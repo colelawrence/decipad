@@ -2158,7 +2158,264 @@ const tests = {
       line: 1,
       column: 14
     }
-  }
+  },
+
+  "function declaration and use": {
+    source: "functionname = a b => a + b\n\nfunctionname 1 2",
+    ast: [{
+      "type": "function-definition",
+      "args": [
+        {
+          "type": "funcdef",
+          "args": [
+            "functionname"
+          ],
+          "start": {
+            "char": 0,
+            "line": 1,
+            "column": 1
+          },
+          "end": {
+            "char": 11,
+            "line": 1,
+            "column": 12
+          }
+        },
+        {
+          "type": "argument-names",
+          "args": [
+            {
+              "type": "def",
+              "args": [
+                "a"
+              ],
+              "start": {
+                "char": 15,
+                "line": 1,
+                "column": 16
+              },
+              "end": {
+                "char": 15,
+                "line": 1,
+                "column": 16
+              }
+            },
+            {
+              "type": "def",
+              "args": [
+                "b"
+              ],
+              "start": {
+                "char": 17,
+                "line": 1,
+                "column": 18
+              },
+              "end": {
+                "char": 17,
+                "line": 1,
+                "column": 18
+              }
+            }
+          ],
+          "start": {
+            "char": 15,
+            "line": 1,
+            "column": 16
+          },
+          "end": {
+            "char": 17,
+            "line": 1,
+            "column": 18
+          }
+        },
+        {
+          "type": "block",
+          "args": [
+            {
+              "type": "function-call",
+              "args": [
+                {
+                  "type": "funcref",
+                  "args": [
+                    "+"
+                  ],
+                  "start": {
+                    "char": 24,
+                    "line": 1,
+                    "column": 25
+                  },
+                  "end": {
+                    "char": 24,
+                    "line": 1,
+                    "column": 25
+                  }
+                },
+                {
+                  "type": "argument-list",
+                  "args": [
+                    {
+                      "type": "ref",
+                      "args": [
+                        "a"
+                      ],
+                      "start": {
+                        "char": 22,
+                        "line": 1,
+                        "column": 23
+                      },
+                      "end": {
+                        "char": 22,
+                        "line": 1,
+                        "column": 23
+                      }
+                    },
+                    {
+                      "type": "ref",
+                      "args": [
+                        "b"
+                      ],
+                      "start": {
+                        "char": 26,
+                        "line": 1,
+                        "column": 27
+                      },
+                      "end": {
+                        "char": 26,
+                        "line": 1,
+                        "column": 27
+                      }
+                    }
+                  ],
+                  "start": {
+                    "char": 22,
+                    "line": 1,
+                    "column": 23
+                  },
+                  "end": {
+                    "char": 26,
+                    "line": 1,
+                    "column": 27
+                  }
+                }
+              ],
+              "start": {
+                "char": 22,
+                "line": 1,
+                "column": 23
+              },
+              "end": {
+                "char": 26,
+                "line": 1,
+                "column": 27
+              }
+            }
+          ],
+          "start": {
+            "char": 21,
+            "line": 1,
+            "column": 22
+          },
+          "end": {
+            "char": 26,
+            "line": 1,
+            "column": 27
+          }
+        }
+      ],
+      "start": {
+        "char": 0,
+        "line": 1,
+        "column": 1
+      },
+      "end": {
+        "char": 26,
+        "line": 1,
+        "column": 27
+      }
+    },
+    {
+      "type": "function-call",
+      "args": [
+        {
+          "type": "funcref",
+          "args": [
+            "functionname"
+          ],
+          "start": {
+            "char": 29,
+            "line": 3,
+            "column": 1
+          },
+          "end": {
+            "char": 40,
+            "line": 3,
+            "column": 12
+          }
+        },
+        {
+          "type": "argument-list",
+          "args": [
+            {
+              "type": "literal",
+              "args": [
+                "number",
+                1,
+                null
+              ],
+              "start": {
+                "char": 42,
+                "line": 3,
+                "column": 14
+              },
+              "end": {
+                "char": 42,
+                "line": 3,
+                "column": 14
+              }
+            },
+            {
+              "type": "literal",
+              "args": [
+                "number",
+                2,
+                null
+              ],
+              "start": {
+                "char": 44,
+                "line": 3,
+                "column": 16
+              },
+              "end": {
+                "char": 44,
+                "line": 3,
+                "column": 16
+              }
+            }
+          ],
+          "start": {
+            "char": 42,
+            "line": 3,
+            "column": 14
+          },
+          "end": {
+            "char": 44,
+            "line": 3,
+            "column": 16
+          }
+        }
+      ],
+      "start": {
+        "char": 29,
+        "line": 3,
+        "column": 1
+      },
+      "end": {
+        "char": 44,
+        "line": 3,
+        "column": 16
+      }
+    }
+  ]}
 }
 
 for (const [name, spec] of Object.entries(tests)) {

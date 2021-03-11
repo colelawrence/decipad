@@ -30,7 +30,7 @@ function lengthOf(d) {
 
 %}
 
-block         -> _ statement _                          {%
+block         -> _ statement                            {%
                                                         (d, l) => {
                                                           const stmt = d[1]
                                                           return {
@@ -211,7 +211,7 @@ functionDefArgs  -> argName                             {%
                                                         })
                                                         %}
 
-functionDefArgs  -> argName __ functionDefArgs          {%
+functionDefArgs  -> argName ___ functionDefArgs         {%
                                                         (d, l) => ({
                                                           type: 'argument-names',
                                                           args: [
@@ -302,7 +302,7 @@ factor       -> referenceInExpression                   {%
 factor       -> "(" _ expression _ ")"                  {%
                                                         (d, l) => {
                                                           return {
-                                                            ...expression,
+                                                            ...d[2],
                                                             location: l,
                                                             length: lengthOf(d)
                                                           }
@@ -395,7 +395,7 @@ associativeOperator -> (" * " | " / ")                  {%
 ### Function call ###
 #####################
 
-functionCall -> functionNameRef __ funcArgumentList     {%
+functionCall -> functionNameRef ___ funcArgumentList    {%
                                                         (d, l) => {
                                                           const func = d[0]
                                                           const args = d[2]
@@ -461,7 +461,7 @@ funcArgumentList -> expression                          {%
                                                         }
                                                         %}
 
-funcArgumentList -> expression __ funcArgumentList      {%
+funcArgumentList -> expression ___ funcArgumentList      {%
                                                         (d, l) => {
                                                           const e = d[0]
                                                           const args = d[2]
@@ -846,5 +846,6 @@ strescape -> ["\\/bfnrt] {% id %}
 
 _  -> wschar:* {% id %}
 __ -> wschar:+ {% id %}
+___ -> [ \t]:+ {% id %}
 
 wschar -> [ \t\n\v\f] {% id %}

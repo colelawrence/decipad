@@ -35,7 +35,7 @@ function lengthOf(d) {
 var grammar = {
     Lexer: undefined,
     ParserRules: [
-    {"name": "block", "symbols": ["_", "statement", "_"], "postprocess": 
+    {"name": "block", "symbols": ["_", "statement"], "postprocess": 
         (d, l) => {
           const stmt = d[1]
           return {
@@ -212,7 +212,7 @@ var grammar = {
           length: d[0].length
         })
         },
-    {"name": "functionDefArgs", "symbols": ["argName", "__", "functionDefArgs"], "postprocess": 
+    {"name": "functionDefArgs", "symbols": ["argName", "___", "functionDefArgs"], "postprocess": 
         (d, l) => ({
           type: 'argument-names',
           args: [
@@ -294,7 +294,7 @@ var grammar = {
     {"name": "factor", "symbols": [{"literal":"("}, "_", "expression", "_", {"literal":")"}], "postprocess": 
         (d, l) => {
           return {
-            ...expression,
+            ...d[2],
             location: l,
             length: lengthOf(d)
           }
@@ -393,7 +393,7 @@ var grammar = {
           }
         }
         },
-    {"name": "functionCall", "symbols": ["functionNameRef", "__", "funcArgumentList"], "postprocess": 
+    {"name": "functionCall", "symbols": ["functionNameRef", "___", "funcArgumentList"], "postprocess": 
         (d, l) => {
           const func = d[0]
           const args = d[2]
@@ -458,7 +458,7 @@ var grammar = {
           }
         }
         },
-    {"name": "funcArgumentList", "symbols": ["expression", "__", "funcArgumentList"], "postprocess": 
+    {"name": "funcArgumentList", "symbols": ["expression", "___", "funcArgumentList"], "postprocess": 
         (d, l) => {
           const e = d[0]
           const args = d[2]
@@ -901,6 +901,9 @@ var grammar = {
     {"name": "__$ebnf$1", "symbols": ["wschar"]},
     {"name": "__$ebnf$1", "symbols": ["__$ebnf$1", "wschar"], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
     {"name": "__", "symbols": ["__$ebnf$1"], "postprocess": id},
+    {"name": "___$ebnf$1", "symbols": [/[ \t]/]},
+    {"name": "___$ebnf$1", "symbols": ["___$ebnf$1", /[ \t]/], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
+    {"name": "___", "symbols": ["___$ebnf$1"], "postprocess": id},
     {"name": "wschar", "symbols": [/[ \t\n\v\f]/], "postprocess": id}
 ]
   , ParserStart: "block"

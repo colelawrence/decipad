@@ -63,16 +63,18 @@ describe('basic code', () => {
   });
 
   /* eslint-disable-next-line jest/no-disabled-tests */
-  it.skip('supports functions', async () => {
-    expect(
-      await runCode(`
-        functionname = A B => A + B
+  it('supports functions', async () => {
+    const results = await runCode(`
+      functionname = a b => a + b
 
-        (functionname 1 2)
-      `)
+      functionname 1 2
+    `)
+
+    expect(
+      results
     ).toEqual({
       type: 'number',
-      value: 2,
+      value: 3,
       units: null,
     });
   });
