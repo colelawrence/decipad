@@ -62,7 +62,7 @@ it('evaluates conditions', () => {
     n('conditional', l(true), l(1), l(0))
   )
 
-  expect(testMultiTensors([condition], [0])).toEqual(1)
+  expect(testMultiTensors([condition], [0])).toEqual([1])
 })
 
 describe("functions", () => {
