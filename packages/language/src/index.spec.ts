@@ -1,0 +1,183 @@
+// E2e tests
+
+import * as AutoChange from 'automerge';
+import { Computer } from './runtime/computer';
+
+const runCode = async (source: string) => {
+  const lineCount = source.split('\n').length;
+  const syncDoc = AutoChange.from({
+    children: [
+      {
+        children: [
+          {
+            id: 'block-id',
+            type: 'code_block',
+            children: [{ text: source }],
+          },
+        ],
+      },
+    ],
+  });
+  const computer = new Computer();
+  computer.setContext(syncDoc);
+  const parseResult = computer.parse();
+
+  if (!parseResult.ok) return parseResult;
+
+  return await computer.resultAt('block-id', lineCount);
+};
+
+describe('basic code', () => {
+  it('runs basic operations', async () => {
+    expect(await runCode('1 + 1')).toEqual({
+      type: 'number',
+      value: 2,
+      units: null,
+    });
+
+    expect(await runCode('-1')).toEqual({
+      type: 'number',
+      value: -1,
+      units: null,
+    });
+
+    expect(await runCode('1 / 4')).toEqual({
+      type: 'number',
+      value: 0.25,
+      units: null,
+    });
+  });
+
+  it('can assign variables', async () => {
+    expect(
+      await runCode(`
+        A = 1
+
+        1 + A
+      `)
+    ).toEqual({
+      type: 'number',
+      value: 2,
+      units: null,
+    });
+  });
+
+  /* eslint-disable-next-line jest/no-disabled-tests */
+  it.skip('supports functions', async () => {
+    expect(
+      await runCode(`
+        functionname = A B => A + B
+
+        (functionname 1 2)
+      `)
+    ).toEqual({
+      type: 'number',
+      value: 2,
+      units: null,
+    });
+  });
+
+  it.todo('TODO: Can perform operations on arrays');
+  it.todo('TODO: Can perform binops between arrays and single numbers');
+
+  it('supports conditions', async () => {
+    expect(
+      await runCode(`
+        A = if 1 < 3 then 1 else 0
+      `)
+    ).toEqual({
+      type: 'number',
+      value: 1,
+      units: null,
+    });
+
+    expect(
+      await runCode(`
+        A = if 1 > 3 then 1 else 0
+      `)
+    ).toEqual({
+      type: 'number',
+      value: 0,
+      units: null,
+    });
+  });
+});
+
+describe('Units', () => {
+  it('numbers can have units', async () => {
+    expect(
+      await runCode(`
+        Speed = 1 meter/second
+      `)
+    ).toMatchObject({
+      value: 1,
+      units: [
+        { exp: 1, known: true, multiplier: 1, unit: 'meter' },
+        { exp: -1, known: true, multiplier: 1, unit: 'second' },
+      ],
+    });
+  });
+
+  /* eslint-disable-next-line jest/no-disabled-tests */
+  it.skip('units can be divided', async () => {
+    expect(
+      await runCode(`
+        Distance = 3 meter
+        Time = 3 second
+
+        Distance / Time
+      `)
+    ).toMatchObject({
+      value: 1,
+      units: [
+        {
+          exp: 1,
+          known: true,
+          multiplier: 1,
+          unit: 'meter',
+        },
+        {
+          exp: -1,
+          known: true,
+          multiplier: 1,
+          unit: 'second',
+        },
+      ],
+    });
+  });
+
+  it('units can be collapsed', async () => {
+    expect(
+      await runCode(`
+        Speed = 2 meter/second
+
+        Distance = Speed * 3 second
+      `)
+    ).toMatchObject({
+      value: 6,
+      units: [{ exp: 1, known: true, multiplier: 1, unit: 'meter' }],
+    });
+
+    // TODO internally it's fine but do we actually want to support
+    // calculations that result in a unit^-1?
+    expect(
+      await runCode(`
+        Speed = 6 meter/second
+
+        Distance = Speed / 3 meter
+      `)
+    ).toMatchObject({
+      value: 2,
+      units: [{ exp: -1, known: true, multiplier: 1, unit: 'second' }],
+    });
+  });
+});
+
+describe('Inference', () => {
+  it.todo('TODO: Complains about missing variables');
+  it.todo('TODO: Complains about mismatched units');
+  it.todo('TODO: complains about mismatched types');
+
+  it.todo('TODO: Complains about mismatched array units');
+  it.todo('TODO: Complains about mismatched array lengths');
+});
