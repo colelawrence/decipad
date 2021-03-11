@@ -71,14 +71,12 @@ export const inferExpression = (ctx: Context, expr: AST.Expression): Type => {
       }
     }
     case "conditional": {
-      const [condType, thenType, elseType] = expr.args.map((a) =>
-        inferExpression(ctx, a)
-      );
+      const argTypes = expr.args.map((a) => inferExpression(ctx, a));
 
-      const condFunctor = (condT: Type, thenT: Type, elseT: Type) =>
+      const functor = (condT: Type, thenT: Type, elseT: Type): Type =>
         Type.combine(condT.hasType("boolean"), thenT.sameAs(elseT));
 
-      return Type.runFunctor(expr, condFunctor, condType, thenType, elseType);
+      return Type.runFunctor(expr, functor, ...argTypes);
     }
   }
 };

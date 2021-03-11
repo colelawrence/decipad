@@ -56,6 +56,15 @@ it("can return multiple results", () => {
   expect(testMultiTensors([multipleResults], ["Variable", 0])).toEqual([1, 3]);
 });
 
+it('evaluates conditions', () => {
+  const condition = n(
+    'block',
+    n('conditional', l(true), l(1), l(0))
+  )
+
+  expect(testMultiTensors([condition], [0])).toEqual(1)
+})
+
 describe("functions", () => {
   it("can create and use functions", () => {
     const usingFunctions = n(

@@ -36,32 +36,57 @@ const dollar: AST.Unit = {
 };
 
 it("Can assert type equivalence and pass on this information", () => {
-  const type = new Type("string").inNode(testNode);
+  const type = new Type("string");
 
   expect(type.hasType("string")).toEqual(type);
   expect(type.sameAs(type)).toEqual(type);
 });
 
-it("returns an impossible type and remembers causality", () => {
-  const type = new Type("string").inNode(testNode);
+it('Can be made to represent any ol\' type', () => {
+  const anyType = new Type()
 
-  expect(type.hasType("boolean")).toEqual(
-    Type.Impossible.inNode(testNode).withErrorCause(
-      new InferError("Mismatched types: string and boolean")
-    )
-  );
+  expect(anyType.hasType('string')).toEqual(Type.String)
+  expect(anyType.hasType('number')).toEqual(Type.Number)
+})
 
-  const differentType = new Type("number");
-  expect(type.sameAs(differentType)).toEqual(
-    Type.Impossible.inNode(testNode).withErrorCause(
-      new InferError("Mismatched types: string and number")
-    )
-  );
-});
+describe('Impossible types', () => {
+  it("returns an impossible type and remembers causality", () => {
+    const type = new Type("string");
+
+    expect(type.hasType("boolean")).toEqual(
+      Type.Impossible.withErrorCause(
+        new InferError("Mismatched types: string and boolean")
+      )
+    );
+
+    const differentType = new Type("number");
+    expect(type.sameAs(differentType)).toEqual(
+      Type.Impossible.withErrorCause(
+        new InferError("Mismatched types: string and number")
+      )
+    );
+  });
+
+  it('propagates impossibility', () => {
+    const imp = Type.Impossible.withErrorCause(new InferError('imp 1'))
+    const imp2 = Type.Impossible.withErrorCause(new InferError('imp 2'))
+
+    expect(imp.sameAs(imp2)).toEqual(imp)
+    expect(Type.Number.sameAs(imp2)).toEqual(imp2)
+
+    expect(imp.hasType("string")).toEqual(imp)
+
+    expect(imp.withUnit([meter])).toEqual(imp)
+    expect(imp.multiplyUnit([meter])).toEqual(imp)
+    expect(imp.divideUnit([meter])).toEqual(imp)
+
+    expect(imp.withErrorCause(new InferError('ignored different error'))).toEqual(imp)
+  })
+})
 
 describe("Type.runFunctor", () => {
   it("replicates types in arguments which are already impossible, and does not call the function", () => {
-    const impossible = Type.Impossible.inNode(testNode).withErrorCause(
+    const impossible = Type.Impossible.withErrorCause(
       new InferError("")
     );
     const functor = jest.fn();
@@ -78,7 +103,26 @@ describe("Type.runFunctor", () => {
       type.withErrorCause(new InferError("")).inNode(testNode)
     );
   });
+
+  it('returns what the functor returns, when all is normal', () => {
+    expect(Type.runFunctor(testNode, () => Type.Boolean)).toEqual(Type.Boolean)
+  })
 });
+
+describe('Type.combine', () => {
+  it('returns the last type', () => {
+    expect(Type.combine(Type.Number, Type.String)).toEqual(Type.String)
+  })
+
+  it('returns any error in the args', () => {
+    const badType = Type.Impossible.withErrorCause(new InferError(''))
+    expect(Type.combine(Type.Number, badType)).toEqual(badType)
+  })
+
+  it('panics when called with zero arguments', () => {
+    expect(() => Type.combine()).toThrow()
+  })
+})
 
 const setExponent = (u: AST.Unit, exp: number) =>
   produce(u, (u) => {
@@ -102,9 +146,16 @@ it("has a withUnit method", () => {
   expect(Type.Number.withUnit([meter])).toEqual(numberInMeter);
   expect(Type.Number.withUnit([meter, second])).toEqual(numberInMeterBySecond);
   expect(Type.Number.withUnit([meter]).withUnit(null)).toEqual(Type.Number);
+
+  expect(Type.Number.withUnit([meter]).withUnit([meter])).toEqual(Type.Number.withUnit([meter]))
+
+  // Mismatched units
   expect(
-    Type.Number.withUnit([meter]).inNode(testNode).withUnit([second]).errorCause
+    Type.Number.withUnit([meter]).withUnit([second]).errorCause
   ).toEqual(new InferError("Mismatched units: meter and second"));
+  expect(
+    Type.Number.withUnit([meter, second]).withUnit([second]).errorCause
+  ).toEqual(new InferError("Mismatched units: meter.second and second"));
 });
 
 it("can be stringified", () => {

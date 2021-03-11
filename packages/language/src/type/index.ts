@@ -83,10 +83,10 @@ const stringifyUnit = (unit: AST.Unit) => {
   return result.join("");
 };
 
-export const stringifyUnits = (unit: AST.Unit[]) =>
+const stringifyUnits = (unit: AST.Unit[]) =>
   unit.map((unit) => stringifyUnit(unit)).join(".");
 
-export const combineUnits = (
+const combineUnits = (
   myUnits: AST.Unit[] | null,
   theirUnits: AST.Unit[] | null
 ) => {
@@ -115,7 +115,7 @@ export const combineUnits = (
     }
   }
 
-  return outputUnits.length > 0 ? normalizeUnits(outputUnits) : null;
+  return normalizeUnits(outputUnits);
 };
 
 export class Type {
@@ -207,6 +207,7 @@ export class Type {
 
   sameAs(other: Type): Type {
     if (this.errorCause != null) return this;
+    if (other.errorCause != null) return other;
 
     return this.hasType(...other.possibleTypes);
   }
