@@ -5,11 +5,25 @@ import { getOfType, getDefined, getIdentifierString } from "../utils";
 import { Realm } from "./Realm";
 
 // Gets a single tensor from an expanded AST.
-function getTensor(realm: Realm, node: AST.Statement): tf.Tensor {
+export function getTensor(realm: Realm, node: AST.Statement): tf.Tensor {
   switch (node.type) {
     case "literal": {
+      let tensorValue
+
       // assume node.args[0] == 'number' for now
-      return tf.tensor([node.args[1] as number]);
+      if (node.args[0] === 'array') {
+        tensorValue = node.args[1].map((v: AST.Literal) => {
+          if (!Array.isArray(v.args[1])) {
+            return v.args[1]
+          } else {
+            throw new Error('panic: nested array is not supported')
+          }
+        })
+      } else {
+        tensorValue = [node.args[1]]
+      }
+
+      return tf.tensor(tensorValue);
     }
     case "assign": {
       const varName = getIdentifierString(node.args[0]);

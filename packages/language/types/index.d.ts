@@ -62,11 +62,16 @@ declare namespace AST {
 
   // Literal number, char, string etc
 
+  type LitArgs =
+    | ["number", number]
+    | ["boolean", boolean]
+    | ["string", string]
+    | ["array", AST.Literal[]]
+
   interface Literal {
     type: "literal";
     args: [
-      type: "number" | "char" | "boolean" | "string" | "array",
-      value: number | boolean | string,
+      ...LitArgs,
       unit: Unit[] | null
     ];
     start: Pos;

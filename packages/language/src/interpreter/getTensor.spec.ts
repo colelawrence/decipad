@@ -1,7 +1,8 @@
 import * as tf from "@tensorflow/tfjs-core";
 import { n, c, l, funcDef } from "../utils";
 
-import { getTensorWithTargets } from "./getTensor";
+import { getTensor, getTensorWithTargets } from "./getTensor";
+import { Realm } from './Realm'
 
 const testMultiTensors = (
   program: AST.Block[],
@@ -17,6 +18,16 @@ const testMultiTensors = (
     tensorWithTargets.dispose();
   }
 };
+
+const testGetTensor = (statement: AST.Statement): number[] => {
+  const tensor = tf.tidy(() => getTensor(new Realm(), statement))
+
+  try {
+    return [...tensor.dataSync()]
+  } finally {
+    tensor.dispose()
+  }
+}
 
 it("runs", () => {
   const onePlusOne = [n("block", c("+", l(1), l(1)))];
@@ -63,6 +74,18 @@ it('evaluates conditions', () => {
   )
 
   expect(testMultiTensors([condition], [0])).toEqual([1])
+})
+
+it('evaluates arrays', () => {
+  const array = l([1, 2, 3])
+  const programWithArray = n(
+    'block',
+    n('assign', n('def', 'Array'), array),
+    c('+', n('ref', 'Array'), l([3, 2, 1]))
+  )
+
+  expect(testGetTensor(array)).toEqual([1, 2, 3])
+  expect(testMultiTensors([programWithArray], [0])).toEqual([4, 4, 4])
 })
 
 describe("functions", () => {

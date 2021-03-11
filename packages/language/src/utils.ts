@@ -10,6 +10,8 @@ export const walk = <T>(node: AST.Node, fn: WalkFn<T>, depth = 0): T | null => {
   if (ret === walkSkip) return null;
   if (ret != null) return ret;
 
+  if (node.type === 'literal') return null;
+
   for (const arg of node.args) {
     if (isNode(arg)) {
       const childReturn = walk(arg, fn, depth + 1);
@@ -33,15 +35,19 @@ export function n<K extends AST.Node["type"], N extends AST.TypeToNode[K]>(
   return node;
 }
 
-export function l(value: number | string | boolean, ...units: AST.Unit[]) {
+type LitType = number | string | boolean
+export function l(value: LitType | LitType[], ...units: AST.Unit[]): AST.Literal {
   const unitArg = units.length > 0 ? units : null;
 
   if (typeof value === "number") {
     return n("literal", "number", value, unitArg);
   } else if (typeof value === "boolean") {
     return n("literal", "boolean", value, unitArg);
-  } else {
+  } else if (typeof value === 'string'){
     return n("literal", "string", value, unitArg);
+  } else {
+    const arrayNodes = value.map(item => l(item, ...units))
+    return n('literal', 'array', arrayNodes, unitArg)
   }
 }
 
