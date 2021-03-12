@@ -29,22 +29,19 @@ const runCode = async (source: string) => {
 
 describe('basic code', () => {
   it('runs basic operations', async () => {
-    expect(await runCode('1 + 1')).toEqual({
-      type: 'number',
-      value: 2,
-      units: null,
+    expect(await runCode('1 + 1')).toMatchObject({
+      type: { possibleTypes: ['number'] },
+      value: 2
     });
 
-    expect(await runCode('-1')).toEqual({
-      type: 'number',
-      value: -1,
-      units: null,
+    expect(await runCode('-1')).toMatchObject({
+      type: { possibleTypes: ['number'] },
+      value: -1
     });
 
-    expect(await runCode('1 / 4')).toEqual({
-      type: 'number',
-      value: 0.25,
-      units: null,
+    expect(await runCode('1 / 4')).toMatchObject({
+      type: { possibleTypes: ['number'] },
+      value: 0.25
     });
   });
 
@@ -55,10 +52,9 @@ describe('basic code', () => {
 
         1 + A
       `)
-    ).toEqual({
-      type: 'number',
-      value: 2,
-      units: null,
+    ).toMatchObject({
+      type: { possibleTypes: ['number'] },
+      value: 2
     });
   });
 
@@ -72,10 +68,9 @@ describe('basic code', () => {
 
     expect(
       results
-    ).toEqual({
-      type: 'number',
-      value: 3,
-      units: null,
+    ).toMatchObject({
+      type: { possibleTypes: ['number'] },
+      value: 3
     });
   });
 
@@ -87,20 +82,18 @@ describe('basic code', () => {
       await runCode(`
         A = if 1 < 3 then 1 else 0
       `)
-    ).toEqual({
-      type: 'number',
-      value: 1,
-      units: null,
+    ).toMatchObject({
+      type: { possibleTypes: ['number'] },
+      value: 1
     });
 
     expect(
       await runCode(`
         A = if 1 > 3 then 1 else 0
       `)
-    ).toEqual({
-      type: 'number',
-      value: 0,
-      units: null,
+    ).toMatchObject({
+      type: { possibleTypes: ['number'] },
+      value: 0
     });
   });
 });
@@ -112,11 +105,13 @@ describe('Units', () => {
         Speed = 1 meter/second
       `)
     ).toMatchObject({
-      value: 1,
-      units: [
-        { exp: 1, known: true, multiplier: 1, unit: 'meter' },
-        { exp: -1, known: true, multiplier: 1, unit: 'second' },
-      ],
+      type: {
+        unit: [
+          { exp: 1, known: true, multiplier: 1, unit: 'meter' },
+          { exp: -1, known: true, multiplier: 1, unit: 'second' },
+        ]
+      },
+      value: 1
     });
   });
 
@@ -157,7 +152,7 @@ describe('Units', () => {
       `)
     ).toMatchObject({
       value: 6,
-      units: [{ exp: 1, known: true, multiplier: 1, unit: 'meter' }],
+      type: { unit: [{ exp: 1, known: true, multiplier: 1, unit: 'meter' }] },
     });
 
     // TODO internally it's fine but do we actually want to support
@@ -170,7 +165,7 @@ describe('Units', () => {
       `)
     ).toMatchObject({
       value: 2,
-      units: [{ exp: -1, known: true, multiplier: 1, unit: 'second' }],
+      type: { unit: [{ exp: -1, known: true, multiplier: 1, unit: 'second' }] },
     });
   });
 });
