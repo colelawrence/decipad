@@ -17,7 +17,7 @@ const intersect = (a1: TypeName[], a2: TypeName[]): TypeName[] =>
 const matchUnits = (u1: AST.Unit, u2: AST.Unit) =>
   u1.unit === u2.unit && u1.exp === u2.exp;
 
-const matchUnitArrays = (units1: AST.Unit[], units2: AST.Unit[]) => {
+const matchUnitColumns = (units1: AST.Unit[], units2: AST.Unit[]) => {
   if (units1.length !== units2.length) return false;
   return units1.every((u1, i) => matchUnits(u1, units2[i]));
 };
@@ -132,6 +132,7 @@ export class Type {
   unit: AST.Unit[] | null = null;
   node: AST.Node;
   errorCause: InferError | null = null;
+  columnSize: number | null = null
 
   constructor(...possibleTypes: TypeName[]) {
     if (possibleTypes.length > 0) {
@@ -205,11 +206,48 @@ export class Type {
     });
   }
 
+  isColumn(size: number) {
+    const incompatibleSizes = this.columnSize != null && this.columnSize !== size
+
+    if (incompatibleSizes) {
+      return this.withErrorCause(new InferError(
+        "Incompatible column sizes: " + this.columnSize + ' and ' + size
+      ))
+    } else {
+      return produce(this, newType => {
+        newType.columnSize = size
+      })
+    }
+  }
+
+  isNotColumn() {
+    if (this.columnSize != null) {
+      return this.withErrorCause(new InferError('Unexpected column'))
+    } else {
+      return this
+    }
+  }
+
+  sameColumnSizeAs(other: Type) {
+    if (this.columnSize === other.columnSize) {
+      return this
+    } else if ((this.columnSize == null) !== (other.columnSize == null)) {
+      // Only one is an column
+      return produce(this, newType => {
+        newType.columnSize = this.columnSize ?? other.columnSize
+      })
+    } else {
+      return this.withErrorCause(new InferError(
+        `Incompatible column sizes: ${this.columnSize} and ${other.columnSize}`
+      ))
+    }
+  }
+
   sameAs(other: Type): Type {
     if (this.errorCause != null) return this;
     if (other.errorCause != null) return other;
 
-    return this.hasType(...other.possibleTypes);
+    return this.hasType(...other.possibleTypes).sameColumnSizeAs(other);
   }
 
   withUnit(unit: AST.Unit[] | null) {
@@ -220,7 +258,7 @@ export class Type {
         newType.unit = unit;
       });
     } else {
-      if (!matchUnitArrays(this.unit, unit)) {
+      if (!matchUnitColumns(this.unit, unit)) {
         return this.withErrorCause(
           new InferError(
             "Mismatched units: " +

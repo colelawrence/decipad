@@ -49,6 +49,78 @@ it('Can be made to represent any ol\' type', () => {
   expect(anyType.hasType('number')).toEqual(Type.Number)
 })
 
+describe('Columns', () => {
+  it('supports column types', () => {
+    const columnType = new Type('number').isColumn(42).withUnit([dollar])
+
+    expect(columnType).toMatchObject({
+      possibleTypes: ['number'],
+      unit: [dollar],
+      columnSize: 42
+    })
+
+    const normalType = new Type('string')
+    expect(normalType.columnSize).toEqual(null)
+  })
+
+  it('can combine column types', () => {
+    const columnType = new Type('number').isColumn(42)
+
+    expect(columnType.sameAs(columnType)).toEqual(columnType)
+    expect(columnType.hasType('number')).toEqual(columnType)
+    expect(columnType.withUnit([meter])).toMatchObject({
+      errorCause: null,
+      unit: [meter]
+    })
+    expect(columnType.multiplyUnit([meter, second])).toMatchObject({
+      errorCause: null,
+      unit: [meter, second]
+    })
+  })
+
+  it('can propagate the columnness', () => {
+    const columnType = Type.Number.isColumn(42)
+    expect(columnType.sameColumnSizeAs(Type.Number)).toEqual(columnType)
+
+    expect(Type.Number.sameColumnSizeAs(columnType)).toEqual(columnType)
+    expect(Type.Number.sameColumnSizeAs(Type.Number.withUnit([meter]))).toEqual(Type.Number)
+  })
+
+  it('fails to combine with other sizes of column', () => {
+    const columnType = Type.Number.isColumn(42)
+    const otherSizedColumnType = Type.Number.isColumn(10)
+
+    expect(columnType.sameColumnSizeAs(otherSizedColumnType)).toMatchObject({
+      errorCause: new InferError('Incompatible column sizes: 42 and 10')
+    })
+  })
+
+  it('non-columns are coerced to columns', () => {
+    const nonColumnType = Type.Number
+    const columnType = Type.Number.isColumn(42)
+
+    expect(columnType.sameAs(nonColumnType)).toEqual(columnType)
+    expect(nonColumnType.sameAs(columnType)).toEqual(columnType)
+  })
+
+  it('can check columnness', () => {
+    const columnType = Type.Number.isColumn(42)
+    const nonColumnType = Type.Number
+
+    expect(columnType.isColumn(42)).toEqual(columnType)
+    expect(nonColumnType.isColumn(42)).toEqual(columnType)
+    expect(nonColumnType.isNotColumn()).toEqual(nonColumnType)
+
+    // Errors
+    expect(columnType.isColumn(100)).toMatchObject({
+      errorCause: new InferError('Incompatible column sizes: 42 and 100')
+    })
+    expect(columnType.isNotColumn()).toMatchObject({
+      errorCause: new InferError('Unexpected column')
+    })
+  })
+})
+
 describe('Impossible types', () => {
   it("returns an impossible type and remembers causality", () => {
     const type = new Type("string");
