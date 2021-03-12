@@ -1,4 +1,3 @@
-import { Type } from './src/type'
 declare module "../src/grammar";
 
 declare namespace Parser {
@@ -160,6 +159,7 @@ declare namespace AST {
   }
 }
 
+type Type = import('../src/type').Type
 interface Result {
   type: Type,
   value: any

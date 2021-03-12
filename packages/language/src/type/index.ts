@@ -211,7 +211,7 @@ export class Type {
 
     if (incompatibleSizes) {
       return this.withErrorCause(new InferError(
-        "Incompatible column sizes: " + this.columnSize + ' and ' + size
+        `Incompatible column sizes: ${String(this.columnSize)} and ${String(size)}`
       ))
     } else {
       return produce(this, newType => {
@@ -238,7 +238,7 @@ export class Type {
       })
     } else {
       return this.withErrorCause(new InferError(
-        `Incompatible column sizes: ${this.columnSize} and ${other.columnSize}`
+        `Incompatible column sizes: ${String(this.columnSize)} and ${String(other.columnSize)}`
       ))
     }
   }
