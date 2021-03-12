@@ -81,7 +81,7 @@ it('evaluates arrays', () => {
   const programWithArray = n(
     'block',
     n('assign', n('def', 'Array'), array),
-    c('+', n('ref', 'Array'), l([3, 2, 1]))
+    c('+', n('ref', 'Array'), l([l(3), c('+', l(1), l(1)), l(1)]))
   )
 
   expect(testGetTensor(array)).toEqual([1, 2, 3])

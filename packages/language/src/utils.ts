@@ -36,7 +36,7 @@ export function n<K extends AST.Node["type"], N extends AST.TypeToNode[K]>(
 }
 
 type LitType = number | string | boolean
-export function l(value: LitType | LitType[], ...units: AST.Unit[]): AST.Literal {
+export function l(value: LitType | (LitType | AST.Expression)[], ...units: AST.Unit[]): AST.Literal {
   const unitArg = units.length > 0 ? units : null;
 
   if (typeof value === "number") {
@@ -46,7 +46,11 @@ export function l(value: LitType | LitType[], ...units: AST.Unit[]): AST.Literal
   } else if (typeof value === 'string'){
     return n("literal", "string", value, unitArg);
   } else {
-    const arrayNodes = value.map(item => l(item, ...units))
+    const arrayNodes = value.map(item => {
+      if (isExpression(item)) return item
+
+      return l(item, ...units)
+    })
     return n('literal', 'array', arrayNodes, unitArg)
   }
 }
@@ -83,7 +87,7 @@ export function getOfType<
 }
 
 export const isNode = (
-  value: AST.Node | AST.Unit[] | string | number | boolean | null
+  value: unknown | AST.Node
 ): value is AST.Node => {
   if (value == null || typeof value !== "object" || Array.isArray(value)) {
     return false;
@@ -94,6 +98,14 @@ export const isNode = (
 
   return typeof valueAny.type === "string" && Array.isArray(valueAny.args);
 };
+
+export const isExpression = (
+  value: unknown | AST.Expression
+): value is AST.Expression => {
+  if (!isNode(value)) return false
+
+  return ['function-call', 'ref', 'literal', 'conditional'].includes(value.type)
+}
 
 export const getIdentifierString = ({ type, args }: AST.Identifier): string => {
   if (

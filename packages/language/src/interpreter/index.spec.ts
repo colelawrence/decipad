@@ -9,7 +9,7 @@ it("wraps getTensorWithTargets, evaluates and returns", async () => {
   ];
 
   expect(await run(basicProgram, ["A"])).toEqual(
-    new Map<string | number, number>([["A", 42]])
+    new Map([["A", 42]])
   );
 });
 
@@ -17,6 +17,6 @@ it("Gets specific statement", async () => {
   const basicProgram = [n("block", c("+", l(1), l(1)))];
 
   expect(await run(basicProgram, [[0, 0]])).toEqual(
-    new Map<string | number | [number, number], number>([[[0, 0], 2]])
+    new Map([[[0, 0], 2]])
   );
 });

@@ -66,7 +66,7 @@ declare namespace AST {
     | ["number", number]
     | ["boolean", boolean]
     | ["string", string]
-    | ["array", AST.Literal[]]
+    | ["array", AST.Expression[]]
 
   interface Literal {
     type: "literal";

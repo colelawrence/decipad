@@ -8,22 +8,21 @@ import { Realm } from "./Realm";
 export function getTensor(realm: Realm, node: AST.Statement): tf.Tensor {
   switch (node.type) {
     case "literal": {
-      let tensorValue
-
-      // assume node.args[0] == 'number' for now
-      if (node.args[0] === 'array') {
-        tensorValue = node.args[1].map((v: AST.Literal) => {
-          if (!Array.isArray(v.args[1])) {
-            return v.args[1]
-          } else {
-            throw new Error('panic: nested array is not supported')
-          }
-        })
-      } else {
-        tensorValue = [node.args[1]]
+      switch (node.args[0]) {
+        case 'array': {
+          const items: tf.Tensor[] = node.args[1].map((v: AST.Expression) =>
+            getTensor(realm, v)
+          )
+          return tf.concat(items)
+        }
+        case 'number':
+        case 'boolean': {
+          return tf.tensor(node.args[1], [1])
+        }
+        default: {
+          throw new Error('not implemented: literals with type ' + node.args[0])
+        }
       }
-
-      return tf.tensor(tensorValue);
     }
     case "assign": {
       const varName = getIdentifierString(node.args[0]);
