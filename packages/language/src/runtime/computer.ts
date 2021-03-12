@@ -49,7 +49,7 @@ export class Computer {
     this.context = context;
   }
 
-  async resultAt(blockId: string, line: number): Promise<Result.Value> {
+  async resultAt(blockId: string, line: number): Promise<Result> {
     let inBlock: AST.Block | undefined;
     let blockOffset = -1;
     for (const block of this.codeBlocks) {
@@ -77,21 +77,12 @@ export class Computer {
     const location = [blockOffset, statementOffset] as [number, number];
 
     const type = inferTargetStatement(program, location);
+    const value = (await run(program, [location])).get(location);
 
-    const result = (await run(program, [location])).get(location);
-
-    let returnResult: Result.Value;
-
-    if (typeof result === "number") {
-      // TODO: we only support number results for now
-      returnResult = {
-        type: "number",
-        value: result,
-        units: type.unit as AST.Unit[],
-      };
+    return {
+      type,
+      value
     }
-
-    return returnResult;
   }
 
   compute(): ComputeResult {

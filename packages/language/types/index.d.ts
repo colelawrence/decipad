@@ -1,3 +1,4 @@
+import { Type } from './src/type'
 declare module "../src/grammar";
 
 declare namespace Parser {
@@ -159,12 +160,7 @@ declare namespace AST {
   }
 }
 
-declare namespace Result {
-  interface NumberWithUnits {
-    type: "number";
-    value: number;
-    units: Unit[];
-  }
-
-  type Value = NumberWithUnits | undefined;
+interface Result {
+  type: Type,
+  value: any
 }

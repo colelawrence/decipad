@@ -1,5 +1,6 @@
 import { createRuntime } from '.'
 import { createEditor } from 'slate'
+import { Type } from '../type'
 
 const actorId = 'actor1'
 const docId = 'docid'
@@ -132,29 +133,27 @@ it('runs code', async () => {
   expect(computeResult.parseErrors).toHaveLength(0)
   expect(computeResult.typeInferErrors).toHaveLength(0)
 
-  const result = await context.resultAt("code block 1", 3);
-  expect(result).toMatchObject({
-    type: 'number',
-    value: 30,
-    units: [{
+  const result = await context.resultAt("code block 1", 3)
+  expect(result.type.possibleTypes).toEqual(["number"])
+  expect(result.type.unit).toMatchObject([
+    {
       exp: 1,
       multiplier: 1,
       known: false,
       unit: "apples"
-    }]
-  })
+    }])
+  expect(result.value).toBe(30)
 
   const result2 = await context.resultAt("code block 1", 2)
-  expect(result2).toMatchObject({
-    type: 'number',
-    value: 20,
-    units: [{
+  expect(result2.type.possibleTypes).toEqual(["number"])
+  expect(result2.type.unit).toMatchObject([
+    {
       exp: 1,
       multiplier: 1,
       known: false,
       unit: "apples"
-    }]
-  })
+    }])
+  expect(result2.value).toBe(20)
 
   cancel()
   context.stop()
@@ -165,4 +164,4 @@ function timeout (ms) {
     setTimeout(() => resolve(), ms)
   })
 }
-  
+
