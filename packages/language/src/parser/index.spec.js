@@ -1857,13 +1857,12 @@ const tests = {
     ]
   },
 
-  "empty array": {
+  "empty column": {
     source: " [ ] ",
     ast: [
       {
-        "type": "literal",
+        "type": "column",
         "args": [
-          "array",
           []
         ],
         "start": {
@@ -1880,13 +1879,12 @@ const tests = {
     ]
   },
 
-  "array with two expressions": {
+  "column with two expressions": {
     source: " [ 1, 2 + 3 ] ",
     ast: [
       {
-        "type": "literal",
+        "type": "column",
         "args": [
-          "array",
           [
             {
               "type": "literal",
@@ -2714,7 +2712,7 @@ const tests = {
   ]
   },
 
-  "table with explicit value as array": {
+  "table with explicit value as column": {
     source: "  { abc = [ 1 , 2 ]  }",
     ast: [{
       "type": "table",
@@ -2736,9 +2734,8 @@ const tests = {
           }
         },
         {
-          "type": "literal",
+          "type": "column",
           "args": [
-            "array",
             [
               {
                 "type": "literal",
@@ -2841,9 +2838,8 @@ const tests = {
           }
         },
         {
-          "type": "literal",
+          "type": "column",
           "args": [
-            "array",
             [
               {
                 "type": "literal",

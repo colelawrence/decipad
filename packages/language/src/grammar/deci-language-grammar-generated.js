@@ -484,42 +484,40 @@ var grammar = {
           length: lengthOf(d)
         })
         },
-    {"name": "array", "symbols": [{"literal":"["}, "_", {"literal":"]"}], "postprocess": 
+    {"name": "column", "symbols": [{"literal":"["}, "_", {"literal":"]"}], "postprocess": 
         (d, l) => ({
-          type: 'literal',
+          type: 'column',
           args: [
-            'array',
             []
           ],
           location: l,
           length: lengthOf(d)
         })
         },
-    {"name": "array$ebnf$1", "symbols": []},
-    {"name": "array$ebnf$1$subexpression$1", "symbols": ["_", {"literal":","}, "_", "expression"]},
-    {"name": "array$ebnf$1", "symbols": ["array$ebnf$1", "array$ebnf$1$subexpression$1"], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
-    {"name": "array", "symbols": [{"literal":"["}, "_", "expression", "array$ebnf$1", "_", {"literal":"]"}], "postprocess": 
+    {"name": "column$ebnf$1", "symbols": []},
+    {"name": "column$ebnf$1$subexpression$1", "symbols": ["_", {"literal":","}, "_", "expression"]},
+    {"name": "column$ebnf$1", "symbols": ["column$ebnf$1", "column$ebnf$1$subexpression$1"], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
+    {"name": "column", "symbols": [{"literal":"["}, "_", "expression", "column$ebnf$1", "_", {"literal":"]"}], "postprocess": 
         (d, l) => {
         
-          const exp1 = d[2]
-          const elems = [exp1]
-          let length  = lengthOf([d[0], d[1], d[2]])
+         const exp1 = d[2]
+         const elems = [exp1]
+         let length  = lengthOf([d[0], d[1], d[2]])
         
-          for (const e of d[3]) {
-            const [s1, c, s2, expr] = e
-            elems.push(expr)
-            length += lengthOf(e)
-          }
+         for (const e of d[3]) {
+           const [s1, c, s2, expr] = e
+           elems.push(expr)
+           length += lengthOf(e)
+         }
         
-          return {
-            type: 'literal',
-            args: [
-              'array',
-              elems
-            ],
-            location: l,
-            length
-          }
+         return {
+           type: 'column',
+           args: [
+             elems
+           ],
+           location: l,
+           length
+         }
         }
         },
     {"name": "table", "symbols": [{"literal":"{"}, "tableColDef", {"literal":"}"}], "postprocess": 
@@ -618,7 +616,7 @@ var grammar = {
     {"name": "literal", "symbols": ["character"], "postprocess": id},
     {"name": "literal", "symbols": ["string"], "postprocess": id},
     {"name": "literal", "symbols": ["number"], "postprocess": id},
-    {"name": "literal", "symbols": ["array"], "postprocess": id},
+    {"name": "literal", "symbols": ["column"], "postprocess": id},
     {"name": "literal", "symbols": ["table"], "postprocess": id},
     {"name": "boolean$string$1", "symbols": [{"literal":"t"}, {"literal":"r"}, {"literal":"u"}, {"literal":"e"}], "postprocess": function joiner(d) {return d.join('');}},
     {"name": "boolean", "symbols": ["boolean$string$1"], "postprocess": 
