@@ -538,11 +538,8 @@ array        -> "[" _ expression (_ "," _ expression):* _ "]" {%
 
 table        -> "{" tableColDef "}"                     {%
                                                         (d, l) => ({
-                                                          type: 'literal',
-                                                          args: [
-                                                            'table',
-                                                            ...d[1].coldefs
-                                                          ],
+                                                          type: 'table',
+                                                          args: d[1].coldefs,
                                                           location: l,
                                                           length: lengthOf(d)
                                                         })

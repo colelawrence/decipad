@@ -7,7 +7,8 @@ const typesWithArgs = new Set([
   "assign",
   "argument-names",
   "function-definition",
-  "block"
+  "block",
+  "table"
 ]);
 
 export function sourceMapDecorator(

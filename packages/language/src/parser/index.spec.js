@@ -2420,9 +2420,8 @@ const tests = {
   "empty table": {
     source: " { } ",
     ast: [{
-      type: 'literal',
+      type: 'table',
       args: [
-        'table'
       ],
       start: {
         char: 1,
@@ -2440,9 +2439,8 @@ const tests = {
   "table with one implicit coldef": {
     source: " { abc } ",
     ast: [{
-      type: 'literal',
+      type: 'table',
       args: [
-        'table',
         {
           type: 'coldef',
           args: [ 'abc' ],
@@ -2488,9 +2486,8 @@ const tests = {
   "table with three implicit coldefs": {
     source: " { abc  ,  def,   ghi} ",
     ast: [{
-      "type": "literal",
+      "type": "table",
       "args": [
-        "table",
         {
           "type": "coldef",
           "args": [
@@ -2604,9 +2601,8 @@ const tests = {
   "table with three implicit coldefs newline separated": {
     source: " { abc \n  def    \n   ghi \n } ",
     ast: [{
-      "type": "literal",
+      "type": "table",
       "args": [
-        "table",
         {
           "type": "coldef",
           "args": [
@@ -2721,9 +2717,8 @@ const tests = {
   "table with explicit value as array": {
     source: "  { abc = [ 1 , 2 ]  }",
     ast: [{
-      "type": "literal",
+      "type": "table",
       "args": [
-        "table",
         {
           "type": "coldef",
           "args": [
@@ -2795,9 +2790,8 @@ const tests = {
   "table with mixed defs in each line": {
     source: "  { \n abc \n def = [ 1 , 2 ] \n  }",
     ast: [{
-      "type": "literal",
+      "type": "table",
       "args": [
-        "table",
         {
           "type": "coldef",
           "args": [

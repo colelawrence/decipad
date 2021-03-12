@@ -524,11 +524,8 @@ var grammar = {
         },
     {"name": "table", "symbols": [{"literal":"{"}, "tableColDef", {"literal":"}"}], "postprocess": 
         (d, l) => ({
-          type: 'literal',
-          args: [
-            'table',
-            ...d[1].coldefs
-          ],
+          type: 'table',
+          args: d[1].coldefs,
           location: l,
           length: lengthOf(d)
         })
