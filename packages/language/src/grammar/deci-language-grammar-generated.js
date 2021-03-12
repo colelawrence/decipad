@@ -522,11 +522,107 @@ var grammar = {
           }
         }
         },
+    {"name": "table", "symbols": [{"literal":"{"}, "tableColDef", {"literal":"}"}], "postprocess": 
+        (d, l) => ({
+          type: 'literal',
+          args: [
+            'table',
+            ...d[1].coldefs
+          ],
+          location: l,
+          length: lengthOf(d)
+        })
+        },
+    {"name": "tableColDef", "symbols": ["_"], "postprocess": 
+        (d, l) => ({
+          coldefs: [],
+          location: l,
+          length: d[0].length
+        })
+        },
+    {"name": "tableColDef$ebnf$1", "symbols": []},
+    {"name": "tableColDef$ebnf$1$subexpression$1", "symbols": ["tableDefSeparator", "tableOneColDef"]},
+    {"name": "tableColDef$ebnf$1", "symbols": ["tableColDef$ebnf$1", "tableColDef$ebnf$1$subexpression$1"], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
+    {"name": "tableColDef", "symbols": ["_", "tableOneColDef", "tableColDef$ebnf$1", "_"], "postprocess": 
+        (d, l) => {
+          const initial = {
+            coldefs: d[1].coldefs,
+            location: l,
+            length: lengthOf([d[0], d[1], d[3]])
+          }
+        
+          return d[2].reduce((coldefs, more) => {
+            const [_, oneColDef] = more
+            return {
+              coldefs: [
+                ...coldefs.coldefs,
+                ...oneColDef.coldefs
+              ],
+              location: l,
+              length: coldefs.length + lengthOf(more)
+            }
+          }, initial)
+        }
+        },
+    {"name": "tableOneColDef", "symbols": ["referenceName"], "postprocess": 
+        (d, l) => {
+          const ref = d[0]
+          return {
+            coldefs: [
+              {
+                type: 'coldef',
+                args: [ref.name],
+                location: l,
+                length: ref.length
+              },
+              {
+                type: 'ref',
+                args: [ ref.name ],
+                location: l,
+                length: ref.length
+              }
+            ],
+            location: l,
+            length: ref.length
+          }
+        }
+        },
+    {"name": "tableOneColDef", "symbols": ["referenceName", "_", {"literal":"="}, "_", "expression"], "postprocess": 
+        (d, l) => {
+          const ref = d[0]
+          return {
+            coldefs: [
+              {
+                type: 'coldef',
+                args: [ref.name],
+                location: l,
+                length: ref.length
+              },
+              d[4]
+            ],
+            location: l,
+            length: lengthOf(d)
+          }
+        }
+        },
+    {"name": "tableDefSeparator", "symbols": ["_", {"literal":"\n"}, "_"], "postprocess": 
+        (d, l) => ({
+          location: l,
+          length: lengthOf(d)
+        })
+        },
+    {"name": "tableDefSeparator", "symbols": ["_", {"literal":","}, "_"], "postprocess": 
+        (d, l) => ({
+          location: l,
+          length: lengthOf(d)
+        })
+        },
     {"name": "literal", "symbols": ["boolean"], "postprocess": id},
     {"name": "literal", "symbols": ["character"], "postprocess": id},
     {"name": "literal", "symbols": ["string"], "postprocess": id},
     {"name": "literal", "symbols": ["number"], "postprocess": id},
     {"name": "literal", "symbols": ["array"], "postprocess": id},
+    {"name": "literal", "symbols": ["table"], "postprocess": id},
     {"name": "boolean$string$1", "symbols": [{"literal":"t"}, {"literal":"r"}, {"literal":"u"}, {"literal":"e"}], "postprocess": function joiner(d) {return d.join('');}},
     {"name": "boolean", "symbols": ["boolean$string$1"], "postprocess": 
         (d, l) => ({

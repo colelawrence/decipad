@@ -7,7 +7,7 @@ const typesWithArgs = new Set([
   "assign",
   "argument-names",
   "function-definition",
-  "block",
+  "block"
 ]);
 
 export function sourceMapDecorator(
@@ -61,6 +61,10 @@ export function sourceMapDecorator(
           n.args[2] = (units.map((unit: unknown) =>
             decorateNode(unit as ParserNode)
           ) as unknown) as AST.Unit[];
+        }
+      } else if (n.args[0] === "table") {
+        for (let i = 1; i < n.args.length; i++) {
+          n.args[i] = decorateNode(n.args[i])
         }
       }
     }
