@@ -67,7 +67,7 @@ export class Context {
     return this.computer.compute();
   }
 
-  async resultAt(blockId: string, line: number): Promise<Result.Value> {
+  async resultAt(blockId: string, line: number): Promise<Result> {
     return await this.computer.resultAt(blockId, line);
   }
 }

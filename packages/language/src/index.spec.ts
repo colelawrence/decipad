@@ -31,17 +31,17 @@ describe('basic code', () => {
   it('runs basic operations', async () => {
     expect(await runCode('1 + 1')).toMatchObject({
       type: { possibleTypes: ['number'] },
-      value: 2
+      value: [2]
     });
 
     expect(await runCode('-1')).toMatchObject({
       type: { possibleTypes: ['number'] },
-      value: -1
+      value: [-1]
     });
 
     expect(await runCode('1 / 4')).toMatchObject({
       type: { possibleTypes: ['number'] },
-      value: 0.25
+      value: [0.25]
     });
   });
 
@@ -54,7 +54,7 @@ describe('basic code', () => {
       `)
     ).toMatchObject({
       type: { possibleTypes: ['number'] },
-      value: 2
+      value: [2]
     });
   });
 
@@ -70,7 +70,7 @@ describe('basic code', () => {
       results
     ).toMatchObject({
       type: { possibleTypes: ['number'] },
-      value: 3
+      value: [3]
     });
   });
 
@@ -84,7 +84,7 @@ describe('basic code', () => {
       `)
     ).toMatchObject({
       type: { possibleTypes: ['number'] },
-      value: 1
+      value: [1]
     });
 
     expect(
@@ -93,7 +93,7 @@ describe('basic code', () => {
       `)
     ).toMatchObject({
       type: { possibleTypes: ['number'] },
-      value: 0
+      value: [0]
     });
   });
 });
@@ -111,7 +111,7 @@ describe('Units', () => {
           { exp: -1, known: true, multiplier: 1, unit: 'second' },
         ]
       },
-      value: 1
+      value: [1]
     });
   });
 
@@ -125,7 +125,7 @@ describe('Units', () => {
         Distance / Time
       `)
     ).toMatchObject({
-      value: 1,
+      value: [1],
       units: [
         {
           exp: 1,
@@ -151,7 +151,7 @@ describe('Units', () => {
         Distance = Speed * 3 second
       `)
     ).toMatchObject({
-      value: 6,
+      value: [6],
       type: { unit: [{ exp: 1, known: true, multiplier: 1, unit: 'meter' }] },
     });
 
@@ -164,7 +164,7 @@ describe('Units', () => {
         Distance = Speed / 3 meter
       `)
     ).toMatchObject({
-      value: 2,
+      value: [2],
       type: { unit: [{ exp: -1, known: true, multiplier: 1, unit: 'second' }] },
     });
   });

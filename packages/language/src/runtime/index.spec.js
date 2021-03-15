@@ -142,7 +142,7 @@ it('runs code', async () => {
       known: false,
       unit: "apples"
     }])
-  expect(result.value).toBe(30)
+  expect(result.value).toEqual([30])
 
   const result2 = await context.resultAt("code block 1", 2)
   expect(result2.type.possibleTypes).toEqual(["number"])
@@ -153,7 +153,7 @@ it('runs code', async () => {
       known: false,
       unit: "apples"
     }])
-  expect(result2.value).toBe(20)
+  expect(result2.value).toEqual([20])
 
   cancel()
   context.stop()

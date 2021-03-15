@@ -5,7 +5,7 @@ import { getTensorWithTargets } from "./getTensor";
 export const run = async (
   program: AST.Block[],
   desiredTargets: Array<string | number | [number, number]>
-): Promise<Map<string | number | [number, number], number>> => {
+): Promise<number[]> => {
   const combinedTensor = tf.tidy(() =>
     getTensorWithTargets(program, desiredTargets)
   );
@@ -14,5 +14,5 @@ export const run = async (
 
   combinedTensor.dispose(); // GC the tensor
 
-  return new Map(desiredTargets.map((key, i) => [key, targetValues[i]]));
+  return [...targetValues]
 };
