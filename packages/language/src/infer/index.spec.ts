@@ -47,6 +47,11 @@ it("typechecks columns", () => {
   )
 })
 
+it("column-ness is infectious", () => {
+  expect(inferExpression(nilCtx, c('+', col(1, 2, 3), l(1)))).toEqual(Type.Number.isColumn(3))
+  expect(inferExpression(nilCtx, c('+', l(1), col(1, 2, 3)))).toEqual(Type.Number.isColumn(3))
+})
+
 it("typechecks refs", () => {
   const scopeWithVariable = makeContext();
   scopeWithVariable.stack.set("N", Type.Number);

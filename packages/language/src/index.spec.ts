@@ -86,7 +86,28 @@ describe('basic code', () => {
       value: [0, 2, 4, 12]
     })
   });
-  it.todo('TODO: Can perform binops between arrays and single numbers');
+  it('Can perform binops between arrays and single numbers', async () => {
+    const results = await runCode(`
+      Column = [ 1, 2, 3 ]
+      Column * 2
+    `)
+
+    expect(results).toMatchObject({
+      type: { possibleTypes: ['number'], columnSize: 3 },
+      value: [2, 4, 6]
+    })
+
+    const results2 = await runCode(`
+      Column = [ 1, 2, 4 ]
+      2 / Column
+    `)
+
+    expect(results2).toMatchObject({
+      type: { possibleTypes: ['number'], columnSize: 3 },
+      value: [2, 1, 0.5]
+    })
+  });
+
   it.todo('TODO: Does not allow empty columns');
 
   it('supports conditions', async () => {

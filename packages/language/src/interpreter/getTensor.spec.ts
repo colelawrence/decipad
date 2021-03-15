@@ -76,16 +76,37 @@ it('evaluates conditions', () => {
   expect(testMultiTensors([condition], [0])).toEqual([1])
 })
 
-it('evaluates arrays', () => {
-  const array = col(1, 2, 3)
+it('evaluates columns', () => {
+  const column = col(1, 2, 3)
   const programWithArray = n(
     'block',
-    n('assign', n('def', 'Array'), array),
-    c('+', n('ref', 'Array'), col(l(3), c('+', l(1), l(1)), l(1)))
+    n('assign', n('def', 'Array'), column),
+    c('+',
+      n('ref', 'Array'),
+      col(
+        3,
+        c('+', l(1), l(1)),
+        1
+      )
+    )
   )
 
-  expect(testGetTensor(array)).toEqual([1, 2, 3])
+  expect(testGetTensor(column)).toEqual([1, 2, 3])
   expect(testMultiTensors([programWithArray], [0])).toEqual([4, 4, 4])
+})
+
+it('can perform calculations between columns and single numbers', () => {
+  expect(testGetTensor(
+    c('*', col(1, 2, 3), l(2))
+  )).toEqual([2, 4, 6])
+
+  expect(testGetTensor(
+    c('/', col(1, 2, 3), l(2))
+  )).toEqual([.5, 1, 1.5])
+
+  expect(testGetTensor(
+    c('+', l(1), col(1, 2, 3))
+  )).toEqual([2, 3, 4])
 })
 
 describe("functions", () => {
