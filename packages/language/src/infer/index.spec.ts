@@ -1,7 +1,7 @@
 import { produce } from "immer";
 import { Type, InferError, inverseExponent } from "../type";
 
-import { l, c, n, r, funcDef } from "../utils";
+import { l, c, n, r, col, funcDef } from "../utils";
 
 import { makeContext } from "./context";
 import {
@@ -33,6 +33,19 @@ it("typechecks literals", () => {
 
   expect(inferExpression(nilCtx, l(true))).toEqual(Type.Boolean);
 });
+
+it("typechecks columns", () => {
+  expect(inferExpression(nilCtx, col(1, 2, 3))).toEqual(Type.Number.isColumn(3))
+
+  expect(inferExpression(nilCtx, col(c('+', l(1), l(1))))).toEqual(Type.Number.isColumn(1))
+
+  const mixedCol = col(l(1), l("hi"))
+  expect(inferExpression(nilCtx, mixedCol)).toEqual(
+    Type.Impossible.isColumn(2).inNode(mixedCol).withErrorCause(
+      new InferError("Mismatched types: number and string")
+    )
+  )
+})
 
 it("typechecks refs", () => {
   const scopeWithVariable = makeContext();

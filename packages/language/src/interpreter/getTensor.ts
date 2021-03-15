@@ -9,12 +9,6 @@ export function getTensor(realm: Realm, node: AST.Statement): tf.Tensor {
   switch (node.type) {
     case "literal": {
       switch (node.args[0]) {
-        case 'array': {
-          const items: tf.Tensor[] = node.args[1].map((v: AST.Expression) =>
-            getTensor(realm, v)
-          )
-          return tf.concat(items)
-        }
         case 'number':
         case 'boolean': {
           return tf.tensor(node.args[1], [1])
@@ -70,6 +64,12 @@ export function getTensor(realm: Realm, node: AST.Statement): tf.Tensor {
           throw new Error("function is empty");
         });
       }
+    }
+    case "column": {
+      const items: tf.Tensor[] = node.args[0].map((v: AST.Expression) =>
+        getTensor(realm, v)
+      )
+      return tf.concat(items)
     }
     case "conditional": {
       return tf.where(

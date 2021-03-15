@@ -36,23 +36,26 @@ export function n<K extends AST.Node["type"], N extends AST.TypeToNode[K]>(
 }
 
 type LitType = number | string | boolean
-export function l(value: LitType | (LitType | AST.Expression)[], ...units: AST.Unit[]): AST.Literal {
+export function l(value: LitType, ...units: AST.Unit[]): AST.Literal {
   const unitArg = units.length > 0 ? units : null;
 
   if (typeof value === "number") {
     return n("literal", "number", value, unitArg);
   } else if (typeof value === "boolean") {
     return n("literal", "boolean", value, unitArg);
-  } else if (typeof value === 'string'){
-    return n("literal", "string", value, unitArg);
   } else {
-    const arrayNodes = value.map(item => {
-      if (isExpression(item)) return item
-
-      return l(item, ...units)
-    })
-    return n('literal', 'array', arrayNodes, unitArg)
+    return n("literal", "string", value, unitArg);
   }
+}
+
+export function col(...values: (LitType | AST.Expression)[]): AST.Column {
+  return n('column', values.map(value => {
+    if (isExpression(value)) {
+      return value
+    } else {
+      return l(value)
+    }
+  }))
 }
 
 export function c(fName: string, ...args: AST.Expression[]) {

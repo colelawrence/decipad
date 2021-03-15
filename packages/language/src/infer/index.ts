@@ -36,6 +36,25 @@ export const inferExpression = (ctx: Context, expr: AST.Expression): Type => {
 
       return new Type(exprType).withUnit(expr.args[2]);
     }
+    case "column": {
+      const columnTypes = expr.args[0].map((a) => inferExpression(ctx, a))
+
+      if (columnTypes.length === 0) {
+        return Type.Impossible.inNode(expr).withErrorCause(new InferError("Columns cannot be empty"))
+      }
+
+      const columnFunctor = (...columnTypes: Type[]) => {
+        let type = new Type().isColumn(columnTypes.length)
+
+        return columnTypes.reduce((a, b) => a.sameAs(b), type)
+      }
+
+      return Type.runFunctor(
+        expr,
+        columnFunctor,
+        ...columnTypes
+      );
+    }
     case "function-call": {
       const fName = getIdentifierString(expr.args[0]);
       const fArgs = getOfType("argument-list", expr.args[1]).args;
@@ -71,12 +90,14 @@ export const inferExpression = (ctx: Context, expr: AST.Expression): Type => {
       }
     }
     case "conditional": {
-      const argTypes = expr.args.map((a) => inferExpression(ctx, a));
+      const condArg = inferExpression(ctx, expr.args[0])
+      const thenArg = inferExpression(ctx, expr.args[1])
+      const elseArg = inferExpression(ctx, expr.args[2])
 
       const functor = (condT: Type, thenT: Type, elseT: Type): Type =>
         Type.combine(condT.hasType("boolean"), thenT.sameAs(elseT));
 
-      return Type.runFunctor(expr, functor, ...argTypes);
+      return Type.runFunctor(expr, functor, condArg, thenArg, elseArg);
     }
   }
 };

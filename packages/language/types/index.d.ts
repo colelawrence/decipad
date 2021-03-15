@@ -66,13 +66,22 @@ declare namespace AST {
     | ["number", number]
     | ["boolean", boolean]
     | ["string", string]
-    | ["array", AST.Expression[]]
 
   interface Literal {
     type: "literal";
     args: [
       ...LitArgs,
       unit: Unit[] | null
+    ];
+    start: Pos;
+    end: Pos;
+  }
+
+  // Columns, tables
+  interface Column {
+    type: "column";
+    args: [
+      contents: Expression[]
     ];
     start: Pos;
     end: Pos;
@@ -136,7 +145,7 @@ declare namespace AST {
     end: Pos;
   }
 
-  type Expression = FunctionCall | Ref | Literal | Conditional;
+  type Expression = FunctionCall | Ref | Literal | Conditional | Column;
   type Statement = FunctionDefinition | Assign | Expression;
 
   type Lists = FunctionArgumentNames | ArgList;
@@ -151,6 +160,7 @@ declare namespace AST {
     literal: Literal;
     "argument-list": ArgList;
     "function-call": FunctionCall;
+    column: Column;
     conditional: Conditional;
     assign: Assign;
     "argument-names": FunctionArgumentNames;

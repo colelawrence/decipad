@@ -1,5 +1,5 @@
 import * as tf from "@tensorflow/tfjs-core";
-import { n, c, l, funcDef } from "../utils";
+import { n, c, l, col, funcDef } from "../utils";
 
 import { getTensor, getTensorWithTargets } from "./getTensor";
 import { Realm } from './Realm'
@@ -77,11 +77,11 @@ it('evaluates conditions', () => {
 })
 
 it('evaluates arrays', () => {
-  const array = l([1, 2, 3])
+  const array = col(1, 2, 3)
   const programWithArray = n(
     'block',
     n('assign', n('def', 'Array'), array),
-    c('+', n('ref', 'Array'), l([l(3), c('+', l(1), l(1)), l(1)]))
+    c('+', n('ref', 'Array'), col(l(3), c('+', l(1), l(1)), l(1)))
   )
 
   expect(testGetTensor(array)).toEqual([1, 2, 3])

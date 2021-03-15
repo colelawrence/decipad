@@ -74,8 +74,20 @@ describe('basic code', () => {
     });
   });
 
-  it.todo('TODO: Can perform operations on arrays');
+  it('Can perform operations on arrays', async () => {
+    const results = await runCode(`
+      Column = [ 0, 1, 2, 4 ]
+
+      Column * [ 2, 2, 2, 3 ]
+    `)
+
+    expect(results).toMatchObject({
+      type: { possibleTypes: ['number'] },
+      value: [0, 2, 4, 12]
+    })
+  });
   it.todo('TODO: Can perform binops between arrays and single numbers');
+  it.todo('TODO: Does not allow empty columns');
 
   it('supports conditions', async () => {
     expect(
