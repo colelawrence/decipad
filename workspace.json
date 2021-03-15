@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "projects": {
+    "language": {
+      "root": "libs/language",
+      "sourceRoot": "libs/language/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/language/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/language"
+          ],
+          "options": {
+            "jestConfig": "libs/language/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/workspace"
+  }
+}

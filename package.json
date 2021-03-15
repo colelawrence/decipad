@@ -1,53 +1,76 @@
 {
   "name": "decipad",
   "version": "0.0.0",
-  "main": "index.js",
-  "repository": "https://github.com/decipad/decipad",
-  "author": "Ahmed Elsakaan",
-  "license": "MIT",
+  "license": "UNLICENSED",
+  "scripts": {
+    "nx": "nx",
+    "start": "nx serve",
+    "build": "nx build",
+    "test": "nx test",
+    "lint": "nx workspace-lint && nx lint",
+    "e2e": "nx e2e",
+    "affected:apps": "nx affected:apps",
+    "affected:libs": "nx affected:libs",
+    "affected:build": "nx affected:build",
+    "affected:e2e": "nx affected:e2e",
+    "affected:test": "nx affected:test",
+    "affected:lint": "nx affected:lint",
+    "affected:dep-graph": "nx affected:dep-graph",
+    "affected": "nx affected",
+    "format": "nx format:write",
+    "format:write": "nx format:write",
+    "format:check": "nx format:check",
+    "update": "nx migrate latest",
+    "workspace-generator": "nx workspace-generator",
+    "dep-graph": "nx dep-graph",
+    "help": "nx help"
+  },
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
   "devDependencies": {
-    "@tensorflow/tfjs-backend-cpu": "^3.2.0",
-    "@types/lodash.debounce": "^4.0.6",
-    "@types/nearley": "^2.11.1",
-    "@types/node": "^14.14.33",
-    "@types/react": "^17.0.3",
-    "@typescript-eslint/eslint-plugin": "^4.15.2",
-    "@typescript-eslint/parser": "^4.15.2",
-    "babel-eslint": "^10.1.0",
-    "babel-jest": "^26.6.3",
-    "eslint": "^7.20.0",
-    "eslint-config-prettier": "^8.0.0",
-    "eslint-config-react-app": "^6.0.0",
-    "eslint-config-standard-with-typescript": "^20.0.0",
-    "eslint-plugin-eslint-comments": "^3.2.0",
-    "eslint-plugin-flowtype": "^5.3.1",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jest": "^24.1.5",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^3.3.1",
-    "eslint-plugin-promise": "^4.3.1",
-    "eslint-plugin-react": "^7.22.0",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    "eslint-plugin-standard": "^5.0.0",
-    "eslint-plugin-testing-library": "^3.10.1",
-    "husky": "^3.1.0",
-    "jest": "^26.6.3",
-    "lerna": "^3.22.1",
+    "@nrwl/cli": "11.5.1",
+    "@nrwl/eslint-plugin-nx": "11.5.1",
+    "@nrwl/jest": "11.5.1",
+    "@nrwl/linter": "11.5.1",
+    "@nrwl/node": "^11.5.1",
+    "@nrwl/tao": "11.5.1",
+    "@nrwl/workspace": "11.5.1",
+    "@types/jest": "26.0.8",
+    "@types/node": "12.12.38",
+    "@typescript-eslint/eslint-plugin": "4.3.0",
+    "@typescript-eslint/parser": "4.3.0",
+    "dotenv": "6.2.0",
+    "eslint": "7.10.0",
+    "eslint-config-prettier": "8.1.0",
+    "husky": "^4.3.8",
+    "jest": "26.2.2",
     "lint-staged": "^10.5.4",
-    "nearley": "^2.20.1",
-    "prettier": "^2.2.1",
-    "ts-jest": "^26.5.2",
-    "ts-node": "^9.1.1",
-    "typescript": "^4.2.3"
+    "prettier": "2.2.1",
+    "ts-jest": "26.4.0",
+    "ts-node": "~9.1.1",
+    "typescript": "~4.0.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js, jsx, ts, tsx, json}": [
+      "prettier --write"
+    ],
+    "*.ts?(x)": [
+      "jest",
+      "eslint --cache"
+    ]
   },
   "dependencies": {
-    "@decipad/app": "file:packages/app",
-    "@decipad/landing": "file:packages/landing",
-    "@decipad/language": "file:packages/language"
+    "@tensorflow/tfjs-backend-cpu": "^3.3.0",
+    "@tensorflow/tfjs-core": "^3.3.0",
+    "automerge": "^0.14.2",
+    "immer": "^8.0.1",
+    "lodash.debounce": "^4.0.8",
+    "nanoid": "^3.1.22",
+    "nearley": "^2.20.1",
+    "slate": "^0.59.0"
   }
 }
