@@ -1,0 +1,112 @@
+import { Box } from '@chakra-ui/react';
+import { EditablePlugins, pipe } from '@udecode/slate-plugins';
+import { nanoid } from 'nanoid';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { createEditor, Node } from 'slate';
+import {
+  ReactEditor,
+  RenderElementProps,
+  RenderLeafProps,
+  Slate,
+} from 'slate-react';
+import { Elements } from './Elements';
+import { Leaves } from './Leaves';
+import { plugins, withPlugins } from './plugins';
+import { commands } from './plugins/DashCommands/commands';
+import { DashCommandsPortal } from './plugins/DashCommands/DashCommandsPortal';
+import { useDashCommands } from './plugins/DashCommands/useDashCommands';
+import { HoveringToolbar } from './plugins/HoveringToolbar/HoveringToolbar.component';
+import { MentionPortal } from './plugins/MentionPlugin/MentionPortal.component';
+import { useMention } from './plugins/MentionPlugin/useMention';
+import { users } from './plugins/MentionPlugin/users';
+
+const actorId = nanoid();
+
+interface DeciEditorProps {
+  docId: string;
+}
+
+export const DeciEditor = ({ docId }: DeciEditorProps): JSX.Element => {
+  const editor = useMemo(() => pipe(createEditor(), ...withPlugins), []);
+
+  const [value, setValue] = useState<Node[]>([
+    {
+      children: [{ children: [{ text: '' }] }],
+    },
+  ]);
+
+  const renderElement = useCallback(
+    (props: RenderElementProps) => <Elements {...props} />,
+    []
+  );
+
+  const renderLeaf = useCallback(
+    (props: RenderLeafProps) => <Leaves {...props} />,
+    []
+  );
+
+  const {
+    onAddElement,
+    onChangeDashCommands,
+    onKeyDownDashCommands,
+    search,
+    index,
+    target,
+    values,
+  } = useDashCommands(commands);
+
+  const {
+    target: mentionTarget,
+    search: mentionSearch,
+    index: mentionIndex,
+    onChangeMention,
+    onKeyDownMention,
+    filteredUsers,
+  } = useMention(users);
+
+  const onChange = (newValue: Node[]) => {
+    setValue(newValue);
+    onChangeDashCommands(editor);
+    onChangeMention(editor);
+  };
+
+  useEffect(() => {
+    ReactEditor.focus(editor);
+  }, [editor]);
+
+  return (
+    <Box>
+      <Slate editor={editor} value={value} onChange={onChange}>
+        <EditablePlugins
+          autoFocus={true}
+          style={{ height: '100%' }}
+          plugins={plugins}
+          renderElement={[renderElement]}
+          renderLeaf={[renderLeaf]}
+          onKeyDown={[onKeyDownDashCommands, onKeyDownMention]}
+          onKeyDownDeps={[
+            index,
+            search,
+            target,
+            mentionIndex,
+            mentionSearch,
+            mentionTarget,
+          ]}
+          placeholder={`Type "/" for commands`}
+        />
+        <DashCommandsPortal
+          target={target}
+          index={index}
+          values={values}
+          onClick={onAddElement}
+        />
+        <MentionPortal
+          target={mentionTarget}
+          index={mentionIndex}
+          users={filteredUsers}
+        />
+        <HoveringToolbar />
+      </Slate>
+    </Box>
+  );
+};
