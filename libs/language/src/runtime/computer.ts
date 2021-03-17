@@ -1,8 +1,9 @@
-import { SyncDoc, Node } from "./model";
-import { docFromContext } from "./utils/doc-from-context";
-import { parse } from "../parser";
-import { run } from "../interpreter";
-import { inferTargetStatement } from "../infer";
+import { Element, Text } from 'slate';
+import { inferTargetStatement } from '../infer';
+import { run } from '../interpreter';
+import { parse } from '../parser';
+import { SyncDoc } from './model';
+import { docFromContext } from './utils/doc-from-context';
 
 interface CodeBlock {
   id: string;
@@ -81,8 +82,8 @@ export class Computer {
 
     return {
       type,
-      value
-    }
+      value,
+    };
   }
 
   compute(): ComputeResult {
@@ -128,13 +129,13 @@ export class Computer {
 
     const blocks: Parser.UnparsedBlock[] = [];
 
-    for (const elem of doc as Node[]) {
-      if (elem.type !== "code_block") {
+    for (const elem of doc as EditorCodeBlock[]) {
+      if (elem.type !== 'code_block') {
         continue;
       }
       const [id, source] = idAndTextFromElem(elem);
       if (id === undefined) {
-        throw new Error("every code block needs an id");
+        throw new Error('every code block needs an id');
       }
 
       blocks.push({ id, source });
@@ -160,7 +161,7 @@ export class Computer {
       if (solutions.length === 0) {
         parseResult.ok = false;
         parseResult.errors.push({
-          message: "no solutions found for code",
+          message: 'no solutions found for code',
           blockId: parsedBlock.id,
           line: 0, // TODO
           column: 0, // TODO
@@ -192,12 +193,22 @@ export class Computer {
   }
 }
 
-function idAndTextFromElem(elem: any): [string, string] {
-  const textElem = elem.children[0];
-  let text = textElem && textElem.text;
-  if (text) {
-    text = text.toString().trim();
-  }
+interface EditorCodeBlockLine extends Text {
+  text: string;
+  result: Result;
+}
+
+interface EditorCodeBlock extends Element {
+  type: 'code_block';
+  id: string;
+  children: EditorCodeBlockLine[];
+}
+
+function idAndTextFromElem(elem: EditorCodeBlock): [string, string] {
+  const text = elem.children
+    .map((child: { text: string }) => child.text)
+    .join('\n')
+    .trim();
 
   return [elem.id, text];
 }

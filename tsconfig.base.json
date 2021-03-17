@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@decipad/language": ["libs/language/src/index.ts"]
+      "@decipad/language": ["libs/language/src/index.ts"],
+      "@decipad/ui": ["libs/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
