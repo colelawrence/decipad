@@ -1,0 +1,102 @@
+import { runTests } from './run-tests';
+
+runTests({
+  'basic numeric range using ..': {
+    source: '  [  1..10  ]',
+    ast: [
+      {
+        type: 'range',
+        args: [
+          {
+            type: 'literal',
+            args: ['number', 1, null],
+            location: 5,
+            length: 1,
+          },
+          {
+            type: 'literal',
+            args: ['number', 10, null],
+            location: 8,
+            length: 2,
+          },
+        ],
+        start: {
+          char: 2,
+          line: 1,
+          column: 3,
+        },
+        end: {
+          char: 12,
+          line: 1,
+          column: 13,
+        },
+      },
+    ],
+  },
+
+  'basic numeric range using "through"': {
+    source: '  [  1  through 10   ]',
+    ast: [
+      {
+        type: 'range',
+        args: [
+          {
+            type: 'literal',
+            args: ['number', 1, null],
+            location: 5,
+            length: 1,
+          },
+          {
+            type: 'literal',
+            args: ['number', 10, null],
+            location: 16,
+            length: 2,
+          },
+        ],
+        start: {
+          char: 2,
+          line: 1,
+          column: 3,
+        },
+        end: {
+          char: 21,
+          line: 1,
+          column: 22,
+        },
+      },
+    ],
+  },
+
+  'basic time range': {
+    source: '   [2020-10..2020-03]',
+    ast: [
+      {
+        type: 'range',
+        args: [
+          {
+            type: 'date',
+            args: ['year', 2020, 'month', 10],
+            location: 4,
+            length: 7,
+          },
+          {
+            type: 'date',
+            args: ['year', 2020, 'month', 3],
+            location: 13,
+            length: 7,
+          },
+        ],
+        start: {
+          char: 3,
+          line: 1,
+          column: 4,
+        },
+        end: {
+          char: 20,
+          line: 1,
+          column: 21,
+        },
+      },
+    ],
+  },
+});

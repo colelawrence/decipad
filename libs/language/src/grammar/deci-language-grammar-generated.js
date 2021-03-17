@@ -25,6 +25,7 @@
     'if',
     'then',
     'else',
+    'through',
     '+',
     '-',
     '*',
@@ -57,6 +58,23 @@
     'November',
     'Dec',
     'December',
+  ]);
+
+  const timeUnitStrings = new Set([
+    'year',
+    'years',
+    'month',
+    'months',
+    'weeks',
+    'week',
+    'day',
+    'days',
+    'hour',
+    'hours',
+    'minute',
+    'minutes',
+    'second',
+    'seconds',
   ]);
 
   function isReservedWord(str) {
@@ -113,9 +131,12 @@
       { name: 'literal', symbols: ['character'], postprocess: id },
       { name: 'literal', symbols: ['string'], postprocess: id },
       { name: 'literal', symbols: ['number'], postprocess: id },
+      { name: 'literal', symbols: ['timeQuantity'], postprocess: id },
       { name: 'literal', symbols: ['column'], postprocess: id },
       { name: 'literal', symbols: ['table'], postprocess: id },
       { name: 'literal', symbols: ['date'], postprocess: id },
+      { name: 'literal', symbols: ['range'], postprocess: id },
+      { name: 'literal', symbols: ['sequence'], postprocess: id },
       {
         name: 'boolean$string$1',
         symbols: [
@@ -1971,7 +1992,7 @@
           '_',
           { literal: ']' },
         ],
-        postprocess: (d, l) => {
+        postprocess: (d, l, reject) => {
           const exp1 = d[2];
           const elems = [exp1];
           let length = lengthOf([d[0], d[1], d[2]]);
@@ -1980,6 +2001,20 @@
             const [s1, c, s2, expr] = e;
             elems.push(expr);
             length += lengthOf(e);
+          }
+
+          if (
+            elems.every((elem) => {
+              return (
+                elem.type === 'literal' &&
+                elem.args[0] === 'number' &&
+                elem.args[2] &&
+                elem.args[2].length === 1 &&
+                timeUnitStrings.has(elem.args[2][0].unit)
+              );
+            })
+          ) {
+            return reject;
           }
 
           return {
@@ -2280,6 +2315,503 @@
       },
       { name: 'expression', symbols: ['conditional'], postprocess: id },
       { name: 'expression', symbols: ['functionCall'], postprocess: id },
+      { name: 'timeQuantity$ebnf$1', symbols: [] },
+      {
+        name: 'timeQuantity$ebnf$1$subexpression$1',
+        symbols: ['timeQuantityDefParcelSeparator', 'timeQuantityDefParcel'],
+      },
+      {
+        name: 'timeQuantity$ebnf$1',
+        symbols: ['timeQuantity$ebnf$1', 'timeQuantity$ebnf$1$subexpression$1'],
+        postprocess: function arrpush(d) {
+          return d[0].concat([d[1]]);
+        },
+      },
+      {
+        name: 'timeQuantity',
+        symbols: [
+          { literal: '[' },
+          '_',
+          'timeQuantityDefParcel',
+          'timeQuantity$ebnf$1',
+          '_',
+          { literal: ']' },
+        ],
+        postprocess: (d, l) => {
+          const parcel = d[2];
+          const moreParcels = (d[3] && d[3].map((e) => e[1])) || [];
+          const length =
+            d[0].length +
+            d[1].length +
+            parcel.length +
+            lengthOf(moreParcels) +
+            d[4].length +
+            d[5].length;
+
+          return {
+            type: 'time-quantity',
+            args: [
+              ...parcel.parcel,
+              ...moreParcels.map((parcel) => parcel.parcel).flat(),
+            ],
+            location: l,
+            length,
+          };
+        },
+      },
+      {
+        name: 'timeQuantityDefParcel',
+        symbols: ['int', '__', 'timeQuantityUnit'],
+        postprocess: (d, l) => {
+          return {
+            parcel: [d[2].unit, d[0].n],
+            location: l,
+            length: lengthOf(d),
+          };
+        },
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$1$string$1',
+        symbols: [
+          { literal: 'y' },
+          { literal: 'e' },
+          { literal: 'a' },
+          { literal: 'r' },
+        ],
+        postprocess: function joiner(d) {
+          return d.join('');
+        },
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$1',
+        symbols: ['timeQuantityUnit$subexpression$1$string$1'],
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$1$string$2',
+        symbols: [
+          { literal: 'y' },
+          { literal: 'e' },
+          { literal: 'a' },
+          { literal: 'r' },
+          { literal: 's' },
+        ],
+        postprocess: function joiner(d) {
+          return d.join('');
+        },
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$1',
+        symbols: ['timeQuantityUnit$subexpression$1$string$2'],
+      },
+      {
+        name: 'timeQuantityUnit',
+        symbols: ['timeQuantityUnit$subexpression$1'],
+        postprocess: (d) => ({ unit: 'years', length: d[0][0].length }),
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$2$string$1',
+        symbols: [
+          { literal: 'm' },
+          { literal: 'o' },
+          { literal: 'n' },
+          { literal: 't' },
+          { literal: 'h' },
+        ],
+        postprocess: function joiner(d) {
+          return d.join('');
+        },
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$2',
+        symbols: ['timeQuantityUnit$subexpression$2$string$1'],
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$2$string$2',
+        symbols: [
+          { literal: 'm' },
+          { literal: 'o' },
+          { literal: 'n' },
+          { literal: 't' },
+          { literal: 'h' },
+          { literal: 's' },
+        ],
+        postprocess: function joiner(d) {
+          return d.join('');
+        },
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$2',
+        symbols: ['timeQuantityUnit$subexpression$2$string$2'],
+      },
+      {
+        name: 'timeQuantityUnit',
+        symbols: ['timeQuantityUnit$subexpression$2'],
+        postprocess: (d) => ({ unit: 'months', length: d[0][0].length }),
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$3$string$1',
+        symbols: [
+          { literal: 'w' },
+          { literal: 'e' },
+          { literal: 'e' },
+          { literal: 'k' },
+        ],
+        postprocess: function joiner(d) {
+          return d.join('');
+        },
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$3',
+        symbols: ['timeQuantityUnit$subexpression$3$string$1'],
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$3$string$2',
+        symbols: [
+          { literal: 'w' },
+          { literal: 'e' },
+          { literal: 'e' },
+          { literal: 'k' },
+          { literal: 's' },
+        ],
+        postprocess: function joiner(d) {
+          return d.join('');
+        },
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$3',
+        symbols: ['timeQuantityUnit$subexpression$3$string$2'],
+      },
+      {
+        name: 'timeQuantityUnit',
+        symbols: ['timeQuantityUnit$subexpression$3'],
+        postprocess: (d) => ({ unit: 'weeks', length: d[0][0].length }),
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$4$string$1',
+        symbols: [{ literal: 'd' }, { literal: 'a' }, { literal: 'y' }],
+        postprocess: function joiner(d) {
+          return d.join('');
+        },
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$4',
+        symbols: ['timeQuantityUnit$subexpression$4$string$1'],
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$4$string$2',
+        symbols: [
+          { literal: 'd' },
+          { literal: 'a' },
+          { literal: 'y' },
+          { literal: 's' },
+        ],
+        postprocess: function joiner(d) {
+          return d.join('');
+        },
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$4',
+        symbols: ['timeQuantityUnit$subexpression$4$string$2'],
+      },
+      {
+        name: 'timeQuantityUnit',
+        symbols: ['timeQuantityUnit$subexpression$4'],
+        postprocess: (d) => ({ unit: 'days', length: d[0][0].length }),
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$5$string$1',
+        symbols: [
+          { literal: 'h' },
+          { literal: 'o' },
+          { literal: 'u' },
+          { literal: 'r' },
+        ],
+        postprocess: function joiner(d) {
+          return d.join('');
+        },
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$5',
+        symbols: ['timeQuantityUnit$subexpression$5$string$1'],
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$5$string$2',
+        symbols: [
+          { literal: 'h' },
+          { literal: 'o' },
+          { literal: 'u' },
+          { literal: 'r' },
+          { literal: 's' },
+        ],
+        postprocess: function joiner(d) {
+          return d.join('');
+        },
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$5',
+        symbols: ['timeQuantityUnit$subexpression$5$string$2'],
+      },
+      {
+        name: 'timeQuantityUnit',
+        symbols: ['timeQuantityUnit$subexpression$5'],
+        postprocess: (d) => ({ unit: 'hours', length: d[0][0].length }),
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$6$string$1',
+        symbols: [
+          { literal: 'm' },
+          { literal: 'i' },
+          { literal: 'n' },
+          { literal: 'u' },
+          { literal: 't' },
+          { literal: 'e' },
+        ],
+        postprocess: function joiner(d) {
+          return d.join('');
+        },
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$6',
+        symbols: ['timeQuantityUnit$subexpression$6$string$1'],
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$6$string$2',
+        symbols: [
+          { literal: 'm' },
+          { literal: 'i' },
+          { literal: 'n' },
+          { literal: 'u' },
+          { literal: 't' },
+          { literal: 'e' },
+          { literal: 's' },
+        ],
+        postprocess: function joiner(d) {
+          return d.join('');
+        },
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$6',
+        symbols: ['timeQuantityUnit$subexpression$6$string$2'],
+      },
+      {
+        name: 'timeQuantityUnit',
+        symbols: ['timeQuantityUnit$subexpression$6'],
+        postprocess: (d) => ({ unit: 'minutes', length: d[0][0].length }),
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$7$string$1',
+        symbols: [
+          { literal: 's' },
+          { literal: 'e' },
+          { literal: 'c' },
+          { literal: 'o' },
+          { literal: 'n' },
+          { literal: 'd' },
+        ],
+        postprocess: function joiner(d) {
+          return d.join('');
+        },
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$7',
+        symbols: ['timeQuantityUnit$subexpression$7$string$1'],
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$7$string$2',
+        symbols: [
+          { literal: 's' },
+          { literal: 'e' },
+          { literal: 'c' },
+          { literal: 'o' },
+          { literal: 'n' },
+          { literal: 'd' },
+          { literal: 's' },
+        ],
+        postprocess: function joiner(d) {
+          return d.join('');
+        },
+      },
+      {
+        name: 'timeQuantityUnit$subexpression$7',
+        symbols: ['timeQuantityUnit$subexpression$7$string$2'],
+      },
+      {
+        name: 'timeQuantityUnit',
+        symbols: ['timeQuantityUnit$subexpression$7'],
+        postprocess: (d) => ({ unit: 'seconds', length: d[0][0].length }),
+      },
+      {
+        name: 'timeQuantityDefParcelSeparator$subexpression$1$subexpression$1',
+        symbols: ['_', { literal: ',' }, '_'],
+      },
+      {
+        name: 'timeQuantityDefParcelSeparator$subexpression$1',
+        symbols: [
+          'timeQuantityDefParcelSeparator$subexpression$1$subexpression$1',
+        ],
+      },
+      {
+        name:
+          'timeQuantityDefParcelSeparator$subexpression$1$subexpression$2$string$1',
+        symbols: [{ literal: 'a' }, { literal: 'n' }, { literal: 'd' }],
+        postprocess: function joiner(d) {
+          return d.join('');
+        },
+      },
+      {
+        name: 'timeQuantityDefParcelSeparator$subexpression$1$subexpression$2',
+        symbols: [
+          '__',
+          'timeQuantityDefParcelSeparator$subexpression$1$subexpression$2$string$1',
+          '__',
+        ],
+      },
+      {
+        name: 'timeQuantityDefParcelSeparator$subexpression$1',
+        symbols: [
+          'timeQuantityDefParcelSeparator$subexpression$1$subexpression$2',
+        ],
+      },
+      {
+        name:
+          'timeQuantityDefParcelSeparator$subexpression$1$subexpression$3$string$1',
+        symbols: [{ literal: 'a' }, { literal: 'n' }, { literal: 'd' }],
+        postprocess: function joiner(d) {
+          return d.join('');
+        },
+      },
+      {
+        name: 'timeQuantityDefParcelSeparator$subexpression$1$subexpression$3',
+        symbols: [
+          '_',
+          { literal: ',' },
+          '_',
+          'timeQuantityDefParcelSeparator$subexpression$1$subexpression$3$string$1',
+          '__',
+        ],
+      },
+      {
+        name: 'timeQuantityDefParcelSeparator$subexpression$1',
+        symbols: [
+          'timeQuantityDefParcelSeparator$subexpression$1$subexpression$3',
+        ],
+      },
+      {
+        name: 'timeQuantityDefParcelSeparator',
+        symbols: ['timeQuantityDefParcelSeparator$subexpression$1'],
+        postprocess: (d, l) => ({
+          location: l,
+          length: lengthOf(d[0][0]),
+        }),
+      },
+      {
+        name: 'range',
+        symbols: [{ literal: '[' }, '_', 'rangeSpec', '_', { literal: ']' }],
+        postprocess: (d, l) => {
+          const range = d[2];
+          return {
+            ...range,
+            location: l,
+            length: lengthOf(d),
+          };
+        },
+      },
+      {
+        name: 'rangeSpec',
+        symbols: ['expression', 'rangeParcelSeparator', 'expression'],
+        postprocess: (d, l) => {
+          return {
+            type: 'range',
+            args: [d[0], d[2]],
+            location: l,
+            length: lengthOf(d),
+          };
+        },
+      },
+      {
+        name: 'rangeParcelSeparator$subexpression$1$subexpression$1$string$1',
+        symbols: [
+          { literal: 't' },
+          { literal: 'h' },
+          { literal: 'r' },
+          { literal: 'o' },
+          { literal: 'u' },
+          { literal: 'g' },
+          { literal: 'h' },
+        ],
+        postprocess: function joiner(d) {
+          return d.join('');
+        },
+      },
+      {
+        name: 'rangeParcelSeparator$subexpression$1$subexpression$1',
+        symbols: [
+          '__',
+          'rangeParcelSeparator$subexpression$1$subexpression$1$string$1',
+          '__',
+        ],
+      },
+      {
+        name: 'rangeParcelSeparator$subexpression$1',
+        symbols: ['rangeParcelSeparator$subexpression$1$subexpression$1'],
+      },
+      {
+        name: 'rangeParcelSeparator$subexpression$1$subexpression$2$string$1',
+        symbols: [{ literal: '.' }, { literal: '.' }],
+        postprocess: function joiner(d) {
+          return d.join('');
+        },
+      },
+      {
+        name: 'rangeParcelSeparator$subexpression$1$subexpression$2',
+        symbols: [
+          '_',
+          'rangeParcelSeparator$subexpression$1$subexpression$2$string$1',
+          '_',
+        ],
+      },
+      {
+        name: 'rangeParcelSeparator$subexpression$1',
+        symbols: ['rangeParcelSeparator$subexpression$1$subexpression$2'],
+      },
+      {
+        name: 'rangeParcelSeparator',
+        symbols: ['rangeParcelSeparator$subexpression$1'],
+        postprocess: (d, l) => ({
+          location: l,
+          length: lengthOf(d[0][0]),
+        }),
+      },
+      {
+        name: 'sequence',
+        symbols: [{ literal: '[' }, '_', 'sequenceSpec', '_', { literal: ']' }],
+        postprocess: (d, l) => {
+          const seq = d[2];
+          return {
+            ...seq,
+            location: l,
+            length: lengthOf(d),
+          };
+        },
+      },
+      {
+        name: 'sequenceSpec$string$1',
+        symbols: [{ literal: 'b' }, { literal: 'y' }],
+        postprocess: function joiner(d) {
+          return d.join('');
+        },
+      },
+      {
+        name: 'sequenceSpec',
+        symbols: ['rangeSpec', '_', 'sequenceSpec$string$1', '_', 'expression'],
+        postprocess: (d, l) => {
+          const range = d[0];
+          return {
+            type: 'sequence',
+            args: [range.args[0], range.args[1], d[4]],
+          };
+        },
+      },
       {
         name: 'block',
         symbols: ['_', 'statement'],

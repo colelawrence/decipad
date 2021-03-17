@@ -7,6 +7,9 @@
 @include "./column.ne"
 @include "./table.ne"
 @include "./expression.ne"
+@include "./time-quantity.ne"
+@include "./range.ne"
+@include "./sequence.ne"
 @{%
 
 const knownUnits = require('./units').knownUnits
@@ -21,6 +24,7 @@ const reservedWords = new Set([
   'if',
   'then',
   'else',
+  'through',
   '+',
   '-',
   '*',
@@ -53,6 +57,23 @@ const monthStrings = new Set([
   'November',
   'Dec',
   'December'
+])
+
+const timeUnitStrings = new Set([
+  'year',
+  'years',
+  'month',
+  'months',
+  'weeks',
+  'week',
+  'day',
+  'days',
+  'hour',
+  'hours',
+  'minute',
+  'minutes',
+  'second',
+  'seconds'
 ])
 
 function isReservedWord(str) {
@@ -430,8 +451,3 @@ conditional  -> "if" __ expression __ "then" __ expression __ "else" __ expressi
                                                           length: lengthOf(d)
                                                         })
                                                         %}
-
-
-
-
-
