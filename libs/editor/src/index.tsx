@@ -1,6 +1,7 @@
 import { Box } from '@chakra-ui/react';
 import { EditablePlugins, pipe } from '@udecode/slate-plugins';
 import { nanoid } from 'nanoid';
+import dynamic from 'next/dynamic';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { createEditor, Node } from 'slate';
 import {
@@ -13,12 +14,28 @@ import { Elements } from './Elements';
 import { Leaves } from './Leaves';
 import { plugins, withPlugins } from './plugins';
 import { commands } from './plugins/DashCommands/commands';
-import { DashCommandsPortal } from './plugins/DashCommands/DashCommandsPortal';
+import { DashCommandsPortalProps } from './plugins/DashCommands/DashCommandsPortal';
 import { useDashCommands } from './plugins/DashCommands/useDashCommands';
 import { HoveringToolbar } from './plugins/HoveringToolbar/HoveringToolbar.component';
-import { MentionPortal } from './plugins/MentionPlugin/MentionPortal.component';
+import { MentionPortalProps } from './plugins/MentionPlugin/MentionPortal.component';
 import { useMention } from './plugins/MentionPlugin/useMention';
 import { users } from './plugins/MentionPlugin/users';
+
+const DashCommandsPortal = dynamic<DashCommandsPortalProps>(
+  () =>
+    import('./plugins/DashCommands/DashCommandsPortal').then(
+      (res) => res.DashCommandsPortal
+    ),
+  { ssr: false }
+);
+
+const MentionPortal = dynamic<MentionPortalProps>(
+  () =>
+    import('./plugins/MentionPlugin/MentionPortal.component').then(
+      (res) => res.MentionPortal
+    ),
+  { ssr: false }
+);
 
 const actorId = nanoid();
 

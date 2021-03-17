@@ -14,11 +14,14 @@ import { Editor, Location, Range } from 'slate';
 import { ReactEditor, useEditor } from 'slate-react';
 import { Command } from './commands';
 
-const Portal = dynamic(() => import('../utils/Portal.component'), {
-  ssr: false,
-});
+const Portal = dynamic(
+  () => import('../utils/Portal.component').then((res) => res.Portal),
+  {
+    ssr: false,
+  }
+);
 
-interface DashCommandsPortalProps {
+export interface DashCommandsPortalProps {
   target: Range | null;
   values: Command[];
   index: number;

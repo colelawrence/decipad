@@ -4,11 +4,14 @@ import React, { useEffect, useRef } from 'react';
 import { Range } from 'slate';
 import { ReactEditor, useSlate } from 'slate-react';
 
-const Portal = dynamic(() => import('../utils/Portal.component'), {
-  ssr: false,
-});
+const Portal = dynamic(
+  () => import('../utils/Portal.component').then((res) => res.Portal),
+  {
+    ssr: false,
+  }
+);
 
-interface MentionPortalProps {
+export interface MentionPortalProps {
   target: Range | null | undefined;
   users: string[];
   index: number;
