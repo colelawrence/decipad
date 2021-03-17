@@ -80,7 +80,7 @@
       "prettier --write"
     ],
     "*.ts?(x)": [
-      "jest",
+      "jest --passWithNoTests",
       "eslint --cache"
     ]
   },
