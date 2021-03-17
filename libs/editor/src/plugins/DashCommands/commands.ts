@@ -8,8 +8,9 @@ export interface Command {
 }
 
 const getLightImage = (name: string) =>
-  `/dash-commands-images/light/${name}.svg`;
-const getDarkImage = (name: string) => `/dash-commands-images/dark/${name}.svg`;
+  `/assets/dash-commands-images/light/${name}.svg`;
+const getDarkImage = (name: string) =>
+  `/assets/dash-commands-images/dark/${name}.svg`;
 
 export const commands: Command[] = [
   {

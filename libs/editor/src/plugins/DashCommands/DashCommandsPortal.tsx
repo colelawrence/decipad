@@ -1,7 +1,6 @@
 import {
   Box,
   Grid,
-  Image,
   Square,
   Text,
   useColorMode,
@@ -9,6 +8,7 @@ import {
 } from '@chakra-ui/react';
 import { getPreventDefaultHandler } from '@udecode/slate-plugins';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import React, { useEffect, useRef } from 'react';
 import { Editor, Location, Range } from 'slate';
 import { ReactEditor, useEditor } from 'slate-react';
@@ -86,9 +86,19 @@ export const DashCommandsPortal = ({
             >
               <Square>
                 {colorMode === 'dark' ? (
-                  <Image src={value.darkImage} alt="Preview" height="20px" />
+                  <Image
+                    src={value.darkImage}
+                    alt="Preview"
+                    height="20px"
+                    width="auto"
+                  />
                 ) : (
-                  <Image src={value.lightImage} alt="Preview" height="20px" />
+                  <Image
+                    src={value.lightImage}
+                    alt="Preview"
+                    height="20px"
+                    width="auto"
+                  />
                 )}
               </Square>
               <Box>
