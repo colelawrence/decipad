@@ -208,3 +208,16 @@ factor       -> "-" _ expression                        {%
 
 expression   -> conditional                             {% id %}
 expression   -> functionCall                            {% id %}
+factor       -> term _ "." _ propertyAccessor           {%
+                                                        (d, l) => ({
+                                                          type: 'property-access',
+                                                          args: [
+                                                            d[0],
+                                                            d[4].name
+                                                          ],
+                                                          location: l,
+                                                          length: lengthOf(d)
+                                                        })
+                                                        %}
+
+propertyAccessor -> referenceInExpression               {% id %}

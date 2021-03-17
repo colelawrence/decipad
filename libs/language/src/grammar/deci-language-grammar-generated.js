@@ -2315,6 +2315,21 @@
       },
       { name: 'expression', symbols: ['conditional'], postprocess: id },
       { name: 'expression', symbols: ['functionCall'], postprocess: id },
+      {
+        name: 'factor',
+        symbols: ['term', '_', { literal: '.' }, '_', 'propertyAccessor'],
+        postprocess: (d, l) => ({
+          type: 'property-access',
+          args: [d[0], d[4].name],
+          location: l,
+          length: lengthOf(d),
+        }),
+      },
+      {
+        name: 'propertyAccessor',
+        symbols: ['referenceInExpression'],
+        postprocess: id,
+      },
       { name: 'timeQuantity$ebnf$1', symbols: [] },
       {
         name: 'timeQuantity$ebnf$1$subexpression$1',
