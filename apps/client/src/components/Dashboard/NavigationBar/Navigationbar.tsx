@@ -10,7 +10,7 @@ import { FiLogOut } from 'react-icons/fi';
 export const NavigationBar = () => {
   const [session] = useSession();
   return (
-    <HStack justifyContent="space-between">
+    <HStack justifyContent="space-between" px={9}>
       <Image
         src="/assets/deci-logo-brand.png"
         alt="Brand"
