@@ -1,9 +1,6 @@
-import { Button } from '@chakra-ui/button';
-import { Box } from '@chakra-ui/layout';
-import { DeciEditor } from '@decipad/editor';
-import { signOut, useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/client';
 import React from 'react';
-import { v4 } from 'uuid';
+import { Dashboard } from '../components/Dashboard/Dashboard';
 import { Login } from '../components/Login/Login';
 
 const Home = () => {
@@ -11,12 +8,7 @@ const Home = () => {
   return (
     <>
       {!session && <Login />}
-      {session && (
-        <Box>
-          <Button onClick={() => signOut()}>Sign out</Button>
-          <DeciEditor docId={v4()} />
-        </Box>
-      )}
+      {session && <Dashboard />}
     </>
   );
 };
