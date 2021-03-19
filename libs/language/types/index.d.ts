@@ -58,7 +58,21 @@ declare namespace AST {
     end: Pos;
   }
 
-  type Identifier = Ref | FuncRef | Def | FuncDef;
+  interface ColDef {
+    type: "coldef"
+    args: [colName: string]
+    start: Pos
+    end: Pos
+  }
+
+  interface TableDef {
+    type: "tabledef"
+    args: [tableName: string]
+    start: Pos
+    end: Pos
+  }
+
+  type Identifier = Ref | FuncRef | Def | FuncDef | ColDef | TableDef;
 
   // Literal number, char, string etc
 
@@ -85,6 +99,20 @@ declare namespace AST {
     ];
     start: Pos;
     end: Pos;
+  }
+
+  interface TableColumns {
+    type: "table-columns"
+    args: (ColDef | Expression)[]
+    start: Pos
+    end: Pos
+  }
+
+  interface TableDefinition {
+    type: "table-definition"
+    args: [TableDef, TableColumns]
+    start: Pos
+    end: Pos
   }
 
   // Function calls and operators
@@ -146,9 +174,9 @@ declare namespace AST {
   }
 
   type Expression = FunctionCall | Ref | Literal | Conditional | Column;
-  type Statement = FunctionDefinition | Assign | Expression;
+  type Statement = FunctionDefinition | Assign | TableDefinition | Expression;
 
-  type Lists = FunctionArgumentNames | ArgList;
+  type Lists = FunctionArgumentNames | ArgList | TableColumns;
 
   type Node = Block | Statement | Identifier | Lists;
 
@@ -157,10 +185,14 @@ declare namespace AST {
     ref: Ref;
     funcref: FuncRef;
     funcdef: FuncDef;
+    coldef: ColDef;
+    tabledef: TableDef;
     literal: Literal;
     "argument-list": ArgList;
     "function-call": FunctionCall;
     column: Column;
+    "table-columns": TableColumns;
+    "table-definition": TableDefinition;
     conditional: Conditional;
     assign: Assign;
     "argument-names": FunctionArgumentNames;
@@ -169,8 +201,13 @@ declare namespace AST {
   }
 }
 
+declare namespace Interpreter {
+  type Value = (number | number[] | Map<string, number>)[]
+}
+
 type Type = import('../src/type').Type
+type TableType = import('../src/type').TableType
 interface Result {
-  type: Type,
-  value: number[]
+  type: Type | TableType,
+  value: Interpreter.Result
 }

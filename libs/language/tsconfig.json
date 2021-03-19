@@ -30,5 +30,8 @@
     "./tests/*.ts",
     "./src/**/*.ts",
     "./src/**/*.js"
-  ]
+  ],
+  "ts-node": {
+    "files": true
+  }
 }

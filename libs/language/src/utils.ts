@@ -58,6 +58,15 @@ export function col(...values: (LitType | AST.Expression)[]): AST.Column {
   }))
 }
 
+export function tableDef(name: string, columns: Record<string, AST.Expression>): AST.TableDefinition {
+  const tableCols: AST.TableColumns = n('table-columns')
+  for (const [key, value] of Object.entries(columns)) {
+    tableCols.args.push(n('coldef', key))
+    tableCols.args.push(value)
+  }
+  return n('table-definition', n('tabledef', name), tableCols)
+}
+
 export function c(fName: string, ...args: AST.Expression[]) {
   return n("function-call", n("funcref", fName), n("argument-list", ...args));
 }
@@ -115,7 +124,9 @@ export const getIdentifierString = ({ type, args }: AST.Identifier): string => {
     (type !== "ref" &&
       type !== "def" &&
       type !== "funcdef" &&
-      type !== "funcref") ||
+      type !== "funcref" &&
+      type !== "coldef" &&
+      type !== "tabledef") ||
     typeof args[0] !== "string"
   ) {
     throw new Error("panic: identifier expected");

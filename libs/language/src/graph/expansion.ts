@@ -146,6 +146,7 @@ const getHygienicFunctionExpansion = (
 
   if (
     lastStatement.type === "function-definition" ||
+    lastStatement.type === "table-definition" ||
     lastStatement.type === "assign"
   ) {
     throw new Error(
@@ -170,6 +171,18 @@ export const expandStatement = (
     case "function-definition": {
       // Function definitions are not expanded themselves
       return null;
+    }
+
+    case "table-definition": {
+      // Assignments are preserved so that exports can be found afterwards.
+      return produce(statement, (tableDef) => {
+        const tableCols = tableDef.args[1]
+
+        // Pairwise iteration
+        for (let i = 0; i + 1 < tableCols.args.length; i += 2) {
+          tableCols.args[i] = expandExpression(blocks, tableCols.args[i])
+        }
+      });
     }
 
     case "assign": {

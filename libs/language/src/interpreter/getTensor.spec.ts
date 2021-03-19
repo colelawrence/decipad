@@ -1,98 +1,45 @@
 import * as tf from "@tensorflow/tfjs-core";
-import { n, c, l, col, funcDef } from "../utils";
+import { n, c, l, col } from "../utils";
 
-import { getTensor, getTensorWithTargets } from "./getTensor";
+import { getTensor } from "./getTensor";
 import { Realm } from './Realm'
+import { isTable } from './types'
 
-const testMultiTensors = (
-  program: AST.Block[],
-  targets: Array<string | number | [blockIdx: number, statementIdx: number]>
-): number[] => {
-  const tensorWithTargets = tf.tidy(() =>
-    getTensorWithTargets(program, targets)
-  );
+const testGetTensor = (statement: AST.Statement): number[] | Record<string, number[]> => {
+  const columns = tf.tidy(() => {
+    const tensor = getTensor(new Realm(), statement)
 
-  try {
-    return [...(tensorWithTargets.dataSync() as Float32Array)];
-  } finally {
-    tensorWithTargets.dispose();
-  }
-};
-
-const testGetTensor = (statement: AST.Statement): number[] => {
-  const tensor = tf.tidy(() => getTensor(new Realm(), statement))
+    // tf.tidy walks returned objects (just the top level though)
+    return isTable(tensor) ? tensor : { __notTable: tensor }
+  })
 
   try {
-    return [...tensor.dataSync()]
+    let columnsWithData: Record<string, number[]> = {}
+    for (const [key, value] of Object.entries(columns)) {
+      columnsWithData[key] = [...value.dataSync()]
+    }
+    if (Array.isArray(columnsWithData.__notTable)) {
+      return columnsWithData.__notTable
+    } else {
+      return columnsWithData
+    }
   } finally {
-    tensor.dispose()
+    for (const tensor of Object.values(columns)) {
+      tensor.dispose()
+    }
   }
 }
 
 it("runs", () => {
-  const onePlusOne = [n("block", c("+", l(1), l(1)))];
+  const onePlusOne = c("+", l(1), l(1));
 
-  expect(testMultiTensors(onePlusOne, [0])).toEqual([2]);
-});
-
-it("can create and use variables", () => {
-  const withVariables = n(
-    "block",
-    n("assign", n("def", "Some Variable"), n("literal", "number", 1, null)),
-    n("ref", "Some Variable")
-  );
-
-  expect(testMultiTensors([withVariables], ["Some Variable"])).toEqual([1]);
-});
-
-it("can target specific expressions", () => {
-  const withVariables = n(
-    "block",
-    n("assign", n("def", "Some Variable"), n("literal", "number", 1, null)),
-    c("+", l(1), l(2)),
-    n("ref", "Some Variable")
-  );
-
-  expect(testMultiTensors([withVariables], [[0, 1]])).toEqual([3]);
-  expect(testMultiTensors([withVariables], [[0, 2]])).toEqual([1]);
-});
-
-it("can return multiple results", () => {
-  const multipleResults = n(
-    "block",
-    n("assign", n("def", "Variable"), l(1)),
-    c("+", n("ref", "Variable"), l(2))
-  );
-
-  expect(testMultiTensors([multipleResults], ["Variable", 0])).toEqual([1, 3]);
+  expect(testGetTensor(onePlusOne)).toEqual([2]);
 });
 
 it('evaluates conditions', () => {
-  const condition = n(
-    'block',
-    n('conditional', l(true), l(1), l(0))
-  )
+  const condition = n('conditional', l(true), l(1), l(0))
 
-  expect(testMultiTensors([condition], [0])).toEqual([1])
-})
-
-it('evaluates columns', () => {
-  const column = col(1, 2, 3)
-  const programWithArray = n(
-    'block',
-    n('assign', n('def', 'Array'), column),
-    c('+',
-      n('ref', 'Array'),
-      col(
-        3,
-        c('+', l(1), l(1)),
-        1
-      )
-    )
-  )
-
-  expect(testGetTensor(column)).toEqual([1, 2, 3])
-  expect(testMultiTensors([programWithArray], [0])).toEqual([4, 4, 4])
+  expect(testGetTensor(condition)).toEqual([1])
 })
 
 it('can perform calculations between columns and single numbers', () => {
@@ -108,23 +55,3 @@ it('can perform calculations between columns and single numbers', () => {
     c('+', l(1), col(1, 2, 3))
   )).toEqual([2, 3, 4])
 })
-
-describe("functions", () => {
-  it("can create and use functions", () => {
-    const usingFunctions = n(
-      "block",
-      funcDef(
-        "Function Name",
-        ["Arg 1", "Arg 2"],
-        c("+", n("ref", "Arg 1"), n("ref", "Arg 2"))
-      ),
-      c(
-        "Function Name",
-        n("literal", "number", 1, null),
-        n("literal", "number", 2, null)
-      )
-    );
-
-    expect(testMultiTensors([usingFunctions], [0])).toEqual([3]);
-  });
-});

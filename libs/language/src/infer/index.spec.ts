@@ -1,10 +1,11 @@
 import { produce } from "immer";
-import { Type, InferError, inverseExponent } from "../type";
+import { Type, TableType, InferError, inverseExponent } from "../type";
 
-import { l, c, n, r, col, funcDef } from "../utils";
+import { l, c, n, r, col, tableDef, funcDef } from "../utils";
 
 import { makeContext } from "./context";
 import {
+  inferStatement,
   inferExpression,
   inferFunction,
   inferProgram,
@@ -50,6 +51,22 @@ it("typechecks columns", () => {
 it("column-ness is infectious", () => {
   expect(inferExpression(nilCtx, c('+', col(1, 2, 3), l(1)))).toEqual(Type.Number.isColumn(3))
   expect(inferExpression(nilCtx, c('+', l(1), col(1, 2, 3)))).toEqual(Type.Number.isColumn(3))
+})
+
+it('infers table defs', () => {
+  const tableContext = makeContext()
+
+  const expectedType = new TableType(new Map([
+    ['Col1', Type.Number.isColumn(3)],
+    ['Col2', Type.Number.isColumn(3)],
+  ]))
+
+  expect(inferStatement(tableContext, tableDef('Table', {
+    Col1: col(1, 2, 3),
+    Col2: c('+', n('ref', 'Col1'), l(2))
+  }))).toEqual(expectedType)
+
+  expect(tableContext.tables.get('Table')).toEqual(expectedType)
 })
 
 it("typechecks refs", () => {
@@ -188,14 +205,14 @@ describe("inferProgram", () => {
     });
     const badCall = wrongProgram[0].args[1];
 
-    expect(inferProgram(program)).toEqual({
+    expect(inferProgram(program)).toMatchObject({
       variables: new Map([["A", Type.Number]]),
       functions: new Map(),
       blockReturns: [Type.Number],
     });
 
     const error = new InferError("Mismatched types: number and string");
-    expect(inferProgram(wrongProgram)).toEqual({
+    expect(inferProgram(wrongProgram)).toMatchObject({
       variables: new Map([["A", Type.Number]]),
       functions: new Map(),
       blockReturns: [Type.Impossible.withErrorCause(error).inNode(badCall)],
@@ -219,7 +236,7 @@ describe("inferProgram", () => {
       ),
     ];
 
-    expect(inferProgram(program)).toEqual({
+    expect(inferProgram(program)).toMatchObject({
       variables: new Map([["Result", Type.Number]]),
       functions: new Map([
         [
@@ -243,7 +260,7 @@ describe("inferProgram", () => {
       ),
     ];
 
-    expect(inferProgram(program)).toEqual({
+    expect(inferProgram(program)).toMatchObject({
       variables: new Map([
         ["A Number", Type.Number],
         ["A String", Type.String],
