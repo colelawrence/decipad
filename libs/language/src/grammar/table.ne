@@ -2,7 +2,7 @@
 ### Table ###
 #############
 
-tableDef -> referenceName _ "=" _ tableColumnList         {%
+tableDef -> referenceName _ "=" _ tableColumnList       {%
                                                         (d, l) => {
                                                           const defSymbol = {
                                                             type: 'tabledef',
@@ -20,13 +20,13 @@ tableDef -> referenceName _ "=" _ tableColumnList         {%
                                                         }
                                                         %}
 
-tableColumnList -> "{" tableColDef "}"                {%
+tableColumnList -> "{" tableColDef "}"                  {%
                                                         (d, l) => {
                                                           return {
                                                             type: 'table-columns',
                                                             args: d[1].coldefs,
                                                             location: l,
-                                                            length: lengthOf([d[0], d[1], d[2]])
+                                                            length: lengthOf(d)
                                                           }
                                                         }
                                                         %}
