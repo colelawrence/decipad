@@ -19,6 +19,7 @@
     "language": { "tags": [] },
     "client": { "tags": [] },
     "client-e2e": { "tags": [], "implicitDependencies": ["client"] },
-    "ui": { "tags": [] }
+    "ui": { "tags": [] },
+    "editor": { "tags": [] }
   }
 }

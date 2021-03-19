@@ -3,5 +3,6 @@ module.exports = {
     '<rootDir>/libs/language',
     '<rootDir>/apps/client',
     '<rootDir>/libs/ui',
+    '<rootDir>/libs/editor',
   ],
 };

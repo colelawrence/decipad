@@ -1,0 +1,38 @@
+import { Avatar } from '@chakra-ui/avatar';
+import Icon from '@chakra-ui/icon';
+import { Heading, HStack } from '@chakra-ui/layout';
+import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/menu';
+import { signOut, useSession } from 'next-auth/client';
+import Image from 'next/image';
+import React from 'react';
+import { FiLogOut } from 'react-icons/fi';
+
+export const NavigationBar = () => {
+  const [session] = useSession();
+  return (
+    <HStack justifyContent="space-between" px={9}>
+      <Image
+        src="/assets/deci-logo-brand.png"
+        alt="Brand"
+        width="60px"
+        height="60px"
+      />
+      <HStack>
+        <Heading fontSize="2xl" pr={3}>
+          {session.user.name}
+        </Heading>
+        <Menu>
+          <MenuButton>
+            <Avatar src={session.user.image} />
+          </MenuButton>
+          <MenuList>
+            <MenuItem onClick={() => signOut()}>
+              <Icon as={FiLogOut} mr={3} />
+              Log out
+            </MenuItem>
+          </MenuList>
+        </Menu>
+      </HStack>
+    </HStack>
+  );
+};
