@@ -136,6 +136,16 @@ statement     -> functionDef                            {%
                                                           }
                                                         }
                                                         %}
+statement     -> tableDef                               {%
+                                                        (d, l) => {
+                                                          const stmt = d[0]
+                                                          return {
+                                                            ...stmt,
+                                                            location: l,
+                                                            length: stmt.length
+                                                          }
+                                                        }
+                                                        %}
 statement     -> expression                             {%
                                                         (d, l) => {
                                                           const stmt = d[0]

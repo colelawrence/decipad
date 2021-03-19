@@ -46,6 +46,8 @@
     "@nrwl/workspace": "11.5.1",
     "@testing-library/react": "11.1.2",
     "@types/jest": "26.0.8",
+    "@types/lodash.debounce": "^4.0.6",
+    "@types/nearley": "^2.11.1",
     "@types/next-auth": "^3.7.1",
     "@types/node": "12.12.38",
     "@types/react": "16.9.56",

@@ -8,7 +8,6 @@ literal     -> string                                   {% id %}
 literal     -> number                                   {% id %}
 literal     -> timeQuantity                             {% id %}
 literal     -> column                                   {% id %}
-literal     -> table                                    {% id %}
 literal     -> date                                     {% id %}
 literal     -> range                                    {% id %}
 literal     -> sequence                                 {% id %}

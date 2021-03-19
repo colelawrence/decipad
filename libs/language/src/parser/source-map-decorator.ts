@@ -8,7 +8,8 @@ const typesWithArgs = new Set([
   "argument-names",
   "function-definition",
   "block",
-  "table"
+  "table-definition",
+  "table-columns",
 ]);
 
 export function sourceMapDecorator(
@@ -51,7 +52,7 @@ export function sourceMapDecorator(
     };
 
     if (typesWithArgs.has(node.type)) {
-      node.args = (node.args.map((node: unknown) =>
+      node.args = ((node.args as AST.Node[]).map((node: unknown) =>
         decorateNode(node as ParserNode)
       ) as unknown) as ParserNode[];
     } else if (node.type === "literal") {
@@ -62,10 +63,6 @@ export function sourceMapDecorator(
           n.args[2] = (units.map((unit: unknown) =>
             decorateNode(unit as ParserNode)
           ) as unknown) as AST.Unit[];
-        }
-      } else if (n.args[0] === "table") {
-        for (let i = 1; i < n.args.length; i++) {
-          n.args[i] = decorateNode(n.args[i])
         }
       }
     }
