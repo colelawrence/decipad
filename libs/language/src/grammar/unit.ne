@@ -11,7 +11,7 @@ units -> unit                                           {%
                                                         }
                                                         %}
 
-units -> unit ( "." | "*" ) units                       {%
+units -> unit ( "*" ) units                       {%
                                                         (d, l) => {
                                                           return {
                                                             units: [d[0], ...d[2].units],

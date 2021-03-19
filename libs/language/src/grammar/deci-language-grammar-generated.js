@@ -457,7 +457,6 @@
           };
         },
       },
-      { name: 'units$subexpression$1', symbols: [{ literal: '.' }] },
       { name: 'units$subexpression$1', symbols: [{ literal: '*' }] },
       {
         name: 'units',

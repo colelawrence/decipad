@@ -43,7 +43,7 @@ runTests({
   },
 
   'expression is number with composed units': {
-    source: '10 apples.oranges',
+    source: '10 apples*oranges',
     ast: [
       {
         type: 'literal',
@@ -337,7 +337,7 @@ runTests({
   },
 
   'expression is number with complex composed unit (2)': {
-    source: '3 kg^3/hm^2.MWatt',
+    source: '3 kg^3/hm^2*MWatt',
     ast: [
       {
         type: 'literal',
