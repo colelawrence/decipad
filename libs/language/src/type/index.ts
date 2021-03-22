@@ -300,3 +300,14 @@ export class Type {
     });
   }
 }
+
+export class TableType {
+  constructor(public columnDefs: Map<string, Type>) {}
+
+  toString() {
+    const columns = [...this.columnDefs.entries()].map(([col, value]) => {
+      return `${col} = ${value.toString()}`
+    }).join(', ')
+    return `table { ${columns} }`
+  }
+}

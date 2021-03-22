@@ -1,5 +1,5 @@
 import { functors } from '../builtins';
-import { FunctionType, InferError, Type, TypeName, typeNames } from '../type';
+import { FunctionType, InferError, Type, TableType, TypeName, typeNames } from '../type';
 import { getDefined, getIdentifierString, getOfType } from '../utils';
 import { Context, makeContext } from './context';
 
@@ -56,14 +56,13 @@ export const inferExpression = (ctx: Context, expr: AST.Expression): Type => {
     case 'function-call': {
       const fName = getIdentifierString(expr.args[0]);
       const fArgs = getOfType('argument-list', expr.args[1]).args;
+      const givenArguments: Type[] = fArgs.map((arg) =>
+        inferExpression(ctx, arg)
+      );
 
       const functionDefinition = ctx.functionDefinitions.get(fName);
 
       if (functionDefinition != null) {
-        const givenArguments: Type[] = fArgs.map((arg) =>
-          inferExpression(ctx, arg)
-        );
-
         const functionType = inferFunction(
           ctx,
           functionDefinition,
@@ -77,14 +76,10 @@ export const inferExpression = (ctx: Context, expr: AST.Expression): Type => {
           fName in functors.binary
             ? functors.binary[fName]
             : functors.unary[fName],
-          'unknown builtin function ' + fName
+          'panic: unknown builtin function ' + fName
         );
 
-        return Type.runFunctor(
-          expr,
-          functor,
-          ...fArgs.map((a) => inferExpression(ctx, a))
-        );
+        return Type.runFunctor(expr, functor, ...givenArguments);
       }
     }
     case 'conditional': {
@@ -152,7 +147,7 @@ export const inferFunction = (
 export const inferStatement = (
   /* Mutable! */ ctx: Context,
   statement: AST.Statement
-): Type | FunctionType => {
+): Type | TableType | FunctionType => {
   switch (statement.type) {
     case 'assign': {
       const [nName, nValue] = statement.args;
@@ -168,6 +163,27 @@ export const inferStatement = (
       ctx.functions.set(fName, type);
       return type;
     }
+    case 'table-definition': {
+      const tName = getIdentifierString(statement.args[0]);
+      const table: AST.TableColumns = statement.args[1]
+
+      const tableType = ctx.stack.withPush(() => {
+        const columnDefs: Map<string, Type> = new Map()
+
+        for (let i = 0; i + 1 < table.args.length; i += 2) {
+          const name = getIdentifierString(table.args[i] as AST.ColDef)
+          const type = inferExpression(ctx, table.args[i + 1] as AST.Expression)
+
+          ctx.stack.set(name, type)
+          columnDefs.set(name, type)
+        }
+
+        return new TableType(columnDefs)
+      })
+
+      ctx.tables.set(tName, tableType)
+      return tableType
+    }
     default: {
       return inferExpression(ctx, statement);
     }
@@ -177,14 +193,15 @@ export const inferStatement = (
 interface InferProgramResult {
   variables: Map<string, Type>;
   functions: Map<string, FunctionType>;
-  blockReturns: Array<Type | FunctionType>;
+  tables: Map<string, TableType>;
+  blockReturns: Array<Type | TableType | FunctionType>;
 }
 
 export const inferProgram = (
   program: AST.Block[],
   ctx = makeContext()
 ): InferProgramResult => {
-  const blockReturns: Array<Type | FunctionType> = [];
+  const blockReturns: Array<Type | TableType | FunctionType> = [];
 
   for (const block of program) {
     if (block.args.length === 0) {
@@ -202,6 +219,7 @@ export const inferProgram = (
 
   return {
     variables: ctx.stack.top,
+    tables: ctx.tables,
     functions: ctx.functions,
     blockReturns,
   };
@@ -211,7 +229,7 @@ export const inferTargetStatement = (
   program: AST.Block[],
   [blockId, statementOffset]: [blockId: number, statementOffset: number],
   ctx = makeContext()
-): Type => {
+): Type | TableType => {
   for (let blockIndex = 0; blockIndex < program.length; blockIndex++) {
     const block = program[blockIndex];
 
@@ -224,6 +242,8 @@ export const inferTargetStatement = (
 
       if (blockIndex === blockId && statementOffset === statementIndex) {
         if (type instanceof Type) {
+          return type;
+        } else if (type instanceof TableType) {
           return type;
         } else {
           throw new Error('panic: trying to infer the type of a function');

@@ -2,6 +2,7 @@
 
 import * as AutoChange from 'automerge';
 import { Computer } from './runtime/computer';
+import { Type, TableType } from './type'
 
 const runCode = async (source: string) => {
   const lineCount = source.split('\n').length;
@@ -71,7 +72,7 @@ describe('basic code', () => {
     });
   });
 
-  it('Can perform operations on arrays', async () => {
+  it('Can perform operations on columns', async () => {
     const results = await runCode(`
       Column = [ 0, 1, 2, 4 ]
 
@@ -80,10 +81,11 @@ describe('basic code', () => {
 
     expect(results).toMatchObject({
       type: { possibleTypes: ['number'] },
-      value: [0, 2, 4, 12],
+      value: [[0, 2, 4, 12]],
     });
   });
-  it('Can perform binops between arrays and single numbers', async () => {
+
+  it('Can perform binops between columns and single numbers', async () => {
     const results = await runCode(`
       Column = [ 1, 2, 3 ]
       Column * 2
@@ -91,7 +93,7 @@ describe('basic code', () => {
 
     expect(results).toMatchObject({
       type: { possibleTypes: ['number'], columnSize: 3 },
-      value: [2, 4, 6],
+      value: [[2, 4, 6]],
     });
 
     const results2 = await runCode(`
@@ -101,7 +103,7 @@ describe('basic code', () => {
 
     expect(results2).toMatchObject({
       type: { possibleTypes: ['number'], columnSize: 3 },
-      value: [2, 1, 0.5],
+      value: [[2, 1, 0.5]],
     });
   });
 
@@ -127,6 +129,23 @@ describe('basic code', () => {
     });
   });
 });
+
+describe('Tables', () => {
+  it('can be created', async () => {
+    expect(
+      await runCode(`Table = { Column1 = [1, 2, 3], Column2 = Column1 * 2 }`)
+    ).toMatchObject({
+      type: new TableType(new Map([
+        ['Column1', Type.Number.isColumn(3)],
+        ['Column2', Type.Number.isColumn(3)],
+      ])),
+      value: new Map([
+        ['Column1', [1, 2, 3]],
+        ['Column2', [2, 4, 6]]
+      ])
+    })
+  })
+})
 
 describe('Units', () => {
   it('numbers can have units', async () => {
