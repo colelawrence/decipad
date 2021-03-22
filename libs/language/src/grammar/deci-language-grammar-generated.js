@@ -133,7 +133,6 @@
       { name: 'literal', symbols: ['number'], postprocess: id },
       { name: 'literal', symbols: ['timeQuantity'], postprocess: id },
       { name: 'literal', symbols: ['column'], postprocess: id },
-      { name: 'literal', symbols: ['table'], postprocess: id },
       { name: 'literal', symbols: ['date'], postprocess: id },
       { name: 'literal', symbols: ['range'], postprocess: id },
       { name: 'literal', symbols: ['sequence'], postprocess: id },
@@ -2025,14 +2024,41 @@
         },
       },
       {
-        name: 'table',
+        name: 'tableDef',
+        symbols: [
+          'referenceName',
+          '_',
+          { literal: '=' },
+          '_',
+          'tableColumnList',
+        ],
+        postprocess: (d, l) => {
+          const defSymbol = {
+            type: 'tabledef',
+            args: [d[0].name],
+            location: d[0].location,
+            length: d[0].length,
+          };
+
+          return {
+            type: 'table-definition',
+            args: [defSymbol, d[4]],
+            location: l,
+            length: lengthOf(d),
+          };
+        },
+      },
+      {
+        name: 'tableColumnList',
         symbols: [{ literal: '{' }, 'tableColDef', { literal: '}' }],
-        postprocess: (d, l) => ({
-          type: 'table',
-          args: d[1].coldefs,
-          location: l,
-          length: lengthOf(d),
-        }),
+        postprocess: (d, l) => {
+          return {
+            type: 'table-columns',
+            args: d[1].coldefs,
+            location: l,
+            length: lengthOf(d),
+          };
+        },
       },
       {
         name: 'tableColDef',
@@ -2867,6 +2893,18 @@
       {
         name: 'statement',
         symbols: ['functionDef'],
+        postprocess: (d, l) => {
+          const stmt = d[0];
+          return {
+            ...stmt,
+            location: l,
+            length: stmt.length,
+          };
+        },
+      },
+      {
+        name: 'statement',
+        symbols: ['tableDef'],
         postprocess: (d, l) => {
           const stmt = d[0];
           return {

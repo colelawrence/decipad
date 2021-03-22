@@ -2,38 +2,67 @@ import { runTests } from './run-tests';
 
 runTests({
   'empty table': {
-    source: ' { } ',
+    source: ' Table = { } ',
     ast: [
       {
-        type: 'table',
-        args: [],
+        type: 'table-definition',
+        args: [
+          {
+            type: 'tabledef',
+            args: ['Table'],
+            start: {
+              char: 1,
+              line: 1,
+              column: 2,
+            },
+            end: {
+              char: 5,
+              line: 1,
+              column: 6,
+            },
+          },
+          {
+            type: 'table-columns',
+            args: [],
+            start: {
+              char: 9,
+              line: 1,
+              column: 10,
+            },
+            end: {
+              char: 11,
+              line: 1,
+              column: 12,
+            },
+          },
+        ],
         start: {
           char: 1,
           line: 1,
           column: 2,
         },
         end: {
-          char: 3,
+          char: 11,
           line: 1,
-          column: 4,
+          column: 12,
         },
       },
     ],
   },
 
   'table with one implicit coldef': {
-    source: ' { abc } ',
+    source: ' Table = { abc } ',
     ast: [
       {
-        type: 'table',
+        type: 'table-definition',
         args: [
           {
-            type: 'coldef',
-            args: ['abc'],
+            type: 'tabledef',
+            args: ['Table'],
             start: {
-              char: 3,
+              char: 1,
               line: 1,
-              column: 4,
+              column: 2,
             },
             end: {
               char: 5,
@@ -42,17 +71,46 @@ runTests({
             },
           },
           {
-            type: 'ref',
-            args: ['abc'],
+            type: 'table-columns',
+            args: [
+              {
+                type: 'coldef',
+                args: ['abc'],
+                start: {
+                  char: 11,
+                  line: 1,
+                  column: 12,
+                },
+                end: {
+                  char: 13,
+                  line: 1,
+                  column: 14,
+                },
+              },
+              {
+                type: 'ref',
+                args: ['abc'],
+                start: {
+                  char: 11,
+                  line: 1,
+                  column: 12,
+                },
+                end: {
+                  char: 13,
+                  line: 1,
+                  column: 14,
+                },
+              },
+            ],
             start: {
-              char: 3,
+              char: 9,
               line: 1,
-              column: 4,
+              column: 10,
             },
             end: {
-              char: 5,
+              char: 15,
               line: 1,
-              column: 6,
+              column: 16,
             },
           },
         ],
@@ -62,27 +120,27 @@ runTests({
           column: 2,
         },
         end: {
-          char: 7,
+          char: 15,
           line: 1,
-          column: 8,
+          column: 16,
         },
       },
     ],
   },
 
   'table with three implicit coldefs': {
-    source: ' { abc  ,  def,   ghi} ',
+    source: ' Table = { abc  ,  def,   ghi} ',
     ast: [
       {
-        type: 'table',
+        type: 'table-definition',
         args: [
           {
-            type: 'coldef',
-            args: ['abc'],
+            type: 'tabledef',
+            args: ['Table'],
             start: {
-              char: 3,
+              char: 1,
               line: 1,
-              column: 4,
+              column: 2,
             },
             end: {
               char: 5,
@@ -91,73 +149,102 @@ runTests({
             },
           },
           {
-            type: 'ref',
-            args: ['abc'],
+            type: 'table-columns',
+            args: [
+              {
+                type: 'coldef',
+                args: ['abc'],
+                start: {
+                  char: 11,
+                  line: 1,
+                  column: 12,
+                },
+                end: {
+                  char: 13,
+                  line: 1,
+                  column: 14,
+                },
+              },
+              {
+                type: 'ref',
+                args: ['abc'],
+                start: {
+                  char: 11,
+                  line: 1,
+                  column: 12,
+                },
+                end: {
+                  char: 13,
+                  line: 1,
+                  column: 14,
+                },
+              },
+              {
+                type: 'coldef',
+                args: ['def'],
+                start: {
+                  char: 19,
+                  line: 1,
+                  column: 20,
+                },
+                end: {
+                  char: 21,
+                  line: 1,
+                  column: 22,
+                },
+              },
+              {
+                type: 'ref',
+                args: ['def'],
+                start: {
+                  char: 19,
+                  line: 1,
+                  column: 20,
+                },
+                end: {
+                  char: 21,
+                  line: 1,
+                  column: 22,
+                },
+              },
+              {
+                type: 'coldef',
+                args: ['ghi'],
+                start: {
+                  char: 26,
+                  line: 1,
+                  column: 27,
+                },
+                end: {
+                  char: 28,
+                  line: 1,
+                  column: 29,
+                },
+              },
+              {
+                type: 'ref',
+                args: ['ghi'],
+                start: {
+                  char: 26,
+                  line: 1,
+                  column: 27,
+                },
+                end: {
+                  char: 28,
+                  line: 1,
+                  column: 29,
+                },
+              },
+            ],
             start: {
-              char: 3,
+              char: 9,
               line: 1,
-              column: 4,
+              column: 10,
             },
             end: {
-              char: 5,
+              char: 29,
               line: 1,
-              column: 6,
-            },
-          },
-          {
-            type: 'coldef',
-            args: ['def'],
-            start: {
-              char: 11,
-              line: 1,
-              column: 12,
-            },
-            end: {
-              char: 13,
-              line: 1,
-              column: 14,
-            },
-          },
-          {
-            type: 'ref',
-            args: ['def'],
-            start: {
-              char: 11,
-              line: 1,
-              column: 12,
-            },
-            end: {
-              char: 13,
-              line: 1,
-              column: 14,
-            },
-          },
-          {
-            type: 'coldef',
-            args: ['ghi'],
-            start: {
-              char: 18,
-              line: 1,
-              column: 19,
-            },
-            end: {
-              char: 20,
-              line: 1,
-              column: 21,
-            },
-          },
-          {
-            type: 'ref',
-            args: ['ghi'],
-            start: {
-              char: 18,
-              line: 1,
-              column: 19,
-            },
-            end: {
-              char: 20,
-              line: 1,
-              column: 21,
+              column: 30,
             },
           },
         ],
@@ -167,27 +254,27 @@ runTests({
           column: 2,
         },
         end: {
-          char: 21,
+          char: 29,
           line: 1,
-          column: 22,
+          column: 30,
         },
       },
     ],
   },
 
   'table with three implicit coldefs newline separated': {
-    source: ' { abc \n  def    \n   ghi \n } ',
+    source: ' Table = { abc \n  def    \n   ghi \n } ',
     ast: [
       {
-        type: 'table',
+        type: 'table-definition',
         args: [
           {
-            type: 'coldef',
-            args: ['abc'],
+            type: 'tabledef',
+            args: ['Table'],
             start: {
-              char: 3,
+              char: 1,
               line: 1,
-              column: 4,
+              column: 2,
             },
             end: {
               char: 5,
@@ -196,73 +283,102 @@ runTests({
             },
           },
           {
-            type: 'ref',
-            args: ['abc'],
+            type: 'table-columns',
+            args: [
+              {
+                type: 'coldef',
+                args: ['abc'],
+                start: {
+                  char: 11,
+                  line: 1,
+                  column: 12,
+                },
+                end: {
+                  char: 13,
+                  line: 1,
+                  column: 14,
+                },
+              },
+              {
+                type: 'ref',
+                args: ['abc'],
+                start: {
+                  char: 11,
+                  line: 1,
+                  column: 12,
+                },
+                end: {
+                  char: 13,
+                  line: 1,
+                  column: 14,
+                },
+              },
+              {
+                type: 'coldef',
+                args: ['def'],
+                start: {
+                  char: 18,
+                  line: 2,
+                  column: 3,
+                },
+                end: {
+                  char: 20,
+                  line: 2,
+                  column: 5,
+                },
+              },
+              {
+                type: 'ref',
+                args: ['def'],
+                start: {
+                  char: 18,
+                  line: 2,
+                  column: 3,
+                },
+                end: {
+                  char: 20,
+                  line: 2,
+                  column: 5,
+                },
+              },
+              {
+                type: 'coldef',
+                args: ['ghi'],
+                start: {
+                  char: 29,
+                  line: 3,
+                  column: 4,
+                },
+                end: {
+                  char: 31,
+                  line: 3,
+                  column: 6,
+                },
+              },
+              {
+                type: 'ref',
+                args: ['ghi'],
+                start: {
+                  char: 29,
+                  line: 3,
+                  column: 4,
+                },
+                end: {
+                  char: 31,
+                  line: 3,
+                  column: 6,
+                },
+              },
+            ],
             start: {
-              char: 3,
+              char: 9,
               line: 1,
-              column: 4,
+              column: 10,
             },
             end: {
-              char: 5,
-              line: 1,
-              column: 6,
-            },
-          },
-          {
-            type: 'coldef',
-            args: ['def'],
-            start: {
-              char: 10,
-              line: 2,
-              column: 3,
-            },
-            end: {
-              char: 12,
-              line: 2,
-              column: 5,
-            },
-          },
-          {
-            type: 'ref',
-            args: ['def'],
-            start: {
-              char: 10,
-              line: 2,
-              column: 3,
-            },
-            end: {
-              char: 12,
-              line: 2,
-              column: 5,
-            },
-          },
-          {
-            type: 'coldef',
-            args: ['ghi'],
-            start: {
-              char: 21,
-              line: 3,
-              column: 4,
-            },
-            end: {
-              char: 23,
-              line: 3,
-              column: 6,
-            },
-          },
-          {
-            type: 'ref',
-            args: ['ghi'],
-            start: {
-              char: 21,
-              line: 3,
-              column: 4,
-            },
-            end: {
-              char: 23,
-              line: 3,
-              column: 6,
+              char: 35,
+              line: 4,
+              column: 2,
             },
           },
         ],
@@ -272,7 +388,7 @@ runTests({
           column: 2,
         },
         end: {
-          char: 27,
+          char: 35,
           line: 4,
           column: 2,
         },
@@ -281,154 +397,212 @@ runTests({
   },
 
   'table with explicit value as column': {
-    source: '  { abc = [ 1 , 2 ]  }',
+    source: ' Table = { abc = [ 1 , 2 ]  }',
     ast: [
       {
-        type: 'table',
+        type: 'table-definition',
         args: [
           {
-            type: 'coldef',
-            args: ['abc'],
+            type: 'tabledef',
+            args: ['Table'],
             start: {
-              char: 4,
+              char: 1,
               line: 1,
-              column: 5,
+              column: 2,
             },
             end: {
-              char: 6,
+              char: 5,
               line: 1,
-              column: 7,
+              column: 6,
             },
           },
           {
-            type: 'column',
+            type: 'table-columns',
             args: [
-              [
-                {
-                  type: 'literal',
-                  args: ['number', 1, null],
-                  location: 12,
-                  length: 1,
+              {
+                type: 'coldef',
+                args: ['abc'],
+                start: {
+                  char: 11,
+                  line: 1,
+                  column: 12,
                 },
-                {
-                  type: 'literal',
-                  args: ['number', 2, null],
-                  location: 16,
-                  length: 1,
+                end: {
+                  char: 13,
+                  line: 1,
+                  column: 14,
                 },
-              ],
+              },
+              {
+                type: 'column',
+                args: [
+                  [
+                    {
+                      type: 'literal',
+                      args: ['number', 1, null],
+                      location: 19,
+                      length: 1,
+                    },
+                    {
+                      type: 'literal',
+                      args: ['number', 2, null],
+                      location: 23,
+                      length: 1,
+                    },
+                  ],
+                ],
+                start: {
+                  char: 17,
+                  line: 1,
+                  column: 18,
+                },
+                end: {
+                  char: 23,
+                  line: 1,
+                  column: 24,
+                },
+              },
             ],
             start: {
-              char: 10,
+              char: 9,
               line: 1,
-              column: 11,
+              column: 10,
             },
             end: {
-              char: 16,
+              char: 26,
               line: 1,
-              column: 17,
+              column: 27,
             },
           },
         ],
         start: {
-          char: 2,
+          char: 1,
           line: 1,
-          column: 3,
+          column: 2,
         },
         end: {
-          char: 19,
+          char: 26,
           line: 1,
-          column: 20,
+          column: 27,
         },
       },
     ],
   },
 
   'table with mixed defs in each line': {
-    source: '  { \n abc \n def = [ 1 , 2 ] \n  }',
+    source: ' Table = { \n abc \n def = [ 1 , 2 ] \n  }',
     ast: [
       {
-        type: 'table',
+        type: 'table-definition',
         args: [
           {
-            type: 'coldef',
-            args: ['abc'],
+            type: 'tabledef',
+            args: ['Table'],
             start: {
-              char: 6,
-              line: 2,
+              char: 1,
+              line: 1,
               column: 2,
             },
             end: {
-              char: 8,
-              line: 2,
-              column: 4,
+              char: 5,
+              line: 1,
+              column: 6,
             },
           },
           {
-            type: 'ref',
-            args: ['abc'],
-            start: {
-              char: 6,
-              line: 2,
-              column: 2,
-            },
-            end: {
-              char: 8,
-              line: 2,
-              column: 4,
-            },
-          },
-          {
-            type: 'coldef',
-            args: ['def'],
-            start: {
-              char: 12,
-              line: 3,
-              column: 2,
-            },
-            end: {
-              char: 14,
-              line: 3,
-              column: 4,
-            },
-          },
-          {
-            type: 'column',
+            type: 'table-columns',
             args: [
-              [
-                {
-                  type: 'literal',
-                  args: ['number', 1, null],
-                  location: 20,
-                  length: 1,
+              {
+                type: 'coldef',
+                args: ['abc'],
+                start: {
+                  char: 13,
+                  line: 2,
+                  column: 2,
                 },
-                {
-                  type: 'literal',
-                  args: ['number', 2, null],
-                  location: 24,
-                  length: 1,
+                end: {
+                  char: 15,
+                  line: 2,
+                  column: 4,
                 },
-              ],
+              },
+              {
+                type: 'ref',
+                args: ['abc'],
+                start: {
+                  char: 13,
+                  line: 2,
+                  column: 2,
+                },
+                end: {
+                  char: 15,
+                  line: 2,
+                  column: 4,
+                },
+              },
+              {
+                type: 'coldef',
+                args: ['def'],
+                start: {
+                  char: 19,
+                  line: 3,
+                  column: 2,
+                },
+                end: {
+                  char: 21,
+                  line: 3,
+                  column: 4,
+                },
+              },
+              {
+                type: 'column',
+                args: [
+                  [
+                    {
+                      type: 'literal',
+                      args: ['number', 1, null],
+                      location: 27,
+                      length: 1,
+                    },
+                    {
+                      type: 'literal',
+                      args: ['number', 2, null],
+                      location: 31,
+                      length: 1,
+                    },
+                  ],
+                ],
+                start: {
+                  char: 25,
+                  line: 3,
+                  column: 8,
+                },
+                end: {
+                  char: 31,
+                  line: 3,
+                  column: 14,
+                },
+              },
             ],
             start: {
-              char: 18,
-              line: 3,
-              column: 8,
+              char: 9,
+              line: 1,
+              column: 10,
             },
             end: {
-              char: 24,
-              line: 3,
-              column: 14,
+              char: 36,
+              line: 4,
+              column: 1,
             },
           },
         ],
         start: {
-          char: 2,
+          char: 1,
           line: 1,
-          column: 3,
+          column: 2,
         },
         end: {
-          char: 29,
+          char: 36,
           line: 4,
           column: 1,
         },
