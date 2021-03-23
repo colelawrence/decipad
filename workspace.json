@@ -103,6 +103,12 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": { "lintFilePatterns": ["apps/client-e2e/**/*.{js,ts}"] }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b apps/client-e2e/tsconfig.json --incremental"
+          }
         }
       }
     },
@@ -121,6 +127,12 @@
           "options": {
             "jestConfig": "libs/ui/jest.config.js",
             "passWithNoTests": true
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/ui/tsconfig.json --incremental"
           }
         }
       }
@@ -142,6 +154,12 @@
           "options": {
             "jestConfig": "libs/editor/jest.config.js",
             "passWithNoTests": true
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/editor/tsconfig.json --incremental"
           }
         }
       }
