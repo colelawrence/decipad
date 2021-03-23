@@ -1,7 +1,7 @@
-import { enableMapSet } from 'immer'
+import { enableMapSet } from 'immer';
 export * from './runtime';
 
-  enableMapSet()
+enableMapSet();
 
 // Global stuff:
 // Result (returned from resultAt) { type: Type (global), value: number[] }

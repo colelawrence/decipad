@@ -75,15 +75,15 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged && nx run-many --all --target typecheck"
     }
   },
   "lint-staged": {
-    "*.{js, jsx, ts, tsx, json}": [
+    "*.{js,jsx,ts,tsx,json}": [
       "prettier --write"
     ],
-    "*.ts?(x)": [
-      "jest --passWithNoTests",
+    "*.{js,jsx,ts,tsx}": [
+      "jest --findRelatedTests",
       "eslint --cache"
     ]
   },

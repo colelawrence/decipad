@@ -25,6 +25,12 @@
             "jestConfig": "libs/language/jest.config.js",
             "passWithNoTests": true
           }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/language/tsconfig.json --incremental"
+          }
         }
       }
     },
@@ -68,6 +74,12 @@
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["apps/client/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b apps/client/tsconfig.json --incremental"
           }
         }
       }
