@@ -1,21 +1,21 @@
-import { ParserNode } from "./types";
+import { ParserNode } from './types';
 
 const typesWithArgs = new Set([
-  "argument-list",
-  "function-call",
-  "conditional",
-  "assign",
-  "argument-names",
-  "function-definition",
-  "block",
-  "table-definition",
-  "table-columns",
+  'argument-list',
+  'function-call',
+  'conditional',
+  'assign',
+  'argument-names',
+  'function-definition',
+  'block',
+  'table-definition',
+  'table-columns',
 ]);
 
 export function sourceMapDecorator(
   source: string
 ): (nodes: ParserNode) => AST.Node {
-  const lines: string[] = source.split("\n");
+  const lines: string[] = source.split('\n');
   const locationToLine: Array<[number, number]> = [];
   const lineToLocation: Array<[number, number]> = [];
 
@@ -55,9 +55,9 @@ export function sourceMapDecorator(
       node.args = ((node.args as AST.Node[]).map((node: unknown) =>
         decorateNode(node as ParserNode)
       ) as unknown) as ParserNode[];
-    } else if (node.type === "literal") {
+    } else if (node.type === 'literal') {
       const n = (node as unknown) as AST.Literal;
-      if (n.args[0] === "number") {
+      if (n.args[0] === 'number') {
         const units = n.args[2];
         if (units !== null) {
           n.args[2] = (units.map((unit: unknown) =>

@@ -1,9 +1,9 @@
-import { produce, immerable } from "immer";
-import { InferError } from "./InferError";
+import { produce, immerable } from 'immer';
+import { InferError } from './InferError';
 
 export { InferError };
 
-export const typeNames = ["number", "string", "boolean"];
+export const typeNames = ['number', 'string', 'boolean'];
 
 export type TypeName = typeof typeNames[number];
 
@@ -52,25 +52,25 @@ export const multiplyExponent = (unit: AST.Unit, multiplier: number) =>
 export const inverseExponent = (unit: AST.Unit) => multiplyExponent(unit, -1);
 
 const multipliersToPrefixes: Record<number, string> = {
-  1e-18: "a",
-  1e-15: "f",
-  1e-12: "p",
-  1e-9: "n",
-  1e-6: "μ",
-  1e-3: "m",
-  1e-2: "c",
-  1e-1: "d",
-  1: "",
-  1e1: "da",
-  1e2: "h",
-  1e3: "k",
-  1e6: "M",
-  1e9: "g",
-  1e12: "t",
-  1e15: "p",
-  1e18: "e",
-  1e21: "z",
-  1e24: "y",
+  1e-18: 'a',
+  1e-15: 'f',
+  1e-12: 'p',
+  1e-9: 'n',
+  1e-6: 'μ',
+  1e-3: 'm',
+  1e-2: 'c',
+  1e-1: 'd',
+  1: '',
+  1e1: 'da',
+  1e2: 'h',
+  1e3: 'k',
+  1e6: 'M',
+  1e9: 'g',
+  1e12: 't',
+  1e15: 'p',
+  1e18: 'e',
+  1e21: 'z',
+  1e24: 'y',
 };
 
 const stringifyUnit = (unit: AST.Unit) => {
@@ -80,11 +80,11 @@ const stringifyUnit = (unit: AST.Unit) => {
     result.push(`^${unit.exp}`);
   }
 
-  return result.join("");
+  return result.join('');
 };
 
 const stringifyUnits = (unit: AST.Unit[]) =>
-  unit.map((unit) => stringifyUnit(unit)).join(".");
+  unit.map((unit) => stringifyUnit(unit)).join('.');
 
 const combineUnits = (
   myUnits: AST.Unit[] | null,
@@ -121,10 +121,10 @@ const combineUnits = (
 export class Type {
   [immerable] = true;
 
-  static Number = new Type("number");
-  static String = new Type("string");
-  static Boolean = new Type("boolean");
-  static Impossible = produce(new Type("number"), (impossibleType) => {
+  static Number = new Type('number');
+  static String = new Type('string');
+  static Boolean = new Type('boolean');
+  static Impossible = produce(new Type('number'), (impossibleType) => {
     impossibleType.possibleTypes = [];
   });
 
@@ -132,7 +132,7 @@ export class Type {
   unit: AST.Unit[] | null = null;
   node: AST.Node;
   errorCause: InferError | null = null;
-  columnSize: number | null = null
+  columnSize: number | null = null;
 
   constructor(...possibleTypes: TypeName[]) {
     if (possibleTypes.length > 0) {
@@ -145,7 +145,7 @@ export class Type {
       return stringifyUnits(this.unit);
     }
 
-    return `<${this.possibleTypes.join(", or ")}>`;
+    return `<${this.possibleTypes.join(', or ')}>`;
   }
 
   // Return the first type that has an error, or the last one.
@@ -156,7 +156,7 @@ export class Type {
       }
     }
 
-    throw new Error("panic: Type.combine() called with 0 arguments");
+    throw new Error('panic: Type.combine() called with 0 arguments');
   }
 
   static runFunctor<ArgsT extends Type[]>(
@@ -193,10 +193,10 @@ export class Type {
     if (intersection.length === 0) {
       return this.withErrorCause(
         new InferError(
-          "Mismatched types: " +
-            this.possibleTypes.join(", ") +
-            " and " +
-            typeNames.join(", ")
+          'Mismatched types: ' +
+            this.possibleTypes.join(', ') +
+            ' and ' +
+            typeNames.join(', ')
         )
       );
     }
@@ -207,39 +207,48 @@ export class Type {
   }
 
   isColumn(size: number) {
-    const incompatibleSizes = this.columnSize != null && this.columnSize !== size
+    const incompatibleSizes =
+      this.columnSize != null && this.columnSize !== size;
 
     if (incompatibleSizes) {
-      return this.withErrorCause(new InferError(
-        `Incompatible column sizes: ${String(this.columnSize)} and ${String(size)}`
-      ))
+      return this.withErrorCause(
+        new InferError(
+          `Incompatible column sizes: ${String(this.columnSize)} and ${String(
+            size
+          )}`
+        )
+      );
     } else {
-      return produce(this, newType => {
-        newType.columnSize = size
-      })
+      return produce(this, (newType) => {
+        newType.columnSize = size;
+      });
     }
   }
 
   isNotColumn() {
     if (this.columnSize != null) {
-      return this.withErrorCause(new InferError('Unexpected column'))
+      return this.withErrorCause(new InferError('Unexpected column'));
     } else {
-      return this
+      return this;
     }
   }
 
   sameColumnSizeAs(other: Type) {
     if (this.columnSize === other.columnSize) {
-      return this
+      return this;
     } else if ((this.columnSize == null) !== (other.columnSize == null)) {
       // Only one is an column
-      return produce(this, newType => {
-        newType.columnSize = this.columnSize ?? other.columnSize
-      })
+      return produce(this, (newType) => {
+        newType.columnSize = this.columnSize ?? other.columnSize;
+      });
     } else {
-      return this.withErrorCause(new InferError(
-        `Incompatible column sizes: ${String(this.columnSize)} and ${String(other.columnSize)}`
-      ))
+      return this.withErrorCause(
+        new InferError(
+          `Incompatible column sizes: ${String(this.columnSize)} and ${String(
+            other.columnSize
+          )}`
+        )
+      );
     }
   }
 
@@ -261,9 +270,9 @@ export class Type {
       if (!matchUnitColumns(this.unit, unit)) {
         return this.withErrorCause(
           new InferError(
-            "Mismatched units: " +
+            'Mismatched units: ' +
               stringifyUnits(this.unit) +
-              " and " +
+              ' and ' +
               stringifyUnits(unit)
           )
         );
@@ -302,13 +311,15 @@ export class Type {
 }
 
 export class TableType {
-  [immerable] = true
+  [immerable] = true;
   constructor(public columnDefs: Map<string, Type>) {}
 
   toString() {
-    const columns = [...this.columnDefs.entries()].map(([col, value]) => {
-      return `${col} = ${value.toString()}`
-    }).join(', ')
-    return `table { ${columns} }`
+    const columns = [...this.columnDefs.entries()]
+      .map(([col, value]) => {
+        return `${col} = ${value.toString()}`;
+      })
+      .join(', ');
+    return `table { ${columns} }`;
   }
 }

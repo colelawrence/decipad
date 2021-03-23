@@ -1,12 +1,12 @@
-import automerge, { Change } from "automerge";
-import debounce from "lodash.debounce";
-import { Operation as SlateOperation, ExtendedSlateOperation } from "./slate";
-import { SyncDoc } from "./model";
-import { Observers } from "./utils/observers";
-import { fromSlateOpType, SupportedSlateOpTypes } from "./from-slate-op";
-import { toSync } from "./utils/to-sync";
-import { toJS } from "./utils/to-js";
-import { toSlateOps } from "./to-slate-ops";
+import automerge, { Change } from 'automerge';
+import debounce from 'lodash.debounce';
+import { Operation as SlateOperation, ExtendedSlateOperation } from './slate';
+import { SyncDoc } from './model';
+import { Observers } from './utils/observers';
+import { fromSlateOpType, SupportedSlateOpTypes } from './from-slate-op';
+import { toSync } from './utils/to-sync';
+import { toJS } from './utils/to-js';
+import { toSlateOps } from './to-slate-ops';
 
 const defaultInitialValue = {
   children: [
@@ -15,8 +15,8 @@ const defaultInitialValue = {
         {
           children: [
             {
-              type: "paragraph",
-              text: "",
+              type: 'paragraph',
+              text: '',
             },
           ],
         },
@@ -42,14 +42,14 @@ export class ClientReplica {
 
   start(initialValue: string | null) {
     if (this.context !== undefined) {
-      throw new Error("replica already started");
+      throw new Error('replica already started');
     }
     if (initialValue !== null) {
       this.context = automerge.load(initialValue, this.actorId);
     } else {
       this.context = automerge.from(toSync(defaultInitialValue), this.actorId);
     }
-    this.observers.notify("initialContext", toJS(this.context));
+    this.observers.notify('initialContext', toJS(this.context));
   }
 
   applySlateOperations(ops: SlateOperation[]) {
@@ -85,9 +85,9 @@ export class ClientReplica {
 
     const changes = automerge.getChanges(before, this.context);
     if (changes.length > 0) {
-      this.observers.notify("changes", changes);
+      this.observers.notify('changes', changes);
     }
-    this.observers.notify("newContext", toJS(this.context));
+    this.observers.notify('newContext', toJS(this.context));
   }
 
   applyRemoteChanges(changes: Change[]) {
@@ -98,7 +98,7 @@ export class ClientReplica {
     for (const op of slateOps) {
       op.isRemote = true;
     }
-    this.observers.notify("slateOps", slateOps);
+    this.observers.notify('slateOps', slateOps);
   }
 
   subscribe(observer: any) {

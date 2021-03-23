@@ -2,7 +2,7 @@
 
 import * as AutoChange from 'automerge';
 import { Computer } from './runtime/computer';
-import { Type, TableType } from './type'
+import { Type, TableType } from './type';
 
 const runCode = async (source: string) => {
   const lineCount = source.split('\n').length;
@@ -135,32 +135,38 @@ describe('Tables', () => {
     expect(
       await runCode(`Table = { Column1 = [1, 2, 3], Column2 = Column1 * 2 }`)
     ).toMatchObject({
-      type: new TableType(new Map([
-        ['Column1', Type.Number.isColumn(3)],
-        ['Column2', Type.Number.isColumn(3)],
-      ])),
+      type: new TableType(
+        new Map([
+          ['Column1', Type.Number.isColumn(3)],
+          ['Column2', Type.Number.isColumn(3)],
+        ])
+      ),
       value: new Map([
         ['Column1', [1, 2, 3]],
-        ['Column2', [2, 4, 6]]
-      ])
-    })
-  })
+        ['Column2', [2, 4, 6]],
+      ]),
+    });
+  });
 
   it('can refer to the previous thing', async () => {
     expect(
-      await runCode(`Table = { Column1 = [1, 1, 1], Column2 = Column1 + (previous 0) }`)
+      await runCode(
+        `Table = { Column1 = [1, 1, 1], Column2 = Column1 + (previous 0) }`
+      )
     ).toMatchObject({
-      type: new TableType(new Map([
-        ['Column1', Type.Number.isColumn(3)],
-        ['Column2', Type.Number.isColumn(3)]
-      ])),
+      type: new TableType(
+        new Map([
+          ['Column1', Type.Number.isColumn(3)],
+          ['Column2', Type.Number.isColumn(3)],
+        ])
+      ),
       value: new Map([
         ['Column1', [1, 1, 1]],
-        ['Column2', [1, 2, 3]]
-      ])
-    })
-  })
-})
+        ['Column2', [1, 2, 3]],
+      ]),
+    });
+  });
+});
 
 describe('Units', () => {
   it('numbers can have units', async () => {

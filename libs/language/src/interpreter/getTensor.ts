@@ -1,69 +1,75 @@
-import * as tf from "@tensorflow/tfjs-core";
+import * as tf from '@tensorflow/tfjs-core';
 
-import { builtins } from "../builtins";
-import { getOfType, getDefined, getIdentifierString } from "../utils";
+import { builtins } from '../builtins';
+import { getOfType, getDefined, getIdentifierString } from '../utils';
 
-import { Realm } from "./Realm";
-import { Table } from './types'
-import { getLargestColumn, evaluateRecursiveColumn, getWithSize } from './column'
+import { Realm } from './Realm';
+import { Table } from './types';
+import {
+  getLargestColumn,
+  evaluateRecursiveColumn,
+  getWithSize,
+} from './column';
 
 function castToColumns(table: Table): Table {
-  const sizes: Set<number> = new Set(Object.values(table).map(t => t.shape.length === 0 ? 0 : t.shape[0]))
+  const sizes: Set<number> = new Set(
+    Object.values(table).map((t) => (t.shape.length === 0 ? 0 : t.shape[0]))
+  );
 
   if (sizes.size === 1) {
-    return table
+    return table;
   } else {
-    const largestSize = Math.max(...sizes)
+    const largestSize = Math.max(...sizes);
 
-    const sameSized = Object.entries(table)
-      .map(([key, value]) => {
-        if (value.shape.length > 0) {
-          return [key, value]
-        } else {
-          return [key, getWithSize(value, largestSize)]
-        }
-      })
+    const sameSized = Object.entries(table).map(([key, value]) => {
+      if (value.shape.length > 0) {
+        return [key, value];
+      } else {
+        return [key, getWithSize(value, largestSize)];
+      }
+    });
 
-    return Object.fromEntries(sameSized)
+    return Object.fromEntries(sameSized);
   }
 }
 
 // Gets a single tensor from an expanded AST.
 export function getTensor(realm: Realm, node: AST.Statement): tf.Tensor {
   switch (node.type) {
-    case "literal": {
+    case 'literal': {
       switch (node.args[0]) {
         case 'number':
         case 'boolean': {
-          return tf.tensor(node.args[1])
+          return tf.tensor(node.args[1]);
         }
         default: {
-          throw new Error('not implemented: literals with type ' + node.args[0])
+          throw new Error(
+            'not implemented: literals with type ' + node.args[0]
+          );
         }
       }
     }
-    case "assign": {
+    case 'assign': {
       const varName = getIdentifierString(node.args[0]);
       const value = getTensor(realm, node.args[1]);
       realm.stack.set(varName, value);
       return value;
     }
-    case "ref": {
+    case 'ref': {
       return getDefined(realm.stack.get(getIdentifierString(node)));
     }
-    case "function-call": {
+    case 'function-call': {
       const funcName = getIdentifierString(node.args[0]);
-      const funcArgs = getOfType("argument-list", node.args[1]).args;
+      const funcArgs = getOfType('argument-list', node.args[1]).args;
       const args = funcArgs.map((arg) => getTensor(realm, arg));
 
       const builtinName = builtins.binary[funcName] ?? builtins.unary[funcName];
 
       if (funcName === 'previous') {
-        return realm.previousValue ?? args[0]
-      } if (builtinName != null) {
-        const tfFunction = getDefined(
-          (tf as any)[builtinName]
-        );
+        return realm.previousValue ?? args[0];
+      }
+      if (builtinName != null) {
+        const tfFunction = getDefined((tf as any)[builtinName]);
 
         return tfFunction(...args) as tf.Tensor;
       } else {
@@ -86,50 +92,50 @@ export function getTensor(realm: Realm, node: AST.Statement): tf.Tensor {
             }
           }
 
-          throw new Error("function is empty");
+          throw new Error('function is empty');
         });
       }
     }
-    case "conditional": {
+    case 'conditional': {
       return tf.where(
         getTensor(realm, node.args[0]),
         getTensor(realm, node.args[1]),
         getTensor(realm, node.args[2])
       );
     }
-    case "column": {
+    case 'column': {
       const items: tf.Tensor[] = node.args[0].map((v: AST.Expression) =>
         tf.reshape(getTensor(realm, v), [1])
-      )
-      return tf.concat(items)
+      );
+      return tf.concat(items);
     }
-    case "table-definition": {
-      const table: Table = {}
-      const tableName = getIdentifierString(node.args[0])
-      const columns: AST.TableColumns = node.args[1]
+    case 'table-definition': {
+      const table: Table = {};
+      const tableName = getIdentifierString(node.args[0]);
+      const columns: AST.TableColumns = node.args[1];
 
       realm.stack.withPush(() => {
         // Pairwise iteration
         for (let i = 0; i + 1 < columns.args.length; i += 2) {
-          const [def, column] = [columns.args[i], columns.args[i + 1]]
-          const colName = getIdentifierString(def as AST.ColDef)
+          const [def, column] = [columns.args[i], columns.args[i + 1]];
+          const colName = getIdentifierString(def as AST.ColDef);
           const tensor = evaluateRecursiveColumn(
             realm,
             column as AST.Expression,
             getLargestColumn(table)
-          )
+          );
 
-          realm.stack.set(colName, tensor)
+          realm.stack.set(colName, tensor);
 
-          table[colName] = tensor
+          table[colName] = tensor;
         }
-      })
+      });
 
-      realm.tables.set(tableName, castToColumns(table))
+      realm.tables.set(tableName, castToColumns(table));
 
-      return tf.tensor([NaN])
+      return tf.tensor([NaN]);
     }
-    case "function-definition": {
+    case 'function-definition': {
       const funcName = getIdentifierString(getDefined(node.args[0]));
       realm.functions.set(funcName, node);
 
@@ -149,7 +155,7 @@ const desiredTargetsToStatements = (
   return desiredTargets.map((target) => {
     if (Array.isArray(target)) {
       return getDefined(program[target[0]].args[target[1]]);
-    } else if (typeof target === "number") {
+    } else if (typeof target === 'number') {
       const targetBlock = program[target].args;
 
       return getDefined(targetBlock[targetBlock.length - 1]);
@@ -159,7 +165,7 @@ const desiredTargetsToStatements = (
           return (
             block.args.find(
               (statement) =>
-                statement.type === "assign" &&
+                statement.type === 'assign' &&
                 getIdentifierString(statement.args[0]) === target
             ) ?? []
           );
@@ -179,7 +185,7 @@ export function getTensorWithTargets(
   >
 ): (tf.Tensor | Table)[] {
   const realm = new Realm();
-  const targetSet: Map<unknown, (tf.Tensor | Table)> = new Map(
+  const targetSet: Map<unknown, tf.Tensor | Table> = new Map(
     desiredTargetsToStatements(program, desiredTargets).map((target) => [
       target,
       tf.tensor([NaN]),
@@ -190,8 +196,8 @@ export function getTensorWithTargets(
     for (const statement of block.args) {
       let value: tf.Tensor | Table = getTensor(realm, statement);
       if (statement.type === 'table-definition') {
-        const tableName = getIdentifierString(statement.args[0])
-        value = getDefined(realm.tables.get(tableName))
+        const tableName = getIdentifierString(statement.args[0]);
+        value = getDefined(realm.tables.get(tableName));
       }
 
       if (targetSet.has(statement)) {
@@ -200,5 +206,5 @@ export function getTensorWithTargets(
     }
   }
 
-  return [...targetSet.values()]
+  return [...targetSet.values()];
 }

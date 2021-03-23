@@ -1,5 +1,5 @@
-import { getIdentifierString, n } from "../utils";
-import { expandExpression } from "./expansion";
+import { getIdentifierString, n } from '../utils';
+import { expandExpression } from './expansion';
 
 /*
 
@@ -24,13 +24,13 @@ const expandExpressionOrAssignment = (
   }
 
   switch (statement.type) {
-    case "function-definition": {
+    case 'function-definition': {
       return null;
     }
 
-    case "assign": {
+    case 'assign': {
       if (transparentAssignments) {
-        return n("ref", getIdentifierString(statement.args[0]));
+        return n('ref', getIdentifierString(statement.args[0]));
       } else {
         return expandExpression(program, statement.args[1], false);
       }
@@ -58,14 +58,14 @@ export function getComputationTargets(program: AST.Block[]) {
     ) {
       const statement = block.args[statementIdx];
 
-      if (statement.type === "assign") {
+      if (statement.type === 'assign') {
         targets.set(
           getIdentifierString(statement.args[0]),
           expandExpressionOrAssignment(program, statement)
         );
       }
 
-      if (statement.type !== "function-definition") {
+      if (statement.type !== 'function-definition') {
         const statementId: [number, number] = [blockIdx, statementIdx];
 
         targets.set(
@@ -78,8 +78,8 @@ export function getComputationTargets(program: AST.Block[]) {
     const lastStatement = block.args[block.args.length - 1];
     targets.set(
       blockIdx,
-      lastStatement?.type === "assign"
-        ? n("ref", getIdentifierString(lastStatement.args[0]))
+      lastStatement?.type === 'assign'
+        ? n('ref', getIdentifierString(lastStatement.args[0]))
         : expandExpressionOrAssignment(program, lastStatement)
     );
   }

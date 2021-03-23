@@ -1,5 +1,5 @@
-import * as tf from "@tensorflow/tfjs-core";
-import { Type } from "./type";
+import * as tf from '@tensorflow/tfjs-core';
+import { Type } from './type';
 
 // Can make this a union, so we can add custom functions as well.
 // & string excludes symbol and number keys.
@@ -12,17 +12,17 @@ interface Builtins {
 
 export const builtins: Builtins = {
   binary: {
-    "+": "add",
-    "-": "sub",
-    "/": "div",
-    "*": "mul",
-    "<": "less",
-    ">": "greater",
-    "<=": "lessEqual",
-    ">=": "greaterEqual",
+    '+': 'add',
+    '-': 'sub',
+    '/': 'div',
+    '*': 'mul',
+    '<': 'less',
+    '>': 'greater',
+    '<=': 'lessEqual',
+    '>=': 'greaterEqual',
   },
   unary: {
-    sqrt: "sqrt",
+    sqrt: 'sqrt',
   },
 };
 
@@ -38,23 +38,23 @@ interface BuiltinFunctors {
 // Allow the comma operator to keep these in one line
 /* eslint-disable no-sequences */
 const relativeCompareOp = (A: Type, B: Type) => (
-  A.hasType("number", "string").sameAs(B), Type.Boolean
+  A.hasType('number', 'string').sameAs(B), Type.Boolean
 );
 
 export const functors: BuiltinFunctors = {
   binary: {
-    "+": (A, B) => A.hasType("number", "string").sameAs(B).withUnit(B.unit),
-    "-": (A, B) => A.hasType("number", "string").sameAs(B).withUnit(B.unit),
-    "/": (A, B) => A.hasType("number", "string").sameAs(B).divideUnit(B.unit),
-    "*": (A, B) => A.hasType("number", "string").sameAs(B).multiplyUnit(B.unit),
-    ">": relativeCompareOp,
-    "<": relativeCompareOp,
-    ">=": relativeCompareOp,
-    "<=": relativeCompareOp,
-    "==": (A, B) => Type.combine(A.sameAs(B), Type.Boolean),
+    '+': (A, B) => A.hasType('number', 'string').sameAs(B).withUnit(B.unit),
+    '-': (A, B) => A.hasType('number', 'string').sameAs(B).withUnit(B.unit),
+    '/': (A, B) => A.hasType('number', 'string').sameAs(B).divideUnit(B.unit),
+    '*': (A, B) => A.hasType('number', 'string').sameAs(B).multiplyUnit(B.unit),
+    '>': relativeCompareOp,
+    '<': relativeCompareOp,
+    '>=': relativeCompareOp,
+    '<=': relativeCompareOp,
+    '==': (A, B) => Type.combine(A.sameAs(B), Type.Boolean),
   },
   unary: {
-    sqrt: (N) => N.hasType("number"),
+    sqrt: (N) => N.hasType('number'),
   },
 };
 /* eslint-enable no-sequences */

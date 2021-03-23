@@ -23,9 +23,9 @@ export const walk = <T>(node: AST.Node, fn: WalkFn<T>, depth = 0): T | null => {
   return null;
 };
 
-export function n<K extends AST.Node["type"], N extends AST.TypeToNode[K]>(
+export function n<K extends AST.Node['type'], N extends AST.TypeToNode[K]>(
   type: K,
-  ...args: N["args"]
+  ...args: N['args']
 ): N {
   const node: N = ({
     type,
@@ -35,44 +35,50 @@ export function n<K extends AST.Node["type"], N extends AST.TypeToNode[K]>(
   return node;
 }
 
-type LitType = number | string | boolean
+type LitType = number | string | boolean;
 export function l(value: LitType, ...units: AST.Unit[]): AST.Literal {
   const unitArg = units.length > 0 ? units : null;
 
-  if (typeof value === "number") {
-    return n("literal", "number", value, unitArg);
-  } else if (typeof value === "boolean") {
-    return n("literal", "boolean", value, unitArg);
+  if (typeof value === 'number') {
+    return n('literal', 'number', value, unitArg);
+  } else if (typeof value === 'boolean') {
+    return n('literal', 'boolean', value, unitArg);
   } else {
-    return n("literal", "string", value, unitArg);
+    return n('literal', 'string', value, unitArg);
   }
 }
 
 export function col(...values: (LitType | AST.Expression)[]): AST.Column {
-  return n('column', values.map(value => {
-    if (isExpression(value)) {
-      return value
-    } else {
-      return l(value)
-    }
-  }))
+  return n(
+    'column',
+    values.map((value) => {
+      if (isExpression(value)) {
+        return value;
+      } else {
+        return l(value);
+      }
+    })
+  );
 }
 
-export function tableDef(name: string, columns: Record<string, AST.Expression>): AST.TableDefinition {
-  const tableCols: AST.TableColumns = n('table-columns')
+export function tableDef(
+  name: string,
+  columns: Record<string, AST.Expression>
+): AST.TableDefinition {
+  const tableCols: AST.TableColumns = n('table-columns');
   for (const [key, value] of Object.entries(columns)) {
-    tableCols.args.push(n('coldef', key))
-    tableCols.args.push(value)
+    tableCols.args.push(n('coldef', key));
+    tableCols.args.push(value);
   }
-  return n('table-definition', n('tabledef', name), tableCols)
+  return n('table-definition', n('tabledef', name), tableCols);
 }
 
 export function c(fName: string, ...args: AST.Expression[]) {
-  return n("function-call", n("funcref", fName), n("argument-list", ...args));
+  return n('function-call', n('funcref', fName), n('argument-list', ...args));
 }
 
 export function r(fName: string) {
-  return n("ref", fName);
+  return n('ref', fName);
 }
 
 export function funcDef(
@@ -81,15 +87,15 @@ export function funcDef(
   ...body: AST.Statement[]
 ) {
   return n(
-    "function-definition",
-    n("funcdef", fName),
-    n("argument-names", ...args.map((a) => n("def", a))),
-    n("block", ...body)
+    'function-definition',
+    n('funcdef', fName),
+    n('argument-names', ...args.map((a) => n('def', a))),
+    n('block', ...body)
   );
 }
 
 export function getOfType<
-  K extends AST.Node["type"],
+  K extends AST.Node['type'],
   N extends AST.TypeToNode[K]
 >(desiredType: K, node: AST.Node): N {
   if (getDefined(node).type !== desiredType) {
@@ -98,38 +104,38 @@ export function getOfType<
   return node as N;
 }
 
-export const isNode = (
-  value: unknown | AST.Node
-): value is AST.Node => {
-  if (value == null || typeof value !== "object" || Array.isArray(value)) {
+export const isNode = (value: unknown | AST.Node): value is AST.Node => {
+  if (value == null || typeof value !== 'object' || Array.isArray(value)) {
     return false;
   }
 
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   const valueAny = value as any;
 
-  return typeof valueAny.type === "string" && Array.isArray(valueAny.args);
+  return typeof valueAny.type === 'string' && Array.isArray(valueAny.args);
 };
 
 export const isExpression = (
   value: unknown | AST.Expression
 ): value is AST.Expression => {
-  if (!isNode(value)) return false
+  if (!isNode(value)) return false;
 
-  return ['function-call', 'ref', 'literal', 'conditional', 'column'].includes(value.type)
-}
+  return ['function-call', 'ref', 'literal', 'conditional', 'column'].includes(
+    value.type
+  );
+};
 
 export const getIdentifierString = ({ type, args }: AST.Identifier): string => {
   if (
-    (type !== "ref" &&
-      type !== "def" &&
-      type !== "funcdef" &&
-      type !== "funcref" &&
-      type !== "coldef" &&
-      type !== "tabledef") ||
-    typeof args[0] !== "string"
+    (type !== 'ref' &&
+      type !== 'def' &&
+      type !== 'funcdef' &&
+      type !== 'funcref' &&
+      type !== 'coldef' &&
+      type !== 'tabledef') ||
+    typeof args[0] !== 'string'
   ) {
-    throw new Error("panic: identifier expected");
+    throw new Error('panic: identifier expected');
   }
 
   return args[0];
@@ -137,10 +143,10 @@ export const getIdentifierString = ({ type, args }: AST.Identifier): string => {
 
 export const getDefined = <T>(
   anything: T | null | undefined,
-  message = "something was null or undefined"
+  message = 'something was null or undefined'
 ): T => {
   if (anything == null) {
-    throw new Error("panic: " + message);
+    throw new Error('panic: ' + message);
   }
 
   return anything;

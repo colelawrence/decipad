@@ -1,5 +1,5 @@
-import Automerge from "automerge";
-import { Node } from "slate";
+import Automerge from 'automerge';
+import { Node } from 'slate';
 
 export { Node };
 

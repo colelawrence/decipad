@@ -1,9 +1,9 @@
-import { ClientReplica } from "./client-replica";
-import { Observers } from "./utils/observers";
-import { Storage } from "./storage";
-import { Operation as SlateOperation } from "./slate";
-import { Computer } from "./computer";
-import { SyncDoc } from "./model";
+import { ClientReplica } from './client-replica';
+import { Observers } from './utils/observers';
+import { Storage } from './storage';
+import { Operation as SlateOperation } from './slate';
+import { Computer } from './computer';
+import { SyncDoc } from './model';
 
 export class Context {
   id: string;
@@ -28,7 +28,7 @@ export class Context {
   start() {
     const cancel = this.replica.subscribe({
       initialContext: (context: any) => {
-        this.observers.notify("initialContext", context);
+        this.observers.notify('initialContext', context);
         this.computer.setContext(context);
       },
       changes: () => {
@@ -39,7 +39,7 @@ export class Context {
         this.storage.saveAll(this.replica.save());
       },
       slateOps: (ops: SlateOperation[]) => {
-        this.observers.notify("slateOps", ops);
+        this.observers.notify('slateOps', ops);
       },
     });
     this.stoppers.push(cancel);

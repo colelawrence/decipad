@@ -1,8 +1,15 @@
 import { functors } from '../builtins';
-import { FunctionType, InferError, Type, TableType, TypeName, typeNames } from '../type';
+import {
+  FunctionType,
+  InferError,
+  Type,
+  TableType,
+  TypeName,
+  typeNames,
+} from '../type';
 import { getDefined, getIdentifierString, getOfType } from '../utils';
 import { Context, makeContext } from './context';
-import { unifyColumnSizes, findBadColumn } from './table'
+import { unifyColumnSizes, findBadColumn } from './table';
 
 export { makeContext, Type, FunctionType, typeNames, TypeName, InferError };
 
@@ -62,7 +69,7 @@ export const inferExpression = (ctx: Context, expr: AST.Expression): Type => {
       );
 
       if (ctx.inTable && fName === 'previous') {
-        return givenArguments[0]
+        return givenArguments[0];
       }
 
       const functionDefinition = ctx.functionDefinitions.get(fName);
@@ -170,28 +177,32 @@ export const inferStatement = (
     }
     case 'table-definition': {
       const tName = getIdentifierString(statement.args[0]);
-      const table: AST.TableColumns = statement.args[1]
+      const table: AST.TableColumns = statement.args[1];
 
-      ctx.inTable = true
+      ctx.inTable = true;
 
       const tableType = ctx.stack.withPush(() => {
-        const columnDefs: Map<string, Type> = new Map()
+        const columnDefs: Map<string, Type> = new Map();
 
         for (let i = 0; i + 1 < table.args.length; i += 2) {
-          const name = getIdentifierString(table.args[i] as AST.ColDef)
-          const type = inferExpression(ctx, table.args[i + 1] as AST.Expression)
+          const name = getIdentifierString(table.args[i] as AST.ColDef);
+          const type = inferExpression(
+            ctx,
+            table.args[i + 1] as AST.Expression
+          );
 
-          ctx.stack.set(name, type)
-          columnDefs.set(name, type)
+          ctx.stack.set(name, type);
+          columnDefs.set(name, type);
         }
 
-        return new TableType(columnDefs)
-      })
-      ctx.inTable = false
+        return new TableType(columnDefs);
+      });
+      ctx.inTable = false;
 
-      const unified = findBadColumn(tableType) ?? unifyColumnSizes(statement, tableType)
-      ctx.tables.set(tName, unified)
-      return unified
+      const unified =
+        findBadColumn(tableType) ?? unifyColumnSizes(statement, tableType);
+      ctx.tables.set(tName, unified);
+      return unified;
     }
     default: {
       return inferExpression(ctx, statement);

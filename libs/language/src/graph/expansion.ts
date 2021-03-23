@@ -1,13 +1,13 @@
-import { produce } from "immer";
-import { nanoid } from "nanoid";
+import { produce } from 'immer';
+import { nanoid } from 'nanoid';
 
-import { n, walk, getDefined, getOfType, getIdentifierString } from "../utils";
-import { builtins } from "../builtins";
-import { getExternalScope } from "./index";
+import { n, walk, getDefined, getOfType, getIdentifierString } from '../utils';
+import { builtins } from '../builtins';
+import { getExternalScope } from './index';
 
 const getExpandedFunctionArgument = (prefix: string, argName: string) =>
   `\0${prefix}\0${argName}`;
-const isExpandedFunctionArgument = (refName: string) => refName[0] === "\0";
+const isExpandedFunctionArgument = (refName: string) => refName[0] === '\0';
 
 export const expandExpression = (
   blocks: AST.Block[],
@@ -17,18 +17,18 @@ export const expandExpression = (
   const graph = blocks.map((ast) => getExternalScope(ast));
 
   switch (expression.type) {
-    case "literal": {
+    case 'literal': {
       // Cannot be expanded at compile time
       return expression;
     }
-    case "conditional": {
+    case 'conditional': {
       return produce(expression, (cond) => {
         for (let i = 0; i < cond.args.length; i++) {
           cond.args[i] = expandExpression(blocks, cond.args[i], expandRefs);
         }
       });
     }
-    case "ref": {
+    case 'ref': {
       const varName = getIdentifierString(expression);
       if (!expandRefs && !isExpandedFunctionArgument(varName)) {
         return expression;
@@ -38,14 +38,14 @@ export const expandExpression = (
         exports.includes(varName)
       );
 
-      const { args: blockItems } = getOfType("block", blocks[blockIndex]);
+      const { args: blockItems } = getOfType('block', blocks[blockIndex]);
 
       const assignTarget = getOfType(
-        "assign",
+        'assign',
         getDefined(
           blockItems.find(
             (node) =>
-              node.type === "assign" &&
+              node.type === 'assign' &&
               getIdentifierString(node.args[0]) === varName
           )
         )
@@ -53,7 +53,7 @@ export const expandExpression = (
 
       return expandExpression(blocks, assignTarget, expandRefs);
     }
-    case "function-call": {
+    case 'function-call': {
       const [fName, fArgs] = expression.args;
 
       const fNameString = getIdentifierString(fName);
@@ -64,7 +64,7 @@ export const expandExpression = (
           args: [
             fName,
             n(
-              "argument-list",
+              'argument-list',
               ...fArgs.args.map((arg) =>
                 expandExpression(blocks, arg, expandRefs)
               )
@@ -77,13 +77,13 @@ export const expandExpression = (
       const blockIndex = graph.findIndex(({ funcExports }) =>
         funcExports.includes(fNameString)
       );
-      const { args: blockItems } = getOfType("block", blocks[blockIndex]);
+      const { args: blockItems } = getOfType('block', blocks[blockIndex]);
       const func = getOfType(
-        "function-definition",
+        'function-definition',
         getDefined(
           blockItems.find(
             (item) =>
-              item.type === "function-definition" && item.args[0].args[0]
+              item.type === 'function-definition' && item.args[0].args[0]
           )
         )
       );
@@ -99,7 +99,7 @@ export const expandExpression = (
       return expandedFunctionDefinition;
     }
     default: {
-      throw new Error("unsupported: expanding " + expression.type);
+      throw new Error('unsupported: expanding ' + expression.type);
     }
   }
 };
@@ -127,13 +127,13 @@ const getHygienicFunctionExpansion = (
 
     for (let i = 0; i < argNames.length; i++) {
       statements.unshift(
-        n("assign", n("def", newArgNames[i]), givenArguments[i])
+        n('assign', n('def', newArgNames[i]), givenArguments[i])
       );
     }
 
     // Rename arguments
     walk(fBody, (node) => {
-      if (node.type === "ref" && argNames.includes(node.args[0])) {
+      if (node.type === 'ref' && argNames.includes(node.args[0])) {
         const argIndex = argNames.indexOf(node.args[0]);
         if (argIndex !== -1) {
           node.args[0] = newArgNames[argIndex];
@@ -145,12 +145,12 @@ const getHygienicFunctionExpansion = (
   const lastStatement = expandedBody.args[expandedBody.args.length - 1];
 
   if (
-    lastStatement.type === "function-definition" ||
-    lastStatement.type === "table-definition" ||
-    lastStatement.type === "assign"
+    lastStatement.type === 'function-definition' ||
+    lastStatement.type === 'table-definition' ||
+    lastStatement.type === 'assign'
   ) {
     throw new Error(
-      "panic: Illegal last item in a function: " + lastStatement.type
+      'panic: Illegal last item in a function: ' + lastStatement.type
     );
   }
 
@@ -168,24 +168,24 @@ export const expandStatement = (
   statement: AST.Statement
 ) => {
   switch (statement.type) {
-    case "function-definition": {
+    case 'function-definition': {
       // Function definitions are not expanded themselves
       return null;
     }
 
-    case "table-definition": {
+    case 'table-definition': {
       // Assignments are preserved so that exports can be found afterwards.
       return produce(statement, (tableDef) => {
-        const tableCols = tableDef.args[1]
+        const tableCols = tableDef.args[1];
 
         // Pairwise iteration
         for (let i = 0; i + 1 < tableCols.args.length; i += 2) {
-          tableCols.args[i] = expandExpression(blocks, tableCols.args[i])
+          tableCols.args[i] = expandExpression(blocks, tableCols.args[i]);
         }
       });
     }
 
-    case "assign": {
+    case 'assign': {
       // Assignments are preserved so that exports can be found afterwards.
       return produce(statement, (assign) => {
         assign.args[1] = expandExpression(blocks, assign.args[1]);
@@ -212,6 +212,6 @@ export const expandProgram = (blocks: AST.Block[]): AST.Block[] => {
       }
     }
 
-    return n("block", ...statements);
+    return n('block', ...statements);
   });
 };

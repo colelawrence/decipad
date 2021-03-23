@@ -1,7 +1,7 @@
-import nearley from "nearley";
-import { compiledGrammar } from "../grammar";
-import { ParserNode } from "./types";
-import { sourceMapDecorator } from "./source-map-decorator";
+import nearley from 'nearley';
+import { compiledGrammar } from '../grammar';
+import { ParserNode } from './types';
+import { sourceMapDecorator } from './source-map-decorator';
 
 const grammar = nearley.Grammar.fromCompiled(compiledGrammar);
 
@@ -21,13 +21,13 @@ class BlockParser {
 
   finish() {
     this.parser.finish();
-    this.sourceDecorator = sourceMapDecorator(this.chunks.join(""));
+    this.sourceDecorator = sourceMapDecorator(this.chunks.join(''));
     this.chunks = [];
   }
 
   get solutions(): Parser.Solution[] {
     if (this.sourceDecorator === undefined) {
-      throw new Error("Not yet finished");
+      throw new Error('Not yet finished');
     }
 
     return ((this.parser.results as ParserNode[]).map(

@@ -1,4 +1,4 @@
-import { Operation, Path, NodeEntry } from "slate";
+import { Operation, Path, NodeEntry } from 'slate';
 
 export type SyncNode = NodeEntry;
 

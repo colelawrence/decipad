@@ -1,4 +1,4 @@
-import { Contexts } from "./contexts";
+import { Contexts } from './contexts';
 
 class Runtime {
   contexts: Contexts;
@@ -9,5 +9,5 @@ class Runtime {
 }
 
 export function createRuntime(actorId: string): Runtime {
-    return new Runtime(actorId);
+  return new Runtime(actorId);
 }

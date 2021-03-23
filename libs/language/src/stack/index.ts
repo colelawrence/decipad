@@ -1,4 +1,4 @@
-import { immerable } from "immer";
+import { immerable } from 'immer';
 
 export class Stack<T> {
   [immerable] = true;
@@ -17,7 +17,7 @@ export class Stack<T> {
     this.stack.pop();
 
     if (this.stack.length === 0) {
-      throw new Error("panic: stack became empty");
+      throw new Error('panic: stack became empty');
     }
   }
 
@@ -39,7 +39,7 @@ export class Stack<T> {
       if (value != null) return value;
     }
 
-    throw new Error("panic: not found in stack: " + varName);
+    throw new Error('panic: not found in stack: ' + varName);
   }
 
   withPush<T>(wrapper: () => T): T {

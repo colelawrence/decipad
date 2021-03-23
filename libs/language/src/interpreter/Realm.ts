@@ -1,6 +1,6 @@
-import * as tf from "@tensorflow/tfjs-core";
-import { Stack } from "../stack";
-import { Table } from './types'
+import * as tf from '@tensorflow/tfjs-core';
+import { Stack } from '../stack';
+import { Table } from './types';
 
 // The name "realm" comes from V8.
 // It's passed around during interpretation and
@@ -10,5 +10,5 @@ export class Realm {
   stack = new Stack<tf.Tensor>();
   tables = new Map<string, Table>();
   functions = new Map<string, AST.FunctionDefinition>();
-  previousValue: tf.Tensor | null = null
+  previousValue: tf.Tensor | null = null;
 }
