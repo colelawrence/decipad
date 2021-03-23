@@ -145,6 +145,21 @@ describe('Tables', () => {
       ])
     })
   })
+
+  it('can refer to the previous thing', async () => {
+    expect(
+      await runCode(`Table = { Column1 = [1, 1, 1], Column2 = Column1 + (previous 0) }`)
+    ).toMatchObject({
+      type: new TableType(new Map([
+        ['Column1', Type.Number.isColumn(3)],
+        ['Column2', Type.Number.isColumn(3)]
+      ])),
+      value: new Map([
+        ['Column1', [1, 1, 1]],
+        ['Column2', [1, 2, 3]]
+      ])
+    })
+  })
 })
 
 describe('Units', () => {
@@ -218,7 +233,7 @@ describe('Units', () => {
   });
 });
 
-describe('Inference', () => {
+describe('Inference errors', () => {
   it.todo('TODO: Complains about missing variables');
   it.todo('TODO: Complains about mismatched units');
   it.todo('TODO: complains about mismatched types');

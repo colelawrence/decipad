@@ -116,7 +116,7 @@ export const isExpression = (
 ): value is AST.Expression => {
   if (!isNode(value)) return false
 
-  return ['function-call', 'ref', 'literal', 'conditional'].includes(value.type)
+  return ['function-call', 'ref', 'literal', 'conditional', 'column'].includes(value.type)
 }
 
 export const getIdentifierString = ({ type, args }: AST.Identifier): string => {

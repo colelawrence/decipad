@@ -10,4 +10,5 @@ export class Realm {
   stack = new Stack<tf.Tensor>();
   tables = new Map<string, Table>();
   functions = new Map<string, AST.FunctionDefinition>();
+  previousValue: tf.Tensor | null = null
 }

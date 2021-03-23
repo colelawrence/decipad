@@ -26,7 +26,7 @@ afterEach(() => {
   }
 });
 
-it("typechecks literals", () => {
+it("infers literals", () => {
   expect(inferExpression(nilCtx, l(1.1))).toEqual(Type.Number);
   expect(inferExpression(nilCtx, l(1))).toEqual(Type.Number);
 
@@ -35,41 +35,62 @@ it("typechecks literals", () => {
   expect(inferExpression(nilCtx, l(true))).toEqual(Type.Boolean);
 });
 
-it("typechecks columns", () => {
-  expect(inferExpression(nilCtx, col(1, 2, 3))).toEqual(Type.Number.isColumn(3))
+describe('columns', () => {
+  it("infers columns", () => {
+    expect(inferExpression(nilCtx, col(1, 2, 3))).toEqual(Type.Number.isColumn(3))
 
-  expect(inferExpression(nilCtx, col(c('+', l(1), l(1))))).toEqual(Type.Number.isColumn(1))
+    expect(inferExpression(nilCtx, col(c('+', l(1), l(1))))).toEqual(Type.Number.isColumn(1))
 
-  const mixedCol = col(l(1), l("hi"))
-  expect(inferExpression(nilCtx, mixedCol)).toEqual(
-    Type.Impossible.isColumn(2).inNode(mixedCol).withErrorCause(
-      new InferError("Mismatched types: number and string")
+    const mixedCol = col(l(1), l("hi"))
+    expect(inferExpression(nilCtx, mixedCol)).toEqual(
+      Type.Impossible.isColumn(2).inNode(mixedCol).withErrorCause(
+        new InferError("Mismatched types: number and string")
+      )
     )
-  )
+  })
+
+  it("column-ness is infectious", () => {
+    expect(inferExpression(nilCtx, c('+', col(1, 2, 3), l(1)))).toEqual(Type.Number.isColumn(3))
+    expect(inferExpression(nilCtx, c('+', l(1), col(1, 2, 3)))).toEqual(Type.Number.isColumn(3))
+  })
 })
 
-it("column-ness is infectious", () => {
-  expect(inferExpression(nilCtx, c('+', col(1, 2, 3), l(1)))).toEqual(Type.Number.isColumn(3))
-  expect(inferExpression(nilCtx, c('+', l(1), col(1, 2, 3)))).toEqual(Type.Number.isColumn(3))
+describe('tables', () => {
+  it('infers table defs', () => {
+    const tableContext = makeContext()
+
+    const expectedType = new TableType(new Map([
+      ['Col1', Type.Number.isColumn(3)],
+      ['Col2', Type.Number.isColumn(3)],
+    ]))
+
+    expect(inferStatement(tableContext, tableDef('Table', {
+      Col1: col(1, 2, 3),
+      Col2: c('+', n('ref', 'Col1'), l(2))
+    }))).toEqual(expectedType)
+
+    expect(tableContext.tables.get('Table')).toEqual(expectedType)
+  })
+
+  it('"previous" references', () => {
+    const expectedType = new TableType(new Map([
+      ['Col1', Type.Number.isColumn(3)],
+      ['Col2', Type.Number.isColumn(3)],
+      ['Col3', Type.String.isColumn(3)]
+    ]))
+
+    const table = tableDef('Table', {
+      Col1: col(1, 1, 1),
+      Col2: c('+', n('ref', 'Col1'), c('previous', l(0))),
+      Col3: c('previous', l('hi'))
+    })
+
+    expect(inferStatement(nilCtx, table))
+      .toEqual(expectedType)
+  })
 })
 
-it('infers table defs', () => {
-  const tableContext = makeContext()
-
-  const expectedType = new TableType(new Map([
-    ['Col1', Type.Number.isColumn(3)],
-    ['Col2', Type.Number.isColumn(3)],
-  ]))
-
-  expect(inferStatement(tableContext, tableDef('Table', {
-    Col1: col(1, 2, 3),
-    Col2: c('+', n('ref', 'Col1'), l(2))
-  }))).toEqual(expectedType)
-
-  expect(tableContext.tables.get('Table')).toEqual(expectedType)
-})
-
-it("typechecks refs", () => {
+it("infers refs", () => {
   const scopeWithVariable = makeContext();
   scopeWithVariable.stack.set("N", Type.Number);
 
@@ -81,7 +102,7 @@ it("typechecks refs", () => {
   );
 });
 
-it("typechecks binops", () => {
+it("infers binops", () => {
   expect(inferExpression(nilCtx, c("+", l(1), l(1)))).toEqual(Type.Number);
 
   // These assertions will be different WRT integer/float casts eventually
@@ -101,7 +122,7 @@ it("typechecks binops", () => {
   );
 });
 
-it("typechecks conditions", () => {
+it("infers conditions", () => {
   expect(
     inferExpression(nilCtx, n("conditional", l(true), l(1), l(1)))
   ).toEqual(Type.Number);
@@ -121,7 +142,7 @@ it("typechecks conditions", () => {
 });
 
 describe("inferFunction", () => {
-  it("typechecks unused functions within the program", () => {
+  it("infers unused functions within the program", () => {
     const goodFn = funcDef("Good", ["A"], c("+", l(1), l(2)));
 
     expect(inferFunction(nilCtx, goodFn).returns).toEqual(Type.Number);
@@ -141,7 +162,7 @@ describe("inferFunction", () => {
     expect(inferFunction(nilCtx, fn)).toEqual({ returns: Type.Number });
   });
 
-  it("typechecks functions which use things in the parent scope", () => {
+  it("infers functions which use things in the parent scope", () => {
     const functionUsingOuterScope = funcDef("Fn", [], c("+", l(1), r("A")));
 
     const parentScope = makeContext([["A", Type.Number]]);
@@ -192,7 +213,7 @@ describe("inferFunction", () => {
 });
 
 describe("inferProgram", () => {
-  it("typechecks the whole program", () => {
+  it("infers the whole program", () => {
     const program: AST.Block[] = [
       n("block", n("assign", n("def", "A"), l(3)), c("+", r("A"), l(1.1))),
     ];
@@ -362,7 +383,7 @@ describe("Units", () => {
       nilCtx,
       c("*", l(1, meters, inverseExponent(seconds)), l(1, seconds))
     );
-    // const withNullUnit = typecheckExpression(nilCtx, c('*', l(1, second), l(1)))
+    // const withNullUnit = inferExpression(nilCtx, c('*', l(1, seconds), l(1)))
 
     expect(type).toMatchObject(Type.Number.withUnit([meters]));
     // TODO expect(withNullUnit).toEqual(Type.Number)

@@ -2,6 +2,7 @@ import { functors } from '../builtins';
 import { FunctionType, InferError, Type, TableType, TypeName, typeNames } from '../type';
 import { getDefined, getIdentifierString, getOfType } from '../utils';
 import { Context, makeContext } from './context';
+import { unifyColumnSizes, findBadColumn } from './table'
 
 export { makeContext, Type, FunctionType, typeNames, TypeName, InferError };
 
@@ -59,6 +60,10 @@ export const inferExpression = (ctx: Context, expr: AST.Expression): Type => {
       const givenArguments: Type[] = fArgs.map((arg) =>
         inferExpression(ctx, arg)
       );
+
+      if (ctx.inTable && fName === 'previous') {
+        return givenArguments[0]
+      }
 
       const functionDefinition = ctx.functionDefinitions.get(fName);
 
@@ -167,6 +172,8 @@ export const inferStatement = (
       const tName = getIdentifierString(statement.args[0]);
       const table: AST.TableColumns = statement.args[1]
 
+      ctx.inTable = true
+
       const tableType = ctx.stack.withPush(() => {
         const columnDefs: Map<string, Type> = new Map()
 
@@ -180,9 +187,11 @@ export const inferStatement = (
 
         return new TableType(columnDefs)
       })
+      ctx.inTable = false
 
-      ctx.tables.set(tName, tableType)
-      return tableType
+      const unified = findBadColumn(tableType) ?? unifyColumnSizes(statement, tableType)
+      ctx.tables.set(tName, unified)
+      return unified
     }
     default: {
       return inferExpression(ctx, statement);
@@ -193,7 +202,7 @@ export const inferStatement = (
 interface InferProgramResult {
   variables: Map<string, Type>;
   functions: Map<string, FunctionType>;
-  tables: Map<string, TableType>;
+  tables: Map<string, TableType | Type>;
   blockReturns: Array<Type | TableType | FunctionType>;
 }
 

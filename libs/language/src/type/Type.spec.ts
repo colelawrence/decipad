@@ -1,7 +1,7 @@
 import { produce } from "immer";
 import { c, l } from "../utils";
-import { Type, inverseExponent } from "./index";
 import { InferError } from "./InferError";
+import { Type, TableType, inverseExponent } from "./index";
 
 const testNode = c("node 1", l(1));
 const nilPos = {
@@ -306,3 +306,14 @@ describe("multiplyUnit", () => {
     ).toEqual(Type.Number.withUnit(null));
   });
 });
+
+it('has a TableType', () => {
+  const table = new TableType(new Map([
+    ['Col1', Type.Number.isColumn(3).withUnit([meter])],
+    ['Col2', Type.String.isColumn(3)],
+  ]))
+
+  expect(table.toString()).toEqual(
+    'table { Col1 = meter, Col2 = <string> }'
+  )
+})

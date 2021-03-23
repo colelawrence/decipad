@@ -302,6 +302,7 @@ export class Type {
 }
 
 export class TableType {
+  [immerable] = true
   constructor(public columnDefs: Map<string, Type>) {}
 
   toString() {

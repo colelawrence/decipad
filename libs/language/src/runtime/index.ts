@@ -9,5 +9,5 @@ class Runtime {
 }
 
 export function createRuntime(actorId: string): Runtime {
-  return new Runtime(actorId);
+    return new Runtime(actorId);
 }

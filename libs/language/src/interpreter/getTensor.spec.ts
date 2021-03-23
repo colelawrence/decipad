@@ -14,7 +14,7 @@ const testGetTensor = (statement: AST.Statement): number[] | Record<string, numb
   })
 
   try {
-    let columnsWithData: Record<string, number[]> = {}
+    const columnsWithData: Record<string, number[]> = {}
     for (const [key, value] of Object.entries(columns)) {
       columnsWithData[key] = [...value.dataSync()]
     }

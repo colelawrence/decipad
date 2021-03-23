@@ -2,8 +2,10 @@ import * as tf from "@tensorflow/tfjs-core";
 
 import { builtins } from "../builtins";
 import { getOfType, getDefined, getIdentifierString } from "../utils";
+
 import { Realm } from "./Realm";
 import { Table } from './types'
+import { getLargestColumn, evaluateRecursiveColumn, getWithSize } from './column'
 
 function castToColumns(table: Table): Table {
   const sizes: Set<number> = new Set(Object.values(table).map(t => t.shape.length === 0 ? 0 : t.shape[0]))
@@ -18,8 +20,7 @@ function castToColumns(table: Table): Table {
         if (value.shape.length > 0) {
           return [key, value]
         } else {
-          // Turn non-column into a [1] and tile it to fit the size of the table
-          return [key, tf.tile(tf.reshape(value, [1]), [largestSize])]
+          return [key, getWithSize(value, largestSize)]
         }
       })
 
@@ -57,7 +58,9 @@ export function getTensor(realm: Realm, node: AST.Statement): tf.Tensor {
 
       const builtinName = builtins.binary[funcName] ?? builtins.unary[funcName];
 
-      if (builtinName != null) {
+      if (funcName === 'previous') {
+        return realm.previousValue ?? args[0]
+      } if (builtinName != null) {
         const tfFunction = getDefined(
           (tf as any)[builtinName]
         );
@@ -110,8 +113,12 @@ export function getTensor(realm: Realm, node: AST.Statement): tf.Tensor {
         for (let i = 0; i + 1 < columns.args.length; i += 2) {
           const [def, column] = [columns.args[i], columns.args[i + 1]]
           const colName = getIdentifierString(def as AST.ColDef)
+          const tensor = evaluateRecursiveColumn(
+            realm,
+            column as AST.Expression,
+            getLargestColumn(table)
+          )
 
-          const tensor = getTensor(realm, column as AST.Expression)
           realm.stack.set(colName, tensor)
 
           table[colName] = tensor
