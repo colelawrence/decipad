@@ -1,0 +1,49 @@
+import * as tf from '@tensorflow/tfjs-core';
+import { Value, Column, Table } from './Value';
+
+async function asyncTidy<T>(fn: () => Promise<T>): Promise<T> {
+  try {
+    tf.engine().startScope();
+    return await fn();
+  } finally {
+    tf.engine().endScope();
+  }
+}
+
+export const materializeMultiple = async (
+  values: (Value | Column | Table)[]
+): Promise<Interpreter.Result> => {
+  return asyncTidy(async () => {
+    const materialized = [];
+
+    for (const value of values) {
+      materialized.push(await materializeOne(value));
+    }
+
+    return materialized;
+  });
+};
+
+export const materializeOne = async (
+  value: Value | Column | Table
+): Promise<Interpreter.OneResult> => {
+  return asyncTidy(async () => {
+    const v = value as Value | Column | Table;
+
+    if (v instanceof Value) {
+      return await v.getData();
+    } else if (v instanceof Column) {
+      return await v.getData();
+    } else if (v instanceof Table) {
+      const out = new Map();
+
+      for (const [colName, column] of v.columns.entries()) {
+        out.set(colName, await column.getData());
+      }
+
+      return out;
+    } else {
+      throw new Error('panic: unknown value type');
+    }
+  });
+};

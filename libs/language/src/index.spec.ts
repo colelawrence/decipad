@@ -150,9 +150,12 @@ describe('Tables', () => {
 
   it('can refer to the previous thing', async () => {
     expect(
-      await runCode(
-        `Table = { Column1 = [1, 1, 1], Column2 = Column1 + (previous 0) }`
-      )
+      await runCode(`
+        Table = {
+          Column1 = [1, 1, 1],
+          Column2 = Column1 + (previous 0)
+        }
+      `)
     ).toMatchObject({
       type: new TableType(
         new Map([

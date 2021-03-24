@@ -29,7 +29,7 @@
         "typecheck": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "yarn tsc -b libs/language/tsconfig.json --incremental"
+            "command": "yarn tsc -p libs/language/tsconfig.json --incremental"
           }
         }
       }
@@ -79,7 +79,7 @@
         "typecheck": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "yarn tsc -b apps/client/tsconfig.json --incremental"
+            "command": "yarn tsc -p apps/client/tsconfig.json --incremental"
           }
         }
       }
@@ -107,7 +107,7 @@
         "typecheck": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "yarn tsc -b apps/client-e2e/tsconfig.json --incremental"
+            "command": "yarn tsc -p apps/client-e2e/tsconfig.json --incremental"
           }
         }
       }
@@ -132,7 +132,7 @@
         "typecheck": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "yarn tsc -b libs/ui/tsconfig.json --incremental"
+            "command": "yarn tsc -p libs/ui/tsconfig.json --incremental"
           }
         }
       }
@@ -159,7 +159,7 @@
         "typecheck": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "yarn tsc -b libs/editor/tsconfig.json --incremental"
+            "command": "yarn tsc -p libs/editor/tsconfig.json --incremental"
           }
         }
       }

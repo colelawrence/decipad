@@ -151,3 +151,18 @@ export const getDefined = <T>(
 
   return anything;
 };
+
+export const zip = <T>(keys: string[], values: T[]): [string, T][] => {
+  if (keys.length !== values.length) {
+    throw new Error('panic: cannot zip arrays of different lengths');
+  }
+
+  const out = [];
+
+  for (let i = 0; i < keys.length; i++) {
+    const pair: [string, T] = [keys[i], values[i]];
+    out.push(pair);
+  }
+
+  return out;
+};
