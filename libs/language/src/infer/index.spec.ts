@@ -139,16 +139,16 @@ it('infers binops', () => {
 });
 
 it('infers conditions', () => {
-  expect(
-    inferExpression(nilCtx, n('conditional', l(true), l(1), l(1)))
-  ).toEqual(Type.Number);
+  expect(inferExpression(nilCtx, c('if', l(true), l(1), l(1)))).toEqual(
+    Type.Number
+  );
 
   expect(
-    inferExpression(nilCtx, n('conditional', l(true), l('str'), l('other str')))
+    inferExpression(nilCtx, c('if', l(true), l('str'), l('other str')))
   ).toEqual(Type.String);
 
   const errorCtx = makeContext();
-  const badConditional = n('conditional', l(true), l('wrong!'), l(1));
+  const badConditional = c('if', l(true), l('wrong!'), l(1));
   const badConditionalError = new InferError(
     'Mismatched types: string and number'
   );

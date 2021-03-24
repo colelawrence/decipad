@@ -1,4 +1,4 @@
-declare module "../src/grammar";
+declare module '../src/grammar';
 
 declare namespace Parser {
   interface UnparsedBlock {
@@ -31,111 +31,94 @@ declare namespace AST {
   }
 
   interface Def {
-    type: "def";
+    type: 'def';
     args: [varName: string];
     start: Pos;
     end: Pos;
   }
 
   interface Ref {
-    type: "ref";
+    type: 'ref';
     args: [varName: string];
     start: Pos;
     end: Pos;
   }
 
   interface FuncRef {
-    type: "funcref";
+    type: 'funcref';
     args: [functionName: string];
     start: Pos;
     end: Pos;
   }
 
   interface FuncDef {
-    type: "funcdef";
+    type: 'funcdef';
     args: [functionName: string];
     start: Pos;
     end: Pos;
   }
 
   interface ColDef {
-    type: "coldef"
-    args: [colName: string]
-    start: Pos
-    end: Pos
+    type: 'coldef';
+    args: [colName: string];
+    start: Pos;
+    end: Pos;
   }
 
   interface TableDef {
-    type: "tabledef"
-    args: [tableName: string]
-    start: Pos
-    end: Pos
+    type: 'tabledef';
+    args: [tableName: string];
+    start: Pos;
+    end: Pos;
   }
 
   type Identifier = Ref | FuncRef | Def | FuncDef | ColDef | TableDef;
 
   // Literal number, char, string etc
 
-  type LitArgs =
-    | ["number", number]
-    | ["boolean", boolean]
-    | ["string", string]
+  type LitArgs = ['number', number] | ['boolean', boolean] | ['string', string];
 
   interface Literal {
-    type: "literal";
-    args: [
-      ...LitArgs,
-      unit: Unit[] | null
-    ];
+    type: 'literal';
+    args: [...LitArgs, unit: Unit[] | null];
     start: Pos;
     end: Pos;
   }
 
   // Columns, tables
   interface Column {
-    type: "column";
-    args: [
-      contents: Expression[]
-    ];
+    type: 'column';
+    args: [contents: Expression[]];
     start: Pos;
     end: Pos;
   }
 
   interface TableColumns {
-    type: "table-columns"
-    args: (ColDef | Expression)[]
-    start: Pos
-    end: Pos
+    type: 'table-columns';
+    args: (ColDef | Expression)[];
+    start: Pos;
+    end: Pos;
   }
 
   interface TableDefinition {
-    type: "table-definition"
-    args: [TableDef, TableColumns]
-    start: Pos
-    end: Pos
+    type: 'table-definition';
+    args: [TableDef, TableColumns];
+    start: Pos;
+    end: Pos;
   }
 
   // Function calls and operators
 
   interface ArgList {
-    type: "argument-list";
+    type: 'argument-list';
     args: Expression[];
     start: Pos;
     end: Pos;
   }
 
   interface FunctionCall {
-    type: "function-call";
+    type: 'function-call';
     args: [FuncRef, ArgList];
-    start: Pos;
-    end: Pos;
-  }
-
-  // Conditions
-
-  interface Conditional {
-    type: "conditional";
-    args: [condition: Expression, then: Expression, otherwise: Expression];
     start: Pos;
     end: Pos;
   }
@@ -143,21 +126,21 @@ declare namespace AST {
   // Definitions
 
   interface Assign {
-    type: "assign";
+    type: 'assign';
     args: [def: Def, assignee: Expression];
     start: Pos;
     end: Pos;
   }
 
   interface FunctionArgumentNames {
-    type: "argument-names";
+    type: 'argument-names';
     args: Def[];
     start: Pos;
     end: Pos;
   }
 
   interface FunctionDefinition {
-    type: "function-definition";
+    type: 'function-definition';
     args: [name: FuncDef, arguments: FunctionArgumentNames, body: Block];
     start: Pos;
     end: Pos;
@@ -166,14 +149,14 @@ declare namespace AST {
   // Groupings
 
   interface Block {
-    type: "block";
+    type: 'block';
     id: string;
     args: Statement[];
     start: Pos;
     end: Pos;
   }
 
-  type Expression = FunctionCall | Ref | Literal | Conditional | Column;
+  type Expression = FunctionCall | Ref | Literal | Column;
   type Statement = FunctionDefinition | Assign | TableDefinition | Expression;
 
   type Lists = FunctionArgumentNames | ArgList | TableColumns;
@@ -188,26 +171,26 @@ declare namespace AST {
     coldef: ColDef;
     tabledef: TableDef;
     literal: Literal;
-    "argument-list": ArgList;
-    "function-call": FunctionCall;
+    'argument-list': ArgList;
+    'function-call': FunctionCall;
     column: Column;
-    "table-columns": TableColumns;
-    "table-definition": TableDefinition;
-    conditional: Conditional;
+    'table-columns': TableColumns;
+    'table-definition': TableDefinition;
     assign: Assign;
-    "argument-names": FunctionArgumentNames;
-    "function-definition": FunctionDefinition;
+    'argument-names': FunctionArgumentNames;
+    'function-definition': FunctionDefinition;
     block: Block;
   }
 }
 
 declare namespace Interpreter {
-  type Value = (number | number[] | Map<string, number>)[]
+  type OneResult = number | number[] | Map<string, number>;
+  type Result = OneResult[];
 }
 
-type Type = import('../src/type').Type
-type TableType = import('../src/type').TableType
+type Type = import('../src/type').Type;
+type TableType = import('../src/type').TableType;
 interface Result {
-  type: Type | TableType,
-  value: Interpreter.Result
+  type: Type | TableType;
+  value: Interpreter.Result;
 }

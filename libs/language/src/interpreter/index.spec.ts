@@ -27,7 +27,7 @@ it('can return multiple results', async () => {
 });
 
 it('evaluates conditions', async () => {
-  const condition = n('conditional', l(true), l(1), l(0));
+  const condition = c('if', l(true), l(1), l(0));
 
   expect(await runOne(condition)).toEqual(1);
 });

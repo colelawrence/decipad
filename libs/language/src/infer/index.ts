@@ -85,24 +85,12 @@ export const inferExpression = (ctx: Context, expr: AST.Expression): Type => {
         return functionType.returns;
       } else {
         const functor: (...ts: Type[]) => Type = getDefined(
-          fName in functors.binary
-            ? functors.binary[fName]
-            : functors.unary[fName],
+          (functors as any)[givenArguments.length][fName],
           'panic: unknown builtin function ' + fName
         );
 
         return Type.runFunctor(expr, functor, ...givenArguments);
       }
-    }
-    case 'conditional': {
-      const condArg = inferExpression(ctx, expr.args[0]);
-      const thenArg = inferExpression(ctx, expr.args[1]);
-      const elseArg = inferExpression(ctx, expr.args[2]);
-
-      const functor = (condT: Type, thenT: Type, elseT: Type): Type =>
-        Type.combine(condT.hasType('boolean'), thenT.sameAs(elseT));
-
-      return Type.runFunctor(expr, functor, condArg, thenArg, elseArg);
     }
   }
 };

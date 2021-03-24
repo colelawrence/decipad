@@ -3516,8 +3516,21 @@
           'expression',
         ],
         postprocess: (d, l) => ({
-          type: 'conditional',
-          args: [d[2], d[6], d[10]],
+          type: 'function-call',
+          args: [
+            {
+              type: 'funcref',
+              args: ['if'],
+              location: l,
+              length: 2,
+            },
+            {
+              type: 'argument-list',
+              args: [d[2], d[6], d[10]],
+              location: d[2].location,
+              length: lengthOf(d.slice(2)),
+            },
+          ],
           location: l,
           length: lengthOf(d),
         }),

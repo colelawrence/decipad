@@ -48,7 +48,7 @@ export function getTensor(realm: Realm, node: AST.Statement): Value | Column {
       const funcArgs = getOfType('argument-list', node.args[1]).args;
       const args = funcArgs.map((arg) => getTensor(realm, arg));
 
-      const builtinName = builtins.binary[funcName] ?? builtins.unary[funcName];
+      const builtinName = builtins[args.length][funcName];
 
       if (funcName === 'previous') {
         return realm.previousValue ?? args[0];
@@ -77,14 +77,6 @@ export function getTensor(realm: Realm, node: AST.Statement): Value | Column {
           throw new Error('function is empty');
         });
       }
-    }
-    case 'conditional': {
-      return callTfMethod(
-        'where',
-        getTensor(realm, node.args[0]),
-        getTensor(realm, node.args[1]),
-        getTensor(realm, node.args[2])
-      );
     }
     case 'column': {
       return Column.fromValues(node.args[0].map((v) => getTensor(realm, v)));

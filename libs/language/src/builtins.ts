@@ -6,12 +6,14 @@ import { Type } from './type';
 type Builtin = keyof typeof tf & string;
 
 interface Builtins {
-  binary: { [fname: string]: Builtin };
-  unary: { [fname: string]: Builtin };
+  [count: number]: { [fname: string]: Builtin };
 }
 
 export const builtins: Builtins = {
-  binary: {
+  1: {
+    sqrt: 'sqrt',
+  },
+  2: {
     '+': 'add',
     '-': 'sub',
     '/': 'div',
@@ -21,40 +23,44 @@ export const builtins: Builtins = {
     '<=': 'lessEqual',
     '>=': 'greaterEqual',
   },
-  unary: {
-    sqrt: 'sqrt',
+  3: {
+    if: 'where',
   },
 };
 
 interface BuiltinFunctors {
-  binary: {
+  1: {
+    [fname: string]: (A: Type) => Type;
+  };
+  2: {
     [fname: string]: (A: Type, B: Type) => Type;
   };
-  unary: {
-    [fname: string]: (A: Type) => Type;
+  3: {
+    [fname: string]: (A: Type, B: Type, C: Type) => Type;
   };
 }
 
 // Allow the comma operator to keep these in one line
-/* eslint-disable no-sequences */
-const relativeCompareOp = (A: Type, B: Type) => (
-  A.hasType('number', 'string').sameAs(B), Type.Boolean
-);
+const relativeCompareOp = (A: Type, B: Type) =>
+  Type.combine(A.hasType('number', 'string').sameAs(B), Type.Boolean);
 
 export const functors: BuiltinFunctors = {
-  binary: {
+  1: {
+    sqrt: (N) => N.hasType('number'),
+  },
+  2: {
     '+': (A, B) => A.hasType('number', 'string').sameAs(B).withUnit(B.unit),
-    '-': (A, B) => A.hasType('number', 'string').sameAs(B).withUnit(B.unit),
-    '/': (A, B) => A.hasType('number', 'string').sameAs(B).divideUnit(B.unit),
-    '*': (A, B) => A.hasType('number', 'string').sameAs(B).multiplyUnit(B.unit),
+    '-': (A, B) => A.hasType('number').sameAs(B).withUnit(B.unit),
+    '/': (A, B) => A.hasType('number').sameAs(B).divideUnit(B.unit),
+    '*': (A, B) => A.hasType('number').sameAs(B).multiplyUnit(B.unit),
     '>': relativeCompareOp,
     '<': relativeCompareOp,
     '>=': relativeCompareOp,
     '<=': relativeCompareOp,
     '==': (A, B) => Type.combine(A.sameAs(B), Type.Boolean),
   },
-  unary: {
-    sqrt: (N) => N.hasType('number'),
+  3: {
+    if: (Cond, Then, Else) =>
+      Type.combine(Cond.hasType('boolean'), Then.sameAs(Else)),
   },
 };
-/* eslint-enable no-sequences */

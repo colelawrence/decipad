@@ -3,7 +3,6 @@ import { ParserNode } from './types';
 const typesWithArgs = new Set([
   'argument-list',
   'function-call',
-  'conditional',
   'assign',
   'argument-names',
   'function-definition',

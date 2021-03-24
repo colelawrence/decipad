@@ -451,11 +451,24 @@ funcArgumentList -> expression ___ funcArgumentList      {%
 
 conditional  -> "if" __ expression __ "then" __ expression __ "else" __ expression {%
                                                         (d, l) => ({
-                                                          type: "conditional",
+                                                          type: 'function-call',
                                                           args: [
-                                                            d[2],
-                                                            d[6],
-                                                            d[10]
+                                                            {
+                                                              type: 'funcref',
+                                                              args: ['if'],
+                                                              location: l,
+                                                              length: 2
+                                                            },
+                                                            {
+                                                              type: 'argument-list',
+                                                              args: [
+                                                                d[2],
+                                                                d[6],
+                                                                d[10]
+                                                              ],
+                                                              location: d[2].location,
+                                                              length: lengthOf(d.slice(2))
+                                                            }
                                                           ],
                                                           location: l,
                                                           length: lengthOf(d)
