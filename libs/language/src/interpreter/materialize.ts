@@ -1,5 +1,5 @@
 import * as tf from '@tensorflow/tfjs-core';
-import { Value, Column, Table, AnyValue } from './Value';
+import { Value, Column, Table, Range, AnyValue } from './Value';
 
 async function asyncTidy<T>(fn: () => Promise<T>): Promise<T> {
   try {
@@ -30,9 +30,7 @@ export const materializeOne = async (
   return asyncTidy(async () => {
     const v = value as AnyValue;
 
-    if (v instanceof Value) {
-      return await v.getData();
-    } else if (v instanceof Column) {
+    if (v instanceof Value || v instanceof Column || v instanceof Range) {
       return await v.getData();
     } else if (v instanceof Table) {
       const out = new Map();

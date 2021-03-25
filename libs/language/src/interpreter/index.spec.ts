@@ -1,4 +1,4 @@
-import { c, l, n, col, funcDef, tableDef } from '../utils';
+import { c, l, n, col, range, funcDef, tableDef } from '../utils';
 import { run, runOne } from './index';
 
 it('evaluates and returns', async () => {
@@ -30,6 +30,12 @@ it('evaluates conditions', async () => {
   const condition = c('if', l(true), l(1), l(0));
 
   expect(await runOne(condition)).toEqual(1);
+});
+
+it('evaluates ranges', async () => {
+  const r = range(1, 10);
+
+  expect(await runOne(r)).toEqual([1, 10]);
 });
 
 describe('functions', () => {
