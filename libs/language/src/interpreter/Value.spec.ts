@@ -23,7 +23,7 @@ it('can be turned into something of the desired row count', async () => {
 });
 
 it('can represent a range', async () => {
-  const range = new Range(tf.tensor(0), tf.tensor(10));
+  const range = new Range(new Value(tf.tensor(0)), new Value(tf.tensor(10)));
 
   expect(await range.getData()).toEqual([0, 10]);
 });

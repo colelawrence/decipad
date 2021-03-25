@@ -4,14 +4,21 @@ import { builtins } from '../builtins';
 import { getOfType, getDefined, getIdentifierString } from '../utils';
 
 import { Realm } from './Realm';
-import { Value, Column, Table, fromTensor } from './Value';
+import {
+  Value,
+  Range,
+  Column,
+  SimpleValue,
+  AnyValue,
+  fromTensor,
+} from './Value';
 import {
   castToColumns,
   getLargestColumn,
   evaluateRecursiveColumn,
 } from './column';
 
-const callTfMethod = (methodName: string, ...args: (Value | Column)[]) => {
+const callTfMethod = (methodName: string, ...args: SimpleValue[]) => {
   const tfFunction = getDefined((tf as any)[methodName]);
   const tensorArgs = args.map((a) => a.getInternalTensor());
 
@@ -19,7 +26,7 @@ const callTfMethod = (methodName: string, ...args: (Value | Column)[]) => {
 };
 
 // Gets a single tensor from an expanded AST.
-export function getTensor(realm: Realm, node: AST.Statement): Value | Column {
+export function getTensor(realm: Realm, node: AST.Statement): SimpleValue {
   switch (node.type) {
     case 'literal': {
       switch (node.args[0]) {
@@ -79,13 +86,17 @@ export function getTensor(realm: Realm, node: AST.Statement): Value | Column {
       }
     }
     case 'range': {
-      throw new Error('panic: not implemented');
+      const [start, end] = node.args.map((arg) => getTensor(realm, arg));
+
+      return new Range(start.asValue(), end.asValue());
     }
     case 'column': {
-      return Column.fromValues(node.args[0].map((v) => getTensor(realm, v)));
+      return Column.fromValues(
+        node.args[0].map((v) => getTensor(realm, v).asValue())
+      );
     }
     case 'table-definition': {
-      const table: Record<string, Value | Column> = {};
+      const table: Record<string, SimpleValue> = {};
       const tableName = getIdentifierString(node.args[0]);
       const columns: AST.TableColumns = node.args[1];
 
@@ -158,9 +169,9 @@ export function getTensorForTargets(
   desiredTargets: Array<
     string | number | [blockIdx: number, statementIdx: number]
   >
-): (Value | Column | Table)[] {
+): AnyValue[] {
   const realm = new Realm();
-  const targetSet: Map<unknown, Value | Column | Table> = new Map(
+  const targetSet: Map<unknown, AnyValue> = new Map(
     desiredTargetsToStatements(program, desiredTargets).map((target) => [
       target,
       new Value(tf.tensor([NaN])),
@@ -169,7 +180,7 @@ export function getTensorForTargets(
 
   for (const block of program) {
     for (const statement of block.args) {
-      let value: Value | Column | Table = getTensor(realm, statement);
+      let value: AnyValue = getTensor(realm, statement);
       if (statement.type === 'table-definition') {
         const tableName = getIdentifierString(statement.args[0]);
         value = getDefined(realm.tables.get(tableName));

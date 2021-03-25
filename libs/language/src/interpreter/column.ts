@@ -2,7 +2,7 @@ import * as tf from '@tensorflow/tfjs-core';
 import { walk, getIdentifierString, isExpression, zip } from '../utils';
 import { getTensor } from './getTensor';
 import { Realm } from './Realm';
-import { Column, Value, Table } from './Value';
+import { Column, Value, Table, SimpleValue } from './Value';
 
 const isRecursiveReference = (expr: AST.Expression) =>
   expr.type === 'function-call' &&
@@ -33,7 +33,7 @@ export const evaluateRecursiveColumn = (
   realm: Realm,
   column: AST.Expression,
   rowCount: number
-): Column | Value => {
+): SimpleValue => {
   if (!usesRecursion(column)) {
     return getTensor(realm, column);
   } else {
@@ -54,7 +54,7 @@ export const evaluateRecursiveColumn = (
   }
 };
 
-export const getLargestColumn = (values: (Value | Column)[]): number => {
+export const getLargestColumn = (values: SimpleValue[]): number => {
   const sizes: Set<number> = new Set(values.map((v) => v.rowCount ?? 0));
 
   // Make sure it can't be empty
@@ -63,15 +63,13 @@ export const getLargestColumn = (values: (Value | Column)[]): number => {
   return Math.max(...sizes);
 };
 
-export const castToLargestRowCount = (values: (Value | Column)[]): Column[] => {
+export const castToLargestRowCount = (values: SimpleValue[]): Column[] => {
   const largestSize = getLargestColumn(values);
 
   return values.map((value) => value.withRowCount(largestSize));
 };
 
-export const castToColumns = (table: {
-  [col: string]: Value | Column;
-}): Table => {
+export const castToColumns = (table: { [col: string]: SimpleValue }): Table => {
   const colNames = Object.keys(table);
   const columns = castToLargestRowCount(Object.values(table));
 

@@ -1,5 +1,5 @@
 import * as tf from '@tensorflow/tfjs-core';
-import { Value, Column, Table } from './Value';
+import { Value, Column, Table, AnyValue } from './Value';
 
 async function asyncTidy<T>(fn: () => Promise<T>): Promise<T> {
   try {
@@ -11,7 +11,7 @@ async function asyncTidy<T>(fn: () => Promise<T>): Promise<T> {
 }
 
 export const materializeMultiple = async (
-  values: (Value | Column | Table)[]
+  values: AnyValue[]
 ): Promise<Interpreter.Result> => {
   return asyncTidy(async () => {
     const materialized = [];
@@ -25,10 +25,10 @@ export const materializeMultiple = async (
 };
 
 export const materializeOne = async (
-  value: Value | Column | Table
+  value: AnyValue
 ): Promise<Interpreter.OneResult> => {
   return asyncTidy(async () => {
-    const v = value as Value | Column | Table;
+    const v = value as AnyValue;
 
     if (v instanceof Value) {
       return await v.getData();
