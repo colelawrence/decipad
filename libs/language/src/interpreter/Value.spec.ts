@@ -1,5 +1,5 @@
 import * as tf from '@tensorflow/tfjs-core';
-import { Value, Column } from './Value';
+import { Value, Column, Range } from './Value';
 
 it('can be turned into a scalar value', async () => {
   const oneNumber = new Value(tf.tensor(1));
@@ -20,4 +20,10 @@ it('can be turned into something of the desired row count', async () => {
   expect(await oneNumber.withRowCount(3).getData()).toEqual([1, 1, 1]);
   expect(await column.withRowCount(3).getData()).toEqual([1, 2, 3]);
   expect(() => column.withRowCount(10)).toThrow(/panic:/);
+});
+
+it('can represent a range', async () => {
+  const range = new Range(tf.tensor(0), tf.tensor(10));
+
+  expect(await range.getData()).toEqual([0, 10]);
 });

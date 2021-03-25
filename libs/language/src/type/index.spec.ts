@@ -321,3 +321,48 @@ it('has a TableType', () => {
 
   expect(table.toString()).toEqual('table { Col1 = meter, Col2 = <string> }');
 });
+
+describe('ranges', () => {
+  it('types can check and assign rangeness', () => {
+    const range = Type.Number.isRange();
+    const notRange = Type.Number.isNotRange();
+    const ranged = Type.Number.isNotRange().isRange();
+    const deranged = range.isNotRange();
+
+    expect(range).toMatchObject({ rangeness: true });
+    expect(notRange).toMatchObject({ rangeness: false });
+    expect(ranged.errorCause).toEqual(new InferError('Expected range'));
+    expect(deranged.errorCause).toEqual(new InferError('Unexpected range'));
+  });
+
+  it('types cannot be divided or multiplied', () => {
+    const range = Type.Number.isRange();
+
+    expect(range.divideUnit(null).errorCause).toEqual(
+      new InferError('Invalid method for a range')
+    );
+    /*
+    expect(range.multiplyUnit(null).errorCause).toEqual(new InferError(
+      'Invalid method for a range'
+    ))
+    */
+  });
+
+  it('rangeness is unified with sameAs', () => {
+    expect(
+      Type.Number.isRange().sameAs(Type.Number.isNotRange()).errorCause
+    ).toEqual(
+      new InferError(
+        'Expected type with rangeness true to have rangeness false'
+      )
+    );
+
+    expect(
+      Type.Number.isNotRange().sameAs(Type.Number.isRange()).errorCause
+    ).toEqual(
+      new InferError(
+        'Expected type with rangeness false to have rangeness true'
+      )
+    );
+  });
+});

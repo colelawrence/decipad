@@ -1,8 +1,6 @@
 import * as tf from '@tensorflow/tfjs-core';
 
 export class Value {
-  type = 'number';
-
   rowCount = null;
 
   constructor(public tensor: tf.Scalar) {}
@@ -25,6 +23,16 @@ export class Value {
 
   async getData() {
     return (await this.tensor.data())[0];
+  }
+}
+
+export class Range {
+  rowCount = null;
+
+  constructor(public start: tf.Scalar, public end: tf.Scalar) {}
+
+  async getData() {
+    return [(await this.start.data())[0], (await this.end.data())[0]];
   }
 }
 
@@ -72,6 +80,10 @@ export class Column {
   }
 }
 
+export class Table {
+  constructor(public columns: Map<string, Column> = new Map()) {}
+}
+
 export const fromTensor = (tensor: tf.Tensor): Value | Column => {
   if (tensor.shape.length === 0) {
     return new Value(tensor as tf.Scalar);
@@ -79,7 +91,3 @@ export const fromTensor = (tensor: tf.Tensor): Value | Column => {
     return new Column(tensor as tf.Tensor1D);
   }
 };
-
-export class Table {
-  constructor(public columns: Map<string, Column> = new Map()) {}
-}

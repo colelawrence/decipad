@@ -81,6 +81,7 @@ declare namespace AST {
   interface Literal {
     type: 'literal';
     args: [...LitArgs, unit: Unit[] | null];
+    type?: Type; // TODO
     start: Pos;
     end: Pos;
   }

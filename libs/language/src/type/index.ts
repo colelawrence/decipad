@@ -118,6 +118,19 @@ const combineUnits = (
   return normalizeUnits(outputUnits);
 };
 
+// decorates methods that propagate errors found in `this` or any argument.
+const propagate = (_: Type, _methodName: string, desc: PropertyDescriptor) => {
+  const method = desc.value;
+
+  desc.value = function (this: Type, ...args: any[]) {
+    const errored = [this, ...args].find(
+      (a) => a instanceof Type && a.errorCause != null
+    );
+
+    return errored ?? method.call(this, ...args);
+  };
+};
+
 export class Type {
   [immerable] = true;
 
@@ -133,6 +146,7 @@ export class Type {
   node: AST.Node;
   errorCause: InferError | null = null;
   columnSize: number | null = null;
+  rangeness: boolean | null = null;
 
   constructor(...possibleTypes: TypeName[]) {
     if (possibleTypes.length > 0) {
@@ -140,7 +154,15 @@ export class Type {
     }
   }
 
-  toString() {
+  toString(): string {
+    if (this.rangeness === true) {
+      const withoutRange = produce(this, (type) => {
+        type.rangeness = null;
+      });
+
+      return 'range of ' + withoutRange.toString();
+    }
+
     if (this.unit != null && this.unit.length > 0) {
       return stringifyUnits(this.unit);
     }
@@ -185,9 +207,8 @@ export class Type {
     });
   }
 
+  @propagate
   hasType(...typeNames: TypeName[]): Type {
-    if (this.errorCause != null) return this;
-
     const intersection = intersect(this.possibleTypes, typeNames);
 
     if (intersection.length === 0) {
@@ -206,6 +227,7 @@ export class Type {
     });
   }
 
+  @propagate
   isColumn(size: number) {
     const incompatibleSizes =
       this.columnSize != null && this.columnSize !== size;
@@ -225,6 +247,7 @@ export class Type {
     }
   }
 
+  @propagate
   isNotColumn() {
     if (this.columnSize != null) {
       return this.withErrorCause(new InferError('Unexpected column'));
@@ -233,6 +256,7 @@ export class Type {
     }
   }
 
+  @propagate
   sameColumnSizeAs(other: Type) {
     if (this.columnSize === other.columnSize) {
       return this;
@@ -252,16 +276,58 @@ export class Type {
     }
   }
 
-  sameAs(other: Type): Type {
-    if (this.errorCause != null) return this;
-    if (other.errorCause != null) return other;
-
-    return this.hasType(...other.possibleTypes).sameColumnSizeAs(other);
+  @propagate
+  isRange() {
+    if (this.rangeness === false) {
+      return this.withErrorCause(new InferError('Expected range'));
+    } else {
+      return produce(this, (newType) => {
+        newType.rangeness = true;
+      });
+    }
   }
 
-  withUnit(unit: AST.Unit[] | null) {
-    if (this.errorCause != null) return this;
+  @propagate
+  isNotRange() {
+    if (this.rangeness === true) {
+      return this.withErrorCause(new InferError('Unexpected range'));
+    } else {
+      return produce(this, (newType) => {
+        newType.rangeness = false;
+      });
+    }
+  }
 
+  @propagate
+  sameRangenessAs(other: Type): Type {
+    if (this.rangeness === other.rangeness) {
+      return this;
+    } else if ((this.rangeness == null) !== (other.rangeness == null)) {
+      // Only one is a range
+      return produce(this, (newType) => {
+        newType.rangeness = this.rangeness ?? other.rangeness;
+      });
+    } else {
+      return this.withErrorCause(
+        new InferError(
+          'Expected type with rangeness ' +
+            this.rangeness +
+            ' to have rangeness ' +
+            other.rangeness
+        )
+      );
+    }
+  }
+
+  @propagate
+  sameAs(other: Type): Type {
+    return this.hasType(...other.possibleTypes)
+      .sameColumnSizeAs(other)
+      .sameRangenessAs(other);
+  }
+
+  @propagate
+  withUnit(unit: AST.Unit[] | null) {
     if (this.unit == null || unit == null) {
       return produce(this, (newType) => {
         newType.unit = unit;
@@ -282,16 +348,22 @@ export class Type {
     }
   }
 
+  @propagate
   multiplyUnit(withUnits: AST.Unit[] | null) {
-    if (this.errorCause != null) return this;
+    if (this.rangeness === true) {
+      return this.withErrorCause(new InferError('Invalid method for a range'));
+    }
 
     return produce(this, (newType) => {
       newType.unit = combineUnits(this.unit, withUnits);
     });
   }
 
+  @propagate
   divideUnit(withUnit: AST.Unit[] | null) {
-    if (this.errorCause != null) return this;
+    if (this.rangeness === true) {
+      return this.withErrorCause(new InferError('Invalid method for a range'));
+    }
 
     const theirUnits =
       withUnit == null ? null : withUnit.map((u) => inverseExponent(u));
@@ -299,9 +371,8 @@ export class Type {
     return this.multiplyUnit(theirUnits);
   }
 
+  @propagate
   withErrorCause(error: InferError) {
-    if (this.errorCause != null) return this;
-
     return produce(this, (newType) => {
       newType.possibleTypes = [];
       newType.unit = null;
