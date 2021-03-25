@@ -86,6 +86,14 @@ declare namespace AST {
     end: Pos;
   }
 
+  // Range expression
+  interface Range {
+    type: 'range';
+    args: [start: Expression, end: Expression];
+    start: Pos;
+    end: Pos;
+  }
+
   // Columns, tables
   interface Column {
     type: 'column';
@@ -157,7 +165,7 @@ declare namespace AST {
     end: Pos;
   }
 
-  type Expression = FunctionCall | Ref | Literal | Column;
+  type Expression = FunctionCall | Ref | Literal | Column | Range;
   type Statement = FunctionDefinition | Assign | TableDefinition | Expression;
 
   type Lists = FunctionArgumentNames | ArgList | TableColumns;
@@ -174,6 +182,7 @@ declare namespace AST {
     literal: Literal;
     'argument-list': ArgList;
     'function-call': FunctionCall;
+    range: Range;
     column: Column;
     'table-columns': TableColumns;
     'table-definition': TableDefinition;

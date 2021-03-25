@@ -61,6 +61,15 @@ export function col(...values: (LitType | AST.Expression)[]): AST.Column {
   );
 }
 
+export function range(
+  start: LitType | AST.Expression,
+  end: LitType | AST.Expression
+): AST.Range {
+  const startExpr = isExpression(start) ? start : l(start);
+  const endExpr = isExpression(end) ? end : l(end);
+  return n('range', startExpr, endExpr);
+}
+
 export function tableDef(
   name: string,
   columns: Record<string, AST.Expression>
@@ -120,7 +129,9 @@ export const isExpression = (
 ): value is AST.Expression => {
   if (!isNode(value)) return false;
 
-  return ['function-call', 'ref', 'literal', 'column'].includes(value.type);
+  return ['function-call', 'ref', 'literal', 'column', 'range'].includes(
+    value.type
+  );
 };
 
 export const getIdentifierString = ({ type, args }: AST.Identifier): string => {

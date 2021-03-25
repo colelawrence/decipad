@@ -78,6 +78,9 @@ export function getTensor(realm: Realm, node: AST.Statement): Value | Column {
         });
       }
     }
+    case 'range': {
+      throw new Error('panic: not implemented');
+    }
     case 'column': {
       return Column.fromValues(node.args[0].map((v) => getTensor(realm, v)));
     }

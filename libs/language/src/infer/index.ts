@@ -44,6 +44,20 @@ export const inferExpression = (ctx: Context, expr: AST.Expression): Type => {
 
       return new Type(exprType).withUnit(expr.args[2]);
     }
+    case 'range': {
+      const [start, end] = expr.args.map((expr) => inferExpression(ctx, expr));
+
+      const rangeFunctor = (start: Type, end: Type) => {
+        return Type.combine(
+          start.hasType('number', 'string').isNotRange(),
+          end.hasType('number', 'string').isNotRange(),
+          start.sameAs(end),
+          start.isRange()
+        );
+      };
+
+      return Type.runFunctor(expr, rangeFunctor, start, end);
+    }
     case 'column': {
       const columnTypes = expr.args[0].map((a) => inferExpression(ctx, a));
 

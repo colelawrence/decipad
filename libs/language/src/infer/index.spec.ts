@@ -1,7 +1,7 @@
 import { produce } from 'immer';
 import { Type, TableType, InferError, inverseExponent } from '../type';
 
-import { l, c, n, r, col, tableDef, funcDef } from '../utils';
+import { l, c, n, r, col, range, tableDef, funcDef } from '../utils';
 
 import { makeContext } from './context';
 import {
@@ -33,6 +33,19 @@ it('infers literals', () => {
   expect(inferExpression(nilCtx, l('one'))).toEqual(Type.String);
 
   expect(inferExpression(nilCtx, l(true))).toEqual(Type.Boolean);
+});
+
+it('infers ranges', () => {
+  expect(inferExpression(nilCtx, range(1, 2))).toEqual(Type.Number.isRange());
+  expect(inferExpression(nilCtx, range('one', 'six'))).toEqual(
+    Type.String.isRange()
+  );
+
+  expect(inferExpression(nilCtx, range(false, true)).errorCause).toBeDefined();
+  expect(
+    inferExpression(nilCtx, range(range(1, 2), range(3, 4))).errorCause
+  ).toBeDefined();
+  expect(inferExpression(nilCtx, range('string', 1)).errorCause).toBeDefined();
 });
 
 describe('columns', () => {
