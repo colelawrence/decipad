@@ -1,3 +1,4 @@
+import "@tensorflow/tfjs-backend-cpu"
 import { getTensorForTargets } from './getTensor';
 import { materializeMultiple } from './materialize';
 import { n } from '../utils';

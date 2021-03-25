@@ -2,12 +2,14 @@
 const oldWarn = console.warn;
 console.warn = () => {};
 
-import '@tensorflow/tfjs-backend-cpu';
-import * as tf from '@tensorflow/tfjs-core';
+import './interpreter'
+import * as tf from "@tensorflow/tfjs-core"
+tf.tensor(0);
+
+console.warn = oldWarn;
+
 // alt backend: import '@tensorflow/tfjs-node'
 // Enable Map/Set support in Immer
 import { enableMapSet } from 'immer';
 enableMapSet();
 
-tf.tensor(0);
-console.warn = oldWarn;
