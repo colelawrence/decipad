@@ -194,7 +194,11 @@ declare namespace AST {
 }
 
 declare namespace Interpreter {
-  type OneResult = number | number[] | Map<string, number>;
+  type ResultScalar = number | boolean;
+  type ResultColumn = ResultScalar[];
+  type ResultTable = Map<string, ResultColumn>;
+
+  type OneResult = ResultScalar | ResultColumn | ResultTable;
   type Result = OneResult[];
 }
 

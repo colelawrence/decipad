@@ -1,8 +1,7 @@
-import * as tf from '@tensorflow/tfjs-core';
 import { walk, getIdentifierString, isExpression, zip } from '../utils';
-import { getTensor } from './getTensor';
+import { evaluate } from './evaluate';
 import { Realm } from './Realm';
-import { Column, Value, Table, SimpleValue } from './Value';
+import { Column, Scalar, Table, SimpleValue } from './Value';
 
 const isRecursiveReference = (expr: AST.Expression) =>
   expr.type === 'function-call' &&
@@ -20,37 +19,31 @@ export const usesRecursion = (expr: AST.Expression) => {
   return result;
 };
 
-const atIndex = (col: Column, index: number): Value => {
-  if (index <= col.rowCount) {
-    const slice = tf.slice(col.tensors, [index], [1]);
-    return new Value(tf.reshape(slice, []));
-  } else {
-    throw new Error('index out of range: ' + index);
-  }
-};
-
 export const evaluateRecursiveColumn = (
   realm: Realm,
   column: AST.Expression,
   rowCount: number
 ): SimpleValue => {
   if (!usesRecursion(column)) {
-    return getTensor(realm, column);
+    return evaluate(realm, column);
   } else {
     if (realm.previousValue != null) {
       throw new Error('panic: column must not contain another column');
     }
 
-    const rows = [];
+    const rows: Scalar[] = [];
 
     for (let i = 0; i < rowCount; i++) {
-      const value = atIndex(getTensor(realm, column).withRowCount(rowCount), i);
+      const value = evaluate(realm, column)
+        .withRowCount(rowCount)
+        .atIndex(i)
+        .asScalar();
       realm.previousValue = value;
-      rows.push(tf.reshape(value.tensor, [1]));
+      rows.push(value);
     }
 
     realm.previousValue = null;
-    return new Column(tf.concat(rows) as tf.Tensor1D);
+    return Column.fromValues(rows);
   }
 };
 

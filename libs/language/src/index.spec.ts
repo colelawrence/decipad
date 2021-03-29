@@ -72,7 +72,7 @@ describe('basic code', () => {
     });
   });
 
-  it('Can perform operations on columns', async () => {
+  it('Can perform operations between columns', async () => {
     const results = await runCode(`
       Column = [ 0, 1, 2, 4 ]
 
@@ -107,6 +107,30 @@ describe('basic code', () => {
     });
   });
 
+  it('Can run a function with two columns as arguments', async () => {
+    const results = await runCode(`
+      multiply = A B => A * B
+      multiply [ 1, 2, 3 ] 2
+    `);
+
+    expect(results).toMatchObject({
+      type: { possibleTypes: ['number'], columnSize: 3 },
+      value: [[2, 4, 6]],
+    });
+  });
+
+  it('Can run a function with two columns as arguments', async () => {
+    const results = await runCode(`
+      multiply = A B => A * B
+      multiply [ 1, 2, 3 ] [ 1, 2, 0 ]
+    `);
+
+    expect(results).toMatchObject({
+      type: { possibleTypes: ['number'], columnSize: 3 },
+      value: [[1, 4, 0]],
+    });
+  });
+
   it.todo('TODO: Does not allow empty columns');
 
   it('supports conditions', async () => {
@@ -137,14 +161,16 @@ describe('Tables', () => {
     ).toMatchObject({
       type: new TableType(
         new Map([
-          ['Column1', Type.Number.isColumn(3)],
-          ['Column2', Type.Number.isColumn(3)],
+          ['Column1', Type.build({ type: 'number', columnSize: 3 })],
+          ['Column2', Type.build({ type: 'number', columnSize: 3 })],
         ])
       ),
-      value: new Map([
-        ['Column1', [1, 2, 3]],
-        ['Column2', [2, 4, 6]],
-      ]),
+      value: [
+        new Map([
+          ['Column1', [1, 2, 3]],
+          ['Column2', [2, 4, 6]],
+        ]),
+      ],
     });
   });
 
@@ -159,14 +185,43 @@ describe('Tables', () => {
     ).toMatchObject({
       type: new TableType(
         new Map([
-          ['Column1', Type.Number.isColumn(3)],
-          ['Column2', Type.Number.isColumn(3)],
+          ['Column1', Type.build({ type: 'number', columnSize: 3 })],
+          ['Column2', Type.build({ type: 'number', columnSize: 3 })],
         ])
       ),
-      value: new Map([
-        ['Column1', [1, 1, 1]],
-        ['Column2', [1, 2, 3]],
-      ]),
+      value: [
+        new Map([
+          ['Column1', [1, 1, 1]],
+          ['Column2', [1, 2, 3]],
+        ]),
+      ],
+    });
+  });
+
+  it('can perform calculations between columns', async () => {
+    expect(
+      await runCode(`
+        Table = {
+          Column1 = [1, 2, 3],
+          Column2 = Column1 / 2
+          Column3 = Column2 > 1.1
+        }
+      `)
+    ).toMatchObject({
+      type: new TableType(
+        new Map([
+          ['Column1', Type.build({ type: 'number', columnSize: 3 })],
+          ['Column2', Type.build({ type: 'number', columnSize: 3 })],
+          ['Column3', Type.build({ type: 'boolean', columnSize: 3 })],
+        ])
+      ),
+      value: [
+        new Map([
+          ['Column1', [1, 2, 3]],
+          ['Column2', [0.5, 1, 1.5]],
+          ['Column3', [false, false, true]],
+        ]),
+      ],
     });
   });
 });
@@ -238,6 +293,20 @@ describe('Units', () => {
     ).toMatchObject({
       value: [2],
       type: { unit: [{ exp: -1, known: true, multiplier: 1, unit: 'second' }] },
+    });
+  });
+});
+
+describe('Ranges', () => {
+  it('Evaluates and types ranges', async () => {
+    expect(
+      await runCode(`
+      Range = [1..3]
+      Containment = contains Range 3
+    `)
+    ).toMatchObject({
+      type: { rangeness: false },
+      value: [true],
     });
   });
 });

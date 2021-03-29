@@ -17,7 +17,12 @@ export const unifyColumnSizes = (
 
   const unifiedTable = produce(table, (table) => {
     for (const [colName, colValue] of table.columnDefs.entries()) {
-      const newValue = colValue.isColumn(columnSize);
+      const newValue = colValue.columnSize
+        ? // Ensure it's the same size
+          colValue.isColumn(columnSize)
+        : // Create a new type with that size
+          Type.extend(colValue as Type, { columnSize: columnSize });
+
       table.columnDefs.set(colName, newValue);
     }
   });

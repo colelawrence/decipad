@@ -1,38 +1,22 @@
-import * as tf from '@tensorflow/tfjs-core';
-
-import { builtins } from '../builtins';
+import { hasBuiltin, callBuiltin } from '../builtins';
 import { getOfType, getDefined, getIdentifierString } from '../utils';
 
 import { Realm } from './Realm';
-import {
-  Value,
-  Range,
-  Column,
-  SimpleValue,
-  AnyValue,
-  fromTensor,
-} from './Value';
+import { Scalar, Range, Column, SimpleValue, Value } from './Value';
 import {
   castToColumns,
   getLargestColumn,
   evaluateRecursiveColumn,
 } from './column';
 
-const callTfMethod = (methodName: string, ...args: SimpleValue[]) => {
-  const tfFunction = getDefined((tf as any)[methodName]);
-  const tensorArgs = args.map((a) => a.getInternalTensor());
-
-  return fromTensor(tfFunction(...tensorArgs));
-};
-
-// Gets a single tensor from an expanded AST.
-export function getTensor(realm: Realm, node: AST.Statement): SimpleValue {
+// Gets a single value from an expanded AST.
+export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
   switch (node.type) {
     case 'literal': {
       switch (node.args[0]) {
         case 'number':
         case 'boolean': {
-          return new Value(tf.tensor(node.args[1]));
+          return Scalar.fromValue(node.args[1]);
         }
         default: {
           throw new Error(
@@ -43,7 +27,7 @@ export function getTensor(realm: Realm, node: AST.Statement): SimpleValue {
     }
     case 'assign': {
       const varName = getIdentifierString(node.args[0]);
-      const value = getTensor(realm, node.args[1]);
+      const value = evaluate(realm, node.args[1]);
       realm.stack.set(varName, value);
       return value;
     }
@@ -53,14 +37,12 @@ export function getTensor(realm: Realm, node: AST.Statement): SimpleValue {
     case 'function-call': {
       const funcName = getIdentifierString(node.args[0]);
       const funcArgs = getOfType('argument-list', node.args[1]).args;
-      const args = funcArgs.map((arg) => getTensor(realm, arg));
-
-      const builtinName = builtins[args.length][funcName];
+      const args = funcArgs.map((arg) => evaluate(realm, arg));
 
       if (funcName === 'previous') {
         return realm.previousValue ?? args[0];
-      } else if (builtinName != null) {
-        return callTfMethod(builtinName, ...args);
+      } else if (hasBuiltin(funcName)) {
+        return callBuiltin(funcName, ...args);
       } else {
         const customFunc = getDefined(realm.functions.get(funcName));
 
@@ -74,7 +56,7 @@ export function getTensor(realm: Realm, node: AST.Statement): SimpleValue {
           const funcBody: AST.Block = customFunc.args[2];
 
           for (let i = 0; i < funcBody.args.length; i++) {
-            const value = getTensor(realm, funcBody.args[i]);
+            const value = evaluate(realm, funcBody.args[i]);
 
             if (i === funcBody.args.length - 1) {
               return value;
@@ -86,14 +68,15 @@ export function getTensor(realm: Realm, node: AST.Statement): SimpleValue {
       }
     }
     case 'range': {
-      const [start, end] = node.args.map((arg) => getTensor(realm, arg));
+      const [start, end] = node.args.map((arg) =>
+        evaluate(realm, arg).asScalar()
+      );
 
-      return new Range(start.asValue(), end.asValue());
+      return Range.fromBounds(start, end);
     }
     case 'column': {
-      return Column.fromValues(
-        node.args[0].map((v) => getTensor(realm, v).asValue())
-      );
+      const values: SimpleValue[] = node.args[0].map((v) => evaluate(realm, v));
+      return Column.fromValues(values as (Scalar | Range)[]);
     }
     case 'table-definition': {
       const table: Record<string, SimpleValue> = {};
@@ -105,21 +88,21 @@ export function getTensor(realm: Realm, node: AST.Statement): SimpleValue {
         for (let i = 0; i + 1 < columns.args.length; i += 2) {
           const [def, column] = [columns.args[i], columns.args[i + 1]];
           const colName = getIdentifierString(def as AST.ColDef);
-          const tensor = evaluateRecursiveColumn(
+          const columnData = evaluateRecursiveColumn(
             realm,
             column as AST.Expression,
             getLargestColumn(Object.values(table))
           );
 
-          realm.stack.set(colName, tensor);
+          realm.stack.set(colName, columnData);
 
-          table[colName] = tensor;
+          table[colName] = columnData;
         }
       });
 
       realm.tables.set(tableName, castToColumns(table));
 
-      return new Value(tf.tensor([NaN]));
+      return Scalar.fromValue(NaN);
     }
     case 'function-definition': {
       const funcName = getIdentifierString(getDefined(node.args[0]));
@@ -127,7 +110,7 @@ export function getTensor(realm: Realm, node: AST.Statement): SimpleValue {
 
       // Typecheck ensures this isn't used as a result
       // but we want to always return something
-      return new Value(tf.tensor([NaN]));
+      return Scalar.fromValue(NaN);
     }
   }
 }
@@ -162,25 +145,24 @@ const desiredTargetsToStatements = (
 };
 
 // Given a program and target symbols/block indices,
-// compute a tensor that aggregates the results of each target, one by one.
-// For GC reasons, call this wrapped in tf.tidy(() => getTensor(...)
-export function getTensorForTargets(
+// compute a Interpreter.Result (value) for each target
+export function evaluateTargets(
   program: AST.Block[],
   desiredTargets: Array<
     string | number | [blockIdx: number, statementIdx: number]
   >
-): AnyValue[] {
+): Value[] {
   const realm = new Realm();
-  const targetSet: Map<unknown, AnyValue> = new Map(
+  const targetSet: Map<unknown, Value> = new Map(
     desiredTargetsToStatements(program, desiredTargets).map((target) => [
       target,
-      new Value(tf.tensor([NaN])),
+      Scalar.fromValue(NaN),
     ])
   );
 
   for (const block of program) {
     for (const statement of block.args) {
-      let value: AnyValue = getTensor(realm, statement);
+      let value: Value = evaluate(realm, statement);
       if (statement.type === 'table-definition') {
         const tableName = getIdentifierString(statement.args[0]);
         value = getDefined(realm.tables.get(tableName));

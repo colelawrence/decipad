@@ -1,9 +1,8 @@
-import * as tf from '@tensorflow/tfjs-core';
 import { n, c, l } from '../utils';
 
 import { Realm } from './Realm';
 import { usesRecursion, evaluateRecursiveColumn } from './column';
-import { Column } from './Value';
+import { fromJS } from './Value';
 
 it('can find a previous symbol', () => {
   expect(usesRecursion(c('previous', l(1)))).toEqual(true);
@@ -31,7 +30,7 @@ describe('evaluateRecursiveColumn', () => {
 
   it('can be used in a column with inherent size', async () => {
     const realm = new Realm();
-    realm.stack.set('numbers', new Column(tf.tensor([1, 2, 3, 4])));
+    realm.stack.set('numbers', fromJS([1, 2, 3, 4]));
 
     expect(
       await evaluateRecursiveColumn(
