@@ -11,6 +11,7 @@ import {
   Slate,
 } from 'slate-react';
 import { Elements } from './Elements';
+import { useRuntime } from './hooks/useRuntime';
 import { Leaves } from './Leaves';
 import { plugins, withPlugins } from './plugins';
 import { commands } from './plugins/DashCommands/commands';
@@ -81,11 +82,33 @@ export const DeciEditor = ({ docId }: DeciEditorProps): JSX.Element => {
     filteredUsers,
   } = useMention(users);
 
+  const { context, onChangeResult } = useRuntime({ docId });
+
   const onChange = (newValue: Node[]) => {
-    setValue(newValue);
     onChangeDashCommands(editor);
     onChangeMention(editor);
+    onChangeResult(editor);
+    const ops = editor.operations;
+    if (ops && ops.length) {
+      context.sendSlateOperations(ops);
+    }
+    setValue(newValue);
   };
+
+  useEffect(() => {
+    const cancel = context.subscribe({
+      initialContext: (context) => {
+        setValue(context.children);
+      },
+      error: (err: Error) => {
+        throw Object.assign(new Error(), err);
+      },
+    });
+
+    context.start();
+
+    return () => cancel();
+  }, [editor, context]);
 
   useEffect(() => {
     ReactEditor.focus(editor);

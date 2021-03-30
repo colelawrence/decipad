@@ -1,15 +1,13 @@
-import { useSession } from 'next-auth/client';
+import { Box, Heading } from '@chakra-ui/layout';
+import { DeciEditor } from '@decipad/editor';
 import React from 'react';
-import { Dashboard } from '../components/Dashboard/Dashboard';
-import { Login } from '../components/Login/Login';
 
 const Home = () => {
-  const [session] = useSession();
   return (
-    <>
-      {!session && <Login />}
-      {session && <Dashboard />}
-    </>
+    <Box p={10}>
+      <Heading>Deci</Heading>
+      <DeciEditor docId="testing-1" />
+    </Box>
   );
 };
 

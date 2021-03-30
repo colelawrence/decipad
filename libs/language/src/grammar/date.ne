@@ -3,7 +3,7 @@
 ############
 
 @{%
-returnMonth = (month) => (d, l) => {
+const returnMonth = (month) => (d, l) => {
   let obj = d[0]
   if (Array.isArray(obj)) {
     obj = obj[0]

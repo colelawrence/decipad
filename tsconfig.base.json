@@ -14,6 +14,7 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
+    "allowSyntheticDefaultImports": true,
     "paths": {
       "@decipad/language": ["libs/language/src/index.ts"],
       "@decipad/ui": ["libs/ui/src/index.ts"],

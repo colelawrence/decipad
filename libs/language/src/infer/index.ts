@@ -2,16 +2,14 @@ import { builtins } from '../builtins';
 import {
   FunctionType,
   InferError,
-  Type,
   TableType,
+  Type,
   TypeName,
   typeNames,
 } from '../type';
 import { getDefined, getIdentifierString, getOfType } from '../utils';
 import { Context, makeContext } from './context';
-import { unifyColumnSizes, findBadColumn } from './table';
-
-export { makeContext, Type, FunctionType, typeNames, TypeName, InferError };
+import { findBadColumn, unifyColumnSizes } from './table';
 
 /*
 Walk depth-first into an expanded AST.Expression, collecting the type of things beneath and checking it against the current iteration's constraints.
