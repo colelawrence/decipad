@@ -1,4 +1,4 @@
-import { produce, immerable } from 'immer';
+import { immerable, produce } from 'immer';
 import { InferError } from './InferError';
 
 export { InferError };
@@ -134,19 +134,17 @@ const propagate = (_: Type, _methodName: string, desc: PropertyDescriptor) => {
 export class Type {
   [immerable] = true;
 
-  static Number = new Type('number');
-  static String = new Type('string');
-  static Boolean = new Type('boolean');
-  static Impossible = produce(new Type('number'), (impossibleType) => {
-    impossibleType.possibleTypes = [];
-  });
-
   possibleTypes = typeNames;
   unit: AST.Unit[] | null = null;
   node: AST.Node;
   errorCause: InferError | null = null;
   columnSize: number | null = null;
   rangeness: boolean | null = null;
+
+  static Number: Type;
+  static String: Type;
+  static Boolean: Type;
+  static Impossible: Type;
 
   constructor(...possibleTypes: TypeName[]) {
     if (possibleTypes.length > 0) {
@@ -380,6 +378,13 @@ export class Type {
     });
   }
 }
+
+Type.Number = new Type('number');
+Type.String = new Type('string');
+Type.Boolean = new Type('boolean');
+Type.Impossible = produce(new Type('number'), (impossibleType) => {
+  impossibleType.possibleTypes = [];
+});
 
 export class TableType {
   [immerable] = true;
