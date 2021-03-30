@@ -2,14 +2,14 @@ import { functors } from '../builtins';
 import {
   FunctionType,
   InferError,
-  Type,
   TableType,
+  Type,
   TypeName,
   typeNames,
 } from '../type';
 import { getDefined, getIdentifierString, getOfType } from '../utils';
 import { Context, makeContext } from './context';
-import { unifyColumnSizes, findBadColumn } from './table';
+import { findBadColumn, unifyColumnSizes } from './table';
 
 export { makeContext, Type, FunctionType, typeNames, TypeName, InferError };
 

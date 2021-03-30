@@ -50,7 +50,7 @@ export const DashCommandsPortal = ({
       const el = ref.current;
       const domRange = ReactEditor.toDOMRange(editor, target);
       const rect = domRange.getBoundingClientRect();
-      if (el) {
+      if (typeof window !== 'undefined' && el) {
         el.style.top = `${rect.top + window.pageYOffset + 24}px`;
         el.style.left = `${rect.left + window.pageXOffset}px`;
       }
