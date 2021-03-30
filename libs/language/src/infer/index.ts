@@ -11,8 +11,6 @@ import { getDefined, getIdentifierString, getOfType } from '../utils';
 import { Context, makeContext } from './context';
 import { findBadColumn, unifyColumnSizes } from './table';
 
-export { makeContext, Type, FunctionType, typeNames, TypeName, InferError };
-
 /*
 Walk depth-first into an expanded AST.Expression, collecting the type of things beneath and checking it against the current iteration's constraints.
 
