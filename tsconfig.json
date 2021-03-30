@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "skipLibCheck": true,
+    "emitDeclarationOnly": true,
+    "esModuleInterop": true
+  },
+  "include": [],
+  "exclude": ["node_modules"],
+  "files": [],
+  "references": [
+    { "path": "./libs/language" },
+    { "path": "./libs/ui" },
+    { "path": "./libs/editor" },
+    { "path": "./apps/client" }
+  ],
+  "paths": {
+    "@decipad/language": ["libs/language/src/index.ts"],
+    "@decipad/ui": ["libs/ui/src/index.ts"],
+    "@decipad/editor": ["libs/editor/src/index.tsx"]
+  }
+}

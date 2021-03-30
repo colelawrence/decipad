@@ -2,7 +2,7 @@ import { ClientReplica } from './client-replica';
 import { Observers } from './utils/observers';
 import { Storage } from './storage';
 import { Operation as SlateOperation } from './slate';
-import { Computer } from './computer';
+import { Computer, ComputeResult } from './computer';
 import { SyncDoc } from './model';
 
 export class Context {
@@ -62,7 +62,7 @@ export class Context {
     this.replica.applySlateOperations(operations);
   }
 
-  compute() {
+  compute(): ComputeResult {
     this.replica.flushOps();
     return this.computer.compute();
   }

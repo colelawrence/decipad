@@ -33,7 +33,7 @@ interface TypeInferError {
   column: number;
 }
 
-interface ComputeResult {
+export interface ComputeResult {
   ok: boolean;
   parseErrors: ParseError[];
   typeInferErrors: TypeInferError[];

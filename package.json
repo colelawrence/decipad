@@ -78,7 +78,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && jest --onlyChanged"
+      "pre-commit": "lint-staged && jest --onlyChanged && tsc -b ."
     }
   },
   "lint-staged": {
