@@ -1,4 +1,4 @@
-import { functors } from '../builtins';
+import { builtins } from '../builtins';
 import {
   FunctionType,
   InferError,
@@ -40,7 +40,7 @@ export const inferExpression = (ctx: Context, expr: AST.Expression): Type => {
         throw new Error('panic: Unknown literal type ' + exprType);
       }
 
-      return new Type(exprType).withUnit(expr.args[2]);
+      return Type.build({ type: exprType, unit: expr.args[2] });
     }
     case 'range': {
       const [start, end] = expr.args.map((expr) => inferExpression(ctx, expr));
@@ -50,7 +50,11 @@ export const inferExpression = (ctx: Context, expr: AST.Expression): Type => {
           start.hasType('number', 'string').isNotRange(),
           end.hasType('number', 'string').isNotRange(),
           start.sameAs(end),
-          start.isRange()
+          Type.build({
+            type: start.possibleTypes[0 /* TODO */],
+            unit: start.unit,
+            rangeness: true,
+          })
         );
       };
 
@@ -63,15 +67,21 @@ export const inferExpression = (ctx: Context, expr: AST.Expression): Type => {
         return Type.Impossible.inNode(expr).withErrorCause(
           new InferError('Columns cannot be empty')
         );
+      } else {
+        const columnFunctor = (...columnTypes: Type[]) => {
+          const [firstCell] = columnTypes;
+
+          const type = Type.build({
+            columnSize: columnTypes.length,
+            unit: firstCell.unit,
+            type: firstCell.possibleTypes[/*TODO*/ 0],
+          });
+
+          return columnTypes.reduce((a, b) => a.sameAs(b), type);
+        };
+
+        return Type.runFunctor(expr, columnFunctor, ...columnTypes);
       }
-
-      const columnFunctor = (...columnTypes: Type[]) => {
-        const type = new Type().isColumn(columnTypes.length);
-
-        return columnTypes.reduce((a, b) => a.sameAs(b), type);
-      };
-
-      return Type.runFunctor(expr, columnFunctor, ...columnTypes);
     }
     case 'function-call': {
       const fName = getIdentifierString(expr.args[0]);
@@ -96,12 +106,23 @@ export const inferExpression = (ctx: Context, expr: AST.Expression): Type => {
 
         return functionType.returns;
       } else {
-        const functor: (...ts: Type[]) => Type = getDefined(
-          (functors as any)[givenArguments.length][fName],
-          'panic: unknown builtin function ' + fName
-        );
+        const builtin = builtins[fName];
 
-        return Type.runFunctor(expr, functor, ...givenArguments);
+        if (builtin != null) {
+          if (givenArguments.length !== builtin.argCount) {
+            return Type.Impossible.inNode(expr).withErrorCause(
+              new InferError(
+                `${fName} expects ${builtin.argCount} parameters and was given ${givenArguments.length}`
+              )
+            );
+          }
+
+          return Type.runFunctor(expr, builtin.functor, ...givenArguments);
+        }
+
+        return Type.Impossible.inNode(expr).withErrorCause(
+          new InferError(`Unknown function: ${fName}`)
+        );
       }
     }
   }

@@ -8,6 +8,7 @@
     "build": "nx build",
     "test": "nx test",
     "lint": "nx workspace-lint && nx lint",
+    "typecheck": "nx typecheck",
     "e2e": "nx e2e",
     "affected:apps": "nx affected:apps",
     "affected:libs": "nx affected:libs",
@@ -84,7 +85,7 @@
     "*.{js,jsx,ts,tsx,json}": [
       "prettier --write"
     ],
-    "*.{js,jsx,ts,tsx}": [
+    "*.{ts,tsx}": [
       "eslint --cache"
     ]
   },

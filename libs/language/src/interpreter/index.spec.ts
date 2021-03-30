@@ -36,6 +36,14 @@ it('evaluates ranges', async () => {
   const r = range(1, 10);
 
   expect(await runOne(r)).toEqual([1, 10]);
+
+  // Contains
+  expect(await runOne(c('contains', r, l(1)))).toEqual(true);
+  expect(await runOne(c('contains', r, l(10)))).toEqual(true);
+
+  // Does not contain
+  expect(await runOne(c('contains', r, l(0)))).toEqual(false);
+  expect(await runOne(c('contains', r, l(11)))).toEqual(false);
 });
 
 describe('functions', () => {
@@ -87,6 +95,28 @@ describe('columns', () => {
 
     expect(await runOne(c('+', l(1), col(1, 2, 3)))).toEqual([2, 3, 4]);
   });
+
+  it('evaluates columns of ranges', async () => {
+    const column = col(range(1, 2), range(3, 4), range(5, 6));
+
+    expect(await runOne(column)).toEqual([
+      [1, 2],
+      [3, 4],
+      [5, 6],
+    ]);
+
+    expect(await runOne(c('contains', column, l(3)))).toEqual([
+      false,
+      true,
+      false,
+    ]);
+
+    expect(await runOne(c('contains', column, col(1, 5, 5)))).toEqual([
+      true,
+      false,
+      true,
+    ]);
+  });
 });
 
 it('can evaluate tables', async () => {
@@ -101,11 +131,13 @@ it('can evaluate tables', async () => {
       tableDef('Table', {
         Col1: col(1, 2, 3),
         Col2: l(2),
+        Col3: c('>', n('ref', 'Col1'), n('ref', 'Col2')),
       })
     )
   ).toEqual({
     Col1: [1, 2, 3],
     Col2: [2, 2, 2],
+    Col3: [false, false, true],
   });
 
   /*

@@ -49,9 +49,28 @@ it("Can be made to represent any ol' type", () => {
   expect(anyType.hasType('number')).toEqual(Type.Number);
 });
 
+describe('Type.combine', () => {
+  it('returns the last type', () => {
+    expect(Type.combine(Type.Number, Type.String)).toEqual(Type.String);
+  });
+
+  it('returns any error in the args', () => {
+    const badType = Type.Impossible.withErrorCause(new InferError(''));
+    expect(Type.combine(Type.Number, badType)).toEqual(badType);
+  });
+
+  it('panics when called with zero arguments', () => {
+    expect(() => Type.combine()).toThrow();
+  });
+});
+
 describe('Columns', () => {
   it('supports column types', () => {
-    const columnType = new Type('number').isColumn(42).withUnit([dollar]);
+    const columnType = Type.build({
+      type: 'number',
+      columnSize: 42,
+      unit: [dollar],
+    });
 
     expect(columnType).toMatchObject({
       possibleTypes: ['number'],
@@ -63,8 +82,9 @@ describe('Columns', () => {
     expect(normalType.columnSize).toEqual(null);
   });
 
-  it('can combine column types', () => {
-    const columnType = new Type('number').isColumn(42);
+  it.skip('can combine column types', () => {
+    // TODO what to do with units?
+    const columnType = Type.build({ type: 'number', columnSize: 42 });
 
     expect(columnType.sameAs(columnType)).toEqual(columnType);
     expect(columnType.hasType('number')).toEqual(columnType);
@@ -79,18 +99,20 @@ describe('Columns', () => {
   });
 
   it('can propagate the columnness', () => {
-    const columnType = Type.Number.isColumn(42);
+    const columnType = Type.build({ type: 'number', columnSize: 42 });
     expect(columnType.sameColumnSizeAs(Type.Number)).toEqual(columnType);
 
     expect(Type.Number.sameColumnSizeAs(columnType)).toEqual(columnType);
-    expect(Type.Number.sameColumnSizeAs(Type.Number.withUnit([meter]))).toEqual(
-      Type.Number
-    );
+    expect(
+      Type.Number.sameColumnSizeAs(
+        Type.build({ type: 'number', unit: [meter] })
+      )
+    ).toEqual(Type.Number);
   });
 
   it('fails to combine with other sizes of column', () => {
-    const columnType = Type.Number.isColumn(42);
-    const otherSizedColumnType = Type.Number.isColumn(10);
+    const columnType = Type.build({ type: 'number', columnSize: 42 });
+    const otherSizedColumnType = Type.build({ type: 'number', columnSize: 10 });
 
     expect(columnType.sameColumnSizeAs(otherSizedColumnType)).toMatchObject({
       errorCause: new InferError('Incompatible column sizes: 42 and 10'),
@@ -99,18 +121,18 @@ describe('Columns', () => {
 
   it('non-columns are coerced to columns', () => {
     const nonColumnType = Type.Number;
-    const columnType = Type.Number.isColumn(42);
+    const columnType = Type.build({ type: 'number', columnSize: 42 });
 
     expect(columnType.sameAs(nonColumnType)).toEqual(columnType);
     expect(nonColumnType.sameAs(columnType)).toEqual(columnType);
   });
 
   it('can check columnness', () => {
-    const columnType = Type.Number.isColumn(42);
+    const columnType = Type.build({ type: 'number', columnSize: 42 });
     const nonColumnType = Type.Number;
 
     expect(columnType.isColumn(42)).toEqual(columnType);
-    expect(nonColumnType.isColumn(42)).toEqual(columnType);
+    expect(nonColumnType.withColumnSize(42)).toEqual(columnType);
     expect(nonColumnType.isNotColumn()).toEqual(nonColumnType);
 
     // Errors
@@ -183,21 +205,6 @@ describe('Type.runFunctor', () => {
   });
 });
 
-describe('Type.combine', () => {
-  it('returns the last type', () => {
-    expect(Type.combine(Type.Number, Type.String)).toEqual(Type.String);
-  });
-
-  it('returns any error in the args', () => {
-    const badType = Type.Impossible.withErrorCause(new InferError(''));
-    expect(Type.combine(Type.Number, badType)).toEqual(badType);
-  });
-
-  it('panics when called with zero arguments', () => {
-    expect(() => Type.combine()).toThrow();
-  });
-});
-
 const setExponent = (u: AST.Unit, exp: number) =>
   produce(u, (u) => {
     u.exp = exp;
@@ -217,60 +224,75 @@ const numberInMeterPerSecond = produce(Type.Number, (type) => {
 });
 
 it('has a withUnit method', () => {
-  expect(Type.Number.withUnit([meter])).toEqual(numberInMeter);
-  expect(Type.Number.withUnit([meter, second])).toEqual(numberInMeterBySecond);
-  expect(Type.Number.withUnit([meter]).withUnit(null)).toEqual(Type.Number);
-
-  expect(Type.Number.withUnit([meter]).withUnit([meter])).toEqual(
-    Type.Number.withUnit([meter])
+  expect(Type.build({ type: 'number', unit: [meter] })).toEqual(numberInMeter);
+  expect(Type.build({ type: 'number', unit: [meter, second] })).toEqual(
+    numberInMeterBySecond
   );
+
+  expect(
+    Type.build({ type: 'number', unit: [meter] }).withUnit([meter])
+  ).toEqual(Type.build({ type: 'number', unit: [meter] }));
 
   // Mismatched units
-  expect(Type.Number.withUnit([meter]).withUnit([second]).errorCause).toEqual(
-    new InferError('Mismatched units: meter and second')
-  );
   expect(
-    Type.Number.withUnit([meter, second]).withUnit([second]).errorCause
+    Type.build({ type: 'number', unit: [meter] }).withUnit([second]).errorCause
+  ).toEqual(new InferError('Mismatched units: meter and second'));
+  expect(
+    Type.build({ type: 'number', unit: [meter, second] }).withUnit([second])
+      .errorCause
   ).toEqual(new InferError('Mismatched units: meter.second and second'));
+  expect(
+    Type.build({ type: 'number', unit: [meter] }).withUnit(null).errorCause
+  ).toEqual(new InferError('Mismatched units: meter and '));
 });
 
 it('can be stringified', () => {
   expect(Type.Number.toString()).toEqual('<number>');
-  expect(Type.Number.withUnit([meter]).toString()).toEqual('meter');
-  expect(Type.Number.withUnit([meter, second]).toString()).toEqual(
-    'meter.second'
+  expect(Type.build({ type: 'number', unit: [meter] }).toString()).toEqual(
+    'meter'
   );
   expect(
-    Type.Number.withUnit([meter, inverseExponent(second)]).toString()
+    Type.build({ type: 'number', unit: [meter, second] }).toString()
+  ).toEqual('meter.second');
+  expect(
+    Type.build({
+      type: 'number',
+      unit: [meter, inverseExponent(second)],
+    }).toString()
   ).toEqual('meter.second^-1');
 });
 
 describe('divideUnit', () => {
   it('divides units', () => {
-    expect(Type.Number.withUnit([meter]).divideUnit([second])).toEqual(
-      numberInMeterPerSecond
-    );
+    expect(
+      Type.build({ type: 'number', unit: [meter] }).divideUnit([second])
+    ).toEqual(numberInMeterPerSecond);
   });
 
   it('exponentiates units', () => {
-    expect(Type.Number.withUnit([invSecond]).divideUnit([second])).toEqual(
-      Type.Number.withUnit([setExponent(second, -2)])
-    );
+    expect(
+      Type.build({ type: 'number', unit: [invSecond] }).divideUnit([second])
+    ).toEqual(Type.build({ type: 'number', unit: [setExponent(second, -2)] }));
 
     expect(
-      Type.Number.withUnit([setExponent(second, -2)]).divideUnit([second])
-    ).toEqual(Type.Number.withUnit([setExponent(second, -3)]));
+      Type.build({
+        type: 'number',
+        unit: [setExponent(second, -2)],
+      }).divideUnit([second])
+    ).toEqual(Type.build({ type: 'number', unit: [setExponent(second, -3)] }));
   });
 
   it('exponentiation that results in 0-exponent eliminates the unit', () => {
-    expect(Type.Number.withUnit([meter]).divideUnit([meter])).toEqual(
-      Type.Number
-    );
+    expect(
+      Type.build({ type: 'number', unit: [meter] }).divideUnit([meter])
+    ).toEqual(Type.Number);
   });
 
   it('divides units even further', () => {
     expect(
-      Type.Number.withUnit([meter, invSecond]).divideUnit([dollar]).unit
+      Type.build({ type: 'number', unit: [meter, invSecond] }).divideUnit([
+        dollar,
+      ]).unit
     ).toEqual([
       setExponent(dollar, -1), // first because of sort
       meter,
@@ -279,43 +301,46 @@ describe('divideUnit', () => {
   });
 
   it('maintains units when one of the operands is unitless', () => {
-    expect(Type.Number.withUnit([meter]).divideUnit(null)).toEqual(
-      Type.Number.withUnit([meter])
-    );
-    expect(Type.Number.withUnit(null).divideUnit([invMeter])).toEqual(
-      Type.Number.withUnit([meter])
-    );
+    expect(
+      Type.build({ type: 'number', unit: [meter] }).divideUnit(null)
+    ).toEqual(Type.build({ type: 'number', unit: [meter] }));
+    expect(
+      Type.build({ type: 'number', unit: null }).divideUnit([invMeter])
+    ).toEqual(Type.build({ type: 'number', unit: [meter] }));
   });
 });
 
 describe('multiplyUnit', () => {
   it('multiplies units', () => {
     expect(numberInMeterPerSecond.multiplyUnit([second])).toEqual(
-      Type.Number.withUnit([meter])
+      Type.build({ type: 'number', unit: [meter] })
     );
   });
 
   it('when one of the numbers has no unit, the other unit prevails', () => {
-    expect(Type.Number.withUnit([meter, second]).multiplyUnit(null)).toEqual(
-      Type.Number.withUnit([meter, second])
-    );
-    expect(Type.Number.withUnit(null).multiplyUnit([meter, second])).toEqual(
-      Type.Number.withUnit([meter, second])
-    );
+    expect(
+      Type.build({ type: 'number', unit: [meter, second] }).multiplyUnit(null)
+    ).toEqual(Type.build({ type: 'number', unit: [meter, second] }));
+    expect(
+      Type.build({ type: 'number', unit: null }).multiplyUnit([meter, second])
+    ).toEqual(Type.build({ type: 'number', unit: [meter, second] }));
   });
 
   it('eliminates units that are opposite on both sides', () => {
     expect(
-      Type.Number.withUnit([invMeter, invSecond]).multiplyUnit([meter, second])
-    ).toEqual(Type.Number.withUnit(null));
+      Type.build({ type: 'number', unit: [invMeter, invSecond] }).multiplyUnit([
+        meter,
+        second,
+      ])
+    ).toEqual(Type.build({ type: 'number', unit: null }));
   });
 });
 
 it('has a TableType', () => {
   const table = new TableType(
     new Map([
-      ['Col1', Type.Number.isColumn(3).withUnit([meter])],
-      ['Col2', Type.String.isColumn(3)],
+      ['Col1', Type.build({ type: 'number', columnSize: 3, unit: [meter] })],
+      ['Col2', Type.build({ type: 'string', columnSize: 3 })],
     ])
   );
 
@@ -324,45 +349,25 @@ it('has a TableType', () => {
 
 describe('ranges', () => {
   it('types can check and assign rangeness', () => {
-    const range = Type.Number.isRange();
-    const notRange = Type.Number.isNotRange();
-    const ranged = Type.Number.isNotRange().isRange();
-    const deranged = range.isNotRange();
+    const ranged = Type.Number.isRange();
+    const deranged = Type.build({
+      type: 'number',
+      rangeness: true,
+    }).isNotRange();
 
-    expect(range).toMatchObject({ rangeness: true });
-    expect(notRange).toMatchObject({ rangeness: false });
     expect(ranged.errorCause).toEqual(new InferError('Expected range'));
     expect(deranged.errorCause).toEqual(new InferError('Unexpected range'));
   });
 
-  it('types cannot be divided or multiplied', () => {
-    const range = Type.Number.isRange();
-
-    expect(range.divideUnit(null).errorCause).toEqual(
-      new InferError('Invalid method for a range')
-    );
-    /*
-    expect(range.multiplyUnit(null).errorCause).toEqual(new InferError(
-      'Invalid method for a range'
-    ))
-    */
-  });
-
   it('rangeness is unified with sameAs', () => {
     expect(
-      Type.Number.isRange().sameAs(Type.Number.isNotRange()).errorCause
-    ).toEqual(
-      new InferError(
-        'Expected type with rangeness true to have rangeness false'
-      )
-    );
+      Type.build({ type: 'number', rangeness: true }).sameAs(Type.Number)
+        .errorCause
+    ).toEqual(new InferError('Expected range'));
 
     expect(
-      Type.Number.isNotRange().sameAs(Type.Number.isRange()).errorCause
-    ).toEqual(
-      new InferError(
-        'Expected type with rangeness false to have rangeness true'
-      )
-    );
+      Type.Number.sameAs(Type.build({ type: 'number', rangeness: true }))
+        .errorCause
+    ).toEqual(new InferError('Unexpected range'));
   });
 });

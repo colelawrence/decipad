@@ -1,66 +1,149 @@
-import * as tf from '@tensorflow/tfjs-core';
 import { Type } from './type';
+import { Scalar, Column, SimpleValue } from './interpreter/Value';
+import { getDefined } from './utils';
 
-// Can make this a union, so we can add custom functions as well.
-// & string excludes symbol and number keys.
-type Builtin = keyof typeof tf & string;
-
-interface Builtins {
-  [count: number]: { [fname: string]: Builtin };
+export interface BuiltinSpec {
+  name: string;
+  argCount: number;
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  fn: (...args: any[]) => any;
+  functor: (...types: Type[]) => Type;
 }
 
-export const builtins: Builtins = {
-  1: {
-    sqrt: 'sqrt',
+const basicFunctor = (...types: Type[]) =>
+  types.reduce((a, b) => a.hasType('number').sameAs(b).withUnit(b.unit));
+
+const cmpFunctor = (left: Type, right: Type): Type =>
+  Type.combine(
+    left.hasType('number').sameAs(right),
+    Type.build({
+      type: 'boolean',
+      columnSize: left.columnSize,
+    })
+  );
+
+export const builtins: Record<string, BuiltinSpec> = {
+  sqrt: {
+    name: 'sqrt',
+    argCount: 1,
+    fn: (n) => Math.sqrt(n as number),
+    functor: basicFunctor,
   },
-  2: {
-    '+': 'add',
-    '-': 'sub',
-    '/': 'div',
-    '*': 'mul',
-    '<': 'less',
-    '>': 'greater',
-    '<=': 'lessEqual',
-    '>=': 'greaterEqual',
+  '+': {
+    name: '+',
+    argCount: 2,
+    fn: (a, b) => a + b,
+    functor: basicFunctor,
   },
-  3: {
-    if: 'where',
+  '-': {
+    name: '-',
+    argCount: 2,
+    fn: (a, b) => a - b,
+    functor: basicFunctor,
+  },
+  '*': {
+    name: '*',
+    argCount: 2,
+    fn: (a, b) => a * b,
+    functor: (a, b) =>
+      a.hasType('number').sameAs(b).isNotRange().multiplyUnit(b.unit),
+  },
+  '/': {
+    name: '/',
+    argCount: 2,
+    fn: (a, b) => a / b,
+    functor: (a, b) =>
+      a.hasType('number').sameAs(b).isNotRange().divideUnit(b.unit),
+  },
+  '<': {
+    name: '<',
+    argCount: 2,
+    fn: (a, b) => a < b,
+    functor: cmpFunctor,
+  },
+  '>': {
+    name: '>',
+    argCount: 2,
+    fn: (a, b) => a > b,
+    functor: cmpFunctor,
+  },
+  '<=': {
+    name: '<=',
+    argCount: 2,
+    fn: (a, b) => a <= b,
+    functor: cmpFunctor,
+  },
+  '>=': {
+    name: '>=',
+    argCount: 2,
+    fn: (a, b) => a >= b,
+    functor: cmpFunctor,
+  },
+  '==': {
+    name: '==',
+    argCount: 2,
+    fn: (a, b) => a == b,
+    functor: cmpFunctor,
+  },
+  if: {
+    name: 'if',
+    argCount: 3,
+    fn: (a, b, c) => (a ? b : c),
+    functor: (a: Type, b: Type, c: Type) =>
+      Type.combine(
+        a.hasType('boolean'),
+        a.sameColumnSizeAs(b).sameColumnSizeAs(c),
+        b.sameAs(c)
+      ),
+  },
+  // Range stuff
+  contains: {
+    name: 'contains',
+    argCount: 2,
+    fn: ([bStart, bEnd], a) => a >= bStart && a <= bEnd,
+    functor: (a: Type, b: Type) =>
+      Type.combine(
+        a.hasType('number').isRange(),
+        b.hasType('number'),
+        Type.build({ type: 'boolean', columnSize: a.columnSize })
+      ),
   },
 };
 
-interface BuiltinFunctors {
-  1: {
-    [fname: string]: (A: Type) => Type;
-  };
-  2: {
-    [fname: string]: (A: Type, B: Type) => Type;
-  };
-  3: {
-    [fname: string]: (A: Type, B: Type, C: Type) => Type;
-  };
-}
-
-// Allow the comma operator to keep these in one line
-const relativeCompareOp = (A: Type, B: Type) =>
-  Type.combine(A.hasType('number', 'string').sameAs(B), Type.Boolean);
-
-export const functors: BuiltinFunctors = {
-  1: {
-    sqrt: (N) => N.hasType('number'),
-  },
-  2: {
-    '+': (A, B) => A.hasType('number', 'string').sameAs(B).withUnit(B.unit),
-    '-': (A, B) => A.hasType('number').sameAs(B).withUnit(B.unit),
-    '/': (A, B) => A.hasType('number').sameAs(B).divideUnit(B.unit),
-    '*': (A, B) => A.hasType('number').sameAs(B).multiplyUnit(B.unit),
-    '>': relativeCompareOp,
-    '<': relativeCompareOp,
-    '>=': relativeCompareOp,
-    '<=': relativeCompareOp,
-    '==': (A, B) => Type.combine(A.sameAs(B), Type.Boolean),
-  },
-  3: {
-    if: (Cond, Then, Else) =>
-      Type.combine(Cond.hasType('boolean'), Then.sameAs(Else)),
-  },
+const raiseDimensions = (
+  values: SimpleValue[]
+): [Column[] | (Scalar | Range)[], boolean] => {
+  const column = values.find((v) => v instanceof Column);
+  if (column != null) {
+    return [values.map((v) => v.withRowCount(column.rowCount as number)), true];
+  } else {
+    return [values.map((v) => v as Scalar | Range), false];
+  }
 };
+
+export const callBuiltin = (
+  builtinName: string,
+  ...givenArgs: SimpleValue[]
+): SimpleValue => {
+  const builtinSpec: BuiltinSpec = getDefined(builtins[builtinName]);
+
+  const [args, isColumn] = raiseDimensions(givenArgs);
+
+  if (isColumn) {
+    const ret = [];
+    const columnArgs = args as Column[];
+    for (let i = 0; i < columnArgs[0].rowCount; i++) {
+      const row = columnArgs.map((a) => a.atIndex(i).getData());
+
+      ret.push(Scalar.fromValue(builtinSpec.fn(...row)));
+    }
+    return Column.fromValues(ret);
+  } else {
+    const scalarArgs = args as Scalar[];
+    return Scalar.fromValue(
+      builtinSpec.fn(...scalarArgs.map((v) => v.getData() as number))
+    );
+  }
+};
+
+export const hasBuiltin = (builtinName: string) => builtinName in builtins;

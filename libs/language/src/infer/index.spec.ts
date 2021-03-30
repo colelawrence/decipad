@@ -12,7 +12,36 @@ import {
   inferTargetStatement,
 } from './index';
 
+const nilPos = {
+  line: 0,
+  column: 0,
+  char: 0,
+};
 const nilCtx = makeContext();
+const degC: AST.Unit = {
+  unit: 'celsius',
+  exp: 1,
+  multiplier: 1,
+  known: true,
+  start: nilPos,
+  end: nilPos,
+};
+const seconds: AST.Unit = {
+  unit: 'second',
+  exp: 1,
+  multiplier: 1,
+  known: true,
+  start: nilPos,
+  end: nilPos,
+};
+const meters: AST.Unit = {
+  unit: 'meter',
+  exp: 1,
+  multiplier: 1,
+  known: true,
+  start: nilPos,
+  end: nilPos,
+};
 
 afterEach(() => {
   // Ensure nilCtx is never modified
@@ -35,32 +64,49 @@ it('infers literals', () => {
   expect(inferExpression(nilCtx, l(true))).toEqual(Type.Boolean);
 });
 
-it('infers ranges', () => {
-  expect(inferExpression(nilCtx, range(1, 2))).toEqual(Type.Number.isRange());
-  expect(inferExpression(nilCtx, range('one', 'six'))).toEqual(
-    Type.String.isRange()
-  );
+describe('ranges', () => {
+  it('infers ranges', () => {
+    expect(inferExpression(nilCtx, range(1, 2))).toEqual(
+      Type.build({ type: 'number', rangeness: true })
+    );
+    expect(inferExpression(nilCtx, range('one', 'six'))).toEqual(
+      Type.build({ type: 'string', rangeness: true })
+    );
 
-  expect(inferExpression(nilCtx, range(false, true)).errorCause).toBeDefined();
-  expect(
-    inferExpression(nilCtx, range(range(1, 2), range(3, 4))).errorCause
-  ).toBeDefined();
-  expect(inferExpression(nilCtx, range('string', 1)).errorCause).toBeDefined();
+    expect(
+      inferExpression(nilCtx, range(false, true)).errorCause
+    ).toBeDefined();
+    expect(
+      inferExpression(nilCtx, range(range(1, 2), range(3, 4))).errorCause
+    ).toBeDefined();
+    expect(
+      inferExpression(nilCtx, range('string', 1)).errorCause
+    ).toBeDefined();
+  });
+
+  it('infers range functions', () => {
+    expect(inferExpression(nilCtx, c('contains', range(1, 10), l(1)))).toEqual(
+      Type.Boolean
+    );
+    expect(
+      inferExpression(nilCtx, c('contains', l(1), l(1))).errorCause
+    ).not.toBeNull();
+  });
 });
 
 describe('columns', () => {
   it('infers columns', () => {
     expect(inferExpression(nilCtx, col(1, 2, 3))).toEqual(
-      Type.Number.isColumn(3)
+      Type.build({ type: 'number', columnSize: 3 })
     );
 
     expect(inferExpression(nilCtx, col(c('+', l(1), l(1))))).toEqual(
-      Type.Number.isColumn(1)
+      Type.build({ type: 'number', columnSize: 1 })
     );
 
     const mixedCol = col(l(1), l('hi'));
     expect(inferExpression(nilCtx, mixedCol)).toEqual(
-      Type.Impossible.isColumn(2)
+      Type.build({ type: [], columnSize: 2 })
         .inNode(mixedCol)
         .withErrorCause(new InferError('Mismatched types: number and string'))
     );
@@ -68,10 +114,16 @@ describe('columns', () => {
 
   it('column-ness is infectious', () => {
     expect(inferExpression(nilCtx, c('+', col(1, 2, 3), l(1)))).toEqual(
-      Type.Number.isColumn(3)
+      Type.build({
+        type: 'number',
+        columnSize: 3,
+      })
     );
     expect(inferExpression(nilCtx, c('+', l(1), col(1, 2, 3)))).toEqual(
-      Type.Number.isColumn(3)
+      Type.build({
+        type: 'number',
+        columnSize: 3,
+      })
     );
   });
 });
@@ -82,8 +134,8 @@ describe('tables', () => {
 
     const expectedType = new TableType(
       new Map([
-        ['Col1', Type.Number.isColumn(3)],
-        ['Col2', Type.Number.isColumn(3)],
+        ['Col1', Type.build({ type: 'number', columnSize: 3 })],
+        ['Col2', Type.build({ type: 'number', columnSize: 3 })],
       ])
     );
 
@@ -103,9 +155,9 @@ describe('tables', () => {
   it('"previous" references', () => {
     const expectedType = new TableType(
       new Map([
-        ['Col1', Type.Number.isColumn(3)],
-        ['Col2', Type.Number.isColumn(3)],
-        ['Col3', Type.String.isColumn(3)],
+        ['Col1', Type.build({ type: 'number', columnSize: 3 })],
+        ['Col2', Type.build({ type: 'number', columnSize: 3 })],
+        ['Col3', Type.build({ type: 'string', columnSize: 3 })],
       ])
     );
 
@@ -273,16 +325,8 @@ describe('inferProgram', () => {
     const program: AST.Block[] = [
       n(
         'block',
-        funcDef('Cmp', ['A', 'B'], c('+', r('A'), r('B'))),
-        n(
-          'assign',
-          n('def', 'Result'),
-          n(
-            'function-call',
-            n('funcref', 'Cmp'),
-            n('argument-list', l(2), l(2))
-          )
-        )
+        funcDef('Plus', ['A', 'B'], c('+', r('A'), r('B'))),
+        n('assign', n('def', 'Result'), c('Plus', l(2), l(2)))
       ),
     ];
 
@@ -290,40 +334,13 @@ describe('inferProgram', () => {
       variables: new Map([['Result', Type.Number]]),
       functions: new Map([
         [
-          'Cmp',
+          'Plus',
           {
-            returns: new Type('number', 'string'),
+            returns: Type.Number,
           },
         ],
       ]),
       blockReturns: [Type.Number],
-    });
-  });
-
-  it('supports calling the same function twice with different arguments', () => {
-    const program: AST.Block[] = [
-      n(
-        'block',
-        funcDef('Add', ['A', 'B'], c('+', r('A'), r('B'))),
-        n('assign', n('def', 'A Number'), c('Add', l(2), l(2))),
-        n('assign', n('def', 'A String'), c('Add', l('hi'), l('hi')))
-      ),
-    ];
-
-    expect(inferProgram(program)).toMatchObject({
-      variables: new Map([
-        ['A Number', Type.Number],
-        ['A String', Type.String],
-      ]),
-      functions: new Map([
-        [
-          'Add',
-          {
-            returns: new Type('number', 'string'),
-          },
-        ],
-      ]),
-      blockReturns: [Type.String],
     });
   });
 });
@@ -355,56 +372,24 @@ describe('inferTargetStatement', () => {
 });
 
 describe('Units', () => {
-  const nilPos = {
-    line: 0,
-    column: 0,
-    char: 0,
-  };
-  const degC: AST.Unit = {
-    unit: 'celsius',
-    exp: 1,
-    multiplier: 1,
-    known: true,
-    start: nilPos,
-    end: nilPos,
-  };
-  const seconds: AST.Unit = {
-    unit: 'second',
-    exp: 1,
-    multiplier: 1,
-    known: true,
-    start: nilPos,
-    end: nilPos,
-  };
-  const meters: AST.Unit = {
-    unit: 'meter',
-    exp: 1,
-    multiplier: 1,
-    known: true,
-    start: nilPos,
-    end: nilPos,
-  };
-
-  it('infers literals units', () => {
-    expect(inferExpression(nilCtx, l(1))).toEqual(Type.Number.withUnit(null));
-    expect(inferExpression(nilCtx, l(1, degC))).toEqual(
-      Type.Number.withUnit([degC])
-    );
+  const getWithUnit = (unit: AST.Unit[] | null) =>
+    Type.build({ type: 'number', unit });
+  it("infers literals' units", () => {
+    expect(inferExpression(nilCtx, l(1))).toEqual(getWithUnit(null));
+    expect(inferExpression(nilCtx, l(1, degC))).toEqual(getWithUnit([degC]));
   });
 
   it('infers expressions units', () => {
     const type = inferExpression(nilCtx, c('+', l(1, degC), l(1, degC)));
-    expect(type).toMatchObject(Type.Number.withUnit([degC]));
+    expect(type).toMatchObject(getWithUnit([degC]));
   });
 
   it('composes units', () => {
     const type = inferExpression(nilCtx, c('/', l(1, degC), l(1, seconds)));
     const withNullUnit = inferExpression(nilCtx, c('/', l(1, degC), l(1)));
 
-    expect(type).toMatchObject(
-      Type.Number.withUnit([degC, inverseExponent(seconds)])
-    );
-    expect(withNullUnit).toMatchObject(Type.Number.withUnit([degC]));
+    expect(type).toMatchObject(getWithUnit([degC, inverseExponent(seconds)]));
+    expect(withNullUnit).toMatchObject(getWithUnit([degC]));
   });
 
   it('decomposes units', () => {
@@ -414,7 +399,7 @@ describe('Units', () => {
     );
     // const withNullUnit = inferExpression(nilCtx, c('*', l(1, seconds), l(1)))
 
-    expect(type).toMatchObject(Type.Number.withUnit([meters]));
+    expect(type).toMatchObject(getWithUnit([meters]));
     // TODO expect(withNullUnit).toEqual(Type.Number)
   });
 
