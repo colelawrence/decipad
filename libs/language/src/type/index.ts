@@ -1,5 +1,5 @@
 import { immerable, produce } from 'immer';
-import { DateSpecificity } from '../date';
+import type { DateSpecificity } from '../date';
 import { InferError } from './InferError';
 
 export { InferError };
