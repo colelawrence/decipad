@@ -1,4 +1,5 @@
-import { c, l, n, col, range, funcDef, tableDef } from '../utils';
+import { c, l, n, col, range, date, funcDef, tableDef } from '../utils';
+import { parseUTCDate } from '../date';
 import { run, runOne } from './index';
 
 it('evaluates and returns', async () => {
@@ -119,11 +120,35 @@ describe('columns', () => {
   });
 });
 
+describe('dates', () => {
+  const d = parseUTCDate;
+
+  it('can evaluate dates', async () => {
+    expect(await runOne(date('2021-10-11', 'month'))).toEqual([
+      d('2021-10'),
+      d('2021-11') - 1, // Last millisecond of october
+    ]);
+  });
+
+  it('can evaluate date functions', async () => {
+    expect(
+      await runOne(
+        c('dateequals', date('2021-10', 'month'), date('2021-11', 'month'))
+      )
+    ).toEqual(false);
+
+    expect(
+      await runOne(
+        c('dateequals', date('2021-10', 'month'), date('2021-10', 'month'))
+      )
+    ).toEqual(true);
+  });
+});
+
 it('can evaluate tables', async () => {
   const testGetTable = async (table: AST.TableDefinition) => {
-    const result = await run([n('block', table)], [0]);
-    const pairs = [...(result[0] as any).entries()];
-    return Object.fromEntries(pairs);
+    const out = (await runOne(table)) as Interpreter.ResultTable;
+    return Object.fromEntries(out.entries());
   };
 
   expect(

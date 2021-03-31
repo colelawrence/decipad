@@ -86,10 +86,22 @@ declare namespace AST {
     end: Pos;
   }
 
-  // Range expression
   interface Range {
     type: 'range';
     args: [start: Expression, end: Expression];
+    start: Pos;
+    end: Pos;
+  }
+
+  type DateSegments = (string | number)[];
+  interface TZInfo {
+    hours: number;
+    minutes: number;
+  }
+
+  interface Date {
+    type: 'date';
+    args: [...DateSegments, tz?: TZInfo];
     start: Pos;
     end: Pos;
   }
@@ -165,7 +177,7 @@ declare namespace AST {
     end: Pos;
   }
 
-  type Expression = FunctionCall | Ref | Literal | Column | Range;
+  type Expression = FunctionCall | Ref | Literal | Column | Range | Date;
   type Statement = FunctionDefinition | Assign | TableDefinition | Expression;
 
   type Lists = FunctionArgumentNames | ArgList | TableColumns;
@@ -183,6 +195,7 @@ declare namespace AST {
     'argument-list': ArgList;
     'function-call': FunctionCall;
     range: Range;
+    date: Date;
     column: Column;
     'table-columns': TableColumns;
     'table-definition': TableDefinition;

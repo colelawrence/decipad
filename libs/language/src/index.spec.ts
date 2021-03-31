@@ -301,12 +301,49 @@ describe('Ranges', () => {
   it('Evaluates and types ranges', async () => {
     expect(
       await runCode(`
-      Range = [1..3]
-      Containment = contains Range 3
-    `)
+        Range = [1..3]
+        Containment = contains Range 3
+      `)
     ).toMatchObject({
       type: { rangeness: false },
       value: [true],
+    });
+  });
+});
+
+describe('Dates', () => {
+  it('Evaluates and types dates', async () => {
+    expect(
+      await runCode(`
+        Time = 2020-10-10 10:30
+      `)
+    ).toMatchObject({
+      value: [Array(2).fill(Date.UTC(2020, 9, 10, 10, 30))],
+    });
+  });
+
+  it('Evaluates tables of dates', async () => {
+    expect(
+      await runCode(`
+        Table = {
+          Months = [ 2020-09, 2020-10, 2020-11 ],
+          Days = (dateequals Months [ 2020-09, 2020-11, 2020-10 ])
+        }
+      `)
+    ).toMatchObject({
+      value: [
+        new Map([
+          [
+            'Months',
+            [
+              [Date.UTC(2020, 8), Date.UTC(2020, 9) - 1],
+              [Date.UTC(2020, 9), Date.UTC(2020, 10) - 1],
+              [Date.UTC(2020, 10), Date.UTC(2020, 11) - 1],
+            ],
+          ],
+          ['Days', [true, false, false]],
+        ]),
+      ],
     });
   });
 });

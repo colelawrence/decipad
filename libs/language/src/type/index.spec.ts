@@ -371,3 +371,54 @@ describe('ranges', () => {
     ).toEqual(new InferError('Unexpected range'));
   });
 });
+
+describe('dates', () => {
+  const month = Type.buildDate('month');
+  const day = Type.buildDate('day');
+
+  it('can be checked', () => {
+    expect(month.isDate('month')).toEqual(month);
+
+    expect(month.isDate('day')).toEqual(
+      month.withErrorCause(new InferError('Expected date with day specificity'))
+    );
+
+    expect(day.isDate('month')).toEqual(
+      day.withErrorCause(new InferError('Expected date with month specificity'))
+    );
+
+    expect(Type.Number.isDate('month')).toEqual(
+      Type.Number.withErrorCause(new InferError('Expected date'))
+    );
+
+    expect(day.isNotDate()).toEqual(
+      day.withErrorCause(new InferError('Unexpected date'))
+    );
+  });
+
+  it('can be checked without specificity', () => {
+    expect(day.isDate()).toEqual(day);
+  });
+
+  it('can be compared with other types', () => {
+    expect(month.sameAs(month)).toEqual(month);
+
+    expect(month.sameDatenessAs(month)).toEqual(month);
+
+    // Differing dateness
+    expect(Type.Number.sameDatenessAs(day)).toEqual(
+      Type.Number.withErrorCause(new InferError('Expected date'))
+    );
+
+    expect(day.sameDatenessAs(Type.Number)).toEqual(
+      day.withErrorCause(new InferError('Unexpected date'))
+    );
+
+    // Differing specificity
+    expect(month.sameDatenessAs(day)).toEqual(
+      month.withErrorCause(new InferError('Expected date with day specificity'))
+    );
+
+    expect(month.sameDatenessAs(day)).toEqual(month.sameAs(day));
+  });
+});

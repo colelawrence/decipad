@@ -1,8 +1,9 @@
 import { hasBuiltin, callBuiltin } from '../builtins';
 import { getOfType, getDefined, getIdentifierString } from '../utils';
+import { getDateFromAstForm } from '../date';
 
 import { Realm } from './Realm';
-import { Scalar, Range, Column, SimpleValue, Value } from './Value';
+import { Scalar, Range, Date, Column, SimpleValue, Value } from './Value';
 import {
   castToColumns,
   getLargestColumn,
@@ -73,6 +74,10 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
       );
 
       return Range.fromBounds(start, end);
+    }
+    case 'date': {
+      const [dateMs, specificity] = getDateFromAstForm(node.args);
+      return Date.fromDateAndSpecificity(dateMs, specificity);
     }
     case 'column': {
       const values: SimpleValue[] = node.args[0].map((v) => evaluate(realm, v));

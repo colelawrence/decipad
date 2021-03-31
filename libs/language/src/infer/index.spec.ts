@@ -1,7 +1,7 @@
 import { produce } from 'immer';
 import { Type, TableType, InferError, inverseExponent } from '../type';
 
-import { l, c, n, r, col, range, tableDef, funcDef } from '../utils';
+import { l, c, n, r, col, range, date, tableDef, funcDef } from '../utils';
 
 import { makeContext } from './context';
 import {
@@ -90,6 +90,34 @@ describe('ranges', () => {
     );
     expect(
       inferExpression(nilCtx, c('contains', l(1), l(1))).errorCause
+    ).not.toBeNull();
+  });
+});
+
+describe('dates', () => {
+  it('infers dates', () => {
+    expect(inferExpression(nilCtx, date('2020-01', 'month'))).toEqual(
+      Type.buildDate('month')
+    );
+
+    expect(inferExpression(nilCtx, date('2020-01-15', 'day'))).toEqual(
+      Type.buildDate('day')
+    );
+  });
+
+  it('infers date fns', () => {
+    expect(
+      inferExpression(
+        nilCtx,
+        c('dateequals', date('2020-01', 'month'), date('2020-01', 'month'))
+      )
+    ).toEqual(Type.buildDate('month'));
+
+    expect(
+      inferExpression(
+        nilCtx,
+        c('dateequals', date('2020-01-01', 'day'), date('2020-01', 'month'))
+      ).errorCause
     ).not.toBeNull();
   });
 });

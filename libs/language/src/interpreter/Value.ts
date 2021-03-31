@@ -1,3 +1,5 @@
+import { DateSpecificity, cleanDate } from '../date';
+
 export interface SimpleValue {
   rowCount: number | null;
 
@@ -32,6 +34,37 @@ export class Scalar implements SimpleValue {
   }
 }
 
+export class Date implements SimpleValue {
+  rowCount = null;
+
+  timeRange: Range;
+
+  static fromDateAndSpecificity(
+    date: number,
+    specificity: DateSpecificity
+  ): Date {
+    const [start, end] = cleanDate(date, specificity);
+    const d = new Date();
+    d.timeRange = Range.fromBounds(
+      Scalar.fromValue(start),
+      Scalar.fromValue(end)
+    );
+    return d;
+  }
+
+  withRowCount(rowCount: number) {
+    return Column.fromValues(new Array(rowCount).fill(this));
+  }
+
+  asScalar(): Scalar {
+    throw new Error('panic: could not turn Date into Scalar');
+  }
+
+  getData() {
+    return this.timeRange.getData();
+  }
+}
+
 export class Range implements SimpleValue {
   rowCount = null;
   start: Scalar;
@@ -59,9 +92,9 @@ export class Range implements SimpleValue {
 
 export class Column implements SimpleValue {
   rangeOf = null;
-  values: (Scalar | Range)[];
+  values: (Scalar | Range | Date)[];
 
-  static fromValues(values: (Scalar | Range)[]): Column {
+  static fromValues(values: (Scalar | Range | Date)[]): Column {
     const column = new Column();
     column.values = values;
     return column;

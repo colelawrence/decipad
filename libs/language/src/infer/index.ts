@@ -10,6 +10,7 @@ import {
 import { getDefined, getIdentifierString, getOfType } from '../utils';
 import { Context, makeContext } from './context';
 import { findBadColumn, unifyColumnSizes } from './table';
+import { DateSpecificity } from '../date';
 
 /*
 Walk depth-first into an expanded AST.Expression, collecting the type of things beneath and checking it against the current iteration's constraints.
@@ -59,6 +60,22 @@ export const inferExpression = (ctx: Context, expr: AST.Expression): Type => {
       };
 
       return Type.runFunctor(expr, rangeFunctor, start, end);
+    }
+    case 'date': {
+      let lowestSegment: DateSpecificity = 'year';
+
+      for (let i = 0; i + 1 < expr.args.length; i += 2) {
+        const segment = expr.args[i] as string;
+
+        if (segment === 'hour') {
+          lowestSegment = 'time';
+          break;
+        } else {
+          lowestSegment = segment as DateSpecificity;
+        }
+      }
+
+      return Type.buildDate(lowestSegment);
     }
     case 'column': {
       const columnTypes = expr.args[0].map((a) => inferExpression(ctx, a));

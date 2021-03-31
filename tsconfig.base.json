@@ -21,5 +21,5 @@
       "@decipad/editor": ["libs/editor/src/index.tsx"]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": ["node_modules", "tmp", "dist"]
 }

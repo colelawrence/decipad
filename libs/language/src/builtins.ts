@@ -13,6 +13,9 @@ export interface BuiltinSpec {
 const basicFunctor = (...types: Type[]) =>
   types.reduce((a, b) => a.hasType('number').sameAs(b).withUnit(b.unit));
 
+const dateCmpFunctor = (left: Type, right: Type): Type =>
+  Type.combine(left.isDate(), right.sameAs(left));
+
 const cmpFunctor = (left: Type, right: Type): Type =>
   Type.combine(
     left.hasType('number').sameAs(right),
@@ -85,6 +88,12 @@ export const builtins: Record<string, BuiltinSpec> = {
     fn: (a, b) => a == b,
     functor: cmpFunctor,
   },
+  dateequals: {
+    name: 'dateequals',
+    argCount: 2,
+    fn: ([aStart, aEnd], [bStart, bEnd]) => aStart === bStart && aEnd === bEnd,
+    functor: dateCmpFunctor,
+  },
   if: {
     name: 'if',
     argCount: 3,
@@ -132,14 +141,16 @@ export const callBuiltin = (
   if (isColumn) {
     const ret = [];
     const columnArgs = args as Column[];
+
     for (let i = 0; i < columnArgs[0].rowCount; i++) {
       const row = columnArgs.map((a) => a.atIndex(i).getData());
-
       ret.push(Scalar.fromValue(builtinSpec.fn(...row)));
     }
+
     return Column.fromValues(ret);
   } else {
     const scalarArgs = args as Scalar[];
+
     return Scalar.fromValue(
       builtinSpec.fn(...scalarArgs.map((v) => v.getData() as number))
     );

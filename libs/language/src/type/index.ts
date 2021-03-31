@@ -1,4 +1,5 @@
 import { immerable, produce } from 'immer';
+import { DateSpecificity } from '../date';
 import { InferError } from './InferError';
 
 export { InferError };
@@ -136,6 +137,7 @@ interface ExtendArgs {
   unit?: AST.Unit[] | null;
   columnSize?: number | null;
   rangeness?: boolean;
+  date?: DateSpecificity | null;
 }
 
 export class Type {
@@ -151,8 +153,12 @@ export class Type {
   errorCause: InferError | null = null;
   columnSize: number | null = null;
   rangeness = false;
+  date: DateSpecificity | null;
 
-  static extend(base: Type, { type, unit, columnSize, rangeness }: ExtendArgs) {
+  static extend(
+    base: Type,
+    { type, unit, columnSize, rangeness, date }: ExtendArgs
+  ) {
     return produce(base, (t) => {
       if (type !== undefined) {
         t.possibleTypes = Array.isArray(type) ? type : [type];
@@ -169,11 +175,22 @@ export class Type {
       if (rangeness !== undefined) {
         t.rangeness = rangeness;
       }
+
+      if (date !== undefined) {
+        t.date = date;
+      }
     });
   }
 
   static build(extendArgs: ExtendArgs) {
     return Type.extend(new Type(), extendArgs);
+  }
+
+  static buildDate(specificity: DateSpecificity) {
+    return Type.build({
+      type: 'number',
+      date: specificity,
+    });
   }
 
   constructor(...possibleTypes: TypeName[]) {
@@ -336,9 +353,51 @@ export class Type {
   }
 
   @propagate
+  isDate(specificity?: DateSpecificity): Type {
+    if (this.date != null) {
+      if (specificity == null || specificity === this.date) {
+        return this;
+      } else {
+        return this.withErrorCause(
+          new InferError('Expected date with ' + specificity + ' specificity')
+        );
+      }
+    } else {
+      return this.withErrorCause(new InferError('Expected date'));
+    }
+  }
+
+  @propagate
+  isNotDate(): Type {
+    if (this.date == null) {
+      return this;
+    } else {
+      return this.withErrorCause(new InferError('Unexpected date'));
+    }
+  }
+
+  @propagate
+  sameDatenessAs(other: Type): Type {
+    if (this.date == other.date) {
+      return this;
+    } else {
+      if ((this.date == null) === (other.date == null)) {
+        return this.withErrorCause(
+          new InferError('Expected date with ' + other.date + ' specificity')
+        );
+      } else {
+        const errorMessage =
+          this.date != null ? 'Unexpected date' : 'Expected date';
+        return this.withErrorCause(new InferError(errorMessage));
+      }
+    }
+  }
+
+  @propagate
   sameAs(other: Type): Type {
     return this.hasType(...other.possibleTypes)
       .sameColumnSizeAs(other)
+      .sameDatenessAs(other)
       .sameRangenessAs(other);
   }
 

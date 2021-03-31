@@ -1,3 +1,5 @@
+export { date } from './date';
+
 export const walkSkip = Symbol(
   "Return this while walking to skip a node's children"
 );
