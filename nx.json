@@ -20,6 +20,8 @@
     "client": { "tags": [] },
     "client-e2e": { "tags": [], "implicitDependencies": ["client"] },
     "ui": { "tags": [] },
-    "editor": { "tags": [] }
+    "editor": { "tags": [] },
+    "backend": { "tags": [] },
+    "kafka-lite": { "tags": [] }
   }
 }

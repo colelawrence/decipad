@@ -4,5 +4,7 @@ module.exports = {
     '<rootDir>/apps/client',
     '<rootDir>/libs/ui',
     '<rootDir>/libs/editor',
+    '<rootDir>/apps/backend',
+    '<rootDir>/libs/kafka-lite',
   ],
 };

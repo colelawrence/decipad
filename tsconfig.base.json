@@ -18,7 +18,8 @@
     "paths": {
       "@decipad/language": ["libs/language/src/index.ts"],
       "@decipad/ui": ["libs/ui/src/index.ts"],
-      "@decipad/editor": ["libs/editor/src/index.tsx"]
+      "@decipad/editor": ["libs/editor/src/index.tsx"],
+      "@decipad/kafka-lite": ["libs/kafka-lite/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp", "dist"]

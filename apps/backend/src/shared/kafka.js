@@ -1,0 +1,30 @@
+const process = require('process')
+const { Kafka } = require('kafkajs')
+
+const kafka = new Kafka({
+  clientId: process.env.KAFKA_PRODUCER_ID || 'lambda-producer',
+  brokers: brokers()
+})
+
+let producer
+
+async function getProducer () {
+  if (!producer) {
+    producer = kafka.producer()
+    await producer.connect()
+  }
+
+  return producer
+}
+
+function brokers () {
+  if (process.env.KAFKA_BROKERS_JSON) {
+    return JSON.parse(process.env.KAFKA_BROKERS_JSON)
+  } else if (process.env.KAFKA_BROKER) {
+    return [process.env.KAFKA_BROKER]
+  } else {
+    return ['localhost:9092']
+  }
+}
+
+exports.producer = getProducer
