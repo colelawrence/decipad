@@ -131,7 +131,7 @@ export const isExpression = (
 ): value is AST.Expression => {
   if (!isNode(value)) return false;
 
-  return ['function-call', 'ref', 'literal', 'column', 'range'].includes(
+  return ['function-call', 'ref', 'literal', 'column', 'range', 'date'].includes(
     value.type
   );
 };

@@ -124,6 +124,28 @@ export function date(parsableDate: string, specificity: 'month' | 'day') {
   return n('date', ...args);
 }
 
+export function stringifyDate(
+  date: number,
+  specificity: DateSpecificity
+): string {
+  const segments = dateToArray(date);
+
+  const pad = (x: number | string) => String(x).padStart(2, '0');
+
+  let out = String(segments[0]);
+  if (specificity === 'year') return out;
+
+  out += `-${pad(segments[1])}`;
+  if (specificity === 'month') return out;
+
+  out += `-${pad(segments[2])}`;
+  if (specificity === 'day') return out;
+
+  out += ` ${pad(segments[3])}:${pad(segments[4])}`;
+
+  return out;
+}
+
 export const getDateFromAstForm = (
   segments: AST.Date['args']
 ): [number, DateSpecificity] => {

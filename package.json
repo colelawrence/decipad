@@ -10,6 +10,7 @@
     "lint": "nx workspace-lint && nx lint",
     "typecheck": "nx typecheck",
     "e2e": "nx e2e",
+    "repl": "ts-node --project ./libs/language/tsconfig.json -T libs/language/src/repl.ts",
     "affected:apps": "nx affected:apps",
     "affected:libs": "nx affected:libs",
     "affected:build": "nx affected:build",

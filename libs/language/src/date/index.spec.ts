@@ -2,6 +2,7 @@ import {
   cleanDate,
   getDateFromAstForm,
   parseUTCDate,
+  stringifyDate,
   arrayToDate,
 } from './index';
 
@@ -28,6 +29,13 @@ it('can parse a date from an array of elements', () => {
 it('can parse a date', () => {
   expect(parseUTCDate('2020-01-01')).toEqual(Date.UTC(2020, 0, 1));
 });
+
+it('can stringify a date', () => {
+  expect(stringifyDate(parseUTCDate('2020-10-21'), 'year')).toEqual('2020')
+  expect(stringifyDate(parseUTCDate('2020-10-21'), 'day')).toEqual('2020-10-21')
+  expect(stringifyDate(parseUTCDate('2020-10-21'), 'time')).toEqual('2020-10-21 00:00')
+  expect(stringifyDate(parseUTCDate('2020-10-21T10:30'), 'time')).toEqual('2020-10-21 10:30')
+})
 
 it('can round a date into a range', () => {
   expect(cleanDate(d('2020-01-15'), 'year')).toEqual([

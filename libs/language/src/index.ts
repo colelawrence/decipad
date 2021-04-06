@@ -1,3 +1,4 @@
+/* istanbul ignore file: just config and re-export */
 import { enableMapSet } from 'immer';
 import 'reflect-metadata';
 import 'regenerator-runtime/runtime.js';

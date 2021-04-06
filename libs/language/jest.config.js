@@ -10,7 +10,7 @@ module.exports = {
   coverageDirectory: './coverage',
   moduleFileExtensions: ['js', 'ts', 'tsx', 'json'],
   testPathIgnorePatterns: [
-    '<rootDir>[/\\\\](node_modules|.next|cypress)[/\\\\]',
+    '<rootDir>[/\\\\](node_modules|.next|cypress|dist)[/\\\\]',
   ],
   transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\].+\\.(js,ts|tsx)$'],
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
