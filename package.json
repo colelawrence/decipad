@@ -82,7 +82,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && jest --onlyChanged && tsc -b ."
+      "pre-commit": "lint-staged && nx run-many --all --target test && tsc -b ."
     }
   },
   "lint-staged": {
@@ -90,7 +90,6 @@
       "prettier --write"
     ],
     "*.{js,jsx,ts,tsx}": [
-      "nx run-many --all --target test",
       "eslint --cache"
     ]
   },
