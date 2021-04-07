@@ -1,4 +1,3 @@
-import { produce } from 'immer';
 import { InferError, Type, TableType } from '../type';
 
 export const findBadColumn = (table: TableType) =>

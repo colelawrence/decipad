@@ -111,7 +111,7 @@ describe('dates', () => {
         nilCtx,
         c('dateequals', date('2020-01', 'month'), date('2020-01', 'month'))
       )
-    ).toEqual(Type.buildDate('month'));
+    ).toEqual(Type.Boolean);
 
     expect(
       inferExpression(

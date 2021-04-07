@@ -3,8 +3,8 @@ import { parse } from './';
 
 export function runTests(tests) {
   for (const [name, spec] of Object.entries(tests)) {
-    const { source, ast, expectError, skip = false } = spec;
-    let testFunction = skip ? test.skip : test;
+    const { source, ast, expectError, skip = false, only = false } = spec;
+    let testFunction = skip ? test.skip : only ? test.only : test;
 
     testFunction(name, () => {
       let results, parseError;

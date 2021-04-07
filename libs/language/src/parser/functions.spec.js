@@ -83,9 +83,9 @@ runTests({
               },
             ],
             start: {
-              char: 27,
+              char: 28,
               line: 1,
-              column: 28,
+              column: 29,
             },
             end: {
               char: 31,
@@ -190,9 +190,9 @@ runTests({
               },
             ],
             start: {
-              char: 28,
+              char: 29,
               line: 1,
-              column: 29,
+              column: 30,
             },
             end: {
               char: 32,
@@ -433,9 +433,9 @@ runTests({
               },
             ],
             start: {
-              char: 21,
+              char: 22,
               line: 1,
-              column: 22,
+              column: 23,
             },
             end: {
               char: 26,

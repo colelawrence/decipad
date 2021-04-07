@@ -1,7 +1,9 @@
 // E2e tests
 
+import { produce } from 'immer';
 import * as AutoChange from 'automerge';
 import { Computer } from './runtime/computer';
+import { parseUTCDate, cleanDate } from './date';
 import { Type, TableType } from './type';
 
 const runCode = async (source: string) => {

@@ -126,6 +126,25 @@
         },
       },
       { name: '___', symbols: ['___$ebnf$1'], postprocess: id },
+      { name: '__n$ebnf$1', symbols: ['wschar'] },
+      {
+        name: '__n$ebnf$1',
+        symbols: ['__n$ebnf$1', 'wschar'],
+        postprocess: function arrpush(d) {
+          return d[0].concat([d[1]]);
+        },
+      },
+      {
+        name: '__n',
+        symbols: ['__n$ebnf$1'],
+        postprocess: (d, l, reject) => {
+          if (!d[0].includes('\n')) {
+            return reject;
+          } else {
+            return '\n';
+          }
+        },
+      },
       { name: 'wschar', symbols: [/[ \t\n\v\f]/], postprocess: id },
       { name: 'literal', symbols: ['boolean'], postprocess: id },
       { name: 'literal', symbols: ['character'], postprocess: id },
@@ -2852,27 +2871,25 @@
           };
         },
       },
+      { name: 'block$ebnf$1', symbols: [] },
+      { name: 'block$ebnf$1$subexpression$1', symbols: ['__n', 'statement'] },
       {
-        name: 'block',
-        symbols: ['_', 'statement'],
-        postprocess: (d, l) => {
-          const stmt = d[1];
-          return {
-            type: 'block',
-            args: [stmt],
-            location: l,
-            length: lengthOf(d),
-          };
+        name: 'block$ebnf$1',
+        symbols: ['block$ebnf$1', 'block$ebnf$1$subexpression$1'],
+        postprocess: function arrpush(d) {
+          return d[0].concat([d[1]]);
         },
       },
       {
         name: 'block',
-        symbols: ['statement', { literal: '\n' }, 'block'],
+        symbols: ['_', 'statement', 'block$ebnf$1', '_'],
         postprocess: (d, l) => {
-          const stmt = d[0];
+          const stmt = d[1];
+          const repetitions = d[2].map(([__n, stmt]) => stmt);
+
           return {
             type: 'block',
-            args: [stmt, ...d[2].args],
+            args: [stmt, ...repetitions],
             location: l,
             length: lengthOf(d),
           };
@@ -3075,7 +3092,8 @@
           'functionDefArgs',
           '_',
           'functionDef$string$1',
-          'block',
+          '_',
+          'statement',
         ],
         postprocess: (d, l) => ({
           type: 'function-definition',
@@ -3087,7 +3105,12 @@
               length: d[0].length,
             },
             d[4],
-            d[7],
+            {
+              type: 'block',
+              args: [d[8]],
+              location: d[8].location,
+              length: d[8].length,
+            },
           ],
           location: l,
           length: lengthOf(d),

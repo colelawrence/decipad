@@ -93,23 +93,15 @@ function looksLikeDate (word) {
 
 %}
 
-block         -> _ statement                            {%
+block         -> _ statement (__n statement):* _        {%
                                                         (d, l) => {
                                                           const stmt = d[1]
+                                                          const repetitions = d[2]
+                                                            .map(([__n, stmt]) => stmt)
+
                                                           return {
                                                             type: 'block',
-                                                            args: [stmt],
-                                                            location: l,
-                                                            length: lengthOf(d)
-                                                          }
-                                                        }
-                                                        %}
-block         -> statement "\n" block                   {%
-                                                        (d, l) => {
-                                                          const stmt = d[0]
-                                                          return {
-                                                            type: 'block',
-                                                            args: [stmt, ...d[2].args],
+                                                            args: [stmt, ...repetitions],
                                                             location: l,
                                                             length: lengthOf(d)
                                                           }
@@ -246,7 +238,7 @@ referenceAsOperator -> "`" referenceName "`"            {%
 ### Function definition ###
 ###########################
 
-functionDef -> functionDefName _ "=" _ functionDefArgs _ "=>" block {%
+functionDef -> functionDefName _ "=" _ functionDefArgs _ "=>" _ statement {%
                                                         (d, l) => ({
                                                           type: "function-definition",
                                                           args: [
@@ -257,7 +249,12 @@ functionDef -> functionDefName _ "=" _ functionDefArgs _ "=>" block {%
                                                               length: d[0].length
                                                             },
                                                             d[4],
-                                                            d[7]
+                                                            {
+                                                              type: 'block',
+                                                              args: [d[8]],
+                                                              location: d[8].location,
+                                                              length: d[8].length
+                                                            }
                                                           ],
                                                           location: l,
                                                           length: lengthOf(d)
