@@ -154,6 +154,17 @@ describe('columns', () => {
       })
     );
   });
+
+  it('infers columns of dates', () => {
+    expect(inferExpression(nilCtx, col(date('2020-01', 'month'), date('2020-02', 'month'))))
+      .toEqual(
+        Type.build({
+          type: 'number',
+          date: 'month',
+          columnSize: 2
+        })
+      )
+  })
 });
 
 describe('tables', () => {

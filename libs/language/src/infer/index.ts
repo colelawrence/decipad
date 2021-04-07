@@ -78,26 +78,22 @@ export const inferExpression = (ctx: Context, expr: AST.Expression): Type => {
       return Type.buildDate(lowestSegment);
     }
     case 'column': {
-      const columnTypes = expr.args[0].map((a) => inferExpression(ctx, a));
+      const cellTypes = expr.args[0].map((a) => inferExpression(ctx, a));
 
-      if (columnTypes.length === 0) {
+      if (cellTypes.length === 0) {
         return Type.Impossible.inNode(expr).withErrorCause(
           new InferError('Columns cannot be empty')
         );
       } else {
-        const columnFunctor = (...columnTypes: Type[]) => {
-          const [firstCell] = columnTypes;
+        const columnFunctor = (...cellTypes: Type[]) => {
+          const cellType = cellTypes.reduce((current, next) => current.sameAs(next))
 
-          const type = Type.build({
-            columnSize: columnTypes.length,
-            unit: firstCell.unit,
-            type: firstCell.possibleTypes[/*TODO*/ 0],
+          return Type.extend(cellType, {
+            columnSize: cellTypes.length
           });
-
-          return columnTypes.reduce((a, b) => a.sameAs(b), type);
         };
 
-        return Type.runFunctor(expr, columnFunctor, ...columnTypes);
+        return Type.runFunctor(expr, columnFunctor, ...cellTypes);
       }
     }
     case 'function-call': {
