@@ -15,17 +15,17 @@ export const unifyColumnSizes = (
 
   const columnSize = [...columnSizes][0] ?? 1;
 
-  const unifiedTable = produce(table, (table) => {
-    for (const [colName, colValue] of table.columnDefs.entries()) {
-      const newValue = colValue.columnSize
-        ? // Ensure it's the same size
-          colValue.isColumn(columnSize)
-        : // Create a new type with that size
-          Type.extend(colValue as Type, { columnSize: columnSize });
+  const unifiedTable = new TableType(new Map())
 
-      table.columnDefs.set(colName, newValue);
-    }
-  });
+  for (const [colName, colValue] of table.columnDefs.entries()) {
+    const newValue = colValue.columnSize
+      ? // Ensure it's the same size
+        colValue.isColumn(columnSize)
+      : // Create a new type with that size
+        Type.extend(colValue as Type, { columnSize: columnSize });
+
+    unifiedTable.columnDefs.set(colName, newValue);
+  }
 
   if (findBadColumn(unifiedTable) != null) {
     return Type.Impossible.inNode(statement).withErrorCause(

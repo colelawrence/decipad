@@ -14,7 +14,11 @@ const basicFunctor = (...types: Type[]) =>
   types.reduce((a, b) => a.hasType('number').sameAs(b).withUnit(b.unit));
 
 const dateCmpFunctor = (left: Type, right: Type): Type =>
-  Type.combine(left.isDate(), right.sameAs(left));
+  Type.combine(
+    left.isDate(),
+    right.sameAs(left),
+    Type.build({ type: 'boolean', columnSize: left.columnSize })
+  );
 
 const cmpFunctor = (left: Type, right: Type): Type =>
   Type.combine(
@@ -88,12 +92,6 @@ export const builtins: Record<string, BuiltinSpec> = {
     fn: (a, b) => a == b,
     functor: cmpFunctor,
   },
-  dateequals: {
-    name: 'dateequals',
-    argCount: 2,
-    fn: ([aStart, aEnd], [bStart, bEnd]) => aStart === bStart && aEnd === bEnd,
-    functor: dateCmpFunctor,
-  },
   if: {
     name: 'if',
     argCount: 3,
@@ -116,6 +114,19 @@ export const builtins: Record<string, BuiltinSpec> = {
         b.hasType('number'),
         Type.build({ type: 'boolean', columnSize: a.columnSize })
       ),
+  },
+  // Date stuff (TODO operator overloading)
+  dateequals: {
+    name: 'dateequals',
+    argCount: 2,
+    fn: ([aStart, aEnd], [bStart, bEnd]) => aStart === bStart && aEnd === bEnd,
+    functor: dateCmpFunctor,
+  },
+  dategte: {
+    name: 'dategte',
+    argCount: 2,
+    fn: ([aStart, _aEnd], [bStart, _bEnd]) => aStart >= bStart,
+    functor: dateCmpFunctor,
   },
 };
 
