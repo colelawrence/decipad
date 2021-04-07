@@ -16,6 +16,7 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
     case 'literal': {
       switch (node.args[0]) {
         case 'number':
+        case 'string':
         case 'boolean': {
           return Scalar.fromValue(node.args[1]);
         }

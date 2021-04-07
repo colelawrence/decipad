@@ -207,7 +207,7 @@ declare namespace AST {
 }
 
 declare namespace Interpreter {
-  type ResultScalar = number | boolean;
+  type ResultScalar = number | boolean | string;
   type ResultColumn = ResultScalar[];
   type ResultTable = Map<string, ResultColumn>;
 

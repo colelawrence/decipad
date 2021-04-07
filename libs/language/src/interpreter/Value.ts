@@ -13,9 +13,9 @@ export type Value = SimpleValue | Table;
 
 export class Scalar implements SimpleValue {
   rowCount = null;
-  value: number | boolean;
+  value: number | boolean | string;
 
-  static fromValue(value: number | boolean): Scalar {
+  static fromValue(value: number | boolean | string): Scalar {
     const ret = new Scalar();
     ret.value = value;
     return ret;
