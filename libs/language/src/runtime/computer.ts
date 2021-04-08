@@ -16,7 +16,7 @@ interface ParseError {
   column: number;
 }
 
-interface ParseResult {
+export interface ParseResult {
   ok: boolean;
   errors: ParseError[];
 }

@@ -1,5 +1,5 @@
 import * as AutoChange from 'automerge';
-import { Computer } from './runtime/computer';
+import { Computer, ParseResult } from './runtime/computer';
 
 export const runCode = async (source: string) => {
   const lineCount = source.split('\n').length;
@@ -18,7 +18,7 @@ export const runCode = async (source: string) => {
   });
   const computer = new Computer();
   computer.setContext(syncDoc);
-  const parseResult = computer.parse();
+  const parseResult: ParseResult = computer.parse();
 
   if (!parseResult.ok) return parseResult;
 
