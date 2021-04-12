@@ -1,6 +1,6 @@
-import { Type } from './type';
-import { Scalar, Column, SimpleValue } from './interpreter/Value';
-import { getDefined } from './utils';
+import { Type } from '../type';
+import { Scalar, Column, SimpleValue } from '../interpreter/Value';
+import { getDefined } from '../utils';
 
 export interface BuiltinSpec {
   name: string;
@@ -10,7 +10,7 @@ export interface BuiltinSpec {
   functor: (...types: Type[]) => Type;
 }
 
-const basicFunctor = (...types: Type[]) =>
+const binopFunctor = (...types: Type[]) =>
   types.reduce((a, b) => a.hasType('number').sameAs(b).withUnit(b.unit));
 
 const dateCmpFunctor = (left: Type, right: Type): Type =>
@@ -23,10 +23,7 @@ const dateCmpFunctor = (left: Type, right: Type): Type =>
 const cmpFunctor = (left: Type, right: Type): Type =>
   Type.combine(
     left.hasType('number').sameAs(right),
-    Type.build({
-      type: 'boolean',
-      columnSize: left.columnSize,
-    })
+    Type.build({ type: 'boolean' })
   );
 
 export const builtins: Record<string, BuiltinSpec> = {
@@ -34,19 +31,19 @@ export const builtins: Record<string, BuiltinSpec> = {
     name: 'sqrt',
     argCount: 1,
     fn: (n) => Math.sqrt(n as number),
-    functor: basicFunctor,
+    functor: binopFunctor,
   },
   '+': {
     name: '+',
     argCount: 2,
     fn: (a, b) => a + b,
-    functor: basicFunctor,
+    functor: binopFunctor,
   },
   '-': {
     name: '-',
     argCount: 2,
     fn: (a, b) => a - b,
-    functor: basicFunctor,
+    functor: binopFunctor,
   },
   '*': {
     name: '*',
@@ -166,6 +163,28 @@ export const callBuiltin = (
       builtinSpec.fn(...scalarArgs.map((v) => v.getData() as number))
     );
   }
+};
+
+export const callBuiltinFunctor = (
+  callExpr: AST.FunctionCall,
+  builtinName: string,
+  ...givenArguments: Type[]
+) => {
+  const builtin = builtins[builtinName];
+
+  if (builtin == null) {
+    return Type.Impossible.inNode(callExpr).withErrorCause(
+      `Unknown function: ${builtinName}`
+    );
+  }
+
+  if (givenArguments.length !== builtin.argCount) {
+    return Type.Impossible.inNode(callExpr).withErrorCause(
+      `${builtinName} expects ${builtin.argCount} parameters and was given ${givenArguments.length}`
+    );
+  }
+
+  return Type.runFunctor(callExpr, builtin.functor, ...givenArguments);
 };
 
 export const hasBuiltin = (builtinName: string) => builtinName in builtins;

@@ -1,5 +1,6 @@
 import * as AutoChange from 'automerge';
 import { Computer, ParseResult } from './runtime/computer';
+import { Type } from './type';
 
 export const runCode = async (source: string) => {
   const lineCount = source.split('\n').length;
@@ -23,4 +24,16 @@ export const runCode = async (source: string) => {
   if (!parseResult.ok) return parseResult;
 
   return await computer.resultAt('block-id', lineCount);
+};
+
+export const objectToTable = (obj: Record<string, Type>) => {
+  const names = [];
+  const values = [];
+
+  for (const [name, value] of Object.entries(obj)) {
+    names.push(name);
+    values.push(value);
+  }
+
+  return Type.buildTuple(values, names);
 };
