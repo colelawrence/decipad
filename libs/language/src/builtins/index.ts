@@ -11,7 +11,7 @@ export interface BuiltinSpec {
 }
 
 const binopFunctor = (...types: Type[]) =>
-  types.reduce((a, b) => a.hasType('number').sameAs(b).withUnit(b.unit));
+  types.reduce((a, b) => a.isScalar('number').sameAs(b).withUnit(b.unit));
 
 const dateCmpFunctor = (left: Type, right: Type): Type =>
   Type.combine(
@@ -22,7 +22,7 @@ const dateCmpFunctor = (left: Type, right: Type): Type =>
 
 const cmpFunctor = (left: Type, right: Type): Type =>
   Type.combine(
-    left.hasType('number').sameAs(right),
+    left.isScalar('number').sameAs(right),
     Type.build({ type: 'boolean' })
   );
 
@@ -50,14 +50,14 @@ export const builtins: Record<string, BuiltinSpec> = {
     argCount: 2,
     fn: (a, b) => a * b,
     functor: (a, b) =>
-      a.hasType('number').sameAs(b).isNotRange().multiplyUnit(b.unit),
+      a.isScalar('number').sameAs(b).multiplyUnit(b.unit),
   },
   '/': {
     name: '/',
     argCount: 2,
     fn: (a, b) => a / b,
     functor: (a, b) =>
-      a.hasType('number').sameAs(b).isNotRange().divideUnit(b.unit),
+      a.isScalar('number').sameAs(b).divideUnit(b.unit),
   },
   '<': {
     name: '<',
@@ -95,8 +95,7 @@ export const builtins: Record<string, BuiltinSpec> = {
     fn: (a, b, c) => (a ? b : c),
     functor: (a: Type, b: Type, c: Type) =>
       Type.combine(
-        a.hasType('boolean'),
-        a.sameColumnSizeAs(b).sameColumnSizeAs(c),
+        a.isScalar('boolean'),
         b.sameAs(c)
       ),
   },
@@ -107,8 +106,9 @@ export const builtins: Record<string, BuiltinSpec> = {
     fn: ([bStart, bEnd], a) => a >= bStart && a <= bEnd,
     functor: (a: Type, b: Type) =>
       Type.combine(
-        a.hasType('number').isRange(),
-        b.hasType('number'),
+        a.isRange(),
+        b.isScalar('number'),
+        a.withUnit(b.unit),
         Type.build({ type: 'boolean', columnSize: a.columnSize })
       ),
   },
@@ -122,7 +122,7 @@ export const builtins: Record<string, BuiltinSpec> = {
   dategte: {
     name: 'dategte',
     argCount: 2,
-    fn: ([aStart, _aEnd], [bStart, _bEnd]) => aStart >= bStart,
+    fn: ([aStart], [bStart]) => aStart >= bStart,
     functor: dateCmpFunctor,
   },
 };
@@ -163,28 +163,6 @@ export const callBuiltin = (
       builtinSpec.fn(...scalarArgs.map((v) => v.getData() as number))
     );
   }
-};
-
-export const callBuiltinFunctor = (
-  callExpr: AST.FunctionCall,
-  builtinName: string,
-  ...givenArguments: Type[]
-) => {
-  const builtin = builtins[builtinName];
-
-  if (builtin == null) {
-    return Type.Impossible.inNode(callExpr).withErrorCause(
-      `Unknown function: ${builtinName}`
-    );
-  }
-
-  if (givenArguments.length !== builtin.argCount) {
-    return Type.Impossible.inNode(callExpr).withErrorCause(
-      `${builtinName} expects ${builtin.argCount} parameters and was given ${givenArguments.length}`
-    );
-  }
-
-  return Type.runFunctor(callExpr, builtin.functor, ...givenArguments);
 };
 
 export const hasBuiltin = (builtinName: string) => builtinName in builtins;

@@ -1,5 +1,5 @@
 import { produce } from 'immer';
-import { Type, TableType, InferError, inverseExponent } from '../type';
+import { Type, InferError, inverseExponent } from '../type';
 
 import { l, c, n, r, col, range, date, tableDef, funcDef } from '../utils';
 
@@ -47,7 +47,6 @@ afterEach(() => {
   // Ensure nilCtx is never modified
   const stillEmpty =
     nilCtx.stack.stack.every((m) => m.size === 0) &&
-    nilCtx.functions.size === 0 &&
     nilCtx.functionDefinitions.size === 0;
 
   if (!stillEmpty) {
@@ -69,9 +68,6 @@ describe('ranges', () => {
     expect(inferExpression(nilCtx, range(1, 2))).toEqual(
       Type.build({ type: 'number', rangeness: true })
     );
-    expect(inferExpression(nilCtx, range('one', 'six'))).toEqual(
-      Type.build({ type: 'string', rangeness: true })
-    );
 
     expect(
       inferExpression(nilCtx, range(false, true)).errorCause
@@ -80,7 +76,7 @@ describe('ranges', () => {
       inferExpression(nilCtx, range(range(1, 2), range(3, 4))).errorCause
     ).toBeDefined();
     expect(
-      inferExpression(nilCtx, range('string', 1)).errorCause
+      inferExpression(nilCtx, range('string', 'string2')).errorCause
     ).toBeDefined();
   });
 
@@ -134,9 +130,7 @@ describe('columns', () => {
 
     const mixedCol = col(l(1), l('hi'));
     expect(inferExpression(nilCtx, mixedCol)).toEqual(
-      Type.build({ type: [], columnSize: 2 })
-        .inNode(mixedCol)
-        .withErrorCause(new InferError('Mismatched types: number and string'))
+      Type.buildTuple([Type.Number, Type.String])
     );
   });
 
@@ -171,11 +165,9 @@ describe('tables', () => {
   it('infers table defs', () => {
     const tableContext = makeContext();
 
-    const expectedType = new TableType(
-      new Map([
-        ['Col1', Type.build({ type: 'number', columnSize: 3 })],
-        ['Col2', Type.build({ type: 'number', columnSize: 3 })],
-      ])
+    const expectedType = Type.buildTuple(
+      [Type.build({ type: 'number', columnSize: 3 }), Type.build({ type: 'number', columnSize: 3 })],
+      ['Col1', 'Col2']
     );
 
     expect(
@@ -192,12 +184,13 @@ describe('tables', () => {
   });
 
   it('"previous" references', () => {
-    const expectedType = new TableType(
-      new Map([
-        ['Col1', Type.build({ type: 'number', columnSize: 3 })],
-        ['Col2', Type.build({ type: 'number', columnSize: 3 })],
-        ['Col3', Type.build({ type: 'string', columnSize: 3 })],
-      ])
+    const expectedType = Type.buildTuple(
+      [
+        Type.build({ type: 'number', columnSize: 3 }),
+        Type.build({ type: 'number', columnSize: 3 }),
+        Type.build({ type: 'string', columnSize: 3 }),
+      ],
+      ['Col1', 'Col2', 'Col3']
     );
 
     const table = tableDef('Table', {
@@ -235,10 +228,9 @@ it('infers binops', () => {
 
   const errorCtx = makeContext();
   const badExpr = c('==', l(1), l(true));
-  const badExprError = new InferError('Mismatched types: number and boolean');
 
   expect(inferExpression(errorCtx, badExpr)).toEqual(
-    Type.Impossible.withErrorCause(badExprError).inNode(badExpr)
+    Type.Impossible.withErrorCause('Expected boolean').inNode(badExpr)
   );
 });
 
@@ -253,56 +245,19 @@ it('infers conditions', () => {
 
   const errorCtx = makeContext();
   const badConditional = c('if', l(true), l('wrong!'), l(1));
-  const badConditionalError = new InferError(
-    'Mismatched types: string and number'
-  );
+
   expect(inferExpression(errorCtx, badConditional)).toEqual(
-    Type.Impossible.withErrorCause(badConditionalError).inNode(badConditional)
+    Type.Impossible.withErrorCause('Expected number').inNode(badConditional)
   );
 });
 
 describe('inferFunction', () => {
-  it('infers unused functions within the program', () => {
-    const goodFn = funcDef('Good', ['A'], c('+', l(1), l(2)));
-
-    expect(inferFunction(nilCtx, goodFn).returns).toEqual(Type.Number);
-
-    const badCall = c('+', l('x'), l(1));
-    const badFn = funcDef('Bad', ['A'], badCall);
-    const errorCtx = makeContext();
-    const badFnError = new InferError('Mismatched types: string and number');
-    expect(inferFunction(errorCtx, badFn).returns).toEqual(
-      Type.Impossible.withErrorCause(badFnError).inNode(badCall)
-    );
-  });
-
-  it('narrows down the type of each argument', () => {
-    const fn = funcDef('Good', ['A'], c('+', l(1), r('A')));
-
-    expect(inferFunction(nilCtx, fn)).toEqual({ returns: Type.Number });
-  });
-
-  it('infers functions which use things in the parent scope', () => {
-    const functionUsingOuterScope = funcDef('Fn', [], c('+', l(1), r('A')));
-
-    const parentScope = makeContext([['A', Type.Number]]);
-
-    expect(inferFunction(parentScope, functionUsingOuterScope)).toEqual({
-      returns: Type.Number,
-    });
-  });
-
-  it('allows to pass in specific arguments types, instead of assuming any type', () => {
+  it('Accepts arguments types and returns a return type', () => {
     const functionWithSpecificTypes = funcDef('Fn', ['A'], r('A'));
 
-    expect(inferFunction(nilCtx, functionWithSpecificTypes).returns).toEqual(
-      new Type()
+    expect(inferFunction(nilCtx, functionWithSpecificTypes, [Type.Boolean])).toEqual(
+      Type.Boolean
     );
-    expect(
-      inferFunction(nilCtx, functionWithSpecificTypes, c('A'), [
-        new Type('boolean'),
-      ]).returns
-    ).toEqual(new Type('boolean'));
   });
 
   it('disallows wrong argument count', () => {
@@ -312,23 +267,19 @@ describe('inferFunction', () => {
     const badArgumentCountError = new InferError(
       'Wrong number of arguments applied to Fn (expected 1)'
     );
-    expect(inferFunction(errorCtx, unaryFn, c('Fn'), [])).toEqual({
-      returns: Type.Impossible.withErrorCause(badArgumentCountError).inNode(
-        c('Fn')
-      ),
-    });
+    expect(inferFunction(errorCtx, unaryFn, [])).toEqual(
+      Type.Impossible.withErrorCause(badArgumentCountError),
+    );
 
     errorCtx = makeContext();
     const badArgumentCountError2 = new InferError(
       'Wrong number of arguments applied to Fn (expected 1)'
     );
     expect(
-      inferFunction(errorCtx, unaryFn, c('Fn'), [Type.Boolean, Type.String])
-    ).toEqual({
-      returns: Type.Impossible.withErrorCause(badArgumentCountError2).inNode(
-        c('Fn')
-      ),
-    });
+      inferFunction(errorCtx, unaryFn, [Type.Boolean, Type.String])
+    ).toEqual(
+      Type.Impossible.withErrorCause(badArgumentCountError2),
+    );
   });
 });
 
@@ -348,14 +299,12 @@ describe('inferProgram', () => {
 
     expect(inferProgram(program)).toMatchObject({
       variables: new Map([['A', Type.Number]]),
-      functions: new Map(),
       blockReturns: [Type.Number],
     });
 
-    const error = new InferError('Mismatched types: number and string');
+    const error = new InferError('Expected string');
     expect(inferProgram(wrongProgram)).toMatchObject({
       variables: new Map([['A', Type.Number]]),
-      functions: new Map(),
       blockReturns: [Type.Impossible.withErrorCause(error).inNode(badCall)],
     });
   });
@@ -371,14 +320,6 @@ describe('inferProgram', () => {
 
     expect(inferProgram(program)).toMatchObject({
       variables: new Map([['Result', Type.Number]]),
-      functions: new Map([
-        [
-          'Plus',
-          {
-            returns: Type.Number,
-          },
-        ],
-      ]),
       blockReturns: [Type.Number],
     });
   });
@@ -404,7 +345,7 @@ describe('inferTargetStatement', () => {
 
     expect(inferTargetStatement(badProgram, [0, 0])).toEqual(
       Type.Impossible.withErrorCause(
-        new InferError('Mismatched types: string and number')
+        new InferError('Expected number')
       ).inNode(badCall)
     );
   });

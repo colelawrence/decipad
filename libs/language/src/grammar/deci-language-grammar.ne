@@ -5,6 +5,7 @@
 @include "./string.ne"
 @include "./date.ne"
 @include "./column.ne"
+@include "./given.ne"
 @include "./table.ne"
 @include "./expression.ne"
 @include "./time-quantity.ne"
@@ -18,6 +19,7 @@ const reservedWords = new Set([
   '\n',
   'in',
   'where',
+  'given',
   'per',
   'true',
   'false',

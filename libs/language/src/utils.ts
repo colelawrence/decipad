@@ -131,7 +131,7 @@ export const isExpression = (
 ): value is AST.Expression => {
   if (!isNode(value)) return false;
 
-  return ['function-call', 'ref', 'literal', 'column', 'range', 'date'].includes(
+  return ['function-call', 'ref', 'literal', 'column', 'range', 'date', 'given'].includes(
     value.type
   );
 };
@@ -163,7 +163,7 @@ export const getDefined = <T>(
   return anything;
 };
 
-export const zip = <T>(keys: string[], values: T[]): [string, T][] => {
+export const zip = <K, V>(keys: K[], values: V[]): [K, V][] => {
   if (keys.length !== values.length) {
     throw new Error('panic: cannot zip arrays of different lengths');
   }
@@ -171,7 +171,7 @@ export const zip = <T>(keys: string[], values: T[]): [string, T][] => {
   const out = [];
 
   for (let i = 0; i < keys.length; i++) {
-    const pair: [string, T] = [keys[i], values[i]];
+    const pair: [K, V] = [keys[i], values[i]];
     out.push(pair);
   }
 

@@ -1,22 +1,22 @@
 // E2e tests
 
-import { Type, TableType } from './type';
-import { runCode } from './testUtils';
+import { Type } from './type';
+import { runCode, objectToTable } from './testUtils';
 
 describe('basic code', () => {
   it('runs basic operations', async () => {
     expect(await runCode('1 + 1')).toMatchObject({
-      type: { possibleTypes: ['number'] },
+      type: { type: 'number' },
       value: [2],
     });
 
     expect(await runCode('-1')).toMatchObject({
-      type: { possibleTypes: ['number'] },
+      type: { type: 'number' },
       value: [-1],
     });
 
     expect(await runCode('1 / 4')).toMatchObject({
-      type: { possibleTypes: ['number'] },
+      type: { type: 'number' },
       value: [0.25],
     });
   });
@@ -29,7 +29,7 @@ describe('basic code', () => {
         1 + A
       `)
     ).toMatchObject({
-      type: { possibleTypes: ['number'] },
+      type: { type: 'number' },
       value: [2],
     });
   });
@@ -42,7 +42,7 @@ describe('basic code', () => {
     `);
 
     expect(results).toMatchObject({
-      type: { possibleTypes: ['number'] },
+      type: { type: 'number' },
       value: [3],
     });
   });
@@ -55,7 +55,7 @@ describe('basic code', () => {
     `);
 
     expect(results).toMatchObject({
-      type: { possibleTypes: ['number'] },
+      type: { columnSize: 4, cellType: { type: 'number' } },
       value: [[0, 2, 4, 12]],
     });
   });
@@ -67,7 +67,7 @@ describe('basic code', () => {
     `);
 
     expect(results).toMatchObject({
-      type: { possibleTypes: ['number'], columnSize: 3 },
+      type: { columnSize: 3 },
       value: [[2, 4, 6]],
     });
 
@@ -77,7 +77,7 @@ describe('basic code', () => {
     `);
 
     expect(results2).toMatchObject({
-      type: { possibleTypes: ['number'], columnSize: 3 },
+      type: { columnSize: 3 },
       value: [[2, 1, 0.5]],
     });
   });
@@ -89,7 +89,7 @@ describe('basic code', () => {
     `);
 
     expect(results).toMatchObject({
-      type: { possibleTypes: ['number'], columnSize: 3 },
+      type: { columnSize: 3, cellType: { type: 'number' } },
       value: [[2, 4, 6]],
     });
   });
@@ -101,7 +101,7 @@ describe('basic code', () => {
     `);
 
     expect(results).toMatchObject({
-      type: { possibleTypes: ['number'], columnSize: 3 },
+      type: { columnSize: 3, cellType: { type: 'number' } },
       value: [[1, 4, 0]],
     });
   });
@@ -114,7 +114,7 @@ describe('basic code', () => {
         A = if 1 < 3 then 1 else 0
       `)
     ).toMatchObject({
-      type: { possibleTypes: ['number'] },
+      type: { type: 'number' },
       value: [1],
     });
 
@@ -123,7 +123,7 @@ describe('basic code', () => {
         A = if 1 > 3 then 1 else 0
       `)
     ).toMatchObject({
-      type: { possibleTypes: ['number'] },
+      type: { type: 'number' },
       value: [0],
     });
   });
@@ -134,12 +134,10 @@ describe('Tables', () => {
     expect(
       await runCode(`Table = { Column1 = [1, 2, 3], Column2 = Column1 * 2 }`)
     ).toMatchObject({
-      type: new TableType(
-        new Map([
-          ['Column1', Type.build({ type: 'number', columnSize: 3 })],
-          ['Column2', Type.build({ type: 'number', columnSize: 3 })],
-        ])
-      ),
+      type: objectToTable({
+        'Column1': Type.build({ type: 'number', columnSize: 3 }),
+        'Column2': Type.build({ type: 'number', columnSize: 3 }),
+      }),
       value: [
         new Map([
           ['Column1', [1, 2, 3]],
@@ -158,11 +156,11 @@ describe('Tables', () => {
         }
       `)
     ).toMatchObject({
-      type: new TableType(
-        new Map([
-          ['Column1', Type.build({ type: 'number', columnSize: 3 })],
-          ['Column2', Type.build({ type: 'number', columnSize: 3 })],
-        ])
+      type: objectToTable(
+                {
+                    'Column1': Type.build({ type: 'number', columnSize: 3 }),
+                    'Column2': Type.build({ type: 'number', columnSize: 3 }),
+                }
       ),
       value: [
         new Map([
@@ -183,13 +181,11 @@ describe('Tables', () => {
         }
       `)
     ).toMatchObject({
-      type: new TableType(
-        new Map([
-          ['Column1', Type.build({ type: 'number', columnSize: 3 })],
-          ['Column2', Type.build({ type: 'number', columnSize: 3 })],
-          ['Column3', Type.build({ type: 'boolean', columnSize: 3 })],
-        ])
-      ),
+      type: objectToTable({
+          'Column1': Type.build({ type: 'number', columnSize: 3 }),
+          'Column2': Type.build({ type: 'number', columnSize: 3 }),
+          'Column3': Type.build({ type: 'boolean', columnSize: 3 }),
+      }),
       value: [
         new Map([
           ['Column1', [1, 2, 3]],
@@ -218,7 +214,7 @@ describe('Units', () => {
     });
   });
 
-  it.skip('units can be divided', async () => {
+  it('units can be divided', async () => {
     expect(
       await runCode(`
         Distance = 3 meter
@@ -228,20 +224,22 @@ describe('Units', () => {
       `)
     ).toMatchObject({
       value: [1],
-      units: [
-        {
-          exp: 1,
-          known: true,
-          multiplier: 1,
-          unit: 'meter',
-        },
-        {
-          exp: -1,
-          known: true,
-          multiplier: 1,
-          unit: 'second',
-        },
-      ],
+      type: {
+        unit: [
+          {
+            exp: 1,
+            known: true,
+            multiplier: 1,
+            unit: 'meter',
+          },
+          {
+            exp: -1,
+            known: true,
+            multiplier: 1,
+            unit: 'second',
+          },
+        ],
+      }
     });
   });
 

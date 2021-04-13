@@ -144,6 +144,15 @@ declare namespace AST {
     end: Pos;
   }
 
+  // Expansion operator
+
+  interface Given {
+    type: 'given'
+    args: [ref: Ref, body: Expression]
+    start: Pos
+    end: Pos
+  }
+
   // Definitions
 
   interface Assign {
@@ -202,6 +211,7 @@ declare namespace AST {
     assign: Assign;
     'argument-names': FunctionArgumentNames;
     'function-definition': FunctionDefinition;
+    given: Given;
     block: Block;
   }
 }

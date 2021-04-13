@@ -1,35 +1,41 @@
-import { InferError, Type, TableType } from '../type';
+import { Type } from '../type';
+import { zip, getDefined } from '../utils'
 
-export const findBadColumn = (table: TableType) =>
-  [...table.columnDefs.values()].find((c) => c.errorCause != null);
+export const findBadColumn = (table: Type) =>
+  [...getDefined(table.tupleTypes, 'expected tuple')].find((c) => c.errorCause != null);
 
 export const unifyColumnSizes = (
   statement: AST.TableDefinition,
-  table: TableType
-): TableType | Type => {
-  const columnSizes = new Set(
-    [...table.columnDefs.values()].map((c) => c.columnSize)
-  );
+  table: Type
+): Type => {
+  if (table.tupleNames == null || table.tupleTypes == null) {
+    throw new Error('panic: expected tuple with names')
+  }
+
+  const columnSizes = new Set([...table.tupleTypes].map((c) => c.columnSize));
+
   columnSizes.delete(null);
 
   const columnSize = [...columnSizes][0] ?? 1;
 
-  const unifiedTable = new TableType(new Map())
+  const tupleTypes = []
+  const tupleNames = []
 
-  for (const [colName, colValue] of table.columnDefs.entries()) {
+  for (const [colName, colValue] of zip(table.tupleNames, table.tupleTypes)) {
     const newValue = colValue.columnSize
       ? // Ensure it's the same size
-        colValue.isColumn(columnSize)
+        colValue.withColumnSize(columnSize)
       : // Create a new type with that size
         Type.extend(colValue as Type, { columnSize: columnSize });
 
-    unifiedTable.columnDefs.set(colName, newValue);
+    tupleTypes.push(newValue);
+    tupleNames.push(colName);
   }
 
+  const unifiedTable = Type.buildTuple(tupleTypes, tupleNames)
+
   if (findBadColumn(unifiedTable) != null) {
-    return Type.Impossible.inNode(statement).withErrorCause(
-      new InferError('Incompatible column sizes')
-    );
+    return Type.Impossible.inNode(statement).withErrorCause('Incompatible column sizes');
   } else {
     return unifiedTable;
   }

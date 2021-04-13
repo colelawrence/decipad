@@ -6,13 +6,13 @@ import { parse } from './parser';
 import { run } from './interpreter';
 import { inferProgram } from './infer';
 import { stringifyDate } from './date';
-import { Type, TableType, FunctionType } from './type';
+import { Type } from './type';
 
 enableMapSet();
 
 export const stringifyResult = (
   result: Interpreter.OneResult,
-  type: Type | TableType | FunctionType | null
+  type: Type | null
 ): string => {
   if (type instanceof Type && type.rangeness) {
     const contentT = Type.extend(type, { rangeness: false });

@@ -19,6 +19,7 @@
     '\n',
     'in',
     'where',
+    'given',
     'per',
     'true',
     'false',
@@ -2043,6 +2044,47 @@
         },
       },
       {
+        name: 'given$string$1',
+        symbols: [
+          { literal: 'g' },
+          { literal: 'i' },
+          { literal: 'v' },
+          { literal: 'e' },
+          { literal: 'n' },
+        ],
+        postprocess: function joiner(d) {
+          return d.join('');
+        },
+      },
+      {
+        name: 'given',
+        symbols: [
+          'given$string$1',
+          '__',
+          'referenceName',
+          '_',
+          { literal: ':' },
+          '_',
+          'expression',
+        ],
+        postprocess: (d, l) => {
+          return {
+            type: 'given',
+            args: [
+              {
+                type: 'ref',
+                args: [d[2].name],
+                location: d[2].location,
+                length: d[2].length,
+              },
+              d[6],
+            ],
+            location: l,
+            length: lengthOf(d),
+          };
+        },
+      },
+      {
         name: 'tableDef',
         symbols: [
           'referenceName',
@@ -2357,6 +2399,7 @@
           };
         },
       },
+      { name: 'expression', symbols: ['given'], postprocess: id },
       { name: 'expression', symbols: ['conditional'], postprocess: id },
       { name: 'expression', symbols: ['functionCall'], postprocess: id },
       {

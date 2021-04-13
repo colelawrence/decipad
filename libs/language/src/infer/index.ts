@@ -1,27 +1,36 @@
-import { builtins } from '../builtins';
 import {
-  FunctionType,
   InferError,
-  TableType,
   Type,
-  TypeName,
-  typeNames,
+  scalarTypeNames,
 } from '../type';
-import { getDefined, getIdentifierString, getOfType } from '../utils';
-import { Context, makeContext } from './context';
-import { findBadColumn, unifyColumnSizes } from './table';
+import { getDefined, zip, getIdentifierString, getOfType } from '../utils';
 import { DateSpecificity } from '../date';
 
+import { callBuiltin } from './callBuiltin';
+import { Context, makeContext } from './context';
+import { findBadColumn, unifyColumnSizes } from './table';
+
+const withPropagation = <T extends AST.Node>(fn: (ctx: Context, thing: T) => Type) =>
+  (ctx: Context, thing: T): Type => {
+    const type = fn(ctx, thing)
+
+    if (type.errorCause != null && type.node == null) {
+      return type.inNode(thing)
+    } else {
+      return type
+    }
+  }
+
 /*
-Walk depth-first into an expanded AST.Expression, collecting the type of things beneath and checking it against the current iteration's constraints.
+ Walk depth-first into an expanded AST.Expression, collecting the type of things beneath and checking it against the current iteration's constraints.
 
-Given a literal, this type is always known (barring casting).
-Given a function call, this type is given by calling the functor with the arguments' types.
-Given a condition, the functor is (thentype == elsetype) and its condition must be boolean
+ Given a literal, this type is always known (barring casting).
+ Given a function call, this type is given by calling the functor with the arguments' types.
+ Given a condition, the functor is (thentype == elsetype) and its condition must be boolean
 
-AST.Assign is special-cased by looking at its expression and returning just that
-*/
-export const inferExpression = (ctx: Context, expr: AST.Expression): Type => {
+ AST.Assign is special-cased by looking at its expression and returning just that
+ */
+export const inferExpression = withPropagation((ctx: Context, expr: AST.Expression): Type => {
   switch (expr.type) {
     case 'ref': {
       const name = getIdentifierString(expr);
@@ -31,28 +40,26 @@ export const inferExpression = (ctx: Context, expr: AST.Expression): Type => {
       } else {
         const error = new InferError('Undefined variable ' + name);
 
-        return Type.Impossible.inNode(expr).withErrorCause(error);
+        return Type.Impossible.withErrorCause(error);
       }
     }
     case 'literal': {
-      const exprType = expr.args[0] as TypeName;
+      const [litType, , litUnit] = expr.args
 
-      if (!typeNames.includes(exprType)) {
-        throw new Error('panic: Unknown literal type ' + exprType);
+      if (!scalarTypeNames.includes(litType)) {
+        throw new Error('panic: Unknown literal type ' + litType);
       }
 
-      return Type.build({ type: exprType, unit: expr.args[2] });
+      return Type.build({ type: litType, unit: litUnit });
     }
     case 'range': {
       const [start, end] = expr.args.map((expr) => inferExpression(ctx, expr));
 
       const rangeFunctor = (start: Type, end: Type) => {
         return Type.combine(
-          start.hasType('number', 'string').isNotRange(),
-          end.hasType('number', 'string').isNotRange(),
-          start.sameAs(end),
+          start.isScalar('number').sameAs(end),
           Type.build({
-            type: start.possibleTypes[0 /* TODO */],
+            type: 'number',
             unit: start.unit,
             rangeness: true,
           })
@@ -80,21 +87,7 @@ export const inferExpression = (ctx: Context, expr: AST.Expression): Type => {
     case 'column': {
       const cellTypes = expr.args[0].map((a) => inferExpression(ctx, a));
 
-      if (cellTypes.length === 0) {
-        return Type.Impossible.inNode(expr).withErrorCause(
-          new InferError('Columns cannot be empty')
-        );
-      } else {
-        const columnFunctor = (...cellTypes: Type[]) => {
-          const cellType = cellTypes.reduce((current, next) => current.sameAs(next))
-
-          return Type.extend(cellType, {
-            columnSize: cellTypes.length
-          });
-        };
-
-        return Type.runFunctor(expr, columnFunctor, ...cellTypes);
-      }
+      return Type.buildListLike(cellTypes)
     }
     case 'function-call': {
       const fName = getIdentifierString(expr.args[0]);
@@ -110,90 +103,56 @@ export const inferExpression = (ctx: Context, expr: AST.Expression): Type => {
       const functionDefinition = ctx.functionDefinitions.get(fName);
 
       if (functionDefinition != null) {
-        const functionType = inferFunction(
-          ctx,
-          functionDefinition,
-          expr,
-          givenArguments
-        );
-
-        return functionType.returns;
+        return inferFunction(ctx, functionDefinition, givenArguments);
       } else {
-        const builtin = builtins[fName];
-
-        if (builtin != null) {
-          if (givenArguments.length !== builtin.argCount) {
-            return Type.Impossible.inNode(expr).withErrorCause(
-              new InferError(
-                `${fName} expects ${builtin.argCount} parameters and was given ${givenArguments.length}`
-              )
-            );
-          }
-
-          return Type.runFunctor(expr, builtin.functor, ...givenArguments);
-        }
-
-        return Type.Impossible.inNode(expr).withErrorCause(
-          new InferError(`Unknown function: ${fName}`)
-        );
+        return callBuiltin(expr, fName, ...givenArguments)
       }
     }
   }
-};
+});
 
 export const inferFunction = (
   ctx: Context,
   func: AST.FunctionDefinition,
-  callExpr?: AST.FunctionCall,
-  givenArguments?: Type[]
-): FunctionType => {
+  givenArguments: Type[]
+): Type => {
   try {
     ctx.stack.push();
 
     const [fName, fArgs, fBody] = func.args;
 
-    if (givenArguments != null && callExpr != null) {
-      if (givenArguments.length !== fArgs.args.length) {
-        const error = new InferError(
-          'Wrong number of arguments applied to ' +
-            getIdentifierString(fName) +
-            ' (expected ' +
-            String(fArgs.args.length) +
-            ')'
-        );
+    if (givenArguments.length !== fArgs.args.length) {
+      const error = new InferError(
+        'Wrong number of arguments applied to ' +
+          getIdentifierString(fName) +
+          ' (expected ' +
+          String(fArgs.args.length) +
+          ')'
+      );
 
-        return {
-          returns: Type.Impossible.withErrorCause(error).inNode(callExpr),
-        };
-      }
+      return Type.Impossible.withErrorCause(error);
     }
 
-    fArgs.args.forEach((argDef, i) => {
-      const type = givenArguments != null ? givenArguments[i] : new Type();
-
-      ctx.stack.set(getIdentifierString(argDef), type);
-    });
-
-    const statementTypes = fBody.args.map((statement) => {
-      return inferStatement(ctx, statement);
-    });
-
-    const returns = statementTypes[statementTypes.length - 1];
-
-    if (!(returns instanceof Type)) {
-      throw new Error('panic: function did not return');
+    for (const [argDef, arg] of zip(fArgs.args, givenArguments)) {
+      ctx.stack.set(getIdentifierString(argDef), arg)
     }
 
-    return { returns };
+    let returned
+
+    for (const statement of fBody.args) {
+      returned = inferStatement(ctx, statement)
+    }
+
+    return getDefined(returned, 'panic: function did not return')
   } finally {
     ctx.stack.pop();
   }
 };
 
-export const inferStatement = (
+export const inferStatement = withPropagation((
   /* Mutable! */ ctx: Context,
   statement: AST.Statement
-): Type | TableType | FunctionType => {
+): Type => {
   switch (statement.type) {
     case 'assign': {
       const [nName, nValue] = statement.args;
@@ -203,11 +162,10 @@ export const inferStatement = (
     }
     case 'function-definition': {
       const fName = getIdentifierString(statement.args[0]);
-      const type = inferFunction(ctx, statement);
 
       ctx.functionDefinitions.set(fName, statement);
-      ctx.functions.set(fName, type);
-      return type;
+
+      return Type.Impossible.withErrorCause('Functions are not types')
     }
     case 'table-definition': {
       const tName = getIdentifierString(statement.args[0]);
@@ -216,7 +174,8 @@ export const inferStatement = (
       ctx.inTable = true;
 
       const tableType = ctx.stack.withPush(() => {
-        const columnDefs: Map<string, Type> = new Map();
+        const columnDefs = [];
+        const columnNames = []
 
         for (let i = 0; i + 1 < table.args.length; i += 2) {
           const name = getIdentifierString(table.args[i] as AST.ColDef);
@@ -226,36 +185,42 @@ export const inferStatement = (
           );
 
           ctx.stack.set(name, type);
-          columnDefs.set(name, type);
+
+          columnDefs.push(type);
+          columnNames.push(name);
         }
 
-        return new TableType(columnDefs);
+        return Type.buildTuple(columnDefs, columnNames);
       });
       ctx.inTable = false;
 
-      const unified =
-        findBadColumn(tableType) ?? unifyColumnSizes(statement, tableType);
-      ctx.tables.set(tName, unified);
-      return unified;
+      if (tableType.errorCause != null) {
+        return tableType
+      } else {
+        const unified =
+          findBadColumn(tableType) ?? unifyColumnSizes(statement, tableType);
+        ctx.tables.set(tName, unified);
+        return unified;
+      }
     }
     default: {
       return inferExpression(ctx, statement);
     }
   }
-};
+});
+
 
 interface InferProgramResult {
   variables: Map<string, Type>;
-  functions: Map<string, FunctionType>;
-  tables: Map<string, TableType | Type>;
-  blockReturns: Array<Type | TableType | FunctionType>;
+  tables: Map<string, Type>;
+  blockReturns: Array<Type>;
 }
 
 export const inferProgram = (
   program: AST.Block[],
   ctx = makeContext()
 ): InferProgramResult => {
-  const blockReturns: Array<Type | TableType | FunctionType> = [];
+  const blockReturns: Array<Type> = [];
 
   for (const block of program) {
     if (block.args.length === 0) {
@@ -274,7 +239,6 @@ export const inferProgram = (
   return {
     variables: ctx.stack.top,
     tables: ctx.tables,
-    functions: ctx.functions,
     blockReturns,
   };
 };
@@ -283,7 +247,7 @@ export const inferTargetStatement = (
   program: AST.Block[],
   [blockId, statementOffset]: [blockId: number, statementOffset: number],
   ctx = makeContext()
-): Type | TableType => {
+): Type => {
   for (let blockIndex = 0; blockIndex < program.length; blockIndex++) {
     const block = program[blockIndex];
 
@@ -296,8 +260,6 @@ export const inferTargetStatement = (
 
       if (blockIndex === blockId && statementOffset === statementIndex) {
         if (type instanceof Type) {
-          return type;
-        } else if (type instanceof TableType) {
           return type;
         } else {
           throw new Error('panic: trying to infer the type of a function');

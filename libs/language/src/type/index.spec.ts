@@ -1,7 +1,8 @@
 import { produce } from 'immer';
 import { c, l } from '../utils';
 import { InferError } from './InferError';
-import { Type, TableType, inverseExponent } from './index';
+import { inverseExponent, setExponent } from './units'
+import { Type } from './index';
 
 const testNode = c('node 1', l(1));
 const nilPos = {
@@ -36,18 +37,24 @@ const dollar: AST.Unit = {
 };
 
 it('Can assert type equivalence and pass on this information', () => {
-  const type = new Type('string');
+  const type = Type.buildScalar('string');
 
-  expect(type.hasType('string')).toEqual(type);
+  expect(type.isScalar('string')).toEqual(type);
   expect(type.sameAs(type)).toEqual(type);
 });
 
-it("Can be made to represent any ol' type", () => {
-  const anyType = new Type();
+it('can be unified with sameAs', () => {
+  const sameAsItself = (t: Type) => {
+    expect(t.sameAs(t)).toEqual(t)
+  }
 
-  expect(anyType.hasType('string')).toEqual(Type.String);
-  expect(anyType.hasType('number')).toEqual(Type.Number);
-});
+  sameAsItself(Type.Number)
+  sameAsItself(Type.String)
+  sameAsItself(Type.build({ type: 'number', unit: [meter] }))
+  sameAsItself(Type.build({ type: 'number', unit: [second, meter] }))
+  sameAsItself(Type.buildColumn(Type.Number, 6))
+  sameAsItself(Type.buildColumn(Type.buildTuple([Type.Number, Type.String]), 6))
+})
 
 describe('Type.combine', () => {
   it('returns the last type', () => {
@@ -55,136 +62,92 @@ describe('Type.combine', () => {
   });
 
   it('returns any error in the args', () => {
-    const badType = Type.Impossible.withErrorCause(new InferError(''));
+    const badType = Type.Impossible.withErrorCause((''));
     expect(Type.combine(Type.Number, badType)).toEqual(badType);
+    expect(Type.combine(badType, Type.Number)).toEqual(badType);
   });
 
-  it('panics when called with zero arguments', () => {
+  it('panicks when called with zero arguments', () => {
     expect(() => Type.combine()).toThrow();
   });
 });
 
-describe('Columns', () => {
-  it('supports column types', () => {
-    const columnType = Type.build({
-      type: 'number',
-      columnSize: 42,
-      unit: [dollar],
-    });
+describe('new columns and tuples', () => {
+  it('can get cardinality', () => {
+    expect(Type.Number.cardinality).toEqual(1)
 
-    expect(columnType).toMatchObject({
-      possibleTypes: ['number'],
-      unit: [dollar],
-      columnSize: 42,
-    });
+    expect(Type.buildColumn(Type.buildColumn(Type.Number, 2), 2).cardinality).toEqual(3)
 
-    const normalType = new Type('string');
-    expect(normalType.columnSize).toEqual(null);
-  });
+    expect(Type.buildColumn(Type.buildColumn(Type.buildDate('month'), 9), 9).cardinality).toEqual(3)
 
-  it.skip('can combine column types', () => {
-    // TODO what to do with units?
-    const columnType = Type.build({ type: 'number', columnSize: 42 });
+    expect(Type.buildColumn(Type.buildColumn(Type.build({ type: 'number', rangeness: true }), 9), 9).cardinality).toEqual(3)
 
-    expect(columnType.sameAs(columnType)).toEqual(columnType);
-    expect(columnType.hasType('number')).toEqual(columnType);
-    expect(columnType.withUnit([meter])).toMatchObject({
-      errorCause: null,
-      unit: [meter],
-    });
-    expect(columnType.multiplyUnit([meter, second])).toMatchObject({
-      errorCause: null,
-      unit: [meter, second],
-    });
-  });
+    expect(Type.buildTuple([Type.Number, Type.buildColumn(Type.Number, 6)]).cardinality).toEqual(3)
+  })
 
-  it('can propagate the columnness', () => {
-    const columnType = Type.build({ type: 'number', columnSize: 42 });
-    expect(columnType.sameColumnSizeAs(Type.Number)).toEqual(columnType);
+  it('can be built with Type.buildListLike', () => {
+    expect(Type.buildListLike([Type.Number])).toEqual(Type.buildColumn(Type.Number, 1))
 
-    expect(Type.Number.sameColumnSizeAs(columnType)).toEqual(columnType);
-    expect(
-      Type.Number.sameColumnSizeAs(
-        Type.build({ type: 'number', unit: [meter] })
-      )
-    ).toEqual(Type.Number);
-  });
+    expect(Type.buildListLike([Type.Number, Type.String])).toEqual(Type.buildTuple([Type.Number, Type.String]))
 
-  it('fails to combine with other sizes of column', () => {
-    const columnType = Type.build({ type: 'number', columnSize: 42 });
-    const otherSizedColumnType = Type.build({ type: 'number', columnSize: 10 });
+    expect(Type.buildListLike([Type.buildColumn(Type.Number, 1), Type.String])).toEqual(Type.buildTuple([Type.buildColumn(Type.Number, 1), Type.String]))
+  })
 
-    expect(columnType.sameColumnSizeAs(otherSizedColumnType)).toMatchObject({
-      errorCause: new InferError('Incompatible column sizes: 42 and 10'),
-    });
-  });
+  it('can be stringified', () => {
+    const table = Type.buildTuple([
+      Type.build({ type: 'number', unit: [meter] }),
+      Type.build({ type: 'string'})
+    ], [
+      'Col1',
+      'Col2'
+    ])
 
-  it('non-columns are coerced to columns', () => {
-    const nonColumnType = Type.Number;
-    const columnType = Type.build({ type: 'number', columnSize: 42 });
+    expect(table.toString()).toEqual('[ Col1 = meter, Col2 = <string> ]');
 
-    expect(columnType.sameAs(nonColumnType)).toEqual(columnType);
-    expect(nonColumnType.sameAs(columnType)).toEqual(columnType);
-  });
+    const col = Type.buildColumn(Type.String, 4)
+    expect(col.toString()).toEqual('<string> x 4')
 
-  it('can check columnness', () => {
-    const columnType = Type.build({ type: 'number', columnSize: 42 });
-    const nonColumnType = Type.Number;
-
-    expect(columnType.isColumn(42)).toEqual(columnType);
-    expect(nonColumnType.withColumnSize(42)).toEqual(columnType);
-    expect(nonColumnType.isNotColumn()).toEqual(nonColumnType);
-
-    // Errors
-    expect(columnType.isColumn(100)).toMatchObject({
-      errorCause: new InferError('Incompatible column sizes: 42 and 100'),
-    });
-    expect(columnType.isNotColumn()).toMatchObject({
-      errorCause: new InferError('Unexpected column'),
-    });
-  });
-});
+    const nestedCol = Type.buildColumn(Type.buildColumn(Type.String, 4), 6)
+    expect(nestedCol.toString()).toEqual('<string> x 4 x 6')
+  })
+})
 
 describe('Impossible types', () => {
   it('returns an impossible type and remembers causality', () => {
-    const type = new Type('string');
+    const type = Type.buildScalar('string');
 
-    expect(type.hasType('boolean')).toEqual(
-      Type.Impossible.withErrorCause(
-        new InferError('Mismatched types: string and boolean')
-      )
+    expect(type.isScalar('boolean')).toEqual(
+      Type.Impossible.withErrorCause('Expected boolean')
     );
 
-    const differentType = new Type('number');
+    const differentType = Type.buildScalar('number');
     expect(type.sameAs(differentType)).toEqual(
-      Type.Impossible.withErrorCause(
-        new InferError('Mismatched types: string and number')
-      )
+      Type.Impossible.withErrorCause('Expected number')
     );
   });
 
   it('propagates impossibility', () => {
-    const imp = Type.Impossible.withErrorCause(new InferError('imp 1'));
-    const imp2 = Type.Impossible.withErrorCause(new InferError('imp 2'));
+    const imp = Type.Impossible.withErrorCause(('imp 1'));
+    const imp2 = Type.Impossible.withErrorCause(('imp 2'));
 
     expect(imp.sameAs(imp2)).toEqual(imp);
     expect(Type.Number.sameAs(imp2)).toEqual(imp2);
 
-    expect(imp.hasType('string')).toEqual(imp);
+    expect(imp.isScalar('string')).toEqual(imp);
 
     expect(imp.withUnit([meter])).toEqual(imp);
     expect(imp.multiplyUnit([meter])).toEqual(imp);
     expect(imp.divideUnit([meter])).toEqual(imp);
 
     expect(
-      imp.withErrorCause(new InferError('ignored different error'))
+      imp.withErrorCause('ignored different error')
     ).toEqual(imp);
   });
 });
 
 describe('Type.runFunctor', () => {
   it('replicates types in arguments which are already impossible, and does not call the function', () => {
-    const impossible = Type.Impossible.withErrorCause(new InferError(''));
+    const impossible = Type.Impossible.withErrorCause((''));
     const functor = jest.fn();
 
     expect(Type.runFunctor(testNode, functor, impossible)).toEqual(impossible);
@@ -193,10 +156,10 @@ describe('Type.runFunctor', () => {
 
   it('calls the functor and assigns an error cause and source node to it if there is an error', () => {
     const type = Type.String;
-    const functor = (a: Type) => a.withErrorCause(new InferError(''));
+    const functor = (a: Type) => a.withErrorCause((''));
 
     expect(Type.runFunctor(testNode, functor, type)).toEqual(
-      type.withErrorCause(new InferError('')).inNode(testNode)
+      type.withErrorCause(('')).inNode(testNode)
     );
   });
 
@@ -204,11 +167,6 @@ describe('Type.runFunctor', () => {
     expect(Type.runFunctor(testNode, () => Type.Boolean)).toEqual(Type.Boolean);
   });
 });
-
-const setExponent = (u: AST.Unit, exp: number) =>
-  produce(u, (u) => {
-    u.exp = exp;
-  });
 
 const invMeter: AST.Unit = inverseExponent(meter);
 const invSecond: AST.Unit = inverseExponent(second);
@@ -336,17 +294,6 @@ describe('multiplyUnit', () => {
   });
 });
 
-it('has a TableType', () => {
-  const table = new TableType(
-    new Map([
-      ['Col1', Type.build({ type: 'number', columnSize: 3, unit: [meter] })],
-      ['Col2', Type.build({ type: 'string', columnSize: 3 })],
-    ])
-  );
-
-  expect(table.toString()).toEqual('table { Col1 = meter, Col2 = <string> }');
-});
-
 describe('ranges', () => {
   it('types can check and assign rangeness', () => {
     const ranged = Type.Number.isRange();
@@ -359,16 +306,16 @@ describe('ranges', () => {
     expect(deranged.errorCause).toEqual(new InferError('Unexpected range'));
   });
 
-  it('rangeness is unified with sameAs', () => {
+  it('rangeness is checked with sameAs', () => {
     expect(
       Type.build({ type: 'number', rangeness: true }).sameAs(Type.Number)
         .errorCause
-    ).toEqual(new InferError('Expected range'));
+    ).toEqual(new InferError('Unexpected scalar'));
 
     expect(
       Type.Number.sameAs(Type.build({ type: 'number', rangeness: true }))
         .errorCause
-    ).toEqual(new InferError('Unexpected range'));
+    ).toEqual(new InferError('Expected scalar'));
   });
 });
 
@@ -380,19 +327,19 @@ describe('dates', () => {
     expect(month.isDate('month')).toEqual(month);
 
     expect(month.isDate('day')).toEqual(
-      month.withErrorCause(new InferError('Expected date with day specificity'))
+      month.withErrorCause(('Expected date with day specificity'))
     );
 
     expect(day.isDate('month')).toEqual(
-      day.withErrorCause(new InferError('Expected date with month specificity'))
+      day.withErrorCause(('Expected date with month specificity'))
     );
 
     expect(Type.Number.isDate('month')).toEqual(
-      Type.Number.withErrorCause(new InferError('Expected date'))
+      Type.Number.withErrorCause(('Expected date'))
     );
 
     expect(day.isNotDate()).toEqual(
-      day.withErrorCause(new InferError('Unexpected date'))
+      day.withErrorCause(('Unexpected date'))
     );
   });
 
@@ -407,16 +354,16 @@ describe('dates', () => {
 
     // Differing dateness
     expect(Type.Number.sameDatenessAs(day)).toEqual(
-      Type.Number.withErrorCause(new InferError('Expected date'))
+      Type.Number.withErrorCause(('Expected date'))
     );
 
     expect(day.sameDatenessAs(Type.Number)).toEqual(
-      day.withErrorCause(new InferError('Unexpected date'))
+      day.withErrorCause(('Unexpected date'))
     );
 
     // Differing specificity
     expect(month.sameDatenessAs(day)).toEqual(
-      month.withErrorCause(new InferError('Expected date with day specificity'))
+      month.withErrorCause(('Expected date with day specificity'))
     );
 
     expect(month.sameDatenessAs(day)).toEqual(month.sameAs(day));

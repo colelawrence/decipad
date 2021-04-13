@@ -1,6 +1,6 @@
-import { Type, TableType } from './type';
+import { Type } from './type';
 import { cleanDate } from './date';
-import { runCode } from './testUtils';
+import { runCode, objectToTable } from './testUtils';
 
 // https://observablehq.com/d/0c4bca59558d2985
 describe('use of funds document', () => {
@@ -36,17 +36,13 @@ describe('use of funds document', () => {
       }
     `)
     ).toMatchObject({
-      type: new TableType(
-        new Map(
-          Object.entries({
-            Months: Type.extend(Type.buildDate('month'), { columnSize: 12 }),
-            Exec: Type.build({ type: 'number', columnSize: 12 }),
-            Product: Type.build({ type: 'number', columnSize: 12 }),
-            Tech: Type.build({ type: 'number', columnSize: 12 }),
-            FrontEnd: Type.build({ type: 'number', columnSize: 12 }),
-          })
-        )
-      ),
+      type: objectToTable({
+        Months: Type.extend(Type.buildDate('month'), { columnSize: 12 }),
+        Exec: Type.build({ type: 'number', columnSize: 12 }),
+        Product: Type.build({ type: 'number', columnSize: 12 }),
+        Tech: Type.build({ type: 'number', columnSize: 12 }),
+        FrontEnd: Type.build({ type: 'number', columnSize: 12 }),
+      }),
       value: [
         new Map([
           ['Months', months],
@@ -86,20 +82,11 @@ describe('use of funds document', () => {
 
       Months = [2021-01, 2021-02, 2021-03, 2021-04, 2021-05, 2021-06, 2021-07, 2021-08, 2021-09, 2021-10, 2021-11, 2021-12]
 
-      <syntax ????>
-      StaffCosts = per Salaries: [
+      StaffCosts = given Salaries: [
         Salaries.Title,
         Salaries.Salary,
-        per Months: costtobusiness Months YearSalary StartDate true
+        given Months: costtobusiness Months (Salaries.Salary / 12) StartDate true
       ]
-      </syntax ????>
-
-      <syntax ????>
-      StaffCosts = {
-        Person = Salaries
-        MonthSalary = costtobusiness Months YearSalary StartDate true
-      }
-      </syntax ????>
     `)
     ).toMatchObject({
       value: '????',

@@ -206,6 +206,7 @@ factor       -> "-" _ expression                        {%
                                                         }
                                                         %}
 
+expression   -> given                                   {% id %}
 expression   -> conditional                             {% id %}
 expression   -> functionCall                            {% id %}
 factor       -> term _ "." _ propertyAccessor           {%

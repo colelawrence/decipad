@@ -1,6 +1,5 @@
 import { createRuntime } from '.';
 import { createEditor } from 'slate';
-import { Type } from '../type';
 
 const actorId = 'actor1';
 const docId = 'docid';
@@ -136,7 +135,7 @@ it('runs code', async () => {
   expect(computeResult.typeInferErrors).toHaveLength(0);
 
   const result = await context.resultAt('code block 1', 3);
-  expect(result.type.possibleTypes).toEqual(['number']);
+  expect(result.type.type).toEqual('number');
   expect(result.type.unit).toMatchObject([
     {
       exp: 1,
@@ -148,7 +147,7 @@ it('runs code', async () => {
   expect(result.value).toEqual([30]);
 
   const result2 = await context.resultAt('code block 1', 2);
-  expect(result2.type.possibleTypes).toEqual(['number']);
+  expect(result2.type.type).toEqual('number');
   expect(result2.type.unit).toMatchObject([
     {
       exp: 1,
