@@ -1,6 +1,6 @@
 import { Type } from './type';
 import { cleanDate } from './date';
-import { runCode, objectToTable } from './testUtils';
+import { runCode, objectToTupleType, objectToTupleValue } from './testUtils';
 
 // https://observablehq.com/d/0c4bca59558d2985
 describe('use of funds document', () => {
@@ -36,7 +36,7 @@ describe('use of funds document', () => {
       }
     `)
     ).toMatchObject({
-      type: objectToTable({
+      type: objectToTupleType({
         Months: Type.extend(Type.buildDate('month'), { columnSize: 12 }),
         Exec: Type.build({ type: 'number', columnSize: 12 }),
         Product: Type.build({ type: 'number', columnSize: 12 }),
@@ -44,19 +44,13 @@ describe('use of funds document', () => {
         FrontEnd: Type.build({ type: 'number', columnSize: 12 }),
       }),
       value: [
-        new Map([
-          ['Months', months],
-          ['Exec', salaryWithBonus],
-          [
-            'Product',
-            salaryWithBonus.map((salary, i) => (i >= 1 ? salary : 0)),
-          ],
-          ['Tech', usualSalary.map((salary, i) => (i >= 2 ? salary : 0))],
-          [
-            'FrontEnd',
-            salaryWithBonus.map((salary, i) => (i >= 2 ? salary : 0)),
-          ],
-        ]),
+        objectToTupleValue({
+          Months: months,
+          Exec: salaryWithBonus,
+          Product: salaryWithBonus.map((salary, i) => (i >= 1 ? salary : 0)),
+          Tech: usualSalary.map((salary, i) => (i >= 2 ? salary : 0)),
+          FrontEnd: salaryWithBonus.map((salary, i) => (i >= 2 ? salary : 0)),
+        }),
       ],
     });
   });

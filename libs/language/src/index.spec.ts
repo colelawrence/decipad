@@ -1,7 +1,7 @@
 // E2e tests
 
 import { Type } from './type';
-import { runCode, objectToTable } from './testUtils';
+import { runCode, objectToTupleType, objectToTupleValue } from './testUtils';
 
 describe('basic code', () => {
   it('runs basic operations', async () => {
@@ -134,15 +134,15 @@ describe('Tables', () => {
     expect(
       await runCode(`Table = { Column1 = [1, 2, 3], Column2 = Column1 * 2 }`)
     ).toMatchObject({
-      type: objectToTable({
-        'Column1': Type.build({ type: 'number', columnSize: 3 }),
-        'Column2': Type.build({ type: 'number', columnSize: 3 }),
+      type: objectToTupleType({
+        Column1: Type.build({ type: 'number', columnSize: 3 }),
+        Column2: Type.build({ type: 'number', columnSize: 3 }),
       }),
       value: [
-        new Map([
-          ['Column1', [1, 2, 3]],
-          ['Column2', [2, 4, 6]],
-        ]),
+        objectToTupleValue({
+          Column1: [1, 2, 3],
+          Column2: [2, 4, 6],
+        }),
       ],
     });
   });
@@ -156,17 +156,15 @@ describe('Tables', () => {
         }
       `)
     ).toMatchObject({
-      type: objectToTable(
-                {
-                    'Column1': Type.build({ type: 'number', columnSize: 3 }),
-                    'Column2': Type.build({ type: 'number', columnSize: 3 }),
-                }
-      ),
+      type: objectToTupleType({
+        Column1: Type.build({ type: 'number', columnSize: 3 }),
+        Column2: Type.build({ type: 'number', columnSize: 3 }),
+      }),
       value: [
-        new Map([
-          ['Column1', [1, 1, 1]],
-          ['Column2', [1, 2, 3]],
-        ]),
+        objectToTupleValue({
+          Column1: [1, 1, 1],
+          Column2: [1, 2, 3],
+        }),
       ],
     });
   });
@@ -181,17 +179,17 @@ describe('Tables', () => {
         }
       `)
     ).toMatchObject({
-      type: objectToTable({
-          'Column1': Type.build({ type: 'number', columnSize: 3 }),
-          'Column2': Type.build({ type: 'number', columnSize: 3 }),
-          'Column3': Type.build({ type: 'boolean', columnSize: 3 }),
+      type: objectToTupleType({
+        Column1: Type.build({ type: 'number', columnSize: 3 }),
+        Column2: Type.build({ type: 'number', columnSize: 3 }),
+        Column3: Type.build({ type: 'boolean', columnSize: 3 }),
       }),
       value: [
-        new Map([
-          ['Column1', [1, 2, 3]],
-          ['Column2', [0.5, 1, 1.5]],
-          ['Column3', [false, false, true]],
-        ]),
+        objectToTupleValue({
+          Column1: [1, 2, 3],
+          Column2: [0.5, 1, 1.5],
+          Column3: [false, false, true],
+        }),
       ],
     });
   });
@@ -239,7 +237,7 @@ describe('Units', () => {
             unit: 'second',
           },
         ],
-      }
+      },
     });
   });
 
@@ -305,17 +303,14 @@ describe('Dates', () => {
       `)
     ).toMatchObject({
       value: [
-        new Map([
-          [
-            'Months',
-            [
-              [Date.UTC(2020, 8), Date.UTC(2020, 9) - 1],
-              [Date.UTC(2020, 9), Date.UTC(2020, 10) - 1],
-              [Date.UTC(2020, 10), Date.UTC(2020, 11) - 1],
-            ],
+        objectToTupleValue({
+          Months: [
+            [Date.UTC(2020, 8), Date.UTC(2020, 9) - 1],
+            [Date.UTC(2020, 9), Date.UTC(2020, 10) - 1],
+            [Date.UTC(2020, 10), Date.UTC(2020, 11) - 1],
           ],
-          ['Days', [true, false, false]],
-        ]),
+          Days: [true, false, false],
+        }),
       ],
     });
   });

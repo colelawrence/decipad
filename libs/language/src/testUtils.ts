@@ -26,7 +26,7 @@ export const runCode = async (source: string) => {
   return await computer.resultAt('block-id', lineCount);
 };
 
-export const objectToTable = (obj: Record<string, Type>) => {
+export const objectToTupleType = (obj: Record<string, Type>) => {
   const names = [];
   const values = [];
 
@@ -37,3 +37,6 @@ export const objectToTable = (obj: Record<string, Type>) => {
 
   return Type.buildTuple(values, names);
 };
+
+export const objectToTupleValue = <V extends unknown>(obj: Record<string, V>) =>
+  new Map(Object.entries(obj));
