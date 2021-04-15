@@ -1,11 +1,7 @@
 module.exports = {
+  preset: '../../jest.preset.js',
   rootDir: '.',
   roots: ['<rootDir>'],
-  testRegex: '.spec.[jt]s$',
-  transform: {
-    '^.+\\.[jt]s$': 'ts-jest',
-  },
-  testEnvironment: 'jsdom',
   projects: ['<rootDir>'],
   coverageDirectory: './coverage',
   moduleFileExtensions: ['js', 'ts', 'tsx', 'json'],
@@ -21,12 +17,6 @@ module.exports = {
       functions: 100,
       lines: 100,
       statements: 100,
-    },
-  },
-  globals: {
-    'ts-jest': {
-      diagnostics: false,
-      isolatedModules: true,
     },
   },
 };
