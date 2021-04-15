@@ -146,24 +146,19 @@ describe('dates', () => {
 });
 
 it('can evaluate tables', async () => {
-  const testGetTable = async (table: AST.TableDefinition) => {
-    const out = (await runOne(table)) as Interpreter.ResultTable;
-    return Object.fromEntries(out.entries());
-  };
-
   expect(
-    await testGetTable(
+    await runOne(
       tableDef('Table', {
         Col1: col(1, 2, 3),
         Col2: l(2),
         Col3: c('>', n('ref', 'Col1'), n('ref', 'Col2')),
       })
     )
-  ).toEqual({
-    Col1: [1, 2, 3],
-    Col2: [2, 2, 2],
-    Col3: [false, false, true],
-  });
+  ).toEqual([
+    [1, 2, 3],
+    [2, 2, 2],
+    [false, false, true],
+  ]);
 
   /*
   TODO what's the design here?
@@ -181,14 +176,34 @@ it('can evaluate tables', async () => {
   */
 
   expect(
-    await testGetTable(
+    await runOne(
       tableDef('Table', {
         Col1: col(1, 2, 3),
         Col2: c('*', n('ref', 'Col1'), l(2)),
       })
     )
-  ).toEqual({
-    Col1: [1, 2, 3],
-    Col2: [2, 4, 6],
-  });
+  ).toEqual([
+    [1, 2, 3],
+    [2, 4, 6],
+  ]);
+});
+
+it('Can create 2D columns', async () => {
+  expect(
+    await runOne(col(col(l(1), l(2), l(3)), col(l(4), l(5), l(6))))
+  ).toEqual([
+    [1, 2, 3],
+    [4, 5, 6],
+  ]);
+});
+
+it('Can create columns with disparate types / dims', async () => {
+  expect(
+    await runOne(
+      col(col(l(1), l(2), l(3)), col(l('s'), l(5), l(false), col(l(1))))
+    )
+  ).toEqual([
+    [1, 2, 3],
+    ['s', 5, false, [1]],
+  ]);
 });

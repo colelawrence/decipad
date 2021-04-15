@@ -1,8 +1,4 @@
-import {
-  InferError,
-  Type,
-  scalarTypeNames,
-} from '../type';
+import { InferError, Type, scalarTypeNames } from '../type';
 import { getDefined, zip, getIdentifierString, getOfType } from '../utils';
 import { DateSpecificity } from '../date';
 
@@ -10,16 +6,17 @@ import { callBuiltin } from './callBuiltin';
 import { Context, makeContext } from './context';
 import { findBadColumn, unifyColumnSizes } from './table';
 
-const withPropagation = <T extends AST.Node>(fn: (ctx: Context, thing: T) => Type) =>
-  (ctx: Context, thing: T): Type => {
-    const type = fn(ctx, thing)
+const withErrorSource = <T extends AST.Node>(
+  fn: (ctx: Context, thing: T) => Type
+) => (ctx: Context, thing: T): Type => {
+  const type = fn(ctx, thing);
 
-    if (type.errorCause != null && type.node == null) {
-      return type.inNode(thing)
-    } else {
-      return type
-    }
+  if (type.errorCause != null && type.node == null) {
+    return type.inNode(thing);
+  } else {
+    return type;
   }
+};
 
 /*
  Walk depth-first into an expanded AST.Expression, collecting the type of things beneath and checking it against the current iteration's constraints.
@@ -30,86 +27,90 @@ const withPropagation = <T extends AST.Node>(fn: (ctx: Context, thing: T) => Typ
 
  AST.Assign is special-cased by looking at its expression and returning just that
  */
-export const inferExpression = withPropagation((ctx: Context, expr: AST.Expression): Type => {
-  switch (expr.type) {
-    case 'ref': {
-      const name = getIdentifierString(expr);
+export const inferExpression = withErrorSource(
+  (ctx: Context, expr: AST.Expression): Type => {
+    switch (expr.type) {
+      case 'ref': {
+        const name = getIdentifierString(expr);
 
-      if (ctx.stack.has(name)) {
-        return ctx.stack.get(name);
-      } else {
-        const error = new InferError('Undefined variable ' + name);
-
-        return Type.Impossible.withErrorCause(error);
-      }
-    }
-    case 'literal': {
-      const [litType, , litUnit] = expr.args
-
-      if (!scalarTypeNames.includes(litType)) {
-        throw new Error('panic: Unknown literal type ' + litType);
-      }
-
-      return Type.build({ type: litType, unit: litUnit });
-    }
-    case 'range': {
-      const [start, end] = expr.args.map((expr) => inferExpression(ctx, expr));
-
-      const rangeFunctor = (start: Type, end: Type) => {
-        return Type.combine(
-          start.isScalar('number').sameAs(end),
-          Type.build({
-            type: 'number',
-            unit: start.unit,
-            rangeness: true,
-          })
-        );
-      };
-
-      return Type.runFunctor(expr, rangeFunctor, start, end);
-    }
-    case 'date': {
-      let lowestSegment: DateSpecificity = 'year';
-
-      for (let i = 0; i + 1 < expr.args.length; i += 2) {
-        const segment = expr.args[i] as string;
-
-        if (segment === 'hour') {
-          lowestSegment = 'time';
-          break;
+        if (ctx.stack.has(name)) {
+          return ctx.stack.get(name);
         } else {
-          lowestSegment = segment as DateSpecificity;
+          const error = new InferError('Undefined variable ' + name);
+
+          return Type.Impossible.withErrorCause(error);
         }
       }
+      case 'literal': {
+        const [litType, , litUnit] = expr.args;
 
-      return Type.buildDate(lowestSegment);
-    }
-    case 'column': {
-      const cellTypes = expr.args[0].map((a) => inferExpression(ctx, a));
+        if (!scalarTypeNames.includes(litType)) {
+          throw new Error('panic: Unknown literal type ' + litType);
+        }
 
-      return Type.buildListLike(cellTypes)
-    }
-    case 'function-call': {
-      const fName = getIdentifierString(expr.args[0]);
-      const fArgs = getOfType('argument-list', expr.args[1]).args;
-      const givenArguments: Type[] = fArgs.map((arg) =>
-        inferExpression(ctx, arg)
-      );
-
-      if (ctx.inTable && fName === 'previous') {
-        return givenArguments[0];
+        return Type.build({ type: litType, unit: litUnit });
       }
+      case 'range': {
+        const [start, end] = expr.args.map((expr) =>
+          inferExpression(ctx, expr)
+        );
 
-      const functionDefinition = ctx.functionDefinitions.get(fName);
+        const rangeFunctor = (start: Type, end: Type) => {
+          return Type.combine(
+            start.isScalar('number').sameAs(end),
+            Type.build({
+              type: 'number',
+              unit: start.unit,
+              rangeness: true,
+            })
+          );
+        };
 
-      if (functionDefinition != null) {
-        return inferFunction(ctx, functionDefinition, givenArguments);
-      } else {
-        return callBuiltin(expr, fName, ...givenArguments)
+        return Type.runFunctor(expr, rangeFunctor, start, end);
+      }
+      case 'date': {
+        let lowestSegment: DateSpecificity = 'year';
+
+        for (let i = 0; i + 1 < expr.args.length; i += 2) {
+          const segment = expr.args[i] as string;
+
+          if (segment === 'hour') {
+            lowestSegment = 'time';
+            break;
+          } else {
+            lowestSegment = segment as DateSpecificity;
+          }
+        }
+
+        return Type.buildDate(lowestSegment);
+      }
+      case 'column': {
+        const cellTypes = expr.args[0].map((a) => inferExpression(ctx, a));
+
+        return Type.buildListLike(cellTypes);
+      }
+      case 'function-call': {
+        const fName = getIdentifierString(expr.args[0]);
+        const fArgs = getOfType('argument-list', expr.args[1]).args;
+        const givenArguments: Type[] = fArgs.map((arg) =>
+          inferExpression(ctx, arg)
+        );
+
+        if (ctx.inTable && fName === 'previous') {
+          return givenArguments[0];
+        }
+
+        const functionDefinition = ctx.functionDefinitions.get(fName);
+
+        if (functionDefinition != null) {
+          return inferFunction(ctx, functionDefinition, givenArguments);
+        } else {
+          return callBuiltin(expr, fName, ...givenArguments);
+        }
       }
     }
   }
-});
+);
 
 export const inferFunction = (
   ctx: Context,
@@ -134,81 +135,79 @@ export const inferFunction = (
     }
 
     for (const [argDef, arg] of zip(fArgs.args, givenArguments)) {
-      ctx.stack.set(getIdentifierString(argDef), arg)
+      ctx.stack.set(getIdentifierString(argDef), arg);
     }
 
-    let returned
+    let returned;
 
     for (const statement of fBody.args) {
-      returned = inferStatement(ctx, statement)
+      returned = inferStatement(ctx, statement);
     }
 
-    return getDefined(returned, 'panic: function did not return')
+    return getDefined(returned, 'panic: function did not return');
   } finally {
     ctx.stack.pop();
   }
 };
 
-export const inferStatement = withPropagation((
-  /* Mutable! */ ctx: Context,
-  statement: AST.Statement
-): Type => {
-  switch (statement.type) {
-    case 'assign': {
-      const [nName, nValue] = statement.args;
-      const type = inferExpression(ctx, nValue);
-      ctx.stack.set(nName.args[0], type);
-      return type;
-    }
-    case 'function-definition': {
-      const fName = getIdentifierString(statement.args[0]);
+export const inferStatement = withErrorSource(
+  (/* Mutable! */ ctx: Context, statement: AST.Statement): Type => {
+    switch (statement.type) {
+      case 'assign': {
+        const [nName, nValue] = statement.args;
+        const type = inferExpression(ctx, nValue);
+        ctx.stack.set(nName.args[0], type);
+        return type;
+      }
+      case 'function-definition': {
+        const fName = getIdentifierString(statement.args[0]);
 
-      ctx.functionDefinitions.set(fName, statement);
+        ctx.functionDefinitions.set(fName, statement);
 
-      return Type.Impossible.withErrorCause('Functions are not types')
-    }
-    case 'table-definition': {
-      const tName = getIdentifierString(statement.args[0]);
-      const table: AST.TableColumns = statement.args[1];
+        return Type.Impossible.withErrorCause('Functions are not types');
+      }
+      case 'table-definition': {
+        const tName = getIdentifierString(statement.args[0]);
+        const table: AST.TableColumns = statement.args[1];
 
-      ctx.inTable = true;
+        ctx.inTable = true;
 
-      const tableType = ctx.stack.withPush(() => {
-        const columnDefs = [];
-        const columnNames = []
+        const tableType = ctx.stack.withPush(() => {
+          const columnDefs = [];
+          const columnNames = [];
 
-        for (let i = 0; i + 1 < table.args.length; i += 2) {
-          const name = getIdentifierString(table.args[i] as AST.ColDef);
-          const type = inferExpression(
-            ctx,
-            table.args[i + 1] as AST.Expression
-          );
+          for (let i = 0; i + 1 < table.args.length; i += 2) {
+            const name = getIdentifierString(table.args[i] as AST.ColDef);
+            const type = inferExpression(
+              ctx,
+              table.args[i + 1] as AST.Expression
+            );
 
-          ctx.stack.set(name, type);
+            ctx.stack.set(name, type);
 
-          columnDefs.push(type);
-          columnNames.push(name);
+            columnDefs.push(type);
+            columnNames.push(name);
+          }
+
+          return Type.buildTuple(columnDefs, columnNames);
+        });
+        ctx.inTable = false;
+
+        if (tableType.errorCause != null) {
+          return tableType;
+        } else {
+          const unified =
+            findBadColumn(tableType) ?? unifyColumnSizes(statement, tableType);
+          ctx.tables.set(tName, unified);
+          return unified;
         }
-
-        return Type.buildTuple(columnDefs, columnNames);
-      });
-      ctx.inTable = false;
-
-      if (tableType.errorCause != null) {
-        return tableType
-      } else {
-        const unified =
-          findBadColumn(tableType) ?? unifyColumnSizes(statement, tableType);
-        ctx.tables.set(tName, unified);
-        return unified;
+      }
+      default: {
+        return inferExpression(ctx, statement);
       }
     }
-    default: {
-      return inferExpression(ctx, statement);
-    }
   }
-});
-
+);
 
 interface InferProgramResult {
   variables: Map<string, Type>;

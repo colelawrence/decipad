@@ -4,12 +4,15 @@ export interface SimpleValue {
   rowCount: number | null;
 
   withRowCount(rowCount: number): Column;
+
   asScalar(): Scalar;
 
   getData(): Interpreter.OneResult;
 }
 
-export type Value = SimpleValue | Table;
+export type OneDimensional = Scalar | Range | Date;
+
+export type Value = SimpleValue;
 
 export class Scalar implements SimpleValue {
   rowCount = null;
@@ -29,7 +32,7 @@ export class Scalar implements SimpleValue {
     return this;
   }
 
-  getData() {
+  getData(): Interpreter.ResultScalar {
     return this.value;
   }
 }
@@ -92,9 +95,9 @@ export class Range implements SimpleValue {
 
 export class Column implements SimpleValue {
   rangeOf = null;
-  values: (Scalar | Range | Date)[];
+  values: SimpleValue[];
 
-  static fromValues(values: (Scalar | Range | Date)[]): Column {
+  static fromValues(values: SimpleValue[]): Column {
     const column = new Column();
     column.values = values;
     return column;
@@ -135,22 +138,10 @@ export class Column implements SimpleValue {
   }
 }
 
-export class Table {
-  constructor(public columns: Map<string, Column> = new Map()) {}
-
-  getData(): Map<string, (number | boolean)[]> {
-    const out = new Map();
-    for (const [key, value] of this.columns) {
-      out.set(key, value.getData());
-    }
-    return out;
-  }
-}
-
 export const fromJS = (thing: number | number[]): Scalar | Column => {
   if (typeof thing === 'number') {
     return Scalar.fromValue(thing);
   } else {
-    return Column.fromValues(thing.map((t) => fromJS(t).asScalar()));
+    return Column.fromValues(thing.map((t) => fromJS(t)));
   }
 };

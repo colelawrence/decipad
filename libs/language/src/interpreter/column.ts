@@ -1,7 +1,7 @@
-import { walk, getIdentifierString, isExpression, zip } from '../utils';
+import { walk, getIdentifierString, isExpression } from '../utils';
 import { evaluate } from './evaluate';
 import { Realm } from './Realm';
-import { Column, Scalar, Table, SimpleValue } from './Value';
+import { Column, Scalar, SimpleValue } from './Value';
 
 const isRecursiveReference = (expr: AST.Expression) =>
   expr.type === 'function-call' &&
@@ -56,15 +56,10 @@ export const getLargestColumn = (values: SimpleValue[]): number => {
   return Math.max(...sizes);
 };
 
-export const castToLargestRowCount = (values: SimpleValue[]): Column[] => {
+export const castToLargestRowCount = (values: SimpleValue[]): Column => {
   const largestSize = getLargestColumn(values);
 
-  return values.map((value) => value.withRowCount(largestSize));
-};
-
-export const castToColumns = (table: { [col: string]: SimpleValue }): Table => {
-  const colNames = Object.keys(table);
-  const columns = castToLargestRowCount(Object.values(table));
-
-  return new Table(new Map(zip(colNames, columns)));
+  return Column.fromValues(
+    values.map((value) => value.withRowCount(largestSize))
+  );
 };

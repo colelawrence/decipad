@@ -5,7 +5,7 @@ import { getDateFromAstForm } from '../date';
 import { Realm } from './Realm';
 import { Scalar, Range, Date, Column, SimpleValue, Value } from './Value';
 import {
-  castToColumns,
+  castToLargestRowCount,
   getLargestColumn,
   evaluateRecursiveColumn,
 } from './column';
@@ -85,7 +85,7 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
       return Column.fromValues(values as (Scalar | Range)[]);
     }
     case 'table-definition': {
-      const table: Record<string, SimpleValue> = {};
+      const table: SimpleValue[] = [];
       const tableName = getIdentifierString(node.args[0]);
       const columns: AST.TableColumns = node.args[1];
 
@@ -97,16 +97,16 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
           const columnData = evaluateRecursiveColumn(
             realm,
             column as AST.Expression,
-            getLargestColumn(Object.values(table))
+            getLargestColumn(table)
           );
 
           realm.stack.set(colName, columnData);
 
-          table[colName] = columnData;
+          table.push(columnData);
         }
       });
 
-      realm.tables.set(tableName, castToColumns(table));
+      realm.tables.set(tableName, castToLargestRowCount(table));
 
       return Scalar.fromValue(NaN);
     }

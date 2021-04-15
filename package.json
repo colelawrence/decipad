@@ -82,7 +82,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && nx run-many --all --target test && tsc -b ."
+      "pre-commit": "lint-staged && jest --onlyChanged && tsc -b ."
     }
   },
   "lint-staged": {

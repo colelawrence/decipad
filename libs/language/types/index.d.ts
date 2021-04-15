@@ -147,10 +147,10 @@ declare namespace AST {
   // Expansion operator
 
   interface Given {
-    type: 'given'
-    args: [ref: Ref, body: Expression]
-    start: Pos
-    end: Pos
+    type: 'given';
+    args: [ref: Ref, body: Expression];
+    start: Pos;
+    end: Pos;
   }
 
   // Definitions
@@ -218,10 +218,9 @@ declare namespace AST {
 
 declare namespace Interpreter {
   type ResultScalar = number | boolean | string;
-  type ResultColumn = ResultScalar[];
-  type ResultTable = Map<string, ResultColumn>;
+  type ResultColumn = OneResult[];
 
-  type OneResult = ResultScalar | ResultColumn | ResultTable;
+  type OneResult = ResultScalar | ResultColumn;
   type Result = OneResult[];
 }
 

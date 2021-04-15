@@ -1,5 +1,5 @@
 import { Stack } from '../stack';
-import { Scalar, SimpleValue, Table } from './Value';
+import { Scalar, SimpleValue } from './Value';
 
 // The name "realm" comes from V8.
 // It's passed around during interpretation and
@@ -7,7 +7,7 @@ import { Scalar, SimpleValue, Table } from './Value';
 // function names to AST.FunctionDefinition.
 export class Realm {
   stack = new Stack<SimpleValue>();
-  tables = new Map<string, Table>();
+  tables = new Map<string, SimpleValue>();
   functions = new Map<string, AST.FunctionDefinition>();
   previousValue: Scalar | null = null;
 }

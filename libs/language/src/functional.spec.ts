@@ -70,7 +70,7 @@ describe('use of funds document', () => {
       }
 
       costtobusiness = Month Salary StartDate GetsBonus =>
-        if date_gte Month StartDate
+        if dategte Month StartDate
           then Salary + (Salary * 0.2) + (if GetsBonus then Salary * 0.2 else 0)
           else 0
 
