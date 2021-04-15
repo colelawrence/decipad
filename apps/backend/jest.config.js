@@ -1,6 +1,6 @@
 module.exports = {
-  // displayName: 'backend',
-  // preset: '../../jest.preset.js',
+  displayName: 'backend',
+  preset: '../../jest.preset.js',
   // transform: {
   //   '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': '@nrwl/react/plugins/jest',
   //   '^.+\\.[tj]sx?$': 'babel-jest',
