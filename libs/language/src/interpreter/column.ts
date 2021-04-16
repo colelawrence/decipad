@@ -55,11 +55,3 @@ export const getLargestColumn = (values: SimpleValue[]): number => {
 
   return Math.max(...sizes);
 };
-
-export const castToLargestRowCount = (values: SimpleValue[]): Column => {
-  const largestSize = getLargestColumn(values);
-
-  return Column.fromValues(
-    values.map((value) => value.withRowCount(largestSize))
-  );
-};

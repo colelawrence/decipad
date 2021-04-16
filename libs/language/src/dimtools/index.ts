@@ -87,7 +87,7 @@ export const reduceValuesThroughDims = (
   mapFn: (values: Values.Value[]) => Values.Value
 ): Values.Value => {
   function recurse(values: Values.Value[]): Values.Value {
-    const columns = values.filter((t) => t instanceof Values.Column);
+    const columns = values.filter((t) => t.cardinality > 1);
 
     if (columns.length > 0) {
       const colSize = getDefined(columns[0].rowCount);
@@ -107,13 +107,9 @@ export const reduceValuesThroughDims = (
       } else {
         throw new Error('panic');
       }
-    }
-
-    if (values.every((t) => t instanceof Values.Scalar)) {
+    } else {
       return mapFn(values);
     }
-
-    throw new Error('unreachable');
   }
 
   return recurse(values);

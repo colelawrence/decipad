@@ -154,11 +154,7 @@ it('can evaluate tables', async () => {
         Col3: c('>', n('ref', 'Col1'), n('ref', 'Col2')),
       })
     )
-  ).toEqual([
-    [1, 2, 3],
-    [2, 2, 2],
-    [false, false, true],
-  ]);
+  ).toEqual([[1, 2, 3], 2, [false, false, true]]);
 
   /*
   TODO what's the design here?
@@ -188,13 +184,45 @@ it('can evaluate tables', async () => {
   ]);
 });
 
-it('Can create 2D columns', async () => {
-  expect(
-    await runOne(col(col(l(1), l(2), l(3)), col(l(4), l(5), l(6))))
-  ).toEqual([
-    [1, 2, 3],
-    [4, 5, 6],
-  ]);
+describe('higher dimensions', () => {
+  it('Can operate upon 2D columns', async () => {
+    const column = col(col(l(1), l(2), l(3)), col(l(4), l(5), l(6)));
+
+    expect(await runOne(column)).toEqual([
+      [1, 2, 3],
+      [4, 5, 6],
+    ]);
+
+    expect(await runOne(c('+', column, column))).toEqual([
+      [2, 4, 6],
+      [8, 10, 12],
+    ]);
+  });
+
+  it('can mix columns with other dimensions', async () => {
+    const column = col(col(l(1), l(2), l(3)), col(l(4), l(5), l(6)));
+
+    expect(await runOne(c('+', column, l(1)))).toEqual([
+      [2, 3, 4],
+      [5, 6, 7],
+    ]);
+    expect(await runOne(c('+', l(1), column))).toEqual([
+      [2, 3, 4],
+      [5, 6, 7],
+    ]);
+
+    expect(await runOne(c('/', column, col(l(1), l(2))))).toEqual([
+      [1, 2, 3],
+      [4 / 2, 5 / 2, 6 / 2],
+    ]);
+
+    expect(
+      await runOne(c('+', column, col(l(1), col(l(5), l(4), l(3)))))
+    ).toEqual([
+      [2, 3, 4],
+      [9, 9, 9],
+    ]);
+  });
 });
 
 it('Can create columns with disparate types / dims', async () => {

@@ -1,14 +1,19 @@
-import { hasBuiltin, callBuiltin } from '../builtins';
+import { hasBuiltin, builtins } from '../builtins';
 import { getOfType, getDefined, getIdentifierString } from '../utils';
+import { reduceValuesThroughDims } from '../dimtools';
 import { getDateFromAstForm } from '../date';
 
 import { Realm } from './Realm';
-import { Scalar, Range, Date, Column, SimpleValue, Value } from './Value';
 import {
-  castToLargestRowCount,
-  getLargestColumn,
-  evaluateRecursiveColumn,
-} from './column';
+  Scalar,
+  Range,
+  Date,
+  Column,
+  SimpleValue,
+  Value,
+  fromJS,
+} from './Value';
+import { getLargestColumn, evaluateRecursiveColumn } from './column';
 
 // Gets a single value from an expanded AST.
 export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
@@ -44,7 +49,12 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
       if (funcName === 'previous') {
         return realm.previousValue ?? args[0];
       } else if (hasBuiltin(funcName)) {
-        return callBuiltin(funcName, ...args);
+        const builtin = builtins[funcName];
+        return reduceValuesThroughDims(args, (argsLowerDims) => {
+          const argData = argsLowerDims.map((a) => a.getData());
+
+          return fromJS(builtin.fn(...argData));
+        });
       } else {
         const customFunc = getDefined(realm.functions.get(funcName));
 
@@ -82,7 +92,7 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
     }
     case 'column': {
       const values: SimpleValue[] = node.args[0].map((v) => evaluate(realm, v));
-      return Column.fromValues(values as (Scalar | Range)[]);
+      return Column.fromValues(values);
     }
     case 'table-definition': {
       const table: SimpleValue[] = [];
@@ -106,9 +116,11 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
         }
       });
 
-      realm.tables.set(tableName, castToLargestRowCount(table));
+      const tableVal = Column.fromValues(table);
 
-      return Scalar.fromValue(NaN);
+      realm.tables.set(tableName, tableVal);
+
+      return tableVal;
     }
     case 'function-definition': {
       const funcName = getIdentifierString(getDefined(node.args[0]));

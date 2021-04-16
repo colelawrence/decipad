@@ -82,7 +82,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && jest --onlyChanged && tsc -b ."
+      "pre-commit": "lint-staged && jest --config=./jest.config.js --onlyChanged && tsc -b ."
     }
   },
   "lint-staged": {

@@ -2,11 +2,9 @@ import { DateSpecificity, cleanDate } from '../date';
 
 export interface SimpleValue {
   rowCount: number | null;
-
   withRowCount(rowCount: number): Column;
-
   asScalar(): Scalar;
-
+  cardinality: number;
   getData(): Interpreter.OneResult;
 }
 
@@ -15,6 +13,7 @@ export type OneDimensional = Scalar | Range | Date;
 export type Value = SimpleValue;
 
 export class Scalar implements SimpleValue {
+  cardinality = 1;
   rowCount = null;
   value: number | boolean | string;
 
@@ -38,6 +37,7 @@ export class Scalar implements SimpleValue {
 }
 
 export class Date implements SimpleValue {
+  cardinality = 1;
   rowCount = null;
 
   timeRange: Range;
@@ -69,6 +69,7 @@ export class Date implements SimpleValue {
 }
 
 export class Range implements SimpleValue {
+  cardinality = 1;
   rowCount = null;
   start: Scalar;
   end: Scalar;
@@ -81,7 +82,7 @@ export class Range implements SimpleValue {
   }
 
   getData() {
-    return [this.start.getData() as number, this.end.getData() as number];
+    return [this.start.getData(), this.end.getData()];
   }
 
   asScalar(): Scalar {
@@ -107,6 +108,10 @@ export class Column implements SimpleValue {
     return this.values.length;
   }
 
+  get cardinality() {
+    return 1 + Math.max(...this.values.map((v) => v.cardinality));
+  }
+
   withRowCount(rowCount: number) {
     if (rowCount === this.rowCount) {
       return this;
@@ -126,20 +131,21 @@ export class Column implements SimpleValue {
   }
 
   getData() {
-    return (this.values as any).map((v: Scalar | Range) => v.getData());
+    return this.values.map((v) => v.getData());
   }
 
   asScalar() {
     if (this.rowCount === 1) {
-      return this.values[0] as Scalar;
+      return this.values[0].asScalar();
     } else {
       throw new Error('panic: expected column of 1');
     }
   }
 }
 
-export const fromJS = (thing: number | number[]): Scalar | Column => {
-  if (typeof thing === 'number') {
+export const fromJS = (thing: Interpreter.OneResult): Scalar | Column => {
+  // TODO this doesn't distinguish Range/Date from Column, and it can't possibly do it!
+  if (!Array.isArray(thing)) {
     return Scalar.fromValue(thing);
   } else {
     return Column.fromValues(thing.map((t) => fromJS(t)));
