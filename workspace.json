@@ -49,6 +49,37 @@
         }
       }
     },
+    "runtime": {
+      "root": "libs/runtime",
+      "sourceRoot": "libs/runtime/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/runtime/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/runtime"
+          ],
+          "options": {
+            "jestConfig": "libs/runtime/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/runtime --incremental"
+          }
+        }
+      }
+    },
     "client": {
       "root": "apps/client",
       "sourceRoot": "apps/client",
@@ -255,7 +286,7 @@
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "apps/backend/**/*.ts"
+              "apps/backend/src/**/*.js"
             ]
           }
         },

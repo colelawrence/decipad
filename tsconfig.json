@@ -17,6 +17,7 @@
   "paths": {
     "@decipad/language": ["libs/language/src/index.ts"],
     "@decipad/ui": ["libs/ui/src/index.ts"],
-    "@decipad/editor": ["libs/editor/src/index.tsx"]
+    "@decipad/editor": ["libs/editor/src/index.tsx"],
+    "@decipad/runtime": ["libs/runtime/src/index.ts"]
   }
 }

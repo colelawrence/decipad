@@ -8,26 +8,17 @@ const ensureTopics = require('./ensure-topics');
 
 console.log('loading kafka plugin...');
 
-function extendCloudFormation({
-  arc,
-  cloudformation,
-  stage = 'staging',
-  inventory,
-}) {
+function extendCloudFormation({ cloudformation }) {
   return cloudformation; // do nothing for now
 }
 
 let kafka;
 let listeners;
 
-function pluginFunctions({ arc, inventory }) {
+function pluginFunctions({ arc }) {
   const consumers = getConsumers(arc);
   const lambdas = consumers.map((topic) => {
-    const src = lambdaSourceFromTopic(
-      topic.consumerGroup,
-      topic.topic,
-      inventory
-    );
+    const src = lambdaSourceFromTopic(topic.consumerGroup, topic.topic);
     const indexFile = path.join(src, 'index.js');
     return {
       src,
@@ -76,18 +67,6 @@ function start({ arc, inventory, services }, callback) {
     return topics;
   }, {});
 
-  const consumersByGroup = consumers.reduce((consumersByGroup, consumer) => {
-    assert(consumer.consumerGroup);
-    let consumerGroup = consumersByGroup[consumer.consumerGroup];
-    if (!consumerGroup) {
-      consumersByGroup[consumer.consumerGroup] = consumerGroup = [];
-    }
-
-    consumerGroup.push(consumer);
-
-    return consumersByGroup;
-  }, {});
-
   const topicsByGroup = consumers.reduce((topicsByGroup, consumer) => {
     assert(consumer.consumerGroup);
     let consumerGroup = topicsByGroup[consumer.consumerGroup];
@@ -100,17 +79,20 @@ function start({ arc, inventory, services }, callback) {
     return topicsByGroup;
   }, {});
 
-  return new Promise(async (resolve, reject) => {
-    const server = (kafka = services.kafka = await kafkaServer({
-      nodeId: 0,
-      clusterId: 'sandbox',
-    }));
-    server.on('error', reject);
-    server.listen(9092, 'localhost', () => {
-      server.off('error', reject);
-      resolve();
-    });
+  return kafkaServer({
+    nodeId: 0,
+    clusterId: 'sandbox',
   })
+    .then((server) => {
+      return new Promise((resolve, reject) => {
+        kafka = services.kafka = server;
+        server.on('error', reject);
+        server.listen(9092, 'localhost', () => {
+          server.off('error', reject);
+          resolve();
+        });
+      });
+    })
     .then(async () => {
       if (topics) {
         return ensureTopics(topics, partitionsPerTopic);
@@ -169,7 +151,7 @@ function start({ arc, inventory, services }, callback) {
     });
 }
 
-function end({ arc, inventory, services }, callback) {
+function end({ services }, callback) {
   const k = services.kafka || kafka;
   if (!k) {
     throw new Error('kafka service is not defined');
@@ -210,7 +192,7 @@ function getConsumers(arc) {
   });
 }
 
-function lambdaSourceFromTopic(consumerGroup, topic, inventory) {
+function lambdaSourceFromTopic(consumerGroup, topic) {
   // const cwd = inventory.inv._project.src
   return path.join('src', 'kafka-consumers', `${consumerGroup}-${topic}`);
 }

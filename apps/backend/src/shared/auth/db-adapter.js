@@ -3,7 +3,7 @@
 const arc = require('@architect/functions')
 
 function createAdapter () {
-  async function getAdapter (appOptions) {
+  async function getAdapter (/*appOptions*/) {
 
     const tables = await arc.tables()
 
@@ -63,6 +63,7 @@ function createAdapter () {
       accessToken,
       accessTokenExpires
     ) {
+      console.log('linkAccount', { userId, providerId, providerType, providerAccountId, refreshToken, accessToken, accessTokenExpires })
       return null
     }
 
@@ -71,6 +72,7 @@ function createAdapter () {
       providerId,
       providerAccountId
     ) {
+      console.log('unlinkAccount', {userId, providerId, providerAccountId})
       return null
     }
 
@@ -78,6 +80,7 @@ function createAdapter () {
     /* Only for username / password */
 
     async function getUserByCredentials (credentials) {
+      console.log('getUserByCredentials', credentials)
       return null
     }
 
@@ -85,10 +88,12 @@ function createAdapter () {
     /* for when not using JWTs */
 
     async function createSession (user) {
+      console.log('createSession', user)
       return null
     }
 
     async function getSession (sessionToken) {
+      console.log('getSession', sessionToken)
       return null
     }
 
@@ -96,10 +101,12 @@ function createAdapter () {
       session,
       force
     ) {
+      console.log('updateSession', { session, force })
       return null
     }
 
     async function deleteSession (sessionToken) {
+      console.log('deleteSession', sessionToken)
       return null
     }
 
@@ -113,6 +120,7 @@ function createAdapter () {
       secret,
       provider
     ) {
+      console.log('createVerificationRequest', { identifier, url, token, secret, provider })
       return null
     }
 
@@ -122,6 +130,7 @@ function createAdapter () {
       secret,
       provider
     ) {
+      console.log('getVerificationRequest', { identifier, token, secret, provider })
       return null
     }
 
@@ -131,6 +140,7 @@ function createAdapter () {
       secret,
       provider
     ) {
+      console.log('deleteVerificationRequest', { identifier, token, secret, provider })
       return null
     }
 

@@ -3,7 +3,7 @@
 const resolvers = {
   Query: {
     hello: () => 'Hello world!',
-    me: (parent, args, context, info) => {
+    me: (parent, args, context /*, info*/) => {
       return context.user
     }
   },

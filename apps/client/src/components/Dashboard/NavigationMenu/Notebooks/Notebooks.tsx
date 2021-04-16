@@ -1,13 +1,27 @@
 import { Box, Center, Circle, Heading, HStack, Text } from '@chakra-ui/layout';
 import { useRouter } from 'next/router';
-import React from 'react';
-import { useWorkspaces } from '../../workspaces.store';
+import React, { useContext, useState, useEffect } from 'react';
+import { DeciRuntimeContext } from '@decipad/ui';
+import { Item } from './Item/Item';
 
 export const Notebooks = ({ workspaceId }: { workspaceId?: string }) => {
   const router = useRouter();
-  const workspace = useWorkspaces((state) => state.workspaces).find(
-    (w) => w.id === workspaceId
-  );
+  const { runtime } = useContext(DeciRuntimeContext);
+  const [loading, setLoading] = useState(false);
+  const [padIds, setPadIds] = useState([]);
+  useEffect(() => {
+    if (workspaceId) {
+      const sub = runtime
+        .workspace(workspaceId)
+        .pads.list()
+        .subscribe(({ loading, data: padIds }) => {
+          setLoading(loading);
+          setPadIds(padIds);
+        });
+
+      return () => sub.unsubscribe();
+    }
+  }, [runtime, workspaceId]);
 
   return (
     <Box px={10} borderRight="1px solid" borderColor="gray.100">
@@ -19,49 +33,9 @@ export const Notebooks = ({ workspaceId }: { workspaceId?: string }) => {
           <Text>You should select a workspace or create new notebooks!</Text>
         </Center>
       )}
-      {workspace &&
-        workspace.notebooks.map((n) => (
-          <Box
-            key={n.id}
-            px={10}
-            transition="0.2s ease-out"
-            py={5}
-            bg={router.query.notebook === n.id ? 'blue.50' : 'gray.50'}
-            mb={4}
-            borderRadius={15}
-            cursor="pointer"
-            onMouseDown={() =>
-              router.push(`/?workspace=${workspaceId}&notebook=${n.id}`)
-            }
-          >
-            <HStack justifyContent="space-between">
-              <Heading fontSize="xl">{n.name}</Heading>
-              <Circle
-                boxSizing="content-box"
-                h="10px"
-                transition="0.2s ease-out"
-                w="10px"
-                border="5px solid"
-                borderColor={
-                  router.query.notebook === n.id ? 'blue.500' : 'transparent'
-                }
-                bg={router.query.notebook === n.id ? 'blue.300' : 'transparent'}
-              />
-            </HStack>
-            <Text
-              pt={3}
-              opacity={0.5}
-              w="400px"
-              overflow="hidden"
-              lineHeight="1.8rem"
-              maxH="4.2rem"
-            >
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Labore
-              culpa perspiciatis quae rerum odit doloribus cupiditate illum,
-              exercitationem quos, deleniti officiis cumque possimus esse vitae
-              quam suscipit sint! Numquam, vitae.
-            </Text>
-          </Box>
+      {padIds &&
+        padIds.map((padId) => (
+          <Item key={padId} id={padId} workspaceId={workspaceId} />
         ))}
     </Box>
   );

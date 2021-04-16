@@ -5,7 +5,7 @@ const { parse: qsParse } = require('querystring')
 
 function adaptReqRes(handle) {
   return async function respondWithAuth(req) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const { method, path } = req.requestContext.http
       const url = req.rawPath
       const pathParts = path.split('/')

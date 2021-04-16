@@ -43,10 +43,36 @@ function parseBlock(block: Parser.UnparsedBlock): Parser.ParsedBlock {
   const result: Parser.ParsedBlock = {
     id: block.id,
     solutions: parser.solutions,
+    errors: [],
   };
   return result;
 }
 
 export function parse(blocks: Parser.UnparsedBlock[]): Parser.ParsedBlock[] {
-  return blocks.map(parseBlock);
+  return blocks.map((block) => {
+    try {
+      return parseBlock(block);
+    } catch (err) {
+      return {
+        id: block.id,
+        solutions: [],
+        errors: [fromParseError(block.id, err)],
+      };
+    }
+  });
+}
+
+function fromParseError(blockId: string, err: Error): Parser.ParserError {
+  const messageParts = err.message.split('\n');
+  const mainMessage = messageParts[0];
+
+  const matches = mainMessage.match(/Syntax error at line (\d) col (\d)/);
+
+  return {
+    message: matches![0],
+    details: messageParts.slice(2).join('\n'),
+    fileName: blockId,
+    lineNumber: Number(matches === null ? 0 : matches[1]),
+    columnNumber: Number(matches === null ? 0 : matches[2]),
+  };
 }

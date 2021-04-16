@@ -13,23 +13,40 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useContext, useEffect } from 'react';
 import { FiEdit2, FiFolder, FiMoreHorizontal, FiPlus } from 'react-icons/fi';
-import { v4 } from 'uuid';
-import { useWorkspaces, Workspace } from '../../../workspaces.store';
+import { nanoid } from 'nanoid';
 import { DeleteWorkspaceButton } from './DeleteWorkspaceButton/DeleteWorkspaceButton';
+import { DeciRuntimeContext } from '@decipad/ui';
 
-export const Item = ({ workspace }: { workspace: Workspace }) => {
+export const Item = ({ workspaceId }: { workspaceId: string }) => {
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const newNotebookRef = useRef<HTMLInputElement>(null);
-  const set = useWorkspaces((state) => state.set);
+  const { runtime } = useContext(DeciRuntimeContext);
+  const [loading, setLoading] = useState(true);
+  const [workspace, setWorkspace] = useState(null);
+
+  useEffect(() => {
+    const sub = runtime.workspaces
+      .get(workspaceId)
+      .subscribe(({ loading, data: workspace }) => {
+        setLoading(loading);
+        setWorkspace(workspace);
+      });
+  }, [runtime, workspaceId]);
+
   const [newNotebookName, setNewNotebookName] = useState('');
+
+  if (loading || !workspace) {
+    return <span>Loading...</span>;
+  }
+
   return (
     <Box pt={2}>
       <ButtonGroup
         w="100%"
-        bg={router.query.workspace === workspace.id ? 'blue.50' : 'transparent'}
+        bg={router.query.workspace === workspaceId ? 'blue.50' : 'transparent'}
         _hover={{ bg: 'blue.50' }}
         transition="0.2s ease-out"
         borderRadius={5}
@@ -57,7 +74,7 @@ export const Item = ({ workspace }: { workspace: Workspace }) => {
               New Notebook
             </MenuItem>
             <MenuItem icon={<Icon as={FiEdit2} />}>Rename</MenuItem>
-            <DeleteWorkspaceButton id={workspace.id} />
+            <DeleteWorkspaceButton id={workspaceId} />
           </MenuList>
         </Menu>
       </ButtonGroup>
@@ -67,18 +84,18 @@ export const Item = ({ workspace }: { workspace: Workspace }) => {
           <ModalHeader>New Notebook</ModalHeader>
           <ModalBody>
             <form
-              onSubmit={(e) => {
+              onSubmit={async (e) => {
                 e.preventDefault();
-                set((state) => {
-                  state.workspaces.map((w) =>
-                    w.id === workspace.id
-                      ? w.notebooks.push({
-                          id: v4(),
-                          name: newNotebookName,
-                        })
-                      : w
-                  );
-                });
+                const newPad = {
+                  id: nanoid(),
+                  name: newNotebookName,
+                  workspaceId,
+                  permissions: [],
+                  tags: [],
+                  lastUpdatedAt: new Date(),
+                };
+                await runtime.workspace(workspaceId).pads.create(newPad);
+                router.push(`?workspace=${workspaceId}&notebook=${newPad.id}`)
                 setNewNotebookName('');
                 onClose();
               }}

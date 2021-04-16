@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react';
-import { EditablePlugins, pipe } from '@udecode/slate-plugins';
+import { EditablePlugins } from '@udecode/slate-plugins';
 import { nanoid } from 'nanoid';
 import dynamic from 'next/dynamic';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -11,7 +11,7 @@ import {
   Slate,
 } from 'slate-react';
 import { Elements } from './Elements';
-import { useRuntime } from './hooks/useRuntime';
+import { useEditor } from './hooks/useEditor';
 import { Leaves } from './Leaves';
 import { plugins, withPlugins } from './plugins';
 import { commands } from './plugins/DashCommands/commands';
@@ -38,21 +38,14 @@ const MentionPortal = dynamic<MentionPortalProps>(
   { ssr: false }
 );
 
-const actorId = nanoid();
-
 interface DeciEditorProps {
-  docId: string;
+  workspaceId: string;
+  padId: string;
 }
 
-export const DeciEditor = ({ docId }: DeciEditorProps): JSX.Element => {
-  const editor = useMemo(() => pipe(createEditor(), ...withPlugins), []);
-
-  const [value, setValue] = useState<Node[]>([
-    {
-      children: [{ children: [{ text: '' }] }],
-    },
-  ]);
-
+export const DeciEditor = ({ workspaceId, padId }: DeciEditorProps): JSX.Element => {
+  const [value, setValue] = useState(null)
+  const { loading, editor, onChange: onChangeResult } = useEditor({ workspaceId, padId, withPlugins, setValue })
   const renderElement = useCallback(
     (props: RenderElementProps) => <Elements {...props} />,
     []
@@ -82,37 +75,22 @@ export const DeciEditor = ({ docId }: DeciEditorProps): JSX.Element => {
     filteredUsers,
   } = useMention(users);
 
-  const { context, onChangeResult } = useRuntime({ docId });
+  useEffect(() => {
+    if (editor !== null) {
+      ReactEditor.focus(editor);
+    }
+  }, [editor]);
+
+  if (editor === null) {
+    return <span>Loading...</span>
+  }
 
   const onChange = (newValue: Node[]) => {
     onChangeDashCommands(editor);
     onChangeMention(editor);
-    onChangeResult(editor);
-    const ops = editor.operations;
-    if (ops && ops.length) {
-      context.sendSlateOperations(ops);
-    }
-    setValue(newValue);
+    onChangeResult(newValue);
+    setValue(newValue)
   };
-
-  useEffect(() => {
-    const cancel = context.subscribe({
-      initialContext: (context) => {
-        setValue(context.children);
-      },
-      error: (err: Error) => {
-        throw Object.assign(new Error(), err);
-      },
-    });
-
-    context.start();
-
-    return () => cancel();
-  }, [editor, context]);
-
-  useEffect(() => {
-    ReactEditor.focus(editor);
-  }, [editor]);
 
   return (
     <Box>

@@ -11,15 +11,16 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import React, { useRef } from 'react';
+import React, { useRef, useContext } from 'react';
 import { FiTrash2 } from 'react-icons/fi';
-import { useWorkspaces } from '../../../../workspaces.store';
+import { DeciRuntimeContext } from '@decipad/ui';
 
 export const DeleteWorkspaceButton = ({ id }: { id: string }) => {
   const router = useRouter();
   const { isOpen, onClose, onOpen } = useDisclosure();
   const cancelRef = useRef<HTMLButtonElement>(null);
-  const set = useWorkspaces((state) => state.set);
+  const { runtime } = useContext(DeciRuntimeContext);
+
   return (
     <>
       <MenuItem icon={<Icon as={FiTrash2} />} onClick={onOpen}>
@@ -46,14 +47,10 @@ export const DeleteWorkspaceButton = ({ id }: { id: string }) => {
               </Button>
               <Button
                 colorScheme="red"
-                onClick={() => {
-                  set((state) => {
-                    state.workspaces = state.workspaces.filter(
-                      (w) => w.id !== id
-                    );
-                  });
-                  router.push('/');
+                onClick={async () => {
+                  await runtime.workspaces.remove(id);
                   onClose();
+                  router.push('/');
                 }}
                 ml={3}
               >

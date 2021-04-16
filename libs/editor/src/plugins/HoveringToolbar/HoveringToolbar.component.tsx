@@ -52,8 +52,8 @@ export const HoveringToolbar = (): JSX.Element => {
         borderRadius="4px"
         transition="opacity 0.75s"
       >
-        {ToolbarOptions.map((option) => (
-          <FormatButton {...option} />
+        {ToolbarOptions.map((option, index) => (
+          <FormatButton key={index} {...option} />
         ))}
       </Box>
     </Portal>

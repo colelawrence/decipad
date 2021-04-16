@@ -1,19 +1,31 @@
 import { createRuntime } from '@decipad/language';
 import { isCollapsed } from '@udecode/slate-plugins';
-import { useCallback, useMemo } from 'react';
+import React, {
+  useCallback,
+  useMemo,
+  useContext,
+  useState,
+  useEffect,
+} from 'react';
 import { Editor, Range, Text, Transforms } from 'slate';
+import { DeciRuntimeContext } from '@decipad/ui';
 
-const actorId = 'actor-1';
+export const useRuntimeEditor = ({ workspaceId, padId }) => {
+  const { runtime } = useContext(DeciRuntimeContext);
+  const [padEditor, setPadEditor] = useState(null);
 
-export const useRuntime = ({ docId }) => {
-  const runtime = useMemo(() => createRuntime(actorId), []);
-  const context = useMemo(() => runtime.contexts.create(docId), [
-    runtime,
-    docId,
-  ]);
+  useEffect(() => {
+    if (runtime) {
+      const padEditor = runtime.workspace(workspaceId).pads.edit(padId);
+      setPadEditor(padEditor);
+    }
+  }, [runtime, workspaceId, padId]);
 
   const onChangeResult = useCallback(
     async (editor: Editor) => {
+      if (!editor || !padEditor) {
+        return;
+      }
       const { selection } = editor;
 
       if (selection && isCollapsed(selection)) {
@@ -43,8 +55,7 @@ export const useRuntime = ({ docId }) => {
           foundLine--;
         });
         try {
-          context.compute();
-          const result = await context.resultAt(
+          const result = await padEditor.resultAt(
             parentNode.id as string,
             foundLine
           );
@@ -66,8 +77,8 @@ export const useRuntime = ({ docId }) => {
         }
       }
     },
-    [context]
+    [padEditor]
   );
 
-  return { context, onChangeResult };
+  return { padEditor, onChangeResult };
 };

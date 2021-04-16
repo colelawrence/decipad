@@ -20,10 +20,10 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
-    "baseUrl": ".",
     "allowJs": true,
     "skipLibCheck": true,
-    "composite": true
+    "composite": true,
+    "declaration": true
   },
   "exclude": ["node_modules"],
   "include": [

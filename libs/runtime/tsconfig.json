@@ -1,0 +1,33 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "target": "es6",
+    "lib": ["es6", "es2019", "DOM"],
+    "removeComments": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "allowJs": true,
+    "composite": true,
+    "declaration": true,
+    "baseUrl": "../.."
+  },
+  "include": [
+    "./src/**/*.ts",
+    "./src/**/*.js",
+    "./types/index.d.ts",
+  ],
+  "references": [
+    {
+      "path": "../language"
+    }
+  ]
+}

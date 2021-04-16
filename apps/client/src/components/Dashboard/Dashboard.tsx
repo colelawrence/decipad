@@ -8,7 +8,7 @@ import { Notebooks } from './NavigationMenu/Notebooks/Notebooks';
 
 export const Dashboard = () => {
   const router = useRouter();
-  const { workspace } = router.query;
+  const { workspace, notebook } = router.query;
   return (
     <Grid p={10} minH="100vh" gridTemplateRows="auto 1fr" gridGap={10}>
       <NavigationBar />
@@ -21,8 +21,11 @@ export const Dashboard = () => {
               <Text opacity="0.5">Select a notebook to start typing!</Text>
             </Center>
           )}
-          {router.query.notebook && (
-            <DeciEditor docId={router.query.notebook as string} />
+          {notebook && workspace && (
+            <DeciEditor
+              workspaceId={workspace as string}
+              padId={notebook as string}
+            />
           )}
         </Box>
       </Grid>

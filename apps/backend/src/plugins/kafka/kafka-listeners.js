@@ -8,7 +8,7 @@ async function createListeners(group, topics) {
     brokers: ['localhost:9092']
   })
 
-  consumer = kafka.consumer({
+  const consumer = kafka.consumer({
     groupId: group,
     allowAutoTopicCreation: true
   })

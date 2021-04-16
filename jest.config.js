@@ -6,5 +6,6 @@ module.exports = {
     '<rootDir>/libs/editor',
     '<rootDir>/apps/backend',
     '<rootDir>/libs/kafka-lite',
+    '<rootDir>/libs/runtime',
   ],
 };

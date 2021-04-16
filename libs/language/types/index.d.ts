@@ -6,9 +6,18 @@ declare namespace Parser {
     source: string;
   }
 
+  interface ParserError {
+    message: string;
+    details: string;
+    fileName: string;
+    lineNumber: number;
+    columnNumber: number;
+  }
+
   interface ParsedBlock {
     id: string;
     solutions: Solution[];
+    errors: ParserError[];
   }
 
   type Solution = AST.Block;

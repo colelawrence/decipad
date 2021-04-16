@@ -3,6 +3,9 @@ import { enableMapSet } from 'immer';
 import 'reflect-metadata';
 import 'regenerator-runtime/runtime.js';
 export * from './runtime';
+export { parse } from './parser';
+export { inferTargetStatement } from './infer'
+export { run } from './interpreter'
 
 enableMapSet();
 

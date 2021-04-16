@@ -1,4 +1,15 @@
 {
   "presets": ["@nrwl/react/babel", "@emotion/babel-preset-css-prop"],
-  "plugins": []
+  "plugins": [
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "absoluteRuntime": false,
+        "corejs": false,
+        "helpers": true,
+        "regenerator": true,
+        "version": "7.13.10"
+      }
+    ]
+  ]
 }

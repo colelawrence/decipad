@@ -11,7 +11,7 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useContext, useEffect } from 'react';
 import {
   FiClock,
   FiInbox,
@@ -20,14 +20,18 @@ import {
   FiPlus,
   FiTrash2,
 } from 'react-icons/fi';
-import { v4 } from 'uuid';
-import { useWorkspaces } from '../workspaces.store';
+import { useRouter } from 'next/router';
+import { nanoid } from 'nanoid';
+import { DeciRuntimeContext } from '@decipad/ui';
 import { Workspaces } from './Workspaces/Workspaces';
 
 export const NavigationMenu = () => {
+  const router = useRouter()
   const newWorkspaceRef = useRef<HTMLInputElement>(null);
-  const set = useWorkspaces((state) => state.set);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const { runtime } = useContext(DeciRuntimeContext);
+
   const [newWorkspaceName, setNewWorkspaceName] = useState('');
   return (
     <Box px={5} borderRight="1px solid" borderColor="gray.100">
@@ -90,16 +94,17 @@ export const NavigationMenu = () => {
             <ModalHeader>New Workspace</ModalHeader>
             <ModalBody>
               <form
-                onSubmit={(e) => {
+                onSubmit={async (e) => {
                   e.preventDefault();
-                  set((state) => {
-                    state.workspaces.push({
-                      id: v4(),
-                      name: newWorkspaceName,
-                      notebooks: [],
-                    });
-                  });
+                  const newWorkspace = {
+                    id: nanoid(),
+                    name: newWorkspaceName,
+                    permissions: [],
+                  };
                   setNewWorkspaceName('');
+                  await runtime.workspaces.create(newWorkspace);
+                  await runtime.workspaces.push(newWorkspace.id);
+                  router.push(`?workspace=${newWorkspace.id}`)
                   onClose();
                 }}
               >
