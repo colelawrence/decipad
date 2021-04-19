@@ -201,6 +201,26 @@ describe('tables', () => {
     expect(tableContext.tables.get('Table')).toEqual(expectedType);
   });
 
+  it('References to table columns', () => {
+    const block = n(
+      'block',
+      tableDef('Table', { Col1: col(1, 2, 3) }),
+      n(
+        'assign',
+        n('def', 'Col'),
+        n('property-access', n('ref', 'Table'), 'Col1')
+      )
+    );
+
+    expect(inferProgram([block])).toMatchObject({
+      variables: new Map(
+        Object.entries({
+          Col: Type.buildColumn(Type.Number, 3),
+        })
+      ),
+    });
+  });
+
   it('"previous" references', () => {
     const expectedType = Type.buildTuple(
       [

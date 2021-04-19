@@ -137,6 +137,13 @@ declare namespace AST {
     end: Pos;
   }
 
+  interface PropertyAccess {
+    type: 'property-access';
+    args: [Ref, string];
+    start: Pos;
+    end: Pos;
+  }
+
   // Function calls and operators
 
   interface ArgList {
@@ -198,6 +205,7 @@ declare namespace AST {
   type Expression =
     | FunctionCall
     | Ref
+    | PropertyAccess
     | Literal
     | Column
     | Range
@@ -224,6 +232,7 @@ declare namespace AST {
     column: Column;
     'table-columns': TableColumns;
     'table-definition': TableDefinition;
+    'property-access': PropertyAccess;
     assign: Assign;
     'argument-names': FunctionArgumentNames;
     'function-definition': FunctionDefinition;

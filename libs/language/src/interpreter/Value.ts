@@ -97,10 +97,17 @@ export class Range implements SimpleValue {
 export class Column implements SimpleValue {
   rangeOf = null;
   values: SimpleValue[];
+  valueNames: string[] | null = null;
 
   static fromValues(values: SimpleValue[]): Column {
     const column = new Column();
     column.values = values;
+    return column;
+  }
+
+  static fromNamedValues(values: SimpleValue[], names: string[]): Column {
+    const column = Column.fromValues(values);
+    column.valueNames = names;
     return column;
   }
 

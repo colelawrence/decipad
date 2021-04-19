@@ -89,6 +89,23 @@ export const inferExpression = withErrorSource(
 
         return Type.buildListLike(cellTypes);
       }
+      case 'property-access': {
+        const tableName = getIdentifierString(expr.args[0]);
+        const colName = expr.args[1];
+        const table = ctx.tables.get(tableName);
+
+        if (table != null) {
+          const columnIndex = table.tupleNames?.indexOf(colName) ?? -1;
+
+          if (columnIndex !== -1) {
+            return getDefined(table.tupleTypes?.[columnIndex]);
+          } else {
+            return Type.Impossible.withErrorCause('Unknown column ' + colName);
+          }
+        } else {
+          return Type.Impossible.withErrorCause('Undefined table ' + tableName);
+        }
+      }
       case 'function-call': {
         const fName = getIdentifierString(expr.args[0]);
         const fArgs = getOfType('argument-list', expr.args[1]).args;

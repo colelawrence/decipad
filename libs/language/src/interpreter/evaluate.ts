@@ -96,6 +96,7 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
     }
     case 'table-definition': {
       const table: SimpleValue[] = [];
+      const colNames: string[] = [];
       const tableName = getIdentifierString(node.args[0]);
       const columns: AST.TableColumns = node.args[1];
 
@@ -113,14 +114,24 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
           realm.stack.set(colName, columnData);
 
           table.push(columnData);
+          colNames.push(colName);
         }
       });
 
-      const tableVal = Column.fromValues(table);
+      const tableVal = Column.fromNamedValues(table, colNames);
 
       realm.tables.set(tableName, tableVal);
 
       return tableVal;
+    }
+    case 'property-access': {
+      const table = getDefined(
+        realm.tables.get(getIdentifierString(node.args[0]))
+      ) as Column;
+
+      const valueIndex = getDefined(table.valueNames?.indexOf(node.args[1]));
+
+      return getDefined(table.values[valueIndex]);
     }
     case 'function-definition': {
       const funcName = getIdentifierString(getDefined(node.args[0]));

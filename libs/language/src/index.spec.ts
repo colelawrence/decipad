@@ -193,6 +193,21 @@ describe('Tables', () => {
       ],
     });
   });
+
+  it('Can be referred to by column', async () => {
+    expect(
+      await runCode(`
+        Table = {
+          Col = [1, 2, 3]
+        }
+
+        Table.Col
+      `)
+    ).toMatchObject({
+      type: Type.build({ type: 'number', columnSize: 3 }),
+      value: [[1, 2, 3]],
+    });
+  });
 });
 
 describe('Units', () => {
