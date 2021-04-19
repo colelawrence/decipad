@@ -1,6 +1,4 @@
 import { Type } from '../type';
-import { Scalar, Column, SimpleValue } from '../interpreter/Value';
-import { getDefined } from '../utils';
 
 export interface BuiltinSpec {
   name: string;
@@ -49,15 +47,13 @@ export const builtins: Record<string, BuiltinSpec> = {
     name: '*',
     argCount: 2,
     fn: (a, b) => a * b,
-    functor: (a, b) =>
-      a.isScalar('number').sameAs(b).multiplyUnit(b.unit),
+    functor: (a, b) => a.isScalar('number').sameAs(b).multiplyUnit(b.unit),
   },
   '/': {
     name: '/',
     argCount: 2,
     fn: (a, b) => a / b,
-    functor: (a, b) =>
-      a.isScalar('number').sameAs(b).divideUnit(b.unit),
+    functor: (a, b) => a.isScalar('number').sameAs(b).divideUnit(b.unit),
   },
   '<': {
     name: '<',
@@ -94,10 +90,7 @@ export const builtins: Record<string, BuiltinSpec> = {
     argCount: 3,
     fn: (a, b, c) => (a ? b : c),
     functor: (a: Type, b: Type, c: Type) =>
-      Type.combine(
-        a.isScalar('boolean'),
-        b.sameAs(c)
-      ),
+      Type.combine(a.isScalar('boolean'), b.sameAs(c)),
   },
   // Range stuff
   contains: {
@@ -127,42 +120,5 @@ export const builtins: Record<string, BuiltinSpec> = {
   },
 };
 
-const raiseDimensions = (
-  values: SimpleValue[]
-): [Column[] | (Scalar | Range)[], boolean] => {
-  const column = values.find((v) => v instanceof Column);
-  if (column != null) {
-    return [values.map((v) => v.withRowCount(column.rowCount as number)), true];
-  } else {
-    return [values.map((v) => v as Scalar | Range), false];
-  }
-};
-
-export const callBuiltin = (
-  builtinName: string,
-  ...givenArgs: SimpleValue[]
-): SimpleValue => {
-  const builtinSpec: BuiltinSpec = getDefined(builtins[builtinName]);
-
-  const [args, isColumn] = raiseDimensions(givenArgs);
-
-  if (isColumn) {
-    const ret = [];
-    const columnArgs = args as Column[];
-
-    for (let i = 0; i < columnArgs[0].rowCount; i++) {
-      const row = columnArgs.map((a) => a.atIndex(i).getData());
-      ret.push(Scalar.fromValue(builtinSpec.fn(...row)));
-    }
-
-    return Column.fromValues(ret);
-  } else {
-    const scalarArgs = args as Scalar[];
-
-    return Scalar.fromValue(
-      builtinSpec.fn(...scalarArgs.map((v) => v.getData() as number))
-    );
-  }
-};
-
-export const hasBuiltin = (builtinName: string) => builtinName in builtins;
+export const hasBuiltin = (builtinName: string) =>
+  Object.hasOwnProperty.call(builtins, builtinName);
