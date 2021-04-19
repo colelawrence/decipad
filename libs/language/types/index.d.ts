@@ -195,7 +195,14 @@ declare namespace AST {
     end: Pos;
   }
 
-  type Expression = FunctionCall | Ref | Literal | Column | Range | Date;
+  type Expression =
+    | FunctionCall
+    | Ref
+    | Literal
+    | Column
+    | Range
+    | Date
+    | Given;
   type Statement = FunctionDefinition | Assign | TableDefinition | Expression;
 
   type Lists = FunctionArgumentNames | ArgList | TableColumns;

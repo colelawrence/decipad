@@ -1,4 +1,4 @@
-import { c, l, n, col, range, date, funcDef, tableDef } from '../utils';
+import { c, l, n, col, range, date, given, funcDef, tableDef } from '../utils';
 import { parseUTCDate } from '../date';
 import { run, runOne } from './index';
 
@@ -221,6 +221,30 @@ describe('higher dimensions', () => {
     ).toEqual([
       [2, 3, 4],
       [9, 9, 9],
+    ]);
+  });
+});
+
+describe('given', () => {
+  const runWithCol = async (expr: AST.Expression) => {
+    const assignCol = n('assign', n('def', 'Col'), col(l(1), l(2), l(3)));
+    const [result] = await run(
+      [n('block', assignCol, given('Col', expr))],
+      [0]
+    );
+
+    return result;
+  };
+
+  it('can raise a dimension by acting like a map function', async () => {
+    expect(await runWithCol(l('hi'))).toEqual(['hi', 'hi', 'hi']);
+
+    expect(await runWithCol(c('+', n('ref', 'Col'), l(1)))).toEqual([2, 3, 4]);
+
+    expect(await runWithCol(col(n('ref', 'Col'), l(1)))).toEqual([
+      [1, 1],
+      [2, 1],
+      [3, 1],
     ]);
   });
 });

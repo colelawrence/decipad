@@ -105,6 +105,10 @@ export function funcDef(
   );
 }
 
+export function given(varName: string, body: AST.Expression) {
+  return n('given', n('ref', varName), body);
+}
+
 export function getOfType<
   K extends AST.Node['type'],
   N extends AST.TypeToNode[K]
@@ -131,9 +135,15 @@ export const isExpression = (
 ): value is AST.Expression => {
   if (!isNode(value)) return false;
 
-  return ['function-call', 'ref', 'literal', 'column', 'range', 'date', 'given'].includes(
-    value.type
-  );
+  return [
+    'function-call',
+    'ref',
+    'literal',
+    'column',
+    'range',
+    'date',
+    'given',
+  ].includes(value.type);
 };
 
 export const getIdentifierString = ({ type, args }: AST.Identifier): string => {

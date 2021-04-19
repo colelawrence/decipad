@@ -130,6 +130,26 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
       // but we want to always return something
       return Scalar.fromValue(NaN);
     }
+    case 'given': {
+      const [ref, body] = node.args;
+
+      const predicateName = getIdentifierString(ref);
+      const predicate = evaluate(realm, ref);
+
+      if (!(predicate instanceof Column)) {
+        throw new Error('panic: expected column');
+      }
+
+      return realm.stack.withPush(() => {
+        const mapped = predicate.values.map((value) => {
+          realm.stack.set(predicateName, value);
+
+          return evaluate(realm, body);
+        });
+
+        return Column.fromValues(mapped);
+      });
+    }
   }
 }
 

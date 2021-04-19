@@ -1,7 +1,18 @@
 import { produce } from 'immer';
 import { Type, InferError, inverseExponent } from '../type';
 
-import { l, c, n, r, col, range, date, tableDef, funcDef } from '../utils';
+import {
+  l,
+  c,
+  n,
+  r,
+  col,
+  range,
+  date,
+  given,
+  tableDef,
+  funcDef,
+} from '../utils';
 
 import { makeContext } from './context';
 import {
@@ -150,15 +161,19 @@ describe('columns', () => {
   });
 
   it('infers columns of dates', () => {
-    expect(inferExpression(nilCtx, col(date('2020-01', 'month'), date('2020-02', 'month'))))
-      .toEqual(
-        Type.build({
-          type: 'number',
-          date: 'month',
-          columnSize: 2
-        })
+    expect(
+      inferExpression(
+        nilCtx,
+        col(date('2020-01', 'month'), date('2020-02', 'month'))
       )
-  })
+    ).toEqual(
+      Type.build({
+        type: 'number',
+        date: 'month',
+        columnSize: 2,
+      })
+    );
+  });
 });
 
 describe('tables', () => {
@@ -166,7 +181,10 @@ describe('tables', () => {
     const tableContext = makeContext();
 
     const expectedType = Type.buildTuple(
-      [Type.build({ type: 'number', columnSize: 3 }), Type.build({ type: 'number', columnSize: 3 })],
+      [
+        Type.build({ type: 'number', columnSize: 3 }),
+        Type.build({ type: 'number', columnSize: 3 }),
+      ],
       ['Col1', 'Col2']
     );
 
@@ -215,6 +233,54 @@ it('infers refs', () => {
   );
 });
 
+describe('Given', () => {
+  it('Works on scalars', () => {
+    const scopeWithColumn = makeContext([
+      ['Nums', Type.buildColumn(Type.Number, 3)],
+    ]);
+
+    expect(inferExpression(scopeWithColumn, given('Nums', l(1)))).toEqual(
+      Type.buildColumn(Type.Number, 3)
+    );
+
+    expect(inferExpression(scopeWithColumn, given('Nums', l('hi')))).toEqual(
+      Type.buildColumn(Type.String, 3)
+    );
+
+    expect(
+      inferExpression(scopeWithColumn, given('Nums', c('+', r('Nums'), l(1))))
+    ).toEqual(Type.buildColumn(Type.Number, 3));
+  });
+  it('Works with non-scalar bodies', () => {
+    const scopeWithColumn = makeContext([
+      ['Nums', Type.buildColumn(Type.Number, 3)],
+    ]);
+
+    expect(
+      inferExpression(scopeWithColumn, given('Nums', col(l('s1'), l('s2'))))
+    ).toEqual(Type.buildColumn(Type.buildColumn(Type.String, 2), 3));
+
+    expect(
+      inferExpression(scopeWithColumn, given('Nums', col(l('s1'), l(1))))
+    ).toEqual(Type.buildColumn(Type.buildTuple([Type.String, Type.Number]), 3));
+  });
+  it('Needs a column', () => {
+    const scopeWithTuple = makeContext([
+      [
+        'Tuple',
+        Type.buildTuple([
+          Type.buildColumn(Type.Number, 3),
+          Type.buildColumn(Type.String, 3),
+        ]),
+      ],
+    ]);
+
+    expect(
+      inferExpression(scopeWithTuple, given('Tuple', l(1))).errorCause
+    ).not.toBeNull();
+  });
+});
+
 it('infers binops', () => {
   expect(inferExpression(nilCtx, c('+', l(1), l(1)))).toEqual(Type.Number);
 
@@ -255,9 +321,9 @@ describe('inferFunction', () => {
   it('Accepts arguments types and returns a return type', () => {
     const functionWithSpecificTypes = funcDef('Fn', ['A'], r('A'));
 
-    expect(inferFunction(nilCtx, functionWithSpecificTypes, [Type.Boolean])).toEqual(
-      Type.Boolean
-    );
+    expect(
+      inferFunction(nilCtx, functionWithSpecificTypes, [Type.Boolean])
+    ).toEqual(Type.Boolean);
   });
 
   it('disallows wrong argument count', () => {
@@ -268,7 +334,7 @@ describe('inferFunction', () => {
       'Wrong number of arguments applied to Fn (expected 1)'
     );
     expect(inferFunction(errorCtx, unaryFn, [])).toEqual(
-      Type.Impossible.withErrorCause(badArgumentCountError),
+      Type.Impossible.withErrorCause(badArgumentCountError)
     );
 
     errorCtx = makeContext();
@@ -277,9 +343,7 @@ describe('inferFunction', () => {
     );
     expect(
       inferFunction(errorCtx, unaryFn, [Type.Boolean, Type.String])
-    ).toEqual(
-      Type.Impossible.withErrorCause(badArgumentCountError2),
-    );
+    ).toEqual(Type.Impossible.withErrorCause(badArgumentCountError2));
   });
 });
 
@@ -344,9 +408,9 @@ describe('inferTargetStatement', () => {
     const badProgram = [n('block', badCall)];
 
     expect(inferTargetStatement(badProgram, [0, 0])).toEqual(
-      Type.Impossible.withErrorCause(
-        new InferError('Expected number')
-      ).inNode(badCall)
+      Type.Impossible.withErrorCause(new InferError('Expected number')).inNode(
+        badCall
+      )
     );
   });
 });

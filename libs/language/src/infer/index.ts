@@ -108,6 +108,23 @@ export const inferExpression = withErrorSource(
           return callBuiltin(expr, fName, ...givenArguments);
         }
       }
+      case 'given': {
+        const [ref, body] = expr.args;
+
+        const { cellType } = inferExpression(ctx, ref);
+
+        if (cellType != null) {
+          return ctx.stack.withPush(() => {
+            ctx.stack.set(getIdentifierString(ref), cellType);
+
+            const bodyResult = inferExpression(ctx, body);
+
+            return Type.buildColumn(bodyResult, 3);
+          });
+        } else {
+          return Type.Impossible.withErrorCause('Column expected');
+        }
+      }
     }
   }
 );
