@@ -92,7 +92,7 @@ export const inferExpression = withErrorSource(
       case 'property-access': {
         const tableName = getIdentifierString(expr.args[0]);
         const colName = expr.args[1];
-        const table = ctx.tables.get(tableName);
+        const table = ctx.stack.get(tableName);
 
         if (table != null) {
           const columnIndex = table.tupleNames?.indexOf(colName) ?? -1;
@@ -232,7 +232,7 @@ export const inferStatement = withErrorSource(
         } else {
           const unified =
             findBadColumn(tableType) ?? unifyColumnSizes(statement, tableType);
-          ctx.tables.set(tName, unified);
+          ctx.stack.set(tName, unified);
           return unified;
         }
       }
@@ -243,9 +243,8 @@ export const inferStatement = withErrorSource(
   }
 );
 
-interface InferProgramResult {
+export interface InferProgramResult {
   variables: Map<string, Type>;
-  tables: Map<string, Type>;
   blockReturns: Array<Type>;
 }
 
@@ -271,7 +270,6 @@ export const inferProgram = (
 
   return {
     variables: ctx.stack.top,
-    tables: ctx.tables,
     blockReturns,
   };
 };

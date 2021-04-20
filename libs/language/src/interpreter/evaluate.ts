@@ -120,13 +120,13 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
 
       const tableVal = Column.fromNamedValues(table, colNames);
 
-      realm.tables.set(tableName, tableVal);
+      realm.stack.set(tableName, tableVal);
 
       return tableVal;
     }
     case 'property-access': {
       const table = getDefined(
-        realm.tables.get(getIdentifierString(node.args[0]))
+        realm.stack.get(getIdentifierString(node.args[0]))
       ) as Column;
 
       const valueIndex = getDefined(table.valueNames?.indexOf(node.args[1]));
@@ -214,7 +214,7 @@ export function evaluateTargets(
       let value: Value = evaluate(realm, statement);
       if (statement.type === 'table-definition') {
         const tableName = getIdentifierString(statement.args[0]);
-        value = getDefined(realm.tables.get(tableName));
+        value = getDefined(realm.stack.get(tableName));
       }
 
       if (targetSet.has(statement)) {

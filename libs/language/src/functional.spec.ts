@@ -55,35 +55,47 @@ describe('use of funds document', () => {
     });
   });
 
-  it.skip('Use of funds multidimensional', async () => {
+  it('Use of funds multidimensional', async () => {
     expect(
       await runCode(`
-      InitialInvestment = 300000
-      IncomeTax = 0.2
+        InitialInvestment = 300000
+        IncomeTax = 0.2
 
-      Salaries = {
-        Title = ["Exec", "Product", "Tech", "Front-End"]
-        Salary = [80000, 80000, 80000, 80000]
-        Department = ["G&A", "R&D", "R&D", "R&D"]
-        StartDate = [2021-01, 2021-01, 2021-01, 2021-03]
-        Paid = [false, false, true, true]
-      }
+        Salaries = {
+          Title = ["Exec", "Product", "Tech"]
+          Salary = [120000, 80000, 80000]
+          Department = ["G&A", "R&D", "R&D"]
+          StartDate = [2021-02, 2021-01, 2021-03]
+          Bonus = [false, true, false]
+        }
 
-      costtobusiness = Month Salary StartDate GetsBonus =>
-        if dategte Month StartDate
-          then Salary + (Salary * 0.2) + (if GetsBonus then Salary * 0.2 else 0)
-          else 0
+        costtobusiness = Month Salary StartDate GetsBonus =>
+          if dategte Month StartDate
+            then Salary + (Salary * 0.2) + (if GetsBonus then Salary * 0.3 else 0)
+            else 0
 
-      Months = [2021-01, 2021-02, 2021-03, 2021-04, 2021-05, 2021-06, 2021-07, 2021-08, 2021-09, 2021-10, 2021-11, 2021-12]
+        Months = [2021-01, 2021-02, 2021-03, 2021-04]
 
-      StaffCosts = [
-        Salaries.Title,
-        Salaries.Salary,
-        given Months: costtobusiness Months (Salaries.Salary / 12) StartDate true
-      ]
-    `)
+        StaffCosts = {
+          Title = Salaries.Title,
+          Salary = Salaries.Salary,
+          Costs = given Months:
+            costtobusiness Months (Salaries.Salary / 12) Salaries.StartDate Salaries.Bonus
+        }
+      `)
     ).toMatchObject({
-      value: '????',
+      value: [
+        [
+          ['Exec', 'Product', 'Tech'],
+          [120_000, 80_000, 80_000],
+          [
+            [0, 10_000, 0],
+            [12_000, 10_000, 0],
+            [12_000, 10_000, 8_000],
+            [12_000, 10_000, 8_000],
+          ],
+        ],
+      ],
     });
   });
 });

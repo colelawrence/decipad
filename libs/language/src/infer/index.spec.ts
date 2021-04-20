@@ -1,4 +1,5 @@
 import { produce } from 'immer';
+import { dequal } from 'dequal';
 import { Type, InferError, inverseExponent } from '../type';
 
 import {
@@ -28,7 +29,7 @@ const nilPos = {
   column: 0,
   char: 0,
 };
-const nilCtx = makeContext();
+let nilCtx = makeContext();
 const degC: AST.Unit = {
   unit: 'celsius',
   exp: 1,
@@ -55,12 +56,10 @@ const meters: AST.Unit = {
 };
 
 afterEach(() => {
-  // Ensure nilCtx is never modified
-  const stillEmpty =
-    nilCtx.stack.stack.every((m) => m.size === 0) &&
-    nilCtx.functionDefinitions.size === 0;
+  if (!dequal(nilCtx, makeContext())) {
+    // Restore to avoid failing further stillEmpty checks
+    nilCtx = makeContext();
 
-  if (!stillEmpty) {
     throw new Error('sanity check failed: nilCtx was modified');
   }
 });
@@ -198,7 +197,7 @@ describe('tables', () => {
       )
     ).toEqual(expectedType);
 
-    expect(tableContext.tables.get('Table')).toEqual(expectedType);
+    expect(tableContext.stack.get('Table')).toEqual(expectedType);
   });
 
   it('References to table columns', () => {
@@ -212,13 +211,9 @@ describe('tables', () => {
       )
     );
 
-    expect(inferProgram([block])).toMatchObject({
-      variables: new Map(
-        Object.entries({
-          Col: Type.buildColumn(Type.Number, 3),
-        })
-      ),
-    });
+    expect(inferProgram([block]).variables.get('Col')).toEqual(
+      Type.buildColumn(Type.Number, 3)
+    );
   });
 
   it('"previous" references', () => {
@@ -237,7 +232,7 @@ describe('tables', () => {
       Col3: c('previous', l('hi')),
     });
 
-    expect(inferStatement(nilCtx, table)).toEqual(expectedType);
+    expect(inferStatement(makeContext(), table)).toEqual(expectedType);
   });
 });
 
