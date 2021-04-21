@@ -14,7 +14,9 @@
   "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"],
   "references": [
     {
-      "path": "../language",
+      "path": "../language"
+    },
+    {
       "path": "../runtime"
     }
   ]
