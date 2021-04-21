@@ -1,6 +1,7 @@
 import {
   Box,
   Grid,
+  Image,
   Square,
   Text,
   useColorMode,
@@ -8,7 +9,6 @@ import {
 } from '@chakra-ui/react';
 import { getPreventDefaultHandler } from '@udecode/slate-plugins';
 import dynamic from 'next/dynamic';
-import Image from 'next/image';
 import React, { useEffect, useRef } from 'react';
 import { Editor, Location, Range } from 'slate';
 import { ReactEditor, useEditor } from 'slate-react';

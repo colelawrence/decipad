@@ -1,5 +1,4 @@
-import { Center, Heading } from '@chakra-ui/react';
-import Image from 'next/image';
+import { Center, Heading, Image } from '@chakra-ui/react';
 import React from 'react';
 
 export function Loading() {

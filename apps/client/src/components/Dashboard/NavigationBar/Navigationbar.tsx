@@ -1,12 +1,12 @@
 import { Avatar } from '@chakra-ui/avatar';
 import Icon from '@chakra-ui/icon';
+import { Image } from '@chakra-ui/image';
 import { Heading, HStack } from '@chakra-ui/layout';
 import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/menu';
+import { DeciRuntimeConsumer } from '@decipad/ui';
 import { signOut } from 'next-auth/client';
-import Image from 'next/image';
 import React from 'react';
 import { FiLogOut } from 'react-icons/fi';
-import { DeciRuntimeConsumer } from '@decipad/ui';
 
 export const NavigationBar = () => {
   return (

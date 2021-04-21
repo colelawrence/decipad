@@ -1,9 +1,9 @@
 import { Button } from '@chakra-ui/button';
+import { Image } from '@chakra-ui/image';
 import { Input } from '@chakra-ui/input';
 import { Box, Center, Grid, Heading, HStack, Text } from '@chakra-ui/layout';
 import { SlideFade } from '@chakra-ui/transition';
 import { Container } from '@decipad/ui';
-import Image from 'next/image';
 import React from 'react';
 import { TermsOfServiceNotice } from '../components/SignUp/TermsOfServiceNotice';
 

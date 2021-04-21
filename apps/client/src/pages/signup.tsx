@@ -1,4 +1,5 @@
 import { Button } from '@chakra-ui/button';
+import { Image } from '@chakra-ui/image';
 import { Input } from '@chakra-ui/input';
 import {
   Box,
@@ -11,7 +12,6 @@ import {
 } from '@chakra-ui/layout';
 import { SlideFade } from '@chakra-ui/transition';
 import { Container } from '@decipad/ui';
-import Image from 'next/image';
 import React, { useState } from 'react';
 import { TermsOfServiceNotice } from '../components/SignUp/TermsOfServiceNotice';
 

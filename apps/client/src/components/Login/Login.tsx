@@ -1,6 +1,5 @@
-import { Button, Center, Heading, Icon } from '@chakra-ui/react';
+import { Button, Center, Heading, Icon, Image } from '@chakra-ui/react';
 import { signIn } from 'next-auth/client';
-import Image from 'next/image';
 import React from 'react';
 import { FiGithub } from 'react-icons/fi';
 
