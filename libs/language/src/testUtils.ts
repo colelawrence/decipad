@@ -1,45 +1,38 @@
-import * as AutoChange from 'automerge';
 import { parse } from './parser';
 import { run } from './interpreter';
-import { inferProgram } from './infer';
-import { Computer, ParseResult } from './runtime/computer';
+import { inferTargetStatement, inferProgram } from './infer';
 import { Type } from './type';
 
-export const runCode = async (source: string) => {
-  const lineCount = source.split('\n').length;
-  const syncDoc = AutoChange.from({
-    children: [
-      {
-        children: [
-          {
-            id: 'block-id',
-            type: 'code_block',
-            children: [{ text: source }],
-          },
-        ],
-      },
-    ],
-  });
-  const computer = new Computer();
-  computer.setContext(syncDoc);
-  const parseResult: ParseResult = computer.parse();
-
-  if (!parseResult.ok) return parseResult;
-
-  return await computer.resultAt('block-id', lineCount);
-};
-
-export const runCodeForVariables = async (
-  source: string,
-  wantedVariables: string[]
-) => {
+const parseOneBlock = (source: string): AST.Block[] => {
   const parserInput: Parser.UnparsedBlock[] = [{ id: 'block-id', source }];
   const [parsed] = parse(parserInput);
 
   expect(parsed.errors).toEqual([]);
   expect(parsed.solutions.length).toEqual(1);
 
-  const program: AST.Block[] = [parsed.solutions[0]];
+  return [parsed.solutions[0]];
+};
+
+export const runCode = async (source: string) => {
+  const program = parseOneBlock(source);
+
+  const inferResult = await inferTargetStatement(program, [
+    0,
+    program[0].args.length - 1,
+  ]);
+  const value = await run(program, [0]);
+
+  return {
+    value,
+    type: inferResult,
+  };
+};
+
+export const runCodeForVariables = async (
+  source: string,
+  wantedVariables: string[]
+) => {
+  const program = parseOneBlock(source);
 
   const inferResult = await inferProgram(program);
 
@@ -50,10 +43,7 @@ export const runCodeForVariables = async (
 
   const variables = await run(program, wantedVariables);
 
-  return {
-    types,
-    variables,
-  };
+  return { types, variables };
 };
 
 export const objectToTupleType = (obj: Record<string, Type>) => {
