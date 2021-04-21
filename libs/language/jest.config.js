@@ -1,5 +1,6 @@
 module.exports = {
   preset: '../../jest.preset.js',
+  testEnvironment: 'node',
   rootDir: '.',
   roots: ['<rootDir>'],
   projects: ['<rootDir>'],
