@@ -1,4 +1,3 @@
-import { createRuntime } from '@decipad/language';
 import { isCollapsed } from '@udecode/slate-plugins';
 import React, {
   useCallback,
