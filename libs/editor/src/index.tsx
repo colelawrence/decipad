@@ -1,9 +1,8 @@
 import { Box } from '@chakra-ui/react';
 import { EditablePlugins } from '@udecode/slate-plugins';
-import { nanoid } from 'nanoid';
 import dynamic from 'next/dynamic';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { createEditor, Node } from 'slate';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Node } from 'slate';
 import {
   ReactEditor,
   RenderElementProps,
@@ -43,9 +42,17 @@ interface DeciEditorProps {
   padId: string;
 }
 
-export const DeciEditor = ({ workspaceId, padId }: DeciEditorProps): JSX.Element => {
-  const [value, setValue] = useState(null)
-  const { loading, editor, onChange: onChangeResult } = useEditor({ workspaceId, padId, withPlugins, setValue })
+export const DeciEditor = ({
+  workspaceId,
+  padId,
+}: DeciEditorProps): JSX.Element => {
+  const [value, setValue] = useState(null);
+  const { loading, editor, onChange: onChangeResult } = useEditor({
+    workspaceId,
+    padId,
+    withPlugins,
+    setValue,
+  });
   const renderElement = useCallback(
     (props: RenderElementProps) => <Elements {...props} />,
     []
@@ -82,14 +89,14 @@ export const DeciEditor = ({ workspaceId, padId }: DeciEditorProps): JSX.Element
   }, [editor]);
 
   if (editor === null) {
-    return <span>Loading...</span>
+    return <span>Loading...</span>;
   }
 
   const onChange = (newValue: Node[]) => {
     onChangeDashCommands(editor);
     onChangeMention(editor);
-    onChangeResult(newValue);
-    setValue(newValue)
+    onChangeResult(editor);
+    setValue(newValue);
   };
 
   return (

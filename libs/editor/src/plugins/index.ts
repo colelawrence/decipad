@@ -14,8 +14,10 @@ import {
   UnderlinePlugin,
   withAutoformat,
   withList,
+  withNodeID,
   withTrailingNode,
 } from '@udecode/slate-plugins';
+import { nanoid } from 'nanoid';
 import { withHistory } from 'slate-history';
 import { withReact } from 'slate-react';
 import { autoFormatOptions } from '../options/autoFormatOptions';
@@ -47,5 +49,6 @@ export const withPlugins = [
   withList(),
   withAutoformat(autoFormatOptions),
   withTrailingNode({ type: 'p' }),
+  withNodeID({ idCreator: () => nanoid() }),
   withMentions,
 ] as const;
