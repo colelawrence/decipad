@@ -191,8 +191,13 @@ export const inferStatement = withErrorSource(
     switch (statement.type) {
       case 'assign': {
         const [nName, nValue] = statement.args;
-        const type = inferExpression(ctx, nValue);
-        ctx.stack.set(nName.args[0], type);
+
+        const varName = getIdentifierString(nName);
+        const type = !ctx.stack.top.has(varName)
+          ? inferExpression(ctx, nValue)
+          : Type.Impossible.withErrorCause(varName + ' already exists.');
+
+        ctx.stack.set(varName, type);
         return type;
       }
       case 'function-definition': {

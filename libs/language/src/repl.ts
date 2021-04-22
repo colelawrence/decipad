@@ -70,18 +70,6 @@ async function execDeci(source: string) {
   source = source.trim();
 
   try {
-    if (source === ':reset') {
-      reset();
-
-      return '';
-    }
-
-    if (source === ':print') {
-      console.log(wholeProgram);
-
-      return '';
-    }
-
     // Syntax check
     await wrappedParse(source)
       .catch(() => null)
@@ -135,9 +123,15 @@ export const replEval = (
 /* istanbul ignore if */
 if (module.parent == null) {
   console.log('\nWelcome to the deci language REPL');
-  repl.start({
+  const r = repl.start({
     prompt: '🐙 > ',
     eval: replEval,
     writer: (str) => str,
+  });
+
+  r.on('reset', reset);
+
+  r.defineCommand('print', () => {
+    console.log(wholeProgram);
   });
 }

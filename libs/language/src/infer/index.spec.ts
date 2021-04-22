@@ -73,6 +73,20 @@ it('infers literals', () => {
   expect(inferExpression(nilCtx, l(true))).toEqual(Type.Boolean);
 });
 
+describe('variables', () => {
+  it('disallows reassigning variables', () => {
+    const reassigning = n(
+      'block',
+      n('assign', n('def', 'Reassigned'), l(1)),
+      n('assign', n('def', 'Reassigned'), l(1))
+    );
+
+    expect(
+      inferProgram([reassigning]).variables.get('Reassigned')?.errorCause
+    ).not.toBeNull();
+  });
+});
+
 describe('ranges', () => {
   it('infers ranges', () => {
     expect(inferExpression(nilCtx, range(1, 2))).toEqual(
