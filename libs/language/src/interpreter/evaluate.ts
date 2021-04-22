@@ -203,9 +203,9 @@ export function evaluateTargets(
   program: AST.Block[],
   desiredTargets: Array<
     string | number | [blockIdx: number, statementIdx: number]
-  >
+  >,
+  realm = new Realm()
 ): Value[] {
-  const realm = new Realm();
   const targetSet: Map<unknown, Value> = new Map(
     desiredTargetsToStatements(program, desiredTargets).map((target) => [
       target,

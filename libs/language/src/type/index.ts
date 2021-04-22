@@ -198,6 +198,10 @@ export class Type {
   }
 
   toString(): string {
+    if (this.errorCause != null) {
+      return `Error: ${this.errorCause.message}`;
+    }
+
     if (this.columnSize != null) {
       return `${this.cellType?.toString()} x ${this.columnSize}`;
     }

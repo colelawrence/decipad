@@ -1,14 +1,18 @@
-import { evaluateTargets } from './evaluate';
 import { n } from '../utils';
+import { evaluateTargets } from './evaluate';
+import { Realm } from './Realm';
+
+export { Realm };
 
 export const run = async (
   program: AST.Block[],
-  desiredTargets: Array<string | number | [number, number]>
+  desiredTargets: Array<string | number | [number, number]>,
+  realm = new Realm()
 ): Promise<Interpreter.Result> =>
-  evaluateTargets(program, desiredTargets).map((v) => v.getData());
+  evaluateTargets(program, desiredTargets, realm).map((v) => v.getData());
 
-export const runOne = async (statement: AST.Statement) => {
-  const [result] = await run([n('block', statement)], [0]);
+export const runOne = async (statement: AST.Statement, realm = new Realm()) => {
+  const [result] = await run([n('block', statement)], [0], realm);
 
   return result;
 };

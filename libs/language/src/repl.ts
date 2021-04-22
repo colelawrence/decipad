@@ -3,8 +3,8 @@ import util from 'util';
 import chalk from 'chalk';
 import { enableMapSet } from 'immer';
 import { parse } from './parser';
-import { run } from './interpreter';
-import { inferProgram } from './infer';
+import { runOne, Realm } from './interpreter';
+import { inferStatement, makeContext as makeInferContext } from './infer';
 import { stringifyDate } from './date';
 import { Type } from './type';
 
@@ -35,7 +35,7 @@ export const stringifyResult = (
   ].join('');
 };
 
-const wrappedParse = async (source: string): Promise<AST.Node> => {
+const wrappedParse = async (source: string): Promise<AST.Statement> => {
   const parsed = parse([
     {
       id: '<repl>',
@@ -53,13 +53,17 @@ const wrappedParse = async (source: string): Promise<AST.Node> => {
     throw new Error('ambiguous parsed syntax!');
   }
 
-  return parsed.solutions[0];
+  return parsed.solutions[0].args[0];
 };
 
 let wholeProgram = '';
+let realm = new Realm();
+let inferContext = makeInferContext();
 
 const reset = () => {
   wholeProgram = '';
+  realm = new Realm();
+  inferContext = makeInferContext();
 };
 
 async function execDeci(source: string) {
@@ -78,10 +82,6 @@ async function execDeci(source: string) {
       return '';
     }
 
-    wholeProgram = ''; // TODO don't reset every time
-
-    const newProgram = wholeProgram + '\n' + source;
-
     // Syntax check
     await wrappedParse(source)
       .catch(() => null)
@@ -93,21 +93,19 @@ async function execDeci(source: string) {
         }
       });
 
-    const ast = await wrappedParse(newProgram);
+    const ast = await wrappedParse(source);
 
-    const program: AST.Block[] = [ast as AST.Block];
-    const type = inferProgram(program).blockReturns[0];
+    const type = inferStatement(inferContext, ast);
 
-    if (type != null && (type as any).returns != null) {
-      const fType = (type as any).returns as Type;
-      return chalk.blue('λ returns ' + fType.toString());
+    if (type.errorCause != null) {
+      return type.toString();
     }
 
-    const result = (await run(program, [0]))[0];
+    const value = await runOne(ast, realm);
 
-    wholeProgram = newProgram;
+    wholeProgram += '\n' + source;
 
-    return stringifyResult(result, type);
+    return stringifyResult(value, type);
   } catch (error) {
     if (error instanceof repl.Recoverable) {
       throw error;

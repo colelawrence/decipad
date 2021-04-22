@@ -6,6 +6,8 @@ import { callBuiltin } from './callBuiltin';
 import { Context, makeContext } from './context';
 import { findBadColumn, unifyColumnSizes } from './table';
 
+export { makeContext };
+
 const withErrorSource = <T extends AST.Node>(
   fn: (ctx: Context, thing: T) => Type
 ) => (ctx: Context, thing: T): Type => {
@@ -128,15 +130,15 @@ export const inferExpression = withErrorSource(
       case 'given': {
         const [ref, body] = expr.args;
 
-        const { cellType } = inferExpression(ctx, ref);
+        const { cellType, columnSize } = inferExpression(ctx, ref);
 
-        if (cellType != null) {
+        if (cellType != null && columnSize != null) {
           return ctx.stack.withPush(() => {
             ctx.stack.set(getIdentifierString(ref), cellType);
 
             const bodyResult = inferExpression(ctx, body);
 
-            return Type.buildColumn(bodyResult, 3);
+            return Type.buildColumn(bodyResult, columnSize);
           });
         } else {
           return Type.Impossible.withErrorCause('Column expected');
