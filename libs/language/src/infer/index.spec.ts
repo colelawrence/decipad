@@ -13,6 +13,7 @@ import {
   given,
   tableDef,
   funcDef,
+  prop,
 } from '../utils';
 
 import { makeContext } from './context';
@@ -286,6 +287,7 @@ describe('Given', () => {
       inferExpression(scopeWithColumn, given('Nums', c('+', r('Nums'), l(1))))
     ).toEqual(Type.buildColumn(Type.Number, 3));
   });
+
   it('Works with non-scalar bodies', () => {
     const scopeWithColumn = makeContext([
       ['Nums', Type.buildColumn(Type.Number, 3)],
@@ -299,19 +301,38 @@ describe('Given', () => {
       inferExpression(scopeWithColumn, given('Nums', col(l('s1'), l(1))))
     ).toEqual(Type.buildColumn(Type.buildTuple([Type.String, Type.Number]), 3));
   });
-  it('Needs a column', () => {
-    const scopeWithTuple = makeContext([
+
+  it('Works with tables', () => {
+    const scopeWithTable = makeContext([
       [
-        'Tuple',
-        Type.buildTuple([
-          Type.buildColumn(Type.Number, 3),
-          Type.buildColumn(Type.String, 3),
-        ]),
+        'Table',
+        Type.buildTuple(
+          [Type.buildColumn(Type.Number, 4), Type.buildColumn(Type.String, 4)],
+          ['Nums', 'Strs']
+        ),
       ],
     ]);
 
     expect(
-      inferExpression(scopeWithTuple, given('Tuple', l(1))).errorCause
+      inferExpression(
+        scopeWithTable,
+        given('Table', c('+', prop('Table', 'Nums'), l(1)))
+      )
+    ).toEqual(Type.buildColumn(Type.Number, 4));
+  });
+
+  it('Needs a column or table', () => {
+    const scopeWithTupleAndNum = makeContext([
+      ['Tuple', Type.buildTuple([Type.Number, Type.String])],
+      ['Num', Type.Number],
+    ]);
+
+    expect(
+      inferExpression(scopeWithTupleAndNum, given('Tuple', l(1))).errorCause
+    ).not.toBeNull();
+
+    expect(
+      inferExpression(scopeWithTupleAndNum, given('Num', l(1))).errorCause
     ).not.toBeNull();
   });
 });

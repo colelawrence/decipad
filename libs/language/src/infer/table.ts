@@ -6,6 +6,12 @@ export const findBadColumn = (table: Type) =>
     (c) => c.errorCause != null
   );
 
+export const getLargestColumn = (tupleTypes: Type[]) => {
+  const columnSizes = new Set([...tupleTypes].map((c) => c.columnSize));
+  columnSizes.delete(null);
+  return [...columnSizes][0] ?? 1;
+};
+
 export const unifyColumnSizes = (
   statement: AST.TableDefinition,
   table: Type
@@ -14,9 +20,7 @@ export const unifyColumnSizes = (
     throw new Error('panic: expected tuple with names');
   }
 
-  const columnSizes = new Set([...table.tupleTypes].map((c) => c.columnSize));
-  columnSizes.delete(null);
-  const columnSize = [...columnSizes][0] ?? 1;
+  const columnSize = getLargestColumn(table.tupleTypes);
 
   const tupleTypes = [];
   const tupleNames = [];

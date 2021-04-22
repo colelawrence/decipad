@@ -42,6 +42,13 @@ const propagate = (_: Type, _methodName: string, desc: PropertyDescriptor) => {
   const method = desc.value;
 
   desc.value = function (this: Type, ...args: any[]) {
+    if (
+      this.functionness ||
+      args.some((a) => a instanceof Type && a.functionness)
+    ) {
+      throw new Error('panic: functions cannot be used');
+    }
+
     const errored = [this, ...args].find(
       (a) => a instanceof Type && a.errorCause != null
     );
@@ -65,6 +72,7 @@ export class Type {
   static String: Type;
   static Boolean: Type;
   static Impossible: Type;
+  static FunctionPlaceholder: Type;
 
   type: string | null = null;
   unit: AST.Unit[] | null = null;
@@ -80,6 +88,9 @@ export class Type {
   // Tuple
   tupleTypes: Type[] | null = null;
   tupleNames: string[] | null = null;
+
+  // Functions are impossible types with functionness = true
+  functionness = false;
 
   private constructor() {}
 
@@ -485,4 +496,7 @@ Type.String = Type.buildScalar('string');
 Type.Boolean = Type.buildScalar('boolean');
 Type.Impossible = produce(Type.buildScalar('number'), (impossibleType) => {
   impossibleType.type = null;
+});
+Type.FunctionPlaceholder = produce(Type.Impossible, (fType) => {
+  fType.functionness = true;
 });

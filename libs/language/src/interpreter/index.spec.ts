@@ -1,4 +1,15 @@
-import { c, l, n, col, range, date, given, funcDef, tableDef } from '../utils';
+import {
+  c,
+  l,
+  n,
+  col,
+  range,
+  date,
+  given,
+  funcDef,
+  tableDef,
+  prop,
+} from '../utils';
 import { parseUTCDate } from '../date';
 import { run, runOne } from './index';
 
@@ -184,6 +195,18 @@ it('can evaluate tables', async () => {
   ]);
 });
 
+it('can get a column from a table', async () => {
+  const block = n(
+    'block',
+    tableDef('Table', {
+      Col: col('hi', 'there'),
+    }),
+    prop('Table', 'Col')
+  );
+
+  expect(await run([block], [0])).toEqual([['hi', 'there']]);
+});
+
 describe('higher dimensions', () => {
   it('Can operate upon 2D columns', async () => {
     const column = col(col(l(1), l(2), l(3)), col(l(4), l(5), l(6)));
@@ -247,6 +270,34 @@ describe('Dimensions', () => {
       ]);
 
       expect(await runWithCol(col(n('ref', 'Col'), l(1)))).toEqual([
+        [1, 1],
+        [2, 1],
+        [3, 1],
+      ]);
+    });
+
+    const runWithTable = async (expr: AST.Expression) => {
+      const assignTable = tableDef('Table', {
+        Nums: col(1, 2, 3),
+      });
+      const [result] = await run(
+        [n('block', assignTable, given('Table', expr))],
+        [0]
+      );
+
+      return result;
+    };
+
+    it('can map over a table by providing rows', async () => {
+      expect(await runWithTable(l('hi'))).toEqual(['hi', 'hi', 'hi']);
+
+      expect(await runWithTable(c('+', prop('Table', 'Nums'), l(1)))).toEqual([
+        2,
+        3,
+        4,
+      ]);
+
+      expect(await runWithTable(col(prop('Table', 'Nums'), l(1)))).toEqual([
         [1, 1],
         [2, 1],
         [3, 1],

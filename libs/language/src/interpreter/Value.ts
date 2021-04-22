@@ -95,7 +95,6 @@ export class Range implements SimpleValue {
 }
 
 export class Column implements SimpleValue {
-  rangeOf = null;
   values: SimpleValue[];
   valueNames: string[] | null = null;
 

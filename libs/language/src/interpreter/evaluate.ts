@@ -96,6 +96,7 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
     }
     case 'column': {
       const values: SimpleValue[] = node.args[0].map((v) => evaluate(realm, v));
+
       return Column.fromValues(values);
     }
     case 'table-definition': {
@@ -156,13 +157,33 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
       }
 
       return realm.stack.withPush(() => {
-        const mapped = predicate.values.map((value) => {
-          realm.stack.set(predicateName, value);
+        if (predicate.valueNames != null) {
+          // It's a table
 
-          return evaluate(realm, body);
-        });
+          const columns = predicate.values as Column[];
+          const colNames = predicate.valueNames;
+          const tableLength = getDefined(columns[0].values.length);
 
-        return Column.fromValues(mapped);
+          const mapped = new Array(tableLength).fill(null).map((_, index) => {
+            const row = Column.fromNamedValues(
+              columns.map((p) => p.values[index]),
+              colNames
+            );
+            realm.stack.set(predicateName, row);
+
+            return evaluate(realm, body);
+          });
+
+          return Column.fromValues(mapped);
+        } else {
+          const mapped = predicate.values.map((value) => {
+            realm.stack.set(predicateName, value);
+
+            return evaluate(realm, body);
+          });
+
+          return Column.fromValues(mapped);
+        }
       });
     }
   }

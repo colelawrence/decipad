@@ -109,6 +109,10 @@ export function given(varName: string, body: AST.Expression) {
   return n('given', n('ref', varName), body);
 }
 
+export function prop(varName: string, propName: string) {
+  return n('property-access', n('ref', varName), propName);
+}
+
 export function getOfType<
   K extends AST.Node['type'],
   N extends AST.TypeToNode[K]
@@ -143,6 +147,7 @@ export const isExpression = (
     'range',
     'date',
     'given',
+    'property-access',
   ].includes(value.type);
 };
 

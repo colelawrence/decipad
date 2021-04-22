@@ -4,7 +4,7 @@ import { DateSpecificity } from '../date';
 
 import { callBuiltin } from './callBuiltin';
 import { Context, makeContext } from './context';
-import { findBadColumn, unifyColumnSizes } from './table';
+import { findBadColumn, unifyColumnSizes, getLargestColumn } from './table';
 
 export { makeContext };
 
@@ -129,20 +129,31 @@ export const inferExpression = withErrorSource(
       }
       case 'given': {
         const [ref, body] = expr.args;
+        const refName = getIdentifierString(ref);
 
-        const { cellType, columnSize } = inferExpression(ctx, ref);
+        const {
+          cellType,
+          columnSize,
+          tupleTypes,
+          tupleNames,
+        } = inferExpression(ctx, ref);
 
-        if (cellType != null && columnSize != null) {
-          return ctx.stack.withPush(() => {
-            ctx.stack.set(getIdentifierString(ref), cellType);
+        return ctx.stack.withPush(() => {
+          if (cellType != null && columnSize != null) {
+            ctx.stack.set(refName, cellType);
 
             const bodyResult = inferExpression(ctx, body);
 
             return Type.buildColumn(bodyResult, columnSize);
-          });
-        } else {
-          return Type.Impossible.withErrorCause('Column expected');
-        }
+          } else if (tupleTypes != null && tupleNames != null) {
+            const rowTypes = tupleTypes.map((t) => t.reduced());
+            ctx.stack.set(refName, Type.buildTuple(rowTypes, tupleNames));
+
+            return Type.buildColumn(Type.Number, getLargestColumn(tupleTypes));
+          } else {
+            return Type.Impossible.withErrorCause('Column or table expected');
+          }
+        });
       }
     }
   }
@@ -205,7 +216,7 @@ export const inferStatement = withErrorSource(
 
         ctx.functionDefinitions.set(fName, statement);
 
-        return Type.Impossible.withErrorCause('Functions are not types');
+        return Type.FunctionPlaceholder;
       }
       case 'table-definition': {
         const tName = getIdentifierString(statement.args[0]);
