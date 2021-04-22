@@ -11,7 +11,7 @@ export const CodeBlock = ({
   return (
     <Box>
       {element.result && (
-        <Box contentEditable={false} bg="green.500" color="#fff">
+        <Box contentEditable={false} bg="green.500" p={3} color="#fff">
           {element.result}
         </Box>
       )}
