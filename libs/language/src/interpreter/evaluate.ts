@@ -50,11 +50,15 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
         return realm.previousValue ?? args[0];
       } else if (hasBuiltin(funcName)) {
         const builtin = builtins[funcName];
-        return reduceValuesThroughDims(args, (argsLowerDims) => {
-          const argData = argsLowerDims.map((a) => a.getData());
+        return reduceValuesThroughDims(
+          args,
+          (argsLowerDims) => {
+            const argData = argsLowerDims.map((a) => a.getData());
 
-          return fromJS(builtin.fn(...argData));
-        });
+            return fromJS(builtin.fn(...argData));
+          },
+          { reduces: builtin.reduces }
+        );
       } else {
         const customFunc = getDefined(realm.functions.get(funcName));
 

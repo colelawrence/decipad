@@ -3,6 +3,8 @@ import { Type } from '../type';
 export interface BuiltinSpec {
   name: string;
   argCount: number;
+  /** Which argument is supposed to be an array. Only "0" is supported and argCount must be 1 */
+  reduces?: number;
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   fn: (...args: any[]) => any;
   functor: (...types: Type[]) => Type;
@@ -117,6 +119,14 @@ export const builtins: Record<string, BuiltinSpec> = {
     argCount: 2,
     fn: ([aStart], [bStart]) => aStart >= bStart,
     functor: dateCmpFunctor,
+  },
+  // Reduce funcs
+  total: {
+    name: 'total',
+    argCount: 1,
+    reduces: 0,
+    fn: (nums: number[]) => nums.reduce((a, b) => a + b),
+    functor: (nums: Type) => nums.reduced(),
   },
 };
 

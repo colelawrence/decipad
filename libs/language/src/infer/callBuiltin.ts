@@ -21,7 +21,9 @@ export const callBuiltin = (
     );
   }
 
-  return reduceTypesThroughDims(givenArguments, (types) =>
-    Type.runFunctor(callExpr, builtin.functor, ...types)
+  return reduceTypesThroughDims(
+    givenArguments,
+    (types) => Type.runFunctor(callExpr, builtin.functor, ...types),
+    { reduces: builtin.reduces }
   );
 };

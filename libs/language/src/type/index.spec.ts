@@ -1,7 +1,7 @@
 import { produce } from 'immer';
 import { c, l } from '../utils';
 import { InferError } from './InferError';
-import { inverseExponent, setExponent } from './units'
+import { inverseExponent, setExponent } from './units';
 import { Type } from './index';
 
 const testNode = c('node 1', l(1));
@@ -45,16 +45,18 @@ it('Can assert type equivalence and pass on this information', () => {
 
 it('can be unified with sameAs', () => {
   const sameAsItself = (t: Type) => {
-    expect(t.sameAs(t)).toEqual(t)
-  }
+    expect(t.sameAs(t)).toEqual(t);
+  };
 
-  sameAsItself(Type.Number)
-  sameAsItself(Type.String)
-  sameAsItself(Type.build({ type: 'number', unit: [meter] }))
-  sameAsItself(Type.build({ type: 'number', unit: [second, meter] }))
-  sameAsItself(Type.buildColumn(Type.Number, 6))
-  sameAsItself(Type.buildColumn(Type.buildTuple([Type.Number, Type.String]), 6))
-})
+  sameAsItself(Type.Number);
+  sameAsItself(Type.String);
+  sameAsItself(Type.build({ type: 'number', unit: [meter] }));
+  sameAsItself(Type.build({ type: 'number', unit: [second, meter] }));
+  sameAsItself(Type.buildColumn(Type.Number, 6));
+  sameAsItself(
+    Type.buildColumn(Type.buildTuple([Type.Number, Type.String]), 6)
+  );
+});
 
 describe('Type.combine', () => {
   it('returns the last type', () => {
@@ -62,7 +64,7 @@ describe('Type.combine', () => {
   });
 
   it('returns any error in the args', () => {
-    const badType = Type.Impossible.withErrorCause((''));
+    const badType = Type.Impossible.withErrorCause('');
     expect(Type.combine(Type.Number, badType)).toEqual(badType);
     expect(Type.combine(badType, Type.Number)).toEqual(badType);
   });
@@ -74,43 +76,72 @@ describe('Type.combine', () => {
 
 describe('new columns and tuples', () => {
   it('can get cardinality', () => {
-    expect(Type.Number.cardinality).toEqual(1)
+    expect(Type.Number.cardinality).toEqual(1);
 
-    expect(Type.buildColumn(Type.buildColumn(Type.Number, 2), 2).cardinality).toEqual(3)
+    expect(
+      Type.buildColumn(Type.buildColumn(Type.Number, 2), 2).cardinality
+    ).toEqual(3);
 
-    expect(Type.buildColumn(Type.buildColumn(Type.buildDate('month'), 9), 9).cardinality).toEqual(3)
+    expect(
+      Type.buildColumn(Type.buildColumn(Type.buildDate('month'), 9), 9)
+        .cardinality
+    ).toEqual(3);
 
-    expect(Type.buildColumn(Type.buildColumn(Type.build({ type: 'number', rangeness: true }), 9), 9).cardinality).toEqual(3)
+    expect(
+      Type.buildColumn(
+        Type.buildColumn(Type.build({ type: 'number', rangeness: true }), 9),
+        9
+      ).cardinality
+    ).toEqual(3);
 
-    expect(Type.buildTuple([Type.Number, Type.buildColumn(Type.Number, 6)]).cardinality).toEqual(3)
-  })
+    expect(
+      Type.buildTuple([Type.Number, Type.buildColumn(Type.Number, 6)])
+        .cardinality
+    ).toEqual(3);
+  });
+
+  it('Can reduce one dimension off the top', () => {
+    expect(Type.buildColumn(Type.String, 3).reduced()).toEqual(Type.String);
+    expect(
+      Type.buildColumn(Type.buildColumn(Type.String, 3), 1).reduced()
+    ).toEqual(Type.buildColumn(Type.String, 3));
+
+    expect(Type.String.reduced().errorCause).not.toBeNull();
+    expect(Type.buildTuple([Type.String]).reduced().errorCause).not.toBeNull();
+  });
 
   it('can be built with Type.buildListLike', () => {
-    expect(Type.buildListLike([Type.Number])).toEqual(Type.buildColumn(Type.Number, 1))
+    expect(Type.buildListLike([Type.Number])).toEqual(
+      Type.buildColumn(Type.Number, 1)
+    );
 
-    expect(Type.buildListLike([Type.Number, Type.String])).toEqual(Type.buildTuple([Type.Number, Type.String]))
+    expect(Type.buildListLike([Type.Number, Type.String])).toEqual(
+      Type.buildTuple([Type.Number, Type.String])
+    );
 
-    expect(Type.buildListLike([Type.buildColumn(Type.Number, 1), Type.String])).toEqual(Type.buildTuple([Type.buildColumn(Type.Number, 1), Type.String]))
-  })
+    expect(
+      Type.buildListLike([Type.buildColumn(Type.Number, 1), Type.String])
+    ).toEqual(Type.buildTuple([Type.buildColumn(Type.Number, 1), Type.String]));
+  });
 
   it('can be stringified', () => {
-    const table = Type.buildTuple([
-      Type.build({ type: 'number', unit: [meter] }),
-      Type.build({ type: 'string'})
-    ], [
-      'Col1',
-      'Col2'
-    ])
+    const table = Type.buildTuple(
+      [
+        Type.build({ type: 'number', unit: [meter] }),
+        Type.build({ type: 'string' }),
+      ],
+      ['Col1', 'Col2']
+    );
 
     expect(table.toString()).toEqual('[ Col1 = meter, Col2 = <string> ]');
 
-    const col = Type.buildColumn(Type.String, 4)
-    expect(col.toString()).toEqual('<string> x 4')
+    const col = Type.buildColumn(Type.String, 4);
+    expect(col.toString()).toEqual('<string> x 4');
 
-    const nestedCol = Type.buildColumn(Type.buildColumn(Type.String, 4), 6)
-    expect(nestedCol.toString()).toEqual('<string> x 4 x 6')
-  })
-})
+    const nestedCol = Type.buildColumn(Type.buildColumn(Type.String, 4), 6);
+    expect(nestedCol.toString()).toEqual('<string> x 4 x 6');
+  });
+});
 
 describe('Impossible types', () => {
   it('returns an impossible type and remembers causality', () => {
@@ -127,8 +158,8 @@ describe('Impossible types', () => {
   });
 
   it('propagates impossibility', () => {
-    const imp = Type.Impossible.withErrorCause(('imp 1'));
-    const imp2 = Type.Impossible.withErrorCause(('imp 2'));
+    const imp = Type.Impossible.withErrorCause('imp 1');
+    const imp2 = Type.Impossible.withErrorCause('imp 2');
 
     expect(imp.sameAs(imp2)).toEqual(imp);
     expect(Type.Number.sameAs(imp2)).toEqual(imp2);
@@ -139,15 +170,13 @@ describe('Impossible types', () => {
     expect(imp.multiplyUnit([meter])).toEqual(imp);
     expect(imp.divideUnit([meter])).toEqual(imp);
 
-    expect(
-      imp.withErrorCause('ignored different error')
-    ).toEqual(imp);
+    expect(imp.withErrorCause('ignored different error')).toEqual(imp);
   });
 });
 
 describe('Type.runFunctor', () => {
   it('replicates types in arguments which are already impossible, and does not call the function', () => {
-    const impossible = Type.Impossible.withErrorCause((''));
+    const impossible = Type.Impossible.withErrorCause('');
     const functor = jest.fn();
 
     expect(Type.runFunctor(testNode, functor, impossible)).toEqual(impossible);
@@ -156,10 +185,10 @@ describe('Type.runFunctor', () => {
 
   it('calls the functor and assigns an error cause and source node to it if there is an error', () => {
     const type = Type.String;
-    const functor = (a: Type) => a.withErrorCause((''));
+    const functor = (a: Type) => a.withErrorCause('');
 
     expect(Type.runFunctor(testNode, functor, type)).toEqual(
-      type.withErrorCause(('')).inNode(testNode)
+      type.withErrorCause('').inNode(testNode)
     );
   });
 
@@ -327,20 +356,18 @@ describe('dates', () => {
     expect(month.isDate('month')).toEqual(month);
 
     expect(month.isDate('day')).toEqual(
-      month.withErrorCause(('Expected date with day specificity'))
+      month.withErrorCause('Expected date with day specificity')
     );
 
     expect(day.isDate('month')).toEqual(
-      day.withErrorCause(('Expected date with month specificity'))
+      day.withErrorCause('Expected date with month specificity')
     );
 
     expect(Type.Number.isDate('month')).toEqual(
-      Type.Number.withErrorCause(('Expected date'))
+      Type.Number.withErrorCause('Expected date')
     );
 
-    expect(day.isNotDate()).toEqual(
-      day.withErrorCause(('Unexpected date'))
-    );
+    expect(day.isNotDate()).toEqual(day.withErrorCause('Unexpected date'));
   });
 
   it('can be checked without specificity', () => {
@@ -354,16 +381,16 @@ describe('dates', () => {
 
     // Differing dateness
     expect(Type.Number.sameDatenessAs(day)).toEqual(
-      Type.Number.withErrorCause(('Expected date'))
+      Type.Number.withErrorCause('Expected date')
     );
 
     expect(day.sameDatenessAs(Type.Number)).toEqual(
-      day.withErrorCause(('Unexpected date'))
+      day.withErrorCause('Unexpected date')
     );
 
     // Differing specificity
     expect(month.sameDatenessAs(day)).toEqual(
-      month.withErrorCause(('Expected date with day specificity'))
+      month.withErrorCause('Expected date with day specificity')
     );
 
     expect(month.sameDatenessAs(day)).toEqual(month.sameAs(day));

@@ -225,27 +225,43 @@ describe('higher dimensions', () => {
   });
 });
 
-describe('given', () => {
-  const runWithCol = async (expr: AST.Expression) => {
-    const assignCol = n('assign', n('def', 'Col'), col(l(1), l(2), l(3)));
-    const [result] = await run(
-      [n('block', assignCol, given('Col', expr))],
-      [0]
-    );
+describe('Dimensions', () => {
+  describe('given', () => {
+    const runWithCol = async (expr: AST.Expression) => {
+      const assignCol = n('assign', n('def', 'Col'), col(l(1), l(2), l(3)));
+      const [result] = await run(
+        [n('block', assignCol, given('Col', expr))],
+        [0]
+      );
 
-    return result;
-  };
+      return result;
+    };
 
-  it('can raise a dimension by acting like a map function', async () => {
-    expect(await runWithCol(l('hi'))).toEqual(['hi', 'hi', 'hi']);
+    it('can raise a dimension by acting like a map function', async () => {
+      expect(await runWithCol(l('hi'))).toEqual(['hi', 'hi', 'hi']);
 
-    expect(await runWithCol(c('+', n('ref', 'Col'), l(1)))).toEqual([2, 3, 4]);
+      expect(await runWithCol(c('+', n('ref', 'Col'), l(1)))).toEqual([
+        2,
+        3,
+        4,
+      ]);
 
-    expect(await runWithCol(col(n('ref', 'Col'), l(1)))).toEqual([
-      [1, 1],
-      [2, 1],
-      [3, 1],
-    ]);
+      expect(await runWithCol(col(n('ref', 'Col'), l(1)))).toEqual([
+        [1, 1],
+        [2, 1],
+        [3, 1],
+      ]);
+    });
+  });
+
+  describe('(sum nums)', () => {
+    it('evaluates total', async () => {
+      expect(await runOne(c('total', col(1, 2, 3)))).toEqual(6);
+
+      expect(
+        await runOne(c('total', col(col(1, 2, 3), col(3, 3, 3))))
+      ).toEqual([6, 9]);
+    });
   });
 });
 

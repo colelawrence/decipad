@@ -24,6 +24,34 @@ const allMatch = <T extends unknown>(
     return nextItem != null ? matchFn(tuple, nextItem) : true;
   });
 
+interface ReduceOptions {
+  reduces?: number;
+}
+
+const getToReduce = <T extends { cardinality: number }>(
+  args: T[],
+  reduceOptions?: ReduceOptions
+): T[] | null => {
+  if (reduceOptions?.reduces != null) {
+    if (args.length !== 1) {
+      throw new Error(
+        'Not implemented: non-unary functions being dimension reducers'
+      );
+    }
+
+    if (args[0].cardinality === 1) {
+      throw new Error('Panic: reducer function being called with a scalar');
+    }
+
+    // column of scalars
+    if (args[0].cardinality === 2) {
+      return args;
+    }
+  }
+
+  return null;
+};
+
 // Takes a function that works on scalar types, and raises dimensions recursively
 // until they're scalar and good to be arguments to that function.
 // Examples:
@@ -32,9 +60,15 @@ const allMatch = <T extends unknown>(
 // [[a, b], [c, d]] calls the function with (a, c) and (b, d)
 export const reduceTypesThroughDims = (
   types: Type[],
-  mapFn: (types: Type[]) => Type
+  mapFn: (types: Type[]) => Type,
+  reduceOptions?: ReduceOptions
 ): Type => {
   function recurse(types: Type[]): Type {
+    const toReduce = getToReduce(types, reduceOptions);
+    if (toReduce != null) {
+      return mapFn(toReduce);
+    }
+
     const columns = types.filter((t) => t.cellType != null);
     const tuples = types.filter((t) => t.tupleTypes != null);
 
@@ -84,9 +118,15 @@ export const reduceTypesThroughDims = (
 // Extremely symmetric with the above function
 export const reduceValuesThroughDims = (
   values: Values.Value[],
-  mapFn: (values: Values.Value[]) => Values.Value
+  mapFn: (values: Values.Value[]) => Values.Value,
+  reduceOptions?: ReduceOptions
 ): Values.Value => {
   function recurse(values: Values.Value[]): Values.Value {
+    const toReduce = getToReduce(values, reduceOptions);
+    if (toReduce != null) {
+      return mapFn(toReduce);
+    }
+
     const columns = values.filter((t) => t.cardinality > 1);
 
     if (columns.length > 0) {

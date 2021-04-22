@@ -173,6 +173,12 @@ describe('columns', () => {
       })
     );
   });
+
+  it('can be reduced with the total function', () => {
+    expect(inferExpression(nilCtx, c('total', col(1, 2, 3)))).toEqual(
+      Type.Number
+    );
+  });
 });
 
 describe('tables', () => {

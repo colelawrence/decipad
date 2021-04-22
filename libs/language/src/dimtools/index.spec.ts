@@ -102,6 +102,33 @@ describe('reduceTypesThroughDims', () => {
       Type.Impossible.withErrorCause('Mismatched tuples')
     );
   });
+
+  it('can reduce types', () => {
+    const total = ([a]: Type[]) => a.reduced();
+
+    expect(
+      reduceTypesThroughDims([Type.buildColumn(num, 5)], total, { reduces: 0 })
+    ).toEqual(num);
+
+    expect(
+      reduceTypesThroughDims(
+        [Type.buildColumn(Type.buildColumn(num, 5), 1)],
+        total,
+        { reduces: 0 }
+      )
+    ).toEqual(Type.buildColumn(num, 1));
+
+    expect(() =>
+      reduceTypesThroughDims([num], total, { reduces: 0 })
+    ).toThrow();
+    expect(() =>
+      reduceTypesThroughDims(
+        [Type.buildColumn(num, 5), Type.buildColumn(num, 5)],
+        total,
+        { reduces: 0 }
+      )
+    ).toThrow();
+  });
 });
 
 describe('reduceValuesThroughDims', () => {
@@ -114,10 +141,10 @@ describe('reduceValuesThroughDims', () => {
       ]),
     ]);
 
-    const oneDim = Values.fromJS(2);
+    const scalar = Values.fromJS(2);
 
     const calledOnValues: Values.Value[] = [];
-    const result = reduceValuesThroughDims([multiDim, oneDim], ([v1, v2]) => {
+    const result = reduceValuesThroughDims([multiDim, scalar], ([v1, v2]) => {
       calledOnValues.push(Values.Column.fromValues([v1, v2]));
       return Values.fromJS((v1.getData() as number) * (v2.getData() as number));
     });
@@ -137,5 +164,37 @@ describe('reduceValuesThroughDims', () => {
       [32, 2],
       [64, 2],
     ]);
+  });
+
+  describe('value reduction', () => {
+    const sumOne = ([val]: Values.SimpleValue[]) =>
+      Values.fromJS((val.getData() as number[]).reduce((a, b) => a + b));
+
+    it('does not reduce the last dimension, leaving the mapfn to it', () => {
+      const values = Values.fromJS([1, 2, 4]);
+
+      const result = reduceValuesThroughDims([values], sumOne, { reduces: 0 });
+
+      expect(result.getData()).toEqual(7);
+    });
+
+    it('supports reducing the last of many dimensions', () => {
+      const deepValues = Values.fromJS([
+        [1, 2, 4],
+        [8, 16, 32],
+      ]);
+
+      const result = reduceValuesThroughDims([deepValues], sumOne, {
+        reduces: 0,
+      });
+
+      expect(result.getData()).toEqual([7, 56]);
+    });
+
+    it('panics with less than 1 dimension', () => {
+      expect(() => {
+        reduceValuesThroughDims([Values.fromJS(1)], sumOne, { reduces: 0 });
+      }).toThrow(/Panic/i);
+    });
   });
 });
