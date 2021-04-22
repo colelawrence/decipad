@@ -97,10 +97,10 @@ async function execDeci(source: string) {
   } catch (error) {
     if (error instanceof repl.Recoverable) {
       throw error;
+    } else {
+      console.error(error);
+      return '< Crashed >';
     }
-
-    console.error(error);
-    return '< Crashed >';
   }
 }
 

@@ -1,28 +1,17 @@
 export { date } from './date';
 
-export const walkSkip = Symbol(
-  "Return this while walking to skip a node's children"
-);
+type WalkFn = (node: AST.Node, depth: number) => void;
 
-type WalkFn<T> = (node: AST.Node, depth: number) => T | typeof walkSkip;
+export const walk = (node: AST.Node, fn: WalkFn, depth = 0) => {
+  fn(node, depth);
 
-export const walk = <T>(node: AST.Node, fn: WalkFn<T>, depth = 0): T | null => {
-  const ret = fn(node, depth);
-
-  if (ret === walkSkip) return null;
-  if (ret != null) return ret;
-
-  if (node.type === 'literal') return null;
+  if (node.type === 'literal') return;
 
   for (const arg of node.args) {
     if (isNode(arg)) {
-      const childReturn = walk(arg, fn, depth + 1);
-
-      if (childReturn != null) return childReturn;
+      walk(arg, fn, depth + 1);
     }
   }
-
-  return null;
 };
 
 export function n<K extends AST.Node['type'], N extends AST.TypeToNode[K]>(
@@ -53,13 +42,7 @@ export function l(value: LitType, ...units: AST.Unit[]): AST.Literal {
 export function col(...values: (LitType | AST.Expression)[]): AST.Column {
   return n(
     'column',
-    values.map((value) => {
-      if (isExpression(value)) {
-        return value;
-      } else {
-        return l(value);
-      }
-    })
+    values.map((value) => (isExpression(value) ? value : l(value)))
   );
 }
 
@@ -81,6 +64,7 @@ export function tableDef(
     tableCols.args.push(n('coldef', key));
     tableCols.args.push(value);
   }
+
   return n('table-definition', n('tabledef', name), tableCols);
 }
 
@@ -134,22 +118,21 @@ export const isNode = (value: unknown | AST.Node): value is AST.Node => {
   return typeof valueAny.type === 'string' && Array.isArray(valueAny.args);
 };
 
+const expressionTypesSet = new Set([
+  'function-call',
+  'ref',
+  'property-access',
+  'literal',
+  'column',
+  'range',
+  'date',
+  'given',
+]);
+
 export const isExpression = (
   value: unknown | AST.Expression
-): value is AST.Expression => {
-  if (!isNode(value)) return false;
-
-  return [
-    'function-call',
-    'ref',
-    'literal',
-    'column',
-    'range',
-    'date',
-    'given',
-    'property-access',
-  ].includes(value.type);
-};
+): value is AST.Expression =>
+  isNode(value) && expressionTypesSet.has(value.type);
 
 export const getIdentifierString = ({ type, args }: AST.Identifier): string => {
   if (

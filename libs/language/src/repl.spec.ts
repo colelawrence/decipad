@@ -4,24 +4,30 @@ import repl from 'repl';
 import { Type } from './type';
 import { replEval, stringifyResult } from './repl';
 
-it('can evaluate stuff', (done) => {
-  expect.assertions(1);
-
-  replEval('1 + 1', null, null, (...args) => {
-    expect(args).toEqual([null, `${chalk.blue('2')} <number>`]);
-
-    done();
+const testEval = (source: string) =>
+  new Promise((resolve, reject) => {
+    replEval(source, null, null, (err, val) => {
+      if (err) reject(err);
+      else resolve(val);
+    });
   });
+
+it('ignores empty lines', async () => {
+  expect(await testEval('')).toEqual(null);
 });
 
-it('detects unfinished syntax and raises a Recoverable error', (done) => {
-  expect.assertions(1);
+it('can evaluate stuff', async () => {
+  expect(await testEval('1 + 1')).toEqual(`${chalk.blue('2')} <number>`);
+});
 
-  replEval('Table = {', null, null, (error) => {
-    expect(error).toBeInstanceOf(repl.Recoverable);
+it('can display type errors', async () => {
+  expect(await testEval('1 + "two"')).toMatch(/^Error: /);
+});
 
-    done();
-  });
+it('detects unfinished syntax and raises a Recoverable error', async () => {
+  await expect(() => testEval('Unfinished = [')).rejects.toBeInstanceOf(
+    repl.Recoverable
+  );
 });
 
 describe('stringify', () => {
