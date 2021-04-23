@@ -10,7 +10,26 @@ import { n } from '../utils';
  * For now, here's some nonsense about turning dates into arrays and back:
  */
 
-export type DateSpecificity = 'year' | 'quarter' | 'month' | 'day' | 'time';
+const dateSpecificities = ['year', 'quarter', 'month', 'day', 'time'];
+const timeSpecificities = new Set(['hour', 'minute', 'second', 'millisecond']);
+
+export type DateSpecificity = typeof dateSpecificities[number];
+
+const getSpecificity = (
+  thing?: string | number | AST.TZInfo
+): DateSpecificity => {
+  /* istanbul ignore else */
+  if (typeof thing === 'string') {
+    if (dateSpecificities.includes(thing)) {
+      return thing;
+    }
+    if (timeSpecificities.has(thing)) {
+      return 'time';
+    }
+  }
+
+  throw new Error('panic: expected DateSpecificity, got ' + thing);
+};
 
 const specificityToIndex: Record<string, number> = {
   year: 0,
@@ -76,7 +95,7 @@ export function arrayToDate(
 
     if (segNumber != null) {
       dateArgs.push(segNumber);
-      lastSegment = segName as DateSpecificity;
+      lastSegment = getSpecificity(segName);
     } else {
       break;
     }
@@ -87,6 +106,18 @@ export function arrayToDate(
     lastSegment,
   ];
 }
+
+export const dateNodeToSpecificity = (node: AST.Date): DateSpecificity => {
+  let lowestSegment: DateSpecificity = 'year';
+
+  for (let i = 0; i + 1 < node.args.length; i += 2) {
+    const segment = node.args[i] as string;
+
+    lowestSegment = getSpecificity(segment);
+  }
+
+  return lowestSegment;
+};
 
 export const dateToArray = (date: Date | number) => {
   const d = new Date(date);

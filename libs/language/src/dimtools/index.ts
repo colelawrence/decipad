@@ -1,18 +1,6 @@
-import { dequal } from 'dequal';
-
 import { getDefined } from '../utils';
 import { Type } from '../type';
 import * as Values from '../interpreter/Value';
-
-const tuplesMatch = (tupleA: Type, tupleB: Type) => {
-  const typesA = getDefined(tupleA.tupleTypes);
-  const typesB = getDefined(tupleB.tupleTypes);
-
-  return (
-    dequal(tupleA.tupleNames, tupleB.tupleNames) &&
-    typesA.length === typesB.length
-  );
-};
 
 const allMatch = <T extends unknown>(
   array: T[],
@@ -69,28 +57,11 @@ export const reduceTypesThroughDims = (
       return mapFn(toReduce);
     }
 
-    const columns = types.filter((t) => t.cellType != null);
-    const tuples = types.filter((t) => t.tupleTypes != null);
-
-    if (tuples.length > 0) {
-      if (tuples.length !== types.length || !allMatch(types, tuplesMatch)) {
-        return Type.Impossible.withErrorCause('Mismatched tuples');
-      } else {
-        const tupleLength = getDefined(tuples[0].tupleTypes?.length);
-        const tupleNames = tuples[0].tupleNames;
-        const tupleTypes = [];
-
-        for (let i = 0; i < tupleLength; i++) {
-          const ithTupleTypes = tuples.map((t) =>
-            getDefined(t.tupleTypes?.[i])
-          );
-
-          tupleTypes.push(recurse(ithTupleTypes));
-        }
-
-        return Type.buildTuple(tupleTypes, tupleNames);
-      }
+    if (types.some((t) => t.tupleTypes != null)) {
+      return Type.Impossible.withErrorCause('Unexpected tuple');
     }
+
+    const columns = types.filter((t) => t.cellType != null);
 
     if (columns.length > 0) {
       const colSize = getDefined(columns[0]?.columnSize);

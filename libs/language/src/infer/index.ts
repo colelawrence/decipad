@@ -1,6 +1,6 @@
-import { InferError, Type, scalarTypeNames } from '../type';
+import { InferError, Type } from '../type';
 import { getDefined, zip, getIdentifierString, getOfType } from '../utils';
-import { DateSpecificity } from '../date';
+import { dateNodeToSpecificity } from '../date';
 
 import { callBuiltin } from './callBuiltin';
 import { Context, makeContext } from './context';
@@ -38,17 +38,11 @@ export const inferExpression = withErrorSource(
         if (ctx.stack.has(name)) {
           return ctx.stack.get(name);
         } else {
-          const error = new InferError('Undefined variable ' + name);
-
-          return Type.Impossible.withErrorCause(error);
+          return Type.Impossible.withErrorCause('Undefined variable ' + name);
         }
       }
       case 'literal': {
         const [litType, , litUnit] = expr.args;
-
-        if (!scalarTypeNames.includes(litType)) {
-          throw new Error('panic: Unknown literal type ' + litType);
-        }
 
         return Type.build({ type: litType, unit: litUnit });
       }
@@ -71,20 +65,7 @@ export const inferExpression = withErrorSource(
         return Type.runFunctor(expr, rangeFunctor, start, end);
       }
       case 'date': {
-        let lowestSegment: DateSpecificity = 'year';
-
-        for (let i = 0; i + 1 < expr.args.length; i += 2) {
-          const segment = expr.args[i] as string;
-
-          if (segment === 'hour') {
-            lowestSegment = 'time';
-            break;
-          } else {
-            lowestSegment = segment as DateSpecificity;
-          }
-        }
-
-        return Type.buildDate(lowestSegment);
+        return Type.buildDate(dateNodeToSpecificity(expr));
       }
       case 'column': {
         const cellTypes = expr.args[0].map((a) => inferExpression(ctx, a));

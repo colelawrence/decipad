@@ -1,4 +1,4 @@
-import { produce } from 'immer'
+import { produce } from 'immer';
 
 const matchUnits = (u1: AST.Unit, u2: AST.Unit) =>
   u1.unit === u2.unit && u1.exp === u2.exp;
@@ -31,12 +31,9 @@ const normalizeUnits = (units: AST.Unit[] | null) => {
 };
 
 export const setExponent = (unit: AST.Unit, newExponent: number) =>
-  produce(unit, unit => {
-    unit.exp = newExponent
-  })
-
-export const multiplyExponent = (unit: AST.Unit, multiplier: number) =>
-  setExponent(unit, unit.exp * multiplier)
+  produce(unit, (unit) => {
+    unit.exp = newExponent;
+  });
 
 export const inverseExponent = (unit: AST.Unit) => setExponent(unit, -unit.exp);
 
@@ -72,13 +69,8 @@ const stringifyUnit = (unit: AST.Unit) => {
   return result.join('');
 };
 
-export const stringifyUnits = (unit: AST.Unit[] | null) => {
-  if (unit == null) {
-    return '(unitless)'
-  } else {
-    return unit.map((unit) => stringifyUnit(unit)).join('.');
-  }
-}
+export const stringifyUnits = (unit: AST.Unit[] | null) =>
+  (unit ?? []).map((unit) => stringifyUnit(unit)).join('.');
 
 export const combineUnits = (
   myUnits: AST.Unit[] | null,
