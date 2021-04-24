@@ -101,6 +101,7 @@
     "@emotion/react": "^11.0.0",
     "@emotion/server": "11.0.0",
     "@emotion/styled": "^11.0.0",
+    "@storybook/addon-actions": "^6.2.9",
     "@tensorflow/tfjs-backend-cpu": "^3.3.0",
     "@tensorflow/tfjs-core": "^3.3.0",
     "@udecode/slate-plugins": "^0.75.2",

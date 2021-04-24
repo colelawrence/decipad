@@ -11,7 +11,7 @@ export class Sync<T> {
   private connection: WebSocket | null = null;
   private connecting = false;
   private stopped = false;
-  private timeout: timeout | null = null;
+  private timeout: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
     this.onWebsocketClose = this.onWebsocketClose.bind(this);
