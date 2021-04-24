@@ -7,8 +7,21 @@ export function fnQueue () {
   const flushes: Fn[] = []
 
   function push (fn: AsyncFunction) {
-    fns.push(fn)
+    let _resolve: Fn, _reject: Fn
+    const p = new Promise((resolve, reject) => {
+      _resolve = resolve
+      _reject = reject
+    })
+    fns.push(async () => {
+      try {
+        _resolve(await fn())
+      } catch (err) {
+        _reject(err)
+      }
+    })
     work()
+
+    return p
   }
 
   async function work () {
@@ -16,6 +29,8 @@ export function fnQueue () {
       processing++
       try {
         await processOne()
+      } catch (err) {
+        console.error(err)
       } finally {
         processing--
       }

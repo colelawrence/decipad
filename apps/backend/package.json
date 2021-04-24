@@ -1,12 +1,21 @@
 {
-  "name": "backend",
-  "version": "0.0.0",
-  "description": "A fresh new Architect project!",
-  "scripts": {
-    "start": "npx sandbox",
-    "prepare": "./symlink-shared.sh"
+  "name": "decipad-backend",
+  "version": "0.0.1",
+  "description": "Decipad backend",
+  "main": "jest.config.js",
+  "directories": {
+    "test": "tests"
   },
-  "devDependencies": {
-    "@architect/architect": "^8.5.3"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@architect/architect": "^8.5.5",
+    "@architect/functions": "^3.13.11",
+    "nanoid": "^3.1.22",
+    "next-auth": "^3.15.1",
+    "simple-cookie": "^1.0.13"
   }
 }

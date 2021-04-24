@@ -7,6 +7,14 @@ const docId = 'docid';
 describe('pad editor', () => {
   test('sends changes', async () => {
     const deci = new DeciRuntime('TEST_USER_ID', 'TEST_ACTOR_ID');
+    await deci.workspace('workspaceid').pads.create({
+      id: docId,
+      name: 'test pad',
+      workspaceId: 'workspaceid',
+      lastUpdatedAt: new Date(),
+      tags: [],
+      permissions: []
+    })
     const model = deci.workspace('workspaceid').pads.edit(docId);
 
     const editor = createEditor();
@@ -101,7 +109,7 @@ describe('pad editor', () => {
 
     const result = await model.resultAt('code block 1', 3);
     expect(result.errors).toHaveLength(0);
-    expect(result.type.possibleTypes).toEqual(['number']);
+    expect(result.type.type).toEqual('number');
     expect(result.type.unit).toMatchObject([
       {
         exp: 1,
@@ -114,7 +122,7 @@ describe('pad editor', () => {
 
     const result2 = await model.resultAt('code block 1', 2);
     expect(result.errors).toHaveLength(0);
-    expect(result2.type.possibleTypes).toEqual(['number']);
+    expect(result2.type.type).toEqual('number');
     expect(result2.type.unit).toMatchObject([
       {
         exp: 1,
@@ -131,6 +139,14 @@ describe('pad editor', () => {
 
   it('handles syntax errors appropriately', async () => {
     const deci = new DeciRuntime('TEST_USER_ID', 'TEST_ACTOR_ID');
+    await deci.workspace('workspace id').pads.create({
+      id: 'some other doc id',
+      name: 'test pad 2',
+      workspaceId: 'workspace id',
+      lastUpdatedAt: new Date(),
+      tags: [],
+      permissions: []
+    })
     const model = deci.workspace('workspace id').pads.edit('some other doc id');
 
     const editor = createEditor();

@@ -1,7 +1,7 @@
 declare namespace Sync {
-  import { List, Doc } from 'automerge';
+  import { List, Doc, Change } from 'automerge';
   import { Node } from 'slate';
-  export { Node, List, Doc };
+  export { Node, List, Doc, Change };
 }
 
 declare namespace AST {
@@ -100,4 +100,25 @@ interface AsyncSubject<T> {
 interface Mutation<T> {
   before: T | null,
   after: T | null
+}
+
+interface TopicSubscriptionOperation {
+  op: 'add' | 'remove',
+  topic: string
+}
+
+interface DocMetadata {
+  createdLocally: boolean
+}
+
+interface RemoteWebSocketOp {
+  o: 's' | 'u' | 'c',
+  t: string,
+  c: Sync.Change[] | null
+}
+
+interface RemoteOp {
+  op: 'subscribed' | 'unsubscribed' | 'changed',
+  topic: string,
+  changes: Sync.Change[] | null
 }

@@ -13,7 +13,7 @@ import {
 import { useRouter } from 'next/router';
 import React, { useRef, useContext } from 'react';
 import { FiTrash2 } from 'react-icons/fi';
-import { DeciRuntimeContext } from '@decipad/ui';
+import { DeciRuntimeContext } from '@decipad/editor';
 
 export const DeleteWorkspaceButton = ({ id }: { id: string }) => {
   const router = useRouter();

@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Box, Circle, Heading, HStack, Text } from '@chakra-ui/layout';
-import { DeciRuntimeContext } from '@decipad/ui';
+import { DeciRuntimeContext } from '@decipad/editor';
 
 export const Item = ({ id, workspaceId }) => {
   const router = useRouter();

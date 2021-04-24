@@ -1,10 +1,17 @@
 import { createReplica as replica } from './replica';
 import { timeout } from './utils/timeout';
-
+import { Runtime } from './runtime';
+import { Sync } from './sync';
 
 describe('replica', () => {
   test('it works gets inactive when it has no subscribers', async () => {
-    const r = replica<string>('test', 'test user id', 'test actor id', '');
+    const mockRuntime = {
+      userId: 'test user id',
+      actorId: 'test actor id',
+      sync: new Sync()
+    } as unknown as Runtime;
+
+    const r = replica<string>('test', mockRuntime, '', true);
 
     const expectedSubscriberCounts = [0, 1, 0, 1, 0]
     let completedSubscriberCount = false
@@ -16,8 +23,6 @@ describe('replica', () => {
         completedSubscriberCount = true
       }
     })
-
-    expect(r.isActive()).toBe(false);
 
     const expectedValues = ['', 'A', 'AB'];
     let first = true;
@@ -52,8 +57,6 @@ describe('replica', () => {
         expect(s).toBe(expectedValues2.shift());
       }
     });
-
-    expect(r.isActive()).toBe(true);
 
     r.mutate((s) => s + 'C');
     r.mutate((s) => s + 'D');

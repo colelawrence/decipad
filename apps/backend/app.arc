@@ -17,7 +17,29 @@ get /api/auth/session
 get /api/auth/csrf
 get /api/auth/providers
 get /api/auth/error
+get /api/auth/token
 
+get /api/workspaces
+put /api/workspaces
+put /api/workspaces/changes
+
+get /api/workspaces/:workspaceid
+put /api/workspaces/:workspaceid
+put /api/workspaces/:workspaceid/changes
+
+get /api/workspaces/:workspaceid/pads
+put /api/workspaces/:workspaceid/pads
+put /api/workspaces/:workspaceid/pads/changes
+
+get /api/pads/:padid
+put /api/pads/:padid
+put /api/pads/:padid/changes
+
+get /api/pads/:padid/content
+put /api/pads/:padid/content
+put /api/pads/:padid/content/changes
+
+@ws
 
 @tables
 test
@@ -35,19 +57,41 @@ users
 userprofiles
   user_id *String
   github_login String
+  encrypt true
 
 userkeys
   id *String
   user_id String
+  encrypt true
 
-@shared
-src src/shared
+syncdoc
+  id *String
+  latest String
+  encrypt true
 
-@plugins
-kafka
+connections
+  id *String
+  user_id String
+  encrypt true
 
-@kafka-consumer-groups
-consumer1 topic1 10
+collabs
+  id *String
+  user_id String
+  encrypt true
+
+@indexes
+
+collabs
+  room *String
+
+collabs
+  conn *String
+
+#@plugins
+#kafka
+
+#@kafka-consumer-groups
+#consumer1 topic1 10
 
 # @aws
 # profile default

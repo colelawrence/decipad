@@ -22,7 +22,7 @@ import {
 } from 'react-icons/fi';
 import { useRouter } from 'next/router';
 import { nanoid } from 'nanoid';
-import { DeciRuntimeContext } from '@decipad/ui';
+import { DeciRuntimeContext } from '@decipad/editor';
 import { Workspaces } from './Workspaces/Workspaces';
 
 export const NavigationMenu = () => {

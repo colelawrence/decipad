@@ -1,12 +1,14 @@
 import { Observable, BehaviorSubject } from 'rxjs'
 import { Workspaces } from './workspaces'
 import { Pads } from './pads'
+import { Sync } from './sync'
 
 interface WorkspacePads {
   pads: Pads
 }
 
 class Runtime {
+  sync = new Sync()
   workspaces = new Workspaces(this)
   sessionSubject = new BehaviorSubject<Session | null>(null)
   workspaceById = new Map<Id, WorkspacePads>()
@@ -38,6 +40,7 @@ class Runtime {
   }
 
   stop() {
+    this.sync.stop()
     this.sessionSubject.next(null)
     this.sessionSubject.complete()
     this.workspaces.stop()

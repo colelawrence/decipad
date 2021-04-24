@@ -1,4 +1,7 @@
 export function toJS(node) {
+  if (node === null || node === undefined) {
+    return node;
+  }
   try {
     return JSON.parse(JSON.stringify(node));
   } catch (e) {

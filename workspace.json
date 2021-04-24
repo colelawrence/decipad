@@ -247,37 +247,19 @@
       "prefix": "backend",
       "targets": {
         "build": {
-          "executor": "@nrwl/node:build",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "executor": "@nrwl/workspace:run-commands",
           "options": {
-            "outputPath": "dist/apps/backend",
-            "main": "apps/backend/src/main.ts",
-            "tsConfig": "apps/backend/tsconfig.app.json",
-            "assets": [
-              "apps/backend/src/assets"
-            ]
-          },
-          "configurations": {
-            "production": {
-              "optimization": true,
-              "extractLicenses": true,
-              "inspect": false,
-              "fileReplacements": [
-                {
-                  "replace": "apps/backend/src/environments/environment.ts",
-                  "with": "apps/backend/src/environments/environment.prod.ts"
-                }
-              ]
-            }
+            "commands": [
+              "./node_modules/.bin/arc hydrate"
+            ],
+            "cwd": "apps/backend"
           }
         },
         "serve": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
             "commands": [
-              "../../node_modules/.bin/arc sandbox"
+              "./node_modules/.bin/arc sandbox"
             ],
             "cwd": "apps/backend"
           }
@@ -298,6 +280,15 @@
           "options": {
             "jestConfig": "apps/backend/jest.config.js",
             "passWithNoTests": true
+          }
+        },
+        "deploy": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "comands": [
+              "./node_modules/.bin/arc deploy"
+            ],
+            "cwd": "apps/backend"
           }
         }
       }

@@ -86,8 +86,9 @@ export class Computer {
           continue;
         }
         const [id, source] = idAndTextFromElem(elem);
-        if (id === undefined) {
-          throw new Error('every code block needs an id');
+
+        if (!id) {
+          throw new Error('Code block should have id')
         }
 
         blocks.push({ id, source });

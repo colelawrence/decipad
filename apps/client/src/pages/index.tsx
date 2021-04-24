@@ -2,7 +2,7 @@ import React from 'react';
 import { Dashboard } from '../components/Dashboard/Dashboard';
 import { Loading } from '../components/Loading/Loading';
 import { Login } from '../components/Login/Login';
-import { DeciRuntimeProvider, DeciRuntimeConsumer } from '@decipad/ui';
+import { DeciRuntimeProvider, DeciRuntimeConsumer } from '@decipad/editor';
 
 const Home = () => (
   <DeciRuntimeProvider>

@@ -63,13 +63,14 @@ export function parse(blocks: Parser.UnparsedBlock[]): Parser.ParsedBlock[] {
 }
 
 function fromParseError(blockId: string, err: Error): Parser.ParserError {
+  console.error(err);
   const messageParts = err.message.split('\n');
   const mainMessage = messageParts[0];
 
   const matches = mainMessage.match(/Syntax error at line (\d) col (\d)/);
 
   return {
-    message: matches![0],
+    message: matches === null ? err.message : matches[0],
     details: messageParts.slice(2).join('\n'),
     fileName: blockId,
     lineNumber: Number(matches === null ? 0 : matches[1]),

@@ -4,25 +4,29 @@ import { List } from './list'
 import { invertedIndex, InvertedIndex } from './inverted-index'
 import { Replica, createReplica } from './replica'
 import { PadEditor } from './pad-editor'
+import { LocalMetadata } from './local-metadata'
+import { uri } from './utils/uri'
+
+const INITIAL_STATIC_VALUE = "[\"~#iL\",[[\"~#iM\",[\"ops\",[\"^0\",[[\"^1\",[\"action\",\"makeList\",\"obj\",\"ecc6c560-86c6-4384-aed4-ba606a2cce40\"]],[\"^1\",[\"action\",\"link\",\"obj\",\"00000000-0000-0000-0000-000000000000\",\"key\",\"value\",\"value\",\"ecc6c560-86c6-4384-aed4-ba606a2cce40\"]]]],\"actor\",\"starter\",\"seq\",1,\"deps\",[\"^1\",[]],\"message\",\"Initialization\",\"undoable\",false]]]]";
 
 export class Pads extends List {
   pads: Map<Id, Replica<Pad>> = new Map()
   editors: Map<Id, PadEditor> = new Map()
   byTag: InvertedIndex
   mutationsObservable = new Subject<Mutation<Pad>>()
+  meta: Map<Id, LocalMetadata> = new Map()
 
   constructor (runtime: Runtime, workspaceId: Id) {
-    super(runtime, `workspace:${workspaceId}:pads`)
+    super(runtime, uri('workspaces', workspaceId, 'pads'), INITIAL_STATIC_VALUE)
 
     this.byTag = invertedIndex<Pad>(
-      'padsByTag',
-      runtime.userId,
-      runtime.actorId,
+      uri('workspaces', workspaceId, 'padsByTag'),
+      runtime,
       this.mutationsObservable,
       (pad) => pad.tags
     )
 
-    for (const id of this.replica.getValue()) {
+    for (const id of this.replica.getValue()!) {
       const value = this.getPadReplica(id).getValue()
       if (value !== null) {
         this.mutationsObservable.next({ before: null, after: value })
@@ -33,11 +37,11 @@ export class Pads extends List {
   edit (padId: Id) {
     let editor = this.editors.get(padId)
     if (editor === undefined) {
-      console.log(`creating editor for pad ${padId}`)
-      editor = new PadEditor(padId, this.runtime)
+      const meta = this.getPadMeta(padId)
+      const createIfAbsent = meta.get('createdLocally')
+      editor = new PadEditor(padId, this.runtime, createIfAbsent)
       let hadSubscribers = false
       editor.slateOpsCountObservable.subscribe((subscriptionCount) => {
-        console.log(`subscription counnt for slate ops of ${padId} is ${subscriptionCount}`)
         if (subscriptionCount === 0) {
           if (hadSubscribers) {
             editor!.stop()
@@ -53,11 +57,13 @@ export class Pads extends List {
   }
 
   async create(pad: Pad) {
-    const replica = this.getPadReplica(pad.id)
+    const replica = this.getPadReplica(pad.id, true)
     const before = replica.getValue()
     const after = replica.mutate(() => pad)
     await replica.flush()
     await this.push(pad.id)
+    const meta = this.getPadMeta(pad.id)
+    meta.set('createdLocally', true)
     this.mutationsObservable.next({ before, after })
   }
 
@@ -83,10 +89,19 @@ export class Pads extends List {
     return this.getPadReplica(padId).observable
   }
 
-  private getPadReplica(id: Id): Replica<Pad> {
+  stop() {
+    this.mutationsObservable.complete()
+    for (const pad of this.pads.values()) {
+      pad.stop()
+    }
+    this.pads.clear()
+    this.byTag.stop()
+  }
+
+  private getPadReplica(id: Id, createIfAbsent = false): Replica<Pad> {
     let replica = this.pads.get(id)
     if (replica === undefined) {
-      replica = createReplica(`pad:${id}`, this.runtime.userId, this.runtime.actorId)
+      replica = createReplica<Pad>(uri('pads', id), this.runtime, null, createIfAbsent)
       let firstZeroHappened = false
       replica.subscriptionCountObservable.subscribe((subscriberCount) => {
         if (subscriberCount === 0) {
@@ -103,12 +118,12 @@ export class Pads extends List {
     return replica
   }
 
-  stop() {
-    this.mutationsObservable.complete()
-    for (const pad of this.pads.values()) {
-      pad.stop()
+  private getPadMeta(padId: Id): LocalMetadata {
+    let meta = this.meta.get(padId)
+    if (meta === undefined) {
+      meta = new LocalMetadata(`pad:${padId}:meta`)
+      this.meta.set(padId, meta)
     }
-    this.pads.clear()
-    this.byTag.stop()
+    return meta
   }
 }

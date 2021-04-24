@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/layout';
 import React, { useContext, useEffect, useState } from 'react';
 import { Item } from './Item/Item';
-import { DeciRuntimeContext } from '@decipad/ui';
+import { DeciRuntimeContext } from '@decipad/editor';
 
 export const Workspaces = () => {
   const { runtime } = useContext(DeciRuntimeContext);

@@ -5,7 +5,10 @@ async function createListeners(group, topics) {
   console.log('CREATE LISTENERS, topics:', topics)
   const kafka = new Kafka({
     clientId: 'sandbox-client',
-    brokers: ['localhost:9092']
+    brokers: ['localhost:9092'],
+    retry: {
+      restartOnFailure: () => false
+    }
   })
 
   const consumer = kafka.consumer({
@@ -39,8 +42,12 @@ async function createListeners(group, topics) {
     })
   }
 
-  function stop() {
-    return consumer.disconnect()
+  async function stop() {
+    console.log('STOPPING...')
+    await consumer.stop()
+    console.log('STOPPED 1!!!')
+    await consumer.disconnect()
+    console.log('STOPPED 2!!!')
   }
 
   return {

@@ -15,7 +15,7 @@ module.exports = (fn) => {
           statusCode: okStatusCodeFor(req),
           body: result,
           headers: {
-            'content-type': 'text/html',
+            'content-type': 'text/text',
           },
         };
       }

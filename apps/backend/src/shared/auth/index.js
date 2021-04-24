@@ -1,16 +1,15 @@
 'use strict'
 
 const arc = require('@architect/functions')
-const NextAuth = require('next-auth').default
-const Providers = require('next-auth/providers')
+const GitHub = require('./providers/github')
 const { nanoid } = require('nanoid')
 const adaptReqRes = require('./adapt-req-res')
 const createDbAdapter = require('./db-adapter')
 const jwt = require('./jwt')
 
-module.exports = function createAuthHandler() {
+module.exports = function createAuthHandler({ NextAuth, NextAuthJWT }) {
   const providers = [
-    Providers.GitHub({
+    GitHub({
       clientId: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET
     })
@@ -111,7 +110,7 @@ module.exports = function createAuthHandler() {
     },
     providers,
     callbacks,
-    jwt,
+    jwt: jwt({ NextAuthJWT }),
     adapter: createDbAdapter()
   }
 

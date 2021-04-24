@@ -3,10 +3,10 @@ import Icon from '@chakra-ui/icon';
 import { Image } from '@chakra-ui/image';
 import { Heading, HStack } from '@chakra-ui/layout';
 import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/menu';
-import { DeciRuntimeConsumer } from '@decipad/ui';
 import { signOut } from 'next-auth/client';
 import React from 'react';
 import { FiLogOut } from 'react-icons/fi';
+import { DeciRuntimeConsumer } from '@decipad/editor';
 
 export const NavigationBar = () => {
   return (
@@ -28,7 +28,7 @@ export const NavigationBar = () => {
               </Heading>
               <Menu>
                 <MenuButton>
-                  <Avatar src={session.user.image} />
+                  <Avatar src={session && session.user.image} />
                 </MenuButton>
                 <MenuList>
                   <MenuItem onClick={() => signOut()}>

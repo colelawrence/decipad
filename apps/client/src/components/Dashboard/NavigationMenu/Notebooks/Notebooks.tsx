@@ -1,7 +1,7 @@
 import { Box, Center, Circle, Heading, HStack, Text } from '@chakra-ui/layout';
 import { useRouter } from 'next/router';
 import React, { useContext, useState, useEffect } from 'react';
-import { DeciRuntimeContext } from '@decipad/ui';
+import { DeciRuntimeContext } from '@decipad/editor';
 import { Item } from './Item/Item';
 
 export const Notebooks = ({ workspaceId }: { workspaceId?: string }) => {

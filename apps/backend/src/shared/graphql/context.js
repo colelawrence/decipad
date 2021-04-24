@@ -1,20 +1,20 @@
 'use strict'
 
 const arc = require('@architect/functions')
-const { decode: decodeJWT } = require('next-auth/jwt')
 const { parse: parseCookie} = require('simple-cookie')
 const jwtConf = require('../auth/jwt')
 
 const TOKEN_COOKIE_NAME = 'next-auth.session-token'
 
-async function context ({ event, context }) {
+const context = ({ NextAuthJWT }) => async ({ event, context }) => {
+  const { decode: decodeJWT } = NextAuthJWT
   const cookies = parseCookies(event.cookies)
   const token = cookies[TOKEN_COOKIE_NAME]
   let user = null
   if (token) {
     try {
       const decoded = await decodeJWT({
-        ...jwtConf,
+        ...jwtConf({ NextAuthJWT }),
         token
       })
       if (decoded.accessToken) {

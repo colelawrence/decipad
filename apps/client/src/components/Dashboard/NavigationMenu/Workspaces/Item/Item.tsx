@@ -17,7 +17,7 @@ import React, { useRef, useState, useContext, useEffect } from 'react';
 import { FiEdit2, FiFolder, FiMoreHorizontal, FiPlus } from 'react-icons/fi';
 import { nanoid } from 'nanoid';
 import { DeleteWorkspaceButton } from './DeleteWorkspaceButton/DeleteWorkspaceButton';
-import { DeciRuntimeContext } from '@decipad/ui';
+import { DeciRuntimeContext } from '@decipad/editor';
 
 export const Item = ({ workspaceId }: { workspaceId: string }) => {
   const router = useRouter();

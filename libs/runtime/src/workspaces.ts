@@ -2,12 +2,15 @@ import { Observable } from 'rxjs';
 import { Runtime } from './runtime';
 import { createReplica, Replica } from './replica';
 import { List } from './list';
+import { uri } from './utils/uri'
+
+const INITIAL_STATIC_VALUE = "[\"~#iL\",[[\"~#iM\",[\"ops\",[\"^0\",[[\"^1\",[\"action\",\"makeList\",\"obj\",\"ecc6c560-86c6-4384-aed4-ba606a2cce40\"]],[\"^1\",[\"action\",\"link\",\"obj\",\"00000000-0000-0000-0000-000000000000\",\"key\",\"value\",\"value\",\"ecc6c560-86c6-4384-aed4-ba606a2cce40\"]]]],\"actor\",\"starter\",\"seq\",1,\"deps\",[\"^1\",[]],\"message\",\"Initialization\",\"undoable\",false]]]]";
 
 class Workspaces extends List {
   workspaces: Map<Id, Replica<Workspace>> = new Map()
 
   constructor(public runtime: Runtime) {
-    super(runtime, 'workspaces')
+    super(runtime, '/workspaces', INITIAL_STATIC_VALUE)
   }
 
   get(id: Id): Observable<AsyncSubject<Workspace>> {
@@ -15,7 +18,7 @@ class Workspaces extends List {
   }
 
   async create(workspace: Workspace) {
-    const replica = this.getWorkspaceReplica(workspace.id)
+    const replica = this.getWorkspaceReplica(workspace.id, true)
     replica.mutate(() => workspace)
     await replica.flush()
   }
@@ -33,10 +36,10 @@ class Workspaces extends List {
     await super.remove(workspaceId)
   }
 
-  getWorkspaceReplica(id: Id): Replica<Workspace> {
+  getWorkspaceReplica(id: Id, create = false): Replica<Workspace> {
     let replica = this.workspaces.get(id)
     if (replica === undefined) {
-      replica = createReplica(`workspace:${id}`, this.runtime.userId, this.runtime.actorId)
+      replica = createReplica<Workspace>(uri('workspaces', id), this.runtime, null, create)
       this.workspaces.set(id, replica)
     }
     return replica

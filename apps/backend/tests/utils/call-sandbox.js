@@ -1,8 +1,7 @@
 'use strict';
 
 const tiny = require('tiny-json-http');
-
-const baseUrl = 'http://localhost:3333';
+const baseUrl = require('./base-url');
 
 function get(url, options = {}) {
   const opts = Object.assign({}, options, {
@@ -24,6 +23,7 @@ function put(url, data = null, options = {}) {
     url: baseUrl + url,
     data,
   });
+  console.log('OPTS:', opts)
   return tiny.put(opts);
 }
 

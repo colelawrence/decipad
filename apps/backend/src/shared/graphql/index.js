@@ -1,13 +1,17 @@
-const { ApolloServer  } = require('apollo-server-lambda');
 const typeDefs = require('./typedefs')
 const resolvers = require('./resolvers')
 const context = require('./context')
 const playground = require('./playground')
 
-const server = new ApolloServer({ typeDefs, resolvers, context, playground });
-const handler = server.createHandler();
+function createHandler({ ApolloServer, gql, NextAuthJWT }) {
+  const server = new ApolloServer({
+    typeDefs: typeDefs({ gql }),
+    resolvers,
+    context: context({ NextAuthJWT }),
+    playground
+  });
+  const handler = server.createHandler();
 
-function createHandler() {
   return (event, context, callback) => {
     event.httpMethod = event.httpMethod
       ? event.httpMethod

@@ -151,29 +151,25 @@ function start({ arc, inventory, services }, callback) {
     });
 }
 
-function end({ services }, callback) {
+async function end({ services }, callback) {
+  console.log('ENDING KAFKA PLUGIN')
   const k = services.kafka || kafka;
   if (!k) {
     throw new Error('kafka service is not defined');
   }
-  const l = services._kafka_listeners || listeners || [];
-  if (!l) {
+  const ls = services._kafka_listeners || listeners || [];
+  if (!ls) {
     throw new Error('kafka listeners is not defined');
   }
-  return Promise.all(l.map((l) => l.stop()))
-    .then(() => k.close())
-    .then(() => {
-      if (callback) {
-        callback();
-      }
-    })
-    .catch((err) => {
-      if (callback) {
-        callback(err);
-      } else {
-        throw err;
-      }
-    });
+  await k.close();
+  console.log('closed server')
+  for (const l of ls) {
+    await l.stop()
+  }
+  console.log('stopped all listeners')
+  if (callback) {
+    callback()
+  }
 }
 
 function getConsumers(arc) {

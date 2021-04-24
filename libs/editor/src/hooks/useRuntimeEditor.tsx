@@ -7,7 +7,7 @@ import React, {
   useEffect,
 } from 'react';
 import { Editor, Range, Text, Transforms } from 'slate';
-import { DeciRuntimeContext } from '@decipad/ui';
+import { DeciRuntimeContext } from '../contexts/DeciRuntimeContext';
 
 export const useRuntimeEditor = ({ workspaceId, padId }) => {
   const { runtime } = useContext(DeciRuntimeContext);
@@ -21,60 +21,72 @@ export const useRuntimeEditor = ({ workspaceId, padId }) => {
   }, [runtime, workspaceId, padId]);
 
   const onChangeResult = useCallback(
-    async (editor: Editor) => {
+    (editor: Editor) => {
       if (!editor || !padEditor) {
         return;
       }
-      const { selection } = editor;
 
-      if (selection && isCollapsed(selection)) {
-        const cursor = Range.start(selection);
+      async function evaluatePad() {
+        const { selection } = editor;
 
-        const [parentNode] = Editor.parent(editor, cursor);
-        if (parentNode.type !== 'code_block') return;
+        if (selection && isCollapsed(selection)) {
+          const cursor = Range.start(selection);
 
-        const [node] = Editor.node(editor, cursor);
-        console.log(parentNode);
+          const [parentNode] = Editor.parent(editor, cursor);
+          if (parentNode.type !== 'code_block') return;
 
-        if (!Text.isText(node)) {
-          return;
-        }
-        const cumulativeSum = ((sum) => (value: number) => (sum += value))(0);
-        const lines = node.text
-          .split('\n')
-          .map((line) => line.length)
-          .map(cumulativeSum)
-          .map((line, i) => line + i);
+          const [node] = Editor.node(editor, cursor);
+          console.log(parentNode);
 
-        let c = cursor.offset;
-        let foundLine = lines.length + 1;
-        lines.forEach((line) => {
-          if (c > line) return;
-          c -= line;
-          foundLine--;
-        });
-        try {
-          const result = await padEditor.resultAt(
-            parentNode.id as string,
-            foundLine
-          );
-          console.log(result);
-          const [match] = Editor.nodes(editor, {
-            match: (n) => n.id === parentNode.id,
+          if (!Text.isText(node)) {
+            return;
+          }
+          const cumulativeSum = ((sum) => (value: number) => (sum += value))(0);
+          const lines = node.text
+            .split('\n')
+            .map((line) => line.length)
+            .map(cumulativeSum)
+            .map((line, i) => line + i);
+
+          let c = cursor.offset;
+          let foundLine = lines.length + 1;
+          lines.forEach((line) => {
+            if (c > line) return;
+            c -= line;
+            foundLine--;
           });
-          Transforms.setNodes(
-            editor,
-            {
-              result: match
-                ? result.value[0] + ' ' + result.type.unit[0].unit + '\n'
-                : null,
-            },
-            { match: (n) => Editor.isBlock(editor, n) }
-          );
-        } catch (err) {
-          console.log(err);
+          try {
+            const result = await padEditor.resultAt(
+              parentNode.id as string,
+              foundLine
+            );
+            if (result.errors !== null && result.errors.length > 0) {
+              for (const error of result.errors) {
+                console.error(error)
+              }
+            } else {
+              console.log(result);
+              const [match] = Editor.nodes(editor, {
+                match: (n) => n.id === parentNode.id,
+              });
+              Transforms.setNodes(
+                editor,
+                {
+                  result: match
+                    ? result.value[0] + (result.type.unit === null ? '' : ' ' + result.type.unit[0].unit) + '\n'
+                    : null,
+                },
+                { match: (n) => Editor.isBlock(editor, n) }
+              );
+            }
+
+          } catch (err) {
+            console.error(err)
+          }
         }
       }
+
+      evaluatePad();
     },
     [padEditor]
   );

@@ -1,4 +1,5 @@
-import { Observable, Subject, Subscription } from 'rxjs'
+import { Observable, Subject, Subscription } from 'rxjs';
+import { first } from 'rxjs/operators';
 import debounce from 'lodash.debounce';
 import { Operation as SlateOperation } from 'slate';
 import { nanoid } from 'nanoid';
@@ -11,26 +12,24 @@ import { toSync } from './utils/to-sync';
 import { Computer } from './computer';
 import { fnQueue } from './utils/fn-queue';
 import { observeSubscriberCount } from './utils/observe-subscriber-count';
+import { uri } from './utils/uri';
 
 class PadEditor {
-  slateOpQueue: SlateOperation[] = [];
-  replica: Replica<SyncPadDoc>
-  slateOpsObservable = new Subject<SlateOperation[]>()
-  slateOpsCountObservable = observeSubscriberCount(this.slateOpsObservable)
-  debouncedProcessSlateOps: () => void
-  computer: Computer
-  subscriptionCountObservable: Observable<number>
-  changesSubscription: Subscription
-  pendingApplySlateOpIds: string[] = []
-  pendingApplyResolve: ((value: unknown) => void) | null = null
-  pendingApplyPromise: Promise<unknown> | null = null
-  queue = fnQueue();
+  private slateOpQueue: SlateOperation[] = [];
+  private replica: Replica<SyncPadDoc>
+  private slateOpsObservable = new Subject<SlateOperation[]>()
+  public slateOpsCountObservable = observeSubscriberCount(this.slateOpsObservable)
+  private debouncedProcessSlateOps: () => void
+  private computer: Computer
+  private changesSubscription: Subscription
+  private pendingApplySlateOpIds: string[] = []
+  private pendingApplyResolve: ((value: unknown) => void) | null = null
+  private pendingApplyPromise: Promise<unknown> | null = null
+  private queue = fnQueue();
 
-  constructor(public padId: Id, runtime: Runtime) {
+  constructor(public padId: Id, runtime: Runtime, createIfAbsent: boolean) {
     this.processSlateOps = this.processSlateOps.bind(this);
-    this.debouncedProcessSlateOps = debounce(this.processSlateOps, 500).bind(
-      this
-    );
+    this.debouncedProcessSlateOps = debounce(this.processSlateOps, 500);
 
     const defaultInitialValue = toSync([
       {
@@ -40,6 +39,7 @@ class PadEditor {
               {
                 type: 'paragraph',
                 text: '',
+                id: nanoid()
               },
             ],
           },
@@ -47,21 +47,43 @@ class PadEditor {
       }
     ]) as SyncPadDoc;
 
-    this.replica = createReplica<SyncPadDoc>(`padcontent:${padId}`, runtime.userId, runtime.actorId, defaultInitialValue);
-    this.subscriptionCountObservable = this.replica.subscriptionCountObservable;
+    this.replica = createReplica<SyncPadDoc>(uri('pads', padId, 'content'), runtime, defaultInitialValue, createIfAbsent);
     this.computer = new Computer(this.replica);
     this.replica.beforeRemoteChanges = () => {
       this.processSlateOps()
       return this.pendingApplyPromise
     }
-    this.changesSubscription = this.replica.changes.subscribe(({ diffs, doc, before }) => {
+    this.changesSubscription = this.replica.remoteChanges.subscribe(({ diffs, doc, before }) => {
       const ops = toSlateOps(diffs, doc, before).map(remoteOp)
       this.queue.push(() => this.applySlateOps(ops))
     });
   }
 
+  isOnlyRemote(): boolean {
+    return this.replica.isOnlyRemote();
+  }
+
   getValue(): SyncPadDoc {
     return toJS(this.replica.getValue())
+  }
+
+  getValueEventually(): Promise<SyncPadDoc> {
+    return new Promise((resolve, reject) => {
+      const value = this.getValue();
+      if (value !== null) {
+        resolve(value)
+        return;
+      }
+      this.replica.observable.pipe(
+        first(({ error, data }) => error !== null || data !== null))
+        .subscribe(({ error, data }) => {
+          if (error !== null) {
+            reject(error)
+          } else {
+            resolve(toJS(data))
+          }
+        })
+    })
   }
 
   slateOps(): Observable<SlateOperation[]> {
@@ -71,10 +93,14 @@ class PadEditor {
   applySlateOps(ops: SlateOperation[]) {
     const p  = this.pendingApplyPromise = new Promise((resolve) => {
       this.pendingApplyResolve = resolve
-      for (const op of ops) {
-        this.pendingApplySlateOpIds.push(op.id as string)
+      if (ops.length > 0) {
+        for (const op of ops) {
+          this.pendingApplySlateOpIds.push(op.id as string)
+        }
+        this.slateOpsObservable.next(ops)
+      } else {
+        resolve(null)
       }
-      this.slateOpsObservable.next(ops)
     })
     return p
   }
@@ -103,7 +129,6 @@ class PadEditor {
     this.slateOpsObservable.complete()
     this.changesSubscription.unsubscribe()
     this.replica.stop()
-    console.trace(`editor ${this.padId} is stopped`)
   }
 
   processSlateOps() {

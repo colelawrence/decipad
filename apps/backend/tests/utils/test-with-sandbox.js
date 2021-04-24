@@ -17,8 +17,18 @@ function testWithSandbox(description, fn) {
       rimraf(path.join(process.cwd(), '.kafka_lite_data'), done);
     });
 
-    beforeAll(() => sandbox.start({ quiet: true }));
-    afterAll(() => sandbox.end());
+    beforeAll(async () => {
+      await sandbox.start({ quiet: true })
+    });
+
+    afterAll(async () => {
+      await sandbox.end()
+    });
+
+    beforeAll((done) => {
+      setTimeout(done, 2000)
+    })
+
     afterAll(() => {
       process.chdir(beforeWorkingDir);
     });

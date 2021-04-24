@@ -1,97 +1,98 @@
 import { Observable, BehaviorSubject, from } from 'rxjs';
-import { createReplica, Replica } from './replica'
-import { fnQueue } from './utils/fn-queue'
+import { Runtime } from './runtime';
+import { createReplica, Replica } from './replica';
+import { fnQueue } from './utils/fn-queue';
+import { uri } from './utils/uri';
 
 export function invertedIndex<T extends Identifiable>(
   name: string,
-  userId: string,
-  actorId: string,
+  runtime: Runtime,
   changeObservable: Observable<Mutation<T>>,
   extract: (o: T) => string[]
   ): InvertedIndex {
-  const replicaByKey: Map<string, Replica<Id[]>> = new Map()
-  const keysSubject = new BehaviorSubject<string[]>([])
-  const queue = fnQueue()
+  const replicaByKey: Map<string, Replica<Id[]>> = new Map();
+  const keysSubject = new BehaviorSubject<string[]>([]);
+  const queue = fnQueue();
 
   const subscription = changeObservable.subscribe(({ before, after }) => {
     queue.push(async () => {
-      const keysBefore = before !== null ? extract(before) : []
-      const keysAfter = after !== null ? extract(after) : []
+      const keysBefore = before !== null ? extract(before) : [];
+      const keysAfter = after !== null ? extract(after) : [];
 
-      const id = before !== null ? before.id : after!.id
+      const id = before !== null ? before.id : after!.id;
       for (const key of (keysAfter || [])) {
-        const index = keysBefore.indexOf(key)
+        const index = keysBefore.indexOf(key);
         if (index < 0) {
-          await ensureEntry(key, id)
+          await ensureEntry(key, id);
         }
-        keysBefore.splice(index, 1)
+        keysBefore.splice(index, 1);
       }
       for (const removeKey of (keysBefore || [])) {
-        await removeEntry(removeKey, id)
+        await removeEntry(removeKey, id);
       }
-      keysSubject.next(Array.from(replicaByKey.keys()).sort())
+      keysSubject.next(Array.from(replicaByKey.keys()).sort());
     })
   })
 
   function keys(): Observable<Id[]> {
-    return keysSubject
+    return keysSubject;
   }
 
   function get(key: string): Observable<AsyncSubject<Id[]>> {
     if (!replicaByKey.has(key)) {
-      return from([{ loading: true, error: null, data: null}, { loading: false, error: null, data: []}])
+      return from([{ loading: true, error: null, data: null}, { loading: false, error: null, data: []}]);
     }
-    return replicaByKey.get(key)!.observable
+    return replicaByKey.get(key)!.observable;
   }
 
   async function ensureEntry(key: string, id: Id) {
-    const replica = getReplicaForKey(key)
+    const replica = getReplicaForKey(key);
     replica.mutate((ids) => {
       if (ids.indexOf(id) < 0) {
-        ids.push(id)
+        ids.push(id);
       }
     })
-    await replica.flush() // TODO: do not save index every time we make a change
+    await replica.flush(); // TODO: do not save index every time we make a change
   }
 
   async function removeEntry(key: string, id: Id) {
-    const replica = getReplicaForKey(key)
+    const replica = getReplicaForKey(key);
     const result = replica.mutate((ids) => {
-      const index = ids.indexOf(id)
+      const index = ids.indexOf(id);
       if (index >= 0) {
-        ids.splice(index, 1)
+        ids.splice(index, 1);
       }
     })
     if (result!.length === 0) {
-      replicaByKey.delete(key)
-      await replica.remove()
+      replicaByKey.delete(key);
+      await replica.remove();
     } else {
       await replica.flush() // TODO: do not save index every time we make a change
     }
   }
 
   function getReplicaForKey(key: string): Replica<Id[]> {
-    let replica: Replica<Id[]> | undefined = replicaByKey.get(key)
+    let replica: Replica<Id[]> | undefined = replicaByKey.get(key);
     if (replica === undefined) {
-      replica = createReplica<Id[]>(`${name}:${key}`, userId, actorId, [])
-      replicaByKey.set(key, replica)
+      replica = createReplica<Id[]>(uri(name, key), runtime, [], true);
+      replicaByKey.set(key, replica);
     }
-    return replica
+    return replica;
   }
 
   function stop() {
-    subscription.unsubscribe()
+    subscription.unsubscribe();
     for (const replica of replicaByKey.values()) {
-      replica.stop()
+      replica.stop();
     }
-    replicaByKey.clear()
+    replicaByKey.clear();
   }
 
   return {
     keys,
     get,
     stop
-  }
+  };
 }
 
 export interface InvertedIndex {

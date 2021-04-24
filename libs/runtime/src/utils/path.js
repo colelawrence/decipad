@@ -1,14 +1,14 @@
-export const isTree = (node) => Boolean(node && node.children);
+export const isTree = (node) => Boolean(node && (node.children || node.value));
 
 export function getTarget(doc, path) {
   function iterate(current, idx) {
-    if (!(isTree(current) || current[idx])) {
+    if (!(isTree(current) || current && current[idx])) {
       throw new TypeError(
         `path ${path.toString()} does not match tree ${JSON.stringify(current)}`
       );
     }
 
-    return current[idx] || (current && current.children[idx]);
+    return current[idx] || (current && (current.children && current.children[idx] || current.value && current.value[idx]));
   }
 
   return path.reduce(iterate, doc);
