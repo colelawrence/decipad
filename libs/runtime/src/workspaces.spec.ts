@@ -113,4 +113,23 @@ describe('workspaces', () => {
     sub.unsubscribe()
     deci.stop()
   })
+
+  test('can update workspace', async () => {
+    const deci = new DeciRuntime(USER_ID, ACTOR_ID);
+    let lastSeen: Workspace | null = null
+    const sub = deci.workspaces.get(workspaceId).subscribe(({ data }) => {
+      lastSeen = data
+    })
+
+    await deci.workspaces.update(workspaceId, { name: 'Test workspace renamed' })
+
+    expect(lastSeen).toMatchObject({
+      id: workspaceId,
+      name: 'Test workspace renamed',
+      permissions: []
+    })
+
+    sub.unsubscribe()
+    deci.stop()
+  })
 });
