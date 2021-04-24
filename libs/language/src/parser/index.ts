@@ -63,7 +63,6 @@ export function parse(blocks: Parser.UnparsedBlock[]): Parser.ParsedBlock[] {
 }
 
 function fromParseError(blockId: string, err: Error): Parser.ParserError {
-  console.error(err);
   const messageParts = err.message.split('\n');
   const mainMessage = messageParts[0];
 
