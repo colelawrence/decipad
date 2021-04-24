@@ -2,15 +2,14 @@
   "name": "decipad-backend",
   "version": "0.0.1",
   "description": "Decipad backend",
-  "main": "jest.config.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "N1N",
+  "license": "Proprietary",
   "dependencies": {
     "@architect/architect": "^8.5.5",
     "@architect/functions": "^3.13.11",

@@ -246,15 +246,6 @@
       "projectType": "application",
       "prefix": "backend",
       "targets": {
-        "build": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "commands": [
-              "./node_modules/.bin/arc hydrate"
-            ],
-            "cwd": "apps/backend"
-          }
-        },
         "serve": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
@@ -285,7 +276,7 @@
         "deploy": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
-            "comands": [
+            "commands": [
               "./node_modules/.bin/arc deploy"
             ],
             "cwd": "apps/backend"
