@@ -11,6 +11,7 @@ export class Sync<T> {
   private connection: WebSocket | null = null;
   private connecting = false;
   private stopped = false;
+  private timeout: timeout | null = null;
 
   constructor() {
     this.onWebsocketClose = this.onWebsocketClose.bind(this);
@@ -52,6 +53,9 @@ export class Sync<T> {
     this.stopped = true;
     this.subscriptionManagerTopicSubscription.unsubscribe();
     this.subscriptionManager.stop();
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+    }
     this.disconnect();
   }
 
@@ -98,13 +102,17 @@ export class Sync<T> {
     } finally {
       this.connecting = false;
     }
+    if (!token) {
+      this.timeout = setTimeout(() => this.connect(), randomReconnectTimeout());
+      return;
+    }
 
     this.connection = new WebSocket(process.env.NEXT_PUBLIC_DECI_WS_URL || 'ws://localhost:3333/ws', token);
     this.connection.onopen = () => this.onWebsocketOpen();
     this.connection.onmessage = this.onWebsocketMessage;
     this.connection.onclose = () => {
       this.onWebsocketClose();
-      setTimeout(() => this.connect(), randomReconnectTimeout())
+      this.timeout = setTimeout(() => this.connect(), randomReconnectTimeout())
     };
   }
 

@@ -57,7 +57,7 @@ describe('pad editor', () => {
 
     editor.children = model.getValue() as Sync.Node[];
 
-    expect(editor.children).toStrictEqual([
+    expect(editor.children).toMatchObject([
       {
         children: [
           {

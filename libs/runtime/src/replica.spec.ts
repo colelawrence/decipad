@@ -4,7 +4,7 @@ import { Runtime } from './runtime';
 import { Sync } from './sync';
 
 describe('replica', () => {
-  test('it works gets inactive when it has no subscribers', async () => {
+  test('gets inactive when it has no subscribers', async () => {
     const mockRuntime = {
       userId: 'test user id',
       actorId: 'test actor id',
