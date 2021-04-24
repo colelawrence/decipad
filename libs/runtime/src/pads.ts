@@ -7,8 +7,6 @@ import { PadEditor } from './pad-editor'
 import { LocalMetadata } from './local-metadata'
 import { uri } from './utils/uri'
 
-const INITIAL_STATIC_VALUE = "[\"~#iL\",[[\"~#iM\",[\"ops\",[\"^0\",[[\"^1\",[\"action\",\"makeList\",\"obj\",\"ecc6c560-86c6-4384-aed4-ba606a2cce40\"]],[\"^1\",[\"action\",\"link\",\"obj\",\"00000000-0000-0000-0000-000000000000\",\"key\",\"value\",\"value\",\"ecc6c560-86c6-4384-aed4-ba606a2cce40\"]]]],\"actor\",\"starter\",\"seq\",1,\"deps\",[\"^1\",[]],\"message\",\"Initialization\",\"undoable\",false]]]]";
-
 export class Pads extends List {
   pads: Map<Id, Replica<Pad>> = new Map()
   editors: Map<Id, PadEditor> = new Map()
@@ -17,7 +15,7 @@ export class Pads extends List {
   meta: Map<Id, LocalMetadata> = new Map()
 
   constructor (runtime: Runtime, workspaceId: Id) {
-    super(runtime, uri('workspaces', workspaceId, 'pads'), INITIAL_STATIC_VALUE)
+    super(runtime, uri('workspaces', workspaceId, 'pads'))
 
     this.byTag = invertedIndex<Pad>(
       uri('workspaces', workspaceId, 'padsByTag'),

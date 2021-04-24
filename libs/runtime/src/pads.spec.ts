@@ -152,6 +152,9 @@ describe('pads', () => {
       lastSeenTags = keys
     })
 
+    // removing a pad that does not exist works
+    await deci.workspace(workspaceId).pads.removePad('pad id does not exist')
+
     await deci.workspace(workspaceId).pads.removePad('pad id 1')
 
     expect(lastSeenPadIds).toHaveLength(1)

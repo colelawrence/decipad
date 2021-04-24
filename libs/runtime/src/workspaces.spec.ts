@@ -51,13 +51,6 @@ describe('workspaces', () => {
     deci.stop()
   })
 
-  test('errors if we try to remove nonexisting id', async () => {
-    const deci = new DeciRuntime(USER_ID, ACTOR_ID);
-    await expect(deci.workspaces.remove('does not exist'))
-      .rejects.toThrow('element with id does not exist not found')
-    deci.stop()
-  })
-
   test('removes existing id', async () => {
     const deci = new DeciRuntime(USER_ID, ACTOR_ID);
     const workspaces = deci.workspaces.list();

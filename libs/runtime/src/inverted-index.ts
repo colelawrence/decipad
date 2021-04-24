@@ -19,7 +19,10 @@ export function invertedIndex<T extends Identifiable>(
       const keysBefore = before !== null ? extract(before) : [];
       const keysAfter = after !== null ? extract(after) : [];
 
-      const id = before !== null ? before.id : after!.id;
+      const id = before !== null ? before.id : after !== null ? after.id : null;
+      if (id === null) {
+        return
+      }
       for (const key of (keysAfter || [])) {
         const index = keysBefore.indexOf(key);
         if (index < 0) {
@@ -59,9 +62,7 @@ export function invertedIndex<T extends Identifiable>(
     const replica = getReplicaForKey(key);
     const result = replica.mutate((ids) => {
       const index = ids.indexOf(id);
-      if (index >= 0) {
-        ids.splice(index, 1);
-      }
+      ids.splice(index, 1);
     })
     if (result!.length === 0) {
       replicaByKey.delete(key);
