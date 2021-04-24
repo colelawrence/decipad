@@ -29,8 +29,6 @@ export function fnQueue () {
       processing++
       try {
         await processOne()
-      } catch (err) {
-        console.error(err)
       } finally {
         processing--
       }
@@ -46,7 +44,7 @@ export function fnQueue () {
   async function processOne () {
     const fn = fns.shift()
 
-    await fn!()
+    return await fn!()
   }
 
   async function flush () {
