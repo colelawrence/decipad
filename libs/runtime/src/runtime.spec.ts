@@ -1,4 +1,3 @@
-import { nanoid } from 'nanoid';
 import { DeciRuntime } from './';
 
 const USER_ID = 'test user id';

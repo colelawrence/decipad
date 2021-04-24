@@ -6,8 +6,7 @@ export class List {
   replica: Replica<Id[]>;
 
   constructor(public runtime: Runtime, name: string, initialStaticValue: string | null = null) {
-    const initialValue = [] as Id[];
-    this.replica = createReplica(name, runtime, initialValue, true, initialStaticValue);
+    this.replica = createReplica(name, runtime, [] as Id[], true, initialStaticValue);
   }
 
   list(): Observable<AsyncSubject<Id[]>> {

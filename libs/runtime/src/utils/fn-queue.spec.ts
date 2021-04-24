@@ -36,8 +36,8 @@ describe('fn-queue', () => {
   it('should wait for flush', async () => {
     const q = fnQueue();
     let r1, r2;
-    q.push(() => 'r1').then((v) => r1 = v);
-    q.push(() => 'r2').then((v) => r2 = v)
+    q.push(() => Promise.resolve('r1')).then((v) => r1 = v);
+    q.push(() => Promise.resolve('r2')).then((v) => r2 = v)
     await q.flush();
 
     expect(r1).toBe('r1');
