@@ -9,8 +9,8 @@ describe('runtime', () => {
 
     let lastSession;
     const sub = deci.getSession().subscribe((session) => {
-      lastSession = session
-    })
+      lastSession = session;
+    });
 
     expect(deci.getSessionValue()).toBeNull();
 
@@ -19,8 +19,8 @@ describe('runtime', () => {
         id: 'id',
         name: 'name',
         email: 'email@example.com',
-        avatar: 'avatar'
-      }
+        avatar: 'avatar',
+      },
     });
 
     expect(deci.getSessionValue()).toMatchObject({
@@ -28,8 +28,8 @@ describe('runtime', () => {
         id: 'id',
         name: 'name',
         email: 'email@example.com',
-        avatar: 'avatar'
-      }
+        avatar: 'avatar',
+      },
     });
 
     expect(lastSession).toMatchObject({
@@ -37,12 +37,11 @@ describe('runtime', () => {
         id: 'id',
         name: 'name',
         email: 'email@example.com',
-        avatar: 'avatar'
-      }
+        avatar: 'avatar',
+      },
     });
 
     sub.unsubscribe();
     deci.stop();
   });
-
 });

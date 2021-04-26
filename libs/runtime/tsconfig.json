@@ -20,11 +20,7 @@
     "declaration": true,
     "baseUrl": "../.."
   },
-  "include": [
-    "./src/**/*.ts",
-    "./src/**/*.js",
-    "./types/index.d.ts",
-  ],
+  "include": ["./src/**/*.ts", "./src/**/*.js", "./types/index.d.ts"],
   "references": [
     {
       "path": "../language"

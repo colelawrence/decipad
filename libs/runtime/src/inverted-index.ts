@@ -9,7 +9,7 @@ export function invertedIndex<T extends Identifiable>(
   runtime: Runtime,
   changeObservable: Observable<Mutation<T>>,
   extract: (o: T) => string[]
-  ): InvertedIndex {
+): InvertedIndex {
   const replicaByKey: Map<string, Replica<Id[]>> = new Map();
   const keysSubject = new BehaviorSubject<string[]>([]);
   const queue = fnQueue();
@@ -21,21 +21,21 @@ export function invertedIndex<T extends Identifiable>(
 
       const id = before !== null ? before.id : after !== null ? after.id : null;
       if (id === null) {
-        return
+        return;
       }
-      for (const key of (keysAfter || [])) {
+      for (const key of keysAfter || []) {
         const index = keysBefore.indexOf(key);
         if (index < 0) {
           await ensureEntry(key, id);
         }
         keysBefore.splice(index, 1);
       }
-      for (const removeKey of (keysBefore || [])) {
+      for (const removeKey of keysBefore || []) {
         await removeEntry(removeKey, id);
       }
       keysSubject.next(Array.from(replicaByKey.keys()).sort());
-    })
-  })
+    });
+  });
 
   function keys(): Observable<Id[]> {
     return keysSubject;
@@ -43,7 +43,10 @@ export function invertedIndex<T extends Identifiable>(
 
   function get(key: string): Observable<AsyncSubject<Id[]>> {
     if (!replicaByKey.has(key)) {
-      return from([{ loading: true, error: null, data: null}, { loading: false, error: null, data: []}]);
+      return from([
+        { loading: true, error: null, data: null },
+        { loading: false, error: null, data: [] },
+      ]);
     }
     return replicaByKey.get(key)!.observable;
   }
@@ -54,7 +57,7 @@ export function invertedIndex<T extends Identifiable>(
       if (ids.indexOf(id) < 0) {
         ids.push(id);
       }
-    })
+    });
     await replica.flush(); // TODO: do not save index every time we make a change
   }
 
@@ -63,12 +66,12 @@ export function invertedIndex<T extends Identifiable>(
     const result = replica.mutate((ids) => {
       const index = ids.indexOf(id);
       ids.splice(index, 1);
-    })
+    });
     if (result!.length === 0) {
       replicaByKey.delete(key);
       await replica.remove();
     } else {
-      await replica.flush() // TODO: do not save index every time we make a change
+      await replica.flush(); // TODO: do not save index every time we make a change
     }
   }
 
@@ -92,12 +95,12 @@ export function invertedIndex<T extends Identifiable>(
   return {
     keys,
     get,
-    stop
+    stop,
   };
 }
 
 export interface InvertedIndex {
-  keys(): Observable<Id[]>
-  get(key: string): Observable<AsyncSubject<Id[]>>
-  stop(): void
+  keys(): Observable<Id[]>;
+  get(key: string): Observable<AsyncSubject<Id[]>>;
+  stop(): void;
 }

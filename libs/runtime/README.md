@@ -4,23 +4,22 @@ Client interface to the runtime.
 
 The user of the runtime should be able to:
 
-* Identify the user
-* Organising: manage workspaces, folders, most recent pads
-* Syncing:
-  * Receiving remote changes
-  * Sending local changes
-* Persistence:
-  * Load a pad
-  * Save a pad
-  * Know if a pad has been fully synced with the back-end
-* Remote presence while editing a pad
-  * Inform the user of the identity of the users editing the pad
-  * Inform the user of other users' cursor positions
-  * Inform the user of other users'
-* Computation
-  * Ask to parse type-check a pad. Get the errors with block and location of each error encountered.
-  * Ask for a given value on a given line in a given block. Get informed about both the type and the result value.
-
+- Identify the user
+- Organising: manage workspaces, folders, most recent pads
+- Syncing:
+  - Receiving remote changes
+  - Sending local changes
+- Persistence:
+  - Load a pad
+  - Save a pad
+  - Know if a pad has been fully synced with the back-end
+- Remote presence while editing a pad
+  - Inform the user of the identity of the users editing the pad
+  - Inform the user of other users' cursor positions
+  - Inform the user of other users'
+- Computation
+  - Ask to parse type-check a pad. Get the errors with block and location of each error encountered.
+  - Ask for a given value on a given line in a given block. Get informed about both the type and the result value.
 
 ## Import
 
@@ -44,7 +43,6 @@ const deci = new DeciRuntime(userId, actorId)
 
 deci.stop() // stops all observables / subjects / subscriptions
 ```
-
 
 ### Identify
 
@@ -75,21 +73,23 @@ A list or an individual element is an observable to which you can subscribe to.
 To subscribe, you have to supply an observer. An observer can be a function that has the following signature:
 
 ```js
-const observer = ({ error, loading, data }) => { /**/ }
-````
+const observer = ({ error, loading, data }) => {
+  /**/
+};
+```
 
 The type of the `data` element depends on the data type you're subscribing to.
 
 To subscribe, you have to do the following:
 
 ```js
-const subscription = observable.subscribe(observer)
-````
+const subscription = observable.subscribe(observer);
+```
 
 To unsubscribe, you should do the following:
 
 ```js
-subscription.unsubscribe() // observable won't be called again after this
+subscription.unsubscribe(); // observable won't be called again after this
 ```
 
 ### List subscriptions
@@ -100,40 +100,42 @@ Then, in each UI component that renders each element, you should subscribe to th
 
 ```js
 const Workspace = ({ id }) => {
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [workspace, setWorkspace] = useState(null)
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [workspace, setWorkspace] = useState(null);
 
   useEffect(() => {
-    const observable = deci.workspaces.get(id)
-    const subscription = observable.subscribe(({ loading, data: workspace, error }) => {
-      setLoading(loading)
-      setError(error)
-      setWorkspace(workspace)
-    })
+    const observable = deci.workspaces.get(id);
+    const subscription = observable.subscribe(
+      ({ loading, data: workspace, error }) => {
+        setLoading(loading);
+        setError(error);
+        setWorkspace(workspace);
+      }
+    );
 
-    return () => subscription.unsubscribe()
-  }, [id])
-}
-````
+    return () => subscription.unsubscribe();
+  }, [id]);
+};
+```
 
 Here are some examples:
 
-
 ### Workspaces
-
 
 #### Get Workspace
 
 ```js
-const workspaceObservable = deci.workspaces.get(id)
-const subscription = workspaceObservable.subscribe(({ loading, data: workspace, error }) => {
-  console.log({ loading, error, workspace })
-})
+const workspaceObservable = deci.workspaces.get(id);
+const subscription = workspaceObservable.subscribe(
+  ({ loading, data: workspace, error }) => {
+    console.log({ loading, error, workspace });
+  }
+);
 
 /*...*/
 
-subscription.unsubscribe()
+subscription.unsubscribe();
 ```
 
 #### List workspaces
@@ -154,7 +156,7 @@ const subscription : Subscription = workspaceList.subscribe(listObserver);
 // ...
 
 subscription.unsubscribe()
-````
+```
 
 #### Create workspace
 
@@ -176,14 +178,14 @@ const workspace : Workspace = {
   ...
 };
 await deci.workspaces.create(workspace);
-````
+```
 
 #### Update workspace
 
 You can pass an id of the workspace and an object with the properties that you want to change:
 
 ```js
-await deci.workspaces.update(id, { name: 'new workspace name'})
+await deci.workspaces.update(id, { name: 'new workspace name' });
 ```
 
 #### Delete workspace
@@ -195,20 +197,20 @@ await deci.workspaces.delete(workspace.id);
 #### Insert Workspace in list
 
 ```js
-await deci.workspaces.insertAt(pos, workspace.id)
-````
+await deci.workspaces.insertAt(pos, workspace.id);
+```
 
 #### Remove Workspace
 
 ```js
-await deci.workspaces.remove(workspace.id)
-````
+await deci.workspaces.remove(workspace.id);
+```
 
 #### Move Workspace within list
 
 ```js
-await deci.workspaces.move(workspace, newPos)
-````
+await deci.workspaces.move(workspace, newPos);
+```
 
 ### Pads
 
@@ -217,22 +219,26 @@ await deci.workspaces.move(workspace, newPos)
 You can list all the pads directly inside a workspace:
 
 ```js
-const padIds : Observable<Id[]> = deci.workspace(id).pads.list()
+const padIds: Observable<Id[]> = deci.workspace(id).pads.list();
 const padListObserver = {
-  next: (list: Pad[]) => { console.log('new pad list', list) },
-  error: (err: Error) => { console.error(err) }
-}
-const subscription : Subscription = padList.subscribe(padListObserver)
+  next: (list: Pad[]) => {
+    console.log('new pad list', list);
+  },
+  error: (err: Error) => {
+    console.error(err);
+  },
+};
+const subscription: Subscription = padList.subscribe(padListObserver);
 
 // ...
 
-subscription.unsubscribe()
+subscription.unsubscribe();
 ```
 
 You can also list a pad inside a folder:
 
 ```js
-const padList : Observable<Pad[]> = deci.workspace(id).pads.list()
+const padList: Observable<Pad[]> = deci.workspace(id).pads.list();
 
 // etc..
 ```
@@ -245,10 +251,10 @@ const pad = {
   name: 'Some name',
   workspaceId: workspace.id,
   folderId: folder.id,
-  lastUpdatedAt: new Date()
-}
+  lastUpdatedAt: new Date(),
+};
 
-await deci.workspace(id).pads.create(pad)
+await deci.workspace(id).pads.create(pad);
 ```
 
 #### Update a pad metadata
@@ -256,15 +262,15 @@ await deci.workspace(id).pads.create(pad)
 You can partially update the properties of a pad:
 
 ```js
-const newPadProps = { name: 'new pad name' }
+const newPadProps = { name: 'new pad name' };
 
-setSaving(true)
+setSaving(true);
 try {
-  await deci.workspace(id).pads.update(id, newPadProps)
+  await deci.workspace(id).pads.update(id, newPadProps);
 } catch (err) {
-  showAnErrorMessage(err.message)
+  showAnErrorMessage(err.message);
 } finally {
-  setSaving(false)
+  setSaving(false);
 }
 ```
 
@@ -297,51 +303,51 @@ You can move a pad to another workspace while at the same time updating other pr
 ```js
 const newPadProps = {
   name: 'new pad name',
-  workspaceId: newWorkspaceId
-}
-const newPositionInNewFolder = 2 // defaults to 0
+  workspaceId: newWorkspaceId,
+};
+const newPositionInNewFolder = 2; // defaults to 0
 
-await deci.pads.update(padId, newPadProps, newPositionInNewFolder)
+await deci.pads.update(padId, newPadProps, newPositionInNewFolder);
 ```
 
 If the only thing you want is to move a pad without updating any other prop, you can simply:
 
 ```js
-await deci.pads.move(padId, targetWorkspaceId, insertAtPos /* default = 0 */)
+await deci.pads.move(padId, targetWorkspaceId, insertAtPos /* default = 0 */);
 ```
 
 #### Remove a pad
 
 ```js
-await deci.pads.removePad(padId)
+await deci.pads.removePad(padId);
 ```
 
 #### Editing a pad's contents
 
 ```js
-const editorModel = deci.pads.editor(padId)
-const value = editorModel.getValue() // put this as initial value of the UI editor
+const editorModel = deci.pads.editor(padId);
+const value = editorModel.getValue(); // put this as initial value of the UI editor
 
 const subscription = editorModel.slateOps().subscribe((slateOp) => {
   // insert into UI editor
-})
+});
 
 // also send slate operations that represent changes of the UI editor:
-uiEditor.on('change', () => editorModel.sendSlateOps(uiEditor.operations))
+uiEditor.on('change', () => editorModel.sendSlateOps(uiEditor.operations));
 
 // ...
 
-subscription.unsubscribe()
+subscription.unsubscribe();
 
-editorModel.stop() // important to release resources
-````
+editorModel.stop(); // important to release resources
+```
 
 ### Evaluating a pad
 
 ```js
-const editorModel = deci.pads.editor(padId)
+const editorModel = deci.pads.editor(padId);
 
-const result = await editorModel.valueAt('block id', lineNumber)
+const result = await editorModel.valueAt('block id', lineNumber);
 ```
 
 result is a ComputationResult:
@@ -352,7 +358,7 @@ result is a ComputationResult:
   value: Interpreter.Result | undefined
   errors: ComputationError[]
 }
-````
+```
 
 ## Running unit tests
 

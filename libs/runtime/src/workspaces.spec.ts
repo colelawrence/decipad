@@ -1,12 +1,12 @@
 import { nanoid } from 'nanoid';
 import { DeciRuntime } from './';
 
-const USER_ID = 'test user id'
-const ACTOR_ID = 'workspace test actor id'
+const USER_ID = 'test user id';
+const ACTOR_ID = 'workspace test actor id';
 
 describe('workspaces', () => {
-  let existingId = ''
-  let workspaceId = ''
+  let existingId = '';
+  let workspaceId = '';
   test('starts with zero elements', (done) => {
     const deci = new DeciRuntime(USER_ID, ACTOR_ID);
     const workspaces = deci.workspaces.list();
@@ -22,107 +22,111 @@ describe('workspaces', () => {
   test('can push id', async () => {
     const deci = new DeciRuntime(USER_ID, ACTOR_ID);
     const workspaces = deci.workspaces.list();
-    let lastSeen: Id[] | null = null
+    let lastSeen: Id[] | null = null;
     const sub = workspaces.subscribe(({ data }) => {
-      lastSeen = data
+      lastSeen = data;
     });
 
-    const id = existingId = nanoid()
-    await deci.workspaces.push(id)
-    expect(lastSeen).toHaveLength(1)
-    expect(lastSeen![0]).toBe(id)
-    sub.unsubscribe()
-    deci.stop()
-  })
+    const id = (existingId = nanoid());
+    await deci.workspaces.push(id);
+    expect(lastSeen).toHaveLength(1);
+    expect(lastSeen![0]).toBe(id);
+    sub.unsubscribe();
+    deci.stop();
+  });
 
   test('can insert id at given position', async () => {
     const deci = new DeciRuntime(USER_ID, ACTOR_ID);
     const workspaces = deci.workspaces.list();
-    let lastSeen: Id[] | null = null
+    let lastSeen: Id[] | null = null;
     const sub = workspaces.subscribe(({ data }) => {
-      lastSeen = data
+      lastSeen = data;
     });
 
-    const id = nanoid()
-    await deci.workspaces.insertAt(0, id)
-    expect(lastSeen).toHaveLength(2)
-    expect(lastSeen![0]).toBe(id)
-    sub.unsubscribe()
-    deci.stop()
-  })
+    const id = nanoid();
+    await deci.workspaces.insertAt(0, id);
+    expect(lastSeen).toHaveLength(2);
+    expect(lastSeen![0]).toBe(id);
+    sub.unsubscribe();
+    deci.stop();
+  });
 
   test('removes existing id', async () => {
     const deci = new DeciRuntime(USER_ID, ACTOR_ID);
     const workspaces = deci.workspaces.list();
-    let lastSeen: Id[] | null = null
+    let lastSeen: Id[] | null = null;
     const sub = workspaces.subscribe(({ data }) => {
-      lastSeen = data
+      lastSeen = data;
     });
 
-    await deci.workspaces.remove(existingId)
+    await deci.workspaces.remove(existingId);
 
-    expect(lastSeen).toHaveLength(1)
-    expect(lastSeen![0]).not.toBe(existingId)
-    sub.unsubscribe()
-    deci.stop()
-  })
+    expect(lastSeen).toHaveLength(1);
+    expect(lastSeen![0]).not.toBe(existingId);
+    sub.unsubscribe();
+    deci.stop();
+  });
 
   test('getting non-existing workspace yields null', () => {
     const deci = new DeciRuntime(USER_ID, ACTOR_ID);
-    let lastSeen: Workspace | null = null
-    const sub = deci.workspaces.get('non existing workspace id').subscribe(({ data }) => {
-      lastSeen = data
-    })
-    expect(lastSeen).toBeNull()
-    sub.unsubscribe()
-    deci.stop()
-  })
+    let lastSeen: Workspace | null = null;
+    const sub = deci.workspaces
+      .get('non existing workspace id')
+      .subscribe(({ data }) => {
+        lastSeen = data;
+      });
+    expect(lastSeen).toBeNull();
+    sub.unsubscribe();
+    deci.stop();
+  });
 
   test('can create workspace', async () => {
     const deci = new DeciRuntime(USER_ID, ACTOR_ID);
-    workspaceId = nanoid()
+    workspaceId = nanoid();
     const workspace = {
       id: workspaceId,
       name: 'Test workspace',
-      permissions: []
-    }
+      permissions: [],
+    };
 
-    await deci.workspaces.create(workspace)
+    await deci.workspaces.create(workspace);
 
-    deci.stop()
-  })
+    deci.stop();
+  });
 
   test('can retrieve observable for existing workspace', () => {
     const deci = new DeciRuntime(USER_ID, ACTOR_ID);
-    let lastSeen: Workspace | null = null
+    let lastSeen: Workspace | null = null;
     const sub = deci.workspaces.get(workspaceId).subscribe(({ data }) => {
-      lastSeen = data
-    })
+      lastSeen = data;
+    });
     expect(lastSeen).toMatchObject({
       id: workspaceId,
       name: 'Test workspace',
-      permissions: []
-    })
-    sub.unsubscribe()
-    deci.stop()
-  })
+      permissions: [],
+    });
+    sub.unsubscribe();
+    deci.stop();
+  });
 
   test('can update workspace', async () => {
     const deci = new DeciRuntime(USER_ID, ACTOR_ID);
-    let lastSeen: Workspace | null = null
+    let lastSeen: Workspace | null = null;
     const sub = deci.workspaces.get(workspaceId).subscribe(({ data }) => {
-      lastSeen = data
-    })
+      lastSeen = data;
+    });
 
-    await deci.workspaces.update(workspaceId, { name: 'Test workspace renamed' })
+    await deci.workspaces.update(workspaceId, {
+      name: 'Test workspace renamed',
+    });
 
     expect(lastSeen).toMatchObject({
       id: workspaceId,
       name: 'Test workspace renamed',
-      permissions: []
-    })
+      permissions: [],
+    });
 
-    sub.unsubscribe()
-    deci.stop()
-  })
+    sub.unsubscribe();
+    deci.stop();
+  });
 });

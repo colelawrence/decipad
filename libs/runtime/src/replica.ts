@@ -1,10 +1,6 @@
 import { Doc } from 'automerge';
 import Automerge, { Diff, Change } from 'automerge';
-import {
-  Observable,
-  Subject,
-  combineLatest
-} from 'rxjs';
+import { Observable, Subject, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { dequal } from 'dequal';
 import { Runtime } from './runtime';
@@ -33,26 +29,33 @@ function createReplica<T>(
 
   // Subscription count observeables
 
-  const subscriptionCountObservable1 = observeSubscriberCount(observable, () => {
-    observable.next({ loading: true, error: null, data: null });
+  const subscriptionCountObservable1 = observeSubscriberCount(
+    observable,
+    () => {
+      observable.next({ loading: true, error: null, data: null });
 
-    try {
-      doc = getDoc();
-      if (doc !== null) {
-        observable.next({ loading: false, data: doc.value as T, error: null });
+      try {
+        doc = getDoc();
+        if (doc !== null) {
+          observable.next({
+            loading: false,
+            data: doc.value as T,
+            error: null,
+          });
+        }
+      } catch (err) {
+        observable.next({ loading: false, error: err, data: null });
+        stop();
       }
-    } catch (err) {
-      observable.next({ loading: false, error: err, data: null });
-      stop();
     }
-  });
+  );
 
   const subscriptionCountObservable2 = observeSubscriberCount(remoteChanges);
 
   const subscriptionCountObservable = combineLatest(
     subscriptionCountObservable1,
-    subscriptionCountObservable2).pipe(
-      map(([c1, c2]) => c1 + c2));
+    subscriptionCountObservable2
+  ).pipe(map(([c1, c2]) => c1 + c2));
 
   let hadSubscriptors = false;
   subscriptionCountObservable.subscribe((subscriptionCount) => {
@@ -67,7 +70,12 @@ function createReplica<T>(
 
   // sync
 
-  const sync = new ReplicaSync(name, runtime, localChanges, subscriptionCountObservable);
+  const sync = new ReplicaSync(
+    name,
+    runtime,
+    localChanges,
+    subscriptionCountObservable
+  );
   const remoteDocSubscription = sync.remoteDoc.subscribe((doc2) => {
     const doc1 = getDoc();
     if (doc1 === null) {
@@ -80,22 +88,24 @@ function createReplica<T>(
     }
   });
 
-  const remoteChangesSubscription = sync.remoteChanges.subscribe((changes: Change[]) => {
-    queue.push(async () => {
-      await self.beforeRemoteChanges();
-      const oldDoc = getDoc();
-      if (oldDoc === null) {
-        throw new Error('Could not get doc from local storage');
-      }
-      doc = Automerge.applyChanges(oldDoc, changes);
+  const remoteChangesSubscription = sync.remoteChanges.subscribe(
+    (changes: Change[]) => {
+      queue.push(async () => {
+        await self.beforeRemoteChanges();
+        const oldDoc = getDoc();
+        if (oldDoc === null) {
+          throw new Error('Could not get doc from local storage');
+        }
+        doc = Automerge.applyChanges(oldDoc, changes);
 
-      const diffs = Automerge.diff(oldDoc, doc);
-      remoteChanges.next({ before: oldDoc, doc, diffs });
-      observable.next({ loading: false, error: null, data: doc.value as T });
-      needsFlush = true;
-      flush();
-    })
-  });
+        const diffs = Automerge.diff(oldDoc, doc);
+        remoteChanges.next({ before: oldDoc, doc, diffs });
+        observable.next({ loading: false, error: null, data: doc.value as T });
+        needsFlush = true;
+        flush();
+      });
+    }
+  );
 
   loadDoc();
 
@@ -155,13 +165,13 @@ function createReplica<T>(
   }
 
   function stop() {
-    stopped = true
+    stopped = true;
     remoteDocSubscription.unsubscribe();
     remoteChangesSubscription.unsubscribe();
     sync.stop();
     observable.complete();
-    remoteChanges.complete()
-    localChanges.complete()
+    remoteChanges.complete();
+    localChanges.complete();
     window.removeEventListener('storage', onStorageEvent);
     subscriptionCountObservable1.complete();
     subscriptionCountObservable2.complete();
@@ -170,19 +180,19 @@ function createReplica<T>(
   function remove() {
     window.localStorage.removeItem(key());
     observable.next({ loading: false, error: null, data: null });
-    stop()
+    stop();
   }
 
   function getValue(): T | null {
-    const doc = getDoc()
-    return doc === null ? null : doc?.value as T;
+    const doc = getDoc();
+    return doc === null ? null : (doc?.value as T);
   }
 
   function loadDoc() {
     const str = window.localStorage.getItem(key()) || initialStaticValue;
     if (str !== null) {
       doc = Automerge.load(str, runtime.actorId);
-    } else if(createIfAbsent) {
+    } else if (createIfAbsent) {
       doc = Automerge.from({ value: initialValue }, 'starter') as Doc<{
         value: T;
       }>;
@@ -200,7 +210,7 @@ function createReplica<T>(
     if (str !== null) {
       return Automerge.load(str, runtime.actorId) as Doc<{ value: T }>;
     }
-    return null
+    return null;
   }
 
   function getDoc(): Doc<{ value: T }> | null {
@@ -242,7 +252,10 @@ function createReplica<T>(
     }
   }
 
-  async function mergeRemoteDoc(remoteDoc: Doc<{ value: T }>, fromError = false) {
+  async function mergeRemoteDoc(
+    remoteDoc: Doc<{ value: T }>,
+    fromError = false
+  ) {
     await self.beforeRemoteChanges();
     const oldDoc = doc;
     try {
@@ -256,7 +269,6 @@ function createReplica<T>(
         });
 
         observable.next({ loading: false, error: null, data: doc!.value as T });
-
       }
       if (oldDoc !== doc) {
         needsFlush = true;
@@ -294,7 +306,7 @@ interface Replica<T> {
   getValue: () => T | null;
   stop: () => void;
   isActive: () => boolean;
-  isOnlyRemote: () => boolean,
+  isOnlyRemote: () => boolean;
   subscriptionCountObservable: Observable<number>;
   beforeRemoteChanges: (() => void) | null;
 }

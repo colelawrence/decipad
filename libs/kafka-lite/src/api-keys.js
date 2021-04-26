@@ -18,7 +18,7 @@ module.exports = {
   // ListGroups: 16,
   // SaslHandshake: 17,
   18: require('./api/api-versions'),
-  19: require('./api/create-topics')
+  19: require('./api/create-topics'),
   // DeleteTopics: 20,
   // DeleteRecords: 21,
   // InitProducerId: 22,
@@ -43,4 +43,4 @@ module.exports = {
   // DescribeDelegationToken: 41,
   // DeleteGroups: 42, // ApiVersions v2 on Kafka 1.0
   // ElectPreferredLeaders: 43,
-}
+};

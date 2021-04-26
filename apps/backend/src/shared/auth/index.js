@@ -1,21 +1,21 @@
-'use strict'
+'use strict';
 
-const arc = require('@architect/functions')
-const GitHub = require('./providers/github')
-const { nanoid } = require('nanoid')
-const adaptReqRes = require('./adapt-req-res')
-const createDbAdapter = require('./db-adapter')
-const jwt = require('./jwt')
+const arc = require('@architect/functions');
+const GitHub = require('./providers/github');
+const { nanoid } = require('nanoid');
+const adaptReqRes = require('./adapt-req-res');
+const createDbAdapter = require('./db-adapter');
+const jwt = require('./jwt');
 
 module.exports = function createAuthHandler({ NextAuth, NextAuthJWT }) {
   const providers = [
     GitHub({
       clientId: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET
-    })
-  ]
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    }),
+  ];
 
-  const callbacks = {}
+  const callbacks = {};
 
   callbacks.signIn = async function signIn(user, account, metadata) {
     // Deny access to users that are not yet registered
@@ -25,16 +25,16 @@ module.exports = function createAuthHandler({ NextAuth, NextAuthJWT }) {
         login: metadata.login,
         name: metadata.name,
         avatar: metadata.avatar_url,
-        email: metadata.email
-      }
+        email: metadata.email,
+      };
 
-      let existingUser
-      const tables = await arc.tables()
-      const userKeyId = `${account.provider}:${githubUser.id}`
-      const userKey = await tables.userkeys.get({ id: userKeyId })
+      let existingUser;
+      const tables = await arc.tables();
+      const userKeyId = `${account.provider}:${githubUser.id}`;
+      const userKey = await tables.userkeys.get({ id: userKeyId });
 
       if (userKey) {
-        existingUser = await tables.users.get({ id: userKey.user_id })
+        existingUser = await tables.users.get({ id: userKey.user_id });
       }
       if (!existingUser) {
         // If the user does not exist, we just create a new one.
@@ -46,76 +46,75 @@ module.exports = function createAuthHandler({ NextAuth, NextAuthJWT }) {
           name: githubUser.name,
           last_login: Date.now(),
           avatar: githubUser.avatar,
-          email: githubUser.email
-        }
+          email: githubUser.email,
+        };
 
-        await tables.users.put(newUser)
+        await tables.users.put(newUser);
 
         const newUserKey = {
           id: `${account.provider}:${githubUser.id}`,
-          user_id: newUser.id
-        }
+          user_id: newUser.id,
+        };
 
-        await tables.userkeys.put(newUserKey)
+        await tables.userkeys.put(newUserKey);
 
         if (githubUser.email) {
           const newEmailUserKey = {
             id: `${githubUser.email}:${githubUser.email}`,
-            user_id: newUser.id
-          }
+            user_id: newUser.id,
+          };
 
-          await tables.userkeys.put(newEmailUserKey)
+          await tables.userkeys.put(newEmailUserKey);
         }
 
-        existingUser = newUser
+        existingUser = newUser;
       }
 
-      user.accessToken = existingUser.id
+      user.accessToken = existingUser.id;
 
-      return true
+      return true;
     }
 
     return false;
-  }
+  };
 
   callbacks.jwt = async function jwt(token, user) {
     if (user) {
-      token = { accessToken: user.id }
+      token = { accessToken: user.id };
     }
 
-    return token
-  }
+    return token;
+  };
 
   callbacks.session = async function session(session, token) {
-    session.accessToken = token.accessToken
-    const tables = await arc.tables()
-    const user = await tables.users.get({ id:token.accessToken })
+    session.accessToken = token.accessToken;
+    const tables = await arc.tables();
+    const user = await tables.users.get({ id: token.accessToken });
 
     if (user) {
       Object.assign(session.user, {
         id: user.id,
         name: user.name,
         email: user.email,
-        image: user.avatar
-      })
+        image: user.avatar,
+      });
     }
 
-    return session
-  }
+    return session;
+  };
 
   const options = {
     session: {
       jwt: true,
-      secret: process.env.JWT_SECRET
+      secret: process.env.JWT_SECRET,
     },
     providers,
     callbacks,
     jwt: jwt({ NextAuthJWT }),
-    adapter: createDbAdapter()
-  }
+    adapter: createDbAdapter(),
+  };
 
-  const nextAuth = NextAuth(options)
+  const nextAuth = NextAuth(options);
 
-  return adaptReqRes(nextAuth)
-}
-
+  return adaptReqRes(nextAuth);
+};

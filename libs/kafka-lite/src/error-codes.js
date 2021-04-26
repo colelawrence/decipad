@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 module.exports = {
   NONE: 0,
@@ -9,5 +9,5 @@ module.exports = {
   REBALANCE_IN_PROGRESS: 27,
   UNSUPPORTED_VERSION: 35,
   TOPIC_ALREADY_EXISTS: 36,
-  INVALID_REQUEST: 42
-}
+  INVALID_REQUEST: 42,
+};

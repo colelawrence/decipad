@@ -62,7 +62,7 @@ export const useRuntimeEditor = ({ workspaceId, padId }) => {
             );
             if (result.errors !== null && result.errors.length > 0) {
               for (const error of result.errors) {
-                console.error(error)
+                console.error(error);
               }
             } else {
               console.log(result);
@@ -73,15 +73,18 @@ export const useRuntimeEditor = ({ workspaceId, padId }) => {
                 editor,
                 {
                   result: match
-                    ? result.value[0] + (result.type.unit === null ? '' : ' ' + result.type.unit[0].unit) + '\n'
+                    ? result.value[0] +
+                      (result.type.unit === null
+                        ? ''
+                        : ' ' + result.type.unit[0].unit) +
+                      '\n'
                     : null,
                 },
                 { match: (n) => Editor.isBlock(editor, n) }
               );
             }
-
           } catch (err) {
-            console.error(err)
+            console.error(err);
           }
         }
       }

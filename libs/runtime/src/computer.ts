@@ -88,7 +88,7 @@ export class Computer {
         const [id, source] = idAndTextFromElem(elem);
 
         if (!id) {
-          throw new Error('Code block should have id')
+          throw new Error('Code block should have id');
         }
 
         blocks.push({ id, source });

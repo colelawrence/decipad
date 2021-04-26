@@ -26,7 +26,7 @@ import { DeciRuntimeContext } from '@decipad/editor';
 import { Workspaces } from './Workspaces/Workspaces';
 
 export const NavigationMenu = () => {
-  const router = useRouter()
+  const router = useRouter();
   const newWorkspaceRef = useRef<HTMLInputElement>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -104,7 +104,7 @@ export const NavigationMenu = () => {
                   setNewWorkspaceName('');
                   await runtime.workspaces.create(newWorkspace);
                   await runtime.workspaces.push(newWorkspace.id);
-                  router.push(`?workspace=${newWorkspace.id}`)
+                  router.push(`?workspace=${newWorkspace.id}`);
                   onClose();
                 }}
               >

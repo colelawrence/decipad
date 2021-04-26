@@ -13,15 +13,17 @@ export const useEditor = ({ workspaceId, padId, withPlugins, setValue }) => {
   });
 
   useEffect(() => {
-    ;(async() => {
+    (async () => {
       if (padEditor) {
         if (padEditor.padId !== padId) {
           padEditor.stop();
           setEditor(null);
-          return
+          return;
         }
-        const isRemote = padEditor.isOnlyRemote()
-        const value = isRemote ? await padEditor.getValueEventually() : padEditor.getValue();
+        const isRemote = padEditor.isOnlyRemote();
+        const value = isRemote
+          ? await padEditor.getValueEventually()
+          : padEditor.getValue();
         if (value) {
           const editor: Editor = pipe(createEditor(), ...withPlugins);
 
@@ -30,22 +32,22 @@ export const useEditor = ({ workspaceId, padId, withPlugins, setValue }) => {
               if (HistoryEditor.isHistoryEditor(editor)) {
                 HistoryEditor.withoutSaving(editor, () => {
                   for (const op of ops) {
-                    editor.apply(op)
+                    editor.apply(op);
                   }
-                })
+                });
               } else {
                 for (const op of ops) {
                   editor.apply(op);
                 }
               }
-            })
-          })
+            });
+          });
 
           setValue(value);
-          setLoading(false)
+          setLoading(false);
           setEditor(editor);
 
-          return () => sub.unsubscribe()
+          return () => sub.unsubscribe();
         }
       }
     })();

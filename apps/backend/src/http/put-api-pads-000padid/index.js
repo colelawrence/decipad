@@ -1,14 +1,14 @@
-const handle = require('@architect/shared/handle')
-const put = require('@architect/shared/sync/put')
-const uri = require('@architect/shared/uri')
+const handle = require('@architect/shared/handle');
+const put = require('@architect/shared/sync/put');
+const uri = require('@architect/shared/uri');
 
 exports.handler = handle(async (event) => {
-  const id = uri('pads', event.pathParameters.padid)
-  let body
+  const id = uri('pads', event.pathParameters.padid);
+  let body;
   if (event.isBase64Encoded) {
-    body = Buffer.from(event.body, 'base64').toString()
+    body = Buffer.from(event.body, 'base64').toString();
   } else {
-    body = event.body
+    body = event.body;
   }
-  return put(id, body)
-})
+  return put(id, body);
+});

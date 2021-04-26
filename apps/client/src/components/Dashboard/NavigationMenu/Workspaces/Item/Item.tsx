@@ -95,7 +95,7 @@ export const Item = ({ workspaceId }: { workspaceId: string }) => {
                   lastUpdatedAt: new Date(),
                 };
                 await runtime.workspace(workspaceId).pads.create(newPad);
-                router.push(`?workspace=${workspaceId}&notebook=${newPad.id}`)
+                router.push(`?workspace=${workspaceId}&notebook=${newPad.id}`);
                 setNewNotebookName('');
                 onClose();
               }}

@@ -152,7 +152,7 @@ function start({ arc, inventory, services }, callback) {
 }
 
 async function end({ services }, callback) {
-  console.log('ENDING KAFKA PLUGIN')
+  console.log('ENDING KAFKA PLUGIN');
   const k = services.kafka || kafka;
   if (!k) {
     throw new Error('kafka service is not defined');
@@ -162,13 +162,13 @@ async function end({ services }, callback) {
     throw new Error('kafka listeners is not defined');
   }
   await k.close();
-  console.log('closed server')
+  console.log('closed server');
   for (const l of ls) {
-    await l.stop()
+    await l.stop();
   }
-  console.log('stopped all listeners')
+  console.log('stopped all listeners');
   if (callback) {
-    callback()
+    callback();
   }
 }
 

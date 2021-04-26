@@ -1,12 +1,12 @@
-'use strict'
+'use strict';
 
 const resolvers = {
   Query: {
     hello: () => 'Hello world!',
     me: (parent, args, context /*, info*/) => {
-      return context.user
-    }
+      return context.user;
+    },
   },
 };
 
-module.exports = resolvers
+module.exports = resolvers;

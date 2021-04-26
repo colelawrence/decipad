@@ -2444,11 +2444,7 @@
     },
     "WebsocketDeployment": {
       "Type": "AWS::ApiGatewayV2::Deployment",
-      "DependsOn": [
-        "ConnectWSRoute",
-        "DefaultWSRoute",
-        "DisconnectWSRoute"
-      ],
+      "DependsOn": ["ConnectWSRoute", "DefaultWSRoute", "DisconnectWSRoute"],
       "Properties": {
         "ApiId": {
           "Ref": "WS"
@@ -2476,10 +2472,7 @@
           "Statement": [
             {
               "Effect": "Allow",
-              "Action": [
-                "execute-api:Invoke",
-                "execute-api:ManageConnections"
-              ],
+              "Action": ["execute-api:Invoke", "execute-api:ManageConnections"],
               "Resource": [
                 {
                   "Fn::Sub": [
@@ -2590,10 +2583,7 @@
     },
     "ConnectWSPermission": {
       "Type": "AWS::Lambda::Permission",
-      "DependsOn": [
-        "WS",
-        "ConnectWSLambda"
-      ],
+      "DependsOn": ["WS", "ConnectWSLambda"],
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -2690,10 +2680,7 @@
     },
     "DefaultWSPermission": {
       "Type": "AWS::Lambda::Permission",
-      "DependsOn": [
-        "WS",
-        "DefaultWSLambda"
-      ],
+      "DependsOn": ["WS", "DefaultWSLambda"],
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -2790,10 +2777,7 @@
     },
     "DisconnectWSPermission": {
       "Type": "AWS::Lambda::Permission",
-      "DependsOn": [
-        "WS",
-        "DisconnectWSLambda"
-      ],
+      "DependsOn": ["WS", "DisconnectWSLambda"],
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {

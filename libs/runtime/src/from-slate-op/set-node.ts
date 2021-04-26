@@ -1,5 +1,5 @@
-import { SetNodeOperation } from "slate";
-import { getTarget } from "../utils/path";
+import { SetNodeOperation } from 'slate';
+import { getTarget } from '../utils/path';
 
 function setNode(doc: SyncPadValue, op: SetNodeOperation): SyncPadValue {
   const node = getTarget(doc, op.path);

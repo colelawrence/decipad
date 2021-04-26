@@ -23,7 +23,7 @@ function put(url, data = null, options = {}) {
     url: baseUrl + url,
     data,
   });
-  console.log('OPTS:', opts)
+  console.log('OPTS:', opts);
   return tiny.put(opts);
 }
 

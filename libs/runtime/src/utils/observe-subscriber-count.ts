@@ -1,12 +1,23 @@
-import { Observable, BehaviorSubject, Subject, Observer, Subscription } from 'rxjs';
+import {
+  Observable,
+  BehaviorSubject,
+  Subject,
+  Observer,
+  Subscription,
+} from 'rxjs';
 
 /* eslint-disable @typescript-eslint/no-empty-function */
-export function observeSubscriberCount<T>(observable: Observable<T>, onSubscribe: () => void = () => {}): Subject<number> {
+export function observeSubscriberCount<T>(
+  observable: Observable<T>,
+  onSubscribe: () => void = () => {}
+): Subject<number> {
   const subscriptionCountObservable = new BehaviorSubject<number>(0);
 
-  const subscribe = observable.subscribe
+  const subscribe = observable.subscribe;
   observable.subscribe = (observer: any) => {
-    subscriptionCountObservable.next(subscriptionCountObservable.getValue() + 1);
+    subscriptionCountObservable.next(
+      subscriptionCountObservable.getValue() + 1
+    );
 
     const subscription = subscribe.call(
       observable,
@@ -20,7 +31,9 @@ export function observeSubscriberCount<T>(observable: Observable<T>, onSubscribe
       }
       unsubscribed = true;
       unsubscribe.call(subscription);
-      subscriptionCountObservable.next(subscriptionCountObservable.getValue() - 1);
+      subscriptionCountObservable.next(
+        subscriptionCountObservable.getValue() - 1
+      );
     };
 
     onSubscribe();

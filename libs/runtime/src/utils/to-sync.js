@@ -6,7 +6,7 @@ function toSync(node) {
   }
 
   if (Array.isArray(node)) {
-    return node.map(toSync)
+    return node.map(toSync);
   }
 
   if (Object.prototype.hasOwnProperty.call(node, 'text')) {

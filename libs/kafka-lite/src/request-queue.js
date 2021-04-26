@@ -1,37 +1,37 @@
-const processRequest = require('./process-request')
+const processRequest = require('./process-request');
 
-function createRequestQueue () {
-  const requests = []
-  let processing = 0
+function createRequestQueue() {
+  const requests = [];
+  let processing = 0;
 
-  function push (req) {
-    requests.push(req)
-    maybeProcessOne()
+  function push(req) {
+    requests.push(req);
+    maybeProcessOne();
   }
 
-  async function maybeProcessOne () {
-    if ((processing === 0) && (requests.length > 0)) {
-      processing++
+  async function maybeProcessOne() {
+    if (processing === 0 && requests.length > 0) {
+      processing++;
       try {
-        await processOne()
+        await processOne();
       } catch (err) {
-        processing--
-        throw err
+        processing--;
+        throw err;
       }
-      processing--
-      maybeProcessOne()
+      processing--;
+      maybeProcessOne();
     }
   }
 
-  async function processOne () {
-    const request = requests.shift()
+  async function processOne() {
+    const request = requests.shift();
 
-    await processRequest(request)
+    await processRequest(request);
   }
 
   return {
-    push
-  }
+    push,
+  };
 }
 
-module.exports = createRequestQueue
+module.exports = createRequestQueue;

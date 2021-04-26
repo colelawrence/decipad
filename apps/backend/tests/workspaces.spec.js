@@ -11,9 +11,9 @@ test('/api/workspaces', () => {
     value: {
       id: 'workspaceid1',
       name: 'workspace one',
-      permissions: []
-    }
-  }
+      permissions: [],
+    },
+  };
   let doc = Automerge.from(workspace, 'agent id 1');
 
   it('PUT /api/workspaces/:id', () => {
@@ -21,43 +21,42 @@ test('/api/workspaces', () => {
       method: 'PUT',
       body: Automerge.save(doc),
       headers: {
-        'Content-Type': 'text/text'
-      }
+        'Content-Type': 'text/text',
+      },
     });
   });
 
   it('GET /api/workspaces/:id', async () => {
     const doc = await (await call('/api/workspaces/workspaceid1')).text();
-    expect(typeof doc).toBe('string')
-    const workspace2 = Automerge.load(doc, 'agent id 1')
-    expect(workspace2).toMatchObject(workspace)
-  })
+    expect(typeof doc).toBe('string');
+    const workspace2 = Automerge.load(doc, 'agent id 1');
+    expect(workspace2).toMatchObject(workspace);
+  });
 
   it('change and PUT again', async () => {
     doc = Automerge.change(doc, (doc) => {
-      doc.value.name = 'name was changed'
-    })
+      doc.value.name = 'name was changed';
+    });
 
     return call('/api/workspaces/workspaceid1', {
       method: 'PUT',
       body: Automerge.save(doc),
       headers: {
-        'Content-Type': 'text/text'
-      }
+        'Content-Type': 'text/text',
+      },
     });
-  })
-
+  });
 
   it('GET /api/workspaces/:id', async () => {
     const doc = await (await call('/api/workspaces/workspaceid1')).text();
-    expect(typeof doc).toBe('string')
-    const workspace2 = Automerge.load(doc, 'agent id 1')
+    expect(typeof doc).toBe('string');
+    const workspace2 = Automerge.load(doc, 'agent id 1');
     expect(workspace2).toMatchObject({
       value: {
         id: 'workspaceid1',
         name: 'name was changed',
-        permissions: []
-      }
-    })
-  })
+        permissions: [],
+      },
+    });
+  });
 });

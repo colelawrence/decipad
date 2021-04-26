@@ -13,13 +13,13 @@ runTests({
             start: {
               char: 6,
               line: 1,
-              column: 7
+              column: 7,
             },
             end: {
               char: 13,
               line: 1,
-              column: 14
-            }
+              column: 14,
+            },
           },
           {
             type: 'literal',
@@ -27,26 +27,26 @@ runTests({
             start: {
               char: 17,
               line: 1,
-              column: 18
+              column: 18,
             },
             end: {
               char: 17,
               line: 1,
-              column: 18
+              column: 18,
             },
-          }
+          },
         ],
         start: {
           char: 0,
           line: 1,
-          column: 1
+          column: 1,
         },
         end: {
           char: 17,
           line: 1,
-          column: 18
+          column: 18,
         },
-      }
-    ]
-  }
-})
+      },
+    ],
+  },
+});

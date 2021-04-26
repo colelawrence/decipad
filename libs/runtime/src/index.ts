@@ -1,4 +1,4 @@
-import 'regenerator-runtime/runtime'
-import { Runtime as DeciRuntime } from './runtime'
+import 'regenerator-runtime/runtime';
+import { Runtime as DeciRuntime } from './runtime';
 
-export { DeciRuntime }
+export { DeciRuntime };

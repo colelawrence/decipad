@@ -1,7 +1,7 @@
-import { Diff, CollectionType } from "automerge";
+import { Diff, CollectionType } from 'automerge';
 
 function createByType(type: CollectionType) {
-  return type === "map" ? {} : type === "list" ? [] : "";
+  return type === 'map' ? {} : type === 'list' ? [] : '';
 }
 
 function opCreate({ obj, type }: Diff, [map, ops]: any) {

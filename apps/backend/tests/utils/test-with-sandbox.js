@@ -18,16 +18,16 @@ function testWithSandbox(description, fn) {
     });
 
     beforeAll(async () => {
-      await sandbox.start({ quiet: true })
+      await sandbox.start({ quiet: true });
     });
 
     afterAll(async () => {
-      await sandbox.end()
+      await sandbox.end();
     });
 
     beforeAll((done) => {
-      setTimeout(done, 2000)
-    })
+      setTimeout(done, 2000);
+    });
 
     afterAll(() => {
       process.chdir(beforeWorkingDir);

@@ -1,6 +1,6 @@
 import { DeciRuntime } from './';
 import { createEditor } from 'slate';
-import { timeout } from './utils/timeout'
+import { timeout } from './utils/timeout';
 
 const docId = 'docid';
 
@@ -13,8 +13,8 @@ describe('pad editor', () => {
       workspaceId: 'workspaceid',
       lastUpdatedAt: new Date(),
       tags: [],
-      permissions: []
-    })
+      permissions: [],
+    });
     const model = deci.workspace('workspaceid').pads.edit(docId);
 
     const editor = createEditor();
@@ -145,8 +145,8 @@ describe('pad editor', () => {
       workspaceId: 'workspace id',
       lastUpdatedAt: new Date(),
       tags: [],
-      permissions: []
-    })
+      permissions: [],
+    });
     const model = deci.workspace('workspace id').pads.edit('some other doc id');
 
     const editor = createEditor();

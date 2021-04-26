@@ -1,31 +1,30 @@
-'use strict'
+'use strict';
 
-const { Kafka } = require('kafkajs')
+const { Kafka } = require('kafkajs');
 
-async function ensureTopics (topics, partitionsPerTopic) {
+async function ensureTopics(topics, partitionsPerTopic) {
   const kafka = new Kafka({
     clientId: 'sandbox-client',
-    brokers: ['localhost:9092']
-  })
+    brokers: ['localhost:9092'],
+  });
 
-  const admin = kafka.admin()
+  const admin = kafka.admin();
 
-  const existingTopics = await admin.listTopics()
+  const existingTopics = await admin.listTopics();
 
   const topicsToCreate = topics.filter((topic) => {
-    return existingTopics.indexOf(topic) < 0
-  })
+    return existingTopics.indexOf(topic) < 0;
+  });
 
-  console.log('Going to create topics', topicsToCreate)
+  console.log('Going to create topics', topicsToCreate);
 
   await admin.createTopics({
     topics: topicsToCreate.map((topic) => ({
       topic,
-      numPartitions: partitionsPerTopic[topic]
-    }))
-  })
-  await admin.disconnect()
-
+      numPartitions: partitionsPerTopic[topic],
+    })),
+  });
+  await admin.disconnect();
 }
 
-module.exports = ensureTopics
+module.exports = ensureTopics;

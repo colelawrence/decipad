@@ -16,10 +16,10 @@ declare namespace Parser {
 
 type Id = string;
 
-type Tags = string[]
+type Tags = string[];
 
 interface Identifiable {
-  id: Id
+  id: Id;
 }
 
 interface Session {
@@ -52,8 +52,8 @@ interface Pad {
   name: string;
   workspaceId: string;
   lastUpdatedAt: Date;
-  tags: Tags
-  permissions: Permission[]
+  tags: Tags;
+  permissions: Permission[];
 }
 
 interface ComputationResult {
@@ -98,27 +98,27 @@ interface AsyncSubject<T> {
 }
 
 interface Mutation<T> {
-  before: T | null,
-  after: T | null
+  before: T | null;
+  after: T | null;
 }
 
 interface TopicSubscriptionOperation {
-  op: 'add' | 'remove',
-  topic: string
+  op: 'add' | 'remove';
+  topic: string;
 }
 
 interface DocMetadata {
-  createdLocally: boolean
+  createdLocally: boolean;
 }
 
 interface RemoteWebSocketOp {
-  o: 's' | 'u' | 'c',
-  t: string,
-  c: Sync.Change[] | null
+  o: 's' | 'u' | 'c';
+  t: string;
+  c: Sync.Change[] | null;
 }
 
 interface RemoteOp {
-  op: 'subscribed' | 'unsubscribed' | 'changed',
-  topic: string,
-  changes: Sync.Change[] | null
+  op: 'subscribed' | 'unsubscribed' | 'changed';
+  topic: string;
+  changes: Sync.Change[] | null;
 }

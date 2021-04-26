@@ -12,9 +12,9 @@ test('/api/pads', () => {
       id: 'padid1',
       name: 'pad one',
       permissions: [],
-      tags: []
-    }
-  }
+      tags: [],
+    },
+  };
   let doc = Automerge.from(pad, 'agent id 1');
 
   it('PUT /api/pads/:id', () => {
@@ -22,44 +22,43 @@ test('/api/pads', () => {
       method: 'PUT',
       body: Automerge.save(doc),
       headers: {
-        'Content-Type': 'text/text'
-      }
+        'Content-Type': 'text/text',
+      },
     });
   });
 
   it('GET /api/pads/:id', async () => {
     const doc = await (await call('/api/pads/padid1')).text();
-    expect(typeof doc).toBe('string')
-    const pad2 = Automerge.load(doc, 'agent id 1')
-    expect(pad2).toMatchObject(pad)
-  })
+    expect(typeof doc).toBe('string');
+    const pad2 = Automerge.load(doc, 'agent id 1');
+    expect(pad2).toMatchObject(pad);
+  });
 
   it('change and PUT again', async () => {
     doc = Automerge.change(doc, (doc) => {
-      doc.value.name = 'pad name was changed'
-    })
+      doc.value.name = 'pad name was changed';
+    });
 
     return call('/api/pads/padid1', {
       method: 'PUT',
       body: Automerge.save(doc),
       headers: {
-        'Content-Type': 'text/text'
-      }
+        'Content-Type': 'text/text',
+      },
     });
-  })
-
+  });
 
   it('GET /api/workspaces/:id', async () => {
     const doc = await (await call('/api/pads/padid1')).text();
-    expect(typeof doc).toBe('string')
-    const pad2 = Automerge.load(doc, 'agent id 1')
+    expect(typeof doc).toBe('string');
+    const pad2 = Automerge.load(doc, 'agent id 1');
     expect(pad2).toMatchObject({
       value: {
         id: 'padid1',
         name: 'pad name was changed',
         permissions: [],
-        tags: []
-      }
-    })
-  })
+        tags: [],
+      },
+    });
+  });
 });

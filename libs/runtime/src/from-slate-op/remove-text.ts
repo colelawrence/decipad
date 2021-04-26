@@ -1,5 +1,5 @@
-import { RemoveTextOperation } from "slate";
-import { getTarget } from "../utils/path";
+import { RemoveTextOperation } from 'slate';
+import { getTarget } from '../utils/path';
 
 function removeText(doc: SyncPadValue, op: RemoveTextOperation): SyncPadValue {
   const node = getTarget(doc, op.path);

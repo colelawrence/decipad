@@ -14,74 +14,91 @@ export class ReplicaSync<T> {
   private subscribed = false;
   private debouncedSendChanges: { (): void; cancel: () => void };
   public remoteChanges: Subject<Change[]> = new Subject<Change[]>();
-  public remoteDoc: Subject<Doc<{ value: T }>> = new Subject<Doc<{ value: T }>>();
-  private latest: Doc<{ value: T}> | null = null;
+  public remoteDoc: Subject<Doc<{ value: T }>> = new Subject<
+    Doc<{ value: T }>
+  >();
+  private latest: Doc<{ value: T }> | null = null;
   private queue = fnQueue();
   private stopped = false;
-  private lastFromRemote: Doc<{ value: T}> | null = null;
+  private lastFromRemote: Doc<{ value: T }> | null = null;
 
-  constructor(private topic: string, private runtime: Runtime, private localChangesObservable: Observable<Mutation<Doc<{ value: T }>>>, private subscriptionCountObservable: Observable<number>) {
-
+  constructor(
+    private topic: string,
+    private runtime: Runtime,
+    private localChangesObservable: Observable<Mutation<Doc<{ value: T }>>>,
+    private subscriptionCountObservable: Observable<number>
+  ) {
     this.sendChanges = this.sendChanges.bind(this);
     this.debouncedSendChanges = debounce(this.sendChanges, 3000);
 
-    this.subscriptionCountSubscription = this.subscriptionCountObservable.subscribe((observerCount) => {
-      if (observerCount === 0) {
-        this.queue.push(() => this.unsubscribe());
-      } else if (observerCount > 0) {
-        this.queue.push(() =>this.subscribe())
+    this.subscriptionCountSubscription = this.subscriptionCountObservable.subscribe(
+      (observerCount) => {
+        if (observerCount === 0) {
+          this.queue.push(() => this.unsubscribe());
+        } else if (observerCount > 0) {
+          this.queue.push(() => this.subscribe());
+        }
       }
-    });
+    );
 
-    this.localChangesSubscription = localChangesObservable.subscribe(({ after }) => {
-      this.latest = after;
-      this.debouncedSendChanges();
-    })
+    this.localChangesSubscription = localChangesObservable.subscribe(
+      ({ after }) => {
+        this.latest = after;
+        this.debouncedSendChanges();
+      }
+    );
 
     this.fetchFromRemote(1)
       .catch(() => this.sendChanges(1))
-      .catch(() => this.fetchFromRemote()).then(() => this.sendChanges())
+      .catch(() => this.fetchFromRemote())
+      .then(() => this.sendChanges());
   }
 
   private subscribe(): Promise<void> {
     return new Promise((resolve) => {
       // TODO: Have a timeout and perhaps reject subscribe call?
       if (this.subscribed) {
-        resolve()
-        return
+        resolve();
+        return;
       }
 
-      const remoteOpsObservable = this.runtime.sync.subscribe(this.topic, this.localChangesObservable);
-      this.remoteOpsSubscription = remoteOpsObservable.subscribe((remoteOp: RemoteOp) => {
-        switch(remoteOp.op) {
-          case 'subscribed':
-            resolve()
-            break
+      const remoteOpsObservable = this.runtime.sync.subscribe(
+        this.topic,
+        this.localChangesObservable
+      );
+      this.remoteOpsSubscription = remoteOpsObservable.subscribe(
+        (remoteOp: RemoteOp) => {
+          switch (remoteOp.op) {
+            case 'subscribed':
+              resolve();
+              break;
 
-          case 'unsubscribed':
-          if (this.remoteOpsSubscription !== null) {
-            this.remoteOpsSubscription.unsubscribe()
-            this.remoteOpsSubscription = null
-          }
-          break
+            case 'unsubscribed':
+              if (this.remoteOpsSubscription !== null) {
+                this.remoteOpsSubscription.unsubscribe();
+                this.remoteOpsSubscription = null;
+              }
+              break;
 
-          case 'changed':
-          if (remoteOp.changes === null) {
-            this.queue.push(() => this.fetchFromRemote())
-          } else if (remoteOp.changes.length > 0) {
-            this.queue.push(() => this.integrateRemoteChanges(remoteOp.changes!))
+            case 'changed':
+              if (remoteOp.changes === null) {
+                this.queue.push(() => this.fetchFromRemote());
+              } else if (remoteOp.changes.length > 0) {
+                this.queue.push(() =>
+                  this.integrateRemoteChanges(remoteOp.changes!)
+                );
+              }
+              break;
           }
-          break
         }
-
-      })
+      );
       this.subscribed = true;
-    })
+    });
   }
 
   private async unsubscribe() {
     if (!this.subscribed) {
-      return
+      return;
     }
     this.runtime.sync.unsubscribe(this.topic, this.localChangesObservable);
     this.subscribed = false;
@@ -91,8 +108,11 @@ export class ReplicaSync<T> {
     let attemptsLeft = maxAttempts;
     let lastError: Error | null = null;
 
-    const attempt = (resolve: (value: unknown) => void, reject: (err: Error) => void) => {
-      attemptsLeft --
+    const attempt = (
+      resolve: (value: unknown) => void,
+      reject: (err: Error) => void
+    ) => {
+      attemptsLeft--;
       if (attemptsLeft < 0) {
         return reject(lastError || new Error('max attemps exceeded'));
       }
@@ -105,16 +125,19 @@ export class ReplicaSync<T> {
           if (attemptsLeft === 0) {
             reject(err);
           } else {
-            console.log('GOING TO ATTEMPT FETCHING AS A FALLBACK')
+            console.log('GOING TO ATTEMPT FETCHING AS A FALLBACK');
             this.attemptFetchFromRemote()
               .then(() => attempt(resolve, reject))
               .catch((err) => {
                 console.error(err);
-                setTimeout(() => attempt(resolve, reject), randomSendChangesTimeout());
-              })
+                setTimeout(
+                  () => attempt(resolve, reject),
+                  randomSendChangesTimeout()
+                );
+              });
           }
         });
-    }
+    };
     return this.queue.push(() => new Promise(attempt));
   }
 
@@ -129,7 +152,7 @@ export class ReplicaSync<T> {
         return await this.attempSendOnlyChanges();
       } catch (err) {
         if (err instanceof RangeError) {
-          return await this.attemptSendEverything()
+          return await this.attemptSendEverything();
         }
         throw err;
       }
@@ -147,12 +170,12 @@ export class ReplicaSync<T> {
         method: 'PUT',
         body: JSON.stringify(changes),
         headers: {
-          'Content-Type': 'application/json; charset=utf-8'
-        }
+          'Content-Type': 'application/json; charset=utf-8',
+        },
       });
 
       if (!response.ok) {
-        const message = `Failed to send data to remote: ${await response.text()}`
+        const message = `Failed to send data to remote: ${await response.text()}`;
         console.error(message);
         throw new Error(message);
       }
@@ -168,14 +191,14 @@ export class ReplicaSync<T> {
       method: 'PUT',
       body: Automerge.save(latest),
       headers: {
-        'Content-Type': 'text/text'
-      }
+        'Content-Type': 'text/text',
+      },
     });
 
     if (!response.ok) {
-      const message = `Failed to send data to remote: ${await response.text()}`
+      const message = `Failed to send data to remote: ${await response.text()}`;
       console.error(message);
-      throw new Error(message)
+      throw new Error(message);
     }
     this.lastFromRemote = latest;
   }
@@ -183,8 +206,11 @@ export class ReplicaSync<T> {
   async fetchFromRemote(maxAttempts = Infinity) {
     let attemptsLeft = maxAttempts;
     let lastError: Error | null = null;
-    const attempt = (resolve: (value: unknown) => void, reject: (err: Error) => void) => {
-      attemptsLeft --
+    const attempt = (
+      resolve: (value: unknown) => void,
+      reject: (err: Error) => void
+    ) => {
+      attemptsLeft--;
       if (attemptsLeft < 0) {
         return reject(lastError || new Error('max attemps exceeded'));
       }
@@ -194,26 +220,31 @@ export class ReplicaSync<T> {
           console.error(err);
           lastError = err;
           if (attemptsLeft === 0) {
-            reject(err)
+            reject(err);
           } else {
-            setTimeout(() => attempt(resolve, reject), randomFetchChangesTimeout());
+            setTimeout(
+              () => attempt(resolve, reject),
+              randomFetchChangesTimeout()
+            );
           }
         });
-    }
+    };
     return this.queue.push(() => new Promise(attempt));
   }
 
   async attemptFetchFromRemote() {
     if (this.stopped) {
-      return
+      return;
     }
-    const resp = await fetch('/api' + this.topic)
+    const resp = await fetch('/api' + this.topic);
     if (resp.status === 404 && this.latest !== null) {
       this.sendChanges();
       return;
     }
     if (!resp.ok) {
-      throw new Error('response was not ok: ' + resp.status + ': ' + await resp.text())
+      throw new Error(
+        'response was not ok: ' + resp.status + ': ' + (await resp.text())
+      );
     }
     const doc = await resp.text();
     if (doc.length > 0) {
@@ -230,9 +261,12 @@ export class ReplicaSync<T> {
 
   async integrateRemoteChanges(changes: Change[]) {
     if (this.lastFromRemote !== null) {
-      this.lastFromRemote = Automerge.applyChanges(this.lastFromRemote, changes);
+      this.lastFromRemote = Automerge.applyChanges(
+        this.lastFromRemote,
+        changes
+      );
     }
-    this.remoteChanges.next(changes)
+    this.remoteChanges.next(changes);
   }
 
   stop() {
@@ -253,7 +287,6 @@ export class ReplicaSync<T> {
     this.lastFromRemote = null;
   }
 }
-
 
 function randomSendChangesTimeout() {
   return Math.ceil(Math.random() * AVERAGE_RESEND_TRY_INTERVAL_MS);

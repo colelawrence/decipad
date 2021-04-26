@@ -1,1 +1,1 @@
-module.exports.GitHub = require('./github')
+module.exports.GitHub = require('./github');

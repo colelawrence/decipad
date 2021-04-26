@@ -1,8 +1,7 @@
 import { uri } from './utils/uri';
 
 export class LocalMetadata {
-
-  constructor (private baseName: string) {}
+  constructor(private baseName: string) {}
 
   get(prop: keyof DocMetadata) {
     const meta = this.load();
@@ -23,18 +22,18 @@ export class LocalMetadata {
     let doc: DocMetadata;
     const docStr = window.localStorage.getItem(this.key());
     if (docStr === null) {
-      doc = this.init()
+      doc = this.init();
     } else {
-      doc = JSON.parse(docStr) as DocMetadata
+      doc = JSON.parse(docStr) as DocMetadata;
     }
-    return doc
+    return doc;
   }
 
   private init(): DocMetadata {
     const doc = {
-      createdLocally: false
-    }
-    window.localStorage.setItem(this.key(), JSON.stringify(doc))
-    return doc
+      createdLocally: false,
+    };
+    window.localStorage.setItem(this.key(), JSON.stringify(doc));
+    return doc;
   }
 }

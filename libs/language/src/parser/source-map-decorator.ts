@@ -9,7 +9,7 @@ const typesWithArgs = new Set([
   'block',
   'table-definition',
   'table-columns',
-  'given'
+  'given',
 ]);
 
 export function sourceMapDecorator(

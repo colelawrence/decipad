@@ -5,24 +5,24 @@ import { Sync } from './sync';
 
 describe('replica', () => {
   test('gets inactive when it has no subscribers', async () => {
-    const mockRuntime = {
+    const mockRuntime = ({
       userId: 'test user id',
       actorId: 'test actor id',
-      sync: new Sync()
-    } as unknown as Runtime;
+      sync: new Sync(),
+    } as unknown) as Runtime;
 
     const r = replica<string>('test', mockRuntime, '', true);
 
-    const expectedSubscriberCounts = [0, 1, 0, 1, 0]
-    let completedSubscriberCount = false
+    const expectedSubscriberCounts = [0, 1, 0, 1, 0];
+    let completedSubscriberCount = false;
     r.subscriptionCountObservable.subscribe({
       next: (count) => {
-        expect(count).toBe(expectedSubscriberCounts.shift())
+        expect(count).toBe(expectedSubscriberCounts.shift());
       },
       complete: () => {
-        completedSubscriberCount = true
-      }
-    })
+        completedSubscriberCount = true;
+      },
+    });
 
     const expectedValues = ['', 'A', 'AB'];
     let first = true;
@@ -68,10 +68,10 @@ describe('replica', () => {
     expect(expectedValues2).toHaveLength(0);
     expect(r.isActive()).toBe(false);
 
-    expect(expectedSubscriberCounts).toHaveLength(0)
-    r.stop()
-    expect(completedSubscriberCount).toBe(true)
+    expect(expectedSubscriberCounts).toHaveLength(0);
+    r.stop();
+    expect(completedSubscriberCount).toBe(true);
 
-    await timeout(2000)
+    await timeout(2000);
   });
 });

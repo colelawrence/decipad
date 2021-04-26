@@ -1,5 +1,5 @@
 module.exports = {
-  preset: "ts-jest",
+  preset: 'ts-jest',
   rootDir: '.',
   roots: ['<rootDir>'],
   testRegex: '.spec.[jt]s$',
@@ -29,7 +29,5 @@ module.exports = {
       isolatedModules: true,
     },
   },
-  setupFiles: [
-    './jest.setup.js'
-  ]
+  setupFiles: ['./jest.setup.js'],
 };

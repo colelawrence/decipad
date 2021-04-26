@@ -18,34 +18,42 @@ export class Sync<T> {
     this.onWebsocketOpen = this.onWebsocketOpen.bind(this);
     this.onWebsocketMessage = this.onWebsocketMessage.bind(this);
 
-    this.subscriptionManagerTopicSubscription = this.subscriptionManager.topicObservable.subscribe(({ op, topic }) => {
-      switch(op) {
-        case 'add':
-          if (!this.topics.has(topic)) {
-            // TODO: get
-            this.topics.add(topic);
-            this.subscribeRemote(topic);
-          }
-          break;
-        case 'remove':
-          if (this.topics.has(topic)) {
-            // TODO: cancel
-            this.topics.delete(topic);
-            this.unsubscribeRemote(topic);
-            if (this.topics.size === 0) {
-              this.disconnect();
+    this.subscriptionManagerTopicSubscription = this.subscriptionManager.topicObservable.subscribe(
+      ({ op, topic }) => {
+        switch (op) {
+          case 'add':
+            if (!this.topics.has(topic)) {
+              // TODO: get
+              this.topics.add(topic);
+              this.subscribeRemote(topic);
             }
-          }
-          break;
+            break;
+          case 'remove':
+            if (this.topics.has(topic)) {
+              // TODO: cancel
+              this.topics.delete(topic);
+              this.unsubscribeRemote(topic);
+              if (this.topics.size === 0) {
+                this.disconnect();
+              }
+            }
+            break;
+        }
       }
-    });
+    );
   }
 
-  subscribe(topic: string, localChangesObservable: Observable<Mutation<Doc<{ value: T}>>>): Observable<RemoteOp> {
+  subscribe(
+    topic: string,
+    localChangesObservable: Observable<Mutation<Doc<{ value: T }>>>
+  ): Observable<RemoteOp> {
     return this.subscriptionManager.subscribe(topic, localChangesObservable);
   }
 
-  unsubscribe(topic: string, localChangesObservable: Observable<Mutation<Doc<{ value: T}>>>) {
+  unsubscribe(
+    topic: string,
+    localChangesObservable: Observable<Mutation<Doc<{ value: T }>>>
+  ) {
     this.subscriptionManager.unsubscribe(topic, localChangesObservable);
   }
 
@@ -60,14 +68,18 @@ export class Sync<T> {
   }
 
   private disconnect() {
-    if (this.connection !== null && this.connection.readyState !== WebSocket.CLOSED && this.connection.readyState !== WebSocket.CLOSING) {
+    if (
+      this.connection !== null &&
+      this.connection.readyState !== WebSocket.CLOSED &&
+      this.connection.readyState !== WebSocket.CLOSING
+    ) {
       this.connection.close();
       this.connection = null;
     }
   }
 
   private subscribeRemote(topic: string) {
-    const conn = this.connection
+    const conn = this.connection;
     if (conn !== null && conn.readyState === WebSocket.OPEN) {
       conn.send(JSON.stringify(['subscribe', topic]));
     } else {
@@ -92,11 +104,14 @@ export class Sync<T> {
     if (this.topics.size === 0) {
       return;
     }
-    if (this.connection !== null && this.connection.readyState === WebSocket.CONNECTING) {
+    if (
+      this.connection !== null &&
+      this.connection.readyState === WebSocket.CONNECTING
+    ) {
       return;
     }
     this.connecting = true;
-    let token
+    let token;
     try {
       token = await getAuthToken();
     } finally {
@@ -107,12 +122,15 @@ export class Sync<T> {
       return;
     }
 
-    this.connection = new WebSocket(process.env.NEXT_PUBLIC_DECI_WS_URL || 'ws://localhost:3333/ws', token);
+    this.connection = new WebSocket(
+      process.env.NEXT_PUBLIC_DECI_WS_URL || 'ws://localhost:3333/ws',
+      token
+    );
     this.connection.onopen = () => this.onWebsocketOpen();
     this.connection.onmessage = this.onWebsocketMessage;
     this.connection.onclose = () => {
       this.onWebsocketClose();
-      this.timeout = setTimeout(() => this.connect(), randomReconnectTimeout())
+      this.timeout = setTimeout(() => this.connect(), randomReconnectTimeout());
     };
   }
 
@@ -130,26 +148,25 @@ export class Sync<T> {
     const m = JSON.parse(event.data) as RemoteWebSocketOp;
     const { o: op, t: topic, c: changes = null } = m;
 
-    let opString: RemoteOp['op']
+    let opString: RemoteOp['op'];
     switch (op) {
       case 's':
-      opString = 'subscribed';
-      break
+        opString = 'subscribed';
+        break;
 
       case 'u':
-      opString = 'unsubscribed';
-      break
+        opString = 'unsubscribed';
+        break;
 
       case 'c':
-      opString = 'changed';
-      break
+        opString = 'changed';
+        break;
 
       default:
         throw new Error('Unsupported operation:' + op);
     }
     // TODO: extract changes from message (once they come)
     this.subscriptionManager.notifyRemoteOp({ op: opString, topic, changes });
-
   }
 
   private onWebsocketClose() {
@@ -162,9 +179,9 @@ function randomReconnectTimeout() {
 }
 
 async function getAuthToken(): Promise<string> {
-  const resp = await fetch('/api/auth/token')
+  const resp = await fetch('/api/auth/token');
   if (!resp.ok) {
-    const message = `Failed to send data to remote: ${await resp.text()}`
+    const message = `Failed to send data to remote: ${await resp.text()}`;
     console.error(message);
     throw new Error(message);
   }

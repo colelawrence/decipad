@@ -1,6 +1,6 @@
-import { MoveNodeOperation } from "slate";
-import { cloneNode } from "../utils/clone-node";
-import { getParent, getChildren } from "../utils/path";
+import { MoveNodeOperation } from 'slate';
+import { cloneNode } from '../utils/clone-node';
+import { getParent, getChildren } from '../utils/path';
 
 function moveNode(doc: SyncPadValue, op: MoveNodeOperation): SyncPadValue {
   const [from, fromIndex] = getParent(doc, op.path);

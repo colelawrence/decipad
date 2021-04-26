@@ -1,38 +1,41 @@
-'use strict'
+'use strict';
 
-const { parse: parseCookie} = require('simple-cookie')
-const { parse: qsParse } = require('querystring')
+const { parse: parseCookie } = require('simple-cookie');
+const { parse: qsParse } = require('querystring');
 
 function adaptReqRes(handle) {
   return async function respondWithAuth(req) {
     return new Promise((resolve) => {
-      const { method, path } = req.requestContext.http
-      const url = req.rawPath
-      const pathParts = path.split('/')
-      let action = pathParts[pathParts.length - 1]
-      const provider = req.pathParameters && req.pathParameters.provider
+      const { method, path } = req.requestContext.http;
+      const url = req.rawPath;
+      const pathParts = path.split('/');
+      let action = pathParts[pathParts.length - 1];
+      const provider = req.pathParameters && req.pathParameters.provider;
       if (provider === action) {
-        action = pathParts[pathParts.length - 2]
+        action = pathParts[pathParts.length - 2];
       }
 
-      const nextauth = [action]
+      const nextauth = [action];
       if (provider) {
-        nextauth.push(provider)
+        nextauth.push(provider);
       }
 
-      const query = { nextauth, ...req.queryStringParameters }
+      const query = { nextauth, ...req.queryStringParameters };
 
-      let body = req.body
+      let body = req.body;
       if (req.isBase64Encoded) {
-        body = base64Decode(req.body)
+        body = base64Decode(req.body);
       }
 
-      if (body && req.headers['content-type'] === 'application/x-www-form-urlencoded') {
-        body = urlDecode(body)
+      if (
+        body &&
+        req.headers['content-type'] === 'application/x-www-form-urlencoded'
+      ) {
+        body = urlDecode(body);
       }
 
       if (!body) {
-        body = {}
+        body = {};
       }
 
       const newReq = {
@@ -40,85 +43,84 @@ function adaptReqRes(handle) {
         body,
         method,
         url,
-        query
-      }
+        query,
+      };
 
-      let statusCode = 200
-      const headers = {}
+      let statusCode = 200;
+      const headers = {};
       const newRes = {
         end: (buf) => {
-          reply(buf)
+          reply(buf);
         },
         json: (json) => {
-          reply(json)
+          reply(json);
         },
         send: (buf) => {
-          reply(buf)
+          reply(buf);
         },
         setHeader: (key, value) => {
           if (Array.isArray(value)) {
             for (const val of value) {
-              newRes.setHeader(key, val)
+              newRes.setHeader(key, val);
             }
-            return
+            return;
           }
-          key = key.toLowerCase()
-          const existingValue = headers[key]
+          key = key.toLowerCase();
+          const existingValue = headers[key];
           if (key === 'set-cookie' && existingValue) {
-            headers[key] = existingValue + ',' + value
+            headers[key] = existingValue + ',' + value;
           } else {
-            headers[key] = value
+            headers[key] = value;
           }
         },
         getHeader: (key) => {
-          return headers[key.toLowerCase()]
+          return headers[key.toLowerCase()];
         },
         status: (code) => {
-          statusCode = code
-          return newRes
+          statusCode = code;
+          return newRes;
         },
         redirect: (url) => {
-          headers['Location'] = url
-          statusCode = 302
-          reply()
-        }
-      }
-      handle(newReq, newRes)
+          headers['Location'] = url;
+          statusCode = 302;
+          reply();
+        },
+      };
+      handle(newReq, newRes);
 
       function reply(body) {
         if (typeof body === 'object') {
-          body = JSON.stringify(body)
+          body = JSON.stringify(body);
           if (!headers['content-type']) {
-            headers['content-type'] = 'application/json; charset=utf-8'
+            headers['content-type'] = 'application/json; charset=utf-8';
           }
         }
         const response = {
           statusCode,
           headers,
-          body
-        }
+          body,
+        };
 
-        resolve(response)
+        resolve(response);
       }
-    })
-
-  }
+    });
+  };
 }
 
 function parseCookies(cookies = []) {
   return cookies.reduce((cookies, cookie) => {
-    const { name, value } = parseCookie(cookie)
-    cookies[name] = decodeURIComponent(value)
-    return cookies
-  }, {})
+    const { name, value } = parseCookie(cookie);
+    cookies[name] = decodeURIComponent(value);
+    return cookies;
+  }, {});
 }
 
 function base64Decode(str) {
-  return Buffer.from(str, 'base64').toString()
+  return Buffer.from(str, 'base64').toString();
 }
 
 function urlDecode(str) {
-  return qsParse(str)
+  return qsParse(str);
 }
 
-module.exports = adaptReqRes
+module.exports = adaptReqRes;

@@ -1,9 +1,9 @@
-import Automerge, { Diff } from "automerge";
-import { toSlatePath } from "../utils/to-slate-path";
-import { toJS } from "../utils/to-js";
+import Automerge, { Diff } from 'automerge';
+import { toSlatePath } from '../utils/to-slate-path';
+import { toJS } from '../utils/to-js';
 
 const insertTextOp = ({ index, path, value }: Diff) => () => ({
-  type: "insert_text",
+  type: 'insert_text',
   path: toSlatePath(path),
   offset: index,
   text: value,
@@ -19,7 +19,7 @@ const insertNodeOp = ({ value, obj, index, path }: Diff, doc: SyncPadDoc) => (
     const node = children ? { ...json, children: [] } : json;
 
     ops.push({
-      type: "insert_node",
+      type: 'insert_node',
       path,
       node,
     });
@@ -45,16 +45,16 @@ const opInsert = (op: Diff, [map, ops]: any, doc: SyncPadDoc) => {
 
   if (link && Object.prototype.hasOwnProperty.call(map, obj)) {
     map[obj].splice(index, 0, map[value] || value);
-  } else if ((type === "text" || type === "list") && !path) {
+  } else if ((type === 'text' || type === 'list') && !path) {
     map[obj] = map[obj]
       ? map[obj].slice(0, index).concat(value).concat(map[obj].slice(index))
       : value;
   } else {
     let insert;
     let operation;
-    if (type === "text") {
+    if (type === 'text') {
       insert = insertTextOp;
-    } else if (type === "list") {
+    } else if (type === 'list') {
       insert = insertNodeOp;
     }
     if (insert !== undefined) {

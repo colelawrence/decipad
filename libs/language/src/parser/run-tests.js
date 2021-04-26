@@ -19,9 +19,11 @@ export function runTests(tests) {
         parseError = err;
       }
 
-      const resultsWithErrors = results.filter((result) => result.errors.length > 0)
+      const resultsWithErrors = results.filter(
+        (result) => result.errors.length > 0
+      );
       if (resultsWithErrors.length > 0) {
-        parseError = resultsWithErrors[0].errors[0]
+        parseError = resultsWithErrors[0].errors[0];
       }
 
       if (parseError) {

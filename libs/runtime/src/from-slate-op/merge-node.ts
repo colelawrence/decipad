@@ -1,7 +1,7 @@
-import { MergeNodeOperation } from "slate";
-import { getParent, getChildren } from "../utils/path";
-import { toJS } from "../utils/to-js";
-import { cloneNode } from "../utils/clone-node";
+import { MergeNodeOperation } from 'slate';
+import { getParent, getChildren } from '../utils/path';
+import { toJS } from '../utils/to-js';
+import { cloneNode } from '../utils/clone-node';
 
 function mergeNode(doc: SyncPadValue, op: MergeNodeOperation): SyncPadValue {
   const [parent, index]: [any, number] = getParent(doc, op.path) as [
@@ -13,7 +13,7 @@ function mergeNode(doc: SyncPadValue, op: MergeNodeOperation): SyncPadValue {
   const next = parent[index] || parent.children[index];
 
   if (prev.text) {
-    prev.text.insertAt(prev.text.length, ...toJS(next.text).split(""));
+    prev.text.insertAt(prev.text.length, ...toJS(next.text).split(''));
   } else {
     getChildren(next).forEach((n: Sync.Node) =>
       getChildren(prev).push(cloneNode(n))
