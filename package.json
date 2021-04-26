@@ -9,7 +9,7 @@
     "test": "nx run-many --target=test --all",
     "lint": "nx workspace-lint && nx run-many --target=lint --all",
     "typecheck": "tsc -b . --incremental",
-    "e2e": "nx e2e",
+    "e2e": "nx run client-e2e:e2e",
     "repl": "ts-node --project ./libs/language/tsconfig.json -T libs/language/src/repl.ts",
     "affected:apps": "nx affected:apps",
     "affected:libs": "nx affected:libs",

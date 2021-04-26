@@ -18,7 +18,7 @@
   "projects": {
     "language": { "tags": [] },
     "runtime": { "tags": [] },
-    "client": { "tags": [] },
+    "client": { "tags": [], "implicitDependencies": ["backend"] },
     "client-e2e": { "tags": [], "implicitDependencies": ["client"] },
     "ui": { "tags": [] },
     "editor": { "tags": [] },
