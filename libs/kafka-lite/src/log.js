@@ -2,7 +2,7 @@
 
 const { readdir, mkdir } = require('fs/promises');
 const path = require('path');
-const EventEmitter = require('events');
+const { EventEmitter } = require('events');
 const serverError = require('./server-error');
 const errorCodes = require('./error-codes');
 const byPartitionIndex = require('./utils/by-partition-index');

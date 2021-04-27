@@ -1,12 +1,7 @@
 {
   "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "module": "commonjs",
-    "outDir": "../../dist/out-tsc",
-    "declaration": true,
-    "types": ["node"]
-  },
   "exclude": ["**/*.spec.ts"],
+  "include": ["./types/index.d.ts", "./**/*.js", "./**/*.ts"],
   "references": [
     {
       "path": "../language"

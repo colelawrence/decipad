@@ -1,17 +1,14 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "../../tsconfig.strictbase.json",
   "compilerOptions": {
     "jsx": "preserve",
-    "allowJs": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "types": ["node", "jest"],
-    "strict": false,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true
+    "types": ["node", "jest"]
   },
-  "include": ["src/**/*.js"],
-  "exclude": ["node_modules"]
+  "include": ["**/*.js"],
+  "exclude": ["node_modules"],
+  "references": [
+    {
+      "path": "../../libs/kafka-lite"
+    }
+  ]
 }

@@ -1,9 +1,13 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist/out-tsc",
     "types": ["node", "express"]
   },
-  "exclude": ["**/*.spec.ts"],
-  "include": ["**/*.js"]
+  "exclude": ["**/*.spec.*"],
+  "include": ["**/*.js"],
+  "references": [
+    {
+      "path": "../../libs/kafka-lite"
+    }
+  ]
 }

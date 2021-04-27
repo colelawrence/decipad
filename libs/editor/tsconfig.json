@@ -1,13 +1,5 @@
 {
   "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "jsx": "react",
-    "allowJs": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "composite": true,
-    "declaration": true
-  },
   "files": [],
   "include": [],
   "references": [
@@ -16,6 +8,8 @@
     },
     {
       "path": "./tsconfig.spec.json"
-    }
+    },
+    { "path": "../runtime" },
+    { "path": "../ui" }
   ]
 }
