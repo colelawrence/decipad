@@ -31,5 +31,6 @@
       "@decipad/kafka-lite": ["libs/kafka-lite/src/index.ts"]
     }
   },
+  "types": ["node", "browser", "jest"],
   "exclude": ["node_modules", "tmp", "dist"]
 }

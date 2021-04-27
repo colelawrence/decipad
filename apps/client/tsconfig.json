@@ -8,13 +8,5 @@
     "isolatedModules": true
   },
   "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "next-env.d.ts"],
-  "exclude": ["node_modules"],
-  "references": [
-    {
-      "path": "../../libs/editor"
-    },
-    {
-      "path": "../../libs/ui"
-    }
-  ]
+  "references": [{ "path": "../../libs/editor" }, { "path": "../../libs/ui" }]
 }

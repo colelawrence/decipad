@@ -1,13 +1,4 @@
 {
   "extends": "../../tsconfig.base.json",
-  "files": [],
-  "include": ["**/*.d.ts", "**/*.ts", "**/*.js"],
-  "references": [
-    {
-      "path": "./tsconfig.lib.json"
-    },
-    {
-      "path": "./tsconfig.spec.json"
-    }
-  ]
+  "include": ["**/*.d.ts", "**/*.ts", "**/*.js"]
 }

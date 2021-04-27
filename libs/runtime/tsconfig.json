@@ -1,12 +1,5 @@
 {
   "extends": "../../tsconfig.strictbase.json",
-  "compilerOptions": {
-    "lib": ["es2019", "DOM"]
-  },
   "include": ["**/*.d.ts", "**/*.ts", "**/*.js"],
-  "references": [
-    {
-      "path": "../language"
-    }
-  ]
+  "references": [{ "path": "../language" }]
 }
