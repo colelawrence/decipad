@@ -1,11 +1,4 @@
 {
   "extends": ["../../.eslintrc.json"],
-  "ignorePatterns": ["!**/*", "dist"],
-  "env": {
-    "jest": true,
-    "browser": true
-  },
-  "rules": {
-    "@typescript-eslint/no-explicit-any": "off"
-  }
+  "ignorePatterns": ["!**/*"]
 }
