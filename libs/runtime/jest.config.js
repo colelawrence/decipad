@@ -1,19 +1,8 @@
 module.exports = {
-  preset: 'ts-jest',
-  rootDir: '.',
-  roots: ['<rootDir>'],
-  testRegex: '.spec.[jt]s$',
-  transform: {
-    '^.+\\.[jt]s$': 'ts-jest',
-  },
+  displayName: 'runtime',
+  preset: '../../jest.preset.js',
   testEnvironment: 'jsdom',
-  projects: ['<rootDir>'],
-  coverageDirectory: './coverage',
-  moduleFileExtensions: ['js', 'ts', 'tsx', 'json'],
-  testPathIgnorePatterns: [
-    '<rootDir>[/\\\\](node_modules|.next|cypress|dist)[/\\\\]',
-  ],
-  transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\].+\\.(js,ts|tsx)$'],
+  setupFiles: ['./jest.setup.js'],
   collectCoverageFrom: ['src/**/*.ts'],
   coverageThreshold: {
     global: {
@@ -23,11 +12,4 @@ module.exports = {
       statements: 100,
     },
   },
-  globals: {
-    'ts-jest': {
-      diagnostics: false,
-      isolatedModules: true,
-    },
-  },
-  setupFiles: ['./jest.setup.js'],
 };
