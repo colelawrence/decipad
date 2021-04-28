@@ -6,10 +6,6 @@ function moveNode(doc: SyncPadValue, op: MoveNodeOperation): SyncPadValue {
   const [from, fromIndex] = getParent(doc, op.path);
   const [to, toIndex] = getParent(doc, op.newPath);
 
-  if (from.text || to.text) {
-    throw new TypeError("Can't move node as child of a text node");
-  }
-
   getChildren(to).splice(
     toIndex,
     0,

@@ -14,6 +14,9 @@ import { fnQueue } from './utils/fn-queue';
 import { observeSubscriberCount } from './utils/observe-subscriber-count';
 import { uri } from './utils/uri';
 
+const DEBOUNCE_PROCESS_SLATE_OPS =
+  Number(process.env.DECI_DEBOUNCE_PROCESS_SLATE_OPS) || 500;
+
 class PadEditor {
   private slateOpQueue: SlateOperation[] = [];
   private replica: Replica<SyncPadDoc>;
@@ -31,19 +34,22 @@ class PadEditor {
 
   constructor(public padId: Id, runtime: Runtime, createIfAbsent: boolean) {
     this.processSlateOps = this.processSlateOps.bind(this);
-    this.debouncedProcessSlateOps = debounce(this.processSlateOps, 500);
+    this.debouncedProcessSlateOps = debounce(
+      this.processSlateOps,
+      DEBOUNCE_PROCESS_SLATE_OPS
+    );
 
     const defaultInitialValue = toSync([
       {
         children: [
           {
+            type: 'p',
             children: [
               {
-                type: 'paragraph',
                 text: '',
-                id: nanoid(),
               },
             ],
+            id: nanoid(),
           },
         ],
       },
@@ -72,15 +78,15 @@ class PadEditor {
     return this.replica.isOnlyRemote();
   }
 
-  getValue(): SyncPadDoc {
+  getValue(): SyncPadValue {
     return toJS(this.replica.getValue());
   }
 
-  getValueEventually(): Promise<SyncPadDoc> {
+  getValueEventually(): Promise<SyncPadValue> {
     return new Promise((resolve, reject) => {
       const value = this.getValue();
       if (value !== null) {
-        resolve(value);
+        resolve(toJS(value));
         return;
       }
       this.replica.observable
@@ -152,17 +158,17 @@ class PadEditor {
         if (op.isRemote === true) {
           continue;
         }
+        // console.log('before:', this.replica.getValue())
+        // console.trace('OP:', op);
         const applyOp = fromSlateOpType(
           ((op as unknown) as ExtendedSlateOperation)
             .type as SupportedSlateOpTypes
         );
 
-        if (applyOp === undefined) {
-          continue;
+        if (applyOp) {
+          applyOp(doc as SyncPadValue, op);
+          applied = true;
         }
-
-        applyOp(doc as SyncPadValue, op);
-        applied = true;
       }
     });
     if (applied) {

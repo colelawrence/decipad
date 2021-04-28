@@ -7,6 +7,7 @@ import fetch from 'jest-fetch-mock';
 
 describe('replica sync', () => {
   beforeEach(() => {
+    fetch.enableMocks();
     fetch.resetMocks();
   });
   test('created locally eventually syncs to remote', async () => {
@@ -23,10 +24,13 @@ describe('replica sync', () => {
 
     await timeout(4000);
 
-    expect(fetch.mock.calls).toHaveLength(2);
-    expect(fetch.mock.calls[0][0]).toBe('/api/test/id');
+    expect(fetch.mock.calls).toHaveLength(3);
     expect(fetch.mock.calls[0][1]).toBeUndefined(); // GET request
-    expect(fetch.mock.calls[1][0]).toBe('/api/test/id');
+    expect(fetch.mock.calls[0][0]).toBe('http://localhost:3333/api/test/id');
+    expect(fetch.mock.calls[1][0]).toBe('http://localhost:3333/api/test/id');
+    expect(fetch.mock.calls[1][1]?.body).toBeDefined(); // PUT request
+    expect(fetch.mock.calls[2][1]).toBeUndefined(); // GET request
+    expect(fetch.mock.calls[2][0]).toBe('http://localhost:3333/api/test/id');
     expect(
       Automerge.load(fetch!.mock!.calls![1]![1]!.body as string)
     ).toMatchObject({ value: 'ABCDEF' });
@@ -50,7 +54,7 @@ describe('replica sync', () => {
     await timeout(4000);
 
     expect(fetch.mock.calls).toHaveLength(1);
-    expect(fetch.mock.calls[0][0]).toBe('/api/test/id2');
+    expect(fetch.mock.calls[0][0]).toBe('http://localhost:3333/api/test/id2');
     expect(r.getValue()).toBe('ABCDEFGHIJK');
 
     r.stop();

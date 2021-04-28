@@ -1,11 +1,12 @@
 import { DeciRuntime } from './';
 import { timeout } from './utils/timeout';
+import { nanoid } from 'nanoid';
 
-const USER_ID = 'workspace test user id';
-const ACTOR_ID = 'workspace test actor id';
+const USER_ID = nanoid();
+const ACTOR_ID = nanoid();
 
 describe('pads', () => {
-  const workspaceId = 'workspace id';
+  const workspaceId = nanoid();
 
   beforeAll(async () => {
     const deci = new DeciRuntime(USER_ID, ACTOR_ID);
@@ -21,9 +22,11 @@ describe('pads', () => {
   test('starts with zero elements', (done) => {
     const deci = new DeciRuntime(USER_ID, ACTOR_ID);
     const pads = deci.workspace(workspaceId).pads.list();
+    let ended = false;
     pads.subscribe(({ loading, data: ids }) => {
-      if (!loading) {
+      if (!loading && !ended) {
         expect(ids).toHaveLength(0);
+        ended = true;
         deci.stop();
         done();
       }

@@ -2,7 +2,8 @@ import { Observable, Subscription } from 'rxjs';
 import { Doc } from 'automerge';
 import { SyncSubscriptionManager } from './sync-subscription-manager';
 
-const AVERAGE_RECONNECT_MS = 10000;
+const MAX_RECONNECT_MS = Number(process.env.DECI_MAX_RECONNECT_MS) || 10000;
+const fetchPrefix = process.env.DECI_API_URL || '';
 
 export class Sync<T> {
   private subscriptionManager = new SyncSubscriptionManager<T>();
@@ -114,6 +115,11 @@ export class Sync<T> {
     let token;
     try {
       token = await getAuthToken();
+    } catch (err) {
+      if (err.code !== 'ECONNREFUSED') {
+        console.error(err);
+      }
+      // do nothing
     } finally {
       this.connecting = false;
     }
@@ -175,14 +181,13 @@ export class Sync<T> {
 }
 
 function randomReconnectTimeout() {
-  return Math.ceil(Math.random() * AVERAGE_RECONNECT_MS);
+  return Math.ceil(Math.random() * MAX_RECONNECT_MS);
 }
 
 async function getAuthToken(): Promise<string> {
-  const resp = await fetch('/api/auth/token');
+  const resp = await fetch(fetchPrefix + '/api/auth/token');
   if (!resp.ok) {
-    const message = `Failed to send data to remote: ${await resp.text()}`;
-    console.error(message);
+    const message = `Failed fetching token from remote: ${await resp.text()}`;
     throw new Error(message);
   }
   return await resp.text();

@@ -56,8 +56,13 @@ export function fnQueue() {
     });
   }
 
+  function pendingCount() {
+    return fns.length;
+  }
+
   return {
     push,
     flush,
+    pendingCount,
   };
 }

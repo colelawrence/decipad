@@ -15,26 +15,31 @@ export function invertedIndex<T extends Identifiable>(
   const queue = fnQueue();
 
   const subscription = changeObservable.subscribe(({ before, after }) => {
-    queue.push(async () => {
-      const keysBefore = before !== null ? extract(before) : [];
-      const keysAfter = after !== null ? extract(after) : [];
+    queue
+      .push(async () => {
+        const keysBefore = before !== null ? extract(before) : [];
+        const keysAfter = after !== null ? extract(after) : [];
 
-      const id = before !== null ? before.id : after !== null ? after.id : null;
-      if (id === null) {
-        return;
-      }
-      for (const key of keysAfter || []) {
-        const index = keysBefore.indexOf(key);
-        if (index < 0) {
-          await ensureEntry(key, id);
+        const id =
+          before !== null ? before.id : after !== null ? after.id : null;
+        if (id === null) {
+          return;
         }
-        keysBefore.splice(index, 1);
-      }
-      for (const removeKey of keysBefore || []) {
-        await removeEntry(removeKey, id);
-      }
-      keysSubject.next(Array.from(replicaByKey.keys()).sort());
-    });
+        for (const key of keysAfter || []) {
+          const index = keysBefore.indexOf(key);
+          if (index < 0) {
+            await ensureEntry(key, id);
+          }
+          keysBefore.splice(index, 1);
+        }
+        for (const removeKey of keysBefore || []) {
+          await removeEntry(removeKey, id);
+        }
+        keysSubject.next(Array.from(replicaByKey.keys()).sort());
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   });
 
   function keys(): Observable<Id[]> {

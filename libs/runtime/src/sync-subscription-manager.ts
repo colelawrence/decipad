@@ -50,39 +50,19 @@ export class SyncSubscriptionManager<T> {
     topic: string,
     inObservable: Observable<Mutation<Doc<{ value: T }>>>
   ) {
-    let count = this.outObservablesSubscriberCount.get(topic);
-    if (count === undefined || count === 0) {
-      throw new Error(
-        `Tried unsubscribing topic ${topic} without subscriptions`
-      );
-    }
+    let count = this.outObservablesSubscriberCount.get(topic) as number;
     count--;
     this.outObservablesSubscriberCount.set(topic, count);
     if (count === 0) {
       const outObservables = this.outObservables.get(topic);
-      if (outObservables === undefined) {
-        throw new Error(
-          `Tried unsubscribing topic ${topic} without subscriptions`
-        );
-      }
-      outObservables.complete();
+      outObservables!.complete();
       this.outObservables.delete(topic);
       this.topicObservable.next({ op: 'remove', topic });
     }
 
     const inObservables = this.inObservables.get(topic);
-    if (inObservables === undefined) {
-      throw new Error(
-        `Tried unsubscribing topic ${topic} without in observables`
-      );
-    }
-    const index = inObservables.indexOf(inObservable);
-    if (index < 0) {
-      throw new Error(
-        `Tried unsubscribing topic ${topic} without in observables`
-      );
-    }
-    inObservables.splice(index, 1);
+    const index = inObservables!.indexOf(inObservable);
+    inObservables!.splice(index, 1);
   }
 
   stop() {

@@ -16,6 +16,7 @@ function createReplica<T>(
   createIfAbsent = false,
   initialStaticValue: string | null = null
 ): Replica<T> {
+  const inTests = navigator.userAgent.includes('jsdom');
   let stopped = false;
   const queue = fnQueue();
   let doc: null | Doc<{ value: T }> = null;
@@ -24,8 +25,6 @@ function createReplica<T>(
 
   const remoteChanges = new Subject<ChangeEvent<T>>();
   const localChanges = new Subject<Mutation<Doc<{ value: T }>>>();
-
-  window.addEventListener('storage', onStorageEvent);
 
   // Subscription count observeables
 
@@ -84,26 +83,35 @@ function createReplica<T>(
       needsFlush = true;
       flush();
     } else {
-      queue.push(() => mergeRemoteDoc(doc2));
+      queue
+        .push(() => mergeRemoteDoc(doc2))
+        .catch((err) => {
+          console.error(err);
+        });
     }
   });
 
   const remoteChangesSubscription = sync.remoteChanges.subscribe(
     (changes: Change[]) => {
-      queue.push(async () => {
-        await self.beforeRemoteChanges();
-        const oldDoc = getDoc();
-        if (oldDoc === null) {
-          throw new Error('Could not get doc from local storage');
-        }
-        doc = Automerge.applyChanges(oldDoc, changes);
+      queue
+        .push(async () => {
+          await self.beforeRemoteChanges();
+          const oldDoc = getDoc();
+          doc = Automerge.applyChanges(oldDoc!, changes);
 
-        const diffs = Automerge.diff(oldDoc, doc);
-        remoteChanges.next({ before: oldDoc, doc, diffs });
-        observable.next({ loading: false, error: null, data: doc.value as T });
-        needsFlush = true;
-        flush();
-      });
+          const diffs = Automerge.diff(oldDoc!, doc);
+          remoteChanges.next({ before: oldDoc!, doc, diffs });
+          observable.next({
+            loading: false,
+            error: null,
+            data: doc.value as T,
+          });
+          needsFlush = true;
+          flush();
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     }
   );
 
@@ -130,6 +138,8 @@ function createReplica<T>(
     /* eslint-disable @typescript-eslint/no-empty-function */
     beforeRemoteChanges: () => {},
   };
+
+  window.addEventListener('storage', onStorageEvent);
 
   return self;
 
@@ -159,9 +169,12 @@ function createReplica<T>(
     if (!doc) {
       return;
     }
-    window.localStorage.setItem(key(), Automerge.save(doc));
+    const k = key();
+    window.localStorage.setItem(k, Automerge.save(doc));
 
     needsFlush = false;
+
+    emitStorageEventIfInTests();
   }
 
   function stop() {
@@ -189,7 +202,11 @@ function createReplica<T>(
   }
 
   function loadDoc() {
-    const str = window.localStorage.getItem(key()) || initialStaticValue;
+    const localStr = window.localStorage.getItem(key());
+    let str = localStr;
+    if (localStr === null) {
+      str = initialStaticValue;
+    }
     if (str !== null) {
       doc = Automerge.load(str, runtime.actorId);
     } else if (createIfAbsent) {
@@ -197,10 +214,11 @@ function createReplica<T>(
         value: T;
       }>;
     }
-    if (doc) {
-      const toBeSaved = Automerge.save(doc);
-      if (toBeSaved !== str) {
+    if (doc !== null) {
+      const toBeSaved = Automerge.save(doc!);
+      if (toBeSaved !== localStr) {
         window.localStorage.setItem(key(), toBeSaved);
+        emitStorageEventIfInTests();
       }
     }
   }
@@ -226,7 +244,7 @@ function createReplica<T>(
   }
 
   function isActive(): boolean {
-    return doc !== null;
+    return !stopped && doc !== null;
   }
 
   function isOnlyRemote(): boolean {
@@ -234,10 +252,23 @@ function createReplica<T>(
   }
 
   function onStorageEvent(event: StorageEvent) {
-    if (event.key !== key()) {
+    if (stopped || event.key !== key()) {
       return;
     }
-    queue.push(() => handleStorageEvent());
+    queue
+      .push(() => handleStorageEvent())
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+
+  function emitStorageEventIfInTests() {
+    if (stopped || !inTests) {
+      return;
+    }
+    // Artificial event triggered in tests because JSDOM does not
+    const event = new StorageEvent('storage', { key: key() });
+    window.dispatchEvent(event);
   }
 
   async function handleStorageEvent() {
@@ -258,6 +289,10 @@ function createReplica<T>(
   ) {
     await self.beforeRemoteChanges();
     const oldDoc = doc;
+    if (oldDoc === null) {
+      return;
+    }
+
     try {
       const c = Automerge.getChanges(oldDoc!, remoteDoc);
       if (c.length > 0) {
@@ -268,13 +303,23 @@ function createReplica<T>(
           before: oldDoc!,
         });
 
-        observable.next({ loading: false, error: null, data: doc!.value as T });
+        if (doc !== null) {
+          observable.next({
+            loading: false,
+            error: null,
+            data: doc.value as T,
+          });
+        }
       }
+
       if (oldDoc !== doc) {
         needsFlush = true;
         flush();
       }
     } catch (err) {
+      if (!(err instanceof RangeError)) {
+        throw err;
+      }
       if (!fromError && dequal(toJS(oldDoc), initialValue)) {
         await mergeRemoteDoc(remoteDoc, true);
       } else {

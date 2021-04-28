@@ -124,7 +124,7 @@ export class Pads extends List {
   private getPadMeta(padId: Id): LocalMetadata {
     let meta = this.meta.get(padId);
     if (meta === undefined) {
-      meta = new LocalMetadata(`pad:${padId}:meta`);
+      meta = new LocalMetadata(`${this.runtime.userId}:pad:${padId}:meta`);
       this.meta.set(padId, meta);
     }
     return meta;

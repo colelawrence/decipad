@@ -1,8 +1,8 @@
-import { Diff } from 'automerge';
+import { Diff, Doc } from 'automerge';
 import { Element } from 'slate';
 import { toSlatePath } from '../utils/to-slate-path';
-import { toJS } from '../utils/to-js';
 import { getTarget } from '../utils/path';
+import assert from 'assert';
 
 const removeTextOp = (op: Diff) => (map: any, doc: Element) => {
   const { index, path, obj } = op;
@@ -11,11 +11,7 @@ const removeTextOp = (op: Diff) => (map: any, doc: Element) => {
 
   let node = map[obj];
 
-  try {
-    node = getTarget(doc, slatePath);
-  } catch (e) {
-    console.error(e, slatePath, op, map, toJS(doc));
-  }
+  node = getTarget(doc, slatePath);
 
   if (typeof index !== 'number') return;
 
@@ -37,6 +33,32 @@ const removeTextOp = (op: Diff) => (map: any, doc: Element) => {
   };
 };
 
+const removeAttributeOp = (op: Diff, before: Doc<{ value: SyncPadDoc }>) => (
+  map: any,
+  doc: Element
+) => {
+  const { obj, path, key } = op;
+
+  const slatePath = toSlatePath(path);
+
+  const target = getTarget(doc, slatePath);
+
+  assert(target, 'Target is not found!');
+
+  if (!Object.prototype.hasOwnProperty.call(map, obj)) {
+    map[obj] = target;
+  }
+
+  return {
+    type: 'set_node',
+    path: slatePath,
+    properties: {
+      [key as string]: (before as any)[key as string] as any,
+    } as any,
+    newProperties: { [key as string]: undefined },
+  };
+};
+
 const removeNodeOp = (op: Diff) => (map: any, doc: Element) => {
   const { index, obj, path } = op;
 
@@ -48,17 +70,13 @@ const removeNodeOp = (op: Diff) => (map: any, doc: Element) => {
     parent.children[index as number]) ||
     (parent && parent[index as number]) || { children: [] };
 
-  if (!target) {
-    throw new TypeError('Target is not found!');
-  }
+  assert(target, 'Target is not found!');
 
   if (!Object.prototype.hasOwnProperty.call(map, obj)) {
     map[obj] = target;
   }
 
-  if (!Number.isInteger(index)) {
-    throw new TypeError('Index is not a number');
-  }
+  assert(Number.isInteger(index), 'Index is not a number');
 
   return {
     type: 'remove_node',
@@ -67,7 +85,12 @@ const removeNodeOp = (op: Diff) => (map: any, doc: Element) => {
   };
 };
 
-const opRemove = (op: Diff, [map, ops]: any) => {
+const opRemove = (
+  op: Diff,
+  [map, ops]: any,
+  _: Doc<{ value: SyncPadDoc }>,
+  before: Doc<{ value: SyncPadDoc }>
+) => {
   const { index, path, obj, type } = op;
 
   if (
@@ -89,9 +112,14 @@ const opRemove = (op: Diff, [map, ops]: any) => {
 
   if (key === 'cursors' || op.key === 'cursors') return [map, ops];
 
-  const fn = key === 'text' ? removeTextOp : removeNodeOp;
+  const fn =
+    key === 'text'
+      ? removeTextOp
+      : type === 'map'
+      ? removeAttributeOp
+      : removeNodeOp;
 
-  return [map, [...ops, fn(op)]];
+  return [map, [...ops, fn(op, before)]];
 };
 
 export { opRemove };

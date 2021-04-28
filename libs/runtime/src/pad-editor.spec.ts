@@ -61,9 +61,9 @@ describe('pad editor', () => {
       {
         children: [
           {
+            type: 'p',
             children: [
               {
-                type: 'paragraph',
                 text: 'A new string of text to be inserted.',
               },
             ],
