@@ -39,6 +39,6 @@ jobs:
         with:
           add: 'apps/backend/sam.*'
           message: 'new cloudformation after deploy'
-          pull_strategy: 'rebase'
+          pull_strategy: '--rebase'
 
 
