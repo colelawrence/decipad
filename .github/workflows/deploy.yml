@@ -39,6 +39,12 @@ jobs:
         with:
           add: 'apps/backend/sam.*'
           message: 'new cloudformation after deploy'
-          pull_strategy: '--rebase'
+
+      - name: Discord notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@master
+        with:
+          args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed to staging: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com'
 
 
