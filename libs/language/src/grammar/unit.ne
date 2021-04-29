@@ -91,6 +91,12 @@ unknownUnitName -> [yzafpnμmcdhkMGTPEZY] [a-zA-Z]:*     {%
                                                         %}
 unknownUnitName -> [^yzafpnμmcdhkMGTPEZY0-9=+\%*\- ] [a-zA-Z]:*    {%
                                                         (d, l, reject) => {
+                                                          if (!/^[°a-zA-Z]$/.test(d[0])) {
+                                                            // Must not be a known multiplier prefix,
+                                                            // but needs to be a valid unit name
+                                                            return reject
+                                                          }
+
                                                           const candidate = d[0] + d[1].join('')
                                                           if (knownUnits.has(candidate) || reservedWords.has(candidate)) {
                                                             return reject

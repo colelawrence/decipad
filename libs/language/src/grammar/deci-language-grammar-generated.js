@@ -602,6 +602,12 @@
           'unknownUnitName$ebnf$2',
         ],
         postprocess: (d, l, reject) => {
+          if (!/^[°a-zA-Z]$/.test(d[0])) {
+            // Must not be a known multiplier prefix,
+            // but needs to be a valid unit name
+            return reject;
+          }
+
           const candidate = d[0] + d[1].join('');
           if (knownUnits.has(candidate) || reservedWords.has(candidate)) {
             return reject;
@@ -3052,7 +3058,7 @@
           const first = d[0][0] + d[0][1].join('');
           const rest = d[1].map((e) => e[0] + e[1].join('')).join('');
           const r = first + rest;
-          for (word of r.split(' ')) {
+          for (const word of r.split(' ')) {
             if (reservedWords.has(word.trim())) {
               return reject;
             }
@@ -3081,7 +3087,7 @@
         symbols: [/[a-zA-Z\$]/, 'referenceInExpression$ebnf$1'],
         postprocess: (d, l, reject) => {
           const r = d[0] + d[1].join('');
-          for (word of r.split(' ')) {
+          for (const word of r.split(' ')) {
             if (reservedWords.has(word.trim())) {
               return reject;
             }
