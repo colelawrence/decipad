@@ -26,7 +26,8 @@
     "workspace-generator": "nx workspace-generator",
     "dep-graph": "nx dep-graph",
     "help": "nx help",
-    "build:grammar": "nearleyc libs/language/src/grammar/deci-language-grammar.ne -o libs/language/src/grammar/deci-language-grammar-generated.js && prettier --write libs/language/src/grammar/deci-language-grammar-generated.js "
+    "build:grammar": "nearleyc libs/language/src/grammar/deci-language-grammar.ne -o libs/language/src/grammar/deci-language-grammar-generated.js && prettier --write libs/language/src/grammar/deci-language-grammar-generated.js ",
+    "postinstall": "cd apps/backend && npm install && ./node_modules/.bin/arc hydrate && ./symlink-shared.sh"
   },
   "private": true,
   "devDependencies": {
