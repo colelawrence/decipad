@@ -1,7 +1,7 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
   "Transform": "AWS::Serverless-2016-10-31",
-  "Description": "Exported by architect/package@6.2.0 on 2021-04-29T09:31:36.189Z",
+  "Description": "Exported by architect/package@6.2.0 on 2021-04-29T13:47:08.945Z",
   "Resources": {
     "HTTP": {
       "Type": "AWS::Serverless::HttpApi",
@@ -420,7 +420,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/node_modules/@architect/asap/dist",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/node_modules/@architect/asap/dist",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -481,7 +481,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/post-test",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/post-test",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -542,7 +542,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-test-000id",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-test-000id",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -603,7 +603,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-graphql",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-graphql",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -664,7 +664,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/post-graphql",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/post-graphql",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -725,7 +725,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-api-auth-signin",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-api-auth-signin",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -786,7 +786,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/post-api-auth-signin-000provider",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/post-api-auth-signin-000provider",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -847,7 +847,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-api-auth-callback-000provider",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-api-auth-callback-000provider",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -908,7 +908,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-api-auth-signout",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-api-auth-signout",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -969,7 +969,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/post-api-auth-signout",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/post-api-auth-signout",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1030,7 +1030,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-api-auth-session",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-api-auth-session",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1091,7 +1091,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-api-auth-csrf",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-api-auth-csrf",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1152,7 +1152,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-api-auth-providers",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-api-auth-providers",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1213,7 +1213,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-api-auth-error",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-api-auth-error",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1274,7 +1274,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-api-auth-token",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-api-auth-token",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1335,7 +1335,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-api-workspaces",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-api-workspaces",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1396,7 +1396,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/put-api-workspaces",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/put-api-workspaces",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1457,7 +1457,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/put-api-workspaces-changes",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/put-api-workspaces-changes",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1518,7 +1518,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-api-workspaces-000workspaceid",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-api-workspaces-000workspaceid",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1579,7 +1579,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/put-api-workspaces-000workspaceid",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/put-api-workspaces-000workspaceid",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1640,7 +1640,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/put-api-workspaces-000workspaceid-changes",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/put-api-workspaces-000workspaceid-changes",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1701,7 +1701,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-api-workspaces-000workspaceid-pads",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-api-workspaces-000workspaceid-pads",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1762,7 +1762,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/put-api-workspaces-000workspaceid-pads",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/put-api-workspaces-000workspaceid-pads",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1823,7 +1823,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/put-api-workspaces-000workspaceid-pads-changes",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/put-api-workspaces-000workspaceid-pads-changes",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1884,7 +1884,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-api-pads-000padid",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-api-pads-000padid",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1945,7 +1945,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/put-api-pads-000padid",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/put-api-pads-000padid",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -2006,7 +2006,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/put-api-pads-000padid-changes",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/put-api-pads-000padid-changes",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -2067,7 +2067,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-api-pads-000padid-content",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-api-pads-000padid-content",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -2128,7 +2128,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/put-api-pads-000padid-content",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/put-api-pads-000padid-content",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -2189,7 +2189,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/put-api-pads-000padid-content-changes",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/put-api-pads-000padid-content-changes",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -2506,7 +2506,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/ws/connect",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/ws/connect",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -2606,7 +2606,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/ws/default",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/ws/default",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -2706,7 +2706,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/ws/disconnect",
+        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/ws/disconnect",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
