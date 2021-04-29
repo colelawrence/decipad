@@ -1,7 +1,7 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
   "Transform": "AWS::Serverless-2016-10-31",
-  "Description": "Exported by architect/package@6.2.0 on 2021-04-24T08:54:22.514Z",
+  "Description": "Exported by architect/package@6.2.0 on 2021-04-29T09:31:36.189Z",
   "Resources": {
     "HTTP": {
       "Type": "AWS::Serverless::HttpApi",
@@ -2444,7 +2444,11 @@
     },
     "WebsocketDeployment": {
       "Type": "AWS::ApiGatewayV2::Deployment",
-      "DependsOn": ["ConnectWSRoute", "DefaultWSRoute", "DisconnectWSRoute"],
+      "DependsOn": [
+        "ConnectWSRoute",
+        "DefaultWSRoute",
+        "DisconnectWSRoute"
+      ],
       "Properties": {
         "ApiId": {
           "Ref": "WS"
@@ -2472,7 +2476,10 @@
           "Statement": [
             {
               "Effect": "Allow",
-              "Action": ["execute-api:Invoke", "execute-api:ManageConnections"],
+              "Action": [
+                "execute-api:Invoke",
+                "execute-api:ManageConnections"
+              ],
               "Resource": [
                 {
                   "Fn::Sub": [
@@ -2583,7 +2590,10 @@
     },
     "ConnectWSPermission": {
       "Type": "AWS::Lambda::Permission",
-      "DependsOn": ["WS", "ConnectWSLambda"],
+      "DependsOn": [
+        "WS",
+        "ConnectWSLambda"
+      ],
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -2680,7 +2690,10 @@
     },
     "DefaultWSPermission": {
       "Type": "AWS::Lambda::Permission",
-      "DependsOn": ["WS", "DefaultWSLambda"],
+      "DependsOn": [
+        "WS",
+        "DefaultWSLambda"
+      ],
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -2777,7 +2790,10 @@
     },
     "DisconnectWSPermission": {
       "Type": "AWS::Lambda::Permission",
-      "DependsOn": ["WS", "DisconnectWSLambda"],
+      "DependsOn": [
+        "WS",
+        "DisconnectWSLambda"
+      ],
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {

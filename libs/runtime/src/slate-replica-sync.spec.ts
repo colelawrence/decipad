@@ -576,30 +576,6 @@ function splitRandomText(editor: Editor): SlateOperation[] {
 
   const splitAt = Math.round((candidate.children[0].text as string).length / 2);
 
-  // ops.push({
-  //   type: 'set_selection',
-  //   newProperties: {
-  //     anchor: {
-  //       path: [0, targetIndex, 0],
-  //       offset: splitAt
-  //     },
-  //     focus: {
-  //       path: [0, targetIndex, 0],
-  //       offset: splitAt
-  //     }
-  //   },
-  //   properties: {
-  //     anchor: {
-  //       path: [0, 0, 0],
-  //       offset: splitAt
-  //     },
-  //     focus: {
-  //       path: [0, 0, 0],
-  //       offset: 0
-  //     }
-  //   }
-  // })
-
   ops.push({
     type: 'split_node',
     path: [0, targetIndex, 0],
