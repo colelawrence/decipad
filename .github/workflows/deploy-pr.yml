@@ -38,6 +38,17 @@ jobs:
       - name: Install
         run: npm ci
 
+      - name: Cache NX things
+        id: node-modules-nx-cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules/.cache
+            dist
+          key: nx-node-modules-cache-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            nx-node-modules-cache-
+
       - name: Find PR
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
