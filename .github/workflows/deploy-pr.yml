@@ -33,7 +33,9 @@ jobs:
         id: findPr
 
       - name: Deploy
-        run: "npm run deploy:pr -- ${{steps.findPr.outputs.number}}"
+        env:
+          PR: ${{ steps.findPr.outputs.pr }}
+        run: "npm run deploy:pr -- $PR"
 
       - name: Commit Cloudformation
         uses: EndBug/add-and-commit@v7
