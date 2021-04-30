@@ -18,11 +18,36 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
+
+    - name: Npm cache
+      id: npm-cache
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.npm
+          ~/.cache
+        key: npm-and-cypress-${{ hashFiles('package-lock.json') }}
+        restore-keys: |
+          npm-and-cypress-
+
     - run: npm ci
+
+    - name: Cache NX things
+      id: node-modules-nx-cache
+      uses: actions/cache@v2
+      with:
+        path: |
+          node_modules/.cache
+          dist
+        key: nx-node-modules-cache-${{ hashFiles('package-lock.json') }}
+        restore-keys: |
+          nx-node-modules-cache-
+
     - run: npm run lint
     - run: npm run typecheck
     - run: npm run test:coverage

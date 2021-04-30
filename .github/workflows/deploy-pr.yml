@@ -25,6 +25,16 @@ jobs:
         with:
           node-version: 14
 
+      - name: Cache NPM
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.npm
+            ~/.cache
+          key: npm-and-cypress-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            npm-and-cypress-
+
       - name: Install
         run: npm ci
 
