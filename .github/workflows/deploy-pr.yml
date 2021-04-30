@@ -28,8 +28,11 @@ jobs:
       - name: Install
         run: npm ci
 
+      - name: Find PR
+        uses: jwalton/gh-find-current-pr@v1
+
       - name: Deploy
-        run: npm run deploy:pr -- ${{github.event.pull_request.issue.id}}
+        run: npm run deploy:pr -- ${PR}
 
       - name: Commit Cloudformation
         uses: EndBug/add-and-commit@v7
@@ -43,10 +46,12 @@ jobs:
     needs: # make sure the notification is sent AFTER the jobs you want included have completed
       - deploy
     steps:
+    - name: Find PR
+      uses: jwalton/gh-find-current-pr@v1
     - name: Notify
       uses: nobrayner/discord-webhook@v1
       with:
         github-token: ${{ secrets.github_token }}
         discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
-        title: 'Deployment of PR ${{github.event.pull_request.issue.id}} {{STATUS}}'
+        title: 'Deployment of PR ${PR} {{STATUS}}'
 
