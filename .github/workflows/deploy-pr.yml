@@ -48,5 +48,5 @@ jobs:
       with:
         github-token: ${{ secrets.github_token }}
         discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
-        title: 'Deployment of PR ${{github.event.pull_request.issue.id}} ${{STATUS}}'
+        title: 'Deployment of PR ${{github.event.pull_request.issue.id}} {{STATUS}}'
 
