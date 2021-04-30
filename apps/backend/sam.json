@@ -1,7 +1,7 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
   "Transform": "AWS::Serverless-2016-10-31",
-  "Description": "Exported by architect/package@6.2.0 on 2021-04-30T09:42:35.254Z",
+  "Description": "Exported by architect/package@6.2.0 on 2021-04-30T09:48:20.325Z",
   "Resources": {
     "HTTP": {
       "Type": "AWS::Serverless::HttpApi",
