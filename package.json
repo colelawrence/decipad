@@ -30,7 +30,8 @@
     "build:grammar": "nearleyc libs/language/src/grammar/deci-language-grammar.ne -o libs/language/src/grammar/deci-language-grammar-generated.js && prettier --write libs/language/src/grammar/deci-language-grammar-generated.js ",
     "postinstall": "cd apps/backend && npm install && ./node_modules/.bin/arc hydrate && ./symlink-shared.sh",
     "deploy": "nx export client && cd apps/backend && ./node_modules/.bin/arc deploy",
-    "deploy:pr": "nx export client && cd apps/backend && ./node_modules/.bin/arc deploy --name "
+    "deploy:pr": "nx export client && cd apps/backend && ./node_modules/.bin/arc deploy --name ",
+    "undeploy:pr": "cd apps/backend && ./node_modules/.bin/arc destroy "
   },
   "private": true,
   "devDependencies": {

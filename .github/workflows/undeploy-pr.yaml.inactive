@@ -1,8 +1,9 @@
-name: Deploy PR
+name: Undeploy PR
 
 on:
   pull_request:
     branches: [ main ]
+    types: [ closed ]
 
 #  workflow_run:
 #    workflows: ["Run Tests"]
@@ -11,7 +12,7 @@ on:
 #      - completed
 
 jobs:
-  deploy:
+  undeploy:
 #    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
@@ -21,29 +22,8 @@ jobs:
         with:
           node-version: 14
 
-      - name: Cache NPM
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.npm
-            ~/.cache
-          key: npm-and-cypress-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            npm-and-cypress-
-
       - name: Install
         run: npm ci
-
-      - name: Cache NX things
-        id: node-modules-nx-cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            node_modules/.cache
-            dist
-          key: nx-node-modules-cache-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            nx-node-modules-cache-
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -52,21 +32,21 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-2
 
-      - name: Deploy
+      - name: Undeploy
         env:
           PR: ${{ github.event.pull_request.number }}
-        run: "npm run deploy:pr -- pr$PR"
+        run: "npm run undeploy:pr -- pr$PR --name decipad-backend"
 
       - name: Commit Cloudformation
         uses: EndBug/add-and-commit@v7
         with:
           branch: ${{ github.event.pull_request.head.ref }}
           add: 'apps/backend/sam.*'
-          message: 'new cloudformation after deploy'
+          message: 'new cloudformation after destroy'
 
       - name: Notify
         uses: nobrayner/discord-webhook@v1
         with:
           github-token: ${{ github.token }}
           discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          title: 'Deployment of PR ${{github.event.pull_request.number}} : {{STATUS}}'
+          title: 'Removal of PR ${{github.event.pull_request.number}} deployment : {{STATUS}}'
