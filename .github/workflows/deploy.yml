@@ -25,8 +25,29 @@ jobs:
         with:
           node-version: 14
 
+      - name: Cache NPM
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.npm
+            ~/.cache
+          key: npm-and-cypress-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            npm-and-cypress-
+
       - name: Install
         run: npm ci
+
+      - name: Cache NX things
+        id: node-modules-nx-cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules/.cache
+            dist
+          key: nx-node-modules-cache-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            nx-node-modules-cache-
 
       - name: Deploy
         run: npm run deploy
