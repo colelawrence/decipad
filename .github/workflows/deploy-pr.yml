@@ -30,9 +30,10 @@ jobs:
 
       - name: Find PR
         uses: jwalton/gh-find-current-pr@v1
+        id: findPr
 
       - name: Deploy
-        run: 'npm run deploy:pr -- ${{PR}}'
+        run: "npm run deploy:pr -- ${{steps.findPr.outputs.number}}"
 
       - name: Commit Cloudformation
         uses: EndBug/add-and-commit@v7
@@ -48,10 +49,11 @@ jobs:
     steps:
     - name: Find PR
       uses: jwalton/gh-find-current-pr@v1
+      id: findPr
     - name: Notify
       uses: nobrayner/discord-webhook@v1
       with:
         github-token: ${{ secrets.github_token }}
         discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
-        title: 'Deployment of PR ${{PR}} {{STATUS}}'
+        title: "Deployment of PR ${{steps.findPr.outputs.number}} {{STATUS}}"
 
