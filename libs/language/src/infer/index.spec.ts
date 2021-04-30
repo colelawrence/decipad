@@ -12,6 +12,7 @@ import {
   date,
   given,
   tableDef,
+  table,
   funcDef,
   prop,
 } from '../utils';
@@ -255,6 +256,65 @@ describe('tables', () => {
 
     expect(inferStatement(makeContext(), table)).toEqual(expectedType);
   });
+
+  it('unifies table sizes', () => {
+    const table = tableDef('Table', {
+      Col1: l(1),
+      Col2: col(1, 2),
+    });
+
+    expect(inferStatement(makeContext(), table)).toEqual(
+      Type.buildTuple(
+        [Type.buildColumn(Type.Number, 2), Type.buildColumn(Type.Number, 2)],
+        ['Col1', 'Col2']
+      )
+    );
+  });
+
+  it('complains about incompatible table sizes', () => {
+    const table = tableDef('Table', {
+      Col1: col(1),
+      Col2: col(1, 2),
+    });
+
+    expect(inferStatement(makeContext(), table).errorCause).not.toBeNull();
+  });
+
+  it('Can be record oriented', () => {
+    const recordOriented = col(
+      table({ A: l(1), B: l('hi') }),
+      table({ A: l(2), B: l('hello') }),
+      table({ A: l(3), B: l('hiii') })
+    );
+    expect(inferStatement(nilCtx, recordOriented)).toEqual(
+      Type.buildColumn(
+        Type.buildTuple([Type.Number, Type.String], ['A', 'B']),
+        3
+      )
+    );
+  });
+
+  it('Supports single items tuples', () => {
+    const table = tableDef('Table', {
+      Col1: l('hi'),
+      Col2: l(2),
+    });
+
+    expect(inferStatement(makeContext(), table)).toEqual(
+      Type.buildTuple([Type.String, Type.Number], ['Col1', 'Col2'])
+    );
+  });
+
+  it('Supports previous in single item tuples', () => {
+    const table = tableDef('Table', {
+      Col1: c('previous', l('hi')),
+      Col2: l(2),
+    });
+
+    expect(inferStatement(makeContext(), table)).toEqual(
+      Type.buildTuple([Type.String, Type.Number], ['Col1', 'Col2'])
+    );
+  });
 });
 
 it('infers refs', () => {
@@ -319,11 +379,37 @@ describe('Given', () => {
         given('Table', c('+', prop('Table', 'Nums'), l(1)))
       )
     ).toEqual(Type.buildColumn(Type.Number, 4));
+
+    expect(
+      inferExpression(
+        scopeWithTable,
+        given('Table', table({ Col: prop('Table', 'Nums') }))
+      )
+    ).toEqual(Type.buildTuple([Type.buildColumn(Type.Number, 4)], ['Col']));
   });
 
-  it('Needs a column or table', () => {
+  it('Works with record-oriented tables', () => {
+    const scopeWithTable = makeContext([
+      [
+        'RTable',
+        Type.buildColumn(
+          Type.buildTuple([Type.Number, Type.String], ['Nums', 'Strs']),
+          3
+        ),
+      ],
+    ]);
+
+    expect(
+      inferExpression(
+        scopeWithTable,
+        given('RTable', c('+', prop('RTable', 'Nums'), l(1)))
+      )
+    ).toEqual(Type.buildColumn(Type.Number, 3));
+  });
+
+  it('Needs a column, table, or record-oriented table', () => {
     const scopeWithTupleAndNum = makeContext([
-      ['Tuple', Type.buildTuple([Type.Number, Type.String])],
+      ['Tuple', Type.buildTuple([Type.Number, Type.String], ['A', 'B'])],
       ['Num', Type.Number],
     ]);
 

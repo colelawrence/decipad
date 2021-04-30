@@ -9,18 +9,19 @@ export const findBadColumn = (table: Type) =>
 export const getLargestColumn = (tupleTypes: Type[]) => {
   const columnSizes = new Set([...tupleTypes].map((c) => c.columnSize));
   columnSizes.delete(null);
-  return [...columnSizes][0] ?? 1;
+  return [...columnSizes][0] ?? null;
 };
 
-export const unifyColumnSizes = (
-  statement: AST.TableDefinition,
-  table: Type
-): Type => {
+export const unifyColumnSizes = (node: AST.Table, table: Type): Type => {
   if (table.tupleNames == null || table.tupleTypes == null) {
     throw new Error('panic: expected tuple with names');
   }
 
   const columnSize = getLargestColumn(table.tupleTypes);
+  if (columnSize == null) {
+    // Non-column tuple
+    return table;
+  }
 
   const tupleTypes = [];
   const tupleNames = [];
@@ -39,7 +40,7 @@ export const unifyColumnSizes = (
   const unifiedTable = Type.buildTuple(tupleTypes, tupleNames);
 
   if (findBadColumn(unifiedTable) != null) {
-    return Type.Impossible.inNode(statement).withErrorCause(
+    return Type.Impossible.inNode(node).withErrorCause(
       'Incompatible column sizes'
     );
   } else {

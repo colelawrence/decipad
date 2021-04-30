@@ -206,6 +206,7 @@ factor       -> "-" _ expression                        {%
                                                         }
                                                         %}
 
+expression   -> table                                   {% id %}
 expression   -> given                                   {% id %}
 expression   -> conditional                             {% id %}
 expression   -> functionCall                            {% id %}

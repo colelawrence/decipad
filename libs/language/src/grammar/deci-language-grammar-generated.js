@@ -2091,36 +2091,11 @@
         },
       },
       {
-        name: 'tableDef',
-        symbols: [
-          'referenceName',
-          '_',
-          { literal: '=' },
-          '_',
-          'tableColumnList',
-        ],
-        postprocess: (d, l) => {
-          const defSymbol = {
-            type: 'tabledef',
-            args: [d[0].name],
-            location: d[0].location,
-            length: d[0].length,
-          };
-
-          return {
-            type: 'table-definition',
-            args: [defSymbol, d[4]],
-            location: l,
-            length: lengthOf(d),
-          };
-        },
-      },
-      {
-        name: 'tableColumnList',
+        name: 'table',
         symbols: [{ literal: '{' }, 'tableColDef', { literal: '}' }],
         postprocess: (d, l) => {
           return {
-            type: 'table-columns',
+            type: 'table',
             args: d[1].coldefs,
             location: l,
             length: lengthOf(d),
@@ -2405,6 +2380,7 @@
           };
         },
       },
+      { name: 'expression', symbols: ['table'], postprocess: id },
       { name: 'expression', symbols: ['given'], postprocess: id },
       { name: 'expression', symbols: ['conditional'], postprocess: id },
       { name: 'expression', symbols: ['functionCall'], postprocess: id },
@@ -2959,18 +2935,6 @@
       {
         name: 'statement',
         symbols: ['functionDef'],
-        postprocess: (d, l) => {
-          const stmt = d[0];
-          return {
-            ...stmt,
-            location: l,
-            length: stmt.length,
-          };
-        },
-      },
-      {
-        name: 'statement',
-        symbols: ['tableDef'],
         postprocess: (d, l) => {
           const stmt = d[0];
           return {

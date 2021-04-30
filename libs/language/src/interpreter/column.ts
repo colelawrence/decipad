@@ -47,11 +47,28 @@ export const evaluateRecursiveColumn = (
   }
 };
 
-export const getLargestColumn = (values: SimpleValue[]): number => {
-  const sizes: Set<number> = new Set(values.map((v) => v.rowCount ?? 0));
+export const evaluateTableColumn = (
+  realm: Realm,
+  column: AST.Node,
+  rowCount: number
+) => {
+  if (column.type === 'column') {
+    return evaluateRecursiveColumn(realm, column, rowCount);
+  } else if (isExpression(column)) {
+    return evaluate(realm, column);
+  } else {
+    throw new Error('panic: expected expression');
+  }
+};
+
+export const getLargestColumn = (
+  values: SimpleValue[],
+  minValue = 1
+): number => {
+  const sizes: Set<number> = new Set(values.map((v) => v.rowCount ?? minValue));
 
   // Make sure it can't be empty
-  sizes.add(0);
+  sizes.add(minValue);
 
   return Math.max(...sizes);
 };

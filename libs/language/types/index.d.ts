@@ -74,14 +74,7 @@ declare namespace AST {
     end: Pos;
   }
 
-  interface TableDef {
-    type: 'tabledef';
-    args: [tableName: string];
-    start: Pos;
-    end: Pos;
-  }
-
-  type Identifier = Ref | FuncRef | Def | FuncDef | ColDef | TableDef;
+  type Identifier = Ref | FuncRef | Def | FuncDef | ColDef;
 
   // Literal number, char, string etc
 
@@ -123,16 +116,9 @@ declare namespace AST {
     end: Pos;
   }
 
-  interface TableColumns {
-    type: 'table-columns';
+  interface Table {
+    type: 'table';
     args: (ColDef | Expression)[];
-    start: Pos;
-    end: Pos;
-  }
-
-  interface TableDefinition {
-    type: 'table-definition';
-    args: [TableDef, TableColumns];
     start: Pos;
     end: Pos;
   }
@@ -210,10 +196,12 @@ declare namespace AST {
     | Column
     | Range
     | Date
-    | Given;
-  type Statement = FunctionDefinition | Assign | TableDefinition | Expression;
+    | Given
+    | Table;
 
-  type Lists = FunctionArgumentNames | ArgList | TableColumns;
+  type Statement = FunctionDefinition | Assign | Expression;
+
+  type Lists = FunctionArgumentNames | ArgList;
 
   type Node = Block | Statement | Identifier | Lists;
 
@@ -223,15 +211,13 @@ declare namespace AST {
     funcref: FuncRef;
     funcdef: FuncDef;
     coldef: ColDef;
-    tabledef: TableDef;
     literal: Literal;
     'argument-list': ArgList;
     'function-call': FunctionCall;
     range: Range;
     date: Date;
     column: Column;
-    'table-columns': TableColumns;
-    'table-definition': TableDefinition;
+    table: Table;
     'property-access': PropertyAccess;
     assign: Assign;
     'argument-names': FunctionArgumentNames;

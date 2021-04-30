@@ -1,7 +1,12 @@
 // E2e tests
 
 import { Type } from './type';
-import { runCode, objectToTupleType, objectToTupleValue } from './testUtils';
+import {
+  runCode,
+  runCodeForVariables,
+  objectToTupleType,
+  objectToTupleValue,
+} from './testUtils';
 
 describe('basic code', () => {
   it('runs basic operations', async () => {
@@ -208,6 +213,43 @@ describe('Tables', () => {
       value: [[1, 2, 3]],
     });
   });
+
+  it('Supports simple tuples with one item', async () => {
+    expect(
+      await runCodeForVariables(
+        `
+        Table = {
+          Item1 = 1,
+          Item2 = 2
+        }
+
+        PropAccess = Table.Item2
+      `,
+        ['Table', 'PropAccess']
+      )
+    ).toMatchObject({
+      variables: {
+        Table: [1, 2],
+        PropAccess: 2,
+      },
+      types: {
+        Table: Type.buildTuple([Type.Number, Type.Number], ['Item1', 'Item2']),
+        PropAccess: Type.Number,
+      },
+    });
+  });
+
+  it('Are expressions', async () => {
+    const col1Type = Type.buildColumn(Type.Number, 3);
+    expect(
+      await runCode(`
+        [{ Col1 = [1, 2, 3] }]
+      `)
+    ).toMatchObject({
+      type: Type.buildColumn(Type.buildTuple([col1Type], ['Col1']), 1),
+      value: [[[[1, 2, 3]]]],
+    });
+  });
 });
 
 describe('Units', () => {
@@ -327,6 +369,78 @@ describe('Dates', () => {
           Days: [true, false, false],
         }),
       ],
+    });
+  });
+});
+
+describe('Given', () => {
+  it('Works on single dims and tables', async () => {
+    expect(
+      await runCode(`
+        Col = [1, 2, 3]
+        given Col: Col + 1
+      `)
+    ).toMatchObject({
+      value: [[2, 3, 4]],
+      type: {
+        columnSize: 3,
+        cellType: { type: 'number' },
+      },
+    });
+
+    expect(
+      await runCode(`
+        Col = {
+          Ayy = [1, 2, 3],
+          Bee = [1, 2, 3]
+        }
+        given Col: Col.Ayy - Col.Bee
+      `)
+    ).toMatchObject({
+      value: [[0, 0, 0]],
+      type: {
+        columnSize: 3,
+        cellType: { type: 'number' },
+      },
+    });
+
+    expect(
+      await runCode(`
+        Tbl = {
+          Ayy = [1, 2, 3],
+          Bee = [4, 5, 6]
+        }
+        given Tbl: { Ayy = Tbl.Ayy, Bee = Tbl.Bee }
+      `)
+    ).toMatchObject({
+      value: [
+        [
+          [1, 2, 3],
+          [4, 5, 6],
+        ],
+      ],
+      type: {
+        tupleNames: ['Ayy', 'Bee'],
+        tupleTypes: [{ columnSize: 3 }, { columnSize: 3 }],
+      },
+    });
+
+    expect(
+      await runCode(`
+        SidewaysTbl = [
+          {Ayy = 1, Bee = 0},
+          {Ayy = 1, Bee = 1},
+          {Ayy = 1, Bee = 2}
+        ]
+
+        given SidewaysTbl: SidewaysTbl.Ayy + SidewaysTbl.Bee
+      `)
+    ).toMatchObject({
+      value: [[1, 2, 3]],
+      type: {
+        columnSize: 3,
+        cellType: { type: 'number' },
+      },
     });
   });
 });

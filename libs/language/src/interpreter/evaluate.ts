@@ -13,7 +13,7 @@ import {
   Value,
   fromJS,
 } from './Value';
-import { getLargestColumn, evaluateRecursiveColumn } from './column';
+import { getLargestColumn, evaluateTableColumn } from './column';
 
 // Gets a single value from an expanded AST.
 export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
@@ -99,35 +99,30 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
 
       return Column.fromValues(values);
     }
-    case 'table-definition': {
-      const table: SimpleValue[] = [];
+    case 'table': {
       const colNames: string[] = [];
-      const tableName = getIdentifierString(node.args[0]);
-      const columns: AST.TableColumns = node.args[1];
+      const colValues: SimpleValue[] = [];
+      const columns = node.args;
 
-      realm.stack.withPush(() => {
+      return realm.stack.withPush(() => {
         // Pairwise iteration
-        for (let i = 0; i + 1 < columns.args.length; i += 2) {
-          const [def, column] = [columns.args[i], columns.args[i + 1]];
+        for (let i = 0; i + 1 < columns.length; i += 2) {
+          const [def, column] = [columns[i], columns[i + 1]];
           const colName = getIdentifierString(def as AST.ColDef);
-          const columnData = evaluateRecursiveColumn(
+          const columnData = evaluateTableColumn(
             realm,
-            column as AST.Expression,
-            getLargestColumn(table)
+            column,
+            getLargestColumn(colValues)
           );
 
           realm.stack.set(colName, columnData);
 
-          table.push(columnData);
+          colValues.push(columnData);
           colNames.push(colName);
         }
+
+        return Column.fromNamedValues(colValues, colNames);
       });
-
-      const tableVal = Column.fromNamedValues(table, colNames);
-
-      realm.stack.set(tableName, tableVal);
-
-      return tableVal;
     }
     case 'property-access': {
       const table = getDefined(
@@ -162,17 +157,32 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
 
           const columns = predicate.values as Column[];
           const colNames = predicate.valueNames;
-          const tableLength = getDefined(columns[0].values.length);
+          const length = getDefined(columns[0].values.length);
 
-          const mapped = new Array(tableLength).fill(null).map((_, index) => {
-            const row = Column.fromNamedValues(
-              columns.map((p) => p.values[index]),
-              colNames
-            );
-            realm.stack.set(predicateName, row);
+          const mapped = Array.from({ length })
+            .fill(null)
+            .map((_, index) => {
+              const thisRow = Column.fromNamedValues(
+                columns.map((p) => p.values[index]),
+                colNames
+              );
+              realm.stack.set(predicateName, thisRow);
 
-            return evaluate(realm, body);
-          });
+              return evaluate(realm, body);
+            });
+
+          if (mapped.some((m) => m instanceof Column && m.valueNames != null)) {
+            // A row was returned in the body -- re-column-orient the table!
+            const newColumns = columns.map((column) => {
+              const newColumn = Array.from({ length }).map(
+                (_, rowIndex) => column.values[rowIndex]
+              );
+
+              return Column.fromValues(newColumn);
+            });
+
+            return Column.fromNamedValues(newColumns, colNames);
+          }
 
           return Column.fromValues(mapped);
         } else {
@@ -236,11 +246,7 @@ export function evaluateTargets(
 
   for (const block of program) {
     for (const statement of block.args) {
-      let value: Value = evaluate(realm, statement);
-      if (statement.type === 'table-definition') {
-        const tableName = getIdentifierString(statement.args[0]);
-        value = getDefined(realm.stack.get(tableName));
-      }
+      const value: Value = evaluate(realm, statement);
 
       if (targetSet.has(statement)) {
         targetSet.set(statement, value);

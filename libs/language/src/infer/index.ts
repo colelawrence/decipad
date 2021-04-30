@@ -72,6 +72,37 @@ export const inferExpression = withErrorSource(
 
         return Type.buildListLike(cellTypes);
       }
+      case 'table': {
+        const columns = expr.args;
+
+        ctx.inTable = true;
+
+        const tableType = ctx.stack.withPush(() => {
+          const columnDefs = [];
+          const columnNames = [];
+
+          for (let i = 0; i + 1 < columns.length; i += 2) {
+            const name = getIdentifierString(columns[i] as AST.ColDef);
+            const type = inferExpression(ctx, columns[i + 1] as AST.Expression);
+
+            ctx.stack.set(name, type);
+
+            columnDefs.push(type);
+            columnNames.push(name);
+          }
+
+          return Type.buildTuple(columnDefs, columnNames);
+        });
+        ctx.inTable = false;
+
+        if (tableType.errorCause != null) {
+          return tableType;
+        } else {
+          const unified =
+            findBadColumn(tableType) ?? unifyColumnSizes(expr, tableType);
+          return unified;
+        }
+      }
       case 'property-access': {
         const tableName = getIdentifierString(expr.args[0]);
         const colName = expr.args[1];
@@ -119,6 +150,9 @@ export const inferExpression = withErrorSource(
           tupleNames,
         } = inferExpression(ctx, ref);
 
+        const largestColumn =
+          tupleTypes != null ? getLargestColumn(tupleTypes) : null;
+
         return ctx.stack.withPush(() => {
           if (cellType != null && columnSize != null) {
             ctx.stack.set(refName, cellType);
@@ -126,11 +160,28 @@ export const inferExpression = withErrorSource(
             const bodyResult = inferExpression(ctx, body);
 
             return Type.buildColumn(bodyResult, columnSize);
-          } else if (tupleTypes != null && tupleNames != null) {
+          } else if (
+            tupleTypes != null &&
+            tupleNames != null &&
+            largestColumn != null
+          ) {
             const rowTypes = tupleTypes.map((t) => t.reduced());
             ctx.stack.set(refName, Type.buildTuple(rowTypes, tupleNames));
 
-            return Type.buildColumn(Type.Number, getLargestColumn(tupleTypes));
+            const bodyType = inferExpression(ctx, body);
+
+            if (bodyType.tupleTypes != null && bodyType.tupleNames != null) {
+              // Returned a row -- rebuild column-oriented table
+              return Type.buildTuple(
+                bodyType.tupleTypes.map((t) =>
+                  Type.buildColumn(t, largestColumn)
+                ),
+                bodyType.tupleNames
+              );
+            } else {
+              // Returned a number or something else.
+              return Type.buildColumn(bodyType, largestColumn);
+            }
           } else {
             return Type.Impossible.withErrorCause('Column or table expected');
           }
@@ -198,42 +249,6 @@ export const inferStatement = withErrorSource(
         ctx.functionDefinitions.set(fName, statement);
 
         return Type.FunctionPlaceholder;
-      }
-      case 'table-definition': {
-        const tName = getIdentifierString(statement.args[0]);
-        const table: AST.TableColumns = statement.args[1];
-
-        ctx.inTable = true;
-
-        const tableType = ctx.stack.withPush(() => {
-          const columnDefs = [];
-          const columnNames = [];
-
-          for (let i = 0; i + 1 < table.args.length; i += 2) {
-            const name = getIdentifierString(table.args[i] as AST.ColDef);
-            const type = inferExpression(
-              ctx,
-              table.args[i + 1] as AST.Expression
-            );
-
-            ctx.stack.set(name, type);
-
-            columnDefs.push(type);
-            columnNames.push(name);
-          }
-
-          return Type.buildTuple(columnDefs, columnNames);
-        });
-        ctx.inTable = false;
-
-        if (tableType.errorCause != null) {
-          return tableType;
-        } else {
-          const unified =
-            findBadColumn(tableType) ?? unifyColumnSizes(statement, tableType);
-          ctx.stack.set(tName, unified);
-          return unified;
-        }
       }
       default: {
         return inferExpression(ctx, statement);

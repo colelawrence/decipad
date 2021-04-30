@@ -1,6 +1,7 @@
 import { parse } from './parser';
 import { run } from './interpreter';
 import { inferTargetStatement, inferProgram } from './infer';
+import { zip } from './utils';
 import { Type } from './type';
 
 const parseOneBlock = (source: string): AST.Block[] => {
@@ -43,7 +44,10 @@ export const runCodeForVariables = async (
 
   const variables = await run(program, wantedVariables);
 
-  return { types, variables };
+  return {
+    types,
+    variables: Object.fromEntries(zip(wantedVariables, variables)),
+  };
 };
 
 export const objectToTupleType = (obj: Record<string, Type>) => {

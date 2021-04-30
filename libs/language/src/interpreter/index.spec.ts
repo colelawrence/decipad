@@ -156,55 +156,69 @@ describe('dates', () => {
   });
 });
 
-it('can evaluate tables', async () => {
-  expect(
-    await runOne(
-      tableDef('Table', {
-        Col1: col(1, 2, 3),
-        Col2: l(2),
-        Col3: c('>', n('ref', 'Col1'), n('ref', 'Col2')),
-      })
-    )
-  ).toEqual([[1, 2, 3], 2, [false, false, true]]);
+describe('Tables', () => {
+  it('can evaluate tables', async () => {
+    expect(
+      await runOne(
+        tableDef('Table', {
+          Col1: col(1, 2, 3),
+          Col2: l(2),
+          Col3: c('>', n('ref', 'Col1'), n('ref', 'Col2')),
+        })
+      )
+    ).toEqual([[1, 2, 3], 2, [false, false, true]]);
 
-  /*
-  TODO what's the design here?
-  expect(
-    await testGetTable(
-      tableDef('Table', {
-        Col1: l(1),
-        Col2: l(2),
-      })
-    )
-  ).toEqual({
-    Col1: [1],
-    Col2: [2],
+    expect(
+      await runOne(
+        tableDef('Table', {
+          Col1: l(1),
+          Col2: l(2),
+        })
+      )
+    ).toEqual([1, 2]);
+
+    expect(
+      await runOne(
+        tableDef('Table', {
+          Col1: col(1, 2, 3),
+          Col2: c('*', n('ref', 'Col1'), l(2)),
+        })
+      )
+    ).toEqual([
+      [1, 2, 3],
+      [2, 4, 6],
+    ]);
   });
-  */
 
-  expect(
-    await runOne(
+  it('Tables can have one item', async () => {
+    expect(
+      await runOne(
+        tableDef('Table', {
+          Col1: l(101),
+        })
+      )
+    ).toEqual([101]);
+
+    expect(
+      await runOne(
+        tableDef('Table', {
+          Col1: c('previous', l(101)),
+        })
+      )
+    ).toEqual([101]);
+  });
+
+  it('can get a column from a table', async () => {
+    const block = n(
+      'block',
       tableDef('Table', {
-        Col1: col(1, 2, 3),
-        Col2: c('*', n('ref', 'Col1'), l(2)),
-      })
-    )
-  ).toEqual([
-    [1, 2, 3],
-    [2, 4, 6],
-  ]);
-});
+        Col: col('hi', 'there'),
+      }),
+      prop('Table', 'Col')
+    );
 
-it('can get a column from a table', async () => {
-  const block = n(
-    'block',
-    tableDef('Table', {
-      Col: col('hi', 'there'),
-    }),
-    prop('Table', 'Col')
-  );
-
-  expect(await run([block], [0])).toEqual([['hi', 'there']]);
+    expect(await run([block], [0])).toEqual([['hi', 'there']]);
+  });
 });
 
 describe('higher dimensions', () => {

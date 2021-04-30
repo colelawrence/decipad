@@ -7,7 +7,7 @@ const typesWithArgs = new Set([
   'argument-names',
   'function-definition',
   'block',
-  'table-definition',
+  'table',
   'table-columns',
   'given',
 ]);

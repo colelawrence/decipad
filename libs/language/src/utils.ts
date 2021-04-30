@@ -55,17 +55,21 @@ export function range(
   return n('range', startExpr, endExpr);
 }
 
+export function table(items: Record<string, AST.Expression>): AST.Table {
+  const tableCols = [];
+  for (const [key, value] of Object.entries(items)) {
+    tableCols.push(n('coldef', key));
+    tableCols.push(value);
+  }
+
+  return n('table', ...tableCols);
+}
+
 export function tableDef(
   name: string,
   columns: Record<string, AST.Expression>
-): AST.TableDefinition {
-  const tableCols: AST.TableColumns = n('table-columns');
-  for (const [key, value] of Object.entries(columns)) {
-    tableCols.args.push(n('coldef', key));
-    tableCols.args.push(value);
-  }
-
-  return n('table-definition', n('tabledef', name), tableCols);
+): AST.Assign {
+  return n('assign', n('def', name), table(columns));
 }
 
 export function c(fName: string, ...args: AST.Expression[]) {
@@ -124,6 +128,7 @@ const expressionTypesSet = new Set([
   'property-access',
   'literal',
   'column',
+  'table',
   'range',
   'date',
   'given',

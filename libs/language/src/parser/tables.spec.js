@@ -5,10 +5,10 @@ runTests({
     source: ' Table = { } ',
     ast: [
       {
-        type: 'table-definition',
+        type: 'assign',
         args: [
           {
-            type: 'tabledef',
+            type: 'def',
             args: ['Table'],
             start: {
               char: 1,
@@ -22,7 +22,7 @@ runTests({
             },
           },
           {
-            type: 'table-columns',
+            type: 'table',
             args: [],
             start: {
               char: 9,
@@ -54,10 +54,10 @@ runTests({
     source: ' Table = { abc } ',
     ast: [
       {
-        type: 'table-definition',
+        type: 'assign',
         args: [
           {
-            type: 'tabledef',
+            type: 'def',
             args: ['Table'],
             start: {
               char: 1,
@@ -71,7 +71,7 @@ runTests({
             },
           },
           {
-            type: 'table-columns',
+            type: 'table',
             args: [
               {
                 type: 'coldef',
@@ -132,10 +132,10 @@ runTests({
     source: ' Table = { abc  ,  def,   ghi} ',
     ast: [
       {
-        type: 'table-definition',
+        type: 'assign',
         args: [
           {
-            type: 'tabledef',
+            type: 'def',
             args: ['Table'],
             start: {
               char: 1,
@@ -149,7 +149,7 @@ runTests({
             },
           },
           {
-            type: 'table-columns',
+            type: 'table',
             args: [
               {
                 type: 'coldef',
@@ -266,10 +266,10 @@ runTests({
     source: ' Table = { abc \n  def    \n   ghi \n } ',
     ast: [
       {
-        type: 'table-definition',
+        type: 'assign',
         args: [
           {
-            type: 'tabledef',
+            type: 'def',
             args: ['Table'],
             start: {
               char: 1,
@@ -283,7 +283,7 @@ runTests({
             },
           },
           {
-            type: 'table-columns',
+            type: 'table',
             args: [
               {
                 type: 'coldef',
@@ -400,10 +400,10 @@ runTests({
     source: ' Table = { abc = [ 1 , 2 ]  }',
     ast: [
       {
-        type: 'table-definition',
+        type: 'assign',
         args: [
           {
-            type: 'tabledef',
+            type: 'def',
             args: ['Table'],
             start: {
               char: 1,
@@ -417,7 +417,7 @@ runTests({
             },
           },
           {
-            type: 'table-columns',
+            type: 'table',
             args: [
               {
                 type: 'coldef',
@@ -493,10 +493,10 @@ runTests({
     source: ' Table = { \n abc \n def = [ 1 , 2 ] \n  }',
     ast: [
       {
-        type: 'table-definition',
+        type: 'assign',
         args: [
           {
-            type: 'tabledef',
+            type: 'def',
             args: ['Table'],
             start: {
               char: 1,
@@ -510,7 +510,7 @@ runTests({
             },
           },
           {
-            type: 'table-columns',
+            type: 'table',
             args: [
               {
                 type: 'coldef',
