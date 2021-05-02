@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: Exported by architect/package@6.2.0 on 2021-04-30T16:46:20.850Z
+Description: Exported by architect/package@6.2.0 on 2021-05-02T07:59:09.248Z
 Resources:
   HTTP:
     Type: AWS::Serverless::HttpApi
@@ -317,7 +317,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -335,7 +335,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/f1acb53bc8173797b9c8d72bb4c0bf32
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/70aed0e44ec2d844f680d9ab9b75f33b
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -360,7 +360,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -378,7 +378,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/643f478f19f6567cfa352acae61bcfab
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/061046b3a28ffcf2766656e86d26a7e1
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -403,7 +403,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -421,7 +421,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/13a01c37163c7fb5c498b23e43a30f0e
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/dc218faaa786fe4bf9a8b35982bfb3c5
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -446,7 +446,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -464,7 +464,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/ddfa0922e8372374a682e6ebe049451d
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/dfad0f835454f1ba313ccf5da5f80614
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -489,7 +489,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -507,7 +507,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/ee31c17f3c24f4d64b7fe92cf221634f
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/58eef2f07e90a3391cc72c0581582520
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -532,7 +532,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -550,7 +550,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/d6fcaa3e4e8dfefb690a8e0ff7a8c891
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/803a0e716c1b5cdc1b46fcb93e73eb98
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -575,7 +575,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -593,7 +593,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/2be2fddcd32ca39953c20bce35218c3f
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/00ac93686edf2b514e9ec206cbc32859
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -618,7 +618,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -636,7 +636,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/3dd88b55248c8a4fa801059b348bcc66
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/1752aed66b944abef437acd7469e49d3
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -661,7 +661,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -679,7 +679,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/6d7a86bd2e80612764c6c279126424dc
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/ffb3d436f7c0ca5d98f6f86e72058010
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -704,7 +704,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -722,7 +722,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/c9282afd18d0d0faa0e42f25f645325b
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/cdcbc8666fd08f66bef079a6d36622d9
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -747,7 +747,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -765,7 +765,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/8438d84b501c79e13645516ad902f448
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/a811f52cbeccd39788222ce89a35cd10
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -790,7 +790,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -808,7 +808,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/78824378613a44af7ae332001a36be5f
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/0e91a4b193674819fde2cfbc40c7f1ae
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -833,7 +833,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -851,7 +851,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/2a090862dba6de6af30e4f8a8976af20
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/cc9ec9973b1870b44a19a7d6bbd38587
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -876,7 +876,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -894,7 +894,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/9b442f99e0a17d72e001a3a85eb532b4
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/ff8d4209470059ed2b1c4b23f9d7cbfb
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -919,7 +919,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -937,7 +937,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/c8b039653e6d018170c015a737f254d4
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/54d32d24bce87d8ac502b96346e002a8
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -962,7 +962,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -980,7 +980,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/0cea88e69f04cb52cab0f82cbeddd4b8
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/1e87a698bfeef9b707ad5435e3b865f2
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -1005,7 +1005,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -1023,7 +1023,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/5323a0f500f5350bfcf0294f26e9ac7b
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/be1f592a5eceb05d86d948147805e49e
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -1048,7 +1048,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -1066,7 +1066,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/925a4d3bdb5f587e72e3fbcd07812605
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/937e178a7df3ab830d9e28743b199eaa
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -1091,7 +1091,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -1109,7 +1109,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/91b26225aa9e8bad644201c33bc3f17c
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/e1482a223b4cd57f6c5d234b31fc2323
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -1134,7 +1134,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -1152,7 +1152,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/09ba08ae6564268cc175b37f947bdc15
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/cb7674046c82485c65566378409ca7b4
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -1177,7 +1177,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -1195,7 +1195,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/1a177235ef8a564a87ba2636a83fb643
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/0745938b47a60b62941840e916f9a01d
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -1220,7 +1220,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -1238,7 +1238,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/9fd3c6d60a0ada9b952035d51147ab5c
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/69f01e74320563a0c54673c6297cb260
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -1263,7 +1263,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -1281,7 +1281,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/7be44a2ce6245d1e7d22abf9ca04b60c
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/eb0a6901e4d31e85d05c5c5a4f0669e6
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -1306,7 +1306,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -1324,7 +1324,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/d73d95bb14584b4d409eb9d2764f10aa
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/52e5badb63fefee44d2814d3bc96f0fe
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -1349,7 +1349,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -1367,7 +1367,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/a5918f47088627af009540fdca370b96
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/150abe868a655a96cd1d7f69ee81213a
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -1392,7 +1392,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -1410,7 +1410,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/4c81969fef8c18c2c076aa10e2a23e95
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/5b88f6ac6e01233e876004d966c020ed
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -1435,7 +1435,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -1453,7 +1453,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/55649b73f97c3995ee5192a43fe1c85c
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/326159a7887e7367194f9ae306fde44f
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -1478,7 +1478,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -1496,7 +1496,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/8eecb300eed61631075459b53d984a93
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/0d38eabde7c8d3396ca0b264dc0319bf
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -1521,7 +1521,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -1539,7 +1539,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/c153647dd09b1341e761f423d38521d4
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/ad4a328b3bf829400d0afe2300e15229
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -1564,7 +1564,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -1729,7 +1729,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/178cbb1ac267bff095ba14b7cdb18e1b
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/4e982621ce527d8ba82abeaeac38425b
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -1754,7 +1754,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -1797,7 +1797,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/fb6b1f9ed9f47dbc75d8487cee7ed745
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/08df1dafd6920ae8f17dfabe59de0d95
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -1822,7 +1822,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}
@@ -1865,7 +1865,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://decipad-backend-cfn-deployments-11e42/a7e4b20e41a43264e4375a04f7ad143e
+      CodeUri: s3://decipad-backend-cfn-deployments-11e42/b00656268f03bcaf0e87ef105c93f6d2
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -1890,7 +1890,7 @@ Resources:
           GITHUB_CLIENT_SECRET: a278e99b6111d1b0df0d24fc146794be22f81d00
           JWT_SECRET: catwalklrjqwr92309endasjkdn023eqhjdskajhaskj
           JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
-          NEXTAUTH_URL: https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth
+          NEXTAUTH_URL: https://dev.decipad.com/api/auth
       Role:
         Fn::Sub:
         - arn:aws:iam::${AWS::AccountId}:role/${roleName}

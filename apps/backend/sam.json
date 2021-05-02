@@ -1,7 +1,7 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
   "Transform": "AWS::Serverless-2016-10-31",
-  "Description": "Exported by architect/package@6.2.0 on 2021-04-30T16:46:20.850Z",
+  "Description": "Exported by architect/package@6.2.0 on 2021-05-02T07:59:09.248Z",
   "Resources": {
     "HTTP": {
       "Type": "AWS::Serverless::HttpApi",
@@ -420,7 +420,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/node_modules/@architect/asap/dist",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/node_modules/@architect/asap/dist",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -450,7 +450,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -481,7 +481,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/post-test",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/post-test",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -511,7 +511,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -542,7 +542,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-test-000id",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-test-000id",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -572,7 +572,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -603,7 +603,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-graphql",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-graphql",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -633,7 +633,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -664,7 +664,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/post-graphql",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/post-graphql",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -694,7 +694,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -725,7 +725,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-api-auth-signin",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-api-auth-signin",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -755,7 +755,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -786,7 +786,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/post-api-auth-signin-000provider",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/post-api-auth-signin-000provider",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -816,7 +816,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -847,7 +847,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-api-auth-callback-000provider",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-api-auth-callback-000provider",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -877,7 +877,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -908,7 +908,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-api-auth-signout",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-api-auth-signout",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -938,7 +938,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -969,7 +969,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/post-api-auth-signout",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/post-api-auth-signout",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -999,7 +999,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -1030,7 +1030,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-api-auth-session",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-api-auth-session",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1060,7 +1060,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -1091,7 +1091,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-api-auth-csrf",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-api-auth-csrf",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1121,7 +1121,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -1152,7 +1152,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-api-auth-providers",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-api-auth-providers",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1182,7 +1182,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -1213,7 +1213,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-api-auth-error",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-api-auth-error",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1243,7 +1243,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -1274,7 +1274,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-api-auth-token",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-api-auth-token",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1304,7 +1304,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -1335,7 +1335,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-api-workspaces",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-api-workspaces",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1365,7 +1365,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -1396,7 +1396,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/put-api-workspaces",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/put-api-workspaces",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1426,7 +1426,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -1457,7 +1457,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/put-api-workspaces-changes",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/put-api-workspaces-changes",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1487,7 +1487,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -1518,7 +1518,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-api-workspaces-000workspaceid",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-api-workspaces-000workspaceid",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1548,7 +1548,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -1579,7 +1579,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/put-api-workspaces-000workspaceid",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/put-api-workspaces-000workspaceid",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1609,7 +1609,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -1640,7 +1640,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/put-api-workspaces-000workspaceid-changes",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/put-api-workspaces-000workspaceid-changes",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1670,7 +1670,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -1701,7 +1701,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-api-workspaces-000workspaceid-pads",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-api-workspaces-000workspaceid-pads",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1731,7 +1731,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -1762,7 +1762,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/put-api-workspaces-000workspaceid-pads",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/put-api-workspaces-000workspaceid-pads",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1792,7 +1792,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -1823,7 +1823,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/put-api-workspaces-000workspaceid-pads-changes",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/put-api-workspaces-000workspaceid-pads-changes",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1853,7 +1853,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -1884,7 +1884,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-api-pads-000padid",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-api-pads-000padid",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1914,7 +1914,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -1945,7 +1945,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/put-api-pads-000padid",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/put-api-pads-000padid",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -1975,7 +1975,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -2006,7 +2006,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/put-api-pads-000padid-changes",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/put-api-pads-000padid-changes",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -2036,7 +2036,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -2067,7 +2067,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/get-api-pads-000padid-content",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/get-api-pads-000padid-content",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -2097,7 +2097,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -2128,7 +2128,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/put-api-pads-000padid-content",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/put-api-pads-000padid-content",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -2158,7 +2158,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -2189,7 +2189,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/http/put-api-pads-000padid-content-changes",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/http/put-api-pads-000padid-content-changes",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -2219,7 +2219,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -2506,7 +2506,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/ws/connect",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/ws/connect",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -2536,7 +2536,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -2606,7 +2606,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/ws/default",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/ws/default",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -2636,7 +2636,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
@@ -2706,7 +2706,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.handler",
-        "CodeUri": "/home/runner/work/decipad/decipad/apps/backend/src/ws/disconnect",
+        "CodeUri": "/Users/pedroteixeira/projects/deci/decipad/apps/backend/src/ws/disconnect",
         "Runtime": "nodejs12.x",
         "MemorySize": 1152,
         "Timeout": 5,
@@ -2736,7 +2736,7 @@
             "GITHUB_CLIENT_SECRET": "a278e99b6111d1b0df0d24fc146794be22f81d00",
             "JWT_SECRET": "catwalklrjqwr92309endasjkdn023eqhjdskajhaskj",
             "JWT_SIGNING_PRIVATE_KEY": "{\"kty\":\"oct\",\"kid\":\"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM\",\"alg\":\"HS512\",\"k\":\"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg\"}",
-            "NEXTAUTH_URL": "https://pwjc27kjr1.execute-api.eu-west-2.amazonaws.com/api/auth"
+            "NEXTAUTH_URL": "https://dev.decipad.com/api/auth"
           }
         },
         "Role": {
