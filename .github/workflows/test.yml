@@ -52,12 +52,16 @@ jobs:
     - run: npm run typecheck
     - run: npm run test:coverage
 
+    - run: |
+        echo "Omg the build failed? I wonder if it was on purpose!"
+        exit 1
+
   notify:
     name: Discord Notification
     runs-on: ubuntu-latest
     needs: # make sure the notification is sent AFTER the jobs you want included have completed
       - build
-    if: ${{ failure() }} # You always want to be notified: success, failure, or cancelled
+    if: ${{ failure() }}
 
     steps:
     - name: Notify

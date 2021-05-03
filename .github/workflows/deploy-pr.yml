@@ -63,6 +63,7 @@ jobs:
           scripts/push-sam.sh
 
       - name: Notify
+        if: ${{ failure() }}
         uses: nobrayner/discord-webhook@v1
         with:
           github-token: ${{ github.token }}

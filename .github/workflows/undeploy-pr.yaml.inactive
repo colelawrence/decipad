@@ -45,6 +45,7 @@ jobs:
           message: 'new cloudformation after destroy'
 
       - name: Notify
+        if: ${{ failure() }}
         uses: nobrayner/discord-webhook@v1
         with:
           github-token: ${{ github.token }}
