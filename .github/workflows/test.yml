@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: # make sure the notification is sent AFTER the jobs you want included have completed
       - build
-    if: ${{ failure() }} # You always want to be notified: success, failure, or cancelled
+    if: ${{ failure() }}
 
     steps:
     - name: Notify
