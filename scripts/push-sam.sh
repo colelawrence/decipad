@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -exuo pipefail
+set -euo pipefail
 
-aws s3 cp apps/backend/sam.yaml "${SAM_LOCATION}/"
-aws s3 cp apps/backend/sam.json "${SAM_LOCATION}/"
+aws s3 cp --no-progress apps/backend/sam.yaml "${SAM_LOCATION}/"
+aws s3 cp --no-progress apps/backend/sam.json "${SAM_LOCATION}/"

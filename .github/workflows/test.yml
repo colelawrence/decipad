@@ -52,10 +52,6 @@ jobs:
     - run: npm run typecheck
     - run: npm run test:coverage
 
-    - run: |
-        echo "Omg the build failed? I wonder if it was on purpose!"
-        exit 1
-
   notify:
     name: Discord Notification
     runs-on: ubuntu-latest
