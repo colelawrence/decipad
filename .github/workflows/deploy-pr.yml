@@ -55,14 +55,12 @@ jobs:
       - name: Deploy
         env:
           PR: ${{ github.event.pull_request.number }}
-        run: "npm run deploy:pr -- pr$PR"
+        run: |
+          export SAM_LOCATION="s3://decipad-backend-sam/pr${PR}.decipad.com"
 
-      - name: Commit Cloudformation
-        uses: EndBug/add-and-commit@v7
-        with:
-          branch: ${{ github.event.pull_request.head.ref }}
-          add: 'apps/backend/sam.*'
-          message: 'new cloudformation after deploy'
+          scripts/pull-sam.sh
+          npm run deploy:pr -- "pr${PR}"
+          scripts/push-sam.sh
 
       - name: Notify
         uses: nobrayner/discord-webhook@v1

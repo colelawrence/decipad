@@ -50,13 +50,12 @@ jobs:
             nx-node-modules-cache-
 
       - name: Deploy
-        run: npm run deploy
+        run: |
+          export SAM_LOCATION="s3://decipad-backend-sam/dev.decipad.com"
 
-      - name: Commit Cloudformation
-        uses: EndBug/add-and-commit@v7
-        with:
-          add: 'apps/backend/sam.*'
-          message: 'new cloudformation after deploy'
+          scripts/pull-sam.sh
+          npm run deploy
+          scripts/push-sam.sh
 
   notify:
     name: Discord Notification
