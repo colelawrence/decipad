@@ -4,7 +4,7 @@ const toPath = (_path) => path.join(process.cwd(), _path);
 
 module.exports = {
   stories: [],
-  addons: ['@storybook/addon-knobs/register', '@storybook/addon-actions'],
+  addons: ['@storybook/addon-essentials'],
   typescript: {
     reactDocgen: false,
   },

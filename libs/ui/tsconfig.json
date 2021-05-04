@@ -8,5 +8,21 @@
     "../../node_modules/@nrwl/react/typings/image.d.ts"
   ],
   "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"],
-  "references": [{ "path": "../language" }, { "path": "../runtime" }]
+  "references": [
+    {
+      "path": "../language"
+    },
+    {
+      "path": "../runtime"
+    },
+    {
+      "path": "./.storybook/tsconfig.json"
+    }
+  ],
+  "exclude": [
+    "**/*.stories.ts",
+    "**/*.stories.js",
+    "**/*.stories.jsx",
+    "**/*.stories.tsx"
+  ]
 }

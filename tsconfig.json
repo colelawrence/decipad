@@ -3,6 +3,7 @@
     "module": "commonjs",
     "skipLibCheck": true,
     "emitDeclarationOnly": true,
+    "composite": true,
     "esModuleInterop": true
   },
   "include": [],
