@@ -5,5 +5,5 @@ const NextAuthJWT = require('next-auth/jwt');
 
 exports.handler = handle(async (event) => {
   const id = uri('workspaces', event.pathParameters.workspaceid);
-  return await syncGet(id, { NextAuthJWT });
+  return await syncGet(id, event, { NextAuthJWT });
 });

@@ -1,7 +1,7 @@
 const tables = require('../tables');
 const auth = require('../auth');
 
-module.exports = async function get(id, { NextAuthJWT }) {
+module.exports = async function get(id, event, { NextAuthJWT }) {
   const { user } = await auth(event, { NextAuthJWT });
 
   if (!user) {
