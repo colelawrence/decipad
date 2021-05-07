@@ -17,7 +17,10 @@ async function auth(userId = 'test user id 1') {
   const encodedToken = await encodeJWT({
     token,
     secret: process.env.JWT_SECRET,
-    signingKey: process.env.JWT_SIGNING_PRIVATE_KEY,
+    signingKey: Buffer.from(
+      process.env.JWT_SIGNING_PRIVATE_KEY,
+      'base64'
+    ).toString(),
   });
 
   return { token: encodedToken };

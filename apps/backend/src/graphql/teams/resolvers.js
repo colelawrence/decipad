@@ -104,8 +104,6 @@ const resolvers = {
           : process.env.DECI_APP_URL_BASE
       }/api/invites/${newInvite.id}/accept`;
 
-      console.log('inviteAcceptLink:', inviteAcceptLink);
-
       if (!inTesting) {
         await arc.queues.publish({
           name: 'sendemail',
