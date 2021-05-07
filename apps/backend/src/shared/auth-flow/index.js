@@ -1,6 +1,6 @@
 'use strict';
 
-const arc = require('@architect/functions');
+const tables = require('../tables');
 const GitHub = require('./providers/github');
 const { nanoid } = require('nanoid');
 const adaptReqRes = require('./adapt-req-res');
@@ -8,6 +8,14 @@ const createDbAdapter = require('./db-adapter');
 const jwt = require('./jwt');
 
 module.exports = function createAuthHandler({ NextAuth, NextAuthJWT }) {
+  if (typeof NextAuthJWT.encode !== 'function') {
+    NextAuthJWT = NextAuthJWT.default;
+  }
+
+  if (typeof NextAuth !== 'function') {
+    NextAuth = NextAuth.default;
+  }
+
   const providers = [
     GitHub({
       clientId: process.env.GITHUB_CLIENT_ID,
@@ -29,12 +37,12 @@ module.exports = function createAuthHandler({ NextAuth, NextAuthJWT }) {
       };
 
       let existingUser;
-      const tables = await arc.tables();
+      const data = await tables();
       const userKeyId = `${account.provider}:${githubUser.id}`;
-      const userKey = await tables.userkeys.get({ id: userKeyId });
+      const userKey = await data.userkeys.get({ id: userKeyId });
 
       if (userKey) {
-        existingUser = await tables.users.get({ id: userKey.user_id });
+        existingUser = await data.users.get({ id: userKey.user_id });
       }
       if (!existingUser) {
         // If the user does not exist, we just create a new one.
@@ -49,22 +57,24 @@ module.exports = function createAuthHandler({ NextAuth, NextAuthJWT }) {
           email: githubUser.email,
         };
 
-        await tables.users.put(newUser);
+        await data.users.put(newUser);
 
         const newUserKey = {
           id: `${account.provider}:${githubUser.id}`,
           user_id: newUser.id,
         };
 
-        await tables.userkeys.put(newUserKey);
+        await data.userkeys.put(newUserKey);
 
         if (githubUser.email) {
           const newEmailUserKey = {
-            id: `${githubUser.email}:${githubUser.email}`,
+            id: `email:${githubUser.email}`,
             user_id: newUser.id,
           };
 
-          await tables.userkeys.put(newEmailUserKey);
+          console.log('INSERTING NEW EMAIL', newEmailUserKey);
+
+          await data.userkeys.put(newEmailUserKey);
         }
 
         existingUser = newUser;
@@ -88,8 +98,8 @@ module.exports = function createAuthHandler({ NextAuth, NextAuthJWT }) {
 
   callbacks.session = async function session(session, token) {
     session.accessToken = token.accessToken;
-    const tables = await arc.tables();
-    const user = await tables.users.get({ id: token.accessToken });
+    const data = await tables();
+    const user = await data.users.get({ id: token.accessToken });
 
     if (user) {
       Object.assign(session.user, {

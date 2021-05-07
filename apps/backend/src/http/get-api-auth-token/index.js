@@ -1,43 +1,32 @@
 'use strict';
 
-const arc = require('@architect/functions');
-let jwt = require('next-auth/jwt');
-if (typeof jwt.decode !== 'function') {
-  jwt = jwt.default;
-}
-const { decode: decodeJWT } = jwt;
-const { parse: parseCookie } = require('simple-cookie');
-const jwtConf = require('@architect/shared/auth/jwt')({ NextAuthJWT: jwt });
+const auth = require('@architect/shared/auth');
 const handle = require('@architect/shared/handle');
+let NextAuthJWT = require('next-auth/jwt');
+if (typeof NextAuthJWT.encode !== 'function') {
+  NextAuthJWT = NextAuthJWT.default;
+}
+const jwtConf = require('@architect/shared/auth-flow/jwt')({ NextAuthJWT });
 
-const TOKEN_COOKIE_NAMES = [
-  'next-auth.session-token',
-  '__Secure-next-auth.session-token',
-];
+const purposes = {
+  pubsub: {
+    maxAge: 5 * 60, // 5 minutes
+  },
+};
 
 exports.handler = handle(async (event) => {
-  const cookies = parseCookies(event.cookies);
-  const token =
-    cookies[TOKEN_COOKIE_NAMES[0]] || cookies[TOKEN_COOKIE_NAMES[1]];
-  let user = null;
-  if (token) {
-    try {
-      const decoded = await decodeJWT({
-        ...jwtConf,
-        token,
-      });
-      if (decoded.accessToken) {
-        const tables = await arc.tables();
-        user = await tables.users.get({ id: decoded.accessToken });
-      }
-    } catch (err) {
-      console.error(err.message);
-      // do nothing
-    }
-  }
+  const { user } = await auth(event, { NextAuthJWT });
 
   if (user) {
-    return token;
+    const purposeName = event.queryStringParameters.for;
+    const purpose = purposes[purposeName];
+    if (!purpose) {
+      return {
+        statusCode: 406,
+        body: 'No such purpose',
+      };
+    }
+    return await generateToken(user, purpose);
   } else {
     return {
       statusCode: 403,
@@ -45,10 +34,10 @@ exports.handler = handle(async (event) => {
   }
 });
 
-function parseCookies(cookies = []) {
-  return cookies.reduce((cookies, cookie) => {
-    const { name, value } = parseCookie(cookie);
-    cookies[name] = decodeURIComponent(value);
-    return cookies;
-  }, {});
+async function generateToken(user, options) {
+  return await NextAuthJWT.encode({
+    ...jwtConf,
+    token: { accessToken: user.id },
+    ...options,
+  });
 }

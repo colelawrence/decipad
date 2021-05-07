@@ -184,7 +184,10 @@ function apiServer(deciWebsocketServer: DeciWebsocketServer) {
     await randomSmallTimeout();
 
     let resp;
-    if (req.method === 'GET' && req.url === fetchPrefix + '/auth/token') {
+    if (
+      req.method === 'GET' &&
+      req.url === fetchPrefix + '/auth/token?for=pubsub'
+    ) {
       return {
         status: 200,
         body: 'thisisagreattokenjustforyou',

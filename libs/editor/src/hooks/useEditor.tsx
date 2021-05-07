@@ -57,9 +57,6 @@ export const useEditor = ({ workspaceId, padId, withPlugins, setValue }) => {
     (editor: Editor) => {
       const ops = editor.operations;
       if (ops && ops.length) {
-        for (const op of ops) {
-          console.log(op);
-        }
         padEditor.sendSlateOperations(ops);
       }
 

@@ -54,6 +54,19 @@ jobs:
           export SAM_LOCATION="s3://decipad-backend-sam/dev.decipad.com"
 
           scripts/pull-sam.sh
+          cd apps/backend
+          ./node_modules/.bin/arc env NEXTAUTH_URL https://dev.decipad.com/api/auth
+          ./node_modules/.bin/arc env GITHUB_CLIENT_ID ${{secrets.DECI_GITHUB_CLIENT_ID}}
+          ./node_modules/.bin/arc env GITHUB_CLIENT_SECRET ${{secrets.DECI_GITHUB_CLIENT_SECRET}}
+          ./node_modules/.bin/arc env JWT_SECRET ${{secrets.JWT_SECRET}}
+          ./node_modules/.bin/arc env JWT_SIGNING_PRIVATE_KEY '${{secrets.JWT_SIGNING_PRIVATE_KEY}}'
+          ./node_modules/.bin/arc env DECI_SES_ACCESS_KEY_ID '${{secrets.DECI_SES_ACCESS_KEY_ID}}'
+          ./node_modules/.bin/arc env DECI_SES_SECRET_ACCESS_KEY '${{secrets.DECI_SES_SECRET_ACCESS_KEY}}'
+          ./node_modules/.bin/arc env DECI_INVITE_EXPIRATION_SECONDS '${{secrets.DECI_INVITE_EXPIRATION_SECONDS}}'
+          ./node_modules/.bin/arc env DECI_KEY_VALIDATION_EXPIRATION_SECONDS '${{secrets.DECI_KEY_VALIDATION_EXPIRATION_SECONDS}}'
+          ./node_modules/.bin/arc env DECI_FROM_EMAIL_ADDRESS '${{secrets.DECI_FROM_EMAIL_ADDRESS}}'
+          ./node_modules/.bin/arc env DECI_APP_URL_BASE https://dev.decipad.com
+          cd ../..
           npm run deploy
           scripts/push-sam.sh
 

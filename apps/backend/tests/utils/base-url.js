@@ -1,1 +1,1 @@
-module.exports = 'http://localhost:3333';
+export default () => `http://localhost:${process.env.PORT}`;

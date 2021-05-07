@@ -1,8 +1,18 @@
-const arc = require('@architect/functions');
+const tables = require('../tables');
+const auth = require('../auth');
 
-module.exports = async function get(id) {
-  const tables = await arc.tables();
-  let doc = await tables.syncdoc.get({ id });
+module.exports = async function get(id, { NextAuthJWT }) {
+  const { user } = await auth(event, { NextAuthJWT });
+
+  if (!user) {
+    return {
+      status: 403,
+      body: 'Forbidden',
+    };
+  }
+
+  const data = await tables();
+  let doc = await data.syncdoc.get({ id });
   if (!doc) {
     return null;
   }

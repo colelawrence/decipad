@@ -34,6 +34,7 @@ function pluginFunctions({ arc }) {
 }
 
 function start({ arc, inventory, services }, callback) {
+  console.log('inventiry:', JSON.stringify(inventory, null, '\t'));
   console.log('starting kafka-lite...');
   if (services.kafka) {
     throw new Error('kafka service already defined');

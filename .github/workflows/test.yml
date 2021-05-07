@@ -3,8 +3,8 @@ name: Run Tests
 on:
   push:
     branches: [ main ]
-#  pull_request:
-#    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
@@ -50,7 +50,14 @@ jobs:
 
     - run: npm run lint
     - run: npm run typecheck
-    - run: npm run test:coverage
+
+    - name: Run tests
+      run: npm run test:coverage
+      env:
+        JWT_SECRET: "23eqhjdskajhaskjcatwndasjkdn0alklrjqwr92309e"
+        JWT_SIGNING_PRIVATE_KEY: '{"kty":"oct","kid":"ZOZrs3wZ9G2ANQMc2H74fvZK9g50dBdFuCrECQwbznM","alg":"HS512","k":"JbdHYPsSYiiHDabJZTo1VUJd8HF56eCM_4LTbncw8Wg"}'
+        DECI_INVITE_EXPIRATION_SECONDS: "604800"
+        DECI_KEY_VALIDATION_EXPIRATION_SECONDS: "2592000"
 
   notify:
     name: Discord Notification

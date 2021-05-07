@@ -1,9 +1,9 @@
-const arc = require('@architect/functions');
+const tables = require('@architect/shared/tables');
 
 exports.handler = async function ws(event) {
-  const tables = await arc.tables();
+  const data = await tables();
 
-  const collabs = await tables.collabs.query({
+  const collabs = await data.collabs.query({
     IndexName: 'conn-index',
     KeyConditionExpression: 'conn = :conn',
     ExpressionAttributeValues: {
@@ -12,10 +12,10 @@ exports.handler = async function ws(event) {
   });
 
   for (const collab of collabs.Items) {
-    await tables.collabs.delete({ id: collab.id });
+    await data.collabs.delete({ id: collab.id });
   }
 
-  await tables.connections.delete({
+  await data.connections.delete({
     id: event.requestContext.connectionId,
   });
 

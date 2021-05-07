@@ -13,6 +13,9 @@
   "dependencies": {
     "@architect/architect": "^8.5.5",
     "@architect/functions": "^3.13.11",
+    "apollo-server-lambda": "^2.22.2",
+    "aws-sdk": "^2.712.0",
+    "lodash.merge": "^4.6.2",
     "nanoid": "^3.1.22",
     "next-auth": "^3.15.1",
     "simple-cookie": "^1.0.13"

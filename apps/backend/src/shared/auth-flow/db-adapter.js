@@ -1,10 +1,10 @@
 'use strict';
 
-const arc = require('@architect/functions');
+const tables = require('../tables');
 
 function createAdapter() {
   async function getAdapter(/*appOptions*/) {
-    const tables = await arc.tables();
+    const data = await tables();
 
     async function createUser(profile) {
       console.log('ADAPTER: createUser:', profile);
@@ -13,16 +13,16 @@ function createAdapter() {
 
     function getUser(id) {
       console.log('ADAPTER: getUser:', id);
-      return tables.users.get({ id });
+      return data.users.get({ id });
     }
 
     async function getUserByEmail(email) {
       console.log('ADAPTER: getUserByEmail:', email);
       const id = `email:${email}`;
-      const key = await tables.userkeys.get({ id });
+      const key = await data.userkeys.get({ id });
       let user;
       if (key) {
-        user = await tables.users.get({ id: key.user_id });
+        user = await data.users.get({ id: key.user_id });
       }
 
       return user;
@@ -33,12 +33,12 @@ function createAdapter() {
         providerId,
         providerAccountId,
       });
-      const userkey = await tables.userkeys.get({
+      const userkey = await data.userkeys.get({
         id: `${providerId}:${providerAccountId}`,
       });
       let user;
       if (userkey) {
-        user = await tables.users.get({ id: userkey.user_id });
+        user = await data.users.get({ id: userkey.user_id });
       }
 
       return user;

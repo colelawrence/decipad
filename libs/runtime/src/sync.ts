@@ -185,7 +185,7 @@ function randomReconnectTimeout() {
 }
 
 async function getAuthToken(): Promise<string> {
-  const resp = await fetch(fetchPrefix + '/api/auth/token');
+  const resp = await fetch(fetchPrefix + '/api/auth/token?for=pubsub');
   if (!resp.ok) {
     const message = `Failed fetching token from remote: ${await resp.text()}`;
     throw new Error(message);

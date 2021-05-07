@@ -1,9 +1,8 @@
 @app
+
 decipad-backend
 
 @http
-post /test
-get /test/:id
 
 get /graphql
 post /graphql
@@ -39,12 +38,14 @@ get /api/pads/:padid/content
 put /api/pads/:padid/content
 put /api/pads/:padid/content/changes
 
+get /api/invites/:inviteid/accept
+
+get /api/userkeyvalidations/:userkeyvalidationid/validate
+
 @ws
 
+
 @tables
-test
-  key *String
-  value String
 
 users
   id *String
@@ -62,6 +63,14 @@ userprofiles
 userkeys
   id *String
   user_id String
+  validated_at Number
+  validation_msg_sent_at Number
+  encrypt true
+
+userkeyvalidations
+  id *String
+  userkey_id: String
+  expires_at TTL
   encrypt true
 
 syncdoc
@@ -79,6 +88,32 @@ collabs
   user_id String
   encrypt true
 
+permissions
+  id *String
+  resource_type String
+  resource_uri String
+  resource_id String
+  user_id String
+  given_by_user_id String
+  type String
+  encrypt true
+
+teams
+  id *String
+  name String
+  encrypt true
+
+invites
+  id *String
+  resource_type String
+  resource_id String
+  user_id String
+  invited_by_user_id String
+  permission String
+  expires_at TTL
+  encrypt true
+
+
 @indexes
 
 collabs
@@ -87,12 +122,27 @@ collabs
 collabs
   conn *String
 
+permissions
+  resource_uri *String
+  name byResource
+
+permissions
+  user_id *String
+  resource_type **String
+  name byUserId
+
+
+@queues
+
+sendemail
+userkeys-changes
+
+
 #@plugins
 #kafka
 
 #@kafka-consumer-groups
 #consumer1 topic1 10
 
-# @aws
-# profile default
-# region us-west-1
+@aws
+region eu-west-2

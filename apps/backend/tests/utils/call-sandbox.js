@@ -1,18 +1,18 @@
 'use strict';
 
-const tiny = require('tiny-json-http');
-const baseUrl = require('./base-url');
+import tiny from 'tiny-json-http';
+import baseUrl from './base-url';
 
 function get(url, options = {}) {
   const opts = Object.assign({}, options, {
-    url: baseUrl + url,
+    url: baseUrl() + url,
   });
   return tiny.get(opts);
 }
 
 function post(url, data = null, options = {}) {
   const opts = Object.assign({}, options, {
-    url: baseUrl + url,
+    url: baseUrl() + url,
     data,
   });
   return tiny.post(opts);
@@ -20,16 +20,15 @@ function post(url, data = null, options = {}) {
 
 function put(url, data = null, options = {}) {
   const opts = Object.assign({}, options, {
-    url: baseUrl + url,
+    url: baseUrl() + url,
     data,
   });
-  console.log('OPTS:', opts);
   return tiny.put(opts);
 }
 
 function del(url, options = {}) {
   const opts = Object.assign({}, options, {
-    url: baseUrl + url,
+    url: baseUrl() + url,
   });
   return tiny.put(opts);
 }
@@ -41,4 +40,4 @@ const callSandbox = {
   post,
 };
 
-module.exports = callSandbox;
+export default callSandbox;

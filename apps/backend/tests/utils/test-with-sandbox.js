@@ -2,23 +2,34 @@
 
 /* eslint-env jest */
 
-const sandbox = require('@architect/sandbox');
-const path = require('path');
-const rimraf = require('rimraf');
+import sandbox from '@architect/sandbox';
+import path from 'path';
+import rimraf from 'rimraf';
+import getPort from 'get-port';
 
 function testWithSandbox(description, fn) {
   return describe(description, () => {
     let beforeWorkingDir;
+
+    beforeAll(async () => {
+      process.env.DECI_PORT = process.env.PORT = await getPort();
+      process.env.ARC_EVENTS_PORT = await getPort();
+      process.env.ARC_TABLES_PORT = await getPort();
+    });
+
     beforeAll(() => {
       beforeWorkingDir = process.cwd();
       process.chdir(path.join(__dirname, '..', '..'));
     });
+
     beforeAll((done) => {
       rimraf(path.join(process.cwd(), '.kafka_lite_data'), done);
     });
 
     beforeAll(async () => {
-      await sandbox.start({ quiet: true });
+      await sandbox.start({
+        quiet: true,
+      });
     });
 
     afterAll(async () => {
@@ -33,8 +44,12 @@ function testWithSandbox(description, fn) {
       process.chdir(beforeWorkingDir);
     });
 
+    afterAll((done) => {
+      setTimeout(done, 4000);
+    });
+
     fn();
   });
 }
 
-module.exports = testWithSandbox;
+export default testWithSandbox;

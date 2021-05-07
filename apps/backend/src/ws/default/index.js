@@ -1,4 +1,5 @@
-let arc = require('@architect/functions');
+const arc = require('@architect/functions');
+const tables = require('@architect/shared/tables');
 let { nanoid } = require('nanoid');
 
 /**
@@ -7,11 +8,11 @@ let { nanoid } = require('nanoid');
 exports.handler = async function ws(event) {
   const [op, topic] = JSON.parse(event.body);
 
-  const tables = await arc.tables();
+  const data = await tables();
 
   const connId = event.requestContext.connectionId;
 
-  const connection = await tables.connections.get({
+  const connection = await data.connections.get({
     id: connId,
   });
 
@@ -21,7 +22,7 @@ exports.handler = async function ws(event) {
 
   switch (op) {
     case 'subscribe':
-      await tables.collabs.put({
+      await data.collabs.put({
         id: nanoid(),
         room: topic,
         user_id: connection.user_id,
@@ -37,7 +38,7 @@ exports.handler = async function ws(event) {
 
     case 'unsubscribe':
       {
-        const collabs = await tables.collabs.query({
+        const collabs = await data.collabs.query({
           IndexName: 'conn-index',
           KeyConditionExpression: 'conn = :conn',
           ExpressionAttributeValues: {
@@ -47,7 +48,7 @@ exports.handler = async function ws(event) {
 
         for (const collab of collabs.Items) {
           if (collab.room === topic) {
-            await tables.collabs.delete({ id: collab.id });
+            await data.collabs.delete({ id: collab.id });
           }
         }
 

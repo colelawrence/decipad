@@ -1,11 +1,11 @@
-const arc = require('@architect/functions');
+const tables = require('@architect/shared/tables');
 let NextAuthJWT = require('next-auth/jwt');
 if (typeof NextAuthJWT.decode !== 'function') {
   NextAuthJWT = NextAuthJWT.default;
 }
 const { decode: decodeJWT } = NextAuthJWT;
 
-const jwtConf = require('@architect/shared/auth/jwt')({ NextAuthJWT });
+const jwtConf = require('@architect/shared/auth-flow/jwt')({ NextAuthJWT });
 
 exports.handler = async function ws(event) {
   const { user, token } = await auth(event);
@@ -15,8 +15,8 @@ exports.handler = async function ws(event) {
     };
   }
 
-  const tables = await arc.tables();
-  await tables.connections.put({
+  const data = await tables();
+  await data.connections.put({
     id: event.requestContext.connectionId,
     user_id: user.id,
   });
@@ -41,8 +41,8 @@ async function auth(event) {
         token,
       });
       if (decoded.accessToken) {
-        const tables = await arc.tables();
-        user = await tables.users.get({ id: decoded.accessToken });
+        const data = await tables();
+        user = await data.users.get({ id: decoded.accessToken });
       }
     } catch (err) {
       console.error(err.message);

@@ -1,0 +1,48 @@
+'use strict';
+
+const { UserInputError, ForbiddenError } = require('apollo-server-lambda');
+let NextAuthJWT = require('next-auth/jwt');
+if (typeof NextAuthJWT.encode !== 'function') {
+  NextAuthJWT = NextAuthJWT.default;
+}
+const { tokenize: tokenizeCookies } = require('simple-cookie');
+const tables = require('../../shared/tables');
+const jwtConf = require('../../shared/auth-flow/jwt')({ NextAuthJWT });
+
+const inTesting = process.env.ARC_ENV === 'testing';
+
+module.exports = {
+  Mutation: {
+    async pretendUser(_, { userId }, context) {
+      if (!inTesting) {
+        throw new ForbiddenError('Forbidden');
+      }
+
+      const data = await tables();
+      const user = await data.users.get({ id: userId });
+
+      if (!user) {
+        throw new UserInputError('No such user');
+      }
+
+      const options = {
+        maxAge: 1000 * 60 * 60 * 24, // 1 day
+      };
+      const token = await generateToken(user.id, options);
+      context.additionalHeaders.set(
+        'Set-Cookie',
+        tokenizeCookies([{ name: 'next-auth.session-token', value: token }])
+      );
+
+      return true;
+    },
+  },
+};
+
+async function generateToken(userId, options) {
+  return await NextAuthJWT.encode({
+    ...jwtConf,
+    token: { accessToken: userId },
+    ...options,
+  });
+}

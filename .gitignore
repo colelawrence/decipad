@@ -229,3 +229,4 @@ $RECYCLE.BIN/
 
 # Back-end sandbox data
 .kafka_lite_data
+prefs.arc

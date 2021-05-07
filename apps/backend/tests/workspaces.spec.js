@@ -2,11 +2,13 @@
 
 /* eslint-env jest */
 
-const test = require('./utils/test-with-sandbox');
-const call = require('./utils/call-simple');
-const Automerge = require('automerge');
+import test from './utils/test-with-sandbox';
+import Call, { withAuth } from './utils/call-simple';
+import auth from './utils/auth';
+import Automerge from 'automerge';
 
 test('/api/workspaces', () => {
+  let call;
   let workspace = {
     value: {
       id: 'workspaceid1',
@@ -15,6 +17,10 @@ test('/api/workspaces', () => {
     },
   };
   let doc = Automerge.from(workspace, 'agent id 1');
+
+  beforeAll(async () => {
+    call = withAuth(await auth());
+  });
 
   it('PUT /api/workspaces/:id', () => {
     return call('/api/workspaces/workspaceid1', {

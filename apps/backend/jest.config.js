@@ -3,8 +3,9 @@ module.exports = {
   preset: '../../jest.preset.js',
   testURL: 'http://localhost:3333',
   setupFiles: ['./jest.setup.js'],
-  maxWorkers: 1,
   coveragePathIgnorePatterns: ['node_modules'],
+  maxConcurrency: 1,
+  maxWorkers: 1,
   coverageThreshold: {
     global: {
       branches: 50,

@@ -1,15 +1,6 @@
-let NextAuth = require('next-auth');
-if (typeof NextAuth !== 'function') {
-  NextAuth = NextAuth.default;
-}
-
-let NextAuthJWT = require('next-auth/jwt');
-
-if (typeof NextAuthJWT.encode !== 'function') {
-  NextAuthJWT = NextAuthJWT.default;
-}
-
-const Auth = require('@architect/shared/auth');
+const NextAuth = require('next-auth');
+const NextAuthJWT = require('next-auth/jwt');
+const Auth = require('@architect/shared/auth-flow');
 const auth = Auth({ NextAuth, NextAuthJWT });
 
 exports.handler = async (req) => {
