@@ -3,6 +3,3 @@ node scripts/sandbox_seed_db.js
 
 @sandbox
 env testing
-
-@aws
-timeout 30
