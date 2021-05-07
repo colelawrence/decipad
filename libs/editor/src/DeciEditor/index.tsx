@@ -51,7 +51,7 @@ export const DeciEditor = ({
   padId,
 }: DeciEditorProps): JSX.Element => {
   const [value, setValue] = useState(null);
-  const { loading, editor, onChange: onChangeResult } = useEditor({
+  const { loading: _, editor, onChange: onChangeResult } = useEditor({
     workspaceId,
     padId,
     withPlugins,

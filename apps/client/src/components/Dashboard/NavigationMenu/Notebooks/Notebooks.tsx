@@ -1,13 +1,11 @@
-import { Box, Center, Circle, Heading, HStack, Text } from '@chakra-ui/layout';
-import { useRouter } from 'next/router';
+import { Box, Center, Heading, Text } from '@chakra-ui/layout';
 import React, { useContext, useState, useEffect } from 'react';
 import { DeciRuntimeContext } from '@decipad/editor';
 import { Item } from './Item/Item';
 
 export const Notebooks = ({ workspaceId }: { workspaceId?: string }) => {
-  const router = useRouter();
   const { runtime } = useContext(DeciRuntimeContext);
-  const [loading, setLoading] = useState(false);
+  const [_loading, setLoading] = useState(false);
   const [padIds, setPadIds] = useState([]);
   useEffect(() => {
     if (workspaceId) {

@@ -34,6 +34,8 @@ export const Item = ({ workspaceId }: { workspaceId: string }) => {
         setLoading(loading);
         setWorkspace(workspace);
       });
+
+    return () => sub.unsubscribe();
   }, [runtime, workspaceId]);
 
   const [newNotebookName, setNewNotebookName] = useState('');
