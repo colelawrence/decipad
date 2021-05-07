@@ -55,11 +55,11 @@ jobs:
 
           scripts/pull-sam.sh
           cd apps/backend
+          ./node_modules/.bin/arc env staging JWT_SIGNING_PRIVATE_KEY ${{secrets.JWT_SIGNING_PRIVATE_KEY}}
           ./node_modules/.bin/arc env staging NEXTAUTH_URL https://dev.decipad.com/api/auth
           ./node_modules/.bin/arc env staging GITHUB_CLIENT_ID ${{secrets.DECI_GITHUB_CLIENT_ID}}
           ./node_modules/.bin/arc env staging GITHUB_CLIENT_SECRET ${{secrets.DECI_GITHUB_CLIENT_SECRET}}
           ./node_modules/.bin/arc env staging JWT_SECRET ${{secrets.JWT_SECRET}}
-          ./node_modules/.bin/arc env staging JWT_SIGNING_PRIVATE_KEY ${{secrets.JWT_SIGNING_PRIVATE_KEY}}
           ./node_modules/.bin/arc env staging DECI_SES_ACCESS_KEY_ID '${{secrets.DECI_SES_ACCESS_KEY_ID}}'
           ./node_modules/.bin/arc env staging DECI_SES_SECRET_ACCESS_KEY '${{secrets.DECI_SES_SECRET_ACCESS_KEY}}'
           ./node_modules/.bin/arc env staging DECI_INVITE_EXPIRATION_SECONDS '${{secrets.DECI_INVITE_EXPIRATION_SECONDS}}'
