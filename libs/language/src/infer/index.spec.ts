@@ -503,13 +503,13 @@ describe('inferProgram', () => {
     });
     const badCall = wrongProgram[0].args[1];
 
-    expect(inferProgram(program)).toMatchObject({
+    expect(inferProgram(program)).toEqual({
       variables: new Map([['A', Type.Number]]),
       blockReturns: [Type.Number],
     });
 
     const error = new InferError('Expected string');
-    expect(inferProgram(wrongProgram)).toMatchObject({
+    expect(inferProgram(wrongProgram)).toEqual({
       variables: new Map([['A', Type.Number]]),
       blockReturns: [Type.Impossible.withErrorCause(error).inNode(badCall)],
     });
@@ -524,7 +524,7 @@ describe('inferProgram', () => {
       ),
     ];
 
-    expect(inferProgram(program)).toMatchObject({
+    expect(inferProgram(program)).toEqual({
       variables: new Map([['Result', Type.Number]]),
       blockReturns: [Type.Number],
     });

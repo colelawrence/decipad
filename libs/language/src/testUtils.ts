@@ -1,5 +1,6 @@
 import { parse } from './parser';
 import { run } from './interpreter';
+import { Column, fromJS } from './interpreter/Value';
 import { inferTargetStatement, inferProgram } from './infer';
 import { zip } from './utils';
 import { Type } from './type';
@@ -62,5 +63,10 @@ export const objectToTupleType = (obj: Record<string, Type>) => {
   return Type.buildTuple(values, names);
 };
 
-export const objectToTupleValue = <V extends unknown>(obj: Record<string, V>) =>
-  new Map(Object.entries(obj));
+export const objectToTupleValue = (
+  obj: Record<string, Interpreter.OneResult>
+) => {
+  const values = Object.values(obj).map((v) => fromJS(v));
+
+  return Column.fromNamedValues(values, Object.keys(obj)).getData();
+};

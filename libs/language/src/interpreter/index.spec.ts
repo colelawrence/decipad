@@ -8,6 +8,7 @@ import {
   given,
   funcDef,
   tableDef,
+  table,
   prop,
 } from '../utils';
 import { parseUTCDate } from '../date';
@@ -205,7 +206,7 @@ describe('Tables', () => {
           Col1: c('previous', l(101)),
         })
       )
-    ).toEqual([101]);
+    ).toEqual([[101]]);
   });
 
   it('can get a column from a table', async () => {
@@ -218,6 +219,20 @@ describe('Tables', () => {
     );
 
     expect(await run([block], [0])).toEqual([['hi', 'there']]);
+  });
+
+  it('sets the "previous" reference', async () => {
+    expect(
+      await runOne(
+        table({
+          Col1: col(1, 2, 3),
+          Col2: c('+', c('previous', l(0)), l(1)),
+        })
+      )
+    ).toEqual([
+      [1, 2, 3],
+      [1, 2, 3],
+    ]);
   });
 });
 

@@ -1,7 +1,7 @@
 import { n, c, l } from '../utils';
 
 import { Realm } from './Realm';
-import { usesRecursion, evaluateRecursiveColumn } from './column';
+import { usesRecursion, evaluateTableColumn } from './column';
 import { fromJS } from './Value';
 
 it('can find a previous symbol', () => {
@@ -12,12 +12,12 @@ it('can find a previous symbol', () => {
   expect(usesRecursion(c('+', l(1), l(1)))).toEqual(false);
 });
 
-describe('evaluateRecursiveColumn', () => {
+describe('evaluateTableColumn', () => {
   it('can emulate a quadratic function', async () => {
     const realm = new Realm();
 
     expect(
-      await evaluateRecursiveColumn(
+      await evaluateTableColumn(
         realm,
         c('*', l(2), c('previous', l(1))),
         4
@@ -33,7 +33,7 @@ describe('evaluateRecursiveColumn', () => {
     realm.stack.set('numbers', fromJS([1, 2, 3, 4]));
 
     expect(
-      await evaluateRecursiveColumn(
+      await evaluateTableColumn(
         realm,
         c('*', n('ref', 'numbers'), c('previous', l(1))),
         4

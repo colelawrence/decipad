@@ -1,5 +1,11 @@
 import { InferError, Type } from '../type';
-import { getDefined, zip, getIdentifierString, getOfType } from '../utils';
+import {
+  getDefined,
+  zip,
+  getIdentifierString,
+  getOfType,
+  pairwise,
+} from '../utils';
 import { dateNodeToSpecificity } from '../date';
 
 import { callBuiltin } from './callBuiltin';
@@ -81,9 +87,11 @@ export const inferExpression = withErrorSource(
           const columnDefs = [];
           const columnNames = [];
 
-          for (let i = 0; i + 1 < columns.length; i += 2) {
-            const name = getIdentifierString(columns[i] as AST.ColDef);
-            const type = inferExpression(ctx, columns[i + 1] as AST.Expression);
+          for (const [colDef, expr] of pairwise<AST.ColDef, AST.Expression>(
+            columns
+          )) {
+            const name = getIdentifierString(colDef);
+            const type = inferExpression(ctx, expr);
 
             ctx.stack.set(name, type);
 

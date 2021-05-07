@@ -107,19 +107,20 @@ export function getOfType<
 >(desiredType: K, node: AST.Node): N {
   if (getDefined(node).type !== desiredType) {
     throw new Error(`getOfType: expected ${desiredType}, found ${node.type}`);
+  } else {
+    return node as N;
   }
-  return node as N;
 }
 
 export const isNode = (value: unknown | AST.Node): value is AST.Node => {
   if (value == null || typeof value !== 'object' || Array.isArray(value)) {
     return false;
+  } else {
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    const v = value as any;
+
+    return typeof v.type === 'string' && Array.isArray(v.args);
   }
-
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  const valueAny = value as any;
-
-  return typeof valueAny.type === 'string' && Array.isArray(valueAny.args);
 };
 
 const expressionTypesSet = new Set([
@@ -150,9 +151,9 @@ export const getIdentifierString = ({ type, args }: AST.Identifier): string => {
     typeof args[0] !== 'string'
   ) {
     throw new Error('panic: identifier expected');
+  } else {
+    return args[0];
   }
-
-  return args[0];
 };
 
 export const getDefined = <T>(
@@ -161,9 +162,9 @@ export const getDefined = <T>(
 ): T => {
   if (anything == null) {
     throw new Error('panic: ' + message);
+  } else {
+    return anything;
   }
-
-  return anything;
 };
 
 export const zip = <K, V>(keys: K[], values: V[]): [K, V][] => {
@@ -180,3 +181,9 @@ export const zip = <K, V>(keys: K[], values: V[]): [K, V][] => {
 
   return out;
 };
+
+export function* pairwise<T1, T2>(array: (T1 | T2)[]) {
+  for (let i = 0; i < array.length - 1; i += 2) {
+    yield [array[i], array[i + 1]] as [T1, T2];
+  }
+}

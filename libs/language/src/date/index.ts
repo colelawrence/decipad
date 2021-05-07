@@ -1,5 +1,5 @@
 import produce from 'immer';
-import { n } from '../utils';
+import { n, pairwise } from '../utils';
 
 /* Warning: extremely hacky
  *
@@ -110,9 +110,7 @@ export function arrayToDate(
 export const dateNodeToSpecificity = (node: AST.Date): DateSpecificity => {
   let lowestSegment: DateSpecificity = 'year';
 
-  for (let i = 0; i + 1 < node.args.length; i += 2) {
-    const segment = node.args[i] as string;
-
+  for (const [segment, _] of pairwise<string, unknown>(node.args)) {
     lowestSegment = getSpecificity(segment);
   }
 

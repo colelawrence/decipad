@@ -160,7 +160,7 @@ describe('Tables', () => {
           Column2 = Column1 + (previous 0)
         }
       `)
-    ).toMatchObject({
+    ).toEqual({
       type: objectToTupleType({
         Column1: Type.build({ type: 'number', columnSize: 3 }),
         Column2: Type.build({ type: 'number', columnSize: 3 }),

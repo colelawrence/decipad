@@ -19,7 +19,7 @@ export const usesRecursion = (expr: AST.Expression) => {
   return result;
 };
 
-export const evaluateRecursiveColumn = (
+export const evaluateTableColumn = (
   realm: Realm,
   column: AST.Expression,
   rowCount: number
@@ -44,20 +44,6 @@ export const evaluateRecursiveColumn = (
 
     realm.previousValue = null;
     return Column.fromValues(rows);
-  }
-};
-
-export const evaluateTableColumn = (
-  realm: Realm,
-  column: AST.Node,
-  rowCount: number
-) => {
-  if (column.type === 'column') {
-    return evaluateRecursiveColumn(realm, column, rowCount);
-  } else if (isExpression(column)) {
-    return evaluate(realm, column);
-  } else {
-    throw new Error('panic: expected expression');
   }
 };
 

@@ -1,5 +1,5 @@
 import { hasBuiltin, builtins } from '../builtins';
-import { getOfType, getDefined, getIdentifierString } from '../utils';
+import { getOfType, getDefined, getIdentifierString, pairwise } from '../utils';
 import { reduceValuesThroughDims } from '../dimtools';
 import { getDateFromAstForm } from '../date';
 
@@ -105,10 +105,10 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
       const columns = node.args;
 
       return realm.stack.withPush(() => {
-        // Pairwise iteration
-        for (let i = 0; i + 1 < columns.length; i += 2) {
-          const [def, column] = [columns[i], columns[i + 1]];
-          const colName = getIdentifierString(def as AST.ColDef);
+        for (const [def, column] of pairwise<AST.ColDef, AST.Expression>(
+          columns
+        )) {
+          const colName = getIdentifierString(def);
           const columnData = evaluateTableColumn(
             realm,
             column,
