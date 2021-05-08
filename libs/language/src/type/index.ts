@@ -235,6 +235,14 @@ export class Type {
     }
   }
 
+  mapType(fn: (t: Type) => Type) {
+    if (this.errorCause) {
+      return this;
+    } else {
+      return fn(this);
+    }
+  }
+
   inNode(node: AST.Node) {
     return produce(this, (newType) => {
       newType.node = node;

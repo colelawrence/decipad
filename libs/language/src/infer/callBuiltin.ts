@@ -1,4 +1,4 @@
-import { builtins } from '../builtins';
+import { builtins, hasBuiltin } from '../builtins';
 import { Type } from '../type';
 import { reduceTypesThroughDims } from '../dimtools';
 
@@ -7,13 +7,13 @@ export const callBuiltin = (
   builtinName: string,
   ...givenArguments: Type[]
 ) => {
-  const builtin = builtins[builtinName];
-
-  if (builtin == null) {
+  if (!hasBuiltin(builtinName)) {
     return Type.Impossible.inNode(callExpr).withErrorCause(
       `Unknown function: ${builtinName}`
     );
   }
+
+  const builtin = builtins[builtinName];
 
   if (givenArguments.length !== builtin.argCount) {
     return Type.Impossible.inNode(callExpr).withErrorCause(
@@ -24,6 +24,6 @@ export const callBuiltin = (
   return reduceTypesThroughDims(
     givenArguments,
     (types) => Type.runFunctor(callExpr, builtin.functor, ...types),
-    { reduces: builtin.reduces }
+    builtin.argCardinalities
   );
 };

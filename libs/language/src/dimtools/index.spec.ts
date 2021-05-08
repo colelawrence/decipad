@@ -83,31 +83,33 @@ describe('reduceTypesThroughDims', () => {
     );
   });
 
-  it('can reduce types', () => {
+  it('can automap types', () => {
     const total = ([a]: Type[]) => a.reduced();
 
     expect(
-      reduceTypesThroughDims([Type.buildColumn(num, 5)], total, { reduces: 0 })
+      reduceTypesThroughDims([Type.buildColumn(num, 5)], total, [2])
     ).toEqual(num);
 
     expect(
       reduceTypesThroughDims(
         [Type.buildColumn(Type.buildColumn(num, 5), 1)],
         total,
-        { reduces: 0 }
+        [2]
       )
     ).toEqual(Type.buildColumn(num, 1));
 
-    expect(() =>
-      reduceTypesThroughDims([num], total, { reduces: 0 })
-    ).toThrow();
-    expect(() =>
+    expect(
       reduceTypesThroughDims(
-        [Type.buildColumn(num, 5), Type.buildColumn(num, 5)],
-        total,
-        { reduces: 0 }
+        [Type.buildColumn(num, 4), Type.buildColumn(num, 5)],
+        ([scalar, col]: Type[]) =>
+          Type.combine(scalar.isScalar('number'), col.isColumn(5), Type.String),
+        [1, 2]
       )
-    ).toThrow();
+    ).toEqual(Type.buildColumn(Type.String, 4));
+
+    expect(reduceTypesThroughDims([num], total, [2])).toEqual(
+      Type.Impossible.withErrorCause('A column is required')
+    );
   });
 });
 
@@ -146,14 +148,14 @@ describe('reduceValuesThroughDims', () => {
     ]);
   });
 
-  describe('value reduction', () => {
+  describe('automapping', () => {
     const sumOne = ([val]: Values.SimpleValue[]) =>
       Values.fromJS((val.getData() as number[]).reduce((a, b) => a + b));
 
     it('does not reduce the last dimension, leaving the mapfn to it', () => {
       const values = Values.fromJS([1, 2, 4]);
 
-      const result = reduceValuesThroughDims([values], sumOne, { reduces: 0 });
+      const result = reduceValuesThroughDims([values], sumOne, [2]);
 
       expect(result.getData()).toEqual(7);
     });
@@ -164,16 +166,41 @@ describe('reduceValuesThroughDims', () => {
         [8, 16, 32],
       ]);
 
-      const result = reduceValuesThroughDims([deepValues], sumOne, {
-        reduces: 0,
-      });
+      const result = reduceValuesThroughDims([deepValues], sumOne, [2]);
 
       expect(result.getData()).toEqual([7, 56]);
     });
 
+    it('supports reducing one of multiple args', () => {
+      const args = [Values.fromJS([1, 2]), Values.fromJS([1, 2, 3])];
+
+      const calls: unknown[] = [];
+      const result = reduceValuesThroughDims(
+        args,
+        ([a1, a2]: Values.SimpleValue[]) => {
+          const v1 = a1.getData() as number;
+          const v2 = a2.getData() as number[];
+
+          calls.push([v1, v2]);
+
+          return Values.fromJS(v2.map((v) => v + v1));
+        },
+        [1, 2]
+      );
+
+      expect(calls).toEqual([
+        [1, [1, 2, 3]],
+        [2, [1, 2, 3]],
+      ]);
+      expect(result.getData()).toEqual([
+        [2, 3, 4],
+        [3, 4, 5],
+      ]);
+    });
+
     it('panics with less than 1 dimension', () => {
       expect(() => {
-        reduceValuesThroughDims([Values.fromJS(1)], sumOne, { reduces: 0 });
+        reduceValuesThroughDims([Values.fromJS(1)], sumOne, [2]);
       }).toThrow(/Panic/i);
     });
   });

@@ -1,10 +1,11 @@
 import { Type } from '../type';
+import { getDefined } from '../utils';
 
 export interface BuiltinSpec {
   name: string;
   argCount: number;
-  /** Which argument is supposed to be an array. Only "0" is supported and argCount must be 1 */
-  reduces?: number;
+  /** Each argument's cardinality (1 for scalar, 2 for array, 3 for array of array, etc). Defaults to [1] * argCount */
+  argCardinalities?: number[];
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   fn: (...args: any[]) => any;
   functor: (...types: Type[]) => Type;
@@ -94,6 +95,66 @@ export const builtins: Record<string, BuiltinSpec> = {
     functor: (a: Type, b: Type, c: Type) =>
       Type.combine(a.isScalar('boolean'), b.sameAs(c)),
   },
+  // List stuff
+  stepgrowth: {
+    name: 'stepgrowth',
+    argCount: 1,
+    argCardinalities: [2],
+    fn: (a: number[]) =>
+      a.map((item, index) => {
+        const previous = a[index - 1] ?? 0;
+        return item - previous;
+      }),
+    functor: (a: Type) =>
+      Type.combine(a.isColumn().reduced().isScalar('number'), a),
+  },
+  grow: {
+    name: 'grow',
+    argCount: 3,
+    argCardinalities: [1, 1, 2],
+    fn: (initial: number, growthRate: number, length: unknown[]) => {
+      let current = initial;
+      return Array.from({ length: length.length }, (_) => {
+        const ret = current;
+        current += current * growthRate;
+        return ret;
+      });
+    },
+    functor: (initial: Type, growthRate: Type, period: Type) =>
+      Type.combine(
+        initial.isScalar('number'),
+        growthRate.isScalar('number'),
+        period.isColumn()
+      ).mapType(() =>
+        Type.buildColumn(Type.Number, getDefined(period.columnSize))
+      ),
+  },
+  transpose: {
+    name: 'transpose',
+    argCount: 1,
+    fn: (twoDee: number[][]) =>
+      Array.from({ length: twoDee[0].length }, (_, y) => {
+        return Array.from({ length: twoDee.length }, (_, x) => {
+          return getDefined(twoDee[x][y]);
+        });
+      }),
+    functor: (twoDee: Type) =>
+      twoDee
+        .isColumn()
+        .reduced()
+        .isColumn()
+        .reduced()
+        .isScalar('number')
+        .mapType((t) => {
+          const horizontal = getDefined(t.columnSize);
+          const vertical = getDefined(t.reduced().columnSize);
+
+          return Type.buildColumn(
+            Type.buildColumn(Type.Number, horizontal),
+            vertical
+          );
+        }),
+  },
   // Range stuff
   contains: {
     name: 'contains',
@@ -124,7 +185,7 @@ export const builtins: Record<string, BuiltinSpec> = {
   total: {
     name: 'total',
     argCount: 1,
-    reduces: 0,
+    argCardinalities: [2],
     fn: (nums: number[]) => nums.reduce((a, b) => a + b),
     functor: (nums: Type) => nums.reduced(),
   },

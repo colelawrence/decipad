@@ -2,6 +2,8 @@ import { getDefined } from '../utils';
 import { Type } from '../type';
 import * as Values from '../interpreter/Value';
 
+const arrayOfOnes = (length: number) => Array.from({ length }, () => 1);
+
 const allMatch = <T extends unknown>(
   array: T[],
   matchFn: (a: T, b: T) => boolean
@@ -12,33 +14,10 @@ const allMatch = <T extends unknown>(
     return nextItem != null ? matchFn(tuple, nextItem) : true;
   });
 
-interface ReduceOptions {
-  reduces?: number;
-}
-
-const getToReduce = <T extends { cardinality: number }>(
+const checkCardinalities = <T extends { cardinality: number }>(
   args: T[],
-  reduceOptions?: ReduceOptions
-): T[] | null => {
-  if (reduceOptions?.reduces != null) {
-    if (args.length !== 1) {
-      throw new Error(
-        'Not implemented: non-unary functions being dimension reducers'
-      );
-    }
-
-    if (args[0].cardinality === 1) {
-      throw new Error('Panic: reducer function being called with a scalar');
-    }
-
-    // column of scalars
-    if (args[0].cardinality === 2) {
-      return args;
-    }
-  }
-
-  return null;
-};
+  expectedCardinalities: number[]
+) => args.every((arg, i) => arg.cardinality >= expectedCardinalities[i]);
 
 // Takes a function that works on scalar types, and raises dimensions recursively
 // until they're scalar and good to be arguments to that function.
@@ -49,79 +28,82 @@ const getToReduce = <T extends { cardinality: number }>(
 export const reduceTypesThroughDims = (
   types: Type[],
   mapFn: (types: Type[]) => Type,
-  reduceOptions?: ReduceOptions
+  expectedCardinalities = arrayOfOnes(types.length)
 ): Type => {
   function recurse(types: Type[]): Type {
-    const toReduce = getToReduce(types, reduceOptions);
-    if (toReduce != null) {
-      return mapFn(toReduce);
-    }
-
     if (types.some((t) => t.tupleTypes != null)) {
       return Type.Impossible.withErrorCause('Unexpected tuple');
     }
 
-    const columns = types.filter((t) => t.cellType != null);
+    const toMapOver = types.filter(
+      (t, i) => t.cardinality > expectedCardinalities[i]
+    );
+    const mapLength = toMapOver[0]?.columnSize;
 
-    if (columns.length > 0) {
-      const colSize = getDefined(columns[0]?.columnSize);
+    if (mapLength != null) {
+      if (allMatch(toMapOver, (a, b) => a.columnSize === b.columnSize)) {
+        // When an argument is higher-dimensional than expected,
+        // the result of the call is also higher dimensional.
+        // To achieve this we essentially do .map(fargs => recurse(fargs))
+        const mappedValues = types.map((t) =>
+          toMapOver.includes(t) ? getDefined(t.cellType) : t
+        );
 
-      if (allMatch(columns, (a, b) => a.columnSize === b.columnSize)) {
-        // Bring columns down to singles so we can call mapFn
-        const asSingles = types.map((t) => t.cellType ?? t);
-
-        return Type.buildColumn(recurse(asSingles), colSize);
+        return Type.buildColumn(recurse(mappedValues), mapLength);
       } else {
         return Type.Impossible.withErrorCause('Mismatched column lengths');
       }
-    }
-
-    if (types.every((t) => t.cardinality === 1)) {
+    } else {
       return mapFn(types);
     }
-
-    throw new Error('unreachable');
   }
 
-  return recurse(types);
+  if (checkCardinalities(types, expectedCardinalities)) {
+    return recurse(types);
+  } else {
+    return Type.Impossible.withErrorCause('A column is required');
+  }
 };
 
 // Extremely symmetric with the above function
 export const reduceValuesThroughDims = (
   values: Values.Value[],
   mapFn: (values: Values.Value[]) => Values.Value,
-  reduceOptions?: ReduceOptions
+  expectedCardinalities = arrayOfOnes(values.length)
 ): Values.Value => {
   function recurse(values: Values.Value[]): Values.Value {
-    const toReduce = getToReduce(values, reduceOptions);
-    if (toReduce != null) {
-      return mapFn(toReduce);
-    }
+    const toMapOver = values.filter(
+      (t, i) => t.cardinality > expectedCardinalities[i]
+    );
+    const mapLength = toMapOver[0]?.rowCount;
 
-    const columns = values.filter((t) => t.cardinality > 1);
+    if (mapLength != null) {
+      if (allMatch(toMapOver, (a, b) => a.rowCount === b.rowCount)) {
+        // When an argument is higher-dimensional than expected,
+        // the result of the call is also higher dimensional.
+        // To achieve this we essentially do .map(fargs => recurse(fargs))
+        const mappedValues = Array.from({ length: mapLength }, (_, i) => {
+          const thisRow = values.map((v) =>
+            toMapOver.includes(v)
+              ? getDefined((v as Values.Column).values?.[i])
+              : v
+          );
 
-    if (columns.length > 0) {
-      const colSize = getDefined(columns[0].rowCount);
+          return recurse(thisRow);
+        });
 
-      if (allMatch(columns, (a, b) => a.rowCount === b.rowCount)) {
-        // Bring columns down to singles so we can call mapFn
-        const asColumns = values.map((v) => v.withRowCount(colSize));
-        const columnValues = [];
-
-        for (let i = 0; i < colSize; i++) {
-          const thisRow = asColumns.map((c) => getDefined(c.values?.[i]));
-
-          columnValues.push(recurse(thisRow));
-        }
-
-        return Values.Column.fromValues(columnValues);
+        return Values.Column.fromValues(mappedValues);
       } else {
-        throw new Error('panic');
+        throw new Error('panic; mismatched column lengths');
       }
     } else {
       return mapFn(values);
     }
   }
 
-  return recurse(values);
+  if (checkCardinalities(values, expectedCardinalities)) {
+    return recurse(values);
+  } else {
+    throw new Error('panic: one or more cardinalities are too low');
+  }
 };

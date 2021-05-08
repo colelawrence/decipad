@@ -57,7 +57,7 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
 
             return fromJS(builtin.fn(...argData));
           },
-          { reduces: builtin.reduces }
+          builtin.argCardinalities
         );
       } else {
         const customFunc = getDefined(realm.functions.get(funcName));
