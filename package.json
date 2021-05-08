@@ -126,6 +126,7 @@
     "dequal": "^2.0.2",
     "document-register-element": "1.13.1",
     "framer-motion": "^3.10.5",
+    "graphql": "^15.5.0",
     "immer": "^8.0.1",
     "kafkajs": "^1.15.0",
     "leftpad": "^0.0.1",
