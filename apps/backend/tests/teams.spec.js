@@ -223,6 +223,14 @@ test('teams', () => {
             teams {
               id
               name
+              teamUsers {
+                user {
+                  teams {
+                    id
+                    name
+                  }
+                }
+              }
             }
           }
         `,
@@ -230,6 +238,15 @@ test('teams', () => {
     ).data.teams;
     expect(teams).toHaveLength(1);
     expect(teams[0]).toMatchObject(newTeam);
+    expect(teams[0].teamUsers).toHaveLength(2);
+    expect(
+      teams[0].teamUsers.every((teamUser) => teamUser.user.teams.length === 1)
+    ).toBe(true);
+    expect(
+      teams[0].teamUsers.every(
+        (teamUser) => teamUser.user.teams[0].id === newTeam.id
+      )
+    ).toBe(true);
   }, 10000);
 
   it('user can remove them-selves from team', async () => {

@@ -4,6 +4,7 @@ module.exports = ({ gql }) => gql`
     name: String
     email: String
     avatar: String
+    teams: [Team!]!
   }
 
   enum PermissionType {

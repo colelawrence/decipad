@@ -4,7 +4,11 @@ const arc = require('@architect/functions');
 const tables = require('../../tables');
 const { nanoid } = require('nanoid');
 const { UserInputError } = require('apollo-server-lambda');
-const { check: checkAuthorized, requireUser } = require('../authorization');
+const {
+  check: checkAuthorized,
+  requireUser,
+  isAuthorized,
+} = require('../authorization');
 
 const inTesting = !!process.env.JEST_WORKER_ID;
 
@@ -210,6 +214,33 @@ const resolvers = {
     async team(teamUser) {
       const data = await tables();
       return await data.teams.get({ id: teamUser.team_id });
+    },
+  },
+  User: {
+    async teams(user, _, context) {
+      const data = await tables();
+      const permissions = await data.permissions.query({
+        IndexName: 'byUserId',
+        KeyConditionExpression:
+          'user_id = :user_id and resource_type = :resource_type',
+        ExpressionAttributeValues: {
+          ':user_id': user.id,
+          ':resource_type': 'teams',
+        },
+      });
+
+      const teams = [];
+      for (const permission of permissions.Items) {
+        const resource = `/${permission.resource_type}/${permission.resource_id}`;
+        if (await isAuthorized(resource, context, 'READ')) {
+          const team = await data.teams.get({ id: permission.resource_id });
+          if (team) {
+            teams.push(team);
+          }
+        }
+      }
+
+      return teams;
     },
   },
 };

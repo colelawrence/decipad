@@ -8,14 +8,20 @@ function requireUser(context) {
   return context.user;
 }
 
-async function check(resource, context, permissionType) {
+async function isAuthorized(resource, context, permissionType) {
   const user = requireUser(context);
 
   const id = `/users/${user.id}${resource}`;
   const data = await tables();
   const permission = await data.permissions.get({ id });
 
-  if (!permission || !isEnoughPermission(permission.type, permissionType)) {
+  return permission && isEnoughPermission(permission.type, permissionType);
+}
+
+async function check(resource, context, permissionType) {
+  const user = requireUser(context);
+
+  if (! await isAuthorized(resource, context, permissionType)) {
     throw new ForbiddenError('Forbidden');
   }
 
@@ -32,5 +38,6 @@ function isEnoughPermission(existingPermission, requiredPermission) {
   return existingPermission === 'ADMIN';
 }
 
-module.exports.requireUser = requireUser;
-module.exports.check = check;
+exports.requireUser = requireUser;
+exports.isAuthorized = isAuthorized;
+exports.check = check;
