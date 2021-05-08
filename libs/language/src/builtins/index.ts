@@ -132,6 +132,7 @@ export const builtins: Record<string, BuiltinSpec> = {
   transpose: {
     name: 'transpose',
     argCount: 1,
+    argCardinalities: [3],
     fn: (twoDee: number[][]) =>
       Array.from({ length: twoDee[0].length }, (_, y) => {
         return Array.from({ length: twoDee.length }, (_, x) => {
@@ -139,21 +140,18 @@ export const builtins: Record<string, BuiltinSpec> = {
         });
       }),
     functor: (twoDee: Type) =>
-      twoDee
-        .isColumn()
-        .reduced()
-        .isColumn()
-        .reduced()
-        .isScalar('number')
-        .mapType((t) => {
-          const horizontal = getDefined(t.columnSize);
-          const vertical = getDefined(t.reduced().columnSize);
+      Type.combine(
+        twoDee.isColumn().reduced().isColumn().reduced().isScalar('number'),
+        twoDee
+      ).mapType((t) => {
+        const horizontal = getDefined(t.columnSize);
+        const vertical = getDefined(t.reduced().columnSize);
 
-          return Type.buildColumn(
-            Type.buildColumn(Type.Number, horizontal),
-            vertical
-          );
-        }),
+        return Type.buildColumn(
+          Type.buildColumn(Type.Number, horizontal),
+          vertical
+        );
+      }),
   },
   // Range stuff
   contains: {

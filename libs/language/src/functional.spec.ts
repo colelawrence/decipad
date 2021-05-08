@@ -1,6 +1,11 @@
 import { Type } from './type';
 import { cleanDate } from './date';
-import { runCode, objectToTupleType, objectToTupleValue } from './testUtils';
+import {
+  runCode,
+  runCodeForVariables,
+  objectToTupleType,
+  objectToTupleValue,
+} from './testUtils';
 
 // https://observablehq.com/d/0c4bca59558d2985
 describe('use of funds document', () => {
@@ -57,7 +62,8 @@ describe('use of funds document', () => {
 
   it('Use of funds multidimensional', async () => {
     expect(
-      await runCode(`
+      await runCodeForVariables(
+        `
         InitialInvestment = 300000
         IncomeTax = 0.2
 
@@ -79,23 +85,59 @@ describe('use of funds document', () => {
         StaffCosts = {
           Title = Salaries.Title,
           Salary = Salaries.Salary,
-          Costs = given Months:
+          Costs = given Salaries: given Months:
             costtobusiness Months (Salaries.Salary / 12) Salaries.StartDate Salaries.Bonus
         }
-      `)
-    ).toMatchObject({
-      value: [
+
+        TotalsPerMonth = total (transpose StaffCosts.Costs)
+
+        isworking = Month StartDate => (dategte Month StartDate)
+
+        countworking = Month StartDate =>
+          (total (given StartDate: if (isworking Month StartDate) then 1 else 0))
+
+        HeadCountPerMonth = given Months: (countworking Months Salaries.StartDate)
+
+        HeadCountStepGrowth = stepgrowth HeadCountPerMonth
+
+        Overheads = {
+          OtherCosts = 50 * HeadCountPerMonth,
+          NewHireCosts = 2000 * HeadCountStepGrowth,
+          FixedCosts = grow 2000 (0.05) Months
+        }
+
+        TotalOverheads = Overheads.OtherCosts + Overheads.NewHireCosts + Overheads.FixedCosts
+      `,
         [
+          'StaffCosts',
+          'TotalsPerMonth',
+          'HeadCountPerMonth',
+          'HeadCountStepGrowth',
+          'Overheads',
+          'TotalOverheads',
+        ]
+      )
+    ).toMatchObject({
+      variables: {
+        StaffCosts: [
           ['Exec', 'Product', 'Tech'],
           [120_000, 80_000, 80_000],
           [
-            [0, 10_000, 0],
-            [12_000, 10_000, 0],
-            [12_000, 10_000, 8_000],
-            [12_000, 10_000, 8_000],
+            [0, 12_000, 12_000, 12_000],
+            [10_000, 10_000, 10_000, 10_000],
+            [0, 0, 8_000, 8_000],
           ],
         ],
-      ],
+        TotalsPerMonth: [10_000, 22_000, 30_000, 30_000],
+        HeadCountPerMonth: [1, 2, 3, 3],
+        HeadCountStepGrowth: [1, 1, 1, 0],
+        Overheads: [
+          [50, 100, 150, 150],
+          [2000, 2000, 2000, 0],
+          [2000, 2100, 2205, 2315.25],
+        ],
+        TotalOverheads: [4050, 4200, 4355, 2465.25],
+      },
     });
   });
 });

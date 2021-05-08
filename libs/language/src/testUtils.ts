@@ -22,6 +22,10 @@ export const runCode = async (source: string) => {
     0,
     program[0].args.length - 1,
   ]);
+
+  const erroredType = inferResult.errorCause != null ? inferResult : null;
+  expect(erroredType).toEqual(null);
+
   const value = await run(program, [0]);
 
   return {
