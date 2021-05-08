@@ -1,5 +1,5 @@
 const { AuthenticationError, ForbiddenError } = require('apollo-server-lambda');
-const tables = require('../shared/tables');
+const tables = require('../tables');
 
 function requireUser(context) {
   if (!context.user) {

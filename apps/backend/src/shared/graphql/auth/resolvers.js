@@ -6,8 +6,8 @@ if (typeof NextAuthJWT.encode !== 'function') {
   NextAuthJWT = NextAuthJWT.default;
 }
 const { tokenize: tokenizeCookies } = require('simple-cookie');
-const tables = require('../../shared/tables');
-const jwtConf = require('../../shared/auth-flow/jwt')({ NextAuthJWT });
+const tables = require('../../tables');
+const jwtConf = require('../../auth-flow/jwt')({ NextAuthJWT });
 
 const inTesting = process.env.ARC_ENV === 'testing';
 

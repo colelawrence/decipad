@@ -1,7 +1,7 @@
 'use strict';
 
 const arc = require('@architect/functions');
-const tables = require('../../shared/tables');
+const tables = require('../../tables');
 const { nanoid } = require('nanoid');
 const { UserInputError } = require('apollo-server-lambda');
 const { check: checkAuthorized, requireUser } = require('../authorization');

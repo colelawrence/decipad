@@ -1,6 +1,14 @@
-const { typedefs, resolvers } = require('../../graphql');
+const merge = require('lodash.merge');
 const context = require('./context');
 const playground = require('./playground');
+const glbl = require('./global');
+const teams = require('./teams');
+const auth = require('./auth');
+
+const typedefs = ({ gql }) =>
+  [glbl.typedefs, teams.typedefs, auth.typedefs].map((typedef) => typedef(gql));
+
+const resolvers = merge(glbl.resolvers, teams.resolvers, auth.resolvers);
 
 function createHandler({
   ApolloServer,
