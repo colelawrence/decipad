@@ -1,3 +1,4 @@
+require('graphql');
 const {
   ApolloServer,
   gql,
