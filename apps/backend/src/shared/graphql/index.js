@@ -46,6 +46,7 @@ function createHandler({
       _callback(err, reply);
     };
 
+    context.event = event;
     context.additionalHeaders = new Map();
 
     event.httpMethod = event.httpMethod
