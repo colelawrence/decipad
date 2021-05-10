@@ -14,18 +14,20 @@ const allMatch = <T extends unknown>(
     return nextItem != null ? matchFn(tuple, nextItem) : true;
   });
 
-const checkCardinalities = <T extends { cardinality: number }>(
+const validateCardinalities = <T extends { cardinality: number }>(
   args: T[],
   expectedCardinalities: number[]
 ) => args.every((arg, i) => arg.cardinality >= expectedCardinalities[i]);
 
-// Takes a function that works on scalar types, and raises dimensions recursively
-// until they're scalar and good to be arguments to that function.
+// Takes a function expects a certain cardinality in each argument,
+// and arguments that might have a higher cardinality. Higher cardinality
+// arguments are looped over, constructing a result that's higher dimension.
+//
 // Examples:
 // [a, b] calls the function with (a, b)
 // [[a], [b]] calls the function with (a, b)
 // [[a, b], [c, d]] calls the function with (a, c) and (b, d)
-export const reduceTypesThroughDims = (
+export const automapTypes = (
   types: Type[],
   mapFn: (types: Type[]) => Type,
   expectedCardinalities = arrayOfOnes(types.length)
@@ -58,7 +60,7 @@ export const reduceTypesThroughDims = (
     }
   }
 
-  if (checkCardinalities(types, expectedCardinalities)) {
+  if (validateCardinalities(types, expectedCardinalities)) {
     return recurse(types);
   } else {
     return Type.Impossible.withErrorCause('A column is required');
@@ -66,7 +68,7 @@ export const reduceTypesThroughDims = (
 };
 
 // Extremely symmetric with the above function
-export const reduceValuesThroughDims = (
+export const automapValues = (
   values: Values.Value[],
   mapFn: (values: Values.Value[]) => Values.Value,
   expectedCardinalities = arrayOfOnes(values.length)
@@ -101,7 +103,7 @@ export const reduceValuesThroughDims = (
     }
   }
 
-  if (checkCardinalities(values, expectedCardinalities)) {
+  if (validateCardinalities(values, expectedCardinalities)) {
     return recurse(values);
   } else {
     throw new Error('panic: one or more cardinalities are too low');

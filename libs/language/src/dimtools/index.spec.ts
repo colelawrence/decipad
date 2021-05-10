@@ -1,15 +1,15 @@
 import * as Values from '../interpreter/Value';
 import { Type } from '../type';
-import { reduceTypesThroughDims, reduceValuesThroughDims } from '../dimtools';
+import { automapTypes, automapValues } from '../dimtools';
 
 const num = Type.Number;
 const str = Type.String;
 
-describe('reduceTypesThroughDims', () => {
+describe('automapTypes', () => {
   it('shallow', () => {
     const calledOnTypes: Type[][] = [];
 
-    const result = reduceTypesThroughDims([num, str], ([t1, t2]) => {
+    const result = automapTypes([num, str], ([t1, t2]) => {
       calledOnTypes.push([t1, t2]);
       return t1;
     });
@@ -22,7 +22,7 @@ describe('reduceTypesThroughDims', () => {
     const type = Type.buildColumn(str, 10);
 
     const calledOnTypes: Type[][] = [];
-    const result = reduceTypesThroughDims([type, type], ([t1, t2]) => {
+    const result = automapTypes([type, type], ([t1, t2]) => {
       calledOnTypes.push([t1, t2]);
       return t1;
     });
@@ -38,7 +38,7 @@ describe('reduceTypesThroughDims', () => {
     );
 
     const calledOnTypes: Type[][] = [];
-    const result = reduceTypesThroughDims([type, str], ([t1, t2]) => {
+    const result = automapTypes([type, str], ([t1, t2]) => {
       calledOnTypes.push([t1, t2]);
       return t1;
     });
@@ -51,7 +51,7 @@ describe('reduceTypesThroughDims', () => {
     const type = Type.buildColumn(str, 10);
 
     const calledOnTypes: Type[][] = [];
-    const result = reduceTypesThroughDims([type, str], ([t1, t2]) => {
+    const result = automapTypes([type, str], ([t1, t2]) => {
       calledOnTypes.push([t1, t2]);
       return t1;
     });
@@ -63,7 +63,7 @@ describe('reduceTypesThroughDims', () => {
   const typeId = (t: Type[]) => t[0];
 
   it('errors with incompatible dims', () => {
-    const erroredColLengths = reduceTypesThroughDims(
+    const erroredColLengths = automapTypes(
       [Type.buildColumn(num, 1), Type.buildColumn(num, 2)],
       typeId
     );
@@ -74,11 +74,11 @@ describe('reduceTypesThroughDims', () => {
     const t1 = num;
     const tuple = Type.buildTuple([num]);
 
-    expect(reduceTypesThroughDims([t1, tuple], typeId)).toEqual(
+    expect(automapTypes([t1, tuple], typeId)).toEqual(
       Type.Impossible.withErrorCause('Unexpected tuple')
     );
 
-    expect(reduceTypesThroughDims([tuple, tuple], typeId)).toEqual(
+    expect(automapTypes([tuple, tuple], typeId)).toEqual(
       Type.Impossible.withErrorCause('Unexpected tuple')
     );
   });
@@ -86,20 +86,14 @@ describe('reduceTypesThroughDims', () => {
   it('can automap types', () => {
     const total = ([a]: Type[]) => a.reduced();
 
-    expect(
-      reduceTypesThroughDims([Type.buildColumn(num, 5)], total, [2])
-    ).toEqual(num);
+    expect(automapTypes([Type.buildColumn(num, 5)], total, [2])).toEqual(num);
 
     expect(
-      reduceTypesThroughDims(
-        [Type.buildColumn(Type.buildColumn(num, 5), 1)],
-        total,
-        [2]
-      )
+      automapTypes([Type.buildColumn(Type.buildColumn(num, 5), 1)], total, [2])
     ).toEqual(Type.buildColumn(num, 1));
 
     expect(
-      reduceTypesThroughDims(
+      automapTypes(
         [Type.buildColumn(num, 4), Type.buildColumn(num, 5)],
         ([scalar, col]: Type[]) =>
           Type.combine(scalar.isScalar('number'), col.isColumn(5), Type.String),
@@ -107,13 +101,13 @@ describe('reduceTypesThroughDims', () => {
       )
     ).toEqual(Type.buildColumn(Type.String, 4));
 
-    expect(reduceTypesThroughDims([num], total, [2])).toEqual(
+    expect(automapTypes([num], total, [2])).toEqual(
       Type.Impossible.withErrorCause('A column is required')
     );
   });
 });
 
-describe('reduceValuesThroughDims', () => {
+describe('automapValues', () => {
   it('can bump dimensions recursively', () => {
     const multiDim = Values.Column.fromValues([
       Values.Column.fromValues([
@@ -126,7 +120,7 @@ describe('reduceValuesThroughDims', () => {
     const scalar = Values.fromJS(2);
 
     const calledOnValues: Values.Value[] = [];
-    const result = reduceValuesThroughDims([multiDim, scalar], ([v1, v2]) => {
+    const result = automapValues([multiDim, scalar], ([v1, v2]) => {
       calledOnValues.push(Values.Column.fromValues([v1, v2]));
       return Values.fromJS((v1.getData() as number) * (v2.getData() as number));
     });
@@ -155,7 +149,7 @@ describe('reduceValuesThroughDims', () => {
     it('does not reduce the last dimension, leaving the mapfn to it', () => {
       const values = Values.fromJS([1, 2, 4]);
 
-      const result = reduceValuesThroughDims([values], sumOne, [2]);
+      const result = automapValues([values], sumOne, [2]);
 
       expect(result.getData()).toEqual(7);
     });
@@ -166,7 +160,7 @@ describe('reduceValuesThroughDims', () => {
         [8, 16, 32],
       ]);
 
-      const result = reduceValuesThroughDims([deepValues], sumOne, [2]);
+      const result = automapValues([deepValues], sumOne, [2]);
 
       expect(result.getData()).toEqual([7, 56]);
     });
@@ -175,7 +169,7 @@ describe('reduceValuesThroughDims', () => {
       const args = [Values.fromJS([1, 2]), Values.fromJS([1, 2, 3])];
 
       const calls: unknown[] = [];
-      const result = reduceValuesThroughDims(
+      const result = automapValues(
         args,
         ([a1, a2]: Values.SimpleValue[]) => {
           const v1 = a1.getData() as number;
@@ -200,7 +194,7 @@ describe('reduceValuesThroughDims', () => {
 
     it('panics with less than 1 dimension', () => {
       expect(() => {
-        reduceValuesThroughDims([Values.fromJS(1)], sumOne, [2]);
+        automapValues([Values.fromJS(1)], sumOne, [2]);
       }).toThrow(/Panic/i);
     });
   });

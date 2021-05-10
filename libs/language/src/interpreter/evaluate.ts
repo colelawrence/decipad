@@ -1,6 +1,6 @@
 import { hasBuiltin, builtins } from '../builtins';
-import { getOfType, getDefined, getIdentifierString, pairwise } from '../utils';
-import { reduceValuesThroughDims } from '../dimtools';
+import { getOfType, getDefined, getIdentifierString } from '../utils';
+import { automapValues } from '../dimtools';
 import { getDateFromAstForm } from '../date';
 
 import { Realm } from './Realm';
@@ -13,7 +13,7 @@ import {
   Value,
   fromJS,
 } from './Value';
-import { getLargestColumn, evaluateTableColumn } from './column';
+import { evaluateTable } from './table';
 
 // Gets a single value from an expanded AST.
 export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
@@ -50,7 +50,7 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
         return realm.previousValue ?? args[0];
       } else if (hasBuiltin(funcName)) {
         const builtin = builtins[funcName];
-        return reduceValuesThroughDims(
+        return automapValues(
           args,
           (argsLowerDims) => {
             const argData = argsLowerDims.map((a) => a.getData());
@@ -100,29 +100,7 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
       return Column.fromValues(values);
     }
     case 'table': {
-      const colNames: string[] = [];
-      const colValues: SimpleValue[] = [];
-      const columns = node.args;
-
-      return realm.stack.withPush(() => {
-        for (const [def, column] of pairwise<AST.ColDef, AST.Expression>(
-          columns
-        )) {
-          const colName = getIdentifierString(def);
-          const columnData = evaluateTableColumn(
-            realm,
-            column,
-            getLargestColumn(colValues)
-          );
-
-          realm.stack.set(colName, columnData);
-
-          colValues.push(columnData);
-          colNames.push(colName);
-        }
-
-        return Column.fromNamedValues(colValues, colNames);
-      });
+      return evaluateTable(realm, node);
     }
     case 'property-access': {
       const table = getDefined(

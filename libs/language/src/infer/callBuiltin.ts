@@ -1,6 +1,6 @@
 import { builtins, hasBuiltin } from '../builtins';
 import { Type } from '../type';
-import { reduceTypesThroughDims } from '../dimtools';
+import { automapTypes } from '../dimtools';
 
 export const callBuiltin = (
   callExpr: AST.FunctionCall,
@@ -21,7 +21,7 @@ export const callBuiltin = (
     );
   }
 
-  return reduceTypesThroughDims(
+  return automapTypes(
     givenArguments,
     (types) => Type.runFunctor(callExpr, builtin.functor, ...types),
     builtin.argCardinalities

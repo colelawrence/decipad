@@ -1,7 +1,7 @@
 import { n, c, l } from '../utils';
 
 import { Realm } from './Realm';
-import { usesRecursion, evaluateTableColumn } from './column';
+import { usesRecursion, evaluateTableColumn } from './table';
 import { fromJS } from './Value';
 
 it('can find a previous symbol', () => {

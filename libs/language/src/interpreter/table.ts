@@ -1,4 +1,4 @@
-import { walk, getIdentifierString, isExpression } from '../utils';
+import { walk, getIdentifierString, isExpression, pairwise } from '../utils';
 import { evaluate } from './evaluate';
 import { Realm } from './Realm';
 import { Column, Scalar, SimpleValue } from './Value';
@@ -27,9 +27,9 @@ export const evaluateTableColumn = (
   if (!usesRecursion(column)) {
     return evaluate(realm, column);
   } else {
-    if (realm.previousValue != null) {
-      throw new Error('panic: column must not contain another column');
-    }
+    // Allow nested tables to have previous references
+    const savedPreviousValue = realm.previousValue;
+    realm.previousValue = null;
 
     const rows: Scalar[] = [];
 
@@ -42,7 +42,7 @@ export const evaluateTableColumn = (
       rows.push(value);
     }
 
-    realm.previousValue = null;
+    realm.previousValue = savedPreviousValue;
     return Column.fromValues(rows);
   }
 };
@@ -57,4 +57,27 @@ export const getLargestColumn = (
   sizes.add(minValue);
 
   return Math.max(...sizes);
+};
+
+export const evaluateTable = (realm: Realm, { args: columns }: AST.Table) => {
+  const colNames: string[] = [];
+  const colValues: SimpleValue[] = [];
+
+  return realm.stack.withPush(() => {
+    for (const [def, column] of pairwise<AST.ColDef, AST.Expression>(columns)) {
+      const colName = getIdentifierString(def);
+      const columnData = evaluateTableColumn(
+        realm,
+        column,
+        getLargestColumn(colValues)
+      );
+
+      realm.stack.set(colName, columnData);
+
+      colValues.push(columnData);
+      colNames.push(colName);
+    }
+
+    return Column.fromNamedValues(colValues, colNames);
+  });
 };

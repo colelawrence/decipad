@@ -15,11 +15,7 @@ const binopFunctor = (...types: Type[]) =>
   types.reduce((a, b) => a.isScalar('number').sameAs(b).withUnit(b.unit));
 
 const dateCmpFunctor = (left: Type, right: Type): Type =>
-  Type.combine(
-    left.isDate(),
-    right.sameAs(left),
-    Type.build({ type: 'boolean', columnSize: left.columnSize })
-  );
+  Type.combine(left.isDate(), right.sameAs(left), Type.Boolean);
 
 const cmpFunctor = (left: Type, right: Type): Type =>
   Type.combine(
@@ -134,11 +130,11 @@ export const builtins: Record<string, BuiltinSpec> = {
     argCount: 1,
     argCardinalities: [3],
     fn: (twoDee: number[][]) =>
-      Array.from({ length: twoDee[0].length }, (_, y) => {
-        return Array.from({ length: twoDee.length }, (_, x) => {
-          return getDefined(twoDee[x][y]);
-        });
-      }),
+      Array.from({ length: twoDee[0].length }, (_, y) =>
+        Array.from({ length: twoDee.length }, (_, x) =>
+          getDefined(twoDee[x][y])
+        )
+      ),
     functor: (twoDee: Type) =>
       Type.combine(
         twoDee.isColumn().reduced().isColumn().reduced().isScalar('number'),
@@ -163,7 +159,7 @@ export const builtins: Record<string, BuiltinSpec> = {
         a.isRange(),
         b.isScalar('number'),
         a.withUnit(b.unit),
-        Type.build({ type: 'boolean', columnSize: a.columnSize })
+        Type.Boolean
       ),
   },
   // Date stuff (TODO operator overloading)
