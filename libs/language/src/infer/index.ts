@@ -58,14 +58,12 @@ export const inferExpression = withErrorSource(
         );
 
         const rangeFunctor = (start: Type, end: Type) => {
-          return Type.combine(
-            start.isScalar('number').sameAs(end),
-            Type.build({
-              type: 'number',
-              unit: start.unit,
-              rangeness: true,
-            })
-          );
+          const rangeOf =
+            start.date != null
+              ? start.sameAs(end)
+              : start.isScalar('number').sameAs(end);
+
+          return Type.extend(rangeOf, { rangeness: true });
         };
 
         return Type.runFunctor(expr, rangeFunctor, start, end);

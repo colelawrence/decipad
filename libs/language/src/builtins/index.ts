@@ -1,5 +1,7 @@
 import { Type } from '../type';
-import { getDefined } from '../utils';
+import { getDefined, getInstanceof } from '../utils';
+import { dateToArray, arrayToDate } from '../date';
+import { AnyValue, Date } from '../interpreter/Value';
 
 export interface BuiltinSpec {
   name: string;
@@ -7,7 +9,9 @@ export interface BuiltinSpec {
   /** Each argument's cardinality (1 for scalar, 2 for array, 3 for array of array, etc). Defaults to [1] * argCount */
   argCardinalities?: number[];
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  fn: (...args: any[]) => any;
+  fn?: (...args: any[]) => any;
+  // Variant that operates on Value specifically
+  fnValues?: (...args: AnyValue[]) => AnyValue;
   functor: (...types: Type[]) => Type;
 }
 
@@ -162,6 +166,13 @@ export const builtins: Record<string, BuiltinSpec> = {
         Type.Boolean
       ),
   },
+  containsdate: {
+    name: 'containsdate',
+    argCount: 2,
+    fn: ([rStart, rEnd], [dStart, dEnd]) => rStart <= dStart && rEnd >= dEnd,
+    functor: (a: Type, b: Type) =>
+      Type.combine(a.isRange().isDate(), b.isDate(), Type.Boolean),
+  },
   // Date stuff (TODO operator overloading)
   dateequals: {
     name: 'dateequals',
@@ -174,6 +185,23 @@ export const builtins: Record<string, BuiltinSpec> = {
     argCount: 2,
     fn: ([aStart], [bStart]) => aStart >= bStart,
     functor: dateCmpFunctor,
+  },
+  dateaddyears: {
+    name: 'dateaddyears',
+    argCount: 2,
+    fnValues: (date: AnyValue, years: AnyValue) => {
+      date = getInstanceof(date, Date);
+
+      const asArray = dateToArray(date.timeRange.start.getData() as number);
+
+      asArray[0] += years.getData() as number;
+
+      const [newDate] = arrayToDate(asArray);
+
+      return Date.fromDateAndSpecificity(newDate, date.specificity);
+    },
+    functor: (date: Type, years: Type) =>
+      Type.combine(date.isDate(), years.isScalar('number'), date),
   },
   // Reduce funcs
   total: {

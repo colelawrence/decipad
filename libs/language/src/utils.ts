@@ -158,12 +158,30 @@ export const getIdentifierString = ({ type, args }: AST.Identifier): string => {
 
 export const getDefined = <T>(
   anything: T | null | undefined,
-  message = 'something was null or undefined'
+  message = 'getDefined did not expect null or undefined'
 ): T => {
   if (anything == null) {
     throw new Error('panic: ' + message);
   } else {
     return anything;
+  }
+};
+
+type ClassOf<T> = {
+  new (...x: unknown[]): T;
+};
+
+export const getInstanceof = <T>(
+  thing: T | unknown,
+  cls: ClassOf<T>,
+  message = `getInstanceof expected an instance of ${
+    cls?.name ?? 'a specific class'
+  }`
+): T => {
+  if (thing instanceof cls) {
+    return thing as T;
+  } else {
+    throw new Error('panic: ' + message);
   }
 };
 
