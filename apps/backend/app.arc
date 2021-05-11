@@ -131,6 +131,14 @@ permissions
   resource_type **String
   name byUserId
 
+userkeys
+  user_id *String
+  name byUserId
+
+userkeyvalidations
+  userkey_id *String
+  name byUserKeyId
+
 
 @queues
 
@@ -146,3 +154,4 @@ userkeys-changes
 
 @aws
 region eu-west-2
+timeout 30

@@ -19,7 +19,7 @@ module.exports = ({ gql }) => gql`
     teams: [Team!]!
   }
 
-  type Mutation {
+  extend type Mutation {
     createTeam(team: TeamInput!): Team
 
     inviteUserToTeam(

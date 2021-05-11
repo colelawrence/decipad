@@ -43,6 +43,10 @@ module.exports = function createAuthHandler({ NextAuth, NextAuthJWT }) {
 
       if (userKey) {
         existingUser = await data.users.get({ id: userKey.user_id });
+        if (!existingUser.validated_at) {
+          console.log('NOT VALIDATED YET');
+          existingUser = null;
+        }
       }
       if (!existingUser) {
         // If the user does not exist, we just create a new one.

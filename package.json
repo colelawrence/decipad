@@ -28,7 +28,7 @@
     "dep-graph": "nx dep-graph",
     "help": "nx help",
     "build:grammar": "nearleyc libs/language/src/grammar/deci-language-grammar.ne -o libs/language/src/grammar/deci-language-grammar-generated.js && prettier --write libs/language/src/grammar/deci-language-grammar-generated.js ",
-    "postinstall": "cd apps/backend && npm install && ./symlink-shared.sh",
+    "postinstall": "cd apps/backend && npm install",
     "deploy": "nx export client && cd apps/backend && ./node_modules/.bin/arc deploy",
     "deploy:pr": "nx export client && cd apps/backend && ./node_modules/.bin/arc deploy --name ",
     "undeploy:pr": "cd apps/backend && ./node_modules/.bin/arc destroy "
@@ -91,6 +91,7 @@
     "lorem-ipsum": "^2.0.3",
     "mock-socket": "^9.0.3",
     "prettier": "2.2.1",
+    "realpath": "^1.1.0",
     "rimraf": "^3.0.2",
     "tiny-json-http": "^7.3.0",
     "ts-jest": "26.4.0",
@@ -99,7 +100,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && jest --config=./jest.config.js --onlyChanged && yarn typecheck"
+      "pre-commit": "lint-staged && jest --config=./jest.config.js --onlyChanged --maxWorkers=1 && yarn typecheck"
     }
   },
   "lint-staged": {

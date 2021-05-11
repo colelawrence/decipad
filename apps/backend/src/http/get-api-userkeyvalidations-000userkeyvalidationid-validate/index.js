@@ -1,5 +1,16 @@
 const tables = require('@architect/shared/tables');
 const handle = require('@architect/shared/handle');
+let NextAuthJWT = require('next-auth/jwt');
+if (typeof NextAuthJWT.encode !== 'function') {
+  NextAuthJWT = NextAuthJWT.default;
+}
+const jwtConf = require('@architect/shared/auth-flow/jwt')({ NextAuthJWT });
+
+const isSecureCookie =
+  process.env.NEXTAUTH_URL && process.env.NEXTAUTH_URL.startsWith('https:');
+const tokenCookieName = isSecureCookie
+  ? '__Secure-next-auth.session-token'
+  : 'next-auth.session-token';
 
 exports.handler = handle(async (event) => {
   const data = await tables();
@@ -16,12 +27,44 @@ exports.handler = handle(async (event) => {
   }
 
   const key = await data.userkeys.get({ id: validation.userkey_id });
+  if (!key) {
+    return {
+      statusCode: 404,
+      body: 'User key not found',
+    };
+  }
+
   key.validated_at = Date.now();
   await data.userkeys.put(key);
 
   await data.userkeyvalidations.delete({ id: validation.id });
 
+  const token = await NextAuthJWT.encode({
+    ...jwtConf,
+    token: { accessToken: key.user_id },
+  });
+
+  let cookie = `${tokenCookieName}=${token}`;
+  cookie += `; HttpOnly; Path=/; Max-Age=${jwtConf.maxAge}`;
+
+  if (isSecureCookie) {
+    cookie += '; Secure';
+  }
+
+  if (event.queryStringParameters.redirect === 'false') {
+    return {
+      statusCode: 201,
+      headers: {
+        'Set-Cookie': cookie,
+      },
+    };
+  }
+
   return {
-    statusCode: 201,
+    statusCode: 302,
+    headers: {
+      Location: '/',
+      'Set-Cookie': cookie,
+    },
   };
 });

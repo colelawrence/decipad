@@ -1,20 +1,16 @@
-const { SESV2 } = require('aws-sdk');
 const arc = require('@architect/functions');
 const templates = require('@architect/shared/email-templates');
-
-const serviceOptions = {
-  apiVersion: '2019-09-27',
-  accessKeyId: process.env.DECI_SES_ACCESS_KEY_ID,
-  secretAccessKey: process.env.DECI_SES_SECRET_ACCESS_KEY,
-  region: 'eu-west-2',
-};
-
-const service = new SESV2(serviceOptions);
+const sendEmail = require('@architect/shared/services/send-email');
 
 exports.handler = arc.queues.subscribe(handler);
 
+const inTesting = !!process.env.JEST_WORKER_ID;
+
 async function handler({ template: templateName, ...params }) {
-  console.log('SEND EMAIL:', { template: templateName, ...params });
+  if (inTesting) {
+    return;
+  }
+
   const template = templates[templateName];
   if (!template) {
     throw new Error(`Could not find template with name ${templateName}`);
@@ -29,37 +25,4 @@ async function handler({ template: templateName, ...params }) {
   });
 
   return;
-}
-
-function sendEmail({ to, body, subject }) {
-  return new Promise((resolve, reject) => {
-    const params = {
-      Content: {
-        Simple: {
-          Body: {
-            Text: {
-              Data: body,
-              Charset: 'UTF-8',
-            },
-          },
-          Subject: {
-            Data: subject,
-            Charset: 'UTF-8',
-          },
-        },
-      },
-      Destination: {
-        ToAddresses: [to],
-      },
-      FromEmailAddress: process.env.DECI_FROM_EMAIL_ADDRESS,
-      ReplyToAddresses: [process.env.DECI_FROM_EMAIL_ADDRESS],
-    };
-
-    service.sendEmail(params, (err) => {
-      if (err) {
-        return reject(err);
-      }
-      resolve();
-    });
-  });
 }

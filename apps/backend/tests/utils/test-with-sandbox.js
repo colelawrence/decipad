@@ -5,17 +5,17 @@
 import sandbox from '@architect/sandbox';
 import path from 'path';
 import rimraf from 'rimraf';
-import getPort from 'get-port';
+// import getPort from 'get-port';
 
 function testWithSandbox(description, fn) {
   return describe(description, () => {
     let beforeWorkingDir;
 
-    beforeAll(async () => {
-      process.env.DECI_PORT = process.env.PORT = await getPort();
-      process.env.ARC_EVENTS_PORT = await getPort();
-      process.env.ARC_TABLES_PORT = await getPort();
-    });
+    // beforeAll(async () => {
+    //   process.env.DECI_PORT = process.env.PORT = await getPort();
+    //   process.env.ARC_EVENTS_PORT = await getPort();
+    //   process.env.ARC_TABLES_PORT = await getPort();
+    // });
 
     beforeAll(() => {
       beforeWorkingDir = process.cwd();

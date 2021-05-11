@@ -1,14 +1,16 @@
 const merge = require('lodash.merge');
 const context = require('./context');
 const playground = require('./playground');
-const glbl = require('./global');
-const teams = require('./teams');
-const auth = require('./auth');
+const modules = [
+  require('./global'),
+  require('./registration'),
+  require('./users'),
+  require('./teams'),
+  require('./auth'),
+];
 
-const typedefs = ({ gql }) =>
-  [glbl.typedefs, teams.typedefs, auth.typedefs].map((typedef) => typedef(gql));
-
-const resolvers = merge(glbl.resolvers, teams.resolvers, auth.resolvers);
+const typedefs = ({ gql }) => modules.map(({ typedefs }) => typedefs(gql));
+const resolvers = merge(...modules.map(({ resolvers }) => resolvers));
 
 function createHandler({
   ApolloServer,

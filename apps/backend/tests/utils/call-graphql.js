@@ -29,5 +29,15 @@ function withAuth({ token }) {
   });
 }
 
-export { withAuth };
+function withoutAuth() {
+  const uri = `${baseUrl()}/graphql`;
+  const httpLink = createHttpLink({ uri });
+
+  return new ApolloClient({
+    link: httpLink,
+    cache: new InMemoryCache(),
+  });
+}
+
+export { withAuth, withoutAuth };
 export { gql };

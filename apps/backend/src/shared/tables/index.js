@@ -3,11 +3,19 @@
 const arc = require('@architect/functions');
 
 const observedTables = ['userkeys'];
-
 const observedMethods = ['put', 'delete'];
 
+const observed = Symbol('deci_observed');
+
+let tablesPromise;
+
 module.exports = async function tables() {
-  const tables = await arc.tables();
+  if (tablesPromise) {
+    return tablesPromise;
+  }
+  const promise = arc.tables();
+  const tables = await promise;
+  tablesPromise = promise;
 
   for (const observedTable of observedTables) {
     observe(tables, observedTable);
@@ -18,6 +26,11 @@ module.exports = async function tables() {
 
 async function observe(tables, tableName) {
   const table = tables[tableName];
+  if (table[observed]) {
+    return;
+  }
+  table[observed] = true;
+
   for (const methodName of observedMethods) {
     const method = table[methodName];
     table[methodName] = async (args) => {

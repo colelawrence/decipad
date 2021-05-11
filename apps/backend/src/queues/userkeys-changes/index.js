@@ -3,14 +3,11 @@ const assert = require('assert');
 const { nanoid } = require('nanoid');
 const tables = require('@architect/shared/tables');
 
-const inTesting = !!process.env.JEST_WORKER_ID;
-
 exports.handler = arc.queues.subscribe(userKeyChangesHandler);
 
-async function userKeyChangesHandler({ table, action, args }) {
-  if (inTesting) {
-    return;
-  }
+async function userKeyChangesHandler(event) {
+  const { table, action, args } = event;
+
   assert.equal(table, 'userkeys');
   if (action === 'delete') {
     return;
@@ -39,7 +36,7 @@ async function userKeyChangesHandler({ table, action, args }) {
     userkey_id: args.id,
     expires_at:
       Math.round(Date.now() / 1000) +
-      Number(process.env.DECI_KEY_VALIDATION_EXPIRATION_SECONDS),
+      Number(process.env.DECI_KEY_VALIDATION_EXPIRATION_SECONDS || 2592000),
   };
 
   await data.userkeyvalidations.put(newValidation);
@@ -62,5 +59,5 @@ async function userKeyChangesHandler({ table, action, args }) {
   const userkey = await data.userkeys.get({ id: args.id });
   userkey.validation_msg_sent_at = Date.now();
 
-  data.userkeys.put(userkey);
+  await data.userkeys.put(userkey);
 }

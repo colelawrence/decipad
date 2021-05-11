@@ -3,12 +3,12 @@
 set -exuo pipefail
 
 mkdir -p \
-  src/kafka-consumers/consumer1-topic1/node_modules/@architect
+  tests/node_modules/@architect
 
 rm -f \
-  src/kafka-consumers/consumer1-topic1/node_modules/@architect/shared
+  tests/node_modules/@architect/shared
 
 ln -s \
-  src/shared \
-  src/kafka-consumers/consumer1-topic1/node_modules/@architect/shared
+  `../../node_modules/.bin/realpath src/shared` \
+  tests/node_modules/@architect/shared
 
