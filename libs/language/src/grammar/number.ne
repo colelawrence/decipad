@@ -26,7 +26,17 @@ number      -> plainNumber _ units                      {%
                                                         }
                                                         %}
 
-plainNumber -> percentage                               {% id %}
+percentage -> decimal "%"                               {%
+                                                        (d, l) => {
+                                                          return {
+                                                            type: 'literal',
+                                                            args: ['number', d[0].n / 100, null],
+                                                            location: l,
+                                                            length: lengthOf(d)
+                                                          }
+                                                        }
+                                                        %}
+
 plainNumber -> jsonfloat                                {% id %}
 
 int -> ("-"|"+"):? [0-9]:+                              {%
@@ -77,15 +87,4 @@ decimal -> "-":? [0-9]:+ ("." [0-9]:+):?                {%
                                                           }
                                                         }
                                                         %}
-
-percentage -> decimal "%"                               {%
-                                                        (d, l) => {
-                                                          return {
-                                                            n: d[0] / 1000,
-                                                            location: l,
-                                                            length: lengthOf(d)
-                                                          }
-                                                        }
-                                                        %}
-
 

@@ -6,6 +6,7 @@ literal     -> boolean                                  {% id %}
 literal     -> character                                {% id %}
 literal     -> string                                   {% id %}
 literal     -> number                                   {% id %}
+literal     -> percentage                               {% id %}
 literal     -> timeQuantity                             {% id %}
 literal     -> column                                   {% id %}
 literal     -> date                                     {% id %}

@@ -151,6 +151,7 @@
       { name: 'literal', symbols: ['character'], postprocess: id },
       { name: 'literal', symbols: ['string'], postprocess: id },
       { name: 'literal', symbols: ['number'], postprocess: id },
+      { name: 'literal', symbols: ['percentage'], postprocess: id },
       { name: 'literal', symbols: ['timeQuantity'], postprocess: id },
       { name: 'literal', symbols: ['column'], postprocess: id },
       { name: 'literal', symbols: ['date'], postprocess: id },
@@ -241,7 +242,18 @@
           };
         },
       },
-      { name: 'plainNumber', symbols: ['percentage'], postprocess: id },
+      {
+        name: 'percentage',
+        symbols: ['decimal', { literal: '%' }],
+        postprocess: (d, l) => {
+          return {
+            type: 'literal',
+            args: ['number', d[0].n / 100, null],
+            location: l,
+            length: lengthOf(d),
+          };
+        },
+      },
       { name: 'plainNumber', symbols: ['jsonfloat'], postprocess: id },
       { name: 'int$ebnf$1$subexpression$1', symbols: [{ literal: '-' }] },
       { name: 'int$ebnf$1$subexpression$1', symbols: [{ literal: '+' }] },
@@ -448,17 +460,6 @@
 
           return {
             n,
-            location: l,
-            length: lengthOf(d),
-          };
-        },
-      },
-      {
-        name: 'percentage',
-        symbols: ['decimal', { literal: '%' }],
-        postprocess: (d, l) => {
-          return {
-            n: d[0] / 1000,
             location: l,
             length: lengthOf(d),
           };
