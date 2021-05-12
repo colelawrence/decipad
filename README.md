@@ -32,7 +32,7 @@ You will also need to run stuff on the command line. Depending on your system (W
 
 After you're done with the preparation above, you can now choose a folder where you will install Deci. Normally people choose a folder named "dev" or "projects".
 
-###  Clone the decipad repo
+### Clone the decipad repo
 
 If you're using the command line, you can install it like this:
 
@@ -47,9 +47,37 @@ If you're using Github Desktop, clone the decipad repo (which installs it locall
 Using the command line, inside your local copy of the decipad repo, you should do:
 
 ```bash
-npm install
+npm install --legacy-peer-deps
 ```
 
-### Run
+### Installing the nx cli
 
-TODO
+To be able to run our project, you should firstly install the nx cli globally on your machine. You can do this by running the following command in your command line:
+
+```bash
+npm install -g @nrwl/cli
+```
+
+### Running the project
+
+To run the backend and the frontend, just copy and past the following command in your command line:
+
+```bash
+nx run-many --target=serve --projects=client,backend --parallel
+```
+
+### Testing the project
+
+To run the unit tests for all the monorepos in the project, you can run the following:
+
+```bash
+nx run-many --target=test --all
+```
+
+### Running storybook
+
+We use storybook for development and showcasing purposes of all of our components, you can also run storybook by running:
+
+```bash
+nx run ui:storybook
+```

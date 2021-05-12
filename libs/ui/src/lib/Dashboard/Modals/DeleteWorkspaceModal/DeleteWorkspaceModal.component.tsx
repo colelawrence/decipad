@@ -16,7 +16,7 @@ import {
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
-interface DeleteWorkspaceModalProps {
+export interface DeleteWorkspaceModalProps {
   name: string;
   onDelete: () => void;
   openButton: (onOpen: () => void) => JSX.Element;
@@ -28,7 +28,11 @@ export const DeleteWorkspaceModal = ({
   openButton,
 }: DeleteWorkspaceModalProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { register, errors, handleSubmit } = useForm();
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm();
 
   return (
     <>
@@ -52,9 +56,7 @@ export const DeleteWorkspaceModal = ({
               <FormControl isInvalid={errors.workspace !== undefined}>
                 <Input
                   type="text"
-                  name="workspace"
-                  ref={register({
-                    required: true,
+                  {...register('workspace', {
                     validate: (value) => value === name,
                   })}
                 />

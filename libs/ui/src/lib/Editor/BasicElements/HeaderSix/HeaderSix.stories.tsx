@@ -7,7 +7,7 @@ export default {
 
 export const Six = () => (
   <HeaderSix
-    element={null}
+    element={{ children: [{ text: 'hello world ' }] }}
     attributes={{
       'data-slate-node': 'element',
       ref: null,

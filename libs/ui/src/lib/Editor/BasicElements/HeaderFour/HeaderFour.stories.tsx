@@ -7,7 +7,7 @@ export default {
 
 export const Four = () => (
   <HeaderFour
-    element={null}
+    element={{ children: [{ text: 'hello world ' }] }}
     attributes={{
       'data-slate-node': 'element',
       ref: null,

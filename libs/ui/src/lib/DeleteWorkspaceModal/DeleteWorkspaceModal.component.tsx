@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 
-interface DeleteWorkspaceModalProps {
+export interface DeleteWorkspaceModalProps {
   name: string;
   onDelete: () => void;
   openButton: (onOpen: () => void) => JSX.Element;

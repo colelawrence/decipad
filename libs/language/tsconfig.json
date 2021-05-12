@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.strictbase.json",
+  "extends": "../../tsconfig.base.json",
   "include": ["**/*.d.ts", "**/*.ts", "**/*.js"],
   "ts-node": {
     "files": true
