@@ -6,7 +6,7 @@ import { FiGithub, FiMail } from 'react-icons/fi';
 
 export const Login = () => {
   const [usingEmail, setUsingEmail] = useState(false);
-  const [email, setEmail] = useState('i@pgte.me');
+  const [email, setEmail] = useState('');
 
   return (
     <Center
