@@ -428,7 +428,7 @@ function randomRemove(index: number, text: string): Operation[] {
 function randomSplit(index: number, text: string, node: Node): Operation[] {
   const ops: Operation[] = [];
   const pos = pickRandomIndex(text);
-  const { children, ...props } = node;
+  const { children: _, ...props } = node;
 
   ops.push({
     type: 'split_node',

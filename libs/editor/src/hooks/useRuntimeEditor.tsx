@@ -1,11 +1,5 @@
 import { isCollapsed } from '@udecode/slate-plugins';
-import React, {
-  useCallback,
-  useMemo,
-  useContext,
-  useState,
-  useEffect,
-} from 'react';
+import { useCallback, useContext, useState, useEffect } from 'react';
 import { Editor, Range, Text, Transforms } from 'slate';
 import { DeciRuntimeContext } from '../contexts/DeciRuntimeContext';
 

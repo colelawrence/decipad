@@ -6,7 +6,7 @@ import { DeciRuntimeContext } from '@decipad/editor';
 export const Workspaces = () => {
   const { runtime } = useContext(DeciRuntimeContext);
 
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
   const [workspaces, setWorkspaces] = useState([]);
 
   useEffect(() => {

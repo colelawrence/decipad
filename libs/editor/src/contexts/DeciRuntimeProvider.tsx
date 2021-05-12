@@ -1,7 +1,6 @@
 /* eslint-disable  react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/client';
-import { User } from 'next-auth';
 import { DeciRuntimeContext } from './DeciRuntimeContext';
 import { DeciRuntime } from '@decipad/runtime';
 import { nanoid } from 'nanoid';
