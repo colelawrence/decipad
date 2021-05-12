@@ -1,23 +1,21 @@
 'use strict';
 
+const { createHash } = require('crypto');
 const tables = require('../tables');
 
 function createAdapter() {
-  async function getAdapter(/*appOptions*/) {
+  async function getAdapter({ secret, ...appOptions }) {
     const data = await tables();
 
-    async function createUser(profile) {
-      console.log('ADAPTER: createUser:', profile);
+    async function createUser(_profile) {
       return null;
     }
 
     function getUser(id) {
-      console.log('ADAPTER: getUser:', id);
       return data.users.get({ id });
     }
 
     async function getUserByEmail(email) {
-      console.log('ADAPTER: getUserByEmail:', email);
       const id = `email:${email}`;
       const key = await data.userkeys.get({ id });
       let user;
@@ -29,10 +27,6 @@ function createAdapter() {
     }
 
     async function getUserByProviderAccountId(providerId, providerAccountId) {
-      console.log('ADAPTER: getUserByProviderAccountId:', {
-        providerId,
-        providerAccountId,
-      });
       const userkey = await data.userkeys.get({
         id: `${providerId}:${providerAccountId}`,
       });
@@ -45,12 +39,32 @@ function createAdapter() {
     }
 
     async function updateUser(user) {
-      console.log('ADAPTER: updateUser:', user);
-      return null;
+      let verifiedAt;
+      if (user.emailVerified) {
+        verifiedAt = new Date(user.emailVerified);
+        delete user.emailVerified;
+
+        const userkey = await data.userkeys.get({
+          id: `email:${user.email}`,
+        });
+
+        if (userkey) {
+          userkey.validated_at = verifiedAt.getTime();
+
+          await data.userkeys.put(userkey);
+        }
+      }
+
+      await data.users.put(user);
+
+      if (verifiedAt) {
+        user.verifiedAt = verifiedAt;
+      }
+
+      return user;
     }
 
-    async function deleteUser(userId) {
-      console.log('ADAPTER: deleteUser:', userId);
+    async function deleteUser(_userId) {
       return null;
     }
 
@@ -118,14 +132,26 @@ function createAdapter() {
       secret,
       provider
     ) {
-      console.log('createVerificationRequest', {
+      const hashedToken = hashToken(token);
+
+      const newVerificationRequest = {
+        id: `${identifier}:${hashedToken}`,
+        identifier,
+        token: hashedToken,
+        expires_at:
+          Math.round(Date.now() / 1000) +
+          Number(process.env.DECI_VERIFICATION_EXPIRES_SECONDS || 86400),
+      };
+
+      await data.verificationrequests.put(newVerificationRequest);
+
+      await provider.sendVerificationRequest({
         identifier,
         url,
         token,
-        secret,
+        baseUrl: appOptions.baseUrl,
         provider,
       });
-      return null;
     }
 
     async function getVerificationRequest(identifier, token, secret, provider) {
@@ -135,22 +161,22 @@ function createAdapter() {
         secret,
         provider,
       });
-      return null;
+
+      const hashedToken = hashToken(token);
+      const id = `${identifier}:${hashedToken}`;
+      const verificationRequest = await data.verificationrequests.get({ id });
+
+      return verificationRequest;
     }
 
-    async function deleteVerificationRequest(
-      identifier,
-      token,
-      secret,
-      provider
-    ) {
-      console.log('deleteVerificationRequest', {
-        identifier,
-        token,
-        secret,
-        provider,
-      });
-      return null;
+    async function deleteVerificationRequest(identifier, token) {
+      const hashedToken = hashToken(token);
+      const id = `${identifier}:${hashedToken}`;
+      await data.verificationrequests.delete({ id });
+    }
+
+    function hashToken(token) {
+      return createHash('sha256').update(`${token}${secret}`).digest('hex');
     }
 
     return {

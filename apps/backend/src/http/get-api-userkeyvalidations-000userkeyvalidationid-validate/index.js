@@ -51,7 +51,7 @@ exports.handler = handle(async (event) => {
     cookie += '; Secure';
   }
 
-  if (event.queryStringParameters.redirect === 'false') {
+  if (event.queryStringParameters?.redirect === 'false') {
     return {
       statusCode: 201,
       headers: {

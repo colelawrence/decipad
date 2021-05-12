@@ -1,6 +1,6 @@
 import baseUrl from './base-url';
 
-async function callSimple(url, options) {
+async function call(url, options) {
   if (!url.startsWith('http')) {
     url = baseUrl() + url;
   }
@@ -17,7 +17,7 @@ async function callSimple(url, options) {
   return response;
 }
 
-export default callSimple;
+export default call;
 
 function withAuth({ token }) {
   return (url, options = {}) => {
@@ -32,7 +32,7 @@ function withAuth({ token }) {
     headers.Cookie = `${cookies}next-auth.session-token=${token}`;
     options.credentials = 'same-origin';
 
-    return callSimple(url, options);
+    return call(url, options);
   };
 }
 

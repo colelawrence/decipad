@@ -110,7 +110,7 @@ export const builtins: Record<string, BuiltinSpec> = {
     argCardinalities: [1, 1, 2],
     fn: (initial: number, growthRate: number, length: unknown[]) => {
       let current = initial;
-      return Array.from({ length: length.length }, (_) => {
+      return Array.from({ length: length.length }, () => {
         const ret = current;
         current += current * growthRate;
         return ret;

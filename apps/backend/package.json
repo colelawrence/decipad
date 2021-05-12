@@ -18,7 +18,7 @@
     "graphql": "^15.5.0",
     "lodash.merge": "^4.6.2",
     "nanoid": "^3.1.22",
-    "next-auth": "^3.15.1",
+    "next-auth": "^3.21.1",
     "simple-cookie": "^1.0.13"
   }
 }

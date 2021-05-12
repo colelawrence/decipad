@@ -1,9 +1,13 @@
 import { Button, Center, Heading, Icon, Image } from '@chakra-ui/react';
+import { Input } from '@chakra-ui/react';
 import { signIn } from 'next-auth/client';
-import React from 'react';
-import { FiGithub } from 'react-icons/fi';
+import React, { useState } from 'react';
+import { FiGithub, FiMail } from 'react-icons/fi';
 
 export const Login = () => {
+  const [usingEmail, setUsingEmail] = useState(false);
+  const [email, setEmail] = useState('i@pgte.me');
+
   return (
     <Center
       h="100vh"
@@ -20,15 +24,57 @@ export const Login = () => {
       <Heading fontSize="2xl" mt={3}>
         Make sense of your decisions.
       </Heading>
-      <Button
-        onClick={() => signIn('github')}
-        bg="black"
-        color="white"
-        mt={3}
-        _hover={{ bg: 'black' }}
-      >
-        <Icon as={FiGithub} mr={3} /> Sign in with Github
-      </Button>
+      {!usingEmail ? (
+        <>
+          <Button
+            onClick={() => signIn('github')}
+            bg="black"
+            color="white"
+            mt={3}
+            _hover={{ bg: 'black' }}
+          >
+            <Icon as={FiGithub} mr={3} /> Sign in with Github
+          </Button>
+
+          <Button
+            onClick={() => setUsingEmail(true)}
+            bg="black"
+            color="white"
+            mt={3}
+            _hover={{ bg: 'black' }}
+          >
+            <Icon as={FiMail} mr={3} /> Sign in using E-mail
+          </Button>
+        </>
+      ) : (
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            signIn('email', { email });
+            setEmail('');
+          }}
+        >
+          <Input
+            type="email"
+            value={email}
+            focus
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="me@example.com"
+            autoComplete="email"
+            isRequired
+          />
+
+          <Button
+            onClick={() => setUsingEmail(false)}
+            bg="black"
+            color="white"
+            mt={3}
+            _hover={{ bg: 'black' }}
+          >
+            Go back
+          </Button>
+        </form>
+      )}
     </Center>
   );
 };

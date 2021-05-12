@@ -17,6 +17,7 @@ get /api/auth/csrf
 get /api/auth/providers
 get /api/auth/error
 get /api/auth/token
+get /api/auth/verify-request
 
 get /api/workspaces
 put /api/workspaces
@@ -113,6 +114,12 @@ invites
   expires_at TTL
   encrypt true
 
+verificationrequests
+  id *String
+  identifier String
+  token String
+  baseUrl: String
+  expires_at TTL
 
 @indexes
 
@@ -139,6 +146,9 @@ userkeyvalidations
   userkey_id *String
   name byUserKeyId
 
+verificationrequests
+  identifier *String
+  name byIdentifier
 
 @queues
 

@@ -11,11 +11,12 @@ function testWithSandbox(description, fn) {
   return describe(description, () => {
     let beforeWorkingDir;
 
-    // beforeAll(async () => {
-    //   process.env.DECI_PORT = process.env.PORT = await getPort();
-    //   process.env.ARC_EVENTS_PORT = await getPort();
-    //   process.env.ARC_TABLES_PORT = await getPort();
-    // });
+    beforeAll(async () => {
+      process.env.DECI_PORT = process.env.PORT = '3333';
+      process.env.NEXTAUTH_URL = 'http://localhost:3333/api/auth';
+      //   process.env.ARC_EVENTS_PORT = await getPort();
+      //   process.env.ARC_TABLES_PORT = await getPort();
+    });
 
     beforeAll(() => {
       beforeWorkingDir = process.cwd();

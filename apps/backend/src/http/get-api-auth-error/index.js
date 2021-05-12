@@ -13,7 +13,7 @@ exports.handler = async function http(req) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Architect</title>
+  <title>Deci</title>
   <style>
     * {
       box-sizing: border-box;

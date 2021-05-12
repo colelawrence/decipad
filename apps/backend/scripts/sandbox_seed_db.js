@@ -13,6 +13,13 @@ const arc = require('@architect/functions');
 
   await tables.users.put(newUser1);
 
+  const newUserKey1 = {
+    id: `email:${newUser1.email}`,
+    user_id: newUser1.id,
+  };
+
+  await tables.userkeys.put(newUserKey1);
+
   const newUser2 = {
     id: 'test user id 2',
     name: 'Test User 2',
