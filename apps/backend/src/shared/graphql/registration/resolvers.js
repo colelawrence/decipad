@@ -18,6 +18,8 @@ const resolvers = {
       const newUser = {
         id: nanoid(),
         name: '',
+        email,
+        secret: nanoid(),
       };
 
       await data.users.put(newUser);

@@ -128,7 +128,7 @@ test('registration via magic link', () => {
   });
 
   it('does not let register twice with the same email', async () => {
-    const client = withAuth(await auth());
+    const client = withoutAuth();
     await expect(
       client.mutate({
         mutation: gql`

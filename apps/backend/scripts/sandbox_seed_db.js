@@ -1,4 +1,5 @@
 const arc = require('@architect/functions');
+const { nanoid } = require('nanoid');
 
 (async () => {
   const tables = await arc.tables();
@@ -7,8 +8,9 @@ const arc = require('@architect/functions');
     id: 'test user id 1',
     name: 'Test User',
     last_login: Date.now(),
-    avatar: null,
+    image: null,
     email: 'test1@decipad.com',
+    secret: nanoid(),
   };
 
   await tables.users.put(newUser1);
@@ -24,8 +26,9 @@ const arc = require('@architect/functions');
     id: 'test user id 2',
     name: 'Test User 2',
     last_login: Date.now(),
-    avatar: null,
-    email: 'pedro@n1n.co',
+    image: null,
+    email: 'test2@decipad.com',
+    secret: nanoid(),
   };
 
   await tables.users.put(newUser2);

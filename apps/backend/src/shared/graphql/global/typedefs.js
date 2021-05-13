@@ -3,7 +3,7 @@ module.exports = ({ gql }) => gql`
     id: ID!
     name: String
     email: String
-    avatar: String
+    image: String
     teams: [Team!]!
   }
 

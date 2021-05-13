@@ -2,6 +2,7 @@
 
 decipad-backend
 
+
 @http
 
 get /graphql
@@ -43,6 +44,7 @@ get /api/invites/:inviteid/accept
 
 get /api/userkeyvalidations/:userkeyvalidationid/validate
 
+
 @ws
 
 
@@ -52,8 +54,9 @@ users
   id *String
   name String
   last_login Number
-  avatar String
+  image String
   email String
+  secret String
   encrypt true
 
 userprofiles
@@ -119,9 +122,15 @@ verificationrequests
   identifier String
   token String
   baseUrl: String
-  expires_at TTL
+  expires TTL
+  encrypt true
+
 
 @indexes
+
+users
+  secret *String
+  name bySecret
 
 collabs
   room *String
@@ -150,6 +159,7 @@ verificationrequests
   identifier *String
   name byIdentifier
 
+
 @queues
 
 sendemail
@@ -161,6 +171,7 @@ userkeys-changes
 
 #@kafka-consumer-groups
 #consumer1 topic1 10
+
 
 @aws
 region eu-west-2
