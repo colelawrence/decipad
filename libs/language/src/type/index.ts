@@ -58,7 +58,7 @@ export class Type {
   node: AST.Node;
   errorCause: InferError | null = null;
   rangeness = false;
-  date: DateSpecificity | null;
+  date: DateSpecificity | null = null;
 
   // Column
   cellType: Type | null = null;
@@ -77,6 +77,10 @@ export class Type {
     base: Type,
     { type, unit, columnSize, rangeness, date }: ExtendArgs
   ): Type {
+    if (base.errorCause != null) {
+      return base;
+    }
+
     if (columnSize != null) {
       const t = Type.extend(base, { type, unit, rangeness, date });
 

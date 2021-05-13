@@ -9,7 +9,7 @@ sequence -> "[" _ sequenceSpec _ "]"                {%
                                                     }
                                                     %}
 
-sequenceSpec -> rangeSpec _ "by" _ expression         {%
+sequenceSpec -> rangeSpec _ "by" _ expression       {%
                                                     (d, l) => {
                                                       const range = d[0]
                                                       return {
