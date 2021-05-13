@@ -1,9 +1,25 @@
 import assert from 'assert';
+import { walk } from '../utils';
+import { prettyPrintAST } from './utils';
 import { parse } from './';
+
+function cleanSourceMap(ast) {
+  walk(ast, (node) => {
+    delete node.end;
+    delete node.start;
+  });
+}
 
 export function runTests(tests) {
   for (const [name, spec] of Object.entries(tests)) {
-    const { source, ast, expectError, skip = false, only = false } = spec;
+    const {
+      source,
+      ast,
+      expectError,
+      sourceMap = true,
+      skip = false,
+      only = false,
+    } = spec;
     let testFunction = skip ? test.skip : only ? test.only : test;
 
     testFunction(name, () => {
@@ -19,10 +35,10 @@ export function runTests(tests) {
         parseError = err;
       }
 
-      const resultsWithErrors = results.filter(
+      const resultsWithErrors = results?.filter(
         (result) => result.errors.length > 0
       );
-      if (resultsWithErrors.length > 0) {
+      if ((resultsWithErrors?.length ?? 0) > 0) {
         parseError = resultsWithErrors[0].errors[0];
       }
 
@@ -48,8 +64,7 @@ export function runTests(tests) {
         if (result.solutions.length > 1) {
           throw new Error(
             `Ambiguous results. Alternatives:\n${result.solutions.map(
-              (result) =>
-                `Result :\n ${JSON.stringify(result, null, '\t')}\n-------\n`
+              (solution) => `Result :\n${prettyPrintAST(solution)}\n-------\n`
             )}`
           );
         }
@@ -57,6 +72,10 @@ export function runTests(tests) {
         const solution = result.solutions[0];
 
         expect(solution.type).toBe('block');
+
+        if (sourceMap === false) {
+          cleanSourceMap(solution);
+        }
 
         try {
           expect(solution.args).toStrictEqual(ast);

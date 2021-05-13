@@ -1,11 +1,16 @@
-import { parse } from './index';
 import { n, c, l, date, range, col, tableDef, funcDef } from '../utils';
+import { parse } from './index';
+import { prettyPrintAST } from './utils';
 
 const testParse = (source: string, ...expected: AST.Statement[]) => {
   const p = (source: string) => {
     const parsed = parse([{ id: 'ignored', source }])[0];
 
     if (parsed.solutions.length > 1) {
+      for (const solution of parsed.solutions) {
+        console.log(prettyPrintAST(solution));
+        console.log(' ----- ');
+      }
       throw new Error('multiple solutions');
     }
 
@@ -31,6 +36,13 @@ it('parses things in multiple lines', () => {
   );
 });
 
+it('perceives the correct precedence between operators', () => {
+  testParse(
+    '1 + 2 / 1 - 2 ** 5 / 42',
+    c('-', c('+', l(1), c('/', l(2), l(1))), c('/', c('**', l(2), l(5)), l(42)))
+  );
+});
+
 it('can parse functions with multiline conditions', () => {
   testParse(
     [
@@ -47,12 +59,8 @@ it('can parse functions with multiline conditions', () => {
         n('ref', 'working'),
         c(
           '+',
-          n('ref', 'salary'),
-          c(
-            '+',
-            c('*', n('ref', 'salary'), l(0.2)),
-            c('if', n('ref', 'bonus'), c('*', n('ref', 'salary'), l(0.2)), l(0))
-          )
+          c('+', n('ref', 'salary'), c('*', n('ref', 'salary'), l(0.2))),
+          c('if', n('ref', 'bonus'), c('*', n('ref', 'salary'), l(0.2)), l(0))
         ),
         l(0)
       )
