@@ -1,24 +1,37 @@
 import { isNode, isStatement } from '../utils';
 
-const prettyPrint = (node: AST.Node, indent = 0) => {
-  const { type, args } = node;
-  const perLine = isStatement(node) || type === 'block';
+const prettyPrint = (node: AST.Node, indent: number) => {
+  const perLine = isStatement(node) || node.type === 'block';
 
-  const printedArgs = (args as (AST.Node | unknown)[]).flatMap(
-    function printArg(a): string | string[] {
-      if (isNode(a)) {
-        if (a.type === 'literal') {
-          return JSON.stringify(a.args[1]);
-        } else {
-          return prettyPrint(a, indent + 1);
-        }
-      } else if (Array.isArray(a)) {
-        return a.flatMap(printArg);
-      } else {
-        return String(a);
-      }
+  let printedArgs: string[];
+  let fname: string;
+
+  switch (node.type) {
+    case 'literal': {
+      return JSON.stringify(node.args[1]);
     }
-  );
+    case 'function-call': {
+      fname = node.args[0].args[0];
+      printedArgs = node.args[1].args.map((arg) =>
+        prettyPrint(arg, indent + 1)
+      );
+      break;
+    }
+    default: {
+      fname = node.type;
+      printedArgs = (node.args as (AST.Node | unknown)[]).flatMap(
+        function printArg(a): string | string[] {
+          if (isNode(a)) {
+            return prettyPrint(a, indent + 1);
+          } else if (Array.isArray(a)) {
+            return a.flatMap(printArg);
+          } else {
+            return String(a);
+          }
+        }
+      );
+    }
+  }
 
   let argsStr;
   if (perLine) {
@@ -28,7 +41,7 @@ const prettyPrint = (node: AST.Node, indent = 0) => {
     argsStr = printedArgs.join(' ');
   }
 
-  return `(${type} ${argsStr})`;
+  return `(${fname} ${argsStr})`;
 };
 
 export const prettyPrintAST = (ast: AST.Node) => {
