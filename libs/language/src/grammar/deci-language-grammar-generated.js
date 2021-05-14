@@ -2205,68 +2205,73 @@
           length: lengthOf(d),
         }),
       },
-      { name: 'expression', symbols: ['term'], postprocess: id },
+      { name: 'expression', symbols: ['nonGivenExp'], postprocess: id },
+      { name: 'expression', symbols: ['given'], postprocess: id },
+      { name: 'nonGivenExp', symbols: ['divMulOp'], postprocess: id },
+      { name: 'nonGivenExp', symbols: ['table'], postprocess: id },
+      { name: 'nonGivenExp', symbols: ['functionCall'], postprocess: id },
+      { name: 'divMulOp', symbols: ['addSubOp'], postprocess: id },
       {
-        name: 'expression',
-        symbols: ['term', '_', 'dissociativeOperator', '_', 'expression'],
+        name: 'divMulOp',
+        symbols: ['divMulOp', '_', 'dissociativeOperator', '_', 'addSubOp'],
         postprocess: (d, l, reject) => {
-          const term = d[0];
+          const left = d[0];
           const op = d[2];
-          const expr = d[4];
+          const right = d[4];
           const totalLength = lengthOf(d);
 
           // reject if this looks like a date in the format yyyy-mm or yyyy-mm-dd
           if (
             (op.name === '-' &&
-              term.type === 'literal' &&
-              term.args[0] === 'number' &&
-              term.length === 4 &&
+              left.type === 'literal' &&
+              left.args[0] === 'number' &&
+              left.length === 4 &&
               ((totalLength === 7 &&
-                expr.type === 'literal' &&
-                expr.args[0] === 'number' &&
-                expr.length === 2 &&
-                expr.args[1] <= 12 &&
-                expr.args[1] >= 1) ||
+                right.type === 'literal' &&
+                right.args[0] === 'number' &&
+                right.length === 2 &&
+                right.args[1] <= 12 &&
+                right.args[1] >= 1) ||
                 (totalLength === 10 &&
-                  expr.type === 'function-call' &&
-                  expr.args[0].type === 'funcref' &&
-                  expr.args[0].args[0] === '-' &&
-                  expr.args[1].args.length === 2 &&
-                  ((expr.args[1].args[0].type === 'literal' &&
-                    expr.args[1].args[0].args[0] === 'number' &&
-                    expr.args[1].args[0].length === 2 &&
-                    ((expr.args[1].args[1].type === 'literal' &&
-                      expr.args[1].args[1].args[0] === 'number' &&
-                      expr.args[1].args[1].length === 2) ||
-                      (expr.args[1].args[1].type === 'ref' &&
-                        monthStrings.has(expr.args[1].args[1].args[0])))) ||
-                    (expr.args[1].args[0].type === 'ref' &&
-                      monthStrings.has(expr.args[1].args[0].args[0]) &&
-                      expr.args[1].args[1].type === 'literal' &&
-                      expr.args[1].args[1].args[0] === 'number' &&
-                      expr.args[1].args[1].length === 2))) ||
-                (expr.type === 'ref' && monthStrings.has(expr.args[0])) ||
-                (expr.type === 'function-call' &&
-                  expr.args[0].args[0] === '-' &&
-                  expr.args[1].args.length === 2 &&
-                  expr.args[1].args[0].type === 'ref' &&
-                  monthStrings.has(expr.args[1].args[0].args[0]) &&
-                  expr.args[1].args[1].type === 'literal' &&
-                  expr.args[1].args[1].args[0] === 'number' &&
-                  expr.args[1].args[1].length === 2))) ||
-            (term.type === 'date' &&
-              expr.type === 'literal' &&
-              expr.args[0] === 'number' &&
-              expr.length === 2)
+                  right.type === 'function-call' &&
+                  right.args[0].type === 'funcref' &&
+                  right.args[0].args[0] === '-' &&
+                  right.args[1].args.length === 2 &&
+                  ((right.args[1].args[0].type === 'literal' &&
+                    right.args[1].args[0].args[0] === 'number' &&
+                    right.args[1].args[0].length === 2 &&
+                    ((right.args[1].args[1].type === 'literal' &&
+                      right.args[1].args[1].args[0] === 'number' &&
+                      right.args[1].args[1].length === 2) ||
+                      (right.args[1].args[1].type === 'ref' &&
+                        monthStrings.has(right.args[1].args[1].args[0])))) ||
+                    (right.args[1].args[0].type === 'ref' &&
+                      monthStrings.has(right.args[1].args[0].args[0]) &&
+                      right.args[1].args[1].type === 'literal' &&
+                      right.args[1].args[1].args[0] === 'number' &&
+                      right.args[1].args[1].length === 2))) ||
+                (right.type === 'ref' && monthStrings.has(right.args[0])) ||
+                (right.type === 'function-call' &&
+                  right.args[0].args[0] === '-' &&
+                  right.args[1].args.length === 2 &&
+                  right.args[1].args[0].type === 'ref' &&
+                  monthStrings.has(right.args[1].args[0].args[0]) &&
+                  right.args[1].args[1].type === 'literal' &&
+                  right.args[1].args[1].args[0] === 'number' &&
+                  right.args[1].args[1].length === 2))) ||
+            (left.type === 'date' &&
+              right.type === 'literal' &&
+              right.args[0] === 'number' &&
+              right.length === 2)
           ) {
             return reject;
           }
 
           if (
             op.name === '+' &&
-            term.type === 'date' &&
-            expr.type === 'literal' &&
-            expr.args[0] === 'number'
+            left.type === 'date' &&
+            right.type === 'literal' &&
+            right.args[0] === 'number'
           ) {
             return reject;
           }
@@ -2277,12 +2282,12 @@
               {
                 type: 'funcref',
                 args: [op.name],
-                location: l + lengthOf([term, d[1]]),
+                location: l + lengthOf([left, d[1]]),
                 length: op.length,
               },
               {
                 type: 'argument-list',
-                args: [term, expr],
+                args: [left, right],
                 location: l,
                 length: totalLength,
               },
@@ -2292,14 +2297,14 @@
           };
         },
       },
-      { name: 'term', symbols: ['factor'], postprocess: id },
+      { name: 'addSubOp', symbols: ['primary'], postprocess: id },
       {
-        name: 'term',
-        symbols: ['factor', '_', 'associativeOperator', '_', 'term'],
+        name: 'addSubOp',
+        symbols: ['addSubOp', '_', 'associativeOperator', '_', 'primary'],
         postprocess: (d, l) => {
-          const factor = d[0];
+          const left = d[0];
           const op = d[2];
-          const term = d[4];
+          const right = d[4];
           const totalLength = lengthOf(d);
 
           return {
@@ -2308,12 +2313,12 @@
               {
                 type: 'funcref',
                 args: [op.name],
-                location: l + lengthOf([factor, d[1]]),
+                location: l + lengthOf([left, d[1]]),
                 length: op.length,
               },
               {
                 type: 'argument-list',
-                args: [factor, term],
+                args: [left, right],
                 location: l,
                 length: totalLength,
               },
@@ -2323,9 +2328,8 @@
           };
         },
       },
-      { name: 'factor', symbols: ['literal'], postprocess: id },
       {
-        name: 'factor',
+        name: 'basicRef',
         symbols: ['referenceInExpression'],
         postprocess: (d, l, reject) => {
           const name = d[0];
@@ -2340,8 +2344,10 @@
           };
         },
       },
+      { name: 'primary', symbols: ['literal'], postprocess: id },
+      { name: 'primary', symbols: ['basicRef'], postprocess: id },
       {
-        name: 'factor',
+        name: 'primary',
         symbols: [{ literal: '(' }, '_', 'expression', '_', { literal: ')' }],
         postprocess: (d, l) => {
           return {
@@ -2352,7 +2358,7 @@
         },
       },
       {
-        name: 'factor',
+        name: 'primary',
         symbols: [{ literal: '-' }, '_', 'expression'],
         postprocess: (d, l, reject) => {
           const expr = d[2];
@@ -2381,24 +2387,15 @@
           };
         },
       },
-      { name: 'expression', symbols: ['table'], postprocess: id },
-      { name: 'expression', symbols: ['given'], postprocess: id },
-      { name: 'expression', symbols: ['conditional'], postprocess: id },
-      { name: 'expression', symbols: ['functionCall'], postprocess: id },
       {
-        name: 'factor',
-        symbols: ['term', '_', { literal: '.' }, '_', 'propertyAccessor'],
+        name: 'primary',
+        symbols: ['basicRef', '_', { literal: '.' }, '_', 'basicRef'],
         postprocess: (d, l) => ({
           type: 'property-access',
-          args: [d[0], d[4].name],
+          args: [d[0], d[4].args[0]],
           location: l,
           length: lengthOf(d),
         }),
-      },
-      {
-        name: 'propertyAccessor',
-        symbols: ['referenceInExpression'],
-        postprocess: id,
       },
       { name: 'timeQuantity$ebnf$1', symbols: [] },
       {
@@ -3079,17 +3076,6 @@
         },
       },
       {
-        name: 'referenceAsOperator',
-        symbols: [{ literal: '`' }, 'referenceName', { literal: '`' }],
-        postprocess: (d, l) => {
-          return {
-            name: d[1].name,
-            location: l,
-            length: lengthOf(d),
-          };
-        },
-      },
-      {
         name: 'functionDef$string$1',
         symbols: [{ literal: '=' }, { literal: '>' }],
         postprocess: function joiner(d) {
@@ -3290,11 +3276,6 @@
             length: d[1].length,
           };
         },
-      },
-      {
-        name: 'dissociativeOperator',
-        symbols: ['referenceAsOperator'],
-        postprocess: id,
       },
       {
         name: 'associativeOperator$subexpression$1$string$1',
@@ -3507,14 +3488,14 @@
         },
       },
       {
-        name: 'conditional$string$1',
+        name: 'expression$string$1',
         symbols: [{ literal: 'i' }, { literal: 'f' }],
         postprocess: function joiner(d) {
           return d.join('');
         },
       },
       {
-        name: 'conditional$string$2',
+        name: 'expression$string$2',
         symbols: [
           { literal: 't' },
           { literal: 'h' },
@@ -3526,7 +3507,7 @@
         },
       },
       {
-        name: 'conditional$string$3',
+        name: 'expression$string$3',
         symbols: [
           { literal: 'e' },
           { literal: 'l' },
@@ -3538,17 +3519,17 @@
         },
       },
       {
-        name: 'conditional',
+        name: 'expression',
         symbols: [
-          'conditional$string$1',
+          'expression$string$1',
           '__',
           'expression',
           '__',
-          'conditional$string$2',
+          'expression$string$2',
           '__',
           'expression',
           '__',
-          'conditional$string$3',
+          'expression$string$3',
           '__',
           'expression',
         ],

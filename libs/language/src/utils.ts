@@ -140,14 +140,19 @@ export const isExpression = (
 ): value is AST.Expression =>
   isNode(value) && expressionTypesSet.has(value.type);
 
+const statementTypesSet = new Set(['assign', 'function-definition']);
+
+export const isStatement = (
+  value: unknown | AST.Statement
+): value is AST.Statement => isNode(value) && statementTypesSet.has(value.type);
+
 export const getIdentifierString = ({ type, args }: AST.Identifier): string => {
   if (
     (type !== 'ref' &&
       type !== 'def' &&
       type !== 'funcdef' &&
       type !== 'funcref' &&
-      type !== 'coldef' &&
-      type !== 'tabledef') ||
+      type !== 'coldef') ||
     typeof args[0] !== 'string'
   ) {
     throw new Error('panic: identifier expected');

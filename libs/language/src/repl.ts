@@ -20,7 +20,7 @@ export const stringifyResult = (
     return `range [ ${stringifyResult(
       (result as any)[0],
       contentT
-    )} ... ${stringifyResult((result as any)[1], contentT)} ]`;
+    )} through ${stringifyResult((result as any)[1], contentT)} ]`;
   }
 
   if (type instanceof Type && type.date != null) {

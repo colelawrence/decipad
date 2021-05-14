@@ -26,6 +26,13 @@ describe('basic code', () => {
     });
   });
 
+  it('has correct operator precedence', async () => {
+    expect(await runCode('1 + 2 / 4 - 5 ** 2 / 4')).toMatchObject({
+      type: { type: 'number' },
+      value: [-4.75],
+    });
+  });
+
   it('can assign variables', async () => {
     expect(
       await runCode(`

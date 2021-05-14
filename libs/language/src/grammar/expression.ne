@@ -2,88 +2,94 @@
 ### Expression ###
 ##################
 
-expression   -> term                                    {% id %}
+expression    -> nonGivenExp                             {% id %}
+expression    -> given                                   {% id %}
 
-expression   -> term _ dissociativeOperator _ expression {%
+nonGivenExp   -> divMulOp                                {% id %}
+nonGivenExp   -> table                                   {% id %}
+nonGivenExp   -> functionCall                            {% id %}
+
+divMulOp      -> addSubOp                                {% id %}
+divMulOp      -> divMulOp _ dissociativeOperator _ addSubOp {%
                                                         (d, l, reject) => {
-                                                          const term = d[0]
+                                                          const left = d[0]
                                                           const op = d[2]
-                                                          const expr = d[4]
+                                                          const right = d[4]
                                                           const totalLength = lengthOf(d)
 
                                                           // reject if this looks like a date in the format yyyy-mm or yyyy-mm-dd
                                                           if (
                                                               (op.name === '-') &&
                                                               (
-                                                                (term.type === 'literal') &&
-                                                                (term.args[0] === 'number') &&
-                                                                (term.length === 4) &&
+                                                                (left.type === 'literal') &&
+                                                                (left.args[0] === 'number') &&
+                                                                (left.length === 4) &&
                                                                 (
                                                                   (
                                                                     (
                                                                       (
                                                                         (totalLength === 7) &&
-                                                                        (expr.type === 'literal') &&
-                                                                        (expr.args[0] === 'number') &&
-                                                                        (expr.length === 2) &&
-                                                                        (expr.args[1] <= 12 && expr.args[1] >= 1)
+                                                                        (right.type === 'literal') &&
+                                                                        (right.args[0] === 'number') &&
+                                                                        (right.length === 2) &&
+                                                                        (right.args[1] <= 12 && right.args[1] >= 1)
                                                                       ) ||
                                                                       (
                                                                         (totalLength === 10) &&
-                                                                        (expr.type === 'function-call') &&
-                                                                        (expr.args[0].type === 'funcref') &&
-                                                                        (expr.args[0].args[0] === '-') &&
-                                                                        (expr.args[1].args.length === 2) &&
+                                                                        (right.type === 'function-call') &&
+                                                                        (right.args[0].type === 'funcref') &&
+                                                                        (right.args[0].args[0] === '-') &&
+                                                                        (right.args[1].args.length === 2) &&
                                                                         (
                                                                           (
-                                                                            (expr.args[1].args[0].type === 'literal') &&
-                                                                            (expr.args[1].args[0].args[0] === 'number') &&
-                                                                            (expr.args[1].args[0].length === 2) &&
+                                                                            (right.args[1].args[0].type === 'literal') &&
+                                                                            (right.args[1].args[0].args[0] === 'number') &&
+                                                                            (right.args[1].args[0].length === 2) &&
                                                                             (
                                                                               (
-                                                                                (expr.args[1].args[1].type === 'literal') &&
-                                                                                (expr.args[1].args[1].args[0] === 'number') &&
-                                                                                (expr.args[1].args[1].length === 2)
+                                                                                (right.args[1].args[1].type === 'literal') &&
+                                                                                (right.args[1].args[1].args[0] === 'number') &&
+                                                                                (right.args[1].args[1].length === 2)
                                                                               ) ||
                                                                               (
-                                                                                (expr.args[1].args[1].type === 'ref') &&
-                                                                                (monthStrings.has(expr.args[1].args[1].args[0]))
+                                                                                (right.args[1].args[1].type === 'ref') &&
+                                                                                (monthStrings.has(right.args[1].args[1].args[0]))
                                                                               )
                                                                             )
                                                                           ) ||
                                                                           (
-                                                                            (expr.args[1].args[0].type === 'ref') &&
-                                                                            (monthStrings.has(expr.args[1].args[0].args[0])) &&
-                                                                            (expr.args[1].args[1].type === 'literal') &&
-                                                                            (expr.args[1].args[1].args[0] === 'number') &&
-                                                                            (expr.args[1].args[1].length === 2)
+                                                                            (right.args[1].args[0].type === 'ref') &&
+                                                                            (monthStrings.has(right.args[1].args[0].args[0])) &&
+                                                                            (right.args[1].args[1].type === 'literal') &&
+                                                                            (right.args[1].args[1].args[0] === 'number') &&
+                                                                            (right.args[1].args[1].length === 2)
 
                                                                           )
                                                                         )
                                                                       ) ||
                                                                       (
-                                                                        (expr.type === 'ref') &&
-                                                                        (monthStrings.has(expr.args[0]))
+                                                                        (right.type === 'ref') &&
+                                                                        (monthStrings.has(right.args[0]))
                                                                       )
                                                                     )
                                                                   ) ||
                                                                   (
-                                                                    (expr.type === 'function-call') &&
-                                                                    (expr.args[0].args[0] === '-') &&
-                                                                    (expr.args[1].args.length === 2) &&
-                                                                    (expr.args[1].args[0].type === 'ref') &&
-                                                                    (monthStrings.has(expr.args[1].args[0].args[0])) &&
-                                                                    (expr.args[1].args[1].type === 'literal') &&
-                                                                    (expr.args[1].args[1].args[0] === 'number') &&
-                                                                    (expr.args[1].args[1].length === 2)
+                                                                    (right.type === 'function-call') &&
+                                                                    (right.args[0].args[0] === '-') &&
+                                                                    (right.args[1].args.length === 2) &&
+                                                                    (right.args[1].args[0].type === 'ref') &&
+                                                                    (monthStrings.has(right.args[1].args[0].args[0])) &&
+                                                                    (right.args[1].args[1].type === 'literal') &&
+                                                                    (right.args[1].args[1].args[0] === 'number') &&
+                                                                    (right.args[1].args[1].length === 2)
                                                                   )
                                                                 )
                                                               ) ||
                                                               (
-                                                                (term.type === 'date') &&
-                                                                (expr.type === 'literal') &&
-                                                                (expr.args[0] === 'number') &&
-                                                                (expr.length === 2)
+                                                                (left.type === 'date') &&
+                                                                (right.type === 'literal') &&
+                                                                (right.args[0] === 'number') &&
+                                                                (right.length === 2)
                                                               )
                                                             )
                                                           {
@@ -92,9 +98,9 @@ expression   -> term _ dissociativeOperator _ expression {%
 
                                                           if (
                                                             (op.name === '+') &&
-                                                            (term.type === 'date') &&
-                                                            (expr.type === 'literal') &&
-                                                            (expr.args[0] === 'number')
+                                                            (left.type === 'date') &&
+                                                            (right.type === 'literal') &&
+                                                            (right.args[0] === 'number')
                                                           ) {
                                                             return reject
                                                           }
@@ -105,12 +111,12 @@ expression   -> term _ dissociativeOperator _ expression {%
                                                               {
                                                                 type: 'funcref',
                                                                 args: [op.name],
-                                                                location: l + lengthOf([term, d[1]]),
+                                                                location: l + lengthOf([left, d[1]]),
                                                                 length: op.length
                                                               },
                                                               {
                                                                 type: 'argument-list',
-                                                                args: [term, expr],
+                                                                args: [left, right],
                                                                 location: l,
                                                                 length: totalLength
                                                               }
@@ -121,12 +127,12 @@ expression   -> term _ dissociativeOperator _ expression {%
                                                         }
                                                         %}
 
-term         -> factor                                  {% id %}
-term         -> factor _ associativeOperator _ term     {%
+addSubOp     -> primary                                 {% id %}
+addSubOp     -> addSubOp _ associativeOperator _ primary {%
                                                         (d, l) => {
-                                                          const factor = d[0]
+                                                          const left = d[0]
                                                           const op = d[2]
-                                                          const term = d[4]
+                                                          const right = d[4]
                                                           const totalLength = lengthOf(d)
 
                                                           return {
@@ -135,12 +141,12 @@ term         -> factor _ associativeOperator _ term     {%
                                                               {
                                                                 type: 'funcref',
                                                                 args: [op.name],
-                                                                location: l + lengthOf([factor, d[1]]),
+                                                                location: l + lengthOf([left, d[1]]),
                                                                 length: op.length
                                                               },
                                                               {
                                                                 type: 'argument-list',
-                                                                args: [factor, term],
+                                                                args: [left, right],
                                                                 location: l,
                                                                 length: totalLength
                                                               }
@@ -151,8 +157,7 @@ term         -> factor _ associativeOperator _ term     {%
                                                         }
                                                         %}
 
-factor       -> literal                                 {% id %}
-factor       -> referenceInExpression                   {%
+basicRef     -> referenceInExpression                   {%
                                                         (d, l, reject) => {
                                                           const name = d[0]
                                                           if (reservedWords.has(name.name)) {
@@ -167,7 +172,10 @@ factor       -> referenceInExpression                   {%
                                                         }
                                                         %}
 
-factor       -> "(" _ expression _ ")"                  {%
+primary      -> literal                                 {% id %}
+primary      -> basicRef                                {% id %}
+
+primary      -> "(" _ expression _ ")"                  {%
                                                         (d, l) => {
                                                           return {
                                                             ...d[2],
@@ -177,7 +185,7 @@ factor       -> "(" _ expression _ ")"                  {%
                                                         }
                                                         %}
 
-factor       -> "-" _ expression                        {%
+primary      -> "-" _ expression                        {%
                                                         (d, l, reject) => {
                                                           const expr = d[2]
                                                           if (expr.type === 'literal' && expr.args[0] === 'number') {
@@ -206,20 +214,14 @@ factor       -> "-" _ expression                        {%
                                                         }
                                                         %}
 
-expression   -> table                                   {% id %}
-expression   -> given                                   {% id %}
-expression   -> conditional                             {% id %}
-expression   -> functionCall                            {% id %}
-factor       -> term _ "." _ propertyAccessor           {%
+primary      -> basicRef _ "." _ basicRef               {%
                                                         (d, l) => ({
                                                           type: 'property-access',
                                                           args: [
                                                             d[0],
-                                                            d[4].name
+                                                            d[4].args[0]
                                                           ],
                                                           location: l,
                                                           length: lengthOf(d)
                                                         })
                                                         %}
-
-propertyAccessor -> referenceInExpression               {% id %}

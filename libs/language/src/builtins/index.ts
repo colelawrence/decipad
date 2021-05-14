@@ -58,6 +58,12 @@ export const builtins: Record<string, BuiltinSpec> = {
     fn: (a, b) => a / b,
     functor: (a, b) => a.isScalar('number').sameAs(b).divideUnit(b.unit),
   },
+  '**': {
+    name: '**',
+    argCount: 2,
+    fn: (a, b) => Math.pow(a, b),
+    functor: binopFunctor,
+  },
   '<': {
     name: '<',
     argCount: 2,

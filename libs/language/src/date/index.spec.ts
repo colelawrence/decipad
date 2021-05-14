@@ -35,6 +35,9 @@ it('can stringify a date', () => {
   expect(stringifyDate(parseUTCDate('2020-10-21'), 'day')).toEqual(
     '2020-10-21'
   );
+  expect(stringifyDate(parseUTCDate('2020-01-10T10:30'), 'month')).toEqual(
+    '2020-01'
+  );
   expect(stringifyDate(parseUTCDate('2020-10-21'), 'time')).toEqual(
     '2020-10-21 00:00'
   );
