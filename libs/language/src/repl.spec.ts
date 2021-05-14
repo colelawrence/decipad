@@ -13,7 +13,7 @@ const testEval = (source: string) =>
   });
 
 it('ignores empty lines', async () => {
-  expect(await testEval('')).toEqual(null);
+  expect(await testEval('')).toEqual(undefined);
 });
 
 it('can evaluate stuff', async () => {

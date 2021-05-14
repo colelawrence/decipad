@@ -3,6 +3,7 @@ import util from 'util';
 import chalk from 'chalk';
 import { enableMapSet } from 'immer';
 import { parse } from './parser';
+import { prettyPrintAST } from './parser/utils';
 import { runOne, Realm } from './interpreter';
 import { inferStatement, makeContext as makeInferContext } from './infer';
 import { stringifyDate } from './date';
@@ -35,7 +36,7 @@ export const stringifyResult = (
   ].join('');
 };
 
-const wrappedParse = async (source: string): Promise<AST.Statement> => {
+const wrappedParse = (source: string): AST.Statement | null => {
   const parsed = parse([
     {
       id: '<repl>',
@@ -44,45 +45,28 @@ const wrappedParse = async (source: string): Promise<AST.Statement> => {
   ])[0];
 
   if (parsed.solutions.length > 1) {
+    console.error('Ambiguous parsed syntax!');
+
     for (let i = 0; i < parsed.solutions.length; i++) {
-      console.error(
-        `Solution ${i}: `,
-        util.inspect(parsed.solutions[i], { depth: Infinity })
-      );
+      console.error(`Solution ${i + 1}: `, prettyPrintAST(parsed.solutions[i]));
     }
-    throw new Error('ambiguous parsed syntax!');
   }
 
-  return parsed.solutions[0].args[0];
+  return parsed.solutions[0]?.args?.[0] ?? null;
 };
 
-let wholeProgram = '';
+let accumulatedSource = '';
 let realm = new Realm();
 let inferContext = makeInferContext();
 
 const reset = () => {
-  wholeProgram = '';
+  accumulatedSource = '';
   realm = new Realm();
   inferContext = makeInferContext();
 };
 
-async function execDeci(source: string) {
-  source = source.trim();
-
+async function execDeci(ast: AST.Statement) {
   try {
-    // Syntax check
-    await wrappedParse(source)
-      .catch(() => null)
-      .then((value) => {
-        if (value == null) {
-          throw new repl.Recoverable(new Error('continue'));
-        } else {
-          return value;
-        }
-      });
-
-    const ast = await wrappedParse(source);
-
     const type = inferStatement(inferContext, ast);
 
     if (type.errorCause != null) {
@@ -90,8 +74,6 @@ async function execDeci(source: string) {
     }
 
     const value = await runOne(ast, realm);
-
-    wholeProgram += '\n' + source;
 
     return stringifyResult(value, type);
   } catch (error) {
@@ -104,20 +86,27 @@ async function execDeci(source: string) {
   }
 }
 
-reset();
-
 export const replEval = (
   cmd: string,
   _context: unknown,
   _filename: unknown,
-  callback: (e: Error | null, result: string | null) => void
+  callback: (e: Error | null, result: string | null | undefined) => void
 ) => {
-  if (!cmd.trim()) return callback(null, null);
+  if (!cmd.trim()) return callback(null, undefined);
 
-  execDeci(cmd).then(
-    (result) => callback(null, result),
-    (error) => callback(error, null)
-  );
+  const ast = wrappedParse(cmd);
+
+  if (ast == null) {
+    const pleaseContinueTyping = new repl.Recoverable(new Error('continue'));
+    callback(pleaseContinueTyping, null);
+  } else {
+    accumulatedSource += '\n' + cmd;
+
+    execDeci(ast).then(
+      (result) => callback(null, result),
+      (error) => callback(error, null)
+    );
+  }
 };
 
 /* istanbul ignore if */
@@ -129,9 +118,10 @@ if (module.parent == null) {
     writer: (str) => str,
   });
 
+  reset();
   r.on('reset', reset);
 
   r.defineCommand('print', () => {
-    console.log(wholeProgram);
+    console.log(accumulatedSource);
   });
 }
