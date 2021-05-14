@@ -10,6 +10,7 @@ import {
   col,
   range,
   date,
+  timeQuantity,
   given,
   tableDef,
   table,
@@ -152,6 +153,20 @@ describe('dates', () => {
         c('dateequals', date('2020-01-01', 'day'), date('2020-01', 'month'))
       ).errorCause
     ).not.toBeNull();
+  });
+});
+
+describe('time quantities', () => {
+  it('can be inferred', () => {
+    expect(
+      inferExpression(
+        nilCtx,
+        timeQuantity({
+          year: 2020,
+          minute: 3,
+        })
+      )
+    ).toEqual(Type.buildTimeQuantity(['year', 'minute']));
   });
 });
 

@@ -39,6 +39,16 @@ export function l(value: LitType, ...units: AST.Unit[]): AST.Literal {
   }
 }
 
+export function timeQuantity(items: { [unit in AST.TimeUnit]?: number }) {
+  return n(
+    'time-quantity',
+    ...Object.entries(items).flatMap(([k, v]) => [
+      k as AST.TimeUnit,
+      getDefined(v),
+    ])
+  );
+}
+
 export function col(...values: (LitType | AST.Expression)[]): AST.Column {
   return n(
     'column',
@@ -128,6 +138,7 @@ const expressionTypesSet = new Set([
   'ref',
   'property-access',
   'literal',
+  'time-quantity',
   'column',
   'table',
   'range',

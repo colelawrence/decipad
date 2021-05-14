@@ -66,6 +66,8 @@ const timeUnitStrings = new Set([
   'years',
   'month',
   'months',
+  'quarter',
+  'quarters',
   'weeks',
   'week',
   'day',
@@ -75,7 +77,9 @@ const timeUnitStrings = new Set([
   'minute',
   'minutes',
   'second',
-  'seconds'
+  'seconds',
+  'millisecond',
+  'milliseconds',
 ])
 
 function isReservedWord(str) {

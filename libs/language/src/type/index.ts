@@ -68,6 +68,9 @@ export class Type {
   tupleTypes: Type[] | null = null;
   tupleNames: string[] | null = null;
 
+  // Time quantities
+  timeUnits: AST.TimeUnit[] | null = null;
+
   // Functions are impossible types with functionness = true
   functionness = false;
 
@@ -158,6 +161,12 @@ export class Type {
 
   static buildDate(specificity: DateSpecificity) {
     return Type.build({ type: 'number', date: specificity });
+  }
+
+  static buildTimeQuantity(timeUnits: AST.TimeUnit[]) {
+    const t = new Type();
+    t.timeUnits = timeUnits;
+    return t;
   }
 
   // Return the first type that has an error, or the last one.
