@@ -4,6 +4,7 @@ module.exports = {
   testEnvironment: 'jsdom',
   setupFiles: ['./jest.setup.js'],
   collectCoverageFrom: ['src/**/*.ts'],
+  maxWorkers: 1,
   coverageThreshold: {
     global: {
       branches: 75,
