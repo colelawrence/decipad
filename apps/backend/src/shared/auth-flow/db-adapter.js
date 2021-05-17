@@ -148,7 +148,7 @@ function createAdapter() {
       });
     }
 
-    async function getVerificationRequest(identifier, token, secret, provider) {
+    async function getVerificationRequest(identifier, token, secret) {
       const hashedToken = hashToken(token);
       const id = hashToken(`${identifier}:${hashedToken}:${secret}`);
       const verificationRequest = await data.verificationrequests.get({ id });

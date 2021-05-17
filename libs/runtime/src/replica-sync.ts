@@ -178,16 +178,13 @@ export class ReplicaSync<T> {
     const changes = Automerge.getChanges(lastRemote, latest);
 
     if (changes.length > 0) {
-      const response = await fetch(
-        fetchPrefix + '/api' + this.topic + '/changes',
-        {
-          method: 'PUT',
-          body: JSON.stringify(changes),
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8',
-          },
-        }
-      );
+      const response = await fetch(this.remoteUrl() + '/changes', {
+        method: 'PUT',
+        body: JSON.stringify(changes),
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+      });
 
       if (!response.ok) {
         const message = `Failed to send data to remote: ${
@@ -202,11 +199,11 @@ export class ReplicaSync<T> {
 
   private async attemptSendEverything() {
     const latest = this.latest!;
-    const response = await fetch(fetchPrefix + '/api' + this.topic, {
+    const response = await fetch(this.remoteUrl(), {
       method: 'PUT',
       body: Automerge.save(latest),
       headers: {
-        'Content-Type': 'text/text',
+        'Content-Type': 'text/plain',
       },
     });
 
@@ -221,7 +218,7 @@ export class ReplicaSync<T> {
     if (this.stopped) {
       throw new Error('stopped');
     }
-    const resp = await fetch(fetchPrefix + '/api' + this.topic);
+    const resp = await fetch(this.remoteUrl());
     if (!resp.ok) {
       throw new Error(
         'response was not ok: ' + resp.status + ': ' + (await resp.text())
@@ -271,6 +268,10 @@ export class ReplicaSync<T> {
         this.stopped = true;
         this.lastFromRemote = null;
       }); // One last attempt
+  }
+
+  remoteUrl(): string {
+    return fetchPrefix + '/api/syncdoc/' + encodeURIComponent(this.topic);
   }
 }
 

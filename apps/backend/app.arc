@@ -20,25 +20,9 @@ get /api/auth/error
 get /api/auth/token
 get /api/auth/verify-request
 
-get /api/workspaces
-put /api/workspaces
-put /api/workspaces/changes
-
-get /api/workspaces/:workspaceid
-put /api/workspaces/:workspaceid
-put /api/workspaces/:workspaceid/changes
-
-get /api/workspaces/:workspaceid/pads
-put /api/workspaces/:workspaceid/pads
-put /api/workspaces/:workspaceid/pads/changes
-
-get /api/pads/:padid
-put /api/pads/:padid
-put /api/pads/:padid/changes
-
-get /api/pads/:padid/content
-put /api/pads/:padid/content
-put /api/pads/:padid/content/changes
+get /api/syncdoc/:id
+put /api/syncdoc/:id
+put /api/syncdoc/:id/changes
 
 get /api/invites/:inviteid/accept
 
@@ -100,20 +84,19 @@ permissions
   user_id String
   given_by_user_id String
   type String
-  encrypt true
-
-teams
-  id *String
-  name String
+  role_id String
+  parent_resource_uri String
   encrypt true
 
 invites
   id *String
+  permission_id String
   resource_type String
   resource_id String
   user_id String
   invited_by_user_id String
   permission String
+  parent_resource_uri String
   expires_at TTL
   encrypt true
 
@@ -125,6 +108,15 @@ verificationrequests
   expires TTL
   encrypt true
 
+workspaces
+  id *String
+  name String
+
+workspaceroles
+  id *String
+  name String
+  permission String
+  workspace_id String
 
 @indexes
 
@@ -143,9 +135,19 @@ permissions
   name byResource
 
 permissions
+  resource_uri *String
+  user_id **String
+  name byResourceAndUser
+
+permissions
   user_id *String
   resource_type **String
   name byUserId
+
+permissions
+  user_id *String
+  role_id **String
+  name byUserAndRole
 
 userkeys
   user_id *String
@@ -158,6 +160,10 @@ userkeyvalidations
 verificationrequests
   identifier *String
   name byIdentifier
+
+workspaceroles
+  workspace_id *String
+  name byWorkspaceId
 
 
 @queues

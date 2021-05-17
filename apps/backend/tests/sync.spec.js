@@ -7,7 +7,7 @@ import { withAuth } from './utils/call-simple';
 import auth from './utils/auth';
 import Automerge from 'automerge';
 
-test('/api/pads', () => {
+test('sync docs', () => {
   let call;
   let pad = {
     value: {
@@ -23,18 +23,20 @@ test('/api/pads', () => {
     call = withAuth(await auth());
   });
 
-  it('PUT /api/pads/:id', () => {
-    return call('/api/pads/padid1', {
+  it('PUT /api/syncdoc/:id', () => {
+    return call(`/api/syncdoc/${encodeURIComponent('/pads/padid')}`, {
       method: 'PUT',
       body: Automerge.save(doc),
       headers: {
-        'Content-Type': 'text/text',
+        'Content-Type': 'text/plain',
       },
     });
   });
 
-  it('GET /api/pads/:id', async () => {
-    const doc = await (await call('/api/pads/padid1')).text();
+  it('GET /api/syncdoc/:id', async () => {
+    const doc = await (
+      await call(`/api/syncdoc/${encodeURIComponent('/pads/padid')}`)
+    ).text();
     expect(typeof doc).toBe('string');
     const pad2 = Automerge.load(doc, 'agent id 1');
     expect(pad2).toMatchObject(pad);
@@ -45,17 +47,19 @@ test('/api/pads', () => {
       doc.value.name = 'pad name was changed';
     });
 
-    return call('/api/pads/padid1', {
+    return call(`/api/syncdoc/${encodeURIComponent('/pads/padid')}`, {
       method: 'PUT',
       body: Automerge.save(doc),
       headers: {
-        'Content-Type': 'text/text',
+        'Content-Type': 'text/plain',
       },
     });
   });
 
-  it('GET /api/pads/:id', async () => {
-    const doc = await (await call('/api/pads/padid1')).text();
+  it('GET /api/syncdoc/:id', async () => {
+    const doc = await (
+      await call(`/api/syncdoc/${encodeURIComponent('/pads/padid')}`)
+    ).text();
     expect(typeof doc).toBe('string');
     const pad2 = Automerge.load(doc, 'agent id 1');
     expect(pad2).toMatchObject({
@@ -68,13 +72,13 @@ test('/api/pads', () => {
     });
   });
 
-  it('PUT /api/pads/:id/changes replicates only changes', async () => {
+  it('PUT /api/syncdoc/:id/changes replicates only changes', async () => {
     const before = doc;
     doc = Automerge.change(doc, (doc) => {
       doc.value.name = 'pad name was changed again';
     });
 
-    return call('/api/pads/padid1/changes', {
+    return call(`/api/syncdoc/${encodeURIComponent('/pads/padid')}/changes`, {
       method: 'PUT',
       body: JSON.stringify(Automerge.getChanges(before, doc)),
       headers: {
@@ -83,8 +87,10 @@ test('/api/pads', () => {
     });
   });
 
-  it('GET /api/pads/:id', async () => {
-    const doc = await (await call('/api/pads/padid1')).text();
+  it('GET /api/syncdoc/:id', async () => {
+    const doc = await (
+      await call(`/api/syncdoc/${encodeURIComponent('/pads/padid')}`)
+    ).text();
     expect(typeof doc).toBe('string');
     const pad2 = Automerge.load(doc, 'agent id 1');
     expect(pad2).toMatchObject({

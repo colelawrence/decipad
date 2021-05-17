@@ -4,7 +4,6 @@ module.exports = ({ gql }) => gql`
     name: String
     email: String
     image: String
-    teams: [Team!]!
   }
 
   enum PermissionType {
@@ -18,6 +17,7 @@ module.exports = ({ gql }) => gql`
     resource: String!
     user: User!
     type: PermissionType!
+    givenBy: User!
   }
 
   type Query {

@@ -2,11 +2,13 @@ const merge = require('lodash.merge');
 const context = require('./context');
 const playground = require('./playground');
 const modules = [
+  require('./date'),
   require('./global'),
   require('./registration'),
   require('./users'),
-  require('./teams'),
   require('./auth'),
+  require('./roles'),
+  require('./workspaces'),
 ];
 
 const typedefs = ({ gql }) => modules.map(({ typedefs }) => typedefs(gql));
@@ -31,6 +33,7 @@ function createHandler({
     schema,
     context: context({ NextAuthJWT }),
     playground,
+    debug: true,
   });
 
   const handler = server.createHandler();

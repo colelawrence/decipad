@@ -131,6 +131,7 @@
     "kafkajs": "^1.15.0",
     "leftpad": "^0.0.1",
     "lodash.debounce": "^4.0.8",
+    "lodash.uniqby": "^4.7.0",
     "nanoid": "^3.1.22",
     "nearley": "^2.20.1",
     "next": "^10.0.1",

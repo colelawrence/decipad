@@ -141,24 +141,37 @@ describe('sync', () => {
     await randomChangesToEditors(padEditors, 100);
   }, 60000);
 
-  it('waits a bit', async () => {
-    await timeout(20000);
-  }, 21000);
+  it('waits a bit', async () => await timeout(20000), 21000);
 
-  it('all converged', () => {
-    for (const editor1 of padEditors) {
-      for (const editor2 of padEditors) {
-        if (editor1 === editor2) {
-          continue;
+  it('all converges', (done) => {
+    function checkConversion() {
+      for (const editor1 of padEditors) {
+        for (const editor2 of padEditors) {
+          if (editor1 === editor2) {
+            continue;
+          }
+          expect(editor1.children).toMatchObject(editor2.children);
         }
-        expect(editor1.children).toMatchObject(editor2.children);
-      }
 
-      for (const content of padContents) {
-        expect(content.getValue()).toMatchObject(editor1.children);
+        for (const content of padContents) {
+          expect(content.getValue()).toMatchObject(editor1.children);
+        }
       }
     }
-  });
+
+    function scheduleConversionCheck() {
+      setTimeout(() => {
+        try {
+          checkConversion();
+          done();
+        } catch (err) {
+          scheduleConversionCheck();
+        }
+      }, 10000);
+    }
+
+    scheduleConversionCheck();
+  }, 120000);
 
   afterAll(() => {
     for (const sub of padSubscriptions) {
