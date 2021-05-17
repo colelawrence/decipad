@@ -88,6 +88,24 @@ declare namespace AST {
     end: Pos;
   }
 
+  type TimeUnit =
+    | 'year'
+    | 'quarter'
+    | 'month'
+    | 'week'
+    | 'day'
+    | 'hour'
+    | 'minute'
+    | 'second'
+    | 'millisecond';
+
+  interface TimeQuantity {
+    type: 'time-quantity';
+    args: (TimeUnit | number)[];
+    start: Pos;
+    end: Pos;
+  }
+
   interface Range {
     type: 'range';
     args: [start: Expression, end: Expression];
@@ -193,6 +211,7 @@ declare namespace AST {
     | Ref
     | PropertyAccess
     | Literal
+    | TimeQuantity
     | Column
     | Range
     | Date
@@ -212,6 +231,7 @@ declare namespace AST {
     funcdef: FuncDef;
     coldef: ColDef;
     literal: Literal;
+    'time-quantity': TimeQuantity;
     'argument-list': ArgList;
     'function-call': FunctionCall;
     range: Range;

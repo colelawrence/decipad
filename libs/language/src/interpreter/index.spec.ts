@@ -5,6 +5,7 @@ import {
   col,
   range,
   date,
+  timeQuantity,
   given,
   funcDef,
   tableDef,
@@ -188,6 +189,19 @@ describe('dates', () => {
         c('dateequals', date('2021-10', 'month'), date('2021-10', 'month'))
       )
     ).toEqual(true);
+  });
+});
+
+describe('Time quantities', () => {
+  it('can be evaluated', async () => {
+    const q = timeQuantity({
+      year: 4,
+      day: 3,
+    });
+    expect(await runOne(q)).toEqual([
+      ['year', 4],
+      ['day', 3],
+    ]);
   });
 });
 

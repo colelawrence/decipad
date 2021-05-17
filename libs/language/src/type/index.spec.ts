@@ -396,3 +396,10 @@ describe('dates', () => {
     expect(month.sameDatenessAs(day)).toEqual(month.sameAs(day));
   });
 });
+
+it('time quantities', () => {
+  expect(Type.buildTimeQuantity(['quarter', 'month']).timeUnits).toEqual([
+    'quarter',
+    'month',
+  ]);
+});

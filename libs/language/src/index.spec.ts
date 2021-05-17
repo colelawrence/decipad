@@ -380,6 +380,39 @@ describe('Dates', () => {
   });
 });
 
+describe('Time quantities', () => {
+  it('evaluates time quantities', async () => {
+    expect(
+      await runCodeForVariables(
+        `
+        Years = [ 7 years ]
+        Quarters = [ 3 quarters ]
+        Seconds = [ 999 seconds ]
+        Combined = [ 4 quarters and 3 second and 1 millisecond ]
+      `,
+        ['Years', 'Quarters', 'Seconds', 'Combined']
+      )
+    ).toEqual({
+      variables: {
+        Years: [['year', 7]],
+        Quarters: [['quarter', 3]],
+        Seconds: [['second', 999]],
+        Combined: [
+          ['quarter', 4],
+          ['second', 3],
+          ['millisecond', 1],
+        ],
+      },
+      types: {
+        Years: Type.buildTimeQuantity(['year']),
+        Quarters: Type.buildTimeQuantity(['quarter']),
+        Seconds: Type.buildTimeQuantity(['second']),
+        Combined: Type.buildTimeQuantity(['quarter', 'second', 'millisecond']),
+      },
+    });
+  });
+});
+
 describe('Given', () => {
   it('Works on single dims and tables', async () => {
     expect(

@@ -3,7 +3,15 @@ import { getOfType, getDefined, getIdentifierString } from '../utils';
 import { getDateFromAstForm } from '../date';
 
 import { Realm } from './Realm';
-import { Scalar, Range, Date, Column, SimpleValue, Value } from './Value';
+import {
+  Scalar,
+  Range,
+  Date,
+  Column,
+  SimpleValue,
+  TimeQuantity,
+  Value,
+} from './Value';
 import { evaluateTable } from './table';
 import { evaluateGiven } from './given';
 import { callBuiltin } from './callBuiltin';
@@ -24,6 +32,9 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
           );
         }
       }
+    }
+    case 'time-quantity': {
+      return TimeQuantity.fromASTArgs(node.args);
     }
     case 'assign': {
       const varName = getIdentifierString(node.args[0]);

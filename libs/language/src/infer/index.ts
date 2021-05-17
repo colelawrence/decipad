@@ -52,6 +52,13 @@ export const inferExpression = withErrorSource(
 
         return Type.build({ type: litType, unit: litUnit });
       }
+      case 'time-quantity': {
+        const units = expr.args.filter(
+          (a) => typeof a === 'string'
+        ) as AST.TimeUnit[];
+
+        return Type.buildTimeQuantity(units);
+      }
       case 'range': {
         const [start, end] = expr.args.map((expr) =>
           inferExpression(ctx, expr)

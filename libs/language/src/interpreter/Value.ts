@@ -1,3 +1,4 @@
+import { pairwise } from '../utils';
 import { DateSpecificity, cleanDate } from '../date';
 
 export interface SimpleValue {
@@ -8,7 +9,7 @@ export interface SimpleValue {
   getData(): Interpreter.OneResult;
 }
 
-export type AnyValue = Scalar | Range | Date | Column;
+export type AnyValue = Scalar | Range | Date | TimeQuantity | Column;
 
 export type Value = SimpleValue;
 
@@ -67,6 +68,31 @@ export class Date implements SimpleValue {
 
   getData() {
     return this.timeRange.getData() as number[];
+  }
+}
+
+export class TimeQuantity implements SimpleValue {
+  cardinality = 1;
+  rowCount = null;
+
+  timeUnits: Map<AST.TimeUnit, number>;
+
+  static fromASTArgs(args: AST.TimeQuantity['args']): TimeQuantity {
+    const tq = new TimeQuantity();
+    tq.timeUnits = new Map(pairwise<AST.TimeUnit, number>(args));
+    return tq;
+  }
+
+  withRowCount(rowCount: number) {
+    return Column.fromValues(new Array(rowCount).fill(this));
+  }
+
+  asScalar(): Scalar {
+    throw new Error('panic: could not turn TimeQuantity into Scalar');
+  }
+
+  getData() {
+    return [...this.timeUnits.entries()];
   }
 }
 

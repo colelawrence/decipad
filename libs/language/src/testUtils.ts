@@ -1,4 +1,5 @@
 import { parse } from './parser';
+import { prettyPrintAST } from './parser/utils';
 import { run } from './interpreter';
 import { Column, fromJS } from './interpreter/Value';
 import { inferTargetStatement, inferProgram } from './infer';
@@ -10,6 +11,12 @@ const parseOneBlock = (source: string): AST.Block[] => {
   const [parsed] = parse(parserInput);
 
   expect(parsed.errors).toEqual([]);
+
+  if (parsed.solutions.length !== 1) {
+    const solutions = parsed.solutions.map((s) => prettyPrintAST(s));
+    console.error('Multiple solutions: \n' + solutions.join('\n'));
+    throw new Error('Multiple solutions');
+  }
   expect(parsed.solutions.length).toEqual(1);
 
   return [parsed.solutions[0]];

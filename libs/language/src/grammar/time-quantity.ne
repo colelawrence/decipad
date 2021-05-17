@@ -34,13 +34,15 @@ timeQuantityDefParcel -> int __ timeQuantityUnit            {%
                                                             }
                                                             %}
 
-timeQuantityUnit -> ("year" | "years")                      {% (d) => ({unit: "years", length: d[0][0].length }) %}
-timeQuantityUnit -> ("month" | "months")                    {% (d) => ({unit: "months", length: d[0][0].length }) %}
-timeQuantityUnit -> ("week" | "weeks")                      {% (d) => ({unit: "weeks", length: d[0][0].length }) %}
-timeQuantityUnit -> ("day" | "days")                        {% (d) => ({unit: "days", length: d[0][0].length }) %}
-timeQuantityUnit -> ("hour" | "hours")                      {% (d) => ({unit: "hours", length: d[0][0].length }) %}
-timeQuantityUnit -> ("minute" | "minutes")                  {% (d) => ({unit: "minutes", length: d[0][0].length }) %}
-timeQuantityUnit -> ("second" | "seconds")                  {% (d) => ({unit: "seconds", length: d[0][0].length }) %}
+timeQuantityUnit -> "year" "s":?                            {% (d) => ({unit: "year", length: lengthOf(d) }) %}
+timeQuantityUnit -> "quarter" "s":?                         {% (d) => ({unit: "quarter", length: lengthOf(d) }) %}
+timeQuantityUnit -> "month" "s":?                           {% (d) => ({unit: "month", length: lengthOf(d) }) %}
+timeQuantityUnit -> "week" "s":?                            {% (d) => ({unit: "week", length: lengthOf(d) }) %}
+timeQuantityUnit -> "day" "s":?                             {% (d) => ({unit: "day", length: lengthOf(d) }) %}
+timeQuantityUnit -> "hour" "s":?                            {% (d) => ({unit: "hour", length: lengthOf(d) }) %}
+timeQuantityUnit -> "minute" "s":?                          {% (d) => ({unit: "minute", length: lengthOf(d) }) %}
+timeQuantityUnit -> "second" "s":?                          {% (d) => ({unit: "second", length: lengthOf(d) }) %}
+timeQuantityUnit -> "millisecond" "s":?                     {% (d) => ({unit: "millisecond", length: lengthOf(d) }) %}
 
 timeQuantityDefParcelSeparator -> ((_ "," _) | (__ "and" __) | (_ "," _ "and" __)) {%
                                                             (d, l) => ({
