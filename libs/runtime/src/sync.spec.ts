@@ -141,7 +141,7 @@ describe('sync', () => {
     await randomChangesToEditors(padEditors, 100);
   }, 60000);
 
-  it('waits a bit', async () => await timeout(20000), 21000);
+  it('waits a bit', async () => await timeout(30000), 31000);
 
   it('all converges', (done) => {
     function checkConversion() {
