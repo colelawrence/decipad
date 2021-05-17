@@ -165,6 +165,7 @@ describe('sync', () => {
           checkConversion();
           done();
         } catch (err) {
+          console.log(err);
           scheduleConversionCheck();
         }
       }, 10000);
