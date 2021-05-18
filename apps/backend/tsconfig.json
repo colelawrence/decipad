@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.strictbase.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "jsx": "preserve"
   },
