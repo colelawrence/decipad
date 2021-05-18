@@ -7,8 +7,8 @@ export default {
 
 export const B = () => (
   <Highlight
-    text={null}
-    leaf={null}
+    text={{ text: 'hello world' }}
+    leaf={{ text: 'hello world' }}
     attributes={{
       'data-slate-leaf': true,
     }}

@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
-interface NewWorkspaceModalProps {
+export interface NewWorkspaceModalProps {
   openButton: (onOpen: () => void) => JSX.Element;
   createWorkspace: (value: string) => void;
 }

@@ -23,6 +23,12 @@
     "allowJs": true,
     "esModuleInterop": true,
     "jsx": "react",
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noUnusedLocals": true,
+    "noImplicitReturns": true,
+    "noUnusedParameters": true,
     "paths": {
       "@decipad/runtime": ["libs/runtime/src/index.ts"],
       "@decipad/language": ["libs/language/src/index.ts"],
