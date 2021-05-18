@@ -37,17 +37,17 @@ module.exports = function createAuthHandler({ NextAuth, NextAuthJWT }) {
   const callbacks = {};
 
   callbacks.signIn = async function signIn(user, account, metadata) {
-    // Deny access to users that are not yet registered
     if (account.provider === 'github' && metadata && metadata.id) {
       return await signInGithub(user, account, metadata);
-    } else if (metadata.verificationRequest && account.type === 'email') {
+    } else if (account.type === 'email') {
       return await signInEmail(user, account, metadata);
     }
+    return false;
   };
 
   callbacks.jwt = async function jwt(token, user) {
     if (user) {
-      token = { accessToken: user.id };
+      token = { accessToken: user.secret };
     }
 
     return token;
@@ -55,15 +55,14 @@ module.exports = function createAuthHandler({ NextAuth, NextAuthJWT }) {
 
   callbacks.session = async function session(session, token) {
     session.accessToken = token.accessToken;
-    const data = await tables();
-    const user = await data.users.get({ id: token.accessToken });
+    const user = await findUserByAccessToken(token.accessToken);
 
     if (user) {
       Object.assign(session.user, {
         id: user.id,
         name: user.name,
         email: user.email,
-        image: user.avatar,
+        image: user.image,
       });
     }
 
@@ -91,7 +90,7 @@ async function signInGithub(user, account, metadata) {
     id: metadata.id,
     login: metadata.login,
     name: metadata.name,
-    avatar: metadata.avatar_url,
+    image: metadata.avatar_url,
     email: metadata.email,
   };
 
@@ -112,8 +111,9 @@ async function signInGithub(user, account, metadata) {
       id: nanoid(),
       name: githubUser.name,
       last_login: Date.now(),
-      avatar: githubUser.avatar,
+      image: githubUser.image,
       email: githubUser.email,
+      secret: nanoid(),
     };
 
     await data.users.put(newUser);
@@ -137,7 +137,7 @@ async function signInGithub(user, account, metadata) {
     existingUser = newUser;
   }
 
-  user.accessToken = existingUser.id;
+  user.accessToken = existingUser.secret;
 
   return true;
 }
@@ -160,6 +160,7 @@ async function signInEmail(user, account, metadata) {
       id: nanoid(),
       name: '',
       email: metadata.email,
+      secret: nanoid(),
     };
 
     await data.users.put(newUser);
@@ -175,7 +176,21 @@ async function signInEmail(user, account, metadata) {
     existingUser = newUser;
   }
 
-  user.accessToken = existingUser.id;
+  user.accessToken = existingUser.secret;
 
   return true;
+}
+
+async function findUserByAccessToken(accessToken) {
+  const data = await tables();
+
+  const foundUsers = await data.users.query({
+    IndexName: 'bySecret',
+    KeyConditionExpression: 'secret = :secret',
+    ExpressionAttributeValues: {
+      ':secret': accessToken,
+    },
+  });
+
+  return foundUsers.Items[0];
 }

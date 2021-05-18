@@ -9,9 +9,9 @@ import {
 
 // https://observablehq.com/d/0c4bca59558d2985
 describe('use of funds document', () => {
-  const months = Array(12)
-    .fill(null)
-    .map((_, i) => cleanDate(Date.UTC(2021, i), 'month'));
+  const months = Array.from({ length: 12 }, (_, i) =>
+    cleanDate(Date.UTC(2021, i), 'month')
+  );
 
   const baseSalary = new Array(12).fill(10000);
   const usualSalary = baseSalary.map((s) => s + s * 0.2);
@@ -140,4 +140,135 @@ describe('use of funds document', () => {
       },
     });
   });
+});
+
+describe('more models', () => {
+  it('Discounted cash flow (for dogecoin)', async () => {
+    const years = Array.from({ length: 4 }, (_, i) =>
+      cleanDate(Date.UTC(2020 + i, 0), 'year')
+    );
+
+    expect(
+      await runCodeForVariables(
+        `
+          DiscountRate = 0.25
+
+          Years = [Y2020, Y2021, Y2022, Y2023]
+
+          InitialCashFlow = 10musd
+
+          GrowthRate = 0.25
+
+          CashFlows = grow InitialCashFlow GrowthRate Years
+
+          YearlyCashFlows = CashFlows / (1 + DiscountRate)
+
+          DCF = total YearlyCashFlows
+        `,
+        [
+          'InitialCashFlow',
+          'Years',
+          'GrowthRate',
+          'CashFlows',
+          'YearlyCashFlows',
+        ]
+      )
+    ).toMatchObject({
+      variables: {
+        InitialCashFlow: 10,
+        Years: years,
+        GrowthRate: 0.25,
+        CashFlows: [10, 12.5, 15.625, 19.53125],
+        YearlyCashFlows: [8, 10, 12.5, 15.625],
+      },
+      types: {
+        InitialCashFlow: {
+          type: 'number',
+          unit: [
+            {
+              // TODO this unit is million USD,
+              // multiplier/exponent should reflect that
+              unit: 'musd',
+              exp: 1,
+              multiplier: 1,
+            },
+          ],
+        },
+        Years: {
+          columnSize: 4,
+          cellType: {
+            date: 'year',
+          },
+        },
+        YearlyCashFlows: {
+          columnSize: 4,
+          cellType: {
+            type: 'number',
+            unit: null,
+            date: null,
+          },
+        },
+      },
+    });
+  });
+
+  it('getting fired in Portugal', async () => {
+    expect(
+      await runCode(
+        `
+          People = {
+            JoinDate = [2020-01-10, 2020-05-10],
+            LeaveDate = [2022-02-13, 2022-02-13]
+          }
+
+          getbadperiod = JoinDate => [ JoinDate through (dateaddyears JoinDate 2)]
+
+          LosesUnemploymentBenefits = given People: (containsdate (getbadperiod People.JoinDate) People.LeaveDate)
+        `
+      )
+    ).toMatchObject({
+      value: [[false, true]],
+      type: {
+        columnSize: 2,
+        cellType: { type: 'boolean' },
+      },
+    });
+  });
+
+  // Need discrete ranges first
+  /*
+  it.skip('retirement model', async () => {
+    const years = Array.from({ length: 4 }, (_, i) =>
+      cleanDate(Date.UTC(2020 + i, 0), 'year')
+    );
+
+    expect(
+      await runCode(
+        `
+          YearsUntilRetirement = 20
+          InitialInvestment = 5keur
+          YearlyReinforcement = 100eur
+          ExpectedYearlyGrowth = 0.05
+
+          InvestmentValue = {
+            Years = [Y2020 through (dateaddyears Y2020 YearsUntilRetirement)],
+            Value = (previous InitialInvestment) + ExpectedYearlyGrowth + YearlyReinforcement
+          }
+        `
+      )
+    ).toMatchObject({
+      value: [[]],
+      type: {
+        tupleTypes: [
+          {
+            columnSize: 4,
+            cellType: {
+              date: 'year',
+            },
+          },
+        ],
+      },
+    });
+  });
+  */
 });

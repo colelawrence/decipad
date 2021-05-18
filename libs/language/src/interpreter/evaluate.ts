@@ -1,6 +1,5 @@
-import { hasBuiltin, builtins } from '../builtins';
+import { hasBuiltin } from '../builtins';
 import { getOfType, getDefined, getIdentifierString } from '../utils';
-import { automapValues } from '../dimtools';
 import { getDateFromAstForm } from '../date';
 
 import { Realm } from './Realm';
@@ -10,10 +9,12 @@ import {
   Date,
   Column,
   SimpleValue,
+  TimeQuantity,
   Value,
-  fromJS,
 } from './Value';
 import { evaluateTable } from './table';
+import { evaluateGiven } from './given';
+import { callBuiltin } from './callBuiltin';
 
 // Gets a single value from an expanded AST.
 export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
@@ -32,6 +33,9 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
         }
       }
     }
+    case 'time-quantity': {
+      return TimeQuantity.fromASTArgs(node.args);
+    }
     case 'assign': {
       const varName = getIdentifierString(node.args[0]);
       const value = evaluate(realm, node.args[1]);
@@ -49,16 +53,7 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
       if (funcName === 'previous') {
         return realm.previousValue ?? args[0];
       } else if (hasBuiltin(funcName)) {
-        const builtin = builtins[funcName];
-        return automapValues(
-          args,
-          (argsLowerDims) => {
-            const argData = argsLowerDims.map((a) => a.getData());
-
-            return fromJS(builtin.fn(...argData));
-          },
-          builtin.argCardinalities
-        );
+        return callBuiltin(funcName, args);
       } else {
         const customFunc = getDefined(realm.functions.get(funcName));
 
@@ -84,9 +79,7 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
       }
     }
     case 'range': {
-      const [start, end] = node.args.map((arg) =>
-        evaluate(realm, arg).asScalar()
-      );
+      const [start, end] = node.args.map((arg) => evaluate(realm, arg));
 
       return Range.fromBounds(start, end);
     }
@@ -120,59 +113,7 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
       return Scalar.fromValue(NaN);
     }
     case 'given': {
-      const [ref, body] = node.args;
-
-      const predicateName = getIdentifierString(ref);
-      const predicate = evaluate(realm, ref);
-
-      if (!(predicate instanceof Column)) {
-        throw new Error('panic: expected column');
-      }
-
-      return realm.stack.withPush(() => {
-        if (predicate.valueNames != null) {
-          // It's a table
-
-          const columns = predicate.values as Column[];
-          const colNames = predicate.valueNames;
-          const length = getDefined(columns[0].values.length);
-
-          const mapped = Array.from({ length })
-            .fill(null)
-            .map((_, index) => {
-              const thisRow = Column.fromNamedValues(
-                columns.map((p) => p.values[index]),
-                colNames
-              );
-              realm.stack.set(predicateName, thisRow);
-
-              return evaluate(realm, body);
-            });
-
-          if (mapped.some((m) => m instanceof Column && m.valueNames != null)) {
-            // A row was returned in the body -- re-column-orient the table!
-            const newColumns = columns.map((column) => {
-              const newColumn = Array.from({ length }).map(
-                (_, rowIndex) => column.values[rowIndex]
-              );
-
-              return Column.fromValues(newColumn);
-            });
-
-            return Column.fromNamedValues(newColumns, colNames);
-          }
-
-          return Column.fromValues(mapped);
-        } else {
-          const mapped = predicate.values.map((value) => {
-            realm.stack.set(predicateName, value);
-
-            return evaluate(realm, body);
-          });
-
-          return Column.fromValues(mapped);
-        }
-      });
+      return evaluateGiven(realm, node);
     }
   }
 }

@@ -1,5 +1,6 @@
 'use strict';
 
+const assert = require('assert');
 const { UserInputError, ForbiddenError } = require('apollo-server-lambda');
 let NextAuthJWT = require('next-auth/jwt');
 if (typeof NextAuthJWT.encode !== 'function') {
@@ -28,7 +29,8 @@ module.exports = {
       const options = {
         maxAge: 1000 * 60 * 60 * 24, // 1 day
       };
-      const token = await generateToken(user.id, options);
+      assert(user.secret, 'User does not have secret');
+      const token = await generateToken(user.secret, options);
       context.additionalHeaders.set(
         'Set-Cookie',
         tokenizeCookies([{ name: 'next-auth.session-token', value: token }])
@@ -39,10 +41,10 @@ module.exports = {
   },
 };
 
-async function generateToken(userId, options) {
+async function generateToken(userSecret, options) {
   return await NextAuthJWT.encode({
     ...jwtConf,
-    token: { accessToken: userId },
+    token: { accessToken: userSecret },
     ...options,
   });
 }

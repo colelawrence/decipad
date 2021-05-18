@@ -26,6 +26,13 @@ describe('basic code', () => {
     });
   });
 
+  it('has correct operator precedence', async () => {
+    expect(await runCode('1 + 2 / 4 - 5 ** 2 / 4')).toMatchObject({
+      type: { type: 'number' },
+      value: [-4.75],
+    });
+  });
+
   it('can assign variables', async () => {
     expect(
       await runCode(`
@@ -369,6 +376,39 @@ describe('Dates', () => {
           Days: [true, false, false],
         }),
       ],
+    });
+  });
+});
+
+describe('Time quantities', () => {
+  it('evaluates time quantities', async () => {
+    expect(
+      await runCodeForVariables(
+        `
+        Years = [ 7 years ]
+        Quarters = [ 3 quarters ]
+        Seconds = [ 999 seconds ]
+        Combined = [ 4 quarters and 3 second and 1 millisecond ]
+      `,
+        ['Years', 'Quarters', 'Seconds', 'Combined']
+      )
+    ).toEqual({
+      variables: {
+        Years: [['year', 7]],
+        Quarters: [['quarter', 3]],
+        Seconds: [['second', 999]],
+        Combined: [
+          ['quarter', 4],
+          ['second', 3],
+          ['millisecond', 1],
+        ],
+      },
+      types: {
+        Years: Type.buildTimeQuantity(['year']),
+        Quarters: Type.buildTimeQuantity(['quarter']),
+        Seconds: Type.buildTimeQuantity(['second']),
+        Combined: Type.buildTimeQuantity(['quarter', 'second', 'millisecond']),
+      },
     });
   });
 });

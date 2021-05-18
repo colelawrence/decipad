@@ -14,6 +14,7 @@ async function auth(event, { NextAuthJWT }) {
 
   const token = getSessionToken(event);
   let user = null;
+  let secret = null;
   if (token) {
     const { decode: decodeJWT } = NextAuthJWT;
     try {
@@ -21,9 +22,13 @@ async function auth(event, { NextAuthJWT }) {
         ...jwtConf({ NextAuthJWT }),
         token,
       });
+
       if (decoded.accessToken) {
-        const data = await tables();
-        user = await data.users.get({ id: decoded.accessToken });
+        user = await findUserByAccessToken(decoded.accessToken);
+        if (user) {
+          secret = user.secret;
+          delete user.secret;
+        }
       }
     } catch (err) {
       console.error(err.message);
@@ -31,7 +36,7 @@ async function auth(event, { NextAuthJWT }) {
     }
   }
 
-  return { user, token };
+  return { user, token, secret };
 }
 
 function getSessionToken(event) {
@@ -40,7 +45,9 @@ function getSessionToken(event) {
     cookies[TOKEN_COOKIE_NAMES[0]] ||
     cookies[TOKEN_COOKIE_NAMES[1]] ||
     event.headers.authorization ||
-    event.headers.Authorization;
+    event.headers.Authorization ||
+    event.headers['sec-websocket-protocol'] ||
+    event.headers['Sec-WebSocket-Protocol'];
   if (token && token.startsWith('Bearer ')) {
     token = token.substring('Bearer '.length);
   }
@@ -53,6 +60,20 @@ function parseCookies(cookies = []) {
     cookies[name] = value;
     return cookies;
   }, {});
+}
+
+async function findUserByAccessToken(accessToken) {
+  const data = await tables();
+
+  const foundUsers = await data.users.query({
+    IndexName: 'bySecret',
+    KeyConditionExpression: 'secret = :secret',
+    ExpressionAttributeValues: {
+      ':secret': accessToken,
+    },
+  });
+
+  return foundUsers.Items[0];
 }
 
 module.exports = auth;

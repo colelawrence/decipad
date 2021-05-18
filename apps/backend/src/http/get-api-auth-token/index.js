@@ -15,7 +15,7 @@ const purposes = {
 };
 
 exports.handler = handle(async (event) => {
-  const { user } = await auth(event, { NextAuthJWT });
+  const { user, secret } = await auth(event, { NextAuthJWT });
 
   if (user) {
     const purposeName = event.queryStringParameters.for;
@@ -26,7 +26,7 @@ exports.handler = handle(async (event) => {
         body: 'No such purpose',
       };
     }
-    return await generateToken(user, purpose);
+    return await generateToken(secret, purpose);
   } else {
     return {
       statusCode: 403,
@@ -34,10 +34,10 @@ exports.handler = handle(async (event) => {
   }
 });
 
-async function generateToken(user, options) {
+async function generateToken(secret, options) {
   return await NextAuthJWT.encode({
     ...jwtConf,
-    token: { accessToken: user.id },
+    token: { accessToken: secret },
     ...options,
   });
 }

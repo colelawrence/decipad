@@ -66,6 +66,8 @@ const timeUnitStrings = new Set([
   'years',
   'month',
   'months',
+  'quarter',
+  'quarters',
   'weeks',
   'week',
   'day',
@@ -75,7 +77,9 @@ const timeUnitStrings = new Set([
   'minute',
   'minutes',
   'second',
-  'seconds'
+  'seconds',
+  'millisecond',
+  'milliseconds',
 ])
 
 function isReservedWord(str) {
@@ -215,16 +219,6 @@ referenceInExpression -> "`" referenceName "`"          {%
                                                         }
                                                         %}
 
-referenceAsOperator -> "`" referenceName "`"            {%
-                                                        (d, l) => {
-                                                          return {
-                                                            name: d[1].name,
-                                                            location: l,
-                                                            length: lengthOf(d)
-                                                          }
-                                                        }
-                                                        %}
-
 
 ###########################
 ### Function definition ###
@@ -326,7 +320,6 @@ dissociativeOperator  -> __ ("in") __    {%
                                                           }
                                                         }
                                                         %}
-dissociativeOperator  -> referenceAsOperator            {% id %}
 
 
 associativeOperator -> ("**" | "%" | ">" | "<" | "<=" | ">=" | "==")       {%
@@ -438,7 +431,7 @@ funcArgumentList -> expression ___ funcArgumentList      {%
 ### Conditional ###
 ###################
 
-conditional  -> "if" __ expression __ "then" __ expression __ "else" __ expression {%
+expression -> "if" __ expression __ "then" __ expression __ "else" __ expression {%
                                                         (d, l) => ({
                                                           type: 'function-call',
                                                           args: [

@@ -13,7 +13,7 @@ const testEval = (source: string) =>
   });
 
 it('ignores empty lines', async () => {
-  expect(await testEval('')).toEqual(null);
+  expect(await testEval('')).toEqual(undefined);
 });
 
 it('can evaluate stuff', async () => {
@@ -39,7 +39,9 @@ describe('stringify', () => {
     expect(
       stringifyResult([1, 10], Type.build({ type: 'number', rangeness: true }))
     ).toEqual(
-      `range [ ${chalk.blue('1')} <number> ... ${chalk.blue('10')} <number> ]`
+      `range [ ${chalk.blue('1')} <number> through ${chalk.blue(
+        '10'
+      )} <number> ]`
     );
 
     expect(

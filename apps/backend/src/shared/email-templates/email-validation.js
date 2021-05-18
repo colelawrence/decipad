@@ -1,6 +1,6 @@
 module.exports = ({ name, validationLink }) => ({
   subject: `Validate your e-mail address`,
-  body: `Dear ${name},
+  body: `${name ? `Dear ${name}` : 'Hi'},
 
 You have recently created an account in Deci.
 

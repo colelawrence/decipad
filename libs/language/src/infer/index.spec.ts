@@ -10,6 +10,7 @@ import {
   col,
   range,
   date,
+  timeQuantity,
   given,
   tableDef,
   table,
@@ -106,6 +107,17 @@ describe('ranges', () => {
     ).toBeDefined();
   });
 
+  it('infers ranges of dates', () => {
+    const r = range(date('2030-01', 'month'), date('2031-11', 'month'));
+    expect(inferExpression(nilCtx, r)).toEqual(
+      Type.extend(Type.buildDate('month'), { rangeness: true })
+    );
+
+    expect(
+      inferExpression(nilCtx, c('containsdate', r, date('2020-01', 'month')))
+    ).toEqual(Type.Boolean);
+  });
+
   it('infers range functions', () => {
     expect(inferExpression(nilCtx, c('contains', range(1, 10), l(1)))).toEqual(
       Type.Boolean
@@ -141,6 +153,20 @@ describe('dates', () => {
         c('dateequals', date('2020-01-01', 'day'), date('2020-01', 'month'))
       ).errorCause
     ).not.toBeNull();
+  });
+});
+
+describe('time quantities', () => {
+  it('can be inferred', () => {
+    expect(
+      inferExpression(
+        nilCtx,
+        timeQuantity({
+          year: 2020,
+          minute: 3,
+        })
+      )
+    ).toEqual(Type.buildTimeQuantity(['year', 'minute']));
   });
 });
 

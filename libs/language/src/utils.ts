@@ -39,6 +39,16 @@ export function l(value: LitType, ...units: AST.Unit[]): AST.Literal {
   }
 }
 
+export function timeQuantity(items: { [unit in AST.TimeUnit]?: number }) {
+  return n(
+    'time-quantity',
+    ...Object.entries(items).flatMap(([k, v]) => [
+      k as AST.TimeUnit,
+      getDefined(v),
+    ])
+  );
+}
+
 export function col(...values: (LitType | AST.Expression)[]): AST.Column {
   return n(
     'column',
@@ -128,6 +138,7 @@ const expressionTypesSet = new Set([
   'ref',
   'property-access',
   'literal',
+  'time-quantity',
   'column',
   'table',
   'range',
@@ -140,14 +151,19 @@ export const isExpression = (
 ): value is AST.Expression =>
   isNode(value) && expressionTypesSet.has(value.type);
 
+const statementTypesSet = new Set(['assign', 'function-definition']);
+
+export const isStatement = (
+  value: unknown | AST.Statement
+): value is AST.Statement => isNode(value) && statementTypesSet.has(value.type);
+
 export const getIdentifierString = ({ type, args }: AST.Identifier): string => {
   if (
     (type !== 'ref' &&
       type !== 'def' &&
       type !== 'funcdef' &&
       type !== 'funcref' &&
-      type !== 'coldef' &&
-      type !== 'tabledef') ||
+      type !== 'coldef') ||
     typeof args[0] !== 'string'
   ) {
     throw new Error('panic: identifier expected');
@@ -158,12 +174,30 @@ export const getIdentifierString = ({ type, args }: AST.Identifier): string => {
 
 export const getDefined = <T>(
   anything: T | null | undefined,
-  message = 'something was null or undefined'
+  message = 'getDefined did not expect null or undefined'
 ): T => {
   if (anything == null) {
     throw new Error('panic: ' + message);
   } else {
     return anything;
+  }
+};
+
+type ClassOf<T> = {
+  new (...x: unknown[]): T;
+};
+
+export const getInstanceof = <T>(
+  thing: T | unknown,
+  cls: ClassOf<T>,
+  message = `getInstanceof expected an instance of ${
+    cls?.name ?? 'a specific class'
+  }`
+): T => {
+  if (thing instanceof cls) {
+    return thing as T;
+  } else {
+    throw new Error('panic: ' + message);
   }
 };
 

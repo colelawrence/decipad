@@ -1,41 +1,54 @@
-const { AuthenticationError, ForbiddenError } = require('apollo-server-lambda');
+const { ForbiddenError } = require('apollo-server-lambda');
 const tables = require('../tables');
 
 function requireUser(context) {
   if (!context.user) {
-    throw new AuthenticationError();
+    throw new ForbiddenError('Forbidden');
   }
   return context.user;
 }
 
 async function isAuthorized(resource, context, permissionType) {
   const user = requireUser(context);
-
-  const id = `/users/${user.id}${resource}`;
   const data = await tables();
-  const permission = await data.permissions.get({ id });
+  const permissions = (
+    await data.permissions.query({
+      IndexName: 'byResourceAndUser',
+      KeyConditionExpression:
+        'user_id = :user_id and resource_uri = :resource_uri',
+      ExpressionAttributeValues: {
+        ':user_id': user.id,
+        ':resource_uri': resource,
+      },
+    })
+  ).Items;
 
-  return permission && isEnoughPermission(permission.type, permissionType);
+  return permissions.some(isEnoughPermissionFor(permissionType));
 }
 
 async function check(resource, context, permissionType) {
   const user = requireUser(context);
 
-  if (! await isAuthorized(resource, context, permissionType)) {
+  if (!(await isAuthorized(resource, context, permissionType))) {
     throw new ForbiddenError('Forbidden');
   }
 
   return user;
 }
 
-function isEnoughPermission(existingPermission, requiredPermission) {
-  if (requiredPermission === 'READ') {
-    return true;
-  }
-  if (requiredPermission === 'WRITE') {
-    return existingPermission === 'WRITE' || existingPermission === 'ADMIN';
-  }
-  return existingPermission === 'ADMIN';
+function isEnoughPermissionFor(requiredPermissionType) {
+  return (existingPermission) => {
+    if (requiredPermissionType === 'READ') {
+      return true;
+    }
+    if (requiredPermissionType === 'WRITE') {
+      return (
+        existingPermission.type === 'WRITE' ||
+        existingPermission.type === 'ADMIN'
+      );
+    }
+    return existingPermission.type === 'ADMIN';
+  };
 }
 
 exports.requireUser = requireUser;

@@ -1,3 +1,4 @@
+import { pairwise } from '../utils';
 import { DateSpecificity, cleanDate } from '../date';
 
 export interface SimpleValue {
@@ -8,7 +9,7 @@ export interface SimpleValue {
   getData(): Interpreter.OneResult;
 }
 
-export type OneDimensional = Scalar | Range | Date;
+export type AnyValue = Scalar | Range | Date | TimeQuantity | Column;
 
 export type Value = SimpleValue;
 
@@ -40,6 +41,7 @@ export class Date implements SimpleValue {
   cardinality = 1;
   rowCount = null;
 
+  specificity: DateSpecificity = 'time';
   timeRange: Range;
 
   static fromDateAndSpecificity(
@@ -52,6 +54,7 @@ export class Date implements SimpleValue {
       Scalar.fromValue(start),
       Scalar.fromValue(end)
     );
+    d.specificity = specificity;
     return d;
   }
 
@@ -64,7 +67,32 @@ export class Date implements SimpleValue {
   }
 
   getData() {
-    return this.timeRange.getData();
+    return this.timeRange.getData() as number[];
+  }
+}
+
+export class TimeQuantity implements SimpleValue {
+  cardinality = 1;
+  rowCount = null;
+
+  timeUnits: Map<AST.TimeUnit, number>;
+
+  static fromASTArgs(args: AST.TimeQuantity['args']): TimeQuantity {
+    const tq = new TimeQuantity();
+    tq.timeUnits = new Map(pairwise<AST.TimeUnit, number>(args));
+    return tq;
+  }
+
+  withRowCount(rowCount: number) {
+    return Column.fromValues(new Array(rowCount).fill(this));
+  }
+
+  asScalar(): Scalar {
+    throw new Error('panic: could not turn TimeQuantity into Scalar');
+  }
+
+  getData() {
+    return [...this.timeUnits.entries()];
   }
 }
 
@@ -74,11 +102,27 @@ export class Range implements SimpleValue {
   start: Scalar;
   end: Scalar;
 
-  static fromBounds(start: Scalar, end: Scalar) {
-    const range = new Range();
-    range.start = start;
-    range.end = end;
-    return range;
+  static fromBounds(start: Value, end: Value): Range {
+    if (start instanceof Date && end instanceof Date) {
+      const startStart = start.timeRange.getData()[0];
+      const endEnd = end.timeRange.getData()[1];
+
+      return Range.fromBounds(
+        Scalar.fromValue(startStart),
+        Scalar.fromValue(endEnd)
+      );
+    } else if (start instanceof Scalar && end instanceof Scalar) {
+      const range = new Range();
+
+      range.start = start;
+      range.end = end;
+
+      return range;
+    } else {
+      throw new Error(
+        `panic: bad Range.fromBounds arguments ${start?.constructor?.name} and ${end?.constructor?.name}`
+      );
+    }
   }
 
   getData() {

@@ -39,11 +39,8 @@ function createAdapter() {
     }
 
     async function updateUser(user) {
-      let verifiedAt;
       if (user.emailVerified) {
-        verifiedAt = new Date(user.emailVerified);
-        delete user.emailVerified;
-
+        const verifiedAt = new Date(user.emailVerified);
         const userkey = await data.userkeys.get({
           id: `email:${user.email}`,
         });
@@ -55,13 +52,10 @@ function createAdapter() {
         }
       }
 
+      const previousUser = data.users.get({ id: user.id });
+      const newUser = Object.assign(previousUser, user);
       await data.users.put(user);
-
-      if (verifiedAt) {
-        user.verifiedAt = verifiedAt;
-      }
-
-      return user;
+      return newUser;
     }
 
     async function deleteUser(_userId) {
@@ -135,10 +129,10 @@ function createAdapter() {
       const hashedToken = hashToken(token);
 
       const newVerificationRequest = {
-        id: `${identifier}:${hashedToken}`,
+        id: hashToken(`${identifier}:${hashedToken}:${secret}`),
         identifier,
         token: hashedToken,
-        expires_at:
+        expires:
           Math.round(Date.now() / 1000) +
           Number(process.env.DECI_VERIFICATION_EXPIRES_SECONDS || 86400),
       };
@@ -154,24 +148,17 @@ function createAdapter() {
       });
     }
 
-    async function getVerificationRequest(identifier, token, secret, provider) {
-      console.log('getVerificationRequest', {
-        identifier,
-        token,
-        secret,
-        provider,
-      });
-
+    async function getVerificationRequest(identifier, token, secret) {
       const hashedToken = hashToken(token);
-      const id = `${identifier}:${hashedToken}`;
+      const id = hashToken(`${identifier}:${hashedToken}:${secret}`);
       const verificationRequest = await data.verificationrequests.get({ id });
 
       return verificationRequest;
     }
 
-    async function deleteVerificationRequest(identifier, token) {
+    async function deleteVerificationRequest(identifier, token, secret) {
       const hashedToken = hashToken(token);
-      const id = `${identifier}:${hashedToken}`;
+      const id = hashToken(`${identifier}:${hashedToken}:${secret}`);
       await data.verificationrequests.delete({ id });
     }
 

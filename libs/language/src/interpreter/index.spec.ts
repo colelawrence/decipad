@@ -5,6 +5,7 @@ import {
   col,
   range,
   date,
+  timeQuantity,
   given,
   funcDef,
   tableDef,
@@ -45,18 +46,52 @@ it('evaluates conditions', async () => {
   expect(await runOne(condition)).toEqual(1);
 });
 
-it('evaluates ranges', async () => {
-  const r = range(1, 10);
+describe('ranges', () => {
+  it('evaluates ranges', async () => {
+    const r = range(1, 10);
 
-  expect(await runOne(r)).toEqual([1, 10]);
+    expect(await runOne(r)).toEqual([1, 10]);
 
-  // Contains
-  expect(await runOne(c('contains', r, l(1)))).toEqual(true);
-  expect(await runOne(c('contains', r, l(10)))).toEqual(true);
+    // Contains
+    expect(await runOne(c('contains', r, l(1)))).toEqual(true);
+    expect(await runOne(c('contains', r, l(10)))).toEqual(true);
 
-  // Does not contain
-  expect(await runOne(c('contains', r, l(0)))).toEqual(false);
-  expect(await runOne(c('contains', r, l(11)))).toEqual(false);
+    // Does not contain
+    expect(await runOne(c('contains', r, l(0)))).toEqual(false);
+    expect(await runOne(c('contains', r, l(11)))).toEqual(false);
+  });
+
+  it('evaluates ranges of dates', async () => {
+    const d = parseUTCDate;
+
+    const r = range(date('2020-01', 'month'), date('2020-11', 'month'));
+
+    expect(await runOne(r)).toEqual([d('2020-01-01'), d('2020-12-01') - 1]);
+
+    expect(
+      await runOne(c('containsdate', r, date('2020-01', 'month')))
+    ).toEqual(true);
+    expect(
+      await runOne(c('containsdate', r, date('2020-02', 'month')))
+    ).toEqual(true);
+    expect(
+      await runOne(c('containsdate', r, date('2020-11', 'month')))
+    ).toEqual(true);
+    expect(
+      await runOne(c('containsdate', r, date('2020-11-30', 'day')))
+    ).toEqual(true);
+
+    expect(
+      await runOne(c('containsdate', r, date('2019-12-31', 'day')))
+    ).toEqual(false);
+
+    expect(
+      await runOne(c('containsdate', r, date('2020-12', 'month')))
+    ).toEqual(false);
+    expect(
+      await runOne(c('containsdate', r, date('2020-12-01', 'day')))
+    ).toEqual(false);
+  });
 });
 
 describe('functions', () => {
@@ -154,6 +189,19 @@ describe('dates', () => {
         c('dateequals', date('2021-10', 'month'), date('2021-10', 'month'))
       )
     ).toEqual(true);
+  });
+});
+
+describe('Time quantities', () => {
+  it('can be evaluated', async () => {
+    const q = timeQuantity({
+      year: 4,
+      day: 3,
+    });
+    expect(await runOne(q)).toEqual([
+      ['year', 4],
+      ['day', 3],
+    ]);
   });
 });
 

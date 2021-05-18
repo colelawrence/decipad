@@ -1,3 +1,4 @@
+const assert = require('assert');
 const tables = require('@architect/shared/tables');
 const handle = require('@architect/shared/handle');
 let NextAuthJWT = require('next-auth/jwt');
@@ -39,14 +40,21 @@ exports.handler = handle(async (event) => {
 
   await data.userkeyvalidations.delete({ id: validation.id });
 
+  const user = await data.users.get({ id: key.user_id });
+  if (!user) {
+    return {
+      statusCode: 404,
+      body: 'User not found',
+    };
+  }
+
+  assert(user.secret, 'use has a secret');
   const token = await NextAuthJWT.encode({
     ...jwtConf,
-    token: { accessToken: key.user_id },
+    token: { accessToken: user.secret },
   });
-
   let cookie = `${tokenCookieName}=${token}`;
   cookie += `; HttpOnly; Path=/; Max-Age=${jwtConf.maxAge}`;
-
   if (isSecureCookie) {
     cookie += '; Secure';
   }

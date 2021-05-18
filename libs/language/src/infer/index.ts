@@ -52,20 +52,25 @@ export const inferExpression = withErrorSource(
 
         return Type.build({ type: litType, unit: litUnit });
       }
+      case 'time-quantity': {
+        const units = expr.args.filter(
+          (a) => typeof a === 'string'
+        ) as AST.TimeUnit[];
+
+        return Type.buildTimeQuantity(units);
+      }
       case 'range': {
         const [start, end] = expr.args.map((expr) =>
           inferExpression(ctx, expr)
         );
 
         const rangeFunctor = (start: Type, end: Type) => {
-          return Type.combine(
-            start.isScalar('number').sameAs(end),
-            Type.build({
-              type: 'number',
-              unit: start.unit,
-              rangeness: true,
-            })
-          );
+          const rangeOf =
+            start.date != null
+              ? start.sameAs(end)
+              : start.isScalar('number').sameAs(end);
+
+          return Type.extend(rangeOf, { rangeness: true });
         };
 
         return Type.runFunctor(expr, rangeFunctor, start, end);
