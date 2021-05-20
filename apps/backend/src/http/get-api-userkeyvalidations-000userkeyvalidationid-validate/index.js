@@ -10,7 +10,7 @@ const jwtConf = require('@architect/shared/auth-flow/jwt')({ NextAuthJWT });
 const isSecureCookie =
   process.env.NEXTAUTH_URL && process.env.NEXTAUTH_URL.startsWith('https:');
 const tokenCookieName = isSecureCookie
-  ? '__Secure-next-auth.session-token'
+  ? '__Host-next-auth.session-token'
   : 'next-auth.session-token';
 
 exports.handler = handle(async (event) => {
@@ -54,7 +54,7 @@ exports.handler = handle(async (event) => {
     token: { accessToken: user.secret },
   });
   let cookie = `${tokenCookieName}=${token}`;
-  cookie += `; HttpOnly; Path=/; Max-Age=${jwtConf.maxAge}`;
+  cookie += `; HttpOnly; Path=/; Max-Age=${jwtConf.maxAge}; SameSite=Strict`;
   if (isSecureCookie) {
     cookie += '; Secure';
   }

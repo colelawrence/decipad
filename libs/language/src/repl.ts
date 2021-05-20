@@ -30,6 +30,17 @@ export const stringifyResult = (
     )}`;
   }
 
+  if (
+    type instanceof Type &&
+    type.columnSize != null &&
+    type.cellType != null &&
+    Array.isArray(result)
+  ) {
+    return `[ ${result
+      .map((item) => stringifyResult(item, type.cellType))
+      .join(', ')} ]`;
+  }
+
   return [
     chalk.blue(util.inspect(result != null ? result : result)),
     type != null ? ' ' + type.toString() : '',
