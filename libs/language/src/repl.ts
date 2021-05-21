@@ -30,10 +30,18 @@ export const stringifyResult = (
     )}`;
   }
 
-  return [
-    chalk.blue(util.inspect(result != null ? result : result)),
-    type != null ? ' ' + type.toString() : '',
-  ].join('');
+  if (
+    type instanceof Type &&
+    type.columnSize != null &&
+    type.cellType != null &&
+    Array.isArray(result)
+  ) {
+    return `[ ${result
+      .map((item) => stringifyResult(item, type.cellType))
+      .join(', ')} ]`;
+  }
+
+  return [chalk.blue(util.inspect(result)), type?.toString()].join(' ');
 };
 
 const wrappedParse = (source: string): AST.Statement | null => {
@@ -44,6 +52,7 @@ const wrappedParse = (source: string): AST.Statement | null => {
     },
   ])[0];
 
+  /* istanbul ignore if */
   if (parsed.solutions.length > 1) {
     console.error('Ambiguous parsed syntax!');
 
@@ -77,12 +86,8 @@ async function execDeci(ast: AST.Statement) {
 
     return stringifyResult(value, type);
   } catch (error) {
-    if (error instanceof repl.Recoverable) {
-      throw error;
-    } else {
-      console.error(error);
-      return '< Crashed >';
-    }
+    console.error(error);
+    return '< Crashed >';
   }
 }
 

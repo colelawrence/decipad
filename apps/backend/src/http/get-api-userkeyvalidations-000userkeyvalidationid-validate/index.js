@@ -54,7 +54,7 @@ exports.handler = handle(async (event) => {
     token: { accessToken: user.secret },
   });
   let cookie = `${tokenCookieName}=${token}`;
-  cookie += `; HttpOnly; Path=/; Max-Age=${jwtConf.maxAge}`;
+  cookie += `; HttpOnly; Path=/; Max-Age=${jwtConf.maxAge}; SameSite=Strict`;
   if (isSecureCookie) {
     cookie += '; Secure';
   }
