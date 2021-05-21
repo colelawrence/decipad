@@ -10,7 +10,7 @@ const jwtConf = require('@architect/shared/auth-flow/jwt')({ NextAuthJWT });
 const isSecureCookie =
   process.env.NEXTAUTH_URL && process.env.NEXTAUTH_URL.startsWith('https:');
 const tokenCookieName = isSecureCookie
-  ? '__Host-next-auth.session-token'
+  ? '__Secure-next-auth.session-token'
   : 'next-auth.session-token';
 
 exports.handler = handle(async (event) => {
