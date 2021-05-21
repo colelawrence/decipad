@@ -1,35 +1,30 @@
-import { pairwise } from '../utils';
-import { DateSpecificity, cleanDate } from '../date';
+import { pairwise, getDefined } from '../utils';
+import {
+  cleanDate,
+  addTimeQuantity,
+  cmpSpecificities,
+  getSpecificity,
+} from '../date';
 
 export interface SimpleValue {
-  rowCount: number | null;
-  withRowCount(rowCount: number): Column;
-  asScalar(): Scalar;
   cardinality: number;
   getData(): Interpreter.OneResult;
 }
 
-export type AnyValue = Scalar | Range | Date | TimeQuantity | Column;
+export type NonColumn = Scalar | Range | Date | TimeQuantity;
+export type AnyValue = NonColumn | Column;
 
 export type Value = SimpleValue;
 
 export class Scalar implements SimpleValue {
   cardinality = 1;
-  rowCount = null;
+
   value: number | boolean | string;
 
   static fromValue(value: number | boolean | string): Scalar {
     const ret = new Scalar();
     ret.value = value;
     return ret;
-  }
-
-  withRowCount(rowCount: number): Column {
-    return Column.fromValues(new Array(rowCount).fill(this));
-  }
-
-  asScalar() {
-    return this;
   }
 
   getData(): Interpreter.ResultScalar {
@@ -39,14 +34,13 @@ export class Scalar implements SimpleValue {
 
 export class Date implements SimpleValue {
   cardinality = 1;
-  rowCount = null;
 
-  specificity: DateSpecificity = 'time';
+  specificity: Time.Specificity = 'time';
   timeRange: Range;
 
   static fromDateAndSpecificity(
     date: number,
-    specificity: DateSpecificity
+    specificity: Time.Specificity
   ): Date {
     const [start, end] = cleanDate(date, specificity);
     const d = new Date();
@@ -58,14 +52,6 @@ export class Date implements SimpleValue {
     return d;
   }
 
-  withRowCount(rowCount: number) {
-    return Column.fromValues(new Array(rowCount).fill(this));
-  }
-
-  asScalar(): Scalar {
-    throw new Error('panic: could not turn Date into Scalar');
-  }
-
   getData() {
     return this.timeRange.getData() as number[];
   }
@@ -73,22 +59,13 @@ export class Date implements SimpleValue {
 
 export class TimeQuantity implements SimpleValue {
   cardinality = 1;
-  rowCount = null;
 
-  timeUnits: Map<AST.TimeUnit, number>;
+  timeUnits: Map<Time.Unit, number>;
 
   static fromASTArgs(args: AST.TimeQuantity['args']): TimeQuantity {
     const tq = new TimeQuantity();
-    tq.timeUnits = new Map(pairwise<AST.TimeUnit, number>(args));
+    tq.timeUnits = new Map(pairwise<Time.Unit, number>(args));
     return tq;
-  }
-
-  withRowCount(rowCount: number) {
-    return Column.fromValues(new Array(rowCount).fill(this));
-  }
-
-  asScalar(): Scalar {
-    throw new Error('panic: could not turn TimeQuantity into Scalar');
   }
 
   getData() {
@@ -98,7 +75,7 @@ export class TimeQuantity implements SimpleValue {
 
 export class Range implements SimpleValue {
   cardinality = 1;
-  rowCount = null;
+
   start: Scalar;
   end: Scalar;
 
@@ -120,21 +97,13 @@ export class Range implements SimpleValue {
       return range;
     } else {
       throw new Error(
-        `panic: bad Range.fromBounds arguments ${start?.constructor?.name} and ${end?.constructor?.name}`
+        `panic: bad Range.fromBounds arguments ${start.constructor.name} and ${end.constructor.name}`
       );
     }
   }
 
   getData() {
     return [this.start.getData(), this.end.getData()];
-  }
-
-  asScalar(): Scalar {
-    throw new Error('panic: Range cannot be turned into a single value');
-  }
-
-  withRowCount(): Column {
-    throw new Error('not implemented TODO');
   }
 }
 
@@ -154,6 +123,37 @@ export class Column implements SimpleValue {
     return column;
   }
 
+  static fromSequence(startV: Value, endV: Value, byV: Value): Column {
+    const [start, end, by] = [startV, endV, byV].map(
+      (val) => val.getData() as number
+    );
+
+    const array = [];
+
+    for (let i = start; i <= end; i += by) {
+      array.push(Scalar.fromValue(i));
+    }
+
+    return Column.fromValues(array);
+  }
+
+  static fromDateSequence(startD: Date, endD: Date, by: Time.Unit): Column {
+    const [start] = startD.getData();
+    const [end] = endD.getData();
+
+    if (cmpSpecificities(getSpecificity(by), startD.specificity) > 0) {
+      throw new Error('panic: time quantity more specific than the input date');
+    }
+
+    const array = [];
+
+    for (let cur = start; cur <= end; cur = addTimeQuantity(cur, [[by, 1]])) {
+      array.push(Date.fromDateAndSpecificity(cur, startD.specificity));
+    }
+
+    return Column.fromValues(array);
+  }
+
   get rowCount() {
     return this.values.length;
   }
@@ -162,34 +162,12 @@ export class Column implements SimpleValue {
     return 1 + Math.max(...this.values.map((v) => v.cardinality));
   }
 
-  withRowCount(rowCount: number) {
-    if (rowCount === this.rowCount) {
-      return this;
-    } else {
-      throw new Error(
-        `panic: bad row count ${this.rowCount} incompatible with desired row count ${rowCount}`
-      );
-    }
-  }
-
   atIndex(i: number) {
-    if (i < this.values.length) {
-      return this.values[i];
-    } else {
-      throw new Error(`panic: index ${i} out of bounds`);
-    }
+    return getDefined(this.values[i], `index ${i} out of bounds`);
   }
 
   getData() {
     return this.values.map((v) => v.getData());
-  }
-
-  asScalar() {
-    if (this.rowCount === 1) {
-      return this.values[0].asScalar();
-    } else {
-      throw new Error('panic: expected column of 1');
-    }
   }
 }
 

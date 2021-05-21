@@ -1,6 +1,6 @@
 import { hasBuiltin } from '../builtins';
 import { getOfType, getDefined, getIdentifierString } from '../utils';
-import { getDateFromAstForm } from '../date';
+import { getDateFromAstForm, getTimeUnit } from '../date';
 
 import { Realm } from './Realm';
 import {
@@ -82,6 +82,20 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
       const [start, end] = node.args.map((arg) => evaluate(realm, arg));
 
       return Range.fromBounds(start, end);
+    }
+    case 'sequence': {
+      const start = evaluate(realm, node.args[0]);
+      const end = evaluate(realm, node.args[1]);
+
+      if (start instanceof Date && end instanceof Date) {
+        return Column.fromDateSequence(
+          start,
+          end,
+          getTimeUnit(getIdentifierString(node.args[2] as AST.Ref))
+        );
+      } else {
+        return Column.fromSequence(start, end, evaluate(realm, node.args[2]));
+      }
     }
     case 'date': {
       const [dateMs, specificity] = getDateFromAstForm(node.args);

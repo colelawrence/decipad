@@ -1,6 +1,5 @@
 import { immerable, produce } from 'immer';
 import { getDefined } from '../utils';
-import type { DateSpecificity } from '../date';
 import { InferError } from './InferError';
 import {
   inverseExponent,
@@ -41,7 +40,7 @@ export interface ExtendArgs {
   unit?: AST.Unit[] | null;
   columnSize?: number | null;
   rangeness?: boolean;
-  date?: DateSpecificity | null;
+  date?: Time.Specificity | null;
 }
 
 export class Type {
@@ -58,7 +57,7 @@ export class Type {
   node: AST.Node;
   errorCause: InferError | null = null;
   rangeness = false;
-  date: DateSpecificity | null = null;
+  date: Time.Specificity | null = null;
 
   // Column
   cellType: Type | null = null;
@@ -69,7 +68,7 @@ export class Type {
   tupleNames: string[] | null = null;
 
   // Time quantities
-  timeUnits: AST.TimeUnit[] | null = null;
+  timeUnits: Time.Unit[] | null = null;
 
   // Functions are impossible types with functionness = true
   functionness = false;
@@ -159,11 +158,11 @@ export class Type {
     }
   }
 
-  static buildDate(specificity: DateSpecificity) {
+  static buildDate(specificity: Time.Specificity) {
     return Type.build({ type: 'number', date: specificity });
   }
 
-  static buildTimeQuantity(timeUnits: AST.TimeUnit[]) {
+  static buildTimeQuantity(timeUnits: Time.Unit[]) {
     const t = new Type();
     t.timeUnits = timeUnits;
     return t;
@@ -339,15 +338,6 @@ export class Type {
   }
 
   @propagate
-  isNotColumn() {
-    if (this.columnSize == null) {
-      return this;
-    } else {
-      return this.withErrorCause('Unexpected column');
-    }
-  }
-
-  @propagate
   reduced() {
     if (this.cellType != null) {
       return this.cellType;
@@ -387,15 +377,6 @@ export class Type {
   }
 
   @propagate
-  isNotRange() {
-    if (this.rangeness === false) {
-      return this;
-    } else {
-      return this.withErrorCause('Unexpected range');
-    }
-  }
-
-  @propagate
   sameRangenessAs(other: Type): Type {
     if (this.rangeness === other.rangeness) {
       return this;
@@ -409,7 +390,7 @@ export class Type {
   }
 
   @propagate
-  isDate(specificity?: DateSpecificity): Type {
+  isDate(specificity?: Time.Specificity): Type {
     if (this.date != null) {
       if (specificity == null || specificity === this.date) {
         return this;
@@ -424,11 +405,11 @@ export class Type {
   }
 
   @propagate
-  isNotDate(): Type {
-    if (this.date == null) {
+  isTimeQuantity() {
+    if (this.timeUnits != null) {
       return this;
     } else {
-      return this.withErrorCause('Unexpected date');
+      return this.withErrorCause('Expected time quantity');
     }
   }
 

@@ -29,7 +29,7 @@ describe('use of funds document', () => {
             else 0
         )
 
-        Months = [2021-01, 2021-02, 2021-03, 2021-04, 2021-05, 2021-06, 2021-07, 2021-08, 2021-09, 2021-10, 2021-11, 2021-12]
+        Months = [ 2021-01 through 2021-12 by month ]
         StandardSalary = 120000 / 12
 
         SalaryStaff = {
@@ -80,7 +80,7 @@ describe('use of funds document', () => {
               then Salary + (Salary * 20%) + (if GetsBonus then Salary * 30% else 0)
               else 0
 
-          Months = [2021-01, 2021-02, 2021-03, 2021-04]
+          Months = [ 2021-01 through 2021-04 by month ]
 
           StaffCosts = {
             Title = Salaries.Title,
@@ -153,7 +153,7 @@ describe('more models', () => {
         `
           DiscountRate = 0.25
 
-          Years = [Y2020, Y2021, Y2022, Y2023]
+          Years = [ Y2020 through Y2023 by year ]
 
           InitialCashFlow = 10musd
 
@@ -216,59 +216,58 @@ describe('more models', () => {
     expect(
       await runCode(
         `
-          People = {
-            JoinDate = [2020-01-10, 2020-05-10],
-            LeaveDate = [2022-02-13, 2022-02-13]
-          }
+          JoinDate = 2020-01-10
+          LeaveDate = 2022-02-13
+          BeginUnemploymentBenefits = dateadd JoinDate [ 2 years ]
 
-          getbadperiod = JoinDate => [ JoinDate through (dateaddyears JoinDate 2)]
-
-          LosesUnemploymentBenefits = given People: (containsdate (getbadperiod People.JoinDate) People.LeaveDate)
+          GetsUnemploymentBenefits = dategte LeaveDate BeginUnemploymentBenefits
         `
       )
     ).toMatchObject({
-      value: [[false, true]],
-      type: {
-        columnSize: 2,
-        cellType: { type: 'boolean' },
-      },
+      value: [true],
+      type: { type: 'boolean' },
     });
   });
 
   // Need discrete ranges first
-  /*
-  it.skip('retirement model', async () => {
-    const years = Array.from({ length: 4 }, (_, i) =>
+  it('retirement model', async () => {
+    const years = Array.from({ length: 3 }, (_, i) =>
       cleanDate(Date.UTC(2020 + i, 0), 'year')
     );
 
     expect(
       await runCode(
         `
-          YearsUntilRetirement = 20
-          InitialInvestment = 5keur
+          InitialInvestment = 5000eur
           YearlyReinforcement = 100eur
-          ExpectedYearlyGrowth = 0.05
+          ExpectedYearlyGrowth = 2%
 
           InvestmentValue = {
-            Years = [Y2020 through (dateaddyears Y2020 YearsUntilRetirement)],
-            Value = (previous InitialInvestment) + ExpectedYearlyGrowth + YearlyReinforcement
+            Years = [ Y2020 through Y2022 by year ],
+            Value = (previous InitialInvestment) * (1 + ExpectedYearlyGrowth) + YearlyReinforcement
           }
         `
       )
     ).toMatchObject({
-      value: [[]],
+      value: [[years, [5200, 5404, 5612.08]]],
       type: {
+        tupleNames: ['Years', 'Value'],
         tupleTypes: [
           {
-            columnSize: 4,
+            columnSize: 3,
             cellType: {
               date: 'year',
+            },
+          },
+          {
+            columnSize: 3,
+            cellType: {
+              type: 'number',
+              unit: [{ unit: 'eur' }],
             },
           },
         ],
       },
     });
   });
-  */
 });
