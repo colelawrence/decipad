@@ -67,6 +67,9 @@ export const automapTypes = (
   }
 };
 
+const getRowCount = (v?: Values.Value) =>
+  (v as Values.Column | undefined)?.rowCount ?? null;
+
 // Extremely symmetric with the above function
 export const automapValues = (
   values: Values.Value[],
@@ -77,10 +80,10 @@ export const automapValues = (
     const toMapOver = values.filter(
       (t, i) => t.cardinality > expectedCardinalities[i]
     );
-    const mapLength = toMapOver[0]?.rowCount;
+    const mapLength = (toMapOver[0] as Values.Column | undefined)?.rowCount;
 
     if (mapLength != null) {
-      if (allMatch(toMapOver, (a, b) => a.rowCount === b.rowCount)) {
+      if (allMatch(toMapOver, (a, b) => getRowCount(a) === getRowCount(b))) {
         // When an argument is higher-dimensional than expected,
         // the result of the call is also higher dimensional.
         // To achieve this we essentially do .map(fargs => recurse(fargs))

@@ -324,15 +324,10 @@ describe('multiplyUnit', () => {
 });
 
 describe('ranges', () => {
-  it('types can check and assign rangeness', () => {
+  it('types can check rangeness', () => {
     const ranged = Type.Number.isRange();
-    const deranged = Type.build({
-      type: 'number',
-      rangeness: true,
-    }).isNotRange();
 
     expect(ranged.errorCause).toEqual(new InferError('Expected range'));
-    expect(deranged.errorCause).toEqual(new InferError('Unexpected range'));
   });
 
   it('rangeness is checked with sameAs', () => {
@@ -366,8 +361,6 @@ describe('dates', () => {
     expect(Type.Number.isDate('month')).toEqual(
       Type.Number.withErrorCause('Expected date')
     );
-
-    expect(day.isNotDate()).toEqual(day.withErrorCause('Unexpected date'));
   });
 
   it('can be checked without specificity', () => {

@@ -1,7 +1,7 @@
 import { Type } from '../type';
 import { getDefined, getInstanceof } from '../utils';
-import { dateToArray, arrayToDate } from '../date';
-import { AnyValue, Date } from '../interpreter/Value';
+import { addTimeQuantity, sortSpecificities } from '../date';
+import { AnyValue, Date, TimeQuantity } from '../interpreter/Value';
 
 export interface BuiltinSpec {
   name: string;
@@ -192,22 +192,31 @@ export const builtins: Record<string, BuiltinSpec> = {
     fn: ([aStart], [bStart]) => aStart >= bStart,
     functor: dateCmpFunctor,
   },
-  dateaddyears: {
-    name: 'dateaddyears',
+  dateadd: {
+    name: 'dateadd',
     argCount: 2,
     fnValues: (date: AnyValue, years: AnyValue) => {
       date = getInstanceof(date, Date);
+      years = getInstanceof(years, TimeQuantity);
 
-      const asArray = dateToArray(date.timeRange.start.getData() as number);
-
-      asArray[0] += years.getData() as number;
-
-      const [newDate] = arrayToDate(asArray);
+      const newDate = addTimeQuantity(
+        date.timeRange.start.getData() as number,
+        years.getData()
+      );
 
       return Date.fromDateAndSpecificity(newDate, date.specificity);
     },
     functor: (date: Type, years: Type) =>
-      Type.combine(date.isDate(), years.isScalar('number'), date),
+      Type.combine(date.isDate(), years.isTimeQuantity(), date).mapType(() => {
+        const lowest = getDefined(
+          sortSpecificities([
+            getDefined(date.date),
+            ...getDefined(years.timeUnits),
+          ]).pop()
+        );
+
+        return Type.buildDate(lowest);
+      }),
   },
   // Reduce funcs
   total: {

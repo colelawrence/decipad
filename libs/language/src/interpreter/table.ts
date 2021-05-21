@@ -1,7 +1,7 @@
 import { walk, getIdentifierString, isExpression, pairwise } from '../utils';
 import { evaluate } from './evaluate';
 import { Realm } from './Realm';
-import { Column, Scalar, SimpleValue } from './Value';
+import { Column, Value } from './Value';
 
 const isRecursiveReference = (expr: AST.Expression) =>
   expr.type === 'function-call' &&
@@ -19,11 +19,19 @@ export const usesRecursion = (expr: AST.Expression) => {
   return result;
 };
 
+const atIndex = (v: Value, rowCount: number, index: number): Value => {
+  if (!(v instanceof Column)) {
+    v = Column.fromValues(Array.from({ length: rowCount }, () => v));
+  }
+
+  return (v as Column).atIndex(index);
+};
+
 export const evaluateTableColumn = (
   realm: Realm,
   column: AST.Expression,
   rowCount: number
-): SimpleValue => {
+): Value => {
   if (!usesRecursion(column)) {
     return evaluate(realm, column);
   } else {
@@ -31,13 +39,10 @@ export const evaluateTableColumn = (
     const savedPreviousValue = realm.previousValue;
     realm.previousValue = null;
 
-    const rows: Scalar[] = [];
+    const rows: Value[] = [];
 
     for (let i = 0; i < rowCount; i++) {
-      const value = evaluate(realm, column)
-        .withRowCount(rowCount)
-        .atIndex(i)
-        .asScalar();
+      const value = atIndex(evaluate(realm, column), rowCount, i);
       realm.previousValue = value;
       rows.push(value);
     }
@@ -47,11 +52,10 @@ export const evaluateTableColumn = (
   }
 };
 
-export const getLargestColumn = (
-  values: SimpleValue[],
-  minValue = 1
-): number => {
-  const sizes: Set<number> = new Set(values.map((v) => v.rowCount ?? minValue));
+export const getLargestColumn = (values: Value[], minValue = 1): number => {
+  const sizes: Set<number> = new Set(
+    values.map((v) => (v instanceof Column ? v.rowCount : minValue))
+  );
 
   // Make sure it can't be empty
   sizes.add(minValue);
@@ -61,7 +65,7 @@ export const getLargestColumn = (
 
 export const evaluateTable = (realm: Realm, { args: columns }: AST.Table) => {
   const colNames: string[] = [];
-  const colValues: SimpleValue[] = [];
+  const colValues: Value[] = [];
 
   return realm.stack.withPush(() => {
     for (const [def, column] of pairwise<AST.ColDef, AST.Expression>(columns)) {

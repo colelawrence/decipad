@@ -23,6 +23,39 @@ declare namespace Parser {
   type Solution = AST.Block;
 }
 
+declare namespace Time {
+  /**
+   * A unit of time available for time quantities in the language (eventually dates too)
+   */
+  type Unit =
+    | 'year'
+    | 'quarter'
+    | 'month'
+    | 'week'
+    | 'day'
+    | 'hour'
+    | 'minute'
+    | 'second'
+    | 'millisecond';
+
+  /**
+   * The arguments to JavaScript's new Date() or Date.UTC
+   */
+  type JSDateUnit =
+    | 'year'
+    | 'month'
+    | 'day'
+    | 'hour'
+    | 'minute'
+    | 'second'
+    | 'millisecond';
+
+  /**
+   * Specificity of a date in the language. quarter, week get turned into months, days. hours, minutes etc get turned into "time" because to the language all the time of day is the same type.
+   */
+  type Specificity = 'year' | 'month' | 'day' | 'time';
+}
+
 declare namespace AST {
   interface Pos {
     line: number;
@@ -88,20 +121,9 @@ declare namespace AST {
     end: Pos;
   }
 
-  type TimeUnit =
-    | 'year'
-    | 'quarter'
-    | 'month'
-    | 'week'
-    | 'day'
-    | 'hour'
-    | 'minute'
-    | 'second'
-    | 'millisecond';
-
   interface TimeQuantity {
     type: 'time-quantity';
-    args: (TimeUnit | number)[];
+    args: (Time.Unit | number)[];
     start: Pos;
     end: Pos;
   }
@@ -113,7 +135,14 @@ declare namespace AST {
     end: Pos;
   }
 
-  type DateSegments = (string | number)[];
+  interface Sequence {
+    type: 'sequence';
+    args: [start: Expression, end: Expression, by: Expression];
+    start: Pos;
+    end: Pos;
+  }
+
+  type DateSegments = (Time.Unit | number)[];
   interface TZInfo {
     hours: number;
     minutes: number;
@@ -214,6 +243,7 @@ declare namespace AST {
     | TimeQuantity
     | Column
     | Range
+    | Sequence
     | Date
     | Given
     | Table;
@@ -235,6 +265,7 @@ declare namespace AST {
     'argument-list': ArgList;
     'function-call': FunctionCall;
     range: Range;
+    sequence: Sequence;
     date: Date;
     column: Column;
     table: Table;
