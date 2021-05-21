@@ -98,6 +98,11 @@
     "ts-node": "~9.1.1",
     "typescript": "~4.2.4"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged && jest --config=./jest.config.js --onlyChanged --maxWorkers=1 --testTimeout=10000 && yarn typecheck"
+    }
+  },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json}": [
       "prettier --write"

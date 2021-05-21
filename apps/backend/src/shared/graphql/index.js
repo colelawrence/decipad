@@ -4,15 +4,17 @@ const playground = require('./playground');
 const modules = [
   require('./date'),
   require('./global'),
+  require('./pagination'),
   require('./registration'),
   require('./users'),
   require('./auth'),
   require('./roles'),
   require('./workspaces'),
+  require('./share'),
 ];
 
 const typedefs = ({ gql }) => modules.map(({ typedefs }) => typedefs(gql));
-const resolvers = merge(...modules.map(({ resolvers }) => resolvers));
+const resolvers = merge(...modules.map(({ resolvers }) => resolvers || {}));
 
 function createHandler({
   ApolloServer,

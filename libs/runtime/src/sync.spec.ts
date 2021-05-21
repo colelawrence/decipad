@@ -44,7 +44,7 @@ const MAX_SMALL_TIMEOUT = 250;
 const MAX_TINY_TIMEOUT = 50;
 const fetchPrefix = process.env.DECI_API_URL + '/api';
 
-describe('sync', () => {
+const runTests = () => {
   const replicas: DeciRuntime[] = [];
   let websocketServer: WebSocketServer;
   const workspaceId = nanoid();
@@ -165,7 +165,6 @@ describe('sync', () => {
           checkConversion();
           done();
         } catch (err) {
-          console.log(err);
           scheduleConversionCheck();
         }
       }, 10000);
@@ -189,7 +188,13 @@ describe('sync', () => {
   afterAll((done) => {
     websocketServer.stop(done);
   });
-});
+};
+
+if (!process.env.DECI_SYNC_TESTS) {
+  describe.skip('sync', runTests);
+} else {
+  describe('sync', runTests);
+}
 
 function apiServer(deciWebsocketServer: DeciWebsocketServer) {
   const store = new Map<string, string>();

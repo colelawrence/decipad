@@ -1,27 +1,37 @@
 const tables = require('../tables');
 
 async function create({
-  userId,
+  userId = null,
+  roleId = null,
   givenByUserId,
   resourceType,
   resourceId,
+  resourceUri,
   type,
   parentResourceUri = null,
-  roleId = null,
+  canComment = false,
 }) {
   const data = await tables();
 
-  const resource = `/${resourceType}/${resourceId}`;
+  const resource = resourceUri
+    ? resourceUri
+    : `/${resourceType}${resourceId ? '/' + resourceId : ''}`;
+  if (!resourceType) {
+    const parts = resource.split('/');
+    resourceType = parts[1];
+    resourceId = parts.splice(2).join('/');
+  }
   const id = `/users/${userId}/roles/${roleId}${resource}`;
   const newRolePermission = {
     id,
     resource_type: resourceType,
     resource_uri: resource,
     resource_id: resourceId,
-    user_id: userId,
+    user_id: userId || 'null',
+    role_id: roleId || 'null',
     given_by_user_id: givenByUserId,
     parent_resource_uri: parentResourceUri,
-    role_id: roleId,
+    can_comment: canComment,
     type,
   };
 

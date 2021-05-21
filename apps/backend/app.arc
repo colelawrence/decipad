@@ -86,6 +86,8 @@ permissions
   type String
   role_id String
   parent_resource_uri String
+  parent_permission_id String
+  can_comment Boolean
   encrypt true
 
 invites
@@ -93,10 +95,13 @@ invites
   permission_id String
   resource_type String
   resource_id String
+  resource_uri String
   user_id String
   invited_by_user_id String
   permission String
   parent_resource_uri String
+  email String
+  can_comment Boolean
   expires_at TTL
   encrypt true
 
@@ -111,12 +116,15 @@ verificationrequests
 workspaces
   id *String
   name String
+  encrypt true
 
 workspaceroles
   id *String
   name String
   permission String
   workspace_id String
+  encrypt true
+
 
 @indexes
 
@@ -129,6 +137,14 @@ collabs
 
 collabs
   conn *String
+
+invites
+  resource_uri *String
+  name byResource
+
+invites
+  user_id *String
+  name byUser
 
 permissions
   resource_uri *String
@@ -148,6 +164,10 @@ permissions
   user_id *String
   role_id **String
   name byUserAndRole
+
+permissions
+  parent_permission_id *String
+  name byParentPermission
 
 userkeys
   user_id *String
@@ -170,6 +190,7 @@ workspaceroles
 
 sendemail
 userkeys-changes
+permissions-changes
 
 
 #@plugins

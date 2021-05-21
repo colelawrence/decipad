@@ -7,12 +7,6 @@ const adaptReqRes = require('./adapt-req-res');
 const createDbAdapter = require('./db-adapter');
 const jwt = require('./jwt');
 
-const inTesting = !!process.env.JEST_WORKER_ID;
-
-if (inTesting) {
-  process.env.NEXT_AUTH_URL = 'http://localhost:3333/api/auth';
-}
-
 module.exports = function createAuthHandler({ NextAuth, NextAuthJWT }) {
   if (typeof NextAuthJWT.encode !== 'function') {
     NextAuthJWT = NextAuthJWT.default;
@@ -20,10 +14,6 @@ module.exports = function createAuthHandler({ NextAuth, NextAuthJWT }) {
 
   if (typeof NextAuth !== 'function') {
     NextAuth = NextAuth.default;
-  }
-
-  if (inTesting) {
-    process.env.NEXT_AUTH_URL = 'http://localhost:3333/api/auth';
   }
 
   const providers = [

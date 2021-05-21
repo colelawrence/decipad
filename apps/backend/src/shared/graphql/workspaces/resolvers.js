@@ -58,6 +58,7 @@ const resolvers = {
         name: 'Administrator',
         permission: 'ADMIN',
         workspace_id: newWorkspace.id,
+        system: true,
       };
 
       await data.workspaceroles.put(newWorkspaceAdminRole);

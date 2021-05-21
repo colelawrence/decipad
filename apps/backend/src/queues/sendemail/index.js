@@ -1,8 +1,9 @@
-const arc = require('@architect/functions');
+'use strict';
 const templates = require('@architect/shared/email-templates');
 const sendEmail = require('@architect/shared/services/send-email');
+const handle = require('@architect/shared/queues/handler');
 
-exports.handler = arc.queues.subscribe(handler);
+exports.handler = handle(handler);
 
 const inTesting = !!process.env.JEST_WORKER_ID;
 

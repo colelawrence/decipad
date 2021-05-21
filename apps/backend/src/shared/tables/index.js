@@ -2,7 +2,7 @@
 
 const arc = require('@architect/functions');
 
-const observedTables = ['userkeys'];
+const observedTables = ['userkeys', 'permissions'];
 const observedMethods = ['put', 'delete'];
 
 const observed = Symbol('deci_observed');

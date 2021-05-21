@@ -91,8 +91,7 @@ test('workspaces', () => {
           mutation {
             createRole(role: {
               name: "read-only role"
-              workspace_id: "${workspace.id}"
-              permission: READ
+              workspaceId: "${workspace.id}"
             }) {
                 id
                 name
@@ -100,7 +99,6 @@ test('workspaces', () => {
                   id
                   name
                 }
-                permission
                 users {
                   id
                   name
@@ -117,7 +115,6 @@ test('workspaces', () => {
         id: workspace.id,
         name: 'Workspace 1 renamed',
       },
-      permission: 'READ',
       users: [],
     });
   });
@@ -187,7 +184,6 @@ test('workspaces', () => {
               roles {
                 id
                 name
-                permission
                 users {
                   id
                 }
@@ -206,7 +202,6 @@ test('workspaces', () => {
           {
             id: role.id,
             name: role.name,
-            permission: 'READ',
             users: [
               {
                 id: 'test user id 2',
@@ -215,7 +210,6 @@ test('workspaces', () => {
           },
           {
             name: 'Administrator',
-            permission: 'ADMIN',
             users: [
               {
                 id: 'test user id 1',
@@ -240,7 +234,6 @@ test('workspaces', () => {
               roles {
                 id
                 name
-                permission
                 users {
                   id
                 }
@@ -259,7 +252,6 @@ test('workspaces', () => {
           {
             id: role.id,
             name: role.name,
-            permission: 'READ',
             users: [
               {
                 id: 'test user id 2',

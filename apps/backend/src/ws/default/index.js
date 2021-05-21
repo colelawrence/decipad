@@ -1,6 +1,7 @@
 const arc = require('@architect/functions');
 const tables = require('@architect/shared/tables');
-let { nanoid } = require('nanoid');
+const { nanoid } = require('nanoid');
+const { isAuthorized } = require('@architect/shared/authorization');
 
 /**
  * append a timestamp and echo the message back to the connectionId
@@ -18,6 +19,12 @@ exports.handler = async function ws(event) {
 
   if (!connection) {
     return { statusCode: 403 };
+  }
+
+  if (!(await isAuthorized(topic, { id: connection.user_id }))) {
+    // The user is not autorized, but don't close the connection
+    // He won't be able to fetch the resource through HTTP anyway
+    return { statusCode: 200 };
   }
 
   switch (op) {

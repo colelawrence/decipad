@@ -32,4 +32,11 @@ const { nanoid } = require('nanoid');
   };
 
   await tables.users.put(newUser2);
+
+  const newUserKey2 = {
+    id: `email:${newUser2.email}`,
+    user_id: newUser2.id,
+  };
+
+  await tables.userkeys.put(newUserKey2);
 })();

@@ -1,9 +1,11 @@
+'use strict';
 const arc = require('@architect/functions');
 const assert = require('assert');
 const { nanoid } = require('nanoid');
 const tables = require('@architect/shared/tables');
+const handle = require('@architect/shared/queues/handler');
 
-exports.handler = arc.queues.subscribe(userKeyChangesHandler);
+exports.handler = handle(userKeyChangesHandler);
 
 async function userKeyChangesHandler(event) {
   const { table, action, args } = event;
