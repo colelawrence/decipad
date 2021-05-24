@@ -139,7 +139,7 @@ describe('sameAs', () => {
     ).toEqual(new InferError('Mismatched units: meter.second and second'));
     expect(
       Type.build({ type: 'number', unit: [meter] }).sameAs(n(null)).errorCause
-    ).toEqual(new InferError('Mismatched units: meter and '));
+    ).toEqual(new InferError('Mismatched units: meter and unitless'));
   });
 });
 

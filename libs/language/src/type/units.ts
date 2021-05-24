@@ -69,8 +69,13 @@ const stringifyUnit = (unit: AST.Unit) => {
   return result.join('');
 };
 
-export const stringifyUnits = (unit: AST.Unit[] | null) =>
-  (unit ?? []).map((unit) => stringifyUnit(unit)).join('.');
+export const stringifyUnits = (unit: AST.Unit[] | null) => {
+  if (unit == null || unit.length === 0) {
+    return 'unitless';
+  } else {
+    return unit.map((unit) => stringifyUnit(unit)).join('.');
+  }
+};
 
 export const combineUnits = (
   myUnits: AST.Unit[] | null,
