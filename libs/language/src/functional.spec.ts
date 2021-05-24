@@ -42,7 +42,7 @@ describe('use of funds document', () => {
       `)
     ).toMatchObject({
       type: objectToTupleType({
-        Months: Type.extend(Type.buildDate('month'), { columnSize: 12 }),
+        Months: Type.buildColumn(Type.buildDate('month'), 12),
         Exec: Type.build({ type: 'number', columnSize: 12 }),
         Product: Type.build({ type: 'number', columnSize: 12 }),
         Tech: Type.build({ type: 'number', columnSize: 12 }),

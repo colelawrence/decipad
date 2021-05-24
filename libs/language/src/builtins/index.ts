@@ -15,8 +15,7 @@ export interface BuiltinSpec {
   functor: (...types: Type[]) => Type;
 }
 
-const binopFunctor = (...types: Type[]) =>
-  types.reduce((a, b) => a.isScalar('number').sameAs(b).withUnit(b.unit));
+const binopFunctor = (a: Type, b: Type) => a.isScalar('number').sameAs(b);
 
 const dateCmpFunctor = (left: Type, right: Type): Type =>
   Type.combine(left.isDate(), right.sameAs(left), Type.Boolean);
@@ -32,7 +31,7 @@ export const builtins: Record<string, BuiltinSpec> = {
     name: 'sqrt',
     argCount: 1,
     fn: (n) => Math.sqrt(n as number),
-    functor: binopFunctor,
+    functor: (n) => n.isScalar('number'),
   },
   '+': {
     name: '+',
@@ -50,13 +49,23 @@ export const builtins: Record<string, BuiltinSpec> = {
     name: '*',
     argCount: 2,
     fn: (a, b) => a * b,
-    functor: (a, b) => a.isScalar('number').sameAs(b).multiplyUnit(b.unit),
+    functor: (a, b) =>
+      Type.combine(
+        a.isScalar('number'),
+        b.isScalar('number'),
+        a.multiplyUnit(b.unit)
+      ),
   },
   '/': {
     name: '/',
     argCount: 2,
     fn: (a, b) => a / b,
-    functor: (a, b) => a.isScalar('number').sameAs(b).divideUnit(b.unit),
+    functor: (a, b) =>
+      Type.combine(
+        a.isScalar('number'),
+        b.isScalar('number'),
+        a.divideUnit(b.unit)
+      ),
   },
   '**': {
     name: '**',
@@ -165,19 +174,14 @@ export const builtins: Record<string, BuiltinSpec> = {
     argCount: 2,
     fn: ([bStart, bEnd], a) => a >= bStart && a <= bEnd,
     functor: (a: Type, b: Type) =>
-      Type.combine(
-        a.isRange(),
-        b.isScalar('number'),
-        a.withUnit(b.unit),
-        Type.Boolean
-      ),
+      Type.combine(a.getRangeOf().sameAs(b), Type.Boolean),
   },
   containsdate: {
     name: 'containsdate',
     argCount: 2,
     fn: ([rStart, rEnd], [dStart, dEnd]) => rStart <= dStart && rEnd >= dEnd,
     functor: (a: Type, b: Type) =>
-      Type.combine(a.isRange().isDate(), b.isDate(), Type.Boolean),
+      Type.combine(a.getRangeOf().isDate(), b.isDate(), Type.Boolean),
   },
   // Date stuff (TODO operator overloading)
   dateequals: {

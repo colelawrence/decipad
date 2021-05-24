@@ -31,7 +31,7 @@ export const unifyColumnSizes = (node: AST.Table, table: Type): Type => {
       ? // Ensure it's the same size
         colValue.withColumnSize(columnSize)
       : // Create a new type with that size
-        Type.extend(colValue as Type, { columnSize: columnSize });
+        Type.buildColumn(colValue as Type, columnSize);
 
     tupleTypes.push(newValue);
     tupleNames.push(colName);

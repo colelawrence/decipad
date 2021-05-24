@@ -93,6 +93,12 @@ describe('ranges', () => {
       await runOne(c('containsdate', r, date('2020-12-01', 'day')))
     ).toEqual(false);
   });
+
+  it('evaluates ranges of dates (2)', async () => {
+    expect(
+      await runOne(range(n('date', 'year', 2020), n('date', 'year', 2022)))
+    ).toEqual([Date.UTC(2020, 0), Date.UTC(2023, 0) - 1]);
+  });
 });
 
 describe('sequences', () => {

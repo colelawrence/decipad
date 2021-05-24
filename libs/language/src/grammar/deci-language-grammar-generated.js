@@ -2738,8 +2738,7 @@
         ],
       },
       {
-        name:
-          'timeQuantityDefParcelSeparator$subexpression$1$subexpression$2$string$1',
+        name: 'timeQuantityDefParcelSeparator$subexpression$1$subexpression$2$string$1',
         symbols: [{ literal: 'a' }, { literal: 'n' }, { literal: 'd' }],
         postprocess: function joiner(d) {
           return d.join('');
@@ -2760,8 +2759,7 @@
         ],
       },
       {
-        name:
-          'timeQuantityDefParcelSeparator$subexpression$1$subexpression$3$string$1',
+        name: 'timeQuantityDefParcelSeparator$subexpression$1$subexpression$3$string$1',
         symbols: [{ literal: 'a' }, { literal: 'n' }, { literal: 'd' }],
         postprocess: function joiner(d) {
           return d.join('');

@@ -94,7 +94,7 @@ describe('variables', () => {
 describe('ranges', () => {
   it('infers ranges', () => {
     expect(inferExpression(nilCtx, range(1, 2))).toEqual(
-      Type.build({ type: 'number', rangeness: true })
+      Type.buildRange(Type.Number)
     );
 
     expect(
@@ -111,7 +111,7 @@ describe('ranges', () => {
   it('infers ranges of dates', () => {
     const r = range(date('2030-01', 'month'), date('2031-11', 'month'));
     expect(inferExpression(nilCtx, r)).toEqual(
-      Type.extend(Type.buildDate('month'), { rangeness: true })
+      Type.buildRange(Type.buildDate('month'))
     );
 
     expect(
@@ -349,7 +349,6 @@ describe('columns', () => {
       )
     ).toEqual(
       Type.build({
-        type: 'number',
         date: 'month',
         columnSize: 2,
       })
@@ -604,7 +603,7 @@ it('infers binops', () => {
   const badExpr = c('==', l(1), l(true));
 
   expect(inferExpression(errorCtx, badExpr)).toEqual(
-    Type.Impossible.withErrorCause('Expected boolean').inNode(badExpr)
+    Type.Impossible.withErrorCause('Expected number').inNode(badExpr)
   );
 });
 
@@ -621,7 +620,7 @@ it('infers conditions', () => {
   const badConditional = c('if', l(true), l('wrong!'), l(1));
 
   expect(inferExpression(errorCtx, badConditional)).toEqual(
-    Type.Impossible.withErrorCause('Expected number').inNode(badConditional)
+    Type.Impossible.withErrorCause('Expected string').inNode(badConditional)
   );
 });
 
@@ -661,23 +660,23 @@ describe('inferProgram', () => {
       n('block', n('assign', n('def', 'A'), l(3)), c('+', r('A'), l(1.1))),
     ];
 
-    const badString = l('bad string, bad string!');
-    const wrongProgram = produce(program, (wrongProgram: AST.Block[]) => {
-      const argList = wrongProgram[0].args[1].args[1] as AST.ArgList;
-
-      argList.args[1] = badString;
-    });
-    const badCall = wrongProgram[0].args[1];
-
     expect(inferProgram(program)).toEqual({
       variables: new Map([['A', Type.Number]]),
       blockReturns: [Type.Number],
     });
 
-    const error = new InferError('Expected string');
+    const wrongProgram = produce(program, (wrongProgram: AST.Block[]) => {
+      const argList = wrongProgram[0].args[1].args[1] as AST.ArgList;
+
+      argList.args[1] = l('bad string, bad string!');
+    });
+    const badCall = wrongProgram[0].args[1];
+
     expect(inferProgram(wrongProgram)).toEqual({
       variables: new Map([['A', Type.Number]]),
-      blockReturns: [Type.Impossible.withErrorCause(error).inNode(badCall)],
+      blockReturns: [
+        Type.Impossible.withErrorCause('Expected number').inNode(badCall),
+      ],
     });
   });
 

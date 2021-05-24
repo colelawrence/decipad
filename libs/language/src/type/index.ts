@@ -5,7 +5,7 @@ import {
   inverseExponent,
   setExponent,
   combineUnits,
-  matchUnitColumns,
+  matchUnitArrays,
   stringifyUnits,
 } from './units';
 
@@ -56,8 +56,10 @@ export class Type {
   unit: AST.Unit[] | null = null;
   node: AST.Node;
   errorCause: InferError | null = null;
-  rangeness = false;
+
   date: Time.Specificity | null = null;
+
+  rangeOf: Type | null = null;
 
   // Column
   cellType: Type | null = null;
@@ -77,16 +79,19 @@ export class Type {
 
   static extend(
     base: Type,
-    { type, unit, columnSize, rangeness, date }: ExtendArgs
+    { type, unit, columnSize, date }: ExtendArgs
   ): Type {
     if (base.errorCause != null) {
       return base;
     }
 
-    if (columnSize != null) {
-      const t = Type.extend(base, { type, unit, rangeness, date });
+    if (columnSize !== undefined) {
+      const t = Type.extend(base, { type, unit, date });
 
-      return Type.buildColumn(t, columnSize);
+      return Type.buildColumn(
+        t,
+        getDefined(columnSize, 'unsupported: removing columnness')
+      );
     }
 
     return produce(base, (t) => {
@@ -96,14 +101,6 @@ export class Type {
 
       if (unit !== undefined) {
         t.unit = unit;
-      }
-
-      if (columnSize !== undefined) {
-        t.columnSize = columnSize;
-      }
-
-      if (rangeness !== undefined) {
-        t.rangeness = rangeness;
       }
 
       if (date !== undefined) {
@@ -159,7 +156,13 @@ export class Type {
   }
 
   static buildDate(specificity: Time.Specificity) {
-    return Type.build({ type: 'number', date: specificity });
+    return Type.build({ date: specificity });
+  }
+
+  static buildRange(of: Type) {
+    const t = new Type();
+    t.rangeOf = of;
+    return t;
   }
 
   static buildTimeQuantity(timeUnits: Time.Unit[]) {
@@ -204,8 +207,8 @@ export class Type {
       return `Error: ${this.errorCause.message}`;
     }
 
-    if (this.columnSize != null) {
-      return `${this.cellType?.toString()} x ${this.columnSize}`;
+    if (this.columnSize != null && this.cellType != null) {
+      return `${this.cellType.toString()} x ${this.columnSize}`;
     }
 
     if (this.tupleTypes != null) {
@@ -222,16 +225,16 @@ export class Type {
       return `[ ${columnStrings.join(', ')} ]`;
     }
 
-    if (this.rangeness) {
-      const withoutRange = produce(this, (type) => {
-        type.rangeness = false;
-      });
-
-      return 'range of ' + withoutRange.toString();
+    if (this.rangeOf != null) {
+      return 'range of ' + this.rangeOf.toString();
     }
 
     if (this.unit != null && this.unit.length > 0) {
       return stringifyUnits(this.unit);
+    }
+
+    if (this.date != null) {
+      return this.date;
     }
 
     return `<${this.type}>`;
@@ -278,7 +281,7 @@ export class Type {
   @propagate
   sameAs(other: Type): Type {
     return this.sameScalarnessAs(other)
-      .sameColumnSizeAs(other)
+      .sameColumnessAs(other)
       .sameDatenessAs(other)
       .sameRangenessAs(other);
   }
@@ -288,7 +291,7 @@ export class Type {
     if (
       this.tupleTypes == null &&
       this.cellType == null &&
-      this.rangeness == false &&
+      this.rangeOf == null &&
       this.date == null
     ) {
       if (type == null || type === this.type) {
@@ -303,19 +306,26 @@ export class Type {
 
   @propagate
   sameScalarnessAs(other: Type) {
-    const meScalar =
-      this.tupleTypes == null &&
-      this.cellType == null &&
-      this.rangeness == false &&
-      this.date == null;
-    const theyScalar =
-      other.tupleTypes == null &&
-      other.cellType == null &&
-      other.rangeness == false &&
-      other.date == null;
+    const meScalar = this.type != null;
+    const theyScalar = this.type != null;
 
-    if (meScalar == theyScalar) {
-      return theyScalar ? this.isScalar(other.type) : this;
+    if (meScalar && theyScalar) {
+      const matchingTypes = this.type === other.type;
+      const matchingUnits = matchUnitArrays(this.unit ?? [], other.unit ?? []);
+
+      if (matchingTypes && matchingUnits) {
+        return this;
+      } else {
+        return this.withErrorCause(
+          !matchingTypes
+            ? `Expected ${this.type}`
+            : `Mismatched units: ${stringifyUnits(
+                this.unit
+              )} and ${stringifyUnits(other.unit)}`
+        );
+      }
+    } else if (!meScalar && !theyScalar) {
+      return this;
     } else if (meScalar) {
       return this.withErrorCause('Expected scalar');
     } else {
@@ -347,14 +357,14 @@ export class Type {
   }
 
   @propagate
+  getRangeOf() {
+    return this.rangeOf ?? this.withErrorCause('Expected range');
+  }
+
+  @propagate
   withColumnSize(columnSize: number | null) {
     if (this.columnSize === columnSize) {
       return this;
-    } else if ((this.columnSize == null) !== (columnSize == null)) {
-      // Only one is an column
-      return produce(this, (newType) => {
-        newType.columnSize = this.columnSize ?? columnSize;
-      });
     } else {
       return this.withErrorCause(
         `Incompatible column sizes: ${this.columnSize} and ${columnSize}`
@@ -363,13 +373,23 @@ export class Type {
   }
 
   @propagate
-  sameColumnSizeAs(other: Type) {
-    return this.withColumnSize(other.columnSize);
+  sameColumnessAs(other: Type) {
+    return this.withColumnSize(other.columnSize).mapType((t) => {
+      if (t.columnSize) {
+        // Recurse to make sure it's a colummn of the same size
+        return t
+          .reduced()
+          .sameAs(other.reduced())
+          .mapType(() => t);
+      } else {
+        return t;
+      }
+    });
   }
 
   @propagate
   isRange() {
-    if (this.rangeness === true) {
+    if (this.rangeOf != null) {
       return this;
     } else {
       return this.withErrorCause('Expected range');
@@ -378,12 +398,13 @@ export class Type {
 
   @propagate
   sameRangenessAs(other: Type): Type {
-    if (this.rangeness === other.rangeness) {
+    if (this.rangeOf != null && other.rangeOf != null) {
+      return this.rangeOf.sameAs(other.rangeOf).mapType(() => this);
+    } else if (this.rangeOf == null && other.rangeOf == null) {
       return this;
     } else {
-      const errorMessage = this.rangeness
-        ? 'Expected range'
-        : 'Unexpected range';
+      const errorMessage =
+        this.rangeOf != null ? 'Expected range' : 'Unexpected range';
 
       return this.withErrorCause(errorMessage);
     }
@@ -428,19 +449,6 @@ export class Type {
 
         return this.withErrorCause(errorMessage);
       }
-    }
-  }
-
-  @propagate
-  withUnit(unit: AST.Unit[] | null) {
-    if (matchUnitColumns(this.unit ?? [], unit ?? [])) {
-      return this;
-    } else {
-      return this.withErrorCause(
-        `Mismatched units: ${stringifyUnits(this.unit)} and ${stringifyUnits(
-          unit
-        )}`
-      );
     }
   }
 

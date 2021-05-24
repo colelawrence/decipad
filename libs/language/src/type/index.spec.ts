@@ -36,6 +36,19 @@ const dollar: AST.Unit = {
   end: nilPos,
 };
 
+const invMeter: AST.Unit = inverseExponent(meter);
+const invSecond: AST.Unit = inverseExponent(second);
+
+const numberInMeter = produce(Type.Number, (type) => {
+  type.unit = [meter];
+});
+const numberInMeterBySecond = produce(Type.Number, (type) => {
+  type.unit = [meter, second];
+});
+const numberInMeterPerSecond = produce(Type.Number, (type) => {
+  type.unit = [meter, invSecond];
+});
+
 it('Can assert type equivalence and pass on this information', () => {
   const type = Type.buildScalar('string');
 
@@ -43,19 +56,91 @@ it('Can assert type equivalence and pass on this information', () => {
   expect(type.sameAs(type)).toEqual(type);
 });
 
-it('can be unified with sameAs', () => {
-  const sameAsItself = (t: Type) => {
-    expect(t.sameAs(t)).toEqual(t);
-  };
-
-  sameAsItself(Type.Number);
-  sameAsItself(Type.String);
-  sameAsItself(Type.build({ type: 'number', unit: [meter] }));
-  sameAsItself(Type.build({ type: 'number', unit: [second, meter] }));
-  sameAsItself(Type.buildColumn(Type.Number, 6));
-  sameAsItself(
-    Type.buildColumn(Type.buildTuple([Type.Number, Type.String]), 6)
+it('can be stringified', () => {
+  expect(Type.Number.toString()).toEqual('<number>');
+  expect(Type.build({ type: 'number', unit: [meter] }).toString()).toEqual(
+    'meter'
   );
+  expect(
+    Type.build({ type: 'number', unit: [meter, second] }).toString()
+  ).toEqual('meter.second');
+  expect(
+    Type.build({
+      type: 'number',
+      unit: [meter, inverseExponent(second)],
+    }).toString()
+  ).toEqual('meter.second^-1');
+
+  expect(Type.buildRange(Type.Number).toString()).toEqual('range of <number>');
+
+  expect(Type.buildDate('month').toString()).toEqual('month');
+
+  const table = Type.buildTuple(
+    [
+      Type.build({ type: 'number', unit: [meter] }),
+      Type.build({ type: 'string' }),
+    ],
+    ['Col1', 'Col2']
+  );
+  expect(table.toString()).toEqual('[ Col1 = meter, Col2 = <string> ]');
+
+  const tuple = Type.buildTuple([Type.Number, Type.String]);
+  expect(tuple.toString()).toEqual('[ <number>, <string> ]');
+
+  const col = Type.buildColumn(Type.String, 4);
+  expect(col.toString()).toEqual('<string> x 4');
+
+  const nestedCol = Type.buildColumn(Type.buildColumn(Type.String, 4), 6);
+  expect(nestedCol.toString()).toEqual('<string> x 4 x 6');
+});
+
+describe('sameAs', () => {
+  it('checks if the types are completely equal', () => {
+    const sameAsItself = (t: Type) => {
+      expect(t.sameAs(t)).toEqual(t);
+    };
+
+    sameAsItself(Type.Number);
+    sameAsItself(Type.String);
+    sameAsItself(Type.build({ type: 'number', unit: [meter] }));
+    sameAsItself(Type.build({ type: 'number', unit: [second, meter] }));
+    sameAsItself(Type.buildColumn(Type.Number, 6));
+    sameAsItself(
+      Type.buildColumn(Type.buildTuple([Type.Number, Type.String]), 6)
+    );
+  });
+
+  it('sameAs checks units', () => {
+    expect(Type.build({ type: 'number', unit: [meter] })).toEqual(
+      numberInMeter
+    );
+    expect(Type.build({ type: 'number', unit: [meter, second] })).toEqual(
+      numberInMeterBySecond
+    );
+
+    const n = (unit: AST.Unit[] | null) =>
+      Type.build({
+        type: 'number',
+        unit,
+      });
+
+    expect(
+      Type.build({ type: 'number', unit: [meter] }).sameAs(n([meter]))
+    ).toEqual(Type.build({ type: 'number', unit: [meter] }));
+
+    // Mismatched units
+    expect(
+      Type.build({ type: 'number', unit: [meter] }).sameAs(n([second]))
+        .errorCause
+    ).toEqual(new InferError('Mismatched units: meter and second'));
+    expect(
+      Type.build({ type: 'number', unit: [meter, second] }).sameAs(n([second]))
+        .errorCause
+    ).toEqual(new InferError('Mismatched units: meter.second and second'));
+    expect(
+      Type.build({ type: 'number', unit: [meter] }).sameAs(n(null)).errorCause
+    ).toEqual(new InferError('Mismatched units: meter and '));
+  });
 });
 
 describe('Type.combine', () => {
@@ -88,10 +173,8 @@ describe('new columns and tuples', () => {
     ).toEqual(3);
 
     expect(
-      Type.buildColumn(
-        Type.buildColumn(Type.build({ type: 'number', rangeness: true }), 9),
-        9
-      ).cardinality
+      Type.buildColumn(Type.buildColumn(Type.buildRange(Type.Number), 9), 9)
+        .cardinality
     ).toEqual(3);
 
     expect(
@@ -122,29 +205,30 @@ describe('new columns and tuples', () => {
     expect(
       Type.buildListLike([Type.buildColumn(Type.Number, 1), Type.String])
     ).toEqual(Type.buildTuple([Type.buildColumn(Type.Number, 1), Type.String]));
-  });
 
-  it('can be stringified', () => {
-    const table = Type.buildTuple(
-      [
-        Type.build({ type: 'number', unit: [meter] }),
-        Type.build({ type: 'string' }),
-      ],
-      ['Col1', 'Col2']
+    expect(
+      Type.buildListLike([
+        Type.buildColumn(Type.Number, 1),
+        Type.buildColumn(Type.Number, 1),
+      ])
+    ).toEqual(Type.buildColumn(Type.buildColumn(Type.Number, 1), 2));
+
+    expect(
+      Type.buildListLike([
+        Type.buildColumn(Type.Number, 1),
+        Type.buildColumn(Type.String, 1),
+      ])
+    ).toEqual(
+      Type.buildTuple([
+        Type.buildColumn(Type.Number, 1),
+        Type.buildColumn(Type.String, 1),
+      ])
     );
-
-    expect(table.toString()).toEqual('[ Col1 = meter, Col2 = <string> ]');
-
-    const col = Type.buildColumn(Type.String, 4);
-    expect(col.toString()).toEqual('<string> x 4');
-
-    const nestedCol = Type.buildColumn(Type.buildColumn(Type.String, 4), 6);
-    expect(nestedCol.toString()).toEqual('<string> x 4 x 6');
   });
 });
 
 describe('Impossible types', () => {
-  it('returns an impossible type and remembers causality', () => {
+  it('returns an impossible type', () => {
     const type = Type.buildScalar('string');
 
     expect(type.isScalar('boolean')).toEqual(
@@ -153,7 +237,7 @@ describe('Impossible types', () => {
 
     const differentType = Type.buildScalar('number');
     expect(type.sameAs(differentType)).toEqual(
-      Type.Impossible.withErrorCause('Expected number')
+      Type.Impossible.withErrorCause('Expected string')
     );
   });
 
@@ -166,7 +250,6 @@ describe('Impossible types', () => {
 
     expect(imp.isScalar('string')).toEqual(imp);
 
-    expect(imp.withUnit([meter])).toEqual(imp);
     expect(imp.multiplyUnit([meter])).toEqual(imp);
     expect(imp.divideUnit([meter])).toEqual(imp);
 
@@ -195,58 +278,6 @@ describe('Type.runFunctor', () => {
   it('returns what the functor returns, when all is normal', () => {
     expect(Type.runFunctor(testNode, () => Type.Boolean)).toEqual(Type.Boolean);
   });
-});
-
-const invMeter: AST.Unit = inverseExponent(meter);
-const invSecond: AST.Unit = inverseExponent(second);
-
-const numberInMeter = produce(Type.Number, (type) => {
-  type.unit = [meter];
-});
-const numberInMeterBySecond = produce(Type.Number, (type) => {
-  type.unit = [meter, second];
-});
-const numberInMeterPerSecond = produce(Type.Number, (type) => {
-  type.unit = [meter, invSecond];
-});
-
-it('has a withUnit method', () => {
-  expect(Type.build({ type: 'number', unit: [meter] })).toEqual(numberInMeter);
-  expect(Type.build({ type: 'number', unit: [meter, second] })).toEqual(
-    numberInMeterBySecond
-  );
-
-  expect(
-    Type.build({ type: 'number', unit: [meter] }).withUnit([meter])
-  ).toEqual(Type.build({ type: 'number', unit: [meter] }));
-
-  // Mismatched units
-  expect(
-    Type.build({ type: 'number', unit: [meter] }).withUnit([second]).errorCause
-  ).toEqual(new InferError('Mismatched units: meter and second'));
-  expect(
-    Type.build({ type: 'number', unit: [meter, second] }).withUnit([second])
-      .errorCause
-  ).toEqual(new InferError('Mismatched units: meter.second and second'));
-  expect(
-    Type.build({ type: 'number', unit: [meter] }).withUnit(null).errorCause
-  ).toEqual(new InferError('Mismatched units: meter and '));
-});
-
-it('can be stringified', () => {
-  expect(Type.Number.toString()).toEqual('<number>');
-  expect(Type.build({ type: 'number', unit: [meter] }).toString()).toEqual(
-    'meter'
-  );
-  expect(
-    Type.build({ type: 'number', unit: [meter, second] }).toString()
-  ).toEqual('meter.second');
-  expect(
-    Type.build({
-      type: 'number',
-      unit: [meter, inverseExponent(second)],
-    }).toString()
-  ).toEqual('meter.second^-1');
 });
 
 describe('divideUnit', () => {
@@ -332,14 +363,21 @@ describe('ranges', () => {
 
   it('rangeness is checked with sameAs', () => {
     expect(
-      Type.build({ type: 'number', rangeness: true }).sameAs(Type.Number)
-        .errorCause
-    ).toEqual(new InferError('Unexpected scalar'));
+      Type.buildRange(Type.Number).sameAs(Type.buildRange(Type.Number))
+    ).toEqual(Type.buildRange(Type.Number));
 
     expect(
-      Type.Number.sameAs(Type.build({ type: 'number', rangeness: true }))
+      Type.buildRange(Type.Number).sameAs(Type.buildRange(Type.String))
         .errorCause
-    ).toEqual(new InferError('Expected scalar'));
+    ).not.toBeNull();
+
+    expect(Type.buildRange(Type.Number).sameAs(Type.Number).errorCause).toEqual(
+      new InferError('Expected range')
+    );
+
+    expect(Type.Number.sameAs(Type.buildRange(Type.Number)).errorCause).toEqual(
+      new InferError('Expected number')
+    );
   });
 });
 
@@ -391,8 +429,10 @@ describe('dates', () => {
 });
 
 it('time quantities', () => {
-  expect(Type.buildTimeQuantity(['quarter', 'month']).timeUnits).toEqual([
-    'quarter',
-    'month',
-  ]);
+  const q = Type.buildTimeQuantity(['quarter', 'month']);
+  expect(q.timeUnits).toEqual(['quarter', 'month']);
+
+  expect(q.isTimeQuantity()).toEqual(q);
+
+  expect(Type.Number.isTimeQuantity().errorCause).not.toBeNull();
 });
