@@ -31,6 +31,68 @@ const second: AST.Unit = {
 
 const testFunctor = callBuiltin.bind(null, testNode);
 
+describe('callBuiltin', () => {
+  it('dateCmpFunctor', () => {
+    expect(
+      testFunctor(
+        'dateequals',
+        Type.buildDate('month'),
+        Type.buildDate('month')
+      )
+    ).toEqual(Type.Boolean);
+
+    expect(
+      testFunctor('dategte', Type.buildDate('day'), Type.buildDate('month'))
+        .errorCause
+    ).not.toBeNull();
+  });
+
+  it('contains', () => {
+    expect(
+      testFunctor(
+        'contains',
+        Type.buildRange(Type.build({ type: 'number', unit: [meter] })),
+        Type.build({ type: 'number', unit: [meter] })
+      )
+    ).toEqual(Type.Boolean);
+
+    expect(
+      testFunctor(
+        'contains',
+        Type.buildColumn(
+          Type.buildRange(Type.build({ type: 'number', unit: [meter] })),
+          3
+        ),
+        Type.build({ type: 'number', unit: [meter] })
+      )
+    ).toEqual(Type.buildColumn(Type.Boolean, 3));
+
+    expect(
+      testFunctor(
+        'contains',
+        Type.buildRange(Type.build({ type: 'number', unit: [meter] })),
+        Type.buildColumn(Type.build({ type: 'number', unit: [meter] }), 3)
+      )
+    ).toEqual(Type.buildColumn(Type.Boolean, 3));
+
+    expect(
+      testFunctor(
+        'contains',
+        Type.buildRange(Type.build({ type: 'number', unit: [meter] })),
+        Type.build({ type: 'number', unit: [second] })
+      ).errorCause
+    ).not.toBeNull();
+
+    expect(
+      testFunctor(
+        'contains',
+        Type.build({ type: 'number', unit: [meter] }),
+        Type.buildRange(Type.build({ type: 'number', unit: [meter] }))
+      ).errorCause
+    ).not.toBeNull();
+  });
+});
+
 type Builder = (a: ExtendArgs) => Type;
 // build, build2, build3, and buildOut will switch dimensionality to test propagation
 type Test = (
@@ -44,16 +106,16 @@ const typeDimTests: Record<string, Test> = {
   binopFunctor: (build, build2, _, buildOut) => {
     const n = build({ type: 'number' });
     const n2 = build2({ type: 'number' });
-    const no = buildOut({ type: 'number' });
+    const out = buildOut({ type: 'number' });
 
-    expect(testFunctor('+', n, n2)).toEqual(no);
+    expect(testFunctor('+', n, n2)).toEqual(out);
   },
   cmpFunctor: (build, build2, _, buildOut) => {
     const n = build({ type: 'number' });
     const n2 = build2({ type: 'number' });
-    const bo = buildOut({ type: 'boolean' });
+    const out = buildOut({ type: 'boolean' });
 
-    expect(testFunctor('>', n, n2)).toEqual(bo);
+    expect(testFunctor('>', n, n2)).toEqual(out);
 
     expect(
       testFunctor(
@@ -61,23 +123,23 @@ const typeDimTests: Record<string, Test> = {
         build({ type: 'number', unit: [meter] }),
         build2({ type: 'number', unit: [meter] })
       )
-    ).toEqual(bo);
-
-    expect(
-      testFunctor('>', n, build2({ type: 'number', unit: [meter] }))
-    ).toEqual(bo);
-
-    expect(
-      testFunctor('>', build({ type: 'number', unit: [meter] }), n2)
-    ).toEqual(bo);
+    ).toEqual(out);
 
     expect(
       testFunctor(
         '>',
         build({ type: 'number', unit: [meter] }),
         build2({ type: 'number', unit: [second] })
-      )
-    ).toEqual(bo);
+      ).errorCause.message
+    ).toMatch(/mismatched units/i);
+
+    expect(
+      testFunctor('>', n, build2({ type: 'number', unit: [meter] })).errorCause
+    ).not.toBeNull();
+
+    expect(
+      testFunctor('>', build({ type: 'number', unit: [meter] }), n2).errorCause
+    ).not.toBeNull();
   },
   if: (build, build2, build3, buildOut) => {
     expect(
@@ -100,99 +162,37 @@ const typeDimTests: Record<string, Test> = {
   },
 };
 
-describe('callBuiltin', () => {
-  it('dateCmpFunctor', () => {
-    expect(
-      testFunctor(
-        'dateequals',
-        Type.buildDate('month'),
-        Type.buildDate('month')
-      )
-    ).toEqual(Type.Boolean);
-
-    expect(
-      testFunctor('dategte', Type.buildDate('day'), Type.buildDate('month'))
-        .errorCause
-    ).not.toBeNull();
-  });
-
-  it('contains', () => {
-    expect(
-      testFunctor(
-        'contains',
-        Type.build({ type: 'number', unit: [meter], rangeness: true }),
-        Type.build({ type: 'number', unit: [meter] })
-      )
-    ).toEqual(Type.Boolean);
-
-    expect(
-      testFunctor(
-        'contains',
-        Type.buildColumn(
-          Type.build({ type: 'number', unit: [meter], rangeness: true }),
-          3
-        ),
-        Type.build({ type: 'number', unit: [meter] })
-      )
-    ).toEqual(Type.buildColumn(Type.Boolean, 3));
-
-    expect(
-      testFunctor(
-        'contains',
-        Type.build({ type: 'number', unit: [meter], rangeness: true }),
-        Type.buildColumn(Type.build({ type: 'number', unit: [meter] }), 3)
-      )
-    ).toEqual(Type.buildColumn(Type.Boolean, 3));
-
-    expect(
-      testFunctor(
-        'contains',
-        Type.build({ type: 'number', unit: [meter], rangeness: true }),
-        Type.build({ type: 'number', unit: [second] })
-      ).errorCause
-    ).not.toBeNull();
-
-    expect(
-      testFunctor(
-        'contains',
-        Type.build({ type: 'number', unit: [meter] }),
-        Type.build({ type: 'number', unit: [meter], rangeness: true })
-      ).errorCause
-    ).not.toBeNull();
-  });
-});
-
 for (const [testName, testFn] of Object.entries(typeDimTests)) {
-  const build1D = (args: ExtendArgs) => Type.build(args);
+  const buildScalar = (args: ExtendArgs) => Type.build(args);
+  const build1D = (args: ExtendArgs) => Type.buildColumn(buildScalar(args), 42);
   const build2D = (args: ExtendArgs) => Type.buildColumn(build1D(args), 42);
   const build3D = (args: ExtendArgs) => Type.buildColumn(build2D(args), 42);
-  const build4D = (args: ExtendArgs) => Type.buildColumn(build3D(args), 42);
+
+  it(`${testName} - Scalar`, () => {
+    testFn(buildScalar, buildScalar, buildScalar, buildScalar);
+  });
 
   it(`${testName} - 1D`, () => {
     testFn(build1D, build1D, build1D, build1D);
+  });
+
+  it(`${testName} - Scalar mixed with 1D`, () => {
+    testFn(buildScalar, build1D, build1D, build1D);
   });
 
   it(`${testName} - 2D`, () => {
     testFn(build2D, build2D, build2D, build2D);
   });
 
-  it(`${testName} - 1D mixed with 2D`, () => {
-    testFn(build1D, build2D, build2D, build2D);
+  it(`${testName} - Scalar mixed with 2D`, () => {
+    testFn(buildScalar, build2D, build2D, build2D);
   });
 
-  it(`${testName} - 3D`, () => {
-    testFn(build3D, build3D, build3D, build3D);
+  it(`${testName} - Scalar mixed with 3D`, () => {
+    testFn(buildScalar, build3D, build3D, build3D);
   });
 
   it(`${testName} - 1D mixed with 3D`, () => {
     testFn(build1D, build3D, build3D, build3D);
-  });
-
-  it(`${testName} - 1D mixed with 4D`, () => {
-    testFn(build1D, build4D, build4D, build4D);
-  });
-
-  it(`${testName} - 2D mixed with 4D`, () => {
-    testFn(build2D, build4D, build4D, build4D);
   });
 }

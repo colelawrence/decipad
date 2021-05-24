@@ -2,6 +2,8 @@ import repl from 'repl';
 import util from 'util';
 import chalk from 'chalk';
 import { enableMapSet } from 'immer';
+
+import { getDefined } from './utils';
 import { parse } from './parser';
 import { prettyPrintAST } from './parser/utils';
 import { runOne, Realm } from './interpreter';
@@ -13,31 +15,29 @@ enableMapSet();
 
 export const stringifyResult = (
   result: Interpreter.OneResult,
-  type: Type | null
+  type: Type
 ): string => {
-  if (type instanceof Type && type.rangeness) {
-    const contentT = Type.extend(type, { rangeness: false });
-
+  if (type.rangeOf != null) {
+    const [start, end] = result as Interpreter.OneResult[];
     return `range [ ${stringifyResult(
-      (result as any)[0],
-      contentT
-    )} through ${stringifyResult((result as any)[1], contentT)} ]`;
+      start,
+      type.rangeOf
+    )} through ${stringifyResult(end, type.rangeOf)} ]`;
   }
 
-  if (type instanceof Type && type.date != null) {
+  if (type.date != null) {
     return `${type.date} ${chalk.blue(
       stringifyDate((result as number[])[0], type.date)
     )}`;
   }
 
   if (
-    type instanceof Type &&
     type.columnSize != null &&
     type.cellType != null &&
     Array.isArray(result)
   ) {
     return `[ ${result
-      .map((item) => stringifyResult(item, type.cellType))
+      .map((item) => stringifyResult(item, getDefined(type.cellType)))
       .join(', ')} ]`;
   }
 

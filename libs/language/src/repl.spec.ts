@@ -36,9 +36,7 @@ describe('stringify', () => {
       `${chalk.blue('10')} <number>`
     );
 
-    expect(
-      stringifyResult([1, 10], Type.build({ type: 'number', rangeness: true }))
-    ).toEqual(
+    expect(stringifyResult([1, 10], Type.buildRange(Type.Number))).toEqual(
       `range [ ${chalk.blue('1')} <number> through ${chalk.blue(
         '10'
       )} <number> ]`

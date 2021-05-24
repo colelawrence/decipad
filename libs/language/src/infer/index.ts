@@ -71,7 +71,7 @@ export const inferExpression = withErrorSource(
               ? start.sameAs(end)
               : start.isScalar('number').sameAs(end);
 
-          return Type.extend(rangeOf, { rangeness: true });
+          return Type.buildRange(rangeOf);
         });
       }
       case 'sequence': {

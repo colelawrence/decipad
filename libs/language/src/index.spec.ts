@@ -340,7 +340,7 @@ describe('Ranges', () => {
         Containment = contains Range 3
       `)
     ).toMatchObject({
-      type: { rangeness: false },
+      type: { type: 'boolean' },
       value: [true],
     });
   });
