@@ -91,6 +91,16 @@ describe('callBuiltin', () => {
       ).errorCause
     ).not.toBeNull();
   });
+
+  it('errors', () => {
+    expect(testFunctor('unknownFn', Type.Number).errorCause?.message).toMatch(
+      /Unknown function/i
+    );
+
+    expect(testFunctor('if', Type.Number).errorCause?.message).toMatch(
+      /3 parameters/i
+    );
+  });
 });
 
 type Builder = (a: ExtendArgs) => Type;

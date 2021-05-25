@@ -33,6 +33,12 @@ export const builtins: Record<string, BuiltinSpec> = {
     fn: (n) => Math.sqrt(n as number),
     functor: (n) => n.isScalar('number'),
   },
+  ln: {
+    name: 'ln',
+    argCount: 1,
+    fn: (n) => Math.log(n),
+    functor: (n) => n.isScalar('number'),
+  },
   '+': {
     name: '+',
     argCount: 2,
@@ -127,14 +133,11 @@ export const builtins: Record<string, BuiltinSpec> = {
     name: 'grow',
     argCount: 3,
     argCardinalities: [1, 1, 2],
-    fn: (initial: number, growthRate: number, length: unknown[]) => {
-      let current = initial;
-      return Array.from({ length: length.length }, () => {
-        const ret = current;
-        current += current * growthRate;
-        return ret;
-      });
-    },
+    fn: (initial: number, growthRate: number, { length }: unknown[]) =>
+      Array.from({ length }, (_, i) => {
+        const growth = (1 + growthRate) ** i;
+        return initial * growth;
+      }),
     functor: (initial: Type, growthRate: Type, period: Type) =>
       Type.combine(
         initial.isScalar('number'),

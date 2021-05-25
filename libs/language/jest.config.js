@@ -2,7 +2,7 @@ module.exports = {
   displayName: 'language',
   preset: '../../jest.preset.js',
   testEnvironment: 'node',
-  setupFiles: ['./jest.setup.js'],
+  setupFilesAfterEnv: ['./jest.setup.js'],
   collectCoverageFrom: ['src/**/*.ts'],
   coveragePathIgnorePatterns: ['/node_modules/', 'src/testUtils'],
   coverageThreshold: {

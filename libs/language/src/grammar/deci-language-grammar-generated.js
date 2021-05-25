@@ -1842,7 +1842,7 @@
       },
       {
         name: 'literalMonth$subexpression$11$string$1',
-        symbols: [{ literal: 'D' }, { literal: 'e' }, { literal: 'v' }],
+        symbols: [{ literal: 'D' }, { literal: 'e' }, { literal: 'c' }],
         postprocess: function joiner(d) {
           return d.join('');
         },

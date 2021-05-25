@@ -1,7 +1,6 @@
 import repl from 'repl';
 import util from 'util';
 import chalk from 'chalk';
-import { enableMapSet } from 'immer';
 
 import { getDefined } from './utils';
 import { parse } from './parser';
@@ -10,8 +9,6 @@ import { runOne, Realm } from './interpreter';
 import { inferStatement, makeContext as makeInferContext } from './infer';
 import { stringifyDate } from './date';
 import { Type } from './type';
-
-enableMapSet();
 
 export const stringifyResult = (
   result: Interpreter.OneResult,

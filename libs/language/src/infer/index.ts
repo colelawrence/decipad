@@ -111,13 +111,11 @@ export const inferExpression = withErrorSource(
         });
         ctx.inTable = false;
 
-        if (tableType.errorCause != null) {
-          return tableType;
-        } else {
+        return tableType.mapType(() => {
           const unified =
             findBadColumn(tableType) ?? unifyColumnSizes(expr, tableType);
           return unified;
-        }
+        });
       }
       case 'property-access': {
         const tableName = getIdentifierString(expr.args[0]);

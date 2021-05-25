@@ -185,7 +185,7 @@ literalMonth -> ("Aug" | "August")                      {% returnMonth(8) %}
 literalMonth -> ("Sep" | "September")                   {% returnMonth(9) %}
 literalMonth -> ("Oct" | "October")                     {% returnMonth(10) %}
 literalMonth -> ("Nov" | "November")                    {% returnMonth(11) %}
-literalMonth -> ("Dev" | "December")                    {% returnMonth(12) %}
+literalMonth -> ("Dec" | "December")                    {% returnMonth(12) %}
 
 dateDay -> [0-9] [0-9]                                  {%
                                                         (d, l, reject) => {
