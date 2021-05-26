@@ -53,7 +53,7 @@ export const Item = ({ workspaceId }: { workspaceId: string }) => {
         transition="0.2s ease-out"
         borderRadius={5}
       >
-        <Link href={`/?workspace=${workspace.id}`}>
+        <Link href={`/workspaces/${workspace.id}`}>
           <Button
             bg="transparent"
             w="100%"
@@ -97,7 +97,7 @@ export const Item = ({ workspaceId }: { workspaceId: string }) => {
                   lastUpdatedAt: new Date(),
                 };
                 await runtime.workspace(workspaceId).pads.create(newPad);
-                router.push(`?workspace=${workspaceId}&notebook=${newPad.id}`);
+                router.push(`/workspaces/${workspaceId}/pads/${newPad.id}`);
                 setNewNotebookName('');
                 onClose();
               }}

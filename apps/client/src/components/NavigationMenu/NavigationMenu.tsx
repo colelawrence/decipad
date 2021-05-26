@@ -104,7 +104,7 @@ export const NavigationMenu = () => {
                   setNewWorkspaceName('');
                   await runtime.workspaces.create(newWorkspace);
                   await runtime.workspaces.push(newWorkspace.id);
-                  router.push(`?workspace=${newWorkspace.id}`);
+                  router.push(`/workspaces/${newWorkspace.id}`);
                   onClose();
                 }}
               >

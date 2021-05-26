@@ -35,6 +35,8 @@ const propagate = (_: Type, _methodName: string, desc: PropertyDescriptor) => {
   };
 };
 
+type TimeDotSpecificityBecauseNextJsIsVeryBadAndWrong = Time.Specificity;
+
 export interface ExtendArgs {
   type?: TypeName;
   unit?: AST.Unit[] | null;
@@ -411,7 +413,7 @@ export class Type {
   }
 
   @propagate
-  isDate(specificity?: Time.Specificity): Type {
+  isDate(specificity?: TimeDotSpecificityBecauseNextJsIsVeryBadAndWrong): Type {
     if (this.date != null) {
       if (specificity == null || specificity === this.date) {
         return this;
