@@ -73,8 +73,20 @@ export const builtins: Record<string, BuiltinSpec> = {
         a.divideUnit(b.unit)
       ),
   },
+  '%': {
+    name: '/',
+    argCount: 2,
+    fn: (a, b) => a % b,
+    functor: binopFunctor,
+  },
   '**': {
     name: '**',
+    argCount: 2,
+    fn: (a, b) => Math.pow(a, b),
+    functor: binopFunctor,
+  },
+  '^': {
+    name: '^',
     argCount: 2,
     fn: (a, b) => Math.pow(a, b),
     functor: binopFunctor,

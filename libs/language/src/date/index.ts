@@ -1,5 +1,5 @@
 import produce from 'immer';
-import { n, pairwise } from '../utils';
+import { n, pairwise, getDefined } from '../utils';
 
 /*
  * Check out types/index.d.ts (namespace Time) for documentation about different kinds of time units
@@ -186,11 +186,7 @@ export function arrayToDate(
 export function parseUTCDate(iso: string) {
   const segments = iso.match(/(\d+)/g);
 
-  if (segments != null) {
-    return arrayToDate(segments);
-  } else {
-    throw new Error('bad date: ' + iso);
-  }
+  return arrayToDate(getDefined(segments, 'bad date ' + iso));
 }
 
 export function date(
@@ -267,8 +263,10 @@ export const addSingleQuantity = (
   quantity: number,
   timeUnit: Time.Unit
 ): number => {
-  const [composedUnit, compositeMultiplier] =
-    timeUnitToJSDateUnit[timeUnit] ?? [];
+  const [composedUnit, compositeMultiplier] = getDefined(
+    timeUnitToJSDateUnit[timeUnit],
+    'bad time unit ' + timeUnit
+  );
 
   timeUnit = composedUnit;
   quantity *= compositeMultiplier;

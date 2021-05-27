@@ -300,7 +300,7 @@ argName -> [a-zA-Z] [0-9a-zA-Z]:*                       {%
 ### Operator ###
 ################
 
-dissociativeOperator  -> ("+" | "-" | "&&" | "||") {%
+dissociativeOperator  -> ("+" | "&&" | "||") {%
                                                         (d, l) => {
                                                           const op = d[0][0]
                                                           return {
@@ -321,8 +321,19 @@ dissociativeOperator  -> __ ("in") __    {%
                                                         }
                                                         %}
 
+dissociativeOperator  -> " - "                          {%
+                                                        (d, l) => {
+                                                          const op = d[0].trim()
+                                                          return {
+                                                            name: op,
+                                                            location: l + 1,
+                                                            length: 3
+                                                          }
+                                                        }
+                                                        %}
 
-associativeOperator -> ("**" | "%" | ">" | "<" | "<=" | ">=" | "==")       {%
+
+associativeOperator -> ("**" | ">" | "<" | "<=" | ">=" | "==")       {%
                                                         (d, l) => {
                                                           const op = d[0][0]
                                                           return {
@@ -332,7 +343,7 @@ associativeOperator -> ("**" | "%" | ">" | "<" | "<=" | ">=" | "==")       {%
                                                           }
                                                         }
                                                         %}
-associativeOperator -> (" * " | " / ")                  {%
+associativeOperator -> (" * " | " / " | " % " | " ^ ")  {%
                                                         (d, l) => {
                                                           const op = d[0][0].trim()
                                                           return {
