@@ -3,13 +3,12 @@ import { getDefined } from '../utils';
 import { InferError } from './InferError';
 import {
   inverseExponent,
-  setExponent,
   combineUnits,
   matchUnitArrays,
   stringifyUnits,
 } from './units';
 
-export { InferError, inverseExponent, setExponent };
+export { InferError, inverseExponent };
 
 export const scalarTypeNames = ['number', 'string', 'boolean'];
 

@@ -3221,10 +3221,6 @@
         symbols: [{ literal: '+' }],
       },
       {
-        name: 'dissociativeOperator$subexpression$1',
-        symbols: [{ literal: '-' }],
-      },
-      {
         name: 'dissociativeOperator$subexpression$1$string$1',
         symbols: [{ literal: '&' }, { literal: '&' }],
         postprocess: function joiner(d) {
@@ -3281,6 +3277,25 @@
         },
       },
       {
+        name: 'dissociativeOperator$string$1',
+        symbols: [{ literal: ' ' }, { literal: '-' }, { literal: ' ' }],
+        postprocess: function joiner(d) {
+          return d.join('');
+        },
+      },
+      {
+        name: 'dissociativeOperator',
+        symbols: ['dissociativeOperator$string$1'],
+        postprocess: (d, l) => {
+          const op = d[0].trim();
+          return {
+            name: op,
+            location: l + 1,
+            length: 3,
+          };
+        },
+      },
+      {
         name: 'associativeOperator$subexpression$1$string$1',
         symbols: [{ literal: '*' }, { literal: '*' }],
         postprocess: function joiner(d) {
@@ -3290,10 +3305,6 @@
       {
         name: 'associativeOperator$subexpression$1',
         symbols: ['associativeOperator$subexpression$1$string$1'],
-      },
-      {
-        name: 'associativeOperator$subexpression$1',
-        symbols: [{ literal: '%' }],
       },
       {
         name: 'associativeOperator$subexpression$1',
@@ -3369,6 +3380,28 @@
       {
         name: 'associativeOperator$subexpression$2',
         symbols: ['associativeOperator$subexpression$2$string$2'],
+      },
+      {
+        name: 'associativeOperator$subexpression$2$string$3',
+        symbols: [{ literal: ' ' }, { literal: '%' }, { literal: ' ' }],
+        postprocess: function joiner(d) {
+          return d.join('');
+        },
+      },
+      {
+        name: 'associativeOperator$subexpression$2',
+        symbols: ['associativeOperator$subexpression$2$string$3'],
+      },
+      {
+        name: 'associativeOperator$subexpression$2$string$4',
+        symbols: [{ literal: ' ' }, { literal: '^' }, { literal: ' ' }],
+        postprocess: function joiner(d) {
+          return d.join('');
+        },
+      },
+      {
+        name: 'associativeOperator$subexpression$2',
+        symbols: ['associativeOperator$subexpression$2$string$4'],
       },
       {
         name: 'associativeOperator',

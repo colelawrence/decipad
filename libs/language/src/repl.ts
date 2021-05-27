@@ -2,7 +2,7 @@ import repl from 'repl';
 import util from 'util';
 import chalk from 'chalk';
 
-import { getDefined } from './utils';
+import { getDefined, zip } from './utils';
 import { parse } from './parser';
 import { prettyPrintAST } from './parser/utils';
 import { runOne, Realm } from './interpreter';
@@ -38,6 +38,22 @@ export const stringifyResult = (
       .join(', ')} ]`;
   }
 
+  if (
+    type.tupleTypes != null &&
+    type.tupleNames != null &&
+    Array.isArray(result)
+  ) {
+    const typesAndNames = zip(type.tupleTypes, type.tupleNames);
+    const cols = result
+      .map((col, i) => {
+        const [type, name] = typesAndNames[i];
+
+        return `  ${name} = ${stringifyResult(col, type)}`;
+      })
+      .join(',\n');
+    return `{\n${cols}\n}`;
+  }
+
   return [chalk.blue(util.inspect(result)), type?.toString()].join(' ');
 };
 
@@ -65,7 +81,7 @@ let accumulatedSource = '';
 let realm = new Realm();
 let inferContext = makeInferContext();
 
-const reset = () => {
+export const reset = () => {
   accumulatedSource = '';
   realm = new Realm();
   inferContext = makeInferContext();
