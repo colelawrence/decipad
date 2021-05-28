@@ -11,15 +11,19 @@
   "author": "N1N",
   "license": "Proprietary",
   "dependencies": {
-    "@architect/architect": "^8.5.5",
-    "@architect/functions": "^3.13.11",
+    "@architect/architect": "8.6.0",
+    "@architect/functions": "3.14.1",
     "apollo-server-lambda": "^2.22.2",
     "automerge": "^0.14.2",
     "aws-sdk": "^2.712.0",
     "graphql": "^15.5.0",
+    "graphql-ws": "^4.5.1",
     "lodash.merge": "^4.6.2",
     "nanoid": "^3.1.22",
     "next-auth": "^3.21.1",
     "simple-cookie": "^1.0.13"
+  },
+  "devDependencies": {
+    "@architect/sandbox": "3.6.0"
   }
 }

@@ -74,6 +74,7 @@ connections
 collabs
   id *String
   user_id String
+  room String
   encrypt true
 
 permissions
@@ -125,6 +126,11 @@ workspaceroles
   workspace_id String
   encrypt true
 
+subscriptions
+  id *String
+  connection_id String
+  user_id String
+  gqltype String
 
 @indexes
 
@@ -185,12 +191,21 @@ workspaceroles
   workspace_id *String
   name byWorkspaceId
 
+subscriptions
+  user_id *String
+  gqltype **String
+  name byUserAndType
+
+subscriptions
+  connection_id *String
+  name byConnection
 
 @queues
 
 sendemail
 userkeys-changes
 permissions-changes
+notify-subscriptions
 
 
 #@plugins

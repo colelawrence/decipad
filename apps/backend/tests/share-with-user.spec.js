@@ -3,8 +3,7 @@
 /* eslint-env jest */
 
 import test from './utils/test-with-sandbox';
-import { withAuth, withoutAuth, gql } from './utils/call-graphql';
-import { withAuth as callWithAuth } from './utils/call-simple';
+import { withAuth, gql } from './utils/call-graphql';
 import auth from './utils/auth';
 import { timeout } from './utils/timeout';
 import createResourcePermission from '../src/shared/resource-permissions/create';

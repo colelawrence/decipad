@@ -2,25 +2,28 @@
 
 /* eslint-env jest */
 
-import sandbox from '@architect/sandbox';
 import path from 'path';
 import rimraf from 'rimraf';
+import sandbox from './sandbox';
 // import getPort from 'get-port';
+import dotenv from 'dotenv';
 
 function testWithSandbox(description, fn) {
   return describe(description, () => {
     let beforeWorkingDir;
 
-    beforeAll(async () => {
-      process.env.DECI_PORT = process.env.PORT = '3333';
-      process.env.NEXTAUTH_URL = 'http://localhost:3333/api/auth';
-      //   process.env.ARC_EVENTS_PORT = await getPort();
-      //   process.env.ARC_TABLES_PORT = await getPort();
-    });
-
     beforeAll(() => {
       beforeWorkingDir = process.cwd();
       process.chdir(path.join(__dirname, '..', '..'));
+    });
+
+    beforeAll(() => {
+      dotenv.config();
+      process.env.DECI_PORT = process.env.PORT = '3333';
+      process.env.NEXTAUTH_URL = 'http://localhost:3333/api/auth';
+
+      //   process.env.ARC_EVENTS_PORT = await getPort();
+      //   process.env.ARC_TABLES_PORT = await getPort();
     });
 
     beforeAll((done) => {
@@ -28,25 +31,15 @@ function testWithSandbox(description, fn) {
     });
 
     beforeAll(async () => {
-      await sandbox.start({
-        quiet: true,
-      });
+      await sandbox.start();
     });
 
     afterAll(async () => {
-      await sandbox.end();
-    });
-
-    beforeAll((done) => {
-      setTimeout(done, 2000);
+      await sandbox.stop();
     });
 
     afterAll(() => {
       process.chdir(beforeWorkingDir);
-    });
-
-    afterAll((done) => {
-      setTimeout(done, 4000);
     });
 
     fn();

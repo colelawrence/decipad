@@ -1,3 +1,5 @@
+'use strict';
+
 const tables = require('@architect/shared/tables');
 
 exports.handler = async function ws(event) {
@@ -18,6 +20,18 @@ exports.handler = async function ws(event) {
   await data.connections.delete({
     id: event.requestContext.connectionId,
   });
+
+  const subscriptions = await data.subscriptions.query({
+    IndexName: 'byConnection',
+    KeyConditionExpression: 'connection_id = :connection_id',
+    ExpressionAttributeValues: {
+      ':connection_id': event.requestContext.connectionId,
+    },
+  });
+
+  for (const subscription of subscriptions.Items) {
+    await data.subscriptions.delete({ id: subscription.id });
+  }
 
   return { statusCode: 200 };
 };

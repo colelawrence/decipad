@@ -7,12 +7,13 @@ module.exports = {
   maxConcurrency: 1,
   maxWorkers: 1,
   testTimeout: 10000,
+  bail: true,
   coverageThreshold: {
     global: {
       branches: 50,
-      functions: 100,
-      lines: 94,
-      statements: 94,
+      functions: 89,
+      lines: 89,
+      statements: 90,
     },
   },
 };

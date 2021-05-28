@@ -21,7 +21,7 @@ module.exports = ({ gql }) => gql`
     canComment: Boolean!
   }
 
-  type Query {
+  extend type Query {
     me: User
   }
 `;

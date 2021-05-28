@@ -7,7 +7,6 @@ import { withAuth, gql } from './utils/call-graphql';
 import auth from './utils/auth';
 import { timeout } from './utils/timeout';
 import createResourcePermission from '../src/shared/resource-permissions/create';
-import arc from '@architect/functions';
 
 test('share with role', () => {
   let workspace;
@@ -70,7 +69,7 @@ test('share with role', () => {
     await expect(
       client.mutate({
         mutation: gql`
-          mutation($roleId: ID!) {
+          mutation ($roleId: ID!) {
             shareWithRole(
               resource: "/testtype/testresourceid1"
               roleId: $roleId
@@ -90,7 +89,7 @@ test('share with role', () => {
     const client = withAuth(await auth());
     await client.mutate({
       mutation: gql`
-        mutation($roleId: ID!) {
+        mutation ($roleId: ID!) {
           shareWithRole(
             resource: "/testtype/testresourceid1"
             roleId: $roleId
@@ -201,7 +200,7 @@ test('share with role', () => {
     await expect(
       client.mutate({
         mutation: gql`
-          mutation($roleId: ID!) {
+          mutation ($roleId: ID!) {
             unShareWithRole(
               resource: "/testtype/testresourceid1"
               roleId: $roleId
@@ -219,7 +218,7 @@ test('share with role', () => {
     const client = withAuth(await auth());
     await client.mutate({
       mutation: gql`
-        mutation($roleId: ID!) {
+        mutation ($roleId: ID!) {
           unShareWithRole(
             resource: "/testtype/testresourceid1"
             roleId: $roleId
@@ -272,7 +271,7 @@ test('share with role', () => {
     const client = withAuth(await auth());
     await client.mutate({
       mutation: gql`
-        mutation($roleId: ID!) {
+        mutation ($roleId: ID!) {
           shareWithRole(
             resource: "/testtype/testresourceid1"
             roleId: $roleId
@@ -292,7 +291,7 @@ test('share with role', () => {
 
     await client.mutate({
       mutation: gql`
-        mutation($roleId: ID!) {
+        mutation ($roleId: ID!) {
           removeSelfFromRole(roleId: $roleId)
         }
       `,

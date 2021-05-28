@@ -83,7 +83,7 @@ const resolvers = {
 
       const newInviteForRole = {
         id: nanoid(),
-        permission_id: `/users/${user.id}/roles/${roleId}/roles/${roleId}`,
+        permission_id: `/users/${userId}/roles/${roleId}/roles/${roleId}`,
         resource_type: 'roles',
         resource_id: roleId,
         user_id: userId,
@@ -100,7 +100,7 @@ const resolvers = {
 
       const newInviteForWorkspace = {
         id: nanoid(),
-        permission_id: `/users/${user.id}/roles/${roleId}${workspaceResource}`,
+        permission_id: `/users/${userId}/roles/${roleId}${workspaceResource}`,
         resource_type: 'workspaces',
         resource_id: workspace.id,
         user_id: userId,

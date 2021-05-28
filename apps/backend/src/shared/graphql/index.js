@@ -1,20 +1,6 @@
-const merge = require('lodash.merge');
-const context = require('./context');
-const playground = require('./playground');
-const modules = [
-  require('./date'),
-  require('./global'),
-  require('./pagination'),
-  require('./registration'),
-  require('./users'),
-  require('./auth'),
-  require('./roles'),
-  require('./workspaces'),
-  require('./share'),
-];
+'use strict';
 
-const typedefs = ({ gql }) => modules.map(({ typedefs }) => typedefs(gql));
-const resolvers = merge(...modules.map(({ resolvers }) => resolvers || {}));
+const createServer = require('./server');
 
 function createHandler({
   ApolloServer,
@@ -22,20 +8,11 @@ function createHandler({
   makeExecutableSchema,
   NextAuthJWT,
 }) {
-  if (typeof NextAuthJWT.encode !== 'function') {
-    NextAuthJWT = NextAuthJWT.default;
-  }
-
-  const schema = makeExecutableSchema({
-    typeDefs: typedefs({ gql }),
-    resolvers,
-  });
-
-  const server = new ApolloServer({
-    schema,
-    context: context({ NextAuthJWT }),
-    playground,
-    debug: true,
+  const server = createServer({
+    ApolloServer,
+    gql,
+    makeExecutableSchema,
+    NextAuthJWT,
   });
 
   const handler = server.createHandler();

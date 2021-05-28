@@ -215,7 +215,12 @@
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": { "lintFilePatterns": ["apps/backend/src/**/*.js"] }
+          "options": {
+            "lintFilePatterns": [
+              "apps/backend/src/**/*.js",
+              "apps/backend/tests/**/*.js"
+            ]
+          }
         },
         "test": {
           "executor": "@nrwl/jest:jest",

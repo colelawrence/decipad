@@ -7,7 +7,6 @@ import { parse as parseCookie } from 'simple-cookie';
 import test from './utils/test-with-sandbox';
 import { withAuth, withoutAuth, gql } from './utils/call-graphql';
 import { timeout } from './utils/timeout';
-import auth from './utils/auth';
 
 test('registration via magic link', () => {
   let user;

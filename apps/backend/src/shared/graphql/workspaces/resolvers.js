@@ -6,7 +6,9 @@ const tables = require('../../tables');
 const { requireUser, check, isAuthorized } = require('../authorization');
 const createResourcePermission = require('../../resource-permissions/create');
 const queryAccessibleResources = require('../../resource-permissions/query-accessible-resources');
+const removeAllPermissionsFor = require('../../resource-permissions/remove-all-permissions-for');
 const by = require('../utils/by');
+const pubsub = require('../../pubsub');
 
 const resolvers = {
   Query: {
@@ -86,7 +88,8 @@ const resolvers = {
     },
 
     async updateWorkspace(_, { id, workspace }, context) {
-      await check(`/workspaces/${id}`, context, 'WRITE');
+      const resource = `/workspaces/${id}`;
+      await check(resource, context, 'WRITE');
 
       const data = await tables();
       const previousWorkspace = await data.workspaces.get({ id });
@@ -94,10 +97,55 @@ const resolvers = {
         throw new UserInputError('No such workspace');
       }
 
-      const newWorkspace = Object.assign(previousWorkspace, workspace);
+      const newWorkspace = { ...previousWorkspace, ...workspace };
       await data.workspaces.put(newWorkspace);
 
+      await pubsub.notifyAllWithAccessTo(resource, 'workspacesChanged', {
+        updated: [
+          {
+            id,
+            ...workspace,
+          },
+        ],
+      });
+
       return newWorkspace;
+    },
+
+    async removeWorkspace(_, { id }, context) {
+      await check(`/workspaces/${id}`, context, 'ADMIN');
+
+      const data = await tables();
+      const roles = (
+        await data.workspaceroles.query({
+          IndexName: 'byWorkspaceId',
+          KeyConditionExpression: 'workspace_id = :workspace_id',
+          ExpressionAttributeValues: {
+            ':workspace_id': id,
+          },
+        })
+      ).Items;
+
+      for (const role of roles) {
+        await data.workspaceroles.delete({ id: role.id });
+        await removeAllPermissionsFor(`/roles/${role.id}`);
+      }
+
+      await removeAllPermissionsFor(`/workspaces/${id}`);
+    },
+  },
+
+  Subscription: {
+    workspacesChanged: {
+      async subscribe(_, __, context) {
+        const user = requireUser(context);
+        return await pubsub.subscribe({
+          subscriptionId: context.subscriptionId,
+          connectionId: context.connectionId,
+          user,
+          type: 'workspacesChanged',
+        });
+      },
     },
   },
 

@@ -33,9 +33,7 @@ export const Item = ({ id, workspaceId }) => {
       mb={4}
       borderRadius={15}
       cursor="pointer"
-      onMouseDown={() =>
-        router.push(`/?workspace=${workspaceId}&notebook=${id}`)
-      }
+      onMouseDown={() => router.push(`/workspaces/${workspaceId}/pads/${id}`)}
     >
       <HStack justifyContent="space-between">
         <Heading fontSize="xl">{pad.name}</Heading>

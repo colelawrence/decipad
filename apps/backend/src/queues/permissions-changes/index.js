@@ -1,7 +1,9 @@
 'use strict';
-const arc = require('@architect/functions');
 const assert = require('assert');
 const handle = require('@architect/shared/queues/handler');
+const { isAuthorized } = require('@architect/shared/authorization');
+const pubsub = require('@architect/shared/pubsub');
+const tables = require('@architect/shared/tables');
 
 exports.handler = handle(permissionsChangesHandler);
 
@@ -9,6 +11,15 @@ async function permissionsChangesHandler(event) {
   const { table, action, args } = event;
 
   assert.equal(table, 'permissions');
+  const { userId, resourceType } = parsePermissionId(args.id);
+  if (
+    (args.resource_type === 'workspaces' || resourceType === 'workspaces') &&
+    args.user_id !== 'null' &&
+    userId !== null
+  ) {
+    await handleWorkspaces(event);
+  }
+
   if (action === 'delete') {
     await handleDelete(args);
   } else if (action === 'put') {
@@ -24,7 +35,7 @@ async function handlePutWithUserAndRoleResource({
   resource_id: roleId,
   user_id,
 }) {
-  const data = await arc.tables();
+  const data = await tables();
 
   let lastKey = null;
   do {
@@ -66,7 +77,7 @@ async function handlePutWithUserAndRoleResource({
 }
 
 async function handlePutWithNoUser({ role_id }) {
-  const data = await arc.tables();
+  const data = await tables();
   const userIdsInRole = (
     await data.permissions.query({
       IndexName: 'byResource',
@@ -129,7 +140,7 @@ async function handleDelete({ id }) {
     return;
   }
 
-  const data = await arc.tables();
+  const data = await tables();
 
   const userIdsInRole = (
     await data.permissions.query({
@@ -156,6 +167,28 @@ async function handleDelete({ id }) {
       const permissionId = `/users/${userId}/roles/${roleId}${p.resource_uri}`;
       await data.permissions.delete({ id: permissionId });
     }
+  }
+}
+
+async function handleWorkspaces(event) {
+  const { action, args } = event;
+  const { userId, resourceType, resourceId } = parsePermissionId(args.id);
+  const user = { id: userId };
+
+  if (action === 'delete') {
+    // check if user is no longer authorized to access workspace
+    const resource = `/${resourceType}/${resourceId}`;
+    if (!(await isAuthorized(resource, user))) {
+      await pubsub.notifyOne(user, 'workspacesChanged', {
+        removed: [resourceId],
+      });
+    }
+  } else {
+    const data = await tables();
+    const workspace = await data.workspaces.get({ id: resourceId });
+    await pubsub.notifyOne(user, 'workspacesChanged', {
+      added: [workspace],
+    });
   }
 }
 
