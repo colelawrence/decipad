@@ -9,7 +9,7 @@ export class List {
   replica: Replica<Id[]>;
 
   constructor(public runtime: Runtime, name: string) {
-    this.replica = createReplica(
+    this.replica = createReplica<Id[]>(
       name,
       runtime,
       [] as Id[],

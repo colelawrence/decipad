@@ -2,13 +2,14 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { Workspaces } from './workspaces';
 import { Pads } from './pads';
 import { Sync } from './sync';
+import createExternalWebsocketImpl from './external-websocket';
 
 interface WorkspacePads {
   pads: Pads;
 }
 
 class Runtime {
-  sync = new Sync();
+  sync = new Sync<AnySyncValue>();
   workspaces = new Workspaces(this);
   sessionSubject = new BehaviorSubject<Session | null>(null);
   workspaceById = new Map<Id, WorkspacePads>();
@@ -36,6 +37,10 @@ class Runtime {
 
   getSessionValue(): Session | null {
     return this.sessionSubject.getValue();
+  }
+
+  websocketImpl(): typeof WebSocket {
+    return createExternalWebsocketImpl(this.sync);
   }
 
   stop() {

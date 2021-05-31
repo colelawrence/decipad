@@ -1,9 +1,11 @@
-import { MergeNodeOperation } from 'slate';
 import { getParent, getChildren } from '../utils/path';
 import { toJS } from '../utils/to-js';
 import { cloneNode } from '../utils/clone-node';
 
-function mergeNode(doc: SyncPadValue, op: MergeNodeOperation): SyncPadValue {
+function mergeNode(
+  doc: SyncPadValue,
+  op: ExtendedSlate.ExtendedSlateMergeNodeOperation
+): SyncPadValue {
   const [parent, index]: [any, number] = getParent(doc, op.path) as [
     any,
     number

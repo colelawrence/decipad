@@ -18,9 +18,11 @@ const DEBOUNCE_PROCESS_SLATE_OPS =
   Number(process.env.DECI_DEBOUNCE_PROCESS_SLATE_OPS) || 500;
 
 class PadEditor {
-  private slateOpQueue: SlateOperation[] = [];
+  private slateOpQueue: ExtendedSlate.ExtendedSlateOperation[] = [];
   private replica: Replica<SyncPadDoc>;
-  private slateOpsObservable = new Subject<SlateOperation[]>();
+  private slateOpsObservable = new Subject<
+    ExtendedSlate.ExtendedSlateOperation[]
+  >();
   public slateOpsCountObservable = observeSubscriberCount(
     this.slateOpsObservable
   );
@@ -95,17 +97,17 @@ class PadEditor {
           if (error !== null) {
             reject(error);
           } else {
-            resolve(toJS(data));
+            resolve(toJS(data) as SyncPadValue);
           }
         });
     });
   }
 
-  slateOps(): Observable<SlateOperation[]> {
+  slateOps(): Observable<ExtendedSlate.ExtendedSlateOperation[]> {
     return this.slateOpsObservable;
   }
 
-  applySlateOps(ops: SlateOperation[]) {
+  applySlateOps(ops: ExtendedSlate.ExtendedSlateOperation[]) {
     const p = (this.pendingApplyPromise = new Promise((resolve) => {
       this.pendingApplyResolve = resolve;
       if (ops.length > 0) {
@@ -120,7 +122,7 @@ class PadEditor {
     return p;
   }
 
-  sendSlateOperations(ops: SlateOperation[]) {
+  sendSlateOperations(ops: ExtendedSlate.ExtendedSlateOperation[]) {
     for (const op of ops) {
       if (op.id) {
         const index = this.pendingApplySlateOpIds.indexOf(op.id as string);
@@ -161,7 +163,7 @@ class PadEditor {
         // console.log('before:', this.replica.getValue())
         // console.trace('OP:', op);
         const applyOp = fromSlateOpType(
-          ((op as unknown) as ExtendedSlateOperation)
+          (op as unknown as ExtendedSlate.ExtendedSlateOperation)
             .type as SupportedSlateOpTypes
         );
 
@@ -187,13 +189,11 @@ class PadEditor {
   }
 }
 
-function remoteOp(op: SlateOperation): SlateOperation {
-  op.isRemote = true;
-  op.id = nanoid();
-  return op;
+function remoteOp(op: SlateOperation): ExtendedSlate.ExtendedSlateOperation {
+  return { ...op, isRemote: true, id: nanoid() };
 }
 
-function isNotRemoteOp(op: SlateOperation): boolean {
+function isNotRemoteOp(op: ExtendedSlate.ExtendedSlateOperation): boolean {
   return !op.isRemote;
 }
 

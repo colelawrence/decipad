@@ -69,7 +69,7 @@ function createReplica<T>(
 
   // sync
 
-  const sync = new ReplicaSync(
+  const sync = new ReplicaSync<T>(
     name,
     runtime,
     localChanges,

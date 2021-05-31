@@ -1,7 +1,9 @@
-import { SetNodeOperation } from 'slate';
 import { getTarget } from '../utils/path';
 
-function setNode(doc: SyncPadValue, op: SetNodeOperation): SyncPadValue {
+function setNode(
+  doc: SyncPadValue,
+  op: ExtendedSlate.ExtendedSlateSetNodeOperation
+): SyncPadValue {
   const node = getTarget(doc, op.path);
 
   const { newProperties } = op;

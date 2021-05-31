@@ -1,5 +1,5 @@
 import { DeciRuntime } from './';
-import { createEditor } from 'slate';
+import { createEditor, Node } from 'slate';
 import { timeout } from './utils/timeout';
 
 const docId = 'docid';
@@ -102,7 +102,7 @@ describe('pad editor', () => {
             text: 'a = 10 apples\nb = 20 apples\na + b',
           },
         ],
-      },
+      } as Node,
     });
 
     await timeout(100);
@@ -171,7 +171,7 @@ describe('pad editor', () => {
             text: 'a = 10 apples\n b = b[)21$q',
           },
         ],
-      },
+      } as Node,
     });
 
     await timeout(100);
