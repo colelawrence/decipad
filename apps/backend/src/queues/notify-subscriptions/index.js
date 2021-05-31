@@ -27,6 +27,15 @@ async function notifySubscriptions({ userIds, type, changes }) {
     }
 
     for (const sub of subscriptions) {
+      const filter = sub.filter && JSON.parse(sub.filter);
+      if (filter) {
+        changes = applyFilter(changes, filter);
+      }
+
+      if (emptyChanges(changes)) {
+        continue;
+      }
+
       const payload = {
         data: {
           [sub.gqltype]: changes,
@@ -45,4 +54,32 @@ async function notifySubscriptions({ userIds, type, changes }) {
       }
     }
   }
+}
+
+function applyFilter(changes, filterObject) {
+  const filter = passesFilter(filterObject);
+  return {
+    added: changes.added.filter(filter),
+    updated: changes.updated.filter(filter),
+    removed: changes.removed,
+  };
+}
+
+function passesFilter(filterObject) {
+  return (o) => {
+    for (const [key, value] of Object.entries(filterObject)) {
+      if (o[key] !== value) {
+        return false;
+      }
+    }
+    return true;
+  };
+}
+
+function emptyChanges(changes) {
+  return (
+    changes.added.length === 0 &&
+    changes.updated.length === 0 &&
+    changes.removed.length === 0
+  );
 }

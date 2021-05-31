@@ -3,13 +3,14 @@
 const arc = require('@architect/functions');
 const tables = require('../tables');
 
-async function subscribe({ subscriptionId, connectionId, user, type }) {
+async function subscribe({ subscriptionId, connectionId, user, type, filter }) {
   const data = await tables();
   const newSubscription = {
     id: subscriptionId,
     connection_id: connectionId,
     user_id: user.id,
     gqltype: type,
+    filter,
   };
   await data.subscriptions.put(newSubscription);
 
@@ -29,7 +30,7 @@ async function notifyMany(userIds, type, changes) {
     payload: {
       userIds,
       type,
-      changes
+      changes,
     },
   });
 }
@@ -42,11 +43,10 @@ async function notifyAllWithAccessTo(resource, type, changes) {
   do {
     const q = {
       IndexName: 'byResource',
-      KeyConditionExpression:
-        'resource_uri = :resource_uri',
+      KeyConditionExpression: 'resource_uri = :resource_uri',
       ExpressionAttributeValues: {
         ':resource_uri': resource,
-      }
+      },
     };
 
     if (lastKey) {
@@ -56,9 +56,9 @@ async function notifyAllWithAccessTo(resource, type, changes) {
     const permissionsQueryResult = await data.permissions.query(q);
     lastKey = permissionsQueryResult.LastEvaluatedKey;
 
-    const userIds = permissionsQueryResult.Items
-      .filter((p) => p.user_id && p.user_id !== 'null')
-      .map((p) => p.user_id);
+    const userIds = permissionsQueryResult.Items.filter(
+      (p) => p.user_id && p.user_id !== 'null'
+    ).map((p) => p.user_id);
 
     await notifyMany(userIds, type, changes);
   } while (lastKey);

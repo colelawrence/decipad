@@ -8,6 +8,7 @@ module.exports = [
   require('./auth'),
   require('./roles'),
   require('./workspaces'),
+  require('./pads'),
   require('./share'),
 ];
 

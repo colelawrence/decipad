@@ -8,7 +8,15 @@ async function paginate(table, query, page, map) {
   }
 
   const result = await table.query(query);
-  const items = map ? result.Items.map(map) : result.Items;
+  let items = result.Items;
+  if (map) {
+    const mappedItems = [];
+    for (const item of items) {
+      const retItem = await map(item);
+      mappedItems.push(retItem);
+    }
+    items = mappedItems;
+  }
 
   return {
     items,

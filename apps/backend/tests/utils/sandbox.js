@@ -40,7 +40,16 @@ function start() {
           resolve();
         }
       } else {
-        process.stdout.write('Sandbox: ' + d);
+        const statement = d.toString().trim();
+        if (
+          !statement.includes('Sandbox ws/connect') &&
+          !statement.includes('Sandbox ws/default') &&
+          !statement.includes('Sandbox ws/disconnect') &&
+          !statement.endsWith('completed') &&
+          !statement.endsWith('received event')
+        ) {
+          process.stdout.write('Sandbox: ' + d);
+        }
       }
     });
 

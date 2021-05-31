@@ -15,9 +15,15 @@ async function permissionsChangesHandler(event) {
   if (
     (args.resource_type === 'workspaces' || resourceType === 'workspaces') &&
     args.user_id !== 'null' &&
-    userId !== null
+    userId !== 'null'
   ) {
     await handleWorkspaces(event);
+  } else if (
+    (args.resource_type === 'pads' || resourceType === 'pads') &&
+    args.user_id !== 'null' &&
+    userId !== 'null'
+  ) {
+    await handlePads(event);
   }
 
   if (action === 'delete') {
@@ -188,6 +194,28 @@ async function handleWorkspaces(event) {
     const workspace = await data.workspaces.get({ id: resourceId });
     await pubsub.notifyOne(user, 'workspacesChanged', {
       added: [workspace],
+    });
+  }
+}
+
+async function handlePads(event) {
+  const { action, args } = event;
+  const { userId, resourceType, resourceId } = parsePermissionId(args.id);
+  const user = { id: userId };
+
+  if (action === 'delete') {
+    // check if user is no longer authorized to access workspace
+    const resource = `/${resourceType}/${resourceId}`;
+    if (!(await isAuthorized(resource, user))) {
+      await pubsub.notifyOne(user, 'padsChanged', {
+        removed: [resourceId],
+      });
+    }
+  } else {
+    const data = await tables();
+    const pad = await data.pads.get({ id: resourceId });
+    await pubsub.notifyOne(user, 'padsChanged', {
+      added: [pad],
     });
   }
 }

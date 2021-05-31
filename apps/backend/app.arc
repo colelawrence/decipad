@@ -89,6 +89,7 @@ permissions
   parent_resource_uri String
   parent_permission_id String
   can_comment Boolean
+  created_at Number
   encrypt true
 
 invites
@@ -131,6 +132,12 @@ subscriptions
   connection_id String
   user_id String
   gqltype String
+  filter String
+
+pads
+  id *String
+  name String
+  workspace_id String
 
 @indexes
 

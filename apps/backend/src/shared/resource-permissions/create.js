@@ -33,6 +33,7 @@ async function create({
     parent_resource_uri: parentResourceUri,
     can_comment: canComment,
     type,
+    created_at: Date.now(),
   };
 
   await data.permissions.put(newRolePermission);
