@@ -1,6 +1,6 @@
 import { hasBuiltin } from '../builtins';
 import { getOfType, getDefined, getIdentifierString } from '../utils';
-import { getDateFromAstForm } from '../date';
+import { getDateFromAstForm, getTimeUnit } from '../date';
 
 import { Realm } from './Realm';
 import {
@@ -83,6 +83,20 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
 
       return Range.fromBounds(start, end);
     }
+    case 'sequence': {
+      const start = evaluate(realm, node.args[0]);
+      const end = evaluate(realm, node.args[1]);
+
+      if (start instanceof Date && end instanceof Date) {
+        return Column.fromDateSequence(
+          start,
+          end,
+          getTimeUnit(getIdentifierString(node.args[2] as AST.Ref))
+        );
+      } else {
+        return Column.fromSequence(start, end, evaluate(realm, node.args[2]));
+      }
+    }
     case 'date': {
       const [dateMs, specificity] = getDateFromAstForm(node.args);
       return Date.fromDateAndSpecificity(dateMs, specificity);
@@ -126,23 +140,30 @@ const desiredTargetsToStatements = (
 ): AST.Statement[] => {
   return desiredTargets.map((target) => {
     if (Array.isArray(target)) {
-      return getDefined(program[target[0]].args[target[1]]);
+      return getDefined(
+        program[target[0]]?.args[target[1]],
+        'Could not find target ' + JSON.stringify(target)
+      );
     } else if (typeof target === 'number') {
       const targetBlock = program[target].args;
 
-      return getDefined(targetBlock[targetBlock.length - 1]);
-    } else {
       return getDefined(
-        program.flatMap((block) => {
-          return (
-            block.args.find(
-              (statement) =>
-                statement.type === 'assign' &&
-                getIdentifierString(statement.args[0]) === target
-            ) ?? []
-          );
-        })[0]
+        targetBlock[targetBlock.length - 1],
+        'Cannot get the result of an empty block'
       );
+    } else {
+      for (const block of program) {
+        for (const stmt of block.args) {
+          if (
+            stmt.type === 'assign' &&
+            getIdentifierString(stmt.args[0]) === target
+          ) {
+            return stmt;
+          }
+        }
+      }
+
+      throw new Error('Did not find requested variable ' + target);
     }
   });
 };

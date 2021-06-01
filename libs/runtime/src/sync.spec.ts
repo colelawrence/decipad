@@ -6,7 +6,14 @@ import fetch from 'jest-fetch-mock';
 import Automerge from 'automerge';
 import { Subscription } from 'rxjs';
 import assert from 'assert';
-import { Editor, createEditor, Operation, Node } from 'slate';
+import {
+  Editor,
+  createEditor,
+  Operation,
+  Node,
+  BaseElement,
+  BaseText,
+} from 'slate';
 import { PadEditor } from './pad-editor';
 
 let CHARS = [
@@ -44,7 +51,7 @@ const MAX_SMALL_TIMEOUT = 250;
 const MAX_TINY_TIMEOUT = 50;
 const fetchPrefix = process.env.DECI_API_URL + '/api';
 
-describe('sync', () => {
+const runTests = () => {
   const replicas: DeciRuntime[] = [];
   let websocketServer: WebSocketServer;
   const workspaceId = nanoid();
@@ -165,7 +172,6 @@ describe('sync', () => {
           checkConversion();
           done();
         } catch (err) {
-          console.log(err);
           scheduleConversionCheck();
         }
       }, 10000);
@@ -189,7 +195,13 @@ describe('sync', () => {
   afterAll((done) => {
     websocketServer.stop(done);
   });
-});
+};
+
+if (!process.env.DECI_SYNC_TESTS) {
+  describe.skip('sync', runTests);
+} else {
+  describe('sync', runTests);
+}
 
 function apiServer(deciWebsocketServer: DeciWebsocketServer) {
   const store = new Map<string, string>();
@@ -398,10 +410,10 @@ async function randomChangesToEditor(editor: Editor, changeCount: number) {
 }
 
 function randomChangeToEditor(editor: Editor): Operation[] {
-  const candidates = editor.children[0].children as Node[];
+  const candidates = (editor.children[0] as BaseElement).children as Node[];
   const candidateIndex = pickRandomIndex(candidates);
-  const candidate = candidates[candidateIndex] as Node;
-  const text = ((candidate.children as Node[])[0] as Node).text as string;
+  const candidate = candidates[candidateIndex] as BaseElement;
+  const text = ((candidate.children as Node[])[0] as BaseText).text as string;
 
   if (text.length < 6) {
     return randomInsert(candidateIndex, text);
@@ -439,7 +451,7 @@ function randomRemove(index: number, text: string): Operation[] {
   return ops;
 }
 
-function randomSplit(index: number, text: string, node: Node): Operation[] {
+function randomSplit(index: number, text: string, node: Element): Operation[] {
   const ops: Operation[] = [];
   const pos = pickRandomIndex(text);
   const { children: _, ...props } = node;
@@ -458,7 +470,7 @@ function randomSplit(index: number, text: string, node: Node): Operation[] {
     properties: {
       ...props,
       id: nanoid(),
-    },
+    } as Partial<Sync.Node>,
   });
 
   return ops;

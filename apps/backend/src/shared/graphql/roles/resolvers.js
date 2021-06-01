@@ -9,14 +9,13 @@ const { check, isAuthorized } = require('../authorization');
 const resolvers = {
   Mutation: {
     async createRole(_, { role }, context) {
-      const workspaceResource = `/workspaces/${role.workspace_id}`;
+      const workspaceResource = `/workspaces/${role.workspaceId}`;
       await check(workspaceResource, context, 'ADMIN');
 
       const newRole = {
         id: nanoid(),
         name: role.name,
-        permission: role.permission,
-        workspace_id: role.workspace_id,
+        workspace_id: role.workspaceId,
       };
 
       const data = await tables();
@@ -29,6 +28,10 @@ const resolvers = {
       const role = await data.workspaceroles.get({ id: roleId });
       if (!role) {
         throw new UserInputError('no such user');
+      }
+
+      if (role.system) {
+        throw new UserInputError('cannot remove a system role');
       }
 
       const roleResource = `/roles/${role.id}`;
@@ -80,7 +83,7 @@ const resolvers = {
 
       const newInviteForRole = {
         id: nanoid(),
-        permission_id: `/users/${user.id}/roles/${roleId}/roles/${roleId}`,
+        permission_id: `/users/${userId}/roles/${roleId}/roles/${roleId}`,
         resource_type: 'roles',
         resource_id: roleId,
         user_id: userId,
@@ -97,7 +100,7 @@ const resolvers = {
 
       const newInviteForWorkspace = {
         id: nanoid(),
-        permission_id: `/users/${user.id}/roles/${roleId}${workspaceResource}`,
+        permission_id: `/users/${userId}/roles/${roleId}${workspaceResource}`,
         resource_type: 'workspaces',
         resource_id: workspace.id,
         user_id: userId,

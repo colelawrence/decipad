@@ -1,7 +1,8 @@
 import repl from 'repl';
 import util from 'util';
 import chalk from 'chalk';
-import { enableMapSet } from 'immer';
+
+import { getDefined, zip } from './utils';
 import { parse } from './parser';
 import { prettyPrintAST } from './parser/utils';
 import { runOne, Realm } from './interpreter';
@@ -9,31 +10,51 @@ import { inferStatement, makeContext as makeInferContext } from './infer';
 import { stringifyDate } from './date';
 import { Type } from './type';
 
-enableMapSet();
-
 export const stringifyResult = (
   result: Interpreter.OneResult,
-  type: Type | null
+  type: Type
 ): string => {
-  if (type instanceof Type && type.rangeness) {
-    const contentT = Type.extend(type, { rangeness: false });
-
+  if (type.rangeOf != null) {
+    const [start, end] = result as Interpreter.OneResult[];
     return `range [ ${stringifyResult(
-      (result as any)[0],
-      contentT
-    )} through ${stringifyResult((result as any)[1], contentT)} ]`;
+      start,
+      type.rangeOf
+    )} through ${stringifyResult(end, type.rangeOf)} ]`;
   }
 
-  if (type instanceof Type && type.date != null) {
+  if (type.date != null) {
     return `${type.date} ${chalk.blue(
       stringifyDate((result as number[])[0], type.date)
     )}`;
   }
 
-  return [
-    chalk.blue(util.inspect(result != null ? result : result)),
-    type != null ? ' ' + type.toString() : '',
-  ].join('');
+  if (
+    type.columnSize != null &&
+    type.cellType != null &&
+    Array.isArray(result)
+  ) {
+    return `[ ${result
+      .map((item) => stringifyResult(item, getDefined(type.cellType)))
+      .join(', ')} ]`;
+  }
+
+  if (
+    type.tupleTypes != null &&
+    type.tupleNames != null &&
+    Array.isArray(result)
+  ) {
+    const typesAndNames = zip(type.tupleTypes, type.tupleNames);
+    const cols = result
+      .map((col, i) => {
+        const [type, name] = typesAndNames[i];
+
+        return `  ${name} = ${stringifyResult(col, type)}`;
+      })
+      .join(',\n');
+    return `{\n${cols}\n}`;
+  }
+
+  return [chalk.blue(util.inspect(result)), type?.toString()].join(' ');
 };
 
 const wrappedParse = (source: string): AST.Statement | null => {
@@ -44,6 +65,7 @@ const wrappedParse = (source: string): AST.Statement | null => {
     },
   ])[0];
 
+  /* istanbul ignore if */
   if (parsed.solutions.length > 1) {
     console.error('Ambiguous parsed syntax!');
 
@@ -59,7 +81,7 @@ let accumulatedSource = '';
 let realm = new Realm();
 let inferContext = makeInferContext();
 
-const reset = () => {
+export const reset = () => {
   accumulatedSource = '';
   realm = new Realm();
   inferContext = makeInferContext();
@@ -77,12 +99,8 @@ async function execDeci(ast: AST.Statement) {
 
     return stringifyResult(value, type);
   } catch (error) {
-    if (error instanceof repl.Recoverable) {
-      throw error;
-    } else {
-      console.error(error);
-      return '< Crashed >';
-    }
+    console.error(error);
+    return '< Crashed >';
   }
 }
 

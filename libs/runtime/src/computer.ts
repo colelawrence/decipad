@@ -9,6 +9,7 @@ export class Computer {
 
   constructor(replica: Replica<SyncPadDoc>) {
     this.replica = replica;
+    this.reset();
   }
 
   reset() {

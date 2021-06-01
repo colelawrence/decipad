@@ -1,3 +1,5 @@
+'use strict';
+
 const tables = require('@architect/shared/tables');
 const auth = require('@architect/shared/auth');
 let NextAuthJWT = require('next-auth/jwt');
@@ -6,7 +8,9 @@ if (typeof NextAuthJWT.decode !== 'function') {
 }
 
 exports.handler = async function ws(event) {
-  const { user, token } = await auth(event, { NextAuthJWT });
+  const { user, token, gotFromSecProtocolHeader } = await auth(event, {
+    NextAuthJWT,
+  });
   if (!user) {
     return {
       statusCode: 403,
@@ -19,10 +23,15 @@ exports.handler = async function ws(event) {
     user_id: user.id,
   });
 
-  return {
+  const reply = {
     statusCode: 200,
     headers: {
-      'Sec-WebSocket-Protocol': token,
+      'Sec-WebSocket-Protocol': gotFromSecProtocolHeader
+        ? token
+        : event.headers['sec-websocket-protocol'] ||
+          event.headers['Sec-WebSocket-Protocol'],
     },
   };
+
+  return reply;
 };

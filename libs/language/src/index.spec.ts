@@ -10,19 +10,38 @@ import {
 
 describe('basic code', () => {
   it('runs basic operations', async () => {
-    expect(await runCode('1 + 1')).toMatchObject({
-      type: { type: 'number' },
-      value: [2],
+    expect(
+      await runCode(`
+      [
+        1 + 1,
+        -1,
+        55 % 2,
+        101%,
+        1 / 4,
+        2 ^ 4,
+        sqrt 16
+      ]
+    `)
+    ).toMatchObject({
+      type: { cellType: { type: 'number' } },
+      value: [[2, -1, 1, 1.01, 0.25, 16, 4]],
     });
+  });
 
-    expect(await runCode('-1')).toMatchObject({
-      type: { type: 'number' },
-      value: [-1],
-    });
-
-    expect(await runCode('1 / 4')).toMatchObject({
-      type: { type: 'number' },
-      value: [0.25],
+  it('supports boolean ops', async () => {
+    expect(
+      await runCode(`
+      [
+        1 >= 1,
+        1 > 1,
+        1 <= 1,
+        1 < 1,
+        1 == 1
+      ]
+    `)
+    ).toMatchObject({
+      type: { cellType: { type: 'boolean' } },
+      value: [[true, false, true, false, true]],
     });
   });
 
@@ -340,7 +359,7 @@ describe('Ranges', () => {
         Containment = contains Range 3
       `)
     ).toMatchObject({
-      type: { rangeness: false },
+      type: { type: 'boolean' },
       value: [true],
     });
   });

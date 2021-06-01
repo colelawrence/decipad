@@ -1,8 +1,10 @@
-import { SplitNodeOperation } from 'slate';
 import { getParent, getChildren } from '../utils/path';
 import { cloneNode } from '../utils/clone-node';
 
-function splitNode(doc: SyncPadValue, op: SplitNodeOperation): SyncPadValue {
+function splitNode(
+  doc: SyncPadValue,
+  op: ExtendedSlate.ExtendedSlateSplitNodeOperation
+): SyncPadValue {
   const [parent, index]: [any, number] = getParent(doc, op.path) as [
     any,
     number

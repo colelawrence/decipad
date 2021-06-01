@@ -6,12 +6,14 @@ module.exports = {
   coveragePathIgnorePatterns: ['node_modules'],
   maxConcurrency: 1,
   maxWorkers: 1,
+  testTimeout: 10000,
+  bail: true,
   coverageThreshold: {
     global: {
       branches: 50,
-      functions: 100,
-      lines: 96,
-      statements: 94,
+      functions: 87,
+      lines: 87,
+      statements: 88,
     },
   },
 };

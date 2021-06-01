@@ -9,6 +9,7 @@ import {
   r,
   col,
   range,
+  seq,
   date,
   timeQuantity,
   given,
@@ -93,7 +94,7 @@ describe('variables', () => {
 describe('ranges', () => {
   it('infers ranges', () => {
     expect(inferExpression(nilCtx, range(1, 2))).toEqual(
-      Type.build({ type: 'number', rangeness: true })
+      Type.buildRange(Type.Number)
     );
 
     expect(
@@ -110,7 +111,7 @@ describe('ranges', () => {
   it('infers ranges of dates', () => {
     const r = range(date('2030-01', 'month'), date('2031-11', 'month'));
     expect(inferExpression(nilCtx, r)).toEqual(
-      Type.extend(Type.buildDate('month'), { rangeness: true })
+      Type.buildRange(Type.buildDate('month'))
     );
 
     expect(
@@ -124,6 +125,145 @@ describe('ranges', () => {
     );
     expect(
       inferExpression(nilCtx, c('contains', l(1), l(1))).errorCause
+    ).not.toBeNull();
+  });
+});
+
+describe('sequences', () => {
+  it('infers sequences of numbers', () => {
+    expect(inferExpression(nilCtx, seq(l(1), l(1), l(1)))).toEqual(
+      Type.buildColumn(Type.Number, 1)
+    );
+
+    expect(inferExpression(nilCtx, seq(l(1), l(2), l(1)))).toEqual(
+      Type.buildColumn(Type.Number, 2)
+    );
+
+    expect(inferExpression(nilCtx, seq(l(1), l(8), l(3)))).toEqual(
+      Type.buildColumn(Type.Number, 3)
+    );
+
+    expect(inferExpression(nilCtx, seq(l(10), l(1), l(-1)))).toEqual(
+      Type.buildColumn(Type.Number, 10)
+    );
+  });
+
+  it('infers sequences of dates', () => {
+    const getSize = (
+      start: AST.Date,
+      end: AST.Date,
+      by: 'year' | 'quarter' | 'month' | 'day' | 'hour' | 'minute'
+    ) => {
+      const t = inferExpression(nilCtx, seq(start, end, n('ref', by)));
+
+      return t.errorCause ?? t.columnSize;
+    };
+
+    // Years
+    expect(
+      getSize(date('2020-01', 'year'), date('2020-01', 'year'), 'year')
+    ).toEqual(1);
+
+    // Quarters
+    expect(
+      getSize(date('2020-01', 'month'), date('2020-02', 'month'), 'quarter')
+    ).toEqual(1);
+
+    expect(
+      getSize(date('2020-01', 'month'), date('2020-03', 'month'), 'quarter')
+    ).toEqual(1);
+
+    expect(
+      getSize(date('2020-01', 'month'), date('2020-04', 'month'), 'quarter')
+    ).toEqual(2);
+
+    expect(
+      getSize(date('2020-01', 'month'), date('2020-05', 'month'), 'quarter')
+    ).toEqual(2);
+
+    expect(
+      getSize(date('2020-01', 'month'), date('2021-01', 'month'), 'quarter')
+    ).toEqual(5);
+
+    // Months
+    expect(
+      getSize(date('2020-01', 'month'), date('2020-01', 'month'), 'month')
+    ).toEqual(1);
+
+    expect(
+      getSize(date('2020-01', 'month'), date('2020-03', 'month'), 'month')
+    ).toEqual(3);
+
+    // Days
+    expect(
+      getSize(date('2021-01-01', 'day'), date('2022-01-01', 'day'), 'day')
+    ).toEqual(366);
+
+    expect(
+      getSize(date('2020-01-01', 'day'), date('2021-01-01', 'day'), 'day')
+    ).toEqual(367);
+
+    expect(
+      getSize(date('2021-02-01', 'day'), date('2021-03-01', 'day'), 'day')
+    ).toEqual(29);
+
+    // Time
+    expect(
+      getSize(date('2021-02-01', 'hour'), date('2021-02-02', 'hour'), 'hour')
+    ).toEqual(25);
+
+    // Across DST
+    expect(
+      getSize(date('2021-03-01', 'hour'), date('2021-03-02', 'hour'), 'hour')
+    ).toEqual(25);
+
+    expect(
+      getSize(date('2021-02-01', 'hour'), date('2021-02-02', 'hour'), 'minute')
+    ).toEqual(60 * 24 + 1);
+  });
+
+  it('catches multiple errors', () => {
+    const msg = (start: number, end: number, by: number) =>
+      inferExpression(nilCtx, seq(l(start), l(end), l(by))).errorCause?.message;
+
+    expect(msg(10, 1, 1)).toEqual('Divergent sequence');
+    expect(msg(1, 10, -1)).toEqual('Divergent sequence');
+    expect(msg(1, 10, 0)).toEqual('Sequence interval must not be zero');
+  });
+
+  it('refuses variable references anywhere in the sequence', () => {
+    const ctx = makeContext([
+      ['Bad', Type.Number],
+      ['DBad', Type.buildDate('month')],
+    ]);
+
+    expect(
+      inferExpression(ctx, seq(n('ref', 'Bad'), l(10), l(2))).errorCause
+    ).not.toBeNull();
+
+    expect(
+      inferExpression(ctx, seq(l(10), n('ref', 'Bad'), l(2))).errorCause
+    ).not.toBeNull();
+
+    expect(
+      inferExpression(ctx, seq(l(10), l(2), n('ref', 'Bad'))).errorCause
+    ).not.toBeNull();
+
+    // Dates
+
+    const d = date('2020-01', 'month');
+    expect(
+      inferExpression(ctx, seq(n('ref', 'DBad'), d, n('ref', 'month')))
+        .errorCause
+    ).not.toBeNull();
+
+    expect(
+      inferExpression(ctx, seq(d, n('ref', 'DBad'), n('ref', 'month')))
+        .errorCause
+    ).not.toBeNull();
+
+    expect(
+      inferExpression(ctx, seq(d, d, n('ref', 'DBad'))).errorCause
     ).not.toBeNull();
   });
 });
@@ -209,7 +349,6 @@ describe('columns', () => {
       )
     ).toEqual(
       Type.build({
-        type: 'number',
         date: 'month',
         columnSize: 2,
       })
@@ -464,7 +603,7 @@ it('infers binops', () => {
   const badExpr = c('==', l(1), l(true));
 
   expect(inferExpression(errorCtx, badExpr)).toEqual(
-    Type.Impossible.withErrorCause('Expected boolean').inNode(badExpr)
+    Type.Impossible.withErrorCause('Expected number').inNode(badExpr)
   );
 });
 
@@ -481,7 +620,7 @@ it('infers conditions', () => {
   const badConditional = c('if', l(true), l('wrong!'), l(1));
 
   expect(inferExpression(errorCtx, badConditional)).toEqual(
-    Type.Impossible.withErrorCause('Expected number').inNode(badConditional)
+    Type.Impossible.withErrorCause('Expected string').inNode(badConditional)
   );
 });
 
@@ -521,23 +660,23 @@ describe('inferProgram', () => {
       n('block', n('assign', n('def', 'A'), l(3)), c('+', r('A'), l(1.1))),
     ];
 
-    const badString = l('bad string, bad string!');
-    const wrongProgram = produce(program, (wrongProgram: AST.Block[]) => {
-      const argList = wrongProgram[0].args[1].args[1] as AST.ArgList;
-
-      argList.args[1] = badString;
-    });
-    const badCall = wrongProgram[0].args[1];
-
     expect(inferProgram(program)).toEqual({
       variables: new Map([['A', Type.Number]]),
       blockReturns: [Type.Number],
     });
 
-    const error = new InferError('Expected string');
+    const wrongProgram = produce(program, (wrongProgram: AST.Block[]) => {
+      const argList = wrongProgram[0].args[1].args[1] as AST.ArgList;
+
+      argList.args[1] = l('bad string, bad string!');
+    });
+    const badCall = wrongProgram[0].args[1];
+
     expect(inferProgram(wrongProgram)).toEqual({
       variables: new Map([['A', Type.Number]]),
-      blockReturns: [Type.Impossible.withErrorCause(error).inNode(badCall)],
+      blockReturns: [
+        Type.Impossible.withErrorCause('Expected number').inNode(badCall),
+      ],
     });
   });
 

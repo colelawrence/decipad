@@ -9,6 +9,12 @@ module.exports = ({ gql }) => gql`
     roles: [Role!]!
   }
 
+  type WorkspacesChanges {
+    added: [Workspace!]!
+    removed: [ID!]!
+    updated: [Workspace!]!
+  }
+
   extend type Query {
     workspaces: [Workspace!]!
   }
@@ -16,5 +22,10 @@ module.exports = ({ gql }) => gql`
   extend type Mutation {
     createWorkspace(workspace: WorkspaceInput!): Workspace!
     updateWorkspace(id: ID!, workspace: WorkspaceInput!): Workspace!
+    removeWorkspace(id: ID!): Boolean
+  }
+
+  extend type Subscription {
+    workspacesChanged: WorkspacesChanges!
   }
 `;

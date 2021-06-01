@@ -1,7 +1,9 @@
-import { RemoveTextOperation } from 'slate';
 import { getTarget } from '../utils/path';
 
-function removeText(doc: SyncPadValue, op: RemoveTextOperation): SyncPadValue {
+function removeText(
+  doc: SyncPadValue,
+  op: ExtendedSlate.ExtendedSlateRemoveTextOperation
+): SyncPadValue {
   const node = getTarget(doc, op.path);
 
   const offset = Math.min(node.text.length, op.offset);

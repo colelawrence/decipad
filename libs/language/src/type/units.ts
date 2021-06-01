@@ -3,7 +3,7 @@ import { produce } from 'immer';
 const matchUnits = (u1: AST.Unit, u2: AST.Unit) =>
   u1.unit === u2.unit && u1.exp === u2.exp;
 
-export const matchUnitColumns = (units1: AST.Unit[], units2: AST.Unit[]) => {
+export const matchUnitArrays = (units1: AST.Unit[], units2: AST.Unit[]) => {
   if (units1.length !== units2.length) return false;
   return units1.every((u1, i) => matchUnits(u1, units2[i]));
 };
@@ -69,8 +69,13 @@ const stringifyUnit = (unit: AST.Unit) => {
   return result.join('');
 };
 
-export const stringifyUnits = (unit: AST.Unit[] | null) =>
-  (unit ?? []).map((unit) => stringifyUnit(unit)).join('.');
+export const stringifyUnits = (unit: AST.Unit[] | null) => {
+  if (unit == null || unit.length === 0) {
+    return 'unitless';
+  } else {
+    return unit.map((unit) => stringifyUnit(unit)).join('.');
+  }
+};
 
 export const combineUnits = (
   myUnits: AST.Unit[] | null,

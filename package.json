@@ -36,7 +36,6 @@
   },
   "private": true,
   "devDependencies": {
-    "@architect/sandbox": "^3.4.3",
     "@babel/core": "7.14.2",
     "@babel/plugin-proposal-decorators": "^7.14.2",
     "@babel/plugin-transform-runtime": "^7.14.2",
@@ -74,7 +73,7 @@
     "babel-jest": "26.6.3",
     "babel-loader": "8.2.2",
     "cypress": "^7.3.0",
-    "dotenv": "9.0.2",
+    "dotenv": "^9.0.2",
     "eslint": "7.26.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-cypress": "^2.11.3",
@@ -96,19 +95,25 @@
     "tiny-json-http": "^7.3.0",
     "ts-jest": "26.5.6",
     "ts-node": "~9.1.1",
-    "typescript": "~4.2.4"
+    "typescript": "~4.2.4",
+    "wait-for-expect": "^3.0.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json}": [
+    "*.{js,jsx,ts,tsx,json,yml,yaml}": [
       "prettier --write"
     ],
     "*.{js,jsx,ts,tsx}": [
       "eslint --cache --fix",
-      "jest --passWithNoTests"
+      "jest --passWithNoTests --maxWorkers 1"
     ]
   },
   "dependencies": {
-    "@apollo/client": "^3.3.17",
+    "@apollo/client": "^3.3.19",
     "@babel/runtime": "^7.14.0",
     "@chakra-ui/react": "^1.6.1",
     "@emotion/react": "^11.4.0",
@@ -124,6 +129,7 @@
     "document-register-element": "1.13.1",
     "framer-motion": "^4.1.16",
     "graphql": "^15.5.0",
+    "graphql-ws": "^4.5.1",
     "immer": "^9.0.2",
     "kafkajs": "^1.15.0",
     "leftpad": "^0.0.1",

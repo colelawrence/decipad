@@ -4,6 +4,7 @@ import {
   n,
   col,
   range,
+  seq,
   date,
   timeQuantity,
   given,
@@ -91,6 +92,51 @@ describe('ranges', () => {
     expect(
       await runOne(c('containsdate', r, date('2020-12-01', 'day')))
     ).toEqual(false);
+  });
+
+  it('evaluates ranges of dates (2)', async () => {
+    expect(
+      await runOne(range(n('date', 'year', 2020), n('date', 'year', 2022)))
+    ).toEqual([Date.UTC(2020, 0), Date.UTC(2023, 0) - 1]);
+  });
+});
+
+describe('sequences', () => {
+  it('can be evaluated', async () => {
+    expect(await runOne(seq(l(1), l(5), l(1)))).toEqual([1, 2, 3, 4, 5]);
+
+    expect(
+      await runOne(
+        seq(
+          date('2020-01', 'month'),
+          date('2020-02', 'month'),
+          n('ref', 'month')
+        )
+      )
+    ).toEqual([
+      [parseUTCDate('2020-01'), parseUTCDate('2020-02') - 1],
+      [parseUTCDate('2020-02'), parseUTCDate('2020-03') - 1],
+    ]);
+  });
+
+  it('ensures the time quantity is not more specific than the date', async () => {
+    expect.assertions(2);
+
+    await runOne(
+      seq(date('2020-01', 'month'), date('2020-02', 'month'), n('ref', 'day'))
+    ).catch(() => {
+      expect(true).toBe(true);
+    });
+
+    await runOne(
+      seq(
+        date('2020-01-01', 'day'),
+        date('2020-02-01', 'day'),
+        n('ref', 'hour')
+      )
+    ).catch(() => {
+      expect(true).toBe(true);
+    });
   });
 });
 
@@ -341,9 +387,7 @@ describe('Dimensions', () => {
       expect(await runWithCol(l('hi'))).toEqual(['hi', 'hi', 'hi']);
 
       expect(await runWithCol(c('+', n('ref', 'Col'), l(1)))).toEqual([
-        2,
-        3,
-        4,
+        2, 3, 4,
       ]);
 
       expect(await runWithCol(col(n('ref', 'Col'), l(1)))).toEqual([
@@ -369,9 +413,7 @@ describe('Dimensions', () => {
       expect(await runWithTable(l('hi'))).toEqual(['hi', 'hi', 'hi']);
 
       expect(await runWithTable(c('+', prop('Table', 'Nums'), l(1)))).toEqual([
-        2,
-        3,
-        4,
+        2, 3, 4,
       ]);
 
       expect(await runWithTable(col(prop('Table', 'Nums'), l(1)))).toEqual([
@@ -386,9 +428,9 @@ describe('Dimensions', () => {
     it('evaluates total', async () => {
       expect(await runOne(c('total', col(1, 2, 3)))).toEqual(6);
 
-      expect(
-        await runOne(c('total', col(col(1, 2, 3), col(3, 3, 3))))
-      ).toEqual([6, 9]);
+      expect(await runOne(c('total', col(col(1, 2, 3), col(3, 3, 3))))).toEqual(
+        [6, 9]
+      );
     });
   });
 });

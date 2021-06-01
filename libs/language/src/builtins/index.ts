@@ -1,7 +1,7 @@
 import { Type } from '../type';
 import { getDefined, getInstanceof } from '../utils';
-import { dateToArray, arrayToDate } from '../date';
-import { AnyValue, Date } from '../interpreter/Value';
+import { addTimeQuantity, sortSpecificities } from '../date';
+import { AnyValue, Date, TimeQuantity } from '../interpreter/Value';
 
 export interface BuiltinSpec {
   name: string;
@@ -15,8 +15,7 @@ export interface BuiltinSpec {
   functor: (...types: Type[]) => Type;
 }
 
-const binopFunctor = (...types: Type[]) =>
-  types.reduce((a, b) => a.isScalar('number').sameAs(b).withUnit(b.unit));
+const binopFunctor = (a: Type, b: Type) => a.isScalar('number').sameAs(b);
 
 const dateCmpFunctor = (left: Type, right: Type): Type =>
   Type.combine(left.isDate(), right.sameAs(left), Type.Boolean);
@@ -32,7 +31,13 @@ export const builtins: Record<string, BuiltinSpec> = {
     name: 'sqrt',
     argCount: 1,
     fn: (n) => Math.sqrt(n as number),
-    functor: binopFunctor,
+    functor: (n) => n.isScalar('number'),
+  },
+  ln: {
+    name: 'ln',
+    argCount: 1,
+    fn: (n) => Math.log(n),
+    functor: (n) => n.isScalar('number'),
   },
   '+': {
     name: '+',
@@ -50,16 +55,38 @@ export const builtins: Record<string, BuiltinSpec> = {
     name: '*',
     argCount: 2,
     fn: (a, b) => a * b,
-    functor: (a, b) => a.isScalar('number').sameAs(b).multiplyUnit(b.unit),
+    functor: (a, b) =>
+      Type.combine(
+        a.isScalar('number'),
+        b.isScalar('number'),
+        a.multiplyUnit(b.unit)
+      ),
   },
   '/': {
     name: '/',
     argCount: 2,
     fn: (a, b) => a / b,
-    functor: (a, b) => a.isScalar('number').sameAs(b).divideUnit(b.unit),
+    functor: (a, b) =>
+      Type.combine(
+        a.isScalar('number'),
+        b.isScalar('number'),
+        a.divideUnit(b.unit)
+      ),
+  },
+  '%': {
+    name: '/',
+    argCount: 2,
+    fn: (a, b) => a % b,
+    functor: binopFunctor,
   },
   '**': {
     name: '**',
+    argCount: 2,
+    fn: (a, b) => Math.pow(a, b),
+    functor: binopFunctor,
+  },
+  '^': {
+    name: '^',
     argCount: 2,
     fn: (a, b) => Math.pow(a, b),
     functor: binopFunctor,
@@ -118,14 +145,11 @@ export const builtins: Record<string, BuiltinSpec> = {
     name: 'grow',
     argCount: 3,
     argCardinalities: [1, 1, 2],
-    fn: (initial: number, growthRate: number, length: unknown[]) => {
-      let current = initial;
-      return Array.from({ length: length.length }, () => {
-        const ret = current;
-        current += current * growthRate;
-        return ret;
-      });
-    },
+    fn: (initial: number, growthRate: number, { length }: unknown[]) =>
+      Array.from({ length }, (_, i) => {
+        const growth = (1 + growthRate) ** i;
+        return initial * growth;
+      }),
     functor: (initial: Type, growthRate: Type, period: Type) =>
       Type.combine(
         initial.isScalar('number'),
@@ -165,19 +189,14 @@ export const builtins: Record<string, BuiltinSpec> = {
     argCount: 2,
     fn: ([bStart, bEnd], a) => a >= bStart && a <= bEnd,
     functor: (a: Type, b: Type) =>
-      Type.combine(
-        a.isRange(),
-        b.isScalar('number'),
-        a.withUnit(b.unit),
-        Type.Boolean
-      ),
+      Type.combine(a.getRangeOf().sameAs(b), Type.Boolean),
   },
   containsdate: {
     name: 'containsdate',
     argCount: 2,
     fn: ([rStart, rEnd], [dStart, dEnd]) => rStart <= dStart && rEnd >= dEnd,
     functor: (a: Type, b: Type) =>
-      Type.combine(a.isRange().isDate(), b.isDate(), Type.Boolean),
+      Type.combine(a.getRangeOf().isDate(), b.isDate(), Type.Boolean),
   },
   // Date stuff (TODO operator overloading)
   dateequals: {
@@ -192,22 +211,31 @@ export const builtins: Record<string, BuiltinSpec> = {
     fn: ([aStart], [bStart]) => aStart >= bStart,
     functor: dateCmpFunctor,
   },
-  dateaddyears: {
-    name: 'dateaddyears',
+  dateadd: {
+    name: 'dateadd',
     argCount: 2,
     fnValues: (date: AnyValue, years: AnyValue) => {
       date = getInstanceof(date, Date);
+      years = getInstanceof(years, TimeQuantity);
 
-      const asArray = dateToArray(date.timeRange.start.getData() as number);
-
-      asArray[0] += years.getData() as number;
-
-      const [newDate] = arrayToDate(asArray);
+      const newDate = addTimeQuantity(
+        date.timeRange.start.getData() as number,
+        years.getData()
+      );
 
       return Date.fromDateAndSpecificity(newDate, date.specificity);
     },
     functor: (date: Type, years: Type) =>
-      Type.combine(date.isDate(), years.isScalar('number'), date),
+      Type.combine(date.isDate(), years.isTimeQuantity(), date).mapType(() => {
+        const lowest = getDefined(
+          sortSpecificities([
+            getDefined(date.date),
+            ...getDefined(years.timeUnits),
+          ]).pop()
+        );
+
+        return Type.buildDate(lowest);
+      }),
   },
   // Reduce funcs
   total: {

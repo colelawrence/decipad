@@ -39,4 +39,32 @@ runTests({
       },
     ],
   },
+  "Isn't ambiguous with the modulo operator": {
+    source: ' someFunc 10% 1 ',
+    sourceMap: false,
+    ast: [
+      {
+        type: 'function-call',
+        args: [
+          {
+            type: 'funcref',
+            args: ['someFunc'],
+          },
+          {
+            type: 'argument-list',
+            args: [
+              {
+                type: 'literal',
+                args: ['number', 0.1, null],
+              },
+              {
+                type: 'literal',
+                args: ['number', 1, null],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
 });

@@ -4,6 +4,7 @@ import {
   createEditor,
   Operation as SlateOperation,
   Element,
+  BaseText,
 } from 'slate';
 import { LoremIpsum } from 'lorem-ipsum';
 import { nanoid } from 'nanoid';
@@ -135,8 +136,8 @@ describe('slate to replica sync', () => {
         properties: {
           type: 'p',
           id: nanoid(),
-        },
-      });
+        } as Partial<Node>,
+      } as SlateOperation);
     });
 
     // wait until slate sends ops to model and model processes them
@@ -318,9 +319,9 @@ describe('slate to replica sync', () => {
     editor1.apply({
       type: 'set_node',
       path: [0, 0, 0],
-      properties: { bold: undefined },
-      newProperties: { bold: true },
-    });
+      properties: { bold: undefined } as Partial<Node>,
+      newProperties: { bold: true } as Partial<Node>,
+    } as SlateOperation);
 
     // wait until slate sends ops to model and model processes them
     await Promise.resolve();
@@ -337,9 +338,9 @@ describe('slate to replica sync', () => {
       editor1.apply({
         type: 'set_node',
         path: [0, 0, 0],
-        properties: { bold: true },
-        newProperties: { bold: undefined },
-      });
+        properties: { bold: true } as Partial<Node>,
+        newProperties: { bold: undefined } as Partial<Node>,
+      } as SlateOperation);
     });
 
     // wait until slate sends ops to model and model processes them
@@ -406,8 +407,8 @@ function createRandomInsertSlateOperations(
           type: 'p',
           children: [{ text: '' }],
           id: nanoid(),
-        },
-      });
+        } as Partial<Node>,
+      } as SlateOperation);
     }
 
     i++;
@@ -432,7 +433,7 @@ function randomEdit(editor: Editor): SlateOperation {
   }
   const pickedIndex = Math.floor(Math.random() * candidates.length);
   const candidate = candidates[pickedIndex] as Element;
-  const text = candidate.children[0].text as string;
+  const text = (candidate.children[0] as BaseText).text as string;
   const willRemove = !!text && Math.random() > 0.7;
   const pickedCharIndex = Math.floor(Math.random() * text.length);
 
@@ -475,10 +476,11 @@ function mergeTwoFirstLines(editor: Editor): SlateOperation[] {
   ops.push({
     type: 'remove_text',
     text: '',
-    offset: (((candidates[0] as Element).children[0] as Element).text as string)
-      .length,
+    offset: (
+      ((candidates[0] as Element).children[0] as BaseText).text as string
+    ).length,
     path: [0, 0, 0],
-  });
+  } as SlateOperation);
 
   ops.push({
     type: 'remove_text',
@@ -487,7 +489,7 @@ function mergeTwoFirstLines(editor: Editor): SlateOperation[] {
     offset: 0,
   });
 
-  const secondLine = candidates[1];
+  const secondLine = candidates[1] as Sync.Node;
 
   ops.push({
     type: 'merge_node',
@@ -496,8 +498,8 @@ function mergeTwoFirstLines(editor: Editor): SlateOperation[] {
     properties: {
       type: secondLine.type,
       id: secondLine.id,
-    },
-  });
+    } as Partial<ExtendedSlate.ExtendedSlateOperation>,
+  } as SlateOperation);
 
   return ops;
 }
@@ -568,13 +570,17 @@ function splitRandomText(editor: Editor): SlateOperation[] {
   do {
     targetIndex = Math.floor(Math.random() * candidates.length);
   } while (
-    (((candidates[targetIndex] as Element).children[0] as Element)
-      .text as string).length < 2
+    (
+      ((candidates[targetIndex] as Element).children[0] as BaseText)
+        .text as string
+    ).length < 2
   );
 
   const candidate = candidates[targetIndex] as Element;
 
-  const splitAt = Math.round((candidate.children[0].text as string).length / 2);
+  const splitAt = Math.round(
+    ((candidate.children[0] as BaseText).text as string).length / 2
+  );
 
   ops.push({
     type: 'split_node',

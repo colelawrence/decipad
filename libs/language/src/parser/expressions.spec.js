@@ -173,14 +173,14 @@ runTests({
             type: 'funcref',
             args: ['-'],
             start: {
-              char: 10,
+              char: 9,
               line: 1,
-              column: 11,
+              column: 10,
             },
             end: {
-              char: 10,
+              char: 11,
               line: 1,
-              column: 11,
+              column: 12,
             },
           },
           {
@@ -758,5 +758,67 @@ runTests({
       line: 1,
       column: 14,
     },
+  },
+
+  'No ambiguity between negation and subtraction': {
+    sourceMap: false,
+    source: '100 - -1',
+    ast: [
+      {
+        type: 'function-call',
+        args: [
+          {
+            type: 'funcref',
+            args: ['-'],
+          },
+          {
+            type: 'argument-list',
+            args: [
+              {
+                type: 'literal',
+                args: ['number', 100, null],
+              },
+              {
+                type: 'literal',
+                args: ['number', -1, null],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+
+  'No ambiguity between several operators': {
+    sourceMap: false,
+    source: 'grow 100 -10% Var',
+    ast: [
+      {
+        type: 'function-call',
+        args: [
+          {
+            type: 'funcref',
+            args: ['grow'],
+          },
+          {
+            type: 'argument-list',
+            args: [
+              {
+                type: 'literal',
+                args: ['number', 100, null],
+              },
+              {
+                type: 'literal',
+                args: ['number', -0.1, null],
+              },
+              {
+                type: 'ref',
+                args: ['Var'],
+              },
+            ],
+          },
+        ],
+      },
+    ],
   },
 });

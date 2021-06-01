@@ -13,8 +13,6 @@ import call from './utils/call-simple';
 import { timeout } from './utils/timeout';
 
 test('sign-in via magic link', () => {
-  let verificationRequest;
-
   it('requests sign-in email', async () => {
     const csrfTokenResp = await call('http://localhost:3333/api/auth/csrf');
     const cookies = csrfTokenResp.headers.get('set-cookie');
@@ -57,7 +55,6 @@ test('sign-in via magic link', () => {
     ).Items;
 
     expect(verificationRequests).toHaveLength(1);
-    verificationRequest = verificationRequests[0];
   });
 
   // Can't do this because, without accessing the email, there is no way to know the token

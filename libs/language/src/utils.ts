@@ -18,10 +18,10 @@ export function n<K extends AST.Node['type'], N extends AST.TypeToNode[K]>(
   type: K,
   ...args: N['args']
 ): N {
-  const node: N = ({
+  const node: N = {
     type,
     args,
-  } as unknown) as N;
+  } as unknown as N;
 
   return node;
 }
@@ -39,11 +39,11 @@ export function l(value: LitType, ...units: AST.Unit[]): AST.Literal {
   }
 }
 
-export function timeQuantity(items: { [unit in AST.TimeUnit]?: number }) {
+export function timeQuantity(items: { [unit in Time.Unit]?: number }) {
   return n(
     'time-quantity',
     ...Object.entries(items).flatMap(([k, v]) => [
-      k as AST.TimeUnit,
+      k as Time.Unit,
       getDefined(v),
     ])
   );
@@ -54,6 +54,14 @@ export function col(...values: (LitType | AST.Expression)[]): AST.Column {
     'column',
     values.map((value) => (isExpression(value) ? value : l(value)))
   );
+}
+
+export function seq(
+  start: AST.Expression,
+  end: AST.Expression,
+  by: AST.Expression
+): AST.Sequence {
+  return n('sequence', start, end, by);
 }
 
 export function range(
@@ -142,6 +150,7 @@ const expressionTypesSet = new Set([
   'column',
   'table',
   'range',
+  'sequence',
   'date',
   'given',
 ]);

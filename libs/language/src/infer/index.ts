@@ -6,25 +6,26 @@ import {
   getOfType,
   pairwise,
 } from '../utils';
-import { dateNodeToSpecificity } from '../date';
+import { getDateFromAstForm } from '../date';
 
 import { callBuiltin } from './callBuiltin';
 import { Context, makeContext } from './context';
+import { inferSequence } from './sequence';
 import { findBadColumn, unifyColumnSizes, getLargestColumn } from './table';
 
 export { makeContext };
 
-const withErrorSource = <T extends AST.Node>(
-  fn: (ctx: Context, thing: T) => Type
-) => (ctx: Context, thing: T): Type => {
-  const type = fn(ctx, thing);
+const withErrorSource =
+  <T extends AST.Node>(fn: (ctx: Context, thing: T) => Type) =>
+  (ctx: Context, thing: T): Type => {
+    const type = fn(ctx, thing);
 
-  if (type.errorCause != null && type.node == null) {
-    return type.inNode(thing);
-  } else {
-    return type;
-  }
-};
+    if (type.errorCause != null && type.node == null) {
+      return type.inNode(thing);
+    } else {
+      return type;
+    }
+  };
 
 /*
  Walk depth-first into an expanded AST.Expression, collecting the type of things beneath and checking it against the current iteration's constraints.
@@ -55,7 +56,7 @@ export const inferExpression = withErrorSource(
       case 'time-quantity': {
         const units = expr.args.filter(
           (a) => typeof a === 'string'
-        ) as AST.TimeUnit[];
+        ) as Time.Unit[];
 
         return Type.buildTimeQuantity(units);
       }
@@ -64,19 +65,21 @@ export const inferExpression = withErrorSource(
           inferExpression(ctx, expr)
         );
 
-        const rangeFunctor = (start: Type, end: Type) => {
+        return Type.combine(start, end).mapType(() => {
           const rangeOf =
             start.date != null
               ? start.sameAs(end)
               : start.isScalar('number').sameAs(end);
 
-          return Type.extend(rangeOf, { rangeness: true });
-        };
-
-        return Type.runFunctor(expr, rangeFunctor, start, end);
+          return Type.buildRange(rangeOf);
+        });
+      }
+      case 'sequence': {
+        return inferSequence(ctx, expr);
       }
       case 'date': {
-        return Type.buildDate(dateNodeToSpecificity(expr));
+        const [, specificity] = getDateFromAstForm(expr.args);
+        return Type.buildDate(specificity);
       }
       case 'column': {
         const cellTypes = expr.args[0].map((a) => inferExpression(ctx, a));
@@ -108,13 +111,11 @@ export const inferExpression = withErrorSource(
         });
         ctx.inTable = false;
 
-        if (tableType.errorCause != null) {
-          return tableType;
-        } else {
+        return tableType.mapType(() => {
           const unified =
             findBadColumn(tableType) ?? unifyColumnSizes(expr, tableType);
           return unified;
-        }
+        });
       }
       case 'property-access': {
         const tableName = getIdentifierString(expr.args[0]);
@@ -156,12 +157,8 @@ export const inferExpression = withErrorSource(
         const [ref, body] = expr.args;
         const refName = getIdentifierString(ref);
 
-        const {
-          cellType,
-          columnSize,
-          tupleTypes,
-          tupleNames,
-        } = inferExpression(ctx, ref);
+        const { cellType, columnSize, tupleTypes, tupleNames } =
+          inferExpression(ctx, ref);
 
         const largestColumn =
           tupleTypes != null ? getLargestColumn(tupleTypes) : null;

@@ -1,13 +1,13 @@
 name: Deploy PR
 
 on:
-#  pull_request:
-#    branches: [ main ]
- workflow_run:
-   workflows: ["Run Tests"]
-   branches-ignore: [main]
-   types:
-     - completed
+  #  pull_request:
+  #    branches: [ main ]
+  workflow_run:
+    workflows: ['Run Tests']
+    branches-ignore: [main]
+    types:
+      - completed
 
 jobs:
   deploy:
@@ -61,10 +61,16 @@ jobs:
           npm run deploy:pr -- "pr${PR}"
           scripts/push-sam.sh
 
+  notify:
+    name: Discord Notification
+    runs-on: ubuntu-latest
+    needs: # make sure the notification is sent AFTER the jobs you want included have completed
+      - deploy
+    if: ${{ failure() }}
+
+    steps:
       - name: Notify
-        if: ${{ failure() }}
         uses: nobrayner/discord-webhook@v1
         with:
-          github-token: ${{ github.token }}
+          github-token: ${{ secrets.github_token }}
           discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          title: 'Deployment of PR ${{github.event.pull_request.number}} failed'

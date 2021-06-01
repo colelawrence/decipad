@@ -81,3 +81,17 @@ We use storybook for development and showcasing purposes of all of our component
 ```bash
 nx run ui:storybook
 ```
+
+## Other stuff
+
+To receive e-mails from the application (like when signing in through e-mail), verify your e-mail in SES (it's in sandbox mode so it only sends to verified e-mails)
+
+    go to the aws web console
+    search for SES service
+    go there
+    click on "Verified identities" in the menu
+    Click on the button "Create identity"
+    Choose "email address"
+    Enter the email address you want your local dev env to send email to
+    You will then receive a verification e-mail with more instructions
+

@@ -1,5 +1,5 @@
-import { Operation as SlateOperation } from 'slate';
 import { Diff, Doc } from 'automerge';
+import { Operation as SlateOperation } from 'slate';
 import { toJS } from '../utils/to-js';
 import { opInsert } from './insert';
 import { opRemove } from './remove';

@@ -1,26 +1,28 @@
 import { Observable, Subscription } from 'rxjs';
 import { Doc } from 'automerge';
+import EventEmitter from 'events';
 import { SyncSubscriptionManager } from './sync-subscription-manager';
 
 const MAX_RECONNECT_MS = Number(process.env.DECI_MAX_RECONNECT_MS) || 10000;
 const fetchPrefix = process.env.DECI_API_URL || '';
 
-export class Sync<T> {
+export class Sync<T> extends EventEmitter {
   private subscriptionManager = new SyncSubscriptionManager<T>();
   private subscriptionManagerTopicSubscription: Subscription;
   private topics = new Set<string>();
-  private connection: WebSocket | null = null;
   private connecting = false;
   private stopped = false;
   private timeout: ReturnType<typeof setTimeout> | null = null;
+  connection: WebSocket | null = null;
 
   constructor() {
+    super();
     this.onWebsocketClose = this.onWebsocketClose.bind(this);
     this.onWebsocketOpen = this.onWebsocketOpen.bind(this);
     this.onWebsocketMessage = this.onWebsocketMessage.bind(this);
 
-    this.subscriptionManagerTopicSubscription = this.subscriptionManager.topicObservable.subscribe(
-      ({ op, topic }) => {
+    this.subscriptionManagerTopicSubscription =
+      this.subscriptionManager.topicObservable.subscribe(({ op, topic }) => {
         switch (op) {
           case 'add':
             if (!this.topics.has(topic)) {
@@ -40,8 +42,7 @@ export class Sync<T> {
             }
             break;
         }
-      }
-    );
+      });
   }
 
   subscribe(
@@ -138,6 +139,7 @@ export class Sync<T> {
       this.onWebsocketClose();
       this.timeout = setTimeout(() => this.connect(), randomReconnectTimeout());
     };
+    this.emit('websocket', this.connection);
   }
 
   private onWebsocketOpen() {

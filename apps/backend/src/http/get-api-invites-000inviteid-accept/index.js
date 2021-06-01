@@ -40,7 +40,8 @@ exports.handler = handle(async (event) => {
         };
       }
 
-      const resource = `/${invite.resource_type}/${invite.resource_id}`;
+      const resource =
+        invite.resource_uri || `/${invite.resource_type}/${invite.resource_id}`;
       const permissionId = invite.permission_id;
 
       const oldPermission = await data.permissions.get({ id: permissionId });
@@ -62,6 +63,7 @@ exports.handler = handle(async (event) => {
           type: invite.permission,
           given_by_user_id: invite.invited_by_user_id,
           parent_resource_uri: invite.parent_resource_uri || null,
+          can_comment: invite.can_comment || false,
         };
 
         await data.permissions.put(newPermission);

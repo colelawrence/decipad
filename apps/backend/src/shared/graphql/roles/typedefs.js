@@ -1,15 +1,13 @@
 module.exports = ({ gql }) => gql`
   input RoleInput {
     name: String!
-    workspace_id: ID!
-    permission: PermissionType!
+    workspaceId: ID!
   }
 
   type Role {
     id: ID!
     name: String!
     workspace: Workspace!
-    permission: PermissionType!
     users: [User!]!
   }
 

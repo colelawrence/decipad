@@ -74,6 +74,7 @@ connections
 collabs
   id *String
   user_id String
+  room String
   encrypt true
 
 permissions
@@ -86,6 +87,9 @@ permissions
   type String
   role_id String
   parent_resource_uri String
+  parent_permission_id String
+  can_comment Boolean
+  created_at Number
   encrypt true
 
 invites
@@ -93,10 +97,13 @@ invites
   permission_id String
   resource_type String
   resource_id String
+  resource_uri String
   user_id String
   invited_by_user_id String
   permission String
   parent_resource_uri String
+  email String
+  can_comment Boolean
   expires_at TTL
   encrypt true
 
@@ -111,11 +118,25 @@ verificationrequests
 workspaces
   id *String
   name String
+  encrypt true
 
 workspaceroles
   id *String
   name String
   permission String
+  workspace_id String
+  encrypt true
+
+subscriptions
+  id *String
+  connection_id String
+  user_id String
+  gqltype String
+  filter String
+
+pads
+  id *String
+  name String
   workspace_id String
 
 @indexes
@@ -129,6 +150,14 @@ collabs
 
 collabs
   conn *String
+
+invites
+  resource_uri *String
+  name byResource
+
+invites
+  user_id *String
+  name byUser
 
 permissions
   resource_uri *String
@@ -149,6 +178,10 @@ permissions
   role_id **String
   name byUserAndRole
 
+permissions
+  parent_permission_id *String
+  name byParentPermission
+
 userkeys
   user_id *String
   name byUserId
@@ -165,11 +198,21 @@ workspaceroles
   workspace_id *String
   name byWorkspaceId
 
+subscriptions
+  user_id *String
+  gqltype **String
+  name byUserAndType
+
+subscriptions
+  connection_id *String
+  name byConnection
 
 @queues
 
 sendemail
 userkeys-changes
+permissions-changes
+notify-subscriptions
 
 
 #@plugins

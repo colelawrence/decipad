@@ -1,4 +1,3 @@
-import { Operation as SlateOperation } from 'slate';
 import { insertNode } from './insert-node';
 import { mergeNode } from './merge-node';
 import { moveNode } from './move-node';
@@ -23,9 +22,12 @@ export type SupportedSlateOpTypes = keyof typeof slateOpTypes;
 
 export function fromSlateOpType(
   type: SupportedSlateOpTypes
-): (doc: SyncPadValue, op: SlateOperation) => SyncPadValue {
+): (
+  doc: SyncPadValue,
+  op: ExtendedSlate.ExtendedSlateOperation
+) => SyncPadValue {
   return slateOpTypes[type] as (
     doc: SyncPadValue,
-    op: SlateOperation
+    op: ExtendedSlate.ExtendedSlateOperation
   ) => SyncPadValue;
 }

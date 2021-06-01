@@ -7,7 +7,7 @@ import {
 import { setContext } from '@apollo/client/link/context';
 import baseUrl from './base-url';
 
-function withAuth({ token }) {
+function withAuth({ token, link }) {
   const authLink = setContext((_, { headers }) => {
     return {
       headers: {
@@ -18,13 +18,16 @@ function withAuth({ token }) {
   });
 
   const uri = `${baseUrl()}/graphql`;
-  const httpLink = createHttpLink({
-    uri,
-    credentials: 'same-origin',
-  });
+
+  if (!link) {
+    link = createHttpLink({
+      uri,
+      credentials: 'same-origin',
+    });
+  }
 
   return new ApolloClient({
-    link: authLink.concat(httpLink),
+    link: authLink.concat(link),
     cache: new InMemoryCache(),
   });
 }

@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import repl from 'repl';
 
 import { Type } from './type';
-import { replEval, stringifyResult } from './repl';
+import { replEval, stringifyResult, reset } from './repl';
 
 const testEval = (source: string) =>
   new Promise((resolve, reject) => {
@@ -12,6 +12,9 @@ const testEval = (source: string) =>
     });
   });
 
+afterEach(() => {
+  reset();
+});
 it('ignores empty lines', async () => {
   expect(await testEval('')).toEqual(undefined);
 });
@@ -36,9 +39,7 @@ describe('stringify', () => {
       `${chalk.blue('10')} <number>`
     );
 
-    expect(
-      stringifyResult([1, 10], Type.build({ type: 'number', rangeness: true }))
-    ).toEqual(
+    expect(stringifyResult([1, 10], Type.buildRange(Type.Number))).toEqual(
       `range [ ${chalk.blue('1')} <number> through ${chalk.blue(
         '10'
       )} <number> ]`
@@ -50,5 +51,27 @@ describe('stringify', () => {
         Type.buildDate('month')
       )
     ).toEqual(`month ${chalk.blue('2020-01')}`);
+
+    expect(stringifyResult([1, 2], Type.buildColumn(Type.Number, 2))).toEqual(
+      `[ ${chalk.blue('1')} <number>, ${chalk.blue('2')} <number> ]`
+    );
+
+    expect(
+      stringifyResult(
+        [
+          [1, 2],
+          ['hi', 'lol'],
+        ],
+        Type.buildTuple(
+          [Type.buildColumn(Type.Number, 2), Type.buildColumn(Type.String, 2)],
+          ['Numbers', 'Strings']
+        )
+      )
+    ).toEqual(
+      `{
+  Numbers = [ ${chalk.blue('1')} <number>, ${chalk.blue('2')} <number> ],
+  Strings = [ ${chalk.blue("'hi'")} <string>, ${chalk.blue("'lol'")} <string> ]
+}`
+    );
   });
 });

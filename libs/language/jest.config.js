@@ -2,15 +2,15 @@ module.exports = {
   displayName: 'language',
   preset: '../../jest.preset.js',
   testEnvironment: 'node',
-  setupFiles: ['./jest.setup.js'],
+  setupFilesAfterEnv: ['./jest.setup.js'],
   collectCoverageFrom: ['src/**/*.ts'],
   coveragePathIgnorePatterns: ['/node_modules/', 'src/testUtils'],
   coverageThreshold: {
     global: {
-      branches: 85,
-      functions: 94,
-      lines: 94,
-      statements: 94,
+      statements: 95,
+      branches: 89,
+      functions: 96,
+      lines: 95,
     },
   },
 };
