@@ -4,9 +4,10 @@ const arc = require('@architect/functions');
 const Automerge = require('automerge');
 const tables = require('@architect/shared/tables');
 const auth = require('@architect/shared/auth');
+const { decode } = require('@architect/shared/resource');
 
 exports.handler = handle(async (event) => {
-  const id = event.pathParameters.id;
+  const id = decode(event.pathParameters.id);
   const { user } = await auth(event, { NextAuthJWT });
   if (!user) {
     return {

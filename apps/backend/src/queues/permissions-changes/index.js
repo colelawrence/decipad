@@ -183,13 +183,13 @@ async function handleWorkspaces(event) {
 
   if (action === 'delete') {
     // check if user is no longer authorized to access workspace
-    const resource = `/${resourceType}/${resourceId}`;
+    const resource = `/${resourceType}${resourceId ? `/${resourceId}` : ''}`;
     if (!(await isAuthorized(resource, user))) {
       await pubsub.notifyOne(user, 'workspacesChanged', {
         removed: [resourceId],
       });
     }
-  } else {
+  } else if (resourceId) {
     const data = await tables();
     const workspace = await data.workspaces.get({ id: resourceId });
     await pubsub.notifyOne(user, 'workspacesChanged', {
@@ -205,13 +205,13 @@ async function handlePads(event) {
 
   if (action === 'delete') {
     // check if user is no longer authorized to access workspace
-    const resource = `/${resourceType}/${resourceId}`;
+    const resource = `/${resourceType}${resourceId ? `/${resourceId}` : ''}`;
     if (!(await isAuthorized(resource, user))) {
       await pubsub.notifyOne(user, 'padsChanged', {
         removed: [resourceId],
       });
     }
-  } else {
+  } else if (resourceId) {
     const data = await tables();
     const pad = await data.pads.get({ id: resourceId });
     await pubsub.notifyOne(user, 'padsChanged', {
@@ -222,13 +222,12 @@ async function handlePads(event) {
 
 function parsePermissionId(id) {
   const parts = id.split('/');
-  assert.equal(parts.length, 7);
   assert.equal(parts[1], 'users');
   assert.equal(parts[3], 'roles');
   return {
     userId: parts[2],
     roleId: parts[4],
     resourceType: parts[5],
-    resourceId: parts[6],
+    resourceId: parts.slice(6).join('/'),
   };
 }

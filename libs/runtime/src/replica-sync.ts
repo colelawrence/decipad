@@ -3,6 +3,7 @@ import Automerge, { Change, Doc } from 'automerge';
 import debounce from 'lodash.debounce';
 import { Runtime } from './runtime';
 import { fnQueue } from './utils/fn-queue';
+import { encode } from './utils/resource';
 
 const MAX_RETRY_INTERVAL_MS =
   Number(process.env.DECI_MAX_RETRY_INTERVAL_MS) || 10000;
@@ -39,8 +40,8 @@ export class ReplicaSync<T> {
       SEND_CHANGES_DEBOUNCE_MS
     );
 
-    this.subscriptionCountSubscription = this.subscriptionCountObservable.subscribe(
-      (observerCount) => {
+    this.subscriptionCountSubscription =
+      this.subscriptionCountObservable.subscribe((observerCount) => {
         if (observerCount === 0) {
           this.queue
             .push(() => this.unsubscribe())
@@ -54,8 +55,7 @@ export class ReplicaSync<T> {
               console.error(err);
             });
         }
-      }
-    );
+      });
 
     this.localChangesSubscription = localChangesObservable.subscribe(
       ({ after }) => {
@@ -271,7 +271,7 @@ export class ReplicaSync<T> {
   }
 
   remoteUrl(): string {
-    return fetchPrefix + '/api/syncdoc/' + encodeURIComponent(this.topic);
+    return fetchPrefix + '/api/syncdoc/' + encode(this.topic);
   }
 }
 

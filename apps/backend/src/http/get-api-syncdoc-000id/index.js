@@ -3,11 +3,12 @@ const NextAuthJWT = require('next-auth/jwt');
 const tables = require('@architect/shared/tables');
 const auth = require('@architect/shared/auth');
 const { isAuthorized } = require('@architect/shared/authorization');
+const { decode } = require('@architect/shared/resource');
 
 exports.handler = handle(async (event) => {
   const { user } = await auth(event, { NextAuthJWT });
 
-  const id = event.pathParameters.id;
+  const id = decode(event.pathParameters.id);
   if (!user || !(await isAuthorized(id, user, 'WRITE'))) {
     return {
       status: 403,

@@ -28,15 +28,15 @@ describe('replica sync', () => {
 
     expect(fetch.mock.calls[0][1]).toBeUndefined(); // GET request
     expect(fetch.mock.calls[0][0]).toBe(
-      'http://localhost:3333/api/syncdoc/%2Ftest%2Fid'
+      'http://localhost:3333/api/syncdoc/test:id'
     );
     expect(fetch.mock.calls[1][0]).toBe(
-      'http://localhost:3333/api/syncdoc/%2Ftest%2Fid'
+      'http://localhost:3333/api/syncdoc/test:id'
     );
     expect(fetch.mock.calls[1][1]?.body).toBeDefined(); // PUT request
     expect(fetch.mock.calls[2][1]).toBeUndefined(); // GET request
     expect(fetch.mock.calls[2][0]).toBe(
-      'http://localhost:3333/api/syncdoc/%2Ftest%2Fid'
+      'http://localhost:3333/api/syncdoc/test:id'
     );
     expect(
       Automerge.load(fetch!.mock!.calls![1]![1]!.body as string)
@@ -63,7 +63,7 @@ describe('replica sync', () => {
     });
 
     expect(fetch.mock.calls[0][0]).toBe(
-      'http://localhost:3333/api/syncdoc/%2Ftest%2Fid2'
+      'http://localhost:3333/api/syncdoc/test:id2'
     );
     expect(r.getValue()).toBe('ABCDEFGHIJK');
 
