@@ -1,7 +1,7 @@
 import { isCollapsed } from '@udecode/slate-plugins';
-import { useCallback, useContext, useState, useEffect } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { Editor, Range, Text, Transforms } from 'slate';
-import { DeciRuntimeContext } from '../contexts/DeciRuntimeContext';
+import { DeciRuntimeContext } from '../contexts/DeciRuntime';
 
 export const useRuntimeEditor = ({ workspaceId, padId }) => {
   const { runtime } = useContext(DeciRuntimeContext);
@@ -35,7 +35,10 @@ export const useRuntimeEditor = ({ workspaceId, padId }) => {
           if (!Text.isText(node)) {
             return;
           }
-          const cumulativeSum = ((sum) => (value: number) => (sum += value))(0);
+          const cumulativeSum = (
+            (sum) => (value: number) =>
+              (sum += value)
+          )(0);
           const lines = node.text
             .split('\n')
             .map((line) => line.length)

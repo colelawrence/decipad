@@ -1,6 +1,7 @@
 import { Box, Center, Heading, Text } from '@chakra-ui/layout';
-import React, { useContext, useState, useEffect } from 'react';
 import { DeciRuntimeContext } from '@decipad/editor';
+import React, { useContext, useEffect, useState } from 'react';
+import { Subscription } from 'rxjs';
 import { Item } from './Item/Item';
 
 export const Notebooks = ({ workspaceId }: { workspaceId?: string }) => {
@@ -8,17 +9,17 @@ export const Notebooks = ({ workspaceId }: { workspaceId?: string }) => {
   const [_loading, setLoading] = useState(false);
   const [padIds, setPadIds] = useState([]);
   useEffect(() => {
-    if (workspaceId) {
-      const sub = runtime
+    let sub: Subscription;
+    if (workspaceId && runtime) {
+      sub = runtime
         .workspace(workspaceId)
         .pads.list()
         .subscribe(({ loading, data: padIds }) => {
           setLoading(loading);
           setPadIds(padIds);
         });
-
-      return () => sub.unsubscribe();
     }
+    return () => sub.unsubscribe();
   }, [runtime, workspaceId]);
 
   return (

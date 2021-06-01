@@ -10,10 +10,10 @@ import {
   MenuItem,
   useDisclosure,
 } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
-import React, { useRef, useContext } from 'react';
-import { FiTrash2 } from 'react-icons/fi';
 import { DeciRuntimeContext } from '@decipad/editor';
+import { useRouter } from 'next/router';
+import React, { useContext, useRef } from 'react';
+import { FiTrash2 } from 'react-icons/fi';
 
 export const DeleteWorkspaceButton = ({ id }: { id: string }) => {
   const router = useRouter();
@@ -45,17 +45,19 @@ export const DeleteWorkspaceButton = ({ id }: { id: string }) => {
               <Button ref={cancelRef} onClick={onClose}>
                 Cancel
               </Button>
-              <Button
-                colorScheme="red"
-                onClick={async () => {
-                  await runtime.workspaces.remove(id);
-                  onClose();
-                  router.push('/');
-                }}
-                ml={3}
-              >
-                Delete
-              </Button>
+              {runtime && (
+                <Button
+                  colorScheme="red"
+                  onClick={async () => {
+                    await runtime.workspaces.remove(id);
+                    onClose();
+                    router.push('/');
+                  }}
+                  ml={3}
+                >
+                  Delete
+                </Button>
+              )}
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialogOverlay>

@@ -11,13 +11,14 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
+import { DeciRuntimeContext } from '@decipad/editor';
+import { nanoid } from 'nanoid';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useRef, useState, useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { FiEdit2, FiFolder, FiMoreHorizontal, FiPlus } from 'react-icons/fi';
-import { nanoid } from 'nanoid';
+import { Subscription } from 'rxjs';
 import { DeleteWorkspaceButton } from './DeleteWorkspaceButton/DeleteWorkspaceButton';
-import { DeciRuntimeContext } from '@decipad/editor';
 
 export const Item = ({ workspaceId }: { workspaceId: string }) => {
   const router = useRouter();
@@ -25,15 +26,18 @@ export const Item = ({ workspaceId }: { workspaceId: string }) => {
   const newNotebookRef = useRef<HTMLInputElement>(null);
   const { runtime } = useContext(DeciRuntimeContext);
   const [loading, setLoading] = useState(true);
-  const [workspace, setWorkspace] = useState(null);
+  const [workspace, setWorkspace] = useState<any>(null);
 
   useEffect(() => {
-    const sub = runtime.workspaces
-      .get(workspaceId)
-      .subscribe(({ loading, data: workspace }) => {
-        setLoading(loading);
-        setWorkspace(workspace);
-      });
+    let sub: Subscription;
+    if (runtime) {
+      sub = runtime.workspaces
+        .get(workspaceId)
+        .subscribe(({ loading, data: workspace }) => {
+          setLoading(loading);
+          setWorkspace(workspace);
+        });
+    }
 
     return () => sub.unsubscribe();
   }, [runtime, workspaceId]);
@@ -80,39 +84,47 @@ export const Item = ({ workspaceId }: { workspaceId: string }) => {
           </MenuList>
         </Menu>
       </ButtonGroup>
-      <Modal isOpen={isOpen} onClose={onClose} initialFocusRef={newNotebookRef}>
-        <ModalOverlay />
-        <ModalContent pb={5}>
-          <ModalHeader>New Notebook</ModalHeader>
-          <ModalBody>
-            <form
-              onSubmit={async (e) => {
-                e.preventDefault();
-                const newPad = {
-                  id: nanoid(),
-                  name: newNotebookName,
-                  workspaceId,
-                  permissions: [],
-                  tags: [],
-                  lastUpdatedAt: new Date(),
-                };
-                await runtime.workspace(workspaceId).pads.create(newPad);
-                router.push(`?workspace=${workspaceId}&notebook=${newPad.id}`);
-                setNewNotebookName('');
-                onClose();
-              }}
-            >
-              <Input
-                type="text"
-                ref={newNotebookRef}
-                value={newNotebookName}
-                onChange={(e) => setNewNotebookName(e.target.value)}
-                placeholder="Untitled"
-              />
-            </form>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      {runtime && (
+        <Modal
+          isOpen={isOpen}
+          onClose={onClose}
+          initialFocusRef={newNotebookRef}
+        >
+          <ModalOverlay />
+          <ModalContent pb={5}>
+            <ModalHeader>New Notebook</ModalHeader>
+            <ModalBody>
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  const newPad = {
+                    id: nanoid(),
+                    name: newNotebookName,
+                    workspaceId,
+                    permissions: [],
+                    tags: [],
+                    lastUpdatedAt: new Date(),
+                  };
+                  await runtime.workspace(workspaceId).pads.create(newPad);
+                  router.push(
+                    `?workspace=${workspaceId}&notebook=${newPad.id}`
+                  );
+                  setNewNotebookName('');
+                  onClose();
+                }}
+              >
+                <Input
+                  type="text"
+                  ref={newNotebookRef}
+                  value={newNotebookName}
+                  onChange={(e) => setNewNotebookName(e.target.value)}
+                  placeholder="Untitled"
+                />
+              </form>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      )}
     </Box>
   );
 };

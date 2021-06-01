@@ -1,2 +1,2 @@
-export * from './Container/Container';
-export * from './theme';
+export * from './lib/Dashboard';
+export * from './lib/theme';

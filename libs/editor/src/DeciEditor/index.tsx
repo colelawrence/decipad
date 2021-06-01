@@ -21,10 +21,6 @@ import { MentionPortalProps } from '../plugins/MentionPlugin/MentionPortal.compo
 import { useMention } from '../plugins/MentionPlugin/useMention';
 import { users } from '../plugins/MentionPlugin/users';
 
-export * from '../contexts/DeciRuntimeContext';
-export * from '../contexts/DeciRuntimeProvider';
-export * from '../contexts/DeciRuntimeConsumer';
-
 const DashCommandsPortal = dynamic<DashCommandsPortalProps>(
   () =>
     import('../plugins/DashCommands/DashCommandsPortal').then(
@@ -51,7 +47,11 @@ export const DeciEditor = ({
   padId,
 }: DeciEditorProps): JSX.Element => {
   const [value, setValue] = useState(null);
-  const { loading: _, editor, onChange: onChangeResult } = useEditor({
+  const {
+    loading: _,
+    editor,
+    onChange: onChangeResult,
+  } = useEditor({
     workspaceId,
     padId,
     withPlugins,

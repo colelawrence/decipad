@@ -11,7 +11,11 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
-import React, { useRef, useState, useContext } from 'react';
+import { DeciRuntimeContext } from '@decipad/editor';
+import { CurrentWorkspace } from '@decipad/ui';
+import { nanoid } from 'nanoid';
+import { useRouter } from 'next/router';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   FiClock,
   FiInbox,
@@ -20,21 +24,48 @@ import {
   FiPlus,
   FiTrash2,
 } from 'react-icons/fi';
-import { useRouter } from 'next/router';
-import { nanoid } from 'nanoid';
-import { DeciRuntimeContext } from '@decipad/editor';
+import { Subscription } from 'rxjs';
 import { Workspaces } from './Workspaces/Workspaces';
 
-export const NavigationMenu = () => {
+export const NavigationMenu = ({ workspaceId }: { workspaceId: string }) => {
   const router = useRouter();
   const newWorkspaceRef = useRef<HTMLInputElement>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [currentWorkspace, setCurrentWorkspace] = useState<any>({});
+  const [workspacesIds, setWorkspacesIds] = useState<string[]>([]);
+  const [newWorkspaceName, setNewWorkspaceName] = useState('');
 
   const { runtime } = useContext(DeciRuntimeContext);
 
-  const [newWorkspaceName, setNewWorkspaceName] = useState('');
+  useEffect(() => {
+    let sub: Subscription;
+    let sub2: Subscription;
+
+    if (runtime) {
+      sub = runtime.workspaces
+        .get(workspaceId)
+        .subscribe(({ data: workspace }) => {
+          setCurrentWorkspace(workspace);
+        });
+
+      sub2 = runtime.workspaces.list().subscribe(({ data }) => {
+        setWorkspacesIds(data.filter((d: string) => d !== workspaceId));
+      });
+    }
+
+    return () => {
+      sub.unsubscribe();
+      sub2.unsubscribe();
+    };
+  }, [runtime, workspaceId]);
+
   return (
     <Box px={5} borderRight="1px solid" borderColor="gray.100">
+      <CurrentWorkspace
+        runtime={runtime}
+        currentWorkspace={currentWorkspace}
+        workspaces={workspacesIds}
+      />
       <Button
         w="100%"
         leftIcon={<Icon as={FiInbox} />}
@@ -84,41 +115,43 @@ export const NavigationMenu = () => {
             </MenuItem>
           </MenuList>
         </Menu>
-        <Modal
-          isOpen={isOpen}
-          onClose={onClose}
-          initialFocusRef={newWorkspaceRef}
-        >
-          <ModalOverlay />
-          <ModalContent pb={5}>
-            <ModalHeader>New Workspace</ModalHeader>
-            <ModalBody>
-              <form
-                onSubmit={async (e) => {
-                  e.preventDefault();
-                  const newWorkspace = {
-                    id: nanoid(),
-                    name: newWorkspaceName,
-                    permissions: [],
-                  };
-                  setNewWorkspaceName('');
-                  await runtime.workspaces.create(newWorkspace);
-                  await runtime.workspaces.push(newWorkspace.id);
-                  router.push(`?workspace=${newWorkspace.id}`);
-                  onClose();
-                }}
-              >
-                <Input
-                  type="text"
-                  ref={newWorkspaceRef}
-                  value={newWorkspaceName}
-                  onChange={(e) => setNewWorkspaceName(e.target.value)}
-                  placeholder="Untitled"
-                />
-              </form>
-            </ModalBody>
-          </ModalContent>
-        </Modal>
+        {runtime && (
+          <Modal
+            isOpen={isOpen}
+            onClose={onClose}
+            initialFocusRef={newWorkspaceRef}
+          >
+            <ModalOverlay />
+            <ModalContent pb={5}>
+              <ModalHeader>New Workspace</ModalHeader>
+              <ModalBody>
+                <form
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    const newWorkspace = {
+                      id: nanoid(),
+                      name: newWorkspaceName,
+                      permissions: [],
+                    };
+                    await runtime.workspaces.create(newWorkspace);
+                    await runtime.workspaces.push(newWorkspace.id);
+                    router.push(`?workspace=${newWorkspace.id}`);
+                    onClose();
+                    router.push(`?workspace=${newWorkspace.id}`);
+                  }}
+                >
+                  <Input
+                    type="text"
+                    ref={newWorkspaceRef}
+                    value={newWorkspaceName}
+                    onChange={(e) => setNewWorkspaceName(e.target.value)}
+                    placeholder="Untitled"
+                  />
+                </form>
+              </ModalBody>
+            </ModalContent>
+          </Modal>
+        )}
       </Flex>
       <Workspaces />
     </Box>

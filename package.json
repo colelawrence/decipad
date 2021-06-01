@@ -141,6 +141,7 @@
     "reflect-metadata": "^0.1.13",
     "regenerator-runtime": "^0.13.7",
     "rxjs": "^7.0.1",
+    "rxjs-hooks": "^0.7.0",
     "slate": "^0.62.1",
     "slate-history": "^0.62.0",
     "slate-hyperscript": "^0.62.0",

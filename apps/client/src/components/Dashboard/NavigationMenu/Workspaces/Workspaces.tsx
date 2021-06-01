@@ -1,7 +1,8 @@
 import { Box } from '@chakra-ui/layout';
-import React, { useContext, useEffect, useState } from 'react';
-import { Item } from './Item/Item';
 import { DeciRuntimeContext } from '@decipad/editor';
+import React, { useContext, useEffect, useState } from 'react';
+import { Subscription } from 'rxjs';
+import { Item } from './Item/Item';
 
 export const Workspaces = () => {
   const { runtime } = useContext(DeciRuntimeContext);
@@ -10,13 +11,15 @@ export const Workspaces = () => {
   const [workspaces, setWorkspaces] = useState([]);
 
   useEffect(() => {
-    const sub = runtime.workspaces
-      .list()
-      .subscribe(({ loading, data: workspaces = [] }) => {
-        setLoading(loading);
-        setWorkspaces(workspaces);
-      });
-
+    let sub: Subscription;
+    if (runtime) {
+      sub = runtime.workspaces
+        .list()
+        .subscribe(({ loading, data: workspaces = [] }) => {
+          setLoading(loading);
+          setWorkspaces(workspaces);
+        });
+    }
     return () => sub.unsubscribe();
   }, [runtime]);
 

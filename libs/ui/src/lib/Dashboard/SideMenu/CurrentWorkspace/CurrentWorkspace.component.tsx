@@ -13,8 +13,21 @@ import {
 import React from 'react';
 import { FiChevronDown, FiPlus, FiShare2 } from 'react-icons/fi';
 import { NewWorkspaceModal } from '../../Modals/NewWorkspaceModal/NewWorkspaceModal.component';
+import { WorkspaceItem } from './WorkspaceItem/WorkspaceItem.component';
 
-export const CurrentWorkspace = () => {
+export interface CurrentWorkspaceProps {
+  currentWorkspace: any;
+  workspaces: string[];
+  runtime: any;
+}
+
+export const CurrentWorkspace = ({
+  currentWorkspace,
+  workspaces,
+  runtime,
+}: CurrentWorkspaceProps) => {
+  if (!currentWorkspace || !workspaces) return null;
+
   return (
     <Menu placement="right-start">
       <MenuButton
@@ -35,7 +48,7 @@ export const CurrentWorkspace = () => {
           borderRadius="5"
           mr={3}
         />{' '}
-        Deci
+        {currentWorkspace.name}
       </MenuButton>
       <MenuList>
         <Box px={3} pb={3} pt={2}>
@@ -46,35 +59,16 @@ export const CurrentWorkspace = () => {
             borderRadius="5"
           />{' '}
           <Text ml={3} d="inline-block" fontWeight="bold">
-            Deci
+            {currentWorkspace.name}
           </Text>
         </Box>
         <MenuItem mb={3} icon={<Icon as={FiShare2} />}>
           Invite people
         </MenuItem>
         <Divider mb={3} />
-        <MenuItem
-          icon={
-            <Image
-              src="http://placekitten.com/20/20"
-              borderRadius="5"
-              alt="option"
-            />
-          }
-        >
-          Personal
-        </MenuItem>
-        <MenuItem
-          icon={
-            <Image
-              src="http://placekitten.com/20/20"
-              borderRadius="5"
-              alt="option"
-            />
-          }
-        >
-          Bubble
-        </MenuItem>
+        {workspaces.map((w) => (
+          <WorkspaceItem workspaceId={w} runtime={runtime} />
+        ))}
         <NewWorkspaceModal
           openButton={(onOpen) => (
             <MenuItem

@@ -1,21 +1,31 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
 import { Box, Circle, Heading, HStack, Text } from '@chakra-ui/layout';
 import { DeciRuntimeContext } from '@decipad/editor';
+import { useRouter } from 'next/router';
+import React, { useContext, useEffect, useState } from 'react';
+import { Subscription } from 'rxjs';
 
-export const Item = ({ id, workspaceId }) => {
+interface ItemProps {
+  id: string;
+  workspaceId: string | undefined;
+}
+
+export const Item = ({ id, workspaceId }: ItemProps) => {
   const router = useRouter();
   const { runtime } = useContext(DeciRuntimeContext);
   const [loading, setLoading] = useState(false);
-  const [pad, setPad] = useState(null);
+  const [pad, setPad] = useState<any>(null);
+
   useEffect(() => {
-    const sub = runtime
-      .workspace(workspaceId)
-      .pads.get(id)
-      .subscribe(({ loading, data: pad }) => {
-        setLoading(loading);
-        setPad(pad);
-      });
+    let sub: Subscription;
+    if (runtime) {
+      sub = runtime
+        .workspace(workspaceId)
+        .pads.get(id)
+        .subscribe(({ loading, data: pad }) => {
+          setLoading(loading);
+          setPad(pad);
+        });
+    }
 
     return () => sub.unsubscribe();
   }, [runtime, id, workspaceId]);
