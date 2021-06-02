@@ -49,7 +49,9 @@ export const NavigationMenu = ({ workspaceId }: { workspaceId: string }) => {
         });
 
       sub2 = runtime.workspaces.list().subscribe(({ data }) => {
-        setWorkspacesIds(data.filter((d: string) => d !== workspaceId));
+        if (data != null) {
+          setWorkspacesIds(data.filter((d: string) => d !== workspaceId));
+        }
       });
     }
 
