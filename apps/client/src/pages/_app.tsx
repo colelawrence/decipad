@@ -20,11 +20,11 @@ const App = ({ Component, pageProps }: AppProps) => {
         <ChakraProvider resetCSS theme={theme}>
           <DeciRuntimeProvider>
             <DeciRuntimeConsumer>
-              {({ runtime, loading }) => {
-                if (loading) {
+              {({ status }) => {
+                if (status === 'loading') {
                   return <Loading />;
                 }
-                if (runtime == null) {
+                if (status === 'login') {
                   return <Login />;
                 }
                 return <Component {...pageProps} />;

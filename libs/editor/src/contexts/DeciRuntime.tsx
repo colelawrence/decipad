@@ -12,12 +12,14 @@ export const DeciRuntimeContext = React.createContext<DeciRuntimeContextProps>({
   status: 'loading',
 });
 
+export const DeciRuntimeConsumer = DeciRuntimeContext.Consumer;
+
 export interface DeciRuntimeProviderProps {
   children: JSX.Element;
 }
 
 export const DeciRuntimeProvider = ({ children }: DeciRuntimeProviderProps) => {
-  const [session] = useSession();
+  const [session, sessionLoading] = useSession();
   const [value, setValue] = useState<DeciRuntimeContextProps>({
     runtime: null,
     status: 'loading',
@@ -26,7 +28,9 @@ export const DeciRuntimeProvider = ({ children }: DeciRuntimeProviderProps) => {
   const userId = (session?.user as { id: string })?.id;
 
   useEffect(() => {
-    if (userId) {
+    if (sessionLoading) {
+      return;
+    } else if (userId) {
       const runtime = new DeciRuntime(userId, nanoid());
       runtime.setSession(session);
       setValue({
@@ -37,7 +41,7 @@ export const DeciRuntimeProvider = ({ children }: DeciRuntimeProviderProps) => {
     } else {
       return setValue({ runtime: null, status: 'login' });
     }
-  }, [userId, session]);
+  }, [userId, session, sessionLoading]);
 
   return (
     <DeciRuntimeContext.Provider value={value}>
