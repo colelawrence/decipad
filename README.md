@@ -82,6 +82,18 @@ We use storybook for development and showcasing purposes of all of our component
 nx run ui:storybook
 ```
 
+### Running the end-to-end tests
+
+These tests are powered by cypress and are present in apps/client-e2e.
+
+`cd` to the root of the repo, and run:
+
+```bash
+./scripts/e2e.sh
+```
+
+Interesting options are `--headless` (don't show a window) and `--watch` (don't close after running). They are forwarded to the script with a bash `$@`.
+
 ## Other stuff
 
 To receive e-mails from the application (like when signing in through e-mail), verify your e-mail in SES (it's in sandbox mode so it only sends to verified e-mails)
