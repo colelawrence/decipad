@@ -92,7 +92,7 @@ These tests are powered by cypress and are present in apps/client-e2e.
 ./scripts/e2e.sh
 ```
 
-Interesting options are `--headless` (don't show a window) and `--watch` (don't close after running). They are forwarded to the script with a bash `$@`.
+Interesting options are `--headless` (don't show a window) and `--watch` (don't close after running).
 
 ## Other stuff
 
