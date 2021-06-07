@@ -298,7 +298,7 @@ const resolvers = {
       };
     },
 
-    async workspace(pad, _, context) {
+    async workspace(pad) {
       const data = await tables();
       return await data.workspaces.get({ id: pad.workspace_id });
     },

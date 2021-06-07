@@ -6,7 +6,6 @@ import waitForExpect from 'wait-for-expect';
 import test from './utils/test-with-sandbox';
 import { timeout } from './utils/timeout';
 import { withAuth, gql } from './utils/call-graphql';
-import { withAuth as callSimpleWithAuth } from './utils/call-simple';
 import auth from './utils/auth';
 import createWebsocketLink from './utils/graphql-websocket-link';
 import createDeciWebsocket from './utils/websocket';
@@ -16,8 +15,6 @@ test('pad changes', () => {
   const subscriptions = [];
   let pads = [];
   let inviteepads = [];
-  let role;
-  let invites;
 
   beforeAll(async () => {
     const client = withAuth(await auth());

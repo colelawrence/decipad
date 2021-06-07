@@ -8,7 +8,6 @@ import { withAuth, withoutAuth, gql } from './utils/call-graphql';
 import { withAuth as callWithAuth } from './utils/call-simple';
 import auth from './utils/auth';
 import { timeout } from './utils/timeout';
-import by from './utils/by';
 
 test('pads', () => {
   let workspace;
