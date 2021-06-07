@@ -66,6 +66,7 @@ jobs:
           ./node_modules/.bin/arc env staging DECI_KEY_VALIDATION_EXPIRATION_SECONDS '${{secrets.DECI_KEY_VALIDATION_EXPIRATION_SECONDS}}'
           ./node_modules/.bin/arc env staging DECI_FROM_EMAIL_ADDRESS '${{secrets.DECI_FROM_EMAIL_ADDRESS}}'
           ./node_modules/.bin/arc env staging DECI_APP_URL_BASE https://dev.decipad.com
+          ./node_modules/.bin/arc env staging NODE_OPTIONS --enable-source-maps
           cd ../..
           npm run deploy
           scripts/push-sam.sh

@@ -1,0 +1,256 @@
+import arc from '@architect/functions';
+import { nanoid } from 'nanoid';
+import tables from '../../tables';
+import { requireUser, check } from '../authorization';
+import createResourcePermission from '../../resource-permissions/create';
+import paginate from '../utils/paginate';
+
+const resolvers = {
+  Query: {
+    async resourceSharedWith(_: any, { resource }: { resource: string }, context: GraphqlContext): Promise<SharedWith> {
+      const user = await checkAdminAccessToResource(resource, context);
+      const data = await tables();
+
+      // Get users
+
+      const userPermissions = (
+        await data.permissions.query({
+          IndexName: 'byResource',
+          KeyConditionExpression: 'resource_uri = :resource_uri',
+          FilterExpression: 'user_id <> :null_id and role_id = :null_id',
+          ExpressionAttributeValues: {
+            ':resource_uri': resource,
+            ':null_id': 'null',
+          },
+        })
+      ).Items;
+
+      const users = userPermissions
+        .filter((p) => p.user_id !== user.id)
+        .map((p) => ({
+          user_id: p.user_id,
+          permissionType: p.type,
+          canComment: p.can_comment,
+        }));
+
+      // Get roles
+      const rolePermissions = (
+        await data.permissions.query({
+          IndexName: 'byResource',
+          KeyConditionExpression: 'resource_uri = :resource_uri',
+          FilterExpression: 'user_id = :null_id and role_id <> :null_id',
+          ExpressionAttributeValues: {
+            ':resource_uri': resource,
+            ':null_id': 'null',
+          },
+        })
+      ).Items;
+
+      const roles = rolePermissions.map((p) => ({
+        role_id: p.role_id,
+        permissionType: p.type,
+        canComment: p.can_comment,
+      }));
+
+      // Get pending invitations
+
+      const pendingInvitations = (
+        await data.invites.query({
+          IndexName: 'byResource',
+          KeyConditionExpression: 'resource_uri = :resource_uri',
+          ExpressionAttributeValues: {
+            ':resource_uri': resource,
+          },
+        })
+      ).Items.filter((invite) => !!invite.email).map((invite) => ({
+        email: invite.email,
+      }));
+
+      return {
+        users,
+        roles,
+        pendingInvitations,
+      };
+    },
+
+    async resourcesSharedWithMe(_: any, { page, resourceType }: {page: PageInput, resourceType: string }, context: GraphqlContext): Promise<PagedResult<SharedResource>> {
+      const user = requireUser(context);
+      const data = await tables();
+
+      const q = {
+        IndexName: 'byUserId',
+        KeyConditionExpression:
+          'user_id = :user_id and resource_type = :resource_type',
+        ExpressionAttributeValues: {
+          ':user_id': user.id,
+          ':resource_type': resourceType,
+        },
+      };
+
+      return await paginate<PermissionRecord, SharedResource>(
+        data.permissions,
+        q,
+        page,
+        resourcePermissionToSharedResource
+      );
+    },
+  },
+
+  Mutation: {
+    async shareWithRole(
+      _: any,
+      { resource, roleId, permissionType, canComment }: { resource: URI, roleId: ID, permissionType: PermissionType, canComment: boolean },
+      context: GraphqlContext
+    ) {
+      const actorUser = await checkAdminAccessToResource(resource, context);
+
+      await createResourcePermission({
+        roleId,
+        givenByUserId: actorUser.id,
+        resourceUri: resource,
+        type: permissionType,
+        canComment,
+      });
+    },
+
+    async shareWithUser(
+      _: any,
+      { resource, userId, permissionType, canComment }: { resource: URI, userId: ID, permissionType: PermissionType, canComment: boolean },
+      context: GraphqlContext
+    ) {
+      const actorUser = await checkAdminAccessToResource(resource, context);
+
+      await createResourcePermission({
+        userId,
+        givenByUserId: actorUser.id,
+        resourceUri: resource,
+        type: permissionType,
+        canComment,
+      });
+    },
+
+    async inviteToShareWithEmail(
+      _: any,
+      { resource, resourceName, email, permissionType, canComment }: { resource: URI, resourceName: string, email: string, permissionType: PermissionType, canComment: boolean },
+      context: GraphqlContext
+    ) {
+      const actingUser = await checkAdminAccessToResource(resource, context);
+
+      const data = await tables();
+      const emailKeyId = `email:${email}`;
+      const emailKey = await data.userkeys.get({ id: emailKeyId });
+      if (emailKey) {
+        return await resolvers.Mutation.shareWithUser(
+          _,
+          {
+            resource,
+            userId: emailKey.user_id,
+            permissionType,
+            canComment,
+          },
+          context
+        );
+      }
+
+      const newUser = {
+        id: nanoid(),
+        name: '',
+        last_login: null,
+        email: email,
+        secret: nanoid(),
+      };
+      await data.users.put(newUser);
+
+      const newUserKey = {
+        id: emailKeyId,
+        user_id: newUser.id,
+      };
+      await data.userkeys.put(newUserKey);
+
+      const parsedResource = parseResource(resource);
+      const newInvite = {
+        id: nanoid(),
+        permission_id: `/users/${newUser.id}/roles/null${resource}`,
+        resource_uri: resource,
+        resource_type: parsedResource.type,
+        resource_id: parsedResource.id,
+        user_id: newUser.id,
+        role_id: 'null',
+        invited_by_user_id: actingUser.id,
+        permission: permissionType,
+        email,
+        can_comment: canComment,
+        expires_at:
+          Math.round(Date.now() / 1000) +
+          Number(process.env.DECI_INVITE_EXPIRATION_SECONDS || 86400),
+      };
+      await data.invites.put(newInvite);
+
+      const inviteAcceptLink = `${process.env.DECI_APP_URL_BASE}/api/invites/${newInvite.id}/accept`;
+      await arc.queues.publish({
+        name: 'sendemail',
+        payload: {
+          template: 'generic-invite',
+          from: actingUser,
+          to: newUser,
+          resource,
+          inviteAcceptLink: inviteAcceptLink,
+          resourceName,
+        },
+      });
+    },
+
+    async unShareWithRole(_: any, { resource, roleId }: {resource: URI, roleId: ID }, context: GraphqlContext) {
+      await checkAdminAccessToResource(resource, context);
+      const data = await tables();
+      await data.permissions.delete({
+        id: `/users/null/roles/${roleId}${resource}`,
+      });
+    },
+
+    async unShareWithUser(_: any, { resource, userId }: { resource: URI, userId: ID }, context: GraphqlContext) {
+      await checkAdminAccessToResource(resource, context);
+      const data = await tables();
+      await data.permissions.delete({
+        id: `/users/${userId}/roles/null${resource}`,
+      });
+    },
+  },
+
+  SharedWithUser: {
+    async user(sharedWithUser: SharedWithUserRecord) {
+      const data = await tables();
+      return await data.users.get({ id: sharedWithUser.user_id });
+    },
+  },
+
+  SharedWithRole: {
+    async role(sharedWithRole: SharedWithRoleRecord) {
+      const data = await tables();
+      return await data.workspaceroles.get({ id: sharedWithRole.role_id });
+    },
+  },
+};
+
+async function checkAdminAccessToResource(resource: URI, context: GraphqlContext) {
+  return await check(resource, context, 'ADMIN');
+}
+
+function resourcePermissionToSharedResource(resourcePermission: PermissionRecord): SharedResource {
+  return {
+    gqlType: 'SharedResource',
+    resource: resourcePermission.resource_uri,
+    permission: resourcePermission.type,
+    canComment: resourcePermission.can_comment,
+  };
+}
+
+function parseResource(resource: URI): Resource {
+  const parts = resource.split('/');
+  return {
+    type: parts[1],
+    id: parts.splice(2).join('/'),
+  };
+}
+
+export default resolvers;
