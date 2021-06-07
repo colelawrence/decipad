@@ -24,6 +24,7 @@ export default function createWebsocketImpl(
 
     constructor(_url: string, _protocols: string | string[] | undefined) {
       super();
+      sync.on('websocket close');
       sync.on('websocket', (ws: WebSocket) => {
         if (this.oncloseCallback) {
           ws.onclose = this.oncloseCallback;
@@ -52,13 +53,14 @@ export default function createWebsocketImpl(
     }
 
     set onclose(callback: (event: CloseEvent) => any | null) {
+      if (this.oncloseCallback) {
+        sync.off('websocket close', this.oncloseCallback);
+      }
       this.oncloseCallback = (event: CloseEvent) => {
         this.emit('close');
         callback(event);
       };
-      if (sync.connection) {
-        sync.connection.onclose = this.oncloseCallback;
-      }
+      sync.on('websocket close', this.oncloseCallback);
     }
 
     get onclose() {
@@ -66,10 +68,11 @@ export default function createWebsocketImpl(
     }
 
     set onerror(callback: (event: Event) => any | null) {
-      this.onerrorCallback = callback;
-      if (sync.connection) {
-        sync.connection.onerror = callback;
+      if (this.onerrorCallback) {
+        sync.off('websocket error', this.onerrorCallback);
       }
+      this.onerrorCallback = callback;
+      sync.on('websocket error', this.onerrorCallback);
     }
 
     get onerror() {
@@ -77,15 +80,16 @@ export default function createWebsocketImpl(
     }
 
     set onmessage(callback) {
+      if (this.onmessageCallback) {
+        sync.off('websocket message', this.onmessageCallback);
+      }
       this.onmessageCallback = (event: MessageEvent) => {
         const message = JSON.parse(event.data);
         if (message.type) {
           callback(event);
         }
       };
-      if (sync.connection) {
-        sync.connection.onmessage = this.onmessageCallback;
-      }
+      sync.on('websocket message', this.onmessageCallback);
     }
 
     get onmessage() {
@@ -93,10 +97,11 @@ export default function createWebsocketImpl(
     }
 
     set onopen(callback) {
-      this.onopenCallback = callback;
-      if (sync.connection) {
-        sync.connection.onopen = this.onopenCallback;
+      if (this.onopenCallback) {
+        sync.off('websocket open', this.onopenCallback);
       }
+      this.onopenCallback = callback;
+      sync.on('websocket open', this.onopenCallback);
     }
 
     get onopen() {
