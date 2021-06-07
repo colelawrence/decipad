@@ -115,12 +115,8 @@
         "e2e": {
           "executor": "@nrwl/cypress:cypress",
           "options": {
-            "cypressConfig": "apps/client-e2e/cypress.json",
-            "tsConfig": "apps/client-e2e/tsconfig.e2e.json",
-            "devServerTarget": "client:serve"
-          },
-          "configurations": {
-            "production": { "devServerTarget": "client:serve:production" }
+            "cypressConfig": "cypress.json",
+            "tsConfig": "tsconfig.json"
           }
         },
         "lint": {
