@@ -24,7 +24,6 @@ export default function createWebsocketImpl(
 
     constructor(_url: string, _protocols: string | string[] | undefined) {
       super();
-      sync.on('websocket close');
       sync.on('websocket', (ws: WebSocket) => {
         if (this.oncloseCallback) {
           ws.onclose = this.oncloseCallback;

@@ -32,15 +32,7 @@ describe('slate to replica sync', () => {
 
   beforeAll(async () => {
     deci1 = new DeciRuntime('TEST_USER_ID', 'TEST_ACTOR_ID_1');
-    await deci1.workspace('workspaceid').pads.create({
-      id: docId,
-      name: 'test pad',
-      workspaceId: 'workspaceid',
-      lastUpdatedAt: new Date(),
-      tags: [],
-      permissions: [],
-    });
-    model1 = deci1.workspace('workspaceid').pads.edit(docId);
+    model1 = deci1.startPadEditor(docId, true);
 
     editor1 = createEditor();
 
@@ -56,7 +48,7 @@ describe('slate to replica sync', () => {
 
   beforeAll(async () => {
     deci2 = new DeciRuntime('TEST_USER_ID', 'TEST_ACTOR_ID_2');
-    model2 = deci2.workspace('workspaceid').pads.edit(docId);
+    model2 = deci2.startPadEditor(docId, true);
 
     editor2 = createEditor();
 
