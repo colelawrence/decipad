@@ -1,0 +1,40 @@
+import { Meta, Story, Canvas, Props } from '@storybook/addon-docs/blocks';
+import { StrikeThrough } from './StrikeThrough.component';
+
+<Meta
+  title='Editor/Leaves/StrikeThrough'
+  parameters={{
+    docs: {
+      source: {
+        code: `<StrikeThrough
+  attributes={{ 'data-slate-leaf': true }}
+  leaf={{ text: 'StrikeThrough text' }}
+  text={{ text: 'StrikeThrough text' }}
+>
+  StrikeThrough text
+</StrikeThrough>`,
+      },
+    },
+  }}
+  argTypes={{
+    children: {
+      defaultValue: 'Hello World',
+      description: 'The text content of the component',
+      type: 'string',
+    },
+  }}
+  component={StrikeThrough}
+/>
+
+# StrikeThrough
+
+Cross out anything you regret with this incredible leaf!
+
+export const Template = (args) => <StrikeThrough {...args} />;
+
+<Canvas>
+  <Story name='StrikeThrough'>{Template.bind({})}</Story>
+</Canvas>
+
+<Props story='StrikeThrough' />
+

@@ -1,0 +1,40 @@
+import { Meta, Story, Canvas, Props } from '@storybook/addon-docs/blocks';
+import { Underline } from './Underline.component';
+
+<Meta
+  title='Editor/Leaves/Underline'
+  parameters={{
+    docs: {
+      source: {
+        code: `<Underline
+  attributes={{ 'data-slate-leaf': true }}
+  leaf={{ text: 'Underline text' }}
+  text={{ text: 'Underline text' }}
+>
+  Underline text
+</Underline>`,
+      },
+    },
+  }}
+  argTypes={{
+    children: {
+      defaultValue: 'Hello World',
+      description: 'The text content of the component',
+      type: 'string',
+    },
+  }}
+  component={Underline}
+/>
+
+# Underline
+
+Make sure everyone knows what you think is important in a sentence using this leaf.
+
+export const Template = (args) => <Underline {...args} />;
+
+<Canvas>
+  <Story name='Underline'>{Template.bind({})}</Story>
+</Canvas>
+
+<Props story='Underline' />
+

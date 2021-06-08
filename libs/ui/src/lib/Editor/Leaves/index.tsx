@@ -1,11 +1,11 @@
 import { Text } from '@chakra-ui/react';
 import React from 'react';
 import { RenderLeafProps } from 'slate-react';
-import { Bold } from './Bold.component';
-import { Highlight } from './Highlight.component';
-import { Italic } from './Italic.component';
-import { StrikeThrough } from './StrikeThrough.component';
-import { Underline } from './Underline.component';
+import { Bold } from './Bold/Bold.component';
+import { Highlight } from './Highlight/Highlight.component';
+import { Italic } from './Italic/Italic.component';
+import { StrikeThrough } from './StrikeThrough/StrikeThrough.component';
+import { Underline } from './Underline/Underline.component';
 
 export const Leaves = (props: RenderLeafProps): JSX.Element => {
   let { children } = props;
