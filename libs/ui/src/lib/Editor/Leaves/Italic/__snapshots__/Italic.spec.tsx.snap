@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Italic Leaf matches snapshot 1`] = `
+.emotion-0 {
+  font-style: italic;
+}
+
+<div>
+  <span
+    class="chakra-text emotion-0"
+    data-slate-leaf="true"
+  >
+    Italic text
+  </span>
+</div>
+`;

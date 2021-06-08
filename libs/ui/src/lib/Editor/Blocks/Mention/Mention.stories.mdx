@@ -25,10 +25,10 @@ import { Mention } from './Mention.component';
       type: 'string',
     },
     element: {
-      user: {
-        defaultValue: 'johndoe',
-        description: 'The user mentioned',
-        type: 'string',
+      defaultValue: { user: 'johndoe' },
+      description: 'The user mentioned',
+      type: {
+        user: 'string',
       },
     },
   }}
@@ -37,7 +37,7 @@ import { Mention } from './Mention.component';
 
 # Mention
 
-The Mention component is the most basic slate component that we have in the editor, it is just a normal `p` tag basically and it is the block that is used for normal text.
+The mention component is a slate inline block that is used to mention other users throughout the editor.
 
 export const Template = (args) => <Mention {...args} />;
 
