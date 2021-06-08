@@ -1,6 +1,6 @@
+import { Heading } from '@chakra-ui/layout';
 import React from 'react';
-import { Dashboard } from '../components/Dashboard/Dashboard';
 
-const Home = () => <Dashboard />;
+const Home = () => <Heading as="h1">Hello World</Heading>;
 
 export default Home;

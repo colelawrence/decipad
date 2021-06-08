@@ -1,0 +1,40 @@
+import { Meta, Story, Canvas, Props } from '@storybook/addon-docs/blocks';
+import { Code } from './Code.component';
+
+<Meta
+  title="Editor/Blocks/Code"
+  parameters={{
+    docs: {
+      source: {
+        code: `<Code
+  element={{
+    children: [{ text: 'const hello = "Hello World";' }],
+  }}
+  attributes={{ 'data-slate-node': 'element', ref: null }}
+>
+  const hello = "Hello World";
+</Code>`,
+      },
+    },
+  }}
+  argTypes={{
+    children: {
+      defaultValue: 'const hello = "Hello World";',
+      description: 'The text inside of the Inline code component',
+      type: 'string',
+    },
+  }}
+  component={Code}
+/>
+
+# Code
+
+The Code component serves as one of the editor's slate blocks which is basically just an inline code component to make the text of that component look like some sort of code.
+
+export const Template = (args) => <Code {...args} />;
+
+<Canvas>
+  <Story name="Code">{Template.bind({})}</Story>
+</Canvas>
+
+<Props story="Code" />
