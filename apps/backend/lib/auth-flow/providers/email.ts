@@ -16,21 +16,22 @@ export default function EmailProvider() {
   });
 };
 
-async function sendVerificationRequest(verificationRequest: EmailVerificationRequest) {
-  const {
-    identifier: email,
-    url,
-    token,
-    baseUrl,
-  } = verificationRequest;
-  await arc.queues.publish({
-    name: `sendemail`,
-    payload: {
-      template: 'auth-magiclink',
-      email,
-      url,
-      token,
-      baseUrl,
-    },
-  });
+async function sendVerificationRequest(_verificationRequest: EmailVerificationRequest) {
+  // const {
+  //   identifier: email,
+  //   url,
+  //   token,
+  //   baseUrl,
+  // } = verificationRequest;
+
+  // await arc.queues.publish({
+  //   name: `sendemail`,
+  //   payload: {
+  //     template: 'auth-magiclink',
+  //     email,
+  //     url,
+  //     token,
+  //     baseUrl,
+  //   },
+  // });
 }
