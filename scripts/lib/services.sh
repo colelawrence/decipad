@@ -20,15 +20,18 @@ services_check () {
 
 services_wait () {
   printf "waiting for $1 | "
-  for retry in {1..60}; do
+  for retry in {1..120}; do
     if services_check "$1"; then
-      break
+      printf "ready!\n"
+      return
+    else
+      printf '.'
+      sleep 1
     fi
-    printf '.'
-    sleep 1
   done
 
-  printf "ready!\n"
+  printf "FAILED!\n"
+  return 1
 }
 
 # Spin up the frontend and backend, but only if they're not running
