@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Mention Inline Block matches snapshot 1`] = `
+.emotion-1 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  vertical-align: top;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  max-width: 100%;
+  font-weight: var(--chakra-fontWeights-medium);
+  line-height: 1.2;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  min-height: 1.5rem;
+  min-width: 1.5rem;
+  font-size: var(--chakra-fontSizes-sm);
+  border-radius: var(--chakra-radii-md);
+  -webkit-padding-start: var(--chakra-space-2);
+  padding-inline-start: var(--chakra-space-2);
+  -webkit-padding-end: var(--chakra-space-2);
+  padding-inline-end: var(--chakra-space-2);
+  background: var(--chakra-colors-gray-100);
+  color: var(--chakra-colors-gray-800);
+  size: md;
+  -webkit-print-color-scheme: blue;
+  color-scheme: blue;
+  border-radius: var(--chakra-radii-full);
+}
+
+.emotion-1:focus,
+.emotion-1[data-focus] {
+  box-shadow: var(--chakra-shadows-outline);
+}
+
+.emotion-2 {
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+<div>
+  <span
+    class="chakra-text emotion-0"
+    data-slate-node="element"
+  >
+    <span
+      class="emotion-1"
+      contenteditable="false"
+    >
+      <span
+        class="emotion-2"
+      >
+        @
+        johndoe
+      </span>
+    </span>
+    Next text
+  </span>
+</div>
+`;

@@ -1,6 +1,7 @@
-import { Tag, TagLabel, Text } from '@chakra-ui/react';
+import { TagLabel, Text } from '@chakra-ui/react';
 import React from 'react';
 import { RenderElementProps } from 'slate-react';
+import { TagStyles } from './Mention.styles';
 
 export const Mention = ({
   attributes,
@@ -9,14 +10,9 @@ export const Mention = ({
 }: RenderElementProps): JSX.Element => {
   return (
     <Text as="span" {...attributes}>
-      <Tag
-        contentEditable={false}
-        size="md"
-        colorScheme="blue"
-        borderRadius="full"
-      >
+      <TagStyles contentEditable={false}>
         <TagLabel>@{element.user}</TagLabel>
-      </Tag>
+      </TagStyles>
       {children}
     </Text>
   );

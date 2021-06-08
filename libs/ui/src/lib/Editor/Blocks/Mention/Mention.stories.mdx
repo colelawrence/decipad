@@ -1,0 +1,48 @@
+import { Meta, Story, Canvas, Props } from '@storybook/addon-docs/blocks';
+import { Mention } from './Mention.component';
+
+<Meta
+  title="Editor/Blocks/Mention"
+  parameters={{
+    docs: {
+      source: {
+        code: `<Mention
+  element={{
+    children: [{ text: 'Hello World' }],
+    user: 'johndoe'
+  }}
+  attributes={{ 'data-slate-node': 'element', ref: null }}
+>
+  Hello World
+</Mention>`,
+      },
+    },
+  }}
+  argTypes={{
+    children: {
+      defaultValue: 'Hello World',
+      description: 'The text content of the component',
+      type: 'string',
+    },
+    element: {
+      user: {
+        defaultValue: 'johndoe',
+        description: 'The user mentioned',
+        type: 'string',
+      },
+    },
+  }}
+  component={Mention}
+/>
+
+# Mention
+
+The Mention component is the most basic slate component that we have in the editor, it is just a normal `p` tag basically and it is the block that is used for normal text.
+
+export const Template = (args) => <Mention {...args} />;
+
+<Canvas>
+  <Story name="Mention">{Template.bind({})}</Story>
+</Canvas>
+
+<Props story="Mention" />

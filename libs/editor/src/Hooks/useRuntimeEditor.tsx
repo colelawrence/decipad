@@ -2,7 +2,7 @@ import { PadEditor } from '@decipad/runtime';
 import { isCollapsed } from '@udecode/slate-plugins';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { Editor, Range, Text, Transforms } from 'slate';
-import { DeciRuntimeContext } from '../Contexts/DeciRuntime';
+import { RuntimeContext } from '../Contexts/Runtime';
 
 interface IUseRuntimeEditor {
   workspaceId: string;
@@ -10,7 +10,7 @@ interface IUseRuntimeEditor {
 }
 
 export const useRuntimeEditor = ({ workspaceId, padId }: IUseRuntimeEditor) => {
-  const { runtime } = useContext(DeciRuntimeContext);
+  const { runtime } = useContext(RuntimeContext);
   const [padEditor, setPadEditor] = useState<PadEditor | null>(null);
 
   useEffect(() => {
