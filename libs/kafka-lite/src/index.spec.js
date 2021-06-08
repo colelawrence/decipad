@@ -20,12 +20,14 @@ describe('kafka lite', () => {
     rimraf(join(process.cwd(), '.kafka_lite_data'), done);
   });
 
-  beforeAll(async (done) => {
-    server = await createServer(conf);
-    server.listen(2181, 'localhost', () => {
-      console.log('server listening...');
-      done();
-    });
+  beforeAll((done) => {
+    (async () => {
+      server = await createServer(conf);
+      server.listen(2181, 'localhost', () => {
+        console.log('server listening...');
+        done();
+      });
+    })();
   });
 
   beforeAll(async () => {

@@ -144,84 +144,88 @@ describe('pads', () => {
       });
   });
 
-  test('removing a pad removes the tag index', async (done) => {
-    const deci = new DeciRuntime(USER_ID, ACTOR_ID);
+  test('removing a pad removes the tag index', (done) => {
+    (async () => {
+      const deci = new DeciRuntime(USER_ID, ACTOR_ID);
 
-    const pads = deci.workspace(workspaceId).pads.list();
-    let lastSeenPadIds: Id[] | null = null;
-    pads.subscribe(({ loading, data }) => {
-      if (!loading) {
-        lastSeenPadIds = data;
-      }
-    });
-
-    const tagKeys = deci.workspace(workspaceId).pads.byTag.keys();
-    let lastSeenTags: string[] | null = null;
-    tagKeys.subscribe((keys) => {
-      lastSeenTags = keys;
-    });
-
-    // removing a pad that does not exist works
-    await deci.workspace(workspaceId).pads.removePad('pad id does not exist');
-
-    await deci.workspace(workspaceId).pads.removePad('pad id 1');
-
-    expect(lastSeenPadIds).toHaveLength(1);
-    expect(lastSeenPadIds![0]).toBe('pad id 2');
-
-    await timeout(100);
-
-    expect(lastSeenTags).toHaveLength(2);
-    expect(lastSeenTags![0]).toBe('tag 2');
-    expect(lastSeenTags![1]).toBe('tag 3');
-
-    deci
-      .workspace(workspaceId)
-      .pads.byTag.get('tag 2')
-      .subscribe(({ loading, data: pads }) => {
+      const pads = deci.workspace(workspaceId).pads.list();
+      let lastSeenPadIds: Id[] | null = null;
+      pads.subscribe(({ loading, data }) => {
         if (!loading) {
-          expect(pads).toHaveLength(1);
-          expect(pads![0]).toBe('pad id 2');
-          deci.stop();
-          done();
+          lastSeenPadIds = data;
         }
       });
+
+      const tagKeys = deci.workspace(workspaceId).pads.byTag.keys();
+      let lastSeenTags: string[] | null = null;
+      tagKeys.subscribe((keys) => {
+        lastSeenTags = keys;
+      });
+
+      // removing a pad that does not exist works
+      await deci.workspace(workspaceId).pads.removePad('pad id does not exist');
+
+      await deci.workspace(workspaceId).pads.removePad('pad id 1');
+
+      expect(lastSeenPadIds).toHaveLength(1);
+      expect(lastSeenPadIds![0]).toBe('pad id 2');
+
+      await timeout(100);
+
+      expect(lastSeenTags).toHaveLength(2);
+      expect(lastSeenTags![0]).toBe('tag 2');
+      expect(lastSeenTags![1]).toBe('tag 3');
+
+      deci
+        .workspace(workspaceId)
+        .pads.byTag.get('tag 2')
+        .subscribe(({ loading, data: pads }) => {
+          if (!loading) {
+            expect(pads).toHaveLength(1);
+            expect(pads![0]).toBe('pad id 2');
+            deci.stop();
+            done();
+          }
+        });
+    })();
   });
 
-  test('updating a pad updates the tag index', async (done) => {
-    const deci = new DeciRuntime(USER_ID, ACTOR_ID);
+  test('updating a pad updates the tag index', (done) => {
+    (async () => {
+      const deci = new DeciRuntime(USER_ID, ACTOR_ID);
 
-    const tagKeys = deci.workspace(workspaceId).pads.byTag.keys();
-    let lastSeenTags: string[] | null = null;
-    tagKeys.subscribe((keys) => {
-      lastSeenTags = keys;
-    });
-
-    deci.workspace(workspaceId).pads.update('pad id 2', { tags: ['tag 3'] });
-
-    await timeout(100);
-
-    expect(lastSeenTags).toHaveLength(1);
-    expect(lastSeenTags![0]).toBe('tag 3');
-
-    deci
-      .workspace(workspaceId)
-      .pads.byTag.get('tag 2')
-      .subscribe(({ loading, data: pads }) => {
-        if (!loading) {
-          expect(pads).toHaveLength(0);
-          deci
-            .workspace(workspaceId)
-            .pads.byTag.get('tag 3')
-            .subscribe(({ loading, data: pads }) => {
-              if (!loading) {
-                expect(pads).toHaveLength(1);
-                expect(pads![0]).toBe('pad id 2');
-                deci.stop();
-                done();
-              }
-            });
-        }
+      const tagKeys = deci.workspace(workspaceId).pads.byTag.keys();
+      let lastSeenTags: string[] | null = null;
+      tagKeys.subscribe((keys) => {
+        lastSeenTags = keys;
       });
+
+      deci.workspace(workspaceId).pads.update('pad id 2', { tags: ['tag 3'] });
+
+      await timeout(100);
+
+      expect(lastSeenTags).toHaveLength(1);
+      expect(lastSeenTags![0]).toBe('tag 3');
+
+      deci
+        .workspace(workspaceId)
+        .pads.byTag.get('tag 2')
+        .subscribe(({ loading, data: pads }) => {
+          if (!loading) {
+            expect(pads).toHaveLength(0);
+            deci
+              .workspace(workspaceId)
+              .pads.byTag.get('tag 3')
+              .subscribe(({ loading, data: pads }) => {
+                if (!loading) {
+                  expect(pads).toHaveLength(1);
+                  expect(pads![0]).toBe('pad id 2');
+                  deci.stop();
+                  done();
+                }
+              });
+          }
+        });
+    })();
   });
 });
