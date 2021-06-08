@@ -1,5 +1,6 @@
 module.exports = {
   displayName: 'runtime',
+  testEnvironment: 'jsdom',
   preset: '../../jest.preset.js',
   setupFiles: ['./jest.setup.js'],
   collectCoverageFrom: ['src/**/*.ts'],
