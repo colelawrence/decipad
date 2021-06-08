@@ -1,4 +1,4 @@
-import arc from '@architect/functions';
+// import arc from '@architect/functions';
 import Providers from 'next-auth/providers';
 
 type EmailVerificationRequest = {
