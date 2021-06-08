@@ -1,33 +1,30 @@
 import { Observable, BehaviorSubject } from 'rxjs';
-import { PadEditor } from './pad-editor';
+import { Workspaces } from './workspaces';
+import { Pads } from './pads';
 import { Sync } from './sync';
 import createExternalWebsocketImpl from './external-websocket';
 
+interface WorkspacePads {
+  pads: Pads;
+}
+
 class Runtime {
   sync = new Sync<AnySyncValue>();
+  workspaces = new Workspaces(this);
   sessionSubject = new BehaviorSubject<Session | null>(null);
-  editors: Map<Id, PadEditor> = new Map();
+  workspaceById = new Map<Id, WorkspacePads>();
 
   constructor(public userId: string, public actorId: string) {}
 
-  startPadEditor(padId: Id, createIfAbsent: boolean) {
-    let editor = this.editors.get(padId);
-    if (editor === undefined) {
-      editor = new PadEditor(padId, this, createIfAbsent);
-      let hadSubscribers = false;
-      editor.slateOpsCountObservable.subscribe((subscriptionCount) => {
-        if (subscriptionCount === 0) {
-          if (hadSubscribers) {
-            editor!.stop();
-            this.editors.delete(padId);
-          }
-        } else {
-          hadSubscribers = true;
-        }
-      });
-      this.editors.set(padId, editor);
+  workspace(workspaceId: Id): WorkspacePads {
+    let ws = this.workspaceById.get(workspaceId);
+    if (ws === undefined) {
+      ws = {
+        pads: new Pads(this, workspaceId),
+      };
+      this.workspaceById.set(workspaceId, ws);
     }
-    return editor;
+    return ws;
   }
 
   setSession(session: Session) {
@@ -50,8 +47,10 @@ class Runtime {
     this.sync.stop();
     this.sessionSubject.next(null);
     this.sessionSubject.complete();
-    for (const editor of this.editors.values()) {
-      editor.stop();
+    this.workspaces.stop();
+    for (const ws of this.workspaceById.values()) {
+      ws.pads.stop();
+      this.workspaceById.clear();
     }
   }
 }

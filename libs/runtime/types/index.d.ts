@@ -34,6 +34,29 @@ interface User {
   avatar: string;
 }
 
+interface Workspace {
+  id: Id;
+  name: string;
+  permissions: Permission[];
+}
+
+interface Permission {
+  id: Id;
+  role: RoleId;
+  isOwner: boolean;
+  canRead: boolean;
+  canWrite: boolean;
+}
+
+interface Pad {
+  id: Id;
+  name: string;
+  workspaceId: string;
+  lastUpdatedAt: Date;
+  tags: Tags;
+  permissions: Permission[];
+}
+
 interface ComputationResult {
   type: Type | TableType | undefined;
   value: Interpreter.Result | undefined;
@@ -57,6 +80,8 @@ interface ComputerCodeBlock {
   id: string;
   ast: AST.Node;
 }
+
+type RoleId = string;
 
 type SyncPadValue = Sync.List<Sync.Node>;
 
@@ -136,7 +161,6 @@ interface RemoteWebSocketOp {
   o: 's' | 'u' | 'c';
   t: string;
   c: Sync.Change[] | null;
-  type?: string;
 }
 
 interface RemoteOp {

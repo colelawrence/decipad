@@ -140,7 +140,7 @@ export class Sync<T> extends EventEmitter {
     this.emit('websocket', this.connection);
   }
 
-  private onWebsocketOpen(event: Event) {
+  private onWebsocketOpen(event) {
     this.emit('websocket open', event);
     if (this.topics.size === 0 && this.connection !== null) {
       this.connection.close();
@@ -157,7 +157,7 @@ export class Sync<T> extends EventEmitter {
 
     if (type !== null) {
       // external message
-      this.emit('websocket message', event);
+      return this.emit('websocket message', event);
     }
 
     let opString: RemoteOp['op'];
@@ -181,13 +181,13 @@ export class Sync<T> extends EventEmitter {
     this.subscriptionManager.notifyRemoteOp({ op: opString, topic, changes });
   }
 
-  private onWebsocketClose(event: Event) {
+  private onWebsocketClose(event) {
     this.emit('websocket close', event);
     this.connection = null;
     this.timeout = setTimeout(() => this.connect(), randomReconnectTimeout());
   }
 
-  private onWebsocketError(event: Error) {
+  private onWebsocketError(event) {
     this.emit('websocket error', event);
   }
 }
