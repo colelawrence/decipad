@@ -5,10 +5,10 @@ import { Blockquote } from './Blockquote/Blockquote.component';
 import { BulletList } from './BulletList/BulletList.component';
 import { Code } from './Code/Code.component';
 import { CodeBlock } from './CodeBlock/CodeBlock.component';
-import { Header } from './Header.component';
-import { ListItem } from './ListItem.component';
-import { Mention } from './Mention.component';
-import { NumberedList } from './NumberedList.component';
+import { Header } from './Header/Header.component';
+import { ListItem } from './ListItem/ListItem.component';
+import { Mention } from './Mention/Mention.component';
+import { NumberedList } from './NumberedList/NumberedList.component';
 import { Paragraph } from './Paragraph/Paragraph.component';
 import { TodoListItem } from './TodoListItem.component';
 
