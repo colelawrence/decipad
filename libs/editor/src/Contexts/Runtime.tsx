@@ -3,22 +3,22 @@ import { nanoid } from 'nanoid';
 import { useSession } from 'next-auth/client';
 import React, { useContext, useEffect, useState } from 'react';
 
-export type DeciRuntimeContextProps =
+export type RuntimeContextProps =
   | { runtime: null; status: 'loading' | 'login' }
   | { runtime: DeciRuntime; status: 'success' };
 
-export const DeciRuntimeContext = React.createContext<DeciRuntimeContextProps>({
+export const RuntimeContext = React.createContext<RuntimeContextProps>({
   runtime: null,
   status: 'loading',
 });
 
-export interface DeciRuntimeProviderProps {
+export interface RuntimeProviderProps {
   children: JSX.Element;
 }
 
-export const DeciRuntimeProvider = ({ children }: DeciRuntimeProviderProps) => {
+export const RuntimeProvider = ({ children }: RuntimeProviderProps) => {
   const [session] = useSession();
-  const [value, setValue] = useState<DeciRuntimeContextProps>({
+  const [value, setValue] = useState<RuntimeContextProps>({
     runtime: null,
     status: 'loading',
   });
@@ -40,14 +40,12 @@ export const DeciRuntimeProvider = ({ children }: DeciRuntimeProviderProps) => {
   }, [userId, session]);
 
   return (
-    <DeciRuntimeContext.Provider value={value}>
-      {children}
-    </DeciRuntimeContext.Provider>
+    <RuntimeContext.Provider value={value}>{children}</RuntimeContext.Provider>
   );
 };
 
 export const useRuntime = (): DeciRuntime => {
-  const { runtime } = useContext(DeciRuntimeContext);
+  const { runtime } = useContext(RuntimeContext);
 
   if (runtime == null) {
     throw new Error('Runtime is required');
@@ -57,6 +55,6 @@ export const useRuntime = (): DeciRuntime => {
 };
 
 export const useMaybeRuntime = () => {
-  const { runtime } = useContext(DeciRuntimeContext);
+  const { runtime } = useContext(RuntimeContext);
   return runtime;
 };

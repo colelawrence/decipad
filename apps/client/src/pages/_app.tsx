@@ -1,5 +1,5 @@
 import { ChakraProvider } from '@chakra-ui/react';
-import { DeciRuntimeProvider } from '@decipad/editor';
+import { RuntimeProvider } from '@decipad/editor';
 import { theme } from '@decipad/ui';
 import { Provider } from 'next-auth/client';
 import { AppProps } from 'next/app';
@@ -14,9 +14,9 @@ const App = ({ Component, pageProps }: AppProps) => {
       </Head>
       <Provider session={pageProps.session}>
         <ChakraProvider resetCSS theme={theme}>
-          <DeciRuntimeProvider>
+          <RuntimeProvider>
             <Component {...pageProps} />
-          </DeciRuntimeProvider>
+          </RuntimeProvider>
         </ChakraProvider>
       </Provider>
     </>
