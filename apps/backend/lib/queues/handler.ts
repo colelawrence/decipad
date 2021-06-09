@@ -10,7 +10,13 @@ export default function queueHandler(handler: Handler) {
   return async (event: Event) => {
     for (const record of event.Records) {
       const message = JSON.parse(record.body);
-      await handler(message);
+      try {
+        await handler(message);
+      } catch (err) {
+        console.error('Error processing queue element: %j', message);
+        console.error(err);
+        // do not throw
+      }
     }
     return {};
   };
