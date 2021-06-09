@@ -3,14 +3,17 @@ import sendEmail from '../../../services/send-email';
 import handle from '../../../queues/handler';
 
 type SendEmailArgs = {
-  template: keyof typeof templates
+  template: keyof typeof templates;
 } & Record<string, any>;
 
 export const handler = handle(handleSendEmail);
 
 const inTesting = !!process.env.JEST_WORKER_ID;
 
-async function handleSendEmail({ template: templateName, ...params }: SendEmailArgs) {
+async function handleSendEmail({
+  template: templateName,
+  ...params
+}: SendEmailArgs) {
   if (inTesting) {
     return;
   }
@@ -27,6 +30,4 @@ async function handleSendEmail({ template: templateName, ...params }: SendEmailA
     body,
     subject,
   });
-
-  return;
 }
