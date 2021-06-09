@@ -1,4 +1,4 @@
-var a=Object.defineProperty;var i=t=>a(t,"__esModule",{value:!0}),o=(t,e)=>a(t,"name",{value:e,configurable:!0});var n=(t,e)=>{for(var r in e)a(t,r,{get:e[r],enumerable:!0})};i(exports);n(exports,{handler:()=>m});var m=o(function(e){return{statusCode:200,headers:{"cache-control":"no-cache, no-store, must-revalidate, max-age=0, s-maxage=0","content-type":"text/html; charset=utf8"},body:`
+var a=Object.defineProperty;var i=t=>a(t,"__esModule",{value:!0}),o=(t,e)=>a(t,"name",{value:e,configurable:!0});var n=(t,e)=>{i(t);for(var r in e)a(t,r,{get:e[r],enumerable:!0})};n(exports,{handler:()=>m});var m=o(function(e){return{statusCode:200,headers:{"cache-control":"no-cache, no-store, must-revalidate, max-age=0, s-maxage=0","content-type":"text/html; charset=utf8"},body:`
 <!DOCTYPE html>
 <html lang="en">
 <head>
