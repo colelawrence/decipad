@@ -443,8 +443,8 @@ test('pads', () => {
     await waitForExpect(async () => {
       expect(guestTags).toHaveLength(1);
       expect(guestTags).toMatchObject(['tag two']);
-    });
-  }, 15000);
+    }, 20000);
+  }, 21000);
 
   it('other user can list pad through tag', async () => {
     const client = withAuth(await auth('test user id 2'));
