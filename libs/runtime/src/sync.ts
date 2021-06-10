@@ -134,13 +134,10 @@ export class Sync<T> extends EventEmitter {
       process.env.NEXT_PUBLIC_DECI_WS_URL || 'ws://localhost:3333/ws',
       token
     );
-    this.connection.onerror = (ev) => this.onWebsocketError(ev);
+    this.connection.onerror = this.onWebsocketError;
     this.connection.onopen = this.onWebsocketOpen;
     this.connection.onmessage = this.onWebsocketMessage;
-    this.connection.onclose = (ev) => {
-      this.onWebsocketClose(ev);
-      this.timeout = setTimeout(() => this.connect(), randomReconnectTimeout());
-    };
+    this.connection.onclose = this.onWebsocketClose;
     this.emit('websocket', this.connection);
   }
 

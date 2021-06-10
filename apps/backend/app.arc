@@ -112,6 +112,7 @@ verificationrequests
   identifier String
   token String
   baseUrl: String
+  sent: Boolean
   expires TTL
   encrypt true
 

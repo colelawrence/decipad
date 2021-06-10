@@ -16,7 +16,6 @@ type GraphqlModule = {
   typedefs: any;
   resolvers?: any;
 };
-
 const modules: GraphqlModule[] = [
   base,
   date,

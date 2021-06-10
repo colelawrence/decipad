@@ -1,7 +1,6 @@
 import arc from '@architect/functions';
 import assert from 'assert';
 import { nanoid } from 'nanoid';
-import tables from '../../../tables';
 import handle from '../../../queues/handler';
 
 export const handler = handle(userKeyChangesHandler);
@@ -24,7 +23,7 @@ async function userKeyChangesHandler(event: TableRecordChanges<UserKey>) {
     return;
   }
 
-  const data = await tables();
+  const data = await arc.tables();
 
   const user = await data.users.get({ id: args.user_id });
 

@@ -18,6 +18,6 @@ export default function queueHandler(handler: Handler) {
         // do not throw
       }
     }
-    return {};
+    return { statusCode: 200 };
   };
 }
