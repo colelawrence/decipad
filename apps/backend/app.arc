@@ -140,6 +140,24 @@ pads
   name String
   workspace_id String
 
+tags
+  id *String
+  tag String
+  resource_uri String
+
+usertags
+  id *String
+  workspace_id String
+  user_id String
+  tag String
+
+usertaggedresources
+  id *String
+  user_id String
+  tag String
+  workspace_id String
+  resource_uri String
+
 @indexes
 
 users
@@ -208,13 +226,39 @@ subscriptions
   connection_id *String
   name byConnection
 
+tags
+  resource_uri *String
+  name byResource
+
+usertags
+  user_id *String
+  workspace_id **String
+  name byUserAndWorkspace
+
+usertaggedresources
+  user_id *String
+  tag **String
+  name byUserAndTag
+
+usertaggedresources
+  resource_uri *String
+  tag **String
+  name byResourceAndTag
+
+usertaggedresources
+  resource_uri *String
+  user_id **String
+  name byResourceAndUser
+
 @queues
 
 sendemail
+notify-subscriptions
 userkeys-changes
 permissions-changes
-notify-subscriptions
-
+pads-changes
+tags-changes
+usertaggedresources-changes
 
 #@plugins
 #kafka

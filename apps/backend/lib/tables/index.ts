@@ -1,6 +1,11 @@
 import arc from '@architect/functions';
 
-const observedTables = ['userkeys', 'permissions'];
+const observedTables = [
+  'userkeys',
+  'permissions',
+  'tags',
+  'usertaggedresources',
+];
 
 let tablesPromise: Promise<DataTables>;
 
@@ -10,7 +15,8 @@ export default async function tables(): Promise<DataTables> {
   }
 
   const p = new Promise<DataTables>((resolve, reject) => {
-    arc.tables()
+    arc
+      .tables()
       .then((_tables) => {
         const tables = _tables as unknown as DataTables;
         for (const observedTable of observedTables) {
@@ -22,7 +28,7 @@ export default async function tables(): Promise<DataTables> {
   });
 
   return p;
-};
+}
 
 async function observe(tables: DataTables, tableName: string) {
   const table = tables[tableName];
@@ -52,9 +58,9 @@ async function observe(tables: DataTables, tableName: string) {
     };
 
     if (methodName === 'put') {
-      table.put = replaceMethod;
+      table['put'] = replaceMethod;
     } else {
-      table.delete = replaceMethod;
+      table['delete'] = replaceMethod;
     }
   }
 }

@@ -306,14 +306,14 @@ const resolvers = {
   },
 
   RoleAccess: {
-    async role({ role_id }: { role_id: ID}): Promise<RoleRecord> {
+    async role({ role_id }: { role_id: ID}): Promise<RoleRecord | undefined> {
       const data = await tables();
       return await data.workspaceroles.get({ id: role_id });
     },
   },
 
   UserAccess: {
-    async user({ user_id }: { user_id: ID}): Promise<User> {
+    async user({ user_id }: { user_id: ID}): Promise<User | undefined> {
       const data = await tables();
       return await data.users.get({ id: user_id });
     },

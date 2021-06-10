@@ -1,4 +1,4 @@
-export default async function paginate<T1, T2=T1>(table: DataTable<T1>, query: DynamoDbQuery, page: PageInput, map?: (rec: T1) => T2 | Promise<T2>): Promise<PagedResult<T2>> {
+export default async function paginate<T1, T2=T1>(table: DataTable<T1>, query: DynamoDbQuery, page: PageInput, map?: (rec: T1) => T2 | Promise<T2 | undefined>): Promise<PagedResult<T2>> {
   const { cursor, maxItems } = page;
 
   query.Limit = maxItems;
@@ -14,7 +14,9 @@ export default async function paginate<T1, T2=T1>(table: DataTable<T1>, query: D
     const mappedItems = [];
     for (const item of items) {
       const retItem = await map(item);
-      mappedItems.push(retItem);
+      if (retItem) {
+        mappedItems.push(retItem);
+      }
     }
     retItems = mappedItems;
   } else {

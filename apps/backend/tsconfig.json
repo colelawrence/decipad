@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.base.json",
-  "include": ["types/**/*.ts", "lib/**/*.ts"],
+  "include": ["types/**/*.ts", "lib/**/*.ts", "tests/**/*.ts"],
   "references": [{ "path": "../../libs/kafka-lite" }],
   "compilerOptions": {
     "rootDir": "."

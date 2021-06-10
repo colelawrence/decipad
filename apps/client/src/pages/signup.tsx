@@ -115,4 +115,5 @@ const SignupPage = () => {
 
 export default SignupPage;
 */
-export default () => 'this page was breaking our build and there is not even a sign up process anywhere in the design. I think we forgot about it, so I commented all of it out, ok bye.'
+export default () =>
+  'this page was breaking our build and there is not even a sign up process anywhere in the design. I think we forgot about it, so I commented all of it out, ok bye.';

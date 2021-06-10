@@ -256,5 +256,5 @@ async function subscribe(userId: string, workspaceId: string, pads: Pad[], subsc
     })
   );
 
-  await timeout(10000);
+  await timeout(2000);
 }

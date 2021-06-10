@@ -3,8 +3,8 @@
 import test from './utils/test-with-sandbox';
 import { withAuth, gql } from './utils/call-graphql';
 import auth from './utils/auth';
-import { timeout } from './utils/timeout';
 import createResourcePermission from '../lib/resource-permissions/create';
+import waitForExpect from 'wait-for-expect';
 
 test('share with user', () => {
   beforeAll(async () => {
@@ -139,39 +139,39 @@ test('share with user', () => {
     });
   });
 
-  it('waits a bit', async () => await timeout(1000));
-
   it('target user no longer has access to resource', async () => {
-    const client = withAuth(await auth('test user id 2'));
-    const resourcesPage = (
-      await client.query({
-        query: gql`
-          query {
-            resourcesSharedWithMe(
-              page: { maxItems: 10 }
-              resourceType: "testtype"
-            ) {
-              items {
-                ... on SharedResource {
-                  resource
-                  permission
-                  canComment
+    await waitForExpect(async () => {
+      const client = withAuth(await auth('test user id 2'));
+      const resourcesPage = (
+        await client.query({
+          query: gql`
+            query {
+              resourcesSharedWithMe(
+                page: { maxItems: 10 }
+                resourceType: "testtype"
+              ) {
+                items {
+                  ... on SharedResource {
+                    resource
+                    permission
+                    canComment
+                  }
                 }
+                count
+                hasNextPage
+                cursor
               }
-              count
-              hasNextPage
-              cursor
             }
-          }
-        `,
-      })
-    ).data.resourcesSharedWithMe;
+          `,
+        })
+      ).data.resourcesSharedWithMe;
 
-    expect(resourcesPage).toMatchObject({
-      items: [],
-      count: 0,
-      hasNextPage: false,
-      cursor: null,
+      expect(resourcesPage).toMatchObject({
+        items: [],
+        count: 0,
+        hasNextPage: false,
+        cursor: null,
+      });
     });
   });
 });

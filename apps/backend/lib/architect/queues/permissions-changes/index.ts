@@ -3,34 +3,55 @@ import handle from '../../../queues/handler';
 import { isAuthorized } from '../../../authorization';
 import { notifyOne } from '../../../pubsub';
 import tables from '../../../tables';
+import allPages from '../../../tables/all-pages';
+
+type ParsedPermission = {
+  userId: ID;
+  roleId: ID;
+  resourceType: string;
+  resourceId: ID;
+};
 
 export const handler = handle(permissionsChangesHandler);
 
-async function permissionsChangesHandler(event: TableRecordChanges<PermissionRecord>) {
+async function permissionsChangesHandler(
+  event: TableRecordChanges<PermissionRecord>
+) {
   const { table, action, args } = event;
 
   assert.equal(table, 'permissions');
-  const { userId, resourceType } = parsePermissionId(args.id);
-  if (
-    ((action === 'put' && args.resource_type === 'workspaces') || resourceType === 'workspaces') &&
-    ((action === 'put' && args.user_id !== 'null') || userId !== 'null')
-  ) {
-    await handleWorkspaces(event);
-  } else if (
-    ((action === 'put' && args.resource_type === 'pads') || resourceType === 'pads') &&
-    ((action === 'put' && args.user_id !== 'null') || userId !== 'null')
-  ) {
-    await handlePads(event);
-  }
+  const parsedPermission = parsePermissionId(args.id);
+  const { userId, resourceType } = parsedPermission;
+  if (action === 'put') {
+    if (
+      (args.resource_type === 'workspaces' || resourceType === 'workspaces') &&
+      (args.user_id !== 'null' || userId !== 'null')
+    ) {
+      await handlePutWorkspaces(event);
+    } else if (
+      (args.resource_type === 'pads' || resourceType === 'pads') &&
+      (args.user_id !== 'null' || userId !== 'null')
+    ) {
+      await handlePutPadsWithUser(event);
+    }
 
-  if (event.action === 'delete') {
-    await handleDelete(args);
-  } else if (event.action === 'put') {
     if (args.user_id === 'null' && args.role_id !== 'null') {
       await handlePutWithNoUser(args);
-    } else if (args.resource_type === 'roles') {
-      await handlePutWithUserAndRoleResource(args);
     }
+    if (args.user_id !== 'null') {
+      if (args.resource_type === 'roles') {
+        await handlePutWithUserAndRoleResource(args);
+      } else if (args.resource_type === 'pads' && args.role_id === 'null') {
+        await handlePutWithUserAndPadResource(args);
+      }
+    }
+  } else if (event.action === 'delete') {
+    if (resourceType === 'pads' && userId !== 'null') {
+      await handleDeletePadWithUser(parsedPermission);
+    } else if (resourceType === 'workspaces' && userId !== 'null') {
+      await handleDeleteWorkspaceWithUser(parsedPermission);
+    }
+    await handleDelete(args);
   }
 }
 
@@ -89,9 +110,9 @@ async function handlePutWithNoUser({ role_id }: PermissionRecord) {
         ':resource_uri': `/roles/${role_id}`,
       },
     })
-  ).Items
-    .filter((p: PermissionRecord) => p.user_id !== 'null')
-    .map((p: PermissionRecord) => p.user_id);
+  ).Items.filter((p: PermissionRecord) => p.user_id !== 'null').map(
+    (p: PermissionRecord) => p.user_id
+  );
 
   let lastKey = null;
   do {
@@ -155,9 +176,9 @@ async function handleDelete({ id }: TableRecordIdentifier) {
         ':resource_uri': `/roles/${roleId}`,
       },
     })
-  ).Items
-    .filter((p: PermissionRecord) => p.user_id !== 'null')
-    .map((p: PermissionRecord) => p.user_id);
+  ).Items.filter((p: PermissionRecord) => p.user_id !== 'null').map(
+    (p: PermissionRecord) => p.user_id
+  );
 
   const rolePermissions = (
     await data.permissions.query({
@@ -177,51 +198,130 @@ async function handleDelete({ id }: TableRecordIdentifier) {
   }
 }
 
-async function handleWorkspaces(event: TableRecordChanges<PermissionRecord>) {
-  const { action, args } = event;
-  const { userId, resourceType, resourceId } = parsePermissionId(args.id);
+async function handlePutWorkspaces(
+  event: TableRecordChanges<PermissionRecord>
+) {
+  const { args } = event;
+  const { userId, resourceId } = parsePermissionId(args.id);
   const user = { id: userId };
 
-  if (action === 'delete') {
-    // check if user is no longer authorized to access workspace
-    const resource = `/${resourceType}${resourceId ? `/${resourceId}` : ''}`;
-    if (!(await isAuthorized(resource, user))) {
-      await notifyOne(user, 'workspacesChanged', {
-        removed: [resourceId],
-      });
-    }
-  } else if (resourceId) {
-    const data = await tables();
-    const workspace = await data.workspaces.get({ id: resourceId });
+  const data = await tables();
+  const workspace = await data.workspaces.get({ id: resourceId });
+  await notifyOne(user, 'workspacesChanged', {
+    added: [workspace],
+  });
+}
+
+async function handleDeleteWorkspaceWithUser(perm: ParsedPermission) {
+  const resource = `/${perm.resourceType}${
+    perm.resourceId ? `/${perm.resourceId}` : ''
+  }`;
+  const user = { id: perm.userId };
+  if (!(await isAuthorized(resource, user))) {
     await notifyOne(user, 'workspacesChanged', {
-      added: [workspace],
+      removed: [perm.resourceId],
     });
   }
 }
 
-async function handlePads(event: TableRecordChanges<PermissionRecord>) {
-  const { action, args } = event;
-  const { userId, resourceType, resourceId } = parsePermissionId(args.id);
-  const user = { id: userId };
+async function handlePutPadsWithUser(
+  event: TableRecordChanges<PermissionRecord>
+) {
+  const { args: perm } = event;
+  const resourceUri = `/${perm.resource_type}/${perm.resource_id}`;
+  const user = { id: perm.user_id };
 
-  if (action === 'delete') {
-    // check if user is no longer authorized to access workspace
-    const resource = `/${resourceType}${resourceId ? `/${resourceId}` : ''}`;
-    if (!(await isAuthorized(resource, user))) {
-      await notifyOne(user, 'padsChanged', {
-        removed: [resourceId],
-      });
-    }
-  } else if (resourceId) {
-    const data = await tables();
-    const pad = await data.pads.get({ id: resourceId });
+  const data = await tables();
+  const pad = await data.pads.get({ id: perm.resource_id });
+  if (!pad) {
+    return;
+  }
+  await notifyOne(user, 'padsChanged', {
+    added: [pad],
+  });
+
+  const query = {
+    IndexName: 'byResource',
+    KeyConditionExpression: 'resource_uri = :resource_uri',
+    ExpressionAttributeValues: {
+      ':resource_uri': resourceUri,
+    },
+  };
+
+  for await (const tag of allPages(data.tags, query)) {
+    const newUserTaggedResource = {
+      id: `/workspaces/${pad.workspace_id}/users/${perm.user_id}/tags/${encodeURIComponent(tag.tag)}${perm.resource_uri}`,
+      user_id: perm.user_id,
+      tag: tag.tag,
+      workspace_id: pad.workspace_id,
+      resource_uri: perm.resource_uri,
+    };
+
+    await data.usertaggedresources.put(newUserTaggedResource);
+  }
+}
+
+async function handleDeletePadWithUser(perm: ParsedPermission) {
+  const resourceUri = `/${perm.resourceType}/${perm.resourceId}`;
+  const user = { id: perm.userId };
+  if (!(await isAuthorized(resourceUri, user))) {
     await notifyOne(user, 'padsChanged', {
-      added: [pad],
+      removed: [perm.resourceId],
     });
+
+    const data = await tables();
+
+    const query = {
+      IndexName: 'byResourceAndUser',
+      KeyConditionExpression:
+        'resource_uri = :resource_uri and user_id = :user_id',
+      ExpressionAttributeValues: {
+        ':resource_uri': resourceUri,
+        ':user_id': perm.userId,
+      },
+    };
+
+    for await (const userTaggedResource of allPages(
+      data.usertaggedresources,
+      query
+    )) {
+      await data.usertaggedresources.delete({ id: userTaggedResource.id });
+    }
   }
 }
 
-function parsePermissionId(id: string) {
+async function handlePutWithUserAndPadResource(perm: PermissionRecord) {
+  assert.equal(perm.resource_type, 'pads');
+
+  const data = await tables();
+
+  const pad = await data.pads.get({ id: perm.resource_id });
+  if (!pad) {
+    return;
+  }
+
+  const query = {
+    IndexName: 'byResource',
+    KeyConditionExpression: 'resource_uri = :resource_uri',
+    ExpressionAttributeValues: {
+      ':resource_uri': perm.resource_uri,
+    },
+  };
+
+  for await (const tag of allPages(data.tags, query)) {
+    const newUserTaggedResource = {
+      id: `/workspaces/${pad.workspace_id}/users/${perm.user_id}/tags/${encodeURIComponent(tag.tag)}${perm.resource_uri}`,
+      user_id: perm.user_id,
+      tag: tag.tag,
+      workspace_id: pad.workspace_id,
+      resource_uri: perm.resource_uri,
+    };
+
+    await data.usertaggedresources.put(newUserTaggedResource);
+  }
+}
+
+function parsePermissionId(id: string): ParsedPermission {
   const parts = id.split('/');
   assert.equal(parts[1], 'users');
   assert.equal(parts[3], 'roles');

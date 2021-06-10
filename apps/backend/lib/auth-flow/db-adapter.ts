@@ -31,7 +31,7 @@ export default function createAdapter() {
       return null;
     }
 
-    function getUser(id: string): Promise<User> {
+    function getUser(id: string): Promise<User | undefined> {
       return data.users.get({ id });
     }
 
