@@ -1,60 +1,26 @@
-import { DeciRuntime } from './';
 import { nanoid } from 'nanoid';
 import { Server as WebSocketServer, WebSocket } from 'mock-socket';
+import waitForExpect from 'wait-for-expect';
+import { DeciRuntime } from './';
 import { timeout } from './utils/timeout';
 import fetch from 'jest-fetch-mock';
 import Automerge from 'automerge';
 import { Subscription } from 'rxjs';
 import assert from 'assert';
-import {
-  Editor,
-  createEditor,
-  Operation,
-  Node,
-  BaseElement,
-  BaseText,
-} from 'slate';
+import { Editor, createEditor, Operation, Node } from 'slate';
 import { PadEditor } from './pad-editor';
+import randomChar from './utils/random-char';
 
-let CHARS = [
-  'a',
-  'b',
-  'c',
-  'd',
-  'e',
-  'f',
-  'g',
-  'h',
-  'i',
-  'j',
-  'k',
-  'l',
-  'm',
-  'n',
-  'o',
-  'p',
-  'q',
-  'r',
-  's',
-  't',
-  'u',
-  'v',
-  'x',
-  'y',
-  'z',
-  ' ',
-];
-CHARS = CHARS.concat(CHARS.map((c) => c.toUpperCase()));
+waitForExpect.defaults.interval = 500;
 
 const REPLICA_COUNT = 3;
-const MAX_SMALL_TIMEOUT = 250;
+const MAX_SMALL_TIMEOUT = 500;
 const MAX_TINY_TIMEOUT = 50;
 const fetchPrefix = process.env.DECI_API_URL + '/api';
 
-const runTests = () => {
+describe('sync', () => {
   const replicas: DeciRuntime[] = [];
   let websocketServer: WebSocketServer;
-  const workspaceId = nanoid();
   const padId = nanoid();
   const padContents: PadEditor[] = [];
   const padSubscriptions: Subscription[] = [];
@@ -71,39 +37,24 @@ const runTests = () => {
 
   it('creates a pad on one of the replicas', async () => {
     const replica = replicas[0];
-    const workspace = {
-      id: workspaceId,
-      name: 'Test workspace',
-      permissions: [],
-    };
-    await replica.workspaces.create(workspace);
-
-    const newPad = {
-      id: padId,
-      name: 'Test pad 1',
-      workspaceId: workspaceId,
-      lastUpdatedAt: new Date(),
-      permissions: [],
-      tags: ['tag 1', 'tag 2'],
-    };
-    await replica.workspace(workspaceId).pads.create(newPad);
-
-    const content = replica.workspace(workspaceId).pads.edit(padId);
+    const content = replica.startPadEditor(padId, true);
     padContents.push(content);
 
     const editor = createEditor();
+    editor.number = 0;
     padEditors.push(editor);
     padSubscriptions.push(wireEditor(editor, content));
   });
 
   it('tries to load pad on other replicas to no avail', async () => {
     for (let i = 1; i < REPLICA_COUNT; i++) {
-      const content = replicas[i].workspace(workspaceId).pads.edit(padId);
+      const content = replicas[i].startPadEditor(padId, false);
       padContents.push(content);
 
       expect(content.isOnlyRemote()).toBe(true);
 
       const editor = createEditor();
+      editor.number = i;
       padEditors.push(editor);
       padSubscriptions.push(wireEditor(editor, content));
     }
@@ -118,10 +69,6 @@ const runTests = () => {
 
     await timeout(3000);
     expect(hasResponses).toBe(false);
-  });
-
-  it('waits a bit', async () => {
-    await timeout(3000);
   });
 
   it('starts api and websocket server', () => {
@@ -146,39 +93,45 @@ const runTests = () => {
 
   it('makes random changes to the editors', async () => {
     await randomChangesToEditors(padEditors, 100);
-  }, 60000);
+  }, 90000);
 
-  it('waits a bit', async () => await timeout(30000), 31000);
+  it('waits a bit', async () => await timeout(10000), 11000);
 
-  it('all converges', (done) => {
-    function checkConversion() {
-      for (const editor1 of padEditors) {
-        for (const editor2 of padEditors) {
-          if (editor1 === editor2) {
-            continue;
+  it('all converges', async () => {
+    await waitForExpect(
+      () => {
+        let editorIndex = -1;
+        for (const editor1 of padEditors) {
+          editorIndex += 1;
+
+          // test if contents are in sync with editor
+          expect(editor1.children).toMatchObject(
+            padContents[editorIndex].getValue()
+          );
+
+          // test if editors are in sync with each other
+          for (const editor2 of padEditors) {
+            if (editor1 === editor2) {
+              continue;
+            }
+            expect(editor1.children).toMatchObject(editor2.children);
           }
-          expect(editor1.children).toMatchObject(editor2.children);
         }
 
-        for (const content of padContents) {
-          expect(content.getValue()).toMatchObject(editor1.children);
+        // test if contents are in sync with each other
+        for (const content1 of padContents) {
+          for (const content2 of padContents) {
+            if (content1 === content2) {
+              continue;
+            }
+            expect(content1.getValue()).toMatchObject(content2.getValue());
+          }
         }
-      }
-    }
-
-    function scheduleConversionCheck() {
-      setTimeout(() => {
-        try {
-          checkConversion();
-          done();
-        } catch (err) {
-          scheduleConversionCheck();
-        }
-      }, 10000);
-    }
-
-    scheduleConversionCheck();
-  }, 120000);
+      },
+      120000,
+      10000
+    );
+  }, 130000);
 
   afterAll(() => {
     for (const sub of padSubscriptions) {
@@ -195,19 +148,13 @@ const runTests = () => {
   afterAll((done) => {
     websocketServer.stop(done);
   });
-};
-
-if (!process.env.DECI_SYNC_TESTS) {
-  describe.skip('sync', runTests);
-} else {
-  describe('sync', runTests);
-}
+});
 
 function apiServer(deciWebsocketServer: DeciWebsocketServer) {
   const store = new Map<string, string>();
   return async (req: Request) => {
     assert(req.url.startsWith(fetchPrefix));
-    await randomSmallTimeout();
+    await randomTinyTimeout();
 
     let resp;
     if (
@@ -229,24 +176,59 @@ function apiServer(deciWebsocketServer: DeciWebsocketServer) {
       resp = await get(req);
     }
 
-    await randomSmallTimeout();
+    await randomTinyTimeout();
 
     return resp;
   };
 
   async function changes(req: Request) {
-    const key = req.url.substring(
-      fetchPrefix.length,
-      req.url.length - '/changes'.length
-    );
-    if (store.has(key)) {
-      const before = Automerge.load(store.get(key)!);
-      const changes = await req.json();
-      const after = Automerge.applyChanges(before, changes);
-      await randomSmallTimeout();
+    try {
+      const key = req.url.substring(
+        fetchPrefix.length,
+        req.url.length - '/changes'.length
+      );
+      if (store.has(key)) {
+        const before = Automerge.load(store.get(key)!);
+        const changes = await req.json();
+        const after = Automerge.applyChanges(before, changes);
+        await randomTinyTimeout();
+        store.set(key, Automerge.save(after));
+
+        // websocket notify subscribers
+        if (changes.length > 0) {
+          deciWebsocketServer.notify(
+            key,
+            JSON.stringify({ o: 'c', t: key, c: changes })
+          );
+        }
+
+        return {
+          status: 201,
+        };
+      }
+
+      return {
+        status: 404,
+      };
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
+
+  async function put(req: Request) {
+    try {
+      const key = req.url.substring(fetchPrefix.length);
+      const remoteText = await req.text();
+      const before = Automerge.load(store.get(key) || remoteText);
+      const remote = Automerge.load(remoteText);
+      const after = Automerge.merge(before, remote);
+
+      await randomTinyTimeout();
       store.set(key, Automerge.save(after));
 
       // websocket notify subscribers
+      const changes = Automerge.getChanges(before, after);
       if (changes.length > 0) {
         deciWebsocketServer.notify(
           key,
@@ -257,49 +239,29 @@ function apiServer(deciWebsocketServer: DeciWebsocketServer) {
       return {
         status: 201,
       };
+    } catch (err) {
+      console.log(err);
+      throw err;
     }
-
-    return {
-      status: 404,
-    };
-  }
-
-  async function put(req: Request) {
-    const key = req.url.substring(fetchPrefix.length);
-    const remoteText = await req.text();
-    const before = Automerge.load(store.get(key) || remoteText);
-    const remote = Automerge.load(remoteText);
-    const after = Automerge.merge(before, remote);
-
-    await randomSmallTimeout();
-    store.set(key, Automerge.save(after));
-
-    // websocket notify subscribers
-    const changes = Automerge.getChanges(before, after);
-    if (changes.length > 0) {
-      deciWebsocketServer.notify(
-        key,
-        JSON.stringify({ o: 'c', t: key, c: changes })
-      );
-    }
-
-    return {
-      status: 201,
-    };
   }
 
   async function get(req: Request) {
-    const key = req.url.substring(fetchPrefix.length);
-    if (store.has(key)) {
-      return {
-        status: 200,
-        body: store.get(key),
-      };
-    }
+    try {
+      const key = req.url.substring(fetchPrefix.length);
+      if (store.has(key)) {
+        return {
+          status: 200,
+          body: store.get(key),
+        };
+      }
 
-    return {
-      status: 404,
-    };
+      return {
+        status: 404,
+      };
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
   }
 }
 
@@ -399,7 +361,7 @@ async function randomChangesToEditors(editors: Editor[], changeCount: number) {
 
 async function randomChangesToEditor(editor: Editor, changeCount: number) {
   for (let i = 0; i < changeCount; i++) {
-    await randomTinyTimeout();
+    await randomSmallTimeout();
     const ops = randomChangeToEditor(editor);
     Editor.withoutNormalizing(editor, () => {
       for (const op of ops) {
@@ -410,10 +372,12 @@ async function randomChangesToEditor(editor: Editor, changeCount: number) {
 }
 
 function randomChangeToEditor(editor: Editor): Operation[] {
-  const candidates = (editor.children[0] as BaseElement).children as Node[];
+  const candidates = (editor.children[0] as { children: Node[] })
+    .children as Node[];
   const candidateIndex = pickRandomIndex(candidates);
-  const candidate = candidates[candidateIndex] as BaseElement;
-  const text = ((candidate.children as Node[])[0] as BaseText).text as string;
+  const candidate = candidates[candidateIndex] as { children: Node[] };
+  const text = ((candidate.children as Node[])[0] as { text: string })
+    .text as string;
 
   if (text.length < 6) {
     return randomInsert(candidateIndex, text);
@@ -482,11 +446,6 @@ function randomSmallTimeout() {
 
 function randomTinyTimeout() {
   return timeout(Math.floor(Math.random() * MAX_TINY_TIMEOUT));
-}
-
-function randomChar(): string {
-  const charIndex = Math.floor(Math.random() * CHARS.length);
-  return CHARS[charIndex];
 }
 
 function pickRandom(arr: Array<any>): any {
