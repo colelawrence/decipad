@@ -16,10 +16,8 @@ export interface RuntimeProviderProps {
   children: JSX.Element;
 }
 
-export const DeciRuntimeConsumer = DeciRuntimeContext.Consumer;
-
 export const RuntimeProvider = ({ children }: RuntimeProviderProps) => {
-  const [session] = useSession();
+  const [session, sessionLoading] = useSession();
   const [value, setValue] = useState<RuntimeContextProps>({
     runtime: null,
     status: 'loading',

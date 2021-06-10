@@ -9,16 +9,16 @@ interface IUseRuntimeEditor {
   padId: string;
 }
 
-export const useRuntimeEditor = ({ workspaceId, padId }: IUseRuntimeEditor) => {
+export const useRuntimeEditor = ({ padId }: IUseRuntimeEditor) => {
   const { runtime } = useContext(RuntimeContext);
   const [padEditor, setPadEditor] = useState<PadEditor | null>(null);
 
   useEffect(() => {
     if (runtime) {
-      const padEditor = runtime.workspace(workspaceId).pads.edit(padId);
+      const padEditor = runtime.startPadEditor(padId, true);
       setPadEditor(padEditor);
     }
-  }, [runtime, workspaceId, padId]);
+  }, [runtime, padId]);
 
   const onChangeResult = useCallback(
     (editor: Editor) => {
