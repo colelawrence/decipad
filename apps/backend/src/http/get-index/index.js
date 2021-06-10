@@ -1,13 +1,4 @@
-// learn more about HTTP functions here: https://arc.codes/primitives/http
-exports.handler = async function http() {
-  return {
-    statusCode: 200,
-    headers: {
-      'cache-control':
-        'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0',
-      'content-type': 'text/html; charset=utf8',
-    },
-    body: `
+var a=Object.defineProperty;var l=c=>a(c,"__esModule",{value:!0}),o=(c,t)=>a(c,"name",{value:t,configurable:!0});var i=(c,t)=>{for(var e in t)a(c,e,{get:t[e],enumerable:!0})};l(exports);i(exports,{handler:()=>s});var s=o(async function(){return{statusCode:200,headers:{"cache-control":"no-cache, no-store, must-revalidate, max-age=0, s-maxage=0","content-type":"text/html; charset=utf8"},body:`
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -73,6 +64,5 @@ exports.handler = async function http() {
   </div>
 </body>
 </html>
-`,
-  };
-};
+`}},"http");0&&(module.exports={handler});
+//# sourceMappingURL=index.js.map

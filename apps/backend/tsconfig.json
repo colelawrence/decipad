@@ -1,8 +1,10 @@
 {
   "extends": "../../tsconfig.base.json",
+  "include": ["types/**/*.ts", "lib/**/*.ts"],
+  "references": [{ "path": "../../libs/kafka-lite" }],
   "compilerOptions": {
-    "jsx": "preserve"
+    "rootDir": "."
   },
-  "include": ["**/*.js", "**/*.ts"],
-  "references": [{ "path": "../../libs/kafka-lite" }]
+  "exclude": ["node_modules", "src/coverage"],
+  "allowJs": false
 }

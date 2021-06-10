@@ -1,13 +1,4 @@
-// learn more about HTTP functions here: https://arc.codes/primitives/http
-exports.handler = async function http(req) {
-  return {
-    statusCode: 200,
-    headers: {
-      'cache-control':
-        'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0',
-      'content-type': 'text/html; charset=utf8',
-    },
-    body: `
+var a=Object.defineProperty;var i=t=>a(t,"__esModule",{value:!0}),o=(t,e)=>a(t,"name",{value:e,configurable:!0});var n=(t,e)=>{for(var r in e)a(t,r,{get:e[r],enumerable:!0})};i(exports);n(exports,{handler:()=>m});var m=o(function(e){return{statusCode:200,headers:{"cache-control":"no-cache, no-store, must-revalidate, max-age=0, s-maxage=0","content-type":"text/html; charset=utf8"},body:`
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -47,11 +38,10 @@ exports.handler = async function http(req) {
 <body class="padding-32">
   <div class="margin-left-8">
     <h1>Error while authenticating:</h1>
-    <pre>${req.queryStringParameters.error}</pre>
+    <pre>${e.queryStringParameters.error}</pre>
     <p><a href="/">Go back</a></p>
   </div>
 </body>
 </html>
-`,
-  };
-};
+`}},"http");0&&(module.exports={handler});
+//# sourceMappingURL=index.js.map
