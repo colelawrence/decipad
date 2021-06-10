@@ -3,8 +3,11 @@
 import test from './utils/test-with-sandbox';
 import { withAuth, gql } from './utils/call-graphql';
 import auth from './utils/auth';
-import { timeout } from './utils/timeout';
 import createResourcePermission from '../lib/resource-permissions/create';
+import waitForExpect from 'wait-for-expect';
+
+waitForExpect.defaults.timeout = 10000;
+waitForExpect.defaults.interval = 500;
 
 test('share with role', () => {
   let workspace: Workspace;
@@ -102,56 +105,56 @@ test('share with role', () => {
     });
   });
 
-  it('waits a bit', async () => await timeout(1000));
-
   it('admin can list role in resource', async () => {
-    const client = withAuth(await auth());
-    const sharedWith = (
-      await client.query({
-        query: gql`
-          query {
-            resourceSharedWith(resource: "/testtype/testresourceid1") {
-              roles {
-                role {
-                  id
-                  name
-                  workspace {
+    await waitForExpect(async () => {
+      const client = withAuth(await auth());
+      const sharedWith = (
+        await client.query({
+          query: gql`
+            query {
+              resourceSharedWith(resource: "/testtype/testresourceid1") {
+                roles {
+                  role {
                     id
                     name
+                    workspace {
+                      id
+                      name
+                    }
+                    users {
+                      id
+                    }
                   }
-                  users {
-                    id
-                  }
+                  permissionType
+                  canComment
                 }
-                permissionType
-                canComment
               }
             }
-          }
-        `,
-      })
-    ).data.resourceSharedWith;
+          `,
+        })
+      ).data.resourceSharedWith;
 
-    expect(sharedWith).toMatchObject({
-      roles: [
-        {
-          role: {
-            id: role.id,
-            name: role.name,
-            workspace: {
-              id: workspace.id,
-              name: workspace.name,
-            },
-            users: [
-              {
-                id: 'test user id 2',
+      expect(sharedWith).toMatchObject({
+        roles: [
+          {
+            role: {
+              id: role.id,
+              name: role.name,
+              workspace: {
+                id: workspace.id,
+                name: workspace.name,
               },
-            ],
+              users: [
+                {
+                  id: 'test user id 2',
+                },
+              ],
+            },
           },
-        },
-      ],
+        ],
+      });
     });
-  });
+  }, 15000);
 
   it('target user has access to resource', async () => {
     const client = withAuth(await auth('test user id 2'));
@@ -229,41 +232,41 @@ test('share with role', () => {
     });
   });
 
-  it('waits a bit', async () => await timeout(1000));
-
   it('target user no longer has access to resource', async () => {
-    const client = withAuth(await auth('test user id 2'));
-    const resourcesPage = (
-      await client.query({
-        query: gql`
-          query {
-            resourcesSharedWithMe(
-              page: { maxItems: 10 }
-              resourceType: "testtype"
-            ) {
-              items {
-                ... on SharedResource {
-                  resource
-                  permission
-                  canComment
+    await waitForExpect(async () => {
+      const client = withAuth(await auth('test user id 2'));
+      const resourcesPage = (
+        await client.query({
+          query: gql`
+            query {
+              resourcesSharedWithMe(
+                page: { maxItems: 10 }
+                resourceType: "testtype"
+              ) {
+                items {
+                  ... on SharedResource {
+                    resource
+                    permission
+                    canComment
+                  }
                 }
+                count
+                hasNextPage
+                cursor
               }
-              count
-              hasNextPage
-              cursor
             }
-          }
-        `,
-      })
-    ).data.resourcesSharedWithMe;
+          `,
+        })
+      ).data.resourcesSharedWithMe;
 
-    expect(resourcesPage).toMatchObject({
-      items: [],
-      count: 0,
-      hasNextPage: false,
-      cursor: null,
+      expect(resourcesPage).toMatchObject({
+        items: [],
+        count: 0,
+        hasNextPage: false,
+        cursor: null,
+      });
     });
-  });
+  }, 15000);
 
   it('admin shares with role again', async () => {
     const client = withAuth(await auth());
@@ -299,41 +302,41 @@ test('share with role', () => {
     });
   });
 
-  it('waits a bit', async () => await timeout(1000));
-
   it('target user no longer has access to resource', async () => {
-    const client = withAuth(await auth('test user id 2'));
-    const resourcesPage = (
-      await client.query({
-        query: gql`
-          query {
-            resourcesSharedWithMe(
-              page: { maxItems: 10 }
-              resourceType: "testtype"
-            ) {
-              items {
-                ... on SharedResource {
-                  resource
-                  permission
-                  canComment
+    await waitForExpect(async () => {
+      const client = withAuth(await auth('test user id 2'));
+      const resourcesPage = (
+        await client.query({
+          query: gql`
+            query {
+              resourcesSharedWithMe(
+                page: { maxItems: 10 }
+                resourceType: "testtype"
+              ) {
+                items {
+                  ... on SharedResource {
+                    resource
+                    permission
+                    canComment
+                  }
                 }
+                count
+                hasNextPage
+                cursor
               }
-              count
-              hasNextPage
-              cursor
             }
-          }
-        `,
-      })
-    ).data.resourcesSharedWithMe;
+          `,
+        })
+      ).data.resourcesSharedWithMe;
 
-    expect(resourcesPage).toMatchObject({
-      items: [],
-      count: 0,
-      hasNextPage: false,
-      cursor: null,
+      expect(resourcesPage).toMatchObject({
+        items: [],
+        count: 0,
+        hasNextPage: false,
+        cursor: null,
+      });
     });
-  });
+  }, 15000);
 
   it('user gets back into role', async () => {
     // add user to role without invite etc.
@@ -348,45 +351,45 @@ test('share with role', () => {
     });
   });
 
-  it('waits a bit', async () => await timeout(1000));
-
   it('target user has access to resource again', async () => {
-    const client = withAuth(await auth('test user id 2'));
-    const resourcesPage = (
-      await client.query({
-        query: gql`
-          query {
-            resourcesSharedWithMe(
-              page: { maxItems: 10 }
-              resourceType: "testtype"
-            ) {
-              items {
-                ... on SharedResource {
-                  resource
-                  permission
-                  canComment
+    await waitForExpect(async () => {
+      const client = withAuth(await auth('test user id 2'));
+      const resourcesPage = (
+        await client.query({
+          query: gql`
+            query {
+              resourcesSharedWithMe(
+                page: { maxItems: 10 }
+                resourceType: "testtype"
+              ) {
+                items {
+                  ... on SharedResource {
+                    resource
+                    permission
+                    canComment
+                  }
                 }
+                count
+                hasNextPage
+                cursor
               }
-              count
-              hasNextPage
-              cursor
             }
-          }
-        `,
-      })
-    ).data.resourcesSharedWithMe;
+          `,
+        })
+      ).data.resourcesSharedWithMe;
 
-    expect(resourcesPage).toMatchObject({
-      items: [
-        {
-          resource: '/testtype/testresourceid1',
-          permission: 'READ',
-          canComment: true,
-        },
-      ],
-      count: 1,
-      hasNextPage: false,
-      cursor: null,
+      expect(resourcesPage).toMatchObject({
+        items: [
+          {
+            resource: '/testtype/testresourceid1',
+            permission: 'READ',
+            canComment: true,
+          },
+        ],
+        count: 1,
+        hasNextPage: false,
+        cursor: null,
+      });
     });
-  });
+  }, 15000);
 });

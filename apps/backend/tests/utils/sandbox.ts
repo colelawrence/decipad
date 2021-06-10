@@ -40,15 +40,23 @@ function start(): Promise<void> {
           resolve();
         }
       } else {
-        const statement = d.toString().trim();
-        if (
-          !statement.includes('Sandbox ws/connect') &&
-          !statement.includes('Sandbox ws/default') &&
-          !statement.includes('Sandbox ws/disconnect') &&
-          !statement.endsWith('completed') &&
-          !statement.endsWith('received event')
-        ) {
-          process.stdout.write('Sandbox: ' + d);
+        const dstr = d.toString();
+        let statement = dstr.trim();
+        if (statement) {
+          if (dstr.endsWith('\n')) {
+            statement += '\n';
+          }
+          if (
+            !statement.includes('Sandbox ws/connect') &&
+            !statement.includes('Sandbox ws/default') &&
+            !statement.includes('Sandbox ws/disconnect') &&
+            !statement.endsWith('completed\n') &&
+            !statement.endsWith('received event\n')
+          ) {
+            process.stdout.write(
+              `Sandbox: [${new Date().toISOString()}] ${statement}`
+            );
+          }
         }
       }
     });

@@ -8,18 +8,20 @@ import auth from './auth';
 import roles from './roles';
 import workspaces from './workspaces';
 import pads from './pads';
+import tags from './tags';
 import share from './share';
 import hello from './hello';
 
 type GraphqlModule = {
-  typedefs: any
-  resolvers: any
-}
+  typedefs: any;
+  resolvers?: any;
+};
 
 const modules: GraphqlModule[] = [
   base,
   date,
   glob,
+  tags,
   pagination,
   registration,
   users,
@@ -27,11 +29,11 @@ const modules: GraphqlModule[] = [
   roles,
   workspaces,
   pads,
-  share
+  share,
 ];
 
 if (process.env.NODE_ENV !== 'production') {
   modules.push(hello);
 }
 
-export default modules
+export default modules;

@@ -201,7 +201,12 @@ async function createClient(userId: string) {
   return withAuth({ token, link });
 }
 
-async function subscribe(userId: string, workspaceId: string, pads: Pad[], subscriptions: ObservableSubscription[]) {
+async function subscribe(
+  userId: string,
+  workspaceId: string,
+  pads: Pad[],
+  subscriptions: ObservableSubscription[]
+) {
   const client = await createClient(userId);
   const sub = client.subscribe({
     query: gql`
@@ -256,5 +261,5 @@ async function subscribe(userId: string, workspaceId: string, pads: Pad[], subsc
     })
   );
 
-  await timeout(10000);
+  await timeout(2000);
 }

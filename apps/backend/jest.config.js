@@ -4,7 +4,7 @@ module.exports = {
   preset: '../../jest.preset.js',
   testURL: 'http://localhost:3333',
   setupFiles: ['./jest.setup.js'],
-  coveragePathIgnorePatterns: ['node_modules'],
+  coveragePathIgnorePatterns: ['node_modules', 'src'],
   maxConcurrency: 1,
   maxWorkers: 1,
   testTimeout: 10000,

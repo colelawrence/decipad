@@ -8,11 +8,11 @@ export default {
   },
 
   Permission: {
-    async user(permission: PermissionRecord): Promise<User> {
+    async user(permission: PermissionRecord): Promise<User | undefined> {
       const data = await tables();
       return await data.users.get({ id: permission.user_id });
     },
-    async givenBy(permission: PermissionRecord): Promise<User> {
+    async givenBy(permission: PermissionRecord): Promise<User | undefined> {
       const data = await tables();
       return await data.users.get({ id: permission.given_by_user_id });
     },
