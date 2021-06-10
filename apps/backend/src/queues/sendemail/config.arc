@@ -1,3 +1,3 @@
 @aws
-timeout 120
+timeout 1200
 runtime nodejs14.x
