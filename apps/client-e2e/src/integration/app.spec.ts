@@ -2,6 +2,6 @@ describe('client', () => {
   beforeEach(() => cy.visit('/'));
 
   it('should display welcome message', () => {
-    cy.get('h1').contains('Hello World');
+    cy.get('h2').contains('MAKE BETTER DECISIONS');
   });
 });
