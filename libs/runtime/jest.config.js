@@ -1,15 +1,16 @@
 module.exports = {
   displayName: 'runtime',
+  testEnvironment: 'jsdom',
   preset: '../../jest.preset.js',
   setupFiles: ['./jest.setup.js'],
   collectCoverageFrom: ['src/**/*.ts'],
   maxWorkers: 1,
   coverageThreshold: {
     global: {
-      branches: 62,
+      branches: 69,
       functions: 77,
-      lines: 80,
-      statements: 80,
+      lines: 84,
+      statements: 83,
     },
   },
 };
