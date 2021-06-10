@@ -22,9 +22,9 @@ async function kafkalite(options = {}) {
   const connHandler = createConnHandler(log, conf, groupManager);
 
   const closeServer = server.close.bind(server);
-  server.close = () => {
+  server.close = (...args) => {
     log.close();
-    closeServer();
+    closeServer(...args);
   };
 
   server.on('connection', connHandler);
