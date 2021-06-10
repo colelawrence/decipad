@@ -7,16 +7,7 @@ const docId = 'docid';
 describe('pad editor', () => {
   test('sends changes', async () => {
     const deci = new DeciRuntime('TEST_USER_ID', 'TEST_ACTOR_ID');
-    await deci.workspace('workspaceid').pads.create({
-      id: docId,
-      name: 'test pad',
-      workspaceId: 'workspaceid',
-      lastUpdatedAt: new Date(),
-      tags: [],
-      permissions: [],
-    });
-    const model = deci.workspace('workspaceid').pads.edit(docId);
-
+    const model = deci.startPadEditor(docId, true);
     const editor = createEditor();
 
     editor.onChange = () => {
@@ -44,7 +35,7 @@ describe('pad editor', () => {
 
   test('loads document as was saved', async () => {
     const deci = new DeciRuntime('TEST_USER_ID', 'TEST_ACTOR_ID');
-    const model = deci.workspace('workspace id').pads.edit(docId);
+    const model = deci.startPadEditor(docId, true);
 
     const editor = createEditor();
 
@@ -78,7 +69,7 @@ describe('pad editor', () => {
 
   it('runs code', async () => {
     const deci = new DeciRuntime('TEST_USER_ID', 'TEST_ACTOR_ID');
-    const model = deci.workspace('workspaceid').pads.edit(docId);
+    const model = deci.startPadEditor(docId, true);
 
     const editor = createEditor();
 
@@ -139,15 +130,7 @@ describe('pad editor', () => {
 
   it('handles syntax errors appropriately', async () => {
     const deci = new DeciRuntime('TEST_USER_ID', 'TEST_ACTOR_ID');
-    await deci.workspace('workspace id').pads.create({
-      id: 'some other doc id',
-      name: 'test pad 2',
-      workspaceId: 'workspace id',
-      lastUpdatedAt: new Date(),
-      tags: [],
-      permissions: [],
-    });
-    const model = deci.workspace('workspace id').pads.edit('some other doc id');
+    const model = deci.startPadEditor('some other doc id', true);
 
     const editor = createEditor();
 
