@@ -12,7 +12,11 @@ import paginate from '../utils/paginate';
 
 const resolvers = {
   Query: {
-    async pads(_: any, { page, workspaceId }: { page: PageInput, workspaceId: ID }, context: GraphqlContext) {
+    async pads(
+      _: any,
+      { page, workspaceId }: { page: PageInput; workspaceId: ID },
+      context: GraphqlContext
+    ) {
       const user = requireUser(context);
       const data = await tables();
 
@@ -40,7 +44,11 @@ const resolvers = {
   },
 
   Mutation: {
-    async createPad(_: any, { workspaceId, pad }: {workspaceId: ID, pad: PadInput} , context: GraphqlContext): Promise<Pad> {
+    async createPad(
+      _: any,
+      { workspaceId, pad }: { workspaceId: ID; pad: PadInput },
+      context: GraphqlContext
+    ): Promise<Pad> {
       const workspaceResource = `/workspaces/${workspaceId}`;
       const user = await check(workspaceResource, context, 'WRITE');
 
@@ -66,7 +74,11 @@ const resolvers = {
       return newPad;
     },
 
-    async updatePad(_: any, { id, pad }: { id: ID, pad: PadInput}, context: GraphqlContext): Promise<Pad> {
+    async updatePad(
+      _: any,
+      { id, pad }: { id: ID; pad: PadInput },
+      context: GraphqlContext
+    ): Promise<Pad> {
       const resource = `/pads/${id}`;
       await check(resource, context, 'WRITE');
 
@@ -102,7 +114,17 @@ const resolvers = {
 
     async sharePadWithRole(
       _: any,
-      { padId, roleId, permissionType, canComment }: { padId: ID, roleId: ID, permissionType: PermissionType, canComment: boolean},
+      {
+        padId,
+        roleId,
+        permissionType,
+        canComment,
+      }: {
+        padId: ID;
+        roleId: ID;
+        permissionType: PermissionType;
+        canComment: boolean;
+      },
       context: GraphqlContext
     ) {
       const resource = `/pads/${padId}`;
@@ -124,7 +146,11 @@ const resolvers = {
       });
     },
 
-    async unsharePadWithRole(_: any, { padId, roleId }: { padId: ID, roleId: ID }, context: GraphqlContext) {
+    async unsharePadWithRole(
+      _: any,
+      { padId, roleId }: { padId: ID; roleId: ID },
+      context: GraphqlContext
+    ) {
       const resource = `/pads/${padId}`;
       await check(resource, context, 'ADMIN');
 
@@ -136,7 +162,17 @@ const resolvers = {
 
     async sharePadWithUser(
       _: any,
-      { padId, userId, permissionType, canComment }: { padId: ID, userId: ID, permissionType: PermissionType, canComment: boolean },
+      {
+        padId,
+        userId,
+        permissionType,
+        canComment,
+      }: {
+        padId: ID;
+        userId: ID;
+        permissionType: PermissionType;
+        canComment: boolean;
+      },
       context: GraphqlContext
     ) {
       const resource = `/pads/${padId}`;
@@ -158,7 +194,11 @@ const resolvers = {
       });
     },
 
-    async unsharePadWithUser(_: any, { padId, userId }: { padId: ID, userId: ID}, context: GraphqlContext) {
+    async unsharePadWithUser(
+      _: any,
+      { padId, userId }: { padId: ID; userId: ID },
+      context: GraphqlContext
+    ) {
       const resource = `/pads/${padId}`;
       await check(resource, context, 'ADMIN');
       const data = await tables();
@@ -169,7 +209,17 @@ const resolvers = {
 
     async sharePadWithEmail(
       _: any,
-      { padId, email, permissionType, canComment }: { padId: ID, email: string, permissionType: PermissionType, canComment: boolean},
+      {
+        padId,
+        email,
+        permissionType,
+        canComment,
+      }: {
+        padId: ID;
+        email: string;
+        permissionType: PermissionType;
+        canComment: boolean;
+      },
       context: GraphqlContext
     ) {
       const resource = `/pads/${padId}`;
@@ -246,7 +296,11 @@ const resolvers = {
 
   Subscription: {
     padsChanged: {
-      async subscribe(_: any, { workspaceId }: {workspaceId: ID}, context: GraphqlContext) {
+      async subscribe(
+        _: any,
+        { workspaceId }: { workspaceId: ID },
+        context: GraphqlContext
+      ) {
         const user = requireUser(context);
         assert(context.subscriptionId, 'no subscriptionId in context');
         assert(context.connectionId, 'no connectionId in context');
@@ -306,14 +360,14 @@ const resolvers = {
   },
 
   RoleAccess: {
-    async role({ role_id }: { role_id: ID}): Promise<RoleRecord | undefined> {
+    async role({ role_id }: { role_id: ID }): Promise<RoleRecord | undefined> {
       const data = await tables();
       return await data.workspaceroles.get({ id: role_id });
     },
   },
 
   UserAccess: {
-    async user({ user_id }: { user_id: ID}): Promise<User | undefined> {
+    async user({ user_id }: { user_id: ID }): Promise<User | undefined> {
       const data = await tables();
       return await data.users.get({ id: user_id });
     },

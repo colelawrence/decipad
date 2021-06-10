@@ -38,13 +38,15 @@ async function handleTagCreate(tag: TagRecord) {
     FilterExpression: 'user_id <> :user_id',
     ExpressionAttributeValues: {
       ':resource_uri': tag.resource_uri,
-      ':user_id': 'null'
+      ':user_id': 'null',
     },
   };
 
   for await (const perm of allPages(data.permissions, query)) {
     const newUserTaggedResource = {
-      id: `/workspaces/${workspaceId}/users/${perm.user_id}/tags/${encodeURIComponent(tag.tag)}${perm.resource_uri}`,
+      id: `/workspaces/${workspaceId}/users/${
+        perm.user_id
+      }/tags/${encodeURIComponent(tag.tag)}${perm.resource_uri}`,
       user_id: perm.user_id,
       tag: tag.tag,
       workspace_id: workspaceId,
@@ -66,11 +68,14 @@ async function handleTagDelete({ id }: TableRecordIdentifier) {
       ':resource_uri': resource,
       ':tag': tagId.tag,
     },
-  }
+  };
 
   const data = await tables();
 
-  for await (const userTaggedResource of allPages(data.usertaggedresources, query)) {
+  for await (const userTaggedResource of allPages(
+    data.usertaggedresources,
+    query
+  )) {
     await data.usertaggedresources.delete({ id: userTaggedResource.id });
   }
 }

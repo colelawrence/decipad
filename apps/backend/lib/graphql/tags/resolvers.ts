@@ -8,7 +8,11 @@ import { subscribe } from '../../pubsub';
 
 const resolvers = {
   Query: {
-    async tags(_: any, { workspaceId }: { workspaceId: ID }, context: GraphqlContext) {
+    async tags(
+      _: any,
+      { workspaceId }: { workspaceId: ID },
+      context: GraphqlContext
+    ) {
       const user = await requireUser(context);
 
       const data = await tables();
@@ -29,13 +33,20 @@ const resolvers = {
       return tags.sort();
     },
 
-    async padsByTag(_: any, { workspaceId, tag, page }: { workspaceId: ID, tag: string, page: PageInput }, context: GraphqlContext) {
+    async padsByTag(
+      _: any,
+      {
+        workspaceId,
+        tag,
+        page,
+      }: { workspaceId: ID; tag: string; page: PageInput },
+      context: GraphqlContext
+    ) {
       const user = await requireUser(context);
 
       const query = {
         IndexName: 'byUserAndTag',
-        KeyConditionExpression:
-          'user_id = :user_id and tag = :tag',
+        KeyConditionExpression: 'user_id = :user_id and tag = :tag',
         FilterExpression: 'workspace_id = :workspace_id',
         ExpressionAttributeValues: {
           ':user_id': user.id,
@@ -56,11 +67,15 @@ const resolvers = {
           return data.pads.get({ id: resource.id });
         }
       );
-    }
+    },
   },
 
   Mutation: {
-    async addTagToPad(_: any, { padId, tag }: { padId: ID, tag: string}, context: GraphqlContext) {
+    async addTagToPad(
+      _: any,
+      { padId, tag }: { padId: ID; tag: string },
+      context: GraphqlContext
+    ) {
       const resource = `/pads/${padId}`;
       await check(resource, context, 'WRITE');
 
@@ -73,19 +88,27 @@ const resolvers = {
       await data.tags.put(newTag);
     },
 
-    async removeTagFromPad(_: any, { padId, tag }: { padId: ID, tag: string}, context: GraphqlContext) {
+    async removeTagFromPad(
+      _: any,
+      { padId, tag }: { padId: ID; tag: string },
+      context: GraphqlContext
+    ) {
       const resource = `/pads/${padId}`;
       await check(resource, context, 'WRITE');
 
       const data = await tables();
       const tagId = `${resource}/tags/${encodeURIComponent(tag)}`;
       await data.tags.delete({ id: tagId });
-    }
+    },
   },
 
   Subscription: {
     tagsChanged: {
-      async subscribe(_: any, { workspaceId }: {workspaceId: ID}, context: GraphqlContext) {
+      async subscribe(
+        _: any,
+        { workspaceId }: { workspaceId: ID },
+        context: GraphqlContext
+      ) {
         const user = requireUser(context);
         assert(context.subscriptionId, 'no subscriptionId in context');
         assert(context.connectionId, 'no connectionId in context');
@@ -107,13 +130,12 @@ const resolvers = {
 
       const query = {
         IndexName: 'byResource',
-        KeyConditionExpression:
-          'resource_uri = :resource_uri',
+        KeyConditionExpression: 'resource_uri = :resource_uri',
         ExpressionAttributeValues: {
           ':resource_uri': resource,
         },
       };
-      const tags = []
+      const tags = [];
       for await (const tag of allPages(data.tags, query)) {
         tags.push(tag.tag);
       }

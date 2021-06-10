@@ -1,0 +1,50 @@
+import { Meta, Story, Canvas, Props } from '@storybook/addon-docs/blocks';
+import { CodeBlock } from './CodeBlock.component';
+
+<Meta
+  title="Editor/Blocks/CodeBlock"
+  parameters={{
+    docs: {
+      source: {
+        code: `<CodeBlock
+  element={{
+    children: [{ text: "a = 10 apples b = 10 apples a + b" }],
+  }}
+  attributes={{ 'data-slate-node': 'element', ref: null }}
+>
+  a = 10 apples b = 10 apples a + b
+</CodeBlock>`,
+      },
+    },
+  }}
+  argTypes={{
+    children: {
+      defaultValue: `a = 10 apples
+b = 10 apples
+a + b`,
+      description: 'The content of the code block',
+      type: 'string',
+    },
+  }}
+  component={CodeBlock}
+/>
+
+# CodeBlock
+
+The CodeBlock component is one of the most important components for our editor, this is where the user will do all of their calculations and decisions. The CodeBlock component gets automatic syntax highlighting once it is plugged into slate. The component itself is a slate specific component where it requires a result to be either undefined or a string to output the calculation's result.
+
+export const Template = (args) => (
+  <CodeBlock element={{ result: '20 apples' }} {...args} />
+);
+
+export const NoResult = (args) => (
+  <CodeBlock element={{ children: [] }} {...args} />
+);
+
+<Canvas>
+  <Story name="With result">{Template.bind({})}</Story>
+  <Story name="Without result">{NoResult.bind({})}</Story>
+</Canvas>
+
+<Props story="With result" />
+<Props story="Without result" />

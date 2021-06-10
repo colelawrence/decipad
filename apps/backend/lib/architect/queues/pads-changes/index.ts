@@ -15,14 +15,13 @@ async function padsChangesHandler(event: TableRecordChanges<Pad>) {
   }
 }
 
-async function handlePadDelete({ id } : TableRecordIdentifier) {
+async function handlePadDelete({ id }: TableRecordIdentifier) {
   const resource = `/pads/${id}`;
   const data = await tables();
 
   const query = {
     IndexName: 'byResource',
-    KeyConditionExpression:
-      'resource_uri = :resource_uri',
+    KeyConditionExpression: 'resource_uri = :resource_uri',
     ExpressionAttributeValues: {
       ':resource_uri': resource,
     },

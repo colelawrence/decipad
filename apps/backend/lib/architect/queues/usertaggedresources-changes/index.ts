@@ -23,7 +23,9 @@ async function handleUserTaggedResourceCreate(
 ) {
   const data = await tables();
 
-  const userTagId = `/workspaces/${userTaggedResource.workspace_id}/users/${userTaggedResource.user_id}/tags/${encodeURIComponent(userTaggedResource.tag)}`;
+  const userTagId = `/workspaces/${userTaggedResource.workspace_id}/users/${
+    userTaggedResource.user_id
+  }/tags/${encodeURIComponent(userTaggedResource.tag)}`;
 
   const userTag = await data.usertags.get({ id: userTagId });
   if (!userTag) {
@@ -41,10 +43,12 @@ async function handleUserTaggedResourceCreate(
     };
 
     await notifyOne(user, 'tagsChanged', {
-      added: [{
-        tag: newUserTag.tag,
-        workspaceId: newUserTag.workspace_id,
-      }],
+      added: [
+        {
+          tag: newUserTag.tag,
+          workspaceId: newUserTag.workspace_id,
+        },
+      ],
     });
   }
 }
@@ -69,19 +73,22 @@ async function handleUserTaggedResourceDelete({ id }: TableRecordIdentifier) {
     ).Count > 0;
 
   if (!hasMore) {
-    const userTagId = `/workspaces/${userTag.workspace_id}/users/${userTag.user_id}/tags/${encodeURIComponent(userTag.tag)}`;
+    const userTagId = `/workspaces/${userTag.workspace_id}/users/${
+      userTag.user_id
+    }/tags/${encodeURIComponent(userTag.tag)}`;
     await data.usertags.delete({ id: userTagId });
     const user = {
       id: userTag.user_id,
     };
 
     await notifyOne(user, 'tagsChanged', {
-      removed: [{
-        tag: userTag.tag,
-        workspaceId: userTag.workspace_id,
-      }],
+      removed: [
+        {
+          tag: userTag.tag,
+          workspaceId: userTag.workspace_id,
+        },
+      ],
     });
-
   }
 }
 

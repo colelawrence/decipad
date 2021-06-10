@@ -250,7 +250,9 @@ async function handlePutPadsWithUser(
 
   for await (const tag of allPages(data.tags, query)) {
     const newUserTaggedResource = {
-      id: `/workspaces/${pad.workspace_id}/users/${perm.user_id}/tags/${encodeURIComponent(tag.tag)}${perm.resource_uri}`,
+      id: `/workspaces/${pad.workspace_id}/users/${
+        perm.user_id
+      }/tags/${encodeURIComponent(tag.tag)}${perm.resource_uri}`,
       user_id: perm.user_id,
       tag: tag.tag,
       workspace_id: pad.workspace_id,
@@ -310,7 +312,9 @@ async function handlePutWithUserAndPadResource(perm: PermissionRecord) {
 
   for await (const tag of allPages(data.tags, query)) {
     const newUserTaggedResource = {
-      id: `/workspaces/${pad.workspace_id}/users/${perm.user_id}/tags/${encodeURIComponent(tag.tag)}${perm.resource_uri}`,
+      id: `/workspaces/${pad.workspace_id}/users/${
+        perm.user_id
+      }/tags/${encodeURIComponent(tag.tag)}${perm.resource_uri}`,
       user_id: perm.user_id,
       tag: tag.tag,
       workspace_id: pad.workspace_id,

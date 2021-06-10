@@ -4,7 +4,6 @@ import {
   createEditor,
   Operation as SlateOperation,
   Element,
-  BaseText,
 } from 'slate';
 import { LoremIpsum } from 'lorem-ipsum';
 import { nanoid } from 'nanoid';
@@ -32,15 +31,7 @@ describe('slate to replica sync', () => {
 
   beforeAll(async () => {
     deci1 = new DeciRuntime('TEST_USER_ID', 'TEST_ACTOR_ID_1');
-    await deci1.workspace('workspaceid').pads.create({
-      id: docId,
-      name: 'test pad',
-      workspaceId: 'workspaceid',
-      lastUpdatedAt: new Date(),
-      tags: [],
-      permissions: [],
-    });
-    model1 = deci1.workspace('workspaceid').pads.edit(docId);
+    model1 = deci1.startPadEditor(docId, true);
 
     editor1 = createEditor();
 
@@ -56,7 +47,7 @@ describe('slate to replica sync', () => {
 
   beforeAll(async () => {
     deci2 = new DeciRuntime('TEST_USER_ID', 'TEST_ACTOR_ID_2');
-    model2 = deci2.workspace('workspaceid').pads.edit(docId);
+    model2 = deci2.startPadEditor(docId, true);
 
     editor2 = createEditor();
 
@@ -433,7 +424,7 @@ function randomEdit(editor: Editor): SlateOperation {
   }
   const pickedIndex = Math.floor(Math.random() * candidates.length);
   const candidate = candidates[pickedIndex] as Element;
-  const text = (candidate.children[0] as BaseText).text as string;
+  const text = (candidate.children[0] as { text: string }).text as string;
   const willRemove = !!text && Math.random() > 0.7;
   const pickedCharIndex = Math.floor(Math.random() * text.length);
 
@@ -477,7 +468,8 @@ function mergeTwoFirstLines(editor: Editor): SlateOperation[] {
     type: 'remove_text',
     text: '',
     offset: (
-      ((candidates[0] as Element).children[0] as BaseText).text as string
+      ((candidates[0] as Element).children[0] as { text: string })
+        .text as string
     ).length,
     path: [0, 0, 0],
   } as SlateOperation);
@@ -571,7 +563,7 @@ function splitRandomText(editor: Editor): SlateOperation[] {
     targetIndex = Math.floor(Math.random() * candidates.length);
   } while (
     (
-      ((candidates[targetIndex] as Element).children[0] as BaseText)
+      ((candidates[targetIndex] as Element).children[0] as { text: string })
         .text as string
     ).length < 2
   );
@@ -579,7 +571,7 @@ function splitRandomText(editor: Editor): SlateOperation[] {
   const candidate = candidates[targetIndex] as Element;
 
   const splitAt = Math.round(
-    ((candidate.children[0] as BaseText).text as string).length / 2
+    ((candidate.children[0] as { text: string }).text as string).length / 2
   );
 
   ops.push({

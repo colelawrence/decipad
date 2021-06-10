@@ -1,6 +1,6 @@
-import { Observable, Subscription } from 'rxjs';
 import { Doc } from 'automerge';
 import EventEmitter from 'events';
+import { Observable, Subscription } from 'rxjs';
 import { SyncSubscriptionManager } from './sync-subscription-manager';
 
 const MAX_RECONNECT_MS = Number(process.env.DECI_MAX_RECONNECT_MS) || 10000;
@@ -134,13 +134,14 @@ export class Sync<T> extends EventEmitter {
       process.env.NEXT_PUBLIC_DECI_WS_URL || 'ws://localhost:3333/ws',
       token
     );
+    this.connection.onerror = this.onWebsocketError;
     this.connection.onopen = this.onWebsocketOpen;
     this.connection.onmessage = this.onWebsocketMessage;
     this.connection.onclose = this.onWebsocketClose;
     this.emit('websocket', this.connection);
   }
 
-  private onWebsocketOpen(event) {
+  private onWebsocketOpen(event: Event) {
     this.emit('websocket open', event);
     if (this.topics.size === 0 && this.connection !== null) {
       this.connection.close();
@@ -157,7 +158,7 @@ export class Sync<T> extends EventEmitter {
 
     if (type !== null) {
       // external message
-      return this.emit('websocket message', event);
+      this.emit('websocket message', event);
     }
 
     let opString: RemoteOp['op'];
@@ -181,13 +182,13 @@ export class Sync<T> extends EventEmitter {
     this.subscriptionManager.notifyRemoteOp({ op: opString, topic, changes });
   }
 
-  private onWebsocketClose(event) {
+  private onWebsocketClose(event: Event) {
     this.emit('websocket close', event);
     this.connection = null;
     this.timeout = setTimeout(() => this.connect(), randomReconnectTimeout());
   }
 
-  private onWebsocketError(event) {
+  private onWebsocketError(event: Event) {
     this.emit('websocket error', event);
   }
 }

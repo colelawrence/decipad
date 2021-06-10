@@ -6,20 +6,20 @@ import tables from '../tables';
 // Next-Auth does not expose some types
 // So we have to help here.
 type AdapterOptions = {
-  secret: string,
-  baseUrl: string,
+  secret: string;
+  baseUrl: string;
 };
 
 type SendVerificationRequest = (params: {
-  identifier: string
-  url: string
-  baseUrl: string
-  token: string
-  provider: EmailConfig
+  identifier: string;
+  url: string;
+  baseUrl: string;
+  token: string;
+  provider: EmailConfig;
 }) => Promise<void>;
 
 type EmailConfig = {
-  sendVerificationRequest: SendVerificationRequest
+  sendVerificationRequest: SendVerificationRequest;
 };
 
 export default function createAdapter() {
@@ -46,7 +46,10 @@ export default function createAdapter() {
       return user;
     }
 
-    async function getUserByProviderAccountId(providerId: string, providerAccountId: string): Promise<User | undefined> {
+    async function getUserByProviderAccountId(
+      providerId: string,
+      providerAccountId: string
+    ): Promise<User | undefined> {
       const userkey = await data.userkeys.get({
         id: `${providerId}:${providerAccountId}`,
       });
@@ -103,7 +106,11 @@ export default function createAdapter() {
       return null;
     }
 
-    async function unlinkAccount(userId: string, providerId: string, providerAccountId: string) {
+    async function unlinkAccount(
+      userId: string,
+      providerId: string,
+      providerAccountId: string
+    ) {
       console.log('unlinkAccount', { userId, providerId, providerAccountId });
       return null;
     }
@@ -168,7 +175,11 @@ export default function createAdapter() {
       });
     }
 
-    async function getVerificationRequest(identifier: string, token: string, secret: string): Promise<VerificationRequest> {
+    async function getVerificationRequest(
+      identifier: string,
+      token: string,
+      secret: string
+    ): Promise<VerificationRequest> {
       const hashedToken = hashToken(token);
       const id = hashToken(`${identifier}:${hashedToken}:${secret}`);
       const verificationRequest = await data.verificationrequests.get({ id });
@@ -176,7 +187,11 @@ export default function createAdapter() {
       return verificationRequest;
     }
 
-    async function deleteVerificationRequest(identifier: string, token: string, secret: string) {
+    async function deleteVerificationRequest(
+      identifier: string,
+      token: string,
+      secret: string
+    ) {
       const hashedToken = hashToken(token);
       const id = hashToken(`${identifier}:${hashedToken}:${secret}`);
       await data.verificationrequests.delete({ id });

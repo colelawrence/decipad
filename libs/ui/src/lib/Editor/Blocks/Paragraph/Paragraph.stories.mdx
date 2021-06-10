@@ -1,0 +1,40 @@
+import { Meta, Story, Canvas, Props } from '@storybook/addon-docs/blocks';
+import { Paragraph } from './Paragraph.component';
+
+<Meta
+  title="Editor/Blocks/Paragraph"
+  parameters={{
+    docs: {
+      source: {
+        code: `<Paragraph
+  element={{
+    children: [{ text: 'Hello World' }],
+  }}
+  attributes={{ 'data-slate-node': 'element', ref: null }}
+>
+  Hello World
+</Paragraph>`,
+      },
+    },
+  }}
+  argTypes={{
+    children: {
+      defaultValue: 'Hello World',
+      description: 'The text content of the component',
+      type: 'string',
+    },
+  }}
+  component={Paragraph}
+/>
+
+# Paragraph
+
+The Paragraph component is the most basic slate component that we have in the editor, it is just a normal `p` tag basically and it is the block that is used for normal text.
+
+export const Template = (args) => <Paragraph {...args} />;
+
+<Canvas>
+  <Story name="Paragraph">{Template.bind({})}</Story>
+</Canvas>
+
+<Props story="Paragraph" />

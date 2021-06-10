@@ -205,7 +205,11 @@ async function createClient(userId: string) {
   return withAuth({ token, link });
 }
 
-async function subscribe(userId: string, workspaces: Workspace[], subscriptions: ObservableSubscription[]) {
+async function subscribe(
+  userId: string,
+  workspaces: Workspace[],
+  subscriptions: ObservableSubscription[]
+) {
   const client = await createClient(userId);
   const sub = client.subscribe({
     query: gql`
@@ -243,7 +247,9 @@ async function subscribe(userId: string, workspaces: Workspace[], subscriptions:
 
         if (changes.updated) {
           for (const w of changes.updated) {
-            const index = workspaces.findIndex((w2: Workspace) => w2.id === w.id);
+            const index = workspaces.findIndex(
+              (w2: Workspace) => w2.id === w.id
+            );
             expect(index).toBeGreaterThan(-1);
             workspaces[index] = Object.assign(workspaces[index], w);
           }

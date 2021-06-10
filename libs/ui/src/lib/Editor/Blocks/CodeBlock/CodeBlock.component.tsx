@@ -1,15 +1,24 @@
-import { Code, useColorModeValue } from '@chakra-ui/react';
+import { Box, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
 import { RenderElementProps } from 'slate-react';
+import { CodeBlockStyles, ResultStyles } from './CodeBlock.styles';
 
 export const CodeBlock = ({
   attributes,
   children,
+  element,
 }: RenderElementProps): JSX.Element => {
   const bg = useColorModeValue('gray.100', 'gray.700');
   return (
-    <Code w="100%" p="5" mb="3" mt="5" {...attributes} bg={bg} borderRadius="0">
-      {children}
-    </Code>
+    <Box>
+      {element.result && (
+        <ResultStyles contentEditable={false}>
+          {element.result as string}
+        </ResultStyles>
+      )}
+      <CodeBlockStyles bg={bg} {...attributes}>
+        {children}
+      </CodeBlockStyles>
+    </Box>
   );
 };

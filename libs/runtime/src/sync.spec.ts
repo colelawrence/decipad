@@ -7,45 +7,11 @@ import fetch from 'jest-fetch-mock';
 import Automerge from 'automerge';
 import { Subscription } from 'rxjs';
 import assert from 'assert';
-import {
-  Editor,
-  createEditor,
-  Operation,
-  Node,
-  BaseElement,
-  BaseText,
-} from 'slate';
+import { Editor, createEditor, Operation, Node } from 'slate';
 import { PadEditor } from './pad-editor';
+import randomChar from './utils/random-char';
 
-let CHARS = [
-  'a',
-  'b',
-  'c',
-  'd',
-  'e',
-  'f',
-  'g',
-  'h',
-  'i',
-  'j',
-  'k',
-  'l',
-  'm',
-  'n',
-  'o',
-  'p',
-  'q',
-  'r',
-  's',
-  't',
-  'u',
-  'v',
-  'x',
-  'y',
-  'z',
-  ' ',
-];
-CHARS = CHARS.concat(CHARS.map((c) => c.toUpperCase()));
+waitForExpect.defaults.interval = 500;
 
 const REPLICA_COUNT = 3;
 const MAX_SMALL_TIMEOUT = 500;
@@ -55,7 +21,6 @@ const fetchPrefix = process.env.DECI_API_URL + '/api';
 describe('sync', () => {
   const replicas: DeciRuntime[] = [];
   let websocketServer: WebSocketServer;
-  const workspaceId = nanoid();
   const padId = nanoid();
   const padContents: PadEditor[] = [];
   const padSubscriptions: Subscription[] = [];
@@ -72,24 +37,7 @@ describe('sync', () => {
 
   it('creates a pad on one of the replicas', async () => {
     const replica = replicas[0];
-    const workspace = {
-      id: workspaceId,
-      name: 'Test workspace',
-      permissions: [],
-    };
-    await replica.workspaces.create(workspace);
-
-    const newPad = {
-      id: padId,
-      name: 'Test pad 1',
-      workspaceId: workspaceId,
-      lastUpdatedAt: new Date(),
-      permissions: [],
-      tags: ['tag 1', 'tag 2'],
-    };
-    await replica.workspace(workspaceId).pads.create(newPad);
-
-    const content = replica.workspace(workspaceId).pads.edit(padId);
+    const content = replica.startPadEditor(padId, true);
     padContents.push(content);
 
     const editor = createEditor();
@@ -100,7 +48,7 @@ describe('sync', () => {
 
   it('tries to load pad on other replicas to no avail', async () => {
     for (let i = 1; i < REPLICA_COUNT; i++) {
-      const content = replicas[i].workspace(workspaceId).pads.edit(padId);
+      const content = replicas[i].startPadEditor(padId, false);
       padContents.push(content);
 
       expect(content.isOnlyRemote()).toBe(true);
@@ -424,10 +372,12 @@ async function randomChangesToEditor(editor: Editor, changeCount: number) {
 }
 
 function randomChangeToEditor(editor: Editor): Operation[] {
-  const candidates = (editor.children[0] as BaseElement).children as Node[];
+  const candidates = (editor.children[0] as { children: Node[] })
+    .children as Node[];
   const candidateIndex = pickRandomIndex(candidates);
-  const candidate = candidates[candidateIndex] as BaseElement;
-  const text = ((candidate.children as Node[])[0] as BaseText).text as string;
+  const candidate = candidates[candidateIndex] as { children: Node[] };
+  const text = ((candidate.children as Node[])[0] as { text: string })
+    .text as string;
 
   if (text.length < 6) {
     return randomInsert(candidateIndex, text);
@@ -496,11 +446,6 @@ function randomSmallTimeout() {
 
 function randomTinyTimeout() {
   return timeout(Math.floor(Math.random() * MAX_TINY_TIMEOUT));
-}
-
-function randomChar(): string {
-  const charIndex = Math.floor(Math.random() * CHARS.length);
-  return CHARS[charIndex];
 }
 
 function pickRandom(arr: Array<any>): any {
