@@ -1,4 +1,4 @@
-var a=Object.defineProperty;var i=t=>a(t,"__esModule",{value:!0}),o=(t,e)=>a(t,"name",{value:e,configurable:!0});var n=(t,e)=>{i(t);for(var r in e)a(t,r,{get:e[r],enumerable:!0})};n(exports,{handler:()=>m});var m=o(function(e){return{statusCode:200,headers:{"cache-control":"no-cache, no-store, must-revalidate, max-age=0, s-maxage=0","content-type":"text/html; charset=utf8"},body:`
+var r=Object.defineProperty;var n=t=>r(t,"__esModule",{value:!0}),o=(t,e)=>r(t,"name",{value:e,configurable:!0});var i=(t,e)=>{n(t);for(var a in e)r(t,a,{get:e[a],enumerable:!0})};i(exports,{handler:()=>m});var m=o(function(e){return{statusCode:200,headers:{"cache-control":"no-cache, no-store, must-revalidate, max-age=0, s-maxage=0","content-type":"text/html; charset=utf8"},body:`
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,7 +38,7 @@ var a=Object.defineProperty;var i=t=>a(t,"__esModule",{value:!0}),o=(t,e)=>a(t,"
 <body class="padding-32">
   <div class="margin-left-8">
     <h1>Error while authenticating:</h1>
-    <pre>${e.queryStringParameters.error}</pre>
+    <pre>${e.queryStringParameters&&e.queryStringParameters.error||"Unknown Error"}</pre>
     <p><a href="/">Go back</a></p>
   </div>
 </body>

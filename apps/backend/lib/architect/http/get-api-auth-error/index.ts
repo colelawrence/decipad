@@ -48,7 +48,10 @@ export const handler = function http(req: HttpRequest): HttpResponse {
 <body class="padding-32">
   <div class="margin-left-8">
     <h1>Error while authenticating:</h1>
-    <pre>${req.queryStringParameters.error}</pre>
+    <pre>${
+      (req.queryStringParameters && req.queryStringParameters.error) ||
+      'Unknown Error'
+    }</pre>
     <p><a href="/">Go back</a></p>
   </div>
 </body>
