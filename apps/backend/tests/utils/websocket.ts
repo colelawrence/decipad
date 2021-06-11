@@ -17,7 +17,6 @@ function createWebsocket(token: string): typeof WebSocket {
     private client: WebSocket;
 
     private idx = ++websocketIndex;
-    private closing = false;
 
     constructor(url: string, protocols: string[] | string | undefined = []) {
       super();
@@ -33,7 +32,6 @@ function createWebsocket(token: string): typeof WebSocket {
     }
 
     close(code: number | undefined, reason: string | undefined) {
-      this.closing = true;
       return this.client.close(code, reason);
     }
 
@@ -43,9 +41,6 @@ function createWebsocket(token: string): typeof WebSocket {
 
     set onclose(callback: (ev: CloseEvent) => any) {
       this.client.onclose = (event: CloseEvent) => {
-        if (!this.closing) {
-          throw new Error('Websocket should not have closed');
-        }
         console.log('websocket %d: closed', this.idx);
         this.emit('close');
         return callback(event);
