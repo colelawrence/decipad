@@ -60,7 +60,7 @@ export class Computer {
     const location = [blockOffset, statementOffset] as [number, number];
 
     const type = inferTargetStatement(program, location);
-    const value = await run(program, [location]);
+    const value = type.errorCause ? null : await run(program, [location]);
 
     return {
       errors: this.computationErrors,

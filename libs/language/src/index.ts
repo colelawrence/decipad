@@ -4,3 +4,4 @@ import 'regenerator-runtime/runtime.js';
 export { parse } from './parser';
 export { inferTargetStatement } from './infer';
 export { run } from './interpreter';
+export { Type } from './type';

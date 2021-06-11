@@ -100,8 +100,8 @@ describe('pad editor', () => {
 
     const result = await model.resultAt('code block 1', 3);
     expect(result.errors).toHaveLength(0);
-    expect(result.type.type).toEqual('number');
-    expect(result.type.unit).toMatchObject([
+    expect(result.type?.type).toEqual('number');
+    expect(result.type?.unit).toMatchObject([
       {
         exp: 1,
         multiplier: 1,
@@ -113,8 +113,8 @@ describe('pad editor', () => {
 
     const result2 = await model.resultAt('code block 1', 2);
     expect(result.errors).toHaveLength(0);
-    expect(result2.type.type).toEqual('number');
-    expect(result2.type.unit).toMatchObject([
+    expect(result2.type?.type).toEqual('number');
+    expect(result2.type?.unit).toMatchObject([
       {
         exp: 1,
         multiplier: 1,
