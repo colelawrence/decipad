@@ -193,73 +193,73 @@ test('pad changes', () => {
     // admin user still has workspace
     expect(pads).toHaveLength(1);
   }, 15000);
+
+  async function createClient(userId: string) {
+    const { token } = await auth(userId);
+    const link = createWebsocketLink(createDeciWebsocket(token), 120000);
+    return withAuth({ token, link });
+  }
+
+  async function subscribe(
+    userId: string,
+    workspaceId: string,
+    pads: Pad[],
+    subscriptions: ObservableSubscription[]
+  ) {
+    const client = await createClient(userId);
+    const sub = client.subscribe({
+      query: gql`
+        subscription {
+          padsChanged(workspaceId: "${workspaceId}") {
+            added {
+              id
+              name
+            }
+            updated {
+              id
+              name
+            }
+            removed
+          }
+        }
+      `,
+    });
+
+    subscriptions.push(
+      await sub.subscribe({
+        error(err) {
+          throw err;
+        },
+        complete() {
+          console.error('COMPLETE!');
+        },
+        next({ data }) {
+          const changes = data.padsChanged;
+          if (changes.added) {
+            for (const w of changes.added) {
+              pads.push(w);
+            }
+          }
+
+          if (changes.updated) {
+            for (const p of changes.updated) {
+              const index = pads.findIndex((p2) => p2.id === p.id);
+              expect(index).toBeGreaterThan(-1);
+              pads[index] = Object.assign(pads[index], p);
+            }
+          }
+
+          if (changes.removed) {
+            for (const id of changes.removed) {
+              const index = pads.findIndex((p) => id === p.id);
+              expect(index).toBeGreaterThan(-1);
+              pads.splice(index, 1);
+            }
+          }
+        },
+      })
+    );
+
+    await timeout(2000);
+  }
 });
-
-async function createClient(userId: string) {
-  const { token } = await auth(userId);
-  const link = createWebsocketLink(createDeciWebsocket(token), 120000);
-  return withAuth({ token, link });
-}
-
-async function subscribe(
-  userId: string,
-  workspaceId: string,
-  pads: Pad[],
-  subscriptions: ObservableSubscription[]
-) {
-  const client = await createClient(userId);
-  const sub = client.subscribe({
-    query: gql`
-      subscription {
-        padsChanged(workspaceId: "${workspaceId}") {
-          added {
-            id
-            name
-          }
-          updated {
-            id
-            name
-          }
-          removed
-        }
-      }
-    `,
-  });
-
-  subscriptions.push(
-    await sub.subscribe({
-      error(err) {
-        throw err;
-      },
-      complete() {
-        console.error('COMPLETE!');
-      },
-      next({ data }) {
-        const changes = data.padsChanged;
-        if (changes.added) {
-          for (const w of changes.added) {
-            pads.push(w);
-          }
-        }
-
-        if (changes.updated) {
-          for (const p of changes.updated) {
-            const index = pads.findIndex((p2) => p2.id === p.id);
-            expect(index).toBeGreaterThan(-1);
-            pads[index] = Object.assign(pads[index], p);
-          }
-        }
-
-        if (changes.removed) {
-          for (const id of changes.removed) {
-            const index = pads.findIndex((p) => id === p.id);
-            expect(index).toBeGreaterThan(-1);
-            pads.splice(index, 1);
-          }
-        }
-      },
-    })
-  );
-
-  await timeout(2000);
-}

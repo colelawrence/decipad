@@ -201,7 +201,8 @@ test('workspaces changes', () => {
 
 async function createClient(userId: string) {
   const { token } = await auth(userId);
-  const link = createWebsocketLink(createDeciWebsocket(token), 120000);
+  const websocket = createDeciWebsocket(token);
+  const link = createWebsocketLink(websocket, 120000);
   return withAuth({ token, link });
 }
 

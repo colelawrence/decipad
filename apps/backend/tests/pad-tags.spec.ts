@@ -522,7 +522,7 @@ test('pads', () => {
 
 async function createClient(userId: string) {
   const { token } = await auth(userId);
-  const link = createWebsocketLink(createDeciWebsocket(token), 180000);
+  const link = createWebsocketLink(createDeciWebsocket(token), 120000);
   return withAuth({ token, link });
 }
 
