@@ -41,7 +41,8 @@ exports[`CodeBlock Block matches snapshot 1`] = `
       class="emotion-1"
       contenteditable="false"
     >
-      20 apples
+      20
+       &lt;number&gt;
     </div>
     <code
       class="chakra-code emotion-2"
