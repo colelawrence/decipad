@@ -11,8 +11,8 @@ exports[`Result Block matches snapshot for a column 1`] = `
   -webkit-padding-end: var(--chakra-space-6);
   padding-inline-end: var(--chakra-space-6);
   display: inline-block;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
   font-weight: var(--chakra-fontWeights-bold);
 }
 
@@ -48,8 +48,8 @@ exports[`Result Block matches snapshot for a column of columns 1`] = `
   -webkit-padding-end: var(--chakra-space-6);
   padding-inline-end: var(--chakra-space-6);
   display: inline-block;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
   font-weight: var(--chakra-fontWeights-bold);
 }
 
@@ -112,8 +112,8 @@ exports[`Result Block matches snapshot for a number 1`] = `
   -webkit-padding-end: var(--chakra-space-6);
   padding-inline-end: var(--chakra-space-6);
   display: inline-block;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
   font-weight: var(--chakra-fontWeights-bold);
 }
 
