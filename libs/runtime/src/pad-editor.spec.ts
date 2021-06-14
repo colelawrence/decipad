@@ -6,7 +6,10 @@ const docId = 'docid';
 
 describe('pad editor', () => {
   test('sends changes', async () => {
-    const deci = new DeciRuntime('TEST_USER_ID', 'TEST_ACTOR_ID');
+    const deci = new DeciRuntime({
+      userId: 'TEST_USER_ID',
+      actorId: 'TEST_ACTOR_ID',
+    });
     const model = deci.startPadEditor(docId, true);
     const editor = createEditor();
 
@@ -34,7 +37,10 @@ describe('pad editor', () => {
   });
 
   test('loads document as was saved', async () => {
-    const deci = new DeciRuntime('TEST_USER_ID', 'TEST_ACTOR_ID');
+    const deci = new DeciRuntime({
+      userId: 'TEST_USER_ID',
+      actorId: 'TEST_ACTOR_ID',
+    });
     const model = deci.startPadEditor(docId, true);
 
     const editor = createEditor();
@@ -68,7 +74,10 @@ describe('pad editor', () => {
   });
 
   it('runs code', async () => {
-    const deci = new DeciRuntime('TEST_USER_ID', 'TEST_ACTOR_ID');
+    const deci = new DeciRuntime({
+      userId: 'TEST_USER_ID',
+      actorId: 'TEST_ACTOR_ID',
+    });
     const model = deci.startPadEditor(docId, true);
 
     const editor = createEditor();
@@ -129,7 +138,10 @@ describe('pad editor', () => {
   });
 
   it('handles syntax errors appropriately', async () => {
-    const deci = new DeciRuntime('TEST_USER_ID', 'TEST_ACTOR_ID');
+    const deci = new DeciRuntime({
+      userId: 'TEST_USER_ID',
+      actorId: 'TEST_ACTOR_ID',
+    });
     const model = deci.startPadEditor('some other doc id', true);
 
     const editor = createEditor();

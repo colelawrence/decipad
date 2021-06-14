@@ -31,7 +31,7 @@ describe('sync', () => {
     for (let i = 0; i < REPLICA_COUNT; i++) {
       const userId = nanoid();
       const actorId = nanoid();
-      replicas.push(new DeciRuntime(userId, actorId));
+      replicas.push(new DeciRuntime({ userId, actorId }));
     }
   });
 

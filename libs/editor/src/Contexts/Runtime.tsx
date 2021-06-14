@@ -29,7 +29,7 @@ export const RuntimeProvider = ({ children }: RuntimeProviderProps) => {
     if (sessionLoading) {
       return;
     } else if (userId) {
-      const runtime = new DeciRuntime(userId, nanoid());
+      const runtime = new DeciRuntime({ userId, actorId: nanoid() });
       runtime.setSession(session);
       setValue({
         runtime,
@@ -40,6 +40,32 @@ export const RuntimeProvider = ({ children }: RuntimeProviderProps) => {
       return setValue({ runtime: null, status: 'login' });
     }
   }, [userId, session, sessionLoading]);
+
+  return (
+    <RuntimeContext.Provider value={value}>{children}</RuntimeContext.Provider>
+  );
+};
+
+export const AnonymousRuntimeProvider = ({
+  children,
+}: RuntimeProviderProps) => {
+  const [value, setValue] = useState<RuntimeContextProps>({
+    runtime: null,
+    status: 'loading',
+  });
+
+  useEffect(() => {
+    const runtime = new DeciRuntime({
+      userId: '',
+      actorId: '',
+      isSynced: false,
+    });
+    setValue({
+      runtime,
+      status: 'success',
+    });
+    return () => runtime.stop();
+  }, []);
 
   return (
     <RuntimeContext.Provider value={value}>{children}</RuntimeContext.Provider>

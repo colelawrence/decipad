@@ -5,7 +5,7 @@ const ACTOR_ID = 'test actor id';
 
 describe('runtime', () => {
   test('supports session', () => {
-    const deci = new DeciRuntime(USER_ID, ACTOR_ID);
+    const deci = new DeciRuntime({ userId: USER_ID, actorId: ACTOR_ID });
 
     let lastSession;
     const sub = deci.getSession().subscribe((session) => {
