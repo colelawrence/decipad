@@ -3,17 +3,32 @@ import { PadEditor } from './pad-editor';
 import { Sync } from './sync';
 import createExternalWebsocketImpl from './external-websocket';
 
+interface RuntimeConstructorOptions {
+  userId: string;
+  actorId: string;
+  isSynced?: boolean;
+}
+
 class Runtime {
-  sync = new Sync<AnySyncValue>();
+  userId: string;
+  actorId: string;
+  isSynced: boolean;
+
+  sync: Sync<AnySyncValue>;
   sessionSubject = new BehaviorSubject<Session | null>(null);
   editors: Map<Id, PadEditor> = new Map();
 
-  constructor(public userId: string, public actorId: string) {}
+  constructor({ userId, actorId, isSynced = true }: RuntimeConstructorOptions) {
+    this.userId = userId;
+    this.actorId = actorId;
+    this.isSynced = isSynced;
+    this.sync = new Sync({ start: isSynced });
+  }
 
   startPadEditor(padId: Id, createIfAbsent: boolean) {
     let editor = this.editors.get(padId);
     if (editor === undefined) {
-      editor = new PadEditor(padId, this, createIfAbsent);
+      editor = new PadEditor(padId, this, createIfAbsent, this.isSynced);
       let hadSubscribers = false;
       editor.slateOpsCountObservable.subscribe((subscriptionCount) => {
         if (subscriptionCount === 0) {
