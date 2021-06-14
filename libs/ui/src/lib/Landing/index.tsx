@@ -1,5 +1,4 @@
 import { Box, Center, Heading } from '@chakra-ui/react';
-import Image from 'next/image';
 import React from 'react';
 import { GithubSignInButton } from './GithubSignInButton/GithubSignInButton.component';
 import { BodyText, Layout, Wrapper } from './index.styles';
@@ -9,7 +8,7 @@ export const Landing = () => {
     <Wrapper>
       <Layout>
         <Box>
-          <Image src="/assets/deci-logo-brand.png" width={75} height={75} />
+          <img src="/assets/deci-logo-brand.png" width={75} height={75} />
         </Box>
         <Center justifyContent="flex-start">
           <Box>
