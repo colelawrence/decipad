@@ -30,7 +30,10 @@ describe('slate to replica sync', () => {
   let secondText: string;
 
   beforeAll(async () => {
-    deci1 = new DeciRuntime('TEST_USER_ID', 'TEST_ACTOR_ID_1');
+    deci1 = new DeciRuntime({
+      userId: 'TEST_USER_ID',
+      actorId: 'TEST_ACTOR_ID_1',
+    });
     model1 = deci1.startPadEditor(docId, true);
 
     editor1 = createEditor();
@@ -46,7 +49,10 @@ describe('slate to replica sync', () => {
   });
 
   beforeAll(async () => {
-    deci2 = new DeciRuntime('TEST_USER_ID', 'TEST_ACTOR_ID_2');
+    deci2 = new DeciRuntime({
+      userId: 'TEST_USER_ID',
+      actorId: 'TEST_ACTOR_ID_2',
+    });
     model2 = deci2.startPadEditor(docId, true);
 
     editor2 = createEditor();

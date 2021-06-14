@@ -13,8 +13,13 @@ const SEND_CHANGES_DEBOUNCE_MS =
 const fetchPrefix = process.env.DECI_API_URL || '';
 
 export class ReplicaSync<T> {
-  private subscriptionCountSubscription: Subscription;
-  private localChangesSubscription: Subscription;
+  private topic: string;
+  private runtime: Runtime;
+  private localChangesObservable: Observable<Mutation<Doc<{ value: T }>>>;
+  private subscriptionCountObservable: Observable<number>;
+
+  private subscriptionCountSubscription: Subscription | null = null;
+  private localChangesSubscription: Subscription | null = null;
   private remoteOpsSubscription: Subscription | null = null;
   private subscribed = false;
   private debouncedSendChanges: { (): void; cancel: () => void };
@@ -28,18 +33,36 @@ export class ReplicaSync<T> {
   private lastFromRemote: Doc<{ value: T }> | null = null;
   private lastSentChangeCount = Infinity;
 
-  constructor(
-    private topic: string,
-    private runtime: Runtime,
-    private localChangesObservable: Observable<Mutation<Doc<{ value: T }>>>,
-    private subscriptionCountObservable: Observable<number>
-  ) {
+  constructor({
+    topic,
+    runtime,
+    localChangesObservable,
+    subscriptionCountObservable,
+    start = true,
+  }: {
+    topic: string;
+    runtime: Runtime;
+    localChangesObservable: Observable<Mutation<Doc<{ value: T }>>>;
+    subscriptionCountObservable: Observable<number>;
+    start: boolean;
+  }) {
+    this.topic = topic;
+    this.runtime = runtime;
+    this.localChangesObservable = localChangesObservable;
+    this.subscriptionCountObservable = subscriptionCountObservable;
+
     this.sendChanges = this.sendChanges.bind(this);
     this.debouncedSendChanges = debounce(
       this.sendChanges,
       SEND_CHANGES_DEBOUNCE_MS
     );
 
+    if (start) {
+      this.start();
+    }
+  }
+
+  start() {
     this.subscriptionCountSubscription =
       this.subscriptionCountObservable.subscribe((observerCount) => {
         if (observerCount === 0) {
@@ -57,7 +80,7 @@ export class ReplicaSync<T> {
         }
       });
 
-    this.localChangesSubscription = localChangesObservable.subscribe(
+    this.localChangesSubscription = this.localChangesObservable.subscribe(
       ({ after }) => {
         this.latest = after;
         this.debouncedSendChanges();
@@ -248,14 +271,12 @@ export class ReplicaSync<T> {
   }
 
   stop() {
-    this.subscriptionCountSubscription.unsubscribe();
-    this.localChangesSubscription.unsubscribe();
+    this.subscriptionCountSubscription?.unsubscribe();
+    this.localChangesSubscription?.unsubscribe();
     if (this.remoteOpsSubscription !== null) {
       this.remoteOpsSubscription.unsubscribe();
     }
-    if (this.subscribed) {
-      this.unsubscribe();
-    }
+    this.unsubscribe();
 
     this.remoteChanges.complete();
     this.remoteDoc.complete();

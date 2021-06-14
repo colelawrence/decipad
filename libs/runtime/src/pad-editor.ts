@@ -34,7 +34,12 @@ class PadEditor {
   private pendingApplyPromise: Promise<unknown> | null = null;
   private queue = fnQueue();
 
-  constructor(public padId: Id, runtime: Runtime, createIfAbsent: boolean) {
+  constructor(
+    public padId: Id,
+    runtime: Runtime,
+    createIfAbsent: boolean,
+    startReplicaSync = true
+  ) {
     this.processSlateOps = this.processSlateOps.bind(this);
     this.debouncedProcessSlateOps = debounce(
       this.processSlateOps,
@@ -57,12 +62,13 @@ class PadEditor {
       },
     ]) as SyncPadDoc;
 
-    this.replica = createReplica<SyncPadDoc>(
-      uri('pads', padId, 'content'),
+    this.replica = createReplica<SyncPadDoc>({
+      name: uri('pads', padId, 'content'),
       runtime,
-      defaultInitialValue,
-      createIfAbsent
-    );
+      initialValue: defaultInitialValue,
+      createIfAbsent,
+      startReplicaSync,
+    });
     this.computer = new Computer(this.replica);
     this.replica.beforeRemoteChanges = () => {
       this.processSlateOps();

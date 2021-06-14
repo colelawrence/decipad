@@ -1,6 +1,6 @@
 import { Doc } from 'automerge';
 import Automerge, { Diff, Change } from 'automerge';
-import { Observable, Subject, combineLatest } from 'rxjs';
+import { Observable, Subscription, Subject, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { dequal } from 'dequal';
 import { Runtime } from './runtime';
@@ -9,13 +9,23 @@ import { toJS } from './utils/to-js';
 import { ReplicaSync } from './replica-sync';
 import { observeSubscriberCount } from './utils/observe-subscriber-count';
 
-function createReplica<T>(
-  name: string,
-  runtime: Runtime,
-  initialValue: T | null = null,
+interface CreateReplicaOptions<T> {
+  name: string;
+  runtime: Runtime;
+  initialValue?: T | null;
+  createIfAbsent?: boolean;
+  initialStaticValue?: string | null;
+  startReplicaSync?: boolean;
+}
+
+function createReplica<T>({
+  name,
+  runtime,
+  initialValue = null,
   createIfAbsent = false,
-  initialStaticValue: string | null = null
-): Replica<T> {
+  initialStaticValue = null,
+  startReplicaSync = true,
+}: CreateReplicaOptions<T>): Replica<T> {
   const inTests = navigator.userAgent.includes('jsdom');
   let stopped = false;
   const queue = fnQueue();
@@ -69,51 +79,58 @@ function createReplica<T>(
 
   // sync
 
-  const sync = new ReplicaSync<T>(
-    name,
+  const sync = new ReplicaSync<T>({
+    topic: name,
     runtime,
-    localChanges,
-    subscriptionCountObservable
-  );
-  const remoteDocSubscription = sync.remoteDoc.subscribe((doc2) => {
-    const doc1 = getDoc();
-    if (doc1 === null) {
-      doc = doc2;
-      observable.next({ loading: false, error: null, data: doc!.value as T });
-      needsFlush = true;
-      flush();
-    } else {
-      queue
-        .push(() => mergeRemoteDoc(doc2))
-        .catch((err) => {
-          console.error(err);
-        });
-    }
+    localChangesObservable: localChanges,
+    subscriptionCountObservable,
+    start: startReplicaSync,
   });
 
-  const remoteChangesSubscription = sync.remoteChanges.subscribe(
-    (changes: Change[]) => {
-      queue
-        .push(async () => {
-          await self.beforeRemoteChanges();
-          const oldDoc = getDoc();
-          doc = Automerge.applyChanges(oldDoc!, changes);
+  let remoteDocSubscription: Subscription | null = null;
+  let remoteChangesSubscription: Subscription | null = null;
 
-          const diffs = Automerge.diff(oldDoc!, doc);
-          remoteChanges.next({ before: oldDoc!, doc, diffs });
-          observable.next({
-            loading: false,
-            error: null,
-            data: doc.value as T,
+  if (startReplicaSync) {
+    remoteDocSubscription = sync.remoteDoc.subscribe((doc2) => {
+      const doc1 = getDoc();
+      if (doc1 === null) {
+        doc = doc2;
+        observable.next({ loading: false, error: null, data: doc!.value as T });
+        needsFlush = true;
+        flush();
+      } else {
+        queue
+          .push(() => mergeRemoteDoc(doc2))
+          .catch((err) => {
+            console.error(err);
           });
-          needsFlush = true;
-          flush();
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    }
-  );
+      }
+    });
+
+    remoteChangesSubscription = sync.remoteChanges.subscribe(
+      (changes: Change[]) => {
+        queue
+          .push(async () => {
+            await self.beforeRemoteChanges();
+            const oldDoc = getDoc();
+            doc = Automerge.applyChanges(oldDoc!, changes);
+
+            const diffs = Automerge.diff(oldDoc!, doc);
+            remoteChanges.next({ before: oldDoc!, doc, diffs });
+            observable.next({
+              loading: false,
+              error: null,
+              data: doc.value as T,
+            });
+            needsFlush = true;
+            flush();
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
+    );
+  }
 
   loadDoc();
 
@@ -179,8 +196,8 @@ function createReplica<T>(
 
   function stop() {
     stopped = true;
-    remoteDocSubscription.unsubscribe();
-    remoteChangesSubscription.unsubscribe();
+    remoteDocSubscription?.unsubscribe();
+    remoteChangesSubscription?.unsubscribe();
     sync.stop();
     observable.complete();
     remoteChanges.complete();

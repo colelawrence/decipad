@@ -6,22 +6,32 @@ import { SyncSubscriptionManager } from './sync-subscription-manager';
 const MAX_RECONNECT_MS = Number(process.env.DECI_MAX_RECONNECT_MS) || 10000;
 const fetchPrefix = process.env.DECI_API_URL || '';
 
+interface SyncConstructorOptions {
+  start?: boolean;
+}
+
 export class Sync<T> extends EventEmitter {
   private subscriptionManager = new SyncSubscriptionManager<T>();
-  private subscriptionManagerTopicSubscription: Subscription;
+  private subscriptionManagerTopicSubscription: Subscription | null = null;
   private topics = new Set<string>();
   private connecting = false;
   private stopped = false;
   private timeout: ReturnType<typeof setTimeout> | null = null;
   connection: WebSocket | null = null;
 
-  constructor() {
+  constructor({ start = true }: SyncConstructorOptions = {}) {
     super();
     this.onWebsocketClose = this.onWebsocketClose.bind(this);
     this.onWebsocketOpen = this.onWebsocketOpen.bind(this);
     this.onWebsocketMessage = this.onWebsocketMessage.bind(this);
     this.onWebsocketError = this.onWebsocketError.bind(this);
 
+    if (start) {
+      this.start();
+    }
+  }
+
+  start() {
     this.subscriptionManagerTopicSubscription =
       this.subscriptionManager.topicObservable.subscribe(({ op, topic }) => {
         switch (op) {
@@ -62,7 +72,7 @@ export class Sync<T> extends EventEmitter {
 
   stop() {
     this.stopped = true;
-    this.subscriptionManagerTopicSubscription.unsubscribe();
+    this.subscriptionManagerTopicSubscription?.unsubscribe();
     this.subscriptionManager.stop();
     if (this.timeout) {
       clearTimeout(this.timeout);
