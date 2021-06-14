@@ -1,8 +1,7 @@
 import { Box } from '@chakra-ui/react';
 import { chakra } from '@chakra-ui/system';
-import React, { Fragment } from 'react';
-
 import { Type } from '@decipad/language';
+import React, { Fragment } from 'react';
 
 export const ResultError = chakra(Box, {
   baseStyle: {
@@ -77,7 +76,10 @@ const ResultContent = ({ type, value, depth = 0 }: ResultContentProps) => {
   }
 };
 
-export const Result = ({ type, value }: ComputationResult): JSX.Element => {
+export const Result = ({
+  type,
+  value,
+}: ComputationResult): JSX.Element | null => {
   if (type?.errorCause != null) {
     return (
       <ResultError contentEditable={false}>
@@ -91,6 +93,6 @@ export const Result = ({ type, value }: ComputationResult): JSX.Element => {
       </SingleResultStyles>
     );
   } else {
-    return <></>;
+    return null;
   }
 };
