@@ -54,7 +54,7 @@ export const useEditor = ({ workspaceId, padId, setValue }: IUseEditor) => {
         }
       }
     })();
-    return () => sub.unsubscribe();
+    return () => sub?.unsubscribe();
   }, [padEditor, padId, setValue, editor]);
 
   const onChange = useCallback(
