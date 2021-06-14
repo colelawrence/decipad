@@ -11,7 +11,7 @@ import { getPreventDefaultHandler } from '@udecode/slate-plugins';
 import React, { useEffect, useRef } from 'react';
 import { Portal } from 'react-portal';
 import { Editor, Location, Range } from 'slate';
-import { ReactEditor, useSlateStatic } from 'slate-react';
+import { ReactEditor, useSlate } from 'slate-react';
 import { Command } from './commands';
 
 export interface DashCommandsPortalProps {
@@ -36,7 +36,7 @@ export const DashCommandsPortal = ({
   const portalBG = useColorModeValue('white', 'gray.700');
   const indexBG = useColorModeValue('gray.100', 'gray.600');
   const { colorMode } = useColorMode();
-  const editor = useSlateStatic();
+  const editor = useSlate();
 
   useEffect(() => {
     if (target !== null && values.length > 0) {

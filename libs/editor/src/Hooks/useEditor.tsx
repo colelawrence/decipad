@@ -1,7 +1,7 @@
 import { pipe } from '@udecode/slate-plugins';
 import { useCallback, useEffect, useState } from 'react';
 import { Subscription } from 'rxjs';
-import { createEditor, Descendant, Editor } from 'slate';
+import { createEditor, Editor, Node } from 'slate';
 import { HistoryEditor } from 'slate-history';
 import { withPlugins } from '../Plugins';
 import { useRuntimeEditor } from './useRuntimeEditor';
@@ -10,7 +10,7 @@ interface IUseEditor {
   workspaceId: string;
   padId: string;
   setEditor: React.Dispatch<React.SetStateAction<Editor | null>>;
-  setValue: React.Dispatch<React.SetStateAction<Descendant[] | null>>;
+  setValue: React.Dispatch<React.SetStateAction<Node[] | null>>;
 }
 
 export const useEditor = ({
