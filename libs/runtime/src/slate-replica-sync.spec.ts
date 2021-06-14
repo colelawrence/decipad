@@ -49,7 +49,7 @@ describe('slate to replica sync', () => {
   });
 
   beforeAll(async () => {
-    deci1 = new DeciRuntime({
+    deci2 = new DeciRuntime({
       userId: 'TEST_USER_ID',
       actorId: 'TEST_ACTOR_ID_2',
     });
