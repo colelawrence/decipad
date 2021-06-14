@@ -8,7 +8,7 @@ type ID = string;
 type User = {
   id: ID;
   name: string;
-  email: string;
+  email?: string;
   image?: string;
   emailVerified?: number | Date;
 };
@@ -182,6 +182,11 @@ type PadRecord = {
   workspace_id: ID;
 };
 
+type WorkspaceRecord = {
+  id: ID;
+  name: string;
+};
+
 type TagRecord = {
   id: ID;
   tag: string;
@@ -253,8 +258,9 @@ interface DataTable<T> {
 
 type DataTables = {
   users: DataTable<UserWithSecret>;
-  pads: DataTable<PadRecord>;
   permissions: DataTable<PermissionRecord>;
+  workspaces: DataTable<WorkspaceRecord>;
+  pads: DataTable<PadRecord>;
   workspaceroles: DataTable<RoleRecord>;
   tags: DataTable<TagRecord>;
   usertaggedresources: DataTable<UserTaggedResourceRecord>;

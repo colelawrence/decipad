@@ -1,13 +1,13 @@
 import assert from 'assert';
-import { nanoid } from 'nanoid';
 import { UserInputError } from 'apollo-server-lambda';
 import tables from '../../tables';
 import { requireUser, check, isAuthorized } from '../authorization';
-import createResourcePermission from '../../resource-permissions/create';
 import queryAccessibleResources from '../../resource-permissions/query-accessible-resources';
 import removeAllPermissionsFor from '../../resource-permissions/remove-all-permissions-for';
 import by from '../utils/by';
 import { notifyAllWithAccessTo, subscribe } from '../../pubsub';
+import createWorkspace2 from '../../workspaces/create';
+import paginate from '../utils/paginate';
 
 export default {
   Query: {
@@ -15,7 +15,7 @@ export default {
       _: any,
       { id }: { id: ID },
       context: GraphqlContext
-    ): Promise<Workspace> {
+    ): Promise<WorkspaceRecord | undefined> {
       const resource = `/workspaces/${id}`;
       await check(resource, context, 'READ');
 
@@ -59,47 +59,9 @@ export default {
       _: any,
       { workspace }: { workspace: WorkspaceInput },
       context: GraphqlContext
-    ) {
+    ): Promise<WorkspaceRecord> {
       const user = requireUser(context);
-
-      const newWorkspace = {
-        id: nanoid(),
-        name: workspace.name,
-      };
-
-      const data = await tables();
-      await data.workspaces.put(newWorkspace);
-
-      const newWorkspaceAdminRole = {
-        id: nanoid(),
-        name: 'Administrator',
-        permission: 'ADMIN',
-        workspace_id: newWorkspace.id,
-        system: true,
-      };
-
-      await data.workspaceroles.put(newWorkspaceAdminRole);
-
-      await createResourcePermission({
-        resourceType: 'roles',
-        resourceId: newWorkspaceAdminRole.id,
-        userId: user.id,
-        type: 'ADMIN',
-        roleId: newWorkspaceAdminRole.id,
-        givenByUserId: user.id,
-        parentResourceUri: `/workspaces/${newWorkspace.id}`,
-      });
-
-      await createResourcePermission({
-        resourceType: 'workspaces',
-        resourceId: newWorkspace.id,
-        userId: user.id,
-        type: 'ADMIN',
-        roleId: newWorkspaceAdminRole.id,
-        givenByUserId: user.id,
-      });
-
-      return newWorkspace;
+      return await createWorkspace2(workspace, user);
     },
 
     async updateWorkspace(
@@ -206,6 +168,37 @@ export default {
       }
 
       return roles.sort(by('name'));
+    },
+
+    async pads(
+      workspace: Workspace,
+      { page }: { page: PageInput },
+      context: GraphqlContext
+    ) {
+      const user = requireUser(context);
+
+      const query = {
+        IndexName: 'byUserId',
+        KeyConditionExpression:
+          'user_id = :user_id and resource_type = :resource_type',
+        FilterExpression: 'parent_resource_uri = :parent_resource_uri',
+        ExpressionAttributeValues: {
+          ':user_id': user.id,
+          ':resource_type': 'pads',
+          ':parent_resource_uri': `/workspaces/${workspace.id}`,
+        },
+      };
+
+      const data = await tables();
+
+      return await paginate<PermissionRecord, PadRecord>(
+        data.permissions,
+        query,
+        page,
+        async (permission: PermissionRecord) => {
+          return data.pads.get({ id: permission.resource_id });
+        }
+      );
     },
   },
 };

@@ -1,11 +1,11 @@
 import { HttpHandler } from '@architect/functions';
 import tables from '../tables';
 import { Github, Email } from './providers';
-import { nanoid } from 'nanoid';
 import NextAuth, { TokenSet } from 'next-auth';
 import adaptReqRes from './adapt-req-res';
 import createDbAdapter from './db-adapter';
 import jwt from './jwt';
+import createUser from '../users/create';
 
 export default function createAuthHandler(): HttpHandler {
   const providers = [
@@ -17,7 +17,11 @@ export default function createAuthHandler(): HttpHandler {
   ];
 
   const callbacks = {
-    async signIn(user: UserWithSecret, account: any, metadata: any): Promise<boolean> {
+    async signIn(
+      user: UserWithSecret,
+      account: any,
+      metadata: any
+    ): Promise<boolean> {
       if (account.provider === 'github' && metadata && metadata.id) {
         return await signInGithub(user, account, metadata);
       } else if (account.type === 'email') {
@@ -34,7 +38,10 @@ export default function createAuthHandler(): HttpHandler {
       return token;
     },
 
-    async session(session: Record<string, any>, token: TokenSet): Promise<Record<string, any>> {
+    async session(
+      session: Record<string, any>,
+      token: TokenSet
+    ): Promise<Record<string, any>> {
       session.accessToken = token.accessToken;
       const user = await findUserByAccessToken(token.accessToken);
 
@@ -48,8 +55,8 @@ export default function createAuthHandler(): HttpHandler {
       }
 
       return session;
-    }
-  }
+    },
+  };
 
   const options = {
     session: {
@@ -64,7 +71,7 @@ export default function createAuthHandler(): HttpHandler {
 
   // @ts-expect-error Because next-auth types are apparently mistaken
   return adaptReqRes(NextAuth(options));
-};
+}
 
 async function signInGithub(user: UserWithSecret, account: any, metadata: any) {
   const githubUser = {
@@ -88,34 +95,13 @@ async function signInGithub(user: UserWithSecret, account: any, metadata: any) {
     // In the future, we might want to redirect the user
     // to a registration page by defining next-auth options.pages.newUser.
 
-    const newUser = {
-      id: nanoid(),
+    existingUser = await createUser({
       name: githubUser.name,
-      last_login: Date.now(),
       image: githubUser.image,
       email: githubUser.email,
-      secret: nanoid(),
-    };
-
-    await data.users.put(newUser);
-
-    const newUserKey = {
-      id: `${account.provider}:${githubUser.id}`,
-      user_id: newUser.id,
-    };
-
-    await data.userkeys.put(newUserKey);
-
-    if (githubUser.email) {
-      const newEmailUserKey = {
-        id: `email:${githubUser.email}`,
-        user_id: newUser.id,
-      };
-
-      await data.userkeys.put(newEmailUserKey);
-    }
-
-    existingUser = newUser;
+      provider: account.provider,
+      providerId: githubUser.id,
+    });
   }
 
   user.accessToken = existingUser.secret;
@@ -123,7 +109,7 @@ async function signInGithub(user: UserWithSecret, account: any, metadata: any) {
   return true;
 }
 
-async function signInEmail(user: UserWithSecret, _account: any, metadata: any) {
+async function signInEmail(user: UserWithSecret, account: any, metadata: any) {
   let existingUser;
   const data = await tables();
   const userKeyId = `email:${metadata.email}`;
@@ -137,24 +123,11 @@ async function signInEmail(user: UserWithSecret, _account: any, metadata: any) {
     // In the future, we might want to redirect the user
     // to a registration page by defining next-auth options.pages.newUser.
 
-    const newUser = {
-      id: nanoid(),
+    existingUser = await createUser({
       name: '',
-      email: metadata.email,
-      secret: nanoid(),
-    };
-
-    await data.users.put(newUser);
-
-    const newEmailUserKey = {
-      id: `email:${metadata.email}`,
-      user_id: newUser.id,
-      validation_msg_sent_at: Date.now(),
-    };
-
-    await data.userkeys.put(newEmailUserKey);
-
-    existingUser = newUser;
+      email: metadata.email as string,
+      provider: account.provider,
+    });
   }
 
   user.accessToken = existingUser.secret;
@@ -162,7 +135,9 @@ async function signInEmail(user: UserWithSecret, _account: any, metadata: any) {
   return true;
 }
 
-async function findUserByAccessToken(accessToken: string): Promise<User | undefined> {
+async function findUserByAccessToken(
+  accessToken: string
+): Promise<User | undefined> {
   const data = await tables();
 
   const foundUsers = await data.users.query({

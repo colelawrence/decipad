@@ -9,6 +9,7 @@ import removeAllPermissionsFor from '../../resource-permissions/remove-all-permi
 import by from '../utils/by';
 import { notifyAllWithAccessTo, subscribe } from '../../pubsub';
 import paginate from '../utils/paginate';
+import createPad2 from '../../pads/create';
 
 const resolvers = {
   Query: {
@@ -63,27 +64,7 @@ const resolvers = {
     ): Promise<Pad> {
       const workspaceResource = `/workspaces/${workspaceId}`;
       const user = await check(workspaceResource, context, 'WRITE');
-
-      const newPad = {
-        id: nanoid(),
-        name: pad.name,
-        workspace_id: workspaceId,
-      };
-
-      const data = await tables();
-      await data.pads.put(newPad);
-
-      await createResourcePermission({
-        resourceType: 'pads',
-        resourceId: newPad.id,
-        userId: user.id,
-        type: 'ADMIN',
-        givenByUserId: user.id,
-        canComment: true,
-        parentResourceUri: workspaceResource,
-      });
-
-      return newPad;
+      return await createPad2(workspaceId, pad, user);
     },
 
     async updatePad(
@@ -365,7 +346,10 @@ const resolvers = {
       };
     },
 
-    async workspace(pad: PadRecord, _: any): Promise<Workspace> {
+    async workspace(
+      pad: PadRecord,
+      _: any
+    ): Promise<WorkspaceRecord | undefined> {
       const data = await tables();
       return await data.workspaces.get({ id: pad.workspace_id });
     },
