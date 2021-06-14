@@ -3,13 +3,14 @@ import { useCallback, useEffect, useState } from 'react';
 import { Subscription } from 'rxjs';
 import { createEditor, Editor, Node } from 'slate';
 import { HistoryEditor } from 'slate-history';
+import { ReactEditor } from 'slate-react';
 import { withPlugins } from '../Plugins';
 import { useRuntimeEditor } from './useRuntimeEditor';
 
 interface IUseEditor {
   workspaceId: string;
   padId: string;
-  setEditor: React.Dispatch<React.SetStateAction<Editor | null>>;
+  setEditor: React.Dispatch<React.SetStateAction<ReactEditor | null>>;
   setValue: React.Dispatch<React.SetStateAction<Node[] | null>>;
 }
 
@@ -38,7 +39,7 @@ export const useEditor = ({
           ? await padEditor.getValueEventually()
           : padEditor.getValue();
         if (value) {
-          const editor: Editor = pipe(createEditor(), ...withPlugins);
+          const editor: ReactEditor = pipe(createEditor(), ...withPlugins);
           sub = padEditor.slateOps().subscribe((ops) => {
             Editor.withoutNormalizing(editor, () => {
               if (HistoryEditor.isHistoryEditor(editor)) {

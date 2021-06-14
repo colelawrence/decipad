@@ -3,7 +3,7 @@ import { Blocks, Leaves } from '@decipad/ui';
 import { EditablePlugins } from '@udecode/slate-plugins';
 import dynamic from 'next/dynamic';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Editor, Node } from 'slate';
+import { Node } from 'slate';
 import {
   ReactEditor,
   RenderElementProps,
@@ -45,8 +45,8 @@ export const DeciEditor = ({
   workspaceId,
   padId,
 }: DeciEditorProps): JSX.Element => {
-  const [value, setValue] = useState<Node[] | null>(null);
-  const [editor, setEditor] = useState<Editor | null>(null);
+  const [value, setValue] = useState<Node[] | null>([]);
+  const [editor, setEditor] = useState<ReactEditor | null>(null);
   const { loading: _, onChange: onChangeResult } = useEditor({
     workspaceId,
     padId,
@@ -101,7 +101,7 @@ export const DeciEditor = ({
 
   return (
     <Box>
-      <Slate editor={editor as any} value={value} onChange={onChange}>
+      <Slate editor={editor} value={value} onChange={onChange}>
         <EditablePlugins
           autoFocus={true}
           style={{ height: '100%' }}
