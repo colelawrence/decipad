@@ -13,10 +13,10 @@ export const CodeBlock = ({
 
   return (
     <Box>
-      {element.result && <Result {...(element.result as any)} />}
       <CodeBlockStyles bg={bg} {...attributes}>
         {children}
       </CodeBlockStyles>
+      {element.result && <Result {...(element.result as any)} />}
     </Box>
   );
 };

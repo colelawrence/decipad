@@ -11,7 +11,7 @@ export const ResultError = chakra(Box, {
     py: 2,
     px: 6,
     d: 'inline-block',
-    borderTopRadius: 6,
+    borderBottomRadius: 6,
     fontWeight: 'bold',
   },
 });
@@ -23,7 +23,7 @@ export const SingleResultStyles = chakra(Box, {
     py: 2,
     px: 6,
     d: 'inline-block',
-    borderTopRadius: 6,
+    borderBottomRadius: 6,
     fontWeight: 'bold',
   },
 });
