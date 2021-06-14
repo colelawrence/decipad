@@ -2,21 +2,6 @@
 
 exports[`CodeBlock Block matches snapshot 1`] = `
 .emotion-1 {
-  background: var(--chakra-colors-green-100);
-  color: var(--chakra-colors-green-500);
-  padding-top: var(--chakra-space-2);
-  padding-bottom: var(--chakra-space-2);
-  -webkit-padding-start: var(--chakra-space-6);
-  padding-inline-start: var(--chakra-space-6);
-  -webkit-padding-end: var(--chakra-space-6);
-  padding-inline-end: var(--chakra-space-6);
-  display: inline-block;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
-  font-weight: var(--chakra-fontWeights-bold);
-}
-
-.emotion-2 {
   display: inline-block;
   font-family: var(--chakra-fonts-mono);
   font-size: var(--chakra-fontSizes-sm);
@@ -33,22 +18,38 @@ exports[`CodeBlock Block matches snapshot 1`] = `
   background: var(--chakra-colors-gray-100);
 }
 
+.emotion-2 {
+  background: var(--chakra-colors-green-100);
+  color: var(--chakra-colors-green-500);
+  padding-top: var(--chakra-space-2);
+  padding-bottom: var(--chakra-space-2);
+  -webkit-padding-start: var(--chakra-space-6);
+  padding-inline-start: var(--chakra-space-6);
+  -webkit-padding-end: var(--chakra-space-6);
+  padding-inline-end: var(--chakra-space-6);
+  display: inline-block;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  font-weight: var(--chakra-fontWeights-bold);
+}
+
 <div>
   <div
     class="emotion-0"
   >
-    <div
-      class="emotion-1"
-      contenteditable="false"
-    >
-      20 apples
-    </div>
     <code
-      class="chakra-code emotion-2"
+      class="chakra-code emotion-1"
       data-slate-node="element"
     >
       a = 10 apples b = 10 apples a + b
     </code>
+    <div
+      class="emotion-2"
+      contenteditable="false"
+    >
+      20
+       &lt;number&gt;
+    </div>
   </div>
 </div>
 `;

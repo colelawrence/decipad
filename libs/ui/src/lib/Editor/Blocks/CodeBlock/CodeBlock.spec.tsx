@@ -1,14 +1,26 @@
 import React from 'react';
 import { render } from 'test-utils';
+import { Type } from '@decipad/language';
 import { CodeBlock } from './CodeBlock.component';
 
 describe('CodeBlock Block', () => {
+  const result = () => ({
+    type: Type.build({
+      type: 'number',
+      unit: {
+        unit: 'apples',
+      },
+    } as any),
+    value: [20],
+    errors: [],
+  });
+
   it('renders', () => {
     const { container } = render(
       <CodeBlock
         element={{
           children: [{ text: 'a = 10 apples \n b = 10 apples \n a + b' }],
-          result: '20 apples',
+          result: result(),
         }}
         attributes={{ 'data-slate-node': 'element', ref: null }}
       >
@@ -24,7 +36,7 @@ describe('CodeBlock Block', () => {
       <CodeBlock
         element={{
           children: [{ text: 'a = 10 apples \n b = 10 apples \n a + b' }],
-          result: '20 apples',
+          result: result(),
         }}
         attributes={{ 'data-slate-node': 'element', ref: null }}
       >

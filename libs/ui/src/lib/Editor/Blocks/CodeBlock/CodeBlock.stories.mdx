@@ -1,5 +1,6 @@
 import { Meta, Story, Canvas, Props } from '@storybook/addon-docs/blocks';
 import { CodeBlock } from './CodeBlock.component';
+import { Type } from '@decipad/language';
 
 <Meta
   title="Editor/Blocks/CodeBlock"
@@ -34,7 +35,16 @@ a + b`,
 The CodeBlock component is one of the most important components for our editor, this is where the user will do all of their calculations and decisions. The CodeBlock component gets automatic syntax highlighting once it is plugged into slate. The component itself is a slate specific component where it requires a result to be either undefined or a string to output the calculation's result.
 
 export const Template = (args) => (
-  <CodeBlock element={{ result: '20 apples' }} {...args} />
+  <CodeBlock
+    element={{
+      result: {
+        type: Type.Number,
+        value: [20],
+        errors: [],
+      },
+    }}
+    {...args}
+  />
 );
 
 export const NoResult = (args) => (
