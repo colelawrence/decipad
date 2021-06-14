@@ -11,6 +11,18 @@ import { notifyAllWithAccessTo, subscribe } from '../../pubsub';
 
 export default {
   Query: {
+    async getWorkspaceById(
+      _: any,
+      { id }: { id: ID },
+      context: GraphqlContext
+    ): Promise<Workspace> {
+      const resource = `/workspaces/${id}`;
+      await check(resource, context, 'READ');
+
+      const data = await tables();
+      return data.workspaces.get({ id });
+    },
+
     async workspaces(_: any, __: any, context: GraphqlContext) {
       const user = requireUser(context);
       const data = await tables();
@@ -43,7 +55,11 @@ export default {
   },
 
   Mutation: {
-    async createWorkspace(_: any, { workspace }: { workspace: WorkspaceInput }, context: GraphqlContext) {
+    async createWorkspace(
+      _: any,
+      { workspace }: { workspace: WorkspaceInput },
+      context: GraphqlContext
+    ) {
       const user = requireUser(context);
 
       const newWorkspace = {
@@ -86,7 +102,11 @@ export default {
       return newWorkspace;
     },
 
-    async updateWorkspace(_: any, { id, workspace }: { id: ID, workspace: WorkspaceInput}, context: GraphqlContext) {
+    async updateWorkspace(
+      _: any,
+      { id, workspace }: { id: ID; workspace: WorkspaceInput },
+      context: GraphqlContext
+    ) {
       const resource = `/workspaces/${id}`;
       await check(resource, context, 'WRITE');
 
@@ -189,4 +209,3 @@ export default {
     },
   },
 };
-

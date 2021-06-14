@@ -44,6 +44,44 @@ test('workspaces', () => {
     expect(workspace).toMatchObject({ name: 'Workspace 1' });
   });
 
+  it('creator can get workspace', async () => {
+    const client = withAuth(await auth());
+
+    const workspace2 = (
+      await client.query({
+        query: gql`
+          query {
+            getWorkspaceById(id: "${workspace.id}") {
+              id
+              name
+            }
+          }
+        `,
+      })
+    ).data.getWorkspaceById;
+
+    expect(workspace2).toMatchObject({
+      id: workspace.id,
+      name: 'Workspace 1',
+    });
+  });
+
+  it('other user cannot get', async () => {
+    const client = withAuth(await auth('test user id 2'));
+    await expect(
+      client.query({
+        query: gql`
+        query {
+          getWorkspaceById(id: "${workspace.id}") {
+            id
+            name
+          }
+        }
+      `,
+      })
+    ).rejects.toThrow('Forbidden');
+  });
+
   it('other user cannot update', async () => {
     const client = withAuth(await auth('test user id 2'));
     await expect(
@@ -259,6 +297,28 @@ test('workspaces', () => {
         ],
       },
     ]);
+  });
+
+  it('invitee can get workspace', async () => {
+    const client = withAuth(await auth('test user id 2'));
+
+    const workspace2 = (
+      await client.query({
+        query: gql`
+          query {
+            getWorkspaceById(id: "${workspace.id}") {
+              id
+              name
+            }
+          }
+        `,
+      })
+    ).data.getWorkspaceById;
+
+    expect(workspace2).toMatchObject({
+      id: workspace.id,
+      name: 'Workspace 1 renamed',
+    });
   });
 
   it('admin can remove user from role', async () => {

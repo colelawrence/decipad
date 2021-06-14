@@ -121,7 +121,7 @@
     ],
     "*.{js,jsx,ts,tsx}": [
       "eslint --cache --fix",
-      "jest --passWithNoTests --maxWorkers 1"
+      "jest --passWithNoTests --maxWorkers 1 --testTimeout=10000"
     ]
   },
   "dependencies": {

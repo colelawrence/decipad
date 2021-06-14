@@ -44,6 +44,7 @@ export default gql`
   }
 
   extend type Query {
+    getPadById(id: ID!): Pad
     pads(workspaceId: ID!, page: PageInput!): PagedPadResult!
   }
 

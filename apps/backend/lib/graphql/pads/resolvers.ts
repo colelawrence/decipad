@@ -12,6 +12,18 @@ import paginate from '../utils/paginate';
 
 const resolvers = {
   Query: {
+    async getPadById(
+      _: any,
+      { id }: { id: ID },
+      context: GraphqlContext
+    ): Promise<PadRecord | undefined> {
+      const resource = `/pads/${id}`;
+      await check(resource, context, 'READ');
+
+      const data = await tables();
+      return await data.pads.get({ id });
+    },
+
     async pads(
       _: any,
       { page, workspaceId }: { page: PageInput; workspaceId: ID },

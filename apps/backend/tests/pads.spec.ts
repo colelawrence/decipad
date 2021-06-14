@@ -195,6 +195,44 @@ test('pads', () => {
     });
   });
 
+  it('creator can get pad', async () => {
+    const client = withAuth(await auth());
+
+    const pad2 = (
+      await client.query({
+        query: gql`
+          query {
+            getPadById(id: "${pad.id}") {
+              id
+              name
+            }
+          }
+        `,
+      })
+    ).data.getPadById;
+
+    expect(pad2).toMatchObject({
+      id: pad.id,
+      name: 'Pad 1 renamed',
+    });
+  });
+
+  it('invited user cannot get the pad', async () => {
+    const client = withAuth(await auth('test user id 2'));
+    await expect(
+      client.query({
+        query: gql`
+        query {
+          getPadById(id: "${pad.id}") {
+            id
+            name
+          }
+        }
+      `,
+      })
+    ).rejects.toThrow('Forbidden');
+  });
+
   it('the creator can share pad with role', async () => {
     const client = withAuth(await auth());
 
@@ -212,6 +250,28 @@ test('pads', () => {
   });
 
   it('waits a bit', async () => await timeout(1000));
+
+  it('invitee can get pad', async () => {
+    const client = withAuth(await auth('test user id 2'));
+
+    const pad2 = (
+      await client.query({
+        query: gql`
+          query {
+            getPadById(id: "${pad.id}") {
+              id
+              name
+            }
+          }
+        `,
+      })
+    ).data.getPadById;
+
+    expect(pad2).toMatchObject({
+      id: pad.id,
+      name: 'Pad 1 renamed',
+    });
+  });
 
   it('the target user has read access to pad', async () => {
     const client = withAuth(await auth('test user id 2'));

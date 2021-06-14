@@ -9,6 +9,7 @@ export default gql`
     id: ID!
     name: String!
     roles: [Role!]!
+    pads(page: PageInput!): PagedPadResult!
   }
 
   type WorkspacesChanges {
@@ -18,6 +19,7 @@ export default gql`
   }
 
   extend type Query {
+    getWorkspaceById(id: ID!): Workspace
     workspaces: [Workspace!]!
   }
 
