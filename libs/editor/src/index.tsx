@@ -45,15 +45,13 @@ export const DeciEditor = ({
   workspaceId,
   padId,
 }: DeciEditorProps): JSX.Element => {
-  const [value, setValue] = useState<Descendant[]>([]);
-  const {
-    loading: _,
-    editor,
-    onChange: onChangeResult,
-  } = useEditor({
+  const [value, setValue] = useState<Descendant[]>(null);
+  const [editor, setEditor] = useState<Editor>(null);
+  const { loading: _, onChange: onChangeResult } = useEditor({
     workspaceId,
     padId,
     setValue,
+    setEditor,
   });
   const renderElement = useCallback(
     (props: RenderElementProps) => <Blocks {...props} />,
@@ -90,7 +88,7 @@ export const DeciEditor = ({
     }
   }, [editor]);
 
-  if (editor === null) {
+  if (editor === null || value === null) {
     return <span>Loading...</span>;
   }
 

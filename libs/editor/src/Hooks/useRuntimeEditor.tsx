@@ -36,7 +36,6 @@ export const useRuntimeEditor = ({ padId }: IUseRuntimeEditor) => {
           if (parentNode.type !== 'code_block') return;
 
           const [node] = Editor.node(editor, cursor);
-          console.log(parentNode);
 
           if (!Text.isText(node)) {
             return;

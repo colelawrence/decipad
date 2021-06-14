@@ -1,3 +1,4 @@
+import { gql, useQuery } from '@apollo/client';
 import {
   Box,
   Button,
@@ -11,8 +12,19 @@ import { signOut, useSession } from 'next-auth/client';
 import React from 'react';
 import { FiLogOut } from 'react-icons/fi';
 
+const GET_ALL_WORKSPACES = gql`
+  query GetWorkspaces {
+    workspaces {
+      id
+      name
+    }
+  }
+`;
+
 export const Dashboard = () => {
   const [session] = useSession();
+
+  const { data } = useQuery(GET_ALL_WORKSPACES);
 
   if (!session) return null;
 
@@ -38,6 +50,8 @@ export const Dashboard = () => {
         >
           Sign Out
         </Button>
+
+        {data && JSON.stringify(data)}
       </Box>
     </Square>
   );

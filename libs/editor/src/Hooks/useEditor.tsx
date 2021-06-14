@@ -9,12 +9,17 @@ import { useRuntimeEditor } from './useRuntimeEditor';
 interface IUseEditor {
   workspaceId: string;
   padId: string;
+  setEditor: React.Dispatch<React.SetStateAction<Editor>>;
   setValue: React.Dispatch<React.SetStateAction<Descendant[]>>;
 }
 
-export const useEditor = ({ workspaceId, padId, setValue }: IUseEditor) => {
+export const useEditor = ({
+  workspaceId,
+  padId,
+  setValue,
+  setEditor,
+}: IUseEditor) => {
   const [loading, setLoading] = useState(true);
-  const editor: Editor = pipe(createEditor(), ...withPlugins);
   const { padEditor, onChangeResult } = useRuntimeEditor({
     workspaceId,
     padId,
@@ -33,6 +38,7 @@ export const useEditor = ({ workspaceId, padId, setValue }: IUseEditor) => {
           ? await padEditor.getValueEventually()
           : padEditor.getValue();
         if (value) {
+          const editor: Editor = pipe(createEditor(), ...withPlugins);
           sub = padEditor.slateOps().subscribe((ops) => {
             Editor.withoutNormalizing(editor, () => {
               if (HistoryEditor.isHistoryEditor(editor)) {
@@ -50,12 +56,13 @@ export const useEditor = ({ workspaceId, padId, setValue }: IUseEditor) => {
           });
 
           setValue(value);
+          setEditor(editor);
           setLoading(false);
         }
       }
     })();
-    return () => sub.unsubscribe();
-  }, [padEditor, padId, setValue, editor]);
+    return () => sub?.unsubscribe();
+  }, [padEditor, padId, setValue, setEditor]);
 
   const onChange = useCallback(
     (editor: Editor) => {
@@ -69,5 +76,5 @@ export const useEditor = ({ workspaceId, padId, setValue }: IUseEditor) => {
     [padEditor, onChangeResult]
   );
 
-  return { loading, editor, onChange };
+  return { loading, onChange };
 };
