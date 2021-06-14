@@ -17,7 +17,12 @@ describe('replica sync', () => {
       sync: new Sync(),
     } as unknown as Runtime;
 
-    const r = replica<string>('/test/id', mockRuntime, '', true);
+    const r = replica<string>({
+      name: '/test/id',
+      runtime: mockRuntime,
+      initialValue: '',
+      createIfAbsent: true,
+    });
 
     r.mutate((s) => s + 'ABC');
     r.mutate((s) => s + 'DEF');
@@ -56,7 +61,11 @@ describe('replica sync', () => {
     const docStr = Automerge.save(doc);
     fetch.mockResponse(docStr);
 
-    const r = replica<string>('/test/id2', mockRuntime, '');
+    const r = replica<string>({
+      name: '/test/id2',
+      runtime: mockRuntime,
+      initialValue: '',
+    });
 
     await waitForExpect(() => {
       expect(fetch.mock.calls).toHaveLength(1);

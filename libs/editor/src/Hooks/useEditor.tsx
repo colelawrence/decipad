@@ -9,8 +9,8 @@ import { useRuntimeEditor } from './useRuntimeEditor';
 interface IUseEditor {
   workspaceId: string;
   padId: string;
-  setEditor: React.Dispatch<React.SetStateAction<Editor>>;
-  setValue: React.Dispatch<React.SetStateAction<Descendant[]>>;
+  setEditor: React.Dispatch<React.SetStateAction<Editor | null>>;
+  setValue: React.Dispatch<React.SetStateAction<Descendant[] | null>>;
 }
 
 export const useEditor = ({

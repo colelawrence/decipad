@@ -4,16 +4,18 @@ import { Sync } from './sync';
 import createExternalWebsocketImpl from './external-websocket';
 
 class Runtime {
-  sync = new Sync<AnySyncValue>();
+  sync: Sync<AnySyncValue>;
   sessionSubject = new BehaviorSubject<Session | null>(null);
   editors: Map<Id, PadEditor> = new Map();
 
-  constructor(public userId: string, public actorId: string) {}
+  constructor(public userId: string, public actorId: string, startSync = true) {
+    this.sync = new Sync({ start: startSync });
+  }
 
-  startPadEditor(padId: Id, createIfAbsent: boolean) {
+  startPadEditor(padId: Id, createIfAbsent: boolean, startSync = true) {
     let editor = this.editors.get(padId);
     if (editor === undefined) {
-      editor = new PadEditor(padId, this, createIfAbsent);
+      editor = new PadEditor(padId, this, createIfAbsent, startSync);
       let hadSubscribers = false;
       editor.slateOpsCountObservable.subscribe((subscriptionCount) => {
         if (subscriptionCount === 0) {

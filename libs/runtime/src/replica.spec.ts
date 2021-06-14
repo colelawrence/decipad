@@ -5,13 +5,18 @@ import { Sync } from './sync';
 
 describe('replica', () => {
   test('gets inactive when it has no subscribers', async () => {
-    const mockRuntime = ({
+    const mockRuntime = {
       userId: 'test user id',
       actorId: 'test actor id',
       sync: new Sync(),
-    } as unknown) as Runtime;
+    } as unknown as Runtime;
 
-    const r = replica<string>('test', mockRuntime, '', true);
+    const r = replica<string>({
+      name: 'test',
+      runtime: mockRuntime,
+      initialValue: '',
+      createIfAbsent: true,
+    });
 
     const expectedSubscriberCounts = [0, 1, 0, 1, 0];
     let completedSubscriberCount = false;
