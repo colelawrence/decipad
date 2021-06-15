@@ -3,15 +3,20 @@ import { chakra } from '@chakra-ui/system';
 import { Type } from '@decipad/language';
 import React, { Fragment } from 'react';
 
+const commonStyles = {
+  py: 2,
+  px: 6,
+  d: 'inline-block',
+  borderBottomRadius: 6,
+  fontWeight: 'bold',
+  mb: 3,
+};
+
 export const ResultError = chakra(Box, {
   baseStyle: {
     bg: 'red.100',
     color: 'red.500',
-    py: 2,
-    px: 6,
-    d: 'inline-block',
-    borderBottomRadius: 6,
-    fontWeight: 'bold',
+    ...commonStyles,
   },
 });
 
@@ -19,11 +24,7 @@ export const SingleResultStyles = chakra(Box, {
   baseStyle: {
     bg: 'green.100',
     color: 'green.500',
-    py: 2,
-    px: 6,
-    d: 'inline-block',
-    borderBottomRadius: 6,
-    fontWeight: 'bold',
+    ...commonStyles,
   },
 });
 

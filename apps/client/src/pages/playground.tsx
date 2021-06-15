@@ -1,8 +1,16 @@
+import { nanoid } from 'nanoid';
+import { useEffect } from 'react';
 import { Container, Heading, Text } from '@chakra-ui/react';
 import { AnonymousRuntimeProvider, DeciEditor } from '@decipad/editor';
-import { nanoid } from 'nanoid';
+
+const ran = nanoid();
 
 export default function Playground() {
+  useEffect(() => {
+    return () => {
+      localStorage.clear();
+    };
+  }, []);
   return (
     <AnonymousRuntimeProvider>
       <Container p={12} maxW="75ch">
@@ -12,7 +20,7 @@ export default function Playground() {
           version is intended just to test out how our pads work, play around
           and have fun!
         </Text>
-        <DeciEditor workspaceId={nanoid()} padId={nanoid()} />
+        <DeciEditor workspaceId={ran} padId={ran} />
       </Container>
     </AnonymousRuntimeProvider>
   );

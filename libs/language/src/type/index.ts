@@ -55,7 +55,7 @@ export class Type {
 
   type: string | null = null;
   unit: AST.Unit[] | null = null;
-  node: AST.Node;
+  node: AST.Node | null = null;
   errorCause: InferError | null = null;
 
   date: Time.Specificity | null = null;
