@@ -1,14 +1,14 @@
 import { useQuery } from '@apollo/client';
 import { Heading } from '@chakra-ui/react';
 import { DeciEditor } from '@decipad/editor';
-import { LoadingSpinnerPage } from '@decipad/ui';
-import { useRouter } from 'next/router';
-import React from 'react';
-import { GET_PAD_BY_ID } from '../../operations/queries/GET_PAD_BY_ID';
 import {
   GetPadById,
   GetPadByIdVariables,
-} from '../../operations/queries/__generated__/GetPadById';
+  GET_PAD_BY_ID,
+} from '@decipad/queries';
+import { LoadingSpinnerPage } from '@decipad/ui';
+import { useRouter } from 'next/router';
+import React from 'react';
 
 const Pad = () => {
   const router = useRouter();

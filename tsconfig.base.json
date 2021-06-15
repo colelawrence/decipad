@@ -35,7 +35,8 @@
       "@decipad/ui": ["libs/ui/src/index.ts"],
       "@decipad/editor": ["libs/editor/src/index.tsx"],
       "@decipad/kafka-lite": ["libs/kafka-lite/src/index.ts"],
-      "test-utils": ["libs/ui/src/lib/utils/test-utils.tsx"]
+      "test-utils": ["libs/ui/src/lib/utils/test-utils.tsx"],
+      "@decipad/queries": ["libs/queries/src/index.ts"]
     }
   },
   "types": ["node", "browser", "jest"],

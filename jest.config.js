@@ -7,5 +7,6 @@ module.exports = {
     '<rootDir>/apps/backend',
     '<rootDir>/libs/kafka-lite',
     '<rootDir>/libs/runtime',
+    '<rootDir>/libs/queries',
   ],
 };

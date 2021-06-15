@@ -1,7 +1,6 @@
 import { Container, Heading, Text } from '@chakra-ui/react';
 import { AnonymousRuntimeProvider, DeciEditor } from '@decipad/editor';
-
-const ran = String(Math.random());
+import { nanoid } from 'nanoid';
 
 export default function Playground() {
   return (
@@ -13,7 +12,7 @@ export default function Playground() {
           version is intended just to test out how our pads work, play around
           and have fun!
         </Text>
-        <DeciEditor workspaceId={ran} padId={ran} />
+        <DeciEditor workspaceId={nanoid()} padId={nanoid()} />
       </Container>
     </AnonymousRuntimeProvider>
   );

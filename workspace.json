@@ -1,11 +1,20 @@
 {
   "version": 2,
-  "cli": { "defaultCollection": "@nrwl/next" },
+  "cli": {
+    "defaultCollection": "@nrwl/next"
+  },
   "defaultProject": "client",
   "generators": {
-    "@nrwl/react": { "application": { "babel": true } },
+    "@nrwl/react": {
+      "application": {
+        "babel": true
+      }
+    },
     "@nrwl/next": {
-      "application": { "style": "@emotion/styled", "linter": "eslint" }
+      "application": {
+        "style": "@emotion/styled",
+        "linter": "eslint"
+      }
     }
   },
   "projects": {
@@ -16,7 +25,9 @@
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": { "lintFilePatterns": ["libs/language/**/*.ts"] }
+          "options": {
+            "lintFilePatterns": ["libs/language/**/*.ts"]
+          }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -28,7 +39,9 @@
         },
         "typecheck": {
           "executor": "@nrwl/workspace:run-commands",
-          "options": { "command": "yarn tsc -b libs/language --incremental" }
+          "options": {
+            "command": "yarn tsc -b libs/language --incremental"
+          }
         }
       }
     },
@@ -39,7 +52,9 @@
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": { "lintFilePatterns": ["libs/runtime/**/*.ts"] }
+          "options": {
+            "lintFilePatterns": ["libs/runtime/**/*.ts"]
+          }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -51,7 +66,9 @@
         },
         "typecheck": {
           "executor": "@nrwl/workspace:run-commands",
-          "options": { "command": "yarn tsc -b libs/runtime --incremental" }
+          "options": {
+            "command": "yarn tsc -b libs/runtime --incremental"
+          }
         }
       }
     },
@@ -67,7 +84,9 @@
             "root": "apps/client",
             "outputPath": "dist/apps/client"
           },
-          "configurations": { "production": {} }
+          "configurations": {
+            "production": {}
+          }
         },
         "serve": {
           "executor": "@nrwl/next:server",
@@ -85,7 +104,9 @@
         },
         "export": {
           "executor": "@nrwl/next:export",
-          "options": { "buildTarget": "client:build:production" }
+          "options": {
+            "buildTarget": "client:build:production"
+          }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -103,7 +124,9 @@
         },
         "typecheck": {
           "executor": "@nrwl/workspace:run-commands",
-          "options": { "command": "yarn tsc -b apps/client --incremental" }
+          "options": {
+            "command": "yarn tsc -b apps/client --incremental"
+          }
         }
       }
     },
@@ -121,11 +144,15 @@
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": { "lintFilePatterns": ["apps/client-e2e/**/*.{js,ts}"] }
+          "options": {
+            "lintFilePatterns": ["apps/client-e2e/**/*.{js,ts}"]
+          }
         },
         "typecheck": {
           "executor": "@nrwl/workspace:run-commands",
-          "options": { "command": "yarn tsc -b apps/client-e2e --incremental" }
+          "options": {
+            "command": "yarn tsc -b apps/client-e2e --incremental"
+          }
         }
       }
     },
@@ -136,7 +163,9 @@
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": { "lintFilePatterns": ["libs/ui/**/*.{ts,tsx,js,jsx}"] }
+          "options": {
+            "lintFilePatterns": ["libs/ui/**/*.{ts,tsx,js,jsx}"]
+          }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -148,16 +177,24 @@
         },
         "typecheck": {
           "executor": "@nrwl/workspace:run-commands",
-          "options": { "command": "yarn tsc -b libs/ui --incremental" }
+          "options": {
+            "command": "yarn tsc -b libs/ui --incremental"
+          }
         },
         "storybook": {
           "executor": "@nrwl/storybook:storybook",
           "options": {
             "uiFramework": "@storybook/react",
             "port": 4400,
-            "config": { "configFolder": "libs/ui/.storybook" }
+            "config": {
+              "configFolder": "libs/ui/.storybook"
+            }
           },
-          "configurations": { "ci": { "quiet": true } }
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
         },
         "build-storybook": {
           "executor": "@nrwl/storybook:build",
@@ -165,9 +202,15 @@
           "options": {
             "uiFramework": "@storybook/react",
             "outputPath": "dist/storybook/ui",
-            "config": { "configFolder": "libs/ui/.storybook" }
+            "config": {
+              "configFolder": "libs/ui/.storybook"
+            }
           },
-          "configurations": { "ci": { "quiet": true } }
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
         }
       }
     },
@@ -192,7 +235,9 @@
         },
         "typecheck": {
           "executor": "@nrwl/workspace:run-commands",
-          "options": { "command": "yarn tsc -b libs/editor --incremental" }
+          "options": {
+            "command": "yarn tsc -b libs/editor --incremental"
+          }
         }
       }
     },
@@ -220,7 +265,9 @@
         },
         "typecheck": {
           "executor": "@nrwl/workspace:run-commands",
-          "options": { "command": "yarn tsc -b apps/backend --incremental" }
+          "options": {
+            "command": "yarn tsc -b apps/backend --incremental"
+          }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -246,13 +293,36 @@
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": { "lintFilePatterns": ["libs/kafka-lite/**/*.ts"] }
+          "options": {
+            "lintFilePatterns": ["libs/kafka-lite/**/*.ts"]
+          }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
           "outputs": ["coverage/libs/kafka-lite"],
           "options": {
             "jestConfig": "libs/kafka-lite/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "queries": {
+      "root": "libs/queries",
+      "sourceRoot": "libs/queries/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/queries/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/queries"],
+          "options": {
+            "jestConfig": "libs/queries/jest.config.js",
             "passWithNoTests": true
           }
         }
