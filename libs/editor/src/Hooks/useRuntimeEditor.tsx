@@ -1,7 +1,8 @@
 import { PadEditor } from '@decipad/runtime';
 import { isCollapsed } from '@udecode/slate-plugins';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useRef, useEffect, useState } from 'react';
 import { Editor, Range, Text, Transforms } from 'slate';
+import { dequal } from 'dequal';
 import { RuntimeContext } from '../Contexts/Runtime';
 
 interface IUseRuntimeEditor {
@@ -19,6 +20,8 @@ export const useRuntimeEditor = ({ padId }: IUseRuntimeEditor) => {
       setPadEditor(padEditor);
     }
   }, [runtime, padId]);
+
+  const prevResultRef = useRef<unknown>(null);
 
   const onChangeResult = useCallback(
     (editor: Editor) => {
@@ -63,6 +66,12 @@ export const useRuntimeEditor = ({ padId }: IUseRuntimeEditor) => {
                 (parentNode as any).id as string,
                 foundLine
               );
+
+              if (dequal(prevResultRef.current, result)) {
+                return;
+              }
+              prevResultRef.current = result;
+
               if (result.errors !== null && result.errors.length > 0) {
                 for (const error of result.errors) {
                   console.error(error);
@@ -75,13 +84,7 @@ export const useRuntimeEditor = ({ padId }: IUseRuntimeEditor) => {
                 Transforms.setNodes(
                   editor,
                   {
-                    result: match
-                      ? result.value[0] +
-                        (result.type.unit === null
-                          ? ''
-                          : ' ' + result.type.unit[0].unit) +
-                        '\n'
-                      : null,
+                    result: match ? result ?? null : null,
                   },
                   { match: (n) => Editor.isBlock(editor, n) }
                 );

@@ -1,9 +1,15 @@
 import { Container, Heading, Text } from '@chakra-ui/react';
 import { AnonymousRuntimeProvider, DeciEditor } from '@decipad/editor';
+import { useEffect } from 'react';
 
 const ran = String(Math.random());
 
 export default function Playground() {
+  useEffect(() => {
+    return () => {
+      localStorage.clear();
+    };
+  }, []);
   return (
     <AnonymousRuntimeProvider>
       <Container p={12} maxW="75ch">
