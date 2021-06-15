@@ -1,5 +1,7 @@
-import { Box, Center, Heading, Image } from '@chakra-ui/react';
+import { Box, Button, Center, Heading, Icon, Image } from '@chakra-ui/react';
+import Link from 'next/link';
 import React from 'react';
+import { FiPlay } from 'react-icons/fi';
 import { GithubSignInButton } from './GithubSignInButton/GithubSignInButton.component';
 import { BodyText, Layout, Wrapper } from './index.styles';
 
@@ -28,6 +30,19 @@ export const Landing = () => {
               maps and pivot tables.
             </BodyText>
             <GithubSignInButton />
+            <Link href="/playground">
+              <Button
+                as="a"
+                size="lg"
+                colorScheme="blue"
+                mt={3}
+                cursor="pointer"
+                ml={6}
+                leftIcon={<Icon as={FiPlay} />}
+              >
+                Playground
+              </Button>
+            </Link>
           </Box>
         </Center>
         <BodyText>&copy; Copyright 2021 Deci. All Rights Reserved.</BodyText>

@@ -1,22 +1,28 @@
 import { useQuery } from '@apollo/client';
 import { Box, Heading, ListItem, UnorderedList } from '@chakra-ui/react';
-import { LoadingSpinnerPage } from '@decipad/ui';
-import { useRouter } from 'next/router';
-import React from 'react';
-import { GET_PADS } from '../../operations/queries/GET_PADS';
-import { GET_WORKSPACE_BY_ID } from '../../operations/queries/GET_WORKSPACE_BY_ID';
 import {
   GetPads,
   GetPadsVariables,
-} from '../../operations/queries/__generated__/GetPads';
-import {
   GetWorkspaceById,
   GetWorkspaceByIdVariables,
-} from '../../operations/queries/__generated__/GetWorkspaceById';
+  GET_PADS,
+  GET_WORKSPACE_BY_ID,
+} from '@decipad/queries';
+import { Dashboard, LoadingSpinnerPage } from '@decipad/ui';
+import { useSession } from 'next-auth/client';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
 
 const Workspace = () => {
   const router = useRouter();
+  const [session, loading] = useSession();
   const { id } = router.query;
+
+  useEffect(() => {
+    if (!session && !loading) {
+      router.push('/');
+    }
+  }, [session, router, loading]);
 
   const { data: workspace, loading: workspaceLoading } = useQuery<
     GetWorkspaceById,
@@ -32,7 +38,7 @@ const Workspace = () => {
     variables: { workspaceId: workspace?.getWorkspaceById?.id || '' },
   });
 
-  if (workspaceLoading || padsLoading) {
+  if (workspaceLoading || padsLoading || loading) {
     return <LoadingSpinnerPage />;
   }
 
@@ -50,6 +56,7 @@ const Workspace = () => {
           </ListItem>
         ))}
       </UnorderedList>
+      <Dashboard />
     </Box>
   );
 };

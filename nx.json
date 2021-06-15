@@ -1,13 +1,18 @@
 {
   "implicitDependencies": {
     "workspace.json": "*",
-    "package.json": { "dependencies": "*", "devDependencies": "*" },
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
     "tsconfig.base.json": "*",
     "tslint.json": "*",
     ".eslintrc.json": "*",
     "nx.json": "*"
   },
-  "affected": { "defaultBase": "main" },
+  "affected": {
+    "defaultBase": "main"
+  },
   "npmScope": "decipad",
   "tasksRunnerOptions": {
     "default": {
@@ -24,13 +29,34 @@
     }
   },
   "projects": {
-    "language": { "tags": [] },
-    "runtime": { "tags": [] },
-    "client": { "tags": [], "implicitDependencies": ["backend"] },
-    "client-e2e": { "tags": [], "implicitDependencies": ["client"] },
-    "ui": { "tags": [] },
-    "editor": { "tags": [] },
-    "backend": { "tags": [] },
-    "kafka-lite": { "tags": [] }
+    "language": {
+      "tags": []
+    },
+    "runtime": {
+      "tags": []
+    },
+    "client": {
+      "tags": [],
+      "implicitDependencies": ["backend"]
+    },
+    "client-e2e": {
+      "tags": [],
+      "implicitDependencies": ["client"]
+    },
+    "ui": {
+      "tags": []
+    },
+    "editor": {
+      "tags": []
+    },
+    "backend": {
+      "tags": []
+    },
+    "kafka-lite": {
+      "tags": []
+    },
+    "queries": {
+      "tags": []
+    }
   }
 }

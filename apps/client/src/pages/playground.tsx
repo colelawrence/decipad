@@ -1,8 +1,9 @@
+import { nanoid } from 'nanoid';
+import { useEffect } from 'react';
 import { Container, Heading, Text } from '@chakra-ui/react';
 import { AnonymousRuntimeProvider, DeciEditor } from '@decipad/editor';
-import { useEffect } from 'react';
 
-const ran = String(Math.random());
+const ran = nanoid();
 
 export default function Playground() {
   useEffect(() => {
