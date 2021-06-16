@@ -1,4 +1,6 @@
 import React, { ReactNode, useCallback } from 'react';
+import { autoformatBlock, unwrapList } from '@udecode/slate-plugins';
+import { Editor, Location } from 'slate';
 import { ReactEditor } from 'slate-react';
 
 interface DropFileProps {
@@ -7,9 +9,13 @@ interface DropFileProps {
 }
 
 export function DropFile({editor, children}: DropFileProps) {
-  const importFile = useCallback((file: File) => {
-    console.log('... file.name = ' + file.name);
-    const dataUrl = await fileToDataURL(file);
+  const importFile = useCallback((file: File, loc: Location) => {
+    (async () => {
+      console.log('... file.name = ' + file.name);
+      const dataUrl = await fileToDataURL(file);
+      console.log('data:', dataUrl);
+      insertNode(editor, 'code_block', loc);
+    })();
   }, [editor]);
 
   const dropHandler = useCallback((ev) => {
@@ -20,7 +26,7 @@ export function DropFile({editor, children}: DropFileProps) {
         if (item.kind === 'file') {
           var file = item.getAsFile();
           if (file) {
-            importFile(file);
+            importFile(file, {x: ev.offsetX, y: offsetY });
 
           }
 
@@ -44,6 +50,18 @@ export function DropFile({editor, children}: DropFileProps) {
   );
 }
 
-function fileToDataURL(file: File): Promise<string> {
-
+async function fileToDataURL(file: File): Promise<string> {
+  const data = Buffer.from(await file.arrayBuffer()).toString('base64')
+  return `data:${file.type};base64,${data}`;
 }
+
+
+export const insertNode = (
+  editor: Editor,
+  type: string,
+  target: Location
+): void => {
+  autoformatBlock(editor, type, target, {
+    preFormat: (editor: Editor) => unwrapList(editor)
+  });
+};
