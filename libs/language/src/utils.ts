@@ -56,6 +56,10 @@ export function col(...values: (LitType | AST.Expression)[]): AST.Column {
   );
 }
 
+export function importedData(url: string, contentType?: string) {
+  return n('imported-data', url, contentType);
+}
+
 export function seq(
   start: AST.Expression,
   end: AST.Expression,

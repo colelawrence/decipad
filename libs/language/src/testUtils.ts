@@ -1,3 +1,4 @@
+import { readFileSync } from 'fs';
 import { parse } from './parser';
 import { prettyPrintAST } from './parser/utils';
 import { run } from './interpreter';
@@ -81,3 +82,13 @@ export const objectToTupleValue = (
 
   return Column.fromNamedValues(values, Object.keys(obj)).getData();
 };
+
+// External data utils
+
+export function readFile(path: string): Buffer {
+  return readFileSync(path);
+}
+
+export function dataUrl(data: Buffer | string, contentType: string): string {
+  return `data:${contentType};base64,${Buffer.from(data).toString('base64')}`;
+}

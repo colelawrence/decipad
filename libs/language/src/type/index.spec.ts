@@ -92,6 +92,9 @@ it('can be stringified', () => {
 
   const nestedCol = Type.buildColumn(Type.buildColumn(Type.String, 4), 6);
   expect(nestedCol.toString()).toEqual('<string> x 4 x 6');
+
+  const importedData = Type.buildImportedData('data:someurl');
+  expect(importedData.toString()).toEqual('<data url="data:someurl">');
 });
 
 describe('sameAs', () => {

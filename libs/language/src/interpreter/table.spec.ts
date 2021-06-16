@@ -17,11 +17,11 @@ describe('evaluateTableColumn', () => {
     const realm = new Realm();
 
     expect(
-      await evaluateTableColumn(
+      (await evaluateTableColumn(
         realm,
         c('*', l(2), c('previous', l(1))),
         4
-      ).getData()
+      )).getData()
     ).toEqual([2, 4, 8, 16]);
 
     // Should be cleaned
@@ -33,11 +33,11 @@ describe('evaluateTableColumn', () => {
     realm.stack.set('numbers', fromJS([1, 2, 3, 4]));
 
     expect(
-      await evaluateTableColumn(
+      (await evaluateTableColumn(
         realm,
         c('*', n('ref', 'numbers'), c('previous', l(1))),
         4
-      ).getData()
+      )).getData()
     ).toEqual([1, 2, 6, 24]);
 
     // Should be cleaned

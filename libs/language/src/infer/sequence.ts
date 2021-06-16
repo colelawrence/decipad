@@ -87,10 +87,10 @@ export const getDateSequenceCount = (
   }
 };
 
-export const inferSequence = (ctx: Context, expr: AST.Sequence) => {
+export const inferSequence = async (ctx: Context, expr: AST.Sequence) => {
   const [startN, endN, byN] = expr.args;
-  const itemType = inferExpression(ctx, startN).sameAs(
-    inferExpression(ctx, endN)
+  const itemType = (await inferExpression(ctx, startN)).sameAs(
+    await inferExpression(ctx, endN)
   );
 
   if (itemType.errorCause != null) {

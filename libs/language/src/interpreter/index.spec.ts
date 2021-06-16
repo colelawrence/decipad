@@ -12,9 +12,12 @@ import {
   tableDef,
   table,
   prop,
+  importedData,
 } from '../utils';
+import { readFile, dataUrl } from '../testUtils';
 import { parseUTCDate } from '../date';
 import { run, runOne } from './index';
+import { join as pathJoin } from 'path';
 
 it('evaluates and returns', async () => {
   const basicProgram = [
@@ -326,6 +329,43 @@ describe('Tables', () => {
     ).toEqual([
       [1, 2, 3],
       [1, 2, 3],
+    ]);
+  });
+});
+
+describe('imported data', () => {
+  it('can import CSV data from url', async () => {
+    const contentType = 'text/csv';
+    const url = dataUrl(
+      readFile(pathJoin(__dirname, '..', 'data', 'test1.csv')),
+      contentType
+    );
+    expect(await runOne(importedData(url, contentType))).toEqual([
+      [
+        'Hello',
+        'World',
+        'Deci',
+        'Table',
+        'Here',
+        'How',
+        'Are',
+        'You',
+        'Doing',
+        '?',
+      ],
+      [1, 2, 3.4, 5, 6.8, 7, 8, 9, 10, 11],
+      [
+        new Date('2021-06-18T00:00:00.000Z'),
+        new Date('2021-06-19T00:00:00.000Z'),
+        new Date('2021-06-20T00:00:00.000Z'),
+        new Date('2021-06-21T00:00:00.000Z'),
+        new Date('2021-06-22T00:00:00.000Z'),
+        new Date('2021-06-23T00:00:00.000Z'),
+        new Date('2021-06-24T00:00:00.000Z'),
+        new Date('2021-06-25T00:00:00.000Z'),
+        new Date('2021-06-26T00:00:00.000Z'),
+        new Date('2021-06-27T00:00:00.000Z'),
+      ],
     ]);
   });
 });

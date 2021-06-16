@@ -177,6 +177,12 @@ declare namespace AST {
     end: Pos;
   }
 
+  // Imported data
+  interface ImportedData {
+    type: 'imported-data';
+    args: [string, string?];
+  }
+
   // Function calls and operators
 
   interface ArgList {
@@ -246,7 +252,8 @@ declare namespace AST {
     | Sequence
     | Date
     | Given
-    | Table;
+    | Table
+    | ImportedData;
 
   type Statement = FunctionDefinition | Assign | Expression;
 
@@ -275,6 +282,7 @@ declare namespace AST {
     'function-definition': FunctionDefinition;
     given: Given;
     block: Block;
+    'imported-data': ImportedData;
   }
 }
 
@@ -291,4 +299,12 @@ type TableType = import('../src/type').TableType;
 interface Result {
   type: Type | TableType;
   value: Interpreter.Result;
+}
+
+declare namespace ExternalData {
+  interface FetchResult {
+    contentType: string | null;
+    result: AsyncIterable<Uint8Array>;
+  }
+  type FetchFunction = (url: string) => Promise<FetchResult>;
 }

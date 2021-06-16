@@ -73,6 +73,9 @@ export class Type {
   // Time quantities
   timeUnits: Time.Unit[] | null = null;
 
+  // Imported data
+  dataUrl: string | null = null;
+
   // Functions are impossible types with functionness = true
   functionness = false;
 
@@ -118,7 +121,7 @@ export class Type {
     return Type.build({ type });
   }
 
-  static buildColumn(cellType: Type, columnSize: number) {
+  static buildColumn(cellType: Type, columnSize: number | null) {
     const t = new Type();
 
     t.cellType = cellType;
@@ -152,8 +155,12 @@ export class Type {
     if (unified.errorCause) {
       return Type.buildTuple(types);
     } else {
-      return Type.buildColumn(unified, types.length);
+      return Type.buildListFromUnifiedType(unified, types.length);
     }
+  }
+
+  static buildListFromUnifiedType(type: Type, length: number) {
+    return Type.buildColumn(type, length);
   }
 
   static buildDate(specificity: Time.Specificity) {
@@ -169,6 +176,12 @@ export class Type {
   static buildTimeQuantity(timeUnits: Time.Unit[]) {
     const t = new Type();
     t.timeUnits = timeUnits;
+    return t;
+  }
+
+  static buildImportedData(url: string) {
+    const t = new Type();
+    t.dataUrl = url;
     return t;
   }
 
@@ -236,6 +249,10 @@ export class Type {
 
     if (this.date != null) {
       return this.date;
+    }
+
+    if (this.dataUrl != null) {
+      return `<data url="${this.dataUrl}">`;
     }
 
     return `<${this.type}>`;

@@ -42,11 +42,11 @@ export class Stack<T> {
     throw new Error('panic: not found in stack: ' + varName);
   }
 
-  withPush<T>(wrapper: () => T): T {
+  async withPush<T>(wrapper: () => T | Promise<T>): Promise<T> {
     try {
       this.push();
 
-      return wrapper();
+      return await wrapper();
     } finally {
       this.pop();
     }

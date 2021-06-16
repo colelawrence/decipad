@@ -1,3 +1,4 @@
+import pSeries from 'p-series';
 import { InferError, Type } from '../type';
 import {
   getDefined,
@@ -12,13 +13,15 @@ import { callBuiltin } from './callBuiltin';
 import { Context, makeContext } from './context';
 import { inferSequence } from './sequence';
 import { findBadColumn, unifyColumnSizes, getLargestColumn } from './table';
+import { resolve as resolveData } from '../data';
+import { inferData } from './data';
 
 export { makeContext };
 
 const withErrorSource =
-  <T extends AST.Node>(fn: (ctx: Context, thing: T) => Type) =>
-  (ctx: Context, thing: T): Type => {
-    const type = fn(ctx, thing);
+  <T extends AST.Node>(fn: (ctx: Context, thing: T) => Promise<Type>) =>
+  async (ctx: Context, thing: T): Promise<Type> => {
+    const type = await fn(ctx, thing);
 
     if (type.errorCause != null && type.node == null) {
       return type.inNode(thing);
@@ -37,7 +40,7 @@ const withErrorSource =
  AST.Assign is special-cased by looking at its expression and returning just that
  */
 export const inferExpression = withErrorSource(
-  (ctx: Context, expr: AST.Expression): Type => {
+  async (ctx: Context, expr: AST.Expression): Promise<Type> => {
     switch (expr.type) {
       case 'ref': {
         const name = getIdentifierString(expr);
@@ -61,8 +64,8 @@ export const inferExpression = withErrorSource(
         return Type.buildTimeQuantity(units);
       }
       case 'range': {
-        const [start, end] = expr.args.map((expr) =>
-          inferExpression(ctx, expr)
+        const [start, end] = await pSeries(
+          expr.args.map((expr) => () => inferExpression(ctx, expr))
         );
 
         return Type.combine(start, end).mapType(() => {
@@ -75,14 +78,16 @@ export const inferExpression = withErrorSource(
         });
       }
       case 'sequence': {
-        return inferSequence(ctx, expr);
+        return await inferSequence(ctx, expr);
       }
       case 'date': {
         const [, specificity] = getDateFromAstForm(expr.args);
         return Type.buildDate(specificity);
       }
       case 'column': {
-        const cellTypes = expr.args[0].map((a) => inferExpression(ctx, a));
+        const cellTypes = await pSeries(
+          expr.args[0].map((a) => () => inferExpression(ctx, a))
+        );
 
         return Type.buildListLike(cellTypes);
       }
@@ -91,7 +96,7 @@ export const inferExpression = withErrorSource(
 
         ctx.inTable = true;
 
-        const tableType = ctx.stack.withPush(() => {
+        const tableType = await ctx.stack.withPush(async () => {
           const columnDefs = [];
           const columnNames = [];
 
@@ -99,7 +104,7 @@ export const inferExpression = withErrorSource(
             columns
           )) {
             const name = getIdentifierString(colDef);
-            const type = inferExpression(ctx, expr);
+            const type = await inferExpression(ctx, expr);
 
             ctx.stack.set(name, type);
 
@@ -137,8 +142,8 @@ export const inferExpression = withErrorSource(
       case 'function-call': {
         const fName = getIdentifierString(expr.args[0]);
         const fArgs = getOfType('argument-list', expr.args[1]).args;
-        const givenArguments: Type[] = fArgs.map((arg) =>
-          inferExpression(ctx, arg)
+        const givenArguments: Type[] = await pSeries(
+          fArgs.map((arg) => () => inferExpression(ctx, arg))
         );
 
         if (ctx.inTable && fName === 'previous') {
@@ -148,7 +153,7 @@ export const inferExpression = withErrorSource(
         const functionDefinition = ctx.functionDefinitions.get(fName);
 
         if (functionDefinition != null) {
-          return inferFunction(ctx, functionDefinition, givenArguments);
+          return await inferFunction(ctx, functionDefinition, givenArguments);
         } else {
           return callBuiltin(expr, fName, ...givenArguments);
         }
@@ -158,16 +163,16 @@ export const inferExpression = withErrorSource(
         const refName = getIdentifierString(ref);
 
         const { cellType, columnSize, tupleTypes, tupleNames } =
-          inferExpression(ctx, ref);
+          await inferExpression(ctx, ref);
 
         const largestColumn =
           tupleTypes != null ? getLargestColumn(tupleTypes) : null;
 
-        return ctx.stack.withPush(() => {
+        return await ctx.stack.withPush(async () => {
           if (cellType != null && columnSize != null) {
             ctx.stack.set(refName, cellType);
 
-            const bodyResult = inferExpression(ctx, body);
+            const bodyResult = await inferExpression(ctx, body);
 
             return Type.buildColumn(bodyResult, columnSize);
           } else if (
@@ -178,7 +183,7 @@ export const inferExpression = withErrorSource(
             const rowTypes = tupleTypes.map((t) => t.reduced());
             ctx.stack.set(refName, Type.buildTuple(rowTypes, tupleNames));
 
-            const bodyType = inferExpression(ctx, body);
+            const bodyType = await inferExpression(ctx, body);
 
             if (bodyType.tupleTypes != null && bodyType.tupleNames != null) {
               // Returned a row -- rebuild column-oriented table
@@ -197,15 +202,21 @@ export const inferExpression = withErrorSource(
           }
         });
       }
+      case 'imported-data': {
+        const [url, contentType] = expr.args;
+        // const maxRows = IMPORTED_DATA_MAX_ROWS_BEFORE_INFER;
+        const data = await resolveData({ url, contentType, fetch: ctx.fetch });
+        return await inferData(data, ctx);
+      }
     }
   }
 );
 
-export const inferFunction = (
+export const inferFunction = async (
   ctx: Context,
   func: AST.FunctionDefinition,
   givenArguments: Type[]
-): Type => {
+): Promise<Type> => {
   try {
     ctx.stack.push();
 
@@ -230,7 +241,7 @@ export const inferFunction = (
     let returned;
 
     for (const statement of fBody.args) {
-      returned = inferStatement(ctx, statement);
+      returned = await inferStatement(ctx, statement);
     }
 
     return getDefined(returned, 'panic: function did not return');
@@ -240,15 +251,18 @@ export const inferFunction = (
 };
 
 export const inferStatement = withErrorSource(
-  (/* Mutable! */ ctx: Context, statement: AST.Statement): Type => {
+  async (
+    /* Mutable! */ ctx: Context,
+    statement: AST.Statement
+  ): Promise<Type> => {
     switch (statement.type) {
       case 'assign': {
         const [nName, nValue] = statement.args;
 
         const varName = getIdentifierString(nName);
-        const type = !ctx.stack.top.has(varName)
+        const type = await (!ctx.stack.top.has(varName)
           ? inferExpression(ctx, nValue)
-          : Type.Impossible.withErrorCause(varName + ' already exists.');
+          : Type.Impossible.withErrorCause(varName + ' already exists.'));
 
         ctx.stack.set(varName, type);
         return type;
@@ -261,7 +275,7 @@ export const inferStatement = withErrorSource(
         return Type.FunctionPlaceholder;
       }
       default: {
-        return inferExpression(ctx, statement);
+        return await inferExpression(ctx, statement);
       }
     }
   }
@@ -272,10 +286,10 @@ export interface InferProgramResult {
   blockReturns: Array<Type>;
 }
 
-export const inferProgram = (
+export const inferProgram = async (
   program: AST.Block[],
   ctx = makeContext()
-): InferProgramResult => {
+): Promise<InferProgramResult> => {
   const blockReturns: Array<Type> = [];
 
   for (const block of program) {
@@ -284,7 +298,7 @@ export const inferProgram = (
     }
 
     for (let i = 0; i < block.args.length; i++) {
-      const returnedValue = inferStatement(ctx, block.args[i]);
+      const returnedValue = await inferStatement(ctx, block.args[i]);
 
       if (i === block.args.length - 1) {
         blockReturns.push(getDefined(returnedValue));
@@ -298,11 +312,11 @@ export const inferProgram = (
   };
 };
 
-export const inferTargetStatement = (
+export const inferTargetStatement = async (
   program: AST.Block[],
   [blockId, statementOffset]: [blockId: number, statementOffset: number],
   ctx = makeContext()
-): Type => {
+): Promise<Type> => {
   for (let blockIndex = 0; blockIndex < program.length; blockIndex++) {
     const block = program[blockIndex];
 
@@ -311,7 +325,7 @@ export const inferTargetStatement = (
       statementIndex < block.args.length;
       statementIndex++
     ) {
-      const type = inferStatement(ctx, block.args[statementIndex]);
+      const type = await inferStatement(ctx, block.args[statementIndex]);
 
       if (blockIndex === blockId && statementOffset === statementIndex) {
         if (type instanceof Type) {

@@ -89,7 +89,7 @@ export const reset = () => {
 
 async function execDeci(ast: AST.Statement) {
   try {
-    const type = inferStatement(inferContext, ast);
+    const type = await inferStatement(inferContext, ast);
 
     if (type.errorCause != null) {
       return type.toString();

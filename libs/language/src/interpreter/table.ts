@@ -27,13 +27,13 @@ const atIndex = (v: Value, rowCount: number, index: number): Value => {
   return (v as Column).atIndex(index);
 };
 
-export const evaluateTableColumn = (
+export const evaluateTableColumn = async (
   realm: Realm,
   column: AST.Expression,
   rowCount: number
-): Value => {
+): Promise<Value> => {
   if (!usesRecursion(column)) {
-    return evaluate(realm, column);
+    return await evaluate(realm, column);
   } else {
     // Allow nested tables to have previous references
     const savedPreviousValue = realm.previousValue;
@@ -42,7 +42,7 @@ export const evaluateTableColumn = (
     const rows: Value[] = [];
 
     for (let i = 0; i < rowCount; i++) {
-      const value = atIndex(evaluate(realm, column), rowCount, i);
+      const value = atIndex(await evaluate(realm, column), rowCount, i);
       realm.previousValue = value;
       rows.push(value);
     }
@@ -63,14 +63,17 @@ export const getLargestColumn = (values: Value[], minValue = 1): number => {
   return Math.max(...sizes);
 };
 
-export const evaluateTable = (realm: Realm, { args: columns }: AST.Table) => {
+export const evaluateTable = async (
+  realm: Realm,
+  { args: columns }: AST.Table
+): Promise<Value> => {
   const colNames: string[] = [];
   const colValues: Value[] = [];
 
-  return realm.stack.withPush(() => {
+  return await realm.stack.withPush(async () => {
     for (const [def, column] of pairwise<AST.ColDef, AST.Expression>(columns)) {
       const colName = getIdentifierString(def);
-      const columnData = evaluateTableColumn(
+      const columnData = await evaluateTableColumn(
         realm,
         column,
         getLargestColumn(colValues)

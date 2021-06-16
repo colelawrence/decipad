@@ -1,5 +1,6 @@
 import { Stack } from '../stack';
 import { Value } from './Value';
+import defaultFetch from '../data/default-fetch';
 
 // The name "realm" comes from V8.
 // It's passed around during interpretation and
@@ -9,4 +10,6 @@ export class Realm {
   stack = new Stack<Value>();
   functions = new Map<string, AST.FunctionDefinition>();
   previousValue: Value | null = null;
+
+  constructor(public fetch: ExternalData.FetchFunction = defaultFetch) {}
 }

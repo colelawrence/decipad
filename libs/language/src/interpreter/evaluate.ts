@@ -1,3 +1,4 @@
+import pSeries from 'p-series';
 import { hasBuiltin } from '../builtins';
 import { getOfType, getDefined, getIdentifierString } from '../utils';
 import { getDateFromAstForm, getTimeUnit } from '../date';
@@ -14,10 +15,15 @@ import {
 } from './Value';
 import { evaluateTable } from './table';
 import { evaluateGiven } from './given';
+import { evaluateData } from './data';
 import { callBuiltin } from './callBuiltin';
+import { resolve as resolveData } from '../data';
 
 // Gets a single value from an expanded AST.
-export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
+export async function evaluate(
+  realm: Realm,
+  node: AST.Statement
+): Promise<SimpleValue> {
   switch (node.type) {
     case 'literal': {
       switch (node.args[0]) {
@@ -38,7 +44,7 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
     }
     case 'assign': {
       const varName = getIdentifierString(node.args[0]);
-      const value = evaluate(realm, node.args[1]);
+      const value = await evaluate(realm, node.args[1]);
       realm.stack.set(varName, value);
       return value;
     }
@@ -48,7 +54,9 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
     case 'function-call': {
       const funcName = getIdentifierString(node.args[0]);
       const funcArgs = getOfType('argument-list', node.args[1]).args;
-      const args = funcArgs.map((arg) => evaluate(realm, arg));
+      const args = await pSeries(
+        funcArgs.map((arg) => () => evaluate(realm, arg))
+      );
 
       if (funcName === 'previous') {
         return realm.previousValue ?? args[0];
@@ -57,7 +65,7 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
       } else {
         const customFunc = getDefined(realm.functions.get(funcName));
 
-        return realm.stack.withPush(() => {
+        return await realm.stack.withPush(async () => {
           for (let i = 0; i < args.length; i++) {
             const argName = getIdentifierString(customFunc.args[1].args[i]);
 
@@ -67,7 +75,7 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
           const funcBody: AST.Block = customFunc.args[2];
 
           for (let i = 0; i < funcBody.args.length; i++) {
-            const value = evaluate(realm, funcBody.args[i]);
+            const value = await evaluate(realm, funcBody.args[i]);
 
             if (i === funcBody.args.length - 1) {
               return value;
@@ -79,13 +87,15 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
       }
     }
     case 'range': {
-      const [start, end] = node.args.map((arg) => evaluate(realm, arg));
+      const [start, end] = await pSeries(
+        node.args.map((arg) => () => evaluate(realm, arg))
+      );
 
       return Range.fromBounds(start, end);
     }
     case 'sequence': {
-      const start = evaluate(realm, node.args[0]);
-      const end = evaluate(realm, node.args[1]);
+      const start = await evaluate(realm, node.args[0]);
+      const end = await evaluate(realm, node.args[1]);
 
       if (start instanceof Date && end instanceof Date) {
         return Column.fromDateSequence(
@@ -94,7 +104,11 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
           getTimeUnit(getIdentifierString(node.args[2] as AST.Ref))
         );
       } else {
-        return Column.fromSequence(start, end, evaluate(realm, node.args[2]));
+        return Column.fromSequence(
+          start,
+          end,
+          await evaluate(realm, node.args[2])
+        );
       }
     }
     case 'date': {
@@ -102,7 +116,9 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
       return Date.fromDateAndSpecificity(dateMs, specificity);
     }
     case 'column': {
-      const values: SimpleValue[] = node.args[0].map((v) => evaluate(realm, v));
+      const values: SimpleValue[] = await pSeries(
+        node.args[0].map((v) => () => evaluate(realm, v))
+      );
 
       return Column.fromValues(values);
     }
@@ -127,7 +143,15 @@ export function evaluate(realm: Realm, node: AST.Statement): SimpleValue {
       return Scalar.fromValue(NaN);
     }
     case 'given': {
-      return evaluateGiven(realm, node);
+      return await evaluateGiven(realm, node);
+    }
+    case 'imported-data': {
+      // TODO
+      const [url, contentType] = node.args;
+      return await evaluateData(
+        realm,
+        await resolveData({ url, contentType, fetch: realm.fetch })
+      );
     }
   }
 }
@@ -170,13 +194,13 @@ const desiredTargetsToStatements = (
 
 // Given a program and target symbols/block indices,
 // compute a Interpreter.Result (value) for each target
-export function evaluateTargets(
+export async function evaluateTargets(
   program: AST.Block[],
   desiredTargets: Array<
     string | number | [blockIdx: number, statementIdx: number]
   >,
   realm = new Realm()
-): Value[] {
+): Promise<Value[]> {
   const targetSet: Map<unknown, Value> = new Map(
     desiredTargetsToStatements(program, desiredTargets).map((target) => [
       target,
@@ -186,7 +210,7 @@ export function evaluateTargets(
 
   for (const block of program) {
     for (const statement of block.args) {
-      const value: Value = evaluate(realm, statement);
+      const value: Value = await evaluate(realm, statement);
 
       if (targetSet.has(statement)) {
         targetSet.set(statement, value);
