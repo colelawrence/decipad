@@ -11,6 +11,7 @@
 @include "./time-quantity.ne"
 @include "./range.ne"
 @include "./sequence.ne"
+@include "./import-data.ne"
 @{%
 
 const knownUnits = require('./units').knownUnits
