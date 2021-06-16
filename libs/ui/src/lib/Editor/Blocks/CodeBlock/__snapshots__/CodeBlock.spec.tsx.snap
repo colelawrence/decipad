@@ -14,7 +14,6 @@ exports[`CodeBlock Block matches snapshot 1`] = `
   color: var(--chakra-colors-gray-800);
   width: 100%;
   padding: var(--chakra-space-5);
-  margin-bottom: var(--chakra-space-3);
   background: var(--chakra-colors-gray-100);
 }
 
@@ -31,6 +30,7 @@ exports[`CodeBlock Block matches snapshot 1`] = `
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
   font-weight: var(--chakra-fontWeights-bold);
+  margin-bottom: var(--chakra-space-3);
 }
 
 <div>
