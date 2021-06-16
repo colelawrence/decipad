@@ -50,6 +50,9 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
 
+      - name: Make sure the frontend can be built
+        run: npm run build:frontend
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
