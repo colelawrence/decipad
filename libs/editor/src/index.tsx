@@ -112,21 +112,23 @@ export const DeciEditor = ({ padId }: DeciEditorProps): JSX.Element => {
 
   return (
     <Box>
-      <Slate editor={editor} value={value} onChange={onChange}>
-        {editablePlugins}
-        <DashCommandsPortal
-          target={target}
-          index={index}
-          values={values}
-          onClick={onAddElement}
-        />
-        <MentionPortal
-          target={mentionTarget}
-          index={mentionIndex}
-          users={filteredUsers}
-        />
-        <HoveringToolbar />
-      </Slate>
+      <DropFile editor={editor}>
+        <Slate editor={editor} value={value} onChange={onChange}>
+          {editablePlugins}
+          <DashCommandsPortal
+            target={target}
+            index={index}
+            values={values}
+            onClick={onAddElement}
+          />
+          <MentionPortal
+            target={mentionTarget}
+            index={mentionIndex}
+            users={filteredUsers}
+          />
+          <HoveringToolbar />
+        </Slate>
+      </DropFile>
     </Box>
   );
 };
