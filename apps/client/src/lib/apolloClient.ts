@@ -11,6 +11,10 @@ import { AppProps } from 'next/app';
 import { useMemo } from 'react';
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
+const ORIGIN =
+  typeof window !== 'undefined'
+    ? window.location.origin
+    : 'http://localhost:4200';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
@@ -18,7 +22,7 @@ function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
     link: new HttpLink({
-      uri: 'http://localhost:4200/graphql', // Server URL (must be absolute)
+      uri: `${ORIGIN}/graphql`, // Server URL (must be absolute)
       credentials: 'same-origin', // Additional fetch() options like `credentials` or `headers`
     }),
     cache: new InMemoryCache({
