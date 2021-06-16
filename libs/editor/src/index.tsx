@@ -16,6 +16,7 @@ import { MentionPortalProps } from './Plugins/MentionPlugin/MentionPortal.compon
 import { useMention } from './Plugins/MentionPlugin/useMention';
 import { users } from './Plugins/MentionPlugin/users';
 import { withPlugins } from './Plugins';
+import { DropFile } from './Components/DropFile';
 
 const DashCommandsPortal = dynamic<DashCommandsPortalProps>(
   () =>
