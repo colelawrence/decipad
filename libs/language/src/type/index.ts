@@ -375,11 +375,6 @@ export class Type {
   }
 
   @propagate
-  getRangeOf() {
-    return this.rangeOf ?? this.withErrorCause('Expected range');
-  }
-
-  @propagate
   withColumnSize(columnSize: number | null) {
     if (this.columnSize === columnSize) {
       return this;
@@ -415,6 +410,11 @@ export class Type {
   }
 
   @propagate
+  getRangeOf() {
+    return this.rangeOf ?? this.withErrorCause('Expected range');
+  }
+
+  @propagate
   sameRangenessAs(other: Type): Type {
     if (this.rangeOf != null && other.rangeOf != null) {
       return this.rangeOf.sameAs(other.rangeOf).mapType(() => this);
@@ -425,6 +425,15 @@ export class Type {
         this.rangeOf != null ? 'Expected range' : 'Unexpected range';
 
       return this.withErrorCause(errorMessage);
+    }
+  }
+
+  @propagate
+  isTimeQuantity() {
+    if (this.timeUnits != null) {
+      return this;
+    } else {
+      return this.withErrorCause('Expected time quantity');
     }
   }
 
@@ -440,15 +449,6 @@ export class Type {
       }
     } else {
       return this.withErrorCause('Expected date');
-    }
-  }
-
-  @propagate
-  isTimeQuantity() {
-    if (this.timeUnits != null) {
-      return this;
-    } else {
-      return this.withErrorCause('Expected time quantity');
     }
   }
 

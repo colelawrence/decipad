@@ -9,7 +9,7 @@ export const callBuiltin = (
 ) => {
   if (!hasBuiltin(builtinName)) {
     return Type.Impossible.inNode(callExpr).withErrorCause(
-      `Unknown function: ${builtinName}`
+      `Unknown function ${builtinName}`
     );
   }
 

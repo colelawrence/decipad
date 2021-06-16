@@ -35,8 +35,8 @@ interface User {
 }
 
 interface ComputationResult {
-  type: Type | TableType | undefined;
-  value: Interpreter.Result | undefined;
+  type: Type | TableType | null;
+  value: Interpreter.Result | null;
   errors: ComputationError[];
 }
 

@@ -60,6 +60,7 @@ export const useRuntimeEditor = ({ padId }: IUseRuntimeEditor) => {
             c -= line;
             foundLine--;
           });
+
           if (padEditor) {
             try {
               const result = await padEditor.resultAt(
@@ -72,23 +73,21 @@ export const useRuntimeEditor = ({ padId }: IUseRuntimeEditor) => {
               }
               prevResultRef.current = result;
 
-              if (result.errors !== null && result.errors.length > 0) {
-                for (const error of result.errors) {
-                  console.error(error);
-                }
-              } else {
-                console.log(result);
-                const [match] = Editor.nodes(editor, {
-                  match: (n: any) => n.id === parentNode.id,
-                });
-                Transforms.setNodes(
-                  editor,
-                  {
-                    result: match ? result ?? null : null,
-                  },
-                  { match: (n) => Editor.isBlock(editor, n) }
-                );
+              for (const error of result.errors ?? []) {
+                console.error(error);
               }
+
+              const [match] = Editor.nodes(editor, {
+                match: (n: any) => n.id === parentNode.id,
+              });
+
+              Transforms.setNodes(
+                editor,
+                {
+                  result: match ? result ?? null : null,
+                },
+                { match: (n) => Editor.isBlock(editor, n) }
+              );
             } catch (err) {
               console.error(err);
             }

@@ -145,6 +145,8 @@ export const inferSequence = async (ctx: Context, expr: AST.Sequence) => {
       ? Type.Impossible.withErrorCause(countOrError)
       : Type.buildColumn(itemType, countOrError);
   } else {
-    return Type.Impossible.withErrorCause('Range parameters must be literal');
+    return Type.Impossible.withErrorCause(
+      'Sequence parameters must be literal'
+    );
   }
 };
