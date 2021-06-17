@@ -1,4 +1,5 @@
 import nearley from 'nearley';
+import { n } from '../utils';
 import { compiledGrammar } from '../grammar';
 import { ParserNode } from './types';
 import { sourceMapDecorator } from './source-map-decorator';
@@ -30,9 +31,9 @@ class BlockParser {
       throw new Error('Not yet finished');
     }
 
-    return ((this.parser.results as ParserNode[]).map(
+    return (this.parser.results as ParserNode[]).map(
       this.sourceDecorator
-    ) as unknown) as Parser.Solution[];
+    ) as unknown as Parser.Solution[];
   }
 }
 
@@ -51,7 +52,12 @@ function parseBlock(block: Parser.UnparsedBlock): Parser.ParsedBlock {
 export function parse(blocks: Parser.UnparsedBlock[]): Parser.ParsedBlock[] {
   return blocks.map((block) => {
     try {
-      return parseBlock(block);
+      if (block.source.trim() === '') {
+        const nilBlock = n('block');
+        return { id: block.id, solutions: [nilBlock], errors: [] };
+      } else {
+        return parseBlock(block);
+      }
     } catch (err) {
       return {
         id: block.id,

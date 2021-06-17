@@ -1,4 +1,5 @@
 /* eslint @nrwl/nx/enforce-module-boundaries: "off" */
+import { produce } from 'immer';
 import { parse, run, inferTargetStatement } from '../../language/src';
 import { Replica } from './replica';
 
@@ -25,8 +26,8 @@ export class Computer {
     if (this.computationErrors.length > 0) {
       return {
         errors: this.computationErrors,
-        type: undefined,
-        value: undefined,
+        type: null,
+        value: null,
       };
     }
     if (this.codeBlocks === undefined) {
@@ -55,6 +56,14 @@ export class Computer {
       }
     }
 
+    if (statementOffset === -1) {
+      return {
+        errors: this.computationErrors,
+        type: null,
+        value: null,
+      };
+    }
+
     const program = this.codeBlocks.map((block) => block.ast as AST.Block);
 
     const location = [blockOffset, statementOffset] as [number, number];
@@ -75,9 +84,35 @@ export class Computer {
     }
   }
 
+  private static getBlockErrors(
+    parsedBlock: Parser.ParsedBlock
+  ): ComputationError[] {
+    if (parsedBlock.errors.length > 0) {
+      return parsedBlock.errors.map(
+        produce((error: ComputationError) => {
+          error.message = 'Error';
+        })
+      );
+    } else if (parsedBlock.solutions.length !== 1) {
+      return [
+        {
+          message: 'Error',
+          details:
+            parsedBlock.solutions.length === 0
+              ? 'no solutions found for code'
+              : 'code is ambiguous',
+          fileName: parsedBlock.id,
+          lineNumber: 0, // TODO
+          columnNumber: 0, // TODO
+        },
+      ];
+    } else {
+      return [];
+    }
+  }
+
   private parseCode() {
     const blocks: ComputerUnparsedBlock[] = [];
-    this.computationErrors = [];
 
     const doc = this.replica.getValue() as Sync.Node[];
 
@@ -98,41 +133,20 @@ export class Computer {
 
     const parsedBlocks = parse(blocks);
 
-    const blocksWithoutErrors = parsedBlocks.filter((block) => {
-      if (block.errors.length > 0) {
-        for (const error of block.errors) {
-          this.computationErrors!.push(error);
-        }
-        return false;
-      }
-      return true;
-    });
+    this.computationErrors = [];
+    this.codeBlocks = [];
+    for (const block of parsedBlocks) {
+      const errors = Computer.getBlockErrors(block);
 
-    this.codeBlocks = blocksWithoutErrors.map((parsedBlock) => {
-      const solutions = parsedBlock.solutions;
-      if (solutions.length === 0) {
-        this.computationErrors!.push({
-          message: 'no solutions found for code',
-          details: '',
-          fileName: parsedBlock.id,
-          lineNumber: 0, // TODO
-          columnNumber: 0, // TODO
+      if (errors.length === 0) {
+        this.codeBlocks.push({
+          id: block.id,
+          ast: block.solutions[0],
         });
-      } else if (solutions.length > 1) {
-        this.computationErrors!.push({
-          message: `code is ambiguous`,
-          details: '',
-          fileName: parsedBlock.id,
-          lineNumber: 0, // TODO
-          columnNumber: 0, // TODO
-        });
+      } else {
+        this.computationErrors.push(...errors);
       }
-      return {
-        id: parsedBlock.id,
-        ast: solutions[0],
-        result: undefined,
-      };
-    });
+    }
   }
 }
 
