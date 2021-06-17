@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { Heading } from '@chakra-ui/react';
+import { Container, Heading } from '@chakra-ui/react';
 import { DeciEditor } from '@decipad/editor';
 import {
   GetPadById,
@@ -28,11 +28,10 @@ const Pad = () => {
   if (error) return <>{JSON.stringify(error)}</>;
 
   return (
-    <>
-      <Heading>Current Pad</Heading>
-      {JSON.stringify(data?.getPadById?.name)}
+    <Container maxW="75ch" py={10}>
+      <Heading mb={3}>{data?.getPadById?.name}</Heading>
       <DeciEditor workspaceId={id as string} padId={pid as string} />
-    </>
+    </Container>
   );
 };
 

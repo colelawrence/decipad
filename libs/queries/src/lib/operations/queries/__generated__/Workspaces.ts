@@ -7,10 +7,22 @@
 // GraphQL query operation: Workspaces
 // ====================================================
 
+export interface Workspaces_workspaces_pads_items {
+  __typename: 'Pad';
+  id: string;
+  name: string;
+}
+
+export interface Workspaces_workspaces_pads {
+  __typename: 'PagedPadResult';
+  items: Workspaces_workspaces_pads_items[];
+}
+
 export interface Workspaces_workspaces {
   __typename: 'Workspace';
   id: string;
   name: string;
+  pads: Workspaces_workspaces_pads;
 }
 
 export interface Workspaces {
