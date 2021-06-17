@@ -15,14 +15,16 @@ export interface BuiltinSpec {
   functor: (...types: Type[]) => Type;
 }
 
-const binopFunctor = (a: Type, b: Type) => a.isScalar('number').sameAs(b);
+const binopFunctor = (a: Type, b: Type) =>
+  Type.combine(a.isScalar('number'), b.sameAs(a));
 
 const dateCmpFunctor = (left: Type, right: Type): Type =>
   Type.combine(left.isDate(), right.sameAs(left), Type.Boolean);
 
 const cmpFunctor = (left: Type, right: Type): Type =>
   Type.combine(
-    left.isScalar('number').sameAs(right),
+    left.isScalar('number'),
+    right.sameAs(left),
     Type.build({ type: 'boolean' })
   );
 
@@ -126,7 +128,7 @@ export const builtins: Record<string, BuiltinSpec> = {
     argCount: 3,
     fn: (a, b, c) => (a ? b : c),
     functor: (a: Type, b: Type, c: Type) =>
-      Type.combine(a.isScalar('boolean'), b.sameAs(c)),
+      Type.combine(a.isScalar('boolean'), c.sameAs(b)),
   },
   // List stuff
   stepgrowth: {
@@ -189,7 +191,7 @@ export const builtins: Record<string, BuiltinSpec> = {
     argCount: 2,
     fn: ([bStart, bEnd], a) => a >= bStart && a <= bEnd,
     functor: (a: Type, b: Type) =>
-      Type.combine(a.getRangeOf().sameAs(b), Type.Boolean),
+      Type.combine(b.sameAs(a.getRangeOf()), Type.Boolean),
   },
   containsdate: {
     name: 'containsdate',

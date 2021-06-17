@@ -258,6 +258,20 @@ export class Type {
     return `<${this.type}>`;
   }
 
+  toBasicString() {
+    if (this.errorCause != null)
+      throw new Error('toBasicString: errors not supported');
+    if (this.unit != null) return stringifyUnits(this.unit);
+    if (this.type != null) return this.type;
+    if (this.columnSize != null) return 'column';
+    if (this.tupleTypes != null) return 'table';
+    if (this.rangeOf != null) return 'range';
+    if (this.date != null) return `date (${this.date})`;
+    if (this.dataUrl != null) return 'imported data';
+
+    throw new Error('toBasicString: unknown type');
+  }
+
   get cardinality(): number {
     if (this.tupleTypes != null) {
       return 1 + Math.max(...this.tupleTypes.map((c) => c.cardinality));
@@ -295,6 +309,13 @@ export class Type {
     }
   }
 
+  @propagate
+  expected(expected: Type | string, got?: Type | string) {
+    return this.withErrorCause(
+      InferError.expectedButGot(expected, got ?? this)
+    );
+  }
+
   // Type assertions -- these return a new type possibly with an error
   @propagate
   sameAs(other: Type): Type {
@@ -305,20 +326,11 @@ export class Type {
   }
 
   @propagate
-  isScalar(type?: TypeName | null) {
-    if (
-      this.tupleTypes == null &&
-      this.cellType == null &&
-      this.rangeOf == null &&
-      this.date == null
-    ) {
-      if (type == null || type === this.type) {
-        return this;
-      } else {
-        return this.withErrorCause(`Expected ${type}`);
-      }
+  isScalar(type: TypeName) {
+    if (type === this.type) {
+      return this;
     } else {
-      return this.withErrorCause('Expected scalar');
+      return this.expected(type);
     }
   }
 
@@ -333,21 +345,15 @@ export class Type {
 
       if (matchingTypes && matchingUnits) {
         return this;
+      } else if (!matchingTypes) {
+        return this.expected(other);
       } else {
-        return this.withErrorCause(
-          !matchingTypes
-            ? `Expected ${this.type}`
-            : `Mismatched units: ${stringifyUnits(
-                this.unit
-              )} and ${stringifyUnits(other.unit)}`
-        );
+        return this.withErrorCause(InferError.badUnits(other.unit, this.unit));
       }
     } else if (!meScalar && !theyScalar) {
       return this;
-    } else if (meScalar) {
-      return this.withErrorCause('Expected scalar');
     } else {
-      return this.withErrorCause('Unexpected scalar');
+      return this.expected(other);
     }
   }
 

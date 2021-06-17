@@ -93,13 +93,9 @@ describe('callBuiltin', () => {
   });
 
   it('errors', () => {
-    expect(testFunctor('unknownFn', Type.Number).errorCause?.message).toMatch(
-      /Unknown function/i
-    );
+    expect(testFunctor('unknownFn', Type.Number).errorCause).not.toBeNull();
 
-    expect(testFunctor('if', Type.Number).errorCause?.message).toMatch(
-      /3 parameters/i
-    );
+    expect(testFunctor('if', Type.Number).errorCause).not.toBeNull();
   });
 });
 
@@ -140,8 +136,8 @@ const typeDimTests: Record<string, Test> = {
         '>',
         build({ type: 'number', unit: [meter] }),
         build2({ type: 'number', unit: [second] })
-      ).errorCause.message
-    ).toMatch(/mismatched units/i);
+      ).errorCause.expectedUnit
+    ).toEqual([[meter], [second]]);
 
     expect(
       testFunctor('>', n, build2({ type: 'number', unit: [meter] })).errorCause

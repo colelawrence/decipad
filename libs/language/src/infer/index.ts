@@ -48,7 +48,9 @@ export const inferExpression = withErrorSource(
         if (ctx.stack.has(name)) {
           return ctx.stack.get(name);
         } else {
-          return Type.Impossible.withErrorCause('Undefined variable ' + name);
+          return Type.Impossible.withErrorCause(
+            `The variable ${name} does not exist`
+          );
         }
       }
       case 'literal': {
@@ -133,10 +135,14 @@ export const inferExpression = withErrorSource(
           if (columnIndex !== -1) {
             return getDefined(table.tupleTypes?.[columnIndex]);
           } else {
-            return Type.Impossible.withErrorCause('Unknown column ' + colName);
+            return Type.Impossible.withErrorCause(
+              `The column ${colName} does not exist`
+            );
           }
         } else {
-          return Type.Impossible.withErrorCause('Undefined table ' + tableName);
+          return Type.Impossible.withErrorCause(
+            `The table ${tableName} does not exist`
+          );
         }
       }
       case 'function-call': {
@@ -223,12 +229,10 @@ export const inferFunction = async (
     const [fName, fArgs, fBody] = func.args;
 
     if (givenArguments.length !== fArgs.args.length) {
-      const error = new InferError(
-        'Wrong number of arguments applied to ' +
-          getIdentifierString(fName) +
-          ' (expected ' +
-          String(fArgs.args.length) +
-          ')'
+      const error = InferError.badArgCount(
+        getIdentifierString(fName),
+        fArgs.args.length,
+        givenArguments.length
       );
 
       return Type.Impossible.withErrorCause(error);
@@ -262,7 +266,9 @@ export const inferStatement = withErrorSource(
         const varName = getIdentifierString(nName);
         const type = await (!ctx.stack.top.has(varName)
           ? inferExpression(ctx, nValue)
-          : Type.Impossible.withErrorCause(varName + ' already exists.'));
+          : Type.Impossible.withErrorCause(
+              `A variable with the name ${varName} already exists`
+            ));
 
         ctx.stack.set(varName, type);
         return type;

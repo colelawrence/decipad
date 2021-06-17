@@ -135,14 +135,14 @@ describe('sameAs', () => {
     expect(
       Type.build({ type: 'number', unit: [meter] }).sameAs(n([second]))
         .errorCause
-    ).toEqual(new InferError('Mismatched units: meter and second'));
+    ).toEqual(InferError.badUnits([second], [meter]));
     expect(
       Type.build({ type: 'number', unit: [meter, second] }).sameAs(n([second]))
         .errorCause
-    ).toEqual(new InferError('Mismatched units: meter.second and second'));
+    ).toEqual(InferError.badUnits([second], [meter, second]));
     expect(
       Type.build({ type: 'number', unit: [meter] }).sameAs(n(null)).errorCause
-    ).toEqual(new InferError('Mismatched units: meter and unitless'));
+    ).toEqual(InferError.badUnits(null, [meter]));
   });
 });
 
@@ -234,13 +234,13 @@ describe('Impossible types', () => {
   it('returns an impossible type', () => {
     const type = Type.buildScalar('string');
 
-    expect(type.isScalar('boolean')).toEqual(
-      Type.Impossible.withErrorCause('Expected boolean')
+    expect(type.isScalar('boolean').errorCause).toEqual(
+      InferError.expectedButGot('boolean', Type.String)
     );
 
     const differentType = Type.buildScalar('number');
-    expect(type.sameAs(differentType)).toEqual(
-      Type.Impossible.withErrorCause('Expected string')
+    expect(type.sameAs(differentType).errorCause).toEqual(
+      InferError.expectedButGot(Type.Number, Type.String)
     );
   });
 
@@ -365,21 +365,21 @@ describe('ranges', () => {
   });
 
   it('rangeness is checked with sameAs', () => {
-    expect(
-      Type.buildRange(Type.Number).sameAs(Type.buildRange(Type.Number))
-    ).toEqual(Type.buildRange(Type.Number));
+    const nrange = Type.buildRange(Type.Number);
+    const srange = Type.buildRange(Type.String);
 
-    expect(
-      Type.buildRange(Type.Number).sameAs(Type.buildRange(Type.String))
-        .errorCause
-    ).not.toBeNull();
+    expect(nrange.sameAs(nrange)).toEqual(nrange);
 
-    expect(Type.buildRange(Type.Number).sameAs(Type.Number).errorCause).toEqual(
+    expect(nrange.sameAs(srange).errorCause).toEqual(
+      InferError.expectedButGot(Type.String, Type.Number)
+    );
+
+    expect(nrange.sameAs(Type.Number).errorCause).toEqual(
       new InferError('Expected range')
     );
 
-    expect(Type.Number.sameAs(Type.buildRange(Type.Number)).errorCause).toEqual(
-      new InferError('Expected number')
+    expect(Type.Number.sameAs(nrange).errorCause).toEqual(
+      InferError.expectedButGot(nrange, Type.Number)
     );
   });
 });
