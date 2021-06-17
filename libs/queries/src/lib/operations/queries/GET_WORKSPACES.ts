@@ -5,6 +5,12 @@ export const GET_WORKSPACES = gql`
     workspaces {
       id
       name
+      pads(page: { maxItems: 10 }) {
+        items {
+          id
+          name
+        }
+      }
     }
   }
 `;
