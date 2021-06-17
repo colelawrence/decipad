@@ -1,15 +1,11 @@
+import { pipe } from '@udecode/slate-plugins';
 import { Box } from '@chakra-ui/react';
 import { Blocks, Leaves } from '@decipad/ui';
 import { EditablePlugins } from '@udecode/slate-plugins';
 import dynamic from 'next/dynamic';
-import React, { useCallback, useEffect, useState } from 'react';
-import { Node } from 'slate';
-import {
-  ReactEditor,
-  RenderElementProps,
-  RenderLeafProps,
-  Slate,
-} from 'slate-react';
+import React, { useCallback, useState, useMemo } from 'react';
+import { Node, createEditor } from 'slate';
+import { ReactEditor, Slate } from 'slate-react';
 import { useEditor } from './Hooks/useEditor';
 import { plugins } from './Plugins';
 import { commands } from './Plugins/DashCommands/commands';
@@ -19,6 +15,7 @@ import { HoveringToolbar } from './Plugins/HoveringToolbar/HoveringToolbar.compo
 import { MentionPortalProps } from './Plugins/MentionPlugin/MentionPortal.component';
 import { useMention } from './Plugins/MentionPlugin/useMention';
 import { users } from './Plugins/MentionPlugin/users';
+import { withPlugins } from './Plugins';
 
 const DashCommandsPortal = dynamic<DashCommandsPortalProps>(
   () =>
@@ -41,27 +38,12 @@ interface DeciEditorProps {
   padId: string;
 }
 
-export const DeciEditor = ({
-  workspaceId,
-  padId,
-}: DeciEditorProps): JSX.Element => {
-  const [value, setValue] = useState<Node[] | null>([]);
-  const [editor, setEditor] = useState<ReactEditor | null>(null);
-  const { loading: _, onChange: onChangeResult } = useEditor({
-    workspaceId,
-    padId,
-    setValue,
-    setEditor,
-  });
-  const renderElement = useCallback(
-    (props: RenderElementProps) => <Blocks {...props} />,
-    []
-  );
-
-  const renderLeaf = useCallback(
-    (props: RenderLeafProps) => <Leaves {...props} />,
-    []
-  );
+export const DeciEditor = ({ padId }: DeciEditorProps): JSX.Element => {
+  const [value, setValue] = useState<Node[] | null>(null);
+  const editor = useState(
+    (): ReactEditor => pipe(createEditor(), ...withPlugins)
+  )[0];
+  const { onChangeLanguage } = useEditor({ padId, editor, setValue });
 
   const {
     onAddElement,
@@ -82,43 +64,56 @@ export const DeciEditor = ({
     filteredUsers,
   } = useMention(users);
 
-  useEffect(() => {
-    if (editor !== null) {
-      ReactEditor.focus(editor as any);
-    }
-  }, [editor]);
+  const onChange = useCallback(
+    (newValue: Node[]) => {
+      onChangeDashCommands(editor);
+      onChangeMention(editor);
+      onChangeLanguage();
+      setValue(newValue);
+    },
+    [editor, onChangeDashCommands, onChangeMention, onChangeLanguage, setValue]
+  );
 
-  if (editor === null || value === null) {
+  const editablePlugins = useMemo(
+    () => (
+      <EditablePlugins
+        autoFocus={true}
+        style={{ height: '100%' }}
+        plugins={plugins}
+        renderElement={[(props) => <Blocks {...props} />]}
+        renderLeaf={[(props) => <Leaves {...props} />]}
+        onKeyDown={[onKeyDownDashCommands, onKeyDownMention]}
+        onKeyDownDeps={[
+          index,
+          search,
+          target,
+          mentionIndex,
+          mentionSearch,
+          mentionTarget,
+        ]}
+        placeholder={`Type "/" for commands`}
+      />
+    ),
+    [
+      onKeyDownDashCommands,
+      onKeyDownMention,
+      index,
+      search,
+      target,
+      mentionIndex,
+      mentionSearch,
+      mentionTarget,
+    ]
+  );
+
+  if (value == null) {
     return <span>Loading...</span>;
   }
-
-  const onChange = (newValue: Node[]) => {
-    onChangeDashCommands(editor);
-    onChangeMention(editor);
-    onChangeResult(editor);
-    setValue(newValue);
-  };
 
   return (
     <Box>
       <Slate editor={editor} value={value} onChange={onChange}>
-        <EditablePlugins
-          autoFocus={true}
-          style={{ height: '100%' }}
-          plugins={plugins}
-          renderElement={[renderElement]}
-          renderLeaf={[renderLeaf]}
-          onKeyDown={[onKeyDownDashCommands, onKeyDownMention]}
-          onKeyDownDeps={[
-            index,
-            search,
-            target,
-            mentionIndex,
-            mentionSearch,
-            mentionTarget,
-          ]}
-          placeholder={`Type "/" for commands`}
-        />
+        {editablePlugins}
         <DashCommandsPortal
           target={target}
           index={index}
