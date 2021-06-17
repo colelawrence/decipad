@@ -172,15 +172,15 @@ describe('pad editor', () => {
     await timeout(100);
 
     const result = await model.resultAt('code block 1', 3);
-    expect(result.type).toBeUndefined();
-    expect(result.value).toBeUndefined();
+    expect(result.type).toBeNull();
+    expect(result.value).toBeNull();
     expect(result.errors).toHaveLength(1);
 
     const error = result.errors[0];
     expect(error).toMatchObject({
       lineNumber: 2,
       columnNumber: 7,
-      message: 'Syntax error at line 2 col 7',
+      message: 'Error',
     });
 
     model.stop();
