@@ -62,9 +62,7 @@ const Workspace = () => {
       >
         <SideMenu currentWorkspace={data?.getWorkspaceById} />
         <Box>
-          <Heading p={6} mb={6}>
-            All Pads
-          </Heading>
+          <Heading p={6}>Notebooks</Heading>
           {data?.getWorkspaceById?.pads.items.length === 0 && (
             <Square h="100%" w="100%" pb="300px">
               <Box textAlign="center">
