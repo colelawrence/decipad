@@ -16,8 +16,8 @@ export const commands: Command[] = [
   {
     type: 'code_block',
     mode: 'block',
-    title: 'Code Block',
-    description: 'Write some Decilang inside this code block',
+    title: 'Model Block',
+    description: 'Write some Decilang',
     darkImage: getDarkImage('code_block'),
     lightImage: getLightImage('code_block'),
   },
