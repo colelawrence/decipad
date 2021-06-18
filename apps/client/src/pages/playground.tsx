@@ -1,4 +1,11 @@
-import { Button, Container, Heading, Icon, Text } from '@chakra-ui/react';
+import {
+  Button,
+  Container,
+  Heading,
+  Icon,
+  Image,
+  Text,
+} from '@chakra-ui/react';
 import { AnonymousRuntimeProvider, DeciEditor } from '@decipad/editor';
 import { nanoid } from 'nanoid';
 import React, { useEffect, useMemo } from 'react';
@@ -16,6 +23,14 @@ export default function Playground() {
   return (
     <AnonymousRuntimeProvider>
       <Container p={12} maxW="75ch" minH="100vh">
+        <Image
+          src="/assets/deci-logo-brand.png"
+          alt="Brand"
+          borderRadius="5px"
+          mb={3}
+          w={50}
+          h={50}
+        />
         <Heading>Deci Playground</Heading>
         <Text opacity={0.7} mt={3} mb={6}>
           This is a lightweight version of Deci, here you only get one pad. This
