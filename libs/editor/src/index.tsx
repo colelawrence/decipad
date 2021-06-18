@@ -1,13 +1,13 @@
-import { pipe } from '@udecode/slate-plugins';
-import { Box } from '@chakra-ui/react';
+import { Box, Button, Container, Icon } from '@chakra-ui/react';
 import { Blocks, Leaves } from '@decipad/ui';
-import { EditablePlugins } from '@udecode/slate-plugins';
+import { EditablePlugins, pipe } from '@udecode/slate-plugins';
 import dynamic from 'next/dynamic';
-import React, { useCallback, useState, useMemo } from 'react';
-import { Node, createEditor } from 'slate';
+import React, { useCallback, useMemo, useState } from 'react';
+import { FiPlus } from 'react-icons/fi';
+import { createEditor, Node, Transforms } from 'slate';
 import { ReactEditor, Slate } from 'slate-react';
 import { useEditor } from './Hooks/useEditor';
-import { plugins } from './Plugins';
+import { plugins, withPlugins } from './Plugins';
 import { commands } from './Plugins/DashCommands/commands';
 import { DashCommandsPortalProps } from './Plugins/DashCommands/DashCommandsPortal';
 import { useDashCommands } from './Plugins/DashCommands/useDashCommands';
@@ -15,7 +15,6 @@ import { HoveringToolbar } from './Plugins/HoveringToolbar/HoveringToolbar.compo
 import { MentionPortalProps } from './Plugins/MentionPlugin/MentionPortal.component';
 import { useMention } from './Plugins/MentionPlugin/useMention';
 import { users } from './Plugins/MentionPlugin/users';
-import { withPlugins } from './Plugins';
 
 const DashCommandsPortal = dynamic<DashCommandsPortalProps>(
   () =>
@@ -111,22 +110,37 @@ export const DeciEditor = ({ padId }: DeciEditorProps): JSX.Element => {
   }
 
   return (
-    <Box>
-      <Slate editor={editor} value={value} onChange={onChange}>
-        {editablePlugins}
-        <DashCommandsPortal
-          target={target}
-          index={index}
-          values={values}
-          onClick={onAddElement}
-        />
-        <MentionPortal
-          target={mentionTarget}
-          index={mentionIndex}
-          users={filteredUsers}
-        />
-        <HoveringToolbar />
-      </Slate>
+    <Box pb="70px" w="100vw" pos="relative">
+      <Container maxW="75ch">
+        <Slate editor={editor} value={value} onChange={onChange}>
+          {editablePlugins}
+          <DashCommandsPortal
+            target={target}
+            index={index}
+            values={values}
+            onClick={onAddElement}
+          />
+          <MentionPortal
+            target={mentionTarget}
+            index={mentionIndex}
+            users={filteredUsers}
+          />
+          <HoveringToolbar />
+        </Slate>
+      </Container>
+      <Button
+        pos="absolute"
+        onClick={() => {
+          editor.insertNode({ type: 'code_block', text: '' });
+          Transforms.setNodes(editor, { type: 'code_block' });
+          ReactEditor.focus(editor);
+        }}
+        top={0}
+        right={10}
+        leftIcon={<Icon as={FiPlus} />}
+      >
+        Add Model Block
+      </Button>
     </Box>
   );
 };

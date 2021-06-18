@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { Container, Heading } from '@chakra-ui/react';
+import { Box, Button, Container, Heading, Icon } from '@chakra-ui/react';
 import { DeciEditor } from '@decipad/editor';
 import {
   GetPadById,
@@ -9,6 +9,7 @@ import {
 import { LoadingSpinnerPage } from '@decipad/ui';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { FiArrowLeft } from 'react-icons/fi';
 
 const Pad = () => {
   const router = useRouter();
@@ -28,10 +29,22 @@ const Pad = () => {
   if (error) return <>{JSON.stringify(error)}</>;
 
   return (
-    <Container maxW="75ch" py={10} minH="100vh">
-      <Heading mb={3}>{data?.getPadById?.name}</Heading>
+    <Box minH="100vh">
+      <Button
+        pos="absolute"
+        top={12}
+        left={12}
+        aria-label="go back"
+        leftIcon={<Icon as={FiArrowLeft} />}
+        onClick={() => router.back()}
+      >
+        Go Back
+      </Button>
+      <Container maxW="75ch" pt={12}>
+        <Heading mb={3}>{data?.getPadById?.name}</Heading>
+      </Container>
       <DeciEditor workspaceId={id as string} padId={pid as string} />
-    </Container>
+    </Box>
   );
 };
 
