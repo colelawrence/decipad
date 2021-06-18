@@ -1,6 +1,6 @@
 import { Realm } from './Realm';
 import { TabularData } from '../data/TabularData';
-import { Column, Value, fromJS } from './Value';
+import { Column, Value, fromJS, Date as IDate } from './Value';
 
 export async function evaluateData(
   realm: Realm,
@@ -20,5 +20,12 @@ export async function evaluateData(
 }
 
 function toValue(values: any[]): Value {
-  return Column.fromValues(values.map(fromJS));
+  return Column.fromValues(values.map(fromJSOrDate));
+}
+
+function fromJSOrDate(value: any): Value {
+  if (value instanceof Date) {
+    return IDate.fromDateAndSpecificity(value.getTime(), 'time');
+  }
+  return fromJS(value);
 }

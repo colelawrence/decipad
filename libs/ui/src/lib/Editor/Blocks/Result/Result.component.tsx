@@ -62,7 +62,7 @@ const ResultContent = ({ type, value, depth = 0 }: ResultContentProps) => {
       </>
     );
   } else if (type.date) {
-    return <>{new Date(value).toISOString()}</>;
+    return <>{new Date(value[0]).toISOString()}</>;
   } else if (type.type === 'string') {
     return <>"{value}"</>;
   } else if (type.columnSize != null && Array.isArray(value)) {
