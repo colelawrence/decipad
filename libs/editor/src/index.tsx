@@ -6,6 +6,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { FiPlus } from 'react-icons/fi';
 import { createEditor, Node, Transforms } from 'slate';
 import { ReactEditor, Slate } from 'slate-react';
+import { DropFile } from './Components/DropFile';
 import { useEditor } from './Hooks/useEditor';
 import { plugins, withPlugins } from './Plugins';
 import { commands } from './Plugins/DashCommands/commands';
@@ -112,21 +113,23 @@ export const DeciEditor = ({ padId }: DeciEditorProps): JSX.Element => {
   return (
     <Box pb="70px" w="100vw" pos="relative">
       <Container maxW="75ch">
-        <Slate editor={editor} value={value} onChange={onChange}>
-          {editablePlugins}
-          <DashCommandsPortal
-            target={target}
-            index={index}
-            values={values}
-            onClick={onAddElement}
-          />
-          <MentionPortal
-            target={mentionTarget}
-            index={mentionIndex}
-            users={filteredUsers}
-          />
-          <HoveringToolbar />
-        </Slate>
+        <DropFile editor={editor}>
+          <Slate editor={editor} value={value} onChange={onChange}>
+            {editablePlugins}
+            <DashCommandsPortal
+              target={target}
+              index={index}
+              values={values}
+              onClick={onAddElement}
+            />
+            <MentionPortal
+              target={mentionTarget}
+              index={mentionIndex}
+              users={filteredUsers}
+            />
+            <HoveringToolbar />
+          </Slate>
+        </DropFile>
       </Container>
       <Button
         pos="absolute"

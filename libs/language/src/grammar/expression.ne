@@ -8,6 +8,7 @@ expression    -> given                                   {% id %}
 nonGivenExp   -> divMulOp                                {% id %}
 nonGivenExp   -> table                                   {% id %}
 nonGivenExp   -> functionCall                            {% id %}
+nonGivenExp   -> importData                              {% id %}
 
 divMulOp      -> addSubOp                                {% id %}
 divMulOp      -> divMulOp _ dissociativeOperator _ addSubOp {%
