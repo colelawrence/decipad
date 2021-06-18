@@ -138,7 +138,7 @@ it('can be stringified in basic form', () => {
   const importedData = Type.buildImportedData('data:someurl');
   expect(importedData.toBasicString()).toEqual('imported data');
 
-  expect(() => Type.Impossible.toBasicString()).toThrow();
+  expect(() => Type.Number.withErrorCause('').toBasicString()).toThrow();
 });
 
 describe('sameAs', () => {
@@ -157,8 +157,12 @@ describe('sameAs', () => {
     );
   });
 
-  it('sameAs checks scalar types', () => {
+  it('sameAs checks scalar types and lack thereof', () => {
     expect(Type.Number.sameAs(Type.String).errorCause).not.toBeNull();
+
+    expect(
+      Type.Number.sameAs(Type.buildColumn(Type.String, 1)).errorCause
+    ).not.toBeNull();
   });
 
   it('sameAs checks units', () => {

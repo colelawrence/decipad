@@ -19,6 +19,7 @@ const propagate = (_: Type, _methodName: string, desc: PropertyDescriptor) => {
   const realMethod = desc.value;
 
   desc.value = function (this: Type, ...args: any[]) {
+    /* istanbul ignore if */
     if (
       this.functionness ||
       args.some((a) => a instanceof Type && a.functionness)
@@ -86,6 +87,7 @@ export class Type {
     base: Type,
     { type, unit, columnSize, date }: ExtendArgs
   ): Type {
+    /* istanbul ignore if */
     if (base.errorCause != null) {
       return base;
     }
