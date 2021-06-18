@@ -28,7 +28,7 @@ const Pad = () => {
   if (error) return <>{JSON.stringify(error)}</>;
 
   return (
-    <Container maxW="75ch" py={10}>
+    <Container maxW="75ch" py={10} minH="100vh">
       <Heading mb={3}>{data?.getPadById?.name}</Heading>
       <DeciEditor workspaceId={id as string} padId={pid as string} />
     </Container>

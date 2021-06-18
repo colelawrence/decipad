@@ -30,13 +30,11 @@ export const useDashCommands = (commands: Command[]): UseDashCommandsReturn => {
   const [index, setIndex] = useState(0);
   const [search, setSearch] = useState('');
 
-  const values = commands
-    .filter(
-      (c: Command) =>
-        c.type.toLowerCase().includes(search.toLowerCase()) ||
-        c.title.toLowerCase().replace(' ', '').includes(search.toLowerCase())
-    )
-    .slice(0, 5);
+  const values = commands.filter(
+    (c: Command) =>
+      c.type.toLowerCase().includes(search.toLowerCase()) ||
+      c.title.toLowerCase().replace(' ', '').includes(search.toLowerCase())
+  );
 
   const onAddElement = useCallback(
     (
