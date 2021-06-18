@@ -229,7 +229,7 @@ export const inferFunction = async (
     const [fName, fArgs, fBody] = func.args;
 
     if (givenArguments.length !== fArgs.args.length) {
-      const error = InferError.badArgCount(
+      const error = InferError.expectedArgCount(
         getIdentifierString(fName),
         fArgs.args.length,
         givenArguments.length

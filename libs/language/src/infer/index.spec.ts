@@ -725,11 +725,11 @@ describe('inferFunction', () => {
 
     let errorCtx = makeContext();
     expect((await inferFunction(errorCtx, unaryFn, [])).errorCause).toEqual(
-      InferError.badArgCount('Fn', 1, 0)
+      InferError.expectedArgCount('Fn', 1, 0)
     );
 
     errorCtx = makeContext();
-    const badArgumentCountError2 = InferError.badArgCount('Fn', 1, 2);
+    const badArgumentCountError2 = InferError.expectedArgCount('Fn', 1, 2);
     expect(
       (await inferFunction(errorCtx, unaryFn, [Type.Boolean, Type.String]))
         .errorCause
@@ -799,7 +799,7 @@ describe('inferTargetStatement', () => {
     const badProgram = [n('block', badCall)];
 
     expect((await inferTargetStatement(badProgram, [0, 0])).errorCause).toEqual(
-      InferError.expectedButGot('number', Type.String)
+      InferError.expectedButGot(Type.Number, Type.String)
     );
   });
 });
@@ -848,7 +848,7 @@ describe('Units', () => {
     const badUnits = c('+', l(1, degC), l(1, seconds));
     const ctxForError = makeContext();
 
-    const badUnitsError = InferError.badUnits([degC], [seconds]);
+    const badUnitsError = InferError.expectedUnit([degC], [seconds]);
     expect(await inferExpression(ctxForError, badUnits)).toEqual(
       Type.Impossible.withErrorCause(badUnitsError).inNode(badUnits)
     );

@@ -49,7 +49,7 @@ const numberInMeterPerSecond = produce(Type.Number, (type) => {
   type.unit = [meter, invSecond];
 });
 
-it('Can assert type equivalence and pass on this information', () => {
+it('Can assert type equivalence', () => {
   const type = Type.buildScalar('string');
 
   expect(type.isScalar('string')).toEqual(type);
@@ -97,6 +97,50 @@ it('can be stringified', () => {
   expect(importedData.toString()).toEqual('<data url="data:someurl">');
 });
 
+it('can be stringified in basic form', () => {
+  expect(Type.FunctionPlaceholder.toBasicString()).toEqual('function');
+  expect(Type.Number.toBasicString()).toEqual('number');
+  expect(Type.build({ type: 'number', unit: [meter] }).toBasicString()).toEqual(
+    'meter'
+  );
+  expect(
+    Type.build({ type: 'number', unit: [meter, second] }).toBasicString()
+  ).toEqual('meter.second');
+  expect(
+    Type.build({
+      type: 'number',
+      unit: [meter, inverseExponent(second)],
+    }).toBasicString()
+  ).toEqual('meter.second^-1');
+
+  expect(Type.buildRange(Type.Number).toBasicString()).toEqual('range');
+
+  expect(Type.buildTimeQuantity([]).toBasicString()).toEqual('time quantity');
+
+  expect(Type.buildDate('month').toBasicString()).toEqual('date(month)');
+
+  const table = Type.buildTuple(
+    [
+      Type.build({ type: 'number', unit: [meter] }),
+      Type.build({ type: 'string' }),
+    ],
+    ['Col1', 'Col2']
+  );
+  expect(table.toBasicString()).toEqual('table');
+
+  // Actually "tuple" is more correct but we're going to kill tuples
+  const tuple = Type.buildTuple([Type.Number, Type.String]);
+  expect(tuple.toBasicString()).toEqual('table');
+
+  const col = Type.buildColumn(Type.String, 4);
+  expect(col.toBasicString()).toEqual('column');
+
+  const importedData = Type.buildImportedData('data:someurl');
+  expect(importedData.toBasicString()).toEqual('imported data');
+
+  expect(() => Type.Impossible.toBasicString()).toThrow();
+});
+
 describe('sameAs', () => {
   it('checks if the types are completely equal', () => {
     const sameAsItself = (t: Type) => {
@@ -111,6 +155,10 @@ describe('sameAs', () => {
     sameAsItself(
       Type.buildColumn(Type.buildTuple([Type.Number, Type.String]), 6)
     );
+  });
+
+  it('sameAs checks scalar types', () => {
+    expect(Type.Number.sameAs(Type.String).errorCause).not.toBeNull();
   });
 
   it('sameAs checks units', () => {
@@ -135,14 +183,14 @@ describe('sameAs', () => {
     expect(
       Type.build({ type: 'number', unit: [meter] }).sameAs(n([second]))
         .errorCause
-    ).toEqual(InferError.badUnits([second], [meter]));
+    ).toEqual(InferError.expectedUnit([second], [meter]));
     expect(
       Type.build({ type: 'number', unit: [meter, second] }).sameAs(n([second]))
         .errorCause
-    ).toEqual(InferError.badUnits([second], [meter, second]));
+    ).toEqual(InferError.expectedUnit([second], [meter, second]));
     expect(
       Type.build({ type: 'number', unit: [meter] }).sameAs(n(null)).errorCause
-    ).toEqual(InferError.badUnits(null, [meter]));
+    ).toEqual(InferError.expectedUnit(null, [meter]));
   });
 });
 
@@ -235,7 +283,7 @@ describe('Impossible types', () => {
     const type = Type.buildScalar('string');
 
     expect(type.isScalar('boolean').errorCause).toEqual(
-      InferError.expectedButGot('boolean', Type.String)
+      InferError.expectedButGot(Type.Boolean, Type.String)
     );
 
     const differentType = Type.buildScalar('number');
@@ -361,7 +409,7 @@ describe('ranges', () => {
   it('types can check rangeness', () => {
     const ranged = Type.Number.isRange();
 
-    expect(ranged.errorCause).toEqual(new InferError('Expected range'));
+    expect(ranged).toEqual(Type.Number.expected('range'));
   });
 
   it('rangeness is checked with sameAs', () => {
@@ -375,7 +423,7 @@ describe('ranges', () => {
     );
 
     expect(nrange.sameAs(Type.Number).errorCause).toEqual(
-      new InferError('Expected range')
+      InferError.expectedButGot(Type.Number, nrange)
     );
 
     expect(Type.Number.sameAs(nrange).errorCause).toEqual(
@@ -391,16 +439,12 @@ describe('dates', () => {
   it('can be checked', () => {
     expect(month.isDate('month')).toEqual(month);
 
-    expect(month.isDate('day')).toEqual(
-      month.withErrorCause('Expected date with day specificity')
-    );
+    expect(month.isDate('day')).toEqual(month.expected(Type.buildDate('day')));
 
-    expect(day.isDate('month')).toEqual(
-      day.withErrorCause('Expected date with month specificity')
-    );
+    expect(day.isDate('month')).toEqual(day.expected(Type.buildDate('month')));
 
     expect(Type.Number.isDate('month')).toEqual(
-      Type.Number.withErrorCause('Expected date')
+      Type.Number.expected(Type.buildDate('month'))
     );
   });
 
@@ -414,18 +458,12 @@ describe('dates', () => {
     expect(month.sameDatenessAs(month)).toEqual(month);
 
     // Differing dateness
-    expect(Type.Number.sameDatenessAs(day)).toEqual(
-      Type.Number.withErrorCause('Expected date')
-    );
+    expect(Type.Number.sameDatenessAs(day)).toEqual(Type.Number.expected(day));
 
-    expect(day.sameDatenessAs(Type.Number)).toEqual(
-      day.withErrorCause('Unexpected date')
-    );
+    expect(day.sameDatenessAs(Type.Number)).toEqual(day.expected(Type.Number));
 
     // Differing specificity
-    expect(month.sameDatenessAs(day)).toEqual(
-      month.withErrorCause('Expected date with day specificity')
-    );
+    expect(month.sameDatenessAs(day)).toEqual(month.expected(day));
 
     expect(month.sameDatenessAs(day)).toEqual(month.sameAs(day));
   });

@@ -136,7 +136,7 @@ const typeDimTests: Record<string, Test> = {
         '>',
         build({ type: 'number', unit: [meter] }),
         build2({ type: 'number', unit: [second] })
-      ).errorCause.expectedUnit
+      ).errorCause.spec.expectedUnit
     ).toEqual([[meter], [second]]);
 
     expect(
