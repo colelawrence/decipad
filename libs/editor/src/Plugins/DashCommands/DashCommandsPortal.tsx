@@ -62,7 +62,7 @@ export const DashCommandsPortal = ({
           borderRadius="5px"
           overflow="hidden"
           width="250px"
-          maxH="400px"
+          maxH="360px"
           overflowY="scroll"
         >
           {values.map((value: Command, i) => (
@@ -70,8 +70,9 @@ export const DashCommandsPortal = ({
               key={`${value.type}${i}`}
               bg={i === index ? indexBG : 'transparent'}
               transition="0.2s background-color ease-out"
-              p="15px"
-              h="100px"
+              px="15px"
+              py="10px"
+              h="90px"
               w="100%"
               gridTemplateColumns="0.4fr 1fr"
               gridGap="15px"
@@ -88,14 +89,14 @@ export const DashCommandsPortal = ({
                   <Image
                     src={value.darkImage}
                     alt="Preview"
-                    height="20px"
+                    height="12px"
                     width="auto"
                   />
                 ) : (
                   <Image
                     src={value.lightImage}
                     alt="Preview"
-                    height="20px"
+                    height="12px"
                     width="auto"
                   />
                 )}
