@@ -1,7 +1,8 @@
-import { Container, Heading, Text } from '@chakra-ui/react';
+import { Button, Container, Heading, Icon, Text } from '@chakra-ui/react';
 import { AnonymousRuntimeProvider, DeciEditor } from '@decipad/editor';
 import { nanoid } from 'nanoid';
-import { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
+import { FiHelpCircle } from 'react-icons/fi';
 
 export default function Playground() {
   const randomId = useMemo(() => nanoid(), []);
@@ -22,6 +23,17 @@ export default function Playground() {
           and have fun!
         </Text>
         <DeciEditor workspaceId={randomId} padId={randomId} />
+        <Button
+          as="a"
+          href="https://www.notion.so/decipad/Deci-101-3f3b513b9a82499080eef6eef87d8179"
+          target="_blank"
+          pos="absolute"
+          right={10}
+          bottom={10}
+          leftIcon={<Icon as={FiHelpCircle} />}
+        >
+          Help & Documentation
+        </Button>
       </Container>
     </AnonymousRuntimeProvider>
   );

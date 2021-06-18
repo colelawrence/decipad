@@ -35,7 +35,7 @@ export const plugins = [
   HighlightPlugin(),
   HeadingPlugin(),
   CodePlugin({ code: { hotkey: 'mod+shift+e' } }),
-  CodeBlockPlugin({ code_block: { hotkey: 'mod+e' } }),
+  CodeBlockPlugin(),
   ListPlugin(),
   TodoListPlugin({ todo_li: { hotkey: 'mod+shift+l' } }),
   ExitBreakPlugin(exitBreakPluginOptions),
