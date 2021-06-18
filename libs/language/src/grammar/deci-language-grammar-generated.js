@@ -2267,6 +2267,7 @@
       { name: 'nonGivenExp', symbols: ['divMulOp'], postprocess: id },
       { name: 'nonGivenExp', symbols: ['table'], postprocess: id },
       { name: 'nonGivenExp', symbols: ['functionCall'], postprocess: id },
+      { name: 'nonGivenExp', symbols: ['importData'], postprocess: id },
       { name: 'divMulOp', symbols: ['addSubOp'], postprocess: id },
       {
         name: 'divMulOp',
@@ -2947,6 +2948,37 @@
           return {
             type: 'sequence',
             args: [range.args[0], range.args[1], d[4]],
+            location: l,
+            length: lengthOf(d),
+          };
+        },
+      },
+      {
+        name: 'importData$string$1',
+        symbols: [
+          { literal: 'i' },
+          { literal: 'm' },
+          { literal: 'p' },
+          { literal: 'o' },
+          { literal: 'r' },
+          { literal: 't' },
+          { literal: '_' },
+          { literal: 'd' },
+          { literal: 'a' },
+          { literal: 't' },
+          { literal: 'a' },
+        ],
+        postprocess: function joiner(d) {
+          return d.join('');
+        },
+      },
+      {
+        name: 'importData',
+        symbols: ['importData$string$1', '__', 'dqstring'],
+        postprocess: (d, l) => {
+          return {
+            type: 'imported-data',
+            args: [d[2]],
             location: l,
             length: lengthOf(d),
           };

@@ -16,6 +16,7 @@ import { MentionPortalProps } from './Plugins/MentionPlugin/MentionPortal.compon
 import { useMention } from './Plugins/MentionPlugin/useMention';
 import { users } from './Plugins/MentionPlugin/users';
 import { withPlugins } from './Plugins';
+import { DropFile } from './Components/DropFile';
 
 const DashCommandsPortal = dynamic<DashCommandsPortalProps>(
   () =>
@@ -112,21 +113,23 @@ export const DeciEditor = ({ padId }: DeciEditorProps): JSX.Element => {
 
   return (
     <Box>
-      <Slate editor={editor} value={value} onChange={onChange}>
-        {editablePlugins}
-        <DashCommandsPortal
-          target={target}
-          index={index}
-          values={values}
-          onClick={onAddElement}
-        />
-        <MentionPortal
-          target={mentionTarget}
-          index={mentionIndex}
-          users={filteredUsers}
-        />
-        <HoveringToolbar />
-      </Slate>
+      <DropFile editor={editor}>
+        <Slate editor={editor} value={value} onChange={onChange}>
+          {editablePlugins}
+          <DashCommandsPortal
+            target={target}
+            index={index}
+            values={values}
+            onClick={onAddElement}
+          />
+          <MentionPortal
+            target={mentionTarget}
+            index={mentionIndex}
+            users={filteredUsers}
+          />
+          <HoveringToolbar />
+        </Slate>
+      </DropFile>
     </Box>
   );
 };
