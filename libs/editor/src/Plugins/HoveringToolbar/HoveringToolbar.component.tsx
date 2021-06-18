@@ -14,6 +14,16 @@ export const HoveringToolbar = (): JSX.Element => {
     const el = ref.current;
     const { selection } = editor;
 
+    const isInCompatibleBlocks = (): boolean | undefined => {
+      if (selection) {
+        const [parentNode] = Editor.parent(editor, selection);
+        return !['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(
+          parentNode.type as string
+        );
+      }
+      return;
+    };
+
     if (!el) {
       return;
     }
@@ -22,7 +32,8 @@ export const HoveringToolbar = (): JSX.Element => {
       !selection ||
       !ReactEditor.isFocused(editor as any) ||
       Range.isCollapsed(selection) ||
-      Editor.string(editor, selection) === ''
+      Editor.string(editor, selection) === '' ||
+      isInCompatibleBlocks()
     ) {
       el.removeAttribute('style');
       return;
