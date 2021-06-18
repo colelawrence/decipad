@@ -1,3 +1,4 @@
+import { stringifyUnits } from '../type/units';
 import { isNode, isStatement } from '../utils';
 
 const prettyPrint = (node: AST.Node, indent: number) => {
@@ -8,7 +9,12 @@ const prettyPrint = (node: AST.Node, indent: number) => {
 
   switch (node.type) {
     case 'literal': {
-      return JSON.stringify(node.args[1]);
+      const [type, value, units] = node.args;
+      if (type === 'number' && units != null && units.length > 0) {
+        return `${value}${stringifyUnits(units)}`;
+      } else {
+        return JSON.stringify(value);
+      }
     }
     case 'function-call': {
       fname = node.args[0].args[0];

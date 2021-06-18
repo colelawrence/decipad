@@ -10,134 +10,124 @@ const returnMonth = (month) => (d, l) => {
   }
   return [month, obj.length]
 }
+
+const joinDateParts = (dateParts) => {
+  let parts = dateParts.args
+
+  if (dateParts.next) {
+    parts = parts.concat(joinDateParts(dateParts.next))
+  }
+
+  // Timezone is last, always
+  if (dateParts.timezone) {
+    parts = parts.concat(dateParts.timezone)
+  }
+
+  return parts
+}
 %}
 
-date -> "Y" dateYear                                    {%
-                                                        (d, l) => ({
-                                                          type: 'date',
-                                                          args: [
-                                                            'year',
-                                                            d[1].year
-                                                          ],
-                                                          location: l,
-                                                          length: lengthOf(d)
-                                                        })
+date -> "date" _ "(" _ dateInner _ ")"                  {%
+                                                        (d, l) => {
+                                                          return {
+                                                            type: 'date',
+                                                            args: joinDateParts(d[4]),
+                                                            location: l,
+                                                            length: lengthOf(d)
+                                                          }
+                                                        }
                                                         %}
 
-date -> dateYear dateSeparator dateMonth                {%
+dateInner -> dateYear dateInnerMonth:?                  {%
                                                         (d, l) => ({
                                                           type: 'date',
                                                           args: [
                                                             'year',
                                                             d[0].year,
-                                                            'month',
-                                                            d[2].month,
                                                           ],
+                                                          next: d[1],
                                                           location: l,
                                                           length: lengthOf(d)
                                                         })
                                                         %}
 
-date -> dateYear dateSeparator dateMonth dateSeparator dateDay {%
+dateInnerMonth -> dateSeparator dateMonth dateInnerDay:? {%
                                                         (d, l) => ({
                                                           type: 'date',
                                                           args: [
-                                                            'year',
-                                                            d[0].year,
                                                             'month',
-                                                            d[2].month,
+                                                            d[1].month,
+                                                          ],
+                                                          next: d[2],
+                                                          location: l,
+                                                          length: lengthOf(d)
+                                                        })
+                                                        %}
+
+dateInnerDay -> dateSeparator dateDay dateInnerHour:?   {%
+                                                        (d, l) => ({
+                                                          type: 'date',
+                                                          args: [
                                                             'day',
-                                                            d[4].day
+                                                            d[1].day
                                                           ],
+                                                          next: d[2],
                                                           location: l,
                                                           length: lengthOf(d)
                                                         })
                                                         %}
 
-date -> dateYear dateSeparator dateMonth dateSeparator dateDay (" " | "T") dateHour {%
+dateInnerHour -> (" " | "T") dateHour dateInnerMinute:? dateTimeZone:? {%
                                                         (d, l) => ({
                                                           type: 'date',
                                                           args: [
-                                                            'year',
-                                                            d[0].year,
-                                                            'month',
-                                                            d[2].month,
-                                                            'day',
-                                                            d[4].day,
                                                             'hour',
-                                                            d[6].hour
+                                                            d[1].hour
                                                           ],
+                                                          next: d[2],
+                                                          timezone: d[3]
+                                                            ? ['timezone', d[3].timezone]
+                                                            : [],
                                                           location: l,
                                                           length: lengthOf(d)
                                                         })
                                                         %}
 
-date -> dateYear dateSeparator dateMonth dateSeparator dateDay (" " | "T") dateHour ":" dateMinute {%
+dateInnerMinute -> timeSeparator dateMinute dateInnerSecond:? {%
                                                         (d, l) => ({
                                                           type: 'date',
-                                                          args: [
-                                                            'year',
-                                                            d[0].year,
-                                                            'month',
-                                                            d[2].month,
-                                                            'day',
-                                                            d[4].day,
-                                                            'hour',
-                                                            d[6].hour,
-                                                            'minute',
-                                                            d[8].minute
-                                                          ],
+                                                          args: ['minute', d[1].minute],
+                                                          next: d[2],
                                                           location: l,
                                                           length: lengthOf(d)
                                                         })
                                                         %}
 
-date -> dateYear dateSeparator dateMonth dateSeparator dateDay (" " | "T") dateHour ":" dateMinute ":" dateSecond {%
+dateInnerSecond -> timeSeparator dateSecond dateInnerMillisecond:? {%
                                                         (d, l) => ({
                                                           type: 'date',
                                                           args: [
-                                                            'year',
-                                                            d[0].year,
-                                                            'month',
-                                                            d[2].month,
-                                                            'day',
-                                                            d[4].day,
-                                                            'hour',
-                                                            d[6].hour,
-                                                            'minute',
-                                                            d[8].minute,
                                                             'second',
-                                                            d[10].second
+                                                            d[1].second
                                                           ],
+                                                          next: d[2],
                                                           location: l,
                                                           length: lengthOf(d)
                                                         })
                                                         %}
 
-date -> dateYear dateSeparator dateMonth dateSeparator dateDay (" " | "T") dateHour ":" dateMinute ":" dateSecond dateTimeZone {%
+dateInnerMillisecond -> millisecondSeparator dateMillisecond {%
                                                         (d, l) => ({
                                                           type: 'date',
                                                           args: [
-                                                            'year',
-                                                            d[0].year,
-                                                            'month',
-                                                            d[2].month,
-                                                            'day',
-                                                            d[4].day,
-                                                            'hour',
-                                                            d[6].hour,
-                                                            'minute',
-                                                            d[8].minute,
-                                                            'second',
-                                                            d[10].second,
-                                                            'timezone',
-                                                            d[11].timezone
+                                                            'millisecond',
+                                                            d[1].millisecond
                                                           ],
+                                                          next: null,
                                                           location: l,
                                                           length: lengthOf(d)
                                                         })
                                                         %}
-
 
 dateYear -> [0-9] [0-9] [0-9] [0-9]                     {%
                                                         (d, l, reject) => {
@@ -243,6 +233,16 @@ dateSecond -> [0-9] [0-9]                               {%
                                                         }
                                                         %}
 
+dateMillisecond -> [0-9] [0-9] [0-9]                    {%
+                                                        (d, l, reject) => {
+                                                          return {
+                                                            millisecond: parseInt(d.join('')),
+                                                            location: l,
+                                                            length: lengthOf(d)
+                                                          }
+                                                        }
+                                                        %}
+
 dateTimeZone -> "Z"                                     {%
                                                         (d, l) => ({
                                                           timezone: {
@@ -276,4 +276,6 @@ dateTimeZone -> ("+" | "-") int (":" int):?             {%
                                                         %}
 
 
-dateSeparator -> [\-/]
+dateSeparator -> ("-" | "/")
+timeSeparator -> ":"
+millisecondSeparator -> "."

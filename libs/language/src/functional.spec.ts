@@ -29,15 +29,15 @@ describe('use of funds document', () => {
             else 0
         )
 
-        Months = [ 2021-01 through 2021-12 by month ]
+        Months = [ date(2021-01) through date(2021-12) by month ]
         StandardSalary = 120000 / 12
 
         SalaryStaff = {
           Months,
-          Exec = (costtobusiness Months StandardSalary 2021-01 true),
-          Product = (costtobusiness Months StandardSalary 2021-02 true),
-          Tech = (costtobusiness Months StandardSalary 2021-03 false),
-          FrontEnd = (costtobusiness Months StandardSalary 2021-03 true)
+          Exec = (costtobusiness Months StandardSalary date(2021-01) true),
+          Product = (costtobusiness Months StandardSalary date(2021-02) true),
+          Tech = (costtobusiness Months StandardSalary date(2021-03) false),
+          FrontEnd = (costtobusiness Months StandardSalary date(2021-03) true)
         }
       `)
     ).toMatchObject({
@@ -71,7 +71,7 @@ describe('use of funds document', () => {
             Title = ["Exec", "Product", "Tech"]
             Salary = [120000, 80000, 80000]
             Department = ["G&A", "R&D", "R&D"]
-            StartDate = [2021-02, 2021-01, 2021-03]
+            StartDate = [date(2021-02), date(2021-01), date(2021-03)]
             Bonus = [false, true, false]
           }
 
@@ -80,7 +80,7 @@ describe('use of funds document', () => {
               then Salary + (Salary * 20%) + (if GetsBonus then Salary * 30% else 0)
               else 0
 
-          Months = [ 2021-01 through 2021-04 by month ]
+          Months = [ date(2021-01) through date(2021-04) by month ]
 
           StaffCosts = {
             Title = Salaries.Title,
@@ -153,7 +153,7 @@ describe('more models', () => {
         `
           DiscountRate = 0.25
 
-          Years = [ Y2020 through Y2023 by year ]
+          Years = [ date(2020) through date(2023) by year ]
 
           InitialCashFlow = 10musd
 
@@ -216,8 +216,8 @@ describe('more models', () => {
     expect(
       await runCode(
         `
-          JoinDate = 2020-01-10
-          LeaveDate = 2022-02-13
+          JoinDate = date(2020-01-10)
+          LeaveDate = date(2022-02-13)
           BeginUnemploymentBenefits = dateadd JoinDate [ 2 years ]
 
           GetsUnemploymentBenefits = dategte LeaveDate BeginUnemploymentBenefits
@@ -242,7 +242,7 @@ describe('more models', () => {
           ExpectedYearlyGrowth = 2%
 
           InvestmentValue = {
-            Years = [ Y2020 through Y2022 by year ],
+            Years = [ date(2020) through date(2022) by year ],
             Value = (previous InitialInvestment) * (1 + ExpectedYearlyGrowth) + YearlyReinforcement
           }
         `
@@ -395,7 +395,7 @@ ${'' /* Get capital needed */}
     expect(
       await runCodeForVariables(
         `
-        Period = [ 2022-Jan through 2022-May by month ]
+        Period = [ date(2022-Jan) through date(2022-May) by month ]
 
         RevenuePerUser = [ 3 eur, 80 eur ]
         InitialUsers = [ 100000, 2500 ]

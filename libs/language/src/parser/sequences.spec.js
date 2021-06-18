@@ -32,15 +32,15 @@ runTests({
           column: 3,
         },
         end: {
-          char: 6,
+          char: 16,
           line: 1,
-          column: 7,
+          column: 17,
         },
       },
     ],
   },
 
-  'basic numeric range using "through"': {
+  'basic numeric sequence using "through"': {
     source: '  [  1  through 10  by 0.5 ]',
     ast: [
       {
@@ -71,16 +71,16 @@ runTests({
           column: 3,
         },
         end: {
-          char: 6,
+          char: 27,
           line: 1,
-          column: 7,
+          column: 28,
         },
       },
     ],
   },
 
-  'basic time range': {
-    source: '   [2020-10..2020-03 by month]',
+  'basic time sequence': {
+    source: '   [date(2020-10)..date(2020-03) by month]',
     ast: [
       {
         type: 'sequence',
@@ -89,18 +89,18 @@ runTests({
             type: 'date',
             args: ['year', 2020, 'month', 10],
             location: 4,
-            length: 7,
+            length: 13,
           },
           {
             type: 'date',
             args: ['year', 2020, 'month', 3],
-            location: 13,
-            length: 7,
+            location: 19,
+            length: 13,
           },
           {
             type: 'ref',
             args: ['month'],
-            location: 24,
+            location: 36,
             length: 5,
           },
         ],
@@ -110,9 +110,9 @@ runTests({
           column: 4,
         },
         end: {
-          char: 4,
+          char: 41,
           line: 1,
-          column: 5,
+          column: 42,
         },
       },
     ],

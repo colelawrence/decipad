@@ -63,9 +63,11 @@ export function runTests(tests) {
 
         if (result.solutions.length > 1) {
           throw new Error(
-            `Ambiguous results. Alternatives:\n${result.solutions.map(
-              (solution) => `Result :\n${prettyPrintAST(solution)}\n-------\n`
-            )}`
+            `Ambiguous results.\nSource:\n  ${source}\nAlternatives:\n${result.solutions
+              .map(
+                (solution) => `Result :\n${prettyPrintAST(solution)}\n-------\n`
+              )
+              .join('')}`
           );
         }
 

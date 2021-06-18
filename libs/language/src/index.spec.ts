@@ -369,7 +369,7 @@ describe('Dates', () => {
   it('Evaluates and types dates', async () => {
     expect(
       await runCode(`
-        Time = 2020-10-10 10:30
+        Time = date(2020-10-10 10:30)
       `)
     ).toMatchObject({
       value: [Array(2).fill(Date.UTC(2020, 9, 10, 10, 30))],
@@ -380,8 +380,8 @@ describe('Dates', () => {
     expect(
       await runCode(`
         Table = {
-          Months = [ 2020-09, 2020-10, 2020-11 ],
-          Days = (dateequals Months [ 2020-09, 2020-11, 2020-10 ])
+          Months = [ date(2020-09), date(2020-10), date(2020-11) ],
+          Days = (dateequals Months [ date(2020-09), date(2020-11), date(2020-10) ])
         }
       `)
     ).toMatchObject({
