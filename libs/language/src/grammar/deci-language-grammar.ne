@@ -27,6 +27,7 @@ const reservedWords = new Set([
   'then',
   'else',
   'through',
+  'date',
   '+',
   '-',
   '*',
@@ -86,15 +87,15 @@ function isReservedWord(str) {
   return reservedWords.has(str)
 }
 
+function containsReservedWord(words) {
+  return words.some(w => isReservedWord(w))
+}
+
 function lengthOf(d) {
   if (!d) {
     return 0
   }
   return d.reduce((acc, c) => acc + ((c && c.length) || 0), 0)
-}
-
-function looksLikeDate (word) {
-  return ((word.length === 5) && word[0] === 'Y' && (parseInt(word.substring(1)).toString() === word.substring(1)))
 }
 
 %}
@@ -173,19 +174,15 @@ referenceName -> ([a-zA-Z\$] [a-zA-Z0-9]:*) (" " [a-zA-Z0-9]:+):* {%
                                                           const first = d[0][0] + d[0][1].join('')
                                                           const rest = d[1].map((e) => e[0] + e[1].join('')).join('')
                                                           const r =  first + rest
-                                                          for (const word of r.split(' ')) {
-                                                            if (reservedWords.has(word.trim())) {
-                                                              return reject
-                                                            }
-                                                            if (looksLikeDate(word)) {
-                                                              return reject
-                                                            }
-                                                          }
 
-                                                          return {
-                                                            name: r,
-                                                            location: l,
-                                                            length: r.length
+                                                          if (containsReservedWord(r.split(' '))) {
+                                                            return reject
+                                                          } else {
+                                                            return {
+                                                              name: r,
+                                                              location: l,
+                                                              length: r.length
+                                                            }
                                                           }
                                                         }
                                                         %}
@@ -193,18 +190,15 @@ referenceName -> ([a-zA-Z\$] [a-zA-Z0-9]:*) (" " [a-zA-Z0-9]:+):* {%
 referenceInExpression -> [a-zA-Z\$] [a-zA-Z0-9]:*       {%
                                                         (d, l, reject) => {
                                                           const r = d[0] + d[1].join('')
-                                                          for (const word of r.split(' ')) {
-                                                            if (reservedWords.has(word.trim())) {
-                                                              return reject
+
+                                                          if (containsReservedWord(r.split(' '))) {
+                                                            return reject
+                                                          } else {
+                                                            return {
+                                                              name: r,
+                                                              location: l,
+                                                              length: r.length
                                                             }
-                                                            if (looksLikeDate(word)) {
-                                                              return reject
-                                                            }
-                                                          }
-                                                          return {
-                                                            name: r,
-                                                            location: l,
-                                                            length: r.length
                                                           }
                                                         }
                                                         %}
@@ -253,11 +247,12 @@ functionDefName -> complexFunctionDefName               {% id %}
 simpleFunctionDefName -> [a-z] [0-9a-zA-Z]:*            {%
                                                         (d, l, reject) => {
                                                           const name = d[0] + d[1].join('')
-                                                          if (reservedWords.has(name)) {
-                                                            return reject
-                                                          }
 
-                                                          return name
+                                                          if (isReservedWord(name)) {
+                                                            return reject
+                                                          } else {
+                                                            return name
+                                                          }
                                                         }
                                                         %}
 
@@ -323,11 +318,11 @@ dissociativeOperator  -> __ ("in") __    {%
 
 dissociativeOperator  -> " - "                          {%
                                                         (d, l) => {
-                                                          const op = d[0].trim()
+                                                          const op = d[0]
                                                           return {
-                                                            name: op,
+                                                            name: op.trim(),
                                                             location: l + 1,
-                                                            length: 3
+                                                            length: op.length
                                                           }
                                                         }
                                                         %}
@@ -345,11 +340,11 @@ associativeOperator -> ("**" | ">" | "<" | "<=" | ">=" | "==")       {%
                                                         %}
 associativeOperator -> (" * " | " / " | " % " | " ^ ")  {%
                                                         (d, l) => {
-                                                          const op = d[0][0].trim()
+                                                          const op = d[0][0]
                                                           return {
-                                                            name: op,
+                                                            name: op.trim(),
                                                             location: l + 1,
-                                                            length: 1
+                                                            length: op.length
                                                           }
                                                         }
                                                         %}
@@ -391,13 +386,15 @@ functionNameRef -> "`" complexFunctionNameRef "`"       {% d => d[1] %}
 functionNameRefWord -> [a-zAZ] [0-9a-zA-Z]:*            {%
                                                         (d, l, reject) => {
                                                           const candidate = d[0] + d[1].join('')
+
                                                           if (isReservedWord(candidate)) {
                                                             return reject
-                                                          }
-                                                          return {
-                                                            name: candidate,
-                                                            location: l,
-                                                            length: lengthOf(d)
+                                                          } else {
+                                                            return {
+                                                              name: candidate,
+                                                              location: l,
+                                                              length: lengthOf(d)
+                                                            }
                                                           }
                                                         }
                                                         %}

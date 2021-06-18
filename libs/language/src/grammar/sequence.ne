@@ -18,7 +18,9 @@ sequenceSpec -> rangeSpec _ "by" _ expression       {%
                                                           range.args[0],
                                                           range.args[1],
                                                           d[4]
-                                                        ]
+                                                        ],
+                                                        location: l,
+                                                        length: lengthOf(d)
                                                       }
                                                     }
                                                     %}

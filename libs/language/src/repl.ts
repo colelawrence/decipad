@@ -72,6 +72,8 @@ const wrappedParse = (source: string): AST.Statement | null => {
     for (let i = 0; i < parsed.solutions.length; i++) {
       console.error(`Solution ${i + 1}: `, prettyPrintAST(parsed.solutions[i]));
     }
+
+    return null;
   }
 
   return parsed.solutions[0]?.args?.[0] ?? null;

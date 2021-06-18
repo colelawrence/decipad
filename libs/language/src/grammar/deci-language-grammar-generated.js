@@ -13,6 +13,21 @@
     return [month, obj.length];
   };
 
+  const joinDateParts = (dateParts) => {
+    let parts = dateParts.args;
+
+    if (dateParts.next) {
+      parts = parts.concat(joinDateParts(dateParts.next));
+    }
+
+    // Timezone is last, always
+    if (dateParts.timezone) {
+      parts = parts.concat(dateParts.timezone);
+    }
+
+    return parts;
+  };
+
   const knownUnits = require('./units').knownUnits;
 
   const reservedWords = new Set([
@@ -27,6 +42,7 @@
     'then',
     'else',
     'through',
+    'date',
     '+',
     '-',
     '*',
@@ -86,19 +102,15 @@
     return reservedWords.has(str);
   }
 
+  function containsReservedWord(words) {
+    return words.some((w) => isReservedWord(w));
+  }
+
   function lengthOf(d) {
     if (!d) {
       return 0;
     }
     return d.reduce((acc, c) => acc + ((c && c.length) || 0), 0);
-  }
-
-  function looksLikeDate(word) {
-    return (
-      word.length === 5 &&
-      word[0] === 'Y' &&
-      parseInt(word.substring(1)).toString() === word.substring(1)
-    );
   }
 
   var grammar = {
@@ -1273,176 +1285,202 @@
         postprocess: (d) => d.join(''),
       },
       {
-        name: 'date',
-        symbols: [{ literal: 'Y' }, 'dateYear'],
-        postprocess: (d, l) => ({
-          type: 'date',
-          args: ['year', d[1].year],
-          location: l,
-          length: lengthOf(d),
-        }),
-      },
-      {
-        name: 'date',
-        symbols: ['dateYear', 'dateSeparator', 'dateMonth'],
-        postprocess: (d, l) => ({
-          type: 'date',
-          args: ['year', d[0].year, 'month', d[2].month],
-          location: l,
-          length: lengthOf(d),
-        }),
-      },
-      {
-        name: 'date',
+        name: 'date$string$1',
         symbols: [
-          'dateYear',
-          'dateSeparator',
-          'dateMonth',
-          'dateSeparator',
-          'dateDay',
+          { literal: 'd' },
+          { literal: 'a' },
+          { literal: 't' },
+          { literal: 'e' },
         ],
+        postprocess: function joiner(d) {
+          return d.join('');
+        },
+      },
+      {
+        name: 'date',
+        symbols: [
+          'date$string$1',
+          '_',
+          { literal: '(' },
+          '_',
+          'dateInner',
+          '_',
+          { literal: ')' },
+        ],
+        postprocess: (d, l) => {
+          return {
+            type: 'date',
+            args: joinDateParts(d[4]),
+            location: l,
+            length: lengthOf(d),
+          };
+        },
+      },
+      {
+        name: 'dateInner$ebnf$1',
+        symbols: ['dateInnerMonth'],
+        postprocess: id,
+      },
+      {
+        name: 'dateInner$ebnf$1',
+        symbols: [],
+        postprocess: function (d) {
+          return null;
+        },
+      },
+      {
+        name: 'dateInner',
+        symbols: ['dateYear', 'dateInner$ebnf$1'],
         postprocess: (d, l) => ({
           type: 'date',
-          args: ['year', d[0].year, 'month', d[2].month, 'day', d[4].day],
+          args: ['year', d[0].year],
+          next: d[1],
           location: l,
           length: lengthOf(d),
         }),
       },
-      { name: 'date$subexpression$1', symbols: [{ literal: ' ' }] },
-      { name: 'date$subexpression$1', symbols: [{ literal: 'T' }] },
       {
-        name: 'date',
+        name: 'dateInnerMonth$ebnf$1',
+        symbols: ['dateInnerDay'],
+        postprocess: id,
+      },
+      {
+        name: 'dateInnerMonth$ebnf$1',
+        symbols: [],
+        postprocess: function (d) {
+          return null;
+        },
+      },
+      {
+        name: 'dateInnerMonth',
+        symbols: ['dateSeparator', 'dateMonth', 'dateInnerMonth$ebnf$1'],
+        postprocess: (d, l) => ({
+          type: 'date',
+          args: ['month', d[1].month],
+          next: d[2],
+          location: l,
+          length: lengthOf(d),
+        }),
+      },
+      {
+        name: 'dateInnerDay$ebnf$1',
+        symbols: ['dateInnerHour'],
+        postprocess: id,
+      },
+      {
+        name: 'dateInnerDay$ebnf$1',
+        symbols: [],
+        postprocess: function (d) {
+          return null;
+        },
+      },
+      {
+        name: 'dateInnerDay',
+        symbols: ['dateSeparator', 'dateDay', 'dateInnerDay$ebnf$1'],
+        postprocess: (d, l) => ({
+          type: 'date',
+          args: ['day', d[1].day],
+          next: d[2],
+          location: l,
+          length: lengthOf(d),
+        }),
+      },
+      { name: 'dateInnerHour$subexpression$1', symbols: [{ literal: ' ' }] },
+      { name: 'dateInnerHour$subexpression$1', symbols: [{ literal: 'T' }] },
+      {
+        name: 'dateInnerHour$ebnf$1',
+        symbols: ['dateInnerMinute'],
+        postprocess: id,
+      },
+      {
+        name: 'dateInnerHour$ebnf$1',
+        symbols: [],
+        postprocess: function (d) {
+          return null;
+        },
+      },
+      {
+        name: 'dateInnerHour$ebnf$2',
+        symbols: ['dateTimeZone'],
+        postprocess: id,
+      },
+      {
+        name: 'dateInnerHour$ebnf$2',
+        symbols: [],
+        postprocess: function (d) {
+          return null;
+        },
+      },
+      {
+        name: 'dateInnerHour',
         symbols: [
-          'dateYear',
-          'dateSeparator',
-          'dateMonth',
-          'dateSeparator',
-          'dateDay',
-          'date$subexpression$1',
+          'dateInnerHour$subexpression$1',
           'dateHour',
+          'dateInnerHour$ebnf$1',
+          'dateInnerHour$ebnf$2',
         ],
         postprocess: (d, l) => ({
           type: 'date',
-          args: [
-            'year',
-            d[0].year,
-            'month',
-            d[2].month,
-            'day',
-            d[4].day,
-            'hour',
-            d[6].hour,
-          ],
+          args: ['hour', d[1].hour],
+          next: d[2],
+          timezone: d[3] ? ['timezone', d[3].timezone] : [],
           location: l,
           length: lengthOf(d),
         }),
       },
-      { name: 'date$subexpression$2', symbols: [{ literal: ' ' }] },
-      { name: 'date$subexpression$2', symbols: [{ literal: 'T' }] },
       {
-        name: 'date',
-        symbols: [
-          'dateYear',
-          'dateSeparator',
-          'dateMonth',
-          'dateSeparator',
-          'dateDay',
-          'date$subexpression$2',
-          'dateHour',
-          { literal: ':' },
-          'dateMinute',
-        ],
+        name: 'dateInnerMinute$ebnf$1',
+        symbols: ['dateInnerSecond'],
+        postprocess: id,
+      },
+      {
+        name: 'dateInnerMinute$ebnf$1',
+        symbols: [],
+        postprocess: function (d) {
+          return null;
+        },
+      },
+      {
+        name: 'dateInnerMinute',
+        symbols: ['timeSeparator', 'dateMinute', 'dateInnerMinute$ebnf$1'],
         postprocess: (d, l) => ({
           type: 'date',
-          args: [
-            'year',
-            d[0].year,
-            'month',
-            d[2].month,
-            'day',
-            d[4].day,
-            'hour',
-            d[6].hour,
-            'minute',
-            d[8].minute,
-          ],
+          args: ['minute', d[1].minute],
+          next: d[2],
           location: l,
           length: lengthOf(d),
         }),
       },
-      { name: 'date$subexpression$3', symbols: [{ literal: ' ' }] },
-      { name: 'date$subexpression$3', symbols: [{ literal: 'T' }] },
       {
-        name: 'date',
-        symbols: [
-          'dateYear',
-          'dateSeparator',
-          'dateMonth',
-          'dateSeparator',
-          'dateDay',
-          'date$subexpression$3',
-          'dateHour',
-          { literal: ':' },
-          'dateMinute',
-          { literal: ':' },
-          'dateSecond',
-        ],
+        name: 'dateInnerSecond$ebnf$1',
+        symbols: ['dateInnerMillisecond'],
+        postprocess: id,
+      },
+      {
+        name: 'dateInnerSecond$ebnf$1',
+        symbols: [],
+        postprocess: function (d) {
+          return null;
+        },
+      },
+      {
+        name: 'dateInnerSecond',
+        symbols: ['timeSeparator', 'dateSecond', 'dateInnerSecond$ebnf$1'],
         postprocess: (d, l) => ({
           type: 'date',
-          args: [
-            'year',
-            d[0].year,
-            'month',
-            d[2].month,
-            'day',
-            d[4].day,
-            'hour',
-            d[6].hour,
-            'minute',
-            d[8].minute,
-            'second',
-            d[10].second,
-          ],
+          args: ['second', d[1].second],
+          next: d[2],
           location: l,
           length: lengthOf(d),
         }),
       },
-      { name: 'date$subexpression$4', symbols: [{ literal: ' ' }] },
-      { name: 'date$subexpression$4', symbols: [{ literal: 'T' }] },
       {
-        name: 'date',
-        symbols: [
-          'dateYear',
-          'dateSeparator',
-          'dateMonth',
-          'dateSeparator',
-          'dateDay',
-          'date$subexpression$4',
-          'dateHour',
-          { literal: ':' },
-          'dateMinute',
-          { literal: ':' },
-          'dateSecond',
-          'dateTimeZone',
-        ],
+        name: 'dateInnerMillisecond',
+        symbols: ['millisecondSeparator', 'dateMillisecond'],
         postprocess: (d, l) => ({
           type: 'date',
-          args: [
-            'year',
-            d[0].year,
-            'month',
-            d[2].month,
-            'day',
-            d[4].day,
-            'hour',
-            d[6].hour,
-            'minute',
-            d[8].minute,
-            'second',
-            d[10].second,
-            'timezone',
-            d[11].timezone,
-          ],
+          args: ['millisecond', d[1].millisecond],
+          next: null,
           location: l,
           length: lengthOf(d),
         }),
@@ -1937,6 +1975,17 @@
         },
       },
       {
+        name: 'dateMillisecond',
+        symbols: [/[0-9]/, /[0-9]/, /[0-9]/],
+        postprocess: (d, l, reject) => {
+          return {
+            millisecond: parseInt(d.join('')),
+            location: l,
+            length: lengthOf(d),
+          };
+        },
+      },
+      {
         name: 'dateTimeZone',
         symbols: [{ literal: 'Z' }],
         postprocess: (d, l) => ({
@@ -1988,7 +2037,11 @@
           };
         },
       },
-      { name: 'dateSeparator', symbols: [/[\-/]/] },
+      { name: 'dateSeparator$subexpression$1', symbols: [{ literal: '-' }] },
+      { name: 'dateSeparator$subexpression$1', symbols: [{ literal: '/' }] },
+      { name: 'dateSeparator', symbols: ['dateSeparator$subexpression$1'] },
+      { name: 'timeSeparator', symbols: [{ literal: ':' }] },
+      { name: 'millisecondSeparator', symbols: [{ literal: '.' }] },
       {
         name: 'column',
         symbols: [{ literal: '[' }, '_', { literal: ']' }],
@@ -2894,6 +2947,8 @@
           return {
             type: 'sequence',
             args: [range.args[0], range.args[1], d[4]],
+            location: l,
+            length: lengthOf(d),
           };
         },
       },
@@ -3023,20 +3078,16 @@
           const first = d[0][0] + d[0][1].join('');
           const rest = d[1].map((e) => e[0] + e[1].join('')).join('');
           const r = first + rest;
-          for (const word of r.split(' ')) {
-            if (reservedWords.has(word.trim())) {
-              return reject;
-            }
-            if (looksLikeDate(word)) {
-              return reject;
-            }
-          }
 
-          return {
-            name: r,
-            location: l,
-            length: r.length,
-          };
+          if (containsReservedWord(r.split(' '))) {
+            return reject;
+          } else {
+            return {
+              name: r,
+              location: l,
+              length: r.length,
+            };
+          }
         },
       },
       { name: 'referenceInExpression$ebnf$1', symbols: [] },
@@ -3052,19 +3103,16 @@
         symbols: [/[a-zA-Z\$]/, 'referenceInExpression$ebnf$1'],
         postprocess: (d, l, reject) => {
           const r = d[0] + d[1].join('');
-          for (const word of r.split(' ')) {
-            if (reservedWords.has(word.trim())) {
-              return reject;
-            }
-            if (looksLikeDate(word)) {
-              return reject;
-            }
+
+          if (containsReservedWord(r.split(' '))) {
+            return reject;
+          } else {
+            return {
+              name: r,
+              location: l,
+              length: r.length,
+            };
           }
-          return {
-            name: r,
-            location: l,
-            length: r.length,
-          };
         },
       },
       {
@@ -3142,11 +3190,12 @@
         symbols: [/[a-z]/, 'simpleFunctionDefName$ebnf$1'],
         postprocess: (d, l, reject) => {
           const name = d[0] + d[1].join('');
-          if (reservedWords.has(name)) {
-            return reject;
-          }
 
-          return name;
+          if (isReservedWord(name)) {
+            return reject;
+          } else {
+            return name;
+          }
         },
       },
       { name: 'complexFunctionDefSurname$ebnf$1', symbols: [/[0-9a-zA-Z]/] },
@@ -3287,11 +3336,11 @@
         name: 'dissociativeOperator',
         symbols: ['dissociativeOperator$string$1'],
         postprocess: (d, l) => {
-          const op = d[0].trim();
+          const op = d[0];
           return {
-            name: op,
+            name: op.trim(),
             location: l + 1,
-            length: 3,
+            length: op.length,
           };
         },
       },
@@ -3407,11 +3456,11 @@
         name: 'associativeOperator',
         symbols: ['associativeOperator$subexpression$2'],
         postprocess: (d, l) => {
-          const op = d[0][0].trim();
+          const op = d[0][0];
           return {
-            name: op,
+            name: op.trim(),
             location: l + 1,
-            length: 1,
+            length: op.length,
           };
         },
       },
@@ -3466,14 +3515,16 @@
         symbols: [/[a-zAZ]/, 'functionNameRefWord$ebnf$1'],
         postprocess: (d, l, reject) => {
           const candidate = d[0] + d[1].join('');
+
           if (isReservedWord(candidate)) {
             return reject;
+          } else {
+            return {
+              name: candidate,
+              location: l,
+              length: lengthOf(d),
+            };
           }
-          return {
-            name: candidate,
-            location: l,
-            length: lengthOf(d),
-          };
         },
       },
       {

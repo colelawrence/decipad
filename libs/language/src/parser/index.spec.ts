@@ -25,7 +25,11 @@ const testParse = (source: string, ...expected: AST.Statement[]) => {
 
 it('parses things in multiple lines', () => {
   testParse(
-    'X = 2020-01-01\nY = 10\nTable = { Column = [1, 2, 3 ]}\nRange = [ 10 .. 20 ]\n function = a b => a + b',
+    `X = date(2020-01-01)
+Y = 10
+Table = { Column = [1, 2, 3 ]}
+Range = [ 10 .. 20 ]
+function = a b => a + b`,
     n('assign', n('def', 'X'), date('2020-01-01', 'day')),
     n('assign', n('def', 'Y'), l(10)),
     tableDef('Table', {

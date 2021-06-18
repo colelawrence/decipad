@@ -68,7 +68,7 @@ runTests({
   },
 
   'basic time range': {
-    source: '   [2020-10..2020-03]',
+    source: '   [date(2020-10)..date(2020-03)]',
     ast: [
       {
         type: 'range',
@@ -77,13 +77,13 @@ runTests({
             type: 'date',
             args: ['year', 2020, 'month', 10],
             location: 4,
-            length: 7,
+            length: 13,
           },
           {
             type: 'date',
             args: ['year', 2020, 'month', 3],
-            location: 13,
-            length: 7,
+            location: 19,
+            length: 13,
           },
         ],
         start: {
@@ -92,9 +92,9 @@ runTests({
           column: 4,
         },
         end: {
-          char: 20,
+          char: 32,
           line: 1,
-          column: 21,
+          column: 33,
         },
       },
     ],
