@@ -9,7 +9,7 @@ export const callBuiltin = (
 ) => {
   if (!hasBuiltin(builtinName)) {
     return Type.Impossible.inNode(callExpr).withErrorCause(
-      `Unknown function ${builtinName}`
+      `The function ${builtinName} does not exist`
     );
   }
 
@@ -17,7 +17,7 @@ export const callBuiltin = (
 
   if (givenArguments.length !== builtin.argCount) {
     return Type.Impossible.inNode(callExpr).withErrorCause(
-      `${builtinName} expects ${builtin.argCount} parameters and was given ${givenArguments.length}`
+      `The function ${builtinName} requires ${builtin.argCount} parameters and ${givenArguments.length} parameters were entered`
     );
   }
 

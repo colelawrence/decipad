@@ -555,7 +555,7 @@ it('infers refs', async () => {
 
   expect(await inferExpression(scopeWithVariable, r('N'))).toEqual(Type.Number);
 
-  const errorCause = new InferError('Undefined variable MissingVar');
+  const errorCause = new InferError('The variable MissingVar does not exist');
   expect(await inferExpression(scopeWithVariable, r('MissingVar'))).toEqual(
     Type.Impossible.withErrorCause(errorCause).inNode(r('MissingVar'))
   );
@@ -689,8 +689,8 @@ it('infers binops', async () => {
   const errorCtx = makeContext();
   const badExpr = c('==', l(1), l(true));
 
-  expect(await inferExpression(errorCtx, badExpr)).toEqual(
-    Type.Impossible.withErrorCause('Expected number').inNode(badExpr)
+  expect((await inferExpression(errorCtx, badExpr)).errorCause).toEqual(
+    InferError.expectedButGot(Type.Number, Type.Boolean)
   );
 });
 
@@ -706,8 +706,8 @@ it('infers conditions', async () => {
   const errorCtx = makeContext();
   const badConditional = c('if', l(true), l('wrong!'), l(1));
 
-  expect(await inferExpression(errorCtx, badConditional)).toEqual(
-    Type.Impossible.withErrorCause('Expected string').inNode(badConditional)
+  expect((await inferExpression(errorCtx, badConditional)).errorCause).toEqual(
+    InferError.expectedButGot(Type.String, Type.Number)
   );
 });
 
@@ -724,20 +724,16 @@ describe('inferFunction', () => {
     const unaryFn = funcDef('Fn', ['A'], r('A'));
 
     let errorCtx = makeContext();
-    const badArgumentCountError = new InferError(
-      'Wrong number of arguments applied to Fn (expected 1)'
-    );
-    expect(await inferFunction(errorCtx, unaryFn, [])).toEqual(
-      Type.Impossible.withErrorCause(badArgumentCountError)
+    expect((await inferFunction(errorCtx, unaryFn, [])).errorCause).toEqual(
+      InferError.expectedArgCount('Fn', 1, 0)
     );
 
     errorCtx = makeContext();
-    const badArgumentCountError2 = new InferError(
-      'Wrong number of arguments applied to Fn (expected 1)'
-    );
+    const badArgumentCountError2 = InferError.expectedArgCount('Fn', 1, 2);
     expect(
-      await inferFunction(errorCtx, unaryFn, [Type.Boolean, Type.String])
-    ).toEqual(Type.Impossible.withErrorCause(badArgumentCountError2));
+      (await inferFunction(errorCtx, unaryFn, [Type.Boolean, Type.String]))
+        .errorCause
+    ).toEqual(badArgumentCountError2);
   });
 });
 
@@ -757,12 +753,13 @@ describe('inferProgram', () => {
 
       argList.args[1] = l('bad string, bad string!');
     });
-    const badCall = wrongProgram[0].args[1];
 
-    expect(await inferProgram(wrongProgram)).toEqual({
+    expect(await inferProgram(wrongProgram)).toMatchObject({
       variables: new Map([['A', Type.Number]]),
       blockReturns: [
-        Type.Impossible.withErrorCause('Expected number').inNode(badCall),
+        {
+          errorCause: InferError.expectedButGot(Type.Number, Type.String),
+        },
       ],
     });
   });
@@ -801,10 +798,8 @@ describe('inferTargetStatement', () => {
     const badCall = c('+', l('string'), l(1));
     const badProgram = [n('block', badCall)];
 
-    expect(await inferTargetStatement(badProgram, [0, 0])).toEqual(
-      Type.Impossible.withErrorCause(new InferError('Expected number')).inNode(
-        badCall
-      )
+    expect((await inferTargetStatement(badProgram, [0, 0])).errorCause).toEqual(
+      InferError.expectedButGot(Type.Number, Type.String)
     );
   });
 });
@@ -853,9 +848,7 @@ describe('Units', () => {
     const badUnits = c('+', l(1, degC), l(1, seconds));
     const ctxForError = makeContext();
 
-    const badUnitsError = new InferError(
-      'Mismatched units: celsius and second'
-    );
+    const badUnitsError = InferError.expectedUnit([degC], [seconds]);
     expect(await inferExpression(ctxForError, badUnits)).toEqual(
       Type.Impossible.withErrorCause(badUnitsError).inNode(badUnits)
     );

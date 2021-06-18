@@ -16,9 +16,10 @@ export type TypeName = typeof scalarTypeNames[number];
 
 // decorates methods that propagate errors found in `this` or any argument.
 const propagate = (_: Type, _methodName: string, desc: PropertyDescriptor) => {
-  const method = desc.value;
+  const realMethod = desc.value;
 
   desc.value = function (this: Type, ...args: any[]) {
+    /* istanbul ignore if */
     if (
       this.functionness ||
       args.some((a) => a instanceof Type && a.functionness)
@@ -30,7 +31,7 @@ const propagate = (_: Type, _methodName: string, desc: PropertyDescriptor) => {
       (a) => a instanceof Type && a.errorCause != null
     );
 
-    return errored ?? method.call(this, ...args);
+    return errored ?? realMethod.call(this, ...args);
   };
 };
 
@@ -53,10 +54,11 @@ export class Type {
   static Impossible: Type;
   static FunctionPlaceholder: Type;
 
-  type: string | null = null;
-  unit: AST.Unit[] | null = null;
   node: AST.Node | null = null;
   errorCause: InferError | null = null;
+
+  type: string | null = null;
+  unit: AST.Unit[] | null = null;
 
   date: Time.Specificity | null = null;
 
@@ -85,6 +87,7 @@ export class Type {
     base: Type,
     { type, unit, columnSize, date }: ExtendArgs
   ): Type {
+    /* istanbul ignore if */
     if (base.errorCause != null) {
       return base;
     }
@@ -258,6 +261,26 @@ export class Type {
     return `<${this.type}>`;
   }
 
+  toBasicString() {
+    if (this.functionness) return 'function';
+
+    if (this.errorCause != null) {
+      throw new Error('toBasicString: errors not supported');
+    }
+
+    if (this.unit != null) return stringifyUnits(this.unit);
+    if (this.type != null) return this.type;
+    if (this.date != null) return `date(${this.date})`;
+    if (this.rangeOf != null) return 'range';
+    if (this.columnSize != null) return 'column';
+    if (this.tupleTypes != null) return 'table';
+    if (this.timeUnits != null) return `time quantity`;
+    if (this.dataUrl != null) return 'imported data';
+
+    /* istanbul ignore next */
+    throw new Error('toBasicString: unknown type');
+  }
+
   get cardinality(): number {
     if (this.tupleTypes != null) {
       return 1 + Math.max(...this.tupleTypes.map((c) => c.cardinality));
@@ -295,6 +318,11 @@ export class Type {
     }
   }
 
+  @propagate
+  expected(expected: Type | string) {
+    return this.withErrorCause(InferError.expectedButGot(expected, this));
+  }
+
   // Type assertions -- these return a new type possibly with an error
   @propagate
   sameAs(other: Type): Type {
@@ -305,20 +333,11 @@ export class Type {
   }
 
   @propagate
-  isScalar(type?: TypeName | null) {
-    if (
-      this.tupleTypes == null &&
-      this.cellType == null &&
-      this.rangeOf == null &&
-      this.date == null
-    ) {
-      if (type == null || type === this.type) {
-        return this;
-      } else {
-        return this.withErrorCause(`Expected ${type}`);
-      }
+  isScalar(type: TypeName) {
+    if (type === this.type) {
+      return this;
     } else {
-      return this.withErrorCause('Expected scalar');
+      return this.expected(Type.buildScalar(type));
     }
   }
 
@@ -333,21 +352,17 @@ export class Type {
 
       if (matchingTypes && matchingUnits) {
         return this;
+      } else if (!matchingTypes) {
+        return this.expected(other);
       } else {
         return this.withErrorCause(
-          !matchingTypes
-            ? `Expected ${this.type}`
-            : `Mismatched units: ${stringifyUnits(
-                this.unit
-              )} and ${stringifyUnits(other.unit)}`
+          InferError.expectedUnit(other.unit, this.unit)
         );
       }
     } else if (!meScalar && !theyScalar) {
       return this;
-    } else if (meScalar) {
-      return this.withErrorCause('Expected scalar');
     } else {
-      return this.withErrorCause('Unexpected scalar');
+      return this.expected(other);
     }
   }
 
@@ -370,7 +385,7 @@ export class Type {
     if (this.cellType != null) {
       return this.cellType;
     } else {
-      return this.withErrorCause('Expected column');
+      return this.expected('column');
     }
   }
 
@@ -405,13 +420,13 @@ export class Type {
     if (this.rangeOf != null) {
       return this;
     } else {
-      return this.withErrorCause('Expected range');
+      return this.expected('range');
     }
   }
 
   @propagate
   getRangeOf() {
-    return this.rangeOf ?? this.withErrorCause('Expected range');
+    return this.rangeOf ?? this.expected('range');
   }
 
   @propagate
@@ -421,10 +436,7 @@ export class Type {
     } else if (this.rangeOf == null && other.rangeOf == null) {
       return this;
     } else {
-      const errorMessage =
-        this.rangeOf != null ? 'Expected range' : 'Unexpected range';
-
-      return this.withErrorCause(errorMessage);
+      return this.expected(other);
     }
   }
 
@@ -433,22 +445,19 @@ export class Type {
     if (this.timeUnits != null) {
       return this;
     } else {
-      return this.withErrorCause('Expected time quantity');
+      return this.expected('time quantity');
     }
   }
 
   @propagate
   isDate(specificity?: TimeDotSpecificityBecauseNextJsIsVeryBadAndWrong): Type {
-    if (this.date != null) {
-      if (specificity == null || specificity === this.date) {
-        return this;
-      } else {
-        return this.withErrorCause(
-          `Expected date with ${specificity} specificity`
-        );
-      }
+    if (
+      this.date != null &&
+      (specificity == null || this.date === specificity)
+    ) {
+      return this;
     } else {
-      return this.withErrorCause('Expected date');
+      return this.expected(specificity ? Type.buildDate(specificity) : 'date');
     }
   }
 
@@ -457,16 +466,7 @@ export class Type {
     if (this.date == other.date) {
       return this;
     } else {
-      if ((this.date == null) === (other.date == null)) {
-        return this.withErrorCause(
-          `Expected date with ${other.date} specificity`
-        );
-      } else {
-        const errorMessage =
-          this.date != null ? 'Unexpected date' : 'Expected date';
-
-        return this.withErrorCause(errorMessage);
-      }
+      return this.expected(other);
     }
   }
 
