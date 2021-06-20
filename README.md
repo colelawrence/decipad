@@ -94,6 +94,13 @@ These tests are powered by cypress and are present in apps/client-e2e.
 
 Interesting options are `--headless` (don't show a window) and `--watch` (don't close after running).
 
+### Private deploys and fast client updates
+
+You can deploy your own private instance by following these instructions:
+
+https://www.loom.com/share/a0b33c1071d343fb8a216ef64ad217ea
+
+
 ## Other stuff
 
 To receive e-mails from the application (like when signing in through e-mail), verify your e-mail in SES (it's in sandbox mode so it only sends to verified e-mails)
