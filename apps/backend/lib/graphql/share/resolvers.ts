@@ -4,10 +4,15 @@ import tables from '../../tables';
 import { requireUser, check } from '../authorization';
 import createResourcePermission from '../../resource-permissions/create';
 import paginate from '../utils/paginate';
+import timestamp from '../../utils/timestamp';
 
 const resolvers = {
   Query: {
-    async resourceSharedWith(_: any, { resource }: { resource: string }, context: GraphqlContext): Promise<SharedWith> {
+    async resourceSharedWith(
+      _: any,
+      { resource }: { resource: string },
+      context: GraphqlContext
+    ): Promise<SharedWith> {
       const user = await checkAdminAccessToResource(resource, context);
       const data = await tables();
 
@@ -63,7 +68,8 @@ const resolvers = {
           },
         })
       ).Items.filter((invite) => !!invite.email).map((invite) => ({
-        email: invite.email,
+        id: invite.id,
+        email: invite.email as string,
       }));
 
       return {
@@ -73,7 +79,11 @@ const resolvers = {
       };
     },
 
-    async resourcesSharedWithMe(_: any, { page, resourceType }: {page: PageInput, resourceType: string }, context: GraphqlContext): Promise<PagedResult<SharedResource>> {
+    async resourcesSharedWithMe(
+      _: any,
+      { page, resourceType }: { page: PageInput; resourceType: string },
+      context: GraphqlContext
+    ): Promise<PagedResult<SharedResource>> {
       const user = requireUser(context);
       const data = await tables();
 
@@ -99,7 +109,17 @@ const resolvers = {
   Mutation: {
     async shareWithRole(
       _: any,
-      { resource, roleId, permissionType, canComment }: { resource: URI, roleId: ID, permissionType: PermissionType, canComment: boolean },
+      {
+        resource,
+        roleId,
+        permissionType,
+        canComment,
+      }: {
+        resource: URI;
+        roleId: ID;
+        permissionType: PermissionType;
+        canComment: boolean;
+      },
       context: GraphqlContext
     ) {
       const actorUser = await checkAdminAccessToResource(resource, context);
@@ -115,7 +135,17 @@ const resolvers = {
 
     async shareWithUser(
       _: any,
-      { resource, userId, permissionType, canComment }: { resource: URI, userId: ID, permissionType: PermissionType, canComment: boolean },
+      {
+        resource,
+        userId,
+        permissionType,
+        canComment,
+      }: {
+        resource: URI;
+        userId: ID;
+        permissionType: PermissionType;
+        canComment: boolean;
+      },
       context: GraphqlContext
     ) {
       const actorUser = await checkAdminAccessToResource(resource, context);
@@ -131,7 +161,19 @@ const resolvers = {
 
     async inviteToShareWithEmail(
       _: any,
-      { resource, resourceName, email, permissionType, canComment }: { resource: URI, resourceName: string, email: string, permissionType: PermissionType, canComment: boolean },
+      {
+        resource,
+        resourceName,
+        email,
+        permissionType,
+        canComment,
+      }: {
+        resource: URI;
+        resourceName: string;
+        email: string;
+        permissionType: PermissionType;
+        canComment: boolean;
+      },
       context: GraphqlContext
     ) {
       const actingUser = await checkAdminAccessToResource(resource, context);
@@ -181,10 +223,10 @@ const resolvers = {
         email,
         can_comment: canComment,
         expires_at:
-          Math.round(Date.now() / 1000) +
+          timestamp() +
           Number(process.env.DECI_INVITE_EXPIRATION_SECONDS || 86400),
       };
-      await data.invites.put(newInvite);
+      await data.invites.create(newInvite);
 
       const inviteAcceptLink = `${process.env.DECI_APP_URL_BASE}/api/invites/${newInvite.id}/accept`;
       await arc.queues.publish({
@@ -200,7 +242,11 @@ const resolvers = {
       });
     },
 
-    async unShareWithRole(_: any, { resource, roleId }: {resource: URI, roleId: ID }, context: GraphqlContext) {
+    async unShareWithRole(
+      _: any,
+      { resource, roleId }: { resource: URI; roleId: ID },
+      context: GraphqlContext
+    ) {
       await checkAdminAccessToResource(resource, context);
       const data = await tables();
       await data.permissions.delete({
@@ -208,7 +254,11 @@ const resolvers = {
       });
     },
 
-    async unShareWithUser(_: any, { resource, userId }: { resource: URI, userId: ID }, context: GraphqlContext) {
+    async unShareWithUser(
+      _: any,
+      { resource, userId }: { resource: URI; userId: ID },
+      context: GraphqlContext
+    ) {
       await checkAdminAccessToResource(resource, context);
       const data = await tables();
       await data.permissions.delete({
@@ -232,11 +282,16 @@ const resolvers = {
   },
 };
 
-async function checkAdminAccessToResource(resource: URI, context: GraphqlContext) {
+async function checkAdminAccessToResource(
+  resource: URI,
+  context: GraphqlContext
+) {
   return await check(resource, context, 'ADMIN');
 }
 
-function resourcePermissionToSharedResource(resourcePermission: PermissionRecord): SharedResource {
+function resourcePermissionToSharedResource(
+  resourcePermission: PermissionRecord
+): SharedResource {
   return {
     gqlType: 'SharedResource',
     resource: resourcePermission.resource_uri,

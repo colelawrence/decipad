@@ -99,6 +99,7 @@ invites
   resource_id String
   resource_uri String
   user_id String
+  role_id String
   invited_by_user_id String
   permission String
   parent_resource_uri String

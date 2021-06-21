@@ -12,7 +12,7 @@ async function create(
   };
 
   const data = await tables();
-  await data.workspaces.put(newWorkspace);
+  await data.workspaces.create(newWorkspace);
 
   const newWorkspaceAdminRole = {
     id: nanoid(),

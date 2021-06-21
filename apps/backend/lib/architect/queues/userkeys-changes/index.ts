@@ -2,6 +2,7 @@ import arc from '@architect/functions';
 import assert from 'assert';
 import { nanoid } from 'nanoid';
 import handle from '../../../queues/handler';
+import timestamp from '../../../utils/timestamp';
 
 export const handler = handle(userKeyChangesHandler);
 
@@ -35,7 +36,7 @@ async function userKeyChangesHandler(event: TableRecordChanges<UserKey>) {
     id: nanoid(),
     userkey_id: args.id,
     expires_at:
-      Math.round(Date.now() / 1000) +
+      timestamp() +
       Number(process.env.DECI_KEY_VALIDATION_EXPIRATION_SECONDS || 2592000),
   };
 
@@ -57,7 +58,7 @@ async function userKeyChangesHandler(event: TableRecordChanges<UserKey>) {
   });
 
   const userkey = await data.userkeys.get({ id: args.id });
-  userkey.validation_msg_sent_at = Date.now();
+  userkey.validation_msg_sent_at = timestamp();
 
   await data.userkeys.put(userkey);
 }

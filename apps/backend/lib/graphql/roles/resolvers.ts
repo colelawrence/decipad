@@ -4,10 +4,15 @@ import { ForbiddenError, UserInputError } from 'apollo-server-lambda';
 import tables from '../../tables';
 import allPages from '../../tables/all-pages';
 import { check, isAuthorized } from '../authorization';
+import timestamp from '../../utils/timestamp';
 
 export default {
   Mutation: {
-    async createRole(_: any, { role }: { role: RoleInput }, context: GraphqlContext): Promise<RoleRecord> {
+    async createRole(
+      _: any,
+      { role }: { role: RoleInput },
+      context: GraphqlContext
+    ): Promise<RoleRecord> {
       const workspaceResource = `/workspaces/${role.workspaceId}`;
       await check(workspaceResource, context, 'ADMIN');
 
@@ -18,11 +23,15 @@ export default {
       };
 
       const data = await tables();
-      await data.workspaceroles.put(newRole);
+      await data.workspaceroles.create(newRole);
       return newRole;
     },
 
-    async removeRole(_: any, { roleId }: { roleId: ID}, context: GraphqlContext) {
+    async removeRole(
+      _: any,
+      { roleId }: { roleId: ID },
+      context: GraphqlContext
+    ) {
       const data = await tables();
       const role = await data.workspaceroles.get({ id: roleId });
       if (!role) {
@@ -60,7 +69,15 @@ export default {
       return true;
     },
 
-    async inviteUserToRole(_: any, { roleId, userId, permission }: { roleId: ID, userId: ID, permission: PermissionType}, context: GraphqlContext) {
+    async inviteUserToRole(
+      _: any,
+      {
+        roleId,
+        userId,
+        permission,
+      }: { roleId: ID; userId: ID; permission: PermissionType },
+      context: GraphqlContext
+    ) {
       const data = await tables();
       const role = await data.workspaceroles.get({ id: roleId });
       if (!role) {
@@ -91,11 +108,11 @@ export default {
         permission,
         parent_resource_uri: workspaceResource,
         expires_at:
-          Math.round(Date.now() / 1000) +
+          timestamp() +
           Number(process.env.DECI_INVITE_EXPIRATION_SECONDS || 86400),
       };
 
-      await data.invites.put(newInviteForRole);
+      await data.invites.create(newInviteForRole);
 
       const newInviteForWorkspace = {
         id: nanoid(),
@@ -107,11 +124,11 @@ export default {
         invited_by_user_id: user.id,
         permission,
         expires_at:
-          Math.round(Date.now() / 1000) +
+          timestamp() +
           Number(process.env.DECI_INVITE_EXPIRATION_SECONDS || 86400),
       };
 
-      await data.invites.put(newInviteForWorkspace);
+      await data.invites.create(newInviteForWorkspace);
 
       const invites = [newInviteForRole, newInviteForWorkspace];
       const inviteIdsForURL = invites.map((i) => i.id).join(',');
@@ -131,7 +148,11 @@ export default {
       return invites;
     },
 
-    async removeUserFromRole(_: any, { roleId, userId }: { roleId: ID, userId: ID}, context: GraphqlContext) {
+    async removeUserFromRole(
+      _: any,
+      { roleId, userId }: { roleId: ID; userId: ID },
+      context: GraphqlContext
+    ) {
       const data = await tables();
       const role = await data.workspaceroles.get({ id: roleId });
       if (!role) {
@@ -152,7 +173,11 @@ export default {
       return true;
     },
 
-    async removeSelfFromRole(_: any, { roleId }: { roleId: ID}, context: GraphqlContext) {
+    async removeSelfFromRole(
+      _: any,
+      { roleId }: { roleId: ID },
+      context: GraphqlContext
+    ) {
       const data = await tables();
       const role = await data.workspaceroles.get({ id: roleId });
       if (!role) {
@@ -209,7 +234,13 @@ export default {
   },
 };
 
-async function removeUserFromRole({ role, userId }: { role: RoleRecord, userId: ID}) {
+async function removeUserFromRole({
+  role,
+  userId,
+}: {
+  role: RoleRecord;
+  userId: ID;
+}) {
   const data = await tables();
 
   const permissions = (
@@ -234,8 +265,20 @@ async function removeUserFromRole({ role, userId }: { role: RoleRecord, userId: 
   }
 }
 
-async function checkIfCanRemoveUserFromRole({ role, userId }: { role: RoleRecord, userId: ID}) {
-  if (!(await isAuthorized(`/roles/${role.id}`, { user: { id: userId }}, 'ADMIN'))) {
+async function checkIfCanRemoveUserFromRole({
+  role,
+  userId,
+}: {
+  role: RoleRecord;
+  userId: ID;
+}) {
+  if (
+    !(await isAuthorized(
+      `/roles/${role.id}`,
+      { user: { id: userId } },
+      'ADMIN'
+    ))
+  ) {
     return;
   }
 
@@ -261,7 +304,7 @@ async function checkIfCanRemoveUserFromRole({ role, userId }: { role: RoleRecord
       IndexName: 'byResource',
       KeyConditionExpression: 'resource_uri = :resource_uri',
       ExpressionAttributeValues: {
-        ':resource_uri': roleResource
+        ':resource_uri': roleResource,
       },
     };
 

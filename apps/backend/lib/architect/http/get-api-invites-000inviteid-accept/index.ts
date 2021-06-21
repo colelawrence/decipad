@@ -65,7 +65,7 @@ export const handler = handle(
             user_id: user.id,
             type: invite.permission,
             given_by_user_id: invite.invited_by_user_id,
-            parent_resource_uri: invite.parent_resource_uri || null,
+            parent_resource_uri: invite.parent_resource_uri || undefined,
             can_comment: invite.can_comment || false,
           };
 
