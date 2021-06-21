@@ -41,7 +41,7 @@ export default function createAuthHandler(): HttpHandler {
     async session(
       session: Record<string, any>,
       token: TokenSet
-    ): Promise<Record<string, any>> {
+    ): Promise<Record<string, any> | null> {
       session.accessToken = token.accessToken;
       const user = await findUserByAccessToken(token.accessToken);
 
@@ -52,9 +52,10 @@ export default function createAuthHandler(): HttpHandler {
           email: user.email,
           image: user.image,
         });
+        return session;
+      } else {
+        return null;
       }
-
-      return session;
     },
   };
 

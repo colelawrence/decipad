@@ -1,28 +1,39 @@
-import { useQuery } from '@apollo/client';
-import { GET_WORKSPACES, Workspaces } from '@decipad/queries';
-import { Landing, LoadingSpinnerPage } from '@decipad/ui';
-import { useSession } from 'next-auth/client';
-import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React from 'react';
+import { ApolloProvider } from '@apollo/client';
+import { ChakraProvider } from '@chakra-ui/react';
+import { RuntimeProvider } from '@decipad/editor';
+import { theme } from '@decipad/ui';
+import { useSession, Provider as AuthProvider } from 'next-auth/client';
+import { BrowserRouter } from 'react-router-dom';
+import Head from 'next/head';
+import { LoadingSpinnerPage } from '@decipad/ui';
+import { useApollo } from '../lib/apolloClient';
+import { Router } from '../components/Router';
 
-const Home = () => {
-  const router = useRouter();
+export default function Index({ pageProps = {} }) {
+  const apolloClient = useApollo(pageProps);
   const [session, loading] = useSession();
-  const query = useQuery<Workspaces>(GET_WORKSPACES);
 
-  useEffect(() => {
-    if (session && !loading) {
-      query.refetch().then((res) => {
-        router.push(`/${res.data.workspaces[0].id}`);
-      });
-    }
-  }, [session, router, query, loading]);
+  if (loading) {
+    return <LoadingSpinnerPage />;
+  }
 
-  if (loading) return <LoadingSpinnerPage />;
-
-  if (!session) return <Landing />;
-
-  return null;
-};
-
-export default Home;
+  return (
+    <div>
+      <Head>
+        <title>Decipad</title>
+      </Head>
+      <AuthProvider session={session!}>
+        <ApolloProvider client={apolloClient}>
+          <ChakraProvider resetCSS theme={theme}>
+            <RuntimeProvider>
+              <BrowserRouter>
+                <Router session={session} />
+              </BrowserRouter>
+            </RuntimeProvider>
+          </ChakraProvider>
+        </ApolloProvider>
+      </AuthProvider>
+    </div>
+  );
+}

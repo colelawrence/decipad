@@ -18,12 +18,12 @@ import {
   CreateWorkspaceVariables,
   CREATE_WORKSPACE,
 } from '@decipad/queries';
-import { useRouter } from 'next/router';
 import React, { useRef } from 'react';
 import { FiPlus } from 'react-icons/fi';
+import { useHistory } from 'react-router-dom';
 
 export const NewWorkspaceOption = () => {
-  const router = useRouter();
+  const history = useHistory();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const newWorkspaceRef = useRef<HTMLInputElement>(null);
 
@@ -36,7 +36,7 @@ export const NewWorkspaceOption = () => {
       refetchQueries: ['Workspaces'],
       awaitRefetchQueries: true,
     }).then((res) => {
-      router.push(`/${res.data?.createWorkspace.id}`);
+      history.push(`/workspaces/${res.data?.createWorkspace.id}`);
       onClose();
     });
   };
