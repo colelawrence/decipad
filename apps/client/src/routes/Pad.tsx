@@ -1,13 +1,13 @@
 import { useQuery } from '@apollo/client';
 import { Box, Button, Container, Heading, Icon } from '@chakra-ui/react';
-import { FiArrowLeft } from 'react-icons/fi';
 import { DeciEditor } from '@decipad/editor';
 import {
   GetPadById,
   GetPadByIdVariables,
   GET_PAD_BY_ID,
 } from '@decipad/queries';
-import { LoadingSpinnerPage } from '@decipad/ui';
+import { HelpButton, LoadingSpinnerPage } from '@decipad/ui';
+import { FiArrowLeft } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
 export function Pad({
@@ -47,6 +47,7 @@ export function Pad({
         <Heading mb={3}>{data?.getPadById?.name}</Heading>
       </Container>
       <DeciEditor workspaceId={workspaceId} padId={padId} />
+      <HelpButton />
     </Box>
   );
 }

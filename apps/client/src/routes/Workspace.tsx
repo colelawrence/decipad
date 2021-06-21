@@ -19,9 +19,10 @@ import {
   RemovePadVariables,
   REMOVE_PAD,
 } from '@decipad/queries';
-import { LoadingSpinnerPage } from '@decipad/ui';
+import { HelpButton, LoadingSpinnerPage } from '@decipad/ui';
+import React from 'react';
+import { FiFile, FiTrash2 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-import { FiFile, FiHelpCircle, FiTrash2 } from 'react-icons/fi';
 import { SideMenu } from '../components/SideMenu';
 import { Topbar } from '../components/Topbar';
 
@@ -102,17 +103,7 @@ export function Workspace({ workspaceId }: { workspaceId: string }) {
           ))}
         </Box>
       </Grid>
-      <Button
-        as="a"
-        href="https://www.notion.so/decipad/Deci-101-3f3b513b9a82499080eef6eef87d8179"
-        target="_blank"
-        pos="absolute"
-        right={10}
-        bottom={10}
-        leftIcon={<Icon as={FiHelpCircle} />}
-      >
-        Help &amp; Documentation
-      </Button>
+      <HelpButton />
     </Grid>
   );
 }

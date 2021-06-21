@@ -1,4 +1,3 @@
-import React, { useEffect, useMemo } from 'react';
 import {
   Box,
   Button,
@@ -9,8 +8,10 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { AnonymousRuntimeProvider, DeciEditor } from '@decipad/editor';
+import { HelpButton } from '@decipad/ui';
 import { nanoid } from 'nanoid';
-import { FiArrowLeft, FiHelpCircle } from 'react-icons/fi';
+import React, { useEffect, useMemo } from 'react';
+import { FiArrowLeft } from 'react-icons/fi';
 
 export function Playground() {
   const randomId = useMemo(() => nanoid(), []);
@@ -50,17 +51,7 @@ export function Playground() {
             This version is intended just to test out how our pads work, play
             around and have fun!
           </Text>
-          <Button
-            as="a"
-            href="https://www.notion.so/decipad/Deci-101-3f3b513b9a82499080eef6eef87d8179"
-            target="_blank"
-            pos="absolute"
-            right={10}
-            bottom={10}
-            leftIcon={<Icon as={FiHelpCircle} />}
-          >
-            Help & Documentation
-          </Button>
+          <HelpButton />
         </Container>
         <DeciEditor workspaceId={randomId} padId={randomId} />
       </Box>
