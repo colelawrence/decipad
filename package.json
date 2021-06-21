@@ -136,6 +136,8 @@
     "@emotion/react": "^11.4.0",
     "@emotion/server": "11.4.0",
     "@emotion/styled": "^11.3.0",
+    "@sentry/react": "^6.7.2",
+    "@sentry/tracing": "^6.7.2",
     "@storybook/addon-actions": "^6.2.9",
     "@tensorflow/tfjs-backend-cpu": "^3.6.0",
     "@tensorflow/tfjs-core": "^3.6.0",
