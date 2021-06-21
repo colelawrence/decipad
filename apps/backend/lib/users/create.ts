@@ -2,6 +2,7 @@ import { nanoid } from 'nanoid';
 import tables from '../tables';
 import createWorkspace from '../workspaces/create';
 import createPad from '../pads/create';
+import timestamp from '../utils/timestamp';
 
 type UserInput = {
   name: string;
@@ -17,13 +18,13 @@ async function create(user: UserInput): Promise<UserWithSecret> {
   const newUser = {
     id: nanoid(),
     name: user.name,
-    last_login: Date.now(),
+    last_login: timestamp(),
     image: user.image,
     email: user.email,
     secret: nanoid(),
   };
 
-  await data.users.put(newUser);
+  await data.users.create(newUser);
 
   if (user.provider && user.providerId) {
     const newUserKey = {
@@ -31,7 +32,7 @@ async function create(user: UserInput): Promise<UserWithSecret> {
       user_id: newUser.id,
     };
 
-    await data.userkeys.put(newUserKey);
+    await data.userkeys.create(newUserKey);
   }
 
   if (user.email) {
@@ -40,7 +41,7 @@ async function create(user: UserInput): Promise<UserWithSecret> {
       user_id: newUser.id,
     };
 
-    await data.userkeys.put(newEmailUserKey);
+    await data.userkeys.create(newEmailUserKey);
   }
 
   const firstName = userFirstName(newUser);

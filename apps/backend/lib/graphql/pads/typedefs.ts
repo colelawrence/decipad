@@ -28,6 +28,7 @@ export default gql`
     name: String!
     access: PadAccess!
     workspace: Workspace!
+    createdAt: DateTime
   }
 
   type PagedPadResult {

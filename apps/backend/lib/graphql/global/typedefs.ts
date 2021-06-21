@@ -6,6 +6,7 @@ export default gql`
     name: String
     email: String
     image: String
+    createdAt: DateTime
   }
 
   enum PermissionType {
@@ -21,6 +22,7 @@ export default gql`
     type: PermissionType!
     givenBy: User!
     canComment: Boolean!
+    createdAt: DateTime
   }
 
   extend type Query {

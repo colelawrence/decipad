@@ -11,6 +11,7 @@ type User = {
   email?: string;
   image?: string;
   emailVerified?: number | Date;
+  createdAt?: number | Date;
 };
 
 type UserInput = {
@@ -126,9 +127,13 @@ type PagedResult<T> = {
 
 /* Data Tables */
 
-type TableRecordIdentifier = {
+interface TableRecordIdentifier {
   id: ID;
-};
+}
+
+interface TableRecord extends TableRecordIdentifier {
+  createdAt?: number;
+}
 
 type TableRecordDelete = {
   table: string;
@@ -144,8 +149,7 @@ type TableRecodPut<T> = {
 
 type TableRecordChanges<T> = TableRecordPut<T> | TableRecordDelete;
 
-type PermissionRecord = {
-  id: ID;
+interface PermissionRecord extends TableRecord {
   resource_type: string;
   resource_uri: URI;
   resource_id: ID;
@@ -153,11 +157,10 @@ type PermissionRecord = {
   given_by_user_id: ID;
   type: PermissionType;
   role_id: ID;
-  parent_resource_uri: URI;
-  parent_permission_id: ID;
+  parent_resource_uri?: URI;
+  parent_permission_id?: ID;
   can_comment: boolean;
-  created_at: number;
-};
+}
 
 type RoleAccess = {
   role_id: ID;
@@ -176,44 +179,38 @@ type PadAccessRecord = {
   users: UserAccessRecord[];
 };
 
-type PadRecord = {
-  id: ID;
+interface PadRecord extends TableRecord {
   name: string;
   workspace_id: ID;
-};
+}
 
-type WorkspaceRecord = {
-  id: ID;
+interface WorkspaceRecord extends TableRecord {
   name: string;
-};
+}
 
-type TagRecord = {
-  id: ID;
+interface TagRecord extends TableRecordIdentifier {
   tag: string;
   resource_uri: string;
-};
+}
 
-type UserTaggedResourceRecord = {
-  id: ID;
+interface UserTaggedResourceRecord extends TableRecordIdentifier {
   user_id: ID;
   tag: string;
   workspace_id: ID;
   resource_uri: string;
-};
+}
 
-type UserTagRecord = {
-  id: ID;
+interface UserTagRecord extends TableRecordIdentifier {
   workspace_id: ID;
   user_id: ID;
   tag: string;
-};
+}
 
-type RoleRecord = {
-  id: ID;
+interface RoleRecord extends TableRecord {
   name: string;
   workspace_id: ID;
   system?: boolean;
-};
+}
 
 type SharedWithUserRecord = {
   user_id: ID;
@@ -233,9 +230,24 @@ type SharedWith = {
   pendingInvitations: ShareInvitation[];
 };
 
-type ShareInvitation = {
+interface ShareInvitation extends TableRecord {
   email: string;
-};
+}
+
+interface InviteRecord extends TableRecord {
+  permission_id: ID;
+  resource_type: string;
+  resource_id: string;
+  resource_uri?: URI;
+  user_id: ID;
+  role_id: ID;
+  invited_by_user_id: ID;
+  permission: PermissionType;
+  parent_resource_uri?: URI;
+  email?: string;
+  can_comment?: boolean;
+  expires_at: number;
+}
 
 type SharedResource = {
   gqlType?: string;
@@ -247,7 +259,8 @@ type SharedResource = {
 interface DataTable<T> {
   delete(key: Key): Promise<void>;
   get(key: Key): Promise<T | undefined>;
-  put(key: Key): Promise<void>;
+  create(doc: T): Promise<void>;
+  put(doc: T): Promise<void>;
   query(params: DynamoDbQuery): Promise<{
     Items: Array<T>;
     Count: number;
@@ -256,17 +269,26 @@ interface DataTable<T> {
   __deci_observed__?: boolean;
 }
 
-type DataTables = {
-  users: DataTable<UserWithSecret>;
-  permissions: DataTable<PermissionRecord>;
-  workspaces: DataTable<WorkspaceRecord>;
-  pads: DataTable<PadRecord>;
-  workspaceroles: DataTable<RoleRecord>;
+interface EnhancedDataTable<T> extends DataTable<T> {
+  create(doc: T): Promise<void>;
+}
+
+interface EnhancedDataTables {
+  users: EnhancedDataTable<UserWithSecret>;
+  userkeys: EnhancedDataTable<UserKey>;
+  permissions: EnhancedDataTable<PermissionRecord>;
+  workspaces: EnhancedDataTable<WorkspaceRecord>;
+  pads: EnhancedDataTable<PadRecord>;
+  workspaceroles: EnhancedDataTable<RoleRecord>;
+  invites: EnhancedDataTable<InviteRecord>;
+}
+
+interface DataTables extends EnhancedDataTables {
   tags: DataTable<TagRecord>;
   usertaggedresources: DataTable<UserTaggedResourceRecord>;
   usertags: DataTable<UserTagRecord>;
   [tableName: string]: DataTable<any>;
-};
+}
 
 interface DynamoDbQuery {
   IndexName: string;

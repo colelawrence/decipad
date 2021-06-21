@@ -1,4 +1,15 @@
 import arc from '@architect/functions';
+import timestamp from '../utils/timestamp';
+
+const enhancedTables: (keyof EnhancedDataTables)[] = [
+  'users',
+  'userkeys',
+  'permissions',
+  'workspaces',
+  'pads',
+  'workspaceroles',
+  'invites',
+];
 
 const observedTables = [
   'userkeys',
@@ -19,6 +30,9 @@ export default async function tables(): Promise<DataTables> {
       .tables()
       .then((_tables) => {
         const tables = _tables as unknown as DataTables;
+        for (const enhancedTableName of enhancedTables) {
+          enhance(tables, enhancedTableName);
+        }
         for (const observedTable of observedTables) {
           observe(tables, observedTable);
         }
@@ -30,7 +44,7 @@ export default async function tables(): Promise<DataTables> {
   return p;
 }
 
-async function observe(tables: DataTables, tableName: string) {
+function observe(tables: DataTables, tableName: keyof DataTables) {
   const table = tables[tableName];
   if (!table) {
     throw new Error('No table named ' + tableName);
@@ -63,4 +77,23 @@ async function observe(tables: DataTables, tableName: string) {
       table['delete'] = replaceMethod;
     }
   }
+}
+
+function enhance(tables: DataTables, tableName: keyof DataTables) {
+  const table = tables[tableName];
+  if (!table) {
+    throw new Error('No table named ' + tableName);
+  }
+
+  if (typeof table.create === 'function') {
+    return;
+  }
+
+  table.create = async function create(doc: any) {
+    if (!doc.createdAt) {
+      doc.createdAt = timestamp();
+    }
+
+    return table.put(doc);
+  };
 }

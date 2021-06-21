@@ -11,13 +11,14 @@ export default gql`
     name: String!
     workspace: Workspace!
     users: [User!]!
+    createdAt: DateTime
   }
 
   type RoleInvitation {
     id: ID!
     role: Role!
     user: User!
-    expires_at: Date
+    expires_at: DateTime
   }
 
   extend type Mutation {
