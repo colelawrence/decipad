@@ -78,7 +78,6 @@ exports[`CodeBlock Block matches snapshot with no results 1`] = `
     <code
       class="chakra-code emotion-1"
       data-slate-node="element"
-      spellcheck="false"
     >
       a = 10 apples b = 10 apples a + b
     </code>

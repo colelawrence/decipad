@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import { FiPlus } from 'react-icons/fi';
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import { Node, createEditor, Transforms } from 'slate';
-import { ReactEditor, Slate, Transforms } from 'slate-react';
+import { ReactEditor, Slate } from 'slate-react';
 import { ResultsContextProvider } from '@decipad/ui';
 import { DropFile } from './Components/DropFile';
 import { useEditor } from './Hooks/useEditor';
@@ -111,10 +111,14 @@ export const DeciEditor = ({ padId }: DeciEditorProps): JSX.Element => {
       // We don't always want to focus the editor, such as in docs.
       ReactEditor.focus(editor as any);
     }
-  }, [value])
+  }, [value]);
 
   if (value == null) {
-    return <Box><span>Loading...</span></Box>
+    return (
+      <Box>
+        <span>Loading...</span>
+      </Box>
+    );
   } else {
     return (
       <ResultsContextProvider key={padId} value={results}>

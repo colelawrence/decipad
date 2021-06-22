@@ -2,9 +2,8 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { render, RenderOptions } from '@testing-library/react';
 import React from 'react';
 
-import { ResultsContextProvider } from '@decipad/editor';
 import { Type } from '@decipad/language';
-import { theme } from '../theme';
+import { theme, ResultsContextProvider } from '../..';
 
 const results = {
   test: {
@@ -17,8 +16,8 @@ const results = {
     value: [20],
     errors: [],
   },
-  noResult: null
-}
+  noResult: null,
+};
 
 const AllTheProviders: React.FC = ({ children }) => {
   return (
