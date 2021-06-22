@@ -1,5 +1,5 @@
 import { Box, Button, Center, Heading, Icon, Image } from '@chakra-ui/react';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import React from 'react';
 import { FiPlay } from 'react-icons/fi';
 import { GithubSignInButton } from './GithubSignInButton/GithubSignInButton.component';
@@ -30,9 +30,8 @@ export const Landing = () => {
               maps and pivot tables.
             </BodyText>
             <GithubSignInButton />
-            <Link href="/playground">
+            <Link to="/playground">
               <Button
-                as="a"
                 size="lg"
                 colorScheme="blue"
                 mt={3}

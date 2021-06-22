@@ -14,7 +14,7 @@ async function create(
   };
 
   const data = await tables();
-  await data.pads.put(newPad);
+  await data.pads.create(newPad);
 
   await createResourcePermission({
     resourceType: 'pads',

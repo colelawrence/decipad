@@ -19,42 +19,30 @@ import {
   RemovePadVariables,
   REMOVE_PAD,
 } from '@decipad/queries';
-import { LoadingSpinnerPage } from '@decipad/ui';
-import { useSession } from 'next-auth/client';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
-import { FiFile, FiHelpCircle, FiTrash2 } from 'react-icons/fi';
-import { SideMenu } from '../../components/SideMenu';
-import { Topbar } from '../../components/Topbar';
+import { HelpButton, LoadingSpinnerPage } from '@decipad/ui';
+import React from 'react';
+import { FiFile, FiTrash2 } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+import { SideMenu } from '../components/SideMenu';
+import { Topbar } from '../components/Topbar';
 
-const Workspace = () => {
-  const router = useRouter();
-  const [session, sessionLoading] = useSession();
-  const { id } = router.query;
-
-  useEffect(() => {
-    if (!session && !sessionLoading) {
-      router.push('/');
-    }
-  }, [session, router, sessionLoading]);
-
+export function Workspace({ workspaceId }: { workspaceId: string }) {
   const { data, loading: workspaceLoading } = useQuery<
     GetWorkspaceById,
     GetWorkspaceByIdVariables
   >(GET_WORKSPACE_BY_ID, {
-    variables: { id: typeof id === 'string' ? id : '' },
+    variables: { id: workspaceId },
   });
 
   const [removePad] = useMutation<RemovePad, RemovePadVariables>(REMOVE_PAD);
 
-  if (workspaceLoading || sessionLoading) {
+  if (workspaceLoading) {
     return <LoadingSpinnerPage />;
   }
 
   return (
     <Grid p={10} gridTemplateRows="auto 1fr" gridGap={6} minH="100vh">
-      <Topbar workspaceId={id as string} />
+      <Topbar workspaceId={workspaceId} />
       <Grid
         gridTemplateColumns="300px 1fr"
         borderTop="2px solid"
@@ -81,6 +69,7 @@ const Workspace = () => {
           )}
           {data?.getWorkspaceById?.pads.items.map((item) => (
             <Grid
+              key={item.id}
               gridTemplateColumns="1fr auto"
               borderBottom="2px solid"
               borderColor="gray.100"
@@ -88,17 +77,14 @@ const Workspace = () => {
             >
               <Box
                 as={Link}
-                href={`/${data.getWorkspaceById?.id}/${item.id}`}
-                key={item.id}
+                to={`/workspaces/${data.getWorkspaceById?.id}/pads/${item.id}`}
               >
-                <a>
-                  <HStack py={6}>
-                    <Icon as={FiFile} mr={3} fontSize="1.5rem" />
-                    <Heading size="md" fontWeight="normal">
-                      {item.name}
-                    </Heading>
-                  </HStack>
-                </a>
+                <HStack py={6}>
+                  <Icon as={FiFile} mr={3} fontSize="1.5rem" />
+                  <Heading size="md" fontWeight="normal">
+                    {item.name}
+                  </Heading>
+                </HStack>
               </Box>
               <Flex alignItems="center">
                 <Button
@@ -117,19 +103,7 @@ const Workspace = () => {
           ))}
         </Box>
       </Grid>
-      <Button
-        as="a"
-        href="https://www.notion.so/decipad/Deci-101-3f3b513b9a82499080eef6eef87d8179"
-        target="_blank"
-        pos="absolute"
-        right={10}
-        bottom={10}
-        leftIcon={<Icon as={FiHelpCircle} />}
-      >
-        Help & Documentation
-      </Button>
+      <HelpButton />
     </Grid>
   );
-};
-
-export default Workspace;
+}

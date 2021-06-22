@@ -205,6 +205,7 @@ test('pads', () => {
             getPadById(id: "${pad.id}") {
               id
               name
+              createdAt
             }
           }
         `,
@@ -215,6 +216,8 @@ test('pads', () => {
       id: pad.id,
       name: 'Pad 1 renamed',
     });
+
+    expect(pad2.createdAt).toBeDefined();
   });
 
   it('invited user cannot get the pad', async () => {

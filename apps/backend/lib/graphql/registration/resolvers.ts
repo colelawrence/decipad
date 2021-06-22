@@ -1,10 +1,14 @@
 import tables from '../../tables';
 import { nanoid } from 'nanoid';
 import { UserInputError } from 'apollo-server-lambda';
+import timestamp from '../../utils/timestamp';
 
 export default {
   Mutation: {
-    async createUserViaMagicLink(_: any, { email }: { email: string }): Promise<User> {
+    async createUserViaMagicLink(
+      _: any,
+      { email }: { email: string }
+    ): Promise<User> {
       const data = await tables();
 
       const key = `email:${email}`;
@@ -20,19 +24,22 @@ export default {
         secret: nanoid(),
       };
 
-      await data.users.put(newUser);
+      await data.users.create(newUser);
 
       const newKey = {
         id: key,
         user_id: newUser.id,
       };
 
-      await data.userkeys.put(newKey);
+      await data.userkeys.create(newKey);
 
       return newUser;
     },
 
-    async resendRegistrationMagicLinkEmail(_: any, { email }: { email: string }) {
+    async resendRegistrationMagicLinkEmail(
+      _: any,
+      { email }: { email: string }
+    ) {
       const data = await tables();
 
       const keyId = `email:${email}`;
@@ -45,9 +52,9 @@ export default {
         throw new UserInputError('User key already validated');
       }
 
-      key.validation_msg_sent_at = Date.now();
+      key.validation_msg_sent_at = timestamp();
 
-      await data.userkeys.put(key);
+      await data.userkeys.create(key);
 
       return true;
     },

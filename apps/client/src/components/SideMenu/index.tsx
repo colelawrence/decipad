@@ -16,9 +16,9 @@ import {
   GET_WORKSPACES,
   Workspaces,
 } from '@decipad/queries';
-import { useRouter } from 'next/router';
 import React, { useMemo } from 'react';
 import { FiChevronDown, FiFolder } from 'react-icons/fi';
+import { useHistory } from 'react-router-dom';
 import { NewWorkspaceOption } from './NewWorkspaceOption';
 import { WorkspacePreferences } from './WorkspacePreferences';
 
@@ -27,7 +27,7 @@ export interface SideMenuProps {
 }
 
 export const SideMenu = ({ currentWorkspace }: SideMenuProps) => {
-  const router = useRouter();
+  const history = useHistory();
   const { data } = useQuery<Workspaces>(GET_WORKSPACES);
 
   const allOtherWorkspaces = useMemo(
@@ -63,7 +63,7 @@ export const SideMenu = ({ currentWorkspace }: SideMenuProps) => {
             <MenuItem
               key={w.id}
               icon={<Icon as={FiFolder} />}
-              onClick={() => router.push(`/${w.id}`)}
+              onClick={() => history.push(`/workspaces/${w.id}`)}
             >
               {w.name}
             </MenuItem>

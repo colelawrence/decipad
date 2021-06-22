@@ -1,15 +1,15 @@
 import tables from '../tables';
 
 interface ResourceCreateArgs {
-  userId?: string
-  roleId?: string
-  givenByUserId: string,
-  resourceType?: string,
-  resourceId?: string,
-  resourceUri?: string,
-  type: string,
-  parentResourceUri?: string,
-  canComment?: boolean
+  userId?: string;
+  roleId?: string;
+  givenByUserId: string;
+  resourceType?: string;
+  resourceId?: string;
+  resourceUri?: string;
+  type: PermissionType;
+  parentResourceUri?: string;
+  canComment?: boolean;
 }
 
 async function create(args: ResourceCreateArgs) {
@@ -21,7 +21,7 @@ async function create(args: ResourceCreateArgs) {
     resourceId: _resourceId,
     resourceUri,
     type,
-    parentResourceUri = null,
+    parentResourceUri = undefined,
     canComment = false,
   } = args;
 
@@ -43,17 +43,16 @@ async function create(args: ResourceCreateArgs) {
     id,
     resource_type: resourceType,
     resource_uri: resource,
-    resource_id: resourceId,
+    resource_id: resourceId!,
     user_id: userId || 'null',
     role_id: roleId || 'null',
     given_by_user_id: givenByUserId,
     parent_resource_uri: parentResourceUri,
     can_comment: canComment,
     type,
-    created_at: Date.now(),
   };
 
-  await data.permissions.put(newRolePermission);
+  await data.permissions.create(newRolePermission);
 }
 
 export default create;

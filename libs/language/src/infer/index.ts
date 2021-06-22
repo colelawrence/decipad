@@ -210,7 +210,6 @@ export const inferExpression = withErrorSource(
       }
       case 'imported-data': {
         const [url, contentType] = expr.args;
-        // const maxRows = IMPORTED_DATA_MAX_ROWS_BEFORE_INFER;
         const data = await resolveData({ url, contentType, fetch: ctx.fetch });
         return await inferData(data, ctx);
       }

@@ -10,6 +10,7 @@ export default gql`
     name: String!
     roles: [Role!]!
     pads(page: PageInput!): PagedPadResult!
+    createdAt: DateTime
   }
 
   type WorkspacesChanges {

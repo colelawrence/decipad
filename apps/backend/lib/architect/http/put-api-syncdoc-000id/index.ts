@@ -8,8 +8,8 @@ import { isAuthorized } from '../../../authorization';
 import { decode } from '../../../resource';
 
 type Resource = {
-  type: string,
-  id: string
+  type: string;
+  id: string;
 };
 
 export const handler = handle(async (event: APIGatewayProxyEvent) => {
@@ -67,10 +67,10 @@ export const handler = handle(async (event: APIGatewayProxyEvent) => {
       role_id: 'null',
       given_by_user_id: user.id,
       can_comment: true,
-      type: 'ADMIN',
+      type: 'ADMIN' as PermissionType,
     };
 
-    await data.permissions.put(newRolePermission);
+    await data.permissions.create(newRolePermission);
   }
 
   if (changes.length > 0) {

@@ -10,6 +10,7 @@ import by from '../utils/by';
 import { notifyAllWithAccessTo, subscribe } from '../../pubsub';
 import paginate from '../utils/paginate';
 import createPad2 from '../../pads/create';
+import timestamp from '../../utils/timestamp';
 
 const resolvers = {
   Query: {
@@ -267,7 +268,7 @@ const resolvers = {
         can_comment: canComment,
         parent_resource_uri: `/workspaces/${pad.workspace_id}`,
         expires_at:
-          Math.round(Date.now() / 1000) +
+          timestamp() +
           Number(process.env.DECI_INVITE_EXPIRATION_SECONDS || 86400),
       };
       await data.invites.put(newInvite);
@@ -336,7 +337,7 @@ const resolvers = {
           user_id: p.user_id,
           permission: p.type,
           canComment: p.can_comment,
-          createdAt: p.created_at,
+          createdAt: p.createdAt,
         }))
         .sort(by('permission'));
 

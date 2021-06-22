@@ -5,24 +5,24 @@ import tables from './tables';
 import jwtConf from './auth-flow/jwt';
 
 type AuthResult = {
-  user: User | null
-  token: string | null | undefined
-  secret: string | null
-  gotFromSecProtocolHeader: boolean
+  user: User | null;
+  token: string | null | undefined;
+  secret: string | null;
+  gotFromSecProtocolHeader: boolean;
 };
 
 type SessionTokenResult = {
-  token: string | null | undefined
-  gotFromSecProtocolHeader: boolean
+  token: string | null | undefined;
+  gotFromSecProtocolHeader: boolean;
 };
 
 type Request = APIGatewayProxyEvent & {
-  cookies?: string[] | null
+  cookies?: string[] | null;
 };
 
 type ParsedCookies = Record<string, string>;
 
-const TOKEN_COOKIE_NAMES = [
+export const TOKEN_COOKIE_NAMES = [
   'next-auth.session-token',
   '__Secure-next-auth.session-token',
 ];
@@ -40,7 +40,9 @@ async function auth(event: Request): Promise<AuthResult> {
       });
 
       if (decoded.accessToken) {
-        const userWithSecret = await findUserByAccessToken(decoded.accessToken as string);
+        const userWithSecret = await findUserByAccessToken(
+          decoded.accessToken as string
+        );
         if (userWithSecret) {
           const { secret: _secret, ...userWithoutSecret } = userWithSecret;
           secret = _secret;
@@ -55,7 +57,6 @@ async function auth(event: Request): Promise<AuthResult> {
 
   return { user, token, secret, gotFromSecProtocolHeader };
 }
-
 
 function getSessionToken(event: Request): SessionTokenResult {
   let gotFromSecProtocolHeader = false;
@@ -87,13 +88,18 @@ function parseCookies(cookies: string[] | string): ParsedCookies {
     cookies = [cookies];
   }
   return cookies.reduce((cookies: ParsedCookies, cookie: string) => {
-    const { name, value } = parseCookie(cookie) as { name: string, value: string };
+    const { name, value } = parseCookie(cookie) as {
+      name: string;
+      value: string;
+    };
     cookies[name] = value;
     return cookies;
   }, {} as ParsedCookies);
 }
 
-async function findUserByAccessToken(accessToken: string): Promise<UserWithSecret | undefined> {
+async function findUserByAccessToken(
+  accessToken: string
+): Promise<UserWithSecret | undefined> {
   const data = await tables();
 
   const foundUsers = await data.users.query({

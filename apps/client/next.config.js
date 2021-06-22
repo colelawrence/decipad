@@ -5,6 +5,14 @@ const config = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  async rewrites() {
+    return [
+      {
+        source: '/:any*',
+        destination: '/',
+      },
+    ];
+  },
 };
 
 module.exports = withNx(config);

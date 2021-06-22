@@ -1,7 +1,6 @@
-'use strict';
-
 import { createHash } from 'crypto';
 import tables from '../tables';
+import timestamp from '../utils/timestamp';
 
 // Next-Auth does not expose some types
 // So we have to help here.
@@ -61,7 +60,7 @@ export default function createAdapter() {
       return user;
     }
 
-    async function updateUser(user: User) {
+    async function updateUser(user: UserWithSecret) {
       if (user.emailVerified) {
         const verifiedAt = new Date(user.emailVerified);
         const userkey = await data.userkeys.get({
@@ -160,7 +159,7 @@ export default function createAdapter() {
         identifier,
         token: hashedToken,
         expires:
-          Math.round(Date.now() / 1000) +
+          timestamp() +
           Number(process.env.DECI_VERIFICATION_EXPIRES_SECONDS || 86400),
       };
 

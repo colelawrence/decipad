@@ -4,9 +4,12 @@ import { NextApiRequest, NextApiResponse, NextApiHandler } from 'next';
 import { HttpResponse } from '@architect/functions';
 import { parse as parseCookie } from 'simple-cookie';
 import { parse as qsParse, ParsedUrlQuery } from 'querystring';
+import { TOKEN_COOKIE_NAMES } from '../auth';
 
 export default function adaptReqRes(handle: NextApiHandler) {
-  return async function respondWithAuth(req: APIGatewayProxyEvent): Promise<HttpResponse> {
+  return async function respondWithAuth(
+    req: APIGatewayProxyEvent
+  ): Promise<HttpResponse> {
     return new Promise((resolve) => {
       const { method, path } = req.requestContext.http;
       const url = req.rawPath;
@@ -25,6 +28,7 @@ export default function adaptReqRes(handle: NextApiHandler) {
       const query = { nextauth, ...req.queryStringParameters };
 
       const headers: Record<string, string> = {};
+      const cookies: string[] = [];
 
       let body: string | ParsedUrlQuery | undefined = req.body;
 
@@ -71,8 +75,18 @@ export default function adaptReqRes(handle: NextApiHandler) {
           }
           key = key.toLowerCase();
           const existingValue = headers[key];
-          if (key === 'set-cookie' && existingValue) {
-            headers[key] = existingValue + ',' + value;
+          if (key === 'set-cookie') {
+            cookies.push(value);
+            if (existingValue) {
+              for (const cookieName of TOKEN_COOKIE_NAMES) {
+                if (value.startsWith(cookieName)) {
+                  headers[key] = value;
+                  break;
+                }
+              }
+            } else {
+              headers[key] = value;
+            }
           } else {
             headers[key] = value;
           }
@@ -92,7 +106,9 @@ export default function adaptReqRes(handle: NextApiHandler) {
       };
       handle(newReq as unknown as NextApiRequest, newRes as NextApiResponse);
 
-      function reply(body: string | Record<string, any> | undefined = undefined) {
+      function reply(
+        body: string | Record<string, any> | undefined = undefined
+      ) {
         if (typeof body === 'object') {
           body = JSON.stringify(body);
           if (!headers['content-type']) {
@@ -102,6 +118,8 @@ export default function adaptReqRes(handle: NextApiHandler) {
         const response = {
           statusCode,
           headers,
+          multiValueHeaders:
+            cookies.length === 0 ? {} : { 'Set-Cookie': cookies },
           body,
         };
 
@@ -113,7 +131,10 @@ export default function adaptReqRes(handle: NextApiHandler) {
 
 function parseCookies(cookies: string[] = []): Record<string, string> {
   return cookies.reduce((cookies: Record<string, string>, cookie) => {
-    const { name, value } = parseCookie(cookie) as { name: string, value: string };
+    const { name, value } = parseCookie(cookie) as {
+      name: string;
+      value: string;
+    };
     cookies[name] = decodeURIComponent(value);
     return cookies;
   }, {});
