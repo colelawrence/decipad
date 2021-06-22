@@ -8,9 +8,11 @@ function Fallback() {
 const fallback = Fallback();
 
 export function GlobalErrorHandler({ children }: { children: ReactNode }) {
-  return (
+  return process.env.NODE_ENV === 'production' ? (
     <ErrorBoundary fallback={fallback} showDialog>
       {children}
     </ErrorBoundary>
+  ) : (
+    <>{children}</>
   );
 }
