@@ -12,7 +12,7 @@ import { NumberedList } from './NumberedList/NumberedList.component';
 import { Paragraph } from './Paragraph/Paragraph.component';
 import { TodoListItem } from './TodoListItem.component';
 
-export const Blocks = (props: RenderElementProps): JSX.Element | null => {
+export const Blocks = (props: RenderElementProps): JSX.Element => {
   switch (props.element.type) {
     case 'h1':
       return <Header size="h1" {...props} />;
