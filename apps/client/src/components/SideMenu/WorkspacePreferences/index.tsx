@@ -27,7 +27,7 @@ export const WorkspacePreferences = ({
   currentWorkspace,
 }: WorkspacePreferencesProps) => {
   const renameInputRef = useRef(null);
-  const [name, setName] = useState('');
+  const [name, setName] = useState(currentWorkspace?.name || '');
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [renameMutate] = useRenameWorkspace({
     id: currentWorkspace?.id || '',
