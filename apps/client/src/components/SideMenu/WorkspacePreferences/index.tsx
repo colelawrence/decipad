@@ -48,7 +48,7 @@ export const WorkspacePreferences = ({
       <Modal isOpen={isOpen} onClose={onClose} initialFocusRef={renameInputRef}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Workspace Preferences</ModalHeader>
+          <ModalHeader>{name} Preferences</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <Heading mb={3} size="sm">

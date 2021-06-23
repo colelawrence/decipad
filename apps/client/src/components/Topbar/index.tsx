@@ -1,4 +1,3 @@
-import React, { useRef, useState, useCallback } from 'react';
 import { useMutation } from '@apollo/client';
 import {
   Avatar,
@@ -22,10 +21,11 @@ import {
   ModalOverlay,
   useDisclosure,
 } from '@chakra-ui/react';
-import { signOut, useSession } from 'next-auth/client';
-import { useToasts } from 'react-toast-notifications';
 import { CreatePad, CreatePadVariables, CREATE_PAD } from '@decipad/queries';
+import { signOut, useSession } from 'next-auth/client';
+import React, { useCallback, useRef, useState } from 'react';
 import { FiChevronDown, FiLogOut, FiPlus } from 'react-icons/fi';
+import { useToasts } from 'react-toast-notifications';
 
 export const Topbar = ({ workspaceId }: { workspaceId: string }) => {
   const [session] = useSession();
@@ -57,7 +57,7 @@ export const Topbar = ({ workspaceId }: { workspaceId: string }) => {
           })
         );
     },
-    [setCreatingPad, createPad, workspaceId, ref, addToast]
+    [setCreatingPad, createPad, workspaceId, ref, addToast, onClose]
   );
 
   return (
