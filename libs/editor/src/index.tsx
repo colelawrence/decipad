@@ -111,7 +111,7 @@ export const DeciEditor = ({ padId }: DeciEditorProps): JSX.Element => {
       // We don't always want to focus the editor, such as in docs.
       ReactEditor.focus(editor as any);
     }
-  }, [value]);
+  }, [value, editor]);
 
   if (value == null) {
     return (
