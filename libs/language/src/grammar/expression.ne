@@ -11,91 +11,12 @@ nonGivenExp   -> functionCall                            {% id %}
 nonGivenExp   -> importData                              {% id %}
 
 divMulOp      -> addSubOp                                {% id %}
-divMulOp      -> divMulOp _ dissociativeOperator _ addSubOp {%
+divMulOp      -> divMulOp _ additiveOperator _ addSubOp {%
                                                         (d, l, reject) => {
                                                           const left = d[0]
                                                           const op = d[2]
                                                           const right = d[4]
                                                           const totalLength = lengthOf(d)
-
-                                                          // reject if this looks like a date in the format yyyy-mm or yyyy-mm-dd
-                                                          if (
-                                                              (op.name === '-') &&
-                                                              (
-                                                                (left.type === 'literal') &&
-                                                                (left.args[0] === 'number') &&
-                                                                (left.length === 4) &&
-                                                                (
-                                                                  (
-                                                                    (
-                                                                      (
-                                                                        (totalLength === 7) &&
-                                                                        (right.type === 'literal') &&
-                                                                        (right.args[0] === 'number') &&
-                                                                        (right.length === 2) &&
-                                                                        (right.args[1] <= 12 && right.args[1] >= 1)
-                                                                      ) ||
-                                                                      (
-                                                                        (totalLength === 10) &&
-                                                                        (right.type === 'function-call') &&
-                                                                        (right.args[0].type === 'funcref') &&
-                                                                        (right.args[0].args[0] === '-') &&
-                                                                        (right.args[1].args.length === 2) &&
-                                                                        (
-                                                                          (
-                                                                            (right.args[1].args[0].type === 'literal') &&
-                                                                            (right.args[1].args[0].args[0] === 'number') &&
-                                                                            (right.args[1].args[0].length === 2) &&
-                                                                            (
-                                                                              (
-                                                                                (right.args[1].args[1].type === 'literal') &&
-                                                                                (right.args[1].args[1].args[0] === 'number') &&
-                                                                                (right.args[1].args[1].length === 2)
-                                                                              ) ||
-                                                                              (
-                                                                                (right.args[1].args[1].type === 'ref') &&
-                                                                                (monthStrings.has(right.args[1].args[1].args[0]))
-                                                                              )
-                                                                            )
-                                                                          ) ||
-                                                                          (
-                                                                            (right.args[1].args[0].type === 'ref') &&
-                                                                            (monthStrings.has(right.args[1].args[0].args[0])) &&
-                                                                            (right.args[1].args[1].type === 'literal') &&
-                                                                            (right.args[1].args[1].args[0] === 'number') &&
-                                                                            (right.args[1].args[1].length === 2)
-
-                                                                          )
-                                                                        )
-                                                                      ) ||
-                                                                      (
-                                                                        (right.type === 'ref') &&
-                                                                        (monthStrings.has(right.args[0]))
-                                                                      )
-                                                                    )
-                                                                  ) ||
-                                                                  (
-                                                                    (right.type === 'function-call') &&
-                                                                    (right.args[0].args[0] === '-') &&
-                                                                    (right.args[1].args.length === 2) &&
-                                                                    (right.args[1].args[0].type === 'ref') &&
-                                                                    (monthStrings.has(right.args[1].args[0].args[0])) &&
-                                                                    (right.args[1].args[1].type === 'literal') &&
-                                                                    (right.args[1].args[1].args[0] === 'number') &&
-                                                                    (right.args[1].args[1].length === 2)
-                                                                  )
-                                                                )
-                                                              ) ||
-                                                              (
-                                                                (left.type === 'date') &&
-                                                                (right.type === 'literal') &&
-                                                                (right.args[0] === 'number') &&
-                                                                (right.length === 2)
-                                                              )
-                                                            )
-                                                          {
-                                                            return reject
-                                                          }
 
                                                           if (
                                                             (op.name === '+') &&
@@ -129,7 +50,7 @@ divMulOp      -> divMulOp _ dissociativeOperator _ addSubOp {%
                                                         %}
 
 addSubOp     -> primary                                 {% id %}
-addSubOp     -> addSubOp _ associativeOperator _ primary {%
+addSubOp     -> addSubOp _ multiplicativeOperator _ primary {%
                                                         (d, l) => {
                                                           const left = d[0]
                                                           const op = d[2]
@@ -190,27 +111,33 @@ primary      -> "-" _ expression                        {%
                                                         (d, l, reject) => {
                                                           const expr = d[2]
                                                           if (expr.type === 'literal' && expr.args[0] === 'number') {
-                                                            return reject
-                                                          }
-
-                                                          return {
-                                                            type: 'function-call',
-                                                            args: [
-                                                              {
-                                                                type: 'funcref',
-                                                                args: [d[0]],
-                                                                location: l,
-                                                                length: 1
-                                                              },
-                                                              {
-                                                                type: 'argument-list',
-                                                                args: [d[2]],
-                                                                location: lengthOf([d[0], d[1]]),
-                                                                length: d[2].length
-                                                              }
-                                                            ],
-                                                            location: l,
-                                                            length: lengthOf(d)
+                                                            expr.args[1] = -expr.args[1]
+                                                            return {
+                                                              type: expr.type,
+                                                              args: expr.args,
+                                                              location: l,
+                                                              length: lengthOf(d)
+                                                            }
+                                                          } else {
+                                                            return {
+                                                              type: 'function-call',
+                                                              args: [
+                                                                {
+                                                                  type: 'funcref',
+                                                                  args: ['unary-'],
+                                                                  location: l,
+                                                                  length: 1
+                                                                },
+                                                                {
+                                                                  type: 'argument-list',
+                                                                  args: [d[2]],
+                                                                  location: lengthOf([d[0], d[1]]),
+                                                                  length: d[2].length
+                                                                }
+                                                              ],
+                                                              location: l,
+                                                              length: lengthOf(d)
+                                                            }
                                                           }
                                                         }
                                                         %}

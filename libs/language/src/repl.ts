@@ -43,13 +43,8 @@ export const stringifyResult = (
     type.tupleNames != null &&
     Array.isArray(result)
   ) {
-    const typesAndNames = zip(type.tupleTypes, type.tupleNames);
-    const cols = result
-      .map((col, i) => {
-        const [type, name] = typesAndNames[i];
-
-        return `  ${name} = ${stringifyResult(col, type)}`;
-      })
+    const cols = zip(result, zip(type.tupleTypes, type.tupleNames))
+      .map(([col, [type, name]]) => `  ${name} = ${stringifyResult(col, type)}`)
       .join(',\n');
     return `{\n${cols}\n}`;
   }

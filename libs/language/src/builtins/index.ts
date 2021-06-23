@@ -53,6 +53,12 @@ export const builtins: Record<string, BuiltinSpec> = {
     fn: (a, b) => a - b,
     functor: binopFunctor,
   },
+  'unary-': {
+    name: 'unary-',
+    argCount: 1,
+    fn: (a) => -a,
+    functor: (n) => n.isScalar('number'),
+  },
   '*': {
     name: '*',
     argCount: 2,
