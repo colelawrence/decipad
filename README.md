@@ -100,10 +100,9 @@ You can deploy your own private instance by following these instructions:
 
 https://www.loom.com/share/a0b33c1071d343fb8a216ef64ad217ea
 
-
 ## Other stuff
 
-To receive e-mails from the application (like when signing in through e-mail), verify your e-mail in SES (it's in sandbox mode so it only sends to verified e-mails)
+To receive e-mails from the application (like when sigvening in through e-mail), verify your e-mail in SES (it's in sandbox mode so it only sends to verified e-mails)
 
     go to the aws web console
     search for SES service
@@ -113,4 +112,3 @@ To receive e-mails from the application (like when signing in through e-mail), v
     Choose "email address"
     Enter the email address you want your local dev env to send email to
     You will then receive a verification e-mail with more instructions
-
