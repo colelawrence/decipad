@@ -14,12 +14,13 @@ exports[`CodeBlock Block matches snapshot 1`] = `
   color: var(--chakra-colors-gray-800);
   width: 100%;
   padding: var(--chakra-space-5);
+  border-radius: 2px;
   background: var(--chakra-colors-gray-100);
 }
 
 .emotion-2 {
-  background: var(--chakra-colors-green-100);
-  color: var(--chakra-colors-green-500);
+  background: rgb(252,252,263);
+  color: var(--chakra-colors-black);
   padding-top: var(--chakra-space-2);
   padding-bottom: var(--chakra-space-2);
   -webkit-padding-start: var(--chakra-space-6);
@@ -29,8 +30,8 @@ exports[`CodeBlock Block matches snapshot 1`] = `
   display: inline-block;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
-  font-weight: var(--chakra-fontWeights-bold);
   margin-bottom: var(--chakra-space-3);
+  width: 100%;
 }
 
 <div>

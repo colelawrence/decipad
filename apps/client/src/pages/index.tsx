@@ -18,6 +18,7 @@ import { Integrations } from '@sentry/tracing';
 import { useApollo } from '../lib/apolloClient';
 import { Router } from '../components/Router';
 import { GlobalErrorHandler } from '../components/GlobalErrorHandler';
+import { ToastProvider } from 'react-toast-notifications';
 
 const inBrowser = typeof window !== 'undefined';
 
@@ -63,17 +64,19 @@ function Index({ pageProps = {} }) {
         <title>Decipad</title>
       </Head>
       <GlobalErrorHandler>
-        <AuthProvider session={session!}>
-          <ApolloProvider client={apolloClient}>
-            <ChakraProvider resetCSS theme={theme}>
-              <RuntimeProvider>
-                <BrowserRouter>
-                  <Router session={session} />
-                </BrowserRouter>
-              </RuntimeProvider>
-            </ChakraProvider>
-          </ApolloProvider>
-        </AuthProvider>
+        <ToastProvider autoDismiss placement="bottom-left">
+          <AuthProvider session={session!}>
+            <ApolloProvider client={apolloClient}>
+              <ChakraProvider resetCSS theme={theme}>
+                <RuntimeProvider>
+                  <BrowserRouter>
+                    <Router session={session} />
+                  </BrowserRouter>
+                </RuntimeProvider>
+              </ChakraProvider>
+            </ApolloProvider>
+          </AuthProvider>
+        </ToastProvider>
       </GlobalErrorHandler>
     </div>
   );

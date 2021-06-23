@@ -1,6 +1,7 @@
 import React, { ReactNode, useCallback, useState } from 'react';
 import { Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
+import { useToasts } from 'react-toast-notifications';
 
 interface DropFileProps {
   editor: ReactEditor;
@@ -12,6 +13,7 @@ const maxFileSizeBytes = 100000;
 
 export function DropFile({ editor, children }: DropFileProps) {
   const [dragIsHovering, setDragIsHovering] = useState(false);
+  const { addToast } = useToasts();
 
   const importFile = useCallback(
     (file: File) => {
@@ -26,6 +28,9 @@ export function DropFile({ editor, children }: DropFileProps) {
         };
         Transforms.insertNodes(editor, code);
         Transforms.move(editor);
+        addToast(`File ${file.name} successfully imported`, {
+          appearance: 'success',
+        });
       })();
     },
     [editor]

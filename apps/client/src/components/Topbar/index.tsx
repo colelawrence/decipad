@@ -23,28 +23,43 @@ import {
 } from '@chakra-ui/react';
 import { CreatePad, CreatePadVariables, CREATE_PAD } from '@decipad/queries';
 import { signOut, useSession } from 'next-auth/client';
-import React, { useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { FiChevronDown, FiLogOut, FiPlus } from 'react-icons/fi';
+import { useToasts } from 'react-toast-notifications';
 
 export const Topbar = ({ workspaceId }: { workspaceId: string }) => {
   const [session] = useSession();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const ref = useRef<HTMLInputElement>(null);
-
   const [createPad] = useMutation<CreatePad, CreatePadVariables>(CREATE_PAD);
+  const { addToast } = useToasts();
+  const [creatingPad, setCreatingPad] = useState(false);
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    createPad({
-      variables: {
-        workspaceId,
-        name: ref.current?.value || '',
-      },
-      refetchQueries: ['GetWorkspaceById'],
-      awaitRefetchQueries: true,
-    });
-    onClose();
-  };
+  const onSubmit = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      setCreatingPad(true);
+      createPad({
+        variables: {
+          workspaceId,
+          name: ref.current?.value || '',
+        },
+        refetchQueries: ['GetWorkspaceById'],
+        awaitRefetchQueries: true,
+      })
+        .then(() => {
+          addToast('Pad created successfully', { appearance: 'success' });
+          onClose();
+        })
+        .catch((err) =>
+          addToast('Error removing pad: ' + err.message, {
+            appearance: 'error',
+          })
+        );
+    },
+    [setCreatingPad, createPad, workspaceId, ref, addToast, onClose]
+  );
+
   return (
     <>
       <Flex justifyContent="space-between" alignItems="center">
@@ -103,7 +118,11 @@ export const Topbar = ({ workspaceId }: { workspaceId: string }) => {
                 <Button variant="ghost" onClick={onClose}>
                   Cancel
                 </Button>
-                <Button type="submit" colorScheme="messenger">
+                <Button
+                  type="submit"
+                  colorScheme="messenger"
+                  disabled={creatingPad}
+                >
                   Create
                 </Button>
               </ButtonGroup>

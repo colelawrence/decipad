@@ -27,7 +27,7 @@ export const WorkspacePreferences = ({
   currentWorkspace,
 }: WorkspacePreferencesProps) => {
   const renameInputRef = useRef(null);
-  const [name, setName] = useState('');
+  const [name, setName] = useState(currentWorkspace?.name || '');
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [renameMutate] = useRenameWorkspace({
     id: currentWorkspace?.id || '',
@@ -48,7 +48,7 @@ export const WorkspacePreferences = ({
       <Modal isOpen={isOpen} onClose={onClose} initialFocusRef={renameInputRef}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Workspace Preferences</ModalHeader>
+          <ModalHeader>{name} Preferences</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <Heading mb={3} size="sm">
