@@ -3,7 +3,7 @@ import { Blocks, Leaves } from '@decipad/ui';
 import { EditablePlugins, pipe } from '@udecode/slate-plugins';
 import dynamic from 'next/dynamic';
 import { FiPlus } from 'react-icons/fi';
-import React, { useCallback, useEffect, useState, useMemo } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import { Node, createEditor, Transforms } from 'slate';
 import { ReactEditor, Slate } from 'slate-react';
 import { ResultsContextProvider } from '@decipad/ui';
@@ -36,14 +36,22 @@ const MentionPortal = dynamic<MentionPortalProps>(
 
 interface DeciEditorProps {
   padId: string;
+  autoFocus: boolean;
 }
 
-export const DeciEditor = ({ padId }: DeciEditorProps): JSX.Element => {
+export const DeciEditor = ({
+  padId,
+  autoFocus,
+}: DeciEditorProps): JSX.Element => {
   const [value, setValue] = useState<Node[] | null>(null);
   const editor = useState(
     (): ReactEditor => pipe(createEditor(), ...withPlugins)
   )[0];
-  const { onChangeLanguage, results } = useEditor({ padId, editor, setValue });
+  const { onChangeLanguage, results } = useEditor({
+    padId,
+    editor,
+    setValue,
+  });
 
   const {
     onAddElement,
@@ -77,7 +85,7 @@ export const DeciEditor = ({ padId }: DeciEditorProps): JSX.Element => {
   const editablePlugins = useMemo(
     () => (
       <EditablePlugins
-        autoFocus={true}
+        autoFocus={autoFocus}
         style={{ height: '100%' }}
         plugins={plugins}
         renderElement={[Blocks]}
@@ -103,15 +111,9 @@ export const DeciEditor = ({ padId }: DeciEditorProps): JSX.Element => {
       mentionIndex,
       mentionSearch,
       mentionTarget,
+      autoFocus,
     ]
   );
-
-  useEffect(() => {
-    if (value != null) {
-      // We don't always want to focus the editor, such as in docs.
-      ReactEditor.focus(editor as any);
-    }
-  }, [value, editor]);
 
   if (value == null) {
     return (

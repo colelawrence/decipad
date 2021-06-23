@@ -1,3 +1,4 @@
+import React, { useMemo, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { Button, Collapse, Heading, Input, Text } from '@chakra-ui/react';
 import {
@@ -5,8 +6,8 @@ import {
   useDeleteWorkspace,
   Workspaces,
 } from '@decipad/queries';
-import { useRouter } from 'next/router';
-import React, { useMemo, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useToasts } from 'react-toast-notifications';
 import { WorkspacePreferencesProps } from '..';
 
 interface DeleteWorkspaceProps extends WorkspacePreferencesProps {
@@ -17,18 +18,17 @@ export const DeleteWorkspace = ({
   currentWorkspace,
   onClose,
 }: DeleteWorkspaceProps) => {
-  const router = useRouter();
   const { data } = useQuery<Workspaces>(GET_WORKSPACES);
   const [deleteValue, setDeleteValue] = useState('');
-
   const [deleteMutation] = useDeleteWorkspace({
     id: currentWorkspace?.id || '',
   });
-
   const matches = useMemo(
     () => deleteValue === currentWorkspace?.name,
     [deleteValue, currentWorkspace?.name]
   );
+  const history = useHistory();
+  const { addToast } = useToasts();
 
   if (data?.workspaces.length === 1) return null;
 
@@ -55,13 +55,20 @@ export const DeleteWorkspace = ({
           w="100%"
           disabled={!matches}
           onClick={() => {
-            deleteMutation().then(() => {
-              const index = data?.workspaces.findIndex(
-                (workspace) => workspace.id === currentWorkspace?.id
-              );
-              onClose();
-              router.push(`/${data?.workspaces[(index as number) + 1].id}`);
-            });
+            deleteMutation()
+              .then(() => {
+                addToast('Workspace successfully deleted', {
+                  appearance: 'success',
+                });
+                onClose();
+
+                history.push(`/`);
+              })
+              .catch((err) => {
+                addToast('Error deleting workspace: ' + err.message, {
+                  appearance: 'error',
+                });
+              });
           }}
         >
           I am sure, delete

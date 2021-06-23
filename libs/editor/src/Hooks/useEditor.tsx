@@ -8,14 +8,9 @@ import {
   raceWith,
   switchMap,
 } from 'rxjs/operators';
-import { produce } from 'immer'
+import { produce } from 'immer';
 import { isCollapsed } from '@udecode/slate-plugins';
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { HistoryEditor } from 'slate-history';
 import { Node, Editor, Range, Text } from 'slate';
 import { ReactEditor } from 'slate-react';
@@ -126,14 +121,15 @@ export const useEditor = ({ padId, editor, setValue }: IUseRuntimeEditor) => {
 
     let cancelled = false;
 
-    const cursorChangeObservable: Observable<string | null> = evaluationRequests.pipe(
-      map(({ blockId }: Evaluation) => blockId),
-      distinctUntilChanged(),
-    )
+    const cursorChangeObservable: Observable<string | null> =
+      evaluationRequests.pipe(
+        map(({ blockId }: Evaluation) => blockId),
+        distinctUntilChanged()
+      );
 
     // Subject that notifies others when the cursor moves from a block to another
-    const cursorChangeSubject = new Subject<string | null>()
-    cursorChangeObservable.subscribe(cursorChangeSubject)
+    const cursorChangeSubject = new Subject<string | null>();
+    cursorChangeObservable.subscribe(cursorChangeSubject);
 
     const changesObservable: Observable<Evaluation> = evaluationRequests.pipe(
       // Deduplicate requests -- moving the cursor is another onChange event
@@ -143,7 +139,11 @@ export const useEditor = ({ padId, editor, setValue }: IUseRuntimeEditor) => {
       // Each request gets evaluated. concatMap is used, in order to prevent
       // parallel computation
       concatMap(async (request: Evaluation) => {
-        if (request.blockId != null && request.foundLine != null && !cancelled) {
+        if (
+          request.blockId != null &&
+          request.foundLine != null &&
+          !cancelled
+        ) {
           const result = await padEditor.resultAt(
             request.blockId,
             request.foundLine
@@ -151,7 +151,7 @@ export const useEditor = ({ padId, editor, setValue }: IUseRuntimeEditor) => {
 
           return { ...request, result };
         } else {
-          return request
+          return request;
         }
       }),
       // When the result is an error, delay it for a tiny bit.
@@ -171,7 +171,7 @@ export const useEditor = ({ padId, editor, setValue }: IUseRuntimeEditor) => {
           return of(request);
         }
       })
-    )
+    );
 
     const sub = changesObservable.subscribe(
       ({ blockId, result: newResult }: Evaluation) => {
@@ -182,13 +182,15 @@ export const useEditor = ({ padId, editor, setValue }: IUseRuntimeEditor) => {
             console.error(error);
           }
 
-          setResults(produce(results => {
-            const currentResult = results[blockId]
+          setResults(
+            produce((results) => {
+              const currentResult = results[blockId];
 
-            if (!dequal(currentResult, newResult)) {
-              results[blockId] = newResult
-            }
-          }))
+              if (!dequal(currentResult, newResult)) {
+                results[blockId] = newResult;
+              }
+            })
+          );
         } catch (err) {
           console.error(err);
         }
@@ -198,7 +200,7 @@ export const useEditor = ({ padId, editor, setValue }: IUseRuntimeEditor) => {
     return () => {
       cancelled = true;
       sub.unsubscribe();
-      cursorChangeSubject.unsubscribe()
+      cursorChangeSubject.unsubscribe();
     };
   }, [evaluationRequests, editor, padEditor, runtime]);
 
@@ -219,7 +221,7 @@ export const useEditor = ({ padId, editor, setValue }: IUseRuntimeEditor) => {
 
       const [parentNode] = Editor.parent(editor, cursor) as any;
 
-      const isCodeBlock = parentNode.type === 'code_block'
+      const isCodeBlock = parentNode.type === 'code_block';
 
       if (isCodeBlock) {
         const [node] = Editor.node(editor, cursor);

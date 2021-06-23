@@ -53,7 +53,7 @@ export function Playground() {
           </Text>
           <HelpButton />
         </Container>
-        <DeciEditor padId={randomId} />
+        <DeciEditor padId={randomId} autoFocus />
       </Box>
     </AnonymousRuntimeProvider>
   );
