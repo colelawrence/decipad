@@ -244,9 +244,17 @@
           };
         },
       },
+      { name: 'number$ebnf$1', symbols: ['___'], postprocess: id },
+      {
+        name: 'number$ebnf$1',
+        symbols: [],
+        postprocess: function (d) {
+          return null;
+        },
+      },
       {
         name: 'number',
-        symbols: ['plainNumber', '_', 'units'],
+        symbols: ['plainNumber', 'number$ebnf$1', 'units'],
         postprocess: (d, l) => {
           const n = d[0];
           const units = d[2];

@@ -13,7 +13,7 @@ number       -> plainNumber                             {%
                                                           }
                                                         }
                                                         %}
-number      -> plainNumber _ units                      {%
+number      -> plainNumber ___:? units                  {%
                                                         (d, l) => {
                                                           const n = d[0]
                                                           const units = d[2]
