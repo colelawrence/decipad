@@ -11,6 +11,7 @@ import {
   Square,
   Text,
 } from '@chakra-ui/react';
+import { useToasts } from 'react-toast-notifications';
 import {
   GetWorkspaceById,
   GetWorkspaceByIdVariables,
@@ -35,6 +36,8 @@ export function Workspace({ workspaceId }: { workspaceId: string }) {
   });
 
   const [removePad] = useMutation<RemovePad, RemovePadVariables>(REMOVE_PAD);
+
+  const { addToast } = useToasts();
 
   if (workspaceLoading) {
     return <LoadingSpinnerPage />;
@@ -94,6 +97,14 @@ export function Workspace({ workspaceId }: { workspaceId: string }) {
                       refetchQueries: ['GetWorkspaceById'],
                       awaitRefetchQueries: true,
                     })
+                      .then(() =>
+                        addToast('Pad removed', { appearance: 'info' })
+                      )
+                      .catch((err) =>
+                        addToast('Error removing pad: ' + err.message, {
+                          appearance: 'error',
+                        })
+                      )
                   }
                 >
                   <Icon as={FiTrash2} />
