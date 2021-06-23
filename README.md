@@ -102,7 +102,7 @@ https://www.loom.com/share/a0b33c1071d343fb8a216ef64ad217ea
 
 ## Other stuff
 
-To receive e-mails from the application (like when sigvening in through e-mail), verify your e-mail in SES (it's in sandbox mode so it only sends to verified e-mails)
+To receive e-mails from the application (like when signing in through e-mail), verify your e-mail in SES (it's in sandbox mode so it only sends to verified e-mails)
 
     go to the aws web console
     search for SES service
