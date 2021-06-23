@@ -1,11 +1,22 @@
-import { Box, Button, Center, Heading, Icon, Image } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Center,
+  Heading,
+  HStack,
+  Icon,
+  Image,
+  Input,
+} from '@chakra-ui/react';
+import { signIn } from 'next-auth/client';
+import React, { useState } from 'react';
+import { FiLogIn, FiPlay } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-import React from 'react';
-import { FiPlay } from 'react-icons/fi';
 import { GithubSignInButton } from './GithubSignInButton/GithubSignInButton.component';
 import { BodyText, Layout, Wrapper } from './index.styles';
 
 export const Landing = () => {
+  const [inputValue, setInputValue] = useState('');
   return (
     <Wrapper>
       <Layout>
@@ -13,8 +24,9 @@ export const Landing = () => {
           <Image
             src="/assets/deci-logo-brand.png"
             alt="Logo"
-            width={75}
-            height={75}
+            width="60px"
+            height="60px"
+            borderRadius="5px"
           />
         </Box>
         <Center justifyContent="flex-start">
@@ -29,14 +41,39 @@ export const Landing = () => {
               interactive stories that can be analysed using timelines, gauges,
               maps and pivot tables.
             </BodyText>
+            <HStack
+              as="form"
+              mt={3}
+              onSubmit={(e) => {
+                e.preventDefault();
+                signIn('email', { email: inputValue });
+              }}
+            >
+              <Input
+                type="text"
+                placeholder="Email Address..."
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                size="lg"
+              />
+              <Button
+                type="submit"
+                px={12}
+                leftIcon={<Icon as={FiLogIn} />}
+                colorScheme="messenger"
+                size="lg"
+              >
+                Sign in
+              </Button>
+            </HStack>
             <GithubSignInButton />
             <Link to="/playground">
               <Button
                 size="lg"
-                colorScheme="blue"
+                colorScheme="messenger"
                 mt={3}
                 cursor="pointer"
-                ml={6}
+                ml={2}
                 leftIcon={<Icon as={FiPlay} />}
               >
                 Playground
