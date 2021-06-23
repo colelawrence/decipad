@@ -2,10 +2,11 @@ import { Box, Button, Container, Icon } from '@chakra-ui/react';
 import { Blocks, Leaves } from '@decipad/ui';
 import { EditablePlugins, pipe } from '@udecode/slate-plugins';
 import dynamic from 'next/dynamic';
-import React, { useCallback, useMemo, useState } from 'react';
 import { FiPlus } from 'react-icons/fi';
-import { createEditor, Node, Transforms } from 'slate';
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
+import { Node, createEditor, Transforms } from 'slate';
 import { ReactEditor, Slate } from 'slate-react';
+import { ResultsContextProvider } from '@decipad/ui';
 import { DropFile } from './Components/DropFile';
 import { useEditor } from './Hooks/useEditor';
 import { plugins, withPlugins } from './Plugins';
@@ -34,7 +35,6 @@ const MentionPortal = dynamic<MentionPortalProps>(
 );
 
 interface DeciEditorProps {
-  workspaceId: string;
   padId: string;
 }
 
@@ -43,7 +43,7 @@ export const DeciEditor = ({ padId }: DeciEditorProps): JSX.Element => {
   const editor = useState(
     (): ReactEditor => pipe(createEditor(), ...withPlugins)
   )[0];
-  const { onChangeLanguage } = useEditor({ padId, editor, setValue });
+  const { onChangeLanguage, results } = useEditor({ padId, editor, setValue });
 
   const {
     onAddElement,
@@ -80,8 +80,8 @@ export const DeciEditor = ({ padId }: DeciEditorProps): JSX.Element => {
         autoFocus={true}
         style={{ height: '100%' }}
         plugins={plugins}
-        renderElement={[(props) => <Blocks {...props} />]}
-        renderLeaf={[(props) => <Leaves {...props} />]}
+        renderElement={[Blocks]}
+        renderLeaf={[Leaves]}
         onKeyDown={[onKeyDownDashCommands, onKeyDownMention]}
         onKeyDownDeps={[
           index,
@@ -106,46 +106,59 @@ export const DeciEditor = ({ padId }: DeciEditorProps): JSX.Element => {
     ]
   );
 
-  if (value == null) {
-    return <span>Loading...</span>;
-  }
+  useEffect(() => {
+    if (value != null) {
+      // We don't always want to focus the editor, such as in docs.
+      ReactEditor.focus(editor as any);
+    }
+  }, [value, editor]);
 
-  return (
-    <Box pb="70px" w="100vw" pos="relative">
-      <Container maxW="75ch">
-        <DropFile editor={editor}>
-          <Slate editor={editor} value={value} onChange={onChange}>
-            {editablePlugins}
-            <DashCommandsPortal
-              target={target}
-              index={index}
-              values={values}
-              onClick={onAddElement}
-            />
-            <MentionPortal
-              target={mentionTarget}
-              index={mentionIndex}
-              users={filteredUsers}
-            />
-            <HoveringToolbar />
-          </Slate>
-        </DropFile>
-      </Container>
-      <Button
-        pos="absolute"
-        onClick={() => {
-          editor.insertNode({ type: 'code_block', text: '' });
-          Transforms.setNodes(editor, { type: 'code_block' });
-          ReactEditor.focus(editor);
-        }}
-        top={0}
-        right={10}
-        leftIcon={<Icon as={FiPlus} />}
-      >
-        Add Model Block
-      </Button>
-    </Box>
-  );
+  if (value == null) {
+    return (
+      <Box>
+        <span>Loading...</span>
+      </Box>
+    );
+  } else {
+    return (
+      <ResultsContextProvider key={padId} value={results}>
+        <Box pb="70px" w="100vw" pos="relative">
+          <Container maxW="75ch">
+            <DropFile editor={editor}>
+              <Slate editor={editor} value={value} onChange={onChange}>
+                {editablePlugins}
+                <DashCommandsPortal
+                  target={target}
+                  index={index}
+                  values={values}
+                  onClick={onAddElement}
+                />
+                <MentionPortal
+                  target={mentionTarget}
+                  index={mentionIndex}
+                  users={filteredUsers}
+                />
+                <HoveringToolbar />
+              </Slate>
+            </DropFile>
+          </Container>
+          <Button
+            pos="absolute"
+            onClick={() => {
+              editor.insertNode({ type: 'code_block', text: '' });
+              Transforms.setNodes(editor, { type: 'code_block' });
+              ReactEditor.focus(editor);
+            }}
+            top={0}
+            right={10}
+            leftIcon={<Icon as={FiPlus} />}
+          >
+            Add Model Block
+          </Button>
+        </Box>
+      </ResultsContextProvider>
+    );
+  }
 };
 
 export * from './Contexts/Runtime';

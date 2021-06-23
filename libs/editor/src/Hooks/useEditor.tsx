@@ -1,24 +1,27 @@
-import { Subject, Observable, Subscription, pipe, of } from 'rxjs';
+import { Subject, Observable, Subscription, of } from 'rxjs';
 import {
   distinctUntilChanged,
   delay,
-  switchScan,
   throttleTime,
   concatMap,
+  map,
+  raceWith,
+  switchMap,
 } from 'rxjs/operators';
-import { PadEditor } from '@decipad/runtime';
+import { produce } from 'immer'
 import { isCollapsed } from '@udecode/slate-plugins';
 import React, {
   useCallback,
   useContext,
   useEffect,
   useState,
-  useMemo,
 } from 'react';
 import { HistoryEditor } from 'slate-history';
-import { Node, Editor, Range, Text, Transforms, Location } from 'slate';
+import { Node, Editor, Range, Text } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { dequal } from 'dequal';
+import { PadEditor } from '@decipad/runtime';
+import { ResultsContextValue } from '@decipad/ui';
 import { RuntimeContext } from '../Contexts/Runtime';
 
 interface IUseRuntimeEditor {
@@ -64,18 +67,17 @@ function ghostApply(editor: ReactEditor, applier: () => void) {
 interface Evaluation {
   // Used as a deduplicate key in distinctUntilChanged
   sourceText?: string;
-  blockId: string;
-  foundLine: number;
+  blockId: string | null;
+  foundLine?: number;
   result?: any; // ComputationResult is defined globally, so we can't import it
-  // Location of the block to edit props of
-  slateLocation: Location;
 }
 
 export const useEditor = ({ padId, editor, setValue }: IUseRuntimeEditor) => {
   const { runtime } = useContext(RuntimeContext);
   const [padEditor, setPadEditor] = useState<PadEditor | null>(null);
+  const [results, setResults] = useState<ResultsContextValue>({});
 
-  const evaluationRequests = useMemo(() => new Subject<Evaluation>(), []);
+  const [evaluationRequests] = useState(() => new Subject<Evaluation>());
 
   // Create a padEditor and stop it
   useEffect(() => {
@@ -94,23 +96,21 @@ export const useEditor = ({ padId, editor, setValue }: IUseRuntimeEditor) => {
     let sub: Subscription;
 
     if (editor != null && padEditor != null) {
-      // Let's remove this once we have our own state management. Please!
-      sub = padEditor.slateOps().subscribe((ops) => {
-        ghostApply(editor, () => {
-          for (const op of ops) {
-            editor.apply(op);
-          }
-        });
-      });
-
       const valueP = padEditor.isOnlyRemote()
         ? padEditor.getValueEventually()
         : Promise.resolve(padEditor.getValue());
+
       valueP.then((value) => {
         if (!cancelled) {
-          setValue(value);
+          sub = padEditor.slateOps().subscribe((ops) => {
+            ghostApply(editor, () => {
+              for (const op of ops) {
+                editor.apply(op);
+              }
+            });
+          });
 
-          ReactEditor.focus(editor as any);
+          setValue(value);
         }
       });
     }
@@ -126,65 +126,69 @@ export const useEditor = ({ padId, editor, setValue }: IUseRuntimeEditor) => {
 
     let cancelled = false;
 
-    const observable: Observable<Evaluation> = pipe(
+    const cursorChangeObservable: Observable<string | null> = evaluationRequests.pipe(
+      map(({ blockId }: Evaluation) => blockId),
+      distinctUntilChanged(),
+    )
+
+    // Subject that notifies others when the cursor moves from a block to another
+    const cursorChangeSubject = new Subject<string | null>()
+    cursorChangeObservable.subscribe(cursorChangeSubject)
+
+    const changesObservable: Observable<Evaluation> = evaluationRequests.pipe(
       // Deduplicate requests -- moving the cursor is another onChange event
       distinctUntilChanged(dequal),
       // Release the event loop
-      delay(1),
       throttleTime(400, undefined, { leading: false, trailing: true }),
       // Each request gets evaluated. concatMap is used, in order to prevent
       // parallel computation
       concatMap(async (request: Evaluation) => {
-        const result = await padEditor.resultAt(
-          request.blockId,
-          request.foundLine
-        );
+        if (request.blockId != null && request.foundLine != null && !cancelled) {
+          const result = await padEditor.resultAt(
+            request.blockId,
+            request.foundLine
+          );
 
-        return { ...request, result };
+          return { ...request, result };
+        } else {
+          return request
+        }
       }),
       // When the result is an error, delay it for a tiny bit.
       // And when the cursor moved to a new block, evaluate the previous instantly
-      switchScan((prev: Evaluation, request: Evaluation) => {
+      switchMap((request: Evaluation) => {
         const isError =
           request.result?.errors.length > 0 ||
           request.result?.type?.errorCause != null;
-        if (prev != null && prev.blockId !== request.blockId) {
-          return of(prev, request);
-        } else if (isError) {
-          return of(request).pipe(delay(2000));
+
+        if (isError) {
+          return of(null).pipe(
+            delay(2000),
+            raceWith(cursorChangeSubject),
+            map(() => request)
+          );
         } else {
           return of(request);
         }
-      }, null as any)
-    )(evaluationRequests);
+      })
+    )
 
-    const sub = observable.subscribe(
-      ({ blockId, result, slateLocation }: Evaluation) => {
+    const sub = changesObservable.subscribe(
+      ({ blockId, result: newResult }: Evaluation) => {
         try {
-          if (cancelled || !result) return;
+          if (cancelled || !newResult || !blockId) return;
 
-          for (const error of result.errors ?? []) {
+          for (const error of newResult.errors ?? []) {
             console.error(error);
           }
 
-          const [match] = Editor.nodes(editor, {
-            at: slateLocation,
-            match: (n: any) => n.id === blockId,
-          });
+          setResults(produce(results => {
+            const currentResult = results[blockId]
 
-          if (dequal(match?.[0].result, result)) {
-            // Result already exists in the node, don't cause an update
-            return;
-          }
-
-          Transforms.setNodes(
-            editor,
-            { result: match ? result ?? null : null },
-            {
-              at: slateLocation,
-              match: (n) => Editor.isBlock(editor, n) && n.id === blockId,
+            if (!dequal(currentResult, newResult)) {
+              results[blockId] = newResult
             }
-          );
+          }))
         } catch (err) {
           console.error(err);
         }
@@ -194,6 +198,7 @@ export const useEditor = ({ padId, editor, setValue }: IUseRuntimeEditor) => {
     return () => {
       cancelled = true;
       sub.unsubscribe();
+      cursorChangeSubject.unsubscribe()
     };
   }, [evaluationRequests, editor, padEditor, runtime]);
 
@@ -212,25 +217,30 @@ export const useEditor = ({ padId, editor, setValue }: IUseRuntimeEditor) => {
     if (selection && isCollapsed(selection)) {
       const cursor = Range.start(selection);
 
-      const [parentNode, slateLocation] = Editor.parent(editor, cursor) as any;
-      if (parentNode.type !== 'code_block') return;
+      const [parentNode] = Editor.parent(editor, cursor) as any;
 
-      const [node] = Editor.node(editor, cursor);
+      const isCodeBlock = parentNode.type === 'code_block'
 
-      if (!Text.isText(node)) {
-        return;
+      if (isCodeBlock) {
+        const [node] = Editor.node(editor, cursor);
+
+        if (!Text.isText(node)) {
+          return;
+        }
+
+        const foundLine = offsetToLineNumber(node.text, cursor.offset);
+
+        evaluationRequests.next({
+          sourceText: node.text,
+          blockId: parentNode.id as string,
+          foundLine,
+        });
+      } else {
+        // We want to know the cursor left any block
+        evaluationRequests.next({ blockId: null });
       }
-
-      const foundLine = offsetToLineNumber(node.text, cursor.offset);
-
-      evaluationRequests.next({
-        slateLocation,
-        sourceText: node.text,
-        blockId: parentNode.id as string,
-        foundLine,
-      });
     }
   }, [editor, padEditor, evaluationRequests]);
 
-  return { onChangeLanguage };
+  return { onChangeLanguage, results };
 };
