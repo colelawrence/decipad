@@ -53,7 +53,7 @@ export function Playground() {
           </Text>
           <HelpButton />
         </Container>
-        <DeciEditor workspaceId={randomId} padId={randomId} />
+        <DeciEditor padId={randomId} />
       </Box>
     </AnonymousRuntimeProvider>
   );

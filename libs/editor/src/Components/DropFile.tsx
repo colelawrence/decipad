@@ -33,7 +33,7 @@ export function DropFile({ editor, children }: DropFileProps) {
         });
       })();
     },
-    [editor]
+    [editor, addToast]
   );
 
   const dropHandler = useCallback(

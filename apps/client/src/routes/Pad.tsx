@@ -46,7 +46,7 @@ export function Pad({
       <Container maxW="75ch" pt={12}>
         <Heading mb={3}>{data?.getPadById?.name}</Heading>
       </Container>
-      <DeciEditor workspaceId={workspaceId} padId={padId} />
+      <DeciEditor padId={padId} />
       <HelpButton />
     </Box>
   );

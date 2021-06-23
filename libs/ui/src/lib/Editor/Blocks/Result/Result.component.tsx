@@ -111,7 +111,7 @@ const ResultContent = (props: ResultContentProps) => {
   } else if (type.date) {
     return <DateResult {...props} />;
   } else if (type.type === 'string') {
-    return <>{value}</>;
+    return value;
   } else if (type.tupleTypes != null) {
     return TableResult(props);
   } else if (type.columnSize != null && Array.isArray(value)) {
@@ -134,7 +134,7 @@ const ResultContent = (props: ResultContentProps) => {
       </>
     );
   } else if (type.functionness) {
-    return <>ƒ</>;
+    return 'ƒ';
   } else {
     return null;
   }
@@ -232,66 +232,65 @@ function TableResult({
   };
   return (
     <Box {...border}>
-        <ResultTable>
-          {/* TODO: table caption should say the name of the variable (if there is one. */}
-          <Thead>
-            <TableRow>
-              {table.columnNames.map((columnName, colIndex) => {
-                const t =
-                  type.tupleTypes![colIndex].cellType ||
-                  type.tupleTypes![colIndex];
-                const lastColumn = table.columnNames.length === colIndex + 1;
-                const headerProps = lastColumn
-                  ? {
-                      borderRight: 0,
-                    }
-                  : {};
-                return (
-                  <TableHeader {...headerProps}>
-                    <IconForType type={t} />
-                    &nbsp;{columnName}
-                  </TableHeader>
-                );
-              })}
-            </TableRow>
-          </Thead>
-          <Tbody>
-            {table.rows.map((row, rowIndex) => {
-              const lastRow = table.rows.length === rowIndex + 1;
-              const rowProps = lastRow
+      <ResultTable>
+        {/* TODO: table caption should say the name of the variable (if there is one. */}
+        <Thead>
+          <TableRow>
+            {table.columnNames.map((columnName, colIndex) => {
+              const t =
+                type.tupleTypes![colIndex].cellType ||
+                type.tupleTypes![colIndex];
+              const lastColumn = table.columnNames.length === colIndex + 1;
+              const headerProps = lastColumn
                 ? {
-                    borderBottom: 0,
+                    borderRight: 0,
                   }
                 : {};
               return (
-                <TableRow key={rowIndex} {...rowProps}>
-                  {row.map((cell, index) => {
-                    const lastCell = row.length === index + 1;
-                    const t =
-                      type.tupleTypes![index].cellType ||
-                      type.tupleTypes![index];
-                    const cellProps = lastCell
-                      ? {
-                          borderRight: 0,
-                        }
-                      : {};
-                    return (
-                      <TableCell isNumeric={t.type === 'number'} {...cellProps}>
-                        <ResultContent
-                          key={index}
-                          type={t!}
-                          value={cell}
-                          depth={depth + 1}
-                        />
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
+                <TableHeader {...headerProps}>
+                  <IconForType type={t} />
+                  &nbsp;{columnName}
+                </TableHeader>
               );
             })}
-          </Tbody>
-        </ResultTable>
-      </Box>
+          </TableRow>
+        </Thead>
+        <Tbody>
+          {table.rows.map((row, rowIndex) => {
+            const lastRow = table.rows.length === rowIndex + 1;
+            const rowProps = lastRow
+              ? {
+                  borderBottom: 0,
+                }
+              : {};
+            return (
+              <TableRow key={rowIndex} {...rowProps}>
+                {row.map((cell, index) => {
+                  const lastCell = row.length === index + 1;
+                  const t =
+                    type.tupleTypes![index].cellType || type.tupleTypes![index];
+                  const cellProps = lastCell
+                    ? {
+                        borderRight: 0,
+                      }
+                    : {};
+                  return (
+                    <TableCell isNumeric={t.type === 'number'} {...cellProps}>
+                      <ResultContent
+                        key={index}
+                        type={t!}
+                        value={cell}
+                        depth={depth + 1}
+                      />
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+            );
+          })}
+        </Tbody>
+      </ResultTable>
+    </Box>
   );
 }
 
