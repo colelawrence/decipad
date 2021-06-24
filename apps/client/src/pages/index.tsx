@@ -1,24 +1,23 @@
-import React from 'react';
 import { ApolloProvider } from '@apollo/client';
 import { ChakraProvider } from '@chakra-ui/react';
 import { RuntimeProvider } from '@decipad/editor';
-import { theme } from '@decipad/ui';
-import { useSession, Provider as AuthProvider } from 'next-auth/client';
-import { BrowserRouter } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
-import Head from 'next/head';
-import { LoadingSpinnerPage } from '@decipad/ui';
+import { LoadingSpinnerPage, theme } from '@decipad/ui';
 import {
-  setUser,
   init,
-  withProfiler,
   reactRouterV5Instrumentation,
+  setUser,
+  withProfiler,
 } from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
-import { useApollo } from '../lib/apolloClient';
-import { Router } from '../components/Router';
-import { GlobalErrorHandler } from '../components/GlobalErrorHandler';
+import { createBrowserHistory } from 'history';
+import { Provider as AuthProvider, useSession } from 'next-auth/client';
+import Head from 'next/head';
+import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import { ToastProvider } from 'react-toast-notifications';
+import { GlobalErrorHandler } from '../components/GlobalErrorHandler';
+import { useApollo } from '../lib/apolloClient';
+import { Router } from '../routes';
 
 const inBrowser = typeof window !== 'undefined';
 
