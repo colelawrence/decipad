@@ -271,77 +271,84 @@
         },
       },
       { name: 'plainNumber', symbols: ['jsonfloat'], postprocess: id },
-      { name: 'int$ebnf$1$subexpression$1', symbols: [{ literal: '-' }] },
-      { name: 'int$ebnf$1$subexpression$1', symbols: [{ literal: '+' }] },
+      { name: 'int$ebnf$1', symbols: [/[0-9]/] },
       {
         name: 'int$ebnf$1',
-        symbols: ['int$ebnf$1$subexpression$1'],
-        postprocess: id,
-      },
-      {
-        name: 'int$ebnf$1',
-        symbols: [],
-        postprocess: function (d) {
-          return null;
-        },
-      },
-      { name: 'int$ebnf$2', symbols: [/[0-9]/] },
-      {
-        name: 'int$ebnf$2',
-        symbols: ['int$ebnf$2', /[0-9]/],
+        symbols: ['int$ebnf$1', /[0-9]/],
         postprocess: function arrpush(d) {
           return d[0].concat([d[1]]);
         },
       },
       {
         name: 'int',
-        symbols: ['int$ebnf$1', 'int$ebnf$2'],
+        symbols: ['int$ebnf$1'],
         postprocess: (d, l) => {
-          let n;
-          if (d[0]) {
-            n = parseInt(d[0][0] + d[1].join(''));
-          } else {
-            n = parseInt(d[1].join(''));
-          }
-
           return {
-            n,
+            n: parseInt(d[0].join('')),
             location: l,
             length: lengthOf(d),
           };
         },
       },
+      { name: 'jsonfloat$ebnf$1', symbols: [/[0-9]/] },
       {
         name: 'jsonfloat$ebnf$1',
-        symbols: [{ literal: '-' }],
+        symbols: ['jsonfloat$ebnf$1', /[0-9]/],
+        postprocess: function arrpush(d) {
+          return d[0].concat([d[1]]);
+        },
+      },
+      { name: 'jsonfloat$ebnf$2$subexpression$1$ebnf$1', symbols: [/[0-9]/] },
+      {
+        name: 'jsonfloat$ebnf$2$subexpression$1$ebnf$1',
+        symbols: ['jsonfloat$ebnf$2$subexpression$1$ebnf$1', /[0-9]/],
+        postprocess: function arrpush(d) {
+          return d[0].concat([d[1]]);
+        },
+      },
+      {
+        name: 'jsonfloat$ebnf$2$subexpression$1',
+        symbols: [{ literal: '.' }, 'jsonfloat$ebnf$2$subexpression$1$ebnf$1'],
+      },
+      {
+        name: 'jsonfloat$ebnf$2',
+        symbols: ['jsonfloat$ebnf$2$subexpression$1'],
         postprocess: id,
       },
       {
-        name: 'jsonfloat$ebnf$1',
+        name: 'jsonfloat$ebnf$2',
         symbols: [],
         postprocess: function (d) {
           return null;
         },
       },
-      { name: 'jsonfloat$ebnf$2', symbols: [/[0-9]/] },
-      {
-        name: 'jsonfloat$ebnf$2',
-        symbols: ['jsonfloat$ebnf$2', /[0-9]/],
-        postprocess: function arrpush(d) {
-          return d[0].concat([d[1]]);
-        },
-      },
-      { name: 'jsonfloat$ebnf$3$subexpression$1$ebnf$1', symbols: [/[0-9]/] },
       {
         name: 'jsonfloat$ebnf$3$subexpression$1$ebnf$1',
-        symbols: ['jsonfloat$ebnf$3$subexpression$1$ebnf$1', /[0-9]/],
+        symbols: [/[+-]/],
+        postprocess: id,
+      },
+      {
+        name: 'jsonfloat$ebnf$3$subexpression$1$ebnf$1',
+        symbols: [],
+        postprocess: function (d) {
+          return null;
+        },
+      },
+      { name: 'jsonfloat$ebnf$3$subexpression$1$ebnf$2', symbols: [/[0-9]/] },
+      {
+        name: 'jsonfloat$ebnf$3$subexpression$1$ebnf$2',
+        symbols: ['jsonfloat$ebnf$3$subexpression$1$ebnf$2', /[0-9]/],
         postprocess: function arrpush(d) {
           return d[0].concat([d[1]]);
         },
       },
       {
         name: 'jsonfloat$ebnf$3$subexpression$1',
-        symbols: [{ literal: '.' }, 'jsonfloat$ebnf$3$subexpression$1$ebnf$1'],
+        symbols: [
+          /[eE]/,
+          'jsonfloat$ebnf$3$subexpression$1$ebnf$1',
+          'jsonfloat$ebnf$3$subexpression$1$ebnf$2',
+        ],
       },
       {
         name: 'jsonfloat$ebnf$3',
@@ -356,111 +363,50 @@
         },
       },
       {
-        name: 'jsonfloat$ebnf$4$subexpression$1$ebnf$1',
-        symbols: [/[+-]/],
-        postprocess: id,
-      },
-      {
-        name: 'jsonfloat$ebnf$4$subexpression$1$ebnf$1',
-        symbols: [],
-        postprocess: function (d) {
-          return null;
-        },
-      },
-      { name: 'jsonfloat$ebnf$4$subexpression$1$ebnf$2', symbols: [/[0-9]/] },
-      {
-        name: 'jsonfloat$ebnf$4$subexpression$1$ebnf$2',
-        symbols: ['jsonfloat$ebnf$4$subexpression$1$ebnf$2', /[0-9]/],
-        postprocess: function arrpush(d) {
-          return d[0].concat([d[1]]);
-        },
-      },
-      {
-        name: 'jsonfloat$ebnf$4$subexpression$1',
-        symbols: [
-          /[eE]/,
-          'jsonfloat$ebnf$4$subexpression$1$ebnf$1',
-          'jsonfloat$ebnf$4$subexpression$1$ebnf$2',
-        ],
-      },
-      {
-        name: 'jsonfloat$ebnf$4',
-        symbols: ['jsonfloat$ebnf$4$subexpression$1'],
-        postprocess: id,
-      },
-      {
-        name: 'jsonfloat$ebnf$4',
-        symbols: [],
-        postprocess: function (d) {
-          return null;
-        },
-      },
-      {
         name: 'jsonfloat',
-        symbols: [
-          'jsonfloat$ebnf$1',
-          'jsonfloat$ebnf$2',
-          'jsonfloat$ebnf$3',
-          'jsonfloat$ebnf$4',
-        ],
+        symbols: ['jsonfloat$ebnf$1', 'jsonfloat$ebnf$2', 'jsonfloat$ebnf$3'],
         postprocess: (d, l) => {
+          const [int, dec, exp] = d;
           const n = parseFloat(
-            (d[0] || '') +
-              d[1].join('') +
-              (d[2] ? '.' + d[2][1].join('') : '') +
-              (d[3] ? 'e' + (d[3][1] || '+') + d[3][2].join('') : '')
+            int.join('') +
+              (dec ? '.' + dec[1].join('') : '') +
+              (exp ? 'e' + (exp[1] || '+') + exp[2].join('') : '')
           );
 
           return {
             n,
             location: l,
-            length: lengthOf([
-              d[0],
-              d[1],
-              d[2] && d[2][0],
-              d[2] && d[2][1],
-              d[3] && d[3][0],
-              d[3] && d[3][1],
-              d[3] && d[3][2],
-            ]),
+            length: lengthOf([int, ...(dec || []), ...(exp || [])]),
           };
         },
       },
-      { name: 'decimal$ebnf$1', symbols: [{ literal: '-' }], postprocess: id },
+      { name: 'decimal$ebnf$1', symbols: [/[0-9]/] },
       {
         name: 'decimal$ebnf$1',
-        symbols: [],
-        postprocess: function (d) {
-          return null;
+        symbols: ['decimal$ebnf$1', /[0-9]/],
+        postprocess: function arrpush(d) {
+          return d[0].concat([d[1]]);
         },
       },
-      { name: 'decimal$ebnf$2', symbols: [/[0-9]/] },
+      { name: 'decimal$ebnf$2$subexpression$1$ebnf$1', symbols: [/[0-9]/] },
+      {
+        name: 'decimal$ebnf$2$subexpression$1$ebnf$1',
+        symbols: ['decimal$ebnf$2$subexpression$1$ebnf$1', /[0-9]/],
+        postprocess: function arrpush(d) {
+          return d[0].concat([d[1]]);
+        },
+      },
+      {
+        name: 'decimal$ebnf$2$subexpression$1',
+        symbols: [{ literal: '.' }, 'decimal$ebnf$2$subexpression$1$ebnf$1'],
+      },
       {
         name: 'decimal$ebnf$2',
-        symbols: ['decimal$ebnf$2', /[0-9]/],
-        postprocess: function arrpush(d) {
-          return d[0].concat([d[1]]);
-        },
-      },
-      { name: 'decimal$ebnf$3$subexpression$1$ebnf$1', symbols: [/[0-9]/] },
-      {
-        name: 'decimal$ebnf$3$subexpression$1$ebnf$1',
-        symbols: ['decimal$ebnf$3$subexpression$1$ebnf$1', /[0-9]/],
-        postprocess: function arrpush(d) {
-          return d[0].concat([d[1]]);
-        },
-      },
-      {
-        name: 'decimal$ebnf$3$subexpression$1',
-        symbols: [{ literal: '.' }, 'decimal$ebnf$3$subexpression$1$ebnf$1'],
-      },
-      {
-        name: 'decimal$ebnf$3',
-        symbols: ['decimal$ebnf$3$subexpression$1'],
+        symbols: ['decimal$ebnf$2$subexpression$1'],
         postprocess: id,
       },
       {
-        name: 'decimal$ebnf$3',
+        name: 'decimal$ebnf$2',
         symbols: [],
         postprocess: function (d) {
           return null;
@@ -468,10 +414,11 @@
       },
       {
         name: 'decimal',
-        symbols: ['decimal$ebnf$1', 'decimal$ebnf$2', 'decimal$ebnf$3'],
+        symbols: ['decimal$ebnf$1', 'decimal$ebnf$2'],
         postprocess: (d, l) => {
+          const [int, dec] = d;
           const n = parseFloat(
-            (d[0] || '') + d[1].join('') + (d[2] ? '.' + d[2][1].join('') : '')
+            int.join('') + (dec ? '.' + dec[1].join('') : '')
           );
 
           return {
@@ -2271,59 +2218,12 @@
       { name: 'divMulOp', symbols: ['addSubOp'], postprocess: id },
       {
         name: 'divMulOp',
-        symbols: ['divMulOp', '_', 'dissociativeOperator', '_', 'addSubOp'],
+        symbols: ['divMulOp', '_', 'additiveOperator', '_', 'addSubOp'],
         postprocess: (d, l, reject) => {
           const left = d[0];
           const op = d[2];
           const right = d[4];
           const totalLength = lengthOf(d);
-
-          // reject if this looks like a date in the format yyyy-mm or yyyy-mm-dd
-          if (
-            (op.name === '-' &&
-              left.type === 'literal' &&
-              left.args[0] === 'number' &&
-              left.length === 4 &&
-              ((totalLength === 7 &&
-                right.type === 'literal' &&
-                right.args[0] === 'number' &&
-                right.length === 2 &&
-                right.args[1] <= 12 &&
-                right.args[1] >= 1) ||
-                (totalLength === 10 &&
-                  right.type === 'function-call' &&
-                  right.args[0].type === 'funcref' &&
-                  right.args[0].args[0] === '-' &&
-                  right.args[1].args.length === 2 &&
-                  ((right.args[1].args[0].type === 'literal' &&
-                    right.args[1].args[0].args[0] === 'number' &&
-                    right.args[1].args[0].length === 2 &&
-                    ((right.args[1].args[1].type === 'literal' &&
-                      right.args[1].args[1].args[0] === 'number' &&
-                      right.args[1].args[1].length === 2) ||
-                      (right.args[1].args[1].type === 'ref' &&
-                        monthStrings.has(right.args[1].args[1].args[0])))) ||
-                    (right.args[1].args[0].type === 'ref' &&
-                      monthStrings.has(right.args[1].args[0].args[0]) &&
-                      right.args[1].args[1].type === 'literal' &&
-                      right.args[1].args[1].args[0] === 'number' &&
-                      right.args[1].args[1].length === 2))) ||
-                (right.type === 'ref' && monthStrings.has(right.args[0])) ||
-                (right.type === 'function-call' &&
-                  right.args[0].args[0] === '-' &&
-                  right.args[1].args.length === 2 &&
-                  right.args[1].args[0].type === 'ref' &&
-                  monthStrings.has(right.args[1].args[0].args[0]) &&
-                  right.args[1].args[1].type === 'literal' &&
-                  right.args[1].args[1].args[0] === 'number' &&
-                  right.args[1].args[1].length === 2))) ||
-            (left.type === 'date' &&
-              right.type === 'literal' &&
-              right.args[0] === 'number' &&
-              right.length === 2)
-          ) {
-            return reject;
-          }
 
           if (
             op.name === '+' &&
@@ -2358,7 +2258,7 @@
       { name: 'addSubOp', symbols: ['primary'], postprocess: id },
       {
         name: 'addSubOp',
-        symbols: ['addSubOp', '_', 'associativeOperator', '_', 'primary'],
+        symbols: ['addSubOp', '_', 'multiplicativeOperator', '_', 'primary'],
         postprocess: (d, l) => {
           const left = d[0];
           const op = d[2];
@@ -2421,28 +2321,34 @@
         postprocess: (d, l, reject) => {
           const expr = d[2];
           if (expr.type === 'literal' && expr.args[0] === 'number') {
-            return reject;
+            expr.args[1] = -expr.args[1];
+            return {
+              type: expr.type,
+              args: expr.args,
+              location: l,
+              length: lengthOf(d),
+            };
+          } else {
+            return {
+              type: 'function-call',
+              args: [
+                {
+                  type: 'funcref',
+                  args: ['unary-'],
+                  location: l,
+                  length: 1,
+                },
+                {
+                  type: 'argument-list',
+                  args: [d[2]],
+                  location: lengthOf([d[0], d[1]]),
+                  length: d[2].length,
+                },
+              ],
+              location: l,
+              length: lengthOf(d),
+            };
           }
-
-          return {
-            type: 'function-call',
-            args: [
-              {
-                type: 'funcref',
-                args: [d[0]],
-                location: l,
-                length: 1,
-              },
-              {
-                type: 'argument-list',
-                args: [d[2]],
-                location: lengthOf([d[0], d[1]]),
-                length: d[2].length,
-              },
-            ],
-            location: l,
-            length: lengthOf(d),
-          };
         },
       },
       {
@@ -3297,35 +3203,33 @@
           length: lengthOf(d),
         }),
       },
+      { name: 'additiveOperator$subexpression$1', symbols: [{ literal: '-' }] },
+      { name: 'additiveOperator$subexpression$1', symbols: [{ literal: '+' }] },
       {
-        name: 'dissociativeOperator$subexpression$1',
-        symbols: [{ literal: '+' }],
-      },
-      {
-        name: 'dissociativeOperator$subexpression$1$string$1',
+        name: 'additiveOperator$subexpression$1$string$1',
         symbols: [{ literal: '&' }, { literal: '&' }],
         postprocess: function joiner(d) {
           return d.join('');
         },
       },
       {
-        name: 'dissociativeOperator$subexpression$1',
-        symbols: ['dissociativeOperator$subexpression$1$string$1'],
+        name: 'additiveOperator$subexpression$1',
+        symbols: ['additiveOperator$subexpression$1$string$1'],
       },
       {
-        name: 'dissociativeOperator$subexpression$1$string$2',
+        name: 'additiveOperator$subexpression$1$string$2',
         symbols: [{ literal: '|' }, { literal: '|' }],
         postprocess: function joiner(d) {
           return d.join('');
         },
       },
       {
-        name: 'dissociativeOperator$subexpression$1',
-        symbols: ['dissociativeOperator$subexpression$1$string$2'],
+        name: 'additiveOperator$subexpression$1',
+        symbols: ['additiveOperator$subexpression$1$string$2'],
       },
       {
-        name: 'dissociativeOperator',
-        symbols: ['dissociativeOperator$subexpression$1'],
+        name: 'additiveOperator',
+        symbols: ['additiveOperator$subexpression$1'],
         postprocess: (d, l) => {
           const op = d[0][0];
           return {
@@ -3336,19 +3240,19 @@
         },
       },
       {
-        name: 'dissociativeOperator$subexpression$2$string$1',
+        name: 'additiveOperator$subexpression$2$string$1',
         symbols: [{ literal: 'i' }, { literal: 'n' }],
         postprocess: function joiner(d) {
           return d.join('');
         },
       },
       {
-        name: 'dissociativeOperator$subexpression$2',
-        symbols: ['dissociativeOperator$subexpression$2$string$1'],
+        name: 'additiveOperator$subexpression$2',
+        symbols: ['additiveOperator$subexpression$2$string$1'],
       },
       {
-        name: 'dissociativeOperator',
-        symbols: ['__', 'dissociativeOperator$subexpression$2', '__'],
+        name: 'additiveOperator',
+        symbols: ['__', 'additiveOperator$subexpression$2', '__'],
         postprocess: (d, l) => {
           return {
             name: d[1],
@@ -3358,79 +3262,60 @@
         },
       },
       {
-        name: 'dissociativeOperator$string$1',
-        symbols: [{ literal: ' ' }, { literal: '-' }, { literal: ' ' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'dissociativeOperator',
-        symbols: ['dissociativeOperator$string$1'],
-        postprocess: (d, l) => {
-          const op = d[0];
-          return {
-            name: op.trim(),
-            location: l + 1,
-            length: op.length,
-          };
-        },
-      },
-      {
-        name: 'associativeOperator$subexpression$1$string$1',
+        name: 'multiplicativeOperator$subexpression$1$string$1',
         symbols: [{ literal: '*' }, { literal: '*' }],
         postprocess: function joiner(d) {
           return d.join('');
         },
       },
       {
-        name: 'associativeOperator$subexpression$1',
-        symbols: ['associativeOperator$subexpression$1$string$1'],
+        name: 'multiplicativeOperator$subexpression$1',
+        symbols: ['multiplicativeOperator$subexpression$1$string$1'],
       },
       {
-        name: 'associativeOperator$subexpression$1',
+        name: 'multiplicativeOperator$subexpression$1',
         symbols: [{ literal: '>' }],
       },
       {
-        name: 'associativeOperator$subexpression$1',
+        name: 'multiplicativeOperator$subexpression$1',
         symbols: [{ literal: '<' }],
       },
       {
-        name: 'associativeOperator$subexpression$1$string$2',
+        name: 'multiplicativeOperator$subexpression$1$string$2',
         symbols: [{ literal: '<' }, { literal: '=' }],
         postprocess: function joiner(d) {
           return d.join('');
         },
       },
       {
-        name: 'associativeOperator$subexpression$1',
-        symbols: ['associativeOperator$subexpression$1$string$2'],
+        name: 'multiplicativeOperator$subexpression$1',
+        symbols: ['multiplicativeOperator$subexpression$1$string$2'],
       },
       {
-        name: 'associativeOperator$subexpression$1$string$3',
+        name: 'multiplicativeOperator$subexpression$1$string$3',
         symbols: [{ literal: '>' }, { literal: '=' }],
         postprocess: function joiner(d) {
           return d.join('');
         },
       },
       {
-        name: 'associativeOperator$subexpression$1',
-        symbols: ['associativeOperator$subexpression$1$string$3'],
+        name: 'multiplicativeOperator$subexpression$1',
+        symbols: ['multiplicativeOperator$subexpression$1$string$3'],
       },
       {
-        name: 'associativeOperator$subexpression$1$string$4',
+        name: 'multiplicativeOperator$subexpression$1$string$4',
         symbols: [{ literal: '=' }, { literal: '=' }],
         postprocess: function joiner(d) {
           return d.join('');
         },
       },
       {
-        name: 'associativeOperator$subexpression$1',
-        symbols: ['associativeOperator$subexpression$1$string$4'],
+        name: 'multiplicativeOperator$subexpression$1',
+        symbols: ['multiplicativeOperator$subexpression$1$string$4'],
       },
       {
-        name: 'associativeOperator',
-        symbols: ['associativeOperator$subexpression$1'],
+        name: 'multiplicativeOperator',
+        symbols: ['multiplicativeOperator$subexpression$1'],
         postprocess: (d, l) => {
           const op = d[0][0];
           return {
@@ -3441,52 +3326,52 @@
         },
       },
       {
-        name: 'associativeOperator$subexpression$2$string$1',
+        name: 'multiplicativeOperator$subexpression$2$string$1',
         symbols: [{ literal: ' ' }, { literal: '*' }, { literal: ' ' }],
         postprocess: function joiner(d) {
           return d.join('');
         },
       },
       {
-        name: 'associativeOperator$subexpression$2',
-        symbols: ['associativeOperator$subexpression$2$string$1'],
+        name: 'multiplicativeOperator$subexpression$2',
+        symbols: ['multiplicativeOperator$subexpression$2$string$1'],
       },
       {
-        name: 'associativeOperator$subexpression$2$string$2',
+        name: 'multiplicativeOperator$subexpression$2$string$2',
         symbols: [{ literal: ' ' }, { literal: '/' }, { literal: ' ' }],
         postprocess: function joiner(d) {
           return d.join('');
         },
       },
       {
-        name: 'associativeOperator$subexpression$2',
-        symbols: ['associativeOperator$subexpression$2$string$2'],
+        name: 'multiplicativeOperator$subexpression$2',
+        symbols: ['multiplicativeOperator$subexpression$2$string$2'],
       },
       {
-        name: 'associativeOperator$subexpression$2$string$3',
+        name: 'multiplicativeOperator$subexpression$2$string$3',
         symbols: [{ literal: ' ' }, { literal: '%' }, { literal: ' ' }],
         postprocess: function joiner(d) {
           return d.join('');
         },
       },
       {
-        name: 'associativeOperator$subexpression$2',
-        symbols: ['associativeOperator$subexpression$2$string$3'],
+        name: 'multiplicativeOperator$subexpression$2',
+        symbols: ['multiplicativeOperator$subexpression$2$string$3'],
       },
       {
-        name: 'associativeOperator$subexpression$2$string$4',
+        name: 'multiplicativeOperator$subexpression$2$string$4',
         symbols: [{ literal: ' ' }, { literal: '^' }, { literal: ' ' }],
         postprocess: function joiner(d) {
           return d.join('');
         },
       },
       {
-        name: 'associativeOperator$subexpression$2',
-        symbols: ['associativeOperator$subexpression$2$string$4'],
+        name: 'multiplicativeOperator$subexpression$2',
+        symbols: ['multiplicativeOperator$subexpression$2$string$4'],
       },
       {
-        name: 'associativeOperator',
-        symbols: ['associativeOperator$subexpression$2'],
+        name: 'multiplicativeOperator',
+        symbols: ['multiplicativeOperator$subexpression$2'],
         postprocess: (d, l) => {
           const op = d[0][0];
           return {

@@ -53,3 +53,8 @@ const prettyPrint = (node: AST.Node, indent: number) => {
 export const prettyPrintAST = (ast: AST.Node) => {
   return prettyPrint(ast, 0);
 };
+
+export const prettyPrintSolutions = (asts: AST.Node[]) =>
+  asts
+    .map((solution) => `Result:\n${prettyPrintAST(solution)}\n-------\n`)
+    .join('');

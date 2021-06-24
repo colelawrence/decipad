@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { walk } from '../utils';
-import { prettyPrintAST } from './utils';
+import { prettyPrintAST, prettyPrintSolutions } from './utils';
 import { parse } from './';
 
 function cleanSourceMap(ast) {
@@ -63,11 +63,9 @@ export function runTests(tests) {
 
         if (result.solutions.length > 1) {
           throw new Error(
-            `Ambiguous results.\nSource:\n  ${source}\nAlternatives:\n${result.solutions
-              .map(
-                (solution) => `Result :\n${prettyPrintAST(solution)}\n-------\n`
-              )
-              .join('')}`
+            `Ambiguous results.\nSource:\n  ${source}\nAlternatives:\n${prettyPrintSolutions(
+              result.solutions
+            )}`
           );
         }
 
@@ -82,7 +80,11 @@ export function runTests(tests) {
         try {
           expect(solution.args).toStrictEqual(ast);
         } catch (err) {
-          console.error(JSON.stringify(results[0].solutions, null, '\t'));
+          if (sourceMap !== false) {
+            console.error(JSON.stringify(result.solutions, null, '\t'));
+          } else {
+            console.error(prettyPrintSolutions(result.solutions));
+          }
           throw err;
         }
       }

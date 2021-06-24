@@ -296,8 +296,8 @@ argName -> [a-zA-Z] [0-9a-zA-Z]:*                       {%
 ### Operator ###
 ################
 
-dissociativeOperator  -> ("+" | "&&" | "||") {%
-                                                        (d, l) => {
+additiveOperator  -> ("-" | "+" | "&&" | "||")         {%
+                                                       (d, l) => {
                                                           const op = d[0][0]
                                                           return {
                                                             name: op,
@@ -307,7 +307,7 @@ dissociativeOperator  -> ("+" | "&&" | "||") {%
                                                         }
                                                         %}
 
-dissociativeOperator  -> __ ("in") __    {%
+additiveOperator  -> __ ("in") __                       {%
                                                         (d, l) => {
                                                           return {
                                                             name: d[1],
@@ -317,19 +317,8 @@ dissociativeOperator  -> __ ("in") __    {%
                                                         }
                                                         %}
 
-dissociativeOperator  -> " - "                          {%
-                                                        (d, l) => {
-                                                          const op = d[0]
-                                                          return {
-                                                            name: op.trim(),
-                                                            location: l + 1,
-                                                            length: op.length
-                                                          }
-                                                        }
-                                                        %}
 
-
-associativeOperator -> ("**" | ">" | "<" | "<=" | ">=" | "==")       {%
+multiplicativeOperator -> ("**" | ">" | "<" | "<=" | ">=" | "==") {%
                                                         (d, l) => {
                                                           const op = d[0][0]
                                                           return {
@@ -339,7 +328,7 @@ associativeOperator -> ("**" | ">" | "<" | "<=" | ">=" | "==")       {%
                                                           }
                                                         }
                                                         %}
-associativeOperator -> (" * " | " / " | " % " | " ^ ")  {%
+multiplicativeOperator -> (" * " | " / " | " % " | " ^ ") {%
                                                         (d, l) => {
                                                           const op = d[0][0]
                                                           return {

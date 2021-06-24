@@ -1,3 +1,4 @@
+import { l, c, r } from '../utils';
 import { runTests } from './run-tests';
 
 runTests({
@@ -29,7 +30,7 @@ runTests({
         args: [
           {
             type: 'funcref',
-            args: ['-'],
+            args: ['unary-'],
             start: {
               char: 0,
               line: 1,
@@ -164,14 +165,14 @@ runTests({
   },
 
   'binary operation': {
-    source: 'Something - `Something Else`',
+    source: 'Something / `Something Else`',
     ast: [
       {
         type: 'function-call',
         args: [
           {
             type: 'funcref',
-            args: ['-'],
+            args: ['/'],
             start: {
               char: 9,
               line: 1,
@@ -762,63 +763,43 @@ runTests({
 
   'No ambiguity between negation and subtraction': {
     sourceMap: false,
+    source: '100 - -a',
+    ast: [c('-', l(100), c('unary-', r('a')))],
+  },
+
+  'No ambiguity between negation and subtraction (2)': {
+    sourceMap: false,
+    source: '100- -a',
+    ast: [c('-', l(100), c('unary-', r('a')))],
+  },
+
+  'No ambiguity between negation and subtraction (3)': {
+    sourceMap: false,
+    source: '100- - a',
+    ast: [c('-', l(100), c('unary-', r('a')))],
+  },
+
+  'No ambiguity between negation and subtraction (4)': {
+    sourceMap: false,
+    source: '100- -1',
+    ast: [c('-', l(100), l(-1))],
+  },
+
+  'No ambiguity between negation and subtraction (5)': {
+    sourceMap: false,
+    source: '100- - 1',
+    ast: [c('-', l(100), l(-1))],
+  },
+
+  'No ambiguity between negation and subtraction (6)': {
+    sourceMap: false,
     source: '100 - -1',
-    ast: [
-      {
-        type: 'function-call',
-        args: [
-          {
-            type: 'funcref',
-            args: ['-'],
-          },
-          {
-            type: 'argument-list',
-            args: [
-              {
-                type: 'literal',
-                args: ['number', 100, null],
-              },
-              {
-                type: 'literal',
-                args: ['number', -1, null],
-              },
-            ],
-          },
-        ],
-      },
-    ],
+    ast: [c('-', l(100), l(-1))],
   },
 
   'No ambiguity between several operators': {
     sourceMap: false,
-    source: 'grow 100 -10% Var',
-    ast: [
-      {
-        type: 'function-call',
-        args: [
-          {
-            type: 'funcref',
-            args: ['grow'],
-          },
-          {
-            type: 'argument-list',
-            args: [
-              {
-                type: 'literal',
-                args: ['number', 100, null],
-              },
-              {
-                type: 'literal',
-                args: ['number', -0.1, null],
-              },
-              {
-                type: 'ref',
-                args: ['Var'],
-              },
-            ],
-          },
-        ],
-      },
-    ],
+    source: 'grow 100 (-10%) Var',
+    ast: [c('grow', l(100), l(-0.1), r('Var'))],
   },
 });
