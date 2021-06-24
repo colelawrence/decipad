@@ -5,6 +5,7 @@ import { Playground } from '../../routes/Playground';
 import { Home } from '../../routes/Home';
 import { Workspace } from '../../routes/Workspace';
 import { Pad } from '../../routes/Pad';
+import { decode as decodeVanityUrlComponent } from '../../lib/vanityUrlComponent';
 
 export function Router({ session }: { session: Session | null }) {
   return (
@@ -15,7 +16,7 @@ export function Router({ session }: { session: Session | null }) {
           <RequireSession session={session}>
             <Pad
               workspaceId={match.params.workspaceid}
-              padId={match.params.padid}
+              padId={decodeVanityUrlComponent(match.params.padid)}
             />
           </RequireSession>
         )}

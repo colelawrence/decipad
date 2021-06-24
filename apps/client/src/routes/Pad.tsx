@@ -9,7 +9,6 @@ import {
   EditablePreview,
   EditableInput,
 } from '@chakra-ui/react';
-import { DeciEditor } from '@decipad/editor';
 import {
   GetPadById,
   GetPadByIdVariables,
@@ -19,10 +18,12 @@ import {
   RenamePadVariables,
   RENAME_PAD,
 } from '@decipad/queries';
-import { HelpButton, LoadingSpinnerPage } from '@decipad/ui';
 import { FiArrowLeft } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
+import { DeciEditor } from '@decipad/editor';
+import { HelpButton, LoadingSpinnerPage } from '@decipad/ui';
+import { encode as encodeVanityUrlComponent } from '../lib/vanityUrlComponent';
 
 export function Pad({
   workspaceId,
@@ -73,6 +74,21 @@ export function Pad({
     }
   }, [error, addToast]);
 
+  const history = useHistory();
+
+  useEffect(() => {
+    if (!pad) {
+      return;
+    }
+    const url = `/workspaces/${workspaceId}/pads/${encodeVanityUrlComponent(
+      pad.name,
+      padId
+    )}`;
+    if (url !== history.location.pathname) {
+      history.replace(url);
+    }
+  }, [pad, pad?.name || '', history.location.pathname, history]);
+
   if (loading || !pad) {
     return <LoadingSpinnerPage />;
   }
@@ -93,10 +109,7 @@ export function Pad({
       <Container maxW="75ch" pt={12}>
         <PadTitleEditor pad={pad!} onPadNameChanged={renamePad} />
       </Container>
-      <DeciEditor
-        padId={padId}
-        autoFocus={!!pad!.name}
-      />
+      <DeciEditor padId={padId} autoFocus={!!pad!.name} />
       <HelpButton />
     </Box>
   );

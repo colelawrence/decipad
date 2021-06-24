@@ -26,6 +26,7 @@ import { FiFile, FiTrash2 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { SideMenu } from '../components/SideMenu';
 import { Topbar } from '../components/Topbar';
+import { encode as encodeVanityUrlComponent } from '../lib/vanityUrlComponent';
 
 export function Workspace({ workspaceId }: { workspaceId: string }) {
   const { data, loading: workspaceLoading } = useQuery<
@@ -80,7 +81,9 @@ export function Workspace({ workspaceId }: { workspaceId: string }) {
             >
               <Box
                 as={Link}
-                to={`/workspaces/${data.getWorkspaceById?.id}/pads/${item.id}`}
+                to={`/workspaces/${
+                  data.getWorkspaceById?.id
+                }/pads/${encodeVanityUrlComponent(item.name, item.id)}`}
               >
                 <HStack py={6}>
                   <Icon as={FiFile} mr={3} fontSize="1.5rem" />

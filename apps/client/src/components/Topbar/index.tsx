@@ -18,6 +18,7 @@ import { CreatePad, CreatePadVariables, CREATE_PAD } from '@decipad/queries';
 import { signOut, useSession } from 'next-auth/client';
 import { FiChevronDown, FiLogOut, FiPlus } from 'react-icons/fi';
 import { useToasts } from 'react-toast-notifications';
+import { encode as encodeVanityUrlComponent } from '../../lib/vanityUrlComponent';
 
 export const Topbar = ({ workspaceId }: { workspaceId: string }) => {
   const [session] = useSession();
@@ -37,7 +38,12 @@ export const Topbar = ({ workspaceId }: { workspaceId: string }) => {
       .then((result) => {
         const newPad = result.data!.createPad!;
         addToast('Pad created successfully', { appearance: 'success' });
-        history.push(`/workspaces/${workspaceId}/pads/${newPad.id}`);
+        history.push(
+          `/workspaces/${workspaceId}/pads/${encodeVanityUrlComponent(
+            '',
+            newPad.id
+          )}`
+        );
       })
       .catch((err) =>
         addToast('Error creating pad: ' + err.message, {
