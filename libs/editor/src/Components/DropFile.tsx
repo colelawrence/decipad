@@ -2,6 +2,8 @@ import React, { ReactNode, useCallback, useState } from 'react';
 import { Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { useToasts } from 'react-toast-notifications';
+import slug from 'slug';
+import camelcase from 'camelcase';
 
 interface DropFileProps {
   editor: ReactEditor;
@@ -22,9 +24,10 @@ export function DropFile({ editor, children }: DropFileProps) {
       }
       (async () => {
         const dataUrl = await fileToDataURL(file);
+        const varName = varNamify(file.name);
         const code = {
           type: 'code_block',
-          children: [{ text: `import_data "${dataUrl}"` }],
+          children: [{ text: `${varName} = import_data "${dataUrl}"` }],
         };
         Transforms.insertNodes(editor, code);
         Transforms.move(editor);
@@ -130,4 +133,11 @@ function getFilesFromEvent(ev: DragEvent): File[] {
   }
 
   return files;
+}
+
+function varNamify(fileName: string): string {
+  return camelcase(slug(fileName), {
+    pascalCase: true,
+    preserveConsecutiveUppercase: true,
+  });
 }

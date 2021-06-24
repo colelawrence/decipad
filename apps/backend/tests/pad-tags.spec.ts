@@ -443,8 +443,8 @@ test('pads', () => {
     await waitForExpect(async () => {
       expect(guestTags).toHaveLength(1);
       expect(guestTags).toMatchObject(['tag two']);
-    }, 20000);
-  }, 21000);
+    }, 30000);
+  }, 31000);
 
   it('other user can list pad through tag', async () => {
     const client = withAuth(await auth('test user id 2'));
@@ -522,7 +522,7 @@ test('pads', () => {
 
 async function createClient(userId: string) {
   const { token } = await auth(userId);
-  const link = createWebsocketLink(createDeciWebsocket(token), 120000);
+  const link = createWebsocketLink(createDeciWebsocket(token), 240000);
   return withAuth({ token, link });
 }
 

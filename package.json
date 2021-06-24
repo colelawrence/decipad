@@ -83,6 +83,7 @@
     "@types/react-portal": "^4.0.2",
     "@types/react-router-dom": "^5.1.7",
     "@types/rimraf": "^3.0.0",
+    "@types/slug": "^5.0.0",
     "@types/uuid": "^8.3.0",
     "@types/webpack": "5.28.0",
     "@typescript-eslint/eslint-plugin": "4.26.0",
@@ -146,6 +147,7 @@
     "@udecode/slate-plugins": "^0.75.2",
     "automerge": "^0.14.2",
     "aws-lambda": "^1.0.6",
+    "camelcase": "^6.2.0",
     "core-js": "^3.13.1",
     "csv-parse": "^4.16.0",
     "date-fns": "^2.22.1",
@@ -181,6 +183,7 @@
     "slate-history": "^0.58.4",
     "slate-hyperscript": "^0.58.4",
     "slate-react": "^0.58.4",
+    "slug": "^5.1.0",
     "tslib": "^2.2.0",
     "uuid": "^8.3.2"
   }
