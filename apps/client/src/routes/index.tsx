@@ -1,11 +1,11 @@
-import { Switch, Route } from 'react-router-dom';
 import { Session } from 'next-auth';
-import { RequireSession } from '../RequireSession';
-import { Playground } from '../../routes/Playground';
-import { Home } from '../../routes/Home';
-import { Workspace } from '../../routes/Workspace';
-import { Pad } from '../../routes/Pad';
-import { decode as decodeVanityUrlComponent } from '../../lib/vanityUrlComponent';
+import { Route, Switch } from 'react-router-dom';
+import { RequireSession } from '../components/RequireSession';
+import { decode as decodeVanityUrlComponent } from '../lib/vanityUrlComponent';
+import { Home } from './Home';
+import { Pad } from './Pad';
+import { Playground } from './Playground';
+import { Workspace } from './Workspace';
 
 export function Router({ session }: { session: Session | null }) {
   return (
