@@ -76,18 +76,21 @@ export function Pad({
 
   const history = useHistory();
 
+  const padName = pad?.name || '';
+  const pathName = history.location.pathname;
+
   useEffect(() => {
     if (!pad) {
       return;
     }
     const url = `/workspaces/${workspaceId}/pads/${encodeVanityUrlComponent(
-      pad.name,
+      padName,
       padId
     )}`;
-    if (url !== history.location.pathname) {
+    if (url !== pathName) {
       history.replace(url);
     }
-  }, [pad, pad?.name || '', history.location.pathname, history]);
+  }, [pad, padName, pathName, history, workspaceId, padId]);
 
   if (loading || !pad) {
     return <LoadingSpinnerPage />;

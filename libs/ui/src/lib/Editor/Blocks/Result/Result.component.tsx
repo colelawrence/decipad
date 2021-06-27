@@ -168,7 +168,7 @@ export const Result = ({
   }
 };
 
-function DateResult({ type, value }: ResultContentProps): JSX.Element {
+function DateResult({ type, value }: ResultContentProps) {
   const date = new Date(Array.isArray(value) ? value[0] : value);
   let format;
   switch (type.date) {
@@ -186,14 +186,8 @@ function DateResult({ type, value }: ResultContentProps): JSX.Element {
     }
   }
 
-  let string;
-  if (!format) {
-    string = formatDateISO(date);
-  } else {
-    string = dateFormat(date, format);
-  }
-
-  return <>{string}</>;
+  const string = format ? dateFormat(date, format) : formatDateISO(date);
+  return <span>{string}</span>;
 }
 
 function tableByRows(tupleNames: string[], columns: any[], tupleTypes: Type[]) {
