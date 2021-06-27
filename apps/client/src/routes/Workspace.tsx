@@ -34,6 +34,7 @@ export function Workspace({ workspaceId }: { workspaceId: string }) {
     GetWorkspaceByIdVariables
   >(GET_WORKSPACE_BY_ID, {
     variables: { id: workspaceId },
+    fetchPolicy: 'network-only',
   });
 
   const [removePad] = useMutation<RemovePad, RemovePadVariables>(REMOVE_PAD);
