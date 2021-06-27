@@ -150,7 +150,6 @@ function createReplica<T>({
     getValue,
     stop,
     isActive,
-    isOnlyRemote,
     subscriptionCountObservable,
     /* eslint-disable @typescript-eslint/no-empty-function */
     beforeRemoteChanges: () => {},
@@ -230,6 +229,7 @@ function createReplica<T>({
       doc = Automerge.from({ value: initialValue }, 'starter') as Doc<{
         value: T;
       }>;
+      // console.log('Automerge.save', Automerge.save(doc));
     }
     if (doc !== null) {
       const toBeSaved = Automerge.save(doc!);
@@ -262,10 +262,6 @@ function createReplica<T>({
 
   function isActive(): boolean {
     return !stopped && doc !== null;
-  }
-
-  function isOnlyRemote(): boolean {
-    return !createIfAbsent && doc === null;
   }
 
   function onStorageEvent(event: StorageEvent) {
@@ -368,7 +364,6 @@ interface Replica<T> {
   getValue: () => T | null;
   stop: () => void;
   isActive: () => boolean;
-  isOnlyRemote: () => boolean;
   subscriptionCountObservable: Observable<number>;
   beforeRemoteChanges: (() => void) | null;
 }

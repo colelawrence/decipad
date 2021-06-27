@@ -37,7 +37,7 @@ describe('sync', () => {
 
   it('creates a pad on one of the replicas', async () => {
     const replica = replicas[0];
-    const content = replica.startPadEditor(padId, true);
+    const content = replica.startPadEditor(padId);
     padContents.push(content);
 
     const editor = createEditor();
@@ -46,29 +46,16 @@ describe('sync', () => {
     padSubscriptions.push(wireEditor(editor, content));
   });
 
-  it('tries to load pad on other replicas to no avail', async () => {
+  it('creates other replicas', async () => {
     for (let i = 1; i < REPLICA_COUNT; i++) {
-      const content = replicas[i].startPadEditor(padId, false);
+      const content = replicas[i].startPadEditor(padId);
       padContents.push(content);
-
-      expect(content.isOnlyRemote()).toBe(true);
 
       const editor = createEditor();
       editor.number = i;
       padEditors.push(editor);
       padSubscriptions.push(wireEditor(editor, content));
     }
-
-    const [, ...reps] = padContents;
-    let hasResponses = false;
-    for (const rep of reps) {
-      rep.getValueEventually().then(() => {
-        hasResponses = true;
-      });
-    }
-
-    await timeout(3000);
-    expect(hasResponses).toBe(false);
   });
 
   it('starts api and websocket server', () => {
@@ -82,7 +69,7 @@ describe('sync', () => {
   it('gets the pad contents', async () => {
     let first;
     for (const rep of padContents) {
-      const content = await rep.getValueEventually();
+      const content = await rep.getValue();
       if (!first) {
         first = content;
       } else {
@@ -335,14 +322,7 @@ function wireEditor(editor: Editor, content: PadEditor) {
     });
   });
 
-  if (content.isOnlyRemote()) {
-    content.getValueEventually().then((value) => {
-      editor.children = value;
-    });
-  } else {
-    editor.children = content.getValue();
-  }
-
+  editor.children = content.getValue();
   editor.onChange = () => {
     const ops = editor.operations;
     if (ops && ops.length) {

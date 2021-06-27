@@ -76,7 +76,7 @@ export const useEditor = ({ padId, editor, setValue }: IUseRuntimeEditor) => {
 
   // Create a padEditor and stop it
   useEffect(() => {
-    const padEditor = runtime?.startPadEditor(padId, true) ?? null;
+    const padEditor = runtime?.startPadEditor(padId) ?? null;
     setPadEditor(padEditor);
 
     return () => {
@@ -87,33 +87,21 @@ export const useEditor = ({ padId, editor, setValue }: IUseRuntimeEditor) => {
 
   // Plug the padEditor and the editor
   useEffect(() => {
-    let cancelled = false;
     let sub: Subscription;
 
     if (editor != null && padEditor != null) {
-      const valueP = padEditor.isOnlyRemote()
-        ? padEditor.getValueEventually()
-        : Promise.resolve(padEditor.getValue());
-
-      valueP.then((value) => {
-        if (!cancelled) {
-          sub = padEditor.slateOps().subscribe((ops) => {
-            ghostApply(editor, () => {
-              for (const op of ops) {
-                editor.apply(op);
-              }
-            });
-          });
-
-          setValue(value);
-        }
+      sub = padEditor.slateOps().subscribe((ops) => {
+        ghostApply(editor, () => {
+          for (const op of ops) {
+            editor.apply(op);
+          }
+        });
       });
+
+      setValue(padEditor.getValue());
     }
 
-    return () => {
-      sub?.unsubscribe();
-      cancelled = true;
-    };
+    return () => sub?.unsubscribe();
   }, [editor, padEditor, setValue]);
 
   useEffect(() => {

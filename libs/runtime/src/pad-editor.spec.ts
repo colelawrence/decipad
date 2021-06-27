@@ -10,7 +10,7 @@ describe('pad editor', () => {
       userId: 'TEST_USER_ID',
       actorId: 'TEST_ACTOR_ID',
     });
-    const model = deci.startPadEditor(docId, true);
+    const model = deci.startPadEditor(docId);
     const editor = createEditor();
 
     editor.onChange = () => {
@@ -41,7 +41,7 @@ describe('pad editor', () => {
       userId: 'TEST_USER_ID',
       actorId: 'TEST_ACTOR_ID',
     });
-    const model = deci.startPadEditor(docId, true);
+    const model = deci.startPadEditor(docId);
 
     const editor = createEditor();
 
@@ -78,7 +78,7 @@ describe('pad editor', () => {
       userId: 'TEST_USER_ID',
       actorId: 'TEST_ACTOR_ID',
     });
-    const model = deci.startPadEditor(docId, true);
+    const model = deci.startPadEditor(docId);
 
     const editor = createEditor();
 
@@ -142,7 +142,7 @@ describe('pad editor', () => {
       userId: 'TEST_USER_ID',
       actorId: 'TEST_ACTOR_ID',
     });
-    const model = deci.startPadEditor('some other doc id', true);
+    const model = deci.startPadEditor('some other doc id');
 
     const editor = createEditor();
 

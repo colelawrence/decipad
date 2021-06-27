@@ -128,7 +128,10 @@ export class Sync<T> extends EventEmitter {
     try {
       token = await getAuthToken();
     } catch (err) {
-      if (err.code !== 'ECONNREFUSED') {
+      if (
+        err.code !== 'ECONNREFUSED' &&
+        !err.message.startsWith('Failed fetching token from remote')
+      ) {
         console.error(err);
       }
       // do nothing
@@ -209,8 +212,10 @@ function randomReconnectTimeout() {
 
 async function getAuthToken(): Promise<string> {
   const resp = await fetch(fetchPrefix + '/api/auth/token?for=pubsub');
-  if (!resp.ok) {
-    const message = `Failed fetching token from remote: ${await resp.text()}`;
+  if (!resp || !resp.ok) {
+    const message = `Failed fetching token from remote: ${
+      (await resp?.text()) || 'unknown'
+    }`;
     throw new Error(message);
   }
   return await resp.text();

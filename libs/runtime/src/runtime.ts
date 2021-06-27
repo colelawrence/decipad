@@ -25,10 +25,10 @@ class Runtime {
     this.sync = new Sync({ start: isSynced });
   }
 
-  startPadEditor(padId: Id, createIfAbsent: boolean) {
+  startPadEditor(padId: Id) {
     let editor = this.editors.get(padId);
     if (editor === undefined) {
-      editor = new PadEditor(padId, this, createIfAbsent, this.isSynced);
+      editor = new PadEditor(padId, this, this.isSynced);
       let hadSubscribers = false;
       editor.slateOpsCountObservable.subscribe((subscriptionCount) => {
         if (subscriptionCount === 0) {

@@ -7,7 +7,7 @@ module.exports = {
   maxWorkers: 1,
   coverageThreshold: {
     global: {
-      branches: 69,
+      branches: 67,
       functions: 77,
       lines: 83,
       statements: 83,

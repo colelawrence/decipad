@@ -34,7 +34,7 @@ describe('slate to replica sync', () => {
       userId: 'TEST_USER_ID',
       actorId: 'TEST_ACTOR_ID_1',
     });
-    model1 = deci1.startPadEditor(docId, true);
+    model1 = deci1.startPadEditor(docId);
 
     editor1 = createEditor();
 
@@ -53,7 +53,7 @@ describe('slate to replica sync', () => {
       userId: 'TEST_USER_ID',
       actorId: 'TEST_ACTOR_ID_2',
     });
-    model2 = deci2.startPadEditor(docId, true);
+    model2 = deci2.startPadEditor(docId);
 
     editor2 = createEditor();
 
