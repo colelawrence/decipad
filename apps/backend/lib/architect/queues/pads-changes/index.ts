@@ -2,6 +2,7 @@ import assert from 'assert';
 import tables from '../../../tables';
 import allPages from '../../../tables/all-pages';
 import handle from '../../../queues/handler';
+import { remove } from '../../../s3/pads';
 
 export const handler = handle(padsChangesHandler);
 
@@ -30,4 +31,6 @@ async function handlePadDelete({ id }: TableRecordIdentifier) {
   for await (const perm of allPages(data.permissions, query)) {
     await data.permissions.delete({ id: perm.id });
   }
+
+  await remove(id);
 }

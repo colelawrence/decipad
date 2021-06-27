@@ -112,6 +112,7 @@
     "prettier": "2.3.0",
     "realpath": "^1.1.0",
     "rimraf": "^3.0.2",
+    "s3rver": "^3.7.0",
     "tiny-json-http": "^7.3.0",
     "ts-jest": "27.0.2",
     "ts-node": "~10.0.0",

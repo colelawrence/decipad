@@ -30,6 +30,10 @@ function testWithSandbox(description: string, fn: () => void) {
       rimraf(path.join(process.cwd(), '.kafka_lite_data'), done);
     });
 
+    beforeAll((done) => {
+      rimraf(path.join(process.cwd(), '.s3rver_data'), done);
+    });
+
     beforeAll(async () => {
       await sandbox.start();
     });

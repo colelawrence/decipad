@@ -229,6 +229,7 @@ $RECYCLE.BIN/
 
 # Back-end sandbox data
 .kafka_lite_data
+.s3rver_data
 prefs.arc
 
 # Private deployment config

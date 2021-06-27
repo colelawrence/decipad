@@ -61,11 +61,6 @@ userkeyvalidations
   expires_at TTL
   encrypt true
 
-syncdoc
-  id *String
-  latest String
-  encrypt true
-
 connections
   id *String
   user_id String
@@ -261,7 +256,8 @@ pads-changes
 tags-changes
 usertaggedresources-changes
 
-#@plugins
+@plugins
+s3
 #kafka
 
 #@kafka-consumer-groups

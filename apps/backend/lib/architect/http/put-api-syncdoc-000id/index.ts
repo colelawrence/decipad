@@ -2,10 +2,11 @@ import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
 import Automerge from 'automerge';
 import arc from '@architect/functions';
 import handle from '../../../handle';
-import tables from '../../../tables';
 import auth from '../../../auth';
+import tables from '../../../tables';
 import { isAuthorized } from '../../../authorization';
 import { decode } from '../../../resource';
+import { get, put } from '../../../s3/pads';
 
 type Resource = {
   type: string;
@@ -32,29 +33,23 @@ export const handler = handle(async (event: APIGatewayProxyEvent) => {
   const body = event.isBase64Encoded
     ? Buffer.from(event.body, 'base64').toString()
     : event.body;
-  const data = await tables();
-  let doc = await data.syncdoc.get({ id });
+
+  let doc = await get(id);
   let needsCreate = false;
+  let changes: Automerge.Change[] = [];
 
   if (!doc) {
-    doc = {
-      id,
-      latest: body,
-    };
     needsCreate = true;
-  } else if (!(await isAuthorized(id, user, 'WRITE'))) {
-    return {
-      status: 403,
-      body: 'Forbidden',
-    };
+    doc = body;
+  } else {
+    const before = Automerge.load(doc);
+    const remote = Automerge.load(body);
+    const after = Automerge.merge(before, remote);
+    doc = Automerge.save(after);
+    changes = Automerge.getChanges(before, after);
   }
 
-  const before = Automerge.load(doc.latest);
-  const remote = Automerge.load(body);
-  const after = Automerge.merge(before, remote);
-  doc.latest = Automerge.save(after);
-
-  const changes = Automerge.getChanges(before, after);
+  const data = await tables();
 
   if (needsCreate) {
     const resource = parseId(id);
@@ -71,13 +66,20 @@ export const handler = handle(async (event: APIGatewayProxyEvent) => {
     };
 
     await data.permissions.create(newRolePermission);
+  } else {
+    if (!(await isAuthorized(id, user, 'WRITE'))) {
+      return {
+        status: 403,
+        body: 'Forbidden',
+      };
+    }
+  }
+
+  if (changes.length > 0 || needsCreate) {
+    await put(id, doc);
   }
 
   if (changes.length > 0) {
-    await data.syncdoc.put(doc);
-
-    // Notify room
-
     const collabs = await data.collabs.query({
       IndexName: 'room-index',
       KeyConditionExpression: 'room = :room',
@@ -96,8 +98,6 @@ export const handler = handle(async (event: APIGatewayProxyEvent) => {
         console.error(err);
       }
     }
-  } else if (needsCreate) {
-    await data.syncdoc.put(doc);
   }
 
   return { ok: true };

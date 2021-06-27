@@ -1,9 +1,9 @@
 import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
 import handle from '../../../handle';
-import tables from '../../../tables';
 import auth from '../../../auth';
 import { isAuthorized } from '../../../authorization';
 import { decode } from '../../../resource';
+import { get } from '../../../s3/pads';
 
 exports.handler = handle(async (event: APIGatewayProxyEvent) => {
   const { user } = await auth(event);
@@ -11,21 +11,23 @@ exports.handler = handle(async (event: APIGatewayProxyEvent) => {
   if (!event.pathParameters) {
     return {
       statusCode: 401,
-      body: 'missing parameters'
+      body: 'missing parameters',
     };
   }
   const id = decode(event.pathParameters.id!);
-  if (!user || !(await isAuthorized(id, user, 'WRITE'))) {
+  if (!user || !(await isAuthorized(id, user, 'READ'))) {
     return {
       status: 403,
       body: 'Forbidden',
     };
   }
 
-  const data = await tables();
-  const doc = await data.syncdoc.get({ id });
+  const doc = await get(id);
   if (!doc) {
-    return null;
+    return {
+      statusCode: 403,
+      body: 'Not found',
+    };
   }
-  return doc.latest;
+  return doc;
 });

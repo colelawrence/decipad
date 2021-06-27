@@ -6,6 +6,7 @@ import tables from '../../../tables';
 import auth from '../../../auth';
 import { isAuthorized } from '../../../authorization';
 import { decode } from '../../../resource';
+import { get, put } from '../../../s3/pads';
 
 export const handler = handle(async (event: APIGatewayProxyEvent) => {
   const id = decode(event.pathParameters?.id);
@@ -18,21 +19,20 @@ export const handler = handle(async (event: APIGatewayProxyEvent) => {
     };
   }
 
-  const data = await tables();
-  const doc = await data.syncdoc.get({ id });
+  let doc = await get(id);
 
   if (!doc) {
     return {
       statusCode: 404,
     };
   }
-  const before = Automerge.load(doc.latest);
+  const before = Automerge.load(doc);
 
   if (!event.body) {
     return {
       statusCode: 401,
       body: 'Need some changes',
-    }
+    };
   }
   const body = event.isBase64Encoded
     ? Buffer.from(event.body, 'base64').toString()
@@ -41,11 +41,13 @@ export const handler = handle(async (event: APIGatewayProxyEvent) => {
   const changes = JSON.parse(body);
   if (changes.length > 0) {
     const after = Automerge.applyChanges(before, changes);
-    doc.latest = Automerge.save(after);
+    doc = Automerge.save(after);
 
-    await data.syncdoc.put(doc);
+    await put(id, doc);
 
     // Notify room
+
+    const data = await tables();
 
     const collabs = await data.collabs.query({
       IndexName: 'room-index',

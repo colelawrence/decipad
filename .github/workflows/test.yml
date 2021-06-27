@@ -70,6 +70,10 @@ jobs:
           APP_ROOT_PATH: '/'
           NODE_OPTIONS: --enable-source-maps
           DECI_FROM_EMAIL_ADDRESS: info@decipad.com
+          DECI_S3_ENDPOINT: localhost:4568
+          DECI_S3_ACCESS_KEY_ID: S3RVER
+          DECI_S3_SECRET_ACCESS_KEY: S3RVER
+          DECI_S3_PADS_BUCKET: pads
 
       - name: Run end-to-end tests
         run: ./scripts/e2e.sh

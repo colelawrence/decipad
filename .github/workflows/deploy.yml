@@ -66,6 +66,11 @@ jobs:
           ./node_modules/.bin/arc env staging DECI_KEY_VALIDATION_EXPIRATION_SECONDS '${{secrets.DECI_KEY_VALIDATION_EXPIRATION_SECONDS}}'
           ./node_modules/.bin/arc env staging DECI_FROM_EMAIL_ADDRESS '${{secrets.DECI_FROM_EMAIL_ADDRESS}}'
           ./node_modules/.bin/arc env staging DECI_APP_URL_BASE https://dev.decipad.com
+          ./node_modules/.bin/arc env staging DECI_S3_ENDPOINT 's3.eu-west-2.amazonaws.com'
+          ./node_modules/.bin/arc env staging DECI_S3_ACCESS_KEY_ID '${{secrets.DECI_S3_ACCESS_KEY_ID}}'
+          ./node_modules/.bin/arc env staging DECI_S3_SECRET_ACCESS_KEY '${{secrets.DECI_S3_SECRET_ACCESS_KEY}}'
+          ./node_modules/.bin/arc env staging DECI_S3_PADS_BUCKET '${{secrets.DECI_S3_PADS_BUCKET}}'
+
           ./node_modules/.bin/arc env staging NODE_OPTIONS --enable-source-maps
           cd ../..
           npm run deploy

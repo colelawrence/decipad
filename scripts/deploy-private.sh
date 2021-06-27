@@ -23,6 +23,11 @@ cd apps/backend
 ./node_modules/.bin/arc env staging JWT_SECRET "$JWT_SECRET"
 ./node_modules/.bin/arc env staging DECI_SES_ACCESS_KEY_ID "$DECI_SES_ACCESS_KEY_ID"
 ./node_modules/.bin/arc env staging DECI_SES_SECRET_ACCESS_KEY "$DECI_SES_SECRET_ACCESS_KEY"
+./node_modules/.bin/arc env staging DECI_S3_ENDPOINT s3.eu-west-2.amazonaws.com
+./node_modules/.bin/arc env staging DECI_S3_ACCESS_KEY_ID "$DECI_S3_ACCESS_KEY_ID"
+./node_modules/.bin/arc env staging DECI_S3_SECRET_ACCESS_KEY "$DECI_S3_SECRET_ACCESS_KEY"
+./node_modules/.bin/arc env staging DECI_S3_PADS_BUCKET "$DECI_S3_PADS_BUCKET"
+
 ./node_modules/.bin/arc env staging NODE_OPTIONS --enable-source-maps
 
 ./node_modules/.bin/arc deploy --prune --no-hydrate --name "$DEPLOY_NAME"
