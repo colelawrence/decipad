@@ -27,6 +27,7 @@ function end({ arc, inventory, services }, callback) {
     return callback();
   }
   s3rver.close(callback);
+  s3rver = undefined;
 }
 
 const sandbox = { start, end };
