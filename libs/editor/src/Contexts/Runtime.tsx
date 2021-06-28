@@ -31,7 +31,7 @@ export const RuntimeProvider = ({ children }: RuntimeProviderProps) => {
     } else if (userId) {
       const runtime = new DeciRuntime({ userId, actorId: nanoid() });
       runtime.setSession(session);
-      setValue({ runtime, status: 'success', });
+      setValue({ runtime, status: 'success' });
       return () => runtime.stop();
     } else {
       return setValue({ runtime: null, status: 'login' });
@@ -54,7 +54,7 @@ export const AnonymousRuntimeProvider = ({
   useEffect(() => {
     const runtime = new DeciRuntime({
       userId: '',
-      actorId: '',
+      actorId: nanoid(),
       isSynced: false,
     });
     setValue({
