@@ -50,20 +50,12 @@ Using the command line, inside your local copy of the decipad repo, you should d
 npm install --legacy-peer-deps
 ```
 
-### Installing the nx cli
-
-To be able to run our project, you should firstly install the nx cli globally on your machine. You can do this by running the following command in your command line:
-
-```bash
-npm install -g @nrwl/cli
-```
-
 ### Running the project
 
 To run the backend and the frontend, just copy and past the following command in your command line:
 
 ```bash
-nx run-many --target=serve --projects=client,backend --parallel
+npm run serve:all
 ```
 
 ### Testing the project
@@ -71,7 +63,7 @@ nx run-many --target=serve --projects=client,backend --parallel
 To run the unit tests for all the monorepos in the project, you can run the following:
 
 ```bash
-nx run-many --target=test --all
+npm test
 ```
 
 ### Running storybook
@@ -79,7 +71,7 @@ nx run-many --target=test --all
 We use storybook for development and showcasing purposes of all of our components, you can also run storybook by running:
 
 ```bash
-nx run ui:storybook
+npm run nx run ui:storybook
 ```
 
 ### Running the end-to-end tests
