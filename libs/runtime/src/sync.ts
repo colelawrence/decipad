@@ -14,7 +14,8 @@ export class Sync<T> extends EventEmitter {
   private subscriptionManager = new SyncSubscriptionManager<T>();
   private subscriptionManagerTopicSubscription: Subscription | null = null;
   private topics = new Set<string>();
-  private connecting = false;
+  public connecting = false;
+  private forceConnecting = false;
   private stopped = false;
   private timeout: ReturnType<typeof setTimeout> | null = null;
   connection: WebSocket | null = null;
@@ -47,9 +48,6 @@ export class Sync<T> extends EventEmitter {
               // TODO: cancel
               this.topics.delete(topic);
               this.unsubscribeRemote(topic);
-              if (this.topics.size === 0) {
-                this.disconnect();
-              }
             }
             break;
         }
@@ -86,7 +84,11 @@ export class Sync<T> extends EventEmitter {
       this.connection.readyState !== WebSocket.CLOSED &&
       this.connection.readyState !== WebSocket.CLOSING
     ) {
-      this.connection.close();
+      const connection = this.connection;
+      this.connection = null;
+      this.connecting = false;
+      this.forceConnecting = false;
+      connection.close();
       this.connection = null;
     }
   }
@@ -104,17 +106,32 @@ export class Sync<T> extends EventEmitter {
     const conn = this.connection;
     if (conn !== null && conn.readyState === WebSocket.OPEN) {
       conn.send(JSON.stringify(['unsubscribe', topic]));
+    }
+    this.maybeClose();
+  }
+
+  private maybeClose() {
+    if (this.connection) {
       if (this.topics.size === 0) {
-        conn.close();
+        this.disconnect();
       }
     }
   }
 
-  private async connect() {
+  public close() {
+    this.maybeClose();
+  }
+
+  public async connect(force = false) {
+    // if connection was opened once forcefully, we should keep that knowledge
+    if (force) {
+      this.forceConnecting = true;
+    }
+
     if (this.stopped || this.connecting) {
       return;
     }
-    if (this.topics.size === 0) {
+    if (!this.forceConnecting && this.topics.size === 0) {
       return;
     }
     if (
@@ -123,7 +140,9 @@ export class Sync<T> extends EventEmitter {
     ) {
       return;
     }
+
     this.connecting = true;
+
     let token;
     try {
       token = await getAuthToken();
@@ -156,7 +175,12 @@ export class Sync<T> extends EventEmitter {
 
   private onWebsocketOpen(event: Event) {
     this.emit('websocket open', event);
-    if (this.topics.size === 0 && this.connection !== null) {
+    this.connecting = false;
+    if (
+      !this.forceConnecting &&
+      this.topics.size === 0 &&
+      this.connection !== null
+    ) {
       this.connection.close();
     } else {
       for (const topic of this.topics) {
@@ -172,6 +196,7 @@ export class Sync<T> extends EventEmitter {
     if (type !== null) {
       // external message
       this.emit('websocket message', event);
+      return;
     }
 
     let opString: RemoteOp['op'];
@@ -197,7 +222,15 @@ export class Sync<T> extends EventEmitter {
 
   private onWebsocketClose(event: Event) {
     this.emit('websocket close', event);
-    this.connection = null;
+    const connection = this.connection;
+    if (connection) {
+      this.connection = null;
+      connection.onerror = null;
+      connection.onopen = null;
+      connection.onmessage = null;
+      connection.onclose = null;
+    }
+
     this.timeout = setTimeout(() => this.connect(), randomReconnectTimeout());
   }
 

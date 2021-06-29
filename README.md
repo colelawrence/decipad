@@ -104,3 +104,7 @@ To receive e-mails from the application (like when signing in through e-mail), v
     Choose "email address"
     Enter the email address you want your local dev env to send email to
     You will then receive a verification e-mail with more instructions
+
+## Sub-package documentation
+
+- [runtime](libs/runtime/README.md)

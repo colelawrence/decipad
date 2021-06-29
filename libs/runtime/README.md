@@ -135,6 +135,20 @@ result is a ComputationResult:
 }
 ```
 
+### Getting a shared websocket
+
+To limit the number of open websockets, you can reuse the sync websocket by using `runtime.websocketImpl()` like this:
+
+```js
+const WebSocketClass = runtime.websocketImpl();
+const urlString = 'some bogus url string';
+// the URL string here doesn't matter because it will always return
+// a websocket to the predetermined websocket server.
+const websocket = new WebSocketClass(urlString);
+```
+
+```
+
 ## Running unit tests
 
 Run `nx test runtime` to execute the unit tests via [Jest](https://jestjs.io).

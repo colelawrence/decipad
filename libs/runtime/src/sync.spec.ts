@@ -35,6 +35,51 @@ describe('sync', () => {
     }
   });
 
+  beforeAll(() => {
+    websocketServer = new WebSocketServer('ws://localhost:3333/ws');
+    deciWebsocketServer = createDeciWebsocketServer();
+    websocketServer.on('connection', deciWebsocketServer.socketHandler);
+
+    fetch.mockIf(() => true, apiServer(deciWebsocketServer));
+  });
+
+  it('can send and receive extraneous websocket messages', (done) => {
+    const runtime = replicas[0];
+    const WebsocketClass = runtime.websocketImpl();
+    const websocket = new WebsocketClass('bogus url');
+    let hadResponse = false;
+    let completed = false;
+    websocket.onopen = (event: Event) => {
+      if (completed) {
+        return;
+      }
+      expect(event).toBeDefined();
+      expect(websocket.binaryType).toBe('blob');
+      expect(websocket.extensions).toBe(undefined);
+      expect(websocket.protocol).toBe('thisisagreattokenjustforyou');
+      expect(websocket.url).toBe('ws://localhost:3333/ws');
+
+      websocket.onclose = (event: Event) => {
+        expect(event).toBeDefined();
+        expect(hadResponse).toBe(true);
+        expect(websocket.readyState).toBe(WebSocket.CLOSED);
+        completed = true;
+        done();
+      };
+
+      websocket.onmessage = (event: MessageEvent) => {
+        const m = JSON.parse(event.data.toString());
+        expect(m).toMatchObject({ type: 'pong' });
+        hadResponse = true;
+        websocket.close();
+      };
+    };
+
+    websocket.send(JSON.stringify({ type: 'ping' }));
+
+    expect(websocket.readyState).toBe(WebSocket.CONNECTING);
+  });
+
   it('creates a pad on one of the replicas', async () => {
     const replica = replicas[0];
     const content = replica.startPadEditor(padId);
@@ -56,14 +101,6 @@ describe('sync', () => {
       padEditors.push(editor);
       padSubscriptions.push(wireEditor(editor, content));
     }
-  });
-
-  it('starts api and websocket server', () => {
-    websocketServer = new WebSocketServer('ws://localhost:3333/ws');
-    deciWebsocketServer = createDeciWebsocketServer();
-    websocketServer.on('connection', deciWebsocketServer.socketHandler);
-
-    fetch.mockIf(() => true, apiServer(deciWebsocketServer));
   });
 
   it('gets the pad contents', async () => {
@@ -257,11 +294,20 @@ function createDeciWebsocketServer(): DeciWebsocketServer {
 
   function socketHandler(socket: WebSocket) {
     socket.on('message', (message) => {
-      const [op, topic] = JSON.parse(message.toString()) as [string, string];
-      let topicSubscriptions = subscriptions.get(topic);
-      if (!topicSubscriptions) {
-        topicSubscriptions = [];
-        subscriptions.set(topic, topicSubscriptions);
+      let topicSubscriptions: WebSocket[] | undefined = [];
+      const m = JSON.parse(message.toString());
+      let op: string;
+      let topic: string | undefined;
+      if (Array.isArray(m)) {
+        [op, topic] = m as [string, string];
+        if (topic) {
+          topicSubscriptions = subscriptions.get(topic) || [];
+          if (!topicSubscriptions) {
+            subscriptions.set(topic, topicSubscriptions);
+          }
+        }
+      } else {
+        op = m.type;
       }
 
       switch (op) {
@@ -279,6 +325,10 @@ function createDeciWebsocketServer(): DeciWebsocketServer {
             socket.send(JSON.stringify({ o: 'u', t: topic }));
           }
 
+          break;
+
+        case 'ping':
+          socket.send(JSON.stringify({ type: 'pong' }));
           break;
 
         default:
