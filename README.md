@@ -1,6 +1,6 @@
 # Decipad
 
-All the things Deci.
+> All the things Deci.
 
 ## Preparation
 
@@ -26,8 +26,6 @@ You will need to have [git](https://git-scm.com) installed on your computer. If 
 
 You will also need to run stuff on the command line. Depending on your system (Windows, Mac, or Linux), you will have different solutions for this. Ask the dev team if you're not sure what to do here.
 
-### After Git or Github Desktop
-
 ## Install
 
 After you're done with the preparation above, you can now choose a folder where you will install Deci. Normally people choose a folder named "dev" or "projects".
@@ -49,6 +47,8 @@ Using the command line, inside your local copy of the decipad repo, you should d
 ```bash
 npm install --legacy-peer-deps
 ```
+
+## Important scripts
 
 ### Running the project
 
@@ -86,24 +86,29 @@ These tests are powered by cypress and are present in apps/client-e2e.
 
 Interesting options are `--headless` (don't show a window) and `--watch` (don't close after running).
 
-### Private deploys and fast client updates
+## Environment setup
+
+There are `.env.example` files in the root and in individual projects like the `backend`. These need to be copied to `.env` (without `.example`) and filled with secret values, such as your personal AWS access token, or other secrets that are shared among developers but not included in the repository for security reasons.
+
+### Amazon SES emails
+
+To receive e-mails from the application (like when signing in through e-mail), verify your e-mail in SES (it's in sandbox mode so it only sends to verified e-mails)
+
+* Go to the AWS web console
+* Search for the SES service and go there
+* If you are offered to switch to "Use the new console" in the menu (and thus are on the "classic console"), do it
+* Click "Verified identities" in the menu
+* Click on the button "Create identity"
+* Choose identity type "Email address"
+* Enter the email address you want to send email to
+* Confirm by clicking "Create identity"
+* You will then receive a verification e-mail with instructions to complete the confirmation
+
+## Private deploys and fast client updates
 
 You can deploy your own private instance by following these instructions:
 
 https://www.loom.com/share/a0b33c1071d343fb8a216ef64ad217ea
-
-## Other stuff
-
-To receive e-mails from the application (like when signing in through e-mail), verify your e-mail in SES (it's in sandbox mode so it only sends to verified e-mails)
-
-    go to the aws web console
-    search for SES service
-    go there
-    click on "Verified identities" in the menu
-    Click on the button "Create identity"
-    Choose "email address"
-    Enter the email address you want your local dev env to send email to
-    You will then receive a verification e-mail with more instructions
 
 ## Sub-package documentation
 
