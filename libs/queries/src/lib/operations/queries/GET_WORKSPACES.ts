@@ -5,7 +5,7 @@ export const GET_WORKSPACES = gql`
     workspaces {
       id
       name
-      pads(page: { maxItems: 10 }) {
+      pads(page: { maxItems: 10000 }) {
         items {
           id
           name
