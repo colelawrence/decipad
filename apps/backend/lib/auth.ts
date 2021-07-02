@@ -67,11 +67,18 @@ function getSessionToken(event: Request): SessionTokenResult {
     event.headers.authorization ||
     event.headers.Authorization;
   if (!token) {
-    token =
+    const protocol =
       event.headers['sec-websocket-protocol'] ||
       event.headers['Sec-WebSocket-Protocol'];
-    if (token) {
-      gotFromSecProtocolHeader = true;
+    if (protocol) {
+      const protocolParts = protocol
+        .split(',')
+        .map((t) => t.trim())
+        .filter((t) => t !== 'graphql-transport-ws');
+      if (protocolParts.length === 1) {
+        token = protocolParts[0];
+        gotFromSecProtocolHeader = true;
+      }
     }
   }
   if (token && token.startsWith('Bearer ')) {

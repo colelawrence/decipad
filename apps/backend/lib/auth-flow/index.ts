@@ -6,15 +6,15 @@ import adaptReqRes from './adapt-req-res';
 import createDbAdapter from './db-adapter';
 import jwt from './jwt';
 import createUser from '../users/create';
+import { auth as authConfig } from '../config';
+
+const {
+  providers: { github: githubConfig },
+  jwt: jwtConfig,
+} = authConfig();
 
 export default function createAuthHandler(): HttpHandler {
-  const providers = [
-    Github({
-      clientId: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    }),
-    Email(),
-  ];
+  const providers = [Github(githubConfig), Email()];
 
   const callbacks = {
     async signIn(
@@ -62,7 +62,7 @@ export default function createAuthHandler(): HttpHandler {
   const options = {
     session: {
       jwt: true,
-      secret: process.env.JWT_SECRET,
+      secret: jwtConfig.secret,
     },
     providers,
     callbacks,

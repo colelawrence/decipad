@@ -1,26 +1,26 @@
 import { SESV2 } from 'aws-sdk';
+import { email as emailConfig } from '../config';
+
+const { ses: sesConfig, senderEmailAddress } = emailConfig();
 
 type SendEmailParams = {
-  to: string
-  body: string
-  subject:string
-}
+  to: string;
+  body: string;
+  subject: string;
+};
 
 const serviceOptions = {
+  ...sesConfig,
   apiVersion: '2019-09-27',
-  accessKeyId: process.env.DECI_SES_ACCESS_KEY_ID,
-  secretAccessKey: process.env.DECI_SES_SECRET_ACCESS_KEY,
-  region: 'eu-west-2',
 };
 
 const service = new SESV2(serviceOptions);
 
-const senderEmailAddress = process.env.DECI_FROM_EMAIL_ADDRESS;
-if (!senderEmailAddress) {
-  throw new Error('Environment variable DECI_FROM_EMAIL_ADDRESS is not defined');
-}
-
-export default function sendEmail({ to, body, subject }: SendEmailParams): Promise<void> {
+export default function sendEmail({
+  to,
+  body,
+  subject,
+}: SendEmailParams): Promise<void> {
   return new Promise((resolve, reject) => {
     const params = {
       Content: {
@@ -51,4 +51,4 @@ export default function sendEmail({ to, body, subject }: SendEmailParams): Promi
       resolve();
     });
   });
-};
+}

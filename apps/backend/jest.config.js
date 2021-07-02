@@ -5,7 +5,7 @@ const config = {
   setupFiles: ['./jest.setup.js'],
   coveragePathIgnorePatterns: ['node_modules', 'src'],
   testTimeout: 10000,
-  maxWorkers: 2,
+  // maxWorkers: 2,
   bail: true,
   // coverageThreshold: {
   //   global: {

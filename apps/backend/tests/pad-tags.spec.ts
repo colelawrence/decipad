@@ -289,8 +289,8 @@ test('pads', () => {
     await waitForExpect(async () => {
       expect(guestTags).toHaveLength(2);
       expect(guestTags).toMatchObject(['tag one', 'tag two']);
-    });
-  }, 15000);
+    }, 30000, 2000);
+  }, 40000);
 
   it('admin removes tag from the pad', async () => {
     const client = withAuth(await auth());
@@ -324,8 +324,8 @@ test('pads', () => {
     await waitForExpect(async () => {
       expect(guestTags).toHaveLength(1);
       expect(guestTags).toMatchObject(['tag two']);
-    });
-  }, 15000);
+    }, 30000, 2000);
+  }, 40000);
 
   it('other user can no longer list the pad under that tag', async () => {
     const client = withAuth(await auth('test user id 2'));
@@ -382,8 +382,8 @@ test('pads', () => {
   it('other user no longer has the tag from subscription', async () => {
     await waitForExpect(async () => {
       expect(guestTags).toHaveLength(0);
-    });
-  }, 15000);
+    }, 30000, 2000);
+  }, 40000);
 
   it('admin has the tag', async () => {
     const client = withAuth(await auth());
@@ -403,8 +403,8 @@ test('pads', () => {
     await waitForExpect(async () => {
       expect(adminTags).toHaveLength(1);
       expect(adminTags).toMatchObject(['tag two']);
-    });
-  }, 15000);
+    }, 30000, 2000);
+  }, 40000);
 
   it('admin gives user access to pad', async () => {
     const client = withAuth(await auth());
@@ -443,7 +443,7 @@ test('pads', () => {
     await waitForExpect(async () => {
       expect(guestTags).toHaveLength(1);
       expect(guestTags).toMatchObject(['tag two']);
-    }, 40000);
+    }, 40000, 2000);
   }, 41000);
 
   it('other user can list pad through tag', async () => {
@@ -491,14 +491,14 @@ test('pads', () => {
         })
       ).data.tags;
       expect(tags).toHaveLength(0);
-    });
+    }, 14000, 5000);
   }, 15000);
 
   it('admin user no longer has tag from subscription', async () => {
     await waitForExpect(async () => {
       expect(adminTags).toHaveLength(0);
-    });
-  }, 15000);
+    }, 30000, 2000);
+  }, 40000);
 
   it('admin can no longer list pad', async () => {
     const client = withAuth(await auth());

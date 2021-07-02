@@ -14,11 +14,12 @@ dotenv.config({
 const workerId = Number(process.env.JEST_WORKER_ID);
 assert(!!workerId, 'need JEST_WORKER_ID env var to be defined');
 
-process.env.DECI_PORT = process.env.PORT = '' + (3333 + workerId * 10);
-process.env.NEXTAUTH_URL = `http://localhost:${process.env.PORT}/api/auth`;
-process.env.ARC_EVENTS_PORT = process.env.DECI_PORT + '1'; // just like Architect does
-process.env.ARC_TABLES_PORT = process.env.DECI_PORT + '2'; // just like Architect does
-process.env.DECI_S3_ENDPOINT = `localhost:${process.env.DECI_PORT + '3'}`;
+const portBase = '' + (3333 + workerId * 100 - Math.ceil(Math.random() * 100));
+process.env.DECI_PORT = process.env.PORT = portBase;
+process.env.NEXTAUTH_URL = `http://localhost:${process.env.portBase}/api/auth`;
+process.env.ARC_EVENTS_PORT = portBase + '1'; // just like Architect does
+process.env.ARC_TABLES_PORT = portBase + '2'; // just like Architect does
+process.env.DECI_S3_ENDPOINT = `localhost:${portBase + '3'}`;
 
 const verbose = !!process.env.DECI_VERBOSE;
 

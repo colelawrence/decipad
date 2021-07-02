@@ -1,14 +1,10 @@
 import NextAuthJWT from 'next-auth/jwt';
+import { auth as authConfig } from '../config';
 
-const maxAge = 30 * 24 * 60 * 60;
+const config = authConfig().jwt;
 
 export default {
-  secret: process.env.JWT_SECRET!,
-  signingKey: Buffer.from(
-    process.env.JWT_SIGNING_PRIVATE_KEY!,
-    'base64'
-  ).toString(),
-  maxAge, // same as session maxAge,
+  ...config,
   encode: NextAuthJWT.encode,
   decode: NextAuthJWT.decode,
 };

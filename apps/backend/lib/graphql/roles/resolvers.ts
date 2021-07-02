@@ -5,6 +5,10 @@ import tables from '../../tables';
 import allPages from '../../tables/all-pages';
 import { check, isAuthorized } from '../authorization';
 import timestamp from '../../utils/timestamp';
+import { auth as authConfig, app as appConfig } from '../../config';
+
+const { urlBase } = appConfig();
+const { inviteExpirationSeconds } = authConfig();
 
 export default {
   Mutation: {
@@ -107,9 +111,7 @@ export default {
         invited_by_user_id: user.id,
         permission,
         parent_resource_uri: workspaceResource,
-        expires_at:
-          timestamp() +
-          Number(process.env.DECI_INVITE_EXPIRATION_SECONDS || 86400),
+        expires_at: timestamp() + inviteExpirationSeconds,
       };
 
       await data.invites.create(newInviteForRole);
@@ -123,16 +125,14 @@ export default {
         role_id: roleId,
         invited_by_user_id: user.id,
         permission,
-        expires_at:
-          timestamp() +
-          Number(process.env.DECI_INVITE_EXPIRATION_SECONDS || 86400),
+        expires_at: timestamp() + inviteExpirationSeconds,
       };
 
       await data.invites.create(newInviteForWorkspace);
 
       const invites = [newInviteForRole, newInviteForWorkspace];
       const inviteIdsForURL = invites.map((i) => i.id).join(',');
-      const inviteAcceptLink = `${process.env.DECI_APP_URL_BASE}/api/invites/${inviteIdsForURL}/accept`;
+      const inviteAcceptLink = `${urlBase}/api/invites/${inviteIdsForURL}/accept`;
 
       await arc.queues.publish({
         name: 'sendemail',

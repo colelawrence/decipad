@@ -3,8 +3,12 @@ import assert from 'assert';
 import { nanoid } from 'nanoid';
 import handle from '../../../queues/handler';
 import timestamp from '../../../utils/timestamp';
+import { auth as authConfig, app as appConfig } from '../../../config';
 
 export const handler = handle(userKeyChangesHandler);
+
+const { userKeyValidationExpirationSeconds } = authConfig();
+const { urlBase } = appConfig();
 
 async function userKeyChangesHandler(event: TableRecordChanges<UserKey>) {
   const { table, action, args } = event;
@@ -35,14 +39,12 @@ async function userKeyChangesHandler(event: TableRecordChanges<UserKey>) {
   const newValidation = {
     id: nanoid(),
     userkey_id: args.id,
-    expires_at:
-      timestamp() +
-      Number(process.env.DECI_KEY_VALIDATION_EXPIRATION_SECONDS || 2592000),
+    expires_at: timestamp() + userKeyValidationExpirationSeconds,
   };
 
   await data.userkeyvalidations.put(newValidation);
 
-  const validationLink = `${process.env.DECI_APP_URL_BASE}/api/userkeyvalidations/${newValidation.id}/validate`;
+  const validationLink = `${urlBase}/api/userkeyvalidations/${newValidation.id}/validate`;
 
   const email = args.id.substring('email:'.length);
 

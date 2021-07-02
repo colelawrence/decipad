@@ -11,7 +11,7 @@ function createLink(webSocketImpl: typeof WebSocket, keepAlive = 0) {
 
   return new ApolloLink((operation) => {
     return new Observable((observer) => {
-      client.subscribe(
+        return client.subscribe(
         { ...operation, query: print(operation.query) },
         {
           next(

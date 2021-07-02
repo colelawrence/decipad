@@ -45,8 +45,8 @@ test('workspaces changes', () => {
       expect(workspaces[0]).toMatchObject({
         name: 'Workspace 1',
       });
-    }, 10000);
-  }, 15000);
+    }, 30000, 2000);
+  }, 40000);
 
   it('notifies you when you remove a workspace', async () => {
     const client = withAuth(await auth());
@@ -60,8 +60,8 @@ test('workspaces changes', () => {
 
     await waitForExpect(() => {
       expect(workspaces).toHaveLength(0);
-    }, 40000);
-  }, 41000);
+    }, 30000, 2000);
+  }, 30000);
 
   it('notifies you when you add a workspace again', async () => {
     const client = withAuth(await auth());
@@ -81,8 +81,8 @@ test('workspaces changes', () => {
       expect(workspaces[0]).toMatchObject({
         name: 'Workspace 2',
       });
-    }, 40000);
-  }, 41000);
+    }, 40000, 2000);
+  }, 50000);
 
   it('notifies you when you update a workspace', async () => {
     const client = withAuth(await auth());
@@ -102,8 +102,8 @@ test('workspaces changes', () => {
       expect(workspaces[0]).toMatchObject({
         name: 'Workspace 2 renamed',
       });
-    }, 40000);
-  }, 41000);
+    }, 40000, 2000);
+  }, 50000);
 
   it('allows admin to create role in workspace', async () => {
     const client = withAuth(await auth());
@@ -156,7 +156,7 @@ test('workspaces changes', () => {
       expect(inviteeWorkspaces[0]).toMatchObject({
         name: 'Workspace 2 renamed',
       });
-    }, 40000);
+    }, 40000, 2000);
   }, 50000);
 
   it('notifies other user when you update a workspace', async () => {
@@ -177,7 +177,7 @@ test('workspaces changes', () => {
       expect(inviteeWorkspaces[0]).toMatchObject({
         name: 'Workspace 2 renamed again',
       });
-    }, 40000);
+    }, 40000, 2000);
   }, 50000);
 
   it('notifies other user when access is revoked', async () => {
@@ -192,11 +192,11 @@ test('workspaces changes', () => {
 
     await waitForExpect(() => {
       expect(inviteeWorkspaces).toHaveLength(0);
-    }, 40000);
+    }, 40000, 2000);
 
     // admin user still has workspace
     expect(workspaces).toHaveLength(1);
-  }, 41000);
+  }, 50000);
 });
 
 async function createClient(userId: string) {
@@ -230,44 +230,44 @@ async function subscribe(
     `,
   });
 
-  subscriptions.push(
-    await sub.subscribe({
-      error(err) {
-        throw err;
-      },
-      complete() {
-        // do nothing
-      },
-      next({ data }) {
-        const changes = data.workspacesChanged;
-        if (changes.added) {
-          for (const w of changes.added) {
-            workspaces.push(w);
-          }
+  const subscription = await sub.subscribe({
+    error(err) {
+      throw err;
+    },
+    complete() {
+      // do nothing
+    },
+    next({ data }) {
+      const changes = data.workspacesChanged;
+      if (changes.added) {
+        for (const w of changes.added) {
+          workspaces.push(w);
         }
+      }
 
-        if (changes.updated) {
-          for (const w of changes.updated) {
-            const index = workspaces.findIndex(
-              (w2: Workspace) => w2.id === w.id
-            );
-            if (index >= 0) {
-              workspaces[index] = Object.assign(workspaces[index], w);
-            }
+      if (changes.updated) {
+        for (const w of changes.updated) {
+          const index = workspaces.findIndex(
+            (w2: Workspace) => w2.id === w.id
+          );
+          if (index >= 0) {
+            workspaces[index] = Object.assign(workspaces[index], w);
           }
         }
+      }
 
-        if (changes.removed) {
-          for (const id of changes.removed) {
-            const index = workspaces.findIndex((w) => id === w.id);
-            if (index >= 0) {
-              workspaces.splice(index, 1);
-            }
+      if (changes.removed) {
+        for (const id of changes.removed) {
+          const index = workspaces.findIndex((w) => id === w.id);
+          if (index >= 0) {
+            workspaces.splice(index, 1);
           }
         }
-      },
-    })
-  );
+      }
+    },
+  });
+
+  subscriptions.push(subscription);
 
   await timeout(2000);
 }

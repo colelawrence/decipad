@@ -65,8 +65,8 @@ test('pad changes', () => {
       expect(pads[0]).toMatchObject({
         name: 'Pad 1',
       });
-    }, 10000);
-  }, 15000);
+    }, 30000, 2000);
+  }, 40000);
 
   it('notifies you when you remove a pad', async () => {
     const client = withAuth(await auth());
@@ -80,8 +80,8 @@ test('pad changes', () => {
 
     await waitForExpect(() => {
       expect(pads).toHaveLength(0);
-    }, 15000);
-  }, 20000);
+    }, 30000, 2000);
+  }, 40000);
 
   it('notifies you when you add a pad again', async () => {
     const client = withAuth(await auth());
@@ -104,8 +104,8 @@ test('pad changes', () => {
       expect(pads[0]).toMatchObject({
         name: 'Pad 2',
       });
-    }, 10000);
-  }, 15000);
+    }, 30000, 2000);
+  }, 40000);
 
   it('notifies you when you update a pad', async () => {
     const client = withAuth(await auth());
@@ -125,8 +125,8 @@ test('pad changes', () => {
       expect(pads[0]).toMatchObject({
         name: 'Pad 2 renamed',
       });
-    }, 10000);
-  }, 15000);
+    }, 30000, 2000);
+  }, 40000);
 
   it('other user can subscribe to pads changes', async () => {
     await subscribe('test user id 2', workspace.id, inviteepads, subscriptions);
@@ -152,8 +152,8 @@ test('pad changes', () => {
       expect(inviteepads[0]).toMatchObject({
         name: 'Pad 2 renamed',
       });
-    }, 10000);
-  }, 15000);
+    }, 30000, 2000);
+  }, 40000);
 
   it('notifies other user when you update a pad', async () => {
     const client = withAuth(await auth());
@@ -173,8 +173,8 @@ test('pad changes', () => {
       expect(inviteepads[0]).toMatchObject({
         name: 'Pad 2 renamed again',
       });
-    }, 10000);
-  }, 15000);
+    }, 30000, 2000);
+  }, 40000);
 
   it('notifies other user when access is revoked', async () => {
     const client = withAuth(await auth());
@@ -188,11 +188,11 @@ test('pad changes', () => {
 
     await waitForExpect(() => {
       expect(inviteepads).toHaveLength(0);
-    }, 10000);
+    }, 30000, 2000);
 
     // admin user still has workspace
     expect(pads).toHaveLength(1);
-  }, 15000);
+  }, 40000);
 
   async function createClient(userId: string) {
     const { token } = await auth(userId);
@@ -260,6 +260,6 @@ test('pad changes', () => {
       })
     );
 
-    await timeout(2000);
+    await timeout(4000);
   }
 });

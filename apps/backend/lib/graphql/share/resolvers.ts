@@ -5,6 +5,10 @@ import { requireUser, check } from '../authorization';
 import createResourcePermission from '../../resource-permissions/create';
 import paginate from '../utils/paginate';
 import timestamp from '../../utils/timestamp';
+import { auth as authConfig, app as appConfig } from '../../config';
+
+const { urlBase } = appConfig();
+const { inviteExpirationSeconds } = authConfig();
 
 const resolvers = {
   Query: {
@@ -222,13 +226,11 @@ const resolvers = {
         permission: permissionType,
         email,
         can_comment: canComment,
-        expires_at:
-          timestamp() +
-          Number(process.env.DECI_INVITE_EXPIRATION_SECONDS || 86400),
+        expires_at: timestamp() + inviteExpirationSeconds,
       };
       await data.invites.create(newInvite);
 
-      const inviteAcceptLink = `${process.env.DECI_APP_URL_BASE}/api/invites/${newInvite.id}/accept`;
+      const inviteAcceptLink = `${urlBase}/api/invites/${newInvite.id}/accept`;
       await arc.queues.publish({
         name: 'sendemail',
         payload: {

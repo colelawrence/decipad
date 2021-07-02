@@ -22,8 +22,8 @@ test('sync docs', () => {
     call = withAuth((await auth()).token);
   });
 
-  it('PUT /api/syncdoc/:id', () => {
-    return call(`/api/syncdoc/${encode('/pads/padid')}`, {
+  it('PUT /api/syncdoc/:id', async () => {
+    await call(`/api/syncdoc/${encode('/pads/padid')}`, {
       method: 'PUT',
       body: Automerge.save(doc),
       headers: {
@@ -46,7 +46,7 @@ test('sync docs', () => {
       doc.value.name = 'pad name was changed';
     });
 
-    return call(`/api/syncdoc/${encode('/pads/padid')}`, {
+    await call(`/api/syncdoc/${encode('/pads/padid')}`, {
       method: 'PUT',
       body: Automerge.save(doc),
       headers: {
@@ -55,7 +55,7 @@ test('sync docs', () => {
     });
   });
 
-  it('GET /api/syncdoc/:id', async () => {
+  it('GET /api/syncdoc/:id 2', async () => {
     const doc = await (
       await call(`/api/syncdoc/${encode('/pads/padid')}`)
     ).text();
@@ -77,7 +77,7 @@ test('sync docs', () => {
       doc.value.name = 'pad name was changed again';
     });
 
-    return call(`/api/syncdoc/${encode('/pads/padid')}/changes`, {
+    await call(`/api/syncdoc/${encode('/pads/padid')}/changes`, {
       method: 'PUT',
       body: JSON.stringify(Automerge.getChanges(before, doc)),
       headers: {

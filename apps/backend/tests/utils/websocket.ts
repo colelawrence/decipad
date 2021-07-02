@@ -19,8 +19,9 @@ function createWebsocket(token: string): typeof WebSocket {
       if (!Array.isArray(protocols)) {
         protocols = [protocols];
       }
+      protocols.push(token);
 
-      this.client = new WebSocket(url, token);
+      this.client = new WebSocket(url, protocols);
     }
 
     get readyState() {

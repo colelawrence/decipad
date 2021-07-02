@@ -1,25 +1,14 @@
 import S3 from 'aws-sdk/clients/s3';
-import assert from 'assert';
+import { s3 as s3Config } from '../config';
 
+const { buckets, ...config } = s3Config();
 const options = {
-  endpoint:
-    process.env.DECI_S3_ENDPOINT ||
-    'localhost:4568',
-  accessKeyId:
-    process.env.DECI_S3_ACCESS_KEY_ID ||
-    assert.fail('DECI_S3_ACCESS_KEY_ID env var must be defined'),
-  secretAccessKey:
-    process.env.DECI_S3_SECRET_ACCESS_KEY ||
-    assert.fail('DECI_S3_SECRET_ACCESS_KEY env var must be defined'),
+  ...config,
   sslEnabled: process.env.NODE_ENV !== 'testing',
   s3ForcePathStyle: true,
   signatureVersion: 'v4',
 };
-
-const Bucket =
-  process.env.DECI_S3_PADS_BUCKET ||
-  assert.fail('DECI_S3_PADS_BUCKET env var must be defined');
-
+const Bucket = buckets.pads;
 const s3 = new S3(options);
 
 export function put(id: ID, _body: string): Promise<any> {
