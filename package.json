@@ -101,7 +101,6 @@
     "eslint-plugin-jsx-a11y": "6.4.1",
     "eslint-plugin-react": "7.24.0",
     "eslint-plugin-react-hooks": "4.2.0",
-    "get-port": "^5.1.1",
     "husky": "^6.0.0",
     "isomorphic-fetch": "^3.0.0",
     "jest": "27.0.3",
@@ -130,7 +129,7 @@
     ],
     "*.{js,jsx,ts,tsx}": [
       "eslint --cache --fix",
-      "jest --passWithNoTests --maxWorkers 1 --testTimeout=10000"
+      "jest --passWithNoTests --testTimeout=10000"
     ]
   },
   "dependencies": {

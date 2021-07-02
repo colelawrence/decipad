@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
-import arc from '@architect/functions';
 import test from './utils/test-with-sandbox';
+import arc from '@architect/functions';
 import { withAuth, withoutAuth, gql } from './utils/call-graphql';
 import { withAuth as callWithAuth } from './utils/call-simple';
 import auth from './utils/auth';
@@ -89,7 +89,7 @@ test('pads', () => {
   beforeAll(async () => {
     const call = callWithAuth((await auth('test user id 2')).token);
     const invitationIds = invitations.map((i) => i.id).join(',');
-    const link = `http://localhost:3333/api/invites/${invitationIds}/accept`;
+    const link = `http://localhost:${process.env.DECI_PORT}/api/invites/${invitationIds}/accept`;
     await call(link);
   });
 
@@ -678,7 +678,7 @@ test('pads', () => {
 
     expect(invites).toHaveLength(1);
     const invite = invites[0];
-    const inviteAcceptLink = `http://localhost:3333/api/invites/${invite.id}/accept`;
+    const inviteAcceptLink = `http://localhost:${process.env.DECI_PORT}/api/invites/${invite.id}/accept`;
 
     const call = callWithAuth((await auth(targetUserId)).token);
     await call(inviteAcceptLink);

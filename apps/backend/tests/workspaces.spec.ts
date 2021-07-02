@@ -194,7 +194,7 @@ test('workspaces', () => {
   it('non-target user cannot accept invitation', async () => {
     const call = callWithAuth((await auth()).token);
     const invitationIds = invitations.map((i) => i.id).join(',');
-    const link = `http://localhost:3333/api/invites/${invitationIds}/accept`;
+    const link = `http://localhost:${process.env.PORT}/api/invites/${invitationIds}/accept`;
 
     await expect(call(link)).rejects.toThrow('Forbidden');
   });
@@ -202,7 +202,7 @@ test('workspaces', () => {
   it('target user can accept invitation', async () => {
     const call = callWithAuth((await auth('test user id 2')).token);
     const invitationIds = invitations.map((i) => i.id).join(',');
-    const link = `http://localhost:3333/api/invites/${invitationIds}/accept`;
+    const link = `http://localhost:${process.env.PORT}/api/invites/${invitationIds}/accept`;
 
     await call(link);
   });
@@ -372,7 +372,7 @@ test('workspaces', () => {
   it('target user can accept the invitation again', async () => {
     const call = callWithAuth((await auth('test user id 2')).token);
     const invitationIds = invitations.map((i) => i.id).join(',');
-    const link = `http://localhost:3333/api/invites/${invitationIds}/accept`;
+    const link = `http://localhost:${process.env.PORT}/api/invites/${invitationIds}/accept`;
 
     await call(link);
   });

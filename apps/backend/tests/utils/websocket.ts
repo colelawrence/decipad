@@ -1,7 +1,5 @@
 import EventEmitter from 'events';
 
-let websocketIndex = 0;
-
 function createWebsocket(token: string): typeof WebSocket {
   class DeciWebsocket extends EventEmitter implements WebSocket {
     static CLOSED = WebSocket.CLOSED;
@@ -15,8 +13,6 @@ function createWebsocket(token: string): typeof WebSocket {
     readonly OPEN = WebSocket.OPEN;
 
     private client: WebSocket;
-
-    private idx = ++websocketIndex;
 
     constructor(url: string, protocols: string[] | string | undefined = []) {
       super();
@@ -41,7 +37,6 @@ function createWebsocket(token: string): typeof WebSocket {
 
     set onclose(callback: (ev: CloseEvent) => any) {
       this.client.onclose = (event: CloseEvent) => {
-        console.log('websocket %d: closed', this.idx);
         this.emit('close');
         return callback(event);
       };

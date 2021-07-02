@@ -77,7 +77,7 @@ test('registration via magic link', () => {
   });
 
   it('can visit that link and get authenticated', async () => {
-    const link = `http://localhost:3333/api/userkeyvalidations/${userKeyValidation.id}/validate?redirect=false`;
+    const link = `http://localhost:${process.env.PORT}/api/userkeyvalidations/${userKeyValidation.id}/validate?redirect=false`;
     const resp = await fetch(link);
     const cookie = resp.headers.get('set-cookie');
     expect(cookie).toMatch('next-auth.session-token=');

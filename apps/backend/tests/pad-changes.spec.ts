@@ -196,7 +196,7 @@ test('pad changes', () => {
 
   async function createClient(userId: string) {
     const { token } = await auth(userId);
-    const link = createWebsocketLink(createDeciWebsocket(token), 120000);
+    const link = createWebsocketLink(createDeciWebsocket(token), 240000);
     return withAuth({ token, link });
   }
 
@@ -231,7 +231,7 @@ test('pad changes', () => {
           throw err;
         },
         complete() {
-          console.error('COMPLETE!');
+          // do nothing
         },
         next({ data }) {
           const changes = data.padsChanged;

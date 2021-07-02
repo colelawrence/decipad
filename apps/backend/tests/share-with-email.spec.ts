@@ -158,7 +158,7 @@ test('share with email', () => {
 
     expect(invites).toHaveLength(1);
     const invite = invites[0];
-    const inviteAcceptLink = `http://localhost:3333/api/invites/${invite.id}/accept`;
+    const inviteAcceptLink = `http://localhost:${process.env.PORT}/api/invites/${invite.id}/accept`;
 
     const call = callWithAuth((await auth(targetUserId)).token);
     await call(inviteAcceptLink);

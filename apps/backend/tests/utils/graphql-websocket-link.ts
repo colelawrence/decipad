@@ -4,7 +4,7 @@ import { createClient } from 'graphql-ws';
 
 function createLink(webSocketImpl: typeof WebSocket, keepAlive = 0) {
   const client = createClient({
-    url: 'ws://localhost:3333/graphql',
+    url: `ws://localhost:${process.env.PORT}/graphql`,
     webSocketImpl,
     keepAlive,
   });
@@ -14,13 +14,22 @@ function createLink(webSocketImpl: typeof WebSocket, keepAlive = 0) {
       client.subscribe(
         { ...operation, query: print(operation.query) },
         {
-          next(payload: FetchResult<{ [key: string]: any; }, Record<string, any>, Record<string, any>>) {
+          next(
+            payload: FetchResult<
+              { [key: string]: any },
+              Record<string, any>,
+              Record<string, any>
+            >
+          ) {
             observer.next(payload);
           },
           complete() {
             observer.complete();
           },
           error(err) {
+            if (!err) {
+              return;
+            }
             console.trace(err);
             if (err instanceof Error) {
               return observer.error(err);

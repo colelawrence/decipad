@@ -1,15 +1,32 @@
 const S3rver = require('s3rver');
+const path = require('path');
+const { nanoid } = require('nanoid');
 
 let s3rver;
+
+const port = Number((process.env.DECI_S3_ENDPOINT || 'localhost:4568').split(':')[1]);
+if (!port) {
+  throw new Error('no S3 server port defined');
+}
+
+let directory = '.s3rver_data';
+const inTesting = !!process.env.JEST_WORKER_ID;
+if (inTesting) {
+  directory = path.join(directory, nanoid());
+}
+
+console.log('s3rver storing data in ' + directory);
+
 const options = {
-  resetOnClose: true,
-  directory: '.s3rver_data',
+  port,
+  directory,
   configureBuckets: [
     {
       name: 'pads',
     }
   ],
   silent: true,
+  resetOnClose: true,
 };
 
 function package({ arc, cloudformation, stage='staging', inventory, createFunction }) {
@@ -19,7 +36,11 @@ function package({ arc, cloudformation, stage='staging', inventory, createFuncti
 
 function start({ arc, inventory, invokeFunction, services }, callback) {
   s3rver = new S3rver(options);
-  s3rver.run(callback);
+  s3rver.run((err) => {
+    setTimeout(() => {
+      callback(err);
+    }, 2000);
+  });
 }
 
 function end({ arc, inventory, services }, callback) {

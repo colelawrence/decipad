@@ -4,7 +4,7 @@ import assert from 'assert';
 const options = {
   endpoint:
     process.env.DECI_S3_ENDPOINT ||
-    assert.fail('DECI_S3_ENDPOINT env var must be defined'),
+    'localhost:4568',
   accessKeyId:
     process.env.DECI_S3_ACCESS_KEY_ID ||
     assert.fail('DECI_S3_ACCESS_KEY_ID env var must be defined'),

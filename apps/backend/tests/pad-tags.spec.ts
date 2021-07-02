@@ -96,7 +96,7 @@ test('pads', () => {
   beforeAll(async () => {
     const call = callWithAuth((await auth('test user id 2')).token);
     const invitationIds = invitations.map((i) => i.id).join(',');
-    const link = `http://localhost:3333/api/invites/${invitationIds}/accept`;
+    const link = `http://localhost:${process.env.PORT}/api/invites/${invitationIds}/accept`;
     await call(link);
   });
 
@@ -443,8 +443,8 @@ test('pads', () => {
     await waitForExpect(async () => {
       expect(guestTags).toHaveLength(1);
       expect(guestTags).toMatchObject(['tag two']);
-    }, 30000);
-  }, 31000);
+    }, 40000);
+  }, 41000);
 
   it('other user can list pad through tag', async () => {
     const client = withAuth(await auth('test user id 2'));
@@ -550,7 +550,7 @@ async function subscribe(
         throw err;
       },
       complete() {
-        console.error('COMPLETE!');
+        // do nothing
       },
       next({ data }) {
         const changes = data.tagsChanged;

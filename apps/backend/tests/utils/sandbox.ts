@@ -1,9 +1,26 @@
-'use strict';
-
 import { spawn, ChildProcess } from 'child_process';
+import assert from 'assert';
+import dotenv from 'dotenv';
+import { join } from 'path';
+
 let child: ChildProcess | undefined;
 let started = false;
 let stoppedResolve: (code: number | null) => void;
+
+dotenv.config({
+  path: join(__dirname, '..', '..', '.env'),
+});
+
+const workerId = Number(process.env.JEST_WORKER_ID);
+assert(!!workerId, 'need JEST_WORKER_ID env var to be defined');
+
+process.env.DECI_PORT = process.env.PORT = '' + (3333 + workerId * 10);
+process.env.NEXTAUTH_URL = `http://localhost:${process.env.PORT}/api/auth`;
+process.env.ARC_EVENTS_PORT = process.env.DECI_PORT + '1'; // just like Architect does
+process.env.ARC_TABLES_PORT = process.env.DECI_PORT + '2'; // just like Architect does
+process.env.DECI_S3_ENDPOINT = `localhost:${process.env.DECI_PORT + '3'}`;
+
+const verbose = !!process.env.DECI_VERBOSE;
 
 function start(): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -11,7 +28,18 @@ function start(): Promise<void> {
       throw new Error('already started');
     }
 
-    child = spawn('./node_modules/.bin/arc', ['sandbox'], { stdio: 'pipe' });
+    child = spawn(
+      './node_modules/.bin/arc',
+      [
+        'sandbox',
+        '--disable-symlinks',
+        '--no-hydrate',
+        '--confirm',
+        '--port',
+        process.env.PORT!,
+      ],
+      { stdio: 'pipe', env: process.env }
+    );
 
     child.once('exit', (code) => {
       started = false;
@@ -39,7 +67,8 @@ function start(): Promise<void> {
           started = true;
           resolve();
         }
-      } else {
+      }
+      if (verbose || started) {
         const dstr = d.toString();
         let statement = dstr.trim();
         if (statement) {
@@ -47,14 +76,16 @@ function start(): Promise<void> {
             statement += '\n';
           }
           if (
-            !statement.includes('Sandbox ws/connect') &&
-            !statement.includes('Sandbox ws/default') &&
-            !statement.includes('Sandbox ws/disconnect') &&
-            !statement.endsWith('completed\n') &&
-            !statement.endsWith('received event\n')
+            verbose ||
+            (!statement.includes('ws/connect') &&
+              !statement.includes('ws/default') &&
+              !statement.includes('ws/disconnect') &&
+              !statement.includes('completed') &&
+              !statement.includes('received event') &&
+              !statement.includes('startup scripts ran'))
           ) {
             process.stdout.write(
-              `Sandbox: [${new Date().toISOString()}] ${statement}`
+              `Sandbox ${workerId}: [${new Date().toISOString()}] ${statement}`
             );
           }
         }
@@ -69,7 +100,7 @@ function start(): Promise<void> {
 
 function stop(code: number | undefined) {
   if (!child) {
-    throw new Error("hasn't started yet");
+    return Promise.resolve();
   }
   const stoppedPromise = new Promise((resolve) => {
     stoppedResolve = resolve;

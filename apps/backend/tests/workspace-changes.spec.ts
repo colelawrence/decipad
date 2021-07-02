@@ -60,8 +60,8 @@ test('workspaces changes', () => {
 
     await waitForExpect(() => {
       expect(workspaces).toHaveLength(0);
-    }, 15000);
-  }, 20000);
+    }, 40000);
+  }, 41000);
 
   it('notifies you when you add a workspace again', async () => {
     const client = withAuth(await auth());
@@ -81,8 +81,8 @@ test('workspaces changes', () => {
       expect(workspaces[0]).toMatchObject({
         name: 'Workspace 2',
       });
-    }, 10000);
-  }, 15000);
+    }, 40000);
+  }, 41000);
 
   it('notifies you when you update a workspace', async () => {
     const client = withAuth(await auth());
@@ -102,8 +102,8 @@ test('workspaces changes', () => {
       expect(workspaces[0]).toMatchObject({
         name: 'Workspace 2 renamed',
       });
-    }, 10000);
-  }, 15000);
+    }, 40000);
+  }, 41000);
 
   it('allows admin to create role in workspace', async () => {
     const client = withAuth(await auth());
@@ -147,7 +147,7 @@ test('workspaces changes', () => {
 
   it('allows receiving user to accept invitation for role', async () => {
     const invitesForUrl = invites.map((i) => i.id).join(',');
-    const inviteAcceptLink = `http://localhost:3333/api/invites/${invitesForUrl}/accept`;
+    const inviteAcceptLink = `http://localhost:${process.env.PORT}/api/invites/${invitesForUrl}/accept`;
     const call = callSimpleWithAuth((await auth('test user id 2')).token);
     await call(inviteAcceptLink);
 
@@ -156,8 +156,8 @@ test('workspaces changes', () => {
       expect(inviteeWorkspaces[0]).toMatchObject({
         name: 'Workspace 2 renamed',
       });
-    }, 10000);
-  }, 15000);
+    }, 40000);
+  }, 50000);
 
   it('notifies other user when you update a workspace', async () => {
     const client = withAuth(await auth());
@@ -177,8 +177,8 @@ test('workspaces changes', () => {
       expect(inviteeWorkspaces[0]).toMatchObject({
         name: 'Workspace 2 renamed again',
       });
-    }, 10000);
-  }, 15000);
+    }, 40000);
+  }, 50000);
 
   it('notifies other user when access is revoked', async () => {
     const client = withAuth(await auth());
@@ -192,17 +192,17 @@ test('workspaces changes', () => {
 
     await waitForExpect(() => {
       expect(inviteeWorkspaces).toHaveLength(0);
-    }, 10000);
+    }, 40000);
 
     // admin user still has workspace
     expect(workspaces).toHaveLength(1);
-  }, 15000);
+  }, 41000);
 });
 
 async function createClient(userId: string) {
   const { token } = await auth(userId);
   const websocket = createDeciWebsocket(token);
-  const link = createWebsocketLink(websocket, 120000);
+  const link = createWebsocketLink(websocket, 240000);
   return withAuth({ token, link });
 }
 
@@ -236,7 +236,7 @@ async function subscribe(
         throw err;
       },
       complete() {
-        console.error('COMPLETE!');
+        // do nothing
       },
       next({ data }) {
         const changes = data.workspacesChanged;
@@ -251,16 +251,18 @@ async function subscribe(
             const index = workspaces.findIndex(
               (w2: Workspace) => w2.id === w.id
             );
-            expect(index).toBeGreaterThan(-1);
-            workspaces[index] = Object.assign(workspaces[index], w);
+            if (index >= 0) {
+              workspaces[index] = Object.assign(workspaces[index], w);
+            }
           }
         }
 
         if (changes.removed) {
           for (const id of changes.removed) {
             const index = workspaces.findIndex((w) => id === w.id);
-            expect(index).toBeGreaterThan(-1);
-            workspaces.splice(index, 1);
+            if (index >= 0) {
+              workspaces.splice(index, 1);
+            }
           }
         }
       },

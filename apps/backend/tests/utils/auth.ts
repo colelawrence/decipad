@@ -1,14 +1,12 @@
-'use strict';
-
-import arc from '@architect/functions';
 import assert from 'assert';
 import NextAuthJWT from 'next-auth/jwt';
+import arc from '@architect/functions';
 
 async function auth(userId = 'test user id 1') {
   const { encode: encodeJWT } = NextAuthJWT;
 
   const data = await arc.tables();
-  const user = await data.users.get({ id: userId }) as UserWithSecret;
+  const user = await data.users.get({ id: userId });
 
   assert(user, `no user with id ${userId} found`);
   assert(user.secret, `no user secret for user with id ${userId} found`);
