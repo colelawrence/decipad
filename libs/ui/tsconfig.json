@@ -1,28 +1,9 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "lib": ["esnext", "dom"],
     "jsx": "react"
   },
-  "files": [
-    "../../node_modules/@nrwl/react/typings/cssmodule.d.ts",
-    "../../node_modules/@nrwl/react/typings/image.d.ts"
-  ],
-  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"],
-  "references": [
-    {
-      "path": "../language"
-    },
-    {
-      "path": "../runtime"
-    },
-    {
-      "path": "./.storybook/tsconfig.json"
-    }
-  ],
-  "exclude": [
-    "**/*.stories.ts",
-    "**/*.stories.js",
-    "**/*.stories.jsx",
-    "**/*.stories.tsx"
-  ]
+  "include": ["src"],
+  "references": [{ "path": "../language" }, { "path": "../runtime" }]
 }

@@ -1,16 +1,3 @@
 {
-  "presets": ["@nrwl/next/babel"],
-  "plugins": [
-    ["@babel/plugin-proposal-decorators", { "legacy": true }],
-    [
-      "@babel/plugin-transform-runtime",
-      {
-        "absoluteRuntime": false,
-        "corejs": false,
-        "helpers": true,
-        "regenerator": true,
-        "version": "7.13.10"
-      }
-    ]
-  ]
+  "presets": ["@nrwl/next/babel"]
 }

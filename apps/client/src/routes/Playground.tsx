@@ -10,7 +10,7 @@ import {
 import { AnonymousRuntimeProvider, DeciEditor } from '@decipad/editor';
 import { HelpButton } from '@decipad/ui';
 import { nanoid } from 'nanoid';
-import React, { useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
 
 export function Playground() {

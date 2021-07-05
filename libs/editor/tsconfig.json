@@ -1,9 +1,9 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "files": [
-    "../../node_modules/@nrwl/react/typings/cssmodule.d.ts",
-    "../../node_modules/@nrwl/react/typings/image.d.ts"
-  ],
-  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"],
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["esnext", "dom"],
+    "jsx": "react"
+  },
+  "include": ["src"],
   "references": [{ "path": "../runtime" }, { "path": "../ui" }]
 }

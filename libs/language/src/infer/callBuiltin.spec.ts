@@ -29,6 +29,7 @@ const second: AST.Unit = {
   end: nilPos,
 };
 
+// @ts-expect-error testNode type not specific enough TODO fix
 const testFunctor = callBuiltin.bind(null, testNode);
 
 describe('callBuiltin', () => {
@@ -136,8 +137,8 @@ const typeDimTests: Record<string, Test> = {
         '>',
         build({ type: 'number', unit: [meter] }),
         build2({ type: 'number', unit: [second] })
-      ).errorCause.spec.expectedUnit
-    ).toEqual([[meter], [second]]);
+      ).errorCause!.spec
+    ).toHaveProperty('expectedUnit', [[meter], [second]]);
 
     expect(
       testFunctor('>', n, build2({ type: 'number', unit: [meter] })).errorCause

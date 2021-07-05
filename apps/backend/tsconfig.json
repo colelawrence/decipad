@@ -1,10 +1,8 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "include": ["types/**/*.ts", "lib/**/*.ts", "tests/**/*.ts"],
-  "references": [{ "path": "../../libs/kafka-lite" }],
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "rootDir": "."
+    "lib": ["esnext", "dom"]
   },
-  "exclude": ["node_modules", "src/coverage"],
-  "allowJs": false
+  "include": ["lib", "tests", "types"],
+  "references": [{ "path": "../../libs/kafka-lite" }]
 }

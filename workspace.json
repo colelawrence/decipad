@@ -40,7 +40,7 @@
         "typecheck": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "yarn tsc -b libs/language --incremental"
+            "command": "yarn tsc -b libs/language"
           }
         }
       }
@@ -67,7 +67,7 @@
         "typecheck": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "yarn tsc -b libs/runtime --incremental"
+            "command": "yarn tsc -b libs/runtime"
           }
         }
       }
@@ -125,7 +125,7 @@
         "typecheck": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "yarn tsc -b apps/client --incremental"
+            "command": "yarn tsc -b apps/client"
           }
         }
       }
@@ -151,7 +151,7 @@
         "typecheck": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "yarn tsc -b apps/client-e2e --incremental"
+            "command": "yarn tsc -b apps/client-e2e"
           }
         }
       }
@@ -178,7 +178,7 @@
         "typecheck": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "yarn tsc -b libs/ui --incremental"
+            "command": "yarn tsc -b libs/ui"
           }
         },
         "storybook": {
@@ -236,7 +236,7 @@
         "typecheck": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "yarn tsc -b libs/editor --incremental"
+            "command": "yarn tsc -b libs/editor"
           }
         }
       }
@@ -266,7 +266,7 @@
         "typecheck": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "yarn tsc -b apps/backend --incremental"
+            "command": "yarn tsc -b apps/backend"
           }
         },
         "test": {

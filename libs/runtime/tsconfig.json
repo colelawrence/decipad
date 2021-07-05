@@ -1,5 +1,9 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "include": ["**/*.d.ts", "**/*.ts", "**/*.js"],
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["esnext", "dom"],
+    "allowJs": true
+  },
+  "include": ["src", "types"],
   "references": [{ "path": "../language" }]
 }

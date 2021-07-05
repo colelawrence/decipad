@@ -368,4 +368,5 @@ interface Replica<T> {
   beforeRemoteChanges: (() => void) | null;
 }
 
-export { createReplica, Replica };
+export { createReplica };
+export type { Replica };

@@ -9,7 +9,7 @@ const grammar = nearley.Grammar.fromCompiled(compiledGrammar);
 class BlockParser {
   parser: nearley.Parser;
   chunks: string[] = [];
-  sourceDecorator: (node: ParserNode) => AST.Node;
+  sourceDecorator?: (node: ParserNode) => AST.Node;
 
   constructor() {
     this.parser = new nearley.Parser(grammar);

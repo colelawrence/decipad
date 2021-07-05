@@ -10,6 +10,9 @@ export class Realm {
   stack = new Stack<Value>();
   functions = new Map<string, AST.FunctionDefinition>();
   previousValue: Value | null = null;
+  fetch: ExternalData.FetchFunction;
 
-  constructor(public fetch: ExternalData.FetchFunction = defaultFetch) {}
+  constructor(fetch = defaultFetch) {
+    this.fetch = fetch;
+  }
 }

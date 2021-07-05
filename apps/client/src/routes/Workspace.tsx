@@ -21,7 +21,6 @@ import {
   REMOVE_PAD,
 } from '@decipad/queries';
 import { HelpButton, LoadingSpinnerPage } from '@decipad/ui';
-import React from 'react';
 import { FiFile, FiTrash2 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { SideMenu } from '../components/SideMenu';

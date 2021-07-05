@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { Button, Collapse, Heading, Input, Text } from '@chakra-ui/react';
 import {

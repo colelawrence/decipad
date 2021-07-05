@@ -16,7 +16,7 @@ import {
   GET_WORKSPACES,
   Workspaces,
 } from '@decipad/queries';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { FiChevronDown, FiFolder } from 'react-icons/fi';
 import { useHistory } from 'react-router-dom';
 import { NewWorkspaceOption } from './NewWorkspaceOption';

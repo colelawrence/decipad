@@ -1,14 +1,12 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "lib": ["esnext", "dom"],
     "jsx": "preserve",
-    "types": ["node", "jest"],
-    "strict": false,
-    "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
-    "noEmit": true
+    "noEmit": false
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "next-env.d.ts"],
+  "include": ["src"],
+  "exclude": [],
   "references": [
     {
       "path": "../../libs/editor"

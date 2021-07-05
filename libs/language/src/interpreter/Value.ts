@@ -21,10 +21,12 @@ export class Scalar implements SimpleValue {
 
   value: number | boolean | string;
 
+  constructor(value: Scalar['value']) {
+    this.value = value;
+  }
+
   static fromValue(value: number | boolean | string): Scalar {
-    const ret = new Scalar();
-    ret.value = value;
-    return ret;
+    return new Scalar(value);
   }
 
   getData(): Interpreter.ResultScalar {
@@ -38,15 +40,17 @@ export class Date implements SimpleValue {
   specificity: Time.Specificity = 'time';
   timeRange: Range;
 
+  constructor(timeRange: Date['timeRange']) {
+    this.timeRange = timeRange;
+  }
+
   static fromDateAndSpecificity(
     date: number,
     specificity: Time.Specificity
   ): Date {
     const [start, end] = cleanDate(date, specificity);
-    const d = new Date();
-    d.timeRange = Range.fromBounds(
-      Scalar.fromValue(start),
-      Scalar.fromValue(end)
+    const d = new Date(
+      Range.fromBounds(Scalar.fromValue(start), Scalar.fromValue(end))
     );
     d.specificity = specificity;
     return d;
@@ -62,10 +66,12 @@ export class TimeQuantity implements SimpleValue {
 
   timeUnits: Map<Time.Unit, number>;
 
+  constructor(timeUnits: TimeQuantity['timeUnits']) {
+    this.timeUnits = timeUnits;
+  }
+
   static fromASTArgs(args: AST.TimeQuantity['args']): TimeQuantity {
-    const tq = new TimeQuantity();
-    tq.timeUnits = new Map(pairwise<Time.Unit, number>(args));
-    return tq;
+    return new TimeQuantity(new Map(pairwise<Time.Unit, number>(args)));
   }
 
   getData() {
@@ -79,6 +85,11 @@ export class Range implements SimpleValue {
   start: Scalar;
   end: Scalar;
 
+  constructor({ start, end }: Pick<Range, 'start' | 'end'>) {
+    this.start = start;
+    this.end = end;
+  }
+
   static fromBounds(start: Value, end: Value): Range {
     if (start instanceof Date && end instanceof Date) {
       const startStart = start.timeRange.getData()[0];
@@ -89,12 +100,7 @@ export class Range implements SimpleValue {
         Scalar.fromValue(endEnd)
       );
     } else if (start instanceof Scalar && end instanceof Scalar) {
-      const range = new Range();
-
-      range.start = start;
-      range.end = end;
-
-      return range;
+      return new Range({ start, end });
     } else {
       throw new Error(
         `panic: bad Range.fromBounds arguments ${start.constructor.name} and ${end.constructor.name}`
@@ -111,10 +117,12 @@ export class Column implements SimpleValue {
   values: SimpleValue[];
   valueNames: string[] | null = null;
 
+  constructor(values: Column['values']) {
+    this.values = values;
+  }
+
   static fromValues(values: SimpleValue[]): Column {
-    const column = new Column();
-    column.values = values;
-    return column;
+    return new Column(values);
   }
 
   static fromNamedValues(values: SimpleValue[], names: string[]): Column {

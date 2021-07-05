@@ -42,6 +42,7 @@ function specToString(spec: ErrSpec) {
 }
 
 export class InferError {
+  // @ts-expect-error might be uninitialized, TODO fix
   spec: ErrSpec;
 
   constructor(message?: string) {

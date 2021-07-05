@@ -1,27 +1,51 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
-    "module": "commonjs",
-    "skipLibCheck": true,
-    "emitDeclarationOnly": true,
+    "rootDir": ".",
+    "baseUrl": ".",
+    "outDir": "dist",
+
     "composite": true,
-    "esModuleInterop": true
+    "incremental": true,
+
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
+    "target": "es2015",
+
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "lib": ["esnext"],
+
+    "allowJs": false,
+    "isolatedModules": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+
+    "noErrorTruncation": true,
+
+    "paths": {
+      "@decipad/runtime": ["libs/runtime/src/index.ts"],
+      "@decipad/language": ["libs/language/src/index.ts"],
+      "@decipad/ui": ["libs/ui/src/index.ts"],
+      "@decipad/editor": ["libs/editor/src/index.tsx"],
+      "@decipad/kafka-lite": ["libs/kafka-lite/src/index.ts"],
+      "test-utils": ["libs/ui/src/lib/utils/test-utils.tsx"],
+      "@decipad/queries": ["libs/queries/src/index.ts"]
+    }
   },
-  "include": [],
-  "exclude": ["node_modules"],
   "files": [],
-  "references": [
-    { "path": "./libs/language" },
-    { "path": "./libs/ui" },
-    { "path": "./libs/kafka-lite" },
-    { "path": "./libs/runtime" },
-    { "path": "./libs/editor" },
-    { "path": "./apps/client" },
-    { "path": "./apps/backend" }
-  ],
-  "paths": {
-    "@decipad/language": ["libs/language/src/index.ts"],
-    "@decipad/ui": ["libs/ui/src/index.ts"],
-    "@decipad/runtime": ["libs/runtime/src/index.ts"],
-    "@decipad/editor": ["libs/editor/src/index.tsx"]
-  }
+  "include": []
 }

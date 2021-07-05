@@ -12,7 +12,6 @@ import { Integrations } from '@sentry/tracing';
 import { createBrowserHistory } from 'history';
 import { Provider as AuthProvider, useSession } from 'next-auth/client';
 import Head from 'next/head';
-import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { ToastProvider } from 'react-toast-notifications';
 import { GlobalErrorHandler } from '../components/GlobalErrorHandler';

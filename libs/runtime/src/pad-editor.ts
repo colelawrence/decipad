@@ -111,7 +111,7 @@ class PadEditor {
         if (index >= 0) {
           this.pendingApplySlateOpIds.splice(index, 1);
           if (this.pendingApplySlateOpIds.length === 0) {
-            this.pendingApplyResolve!.call(null);
+            this.pendingApplyResolve!.call(null, undefined);
           }
         }
       }

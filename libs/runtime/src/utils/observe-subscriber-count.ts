@@ -1,10 +1,4 @@
-import {
-  Observable,
-  BehaviorSubject,
-  Subject,
-  Observer,
-  Subscription,
-} from 'rxjs';
+import { Observable, BehaviorSubject, Subject, Subscription } from 'rxjs';
 
 /* eslint-disable @typescript-eslint/no-empty-function */
 export function observeSubscriberCount<T>(
@@ -14,15 +8,13 @@ export function observeSubscriberCount<T>(
   const subscriptionCountObservable = new BehaviorSubject<number>(0);
 
   const subscribe = observable.subscribe;
-  observable.subscribe = (observer: any) => {
+  observable.subscribe = (...args) => {
     subscriptionCountObservable.next(
       subscriptionCountObservable.getValue() + 1
     );
 
-    const subscription = subscribe.call(
-      observable,
-      observer as Partial<Observer<T>> | ((value: T) => void)
-    );
+    // @ts-expect-error re-applying args hard to type
+    const subscription = subscribe.apply(observable, args);
     const unsubscribe = subscription.unsubscribe;
     let unsubscribed = false;
     subscription.unsubscribe = () => {

@@ -197,7 +197,7 @@ export const getDefined = <T>(
 };
 
 type ClassOf<T> = {
-  new (...x: unknown[]): T;
+  new (...x: any[]): T;
 };
 
 export const getInstanceof = <T>(

@@ -36,45 +36,45 @@ function createWebsocket(token: string): typeof WebSocket {
       return this.client.send(data);
     }
 
-    set onclose(callback: (ev: CloseEvent) => any) {
+    set onclose(callback: null | ((ev: CloseEvent) => any)) {
       this.client.onclose = (event: CloseEvent) => {
         this.emit('close');
-        return callback(event);
+        return callback?.(event);
       };
     }
 
     get onclose() {
-      return this.client?.onclose?.bind(this);
+      return this.client.onclose?.bind(this) ?? null;
     }
 
-    set onerror(callback: (ev: Event) => any) {
+    set onerror(callback: null | ((ev: Event) => any)) {
       this.client.onerror = (ev: Event) => {
-        return callback(ev);
+        return callback?.(ev);
       };
     }
 
     get onerror() {
-      return this.client.onerror?.bind(this);
+      return this.client.onerror?.bind(this) ?? null;
     }
 
-    set onmessage(callback: (ev: MessageEvent<any>) => any) {
+    set onmessage(callback: null | ((ev: MessageEvent<any>) => any)) {
       this.client.onmessage = (ev: MessageEvent<any>) => {
-        return callback(ev);
+        return callback?.(ev);
       };
     }
 
     get onmessage() {
-      return this.client.onmessage?.bind(this);
+      return this.client.onmessage?.bind(this) ?? null;
     }
 
-    set onopen(callback: (ev: Event) => any) {
+    set onopen(callback: null | ((ev: Event) => any)) {
       this.client.onopen = (ev: Event) => {
-        return callback(ev);
+        return callback?.(ev);
       };
     }
 
     get onopen() {
-      return this.client.onopen?.bind(this);
+      return this.client.onopen?.bind(this) ?? null;
     }
 
     addEventListener(event: string, listener: (ev: Event) => any) {
