@@ -1,4 +1,5 @@
 import nearley from 'nearley';
+
 import { n } from '../utils';
 import { compiledGrammar } from '../grammar';
 import { ParserNode } from './types';
@@ -37,27 +38,35 @@ class BlockParser {
   }
 }
 
-function parseBlock(block: Parser.UnparsedBlock): Parser.ParsedBlock {
-  const parser = new BlockParser();
-  parser.feed(block.source.trimEnd());
-  parser.finish();
-  const result: Parser.ParsedBlock = {
-    id: block.id,
-    solutions: parser.solutions,
-    errors: [],
-  };
-  return result;
+export function parseBlock({
+  source,
+  id,
+}: Parser.UnparsedBlock): Parser.ParsedBlock {
+  const ensureId = (block: AST.Block) => ({ ...block, id });
+
+  if (source.trim() === '') {
+    return {
+      id,
+      solutions: [ensureId(n('block'))],
+      errors: [],
+    };
+  } else {
+    const parser = new BlockParser();
+    parser.feed(source.trimEnd());
+    parser.finish();
+
+    return {
+      id,
+      solutions: parser.solutions.map((block) => ensureId(block)),
+      errors: [],
+    };
+  }
 }
 
 export function parse(blocks: Parser.UnparsedBlock[]): Parser.ParsedBlock[] {
   return blocks.map((block) => {
     try {
-      if (block.source.trim() === '') {
-        const nilBlock = n('block');
-        return { id: block.id, solutions: [nilBlock], errors: [] };
-      } else {
-        return parseBlock(block);
-      }
+      return parseBlock(block);
     } catch (err) {
       return {
         id: block.id,

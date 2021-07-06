@@ -6,7 +6,6 @@ export async function inferData(
   data: TabularData,
   ctx: Context
 ): Promise<Type> {
-  ctx.inTable = true;
   const tableType = await ctx.stack.withPush(() => {
     const columnDefs: Type[] = [];
     const columnNames = data.columnNames;
@@ -30,7 +29,6 @@ export async function inferData(
 
     return Type.buildTuple(columnDefs, columnNames);
   });
-  ctx.inTable = false;
 
   return tableType;
 }

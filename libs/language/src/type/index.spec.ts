@@ -279,6 +279,10 @@ describe('new columns and tuples', () => {
         Type.buildColumn(Type.String, 1),
       ])
     );
+
+    expect(Type.buildListLike([]).errorCause).toEqual(
+      InferError.unexpectedEmptyColumn()
+    );
   });
 });
 

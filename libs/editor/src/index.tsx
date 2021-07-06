@@ -76,7 +76,7 @@ export const DeciEditor = ({
     (newValue: Node[]) => {
       onChangeDashCommands(editor);
       onChangeMention(editor);
-      onChangeLanguage();
+      onChangeLanguage(newValue);
       setValue(newValue);
     },
     [editor, onChangeDashCommands, onChangeMention, onChangeLanguage, setValue]

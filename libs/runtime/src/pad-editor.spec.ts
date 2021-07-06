@@ -1,5 +1,5 @@
 import { DeciRuntime } from './';
-import { createEditor, Node } from 'slate';
+import { createEditor } from 'slate';
 import { timeout } from './utils/timeout';
 
 const docId = 'docid';
@@ -68,120 +68,6 @@ describe('pad editor', () => {
         ],
       },
     ]);
-
-    model.stop();
-    deci.stop();
-  });
-
-  it('runs code', async () => {
-    const deci = new DeciRuntime({
-      userId: 'TEST_USER_ID',
-      actorId: 'TEST_ACTOR_ID',
-    });
-    const model = deci.startPadEditor(docId);
-
-    const editor = createEditor();
-
-    editor.onChange = () => {
-      const ops = editor.operations;
-      if (ops && ops.length) {
-        model.sendSlateOperations(ops);
-      }
-    };
-
-    editor.children = model.getValue() as Sync.Node[];
-
-    editor.apply({
-      type: 'insert_node',
-      path: [0, 0],
-      node: {
-        type: 'code_block',
-        id: 'code block 1',
-        children: [
-          {
-            text: 'a = 10 apples\nb = 20 apples\na + b',
-          },
-        ],
-      } as Node,
-    });
-
-    await timeout(100);
-
-    const result = await model.resultAt('code block 1', 3);
-    expect(result.errors).toHaveLength(0);
-    expect(result.type?.type).toEqual('number');
-    expect(result.type?.unit).toMatchObject([
-      {
-        exp: 1,
-        multiplier: 1,
-        known: false,
-        unit: 'apples',
-      },
-    ]);
-    expect(result.value).toEqual([30]);
-
-    const result2 = await model.resultAt('code block 1', 2);
-    expect(result.errors).toHaveLength(0);
-    expect(result2.type?.type).toEqual('number');
-    expect(result2.type?.unit).toMatchObject([
-      {
-        exp: 1,
-        multiplier: 1,
-        known: false,
-        unit: 'apples',
-      },
-    ]);
-    expect(result2.value).toEqual([20]);
-
-    model.stop();
-    deci.stop();
-  });
-
-  it('handles syntax errors appropriately', async () => {
-    const deci = new DeciRuntime({
-      userId: 'TEST_USER_ID',
-      actorId: 'TEST_ACTOR_ID',
-    });
-    const model = deci.startPadEditor('some other doc id');
-
-    const editor = createEditor();
-
-    editor.onChange = () => {
-      const ops = editor.operations;
-      if (ops && ops.length) {
-        model.sendSlateOperations(ops);
-      }
-    };
-
-    editor.children = model.getValue() as Sync.Node[];
-
-    editor.apply({
-      type: 'insert_node',
-      path: [0, 0],
-      node: {
-        type: 'code_block',
-        id: 'code block 1',
-        children: [
-          {
-            text: 'a = 10 apples\n b = b[)21$q',
-          },
-        ],
-      } as Node,
-    });
-
-    await timeout(100);
-
-    const result = await model.resultAt('code block 1', 3);
-    expect(result.type).toBeNull();
-    expect(result.value).toBeNull();
-    expect(result.errors).toHaveLength(1);
-
-    const error = result.errors[0];
-    expect(error).toMatchObject({
-      lineNumber: 2,
-      columnNumber: 7,
-      message: 'Error',
-    });
 
     model.stop();
     deci.stop();

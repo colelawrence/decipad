@@ -26,6 +26,8 @@ export function n<K extends AST.Node['type'], N extends AST.TypeToNode[K]>(
   return node;
 }
 
+export const block = (...contents: AST.Statement[]) => n('block', ...contents);
+
 type LitType = number | string | boolean;
 export function l(value: LitType, ...units: AST.Unit[]): AST.Literal {
   const unitArg = units.length > 0 ? units : null;
@@ -93,6 +95,9 @@ export function tableDef(
 ): AST.Assign {
   return n('assign', n('def', name), table(columns));
 }
+
+export const assign = (name: string, value: AST.Expression) =>
+  n('assign', n('def', name), value);
 
 export function c(fName: string, ...args: AST.Expression[]) {
   return n('function-call', n('funcref', fName), n('argument-list', ...args));

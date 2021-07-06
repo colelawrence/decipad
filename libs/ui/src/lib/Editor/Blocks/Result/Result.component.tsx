@@ -1,9 +1,11 @@
 import { chakra } from '@chakra-ui/system';
 import { Box, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
-import { Type } from '@decipad/language';
+import { Type, InBlockResult } from '@decipad/language';
 import React, { ReactNode } from 'react';
 import { format as dateFormat, formatISO as formatDateISO } from 'date-fns';
 import { FiCalendar, FiHash, FiType, FiHelpCircle } from 'react-icons/fi';
+import { useResults } from '../../../Contexts';
+import { ValueLocation } from 'libs/language/src/computer/types';
 
 const commonStyles = {
   py: 2,
@@ -140,27 +142,51 @@ const ResultContent = (props: ResultContentProps) => {
   }
 };
 
+const getLineResult = (
+  cursor: ValueLocation | null,
+  results: InBlockResult[]
+) => {
+  let underCursor = null;
+
+  if (cursor != null) {
+    underCursor = results.find(
+      ({ blockId, statementIndex }) =>
+        blockId === cursor[0] && statementIndex === cursor[1]
+    );
+  }
+
+  return underCursor ?? results[results.length - 1];
+};
+
 export const Result = ({
-  type,
-  value,
-  errors,
-}: ComputationResult): JSX.Element | null => {
-  if (errors?.length > 0) {
+  blockId,
+}: {
+  blockId: string;
+}): JSX.Element | null => {
+  const { cursor, blockResults } = useResults();
+
+  const blockResult = blockResults[blockId];
+
+  if (blockResult == null) return null;
+
+  if (blockResult.isSyntaxError) {
+    return <ResultErrorStyles contentEditable={false}>Error</ResultErrorStyles>;
+  }
+
+  if (blockResult.results.length === 0) return null;
+
+  const { valueType, value } = getLineResult(cursor, blockResult.results);
+
+  if (valueType.errorCause != null) {
     return (
       <ResultErrorStyles contentEditable={false}>
-        {errors.map((e) => e.message)}
+        {valueType.errorCause.message}
       </ResultErrorStyles>
     );
-  } else if (type?.errorCause != null) {
-    return (
-      <ResultErrorStyles contentEditable={false}>
-        {type.errorCause.message}
-      </ResultErrorStyles>
-    );
-  } else if (type != null && value != null) {
+  } else if (value != null) {
     return (
       <ResultStyles contentEditable={false}>
-        <ResultContent type={type} value={value[0]} />
+        <ResultContent type={valueType} value={value} />
       </ResultStyles>
     );
   } else {

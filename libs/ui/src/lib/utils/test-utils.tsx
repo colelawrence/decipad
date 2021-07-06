@@ -4,19 +4,29 @@ import React from 'react';
 
 import { Type } from '@decipad/language';
 import { theme, ResultsContextProvider } from '../..';
+import { ResultsContextValue } from '../Contexts';
 
-const results = {
-  test: {
-    type: Type.build({
-      type: 'number',
-      unit: {
-        unit: 'apples',
-      },
-    } as any),
-    value: [20],
-    errors: [],
+const results: ResultsContextValue = {
+  cursor: null,
+  blockResults: {
+    test: {
+      blockId: 'test',
+      isSyntaxError: false,
+      results: [
+        {
+          blockId: 'test',
+          statementIndex: 0,
+          valueType: Type.build({
+            type: 'number',
+            unit: {
+              unit: 'apples',
+            },
+          } as any),
+          value: 20,
+        },
+      ],
+    },
   },
-  noResult: null,
 };
 
 const AllTheProviders: React.FC = ({ children }) => {

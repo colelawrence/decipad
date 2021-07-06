@@ -1,14 +1,20 @@
-import { createContext, useContext } from 'react'
+import { createContext, useContext } from 'react';
+import { IdentifiedResult } from '@decipad/language';
 
-// TODO import this from the computer when it's possible
-type Result = any
-
-export type ResultsContextValue = { [blockId: string]: Result }
-
-const ResultsContext = createContext<ResultsContextValue>({})
-
-export const ResultsContextProvider = ResultsContext.Provider
-
-export const useResult = (blockId: string): Result | null => {
-  return useContext(ResultsContext)?.[blockId] ?? null
+export type CursorPos = [string, number];
+export interface ResultsContextValue {
+  cursor: CursorPos | null;
+  blockResults: { [blockId: string]: IdentifiedResult };
 }
+export const makeResultsContextValue = (): ResultsContextValue => ({
+  cursor: null,
+  blockResults: {},
+});
+
+const ResultsContext = createContext<ResultsContextValue>(
+  makeResultsContextValue()
+);
+
+export const ResultsContextProvider = ResultsContext.Provider;
+
+export const useResults = () => useContext(ResultsContext);

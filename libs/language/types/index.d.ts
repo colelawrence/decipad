@@ -181,6 +181,8 @@ declare namespace AST {
   interface ImportedData {
     type: 'imported-data';
     args: [string, string?];
+    start: Pos;
+    end: Pos;
   }
 
   // Function calls and operators

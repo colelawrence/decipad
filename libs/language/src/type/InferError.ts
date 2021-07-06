@@ -14,6 +14,9 @@ type ErrSpec =
   | {
       errType: 'expectedUnit';
       expectedUnit: [AST.Unit[] | null, AST.Unit[] | null];
+    }
+  | {
+      errType: 'unexpectedEmptyColumn';
     };
 
 function specToString(spec: ErrSpec) {
@@ -37,6 +40,9 @@ function specToString(spec: ErrSpec) {
       const [fname, expected, got] = spec.expectedArgCount;
 
       return `The function ${fname} requires ${expected} parameters and ${got} parameters were entered`;
+    }
+    case 'unexpectedEmptyColumn': {
+      return `Unexpected empty column`;
     }
   }
 }
@@ -76,6 +82,14 @@ export class InferError {
   static expectedUnit(expected: AST.Unit[] | null, got: AST.Unit[] | null) {
     const error = new InferError();
     error.spec = { errType: 'expectedUnit', expectedUnit: [expected, got] };
+    return error;
+  }
+
+  static unexpectedEmptyColumn(): any {
+    const error = new InferError();
+    error.spec = {
+      errType: 'unexpectedEmptyColumn',
+    };
     return error;
   }
 

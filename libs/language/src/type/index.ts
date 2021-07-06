@@ -153,12 +153,16 @@ export class Type {
   }
 
   static buildListLike(types: Type[]) {
-    const unified = types.reduce((a, b) => a.sameAs(b));
-
-    if (unified.errorCause) {
-      return Type.buildTuple(types);
+    if (types.length === 0) {
+      return Type.Impossible.withErrorCause(InferError.unexpectedEmptyColumn());
     } else {
-      return Type.buildListFromUnifiedType(unified, types.length);
+      const unified = types.reduce((a, b) => a.sameAs(b));
+
+      if (unified.errorCause) {
+        return Type.buildTuple(types);
+      } else {
+        return Type.buildListFromUnifiedType(unified, types.length);
+      }
     }
   }
 

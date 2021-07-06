@@ -42,6 +42,16 @@ export class Stack<T> {
     throw new Error('panic: not found in stack: ' + varName);
   }
 
+  delete(varName: string) {
+    for (let i = this.stack.length - 1; i >= 0; i--) {
+      const has = this.stack[i].has(varName);
+      if (has != null) {
+        this.stack[i].delete(varName);
+        return;
+      }
+    }
+  }
+
   async withPush<T>(wrapper: () => T | Promise<T>): Promise<T> {
     try {
       this.push();

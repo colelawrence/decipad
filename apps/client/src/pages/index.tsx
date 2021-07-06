@@ -57,13 +57,13 @@ function Index({ pageProps = {} }) {
   }
 
   return (
-    <div>
+    <>
       <Head>
         <title>Decipad</title>
       </Head>
       <GlobalErrorHandler>
         <ToastProvider autoDismiss placement="bottom-left">
-          <AuthProvider session={session!}>
+          <AuthProvider session={session ?? undefined}>
             <ApolloProvider client={apolloClient}>
               <ChakraProvider resetCSS theme={theme}>
                 <RuntimeProvider>
@@ -76,6 +76,6 @@ function Index({ pageProps = {} }) {
           </AuthProvider>
         </ToastProvider>
       </GlobalErrorHandler>
-    </div>
+    </>
   );
 }

@@ -29,7 +29,6 @@ import {
   inferExpression,
   inferFunction,
   inferProgram,
-  inferTargetStatement,
 } from './index';
 
 const nilPos = {
@@ -777,30 +776,6 @@ describe('inferProgram', () => {
       variables: new Map([['Result', Type.Number]]),
       blockReturns: [Type.Number],
     });
-  });
-});
-
-describe('inferTargetStatement', () => {
-  it('can infer the result of a statement', async () => {
-    const program = [
-      n('block', n('assign', n('def', 'A'), l(10))),
-      n('block', c('+', r('A'), r('A'))),
-    ];
-
-    expect(await inferTargetStatement(program, [0, 0])).toEqual(Type.Number);
-    expect(await inferTargetStatement(program, [1, 0])).toEqual(Type.Number);
-
-    // Bad path
-    expect(() => inferTargetStatement(program, [2, 0])).rejects.toThrow();
-  });
-
-  it('returns propagated errors', async () => {
-    const badCall = c('+', l('string'), l(1));
-    const badProgram = [n('block', badCall)];
-
-    expect((await inferTargetStatement(badProgram, [0, 0])).errorCause).toEqual(
-      InferError.expectedButGot(Type.Number, Type.String)
-    );
   });
 });
 

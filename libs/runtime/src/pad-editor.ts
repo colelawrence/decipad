@@ -8,7 +8,6 @@ import { fromSlateOpType, SupportedSlateOpTypes } from './from-slate-op';
 import { toSlateOps } from './to-slate-ops';
 import { toJS } from './utils/to-js';
 import { toSync } from './utils/to-sync';
-import { Computer } from './computer';
 import { fnQueue } from './utils/fn-queue';
 import { observeSubscriberCount } from './utils/observe-subscriber-count';
 import { uri } from './utils/uri';
@@ -46,7 +45,6 @@ class PadEditor {
     this.slateOpsObservable
   );
   private debouncedProcessSlateOps: () => void;
-  private computer: Computer;
   private changesSubscription: Subscription;
   private pendingApplySlateOpIds: string[] = [];
   private pendingApplyResolve: ((value: unknown) => void) | null = null;
@@ -68,7 +66,6 @@ class PadEditor {
       createIfAbsent: true,
       startReplicaSync,
     });
-    this.computer = new Computer(this.replica);
     this.replica.beforeRemoteChanges = () => {
       this.processSlateOps();
       return this.pendingApplyPromise;
@@ -157,17 +154,11 @@ class PadEditor {
     });
     if (applied) {
       this.replica.flush();
-      this.computer.reset();
     }
   }
 
   flush() {
     this.processSlateOps();
-  }
-
-  resultAt(blockId: string, line: number): Promise<ComputationResult> {
-    this.flush();
-    return this.computer.resultAt(blockId, line);
   }
 }
 
