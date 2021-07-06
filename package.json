@@ -38,6 +38,7 @@
     "build:graphql:schema": "npx apollo service:download --endpoint=http://localhost:4200/graphql graphql-schema.json",
     "build:graphql:queries": "cd libs/queries && npx apollo codegen:generate --localSchemaFile=../../graphql-schema.json --target=typescript --tagName=gql",
     "serve:all": "nx run-many --target=serve --projects=client,backend --parallel",
+    "serve:storybook": "nx run ui:storybook",
     "deploy": "nx export client && cd apps/backend && ./node_modules/.bin/arc deploy --no-hydrate",
     "deploy:private": "./scripts/deploy-private.sh",
     "deploy:private:client": "./scripts/deploy-private-client.sh"

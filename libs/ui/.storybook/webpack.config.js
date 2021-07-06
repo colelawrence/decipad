@@ -9,7 +9,7 @@ module.exports = async ({ config, mode }) => {
   config = await rootWebpackConfig({ config, mode });
 
   const tsPaths = new TsconfigPathsPlugin({
-    configFile: './tsconfig.base.json',
+    configFile: './tsconfig.json',
   });
 
   config.resolve.plugins
@@ -24,9 +24,8 @@ module.exports = async ({ config, mode }) => {
 
     return test.toString().startsWith('/\\.(svg|ico');
   });
-  config.module.rules[
-    svgRuleIndex
-  ].test = /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/;
+  config.module.rules[svgRuleIndex].test =
+    /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/;
 
   config.module.rules.push(
     {

@@ -71,7 +71,7 @@ npm test
 We use storybook for development and showcasing purposes of all of our components, you can also run storybook by running:
 
 ```bash
-npm run nx run ui:storybook
+npm run serve:storybook
 ```
 
 ### Running the end-to-end tests
