@@ -1,9 +1,15 @@
-import { Button, Icon } from '@chakra-ui/react';
-import { signIn } from 'next-auth/client';
 import React from 'react';
+import { Button, Icon } from '@chakra-ui/react';
 import { FiGithub } from 'react-icons/fi';
+import { noop } from '../../utils/props';
 
-export const GithubSignInButton = () => {
+interface GithubSignInButtonProps {
+  onClick?: () => void;
+}
+
+export const GithubSignInButton = ({
+  onClick = noop,
+}: GithubSignInButtonProps) => {
   return (
     <Button
       colorScheme="blackAlpha"
@@ -12,9 +18,9 @@ export const GithubSignInButton = () => {
       mt={3}
       size="lg"
       leftIcon={<Icon as={FiGithub} />}
-      onClick={() => signIn('github')}
+      onClick={onClick}
     >
-      Sign in With Github
+      Sign in With GitHub
     </Button>
   );
 };

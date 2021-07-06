@@ -11,12 +11,14 @@ import {
 import { signIn } from 'next-auth/client';
 import React, { useState } from 'react';
 import { FiLogIn, FiPlay } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { GithubSignInButton } from './GithubSignInButton/GithubSignInButton.component';
 import { BodyText, Layout, Wrapper } from './index.styles';
 
 export const Landing = () => {
+  const history = useHistory();
   const [inputValue, setInputValue] = useState('');
+
   return (
     <Wrapper>
       <Layout>
@@ -46,6 +48,7 @@ export const Landing = () => {
               mt={3}
               onSubmit={(e) => {
                 e.preventDefault();
+                history.push({}); // signIn `replace`s
                 signIn('email', { email: inputValue });
               }}
             >
@@ -66,7 +69,12 @@ export const Landing = () => {
                 Sign in
               </Button>
             </HStack>
-            <GithubSignInButton />
+            <GithubSignInButton
+              onClick={() => {
+                history.push({}); // signIn `replace`s
+                signIn('github');
+              }}
+            />
             <Link to="/playground">
               <Button
                 size="lg"
