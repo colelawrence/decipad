@@ -4,7 +4,7 @@ import {
   getEvaluationPlan,
   getDependencies,
 } from './dependencies';
-import { program, deeperProgram } from './testutils';
+import { program, deeperProgram, programContainingReassign } from './testutils';
 
 it('finds necessary pre-requisites for computing a key', () => {
   expect(getDependencies(program, [['block-0', 0]])).toEqual([['block-0', 0]]);
@@ -80,6 +80,30 @@ it('finds an evaluation plan', () => {
     ['block-1', 0],
     ['block-2', 0],
     ['block-2', 1],
+  ]);
+});
+
+it('places dupe assignments together, to force them to confront each other', () => {
+  expect(
+    getEvaluationPlan(
+      programContainingReassign,
+      ['block-0', 'block-1'],
+      new TestComputationRealm([], [])
+    )
+  ).toEqual([
+    ['block-0', 0],
+    ['block-1', 0],
+  ]);
+
+  expect(
+    getEvaluationPlan(
+      programContainingReassign,
+      ['block-0', 'block-1'],
+      new TestComputationRealm(['var:A'], [['block-0', 0]])
+    )
+  ).toEqual([
+    ['block-0', 0],
+    ['block-1', 0],
   ]);
 });
 

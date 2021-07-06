@@ -51,7 +51,7 @@ export const computeProgram = async (
   const results: IdentifiedResult[] = [];
   const addResult = (result: InBlockResult) => {
     const { blockId } = result;
-    let identifiedResult = results.find((r) => r.blockId === result.blockId);
+    let identifiedResult = results.find((r) => r.blockId === blockId);
 
     if (identifiedResult == null) {
       identifiedResult = {

@@ -17,6 +17,11 @@ export const deeperProgram = testBlocks(
   block(assign('C', r('B')), assign('D', r('C')))
 );
 
+export const programContainingReassign = testBlocks(
+  block(assign('A', l(1))),
+  block(assign('A', l(2)))
+);
+
 export const programContainingError = testBlocks(
   block(
     assign('A', l(1)),

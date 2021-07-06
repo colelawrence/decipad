@@ -73,7 +73,7 @@ export const getAllBlockLocations = (
     blockIds.includes(block.id) ? blockLocs(block) : []
   );
 
-const sortLocations = (
+const sortAndDeduplicateLocations = (
   program: AST.Block[],
   unsortedLocations: ValueLocation[]
 ) => {
@@ -90,15 +90,40 @@ const sortLocations = (
   return plan;
 };
 
+// Add this to the eval plan to show the computer the places variables are reassigned (so it can error)
+const findReassignmentLocations = (program: AST.Block[]) => {
+  const reassignments: ValueLocation[] = [];
+  const definedSymbols = new Map<string, ValueLocation>();
+
+  iterProgram(program, (stmt, loc) => {
+    const sym = getDefinedSymbol(stmt);
+
+    if (sym != null) {
+      const originalAssignment = definedSymbols.get(sym);
+
+      if (originalAssignment != null) {
+        reassignments.push(originalAssignment);
+        reassignments.push(loc);
+      } else {
+        definedSymbols.set(sym, loc);
+      }
+    }
+  });
+
+  return sortAndDeduplicateLocations(program, reassignments);
+};
+
 export const getEvaluationPlan = (
   program: AST.Block[],
   subscriptions: string[],
   realm: IComputationRealm
 ) => {
   const subbedLocations = getAllBlockLocations(program, subscriptions);
-  const necessaryLocs = getDependencies(program, subbedLocations, realm);
 
-  return sortLocations(program, necessaryLocs);
+  return sortAndDeduplicateLocations(program, [
+    ...getDependencies(program, subbedLocations, realm),
+    ...findReassignmentLocations(program),
+  ]);
 };
 
 export const getDependents = (program: AST.Block[], blockIds: string[]) => {

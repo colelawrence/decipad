@@ -1,5 +1,5 @@
 import { Subject, Subscription } from 'rxjs';
-import { tap, throttleTime } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 import { produce } from 'immer';
 import { isCollapsed } from '@udecode/slate-plugins';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
@@ -125,9 +125,12 @@ export const useEditor = ({ padId, editor, setValue }: IUseRuntimeEditor) => {
     const sub = evaluationRequests
       .pipe(
         // Debounce to give React an easier time
-        throttleTime(100),
-        makeComputer(),
-        tap(([res, cursor]) => {
+        debounceTime(100),
+        makeComputer()
+      )
+      // Catch all errors here
+      .subscribe({
+        next: ([res, cursor]) => {
           if (res.type === 'compute-panic') {
             setResults(makeResultsContextValue());
             captureException(new Error(res.message));
@@ -146,10 +149,7 @@ export const useEditor = ({ padId, editor, setValue }: IUseRuntimeEditor) => {
               })
             );
           }
-        })
-      )
-      // Catch all errors here
-      .subscribe({
+        },
         error: captureException,
       });
 
