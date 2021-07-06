@@ -1,5 +1,5 @@
 import { Box, Divider } from '@chakra-ui/react';
-import React from 'react';
+
 import { RenderElementProps } from 'slate-react';
 import { Blockquote } from './Blockquote/Blockquote.component';
 import { BulletList } from './BulletList/BulletList.component';

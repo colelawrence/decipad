@@ -2,8 +2,8 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "lib": ["esnext", "dom"],
-    "jsx": "react"
+    "jsx": "react-jsx"
   },
   "include": ["src"],
-  "references": [{ "path": "../language" }, { "path": "../runtime" }]
+  "references": [{ "path": "../language" }]
 }

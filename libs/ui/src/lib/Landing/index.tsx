@@ -9,7 +9,7 @@ import {
   Input,
 } from '@chakra-ui/react';
 import { signIn } from 'next-auth/client';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FiLogIn, FiPlay } from 'react-icons/fi';
 import { Link, useHistory } from 'react-router-dom';
 import { GithubSignInButton } from './GithubSignInButton/GithubSignInButton.component';

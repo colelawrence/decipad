@@ -1,5 +1,5 @@
 import { UnorderedList } from '@chakra-ui/layout';
-import React from 'react';
+
 import { render } from 'test-utils';
 import { ListItem } from './ListItem.component';
 

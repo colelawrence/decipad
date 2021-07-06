@@ -1,5 +1,5 @@
 import { Box, Checkbox, Text } from '@chakra-ui/react';
-import React from 'react';
+
 import { Transforms } from 'slate';
 import {
   ReactEditor,

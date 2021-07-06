@@ -1,5 +1,5 @@
 import { Text } from '@chakra-ui/react';
-import React from 'react';
+
 import { RenderElementProps } from 'slate-react';
 
 interface HeaderProps extends RenderElementProps {

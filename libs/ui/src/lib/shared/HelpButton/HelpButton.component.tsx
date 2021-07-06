@@ -1,5 +1,5 @@
 import { Button, Icon } from '@chakra-ui/react';
-import React from 'react';
+
 import { FiHelpCircle } from 'react-icons/fi';
 
 export const HelpButton = () => {

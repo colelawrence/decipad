@@ -1,7 +1,7 @@
 import { chakra } from '@chakra-ui/system';
 import { Box, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 import { Type, InBlockResult } from '@decipad/language';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { format as dateFormat, formatISO as formatDateISO } from 'date-fns';
 import { FiCalendar, FiHash, FiType, FiHelpCircle } from 'react-icons/fi';
 import { useResults } from '../../../Contexts';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { render } from 'test-utils';
 import { Type } from '@decipad/language';
 import { Result } from './Result.component';

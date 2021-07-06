@@ -1,5 +1,5 @@
 import { useColorModeValue } from '@chakra-ui/react';
-import React from 'react';
+
 import { RenderElementProps } from 'slate-react';
 import { BlockquoteStyles } from './Blockquote.styles';
 

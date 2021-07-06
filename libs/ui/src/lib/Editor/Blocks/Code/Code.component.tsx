@@ -1,5 +1,5 @@
 import { Code as ChakraCode } from '@chakra-ui/react';
-import React from 'react';
+
 import { RenderElementProps } from 'slate-react';
 
 export const Code = ({

@@ -15,7 +15,7 @@ import {
   GetWorkspaceById_getWorkspaceById,
   useRenameWorkspace,
 } from '@decipad/queries';
-import React, { useRef, useState } from 'react';
+import { FormEvent, useRef, useState } from 'react';
 import { FiSettings } from 'react-icons/fi';
 import { DeleteWorkspace } from './DeleteWorkspace/DeleteWorkspace';
 
@@ -34,7 +34,7 @@ export const WorkspacePreferences = ({
     name,
   });
 
-  const renameWorkspace = (e: React.FormEvent<HTMLFormElement>) => {
+  const renameWorkspace = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     renameMutate();
     onClose();

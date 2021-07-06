@@ -1,6 +1,6 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import { render, RenderOptions } from '@testing-library/react';
-import React from 'react';
+
 
 import { Type } from '@decipad/language';
 import { theme, ResultsContextProvider } from '../..';
