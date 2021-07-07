@@ -136,17 +136,17 @@ const typeDimTests: Record<string, Test> = {
       testFunctor(
         '>',
         build({ type: 'number', unit: [meter] }),
+        build2({ type: 'number', unit: null })
+      )
+    ).toEqual(out);
+
+    expect(
+      testFunctor(
+        '>',
+        build({ type: 'number', unit: [meter] }),
         build2({ type: 'number', unit: [second] })
       ).errorCause!.spec
     ).toHaveProperty('expectedUnit', [[meter], [second]]);
-
-    expect(
-      testFunctor('>', n, build2({ type: 'number', unit: [meter] })).errorCause
-    ).not.toBeNull();
-
-    expect(
-      testFunctor('>', build({ type: 'number', unit: [meter] }), n2).errorCause
-    ).not.toBeNull();
   },
   if: (build, build2, build3, buildOut) => {
     expect(

@@ -4,6 +4,7 @@ import { InferError } from './InferError';
 import {
   inverseExponent,
   combineUnits,
+  removeSingleUnitless,
   matchUnitArrays,
   stringifyUnits,
 } from './units';
@@ -360,11 +361,16 @@ export class Type {
           this.unit ?? [],
           other.unit ?? []
         );
+        const onlyOneHasAUnit = removeSingleUnitless(this, other);
 
         if (matchingTypes && matchingUnits) {
           return this;
         } else if (!matchingTypes) {
           return this.expected(other);
+        } else if (onlyOneHasAUnit != null) {
+          return Type.extend(this, {
+            unit: onlyOneHasAUnit,
+          });
         } else {
           return this.withErrorCause(
             InferError.expectedUnit(other.unit, this.unit)

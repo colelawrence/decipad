@@ -1,4 +1,5 @@
 import { produce } from 'immer';
+import { getDefined } from '../utils';
 
 const matchUnits = (u1: AST.Unit, u2: AST.Unit) =>
   u1.unit === u2.unit && u1.exp === u2.exp;
@@ -6,6 +7,17 @@ const matchUnits = (u1: AST.Unit, u2: AST.Unit) =>
 export const matchUnitArrays = (units1: AST.Unit[], units2: AST.Unit[]) => {
   if (units1.length !== units2.length) return false;
   return units1.every((u1, i) => matchUnits(u1, units2[i]));
+};
+
+export const removeSingleUnitless = (a: Type, b: Type) => {
+  const bothNumbers = a.type === 'number' && b.type === 'number';
+  const oneIsUnitless = (a.unit == null) != (b.unit == null);
+
+  if (bothNumbers && oneIsUnitless) {
+    return getDefined(a.unit ?? b.unit);
+  } else {
+    return null;
+  }
 };
 
 const normalizeUnits = (units: AST.Unit[] | null) => {

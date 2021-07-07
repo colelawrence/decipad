@@ -828,4 +828,19 @@ describe('Units', () => {
       Type.Impossible.withErrorCause(badUnitsError).inNode(badUnits)
     );
   });
+
+  it('fills in missing units', async () => {
+    expect(await inferExpression(nilCtx, c('+', l(1), l(1, degC)))).toEqual(
+      getWithUnit([degC])
+    );
+    expect(await inferExpression(nilCtx, c('+', l(1, degC), l(1)))).toEqual(
+      getWithUnit([degC])
+    );
+  });
+
+  it('removes units from some functions', async () => {
+    expect(
+      await inferExpression(nilCtx, c('^', l(1, meters), l(1, degC)))
+    ).toEqual(getWithUnit([meters]));
+  });
 });

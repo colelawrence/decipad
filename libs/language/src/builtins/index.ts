@@ -6,9 +6,11 @@ import { AnyValue, Date, TimeQuantity } from '../interpreter/Value';
 export interface BuiltinSpec {
   name: string;
   argCount: number;
-  /** Each argument's cardinality (1 for scalar, 2 for array, 3 for array of array, etc). Defaults to [1] * argCount */
+  /**
+   * Use this to indicate desired cardinality per argument (1 for 1D, 2 for 2D, etc.)
+   * The cardinality of the corresponding args passed to fn and functor will be raised from the default 1.
+   */
   argCardinalities?: number[];
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   fn?: (...args: any[]) => any;
   // Variant that operates on Value specifically
   fnValues?: (...args: AnyValue[]) => AnyValue;
@@ -17,6 +19,9 @@ export interface BuiltinSpec {
 
 const binopFunctor = (a: Type, b: Type) =>
   Type.combine(a.isScalar('number'), b.sameAs(a));
+
+const binopWithUnitlessSecondArgFunctor = (a: Type, b: Type) =>
+  binopFunctor(a, Type.extend(b, { unit: null }));
 
 const dateCmpFunctor = (left: Type, right: Type): Type =>
   Type.combine(left.isDate(), right.sameAs(left), Type.Boolean);
@@ -82,7 +87,7 @@ export const builtins: Record<string, BuiltinSpec> = {
       ),
   },
   '%': {
-    name: '/',
+    name: '%',
     argCount: 2,
     fn: (a, b) => a % b,
     functor: binopFunctor,
@@ -91,13 +96,13 @@ export const builtins: Record<string, BuiltinSpec> = {
     name: '**',
     argCount: 2,
     fn: (a, b) => Math.pow(a, b),
-    functor: binopFunctor,
+    functor: binopWithUnitlessSecondArgFunctor,
   },
   '^': {
     name: '^',
     argCount: 2,
     fn: (a, b) => Math.pow(a, b),
-    functor: binopFunctor,
+    functor: binopWithUnitlessSecondArgFunctor,
   },
   '<': {
     name: '<',
@@ -250,8 +255,8 @@ export const builtins: Record<string, BuiltinSpec> = {
     name: 'total',
     argCount: 1,
     argCardinalities: [2],
-    fn: (nums: number[]) => nums.reduce((a, b) => a + b),
-    functor: (nums: Type) => nums.reduced(),
+    fn: (nums: number[]) => nums.reduce((a, b) => a + b, 0),
+    functor: (nums: Type) => nums.reduced().isScalar('number'),
   },
 };
 

@@ -157,7 +157,7 @@ describe('sameAs', () => {
     );
   });
 
-  it('sameAs checks scalar types and lack thereof', () => {
+  it('checks scalar types and lack thereof', () => {
     expect(Type.Number.sameAs(Type.String).errorCause).not.toBeNull();
 
     expect(
@@ -165,36 +165,30 @@ describe('sameAs', () => {
     ).not.toBeNull();
   });
 
+  const n = (...units: AST.Unit[]) =>
+    Type.build({
+      type: 'number',
+      unit: units.length > 0 ? units : null,
+    });
+
   it('sameAs checks units', () => {
-    expect(Type.build({ type: 'number', unit: [meter] })).toEqual(
-      numberInMeter
-    );
-    expect(Type.build({ type: 'number', unit: [meter, second] })).toEqual(
-      numberInMeterBySecond
-    );
+    expect(n(meter)).toEqual(numberInMeter);
+    expect(n(meter, second)).toEqual(numberInMeterBySecond);
 
-    const n = (unit: AST.Unit[] | null) =>
-      Type.build({
-        type: 'number',
-        unit,
-      });
-
-    expect(
-      Type.build({ type: 'number', unit: [meter] }).sameAs(n([meter]))
-    ).toEqual(Type.build({ type: 'number', unit: [meter] }));
+    expect(n(meter).sameAs(n(meter))).toEqual(n(meter));
 
     // Mismatched units
-    expect(
-      Type.build({ type: 'number', unit: [meter] }).sameAs(n([second]))
-        .errorCause
-    ).toEqual(InferError.expectedUnit([second], [meter]));
-    expect(
-      Type.build({ type: 'number', unit: [meter, second] }).sameAs(n([second]))
-        .errorCause
-    ).toEqual(InferError.expectedUnit([second], [meter, second]));
-    expect(
-      Type.build({ type: 'number', unit: [meter] }).sameAs(n(null)).errorCause
-    ).toEqual(InferError.expectedUnit(null, [meter]));
+    expect(n(meter).sameAs(n(second)).errorCause).toEqual(
+      InferError.expectedUnit([second], [meter])
+    );
+    expect(n(meter, second).sameAs(n(second)).errorCause).toEqual(
+      InferError.expectedUnit([second], [meter, second])
+    );
+  });
+
+  it('sameAs fills in the gap in two units', () => {
+    expect(n(meter).sameAs(n())).toEqual(n(meter));
+    expect(n().sameAs(n(meter))).toEqual(n(meter));
   });
 });
 
