@@ -27,7 +27,9 @@ const resolvers = {
       };
       const tags = [];
       for await (const tag of allPages(data.usertags, query)) {
-        tags.push(tag.tag);
+        if (tag) {
+          tags.push(tag.tag);
+        }
       }
 
       return tags.sort();
@@ -137,7 +139,9 @@ const resolvers = {
       };
       const tags = [];
       for await (const tag of allPages(data.tags, query)) {
-        tags.push(tag.tag);
+        if (tag) {
+          tags.push(tag.tag);
+        }
       }
       return tags.sort();
     },

@@ -10,11 +10,11 @@ import { setContext } from '@apollo/client/link/context';
 import baseUrl from './base-url';
 
 interface WithAuthArgs {
-  token: string
-  link?: ApolloLink
+  token: string;
+  link?: ApolloLink;
 }
 
-function withAuth(args: WithAuthArgs): ApolloClient<StoreObject> {
+export function withAuth(args: WithAuthArgs): ApolloClient<StoreObject> {
   const { token, link: _link } = args;
   let link = _link;
   const authLink = setContext((_, { headers }) => {
@@ -41,15 +41,13 @@ function withAuth(args: WithAuthArgs): ApolloClient<StoreObject> {
   });
 }
 
-function withoutAuth() {
+export function withoutAuth() {
   const uri = `${baseUrl()}/graphql`;
-  const httpLink = createHttpLink({ uri });
 
   return new ApolloClient({
-    link: httpLink,
+    link: createHttpLink({ uri }),
     cache: new InMemoryCache(),
   });
 }
 
-export { withAuth, withoutAuth };
 export { gql };

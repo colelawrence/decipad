@@ -7,6 +7,7 @@ export function s3() {
     secretAccessKey: env('DECI_S3_SECRET_ACCESS_KEY'),
     buckets: {
       pads: env('DECI_S3_PADS_BUCKET'),
+      attachments: env('DECI_S3_ATTACHMENTS_BUCKET'),
     },
   };
 }
@@ -14,6 +15,15 @@ export function s3() {
 export function app() {
   return {
     urlBase: env('DECI_APP_URL_BASE', 'http://localhost:4200'),
+    limits: {
+      maxAttachmentSize: Number(env('DECI_MAX_ATTACHMENT_SIZE', '10485760')),
+      maxAttachmentUploadTokenExpirationSeconds: Number(
+        env('DECI_MAX_ATTACHMENT_UPLOAD_TOKEN_EXPIRATION_SECONDS', '600')
+      ),
+      maxAttachmentDownloadTokenExpirationSeconds: Number(
+        env('DECI_MAX_ATTACHMENT_DOWNLOAD_TOKEN_EXPIRATION_SECONDS', '600')
+      ),
+    },
   };
 }
 

@@ -110,7 +110,7 @@ test('pads', () => {
         `,
       })
     ).rejects.toThrow('Forbidden');
-  });
+  }, 20000);
 
   it('cannot create if workspace does not exist', async () => {
     const client = withAuth(await auth());

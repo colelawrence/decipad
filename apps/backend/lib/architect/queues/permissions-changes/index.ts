@@ -249,6 +249,9 @@ async function handlePutPadsWithUser(
   };
 
   for await (const tag of allPages(data.tags, query)) {
+    if (!tag) {
+      continue;
+    }
     const newUserTaggedResource = {
       id: `/workspaces/${pad.workspace_id}/users/${
         perm.user_id
@@ -287,7 +290,9 @@ async function handleDeletePadWithUser(perm: ParsedPermission) {
       data.usertaggedresources,
       query
     )) {
-      await data.usertaggedresources.delete({ id: userTaggedResource.id });
+      if (userTaggedResource) {
+        await data.usertaggedresources.delete({ id: userTaggedResource.id });
+      }
     }
   }
 }
@@ -311,6 +316,9 @@ async function handlePutWithUserAndPadResource(perm: PermissionRecord) {
   };
 
   for await (const tag of allPages(data.tags, query)) {
+    if (!tag) {
+      continue;
+    }
     const newUserTaggedResource = {
       id: `/workspaces/${pad.workspace_id}/users/${
         perm.user_id

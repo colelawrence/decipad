@@ -43,6 +43,9 @@ async function handleTagCreate(tag: TagRecord) {
   };
 
   for await (const perm of allPages(data.permissions, query)) {
+    if (!perm) {
+      continue;
+    }
     const newUserTaggedResource = {
       id: `/workspaces/${workspaceId}/users/${
         perm.user_id
@@ -76,7 +79,9 @@ async function handleTagDelete({ id }: TableRecordIdentifier) {
     data.usertaggedresources,
     query
   )) {
-    await data.usertaggedresources.delete({ id: userTaggedResource.id });
+    if (userTaggedResource) {
+      await data.usertaggedresources.delete({ id: userTaggedResource.id });
+    }
   }
 }
 

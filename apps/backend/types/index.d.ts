@@ -84,6 +84,7 @@ type Pad = {
   access?: PadAccess;
   workspace?: Workspace;
   tags?: string[];
+  attachments?: Attachment[];
 };
 
 type PadInput = {
@@ -111,6 +112,18 @@ type Resource = {
   id: string;
 };
 
+type Attachment = {
+  id: ID;
+  fileName: string;
+  fileType: string;
+  uploadedByUserId: ID;
+  uploadedBy?: User;
+  padId: string;
+  pad?: Pad;
+  createdAt: number;
+  fileSize: number;
+};
+
 /* Pagination */
 
 type PageInput = {
@@ -135,10 +148,11 @@ interface TableRecord extends TableRecordIdentifier {
   createdAt?: number;
 }
 
-type TableRecordDelete = {
+type TableRecordDelete<T> = {
   table: string;
   action: 'delete';
   args: TableRecordIdentifier;
+  recordBeforeDelete: T;
 };
 
 type TableRecodPut<T> = {
@@ -147,7 +161,7 @@ type TableRecodPut<T> = {
   args: T;
 };
 
-type TableRecordChanges<T> = TableRecordPut<T> | TableRecordDelete;
+type TableRecordChanges<T> = TableRecordPut<T> | TableRecordDelete<T>;
 
 interface PermissionRecord extends TableRecord {
   resource_type: string;
@@ -249,6 +263,18 @@ interface InviteRecord extends TableRecord {
   expires_at: number;
 }
 
+interface FutureFileAttachmentRecord extends TableRecord {
+  user_id: ID;
+  resource_uri: string;
+  user_filename: string;
+  filename: string;
+  filetype: string;
+}
+
+interface FileAttachmentRecord extends FutureFileAttachmentRecord {
+  filesize: number;
+}
+
 type SharedResource = {
   gqlType?: string;
   resource: string;
@@ -281,6 +307,8 @@ interface EnhancedDataTables {
   pads: EnhancedDataTable<PadRecord>;
   workspaceroles: EnhancedDataTable<RoleRecord>;
   invites: EnhancedDataTable<InviteRecord>;
+  futurefileattachments: EnhancedDataTable<FutureFileAttachmentRecord>;
+  fileattachments: EnhancedDataTable<FileAttachmentRecord>;
 }
 
 interface DataTables extends EnhancedDataTables {
@@ -316,3 +344,12 @@ type GraphqlContext = {
   subscriptionId?: ID;
   connectionId?: ID;
 };
+
+/* Attachments */
+
+interface CreateAttachmentFormResult {
+  url: URI;
+  fileName: string;
+  fileType: string;
+  fields: Record<string, string>;
+}

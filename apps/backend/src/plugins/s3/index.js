@@ -1,6 +1,9 @@
 const S3rver = require('s3rver');
 const path = require('path');
 const { nanoid } = require('nanoid');
+const { sync: mkdirpSync} = require('mkdirp');
+const { join } = require('path');
+const { tmpdir } = require('os');
 
 let s3rver;
 
@@ -9,7 +12,8 @@ if (!port) {
   throw new Error('no S3 server port defined');
 }
 
-let directory = `/tmp/${nanoid()}`;
+let directory = join(tmpdir(), '.s3rver_data', nanoid());
+mkdirpSync(directory);
 
 console.log('s3rver storing data in ' + directory);
 
@@ -19,6 +23,9 @@ const options = {
   configureBuckets: [
     {
       name: 'pads',
+    },
+    {
+      name: 'attachments',
     }
   ],
   silent: process.env.NODE_ENV === 'production',

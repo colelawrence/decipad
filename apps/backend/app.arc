@@ -156,6 +156,21 @@ usertaggedresources
   workspace_id String
   resource_uri String
 
+futurefileattachments
+  id *String
+  user_id String
+  resource_uri String
+  filename String
+  filetype String
+
+fileattachments
+  id *String
+  user_id String
+  resource_uri String
+  filename String
+  filetype String
+  filesize Number
+
 @indexes
 
 users
@@ -248,6 +263,10 @@ usertaggedresources
   user_id **String
   name byResourceAndUser
 
+fileattachments
+  resource_uri *String
+  name byResource
+
 @queues
 
 sendemail
@@ -257,6 +276,7 @@ permissions-changes
 pads-changes
 tags-changes
 usertaggedresources-changes
+fileattachments-changes
 
 @plugins
 s3

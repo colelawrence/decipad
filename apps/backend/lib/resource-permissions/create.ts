@@ -39,7 +39,7 @@ async function create(args: ResourceCreateArgs) {
     resourceId = parts.splice(2).join('/');
   }
   const id = `/users/${userId}/roles/${roleId}${resource}`;
-  const newRolePermission = {
+  const newPermission = {
     id,
     resource_type: resourceType,
     resource_uri: resource,
@@ -52,7 +52,7 @@ async function create(args: ResourceCreateArgs) {
     type,
   };
 
-  await data.permissions.create(newRolePermission);
+  await data.permissions.create(newPermission);
 }
 
 export default create;

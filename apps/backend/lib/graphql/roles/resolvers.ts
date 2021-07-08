@@ -308,8 +308,15 @@ async function checkIfCanRemoveUserFromRole({
       },
     };
 
-    for await (const permission of allPages(data.permissions, query)) {
-      if (permission.type === 'ADMIN' && permission.user_id !== userId) {
+    for await (const permission of allPages<PermissionRecord>(
+      data.permissions,
+      query
+    )) {
+      if (
+        permission &&
+        permission.type === 'ADMIN' &&
+        permission.user_id !== userId
+      ) {
         hasAnotherAdmin = true;
         break;
       }

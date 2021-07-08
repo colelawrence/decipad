@@ -112,4 +112,5 @@ https://www.loom.com/share/a0b33c1071d343fb8a216ef64ad217ea
 
 ## Sub-package documentation
 
+- [backend](apps/backend/README.md)
 - [runtime](libs/runtime/README.md)

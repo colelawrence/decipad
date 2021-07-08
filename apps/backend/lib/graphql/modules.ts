@@ -10,6 +10,7 @@ import workspaces from './workspaces';
 import pads from './pads';
 import tags from './tags';
 import share from './share';
+import attachments from './attachments';
 import hello from './hello';
 
 type GraphqlModule = {
@@ -24,15 +25,16 @@ const modules: GraphqlModule[] = [
   pagination,
   registration,
   users,
-  auth,
   roles,
   workspaces,
   pads,
+  attachments,
   share,
 ];
 
 if (process.env.NODE_ENV !== 'production') {
   modules.push(hello);
+  modules.push(auth); // fake auth
 }
 
 export default modules;

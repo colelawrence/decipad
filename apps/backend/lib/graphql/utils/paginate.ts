@@ -1,4 +1,4 @@
-export default async function paginate<T1, T2 = T1>(
+export default async function paginate<T1, T2>(
   table: DataTable<T1>,
   query: DynamoDbQuery,
   page: PageInput,

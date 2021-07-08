@@ -49,3 +49,21 @@ $ nx serve client
 ```
 
 Now you can use the GraphQL playground by accessing [http://localhost:4200/graphql](http://localhost:4200/graphql).
+
+
+## File attachments
+
+Our GraphQL API allows users to upload attachments. Since our attachments are stored in S3, the client uploads them to S3 directly (saving us $money$).
+
+You can check out the code to how to upload and attach a file to a pad in this test file:
+
+[tests/attach-file.spec.ts](tests/attach-file.spec.ts)
+
+Here is a quick overview of the process:
+
+* Client asks for form data using our GraphQL `getCreateAttachmentForm(padId, fileName, fileType)` query. As for the fileType `argument`, you should pass in a mime type (like "text/csv", for instance).
+* Client stores the returned handle and URL and creates a form programatically using the returned fields.
+* Client adds the file to upload to the form "file" field.
+* Client uploads the form to the given URL (returned by the previous `getCreateAttachmentForm` call).
+* Client can show a progress bar.
+* After the upload is successfully complete, client needs to call the `attachFileToPad(handle)`, passing in the given handle returned by the first query.

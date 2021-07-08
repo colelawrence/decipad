@@ -29,7 +29,15 @@ async function handlePadDelete({ id }: TableRecordIdentifier) {
   };
 
   for await (const perm of allPages(data.permissions, query)) {
-    await data.permissions.delete({ id: perm.id });
+    if (perm) {
+      await data.permissions.delete({ id: perm.id });
+    }
+  }
+
+  for await (const attachment of allPages(data.fileattachments, query)) {
+    if (attachment) {
+      await data.fileattachments.delete({ id: attachment.id });
+    }
   }
 
   await remove(id);

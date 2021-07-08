@@ -1,11 +1,11 @@
 import { ForbiddenError } from 'apollo-server-lambda';
-import { isAuthorized } from '../authorization';
+import { isAuthorized as isAuthorizedBase } from '../authorization';
 
 type Context = {
   user?: {
-    id: ID
-  }
-}
+    id: ID;
+  };
+};
 
 function requireUser(context: Context) {
   if (!context.user) {
@@ -14,18 +14,24 @@ function requireUser(context: Context) {
   return context.user;
 }
 
-async function graphqlIsAuthorized(resource: string, context: Context, permissionType: PermissionType = 'READ') {
+async function graphqlIsAuthorized(
+  resource: string,
+  context: Context,
+  permissionType: PermissionType = 'READ'
+) {
   const user = requireUser(context);
-  return await isAuthorized(resource, user, permissionType);
+  return await isAuthorizedBase(resource, user, permissionType);
 }
 
-async function check(resource: string, context: Context, permissionType: PermissionType) {
+async function check(
+  resource: string,
+  context: Context,
+  permissionType: PermissionType
+) {
   const user = requireUser(context);
-
   if (!(await graphqlIsAuthorized(resource, context, permissionType))) {
     throw new ForbiddenError('Forbidden');
   }
-
   return user;
 }
 

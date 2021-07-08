@@ -9,6 +9,8 @@ const enhancedTables: (keyof EnhancedDataTables)[] = [
   'pads',
   'workspaceroles',
   'invites',
+  'futurefileattachments',
+  'fileattachments',
 ];
 
 const observedTables = [
@@ -16,6 +18,7 @@ const observedTables = [
   'permissions',
   'tags',
   'usertaggedresources',
+  'fileattachments',
 ];
 
 let tablesPromise: Promise<DataTables>;
@@ -54,29 +57,52 @@ function observe(tables: DataTables, tableName: keyof DataTables) {
   }
   table.__deci_observed__ = true;
 
-  for (const methodName of ['put', 'delete']) {
-    const method = methodName === 'put' ? table.put : table.delete;
-    const replaceMethod = async (args: any) => {
-      const ret = await method.call(table, args);
+  table['put'] = putReplacer(table, tableName, table.put);
+  table['delete'] = deleteReplacer(table, tableName, table.delete);
+}
 
-      await arc.queues.publish({
-        name: `${tableName}-changes`,
-        payload: {
-          table: tableName,
-          action: methodName,
-          args,
-        },
-      });
+function putReplacer<T>(
+  table: DataTable<T>,
+  tableName: keyof DataTables,
+  method: (doc: any) => Promise<void>
+) {
+  return async function putReplacer(args: any) {
+    const ret = await method.call(table, args);
 
-      return ret;
-    };
+    await arc.queues.publish({
+      name: `${tableName}-changes`,
+      payload: {
+        table: tableName,
+        action: 'put',
+        args,
+      },
+    });
 
-    if (methodName === 'put') {
-      table['put'] = replaceMethod;
-    } else {
-      table['delete'] = replaceMethod;
-    }
-  }
+    return ret;
+  };
+}
+
+function deleteReplacer<T>(
+  table: DataTable<T>,
+  tableName: keyof DataTables,
+  method: (doc: any) => Promise<void>
+) {
+  return async function deleteReplacer(args: any) {
+    const recordBeforeDelete = await table.get({ id: args.id });
+    const ret = await method.call(table, args);
+
+    await arc.queues.publish({
+      name: `${tableName}-changes`,
+      payload: {
+        table: tableName,
+        action: 'delete',
+        args,
+        recordBeforeDelete,
+      },
+    });
+
+    return ret;
+  };
 }
 
 function enhance(tables: DataTables, tableName: keyof DataTables) {
