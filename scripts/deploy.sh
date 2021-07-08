@@ -2,10 +2,6 @@
 
 set -euo pipefail
 
-set -o allexport;
-source ./.private-deploy.env;
-set +o allexport;
-
 
 echo "Preparing the public files folder...";
 rm -rf apps/backend/public
@@ -20,9 +16,6 @@ npm run build:storybook
 cp -rT dist/storybook/ui apps/backend/public/.storybook
 
 
-echo "Deploying client on \"$DEPLOY_NAME\"...";
+echo "Deploying..."
 cd apps/backend
-
-./node_modules/.bin/arc deploy --static --prune  --name "$DEPLOY_NAME"
-
-echo "Go to $DECI_APP_URL_BASE"
+./node_modules/.bin/arc deploy --no-hydrate

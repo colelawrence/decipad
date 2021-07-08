@@ -32,6 +32,7 @@
     "postinstall": "cd apps/backend && npm install",
     "prepare": "husky install",
     "build:frontend": "nx export client",
+    "build:storybook": "nx run ui:build-storybook",
     "build:backend:dev": "esbuild apps/backend/lib/architect/http/*/index.ts apps/backend/lib/architect/queues/*/index.ts apps/backend/lib/architect/ws/*/index.ts --bundle --outdir=apps/backend/src --target=node14 --platform=node --format=cjs --external:aws-sdk --legal-comments=none --sourcemap --keep-names",
     "build:backend": "npm run build:backend:dev -- --minify",
     "build:backend:watch": "npm run build:backend -- --watch",
@@ -39,7 +40,7 @@
     "build:graphql:queries": "cd libs/queries && npx apollo codegen:generate --localSchemaFile=../../graphql-schema.json --target=typescript --tagName=gql",
     "serve:all": "nx run-many --target=serve --projects=client,backend --parallel",
     "serve:storybook": "nx run ui:storybook",
-    "deploy": "nx export client && cd apps/backend && ./node_modules/.bin/arc deploy --no-hydrate",
+    "deploy": "./scripts/deploy.sh",
     "deploy:private": "./scripts/deploy-private.sh",
     "deploy:private:client": "./scripts/deploy-private-client.sh"
   },

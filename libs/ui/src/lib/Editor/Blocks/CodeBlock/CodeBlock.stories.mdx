@@ -43,13 +43,13 @@ export const Template = (args) => (
       element={{ id: 'test' }}
       {...args}
     />
-  </ResultsContextProvider />
+  </ResultsContextProvider>
 );
 
 export const NoResult = (args) => (
   <ResultsContextProvider value={{test: null}}>
     <CodeBlock element={{ id: 'test', children: [] }} {...args} />
-  </ResultsContextProvider />
+  </ResultsContextProvider>
 );
 
 <Canvas>

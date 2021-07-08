@@ -8,6 +8,8 @@ decipad-backend
 get /graphql
 post /graphql
 
+get /.storybook
+
 get /api/auth/signin
 post /api/auth/signin/:provider
 get /api/auth/callback/:provider

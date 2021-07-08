@@ -13,7 +13,7 @@
 
 const browserify = require('@cypress/browserify-preprocessor');
 
-module.exports = (on, config) => {
+module.exports = (on) => {
   const options = browserify.defaultOptions;
   options.typescript = require.resolve('typescript');
   options.browserifyOptions.extensions.push('.ts', '.tsx');

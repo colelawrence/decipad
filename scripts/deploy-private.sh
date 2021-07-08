@@ -6,10 +6,21 @@ set -o allexport;
 source ./.private-deploy.env;
 set +o allexport;
 
+
+echo "Preparing the public files folder...";
+rm -rf apps/backend/public
+mkdir apps/backend/public
+
+echo "Building frontend..."
+npm run build:frontend
+cp -rT dist/apps/client/exported apps/backend/public
+
+echo "Building storybook..."
+npm run build:storybook
+cp -rT dist/storybook/ui apps/backend/public/.storybook
+
+
 echo "Deploying \"$DEPLOY_NAME\"...";
-
-
-nx export client
 cd apps/backend
 
 ./node_modules/.bin/arc env staging DECI_APP_URL_BASE "$DECI_APP_URL_BASE"
