@@ -1,9 +1,8 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import { render, RenderOptions } from '@testing-library/react';
 
-
 import { Type } from '@decipad/language';
-import { theme, ResultsContextProvider } from '../..';
+import { theme, ResultsContextProvider, GlobalStyles } from '../..';
 import { ResultsContextValue } from '../Contexts';
 
 const results: ResultsContextValue = {
@@ -31,11 +30,13 @@ const results: ResultsContextValue = {
 
 const AllTheProviders: React.FC = ({ children }) => {
   return (
-    <ChakraProvider resetCSS theme={theme}>
-      <ResultsContextProvider value={results}>
-        {children}
-      </ResultsContextProvider>
-    </ChakraProvider>
+    <GlobalStyles>
+      <ChakraProvider theme={theme}>
+        <ResultsContextProvider value={results}>
+          {children}
+        </ResultsContextProvider>
+      </ChakraProvider>
+    </GlobalStyles>
   );
 };
 

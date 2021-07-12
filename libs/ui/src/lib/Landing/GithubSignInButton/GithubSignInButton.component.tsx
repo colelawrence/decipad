@@ -1,6 +1,6 @@
 import { Button, Icon } from '@chakra-ui/react';
 import { FiGithub } from 'react-icons/fi';
-import { noop } from '../../../utils/props';
+import { noop } from '../../../utils';
 
 interface GithubSignInButtonProps {
   onClick?: () => void;

@@ -12,7 +12,7 @@
     "declaration": true,
     "declarationMap": true,
     "emitDeclarationOnly": true,
-    "target": "es2015",
+    "target": "esnext",
 
     "module": "esnext",
     "moduleResolution": "node",

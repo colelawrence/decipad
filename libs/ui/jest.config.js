@@ -6,5 +6,5 @@ module.exports = {
     '^.+\\.[tj]sx?$': 'babel-jest',
   },
   testEnvironment: 'jsdom',
-  setupFilesAfterEnv: [require.resolve('./src/utils/setupTests.ts')],
+  setupFilesAfterEnv: [require.resolve('./src/test-utils/setupTests.ts')],
 };

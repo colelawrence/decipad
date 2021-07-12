@@ -1,6 +1,13 @@
 module.exports = {
   stories: [],
-  addons: ['@storybook/addon-essentials'],
+  addons: [
+    {
+      name: '@storybook/addon-essentials',
+      options: {
+        backgrounds: false,
+      },
+    },
+  ],
   typescript: {
     reactDocgen: false,
   },

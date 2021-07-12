@@ -8,5 +8,5 @@ module.exports = {
     // required until using actual workspace packages instead of path definitions
     require.resolve('babel-plugin-tsconfig-paths'),
   ],
-  babelrcRoots: ['*'],
+  babelrcRoots: ['libs/*', 'apps/*'],
 };

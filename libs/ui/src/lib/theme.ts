@@ -8,14 +8,4 @@ const breakpoints = createBreakpoints({
   xl: '1200px',
 });
 
-export const theme = extendTheme({
-  breakpoints,
-  styles: {
-    global: {
-      'html, body': {
-        w: '100vw',
-        overflowX: 'hidden',
-      },
-    },
-  },
-});
+export const theme = extendTheme({ breakpoints });
