@@ -19,11 +19,11 @@ interface IUseRuntimeEditor {
 }
 
 interface SlateNode {
-  type: string,
+  type: string;
   children?: SlateNode[];
   text?: string;
   id: string;
-};
+}
 
 export function offsetToLineNumber(codeText: string, offset: number) {
   const cumulativeSum = (

@@ -1,49 +1,52 @@
 import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
 import { HttpResponse } from '@architect/functions';
+import { wrapHandler } from './monitor';
 
-type Handler = (req: APIGatewayProxyEvent) => Promise<string | HttpResponse>
+type Handler = (req: APIGatewayProxyEvent) => Promise<string | HttpResponse>;
 
-export default (fn: Handler) => {
-  return async (req: APIGatewayProxyEvent): Promise<HttpResponse> => {
-    try {
-      const result = await fn(req);
-      if (result === null || result === undefined) {
-        return {
-          statusCode: 404,
-        };
-      }
+export default (handler: Handler) => {
+  return wrapHandler(
+    async (req: APIGatewayProxyEvent): Promise<HttpResponse> => {
+      try {
+        const result = await handler(req);
+        if (result === null || result === undefined) {
+          return {
+            statusCode: 404,
+          };
+        }
 
-      if (typeof result === 'string') {
+        if (typeof result === 'string') {
+          return {
+            statusCode: okStatusCodeFor(req),
+            body: result,
+            headers: {
+              'content-type': 'text/plain',
+            },
+          };
+        }
+        if (isFullReturnObject(result)) {
+          return result;
+        }
         return {
           statusCode: okStatusCodeFor(req),
-          body: result,
           headers: {
-            'content-type': 'text/plain',
+            'content-type': 'application/json; charset=utf-8',
+          },
+          body: JSON.stringify(result),
+        };
+      } catch (err) {
+        console.error(err);
+        return {
+          statusCode: 500,
+          json: {
+            name: err.name,
+            message: err.message,
+            stack: err.stack,
           },
         };
       }
-      if (isFullReturnObject(result)) {
-        return result;
-      }
-      return {
-        statusCode: okStatusCodeFor(req),
-        headers: {
-          'content-type': 'application/json; charset=utf-8',
-        },
-        body: JSON.stringify(result),
-      };
-    } catch (err) {
-      console.error(err);
-      return {
-        statusCode: 500,
-        json: {
-          name: err.name,
-          message: err.message,
-          stack: err.stack,
-        },
-      };
     }
-  };
+  );
 };
 
 function isFullReturnObject(result: HttpResponse) {

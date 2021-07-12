@@ -1,8 +1,11 @@
 import { HttpResponse } from '@architect/functions';
 import tables from '../../../tables';
 import auth from '../../../auth';
+import { wrapHandler } from '../../../monitor';
 
-export const handler = async function ws(event: WSRequest): Promise<HttpResponse> {
+export const handler = wrapHandler(async function ws(
+  event: WSRequest
+): Promise<HttpResponse> {
   const { user, token, gotFromSecProtocolHeader } = await auth(event);
   if (!user) {
     return {
@@ -17,9 +20,9 @@ export const handler = async function ws(event: WSRequest): Promise<HttpResponse
   });
 
   const wsProtocol = gotFromSecProtocolHeader
-        ? token
-        : event.headers['sec-websocket-protocol'] ||
-          event.headers['Sec-WebSocket-Protocol'];
+    ? token
+    : event.headers['sec-websocket-protocol'] ||
+      event.headers['Sec-WebSocket-Protocol'];
   const reply = {
     statusCode: 200,
     headers: {
@@ -28,4 +31,4 @@ export const handler = async function ws(event: WSRequest): Promise<HttpResponse
   };
 
   return reply;
-};
+});

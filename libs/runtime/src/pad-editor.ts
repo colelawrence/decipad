@@ -24,13 +24,13 @@ const initialValue = toSync([
   {
     // children: [
     //   {
-        type: 'p',
-        children: [
-          {
-            text: '',
-          },
-        ],
-        id: '000000000000000000000',
+    type: 'p',
+    children: [
+      {
+        text: '',
+      },
+    ],
+    id: '000000000000000000000',
     //   },
     // ],
   },

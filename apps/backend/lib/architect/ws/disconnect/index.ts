@@ -1,7 +1,10 @@
 import { HttpResponse } from '@architect/functions';
 import tables from '../../../tables';
+import { wrapHandler } from '../../../monitor';
 
-export const handler = async function ws(event: WSRequest): Promise<HttpResponse> {
+export const handler = wrapHandler(async function ws(
+  event: WSRequest
+): Promise<HttpResponse> {
   const data = await tables();
 
   const collabs = await data.collabs.query({
@@ -30,9 +33,12 @@ export const handler = async function ws(event: WSRequest): Promise<HttpResponse
 
   for (const subscription of subscriptions.Items) {
     await data.subscriptions.delete({ id: subscription.id });
-    console.log('removed 1 subscription for %s for user %s', subscription.gqltype, subscription.user_id);
+    console.log(
+      'removed 1 subscription for %s for user %s',
+      subscription.gqltype,
+      subscription.user_id
+    );
   }
 
-
   return { statusCode: 200 };
-};
+});

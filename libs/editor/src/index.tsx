@@ -19,7 +19,13 @@ const Wrapper = styled('div')`
   padding-top: 25px;
 `;
 
-export const Editor = ({ padId, autoFocus }: { padId: string, autoFocus: boolean }) => {
+export const Editor = ({
+  padId,
+  autoFocus,
+}: {
+  padId: string;
+  autoFocus: boolean;
+}) => {
   const [value, setValue] = useState<Node[] | undefined>(undefined);
 
   const { getSlashCommandsProps, plugin: slashCommandsPlugin } =
@@ -30,14 +36,17 @@ export const Editor = ({ padId, autoFocus }: { padId: string, autoFocus: boolean
     [slashCommandsPlugin]
   );
 
-  const editor = useState(() => pipe(
-    createEditor(),
-    withSlatePlugins({
-      id: padId,
-      plugins: editorPlugins,
-      options,
-      components,
-    })))[0];
+  const editor = useState(() =>
+    pipe(
+      createEditor(),
+      withSlatePlugins({
+        id: padId,
+        plugins: editorPlugins,
+        options,
+        components,
+      })
+    )
+  )[0];
 
   const { onChangeLanguage, results } = useEditor({
     padId,
@@ -49,7 +58,7 @@ export const Editor = ({ padId, autoFocus }: { padId: string, autoFocus: boolean
     <ResultsContextProvider key={padId} value={results}>
       <Box pb="70px" w="100vw" pos="relative">
         <Container maxW="75ch">
-          { value && editor ? (
+          {value && editor ? (
             <DropFile editor={editor}>
               <Wrapper>
                 <SlatePlugins
@@ -60,17 +69,17 @@ export const Editor = ({ padId, autoFocus }: { padId: string, autoFocus: boolean
                   options={options}
                   components={components}
                   editableProps={{ autoFocus }}
-                  onChange={() => onChangeLanguage(editor.children) }
+                  onChange={() => onChangeLanguage(editor.children)}
                 />
                 <SlashCommandsSelect {...getSlashCommandsProps()} />
                 <SideFormattingMenu />
               </Wrapper>
-            </DropFile>)
-          : <span>Loading...</span> }
+            </DropFile>
+          ) : (
+            <span>Loading...</span>
+          )}
         </Container>
       </Box>
     </ResultsContextProvider>
   );
 };
-
-

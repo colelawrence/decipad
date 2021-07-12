@@ -5,8 +5,11 @@ import tables from '../../../tables';
 import { isAuthorized } from '../../../authorization';
 import createSchema from '../../../graphql/schema';
 import graphqlResolvers from '../../../graphql/resolvers';
+import { wrapHandler } from '../../../monitor';
 
-export const handler = async function ws(event: WSRequest): Promise<HttpResponse> {
+export const handler = wrapHandler(async function ws(
+  event: WSRequest
+): Promise<HttpResponse> {
   const connId = event.requestContext.connectionId;
   if (!event.body) {
     return {
@@ -18,17 +21,22 @@ export const handler = async function ws(event: WSRequest): Promise<HttpResponse
   if (message.type) {
     // this is a graphql message
     const ret = await handleGraphql(connId, event.body);
-    return ret || {
-      statusCode: 200,
-    };
+    return (
+      ret || {
+        statusCode: 200,
+      }
+    );
   }
 
   // this is an internal message
   const [op, args] = message;
   return await handleCollab(connId, op, args);
-};
+});
 
-async function handleGraphql(connId: string, message: any): Promise<HttpResponse | void> {
+async function handleGraphql(
+  connId: string,
+  message: any
+): Promise<HttpResponse | void> {
   const data = await tables();
   const connection = await data.connections.get({
     id: connId,
@@ -58,8 +66,8 @@ async function handleGraphql(connId: string, message: any): Promise<HttpResponse
     let timeout = setTimeout(() => resolve(), 5000);
     const reply = (r: HttpResponse | void) => {
       clearTimeout(timeout);
-      timeout = setTimeout(() => resolve(r), 2000)
-    }
+      timeout = setTimeout(() => resolve(r), 2000);
+    };
     function makeWebsocket() {
       return {
         protocol: 'graphql-transport-ws',
@@ -116,7 +124,10 @@ async function handleGraphql(connId: string, message: any): Promise<HttpResponse
               // Sending connection init because already acknowledged.
               // We have to set the server into the same state
               //   as it was after receiving the connection_init message.
-              const m3 = JSON.stringify({ type: 'connection_init', payload: {} })
+              const m3 = JSON.stringify({
+                type: 'connection_init',
+                payload: {},
+              });
               await cb(m3);
             }
 
@@ -139,13 +150,21 @@ async function handleGraphql(connId: string, message: any): Promise<HttpResponse
 }
 
 function createContext(user: UserWithSecret, connectionId: string) {
-  const {secret: _, ...userWithoutSecret } = user;
+  const { secret: _, ...userWithoutSecret } = user;
   return (_conn: any, message: { id: string }) => {
-    return { user: userWithoutSecret, subscriptionId: message.id, connectionId };
+    return {
+      user: userWithoutSecret,
+      subscriptionId: message.id,
+      connectionId,
+    };
   };
 }
 
-async function handleCollab(connId: string, op : 'subscribe' | 'unsubscribe', args: any): Promise<HttpResponse> {
+async function handleCollab(
+  connId: string,
+  op: 'subscribe' | 'unsubscribe',
+  args: any
+): Promise<HttpResponse> {
   const data = await tables();
   const connection = await data.connections.get({
     id: connId,

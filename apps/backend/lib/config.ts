@@ -12,6 +12,14 @@ export function s3() {
   };
 }
 
+export function monitor() {
+  return {
+    sentry: {
+      dsn: env('SENTRY_DSN', ''),
+    },
+  };
+}
+
 export function app() {
   return {
     urlBase: env('DECI_APP_URL_BASE', 'http://localhost:4200'),

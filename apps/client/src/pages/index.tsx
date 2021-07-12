@@ -21,10 +21,12 @@ import { Router } from '../routes';
 const inBrowser = typeof window !== 'undefined';
 
 const history = inBrowser ? createBrowserHistory() : null;
+const sentryDSN = process.env.NEXT_SENTRY_DSN;
+const usingSentry = !!sentryDSN;
 
-if (history) {
+if (history && usingSentry) {
   init({
-    dsn: 'https://95cb017d05284b08b7b24b6dfe258962@o592547.ingest.sentry.io/5741035',
+    dsn: sentryDSN,
     integrations: [
       new Integrations.BrowserTracing({
         routingInstrumentation: reactRouterV5Instrumentation(history),
@@ -48,11 +50,9 @@ function Index({ pageProps = {} }) {
     return <LoadingSpinnerPage />;
   }
 
-  if (session?.user) {
+  if (usingSentry && session?.user) {
     setUser({
       id: (session.user as { id: string }).id,
-      email: session.user.email!,
-      username: session.user.name!,
     });
   }
 
