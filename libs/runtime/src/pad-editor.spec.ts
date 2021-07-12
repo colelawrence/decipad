@@ -24,7 +24,7 @@ describe('pad editor', () => {
 
     editor.apply({
       type: 'insert_text',
-      path: [0, 0, 0],
+      path: [0, 0],
       offset: 0,
       text: 'A new string of text to be inserted.',
     });
@@ -56,14 +56,10 @@ describe('pad editor', () => {
 
     expect(editor.children).toMatchObject([
       {
+        type: 'p',
         children: [
           {
-            type: 'p',
-            children: [
-              {
-                text: 'A new string of text to be inserted.',
-              },
-            ],
+            text: 'A new string of text to be inserted.',
           },
         ],
       },

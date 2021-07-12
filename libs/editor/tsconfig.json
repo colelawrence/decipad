@@ -5,5 +5,18 @@
     "jsx": "react"
   },
   "include": ["src"],
-  "references": [{ "path": "../runtime" }, { "path": "../ui" }]
+  "references": [
+    {
+      "path": "../runtime"
+    },
+    {
+      "path": "../ui"
+    }
+  ],
+  "exclude": [
+    "**/*.stories.ts",
+    "**/*.stories.js",
+    "**/*.stories.jsx",
+    "**/*.stories.tsx"
+  ]
 }

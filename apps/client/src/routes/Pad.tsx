@@ -21,7 +21,7 @@ import {
 import { FiArrowLeft } from 'react-icons/fi';
 import { Link, useHistory } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
-import { DeciEditor } from '@decipad/editor';
+import { Editor } from '@decipad/editor';
 import { HelpButton, LoadingSpinnerPage } from '@decipad/ui';
 import { encode as encodeVanityUrlComponent } from '../lib/vanityUrlComponent';
 
@@ -112,7 +112,7 @@ export function Pad({
       <Container maxW="75ch" pt={12}>
         <PadTitleEditor pad={pad!} onPadNameChanged={renamePad} />
       </Container>
-      <DeciEditor padId={padId} autoFocus={!!pad!.name} />
+      <Editor padId={padId} autoFocus={!!pad!.name} />
       <HelpButton />
     </Box>
   );

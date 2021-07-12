@@ -86,7 +86,6 @@ describe('sync', () => {
     padContents.push(content);
 
     const editor = createEditor();
-    editor.number = 0;
     padEditors.push(editor);
     padSubscriptions.push(wireEditor(editor, content));
   });
@@ -97,7 +96,6 @@ describe('sync', () => {
       padContents.push(content);
 
       const editor = createEditor();
-      editor.number = i;
       padEditors.push(editor);
       padSubscriptions.push(wireEditor(editor, content));
     }
@@ -118,8 +116,6 @@ describe('sync', () => {
   it('makes random changes to the editors', async () => {
     await randomChangesToEditors(padEditors, 100);
   }, 90000);
-
-  it('waits a bit', async () => await timeout(10000), 11000);
 
   it('all converges', async () => {
     await waitForExpect(
@@ -153,7 +149,7 @@ describe('sync', () => {
         }
       },
       120000,
-      10000
+      5000
     );
   }, 130000);
 
@@ -402,8 +398,7 @@ async function randomChangesToEditor(editor: Editor, changeCount: number) {
 }
 
 function randomChangeToEditor(editor: Editor): Operation[] {
-  const candidates = (editor.children[0] as { children: Node[] })
-    .children as Node[];
+  const candidates = editor.children;
   const candidateIndex = pickRandomIndex(candidates);
   const candidate = candidates[candidateIndex] as { children: Node[] };
   const text = ((candidate.children as Node[])[0] as { text: string })
@@ -424,7 +419,7 @@ function randomInsert(index: number, text: string): Operation[] {
   const pos = pickRandomIndex(text);
   ops.push({
     type: 'insert_text',
-    path: [0, index, 0],
+    path: [index, 0],
     offset: pos,
     text: randomChar(),
   });
@@ -437,7 +432,7 @@ function randomRemove(index: number, text: string): Operation[] {
   const pos = pickRandomIndex(text);
   ops.push({
     type: 'remove_text',
-    path: [0, index, 0],
+    path: [index, 0],
     offset: pos,
     text: text[pos],
   });
@@ -452,14 +447,14 @@ function randomSplit(index: number, text: string, node: Element): Operation[] {
 
   ops.push({
     type: 'split_node',
-    path: [0, index, 0],
+    path: [index, 0],
     position: pos,
     properties: {},
   });
 
   ops.push({
     type: 'split_node',
-    path: [0, index],
+    path: [index],
     position: 1,
     properties: {
       ...props,

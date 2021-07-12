@@ -17,8 +17,8 @@ const DEBOUNCE_PROCESS_SLATE_OPS =
 
 const initialValue = toSync([
   {
-    children: [
-      {
+    // children: [
+    //   {
         type: 'p',
         children: [
           {
@@ -26,14 +26,14 @@ const initialValue = toSync([
           },
         ],
         id: '000000000000000000000',
-      },
-    ],
+    //   },
+    // ],
   },
 ]) as SyncPadDoc;
 
 // we have to initialize a static value because randomization of ids by automerge will lead to initial divergence and we don't want that.
 const initialStaticValue =
-  '["~#iL",[["~#iM",["ops",["^0",[["^1",["action","makeList","obj","b74ed06c-98ea-4f1b-8afd-ebf2b472b1b3"]],["^1",["action","ins","obj","b74ed06c-98ea-4f1b-8afd-ebf2b472b1b3","key","_head","elem",1]],["^1",["action","makeMap","obj","93fd8288-5669-4590-a972-582ccf9a9adb"]],["^1",["action","makeList","obj","5129085f-3721-4e1f-8f5a-fd47ad8e0d0e"]],["^1",["action","ins","obj","5129085f-3721-4e1f-8f5a-fd47ad8e0d0e","key","_head","elem",1]],["^1",["action","makeMap","obj","60fc8179-0b26-4e72-b35a-5d32a8442b14"]],["^1",["action","set","obj","60fc8179-0b26-4e72-b35a-5d32a8442b14","key","type","value","p"]],["^1",["action","makeList","obj","100125ae-8249-427b-b3b9-bd4c1c41e5b9"]],["^1",["action","ins","obj","100125ae-8249-427b-b3b9-bd4c1c41e5b9","key","_head","elem",1]],["^1",["action","makeMap","obj","ad70cfa3-e5e9-4ce8-a5fa-ef794c3402b7"]],["^1",["action","makeText","obj","8d5a0988-079f-47bc-ba8b-d2a93518850f"]],["^1",["action","link","obj","ad70cfa3-e5e9-4ce8-a5fa-ef794c3402b7","key","text","value","8d5a0988-079f-47bc-ba8b-d2a93518850f"]],["^1",["action","link","obj","100125ae-8249-427b-b3b9-bd4c1c41e5b9","key","starter:1","value","ad70cfa3-e5e9-4ce8-a5fa-ef794c3402b7"]],["^1",["action","link","obj","60fc8179-0b26-4e72-b35a-5d32a8442b14","key","children","value","100125ae-8249-427b-b3b9-bd4c1c41e5b9"]],["^1",["action","set","obj","60fc8179-0b26-4e72-b35a-5d32a8442b14","key","id","value","000000000000000000000"]],["^1",["action","link","obj","5129085f-3721-4e1f-8f5a-fd47ad8e0d0e","key","starter:1","value","60fc8179-0b26-4e72-b35a-5d32a8442b14"]],["^1",["action","link","obj","93fd8288-5669-4590-a972-582ccf9a9adb","key","children","value","5129085f-3721-4e1f-8f5a-fd47ad8e0d0e"]],["^1",["action","link","obj","b74ed06c-98ea-4f1b-8afd-ebf2b472b1b3","key","starter:1","value","93fd8288-5669-4590-a972-582ccf9a9adb"]],["^1",["action","link","obj","00000000-0000-0000-0000-000000000000","key","value","value","b74ed06c-98ea-4f1b-8afd-ebf2b472b1b3"]]]],"actor","starter","seq",1,"deps",["^1",[]],"message","Initialization","undoable",false]]]]';
+  '["~#iL",[["~#iM",["ops",["^0",[["^1",["action","makeList","obj","982602ad-8ccc-406a-bd96-39df0b1a71c5"]],["^1",["action","ins","obj","982602ad-8ccc-406a-bd96-39df0b1a71c5","key","_head","elem",1]],["^1",["action","makeMap","obj","73fce065-0465-4547-8270-dcd75cb37bfb"]],["^1",["action","set","obj","73fce065-0465-4547-8270-dcd75cb37bfb","key","type","value","p"]],["^1",["action","makeList","obj","0055603a-6e3f-4e1d-87cb-9c9aec848906"]],["^1",["action","ins","obj","0055603a-6e3f-4e1d-87cb-9c9aec848906","key","_head","elem",1]],["^1",["action","makeMap","obj","1758ff95-f7ca-484c-a2fa-401397b65d8d"]],["^1",["action","makeText","obj","5778df97-5560-4410-a7c3-ba364d339ac9"]],["^1",["action","link","obj","1758ff95-f7ca-484c-a2fa-401397b65d8d","key","text","value","5778df97-5560-4410-a7c3-ba364d339ac9"]],["^1",["action","link","obj","0055603a-6e3f-4e1d-87cb-9c9aec848906","key","starter:1","value","1758ff95-f7ca-484c-a2fa-401397b65d8d"]],["^1",["action","link","obj","73fce065-0465-4547-8270-dcd75cb37bfb","key","children","value","0055603a-6e3f-4e1d-87cb-9c9aec848906"]],["^1",["action","set","obj","73fce065-0465-4547-8270-dcd75cb37bfb","key","id","value","000000000000000000000"]],["^1",["action","link","obj","982602ad-8ccc-406a-bd96-39df0b1a71c5","key","starter:1","value","73fce065-0465-4547-8270-dcd75cb37bfb"]],["^1",["action","link","obj","00000000-0000-0000-0000-000000000000","key","value","value","982602ad-8ccc-406a-bd96-39df0b1a71c5"]]]],"actor","starter","seq",1,"deps",["^1",[]],"message","Initialization","undoable",false]]]]';
 
 class PadEditor {
   private slateOpQueue: ExtendedSlate.ExtendedSlateOperation[] = [];

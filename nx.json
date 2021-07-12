@@ -29,10 +29,7 @@
     }
   },
   "projects": {
-    "language": {
-      "tags": []
-    },
-    "runtime": {
+    "backend": {
       "tags": []
     },
     "client": {
@@ -43,19 +40,22 @@
       "tags": [],
       "implicitDependencies": ["client"]
     },
-    "ui": {
-      "tags": []
-    },
     "editor": {
-      "tags": []
-    },
-    "backend": {
       "tags": []
     },
     "kafka-lite": {
       "tags": []
     },
+    "language": {
+      "tags": []
+    },
     "queries": {
+      "tags": []
+    },
+    "runtime": {
+      "tags": []
+    },
+    "ui": {
       "tags": []
     }
   }

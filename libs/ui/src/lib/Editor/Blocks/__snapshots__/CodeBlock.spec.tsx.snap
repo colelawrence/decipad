@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CodeBlock Block matches snapshot 1`] = `
+.emotion-1 {
+  background: rgb(252,252,263);
+  color: var(--chakra-colors-black);
+  padding-top: var(--chakra-space-2);
+  padding-bottom: var(--chakra-space-2);
+  -webkit-padding-start: var(--chakra-space-6);
+  padding-inline-start: var(--chakra-space-6);
+  -webkit-padding-end: var(--chakra-space-6);
+  padding-inline-end: var(--chakra-space-6);
+  display: inline-block;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  margin-bottom: var(--chakra-space-3);
+  width: 100%;
+}
+
+<div>
+  <div
+    class="emotion-0"
+  >
+    <pre
+      class="root-65"
+      data-slate-node="element"
+    >
+      <code>
+        a = 10 apples b = 10 apples a + b
+      </code>
+    </pre>
+    <div
+      class="emotion-1"
+      contenteditable="false"
+    >
+      20
+       &lt;number&gt;
+    </div>
+  </div>
+</div>
+`;
+
+exports[`CodeBlock Block matches snapshot with no results 1`] = `
+<div>
+  <div
+    class="emotion-0"
+  >
+    <pre
+      class="root-65"
+      data-slate-node="element"
+    >
+      <code>
+        a = 10 apples b = 10 apples a + b
+      </code>
+    </pre>
+  </div>
+</div>
+`;

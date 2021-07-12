@@ -18,56 +18,47 @@
     }
   },
   "projects": {
-    "language": {
-      "root": "libs/language",
-      "sourceRoot": "libs/language/src",
-      "projectType": "library",
+    "backend": {
+      "root": "apps/backend",
+      "sourceRoot": "apps/backend/src",
+      "projectType": "application",
+      "prefix": "backend",
       "targets": {
+        "serve": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": ["./node_modules/.bin/arc sandbox"],
+            "cwd": "apps/backend"
+          }
+        },
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/language/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/language"],
-          "options": {
-            "jestConfig": "libs/language/jest.config.js",
-            "passWithNoTests": true
+            "lintFilePatterns": [
+              "apps/backend/lib/**/*.ts",
+              "apps/backend/tests/**/*.ts"
+            ]
           }
         },
         "typecheck": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "yarn tsc -b libs/language"
-          }
-        }
-      }
-    },
-    "runtime": {
-      "root": "libs/runtime",
-      "sourceRoot": "libs/runtime/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/runtime/**/*.ts"]
+            "command": "yarn tsc -b apps/backend"
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/runtime"],
+          "outputs": ["coverage/apps/backend"],
           "options": {
-            "jestConfig": "libs/runtime/jest.config.js",
-            "codeCoverage": true
+            "jestConfig": "apps/backend/jest.config.js",
+            "codeCoverage": false
           }
         },
-        "typecheck": {
+        "deploy": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "yarn tsc -b libs/runtime"
+            "commands": ["./node_modules/.bin/arc deploy"],
+            "cwd": "apps/backend"
           }
         }
       }
@@ -156,6 +147,160 @@
         }
       }
     },
+    "editor": {
+      "root": "libs/editor",
+      "sourceRoot": "libs/editor/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/editor/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/editor"],
+          "options": {
+            "jestConfig": "libs/editor/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/editor"
+          }
+        },
+        "storybook": {
+          "executor": "@nrwl/storybook:storybook",
+          "options": {
+            "uiFramework": "@storybook/react",
+            "port": 4400,
+            "config": {
+              "configFolder": "libs/editor/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        },
+        "build-storybook": {
+          "executor": "@nrwl/storybook:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "uiFramework": "@storybook/react",
+            "outputPath": "dist/storybook/editor",
+            "config": {
+              "configFolder": "libs/editor/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        }
+      }
+    },
+    "kafka-lite": {
+      "root": "libs/kafka-lite",
+      "sourceRoot": "libs/kafka-lite/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/kafka-lite/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/kafka-lite"],
+          "options": {
+            "jestConfig": "libs/kafka-lite/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "language": {
+      "root": "libs/language",
+      "sourceRoot": "libs/language/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/language/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/language"],
+          "options": {
+            "jestConfig": "libs/language/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/language"
+          }
+        }
+      }
+    },
+    "queries": {
+      "root": "libs/queries",
+      "sourceRoot": "libs/queries/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/queries/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/queries"],
+          "options": {
+            "jestConfig": "libs/queries/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "runtime": {
+      "root": "libs/runtime",
+      "sourceRoot": "libs/runtime/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/runtime/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/runtime"],
+          "options": {
+            "jestConfig": "libs/runtime/jest.config.js",
+            "codeCoverage": true
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/runtime"
+          }
+        }
+      }
+    },
     "ui": {
       "root": "libs/ui",
       "sourceRoot": "libs/ui/src",
@@ -210,120 +355,6 @@
             "ci": {
               "quiet": true
             }
-          }
-        }
-      }
-    },
-    "editor": {
-      "root": "libs/editor",
-      "sourceRoot": "libs/editor/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/editor/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/editor"],
-          "options": {
-            "jestConfig": "libs/editor/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
-        "typecheck": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "yarn tsc -b libs/editor"
-          }
-        }
-      }
-    },
-    "backend": {
-      "root": "apps/backend",
-      "sourceRoot": "apps/backend/src",
-      "projectType": "application",
-      "prefix": "backend",
-      "targets": {
-        "serve": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "commands": ["./node_modules/.bin/arc sandbox"],
-            "cwd": "apps/backend"
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "apps/backend/lib/**/*.ts",
-              "apps/backend/tests/**/*.ts"
-            ]
-          }
-        },
-        "typecheck": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "yarn tsc -b apps/backend"
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/backend"],
-          "options": {
-            "jestConfig": "apps/backend/jest.config.js",
-            "codeCoverage": false
-          }
-        },
-        "deploy": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "commands": ["./node_modules/.bin/arc deploy"],
-            "cwd": "apps/backend"
-          }
-        }
-      }
-    },
-    "kafka-lite": {
-      "root": "libs/kafka-lite",
-      "sourceRoot": "libs/kafka-lite/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/kafka-lite/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/kafka-lite"],
-          "options": {
-            "jestConfig": "libs/kafka-lite/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "queries": {
-      "root": "libs/queries",
-      "sourceRoot": "libs/queries/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/queries/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/queries"],
-          "options": {
-            "jestConfig": "libs/queries/jest.config.js",
-            "passWithNoTests": true
           }
         }
       }

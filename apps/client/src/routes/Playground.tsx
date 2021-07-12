@@ -7,7 +7,7 @@ import {
   Image,
   Text,
 } from '@chakra-ui/react';
-import { AnonymousRuntimeProvider, DeciEditor } from '@decipad/editor';
+import { AnonymousRuntimeProvider, Editor } from '@decipad/editor';
 import { HelpButton } from '@decipad/ui';
 import { nanoid } from 'nanoid';
 import { useEffect, useMemo } from 'react';
@@ -53,7 +53,7 @@ export function Playground() {
           </Text>
           <HelpButton />
         </Container>
-        <DeciEditor padId={randomId} autoFocus />
+        <Editor padId={randomId} autoFocus />
       </Box>
     </AnonymousRuntimeProvider>
   );

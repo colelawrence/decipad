@@ -92,22 +92,18 @@ describe('slate to replica sync', () => {
 
     expect(model1.getValue()).toMatchObject([
       {
+        type: 'p',
         children: [
           {
-            type: 'p',
-            children: [
-              {
-                text: text,
-              },
-            ],
+            text: text,
           },
+        ],
+      },
+      {
+        type: 'p',
+        children: [
           {
-            type: 'p',
-            children: [
-              {
-                text: '',
-              },
-            ],
+            text: '',
           },
         ],
       },
@@ -121,14 +117,14 @@ describe('slate to replica sync', () => {
     Editor.withoutNormalizing(editor1, () => {
       editor1.apply({
         type: 'split_node',
-        path: [0, 0, 0],
+        path: [0, 0],
         position: firstText.length,
         properties: {},
       });
 
       editor1.apply({
         type: 'split_node',
-        path: [0, 0],
+        path: [0],
         position: 1,
         properties: {
           type: 'p',
@@ -145,30 +141,26 @@ describe('slate to replica sync', () => {
 
     expect(model1.getValue()).toMatchObject([
       {
+        type: 'p',
         children: [
           {
-            type: 'p',
-            children: [
-              {
-                text: firstText,
-              },
-            ],
+            text: firstText,
           },
+        ],
+      },
+      {
+        type: 'p',
+        children: [
           {
-            type: 'p',
-            children: [
-              {
-                text: '',
-              },
-            ],
+            text: '',
           },
+        ],
+      },
+      {
+        type: 'p',
+        children: [
           {
-            type: 'p',
-            children: [
-              {
-                text: '',
-              },
-            ],
+            text: '',
           },
         ],
       },
@@ -196,38 +188,34 @@ describe('slate to replica sync', () => {
 
     expect(model1.getValue()).toMatchObject([
       {
+        type: 'p',
         children: [
           {
-            type: 'p',
-            children: [
-              {
-                text: firstText,
-              },
-            ],
+            text: firstText,
           },
+        ],
+      },
+      {
+        type: 'p',
+        children: [
           {
-            type: 'p',
-            children: [
-              {
-                text: secondText,
-              },
-            ],
+            text: secondText,
           },
+        ],
+      },
+      {
+        type: 'p',
+        children: [
           {
-            type: 'p',
-            children: [
-              {
-                text: '',
-              },
-            ],
+            text: '',
           },
+        ],
+      },
+      {
+        type: 'p',
+        children: [
           {
-            type: 'p',
-            children: [
-              {
-                text: '',
-              },
-            ],
+            text: '',
           },
         ],
       },
@@ -315,7 +303,7 @@ describe('slate to replica sync', () => {
   test('sets node', async () => {
     editor1.apply({
       type: 'set_node',
-      path: [0, 0, 0],
+      path: [0, 0],
       properties: { bold: undefined } as Partial<Node>,
       newProperties: { bold: true } as Partial<Node>,
     } as SlateOperation);
@@ -334,7 +322,7 @@ describe('slate to replica sync', () => {
     Editor.withoutNormalizing(editor1, () => {
       editor1.apply({
         type: 'set_node',
-        path: [0, 0, 0],
+        path: [0, 0],
         properties: { bold: true } as Partial<Node>,
         newProperties: { bold: undefined } as Partial<Node>,
       } as SlateOperation);
@@ -391,7 +379,7 @@ function createRandomInsertSlateOperations(
   for (const c of text) {
     ops.push({
       type: 'insert_text',
-      path: [0, line, 0],
+      path: [line, 0],
       offset: i,
       text: c,
     });
@@ -399,7 +387,7 @@ function createRandomInsertSlateOperations(
     if (i === 0) {
       ops.push({
         type: 'insert_node',
-        path: [0, line + 1],
+        path: [line + 1],
         node: {
           type: 'p',
           children: [{ text: '' }],
@@ -419,12 +407,7 @@ function randomText() {
 }
 
 function randomEdit(editor: Editor): SlateOperation {
-  const children = editor.children;
-  if (children.length < 0) {
-    throw new Error('no children in editor');
-  }
-  const root = children[0] as Element;
-  const candidates = root.children;
+  const candidates = editor.children;
   if (candidates.length === 0) {
     throw new Error('no candidates');
   }
@@ -436,7 +419,7 @@ function randomEdit(editor: Editor): SlateOperation {
 
   if (willRemove) {
     return {
-      path: [0, pickedIndex, 0],
+      path: [pickedIndex, 0],
       text: text[pickedCharIndex],
       type: 'remove_text',
       offset: pickedCharIndex,
@@ -444,7 +427,7 @@ function randomEdit(editor: Editor): SlateOperation {
   } else {
     return {
       type: 'insert_text',
-      path: [0, pickedIndex, 0],
+      path: [pickedIndex, 0],
       text: randomChar(),
       offset: pickedCharIndex,
     };
@@ -458,12 +441,7 @@ function randomChar(): string {
 }
 
 function mergeTwoFirstLines(editor: Editor): SlateOperation[] {
-  const children = editor.children;
-  if (children.length < 0) {
-    throw new Error('no children in editor');
-  }
-  const root = children[0] as Element;
-  const candidates = root.children;
+  const candidates = editor.children;
   if (candidates.length === 0) {
     throw new Error('no candidates');
   }
@@ -477,13 +455,13 @@ function mergeTwoFirstLines(editor: Editor): SlateOperation[] {
       ((candidates[0] as Element).children[0] as { text: string })
         .text as string
     ).length,
-    path: [0, 0, 0],
+    path: [0, 0],
   } as SlateOperation);
 
   ops.push({
     type: 'remove_text',
     text: '',
-    path: [0, 1, 0],
+    path: [1, 0],
     offset: 0,
   });
 
@@ -491,7 +469,7 @@ function mergeTwoFirstLines(editor: Editor): SlateOperation[] {
 
   ops.push({
     type: 'merge_node',
-    path: [0, 1],
+    path: [1],
     position: 1,
     properties: {
       type: secondLine.type,
@@ -505,12 +483,7 @@ function mergeTwoFirstLines(editor: Editor): SlateOperation[] {
 function removeRandomNode(editor: Editor): SlateOperation[] {
   const ops: SlateOperation[] = [];
 
-  const children = editor.children;
-  if (children.length < 0) {
-    throw new Error('no children in editor');
-  }
-  const root = children[0] as Element;
-  const candidates = root.children;
+  const candidates = editor.children;
   if (candidates.length === 0) {
     throw new Error('no candidates');
   }
@@ -518,7 +491,7 @@ function removeRandomNode(editor: Editor): SlateOperation[] {
   const selectedIndex = Math.floor(Math.random() * candidates.length);
   ops.push({
     type: 'remove_node',
-    path: [0, selectedIndex],
+    path: [selectedIndex],
     node: candidates[selectedIndex],
   });
 
@@ -528,12 +501,7 @@ function removeRandomNode(editor: Editor): SlateOperation[] {
 function moveRandomNode(editor: Editor): SlateOperation[] {
   const ops: SlateOperation[] = [];
 
-  const children = editor.children;
-  if (children.length < 0) {
-    throw new Error('no children in editor');
-  }
-  const root = children[0] as Element;
-  const candidates = root.children;
+  const candidates = editor.children;
   if (candidates.length < 2) {
     throw new Error('less than 2 candidates');
   }
@@ -547,8 +515,8 @@ function moveRandomNode(editor: Editor): SlateOperation[] {
 
   ops.push({
     type: 'move_node',
-    path: [0, selectedIndex],
-    newPath: [0, targetIndex],
+    path: [selectedIndex],
+    newPath: [targetIndex],
   });
 
   return ops;
@@ -557,14 +525,9 @@ function moveRandomNode(editor: Editor): SlateOperation[] {
 function splitRandomText(editor: Editor): SlateOperation[] {
   const ops: SlateOperation[] = [];
 
-  const children = editor.children;
-  if (children.length < 0) {
-    throw new Error('no children in editor');
-  }
-  const root = children[0] as Element;
-  const candidates = root.children;
-
+  const candidates = editor.children;
   let targetIndex;
+
   do {
     targetIndex = Math.floor(Math.random() * candidates.length);
   } while (
@@ -582,7 +545,7 @@ function splitRandomText(editor: Editor): SlateOperation[] {
 
   ops.push({
     type: 'split_node',
-    path: [0, targetIndex, 0],
+    path: [targetIndex, 0],
     position: splitAt,
     properties: {},
   });
@@ -591,7 +554,7 @@ function splitRandomText(editor: Editor): SlateOperation[] {
 
   ops.push({
     type: 'split_node',
-    path: [0, targetIndex],
+    path: [targetIndex],
     position: 1,
     properties: candidateExceptChildren,
   });

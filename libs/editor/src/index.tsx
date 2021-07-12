@@ -1,166 +1,76 @@
-import { Box, Button, Container, Icon } from '@chakra-ui/react';
-import { Blocks, Leaves } from '@decipad/ui';
-import { EditablePlugins, pipe } from '@udecode/slate-plugins';
-import dynamic from 'next/dynamic';
-import { FiPlus } from 'react-icons/fi';
-import React, { useCallback, useState, useMemo } from 'react';
-import { Node, createEditor, Transforms } from 'slate';
-import { ReactEditor, Slate } from 'slate-react';
+import React, { useMemo, useState } from 'react';
+import { createEditor, Node } from 'slate';
+import styled from '@emotion/styled';
+import { SlatePlugins, pipe, withSlatePlugins } from '@udecode/slate-plugins';
+import { Box, Container } from '@chakra-ui/react';
 import { ResultsContextProvider } from '@decipad/ui';
-import { DropFile } from './Components/DropFile';
-import { useEditor } from './Hooks/useEditor';
-import { plugins, withPlugins } from './Plugins';
-import { commands } from './Plugins/DashCommands/commands';
-import { DashCommandsPortalProps } from './Plugins/DashCommands/DashCommandsPortal';
-import { useDashCommands } from './Plugins/DashCommands/useDashCommands';
-import { HoveringToolbar } from './Plugins/HoveringToolbar/HoveringToolbar.component';
-import { MentionPortalProps } from './Plugins/MentionPlugin/MentionPortal.component';
-import { useMention } from './Plugins/MentionPlugin/useMention';
-import { users } from './Plugins/MentionPlugin/users';
+import { SideFormattingMenu } from './components/SideFormattingMenu';
+import { DropFile } from './components/DropFile';
+import { components, options, plugins } from './configuration';
+import {
+  SlashCommandsSelect,
+  useSlashCommandsPlugin,
+} from './plugins/SlashCommands';
+import { useEditor } from './hooks/useEditor';
 
-const DashCommandsPortal = dynamic<DashCommandsPortalProps>(
-  () =>
-    import('./Plugins/DashCommands/DashCommandsPortal').then(
-      (res) => res.DashCommandsPortal
-    ),
-  { ssr: false }
-);
+export { RuntimeProvider, AnonymousRuntimeProvider } from './contexts/Runtime';
 
-const MentionPortal = dynamic<MentionPortalProps>(
-  () =>
-    import('./Plugins/MentionPlugin/MentionPortal.component').then(
-      (res) => res.MentionPortal
-    ),
-  { ssr: false }
-);
+const Wrapper = styled('div')`
+  padding-top: 25px;
+`;
 
-interface DeciEditorProps {
-  padId: string;
-  autoFocus: boolean;
-}
+export const Editor = ({ padId, autoFocus }: { padId: string, autoFocus: boolean }) => {
+  const [value, setValue] = useState<Node[] | undefined>(undefined);
 
-export const DeciEditor = ({
-  padId,
-  autoFocus,
-}: DeciEditorProps): JSX.Element => {
-  const [value, setValue] = useState<Node[] | null>(null);
-  const editor = useState(
-    (): ReactEditor => pipe(createEditor(), ...withPlugins)
-  )[0];
+  const { getSlashCommandsProps, plugin: slashCommandsPlugin } =
+    useSlashCommandsPlugin();
+
+  const editorPlugins = useMemo(
+    () => [...plugins, slashCommandsPlugin],
+    [slashCommandsPlugin]
+  );
+
+  const editor = useState(() => pipe(
+    createEditor(),
+    withSlatePlugins({
+      id: padId,
+      plugins: editorPlugins,
+      options,
+      components,
+    })))[0];
+
   const { onChangeLanguage, results } = useEditor({
     padId,
     editor,
     setValue,
   });
 
-  const {
-    onAddElement,
-    onChangeDashCommands,
-    onKeyDownDashCommands,
-    search,
-    index,
-    target,
-    values,
-  } = useDashCommands(commands);
-
-  const {
-    target: mentionTarget,
-    search: mentionSearch,
-    index: mentionIndex,
-    onChangeMention,
-    onKeyDownMention,
-    filteredUsers,
-  } = useMention(users);
-
-  const onChange = useCallback(
-    (newValue: Node[]) => {
-      onChangeDashCommands(editor);
-      onChangeMention(editor);
-      onChangeLanguage(newValue);
-      setValue(newValue);
-    },
-    [editor, onChangeDashCommands, onChangeMention, onChangeLanguage, setValue]
-  );
-
-  const editablePlugins = useMemo(
-    () => (
-      <EditablePlugins
-        autoFocus={autoFocus}
-        style={{ height: '100%' }}
-        plugins={plugins}
-        renderElement={[Blocks]}
-        renderLeaf={[Leaves]}
-        onKeyDown={[onKeyDownDashCommands, onKeyDownMention]}
-        onKeyDownDeps={[
-          index,
-          search,
-          target,
-          mentionIndex,
-          mentionSearch,
-          mentionTarget,
-        ]}
-        placeholder={`Type "/" for commands`}
-      />
-    ),
-    [
-      onKeyDownDashCommands,
-      onKeyDownMention,
-      index,
-      search,
-      target,
-      mentionIndex,
-      mentionSearch,
-      mentionTarget,
-      autoFocus,
-    ]
-  );
-
-  if (value == null) {
-    return (
-      <Box>
-        <span>Loading...</span>
-      </Box>
-    );
-  } else {
-    return (
-      <ResultsContextProvider key={padId} value={results}>
-        <Box pb="70px" w="100vw" pos="relative">
-          <Container maxW="75ch">
+  return (
+    <ResultsContextProvider key={padId} value={results}>
+      <Box pb="70px" w="100vw" pos="relative">
+        <Container maxW="75ch">
+          { value && editor ? (
             <DropFile editor={editor}>
-              <Slate editor={editor} value={value} onChange={onChange}>
-                {editablePlugins}
-                <DashCommandsPortal
-                  target={target}
-                  index={index}
-                  values={values}
-                  onClick={onAddElement}
+              <Wrapper>
+                <SlatePlugins
+                  value={value}
+                  id={padId}
+                  editor={editor}
+                  plugins={editorPlugins}
+                  options={options}
+                  components={components}
+                  editableProps={{ autoFocus }}
+                  onChange={() => onChangeLanguage(editor.children) }
                 />
-                <MentionPortal
-                  target={mentionTarget}
-                  index={mentionIndex}
-                  users={filteredUsers}
-                />
-                <HoveringToolbar />
-              </Slate>
-            </DropFile>
-          </Container>
-          <Button
-            pos="absolute"
-            onClick={() => {
-              editor.insertNode({ type: 'code_block', text: '' });
-              Transforms.setNodes(editor, { type: 'code_block' });
-              ReactEditor.focus(editor);
-            }}
-            top={0}
-            right={10}
-            leftIcon={<Icon as={FiPlus} />}
-          >
-            Add Model Block
-          </Button>
-        </Box>
-      </ResultsContextProvider>
-    );
-  }
+                <SlashCommandsSelect {...getSlashCommandsProps()} />
+                <SideFormattingMenu />
+              </Wrapper>
+            </DropFile>)
+          : <span>Loading...</span> }
+        </Container>
+      </Box>
+    </ResultsContextProvider>
+  );
 };
 
-export * from './Contexts/Runtime';
+
