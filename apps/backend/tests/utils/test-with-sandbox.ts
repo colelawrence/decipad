@@ -11,7 +11,7 @@ function testWithSandbox(description: string, fn: () => void) {
     }, 20000);
 
     afterAll(async () => {
-      await sandbox.stop(undefined);
+      await sandbox.stop();
       await timeout(4000);
     });
 

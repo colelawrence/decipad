@@ -44,16 +44,6 @@ const deci = new DeciRuntime({ userId, actorId })
 deci.stop() // stops all observables / subjects / subscriptions
 ```
 
-### Identify
-
-You can hook it to your session provider:
-
-```js
-const session: Session = ...
-
-deci.setSession(session)
-```
-
 ### Observables
 
 Lists and elements implement the Observer pattern. All observers emit objects with the following shape:
@@ -117,24 +107,6 @@ subscription.unsubscribe();
 editorModel.stop(); // important to release resources
 ```
 
-### Evaluating a pad
-
-```js
-const editorModel = deci.pads.editor(padId);
-
-const result = await editorModel.valueAt('block id', lineNumber);
-```
-
-result is a ComputationResult:
-
-```js
-{
-  type: Type | TableType | undefined
-  value: Interpreter.Result | undefined
-  errors: ComputationError[]
-}
-```
-
 ### Getting a shared websocket
 
 To limit the number of open websockets, you can reuse the sync websocket by using `runtime.websocketImpl()` like this:
@@ -145,8 +117,6 @@ const urlString = 'some bogus url string';
 // the URL string here doesn't matter because it will always return
 // a websocket to the predetermined websocket server.
 const websocket = new WebSocketClass(urlString);
-```
-
 ```
 
 ## Running unit tests

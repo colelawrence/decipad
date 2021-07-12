@@ -2,15 +2,17 @@ import { Doc } from 'automerge';
 import EventEmitter from 'events';
 import { Observable, Subscription } from 'rxjs';
 import { SyncSubscriptionManager } from './sync-subscription-manager';
-
-const MAX_RECONNECT_MS = Number(process.env.DECI_MAX_RECONNECT_MS) || 10000;
-const fetchPrefix = process.env.DECI_API_URL || '';
+import createExternalWebsocketImpl from './external-websocket';
+import { RemoteOp, Mutation, RemoteWebSocketOp } from './types';
 
 interface SyncConstructorOptions {
-  start?: boolean;
+  start: boolean;
+  maxReconnectMs: number;
+  fetchPrefix: string;
 }
 
 export class Sync<T> extends EventEmitter {
+  private options: SyncConstructorOptions;
   private subscriptionManager = new SyncSubscriptionManager<T>();
   private subscriptionManagerTopicSubscription: Subscription | null = null;
   private topics = new Set<string>();
@@ -20,14 +22,15 @@ export class Sync<T> extends EventEmitter {
   private timeout: ReturnType<typeof setTimeout> | null = null;
   connection: WebSocket | null = null;
 
-  constructor({ start = true }: SyncConstructorOptions = {}) {
+  constructor(options: SyncConstructorOptions) {
     super();
+    this.options = options;
     this.onWebsocketClose = this.onWebsocketClose.bind(this);
     this.onWebsocketOpen = this.onWebsocketOpen.bind(this);
     this.onWebsocketMessage = this.onWebsocketMessage.bind(this);
     this.onWebsocketError = this.onWebsocketError.bind(this);
 
-    if (start) {
+    if (options.start) {
       this.start();
     }
   }
@@ -78,6 +81,10 @@ export class Sync<T> extends EventEmitter {
     this.disconnect();
   }
 
+  websocketImpl(): typeof WebSocket {
+    return createExternalWebsocketImpl(this);
+  }
+
   private disconnect() {
     if (
       this.connection !== null &&
@@ -110,7 +117,7 @@ export class Sync<T> extends EventEmitter {
     this.maybeClose();
   }
 
-  private maybeClose() {
+  public maybeClose() {
     if (this.connection) {
       if (this.topics.size === 0) {
         this.disconnect();
@@ -145,7 +152,7 @@ export class Sync<T> extends EventEmitter {
 
     let token;
     try {
-      token = await getAuthToken();
+      token = await this.getAuthToken();
     } catch (err) {
       if (
         err.code !== 'ECONNREFUSED' &&
@@ -158,7 +165,10 @@ export class Sync<T> extends EventEmitter {
       this.connecting = false;
     }
     if (!token) {
-      this.timeout = setTimeout(() => this.connect(), randomReconnectTimeout());
+      this.timeout = setTimeout(
+        () => this.connect(),
+        this.randomReconnectTimeout()
+      );
       return;
     }
 
@@ -231,25 +241,30 @@ export class Sync<T> extends EventEmitter {
       connection.onclose = null;
     }
 
-    this.timeout = setTimeout(() => this.connect(), randomReconnectTimeout());
+    this.timeout = setTimeout(
+      () => this.connect(),
+      this.randomReconnectTimeout()
+    );
   }
 
   private onWebsocketError(event: Event) {
     this.emit('websocket error', event);
   }
-}
 
-function randomReconnectTimeout() {
-  return Math.ceil(Math.random() * MAX_RECONNECT_MS);
-}
-
-async function getAuthToken(): Promise<string> {
-  const resp = await fetch(fetchPrefix + '/api/auth/token?for=pubsub');
-  if (!resp || !resp.ok) {
-    const message = `Failed fetching token from remote: ${
-      (await resp?.text()) || 'unknown'
-    }`;
-    throw new Error(message);
+  private randomReconnectTimeout() {
+    return Math.ceil(Math.random() * this.options.maxReconnectMs);
   }
-  return await resp.text();
+
+  private async getAuthToken(): Promise<string> {
+    const resp = await fetch(
+      this.options.fetchPrefix + '/api/auth/token?for=pubsub'
+    );
+    if (!resp || !resp.ok) {
+      const message = `Failed fetching token from remote: ${
+        (await resp?.text()) || 'unknown'
+      }`;
+      throw new Error(message);
+    }
+    return await resp.text();
+  }
 }

@@ -4,6 +4,5 @@
     "lib": ["esnext", "dom"],
     "allowJs": true
   },
-  "include": ["src", "types"],
-  "references": [{ "path": "../language" }, { "path": "../replica" }]
+  "include": ["src", "types"]
 }

@@ -30,7 +30,6 @@ export const RuntimeProvider = ({ children }: RuntimeProviderProps) => {
       return;
     } else if (userId) {
       const runtime = new DeciRuntime({ userId, actorId: nanoid() });
-      runtime.setSession(session);
       setValue({ runtime, status: 'success' });
       return () => runtime.stop();
     } else {

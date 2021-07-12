@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'runtime',
+  displayName: 'replica',
   testEnvironment: 'jsdom',
   preset: '../../jest.preset.js',
   setupFiles: ['./jest.setup.js'],
@@ -7,10 +7,10 @@ module.exports = {
   maxWorkers: 1,
   coverageThreshold: {
     global: {
-      statements: 96,
-      branches: 75,
-      functions: 98,
-      lines: 97,
+      statements: 72,
+      branches: 57,
+      lines: 72,
+      functions: 72,
     },
   },
 };

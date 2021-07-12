@@ -8,5 +8,6 @@ module.exports = {
     '<rootDir>/libs/kafka-lite',
     '<rootDir>/libs/runtime',
     '<rootDir>/libs/queries',
+    '<rootDir>/libs/replica',
   ],
 };

@@ -45,6 +45,46 @@
           "options": {
             "command": "yarn tsc -b apps/backend"
           }
+        }
+      }
+    },
+    "replica": {
+      "root": "libs/replica",
+      "sourceRoot": "libs/replica/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/replica/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/replica"],
+          "options": {
+            "jestConfig": "libs/replica/jest.config.js",
+            "codeCoverage": true
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/replica"
+          }
+        }
+      }
+    },
+    "runtime": {
+      "root": "libs/runtime",
+      "sourceRoot": "libs/runtime/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/runtime/**/*.ts"]
+          }
         },
         "test": {
           "executor": "@nrwl/jest:jest",

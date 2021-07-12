@@ -1,21 +1,25 @@
 import { createReplica as replica } from './replica';
-import { timeout } from './utils/timeout';
-import { Runtime } from './runtime';
 import { Sync } from './sync';
+import { timeout } from './utils/timeout';
+
+const syncOptions = {
+  start: true,
+  fetchPrefix: 'http://localhost:3333',
+  maxReconnectMs: 3000,
+};
 
 describe('replica', () => {
   test('gets inactive when it has no subscribers', async () => {
-    const mockRuntime = {
-      userId: 'test user id',
-      actorId: 'test actor id',
-      sync: new Sync(),
-    } as unknown as Runtime;
-
     const r = replica<string>({
       name: 'test',
-      runtime: mockRuntime,
+      userId: 'test user id',
+      actorId: 'test actor id',
+      sync: new Sync(syncOptions),
       initialValue: '',
       createIfAbsent: true,
+      maxRetryIntervalMs: 3000,
+      sendChangesDebounceMs: 1,
+      fetchPrefix: syncOptions.fetchPrefix,
     });
 
     const expectedSubscriberCounts = [0, 1, 0, 1, 0];
@@ -44,12 +48,9 @@ describe('replica', () => {
     r.mutate((s) => s + 'A');
     r.mutate((s) => s + 'B');
 
-    expect(r.isActive()).toBe(true);
-
     s.unsubscribe();
 
     expect(expectedValues).toHaveLength(0);
-    expect(r.isActive()).toBe(false);
 
     const expectedValues2 = ['AB', 'ABC', 'ABCD'];
     first = true;
@@ -71,8 +72,6 @@ describe('replica', () => {
     s2.unsubscribe();
 
     expect(expectedValues2).toHaveLength(0);
-    expect(r.isActive()).toBe(false);
-
     expect(expectedSubscriberCounts).toHaveLength(0);
     r.stop();
     expect(completedSubscriberCount).toBe(true);

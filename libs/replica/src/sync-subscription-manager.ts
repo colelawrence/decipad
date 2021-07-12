@@ -1,5 +1,6 @@
 import { Observable, Subject } from 'rxjs';
 import { Doc } from 'automerge';
+import { RemoteOp, Mutation, TopicSubscriptionOperation } from './types';
 
 export class SyncSubscriptionManager<T> {
   private outObservables: Map<string, Subject<RemoteOp>> = new Map();

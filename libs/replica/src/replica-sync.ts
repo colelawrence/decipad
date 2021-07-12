@@ -1,20 +1,20 @@
 import { Observable, Subscription, Subject } from 'rxjs';
 import Automerge, { Change, Doc } from 'automerge';
 import debounce from 'lodash.debounce';
-import { Runtime } from './runtime';
+import { Sync } from './sync';
 import { fnQueue } from './utils/fn-queue';
 import { encode } from './utils/resource';
+import { Mutation, RemoteOp } from './types';
 
-const MAX_RETRY_INTERVAL_MS =
-  Number(process.env.DECI_MAX_RETRY_INTERVAL_MS) || 10000;
-const SEND_CHANGES_DEBOUNCE_MS =
-  Number(process.env.DECI_SEND_CHANGES_DEBOUNCE_MS) || 3000;
-
-const fetchPrefix = process.env.DECI_API_URL || '';
+export type { Mutation };
 
 export class ReplicaSync<T> {
+  private maxRetryIntervalMs: number;
+  private sendChangesDebounceMs: number;
+  private fetchPrefix: string;
+
   private topic: string;
-  private runtime: Runtime;
+  private sync: Sync<T>;
   private localChangesObservable: Observable<Mutation<Doc<{ value: T }>>>;
   private subscriptionCountObservable: Observable<number>;
 
@@ -34,27 +34,38 @@ export class ReplicaSync<T> {
   private lastSentChangeCount = Infinity;
 
   constructor({
+    maxRetryIntervalMs,
+    sendChangesDebounceMs,
+    fetchPrefix,
     topic,
-    runtime,
+    sync,
     localChangesObservable,
     subscriptionCountObservable,
-    start = true,
+    start,
   }: {
+    maxRetryIntervalMs: number;
+    sendChangesDebounceMs: number;
+    fetchPrefix: string;
     topic: string;
-    runtime: Runtime;
+    sync: Sync<T>;
     localChangesObservable: Observable<Mutation<Doc<{ value: T }>>>;
     subscriptionCountObservable: Observable<number>;
     start: boolean;
   }) {
+    this.maxRetryIntervalMs = maxRetryIntervalMs;
+    this.sendChangesDebounceMs = sendChangesDebounceMs;
+    this.fetchPrefix = fetchPrefix;
+
     this.topic = topic;
-    this.runtime = runtime;
+
+    this.sync = sync;
     this.localChangesObservable = localChangesObservable;
     this.subscriptionCountObservable = subscriptionCountObservable;
 
     this.sendChanges = this.sendChanges.bind(this);
     this.debouncedSendChanges = debounce(
       this.sendChanges,
-      SEND_CHANGES_DEBOUNCE_MS
+      this.sendChangesDebounceMs
     );
 
     if (start) {
@@ -99,7 +110,7 @@ export class ReplicaSync<T> {
         return;
       }
 
-      const remoteOpsObservable = this.runtime.sync.subscribe(
+      const remoteOpsObservable = this.sync.subscribe(
         this.topic,
         this.localChangesObservable
       );
@@ -135,7 +146,7 @@ export class ReplicaSync<T> {
     if (!this.subscribed) {
       return;
     }
-    this.runtime.sync.unsubscribe(this.topic, this.localChangesObservable);
+    this.sync.unsubscribe(this.topic, this.localChangesObservable);
     this.subscribed = false;
   }
 
@@ -143,7 +154,9 @@ export class ReplicaSync<T> {
     this.queue
       .push(() => this._fetch())
       .catch(() => {
-        setTimeout(() => this.fetch(), randomRetryTimeout());
+        if (!this.stopped) {
+          setTimeout(() => this.fetch(), this.randomRetryTimeout());
+        }
       });
   }
 
@@ -166,8 +179,9 @@ export class ReplicaSync<T> {
           await this.attemptSendChanges();
           await this.reconcile();
         })
-        .catch(() => {
-          setTimeout(() => this.sendChanges(), randomRetryTimeout());
+        .catch((err) => {
+          console.error(err);
+          setTimeout(() => this.sendChanges(), this.randomRetryTimeout());
         });
     }
   }
@@ -291,11 +305,11 @@ export class ReplicaSync<T> {
       }); // One last attempt
   }
 
-  remoteUrl(): string {
-    return fetchPrefix + '/api/syncdoc/' + encode(this.topic);
+  private remoteUrl(): string {
+    return this.fetchPrefix + '/api/syncdoc/' + encode(this.topic);
   }
-}
 
-function randomRetryTimeout() {
-  return Math.ceil(Math.random() * MAX_RETRY_INTERVAL_MS);
+  private randomRetryTimeout() {
+    return Math.ceil(Math.random() * this.maxRetryIntervalMs);
+  }
 }

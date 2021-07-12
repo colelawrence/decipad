@@ -3,7 +3,7 @@ import debounce from 'lodash.debounce';
 import { Operation as SlateOperation } from 'slate';
 import { nanoid } from 'nanoid';
 import { Runtime } from './runtime';
-import { createReplica, Replica } from './replica';
+import { createReplica, Replica } from '@decipad/replica';
 import { fromSlateOpType, SupportedSlateOpTypes } from './from-slate-op';
 import { toSlateOps } from './to-slate-ops';
 import { toJS } from './utils/to-js';
@@ -14,6 +14,11 @@ import { uri } from './utils/uri';
 
 const DEBOUNCE_PROCESS_SLATE_OPS =
   Number(process.env.DECI_DEBOUNCE_PROCESS_SLATE_OPS) || 500;
+const MAX_RETRY_INTERVAL_MS =
+  Number(process.env.DECI_MAX_RETRY_INTERVAL_MS) || 10000;
+const SEND_CHANGES_DEBOUNCE_MS =
+  Number(process.env.DECI_SEND_CHANGES_DEBOUNCE_MS) || 3000;
+const fetchPrefix = process.env.DECI_API_URL || '';
 
 const initialValue = toSync([
   {
@@ -60,11 +65,16 @@ class PadEditor {
 
     this.replica = createReplica<SyncPadDoc>({
       name: uri('pads', padId, 'content'),
-      runtime,
+      actorId: runtime.actorId,
+      userId: runtime.userId,
+      sync: runtime.sync,
       initialValue,
       initialStaticValue,
       createIfAbsent: true,
       startReplicaSync,
+      maxRetryIntervalMs: MAX_RETRY_INTERVAL_MS,
+      sendChangesDebounceMs: SEND_CHANGES_DEBOUNCE_MS,
+      fetchPrefix,
     });
     this.replica.beforeRemoteChanges = () => {
       this.processSlateOps();
@@ -139,8 +149,6 @@ class PadEditor {
         if (op.isRemote === true) {
           continue;
         }
-        // console.log('before:', this.replica.getValue())
-        // console.trace('OP:', op);
         const applyOp = fromSlateOpType(
           (op as unknown as ExtendedSlate.ExtendedSlateOperation)
             .type as SupportedSlateOpTypes

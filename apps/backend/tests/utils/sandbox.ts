@@ -26,6 +26,7 @@ const verbose = !!process.env.DECI_VERBOSE;
 
 const lockPath = join(__dirname, '..', '..', 'app.arc');
 const lockUnlock = lockingFile(lockPath);
+let stopping = false;
 
 async function start(): Promise<void> {
   await lockUnlock(_start());
@@ -56,7 +57,7 @@ function _start(): Promise<void> {
         if (stoppedResolve) {
           stoppedResolve(code);
         }
-        if (code) {
+        if (!stopping && code) {
           console.error(
             `Sandbox ${workerId} terminated with error code ` + code
           );
@@ -115,14 +116,15 @@ function _start(): Promise<void> {
   });
 }
 
-function stop(code: number | undefined) {
+function stop() {
   if (!child) {
     return Promise.resolve();
   }
+  stopping = true;
   const stoppedPromise = new Promise((resolve) => {
     stoppedResolve = resolve;
   });
-  child.kill(code);
+  child.kill('SIGKILL');
   return stoppedPromise;
 }
 

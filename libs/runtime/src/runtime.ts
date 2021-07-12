@@ -1,7 +1,5 @@
-import { Observable, BehaviorSubject } from 'rxjs';
 import { PadEditor } from './pad-editor';
-import { Sync } from './sync';
-import createExternalWebsocketImpl from './external-websocket';
+import { Sync } from '@decipad/replica';
 
 interface RuntimeConstructorOptions {
   userId: string;
@@ -9,20 +7,22 @@ interface RuntimeConstructorOptions {
   isSynced?: boolean;
 }
 
+const maxReconnectMs = Number(process.env.DECI_MAX_RECONNECT_MS) || 10000;
+const fetchPrefix = process.env.DECI_API_URL || '';
+
 class Runtime {
   userId: string;
   actorId: string;
   isSynced: boolean;
 
   sync: Sync<AnySyncValue>;
-  sessionSubject = new BehaviorSubject<Session | null>(null);
   editors: Map<Id, PadEditor> = new Map();
 
   constructor({ userId, actorId, isSynced = true }: RuntimeConstructorOptions) {
     this.userId = userId;
     this.actorId = actorId;
     this.isSynced = isSynced;
-    this.sync = new Sync({ start: isSynced });
+    this.sync = new Sync({ start: isSynced, maxReconnectMs, fetchPrefix });
   }
 
   startPadEditor(padId: Id) {
@@ -45,26 +45,12 @@ class Runtime {
     return editor;
   }
 
-  setSession(session: Session) {
-    this.sessionSubject.next(session);
-  }
-
-  getSession(): Observable<Session | null> {
-    return this.sessionSubject;
-  }
-
-  getSessionValue(): Session | null {
-    return this.sessionSubject.getValue();
-  }
-
   websocketImpl(): typeof WebSocket {
-    return createExternalWebsocketImpl(this.sync);
+    return this.sync.websocketImpl();
   }
 
   stop() {
     this.sync.stop();
-    this.sessionSubject.next(null);
-    this.sessionSubject.complete();
     for (const editor of this.editors.values()) {
       editor.stop();
     }

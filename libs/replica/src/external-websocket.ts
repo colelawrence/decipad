@@ -3,8 +3,8 @@
 import EventEmitter from 'events';
 import { Sync } from './sync';
 
-export default function createWebsocketImpl(
-  sync: Sync<AnySyncValue>
+export default function createWebsocketImpl<T>(
+  sync: Sync<T>
 ): typeof WebSocket {
   class WebsocketImpl extends EventEmitter implements WebSocket {
     static readonly CLOSED = WebSocket.CLOSED;
@@ -30,7 +30,7 @@ export default function createWebsocketImpl(
 
     close() {
       sync.off('websocket', this.onWebSocket);
-      sync.close();
+      sync.maybeClose();
     }
 
     onWebSocket(ws: WebSocket) {

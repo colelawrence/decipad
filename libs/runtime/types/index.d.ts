@@ -5,57 +5,10 @@ declare namespace Sync {
   export { Node, List, Doc, Change };
 }
 
-declare namespace AST {
-  import { Block } from '@decipad/language';
-  export { Block };
-}
-
-declare namespace Parser {
-  import { ParsedBlock } from '@decipad/language';
-  export { ParsedBlock };
-}
-
 type Id = string;
-
-type Tags = string[];
-
-interface Identifiable {
-  id: Id;
-}
 
 interface Session {
   user: User;
-}
-
-interface User {
-  id: Id;
-  name: string;
-  email: string;
-  avatar: string;
-}
-
-interface ComputationResult {
-  type: Type | TableType | null;
-  value: Interpreter.Result | null;
-  errors: ComputationError[];
-}
-
-interface ComputationError {
-  message: string;
-  details: string;
-  fileName: string;
-  lineNumber: number;
-  columnNumber: number;
-}
-
-interface ComputerUnparsedBlock {
-  id: string;
-  source: string;
-}
-
-interface ComputerCodeBlock {
-  id: string;
-  ast: AST.Node;
 }
 
 type SyncPadValue = Sync.List<Sync.Node>;
@@ -108,39 +61,4 @@ declare namespace ExtendedSlate {
     | ExtendedSlateRemoveTextOperation
     | ExtendedSlateSetNodeOperation
     | ExtendedSlateSplitNodeOperation;
-}
-
-/* Collab */
-
-interface AsyncSubject<T> {
-  error: Error | null;
-  loading: boolean;
-  data: T | null;
-}
-
-interface Mutation<T> {
-  before: T | null;
-  after: T | null;
-}
-
-interface TopicSubscriptionOperation {
-  op: 'add' | 'remove';
-  topic: string;
-}
-
-interface DocMetadata {
-  createdLocally: boolean;
-}
-
-interface RemoteWebSocketOp {
-  o: 's' | 'u' | 'c';
-  t: string;
-  c: Sync.Change[] | null;
-  type?: string;
-}
-
-interface RemoteOp {
-  op: 'subscribed' | 'unsubscribed' | 'changed';
-  topic: string;
-  changes: Sync.Change[] | null;
 }
