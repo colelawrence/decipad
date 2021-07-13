@@ -63,14 +63,14 @@ export const p12Bold: TypographyStyles = {
   color: cssVar('strongTextColor'),
   fontWeight: 600,
   fontSize: '12px',
-  lineHeight: '136%',
+  lineHeight: '16px',
   letterSpacing: '-0.008em',
 };
 export const p13SemiBold: TypographyStyles = {
   ...pDefault,
   fontWeight: 600,
   fontSize: '13px',
-  lineHeight: '136%',
+  lineHeight: '18px',
   letterSpacing: '-0.008em',
 };
 export const p15Medium: TypographyStyles = {
@@ -82,7 +82,7 @@ export const p15Medium: TypographyStyles = {
 export const p16Regular: TypographyStyles = {
   ...pDefault,
   fontSize: '16px',
-  lineHeight: '170%',
+  lineHeight: '27px',
   letterSpacing: '-0.004em',
   fontFeatureSettings: "'ss04' on, 'ss02' on",
 };

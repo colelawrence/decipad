@@ -2,7 +2,10 @@ import { Meta } from '@storybook/react';
 import * as colors from './color';
 import { OpaqueColor } from './color';
 
-type ColorId = Exclude<keyof typeof import('./color'), 'color'>;
+type ColorId = Exclude<
+  keyof typeof import('./color'),
+  'color' | 'transparency'
+>;
 const colorNames: Record<ColorId, string> = {
   black: 'Black',
   white: 'White',

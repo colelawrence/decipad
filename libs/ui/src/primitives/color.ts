@@ -1,16 +1,36 @@
-export interface OpaqueColor {
+interface Color {
   readonly red: number;
   readonly green: number;
   readonly blue: number;
-  readonly rgb: string;
 }
 
+export interface OpaqueColor extends Color {
+  readonly rgb: string;
+}
 export function color(red: number, green: number, blue: number): OpaqueColor {
   return {
     red,
     green,
     blue,
     rgb: `rgb(${red}, ${green}, ${blue})`,
+  };
+}
+
+export interface TransparentColor extends Color {
+  readonly rgba: string;
+}
+// Only list the few opacities we use here so that
+// we do not end up with all kinds of similar but not identical transparent colors.
+export type Opacity = 0.8;
+export function transparency(
+  { red, green, blue }: OpaqueColor,
+  opacity: Opacity
+): TransparentColor {
+  return {
+    red,
+    green,
+    blue,
+    rgba: `rgba(${red}, ${green}, ${blue}, ${opacity})`,
   };
 }
 

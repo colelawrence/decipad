@@ -5,10 +5,21 @@ import { Global } from '@emotion/react';
 import emotionNormalize from 'emotion-normalize';
 import emotionReset from 'emotion-reset';
 
-import { cssVar, globalTextStyles, setCssVar } from '../../primitives';
+import {
+  cssVar,
+  CssVariables,
+  globalTextStyles,
+  setCssVar,
+} from '../../primitives';
 import { black, offWhite, white } from '../../primitives/color';
 import { ALLOW_DARK_THEME_LOCAL_STORAGE_KEY } from '../../utils';
 
+const darkTheme: CssVariables = {
+  backgroundColor: black.rgb,
+
+  weakTextColor: offWhite.rgb,
+  strongTextColor: white.rgb,
+};
 const allowDarkTheme = () =>
   window.localStorage.getItem(ALLOW_DARK_THEME_LOCAL_STORAGE_KEY) === 'true';
 const DarkThemeStyles = (): ReturnType<React.FC> => {
@@ -20,11 +31,11 @@ const DarkThemeStyles = (): ReturnType<React.FC> => {
     <Global
       styles={{
         '@media (prefers-color-scheme: dark)': {
-          ':root': {
-            ...setCssVar('backgroundColor', black.rgb),
-            ...setCssVar('weakTextColor', offWhite.rgb),
-            ...setCssVar('strongTextColor', white.rgb),
-          },
+          ':root': Object.entries(darkTheme)
+            .map(([name, value]) =>
+              setCssVar(name as keyof CssVariables, value)
+            )
+            .reduce(Object.assign, {}),
         },
       }}
     />
