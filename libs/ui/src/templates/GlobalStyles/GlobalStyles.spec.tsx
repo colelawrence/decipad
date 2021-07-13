@@ -1,4 +1,4 @@
-import { act, render } from '@testing-library/react';
+import { act, render, waitFor } from '@testing-library/react';
 
 import { black } from '../../primitives';
 import {
@@ -45,9 +45,11 @@ it('applies the dark theme when enabled manually and preferred by the user agent
 });
 it('applies the dark theme when preferred by the user agent *once* enabled manually', async () => {
   const { container } = render(<GlobalStyles />);
-  window.localStorage.setItem('deciAllowDarkTheme', 'true');
-  act(() => {
-    window.dispatchEvent(new StorageEvent('storage'));
+  await act(async () => {
+    window.localStorage.setItem('deciAllowDarkTheme', 'true');
+    await waitFor(() =>
+      expect(document.head.innerHTML).toContain('prefers-color-scheme')
+    );
   });
 
   cleanup = await applyPrefersColorScheme('dark');
@@ -56,8 +58,8 @@ it('applies the dark theme when preferred by the user agent *once* enabled manua
   ).toBe(black.rgb);
 });
 it('does not apply the dark theme when not preferred by the user agent', async () => {
-  const { container } = render(<GlobalStyles />);
   window.localStorage.setItem('deciAllowDarkTheme', 'true');
+  const { container } = render(<GlobalStyles />);
 
   cleanup = await applyPrefersColorScheme('light');
   expect(
@@ -65,8 +67,8 @@ it('does not apply the dark theme when not preferred by the user agent', async (
   ).not.toBe(black.rgb);
 });
 it('does not apply the dark theme when not enabled manually', async () => {
-  const { container } = render(<GlobalStyles />);
   window.localStorage.setItem('deciAllowDarkTheme', 'false');
+  const { container } = render(<GlobalStyles />);
 
   cleanup = await applyPrefersColorScheme('dark');
   expect(

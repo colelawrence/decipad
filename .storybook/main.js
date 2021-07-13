@@ -7,6 +7,7 @@ module.exports = {
         backgrounds: false,
       },
     },
+    'storybook-dark-mode',
   ],
   typescript: {
     reactDocgen: false,

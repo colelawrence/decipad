@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { useDarkMode } from 'storybook-dark-mode';
 import { ChakraProvider } from '@chakra-ui/react';
 import { Parameters, DecoratorFn } from '@storybook/react';
 
@@ -7,6 +9,7 @@ import {
   smallestDesktop,
   largestDesktop,
 } from '../src/primitives';
+import { ALLOW_DARK_THEME_LOCAL_STORAGE_KEY } from '../src/utils';
 
 const withGlobalStyles: DecoratorFn = (StoryFn, context) => {
   return (
@@ -17,7 +20,26 @@ const withGlobalStyles: DecoratorFn = (StoryFn, context) => {
     </GlobalStyles>
   );
 };
-export const decorators: DecoratorFn[] = [withGlobalStyles];
+
+const SetAllowDarkMode: React.FC = ({ children }) => {
+  const allowDarkMode = useDarkMode();
+  useEffect(() => {
+    localStorage.setItem(
+      ALLOW_DARK_THEME_LOCAL_STORAGE_KEY,
+      String(allowDarkMode)
+    );
+  }, [allowDarkMode]);
+  return <>{children}</>;
+};
+const withDarkMode: DecoratorFn = (StoryFn, context) => {
+  return (
+    <SetAllowDarkMode>
+      <StoryFn {...context} />
+    </SetAllowDarkMode>
+  );
+};
+
+export const decorators: DecoratorFn[] = [withGlobalStyles, withDarkMode];
 
 export const parameters: Parameters = {
   viewport: {

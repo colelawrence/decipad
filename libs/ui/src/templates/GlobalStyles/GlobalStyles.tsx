@@ -1,5 +1,5 @@
 import { fromEvent } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, delay } from 'rxjs/operators';
 import { useObservable } from 'rxjs-hooks';
 import { Global } from '@emotion/react';
 import emotionNormalize from 'emotion-normalize';
@@ -7,12 +7,13 @@ import emotionReset from 'emotion-reset';
 
 import { cssVar, globalTextStyles, setCssVar } from '../../primitives';
 import { black, offWhite, white } from '../../primitives/color';
+import { ALLOW_DARK_THEME_LOCAL_STORAGE_KEY } from '../../utils';
 
 const allowDarkTheme = () =>
-  window.localStorage.getItem('deciAllowDarkTheme') === 'true';
+  window.localStorage.getItem(ALLOW_DARK_THEME_LOCAL_STORAGE_KEY) === 'true';
 const DarkThemeStyles = (): ReturnType<React.FC> => {
   const darkThemeAllowed = useObservable(
-    () => fromEvent(window, 'storage').pipe(map(allowDarkTheme)),
+    () => fromEvent(window, 'storage').pipe(delay(0), map(allowDarkTheme)),
     allowDarkTheme()
   );
   return darkThemeAllowed ? (
