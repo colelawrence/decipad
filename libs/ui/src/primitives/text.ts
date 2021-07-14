@@ -16,6 +16,8 @@ type TypographyStyles = Readonly<
   >
 >;
 
+const usualRemPxs = 16;
+
 // heading
 
 const hFontFamily: TypographyStyles['fontFamily'] =
@@ -25,7 +27,7 @@ export const display: TypographyStyles = {
   color: cssVar('strongTextColor'),
   fontFamily: hFontFamily,
   fontWeight: 600,
-  fontSize: '36px',
+  fontSize: `${36 / usualRemPxs}rem`,
   lineHeight: '113%',
   letterSpacing: '0.01em',
   fontFeatureSettings: "'ss04' on, 'ss08' on, 'ss06' on",
@@ -34,7 +36,7 @@ export const h1: TypographyStyles = {
   color: cssVar('strongTextColor'),
   fontFamily: hFontFamily,
   fontWeight: 600,
-  fontSize: '24px',
+  fontSize: `${24 / usualRemPxs}rem`,
   lineHeight: '130%',
   letterSpacing: '0.01em',
   fontFeatureSettings: "'ss04' on, 'ss02' on",
@@ -48,7 +50,7 @@ const pDefault: TypographyStyles = {
   color: cssVar('weakTextColor'),
   fontFamily: pFontFamily,
   fontWeight: 'normal',
-  fontSize: '16px',
+  fontSize: '1rem',
   lineHeight: '100%',
   letterSpacing: 'unset',
   fontFeatureSettings: 'unset',
@@ -56,33 +58,32 @@ const pDefault: TypographyStyles = {
 
 export const p12Regular: TypographyStyles = {
   ...pDefault,
-  fontSize: '12px',
+  fontSize: `${12 / usualRemPxs}rem`,
 };
 export const p12Bold: TypographyStyles = {
   ...pDefault,
   color: cssVar('strongTextColor'),
   fontWeight: 600,
-  fontSize: '12px',
-  lineHeight: '16px',
+  fontSize: `${12 / usualRemPxs}rem`,
+  lineHeight: '136%',
   letterSpacing: '-0.008em',
 };
 export const p13SemiBold: TypographyStyles = {
   ...pDefault,
   fontWeight: 600,
-  fontSize: '13px',
-  lineHeight: '18px',
+  fontSize: `${13 / usualRemPxs}rem`,
+  lineHeight: '136%',
   letterSpacing: '-0.008em',
 };
 export const p15Medium: TypographyStyles = {
   ...pDefault,
   color: cssVar('strongTextColor'),
   fontWeight: 500,
-  fontSize: '15px',
+  fontSize: `${15 / usualRemPxs}rem`,
 };
 export const p16Regular: TypographyStyles = {
   ...pDefault,
-  fontSize: '16px',
-  lineHeight: '27px',
+  lineHeight: '170%',
   letterSpacing: '-0.004em',
   fontFeatureSettings: "'ss04' on, 'ss02' on",
 };
