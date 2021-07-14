@@ -1,11 +1,13 @@
 import { CSSObject } from '@emotion/react';
+import { Property } from 'csstype';
+
 import { black, grey400, white } from './color';
 
 export interface CssVariables {
-  readonly backgroundColor: CSSObject['backgroundColor'];
+  readonly backgroundColor: Property.Color;
 
-  readonly strongTextColor: CSSObject['color'];
-  readonly weakTextColor: CSSObject['color'];
+  readonly strongTextColor: Property.Color;
+  readonly weakTextColor: Property.Color;
 }
 const defaults: CssVariables = {
   backgroundColor: white.rgb,
