@@ -9,7 +9,7 @@
     "test": "nx run-many --target=test --all",
     "test:coverage": "nx run-many --target=test --all --code-coverage",
     "lint": "nx workspace-lint && nx run-many --target=lint --all",
-    "typecheck": "tsc -b -v libs/* apps/*",
+    "typecheck": "tsc -b libs/* apps/*",
     "typecheck:watch": "npm run typecheck -- -w",
     "e2e": "nx run client-e2e:e2e",
     "repl": "babel-node --extensions=.js,.jsx,.ts,.tsx libs/language/src/repl.ts",

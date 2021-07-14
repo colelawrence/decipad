@@ -1,99 +1,58 @@
 import { makeContext as makeInferContext } from '../infer';
 import { Realm } from '../interpreter';
-import { getAllBlockLocations, getDependents } from './dependencies';
-import { ParseRet } from './parse';
+import { getStatementsToEvict } from './getStatementsToEvict';
 import { InBlockResult, ValueLocation } from './types';
 import {
   parseDefName,
   getDefinedSymbolAt,
-  getGoodBlocks,
-  stringifyLoc,
+  LocationSet,
+  LocationMap,
 } from './utils';
 
-export interface IComputationRealm {
-  interpreterRealm: Realm;
-  inferContext: ReturnType<typeof makeInferContext>;
-
-  evictBlockCache(oldParseRet: ParseRet[], toEvict: string[]): void;
-
-  has(defName: string): boolean;
-  delete(defName: string): void;
-
-  hasLoc(loc: ValueLocation): boolean;
-  addLocToCache(loc: ValueLocation, r: InBlockResult): void;
-}
-
-export class ComputationRealm implements IComputationRealm {
+type CacheContents = InBlockResult | null;
+export class ComputationRealm {
   interpreterRealm = new Realm();
   inferContext = makeInferContext();
-  locCache = new Map<string, InBlockResult>();
+  locCache = new LocationMap<CacheContents>();
+  errorLocs = new LocationSet();
 
-  evictBlockCache(oldParseRet: ParseRet[], toEvict: string[]) {
-    const program = getGoodBlocks(oldParseRet);
+  evictCache(oldBlocks: AST.Block[], newBlocks: AST.Block[]) {
+    for (const loc of this.errorLocs) {
+      this.evictStatement(oldBlocks, loc);
+    }
 
-    const allLocsToClear = [
-      ...getAllBlockLocations(program, toEvict),
-      ...getDependents(program, toEvict),
-    ];
+    for (const loc of getStatementsToEvict(oldBlocks, newBlocks)) {
+      this.evictStatement(oldBlocks, loc);
+    }
+  }
 
-    for (const loc of allLocsToClear) {
-      this.locCache.delete(stringifyLoc(loc));
+  evictStatement(program: AST.Block[], loc: ValueLocation) {
+    this.errorLocs.delete(loc);
+    this.locCache.delete(loc);
 
-      const sym = getDefinedSymbolAt(program, loc);
-      if (sym) {
-        this.delete(sym);
+    const sym = getDefinedSymbolAt(program, loc);
+    if (sym) {
+      const [type, name] = parseDefName(sym);
+
+      if (type === 'var') {
+        this.interpreterRealm.stack.delete(name);
+        this.inferContext.stack.delete(name);
+      } else {
+        this.interpreterRealm.functions.delete(name);
+        this.inferContext.functionDefinitions.delete(name);
       }
     }
   }
 
-  has(defName: string) {
-    const [type, name] = parseDefName(defName);
-
-    return type === 'var'
-      ? this.inferContext.stack.has(name)
-      : this.inferContext.functionDefinitions.has(name);
+  getFromCache(loc: ValueLocation) {
+    return this.locCache.get(loc) ?? null;
   }
 
-  delete(defName: string) {
-    const [type, name] = parseDefName(defName);
-
-    if (type === 'var') {
-      this.interpreterRealm.stack.delete(name);
-      this.inferContext.stack.delete(name);
+  addToCache(loc: ValueLocation, result: CacheContents) {
+    if (result?.valueType?.errorCause == null) {
+      this.locCache.set(loc, result);
     } else {
-      this.interpreterRealm.functions.delete(name);
-      this.inferContext.functionDefinitions.delete(name);
+      this.errorLocs.add(loc);
     }
   }
-
-  hasLoc(loc: ValueLocation) {
-    return this.locCache.has(stringifyLoc(loc));
-  }
-
-  addLocToCache(loc: ValueLocation, value: InBlockResult) {
-    this.locCache.set(stringifyLoc(loc), value);
-  }
-}
-
-/* istanbul ignore next */
-export class TestComputationRealm implements IComputationRealm {
-  interpreterRealm = new Realm();
-  inferContext = makeInferContext();
-  cache: Set<string>;
-  locCache: Set<string>;
-
-  constructor(cacheContents: string[], cachedLocs: ValueLocation[]) {
-    this.cache = new Set(cacheContents);
-    this.locCache = new Set(cachedLocs.map(stringifyLoc));
-  }
-
-  evictBlockCache() {
-    throw new Error('not implemented in the mock');
-  }
-
-  has = (sym: string) => this.cache.has(sym);
-  delete = (sym: string) => this.cache.delete(sym);
-
-  hasLoc = (loc: ValueLocation) => this.locCache.has(stringifyLoc(loc));
-  addLocToCache = () => {};
 }

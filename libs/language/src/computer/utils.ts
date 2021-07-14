@@ -2,7 +2,69 @@ import { walk, getIdentifierString, getDefined } from '../utils';
 import { ParseRet } from './parse';
 import { ValueLocation } from './types';
 
-export const stringifyLoc = (loc: ValueLocation) => `${loc.join(': ')}`;
+export const stringifyLoc = (loc: ValueLocation) => loc.join('/');
+export const parseLoc = (loc: string) => {
+  const [blockId, strIndex, trash] = loc.split('/');
+  const statementIndex = Number(strIndex);
+
+  if (!blockId || isNaN(statementIndex) || trash != null) {
+    throw new Error('invalid ValueLocation: ' + JSON.stringify(loc));
+  }
+
+  return [blockId, statementIndex] as ValueLocation;
+};
+
+export class LocationSet {
+  set = new Set<string>();
+
+  constructor(contents?: Iterable<ValueLocation>) {
+    for (const v of contents ?? []) this.add(v);
+  }
+
+  add(value: ValueLocation) {
+    this.set.add(stringifyLoc(value));
+    return this;
+  }
+
+  has(value: ValueLocation) {
+    return this.set.has(stringifyLoc(value));
+  }
+
+  delete(value: ValueLocation) {
+    this.set.delete(stringifyLoc(value));
+  }
+
+  [Symbol.iterator]() {
+    return [...this.set].map((loc) => parseLoc(loc))[Symbol.iterator]();
+  }
+}
+
+export class LocationMap<T> {
+  map = new Map<string, T>();
+
+  constructor(contents?: Iterable<[ValueLocation, T]>) {
+    for (const [k, v] of contents ?? []) this.set(k, v);
+  }
+
+  set(key: ValueLocation, value: T) {
+    this.map.set(stringifyLoc(key), value);
+    return this;
+  }
+
+  get(value: ValueLocation) {
+    return this.map.get(stringifyLoc(value));
+  }
+
+  delete(value: ValueLocation) {
+    this.map.delete(stringifyLoc(value));
+  }
+
+  [Symbol.iterator]() {
+    return [...this.map]
+      .map(([loc, value]) => [parseLoc(loc), value])
+      [Symbol.iterator]();
+  }
+}
 
 export const getStatement = (
   program: AST.Block[],
@@ -24,6 +86,20 @@ export const iterProgram = (
     });
   });
 };
+
+const blockLocs = (block: AST.Block): ValueLocation[] =>
+  block.args.map((_stmt, i) => [block.id, i]);
+
+export const getAllBlockLocations = (blocks: AST.Block[]) =>
+  blocks.flatMap((block) => blockLocs(block));
+
+export const getSomeBlockLocations = (
+  blocks: AST.Block[],
+  blockIds: string[]
+): ValueLocation[] =>
+  blocks.flatMap((block) =>
+    blockIds.includes(block.id) ? blockLocs(block) : []
+  );
 
 export const getDefinedSymbol = (stmt: AST.Statement) => {
   switch (stmt.type) {
@@ -50,6 +126,15 @@ export const getDefinedSymbolAt = (
 
   return stmt != null ? getDefinedSymbol(stmt) : null;
 };
+
+export const getAllSymbolsDefined = (blocks: AST.Block[]) =>
+  blocks.flatMap((block) =>
+    block.args.flatMap((statement) => {
+      const sym = getDefinedSymbol(statement);
+      if (sym != null) return [sym];
+      else return [];
+    })
+  );
 
 export const getReferredSymbol = (node: AST.Node) => {
   switch (node.type) {
@@ -81,3 +166,6 @@ export const findSymbolsUsed = (stmt: AST.Statement) => {
 
   return symbols;
 };
+
+export const setIntersection = <T>(setA: Set<T>, setB: Set<T>) =>
+  new Set([...setA].filter((itemA) => setB.has(itemA)));

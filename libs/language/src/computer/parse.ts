@@ -3,7 +3,10 @@ import { IdentifiedBlock, IdentifiedError } from './types';
 
 export type ParseRet = IdentifiedBlock | IdentifiedError;
 
-const wrappedParse = ({ id, source }: Parser.UnparsedBlock): ParseRet => {
+export const wrappedParse = ({
+  id,
+  source,
+}: Parser.UnparsedBlock): ParseRet => {
   try {
     const parsed = parseBlock({ id, source });
 
@@ -31,34 +34,22 @@ const wrappedParse = ({ id, source }: Parser.UnparsedBlock): ParseRet => {
   }
 };
 
+/**
+ * Parse the changed bits of a program
+ */
 export const updateParse = (
   unparsedProgram: Parser.UnparsedBlock[],
-  previousBlocks: Map<string, ParseRet>
+  previousBlocks: ParseRet[] = []
 ) => {
-  const toEvict: string[] = [];
-  const newProgram = unparsedProgram.map((unparsedBlock) => {
-    const previouslyParsed = previousBlocks.get(unparsedBlock.id);
+  return unparsedProgram.map((unparsedBlock) => {
+    const prev = previousBlocks.find((prev) => prev.id === unparsedBlock.id);
 
-    if (previouslyParsed == null) {
-      // Totally new
-      return wrappedParse(unparsedBlock);
-    } else if (previouslyParsed.source === unparsedBlock.source) {
-      // Unchanged block
-      return previouslyParsed;
+    if (prev != null && prev.source === unparsedBlock.source) {
+      // Unchanged block -- do not evict this one
+      return prev;
     } else {
       // Block source changed
-      const parsed = wrappedParse(unparsedBlock);
-      toEvict.push(unparsedBlock.id);
-      return parsed;
+      return wrappedParse(unparsedBlock);
     }
   });
-
-  // Find blocks which were totally deleted
-  for (const prevBlockId of previousBlocks.keys()) {
-    if (!newProgram.some((b) => b.id === prevBlockId)) {
-      toEvict.push(prevBlockId);
-    }
-  }
-
-  return [toEvict, newProgram] as const;
 };

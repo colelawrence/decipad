@@ -1,33 +1,22 @@
 import { ComputationRealm } from './ComputationRealm';
+import { program } from './testutils';
 
-it('checks if something is in the cache', () => {
-  const realm = new ComputationRealm();
-
-  expect(realm.has('var:A')).toEqual(false);
-  expect(realm.has('fn:A')).toEqual(false);
-
-  realm.inferContext.functionDefinitions.set('A', null as any);
-
-  expect(realm.has('var:A')).toEqual(false);
-  expect(realm.has('fn:A')).toEqual(true);
-
-  realm.inferContext.stack.set('A', null as any);
-
-  expect(realm.has('var:A')).toEqual(true);
-  expect(realm.has('fn:A')).toEqual(true);
-
-  expect(() => realm.has('A')).toThrow();
+let realm: ComputationRealm;
+beforeEach(() => {
+  realm = new ComputationRealm();
 });
 
-it('deletes from the cache', () => {
-  const realm = new ComputationRealm();
+it('evictStatement', () => {
+  realm.locCache.set(['block-0', 1], 'something' as any);
+  realm.inferContext.stack.set('A', null as any);
 
-  realm.inferContext.functionDefinitions.set('Fn', null as any);
+  // Delete from locCache
+  realm.evictStatement(program, ['block-0', 1]);
 
-  expect(realm.has('fn:Fn')).toEqual(true);
+  expect(realm.locCache.get(['block-0', 1])).toEqual(undefined);
+  expect(realm.inferContext.stack.has('A')).toBe(true);
 
-  realm.delete('fn:Fn');
-
-  expect(realm.has('fn:Fn')).toEqual(false);
-  expect(realm.inferContext.functionDefinitions.has('Fn')).toEqual(false);
+  // Delete var A
+  realm.evictStatement(program, ['block-0', 0]);
+  expect(realm.inferContext.stack.has('A')).toBe(false);
 });

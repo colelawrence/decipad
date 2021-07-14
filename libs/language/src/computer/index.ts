@@ -31,12 +31,12 @@ export type {
   IdentifiedResult,
 };
 
-// Figure out if the compute response is an error (IE it needs to be shown to the user instantly)
-const isError = (
+// We need to delay errors which are under the cursor, so the user can stop typing
+export const getShouldDelayResponse = (
   response: ComputeResponse | ComputePanic,
   currentBlockId?: string | null
 ) => {
-  if (response.type === 'compute-panic') return true;
+  if (response.type === 'compute-panic') return false;
 
   const updateUnderCursor = response.updates.find(
     (upd) => upd.blockId === currentBlockId
@@ -61,8 +61,14 @@ const distinctMap = <In, Out>(
     distinctUntilChanged(dequal)
   );
 
+type ComputerRet = ComputeResponse | ComputePanic;
+export interface MakeComputerOptions {
+  pipeErrors?: () => (
+    inObs: Observable<ComputerRet>
+  ) => Observable<ComputerRet>;
+}
 export const makeComputer =
-  () =>
+  ({ pipeErrors = () => delay(2000) }: MakeComputerOptions = {}) =>
   (in$: ReqsWithCursor$): Res$ => {
     const computer = new Computer();
 
@@ -79,8 +85,8 @@ export const makeComputer =
       // the block will cancel this debounce (through another item in
       // blockId$)
       switchMap(([computeRes, blockId]) => {
-        if (isError(computeRes, blockId)) {
-          return of(computeRes).pipe(delay(2000));
+        if (getShouldDelayResponse(computeRes, blockId)) {
+          return of(computeRes).pipe(pipeErrors());
         } else {
           return of(computeRes);
         }

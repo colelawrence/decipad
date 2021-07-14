@@ -10,48 +10,52 @@ import {
   ComputeRequest,
 } from './types';
 import { ParseRet, updateParse } from './parse';
-import { IComputationRealm, ComputationRealm } from './ComputationRealm';
-import { getEvaluationPlan } from './dependencies';
-import { getGoodBlocks, getStatement } from './utils';
+import { ComputationRealm } from './ComputationRealm';
+import { getAllBlockLocations, getGoodBlocks, getStatement } from './utils';
 
+/*
+ - Skip cached stuff
+ - Infer this statement
+ - Evaluate the statement if it's not a type error
+ */
 const computeStatement = async (
   program: AST.Block[],
   location: ValueLocation,
-  realm: IComputationRealm
+  realm: ComputationRealm
 ): Promise<InBlockResult> => {
-  const [blockId, statementIndex] = location;
-  const statement = getStatement(program, location);
-  const valueType = await inferStatement(realm.inferContext, statement);
+  let result = realm.getFromCache(location);
 
-  let value = null;
+  if (result == null) {
+    const cached = realm.getFromCache(location);
+    if (cached != null) return cached;
 
-  if (!(valueType.errorCause != null && !valueType.functionness)) {
-    const evaluated = await evaluateStatement(
-      realm.interpreterRealm,
-      statement
-    );
-    value = evaluated.getData();
+    const [blockId, statementIndex] = location;
+    const statement = getStatement(program, location);
+    const valueType = await inferStatement(realm.inferContext, statement);
+
+    let value = null;
+
+    if (!(valueType.errorCause != null && !valueType.functionness)) {
+      const evaluated = await evaluateStatement(
+        realm.interpreterRealm,
+        statement
+      );
+      value = evaluated.getData();
+    }
+
+    result = { blockId, statementIndex, value, valueType };
   }
 
-  return { blockId, statementIndex, value, valueType };
+  realm.addToCache(location, result);
+  return result;
 };
 
-/*
- - Figure out dependencies from the desired results
- - Infer this program, evaluating only what's a target OR not in CACHE
- - Evaluate this program, only what's (a target OR not in CACHE) AND not a type error
- */
-export const computeProgram = async (
-  program: AST.Block[],
-  subscriptions: string[],
-  realm: IComputationRealm
-): Promise<IdentifiedResult[]> => {
-  const evalPlan = getEvaluationPlan(program, subscriptions, realm);
+const resultsToUpdates = (results: InBlockResult[]) => {
+  const ret: IdentifiedResult[] = [];
 
-  const results: IdentifiedResult[] = [];
-  const addResult = (result: InBlockResult) => {
+  for (const result of results) {
     const { blockId } = result;
-    let identifiedResult = results.find((r) => r.blockId === blockId);
+    let identifiedResult = ret.find((r) => r.blockId === blockId);
 
     if (identifiedResult == null) {
       identifiedResult = {
@@ -59,17 +63,24 @@ export const computeProgram = async (
         isSyntaxError: false,
         results: [],
       };
-      results.push(identifiedResult);
+      ret.push(identifiedResult);
     }
 
     identifiedResult.results.push(result);
-  };
+  }
 
-  for (const location of evalPlan) {
+  return ret;
+};
+
+export const computeProgram = async (
+  program: AST.Block[],
+  realm: ComputationRealm
+): Promise<InBlockResult[]> => {
+  const results: InBlockResult[] = [];
+
+  for (const location of getAllBlockLocations(program)) {
     const result = await computeStatement(program, location, realm);
-    realm.addLocToCache(location, result);
-
-    addResult(result);
+    results.push(result);
   }
 
   return results;
@@ -79,31 +90,31 @@ export class Computer {
   private previouslyParsed: ParseRet[] = [];
   private computationRealm = new ComputationRealm();
 
-  reset() {
-    this.previouslyParsed = [];
-    this.computationRealm = new ComputationRealm();
-  }
-
   private ingestNewBlocks(unparsedProgram: Parser.UnparsedBlock[]) {
-    const previousBlocks = new Map(
-      this.previouslyParsed.map((block) => [block.id, block])
+    const newParse = updateParse(unparsedProgram, this.previouslyParsed);
+
+    this.computationRealm.evictCache(
+      getGoodBlocks(this.previouslyParsed),
+      getGoodBlocks(newParse)
     );
 
-    const [toEvict, newProgram] = updateParse(unparsedProgram, previousBlocks);
-
-    this.computationRealm.evictBlockCache(this.previouslyParsed, toEvict);
-
-    this.previouslyParsed = newProgram;
-    return newProgram;
+    this.previouslyParsed = newParse;
+    return newParse;
   }
 
   async compute({
     program,
-    subscriptions,
+    subscriptions: _,
   }: ComputeRequest): Promise<ComputeResponse | ComputePanic> {
     /* istanbul ignore catch */
     try {
       const blocks = this.ingestNewBlocks(program);
+
+      const goodBlocks = getGoodBlocks(blocks);
+      const computeResults = await computeProgram(
+        goodBlocks,
+        this.computationRealm
+      );
 
       const updates: IdentifiedResult[] = [];
 
@@ -117,15 +128,7 @@ export class Computer {
         }
       }
 
-      const goodBlocks = getGoodBlocks(blocks);
-
-      for (const upd of await computeProgram(
-        goodBlocks,
-        subscriptions ?? goodBlocks.map((b) => b.id),
-        this.computationRealm
-      )) {
-        updates.push(upd);
-      }
+      updates.push(...resultsToUpdates(computeResults));
 
       return {
         type: 'compute-response',
@@ -141,7 +144,17 @@ export class Computer {
     }
   }
 
-  // Take a cursor position in "editor space" and turn it into "language space"
+  /**
+   * Reset computer's state -- called when it panicks
+   */
+  reset() {
+    this.constructor.call(this);
+  }
+
+  /**
+   * Take a cursor position in "editor space" [blockId, lineNo]
+   * and turn it into "language space" [blockId, statementIndex]
+   */
   cursorPosToValueLocation(
     cursorPos?: ValueLocation | null
   ): ValueLocation | null {

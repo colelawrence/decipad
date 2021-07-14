@@ -17,9 +17,6 @@ The user of the runtime should be able to:
   - Inform the user of the identity of the users editing the pad
   - Inform the user of other users' cursor positions
   - Inform the user of other users'
-- Computation
-  - Ask to parse type-check a pad. Get the errors with block and location of each error encountered.
-  - Ask for a given value on a given line in a given block. Get informed about both the type and the result value.
 
 ## Import
 
@@ -89,16 +86,15 @@ subscription.unsubscribe(); // observable won't be called again after this
 #### Editing a pad's contents
 
 ```js
-const createIfAbsent = true;
-const editorModel = deci.startPadEditor(padId, createIfAbsent);
-const value = editorModel.getValue(); // put this as initial value of the UI editor
+const padEditor = deci.startPadEditor(padId);
+const value = padEditor.getValue(); // put this as initial value of the UI editor
 
-const subscription = editorModel.slateOps().subscribe((slateOp) => {
+const subscription = padEditor.slateOps().subscribe((slateOp) => {
   // insert into UI editor
 });
 
 // also send slate operations that represent changes of the UI editor:
-uiEditor.on('change', () => editorModel.sendSlateOps(uiEditor.operations));
+uiEditor.on('change', () => padEditor.sendSlateOps(uiEditor.operations));
 
 // ...
 
