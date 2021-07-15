@@ -1,9 +1,13 @@
 import nearley from 'nearley';
 
 import { n } from '../utils';
+import * as AST from './ast-types';
+import * as Parser from './parser-types';
 import { compiledGrammar } from '../grammar';
 import { ParserNode } from './types';
 import { sourceMapDecorator } from './source-map-decorator';
+
+export { AST, Parser };
 
 const grammar = nearley.Grammar.fromCompiled(compiledGrammar);
 

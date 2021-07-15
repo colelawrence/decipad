@@ -1,4 +1,6 @@
 import pSeries from 'p-series';
+
+import { AST, Time } from '..';
 import { InferError, Type } from '../type';
 import {
   getDefined,

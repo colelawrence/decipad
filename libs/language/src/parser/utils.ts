@@ -1,3 +1,4 @@
+import { AST } from '..';
 import { stringifyUnits } from '../type/units';
 import { isNode, isStatement } from '../utils';
 

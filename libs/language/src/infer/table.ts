@@ -1,3 +1,4 @@
+import { AST } from '..';
 import { Type } from '../type';
 import { zip, getDefined } from '../utils';
 

@@ -1,4 +1,6 @@
 import { dequal } from 'dequal';
+
+import { AST } from '..';
 import { getDependents } from './dependents';
 import { ValueLocation } from './types';
 import {

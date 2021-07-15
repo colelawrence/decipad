@@ -1,3 +1,4 @@
+import { AST, Time } from '.';
 export { date } from './date';
 
 type WalkFn = (node: AST.Node, depth: number) => void;

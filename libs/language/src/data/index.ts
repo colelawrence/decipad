@@ -1,5 +1,8 @@
 import parseCSV, { Options as ParseCSVOptions } from 'csv-parse';
 import { TabularData } from './TabularData';
+import * as ExternalData from './external-data-types';
+
+export { ExternalData };
 
 type IResolve = {
   url: string;

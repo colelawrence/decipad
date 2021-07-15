@@ -1,6 +1,5 @@
 import { r, c, l, assign } from '../utils';
 import { program } from './testutils';
-
 import {
   findSymbolsUsed,
   getDefinedSymbol,

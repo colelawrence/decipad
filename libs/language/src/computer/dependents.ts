@@ -1,3 +1,4 @@
+import { AST } from '..';
 import { ValueLocation } from './types';
 import {
   iterProgram,

@@ -1,4 +1,5 @@
 import { Type } from '../type';
+import { AST, Parser } from '..';
 
 export interface IdentifiedBlock {
   type: 'identified-block';

@@ -1,3 +1,5 @@
+import { AST, Type } from '..';
+
 type ErrSpec =
   | {
       errType: 'free-form';

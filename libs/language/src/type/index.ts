@@ -1,5 +1,8 @@
 import { immerable, produce } from 'immer';
+
+import { Time } from '..';
 import { getDefined } from '../utils';
+import * as AST from '../parser/ast-types';
 import { InferError } from './InferError';
 import {
   inverseExponent,

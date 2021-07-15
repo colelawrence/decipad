@@ -1,5 +1,7 @@
+import { AST } from '..';
 import { makeContext as makeInferContext } from '../infer';
 import { Realm } from '../interpreter';
+
 import { getStatementsToEvict } from './getStatementsToEvict';
 import { InBlockResult, ValueLocation } from './types';
 import {

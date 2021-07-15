@@ -1,3 +1,4 @@
+import { AST } from '..';
 import { walk, getIdentifierString, isExpression, pairwise } from '../utils';
 import { evaluate } from './evaluate';
 import { Realm } from './Realm';

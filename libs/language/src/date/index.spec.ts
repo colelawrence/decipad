@@ -1,3 +1,4 @@
+import { Time } from '..';
 import {
   cleanDate,
   getDateFromAstForm,

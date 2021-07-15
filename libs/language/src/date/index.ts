@@ -1,8 +1,13 @@
 import produce from 'immer';
+
+import { AST } from '..';
 import { n, pairwise, getDefined } from '../utils';
+import * as Time from './time-types';
+
+export { Time };
 
 /*
- * Check out types/index.d.ts (namespace Time) for documentation about different kinds of time units
+ * Check out ./interfaces.ts for documentation about different kinds of time units
  */
 /* Warning: extremely hacky
  *

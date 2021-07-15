@@ -1,4 +1,5 @@
 import { produce } from 'immer';
+import { AST } from '..';
 import { c, l } from '../utils';
 import { InferError } from './InferError';
 import { inverseExponent, setExponent } from './units';

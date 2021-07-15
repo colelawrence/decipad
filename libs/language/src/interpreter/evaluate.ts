@@ -1,4 +1,6 @@
 import pSeries from 'p-series';
+
+import { AST } from '..';
 import { hasBuiltin } from '../builtins';
 import { getOfType, getDefined, getIdentifierString } from '../utils';
 import { getDateFromAstForm, getTimeUnit } from '../date';

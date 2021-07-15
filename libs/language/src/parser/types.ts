@@ -1,3 +1,5 @@
+import * as AST from './ast-types';
+
 export interface ParserNode {
   type: string;
   location?: number;

@@ -1,5 +1,7 @@
 import { inferStatement } from '../infer';
 import { evaluate as evaluateStatement } from '../interpreter';
+
+import { AST, Parser } from '..';
 import {
   ComputePanic,
   ValueLocation,

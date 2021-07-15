@@ -1,3 +1,4 @@
+import { AST, Time } from '..';
 import { getOfType } from '../utils';
 import { Type } from '../type';
 import {

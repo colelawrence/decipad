@@ -1,6 +1,16 @@
 /* istanbul ignore file: just config and re-export */
-export { parse } from './parser';
+import { Interpreter } from './interpreter';
+import { Type } from './type';
+
+export { parse, AST, Parser } from './parser';
 export { inferTargetStatement } from './infer';
-export { run } from './interpreter';
+export { run, Interpreter } from './interpreter';
 export { Type } from './type';
+export { Time } from './date';
+export { ExternalData } from './data';
 export * from './computer';
+
+export interface Result {
+  type: Type;
+  value: Interpreter.Result;
+}

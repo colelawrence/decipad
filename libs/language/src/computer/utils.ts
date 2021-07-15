@@ -1,3 +1,4 @@
+import { AST } from '..';
 import { walk, getIdentifierString, getDefined } from '../utils';
 import { ParseRet } from './parse';
 import { ValueLocation } from './types';

@@ -1,3 +1,4 @@
+import { AST } from '..';
 import { n, c, l, date, range, col, tableDef, funcDef } from '../utils';
 import { parse } from './index';
 import { prettyPrintAST } from './utils';

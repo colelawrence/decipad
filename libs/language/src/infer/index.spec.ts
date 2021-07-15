@@ -1,5 +1,7 @@
 import { produce } from 'immer';
 import { dequal } from 'dequal';
+
+import { AST } from '..';
 import { Type, InferError, inverseExponent } from '../type';
 import { join as pathJoin } from 'path';
 

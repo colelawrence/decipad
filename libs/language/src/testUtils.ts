@@ -1,4 +1,6 @@
 import { readFileSync } from 'fs';
+
+import { AST, Parser, Interpreter } from '.';
 import { parse } from './parser';
 import { prettyPrintAST } from './parser/utils';
 import { run } from './interpreter';

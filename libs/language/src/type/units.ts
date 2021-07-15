@@ -1,4 +1,6 @@
 import { produce } from 'immer';
+
+import { AST, Type } from '..';
 import { getDefined } from '../utils';
 
 const matchUnits = (u1: AST.Unit, u2: AST.Unit) =>

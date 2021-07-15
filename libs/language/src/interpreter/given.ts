@@ -1,4 +1,6 @@
 import pSeries from 'p-series';
+
+import { AST } from '..';
 import { getDefined, getIdentifierString } from '../utils';
 
 import { Column } from './Value';

@@ -2,6 +2,7 @@ import repl from 'repl';
 import util from 'util';
 import chalk from 'chalk';
 
+import { AST, Interpreter } from '.';
 import { getDefined, zip } from './utils';
 import { parse } from './parser';
 import { prettyPrintAST } from './parser/utils';

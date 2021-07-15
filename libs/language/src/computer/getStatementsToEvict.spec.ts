@@ -1,3 +1,5 @@
+import { AST } from '..';
+
 import {
   findSymbolErrors,
   findSymbolsAffectedByChange,

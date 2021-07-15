@@ -1,8 +1,11 @@
+import { AST } from '..';
 import { n } from '../utils';
+
 import { evaluate, evaluateTargets } from './evaluate';
 import { Realm } from './Realm';
+import * as Interpreter from './interpreter-types';
 
-export { Realm, evaluate };
+export { Realm, Interpreter, evaluate };
 
 export const run = async (
   program: AST.Block[],

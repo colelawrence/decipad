@@ -1,3 +1,4 @@
+import { AST } from '..';
 import { l } from '../utils';
 import { Type, ExtendArgs } from '../type';
 

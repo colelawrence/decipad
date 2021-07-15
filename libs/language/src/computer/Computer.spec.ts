@@ -1,5 +1,6 @@
 import produce from 'immer';
 
+import { AST, Parser } from '..';
 import {
   unparsedProgram,
   deeperProgram,

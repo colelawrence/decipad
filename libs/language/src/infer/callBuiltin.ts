@@ -1,3 +1,4 @@
+import { AST } from '..';
 import { builtins, hasBuiltin } from '../builtins';
 import { Type } from '../type';
 import { automapTypes } from '../dimtools';

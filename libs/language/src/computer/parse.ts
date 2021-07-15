@@ -1,3 +1,4 @@
+import { Parser } from '..';
 import { parseBlock } from '../parser';
 import { IdentifiedBlock, IdentifiedError } from './types';
 

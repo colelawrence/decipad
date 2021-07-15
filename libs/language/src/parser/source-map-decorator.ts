@@ -1,3 +1,4 @@
+import { AST } from '..';
 import { ParserNode } from './types';
 
 const typesWithArgs = new Set([
@@ -52,17 +53,17 @@ export function sourceMapDecorator(
     };
 
     if (typesWithArgs.has(node.type)) {
-      node.args = ((node.args as AST.Node[]).map((node: unknown) =>
+      node.args = (node.args as AST.Node[]).map((node: unknown) =>
         decorateNode(node as ParserNode)
-      ) as unknown) as ParserNode[];
+      ) as unknown as ParserNode[];
     } else if (node.type === 'literal') {
-      const n = (node as unknown) as AST.Literal;
+      const n = node as unknown as AST.Literal;
       if (n.args[0] === 'number') {
         const units = n.args[2];
         if (units !== null) {
-          n.args[2] = (units.map((unit: unknown) =>
+          n.args[2] = units.map((unit: unknown) =>
             decorateNode(unit as ParserNode)
-          ) as unknown) as AST.Unit[];
+          ) as unknown as AST.Unit[];
         }
       }
     }
@@ -70,7 +71,7 @@ export function sourceMapDecorator(
     delete node.location;
     delete node.length;
 
-    return (node as unknown) as AST.Node;
+    return node as unknown as AST.Node;
   }
 }
 

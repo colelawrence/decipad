@@ -1,3 +1,4 @@
+import { AST, ExternalData } from '..';
 import { Type } from '../type';
 import { Stack } from '../stack';
 import defaultFetch from '../data/default-fetch';
