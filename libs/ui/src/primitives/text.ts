@@ -7,6 +7,7 @@ type TypographyStyles = Readonly<
       CSSObject,
       | 'color'
       | 'fontFamily'
+      | 'fontStyle'
       | 'fontWeight'
       | 'fontSize'
       | 'lineHeight'
@@ -26,6 +27,7 @@ const hFontFamily: TypographyStyles['fontFamily'] =
 export const display: TypographyStyles = {
   color: cssVar('strongTextColor'),
   fontFamily: hFontFamily,
+  fontStyle: 'normal',
   fontWeight: 600,
   fontSize: `${36 / usualRemPxs}rem`,
   lineHeight: '113%',
@@ -35,6 +37,7 @@ export const display: TypographyStyles = {
 export const h1: TypographyStyles = {
   color: cssVar('strongTextColor'),
   fontFamily: hFontFamily,
+  fontStyle: 'normal',
   fontWeight: 600,
   fontSize: `${24 / usualRemPxs}rem`,
   lineHeight: '130%',
@@ -49,6 +52,7 @@ const pFontFamily: TypographyStyles['fontFamily'] = 'Inter, sans-serif';
 const pDefault: TypographyStyles = {
   color: cssVar('weakTextColor'),
   fontFamily: pFontFamily,
+  fontStyle: 'normal',
   fontWeight: 'normal',
   fontSize: '1rem',
   lineHeight: '100%',
