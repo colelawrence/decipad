@@ -117,12 +117,12 @@ export class Sync<T> extends EventEmitter {
     this.maybeClose();
   }
 
-  public maybeClose() {
-    if (this.connection) {
-      if (this.topics.size === 0) {
-        this.disconnect();
-      }
+  public maybeClose(): boolean {
+    if (this.connection && this.topics.size === 0) {
+      this.disconnect();
+      return true;
     }
+    return false;
   }
 
   public close() {
@@ -226,8 +226,9 @@ export class Sync<T> extends EventEmitter {
       default:
         throw new Error('Unsupported operation:' + op);
     }
+    const remoteOp = { op: opString, topic, changes };
     // TODO: extract changes from message (once they come)
-    this.subscriptionManager.notifyRemoteOp({ op: opString, topic, changes });
+    this.subscriptionManager.notifyRemoteOp(remoteOp);
   }
 
   private onWebsocketClose(event: Event) {

@@ -1,6 +1,6 @@
 import { getTarget } from '../utils/path';
 
-function insertText(
+export function insertText(
   doc: SyncPadValue,
   op: ExtendedSlate.ExtendedSlateInsertTextOperation
 ): SyncPadValue {
@@ -12,5 +12,3 @@ function insertText(
 
   return doc;
 }
-
-export { insertText };

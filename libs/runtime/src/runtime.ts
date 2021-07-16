@@ -1,11 +1,16 @@
-import { PadEditor } from './pad-editor';
+import { PadEditor, PadEditorOptions } from './pad-editor';
 import { Sync } from '@decipad/replica';
 
 interface RuntimeConstructorOptions {
   userId: string;
   actorId: string;
   isSynced?: boolean;
+  storage?: Storage;
 }
+
+const defaultPadEditorOptions = {
+  startReplicaSync: true,
+};
 
 const maxReconnectMs = Number(process.env.DECI_MAX_RECONNECT_MS) || 10000;
 const fetchPrefix = process.env.DECI_API_URL || '';
@@ -25,10 +30,17 @@ class Runtime {
     this.sync = new Sync({ start: isSynced, maxReconnectMs, fetchPrefix });
   }
 
-  startPadEditor(padId: Id) {
+  startPadEditor(
+    padId: Id,
+    options: PadEditorOptions = defaultPadEditorOptions
+  ) {
     let editor = this.editors.get(padId);
     if (editor === undefined) {
-      editor = new PadEditor(padId, this, this.isSynced);
+      const editorOptions = {
+        startReplicaSync: this.isSynced,
+        storage: options.storage || global.localStorage,
+      };
+      editor = new PadEditor(padId, this, editorOptions);
       let hadSubscribers = false;
       editor.slateOpsCountObservable.subscribe((subscriptionCount) => {
         if (subscriptionCount === 0) {

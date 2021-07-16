@@ -5,5 +5,5 @@
     "allowJs": true
   },
   "include": ["src", "types"],
-  "references": [{ "path": "../language" }, { "path": "../replica" }]
+  "references": [{ "path": "../language" }, { "path": "../replica" }, { "path": "../testutils" }]
 }

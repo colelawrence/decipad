@@ -60,6 +60,9 @@
     },
     "replica": {
       "tags": []
+    },
+    "testutils": {
+      "tags": []
     }
   }
 }

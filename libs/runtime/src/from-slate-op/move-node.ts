@@ -1,7 +1,7 @@
 import { cloneNode } from '../utils/clone-node';
 import { getParent, getChildren } from '../utils/path';
 
-function moveNode(
+export function moveNode(
   doc: SyncPadValue,
   op: ExtendedSlate.ExtendedSlateMoveNodeOperation
 ): SyncPadValue {
@@ -16,5 +16,3 @@ function moveNode(
 
   return doc;
 }
-
-export { moveNode };

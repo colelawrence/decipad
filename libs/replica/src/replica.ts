@@ -1,14 +1,18 @@
 import { Doc } from 'automerge';
 import Automerge, { Diff, Change } from 'automerge';
-import { Observable, Subscription, Subject, combineLatest } from 'rxjs';
+import {
+  Observable,
+  Subscription,
+  Subject,
+  BehaviorSubject,
+  combineLatest,
+} from 'rxjs';
 import { map } from 'rxjs/operators';
-import { dequal } from 'dequal';
 import { fnQueue } from './utils/fn-queue';
-import { toJS } from './utils/to-js';
 import { Sync } from './sync';
 import { ReplicaSync } from './replica-sync';
 import { observeSubscriberCount } from './utils/observe-subscriber-count';
-import { AsyncSubject, Mutation } from './types';
+import { AsyncSubject, Mutation, SyncStatus } from './types';
 import { Store } from './store';
 import assert from 'assert';
 
@@ -24,6 +28,9 @@ export interface ICreateReplicaOptions<T> {
   maxRetryIntervalMs: number;
   sendChangesDebounceMs: number;
   fetchPrefix: string;
+  useLocalStoreEvents?: boolean;
+  beforeRemoteChanges?: () => Promise<void> | void;
+  storage?: Storage;
 }
 
 export interface ChangeEvent<T> {
@@ -38,8 +45,9 @@ export function createReplica<T>(options: ICreateReplicaOptions<T>) {
 
 export class Replica<T> {
   private userId: string;
-  private initialValue: T | null;
   private store: Store<{ value: T }>;
+  private useLocalStoreEvents: boolean;
+  private beforeRemoteChanges: () => Promise<void> | void;
 
   private stopped = false;
   private queue = fnQueue();
@@ -55,6 +63,7 @@ export class Replica<T> {
   public remoteChanges = new Subject<ChangeEvent<T>>();
   public localChanges = new Subject<Mutation<Doc<{ value: T }>>>();
   public subscriptionCountObservable: Observable<number>;
+  public syncStatus: BehaviorSubject<SyncStatus>;
 
   constructor({
     name,
@@ -63,14 +72,18 @@ export class Replica<T> {
     sync: globalSync,
     initialValue = null,
     createIfAbsent = false,
+    useLocalStoreEvents = true,
     initialStaticValue = null,
     startReplicaSync = true,
     maxRetryIntervalMs,
     sendChangesDebounceMs,
     fetchPrefix,
+    beforeRemoteChanges = () => {},
+    storage = global.localStorage,
   }: ICreateReplicaOptions<T>) {
     this.userId = userId;
-    this.initialValue = initialValue;
+    this.useLocalStoreEvents = useLocalStoreEvents;
+    this.beforeRemoteChanges = beforeRemoteChanges;
 
     this.store = new Store<{ value: T }>({
       key: `${this.userId}:${name}`,
@@ -79,6 +92,7 @@ export class Replica<T> {
       actorId,
       createIfAbsent,
       onChange: this.onStoreChange.bind(this),
+      storage,
     });
 
     // Subscription count observeables
@@ -87,15 +101,16 @@ export class Replica<T> {
         this.observable.next({ loading: true, error: null, data: null });
 
         try {
-          this.doc = this.getDoc();
-          if (this.doc !== null) {
+          const doc = this.getDoc();
+          if (doc !== null) {
             this.observable.next({
               loading: false,
-              data: this.doc.value as T,
+              data: doc.value as T,
               error: null,
             });
           }
         } catch (err) {
+          console.error(err);
           this.observable.next({ loading: false, error: err, data: null });
           stop();
         }
@@ -134,23 +149,30 @@ export class Replica<T> {
       fetchPrefix,
     });
 
+    this.syncStatus = this.sync.syncStatus;
+
     if (startReplicaSync) {
       this.startReplicaSync();
     }
+
+    this.loadDoc();
+
+    if (this.doc !== null) {
+      this.localChanges.next({ before: null, after: this.doc });
+    }
   }
 
-  public mutate(fn: (doc: T) => void | T): T | null {
+  public mutate(fn: (doc: T) => void | T) {
     assert(!this.stopped, 'replica is stopped');
 
     const ldoc = this.getDoc();
     assert(ldoc, 'cannot mutate unexisting document');
 
     this.doc = Automerge.change(ldoc, (doc) => {
-      const value = fn(doc.value);
-      if (value !== undefined) {
-        doc.value = value as T;
+      const ret = fn(doc.value);
+      if (ret !== undefined) {
+        doc.value = ret;
       }
-      return doc;
     });
     this.needsFlush = true;
     this.observable.next({
@@ -159,11 +181,6 @@ export class Replica<T> {
       data: this.doc.value as T,
     });
     this.localChanges.next({ before: ldoc, after: this.doc });
-    return this.doc == null ? null : (this.doc.value as T);
-  }
-
-  public beforeRemoteChanges() {
-    // nothing, this is here if the user needs to change it.
   }
 
   public flush() {
@@ -219,15 +236,17 @@ export class Replica<T> {
   }
 
   private onStoreChange() {
-    this.queue
-      .push(() => this.handleStorageEvent())
-      .catch((err) => {
-        console.error(err);
-      });
+    if (this.useLocalStoreEvents) {
+      this.queue
+        .push(() => this.handleStoreChange())
+        .catch((err) => {
+          console.error(err);
+        });
+    }
   }
 
-  private async handleStorageEvent() {
-    if (!this.isActive()) {
+  private async handleStoreChange() {
+    if (!this.isActive() && !this.stopped) {
       this.loadDoc();
       this.observable.next({
         loading: false,
@@ -235,60 +254,88 @@ export class Replica<T> {
         data: this.doc!.value as T,
       });
     } else {
-      const newDoc = this.store.get();
-      if (newDoc !== null) {
-        this.mergeRemoteDoc(newDoc);
+      const doc = this.store.get();
+      if (doc) {
+        this.mergeLocalDoc(doc);
       }
     }
   }
 
-  private async mergeRemoteDoc(remoteDoc: Doc<{ value: T }>) {
+  private async mergeLocalDoc(localDoc: Doc<{ value: T }>) {
     await this.beforeRemoteChanges();
+    let hasChanges = false;
     const oldDoc = this.doc;
     if (oldDoc == null) {
-      return;
-    }
-
-    try {
-      const c = Automerge.getChanges(oldDoc!, remoteDoc);
+      hasChanges = true;
+      this.doc = localDoc;
+    } else {
+      let newDoc;
+      try {
+        newDoc = Automerge.merge(oldDoc, localDoc);
+      } catch (err) {
+        if (!(err instanceof RangeError)) {
+          console.error(err);
+        }
+        newDoc = localDoc;
+      }
+      const c = Automerge.getChanges(oldDoc, newDoc);
       if (c.length > 0) {
+        hasChanges = true;
         this.doc = Automerge.applyChanges(oldDoc!, c) as Doc<{ value: T }>;
         this.remoteChanges.next({
           diffs: Automerge.diff(oldDoc!, this.doc),
           doc: this.doc!,
           before: oldDoc!,
         });
+      }
+    }
 
-        if (this.doc !== null) {
-          this.observable.next({
-            loading: false,
-            error: null,
-            data: this.doc.value as T,
-          });
-        }
-      }
+    if (this.doc !== null && hasChanges) {
+      this.observable.next({
+        loading: false,
+        error: null,
+        data: this.doc.value as T,
+      });
+    }
 
-      if (oldDoc !== this.doc) {
-        this.needsFlush = true;
-        this.flush();
-      }
-    } catch (err) {
-      if (!(err instanceof RangeError)) {
-        throw err;
-      }
-      if (
-        this.initialValue != null &&
-        dequal(toJS(oldDoc), this.initialValue)
-      ) {
-        this.doc = remoteDoc;
-        this.observable.next({
-          loading: false,
-          error: err,
-          data: this.doc.value as T,
+    if (hasChanges) {
+      this.needsFlush = true;
+      this.flush();
+    }
+  }
+
+  private async mergeRemoteDoc(remoteDoc: Doc<{ value: T }>) {
+    await this.beforeRemoteChanges();
+    const oldDoc = this.doc;
+    let hasChanges = false;
+    if (oldDoc == null) {
+      hasChanges = true;
+      this.doc = remoteDoc;
+    } else {
+      const newDoc = Automerge.merge(oldDoc, remoteDoc);
+      this.doc = newDoc;
+      const c = Automerge.getChanges(oldDoc, newDoc);
+      if (c.length > 0) {
+        hasChanges = true;
+        this.remoteChanges.next({
+          diffs: Automerge.diff(oldDoc!, newDoc),
+          doc: this.doc!,
+          before: oldDoc!,
         });
-      } else {
-        this.observable.next({ loading: false, error: err, data: null });
       }
+    }
+
+    if (this.doc !== null && hasChanges) {
+      this.observable.next({
+        loading: false,
+        error: null,
+        data: this.doc.value as T,
+      });
+    }
+
+    if (hasChanges) {
+      this.needsFlush = true;
+      this.flush();
     }
   }
 
@@ -336,11 +383,5 @@ export class Replica<T> {
           });
       }
     );
-
-    this.loadDoc();
-
-    if (this.doc !== null) {
-      this.localChanges.next({ before: null, after: this.doc });
-    }
   }
 }

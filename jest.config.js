@@ -9,5 +9,6 @@ module.exports = {
     '<rootDir>/libs/runtime',
     '<rootDir>/libs/queries',
     '<rootDir>/libs/replica',
+    '<rootDir>/libs/testutils',
   ],
 };

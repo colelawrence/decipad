@@ -7,8 +7,10 @@ import {
 } from 'slate';
 import { LoremIpsum } from 'lorem-ipsum';
 import { nanoid } from 'nanoid';
+import waitForExpect from 'wait-for-expect';
 import { PadEditor } from './pad-editor';
-import { timeout } from './utils/timeout';
+
+waitForExpect.defaults.interval = 100;
 
 const lorem = new LoremIpsum({
   sentencesPerParagraph: {
@@ -109,8 +111,9 @@ describe('slate to replica sync', () => {
       },
     ]);
 
-    await timeout(100);
-    expect(editor2.children).toMatchObject(editor1.children);
+    await waitForExpect(() => {
+      expect(editor2.children).toMatchObject(editor1.children);
+    });
   });
 
   test('carriage return at end of line works', async () => {
@@ -166,8 +169,9 @@ describe('slate to replica sync', () => {
       },
     ]);
 
-    await timeout(100);
-    expect(editor2.children).toMatchObject(editor1.children);
+    await waitForExpect(() => {
+      expect(editor2.children).toMatchObject(editor1.children);
+    });
   });
 
   test('more text after works', async () => {
@@ -221,8 +225,9 @@ describe('slate to replica sync', () => {
       },
     ]);
 
-    await timeout(100);
-    expect(editor2.children).toMatchObject(editor1.children);
+    await waitForExpect(() => {
+      expect(editor2.children).toMatchObject(editor1.children);
+    });
   });
 
   test('random edits work', async () => {
@@ -239,8 +244,9 @@ describe('slate to replica sync', () => {
 
     expect(model1.getValue()).toMatchObject(editor1.children);
 
-    await timeout(100);
-    expect(editor2.children).toMatchObject(editor1.children);
+    await waitForExpect(() => {
+      expect(editor2.children).toMatchObject(editor1.children);
+    });
   });
 
   test('merges two lines', async () => {
@@ -258,8 +264,9 @@ describe('slate to replica sync', () => {
     expect(model1.getValue()).toMatchObject(editor1.children);
     // console.log(JSON.stringify(editor.children, null, '\t'));
 
-    await timeout(100);
-    expect(editor2.children).toMatchObject(editor1.children);
+    await waitForExpect(() => {
+      expect(editor2.children).toMatchObject(editor1.children);
+    });
   });
 
   test('removes node', async () => {
@@ -277,8 +284,9 @@ describe('slate to replica sync', () => {
 
     expect(model1.getValue()).toMatchObject(editor1.children);
 
-    await timeout(100);
-    expect(editor2.children).toMatchObject(editor1.children);
+    await waitForExpect(() => {
+      expect(editor2.children).toMatchObject(editor1.children);
+    });
   });
 
   test('moves node', async () => {
@@ -296,8 +304,9 @@ describe('slate to replica sync', () => {
 
     expect(model1.getValue()).toMatchObject(editor1.children);
 
-    await timeout(100);
-    expect(editor2.children).toMatchObject(editor1.children);
+    await waitForExpect(() => {
+      expect(editor2.children).toMatchObject(editor1.children);
+    });
   });
 
   test('sets node', async () => {
@@ -314,8 +323,9 @@ describe('slate to replica sync', () => {
 
     expect(model1.getValue()).toMatchObject(editor1.children);
 
-    await timeout(100);
-    expect(editor2.children).toMatchObject(editor1.children);
+    await waitForExpect(() => {
+      expect(editor2.children).toMatchObject(editor1.children);
+    });
   });
 
   test('unsets node', async () => {
@@ -334,8 +344,9 @@ describe('slate to replica sync', () => {
 
     expect(model1.getValue()).toMatchObject(editor1.children);
 
-    await timeout(100);
-    expect(editor2.children).toMatchObject(editor1.children);
+    await waitForExpect(() => {
+      expect(editor2.children).toMatchObject(editor1.children);
+    });
   });
 
   test('split text works', async () => {
@@ -353,8 +364,9 @@ describe('slate to replica sync', () => {
 
     expect(model1.getValue()).toMatchObject(editor1.children);
 
-    await timeout(100);
-    expect(editor2.children).toMatchObject(editor1.children);
+    await waitForExpect(() => {
+      expect(editor2.children).toMatchObject(editor1.children);
+    });
   });
 
   afterAll(() => {

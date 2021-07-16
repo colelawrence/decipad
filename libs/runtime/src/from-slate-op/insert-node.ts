@@ -1,7 +1,7 @@
 import { getParent, getChildren } from '../utils/path';
 import { toSync } from '../utils/to-sync';
 
-function insertNode(
+export function insertNode(
   doc: SyncPadValue,
   op: ExtendedSlate.ExtendedSlateInsertNodeOperation
 ): SyncPadValue {
@@ -11,5 +11,3 @@ function insertNode(
 
   return doc;
 }
-
-export { insertNode };

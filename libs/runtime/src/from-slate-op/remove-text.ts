@@ -1,6 +1,6 @@
 import { getTarget } from '../utils/path';
 
-function removeText(
+export function removeText(
   doc: SyncPadValue,
   op: ExtendedSlate.ExtendedSlateRemoveTextOperation
 ): SyncPadValue {
@@ -10,5 +10,3 @@ function removeText(
 
   return doc;
 }
-
-export { removeText };

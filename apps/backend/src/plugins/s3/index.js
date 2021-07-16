@@ -7,10 +7,7 @@ const { tmpdir } = require('os');
 
 let s3rver;
 
-const port = Number((process.env.DECI_S3_ENDPOINT || 'localhost:4568').split(':')[1]);
-if (!port) {
-  throw new Error('no S3 server port defined');
-}
+const port = Number((process.env.DECI_S3_ENDPOINT || 'localhost:4568').split(':')[1]) || 443;
 
 let directory = join(tmpdir(), '.s3rver_data', nanoid());
 mkdirpSync(directory);

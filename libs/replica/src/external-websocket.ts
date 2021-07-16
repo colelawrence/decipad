@@ -21,38 +21,22 @@ export default function createWebsocketImpl<T>(
     private onerrorCallback?: (event: Event) => any;
     private onmessageCallback?: (event: MessageEvent) => any;
     private onopenCallback?: (event: Event) => any;
+    private closed = false;
 
     constructor(_url: string, _protocols: string | string[] | undefined) {
       super();
-      this.onWebSocket = this.onWebSocket.bind(this);
-      sync.on('websocket', this.onWebSocket);
     }
 
     close() {
-      sync.off('websocket', this.onWebSocket);
+      this.closed = true;
       sync.maybeClose();
-    }
-
-    onWebSocket(ws: WebSocket) {
-      if (this.oncloseCallback) {
-        ws.onclose = this.oncloseCallback;
-      }
-      if (this.onerrorCallback) {
-        ws.onerror = this.onerrorCallback;
-      }
-      if (this.onmessageCallback) {
-        ws.onmessage = this.onmessageCallback;
-      }
-      if (this.onopenCallback) {
-        ws.onopen = this.onopenCallback;
-      }
     }
 
     send(data: string | ArrayBufferLike | ArrayBufferView | Blob) {
       if (!sync.connection) {
         sync.connect(true); // force
-        sync.once('websocket', (websocket) => {
-          websocket.send(data);
+        sync.once('websocket open', () => {
+          this.send(data);
         });
       } else {
         return sync.connection.send(data);
@@ -95,7 +79,11 @@ export default function createWebsocketImpl<T>(
         sync.off('websocket error', this.onerrorCallback);
       }
       this.onerrorCallback = callback;
-      sync.on('websocket error', this.onerrorCallback);
+      sync.on('websocket error', (err) => {
+        if (!this.closed && this.onerrorCallback) {
+          this.onerrorCallback(err);
+        }
+      });
     }
 
     get onerror() {
@@ -112,7 +100,12 @@ export default function createWebsocketImpl<T>(
           callback!(event);
         }
       };
-      sync.on('websocket message', this.onmessageCallback);
+      this.onmessageCallback = callback;
+      sync.on('websocket message', (event) => {
+        if (!this.closed && this.onmessageCallback) {
+          this.onmessageCallback(event);
+        }
+      });
     }
 
     get onmessage() {
@@ -124,7 +117,11 @@ export default function createWebsocketImpl<T>(
         sync.off('websocket open', this.onopenCallback);
       }
       this.onopenCallback = callback;
-      sync.on('websocket open', this.onopenCallback!);
+      sync.on('websocket open', (event) => {
+        if (!this.closed) {
+          this.onopenCallback!(event);
+        }
+      });
     }
 
     get onopen() {

@@ -83,34 +83,6 @@
         }
       }
     },
-    "runtime": {
-      "root": "libs/runtime",
-      "sourceRoot": "libs/runtime/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/runtime/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/backend"],
-          "options": {
-            "jestConfig": "apps/backend/jest.config.js",
-            "codeCoverage": false
-          }
-        },
-        "deploy": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "commands": ["./node_modules/.bin/arc deploy"],
-            "cwd": "apps/backend"
-          }
-        }
-      }
-    },
     "client": {
       "root": "apps/client",
       "sourceRoot": "apps/client",
@@ -403,6 +375,25 @@
             "ci": {
               "quiet": true
             }
+          }
+        }
+      }
+    },
+    "testutils": {
+      "root": "libs/testutils",
+      "sourceRoot": "libs/testutils/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/testutils/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/testutils"
           }
         }
       }

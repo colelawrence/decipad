@@ -18,7 +18,7 @@ So we do our Typescript development inside the `lib` folder, which we compile an
 
 We don't rely in Architect's bundler (which zips each lambda an it's dependencies into an archive and deploys it). Instead, we bundle ech lambda's typescript source and bundle it using [esbuild](https://esbuild.github.io).
 
-So, to change, remove or add a lambda or some of the function, you should bundle it using, from the root folder:
+So, to change, remove or add a lambda or some of the functions, you should bundle it using, from the root folder:
 
 ```bash
 $ npm run build:backend

@@ -1,6 +1,6 @@
 import { createReplica as replica } from './replica';
 import { Sync } from './sync';
-import { timeout } from './utils/timeout';
+import { timeout } from '@decipad/testutils';
 
 const syncOptions = {
   start: true,

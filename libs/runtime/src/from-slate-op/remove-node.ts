@@ -1,6 +1,6 @@
 import { getParent, getChildren } from '../utils/path';
 
-function removeNode(
+export function removeNode(
   doc: SyncPadValue,
   op: ExtendedSlate.ExtendedSlateRemoveNodeOperation
 ): SyncPadValue {
@@ -10,5 +10,3 @@ function removeNode(
 
   return doc;
 }
-
-export { removeNode };

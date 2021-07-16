@@ -1,6 +1,6 @@
 import { DeciRuntime } from './';
 import { createEditor } from 'slate';
-import { timeout } from './utils/timeout';
+import { timeout } from '@decipad/testutils';
 
 const docId = 'docid';
 

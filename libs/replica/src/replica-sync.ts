@@ -1,14 +1,14 @@
-import { Observable, Subscription, Subject } from 'rxjs';
+import { Observable, Subscription, Subject, BehaviorSubject } from 'rxjs';
 import Automerge, { Change, Doc } from 'automerge';
 import debounce from 'lodash.debounce';
 import { Sync } from './sync';
-import { fnQueue } from './utils/fn-queue';
-import { encode } from './utils/resource';
-import { Mutation, RemoteOp } from './types';
+import { Mutation, RemoteOp, SyncStatus } from './types';
 
 export type { Mutation };
 
 export class ReplicaSync<T> {
+  public syncStatus = new BehaviorSubject<SyncStatus>(SyncStatus.Unknown);
+
   private maxRetryIntervalMs: number;
   private sendChangesDebounceMs: number;
   private fetchPrefix: string;
@@ -21,17 +21,19 @@ export class ReplicaSync<T> {
   private subscriptionCountSubscription: Subscription | null = null;
   private localChangesSubscription: Subscription | null = null;
   private remoteOpsSubscription: Subscription | null = null;
-  private subscribed = false;
-  private debouncedSendChanges: { (): void; cancel: () => void };
+  private subscribedPromise: Promise<void> | null = null;
+  private debouncedTryReconcile: { (): void; cancel: () => void };
   public remoteChanges: Subject<Change[]> = new Subject<Change[]>();
   public remoteDoc: Subject<Doc<{ value: T }>> = new Subject<
     Doc<{ value: T }>
   >();
   private latest: Doc<{ value: T }> | null = null;
-  private queue = fnQueue();
   private stopped = false;
   private lastFromRemote: Doc<{ value: T }> | null = null;
   private lastSentChangeCount = Infinity;
+  private reconciling = false;
+  private needsReconcile = true;
+  private recoveringReconcile = false;
 
   constructor({
     maxRetryIntervalMs,
@@ -55,16 +57,14 @@ export class ReplicaSync<T> {
     this.maxRetryIntervalMs = maxRetryIntervalMs;
     this.sendChangesDebounceMs = sendChangesDebounceMs;
     this.fetchPrefix = fetchPrefix;
-
     this.topic = topic;
 
     this.sync = sync;
     this.localChangesObservable = localChangesObservable;
     this.subscriptionCountObservable = subscriptionCountObservable;
 
-    this.sendChanges = this.sendChanges.bind(this);
-    this.debouncedSendChanges = debounce(
-      this.sendChanges,
+    this.debouncedTryReconcile = debounce(
+      this.tryReconcile.bind(this),
       this.sendChangesDebounceMs
     );
 
@@ -73,43 +73,60 @@ export class ReplicaSync<T> {
     }
   }
 
-  start() {
+  public start() {
     this.subscriptionCountSubscription =
       this.subscriptionCountObservable.subscribe((observerCount) => {
         if (observerCount === 0) {
-          this.queue
-            .push(() => this.unsubscribe())
-            .catch((err) => {
-              console.error(err);
-            });
+          this.unsubscribe();
         } else if (observerCount > 0) {
-          this.queue
-            .push(() => this.subscribe())
-            .catch((err) => {
-              console.error(err);
-            });
+          this.subscribe();
         }
       });
 
     this.localChangesSubscription = this.localChangesObservable.subscribe(
       ({ after }) => {
+        if (after === this.latest) {
+          return;
+        }
         this.latest = after;
-        this.debouncedSendChanges();
+
+        this.syncStatus.next(SyncStatus.LocalChanged);
+        this.needsReconcile = true;
+        this.debouncedTryReconcile();
       }
     );
 
-    this.fetch();
-    this.sendChanges();
+    this.tryReconcile();
+  }
+
+  public stop() {
+    this.subscriptionCountSubscription?.unsubscribe();
+    this.localChangesSubscription?.unsubscribe();
+    if (this.remoteOpsSubscription !== null) {
+      this.remoteOpsSubscription.unsubscribe();
+    }
+    this.unsubscribe();
+
+    this.remoteChanges.complete();
+    this.remoteDoc.complete();
+    this.debouncedTryReconcile.cancel();
+    this.tryReconcile()
+      .catch(() => {
+        // ignore
+      })
+      .finally(() => {
+        this.stopped = true;
+        this.lastFromRemote = null;
+        this.syncStatus.complete();
+      }); // One last attempt
   }
 
   private subscribe(): Promise<void> {
-    return new Promise((resolve) => {
+    if (this.subscribedPromise) {
+      return this.subscribedPromise;
+    }
+    this.subscribedPromise = new Promise((resolve) => {
       // TODO: Have a timeout and perhaps reject subscribe call?
-      if (this.subscribed) {
-        resolve();
-        return;
-      }
-
       const remoteOpsObservable = this.sync.subscribe(
         this.topic,
         this.localChangesObservable
@@ -118,12 +135,10 @@ export class ReplicaSync<T> {
         (remoteOp: RemoteOp) => {
           switch (remoteOp.op) {
             case 'subscribed':
-              this.subscribed = true;
               resolve();
               break;
 
             case 'unsubscribed':
-              this.subscribed = false;
               if (this.remoteOpsSubscription !== null) {
                 this.remoteOpsSubscription.unsubscribe();
                 this.remoteOpsSubscription = null;
@@ -131,88 +146,136 @@ export class ReplicaSync<T> {
               break;
 
             case 'changed':
-              this.queue
-                .push(() => this.integrateRemoteChanges(remoteOp.changes!))
-                .catch((err) => {
-                  console.error(err);
-                });
+              try {
+                this.integrateRemoteChanges(remoteOp.changes!);
+              } catch (err) {
+                console.error(err);
+                this.needsReconcile = true;
+                this.tryReconcile();
+              }
           }
         }
       );
     });
+
+    return this.subscribedPromise;
   }
 
   private async unsubscribe() {
-    if (!this.subscribed) {
+    if (!this.subscribedPromise) {
       return;
     }
     this.sync.unsubscribe(this.topic, this.localChangesObservable);
-    this.subscribed = false;
+    this.subscribedPromise = null;
   }
 
-  private fetch() {
-    this.queue
-      .push(() => this._fetch())
-      .catch(() => {
-        if (!this.stopped) {
-          setTimeout(() => this.fetch(), this.randomRetryTimeout());
-        }
-      });
-  }
+  private async tryReconcile(): Promise<void> {
+    if (this.reconciling || this.recoveringReconcile || !this.needsReconcile) {
+      return;
+    }
 
-  private async _fetch() {
     try {
-      await this.attemptFetchFromRemote();
-      await this.attemptSendChanges(); // reconcile
-    } catch (err) {
-      if (this.latest !== null) {
-        await this.attemptSendChanges();
+      this.reconciling = true;
+      this.syncStatus.next(SyncStatus.Reconciling);
+      await this.subscribe();
+      this.needsReconcile = false;
+      await this.reconcile();
+      this.reconciling = false;
+      this.syncStatus.next(SyncStatus.Reconciled);
+      if (!this.stopped && this.needsReconcile) {
+        this.tryReconcile();
       }
-      throw err;
+    } catch (err) {
+      this.syncStatus.next(SyncStatus.Errored);
+      this.reconciling = false;
+      if (!this.stopped && !this.recoveringReconcile) {
+        if (!(err instanceof RangeError)) {
+          // do not print merge errors
+          console.error(err);
+        }
+        this.scheduleRecoverReconcile();
+      }
     }
   }
 
-  private sendChanges() {
-    if (this.latest !== null) {
-      this.queue
-        .push(async () => {
-          await this.attemptSendChanges();
-          await this.reconcile();
-        })
-        .catch((err) => {
-          console.error(err);
-          setTimeout(() => this.sendChanges(), this.randomRetryTimeout());
-        });
+  private async scheduleRecoverReconcile() {
+    this.recoveringReconcile = true;
+    setTimeout(() => this.recoverReconcile(), this.randomRetryTimeout());
+  }
+
+  private async recoverReconcile() {
+    this.recoveringReconcile = true;
+    try {
+      this.syncStatus.next(SyncStatus.Reconciling);
+      await this.subscribe();
+      this.needsReconcile = false;
+      await this.reconcile();
+      this.recoveringReconcile = false;
+      this.reconciling = false;
+      this.syncStatus.next(SyncStatus.Reconciled);
+      if (!this.stopped && this.needsReconcile) {
+        this.tryReconcile();
+      }
+    } catch (err) {
+      if (!(err instanceof RangeError)) {
+        console.error(err);
+      }
+
+      this.syncStatus.next(SyncStatus.Errored);
+      this.scheduleRecoverReconcile();
     }
   }
 
   private async reconcile() {
+    let error: Error | null = null;
     do {
-      await this.attemptFetchFromRemote();
-      await this.attemptSendChanges();
-    } while (this.lastSentChangeCount > 0);
+      error = null;
+      try {
+        await this.attemptSendChanges();
+      } catch (err) {
+        error = err;
+      }
+
+      try {
+        await this.attemptFetchFromRemote();
+      } catch (err) {
+        error = err;
+      }
+
+      try {
+        await this.attemptSendChanges();
+      } catch (err) {
+        error = err;
+      }
+    } while (!error && this.lastSentChangeCount > 0);
+    if (error) {
+      throw error;
+    }
   }
 
   private async attemptSendChanges() {
     if (this.stopped || this.latest === null) {
-      throw new Error('nothing to send');
+      if (!this.stopped) {
+        throw new Error('nothing to send');
+      }
     }
     if (this.lastFromRemote === null) {
       await this.attemptSendEverything();
     } else {
-      try {
-        await this.attempSendOnlyChanges();
-      } catch (err) {
-        await this.attemptSendEverything();
-      }
+      await this.attempSendOnlyChanges();
     }
   }
 
   private async attempSendOnlyChanges() {
-    const lastRemote = this.lastFromRemote!;
-    const latest = this.latest!;
-
-    const changes = Automerge.getChanges(lastRemote, latest);
+    const lastRemoteDoc = this.lastFromRemote!;
+    let newRemoteDoc;
+    try {
+      newRemoteDoc = Automerge.merge(this.latest!, lastRemoteDoc);
+    } catch (err) {
+      console.error(err);
+      newRemoteDoc = lastRemoteDoc;
+    }
+    const changes = Automerge.getChanges(lastRemoteDoc, newRemoteDoc);
 
     if (changes.length > 0) {
       const response = await fetch(this.remoteUrl() + '/changes', {
@@ -231,7 +294,7 @@ export class ReplicaSync<T> {
       }
     }
     this.lastSentChangeCount = changes.length;
-    this.lastFromRemote = Automerge.applyChanges(lastRemote, changes);
+    // this.lastFromRemote = newRemoteDoc;
   }
 
   private async attemptSendEverything() {
@@ -248,7 +311,8 @@ export class ReplicaSync<T> {
       const message = `Failed to send data to remote: ${await response.text()}`;
       throw new Error(message);
     }
-    this.lastFromRemote = latest;
+    // this.lastFromRemote = latest;
+    this.lastSentChangeCount = 0; // should be Infinity
   }
 
   async attemptFetchFromRemote() {
@@ -265,44 +329,24 @@ export class ReplicaSync<T> {
     if (doc.length > 0) {
       const remoteDoc = Automerge.load(doc) as Doc<{ value: T }>;
       this.lastFromRemote = remoteDoc;
-      if (this.latest === null) {
-        this.latest = remoteDoc;
-      }
       this.remoteDoc.next(remoteDoc);
     }
   }
 
-  async integrateRemoteChanges(changes: Change[]) {
+  private integrateRemoteChanges(changes: Change[]) {
     if (changes.length > 0) {
       if (this.lastFromRemote !== null) {
         this.lastFromRemote = Automerge.applyChanges(
           this.lastFromRemote,
           changes
         );
+        this.syncStatus.next(SyncStatus.RemoteChanged);
+      } else {
+        this.needsReconcile = true;
       }
+      this.tryReconcile();
       this.remoteChanges.next(changes);
     }
-  }
-
-  stop() {
-    this.subscriptionCountSubscription?.unsubscribe();
-    this.localChangesSubscription?.unsubscribe();
-    if (this.remoteOpsSubscription !== null) {
-      this.remoteOpsSubscription.unsubscribe();
-    }
-    this.unsubscribe();
-
-    this.remoteChanges.complete();
-    this.remoteDoc.complete();
-    this.debouncedSendChanges.cancel();
-    this.attemptSendChanges()
-      .catch(() => {
-        // ignore
-      })
-      .finally(() => {
-        this.stopped = true;
-        this.lastFromRemote = null;
-      }); // One last attempt
   }
 
   private remoteUrl(): string {
@@ -312,4 +356,15 @@ export class ReplicaSync<T> {
   private randomRetryTimeout() {
     return Math.ceil(Math.random() * this.maxRetryIntervalMs);
   }
+}
+
+// apparently AWS API Gateway does not allow some characters as part of the id
+// or it's an architect problem... not sure...
+// anyway, we need to replace "/" characters with ":".
+function encode(uri: string): string {
+  let ret = uri.replace(/\//g, ':');
+  if (ret[0] !== ':') {
+    ret = ':' + ret;
+  }
+  return ret;
 }

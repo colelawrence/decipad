@@ -2,7 +2,7 @@ import { getParent, getChildren } from '../utils/path';
 import { toJS } from '../utils/to-js';
 import { cloneNode } from '../utils/clone-node';
 
-function mergeNode(
+export function mergeNode(
   doc: SyncPadValue,
   op: ExtendedSlate.ExtendedSlateMergeNodeOperation
 ): SyncPadValue {
@@ -26,5 +26,3 @@ function mergeNode(
 
   return doc;
 }
-
-export { mergeNode };

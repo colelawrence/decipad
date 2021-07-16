@@ -1,6 +1,6 @@
 import { getTarget } from '../utils/path';
 
-function setNode(
+export function setNode(
   doc: SyncPadValue,
   op: ExtendedSlate.ExtendedSlateSetNodeOperation
 ): SyncPadValue {
@@ -19,5 +19,3 @@ function setNode(
 
   return doc;
 }
-
-export { setNode };

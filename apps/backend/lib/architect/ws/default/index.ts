@@ -173,7 +173,8 @@ async function handleCollab(
     return { statusCode: 403 };
   }
 
-  const topic = args;
+  const topic = args as string;
+
   if (!(await isAuthorized(topic, { id: connection.user_id }))) {
     // The user is not autorized, but don't close the connection
     // He won't be able to fetch the resource through HTTP anyway

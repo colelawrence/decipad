@@ -2,8 +2,9 @@ import { Observable, Subject, Subscription } from 'rxjs';
 import debounce from 'lodash.debounce';
 import { Operation as SlateOperation } from 'slate';
 import { nanoid } from 'nanoid';
+import assert from 'assert';
 import { Runtime } from './runtime';
-import { createReplica, Replica } from '@decipad/replica';
+import { createReplica, Replica, ChangeEvent } from '@decipad/replica';
 import { fromSlateOpType, SupportedSlateOpTypes } from './from-slate-op';
 import { toSlateOps } from './to-slate-ops';
 import { toJS } from './utils/to-js';
@@ -12,29 +13,18 @@ import { fnQueue } from './utils/fn-queue';
 import { observeSubscriberCount } from './utils/observe-subscriber-count';
 import { uri } from './utils/uri';
 
+export interface PadEditorOptions {
+  startReplicaSync?: boolean;
+  storage?: Storage;
+}
+
 const DEBOUNCE_PROCESS_SLATE_OPS =
   Number(process.env.DECI_DEBOUNCE_PROCESS_SLATE_OPS) || 500;
 const MAX_RETRY_INTERVAL_MS =
   Number(process.env.DECI_MAX_RETRY_INTERVAL_MS) || 10000;
 const SEND_CHANGES_DEBOUNCE_MS =
-  Number(process.env.DECI_SEND_CHANGES_DEBOUNCE_MS) || 3000;
+  Number(process.env.DECI_SEND_CHANGES_DEBOUNCE_MS) || 0;
 const fetchPrefix = process.env.DECI_API_URL || '';
-
-const initialValue = toSync([
-  {
-    // children: [
-    //   {
-    type: 'p',
-    children: [
-      {
-        text: '',
-      },
-    ],
-    id: '000000000000000000000',
-    //   },
-    // ],
-  },
-]) as SyncPadDoc;
 
 // we have to initialize a static value because randomization of ids by automerge will lead to initial divergence and we don't want that.
 const initialStaticValue =
@@ -49,21 +39,32 @@ class PadEditor {
   public slateOpsCountObservable = observeSubscriberCount(
     this.slateOpsObservable
   );
-  private debouncedProcessSlateOps: () => void;
+  private debouncedProcessLocalSlateOps: () => void;
   private changesSubscription: Subscription;
   private pendingApplySlateOpIds: string[] = [];
   private pendingApplyResolve: ((value: unknown) => void) | null = null;
   private pendingApplyPromise: Promise<unknown> | null = null;
   private queue = fnQueue();
 
-  constructor(public padId: Id, runtime: Runtime, startReplicaSync = true) {
-    this.processSlateOps = this.processSlateOps.bind(this);
-    this.debouncedProcessSlateOps = debounce(
-      this.processSlateOps,
+  constructor(public padId: Id, runtime: Runtime, options: PadEditorOptions) {
+    this.debouncedProcessLocalSlateOps = debounce(
+      this.processLocalSlateOps.bind(this),
       DEBOUNCE_PROCESS_SLATE_OPS
     );
 
-    this.replica = createReplica<SyncPadDoc>({
+    const initialValue = toSync([
+      {
+        type: 'p',
+        children: [
+          {
+            text: '',
+          },
+        ],
+        id: '000000000000000000000',
+      },
+    ]) as SyncPadDoc;
+
+    const replicaOptions = {
       name: uri('pads', padId, 'content'),
       actorId: runtime.actorId,
       userId: runtime.userId,
@@ -71,20 +72,17 @@ class PadEditor {
       initialValue,
       initialStaticValue,
       createIfAbsent: true,
-      startReplicaSync,
       maxRetryIntervalMs: MAX_RETRY_INTERVAL_MS,
       sendChangesDebounceMs: SEND_CHANGES_DEBOUNCE_MS,
       fetchPrefix,
-    });
-    this.replica.beforeRemoteChanges = () => {
-      this.processSlateOps();
-      return this.pendingApplyPromise;
+      storage: options.storage || global.localStorage,
+      beforeRemoteChanges: this.beforeRemoteChanges.bind(this),
+      startReplicaSync: options.startReplicaSync,
     };
+    this.replica = createReplica<SyncPadDoc>(replicaOptions);
+
     this.changesSubscription = this.replica.remoteChanges.subscribe(
-      ({ diffs, doc, before }) => {
-        const ops = toSlateOps(diffs, doc, before).map(remoteOp);
-        this.queue.push(() => this.applySlateOps(ops));
-      }
+      this.onRemoteChange.bind(this)
     );
   }
 
@@ -96,7 +94,34 @@ class PadEditor {
     return this.slateOpsObservable;
   }
 
-  applySlateOps(ops: ExtendedSlate.ExtendedSlateOperation[]) {
+  flush() {
+    this.processLocalSlateOps();
+  }
+
+  stop() {
+    this.flush();
+    this.slateOpsObservable.complete();
+    this.changesSubscription.unsubscribe();
+    this.replica.stop();
+  }
+
+  /**************************/
+  /*** remote changes *******/
+  /**************************/
+
+  private beforeRemoteChanges(): Promise<undefined> | void {
+    this.processLocalSlateOps();
+    if (this.pendingApplyPromise) {
+      return this.pendingApplyPromise.then(() => undefined);
+    }
+  }
+
+  private onRemoteChange({ diffs, doc, before }: ChangeEvent<SyncPadDoc>) {
+    const ops = toSlateOps(diffs, doc, before).map(remoteOp);
+    this.queue.push(() => this.applyRemoteSlateOps(ops));
+  }
+
+  private applyRemoteSlateOps(ops: ExtendedSlate.ExtendedSlateOperation[]) {
     const p = (this.pendingApplyPromise = new Promise((resolve) => {
       this.pendingApplyResolve = resolve;
       if (ops.length > 0) {
@@ -105,7 +130,7 @@ class PadEditor {
         }
         this.slateOpsObservable.next(ops);
       } else {
-        resolve(null);
+        resolve(undefined);
       }
     }));
     return p;
@@ -118,26 +143,30 @@ class PadEditor {
         if (index >= 0) {
           this.pendingApplySlateOpIds.splice(index, 1);
           if (this.pendingApplySlateOpIds.length === 0) {
-            this.pendingApplyResolve!.call(null, undefined);
+            const resolve = this.pendingApplyResolve;
+            assert(resolve, 'should have pending apply resolve');
+            this.pendingApplyResolve = null;
+            resolve!.call(null, undefined);
           }
         }
       }
     }
-    const operations = ops.filter(isNotRemoteOp);
-    if (operations.length > 0) {
-      this.slateOpQueue = this.slateOpQueue.concat(operations);
-      this.debouncedProcessSlateOps();
+    const localOperations = ops.filter(isNotRemoteOp);
+    if (localOperations.length > 0) {
+      this.pushLocalSlateOps(localOperations);
     }
   }
 
-  stop() {
-    this.flush();
-    this.slateOpsObservable.complete();
-    this.changesSubscription.unsubscribe();
-    this.replica.stop();
+  /*************************/
+  /*** local changes *******/
+  /*************************/
+
+  private pushLocalSlateOps(ops: ExtendedSlate.ExtendedSlateOperation[]) {
+    this.slateOpQueue = this.slateOpQueue.concat(ops);
+    this.debouncedProcessLocalSlateOps();
   }
 
-  processSlateOps() {
+  private processLocalSlateOps() {
     const ops = this.slateOpQueue;
     if (ops.length === 0) {
       return;
@@ -146,27 +175,22 @@ class PadEditor {
     let applied = false;
     this.replica.mutate((doc) => {
       for (const op of ops) {
-        if (op.isRemote === true) {
-          continue;
-        }
-        const applyOp = fromSlateOpType(
-          (op as unknown as ExtendedSlate.ExtendedSlateOperation)
-            .type as SupportedSlateOpTypes
-        );
+        if (!op.isRemote) {
+          const applyOp = fromSlateOpType(
+            (op as unknown as ExtendedSlate.ExtendedSlateOperation)
+              .type as SupportedSlateOpTypes
+          );
 
-        if (applyOp) {
-          applyOp(doc as SyncPadValue, op);
-          applied = true;
+          if (applyOp) {
+            applyOp(doc as SyncPadValue, op);
+            applied = true;
+          }
         }
       }
     });
     if (applied) {
       this.replica.flush();
     }
-  }
-
-  flush() {
-    this.processSlateOps();
   }
 }
 

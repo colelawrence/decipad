@@ -34,3 +34,17 @@ export interface RemoteOp {
   topic: string;
   changes: Change[] | null;
 }
+
+export enum SyncStatus {
+  Unknown = 1,
+  LocalChanged,
+  RemoteChanged,
+  Reconciling,
+  Reconciled,
+  Errored,
+}
+
+export interface ReplicaMeta {
+  lastSavedLocally: Date;
+  lastSavedRemotely: Date;
+}

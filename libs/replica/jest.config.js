@@ -5,12 +5,13 @@ module.exports = {
   setupFiles: ['./jest.setup.js'],
   collectCoverageFrom: ['src/**/*.ts'],
   maxWorkers: 1,
+  bail: true,
   coverageThreshold: {
     global: {
-      statements: 72,
-      branches: 57,
-      lines: 72,
-      functions: 72,
+      statements: 81,
+      branches: 66,
+      lines: 80,
+      functions: 79,
     },
   },
 };

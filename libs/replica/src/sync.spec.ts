@@ -1,21 +1,21 @@
 import { nanoid } from 'nanoid';
+import { Subscription } from 'rxjs';
 import { Server as WebSocketServer, WebSocket } from 'mock-socket';
 import waitForExpect from 'wait-for-expect';
 import fetch from 'jest-fetch-mock';
-import Automerge, { Text, List } from 'automerge';
-import assert from 'assert';
+import { Text, List } from 'automerge';
 import { createReplica, Replica } from './replica';
 import { Sync } from './sync';
-import { timeout } from './utils/timeout';
 import randomChar from './utils/random-char';
 import { toJS } from './utils/to-js';
+import { toSync } from './utils/to-sync';
+import { cloneNode } from './utils/clone-node';
+import { apiServer, createWebsocketServer, timeout } from '@decipad/testutils';
+import { TestStorage } from '@decipad/testutils';
 
-type Model = List<Text>;
-
-interface DeciWebsocketServer {
-  socketHandler(socket: WebSocket): void;
-  notify(topic: string, message: string): void;
-}
+type BaseNode = { type: string; id: string; children: TextNode[] };
+type TextNode = { text: Text };
+type Model = List<BaseNode>;
 
 waitForExpect.defaults.interval = 500;
 
@@ -23,7 +23,8 @@ const replicaCount = 5;
 const randomChangeCountPerReplica = 100;
 const maxSmallTimeout = 500;
 const maxTinyTimeout = 50;
-const fetchPrefix = 'http://localhost:3333/api';
+const maxMicroTimeout = 10;
+const fetchPrefix = 'http://localhost:3333';
 const maxRetryIntervalMs = 3000;
 const sendChangesDebounceMs = 1;
 
@@ -33,19 +34,51 @@ const syncOptions = {
   maxReconnectMs: 3000,
 };
 
-describe('sync', () => {
-  const globalSyncs: Sync<Model>[] = [];
-  const replicas: Replica<Model>[] = [];
-  let websocketServer: WebSocketServer;
-  let deciWebsocketServer = null;
+const initialStaticValue =
+  '["~#iL",[["~#iM",["ops",["^0",[["^1",["action","makeList","obj","982602ad-8ccc-406a-bd96-39df0b1a71c5"]],["^1",["action","ins","obj","982602ad-8ccc-406a-bd96-39df0b1a71c5","key","_head","elem",1]],["^1",["action","makeMap","obj","73fce065-0465-4547-8270-dcd75cb37bfb"]],["^1",["action","set","obj","73fce065-0465-4547-8270-dcd75cb37bfb","key","type","value","p"]],["^1",["action","makeList","obj","0055603a-6e3f-4e1d-87cb-9c9aec848906"]],["^1",["action","ins","obj","0055603a-6e3f-4e1d-87cb-9c9aec848906","key","_head","elem",1]],["^1",["action","makeMap","obj","1758ff95-f7ca-484c-a2fa-401397b65d8d"]],["^1",["action","makeText","obj","5778df97-5560-4410-a7c3-ba364d339ac9"]],["^1",["action","link","obj","1758ff95-f7ca-484c-a2fa-401397b65d8d","key","text","value","5778df97-5560-4410-a7c3-ba364d339ac9"]],["^1",["action","link","obj","0055603a-6e3f-4e1d-87cb-9c9aec848906","key","starter:1","value","1758ff95-f7ca-484c-a2fa-401397b65d8d"]],["^1",["action","link","obj","73fce065-0465-4547-8270-dcd75cb37bfb","key","children","value","0055603a-6e3f-4e1d-87cb-9c9aec848906"]],["^1",["action","set","obj","73fce065-0465-4547-8270-dcd75cb37bfb","key","id","value","000000000000000000000"]],["^1",["action","link","obj","982602ad-8ccc-406a-bd96-39df0b1a71c5","key","starter:1","value","73fce065-0465-4547-8270-dcd75cb37bfb"]],["^1",["action","link","obj","00000000-0000-0000-0000-000000000000","key","value","value","982602ad-8ccc-406a-bd96-39df0b1a71c5"]]]],"actor","starter","seq",1,"deps",["^1",[]],"message","Initialization","undoable",false]]]]';
 
-  beforeAll(() => {
-    for (let i = 0; i < replicaCount; i++) {
-      const sync = new Sync<Model>(syncOptions);
-      globalSyncs.push(sync);
-      replicas.push(
-        createReplica<Model>({
-          name: 'shared1',
+const optionsToTest = [
+  {
+    useLocalStoreEvents: false,
+    beforeRemoteChanges: () => randomMicroTimeout(),
+  },
+  {
+    useLocalStoreEvents: false,
+  },
+  {
+    useLocalStoreEvents: true,
+  },
+];
+
+describe('sync', () => {
+  describe.each(optionsToTest)('options = %j', (replicaOptions) => {
+    const name = `/pads/${nanoid()}`;
+    const globalSyncs: Sync<Model>[] = [];
+    const replicas: Replica<Model>[] = [];
+    const subscriptions: Subscription[] = [];
+    const replicaObservedValues = new Array(replicaCount);
+    let websocketServer: WebSocketServer;
+    let deciWebsocketServer = null;
+
+    beforeAll(() => {
+      for (let i = 0; i < replicaCount; i++) {
+        const sync = new Sync<Model>(syncOptions);
+        globalSyncs.push(sync);
+
+        const initialValue = toSync([
+          {
+            type: 'p',
+            children: [
+              {
+                text: '',
+              },
+            ],
+            id: '000000000000000000000',
+          },
+        ]) as Model;
+
+        const replica = createReplica<Model>({
+          name,
           userId: nanoid(),
           actorId: nanoid(),
           sync,
@@ -53,297 +86,135 @@ describe('sync', () => {
           maxRetryIntervalMs,
           sendChangesDebounceMs,
           createIfAbsent: true,
-          initialValue: [],
-          initialStaticValue:
-            '["~#iL",[["~#iM",["ops",["^0",[["^1",["action","makeList","obj","d773c7d9-291d-4550-90a9-a6212a40ac64"]],["^1",["action","link","obj","00000000-0000-0000-0000-000000000000","key","value","value","d773c7d9-291d-4550-90a9-a6212a40ac64"]]]],"actor","e304e70a-81dc-4806-87ce-462f68f4771d","seq",1,"deps",["^1",[]],"message","Initialization","undoable",false]]]]',
-        })
-      );
-    }
-  });
+          initialValue,
+          initialStaticValue,
+          ...replicaOptions,
+          storage: replicaOptions.useLocalStoreEvents
+            ? global.localStorage
+            : new TestStorage(),
+        });
 
-  beforeAll(() => {
-    websocketServer = new WebSocketServer('ws://localhost:3333/ws');
-    deciWebsocketServer = createDeciWebsocketServer();
-    websocketServer.on('connection', deciWebsocketServer.socketHandler);
-
-    fetch.mockIf(() => true, apiServer(deciWebsocketServer));
-  });
-
-  afterAll(() => {
-    for (const sync of globalSyncs) {
-      sync.stop();
-    }
-  });
-
-  afterAll(() => {
-    for (const replica of replicas) {
-      replica.stop();
-    }
-  });
-
-  afterAll((done) => {
-    websocketServer.stop(done);
-  });
-
-  it('can send and receive extraneous websocket messages', (done) => {
-    const sync = globalSyncs[0];
-    const WebsocketClass = sync.websocketImpl();
-    const websocket = new WebsocketClass('bogus url');
-    let hadResponse = false;
-    let completed = false;
-    websocket.onopen = (event: Event) => {
-      if (completed) {
-        return;
+        replicas.push(replica);
       }
-      expect(event).toBeDefined();
-      expect(websocket.binaryType).toBe('blob');
-      expect(websocket.extensions).toBe(undefined);
-      expect(websocket.protocol).toBe('thisisagreattokenjustforyou');
-      expect(websocket.url).toBe('ws://localhost:3333/ws');
+    });
 
-      websocket.onclose = (event: Event) => {
+    beforeAll(() => {
+      replicas.forEach((replica) => {
+        subscriptions.push(
+          replica.observable.subscribe(() => {
+            // do nothing
+          })
+        );
+      });
+    });
+
+    beforeAll(() => {
+      websocketServer = new WebSocketServer('ws://localhost:3333/ws');
+      deciWebsocketServer = createWebsocketServer();
+      websocketServer.on('connection', deciWebsocketServer.socketHandler);
+
+      fetch.mockIf(
+        () => true,
+        apiServer(deciWebsocketServer, { fetchPrefix, maxTinyTimeout })
+      );
+    });
+
+    afterAll(() => {
+      for (const sync of globalSyncs) {
+        sync.stop();
+      }
+    });
+
+    afterAll(() => {
+      for (const replica of replicas) {
+        replica.stop();
+      }
+    });
+
+    afterAll(() => {
+      for (const subscription of subscriptions) {
+        subscription.unsubscribe();
+      }
+    });
+
+    afterAll((done) => {
+      websocketServer.stop(done);
+    });
+
+    it('can send and receive extraneous websocket messages', (done) => {
+      const sync = globalSyncs[0];
+      const WebsocketClass = sync.websocketImpl();
+      const websocket = new WebsocketClass('bogus url');
+      websocket.onopen = (event: Event) => {
         expect(event).toBeDefined();
-        expect(hadResponse).toBe(true);
-        expect(websocket.readyState).toBe(WebSocket.CLOSED);
-        completed = true;
+        expect(websocket.binaryType).toBe('blob');
+        expect(websocket.extensions).toBe(undefined);
+        expect(websocket.protocol).toBe('thisisagreattokenjustforyou');
+        expect(websocket.url).toBe('ws://localhost:3333/ws');
+
+        websocket.onclose = () => done();
+
+        websocket.onmessage = (event: MessageEvent) => {
+          const m = JSON.parse(event.data.toString());
+          expect(m).toMatchObject({ type: 'pong' });
+          websocket.close();
+        };
         done();
       };
 
-      websocket.onmessage = (event: MessageEvent) => {
-        const m = JSON.parse(event.data.toString());
-        expect(m).toMatchObject({ type: 'pong' });
-        hadResponse = true;
-        websocket.close();
-      };
-    };
+      websocket.send(JSON.stringify({ type: 'ping' }));
 
-    websocket.send(JSON.stringify({ type: 'ping' }));
+      expect(websocket.readyState).toBe(WebSocket.CONNECTING);
+    });
 
-    expect(websocket.readyState).toBe(WebSocket.CONNECTING);
-  });
+    it('tracks observed changes', () => {
+      // Create a side-channel where we watch remote and local changes
+      replicas.forEach((replica, replicaIndex) => {
+        replica.observable.subscribe(({ loading, error, data }) => {
+          if (error) {
+            throw error;
+          }
+          if (!loading) {
+            replicaObservedValues[replicaIndex] = data;
+          }
+        });
+      });
+    });
 
-  it('gets the replica contents', async () => {
-    let first;
-    for (const rep of replicas) {
-      const content = await toJS(rep.getValue());
-      if (!first) {
-        first = content;
-      } else {
-        expect(content).toMatchObject(first);
-      }
-    }
-  }, 10000);
+    it('gets the replica contents', () => {
+      const expectedValue = toJS(replicas[0].getValue());
+      const expectedValues = replicas.map(() => toJS(expectedValue));
+      const values = replicas.map((r) => toJS(r.getValue()));
+      // console.log(values);
+      expect(values).toMatchObject(expectedValues);
+    });
 
-  it('makes random changes to the replicas', async () => {
-    await randomChangesToReplicas(replicas, randomChangeCountPerReplica);
-  }, 90000);
+    it('makes random changes to the replicas', async () => {
+      await randomChangesToReplicas(replicas, randomChangeCountPerReplica);
+    }, 120000);
 
-  // it('waits a bit', async () => await timeout(10000), 11000);
+    // it('waits a bit', async () => await timeout(10000), 11000);
 
-  it('all converges', async () => {
-    await waitForExpect(
-      () => {
-        const r1Value = toJS(replicas[0].getValue());
-        for (const replica2 of replicas.slice(1)) {
-          const r2Value = toJS(replica2.getValue());
-          // test if contents are in sync
-          expect(r1Value).toMatchObject(r2Value);
-        }
-      },
-      30000,
-      1000
-    );
-  }, 130000);
-});
-
-function apiServer(deciWebsocketServer: DeciWebsocketServer) {
-  const store = new Map<string, string>();
-  return async (req: Request) => {
-    assert(req.url.startsWith(fetchPrefix));
-    await randomTinyTimeout();
-
-    let resp;
-    if (
-      req.method === 'GET' &&
-      req.url === fetchPrefix + '/auth/token?for=pubsub'
-    ) {
-      return {
-        status: 200,
-        body: 'thisisagreattokenjustforyou',
-      };
-    }
-    if (req.method === 'PUT') {
-      if (req.url.endsWith('/changes')) {
-        resp = await changes(req);
-      } else {
-        resp = await put(req);
-      }
-    } else {
-      resp = await get(req);
-    }
-
-    await randomTinyTimeout();
-
-    return resp;
-  };
-
-  async function changes(req: Request) {
-    try {
-      const key = req.url.substring(
-        fetchPrefix.length,
-        req.url.length - '/changes'.length
+    it('all converges', async () => {
+      await waitForExpect(
+        () => {
+          const expectedValue = toJS(replicas[0].getValue());
+          const expectedValues = replicas.map(() => toJS(expectedValue));
+          const values = replicas.map((r) => toJS(r.getValue()));
+          // console.log(JSON.stringify(values));
+          expect(values).toMatchObject(expectedValues);
+        },
+        30000,
+        1000
       );
-      if (store.has(key)) {
-        const before = Automerge.load(store.get(key)!);
-        const changes = await req.json();
-        const after = Automerge.applyChanges(before, changes);
-        await randomTinyTimeout();
-        store.set(key, Automerge.save(after));
+    }, 40000);
 
-        // websocket notify subscribers
-        if (changes.length > 0) {
-          deciWebsocketServer.notify(
-            key,
-            JSON.stringify({ o: 'c', t: key, c: changes })
-          );
-        }
-
-        return {
-          status: 201,
-        };
-      }
-
-      return {
-        status: 404,
-      };
-    } catch (err) {
-      console.error(err);
-      throw err;
-    }
-  }
-
-  async function put(req: Request) {
-    try {
-      const key = req.url.substring(fetchPrefix.length);
-      const remoteText = await req.text();
-      const before = Automerge.load(store.get(key) || remoteText);
-      const remote = Automerge.load(remoteText);
-      const after = Automerge.merge(before, remote);
-
-      await randomTinyTimeout();
-      store.set(key, Automerge.save(after));
-
-      // websocket notify subscribers
-      const changes = Automerge.getChanges(before, after);
-      if (changes.length > 0) {
-        deciWebsocketServer.notify(
-          key,
-          JSON.stringify({ o: 'c', t: key, c: changes })
-        );
-      }
-
-      return {
-        status: 201,
-      };
-    } catch (err) {
-      console.error(err);
-      throw err;
-    }
-  }
-
-  async function get(req: Request) {
-    try {
-      const key = req.url.substring(fetchPrefix.length);
-      if (store.has(key)) {
-        return {
-          status: 200,
-          body: store.get(key),
-        };
-      }
-
-      return {
-        status: 404,
-      };
-    } catch (err) {
-      console.error(err);
-      throw err;
-    }
-  }
-}
-
-function createDeciWebsocketServer(): DeciWebsocketServer {
-  const subscriptions = new Map<string, WebSocket[]>();
-
-  function socketHandler(socket: WebSocket) {
-    socket.on('message', (message) => {
-      let topicSubscriptions: WebSocket[] | undefined = [];
-      const m = JSON.parse(message.toString());
-      let op: string;
-      let topic: string | undefined;
-      if (Array.isArray(m)) {
-        [op, topic] = m as [string, string];
-        if (topic) {
-          topicSubscriptions = subscriptions.get(topic) || [];
-          if (!topicSubscriptions) {
-            subscriptions.set(topic, topicSubscriptions);
-          }
-        }
-      } else {
-        op = m.type;
-      }
-
-      switch (op) {
-        case 'subscribe':
-          topicSubscriptions.push(socket);
-          socket.send(JSON.stringify({ o: 's', t: topic }));
-          break;
-
-        case 'unsubscribe':
-          {
-            const index = topicSubscriptions.indexOf(socket);
-            if (index >= 0) {
-              topicSubscriptions.splice(index, 1);
-            }
-            socket.send(JSON.stringify({ o: 'u', t: topic }));
-          }
-
-          break;
-
-        case 'ping':
-          socket.send(JSON.stringify({ type: 'pong' }));
-          break;
-
-        default:
-          throw new Error('unrecognized operation: ' + op);
-      }
+    it('observed values match', () => {
+      const values = replicas.map((r) => toJS(r.getValue()));
+      expect(values).toMatchObject(replicaObservedValues.map(toJS));
     });
-
-    socket.on('close', () => {
-      for (const sockets of subscriptions.values()) {
-        const index = sockets.indexOf(socket);
-        if (index >= 0) {
-          sockets.splice(index, 1);
-        }
-      }
-    });
-  }
-
-  function notify(topic: string, message: string) {
-    const sockets = subscriptions.get(topic) || [];
-    for (const socket of sockets) {
-      try {
-        socket.send(message);
-      } catch (err) {
-        console.error('Error sending message:', err);
-      }
-    }
-  }
-
-  return {
-    socketHandler,
-    notify,
-  };
-}
+  });
+});
 
 async function randomChangesToReplicas(
   replicas: Replica<Model>[],
@@ -368,7 +239,9 @@ function randomChangeToReplica(replica: Replica<Model>) {
   const value = replica.getValue();
   const candidates = value!;
   const candidateIndex = pickRandomIndex(candidates);
-  const candidate = candidates[candidateIndex];
+  const candidateNode = candidates[candidateIndex];
+  const candidate = candidateNode.children[0].text;
+
   if (!candidate || candidate.length < 6) {
     return randomInsert(replica, candidateIndex);
   }
@@ -380,11 +253,7 @@ function randomChangeToReplica(replica: Replica<Model>) {
 
 function randomInsert(replica: Replica<Model>, index: number) {
   replica.mutate((model) => {
-    let text = model[index] as Text;
-    if (text === undefined) {
-      text = new Text();
-      model[index] = text;
-    }
+    const text = model[index].children[0]?.text;
     const pos = pickRandomIndex(text);
     text!.insertAt!(pos, randomChar());
   });
@@ -392,7 +261,7 @@ function randomInsert(replica: Replica<Model>, index: number) {
 
 function randomRemove(replica: Replica<Model>, index: number) {
   replica.mutate((model) => {
-    const text = model[index] as Text;
+    const text = model[index].children[0].text;
     const pos = pickRandomIndex(text);
     text!.deleteAt!(pos);
   });
@@ -400,11 +269,17 @@ function randomRemove(replica: Replica<Model>, index: number) {
 
 function randomSplit(replica: Replica<Model>, index: number) {
   replica.mutate((model) => {
-    const text = model[index] as Text;
+    const node = model[index];
+    const text = node.children[0].text;
     const pos = pickRandomIndex(text);
-    const rest = new Text(text!.slice(pos).join(''));
-    model[index] = new Text(text.slice(0, pos).join(''));
-    model!.insertAt!(index + 1, rest);
+    const copy = cloneNode(node) as BaseNode;
+
+    text.deleteAt!(pos, text.length - pos);
+    if (pos > 0) {
+      copy.children[0].text.deleteAt!(0, pos);
+    }
+
+    model.insertAt!(index + 1, copy);
   });
 }
 
@@ -412,11 +287,11 @@ function randomSmallTimeout() {
   return timeout(Math.floor(Math.random() * maxSmallTimeout));
 }
 
-function randomTinyTimeout() {
-  return timeout(Math.floor(Math.random() * maxTinyTimeout));
+function randomMicroTimeout() {
+  return timeout(Math.floor(Math.random() * maxMicroTimeout));
 }
 
-function pickRandom(arr: Array<any>): any {
+function pickRandom<T>(arr: Array<T>): T {
   const index = pickRandomIndex(arr);
   return arr[index];
 }
@@ -424,3 +299,29 @@ function pickRandom(arr: Array<any>): any {
 function pickRandomIndex(arr: any[] | string): number {
   return Math.floor(Math.random() * arr.length);
 }
+
+// function syncStatusDesc(status: SyncStatus): string {
+//   let desc = 'UNKONWN STATUS: ' + status;
+//   switch (status) {
+//     case SyncStatus.Unknown:
+//       desc = 'unknown';
+//       break;
+//     case SyncStatus.LocalChanged:
+//       desc = 'local changed';
+//       break;
+//     case SyncStatus.RemoteChanged:
+//       desc = 'remote changed';
+//       break;
+//     case SyncStatus.Reconciling:
+//       desc = 'reconciling';
+//       break;
+//     case SyncStatus.Reconciled:
+//       desc = 'reconciled';
+//       break;
+//     case SyncStatus.Errored:
+//       desc = 'errored';
+//       break;
+//   }
+
+//   return desc;
+// }

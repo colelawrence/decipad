@@ -2,21 +2,26 @@ import { nanoid } from 'nanoid';
 import { Server as WebSocketServer, WebSocket } from 'mock-socket';
 import waitForExpect from 'wait-for-expect';
 import { DeciRuntime } from './';
-import { timeout } from './utils/timeout';
 import fetch from 'jest-fetch-mock';
-import Automerge from 'automerge';
 import { Subscription } from 'rxjs';
-import assert from 'assert';
 import { Editor, createEditor, Operation, Node } from 'slate';
 import { PadEditor } from './pad-editor';
 import randomChar from './utils/random-char';
+import { toJS } from './utils/to-js';
+import {
+  apiServer,
+  createWebsocketServer,
+  timeout,
+  TestStorage,
+} from '@decipad/testutils';
 
 waitForExpect.defaults.interval = 500;
 
-const REPLICA_COUNT = 3;
-const MAX_SMALL_TIMEOUT = 500;
-const MAX_TINY_TIMEOUT = 50;
-const fetchPrefix = process.env.DECI_API_URL + '/api';
+const fetchPrefix = 'http://localhost:3333';
+const maxTinyTimeout = 50;
+const maxSmallTimeout = 500;
+const replicaCount = 3;
+const randomChangeCountPerReplica = 100;
 
 describe('sync', () => {
   const replicas: DeciRuntime[] = [];
@@ -28,19 +33,23 @@ describe('sync', () => {
   let deciWebsocketServer = null;
 
   beforeAll(() => {
-    for (let i = 0; i < REPLICA_COUNT; i++) {
-      const userId = nanoid();
-      const actorId = nanoid();
-      replicas.push(new DeciRuntime({ userId, actorId }));
+    for (let i = 0; i < replicaCount; i++) {
+      replicas.push(new DeciRuntime({ userId: nanoid(), actorId: nanoid() }));
     }
   });
 
   beforeAll(() => {
     websocketServer = new WebSocketServer('ws://localhost:3333/ws');
-    deciWebsocketServer = createDeciWebsocketServer();
+    deciWebsocketServer = createWebsocketServer();
     websocketServer.on('connection', deciWebsocketServer.socketHandler);
 
-    fetch.mockIf(() => true, apiServer(deciWebsocketServer));
+    fetch.mockIf(
+      () => true,
+      apiServer(deciWebsocketServer, {
+        fetchPrefix,
+        maxTinyTimeout,
+      })
+    );
   });
 
   it('can send and receive extraneous websocket messages', (done) => {
@@ -82,7 +91,9 @@ describe('sync', () => {
 
   it('creates a pad on one of the replicas', async () => {
     const replica = replicas[0];
-    const content = replica.startPadEditor(padId);
+    const content = replica.startPadEditor(padId, {
+      storage: new TestStorage(), // separate local storage for tests
+    });
     padContents.push(content);
 
     const editor = createEditor();
@@ -91,8 +102,10 @@ describe('sync', () => {
   });
 
   it('creates other replicas', async () => {
-    for (let i = 1; i < REPLICA_COUNT; i++) {
-      const content = replicas[i].startPadEditor(padId);
+    for (let i = 1; i < replicaCount; i++) {
+      const content = replicas[i].startPadEditor(padId, {
+        storage: new TestStorage(), // separate local storage for tests
+      });
       padContents.push(content);
 
       const editor = createEditor();
@@ -101,57 +114,35 @@ describe('sync', () => {
     }
   });
 
-  it('gets the pad contents', async () => {
-    let first;
-    for (const rep of padContents) {
-      const content = await rep.getValue();
-      if (!first) {
-        first = content;
-      } else {
-        expect(content).toMatchObject(first);
-      }
-    }
+  it('all pad contents match initially', async () => {
+    const expectedValue = padContents[0].getValue();
+    const expectedValues = padContents.map(() => toJS(expectedValue));
+    const values = padContents.map((pc) => pc.getValue());
+    expect(values).toMatchObject(expectedValues);
   }, 10000);
 
   it('makes random changes to the editors', async () => {
-    await randomChangesToEditors(padEditors, 100);
-  }, 90000);
+    await randomChangesToEditors(padEditors, randomChangeCountPerReplica);
+  }, 1200000);
 
-  it('all converges', async () => {
+  it('pad contents converge', async () => {
     await waitForExpect(
       () => {
-        let editorIndex = -1;
-        for (const editor1 of padEditors) {
-          editorIndex += 1;
-
-          // test if contents are in sync with editor
-          expect(editor1.children).toMatchObject(
-            padContents[editorIndex].getValue()
-          );
-
-          // test if editors are in sync with each other
-          for (const editor2 of padEditors) {
-            if (editor1 === editor2) {
-              continue;
-            }
-            expect(editor1.children).toMatchObject(editor2.children);
-          }
-        }
-
-        // test if contents are in sync with each other
-        for (const content1 of padContents) {
-          for (const content2 of padContents) {
-            if (content1 === content2) {
-              continue;
-            }
-            expect(content1.getValue()).toMatchObject(content2.getValue());
-          }
-        }
+        const expectedValue = padContents[0].getValue();
+        const expectedValues = padContents.map(() => toJS(expectedValue));
+        const values = padContents.map((pc) => pc.getValue());
+        expect(values).toMatchObject(expectedValues);
       },
-      120000,
-      5000
+      60000,
+      2000
     );
-  }, 130000);
+  }, 70000);
+
+  it('pad contents match each editor content', () => {
+    const expectedValues = padContents.map((pc) => pc.getValue());
+    const values = padEditors.map((pe) => toJS(pe.children));
+    expect(values).toMatchObject(expectedValues);
+  });
 
   afterAll(() => {
     for (const sub of padSubscriptions) {
@@ -170,195 +161,6 @@ describe('sync', () => {
   });
 });
 
-function apiServer(deciWebsocketServer: DeciWebsocketServer) {
-  const store = new Map<string, string>();
-  return async (req: Request) => {
-    assert(req.url.startsWith(fetchPrefix));
-    await randomTinyTimeout();
-
-    let resp;
-    if (
-      req.method === 'GET' &&
-      req.url === fetchPrefix + '/auth/token?for=pubsub'
-    ) {
-      return {
-        status: 200,
-        body: 'thisisagreattokenjustforyou',
-      };
-    }
-    if (req.method === 'PUT') {
-      if (req.url.endsWith('/changes')) {
-        resp = await changes(req);
-      } else {
-        resp = await put(req);
-      }
-    } else {
-      resp = await get(req);
-    }
-
-    await randomTinyTimeout();
-
-    return resp;
-  };
-
-  async function changes(req: Request) {
-    try {
-      const key = req.url.substring(
-        fetchPrefix.length,
-        req.url.length - '/changes'.length
-      );
-      if (store.has(key)) {
-        const before = Automerge.load(store.get(key)!);
-        const changes = await req.json();
-        const after = Automerge.applyChanges(before, changes);
-        await randomTinyTimeout();
-        store.set(key, Automerge.save(after));
-
-        // websocket notify subscribers
-        if (changes.length > 0) {
-          deciWebsocketServer.notify(
-            key,
-            JSON.stringify({ o: 'c', t: key, c: changes })
-          );
-        }
-
-        return {
-          status: 201,
-        };
-      }
-
-      return {
-        status: 404,
-      };
-    } catch (err) {
-      console.log(err);
-      throw err;
-    }
-  }
-
-  async function put(req: Request) {
-    try {
-      const key = req.url.substring(fetchPrefix.length);
-      const remoteText = await req.text();
-      const before = Automerge.load(store.get(key) || remoteText);
-      const remote = Automerge.load(remoteText);
-      const after = Automerge.merge(before, remote);
-
-      await randomTinyTimeout();
-      store.set(key, Automerge.save(after));
-
-      // websocket notify subscribers
-      const changes = Automerge.getChanges(before, after);
-      if (changes.length > 0) {
-        deciWebsocketServer.notify(
-          key,
-          JSON.stringify({ o: 'c', t: key, c: changes })
-        );
-      }
-
-      return {
-        status: 201,
-      };
-    } catch (err) {
-      console.log(err);
-      throw err;
-    }
-  }
-
-  async function get(req: Request) {
-    try {
-      const key = req.url.substring(fetchPrefix.length);
-      if (store.has(key)) {
-        return {
-          status: 200,
-          body: store.get(key),
-        };
-      }
-
-      return {
-        status: 404,
-      };
-    } catch (err) {
-      console.log(err);
-      throw err;
-    }
-  }
-}
-
-function createDeciWebsocketServer(): DeciWebsocketServer {
-  const subscriptions = new Map<string, WebSocket[]>();
-
-  function socketHandler(socket: WebSocket) {
-    socket.on('message', (message) => {
-      let topicSubscriptions: WebSocket[] | undefined = [];
-      const m = JSON.parse(message.toString());
-      let op: string;
-      let topic: string | undefined;
-      if (Array.isArray(m)) {
-        [op, topic] = m as [string, string];
-        if (topic) {
-          topicSubscriptions = subscriptions.get(topic) || [];
-          if (!topicSubscriptions) {
-            subscriptions.set(topic, topicSubscriptions);
-          }
-        }
-      } else {
-        op = m.type;
-      }
-
-      switch (op) {
-        case 'subscribe':
-          topicSubscriptions.push(socket);
-          socket.send(JSON.stringify({ o: 's', t: topic }));
-          break;
-
-        case 'unsubscribe':
-          {
-            const index = topicSubscriptions.indexOf(socket);
-            if (index >= 0) {
-              topicSubscriptions.splice(index, 1);
-            }
-            socket.send(JSON.stringify({ o: 'u', t: topic }));
-          }
-
-          break;
-
-        case 'ping':
-          socket.send(JSON.stringify({ type: 'pong' }));
-          break;
-
-        default:
-          throw new Error('unrecognized operation: ' + op);
-      }
-    });
-
-    socket.on('close', () => {
-      for (const sockets of subscriptions.values()) {
-        const index = sockets.indexOf(socket);
-        if (index >= 0) {
-          sockets.splice(index, 1);
-        }
-      }
-    });
-  }
-
-  function notify(topic: string, message: string) {
-    const sockets = subscriptions.get(topic) || [];
-    for (const socket of sockets) {
-      try {
-        socket.send(message);
-      } catch (err) {
-        console.error('Error sending message:', err);
-      }
-    }
-  }
-
-  return {
-    socketHandler,
-    notify,
-  };
-}
-
 function wireEditor(editor: Editor, content: PadEditor) {
   const sub = content.slateOps().subscribe((ops) => {
     Editor.withoutNormalizing(editor, () => {
@@ -372,6 +174,7 @@ function wireEditor(editor: Editor, content: PadEditor) {
   editor.onChange = () => {
     const ops = editor.operations;
     if (ops && ops.length) {
+      editor.operations = [];
       content.sendSlateOperations(ops);
     }
   };
@@ -466,11 +269,7 @@ function randomSplit(index: number, text: string, node: Element): Operation[] {
 }
 
 function randomSmallTimeout() {
-  return timeout(Math.floor(Math.random() * MAX_SMALL_TIMEOUT));
-}
-
-function randomTinyTimeout() {
-  return timeout(Math.floor(Math.random() * MAX_TINY_TIMEOUT));
+  return timeout(Math.floor(Math.random() * maxSmallTimeout));
 }
 
 function pickRandom(arr: Array<any>): any {
@@ -480,9 +279,4 @@ function pickRandom(arr: Array<any>): any {
 
 function pickRandomIndex(arr: Array<any> | string): number {
   return Math.floor(Math.random() * arr.length);
-}
-
-interface DeciWebsocketServer {
-  socketHandler(socket: WebSocket): void;
-  notify(topic: string, message: string): void;
 }

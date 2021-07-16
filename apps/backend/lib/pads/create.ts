@@ -26,6 +26,15 @@ async function create(
     parentResourceUri: `/workspaces/${workspaceId}`,
   });
 
+  await createResourcePermission({
+    resourceUri: `/pads/${newPad.id}/content`,
+    userId: user.id,
+    type: 'ADMIN',
+    givenByUserId: user.id,
+    canComment: true,
+    parentResourceUri: `/workspaces/${workspaceId}`,
+  });
+
   return newPad;
 }
 

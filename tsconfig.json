@@ -44,7 +44,8 @@
       "@decipad/kafka-lite": ["libs/kafka-lite/src/index.ts"],
       "test-utils": ["libs/ui/src/lib/utils/test-utils.tsx"],
       "@decipad/queries": ["libs/queries/src/index.ts"],
-      "@decipad/replica": ["libs/replica/src/index.ts"]
+      "@decipad/replica": ["libs/replica/src/index.ts"],
+      "@decipad/testutils": ["libs/testutils/src/index.ts"]
     }
   },
   "files": [],

@@ -40,7 +40,7 @@ const insertNodeOp = ({ value, obj, index, path }: Diff, doc: SyncPadDoc) => (
   return ops;
 };
 
-const opInsert = (op: Diff, [map, ops]: any, doc: SyncPadDoc) => {
+export function opInsert (op: Diff, [map, ops]: any, doc: SyncPadDoc) {
   const { link, obj, path, index, type, value } = op;
 
   if (link && Object.prototype.hasOwnProperty.call(map, obj)) {
@@ -66,5 +66,3 @@ const opInsert = (op: Diff, [map, ops]: any, doc: SyncPadDoc) => {
 
   return [map, ops];
 };
-
-export { opInsert };

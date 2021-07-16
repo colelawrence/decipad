@@ -1,7 +1,7 @@
 import { getParent, getChildren } from '../utils/path';
 import { cloneNode } from '../utils/clone-node';
 
-function splitNode(
+export function splitNode(
   doc: SyncPadValue,
   op: ExtendedSlate.ExtendedSlateSplitNodeOperation
 ): SyncPadValue {
@@ -29,5 +29,3 @@ function splitNode(
 
   return doc;
 }
-
-export { splitNode };
