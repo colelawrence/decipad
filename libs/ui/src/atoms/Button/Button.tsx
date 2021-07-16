@@ -14,7 +14,7 @@ const styles = css(p13SemiBold, {
 
   transition: 'box-shadow 120ms ease-out',
   ':hover, :focus': {
-    boxShadow: `0px 4px 8px ${transparency(black, 0.8).rgba}`,
+    boxShadow: `0px 4px 8px ${transparency(black, 0.08).rgba}`,
   },
 });
 

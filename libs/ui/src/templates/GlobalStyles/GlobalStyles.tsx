@@ -11,13 +11,14 @@ import {
   globalTextStyles,
   setCssVar,
 } from '../../primitives';
-import { black, offWhite, white } from '../../primitives/color';
+import { black, grey100, grey200, white } from '../../primitives/color';
 import { ALLOW_DARK_THEME_LOCAL_STORAGE_KEY } from '../../utils';
 
 const darkTheme: CssVariables = {
   backgroundColor: black.rgb,
 
-  weakTextColor: offWhite.rgb,
+  weakTextColor: grey200.rgb,
+  normalTextColor: grey100.rgb,
   strongTextColor: white.rgb,
 };
 const allowDarkTheme = () =>

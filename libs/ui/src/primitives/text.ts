@@ -50,7 +50,7 @@ export const h1: TypographyStyles = {
 const pFontFamily: TypographyStyles['fontFamily'] = 'Inter, sans-serif';
 
 const pDefault: TypographyStyles = {
-  color: cssVar('weakTextColor'),
+  color: cssVar('normalTextColor'),
   fontFamily: pFontFamily,
   fontStyle: 'normal',
   fontWeight: 'normal',
@@ -62,6 +62,7 @@ const pDefault: TypographyStyles = {
 
 export const p12Regular: TypographyStyles = {
   ...pDefault,
+  color: cssVar('weakTextColor'),
   fontSize: `${12 / usualRemPxs}rem`,
 };
 export const p12Bold: TypographyStyles = {
