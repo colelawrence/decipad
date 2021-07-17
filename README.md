@@ -110,6 +110,87 @@ You can deploy your own private instance by following these instructions:
 
 https://www.loom.com/share/a0b33c1071d343fb8a216ef64ad217ea
 
+
+## Developing new or changing GraphQL queries
+
+Sometimes you may neeed to develop a feature from end to end, or you may want to change or add a Graphql interface. If that's the case, here is what you need to know and do:
+
+The GraphQL API is divided up into separate realms in [`apps/backend/lib/graphql`](apps/backend/lib/graphql). This is mainly to keep things organized, as it's all put together at compile and run time.
+
+You'll need to search and spot the realm you want to add or change something. If there's no suited realm, you can create one. (If you do, don't forget to add it to `apps/backend/lib/graphql/modules.ts`).
+
+Then you will need to change or add the typedef with the GraphQL interface and the implement or change the resolvers for that interface.
+
+You should have a server up and running, so that you can manually test your GraphQL server. To do that, you can run:
+
+`$ npm run serve:all`
+
+or, if you prefer to run things in separate terminal windows, in two separate terminal windows:
+
+```bash
+$ nx serve backend
+$ nx serve client
+```
+
+You should also run the following watch in a separate window to generate the back-end from your typescripts:
+
+```bash
+$ npm run build:backend:watch
+```
+
+(The `nx serve backend` runs everything you should need in the backend for you: database, queues and respective lambdas, graphQL server, HTTP lambdas and websockets).
+
+Then, you can then head out to your local GraphQL playground ([http://localhost:4200/graphql](http://localhost:4200/graphql)) and test your endpoint manually.
+
+#### Adding tests
+
+When changing the Graphql API, you should always add or change the integration tests.
+
+To run all the back-end tests you can run:
+
+```bash
+$ nx test backend
+```
+
+But if you need to test a specific file you can do:
+
+```
+$ jest apps/backend/tests/<file>.spec.ts --testTimeout=10000
+```
+
+Alternatively, you can watch the file for changes and run the test every time there is a change:
+
+```
+$ jest apps/backend/tests/<file>.spec.ts --testTimeout=10000 --watch
+```
+
+
+### Generating your GraqphQL client stuffs
+
+If you're also doing client-side stuff that depends on the changes, you will need to run the following commands:
+
+```bash
+$ npm run build:graphql:schema
+```
+
+This command will build a schema file from your local server schema.
+
+Then you'll need to generate the client-side typescript files:
+
+```bash
+$ npm run build:graphql:queries
+```
+
+This will generate files in `libs/queries`.
+
+If you need to add or change a query, you need to add or change a file in `libs/queries/src/lib/operations/{mutations,queries}` (depending on whether it's a mutation or a query).
+
+If you add or change a file in `libs/queries/src/lib`, you'll need to re-run the `npm run build:graphql:queries` command to (re)generate the Typescript files.
+
+If you're adding a file to You may also need to `libs/queries/src/lib/operations/{mutations,queries}`, you'll also need to export it in `libs/queries/src/lib/index.ts`, so that the client code may use it.
+
+
+
 ## Sub-package documentation
 
 - [backend](apps/backend/README.md)

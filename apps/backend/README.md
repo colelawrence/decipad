@@ -51,6 +51,43 @@ $ nx serve client
 Now you can use the GraphQL playground by accessing [http://localhost:4200/graphql](http://localhost:4200/graphql).
 
 
+## Code structure
+
+The backend code structure is roughly the following:
+
+- **lib**
+  - **architect**
+    - **http**: HTTP endpoint lambdas (auth, sync, validation, invites, graphql entry points)
+    - **queues**: - Queue lambdas that perform async work
+    - **ws**: Websocket lambdas (connect, disconnect, message)
+  - **auth-flow**: authentication adaptation of next-auth, jwts, validation, ...
+  - **email-templates**: only text for now
+  - **graphql**: graphql, separated by realm
+    - **pagination**: pagination helpers
+    - **modules.ts**: puts together all graphql realms
+    - Each ream has:
+      - typedefs.ts : graphql typedefs
+      - resolvers.ts: the respective resolvers
+  - **pads**: some shared business logic for handling pads
+  - **pubsub**: subscription and notification mechanisms. Used mainly for handling graphql subscriptions.
+  - **queues**: shared code for queue handlers
+  - **resource**: resource url encoding and decoding
+  - **resource-permissions**: resource-based permission mechanisms
+  - **s3**: we keep pad attachments and pad contents in S3
+  - **services**: external services. Only send email for now.
+  - **tables**: shared library for database-related stuff.
+  - **users**: some user management business logic.
+  - **workspaces**: some workspace shared business logic
+  - **auth.ts**: shared authentication mechanisms
+  - **authorization.ts**: shared authoritzation mechanisms
+  - **config.ts**: concentrates backend config, roughly divided by realm.
+  - **monitor.ts**: error reporting and tracing.
+- **src**: generated src files (compiled from Typescript in `lib`) for architect.
+- **tests**: back-end integration tests
+- **types**: some typescript types for: Graphql, Database and Lambdas
+- **app.arc**: infrastructure configuration
+
+
 ## File attachments
 
 Our GraphQL API allows users to upload attachments. Since our attachments are stored in S3, the client uploads them to S3 directly (saving us $money$).
@@ -67,3 +104,4 @@ Here is a quick overview of the process:
 * Client uploads the form to the given URL (returned by the previous `getCreateAttachmentForm` call).
 * Client can show a progress bar.
 * After the upload is successfully complete, client needs to call the `attachFileToPad(handle)`, passing in the given handle returned by the first query.
+
