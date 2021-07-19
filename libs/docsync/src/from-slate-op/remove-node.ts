@@ -1,9 +1,9 @@
 import { getParent, getChildren } from '../utils/path';
 
 export function removeNode(
-  doc: SyncPadValue,
+  doc: SyncValue,
   op: ExtendedSlate.ExtendedSlateRemoveNodeOperation
-): SyncPadValue {
+): SyncValue {
   const [parent, index] = getParent(doc, op.path);
 
   getChildren(parent).splice(index, 1);

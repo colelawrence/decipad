@@ -13,7 +13,7 @@ import {
 } from './plugins/SlashCommands';
 import { useEditor } from './hooks/useEditor';
 
-export { RuntimeProvider, AnonymousRuntimeProvider } from './contexts/Runtime';
+export { DocSyncProvider, AnonymousDocSyncProvider } from './contexts/DocSync';
 
 const Wrapper = styled('div')`
   padding-top: 25px;

@@ -294,29 +294,29 @@
         }
       }
     },
-    "runtime": {
-      "root": "libs/runtime",
-      "sourceRoot": "libs/runtime/src",
+    "docsync": {
+      "root": "libs/docsync",
+      "sourceRoot": "libs/docsync/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/runtime/**/*.ts"]
+            "lintFilePatterns": ["libs/docsync/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/runtime"],
+          "outputs": ["coverage/libs/docsync"],
           "options": {
-            "jestConfig": "libs/runtime/jest.config.js",
+            "jestConfig": "libs/docsync/jest.config.js",
             "codeCoverage": true
           }
         },
         "typecheck": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "yarn tsc -b libs/runtime"
+            "command": "yarn tsc -b libs/docsync"
           }
         }
       }

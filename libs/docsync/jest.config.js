@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'runtime',
+  displayName: 'docsync',
   testEnvironment: 'jsdom',
   preset: '../../jest.preset.js',
   setupFiles: ['./jest.setup.js'],

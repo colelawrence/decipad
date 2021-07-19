@@ -1,4 +1,4 @@
-import { DeciRuntime } from './';
+import { DocSync } from './';
 import { createEditor } from 'slate';
 import { timeout } from '@decipad/testutils';
 
@@ -6,11 +6,11 @@ const docId = 'docid';
 
 describe('pad editor', () => {
   test('sends changes', async () => {
-    const deci = new DeciRuntime({
+    const sync = new DocSync({
       userId: 'TEST_USER_ID',
       actorId: 'TEST_ACTOR_ID',
     });
-    const model = deci.startPadEditor(docId);
+    const model = sync.edit(docId);
     const editor = createEditor();
 
     editor.onChange = () => {
@@ -33,15 +33,15 @@ describe('pad editor', () => {
 
     model.stop();
 
-    deci.stop();
+    sync.stop();
   });
 
   test('loads document as was saved', async () => {
-    const deci = new DeciRuntime({
+    const sync = new DocSync({
       userId: 'TEST_USER_ID',
       actorId: 'TEST_ACTOR_ID',
     });
-    const model = deci.startPadEditor(docId);
+    const model = sync.edit(docId);
 
     const editor = createEditor();
 
@@ -66,6 +66,6 @@ describe('pad editor', () => {
     ]);
 
     model.stop();
-    deci.stop();
+    sync.stop();
   });
 });

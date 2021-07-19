@@ -5,17 +5,9 @@ declare namespace Sync {
   export { Node, List, Doc, Change };
 }
 
-type Id = string;
+type SyncValue = Sync.List<Sync.Node>;
 
-interface Session {
-  user: User;
-}
-
-type SyncPadValue = Sync.List<Sync.Node>;
-
-type SyncPadDoc = Sync.Doc<SyncPadValue>;
-
-type AnySyncValue = SyncPadValue | Pad | Workspace | List<Id>;
+type SyncDocDoc = Sync.Doc<SyncValue>;
 
 /* Slate */
 

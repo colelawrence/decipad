@@ -1,6 +1,6 @@
 import { ApolloProvider } from '@apollo/client';
 import { ChakraProvider } from '@chakra-ui/react';
-import { RuntimeProvider } from '@decipad/editor';
+import { DocSyncProvider } from '@decipad/editor';
 import { LoadingSpinnerPage, GlobalStyles, theme } from '@decipad/ui';
 import {
   init,
@@ -67,11 +67,11 @@ function Index({ pageProps = {} }) {
             <ApolloProvider client={apolloClient}>
               <GlobalStyles>
                 <ChakraProvider theme={theme}>
-                  <RuntimeProvider>
+                  <DocSyncProvider>
                     <BrowserRouter>
                       <Router session={session} />
                     </BrowserRouter>
-                  </RuntimeProvider>
+                  </DocSyncProvider>
                 </ChakraProvider>
               </GlobalStyles>
             </ApolloProvider>

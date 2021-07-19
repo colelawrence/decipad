@@ -1,4 +1,4 @@
-import { DeciRuntime } from './';
+import { DocSync } from './';
 import {
   Editor,
   createEditor,
@@ -8,7 +8,7 @@ import {
 import { LoremIpsum } from 'lorem-ipsum';
 import { nanoid } from 'nanoid';
 import waitForExpect from 'wait-for-expect';
-import { PadEditor } from './pad-editor';
+import { SyncEditor } from './sync-editor';
 
 waitForExpect.defaults.interval = 100;
 
@@ -26,17 +26,17 @@ const lorem = new LoremIpsum({
 const docId = 'docid';
 
 describe('slate to replica sync', () => {
-  let deci1: DeciRuntime, editor1: Editor, model1: PadEditor;
-  let deci2: DeciRuntime, editor2: Editor, model2: PadEditor;
+  let sync1: DocSync, editor1: Editor, model1: SyncEditor;
+  let sync2: DocSync, editor2: Editor, model2: SyncEditor;
   let firstText: string;
   let secondText: string;
 
   beforeAll(async () => {
-    deci1 = new DeciRuntime({
+    sync1 = new DocSync({
       userId: 'TEST_USER_ID',
       actorId: 'TEST_ACTOR_ID_1',
     });
-    model1 = deci1.startPadEditor(docId);
+    model1 = sync1.edit(docId);
 
     editor1 = createEditor();
 
@@ -51,11 +51,11 @@ describe('slate to replica sync', () => {
   });
 
   beforeAll(async () => {
-    deci2 = new DeciRuntime({
+    sync2 = new DocSync({
       userId: 'TEST_USER_ID',
       actorId: 'TEST_ACTOR_ID_2',
     });
-    model2 = deci2.startPadEditor(docId);
+    model2 = sync2.edit(docId);
 
     editor2 = createEditor();
 
@@ -371,12 +371,12 @@ describe('slate to replica sync', () => {
 
   afterAll(() => {
     model1.stop();
-    deci1.stop();
+    sync1.stop();
   });
 
   afterAll(() => {
     model2.stop();
-    deci2.stop();
+    sync2.stop();
   });
 });
 

@@ -3,36 +3,25 @@ import debounce from 'lodash.debounce';
 import { Operation as SlateOperation } from 'slate';
 import { nanoid } from 'nanoid';
 import assert from 'assert';
-import { Runtime } from './runtime';
+import { DocSync } from './docsync';
 import { createReplica, Replica, ChangeEvent } from '@decipad/replica';
 import { fromSlateOpType, SupportedSlateOpTypes } from './from-slate-op';
 import { toSlateOps } from './to-slate-ops';
 import { toJS } from './utils/to-js';
-import { toSync } from './utils/to-sync';
 import { fnQueue } from './utils/fn-queue';
 import { observeSubscriberCount } from './utils/observe-subscriber-count';
+import initialEditorValue from './utils/initial-editor-value';
 import { uri } from './utils/uri';
+import { config } from './config';
 
-export interface PadEditorOptions {
+export interface SyncEditorOptions {
   startReplicaSync?: boolean;
   storage?: Storage;
 }
 
-const DEBOUNCE_PROCESS_SLATE_OPS =
-  Number(process.env.DECI_DEBOUNCE_PROCESS_SLATE_OPS) || 500;
-const MAX_RETRY_INTERVAL_MS =
-  Number(process.env.DECI_MAX_RETRY_INTERVAL_MS) || 10000;
-const SEND_CHANGES_DEBOUNCE_MS =
-  Number(process.env.DECI_SEND_CHANGES_DEBOUNCE_MS) || 0;
-const fetchPrefix = process.env.DECI_API_URL || '';
-
-// we have to initialize a static value because randomization of ids by automerge will lead to initial divergence and we don't want that.
-const initialStaticValue =
-  '["~#iL",[["~#iM",["ops",["^0",[["^1",["action","makeList","obj","982602ad-8ccc-406a-bd96-39df0b1a71c5"]],["^1",["action","ins","obj","982602ad-8ccc-406a-bd96-39df0b1a71c5","key","_head","elem",1]],["^1",["action","makeMap","obj","73fce065-0465-4547-8270-dcd75cb37bfb"]],["^1",["action","set","obj","73fce065-0465-4547-8270-dcd75cb37bfb","key","type","value","p"]],["^1",["action","makeList","obj","0055603a-6e3f-4e1d-87cb-9c9aec848906"]],["^1",["action","ins","obj","0055603a-6e3f-4e1d-87cb-9c9aec848906","key","_head","elem",1]],["^1",["action","makeMap","obj","1758ff95-f7ca-484c-a2fa-401397b65d8d"]],["^1",["action","makeText","obj","5778df97-5560-4410-a7c3-ba364d339ac9"]],["^1",["action","link","obj","1758ff95-f7ca-484c-a2fa-401397b65d8d","key","text","value","5778df97-5560-4410-a7c3-ba364d339ac9"]],["^1",["action","link","obj","0055603a-6e3f-4e1d-87cb-9c9aec848906","key","starter:1","value","1758ff95-f7ca-484c-a2fa-401397b65d8d"]],["^1",["action","link","obj","73fce065-0465-4547-8270-dcd75cb37bfb","key","children","value","0055603a-6e3f-4e1d-87cb-9c9aec848906"]],["^1",["action","set","obj","73fce065-0465-4547-8270-dcd75cb37bfb","key","id","value","000000000000000000000"]],["^1",["action","link","obj","982602ad-8ccc-406a-bd96-39df0b1a71c5","key","starter:1","value","73fce065-0465-4547-8270-dcd75cb37bfb"]],["^1",["action","link","obj","00000000-0000-0000-0000-000000000000","key","value","value","982602ad-8ccc-406a-bd96-39df0b1a71c5"]]]],"actor","starter","seq",1,"deps",["^1",[]],"message","Initialization","undoable",false]]]]';
-
-class PadEditor {
+export class SyncEditor {
   private slateOpQueue: ExtendedSlate.ExtendedSlateOperation[] = [];
-  private replica: Replica<SyncPadDoc>;
+  private replica: Replica<SyncDocDoc>;
   private slateOpsObservable = new Subject<
     ExtendedSlate.ExtendedSlateOperation[]
   >();
@@ -46,47 +35,36 @@ class PadEditor {
   private pendingApplyPromise: Promise<unknown> | null = null;
   private queue = fnQueue();
 
-  constructor(public padId: Id, runtime: Runtime, options: PadEditorOptions) {
+  constructor(docId: string, docsync: DocSync, options: SyncEditorOptions) {
+    const conf = config();
     this.debouncedProcessLocalSlateOps = debounce(
       this.processLocalSlateOps.bind(this),
-      DEBOUNCE_PROCESS_SLATE_OPS
+      conf.debounceProcessSlateOpsMs
     );
 
-    const initialValue = toSync([
-      {
-        type: 'p',
-        children: [
-          {
-            text: '',
-          },
-        ],
-        id: '000000000000000000000',
-      },
-    ]) as SyncPadDoc;
-
     const replicaOptions = {
-      name: uri('pads', padId, 'content'),
-      actorId: runtime.actorId,
-      userId: runtime.userId,
-      sync: runtime.sync,
-      initialValue,
-      initialStaticValue,
+      name: uri('pads', docId, 'content'),
+      actorId: docsync.actorId,
+      userId: docsync.userId,
+      sync: docsync.sync,
+      initialValue: initialEditorValue.live(),
+      initialStaticValue: initialEditorValue.static,
       createIfAbsent: true,
-      maxRetryIntervalMs: MAX_RETRY_INTERVAL_MS,
-      sendChangesDebounceMs: SEND_CHANGES_DEBOUNCE_MS,
-      fetchPrefix,
-      storage: options.storage || global.localStorage,
       beforeRemoteChanges: this.beforeRemoteChanges.bind(this),
       startReplicaSync: options.startReplicaSync,
+      storage: options.storage || global.localStorage,
+      fetchPrefix: conf.fetchPrefix,
+      maxRetryIntervalMs: conf.maxRetryIntervalMs,
+      sendChangesDebounceMs: conf.sendChangesDebounceMs,
     };
-    this.replica = createReplica<SyncPadDoc>(replicaOptions);
+    this.replica = createReplica<SyncDocDoc>(replicaOptions);
 
     this.changesSubscription = this.replica.remoteChanges.subscribe(
       this.onRemoteChange.bind(this)
     );
   }
 
-  getValue(): SyncPadValue {
+  getValue(): SyncValue {
     return toJS(this.replica.getValue());
   }
 
@@ -116,7 +94,7 @@ class PadEditor {
     }
   }
 
-  private onRemoteChange({ diffs, doc, before }: ChangeEvent<SyncPadDoc>) {
+  private onRemoteChange({ diffs, doc, before }: ChangeEvent<SyncDocDoc>) {
     const ops = toSlateOps(diffs, doc, before).map(remoteOp);
     this.queue.push(() => this.applyRemoteSlateOps(ops));
   }
@@ -182,7 +160,7 @@ class PadEditor {
           );
 
           if (applyOp) {
-            applyOp(doc as SyncPadValue, op);
+            applyOp(doc as SyncValue, op);
             applied = true;
           }
         }
@@ -201,5 +179,3 @@ function remoteOp(op: SlateOperation): ExtendedSlate.ExtendedSlateOperation {
 function isNotRemoteOp(op: ExtendedSlate.ExtendedSlateOperation): boolean {
   return !op.isRemote;
 }
-
-export { PadEditor };

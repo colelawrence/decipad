@@ -1,9 +1,9 @@
 import { getTarget } from '../utils/path';
 
 export function insertText(
-  doc: SyncPadValue,
+  doc: SyncValue,
   op: ExtendedSlate.ExtendedSlateInsertTextOperation
-): SyncPadValue {
+): SyncValue {
   const node = getTarget(doc, op.path);
 
   const offset = Math.min(node.text.length, op.offset);

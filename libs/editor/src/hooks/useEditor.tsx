@@ -7,12 +7,12 @@ import { HistoryEditor } from 'slate-history';
 import { Node, Editor, Range, Text } from 'slate';
 import { dequal } from 'dequal';
 import { captureException } from '@sentry/react';
-import { PadEditor } from '@decipad/runtime';
+import { SyncEditor } from '@decipad/docsync';
 import { makeResultsContextValue, ResultsContextValue } from '@decipad/ui';
 import { ComputeRequest, makeComputer } from '@decipad/language';
-import { RuntimeContext } from '../contexts/Runtime';
+import { DocSyncContext } from '../contexts/DocSync';
 
-interface IUseRuntimeEditor {
+interface IUseDocSyncEditor {
   padId: string;
   editor: Editor | null;
   setValue: React.Dispatch<React.SetStateAction<Node[] | undefined>>;
@@ -82,9 +82,9 @@ function ghostApply(editor: Editor, applier: () => void) {
   });
 }
 
-export const useEditor = ({ padId, editor, setValue }: IUseRuntimeEditor) => {
-  const { runtime } = useContext(RuntimeContext);
-  const [padEditor, setPadEditor] = useState<PadEditor | null>(null);
+export const useEditor = ({ padId, editor, setValue }: IUseDocSyncEditor) => {
+  const { docsync } = useContext(DocSyncContext);
+  const [syncEditor, setSyncEditor] = useState<SyncEditor | null>(null);
   const [results, setResults] = useState<ResultsContextValue>(
     makeResultsContextValue
   );
@@ -95,21 +95,21 @@ export const useEditor = ({ padId, editor, setValue }: IUseRuntimeEditor) => {
 
   // Create a padEditor
   useEffect(() => {
-    const padEditor = runtime?.startPadEditor(padId) ?? null;
-    setPadEditor(padEditor);
+    const syncEditor = docsync?.edit(padId) ?? null;
+    setSyncEditor(syncEditor);
 
     return () => {
-      setPadEditor(null);
-      padEditor?.stop();
+      setSyncEditor(null);
+      syncEditor?.stop();
     };
-  }, [runtime, padId]);
+  }, [docsync, padId]);
 
   // Plug the padEditor and the editor
   useEffect(() => {
     let sub: Subscription;
 
-    if (editor != null && padEditor != null) {
-      sub = padEditor.slateOps().subscribe((ops) => {
+    if (editor != null && syncEditor != null) {
+      sub = syncEditor.slateOps().subscribe((ops) => {
         ghostApply(editor, () => {
           for (const op of ops) {
             editor.apply(op);
@@ -117,16 +117,16 @@ export const useEditor = ({ padId, editor, setValue }: IUseRuntimeEditor) => {
         });
       });
 
-      const value = padEditor.getValue();
+      const value = syncEditor.getValue();
       setValue(value);
     }
 
     return () => sub?.unsubscribe();
-  }, [editor, padEditor, setValue]);
+  }, [editor, syncEditor, setValue]);
 
   // Get some computation results based on evaluation requests
   useEffect(() => {
-    if (padEditor == null || editor == null) return;
+    if (syncEditor == null || editor == null) return;
 
     const sub = evaluationRequests
       .pipe(
@@ -162,11 +162,11 @@ export const useEditor = ({ padId, editor, setValue }: IUseRuntimeEditor) => {
     return () => {
       sub.unsubscribe();
     };
-  }, [evaluationRequests, editor, padEditor, runtime]);
+  }, [evaluationRequests, editor, syncEditor, docsync]);
 
   const onChangeLanguage = useCallback(
     (value: SlateNode[]) => {
-      if (editor == null || padEditor == null) {
+      if (editor == null || syncEditor == null) {
         return;
       }
 
@@ -176,7 +176,7 @@ export const useEditor = ({ padId, editor, setValue }: IUseRuntimeEditor) => {
       }
 
       editor.operations = [];
-      padEditor.sendSlateOperations(ops);
+      syncEditor.sendSlateOperations(ops);
 
       const codeBlocks = value.filter((node) => node.type === 'code_block');
 
@@ -196,7 +196,7 @@ export const useEditor = ({ padId, editor, setValue }: IUseRuntimeEditor) => {
 
       setValue(value as Node[]);
     },
-    [editor, padEditor, evaluationRequests, setValue]
+    [editor, syncEditor, evaluationRequests, setValue]
   );
 
   return { onChangeLanguage, results };

@@ -1,11 +1,10 @@
 import { nanoid } from 'nanoid';
 import { Server as WebSocketServer, WebSocket } from 'mock-socket';
 import waitForExpect from 'wait-for-expect';
-import { DeciRuntime } from './';
 import fetch from 'jest-fetch-mock';
 import { Subscription } from 'rxjs';
 import { Editor, createEditor, Operation, Node } from 'slate';
-import { PadEditor } from './pad-editor';
+import { DocSync, SyncEditor } from './';
 import randomChar from './utils/random-char';
 import { toJS } from './utils/to-js';
 import {
@@ -24,17 +23,17 @@ const replicaCount = 3;
 const randomChangeCountPerReplica = 100;
 
 describe('sync', () => {
-  const replicas: DeciRuntime[] = [];
+  const replicas: DocSync[] = [];
   let websocketServer: WebSocketServer;
-  const padId = nanoid();
-  const padContents: PadEditor[] = [];
-  const padSubscriptions: Subscription[] = [];
-  const padEditors: Editor[] = [];
+  const docId = nanoid();
+  const docContents: SyncEditor[] = [];
+  const docSubscriptions: Subscription[] = [];
+  const docEditors: Editor[] = [];
   let deciWebsocketServer = null;
 
   beforeAll(() => {
     for (let i = 0; i < replicaCount; i++) {
-      replicas.push(new DeciRuntime({ userId: nanoid(), actorId: nanoid() }));
+      replicas.push(new DocSync({ userId: nanoid(), actorId: nanoid() }));
     }
   });
 
@@ -53,8 +52,8 @@ describe('sync', () => {
   });
 
   it('can send and receive extraneous websocket messages', (done) => {
-    const runtime = replicas[0];
-    const WebsocketClass = runtime.websocketImpl();
+    const docsync = replicas[0];
+    const WebsocketClass = docsync.websocketImpl();
     const websocket = new WebsocketClass('bogus url');
     let hadResponse = false;
     let completed = false;
@@ -91,46 +90,46 @@ describe('sync', () => {
 
   it('creates a pad on one of the replicas', async () => {
     const replica = replicas[0];
-    const content = replica.startPadEditor(padId, {
+    const content = replica.edit(docId, {
       storage: new TestStorage(), // separate local storage for tests
     });
-    padContents.push(content);
+    docContents.push(content);
 
     const editor = createEditor();
-    padEditors.push(editor);
-    padSubscriptions.push(wireEditor(editor, content));
+    docEditors.push(editor);
+    docSubscriptions.push(wireEditor(editor, content));
   });
 
   it('creates other replicas', async () => {
     for (let i = 1; i < replicaCount; i++) {
-      const content = replicas[i].startPadEditor(padId, {
+      const content = replicas[i].edit(docId, {
         storage: new TestStorage(), // separate local storage for tests
       });
-      padContents.push(content);
+      docContents.push(content);
 
       const editor = createEditor();
-      padEditors.push(editor);
-      padSubscriptions.push(wireEditor(editor, content));
+      docEditors.push(editor);
+      docSubscriptions.push(wireEditor(editor, content));
     }
   });
 
   it('all pad contents match initially', async () => {
-    const expectedValue = padContents[0].getValue();
-    const expectedValues = padContents.map(() => toJS(expectedValue));
-    const values = padContents.map((pc) => pc.getValue());
+    const expectedValue = docContents[0].getValue();
+    const expectedValues = docContents.map(() => toJS(expectedValue));
+    const values = docContents.map((pc) => pc.getValue());
     expect(values).toMatchObject(expectedValues);
   }, 10000);
 
   it('makes random changes to the editors', async () => {
-    await randomChangesToEditors(padEditors, randomChangeCountPerReplica);
+    await randomChangesToEditors(docEditors, randomChangeCountPerReplica);
   }, 1200000);
 
   it('pad contents converge', async () => {
     await waitForExpect(
       () => {
-        const expectedValue = padContents[0].getValue();
-        const expectedValues = padContents.map(() => toJS(expectedValue));
-        const values = padContents.map((pc) => pc.getValue());
+        const expectedValue = docContents[0].getValue();
+        const expectedValues = docContents.map(() => toJS(expectedValue));
+        const values = docContents.map((pc) => pc.getValue());
         expect(values).toMatchObject(expectedValues);
       },
       60000,
@@ -139,13 +138,13 @@ describe('sync', () => {
   }, 70000);
 
   it('pad contents match each editor content', () => {
-    const expectedValues = padContents.map((pc) => pc.getValue());
-    const values = padEditors.map((pe) => toJS(pe.children));
+    const expectedValues = docContents.map((pc) => pc.getValue());
+    const values = docEditors.map((pe) => toJS(pe.children));
     expect(values).toMatchObject(expectedValues);
   });
 
   afterAll(() => {
-    for (const sub of padSubscriptions) {
+    for (const sub of docSubscriptions) {
       sub.unsubscribe();
     }
   });
@@ -161,7 +160,7 @@ describe('sync', () => {
   });
 });
 
-function wireEditor(editor: Editor, content: PadEditor) {
+function wireEditor(editor: Editor, content: SyncEditor) {
   const sub = content.slateOps().subscribe((ops) => {
     Editor.withoutNormalizing(editor, () => {
       for (const op of ops) {

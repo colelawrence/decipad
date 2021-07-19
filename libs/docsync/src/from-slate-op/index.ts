@@ -22,12 +22,9 @@ export type SupportedSlateOpTypes = keyof typeof slateOpTypes;
 
 export function fromSlateOpType(
   type: SupportedSlateOpTypes
-): (
-  doc: SyncPadValue,
-  op: ExtendedSlate.ExtendedSlateOperation
-) => SyncPadValue {
+): (doc: SyncValue, op: ExtendedSlate.ExtendedSlateOperation) => SyncValue {
   return slateOpTypes[type] as (
-    doc: SyncPadValue,
+    doc: SyncValue,
     op: ExtendedSlate.ExtendedSlateOperation
-  ) => SyncPadValue;
+  ) => SyncValue;
 }

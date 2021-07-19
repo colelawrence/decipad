@@ -3,9 +3,9 @@ import { toJS } from '../utils/to-js';
 import { cloneNode } from '../utils/clone-node';
 
 export function mergeNode(
-  doc: SyncPadValue,
+  doc: SyncValue,
   op: ExtendedSlate.ExtendedSlateMergeNodeOperation
-): SyncPadValue {
+): SyncValue {
   const [parent, index]: [any, number] = getParent(doc, op.path) as [
     any,
     number

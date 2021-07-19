@@ -2,9 +2,9 @@ import { cloneNode } from '../utils/clone-node';
 import { getParent, getChildren } from '../utils/path';
 
 export function moveNode(
-  doc: SyncPadValue,
+  doc: SyncValue,
   op: ExtendedSlate.ExtendedSlateMoveNodeOperation
-): SyncPadValue {
+): SyncValue {
   const [from, fromIndex] = getParent(doc, op.path);
   const [to, toIndex] = getParent(doc, op.newPath);
 

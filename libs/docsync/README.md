@@ -1,11 +1,9 @@
-# runtime
+# docsync
 
-Client interface to the runtime.
+Client interface to the doc synchronization.
 
 The user of the runtime should be able to:
 
-- Identify the user
-- Organising: manage workspaces, folders, most recent pads
 - Syncing:
   - Receiving remote changes
   - Sending local changes
@@ -21,24 +19,24 @@ The user of the runtime should be able to:
 ## Import
 
 ```js
-import { DeciRuntime } from '@decipad/runtime';
+import { DocSync } from '@decipad/docsync';
 ```
 
 ## API
 
 All values are provided as a subscription, calling the observer provided by the client.
 
-### Runtime lifecycle
+### DocSync lifecycle
 
 ```js
 // Create the runtime
 const userId: string = ...
 const actorId: string = ...
-const deci = new DeciRuntime({ userId, actorId })
+const sync = new DocSync({ userId, actorId })
 
 // ...
 
-deci.stop() // stops all observables / subjects / subscriptions
+sync.stop() // stops all observables / subjects / subscriptions
 ```
 
 ### Observables
@@ -80,35 +78,35 @@ subscription.unsubscribe(); // observable won't be called again after this
 ```
 
 
-### Pads
+### Notebooks
 
 
-#### Editing a pad's contents
+#### Editing a notebooks's contents
 
 ```js
-const padEditor = deci.startPadEditor(padId);
-const value = padEditor.getValue(); // put this as initial value of the UI editor
+const syncEditor = sync.edit(docId);
+const value = syncEditor.getValue(); // put this as initial value of the UI editor
 
-const subscription = padEditor.slateOps().subscribe((slateOp) => {
+const subscription = syncEditor.slateOps().subscribe((slateOp) => {
   // insert into UI editor
 });
 
 // also send slate operations that represent changes of the UI editor:
-uiEditor.on('change', () => padEditor.sendSlateOps(uiEditor.operations));
+uiEditor.on('change', () => syncEditor.sendSlateOps(uiEditor.operations));
 
 // ...
 
 subscription.unsubscribe();
 
-editorModel.stop(); // important to release resources
+syncEditor.stop(); // important to release resources
 ```
 
 ### Getting a shared websocket
 
-To limit the number of open websockets, you can reuse the sync websocket by using `runtime.websocketImpl()` like this:
+To limit the number of open websockets, you can reuse the sync websocket by using `sync.websocketImpl()` like this:
 
 ```js
-const WebSocketClass = runtime.websocketImpl();
+const WebSocketClass = sync.websocketImpl();
 const urlString = 'some bogus url string';
 // the URL string here doesn't matter because it will always return
 // a websocket to the predetermined websocket server.
@@ -117,4 +115,4 @@ const websocket = new WebSocketClass(urlString);
 
 ## Running unit tests
 
-Run `nx test runtime` to execute the unit tests via [Jest](https://jestjs.io).
+Run `nx test docsync` to execute the unit tests via [Jest](https://jestjs.io).

@@ -52,7 +52,7 @@
     "queries": {
       "tags": []
     },
-    "runtime": {
+    "docsync": {
       "tags": []
     },
     "ui": {

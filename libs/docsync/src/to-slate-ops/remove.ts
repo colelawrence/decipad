@@ -33,31 +33,30 @@ const removeTextOp = (op: Diff) => (map: any, doc: Element) => {
   };
 };
 
-const removeAttributeOp = (op: Diff, before: Doc<{ value: SyncPadDoc }>) => (
-  map: any,
-  doc: Element
-) => {
-  const { obj, path, key } = op;
+const removeAttributeOp =
+  (op: Diff, before: Doc<{ value: SyncDocDoc }>) =>
+  (map: any, doc: Element) => {
+    const { obj, path, key } = op;
 
-  const slatePath = toSlatePath(path);
+    const slatePath = toSlatePath(path);
 
-  const target = getTarget(doc, slatePath);
+    const target = getTarget(doc, slatePath);
 
-  assert(target, 'Target is not found!');
+    assert(target, 'Target is not found!');
 
-  if (!Object.prototype.hasOwnProperty.call(map, obj)) {
-    map[obj] = target;
-  }
+    if (!Object.prototype.hasOwnProperty.call(map, obj)) {
+      map[obj] = target;
+    }
 
-  return {
-    type: 'set_node',
-    path: slatePath,
-    properties: {
-      [key as string]: (before as any)[key as string] as any,
-    } as any,
-    newProperties: { [key as string]: undefined },
+    return {
+      type: 'set_node',
+      path: slatePath,
+      properties: {
+        [key as string]: (before as any)[key as string] as any,
+      } as any,
+      newProperties: { [key as string]: undefined },
+    };
   };
-};
 
 const removeNodeOp = (op: Diff) => (map: any, doc: Element) => {
   const { index, obj, path } = op;
@@ -88,8 +87,8 @@ const removeNodeOp = (op: Diff) => (map: any, doc: Element) => {
 const opRemove = (
   op: Diff,
   [map, ops]: any,
-  _: Doc<{ value: SyncPadDoc }>,
-  before: Doc<{ value: SyncPadDoc }>
+  _: Doc<{ value: SyncDocDoc }>,
+  before: Doc<{ value: SyncDocDoc }>
 ) => {
   const { index, path, obj, type } = op;
 

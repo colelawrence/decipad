@@ -37,7 +37,7 @@
     "noErrorTruncation": true,
 
     "paths": {
-      "@decipad/runtime": ["libs/runtime/src/index.ts"],
+      "@decipad/docsync": ["libs/docsync/src/index.ts"],
       "@decipad/language": ["libs/language/src/index.ts"],
       "@decipad/ui": ["libs/ui/src/index.ts"],
       "@decipad/editor": ["libs/editor/src/index.tsx"],

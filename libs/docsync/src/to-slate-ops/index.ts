@@ -17,8 +17,8 @@ const rootKey = '00000000-0000-0000-0000-000000000000';
 
 export function toSlateOps(
   ops: Diff[],
-  doc: Doc<{ value: SyncPadDoc }>,
-  before: Doc<{ value: SyncPadDoc }>
+  doc: Doc<{ value: SyncDocDoc }>,
+  before: Doc<{ value: SyncDocDoc }>
 ): SlateOperation[] {
   function iterate(acc: [any, any[]], op: Diff): any {
     const action = byAction[op.action];

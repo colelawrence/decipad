@@ -7,7 +7,7 @@ import {
   Image,
   Text,
 } from '@chakra-ui/react';
-import { AnonymousRuntimeProvider, Editor } from '@decipad/editor';
+import { AnonymousDocSyncProvider, Editor } from '@decipad/editor';
 import { HelpButton } from '@decipad/ui';
 import { nanoid } from 'nanoid';
 import { useEffect, useMemo } from 'react';
@@ -23,7 +23,7 @@ export function Playground() {
   }, []);
 
   return (
-    <AnonymousRuntimeProvider>
+    <AnonymousDocSyncProvider>
       <Box minH="100vh">
         <Button
           as="a"
@@ -55,6 +55,6 @@ export function Playground() {
         </Container>
         <Editor padId={randomId} autoFocus />
       </Box>
-    </AnonymousRuntimeProvider>
+    </AnonymousDocSyncProvider>
   );
 }

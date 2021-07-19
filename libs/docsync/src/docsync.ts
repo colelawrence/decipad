@@ -1,58 +1,59 @@
-import { PadEditor, PadEditorOptions } from './pad-editor';
+import { SyncEditor, SyncEditorOptions } from './sync-editor';
 import { Sync } from '@decipad/replica';
 
-interface RuntimeConstructorOptions {
+interface ISyncDocConstructorOptions {
   userId: string;
   actorId: string;
   isSynced?: boolean;
   storage?: Storage;
 }
 
-const defaultPadEditorOptions = {
+const defaultSyncEditorOptions = {
   startReplicaSync: true,
 };
 
 const maxReconnectMs = Number(process.env.DECI_MAX_RECONNECT_MS) || 10000;
 const fetchPrefix = process.env.DECI_API_URL || '';
 
-class Runtime {
+export class DocSync {
   userId: string;
   actorId: string;
   isSynced: boolean;
 
-  sync: Sync<AnySyncValue>;
-  editors: Map<Id, PadEditor> = new Map();
+  sync: Sync<SyncValue>;
+  editors: Map<string, SyncEditor> = new Map();
 
-  constructor({ userId, actorId, isSynced = true }: RuntimeConstructorOptions) {
+  constructor({
+    userId,
+    actorId,
+    isSynced = true,
+  }: ISyncDocConstructorOptions) {
     this.userId = userId;
     this.actorId = actorId;
     this.isSynced = isSynced;
     this.sync = new Sync({ start: isSynced, maxReconnectMs, fetchPrefix });
   }
 
-  startPadEditor(
-    padId: Id,
-    options: PadEditorOptions = defaultPadEditorOptions
-  ) {
-    let editor = this.editors.get(padId);
+  edit(docId: string, options: SyncEditorOptions = defaultSyncEditorOptions) {
+    let editor = this.editors.get(docId);
     if (editor === undefined) {
       const editorOptions = {
         startReplicaSync: this.isSynced,
         storage: options.storage || global.localStorage,
       };
-      editor = new PadEditor(padId, this, editorOptions);
+      editor = new SyncEditor(docId, this, editorOptions);
       let hadSubscribers = false;
       editor.slateOpsCountObservable.subscribe((subscriptionCount) => {
         if (subscriptionCount === 0) {
           if (hadSubscribers) {
             editor!.stop();
-            this.editors.delete(padId);
+            this.editors.delete(docId);
           }
         } else {
           hadSubscribers = true;
         }
       });
-      this.editors.set(padId, editor);
+      this.editors.set(docId, editor);
     }
     return editor;
   }
@@ -68,5 +69,3 @@ class Runtime {
     }
   }
 }
-
-export { Runtime };
