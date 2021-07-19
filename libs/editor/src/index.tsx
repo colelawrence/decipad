@@ -1,31 +1,37 @@
+import { ResultsContextProvider } from '@decipad/ui';
+import styled from '@emotion/styled';
+import { pipe, SlatePlugins, withSlatePlugins } from '@udecode/slate-plugins';
 import React, { useMemo, useState } from 'react';
 import { createEditor, Node } from 'slate';
-import styled from '@emotion/styled';
-import { SlatePlugins, pipe, withSlatePlugins } from '@udecode/slate-plugins';
-import { Box, Container } from '@chakra-ui/react';
-import { ResultsContextProvider } from '@decipad/ui';
-import { SideFormattingMenu } from './components/SideFormattingMenu';
 import { DropFile } from './components/DropFile';
+import { SideFormattingMenu } from './components/SideFormattingMenu';
 import { components, options, plugins } from './configuration';
+import { useEditor } from './hooks/useEditor';
 import {
   SlashCommandsSelect,
   useSlashCommandsPlugin,
 } from './plugins/SlashCommands';
-import { useEditor } from './hooks/useEditor';
 
-export { DocSyncProvider, AnonymousDocSyncProvider } from './contexts/DocSync';
+export { AnonymousDocSyncProvider, DocSyncProvider } from './contexts/DocSync';
 
-const Wrapper = styled('div')`
-  padding-top: 25px;
-`;
+const Wrapper = styled('div')({
+  padding: '25px 0 70px 0',
+  width: '100vw',
+  position: 'relative',
+});
 
-export const Editor = ({
-  padId,
-  autoFocus,
-}: {
+const InnerContent = styled('div')({
+  maxWidth: '75ch',
+  margin: 'auto',
+});
+
+interface EditorProps {
   padId: string;
   autoFocus: boolean;
-}) => {
+}
+
+export const Editor = ({ padId, autoFocus }: EditorProps) => {
+  const editor = useMemo(() => pipe(createEditor(), withSlatePlugins()), []);
   const [value, setValue] = useState<Node[] | undefined>(undefined);
 
   const { getSlashCommandsProps, plugin: slashCommandsPlugin } =
@@ -36,18 +42,6 @@ export const Editor = ({
     [slashCommandsPlugin]
   );
 
-  const editor = useState(() =>
-    pipe(
-      createEditor(),
-      withSlatePlugins({
-        id: padId,
-        plugins: editorPlugins,
-        options,
-        components,
-      })
-    )
-  )[0];
-
   const { onChangeLanguage, results } = useEditor({
     padId,
     editor,
@@ -56,30 +50,28 @@ export const Editor = ({
 
   return (
     <ResultsContextProvider key={padId} value={results}>
-      <Box pb="70px" w="100vw" pos="relative">
-        <Container maxW="75ch">
+      <Wrapper>
+        <InnerContent>
           {value && editor ? (
             <DropFile editor={editor}>
-              <Wrapper>
-                <SlatePlugins
-                  value={value}
-                  id={padId}
-                  editor={editor}
-                  plugins={editorPlugins}
-                  options={options}
-                  components={components}
-                  editableProps={{ autoFocus }}
-                  onChange={() => onChangeLanguage(editor.children)}
-                />
-                <SlashCommandsSelect {...getSlashCommandsProps()} />
-                <SideFormattingMenu />
-              </Wrapper>
+              <SlatePlugins
+                value={value}
+                id={padId}
+                editor={editor}
+                plugins={editorPlugins}
+                options={options}
+                components={components}
+                editableProps={{ autoFocus }}
+                onChange={() => onChangeLanguage(editor.children)}
+              />
+              <SlashCommandsSelect {...getSlashCommandsProps()} />
+              <SideFormattingMenu />
             </DropFile>
           ) : (
             <span>Loading...</span>
           )}
-        </Container>
-      </Box>
+        </InnerContent>
+      </Wrapper>
     </ResultsContextProvider>
   );
 };
