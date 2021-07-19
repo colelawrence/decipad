@@ -21,7 +21,10 @@ async function lock(path: string) {
       release = await lockFile(path);
       break;
     } catch (err) {
-      if (err.message.indexOf('already being held') >= 0) {
+      if (
+        err.message.indexOf('already being held') >= 0 ||
+        err.code === 'ENOENT'
+      ) {
         await timeout(retryLockMs);
       } else {
         throw err;
