@@ -16,7 +16,7 @@ export const Caret = ({ type }: CaretProps): ReturnType<FC> => {
             collapse: 'M0.5 5.75L5 1.25L9.5 5.75',
           }[type]
         }
-        stroke={cssVar('strongTextColor')}
+        stroke={cssVar('currentTextColor')}
         strokeWidth="1.4"
         strokeLinejoin="round"
       />

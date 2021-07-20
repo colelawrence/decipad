@@ -6,5 +6,9 @@ export default {
 } as Meta;
 
 export const Normal: Story = () => (
-  <DashboardTopbar userName="John Doe" numberOfNotebooks={2} />
+  <DashboardTopbar
+    userName="John Doe"
+    email="john.doe@example.com"
+    numberOfNotebooks={2}
+  />
 );

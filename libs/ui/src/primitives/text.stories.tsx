@@ -7,6 +7,7 @@ import {
   display,
   h1,
   p12Bold,
+  p12Medium,
   p12Regular,
   p13SemiBold,
   p15Medium,
@@ -30,6 +31,9 @@ export const H1: React.FC = ({ children }) => <h1 css={css(h1)}>{children}</h1>;
 
 export const P12Regular: React.FC = ({ children }) => (
   <p css={css(p12Regular)}>{children}</p>
+);
+export const P12Medium: React.FC = ({ children }) => (
+  <p css={css(p12Medium)}>{children}</p>
 );
 export const P12Bold: React.FC = ({ children }) => (
   <p css={css(p12Bold)}>{children}</p>

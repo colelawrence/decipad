@@ -1,8 +1,9 @@
 import { css } from '@emotion/react';
-import { ComponentProps } from 'react';
+import { ComponentProps, useState } from 'react';
 
 import { Button } from '../../atoms';
 import { NotebookListHeader, AccountAvatar } from '../../molecules';
+import { AccountMenu } from '../../organisms';
 import { smallestDesktop, smallestMobile } from '../../primitives';
 import { noop, viewportCalc } from '../../utils';
 
@@ -30,20 +31,28 @@ const styles = css({
   flexWrap: 'wrap-reverse',
   rowGap: '32px',
 });
+const leftStyles = css({
+  flexGrow: 9999,
+
+  display: 'grid',
+  alignItems: 'end',
+});
 const rightStyles = css({
-  display: 'flex',
+  flexGrow: 1,
+
+  display: 'grid',
+  gridAutoFlow: 'column',
+  justifyContent: 'space-between',
   alignItems: 'center',
   columnGap: '16px',
-
-  flexWrap: 'wrap-reverse',
-  rowGap: '20px',
 });
 
 type DashboardTopbarProps = Pick<
   ComponentProps<typeof NotebookListHeader>,
   'numberOfNotebooks'
 > &
-  Pick<ComponentProps<typeof AccountAvatar>, 'userName'> & {
+  Pick<ComponentProps<typeof AccountAvatar>, 'userName'> &
+  ComponentProps<typeof AccountMenu> & {
     readonly onCreateNotebook?: () => void;
   };
 
@@ -53,15 +62,46 @@ export const DashboardTopbar = ({
   onCreateNotebook = noop,
 
   userName,
+  email,
+  onLogout,
 }: DashboardTopbarProps): ReturnType<React.FC> => {
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <header css={styles}>
-      <NotebookListHeader Heading="h1" numberOfNotebooks={numberOfNotebooks} />
+      <div css={leftStyles}>
+        <NotebookListHeader
+          Heading="h1"
+          numberOfNotebooks={numberOfNotebooks}
+        />
+      </div>
       <div css={rightStyles}>
         <Button primary extraSlim onClick={onCreateNotebook}>
           Create New
         </Button>
-        <AccountAvatar menuOpen={false} userName={userName} />
+        <div css={{ position: 'relative' }}>
+          <AccountAvatar
+            menuOpen={menuOpen}
+            userName={userName}
+            onClick={() => setMenuOpen(!menuOpen)}
+          />
+          {menuOpen && (
+            <div
+              css={{
+                position: 'absolute',
+                width: 'max-content',
+                maxWidth: '50vw',
+                top: 'calc(100% + 8px)',
+                right: 0,
+              }}
+            >
+              <AccountMenu
+                userName={userName}
+                email={email}
+                onLogout={onLogout}
+              />
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );

@@ -4,8 +4,9 @@ import { css } from '@emotion/react';
 import { Avatar } from '../../atoms';
 import { noop } from '../../utils';
 import { Caret } from '../../icons';
+import { p12Bold } from '../../primitives';
 
-const styles = css({
+const styles = css(p12Bold, {
   display: 'grid',
   alignItems: 'center',
   gridTemplateColumns: '28px 6px',

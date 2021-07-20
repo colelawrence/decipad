@@ -1,21 +1,30 @@
-import { CSSObject } from '@emotion/react';
 import { Property } from 'csstype';
 
-import { black, grey300, grey400, white } from './color';
+import { black, grey100, grey300, grey400, white } from './color';
 
 export interface CssVariables {
   readonly backgroundColor: Property.Color;
 
+  readonly highlightColor: Property.Color;
+
   readonly weakTextColor: Property.Color;
   readonly normalTextColor: Property.Color;
   readonly strongTextColor: Property.Color;
+
+  readonly currentTextColor: Property.Color;
 }
 const defaults: CssVariables = {
   backgroundColor: white.rgb,
 
+  highlightColor: grey100.rgb,
+
   weakTextColor: grey300.rgb,
   normalTextColor: grey400.rgb,
   strongTextColor: black.rgb,
+
+  get currentTextColor() {
+    return cssVar('normalTextColor');
+  },
 };
 
 export function cssVar<V extends keyof CssVariables>(
@@ -34,8 +43,10 @@ export function cssVar<V extends keyof CssVariables>(
 export function setCssVar<V extends keyof CssVariables>(
   name: V,
   value: CssVariables[V]
-): CSSObject {
+): Record<`--deci-${V}`, CssVariables[V]> {
+  // This needs to be cast because
+  // TypeScript widens the dynamic propery key to plain `string`
   return {
     [`--deci-${name}`]: value,
-  };
+  } as unknown as Record<`--deci-${V}`, CssVariables[V]>;
 }

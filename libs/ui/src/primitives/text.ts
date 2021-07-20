@@ -1,10 +1,11 @@
 import { CSSObject, Interpolation } from '@emotion/react';
-import { cssVar } from './var';
+import { cssVar, setCssVar } from './var';
 
 type TypographyStyles = Readonly<
   Required<
     Pick<
       CSSObject,
+      | '--deci-currentTextColor'
       | 'color'
       | 'fontFamily'
       | 'fontStyle'
@@ -24,21 +25,27 @@ const usualRemPxs = 16;
 const hFontFamily: TypographyStyles['fontFamily'] =
   '"Neue Haas Grotesk Display Pro", Helvetica, "Open Sans", sans-serif';
 
-export const display: TypographyStyles = {
-  color: cssVar('strongTextColor'),
+const hDefault: TypographyStyles = {
+  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
+  color: cssVar('currentTextColor'),
   fontFamily: hFontFamily,
   fontStyle: 'normal',
   fontWeight: 600,
+  fontSize: `${24 / usualRemPxs}rem`,
+  lineHeight: '100%',
+  letterSpacing: 'unset',
+  fontFeatureSettings: 'unset',
+};
+
+export const display: TypographyStyles = {
+  ...hDefault,
   fontSize: `${36 / usualRemPxs}rem`,
   lineHeight: '113%',
   letterSpacing: '0.01em',
   fontFeatureSettings: "'ss04' on, 'ss08' on, 'ss06' on",
 };
 export const h1: TypographyStyles = {
-  color: cssVar('strongTextColor'),
-  fontFamily: hFontFamily,
-  fontStyle: 'normal',
-  fontWeight: 600,
+  ...hDefault,
   fontSize: `${24 / usualRemPxs}rem`,
   lineHeight: '130%',
   letterSpacing: '0.01em',
@@ -50,7 +57,8 @@ export const h1: TypographyStyles = {
 const pFontFamily: TypographyStyles['fontFamily'] = 'Inter, sans-serif';
 
 const pDefault: TypographyStyles = {
-  color: cssVar('normalTextColor'),
+  ...setCssVar('currentTextColor', cssVar('normalTextColor')),
+  color: cssVar('currentTextColor'),
   fontFamily: pFontFamily,
   fontStyle: 'normal',
   fontWeight: 'normal',
@@ -62,12 +70,18 @@ const pDefault: TypographyStyles = {
 
 export const p12Regular: TypographyStyles = {
   ...pDefault,
-  color: cssVar('weakTextColor'),
+  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
   fontSize: `${12 / usualRemPxs}rem`,
+};
+export const p12Medium: TypographyStyles = {
+  ...pDefault,
+  fontWeight: 500,
+  fontSize: `${12 / usualRemPxs}rem`,
+  lineHeight: '140%',
 };
 export const p12Bold: TypographyStyles = {
   ...pDefault,
-  color: cssVar('strongTextColor'),
+  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
   fontWeight: 600,
   fontSize: `${12 / usualRemPxs}rem`,
   lineHeight: '136%',
@@ -82,7 +96,7 @@ export const p13SemiBold: TypographyStyles = {
 };
 export const p15Medium: TypographyStyles = {
   ...pDefault,
-  color: cssVar('strongTextColor'),
+  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
   fontWeight: 500,
   fontSize: `${15 / usualRemPxs}rem`,
 };
