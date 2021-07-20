@@ -15,7 +15,7 @@ import { Command } from '../commands';
 const Wrapper = styled.div`
   position: absolute;
   left: -9999px;
-  top: --9999px;
+  top: -9999px;
   border-radius: 6px;
   box-sizing: border-box;
   overflow: hidden;
