@@ -1,5 +1,11 @@
 import { css } from '@emotion/react';
-import { black, p13SemiBold, transparency, white } from '../../primitives';
+import {
+  black,
+  p13SemiBold,
+  shortAnimationDuration,
+  transparency,
+  white,
+} from '../../primitives';
 import { noop, TextChildren } from '../../utils';
 
 const styles = css(p13SemiBold, {
@@ -12,7 +18,7 @@ const styles = css(p13SemiBold, {
   padding: '8px 14px',
   borderRadius: '6px',
 
-  transition: 'box-shadow 120ms ease-out',
+  transition: `box-shadow ${shortAnimationDuration} ease-out`,
   ':hover, :focus': {
     boxShadow: `0px 4px 8px ${transparency(black, 0.08).rgba}`,
   },

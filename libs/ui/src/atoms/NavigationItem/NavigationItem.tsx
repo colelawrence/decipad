@@ -1,21 +1,22 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { cssVar, p12Bold, p12Medium } from '../../primitives';
+import { cssVar, p12Regular, setCssVar } from '../../primitives';
 
 import { TextChildren } from '../../utils';
 
-const styles = css(p12Medium, {
-  padding: '0 12px',
+const styles = css(p12Regular, {
+  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
+
   height: '32px',
 
   display: 'flex',
   alignItems: 'center',
   columnGap: '8px',
 
-  borderRadius: '8px',
   ':hover, :focus': {
-    ...p12Bold,
     backgroundColor: cssVar('highlightColor'),
+    boxShadow: `0px 0px 0px 8px ${cssVar('highlightColor')}`,
+    clipPath: 'inset(0 -8px 0 -8px round 8px)',
   },
 });
 
