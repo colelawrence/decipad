@@ -1,11 +1,11 @@
 import { chakra } from '@chakra-ui/system';
+import { format as formatDate, utcToZonedTime } from 'date-fns-tz';
 import { Box, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
-import { Type, InBlockResult } from '@decipad/language';
-import { ReactNode } from 'react';
-import { format as dateFormat, formatISO as formatDateISO } from 'date-fns';
+
 import { FiCalendar, FiHash, FiType, FiHelpCircle } from 'react-icons/fi';
+import { Type, InBlockResult, Interpreter } from '@decipad/language';
 import { useResults } from '@decipad/ui';
-import { ValueLocation } from 'libs/language/src/computer/types';
+import { ValueLocation } from '@decipad/language';
 
 const commonStyles = {
   py: 2,
@@ -33,6 +33,12 @@ export const ResultStyles = chakra(Box, {
   },
 });
 
+const UnselectableCommaStyles = chakra(Box, {
+  baseStyle: {
+    userSelect: 'none',
+  },
+});
+
 const ResultTable = chakra(Table, {
   baseStyle: {},
 });
@@ -47,6 +53,9 @@ const TableHeader = chakra(Th, {
     color: 'black',
     wordWrap: 'no-wrap',
     bg: 'transparent',
+    _last: {
+      borderRight: 0,
+    },
   },
 });
 
@@ -62,6 +71,9 @@ const TableRow = chakra(Tr, {
   baseStyle: {
     borderBottom: '1px',
     borderBottomColor: 'gray.100',
+    _last: {
+      borderBottom: 0,
+    },
   },
 });
 
@@ -73,14 +85,11 @@ const TableCell = chakra(Td, {
     px: 3,
     py: 2.5,
     borderBottom: 0,
+    _last: {
+      borderRight: 0,
+    },
   },
 });
-
-const commaSeparated = (list: ReactNode[]) =>
-  list.flatMap((item, i) => {
-    if (i === list.length - 1) return [item];
-    else return [item, ', '];
-  });
 
 // Cannot be imported from @decipad/runtime
 interface ComputationError {
@@ -99,44 +108,27 @@ interface ResultContentProps extends Pick<ComputationResult, 'type' | 'value'> {
   depth?: number;
 }
 
-const ResultContent = (props: ResultContentProps) => {
-  const { type, value, depth = 0 } = props;
+export const ResultContent = (props: ResultContentProps) => {
+  const { type, value } = props;
   if (type == null) return null;
 
-  if (type.type === 'number' || type.type === 'boolean') {
+  if (type.type === 'number') {
     return (
       <>
-        {String(value)}
+        <ResultNumber value={value} />
         {type.unit ? ` ${type.toString()}` : ''}
       </>
     );
+  } else if (type.type === 'boolean' || type.type === 'string') {
+    return <>{String(value)}</>;
   } else if (type.date) {
     return <DateResult {...props} />;
-  } else if (type.type === 'string') {
-    return value;
   } else if (type.tupleTypes != null) {
-    return TableResult(props);
+    return <TableResult {...props} />;
   } else if (type.columnSize != null && Array.isArray(value)) {
-    const columnItems = commaSeparated(
-      value.map((item, i) => (
-        <ResultContent
-          key={i}
-          type={type.reduced()}
-          value={item}
-          depth={depth + 1}
-        />
-      ))
-    );
-
-    return (
-      <>
-        {'[ '}
-        {columnItems}
-        {' ]'}
-      </>
-    );
+    return <ColumnResult {...props} />;
   } else if (type.functionness) {
-    return 'ƒ';
+    return <>ƒ</>;
   } else {
     return null;
   }
@@ -194,6 +186,56 @@ export const Result = ({
   }
 };
 
+const commatizeEveryThreeDigits = (digits: string) => {
+  const numLeadingDigits = digits.length % 3 || 3;
+
+  const segments = [];
+
+  if (numLeadingDigits > 0) {
+    segments.push(digits.slice(0, numLeadingDigits));
+  }
+
+  for (let i = numLeadingDigits; i < digits.length; i += 3) {
+    const threeDigits = digits.slice(i, i + 3);
+
+    segments.push(
+      <UnselectableCommaStyles as="span" key={i}>
+        ,
+      </UnselectableCommaStyles>
+    );
+    segments.push(threeDigits);
+  }
+
+  return segments;
+};
+
+export const ResultNumber = ({ value }: { value: number }) => {
+  const asString = String(value);
+
+  // Numbers' toString isn't always formatted like [-]####.###
+  const basicNumberMatch = asString.match(/^(-?)(\d+)(\.\d+)?$/);
+  if (basicNumberMatch != null) {
+    const [, sign, integerPart, decimalPart] = basicNumberMatch;
+
+    if (integerPart.length > 3) {
+      return (
+        <>
+          {sign}
+          {commatizeEveryThreeDigits(integerPart)}
+          {decimalPart}
+        </>
+      );
+    }
+  }
+
+  return <>{asString}</>;
+};
+
+export const formatUTCDate = (date: Date, form: string): string => {
+  const zonedDate = utcToZonedTime(date, 'UTC');
+  return formatDate(zonedDate, form, { timeZone: 'UTC' });
+};
+
 function DateResult({ type, value }: ResultContentProps) {
   const date = new Date(Array.isArray(value) ? value[0] : value);
   let format;
@@ -210,9 +252,15 @@ function DateResult({ type, value }: ResultContentProps) {
       format = 'MMM do uuuu';
       break;
     }
+    case 'time': {
+      if (date.getUTCSeconds() === 0 && date.getUTCMilliseconds() === 0) {
+        format = 'MMM do uuuu kk:mm';
+      }
+      break;
+    }
   }
 
-  const string = format ? dateFormat(date, format) : formatDateISO(date);
+  const string = format ? formatUTCDate(date, format) : date.toISOString();
   return <span>{string}</span>;
 }
 
@@ -243,13 +291,12 @@ function TableResult({
   depth = 0,
 }: ResultContentProps): JSX.Element {
   const table = tableByRows(type.tupleNames!, value, type.tupleTypes!);
-
   const border = {
     borderTopRadius: 6,
-    borderCollapse: true,
     border: '1px',
     borderColor: 'gray.100',
   };
+
   return (
     <Box {...border}>
       <ResultTable>
@@ -260,14 +307,9 @@ function TableResult({
               const t =
                 type.tupleTypes![colIndex].cellType ||
                 type.tupleTypes![colIndex];
-              const lastColumn = table.columnNames.length === colIndex + 1;
-              const headerProps = lastColumn
-                ? {
-                    borderRight: 0,
-                  }
-                : {};
+
               return (
-                <TableHeader {...headerProps}>
+                <TableHeader key={colIndex}>
                   <IconForType type={t} />
                   &nbsp;{columnName}
                 </TableHeader>
@@ -277,25 +319,13 @@ function TableResult({
         </Thead>
         <Tbody>
           {table.rows.map((row, rowIndex) => {
-            const lastRow = table.rows.length === rowIndex + 1;
-            const rowProps = lastRow
-              ? {
-                  borderBottom: 0,
-                }
-              : {};
             return (
-              <TableRow key={rowIndex} {...rowProps}>
+              <TableRow key={rowIndex}>
                 {row.map((cell, index) => {
-                  const lastCell = row.length === index + 1;
                   const t =
                     type.tupleTypes![index].cellType || type.tupleTypes![index];
-                  const cellProps = lastCell
-                    ? {
-                        borderRight: 0,
-                      }
-                    : {};
                   return (
-                    <TableCell isNumeric={t.type === 'number'} {...cellProps}>
+                    <TableCell key={index} isNumeric={t.type === 'number'}>
                       <ResultContent
                         key={index}
                         type={t!}
@@ -308,6 +338,39 @@ function TableResult({
               </TableRow>
             );
           })}
+        </Tbody>
+      </ResultTable>
+    </Box>
+  );
+}
+
+function ColumnResult({
+  type,
+  value,
+  depth = 0,
+}: ResultContentProps): JSX.Element {
+  const border = {
+    borderTopRadius: 6,
+    border: '1px',
+    borderColor: 'gray.100',
+  };
+
+  return (
+    <Box {...border}>
+      <ResultTable role="table">
+        {/* TODO: Column caption should say the name of the variable (if there is one. */}
+        <Tbody>
+          {(value as Interpreter.ResultColumn).map((row, rowIndex) => (
+            <TableRow key={rowIndex}>
+              <TableCell isNumeric={type.cellType!.type === 'number'}>
+                <ResultContent
+                  type={type.cellType!}
+                  value={row}
+                  depth={depth + 1}
+                />
+              </TableCell>
+            </TableRow>
+          ))}
         </Tbody>
       </ResultTable>
     </Box>

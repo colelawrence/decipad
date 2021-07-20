@@ -166,6 +166,7 @@
     "core-js": "^3.13.1",
     "csv-parse": "^4.16.0",
     "date-fns": "^2.22.1",
+    "date-fns-tz": "^1.1.4",
     "dequal": "^2.0.2",
     "document-register-element": "1.13.1",
     "emotion-normalize": "^11.0.1",

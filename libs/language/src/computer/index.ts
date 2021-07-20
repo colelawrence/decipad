@@ -29,6 +29,7 @@ export type {
   ComputePanic,
   InBlockResult,
   IdentifiedResult,
+  ValueLocation,
 };
 
 // We need to delay errors which are under the cursor, so the user can stop typing
