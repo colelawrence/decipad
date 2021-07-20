@@ -1,8 +1,4 @@
-import {
-  ELEMENT_H1,
-  ELEMENT_PARAGRAPH,
-  SlatePlugins,
-} from '@udecode/slate-plugins';
+import { SlatePlugins, SlatePluginsProps } from '@udecode/slate-plugins';
 import React, { useMemo } from 'react';
 import { SideFormattingMenu } from './components/SideFormattingMenu';
 import { components, options, plugins } from './configuration';
@@ -11,7 +7,7 @@ import {
   useSlashCommandsPlugin,
 } from './plugins/SlashCommands';
 
-export const NoDocSyncEditor = () => {
+export const NoDocSyncEditor = (props: SlatePluginsProps) => {
   const { getSlashCommandsProps, plugin: slashCommandsPlugin } =
     useSlashCommandsPlugin();
 
@@ -23,14 +19,11 @@ export const NoDocSyncEditor = () => {
   return (
     <div>
       <SlatePlugins
-        initialValue={[
-          { type: ELEMENT_H1, children: [{ text: 'Title' }] },
-          { type: ELEMENT_PARAGRAPH, children: [{ text: '' }] },
-        ]}
         plugins={editorPlugins}
         options={options}
         components={components}
         editableProps={{ autoFocus: true }}
+        {...props}
       />
       <SlashCommandsSelect {...getSlashCommandsProps()} />
       <SideFormattingMenu />
