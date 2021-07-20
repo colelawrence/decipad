@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Title Block matches snapshot 1`] = `
+.emotion-0 {
+  font-size: 2rem;
+  margin: 0;
+  padding-bottom: 2rem;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #f0f0f2;
+  font-weight: bold;
+  color: #121214;
+}
+
+<div>
+  <h1
+    class="emotion-0"
+    data-slate-leaf="true"
+    data-slate-node="element"
+  >
+    Title
+  </h1>
+</div>
+`;

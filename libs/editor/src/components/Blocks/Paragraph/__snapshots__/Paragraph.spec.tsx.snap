@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Paragraph Block matches snapshot 1`] = `
+.emotion-0 {
+  line-height: 1.75;
+  color: #3E3E42;
+  padding: 8px 0;
+  position: relative;
+}
+
+.emotion-0 ::selection {
+  background-color: rgba(196, 202, 251, 0.5);
+}
+
+<div>
+  <p
+    class="emotion-0"
+    data-slate-leaf="true"
+    data-slate-node="element"
+  >
+    Paragraph
+  </p>
+</div>
+`;

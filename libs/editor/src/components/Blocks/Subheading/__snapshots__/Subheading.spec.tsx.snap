@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Subheading Block matches snapshot 1`] = `
+.emotion-0 {
+  font-size: 20px;
+  margin: 0;
+  padding: 1rem 0 0.5rem 0;
+  font-weight: bold;
+  color: #121214;
+}
+
+<div>
+  <h3
+    class="emotion-0"
+    data-slate-leaf="true"
+    data-slate-node="element"
+  >
+    Subheading
+  </h3>
+</div>
+`;

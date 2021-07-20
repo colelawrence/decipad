@@ -25,7 +25,7 @@ const InnerContent = styled('div')({
   margin: 'auto',
 });
 
-interface EditorProps {
+export interface EditorProps {
   padId: string;
   autoFocus: boolean;
 }
