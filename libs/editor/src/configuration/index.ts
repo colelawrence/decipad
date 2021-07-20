@@ -10,6 +10,10 @@ import {
   ELEMENT_IMAGE,
   ELEMENT_PARAGRAPH,
   ImageElement,
+  MARK_BOLD,
+  MARK_ITALIC,
+  MARK_STRIKETHROUGH,
+  MARK_UNDERLINE,
   SlatePluginComponent,
   withProps,
 } from '@udecode/slate-plugins';
@@ -18,6 +22,10 @@ import { Paragraph } from '../components/Blocks/Paragraph/Paragraph.component';
 import { Subheading } from '../components/Blocks/Subheading/Subheading.component';
 import { Subtitle } from '../components/Blocks/Subtitle/Subtitle.component';
 import { Title } from '../components/Blocks/Title/Title.component';
+import { Bold } from '../components/Leafs/Bold/Bold.component';
+import { Italic } from '../components/Leafs/Italic/Italic.component';
+import { Strikethrough } from '../components/Leafs/Strikethrough/Strikethrough.component';
+import { Underline } from '../components/Leafs/Underline/Underline.component';
 import { withStyledPlaceHolders } from '../utils/withStyledPlaceholders';
 
 export * from './plugins';
@@ -38,6 +46,10 @@ let components = createSlatePluginsComponents({
     },
   }),
   [ELEMENT_CODE_BLOCK]: CodeBlock as unknown as SlatePluginComponent,
+  [MARK_BOLD]: Bold,
+  [MARK_ITALIC]: Italic,
+  [MARK_UNDERLINE]: Underline,
+  [MARK_STRIKETHROUGH]: Strikethrough,
 });
 
 components = withStyledPlaceHolders(components);

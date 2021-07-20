@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Underline Leaf matches snapshot 1`] = `
+.emotion-0 {
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+}
+
+<div>
+  <span
+    class="emotion-0"
+    data-slate-leaf="true"
+    data-slate-node="element"
+  >
+    Underline
+  </span>
+</div>
+`;

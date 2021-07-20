@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Strikethrough Leaf matches snapshot 1`] = `
+.emotion-0 {
+  -webkit-text-decoration: line-through;
+  text-decoration: line-through;
+}
+
+<div>
+  <span
+    class="emotion-0"
+    data-slate-leaf="true"
+    data-slate-node="element"
+  >
+    Strikethrough
+  </span>
+</div>
+`;

@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Bold Leaf matches snapshot 1`] = `
+.emotion-0 {
+  font-weight: bold;
+}
+
+<div>
+  <span
+    class="emotion-0"
+    data-slate-leaf="true"
+    data-slate-node="element"
+  >
+    Bold
+  </span>
+</div>
+`;

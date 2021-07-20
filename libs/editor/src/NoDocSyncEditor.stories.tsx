@@ -6,6 +6,10 @@ export default {
   component: NoDocSyncEditor,
 };
 
-export const Default = () => <NoDocSyncEditor />;
+export const Default = () => (
+  <div style={{ maxWidth: '1140px', margin: '25px auto' }}>
+    <NoDocSyncEditor />
+  </div>
+);
 
 Default.storyName = 'No Doc Sync';

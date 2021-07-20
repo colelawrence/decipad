@@ -19,6 +19,7 @@ import {
   MARK_CODE,
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
+  MARK_UNDERLINE,
   SPEditor,
   toggleList,
   unwrapList,
@@ -121,7 +122,7 @@ export const optionsAutoformat: AutoFormatOptions = {
       insertTrigger: true,
     },
     {
-      type: MARK_ITALIC,
+      type: MARK_UNDERLINE,
       between: ['_', '_'],
       mode: 'inline',
       insertTrigger: true,
