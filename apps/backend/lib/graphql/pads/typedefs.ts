@@ -56,6 +56,8 @@ export default gql`
 
     removePad(id: ID!): Boolean
 
+    duplicatePad(id: ID!): Pad!
+
     sharePadWithRole(
       padId: ID!
       roleId: ID!

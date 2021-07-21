@@ -19,9 +19,12 @@ import {
   RemovePad,
   RemovePadVariables,
   REMOVE_PAD,
+  DuplicatePad,
+  DuplicatePadVariables,
+  DUPLICATE_PAD,
 } from '@decipad/queries';
 import { HelpButton, LoadingSpinnerPage } from '@decipad/ui';
-import { FiFile, FiTrash2 } from 'react-icons/fi';
+import { FiFile, FiTrash2, FiCopy } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { SideMenu } from '../components/SideMenu';
 import { Topbar } from '../components/Topbar';
@@ -37,6 +40,8 @@ export function Workspace({ workspaceId }: { workspaceId: string }) {
   });
 
   const [removePad] = useMutation<RemovePad, RemovePadVariables>(REMOVE_PAD);
+  const [duplicatePad] =
+    useMutation<DuplicatePad, DuplicatePadVariables>(DUPLICATE_PAD);
 
   const { addToast } = useToasts();
 
@@ -93,6 +98,25 @@ export function Workspace({ workspaceId }: { workspaceId: string }) {
                 </HStack>
               </Box>
               <Flex alignItems="center">
+                <Button
+                  onClick={() =>
+                    duplicatePad({
+                      variables: { id: item.id },
+                      refetchQueries: ['GetWorkspaceById'],
+                      awaitRefetchQueries: true,
+                    })
+                      .then(() =>
+                        addToast('Pad duplicated', { appearance: 'info' })
+                      )
+                      .catch((err) =>
+                        addToast('Error duplicating pad: ' + err.message, {
+                          appearance: 'error',
+                        })
+                      )
+                  }
+                >
+                  <Icon as={FiCopy} />
+                </Button>
                 <Button
                   onClick={() =>
                     removePad({

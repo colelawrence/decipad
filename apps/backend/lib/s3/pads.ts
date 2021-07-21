@@ -11,6 +11,30 @@ const options = {
 const Bucket = buckets.pads;
 const s3 = new S3(options);
 
+export function duplicate(id: ID, oldID: ID): Promise<void> {
+  const CopySource =
+    '/' + Bucket + '/' + encodeId(`/pads/${encodeId(oldID)}/content`);
+  const options = {
+    Bucket,
+    Key: encodeId(`/pads/${encodeId(id)}/content`),
+    CopySource,
+  };
+
+  return s3
+    .copyObject(options)
+    .promise()
+    .catch((err) => {
+      if (err.statusCode === 404 || err.statusCode === 403) {
+        return null;
+      }
+      console.log(`Error copying ${id}:`, err);
+      throw err;
+    })
+    .then(() => {
+      return;
+    });
+}
+
 export function put(id: ID, _body: string): Promise<any> {
   const Body = Buffer.from(_body, 'utf-8');
   const Key = encodeId(id);

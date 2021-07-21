@@ -11,6 +11,7 @@ import { notifyAllWithAccessTo, subscribe } from '../../pubsub';
 import paginate from '../utils/paginate';
 import createPad2 from '../../pads/create';
 import timestamp from '../../utils/timestamp';
+import { duplicate } from '../../s3/pads';
 import { auth as authConfig, app as appConfig } from '../../config';
 
 const { urlBase } = appConfig();
@@ -70,6 +71,36 @@ const resolvers = {
       const workspaceResource = `/workspaces/${workspaceId}`;
       const user = await check(workspaceResource, context, 'WRITE');
       return await createPad2(workspaceId, pad, user);
+    },
+
+    async duplicatePad(
+      _: any,
+      { id }: { id: ID },
+      context: GraphqlContext
+    ): Promise<Pad> {
+      const resource = `/pads/${id}`;
+      await check(resource, context, 'READ');
+
+      const data = await tables();
+      const previousPad = await data.pads.get({ id });
+
+      if (!previousPad) {
+        throw new UserInputError('No such pad');
+      }
+
+      previousPad.name = 'Copy of ' + previousPad.name;
+
+      const workspaceResource = `/workspaces/${previousPad.workspace_id}`;
+      const user = await check(workspaceResource, context, 'WRITE');
+      const clonedPad = await createPad2(
+        previousPad.workspace_id,
+        previousPad,
+        user
+      );
+
+      await duplicate(clonedPad.id, id);
+
+      return clonedPad;
     },
 
     async updatePad(
