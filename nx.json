@@ -63,6 +63,12 @@
     },
     "testutils": {
       "tags": []
+    },
+    "lrustorage": {
+      "tags": []
+    },
+    "interfaces": {
+      "tags": []
     }
   }
 }

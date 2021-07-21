@@ -5,6 +5,8 @@ import { nanoid } from 'nanoid';
 import assert from 'assert';
 import { DocSync } from './docsync';
 import { createReplica, Replica, ChangeEvent } from '@decipad/replica';
+import { LRUStorage } from '@decipad/lrustorage';
+import { ReplicaStorage } from '@decipad/interfaces';
 import { fromSlateOpType, SupportedSlateOpTypes } from './from-slate-op';
 import { toSlateOps } from './to-slate-ops';
 import { toJS } from './utils/to-js';
@@ -16,7 +18,7 @@ import { config } from './config';
 
 export interface SyncEditorOptions {
   startReplicaSync?: boolean;
-  storage?: Storage;
+  storage?: ReplicaStorage;
 }
 
 export class SyncEditor {
@@ -52,7 +54,7 @@ export class SyncEditor {
       createIfAbsent: true,
       beforeRemoteChanges: this.beforeRemoteChanges.bind(this),
       startReplicaSync: options.startReplicaSync,
-      storage: options.storage || global.localStorage,
+      storage: options.storage || new LRUStorage(global.localStorage),
       fetchPrefix: conf.fetchPrefix,
       maxRetryIntervalMs: conf.maxRetryIntervalMs,
       sendChangesDebounceMs: conf.sendChangesDebounceMs,

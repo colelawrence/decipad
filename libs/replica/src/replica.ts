@@ -8,10 +8,12 @@ import {
   combineLatest,
 } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ReplicaStorage, ReplicationStatus } from '@decipad/interfaces';
 import { fnQueue } from './utils/fn-queue';
 import { Sync } from './sync';
 import { ReplicaSync } from './replica-sync';
 import { observeSubscriberCount } from './utils/observe-subscriber-count';
+import { syncStatusToReplicationStatus } from './utils/sync-status-to-replication-status';
 import { AsyncSubject, Mutation, SyncStatus } from './types';
 import { Store } from './store';
 import assert from 'assert';
@@ -30,7 +32,7 @@ export interface ICreateReplicaOptions<T> {
   fetchPrefix: string;
   useLocalStoreEvents?: boolean;
   beforeRemoteChanges?: () => Promise<void> | void;
-  storage?: Storage;
+  storage: ReplicaStorage;
 }
 
 export interface ChangeEvent<T> {
@@ -58,12 +60,15 @@ export class Replica<T> {
   private subscriptionCountObservables: Subject<number>[] = [];
   private remoteDocSubscription: Subscription | null = null;
   private remoteChangesSubscription: Subscription | null = null;
+  private replicationStatusSubscription: Subscription;
 
   public observable = new Subject<AsyncSubject<T>>();
   public remoteChanges = new Subject<ChangeEvent<T>>();
   public localChanges = new Subject<Mutation<Doc<{ value: T }>>>();
   public subscriptionCountObservable: Observable<number>;
   public syncStatus: BehaviorSubject<SyncStatus>;
+  public replicationStatus: ReplicationStatus =
+    ReplicationStatus.NeedsRemoteSave;
 
   constructor({
     name,
@@ -79,7 +84,7 @@ export class Replica<T> {
     sendChangesDebounceMs,
     fetchPrefix,
     beforeRemoteChanges = () => {},
-    storage = global.localStorage,
+    storage,
   }: ICreateReplicaOptions<T>) {
     this.userId = userId;
     this.useLocalStoreEvents = useLocalStoreEvents;
@@ -151,6 +156,16 @@ export class Replica<T> {
 
     this.syncStatus = this.sync.syncStatus;
 
+    // Update store with replication status so it knows
+    // which elements to evict if it needs to.
+    const replicationStatus$ = syncStatusToReplicationStatus(this.syncStatus);
+    this.replicationStatusSubscription = replicationStatus$.subscribe(
+      (status) => {
+        this.replicationStatus = status;
+      }
+    );
+    this.store.setReplicationStatus(replicationStatus$);
+
     if (startReplicaSync) {
       this.startReplicaSync();
     }
@@ -198,6 +213,7 @@ export class Replica<T> {
     this.stopped = true;
     this.remoteDocSubscription?.unsubscribe();
     this.remoteChangesSubscription?.unsubscribe();
+    this.replicationStatusSubscription.unsubscribe();
     this.sync.stop();
     this.observable.complete();
     this.remoteChanges.complete();

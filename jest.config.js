@@ -10,5 +10,7 @@ module.exports = {
     '<rootDir>/libs/queries',
     '<rootDir>/libs/replica',
     '<rootDir>/libs/testutils',
+    '<rootDir>/libs/lrustorage',
+    '<rootDir>/libs/interfaces',
   ],
 };

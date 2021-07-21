@@ -45,7 +45,9 @@
       "test-utils": ["libs/ui/src/lib/utils/test-utils.tsx"],
       "@decipad/queries": ["libs/queries/src/index.ts"],
       "@decipad/replica": ["libs/replica/src/index.ts"],
-      "@decipad/testutils": ["libs/testutils/src/index.ts"]
+      "@decipad/testutils": ["libs/testutils/src/index.ts"],
+      "@decipad/interfaces": ["libs/interfaces/src/index.ts"],
+      "@decipad/lrustorage": ["libs/lrustorage/src/index.ts"]
     }
   },
   "files": [],

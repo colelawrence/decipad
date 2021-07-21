@@ -4,7 +4,7 @@ import { Server as WebSocketServer, WebSocket } from 'mock-socket';
 import waitForExpect from 'wait-for-expect';
 import fetch from 'jest-fetch-mock';
 import { Text, List } from 'automerge';
-import { createReplica, Replica } from './replica';
+import { createReplica, Replica, SyncStatus } from './';
 import { Sync } from './sync';
 import randomChar from './utils/random-char';
 import { toJS } from './utils/to-js';
@@ -12,6 +12,7 @@ import { toSync } from './utils/to-sync';
 import { cloneNode } from './utils/clone-node';
 import { apiServer, createWebsocketServer, timeout } from '@decipad/testutils';
 import { TestStorage } from '@decipad/testutils';
+import { ReplicationStatus } from '@decipad/interfaces';
 
 type BaseNode = { type: string; id: string; children: TextNode[] };
 type TextNode = { text: Text };
@@ -89,9 +90,7 @@ describe('sync', () => {
           initialValue,
           initialStaticValue,
           ...replicaOptions,
-          storage: replicaOptions.useLocalStoreEvents
-            ? global.localStorage
-            : new TestStorage(),
+          storage: new TestStorage(),
         });
 
         replicas.push(replica);
@@ -185,7 +184,6 @@ describe('sync', () => {
       const expectedValue = toJS(replicas[0].getValue());
       const expectedValues = replicas.map(() => toJS(expectedValue));
       const values = replicas.map((r) => toJS(r.getValue()));
-      // console.log(values);
       expect(values).toMatchObject(expectedValues);
     });
 
@@ -201,7 +199,6 @@ describe('sync', () => {
           const expectedValue = toJS(replicas[0].getValue());
           const expectedValues = replicas.map(() => toJS(expectedValue));
           const values = replicas.map((r) => toJS(r.getValue()));
-          // console.log(JSON.stringify(values));
           expect(values).toMatchObject(expectedValues);
         },
         30000,
@@ -212,6 +209,30 @@ describe('sync', () => {
     it('observed values match', () => {
       const values = replicas.map((r) => toJS(r.getValue()));
       expect(values).toMatchObject(replicaObservedValues.map(toJS));
+    });
+
+    it("eventually, each replica's sync status is either remote changed or reconciled", async () => {
+      const acceptableEndStatuses = [
+        SyncStatus.RemoteChanged,
+        SyncStatus.Reconciled,
+      ];
+      await waitForExpect(() => {
+        for (const replica of replicas) {
+          expect(acceptableEndStatuses).toContainEqual(
+            replica.syncStatus.getValue()
+          );
+        }
+      });
+    });
+
+    it("each replica's replication status is saved remotely", async () => {
+      await waitForExpect(() => {
+        for (const replica of replicas) {
+          expect(replica.replicationStatus).toBe(
+            ReplicationStatus.SavedRemotely
+          );
+        }
+      });
     });
   });
 });
@@ -299,29 +320,3 @@ function pickRandom<T>(arr: Array<T>): T {
 function pickRandomIndex(arr: any[] | string): number {
   return Math.floor(Math.random() * arr.length);
 }
-
-// function syncStatusDesc(status: SyncStatus): string {
-//   let desc = 'UNKONWN STATUS: ' + status;
-//   switch (status) {
-//     case SyncStatus.Unknown:
-//       desc = 'unknown';
-//       break;
-//     case SyncStatus.LocalChanged:
-//       desc = 'local changed';
-//       break;
-//     case SyncStatus.RemoteChanged:
-//       desc = 'remote changed';
-//       break;
-//     case SyncStatus.Reconciling:
-//       desc = 'reconciling';
-//       break;
-//     case SyncStatus.Reconciled:
-//       desc = 'reconciled';
-//       break;
-//     case SyncStatus.Errored:
-//       desc = 'errored';
-//       break;
-//   }
-
-//   return desc;
-// }

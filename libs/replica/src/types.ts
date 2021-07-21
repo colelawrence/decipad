@@ -43,8 +43,3 @@ export enum SyncStatus {
   Reconciled,
   Errored,
 }
-
-export interface ReplicaMeta {
-  lastSavedLocally: Date;
-  lastSavedRemotely: Date;
-}

@@ -1,6 +1,6 @@
 import { createReplica as replica } from './replica';
 import { Sync } from './sync';
-import { timeout } from '@decipad/testutils';
+import { timeout, TestStorage } from '@decipad/testutils';
 
 const syncOptions = {
   start: true,
@@ -20,6 +20,7 @@ describe('replica', () => {
       maxRetryIntervalMs: 3000,
       sendChangesDebounceMs: 1,
       fetchPrefix: syncOptions.fetchPrefix,
+      storage: new TestStorage(),
     });
 
     const expectedSubscriberCounts = [0, 1, 0, 1, 0];

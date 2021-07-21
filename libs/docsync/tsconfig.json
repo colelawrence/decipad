@@ -6,8 +6,9 @@
   },
   "include": ["src", "types"],
   "references": [
-    { "path": "../language" },
     { "path": "../replica" },
-    { "path": "../testutils" }
+    { "path": "../lrustorage" },
+    { "path": "../testutils" },
+    { "path": "../interfaces" }
   ]
 }

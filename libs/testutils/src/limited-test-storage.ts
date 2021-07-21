@@ -1,13 +1,27 @@
-import { ReplicaStorage, ReplicationStatus } from '@decipad/interfaces';
+interface ITestStorageOptions {
+  itemCountLimit: number;
+  getQuotaExceededException: () => any;
+}
 
-export class TestStorage implements ReplicaStorage {
+export class LimitedTestStorage implements Storage {
   private store = new Map<string, string>();
+  private options: ITestStorageOptions;
+
+  constructor(options: ITestStorageOptions) {
+    this.options = options;
+  }
 
   get length(): number {
     return this.store.size;
   }
 
   setItem(key: string, value: string) {
+    if (
+      !this.store.has(key) &&
+      this.store.size >= this.options.itemCountLimit
+    ) {
+      throw this.options.getQuotaExceededException();
+    }
     this.store.set(key, value);
     global.dispatchEvent(new StorageEvent('storage', { key }));
   }
@@ -35,13 +49,5 @@ export class TestStorage implements ReplicaStorage {
       return null;
     }
     return value;
-  }
-
-  setReplicationStatus(_key: string, _status: ReplicationStatus) {
-    // do nothing
-  }
-
-  stop() {
-    // do nothing
   }
 }

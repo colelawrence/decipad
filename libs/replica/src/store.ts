@@ -1,7 +1,9 @@
 import Automerge, { Doc } from 'automerge';
+import { Subscription, Observable } from 'rxjs';
+import { ReplicaStorage, ReplicationStatus } from '@decipad/interfaces';
 
 interface IStoreOptions<T> {
-  storage: Storage,
+  storage: ReplicaStorage;
   key: string;
   initialValue: T | null;
   initialStaticValue: string | null;
@@ -11,7 +13,7 @@ interface IStoreOptions<T> {
 }
 
 export class Store<T> {
-  private storage: Storage;
+  private storage: ReplicaStorage;
   private key: string;
   private initialValue: T | null;
   private initialStaticValue: string | null;
@@ -20,6 +22,7 @@ export class Store<T> {
   private onChange: () => void;
   private stopped = false;
   private mutating = false;
+  private replicationStatusSubscription: Subscription | null = null;
 
   constructor(options: IStoreOptions<T>) {
     this.storage = options.storage;
@@ -71,13 +74,29 @@ export class Store<T> {
     return doc;
   }
 
+  public setReplicationStatus(
+    replicationStatus: Observable<ReplicationStatus>
+  ) {
+    if (this.replicationStatusSubscription) {
+      this.replicationStatusSubscription.unsubscribe();
+    }
+    this.replicationStatusSubscription = replicationStatus.subscribe(
+      (status) => {
+        this.storage.setReplicationStatus(this.key, status);
+      }
+    );
+  }
+
   public stop() {
     this.stopped = true;
     global.removeEventListener('storage', this.onStorageEvent);
+    if (this.replicationStatusSubscription) {
+      this.replicationStatusSubscription.unsubscribe();
+    }
   }
 
   private onStorageEvent(event: StorageEvent) {
-    if (this.stopped || (event.key !== this.key) || this.mutating) {
+    if (this.stopped || event.key !== this.key || this.mutating) {
       return;
     }
     this.onChange.call(null);

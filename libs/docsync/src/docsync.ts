@@ -1,11 +1,13 @@
-import { SyncEditor, SyncEditorOptions } from './sync-editor';
+import { ReplicaStorage } from '@decipad/interfaces';
 import { Sync } from '@decipad/replica';
+import { LRUStorage } from '@decipad/lrustorage';
+import { SyncEditor, SyncEditorOptions } from './sync-editor';
 
 interface ISyncDocConstructorOptions {
   userId: string;
   actorId: string;
   isSynced?: boolean;
-  storage?: Storage;
+  storage?: ReplicaStorage;
 }
 
 const defaultSyncEditorOptions = {
@@ -39,7 +41,7 @@ export class DocSync {
     if (editor === undefined) {
       const editorOptions = {
         startReplicaSync: this.isSynced,
-        storage: options.storage || global.localStorage,
+        storage: options.storage || new LRUStorage(global.localStorage),
       };
       editor = new SyncEditor(docId, this, editorOptions);
       let hadSubscribers = false;

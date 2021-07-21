@@ -4,6 +4,6 @@
     "lib": ["esnext", "dom"],
     "allowJs": true
   },
-  "include": ["src", "types"],
-  "references": [{ "path": "../testutils" }]
+  "include": ["src"],
+  "references": [{ "path": "../testutils" }, { "path": "../interfaces" }]
 }

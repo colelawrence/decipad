@@ -397,6 +397,53 @@
           }
         }
       }
+    },
+    "lrustorage": {
+      "root": "libs/lrustorage",
+      "sourceRoot": "libs/lrustorage/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/lrustorage/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/lrustorage"
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/lrustorage/ui"],
+          "options": {
+            "jestConfig": "libs/lrustorage/jest.config.js",
+            "codeCoverage": true,
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "interfaces": {
+      "root": "libs/interfaces",
+      "sourceRoot": "libs/interfaces/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/interfaces/**/*.ts"]
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/interfaces"
+          }
+        }
+      }
     }
   }
 }

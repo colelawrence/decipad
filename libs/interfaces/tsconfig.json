@@ -1,8 +1,7 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["src"],
   "compilerOptions": {
     "lib": ["esnext", "dom"]
   },
-  "references": [{ "path": "../interfaces" }]
+  "include": ["src"]
 }

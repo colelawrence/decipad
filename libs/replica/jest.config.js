@@ -8,9 +8,9 @@ module.exports = {
   bail: true,
   coverageThreshold: {
     global: {
-      statements: 79,
-      branches: 65,
-      lines: 79,
+      statements: 78,
+      branches: 60,
+      lines: 78,
       functions: 79,
     },
   },
