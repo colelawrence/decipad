@@ -1,11 +1,16 @@
+const { setupFiles = [], ...baseConfig } = require('../../jest-base.config.js');
+
 module.exports = {
+  ...baseConfig,
   displayName: 'docsync',
+
   testEnvironment: 'jsdom',
-  preset: '../../jest.preset.js',
-  setupFiles: ['./jest.setup.js'],
-  collectCoverageFrom: ['src/**/*.ts'],
+  setupFiles: [...setupFiles, './jest.setup.js'],
+
   maxWorkers: 1,
   bail: true,
+
+  collectCoverageFrom: ['src/**/*.ts'],
   coverageThreshold: {
     global: {
       statements: 97,

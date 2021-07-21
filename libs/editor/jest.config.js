@@ -1,6 +1,9 @@
+const baseConfig = require('../../jest-base.config.js');
+
 module.exports = {
+  ...baseConfig,
   displayName: 'editor',
-  preset: '../../jest.preset.js',
+
   testEnvironment: 'jsdom',
   snapshotSerializers: ['@emotion/jest/serializer'],
 };

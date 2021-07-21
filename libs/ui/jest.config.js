@@ -1,10 +1,20 @@
+const {
+  setupFilesAfterEnv = [],
+  ...baseConfig
+} = require('../../jest-base.config.js');
+
 module.exports = {
-  displayName: 'ui',
-  preset: '../../jest.preset.js',
-  transform: {
-    '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': '@nrwl/react/plugins/jest',
-    '^.+\\.[tj]sx?$': 'babel-jest',
-  },
-  testEnvironment: 'jsdom',
-  setupFilesAfterEnv: [require.resolve('./src/test-utils/setupTests.ts')],
+  projects: [
+    {
+      ...baseConfig,
+      displayName: 'ui',
+
+      testEnvironment: 'jsdom',
+      setupFilesAfterEnv: [
+        ...setupFilesAfterEnv,
+        require.resolve('./src/test-utils/setupTests.ts'),
+      ],
+    },
+    require.resolve('./jest-browser.config.js'),
+  ],
 };

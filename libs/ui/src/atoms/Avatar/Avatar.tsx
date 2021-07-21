@@ -70,4 +70,3 @@ export const Avatar = ({
     </div>
   );
 };
-// TODO test hover selector

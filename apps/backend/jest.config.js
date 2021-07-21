@@ -1,12 +1,17 @@
+const { setupFiles = [], ...baseConfig } = require('../../jest-base.config.js');
+
 const config = {
+  ...baseConfig,
   displayName: 'backend',
+
   testEnvironment: 'jsdom',
-  preset: '../../jest.preset.js',
-  setupFiles: ['./jest.setup.js'],
-  coveragePathIgnorePatterns: ['node_modules', 'src'],
+  setupFiles: [...setupFiles, './jest.setup.js'],
+
   testTimeout: 10000,
   // maxWorkers: 2,
   bail: true,
+
+  coveragePathIgnorePatterns: ['node_modules', 'src'],
   // coverageThreshold: {
   //   global: {
   //     branches: 45,

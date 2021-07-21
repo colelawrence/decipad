@@ -1,4 +1,5 @@
 module.exports = {
+  testRegex: '^$',
   projects: [
     '<rootDir>/libs/language',
     '<rootDir>/apps/client',

@@ -1,16 +1,21 @@
+const { setupFiles = [], ...baseConfig } = require('../../jest-base.config.js');
+
 module.exports = {
+  ...baseConfig,
   displayName: 'replica',
+
   testEnvironment: 'jsdom',
-  preset: '../../jest.preset.js',
-  setupFiles: ['./jest.setup.js'],
-  collectCoverageFrom: ['src/**/*.ts'],
+  setupFiles: [...setupFiles, './jest.setup.js'],
+
   maxWorkers: 1,
   bail: true,
+
+  collectCoverageFrom: ['src/**/*.ts'],
   coverageThreshold: {
     global: {
-      statements: 78,
+      statements: 77,
       branches: 60,
-      lines: 78,
+      lines: 77,
       functions: 79,
     },
   },

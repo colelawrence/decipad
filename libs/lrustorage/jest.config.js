@@ -1,11 +1,11 @@
+const baseConfig = require('../../jest-base.config.js');
+
 module.exports = {
+  ...baseConfig,
   displayName: 'lru-storage',
+
   testEnvironment: 'jsdom',
-  preset: '../../jest.preset.js',
-  transform: {
-    '^.+\\.[tj]sx?$': 'babel-jest',
-  },
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
+
   collectCoverageFrom: ['./src/*.ts'],
   coverageThreshold: {
     global: {
