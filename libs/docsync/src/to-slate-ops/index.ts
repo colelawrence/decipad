@@ -1,5 +1,4 @@
 import { Diff, Doc } from 'automerge';
-import { Operation as SlateOperation } from 'slate';
 import { toJS } from '../utils/to-js';
 import { opInsert } from './insert';
 import { opRemove } from './remove';
@@ -19,7 +18,7 @@ export function toSlateOps(
   ops: Diff[],
   doc: Doc<{ value: SyncDocDoc }>,
   before: Doc<{ value: SyncDocDoc }>
-): SlateOperation[] {
+): ExtendedSlate.ExtendedSlateOperation[] {
   function iterate(acc: [any, any[]], op: Diff): any {
     const action = byAction[op.action];
 

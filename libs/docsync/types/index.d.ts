@@ -12,42 +12,32 @@ type SyncDocDoc = Sync.Doc<SyncValue>;
 /* Slate */
 
 declare namespace ExtendedSlate {
-  import {
-    InsertNodeOperation as InsertNodeOperation,
-    InsertTextOperation as InsertTextOperation,
-    MergeNodeOperation as MergeNodeOperation,
-    MoveNodeOperation as MoveNodeOperation,
-    RemoveNodeOperation as RemoveNodeOperation,
-    RemoveTextOperation as RemoveTextOperation,
-    SetNodeOperation as SetNodeOperation,
-    SplitNodeOperation as SplitNodeOperation,
-  } from 'slate';
+  interface IdentifiableOperation {
+    isRemote?: boolean;
+    id?: string;
+  }
 
-  type IdentifiableOperation = {
-    isRemote: boolean;
-    id: string;
-  };
-
-  export type ExtendedSlateInsertNodeOperation = InsertNodeOperation &
-    IdentifiableOperation;
-  export type ExtendedSlateInsertTextOperation = InsertTextOperation &
-    IdentifiableOperation;
-  export type ExtendedSlateMergeNodeOperation = MergeNodeOperation &
-    IdentifiableOperation;
-  export type ExtendedSlateMoveNodeOperation = MoveNodeOperation &
-    IdentifiableOperation;
-  export type ExtendedSlateRemoveNodeOperation = RemoveNodeOperation &
-    IdentifiableOperation;
-  export type ExtendedSlateRemoveTextOperation = RemoveTextOperation &
-    IdentifiableOperation;
-  export type ExtendedSlateSetNodeOperation = SetNodeOperation &
-    IdentifiableOperation;
-  export type ExtendedSlateSplitNodeOperation = SplitNodeOperation &
-    IdentifiableOperation;
+  export type ExtendedSlateInsertNodeOperation =
+    import('slate').InsertNodeOperation & IdentifiableOperation;
+  export type ExtendedSlateInsertTextOperation =
+    import('slate').InsertTextOperation & IdentifiableOperation;
+  export type ExtendedSlateMergeNodeOperation =
+    import('slate').MergeNodeOperation & IdentifiableOperation;
+  export type ExtendedSlateMoveNodeOperation =
+    import('slate').MoveNodeOperation & IdentifiableOperation;
+  export type ExtendedSlateRemoveNodeOperation =
+    import('slate').RemoveNodeOperation & IdentifiableOperation;
+  export type ExtendedSlateRemoveTextOperation =
+    import('slate').RemoveTextOperation & IdentifiableOperation;
+  export type ExtendedSlateSetNodeOperation /* prettier gib line pls kthx */ =
+    import('slate').SetNodeOperation & IdentifiableOperation;
+  export type ExtendedSlateSplitNodeOperation =
+    import('slate').SplitNodeOperation & IdentifiableOperation;
 
   export type ExtendedSlateOperation =
     | ExtendedSlateInsertNodeOperation
-    | ExtendedSlateSlateMergeNodeOperation
+    | ExtendedSlateInsertTextOperation
+    | ExtendedSlateMergeNodeOperation
     | ExtendedSlateMoveNodeOperation
     | ExtendedSlateRemoveNodeOperation
     | ExtendedSlateRemoveTextOperation

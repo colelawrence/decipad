@@ -1,13 +1,17 @@
 import { Observable, Subject, Subscription } from 'rxjs';
 import debounce from 'lodash.debounce';
-import { Operation as SlateOperation } from 'slate';
+import { Operation } from 'slate';
 import { nanoid } from 'nanoid';
 import assert from 'assert';
 import { DocSync } from './docsync';
 import { createReplica, Replica, ChangeEvent } from '@decipad/replica';
 import { LRUStorage } from '@decipad/lrustorage';
 import { ReplicaStorage } from '@decipad/interfaces';
-import { fromSlateOpType, SupportedSlateOpTypes } from './from-slate-op';
+import {
+  fromSlateOpType,
+  isSupportedSlateOpType,
+  SupportedSlateOpTypes,
+} from './from-slate-op';
 import { toSlateOps } from './to-slate-ops';
 import { toJS } from './utils/to-js';
 import { fnQueue } from './utils/fn-queue';
@@ -97,7 +101,7 @@ export class SyncEditor {
   }
 
   private onRemoteChange({ diffs, doc, before }: ChangeEvent<SyncDocDoc>) {
-    const ops = toSlateOps(diffs, doc, before).map(remoteOp);
+    const ops = toSlateOps(diffs, doc, before).map(toRemoteOp);
     this.queue.push(() => this.applyRemoteSlateOps(ops));
   }
 
@@ -116,8 +120,11 @@ export class SyncEditor {
     return p;
   }
 
-  sendSlateOperations(ops: ExtendedSlate.ExtendedSlateOperation[]) {
-    for (const op of ops) {
+  sendSlateOperations(
+    ops: (Operation | ExtendedSlate.ExtendedSlateOperation)[]
+  ) {
+    const supportedOps = ops.filter(isSupportedSlateOpType);
+    for (const op of supportedOps) {
       if (op.id) {
         const index = this.pendingApplySlateOpIds.indexOf(op.id as string);
         if (index >= 0) {
@@ -131,7 +138,7 @@ export class SyncEditor {
         }
       }
     }
-    const localOperations = ops.filter(isNotRemoteOp);
+    const localOperations = supportedOps.filter(isNotRemoteOp);
     if (localOperations.length > 0) {
       this.pushLocalSlateOps(localOperations);
     }
@@ -174,7 +181,9 @@ export class SyncEditor {
   }
 }
 
-function remoteOp(op: SlateOperation): ExtendedSlate.ExtendedSlateOperation {
+function toRemoteOp(
+  op: ExtendedSlate.ExtendedSlateOperation
+): ExtendedSlate.ExtendedSlateOperation {
   return { ...op, isRemote: true, id: nanoid() };
 }
 

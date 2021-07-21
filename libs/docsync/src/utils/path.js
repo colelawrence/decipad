@@ -27,6 +27,9 @@ export function getParentPath(path, level = 1) {
   return [path[path.length - level], path.slice(0, path.length - level)];
 }
 
+/**
+ * @returns [any, number]
+ */
 export function getParent(doc, path, level = 1) {
   const [idx, parentPath] = getParentPath(path, level);
   return [getTarget(doc, parentPath), idx];

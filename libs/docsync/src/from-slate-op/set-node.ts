@@ -8,8 +8,7 @@ export function setNode(
 
   const { newProperties } = op;
 
-  for (const key in newProperties) {
-    const value = newProperties[key];
+  for (const [key, value] of Object.entries(newProperties)) {
     if (value !== undefined) {
       node[key] = value;
     } else {
