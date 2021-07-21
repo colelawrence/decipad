@@ -22,11 +22,13 @@ const SideTools = styled('div')`
   position: fixed;
   right: 15px;
   top: 50%;
+  z-index: 999;
   transform: translateY(-50%);
   width: 50px;
   border: 1px solid #f0f0f2;
   box-shadow: 0px 2px 24px rgba(36, 36, 41, 0.06);
   border-radius: 8px;
+  background-color: #fff;
 `;
 
 const ButtonStyling = {
