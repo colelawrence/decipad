@@ -1,5 +1,5 @@
-import { CodeBlockElement, withProps } from '@udecode/slate-plugins';
 import { Box } from '@chakra-ui/react';
+import { CodeBlockElement, withProps } from '@udecode/slate-plugins';
 import { RenderElementProps } from 'slate-react';
 import { Result } from './Result.component';
 
@@ -10,7 +10,7 @@ const codeBlockStyles = {
       padding: '24px',
       backgroundColor: 'rgba(240, 240, 242, 0.2)',
       border: '1px solid #F0F0F2',
-      lineHeight: '1.75',
+      lineHeight: '2.5',
       margin: '8px 0',
       boxShadow: '0px 2px 24px -4px rgba(36, 36, 41, 0.06)',
     },

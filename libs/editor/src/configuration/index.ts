@@ -26,6 +26,7 @@ import { Bold } from '../components/Leafs/Bold/Bold.component';
 import { Italic } from '../components/Leafs/Italic/Italic.component';
 import { Strikethrough } from '../components/Leafs/Strikethrough/Strikethrough.component';
 import { Underline } from '../components/Leafs/Underline/Underline.component';
+import { withStyledDraggables } from '../utils/withStyledDraggables';
 import { withStyledPlaceHolders } from '../utils/withStyledPlaceholders';
 
 export * from './plugins';
@@ -53,5 +54,6 @@ let components = createSlatePluginsComponents({
 });
 
 components = withStyledPlaceHolders(components);
+components = withStyledDraggables(components);
 
 export const options = createSlatePluginsOptions();

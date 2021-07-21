@@ -3,15 +3,16 @@ import { SlatePluginComponent } from '@udecode/slate-plugins';
 import React from 'react';
 
 const Element = styled('div')({
-  backgroundColor: '#BEE3F8',
-  color: '#2B6CB0',
+  color: 'rgba(0,0,0,0.5)',
   lineHeight: '1.75',
-  border: '1px solid #90CDF4',
-  padding: '12px 24px',
-  borderRadius: '8px',
+  borderLeft: '5px solid #332942',
+  padding: '6px 24px',
   fontStyle: 'italic',
   fontSize: '16px',
   boxShadow: '0px 2px 24px -4px rgba(36, 36, 41, 0.06)',
+  '& ::selection': {
+    backgroundColor: 'rgba(196, 202, 251, 0.5)',
+  },
 });
 
 export const Blockquote: SlatePluginComponent = ({ attributes, children }) => {

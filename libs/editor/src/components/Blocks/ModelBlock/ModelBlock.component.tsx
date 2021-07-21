@@ -12,6 +12,9 @@ const Element = styled('div')({
   boxShadow: '0px 2px 24px -4px rgba(36, 36, 41, 0.06)',
   fontFamily: 'monospace',
   fontSize: '16px',
+  '& ::selection': {
+    backgroundColor: 'rgba(196, 202, 251, 0.5)',
+  },
 });
 
 export const ModelBlock: SlatePluginComponent = ({ attributes, children }) => {

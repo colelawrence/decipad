@@ -1,8 +1,8 @@
-import React, { ReactNode, useCallback, useState } from 'react';
-import { Transforms, Editor } from 'slate';
-import { useToasts } from 'react-toast-notifications';
-import slug from 'slug';
 import camelcase from 'camelcase';
+import React, { ReactNode, useCallback, useState } from 'react';
+import { useToasts } from 'react-toast-notifications';
+import { Editor, Transforms } from 'slate';
+import slug from 'slug';
 
 interface DropFileProps {
   editor: Editor;
@@ -79,7 +79,6 @@ export function DropFile({ editor, children }: DropFileProps) {
       onDragEnter={dragEnterHandler}
       onDragLeave={dragLeaveHandler}
       onDragOver={dragOverHandler}
-      style={dragIsHovering ? { backgroundColor: 'rgb(252,202,181)' } : {}}
     >
       {children}
     </div>

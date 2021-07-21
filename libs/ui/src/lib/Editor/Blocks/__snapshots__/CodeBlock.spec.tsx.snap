@@ -22,7 +22,7 @@ exports[`CodeBlock Block matches snapshot 1`] = `
     class="emotion-0"
   >
     <pre
-      class="root-65"
+      class="CodeBlockElement___StyledPre-sc-o8gydl-0 fXXVRp slate-CodeBlockElement"
       data-slate-node="element"
     >
       <code>
@@ -46,7 +46,7 @@ exports[`CodeBlock Block matches snapshot with no results 1`] = `
     class="emotion-0"
   >
     <pre
-      class="root-65"
+      class="CodeBlockElement___StyledPre-sc-o8gydl-0 fXXVRp slate-CodeBlockElement"
       data-slate-node="element"
     >
       <code>

@@ -8,6 +8,9 @@ const Element = styled('h2')({
   padding: '2rem 0 1rem 0',
   fontWeight: 'bold',
   color: '#121214',
+  '& ::selection': {
+    backgroundColor: 'rgba(196, 202, 251, 0.5)',
+  },
 });
 
 export const Subtitle: SlatePluginComponent = ({ attributes, children }) => {

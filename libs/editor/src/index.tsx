@@ -2,6 +2,8 @@ import { ResultsContextProvider } from '@decipad/ui';
 import styled from '@emotion/styled';
 import { pipe, SlatePlugins, withSlatePlugins } from '@udecode/slate-plugins';
 import React, { useMemo, useState } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { createEditor, Node } from 'slate';
 import { DropFile } from './components/DropFile';
 import { SideFormattingMenu } from './components/SideFormattingMenu';
@@ -30,7 +32,7 @@ export interface EditorProps {
   autoFocus: boolean;
 }
 
-export const Editor = ({ padId, autoFocus }: EditorProps) => {
+const SlateEditor = ({ padId, autoFocus }: EditorProps) => {
   const editor = useMemo(() => pipe(createEditor(), withSlatePlugins()), []);
   const [value, setValue] = useState<Node[] | undefined>(undefined);
 
@@ -73,5 +75,13 @@ export const Editor = ({ padId, autoFocus }: EditorProps) => {
         </InnerContent>
       </Wrapper>
     </ResultsContextProvider>
+  );
+};
+
+export const Editor = (props: EditorProps) => {
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <SlateEditor {...props} />
+    </DndProvider>
   );
 };

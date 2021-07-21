@@ -9,6 +9,10 @@ exports[`Subheading Block matches snapshot 1`] = `
   color: #121214;
 }
 
+.emotion-0 ::selection {
+  background-color: rgba(196, 202, 251, 0.5);
+}
+
 <div>
   <h3
     class="emotion-0"

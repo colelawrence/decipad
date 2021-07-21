@@ -1,5 +1,8 @@
 import { SlatePlugins, SlatePluginsProps } from '@udecode/slate-plugins';
 import React, { useMemo } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { FormattingToolbar } from './components/FormattingToolbar';
 import { SideFormattingMenu } from './components/SideFormattingMenu';
 import { components, options, plugins } from './configuration';
 import {
@@ -7,7 +10,7 @@ import {
   useSlashCommandsPlugin,
 } from './plugins/SlashCommands';
 
-export const NoDocSyncEditor = (props: SlatePluginsProps) => {
+export const Editor = (props: SlatePluginsProps) => {
   const { getSlashCommandsProps, plugin: slashCommandsPlugin } =
     useSlashCommandsPlugin();
 
@@ -17,16 +20,25 @@ export const NoDocSyncEditor = (props: SlatePluginsProps) => {
   );
 
   return (
-    <div>
-      <SlatePlugins
-        plugins={editorPlugins}
-        options={options}
-        components={components}
-        editableProps={{ autoFocus: true }}
-        {...props}
-      />
+    <SlatePlugins
+      id="no-doc-sync"
+      plugins={editorPlugins}
+      options={options}
+      components={components}
+      editableProps={{ autoFocus: true }}
+      {...props}
+    >
+      <FormattingToolbar />
       <SlashCommandsSelect {...getSlashCommandsProps()} />
       <SideFormattingMenu />
-    </div>
+    </SlatePlugins>
+  );
+};
+
+export const NoDocSyncEditor = (props: SlatePluginsProps) => {
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <Editor {...props} />
+    </DndProvider>
   );
 };

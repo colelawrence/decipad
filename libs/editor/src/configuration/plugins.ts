@@ -3,6 +3,7 @@ import {
   createAutoformatPlugin,
   createBasicElementPlugins,
   createBasicMarkPlugins,
+  createDndPlugin,
   createExitBreakPlugin,
   createHistoryPlugin,
   createImagePlugin,
@@ -18,6 +19,7 @@ import {
   WithAutoformatOptions,
 } from '@udecode/slate-plugins';
 import { nanoid } from 'nanoid';
+import { createBubblePlugin } from '../plugins/Bubbles/createBubblePlugin';
 import { optionsAutoformat } from './autoFormatOptions';
 import { exitBreakOptions } from './exitBreakOptions';
 import { resetBlockTypeOptions } from './resetBlockTypeOptions';
@@ -39,6 +41,8 @@ export const plugins = [
   createResetNodePlugin(resetBlockTypeOptions),
   createAutoformatPlugin(optionsAutoformat as WithAutoformatOptions),
   createImagePlugin(),
+  createBubblePlugin(),
+  createDndPlugin(),
 
   createKbdPlugin(),
   createNodeIdPlugin({ idCreator: nanoid }),
