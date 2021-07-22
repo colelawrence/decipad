@@ -6,6 +6,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { createEditor, Node } from 'slate';
 import { DropFile } from './components/DropFile';
+import { FormattingToolbar } from './components/FormattingToolbar';
 import { SideFormattingMenu } from './components/SideFormattingMenu';
 import { components, options, plugins } from './configuration';
 import { useEditor } from './hooks/useEditor';
@@ -66,6 +67,7 @@ const SlateEditor = ({ padId, autoFocus }: EditorProps) => {
                 editableProps={{ autoFocus }}
                 onChange={() => onChangeLanguage(editor.children)}
               />
+              <FormattingToolbar />
               <SlashCommandsSelect {...getSlashCommandsProps()} />
               <SideFormattingMenu />
             </DropFile>
