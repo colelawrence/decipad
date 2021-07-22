@@ -5,11 +5,14 @@
     "jsx": "preserve",
     "noEmit": false
   },
-  "include": ["src"],
+  "include": ["src", "types"],
   "exclude": [],
   "references": [
     {
       "path": "../../libs/editor"
+    },
+    {
+      "path": "../../libs/interfaces"
     },
     {
       "path": "../../libs/ui"

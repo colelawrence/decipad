@@ -14,7 +14,7 @@ import {
 import {
   GetWorkspaceById_getWorkspaceById,
   GET_WORKSPACES,
-  Workspaces,
+  GetWorkspaces,
 } from '@decipad/queries';
 import { useMemo } from 'react';
 import { FiChevronDown, FiFolder } from 'react-icons/fi';
@@ -28,7 +28,7 @@ export interface SideMenuProps {
 
 export const SideMenu = ({ currentWorkspace }: SideMenuProps) => {
   const history = useHistory();
-  const { data } = useQuery<Workspaces>(GET_WORKSPACES);
+  const { data } = useQuery<GetWorkspaces>(GET_WORKSPACES);
 
   const allOtherWorkspaces = useMemo(
     () => data?.workspaces.filter((w) => w.id !== currentWorkspace?.id),

@@ -52,7 +52,7 @@ function Index({ pageProps = {} }) {
 
   if (usingSentry && session?.user) {
     setUser({
-      id: (session.user as { id: string }).id,
+      id: session.user.id,
     });
   }
 

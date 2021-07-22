@@ -4,5 +4,8 @@
     "lib": ["esnext", "dom"]
   },
   "include": ["lib", "tests", "types", "package.json"],
-  "references": [{ "path": "../../libs/kafka-lite" }]
+  "references": [
+    { "path": "../../libs/interfaces" },
+    { "path": "../../libs/kafka-lite" }
+  ]
 }

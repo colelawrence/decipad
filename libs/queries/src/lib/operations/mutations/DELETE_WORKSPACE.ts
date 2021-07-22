@@ -17,6 +17,6 @@ export interface DeleteWorkspaceVars {
 export const useDeleteWorkspace = ({ id }: DeleteWorkspaceVars) =>
   useMutation<DeleteWorkspace, DeleteWorkspaceVars>(DELETE_WORKSPACE, {
     variables: { id },
-    refetchQueries: ['Workspaces'],
+    refetchQueries: ['GetWorkspaces'],
     awaitRefetchQueries: true,
   });

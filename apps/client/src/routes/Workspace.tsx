@@ -50,9 +50,10 @@ export function Workspace({ workspaceId }: { workspaceId: string }) {
   }
 
   return (
-    <Grid p={10} gridTemplateRows="auto 1fr" gridGap={6} minH="100vh">
+    <Grid gridTemplateRows="auto 1fr" minH="100vh">
       <Topbar workspaceId={workspaceId} />
       <Grid
+        p={10}
         gridTemplateColumns="300px 1fr"
         borderTop="2px solid"
         borderColor="gray.100"

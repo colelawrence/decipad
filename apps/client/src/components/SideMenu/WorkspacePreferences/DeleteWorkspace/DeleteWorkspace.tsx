@@ -4,7 +4,7 @@ import { Button, Collapse, Heading, Input, Text } from '@chakra-ui/react';
 import {
   GET_WORKSPACES,
   useDeleteWorkspace,
-  Workspaces,
+  GetWorkspaces,
 } from '@decipad/queries';
 import { useHistory } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
@@ -18,7 +18,7 @@ export const DeleteWorkspace = ({
   currentWorkspace,
   onClose,
 }: DeleteWorkspaceProps) => {
-  const { data } = useQuery<Workspaces>(GET_WORKSPACES);
+  const { data } = useQuery<GetWorkspaces>(GET_WORKSPACES);
   const [deleteValue, setDeleteValue] = useState('');
   const [deleteMutation] = useDeleteWorkspace({
     id: currentWorkspace?.id || '',

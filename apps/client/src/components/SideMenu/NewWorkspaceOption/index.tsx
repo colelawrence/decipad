@@ -33,7 +33,7 @@ export const NewWorkspaceOption = () => {
   const createNewWorkspace = () => {
     mutate({
       variables: { name: newWorkspaceRef?.current?.value || '' },
-      refetchQueries: ['Workspaces'],
+      refetchQueries: ['GetWorkspaces'],
       awaitRefetchQueries: true,
     }).then((res) => {
       history.push(`/workspaces/${res.data?.createWorkspace.id}`);

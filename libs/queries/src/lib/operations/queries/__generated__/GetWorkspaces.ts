@@ -4,27 +4,27 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: Workspaces
+// GraphQL query operation: GetWorkspaces
 // ====================================================
 
-export interface Workspaces_workspaces_pads_items {
+export interface GetWorkspaces_workspaces_pads_items {
   __typename: 'Pad';
   id: string;
   name: string;
 }
 
-export interface Workspaces_workspaces_pads {
+export interface GetWorkspaces_workspaces_pads {
   __typename: 'PagedPadResult';
-  items: Workspaces_workspaces_pads_items[];
+  items: GetWorkspaces_workspaces_pads_items[];
 }
 
-export interface Workspaces_workspaces {
+export interface GetWorkspaces_workspaces {
   __typename: 'Workspace';
   id: string;
   name: string;
-  pads: Workspaces_workspaces_pads;
+  pads: GetWorkspaces_workspaces_pads;
 }
 
-export interface Workspaces {
-  workspaces: Workspaces_workspaces[];
+export interface GetWorkspaces {
+  workspaces: GetWorkspaces_workspaces[];
 }

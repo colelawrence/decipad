@@ -39,7 +39,7 @@ export const AccountMenu = ({
     <nav css={styles}>
       <strong css={css(p12Bold, textStyles)}>{userName}</strong>
       <address css={css(p12Regular, textStyles)}>{email}</address>
-      <div css={{ padding: `12px 0 8px` }}>
+      <div css={{ paddingTop: '12px', paddingBottom: '4px' }}>
         <Divider />
       </div>
       <NavigationList>
