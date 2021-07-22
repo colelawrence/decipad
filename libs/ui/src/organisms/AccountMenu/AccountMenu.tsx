@@ -9,11 +9,10 @@ import { noop } from '../../utils';
 
 const styles = css({
   display: 'grid',
-  gridTemplateRows: 'auto auto 24px auto',
-  alignItems: 'center',
   rowGap: '4px',
 
   padding: '16px',
+  paddingBottom: '8px',
 
   backgroundColor: cssVar('backgroundColor'),
   border: `1px solid ${cssVar('highlightColor')}`,
@@ -40,7 +39,9 @@ export const AccountMenu = ({
     <nav css={styles}>
       <strong css={css(p12Bold, textStyles)}>{userName}</strong>
       <address css={css(p12Regular, textStyles)}>{email}</address>
-      <Divider />
+      <div css={{ padding: `12px 0 8px` }}>
+        <Divider />
+      </div>
       <NavigationList>
         <NavigationItem icon={<Logout />} onClick={onLogout}>
           Log out
