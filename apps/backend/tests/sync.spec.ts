@@ -5,6 +5,7 @@ import { withAuth } from './utils/call-simple';
 import auth from './utils/auth';
 import Automerge from 'automerge';
 import { encode } from '../lib/resource';
+import createResourcePermission from '../lib/resource-permissions/create';
 
 test('sync docs', () => {
   let call: ReturnType<typeof withAuth>;
@@ -20,6 +21,16 @@ test('sync docs', () => {
 
   beforeAll(async () => {
     call = withAuth((await auth()).token);
+  });
+
+  beforeAll(async () => {
+    await createResourcePermission({
+      userId: 'test user id 1',
+      resourceType: 'pads',
+      resourceId: 'padid',
+      type: 'WRITE',
+      givenByUserId: 'test user id 1',
+    });
   });
 
   it('PUT /api/syncdoc/:id', async () => {

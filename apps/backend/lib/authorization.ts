@@ -1,9 +1,6 @@
 import tables from './tables';
 
 export async function isAuthorized(resource: string, user: TableRecordIdentifier, permissionType: PermissionType = 'READ'): Promise<boolean> {
-  if (resource.endsWith('/')) {
-    resource = resource.substring(0, resource.length - 1);
-  }
   const data = await tables();
   const permissions: PermissionRecord[] = (
     await data.permissions.query({
@@ -12,7 +9,7 @@ export async function isAuthorized(resource: string, user: TableRecordIdentifier
         'user_id = :user_id and resource_uri = :resource_uri',
       ExpressionAttributeValues: {
         ':user_id': user.id,
-        ':resource_uri': resource,
+        ':resource_uri': canonizeResource(resource),
       },
     })
   ).Items;
@@ -33,4 +30,13 @@ function isEnoughPermissionFor(requiredPermissionType: PermissionType) {
     }
     return existingPermission.type === requiredPermissionType;
   };
+}
+
+function canonizeResource(resource: string): string {
+  const [type, id] = resource.split('/').filter(notEmpty)
+  return `/${type}/${id}`;
+}
+
+function notEmpty(str: string): boolean {
+  return str.length > 0;
 }
