@@ -10,9 +10,14 @@ import randomChar from './utils/random-char';
 import { toJS } from './utils/to-js';
 import { toSync } from './utils/to-sync';
 import { cloneNode } from './utils/clone-node';
-import { apiServer, createWebsocketServer, timeout } from '@decipad/testutils';
-import { TestStorage } from '@decipad/testutils';
 import { ReplicationStatus } from '@decipad/interfaces';
+import {
+  syncApiServer,
+  createWebsocketServer,
+  timeout,
+  tickUntil,
+  TestStorage,
+} from '@decipad/testutils';
 
 type BaseNode = { type: string; id: string; children: TextNode[] };
 type TextNode = { text: Text };
@@ -20,14 +25,18 @@ type Model = List<BaseNode>;
 
 waitForExpect.defaults.interval = 500;
 
+const fetchPrefix = 'http://localhost:3333';
+
 const replicaCount = 5;
 const randomChangeCountPerReplica = 100;
+
+// timers
 const maxSmallTimeout = 500;
 const maxTinyTimeout = 50;
 const maxMicroTimeout = 10;
-const fetchPrefix = 'http://localhost:3333';
 const maxRetryIntervalMs = 3000;
 const sendChangesDebounceMs = 1;
+const FAKE_TIME_TICK_MS = 50;
 
 const syncOptions = {
   start: true,
@@ -60,6 +69,11 @@ describe('sync', () => {
     const replicaObservedValues = new Array(replicaCount);
     let websocketServer: WebSocketServer;
     let deciWebsocketServer = null;
+
+    afterEach(() => {
+      // go back to real timers no matter the test result
+      jest.useRealTimers();
+    });
 
     beforeAll(() => {
       for (let i = 0; i < replicaCount; i++) {
@@ -114,7 +128,7 @@ describe('sync', () => {
 
       fetch.mockIf(
         () => true,
-        apiServer(deciWebsocketServer, { fetchPrefix, maxTinyTimeout })
+        syncApiServer(deciWebsocketServer, { fetchPrefix, maxTinyTimeout })
       );
     });
 
@@ -188,23 +202,31 @@ describe('sync', () => {
     });
 
     it('makes random changes to the replicas', async () => {
-      await randomChangesToReplicas(replicas, randomChangeCountPerReplica);
-    }, 120000);
+      jest.useFakeTimers();
+      await tickUntil(
+        randomChangesToReplicas(replicas, randomChangeCountPerReplica),
+        FAKE_TIME_TICK_MS
+      );
+    });
 
     // it('waits a bit', async () => await timeout(10000), 11000);
 
     it('all converges', async () => {
-      await waitForExpect(
-        () => {
-          const expectedValue = toJS(replicas[0].getValue());
-          const expectedValues = replicas.map(() => toJS(expectedValue));
-          const values = replicas.map((r) => toJS(r.getValue()));
-          expect(values).toMatchObject(expectedValues);
-        },
-        30000,
-        1000
+      jest.useFakeTimers();
+      await tickUntil(
+        waitForExpect(
+          () => {
+            const expectedValue = toJS(replicas[0].getValue());
+            const expectedValues = replicas.map(() => toJS(expectedValue));
+            const values = replicas.map((r) => toJS(r.getValue()));
+            expect(values).toMatchObject(expectedValues);
+          },
+          30000,
+          1000
+        ),
+        FAKE_TIME_TICK_MS
       );
-    }, 40000);
+    });
 
     it('observed values match', () => {
       const values = replicas.map((r) => toJS(r.getValue()));
@@ -216,23 +238,31 @@ describe('sync', () => {
         SyncStatus.RemoteChanged,
         SyncStatus.Reconciled,
       ];
-      await waitForExpect(() => {
-        for (const replica of replicas) {
-          expect(acceptableEndStatuses).toContainEqual(
-            replica.syncStatus.getValue()
-          );
-        }
-      });
+      jest.useFakeTimers();
+      await tickUntil(
+        waitForExpect(() => {
+          for (const replica of replicas) {
+            expect(acceptableEndStatuses).toContainEqual(
+              replica.syncStatus.getValue()
+            );
+          }
+        }),
+        FAKE_TIME_TICK_MS
+      );
     });
 
     it("each replica's replication status is saved remotely", async () => {
-      await waitForExpect(() => {
-        for (const replica of replicas) {
-          expect(replica.replicationStatus).toBe(
-            ReplicationStatus.SavedRemotely
-          );
-        }
-      });
+      jest.useFakeTimers();
+      await tickUntil(
+        waitForExpect(() => {
+          for (const replica of replicas) {
+            expect(replica.replicationStatus).toBe(
+              ReplicationStatus.SavedRemotely
+            );
+          }
+        }),
+        FAKE_TIME_TICK_MS
+      );
     });
   });
 });
@@ -240,7 +270,8 @@ describe('sync', () => {
 async function randomChangesToReplicas(
   replicas: Replica<Model>[],
   changeCount: number
-) {
+): Promise<void> {
+  // random changes in all replicas happen in parallel
   await Promise.all(
     replicas.map((replica) => randomChangesToReplica(replica, changeCount))
   );

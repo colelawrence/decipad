@@ -8,13 +8,15 @@ interface IApiServerOptions {
   maxTinyTimeout: number;
 }
 
-export function apiServer(
+export function syncApiServer(
   deciWebsocketServer: DeciWebsocketServer,
   { fetchPrefix, maxTinyTimeout }: IApiServerOptions
 ) {
   const store = new Map<string, string>();
   return async (req: Request) => {
     assert(req.url.startsWith(fetchPrefix));
+
+    // simulate request latency and database I/O time
     await randomTinyTimeout();
 
     let resp;
@@ -37,6 +39,7 @@ export function apiServer(
       resp = await get(req);
     }
 
+    // simulate response latency
     await randomTinyTimeout();
 
     return resp;

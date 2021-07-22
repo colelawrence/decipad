@@ -8,10 +8,11 @@ import { DocSync, SyncEditor } from './';
 import randomChar from './utils/random-char';
 import { toJS } from './utils/to-js';
 import {
-  apiServer,
+  syncApiServer,
   createWebsocketServer,
   timeout,
   TestStorage,
+  tickUntil,
 } from '@decipad/testutils';
 
 waitForExpect.defaults.interval = 500;
@@ -21,6 +22,8 @@ const maxTinyTimeout = 50;
 const maxSmallTimeout = 500;
 const replicaCount = 3;
 const randomChangeCountPerReplica = 100;
+
+const FAKE_TIME_TICK_MS = 50;
 
 describe('sync', () => {
   const replicas: DocSync[] = [];
@@ -44,11 +47,15 @@ describe('sync', () => {
 
     fetch.mockIf(
       () => true,
-      apiServer(deciWebsocketServer, {
+      syncApiServer(deciWebsocketServer, {
         fetchPrefix,
         maxTinyTimeout,
       })
     );
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
   });
 
   it('can send and receive extraneous websocket messages', (done) => {
@@ -118,24 +125,28 @@ describe('sync', () => {
     const expectedValues = docContents.map(() => toJS(expectedValue));
     const values = docContents.map((pc) => pc.getValue());
     expect(values).toMatchObject(expectedValues);
-  }, 10000);
+  });
 
   it('makes random changes to the editors', async () => {
-    await randomChangesToEditors(docEditors, randomChangeCountPerReplica);
-  }, 1200000);
+    jest.useFakeTimers();
+    await tickUntil(
+      randomChangesToEditors(docEditors, randomChangeCountPerReplica),
+      FAKE_TIME_TICK_MS
+    );
+  });
 
   it('pad contents converge', async () => {
-    await waitForExpect(
-      () => {
+    jest.useFakeTimers();
+    await tickUntil(
+      waitForExpect(() => {
         const expectedValue = docContents[0].getValue();
         const expectedValues = docContents.map(() => toJS(expectedValue));
         const values = docContents.map((pc) => pc.getValue());
         expect(values).toMatchObject(expectedValues);
-      },
-      60000,
-      2000
+      }),
+      FAKE_TIME_TICK_MS
     );
-  }, 70000);
+  });
 
   it('pad contents match each editor content', () => {
     const expectedValues = docContents.map((pc) => pc.getValue());
