@@ -22,11 +22,11 @@ const containerStyles = css(p12Bold, {
 const initialStyles = css(p12Bold, {
   aspectRatio: '1 / 1',
 });
-const initialBackgroundStyles = (hoverSelector?: string) =>
+const initialBackgroundStyles = (hoverSelector = 'svg:hover') =>
   css({
     transition: `fill ${shortAnimationDuration} ease-in-out`,
     fill: purple100.rgb,
-    [hoverSelector === undefined ? ':hover' : `${hoverSelector} &`]: {
+    [`${hoverSelector} &`]: {
       fill: transparency(purple100, 0.65).rgba,
     },
   });
