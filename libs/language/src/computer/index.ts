@@ -19,7 +19,9 @@ import type {
 } from './types';
 import { Computer } from './Computer';
 
-type ReqsWithCursor$ = Observable<[ComputeRequest, ValueLocation | null]>;
+type ReqsWithCursor$ = Observable<
+  readonly [ComputeRequest, ValueLocation | null]
+>;
 type ResTuple = [ComputeResponse | ComputePanic, ValueLocation | null];
 type Res$ = Observable<ResTuple>;
 

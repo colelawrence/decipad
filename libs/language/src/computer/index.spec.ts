@@ -7,37 +7,47 @@ import {
   ValueLocation,
 } from './types';
 import { getShouldDelayResponse, makeComputer, MakeComputerOptions } from '.';
-import { simplifyComputeResponse } from './testutils';
+import { getUnparsed, simplifyComputeResponse } from './testutils';
 
-const runThroughMock = async (
-  things: string[],
-  cursorPositions?: (ValueLocation | null)[],
-  computerOptions?: MakeComputerOptions
-): Promise<string[][]> => {
-  const reqs: ComputeRequest[] = things.map((source) => ({
-    type: 'compute-request',
+const makeReqs = (things: string[]): ComputeRequest[] =>
+  things.map((source) => ({
     program: [{ id: 'block-0', source }],
   }));
 
-  const thingsStream = from(reqs).pipe(
-    map((t, index): [ComputeRequest, ValueLocation | null] => [
-      t,
-      cursorPositions?.[index] ?? null,
-    ]),
-    makeComputer(computerOptions),
-    map(([res]) => {
-      return simplifyComputeResponse(res);
-    }),
-    toArray()
+const makeMultiBlockReqs = (things: string[][]): ComputeRequest[] =>
+  things.map((blockSources) => ({
+    program: getUnparsed(...blockSources),
+  }));
+
+const runThroughMock = async (
+  reqs: ComputeRequest[],
+  cursorPositions?: (ValueLocation | null)[],
+  computerOptions?: MakeComputerOptions
+): Promise<string[][]> =>
+  await lastValueFrom(
+    from(reqs).pipe(
+      map((t, index) => [t, cursorPositions?.[index] ?? null] as const),
+      makeComputer(computerOptions),
+      map(([res]) => simplifyComputeResponse(res)),
+      toArray()
+    )
   );
 
-  return await lastValueFrom(thingsStream);
-};
-
 it('can run requests through a computer', async () => {
-  expect(await runThroughMock(['A = 1', 'Syntax ---- / --- Error'])).toEqual([
-    ['block-0/0 -> 1'],
-    ['block-0 -> Syntax Error'],
+  expect(
+    await runThroughMock(makeReqs(['A = 1', 'Syntax ---- / --- Error']))
+  ).toEqual([['block-0/0 -> 1'], ['block-0 -> Syntax Error']]);
+});
+
+it('Always yields the whole response, even if parts of it did not change', async () => {
+  const reqs = makeMultiBlockReqs([
+    ['A = 1', '1 + 1'],
+    ['A = 2', '1 + 1'],
+  ]);
+
+  expect(await runThroughMock(reqs)).toEqual([
+    ['block-0/0 -> 1', 'block-1/0 -> 2'],
+    ['block-0/0 -> 2', 'block-1/0 -> 2'],
   ]);
 });
 
@@ -45,10 +55,14 @@ it('delays requests which are errored and under the cursor', async () => {
   const options: MakeComputerOptions = {
     pipeErrors: jest.fn(() => (x) => x),
   };
-  await runThroughMock(['Syntax ---- / --- Error'], [null], options);
+  await runThroughMock(makeReqs(['Syntax ---- / --- Error']), [null], options);
   expect(options.pipeErrors).not.toHaveBeenCalled();
 
-  await runThroughMock(['Syntax ---- / --- Error'], [['block-0', 1]], options);
+  await runThroughMock(
+    makeReqs(['Syntax ---- / --- Error']),
+    [['block-0', 1]],
+    options
+  );
   expect(options.pipeErrors).toHaveBeenCalled();
 });
 

@@ -1,6 +1,5 @@
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { produce } from 'immer';
 import { isCollapsed } from '@udecode/slate-plugins';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { HistoryEditor } from 'slate-history';
@@ -141,19 +140,25 @@ export const useEditor = ({ padId, editor, setValue }: IUseDocSyncEditor) => {
             setResults(makeResultsContextValue());
             captureException(new Error(res.message));
           } else {
-            setResults(
-              produce((ctx) => {
-                ctx.cursor = cursor ?? null;
+            setResults((ctx) => {
+              const blockResultsKv = res.updates.map((newResult) => {
+                const { blockId } = newResult;
+                const previousResult = ctx.blockResults[blockId];
 
-                for (const update of res.updates) {
-                  const { blockId } = update;
+                // Stabilize newResult here -- it'll be equal but not ===
+                // Don't trigger a re-render for results tables and whatnot
+                const value = dequal(previousResult, newResult)
+                  ? previousResult
+                  : newResult;
 
-                  if (!dequal(ctx.blockResults[blockId], update)) {
-                    ctx.blockResults[blockId] = update;
-                  }
-                }
-              })
-            );
+                return [newResult.blockId, value];
+              });
+
+              return {
+                cursor: cursor ?? null,
+                blockResults: Object.fromEntries(blockResultsKv),
+              };
+            });
           }
         },
         error: captureException,

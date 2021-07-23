@@ -25,7 +25,7 @@ export class LRUStorage implements ReplicaStorage {
     this.debouncedFlushMetadata = debounce(
       this.flushMetadata.bind(this),
       options.debouceFlushMetadataMs
-    ).bind(this);
+    );
   }
 
   get length(): number {
