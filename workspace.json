@@ -45,7 +45,7 @@
           "outputs": ["coverage/apps/backend"],
           "options": {
             "jestConfig": "apps/backend/jest.config.js",
-            "codeCoverage": true
+            "codeCoverage": false
           }
         },
         "typecheck": {

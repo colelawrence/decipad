@@ -92,26 +92,23 @@ async function signInGithub(user: UserWithSecret, account: any, metadata: any) {
   if (userKey) {
     existingUser = await data.users.get({ id: userKey.user_id });
   }
+
+  const userInput = {
+    name: githubUser.name || githubUser.login,
+    image: githubUser.image,
+    email: githubUser.email,
+    provider: account.provider,
+    providerId: githubUser.id,
+  };
+
   if (existingUser) {
-    existingUser = await maybeEnrichUser(existingUser, {
-      name: githubUser.name,
-      image: githubUser.image,
-      email: githubUser.email,
-      provider: account.provider,
-      providerId: githubUser.id,
-    });
+    existingUser = await maybeEnrichUser(existingUser, userInput);
   } else {
     // If the user does not exist, we just create a new one.
     // In the future, we might want to redirect the user
     // to a registration page by defining next-auth options.pages.newUser.
 
-    existingUser = await createUser({
-      name: githubUser.name,
-      image: githubUser.image,
-      email: githubUser.email,
-      provider: account.provider,
-      providerId: githubUser.id,
-    });
+    existingUser = await createUser(userInput);
   }
 
   user.accessToken = existingUser.secret;
