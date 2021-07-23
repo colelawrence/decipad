@@ -7,7 +7,6 @@ import {
   useEventEditorId,
   useStoreEditorRef,
 } from '@udecode/slate-plugins';
-import React from 'react';
 import { FiBold, FiItalic, FiUnderline } from 'react-icons/fi';
 import { toolbarButtonStyles } from '../toolbarButtonStyles';
 import { tooltip } from '../tooltipOptions';

@@ -6,7 +6,6 @@ import {
   useEventEditorId,
   useStoreEditorRef,
 } from '@udecode/slate-plugins';
-import React from 'react';
 import { FiCode } from 'react-icons/fi';
 import { BlockTypeButton } from './BlockTypeButton';
 import { Divider } from './Divider';

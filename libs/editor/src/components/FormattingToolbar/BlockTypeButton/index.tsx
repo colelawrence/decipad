@@ -8,7 +8,7 @@ import {
   useEventEditorId,
   useStoreEditorRef,
 } from '@udecode/slate-plugins';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FiChevronDown } from 'react-icons/fi';
 
 const Wrapper = styled('div')({

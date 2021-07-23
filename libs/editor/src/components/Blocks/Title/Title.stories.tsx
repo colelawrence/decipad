@@ -1,4 +1,3 @@
-import React from 'react';
 import { Title } from './Title.component';
 
 export default {
@@ -16,6 +15,7 @@ export const Default = (args: { text: string }) => (
       ref: null,
       'data-slate-leaf': true,
     }}
+    nodeProps={{ styles: { root: { css: false } } }}
   >
     {args.text}
   </Title>

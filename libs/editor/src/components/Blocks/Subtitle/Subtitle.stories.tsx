@@ -1,4 +1,3 @@
-import React from 'react';
 import { Subtitle } from './Subtitle.component';
 
 export default {

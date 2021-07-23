@@ -1,8 +1,7 @@
-import styled from '@emotion/styled';
+import { css } from '@emotion/react';
 import { SlatePluginComponent } from '@udecode/slate-plugins-core';
-import React from 'react';
 
-const Element = styled('h1')({
+const h1Styles = css({
   fontSize: '2rem',
   margin: 0,
   paddingBottom: '2rem',
@@ -15,6 +14,15 @@ const Element = styled('h1')({
   },
 });
 
-export const Title: SlatePluginComponent = ({ attributes, children }) => {
-  return <Element {...attributes}>{children}</Element>;
+export const Title: SlatePluginComponent = ({
+  attributes,
+  children,
+  nodeProps,
+}) => {
+  const root = nodeProps!.styles.root;
+  return (
+    <h1 css={[h1Styles, root.css]} {...attributes} {...nodeProps}>
+      {children}
+    </h1>
+  );
 };

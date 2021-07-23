@@ -5,7 +5,6 @@ import {
   ELEMENT_H2,
   ELEMENT_PARAGRAPH,
 } from '@udecode/slate-plugins';
-import React from 'react';
 import { v4 } from 'uuid';
 import { NoDocSyncEditor } from './NoDocSyncEditor.component';
 

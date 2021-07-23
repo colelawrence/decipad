@@ -1,5 +1,4 @@
 import { LoremIpsum } from 'lorem-ipsum';
-import React from 'react';
 import { Blockquote } from './Blockquote.component';
 
 export default {

@@ -20,6 +20,7 @@ exports[`Title Block matches snapshot 1`] = `
     class="emotion-0"
     data-slate-leaf="true"
     data-slate-node="element"
+    styles="[object Object]"
   >
     Title
   </h1>

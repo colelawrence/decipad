@@ -10,7 +10,6 @@ import {
   useEventEditorId,
   useStoreEditorRef,
 } from '@udecode/slate-plugins';
-import React from 'react';
 import {
   FiAlignCenter,
   FiAlignLeft,

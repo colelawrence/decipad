@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import { SlatePluginComponent } from '@udecode/slate-plugins';
-import React from 'react';
 
 const Element = styled('div')({
   color: 'rgba(0,0,0,0.5)',

@@ -1,5 +1,5 @@
 import camelcase from 'camelcase';
-import React, { ReactNode, useCallback, useState } from 'react';
+import { ReactNode, useCallback, useState } from 'react';
 import { useToasts } from 'react-toast-notifications';
 import { Editor, Transforms } from 'slate';
 import slug from 'slug';

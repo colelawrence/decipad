@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import React from 'react';
 import { RenderLeafProps } from 'slate-react';
 
 const Span = styled('span')({
@@ -14,7 +13,6 @@ const Span = styled('span')({
 export const Bubble = ({ attributes, children }: RenderLeafProps) => {
   return (
     <Span {...attributes} onClick={() => console.log('clicked')}>
-      <span contentEditable={false}>$ </span>
       {children}
     </Span>
   );

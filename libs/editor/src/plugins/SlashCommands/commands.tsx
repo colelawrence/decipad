@@ -4,7 +4,6 @@ import {
   ELEMENT_H2,
   ELEMENT_H3,
 } from '@udecode/slate-plugins';
-import React from 'react';
 import { FiCode } from 'react-icons/fi';
 
 export interface Command {

@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import { SlatePluginComponent } from '@udecode/slate-plugins-core';
-import React from 'react';
 
 const Element = styled('h2')({
   fontSize: '24px',

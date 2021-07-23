@@ -1,4 +1,3 @@
-import React from 'react';
 import { Italic } from './Italic.component';
 
 export default {

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Subheading } from './Subheading.component';
 
 export default {

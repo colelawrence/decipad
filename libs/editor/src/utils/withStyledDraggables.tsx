@@ -12,7 +12,6 @@ import {
   ELEMENT_UL,
   withDraggables,
 } from '@udecode/slate-plugins';
-import React from 'react';
 import { GrDrag } from 'react-icons/gr';
 
 const GrabberTooltipContent = () => (

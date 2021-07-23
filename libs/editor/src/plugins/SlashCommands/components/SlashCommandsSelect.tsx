@@ -7,7 +7,7 @@ import {
   useEventEditorId,
   useStoreEditorRef,
 } from '@udecode/slate-plugins';
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Range } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { Command } from '../commands';

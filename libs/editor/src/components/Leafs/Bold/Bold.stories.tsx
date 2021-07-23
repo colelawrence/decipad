@@ -1,4 +1,3 @@
-import React from 'react';
 import { Bold } from './Bold.component';
 
 export default {

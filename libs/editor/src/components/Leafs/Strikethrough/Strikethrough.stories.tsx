@@ -1,4 +1,3 @@
-import React from 'react';
 import { Strikethrough } from './Strikethrough.component';
 
 export default {

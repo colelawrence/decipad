@@ -1,4 +1,3 @@
-import React from 'react';
 import { ModelBlock } from './ModelBlock.component';
 
 export default {

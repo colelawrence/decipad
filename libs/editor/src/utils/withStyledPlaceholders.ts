@@ -12,7 +12,7 @@ export const withStyledPlaceHolders = (
   withPlaceholders(components, [
     {
       key: ELEMENT_PARAGRAPH,
-      placeholder: 'Type a paragraph',
+      placeholder: 'Type / for commands',
       hideOnBlur: true,
     },
     {
