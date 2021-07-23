@@ -6,6 +6,7 @@ import adaptReqRes from './adapt-req-res';
 import createDbAdapter from './db-adapter';
 import jwt from './jwt';
 import createUser from '../users/create';
+import maybeEnrichUser from '../users/maybe-enrich';
 import { auth as authConfig } from '../config';
 
 const {
@@ -91,7 +92,15 @@ async function signInGithub(user: UserWithSecret, account: any, metadata: any) {
   if (userKey) {
     existingUser = await data.users.get({ id: userKey.user_id });
   }
-  if (!existingUser) {
+  if (existingUser) {
+    existingUser = await maybeEnrichUser(existingUser, {
+      name: githubUser.name,
+      image: githubUser.image,
+      email: githubUser.email,
+      provider: account.provider,
+      providerId: githubUser.id,
+    });
+  } else {
     // If the user does not exist, we just create a new one.
     // In the future, we might want to redirect the user
     // to a registration page by defining next-auth options.pages.newUser.
@@ -119,7 +128,12 @@ async function signInEmail(user: UserWithSecret, account: any, metadata: any) {
   if (userKey) {
     existingUser = await data.users.get({ id: userKey.user_id });
   }
-  if (!existingUser) {
+  if (existingUser) {
+    existingUser = await maybeEnrichUser(existingUser, {
+      email: metadata.email as string,
+      provider: account.provider,
+    });
+  } else {
     // If the user does not exist, we just create a new one.
     // In the future, we might want to redirect the user
     // to a registration page by defining next-auth options.pages.newUser.

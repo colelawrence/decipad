@@ -12,7 +12,9 @@ type UserInput = {
   providerId?: ID;
 };
 
-async function create(user: UserInput): Promise<UserWithSecret> {
+export default async function createUser(
+  user: UserInput
+): Promise<UserWithSecret> {
   const data = await tables();
 
   const newUser = {
@@ -63,8 +65,6 @@ async function create(user: UserInput): Promise<UserWithSecret> {
 
   return newUser;
 }
-
-export default create;
 
 function userFirstName(user: User): string {
   return user.name.split(' ')[0];

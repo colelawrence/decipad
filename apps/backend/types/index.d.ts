@@ -18,6 +18,8 @@ type UserInput = {
   name: string;
   email: string;
   image?: string;
+  provider?: string;
+  providerId?: string;
 };
 
 type UserWithSecret = User & {
