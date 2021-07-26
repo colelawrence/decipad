@@ -28,7 +28,7 @@ export const CodeBlock = ({
   const blockId = (element as any).id ?? '';
 
   return (
-    <Box>
+    <Box spellCheck={false}>
       <InnerCodeBlock
         attributes={attributes}
         element={{ ...element, type: 'code_block' }}

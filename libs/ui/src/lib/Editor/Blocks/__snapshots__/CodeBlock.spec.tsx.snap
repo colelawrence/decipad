@@ -20,6 +20,7 @@ exports[`CodeBlock Block matches snapshot 1`] = `
 <div>
   <div
     class="emotion-0"
+    spellcheck="false"
   >
     <pre
       class="CodeBlockElement___StyledPre-sc-o8gydl-0 fXXVRp slate-CodeBlockElement"
@@ -44,6 +45,7 @@ exports[`CodeBlock Block matches snapshot with no results 1`] = `
 <div>
   <div
     class="emotion-0"
+    spellcheck="false"
   >
     <pre
       class="CodeBlockElement___StyledPre-sc-o8gydl-0 fXXVRp slate-CodeBlockElement"
