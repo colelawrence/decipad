@@ -14,6 +14,14 @@ type User = {
   createdAt?: number | Date;
 };
 
+interface GithubUser {
+  provider: 'github';
+  id: string;
+  name: string;
+  email?: string;
+  image?: string;
+}
+
 type UserInput = {
   name: string;
   email: string;

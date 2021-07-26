@@ -16,7 +16,6 @@ import { DashboardTopbar } from '@decipad/ui';
 import { signOut, useSession } from 'next-auth/client';
 import { useToasts } from 'react-toast-notifications';
 import { encode as encodeVanityUrlComponent } from '../../lib/vanityUrlComponent';
-import { getSafeUsername } from '@decipad/interfaces';
 
 export const Topbar = ({ workspaceId }: { workspaceId: string }) => {
   const history = useHistory();
@@ -72,7 +71,7 @@ export const Topbar = ({ workspaceId }: { workspaceId: string }) => {
 
   return (
     <DashboardTopbar
-      userName={getSafeUsername(session.user)}
+      userName={session.user.name}
       email={session.user.email ?? ''}
       onLogout={signOut}
       onCreateNotebook={onNewPad}

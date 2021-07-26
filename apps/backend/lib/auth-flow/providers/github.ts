@@ -1,5 +1,3 @@
-import { GithubUser } from '@decipad/interfaces';
-
 export default function GitHub(
   options: Record<string, any>
 ): Record<string, any> {

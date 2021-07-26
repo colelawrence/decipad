@@ -126,17 +126,20 @@ async function signInEmail(user: UserWithSecret, account: any, metadata: any) {
     existingUser = await data.users.get({ id: userKey.user_id });
   }
   if (existingUser) {
-    existingUser = await maybeEnrichUser(existingUser, {
+    const userInput: Partial<UserInput> = {
       email: metadata.email as string,
-      provider: account.provider,
-    });
+    };
+    if (!existingUser.name) {
+      userInput.name = userInput.email;
+    }
+    existingUser = await maybeEnrichUser(existingUser, userInput);
   } else {
     // If the user does not exist, we just create a new one.
     // In the future, we might want to redirect the user
     // to a registration page by defining next-auth options.pages.newUser.
 
     existingUser = await createUser({
-      name: '',
+      name: metadata.email,
       email: metadata.email as string,
       provider: account.provider,
     });
