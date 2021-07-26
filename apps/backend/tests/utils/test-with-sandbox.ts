@@ -7,7 +7,6 @@ function testWithSandbox(description: string, fn: () => void) {
   return describe(description, () => {
     beforeAll(async () => {
       await sandbox.start();
-      await timeout(4000);
     }, 20000);
 
     afterAll(async () => {

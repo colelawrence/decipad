@@ -9,6 +9,8 @@ import createWebsocketLink from './utils/graphql-websocket-link';
 import createDeciWebsocket from './utils/websocket';
 import { ObservableSubscription } from '@apollo/client';
 
+waitForExpect.defaults.interval = 250;
+
 test('pad changes', () => {
   let workspace: Workspace;
   const subscriptions: ObservableSubscription[] = [];
@@ -42,7 +44,7 @@ test('pad changes', () => {
 
   it('can subscribe to pad changes', async () => {
     await subscribe('test user id 1', workspace.id, pads, subscriptions);
-  }, 15000);
+  });
 
   it('notifies you when you add a pad', async () => {
     const client = withAuth(await auth());
@@ -65,8 +67,8 @@ test('pad changes', () => {
       expect(pads[0]).toMatchObject({
         name: 'Pad 1',
       });
-    }, 30000, 2000);
-  }, 40000);
+    });
+  });
 
   it('notifies you when you remove a pad', async () => {
     const client = withAuth(await auth());
@@ -80,8 +82,8 @@ test('pad changes', () => {
 
     await waitForExpect(() => {
       expect(pads).toHaveLength(0);
-    }, 30000, 2000);
-  }, 40000);
+    });
+  });
 
   it('notifies you when you add a pad again', async () => {
     const client = withAuth(await auth());
@@ -104,8 +106,8 @@ test('pad changes', () => {
       expect(pads[0]).toMatchObject({
         name: 'Pad 2',
       });
-    }, 30000, 2000);
-  }, 40000);
+    });
+  });
 
   it('notifies you when you update a pad', async () => {
     const client = withAuth(await auth());
@@ -125,12 +127,12 @@ test('pad changes', () => {
       expect(pads[0]).toMatchObject({
         name: 'Pad 2 renamed',
       });
-    }, 30000, 2000);
-  }, 40000);
+    });
+  });
 
   it('other user can subscribe to pads changes', async () => {
     await subscribe('test user id 2', workspace.id, inviteepads, subscriptions);
-  }, 15000);
+  });
 
   it('allows admin to share with other user', async () => {
     const client = withAuth(await auth());
@@ -152,8 +154,8 @@ test('pad changes', () => {
       expect(inviteepads[0]).toMatchObject({
         name: 'Pad 2 renamed',
       });
-    }, 30000, 2000);
-  }, 40000);
+    });
+  });
 
   it('notifies other user when you update a pad', async () => {
     const client = withAuth(await auth());
@@ -173,8 +175,8 @@ test('pad changes', () => {
       expect(inviteepads[0]).toMatchObject({
         name: 'Pad 2 renamed again',
       });
-    }, 30000, 2000);
-  }, 40000);
+    });
+  });
 
   it('notifies other user when access is revoked', async () => {
     const client = withAuth(await auth());
@@ -188,11 +190,11 @@ test('pad changes', () => {
 
     await waitForExpect(() => {
       expect(inviteepads).toHaveLength(0);
-    }, 30000, 2000);
+    });
 
     // admin user still has workspace
     expect(pads).toHaveLength(1);
-  }, 40000);
+  });
 
   async function createClient(userId: string) {
     const { token } = await auth(userId);
@@ -260,6 +262,10 @@ test('pad changes', () => {
       })
     );
 
-    await timeout(4000);
+    // We have to wait because a subscription does not
+    // wait for the server to reply.
+    // Which means that we do a setTimeout and hope
+    // that the subscription was created before it expires.
+    await timeout(6000);
   }
 });

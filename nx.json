@@ -69,6 +69,9 @@
     },
     "interfaces": {
       "tags": []
+    },
+    "nodelambda": {
+      "tags": []
     }
   }
 }

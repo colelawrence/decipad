@@ -40,15 +40,8 @@ function _start(): Promise<void> {
       }
 
       child = spawn(
-        './node_modules/.bin/arc',
-        [
-          'sandbox',
-          '--disable-symlinks',
-          '--no-hydrate',
-          '--confirm',
-          '--port',
-          process.env.PORT!,
-        ],
+        './node_modules/.bin/sandbox',
+        ['--disable-symlinks', '--confirm', '--port', process.env.PORT!],
         { stdio: 'pipe', env: process.env }
       );
 
@@ -61,6 +54,7 @@ function _start(): Promise<void> {
           console.error(
             `Sandbox ${workerId} terminated with error code ` + code
           );
+          console.error(output);
           reject(
             new Error(`Sandbox ${workerId} terminated with error code ` + code)
           );
@@ -76,8 +70,8 @@ function _start(): Promise<void> {
       let output = '';
 
       child.stdout!.on('data', (d) => {
+        output += d;
         if (!started) {
-          output += d;
           if (output.indexOf('Sandbox startup scripts ran') >= 0) {
             started = true;
             resolve();

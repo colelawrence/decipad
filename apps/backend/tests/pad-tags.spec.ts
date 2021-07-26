@@ -10,10 +10,9 @@ import { timeout } from './utils/timeout';
 import createWebsocketLink from './utils/graphql-websocket-link';
 import createDeciWebsocket from './utils/websocket';
 
-waitForExpect.defaults.timeout = 14000;
-waitForExpect.defaults.interval = 500;
+waitForExpect.defaults.interval = 250;
 
-test('pads', () => {
+test('pad tags', () => {
   let workspace: Workspace;
   let role: Role;
   let invitations: RoleInvitation[];
@@ -152,11 +151,11 @@ test('pads', () => {
 
   it('admin subscribes to tag changes', async () => {
     await subscribe('test user id 1', workspace.id, adminTags, subscriptions);
-  }, 10000);
+  });
 
   it('guest subscribes to tag changes', async () => {
     await subscribe('test user id 2', workspace.id, guestTags, subscriptions);
-  }, 10000);
+  });
 
   it('other user has no tags yet', async () => {
     const client = withAuth(await auth('test user id 2'));
@@ -172,13 +171,13 @@ test('pads', () => {
       ).data.tags;
       expect(tags).toHaveLength(0);
     });
-  }, 15000);
+  });
 
   it('other user has no tags yet from subscription', async () => {
     await waitForExpect(async () => {
       expect(guestTags).toHaveLength(0);
     });
-  }, 15000);
+  });
 
   it('the creator can add a tag to a pad', async () => {
     const client = withAuth(await auth());
@@ -206,14 +205,14 @@ test('pads', () => {
       ).data.tags;
       expect(tags).toMatchObject(['tag one']);
     });
-  }, 15000);
+  });
 
   it('admin has a tag from subscription', async () => {
     await waitForExpect(async () => {
       expect(adminTags).toHaveLength(1);
       expect(adminTags[0]).toBe('tag one');
     });
-  }, 15000);
+  });
 
   it('other user has a tag', async () => {
     const client = withAuth(await auth('test user id 2'));
@@ -234,7 +233,7 @@ test('pads', () => {
       expect(guestTags).toHaveLength(1);
       expect(guestTags[0]).toBe('tag one');
     });
-  }, 15000);
+  });
 
   it('other user can list tag pads', async () => {
     const client = withAuth(await auth('test user id 2'));
@@ -283,14 +282,14 @@ test('pads', () => {
       ).data.tags;
       expect(tags).toMatchObject(['tag one', 'tag two']);
     });
-  }, 15000);
+  });
 
   it('other user has a tag from subscription', async () => {
     await waitForExpect(async () => {
       expect(guestTags).toHaveLength(2);
       expect(guestTags).toMatchObject(['tag one', 'tag two']);
-    }, 30000, 2000);
-  }, 40000);
+    });
+  });
 
   it('admin removes tag from the pad', async () => {
     const client = withAuth(await auth());
@@ -318,14 +317,14 @@ test('pads', () => {
       ).data.tags;
       expect(tags).toMatchObject(['tag two']);
     });
-  }, 15000);
+  });
 
   it('other user no longer has the removed tag from subscription', async () => {
     await waitForExpect(async () => {
       expect(guestTags).toHaveLength(1);
       expect(guestTags).toMatchObject(['tag two']);
-    }, 30000, 2000);
-  }, 40000);
+    });
+  });
 
   it('other user can no longer list the pad under that tag', async () => {
     const client = withAuth(await auth('test user id 2'));
@@ -377,13 +376,13 @@ test('pads', () => {
       ).data.tags;
       expect(tags).toHaveLength(0);
     });
-  }, 15000);
+  });
 
   it('other user no longer has the tag from subscription', async () => {
     await waitForExpect(async () => {
       expect(guestTags).toHaveLength(0);
-    }, 30000, 2000);
-  }, 40000);
+    });
+  });
 
   it('admin has the tag', async () => {
     const client = withAuth(await auth());
@@ -403,8 +402,8 @@ test('pads', () => {
     await waitForExpect(async () => {
       expect(adminTags).toHaveLength(1);
       expect(adminTags).toMatchObject(['tag two']);
-    }, 30000, 2000);
-  }, 40000);
+    });
+  });
 
   it('admin gives user access to pad', async () => {
     const client = withAuth(await auth());
@@ -437,14 +436,14 @@ test('pads', () => {
       ).data.tags;
       expect(tags).toMatchObject(['tag two']);
     });
-  }, 15000);
+  });
 
   it('other user has tag from subscription', async () => {
     await waitForExpect(async () => {
       expect(guestTags).toHaveLength(1);
       expect(guestTags).toMatchObject(['tag two']);
-    }, 40000, 2000);
-  }, 41000);
+    });
+  });
 
   it('other user can list pad through tag', async () => {
     const client = withAuth(await auth('test user id 2'));
@@ -491,14 +490,14 @@ test('pads', () => {
         })
       ).data.tags;
       expect(tags).toHaveLength(0);
-    }, 14000, 5000);
-  }, 15000);
+    });
+  });
 
   it('admin user no longer has tag from subscription', async () => {
     await waitForExpect(async () => {
       expect(adminTags).toHaveLength(0);
-    }, 30000, 2000);
-  }, 40000);
+    });
+  });
 
   it('admin can no longer list pad', async () => {
     const client = withAuth(await auth());
@@ -571,5 +570,9 @@ async function subscribe(
     })
   );
 
-  await timeout(2000);
+  // We have to wait because a subscription does not
+  // wait for the server to reply.
+  // Which means that we do a setTimeout and hope
+  // that the subscription was created before it expires.
+  await timeout(6000);
 }

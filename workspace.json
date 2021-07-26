@@ -444,6 +444,19 @@
           }
         }
       }
+    },
+    "nodelambda": {
+      "root": "libs/nodelambda",
+      "sourceRoot": "libs/nodelambda/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/nodelambda/**/*.js"]
+          }
+        }
+      }
     }
   }
 }

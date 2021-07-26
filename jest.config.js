@@ -13,5 +13,6 @@ module.exports = {
     '<rootDir>/libs/testutils',
     '<rootDir>/libs/lrustorage',
     '<rootDir>/libs/interfaces',
+    '<rootDir>/libs/nodelambda',
   ],
 };

@@ -10,6 +10,8 @@ import auth from './utils/auth';
 import createWebsocketLink from './utils/graphql-websocket-link';
 import createDeciWebsocket from './utils/websocket';
 
+waitForExpect.defaults.interval = 250;
+
 test('workspaces changes', () => {
   const subscriptions: ObservableSubscription[] = [];
   const workspaces: Workspace[] = [];
@@ -25,7 +27,7 @@ test('workspaces changes', () => {
 
   it('can subscribe to workspace changes', async () => {
     await subscribe('test user id 1', workspaces, subscriptions);
-  }, 15000);
+  });
 
   it('notifies you when you add a workspace', async () => {
     const client = withAuth(await auth());
@@ -45,8 +47,8 @@ test('workspaces changes', () => {
       expect(workspaces[0]).toMatchObject({
         name: 'Workspace 1',
       });
-    }, 30000, 2000);
-  }, 40000);
+    });
+  });
 
   it('notifies you when you remove a workspace', async () => {
     const client = withAuth(await auth());
@@ -60,8 +62,8 @@ test('workspaces changes', () => {
 
     await waitForExpect(() => {
       expect(workspaces).toHaveLength(0);
-    }, 30000, 2000);
-  }, 30000);
+    });
+  });
 
   it('notifies you when you add a workspace again', async () => {
     const client = withAuth(await auth());
@@ -81,8 +83,8 @@ test('workspaces changes', () => {
       expect(workspaces[0]).toMatchObject({
         name: 'Workspace 2',
       });
-    }, 40000, 2000);
-  }, 50000);
+    });
+  });
 
   it('notifies you when you update a workspace', async () => {
     const client = withAuth(await auth());
@@ -102,8 +104,8 @@ test('workspaces changes', () => {
       expect(workspaces[0]).toMatchObject({
         name: 'Workspace 2 renamed',
       });
-    }, 40000, 2000);
-  }, 50000);
+    });
+  });
 
   it('allows admin to create role in workspace', async () => {
     const client = withAuth(await auth());
@@ -151,12 +153,16 @@ test('workspaces changes', () => {
     const call = callSimpleWithAuth((await auth('test user id 2')).token);
     await call(inviteAcceptLink);
 
-    await waitForExpect(() => {
-      expect(inviteeWorkspaces).toHaveLength(1);
-      expect(inviteeWorkspaces[0]).toMatchObject({
-        name: 'Workspace 2 renamed',
-      });
-    }, 40000, 2000);
+    await waitForExpect(
+      () => {
+        expect(inviteeWorkspaces).toHaveLength(1);
+        expect(inviteeWorkspaces[0]).toMatchObject({
+          name: 'Workspace 2 renamed',
+        });
+      },
+      40000,
+      2000
+    );
   }, 50000);
 
   it('notifies other user when you update a workspace', async () => {
@@ -177,8 +183,8 @@ test('workspaces changes', () => {
       expect(inviteeWorkspaces[0]).toMatchObject({
         name: 'Workspace 2 renamed again',
       });
-    }, 40000, 2000);
-  }, 50000);
+    });
+  });
 
   it('notifies other user when access is revoked', async () => {
     const client = withAuth(await auth());
@@ -192,11 +198,11 @@ test('workspaces changes', () => {
 
     await waitForExpect(() => {
       expect(inviteeWorkspaces).toHaveLength(0);
-    }, 40000, 2000);
+    });
 
     // admin user still has workspace
     expect(workspaces).toHaveLength(1);
-  }, 50000);
+  });
 });
 
 async function createClient(userId: string) {
@@ -247,9 +253,7 @@ async function subscribe(
 
       if (changes.updated) {
         for (const w of changes.updated) {
-          const index = workspaces.findIndex(
-            (w2: Workspace) => w2.id === w.id
-          );
+          const index = workspaces.findIndex((w2: Workspace) => w2.id === w.id);
           if (index >= 0) {
             workspaces[index] = Object.assign(workspaces[index], w);
           }
@@ -269,5 +273,9 @@ async function subscribe(
 
   subscriptions.push(subscription);
 
-  await timeout(2000);
+  // We have to wait because a subscription does not
+  // wait for the server to reply.
+  // Which means that we do a setTimeout and hope
+  // that the subscription was created before it expires.
+  await timeout(6000);
 }

@@ -3,16 +3,29 @@
   "version": "0.0.0",
   "license": "UNLICENSED",
   "scripts": {
-    "nx": "nx",
     "start": "nx serve",
+    "serve:all": "nx run-many --target=serve --projects=client,backend --parallel",
+    "serve:storybook": "nx run ui:storybook",
     "build": "nx build",
-    "test": "nx run-many --target=test --all",
-    "test:coverage": "nx run-many --target=test --all --code-coverage",
+    "build:grammar": "nearleyc libs/language/src/grammar/deci-language-grammar.ne -o libs/language/src/grammar/deci-language-grammar-generated.js && prettier --write libs/language/src/grammar/deci-language-grammar-generated.js ",
+    "build:frontend": "nx export client",
+    "build:storybook": "nx run ui:build-storybook",
+    "build:backend:dev": "esbuild apps/backend/lib/architect/http/*/index.ts apps/backend/lib/architect/queues/*/index.ts apps/backend/lib/architect/ws/*/index.ts --bundle --outdir=apps/backend/src --target=node14 --platform=node --format=cjs --external:aws-sdk --legal-comments=none --sourcemap --keep-names",
+    "build:backend": "npm run build:backend:dev -- --minify",
+    "build:backend:watch": "npm run build:backend -- --watch",
+    "build:graphql:schema": "npx apollo service:download --endpoint=http://localhost:4200/graphql graphql-schema.json",
+    "build:graphql:queries": "cd libs/queries && npx apollo codegen:generate --localSchemaFile=../../graphql-schema.json --target=typescript --tagName=gql",
     "lint": "nx workspace-lint && nx run-many --target=lint --all",
     "typecheck": "tsc -b libs/* apps/*",
     "typecheck:watch": "npm run typecheck -- -w",
+    "test": "nx run-many --target=test --all",
+    "test:coverage": "nx run-many --target=test --all --code-coverage",
     "e2e": "nx run client-e2e:e2e",
+    "deploy": "./scripts/deploy.sh",
+    "deploy:private": "./scripts/deploy-private.sh",
+    "deploy:private:client": "./scripts/deploy-private-client.sh",
     "repl": "babel-node --extensions=.js,.jsx,.ts,.tsx libs/language/src/repl.ts",
+    "nx": "nx",
     "affected:apps": "nx affected:apps",
     "affected:libs": "nx affected:libs",
     "affected:build": "nx affected:build",
@@ -28,21 +41,8 @@
     "workspace-generator": "nx workspace-generator",
     "dep-graph": "nx dep-graph",
     "help": "nx help",
-    "build:grammar": "nearleyc libs/language/src/grammar/deci-language-grammar.ne -o libs/language/src/grammar/deci-language-grammar-generated.js && prettier --write libs/language/src/grammar/deci-language-grammar-generated.js ",
-    "postinstall": "cd apps/backend && npm install",
-    "prepare": "husky install",
-    "build:frontend": "nx export client",
-    "build:storybook": "nx run ui:build-storybook",
-    "build:backend:dev": "esbuild apps/backend/lib/architect/http/*/index.ts apps/backend/lib/architect/queues/*/index.ts apps/backend/lib/architect/ws/*/index.ts --bundle --outdir=apps/backend/src --target=node14 --platform=node --format=cjs --external:aws-sdk --legal-comments=none --sourcemap --keep-names",
-    "build:backend": "npm run build:backend:dev -- --minify",
-    "build:backend:watch": "npm run build:backend -- --watch",
-    "build:graphql:schema": "npx apollo service:download --endpoint=http://localhost:4200/graphql graphql-schema.json",
-    "build:graphql:queries": "cd libs/queries && npx apollo codegen:generate --localSchemaFile=../../graphql-schema.json --target=typescript --tagName=gql",
-    "serve:all": "nx run-many --target=serve --projects=client,backend --parallel",
-    "serve:storybook": "nx run ui:storybook",
-    "deploy": "./scripts/deploy.sh",
-    "deploy:private": "./scripts/deploy-private.sh",
-    "deploy:private:client": "./scripts/deploy-private-client.sh"
+    "postinstall": "cd apps/backend && npm install && rm -f node_modules/@architect/sandbox/src/invoke-lambda/nodelambda && cp -fR ../../patches/backend/* node_modules",
+    "prepare": "husky install"
   },
   "private": true,
   "devDependencies": {
@@ -124,6 +124,7 @@
     "lorem-ipsum": "^2.0.3",
     "mkdirp": "^1.0.4",
     "mock-socket": "^9.0.3",
+    "node-watch": "^0.7.1",
     "playwright": "^1.12.3",
     "postcss": "^8.3.5",
     "prettier": "2.3.0",
@@ -135,7 +136,8 @@
     "tiny-json-http": "^7.3.0",
     "typescript": "~4.3.2",
     "url-loader": "^3.0.0",
-    "wait-for-expect": "^3.0.2"
+    "wait-for-expect": "^3.0.2",
+    "ws": "^7.5.3"
   },
   "husky": {
     "hooks": {
@@ -148,7 +150,7 @@
     ],
     "*.{js,jsx,ts,tsx}": [
       "eslint --cache --fix",
-      "jest --passWithNoTests --testTimeout=10000"
+      "jest --passWithNoTests"
     ]
   },
   "dependencies": {
