@@ -1,9 +1,7 @@
 import { useMutation } from '@apollo/client';
 import {
   Button,
-  Icon,
   Input,
-  MenuItem,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -11,7 +9,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  useDisclosure,
 } from '@chakra-ui/react';
 import {
   CreateWorkspace,
@@ -19,12 +16,13 @@ import {
   CREATE_WORKSPACE,
 } from '@decipad/queries';
 import React, { useRef } from 'react';
-import { FiPlus } from 'react-icons/fi';
-import { useHistory } from 'react-router-dom';
+import { Route, useHistory, useRouteMatch } from 'react-router-dom';
 
-export const NewWorkspaceOption = () => {
+export const CreateWorkspaceModal = () => {
+  const { path } = useRouteMatch();
+
   const history = useHistory();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const handleClose = () => history.push('..');
   const newWorkspaceRef = useRef<HTMLInputElement>(null);
 
   const [mutate] =
@@ -37,7 +35,6 @@ export const NewWorkspaceOption = () => {
       awaitRefetchQueries: true,
     }).then((res) => {
       history.push(`/workspaces/${res.data?.createWorkspace.id}`);
-      onClose();
     });
   };
 
@@ -47,16 +44,8 @@ export const NewWorkspaceOption = () => {
   };
 
   return (
-    <>
-      <MenuItem opacity={0.7} icon={<Icon as={FiPlus} />} onClick={onOpen}>
-        New Workspace
-      </MenuItem>
-
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        initialFocusRef={newWorkspaceRef}
-      >
+    <Route path={`${path}/create-workspace`}>
+      <Modal isOpen onClose={handleClose} initialFocusRef={newWorkspaceRef}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Create New Workspace</ModalHeader>
@@ -72,7 +61,7 @@ export const NewWorkspaceOption = () => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="red" mr={3} onClick={onClose}>
+            <Button colorScheme="red" mr={3} onClick={handleClose}>
               Close
             </Button>
             <Button variant="ghost" onClick={() => createNewWorkspace()}>
@@ -81,6 +70,6 @@ export const NewWorkspaceOption = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </>
+    </Route>
   );
 };

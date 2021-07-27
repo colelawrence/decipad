@@ -48,6 +48,13 @@ export function Workspace({ workspaceId }: { workspaceId: string }) {
   if (workspaceLoading) {
     return <LoadingSpinnerPage />;
   }
+  if (!data) {
+    throw new Error(`Failed to load workspace ${workspaceId}`);
+  }
+  const workspace = data.getWorkspaceById;
+  if (!workspace) {
+    return <>Workspace not found</>;
+  }
 
   return (
     <Grid gridTemplateRows="auto 1fr" minH="100vh">
@@ -58,10 +65,10 @@ export function Workspace({ workspaceId }: { workspaceId: string }) {
         borderTop="2px solid"
         borderColor="gray.100"
       >
-        <SideMenu currentWorkspace={data?.getWorkspaceById} />
+        <SideMenu currentWorkspace={workspace} />
         <Box>
           <Heading p={6}>Notebooks</Heading>
-          {data?.getWorkspaceById?.pads.items.length === 0 && (
+          {workspace.pads.items.length === 0 && (
             <Square h="100%" w="100%" pb="300px">
               <Box textAlign="center">
                 <Heading size="4xl">
@@ -77,7 +84,7 @@ export function Workspace({ workspaceId }: { workspaceId: string }) {
               </Box>
             </Square>
           )}
-          {data?.getWorkspaceById?.pads.items.map((item) => (
+          {workspace.pads.items.map((item) => (
             <Grid
               key={item.id}
               gridTemplateColumns="1fr auto"
@@ -88,7 +95,7 @@ export function Workspace({ workspaceId }: { workspaceId: string }) {
               <Box
                 as={Link}
                 to={`/workspaces/${
-                  data.getWorkspaceById?.id
+                  workspace.id
                 }/pads/${encodeVanityUrlComponent(item.name, item.id)}`}
               >
                 <HStack py={6}>

@@ -5,3 +5,6 @@ export * from './lib/shared';
 export * from './lib/theme';
 
 export * from './templates';
+
+// TODO temporary until whole template finished
+export { WorkspaceSwitcher } from './organisms';

@@ -4,11 +4,14 @@ import { ComponentProps, FC } from 'react';
 import { Divider, IconButton } from '../../atoms';
 import { Create } from '../../icons';
 import { NavigationList, WorkspaceItem } from '../../molecules';
-import { p13Regular } from '../../primitives';
+import { cssVar, p13Regular } from '../../primitives';
 import { noop } from '../../utils';
 
 const styles = css({
-  padding: '8px',
+  border: `1px solid ${cssVar('highlightColor')}`,
+  borderRadius: '8px',
+
+  padding: '12px',
 
   display: 'grid',
   rowGap: '8px',
@@ -49,12 +52,16 @@ export const WorkspaceSwitcher = ({
       <NavigationList>
         <WorkspaceItem {...activeWorkspace} />
       </NavigationList>
-      <Divider />
-      <NavigationList>
-        {otherWorkspaces.map(({ id, ...workspace }) => (
-          <WorkspaceItem key={id} {...workspace} />
-        ))}
-      </NavigationList>
+      {otherWorkspaces.length ? (
+        <>
+          <Divider />
+          <NavigationList>
+            {otherWorkspaces.map(({ id, ...workspace }) => (
+              <WorkspaceItem key={id} {...workspace} />
+            ))}
+          </NavigationList>
+        </>
+      ) : null}
     </nav>
   );
 };

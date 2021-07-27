@@ -74,3 +74,25 @@ it('links to the other workspaces', () => {
     '/other-workspace'
   );
 });
+
+it('shows a separator if there are other workspaces', () => {
+  const { getByRole, queryByRole, rerender } = render(
+    <WorkspaceSwitcher {...props} otherWorkspaces={[]} />
+  );
+  expect(queryByRole('separator')).not.toBeInTheDocument();
+
+  rerender(
+    <WorkspaceSwitcher
+      {...props}
+      otherWorkspaces={[
+        {
+          id: '0',
+          numberOfMembers: 2,
+          name: 'Some Workspace',
+          href: '/some-workspace',
+        },
+      ]}
+    />
+  );
+  expect(getByRole('separator')).toBeVisible();
+});
