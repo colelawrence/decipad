@@ -78,7 +78,7 @@ describe('slate to replica sync', () => {
   });
 
   test('text insertion works', async () => {
-    const [ops, text] = createRandomInsertSlateOperations();
+    const [ops, text] = createRandomInsertSlateOperations(1);
     firstText = text;
     Editor.withoutNormalizing(editor1, () => {
       for (const op of ops) {
@@ -93,6 +93,14 @@ describe('slate to replica sync', () => {
     expect(model1.getValue()).toMatchObject(editor1.children);
 
     expect(model1.getValue()).toMatchObject([
+      {
+        type: 'h1',
+        children: [
+          {
+            text: '',
+          },
+        ],
+      },
       {
         type: 'p',
         children: [
@@ -120,14 +128,14 @@ describe('slate to replica sync', () => {
     Editor.withoutNormalizing(editor1, () => {
       editor1.apply({
         type: 'split_node',
-        path: [0, 0],
+        path: [1, 0],
         position: firstText.length,
         properties: {},
       });
 
       editor1.apply({
         type: 'split_node',
-        path: [0],
+        path: [1],
         position: 1,
         properties: {
           type: 'p',
@@ -143,6 +151,14 @@ describe('slate to replica sync', () => {
     expect(model1.getValue()).toMatchObject(editor1.children);
 
     expect(model1.getValue()).toMatchObject([
+      {
+        type: 'h1',
+        children: [
+          {
+            text: '',
+          },
+        ],
+      },
       {
         type: 'p',
         children: [
@@ -175,7 +191,7 @@ describe('slate to replica sync', () => {
   });
 
   test('more text after works', async () => {
-    const [ops, text] = createRandomInsertSlateOperations(1);
+    const [ops, text] = createRandomInsertSlateOperations(2);
     secondText = text;
 
     Editor.withoutNormalizing(editor1, () => {
@@ -191,6 +207,14 @@ describe('slate to replica sync', () => {
     expect(model1.getValue()).toMatchObject(editor1.children);
 
     expect(model1.getValue()).toMatchObject([
+      {
+        type: 'h1',
+        children: [
+          {
+            text: '',
+          },
+        ],
+      },
       {
         type: 'p',
         children: [
@@ -312,7 +336,7 @@ describe('slate to replica sync', () => {
   test('sets node', async () => {
     editor1.apply({
       type: 'set_node',
-      path: [0, 0],
+      path: [1, 0],
       properties: { bold: undefined } as Partial<Node>,
       newProperties: { bold: true } as Partial<Node>,
     } as SlateOperation);
@@ -332,7 +356,7 @@ describe('slate to replica sync', () => {
     Editor.withoutNormalizing(editor1, () => {
       editor1.apply({
         type: 'set_node',
-        path: [0, 0],
+        path: [1, 0],
         properties: { bold: true } as Partial<Node>,
         newProperties: { bold: undefined } as Partial<Node>,
       } as SlateOperation);

@@ -14,6 +14,7 @@ import {
   SlashCommandsSelect,
   useSlashCommandsPlugin,
 } from './plugins/SlashCommands';
+import { useNotebookTitlePlugin } from './plugins/Title/useNotebookTitlePlugin';
 
 export { AnonymousDocSyncProvider, DocSyncProvider } from './contexts/DocSync';
 
@@ -40,9 +41,11 @@ const SlateEditor = ({ padId, autoFocus }: EditorProps) => {
   const { getSlashCommandsProps, plugin: slashCommandsPlugin } =
     useSlashCommandsPlugin();
 
+  const { plugin: notebookTitlePlugin } = useNotebookTitlePlugin({ padId });
+
   const editorPlugins = useMemo(
-    () => [...plugins, slashCommandsPlugin],
-    [slashCommandsPlugin]
+    () => [...plugins, slashCommandsPlugin, notebookTitlePlugin],
+    [slashCommandsPlugin, notebookTitlePlugin]
   );
 
   const { onChangeLanguage, results } = useEditor({

@@ -10,11 +10,13 @@ import {
   createKbdPlugin,
   createListPlugin,
   createNodeIdPlugin,
+  createNormalizeTypesPlugin,
   createReactPlugin,
   createResetNodePlugin,
   createSoftBreakPlugin,
   createTodoListPlugin,
   createTrailingBlockPlugin,
+  ELEMENT_H1,
   ELEMENT_PARAGRAPH,
   WithAutoformatOptions,
 } from '@udecode/slate-plugins';
@@ -48,4 +50,7 @@ export const plugins = [
   createNodeIdPlugin({ idCreator: nanoid }),
 
   createTrailingBlockPlugin({ type: ELEMENT_PARAGRAPH }),
+  createNormalizeTypesPlugin({
+    rules: [{ path: [0], strictType: ELEMENT_H1 }],
+  }),
 ];

@@ -1,7 +1,7 @@
 import { ApolloProvider } from '@apollo/client';
 import { ChakraProvider } from '@chakra-ui/react';
 import { DocSyncProvider } from '@decipad/editor';
-import { LoadingSpinnerPage, GlobalStyles, theme } from '@decipad/ui';
+import { GlobalStyles, LoadingSpinnerPage, theme } from '@decipad/ui';
 import {
   init,
   reactRouterV5Instrumentation,
@@ -62,7 +62,7 @@ function Index({ pageProps = {} }) {
         <title>Decipad</title>
       </Head>
       <GlobalErrorHandler>
-        <ToastProvider autoDismiss placement="bottom-left">
+        <ToastProvider autoDismiss placement="top-right">
           <AuthProvider session={session ?? undefined}>
             <ApolloProvider client={apolloClient}>
               <GlobalStyles>

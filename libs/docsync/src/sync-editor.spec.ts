@@ -1,6 +1,7 @@
-import { DocSync } from './';
-import { createEditor } from 'slate';
 import { timeout } from '@decipad/testutils';
+import { ELEMENT_H1, ELEMENT_PARAGRAPH } from '@udecode/slate-plugins';
+import { createEditor } from 'slate';
+import { DocSync } from './';
 
 const docId = 'docid';
 
@@ -56,10 +57,16 @@ describe('pad editor', () => {
 
     expect(editor.children).toMatchObject([
       {
-        type: 'p',
+        type: ELEMENT_H1,
+        id: '6d1c2bbb-e354-4e73-83d4-77494a43327e',
+        children: [{ text: 'A new string of text to be inserted.' }],
+      },
+      {
+        type: ELEMENT_PARAGRAPH,
+        id: '000000000000000000000',
         children: [
           {
-            text: 'A new string of text to be inserted.',
+            text: '',
           },
         ],
       },

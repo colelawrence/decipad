@@ -1,9 +1,4 @@
-import {
-  createNormalizeTypesPlugin,
-  ELEMENT_H1,
-  SlatePlugins,
-  SlatePluginsProps,
-} from '@udecode/slate-plugins';
+import { SlatePlugins, SlatePluginsProps } from '@udecode/slate-plugins';
 import { useMemo } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -20,13 +15,7 @@ export const Editor = (props: SlatePluginsProps) => {
     useSlashCommandsPlugin();
 
   const editorPlugins = useMemo(
-    () => [
-      ...plugins,
-      createNormalizeTypesPlugin({
-        rules: [{ path: [0], strictType: ELEMENT_H1 }],
-      }),
-      slashCommandsPlugin,
-    ],
+    () => [...plugins, slashCommandsPlugin],
     [slashCommandsPlugin]
   );
 
