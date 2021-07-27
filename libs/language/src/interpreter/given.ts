@@ -1,5 +1,3 @@
-import pSeries from 'p-series';
-
 import { AST } from '..';
 import { getDefined, getIdentifierString } from '../utils';
 
@@ -7,6 +5,7 @@ import { Column } from './Value';
 import { evaluate } from './evaluate';
 import { Realm } from './Realm';
 import { Value } from './Value';
+import { mapWithPrevious } from './previous';
 
 export const evaluateGiven = async (
   realm: Realm,
@@ -27,17 +26,17 @@ export const evaluateGiven = async (
       const colNames = predicate.valueNames;
       const length = getDefined(columns[0].values.length);
 
-      const mapped = await pSeries(
-        Array.from({ length }, (_, index) => () => {
+      const mapped = await mapWithPrevious(realm, async function* () {
+        for (let index = 0; index < length; index++) {
           const thisRow = Column.fromNamedValues(
             columns.map((p) => p.values[index]),
             colNames
           );
           realm.stack.set(predicateName, thisRow);
 
-          return evaluate(realm, body);
-        })
-      );
+          yield await evaluate(realm, body);
+        }
+      });
 
       if (mapped.some((m) => m instanceof Column && m.valueNames != null)) {
         // A row was returned in the body -- re-column-orient the table!
@@ -48,17 +47,17 @@ export const evaluateGiven = async (
         );
 
         return Column.fromNamedValues(newColumns, colNames);
+      } else {
+        return Column.fromValues(mapped);
       }
-
-      return Column.fromValues(mapped);
     } else {
-      const mapped = await pSeries(
-        predicate.values.map((value) => () => {
+      const mapped = await mapWithPrevious(realm, async function* () {
+        for (const value of predicate.values) {
           realm.stack.set(predicateName, value);
 
-          return evaluate(realm, body);
-        })
-      );
+          yield await evaluate(realm, body);
+        }
+      });
 
       return Column.fromValues(mapped);
     }

@@ -463,6 +463,38 @@ describe('Dimensions', () => {
         [3, 1],
       ]);
     });
+
+    it('supports the previous function', async () => {
+      expect(await runWithCol(c('+', l(2), c('previous', l(-1)))))
+        .toMatchInlineSnapshot(`
+          Array [
+            1,
+            3,
+            5,
+          ]
+        `);
+    });
+
+    it('supports the previous function in tables', async () => {
+      expect(await runWithTable(c('+', l(1), c('previous', l(-1)))))
+        .toMatchInlineSnapshot(`
+          Array [
+            0,
+            1,
+            2,
+          ]
+        `);
+
+      expect(
+        await runWithTable(c('+', prop('Table', 'Nums'), c('previous', l(-1))))
+      ).toMatchInlineSnapshot(`
+        Array [
+          0,
+          2,
+          5,
+        ]
+      `);
+    });
   });
 
   describe('(sum nums)', () => {

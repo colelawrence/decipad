@@ -1,6 +1,7 @@
 import { AST } from '..';
 import { walk, getIdentifierString, isExpression, pairwise } from '../utils';
 import { evaluate } from './evaluate';
+import { mapWithPrevious } from './previous';
 import { Realm } from './Realm';
 import { Column, Value } from './Value';
 
@@ -36,19 +37,14 @@ export const evaluateTableColumn = async (
   if (!usesRecursion(column)) {
     return await evaluate(realm, column);
   } else {
-    // Allow nested tables to have previous references
-    const savedPreviousValue = realm.previousValue;
-    realm.previousValue = null;
+    const rows = await mapWithPrevious(realm, async function* () {
+      for (let i = 0; i < rowCount; i++) {
+        const value = atIndex(await evaluate(realm, column), rowCount, i);
+        realm.previousValue = value;
+        yield value;
+      }
+    });
 
-    const rows: Value[] = [];
-
-    for (let i = 0; i < rowCount; i++) {
-      const value = atIndex(await evaluate(realm, column), rowCount, i);
-      realm.previousValue = value;
-      rows.push(value);
-    }
-
-    realm.previousValue = savedPreviousValue;
     return Column.fromValues(rows);
   }
 };
