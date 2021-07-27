@@ -5,7 +5,7 @@ import { Editor, Transforms } from 'slate';
 import slug from 'slug';
 
 interface DropFileProps {
-  editor: Editor;
+  editor?: Editor;
   children: ReactNode;
 }
 
@@ -18,7 +18,7 @@ export function DropFile({ editor, children }: DropFileProps) {
 
   const importFile = useCallback(
     (file: File) => {
-      if (!isFileAcceptable(file)) {
+      if (!isFileAcceptable(file) || editor == null) {
         return;
       }
       (async () => {
