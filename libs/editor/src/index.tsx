@@ -19,13 +19,12 @@ import { useNotebookTitlePlugin } from './plugins/Title/useNotebookTitlePlugin';
 export { AnonymousDocSyncProvider, DocSyncProvider } from './contexts/DocSync';
 
 const Wrapper = styled('div')({
-  padding: '25px 0 70px 0',
-  width: '100vw',
+  paddingTop: '36px',
   position: 'relative',
 });
 
 const InnerContent = styled('div')({
-  maxWidth: '75ch',
+  maxWidth: '80ch',
   margin: 'auto',
 });
 

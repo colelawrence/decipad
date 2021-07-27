@@ -81,8 +81,13 @@ export const SlashCommandsSelect = ({
       const el = ref.current;
       const domRange = ReactEditor.toDOMRange(editor, at);
       const rect = domRange.getBoundingClientRect();
+      const top = rect.top + window.pageYOffset + 24;
       if (el) {
-        el.style.top = `${rect.top + window.pageYOffset + 24}px`;
+        if (rect.y < window.innerHeight / 2) {
+          el.style.top = top + 'px';
+        } else {
+          el.style.top = `${top - 270}px`;
+        }
         el.style.left = `${rect.left + window.pageXOffset}px`;
       }
     }

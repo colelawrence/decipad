@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { Box, Button, Icon } from '@chakra-ui/react';
+import { Button, Icon } from '@chakra-ui/react';
 import { Editor } from '@decipad/editor';
 import {
   GetPadById,
@@ -59,11 +59,12 @@ export function Pad({
   }
 
   return (
-    <Box minH="100vh">
+    <>
       <Button
         as={Link}
         to={`/workspaces/${workspaceId}`}
         pos="absolute"
+        zIndex="999"
         top={12}
         left={12}
         aria-label="go back"
@@ -73,6 +74,6 @@ export function Pad({
       </Button>
       <Editor padId={padId} autoFocus={!!pad!.name} />
       <HelpButton />
-    </Box>
+    </>
   );
 }
