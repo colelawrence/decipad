@@ -1,0 +1,34 @@
+import { render } from '@testing-library/react';
+import { ComponentProps } from 'react';
+import { WorkspaceItem } from './WorkspaceItem';
+
+const props: ComponentProps<typeof WorkspaceItem> = {
+  name: 'Some Workspace',
+  href: '',
+  numberOfMembers: 2,
+};
+
+it('shows the workspace name', () => {
+  const { getByText } = render(
+    <WorkspaceItem {...props} name="Some Workspace" />
+  );
+  expect(getByText('Some Workspace'));
+});
+
+it('renders an avatar with the initial of the workspace', () => {
+  const { getByLabelText } = render(
+    <WorkspaceItem {...props} name="Some Workspace" />
+  );
+  expect(getByLabelText(/avatar/i)).toHaveTextContent(/^s$/i);
+});
+
+it.each([
+  [0, 'members'],
+  [1, 'member'],
+  [2, 'members'],
+])('shows that there is/are %i member(s)', (numberOfMembers, pluralization) => {
+  const { getByText } = render(
+    <WorkspaceItem {...props} numberOfMembers={numberOfMembers} />
+  );
+  expect(getByText(`${numberOfMembers} ${pluralization}`)).toBeVisible();
+});

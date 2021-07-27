@@ -11,6 +11,7 @@ interface Args {
 export default {
   title: 'Atoms / Navigation Item',
   component: NavigationItem,
+  decorators: [(story) => <div style={{ padding: '0 8px' }}>{story()}</div>],
   args: {
     children: 'Text',
   },

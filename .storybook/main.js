@@ -12,4 +12,6 @@ module.exports = {
   typescript: {
     reactDocgen: false,
   },
+  previewHead: (head) =>
+    head.replace('<base target="_parent"', '<base target="_self"'),
 };

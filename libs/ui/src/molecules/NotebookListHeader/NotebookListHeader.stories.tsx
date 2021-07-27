@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { NotebookListHeader } from './NotebookListHeader';
 
 export default {
-  title: 'Molecules / Notebook List Header',
+  title: 'Molecules / Notebook List / Header',
   component: NotebookListHeader,
   argTypes: {
     numberOfNotebooks: {

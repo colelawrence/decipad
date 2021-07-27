@@ -43,4 +43,3 @@ export const AccountAvatar = ({
     </button>
   );
 };
-// TODO test menuOpen/hoverselector

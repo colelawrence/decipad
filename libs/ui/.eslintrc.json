@@ -1,4 +1,10 @@
 {
   "extends": ["plugin:@nrwl/nx/react", "../../.eslintrc.json"],
-  "ignorePatterns": ["!**/*", ".storybook"]
+  "ignorePatterns": ["!**/*", ".storybook"],
+  "overrides": [
+    {
+      "files": ["**/*.stories.tsx"],
+      "rules": { "no-script-url": "off" }
+    }
+  ]
 }

@@ -1,13 +1,13 @@
 import { css } from '@emotion/react';
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 import { cssVar, p12Regular, setCssVar } from '../../primitives';
 
-import { TextChildren } from '../../utils';
-
+const containerStyles = css({
+  display: 'grid',
+  gridTemplateRows: 'minmax(32px, min-content)',
+});
 const styles = css(p12Regular, {
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
-
-  height: '32px',
 
   display: 'flex',
   alignItems: 'center',
@@ -19,9 +19,17 @@ const styles = css(p12Regular, {
     clipPath: 'inset(0 -8px 0 -8px round 8px)',
   },
 });
+const iconStyles = css({
+  height: 0,
+  minHeight: '50%',
+  aspectRatio: '1 / 1',
+
+  display: 'flex',
+  alignItems: 'center',
+});
 
 export type NavigationItemProps = {
-  readonly children: TextChildren;
+  readonly children: ReactNode;
   readonly icon?: React.ReactNode;
 } & (
   | {
@@ -40,13 +48,9 @@ export const NavigationItem = ({
   icon,
   onClick,
 }: NavigationItemProps): ReturnType<FC> => {
-  const styledIcon = icon && (
-    <span css={{ height: '50%', aspectRatio: '1 / 1', display: 'flex' }}>
-      {icon}
-    </span>
-  );
+  const styledIcon = icon && <span css={iconStyles}>{icon}</span>;
   return (
-    <li css={{ display: 'grid' }}>
+    <li css={containerStyles}>
       {onClick ? (
         <button css={styles} onClick={onClick}>
           {styledIcon}
