@@ -1,7 +1,7 @@
 import { PadTopbar, PadTopbarProps } from './PadTopbar.component';
 
 export default {
-  title: 'Templates / Pad / Topbar',
+  title: 'Legacy / Templates / Pad / Topbar',
   component: PadTopbar,
   argTypes: { backArrowOnClick: { action: 'back button clicked' } },
 };

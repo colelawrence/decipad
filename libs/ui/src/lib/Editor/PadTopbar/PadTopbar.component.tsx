@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { FiArrowLeft, FiShare2 } from 'react-icons/fi';
-import { Avatar } from '../../atoms';
+import { Avatar } from '../../../atoms';
 
 const wrapperStyles = css({
   height: '60px',
