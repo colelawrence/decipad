@@ -3,7 +3,6 @@ import { useMemo } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { FormattingToolbar } from './components/FormattingToolbar';
-import { SideFormattingMenu } from './components/SideFormattingMenu';
 import { components, options, plugins } from './configuration';
 import {
   SlashCommandsSelect,
@@ -30,7 +29,6 @@ export const Editor = (props: SlatePluginsProps) => {
     >
       <FormattingToolbar />
       <SlashCommandsSelect {...getSlashCommandsProps()} />
-      <SideFormattingMenu />
     </SlatePlugins>
   );
 };

@@ -7,7 +7,6 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { createEditor, Node } from 'slate';
 import { DropFile } from './components/DropFile';
 import { FormattingToolbar } from './components/FormattingToolbar';
-import { SideFormattingMenu } from './components/SideFormattingMenu';
 import { components, options, plugins } from './configuration';
 import { useEditor } from './hooks/useEditor';
 import {
@@ -72,7 +71,6 @@ const SlateEditor = ({ padId, autoFocus }: EditorProps) => {
               />
               <FormattingToolbar />
               <SlashCommandsSelect {...getSlashCommandsProps()} />
-              <SideFormattingMenu />
             </DropFile>
           ) : (
             <span>Loading...</span>
