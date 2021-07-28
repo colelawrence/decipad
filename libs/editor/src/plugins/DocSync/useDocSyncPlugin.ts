@@ -52,10 +52,9 @@ export const useDocSyncPlugin = ({
         });
       });
 
-      const value = syncEditor.getValue();
-      for (const childNode of value) {
-        editor.insertNode(childNode);
-      }
+      // TODO this just happens to cause a render, but how to we make
+      // sure one happens and the editor doesn't stay empty?
+      editor.children = syncEditor.getValue();
     }
 
     return () => sub?.unsubscribe();
