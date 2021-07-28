@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { cssVar, p12Regular, setCssVar } from '../../primitives';
+import { Anchor } from '../../utils';
 
 const containerStyles = css({
   display: 'grid',
@@ -57,10 +58,10 @@ export const NavigationItem = ({
           {children}
         </button>
       ) : (
-        <a css={styles} href={href}>
+        <Anchor css={styles} href={href}>
           {styledIcon}
           {children}
-        </a>
+        </Anchor>
       )}
     </li>
   );

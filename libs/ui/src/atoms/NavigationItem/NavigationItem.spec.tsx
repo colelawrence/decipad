@@ -20,8 +20,8 @@ it('can render a button and emit click events', () => {
   expect(handleClick).toHaveBeenCalled();
 });
 it('can render a link with an href', () => {
-  const { getByRole } = render(<NavigationItem href="#">Text</NavigationItem>);
-  expect(getByRole('link')).toHaveAttribute('href', '#');
+  const { getByRole } = render(<NavigationItem href="/">Text</NavigationItem>);
+  expect(getByRole('link')).toHaveAttribute('href', '/');
 });
 
 it('renders an optional icon', () => {
