@@ -17,22 +17,23 @@ function createWorkerFor(functionName, env, update) {
 
   const workerOptions = {
     env,
-    stdin: true,
+    workerData,
     stdout: true,
     stderr: true,
-    workerData,
   };
 
   const fn = {
     worker: new Worker(workerPath, workerOptions),
     ready: false,
     working: false,
+    terminating: false,
     work,
   };
 
   const w = watch(functionName, () => {
     update.status(`function ${functionName} changed`);
     w.close();
+    fn.terminating = true;
     fn.worker.terminate();
   });
 
@@ -43,6 +44,7 @@ function createWorkerFor(functionName, env, update) {
       maybeWork();
       return;
     }
+    assert(fn.ready, 'should be ready when getting a response message');
     assert(
       fn.working,
       'worker should be working when getting a response message'
@@ -51,24 +53,38 @@ function createWorkerFor(functionName, env, update) {
   });
 
   fn.worker.once('error', (err) => {
+    update.error(`worker ${functionName} error:\n${err.stack}`);
     while (replyQueue.length > 0) {
       replyWith(err);
     }
   });
 
   fn.worker.once('exit', () => {
-    update.status(`worker exited: ${functionName} `, functionName);
-    const err = new Error('Worker exited prematurely');
+    let err;
+    if (!fn.terminating) {
+      update.error(`worker exited prematurely: ${functionName} `, functionName);
+      err = new Error('Worker exited prematurely');
+    } else {
+      err = new Error('Worker exited without reply');
+      update.status(`worker exited: ${functionName} `, functionName);
+    }
     while (replyQueue.length > 0) {
       replyWith(err);
     }
     workers.delete(functionName);
   });
 
+  fn.worker.stderr.on('data', (d) => {
+    update.error(`${functionName}:\n${d}`);
+  });
+  fn.worker.stdout.on('data', (d) => {
+    update.status(`${functionName}:\n${d}`);
+  });
+
   return fn;
 
   function maybeWork() {
-    if (workQueue.length === 0 || fn.working) {
+    if (workQueue.length === 0 || !fn.ready || fn.working) {
       return;
     }
     fn.working = true;

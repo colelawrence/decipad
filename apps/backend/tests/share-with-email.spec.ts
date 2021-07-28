@@ -5,7 +5,7 @@ import test from './utils/test-with-sandbox';
 import { withAuth, gql } from './utils/call-graphql';
 import { withAuth as callWithAuth } from './utils/call-simple';
 import auth from './utils/auth';
-import createResourcePermission from '../lib/resource-permissions/create';
+import { create as createResourcePermission } from './utils/permissions';
 
 test('share with email', () => {
   let targetUserId: string;

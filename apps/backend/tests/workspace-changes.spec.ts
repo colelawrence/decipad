@@ -2,6 +2,7 @@
 
 import waitForExpect from 'wait-for-expect';
 import { ObservableSubscription } from '@apollo/client';
+import { Workspace, Role, RoleInvitation } from '@decipad/backendtypes';
 import test from './utils/test-with-sandbox';
 import { timeout } from './utils/timeout';
 import { withAuth, gql } from './utils/call-graphql';
@@ -277,5 +278,5 @@ async function subscribe(
   // wait for the server to reply.
   // Which means that we do a setTimeout and hope
   // that the subscription was created before it expires.
-  await timeout(6000);
+  await timeout(8000);
 }

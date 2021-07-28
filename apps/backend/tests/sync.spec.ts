@@ -4,8 +4,8 @@ import test from './utils/test-with-sandbox';
 import { withAuth } from './utils/call-simple';
 import auth from './utils/auth';
 import Automerge from 'automerge';
-import { encode } from '../lib/resource';
-import createResourcePermission from '../lib/resource-permissions/create';
+import { encode } from './utils/resource';
+import { create as createResourcePermission } from './utils/permissions';
 
 test('sync docs', () => {
   let call: ReturnType<typeof withAuth>;

@@ -1,5 +1,6 @@
 /* eslint-env jest */
 
+import { Workspace, Role, RoleInvitation } from '@decipad/backendtypes';
 import test from './utils/test-with-sandbox';
 import { withAuth, withoutAuth, gql } from './utils/call-graphql';
 import { withAuth as callWithAuth } from './utils/call-simple';

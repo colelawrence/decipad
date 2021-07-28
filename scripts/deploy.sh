@@ -15,6 +15,8 @@ echo "Building storybook..."
 npm run build:storybook
 cp -rT dist/storybook/ui/. apps/backend/public/.storybook
 
+echo "Building the backend..."
+npm run build:backend
 
 echo "Deploying..."
 cd apps/backend

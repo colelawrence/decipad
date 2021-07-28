@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["esnext", "dom"]
+  },
+  "include": ["src"],
+  "references": [
+    { "path": "../../libs/interfaces" },
+    { "path": "../../libs/emails" },
+    { "path": "../../libs/meta" },
+    { "path": "../../libs/backendtypes" },
+    { "path": "../../libs/services" },
+    { "path": "../../libs/graphqlserver" }
+  ]
+}

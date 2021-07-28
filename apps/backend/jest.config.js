@@ -5,6 +5,7 @@ const config = {
   displayName: 'backend',
   setupFiles: [...setupFiles, './jest.setup.js'],
   testTimeout: 10000,
+  maxWorkers: 2,
 };
 
 if (process.env.JEST_MAX_WORKERS) {

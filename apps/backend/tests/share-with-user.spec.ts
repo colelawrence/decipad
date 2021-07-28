@@ -1,10 +1,10 @@
 /* eslint-env jest */
 
+import waitForExpect from 'wait-for-expect';
+import { create as createResourcePermission } from './utils/permissions';
 import test from './utils/test-with-sandbox';
 import { withAuth, gql } from './utils/call-graphql';
 import auth from './utils/auth';
-import createResourcePermission from '../lib/resource-permissions/create';
-import waitForExpect from 'wait-for-expect';
 
 test('share with user', () => {
   beforeAll(async () => {

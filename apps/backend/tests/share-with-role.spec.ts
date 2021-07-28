@@ -1,10 +1,11 @@
 /* eslint-env jest */
 
+import waitForExpect from 'wait-for-expect';
+import { Workspace, Role } from '@decipad/backendtypes';
 import test from './utils/test-with-sandbox';
 import { withAuth, gql } from './utils/call-graphql';
 import auth from './utils/auth';
-import createResourcePermission from '../lib/resource-permissions/create';
-import waitForExpect from 'wait-for-expect';
+import { create as createResourcePermission } from './utils/permissions';
 
 waitForExpect.defaults.timeout = 10000;
 waitForExpect.defaults.interval = 500;

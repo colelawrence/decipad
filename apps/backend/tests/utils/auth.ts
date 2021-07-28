@@ -1,6 +1,7 @@
 import assert from 'assert';
 import NextAuthJWT from 'next-auth/jwt';
 import arc from '@architect/functions';
+import { User } from '@decipad/backendtypes';
 
 async function auth(userId = 'test user id 1') {
   const { encode: encodeJWT } = NextAuthJWT;
@@ -29,7 +30,7 @@ async function auth(userId = 'test user id 1') {
     user: user as User,
     secret: user.secret,
     gotFromSecProtocolHeader: false,
-    link: undefined
+    link: undefined,
   };
 }
 

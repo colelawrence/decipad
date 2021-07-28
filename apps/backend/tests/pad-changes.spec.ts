@@ -1,6 +1,6 @@
 /* eslint-env jest */
-
 import waitForExpect from 'wait-for-expect';
+import { Workspace, Pad } from '@decipad/backendtypes';
 import test from './utils/test-with-sandbox';
 import { timeout } from './utils/timeout';
 import { withAuth, gql } from './utils/call-graphql';
@@ -266,6 +266,6 @@ test('pad changes', () => {
     // wait for the server to reply.
     // Which means that we do a setTimeout and hope
     // that the subscription was created before it expires.
-    await timeout(6000);
+    await timeout(8000);
   }
 });

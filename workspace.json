@@ -27,7 +27,7 @@
         "serve": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
-            "commands": ["./node_modules/.bin/arc sandbox"],
+            "commands": ["./scripts/sandbox.sh"],
             "cwd": "apps/backend"
           }
         },
@@ -35,7 +35,6 @@
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "apps/backend/lib/**/*.ts",
               "apps/backend/tests/**/*.ts"
             ]
           }
@@ -454,6 +453,139 @@
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["libs/nodelambda/**/*.js"]
+          }
+        }
+      }
+    },
+    "lambdas": {
+      "root": "libs/lambdas",
+      "sourceRoot": "libs/lambdas/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/lambdas/src/**/*.ts"]
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/lambdas"
+          }
+        }
+      }
+    },
+    "emails": {
+      "root": "libs/emails",
+      "sourceRoot": "libs/emails/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/emails/src/**/*.ts"]
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/emails"
+          }
+        }
+      }
+    },
+    "meta": {
+      "root": "libs/meta",
+      "sourceRoot": "libs/meta/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/meta/src/**/*.ts"]
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/meta"
+          }
+        }
+      }
+    },
+    "backendtypes": {
+      "root": "libs/backendtypes",
+      "sourceRoot": "libs/backendtypes/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/backendtypes/src/**/*.ts"]
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/backendtypes"
+          }
+        }
+      }
+    },
+    "services": {
+      "root": "libs/services",
+      "sourceRoot": "libs/services/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/services/src/**/*.ts"]
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/services"
+          }
+        }
+      }
+    },
+    "config": {
+      "root": "libs/config",
+      "sourceRoot": "libs/config/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/config/src/**/*.ts"]
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/config"
+          }
+        }
+      }
+    },
+    "graphqlserver": {
+      "root": "libs/graphqlserver",
+      "sourceRoot": "libs/graphqlserver/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/graphqlserver/src/**/*.ts"]
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/graphqlserver"
           }
         }
       }

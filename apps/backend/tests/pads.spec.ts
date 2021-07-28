@@ -2,6 +2,7 @@
 
 import test from './utils/test-with-sandbox';
 import arc from '@architect/functions';
+import { Workspace, Pad, Role, RoleInvitation } from '@decipad/backendtypes';
 import { withAuth, withoutAuth, gql } from './utils/call-graphql';
 import { withAuth as callWithAuth } from './utils/call-simple';
 import auth from './utils/auth';

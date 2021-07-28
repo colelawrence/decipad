@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../lib/architect/http/get-_storybook/index.ts"],
-  "sourcesContent": ["import { HttpHandler } from '@architect/functions';\n\nexport const handler: HttpHandler = async () => {\n  return {\n    statusCode: 301,\n    headers: {\n      location: '/.storybook/index.html',\n    },\n  };\n};\n"],
-  "mappings": "oLAAA,2BAEO,GAAM,GAAuB,WAC3B,EACL,WAAY,IACZ,QAAS,CACP,SAAU,4BAJoB",
-  "names": []
-}

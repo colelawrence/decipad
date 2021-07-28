@@ -4,6 +4,7 @@ import FormData from 'form-data';
 import { createReadStream } from 'fs';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
+import { Workspace, Pad, Attachment } from '@decipad/backendtypes';
 import test from './utils/test-with-sandbox';
 import { withAuth, withoutAuth, gql } from './utils/call-graphql';
 import call from './utils/call-simple';

@@ -2,14 +2,15 @@
 
 import arc from '@architect/functions';
 import { parse as parseCookie } from 'simple-cookie';
+import { User } from '@decipad/backendtypes';
 import test from './utils/test-with-sandbox';
 import { withAuth, withoutAuth, gql } from './utils/call-graphql';
 import { timeout } from './utils/timeout';
 
 type UserKeyValidation = {
-  id: string
-  userkey_id: string
-  expires_at: number
+  id: string;
+  userkey_id: string;
+  expires_at: number;
 };
 
 test('registration via magic link', () => {

@@ -234,3 +234,8 @@ prefs.arc
 
 # Private deployment config
 .private-deploy.env
+
+# Backend lambda bundles
+apps/backend/src/http/*/index.js*
+apps/backend/src/ws/*/index.js*
+apps/backend/src/queues/*/index.js*
