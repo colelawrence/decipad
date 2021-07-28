@@ -7,4 +7,4 @@ export * from './lib/theme';
 export * from './templates';
 
 // TODO temporary until whole template finished
-export { WorkspaceMenu } from './organisms';
+export { WorkspaceSwitcher } from './organisms';

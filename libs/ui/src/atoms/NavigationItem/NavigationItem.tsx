@@ -12,34 +12,27 @@ const styles = css(p12Regular, {
 
   display: 'flex',
   alignItems: 'center',
-  columnGap: '8px',
 
+  clipPath: 'inset(0 -8px 0 -8px round 8px)',
   ':hover, :focus': {
     backgroundColor: cssVar('highlightColor'),
     boxShadow: `0px 0px 0px 8px ${cssVar('highlightColor')}`,
-    clipPath: 'inset(0 -8px 0 -8px round 8px)',
   },
 });
 const iconStyles = css({
   height: 0,
   minHeight: '50%',
-  aspectRatio: '1 / 1',
 
   display: 'flex',
-  alignItems: 'center',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  // essentially 50% padding-right
+  aspectRatio: '1.5 / 1',
+  alignItems: 'start',
 
-  '@supports not (aspect-ratio: 1 / 1)': {
-    position: 'relative',
-    paddingTop: '8px',
-    paddingBottom: '8px',
-    minWidth: '16px',
-    '> *': {
-      position: 'absolute',
-      top: 0,
-      right: 0,
-      bottom: 0,
-      width: '100%',
-    },
+  '@supports not (aspect-ratio: 1.5 / 1)': {
+    minWidth: '24px',
+    paddingRight: '8px',
   },
 });
 

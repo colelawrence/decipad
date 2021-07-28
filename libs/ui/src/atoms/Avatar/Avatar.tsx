@@ -9,8 +9,7 @@ import {
 } from '../../primitives';
 
 const containerStyles = css(p12Bold, {
-  width: '100%',
-  height: '100%',
+  aspectRatio: '1 / 1',
   minWidth: '24px',
   minHeight: '24px',
 
@@ -21,17 +20,14 @@ const containerStyles = css(p12Bold, {
   '@supports not (aspect-ratio: 1 / 1)': {
     position: 'relative',
     paddingBottom: '100%',
+    '> *': {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+    },
   },
 });
 
-const initialStyles = css(p12Bold, {
-  aspectRatio: '1 / 1',
-  '@supports not (aspect-ratio: 1 / 1)': {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-  },
-});
 const initialBackgroundStyles = (hoverSelector = 'svg:hover') =>
   css({
     transition: `fill ${shortAnimationDuration} ease-in-out`,
@@ -40,7 +36,7 @@ const initialBackgroundStyles = (hoverSelector = 'svg:hover') =>
       fill: transparency(purple100, 0.65).rgba,
     },
   });
-const initialTextStyles = css({
+const initialTextStyles = css(p12Bold, {
   dominantBaseline: 'central',
   textAnchor: 'middle',
 
@@ -62,7 +58,11 @@ export const Avatar = ({
   return (
     <div role="img" aria-label={`Avatar of user ${name}`} css={containerStyles}>
       <svg
-        css={[initialStyles, { borderRadius: roundedSquare ? '8px' : '50%' }]}
+        css={{
+          width: '100%',
+          height: '100%',
+          borderRadius: roundedSquare ? '8px' : '50%',
+        }}
       >
         <rect
           width="100%"
