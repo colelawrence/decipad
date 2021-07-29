@@ -10,7 +10,7 @@ __n -> wschar:+ {%
                   if (!d[0].includes('\n')) {
                     return reject
                   } else {
-                    return '\n'
+                    return d[0]
                   }
                 }
                 %}

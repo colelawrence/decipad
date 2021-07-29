@@ -43,7 +43,7 @@ tableColDef -> _ tableOneColDef (tableDefSeparator tableOneColDef):* _ {%
                                                         }
                                                         %}
 
-tableOneColDef -> referenceName                         {%
+tableOneColDef -> identifier                         {%
                                                         (d, l) => {
                                                           const ref = d[0]
                                                           return {
@@ -67,7 +67,7 @@ tableOneColDef -> referenceName                         {%
                                                         }
                                                         %}
 
-tableOneColDef -> referenceName _ "=" _ expression      {%
+tableOneColDef -> identifier _ "=" _ expression      {%
                                                         (d, l) => {
                                                           const ref = d[0]
                                                           return {

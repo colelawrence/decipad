@@ -126,7 +126,7 @@ export class Replica<T> {
       observeSubscriberCount(this.remoteChanges)
     );
     const subscriptionCountObservable = (this.subscriptionCountObservable =
-      combineLatest(...this.subscriptionCountObservables).pipe(
+      combineLatest(this.subscriptionCountObservables).pipe(
         map(([c1, c2]) => c1 + c2)
       ));
 

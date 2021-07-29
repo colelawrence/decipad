@@ -23,8 +23,8 @@ describe('use of funds document', () => {
         InitialInvestment = 300000
         IncomeTax = 20%
 
-        costtobusiness = Month Salary StartDate Bonus => (
-          if dategte Month StartDate
+        function CostToBusiness(Month Salary StartDate Bonus) => (
+          if dategte(Month, StartDate)
             then Salary + (Salary * 20%) + (if Bonus then Salary * 20% else 0)
             else 0
         )
@@ -34,10 +34,10 @@ describe('use of funds document', () => {
 
         SalaryStaff = {
           Months,
-          Exec = (costtobusiness Months StandardSalary date(2021-01) true),
-          Product = (costtobusiness Months StandardSalary date(2021-02) true),
-          Tech = (costtobusiness Months StandardSalary date(2021-03) false),
-          FrontEnd = (costtobusiness Months StandardSalary date(2021-03) true)
+          Exec = CostToBusiness(Months, StandardSalary, date(2021-01), true),
+          Product = CostToBusiness(Months, StandardSalary, date(2021-02), true),
+          Tech = CostToBusiness(Months, StandardSalary, date(2021-03), false),
+          FrontEnd = CostToBusiness(Months, StandardSalary, date(2021-03), true)
         }
       `)
     ).toMatchObject({
@@ -75,8 +75,8 @@ describe('use of funds document', () => {
             Bonus = [false, true, false]
           }
 
-          costtobusiness = Month Salary StartDate GetsBonus =>
-            if dategte Month StartDate
+          function CostToBusiness(Month, Salary, StartDate, GetsBonus) =>
+            if dategte(Month, StartDate)
               then Salary + (Salary * 20%) + (if GetsBonus then Salary * 30% else 0)
               else 0
 
@@ -86,24 +86,24 @@ describe('use of funds document', () => {
             Title = Salaries.Title,
             Salary = Salaries.Salary,
             Costs = given Salaries: given Months:
-              costtobusiness Months (Salaries.Salary / 12) Salaries.StartDate Salaries.Bonus
+              CostToBusiness(Months, Salaries.Salary / 12, Salaries.StartDate, Salaries.Bonus)
           }
 
-          TotalsPerMonth = total (transpose StaffCosts.Costs)
+          TotalsPerMonth = total(transpose(StaffCosts.Costs))
 
-          isworking = Month StartDate => (dategte Month StartDate)
+          function IsWorking(Month StartDate) => dategte(Month, StartDate)
 
-          countworking = Month StartDate =>
-            (total (given StartDate: if (isworking Month StartDate) then 1 else 0))
+          function CountWorking(Month StartDate) =>
+            total(given StartDate: if IsWorking(Month, StartDate) then 1 else 0)
 
-          HeadCountPerMonth = given Months: (countworking Months Salaries.StartDate)
+          HeadCountPerMonth = given Months: CountWorking(Months, Salaries.StartDate)
 
-          HeadCountStepGrowth = stepgrowth HeadCountPerMonth
+          HeadCountStepGrowth = stepgrowth(HeadCountPerMonth)
 
           Overheads = {
             OtherCosts = 50 * HeadCountPerMonth,
             NewHireCosts = 2000 * HeadCountStepGrowth,
-            FixedCosts = grow 2000 (5%) Months
+            FixedCosts = grow(2000, (5%), Months)
           }
 
           TotalOverheads = Overheads.OtherCosts + Overheads.NewHireCosts + Overheads.FixedCosts
@@ -159,11 +159,11 @@ describe('more models', () => {
 
           GrowthRate = 0.25
 
-          CashFlows = grow InitialCashFlow GrowthRate Years
+          CashFlows = grow(InitialCashFlow, GrowthRate, Years)
 
           YearlyCashFlows = CashFlows / (1 + DiscountRate)
 
-          DCF = total YearlyCashFlows
+          DCF = total(YearlyCashFlows)
         `,
         [
           'InitialCashFlow',
@@ -218,9 +218,9 @@ describe('more models', () => {
         `
           JoinDate = date(2020-01-10)
           LeaveDate = date(2022-02-13)
-          BeginUnemploymentBenefits = dateadd JoinDate [ 2 years ]
+          BeginUnemploymentBenefits = dateadd(JoinDate, [ 2 years ])
 
-          GetsUnemploymentBenefits = dategte LeaveDate BeginUnemploymentBenefits
+          GetsUnemploymentBenefits = dategte(LeaveDate, BeginUnemploymentBenefits)
         `
       )
     ).toMatchObject({
@@ -243,7 +243,7 @@ describe('more models', () => {
 
           InvestmentValue = {
             Years = [ date(2020) through date(2022) by year ],
-            Value = (previous InitialInvestment) * (1 + ExpectedYearlyGrowth) + YearlyReinforcement
+            Value = previous(InitialInvestment) * (1 + ExpectedYearlyGrowth) + YearlyReinforcement
           }
         `
       )
@@ -285,14 +285,14 @@ describe('Use cases', () => {
 ${'' /* By equalling Monthly Revenue growth function to Monthly Expenses */}
 ${'' /* we get the time m in months when we'll reach profitability */}
 
-        TimeToProfitability = (ln MonthlyExpenses / InitialMonthlyRevenue) / (ln 1 + MonthlyRevenueGrowthRate)
+        TimeToProfitability = ln(MonthlyExpenses / InitialMonthlyRevenue) / ln(1 + MonthlyRevenueGrowthRate)
 
 ${
   '' /* Integrate Monthly Revenue from month 0 to breakeven month (Time to Profitability) */
 }
 ${'' /* to get to get cumulative Monthly Revenue */}
 
-        CumulativeMonthlyRevenue = InitialMonthlyRevenue * (((1 + MonthlyRevenueGrowthRate) ** TimeToProfitability) / (ln MonthlyRevenueGrowthRate))
+        CumulativeMonthlyRevenue = InitialMonthlyRevenue * (((1 + MonthlyRevenueGrowthRate) ** TimeToProfitability) / ln(MonthlyRevenueGrowthRate))
 
 ${
   '' /* Calculate cumulative Monthly Expenses from month 0 to breakeven month */
@@ -306,7 +306,7 @@ ${'' /* Get capital needed */}
 
         IPOTargetMonthlyRevenue = 10000000 eur
 
-        TimeToIPO = (ln IPOTargetMonthlyRevenue / InitialMonthlyRevenue) / (ln 1 + MonthlyRevenueGrowthRate)
+        TimeToIPO = ln(IPOTargetMonthlyRevenue / InitialMonthlyRevenue) / ln(1 + MonthlyRevenueGrowthRate)
       `,
         [
           'MonthlyRevenueGrowthRate',
@@ -403,7 +403,7 @@ ${'' /* Get capital needed */}
         GrowthRate = 10%
         ProfitMargin = 45%
 
-        Users = grow InitialUsers GrowthRate Period
+        Users = grow(InitialUsers, GrowthRate, Period)
 
         Revenue = Users * RevenuePerUser
 

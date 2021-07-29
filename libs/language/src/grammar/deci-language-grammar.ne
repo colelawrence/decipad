@@ -12,12 +12,12 @@
 @include "./range.ne"
 @include "./sequence.ne"
 @include "./import-data.ne"
+@include "./functions.ne"
 @{%
 
 const knownUnits = require('./units').knownUnits
 
 const reservedWords = new Set([
-  '\n',
   'in',
   'where',
   'given',
@@ -29,12 +29,7 @@ const reservedWords = new Set([
   'else',
   'through',
   'date',
-  '+',
-  '-',
-  '*',
-  '/',
-  '^',
-  '**'
+  'function',
 ])
 
 const monthStrings = new Set([
@@ -88,18 +83,20 @@ function isReservedWord(str) {
   return reservedWords.has(str)
 }
 
-function containsReservedWord(words) {
-  return words.some(w => isReservedWord(w))
-}
-
 function lengthOf(d) {
-  if (!d) {
-    return 0
+  if (Array.isArray(d)) {
+    return d.reduce((acc, item) => acc + lengthOf(item), 0)
+  } else {
+    return d?.length ?? 0
   }
-  return d.reduce((acc, c) => acc + ((c && c.length) || 0), 0)
 }
 
 %}
+
+
+##################
+### Statements ###
+##################
 
 block         -> _ statement (__n statement):* _        {%
                                                         (d, l) => {
@@ -116,7 +113,7 @@ block         -> _ statement (__n statement):* _        {%
                                                         }
                                                         %}
 
-statement     -> refAssignment                          {%
+statement     -> assign                                 {%
                                                         (d, l) => {
                                                           const stmt = d[0]
                                                           return {
@@ -147,279 +144,40 @@ statement     -> expression                             {%
                                                         }
                                                         %}
 
-##################
-### References ###
-##################
-
-refAssignment -> referenceName _ "=" _ expression       {%
-                                                        (d, l) => (
-                                                          {
-                                                            type: 'assign',
-                                                            args: [
-                                                              {
-                                                                type: 'def',
-                                                                args: [d[0].name],
-                                                                location: l,
-                                                                length: d[0].length
-                                                              },
-                                                              d[4]
-                                                            ],
-                                                            location: l,
-                                                            length: lengthOf(d)
-                                                          }
-                                                        )
-                                                        %}
-
-referenceName -> ([a-zA-Z\$] [a-zA-Z0-9]:*) (" " [a-zA-Z0-9]:+):* {%
-                                                        (d, l, reject) => {
-                                                          const first = d[0][0] + d[0][1].join('')
-                                                          const rest = d[1].map((e) => e[0] + e[1].join('')).join('')
-                                                          const r =  first + rest
-
-                                                          if (containsReservedWord(r.split(' '))) {
-                                                            return reject
-                                                          } else {
-                                                            return {
-                                                              name: r,
-                                                              location: l,
-                                                              length: r.length
-                                                            }
-                                                          }
-                                                        }
-                                                        %}
-
-referenceInExpression -> [a-zA-Z\$] [a-zA-Z0-9]:*       {%
-                                                        (d, l, reject) => {
-                                                          const r = d[0] + d[1].join('')
-
-                                                          if (containsReservedWord(r.split(' '))) {
-                                                            return reject
-                                                          } else {
-                                                            return {
-                                                              name: r,
-                                                              location: l,
-                                                              length: r.length
-                                                            }
-                                                          }
-                                                        }
-                                                        %}
-
-referenceInExpression -> "`" referenceName "`"          {%
-                                                        (d, l) => {
-                                                          return {
-                                                            name: d[1].name,
-                                                            location: l,
-                                                            length: lengthOf(d)
-                                                          }
-                                                        }
-                                                        %}
-
-
-###########################
-### Function definition ###
-###########################
-
-functionDef -> functionDefName _ "=" _ functionDefArgs _ "=>" _ statement {%
+assign -> identifier _ "=" _ expression                 {%
                                                         (d, l) => ({
-                                                          type: "function-definition",
+                                                          type: 'assign',
                                                           args: [
                                                             {
-                                                              type: "funcdef",
-                                                              args: [d[0]],
+                                                              type: 'def',
+                                                              args: [d[0].name],
                                                               location: l,
                                                               length: d[0].length
                                                             },
-                                                            d[4],
-                                                            {
-                                                              type: 'block',
-                                                              args: [d[8]],
-                                                              location: d[8].location,
-                                                              length: d[8].length
-                                                            }
+                                                            d[4]
                                                           ],
                                                           location: l,
                                                           length: lengthOf(d)
                                                         })
                                                         %}
 
-functionDefName -> simpleFunctionDefName                {% id %}
-functionDefName -> complexFunctionDefName               {% id %}
 
-simpleFunctionDefName -> [a-z] [0-9a-zA-Z]:*            {%
+##################
+### References ###
+##################
+
+identifier -> ([a-zA-Z\$] [a-zA-Z0-9_\$]:*)             {%
                                                         (d, l, reject) => {
-                                                          const name = d[0] + d[1].join('')
+                                                          const identString = d[0][0] + d[0][1].join('')
 
-                                                          if (isReservedWord(name)) {
-                                                            return reject
-                                                          } else {
-                                                            return name
-                                                          }
-                                                        }
-                                                        %}
-
-complexFunctionDefSurname -> " " [0-9a-zA-Z]:+          {% d => d[0] + d[1].join('') %}
-complexFunctionDefName -> simpleFunctionDefName complexFunctionDefSurname:+ {% d => d.join('') %}
-
-functionDefArgs  -> argName                             {%
-                                                        (d, l) => ({
-                                                          type: 'argument-names',
-                                                          args: [d[0]],
-                                                          location: l,
-                                                          length: d[0].length
-                                                        })
-                                                        %}
-
-functionDefArgs  -> argName ___ functionDefArgs         {%
-                                                        (d, l) => ({
-                                                          type: 'argument-names',
-                                                          args: [
-                                                            d[0]
-                                                          ].concat(d[2].args),
-                                                          location: l,
-                                                          length: lengthOf(d)
-                                                        })
-                                                        %}
-
-argName -> [a-zA-Z] [0-9a-zA-Z]:*                       {%
-                                                        (d, l) => ({
-                                                          type: 'def',
-                                                          args: [d[0] + d[1].join('')],
-                                                          location: l,
-                                                          length: lengthOf(d)
-                                                        })
-                                                        %}
-
-
-
-
-################
-### Operator ###
-################
-
-additiveOperator  -> ("-" | "+" | "&&" | "||")         {%
-                                                       (d, l) => {
-                                                          const op = d[0][0]
-                                                          return {
-                                                            name: op,
-                                                            location: l,
-                                                            length: op.length
-                                                          }
-                                                        }
-                                                        %}
-
-additiveOperator  -> __ ("in") __                       {%
-                                                        (d, l) => {
-                                                          return {
-                                                            name: d[1],
-                                                            location: l + d[0].length,
-                                                            length: d[1].length
-                                                          }
-                                                        }
-                                                        %}
-
-
-multiplicativeOperator -> ("**" | ">" | "<" | "<=" | ">=" | "==") {%
-                                                        (d, l) => {
-                                                          const op = d[0][0]
-                                                          return {
-                                                            name: op,
-                                                            location: l,
-                                                            length: op.length
-                                                          }
-                                                        }
-                                                        %}
-multiplicativeOperator -> (" * " | " / " | " % " | " ^ ") {%
-                                                        (d, l) => {
-                                                          const op = d[0][0]
-                                                          return {
-                                                            name: op.trim(),
-                                                            location: l + 1,
-                                                            length: op.length
-                                                          }
-                                                        }
-                                                        %}
-
-
-#####################
-### Function call ###
-#####################
-
-functionCall -> functionNameRef ___ funcArgumentList    {%
-                                                        (d, l) => {
-                                                          const func = d[0]
-                                                          const args = d[2]
-
-                                                          return {
-                                                            type: 'function-call',
-                                                            args: [
-                                                              {
-                                                                type: 'funcref',
-                                                                args: [func.name],
-                                                                location: func.location,
-                                                                length: func.length
-                                                              },
-                                                              {
-                                                                type: 'argument-list',
-                                                                args: args.args,
-                                                                location: args.location,
-                                                                length: args.length
-                                                              }
-                                                            ],
-                                                            location: l,
-                                                            length: lengthOf(d)
-                                                          }
-                                                        }
-                                                        %}
-
-functionNameRef -> simpleFunctionNameRef                {% id %}
-functionNameRef -> "`" complexFunctionNameRef "`"       {% d => d[1] %}
-functionNameRefWord -> [a-zAZ] [0-9a-zA-Z]:*            {%
-                                                        (d, l, reject) => {
-                                                          const candidate = d[0] + d[1].join('')
-
-                                                          if (isReservedWord(candidate)) {
+                                                          if (isReservedWord(identString)) {
                                                             return reject
                                                           } else {
                                                             return {
-                                                              name: candidate,
+                                                              name: identString,
                                                               location: l,
-                                                              length: lengthOf(d)
+                                                              length: identString.length
                                                             }
-                                                          }
-                                                        }
-                                                        %}
-simpleFunctionNameRef -> functionNameRefWord            {% id %}
-complexFunctionNameRef -> functionNameRefWord " " complexFunctionNameRef {%
-                                                        (d, l) => {
-                                                          const part1 = d[0]
-                                                          const part2 = d[2]
-                                                          return {
-                                                            name: part1.name + " " + part2.name,
-                                                            location: l,
-                                                            length: lengthOf(d)
-                                                          }
-                                                        }
-                                                        %}
-
-funcArgumentList -> expression                          {%
-                                                        (d, l) => {
-                                                          const e = d[0]
-                                                          return {
-                                                            args: [e],
-                                                            location: l,
-                                                            length: e.length
-                                                          }
-                                                        }
-                                                        %}
-
-funcArgumentList -> expression ___ funcArgumentList      {%
-                                                        (d, l) => {
-                                                          const e = d[0]
-                                                          const args = d[2]
-                                                          return {
-                                                            args: [e, ...args.args],
-                                                            location: l,
-                                                            length: lengthOf(d)
                                                           }
                                                         }
                                                         %}

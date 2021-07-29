@@ -2,24 +2,16 @@ import { runTests } from './run-tests';
 
 runTests({
   'function definition with simple name': {
-    source: 'functionname = arg1 arg2 => Ref1 ',
+    source: 'function FunctionName (arg1 arg2) => Ref1',
     ast: [
       {
         type: 'function-definition',
         args: [
           {
             type: 'funcdef',
-            args: ['functionname'],
-            start: {
-              char: 0,
-              line: 1,
-              column: 1,
-            },
-            end: {
-              char: 11,
-              line: 1,
-              column: 12,
-            },
+            args: ['FunctionName'],
+            start: 9,
+            end: 20,
           },
           {
             type: 'argument-names',
@@ -27,42 +19,18 @@ runTests({
               {
                 type: 'def',
                 args: ['arg1'],
-                start: {
-                  char: 15,
-                  line: 1,
-                  column: 16,
-                },
-                end: {
-                  char: 18,
-                  line: 1,
-                  column: 19,
-                },
+                start: 23,
+                end: 26,
               },
               {
                 type: 'def',
                 args: ['arg2'],
-                start: {
-                  char: 20,
-                  line: 1,
-                  column: 21,
-                },
-                end: {
-                  char: 23,
-                  line: 1,
-                  column: 24,
-                },
+                start: 28,
+                end: 31,
               },
             ],
-            start: {
-              char: 15,
-              line: 1,
-              column: 16,
-            },
-            end: {
-              char: 23,
-              line: 1,
-              column: 24,
-            },
+            start: 22,
+            end: 32,
           },
           {
             type: 'block',
@@ -70,63 +38,31 @@ runTests({
               {
                 type: 'ref',
                 args: ['Ref1'],
-                start: {
-                  char: 28,
-                  line: 1,
-                  column: 29,
-                },
-                end: {
-                  char: 31,
-                  line: 1,
-                  column: 32,
-                },
+                start: 37,
+                end: 40,
               },
             ],
-            start: {
-              char: 28,
-              line: 1,
-              column: 29,
-            },
-            end: {
-              char: 31,
-              line: 1,
-              column: 32,
-            },
+            start: 37,
+            end: 40,
           },
         ],
-        start: {
-          char: 0,
-          line: 1,
-          column: 1,
-        },
-        end: {
-          char: 31,
-          line: 1,
-          column: 32,
-        },
+        start: 0,
+        end: 40,
       },
     ],
   },
 
   'function definition': {
-    source: 'function name = arg1 arg2 => Ref1',
+    source: 'function name (arg1 arg2) => Ref1',
     ast: [
       {
         type: 'function-definition',
         args: [
           {
             type: 'funcdef',
-            args: ['function name'],
-            start: {
-              char: 0,
-              line: 1,
-              column: 1,
-            },
-            end: {
-              char: 12,
-              line: 1,
-              column: 13,
-            },
+            args: ['name'],
+            start: 9,
+            end: 12,
           },
           {
             type: 'argument-names',
@@ -134,42 +70,18 @@ runTests({
               {
                 type: 'def',
                 args: ['arg1'],
-                start: {
-                  char: 16,
-                  line: 1,
-                  column: 17,
-                },
-                end: {
-                  char: 19,
-                  line: 1,
-                  column: 20,
-                },
+                start: 15,
+                end: 18,
               },
               {
                 type: 'def',
                 args: ['arg2'],
-                start: {
-                  char: 21,
-                  line: 1,
-                  column: 22,
-                },
-                end: {
-                  char: 24,
-                  line: 1,
-                  column: 25,
-                },
+                start: 20,
+                end: 23,
               },
             ],
-            start: {
-              char: 16,
-              line: 1,
-              column: 17,
-            },
-            end: {
-              char: 24,
-              line: 1,
-              column: 25,
-            },
+            start: 14,
+            end: 24,
           },
           {
             type: 'block',
@@ -177,46 +89,22 @@ runTests({
               {
                 type: 'ref',
                 args: ['Ref1'],
-                start: {
-                  char: 29,
-                  line: 1,
-                  column: 30,
-                },
-                end: {
-                  char: 32,
-                  line: 1,
-                  column: 33,
-                },
+                start: 29,
+                end: 32,
               },
             ],
-            start: {
-              char: 29,
-              line: 1,
-              column: 30,
-            },
-            end: {
-              char: 32,
-              line: 1,
-              column: 33,
-            },
+            start: 29,
+            end: 32,
           },
         ],
-        start: {
-          char: 0,
-          line: 1,
-          column: 1,
-        },
-        end: {
-          char: 32,
-          line: 1,
-          column: 33,
-        },
+        start: 0,
+        end: 32,
       },
     ],
   },
 
   'function call': {
-    source: 'functionname 1 2',
+    source: 'functionname(1, 2)',
     ast: [
       {
         type: 'function-call',
@@ -224,16 +112,8 @@ runTests({
           {
             type: 'funcref',
             args: ['functionname'],
-            start: {
-              char: 0,
-              line: 1,
-              column: 1,
-            },
-            end: {
-              char: 11,
-              line: 1,
-              column: 12,
-            },
+            start: 0,
+            end: 11,
           },
           {
             type: 'argument-list',
@@ -241,77 +121,37 @@ runTests({
               {
                 type: 'literal',
                 args: ['number', 1, null],
-                start: {
-                  char: 13,
-                  line: 1,
-                  column: 14,
-                },
-                end: {
-                  char: 13,
-                  line: 1,
-                  column: 14,
-                },
+                start: 13,
+                end: 13,
               },
               {
                 type: 'literal',
                 args: ['number', 2, null],
-                start: {
-                  char: 15,
-                  line: 1,
-                  column: 16,
-                },
-                end: {
-                  char: 15,
-                  line: 1,
-                  column: 16,
-                },
+                start: 16,
+                end: 16,
               },
             ],
-            start: {
-              char: 13,
-              line: 1,
-              column: 14,
-            },
-            end: {
-              char: 15,
-              line: 1,
-              column: 16,
-            },
+            start: 12,
+            end: 17,
           },
         ],
-        start: {
-          char: 0,
-          line: 1,
-          column: 1,
-        },
-        end: {
-          char: 15,
-          line: 1,
-          column: 16,
-        },
+        start: 0,
+        end: 17,
       },
     ],
   },
 
   'function declaration and use': {
-    source: 'functionname = a b => a + b\n\nfunctionname 1 2',
+    source: 'function name(a b) => a + b\n\nfunctionname(1, 2)',
     ast: [
       {
         type: 'function-definition',
         args: [
           {
             type: 'funcdef',
-            args: ['functionname'],
-            start: {
-              char: 0,
-              line: 1,
-              column: 1,
-            },
-            end: {
-              char: 11,
-              line: 1,
-              column: 12,
-            },
+            args: ['name'],
+            start: 9,
+            end: 12,
           },
           {
             type: 'argument-names',
@@ -319,42 +159,18 @@ runTests({
               {
                 type: 'def',
                 args: ['a'],
-                start: {
-                  char: 15,
-                  line: 1,
-                  column: 16,
-                },
-                end: {
-                  char: 15,
-                  line: 1,
-                  column: 16,
-                },
+                start: 14,
+                end: 14,
               },
               {
                 type: 'def',
                 args: ['b'],
-                start: {
-                  char: 17,
-                  line: 1,
-                  column: 18,
-                },
-                end: {
-                  char: 17,
-                  line: 1,
-                  column: 18,
-                },
+                start: 16,
+                end: 16,
               },
             ],
-            start: {
-              char: 15,
-              line: 1,
-              column: 16,
-            },
-            end: {
-              char: 17,
-              line: 1,
-              column: 18,
-            },
+            start: 13,
+            end: 17,
           },
           {
             type: 'block',
@@ -492,28 +308,12 @@ runTests({
               {
                 type: 'literal',
                 args: ['number', 2, null],
-                start: {
-                  char: 44,
-                  line: 3,
-                  column: 16,
-                },
-                end: {
-                  char: 44,
-                  line: 3,
-                  column: 16,
-                },
+                start: 45,
+                end: 45,
               },
             ],
-            start: {
-              char: 42,
-              line: 3,
-              column: 14,
-            },
-            end: {
-              char: 44,
-              line: 3,
-              column: 16,
-            },
+            start: 41,
+            end: 46,
           },
         ],
         start: {
@@ -522,9 +322,9 @@ runTests({
           column: 1,
         },
         end: {
-          char: 44,
+          char: 46,
           line: 3,
-          column: 16,
+          column: 18,
         },
       },
     ],

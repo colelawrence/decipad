@@ -1,21 +1,33 @@
-import { parse } from '.';
-import { prettyPrintAST } from './utils';
+import { assign, block, c, col, l, prop } from '../utils';
+import { prettyPrintAST, prettyPrintSolutions } from './utils';
 
 it('can pretty print the AST', () => {
   expect(
     prettyPrintAST(
-      parse([{ id: '1', source: 'A = 1 + 2 moos\nB = [1, 2, 3]' }])[0]
-        .solutions[0]
+      block(
+        assign('A', c('+', l(1), l(2))),
+        col(l(1), l(2)),
+        prop('Foo', 'Bar')
+      )
     )
-  ).toEqual(
-    [
-      '(block ',
-      '  (assign ',
-      '    (def A)',
-      '    (+ 1 2moos))',
-      '  (assign ',
-      '    (def B)',
-      '    (column 1 2 3)))',
-    ].join('\n')
-  );
+  ).toMatchInlineSnapshot(`
+    "(block
+      (assign
+        (def A)
+        (+ 1 2))
+      (column 1 2)
+      (prop Foo.Bar))"
+  `);
+});
+
+it('can print multiple parsed solutions', () => {
+  expect(prettyPrintSolutions([l(1), l(2)])).toMatchInlineSnapshot(`
+    "Result:
+    1
+    -------
+    Result:
+    2
+    -------
+    "
+  `);
 });

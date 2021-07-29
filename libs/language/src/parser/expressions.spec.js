@@ -165,7 +165,7 @@ runTests({
   },
 
   'binary operation': {
-    source: 'Something / `Something Else`',
+    source: 'Something / SomethingElse',
     ast: [
       {
         type: 'function-call',
@@ -173,16 +173,8 @@ runTests({
           {
             type: 'funcref',
             args: ['/'],
-            start: {
-              char: 9,
-              line: 1,
-              column: 10,
-            },
-            end: {
-              char: 11,
-              line: 1,
-              column: 12,
-            },
+            start: 9,
+            end: 11,
           },
           {
             type: 'argument-list',
@@ -190,54 +182,22 @@ runTests({
               {
                 type: 'ref',
                 args: ['Something'],
-                start: {
-                  char: 0,
-                  line: 1,
-                  column: 1,
-                },
-                end: {
-                  char: 8,
-                  line: 1,
-                  column: 9,
-                },
+                start: 0,
+                end: 8,
               },
               {
                 type: 'ref',
-                args: ['Something Else'],
-                start: {
-                  char: 12,
-                  line: 1,
-                  column: 13,
-                },
-                end: {
-                  char: 27,
-                  line: 1,
-                  column: 28,
-                },
+                args: ['SomethingElse'],
+                start: 12,
+                end: 24,
               },
             ],
-            start: {
-              char: 0,
-              line: 1,
-              column: 1,
-            },
-            end: {
-              char: 27,
-              line: 1,
-              column: 28,
-            },
+            start: 0,
+            end: 24,
           },
         ],
-        start: {
-          char: 0,
-          line: 1,
-          column: 1,
-        },
-        end: {
-          char: 27,
-          line: 1,
-          column: 28,
-        },
+        start: 0,
+        end: 24,
       },
     ],
   },
@@ -795,11 +755,5 @@ runTests({
     sourceMap: false,
     source: '100 - -1',
     ast: [c('-', l(100), l(-1))],
-  },
-
-  'No ambiguity between several operators': {
-    sourceMap: false,
-    source: 'grow 100 (-10%) Var',
-    ast: [c('grow', l(100), l(-0.1), r('Var'))],
   },
 });

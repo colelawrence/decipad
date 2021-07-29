@@ -1,4 +1,4 @@
-import { c, r } from '../utils';
+import { assign, c, r } from '../utils';
 import { runTests } from './run-tests';
 
 runTests({
@@ -7,13 +7,9 @@ runTests({
     sourceMap: false,
     ast: [c('/', c('/', r('A'), r('B')), r('C'))],
   },
-  /*
-  'subtraction op (1)': {
-    source: 'A - B',
+  'can binop between two function calls': {
+    source: 'A = ln(B) / ln(C)',
     sourceMap: false,
-    ast: [
-      c('-', r('A'), r('B'))
-    ]
-  }
-  */
+    ast: [assign('A', c('/', c('ln', r('B')), c('ln', r('C'))))],
+  },
 });

@@ -1,16 +1,17 @@
 import { AST, Time } from '.';
 export { date } from './date';
 
-type WalkFn = (node: AST.Node, depth: number) => void;
+type WalkFn = (node: AST.Node, path: number[]) => void;
 
-export const walk = (node: AST.Node, fn: WalkFn, depth = 0) => {
-  fn(node, depth);
+export const walk = (node: AST.Node, fn: WalkFn, path: number[] = []) => {
+  fn(node, path);
 
   if (node.type === 'literal') return;
 
-  for (const arg of node.args) {
+  for (let index = 0; index < node.args.length; index++) {
+    const arg = node.args[index];
     if (isNode(arg)) {
-      walk(arg, fn, depth + 1);
+      walk(arg, fn, [...path, index]);
     }
   }
 };

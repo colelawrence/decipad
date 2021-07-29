@@ -1,6 +1,6 @@
 import assert from 'assert';
-import { walk } from '../utils';
-import { prettyPrintAST, prettyPrintSolutions } from './utils';
+import { walk, zip } from '../utils';
+import { prettyPrintSolutions, prettyPrintAST } from './utils';
 import { parse } from './';
 
 function cleanSourceMap(ast) {
@@ -8,6 +8,67 @@ function cleanSourceMap(ast) {
     delete node.end;
     delete node.start;
   });
+}
+
+// If the test places a number in `start` or `end`, assume that's the character index
+function simplifySourceMaps(gots, expecteds) {
+  if (gots.length !== expecteds.length) {
+    return;
+  }
+
+  for (const [got, expected] of zip(gots, expecteds)) {
+    const simplifiedStart = new Set();
+    const simplifiedEnd = new Set();
+
+    walk(expected, (node, path) => {
+      const pathStr = path.toString();
+      if (typeof node.start === 'number') {
+        simplifiedStart.add(pathStr);
+      }
+      if (typeof node.end === 'number') {
+        simplifiedEnd.add(pathStr);
+      }
+    });
+
+    walk(got, (node, path) => {
+      const pathStr = path.toString();
+      if (simplifiedStart.has(pathStr)) {
+        node.start = node.start.char;
+      }
+      if (simplifiedEnd.has(pathStr)) {
+        node.end = node.end.char;
+      }
+    });
+  }
+}
+
+function getCleanSolution(results, source, sourceMap, ast) {
+  assert(results.length === 1);
+
+  const result = results[0];
+
+  if (result.solutions.length === 0) {
+    throw new Error(`No solutions found for source "${source}"`);
+  }
+
+  if (result.solutions.length > 1) {
+    throw new Error(
+      `Ambiguous results.\nSource:\n  ${source}\nAlternatives:\n${prettyPrintSolutions(
+        result.solutions
+      )}`
+    );
+  }
+
+  const solution = result.solutions[0];
+
+  expect(solution.type).toBe('block');
+
+  if (sourceMap === false) {
+    cleanSourceMap(solution);
+  }
+  simplifySourceMaps(solution.args, ast);
+
+  return solution;
 }
 
 export function runTests(tests) {
@@ -53,38 +114,13 @@ export function runTests(tests) {
           throw new Error(`expected error "${expectError}" to occur`);
         }
 
-        assert(results.length === 1);
-
-        const result = results[0];
-
-        if (result.solutions.length === 0) {
-          throw new Error(`No solutions found for source "${source}"`);
-        }
-
-        if (result.solutions.length > 1) {
-          throw new Error(
-            `Ambiguous results.\nSource:\n  ${source}\nAlternatives:\n${prettyPrintSolutions(
-              result.solutions
-            )}`
-          );
-        }
-
-        const solution = result.solutions[0];
-
-        expect(solution.type).toBe('block');
-
-        if (sourceMap === false) {
-          cleanSourceMap(solution);
-        }
+        const solution = getCleanSolution(results, source, sourceMap, ast);
 
         try {
           expect(solution.args).toStrictEqual(ast);
         } catch (err) {
-          if (sourceMap !== false) {
-            console.error(JSON.stringify(result.solutions, null, '\t'));
-          } else {
-            console.error(prettyPrintSolutions(result.solutions));
-          }
+          console.error(prettyPrintAST(solution));
+
           throw err;
         }
       }

@@ -55,7 +55,11 @@ export const runCodeForVariables = async (
   const types = Object.fromEntries(inferResult.variables.entries());
 
   const erroredType = Object.values(types).find((t) => t.errorCause != null);
-  expect(erroredType).toEqual(undefined);
+  if (erroredType != null) {
+    throw new Error(
+      'runCodeForVariables found an error\n' + erroredType.toString()
+    );
+  }
 
   const variables = await run(program, wantedVariables);
 

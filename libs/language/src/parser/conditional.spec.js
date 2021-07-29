@@ -1,8 +1,9 @@
+import { c, r } from '../utils';
 import { runTests } from './run-tests';
 
 runTests({
   conditional: {
-    source: 'if Condition then IfTrue else `If False`',
+    source: 'if Condition then IfTrue else if_false',
     ast: [
       {
         type: 'function-call',
@@ -10,16 +11,8 @@ runTests({
           {
             type: 'funcref',
             args: ['if'],
-            start: {
-              char: 0,
-              line: 1,
-              column: 1,
-            },
-            end: {
-              char: 1,
-              line: 1,
-              column: 2,
-            },
+            start: 0,
+            end: 1,
           },
           {
             type: 'argument-list',
@@ -27,69 +20,37 @@ runTests({
               {
                 type: 'ref',
                 args: ['Condition'],
-                start: {
-                  char: 3,
-                  line: 1,
-                  column: 4,
-                },
-                end: {
-                  char: 11,
-                  line: 1,
-                  column: 12,
-                },
+                start: 3,
+                end: 11,
               },
               {
                 type: 'ref',
                 args: ['IfTrue'],
-                start: {
-                  char: 18,
-                  line: 1,
-                  column: 19,
-                },
-                end: {
-                  char: 23,
-                  line: 1,
-                  column: 24,
-                },
+                start: 18,
+                end: 23,
               },
               {
                 type: 'ref',
-                args: ['If False'],
-                start: {
-                  char: 30,
-                  line: 1,
-                  column: 31,
-                },
-                end: {
-                  char: 39,
-                  line: 1,
-                  column: 40,
-                },
+                args: ['if_false'],
+                start: 30,
+                end: 37,
               },
             ],
-            start: {
-              char: 3,
-              line: 1,
-              column: 4,
-            },
-            end: {
-              char: 39,
-              line: 1,
-              column: 40,
-            },
+            start: 3,
+            end: 37,
           },
         ],
-        start: {
-          char: 0,
-          line: 1,
-          column: 1,
-        },
-        end: {
-          char: 39,
-          line: 1,
-          column: 40,
-        },
+        start: 0,
+        end: 37,
       },
     ],
+  },
+
+  'chained conditional': {
+    source: `if A
+      then B
+      else if C then D else E`,
+    sourceMap: false,
+    ast: [c('if', r('A'), r('B'), c('if', r('C'), r('D'), r('E')))],
   },
 });

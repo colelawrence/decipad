@@ -2,15 +2,14 @@
 ### Expression ###
 ##################
 
-expression    -> nonGivenExp                             {% id %}
-expression    -> given                                   {% id %}
+expression    -> nonGivenExp                            {% id %}
+expression    -> given                                  {% id %}
 
-nonGivenExp   -> divMulOp                                {% id %}
-nonGivenExp   -> table                                   {% id %}
-nonGivenExp   -> functionCall                            {% id %}
-nonGivenExp   -> importData                              {% id %}
+nonGivenExp   -> divMulOp                               {% id %}
+nonGivenExp   -> table                                  {% id %}
+nonGivenExp   -> importData                             {% id %}
 
-divMulOp      -> addSubOp                                {% id %}
+divMulOp      -> addSubOp                               {% id %}
 divMulOp      -> divMulOp _ additiveOperator _ addSubOp {%
                                                         (d, l, reject) => {
                                                           const left = d[0]
@@ -79,7 +78,7 @@ addSubOp     -> addSubOp _ multiplicativeOperator _ primary {%
                                                         }
                                                         %}
 
-basicRef     -> referenceInExpression                   {%
+basicRef     -> identifier                              {%
                                                         (d, l, reject) => {
                                                           const name = d[0]
                                                           if (reservedWords.has(name.name)) {
@@ -93,6 +92,8 @@ basicRef     -> referenceInExpression                   {%
                                                           }
                                                         }
                                                         %}
+
+primary      -> functionCall                            {% id %}
 
 primary      -> literal                                 {% id %}
 primary      -> basicRef                                {% id %}
@@ -110,7 +111,10 @@ primary      -> "(" _ expression _ ")"                  {%
 primary      -> "-" _ expression                        {%
                                                         (d, l, reject) => {
                                                           const expr = d[2]
-                                                          if (expr.type === 'literal' && expr.args[0] === 'number') {
+                                                          if (
+                                                            expr.type === 'literal' &&
+                                                            expr.args[0] === 'number'
+                                                          ) {
                                                             expr.args[1] = -expr.args[1]
                                                             return {
                                                               type: expr.type,
@@ -152,4 +156,52 @@ primary      -> basicRef _ "." _ basicRef               {%
                                                           location: l,
                                                           length: lengthOf(d)
                                                         })
+                                                        %}
+
+
+#################
+### Operators ###
+#################
+
+additiveOperator  -> ("-" | "+" | "&&" | "||")          {%
+                                                        (d, l) => {
+                                                          const op = d[0][0]
+                                                          return {
+                                                            name: op,
+                                                            location: l,
+                                                            length: op.length
+                                                          }
+                                                        }
+                                                        %}
+
+additiveOperator  -> __ ("in") __                       {%
+                                                        (d, l) => {
+                                                          return {
+                                                            name: d[1],
+                                                            location: l + d[0].length,
+                                                            length: d[1].length
+                                                          }
+                                                        }
+                                                        %}
+
+
+multiplicativeOperator -> ("**" | ">" | "<" | "<=" | ">=" | "==") {%
+                                                        (d, l) => {
+                                                          const op = d[0][0]
+                                                          return {
+                                                            name: op,
+                                                            location: l,
+                                                            length: op.length
+                                                          }
+                                                        }
+                                                        %}
+multiplicativeOperator -> (" * " | " / " | " % " | " ^ ") {%
+                                                        (d, l) => {
+                                                          const op = d[0][0]
+                                                          return {
+                                                            name: op.trim(),
+                                                            location: l + 1,
+                                                            length: op.length
+                                                          }
+                                                        }
                                                         %}

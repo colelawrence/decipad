@@ -51,14 +51,14 @@ runTests({
   },
 
   'ref assignment': {
-    source: ' this is a ref name = 12 ',
+    source: ' this_is_a_ref_name = 12 ',
     ast: [
       {
         type: 'assign',
         args: [
           {
             type: 'def',
-            args: ['this is a ref name'],
+            args: ['this_is_a_ref_name'],
             start: {
               char: 1,
               line: 1,

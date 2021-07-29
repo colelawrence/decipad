@@ -35,14 +35,13 @@ it('reports syntax errors', () => {
     updateParse([
       {
         id: '0',
-        source: 'syntax ---- error',
+        source: 'syntax --/-- error',
       },
     ])
   ).toMatchObject([
     {
       type: 'identified-error',
       id: '0',
-      error: { message: 'Syntax error' },
     },
   ]);
 });

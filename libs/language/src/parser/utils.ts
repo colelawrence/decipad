@@ -1,6 +1,6 @@
 import { AST } from '..';
 import { stringifyUnits } from '../type/units';
-import { isNode, isStatement } from '../utils';
+import { getIdentifierString, isNode, isStatement } from '../utils';
 
 const prettyPrint = (node: AST.Node, indent: number) => {
   const perLine = isStatement(node) || node.type === 'block';
@@ -16,6 +16,10 @@ const prettyPrint = (node: AST.Node, indent: number) => {
       } else {
         return JSON.stringify(value);
       }
+    }
+    case 'property-access': {
+      const [ref, prop] = node.args;
+      return `(prop ${getIdentifierString(ref)}.${prop})`;
     }
     case 'function-call': {
       fname = node.args[0].args[0];
@@ -40,20 +44,16 @@ const prettyPrint = (node: AST.Node, indent: number) => {
     }
   }
 
-  let argsStr;
   if (perLine) {
-    argsStr =
-      '\n' + printedArgs.map((a) => '  '.repeat(indent + 1) + a).join('\n');
+    const args = printedArgs.map((a) => '  '.repeat(indent + 1) + a);
+
+    return `(${fname}\n${args.join('\n')})`;
   } else {
-    argsStr = printedArgs.join(' ');
+    return `(${fname} ${printedArgs.join(' ')})`;
   }
-
-  return `(${fname} ${argsStr})`;
 };
 
-export const prettyPrintAST = (ast: AST.Node) => {
-  return prettyPrint(ast, 0);
-};
+export const prettyPrintAST = (ast: AST.Node) => prettyPrint(ast, 0);
 
 export const prettyPrintSolutions = (asts: AST.Node[]) =>
   asts

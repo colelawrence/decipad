@@ -15,6 +15,10 @@ const testParse = (source: string, ...expected: AST.Statement[]) => {
       throw new Error('multiple solutions');
     }
 
+    if (parsed.solutions.length === 0) {
+      throw new Error('No solutions');
+    }
+
     return parsed.solutions[0];
   };
 
@@ -30,14 +34,14 @@ it('parses things in multiple lines', () => {
 Y = 10
 Table = { Column = [1, 2, 3 ]}
 Range = [ 10 .. 20 ]
-function = a b => a + b`,
+function func(a b) => a + b`,
     n('assign', n('def', 'X'), date('2020-01-01', 'day')),
     n('assign', n('def', 'Y'), l(10)),
     tableDef('Table', {
       Column: col(1, 2, 3),
     }),
     n('assign', n('def', 'Range'), range(10, 20)),
-    funcDef('function', ['a', 'b'], c('+', n('ref', 'a'), n('ref', 'b')))
+    funcDef('func', ['a', 'b'], c('+', n('ref', 'a'), n('ref', 'b')))
   );
 });
 
@@ -51,13 +55,13 @@ it('perceives the correct precedence between operators', () => {
 it('can parse functions with multiline conditions', () => {
   testParse(
     [
-      'cost tobusiness = salary working bonus =>',
+      'function costtobusiness(salary working bonus) =>',
       'if working',
       'then salary + (salary * 0.2) + (if bonus then salary * 0.2 else 0)',
       'else 0',
     ].join('\n'),
     funcDef(
-      'cost tobusiness',
+      'costtobusiness',
       ['salary', 'working', 'bonus'],
       c(
         'if',
@@ -71,4 +75,8 @@ it('can parse functions with multiline conditions', () => {
       )
     )
   );
+});
+
+it('can yield syntax errors', () => {
+  expect(() => testParse('syntax --/-- error')).toThrow(/No solutions/);
 });

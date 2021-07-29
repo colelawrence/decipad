@@ -19,7 +19,7 @@ describe('basic code', () => {
         101%,
         1 / 4,
         2 ^ 4,
-        sqrt 16
+        sqrt(16)
       ]
     `)
     ).toMatchObject({
@@ -67,9 +67,9 @@ describe('basic code', () => {
 
   it('supports functions', async () => {
     const results = await runCode(`
-      functionname = a b => a + b
+      function functionname(a b) => a + b
 
-      functionname 1 2
+      functionname(1, 2)
     `);
 
     expect(results).toMatchObject({
@@ -115,8 +115,8 @@ describe('basic code', () => {
 
   it('Can run a function with two columns as arguments', async () => {
     const results = await runCode(`
-      multiply = A B => A * B
-      multiply [ 1, 2, 3 ] 2
+      function multiply(A B) => A * B
+      multiply([ 1, 2, 3 ], 2)
     `);
 
     expect(results).toMatchObject({
@@ -127,8 +127,8 @@ describe('basic code', () => {
 
   it('Can run a function with two columns as arguments', async () => {
     const results = await runCode(`
-      multiply = A B => A * B
-      multiply [ 1, 2, 3 ] [ 1, 2, 0 ]
+      function multiply(A B) => A * B
+      multiply([ 1, 2, 3 ], [ 1, 2, 0 ])
     `);
 
     expect(results).toMatchObject({
@@ -183,7 +183,7 @@ describe('Tables', () => {
       await runCode(`
         Table = {
           Column1 = [1, 1, 1],
-          Column2 = Column1 + (previous 0)
+          Column2 = Column1 + previous(0)
         }
       `)
     ).toEqual({
@@ -356,7 +356,7 @@ describe('Ranges', () => {
     expect(
       await runCode(`
         Range = [1..3]
-        Containment = contains Range 3
+        Containment = contains(Range, 3)
       `)
     ).toMatchObject({
       type: { type: 'boolean' },
@@ -381,7 +381,7 @@ describe('Dates', () => {
       await runCode(`
         Table = {
           Months = [ date(2020-09), date(2020-10), date(2020-11) ],
-          Days = (dateequals Months [ date(2020-09), date(2020-11), date(2020-10) ])
+          Days = dateequals(Months, [ date(2020-09), date(2020-11), date(2020-10) ])
         }
       `)
     ).toMatchObject({
