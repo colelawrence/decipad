@@ -22,7 +22,7 @@ const caretStyles = (hoverSelector: string) =>
     },
   });
 
-type AccountAvatarProps = Pick<ComponentProps<typeof Avatar>, 'userName'> & {
+type AccountAvatarProps = Pick<ComponentProps<typeof Avatar>, 'name'> & {
   readonly menuOpen: boolean;
   readonly onClick?: () => void;
 };

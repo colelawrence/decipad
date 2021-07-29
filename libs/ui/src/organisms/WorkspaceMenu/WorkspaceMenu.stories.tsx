@@ -1,18 +1,18 @@
 import { Meta, Story } from '@storybook/react';
-import { WorkspaceSwitcher } from './WorkspaceSwitcher';
+import { WorkspaceMenu } from './WorkspaceMenu';
 
 const args = {
   numberOfOtherWorkspaces: 2,
 };
 
 export default {
-  title: 'Organisms / Workspaces / Switcher',
-  component: WorkspaceSwitcher,
+  title: 'Organisms / Workspaces / Menu',
+  component: WorkspaceMenu,
   args,
 } as Meta;
 
 export const Normal: Story<typeof args> = ({ numberOfOtherWorkspaces }) => (
-  <WorkspaceSwitcher
+  <WorkspaceMenu
     Heading="h1"
     activeWorkspace={{ name: 'Active Workspace', href: '', numberOfMembers: 1 }}
     otherWorkspaces={Array(numberOfOtherWorkspaces)

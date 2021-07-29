@@ -55,13 +55,13 @@ const shareButtonStyles = css({
 
 export interface PadTopbarProps {
   notebookTitle: string;
-  userName: string;
+  name: string;
   backArrowOnClick: () => void;
 }
 
 export const PadTopbar = ({
   notebookTitle,
-  userName,
+  name,
   backArrowOnClick,
 }: PadTopbarProps) => {
   return (
@@ -78,7 +78,7 @@ export const PadTopbar = ({
           <span>Share</span>
         </button>
         <div style={{ width: '24px', height: '100%' }} />
-        <Avatar userName={userName} />
+        <Avatar name={name} />
       </div>
     </div>
   );

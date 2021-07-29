@@ -10,7 +10,7 @@ afterEach(async () => {
 
 // flaky in headless
 it('changes background on hover', async () => {
-  const { getByText, getByLabelText } = render(<Avatar userName="John Doe" />);
+  const { getByText, getByLabelText } = render(<Avatar name="John Doe" />);
   const { select } = await domToPlaywright(page, document);
   const backgroundElement = [...getByText(/j/i).closest('svg')!.children].find(
     (element) => getComputedStyle(element).fill
@@ -36,7 +36,7 @@ it('can be passed a custom hover selector', async () => {
   const { getByText } = render(
     <div className="some-class">
       <p>Some Paragraph</p>
-      <Avatar userName="John Doe" hoverSelector=".some-class:hover" />
+      <Avatar name="John Doe" hoverSelector=".some-class:hover" />
     </div>
   );
   const { select } = await domToPlaywright(page, document);

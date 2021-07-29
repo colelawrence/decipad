@@ -10,5 +10,5 @@ export default {
 } as Meta;
 
 export const Normal: Story<{ menuOpen: boolean }> = ({ menuOpen }) => (
-  <AccountAvatar userName="John Doe" menuOpen={menuOpen} />
+  <AccountAvatar name="John Doe" menuOpen={menuOpen} />
 );

@@ -7,7 +7,7 @@ export default {
 
 export const Normal: Story = () => (
   <DashboardTopbar
-    userName="John Doe"
+    name="John Doe"
     email="john.doe@example.com"
     numberOfNotebooks={2}
   />

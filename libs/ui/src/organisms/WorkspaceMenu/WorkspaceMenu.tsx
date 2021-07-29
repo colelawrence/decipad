@@ -25,7 +25,7 @@ const headerStyles = css({
   alignItems: 'center',
 });
 
-interface WorkspaceSwitcherProps {
+interface WorkspaceMenuProps {
   readonly Heading: 'h1';
 
   readonly activeWorkspace: ComponentProps<typeof WorkspaceItem>;
@@ -35,12 +35,12 @@ interface WorkspaceSwitcherProps {
   readonly onCreateWorkspace?: () => void;
 }
 
-export const WorkspaceSwitcher = ({
+export const WorkspaceMenu = ({
   Heading,
   activeWorkspace,
   otherWorkspaces,
   onCreateWorkspace = noop,
-}: WorkspaceSwitcherProps): ReturnType<FC> => {
+}: WorkspaceMenuProps): ReturnType<FC> => {
   return (
     <nav css={styles}>
       <div css={headerStyles}>
@@ -49,9 +49,7 @@ export const WorkspaceSwitcher = ({
           <Create />
         </IconButton>
       </div>
-      <NavigationList>
-        <WorkspaceItem {...activeWorkspace} />
-      </NavigationList>
+      <WorkspaceItem {...activeWorkspace} />
       {otherWorkspaces.length ? (
         <>
           <Divider />

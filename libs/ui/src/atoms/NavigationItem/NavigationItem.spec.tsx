@@ -3,11 +3,11 @@ import userEvent from '@testing-library/user-event';
 import { noop } from '../../utils';
 import { NavigationItem } from './NavigationItem';
 
-it('renders a list item with the children', () => {
-  const { getByRole } = render(
+it('renders the children', () => {
+  const { getByText } = render(
     <NavigationItem onClick={noop}>Text</NavigationItem>
   );
-  expect(getByRole('listitem')).toHaveTextContent('Text');
+  expect(getByText('Text')).toBeVisible();
 });
 
 it('can render a button and emit click events', () => {

@@ -4,26 +4,26 @@ import { AccountAvatar } from './AccountAvatar';
 
 it('renders an avatar', () => {
   const { getByLabelText } = render(
-    <AccountAvatar userName="John Doe" menuOpen />
+    <AccountAvatar name="John Doe" menuOpen />
   );
   expect(getByLabelText(/avatar/i)).toBeVisible();
 });
 
 it('allows expanding when closed', () => {
   const { getByTitle } = render(
-    <AccountAvatar userName="John Doe" menuOpen={false} />
+    <AccountAvatar name="John Doe" menuOpen={false} />
   );
   expect(getByTitle(/expand/i)).toBeInTheDocument();
 });
 it('allows collapsing when open', () => {
-  const { getByTitle } = render(<AccountAvatar userName="John Doe" menuOpen />);
+  const { getByTitle } = render(<AccountAvatar name="John Doe" menuOpen />);
   expect(getByTitle(/collapse/i)).toBeInTheDocument();
 });
 
 it('emits click events', () => {
   const handleClick = jest.fn();
   const { getByTitle } = render(
-    <AccountAvatar userName="John Doe" menuOpen={false} onClick={handleClick} />
+    <AccountAvatar name="John Doe" menuOpen={false} onClick={handleClick} />
   );
 
   userEvent.click(getByTitle(/expand/i));

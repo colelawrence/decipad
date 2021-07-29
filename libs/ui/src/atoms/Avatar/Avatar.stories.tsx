@@ -6,11 +6,9 @@ export default {
   title: 'Atoms / Avatar',
   component: Avatar,
   args: {
-    userName: 'John Doe',
+    name: 'John Doe',
     roundedSquare: false,
   },
 } as Meta;
 
-export const Initial: Story<{ userName: string }> = (args) => (
-  <Avatar {...args} />
-);
+export const Initial: Story<{ name: string }> = (args) => <Avatar {...args} />;

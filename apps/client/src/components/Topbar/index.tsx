@@ -71,7 +71,7 @@ export const Topbar = ({ workspaceId }: { workspaceId: string }) => {
 
   return (
     <DashboardTopbar
-      userName={session.user.name}
+      name={session.user.name}
       email={session.user.email ?? ''}
       onLogout={signOut}
       onCreateNotebook={onNewPad}

@@ -15,16 +15,21 @@ interface NavigationListProps {
 }
 
 export const NavigationList = ({ children }: NavigationListProps) => {
-  Children.forEach(children, (child) => {
-    if (
-      child == null ||
-      (isElement(child) &&
-        (child.type === NavigationItem || child.type === WorkspaceItem))
-    ) {
-      return;
-    }
-    console.error('Received child that is not a navigation item', child);
-    throw new Error('Expected all children to be navigation items');
-  });
-  return <ul css={styles}>{children}</ul>;
+  return (
+    <ul css={styles}>
+      {Children.map(children, (child) => {
+        if (child == null) {
+          return null;
+        }
+        if (
+          isElement(child) &&
+          (child.type === NavigationItem || child.type === WorkspaceItem)
+        ) {
+          return <li>{child}</li>;
+        }
+        console.error('Received child that is not a navigation item', child);
+        throw new Error('Expected all children to be navigation items');
+      })}
+    </ul>
+  );
 };

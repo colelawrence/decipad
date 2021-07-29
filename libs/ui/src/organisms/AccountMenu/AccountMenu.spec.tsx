@@ -5,12 +5,12 @@ import { ComponentProps } from 'react';
 import { AccountMenu } from './AccountMenu';
 
 const props: ComponentProps<typeof AccountMenu> = {
-  userName: 'John Doe',
+  name: 'John Doe',
   email: 'john.doe@example.com',
 };
 
 it('shows the username', () => {
-  const { container } = render(<AccountMenu {...props} userName="John Doe" />);
+  const { container } = render(<AccountMenu {...props} name="John Doe" />);
   expect(container).toHaveTextContent('John Doe');
 });
 it('shows the email', () => {

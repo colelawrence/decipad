@@ -1,2 +1,2 @@
 export { AccountMenu } from './AccountMenu/AccountMenu';
-export { WorkspaceSwitcher } from './WorkspaceSwitcher/WorkspaceSwitcher';
+export { WorkspaceMenu } from './WorkspaceMenu/WorkspaceMenu';

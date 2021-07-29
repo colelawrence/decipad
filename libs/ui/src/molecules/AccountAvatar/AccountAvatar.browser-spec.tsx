@@ -9,7 +9,7 @@ afterEach(async () => {
 
 it('moves the caret down on hover', async () => {
   const { getByLabelText, getByTitle } = render(
-    <AccountAvatar userName="John Doe" menuOpen={false} />
+    <AccountAvatar name="John Doe" menuOpen={false} />
   );
   const { select } = await domToPlaywright(page, document);
   const caretElement = getByTitle(/expand/i).closest('svg')!;
@@ -28,7 +28,7 @@ it('moves the caret down on hover', async () => {
 
 it('moves the caret down when the menu is open', async () => {
   const { getByTitle, rerender } = render(
-    <AccountAvatar userName="John Doe" menuOpen={false} />
+    <AccountAvatar name="John Doe" menuOpen={false} />
   );
   const { select, update } = await domToPlaywright(page, document);
   const expandElement = getByTitle(/expand/i).closest('svg')!;
@@ -37,7 +37,7 @@ it('moves the caret down when the menu is open', async () => {
     select(expandElement)
   ))!.boundingBox())!;
 
-  rerender(<AccountAvatar userName="John Doe" menuOpen />);
+  rerender(<AccountAvatar name="John Doe" menuOpen />);
   update(document);
   const collapseElement = getByTitle(/collapse/i).closest('svg')!;
   await (await page.$(select(collapseElement)))!.waitForElementState('stable');

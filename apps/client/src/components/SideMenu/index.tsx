@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { WorkspaceSwitcher } from '@decipad/ui';
+import { WorkspaceMenu } from '@decipad/ui';
 import {
   Box,
   Button,
@@ -57,7 +57,7 @@ export const SideMenu = ({ currentWorkspace }: SideMenuProps) => {
             </Flex>
           </MenuButton>
           <MenuList p={0} border="none" outline="none">
-            <WorkspaceSwitcher
+            <WorkspaceMenu
               Heading="h1"
               activeWorkspace={{
                 ...currentWorkspace,

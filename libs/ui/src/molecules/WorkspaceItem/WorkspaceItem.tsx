@@ -26,7 +26,7 @@ export const WorkspaceItem = ({
   href,
 }: WorkspaceItemProps): ReturnType<FC> => {
   return (
-    <NavigationItem href={href} icon={<Avatar userName={name} roundedSquare />}>
+    <NavigationItem href={href} icon={<Avatar name={name} roundedSquare />}>
       <span css={styles}>
         <strong
           css={css({

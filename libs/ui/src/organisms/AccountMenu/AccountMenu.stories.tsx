@@ -5,7 +5,7 @@ export default {
   title: 'Organisms / Account / Menu',
   component: AccountMenu,
   args: {
-    userName: 'John Doe',
+    name: 'John Doe',
     email: 'john.doe@example.com',
   },
 } as Meta<AccountMenuProps>;

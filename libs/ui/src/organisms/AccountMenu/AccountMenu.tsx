@@ -26,18 +26,18 @@ const textStyles = css({
 
 export interface AccountMenuProps {
   readonly onLogout?: () => void;
-  readonly userName: string;
+  readonly name: string;
   readonly email: string;
 }
 
 export const AccountMenu = ({
-  userName,
+  name,
   email,
   onLogout = noop,
 }: AccountMenuProps): ReturnType<FC> => {
   return (
     <nav css={styles}>
-      <strong css={css(p12Bold, textStyles)}>{userName}</strong>
+      <strong css={css(p12Bold, textStyles)}>{name}</strong>
       <address css={css(p12Regular, textStyles)}>{email}</address>
       <div css={{ paddingTop: '12px', paddingBottom: '4px' }}>
         <Divider />

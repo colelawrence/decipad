@@ -5,7 +5,7 @@ import { ComponentProps } from 'react';
 import { DashboardTopbar } from './DashboardTopbar';
 
 const props: ComponentProps<typeof DashboardTopbar> = {
-  userName: 'John Doe',
+  name: 'John Doe',
   email: 'john.doe@example.com',
 };
 

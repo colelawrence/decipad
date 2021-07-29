@@ -51,7 +51,7 @@ type DashboardTopbarProps = Pick<
   ComponentProps<typeof NotebookListHeader>,
   'numberOfNotebooks'
 > &
-  Pick<ComponentProps<typeof AccountAvatar>, 'userName'> &
+  Pick<ComponentProps<typeof AccountAvatar>, 'name'> &
   ComponentProps<typeof AccountMenu> & {
     readonly onCreateNotebook?: () => void;
   };
@@ -61,7 +61,7 @@ export const DashboardTopbar = ({
 
   onCreateNotebook = noop,
 
-  userName,
+  name,
   email,
   onLogout,
 }: DashboardTopbarProps): ReturnType<React.FC> => {
@@ -81,7 +81,7 @@ export const DashboardTopbar = ({
         <div css={{ position: 'relative' }}>
           <AccountAvatar
             menuOpen={menuOpen}
-            userName={userName}
+            name={name}
             onClick={() => setMenuOpen(!menuOpen)}
           />
           {menuOpen && (
@@ -94,11 +94,7 @@ export const DashboardTopbar = ({
                 right: 0,
               }}
             >
-              <AccountMenu
-                userName={userName}
-                email={email}
-                onLogout={onLogout}
-              />
+              <AccountMenu name={name} email={email} onLogout={onLogout} />
             </div>
           )}
         </div>

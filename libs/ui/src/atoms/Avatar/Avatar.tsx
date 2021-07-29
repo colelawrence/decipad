@@ -38,23 +38,19 @@ const initialTextStyles = css({
 });
 
 interface AvatarProps {
-  readonly userName: string;
+  readonly name: string;
   readonly roundedSquare?: boolean;
 
   readonly hoverSelector?: string;
 }
 
 export const Avatar = ({
-  userName,
+  name,
   roundedSquare = false,
   hoverSelector,
 }: AvatarProps): ReturnType<FC> => {
   return (
-    <div
-      role="img"
-      aria-label={`Avatar of user ${userName}`}
-      css={containerStyles}
-    >
+    <div role="img" aria-label={`Avatar of user ${name}`} css={containerStyles}>
       <svg
         css={[initialStyles, { borderRadius: roundedSquare ? '8px' : '50%' }]}
       >
@@ -64,7 +60,7 @@ export const Avatar = ({
           css={initialBackgroundStyles(hoverSelector)}
         />
         <text x="50%" y="50%" css={initialTextStyles}>
-          {userName[0]}
+          {name[0]}
         </text>
       </svg>
     </div>

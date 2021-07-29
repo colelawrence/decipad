@@ -51,7 +51,7 @@ export const NavigationItem = ({
 }: NavigationItemProps): ReturnType<FC> => {
   const styledIcon = icon && <span css={iconStyles}>{icon}</span>;
   return (
-    <li css={containerStyles}>
+    <div css={containerStyles}>
       {onClick ? (
         <button css={styles} onClick={onClick}>
           {styledIcon}
@@ -63,6 +63,6 @@ export const NavigationItem = ({
           {children}
         </Anchor>
       )}
-    </li>
+    </div>
   );
 };

@@ -2,9 +2,9 @@ import { ComponentProps } from 'react';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { WorkspaceSwitcher } from './WorkspaceSwitcher';
+import { WorkspaceMenu } from './WorkspaceMenu';
 
-const props: ComponentProps<typeof WorkspaceSwitcher> = {
+const props: ComponentProps<typeof WorkspaceMenu> = {
   Heading: 'h1',
   activeWorkspace: {
     name: 'Active Workspace',
@@ -15,14 +15,14 @@ const props: ComponentProps<typeof WorkspaceSwitcher> = {
 };
 
 it('renders a heading at given level', () => {
-  const { getByRole } = render(<WorkspaceSwitcher {...props} Heading="h1" />);
+  const { getByRole } = render(<WorkspaceMenu {...props} Heading="h1" />);
   expect(getByRole('heading').tagName).toBe('H1');
 });
 
 it('renders a button to create a workspace', () => {
   const handleCreateWorkspace = jest.fn();
   const { getByTitle } = render(
-    <WorkspaceSwitcher {...props} onCreateWorkspace={handleCreateWorkspace} />
+    <WorkspaceMenu {...props} onCreateWorkspace={handleCreateWorkspace} />
   );
 
   userEvent.click(getByTitle(/create/i));
@@ -31,7 +31,7 @@ it('renders a button to create a workspace', () => {
 
 it('links to the active workspace', () => {
   const { getByText } = render(
-    <WorkspaceSwitcher
+    <WorkspaceMenu
       {...props}
       activeWorkspace={{
         ...props.activeWorkspace,
@@ -47,7 +47,7 @@ it('links to the active workspace', () => {
 });
 it('links to the other workspaces', () => {
   const { getByText } = render(
-    <WorkspaceSwitcher
+    <WorkspaceMenu
       {...props}
       otherWorkspaces={[
         {
@@ -77,12 +77,12 @@ it('links to the other workspaces', () => {
 
 it('shows a separator if there are other workspaces', () => {
   const { getByRole, queryByRole, rerender } = render(
-    <WorkspaceSwitcher {...props} otherWorkspaces={[]} />
+    <WorkspaceMenu {...props} otherWorkspaces={[]} />
   );
   expect(queryByRole('separator')).not.toBeInTheDocument();
 
   rerender(
-    <WorkspaceSwitcher
+    <WorkspaceMenu
       {...props}
       otherWorkspaces={[
         {

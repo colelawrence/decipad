@@ -7,14 +7,27 @@ import { mockConsoleError } from '../../test-utils';
 
 mockConsoleError();
 
-it('renders a list with all children', () => {
+it('renders a list', () => {
   const { getByRole } = render(
     <NavigationList>
       <NavigationItem onClick={noop}>Item 1</NavigationItem>
+    </NavigationList>
+  );
+  expect(getByRole('list')).toBeVisible();
+});
+
+it('renders each child as a list item', () => {
+  const { getAllByRole } = render(
+    <NavigationList>
+      <NavigationItem onClick={noop}>Item 1</NavigationItem>
+      {null}
+      {undefined}
       <NavigationItem onClick={noop}>Item 2</NavigationItem>
     </NavigationList>
   );
-  expect(getByRole('list')).toHaveTextContent(/Item 1.*Item 2/);
+  expect(
+    getAllByRole('listitem').map(({ textContent }) => textContent)
+  ).toEqual(['Item 1', 'Item 2']);
 });
 
 it.each([
