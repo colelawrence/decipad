@@ -15,7 +15,7 @@ dotenv.config({
 const workerId = Number(process.env.JEST_WORKER_ID);
 assert(!!workerId, 'need JEST_WORKER_ID env var to be defined');
 
-const portBase = '' + (3333 + workerId * 100 - Math.ceil(Math.random() * 100));
+const portBase = '' + (3333 + workerId * 100 - Math.ceil(Math.random() * 50));
 process.env.DECI_PORT = process.env.PORT = portBase;
 process.env.NEXTAUTH_URL = `http://localhost:${process.env.portBase}/api/auth`;
 process.env.ARC_EVENTS_PORT = portBase + '1'; // just like Architect does
