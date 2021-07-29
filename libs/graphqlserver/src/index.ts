@@ -50,7 +50,8 @@ export default function createHandler(): HttpHandler {
       event.path = (
         event.requestContext as unknown as { http: { path: string } }
       ).http.path;
-      return handler(event, context, callback);
+
+      handler(event, context, callback);
     }
   ) as HttpHandler;
 }

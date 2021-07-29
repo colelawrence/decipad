@@ -15,47 +15,43 @@ const hasSentry = !!sentryDSN;
 
 export default {
   requestDidStart() {
-    return Promise.resolve({
+    return {
       didEncounterErrors(rc) {
-        return new Promise((resolve) => {
-          if (!hasSentry) {
-            return resolve();
+        if (!hasSentry) {
+          return;
+        }
+        withScope((scope) => {
+          scope.clear();
+          scope.addEventProcessor((event) =>
+            Handlers.parseRequest(event, (rc.context as any).event)
+          );
+
+          const userId = (rc.context as any).user?.id;
+          if (userId) {
+            scope.setUser({
+              id: userId,
+            });
           }
-          withScope((scope) => {
-            scope.clear();
-            scope.addEventProcessor((event) =>
-              Handlers.parseRequest(event, (rc.context as any).event)
-            );
 
-            const userId = (rc.context as any).user?.id;
-            if (userId) {
-              scope.setUser({
-                id: userId,
+          scope.setTags({
+            graphql: rc.operation?.operation || 'parse_err',
+            graphqlName:
+              (rc.operationName as any) || (rc.request.operationName as any),
+          });
+
+          rc.errors.forEach((error) => {
+            if (error.path || error.name !== 'GraphQLError') {
+              scope.setExtras({
+                path: error.path,
               });
+              captureException(error, scope);
+            } else {
+              scope.setExtras({});
+              captureMessage(`GraphQLWrongQuery: ${error.message}`, scope);
             }
-
-            scope.setTags({
-              graphql: rc.operation?.operation || 'parse_err',
-              graphqlName:
-                (rc.operationName as any) || (rc.request.operationName as any),
-            });
-
-            rc.errors.forEach((error) => {
-              if (error.path || error.name !== 'GraphQLError') {
-                scope.setExtras({
-                  path: error.path,
-                });
-                captureException(error, scope);
-              } else {
-                scope.setExtras({});
-                captureMessage(`GraphQLWrongQuery: ${error.message}`, scope);
-              }
-            });
-
-            resolve();
           });
         });
       },
-    });
+    };
   },
 } as ApolloServerPlugin;

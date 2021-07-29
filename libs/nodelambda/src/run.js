@@ -41,7 +41,7 @@ parentPort.on('message', (event) => {
     result
       .then((result) => callbackGuard(null, result))
       .catch((err) => callbackGuard(err));
-  } else {
+  } else if (typeof result !== 'undefined') {
     callbackGuard(null, result);
   }
 });

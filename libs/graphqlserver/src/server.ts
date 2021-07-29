@@ -1,5 +1,4 @@
 import { ApolloServer } from 'apollo-server-lambda';
-import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import createSchema from './schema';
 import createContext from './context';
 import playground from './playground';
@@ -11,9 +10,7 @@ export default function createServer() {
   return new ApolloServer({
     schema,
     context,
-    plugins: [
-      monitor,
-      ApolloServerPluginLandingPageGraphQLPlayground(playground),
-    ],
+    playground,
+    plugins: [monitor],
   });
 }
