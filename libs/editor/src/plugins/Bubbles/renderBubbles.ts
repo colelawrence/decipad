@@ -1,3 +1,4 @@
+import { ELEMENT_CODE_LINE } from '@udecode/slate-plugins';
 import { Editor, Node, Path, Range, Text } from 'slate';
 
 export const renderBubble =
@@ -9,16 +10,18 @@ export const renderBubble =
 
     const [parentNode] = Editor.parent(editor, path);
 
-    if (!parentNode || (parentNode as any).type !== 'code_block') return ranges;
+    if (!parentNode || (parentNode as any).type !== ELEMENT_CODE_LINE) {
+      return ranges;
+    }
 
     if (!Text.isText(node)) {
       return ranges;
     }
 
-    const lines = node.text.split('\n');
     let start = 0;
 
-    for (const line of lines) {
+    parentNode.children.forEach((child) => {
+      const line = (child as any).text;
       const variable = line.match(/^\s*(\w+)\s*(?:=[^=]+)$/)?.[1];
       const length = variable?.length || 0;
       const end = start + length;
@@ -32,7 +35,7 @@ export const renderBubble =
         });
       }
       start = start + line.length + 1;
-    }
+    });
 
     return ranges;
   };

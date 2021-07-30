@@ -1,6 +1,7 @@
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
+  ELEMENT_CODE_LINE,
   ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_PARAGRAPH,
@@ -50,7 +51,22 @@ export const Default = () => (
           id: v4(),
           children: [
             {
-              text: 'Monthly_expenses = 130,000 £\nInitial_Monthly_Revenue = 2500 £',
+              type: ELEMENT_CODE_LINE,
+              id: v4(),
+              children: [
+                {
+                  text: 'Monthly_expenses = 130,000 £',
+                },
+              ],
+            },
+            {
+              type: ELEMENT_CODE_LINE,
+              id: v4(),
+              children: [
+                {
+                  text: 'Initial_Monthly_Revenue = 2500 £',
+                },
+              ],
             },
           ],
         },
@@ -77,7 +93,13 @@ export const Default = () => (
           id: v4(),
           children: [
             {
-              text: `Monthly_Revenue_Growth_Rate = 5 £`,
+              id: v4(),
+              type: ELEMENT_CODE_LINE,
+              children: [
+                {
+                  text: `Monthly_Revenue_Growth_Rate = 5 £`,
+                },
+              ],
             },
           ],
         },
@@ -100,7 +122,22 @@ export const Default = () => (
           id: v4(),
           children: [
             {
-              text: `Time_to_profitability = ln(Monthly_expenses / Initial_Monthly_Revenue) / \nln(1 + Monthly_Revenue_Growth_Rate) in months`,
+              id: v4(),
+              type: ELEMENT_CODE_LINE,
+              children: [
+                {
+                  text: 'Time_to_profitability = ln(Monthly_expenses / Initial_Monthly_Revenue) /',
+                },
+              ],
+            },
+            {
+              id: v4(),
+              type: ELEMENT_CODE_LINE,
+              children: [
+                {
+                  text: 'ln(1 + Monthly_Revenue_Growth_Rate) in months',
+                },
+              ],
             },
           ],
         },
