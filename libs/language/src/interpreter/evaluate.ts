@@ -1,7 +1,7 @@
 import pSeries from 'p-series';
 
 import { AST } from '..';
-import { hasBuiltin } from '../builtins';
+import { hasBuiltin, callBuiltin } from '../builtins';
 import { getOfType, getDefined, getIdentifierString } from '../utils';
 import { getDateFromAstForm, getTimeUnit } from '../date';
 
@@ -18,7 +18,6 @@ import {
 import { evaluateTable } from './table';
 import { evaluateGiven } from './given';
 import { evaluateData } from './data';
-import { callBuiltin } from './callBuiltin';
 import { resolve as resolveData } from '../data';
 
 // Gets a single value from an expanded AST.

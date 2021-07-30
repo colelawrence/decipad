@@ -467,6 +467,16 @@ describe('tables', () => {
     expect(await inferStatement(makeContext(), table)).toEqual(expectedType);
   });
 
+  it('"previous" references in given: expressions', async () => {
+    const ctx = makeContext();
+
+    ctx.stack.set('A', Type.buildColumn(Type.Number, 3));
+
+    expect(
+      await inferStatement(ctx, given('A', c('previous', l(1))))
+    ).toMatchObject({ cellType: { type: 'number' } });
+  });
+
   it('unifies table sizes', async () => {
     const table = tableDef('Table', {
       Col1: l(1),

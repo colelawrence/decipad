@@ -1,10 +1,14 @@
-import { builtins } from '../builtins';
+import { builtins } from '.';
 import { automapValues } from '../dimtools';
 
-import { Value, AnyValue, fromJS } from './Value';
+import { Value, AnyValue, fromJS } from '../interpreter/Value';
+import { getDefined } from '../utils';
 
 export function callBuiltin(funcName: string, args: Value[]) {
-  const builtin = builtins[funcName];
+  const builtin = getDefined(
+    builtins[funcName],
+    'panic: builtin not found: ' + funcName
+  );
 
   return automapValues(
     args,
@@ -15,11 +19,7 @@ export function callBuiltin(funcName: string, args: Value[]) {
       } else if (builtin.fnValues != null) {
         return builtin.fnValues(...(argsLowerDims as AnyValue[]));
       } else {
-        throw new Error(
-          'panic: bad builtin ' +
-            funcName +
-            ' did not have either fn or fnValues'
-        );
+        throw new Error('unreachable');
       }
     },
     builtin.argCardinalities

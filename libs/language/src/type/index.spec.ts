@@ -1,11 +1,9 @@
 import { produce } from 'immer';
 import { AST } from '..';
-import { c, l } from '../utils';
 import { InferError } from './InferError';
 import { inverseExponent, setExponent } from './units';
 import { Type } from './index';
 
-const testNode = c('node 1', l(1));
 const nilPos = {
   line: 2,
   column: 0,
@@ -308,29 +306,6 @@ describe('Impossible types', () => {
     expect(imp.divideUnit([meter])).toEqual(imp);
 
     expect(imp.withErrorCause('ignored different error')).toEqual(imp);
-  });
-});
-
-describe('Type.runFunctor', () => {
-  it('replicates types in arguments which are already impossible, and does not call the function', () => {
-    const impossible = Type.Impossible.withErrorCause('');
-    const functor = jest.fn();
-
-    expect(Type.runFunctor(testNode, functor, impossible)).toEqual(impossible);
-    expect(functor).not.toHaveBeenCalled();
-  });
-
-  it('calls the functor and assigns an error cause and source node to it if there is an error', () => {
-    const type = Type.String;
-    const functor = (a: Type) => a.withErrorCause('');
-
-    expect(Type.runFunctor(testNode, functor, type)).toEqual(
-      type.withErrorCause('').inNode(testNode)
-    );
-  });
-
-  it('returns what the functor returns, when all is normal', () => {
-    expect(Type.runFunctor(testNode, () => Type.Boolean)).toEqual(Type.Boolean);
   });
 });
 

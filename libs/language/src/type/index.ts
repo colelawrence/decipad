@@ -207,26 +207,6 @@ export class Type {
     throw new Error('panic: Type.combine() called with 0 arguments');
   }
 
-  static runFunctor<ArgsT extends Type[]>(
-    sourceNode: AST.Node,
-    functor: (...args: ArgsT) => Type,
-    ...args: ArgsT
-  ): Type {
-    const impossibleArg = args.find((arg) => arg.errorCause != null);
-
-    if (impossibleArg != null) {
-      return impossibleArg;
-    }
-
-    const ret = functor(...args);
-
-    if (ret.errorCause != null) {
-      return ret.inNode(sourceNode);
-    }
-
-    return ret;
-  }
-
   toString(): string {
     if (this.errorCause != null) {
       return `Error: ${this.errorCause.message}`;

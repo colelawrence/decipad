@@ -6,7 +6,7 @@ import defaultFetch from '../data/default-fetch';
 export interface Context {
   stack: Stack<Type>;
   functionDefinitions: Map<string, AST.FunctionDefinition>;
-  inTable: boolean;
+  hasPrevious: boolean;
   fetch: ExternalData.FetchFunction;
 }
 
@@ -17,7 +17,7 @@ export const makeContext = (
   return {
     stack: new Stack(mapInit),
     functionDefinitions: new Map(),
-    inTable: false,
+    hasPrevious: false,
     fetch,
   };
 };

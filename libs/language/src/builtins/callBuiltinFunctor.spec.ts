@@ -1,10 +1,7 @@
 import { AST } from '..';
-import { l } from '../utils';
 import { Type, ExtendArgs } from '../type';
 
-import { callBuiltin } from './callBuiltin';
-
-const testNode = l('test-node');
+import { callBuiltinFunctor } from './callBuiltinFunctor';
 
 const nilPos = {
   line: 2,
@@ -30,13 +27,10 @@ const second: AST.Unit = {
   end: nilPos,
 };
 
-// @ts-expect-error testNode type not specific enough TODO fix
-const testFunctor = callBuiltin.bind(null, testNode);
-
 describe('callBuiltin', () => {
   it('dateCmpFunctor', () => {
     expect(
-      testFunctor(
+      callBuiltinFunctor(
         'dateequals',
         Type.buildDate('month'),
         Type.buildDate('month')
@@ -44,14 +38,17 @@ describe('callBuiltin', () => {
     ).toEqual(Type.Boolean);
 
     expect(
-      testFunctor('dategte', Type.buildDate('day'), Type.buildDate('month'))
-        .errorCause
+      callBuiltinFunctor(
+        'dategte',
+        Type.buildDate('day'),
+        Type.buildDate('month')
+      ).errorCause
     ).not.toBeNull();
   });
 
   it('contains', () => {
     expect(
-      testFunctor(
+      callBuiltinFunctor(
         'contains',
         Type.buildRange(Type.build({ type: 'number', unit: [meter] })),
         Type.build({ type: 'number', unit: [meter] })
@@ -59,7 +56,7 @@ describe('callBuiltin', () => {
     ).toEqual(Type.Boolean);
 
     expect(
-      testFunctor(
+      callBuiltinFunctor(
         'contains',
         Type.buildColumn(
           Type.buildRange(Type.build({ type: 'number', unit: [meter] })),
@@ -70,7 +67,7 @@ describe('callBuiltin', () => {
     ).toEqual(Type.buildColumn(Type.Boolean, 3));
 
     expect(
-      testFunctor(
+      callBuiltinFunctor(
         'contains',
         Type.buildRange(Type.build({ type: 'number', unit: [meter] })),
         Type.buildColumn(Type.build({ type: 'number', unit: [meter] }), 3)
@@ -78,7 +75,7 @@ describe('callBuiltin', () => {
     ).toEqual(Type.buildColumn(Type.Boolean, 3));
 
     expect(
-      testFunctor(
+      callBuiltinFunctor(
         'contains',
         Type.buildRange(Type.build({ type: 'number', unit: [meter] })),
         Type.build({ type: 'number', unit: [second] })
@@ -86,7 +83,7 @@ describe('callBuiltin', () => {
     ).not.toBeNull();
 
     expect(
-      testFunctor(
+      callBuiltinFunctor(
         'contains',
         Type.build({ type: 'number', unit: [meter] }),
         Type.buildRange(Type.build({ type: 'number', unit: [meter] }))
@@ -95,9 +92,11 @@ describe('callBuiltin', () => {
   });
 
   it('errors', () => {
-    expect(testFunctor('unknownFn', Type.Number).errorCause).not.toBeNull();
+    expect(
+      callBuiltinFunctor('unknownFn', Type.Number).errorCause
+    ).not.toBeNull();
 
-    expect(testFunctor('if', Type.Number).errorCause).not.toBeNull();
+    expect(callBuiltinFunctor('if', Type.Number).errorCause).not.toBeNull();
   });
 });
 
@@ -116,17 +115,17 @@ const typeDimTests: Record<string, Test> = {
     const n2 = build2({ type: 'number' });
     const out = buildOut({ type: 'number' });
 
-    expect(testFunctor('+', n, n2)).toEqual(out);
+    expect(callBuiltinFunctor('+', n, n2)).toEqual(out);
   },
   cmpFunctor: (build, build2, _, buildOut) => {
     const n = build({ type: 'number' });
     const n2 = build2({ type: 'number' });
     const out = buildOut({ type: 'boolean' });
 
-    expect(testFunctor('>', n, n2)).toEqual(out);
+    expect(callBuiltinFunctor('>', n, n2)).toEqual(out);
 
     expect(
-      testFunctor(
+      callBuiltinFunctor(
         '>',
         build({ type: 'number', unit: [meter] }),
         build2({ type: 'number', unit: [meter] })
@@ -134,7 +133,7 @@ const typeDimTests: Record<string, Test> = {
     ).toEqual(out);
 
     expect(
-      testFunctor(
+      callBuiltinFunctor(
         '>',
         build({ type: 'number', unit: [meter] }),
         build2({ type: 'number', unit: null })
@@ -142,7 +141,7 @@ const typeDimTests: Record<string, Test> = {
     ).toEqual(out);
 
     expect(
-      testFunctor(
+      callBuiltinFunctor(
         '>',
         build({ type: 'number', unit: [meter] }),
         build2({ type: 'number', unit: [second] })
@@ -151,7 +150,7 @@ const typeDimTests: Record<string, Test> = {
   },
   if: (build, build2, build3, buildOut) => {
     expect(
-      testFunctor(
+      callBuiltinFunctor(
         'if',
         build({ type: 'boolean' }),
         build2({ type: 'number' }),
@@ -160,7 +159,7 @@ const typeDimTests: Record<string, Test> = {
     ).toEqual(buildOut({ type: 'number' }));
 
     expect(
-      testFunctor(
+      callBuiltinFunctor(
         'if',
         build({ type: 'boolean' }),
         build2({ type: 'string' }),

@@ -11,7 +11,7 @@ import {
 } from '../utils';
 import { getDateFromAstForm } from '../date';
 
-import { callBuiltin } from './callBuiltin';
+import { callBuiltinFunctor } from '../builtins';
 import { Context, makeContext } from './context';
 import { inferSequence } from './sequence';
 import { findBadColumn, unifyColumnSizes, getLargestColumn } from './table';
@@ -31,6 +31,20 @@ const withErrorSource =
       return type;
     }
   };
+
+/** Push the stack and set Context.hasPrevious for the duration of `fn` */
+const pushStackAndPrevious = async (
+  ctx: Context,
+  fn: () => Promise<Type>
+): Promise<Type> => {
+  const savedHasPrevious = ctx.hasPrevious;
+  ctx.hasPrevious = true;
+  try {
+    return await ctx.stack.withPush(fn);
+  } finally {
+    ctx.hasPrevious = savedHasPrevious;
+  }
+};
 
 /*
  Walk depth-first into an expanded AST.Expression, collecting the type of things beneath and checking it against the current iteration's constraints.
@@ -98,9 +112,7 @@ export const inferExpression = withErrorSource(
       case 'table': {
         const columns = expr.args;
 
-        ctx.inTable = true;
-
-        const tableType = await ctx.stack.withPush(async () => {
+        const tableType = await pushStackAndPrevious(ctx, async () => {
           const columnDefs = [];
           const columnNames = [];
 
@@ -118,7 +130,6 @@ export const inferExpression = withErrorSource(
 
           return Type.buildTuple(columnDefs, columnNames);
         });
-        ctx.inTable = false;
 
         return tableType.mapType(() => {
           const unified =
@@ -154,7 +165,7 @@ export const inferExpression = withErrorSource(
           fArgs.map((arg) => () => inferExpression(ctx, arg))
         );
 
-        if (ctx.inTable && fName === 'previous') {
+        if (ctx.hasPrevious && fName === 'previous') {
           return givenArguments[0];
         }
 
@@ -163,7 +174,7 @@ export const inferExpression = withErrorSource(
         if (functionDefinition != null) {
           return await inferFunction(ctx, functionDefinition, givenArguments);
         } else {
-          return callBuiltin(expr, fName, ...givenArguments);
+          return callBuiltinFunctor(fName, ...givenArguments);
         }
       }
       case 'given': {
@@ -176,7 +187,7 @@ export const inferExpression = withErrorSource(
         const largestColumn =
           tupleTypes != null ? getLargestColumn(tupleTypes) : null;
 
-        return await ctx.stack.withPush(async () => {
+        return await pushStackAndPrevious(ctx, async () => {
           if (cellType != null && columnSize != null) {
             ctx.stack.set(refName, cellType);
 

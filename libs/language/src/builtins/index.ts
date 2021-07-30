@@ -3,6 +3,9 @@ import { getDefined, getInstanceof } from '../utils';
 import { addTimeQuantity, sortSpecificities } from '../date';
 import { AnyValue, Date, TimeQuantity } from '../interpreter/Value';
 
+export { callBuiltinFunctor } from './callBuiltinFunctor';
+export { callBuiltin } from './callBuiltin';
+
 export interface BuiltinSpec {
   name: string;
   argCount: number;
@@ -33,7 +36,7 @@ const cmpFunctor = (left: Type, right: Type): Type =>
     Type.build({ type: 'boolean' })
   );
 
-export const builtins: Record<string, BuiltinSpec> = {
+export const builtins: { [fname: string]: BuiltinSpec } = {
   sqrt: {
     name: 'sqrt',
     argCount: 1,
