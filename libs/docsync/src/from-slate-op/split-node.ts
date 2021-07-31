@@ -1,9 +1,10 @@
 import { getParent, getChildren } from '../utils/path';
 import { cloneNode } from '../utils/clone-node';
+import { ExtendedSlateSplitNodeOperation, SyncValue } from '../types';
 
 export function splitNode(
   doc: SyncValue,
-  op: ExtendedSlate.ExtendedSlateSplitNodeOperation
+  op: ExtendedSlateSplitNodeOperation
 ): SyncValue {
   const [parent, index]: [any, number] = getParent(doc, op.path) as [
     any,

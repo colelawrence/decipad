@@ -14,6 +14,7 @@ import {
   TestStorage,
   tickUntil,
 } from '@decipad/testutils';
+import { SyncNode } from './types';
 
 waitForExpect.defaults.interval = 500;
 
@@ -272,7 +273,7 @@ function randomSplit(index: number, text: string, node: Element): Operation[] {
     properties: {
       ...props,
       id: nanoid(),
-    } as Partial<Sync.Node>,
+    } as Partial<SyncNode>,
   });
 
   return ops;

@@ -2,6 +2,7 @@ import { ReplicaStorage } from '@decipad/interfaces';
 import { Sync } from '@decipad/replica';
 import { LRUStorage } from '@decipad/lrustorage';
 import { SyncEditor, SyncEditorOptions } from './sync-editor';
+import { SyncValue } from './types';
 
 interface ISyncDocConstructorOptions {
   userId: string;

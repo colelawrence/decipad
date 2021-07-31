@@ -1,10 +1,10 @@
-import { Diff, CollectionType } from 'automerge';
+import { SyncDiff, SyncCollectionType } from '../types';
 
-function createByType(type: CollectionType) {
+function createByType(type: SyncCollectionType) {
   return type === 'map' ? {} : type === 'list' ? [] : '';
 }
 
-export function opCreate({ obj, type }: Diff, [map, ops]: any) {
+export function opCreate({ obj, type }: SyncDiff, [map, ops]: any) {
   map[obj] = createByType(type);
 
   return [map, ops];

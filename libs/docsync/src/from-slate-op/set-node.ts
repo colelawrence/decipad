@@ -1,8 +1,9 @@
 import { getTarget } from '../utils/path';
+import { ExtendedSlateSetNodeOperation, SyncValue } from '../types';
 
 export function setNode(
   doc: SyncValue,
-  op: ExtendedSlate.ExtendedSlateSetNodeOperation
+  op: ExtendedSlateSetNodeOperation
 ): SyncValue {
   const node = getTarget(doc, op.path);
 

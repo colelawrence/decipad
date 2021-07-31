@@ -1,9 +1,10 @@
 import { getParent, getChildren } from '../utils/path';
 import { toSync } from '../utils/to-sync';
+import { ExtendedSlateInsertNodeOperation, SyncValue } from '../types';
 
 export function insertNode(
   doc: SyncValue,
-  op: ExtendedSlate.ExtendedSlateInsertNodeOperation
+  op: ExtendedSlateInsertNodeOperation
 ): SyncValue {
   const [parent, index] = getParent(doc, op.path);
 

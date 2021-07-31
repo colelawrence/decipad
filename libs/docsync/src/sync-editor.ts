@@ -19,6 +19,7 @@ import { observeSubscriberCount } from './utils/observe-subscriber-count';
 import initialEditorValue from './utils/initial-editor-value';
 import { uri } from './utils/uri';
 import { config } from './config';
+import { ExtendedSlateOperation, SyncDocValue, SyncValue } from './types';
 
 export interface SyncEditorOptions {
   startReplicaSync?: boolean;
@@ -26,11 +27,9 @@ export interface SyncEditorOptions {
 }
 
 export class SyncEditor {
-  private slateOpQueue: ExtendedSlate.ExtendedSlateOperation[] = [];
-  private replica: Replica<SyncDocDoc>;
-  private slateOpsObservable = new Subject<
-    ExtendedSlate.ExtendedSlateOperation[]
-  >();
+  private slateOpQueue: ExtendedSlateOperation[] = [];
+  private replica: Replica<SyncDocValue>;
+  private slateOpsObservable = new Subject<ExtendedSlateOperation[]>();
   public slateOpsCountObservable = observeSubscriberCount(
     this.slateOpsObservable
   );
@@ -63,7 +62,7 @@ export class SyncEditor {
       maxRetryIntervalMs: conf.maxRetryIntervalMs,
       sendChangesDebounceMs: conf.sendChangesDebounceMs,
     };
-    this.replica = createReplica<SyncDocDoc>(replicaOptions);
+    this.replica = createReplica<SyncDocValue>(replicaOptions);
 
     this.changesSubscription = this.replica.remoteChanges.subscribe(
       this.onRemoteChange.bind(this)
@@ -74,7 +73,7 @@ export class SyncEditor {
     return toJS(this.replica.getValue());
   }
 
-  slateOps(): Observable<ExtendedSlate.ExtendedSlateOperation[]> {
+  slateOps(): Observable<ExtendedSlateOperation[]> {
     return this.slateOpsObservable;
   }
 
@@ -100,12 +99,12 @@ export class SyncEditor {
     }
   }
 
-  private onRemoteChange({ diffs, doc, before }: ChangeEvent<SyncDocDoc>) {
+  private onRemoteChange({ diffs, doc, before }: ChangeEvent<SyncDocValue>) {
     const ops = toSlateOps(diffs, doc, before).map(toRemoteOp);
     this.queue.push(() => this.applyRemoteSlateOps(ops));
   }
 
-  private applyRemoteSlateOps(ops: ExtendedSlate.ExtendedSlateOperation[]) {
+  private applyRemoteSlateOps(ops: ExtendedSlateOperation[]) {
     const p = (this.pendingApplyPromise = new Promise((resolve) => {
       this.pendingApplyResolve = resolve;
       if (ops.length > 0) {
@@ -120,9 +119,7 @@ export class SyncEditor {
     return p;
   }
 
-  sendSlateOperations(
-    ops: (Operation | ExtendedSlate.ExtendedSlateOperation)[]
-  ) {
+  sendSlateOperations(ops: (Operation | ExtendedSlateOperation)[]) {
     const supportedOps = ops.filter(isSupportedSlateOpType);
     for (const op of supportedOps) {
       if (op.id) {
@@ -148,7 +145,7 @@ export class SyncEditor {
   /*** local changes *******/
   /*************************/
 
-  private pushLocalSlateOps(ops: ExtendedSlate.ExtendedSlateOperation[]) {
+  private pushLocalSlateOps(ops: ExtendedSlateOperation[]) {
     this.slateOpQueue = this.slateOpQueue.concat(ops);
     this.debouncedProcessLocalSlateOps();
   }
@@ -164,7 +161,7 @@ export class SyncEditor {
       for (const op of ops) {
         if (!op.isRemote) {
           const applyOp = fromSlateOpType(
-            (op as unknown as ExtendedSlate.ExtendedSlateOperation)
+            (op as unknown as ExtendedSlateOperation)
               .type as SupportedSlateOpTypes
           );
 
@@ -181,12 +178,10 @@ export class SyncEditor {
   }
 }
 
-function toRemoteOp(
-  op: ExtendedSlate.ExtendedSlateOperation
-): ExtendedSlate.ExtendedSlateOperation {
+function toRemoteOp(op: ExtendedSlateOperation): ExtendedSlateOperation {
   return { ...op, isRemote: true, id: nanoid() };
 }
 
-function isNotRemoteOp(op: ExtendedSlate.ExtendedSlateOperation): boolean {
+function isNotRemoteOp(op: ExtendedSlateOperation): boolean {
   return !op.isRemote;
 }

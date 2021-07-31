@@ -1,9 +1,14 @@
-import { Diff, Doc } from 'automerge';
 import { toJS } from '../utils/to-js';
 import { opInsert } from './insert';
 import { opRemove } from './remove';
 import { opSet } from './set';
 import { opCreate } from './create';
+import {
+  SyncDiff,
+  SyncDoc,
+  SyncDocValue,
+  ExtendedSlateOperation,
+} from '../types';
 
 const byAction = {
   create: opCreate,
@@ -15,11 +20,11 @@ const byAction = {
 const rootKey = '00000000-0000-0000-0000-000000000000';
 
 export function toSlateOps(
-  ops: Diff[],
-  doc: Doc<{ value: SyncDocDoc }>,
-  before: Doc<{ value: SyncDocDoc }>
-): ExtendedSlate.ExtendedSlateOperation[] {
-  function iterate(acc: [any, any[]], op: Diff): any {
+  ops: SyncDiff[],
+  doc: SyncDoc<{ value: SyncDocValue }>,
+  before: SyncDoc<{ value: SyncDocValue }>
+): ExtendedSlateOperation[] {
+  function iterate(acc: [any, any[]], op: SyncDiff): any {
     const action = byAction[op.action];
 
     const result = action ? action(op, acc, doc, before) : acc;

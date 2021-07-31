@@ -1,10 +1,11 @@
 import { getParent, getChildren } from '../utils/path';
 import { toJS } from '../utils/to-js';
 import { cloneNode } from '../utils/clone-node';
+import { ExtendedSlateMergeNodeOperation, SyncValue, SyncNode } from '../types';
 
 export function mergeNode(
   doc: SyncValue,
-  op: ExtendedSlate.ExtendedSlateMergeNodeOperation
+  op: ExtendedSlateMergeNodeOperation
 ): SyncValue {
   const [parent, index]: [any, number] = getParent(doc, op.path) as [
     any,
@@ -17,7 +18,7 @@ export function mergeNode(
   if (prev.text) {
     prev.text.insertAt(prev.text.length, ...toJS(next.text).split(''));
   } else {
-    getChildren(next).forEach((n: Sync.Node) =>
+    getChildren(next).forEach((n: SyncNode) =>
       getChildren(prev).push(cloneNode(n))
     );
   }

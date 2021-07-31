@@ -1,7 +1,7 @@
 import { timeout } from '@decipad/testutils';
 import { ELEMENT_H1, ELEMENT_PARAGRAPH } from '@udecode/slate-plugins';
 import { createEditor } from 'slate';
-import { DocSync } from './';
+import { DocSync, SyncNode } from './';
 
 const docId = 'docid';
 
@@ -21,7 +21,7 @@ describe('pad editor', () => {
       }
     };
 
-    editor.children = model.getValue() as Sync.Node[];
+    editor.children = model.getValue() as SyncNode[];
 
     editor.apply({
       type: 'insert_text',
@@ -53,7 +53,7 @@ describe('pad editor', () => {
       }
     };
 
-    editor.children = model.getValue() as Sync.Node[];
+    editor.children = model.getValue() as SyncNode[];
 
     expect(editor.children).toMatchObject([
       {

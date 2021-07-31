@@ -1,8 +1,9 @@
 import { getParent, getChildren } from '../utils/path';
+import { ExtendedSlateRemoveNodeOperation, SyncValue } from '../types';
 
 export function removeNode(
   doc: SyncValue,
-  op: ExtendedSlate.ExtendedSlateRemoveNodeOperation
+  op: ExtendedSlateRemoveNodeOperation
 ): SyncValue {
   const [parent, index] = getParent(doc, op.path);
 

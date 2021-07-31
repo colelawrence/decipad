@@ -1,8 +1,9 @@
 import { getTarget } from '../utils/path';
+import { ExtendedSlateInsertTextOperation, SyncValue } from '../types';
 
 export function insertText(
   doc: SyncValue,
-  op: ExtendedSlate.ExtendedSlateInsertTextOperation
+  op: ExtendedSlateInsertTextOperation
 ): SyncValue {
   const node = getTarget(doc, op.path);
 

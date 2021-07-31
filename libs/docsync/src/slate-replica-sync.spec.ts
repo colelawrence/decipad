@@ -9,6 +9,7 @@ import { LoremIpsum } from 'lorem-ipsum';
 import { nanoid } from 'nanoid';
 import waitForExpect from 'wait-for-expect';
 import { SyncEditor } from './sync-editor';
+import { SyncNode, ExtendedSlateOperation } from './types';
 
 waitForExpect.defaults.interval = 100;
 
@@ -47,7 +48,7 @@ describe('slate to replica sync', () => {
       }
     };
 
-    editor1.children = model1.getValue() as Sync.Node[];
+    editor1.children = model1.getValue() as SyncNode[];
   });
 
   beforeAll(async () => {
@@ -74,7 +75,7 @@ describe('slate to replica sync', () => {
       });
     });
 
-    editor2.children = model2.getValue() as Sync.Node[];
+    editor2.children = model2.getValue() as SyncNode[];
   });
 
   test('text insertion works', async () => {
@@ -501,7 +502,7 @@ function mergeTwoFirstLines(editor: Editor): SlateOperation[] {
     offset: 0,
   });
 
-  const secondLine = candidates[1] as Sync.Node;
+  const secondLine = candidates[1] as SyncNode;
 
   ops.push({
     type: 'merge_node',
@@ -510,7 +511,7 @@ function mergeTwoFirstLines(editor: Editor): SlateOperation[] {
     properties: {
       type: secondLine.type,
       id: secondLine.id,
-    } as Partial<ExtendedSlate.ExtendedSlateOperation>,
+    } as Partial<ExtendedSlateOperation>,
   } as SlateOperation);
 
   return ops;

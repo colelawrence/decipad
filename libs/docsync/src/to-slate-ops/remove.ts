@@ -1,10 +1,10 @@
-import { Diff, Doc } from 'automerge';
 import { Element } from 'slate';
 import { toSlatePath } from '../utils/to-slate-path';
 import { getTarget } from '../utils/path';
 import assert from 'assert';
+import { SyncDiff, SyncDoc, SyncDocValue } from '../types';
 
-const removeTextOp = (op: Diff) => (map: any, doc: Element) => {
+const removeTextOp = (op: SyncDiff) => (map: any, doc: Element) => {
   const { index, path, obj } = op;
 
   const slatePath = toSlatePath(path).slice(0, path && path.length);
@@ -34,7 +34,7 @@ const removeTextOp = (op: Diff) => (map: any, doc: Element) => {
 };
 
 const removeAttributeOp =
-  (op: Diff, before: Doc<{ value: SyncDocDoc }>) =>
+  (op: SyncDiff, before: SyncDoc<{ value: SyncDocValue }>) =>
   (map: any, doc: Element) => {
     const { obj, path, key } = op;
 
@@ -58,7 +58,7 @@ const removeAttributeOp =
     };
   };
 
-const removeNodeOp = (op: Diff) => (map: any, doc: Element) => {
+const removeNodeOp = (op: SyncDiff) => (map: any, doc: Element) => {
   const { index, obj, path } = op;
 
   const slatePath = toSlatePath(path);
@@ -85,10 +85,10 @@ const removeNodeOp = (op: Diff) => (map: any, doc: Element) => {
 };
 
 const opRemove = (
-  op: Diff,
+  op: SyncDiff,
   [map, ops]: any,
-  _: Doc<{ value: SyncDocDoc }>,
-  before: Doc<{ value: SyncDocDoc }>
+  _: SyncDoc<{ value: SyncDocValue }>,
+  before: SyncDoc<{ value: SyncDocValue }>
 ) => {
   const { index, path, obj, type } = op;
 

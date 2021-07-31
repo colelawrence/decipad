@@ -1,9 +1,10 @@
-import Automerge, { Diff } from 'automerge';
+import Automerge from 'automerge';
 import { toSlatePath } from '../utils/to-slate-path';
 import { toJS } from '../utils/to-js';
+import { SyncDiff, SyncDocValue } from '../types';
 
 const insertTextOp =
-  ({ index, path, value }: Diff) =>
+  ({ index, path, value }: SyncDiff) =>
   () => ({
     type: 'insert_text',
     path: toSlatePath(path),
@@ -13,7 +14,7 @@ const insertTextOp =
   });
 
 const insertNodeOp =
-  ({ value, obj, index, path }: Diff, doc: SyncDocDoc) =>
+  ({ value, obj, index, path }: SyncDiff, doc: SyncDocValue) =>
   (map: any) => {
     const ops: any = [];
 
@@ -42,7 +43,7 @@ const insertNodeOp =
     return ops;
   };
 
-export function opInsert(op: Diff, [map, ops]: any, doc: SyncDocDoc) {
+export function opInsert(op: SyncDiff, [map, ops]: any, doc: SyncDocValue) {
   const { link, obj, path, index, type, value } = op;
 
   if (link && Object.prototype.hasOwnProperty.call(map, obj)) {

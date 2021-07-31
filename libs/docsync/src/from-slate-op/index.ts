@@ -7,6 +7,7 @@ import { removeNode } from './remove-node';
 import { removeText } from './remove-text';
 import { setNode } from './set-node';
 import { splitNode } from './split-node';
+import { SyncValue, ExtendedSlateOperation } from '../types';
 
 const slateOpTypes = {
   insert_node: insertNode,
@@ -21,17 +22,14 @@ const slateOpTypes = {
 
 export type SupportedSlateOpTypes = keyof typeof slateOpTypes;
 
-type OpApplier = (
-  doc: SyncValue,
-  op: ExtendedSlate.ExtendedSlateOperation
-) => SyncValue;
+type OpApplier = (doc: SyncValue, op: ExtendedSlateOperation) => SyncValue;
 
 export function fromSlateOpType(type: SupportedSlateOpTypes): OpApplier | null {
   return (slateOpTypes[type] as OpApplier) ?? null;
 }
 
 export function isSupportedSlateOpType(
-  op: Operation | ExtendedSlate.ExtendedSlateOperation
-): op is ExtendedSlate.ExtendedSlateOperation {
+  op: Operation | ExtendedSlateOperation
+): op is ExtendedSlateOperation {
   return {}.hasOwnProperty.call(slateOpTypes, op.type);
 }

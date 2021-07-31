@@ -1,7 +1,8 @@
 import { ELEMENT_H1, ELEMENT_PARAGRAPH } from '@udecode/slate-plugins';
 import { toSync } from './to-sync';
+import { SyncDocValue } from '../types';
 
-function live(): SyncDocDoc {
+function live(): SyncDocValue {
   return toSync([
     {
       id: '6d1c2bbb-e354-4e73-83d4-77494a43327e',
@@ -13,7 +14,7 @@ function live(): SyncDocDoc {
       type: ELEMENT_PARAGRAPH,
       children: [{ text: '' }],
     },
-  ]) as SyncDocDoc;
+  ]) as SyncDocValue;
 }
 
 // we have to initialize a static value because randomization of ids by automerge
