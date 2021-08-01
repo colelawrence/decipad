@@ -19,10 +19,10 @@ import React, { useRef } from 'react';
 import { Route, useHistory, useRouteMatch } from 'react-router-dom';
 
 export const CreateWorkspaceModal = () => {
-  const { path } = useRouteMatch();
+  const { path, url } = useRouteMatch();
 
   const history = useHistory();
-  const handleClose = () => history.push('..');
+  const handleClose = () => history.push(url);
   const newWorkspaceRef = useRef<HTMLInputElement>(null);
 
   const [mutate] =

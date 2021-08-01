@@ -60,8 +60,7 @@ export function Workspace({ workspaceId }: { workspaceId: string }) {
     <Grid gridTemplateRows="auto 1fr" minH="100vh">
       <Topbar workspaceId={workspaceId} />
       <Grid
-        p={10}
-        gridTemplateColumns="300px 1fr"
+        gridTemplateColumns="272px 1fr"
         borderTop="2px solid"
         borderColor="gray.100"
       >

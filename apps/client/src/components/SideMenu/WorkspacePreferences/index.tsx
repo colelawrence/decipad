@@ -1,7 +1,7 @@
+import { Route, useHistory, useRouteMatch } from 'react-router-dom';
 import {
   Button,
   Heading,
-  Icon,
   Input,
   Modal,
   ModalBody,
@@ -9,14 +9,12 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  useDisclosure,
 } from '@chakra-ui/react';
 import {
   GetWorkspaceById_getWorkspaceById,
   useRenameWorkspace,
 } from '@decipad/queries';
-import { FormEvent, useRef, useState } from 'react';
-import { FiSettings } from 'react-icons/fi';
+import React, { FormEvent, useRef, useState } from 'react';
 import { DeleteWorkspace } from './DeleteWorkspace/DeleteWorkspace';
 
 export interface WorkspacePreferencesProps {
@@ -26,26 +24,29 @@ export interface WorkspacePreferencesProps {
 export const WorkspacePreferences = ({
   currentWorkspace,
 }: WorkspacePreferencesProps) => {
+  const history = useHistory();
+  const { path, url } = useRouteMatch();
+
   const renameInputRef = useRef(null);
   const [name, setName] = useState(currentWorkspace?.name || '');
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [renameMutate] = useRenameWorkspace({
     id: currentWorkspace?.id || '',
     name,
   });
 
+  const handleClose = () => {
+    history.push(url);
+  };
+
   const renameWorkspace = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     renameMutate();
-    onClose();
+    handleClose();
   };
 
   return (
-    <>
-      <Button leftIcon={<Icon as={FiSettings} />} onClick={onOpen}>
-        Workspace Preferences
-      </Button>
-      <Modal isOpen={isOpen} onClose={onClose} initialFocusRef={renameInputRef}>
+    <Route path={`${path}/preferences`}>
+      <Modal isOpen onClose={handleClose} initialFocusRef={renameInputRef}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>{name} Preferences</ModalHeader>
@@ -68,12 +69,12 @@ export const WorkspacePreferences = ({
             </form>
 
             <DeleteWorkspace
-              onClose={onClose}
+              onClose={handleClose}
               currentWorkspace={currentWorkspace}
             />
           </ModalBody>
         </ModalContent>
       </Modal>
-    </>
+    </Route>
   );
 };
