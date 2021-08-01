@@ -12,6 +12,7 @@ import {
   p13Regular,
   p13SemiBold,
   p14Medium,
+  p14Regular,
   p15Medium,
   p16Regular,
 } from './text';
@@ -45,6 +46,9 @@ export const P13Regular: React.FC = ({ children }) => (
 );
 export const P13SemiBold: React.FC = ({ children }) => (
   <p css={css(p13SemiBold)}>{children}</p>
+);
+export const P14Regular: React.FC = ({ children }) => (
+  <p css={css(p14Regular)}>{children}</p>
 );
 export const P14Medium: React.FC = ({ children }) => (
   <p css={css(p14Medium)}>{children}</p>

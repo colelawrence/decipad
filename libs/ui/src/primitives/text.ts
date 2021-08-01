@@ -98,6 +98,12 @@ export const p13SemiBold: TypographyStyles = {
   lineHeight: '136%',
   letterSpacing: '-0.008em',
 };
+export const p14Regular: TypographyStyles = {
+  ...pDefault,
+  fontSize: `${14 / usualRemPxs}rem`,
+  lineHeight: '140%',
+  letterSpacing: '-0.002em',
+};
 export const p14Medium: TypographyStyles = {
   ...pDefault,
   fontWeight: 500,
