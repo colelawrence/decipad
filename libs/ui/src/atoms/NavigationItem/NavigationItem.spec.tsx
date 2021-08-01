@@ -1,5 +1,12 @@
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { createMemoryHistory } from 'history';
+import { MemoryRouter, Router } from 'react-router-dom';
+import {
+  applyCssVars,
+  findParentWithStyle,
+  mockConsoleWarn,
+} from '../../test-utils';
 import { noop } from '../../utils';
 import { NavigationItem } from './NavigationItem';
 
@@ -38,4 +45,62 @@ it('renders an optional icon', () => {
     </NavigationItem>
   );
   expect(getByTitle('Pretty Icon')).toBeInTheDocument();
+});
+
+describe('with a router', () => {
+  mockConsoleWarn();
+
+  let cleanup: undefined | (() => void);
+  afterEach(() => cleanup?.());
+
+  it('shows when it is active', async () => {
+    const { getByText } = render(
+      <MemoryRouter>
+        <NavigationItem href="/page">Text</NavigationItem>
+      </MemoryRouter>
+    );
+    cleanup = await applyCssVars();
+    const normalBackgroundColor = findParentWithStyle(
+      getByText('Text'),
+      'backgroundColor'
+    )?.backgroundColor;
+    cleanup();
+
+    userEvent.click(getByText('Text'));
+    cleanup = await applyCssVars();
+    const activeBackgroundColor = findParentWithStyle(
+      getByText('Text'),
+      'backgroundColor'
+    )?.backgroundColor;
+
+    expect(activeBackgroundColor).not.toEqual(normalBackgroundColor);
+  });
+
+  describe('and the exact prop', () => {
+    it('is not considered active on sub-routes', async () => {
+      const history = createMemoryHistory({ initialEntries: ['/page'] });
+      const { getByText } = render(
+        <Router history={history}>
+          <NavigationItem exact href="/page">
+            Text
+          </NavigationItem>
+        </Router>
+      );
+      cleanup = await applyCssVars();
+      const activeBackgroundColor = findParentWithStyle(
+        getByText('Text'),
+        'backgroundColor'
+      )?.backgroundColor;
+      cleanup();
+
+      history.push('/page/child');
+      cleanup = await applyCssVars();
+      const childBackgroundColor = findParentWithStyle(
+        getByText('Text'),
+        'backgroundColor'
+      )?.backgroundColor;
+
+      expect(childBackgroundColor).not.toEqual(activeBackgroundColor);
+    });
+  });
 });

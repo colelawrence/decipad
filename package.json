@@ -189,6 +189,7 @@
     "graphql-scalars": "^1.10.0",
     "graphql-tools": "^7.0.5",
     "graphql-ws": "^4.7.0",
+    "history": "^4.0.0",
     "immer": "^9.0.2",
     "kafkajs": "^1.15.0",
     "leftpad": "^0.0.1",

@@ -1,5 +1,6 @@
+import { SerializedStyles } from '@emotion/react';
 import { AnchorHTMLAttributes, ComponentProps } from 'react';
-import { HashLink } from 'react-router-hash-link';
+import { NavHashLink, HashLink } from 'react-router-hash-link';
 import { useHasRouter } from './routing';
 
 export const resolveHref = (
@@ -19,19 +20,54 @@ export const resolveHref = (
   return { internal: false, resolved: url.href };
 };
 
+const activeClassName = 'active';
 type AnchorProps = {
   // hrefs may conditionally be undefined, but the prop is mandatory so it cannot be forgotten
   readonly href: string | undefined;
+  readonly css?: SerializedStyles;
 } & (
-  | Omit<ComponentProps<typeof HashLink>, 'to' | 'smooth'>
-  | Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href' | 'target' | 'rel'>
+  | ({
+      readonly activeStyles?: undefined;
+      readonly exact?: undefined;
+    } & Omit<ComponentProps<typeof HashLink>, 'to' | 'smooth'>)
+  | ({
+      readonly activeStyles: SerializedStyles;
+      readonly exact?: boolean;
+    } & Omit<
+      ComponentProps<typeof NavHashLink>,
+      'activeClassName' | 'to' | 'smooth'
+    >)
+  | ({
+      readonly activeStyles?: undefined;
+      readonly exact?: undefined;
+    } & Omit<
+      AnchorHTMLAttributes<HTMLAnchorElement>,
+      'href' | 'target' | 'rel'
+    >)
 );
 // ESLint does not understand the abstraction
 /* eslint-disable jsx-a11y/anchor-has-content */
 /* eslint-disable react/jsx-no-target-blank */
-export const Anchor: React.FC<AnchorProps> = ({ href, ...props }) => {
+export const Anchor: React.FC<AnchorProps> = ({
+  href,
+  activeStyles,
+  exact,
+  ...props
+}) => {
   const { internal = false, resolved = href } = href ? resolveHref(href) : {};
   if (useHasRouter() && resolved && internal) {
+    if (activeStyles) {
+      return (
+        <NavHashLink
+          {...props}
+          activeClassName={activeClassName}
+          css={[props.css, { [`&.${activeClassName}`]: activeStyles }]}
+          to={resolved}
+          exact={exact}
+          smooth
+        />
+      );
+    }
     return <HashLink {...props} to={resolved} smooth />;
   }
   return (

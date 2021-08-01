@@ -27,7 +27,7 @@ export const WorkspaceNavigation = ({
   return (
     <nav css={styles}>
       <NavigationList>
-        <NavigationItem href={allNotebooksHref} icon={<Folder />}>
+        <NavigationItem exact href={allNotebooksHref} icon={<Folder />}>
           <span css={itemTextStyles}>All Notebooks</span>
         </NavigationItem>
       </NavigationList>

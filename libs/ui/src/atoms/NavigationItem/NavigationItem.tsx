@@ -7,6 +7,11 @@ const containerStyles = css({
   display: 'grid',
   gridTemplateRows: 'minmax(32px, min-content)',
 });
+
+const activeStyles = css({
+  backgroundColor: cssVar('highlightColor'),
+  boxShadow: `0px 0px 0px 8px ${cssVar('highlightColor')}`,
+});
 const styles = css(p12Regular, {
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
 
@@ -14,11 +19,9 @@ const styles = css(p12Regular, {
   alignItems: 'center',
 
   clipPath: 'inset(0 -8px 0 -8px round 8px)',
-  ':hover, :focus': {
-    backgroundColor: cssVar('highlightColor'),
-    boxShadow: `0px 0px 0px 8px ${cssVar('highlightColor')}`,
-  },
+  ':hover, :focus': activeStyles,
 });
+
 const iconStyles = css({
   height: 0,
   minHeight: '50%',
@@ -42,18 +45,23 @@ export type NavigationItemProps = {
 } & (
   | {
       readonly href: string;
+      readonly exact?: boolean;
       readonly onClick?: undefined;
     }
   | {
       readonly onClick: () => void;
       readonly href?: undefined;
+      readonly exact?: undefined;
     }
 );
 
 export const NavigationItem = ({
   children,
-  href,
   icon,
+
+  href,
+  exact,
+
   onClick,
 }: NavigationItemProps): ReturnType<FC> => {
   const styledIcon = icon && <span css={iconStyles}>{icon}</span>;
@@ -65,7 +73,12 @@ export const NavigationItem = ({
           {children}
         </button>
       ) : (
-        <Anchor css={styles} href={href}>
+        <Anchor
+          css={styles}
+          activeStyles={activeStyles}
+          href={href}
+          exact={exact}
+        >
           {styledIcon}
           {children}
         </Anchor>

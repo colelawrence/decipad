@@ -26,8 +26,8 @@ export const findParentWithStyle = <P extends keyof CSSStyleDeclaration>(
 export const applyCssVars = (): Promise<() => void> => {
   return new Promise((resolve, reject) => {
     const cleanup = () =>
-      [...document.head.querySelectorAll('[data-cssvars]')].forEach((element) =>
-        element.remove()
+      [...document.head.querySelectorAll('[data-cssvars="out"]')].forEach(
+        (element) => element.remove()
       );
     cssVarsPonyfill({
       onError: reject,
