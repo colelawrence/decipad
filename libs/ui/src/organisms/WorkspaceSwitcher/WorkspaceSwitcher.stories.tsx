@@ -1,10 +1,11 @@
-import { WorkspaceSwitcher } from './WorkspaceSwitcher';
 import { Meta, Story } from '@storybook/react';
+import { WorkspaceSwitcher } from './WorkspaceSwitcher';
+import { sidePadding } from '../../storybook-utils';
 
 export default {
   title: 'Organisms / Workspaces / Switcher',
   component: WorkspaceSwitcher,
-  decorators: [(story) => <div style={{ padding: '0 8px' }}>{story()}</div>],
+  decorators: [sidePadding(8)],
 } as Meta;
 
 export const Normal: Story = () => (

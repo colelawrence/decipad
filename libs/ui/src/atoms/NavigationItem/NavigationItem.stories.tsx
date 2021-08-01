@@ -1,5 +1,6 @@
 import { Meta, Story } from '@storybook/react';
 import { cssVar } from '../../primitives';
+import { sidePadding } from '../../storybook-utils';
 import { noop } from '../../utils';
 
 import { NavigationItem } from './NavigationItem';
@@ -11,7 +12,7 @@ interface Args {
 export default {
   title: 'Atoms / Navigation Item',
   component: NavigationItem,
-  decorators: [(story) => <div style={{ padding: '0 8px' }}>{story()}</div>],
+  decorators: [sidePadding(8)],
   args: {
     children: 'Text',
   },

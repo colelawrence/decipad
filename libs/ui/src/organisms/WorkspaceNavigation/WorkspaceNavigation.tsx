@@ -31,6 +31,7 @@ export const WorkspaceNavigation = ({
           <span css={itemTextStyles}>All Notebooks</span>
         </NavigationItem>
       </NavigationList>
+      <Divider />
       <NavigationList>
         <NavigationItem href="https://discord.gg/UaJhZdqc" icon={<Globe />}>
           <span css={itemTextStyles}>Explore community</span>
@@ -39,7 +40,6 @@ export const WorkspaceNavigation = ({
           <span css={itemTextStyles}>Preferences</span>
         </NavigationItem>
       </NavigationList>
-      <Divider />
     </nav>
   );
 };

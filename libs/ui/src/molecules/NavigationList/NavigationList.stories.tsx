@@ -1,11 +1,12 @@
 import { Meta } from '@storybook/react';
 import { NavigationItem } from '../../atoms';
+import { sidePadding } from '../../storybook-utils';
 import { noop } from '../../utils';
 import { NavigationList } from './NavigationList';
 
 export default {
   title: 'Molecules / Navigation List',
-  decorators: [(story) => <div style={{ padding: '0 8px' }}>{story()}</div>],
+  decorators: [sidePadding(8)],
   component: NavigationList,
 } as Meta;
 

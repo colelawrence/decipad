@@ -1,10 +1,11 @@
 import { Meta } from '@storybook/react';
+import { sidePadding } from '../../storybook-utils';
 import { WorkspaceNavigation } from './WorkspaceNavigation';
 
 export default {
   title: 'Organisms / Workspace Navigation',
   component: WorkspaceNavigation,
-  decorators: [(story) => <div style={{ padding: '0 8px' }}>{story()}</div>],
+  decorators: [sidePadding(8)],
 } as Meta;
 
 export const Normal = () => (
