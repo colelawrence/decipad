@@ -8,6 +8,7 @@ import { cssVar, p13Regular } from '../../primitives';
 import { noop } from '../../utils';
 
 const styles = css({
+  backgroundColor: cssVar('backgroundColor'),
   border: `1px solid ${cssVar('highlightColor')}`,
   borderRadius: '8px',
 
