@@ -24,7 +24,7 @@ export const Icon: Story<Args> = (args) => (
   <NavigationItem
     onClick={noop}
     icon={
-      <svg>
+      <svg viewBox="0 0 1 1">
         <circle cx="50%" cy="50%" r="50%" fill={cssVar('currentTextColor')} />
       </svg>
     }

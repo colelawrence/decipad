@@ -27,6 +27,20 @@ const iconStyles = css({
 
   display: 'flex',
   alignItems: 'center',
+
+  '@supports not (aspect-ratio: 1 / 1)': {
+    position: 'relative',
+    paddingTop: '8px',
+    paddingBottom: '8px',
+    minWidth: '16px',
+    '> *': {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      bottom: 0,
+      width: '100%',
+    },
+  },
 });
 
 export type NavigationItemProps = {

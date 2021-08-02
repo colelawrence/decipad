@@ -5,6 +5,7 @@ import { NavigationList } from './NavigationList';
 
 export default {
   title: 'Molecules / Navigation List',
+  decorators: [(story) => <div style={{ padding: '0 8px' }}>{story()}</div>],
   component: NavigationList,
 } as Meta;
 

@@ -17,10 +17,20 @@ const containerStyles = css(p12Bold, {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
+
+  '@supports not (aspect-ratio: 1 / 1)': {
+    position: 'relative',
+    paddingBottom: '100%',
+  },
 });
 
 const initialStyles = css(p12Bold, {
   aspectRatio: '1 / 1',
+  '@supports not (aspect-ratio: 1 / 1)': {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+  },
 });
 const initialBackgroundStyles = (hoverSelector = 'svg:hover') =>
   css({

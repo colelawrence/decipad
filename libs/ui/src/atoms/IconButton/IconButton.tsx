@@ -9,6 +9,7 @@ const styles = css({
 });
 const iconStyles = css({
   display: 'flex',
+  flexDirection: 'column',
   maxWidth: '32px',
   maxHeight: '32px',
   padding: `20%`,
