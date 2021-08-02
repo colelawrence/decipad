@@ -91,6 +91,27 @@ describe('basic code', () => {
     });
   });
 
+  it('Can use + for strings too', async () => {
+    const results = await runCodeForVariables(
+      `
+        Two = 1 + 1
+        Eleven = "1" + "1"
+      `,
+      ['Two', 'Eleven']
+    );
+
+    expect(results).toMatchObject({
+      types: {
+        Two: Type.Number,
+        Eleven: Type.String,
+      },
+      variables: {
+        Two: 2,
+        Eleven: '11',
+      },
+    });
+  });
+
   it('Can perform binops between columns and single numbers', async () => {
     const results = await runCode(`
       Column = [ 1, 2, 3 ]

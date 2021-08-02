@@ -44,8 +44,7 @@ export class Stack<T> {
 
   delete(varName: string) {
     for (let i = this.stack.length - 1; i >= 0; i--) {
-      const has = this.stack[i].has(varName);
-      if (has != null) {
+      if (this.stack[i].has(varName)) {
         this.stack[i].delete(varName);
         return;
       }

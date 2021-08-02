@@ -1,7 +1,7 @@
 import pSeries from 'p-series';
 
 import { AST } from '..';
-import { hasBuiltin, callBuiltin } from '../builtins';
+import { callBuiltin } from '../builtins';
 import { getOfType, getDefined, getIdentifierString } from '../utils';
 import { getDateFromAstForm, getTimeUnit } from '../date';
 
@@ -61,9 +61,7 @@ export async function evaluate(
 
       if (funcName === 'previous') {
         return realm.previousValue ?? args[0];
-      } else if (hasBuiltin(funcName)) {
-        return callBuiltin(funcName, args);
-      } else {
+      } else if (realm.functions.has(funcName)) {
         const customFunc = getDefined(realm.functions.get(funcName));
 
         return await realm.stack.withPush(async () => {
@@ -85,6 +83,8 @@ export async function evaluate(
 
           throw new Error('function is empty');
         });
+      } else {
+        return callBuiltin(funcName, args);
       }
     }
     case 'range': {

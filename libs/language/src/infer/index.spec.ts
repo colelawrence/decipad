@@ -769,7 +769,10 @@ describe('inferProgram', () => {
       variables: new Map([['A', Type.Number]]),
       blockReturns: [
         {
-          errorCause: InferError.expectedButGot(Type.Number, Type.String),
+          errorCause: InferError.badOverloadedBuiltinCall('+', [
+            'number',
+            'string',
+          ]),
         },
       ],
     });

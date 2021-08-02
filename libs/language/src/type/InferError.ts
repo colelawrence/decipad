@@ -1,4 +1,5 @@
 import { AST, Type } from '..';
+import { OverloadTypeName } from '../builtins/overloadBuiltin';
 
 type ErrSpec =
   | {
@@ -19,6 +20,11 @@ type ErrSpec =
     }
   | {
       errType: 'unexpectedEmptyColumn';
+    }
+  | {
+      errType: 'badOverloadedBuiltinCall';
+      functionName: string;
+      gotArgTypes: OverloadTypeName[];
     };
 
 function specToString(spec: ErrSpec) {
@@ -45,6 +51,12 @@ function specToString(spec: ErrSpec) {
     }
     case 'unexpectedEmptyColumn': {
       return `Unexpected empty column`;
+    }
+    case 'badOverloadedBuiltinCall': {
+      const gotArgTypes = spec.gotArgTypes
+        .map((argType) => argType.replace('-', ' '))
+        .join(', ');
+      return `The function ${spec.functionName} cannot be called with (${gotArgTypes})`;
     }
   }
 }
@@ -87,10 +99,23 @@ export class InferError {
     return error;
   }
 
-  static unexpectedEmptyColumn(): any {
+  static unexpectedEmptyColumn() {
     const error = new InferError();
     error.spec = {
       errType: 'unexpectedEmptyColumn',
+    };
+    return error;
+  }
+
+  static badOverloadedBuiltinCall(
+    functionName: string,
+    gotArgTypes: OverloadTypeName[]
+  ) {
+    const error = new InferError();
+    error.spec = {
+      errType: 'badOverloadedBuiltinCall',
+      functionName,
+      gotArgTypes,
     };
     return error;
   }

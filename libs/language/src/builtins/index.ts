@@ -1,13 +1,13 @@
 import { Type } from '../type';
 import { getDefined, getInstanceof } from '../utils';
 import { addTimeQuantity, sortSpecificities } from '../date';
-import { AnyValue, Date, TimeQuantity } from '../interpreter/Value';
+import { AnyValue, Date, Scalar, TimeQuantity } from '../interpreter/Value';
 
+import { overloadBuiltin } from './overloadBuiltin';
 export { callBuiltinFunctor } from './callBuiltinFunctor';
 export { callBuiltin } from './callBuiltin';
 
 export interface BuiltinSpec {
-  name: string;
   argCount: number;
   /**
    * Use this to indicate desired cardinality per argument (1 for 1D, 2 for 2D, etc.)
@@ -38,37 +38,41 @@ const cmpFunctor = (left: Type, right: Type): Type =>
 
 export const builtins: { [fname: string]: BuiltinSpec } = {
   sqrt: {
-    name: 'sqrt',
     argCount: 1,
     fn: (n) => Math.sqrt(n as number),
     functor: (n) => n.isScalar('number'),
   },
   ln: {
-    name: 'ln',
     argCount: 1,
     fn: (n) => Math.log(n),
     functor: (n) => n.isScalar('number'),
   },
-  '+': {
-    name: '+',
-    argCount: 2,
-    fn: (a, b) => a + b,
-    functor: binopFunctor,
-  },
+  '+': overloadBuiltin('+', 2, [
+    {
+      argTypes: ['number', 'number'],
+      fnValues: (n1, n2) =>
+        new Scalar(Number(n1.getData()) + Number(n2.getData())),
+      functor: binopFunctor,
+    },
+    {
+      argTypes: ['string', 'string'],
+      fnValues: (n1, n2) =>
+        new Scalar(String(n1.getData()) + String(n2.getData())),
+      functor: (a, b) =>
+        Type.combine(a.isScalar('string'), b.isScalar('string')),
+    },
+  ]),
   '-': {
-    name: '-',
     argCount: 2,
     fn: (a, b) => a - b,
     functor: binopFunctor,
   },
   'unary-': {
-    name: 'unary-',
     argCount: 1,
     fn: (a) => -a,
     functor: (n) => n.isScalar('number'),
   },
   '*': {
-    name: '*',
     argCount: 2,
     fn: (a, b) => a * b,
     functor: (a, b) =>
@@ -79,7 +83,6 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
       ),
   },
   '/': {
-    name: '/',
     argCount: 2,
     fn: (a, b) => a / b,
     functor: (a, b) =>
@@ -90,55 +93,46 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
       ),
   },
   '%': {
-    name: '%',
     argCount: 2,
     fn: (a, b) => a % b,
     functor: binopFunctor,
   },
   '**': {
-    name: '**',
     argCount: 2,
     fn: (a, b) => Math.pow(a, b),
     functor: binopWithUnitlessSecondArgFunctor,
   },
   '^': {
-    name: '^',
     argCount: 2,
     fn: (a, b) => Math.pow(a, b),
     functor: binopWithUnitlessSecondArgFunctor,
   },
   '<': {
-    name: '<',
     argCount: 2,
     fn: (a, b) => a < b,
     functor: cmpFunctor,
   },
   '>': {
-    name: '>',
     argCount: 2,
     fn: (a, b) => a > b,
     functor: cmpFunctor,
   },
   '<=': {
-    name: '<=',
     argCount: 2,
     fn: (a, b) => a <= b,
     functor: cmpFunctor,
   },
   '>=': {
-    name: '>=',
     argCount: 2,
     fn: (a, b) => a >= b,
     functor: cmpFunctor,
   },
   '==': {
-    name: '==',
     argCount: 2,
     fn: (a, b) => a == b,
     functor: cmpFunctor,
   },
   if: {
-    name: 'if',
     argCount: 3,
     fn: (a, b, c) => (a ? b : c),
     functor: (a: Type, b: Type, c: Type) =>
@@ -146,7 +140,6 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
   },
   // List stuff
   stepgrowth: {
-    name: 'stepgrowth',
     argCount: 1,
     argCardinalities: [2],
     fn: (a: number[]) =>
@@ -158,7 +151,6 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
       Type.combine(a.isColumn().reduced().isScalar('number'), a),
   },
   grow: {
-    name: 'grow',
     argCount: 3,
     argCardinalities: [1, 1, 2],
     fn: (initial: number, growthRate: number, { length }: unknown[]) =>
@@ -176,7 +168,6 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
       ),
   },
   transpose: {
-    name: 'transpose',
     argCount: 1,
     argCardinalities: [3],
     fn: (twoDee: number[][]) =>
@@ -201,14 +192,12 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
   },
   // Range stuff
   contains: {
-    name: 'contains',
     argCount: 2,
     fn: ([bStart, bEnd], a) => a >= bStart && a <= bEnd,
     functor: (a: Type, b: Type) =>
       Type.combine(b.sameAs(a.getRangeOf()), Type.Boolean),
   },
   containsdate: {
-    name: 'containsdate',
     argCount: 2,
     fn: ([rStart, rEnd], [dStart, dEnd]) => rStart <= dStart && rEnd >= dEnd,
     functor: (a: Type, b: Type) =>
@@ -216,19 +205,16 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
   },
   // Date stuff (TODO operator overloading)
   dateequals: {
-    name: 'dateequals',
     argCount: 2,
     fn: ([aStart, aEnd], [bStart, bEnd]) => aStart === bStart && aEnd === bEnd,
     functor: dateCmpFunctor,
   },
   dategte: {
-    name: 'dategte',
     argCount: 2,
     fn: ([aStart], [bStart]) => aStart >= bStart,
     functor: dateCmpFunctor,
   },
   dateadd: {
-    name: 'dateadd',
     argCount: 2,
     fnValues: (date: AnyValue, years: AnyValue) => {
       date = getInstanceof(date, Date);
@@ -255,13 +241,9 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
   },
   // Reduce funcs
   total: {
-    name: 'total',
     argCount: 1,
     argCardinalities: [2],
     fn: (nums: number[]) => nums.reduce((a, b) => a + b, 0),
     functor: (nums: Type) => nums.reduced().isScalar('number'),
   },
 };
-
-export const hasBuiltin = (builtinName: string) =>
-  Object.hasOwnProperty.call(builtins, builtinName);

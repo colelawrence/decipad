@@ -19,6 +19,7 @@ export function callBuiltin(funcName: string, args: Value[]) {
       } else if (builtin.fnValues != null) {
         return builtin.fnValues(...(argsLowerDims as AnyValue[]));
       } else {
+        /* istanbul ignore next */
         throw new Error('unreachable');
       }
     },
