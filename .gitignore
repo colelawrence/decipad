@@ -239,3 +239,6 @@ prefs.arc
 apps/backend/src/http/*/index.js*
 apps/backend/src/ws/*/index.js*
 apps/backend/src/queues/*/index.js*
+
+# Backend shared dir
+apps/backend/src/shared

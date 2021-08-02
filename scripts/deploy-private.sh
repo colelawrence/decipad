@@ -19,6 +19,11 @@ echo "Building storybook..."
 npm run build:storybook
 cp -r dist/storybook/ui/. apps/backend/public/.storybook
 
+echo "Building backend..."
+npm run build:backend
+
+## Trying prevent #295 (https://github.com/decipad/decipad/pull/295)
+mkdir -p apps/backend/src/shared;
 
 echo "Deploying \"$DEPLOY_NAME\"...";
 cd apps/backend
