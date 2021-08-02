@@ -1,5 +1,4 @@
 import { ResultsContextProvider } from '@decipad/ui';
-import styled from '@emotion/styled';
 import { SlatePlugins, useStoreEditorRef } from '@udecode/slate-plugins';
 import { nanoid } from 'nanoid';
 import { useMemo, useState } from 'react';
@@ -17,16 +16,6 @@ import {
 import { useNotebookTitlePlugin } from './plugins/Title/useNotebookTitlePlugin';
 
 export { AnonymousDocSyncProvider, DocSyncProvider } from './contexts/DocSync';
-
-const Wrapper = styled('div')({
-  paddingTop: '36px',
-  position: 'relative',
-});
-
-const InnerContent = styled('div')({
-  maxWidth: '80ch',
-  margin: 'auto',
-});
 
 export interface EditorProps {
   padId: string;
@@ -59,22 +48,18 @@ const SlateEditor = ({ padId, autoFocus }: EditorProps) => {
 
   return (
     <ResultsContextProvider value={results}>
-      <Wrapper>
-        <InnerContent>
-          <DropFile editor={editor}>
-            <SlatePlugins
-              id={editorId}
-              plugins={editorPlugins}
-              options={options}
-              components={components}
-              editableProps={{ autoFocus }}
-            >
-              <FormattingToolbar />
-              <SlashCommandsSelect {...getSlashCommandsProps()} />
-            </SlatePlugins>
-          </DropFile>
-        </InnerContent>
-      </Wrapper>
+      <DropFile editor={editor}>
+        <SlatePlugins
+          id={editorId}
+          plugins={editorPlugins}
+          options={options}
+          components={components}
+          editableProps={{ autoFocus }}
+        >
+          <FormattingToolbar />
+          <SlashCommandsSelect {...getSlashCommandsProps()} />
+        </SlatePlugins>
+      </DropFile>
     </ResultsContextProvider>
   );
 };

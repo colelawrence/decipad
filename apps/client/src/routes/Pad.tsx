@@ -1,79 +1,113 @@
-import { useQuery } from '@apollo/client';
-import { Button, Icon } from '@chakra-ui/react';
+import { QueryHookOptions, useQuery } from '@apollo/client';
 import { Editor } from '@decipad/editor';
 import {
   GetPadById,
   GetPadByIdVariables,
   GET_PAD_BY_ID,
 } from '@decipad/queries';
-import { HelpButton, LoadingSpinnerPage } from '@decipad/ui';
-import { useEffect } from 'react';
+import { LoadingSpinnerPage } from '@decipad/ui';
+import styled from '@emotion/styled';
 import { FiArrowLeft } from 'react-icons/fi';
-import { Link, useHistory } from 'react-router-dom';
-import { useToasts } from 'react-toast-notifications';
-import { encode as encodeVanityUrlComponent } from '../lib/vanityUrlComponent';
+import { Link } from 'react-router-dom';
 
-export function Pad({
-  workspaceId,
-  padId,
-}: {
+const Wrapper = styled('div')({
+  padding: '16px 32px',
+});
+
+const ErrorWrapper = styled('div')({
+  minHeight: '100vh',
+  minWidth: '100vw',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+});
+
+const ErrorHeader = styled('h1')({
+  fontSize: '2rem',
+  fontWeight: 'bold',
+  margin: '0',
+  padding: '0',
+});
+
+const LinkButton = styled(Link)({
+  backgroundColor: '#111',
+  color: '#fff',
+  padding: '8px 16px',
+  borderRadius: '6px',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '0.75rem',
+});
+
+const TopBarWrapper = styled('div')({
+  display: 'flex',
+  width: '100%',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  paddingBottom: '16px',
+});
+
+const EditorWrapper = styled('div')({
+  position: 'relative',
+});
+
+const EditorInner = styled('div')({
+  maxWidth: '120ch',
+  margin: 'auto',
+});
+
+const useGetPadByIdQuery = (
+  options: QueryHookOptions<GetPadById, GetPadByIdVariables>
+) => useQuery<GetPadById, GetPadByIdVariables>(GET_PAD_BY_ID, options);
+
+export interface PadProps {
   workspaceId: string;
   padId: string;
-}) {
-  const { addToast } = useToasts();
-  const { data, loading, error } = useQuery<GetPadById, GetPadByIdVariables>(
-    GET_PAD_BY_ID,
-    {
-      variables: { id: padId },
-    }
-  );
-  const pad = data?.getPadById;
-  useEffect(() => {
-    if (error) {
-      addToast('Error fetching the pad: ' + error.message, {
-        appearance: 'error',
-      });
-    }
-  }, [error, addToast]);
+}
 
-  const history = useHistory();
+export const Pad = ({ workspaceId, padId }: PadProps) => {
+  const { data, loading, error } = useGetPadByIdQuery({
+    variables: { id: padId },
+  });
 
-  const padName = pad?.name || '';
-  const pathName = history.location.pathname;
-
-  useEffect(() => {
-    if (!pad) {
-      return;
-    }
-    const url = `/workspaces/${workspaceId}/pads/${encodeVanityUrlComponent(
-      padName,
-      padId
-    )}`;
-    if (url !== pathName) {
-      history.replace(url);
-    }
-  }, [pad, padName, pathName, history, workspaceId, padId]);
-
-  if (loading || !pad) {
+  if (loading) {
     return <LoadingSpinnerPage />;
   }
 
+  if (error) {
+    return (
+      <ErrorWrapper>
+        <ErrorHeader>Error loading pad: ${error.message}</ErrorHeader>
+        <LinkButton to={`/workspaces/${workspaceId}`}>
+          Back to workspace
+        </LinkButton>
+      </ErrorWrapper>
+    );
+  }
+
   return (
-    <>
-      <Button
-        as={Link}
-        to={`/workspaces/${workspaceId}`}
-        pos="absolute"
-        zIndex="999"
-        top={12}
-        left={12}
-        aria-label="go back"
-        leftIcon={<Icon as={FiArrowLeft} />}
-      >
-        Go Back
-      </Button>
-      <Editor padId={padId} autoFocus={!!pad!.name} />
-      <HelpButton />
-    </>
+    <Wrapper>
+      <TopBarWrapper>
+        <LinkButton to={`/workspaces/${workspaceId}`}>
+          <FiArrowLeft />
+          Workspace
+        </LinkButton>
+        <a
+          href="https://www.notion.so/decipad/What-is-Deci-d140cc627f1e4380bb8be1855272f732"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Documentation
+        </a>
+      </TopBarWrapper>
+      <EditorWrapper>
+        <EditorInner>
+          {data && data.getPadById && (
+            <Editor padId={data.getPadById.id} autoFocus />
+          )}
+        </EditorInner>
+      </EditorWrapper>
+    </Wrapper>
   );
-}
+};
