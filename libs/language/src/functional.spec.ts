@@ -1,4 +1,4 @@
-import { Type } from './type';
+import { build as t } from './type';
 import { cleanDate } from './date';
 import {
   runCode,
@@ -42,11 +42,11 @@ describe('use of funds document', () => {
       `)
     ).toMatchObject({
       type: objectToTupleType({
-        Months: Type.buildColumn(Type.buildDate('month'), 12),
-        Exec: Type.build({ type: 'number', columnSize: 12 }),
-        Product: Type.build({ type: 'number', columnSize: 12 }),
-        Tech: Type.build({ type: 'number', columnSize: 12 }),
-        FrontEnd: Type.build({ type: 'number', columnSize: 12 }),
+        Months: t.column(t.date('month'), 12),
+        Exec: t.column(t.number(), 12),
+        Product: t.column(t.number(), 12),
+        Tech: t.column(t.number(), 12),
+        FrontEnd: t.column(t.number(), 12),
       }),
       value: [
         objectToTupleValue({

@@ -6,7 +6,7 @@ import {
   Scalar,
   TimeQuantity,
 } from '../interpreter/Value';
-import { InferError, Type } from '../type';
+import { InferError, build as t } from '../type';
 import {
   getOverloadedTypeFromType,
   getOverloadedTypeFromValue,
@@ -36,9 +36,9 @@ it('chooses the correct overload for a value', () => {
 });
 
 it('chooses the correct overload for a type', () => {
-  expect(plus.functor(Type.Number, Type.Number)).toEqual(Type.Number);
-  expect(plus.functor(Type.String, Type.String)).toEqual(Type.String);
-  expect(plus.functor(Type.Number, Type.String).errorCause).toEqual(
+  expect(plus.functor(t.number(), t.number())).toEqual(t.number());
+  expect(plus.functor(t.string(), t.string())).toEqual(t.string());
+  expect(plus.functor(t.number(), t.string()).errorCause).toEqual(
     InferError.badOverloadedBuiltinCall('+', ['number', 'string'])
   );
 });
@@ -61,17 +61,21 @@ describe('utils', () => {
   });
 
   it('getOverloadTypeFromType', () => {
-    expect(getOverloadedTypeFromType(Type.String)).toEqual('string');
-    expect(getOverloadedTypeFromType(Type.Number)).toEqual('number');
-    expect(getOverloadedTypeFromType(Type.Boolean)).toEqual('boolean');
-    expect(getOverloadedTypeFromType(Type.buildDate('day'))).toEqual('date');
-    expect(getOverloadedTypeFromType(Type.buildTimeQuantity([]))).toEqual(
+    expect(getOverloadedTypeFromType(t.string())).toEqual('string');
+    expect(getOverloadedTypeFromType(t.number())).toEqual('number');
+    expect(getOverloadedTypeFromType(t.boolean())).toEqual('boolean');
+    expect(getOverloadedTypeFromType(t.date('day'))).toEqual('date');
+    expect(getOverloadedTypeFromType(t.timeQuantity([]))).toEqual(
       'time-quantity'
     );
-    expect(() => getOverloadedTypeFromType(Type.buildTuple([]))).toThrow();
+    expect(() =>
+      getOverloadedTypeFromType(
+        t.table({ length: 1, columns: [], columnNames: [] })
+      )
+    ).toThrow();
 
     expect(() =>
-      getOverloadedTypeFromType(Type.buildColumn(Type.Number, 123))
+      getOverloadedTypeFromType(t.column(t.number(), 123))
     ).toThrow();
   });
 });

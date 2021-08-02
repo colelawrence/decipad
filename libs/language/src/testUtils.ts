@@ -7,7 +7,7 @@ import { run } from './interpreter';
 import { Column, fromJS } from './interpreter/Value';
 import { inferTargetStatement, inferProgram } from './infer';
 import { zip } from './utils';
-import { Type } from './type';
+import { Type, build as t } from './type';
 
 const parseOneBlock = (source: string): AST.Block[] => {
   const parserInput: Parser.UnparsedBlock[] = [{ id: 'block-id', source }];
@@ -78,7 +78,7 @@ export const objectToTupleType = (obj: Record<string, Type>) => {
     values.push(value);
   }
 
-  return Type.buildTuple(values, names);
+  return t.tuple(values, names);
 };
 
 export const objectToTupleValue = (

@@ -1,18 +1,9 @@
-import { getDefined } from '../utils';
-import { Type } from '../type';
+import { getDefined, allMatch } from '../utils';
+import { Type, build as t } from '../type';
 import * as Values from '../interpreter/Value';
 
 const arrayOfOnes = (length: number) => Array.from({ length }, () => 1);
 
-const allMatch = <T extends unknown>(
-  array: T[],
-  matchFn: (a: T, b: T) => boolean
-) =>
-  array.every((tuple, index) => {
-    const nextItem = array[index + 1];
-
-    return nextItem != null ? matchFn(tuple, nextItem) : true;
-  });
 
 const validateCardinalities = <T extends { cardinality: number }>(
   args: T[],
@@ -34,7 +25,7 @@ export const automapTypes = (
 ): Type => {
   function recurse(types: Type[]): Type {
     if (types.some((t) => t.tupleTypes != null)) {
-      return Type.Impossible.withErrorCause('Unexpected tuple');
+      return t.impossible('Unexpected tuple');
     }
 
     const toMapOver = types.filter(
@@ -51,9 +42,9 @@ export const automapTypes = (
           toMapOver.includes(t) ? getDefined(t.cellType) : t
         );
 
-        return Type.buildColumn(recurse(mappedValues), mapLength);
+        return t.column(recurse(mappedValues), mapLength);
       } else {
-        return Type.Impossible.withErrorCause('Mismatched column lengths');
+        return t.impossible('Mismatched column lengths');
       }
     } else {
       return mapFn(types);
@@ -63,7 +54,7 @@ export const automapTypes = (
   if (validateCardinalities(types, expectedCardinalities)) {
     return recurse(types);
   } else {
-    return Type.Impossible.withErrorCause('A column is required');
+    return t.impossible('A column is required');
   }
 };
 

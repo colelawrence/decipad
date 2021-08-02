@@ -1,6 +1,6 @@
 import { Meta, Story, Canvas, Props } from '@storybook/addon-docs/blocks';
 import { CodeBlock } from './CodeBlock.component';
-import { Type } from '@decipad/language';
+import { Type, buildType } from '@decipad/language';
 import { ResultsContextProvider } from '@decipad/editor';
 
 <Meta
@@ -37,17 +37,14 @@ The CodeBlock component is one of the most important components for our editor, 
 
 export const Template = (args) => (
   <ResultsContextProvider
-    value={{test: { type: Type.Number, value: [20], errors: [] }}}
+    value={{ test: { type: buildType.number(), value: [20], errors: [] } }}
   >
-    <CodeBlock
-      element={{ id: 'test' }}
-      {...args}
-    />
+    <CodeBlock element={{ id: 'test' }} {...args} />
   </ResultsContextProvider>
 );
 
 export const NoResult = (args) => (
-  <ResultsContextProvider value={{test: null}}>
+  <ResultsContextProvider value={{ test: null }}>
     <CodeBlock element={{ id: 'test', children: [] }} {...args} />
   </ResultsContextProvider>
 );

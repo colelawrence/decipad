@@ -1,5 +1,5 @@
 import { AST } from '..';
-import { Type, ExtendArgs } from '../type';
+import { Type, build as t } from '../type';
 
 import { callBuiltinFunctor } from './callBuiltinFunctor';
 
@@ -30,19 +30,11 @@ const second: AST.Unit = {
 describe('callBuiltin', () => {
   it('dateCmpFunctor', () => {
     expect(
-      callBuiltinFunctor(
-        'dateequals',
-        Type.buildDate('month'),
-        Type.buildDate('month')
-      )
-    ).toEqual(Type.Boolean);
+      callBuiltinFunctor('dateequals', t.date('month'), t.date('month'))
+    ).toEqual(t.boolean());
 
     expect(
-      callBuiltinFunctor(
-        'dategte',
-        Type.buildDate('day'),
-        Type.buildDate('month')
-      ).errorCause
+      callBuiltinFunctor('dategte', t.date('day'), t.date('month')).errorCause
     ).not.toBeNull();
   });
 
@@ -50,57 +42,58 @@ describe('callBuiltin', () => {
     expect(
       callBuiltinFunctor(
         'contains',
-        Type.buildRange(Type.build({ type: 'number', unit: [meter] })),
-        Type.build({ type: 'number', unit: [meter] })
+        t.range(t.number([meter])),
+        t.number([meter])
       )
-    ).toEqual(Type.Boolean);
+    ).toEqual(t.boolean());
 
     expect(
       callBuiltinFunctor(
         'contains',
-        Type.buildColumn(
-          Type.buildRange(Type.build({ type: 'number', unit: [meter] })),
-          3
-        ),
-        Type.build({ type: 'number', unit: [meter] })
+        t.column(t.range(t.number([meter])), 3),
+        t.number([meter])
       )
-    ).toEqual(Type.buildColumn(Type.Boolean, 3));
+    ).toEqual(t.column(t.boolean(), 3));
 
     expect(
       callBuiltinFunctor(
         'contains',
-        Type.buildRange(Type.build({ type: 'number', unit: [meter] })),
-        Type.buildColumn(Type.build({ type: 'number', unit: [meter] }), 3)
+        t.range(t.number([meter])),
+        t.column(t.number([meter]), 3)
       )
-    ).toEqual(Type.buildColumn(Type.Boolean, 3));
+    ).toEqual(t.column(t.boolean(), 3));
 
     expect(
       callBuiltinFunctor(
         'contains',
-        Type.buildRange(Type.build({ type: 'number', unit: [meter] })),
-        Type.build({ type: 'number', unit: [second] })
+        t.range(t.number([meter])),
+        t.number([second])
       ).errorCause
     ).not.toBeNull();
 
     expect(
       callBuiltinFunctor(
         'contains',
-        Type.build({ type: 'number', unit: [meter] }),
-        Type.buildRange(Type.build({ type: 'number', unit: [meter] }))
+        t.number([meter]),
+        t.range(t.number([meter]))
       ).errorCause
     ).not.toBeNull();
   });
 
   it('errors', () => {
     expect(
-      callBuiltinFunctor('unknownFn', Type.Number).errorCause
+      callBuiltinFunctor('unknownFn', t.number()).errorCause
     ).not.toBeNull();
 
-    expect(callBuiltinFunctor('if', Type.Number).errorCause).not.toBeNull();
+    expect(callBuiltinFunctor('if', t.number()).errorCause).not.toBeNull();
   });
 });
 
-type Builder = (a: ExtendArgs) => Type;
+interface TestBuilderArgs {
+  type: 'string' | 'boolean' | 'number';
+  unit?: AST.Unit[] | null;
+}
+type Builder = (a: TestBuilderArgs) => Type;
 // build, build2, build3, and buildOut will switch dimensionality to test propagation
 type Test = (
   build: Builder,
@@ -170,10 +163,16 @@ const typeDimTests: Record<string, Test> = {
 };
 
 for (const [testName, testFn] of Object.entries(typeDimTests)) {
-  const buildScalar = (args: ExtendArgs) => Type.build(args);
-  const build1D = (args: ExtendArgs) => Type.buildColumn(buildScalar(args), 42);
-  const build2D = (args: ExtendArgs) => Type.buildColumn(build1D(args), 42);
-  const build3D = (args: ExtendArgs) => Type.buildColumn(build2D(args), 42);
+  const buildScalar = ({ type, unit }: TestBuilderArgs) => {
+    if (type === 'number') {
+      return t.number(unit);
+    } else {
+      return t[type]();
+    }
+  };
+  const build1D = (args: TestBuilderArgs) => t.column(buildScalar(args), 42);
+  const build2D = (args: TestBuilderArgs) => t.column(build1D(args), 42);
+  const build3D = (args: TestBuilderArgs) => t.column(build2D(args), 42);
 
   it(`${testName} - Scalar`, () => {
     testFn(buildScalar, buildScalar, buildScalar, buildScalar);

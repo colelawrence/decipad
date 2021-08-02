@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import repl from 'repl';
 
-import { Type } from './type';
+import {  build as t } from './type';
 import { replEval, stringifyResult, reset } from './repl';
 
 const testEval = (source: string) =>
@@ -35,11 +35,11 @@ it('detects unfinished syntax and raises a Recoverable error', async () => {
 
 describe('stringify', () => {
   it('stringifies basic stuff', () => {
-    expect(stringifyResult(10, Type.Number)).toEqual(
+    expect(stringifyResult(10, t.number())).toEqual(
       `${chalk.blue('10')} <number>`
     );
 
-    expect(stringifyResult([1, 10], Type.buildRange(Type.Number))).toEqual(
+    expect(stringifyResult([1, 10], t.range(t.number()))).toEqual(
       `range [ ${chalk.blue('1')} <number> through ${chalk.blue(
         '10'
       )} <number> ]`
@@ -48,11 +48,11 @@ describe('stringify', () => {
     expect(
       stringifyResult(
         [Date.UTC(2020, 0), Date.UTC(2020, 1) - 1],
-        Type.buildDate('month')
+        t.date('month')
       )
     ).toEqual(`month ${chalk.blue('2020-01')}`);
 
-    expect(stringifyResult([1, 2], Type.buildColumn(Type.Number, 2))).toEqual(
+    expect(stringifyResult([1, 2], t.column(t.number(), 2))).toEqual(
       `[ ${chalk.blue('1')} <number>, ${chalk.blue('2')} <number> ]`
     );
 
@@ -62,10 +62,11 @@ describe('stringify', () => {
           [1, 2],
           ['hi', 'lol'],
         ],
-        Type.buildTuple(
-          [Type.buildColumn(Type.Number, 2), Type.buildColumn(Type.String, 2)],
-          ['Numbers', 'Strings']
-        )
+        t.table({
+          length: 2,
+          columns: [t.number(), t.string()],
+          columnNames: ['Numbers', 'Strings'],
+        })
       )
     ).toEqual(
       `{

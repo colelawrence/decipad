@@ -1,6 +1,6 @@
 import { AST, Time } from '..';
 import { getOfType } from '../utils';
-import { Type } from '../type';
+import { build as t } from '../type';
 import {
   dateToArray,
   getJSDateUnitAndMultiplier,
@@ -102,9 +102,7 @@ export const inferSequence = async (ctx: Context, expr: AST.Sequence) => {
       increment = getOfType('ref', byN).args[0];
       getSpecificity(increment);
     } catch {
-      return Type.Impossible.withErrorCause(
-        'Invalid increment clause in date sequence'
-      );
+      return t.impossible('Invalid increment clause in date sequence');
     }
 
     const [start, startSpec] = getDateFromAstForm(startN.args);
@@ -114,9 +112,7 @@ export const inferSequence = async (ctx: Context, expr: AST.Sequence) => {
       cmpSpecificities(getSpecificity(increment), startSpec) !== 0 ||
       cmpSpecificities(startSpec, endSpec) !== 0
     ) {
-      return Type.Impossible.withErrorCause(
-        'Mismatched specificities in date sequence'
-      );
+      return t.impossible('Mismatched specificities in date sequence');
     }
 
     const countOrError = getDateSequenceCount(
@@ -126,8 +122,8 @@ export const inferSequence = async (ctx: Context, expr: AST.Sequence) => {
     );
 
     return typeof countOrError === 'string'
-      ? Type.Impossible.withErrorCause(countOrError)
-      : Type.buildColumn(itemType, countOrError);
+      ? t.impossible(countOrError)
+      : t.column(itemType, countOrError);
   } else if (
     expr.args.every(
       (n) =>
@@ -143,11 +139,9 @@ export const inferSequence = async (ctx: Context, expr: AST.Sequence) => {
     );
 
     return typeof countOrError === 'string'
-      ? Type.Impossible.withErrorCause(countOrError)
-      : Type.buildColumn(itemType, countOrError);
+      ? t.impossible(countOrError)
+      : t.column(itemType, countOrError);
   } else {
-    return Type.Impossible.withErrorCause(
-      'Sequence parameters must be literal'
-    );
+    return t.impossible('Sequence parameters must be literal');
   }
 };

@@ -1,10 +1,10 @@
-import { Type } from './index';
+import { build as t } from './index';
 import { InferError } from './InferError';
 
 it('can stringify errors', () => {
   expect(new InferError('random string').message).toEqual('random string');
 
-  expect(InferError.expectedButGot('REQ', Type.Number).message).toEqual(
+  expect(InferError.expectedButGot('REQ', t.number()).message).toEqual(
     'This operation requires a REQ and a number was entered'
   );
 

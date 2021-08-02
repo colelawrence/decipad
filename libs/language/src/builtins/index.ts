@@ -1,4 +1,5 @@
-import { Type } from '../type';
+import { produce } from 'immer';
+import { Type, build as t } from '../type';
 import { getDefined, getInstanceof } from '../utils';
 import { addTimeQuantity, sortSpecificities } from '../date';
 import { AnyValue, Date, Scalar, TimeQuantity } from '../interpreter/Value';
@@ -23,18 +24,18 @@ export interface BuiltinSpec {
 const binopFunctor = (a: Type, b: Type) =>
   Type.combine(a.isScalar('number'), b.sameAs(a));
 
+const removeUnit = produce((t: Type) => {
+  if (t.type === 'number') t.unit = null;
+});
+
 const binopWithUnitlessSecondArgFunctor = (a: Type, b: Type) =>
-  binopFunctor(a, Type.extend(b, { unit: null }));
+  binopFunctor(a, removeUnit(b));
 
 const dateCmpFunctor = (left: Type, right: Type): Type =>
-  Type.combine(left.isDate(), right.sameAs(left), Type.Boolean);
+  Type.combine(left.isDate(), right.sameAs(left), t.boolean());
 
 const cmpFunctor = (left: Type, right: Type): Type =>
-  Type.combine(
-    left.isScalar('number'),
-    right.sameAs(left),
-    Type.build({ type: 'boolean' })
-  );
+  Type.combine(left.isScalar('number'), right.sameAs(left), t.boolean());
 
 export const builtins: { [fname: string]: BuiltinSpec } = {
   sqrt: {
@@ -163,9 +164,7 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
         initial.isScalar('number'),
         growthRate.isScalar('number'),
         period.isColumn()
-      ).mapType(() =>
-        Type.buildColumn(Type.Number, getDefined(period.columnSize))
-      ),
+      ).mapType(() => t.column(t.number(), getDefined(period.columnSize))),
   },
   transpose: {
     argCount: 1,
@@ -180,14 +179,11 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
       Type.combine(
         twoDee.isColumn().reduced().isColumn().reduced().isScalar('number'),
         twoDee
-      ).mapType((t) => {
-        const horizontal = getDefined(t.columnSize);
-        const vertical = getDefined(t.reduced().columnSize);
+      ).mapType((matrix) => {
+        const horizontal = getDefined(matrix.columnSize);
+        const vertical = getDefined(matrix.reduced().columnSize);
 
-        return Type.buildColumn(
-          Type.buildColumn(Type.Number, horizontal),
-          vertical
-        );
+        return t.column(t.column(t.number(), horizontal), vertical);
       }),
   },
   // Range stuff
@@ -195,13 +191,13 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
     argCount: 2,
     fn: ([bStart, bEnd], a) => a >= bStart && a <= bEnd,
     functor: (a: Type, b: Type) =>
-      Type.combine(b.sameAs(a.getRangeOf()), Type.Boolean),
+      Type.combine(b.sameAs(a.getRangeOf()), t.boolean()),
   },
   containsdate: {
     argCount: 2,
     fn: ([rStart, rEnd], [dStart, dEnd]) => rStart <= dStart && rEnd >= dEnd,
     functor: (a: Type, b: Type) =>
-      Type.combine(a.getRangeOf().isDate(), b.isDate(), Type.Boolean),
+      Type.combine(a.getRangeOf().isDate(), b.isDate(), t.boolean()),
   },
   // Date stuff (TODO operator overloading)
   dateequals: {
@@ -236,7 +232,7 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
           ]).pop()
         );
 
-        return Type.buildDate(lowest);
+        return t.date(lowest);
       }),
   },
   // Reduce funcs

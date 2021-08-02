@@ -1,5 +1,5 @@
 import { AST } from '..';
-import { Type } from '../type';
+import { Type, build as t } from '../type';
 import { zip, getDefined } from '../utils';
 
 export const findBadColumn = (table: Type) =>
@@ -32,18 +32,16 @@ export const unifyColumnSizes = (node: AST.Table, table: Type): Type => {
       ? // Ensure it's the same size
         colValue.withColumnSize(columnSize)
       : // Create a new type with that size
-        Type.buildColumn(colValue as Type, columnSize);
+        t.column(colValue , columnSize);
 
     tupleTypes.push(newValue);
     tupleNames.push(colName);
   }
 
-  const unifiedTable = Type.buildTuple(tupleTypes, tupleNames);
+  const unifiedTable = t.tuple(tupleTypes, tupleNames);
 
   if (findBadColumn(unifiedTable) != null) {
-    return Type.Impossible.inNode(node).withErrorCause(
-      'Incompatible column sizes'
-    );
+    return t.impossible('Incompatible column sizes').inNode(node)
   } else {
     return unifiedTable;
   }

@@ -1,7 +1,7 @@
 import pSeries from 'p-series';
 
 import { AST, Time } from '..';
-import { InferError, Type } from '../type';
+import { InferError, Type, build as t } from '../type';
 import {
   getDefined,
   zip,
@@ -64,22 +64,20 @@ export const inferExpression = withErrorSource(
         if (ctx.stack.has(name)) {
           return ctx.stack.get(name);
         } else {
-          return Type.Impossible.withErrorCause(
-            `The variable ${name} does not exist`
-          );
+          return t.impossible(`The variable ${name} does not exist`);
         }
       }
       case 'literal': {
         const [litType, , litUnit] = expr.args;
 
-        return Type.build({ type: litType, unit: litUnit });
+        return litType === 'number' ? t.number(litUnit) : t[litType]();
       }
       case 'time-quantity': {
         const units = expr.args.filter(
           (a) => typeof a === 'string'
         ) as Time.Unit[];
 
-        return Type.buildTimeQuantity(units);
+        return t.timeQuantity(units);
       }
       case 'range': {
         const [start, end] = await pSeries(
@@ -92,7 +90,7 @@ export const inferExpression = withErrorSource(
               ? start.sameAs(end)
               : start.isScalar('number').sameAs(end);
 
-          return Type.buildRange(rangeOf);
+          return t.range(rangeOf);
         });
       }
       case 'sequence': {
@@ -100,14 +98,14 @@ export const inferExpression = withErrorSource(
       }
       case 'date': {
         const [, specificity] = getDateFromAstForm(expr.args);
-        return Type.buildDate(specificity);
+        return t.date(specificity);
       }
       case 'column': {
         const cellTypes = await pSeries(
           expr.args[0].map((a) => () => inferExpression(ctx, a))
         );
 
-        return Type.buildListLike(cellTypes);
+        return t.listLike(cellTypes);
       }
       case 'table': {
         const columns = expr.args;
@@ -128,7 +126,7 @@ export const inferExpression = withErrorSource(
             columnNames.push(name);
           }
 
-          return Type.buildTuple(columnDefs, columnNames);
+          return t.tuple(columnDefs, columnNames);
         });
 
         return tableType.mapType(() => {
@@ -148,14 +146,10 @@ export const inferExpression = withErrorSource(
           if (columnIndex !== -1) {
             return getDefined(table.tupleTypes?.[columnIndex]);
           } else {
-            return Type.Impossible.withErrorCause(
-              `The column ${colName} does not exist`
-            );
+            return t.impossible(`The column ${colName} does not exist`);
           }
         } else {
-          return Type.Impossible.withErrorCause(
-            `The table ${tableName} does not exist`
-          );
+          return t.impossible(`The table ${tableName} does not exist`);
         }
       }
       case 'function-call': {
@@ -193,31 +187,30 @@ export const inferExpression = withErrorSource(
 
             const bodyResult = await inferExpression(ctx, body);
 
-            return Type.buildColumn(bodyResult, columnSize);
+            return t.column(bodyResult, columnSize);
           } else if (
             tupleTypes != null &&
             tupleNames != null &&
             largestColumn != null
           ) {
             const rowTypes = tupleTypes.map((t) => t.reduced());
-            ctx.stack.set(refName, Type.buildTuple(rowTypes, tupleNames));
+            ctx.stack.set(refName, t.tuple(rowTypes, tupleNames));
 
             const bodyType = await inferExpression(ctx, body);
 
             if (bodyType.tupleTypes != null && bodyType.tupleNames != null) {
               // Returned a row -- rebuild column-oriented table
-              return Type.buildTuple(
-                bodyType.tupleTypes.map((t) =>
-                  Type.buildColumn(t, largestColumn)
-                ),
-                bodyType.tupleNames
-              );
+              return t.table({
+                length: largestColumn,
+                columns: bodyType.tupleTypes,
+                columnNames: bodyType.tupleNames,
+              });
             } else {
               // Returned a number or something else.
-              return Type.buildColumn(bodyType, largestColumn);
+              return t.column(bodyType, largestColumn);
             }
           } else {
-            return Type.Impossible.withErrorCause('Column or table expected');
+            return t.impossible('Column or table expected');
           }
         });
       }
@@ -247,7 +240,7 @@ export const inferFunction = async (
         givenArguments.length
       );
 
-      return Type.Impossible.withErrorCause(error);
+      return t.impossible(error);
     }
 
     for (const [argDef, arg] of zip(fArgs.args, givenArguments)) {
@@ -278,9 +271,7 @@ export const inferStatement = withErrorSource(
         const varName = getIdentifierString(nName);
         const type = await (!ctx.stack.top.has(varName)
           ? inferExpression(ctx, nValue)
-          : Type.Impossible.withErrorCause(
-              `A variable with the name ${varName} already exists`
-            ));
+          : t.impossible(`A variable with the name ${varName} already exists`));
 
         ctx.stack.set(varName, type);
         return type;
@@ -290,7 +281,7 @@ export const inferStatement = withErrorSource(
 
         ctx.functionDefinitions.set(fName, statement);
 
-        return Type.FunctionPlaceholder;
+        return t.functionPlaceholder();
       }
       default: {
         return await inferExpression(ctx, statement);

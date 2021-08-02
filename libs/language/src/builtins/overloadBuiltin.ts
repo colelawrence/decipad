@@ -1,5 +1,5 @@
 import { BuiltinSpec } from '.';
-import { InferError, Type } from '../type';
+import { InferError, Type, build as t } from '../type';
 import { AnyValue, Date, Scalar, TimeQuantity } from '../interpreter/Value';
 import { getDefined } from '../utils';
 
@@ -41,7 +41,7 @@ export const overloadBuiltin = (
     const overload = byArgTypes.get(argTypesKey(argTypeNames));
 
     if (overload == null) {
-      return Type.Impossible.withErrorCause(
+      return t.impossible(
         InferError.badOverloadedBuiltinCall(fName, argTypeNames)
       );
     } else {

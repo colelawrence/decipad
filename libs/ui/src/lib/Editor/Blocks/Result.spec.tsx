@@ -1,5 +1,5 @@
 import { render } from 'test-utils';
-import { Type, AST } from '@decipad/language';
+import {  buildType, AST } from '@decipad/language';
 import { ResultContent, ResultNumber } from './Result.component';
 
 const nullPos = null as any;
@@ -17,20 +17,14 @@ const meters: AST.Unit[] = [
 describe('Result', () => {
   it('renders numbers', () => {
     const { container } = render(
-      <ResultContent type={Type.Number} value={123} />
+      <ResultContent type={buildType.number()} value={123} />
     );
     expect(container.textContent).toEqual('123');
   });
 
   it('renders numbers with units', () => {
     const { container } = render(
-      <ResultContent
-        type={Type.build({
-          type: 'number',
-          unit: meters,
-        })}
-        value={1}
-      />
+      <ResultContent type={buildType.number(meters)} value={1} />
     );
 
     expect(container.textContent).toEqual('1 meter');
@@ -38,7 +32,7 @@ describe('Result', () => {
 
   it('renders strings', () => {
     const { container } = render(
-      <ResultContent type={Type.String} value="hello world" />
+      <ResultContent type={buildType.string()} value="hello world" />
     );
     expect(container.textContent).toEqual('hello world');
   });
@@ -47,7 +41,7 @@ describe('Result', () => {
     const colContents = [1, 2, 3];
     const result = render(
       <ResultContent
-        type={Type.buildColumn(Type.Number, 3)}
+        type={buildType.column(buildType.number(), 3)}
         value={colContents}
       />
     );
@@ -61,10 +55,11 @@ describe('Result', () => {
   it('renders tables', async () => {
     const result = render(
       <ResultContent
-        type={Type.buildTuple(
-          [Type.buildColumn(Type.String, 3), Type.buildColumn(Type.Number, 3)],
-          ['Name', 'Bananas']
-        )}
+        type={buildType.table({
+          length: 3,
+          columns: [buildType.string(), buildType.number()],
+          columnNames: ['Name', 'Bananas'],
+        })}
         value={[
           ['Sam', 'Fred', 'Sue'],
           [1.23, 100, 50],

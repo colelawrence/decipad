@@ -1,9 +1,9 @@
 import * as Values from '../interpreter/Value';
-import { Type } from '../type';
+import { Type, build as t } from '../type';
 import { automapTypes, automapValues } from '../dimtools';
 
-const num = Type.Number;
-const str = Type.String;
+const num = t.number();
+const str = t.string();
 
 describe('automapTypes', () => {
   it('shallow', () => {
@@ -19,7 +19,7 @@ describe('automapTypes', () => {
   });
 
   it('columns can be mapped with single type mapFns', () => {
-    const type = Type.buildColumn(str, 10);
+    const type = t.column(str, 10);
 
     const calledOnTypes: Type[][] = [];
     const result = automapTypes([type, type], ([t1, t2]) => {
@@ -32,10 +32,7 @@ describe('automapTypes', () => {
   });
 
   it('can bump dimensions recursively', () => {
-    const type = Type.buildColumn(
-      Type.buildColumn(Type.buildColumn(str, 10), 11),
-      12
-    );
+    const type = t.column(t.column(t.column(str, 10), 11), 12);
 
     const calledOnTypes: Type[][] = [];
     const result = automapTypes([type, str], ([t1, t2]) => {
@@ -48,7 +45,7 @@ describe('automapTypes', () => {
   });
 
   it('compares columns and scalars on equal footing', () => {
-    const type = Type.buildColumn(str, 10);
+    const type = t.column(str, 10);
 
     const calledOnTypes: Type[][] = [];
     const result = automapTypes([type, str], ([t1, t2]) => {
@@ -64,7 +61,7 @@ describe('automapTypes', () => {
 
   it('errors with incompatible dims', () => {
     const erroredColLengths = automapTypes(
-      [Type.buildColumn(num, 1), Type.buildColumn(num, 2)],
+      [t.column(num, 1), t.column(num, 2)],
       typeId
     );
     expect(erroredColLengths.errorCause).not.toBeNull();
@@ -72,37 +69,37 @@ describe('automapTypes', () => {
 
   it('errors with tuples', () => {
     const t1 = num;
-    const tuple = Type.buildTuple([num]);
+    const tuple = t.tuple([num]);
 
     expect(automapTypes([t1, tuple], typeId)).toEqual(
-      Type.Impossible.withErrorCause('Unexpected tuple')
+      t.impossible('Unexpected tuple')
     );
 
     expect(automapTypes([tuple, tuple], typeId)).toEqual(
-      Type.Impossible.withErrorCause('Unexpected tuple')
+      t.impossible('Unexpected tuple')
     );
   });
 
   it('can automap types', () => {
     const total = ([a]: Type[]) => a.reduced();
 
-    expect(automapTypes([Type.buildColumn(num, 5)], total, [2])).toEqual(num);
+    expect(automapTypes([t.column(num, 5)], total, [2])).toEqual(num);
 
-    expect(
-      automapTypes([Type.buildColumn(Type.buildColumn(num, 5), 1)], total, [2])
-    ).toEqual(Type.buildColumn(num, 1));
+    expect(automapTypes([t.column(t.column(num, 5), 1)], total, [2])).toEqual(
+      t.column(num, 1)
+    );
 
     expect(
       automapTypes(
-        [Type.buildColumn(num, 4), Type.buildColumn(num, 5)],
+        [t.column(num, 4), t.column(num, 5)],
         ([scalar, col]: Type[]) =>
-          Type.combine(scalar.isScalar('number'), col.isColumn(5), Type.String),
+          Type.combine(scalar.isScalar('number'), col.isColumn(5), str),
         [1, 2]
       )
-    ).toEqual(Type.buildColumn(Type.String, 4));
+    ).toEqual(t.column(str, 4));
 
     expect(automapTypes([num], total, [2])).toEqual(
-      Type.Impossible.withErrorCause('A column is required')
+      t.impossible('A column is required')
     );
   });
 });

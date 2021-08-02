@@ -1,6 +1,6 @@
 // E2e tests
 
-import { Type } from './type';
+import { build as t } from './type';
 import {
   runCode,
   runCodeForVariables,
@@ -102,8 +102,8 @@ describe('basic code', () => {
 
     expect(results).toMatchObject({
       types: {
-        Two: Type.Number,
-        Eleven: Type.String,
+        Two: t.number(),
+        Eleven: t.string(),
       },
       variables: {
         Two: 2,
@@ -187,8 +187,8 @@ describe('Tables', () => {
       await runCode(`Table = { Column1 = [1, 2, 3], Column2 = Column1 * 2 }`)
     ).toMatchObject({
       type: objectToTupleType({
-        Column1: Type.build({ type: 'number', columnSize: 3 }),
-        Column2: Type.build({ type: 'number', columnSize: 3 }),
+        Column1: t.column(t.number(), 3),
+        Column2: t.column(t.number(), 3),
       }),
       value: [
         objectToTupleValue({
@@ -209,8 +209,8 @@ describe('Tables', () => {
       `)
     ).toEqual({
       type: objectToTupleType({
-        Column1: Type.build({ type: 'number', columnSize: 3 }),
-        Column2: Type.build({ type: 'number', columnSize: 3 }),
+        Column1: t.column(t.number(), 3),
+        Column2: t.column(t.number(), 3),
       }),
       value: [
         objectToTupleValue({
@@ -232,9 +232,9 @@ describe('Tables', () => {
       `)
     ).toMatchObject({
       type: objectToTupleType({
-        Column1: Type.build({ type: 'number', columnSize: 3 }),
-        Column2: Type.build({ type: 'number', columnSize: 3 }),
-        Column3: Type.build({ type: 'boolean', columnSize: 3 }),
+        Column1: t.column(t.number(), 3),
+        Column2: t.column(t.number(), 3),
+        Column3: t.column(t.boolean(), 3),
       }),
       value: [
         objectToTupleValue({
@@ -256,7 +256,7 @@ describe('Tables', () => {
         Table.Col
       `)
     ).toMatchObject({
-      type: Type.build({ type: 'number', columnSize: 3 }),
+      type: t.column(t.number(), 3),
       value: [[1, 2, 3]],
     });
   });
@@ -280,20 +280,20 @@ describe('Tables', () => {
         PropAccess: 2,
       },
       types: {
-        Table: Type.buildTuple([Type.Number, Type.Number], ['Item1', 'Item2']),
-        PropAccess: Type.Number,
+        Table: t.tuple([t.number(), t.number()], ['Item1', 'Item2']),
+        PropAccess: t.number(),
       },
     });
   });
 
   it('Are expressions', async () => {
-    const col1Type = Type.buildColumn(Type.Number, 3);
+    const col1Type = t.column(t.number(), 3);
     expect(
       await runCode(`
         [{ Col1 = [1, 2, 3] }]
       `)
     ).toMatchObject({
-      type: Type.buildColumn(Type.buildTuple([col1Type], ['Col1']), 1),
+      type: t.column(t.tuple([col1Type], ['Col1']), 1),
       value: [[[[1, 2, 3]]]],
     });
   });
@@ -444,10 +444,10 @@ describe('Time quantities', () => {
         ],
       },
       types: {
-        Years: Type.buildTimeQuantity(['year']),
-        Quarters: Type.buildTimeQuantity(['quarter']),
-        Seconds: Type.buildTimeQuantity(['second']),
-        Combined: Type.buildTimeQuantity(['quarter', 'second', 'millisecond']),
+        Years: t.timeQuantity(['year']),
+        Quarters: t.timeQuantity(['quarter']),
+        Seconds: t.timeQuantity(['second']),
+        Combined: t.timeQuantity(['quarter', 'second', 'millisecond']),
       },
     });
   });

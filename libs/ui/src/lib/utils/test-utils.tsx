@@ -1,7 +1,7 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import { render, RenderOptions } from '@testing-library/react';
 
-import { Type } from '@decipad/language';
+import { buildType } from '@decipad/language';
 import { theme, ResultsContextProvider, GlobalStyles } from '../..';
 import { ResultsContextValue } from '../Contexts';
 
@@ -15,12 +15,7 @@ const results: ResultsContextValue = {
         {
           blockId: 'test',
           statementIndex: 0,
-          valueType: Type.build({
-            type: 'number',
-            unit: {
-              unit: 'apples',
-            },
-          } as any),
+          valueType: buildType.number({ unit: 'apples' } as any),
           value: 20,
         },
       ],

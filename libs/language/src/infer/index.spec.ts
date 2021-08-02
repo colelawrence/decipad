@@ -2,7 +2,7 @@ import { produce } from 'immer';
 import { dequal } from 'dequal';
 
 import { AST } from '..';
-import { Type, InferError, inverseExponent } from '../type';
+import {  InferError, inverseExponent, build as t } from '../type';
 import { join as pathJoin } from 'path';
 
 import {
@@ -74,12 +74,12 @@ afterEach(() => {
 });
 
 it('infers literals', async () => {
-  expect(await inferExpression(nilCtx, l(1.1))).toEqual(Type.Number);
-  expect(await inferExpression(nilCtx, l(1))).toEqual(Type.Number);
+  expect(await inferExpression(nilCtx, l(1.1))).toEqual(t.number());
+  expect(await inferExpression(nilCtx, l(1))).toEqual(t.number());
 
-  expect(await inferExpression(nilCtx, l('one'))).toEqual(Type.String);
+  expect(await inferExpression(nilCtx, l('one'))).toEqual(t.string());
 
-  expect(await inferExpression(nilCtx, l(true))).toEqual(Type.Boolean);
+  expect(await inferExpression(nilCtx, l(true))).toEqual(t.boolean());
 });
 
 describe('variables', () => {
@@ -100,7 +100,7 @@ describe('variables', () => {
 describe('ranges', () => {
   it('infers ranges', async () => {
     expect(await inferExpression(nilCtx, range(1, 2))).toEqual(
-      Type.buildRange(Type.Number)
+      t.range(t.number())
     );
 
     expect(
@@ -117,22 +117,20 @@ describe('ranges', () => {
 
   it('infers ranges of dates', async () => {
     const r = range(date('2030-01', 'month'), date('2031-11', 'month'));
-    expect(await inferExpression(nilCtx, r)).toEqual(
-      Type.buildRange(Type.buildDate('month'))
-    );
+    expect(await inferExpression(nilCtx, r)).toEqual(t.range(t.date('month')));
 
     expect(
       await inferExpression(
         nilCtx,
         c('containsdate', r, date('2020-01', 'month'))
       )
-    ).toEqual(Type.Boolean);
+    ).toEqual(t.boolean());
   });
 
   it('infers range functions', async () => {
     expect(
       await inferExpression(nilCtx, c('contains', range(1, 10), l(1)))
-    ).toEqual(Type.Boolean);
+    ).toEqual(t.boolean());
     expect(
       (await inferExpression(nilCtx, c('contains', l(1), l(1)))).errorCause
     ).not.toBeNull();
@@ -142,19 +140,19 @@ describe('ranges', () => {
 describe('sequences', () => {
   it('infers sequences of numbers', async () => {
     expect(await inferExpression(nilCtx, seq(l(1), l(1), l(1)))).toEqual(
-      Type.buildColumn(Type.Number, 1)
+      t.column(t.number(), 1)
     );
 
     expect(await inferExpression(nilCtx, seq(l(1), l(2), l(1)))).toEqual(
-      Type.buildColumn(Type.Number, 2)
+      t.column(t.number(), 2)
     );
 
     expect(await inferExpression(nilCtx, seq(l(1), l(8), l(3)))).toEqual(
-      Type.buildColumn(Type.Number, 3)
+      t.column(t.number(), 3)
     );
 
     expect(await inferExpression(nilCtx, seq(l(10), l(1), l(-1)))).toEqual(
-      Type.buildColumn(Type.Number, 10)
+      t.column(t.number(), 10)
     );
   });
 
@@ -276,8 +274,8 @@ describe('sequences', () => {
 
   it('refuses variable references anywhere in the sequence', async () => {
     const ctx = makeContext([
-      ['Bad', Type.Number],
-      ['DBad', Type.buildDate('month')],
+      ['Bad', t.number()],
+      ['DBad', t.date('month')],
     ]);
 
     expect(
@@ -314,11 +312,11 @@ describe('sequences', () => {
 describe('dates', () => {
   it('infers dates', async () => {
     expect(await inferExpression(nilCtx, date('2020-01', 'month'))).toEqual(
-      Type.buildDate('month')
+      t.date('month')
     );
 
     expect(await inferExpression(nilCtx, date('2020-01-15', 'day'))).toEqual(
-      Type.buildDate('day')
+      t.date('day')
     );
   });
 
@@ -328,7 +326,7 @@ describe('dates', () => {
         nilCtx,
         c('dateequals', date('2020-01', 'month'), date('2020-01', 'month'))
       )
-    ).toEqual(Type.Boolean);
+    ).toEqual(t.boolean());
 
     expect(
       (
@@ -351,38 +349,32 @@ describe('time quantities', () => {
           minute: 3,
         })
       )
-    ).toEqual(Type.buildTimeQuantity(['year', 'minute']));
+    ).toEqual(t.timeQuantity(['year', 'minute']));
   });
 });
 
 describe('columns', () => {
   it('infers columns', async () => {
     expect(await inferExpression(nilCtx, col(1, 2, 3))).toEqual(
-      Type.build({ type: 'number', columnSize: 3 })
+      t.column(t.number(), 3)
     );
 
     expect(await inferExpression(nilCtx, col(c('+', l(1), l(1))))).toEqual(
-      Type.build({ type: 'number', columnSize: 1 })
+      t.column(t.number(), 1)
     );
 
     const mixedCol = col(l(1), l('hi'));
     expect(await inferExpression(nilCtx, mixedCol)).toEqual(
-      Type.buildTuple([Type.Number, Type.String])
+      t.tuple([t.number(), t.string()])
     );
   });
 
   it('column-ness is infectious', async () => {
     expect(await inferExpression(nilCtx, c('+', col(1, 2, 3), l(1)))).toEqual(
-      Type.build({
-        type: 'number',
-        columnSize: 3,
-      })
+      t.column(t.number(), 3)
     );
     expect(await inferExpression(nilCtx, c('+', l(1), col(1, 2, 3)))).toEqual(
-      Type.build({
-        type: 'number',
-        columnSize: 3,
-      })
+      t.column(t.number(), 3)
     );
   });
 
@@ -392,17 +384,12 @@ describe('columns', () => {
         nilCtx,
         col(date('2020-01', 'month'), date('2020-02', 'month'))
       )
-    ).toEqual(
-      Type.build({
-        date: 'month',
-        columnSize: 2,
-      })
-    );
+    ).toEqual(t.column(t.date('month'), 2));
   });
 
   it('can be reduced with the total function', async () => {
     expect(await inferExpression(nilCtx, c('total', col(1, 2, 3)))).toEqual(
-      Type.Number
+      t.number()
     );
   });
 });
@@ -411,13 +398,11 @@ describe('tables', () => {
   it('infers table defs', async () => {
     const tableContext = makeContext();
 
-    const expectedType = Type.buildTuple(
-      [
-        Type.build({ type: 'number', columnSize: 3 }),
-        Type.build({ type: 'number', columnSize: 3 }),
-      ],
-      ['Col1', 'Col2']
-    );
+    const expectedType = t.table({
+      length: 3,
+      columns: [t.number(), t.number()],
+      columnNames: ['Col1', 'Col2'],
+    });
 
     expect(
       await inferStatement(
@@ -444,19 +429,16 @@ describe('tables', () => {
     );
 
     expect((await inferProgram([block])).variables.get('Col')).toEqual(
-      Type.buildColumn(Type.Number, 3)
+      t.column(t.number(), 3)
     );
   });
 
   it('"previous" references', async () => {
-    const expectedType = Type.buildTuple(
-      [
-        Type.build({ type: 'number', columnSize: 3 }),
-        Type.build({ type: 'number', columnSize: 3 }),
-        Type.build({ type: 'string', columnSize: 3 }),
-      ],
-      ['Col1', 'Col2', 'Col3']
-    );
+    const expectedType = t.table({
+      length: 3,
+      columns: [t.number(), t.number(), t.string()],
+      columnNames: ['Col1', 'Col2', 'Col3'],
+    });
 
     const table = tableDef('Table', {
       Col1: col(1, 1, 1),
@@ -470,7 +452,7 @@ describe('tables', () => {
   it('"previous" references in given: expressions', async () => {
     const ctx = makeContext();
 
-    ctx.stack.set('A', Type.buildColumn(Type.Number, 3));
+    ctx.stack.set('A', t.column(t.number(), 3));
 
     expect(
       await inferStatement(ctx, given('A', c('previous', l(1))))
@@ -484,10 +466,11 @@ describe('tables', () => {
     });
 
     expect(await inferStatement(makeContext(), table)).toEqual(
-      Type.buildTuple(
-        [Type.buildColumn(Type.Number, 2), Type.buildColumn(Type.Number, 2)],
-        ['Col1', 'Col2']
-      )
+      t.table({
+        length: 2,
+        columns: [t.number(), t.number()],
+        columnNames: ['Col1', 'Col2'],
+      })
     );
   });
 
@@ -509,10 +492,7 @@ describe('tables', () => {
       table({ A: l(3), B: l('hiii') })
     );
     expect(await inferStatement(nilCtx, recordOriented)).toEqual(
-      Type.buildColumn(
-        Type.buildTuple([Type.Number, Type.String], ['A', 'B']),
-        3
-      )
+      t.column(t.tuple([t.number(), t.string()], ['A', 'B']), 3)
     );
   });
 
@@ -523,7 +503,7 @@ describe('tables', () => {
     });
 
     expect(await inferStatement(makeContext(), table)).toEqual(
-      Type.buildTuple([Type.String, Type.Number], ['Col1', 'Col2'])
+      t.tuple([t.string(), t.number()], ['Col1', 'Col2'])
     );
   });
 
@@ -534,7 +514,7 @@ describe('tables', () => {
     });
 
     expect(await inferStatement(makeContext(), table)).toEqual(
-      Type.buildTuple([Type.String, Type.Number], ['Col1', 'Col2'])
+      t.tuple([t.string(), t.number()], ['Col1', 'Col2'])
     );
   });
 });
@@ -548,77 +528,71 @@ describe('imported data', () => {
     );
     const data = importedData(url, contentType);
     expect(await inferExpression(nilCtx, data)).toEqual(
-      Type.buildTuple(
-        [
-          Type.buildListFromUnifiedType(Type.String, 10),
-          Type.buildListFromUnifiedType(Type.Number, 10),
-          Type.buildListFromUnifiedType(Type.buildDate('time'), 10),
-        ],
-        ['Col1', 'Col2', 'Col3']
-      )
+      t.table({
+        length: 10,
+        columns: [t.string(), t.number(), t.date('time')],
+        columnNames: ['Col1', 'Col2', 'Col3'],
+      })
     );
   });
 });
 
 it('infers refs', async () => {
   const scopeWithVariable = makeContext();
-  scopeWithVariable.stack.set('N', Type.Number);
+  scopeWithVariable.stack.set('N', t.number());
 
-  expect(await inferExpression(scopeWithVariable, r('N'))).toEqual(Type.Number);
+  expect(await inferExpression(scopeWithVariable, r('N'))).toEqual(t.number());
 
   const errorCause = new InferError('The variable MissingVar does not exist');
   expect(await inferExpression(scopeWithVariable, r('MissingVar'))).toEqual(
-    Type.Impossible.withErrorCause(errorCause).inNode(r('MissingVar'))
+    t.impossible(errorCause).inNode(r('MissingVar'))
   );
 });
 
 describe('Given', () => {
   it('Works on scalars', async () => {
-    const scopeWithColumn = makeContext([
-      ['Nums', Type.buildColumn(Type.Number, 3)],
-    ]);
+    const scopeWithColumn = makeContext([['Nums', t.column(t.number(), 3)]]);
 
     expect(await inferExpression(scopeWithColumn, given('Nums', l(1)))).toEqual(
-      Type.buildColumn(Type.Number, 3)
+      t.column(t.number(), 3)
     );
 
     expect(
       await inferExpression(scopeWithColumn, given('Nums', l('hi')))
-    ).toEqual(Type.buildColumn(Type.String, 3));
+    ).toEqual(t.column(t.string(), 3));
 
     expect(
       await inferExpression(
         scopeWithColumn,
         given('Nums', c('+', r('Nums'), l(1)))
       )
-    ).toEqual(Type.buildColumn(Type.Number, 3));
+    ).toEqual(t.column(t.number(), 3));
   });
 
   it('Works with non-scalar bodies', async () => {
-    const scopeWithColumn = makeContext([
-      ['Nums', Type.buildColumn(Type.Number, 3)],
-    ]);
+    const scopeWithColumn = makeContext([['Nums', t.column(t.number(), 3)]]);
 
     expect(
       await inferExpression(
         scopeWithColumn,
         given('Nums', col(l('s1'), l('s2')))
       )
-    ).toEqual(Type.buildColumn(Type.buildColumn(Type.String, 2), 3));
+    ).toEqual(t.column(t.column(t.string(), 2), 3));
 
     expect(
       await inferExpression(scopeWithColumn, given('Nums', col(l('s1'), l(1))))
-    ).toEqual(Type.buildColumn(Type.buildTuple([Type.String, Type.Number]), 3));
+    ).toEqual(t.column(t.tuple([t.string(), t.number()]), 3));
   });
 
   it('Works with tables', async () => {
     const scopeWithTable = makeContext([
       [
         'Table',
-        Type.buildTuple(
-          [Type.buildColumn(Type.Number, 4), Type.buildColumn(Type.String, 4)],
-          ['Nums', 'Strs']
-        ),
+        t.table({
+          length: 4,
+          columns: [t.number(), t.string()],
+          columnNames: ['Nums', 'Strs'],
+        }),
       ],
     ]);
 
@@ -627,24 +601,27 @@ describe('Given', () => {
         scopeWithTable,
         given('Table', c('+', prop('Table', 'Nums'), l(1)))
       )
-    ).toEqual(Type.buildColumn(Type.Number, 4));
+    ).toEqual(t.column(t.number(), 4));
 
     expect(
       await inferExpression(
         scopeWithTable,
         given('Table', table({ Col: prop('Table', 'Nums') }))
       )
-    ).toEqual(Type.buildTuple([Type.buildColumn(Type.Number, 4)], ['Col']));
+    ).toEqual(
+      t.table({
+        length: 4,
+        columns: [t.number()],
+        columnNames: ['Col'],
+      })
+    );
   });
 
   it('Works with record-oriented tables', async () => {
     const scopeWithTable = makeContext([
       [
         'RTable',
-        Type.buildColumn(
-          Type.buildTuple([Type.Number, Type.String], ['Nums', 'Strs']),
-          3
-        ),
+        t.column(t.tuple([t.number(), t.string()], ['Nums', 'Strs']), 3),
       ],
     ]);
 
@@ -653,13 +630,13 @@ describe('Given', () => {
         scopeWithTable,
         given('RTable', c('+', prop('RTable', 'Nums'), l(1)))
       )
-    ).toEqual(Type.buildColumn(Type.Number, 3));
+    ).toEqual(t.column(t.number(), 3));
   });
 
   it('Needs a column, table, or record-oriented table', async () => {
     const scopeWithTupleAndNum = makeContext([
-      ['Tuple', Type.buildTuple([Type.Number, Type.String], ['A', 'B'])],
-      ['Num', Type.Number],
+      ['Tuple', t.tuple([t.number(), t.string()], ['A', 'B'])],
+      ['Num', t.number()],
     ]);
 
     expect(
@@ -675,50 +652,48 @@ describe('Given', () => {
 });
 
 it('infers binops', async () => {
-  expect(await inferExpression(nilCtx, c('+', l(1), l(1)))).toEqual(
-    Type.Number
-  );
+  expect(await inferExpression(nilCtx, c('+', l(1), l(1)))).toEqual(t.number());
 
   // These assertions will be different WRT integer/float casts eventually
   expect(await inferExpression(nilCtx, c('+', l(0.1), l(0.2)))).toEqual(
-    Type.Number
+    t.number()
   );
   expect(await inferExpression(nilCtx, c('+', l(1.1), l(1)))).toEqual(
-    Type.Number
+    t.number()
   );
   expect(await inferExpression(nilCtx, c('+', l(1), l(1.1)))).toEqual(
-    Type.Number
+    t.number()
   );
 
   expect(await inferExpression(nilCtx, c('>', l(1), l(0.5)))).toEqual(
-    Type.Boolean
+    t.boolean()
   );
   expect(await inferExpression(nilCtx, c('==', l(1), l(0.5)))).toEqual(
-    Type.Boolean
+    t.boolean()
   );
 
   const errorCtx = makeContext();
   const badExpr = c('==', l(1), l(true));
 
   expect((await inferExpression(errorCtx, badExpr)).errorCause).toEqual(
-    InferError.expectedButGot(Type.Number, Type.Boolean)
+    InferError.expectedButGot(t.number(), t.boolean())
   );
 });
 
 it('infers conditions', async () => {
   expect(await inferExpression(nilCtx, c('if', l(true), l(1), l(1)))).toEqual(
-    Type.Number
+    t.number()
   );
 
   expect(
     await inferExpression(nilCtx, c('if', l(true), l('str'), l('other str')))
-  ).toEqual(Type.String);
+  ).toEqual(t.string());
 
   const errorCtx = makeContext();
   const badConditional = c('if', l(true), l('wrong!'), l(1));
 
   expect((await inferExpression(errorCtx, badConditional)).errorCause).toEqual(
-    InferError.expectedButGot(Type.String, Type.Number)
+    InferError.expectedButGot(t.string(), t.number())
   );
 });
 
@@ -727,8 +702,8 @@ describe('inferFunction', () => {
     const functionWithSpecificTypes = funcDef('Fn', ['A'], r('A'));
 
     expect(
-      await inferFunction(nilCtx, functionWithSpecificTypes, [Type.Boolean])
-    ).toEqual(Type.Boolean);
+      await inferFunction(nilCtx, functionWithSpecificTypes, [t.boolean()])
+    ).toEqual(t.boolean());
   });
 
   it('disallows wrong argument count', async () => {
@@ -742,7 +717,7 @@ describe('inferFunction', () => {
     errorCtx = makeContext();
     const badArgumentCountError2 = InferError.expectedArgCount('Fn', 1, 2);
     expect(
-      (await inferFunction(errorCtx, unaryFn, [Type.Boolean, Type.String]))
+      (await inferFunction(errorCtx, unaryFn, [t.boolean(), t.string()]))
         .errorCause
     ).toEqual(badArgumentCountError2);
   });
@@ -755,8 +730,8 @@ describe('inferProgram', () => {
     ];
 
     expect(await inferProgram(program)).toEqual({
-      variables: new Map([['A', Type.Number]]),
-      blockReturns: [Type.Number],
+      variables: new Map([['A', t.number()]]),
+      blockReturns: [t.number()],
     });
 
     const wrongProgram = produce(program, (wrongProgram: AST.Block[]) => {
@@ -766,7 +741,7 @@ describe('inferProgram', () => {
     });
 
     expect(await inferProgram(wrongProgram)).toMatchObject({
-      variables: new Map([['A', Type.Number]]),
+      variables: new Map([['A', t.number()]]),
       blockReturns: [
         {
           errorCause: InferError.badOverloadedBuiltinCall('+', [
@@ -788,25 +763,21 @@ describe('inferProgram', () => {
     ];
 
     expect(await inferProgram(program)).toEqual({
-      variables: new Map([['Result', Type.Number]]),
-      blockReturns: [Type.Number],
+      variables: new Map([['Result', t.number()]]),
+      blockReturns: [t.number()],
     });
   });
 });
 
 describe('Units', () => {
-  const getWithUnit = (unit: AST.Unit[] | null) =>
-    Type.build({ type: 'number', unit });
   it("infers literals' units", async () => {
-    expect(await inferExpression(nilCtx, l(1))).toEqual(getWithUnit(null));
-    expect(await inferExpression(nilCtx, l(1, degC))).toEqual(
-      getWithUnit([degC])
-    );
+    expect(await inferExpression(nilCtx, l(1))).toEqual(t.number());
+    expect(await inferExpression(nilCtx, l(1, degC))).toEqual(t.number([degC]));
   });
 
   it('infers expressions units', async () => {
     const type = await inferExpression(nilCtx, c('+', l(1, degC), l(1, degC)));
-    expect(type).toMatchObject(getWithUnit([degC]));
+    expect(type).toMatchObject(t.number([degC]));
   });
 
   it('composes units', async () => {
@@ -819,8 +790,8 @@ describe('Units', () => {
       c('/', l(1, degC), l(1))
     );
 
-    expect(type).toMatchObject(getWithUnit([degC, inverseExponent(seconds)]));
-    expect(withNullUnit).toMatchObject(getWithUnit([degC]));
+    expect(type).toMatchObject(t.number([degC, inverseExponent(seconds)]));
+    expect(withNullUnit).toMatchObject(t.number([degC]));
   });
 
   it('decomposes units', async () => {
@@ -830,8 +801,8 @@ describe('Units', () => {
     );
     // const withNullUnit = inferExpression(nilCtx, c('*', l(1, seconds), l(1)))
 
-    expect(type).toMatchObject(getWithUnit([meters]));
-    // TODO expect(withNullUnit).toEqual(Type.Number)
+    expect(type).toMatchObject(t.number([meters]));
+    // TODO expect(withNullUnit).toEqual(t.number())
   });
 
   it('fills in incompatible unit errors', async () => {
@@ -840,22 +811,22 @@ describe('Units', () => {
 
     const badUnitsError = InferError.expectedUnit([degC], [seconds]);
     expect(await inferExpression(ctxForError, badUnits)).toEqual(
-      Type.Impossible.withErrorCause(badUnitsError).inNode(badUnits)
+      t.impossible(badUnitsError).inNode(badUnits)
     );
   });
 
   it('fills in missing units', async () => {
     expect(await inferExpression(nilCtx, c('+', l(1), l(1, degC)))).toEqual(
-      getWithUnit([degC])
+      t.number([degC])
     );
     expect(await inferExpression(nilCtx, c('+', l(1, degC), l(1)))).toEqual(
-      getWithUnit([degC])
+      t.number([degC])
     );
   });
 
   it('removes units from some functions', async () => {
     expect(
       await inferExpression(nilCtx, c('^', l(1, meters), l(1, degC)))
-    ).toEqual(getWithUnit([meters]));
+    ).toEqual(t.number([meters]));
   });
 });

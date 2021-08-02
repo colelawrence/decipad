@@ -1,7 +1,6 @@
 import { immerable, produce } from 'immer';
 
 import { Time } from '..';
-import { getDefined } from '../utils';
 import * as AST from '../parser/ast-types';
 import { InferError } from './InferError';
 import {
@@ -11,8 +10,11 @@ import {
   matchUnitArrays,
   stringifyUnits,
 } from './units';
+import { setUnit } from './utils';
 
-export { InferError, inverseExponent };
+import * as t from './build';
+
+export { InferError, inverseExponent, t as build };
 
 export const scalarTypeNames = ['number', 'string', 'boolean'];
 
@@ -84,117 +86,6 @@ export class Type {
 
   // Functions are impossible types with functionness = true
   functionness = false;
-
-  private constructor() {}
-
-  static extend(
-    base: Type,
-    { type, unit, columnSize, date }: ExtendArgs
-  ): Type {
-    /* istanbul ignore if */
-    if (base.errorCause != null) {
-      return base;
-    }
-
-    if (columnSize !== undefined) {
-      const t = Type.extend(base, { type, unit, date });
-
-      return Type.buildColumn(
-        t,
-        getDefined(columnSize, 'unsupported: removing columnness')
-      );
-    }
-
-    return produce(base, (t) => {
-      if (type !== undefined) {
-        t.type = type;
-      }
-
-      if (unit !== undefined) {
-        t.unit = unit;
-      }
-
-      if (date !== undefined) {
-        t.date = date;
-      }
-    });
-  }
-
-  static build(extendArgs: ExtendArgs) {
-    return Type.extend(new Type(), extendArgs);
-  }
-
-  static buildScalar(type: TypeName) {
-    return Type.build({ type });
-  }
-
-  static buildColumn(cellType: Type, columnSize: number | null) {
-    const t = new Type();
-
-    t.cellType = cellType;
-    t.columnSize = columnSize;
-
-    if (cellType.errorCause != null) {
-      return t.withErrorCause(cellType.errorCause);
-    } else {
-      return t;
-    }
-  }
-
-  static buildTuple(tupleTypes: Type[], tupleNames?: string[] | null) {
-    const t = new Type();
-
-    t.tupleTypes = tupleTypes;
-    t.tupleNames = tupleNames ?? null;
-
-    const errored = t.tupleTypes.find((t) => t.errorCause != null);
-
-    if (errored != null) {
-      return t.withErrorCause(getDefined(errored.errorCause));
-    } else {
-      return t;
-    }
-  }
-
-  static buildListLike(types: Type[]) {
-    if (types.length === 0) {
-      return Type.Impossible.withErrorCause(InferError.unexpectedEmptyColumn());
-    } else {
-      const unified = types.reduce((a, b) => a.sameAs(b));
-
-      if (unified.errorCause) {
-        return Type.buildTuple(types);
-      } else {
-        return Type.buildListFromUnifiedType(unified, types.length);
-      }
-    }
-  }
-
-  static buildListFromUnifiedType(type: Type, length: number) {
-    return Type.buildColumn(type, length);
-  }
-
-  static buildDate(specificity: Time.Specificity) {
-    return Type.build({ date: specificity });
-  }
-
-  static buildRange(of: Type) {
-    const t = new Type();
-    t.rangeOf = of;
-    return t;
-  }
-
-  static buildTimeQuantity(timeUnits: Time.Unit[]) {
-    const t = new Type();
-    t.timeUnits = timeUnits;
-    return t;
-  }
-
-  static buildImportedData(url: string) {
-    const t = new Type();
-    t.dataUrl = url;
-    return t;
-  }
 
   // Return the first type that has an error, or the last one.
   static combine(...types: Type[]): Type {
@@ -328,7 +219,7 @@ export class Type {
       if (type === this.type) {
         return this;
       } else {
-        return this.expected(Type.buildScalar(type));
+        return this.expected(t.scalar(type));
       }
     }).call(this, type);
   }
@@ -351,9 +242,7 @@ export class Type {
         } else if (!matchingTypes) {
           return this.expected(other);
         } else if (onlyOneHasAUnit != null) {
-          return Type.extend(this, {
-            unit: onlyOneHasAUnit,
-          });
+          return setUnit(this, onlyOneHasAUnit);
         } else {
           return this.withErrorCause(
             InferError.expectedUnit(other.unit, this.unit)
@@ -469,9 +358,7 @@ export class Type {
       ) {
         return this;
       } else {
-        return this.expected(
-          specificity ? Type.buildDate(specificity) : 'date'
-        );
+        return this.expected(specificity ? t.date(specificity) : 'date');
       }
     }).call(this, specificity);
   }
@@ -488,26 +375,16 @@ export class Type {
 
   multiplyUnit(withUnits: AST.Unit[] | null): Type {
     return propagate(function (this: Type, withUnits: AST.Unit[] | null) {
-      return Type.extend(this, { unit: combineUnits(this.unit, withUnits) });
+      return setUnit(this, combineUnits(this.unit, withUnits));
     }).call(this, withUnits);
   }
 
   divideUnit(withUnits: AST.Unit[] | null): Type {
     return propagate(function (this: Type, withUnit: AST.Unit[] | null) {
-      const theirUnits =
+      const invTheirUnits =
         withUnit == null ? null : withUnit.map((u) => inverseExponent(u));
 
-      return Type.extend(this, { unit: combineUnits(this.unit, theirUnits) });
+      return setUnit(this, combineUnits(this.unit, invTheirUnits));
     }).call(this, withUnits);
   }
 }
-
-Type.Number = Type.buildScalar('number');
-Type.String = Type.buildScalar('string');
-Type.Boolean = Type.buildScalar('boolean');
-Type.Impossible = produce(Type.buildScalar('number'), (impossibleType) => {
-  impossibleType.type = null;
-});
-Type.FunctionPlaceholder = produce(Type.Impossible, (fType) => {
-  fType.functionness = true;
-});

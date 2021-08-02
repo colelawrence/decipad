@@ -1,13 +1,13 @@
 import { Context } from './context';
 import { TabularData } from '../data/TabularData';
-import { Type } from '../type';
+import { Type, build as t } from '../type';
 
 export async function inferData(
   data: TabularData,
   ctx: Context
 ): Promise<Type> {
   const tableType = await ctx.stack.withPush(() => {
-    const columnDefs: Type[] = [];
+    const columns: Type[] = [];
     const columnNames = data.columnNames;
     for (const columnName of columnNames) {
       let columnType: Type | undefined = undefined;
@@ -24,10 +24,10 @@ export async function inferData(
       if (!columnType) {
         throw new Error('Unknown column type for column ' + columnName);
       }
-      columnDefs.push(Type.buildListFromUnifiedType(columnType, data.length));
+      columns.push(columnType);
     }
 
-    return Type.buildTuple(columnDefs, columnNames);
+    return t.table({ length: data.length, columns, columnNames });
   });
 
   return tableType;
@@ -37,14 +37,14 @@ export function typeFromValue(value: any): Type {
   if (value instanceof Date) {
     // TODO: infer specificity from date?
     const specificity = 'time';
-    return Type.buildDate(specificity);
+    return t.date(specificity);
   }
   switch (typeof value) {
     case 'number': {
-      return Type.Number;
+      return t.number();
     }
     case 'string': {
-      return Type.String;
+      return t.string();
     }
     default: {
       throw new Error('Cannot deal with data of type ' + typeof value);

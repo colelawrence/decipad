@@ -5,7 +5,7 @@ import { Type } from './type';
 export { parse, AST, Parser } from './parser';
 export { inferTargetStatement } from './infer';
 export { run, Interpreter } from './interpreter';
-export { Type } from './type';
+export { Type, build as buildType } from './type';
 export { Time } from './date';
 export { ExternalData } from './data';
 export * from './computer';
