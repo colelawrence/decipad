@@ -12,14 +12,15 @@ const styles = css({
   border: `1px solid ${cssVar('highlightColor')}`,
   borderRadius: '8px',
 
-  padding: '12px',
+  padding: '16px',
 
   display: 'grid',
   rowGap: '8px',
 });
 
 const headerStyles = css({
-  padding: '4px 2px 2px',
+  paddingTop: '4px',
+  paddingBottom: '2px',
 
   display: 'grid',
   gridTemplateColumns: 'auto 16px',
