@@ -1,17 +1,44 @@
-import {
-  Box,
-  Button,
-  Container,
-  Heading,
-  Icon,
-  Image,
-  Text,
-} from '@chakra-ui/react';
 import { AnonymousDocSyncProvider, Editor } from '@decipad/editor';
-import { HelpButton } from '@decipad/ui';
+import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import { nanoid } from 'nanoid';
 import { useEffect, useMemo } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+
+const Wrapper = styled('div')({
+  padding: '32px',
+  boxSizing: 'border-box',
+});
+
+const TopBar = styled('div')({
+  width: '100%',
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+});
+
+const ButtonStyles = css({
+  border: 'none',
+  backgroundColor: '#111',
+  color: '#fff',
+  fontWeight: 'bold',
+  padding: '6px 12px',
+  borderRadius: '6px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: '0.5rem',
+});
+
+const HomeButton = styled(Link)(ButtonStyles);
+const DocumentationButton = styled('a')(ButtonStyles);
+
+const EditorWrapper = styled('div')({
+  maxWidth: '120ch',
+  margin: '0 auto',
+  paddingTop: '16px',
+});
 
 export function Playground() {
   const randomId = useMemo(() => nanoid(), []);
@@ -24,37 +51,27 @@ export function Playground() {
 
   return (
     <AnonymousDocSyncProvider>
-      <Box minH="100vh">
-        <Button
-          as="a"
-          href="/"
-          pos="absolute"
-          top={12}
-          left={12}
-          aria-label="go back"
-          leftIcon={<Icon as={FiArrowLeft} />}
-        >
-          Home
-        </Button>
-        <Container pt={12} maxW="75ch">
-          <Image
-            src="/assets/deci-logo-brand.png"
-            alt="Brand"
-            borderRadius="5px"
-            mb={3}
-            w={50}
-            h={50}
-          />
-          <Heading>Deci Playground</Heading>
-          <Text opacity={0.7} mt={3} mb={6}>
-            This is a lightweight version of Deci, here you only get one pad.
-            This version is intended just to test out how our pads work, play
-            around and have fun!
-          </Text>
-          <HelpButton />
-        </Container>
-        <Editor padId={randomId} autoFocus />
-      </Box>
+      <Wrapper>
+        <TopBar>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <HomeButton to="/" aria-label="Go to home">
+              <FiArrowLeft />
+              Home
+            </HomeButton>
+            <h1>Deci Playground</h1>
+          </div>
+          <DocumentationButton
+            href="https://www.notion.so/decipad/What-is-Deci-d140cc627f1e4380bb8be1855272f732"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Documentation
+          </DocumentationButton>
+        </TopBar>
+        <EditorWrapper>
+          <Editor padId={randomId} autoFocus />
+        </EditorWrapper>
+      </Wrapper>
     </AnonymousDocSyncProvider>
   );
 }
