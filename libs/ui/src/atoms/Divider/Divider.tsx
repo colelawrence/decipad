@@ -3,7 +3,7 @@ import { cssVar } from '../../primitives';
 
 const styles = css({
   border: 'none',
-  boxShadow: `0 0 0 1px ${cssVar('highlightColor')}`,
+  boxShadow: `0 0 0 0.5px ${cssVar('highlightColor')}`,
 });
 
 export const Divider = (): ReturnType<React.FC> => <hr css={styles} />;
