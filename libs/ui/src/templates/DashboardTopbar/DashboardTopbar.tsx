@@ -88,6 +88,7 @@ export const DashboardTopbar = ({
             <div
               css={{
                 position: 'absolute',
+                minWidth: '120px',
                 width: 'max-content',
                 maxWidth: '50vw',
                 top: 'calc(100% + 8px)',
