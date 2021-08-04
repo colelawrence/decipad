@@ -3,17 +3,19 @@
 import { ObservableSubscription } from '@apollo/client';
 import waitForExpect from 'wait-for-expect';
 import { Workspace, Pad, Role, RoleInvitation } from '@decipad/backendtypes';
-import test from './utils/test-with-sandbox';
-import { withAuth, gql } from './utils/call-graphql';
-import { withAuth as callWithAuth } from './utils/call-simple';
-import auth from './utils/auth';
+import test from './sandbox';
 import { timeout } from './utils/timeout';
-import createWebsocketLink from './utils/graphql-websocket-link';
-import createDeciWebsocket from './utils/websocket';
 
 waitForExpect.defaults.interval = 250;
 
-test('pad tags', () => {
+test('pad tags', ({
+  test: it,
+  subscriptionClient: createClient,
+  graphql: { withAuth },
+  gql,
+  http: { withAuth: callWithAuth },
+  auth,
+}) => {
   let workspace: Workspace;
   let role: Role;
   let invitations: RoleInvitation[];
@@ -96,7 +98,7 @@ test('pad tags', () => {
   beforeAll(async () => {
     const call = callWithAuth((await auth('test user id 2')).token);
     const invitationIds = invitations.map((i) => i.id).join(',');
-    const link = `http://localhost:${process.env.PORT}/api/invites/${invitationIds}/accept`;
+    const link = `/api/invites/${invitationIds}/accept`;
     await call(link);
   });
 
@@ -518,62 +520,56 @@ test('pad tags', () => {
     expect(padsPage.count).toBe(0);
     expect(padsPage.items).toHaveLength(0);
   });
+
+  async function subscribe(
+    userId: string,
+    workspaceId: string,
+    tags: string[],
+    subscriptions: ObservableSubscription[]
+  ) {
+    const client = await createClient(userId);
+    const sub = client.subscribe({
+      query: gql`
+        subscription {
+          tagsChanged(workspaceId: "${workspaceId}") {
+            added { tag }
+            removed { tag }
+          }
+        }
+      `,
+    });
+
+    subscriptions.push(
+      await sub.subscribe({
+        error(err) {
+          throw err;
+        },
+        complete() {
+          // do nothing
+        },
+        next({ data }) {
+          const changes = data.tagsChanged;
+          if (changes.added) {
+            for (const w of changes.added) {
+              tags.push(w.tag);
+            }
+          }
+
+          if (changes.removed) {
+            for (const tag of changes.removed) {
+              const index = tags.indexOf(tag.tag);
+              expect(index).toBeGreaterThan(-1);
+              tags.splice(index, 1);
+            }
+          }
+        },
+      })
+    );
+
+    // We have to wait because a subscription does not
+    // wait for the server to reply.
+    // Which means that we do a setTimeout and hope
+    // that the subscription was created before it expires.
+    await timeout(8000);
+  }
 });
-
-async function createClient(userId: string) {
-  const { token } = await auth(userId);
-  const link = createWebsocketLink(createDeciWebsocket(token), 240000);
-  return withAuth({ token, link });
-}
-
-async function subscribe(
-  userId: string,
-  workspaceId: string,
-  tags: string[],
-  subscriptions: ObservableSubscription[]
-) {
-  const client = await createClient(userId);
-  const sub = client.subscribe({
-    query: gql`
-      subscription {
-        tagsChanged(workspaceId: "${workspaceId}") {
-          added { tag }
-          removed { tag }
-        }
-      }
-    `,
-  });
-
-  subscriptions.push(
-    await sub.subscribe({
-      error(err) {
-        throw err;
-      },
-      complete() {
-        // do nothing
-      },
-      next({ data }) {
-        const changes = data.tagsChanged;
-        if (changes.added) {
-          for (const w of changes.added) {
-            tags.push(w.tag);
-          }
-        }
-
-        if (changes.removed) {
-          for (const tag of changes.removed) {
-            const index = tags.indexOf(tag.tag);
-            expect(index).toBeGreaterThan(-1);
-            tags.splice(index, 1);
-          }
-        }
-      },
-    })
-  );
-
-  // We have to wait because a subscription does not
-  // wait for the server to reply.
-  // Which means that we do a setTimeout and hope
-  // that the subscription was created before it expires.
-  await timeout(8000);
-}

@@ -1,13 +1,16 @@
 /* eslint-env jest */
 
 import arc from '@architect/functions';
-import test from './utils/test-with-sandbox';
-import { withAuth, gql } from './utils/call-graphql';
-import { withAuth as callWithAuth } from './utils/call-simple';
-import auth from './utils/auth';
+import test from './sandbox';
 import { create as createResourcePermission } from './utils/permissions';
 
-test('share with email', () => {
+test('share with email', ({
+  test: it,
+  graphql: { withAuth },
+  gql,
+  http: { withAuth: callWithAuth },
+  auth,
+}) => {
   let targetUserId: string;
 
   beforeAll(async () => {
@@ -158,7 +161,7 @@ test('share with email', () => {
 
     expect(invites).toHaveLength(1);
     const invite = invites[0];
-    const inviteAcceptLink = `http://localhost:${process.env.PORT}/api/invites/${invite.id}/accept`;
+    const inviteAcceptLink = `/api/invites/${invite.id}/accept`;
 
     const call = callWithAuth((await auth(targetUserId)).token);
     await call(inviteAcceptLink);

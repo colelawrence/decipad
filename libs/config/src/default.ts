@@ -1,0 +1,44 @@
+// these are the values that are good for the development sandbox
+// there are no important secrets here, so you can relax.
+export const defaultEnvValues = {
+  APP_ROOT_PATH: '/',
+  AWS_REGION: 'eu-west-2',
+
+  DECI_FROM_EMAIL_ADDRESS: 'info@decipad.com',
+  DECI_APP_URL_BASE: 'http://localhost:4200',
+  DECI_PORT: '4200',
+
+  DECI_SES_ACCESS_KEY_ID: 'noneofyourbusiness',
+  DECI_SES_SECRET_ACCESS_KEY: 'noneofyourbusiness',
+
+  DECI_S3_ENDPOINT: 'localhost:4568',
+  DECI_S3_ACCESS_KEY_ID: 'S3RVER',
+  DECI_S3_SECRET_ACCESS_KEY: 'S3RVER',
+  DECI_S3_PADS_BUCKET: 'pads',
+  DECI_S3_ATTACHMENTS_BUCKET: 'attachments',
+  DECI_INVITE_EXPIRATION_SECONDS: '604800',
+
+  DECI_KEY_VALIDATION_EXPIRATION_SECONDS: '2592000',
+
+  DECI_MAX_ATTACHMENT_SIZE: '100000',
+  DECI_MAX_ATTACHMENT_UPLOAD_TOKEN_EXPIRATION_SECONDS: '300',
+  DECI_MAX_ATTACHMENT_DOWNLOAD_TOKEN_EXPIRATION_SECONDS: '300',
+
+  GITHUB_CLIENT_ID: '724d4d510a5e7301d70d',
+  GITHUB_CLIENT_SECRET: '288ea1dc0c15a556524042cf2691f54faf393c69',
+
+  JWT_MAX_AGE: '2592000', // 1 month (30 * 24 * 60 * 60)
+  JWT_SECRET: 'catwalklrjqwr92309endasjkdn023eqhjdskajhaskj',
+  JWT_SIGNING_PRIVATE_KEY:
+    'eyJrdHkiOiJvY3QiLCJraWQiOiJaT1pyczN3WjlHMkFOUU1jMkg3NGZ2Wks5ZzUwZEJkRnVDckVDUXdiem5NIiwiYWxnIjoiSFM1MTIiLCJrIjoiSmJkSFlQc1NZaWlIRGFiSlpUbzFWVUpkOEhGNTZlQ01fNExUYm5jdzhXZyJ9',
+
+  NEXTAUTH_URL: 'http://localhost:4200/api/auth',
+
+  SENTRY_DSN: '',
+};
+
+export type SupportedEnvKey = keyof typeof defaultEnvValues;
+
+export function defaultEnv(key: SupportedEnvKey): string {
+  return defaultEnvValues[key];
+}

@@ -5,13 +5,16 @@ import { createReadStream } from 'fs';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import { Workspace, Pad, Attachment } from '@decipad/backendtypes';
-import test from './utils/test-with-sandbox';
-import { withAuth, withoutAuth, gql } from './utils/call-graphql';
-import call from './utils/call-simple';
-import auth from './utils/auth';
+import test from './sandbox';
 import { timeout } from './utils/timeout';
 
-test('attach files', () => {
+test('attach files', ({
+  test: it,
+  graphql: { withAuth, withoutAuth },
+  gql,
+  http: { call },
+  auth,
+}) => {
   let workspace: Workspace;
   let pad: Pad;
   let fileHandle: string | undefined;
@@ -105,49 +108,51 @@ test('attach files', () => {
     ).rejects.toThrow('Forbidden');
   });
 
-  it('authenticated user can upload an attachment', (done) => {
-    (async () => {
-      const client = withAuth(await auth());
+  it('authenticated user can upload an attachment', async () => {
+    await new Promise((resolve, reject) => {
+      (async () => {
+        const client = withAuth(await auth());
 
-      const formData = (
-        await client.query({
-          query: gql`
-            query {
-              getCreateAttachmentForm(padId: "${pad.id}", fileName: "filename", fileType: "text/csv") {
-                url
-                handle
-                fields {
-                  key
-                  value
+        const formData = (
+          await client.query({
+            query: gql`
+              query {
+                getCreateAttachmentForm(padId: "${pad.id}", fileName: "filename", fileType: "text/csv") {
+                  url
+                  handle
+                  fields {
+                    key
+                    value
+                  }
                 }
               }
-            }
-          `,
-        })
-      ).data.getCreateAttachmentForm;
+            `,
+          })
+        ).data.getCreateAttachmentForm;
 
-      fileHandle = formData.handle;
-      expect(fileHandle).toBeDefined();
+        fileHandle = formData.handle;
+        expect(fileHandle).toBeDefined();
 
-      const form = new FormData();
-      for (const { key, value } of formData.fields) {
-        form.append(key, value);
-      }
-      form.append(
-        'file',
-        createReadStream(join(__dirname, 'data', 'test1.csv'))
-      );
-
-      form.submit(formData.url, (err, res) => {
-        if (err) {
-          return done(err);
+        const form = new FormData();
+        for (const { key, value } of formData.fields) {
+          form.append(key, value);
         }
-        expect(res.statusCode).toBeGreaterThanOrEqual(200);
-        expect(res.statusCode).toBeLessThan(300);
-        res.once('end', () => done());
-        res.resume();
-      });
-    })();
+        form.append(
+          'file',
+          createReadStream(join(__dirname, 'data', 'test1.csv'))
+        );
+
+        form.submit(formData.url, (err, res) => {
+          if (err) {
+            return reject(err);
+          }
+          expect(res.statusCode).toBeGreaterThanOrEqual(200);
+          expect(res.statusCode).toBeLessThan(300);
+          res.once('end', resolve);
+          res.resume();
+        });
+      })();
+    });
   });
 
   it('same user can add attachment to pad', async () => {

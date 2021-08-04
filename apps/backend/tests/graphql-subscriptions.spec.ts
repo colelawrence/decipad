@@ -1,13 +1,13 @@
 /* eslint-env jest */
 
 import { ApolloClient, StoreObject } from '@apollo/client';
-import test from './utils/test-with-sandbox';
-import { withAuth, gql } from './utils/call-graphql';
-import auth from './utils/auth';
-import createWebsocketLink from './utils/graphql-websocket-link';
-import createDeciWebsocket from './utils/websocket';
+import test from './sandbox';
 
-test('graphql subscriptions', () => {
+test('graphql subscriptions', ({
+  test: it,
+  subscriptionClient: createClient,
+  gql,
+}) => {
   let client: ApolloClient<StoreObject>;
 
   it('can create client', async () => {
@@ -34,9 +34,3 @@ test('graphql subscriptions', () => {
     expect(result).toMatchObject({ data: { hello: 'Hello World!' } });
   }, 15000);
 });
-
-async function createClient(userId: string | undefined = undefined): Promise<ApolloClient<StoreObject>> {
-  const { token } = await auth(userId);
-  const link = createWebsocketLink(createDeciWebsocket(token));
-  return withAuth({ token, link });
-}

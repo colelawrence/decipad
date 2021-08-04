@@ -6,6 +6,7 @@ const config = {
   setupFiles: [...setupFiles, './jest.setup.js'],
   testTimeout: 10000,
   maxWorkers: 2,
+  bail: true,
 };
 
 if (process.env.JEST_MAX_WORKERS) {

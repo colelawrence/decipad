@@ -1,17 +1,19 @@
 /* eslint-env jest */
 import waitForExpect from 'wait-for-expect';
 import { Workspace, Pad } from '@decipad/backendtypes';
-import test from './utils/test-with-sandbox';
+import test from './sandbox';
 import { timeout } from './utils/timeout';
-import { withAuth, gql } from './utils/call-graphql';
-import auth from './utils/auth';
-import createWebsocketLink from './utils/graphql-websocket-link';
-import createDeciWebsocket from './utils/websocket';
 import { ObservableSubscription } from '@apollo/client';
 
 waitForExpect.defaults.interval = 250;
 
-test('pad changes', () => {
+test('pad changes', ({
+  test: it,
+  subscriptionClient: createClient,
+  graphql: { withAuth },
+  gql,
+  auth,
+}) => {
   let workspace: Workspace;
   const subscriptions: ObservableSubscription[] = [];
   const pads: Pad[] = [];
@@ -195,12 +197,6 @@ test('pad changes', () => {
     // admin user still has workspace
     expect(pads).toHaveLength(1);
   });
-
-  async function createClient(userId: string) {
-    const { token } = await auth(userId);
-    const link = createWebsocketLink(createDeciWebsocket(token), 240000);
-    return withAuth({ token, link });
-  }
 
   async function subscribe(
     userId: string,

@@ -62,23 +62,6 @@ jobs:
 
       - name: Run tests
         run: npm run test:coverage
-        env:
-          JWT_SECRET: '23eqhjdskajhaskjcatwndasjkdn0alklrjqwr92309e'
-          JWT_SIGNING_PRIVATE_KEY: 'eyJrdHkiOiJvY3QiLCJraWQiOiJaT1pyczN3WjlHMkFOUU1jMkg3NGZ2Wks5ZzUwZEJkRnVDckVDUXdiem5NIiwiYWxnIjoiSFM1MTIiLCJrIjoiSmJkSFlQc1NZaWlIRGFiSlpUbzFWVUpkOEhGNTZlQ01fNExUYm5jdzhXZyJ9'
-          DECI_INVITE_EXPIRATION_SECONDS: '604800'
-          DECI_KEY_VALIDATION_EXPIRATION_SECONDS: '2592000'
-          APP_ROOT_PATH: '/'
-          NODE_OPTIONS: --enable-source-maps
-          DECI_FROM_EMAIL_ADDRESS: info@decipad.com
-          DECI_S3_ENDPOINT: localhost:4568
-          DECI_S3_ACCESS_KEY_ID: S3RVER
-          DECI_S3_SECRET_ACCESS_KEY: S3RVER
-          DECI_S3_PADS_BUCKET: pads
-          DECI_S3_ATTACHMENTS_BUCKET: attachments
-          DECI_SES_ACCESS_KEY_ID: 'is not really used in backend tests'
-          DECI_SES_SECRET_ACCESS_KEY: 'is not really used in backend tests'
-          GITHUB_CLIENT_ID: 'is not really used in backend tests'
-          GITHUB_CLIENT_SECRET: 'is not really used in backend tests'
 
       - name: Run end-to-end tests
         run: ./scripts/e2e.sh

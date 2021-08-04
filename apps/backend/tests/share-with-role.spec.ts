@@ -2,15 +2,13 @@
 
 import waitForExpect from 'wait-for-expect';
 import { Workspace, Role } from '@decipad/backendtypes';
-import test from './utils/test-with-sandbox';
-import { withAuth, gql } from './utils/call-graphql';
-import auth from './utils/auth';
+import test from './sandbox';
 import { create as createResourcePermission } from './utils/permissions';
 
 waitForExpect.defaults.timeout = 10000;
 waitForExpect.defaults.interval = 500;
 
-test('share with role', () => {
+test('share with role', ({ test: it, graphql: { withAuth }, gql, auth }) => {
   let workspace: Workspace;
   let role: Role;
 

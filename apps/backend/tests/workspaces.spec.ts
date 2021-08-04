@@ -1,12 +1,15 @@
 /* eslint-env jest */
 
 import { Workspace, Role, RoleInvitation } from '@decipad/backendtypes';
-import test from './utils/test-with-sandbox';
-import { withAuth, withoutAuth, gql } from './utils/call-graphql';
-import { withAuth as callWithAuth } from './utils/call-simple';
-import auth from './utils/auth';
+import test from './sandbox';
 
-test('workspaces', () => {
+test('workspaces', ({
+  test: it,
+  graphql: { withAuth, withoutAuth },
+  gql,
+  http: { withAuth: callWithAuth },
+  auth,
+}) => {
   let workspace: Workspace;
   let role: Role;
   let invitations: RoleInvitation[];
@@ -195,7 +198,7 @@ test('workspaces', () => {
   it('non-target user cannot accept invitation', async () => {
     const call = callWithAuth((await auth()).token);
     const invitationIds = invitations.map((i) => i.id).join(',');
-    const link = `http://localhost:${process.env.PORT}/api/invites/${invitationIds}/accept`;
+    const link = `/api/invites/${invitationIds}/accept`;
 
     await expect(call(link)).rejects.toThrow('Forbidden');
   });
@@ -203,7 +206,7 @@ test('workspaces', () => {
   it('target user can accept invitation', async () => {
     const call = callWithAuth((await auth('test user id 2')).token);
     const invitationIds = invitations.map((i) => i.id).join(',');
-    const link = `http://localhost:${process.env.PORT}/api/invites/${invitationIds}/accept`;
+    const link = `/api/invites/${invitationIds}/accept`;
 
     await call(link);
   });
@@ -373,7 +376,7 @@ test('workspaces', () => {
   it('target user can accept the invitation again', async () => {
     const call = callWithAuth((await auth('test user id 2')).token);
     const invitationIds = invitations.map((i) => i.id).join(',');
-    const link = `http://localhost:${process.env.PORT}/api/invites/${invitationIds}/accept`;
+    const link = `/api/invites/${invitationIds}/accept`;
 
     await call(link);
   });

@@ -3,17 +3,19 @@
 import waitForExpect from 'wait-for-expect';
 import { ObservableSubscription } from '@apollo/client';
 import { Workspace, Role, RoleInvitation } from '@decipad/backendtypes';
-import test from './utils/test-with-sandbox';
+import test from './sandbox';
 import { timeout } from './utils/timeout';
-import { withAuth, gql } from './utils/call-graphql';
-import { withAuth as callSimpleWithAuth } from './utils/call-simple';
-import auth from './utils/auth';
-import createWebsocketLink from './utils/graphql-websocket-link';
-import createDeciWebsocket from './utils/websocket';
 
 waitForExpect.defaults.interval = 250;
 
-test('workspaces changes', () => {
+test('workspaces changes', ({
+  test: it,
+  subscriptionClient: createClient,
+  graphql: { withAuth },
+  gql,
+  http: { withAuth: callSimpleWithAuth },
+  auth,
+}) => {
   const subscriptions: ObservableSubscription[] = [];
   const workspaces: Workspace[] = [];
   const inviteeWorkspaces: Workspace[] = [];
@@ -150,7 +152,7 @@ test('workspaces changes', () => {
 
   it('allows receiving user to accept invitation for role', async () => {
     const invitesForUrl = invites.map((i) => i.id).join(',');
-    const inviteAcceptLink = `http://localhost:${process.env.PORT}/api/invites/${invitesForUrl}/accept`;
+    const inviteAcceptLink = `/api/invites/${invitesForUrl}/accept`;
     const call = callSimpleWithAuth((await auth('test user id 2')).token);
     await call(inviteAcceptLink);
 
@@ -204,79 +206,74 @@ test('workspaces changes', () => {
     // admin user still has workspace
     expect(workspaces).toHaveLength(1);
   });
+
+  async function subscribe(
+    userId: string,
+    workspaces: Workspace[],
+    subscriptions: ObservableSubscription[]
+  ) {
+    const client = await createClient(userId);
+    const sub = client.subscribe({
+      query: gql`
+        subscription {
+          workspacesChanged {
+            added {
+              id
+              name
+            }
+            updated {
+              id
+              name
+            }
+            removed
+          }
+        }
+      `,
+    });
+
+    const subscription = await sub.subscribe({
+      error(err) {
+        throw err;
+      },
+      complete() {
+        // do nothing
+      },
+      next({ data }) {
+        const changes = data.workspacesChanged;
+        if (changes.added) {
+          for (const w of changes.added) {
+            workspaces.push(w);
+          }
+        }
+
+        if (changes.updated) {
+          for (const w of changes.updated) {
+            const index = workspaces.findIndex(
+              (w2: Workspace) => w2.id === w.id
+            );
+            if (index >= 0) {
+              workspaces[index] = Object.assign(workspaces[index], w);
+            }
+          }
+        }
+
+        if (changes.removed) {
+          for (const id of changes.removed) {
+            const index = workspaces.findIndex((w) => id === w.id);
+            if (index >= 0) {
+              workspaces.splice(index, 1);
+            }
+          }
+        }
+      },
+    });
+
+    subscriptions.push(subscription);
+
+    // We have to wait because a subscription does not
+    // wait for the server to reply.
+    // Which means that we do a setTimeout and hope
+    // that the subscription was created before it expires.
+    await timeout(8000);
+  }
 });
-
-async function createClient(userId: string) {
-  const { token } = await auth(userId);
-  const websocket = createDeciWebsocket(token);
-  const link = createWebsocketLink(websocket, 240000);
-  return withAuth({ token, link });
-}
-
-async function subscribe(
-  userId: string,
-  workspaces: Workspace[],
-  subscriptions: ObservableSubscription[]
-) {
-  const client = await createClient(userId);
-  const sub = client.subscribe({
-    query: gql`
-      subscription {
-        workspacesChanged {
-          added {
-            id
-            name
-          }
-          updated {
-            id
-            name
-          }
-          removed
-        }
-      }
-    `,
-  });
-
-  const subscription = await sub.subscribe({
-    error(err) {
-      throw err;
-    },
-    complete() {
-      // do nothing
-    },
-    next({ data }) {
-      const changes = data.workspacesChanged;
-      if (changes.added) {
-        for (const w of changes.added) {
-          workspaces.push(w);
-        }
-      }
-
-      if (changes.updated) {
-        for (const w of changes.updated) {
-          const index = workspaces.findIndex((w2: Workspace) => w2.id === w.id);
-          if (index >= 0) {
-            workspaces[index] = Object.assign(workspaces[index], w);
-          }
-        }
-      }
-
-      if (changes.removed) {
-        for (const id of changes.removed) {
-          const index = workspaces.findIndex((w) => id === w.id);
-          if (index >= 0) {
-            workspaces.splice(index, 1);
-          }
-        }
-      }
-    },
-  });
-
-  subscriptions.push(subscription);
-
-  // We have to wait because a subscription does not
-  // wait for the server to reply.
-  // Which means that we do a setTimeout and hope
-  // that the subscription was created before it expires.
-  await timeout(8000);
-}

@@ -1,13 +1,13 @@
 import { lock as lockFile } from 'proper-lockfile';
-import { timeout } from './timeout';
+import { timeout } from '../utils/timeout';
 
 const retryLockMs = 1000;
 
 export default function lockingFile(path: string) {
-  return async (promise: Promise<void>): Promise<void> => {
+  return async (fn: () => Promise<void>): Promise<void> => {
     const release = await lock(path);
     try {
-      await promise;
+      await fn();
     } finally {
       await release();
     }

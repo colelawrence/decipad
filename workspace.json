@@ -34,9 +34,7 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "apps/backend/tests/**/*.ts"
-            ]
+            "lintFilePatterns": ["apps/backend/tests/**/*.ts"]
           }
         },
         "test": {
@@ -55,29 +53,21 @@
         }
       }
     },
-    "replica": {
-      "root": "libs/replica",
-      "sourceRoot": "libs/replica/src",
+    "backendtypes": {
+      "root": "libs/backendtypes",
+      "sourceRoot": "libs/backendtypes/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/replica/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/replica"],
-          "options": {
-            "jestConfig": "libs/replica/jest.config.js",
-            "codeCoverage": true
+            "lintFilePatterns": ["libs/backendtypes/src/**/*.ts"]
           }
         },
         "typecheck": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "yarn tsc -b libs/replica"
+            "command": "yarn tsc -b libs/backendtypes"
           }
         }
       }
@@ -166,6 +156,52 @@
         }
       }
     },
+    "config": {
+      "root": "libs/config",
+      "sourceRoot": "libs/config/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/config/src/**/*.ts"]
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/config"
+          }
+        }
+      }
+    },
+    "docsync": {
+      "root": "libs/docsync",
+      "sourceRoot": "libs/docsync/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/docsync/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/docsync"],
+          "options": {
+            "jestConfig": "libs/docsync/jest.config.js",
+            "codeCoverage": true
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/docsync"
+          }
+        }
+      }
+    },
     "editor": {
       "root": "libs/editor",
       "sourceRoot": "libs/editor/src",
@@ -224,6 +260,63 @@
         }
       }
     },
+    "emails": {
+      "root": "libs/emails",
+      "sourceRoot": "libs/emails/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/emails/src/**/*.ts"]
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/emails"
+          }
+        }
+      }
+    },
+    "graphqlserver": {
+      "root": "libs/graphqlserver",
+      "sourceRoot": "libs/graphqlserver/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/graphqlserver/src/**/*.ts"]
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/graphqlserver"
+          }
+        }
+      }
+    },
+    "interfaces": {
+      "root": "libs/interfaces",
+      "sourceRoot": "libs/interfaces/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/interfaces/**/*.ts"]
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/interfaces"
+          }
+        }
+      }
+    },
     "kafka-lite": {
       "root": "libs/kafka-lite",
       "sourceRoot": "libs/kafka-lite/src",
@@ -241,6 +334,25 @@
           "options": {
             "jestConfig": "libs/kafka-lite/jest.config.js",
             "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "lambdas": {
+      "root": "libs/lambdas",
+      "sourceRoot": "libs/lambdas/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/lambdas/src/**/*.ts"]
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/lambdas"
           }
         }
       }
@@ -272,6 +384,66 @@
         }
       }
     },
+    "lrustorage": {
+      "root": "libs/lrustorage",
+      "sourceRoot": "libs/lrustorage/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/lrustorage/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/lrustorage"
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/lrustorage/ui"],
+          "options": {
+            "jestConfig": "libs/lrustorage/jest.config.js",
+            "codeCoverage": true,
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "meta": {
+      "root": "libs/meta",
+      "sourceRoot": "libs/meta/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/meta/src/**/*.ts"]
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/meta"
+          }
+        }
+      }
+    },
+    "nodelambda": {
+      "root": "libs/nodelambda",
+      "sourceRoot": "libs/nodelambda/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/nodelambda/**/*.js"]
+          }
+        }
+      }
+    },
     "queries": {
       "root": "libs/queries",
       "sourceRoot": "libs/queries/src",
@@ -293,29 +465,67 @@
         }
       }
     },
-    "docsync": {
-      "root": "libs/docsync",
-      "sourceRoot": "libs/docsync/src",
+    "replica": {
+      "root": "libs/replica",
+      "sourceRoot": "libs/replica/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/docsync/**/*.ts"]
+            "lintFilePatterns": ["libs/replica/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/docsync"],
+          "outputs": ["coverage/libs/replica"],
           "options": {
-            "jestConfig": "libs/docsync/jest.config.js",
+            "jestConfig": "libs/replica/jest.config.js",
             "codeCoverage": true
           }
         },
         "typecheck": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "yarn tsc -b libs/docsync"
+            "command": "yarn tsc -b libs/replica"
+          }
+        }
+      }
+    },
+    "services": {
+      "root": "libs/services",
+      "sourceRoot": "libs/services/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/services/src/**/*.ts"]
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/services"
+          }
+        }
+      }
+    },
+    "testutils": {
+      "root": "libs/testutils",
+      "sourceRoot": "libs/testutils/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/testutils/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/testutils"
           }
         }
       }
@@ -374,218 +584,6 @@
             "ci": {
               "quiet": true
             }
-          }
-        }
-      }
-    },
-    "testutils": {
-      "root": "libs/testutils",
-      "sourceRoot": "libs/testutils/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/testutils/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "typecheck": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "yarn tsc -b libs/testutils"
-          }
-        }
-      }
-    },
-    "lrustorage": {
-      "root": "libs/lrustorage",
-      "sourceRoot": "libs/lrustorage/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/lrustorage/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "typecheck": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "yarn tsc -b libs/lrustorage"
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/lrustorage/ui"],
-          "options": {
-            "jestConfig": "libs/lrustorage/jest.config.js",
-            "codeCoverage": true,
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "interfaces": {
-      "root": "libs/interfaces",
-      "sourceRoot": "libs/interfaces/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/interfaces/**/*.ts"]
-          }
-        },
-        "typecheck": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "yarn tsc -b libs/interfaces"
-          }
-        }
-      }
-    },
-    "nodelambda": {
-      "root": "libs/nodelambda",
-      "sourceRoot": "libs/nodelambda/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/nodelambda/**/*.js"]
-          }
-        }
-      }
-    },
-    "lambdas": {
-      "root": "libs/lambdas",
-      "sourceRoot": "libs/lambdas/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/lambdas/src/**/*.ts"]
-          }
-        },
-        "typecheck": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "yarn tsc -b libs/lambdas"
-          }
-        }
-      }
-    },
-    "emails": {
-      "root": "libs/emails",
-      "sourceRoot": "libs/emails/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/emails/src/**/*.ts"]
-          }
-        },
-        "typecheck": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "yarn tsc -b libs/emails"
-          }
-        }
-      }
-    },
-    "meta": {
-      "root": "libs/meta",
-      "sourceRoot": "libs/meta/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/meta/src/**/*.ts"]
-          }
-        },
-        "typecheck": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "yarn tsc -b libs/meta"
-          }
-        }
-      }
-    },
-    "backendtypes": {
-      "root": "libs/backendtypes",
-      "sourceRoot": "libs/backendtypes/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/backendtypes/src/**/*.ts"]
-          }
-        },
-        "typecheck": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "yarn tsc -b libs/backendtypes"
-          }
-        }
-      }
-    },
-    "services": {
-      "root": "libs/services",
-      "sourceRoot": "libs/services/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/services/src/**/*.ts"]
-          }
-        },
-        "typecheck": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "yarn tsc -b libs/services"
-          }
-        }
-      }
-    },
-    "config": {
-      "root": "libs/config",
-      "sourceRoot": "libs/config/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/config/src/**/*.ts"]
-          }
-        },
-        "typecheck": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "yarn tsc -b libs/config"
-          }
-        }
-      }
-    },
-    "graphqlserver": {
-      "root": "libs/graphqlserver",
-      "sourceRoot": "libs/graphqlserver/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/graphqlserver/src/**/*.ts"]
-          }
-        },
-        "typecheck": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "yarn tsc -b libs/graphqlserver"
           }
         }
       }

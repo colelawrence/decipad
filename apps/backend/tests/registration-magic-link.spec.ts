@@ -1,11 +1,12 @@
 /* eslint-env jest */
 
+import waitForExpect from 'wait-for-expect';
 import arc from '@architect/functions';
 import { parse as parseCookie } from 'simple-cookie';
 import { User } from '@decipad/backendtypes';
-import test from './utils/test-with-sandbox';
-import { withAuth, withoutAuth, gql } from './utils/call-graphql';
-import { timeout } from './utils/timeout';
+import test from './sandbox';
+
+waitForExpect.defaults.interval = 250;
 
 type UserKeyValidation = {
   id: string;
@@ -13,7 +14,12 @@ type UserKeyValidation = {
   expires_at: number;
 };
 
-test('registration via magic link', () => {
+test('registration via magic link', ({
+  test: it,
+  graphql: { withAuth, withoutAuth },
+  http: { call: fetch },
+  gql,
+}) => {
   let user: User;
   let userKeyValidation: UserKeyValidation;
   let token: string;
@@ -33,37 +39,37 @@ test('registration via magic link', () => {
     ).data.createUserViaMagicLink;
 
     expect(user).toBeDefined();
-  }, 10000);
-
-  it('waits a bit', async () => await timeout(2000));
+  });
 
   it('a user key validation request was created', async () => {
-    const data = await arc.tables();
-    const userKeys = (
-      await data.userkeys.query({
-        IndexName: 'byUserId',
-        KeyConditionExpression: 'user_id = :user_id',
-        ExpressionAttributeValues: {
-          ':user_id': user.id,
-        },
-      })
-    ).Items;
+    await waitForExpect(async () => {
+      const data = await arc.tables();
+      const userKeys = (
+        await data.userkeys.query({
+          IndexName: 'byUserId',
+          KeyConditionExpression: 'user_id = :user_id',
+          ExpressionAttributeValues: {
+            ':user_id': user.id,
+          },
+        })
+      ).Items;
 
-    expect(userKeys).toHaveLength(1);
-    const userKey = userKeys[0];
+      expect(userKeys).toHaveLength(1);
+      const userKey = userKeys[0];
 
-    const userKeyValidations = (
-      await data.userkeyvalidations.query({
-        IndexName: 'byUserKeyId',
-        KeyConditionExpression: 'userkey_id = :userkey_id',
-        ExpressionAttributeValues: {
-          ':userkey_id': userKey.id,
-        },
-      })
-    ).Items as UserKeyValidation[];
+      const userKeyValidations = (
+        await data.userkeyvalidations.query({
+          IndexName: 'byUserKeyId',
+          KeyConditionExpression: 'userkey_id = :userkey_id',
+          ExpressionAttributeValues: {
+            ':userkey_id': userKey.id,
+          },
+        })
+      ).Items as UserKeyValidation[];
 
-    expect(userKeyValidations).toHaveLength(1);
-    userKeyValidation = userKeyValidations[0];
+      expect(userKeyValidations).toHaveLength(1);
+      userKeyValidation = userKeyValidations[0];
+    });
   });
 
   it('can ask to resend link', async () => {
@@ -78,7 +84,7 @@ test('registration via magic link', () => {
   });
 
   it('can visit that link and get authenticated', async () => {
-    const link = `http://localhost:${process.env.PORT}/api/userkeyvalidations/${userKeyValidation.id}/validate?redirect=false`;
+    const link = `/api/userkeyvalidations/${userKeyValidation.id}/validate?redirect=false`;
     const resp = await fetch(link);
     const cookie = resp.headers.get('set-cookie');
     expect(cookie).toMatch('next-auth.session-token=');

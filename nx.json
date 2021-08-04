@@ -33,6 +33,9 @@
       "tags": [],
       "implicitDependencies": ["nodelambda", "lambdas"]
     },
+    "backendtypes": {
+      "tags": []
+    },
     "client": {
       "tags": [],
       "implicitDependencies": ["backend"]
@@ -41,58 +44,55 @@
       "tags": [],
       "implicitDependencies": ["client"]
     },
-    "editor": {
-      "tags": []
-    },
-    "kafka-lite": {
-      "tags": []
-    },
-    "language": {
-      "tags": []
-    },
-    "queries": {
+    "config": {
       "tags": []
     },
     "docsync": {
       "tags": []
     },
-    "ui": {
-      "tags": []
-    },
-    "replica": {
-      "tags": []
-    },
-    "testutils": {
-      "tags": []
-    },
-    "lrustorage": {
-      "tags": []
-    },
-    "interfaces": {
-      "tags": []
-    },
-    "nodelambda": {
-      "tags": []
-    },
-    "lambdas": {
+    "editor": {
       "tags": []
     },
     "emails": {
       "tags": []
     },
+    "graphqlserver": {
+      "tags": []
+    },
+    "interfaces": {
+      "tags": []
+    },
+    "kafka-lite": {
+      "tags": []
+    },
+    "lambdas": {
+      "tags": []
+    },
+    "language": {
+      "tags": []
+    },
+    "lrustorage": {
+      "tags": []
+    },
     "meta": {
       "tags": []
     },
-    "backendtypes": {
+    "nodelambda": {
       "tags": []
     },
-    "config": {
+    "queries": {
+      "tags": []
+    },
+    "replica": {
       "tags": []
     },
     "services": {
       "tags": []
     },
-    "graphqlserver": {
+    "testutils": {
+      "tags": []
+    },
+    "ui": {
       "tags": []
     }
   }

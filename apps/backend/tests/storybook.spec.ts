@@ -1,13 +1,32 @@
 /* eslint-env jest */
 
-import baseUrl from './utils/base-url';
-import test from './utils/test-with-sandbox';
+import fs from 'fs';
+import path from 'path';
+import { sync as mkdirp } from 'mkdirp';
+import test from './sandbox';
 
-test('the storybook handler', () => {
+test('the storybook handler', ({ test: it, http: { call: fetch } }) => {
+  beforeAll(() => {
+    const storyBookEntryFolder = path.join(
+      __dirname,
+      '..',
+      'public',
+      '.storybook'
+    );
+    const storyBookEntryFilePath = path.join(
+      storyBookEntryFolder,
+      'index.html'
+    );
+    if (!fs.existsSync(storyBookEntryFilePath)) {
+      mkdirp(storyBookEntryFolder);
+      fs.writeFileSync(storyBookEntryFilePath, 'hello');
+    }
+  });
+
   it.each(['/.storybook/', '/.storybook'])(
     'redirects %s to the storybook index.html',
     async (path) => {
-      const resp = await fetch(new URL(path, baseUrl()).href);
+      const resp = await fetch(path);
       expect(resp.redirected).toBe(true);
       expect(new URL(resp.url).pathname).toBe('/.storybook/index.html');
     }

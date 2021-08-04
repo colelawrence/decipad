@@ -1,26 +1,16 @@
 import { spawn, ChildProcess } from 'child_process';
 import assert from 'assert';
-import dotenv from 'dotenv';
 import { join } from 'path';
 import lockingFile from './locking-file';
+import { Env } from './sandbox-env';
+import { Config } from './config';
 
 let child: ChildProcess | undefined;
 let started = false;
 let stoppedResolve: (code: number | null) => void;
 
-dotenv.config({
-  path: join(__dirname, '..', '..', '.env'),
-});
-
 const workerId = Number(process.env.JEST_WORKER_ID);
 assert(!!workerId, 'need JEST_WORKER_ID env var to be defined');
-
-const portBase = '' + (3333 + workerId * 100 - Math.ceil(Math.random() * 50));
-process.env.DECI_PORT = process.env.PORT = portBase;
-process.env.NEXTAUTH_URL = `http://localhost:${process.env.portBase}/api/auth`;
-process.env.ARC_EVENTS_PORT = portBase + '1'; // just like Architect does
-process.env.ARC_TABLES_PORT = portBase + '2'; // just like Architect does
-process.env.DECI_S3_ENDPOINT = `localhost:${portBase + '3'}`;
 
 const verbose = !!process.env.DECI_VERBOSE;
 
@@ -28,11 +18,11 @@ const lockPath = join(__dirname, '..', '..', 'app.arc');
 const lockUnlock = lockingFile(lockPath);
 let stopping = false;
 
-async function start(): Promise<void> {
-  await lockUnlock(_start());
+async function start(env: Env, config: Config): Promise<void> {
+  await lockUnlock(() => _start(env, config));
 }
 
-function _start(): Promise<void> {
+function _start(env: Env, config: Config): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
       if (child !== undefined) {
@@ -41,8 +31,8 @@ function _start(): Promise<void> {
 
       child = spawn(
         './node_modules/.bin/sandbox',
-        ['--disable-symlinks', '--confirm', '--port', process.env.PORT!],
-        { stdio: 'pipe', env: process.env }
+        ['--disable-symlinks', '--confirm', '--port', '' + config.apiPort],
+        { stdio: 'pipe', env }
       );
 
       child.once('exit', (code) => {

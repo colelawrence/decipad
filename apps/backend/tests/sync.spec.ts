@@ -1,13 +1,11 @@
 /* eslint-env jest */
 
-import test from './utils/test-with-sandbox';
-import { withAuth } from './utils/call-simple';
-import auth from './utils/auth';
 import Automerge from 'automerge';
 import { encode } from './utils/resource';
+import test from './sandbox';
 import { create as createResourcePermission } from './utils/permissions';
 
-test('sync docs', () => {
+test('sync docs', ({ test: it, http: { withAuth }, auth }) => {
   let call: ReturnType<typeof withAuth>;
   const pad = {
     value: {
@@ -20,7 +18,8 @@ test('sync docs', () => {
   let doc = Automerge.from(pad, 'agent id 1');
 
   beforeAll(async () => {
-    call = withAuth((await auth()).token);
+    const { token } = await auth();
+    call = withAuth(token);
   });
 
   beforeAll(async () => {

@@ -1,13 +1,16 @@
 /* eslint-env jest */
 
 import { Workspace, Pad } from '@decipad/backendtypes';
-import test from './utils/test-with-sandbox';
-import { withAuth, gql } from './utils/call-graphql';
-import { withAuth as restWithAuth } from './utils/call-simple';
+import test from './sandbox';
 import { encode } from './utils/resource';
-import auth from './utils/auth';
 
-test('duplicate pads', () => {
+test('duplicate pads', ({
+  test: it,
+  graphql: { withAuth },
+  gql,
+  http: { withAuth: restWithAuth },
+  auth,
+}) => {
   let workspace: Workspace;
   let pad: Pad;
   let authRes: any;

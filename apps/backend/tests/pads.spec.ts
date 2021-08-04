@@ -1,14 +1,17 @@
 /* eslint-env jest */
 
-import test from './utils/test-with-sandbox';
 import arc from '@architect/functions';
+import test from './sandbox';
 import { Workspace, Pad, Role, RoleInvitation } from '@decipad/backendtypes';
-import { withAuth, withoutAuth, gql } from './utils/call-graphql';
-import { withAuth as callWithAuth } from './utils/call-simple';
-import auth from './utils/auth';
 import { timeout } from './utils/timeout';
 
-test('pads', () => {
+test('pads', ({
+  test: it,
+  graphql: { withAuth, withoutAuth },
+  gql,
+  http: { withAuth: callWithAuth },
+  auth,
+}) => {
   let workspace: Workspace;
   let role: Role;
   let invitations: RoleInvitation[];
@@ -90,7 +93,7 @@ test('pads', () => {
   beforeAll(async () => {
     const call = callWithAuth((await auth('test user id 2')).token);
     const invitationIds = invitations.map((i) => i.id).join(',');
-    const link = `http://localhost:${process.env.DECI_PORT}/api/invites/${invitationIds}/accept`;
+    const link = `/api/invites/${invitationIds}/accept`;
     await call(link);
   });
 
@@ -679,7 +682,7 @@ test('pads', () => {
 
     expect(invites).toHaveLength(1);
     const invite = invites[0];
-    const inviteAcceptLink = `http://localhost:${process.env.DECI_PORT}/api/invites/${invite.id}/accept`;
+    const inviteAcceptLink = `/api/invites/${invite.id}/accept`;
 
     const call = callWithAuth((await auth(targetUserId)).token);
     await call(inviteAcceptLink);
