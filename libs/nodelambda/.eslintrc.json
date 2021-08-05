@@ -1,4 +1,10 @@
 {
-  "extends": ["../../.eslintrc.json"],
-  "ignorePatterns": ["!**/*"]
+  "extends": ["../../libs/eslint-config-decipad"],
+  "ignorePatterns": ["!**/*"],
+  "rules": {
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+
+    "no-underscore-dangle": "off",
+    "no-use-before-define": "off"
+  }
 }

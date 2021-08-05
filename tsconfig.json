@@ -49,17 +49,22 @@
       "@decipad/interfaces": ["libs/interfaces/src/index.ts"],
       "@decipad/lrustorage": ["libs/lrustorage/src/index.ts"],
       "@decipad/emails": ["libs/emails/src/index.ts"],
+      "@decipad/eslint-config-decipad": ["libs/eslint-config-decipad/index.js"],
       "@decipad/meta": ["libs/meta/src/index.ts"],
       "@decipad/backendtypes": ["libs/backendtypes/src/index.ts"],
       "@decipad/config": ["libs/config/src/index.ts"],
       "@decipad/graphqlserver": ["libs/graphqlserver/src/index.ts"],
       "@decipad/graphqlserver/schema": ["libs/graphqlserver/src/schema.ts"],
-      "@decipad/graphqlserver/resolvers": ["libs/graphqlserver/src/resolvers.ts"],
+      "@decipad/graphqlserver/resolvers": [
+        "libs/graphqlserver/src/resolvers.ts"
+      ],
       "@decipad/services": ["libs/services/src/index.ts"],
       "@decipad/services/authentication": ["libs/services/src/authentication"],
       "@decipad/services/authorization": ["libs/services/src/authorization"],
       "@decipad/services/blobs/pads": ["libs/services/src/blobs/pads"],
-      "@decipad/services/blobs/attachments": ["libs/services/src/blobs/attachments"],
+      "@decipad/services/blobs/attachments": [
+        "libs/services/src/blobs/attachments"
+      ],
       "@decipad/services/email": ["libs/services/src/email"],
       "@decipad/services/monitor": ["libs/services/src/monitor"],
       "@decipad/services/permissions": ["libs/services/src/permissions"],

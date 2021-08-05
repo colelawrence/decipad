@@ -7,7 +7,7 @@
     },
     "tsconfig.json": "*",
     "tslint.json": "*",
-    ".eslintrc.json": "*",
+    "libs/eslint-config-decipad": "*",
     "nx.json": "*"
   },
   "affected": {
@@ -54,6 +54,9 @@
       "tags": []
     },
     "emails": {
+      "tags": []
+    },
+    "eslint-config-decipad": {
       "tags": []
     },
     "graphqlserver": {

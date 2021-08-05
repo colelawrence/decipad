@@ -1,10 +1,28 @@
 {
-  "extends": ["plugin:@nrwl/nx/react", "../../.eslintrc.json"],
-  "ignorePatterns": ["!**/*", ".storybook"],
+  "extends": ["../../libs/eslint-config-decipad/react"],
+  "ignorePatterns": ["!**/*"],
+  "rules": {
+    "no-console": ["error", { "allow": ["error"] }]
+  },
   "overrides": [
     {
-      "files": ["**/*.stories.tsx"],
-      "rules": { "no-script-url": "off" }
+      "files": ["src/test-utils/**"],
+      "rules": {
+        "import/no-extraneous-dependencies": [
+          "error",
+          { "devDependencies": true }
+        ],
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "no-shadow": "off",
+        "no-console": "off"
+      }
+    },
+    // TODO remove when everything is migrated out of src/lib
+    {
+      "files": ["src/lib/**"],
+      "rules": {
+        "@typescript-eslint/explicit-module-boundary-types": "off"
+      }
     }
   ]
 }

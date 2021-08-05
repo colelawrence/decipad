@@ -1,4 +1,10 @@
 {
-  "extends": ["../../.eslintrc.json"],
-  "ignorePatterns": ["!**/*"]
+  "extends": ["../../libs/eslint-config-decipad"],
+  "ignorePatterns": ["!**/*"],
+  "rules": {
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+
+    "no-use-before-define": "off",
+    "no-param-reassign": "off"
+  }
 }

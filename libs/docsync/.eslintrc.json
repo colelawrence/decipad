@@ -1,4 +1,14 @@
 {
-  "extends": ["../../.eslintrc.json"],
-  "ignorePatterns": ["!**/*"]
+  "extends": ["../../libs/eslint-config-decipad"],
+  "ignorePatterns": ["!**/*"],
+  "rules": {
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+
+    "no-use-before-define": "off",
+    "no-param-reassign": "off",
+
+    // TODO improve type safety
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-explicit-any": "off"
+  }
 }

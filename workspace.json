@@ -34,7 +34,8 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/backend/tests/**/*.ts"]
+            "lintFilePatterns": ["apps/backend/tests/**/*.ts"],
+            "maxWarnings": 0
           }
         },
         "test": {
@@ -61,7 +62,8 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/backendtypes/src/**/*.ts"]
+            "lintFilePatterns": ["libs/backendtypes/src/**/*.ts"],
+            "maxWarnings": 0
           }
         },
         "typecheck": {
@@ -119,7 +121,8 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/client/**/*.{ts,tsx,js,jsx}"]
+            "lintFilePatterns": ["apps/client/**/*.{ts,tsx,js,jsx}"],
+            "maxWarnings": 0
           }
         },
         "typecheck": {
@@ -145,7 +148,8 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/client-e2e/**/*.{js,ts}"]
+            "lintFilePatterns": ["apps/client-e2e/**/*.{js,ts}"],
+            "maxWarnings": 0
           }
         },
         "typecheck": {
@@ -164,7 +168,8 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/config/src/**/*.ts"]
+            "lintFilePatterns": ["libs/config/src/**/*.ts"],
+            "maxWarnings": 0
           }
         },
         "typecheck": {
@@ -183,7 +188,8 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/docsync/**/*.ts"]
+            "lintFilePatterns": ["libs/docsync/**/*.ts"],
+            "maxWarnings": 0
           }
         },
         "test": {
@@ -210,7 +216,8 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/editor/**/*.{ts,tsx,js,jsx}"]
+            "lintFilePatterns": ["libs/editor/**/*.{ts,tsx,js,jsx}"],
+            "maxWarnings": 0
           }
         },
         "test": {
@@ -233,7 +240,7 @@
             "uiFramework": "@storybook/react",
             "port": 4400,
             "config": {
-              "configFolder": "libs/editor/.storybook"
+              "configFolder": "libs/editor/storybook"
             }
           },
           "configurations": {
@@ -249,7 +256,7 @@
             "uiFramework": "@storybook/react",
             "outputPath": "dist/storybook/editor",
             "config": {
-              "configFolder": "libs/editor/.storybook"
+              "configFolder": "libs/editor/storybook"
             }
           },
           "configurations": {
@@ -268,7 +275,8 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/emails/src/**/*.ts"]
+            "lintFilePatterns": ["libs/emails/src/**/*.ts"],
+            "maxWarnings": 0
           }
         },
         "typecheck": {
@@ -279,6 +287,11 @@
         }
       }
     },
+    "eslint-config-decipad": {
+      "root": "libs/eslint-config-decipad",
+      "sourceRoot": "libs/eslint-config-decipad",
+      "projectType": "library"
+    },
     "graphqlserver": {
       "root": "libs/graphqlserver",
       "sourceRoot": "libs/graphqlserver/src",
@@ -287,7 +300,8 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/graphqlserver/src/**/*.ts"]
+            "lintFilePatterns": ["libs/graphqlserver/src/**/*.ts"],
+            "maxWarnings": 0
           }
         },
         "typecheck": {
@@ -306,7 +320,8 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/interfaces/**/*.ts"]
+            "lintFilePatterns": ["libs/interfaces/**/*.ts"],
+            "maxWarnings": 0
           }
         },
         "typecheck": {
@@ -325,7 +340,8 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/kafka-lite/**/*.ts"]
+            "lintFilePatterns": ["libs/kafka-lite/**/*.ts"],
+            "maxWarnings": 0
           }
         },
         "test": {
@@ -346,7 +362,8 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/lambdas/src/**/*.ts"]
+            "lintFilePatterns": ["libs/lambdas/src/**/*.ts"],
+            "maxWarnings": 0
           }
         },
         "typecheck": {
@@ -365,7 +382,8 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/language/**/*.ts"]
+            "lintFilePatterns": ["libs/language/**/*.ts"],
+            "maxWarnings": 0
           }
         },
         "test": {
@@ -392,7 +410,8 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/lrustorage/**/*.{ts,tsx,js,jsx}"]
+            "lintFilePatterns": ["libs/lrustorage/**/*.{ts,tsx,js,jsx}"],
+            "maxWarnings": 0
           }
         },
         "typecheck": {
@@ -420,7 +439,8 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/meta/src/**/*.ts"]
+            "lintFilePatterns": ["libs/meta/src/**/*.ts"],
+            "maxWarnings": 0
           }
         },
         "typecheck": {
@@ -439,7 +459,8 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/nodelambda/**/*.js"]
+            "lintFilePatterns": ["libs/nodelambda/**/*.js"],
+            "maxWarnings": 0
           }
         }
       }
@@ -452,7 +473,8 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/queries/**/*.{ts,tsx,js,jsx}"]
+            "lintFilePatterns": ["libs/queries/**/*.{ts,tsx,js,jsx}"],
+            "maxWarnings": 0
           }
         },
         "test": {
@@ -473,7 +495,8 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/replica/**/*.ts"]
+            "lintFilePatterns": ["libs/replica/**/*.ts"],
+            "maxWarnings": 0
           }
         },
         "test": {
@@ -500,7 +523,8 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/services/src/**/*.ts"]
+            "lintFilePatterns": ["libs/services/src/**/*.ts"],
+            "maxWarnings": 0
           }
         },
         "typecheck": {
@@ -519,7 +543,8 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/testutils/**/*.{ts,tsx,js,jsx}"]
+            "lintFilePatterns": ["libs/testutils/**/*.{ts,tsx,js,jsx}"],
+            "maxWarnings": 0
           }
         },
         "typecheck": {
@@ -538,7 +563,8 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/ui/**/*.{ts,tsx,js,jsx}"]
+            "lintFilePatterns": ["libs/ui/**/*.{ts,tsx,js,jsx}"],
+            "maxWarnings": 0
           }
         },
         "test": {
@@ -561,7 +587,7 @@
             "uiFramework": "@storybook/react",
             "port": 4400,
             "config": {
-              "configFolder": "libs/ui/.storybook"
+              "configFolder": "libs/ui/storybook"
             }
           },
           "configurations": {
@@ -577,7 +603,7 @@
             "uiFramework": "@storybook/react",
             "outputPath": "dist/storybook/ui",
             "config": {
-              "configFolder": "libs/ui/.storybook"
+              "configFolder": "libs/ui/storybook"
             }
           },
           "configurations": {

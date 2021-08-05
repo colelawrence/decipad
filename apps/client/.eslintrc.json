@@ -1,4 +1,8 @@
 {
-  "extends": ["plugin:@nrwl/nx/react", "../../.eslintrc.json"],
-  "ignorePatterns": ["!**/*"]
+  "extends": ["../../libs/eslint-config-decipad/react"],
+  "ignorePatterns": ["!**/*"],
+  "rules": {
+    // generated graphql queries
+    "camelcase": "off"
+  }
 }

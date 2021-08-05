@@ -1,4 +1,15 @@
 {
-  "extends": ["../../.eslintrc.json"],
-  "ignorePatterns": ["!**/*", "**/node_modules", "src"]
+  "extends": ["../../libs/eslint-config-decipad"],
+  "ignorePatterns": ["!**/*", "**/node_modules", "src"],
+  "rules": {
+    // existing backend codestyle differs significantly
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "no-use-before-define": "off",
+
+    // TODO re-enable when using Yarn workspaces
+    "import/no-extraneous-dependencies": "off",
+
+    // massively confused by the imported `test` function whose second argument is not actually a done parameter
+    "jest/no-done-callback": "off"
+  }
 }
