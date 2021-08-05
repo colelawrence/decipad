@@ -280,6 +280,7 @@ fileattachments-changes
 
 @plugins
 s3
+custom-domain
 #kafka
 
 #@kafka-consumer-groups

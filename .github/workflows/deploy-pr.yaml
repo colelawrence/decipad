@@ -1,17 +1,16 @@
-name: Deploy
+name: Deploy PR
 
 on:
-  workflow_run:
-    workflows: ['Run Tests']
-    branches: [main]
-    types:
-      - completed
+  pull_request:
+    branches:
+      - main
 
 jobs:
   deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
+      #### Prepare
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -49,15 +48,20 @@ jobs:
           restore-keys: |
             nx-node-modules-cache-
 
+      #### Deploy
+
       - name: Deploy
+        env:
+          DEPLOY_NAME: '${{ github.event.pull_request.number }}'
+          DECI_CUSTOM_DOMAIN: '${{ github.event.pull_request.number }}.dev.decipad.com'
         run: |
-          export SAM_LOCATION="s3://decipad-backend-sam/dev.decipad.com"
+          export SAM_LOCATION="s3://decipad-backend-sam/${{env.DECI_CUSTOM_DOMAIN}}"
           scripts/pull-sam.sh
 
           cd apps/backend
           export PATH=./node_modules/.bin:$PATH
           arc env staging JWT_SIGNING_PRIVATE_KEY ${{secrets.JWT_SIGNING_PRIVATE_KEY}}
-          arc env staging NEXTAUTH_URL https://dev.decipad.com/api/auth
+          arc env staging NEXTAUTH_URL "https://${{ github.event.pull_request.number }}.dev.decipad.com/api/auth"
           arc env staging GITHUB_CLIENT_ID ${{secrets.DECI_GITHUB_CLIENT_ID}}
           arc env staging GITHUB_CLIENT_SECRET ${{secrets.DECI_GITHUB_CLIENT_SECRET}}
           arc env staging JWT_SECRET ${{secrets.JWT_SECRET}}
@@ -67,7 +71,7 @@ jobs:
           arc env staging DECI_INVITE_EXPIRATION_SECONDS '${{secrets.DECI_INVITE_EXPIRATION_SECONDS}}'
           arc env staging DECI_KEY_VALIDATION_EXPIRATION_SECONDS '${{secrets.DECI_KEY_VALIDATION_EXPIRATION_SECONDS}}'
           arc env staging DECI_FROM_EMAIL_ADDRESS '${{secrets.DECI_FROM_EMAIL_ADDRESS}}'
-          arc env staging DECI_APP_URL_BASE https://dev.decipad.com
+          arc env staging DECI_APP_URL_BASE "https://${{ github.event.pull_request.number }}.dev.decipad.com"
           arc env staging DECI_S3_ENDPOINT 's3.eu-west-2.amazonaws.com'
           arc env staging DECI_S3_ACCESS_KEY_ID '${{secrets.DECI_S3_ACCESS_KEY_ID}}'
           arc env staging DECI_S3_SECRET_ACCESS_KEY '${{secrets.DECI_S3_SECRET_ACCESS_KEY}}'
@@ -75,18 +79,22 @@ jobs:
           arc env staging DECI_S3_ATTACHMENTS_BUCKET '${{secrets.DECI_S3_ATTACHMENTS_BUCKET}}'
           arc env staging NODE_OPTIONS --enable-source-maps
           cd ../..
-          npm run deploy
+          npm run deploy:pr
           scripts/push-sam.sh
+
+  #### Notify
 
   notify:
     name: Discord Notification
     runs-on: ubuntu-latest
     needs: # make sure the notification is sent AFTER the jobs you want included have completed
       - deploy
-    if: ${{ failure() && github.ref == 'refs/heads/main' }}
     steps:
       - name: Notify
         uses: nobrayner/discord-webhook@v1
         with:
+          title: 'Deployment of PR ${{github.event.pull_request.number}} {{STATUS}}'
+          description: 'https://${{  github.event.pull_request.number  }}.dev.decipad.com'
           github-token: ${{ secrets.github_token }}
           discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          include-details: true

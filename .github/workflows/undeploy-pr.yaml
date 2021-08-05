@@ -2,18 +2,11 @@ name: Undeploy PR
 
 on:
   pull_request:
-    branches: [ main ]
-    types: [ closed ]
-
-#  workflow_run:
-#    workflows: ["Run Tests"]
-#    branches-ignore: [main]
-#    types:
-#      - completed
+    branches: [main]
+    types: [closed]
 
 jobs:
   undeploy:
-#    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -43,12 +36,10 @@ jobs:
           aws-region: eu-west-2
 
       - name: Undeploy
-        env:
-          PR: ${{ github.event.pull_request.number }}
         run: |
-          export SAM_LOCATION="s3://decipad-backend-sam/pr${PR}.decipad.com"
+          export SAM_LOCATION="s3://decipad-backend-sam/${{ github.event.pull_request.number }}.dev.decipad.com"
 
-          npm run undeploy:pr -- pr$PR --name decipad-backend
+          npm run undeploy:pr -- --app decipad-backend --name ${{ github.event.pull_request.number }} --force
           scripts/destroy-sam.sh
 
       - name: Notify

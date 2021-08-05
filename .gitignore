@@ -235,6 +235,9 @@ prefs.arc
 # Private deployment config
 .private-deploy.env
 
+# PR deploy client config
+apps/client/.env.production
+
 # Backend lambda bundles
 apps/backend/src/http/*/index.js*
 apps/backend/src/ws/*/index.js*
