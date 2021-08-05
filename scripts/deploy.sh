@@ -19,6 +19,7 @@ echo "Building the backend..."
 npm run build:backend
 
 echo "Deploying..."
+mkdir -p tmp
 cd apps/backend
 ./node_modules/.bin/arc deploy --no-hydrate | tee ../../tmp/deploy/result.txt
 
