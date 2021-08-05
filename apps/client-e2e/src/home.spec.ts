@@ -1,9 +1,9 @@
 import { setUp } from './page-utils/Home';
 
-beforeAll(async () => {
-  await setUp();
-});
+beforeAll(setUp);
 
 it('displays a welcome message', async () => {
-  await page.$('text=/make better decisions/i');
+  expect(
+    await (await page.$('text=/make better decisions/i'))!.isVisible()
+  ).toBe(true);
 });

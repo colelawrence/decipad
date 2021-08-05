@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import {
@@ -17,7 +17,11 @@ import { signOut, useSession } from 'next-auth/client';
 import { useToasts } from 'react-toast-notifications';
 import { encode as encodeVanityUrlComponent } from '../../lib/vanityUrlComponent';
 
-export const Topbar = ({ workspaceId }: { workspaceId: string }) => {
+export const Topbar = ({
+  workspaceId,
+}: {
+  workspaceId: string;
+}): ReturnType<FC> => {
   const history = useHistory();
   const [session] = useSession();
   if (!session || !session.user) {
@@ -45,13 +49,16 @@ export const Topbar = ({ workspaceId }: { workspaceId: string }) => {
     if (!creatingPad) {
       setCreatingPad(true);
       try {
-        const { data } = await createPad({
+        const { data: creation } = await createPad({
           variables: {
             workspaceId,
             name: '',
           },
         });
-        const newPad = data!.createPad!;
+        if (!creation) {
+          throw new Error('No pad creation result');
+        }
+        const newPad = creation.createPad;
         addToast('Pad created successfully', { appearance: 'success' });
         history.push(
           `/workspaces/${workspaceId}/pads/${encodeVanityUrlComponent(
@@ -60,7 +67,7 @@ export const Topbar = ({ workspaceId }: { workspaceId: string }) => {
           )}`
         );
       } catch (err) {
-        addToast('Error creating pad: ' + err.message, {
+        addToast(`Error creating pad: ${err.message}`, {
           appearance: 'error',
         });
       } finally {

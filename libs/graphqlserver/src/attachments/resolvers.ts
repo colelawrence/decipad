@@ -7,14 +7,14 @@ import {
 } from '@decipad/backendtypes';
 import { nanoid } from 'nanoid';
 import { UserInputError, ForbiddenError } from 'apollo-server-lambda';
-import { equal as expectEqual } from 'assert';
-import { requireUser, check } from '../authorization';
+import { strictEqual as expectEqual } from 'assert';
 import {
   getCreateAttachmentForm as getForm,
   getSize,
   getURL,
 } from '@decipad/services/blobs/attachments';
 import tables, { allPages } from '@decipad/services/tables';
+import { requireUser, check } from '../authorization';
 import parseResourceUri from '../utils/resource/parse-uri';
 
 export interface ICreateAttachmentFormParams {
@@ -26,7 +26,7 @@ export interface ICreateAttachmentFormParams {
 export default {
   Query: {
     async getCreateAttachmentForm(
-      _: any,
+      _: unknown,
       { padId, fileName: userFileName, fileType }: ICreateAttachmentFormParams,
       context: GraphqlContext
     ) {
@@ -57,7 +57,7 @@ export default {
     },
 
     async getAttachmentURL(
-      _: any,
+      _: unknown,
       { attachmentId }: { attachmentId: string },
       context: GraphqlContext
     ): Promise<string> {
@@ -69,13 +69,13 @@ export default {
 
       await check(attachment.resource_uri, context, 'READ');
 
-      return await getURL(attachment.filename);
+      return getURL(attachment.filename);
     },
   },
 
   Mutation: {
     async attachFileToPad(
-      _: any,
+      _: unknown,
       { handle }: { handle: string },
       context: GraphqlContext
     ): Promise<Attachment> {
@@ -110,13 +110,13 @@ export default {
         fileType: newFileAttachment.filetype,
         uploadedByUserId: newFileAttachment.user_id,
         padId: parsedResource.id,
-        createdAt: newFileAttachment.createdAt!,
+        createdAt: newFileAttachment.createdAt,
         fileSize: newFileAttachment.filesize,
       };
     },
 
     async removeAttachmentFromPad(
-      _: any,
+      _: unknown,
       { attachmentId }: { attachmentId: string },
       context: GraphqlContext
     ) {
@@ -153,7 +153,7 @@ export default {
           fileType: fileAttachment.filetype,
           fileSize: fileAttachment.filesize,
           uploadedByUserId: fileAttachment.user_id,
-          createdAt: fileAttachment.createdAt!,
+          createdAt: fileAttachment.createdAt,
           padId: parseResourceUri(fileAttachment.resource_uri).id,
         })
       )) {
@@ -169,12 +169,12 @@ export default {
   Attachment: {
     async uploadedBy(attachment: Attachment): Promise<User | undefined> {
       const data = await tables();
-      return await data.users.get({ id: attachment.uploadedByUserId });
+      return data.users.get({ id: attachment.uploadedByUserId });
     },
 
     async pad(attachment: Attachment): Promise<Pad | undefined> {
       const data = await tables();
-      return await data.pads.get({ id: attachment.padId });
+      return data.pads.get({ id: attachment.padId });
     },
   },
 };

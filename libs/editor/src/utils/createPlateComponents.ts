@@ -30,8 +30,12 @@ import { withStyledDraggables } from './withStyledDraggables';
 import { withStyledPlaceHolders } from './withStyledPlaceholders';
 
 // This function creates the editor components
-export const createPlateComponents = () => {
-  const components = {
+export const createPlateComponents = (): Partial<
+  Record<DefaultPlatePluginKey, PlatePluginComponent>
+> => {
+  const components: Partial<
+    Record<DefaultPlatePluginKey, PlatePluginComponent>
+  > = {
     // Elements
     [ELEMENT_PARAGRAPH]: ParagraphElement,
     [ELEMENT_H1]: TitleElement,
@@ -49,9 +53,5 @@ export const createPlateComponents = () => {
   };
 
   // returns the components with placeholders and the drag icon
-  return withStyledPlaceHolders(
-    withStyledDraggables(
-      components as Record<DefaultPlatePluginKey, PlatePluginComponent>
-    )
-  );
+  return withStyledPlaceHolders(withStyledDraggables(components));
 };

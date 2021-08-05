@@ -4,6 +4,6 @@ import { Strikethrough } from './Strikethrough.stories';
 describe('Strikethrough Leaf', () => {
   it('renders the text', () => {
     const { getByText } = render(<Strikethrough text="Strikethrough" />);
-    getByText('Strikethrough');
+    expect(getByText('Strikethrough')).toBeVisible();
   });
 });

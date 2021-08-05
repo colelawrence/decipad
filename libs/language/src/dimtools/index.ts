@@ -4,7 +4,6 @@ import * as Values from '../interpreter/Value';
 
 const arrayOfOnes = (length: number) => Array.from({ length }, () => 1);
 
-
 const validateCardinalities = <T extends { cardinality: number }>(
   args: T[],
   expectedCardinalities: number[]

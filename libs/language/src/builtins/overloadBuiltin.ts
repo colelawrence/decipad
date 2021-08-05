@@ -28,10 +28,9 @@ export const overloadBuiltin = (
     const argTypeNames = values.map(getOverloadedTypeFromValue);
     const overload: OverloadedBuiltinSpec = getDefined(
       byArgTypes.get(argTypesKey(argTypeNames)),
-      'panic: did not find version of function ' +
-        fName +
-        ' for arg types ' +
-        argTypeNames.join(', ')
+      `panic: did not find version of function ${fName} for arg types ${argTypeNames.join(
+        ', '
+      )}`
     );
     return overload.fnValues(...values);
   };

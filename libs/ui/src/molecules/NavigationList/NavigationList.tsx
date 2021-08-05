@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { ReactNode, Children } from 'react';
+import { ReactNode, Children, FC } from 'react';
 import { isElement } from 'react-is';
 
 import { NavigationItem } from '../../atoms';
@@ -14,7 +14,9 @@ interface NavigationListProps {
   readonly children: ReactNode;
 }
 
-export const NavigationList = ({ children }: NavigationListProps) => {
+export const NavigationList = ({
+  children,
+}: NavigationListProps): ReturnType<FC> => {
   return (
     <ul css={styles}>
       {Children.map(children, (child) => {

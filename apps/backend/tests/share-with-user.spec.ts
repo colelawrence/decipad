@@ -1,5 +1,8 @@
 /* eslint-env jest */
 
+// existing tests very granular
+/* eslint-disable jest/expect-expect */
+
 import waitForExpect from 'wait-for-expect';
 import test from './sandbox';
 import { create as createResourcePermission } from './utils/permissions';

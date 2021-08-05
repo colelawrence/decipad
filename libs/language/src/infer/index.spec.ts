@@ -1,9 +1,9 @@
 import { produce } from 'immer';
 import { dequal } from 'dequal';
 
+import { join as pathJoin } from 'path';
 import { AST } from '..';
 import { InferError, inverseExponent, build as t } from '../type';
-import { join as pathJoin } from 'path';
 
 import {
   l,

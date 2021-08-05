@@ -22,6 +22,7 @@ it('renders the workspace switcher (which has a popup) stacked above the sidebar
     />
   );
   expect(
+    // eslint-disable-next-line no-bitwise
     getByText(/preference/i).compareDocumentPosition(getByText('WS')) &
       Node.DOCUMENT_POSITION_FOLLOWING
   ).toBeTruthy();

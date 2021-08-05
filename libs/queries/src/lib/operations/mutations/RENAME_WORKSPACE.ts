@@ -1,4 +1,4 @@
-import { gql, useMutation } from '@apollo/client';
+import { gql, MutationTuple, useMutation } from '@apollo/client';
 
 export const RENAME_WORKSPACE = gql`
   mutation RenameWorkspace($id: ID!, $name: String!) {
@@ -21,7 +21,10 @@ export interface RenameWorkspaceVars {
   name: string;
 }
 
-export const useRenameWorkspace = ({ id, name }: RenameWorkspaceVars) =>
+export const useRenameWorkspace = ({
+  id,
+  name,
+}: RenameWorkspaceVars): MutationTuple<RenameWorkspace, RenameWorkspaceVars> =>
   useMutation<RenameWorkspace, RenameWorkspaceVars>(RENAME_WORKSPACE, {
     variables: { id, name },
     refetchQueries: ['GetWorkspaceById'],

@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import assert from 'assert';
 import {
   ID,
@@ -24,12 +25,12 @@ async function permissionsChangesHandler(
   event: TableRecordChanges<PermissionRecord>
 ) {
   const { table } = event;
-  assert.equal(table, 'permissions');
+  assert.strictEqual(table, 'permissions');
   const parsedPermission = parsePermissionId(event.args.id);
   const { userId, resourceType } = parsedPermission;
 
   if (event.action === 'put') {
-    const args = event.args;
+    const { args } = event;
     if (
       (args.resource_type === 'workspaces' || resourceType === 'workspaces') &&
       (args.user_id !== 'null' || userId !== 'null')
@@ -197,9 +198,9 @@ async function handleDelete({ id }: TableRecordIdentifier) {
     })
   ).Items;
 
-  for (const userId of userIdsInRole) {
+  for (const userIdInRole of userIdsInRole) {
     for (const p of rolePermissions) {
-      const permissionId = `/users/${userId}/roles/${roleId}${p.resource_uri}`;
+      const permissionId = `/users/${userIdInRole}/roles/${roleId}${p.resource_uri}`;
       await data.permissions.delete({ id: permissionId });
     }
   }

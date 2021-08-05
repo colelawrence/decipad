@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import Tippy, { TippyProps } from '@tippyjs/react';
 import {
+  DefaultPlatePluginKey,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
   ELEMENT_H2,
@@ -10,6 +11,7 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_TODO_LI,
   ELEMENT_UL,
+  PlatePluginComponent,
   withDraggables,
 } from '@udecode/plate';
 import { GrDrag } from 'react-icons/gr';
@@ -43,7 +45,9 @@ const iconStyles = css({
   },
 });
 
-export const withStyledDraggables = (components: any) => {
+export const withStyledDraggables = (
+  components: Partial<Record<DefaultPlatePluginKey, PlatePluginComponent>>
+): Partial<Record<DefaultPlatePluginKey, PlatePluginComponent>> => {
   return withDraggables(components, [
     {
       keys: [ELEMENT_PARAGRAPH],

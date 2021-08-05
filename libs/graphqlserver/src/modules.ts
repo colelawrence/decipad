@@ -1,3 +1,4 @@
+import { DocumentNode } from 'graphql';
 import base from './base';
 import date from './date';
 import glob from './global';
@@ -14,8 +15,8 @@ import attachments from './attachments';
 import hello from './hello';
 
 type GraphqlModule = {
-  typedefs: any;
-  resolvers?: any;
+  typedefs: DocumentNode;
+  resolvers?: unknown;
 };
 const modules: GraphqlModule[] = [
   base,

@@ -1,10 +1,10 @@
 import { AST } from '..';
 import { getDefined, getIdentifierString } from '../utils';
 
-import { Column } from './Value';
+import { Column, Value } from './Value';
 import { evaluate } from './evaluate';
 import { Realm } from './Realm';
-import { Value } from './Value';
+
 import { mapWithPrevious } from './previous';
 
 export const evaluateGiven = async (
@@ -18,7 +18,7 @@ export const evaluateGiven = async (
     throw new Error('panic: expected column');
   }
 
-  return await realm.stack.withPush(async () => {
+  return realm.stack.withPush(async () => {
     if (predicate.valueNames != null) {
       // It's a table
 
@@ -26,7 +26,7 @@ export const evaluateGiven = async (
       const colNames = predicate.valueNames;
       const length = getDefined(columns[0].values.length);
 
-      const mapped = await mapWithPrevious(realm, async function* () {
+      const mapped = await mapWithPrevious(realm, async function* mapper() {
         for (let index = 0; index < length; index++) {
           const thisRow = Column.fromNamedValues(
             columns.map((p) => p.values[index]),
@@ -34,6 +34,8 @@ export const evaluateGiven = async (
           );
           realm.stack.set(predicateName, thisRow);
 
+          // evaluation only works sequentially
+          // eslint-disable-next-line no-await-in-loop
           yield await evaluate(realm, body);
         }
       });
@@ -51,11 +53,11 @@ export const evaluateGiven = async (
         return Column.fromValues(mapped);
       }
     } else {
-      const mapped = await mapWithPrevious(realm, async function* () {
+      const mapped = await mapWithPrevious(realm, async function* mapper() {
         for (const value of predicate.values) {
           realm.stack.set(predicateName, value);
 
-          yield await evaluate(realm, body);
+          yield evaluate(realm, body);
         }
       });
 

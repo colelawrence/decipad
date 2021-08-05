@@ -4,7 +4,7 @@ import { parse as parseDotEnv } from 'dotenv';
 import { Config } from './config';
 import baseUrl from './base-url';
 
-export type Env = Record<string, string>;
+export type Env = Record<string, string | undefined>;
 type ISandboxEnvReturn = [Env, Config];
 
 export function createSandboxEnv(workerId: number): ISandboxEnvReturn {
@@ -19,19 +19,19 @@ export function createSandboxEnv(workerId: number): ISandboxEnvReturn {
   Object.assign(process.env, baseConfig);
 
   const envBaseConfig = {
-    PATH: process.env.PATH!,
-    PWD: process.env.PWD!,
-    LANG: process.env.LANG!,
-    HOME: process.env.HOME!,
-    JEST_WORKER_ID: process.env.JEST_WORKER_ID!,
+    PATH: process.env.PATH,
+    PWD: process.env.PWD,
+    LANG: process.env.LANG,
+    HOME: process.env.HOME,
+    JEST_WORKER_ID: process.env.JEST_WORKER_ID,
     NODE_ENV: 'testing',
   };
 
   // configure Architect's ports
-  const portBase = '' + (3333 + workerId * 100 - Math.ceil(Math.random() * 50));
-  const eventsPort = portBase + '1'; // string concat, just like Architect does
-  const tablesPort = portBase + '2'; // string concat, just like Architect does
-  const s3Port = portBase + '3';
+  const portBase = `${3333 + workerId * 100 - Math.ceil(Math.random() * 50)}`;
+  const eventsPort = `${portBase}1`; // string concat, just like Architect does
+  const tablesPort = `${portBase}2`; // string concat, just like Architect does
+  const s3Port = `${portBase}3`;
   const appConfig = {
     PORT: portBase,
     NEXTAUTH_URL: new URL('api/auth', baseUrl(portBase)).href,

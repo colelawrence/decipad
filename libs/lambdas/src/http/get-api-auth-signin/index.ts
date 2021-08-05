@@ -4,5 +4,5 @@ import Auth from '../../auth-flow';
 const auth = Auth();
 
 export const handler = async (req: HttpRequest) => {
-  return await auth(req);
+  return auth(req);
 };

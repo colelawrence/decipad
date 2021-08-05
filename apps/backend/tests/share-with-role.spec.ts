@@ -1,5 +1,8 @@
 /* eslint-env jest */
 
+// existing tests very granular
+/* eslint-disable jest/expect-expect */
+
 import waitForExpect from 'wait-for-expect';
 import { Workspace, Role } from '@decipad/backendtypes';
 import test from './sandbox';
@@ -231,7 +234,7 @@ test('share with role', ({ test: it, graphql: { withAuth }, gql, auth }) => {
     });
   });
 
-  it('target user no longer has access to resource', async () => {
+  it('target user no longer has access to resource after removed by admin', async () => {
     await waitForExpect(async () => {
       const client = withAuth(await auth('test user id 2'));
       const resourcesPage = (
@@ -301,7 +304,7 @@ test('share with role', ({ test: it, graphql: { withAuth }, gql, auth }) => {
     });
   });
 
-  it('target user no longer has access to resource', async () => {
+  it('target user no longer has access to resource after removing self', async () => {
     await waitForExpect(async () => {
       const client = withAuth(await auth('test user id 2'));
       const resourcesPage = (

@@ -54,7 +54,7 @@ export const getSpecificity = (thing?: string): Time.Specificity => {
   if (typeof thing === 'string') {
     if (thing in timeUnitToJSDateUnit) {
       // Eliminate quarter, week
-      thing = timeUnitToJSDateUnit[thing as Time.Unit][0];
+      [thing] = timeUnitToJSDateUnit[thing as Time.Unit];
     }
 
     if (dateSpecificities.includes(thing)) {
@@ -65,27 +65,27 @@ export const getSpecificity = (thing?: string): Time.Specificity => {
     }
   }
 
-  throw new Error('panic: expected Time.Specificity, got ' + thing);
+  throw new Error(`panic: expected Time.Specificity, got ${thing}`);
 };
 
 const getJSDateUnit = (thing: AnyUnit) => {
   if (thing in timeUnitToJSDateUnit) {
     // Eliminate quarter, week
-    thing = timeUnitToJSDateUnit[thing as Time.Unit][0];
+    [thing] = timeUnitToJSDateUnit[thing as Time.Unit];
   }
 
   if (thing in jsUnitToIndex) {
     return thing as Time.JSDateUnit;
   }
 
-  throw new Error('panic: Expected Time.JSDateUnit, got ' + thing);
+  throw new Error(`panic: Expected Time.JSDateUnit, got ${thing}`);
 };
 
 export const getTimeUnit = (thing: string) => {
   if (thing in timeUnitToJSDateUnit) {
     return thing as Time.Unit;
   } else {
-    throw new Error('panic: Expected Time.Unit, got ' + thing);
+    throw new Error(`panic: Expected Time.Unit, got ${thing}`);
   }
 };
 
@@ -154,7 +154,7 @@ const getDateSegment = (
     thing = Number(thing.replace(/^0+/, ''));
   }
 
-  if (typeof thing === 'number' && !isNaN(thing)) {
+  if (typeof thing === 'number' && !Number.isNaN(thing)) {
     return thing - Number(isMonth);
   } else {
     return null;
@@ -191,7 +191,7 @@ export function arrayToDate(
 export function parseUTCDate(iso: string) {
   const segments = iso.match(/(\d+)/g);
 
-  return arrayToDate(getDefined(segments, 'bad date ' + iso));
+  return arrayToDate(getDefined(segments, `bad date ${iso}`));
 }
 
 export function date(
@@ -270,7 +270,7 @@ export const addSingleQuantity = (
 ): number => {
   const [composedUnit, compositeMultiplier] = getDefined(
     timeUnitToJSDateUnit[timeUnit],
-    'bad time unit ' + timeUnit
+    `bad time unit ${timeUnit}`
   );
 
   timeUnit = composedUnit;
@@ -306,7 +306,7 @@ export const dateNodeToSpecificity = (
 ): Time.Specificity => {
   let lowestSegment: Time.Specificity = 'year';
 
-  for (const [segment, _] of pairwise<Time.Unit, unknown>(nodeArgs)) {
+  for (const [segment] of pairwise<Time.Unit, unknown>(nodeArgs)) {
     lowestSegment = getSpecificity(segment);
   }
 

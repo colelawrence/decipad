@@ -8,10 +8,21 @@ import { jwt as jwtConf } from '@decipad/services/authentication';
 
 const inTesting = process.env.ARC_ENV === 'testing';
 
+async function generateToken(
+  userSecret: string,
+  options: Partial<JWTEncodeParams>
+) {
+  return NextAuthJWT.encode({
+    ...jwtConf,
+    token: { accessToken: userSecret },
+    ...options,
+  });
+}
+
 export default {
   Mutation: {
     async pretendUser(
-      _: any,
+      _: unknown,
       { userId }: { userId: ID },
       context: GraphqlContext
     ) {
@@ -40,14 +51,3 @@ export default {
     },
   },
 };
-
-async function generateToken(
-  userSecret: string,
-  options: Partial<JWTEncodeParams>
-) {
-  return await NextAuthJWT.encode({
-    ...jwtConf,
-    token: { accessToken: userSecret },
-    ...options,
-  });
-}

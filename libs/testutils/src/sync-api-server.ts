@@ -1,6 +1,7 @@
+/* eslint-disable no-console */
 import assert from 'assert';
-import { DeciWebsocketServer } from './ws-server';
 import Automerge from 'automerge';
+import { DeciWebsocketServer } from './ws-server';
 import { timeout } from './timeout';
 
 interface IApiServerOptions {
@@ -22,7 +23,7 @@ export function syncApiServer(
     let resp;
     if (
       req.method === 'GET' &&
-      req.url === fetchPrefix + '/api/auth/token?for=pubsub'
+      req.url === `${fetchPrefix}/api/auth/token?for=pubsub`
     ) {
       return {
         status: 200,
@@ -47,23 +48,25 @@ export function syncApiServer(
 
   async function changes(req: Request) {
     try {
-      const prefixLength = (fetchPrefix + '/api/syncdoc/').length;
+      const prefixLength = `${fetchPrefix}/api/syncdoc/`.length;
       const key = decodeURIComponent(
         req.url.substring(prefixLength, req.url.length - '/changes'.length)
       );
-      if (store.has(key)) {
-        const before = Automerge.load(store.get(key)!);
-        const changes = await req.json();
-        const after = Automerge.applyChanges(before, changes);
+
+      const value = store.get(key);
+      if (value) {
+        const before = Automerge.load(value);
+        const changesToApply = await req.json();
+        const after = Automerge.applyChanges(before, changesToApply);
         await randomTinyTimeout();
         store.set(key, Automerge.save(after));
 
         // websocket notify subscribers
-        if (changes.length > 0) {
+        if (changesToApply.length > 0) {
           const topic = decode(key);
           deciWebsocketServer.notify(
             topic,
-            JSON.stringify({ o: 'c', t: topic, c: changes })
+            JSON.stringify({ o: 'c', t: topic, c: changesToApply })
           );
         }
 
@@ -83,7 +86,7 @@ export function syncApiServer(
 
   async function put(req: Request) {
     try {
-      const prefixLength = (fetchPrefix + '/api/syncdoc/').length;
+      const prefixLength = `${fetchPrefix}/api/syncdoc/`.length;
       const key = decodeURIComponent(req.url.substring(prefixLength));
       const remoteText = await req.text();
       const before = Automerge.load(store.get(key) || remoteText);
@@ -94,12 +97,12 @@ export function syncApiServer(
       store.set(key, Automerge.save(after));
 
       // websocket notify subscribers
-      const changes = Automerge.getChanges(before, after);
-      if (changes.length > 0) {
+      const calculatedChanges = Automerge.getChanges(before, after);
+      if (calculatedChanges.length > 0) {
         const topic = decode(key);
         deciWebsocketServer.notify(
           topic,
-          JSON.stringify({ o: 'c', t: topic, c: changes })
+          JSON.stringify({ o: 'c', t: topic, c: calculatedChanges })
         );
       }
 
@@ -114,7 +117,7 @@ export function syncApiServer(
 
   async function get(req: Request) {
     try {
-      const prefixLength = (fetchPrefix + '/api/syncdoc/').length;
+      const prefixLength = `${fetchPrefix}/api/syncdoc/`.length;
       const key = decodeURIComponent(req.url.substring(prefixLength));
       if (store.has(key)) {
         return {
@@ -140,7 +143,7 @@ export function syncApiServer(
 export function decode(id: string | undefined): string {
   let newId = (id || '').replace(/:/g, '/');
   if (!newId.startsWith('/')) {
-    newId = '/' + newId;
+    newId = `/${newId}`;
   }
   return newId;
 }

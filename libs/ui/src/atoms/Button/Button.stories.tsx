@@ -1,4 +1,4 @@
-import { Story } from '@storybook/react';
+import { Meta, Story } from '@storybook/react';
 import { Button } from './Button';
 
 export default {
@@ -10,7 +10,7 @@ export default {
       defaultValue: 'Text',
     },
   },
-};
+} as Meta;
 
 export const PrimaryDefault: Story<{ children: string }> = (args) => (
   <Button primary {...args} />

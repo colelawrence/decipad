@@ -1,3 +1,4 @@
+import { Meta, Story } from '@storybook/react';
 import { BoldLeaf } from './Bold';
 
 export default {
@@ -6,9 +7,9 @@ export default {
   children: {
     text: 'Bold text',
   },
-};
+} as Meta;
 
-export const Bold = (args: { text: string }) => (
+export const Bold: Story<{ text: string }> = (args) => (
   <BoldLeaf
     leaf={{ attributes: {}, text: '' }}
     element={{ children: [{ text: '' }] }}

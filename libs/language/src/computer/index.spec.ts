@@ -24,7 +24,7 @@ const runThroughMock = async (
   cursorPositions?: (ValueLocation | null)[],
   computerOptions?: MakeComputerOptions
 ): Promise<string[][]> =>
-  await lastValueFrom(
+  lastValueFrom(
     from(reqs).pipe(
       map((t, index) => [t, cursorPositions?.[index] ?? null] as const),
       makeComputer(computerOptions),
@@ -98,7 +98,7 @@ it('getShouldDelayResponse returns true for if there is an error under the curso
         results: [
           {
             valueType: { errorCause: 'yes' },
-          } as any as InBlockResult,
+          } as unknown as InBlockResult,
         ],
       },
     ],

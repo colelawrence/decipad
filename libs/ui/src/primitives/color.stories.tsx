@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react';
+import { Meta, Story } from '@storybook/react';
 import * as colors from './color';
 import { OpaqueColor } from './color';
 
@@ -33,7 +33,7 @@ export default {
   },
 } as Meta;
 
-export const Normal = ({ color }: { color: OpaqueColor }) => (
+export const Normal: Story<{ color: OpaqueColor }> = ({ color }) => (
   <div
     role="presentation"
     css={{

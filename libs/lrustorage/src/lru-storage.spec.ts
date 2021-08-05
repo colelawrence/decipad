@@ -1,6 +1,6 @@
-import { LRUStorage } from './lru-storage';
 import { timeout, TestStorage, LimitedTestStorage } from '@decipad/testutils';
 import { ReplicationStatus } from '@decipad/interfaces';
+import { LRUStorage } from './lru-storage';
 
 const exceededQuotaExceptionGenerators = [
   () => ({ code: 22 }),

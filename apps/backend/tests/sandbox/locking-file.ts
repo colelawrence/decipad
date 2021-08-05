@@ -16,6 +16,7 @@ export default function lockingFile(path: string) {
 
 async function lock(path: string) {
   let release;
+  /* eslint-disable no-await-in-loop */
   while (!release) {
     try {
       release = await lockFile(path);
@@ -31,6 +32,7 @@ async function lock(path: string) {
       }
     }
   }
+  /* eslint-enable no-await-in-loop */
 
   return release;
 }

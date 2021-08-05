@@ -1,6 +1,6 @@
-import { newRandomUser, credentials } from './';
-import { baseUrl } from '../../testConfig';
 import { URL } from 'url';
+import { newRandomUser, credentials } from '.';
+import { baseUrl } from '../../testConfig';
 
 export async function withNewUser() {
   const user = await newRandomUser();

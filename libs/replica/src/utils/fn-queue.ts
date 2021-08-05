@@ -1,4 +1,5 @@
 type AsyncFunction = () => Promise<unknown>;
+// eslint-disable-next-line no-unused-vars
 type Fn = (value: unknown) => void;
 
 export function fnQueue() {
@@ -7,16 +8,17 @@ export function fnQueue() {
   const flushes: Fn[] = [];
 
   function push(fn: AsyncFunction) {
-    let _resolve: Fn, _reject: Fn;
-    const p = new Promise((resolve, reject) => {
-      _resolve = resolve;
-      _reject = reject;
+    let resolve: Fn;
+    let reject: Fn;
+    const p = new Promise((res, rej) => {
+      resolve = res;
+      reject = rej;
     });
     fns.push(async () => {
       try {
-        _resolve(await fn());
+        resolve(await fn());
       } catch (err) {
-        _reject(err);
+        reject(err);
       }
     });
     work();
@@ -26,30 +28,35 @@ export function fnQueue() {
 
   async function work() {
     if (processing === 0 && fns.length > 0) {
-      processing++;
+      processing += 1;
       try {
         await processOne();
       } finally {
-        processing--;
+        processing -= 1;
       }
       work();
     } else if (processing === 0 && fns.length === 0) {
       while (flushes.length) {
-        const resolveFlush = flushes.shift();
-        resolveFlush!(null);
+        // just checked length
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const resolveFlush = flushes.shift()!;
+        resolveFlush(null);
       }
     }
   }
 
   async function processOne() {
     const fn = fns.shift();
+    if (!fn) {
+      throw new Error('Expected to have a function left in the queue');
+    }
 
-    return await fn!();
+    return fn();
   }
 
   async function flush() {
     if (fns.length === 0 && processing === 0) {
-      return;
+      return undefined;
     }
     return new Promise((resolve) => {
       flushes.push(resolve);

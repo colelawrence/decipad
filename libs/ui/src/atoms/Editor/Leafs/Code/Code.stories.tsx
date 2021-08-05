@@ -1,3 +1,4 @@
+import { Meta, Story } from '@storybook/react';
 import { CodeLeaf } from './Code';
 
 export default {
@@ -6,9 +7,9 @@ export default {
   args: {
     text: '10 apples',
   },
-};
+} as Meta;
 
-export const Code = (args: { text: string }) => (
+export const Code: Story<{ text: string }> = (args) => (
   <CodeLeaf
     leaf={{ attributes: {}, text: '' }}
     element={{ children: [{ text: '' }] }}

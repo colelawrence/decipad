@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import { DynamoDbQuery } from '@decipad/backendtypes';
 import tables from '../tables';
 

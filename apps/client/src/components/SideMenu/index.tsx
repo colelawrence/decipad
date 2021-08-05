@@ -5,7 +5,7 @@ import {
   GET_WORKSPACES,
   GetWorkspaces,
 } from '@decipad/queries';
-import React, { useMemo } from 'react';
+import React, { FC, useMemo } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 
 import { WorkspacePreferences } from './WorkspacePreferences';
@@ -15,7 +15,9 @@ export interface SideMenuProps {
   currentWorkspace: GetWorkspaceById_getWorkspaceById;
 }
 
-export const SideMenu = ({ currentWorkspace }: SideMenuProps) => {
+export const SideMenu = ({
+  currentWorkspace,
+}: SideMenuProps): ReturnType<FC> => {
   const history = useHistory();
   const { url } = useRouteMatch();
 

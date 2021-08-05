@@ -1,6 +1,6 @@
 import * as Values from '../interpreter/Value';
 import { Type, build as t } from '../type';
-import { automapTypes, automapValues } from '../dimtools';
+import { automapTypes, automapValues } from '.';
 
 const num = t.number();
 const str = t.string();

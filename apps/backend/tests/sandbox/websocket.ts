@@ -14,11 +14,9 @@ function createWebsocket(token: string): typeof WebSocket {
 
     private client: WebSocket;
 
-    constructor(url: string, protocols: string[] | string | undefined = []) {
+    constructor(url: string, protocol: string[] | string | undefined = []) {
       super();
-      if (!Array.isArray(protocols)) {
-        protocols = [protocols];
-      }
+      const protocols = Array.isArray(protocol) ? protocol : [protocol];
       protocols.push(token);
 
       this.client = new WebSocket(url, protocols);
@@ -36,7 +34,7 @@ function createWebsocket(token: string): typeof WebSocket {
       return this.client.send(data);
     }
 
-    set onclose(callback: null | ((ev: CloseEvent) => any)) {
+    set onclose(callback: null | ((ev: CloseEvent) => unknown)) {
       this.client.onclose = (event: CloseEvent) => {
         this.emit('close');
         return callback?.(event);
@@ -47,7 +45,7 @@ function createWebsocket(token: string): typeof WebSocket {
       return this.client.onclose?.bind(this) ?? null;
     }
 
-    set onerror(callback: null | ((ev: Event) => any)) {
+    set onerror(callback: null | ((ev: Event) => unknown)) {
       this.client.onerror = (ev: Event) => {
         return callback?.(ev);
       };
@@ -57,8 +55,8 @@ function createWebsocket(token: string): typeof WebSocket {
       return this.client.onerror?.bind(this) ?? null;
     }
 
-    set onmessage(callback: null | ((ev: MessageEvent<any>) => any)) {
-      this.client.onmessage = (ev: MessageEvent<any>) => {
+    set onmessage(callback: null | ((ev: MessageEvent<unknown>) => unknown)) {
+      this.client.onmessage = (ev: MessageEvent<unknown>) => {
         return callback?.(ev);
       };
     }
@@ -67,7 +65,7 @@ function createWebsocket(token: string): typeof WebSocket {
       return this.client.onmessage?.bind(this) ?? null;
     }
 
-    set onopen(callback: null | ((ev: Event) => any)) {
+    set onopen(callback: null | ((ev: Event) => unknown)) {
       this.client.onopen = (ev: Event) => {
         return callback?.(ev);
       };
@@ -77,7 +75,7 @@ function createWebsocket(token: string): typeof WebSocket {
       return this.client.onopen?.bind(this) ?? null;
     }
 
-    addEventListener(event: string, listener: (ev: Event) => any) {
+    addEventListener(event: string, listener: (ev: Event) => unknown) {
       return this.on(event, listener);
     }
 
@@ -101,7 +99,7 @@ function createWebsocket(token: string): typeof WebSocket {
       return this.client.url;
     }
 
-    removeEventListener(event: string, listener: (ev: Event) => any) {
+    removeEventListener(event: string, listener: (ev: Event) => unknown) {
       return this.off(event, listener);
     }
 

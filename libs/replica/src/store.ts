@@ -67,6 +67,8 @@ export class Store<T> {
       doc = Automerge.from(this.initialValue, 'starter') as Doc<T>;
     }
     if (needsCreate) {
+      // all needsCreate = true code paths also set doc
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const toBeSaved = Automerge.save(doc!);
       this.storage.setItem(this.key, toBeSaved);
     }

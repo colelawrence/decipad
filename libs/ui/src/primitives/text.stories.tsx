@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { Meta } from '@storybook/react';
+// eslint-disable-next-line import/no-self-import
 import * as storyExports from './text.stories';
 import * as textExports from './text';
 

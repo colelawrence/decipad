@@ -1,5 +1,8 @@
 /* eslint-env jest */
 
+// existing sequential test "story" very granular
+/* eslint-disable jest/expect-expect */
+
 import { ObservableSubscription } from '@apollo/client';
 import waitForExpect from 'wait-for-expect';
 import { Workspace, Pad, Role, RoleInvitation } from '@decipad/backendtypes';
@@ -163,7 +166,7 @@ test('pad tags', ({
   it('other user has no tags yet', async () => {
     const client = withAuth(await auth('test user id 2'));
     await waitForExpect(async () => {
-      const tags = (
+      const { tags } = (
         await client.query({
           query: gql`
           query {
@@ -171,7 +174,7 @@ test('pad tags', ({
           }
         `,
         })
-      ).data.tags;
+      ).data;
       expect(tags).toHaveLength(0);
     });
   });
@@ -197,7 +200,7 @@ test('pad tags', ({
   it('admin has a tag', async () => {
     await waitForExpect(async () => {
       const client = withAuth(await auth());
-      const tags = (
+      const { tags } = (
         await client.query({
           query: gql`
           query {
@@ -205,7 +208,7 @@ test('pad tags', ({
           }
         `,
         })
-      ).data.tags;
+      ).data;
       expect(tags).toMatchObject(['tag one']);
     });
   });
@@ -219,7 +222,7 @@ test('pad tags', ({
 
   it('other user has a tag', async () => {
     const client = withAuth(await auth('test user id 2'));
-    const tags = (
+    const { tags } = (
       await client.query({
         query: gql`
         query {
@@ -227,7 +230,7 @@ test('pad tags', ({
         }
       `,
       })
-    ).data.tags;
+    ).data;
     expect(tags).toMatchObject(['tag one']);
   });
 
@@ -274,7 +277,7 @@ test('pad tags', ({
   it('other user has the new tag also', async () => {
     await waitForExpect(async () => {
       const client = withAuth(await auth('test user id 2'));
-      const tags = (
+      const { tags } = (
         await client.query({
           query: gql`
           query {
@@ -282,12 +285,12 @@ test('pad tags', ({
           }
         `,
         })
-      ).data.tags;
+      ).data;
       expect(tags).toMatchObject(['tag one', 'tag two']);
     });
   });
 
-  it('other user has a tag from subscription', async () => {
+  it('other user has both tags from subscription', async () => {
     await waitForExpect(async () => {
       expect(guestTags).toHaveLength(2);
       expect(guestTags).toMatchObject(['tag one', 'tag two']);
@@ -309,7 +312,7 @@ test('pad tags', ({
   it('other user no longer has the removed tag', async () => {
     await waitForExpect(async () => {
       const client = withAuth(await auth('test user id 2'));
-      const tags = (
+      const { tags } = (
         await client.query({
           query: gql`
           query {
@@ -317,7 +320,7 @@ test('pad tags', ({
           }
         `,
         })
-      ).data.tags;
+      ).data;
       expect(tags).toMatchObject(['tag two']);
     });
   });
@@ -368,7 +371,7 @@ test('pad tags', ({
   it('other user no longer has the tag', async () => {
     await waitForExpect(async () => {
       const client = withAuth(await auth('test user id 2'));
-      const tags = (
+      const { tags } = (
         await client.query({
           query: gql`
           query {
@@ -376,7 +379,7 @@ test('pad tags', ({
           }
         `,
         })
-      ).data.tags;
+      ).data;
       expect(tags).toHaveLength(0);
     });
   });
@@ -389,7 +392,7 @@ test('pad tags', ({
 
   it('admin has the tag', async () => {
     const client = withAuth(await auth());
-    const tags = (
+    const { tags } = (
       await client.query({
         query: gql`
         query {
@@ -397,7 +400,7 @@ test('pad tags', ({
         }
       `,
       })
-    ).data.tags;
+    ).data;
     expect(tags).toMatchObject(['tag two']);
   });
 
@@ -428,7 +431,7 @@ test('pad tags', ({
   it('other user has tag', async () => {
     await waitForExpect(async () => {
       const client = withAuth(await auth('test user id 2'));
-      const tags = (
+      const { tags } = (
         await client.query({
           query: gql`
           query {
@@ -436,7 +439,7 @@ test('pad tags', ({
           }
         `,
         })
-      ).data.tags;
+      ).data;
       expect(tags).toMatchObject(['tag two']);
     });
   });
@@ -483,7 +486,7 @@ test('pad tags', ({
   it('admin user no longer has tag', async () => {
     await waitForExpect(async () => {
       const client = withAuth(await auth());
-      const tags = (
+      const { tags } = (
         await client.query({
           query: gql`
           query {
@@ -491,7 +494,7 @@ test('pad tags', ({
           }
         `,
         })
-      ).data.tags;
+      ).data;
       expect(tags).toHaveLength(0);
     });
   });
@@ -525,7 +528,7 @@ test('pad tags', ({
     userId: string,
     workspaceId: string,
     tags: string[],
-    subscriptions: ObservableSubscription[]
+    pushToSubscriptions: ObservableSubscription[]
   ) {
     const client = await createClient(userId);
     const sub = client.subscribe({
@@ -539,8 +542,8 @@ test('pad tags', ({
       `,
     });
 
-    subscriptions.push(
-      await sub.subscribe({
+    pushToSubscriptions.push(
+      sub.subscribe({
         error(err) {
           throw err;
         },

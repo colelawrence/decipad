@@ -32,7 +32,7 @@ export const unifyColumnSizes = (node: AST.Table, table: Type): Type => {
       ? // Ensure it's the same size
         colValue.withColumnSize(columnSize)
       : // Create a new type with that size
-        t.column(colValue , columnSize);
+        t.column(colValue, columnSize);
 
     tupleTypes.push(newValue);
     tupleNames.push(colName);
@@ -41,7 +41,7 @@ export const unifyColumnSizes = (node: AST.Table, table: Type): Type => {
   const unifiedTable = t.tuple(tupleTypes, tupleNames);
 
   if (findBadColumn(unifiedTable) != null) {
-    return t.impossible('Incompatible column sizes').inNode(node)
+    return t.impossible('Incompatible column sizes').inNode(node);
   } else {
     return unifiedTable;
   }

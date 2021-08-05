@@ -2,15 +2,16 @@ import { isCollapsed } from '@udecode/plate';
 import { Editor, Range, Text } from 'slate';
 
 function offsetToLineNumber(codeText: string, offset: number) {
-  const cumulativeSum = (
-    (sum) => (value: number) =>
-      (sum += value)
-  )(0);
-
   const lines = codeText
     .split('\n')
     .map((line) => line.length)
-    .map(cumulativeSum)
+    .reduce(
+      (cumulativeSums, next) => [
+        ...cumulativeSums,
+        (cumulativeSums[cumulativeSums.length - 1] ?? 0) + next,
+      ],
+      [] as number[]
+    )
     .map((line, i) => line + i);
 
   let c = offset;
@@ -18,7 +19,7 @@ function offsetToLineNumber(codeText: string, offset: number) {
   lines.forEach((line: number) => {
     if (c > line) return;
     c -= line;
-    foundLine--;
+    foundLine -= 1;
   });
 
   return foundLine;
@@ -32,6 +33,8 @@ export function getCursorPos(editor: Editor): CursorPos | null {
   if (selection && isCollapsed(selection)) {
     const cursor = Range.start(selection);
 
+    // TODO fix node types
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [parentNode] = Editor.parent(editor, cursor) as any;
     const [node] = Editor.node(editor, cursor);
 

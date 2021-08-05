@@ -12,6 +12,28 @@ const defaultOptions = {
   debouceFlushMetadataMs: 2000,
 };
 
+function isStorageExceededException(err: DOMException): boolean {
+  return (
+    // everything except Firefox
+    err.code === 22 ||
+    // Firefox
+    err.code === 1014 ||
+    // test name field too, because code might not be present
+    // everything except Firefox
+    err.name === 'QuotaExceededError' ||
+    // Firefox
+    err.name === 'NS_ERROR_DOM_QUOTA_REACHED'
+  );
+}
+
+function timestamp() {
+  return Date.now();
+}
+
+function metadataKey(key: string): string {
+  return metaKeyStarter + key;
+}
+
 export class LRUStorage implements ReplicaStorage {
   private store: Storage;
   private keyStatuses: Map<string, ItemMetadata> = new Map();
@@ -37,22 +59,23 @@ export class LRUStorage implements ReplicaStorage {
       this.unsafeSetItem(key, value);
     } catch (err) {
       if (isStorageExceededException(err) && this.tryClearStorage()) {
-        return this.setItem(key, value);
+        this.setItem(key, value);
+        return;
       }
       throw err;
     }
   }
 
-  getItem(key: string) {
+  getItem(key: string): string | null {
     return this.store.getItem(key);
   }
 
-  removeItem(key: string) {
+  removeItem(key: string): void {
     this.store.removeItem(key);
     this.removeMetadata(key);
   }
 
-  clear() {
+  clear(): void {
     this.store.clear();
   }
 
@@ -60,7 +83,7 @@ export class LRUStorage implements ReplicaStorage {
     return this.store.key(n);
   }
 
-  setReplicationStatus(key: string, status: ReplicationStatus) {
+  setReplicationStatus(key: string, status: ReplicationStatus): void {
     const meta = this.getMetadata(key);
     if (meta) {
       const savedRemotely = status === ReplicationStatus.SavedRemotely;
@@ -68,7 +91,7 @@ export class LRUStorage implements ReplicaStorage {
     }
   }
 
-  stop() {
+  stop(): void {
     this.flushMetadata();
   }
 
@@ -110,7 +133,8 @@ export class LRUStorage implements ReplicaStorage {
       maybeKey(key);
     }
 
-    for (let i = 0; i < this.store.length; i++) {
+    for (let i = 0; i < this.store.length; i += 1) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       maybeKey(this.store.key(i)!);
     }
     return oldestKey;
@@ -125,9 +149,10 @@ export class LRUStorage implements ReplicaStorage {
     try {
       const pendingKeys = this.keyStatuses.keys();
       for (const key of pendingKeys) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const metadata = this.getMetadata(key)!;
         this.store.setItem(
-          this.metadataKey(key),
+          metadataKey(key),
           JSON.stringify([metadata.savedAt, metadata.savedRemotely])
         );
       }
@@ -154,7 +179,7 @@ export class LRUStorage implements ReplicaStorage {
   }
 
   private getSavedMetadata(key: string): ItemMetadata | null {
-    const m = this.getItem(this.metadataKey(key));
+    const m = this.getItem(metadataKey(key));
     const metadata = m ? (JSON.parse(m) as InternalItemMetadata) : null;
     if (metadata !== null) {
       return {
@@ -167,28 +192,6 @@ export class LRUStorage implements ReplicaStorage {
 
   private removeMetadata(key: string) {
     this.keyStatuses.delete(key);
-    this.store.removeItem(this.metadataKey(key));
+    this.store.removeItem(metadataKey(key));
   }
-
-  private metadataKey(key: string): string {
-    return metaKeyStarter + key;
-  }
-}
-
-function isStorageExceededException(err: DOMException): boolean {
-  return (
-    // everything except Firefox
-    err.code === 22 ||
-    // Firefox
-    err.code === 1014 ||
-    // test name field too, because code might not be present
-    // everything except Firefox
-    err.name === 'QuotaExceededError' ||
-    // Firefox
-    err.name === 'NS_ERROR_DOM_QUOTA_REACHED'
-  );
-}
-
-function timestamp() {
-  return Date.now();
 }

@@ -92,11 +92,12 @@ describe('evictCache', () => {
     expectEvicted: (number | string)[];
   }) => {
     const expected: ValueLocation[] = expectEvicted.map((index) =>
-      typeof index === 'number' ? ['block-' + index, 0] : parseLoc(index)
+      typeof index === 'number' ? [`block-${index}`, 0] : parseLoc(index)
     );
     expect(getStatementsToEvict(oldBlocks, newBlocks)).toEqual(expected);
   };
 
+  /* eslint-disable jest/expect-expect */
   it('evicts location and symbol cache for changed stuff and dependent stuff', () => {
     testEvictBlocks({
       oldBlocks: parse('A = 1', 'B = A + 10', 'B + 9', 'A + 1'),
@@ -191,4 +192,5 @@ describe('evictCache', () => {
       expectEvicted: [0, 1],
     });
   });
+  /* eslint-enable jest/expect-expect */
 });

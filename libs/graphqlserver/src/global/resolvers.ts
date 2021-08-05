@@ -3,7 +3,7 @@ import tables from '@decipad/services/tables';
 
 export default {
   Query: {
-    me(_: any, __: any, context: GraphqlContext): User | undefined {
+    me(_: unknown, __: unknown, context: GraphqlContext): User | undefined {
       return context.user;
     },
   },
@@ -11,11 +11,11 @@ export default {
   Permission: {
     async user(permission: PermissionRecord): Promise<User | undefined> {
       const data = await tables();
-      return await data.users.get({ id: permission.user_id });
+      return data.users.get({ id: permission.user_id });
     },
     async givenBy(permission: PermissionRecord): Promise<User | undefined> {
       const data = await tables();
-      return await data.users.get({ id: permission.given_by_user_id });
+      return data.users.get({ id: permission.given_by_user_id });
     },
   },
 };

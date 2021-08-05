@@ -8,7 +8,7 @@ import {
   useEventEditorId,
   useStoreEditorRef,
 } from '@udecode/plate';
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import { FiChevronDown } from 'react-icons/fi';
 
 const Wrapper = styled('div')({
@@ -77,7 +77,7 @@ const OptionsLabel = styled('span')({
   fontSize: '14px',
 });
 
-export const BlockTypeButton = () => {
+export const BlockTypeButton = (): ReturnType<FC> => {
   const editor = useStoreEditorRef(useEventEditorId('focus'));
   const [active, setActive] = useState(false);
   return (

@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react';
+import { Meta, Story } from '@storybook/react';
 import { sidePadding } from '../../storybook-utils';
 import { WorkspaceItem } from './WorkspaceItem';
 
@@ -13,6 +13,6 @@ export default {
   args,
 } as Meta;
 
-export const Normal = (currentArgs: typeof args) => (
+export const Normal: Story<typeof args> = (currentArgs) => (
   <WorkspaceItem href="" {...currentArgs} />
 );

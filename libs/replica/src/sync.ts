@@ -1,3 +1,5 @@
+/* eslint-env browser */
+
 import { Doc } from 'automerge';
 import EventEmitter from 'events';
 import { Observable, Subscription } from 'rxjs';
@@ -91,7 +93,7 @@ export class Sync<T> extends EventEmitter {
       this.connection.readyState !== WebSocket.CLOSED &&
       this.connection.readyState !== WebSocket.CLOSING
     ) {
-      const connection = this.connection;
+      const { connection } = this;
       this.connection = null;
       this.connecting = false;
       this.forceConnecting = false;
@@ -209,31 +211,43 @@ export class Sync<T> extends EventEmitter {
       return;
     }
 
-    let opString: RemoteOp['op'];
+    // TODO: extract changes from message (once they come)
     switch (op) {
       case 's':
-        opString = 'subscribed';
+        this.subscriptionManager.notifyRemoteOp({
+          op: 'subscribed',
+          topic,
+          changes: null,
+        });
         break;
 
       case 'u':
-        opString = 'unsubscribed';
+        this.subscriptionManager.notifyRemoteOp({
+          op: 'unsubscribed',
+          topic,
+          changes: null,
+        });
         break;
 
       case 'c':
-        opString = 'changed';
+        if (!changes) {
+          throw new Error('Received change event without changes');
+        }
+        this.subscriptionManager.notifyRemoteOp({
+          op: 'changed',
+          topic,
+          changes,
+        });
         break;
 
       default:
-        throw new Error('Unsupported operation:' + op);
+        throw new Error(`Unsupported operation: ${op}`);
     }
-    const remoteOp = { op: opString, topic, changes };
-    // TODO: extract changes from message (once they come)
-    this.subscriptionManager.notifyRemoteOp(remoteOp);
   }
 
   private onWebsocketClose(event: Event) {
     this.emit('websocket close', event);
-    const connection = this.connection;
+    const { connection } = this;
     if (connection) {
       this.connection = null;
       connection.onerror = null;
@@ -258,7 +272,7 @@ export class Sync<T> extends EventEmitter {
 
   private async getAuthToken(): Promise<string> {
     const resp = await fetch(
-      this.options.fetchPrefix + '/api/auth/token?for=pubsub'
+      `${this.options.fetchPrefix}/api/auth/token?for=pubsub`
     );
     if (!resp || !resp.ok) {
       const message = `Failed fetching token from remote: ${
@@ -266,6 +280,6 @@ export class Sync<T> extends EventEmitter {
       }`;
       throw new Error(message);
     }
-    return await resp.text();
+    return resp.text();
   }
 }

@@ -1,3 +1,4 @@
+import { join as pathJoin } from 'path';
 import { AST } from '..';
 import {
   c,
@@ -18,7 +19,6 @@ import {
 import { readFile, dataUrl } from '../testUtils';
 import { parseUTCDate } from '../date';
 import { run, runOne } from './index';
-import { join as pathJoin } from 'path';
 
 it('evaluates and returns', async () => {
   const basicProgram = [
@@ -124,23 +124,20 @@ describe('sequences', () => {
   });
 
   it('ensures the time quantity is not more specific than the date', async () => {
-    expect.assertions(2);
-
-    await runOne(
-      seq(date('2020-01', 'month'), date('2020-02', 'month'), n('ref', 'day'))
-    ).catch(() => {
-      expect(true).toBe(true);
-    });
-
-    await runOne(
-      seq(
-        date('2020-01-01', 'day'),
-        date('2020-02-01', 'day'),
-        n('ref', 'hour')
+    await expect(
+      runOne(
+        seq(date('2020-01', 'month'), date('2020-02', 'month'), n('ref', 'day'))
       )
-    ).catch(() => {
-      expect(true).toBe(true);
-    });
+    ).rejects.toThrow();
+    await expect(
+      runOne(
+        seq(
+          date('2020-01-01', 'day'),
+          date('2020-02-01', 'day'),
+          n('ref', 'hour')
+        )
+      )
+    ).rejects.toThrow();
   });
 });
 

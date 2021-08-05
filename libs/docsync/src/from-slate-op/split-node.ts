@@ -18,12 +18,17 @@ export function splitNode(
   };
 
   if (target.text) {
-    target.text.length > op.position &&
+    if (target.text.length > op.position) {
       target.text.deleteAt(op.position, target.text.length - op.position);
-    op.position && inject.text.deleteAt(0, op.position);
+    }
+    if (op.position) {
+      inject.text.deleteAt(0, op.position);
+    }
   } else {
     target.children.splice(op.position, target.children.length - op.position);
-    op.position && inject.children.splice(0, op.position);
+    if (op.position) {
+      inject.children.splice(0, op.position);
+    }
   }
 
   getChildren(parent).insertAt(index + 1, inject);

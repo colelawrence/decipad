@@ -4,16 +4,11 @@ import { withNewUser } from '../utils';
 
 interface Pad {
   anchor: ElementHandle;
-  name: string | null;
+  name: string;
   href: string | null;
 }
 
 type PadList = Pad[];
-
-export async function setUp() {
-  await withNewUser();
-  await navigateToWorkspacePage();
-}
 
 export async function navigateToWorkspacePage() {
   if (!new URL(page.url()).pathname.match(/\/workspaces\/[^/]+/)) {
@@ -23,13 +18,18 @@ export async function navigateToWorkspacePage() {
   await page.waitForSelector('text=workspace');
 }
 
+export async function setUp() {
+  await withNewUser();
+  await navigateToWorkspacePage();
+}
+
 export async function getPadList(): Promise<PadList> {
   const anchors = await page.$$('a[href*="/pads/"]');
   const pads: PadList = [];
   for (const anchor of anchors) {
     pads.push({
       anchor,
-      name: await anchor.textContent(),
+      name: (await anchor.textContent()) ?? '',
       href: await anchor.getAttribute('href'),
     });
   }

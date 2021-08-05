@@ -14,6 +14,6 @@ describe('Editor Title Element', () => {
       </TitleElement>
     );
 
-    getByText('Title Element');
+    expect(getByText('Title Element')).toBeVisible();
   });
 });

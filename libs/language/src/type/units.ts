@@ -13,7 +13,7 @@ export const matchUnitArrays = (units1: AST.Unit[], units2: AST.Unit[]) => {
 
 export const removeSingleUnitless = (a: Type, b: Type) => {
   const bothNumbers = a.type === 'number' && b.type === 'number';
-  const oneIsUnitless = (a.unit == null) != (b.unit == null);
+  const oneIsUnitless = (a.unit == null) !== (b.unit == null);
 
   if (bothNumbers && oneIsUnitless) {
     return getDefined(a.unit ?? b.unit);

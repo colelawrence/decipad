@@ -1,12 +1,12 @@
+/* eslint-disable jest/no-done-callback */
+// existing granular tests
+/* eslint-disable jest/expect-expect */
 import { nanoid } from 'nanoid';
 import { Server as WebSocketServer, WebSocket } from 'mock-socket';
 import waitForExpect from 'wait-for-expect';
 import fetch from 'jest-fetch-mock';
 import { Subscription } from 'rxjs';
 import { Editor, createEditor, Operation, Node } from 'slate';
-import { DocSync, SyncEditor } from './';
-import randomChar from './utils/random-char';
-import { toJS } from './utils/to-js';
 import {
   syncApiServer,
   createWebsocketServer,
@@ -14,6 +14,9 @@ import {
   TestStorage,
   tickUntil,
 } from '@decipad/testutils';
+import { DocSync, SyncEditor } from '.';
+import randomChar from './utils/random-char';
+import { toJS } from './utils/to-js';
 import { SyncNode } from './types';
 
 waitForExpect.defaults.interval = 500;
@@ -36,7 +39,7 @@ describe('sync', () => {
   let deciWebsocketServer = null;
 
   beforeAll(() => {
-    for (let i = 0; i < replicaCount; i++) {
+    for (let i = 0; i < replicaCount; i += 1) {
       replicas.push(new DocSync({ userId: nanoid(), actorId: nanoid() }));
     }
   });
@@ -75,16 +78,16 @@ describe('sync', () => {
       expect(websocket.protocol).toBe('thisisagreattokenjustforyou');
       expect(websocket.url).toBe('ws://localhost:3333/ws');
 
-      websocket.onclose = (event: Event) => {
-        expect(event).toBeDefined();
+      websocket.onclose = (closeEvent: Event) => {
+        expect(closeEvent).toBeDefined();
         expect(hadResponse).toBe(true);
         expect(websocket.readyState).toBe(WebSocket.CLOSED);
         completed = true;
         done();
       };
 
-      websocket.onmessage = (event: MessageEvent) => {
-        const m = JSON.parse(event.data.toString());
+      websocket.onmessage = (messageEvent: MessageEvent) => {
+        const m = JSON.parse(messageEvent.data.toString());
         expect(m).toMatchObject({ type: 'pong' });
         hadResponse = true;
         websocket.close();
@@ -109,7 +112,7 @@ describe('sync', () => {
   });
 
   it('creates other replicas', async () => {
-    for (let i = 1; i < replicaCount; i++) {
+    for (let i = 1; i < replicaCount; i += 1) {
       const content = replicas[i].edit(docId, {
         storage: new TestStorage(), // separate local storage for tests
       });
@@ -200,7 +203,9 @@ async function randomChangesToEditors(editors: Editor[], changeCount: number) {
 }
 
 async function randomChangesToEditor(editor: Editor, changeCount: number) {
-  for (let i = 0; i < changeCount; i++) {
+  for (let i = 0; i < changeCount; i += 1) {
+    // simulation
+    // eslint-disable-next-line no-await-in-loop
     await randomSmallTimeout();
     const ops = randomChangeToEditor(editor);
     Editor.withoutNormalizing(editor, () => {
@@ -257,6 +262,7 @@ function randomRemove(index: number, text: string): Operation[] {
 function randomSplit(index: number, text: string, node: Element): Operation[] {
   const ops: Operation[] = [];
   const pos = pickRandomIndex(text);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { children: _, ...props } = node;
 
   ops.push({

@@ -1,12 +1,14 @@
+import { User } from '@decipad/interfaces';
+import { EmailGenerator } from './types';
 import salutation from './utils/salutation';
 
-export default ({
-  from,
-  to,
-  resource,
-  resourceName,
-  inviteAcceptLink,
-}: Record<string, any>) => ({
+const genericInvite: EmailGenerator<{
+  from: User;
+  to: User;
+  resource: { type: string };
+  resourceName: string;
+  inviteAcceptLink: string;
+}> = ({ from, to, resource, resourceName, inviteAcceptLink }) => ({
   subject: `${from.name} invites you to a ${resource.type}`,
   body: `${salutation(to)},
 
@@ -23,3 +25,4 @@ Sincerely,
 The Deci team.
 `,
 });
+export default genericInvite;

@@ -5,6 +5,7 @@ import {
   useEventEditorId,
   useStoreEditorRef,
 } from '@udecode/plate';
+import { FC } from 'react';
 import { FiCode } from 'react-icons/fi';
 import { BlockTypeButton } from './BlockTypeButton';
 import { Divider } from './Divider';
@@ -13,7 +14,7 @@ import { toolbarButtonStyles } from './toolbarButtonStyles';
 import { ToolbarWrapper } from './ToolbarWrapper/ToolbarWrapper.component';
 import { tooltip } from './tooltipOptions';
 
-export const FormattingToolbar = () => {
+export const FormattingToolbar = (): ReturnType<FC> => {
   const editor = useStoreEditorRef(useEventEditorId('focus'));
 
   return (

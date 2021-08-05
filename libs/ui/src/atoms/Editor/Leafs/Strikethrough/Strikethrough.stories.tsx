@@ -1,3 +1,4 @@
+import { Meta, Story } from '@storybook/react';
 import { StrikethroughLeaf } from './Strikethrough';
 
 export default {
@@ -6,9 +7,9 @@ export default {
   args: {
     text: 'This text is crossed out',
   },
-};
+} as Meta;
 
-export const Strikethrough = (args: { text: string }) => (
+export const Strikethrough: Story<{ text: string }> = (args) => (
   <StrikethroughLeaf
     leaf={{ attributes: {}, text: '' }}
     element={{ children: [{ text: '' }] }}

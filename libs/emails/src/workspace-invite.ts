@@ -1,11 +1,13 @@
+import { User } from '@decipad/interfaces';
+import { EmailGenerator } from './types';
 import salutation from './utils/salutation';
 
-export default ({
-  from,
-  to,
-  workspace,
-  inviteAcceptLink,
-}: Record<string, any>) => ({
+const workspaceInvite: EmailGenerator<{
+  from: User;
+  to: User;
+  workspace: { name: string };
+  inviteAcceptLink: string;
+}> = ({ from, to, workspace, inviteAcceptLink }) => ({
   subject: `${from.name} invites you to workspace "${workspace.name}"`,
   body: `${salutation(to)},
 
@@ -22,3 +24,4 @@ Sincerely,
 The Deci team.
 `,
 });
+export default workspaceInvite;

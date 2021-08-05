@@ -7,7 +7,7 @@ import {
   useEventEditorId,
   useStoreEditorRef,
 } from '@udecode/plate';
-import { useEffect, useRef } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import { Range } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { Command } from '../commands';
@@ -72,7 +72,7 @@ export const SlashCommandsSelect = ({
   at,
   onClickSlashCommands,
   valueIndex,
-}: SlashCommandsSelectProps) => {
+}: SlashCommandsSelectProps): ReturnType<FC> => {
   const ref = useRef<HTMLDivElement>(null);
   const editor = useStoreEditorRef(useEventEditorId('focus'));
 
@@ -84,7 +84,7 @@ export const SlashCommandsSelect = ({
       const top = rect.top + window.pageYOffset + 24;
       if (el) {
         if (rect.y < window.innerHeight / 2) {
-          el.style.top = top + 'px';
+          el.style.top = `${top}px`;
         } else {
           el.style.top = `${top - 270}px`;
         }

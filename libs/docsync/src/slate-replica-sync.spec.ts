@@ -1,4 +1,3 @@
-import { DocSync } from './';
 import {
   Editor,
   createEditor,
@@ -8,6 +7,7 @@ import {
 import { LoremIpsum } from 'lorem-ipsum';
 import { nanoid } from 'nanoid';
 import waitForExpect from 'wait-for-expect';
+import { DocSync } from '.';
 import { SyncEditor } from './sync-editor';
 import { SyncNode, ExtendedSlateOperation } from './types';
 
@@ -27,8 +27,12 @@ const lorem = new LoremIpsum({
 const docId = 'docid';
 
 describe('slate to replica sync', () => {
-  let sync1: DocSync, editor1: Editor, model1: SyncEditor;
-  let sync2: DocSync, editor2: Editor, model2: SyncEditor;
+  let sync1: DocSync;
+  let editor1: Editor;
+  let model1: SyncEditor;
+  let sync2: DocSync;
+  let editor2: Editor;
+  let model2: SyncEditor;
   let firstText: string;
   let secondText: string;
 
@@ -106,7 +110,7 @@ describe('slate to replica sync', () => {
         type: 'p',
         children: [
           {
-            text: text,
+            text,
           },
         ],
       },
@@ -257,7 +261,7 @@ describe('slate to replica sync', () => {
 
   test('random edits work', async () => {
     Editor.withoutNormalizing(editor1, () => {
-      for (let i = 0; i < 100; i++) {
+      for (let i = 0; i < 100; i += 1) {
         const op = randomEdit(editor1);
         editor1.apply(op);
       }
@@ -433,7 +437,7 @@ function createRandomInsertSlateOperations(
       } as SlateOperation);
     }
 
-    i++;
+    i += 1;
   }
 
   return [ops, text];
@@ -461,14 +465,13 @@ function randomEdit(editor: Editor): SlateOperation {
       type: 'remove_text',
       offset: pickedCharIndex,
     };
-  } else {
-    return {
-      type: 'insert_text',
-      path: [pickedIndex, 0],
-      text: randomChar(),
-      offset: pickedCharIndex,
-    };
   }
+  return {
+    type: 'insert_text',
+    path: [pickedIndex, 0],
+    text: randomChar(),
+    offset: pickedCharIndex,
+  };
 }
 
 function randomChar(): string {
@@ -587,6 +590,7 @@ function splitRandomText(editor: Editor): SlateOperation[] {
     properties: {},
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { children: _, ...candidateExceptChildren } = candidate;
 
   ops.push({

@@ -30,12 +30,12 @@ export const useDocSyncPlugin = ({
 
   // Create a padEditor
   useEffect(() => {
-    const syncEditor = docsync?.edit(padId) ?? null;
-    setSyncEditor(syncEditor);
+    const newSyncEditor = docsync?.edit(padId) ?? null;
+    setSyncEditor(newSyncEditor);
 
     return () => {
       setSyncEditor(null);
-      syncEditor?.stop();
+      newSyncEditor?.stop();
     };
   }, [docsync, padId]);
 
@@ -54,6 +54,7 @@ export const useDocSyncPlugin = ({
 
       // TODO this just happens to cause a render, but how to we make
       // sure one happens and the editor doesn't stay empty?
+      /* eslint-disable no-param-reassign */
       editor.children = syncEditor.getValue();
     }
 
@@ -62,13 +63,13 @@ export const useDocSyncPlugin = ({
 
   return useMemo(
     () => ({
-      onChange: (editor) => () => {
-        const ops = editor.operations;
+      onChange: (changedEditor) => () => {
+        const ops = changedEditor.operations;
         if (!ops || ops.length === 0 || syncEditor == null) {
           return;
         }
 
-        editor.operations = [];
+        changedEditor.operations = [];
         syncEditor.sendSlateOperations(ops);
       },
     }),

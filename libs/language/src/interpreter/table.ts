@@ -35,18 +35,19 @@ export const evaluateTableColumn = async (
   rowCount: number
 ): Promise<Value> => {
   if (!usesRecursion(column)) {
-    return await evaluate(realm, column);
-  } else {
-    const rows = await mapWithPrevious(realm, async function* () {
-      for (let i = 0; i < rowCount; i++) {
-        const value = atIndex(await evaluate(realm, column), rowCount, i);
-        realm.previousValue = value;
-        yield value;
-      }
-    });
-
-    return Column.fromValues(rows);
+    return evaluate(realm, column);
   }
+  const rows = await mapWithPrevious(realm, async function* mapper() {
+    for (let i = 0; i < rowCount; i++) {
+      // TODO should this be parallel?
+      // eslint-disable-next-line no-await-in-loop
+      const value = atIndex(await evaluate(realm, column), rowCount, i);
+      realm.previousValue = value;
+      yield value;
+    }
+  });
+
+  return Column.fromValues(rows);
 };
 
 export const getLargestColumn = (values: Value[], minValue = 1): number => {
@@ -67,9 +68,11 @@ export const evaluateTable = async (
   const colNames: string[] = [];
   const colValues: Value[] = [];
 
-  return await realm.stack.withPush(async () => {
+  return realm.stack.withPush(async () => {
     for (const [def, column] of pairwise<AST.ColDef, AST.Expression>(columns)) {
       const colName = getIdentifierString(def);
+      // TODO should this be parallel?
+      // eslint-disable-next-line no-await-in-loop
       const columnData = await evaluateTableColumn(
         realm,
         column,

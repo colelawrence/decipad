@@ -4,12 +4,6 @@ import { Server as WebSocketServer, WebSocket } from 'mock-socket';
 import waitForExpect from 'wait-for-expect';
 import fetch from 'jest-fetch-mock';
 import { Text, List } from 'automerge';
-import { createReplica, Replica, SyncStatus } from './';
-import { Sync } from './sync';
-import randomChar from './utils/random-char';
-import { toJS } from './utils/to-js';
-import { toSync } from './utils/to-sync';
-import { cloneNode } from './utils/clone-node';
 import { ReplicationStatus } from '@decipad/interfaces';
 import {
   syncApiServer,
@@ -18,6 +12,13 @@ import {
   tickUntil,
   TestStorage,
 } from '@decipad/testutils';
+
+import { createReplica, Replica, SyncStatus } from '.';
+import { Sync } from './sync';
+import randomChar from './utils/random-char';
+import { toJS } from './utils/to-js';
+import { toSync } from './utils/to-sync';
+import { cloneNode } from './utils/clone-node';
 
 type BaseNode = { type: string; id: string; children: TextNode[] };
 type TextNode = { text: Text };
@@ -60,6 +61,8 @@ const optionsToTest = [
   },
 ];
 
+/* eslint-disable jest/expect-expect */
+
 describe('sync', () => {
   describe.each(optionsToTest)('options = %j', (replicaOptions) => {
     const name = `/pads/${nanoid()}`;
@@ -76,7 +79,7 @@ describe('sync', () => {
     });
 
     beforeAll(() => {
-      for (let i = 0; i < replicaCount; i++) {
+      for (let i = 0; i < replicaCount; i += 1) {
         const sync = new Sync<Model>(syncOptions);
         globalSyncs.push(sync);
 
@@ -150,16 +153,18 @@ describe('sync', () => {
       }
     });
 
+    // eslint-disable-next-line jest/no-done-callback
     afterAll((done) => {
       websocketServer.stop(done);
     });
 
+    // eslint-disable-next-line jest/no-done-callback
     it('can send and receive extraneous websocket messages', (done) => {
       const sync = globalSyncs[0];
       const WebsocketClass = sync.websocketImpl();
       const websocket = new WebsocketClass('bogus url');
-      websocket.onopen = (event: Event) => {
-        expect(event).toBeDefined();
+      websocket.onopen = (openEvent: Event) => {
+        expect(openEvent).toBeDefined();
         expect(websocket.binaryType).toBe('blob');
         expect(websocket.extensions).toBe(undefined);
         expect(websocket.protocol).toBe('thisisagreattokenjustforyou');
@@ -167,8 +172,8 @@ describe('sync', () => {
 
         websocket.onclose = () => done();
 
-        websocket.onmessage = (event: MessageEvent) => {
-          const m = JSON.parse(event.data.toString());
+        websocket.onmessage = (msgEvent: MessageEvent) => {
+          const m = JSON.parse(msgEvent.data.toString());
           expect(m).toMatchObject({ type: 'pong' });
           websocket.close();
         };
@@ -208,8 +213,6 @@ describe('sync', () => {
         FAKE_TIME_TICK_MS
       );
     });
-
-    // it('waits a bit', async () => await timeout(10000), 11000);
 
     it('all converges', async () => {
       jest.useFakeTimers();
@@ -281,7 +284,9 @@ async function randomChangesToReplica(
   replica: Replica<Model>,
   changeCount: number
 ) {
-  for (let i = 0; i < changeCount; i++) {
+  for (let i = 0; i < changeCount; i += 1) {
+    // Changes are supposed to happen sequentially to be realistic, so no Promise.all in this case
+    // eslint-disable-next-line no-await-in-loop
     await randomSmallTimeout();
     randomChangeToReplica(replica);
   }
@@ -295,12 +300,12 @@ function randomChangeToReplica(replica: Replica<Model>) {
   const candidate = candidateNode.children[0].text;
 
   if (!candidate || candidate.length < 6) {
-    return randomInsert(replica, candidateIndex);
+    randomInsert(replica, candidateIndex);
+  } else {
+    const candidateOp = pickRandom([randomInsert, randomRemove, randomSplit]);
+
+    candidateOp(replica, candidateIndex);
   }
-
-  const candidateOp = pickRandom([randomInsert, randomRemove, randomSplit]);
-
-  candidateOp(replica, candidateIndex);
 }
 
 function randomInsert(replica: Replica<Model>, index: number) {
@@ -313,7 +318,7 @@ function randomInsert(replica: Replica<Model>, index: number) {
 
 function randomRemove(replica: Replica<Model>, index: number) {
   replica.mutate((model) => {
-    const text = model[index].children[0].text;
+    const { text } = model[index].children[0];
     const pos = pickRandomIndex(text);
     text!.deleteAt!(pos);
   });
@@ -322,7 +327,7 @@ function randomRemove(replica: Replica<Model>, index: number) {
 function randomSplit(replica: Replica<Model>, index: number) {
   replica.mutate((model) => {
     const node = model[index];
-    const text = node.children[0].text;
+    const { text } = node.children[0];
     const pos = pickRandomIndex(text);
     const copy = cloneNode(node) as BaseNode;
 
@@ -348,6 +353,6 @@ function pickRandom<T>(arr: Array<T>): T {
   return arr[index];
 }
 
-function pickRandomIndex(arr: any[] | string): number {
+function pickRandomIndex(arr: unknown[] | string): number {
   return Math.floor(Math.random() * arr.length);
 }

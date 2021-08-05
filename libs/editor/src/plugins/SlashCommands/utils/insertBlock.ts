@@ -13,12 +13,13 @@ export const insertBlock = (
   editor: SPEditor,
   at: Location,
   { pluginKey = ELEMENT_CODE_BLOCK }: PlatePluginKey
-) => {
+): void => {
   const node = {
     type: getPlatePluginType(editor, pluginKey),
     children: [{ text: '' }],
   };
   autoformatBlock(editor, node.type, at, {
-    preFormat: (editor: TEditor) => unwrapList(editor as SPEditor),
+    preFormat: (editorToFormat: TEditor) =>
+      unwrapList(editorToFormat as SPEditor),
   });
 };

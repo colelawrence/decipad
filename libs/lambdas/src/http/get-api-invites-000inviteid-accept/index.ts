@@ -74,8 +74,7 @@ export const handler = handle(
         }
 
         await data.invites.delete({ id: invite.id });
-
-        return;
+        return undefined;
       })
     );
 

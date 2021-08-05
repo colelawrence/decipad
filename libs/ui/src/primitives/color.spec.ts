@@ -18,7 +18,7 @@ describe('transparency', () => {
       blue: 3,
     });
   });
-  it('copies the red, green, and blue values', () => {
+  it('adds an alpha value to the rgb representation', () => {
     expect(transparency(color(1, 2, 3), 0.08).rgba).toMatchInlineSnapshot(
       `"rgba(1, 2, 3, 0.08)"`
     );

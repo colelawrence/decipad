@@ -17,7 +17,7 @@ const parseOneBlock = (source: string): AST.Block[] => {
 
   if (parsed.solutions.length !== 1) {
     const solutions = parsed.solutions.map((s) => prettyPrintAST(s));
-    console.error('Multiple solutions: \n' + solutions.join('\n'));
+    console.error(`Multiple solutions: \n${solutions.join('\n')}`);
     throw new Error('Multiple solutions');
   }
   expect(parsed.solutions.length).toEqual(1);
@@ -57,7 +57,7 @@ export const runCodeForVariables = async (
   const erroredType = Object.values(types).find((t) => t.errorCause != null);
   if (erroredType != null) {
     throw new Error(
-      'runCodeForVariables found an error\n' + erroredType.toString()
+      `runCodeForVariables found an error\n${erroredType.toString()}`
     );
   }
 

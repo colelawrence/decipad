@@ -83,7 +83,7 @@ export const getDateSequenceCount = (
     }
     /* istanbul ignore next */
     default: {
-      throw new Error('panic: unexpected step unit ' + stepUnit);
+      throw new Error(`panic: unexpected step unit ${stepUnit}`);
     }
   }
 };
@@ -99,7 +99,7 @@ export const inferSequence = async (ctx: Context, expr: AST.Sequence) => {
   } else if (startN.type === 'date' && endN.type === 'date') {
     let increment;
     try {
-      increment = getOfType('ref', byN).args[0];
+      [increment] = getOfType('ref', byN).args;
       getSpecificity(increment);
     } catch {
       return t.impossible('Invalid increment clause in date sequence');

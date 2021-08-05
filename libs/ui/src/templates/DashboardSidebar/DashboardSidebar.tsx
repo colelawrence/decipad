@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { ComponentProps } from 'react';
+import { ComponentProps, FC } from 'react';
 import { WorkspaceNavigation, WorkspaceSwitcher } from '../../organisms';
 
 const styles = css({
@@ -13,7 +13,9 @@ const styles = css({
 type DashboardSidebarProps = ComponentProps<typeof WorkspaceSwitcher> &
   ComponentProps<typeof WorkspaceNavigation>;
 
-export const DashboardSidebar = (props: DashboardSidebarProps) => {
+export const DashboardSidebar = (
+  props: DashboardSidebarProps
+): ReturnType<FC> => {
   return (
     <div css={styles}>
       <div css={{ gridRow: 'navigation', display: 'grid' }}>

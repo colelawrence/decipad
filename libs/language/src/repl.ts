@@ -108,7 +108,10 @@ export const replEval = (
   _filename: unknown,
   callback: (e: Error | null, result: string | null | undefined) => void
 ) => {
-  if (!cmd.trim()) return callback(null, undefined);
+  if (!cmd.trim()) {
+    callback(null, undefined);
+    return;
+  }
 
   const ast = wrappedParse(cmd);
 
@@ -116,7 +119,7 @@ export const replEval = (
     const pleaseContinueTyping = new repl.Recoverable(new Error('continue'));
     callback(pleaseContinueTyping, null);
   } else {
-    accumulatedSource += '\n' + cmd;
+    accumulatedSource += `\n${cmd}`;
 
     execDeci(ast).then(
       (result) => callback(null, result),

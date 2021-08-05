@@ -1,9 +1,13 @@
 /* eslint-env jest */
+
+// existing sequential tests very granular
+/* eslint-disable jest/expect-expect */
+
 import waitForExpect from 'wait-for-expect';
 import { Workspace, Pad } from '@decipad/backendtypes';
+import { ObservableSubscription } from '@apollo/client';
 import test from './sandbox';
 import { timeout } from './utils/timeout';
-import { ObservableSubscription } from '@apollo/client';
 
 waitForExpect.defaults.interval = 250;
 
@@ -201,8 +205,8 @@ test('pad changes', ({
   async function subscribe(
     userId: string,
     workspaceId: string,
-    pads: Pad[],
-    subscriptions: ObservableSubscription[]
+    targetPads: Pad[],
+    targetSubscriptions: ObservableSubscription[]
   ) {
     const client = await createClient(userId);
     const sub = client.subscribe({
@@ -223,8 +227,8 @@ test('pad changes', ({
       `,
     });
 
-    subscriptions.push(
-      await sub.subscribe({
+    targetSubscriptions.push(
+      sub.subscribe({
         error(err) {
           throw err;
         },
@@ -235,23 +239,24 @@ test('pad changes', ({
           const changes = data.padsChanged;
           if (changes.added) {
             for (const w of changes.added) {
-              pads.push(w);
+              targetPads.push(w);
             }
           }
 
           if (changes.updated) {
             for (const p of changes.updated) {
-              const index = pads.findIndex((p2) => p2.id === p.id);
+              const index = targetPads.findIndex((p2) => p2.id === p.id);
               expect(index).toBeGreaterThan(-1);
-              pads[index] = Object.assign(pads[index], p);
+              // eslint-disable-next-line no-param-reassign
+              targetPads[index] = Object.assign(targetPads[index], p);
             }
           }
 
           if (changes.removed) {
             for (const id of changes.removed) {
-              const index = pads.findIndex((p) => id === p.id);
+              const index = targetPads.findIndex((p) => id === p.id);
               expect(index).toBeGreaterThan(-1);
-              pads.splice(index, 1);
+              targetPads.splice(index, 1);
             }
           }
         },

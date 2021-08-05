@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import arc from '@architect/functions';
 import {
   DataTables,
@@ -43,14 +44,14 @@ export default async function tables(): Promise<DataTables> {
     arc
       .tables()
       .then((_tables) => {
-        const tables = _tables as unknown as DataTables;
+        const dataTables = _tables as unknown as DataTables;
         for (const enhancedTableName of enhancedTables) {
-          enhance(tables, enhancedTableName);
+          enhance(dataTables, enhancedTableName);
         }
         for (const observedTable of observedTables) {
-          observe(tables, observedTable);
+          observe(dataTables, observedTable);
         }
-        resolve(tables);
+        resolve(dataTables);
       })
       .catch(reject);
   });
@@ -58,10 +59,10 @@ export default async function tables(): Promise<DataTables> {
   return p;
 }
 
-function observe(tables: DataTables, tableName: keyof DataTables) {
-  const table = tables[tableName] as ConcreteDataTable;
+function observe(dataTables: DataTables, tableName: keyof DataTables) {
+  const table = dataTables[tableName] as ConcreteDataTable;
   if (!table) {
-    throw new Error('No table named ' + tableName);
+    throw new Error(`No table named ${tableName}`);
   }
   if (table.__deci_observed__) {
     return;
@@ -78,7 +79,7 @@ function putReplacer<T extends ConcreteRecord>(
   tableName: keyof DataTables,
   method: (doc: T) => Promise<void>
 ): (doc: T) => Promise<void> {
-  return async function putReplacer(args: T) {
+  return async function replacePut(args: T) {
     const ret = await method.call(table, args);
 
     await arc.queues.publish({
@@ -99,7 +100,7 @@ function deleteReplacer<T extends ConcreteRecord>(
   tableName: keyof DataTables,
   method: (id: TableRecordIdentifier) => Promise<void>
 ): (id: TableRecordIdentifier) => Promise<void> {
-  return async function deleteReplacer(args: TableRecordIdentifier) {
+  return async function replaceDelete(args: TableRecordIdentifier) {
     const recordBeforeDelete = await table.get({ id: args.id });
     await method.call(table, args);
 
@@ -115,16 +116,18 @@ function deleteReplacer<T extends ConcreteRecord>(
   };
 }
 
-function enhance(tables: DataTables, tableName: keyof DataTables) {
-  const table = tables[tableName];
+function enhance(dataTables: DataTables, tableName: keyof DataTables) {
+  const table = dataTables[tableName];
   if (!table) {
-    throw new Error('No table named ' + tableName);
+    throw new Error(`No table named ${tableName}`);
   }
 
   if (typeof table.create === 'function') {
     return;
   }
 
+  // TODO type this magic property
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   table.create = async function create(doc: any) {
     if (!doc.createdAt) {
       doc.createdAt = timestamp();

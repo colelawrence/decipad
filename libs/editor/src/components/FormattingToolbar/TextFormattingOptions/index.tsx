@@ -7,11 +7,12 @@ import {
   useEventEditorId,
   useStoreEditorRef,
 } from '@udecode/plate';
+import { FC } from 'react';
 import { FiBold, FiItalic, FiUnderline } from 'react-icons/fi';
 import { toolbarButtonStyles } from '../toolbarButtonStyles';
 import { tooltip } from '../tooltipOptions';
 
-export const TextFormattingOptions = () => {
+export const TextFormattingOptions = (): ReturnType<FC> => {
   const editor = useStoreEditorRef(useEventEditorId('focus'));
   return (
     <>

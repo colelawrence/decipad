@@ -1,3 +1,4 @@
+import { Meta, Story } from '@storybook/react';
 import { ItalicLeaf } from './Italic';
 
 export default {
@@ -6,9 +7,9 @@ export default {
   args: {
     text: 'Italic text',
   },
-};
+} as Meta;
 
-export const Italic = (args: { text: string }) => (
+export const Italic: Story<{ text: string }> = (args) => (
   <ItalicLeaf
     leaf={{ attributes: {}, text: '' }}
     element={{ children: [{ text: '' }] }}

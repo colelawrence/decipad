@@ -1,13 +1,14 @@
 import { Observable, BehaviorSubject, Subject, Subscription } from 'rxjs';
 
 /* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable no-param-reassign */
 export function observeSubscriberCount<T>(
   observable: Observable<T>,
   onSubscribe: () => void = () => {}
 ): Subject<number> {
   const subscriptionCountObservable = new BehaviorSubject<number>(0);
 
-  const subscribe = observable.subscribe;
+  const { subscribe } = observable;
   observable.subscribe = (...args) => {
     subscriptionCountObservable.next(
       subscriptionCountObservable.getValue() + 1
@@ -15,7 +16,7 @@ export function observeSubscriberCount<T>(
 
     // @ts-expect-error re-applying args hard to type
     const subscription = subscribe.apply(observable, args);
-    const unsubscribe = subscription.unsubscribe;
+    const { unsubscribe } = subscription;
     let unsubscribed = false;
     subscription.unsubscribe = () => {
       if (unsubscribed) {

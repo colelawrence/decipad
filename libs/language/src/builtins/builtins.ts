@@ -92,12 +92,12 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
   },
   '**': {
     argCount: 2,
-    fn: (a, b) => Math.pow(a, b),
+    fn: (a, b) => a ** b,
     functor: binopWithUnitlessSecondArgFunctor,
   },
   '^': {
     argCount: 2,
-    fn: (a, b) => Math.pow(a, b),
+    fn: (a, b) => a ** b,
     functor: binopWithUnitlessSecondArgFunctor,
   },
   '<': {
@@ -122,12 +122,12 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
   },
   '==': {
     argCount: 2,
-    fn: (a, b) => a == b,
+    fn: (a, b) => a === b,
     functor: cmpFunctor,
   },
   '!=': {
     argCount: 2,
-    fn: (a, b) => a != b,
+    fn: (a, b) => a !== b,
     functor: cmpFunctor,
   },
   // Boolean ops

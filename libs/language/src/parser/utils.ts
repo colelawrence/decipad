@@ -22,7 +22,7 @@ const prettyPrint = (node: AST.Node, indent: number) => {
       return `(prop ${getIdentifierString(ref)}.${prop})`;
     }
     case 'function-call': {
-      fname = node.args[0].args[0];
+      [fname] = node.args[0].args;
       printedArgs = node.args[1].args.map((arg) =>
         prettyPrint(arg, indent + 1)
       );

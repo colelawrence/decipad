@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import { spawn, ChildProcess } from 'child_process';
 import assert from 'assert';
 import { join } from 'path';
@@ -19,10 +21,10 @@ const lockUnlock = lockingFile(lockPath);
 let stopping = false;
 
 async function start(env: Env, config: Config): Promise<void> {
-  await lockUnlock(() => _start(env, config));
+  await lockUnlock(() => doStart(env, config));
 }
 
-function _start(env: Env, config: Config): Promise<void> {
+function doStart(env: Env, config: Config): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
       if (child !== undefined) {
@@ -31,7 +33,7 @@ function _start(env: Env, config: Config): Promise<void> {
 
       child = spawn(
         './node_modules/.bin/sandbox',
-        ['--disable-symlinks', '--confirm', '--port', '' + config.apiPort],
+        ['--disable-symlinks', '--confirm', '--port', `${config.apiPort}`],
         { stdio: 'pipe', env }
       );
 
@@ -42,11 +44,11 @@ function _start(env: Env, config: Config): Promise<void> {
         }
         if (!stopping && code) {
           console.error(
-            `Sandbox ${workerId} terminated with error code ` + code
+            `Sandbox ${workerId} terminated with error code ${code}`
           );
           console.error(output);
           reject(
-            new Error(`Sandbox ${workerId} terminated with error code ` + code)
+            new Error(`Sandbox ${workerId} terminated with error code ${code}`)
           );
         }
         child = undefined;
@@ -59,6 +61,7 @@ function _start(env: Env, config: Config): Promise<void> {
 
       let output = '';
 
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       child.stdout!.on('data', (d) => {
         output += d;
         if (!started) {
@@ -91,6 +94,7 @@ function _start(env: Env, config: Config): Promise<void> {
         }
       });
 
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       child.stderr!.on('data', (d) => {
         process.stderr.write(d);
       });
@@ -100,7 +104,7 @@ function _start(env: Env, config: Config): Promise<void> {
   });
 }
 
-function stop() {
+function stop(): Promise<unknown> {
   if (!child) {
     return Promise.resolve();
   }

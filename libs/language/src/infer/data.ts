@@ -8,9 +8,9 @@ export async function inferData(
 ): Promise<Type> {
   const tableType = await ctx.stack.withPush(() => {
     const columns: Type[] = [];
-    const columnNames = data.columnNames;
+    const { columnNames } = data;
     for (const columnName of columnNames) {
-      let columnType: Type | undefined = undefined;
+      let columnType: Type | undefined;
       for (let row = 0; row < data.length; row++) {
         const value = data.get(columnName, row);
         const newType = typeFromValue(value);
@@ -22,7 +22,7 @@ export async function inferData(
         columnType = newType;
       }
       if (!columnType) {
-        throw new Error('Unknown column type for column ' + columnName);
+        throw new Error(`Unknown column type for column ${columnName}`);
       }
       columns.push(columnType);
     }
@@ -33,7 +33,7 @@ export async function inferData(
   return tableType;
 }
 
-export function typeFromValue(value: any): Type {
+export function typeFromValue(value: unknown): Type {
   if (value instanceof Date) {
     // TODO: infer specificity from date?
     const specificity = 'time';
@@ -47,7 +47,7 @@ export function typeFromValue(value: any): Type {
       return t.string();
     }
     default: {
-      throw new Error('Cannot deal with data of type ' + typeof value);
+      throw new Error(`Cannot deal with data of type ${typeof value}`);
     }
   }
 }

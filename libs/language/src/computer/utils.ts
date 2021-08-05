@@ -8,8 +8,8 @@ export const parseLoc = (loc: string) => {
   const [blockId, strIndex, trash] = loc.split('/');
   const statementIndex = Number(strIndex);
 
-  if (!blockId || isNaN(statementIndex) || trash != null) {
-    throw new Error('invalid ValueLocation: ' + JSON.stringify(loc));
+  if (!blockId || Number.isNaN(statementIndex) || trash != null) {
+    throw new Error(`invalid ValueLocation: ${JSON.stringify(loc)}`);
   }
 
   return [blockId, statementIndex] as ValueLocation;
@@ -105,9 +105,9 @@ export const getSomeBlockLocations = (
 export const getDefinedSymbol = (stmt: AST.Statement) => {
   switch (stmt.type) {
     case 'assign':
-      return 'var:' + getIdentifierString(stmt.args[0]);
+      return `var:${getIdentifierString(stmt.args[0])}`;
     case 'function-definition':
-      return 'fn:' + getIdentifierString(stmt.args[0]);
+      return `fn:${getIdentifierString(stmt.args[0])}`;
     default:
       return null;
   }
@@ -133,23 +133,23 @@ export const getAllSymbolsDefined = (blocks: AST.Block[]) =>
     block.args.flatMap((statement) => {
       const sym = getDefinedSymbol(statement);
       if (sym != null) return [sym];
-      else return [];
+      return [];
     })
   );
 
 export const getReferredSymbol = (node: AST.Node) => {
   switch (node.type) {
     case 'ref':
-      return 'var:' + getIdentifierString(node);
+      return `var:${getIdentifierString(node)}`;
     case 'funcref':
-      return 'fn:' + getIdentifierString(node);
+      return `fn:${getIdentifierString(node)}`;
     default:
       return null;
   }
 };
 
 export const parseDefName = (sym: string): ['var' | 'fn', string] => {
-  const [_, type, rest] = getDefined(
+  const [, type, rest] = getDefined(
     sym.match(/^(var|fn):(.*)$/),
     'Expected defname to be in the format var:{name} or fn:{name}'
   );

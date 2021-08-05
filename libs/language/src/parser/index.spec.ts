@@ -1,3 +1,4 @@
+/* eslint-disable jest/expect-expect */
 import { AST } from '..';
 import { n, c, l, date, range, col, tableDef, funcDef } from '../utils';
 import { parse } from './index';
@@ -24,7 +25,7 @@ const testParse = (source: string, ...expected: AST.Statement[]) => {
 
   expect(p(source)).toMatchObject(n('block', ...expected));
 
-  const withExtraneousSpace = ' ' + source + ' ';
+  const withExtraneousSpace = ` ${source} `;
   expect(p(withExtraneousSpace)).toMatchObject(n('block', ...expected));
 };
 

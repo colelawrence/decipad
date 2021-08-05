@@ -33,11 +33,11 @@ it('can sort specificities', () => {
 });
 
 it('can parse a date from an array of elements', () => {
-  expect(arrayToDate(['2020', 1, 10, /*T*/ 11, 30, 13, 123])).toEqual(
+  expect(arrayToDate(['2020', 1, 10, /* T */ 11, 30, 13, 123])).toEqual(
     Date.UTC(2020, 0, 10, 11, 30, 13, 123)
   );
 
-  expect(arrayToDate(['2020', 5, 10, /*T*/ 11, 30, 13, 123])).toEqual(
+  expect(arrayToDate(['2020', 5, 10, /* T */ 11, 30, 13, 123])).toEqual(
     Date.UTC(2020, 4, 10, 11, 30, 13, 123)
   );
 
@@ -137,7 +137,7 @@ it('can round a date into a range', () => {
 
 it('does not round times', () => {
   const date = d('2020-05-05T10:00:00.004Z');
-  expect(!isNaN(date)).toEqual(true);
+  expect(!Number.isNaN(date)).toEqual(true);
   expect(cleanDate(date, 'time')).toEqual([date, date]);
 });
 

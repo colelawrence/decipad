@@ -1,4 +1,4 @@
-'use strict';
+/* eslint-env browser */
 
 import EventEmitter from 'events';
 import { Sync } from './sync';
@@ -17,13 +17,15 @@ export default function createWebsocketImpl<T>(
     readonly CONNECTING = WebSocket.CONNECTING;
     readonly OPEN = WebSocket.OPEN;
 
-    private oncloseCallback?: (event: CloseEvent) => any;
-    private onerrorCallback?: (event: Event) => any;
-    private onmessageCallback?: (event: MessageEvent) => any;
-    private onopenCallback?: (event: Event) => any;
+    private oncloseCallback?: ((event: CloseEvent) => unknown) | null;
+    private onerrorCallback?: ((event: Event) => unknown) | null;
+    private onmessageCallback?: ((event: MessageEvent) => unknown) | null;
+    private onopenCallback?: ((event: Event) => unknown) | null;
     private closed = false;
 
-    constructor(_url: string, _protocols: string | string[] | undefined) {
+    // not "useless" if it makes TypeScript happy
+    // eslint-disable-next-line no-useless-constructor
+    constructor() {
       super();
     }
 
@@ -39,11 +41,11 @@ export default function createWebsocketImpl<T>(
           this.send(data);
         });
       } else {
-        return sync.connection.send(data);
+        sync.connection.send(data);
       }
     }
 
-    set onclose(callback: (event: CloseEvent) => any | null) {
+    set onclose(callback: ((event: CloseEvent) => unknown) | null) {
       if (this.oncloseCallback) {
         sync.off('websocket close', this.oncloseCallback);
       }
@@ -65,16 +67,16 @@ export default function createWebsocketImpl<T>(
         this.onmessageCallback = undefined;
         this.onopenCallback = undefined;
         this.emit('close');
-        callback(event);
+        callback?.(event);
       };
       sync.on('websocket close', this.oncloseCallback);
     }
 
     get onclose() {
-      return this.oncloseCallback!;
+      return this.oncloseCallback ?? null;
     }
 
-    set onerror(callback: (event: Event) => any | null) {
+    set onerror(callback: ((event: Event) => unknown) | null) {
       if (this.onerrorCallback) {
         sync.off('websocket error', this.onerrorCallback);
       }
@@ -87,7 +89,7 @@ export default function createWebsocketImpl<T>(
     }
 
     get onerror() {
-      return this.onerrorCallback!;
+      return this.onerrorCallback ?? null;
     }
 
     set onmessage(callback) {
@@ -97,7 +99,7 @@ export default function createWebsocketImpl<T>(
       this.onmessageCallback = (event: MessageEvent) => {
         const message = JSON.parse(event.data);
         if (message.type) {
-          callback!(event);
+          callback?.(event);
         }
       };
       this.onmessageCallback = callback;
@@ -109,7 +111,7 @@ export default function createWebsocketImpl<T>(
     }
 
     get onmessage() {
-      return this.onmessageCallback!;
+      return this.onmessageCallback ?? null;
     }
 
     set onopen(callback) {
@@ -119,13 +121,13 @@ export default function createWebsocketImpl<T>(
       this.onopenCallback = callback;
       sync.on('websocket open', (event) => {
         if (!this.closed) {
-          this.onopenCallback!(event);
+          this.onopenCallback?.(event);
         }
       });
     }
 
     get onopen() {
-      return this.onopenCallback!;
+      return this.onopenCallback ?? null;
     }
 
     // @ts-expect-error listener definition is complex
@@ -148,9 +150,8 @@ export default function createWebsocketImpl<T>(
       }
       if (sync.connection) {
         return sync.connection.readyState;
-      } else {
-        return WebsocketImpl.CLOSED;
       }
+      return WebsocketImpl.CLOSED;
     }
 
     get binaryType(): BinaryType {

@@ -24,7 +24,7 @@ import paginate from '../utils/paginate';
 export default {
   Query: {
     async getWorkspaceById(
-      _: any,
+      _: unknown,
       { id }: { id: ID },
       context: GraphqlContext
     ): Promise<WorkspaceRecord | undefined> {
@@ -35,7 +35,7 @@ export default {
       return data.workspaces.get({ id });
     },
 
-    async workspaces(_: any, __: any, context: GraphqlContext) {
+    async workspaces(_: unknown, __: unknown, context: GraphqlContext) {
       const user = requireUser(context);
       const data = await tables();
 
@@ -54,6 +54,8 @@ export default {
       const workspaces = [];
 
       for (const permission of permissions) {
+        // TODO should we use Promise.all?
+        // eslint-disable-next-line no-await-in-loop
         const workspace = await data.workspaces.get({
           id: permission.resource_id,
         });
@@ -68,16 +70,16 @@ export default {
 
   Mutation: {
     async createWorkspace(
-      _: any,
+      _: unknown,
       { workspace }: { workspace: WorkspaceInput },
       context: GraphqlContext
     ): Promise<WorkspaceRecord> {
       const user = requireUser(context);
-      return await createWorkspace2(workspace, user);
+      return createWorkspace2(workspace, user);
     },
 
     async updateWorkspace(
-      _: any,
+      _: unknown,
       { id, workspace }: { id: ID; workspace: WorkspaceInput },
       context: GraphqlContext
     ) {
@@ -109,7 +111,11 @@ export default {
       return newWorkspace;
     },
 
-    async removeWorkspace(_: any, { id }: { id: ID }, context: GraphqlContext) {
+    async removeWorkspace(
+      _: unknown,
+      { id }: { id: ID },
+      context: GraphqlContext
+    ) {
       await check(`/workspaces/${id}`, context, 'ADMIN');
 
       const data = await tables();
@@ -123,10 +129,13 @@ export default {
         })
       ).Items;
 
+      // TODO should we use Promise.all?
+      /* eslint-disable no-await-in-loop */
       for (const role of roles) {
         await data.workspaceroles.delete({ id: role.id });
         await removeAllPermissionsFor(`/roles/${role.id}`);
       }
+      /* eslint-enable no-await-in-loop */
 
       await removeAllPermissionsFor(`/workspaces/${id}`);
     },
@@ -134,11 +143,11 @@ export default {
 
   Subscription: {
     workspacesChanged: {
-      async subscribe(_: any, __: any, context: GraphqlContext) {
+      async subscribe(_: unknown, __: unknown, context: GraphqlContext) {
         assert(context.subscriptionId, 'context does not have subscriptionId');
         assert(context.connectionId, 'context does not have connectionId');
         const user = requireUser(context);
-        return await subscribe({
+        return subscribe({
           subscriptionId: context.subscriptionId,
           connectionId: context.connectionId,
           user,
@@ -149,7 +158,7 @@ export default {
   },
 
   Workspace: {
-    async roles(workspace: Workspace, _: any, context: GraphqlContext) {
+    async roles(workspace: Workspace, _: unknown, context: GraphqlContext) {
       const user = requireUser(context);
       const data = await tables();
       let roles;
@@ -174,6 +183,8 @@ export default {
         });
 
         for (const roleResource of roleResources) {
+          // TODO should we use Promise.all?
+          // eslint-disable-next-line no-await-in-loop
           const role = await data.workspaceroles.get({
             id: roleResource.id,
           });
@@ -207,7 +218,7 @@ export default {
 
       const data = await tables();
 
-      return await paginate<PermissionRecord, PadRecord>(
+      return paginate<PermissionRecord, PadRecord>(
         data.permissions,
         query,
         page,

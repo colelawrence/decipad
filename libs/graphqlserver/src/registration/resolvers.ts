@@ -7,7 +7,7 @@ import timestamp from '../utils/timestamp';
 export default {
   Mutation: {
     async createUserViaMagicLink(
-      _: any,
+      _: unknown,
       { email }: { email: string }
     ): Promise<User> {
       const data = await tables();
@@ -38,7 +38,7 @@ export default {
     },
 
     async resendRegistrationMagicLinkEmail(
-      _: any,
+      _: unknown,
       { email }: { email: string }
     ) {
       const data = await tables();

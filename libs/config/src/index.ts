@@ -1,6 +1,21 @@
 import { fail } from 'assert';
 import { defaultEnv, SupportedEnvKey } from './default';
 
+function env(name: SupportedEnvKey): string {
+  let value = process.env[name];
+  if (value == null) {
+    const defaultValue = defaultEnv(name);
+    if (defaultValue !== undefined) {
+      value = defaultValue;
+    } else {
+      fail(`${name} env var must be defined`);
+    }
+  }
+  return value;
+}
+
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+
 export function s3() {
   return {
     endpoint: env('DECI_S3_ENDPOINT'),
@@ -68,17 +83,4 @@ export function email() {
     },
     senderEmailAddress: env('DECI_FROM_EMAIL_ADDRESS'),
   };
-}
-
-function env(name: SupportedEnvKey): string {
-  let value = process.env[name];
-  if (value == null) {
-    const defaultValue = defaultEnv(name);
-    if (defaultValue !== undefined) {
-      value = defaultValue;
-    } else {
-      fail(`${name} env var must be defined`);
-    }
-  }
-  return value;
 }

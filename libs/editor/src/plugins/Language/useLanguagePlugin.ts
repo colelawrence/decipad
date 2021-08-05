@@ -97,7 +97,6 @@ export const useLanguagePlugin = (): UseLanguagePluginRet => {
 function getCodeFromBlock(block: SlateNode): string {
   if (block.text) {
     return block.text;
-  } else {
-    return (block.children || []).map(getCodeFromBlock).join('\n');
   }
+  return (block.children || []).map(getCodeFromBlock).join('\n');
 }

@@ -10,6 +10,9 @@ export const renderBubble =
 
     const [parentNode] = Editor.parent(editor, path);
 
+    // TODO fix node types
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+
     if (!parentNode || (parentNode as any).type !== ELEMENT_CODE_LINE) {
       return ranges;
     }

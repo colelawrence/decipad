@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
 import { parse as parseCookie } from 'simple-cookie';
 import NextAuthJWT from 'next-auth/jwt';
@@ -77,7 +78,7 @@ function getSessionToken(event: Request): SessionTokenResult {
         .map((t) => t.trim())
         .filter((t) => t !== 'graphql-transport-ws');
       if (protocolParts.length === 1) {
-        token = protocolParts[0];
+        [token] = protocolParts;
         gotFromSecProtocolHeader = true;
       }
     }
@@ -95,13 +96,13 @@ function parseCookies(cookies: string[] | string): ParsedCookies {
   if (!Array.isArray(cookies)) {
     cookies = [cookies];
   }
-  return cookies.reduce((cookies: ParsedCookies, cookie: string) => {
+  return cookies.reduce((accCookies: ParsedCookies, cookie: string) => {
     const { name, value } = parseCookie(cookie) as {
       name: string;
       value: string;
     };
-    cookies[name] = value;
-    return cookies;
+    accCookies[name] = value;
+    return accCookies;
   }, {} as ParsedCookies);
 }
 

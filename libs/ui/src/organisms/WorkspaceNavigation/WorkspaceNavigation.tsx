@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import { css } from '@emotion/react';
 import { Divider, NavigationItem } from '../../atoms';
 import { Folder, Globe, Settings } from '../../icons';
@@ -23,7 +24,7 @@ interface WorkspaceNavigationProps {
 export const WorkspaceNavigation = ({
   allNotebooksHref,
   preferencesHref,
-}: WorkspaceNavigationProps) => {
+}: WorkspaceNavigationProps): ReturnType<FC> => {
   return (
     <nav css={styles}>
       <NavigationList>

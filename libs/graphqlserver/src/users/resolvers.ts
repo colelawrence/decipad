@@ -5,14 +5,14 @@ import { requireUser } from '../authorization';
 
 export default {
   Query: {
-    self(_: any, _args: any, context: GraphqlContext) {
+    self(_: unknown, _args: unknown, context: GraphqlContext) {
       return context.user;
     },
   },
 
   Mutation: {
     async updateSelf(
-      _: any,
+      _: unknown,
       { props }: { props: Partial<UserInput> },
       context: GraphqlContext
     ): Promise<User> {

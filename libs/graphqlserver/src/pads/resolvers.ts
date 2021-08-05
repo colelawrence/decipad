@@ -37,7 +37,7 @@ const { inviteExpirationSeconds } = authConfig();
 const resolvers = {
   Query: {
     async getPadById(
-      _: any,
+      _: unknown,
       { id }: { id: ID },
       context: GraphqlContext
     ): Promise<PadRecord | undefined> {
@@ -45,11 +45,11 @@ const resolvers = {
       await check(resource, context, 'READ');
 
       const data = await tables();
-      return await data.pads.get({ id });
+      return data.pads.get({ id });
     },
 
     async pads(
-      _: any,
+      _: unknown,
       { page, workspaceId }: { page: PageInput; workspaceId: ID },
       context: GraphqlContext
     ) {
@@ -68,7 +68,7 @@ const resolvers = {
         },
       };
 
-      return await paginate<PermissionRecord, PadRecord>(
+      return paginate<PermissionRecord, PadRecord>(
         data.permissions,
         query,
         page,
@@ -81,17 +81,17 @@ const resolvers = {
 
   Mutation: {
     async createPad(
-      _: any,
+      _: unknown,
       { workspaceId, pad }: { workspaceId: ID; pad: PadInput },
       context: GraphqlContext
     ): Promise<Pad> {
       const workspaceResource = `/workspaces/${workspaceId}`;
       const user = await check(workspaceResource, context, 'WRITE');
-      return await createPad2(workspaceId, pad, user);
+      return createPad2(workspaceId, pad, user);
     },
 
     async duplicatePad(
-      _: any,
+      _: unknown,
       { id }: { id: ID },
       context: GraphqlContext
     ): Promise<Pad> {
@@ -105,7 +105,7 @@ const resolvers = {
         throw new UserInputError('No such pad');
       }
 
-      previousPad.name = 'Copy of ' + previousPad.name;
+      previousPad.name = `Copy of ${previousPad.name}`;
 
       const workspaceResource = `/workspaces/${previousPad.workspace_id}`;
       const user = await check(workspaceResource, context, 'WRITE');
@@ -121,7 +121,7 @@ const resolvers = {
     },
 
     async updatePad(
-      _: any,
+      _: unknown,
       { id, pad }: { id: ID; pad: PadInput },
       context: GraphqlContext
     ): Promise<Pad> {
@@ -149,7 +149,7 @@ const resolvers = {
       return changedPad;
     },
 
-    async removePad(_: any, { id }: { id: ID }, context: GraphqlContext) {
+    async removePad(_: unknown, { id }: { id: ID }, context: GraphqlContext) {
       const resource = `/pads/${id}`;
       await check(resource, context, 'ADMIN');
 
@@ -159,7 +159,7 @@ const resolvers = {
     },
 
     async sharePadWithRole(
-      _: any,
+      _: unknown,
       {
         padId,
         roleId,
@@ -193,7 +193,7 @@ const resolvers = {
     },
 
     async unsharePadWithRole(
-      _: any,
+      _: unknown,
       { padId, roleId }: { padId: ID; roleId: ID },
       context: GraphqlContext
     ) {
@@ -207,7 +207,7 @@ const resolvers = {
     },
 
     async sharePadWithUser(
-      _: any,
+      _: unknown,
       {
         padId,
         userId,
@@ -241,7 +241,7 @@ const resolvers = {
     },
 
     async unsharePadWithUser(
-      _: any,
+      _: unknown,
       { padId, userId }: { padId: ID; userId: ID },
       context: GraphqlContext
     ) {
@@ -254,7 +254,7 @@ const resolvers = {
     },
 
     async sharePadWithEmail(
-      _: any,
+      _: unknown,
       {
         padId,
         email,
@@ -279,7 +279,7 @@ const resolvers = {
       const emailKeyId = `email:${email}`;
       const emailKey = await data.userkeys.get({ id: emailKeyId });
       if (emailKey) {
-        return await resolvers.Mutation.sharePadWithUser(
+        await resolvers.Mutation.sharePadWithUser(
           _,
           {
             padId,
@@ -289,11 +289,12 @@ const resolvers = {
           },
           context
         );
+        return;
       }
 
       const newUser = await createUser({
         name: email,
-        email: email,
+        email,
       });
 
       const newInvite = {
@@ -321,7 +322,7 @@ const resolvers = {
           from: actingUser,
           to: newUser,
           resource,
-          inviteAcceptLink: inviteAcceptLink,
+          inviteAcceptLink,
           resourceName: pad.name,
         },
       });
@@ -331,16 +332,16 @@ const resolvers = {
   Subscription: {
     padsChanged: {
       async subscribe(
-        _: any,
+        _: unknown,
         { workspaceId }: { workspaceId: ID },
         context: GraphqlContext
       ) {
         const user = requireUser(context);
         assert(context.subscriptionId, 'no subscriptionId in context');
         assert(context.connectionId, 'no connectionId in context');
-        return await subscribe({
-          subscriptionId: context.subscriptionId!,
-          connectionId: context.connectionId!,
+        return subscribe({
+          subscriptionId: context.subscriptionId,
+          connectionId: context.connectionId,
           user,
           type: 'padsChanged',
           filter: JSON.stringify({ workspace_id: workspaceId }),
@@ -387,26 +388,25 @@ const resolvers = {
       };
     },
 
-    async workspace(
-      pad: PadRecord,
-      _: any
-    ): Promise<WorkspaceRecord | undefined> {
+    async workspace(pad: PadRecord): Promise<WorkspaceRecord | undefined> {
       const data = await tables();
-      return await data.workspaces.get({ id: pad.workspace_id });
+      return data.workspaces.get({ id: pad.workspace_id });
     },
   },
+
+  /* eslint-disable camelcase */
 
   RoleAccess: {
     async role({ role_id }: { role_id: ID }): Promise<RoleRecord | undefined> {
       const data = await tables();
-      return await data.workspaceroles.get({ id: role_id });
+      return data.workspaceroles.get({ id: role_id });
     },
   },
 
   UserAccess: {
     async user({ user_id }: { user_id: ID }): Promise<User | undefined> {
       const data = await tables();
-      return await data.users.get({ id: user_id });
+      return data.users.get({ id: user_id });
     },
   },
 };

@@ -29,6 +29,7 @@ export default function adaptReqRes(handle: NextApiHandler) {
       const headers: Record<string, string> = {};
       const cookies: string[] = [];
 
+      // eslint-disable-next-line prefer-destructuring
       let body: string | ParsedUrlQuery | undefined = req.body;
 
       if (req.body && req.isBase64Encoded) {
@@ -97,8 +98,8 @@ export default function adaptReqRes(handle: NextApiHandler) {
           statusCode = code;
           return newRes;
         },
-        redirect: (url: string) => {
-          headers['Location'] = url;
+        redirect: (redirectUrl: string) => {
+          headers.Location = redirectUrl;
           statusCode = 302;
           reply();
         },
@@ -106,10 +107,10 @@ export default function adaptReqRes(handle: NextApiHandler) {
       handle(newReq as unknown as NextApiRequest, newRes as NextApiResponse);
 
       function reply(
-        body: string | Record<string, any> | undefined = undefined
+        replyBody: string | Record<string, any> | undefined = undefined
       ) {
-        if (typeof body === 'object') {
-          body = JSON.stringify(body);
+        if (typeof replyBody === 'object') {
+          replyBody = JSON.stringify(replyBody);
           if (!headers['content-type']) {
             headers['content-type'] = 'application/json; charset=utf-8';
           }
@@ -119,7 +120,7 @@ export default function adaptReqRes(handle: NextApiHandler) {
           headers,
           multiValueHeaders:
             cookies.length === 0 ? {} : { 'Set-Cookie': cookies },
-          body,
+          body: replyBody,
         };
 
         resolve(response);
@@ -129,13 +130,13 @@ export default function adaptReqRes(handle: NextApiHandler) {
 }
 
 function parseCookies(cookies: string[] = []): Record<string, string> {
-  return cookies.reduce((cookies: Record<string, string>, cookie) => {
+  return cookies.reduce((accCookies: Record<string, string>, cookie) => {
     const { name, value } = parseCookie(cookie) as {
       name: string;
       value: string;
     };
-    cookies[name] = decodeURIComponent(value);
-    return cookies;
+    accCookies[name] = decodeURIComponent(value);
+    return accCookies;
   }, {});
 }
 

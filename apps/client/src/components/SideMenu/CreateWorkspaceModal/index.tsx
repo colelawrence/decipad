@@ -15,10 +15,10 @@ import {
   CreateWorkspaceVariables,
   CREATE_WORKSPACE,
 } from '@decipad/queries';
-import React, { useRef } from 'react';
+import React, { FC, useRef } from 'react';
 import { Route, useHistory, useRouteMatch } from 'react-router-dom';
 
-export const CreateWorkspaceModal = () => {
+export const CreateWorkspaceModal = (): ReturnType<FC> => {
   const { path, url } = useRouteMatch();
 
   const history = useHistory();

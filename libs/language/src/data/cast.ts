@@ -25,11 +25,11 @@ const castDate = (input: string) => {
     input = input.slice('date('.length, -1);
   }
 
-  let n = Date.parse(input + 'Z');
-  if (isNaN(n)) {
+  let n = Date.parse(`${input}Z`);
+  if (Number.isNaN(n)) {
     n = Date.parse(input);
   }
-  if (!isNaN(n)) {
+  if (!Number.isNaN(n)) {
     return new Date(n);
   }
 

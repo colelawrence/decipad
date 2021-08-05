@@ -33,7 +33,7 @@ export const handler = wrapHandler(async function ws(
 
   // this is an internal message
   const [op, args] = message;
-  return await handleCollab(connId, op, args);
+  return handleCollab(connId, op, args);
 });
 
 async function handleGraphql(
@@ -73,8 +73,8 @@ async function handleGraphql(
     function makeWebsocket() {
       return {
         protocol: 'graphql-transport-ws',
-        async send(message: string) {
-          const m = JSON.parse(message);
+        async send(messageToSend: string) {
+          const m = JSON.parse(messageToSend);
           if (m.type === 'complete') {
             // ignore complete messages, as pub-sub is longer-lived
             //   than the current process.
@@ -152,6 +152,7 @@ async function handleGraphql(
 }
 
 function createContext(user: UserWithSecret, connectionId: string) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { secret: _, ...userWithoutSecret } = user;
   return (_conn: any, message: { id: string }) => {
     return {
@@ -185,42 +186,40 @@ async function handleCollab(
 
   switch (op) {
     case 'subscribe':
-      {
-        await data.collabs.put({
-          id: nanoid(),
-          room: topic,
-          user_id: connection.user_id,
-          conn: connId,
-        });
+      await data.collabs.put({
+        id: nanoid(),
+        room: topic,
+        user_id: connection.user_id,
+        conn: connId,
+      });
 
-        await arc.ws.send({
-          id: connId,
-          payload: { o: 's', t: topic },
-        });
-      }
+      await arc.ws.send({
+        id: connId,
+        payload: { o: 's', t: topic },
+      });
+
       break;
 
     case 'unsubscribe':
-      {
-        const collabs = await data.collabs.query({
-          IndexName: 'conn-index',
-          KeyConditionExpression: 'conn = :conn',
-          ExpressionAttributeValues: {
-            ':conn': connId,
-          },
-        });
+      const collabs = await data.collabs.query({
+        IndexName: 'conn-index',
+        KeyConditionExpression: 'conn = :conn',
+        ExpressionAttributeValues: {
+          ':conn': connId,
+        },
+      });
 
-        for (const collab of collabs.Items) {
-          if (collab.room === topic) {
-            await data.collabs.delete({ id: collab.id });
-          }
+      for (const collab of collabs.Items) {
+        if (collab.room === topic) {
+          await data.collabs.delete({ id: collab.id });
         }
-
-        await arc.ws.send({
-          id: connId,
-          payload: { o: 'u', t: topic },
-        });
       }
+
+      await arc.ws.send({
+        id: connId,
+        payload: { o: 'u', t: topic },
+      });
+
       break;
 
     default:

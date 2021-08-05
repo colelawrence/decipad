@@ -22,7 +22,7 @@ export const wrappedParse = ({
       block: {
         ...parsed.solutions[0],
         // AST.Block doesn't *really* have an ID :(
-        id: id,
+        id,
       },
     };
   } catch (error) {

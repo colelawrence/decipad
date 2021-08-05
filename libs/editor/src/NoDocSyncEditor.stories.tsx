@@ -1,3 +1,4 @@
+import { Meta, Story } from '@storybook/react';
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
@@ -12,9 +13,9 @@ import { NoDocSyncEditor } from './NoDocSyncEditor.component';
 export default {
   title: 'Editor/Examples',
   component: NoDocSyncEditor,
-};
+} as Meta;
 
-export const Normal = () => (
+export const Normal: Story = () => (
   <div style={{ maxWidth: '1140px', margin: '25px auto' }}>
     <NoDocSyncEditor
       initialValue={[

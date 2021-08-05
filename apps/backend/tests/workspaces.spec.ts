@@ -1,5 +1,8 @@
 /* eslint-env jest */
 
+// existing tests very granular
+/* eslint-disable jest/expect-expect */
+
 import { Workspace, Role, RoleInvitation } from '@decipad/backendtypes';
 import test from './sandbox';
 
@@ -214,7 +217,7 @@ test('workspaces', ({
   it('admin user has user in role', async () => {
     const client = withAuth(await auth());
 
-    const workspaces = (
+    const { workspaces } = (
       await client.query({
         query: gql`
           query {
@@ -232,7 +235,7 @@ test('workspaces', ({
           }
         `,
       })
-    ).data.workspaces;
+    ).data;
 
     expect(workspaces).toMatchObject([
       {
@@ -264,7 +267,7 @@ test('workspaces', ({
   it('invited user has self in role', async () => {
     const client = withAuth(await auth('test user id 2'));
 
-    const workspaces = (
+    const { workspaces } = (
       await client.query({
         query: gql`
           query {
@@ -282,7 +285,7 @@ test('workspaces', ({
           }
         `,
       })
-    ).data.workspaces;
+    ).data;
 
     expect(workspaces).toMatchObject([
       {
@@ -337,10 +340,10 @@ test('workspaces', ({
     });
   });
 
-  it('user no longer has access to workspace', async () => {
+  it('user no longer has access to workspace after removed by admin', async () => {
     const client = withAuth(await auth('test user id 2'));
 
-    const workspaces = (
+    const { workspaces } = (
       await client.query({
         query: gql`
           query {
@@ -351,7 +354,7 @@ test('workspaces', ({
           }
         `,
       })
-    ).data.workspaces;
+    ).data;
 
     expect(workspaces).toMatchObject([]);
   });
@@ -407,10 +410,10 @@ test('workspaces', ({
     });
   });
 
-  it('user no longer has access to workspace', async () => {
+  it('user no longer has access to workspace after removing themselves', async () => {
     const client = withAuth(await auth('test user id 2'));
 
-    const workspaces = (
+    const { workspaces } = (
       await client.query({
         query: gql`
           query {
@@ -421,7 +424,7 @@ test('workspaces', ({
           }
         `,
       })
-    ).data.workspaces;
+    ).data;
 
     expect(workspaces).toMatchObject([]);
   });
@@ -441,7 +444,7 @@ test('workspaces', ({
   it('sole admin cannot remove themselves from sole admin role', async () => {
     const client = withAuth(await auth());
 
-    const workspaces = (
+    const { workspaces } = (
       await client.query({
         query: gql`
           query {
@@ -456,20 +459,20 @@ test('workspaces', ({
           }
         `,
       })
-    ).data.workspaces;
+    ).data;
 
     expect(workspaces).toHaveLength(1);
-    const workspace = workspaces[0];
-    const roles = workspace.roles;
+    const soleWorkspace = workspaces[0];
+    const { roles } = soleWorkspace;
     expect(roles).toHaveLength(1);
-    const role = roles[0];
-    expect(role.name).toBe('Administrator');
+    const soleRole = roles[0];
+    expect(soleRole.name).toBe('Administrator');
 
     await expect(
       client.mutate({
         mutation: gql`
           mutation {
-            removeSelfFromRole(roleId: "${role.id}")
+            removeSelfFromRole(roleId: "${soleRole.id}")
           }
         `,
       })

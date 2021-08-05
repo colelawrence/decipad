@@ -1,7 +1,7 @@
 import { ResultsContextProvider } from '@decipad/ui';
 import { Plate, useStoreEditorRef } from '@udecode/plate';
 import { nanoid } from 'nanoid';
-import { useMemo, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DropFile } from './components/DropFile';
@@ -33,7 +33,7 @@ const SlateEditor = ({ padId, autoFocus }: EditorProps) => {
 
   const docSyncPlugin = useDocSyncPlugin({ padId, editor });
 
-  const { plugin: notebookTitlePlugin } = useNotebookTitlePlugin({ padId });
+  const notebookTitlePlugin = useNotebookTitlePlugin({ padId });
 
   const editorPlugins = useMemo(
     () => [
@@ -64,7 +64,7 @@ const SlateEditor = ({ padId, autoFocus }: EditorProps) => {
   );
 };
 
-export const Editor = (props: EditorProps) => {
+export const Editor = (props: EditorProps): ReturnType<FC> => {
   return (
     <DndProvider backend={HTML5Backend}>
       <SlateEditor key={props.padId} {...props} />

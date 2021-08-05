@@ -17,10 +17,108 @@ import timestamp from '../utils/timestamp';
 const { urlBase } = appConfig();
 const { inviteExpirationSeconds } = authConfig();
 
+async function checkIfCanRemoveUserFromRole({
+  role,
+  userId,
+}: {
+  role: RoleRecord;
+  userId: ID;
+}) {
+  if (
+    !(await isAuthorized(
+      `/roles/${role.id}`,
+      { user: { id: userId } },
+      'ADMIN'
+    ))
+  ) {
+    return;
+  }
+
+  // User has the ADMIN role. Let's see if, by removing them, we still have
+  // another user that is also admin.
+
+  const data = await tables();
+
+  const otherRoles = (
+    await data.workspaceroles.query({
+      IndexName: 'byWorkspaceId',
+      KeyConditionExpression: 'workspace_id = :workspace_id',
+      ExpressionAttributeValues: {
+        ':workspace_id': role.workspace_id,
+      },
+    })
+  ).Items;
+
+  let hasAnotherAdmin = false;
+  for (const otherRole of otherRoles) {
+    const roleResource = `/roles/${otherRole.id}`;
+    const query = {
+      IndexName: 'byResource',
+      KeyConditionExpression: 'resource_uri = :resource_uri',
+      ExpressionAttributeValues: {
+        ':resource_uri': roleResource,
+      },
+    };
+
+    // TODO should we parallelize?
+    // eslint-disable-next-line no-await-in-loop
+    for await (const permission of allPages<PermissionRecord>(
+      data.permissions,
+      query
+    )) {
+      if (
+        permission &&
+        permission.type === 'ADMIN' &&
+        permission.user_id !== userId
+      ) {
+        hasAnotherAdmin = true;
+        break;
+      }
+    }
+  }
+
+  if (!hasAnotherAdmin) {
+    throw new ForbiddenError('Cannot remove sole admin');
+  }
+}
+
+async function removeUserFromRole({
+  role,
+  userId,
+}: {
+  role: RoleRecord;
+  userId: ID;
+}) {
+  const data = await tables();
+
+  const permissions = (
+    await data.permissions.query({
+      IndexName: 'byUserAndRole',
+      KeyConditionExpression: 'role_id = :role_id and user_id = :user_id',
+      ExpressionAttributeValues: {
+        ':role_id': role.id,
+        ':user_id': userId,
+      },
+    })
+  ).Items;
+
+  if (permissions.length < 1) {
+    throw new UserInputError('user not in role');
+  }
+
+  await checkIfCanRemoveUserFromRole({ role, userId });
+
+  for (const permission of permissions) {
+    // TODO parallelize?
+    // eslint-disable-next-line no-await-in-loop
+    await data.permissions.delete({ id: permission.id });
+  }
+}
+
 export default {
   Mutation: {
     async createRole(
-      _: any,
+      _: unknown,
       { role }: { role: RoleInput },
       context: GraphqlContext
     ): Promise<RoleRecord> {
@@ -39,7 +137,7 @@ export default {
     },
 
     async removeRole(
-      _: any,
+      _: unknown,
       { roleId }: { roleId: ID },
       context: GraphqlContext
     ) {
@@ -81,7 +179,7 @@ export default {
     },
 
     async inviteUserToRole(
-      _: any,
+      _: unknown,
       {
         roleId,
         userId,
@@ -148,7 +246,7 @@ export default {
           from: user,
           to: invitedUser,
           workspace,
-          inviteAcceptLink: inviteAcceptLink,
+          inviteAcceptLink,
         },
       });
 
@@ -156,7 +254,7 @@ export default {
     },
 
     async removeUserFromRole(
-      _: any,
+      _: unknown,
       { roleId, userId }: { roleId: ID; userId: ID },
       context: GraphqlContext
     ) {
@@ -181,7 +279,7 @@ export default {
     },
 
     async removeSelfFromRole(
-      _: any,
+      _: unknown,
       { roleId }: { roleId: ID },
       context: GraphqlContext
     ) {
@@ -201,14 +299,14 @@ export default {
   },
 
   Role: {
-    async workspace(role: RoleRecord, _: any, context: GraphqlContext) {
+    async workspace(role: RoleRecord, _: unknown, context: GraphqlContext) {
       const workspaceResource = `/workspaces/${role.workspace_id}`;
       await check(workspaceResource, context, 'READ');
 
       const data = await tables();
-      return await data.workspaces.get({ id: role.workspace_id });
+      return data.workspaces.get({ id: role.workspace_id });
     },
-    async users(role: RoleRecord, _: any, context: GraphqlContext) {
+    async users(role: RoleRecord, _: unknown, context: GraphqlContext) {
       const roleResource = `/roles/${role.id}`;
       const workspaceResource = `/workspaces/${role.workspace_id}`;
       if (
@@ -230,6 +328,8 @@ export default {
 
       const users = [];
       for (const permission of permissions) {
+        // TODO parallelize?
+        // eslint-disable-next-line no-await-in-loop
         const user = await data.users.get({ id: permission.user_id });
         if (user) {
           users.push(user);
@@ -240,97 +340,3 @@ export default {
     },
   },
 };
-
-async function removeUserFromRole({
-  role,
-  userId,
-}: {
-  role: RoleRecord;
-  userId: ID;
-}) {
-  const data = await tables();
-
-  const permissions = (
-    await data.permissions.query({
-      IndexName: 'byUserAndRole',
-      KeyConditionExpression: 'role_id = :role_id and user_id = :user_id',
-      ExpressionAttributeValues: {
-        ':role_id': role.id,
-        ':user_id': userId,
-      },
-    })
-  ).Items;
-
-  if (permissions.length < 1) {
-    throw new UserInputError('user not in role');
-  }
-
-  await checkIfCanRemoveUserFromRole({ role, userId });
-
-  for (const permission of permissions) {
-    await data.permissions.delete({ id: permission.id });
-  }
-}
-
-async function checkIfCanRemoveUserFromRole({
-  role,
-  userId,
-}: {
-  role: RoleRecord;
-  userId: ID;
-}) {
-  if (
-    !(await isAuthorized(
-      `/roles/${role.id}`,
-      { user: { id: userId } },
-      'ADMIN'
-    ))
-  ) {
-    return;
-  }
-
-  // User has the ADMIN role. Let's see if, by removing them, we still have
-  // another user that is also admin.
-
-  const data = await tables();
-
-  const roles = (
-    await data.workspaceroles.query({
-      IndexName: 'byWorkspaceId',
-      KeyConditionExpression: 'workspace_id = :workspace_id',
-      ExpressionAttributeValues: {
-        ':workspace_id': role.workspace_id,
-      },
-    })
-  ).Items;
-
-  let hasAnotherAdmin = false;
-  for (const role of roles) {
-    const roleResource = `/roles/${role.id}`;
-    const query = {
-      IndexName: 'byResource',
-      KeyConditionExpression: 'resource_uri = :resource_uri',
-      ExpressionAttributeValues: {
-        ':resource_uri': roleResource,
-      },
-    };
-
-    for await (const permission of allPages<PermissionRecord>(
-      data.permissions,
-      query
-    )) {
-      if (
-        permission &&
-        permission.type === 'ADMIN' &&
-        permission.user_id !== userId
-      ) {
-        hasAnotherAdmin = true;
-        break;
-      }
-    }
-  }
-
-  if (!hasAnotherAdmin) {
-    throw new ForbiddenError('Cannot remove sole admin');
-  }
-}

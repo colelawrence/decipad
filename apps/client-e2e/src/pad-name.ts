@@ -32,7 +32,7 @@ describe('Pad name', () => {
     await waitForEditorToLoad();
     const padName = await getPadName();
     expect(padName).toBe('hello world!');
-    for (const _char of padName) {
+    for (let i = 0; i < padName.length; i += 1) {
       await page.keyboard.press('ArrowRight');
     }
     await page.keyboard.press('Backspace');

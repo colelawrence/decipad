@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react';
+import { Meta, Story } from '@storybook/react';
 import { Logout } from './Logout';
 
 export default {
@@ -6,4 +6,4 @@ export default {
   component: Logout,
 } as Meta;
 
-export const Normal = () => <Logout />;
+export const Normal: Story = () => <Logout />;

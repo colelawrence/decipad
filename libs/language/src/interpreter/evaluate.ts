@@ -21,6 +21,9 @@ import { evaluateData } from './data';
 import { resolve as resolveData } from '../data';
 
 // Gets a single value from an expanded AST.
+
+// exhaustive switch
+// eslint-disable-next-line consistent-return
 export async function evaluate(
   realm: Realm,
   node: AST.Statement
@@ -35,7 +38,7 @@ export async function evaluate(
         }
         default: {
           throw new Error(
-            'not implemented: literals with type ' + node.args[0]
+            `not implemented: literals with type ${node.args[0]}`
           );
         }
       }
@@ -64,7 +67,7 @@ export async function evaluate(
       } else if (realm.functions.has(funcName)) {
         const customFunc = getDefined(realm.functions.get(funcName));
 
-        return await realm.stack.withPush(async () => {
+        return realm.stack.withPush(async () => {
           for (let i = 0; i < args.length; i++) {
             const argName = getIdentifierString(customFunc.args[1].args[i]);
 
@@ -74,6 +77,8 @@ export async function evaluate(
           const funcBody: AST.Block = customFunc.args[2];
 
           for (let i = 0; i < funcBody.args.length; i++) {
+            // TODO should this be parallel?
+            // eslint-disable-next-line no-await-in-loop
             const value = await evaluate(realm, funcBody.args[i]);
 
             if (i === funcBody.args.length - 1) {
@@ -144,12 +149,12 @@ export async function evaluate(
       return Scalar.fromValue(NaN);
     }
     case 'given': {
-      return await evaluateGiven(realm, node);
+      return evaluateGiven(realm, node);
     }
     case 'imported-data': {
       // TODO
       const [url, contentType] = node.args;
-      return await evaluateData(
+      return evaluateData(
         realm,
         await resolveData({ url, contentType, fetch: realm.fetch })
       );
@@ -167,7 +172,7 @@ const desiredTargetsToStatements = (
     if (Array.isArray(target)) {
       return getDefined(
         program[target[0]]?.args[target[1]],
-        'Could not find target ' + JSON.stringify(target)
+        `Could not find target ${JSON.stringify(target)}`
       );
     } else if (typeof target === 'number') {
       const targetBlock = program[target].args;
@@ -188,7 +193,7 @@ const desiredTargetsToStatements = (
         }
       }
 
-      throw new Error('Did not find requested variable ' + target);
+      throw new Error(`Did not find requested variable ${target}`);
     }
   });
 };
@@ -211,6 +216,8 @@ export async function evaluateTargets(
 
   for (const block of program) {
     for (const statement of block.args) {
+      // TODO should this be parallel?
+      // eslint-disable-next-line no-await-in-loop
       const value: Value = await evaluate(realm, statement);
 
       if (targetSet.has(statement)) {

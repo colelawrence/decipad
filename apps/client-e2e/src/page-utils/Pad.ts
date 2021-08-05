@@ -9,6 +9,10 @@ interface PadElement {
 }
 type PadContent = PadElement[];
 
+export async function waitForEditorToLoad() {
+  await page.waitForSelector('h1[data-slate-node="element"]');
+}
+
 export async function setUp() {
   await withNewUser();
   await navigateToWorkspacePage();
@@ -19,10 +23,6 @@ export async function setUp() {
   await waitForEditorToLoad();
 }
 
-export async function waitForEditorToLoad() {
-  await page.waitForSelector('h1[data-slate-node="element"]');
-}
-
 export async function getPadName() {
   const $name = await page.$('h1[data-slate-node="element"]');
   expect($name).not.toBeNull();
@@ -30,7 +30,7 @@ export async function getPadName() {
 }
 
 export async function getPadRoot(): Promise<ElementHandle | null> {
-  return await page.$('[data-slate-node="value"]');
+  return page.$('[data-slate-node="value"]');
 }
 
 export async function getPadContent() {

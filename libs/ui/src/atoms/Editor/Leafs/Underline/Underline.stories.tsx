@@ -1,3 +1,4 @@
+import { Meta, Story } from '@storybook/react';
 import { UnderlineLeaf } from './Underline';
 
 export default {
@@ -6,9 +7,9 @@ export default {
   args: {
     text: 'Underlined text',
   },
-};
+} as Meta;
 
-export const Underline = (args: { text: string }) => (
+export const Underline: Story<{ text: string }> = (args) => (
   <UnderlineLeaf
     leaf={{ attributes: {}, text: '' }}
     element={{ children: [{ text: '' }] }}

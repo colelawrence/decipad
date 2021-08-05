@@ -42,13 +42,14 @@ export async function getCreateAttachmentForm(
         },
         (err, data) => {
           if (err) {
-            return reject(err);
+            reject(err);
+          } else {
+            resolve({
+              ...data,
+              fileName: key,
+              fileType,
+            });
           }
-          resolve({
-            ...data,
-            fileName: key,
-            fileType,
-          });
         }
       );
     } catch (err) {
@@ -70,11 +71,13 @@ export async function getSize(fileName: string): Promise<number> {
         },
         (err, data) => {
           if (err) {
-            return reject(err);
+            reject(err);
+            return;
           }
           if (!data) {
             throw new Error(`Attachment file with name ${fileName} not found`);
           }
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           resolve(data.ContentLength!);
         }
       );
@@ -88,7 +91,7 @@ export async function getURL(fileName: string): Promise<string> {
   if (fileName.startsWith('/')) {
     fileName = fileName.substring(1);
   }
-  return await s3.getSignedUrlPromise('getObject', {
+  return s3.getSignedUrlPromise('getObject', {
     Bucket,
     Key: fileName,
     Expires: maxAttachmentDownloadTokenExpirationSeconds,

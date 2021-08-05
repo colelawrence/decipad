@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react';
+import { Meta, Story } from '@storybook/react';
 import { IconButton } from './IconButton';
 import { cssVar } from '../../primitives';
 
@@ -7,7 +7,7 @@ export default {
   component: IconButton,
 } as Meta;
 
-export const RoundedSquare = () => (
+export const RoundedSquare: Story = () => (
   <IconButton>
     <svg>
       <circle cx="50%" cy="50%" r="50%" fill={cssVar('currentTextColor')} />

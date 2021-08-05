@@ -134,7 +134,7 @@ describe('basic code', () => {
     });
   });
 
-  it('Can run a function with two columns as arguments', async () => {
+  it('Can run a function with a column as only the first argument', async () => {
     const results = await runCode(`
       function multiply(A B) => A * B
       multiply([ 1, 2, 3 ], 2)

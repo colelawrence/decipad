@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { SyncStatus } from '../types';
 import { ReplicationStatus } from '@decipad/interfaces';
+import { SyncStatus } from '../types';
 
 const ignoredSyncStatuses = [
   SyncStatus.Errored,

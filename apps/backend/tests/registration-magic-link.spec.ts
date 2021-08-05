@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-env jest */
 
 import waitForExpect from 'wait-for-expect';
@@ -68,10 +69,12 @@ test('registration via magic link', ({
       ).Items as UserKeyValidation[];
 
       expect(userKeyValidations).toHaveLength(1);
-      userKeyValidation = userKeyValidations[0];
+      [userKeyValidation] = userKeyValidations;
     });
   });
 
+  // TODO merge WHEN test with THEN test?
+  // eslint-disable-next-line jest/expect-expect
   it('can ask to resend link', async () => {
     const client = withoutAuth();
     await client.mutate({
@@ -106,7 +109,7 @@ test('registration via magic link', ({
 
   it('lets user update their name', async () => {
     const client = withAuth({ token });
-    const self = (
+    const { self } = (
       await client.query({
         query: gql`
           query {
@@ -117,7 +120,7 @@ test('registration via magic link', ({
           }
         `,
       })
-    ).data.self;
+    ).data;
 
     expect(self).toMatchObject({ id: user.id, name: '' });
 

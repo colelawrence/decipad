@@ -13,6 +13,8 @@ test('duplicate pads', ({
 }) => {
   let workspace: Workspace;
   let pad: Pad;
+  // TODO type auth result
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let authRes: any;
 
   beforeAll(async () => {

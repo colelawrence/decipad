@@ -1,11 +1,12 @@
+/* eslint-disable no-underscore-dangle */
 export class TabularData {
-  private data: any[][] = [];
+  private data: (string | number)[][] = [];
   private _columnNames: string[] = [];
 
-  addRow(row: any[]) {
+  addRow(row: (string | number)[]) {
     row = trimRow(row);
     if (this.columnCount > 0 && row.length !== this.columnCount) {
-      throw new Error('expected column count to be ' + this.columnCount);
+      throw new Error(`expected column count to be ${this.columnCount}`);
     }
     let columnIndex = -1;
     while (this.data.length < row.length) {
@@ -22,7 +23,7 @@ export class TabularData {
     names = trimRow(names).map((name) => name.toString());
     if (this.columnCount > 0 && names.length !== this.columnCount) {
       throw new Error(
-        'set column names: expected column count to be ' + this.columnCount
+        `set column names: expected column count to be ${this.columnCount}`
       );
     }
     if (names.length === 0) {
@@ -43,21 +44,21 @@ export class TabularData {
     return Array.from(this._columnNames);
   }
 
-  column(columnName: string): any[] {
+  column(columnName: string): (string | number)[] {
     const index = this._columnNames.indexOf(columnName);
     if (index < 0) {
-      throw new Error('Unknown column named ' + columnName);
+      throw new Error(`Unknown column named ${columnName}`);
     }
     return this.data[index];
   }
 
-  get(columnName: string, row: number): any {
+  get(columnName: string, row: number): string | number {
     const column = this.column(columnName);
     return column[row];
   }
 }
 
-function trimRow(row: any[]): any[] {
+function trimRow(row: (string | number)[]): (string | number)[] {
   const result = Array.from(row);
 
   for (let i = result.length - 1; i >= 0; i--) {

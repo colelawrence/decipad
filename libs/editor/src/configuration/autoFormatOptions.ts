@@ -26,7 +26,7 @@ import {
   WithAutoformatOptions,
 } from '@udecode/plate';
 
-const preFormat = (editor: SPEditor) => unwrapList(editor);
+const preFormat = (editor: SPEditor): void => unwrapList(editor);
 
 type Modify<T, R> = Omit<T, keyof R> & R;
 
@@ -56,7 +56,7 @@ export const optionsAutoformat: AutoFormatOptions = {
       type: ELEMENT_LI,
       markup: ['*', '-'],
       preFormat,
-      format: (editor: SPEditor) => {
+      format: (editor: SPEditor): void => {
         if (editor.selection) {
           const parentEntry = getParent(editor, editor.selection);
           if (!parentEntry) return;
@@ -77,7 +77,7 @@ export const optionsAutoformat: AutoFormatOptions = {
       type: ELEMENT_LI,
       markup: ['1.', '1)'],
       preFormat,
-      format: (editor: SPEditor) => {
+      format: (editor: SPEditor): void => {
         if (editor.selection) {
           const parentEntry = getParent(editor, editor.selection);
           if (!parentEntry) return;
@@ -145,7 +145,7 @@ export const optionsAutoformat: AutoFormatOptions = {
       trigger: '`',
       triggerAtBlockStart: false,
       preFormat,
-      format: (editor: SPEditor) => {
+      format: (editor: SPEditor): void => {
         insertEmptyCodeBlock(editor, {
           defaultType: getPlatePluginType(editor, ELEMENT_DEFAULT),
           insertNodesOptions: { select: true },

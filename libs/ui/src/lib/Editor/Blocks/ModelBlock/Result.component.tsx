@@ -1,11 +1,18 @@
+// Too much problematic code, hopeless to fix until this component is migrated
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { chakra } from '@chakra-ui/system';
 import { format as formatDate, utcToZonedTime } from 'date-fns-tz';
 import { Box, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
-
 import { FiCalendar, FiHash, FiType, FiHelpCircle } from 'react-icons/fi';
-import { Type, InBlockResult, Interpreter } from '@decipad/language';
+import {
+  Type,
+  InBlockResult,
+  Interpreter,
+  ValueLocation,
+} from '@decipad/language';
 import { useResults } from '@decipad/ui';
-import { ValueLocation } from '@decipad/language';
 
 const commonStyles = {
   py: 2,
@@ -119,19 +126,23 @@ export const ResultContent = (props: ResultContentProps) => {
         {type.unit ? ` ${type.toString()}` : ''}
       </>
     );
-  } else if (type.type === 'boolean' || type.type === 'string') {
-    return <>{String(value)}</>;
-  } else if (type.date) {
-    return <DateResult {...props} />;
-  } else if (type.tupleTypes != null) {
-    return <TableResult {...props} />;
-  } else if (type.columnSize != null && Array.isArray(value)) {
-    return <ColumnResult {...props} />;
-  } else if (type.functionness) {
-    return <>ƒ</>;
-  } else {
-    return null;
   }
+  if (type.type === 'boolean' || type.type === 'string') {
+    return <>{String(value)}</>;
+  }
+  if (type.date) {
+    return <DateResult {...props} />;
+  }
+  if (type.tupleTypes != null) {
+    return <TableResult {...props} />;
+  }
+  if (type.columnSize != null && Array.isArray(value)) {
+    return <ColumnResult {...props} />;
+  }
+  if (type.functionness) {
+    return <>ƒ</>;
+  }
+  return null;
 };
 
 const getLineResult = (
@@ -175,15 +186,15 @@ export const Result = ({
         {valueType.errorCause.message}
       </ResultErrorStyles>
     );
-  } else if (value != null) {
+  }
+  if (value != null) {
     return (
       <ResultStyles contentEditable={false}>
         <ResultContent type={valueType} value={value} />
       </ResultStyles>
     );
-  } else {
-    return null;
   }
+  return null;
 };
 
 const commatizeEveryThreeDigits = (digits: string) => {
@@ -214,9 +225,9 @@ const removeFpArtifacts = (decimalPart: string) => {
     // Round to 8 places. If the rounding ends in zeroes,
     // that's a heuristic telling us that the FP error has
     // probably been eliminated
-    const rounded = Number('0' + decimalPart).toFixed(8);
+    const rounded = Number(`0${decimalPart}`).toFixed(8);
 
-    const [_, digits, zeroes] = rounded.match(/0\.(\d+?)(0+)$/) ?? [];
+    const [, digits, zeroes] = rounded.match(/0\.(\d+?)(0+)$/) ?? [];
     if (digits && zeroes) {
       return `.${digits}`;
     }
@@ -283,14 +294,19 @@ function DateResult({ type, value }: ResultContentProps) {
   return <span>{string}</span>;
 }
 
-function tableByRows(tupleNames: string[], columns: any[], tupleTypes: Type[]) {
+function tableByRows(
+  tupleNames: string[],
+  columnsOrCells: any[],
+  tupleTypes: Type[]
+) {
   const hasMany = tupleTypes.length && !!tupleTypes[0].cellType;
-  if (!hasMany) {
-    columns = columns.map((value) => [value]);
-  }
+  const columns = hasMany
+    ? columnsOrCells
+    : columnsOrCells.map((value) => [value]);
+
   const refCol = columns[0] || [];
   const rows = [];
-  for (let index = 0; index < refCol.length; index++) {
+  for (let index = 0; index < refCol.length; index += 1) {
     const row = [];
     for (const column of columns) {
       row.push(column[index]);

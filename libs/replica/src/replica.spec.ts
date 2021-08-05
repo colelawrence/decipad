@@ -1,6 +1,6 @@
+import { timeout, TestStorage } from '@decipad/testutils';
 import { createReplica as replica } from './replica';
 import { Sync } from './sync';
-import { timeout, TestStorage } from '@decipad/testutils';
 
 const syncOptions = {
   start: true,
@@ -9,6 +9,8 @@ const syncOptions = {
 };
 
 describe('replica', () => {
+  // TODO extract expects out of subscribe
+  /* eslint-disable jest/no-conditional-expect */
   test('gets inactive when it has no subscribers', async () => {
     const r = replica<string>({
       name: 'test',
@@ -36,20 +38,20 @@ describe('replica', () => {
 
     const expectedValues = ['', 'A', 'AB'];
     let first = true;
-    const s = r.observable.subscribe(({ loading, data: s }) => {
+    const subscription = r.observable.subscribe(({ loading, data }) => {
       if (first) {
         expect(loading).toBe(true);
         first = false;
       } else {
         expect(loading).toBe(false);
-        expect(s).toBe(expectedValues.shift());
+        expect(data).toBe(expectedValues.shift());
       }
     });
 
-    r.mutate((s) => s + 'A');
-    r.mutate((s) => s + 'B');
+    r.mutate((s) => `${s}A`);
+    r.mutate((s) => `${s}B`);
 
-    s.unsubscribe();
+    subscription.unsubscribe();
 
     expect(expectedValues).toHaveLength(0);
 
@@ -65,8 +67,8 @@ describe('replica', () => {
       }
     });
 
-    r.mutate((s) => s + 'C');
-    r.mutate((s) => s + 'D');
+    r.mutate((s) => `${s}C`);
+    r.mutate((s) => `${s}D`);
 
     expect(r.getValue()).toBe('ABCD');
 
@@ -79,4 +81,5 @@ describe('replica', () => {
 
     await timeout(2000);
   });
+  /* eslint-enable jest/no-conditional-expect */
 });

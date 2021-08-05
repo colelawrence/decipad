@@ -1,5 +1,8 @@
 /* eslint-env jest */
 
+// existing sequential test "story" very granular
+/* eslint-disable jest/expect-expect */
+
 import FormData from 'form-data';
 import { createReadStream } from 'fs';
 import { readFile } from 'fs/promises';
@@ -144,7 +147,8 @@ test('attach files', ({
 
         form.submit(formData.url, (err, res) => {
           if (err) {
-            return reject(err);
+            reject(err);
+            return;
           }
           expect(res.statusCode).toBeGreaterThanOrEqual(200);
           expect(res.statusCode).toBeLessThan(300);
@@ -184,7 +188,7 @@ test('attach files', ({
       fileType: 'text/csv',
     });
 
-    expect(attachment!.fileSize).toBe(244);
+    expect(attachment!.fileSize).toBe(233);
     expect(attachment!.uploadedBy).toMatchObject({ id: 'test user id 1' });
     expect(attachment!.pad).toMatchObject({ id: pad.id });
   });
@@ -273,7 +277,7 @@ test('attach files', ({
       id: attachment!.id,
       fileName: 'filename',
       fileType: 'text/csv',
-      fileSize: 244,
+      fileSize: 233,
       uploadedBy: {
         id: 'test user id 1',
       },

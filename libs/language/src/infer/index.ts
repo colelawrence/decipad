@@ -56,6 +56,8 @@ const pushStackAndPrevious = async (
  AST.Assign is special-cased by looking at its expression and returning just that
  */
 export const inferExpression = withErrorSource(
+  // exhaustive switch
+  // eslint-disable-next-line consistent-return
   async (ctx: Context, expr: AST.Expression): Promise<Type> => {
     switch (expr.type) {
       case 'ref': {
@@ -94,7 +96,7 @@ export const inferExpression = withErrorSource(
         });
       }
       case 'sequence': {
-        return await inferSequence(ctx, expr);
+        return inferSequence(ctx, expr);
       }
       case 'date': {
         const [, specificity] = getDateFromAstForm(expr.args);
@@ -133,6 +135,7 @@ export const inferExpression = withErrorSource(
             columns
           )) {
             const name = getIdentifierString(colDef);
+            // eslint-disable-next-line no-await-in-loop
             const type = await inferExpression(ctx, expr);
 
             ctx.stack.set(name, type);
@@ -181,7 +184,7 @@ export const inferExpression = withErrorSource(
         const functionDefinition = ctx.functionDefinitions.get(fName);
 
         if (functionDefinition != null) {
-          return await inferFunction(ctx, functionDefinition, givenArguments);
+          return inferFunction(ctx, functionDefinition, givenArguments);
         } else {
           return callBuiltinFunctor(fName, ...givenArguments);
         }
@@ -196,7 +199,7 @@ export const inferExpression = withErrorSource(
         const largestColumn =
           tupleTypes != null ? getLargestColumn(tupleTypes) : null;
 
-        return await pushStackAndPrevious(ctx, async () => {
+        return pushStackAndPrevious(ctx, async () => {
           if (cellType != null && columnSize != null) {
             ctx.stack.set(refName, cellType);
 
@@ -232,7 +235,7 @@ export const inferExpression = withErrorSource(
       case 'imported-data': {
         const [url, contentType] = expr.args;
         const data = await resolveData({ url, contentType, fetch: ctx.fetch });
-        return await inferData(data, ctx);
+        return inferData(data, ctx);
       }
     }
   }
@@ -265,6 +268,7 @@ export const inferFunction = async (
     let returned;
 
     for (const statement of fBody.args) {
+      // eslint-disable-next-line no-await-in-loop
       returned = await inferStatement(ctx, statement);
     }
 
@@ -299,7 +303,7 @@ export const inferStatement = withErrorSource(
         return t.functionPlaceholder();
       }
       default: {
-        return await inferExpression(ctx, statement);
+        return inferExpression(ctx, statement);
       }
     }
   }
@@ -322,6 +326,7 @@ export const inferProgram = async (
     }
 
     for (let i = 0; i < block.args.length; i++) {
+      // eslint-disable-next-line no-await-in-loop
       const returnedValue = await inferStatement(ctx, block.args[i]);
 
       if (i === block.args.length - 1) {
@@ -349,6 +354,7 @@ export const inferTargetStatement = async (
       statementIndex < block.args.length;
       statementIndex++
     ) {
+      // eslint-disable-next-line no-await-in-loop
       const type = await inferStatement(ctx, block.args[statementIndex]);
 
       if (blockIndex === blockId && statementOffset === statementIndex) {
@@ -362,6 +368,6 @@ export const inferTargetStatement = async (
   }
 
   throw new Error(
-    'panic: target not found: ' + JSON.stringify([blockId, statementOffset])
+    `panic: target not found: ${JSON.stringify([blockId, statementOffset])}`
   );
 };

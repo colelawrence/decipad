@@ -1,4 +1,4 @@
-export function encode(id: string) {
+export function encode(id: string): string {
   let newId = id.replace(/\//g, ':');
   if (newId.startsWith(':')) {
     newId = newId.substring(1);
@@ -6,10 +6,10 @@ export function encode(id: string) {
   return newId;
 }
 
-export function decode(id: string | undefined) {
+export function decode(id: string | undefined): string {
   let newId = (id || '').replace(/:/g, '/');
   if (!newId.startsWith('/')) {
-    newId = '/' + newId;
+    newId = `/${newId}`;
   }
   return newId;
 }

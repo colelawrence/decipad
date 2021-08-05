@@ -22,7 +22,7 @@ export async function resolve({
   if (!contentType) {
     contentType = response.contentType;
   }
-  return await resolveForContentType(
+  return resolveForContentType(
     response.result,
     contentType || 'text/csv',
     maxRows
@@ -36,10 +36,10 @@ async function resolveForContentType(
 ): Promise<TabularData> {
   switch (contentType) {
     case 'text/csv': {
-      return await resolveCsv(response, maxRows);
+      return resolveCsv(response, maxRows);
     }
     default: {
-      throw new Error("don't know how to handle content type " + contentType);
+      throw new Error(`don't know how to handle content type ${contentType}`);
     }
   }
 }
@@ -55,7 +55,7 @@ export async function resolveCsv(
     let isDone = false;
     let hadFirstRow = false;
     parser.on('readable', () => {
-      let row: any[];
+      let row: string[];
       while ((row = parser.read())) {
         if (!isDone) {
           if (!hadFirstRow) {

@@ -12,7 +12,7 @@ it('shows the workspace name', () => {
   const { getByText } = render(
     <WorkspaceItem {...props} name="Some Workspace" />
   );
-  expect(getByText('Some Workspace'));
+  expect(getByText('Some Workspace')).toBeVisible();
 });
 
 it('renders an avatar with the initial of the workspace', () => {

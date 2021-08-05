@@ -3,9 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { AccountAvatar } from './AccountAvatar';
 
 it('renders an avatar', () => {
-  const { getByLabelText } = render(
-    <AccountAvatar name="John Doe" menuOpen />
-  );
+  const { getByLabelText } = render(<AccountAvatar name="John Doe" menuOpen />);
   expect(getByLabelText(/avatar/i)).toBeVisible();
 });
 

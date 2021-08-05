@@ -147,7 +147,7 @@ export class ReplicaSync<T> {
 
             case 'changed':
               try {
-                this.integrateRemoteChanges(remoteOp.changes!);
+                this.integrateRemoteChanges(remoteOp.changes);
               } catch (err) {
                 console.error(err);
                 this.needsReconcile = true;
@@ -228,6 +228,8 @@ export class ReplicaSync<T> {
 
   private async reconcile() {
     let error: Error | null = null;
+    // intentional sequence
+    /* eslint-disable no-await-in-loop */
     do {
       error = null;
       try {
@@ -248,29 +250,30 @@ export class ReplicaSync<T> {
         error = err;
       }
     } while (!error && this.lastSentChangeCount > 0);
+    /* eslint-enable no-await-in-loop */
     if (error) {
       throw error;
     }
   }
 
   private async attemptSendChanges() {
-    if (this.stopped || this.latest === null) {
-      if (!this.stopped) {
-        throw new Error('nothing to send');
-      }
+    if (this.latest === null) {
+      throw new Error('nothing to send');
     }
     if (this.lastFromRemote === null) {
-      await this.attemptSendEverything();
+      await this.attemptSendEverything(this.latest);
     } else {
-      await this.attempSendOnlyChanges();
+      await this.attemptSendOnlyChanges(this.latest, this.lastFromRemote);
     }
   }
 
-  private async attempSendOnlyChanges() {
-    const lastRemoteDoc = this.lastFromRemote!;
+  private async attemptSendOnlyChanges(
+    latest: Doc<{ value: T }>,
+    lastRemoteDoc: Doc<{ value: T }>
+  ) {
     let newRemoteDoc;
     try {
-      newRemoteDoc = Automerge.merge(this.latest!, lastRemoteDoc);
+      newRemoteDoc = Automerge.merge(latest, lastRemoteDoc);
     } catch (err) {
       console.error(err);
       newRemoteDoc = lastRemoteDoc;
@@ -278,7 +281,7 @@ export class ReplicaSync<T> {
     const changes = Automerge.getChanges(lastRemoteDoc, newRemoteDoc);
 
     if (changes.length > 0) {
-      const response = await fetch(this.remoteUrl() + '/changes', {
+      const response = await fetch(`${this.remoteUrl()}/changes`, {
         method: 'PUT',
         body: JSON.stringify(changes),
         headers: {
@@ -294,11 +297,9 @@ export class ReplicaSync<T> {
       }
     }
     this.lastSentChangeCount = changes.length;
-    // this.lastFromRemote = newRemoteDoc;
   }
 
-  private async attemptSendEverything() {
-    const latest = this.latest!;
+  private async attemptSendEverything(latest: Doc<{ value: T }>) {
     const response = await fetch(this.remoteUrl(), {
       method: 'PUT',
       body: Automerge.save(latest),
@@ -322,7 +323,7 @@ export class ReplicaSync<T> {
     const resp = await fetch(this.remoteUrl());
     if (!resp.ok) {
       throw new Error(
-        'response was not ok: ' + resp.status + ': ' + (await resp.text())
+        `response was not ok: ${resp.status}: ${await resp.text()}`
       );
     }
     const doc = await resp.text();
@@ -350,7 +351,7 @@ export class ReplicaSync<T> {
   }
 
   private remoteUrl(): string {
-    return this.fetchPrefix + '/api/syncdoc/' + encode(this.topic);
+    return `${this.fetchPrefix}/api/syncdoc/${encode(this.topic)}`;
   }
 
   private randomRetryTimeout() {
@@ -364,7 +365,7 @@ export class ReplicaSync<T> {
 function encode(uri: string): string {
   let ret = uri.replace(/\//g, ':');
   if (ret[0] !== ':') {
-    ret = ':' + ret;
+    ret = `:${ret}`;
   }
   return ret;
 }

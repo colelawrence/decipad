@@ -60,7 +60,7 @@ export const getUnparsed = (...blockSources: string[]) =>
 export const parse = (...sources: string[]) =>
   sources.map((source, i) => {
     const parsed = wrappedParse({
-      id: 'block-' + i,
+      id: `block-${i}`,
       source,
     }) as IdentifiedBlock;
     expect(parsed.block).toBeDefined();
@@ -70,10 +70,10 @@ export const parse = (...sources: string[]) =>
 export const simplifyInBlockResults = (results: InBlockResult[]) => {
   const simpleUpdates = [];
   for (const { blockId, statementIndex, valueType, value } of results) {
-    const prefix = blockId + '/' + statementIndex + ' -> ';
+    const prefix = `${blockId}/${statementIndex} -> `;
 
     if (valueType.errorCause != null) {
-      simpleUpdates.push(prefix + 'Type Error');
+      simpleUpdates.push(`${prefix}Type Error`);
     } else {
       simpleUpdates.push(prefix + JSON.stringify(value));
     }
@@ -84,13 +84,13 @@ export const simplifyInBlockResults = (results: InBlockResult[]) => {
 export const simplifyComputeResponse = (
   res: ComputeResponse | ComputePanic
 ) => {
-  if (res.type === 'compute-panic') return ['panic: ' + (res.message ?? '')];
+  if (res.type === 'compute-panic') return [`panic: ${res.message ?? ''}`];
 
   const simpleUpdates = [];
 
   for (const { blockId, isSyntaxError, results } of res.updates) {
     if (isSyntaxError) {
-      simpleUpdates.push(blockId + ' -> Syntax Error');
+      simpleUpdates.push(`${blockId} -> Syntax Error`);
     } else {
       simpleUpdates.push(...simplifyInBlockResults(results));
     }

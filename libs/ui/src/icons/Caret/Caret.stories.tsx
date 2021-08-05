@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react';
+import { Meta, Story } from '@storybook/react';
 import { Caret } from './Caret';
 
 export default {
@@ -6,5 +6,5 @@ export default {
   component: Caret,
 } as Meta;
 
-export const Expand = () => <Caret type="expand" />;
-export const Collapse = () => <Caret type="collapse" />;
+export const Expand: Story = () => <Caret type="expand" />;
+export const Collapse: Story = () => <Caret type="collapse" />;

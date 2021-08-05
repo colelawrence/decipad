@@ -1,7 +1,7 @@
 const {
   setupFilesAfterEnv = [],
   ...baseConfig
-} = require('../../jest-base.config.js');
+} = require('../../jest-base.config');
 
 module.exports = {
   ...baseConfig,

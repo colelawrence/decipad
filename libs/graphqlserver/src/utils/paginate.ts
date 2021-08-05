@@ -8,6 +8,7 @@ import {
 
 export default async function paginate<T1 extends ConcreteRecord, T2>(
   table: DataTable<T1>,
+  /* eslint-disable no-param-reassign */
   query: DynamoDbQuery,
   page: PageInput,
   map?: (rec: T1) => T2 | Promise<T2 | undefined>
@@ -26,6 +27,8 @@ export default async function paginate<T1 extends ConcreteRecord, T2>(
   if (map) {
     const mappedItems = [];
     for (const item of items) {
+      // TODO should we use Promise.all?
+      // eslint-disable-next-line no-await-in-loop
       const retItem = await map(item);
       if (retItem) {
         mappedItems.push(retItem);

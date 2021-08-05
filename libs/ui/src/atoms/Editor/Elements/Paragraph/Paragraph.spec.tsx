@@ -14,6 +14,6 @@ describe('Editor Paragraph Element', () => {
       </ParagraphElement>
     );
 
-    getByText('Paragraph Element');
+    expect(getByText('Paragraph Element')).toBeVisible();
   });
 });

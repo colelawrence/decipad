@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react';
+import { Meta, Story } from '@storybook/react';
 import { Folder } from './Folder';
 
 export default {
@@ -6,4 +6,4 @@ export default {
   component: Folder,
 } as Meta;
 
-export const Normal = () => <Folder />;
+export const Normal: Story = () => <Folder />;

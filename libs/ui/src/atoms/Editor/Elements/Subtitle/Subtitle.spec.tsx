@@ -14,6 +14,6 @@ describe('Editor Subtitle Element', () => {
       </SubtitleElement>
     );
 
-    getByText('Subtitle Element');
+    expect(getByText('Subtitle Element')).toBeVisible();
   });
 });

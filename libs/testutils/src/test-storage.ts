@@ -1,4 +1,4 @@
-import { ReplicaStorage, ReplicationStatus } from '@decipad/interfaces';
+import { ReplicaStorage } from '@decipad/interfaces';
 
 export class TestStorage implements ReplicaStorage {
   private store = new Map<string, string>();
@@ -7,12 +7,12 @@ export class TestStorage implements ReplicaStorage {
     return this.store.size;
   }
 
-  setItem(key: string, value: string) {
+  setItem(key: string, value: string): void {
     this.store.set(key, value);
     global.dispatchEvent(new StorageEvent('storage', { key }));
   }
 
-  getItem(key: string) {
+  getItem(key: string): string | null {
     const value = this.store.get(key);
     if (value == null) {
       return null;
@@ -20,12 +20,12 @@ export class TestStorage implements ReplicaStorage {
     return value;
   }
 
-  removeItem(key: string) {
+  removeItem(key: string): void {
     this.store.delete(key);
     global.dispatchEvent(new StorageEvent('storage', { key }));
   }
 
-  clear() {
+  clear(): void {
     this.store.clear();
   }
 
@@ -37,11 +37,11 @@ export class TestStorage implements ReplicaStorage {
     return value;
   }
 
-  setReplicationStatus(_key: string, _status: ReplicationStatus) {
+  setReplicationStatus(): void {
     // do nothing
   }
 
-  stop() {
+  stop(): void {
     // do nothing
   }
 }

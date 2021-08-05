@@ -1,8 +1,11 @@
 /* eslint-env jest */
 
+// existing sequential tests very granular
+/* eslint-disable jest/expect-expect */
+
 import arc from '@architect/functions';
-import test from './sandbox';
 import { Workspace, Pad, Role, RoleInvitation } from '@decipad/backendtypes';
+import test from './sandbox';
 import { timeout } from './utils/timeout';
 
 test('pads', ({
@@ -256,7 +259,7 @@ test('pads', ({
     });
   });
 
-  it('waits a bit', async () => await timeout(1000));
+  it('waits for share', async () => timeout(1000));
 
   it('invitee can get pad', async () => {
     const client = withAuth(await auth('test user id 2'));
@@ -283,7 +286,7 @@ test('pads', ({
   it('the target user has read access to pad', async () => {
     const client = withAuth(await auth('test user id 2'));
 
-    const pads = (
+    const { pads } = (
       await client.query({
         query: gql`
           query {
@@ -316,7 +319,7 @@ test('pads', ({
           }
         `,
       })
-    ).data.pads;
+    ).data;
 
     expect(pads).toMatchObject({
       items: [
@@ -395,12 +398,12 @@ test('pads', ({
     });
   });
 
-  it('waits a bit', async () => await timeout(1000));
+  it('waits for unshare', async () => timeout(1000));
 
   it('target user no longer has access to pad', async () => {
     const client = withAuth(await auth('test user id 2'));
 
-    const pads = (
+    const { pads } = (
       await client.query({
         query: gql`
           query {
@@ -412,7 +415,7 @@ test('pads', ({
           }
         `,
       })
-    ).data.pads;
+    ).data;
 
     expect(pads).toMatchObject({
       items: [],
@@ -437,10 +440,10 @@ test('pads', ({
     });
   });
 
-  it('target user has access to pad', async () => {
+  it('target user has access to pad after share', async () => {
     const client = withAuth(await auth('test user id 2'));
 
-    const pads = (
+    const { pads } = (
       await client.query({
         query: gql`
           query {
@@ -473,7 +476,7 @@ test('pads', ({
           }
         `,
       })
-    ).data.pads;
+    ).data;
 
     expect(pads).toMatchObject({
       items: [
@@ -507,7 +510,7 @@ test('pads', ({
     });
   });
 
-  it('admin user can revoke access to pad', async () => {
+  it('admin user can revoke access to pad after share', async () => {
     const client = withAuth(await auth());
 
     await client.mutate({
@@ -525,7 +528,7 @@ test('pads', ({
   it('target user no longer can access pad', async () => {
     const client = withAuth(await auth('test user id 2'));
 
-    const pads = (
+    const { pads } = (
       await client.query({
         query: gql`
           query {
@@ -537,7 +540,7 @@ test('pads', ({
           }
         `,
       })
-    ).data.pads;
+    ).data;
 
     expect(pads).toMatchObject({
       items: [],
@@ -562,10 +565,10 @@ test('pads', ({
     });
   });
 
-  it('target user has access to pad', async () => {
+  it('target user has access to pad after invite', async () => {
     const client = withAuth(await auth('test user id 2'));
 
-    const pads = (
+    const { pads } = (
       await client.query({
         query: gql`
           query {
@@ -598,7 +601,7 @@ test('pads', ({
           }
         `,
       })
-    ).data.pads;
+    ).data;
 
     expect(pads).toMatchObject({
       items: [
@@ -632,7 +635,7 @@ test('pads', ({
     });
   });
 
-  it('admin user can revoke access to pad', async () => {
+  it('admin user can revoke access to pad after invite', async () => {
     const client = withAuth(await auth());
 
     await client.mutate({
@@ -691,7 +694,7 @@ test('pads', ({
   it('new user can access pad', async () => {
     const client = withAuth(await auth(targetUserId));
 
-    const pads = (
+    const { pads } = (
       await client.query({
         query: gql`
           query {
@@ -724,7 +727,7 @@ test('pads', ({
           }
         `,
       })
-    ).data.pads;
+    ).data;
 
     expect(pads).toMatchObject({
       items: [

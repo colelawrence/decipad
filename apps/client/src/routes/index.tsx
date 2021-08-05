@@ -1,4 +1,5 @@
 import { Session } from 'next-auth';
+import { FC } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { RequireSession } from '../components/RequireSession';
 import { decode as decodeVanityUrlComponent } from '../lib/vanityUrlComponent';
@@ -7,7 +8,11 @@ import { Pad } from './Pad';
 import { Playground } from './Playground';
 import { Workspace } from './Workspace';
 
-export function Router({ session }: { session: Session | null }) {
+export function Router({
+  session,
+}: {
+  session: Session | null;
+}): ReturnType<FC> {
   return (
     <Switch>
       <Route

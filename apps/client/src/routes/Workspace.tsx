@@ -23,6 +23,7 @@ import {
   REMOVE_PAD,
 } from '@decipad/queries';
 import { HelpButton, LoadingSpinnerPage } from '@decipad/ui';
+import { FC } from 'react';
 import { FiFile, FiTrash2, FiCopy } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
@@ -30,7 +31,11 @@ import { SideMenu } from '../components/SideMenu';
 import { Topbar } from '../components/Topbar';
 import { encode as encodeVanityUrlComponent } from '../lib/vanityUrlComponent';
 
-export function Workspace({ workspaceId }: { workspaceId: string }) {
+export function Workspace({
+  workspaceId,
+}: {
+  workspaceId: string;
+}): ReturnType<FC> {
   const { data, loading: workspaceLoading } = useQuery<
     GetWorkspaceById,
     GetWorkspaceByIdVariables
@@ -117,7 +122,7 @@ export function Workspace({ workspaceId }: { workspaceId: string }) {
                         addToast('Pad duplicated', { appearance: 'info' })
                       )
                       .catch((err) =>
-                        addToast('Error duplicating pad: ' + err.message, {
+                        addToast(`Error duplicating pad: ${err.message}`, {
                           appearance: 'error',
                         })
                       )
@@ -137,7 +142,7 @@ export function Workspace({ workspaceId }: { workspaceId: string }) {
                         addToast('Pad removed', { appearance: 'info' })
                       )
                       .catch((err) =>
-                        addToast('Error removing pad: ' + err.message, {
+                        addToast(`Error removing pad: ${err.message}`, {
                           appearance: 'error',
                         })
                       )

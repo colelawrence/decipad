@@ -1,7 +1,7 @@
 import { DocSync } from '@decipad/docsync';
 import { nanoid } from 'nanoid';
 import { useSession } from 'next-auth/client';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 
 export type DocSyncContextProps =
   | { docsync: null; status: 'loading' | 'login' }
@@ -16,7 +16,9 @@ export interface DocSyncProviderProps {
   children: JSX.Element;
 }
 
-export const DocSyncProvider = ({ children }: DocSyncProviderProps) => {
+export const DocSyncProvider = ({
+  children,
+}: DocSyncProviderProps): ReturnType<FC> => {
   const [session, sessionLoading] = useSession();
   const [value, setValue] = useState<DocSyncContextProps>({
     docsync: null,
@@ -27,14 +29,14 @@ export const DocSyncProvider = ({ children }: DocSyncProviderProps) => {
 
   useEffect(() => {
     if (sessionLoading) {
-      return;
-    } else if (userId) {
+      return undefined;
+    }
+    if (userId) {
       const docsync = new DocSync({ userId, actorId: nanoid() });
       setValue({ docsync, status: 'success' });
       return () => docsync.stop();
-    } else {
-      return setValue({ docsync: null, status: 'login' });
     }
+    return setValue({ docsync: null, status: 'login' });
   }, [userId, session, sessionLoading]);
 
   return (
@@ -44,7 +46,7 @@ export const DocSyncProvider = ({ children }: DocSyncProviderProps) => {
 
 export const AnonymousDocSyncProvider = ({
   children,
-}: DocSyncProviderProps) => {
+}: DocSyncProviderProps): ReturnType<FC> => {
   const [value, setValue] = useState<DocSyncContextProps>({
     docsync: null,
     status: 'loading',
@@ -78,7 +80,7 @@ export const useDocSync = (): DocSync => {
   return docsync;
 };
 
-export const useMaybeRuntime = () => {
+export const useMaybeRuntime = (): DocSync | null => {
   const { docsync } = useContext(DocSyncContext);
   return docsync;
 };

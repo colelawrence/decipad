@@ -25,10 +25,36 @@ import { requireUser, check } from '../authorization';
 const { urlBase } = appConfig();
 const { inviteExpirationSeconds } = authConfig();
 
+async function checkAdminAccessToResource(
+  resource: URI,
+  context: GraphqlContext
+) {
+  return check(resource, context, 'ADMIN');
+}
+
+function resourcePermissionToSharedResource(
+  resourcePermission: PermissionRecord
+): SharedResource {
+  return {
+    gqlType: 'SharedResource',
+    resource: resourcePermission.resource_uri,
+    permission: resourcePermission.type,
+    canComment: resourcePermission.can_comment,
+  };
+}
+
+function parseResource(resource: URI): Resource {
+  const parts = resource.split('/');
+  return {
+    type: parts[1],
+    id: parts.splice(2).join('/'),
+  };
+}
+
 const resolvers = {
   Query: {
     async resourceSharedWith(
-      _: any,
+      _: unknown,
       { resource }: { resource: string },
       context: GraphqlContext
     ): Promise<SharedWith> {
@@ -99,7 +125,7 @@ const resolvers = {
     },
 
     async resourcesSharedWithMe(
-      _: any,
+      _: unknown,
       { page, resourceType }: { page: PageInput; resourceType: string },
       context: GraphqlContext
     ): Promise<PagedResult<SharedResource>> {
@@ -116,7 +142,7 @@ const resolvers = {
         },
       };
 
-      return await paginate<PermissionRecord, SharedResource>(
+      return paginate<PermissionRecord, SharedResource>(
         data.permissions,
         q,
         page,
@@ -127,7 +153,7 @@ const resolvers = {
 
   Mutation: {
     async shareWithRole(
-      _: any,
+      _: unknown,
       {
         resource,
         roleId,
@@ -153,7 +179,7 @@ const resolvers = {
     },
 
     async shareWithUser(
-      _: any,
+      _: unknown,
       {
         resource,
         userId,
@@ -179,7 +205,7 @@ const resolvers = {
     },
 
     async inviteToShareWithEmail(
-      _: any,
+      _: unknown,
       {
         resource,
         resourceName,
@@ -201,7 +227,7 @@ const resolvers = {
       const emailKeyId = `email:${email}`;
       const emailKey = await data.userkeys.get({ id: emailKeyId });
       if (emailKey) {
-        return await resolvers.Mutation.shareWithUser(
+        resolvers.Mutation.shareWithUser(
           _,
           {
             resource,
@@ -211,6 +237,7 @@ const resolvers = {
           },
           context
         );
+        return;
       }
 
       const newUser = await createUser({
@@ -243,14 +270,14 @@ const resolvers = {
           from: actingUser,
           to: newUser,
           resource,
-          inviteAcceptLink: inviteAcceptLink,
+          inviteAcceptLink,
           resourceName,
         },
       });
     },
 
     async unShareWithRole(
-      _: any,
+      _: unknown,
       { resource, roleId }: { resource: URI; roleId: ID },
       context: GraphqlContext
     ) {
@@ -262,7 +289,7 @@ const resolvers = {
     },
 
     async unShareWithUser(
-      _: any,
+      _: unknown,
       { resource, userId }: { resource: URI; userId: ID },
       context: GraphqlContext
     ) {
@@ -277,42 +304,16 @@ const resolvers = {
   SharedWithUser: {
     async user(sharedWithUser: SharedWithUserRecord) {
       const data = await tables();
-      return await data.users.get({ id: sharedWithUser.user_id });
+      return data.users.get({ id: sharedWithUser.user_id });
     },
   },
 
   SharedWithRole: {
     async role(sharedWithRole: SharedWithRoleRecord) {
       const data = await tables();
-      return await data.workspaceroles.get({ id: sharedWithRole.role_id });
+      return data.workspaceroles.get({ id: sharedWithRole.role_id });
     },
   },
 };
-
-async function checkAdminAccessToResource(
-  resource: URI,
-  context: GraphqlContext
-) {
-  return await check(resource, context, 'ADMIN');
-}
-
-function resourcePermissionToSharedResource(
-  resourcePermission: PermissionRecord
-): SharedResource {
-  return {
-    gqlType: 'SharedResource',
-    resource: resourcePermission.resource_uri,
-    permission: resourcePermission.type,
-    canComment: resourcePermission.can_comment,
-  };
-}
-
-function parseResource(resource: URI): Resource {
-  const parts = resource.split('/');
-  return {
-    type: parts[1],
-    id: parts.splice(2).join('/'),
-  };
-}
 
 export default resolvers;

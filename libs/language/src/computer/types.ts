@@ -42,6 +42,8 @@ export interface IdentifiedResult {
 export interface InBlockResult {
   blockId: string;
   statementIndex: number;
-  value: any | null; // TODO Interpreter.Result is not exportable
+  // TODO Interpreter.Result is not exportable
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  value: any | null;
   valueType: Type;
 }

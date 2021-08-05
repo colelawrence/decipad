@@ -1,10 +1,15 @@
 import { fnQueue } from './fn-queue';
 
 describe('fn-queue', () => {
-  it('should flush when empty', async () => {
+  it('should flush immediately when empty', async () => {
     const q = fnQueue();
 
-    await q.flush();
+    expect(
+      await Promise.race([
+        new Promise((resolve) => setTimeout(() => resolve('too late'), 0)),
+        q.flush(),
+      ])
+    ).toBe(undefined);
   });
 
   it('should return the resolved value', async () => {
@@ -35,9 +40,14 @@ describe('fn-queue', () => {
 
   it('should wait for flush', async () => {
     const q = fnQueue();
-    let r1, r2;
-    q.push(() => Promise.resolve('r1')).then((v) => (r1 = v));
-    q.push(() => Promise.resolve('r2')).then((v) => (r2 = v));
+    let r1;
+    let r2;
+    q.push(() => Promise.resolve('r1')).then((v) => {
+      r1 = v;
+    });
+    q.push(() => Promise.resolve('r2')).then((v) => {
+      r2 = v;
+    });
     await q.flush();
 
     expect(r1).toBe('r1');

@@ -32,7 +32,9 @@ type ErrSpec =
       gotArgTypes: OverloadTypeName[];
     };
 
-function specToString(spec: ErrSpec) {
+// exhaustive switch
+// eslint-disable-next-line consistent-return
+function specToString(spec: ErrSpec): string {
   switch (spec.errType) {
     case 'free-form': {
       return spec.message;

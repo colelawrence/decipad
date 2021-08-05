@@ -5,8 +5,8 @@ import {
   Context as LambdaContext,
 } from 'aws-lambda';
 import { HttpHandler } from '@architect/functions';
-import createServer from './server';
 import { wrapHandler } from '@decipad/services/monitor';
+import createServer from './server';
 
 type AdditionalContext = {
   additionalHeaders?: Map<string, string>;
@@ -18,6 +18,8 @@ export default function createHandler(): HttpHandler {
   const server = createServer();
   const handler = server.createHandler();
 
+  /* eslint-disable no-param-reassign */
+
   return wrapHandler(
     (
       event: APIGatewayProxyEvent,
@@ -28,12 +30,19 @@ export default function createHandler(): HttpHandler {
         err: Error | null | undefined | string,
         reply: APIGatewayProxyResult | undefined
       ) => {
-        if (!err && context.additionalHeaders!.size > 0) {
-          if (!reply!.headers) {
-            reply!.headers = {};
+        if (!context.additionalHeaders) {
+          throw new Error('missing additional headers');
+        }
+        if (!reply) {
+          throw new Error('missing reply');
+        }
+
+        if (!err && context.additionalHeaders.size > 0) {
+          if (!reply.headers) {
+            reply.headers = {};
           }
-          for (const [key, value] of context.additionalHeaders!) {
-            reply!.headers[key] = value;
+          for (const [key, value] of context.additionalHeaders) {
+            reply.headers[key] = value;
           }
         }
         _callback(err, reply);

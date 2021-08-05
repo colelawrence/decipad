@@ -3,7 +3,7 @@ const { workerFor } = require('./workers');
 module.exports = function invokeByRunning(params, callback) {
   const { options, request, timeout, update } = params;
   const { env, cwd } = options;
-  const functionPath = cwd + '/index.js';
+  const functionPath = `${cwd}/index.js`;
   const headers = {
     'content-type': 'text/html; charset=utf8;',
     'cache-control':
@@ -19,8 +19,8 @@ module.exports = function invokeByRunning(params, callback) {
   });
 
   // Set an execution timeout
-  let to = setTimeout(function () {
-    let duration = `${timeout / 1000}s`;
+  const to = setTimeout(function timedOut() {
+    const duration = `${timeout / 1000}s`;
     update.warn(
       `${functionPath} timed out after hitting its ${duration} timeout!`
     );

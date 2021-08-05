@@ -2,7 +2,7 @@ import { AnonymousDocSyncProvider, Editor } from '@decipad/editor';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { nanoid } from 'nanoid';
-import { useEffect, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
@@ -40,7 +40,7 @@ const EditorWrapper = styled('div')({
   paddingTop: '16px',
 });
 
-export function Playground() {
+export function Playground(): ReturnType<FC> {
   const randomId = useMemo(() => nanoid(), []);
 
   useEffect(() => {

@@ -20,7 +20,9 @@ export const findParentWithStyle = <P extends keyof CSSStyleDeclaration>(
     [propertyName]: styles[propertyName],
     element,
     styles,
-  } as any; // cannot type dynamic property key based on type parameter
+    // cannot type dynamic property key based on type parameter
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } as any;
 };
 
 export const applyCssVars = (): Promise<() => void> => {
@@ -48,7 +50,7 @@ export const applyPrefersColorScheme = async (
         for (
           let mediaIndex = 0;
           mediaIndex < mediaRule.media.length;
-          mediaIndex++
+          mediaIndex += 1
         ) {
           if (
             mediaRule.media[mediaIndex].replace(/\s/g, '') ===

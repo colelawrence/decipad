@@ -7,7 +7,7 @@ import {
   RenamePadVariables,
   RENAME_PAD,
 } from '@decipad/queries';
-import { isCollapsed, OnChange } from '@udecode/plate';
+import { isCollapsed, OnChange, PlatePlugin } from '@udecode/plate';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useToasts } from 'react-toast-notifications';
 import { Editor } from 'slate';
@@ -18,7 +18,7 @@ export interface UseNotebookTitlePluginProps {
 
 export const useNotebookTitlePlugin = ({
   padId,
-}: UseNotebookTitlePluginProps) => {
+}: UseNotebookTitlePluginProps): PlatePlugin => {
   const { addToast } = useToasts();
   const [newTitle, setNewTitle] = useState<null | string>(null);
 
@@ -34,12 +34,15 @@ export const useNotebookTitlePlugin = ({
     (editor) => () => {
       const { selection } = editor;
 
+      // TODO fix Node types
+      /* eslint-disable @typescript-eslint/no-explicit-any */
       if (selection && data && isCollapsed(selection)) {
         const [node] = Editor.node(editor, [0, 0]);
         if (data.getPadById?.name !== (node as any).text) {
           setNewTitle((node as any).text);
         }
       }
+      /* eslint-enable @typescript-eslint/no-explicit-any */
     },
     [data]
   );
@@ -62,10 +65,8 @@ export const useNotebookTitlePlugin = ({
   }, [mutate, newTitle, padId, addToast]);
 
   // return a slate plugin
-  return {
-    plugin: useMemo(
-      () => ({ onChange: onChangeNotebookTitle }),
-      [onChangeNotebookTitle]
-    ),
-  };
+  return useMemo(
+    () => ({ onChange: onChangeNotebookTitle }),
+    [onChangeNotebookTitle]
+  );
 };

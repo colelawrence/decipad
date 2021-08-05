@@ -1,11 +1,13 @@
+/* eslint-disable no-console */
 import S3 from 'aws-sdk/clients/s3';
 import { ID } from '@decipad/backendtypes';
 import { s3 as s3Config } from '@decipad/config';
 
 export function duplicate(id: ID, oldID: ID): Promise<void> {
   const [client, Bucket] = clientAndBucket();
-  const CopySource =
-    '/' + Bucket + '/' + encodeId(`/pads/${encodeId(oldID)}/content`);
+  const CopySource = `/${Bucket}/${encodeId(
+    `/pads/${encodeId(oldID)}/content`
+  )}`;
   const options = {
     Bucket,
     Key: encodeId(`/pads/${encodeId(id)}/content`),
@@ -22,12 +24,10 @@ export function duplicate(id: ID, oldID: ID): Promise<void> {
       console.log(`Error copying ${id}:`, err);
       throw err;
     })
-    .then(() => {
-      return;
-    });
+    .then(() => undefined);
 }
 
-export function put(id: ID, _body: string): Promise<any> {
+export function put(id: ID, _body: string): Promise<unknown> {
   const [client, Bucket] = clientAndBucket();
   const Body = Buffer.from(_body, 'utf-8');
   const Key = encodeId(id);

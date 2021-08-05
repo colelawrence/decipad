@@ -22,15 +22,12 @@ export default ({ apiPort }: { apiPort: number }) => {
     },
   };
 
-  async function call(_url: string, options: Record<string, any> = {}) {
+  async function call(_url: string, options: RequestInit = {}) {
     const { href } = new URL(_url, origin);
     const response = await fetch(href, options);
     if (!response.ok) {
       throw new Error(
-        'response was not ok: ' +
-          response.status +
-          ' : ' +
-          (await response.text())
+        `response was not ok: ${response.status} : ${await response.text()}`
       );
     }
 

@@ -40,15 +40,16 @@ export function sendEmail({
       Destination: {
         ToAddresses: [to],
       },
-      FromEmailAddress: senderEmailAddress!,
-      ReplyToAddresses: [senderEmailAddress!],
+      FromEmailAddress: senderEmailAddress,
+      ReplyToAddresses: [senderEmailAddress],
     };
 
     service.sendEmail(params, (err) => {
       if (err) {
-        return reject(err);
+        reject(err);
+      } else {
+        resolve();
       }
-      resolve();
     });
   });
 }

@@ -1,6 +1,8 @@
 import { ExternalData } from '..';
 
-export default async function (url: string): Promise<ExternalData.FetchResult> {
+export default async function defaultFetch(
+  url: string
+): Promise<ExternalData.FetchResult> {
   const response = await fetch(url);
   const result: AsyncIterable<Uint8Array> = {
     [Symbol.asyncIterator]() {

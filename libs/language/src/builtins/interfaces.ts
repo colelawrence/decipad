@@ -8,6 +8,7 @@ export interface BuiltinSpec {
    * The cardinality of the corresponding args passed to fn and functor will be raised from the default 1.
    */
   argCardinalities?: number[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fn?: (...args: any[]) => any;
   // Variant that operates on Value specifically
   fnValues?: (...args: AnyValue[]) => AnyValue;

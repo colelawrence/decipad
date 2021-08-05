@@ -14,6 +14,6 @@ describe('Editor Subheading Element', () => {
       </SubheadingElement>
     );
 
-    getByText('Subheading Element');
+    expect(getByText('Subheading Element')).toBeVisible();
   });
 });

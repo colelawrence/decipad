@@ -1,4 +1,9 @@
 /* eslint-env jest */
+/* eslint-disable no-shadow */
+/* eslint-disable no-console */
+/* eslint-disable jest/expect-expect */
+/* eslint-disable jest/valid-title */
+/* eslint-disable jest/no-export */
 
 import sandbox from './sandbox';
 import { createSandboxEnv } from './sandbox-env';
@@ -16,7 +21,10 @@ export interface TestGoodies {
   gql: typeof gql;
 }
 
-function testWithSandbox(description: string, fn: (args: TestGoodies) => void) {
+function testWithSandbox(
+  description: string,
+  fn: (args: TestGoodies) => void
+): void {
   let shownEnv = false;
   const workerId = process.env.JEST_WORKER_ID;
   if (typeof workerId === 'undefined') {
@@ -31,7 +39,8 @@ function testWithSandbox(description: string, fn: (args: TestGoodies) => void) {
   test.skip = wrapTestHelper(it.skip);
   test.todo = it.todo;
   test.concurrent = wrapTestHelper(it.concurrent);
-  test.each = (collection: Array<any>) => wrapTestHelper(it.each(collection));
+  test.each = (collection: Array<unknown>) =>
+    wrapTestHelper(it.each(collection));
 
   const testGoodies = {
     graphql: callGraphql(config),
@@ -58,12 +67,14 @@ function testWithSandbox(description: string, fn: (args: TestGoodies) => void) {
     fn(testGoodies as TestGoodies);
   });
 
-  function test(description: string, fn: () => Promise<any> | void) {
+  function test(description: string, fn: () => Promise<unknown> | void) {
     return it(description, wrap(fn));
   }
 
-  function wrap(fn: (arg?: any) => Promise<any> | void): any {
-    return (...args: [firstArg?: any]) => {
+  function wrap(
+    fn: (arg?: unknown) => Promise<unknown> | void
+  ): (arg?: unknown) => void {
+    return (...args: [firstArg?: unknown]) => {
       const firstArg = args[0];
       try {
         const ret = firstArg !== undefined ? fn(firstArg) : fn();
@@ -73,7 +84,7 @@ function testWithSandbox(description: string, fn: (args: TestGoodies) => void) {
             throw err;
           });
         }
-        return;
+        return undefined;
       } catch (err) {
         showEnv();
         throw err;
@@ -81,8 +92,10 @@ function testWithSandbox(description: string, fn: (args: TestGoodies) => void) {
     };
   }
 
-  function wrapTestHelper(targetFn: (desc: string, fn: () => any) => any) {
-    return (desc: string, fn: () => any) => {
+  function wrapTestHelper(
+    targetFn: (desc: string, fn: () => void | Promise<unknown>) => unknown
+  ) {
+    return (desc: string, fn: () => void | Promise<unknown>) => {
       targetFn(desc, wrap(fn));
     };
   }

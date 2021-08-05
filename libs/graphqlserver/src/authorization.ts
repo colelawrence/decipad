@@ -21,7 +21,7 @@ export async function isAuthorized(
   permissionType: PermissionType = 'READ'
 ) {
   const user = requireUser(context);
-  return await isAuthorizedBase(resource, user, permissionType);
+  return isAuthorizedBase(resource, user, permissionType);
 }
 
 export async function check(

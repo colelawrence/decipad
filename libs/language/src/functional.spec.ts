@@ -325,6 +325,7 @@ ${'' /* Get capital needed */}
 
   // https://www.notion.so/decipad/Crypto-Portfolio-Tracker-fe8bbefbd2e1441886576fd3c22c47f2
   // Three-dimensional ¯\_(ツ)_/¯
+  // eslint-disable-next-line jest/no-disabled-tests
   test.skip('Crypto portfolio tracker', async () => {
     expect(
       await runCodeForVariables(

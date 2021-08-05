@@ -51,19 +51,22 @@ export class SyncSubscriptionManager<T> {
     topic: string,
     inObservable: Observable<Mutation<Doc<{ value: T }>>>
   ) {
-    let count = this.outObservablesSubscriberCount.get(topic) as number;
-    count--;
+    //  we've set these in subscribe
+    /* eslint-disable @typescript-eslint/no-non-null-assertion */
+    let count = this.outObservablesSubscriberCount.get(topic)!;
+    count -= 1;
     this.outObservablesSubscriberCount.set(topic, count);
     if (count === 0) {
-      const outObservables = this.outObservables.get(topic);
-      outObservables!.complete();
+      const outObservables = this.outObservables.get(topic)!;
+      outObservables.complete();
       this.outObservables.delete(topic);
       this.topicObservable.next({ op: 'remove', topic });
     }
 
-    const inObservables = this.inObservables.get(topic);
-    const index = inObservables!.indexOf(inObservable);
-    inObservables!.splice(index, 1);
+    const inObservables = this.inObservables.get(topic)!;
+    const index = inObservables.indexOf(inObservable);
+    inObservables.splice(index, 1);
+    /* eslint-enable @typescript-eslint/no-non-null-assertion */
   }
 
   stop() {

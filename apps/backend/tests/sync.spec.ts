@@ -1,5 +1,8 @@
 /* eslint-env jest */
 
+// existing tests very granular
+/* eslint-disable jest/expect-expect */
+
 import Automerge from 'automerge';
 import { encode } from './utils/resource';
 import test from './sandbox';
@@ -43,17 +46,18 @@ test('sync docs', ({ test: it, http: { withAuth }, auth }) => {
   });
 
   it('GET /api/syncdoc/:id', async () => {
-    const doc = await (
+    const fetchedDoc = await (
       await call(`/api/syncdoc/${encode('/pads/padid')}`)
     ).text();
-    expect(typeof doc).toBe('string');
-    const pad2 = Automerge.load(doc, 'agent id 1');
+    expect(typeof fetchedDoc).toBe('string');
+    const pad2 = Automerge.load(fetchedDoc, 'agent id 1');
     expect(pad2).toMatchObject(pad);
   });
 
   it('change and PUT again', async () => {
-    doc = Automerge.change(doc, (doc) => {
-      doc.value.name = 'pad name was changed';
+    doc = Automerge.change(doc, (updateDoc) => {
+      // eslint-disable-next-line no-param-reassign
+      updateDoc.value.name = 'pad name was changed';
     });
 
     await call(`/api/syncdoc/${encode('/pads/padid')}`, {
@@ -66,11 +70,11 @@ test('sync docs', ({ test: it, http: { withAuth }, auth }) => {
   });
 
   it('GET /api/syncdoc/:id 2', async () => {
-    const doc = await (
+    const fetchedDoc = await (
       await call(`/api/syncdoc/${encode('/pads/padid')}`)
     ).text();
-    expect(typeof doc).toBe('string');
-    const pad2 = Automerge.load(doc, 'agent id 1');
+    expect(typeof fetchedDoc).toBe('string');
+    const pad2 = Automerge.load(fetchedDoc, 'agent id 1');
     expect(pad2).toMatchObject({
       value: {
         id: 'padid1',
@@ -83,8 +87,9 @@ test('sync docs', ({ test: it, http: { withAuth }, auth }) => {
 
   it('PUT /api/syncdoc/:id/changes replicates only changes', async () => {
     const before = doc;
-    doc = Automerge.change(doc, (doc) => {
-      doc.value.name = 'pad name was changed again';
+    doc = Automerge.change(doc, (updateDoc) => {
+      // eslint-disable-next-line no-param-reassign
+      updateDoc.value.name = 'pad name was changed again';
     });
 
     await call(`/api/syncdoc/${encode('/pads/padid')}/changes`, {
@@ -96,12 +101,12 @@ test('sync docs', ({ test: it, http: { withAuth }, auth }) => {
     });
   });
 
-  it('GET /api/syncdoc/:id', async () => {
-    const doc = await (
+  it('GET /api/syncdoc/:id again', async () => {
+    const fetchedDoc = await (
       await call(`/api/syncdoc/${encode('/pads/padid')}`)
     ).text();
-    expect(typeof doc).toBe('string');
-    const pad2 = Automerge.load(doc, 'agent id 1');
+    expect(typeof fetchedDoc).toBe('string');
+    const pad2 = Automerge.load(fetchedDoc, 'agent id 1');
     expect(pad2).toMatchObject({
       value: {
         id: 'padid1',

@@ -24,7 +24,7 @@ export type TypeName = typeof scalarTypeNames[number];
 const propagate = <P extends Array<unknown>>(
   method: (this: Type, ...params: P) => Type
 ): ((this: Type, ...params: P) => Type) => {
-  return function (...args) {
+  return function propagated(...args) {
     /* istanbul ignore if */
     if (
       this.functionness ||
@@ -122,7 +122,7 @@ export class Type {
     }
 
     if (this.rangeOf != null) {
-      return 'range of ' + this.rangeOf.toString();
+      return `range of ${this.rangeOf.toString()}`;
     }
 
     if (this.unit != null && this.unit.length > 0) {
@@ -185,7 +185,10 @@ export class Type {
   }
 
   withErrorCause(error: InferError | string): Type {
-    return propagate(function (this: Type, error: InferError | string) {
+    return propagate(function propagated(
+      this: Type,
+      error: InferError | string
+    ) {
       if (typeof error === 'string') {
         return this.withErrorCause(new InferError(error));
       } else {
@@ -199,14 +202,14 @@ export class Type {
   }
 
   expected(expected: Type | string): Type {
-    return propagate(function (this: Type, expected: Type | string) {
+    return propagate(function propagated(this: Type, expected: Type | string) {
       return this.withErrorCause(InferError.expectedButGot(expected, this));
     }).call(this, expected);
   }
 
   // Type assertions -- these return a new type possibly with an error
   sameAs(other: Type): Type {
-    return propagate(function (this: Type, other: Type) {
+    return propagate(function propagated(this: Type, other: Type) {
       return this.sameScalarnessAs(other)
         .sameColumnessAs(other)
         .sameDatenessAs(other)
@@ -215,7 +218,7 @@ export class Type {
   }
 
   isScalar(type: TypeName): Type {
-    return propagate(function (this: Type, type: TypeName) {
+    return propagate(function propagated(this: Type, type: TypeName) {
       if (type === this.type) {
         return this;
       } else {
@@ -225,7 +228,7 @@ export class Type {
   }
 
   sameScalarnessAs(other: Type): Type {
-    return propagate(function (this: Type, other: Type) {
+    return propagate(function propagated(this: Type, other: Type) {
       const meScalar = this.type != null;
       const theyScalar = this.type != null;
 
@@ -257,7 +260,7 @@ export class Type {
   }
 
   isColumn(size?: number): Type {
-    return propagate(function (this: Type, size?: number) {
+    return propagate(function propagated(this: Type, size?: number) {
       if (
         (size === undefined && this.columnSize != null) ||
         this.columnSize === size
@@ -272,7 +275,7 @@ export class Type {
   }
 
   reduced(): Type {
-    return propagate(function (this: Type) {
+    return propagate(function propagated(this: Type) {
       if (this.cellType != null) {
         return this.cellType;
       } else {
@@ -282,7 +285,10 @@ export class Type {
   }
 
   withColumnSize(columnSize: number | null): Type {
-    return propagate(function (this: Type, columnSize: number | null) {
+    return propagate(function propagated(
+      this: Type,
+      columnSize: number | null
+    ) {
       if (this.columnSize === columnSize) {
         return this;
       } else {
@@ -294,7 +300,7 @@ export class Type {
   }
 
   sameColumnessAs(other: Type): Type {
-    return propagate(function (this: Type, other: Type) {
+    return propagate(function propagated(this: Type, other: Type) {
       return this.withColumnSize(other.columnSize).mapType((t) => {
         if (t.columnSize) {
           // Recurse to make sure it's a colummn of the same size
@@ -310,7 +316,7 @@ export class Type {
   }
 
   isRange(): Type {
-    return propagate(function (this: Type) {
+    return propagate(function propagated(this: Type) {
       if (this.rangeOf != null) {
         return this;
       } else {
@@ -320,13 +326,13 @@ export class Type {
   }
 
   getRangeOf(): Type {
-    return propagate(function (this: Type) {
+    return propagate(function propagated(this: Type) {
       return this.rangeOf ?? this.expected('range');
     }).call(this);
   }
 
   sameRangenessAs(other: Type): Type {
-    return propagate(function (this: Type, other: Type) {
+    return propagate(function propagated(this: Type, other: Type) {
       if (this.rangeOf != null && other.rangeOf != null) {
         return this.rangeOf.sameAs(other.rangeOf).mapType(() => this);
       } else if (this.rangeOf == null && other.rangeOf == null) {
@@ -338,7 +344,7 @@ export class Type {
   }
 
   isTimeQuantity(): Type {
-    return propagate(function (this: Type) {
+    return propagate(function propagated(this: Type) {
       if (this.timeUnits != null) {
         return this;
       } else {
@@ -348,7 +354,7 @@ export class Type {
   }
 
   isDate(specificity?: TimeDotSpecificityBecauseNextJsIsVeryBadAndWrong): Type {
-    return propagate(function (
+    return propagate(function propagated(
       this: Type,
       specificity?: TimeDotSpecificityBecauseNextJsIsVeryBadAndWrong
     ) {
@@ -364,8 +370,8 @@ export class Type {
   }
 
   sameDatenessAs(other: Type): Type {
-    return propagate(function (this: Type, other: Type) {
-      if (this.date == other.date) {
+    return propagate(function propagated(this: Type, other: Type) {
+      if (this.date === other.date) {
         return this;
       } else {
         return this.expected(other);
@@ -374,13 +380,19 @@ export class Type {
   }
 
   multiplyUnit(withUnits: AST.Unit[] | null): Type {
-    return propagate(function (this: Type, withUnits: AST.Unit[] | null) {
+    return propagate(function propagated(
+      this: Type,
+      withUnits: AST.Unit[] | null
+    ) {
       return setUnit(this, combineUnits(this.unit, withUnits));
     }).call(this, withUnits);
   }
 
   divideUnit(withUnits: AST.Unit[] | null): Type {
-    return propagate(function (this: Type, withUnit: AST.Unit[] | null) {
+    return propagate(function propagated(
+      this: Type,
+      withUnit: AST.Unit[] | null
+    ) {
       const invTheirUnits =
         withUnit == null ? null : withUnit.map((u) => inverseExponent(u));
 

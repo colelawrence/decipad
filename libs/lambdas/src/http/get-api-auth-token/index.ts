@@ -43,19 +43,18 @@ export const handler = handle(async (event: APIGatewayProxyEvent): Promise<
         body: 'No such purpose',
       };
     }
-    return await generateToken(secret!, purpose);
-  } else {
-    return {
-      statusCode: 403,
-    };
+    return generateToken(secret!, purpose);
   }
+  return {
+    statusCode: 403,
+  };
 });
 
 async function generateToken(
   secret: string,
   options: Partial<JWTEncodeParams>
 ): Promise<string> {
-  return await NextAuthJWT.encode({
+  return NextAuthJWT.encode({
     ...jwtConf,
     token: { accessToken: secret },
     ...options,

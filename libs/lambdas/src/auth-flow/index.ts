@@ -32,9 +32,10 @@ export default function createAuthHandler(): HttpHandler {
       metadata: any
     ): Promise<boolean> {
       if (account.provider === 'github' && metadata && metadata.id) {
-        return await signInGithub(user, account, metadata);
-      } else if (account.type === 'email') {
-        return await signInEmail(user, account, metadata);
+        return signInGithub(user, account, metadata);
+      }
+      if (account.type === 'email') {
+        return signInEmail(user, account, metadata);
       }
       return false;
     },
@@ -62,9 +63,8 @@ export default function createAuthHandler(): HttpHandler {
           image: user.image,
         });
         return session;
-      } else {
-        return null;
       }
+      return null;
     },
   };
 
@@ -111,7 +111,7 @@ async function signInGithub(
     image: githubUser.image,
     email: githubUser.email,
     provider: 'github',
-    providerId: '' + githubUser.id,
+    providerId: `${githubUser.id}`,
   };
 
   if (existingUser) {
@@ -127,7 +127,7 @@ async function signInGithub(
   // let's make next-auth happy:
   user.accessToken = existingUser.secret;
   user.provider = 'github';
-  user.providerId = '' + githubUser.id;
+  user.providerId = `${githubUser.id}`;
 
   account.id = githubUser.id;
 

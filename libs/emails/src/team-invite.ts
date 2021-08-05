@@ -1,4 +1,12 @@
-export default ({ from, to, team, inviteAcceptLink }: Record<string, any>) => ({
+import { User } from '@decipad/interfaces';
+import { EmailGenerator } from './types';
+
+const teamInvite: EmailGenerator<{
+  from: User;
+  to: User;
+  team: { name: string };
+  inviteAcceptLink: string;
+}> = ({ from, to, team, inviteAcceptLink }) => ({
   subject: `${from.name} invites you to team ${team.name}`,
   body: `Dear ${to.name},
 
@@ -15,3 +23,4 @@ Sincerely,
 The Deci team.
 `,
 });
+export default teamInvite;

@@ -12,7 +12,7 @@ interface ResourceCreateArgs {
   canComment?: boolean;
 }
 
-export async function create(args: ResourceCreateArgs) {
+export async function create(args: ResourceCreateArgs): Promise<void> {
   const {
     userId = null,
     roleId = null,
@@ -30,12 +30,11 @@ export async function create(args: ResourceCreateArgs) {
 
   const data = await arc.tables();
 
-  const resource = resourceUri
-    ? resourceUri
-    : `/${resourceType}${resourceId ? '/' + resourceId : ''}`;
+  const resource =
+    resourceUri || `/${resourceType}${resourceId ? `/${resourceId}` : ''}`;
   if (!resourceType) {
     const parts = resource.split('/');
-    resourceType = parts[1];
+    [, resourceType] = parts;
     resourceId = parts.splice(2).join('/');
   }
   const id = `/users/${userId}/roles/${roleId}${resource}`;
@@ -43,7 +42,7 @@ export async function create(args: ResourceCreateArgs) {
     id,
     resource_type: resourceType,
     resource_uri: resource,
-    resource_id: resourceId!,
+    resource_id: resourceId,
     user_id: userId || 'null',
     role_id: roleId || 'null',
     given_by_user_id: givenByUserId,

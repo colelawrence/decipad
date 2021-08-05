@@ -25,8 +25,8 @@ test('the storybook handler', ({ test: it, http: { call: fetch } }) => {
 
   it.each(['/.storybook/', '/.storybook'])(
     'redirects %s to the storybook index.html',
-    async (path) => {
-      const resp = await fetch(path);
+    async (pathname) => {
+      const resp = await fetch(pathname);
       expect(resp.redirected).toBe(true);
       expect(new URL(resp.url).pathname).toBe('/.storybook/index.html');
     }

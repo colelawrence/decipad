@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react';
+import { Meta, Story } from '@storybook/react';
 import { NavigationItem } from '../../atoms';
 import { sidePadding } from '../../storybook-utils';
 import { noop } from '../../utils';
@@ -10,7 +10,7 @@ export default {
   component: NavigationList,
 } as Meta;
 
-export const Normal = () => (
+export const Normal: Story = () => (
   <NavigationList>
     <NavigationItem onClick={noop}>Item 1</NavigationItem>
     <NavigationItem onClick={noop}>Item 2</NavigationItem>

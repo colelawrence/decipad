@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import arc from '@architect/functions';
 import {
   ID,
@@ -100,6 +101,7 @@ function fakeAsyncIterable<T extends TableRecord>(): AsyncIterable<Changes<T>> {
   return {
     [Symbol.asyncIterator]() {
       return {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         next(): Promise<any> {
           return new Promise(() => {
             // do nothing

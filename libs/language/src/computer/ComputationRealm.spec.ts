@@ -1,3 +1,5 @@
+// TODO fix types
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComputationRealm } from './ComputationRealm';
 import { program } from './testutils';
 

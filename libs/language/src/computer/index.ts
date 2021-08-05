@@ -76,11 +76,11 @@ export const makeComputer =
     const computer = new Computer();
 
     const req$ = distinctMap(in$, ([req]) => req);
-    const cursors$ = distinctMap(in$, ([_, cursor]) => cursor);
+    const cursors$ = distinctMap(in$, ([, cursor]) => cursor);
     const blockIds$ = distinctMap(cursors$, (cursor) => cursor?.[0] ?? '');
 
     const computeResults$ = req$.pipe(
-      concatMap(async (req) => await computer.compute(req)),
+      concatMap(async (req) => computer.compute(req)),
       // Bring in the block IDs, which don't trigger more computes
       // but help us figure out the important errors
       combineLatestWith(blockIds$),

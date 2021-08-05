@@ -2,8 +2,11 @@ import { ApolloLink, Observable, FetchResult } from '@apollo/client/core';
 import { print } from 'graphql';
 import { createClient } from 'graphql-ws';
 
-export default function ({ apiPort }: { apiPort: number }) {
-  return function createLink(webSocketImpl: typeof WebSocket, keepAlive = 0) {
+export default function createWebsocketLink({ apiPort }: { apiPort: number }) {
+  return function createLink(
+    webSocketImpl: typeof WebSocket,
+    keepAlive = 0
+  ): ApolloLink {
     const client = createClient({
       url: `ws://localhost:${apiPort}/graphql`,
       webSocketImpl,
@@ -17,9 +20,9 @@ export default function ({ apiPort }: { apiPort: number }) {
           {
             next(
               payload: FetchResult<
-                { [key: string]: any },
-                Record<string, any>,
-                Record<string, any>
+                { [key: string]: unknown },
+                Record<string, unknown>,
+                Record<string, unknown>
               >
             ) {
               observer.next(payload);
@@ -31,21 +34,24 @@ export default function ({ apiPort }: { apiPort: number }) {
               if (!err) {
                 return;
               }
+              // eslint-disable-next-line no-console
               console.trace(err);
               if (err instanceof Error) {
-                return observer.error(err);
+                observer.error(err);
+                return;
               }
 
               if (err instanceof CloseEvent) {
-                return observer.error(
+                observer.error(
                   // reason will be available on clean closes
                   new Error(
                     `Socket closed with event ${err.code} ${err.reason || ''}`
                   )
                 );
+                return;
               }
 
-              return observer.error(err);
+              observer.error(err);
             },
           }
         );

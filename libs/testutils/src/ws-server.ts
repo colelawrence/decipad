@@ -46,7 +46,7 @@ export function createWebsocketServer(): DeciWebsocketServer {
           break;
 
         default:
-          throw new Error('unrecognized operation: ' + op);
+          throw new Error(`unrecognized operation: ${op}`);
       }
     });
 
@@ -67,6 +67,7 @@ export function createWebsocketServer(): DeciWebsocketServer {
       try {
         socket.send(message);
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.error('Error sending message:', err);
       }
     }

@@ -3,10 +3,10 @@ import debounce from 'lodash.debounce';
 import { Operation } from 'slate';
 import { nanoid } from 'nanoid';
 import assert from 'assert';
-import { DocSync } from './docsync';
 import { createReplica, Replica, ChangeEvent } from '@decipad/replica';
 import { LRUStorage } from '@decipad/lrustorage';
 import { ReplicaStorage } from '@decipad/interfaces';
+import { DocSync } from './docsync';
 import {
   fromSlateOpType,
   isSupportedSlateOpType,
@@ -88,15 +88,16 @@ export class SyncEditor {
     this.replica.stop();
   }
 
-  /**************************/
-  /*** remote changes *******/
-  /**************************/
+  /* -------------------- */
+  /* -- remote changes -- */
+  /* -------------------- */
 
   private beforeRemoteChanges(): Promise<undefined> | void {
     this.processLocalSlateOps();
     if (this.pendingApplyPromise) {
       return this.pendingApplyPromise.then(() => undefined);
     }
+    return undefined;
   }
 
   private onRemoteChange({ diffs, doc, before }: ChangeEvent<SyncDocValue>) {
@@ -105,7 +106,7 @@ export class SyncEditor {
   }
 
   private applyRemoteSlateOps(ops: ExtendedSlateOperation[]) {
-    const p = (this.pendingApplyPromise = new Promise((resolve) => {
+    this.pendingApplyPromise = new Promise((resolve) => {
       this.pendingApplyResolve = resolve;
       if (ops.length > 0) {
         for (const op of ops) {
@@ -115,8 +116,8 @@ export class SyncEditor {
       } else {
         resolve(undefined);
       }
-    }));
-    return p;
+    });
+    return this.pendingApplyPromise;
   }
 
   sendSlateOperations(ops: (Operation | ExtendedSlateOperation)[]) {
@@ -141,9 +142,9 @@ export class SyncEditor {
     }
   }
 
-  /*************************/
-  /*** local changes *******/
-  /*************************/
+  /* ------------------- */
+  /* -- local changes -- */
+  /* ------------------- */
 
   private pushLocalSlateOps(ops: ExtendedSlateOperation[]) {
     this.slateOpQueue = this.slateOpQueue.concat(ops);

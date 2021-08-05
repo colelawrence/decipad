@@ -18,6 +18,8 @@ export const ModelBlockElement: PlatePluginComponent = ({
   children,
   element,
 }) => {
+  // TODO fix types
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const blockId = (element as any).id ?? '';
 
   return (

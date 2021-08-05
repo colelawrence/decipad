@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import repl from 'repl';
 
-import {  build as t } from './type';
+import { build as t } from './type';
 import { replEval, stringifyResult, reset } from './repl';
 
 const testEval = (source: string) =>

@@ -1,7 +1,7 @@
 import { Element } from 'slate';
+import assert from 'assert';
 import { toSlatePath } from '../utils/to-slate-path';
 import { getTarget } from '../utils/path';
-import assert from 'assert';
 import { SyncDiff, SyncDoc, SyncDocValue } from '../types';
 
 const removeTextOp = (op: SyncDiff) => (map: any, doc: Element) => {
@@ -13,7 +13,7 @@ const removeTextOp = (op: SyncDiff) => (map: any, doc: Element) => {
 
   node = getTarget(doc, slatePath);
 
-  if (typeof index !== 'number') return;
+  if (typeof index !== 'number') return undefined;
 
   const text = (node && node.text && node.text[index]) || '*';
 

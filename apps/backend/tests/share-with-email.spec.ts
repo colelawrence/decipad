@@ -1,5 +1,8 @@
 /* eslint-env jest */
 
+// existing tests very granular
+/* eslint-disable jest/expect-expect */
+
 import arc from '@architect/functions';
 import test from './sandbox';
 import { create as createResourcePermission } from './utils/permissions';
@@ -60,7 +63,7 @@ test('share with email', ({
     });
   });
 
-  it('target user has access to resource', async () => {
+  it('existing target user has access to resource', async () => {
     const client = withAuth(await auth('test user id 2'));
     const resourcesPage = (
       await client.query({
@@ -188,7 +191,7 @@ test('share with email', ({
     });
   });
 
-  it('target user has access to resource', async () => {
+  it('invited target user has access to resource', async () => {
     const client = withAuth(await auth(targetUserId));
     const resourcesPage = (
       await client.query({

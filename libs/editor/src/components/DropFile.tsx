@@ -1,5 +1,5 @@
 import camelcase from 'camelcase';
-import { ReactNode, useCallback, useState } from 'react';
+import { FC, ReactNode, useCallback, useState } from 'react';
 import { useToasts } from 'react-toast-notifications';
 import { Editor, Transforms } from 'slate';
 import slug from 'slug';
@@ -12,7 +12,7 @@ interface DropFileProps {
 const acceptableFileTypes = ['text/csv'];
 const maxFileSizeBytes = 100000;
 
-export function DropFile({ editor, children }: DropFileProps) {
+export function DropFile({ editor, children }: DropFileProps): ReturnType<FC> {
   const [dragIsHovering, setDragIsHovering] = useState(false);
   const { addToast } = useToasts();
 
@@ -93,12 +93,14 @@ async function fileToDataURL(file: File): Promise<string> {
 function isFileAcceptable(file: File): boolean {
   if (acceptableFileTypes.indexOf(file.type) < 0) {
     // TODO: show the user the following error:
-    console.error('Cannot not import file of type ' + file.type);
+    // eslint-disable-next-line no-console
+    console.error(`Cannot not import file of type ${file.type}`);
     return false;
   }
 
   if (file.size > maxFileSizeBytes) {
     // TODO: show the user the following error:
+    // eslint-disable-next-line no-console
     console.error(
       `File too big (${file.size}). Will only accept files smaller than ${maxFileSizeBytes} bytes`
     );
@@ -111,7 +113,7 @@ function isFileAcceptable(file: File): boolean {
 function getFilesFromEvent(ev: DragEvent): File[] {
   const files = [];
   if (ev.dataTransfer && ev.dataTransfer.items) {
-    for (let i = 0; i < ev.dataTransfer.items.length; i++) {
+    for (let i = 0; i < ev.dataTransfer.items.length; i += 1) {
       const item = ev.dataTransfer.items[i];
       if (item.kind === 'file') {
         const file = item.getAsFile();
@@ -122,7 +124,7 @@ function getFilesFromEvent(ev: DragEvent): File[] {
     }
   } else if (ev.dataTransfer) {
     // Use DataTransfer interface to access the file(s)
-    for (let i = 0; i < ev.dataTransfer.files.length; i++) {
+    for (let i = 0; i < ev.dataTransfer.files.length; i += 1) {
       const file = ev.dataTransfer.files[i];
       files.push(file);
     }

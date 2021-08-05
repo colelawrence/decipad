@@ -1,8 +1,9 @@
 import { AppProps } from 'next/app';
+import { FC } from 'react';
 import 'tippy.js/dist/tippy.css';
 import 'tippy.js/themes/light.css';
 
-function App({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps): ReturnType<FC> {
   return (
     <div suppressHydrationWarning>
       {typeof window === 'undefined' ? null : <Component {...pageProps} />}

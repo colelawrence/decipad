@@ -30,15 +30,15 @@ type EmailConfig = {
 
 export default function createAdapter() {
   async function getAdapter(options: AdapterOptions) {
-    const { secret, ...appOptions } = options;
+    const { secret: secretOption, ...appOptions } = options;
     const data = await tables();
 
     async function createUser(profile: any) {
-      return await createUser2(profile as UserInput);
+      return createUser2(profile as UserInput);
     }
 
     async function getUser(id: string): Promise<User | undefined> {
-      return await data.users.get({ id });
+      return data.users.get({ id });
     }
 
     async function getUserByEmail(email: string): Promise<User | undefined> {
@@ -86,7 +86,7 @@ export default function createAdapter() {
       return newUser;
     }
 
-    async function deleteUser(_userId: string) {
+    async function deleteUser() {
       return null;
     }
 
@@ -135,8 +135,7 @@ export default function createAdapter() {
       return null;
     }
 
-    async function getSession(_sessionToken: string) {
-      // console.log('getSession', _sessionToken);
+    async function getSession() {
       return null;
     }
 
@@ -188,7 +187,7 @@ export default function createAdapter() {
     ): Promise<VerificationRequestRecord | undefined> {
       const hashedToken = hashToken(token);
       const id = hashToken(`${identifier}:${hashedToken}:${secret}`);
-      return await data.verificationrequests.get({ id });
+      return data.verificationrequests.get({ id });
     }
 
     async function deleteVerificationRequest(
@@ -202,7 +201,9 @@ export default function createAdapter() {
     }
 
     function hashToken(token: string): string {
-      return createHash('sha256').update(`${token}${secret}`).digest('hex');
+      return createHash('sha256')
+        .update(`${token}${secretOption}`)
+        .digest('hex');
     }
 
     return {

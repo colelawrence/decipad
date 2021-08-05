@@ -6,9 +6,9 @@ import {
 } from './page-utils/Pad';
 
 describe('pad content', () => {
-  beforeAll(async () => await setUp());
+  beforeAll(setUp);
 
-  beforeEach(async () => await waitForEditorToLoad());
+  beforeEach(waitForEditorToLoad);
 
   // TODO: uncomment this if we get some flakyness in these tests,
   // specifically if we get detached errors.
@@ -58,7 +58,7 @@ describe('pad content', () => {
     await page.waitForTimeout(250);
     await page.keyboard.press('ArrowRight');
     await page.waitForTimeout(250);
-    for (let i = 0; i < 9; i++) {
+    for (let i = 0; i < 9; i += 1) {
       await page.keyboard.press('Backspace');
     }
     expect(await getPadContent()).toMatchObject([
@@ -80,7 +80,7 @@ describe('pad content', () => {
   });
 
   it('can split a paragraph in two', async () => {
-    for (let i = 0; i < 17; i++) {
+    for (let i = 0; i < 17; i += 1) {
       await page.keyboard.press('ArrowLeft');
     }
     await page.keyboard.press('Enter');

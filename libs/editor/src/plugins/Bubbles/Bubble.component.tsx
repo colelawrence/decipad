@@ -11,9 +11,5 @@ const Span = styled('span')({
 });
 
 export const Bubble: PlatePluginComponent = ({ attributes, children }) => {
-  return (
-    <Span {...attributes} onClick={() => console.log('clicked')}>
-      {children}
-    </Span>
-  );
+  return <Span {...attributes}>{children}</Span>;
 };

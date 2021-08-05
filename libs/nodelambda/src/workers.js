@@ -2,7 +2,7 @@ const { Worker } = require('worker_threads');
 const assert = require('assert');
 const watch = require('node-watch');
 
-const workerPath = __dirname + '/run.js';
+const workerPath = `${__dirname}/run.js`;
 const workers = new Map();
 
 function createWorkerFor(functionName, env, update) {
@@ -88,8 +88,8 @@ function createWorkerFor(functionName, env, update) {
       return;
     }
     fn.working = true;
-    const work = workQueue.splice(0, 1)[0];
-    fn.worker.postMessage(work);
+    const nextWork = workQueue.splice(0, 1)[0];
+    fn.worker.postMessage(nextWork);
   }
 
   function replyWith(error, response) {

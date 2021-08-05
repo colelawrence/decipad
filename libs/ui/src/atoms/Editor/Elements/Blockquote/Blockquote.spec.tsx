@@ -14,6 +14,6 @@ describe('Editor Blockquote Element', () => {
       </BlockquoteElement>
     );
 
-    getByText('Blockquote Element');
+    expect(getByText('Blockquote Element')).toBeVisible();
   });
 });

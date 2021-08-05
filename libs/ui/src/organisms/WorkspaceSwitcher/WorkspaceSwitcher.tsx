@@ -3,7 +3,7 @@ import { ComponentProps, FC, useState } from 'react';
 import { Avatar, NavigationItem } from '../../atoms';
 import { Caret } from '../../icons';
 import { p15Medium } from '../../primitives';
-import { WorkspaceMenu } from '../../organisms';
+import { WorkspaceMenu } from '..';
 
 const nameStyles = css(p15Medium, {
   height: '40px',

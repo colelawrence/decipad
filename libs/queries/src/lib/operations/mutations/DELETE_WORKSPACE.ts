@@ -1,4 +1,4 @@
-import { gql, useMutation } from '@apollo/client';
+import { gql, MutationTuple, useMutation } from '@apollo/client';
 
 export const DELETE_WORKSPACE = gql`
   mutation DeleteWorkspace($id: ID!) {
@@ -14,7 +14,9 @@ export interface DeleteWorkspaceVars {
   id: string;
 }
 
-export const useDeleteWorkspace = ({ id }: DeleteWorkspaceVars) =>
+export const useDeleteWorkspace = ({
+  id,
+}: DeleteWorkspaceVars): MutationTuple<DeleteWorkspace, DeleteWorkspaceVars> =>
   useMutation<DeleteWorkspace, DeleteWorkspaceVars>(DELETE_WORKSPACE, {
     variables: { id },
     refetchQueries: ['GetWorkspaces'],

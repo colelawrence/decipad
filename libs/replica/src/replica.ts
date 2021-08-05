@@ -1,5 +1,6 @@
-import { Doc } from 'automerge';
-import Automerge, { Diff, Change } from 'automerge';
+// would take too much restructuring at this point to make typesafe
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import Automerge, { Doc, Diff, Change } from 'automerge';
 import {
   Observable,
   Subscription,
@@ -9,6 +10,7 @@ import {
 } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ReplicaStorage, ReplicationStatus } from '@decipad/interfaces';
+import assert from 'assert';
 import { fnQueue } from './utils/fn-queue';
 import { Sync } from './sync';
 import { ReplicaSync } from './replica-sync';
@@ -16,7 +18,6 @@ import { observeSubscriberCount } from './utils/observe-subscriber-count';
 import { syncStatusToReplicationStatus } from './utils/sync-status-to-replication-status';
 import { AsyncSubject, Mutation, SyncStatus } from './types';
 import { Store } from './store';
-import assert from 'assert';
 
 export interface ICreateReplicaOptions<T> {
   name: string;
@@ -83,6 +84,7 @@ export class Replica<T> {
     maxRetryIntervalMs,
     sendChangesDebounceMs,
     fetchPrefix,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     beforeRemoteChanges = () => {},
     storage,
   }: ICreateReplicaOptions<T>) {
@@ -117,7 +119,7 @@ export class Replica<T> {
         } catch (err) {
           console.error(err);
           this.observable.next({ loading: false, error: err, data: null });
-          stop();
+          this.stop();
         }
       })
     );
@@ -125,10 +127,9 @@ export class Replica<T> {
     this.subscriptionCountObservables.push(
       observeSubscriberCount(this.remoteChanges)
     );
-    const subscriptionCountObservable = (this.subscriptionCountObservable =
-      combineLatest(this.subscriptionCountObservables).pipe(
-        map(([c1, c2]) => c1 + c2)
-      ));
+    this.subscriptionCountObservable = combineLatest(
+      this.subscriptionCountObservables
+    ).pipe(map(([c1, c2]) => c1 + c2));
 
     let hadSubscriptors = false;
     this.subscriptionCountObservable.subscribe((subscriptionCount) => {
@@ -147,7 +148,7 @@ export class Replica<T> {
       topic: name,
       sync: globalSync,
       localChangesObservable: this.localChanges,
-      subscriptionCountObservable,
+      subscriptionCountObservable: this.subscriptionCountObservable,
       start: startReplicaSync,
       maxRetryIntervalMs,
       sendChangesDebounceMs,
@@ -186,6 +187,7 @@ export class Replica<T> {
     this.doc = Automerge.change(ldoc, (doc) => {
       const ret = fn(doc.value);
       if (ret !== undefined) {
+        // eslint-disable-next-line no-param-reassign
         doc.value = ret;
       }
     });
@@ -227,7 +229,7 @@ export class Replica<T> {
   public remove() {
     this.store.delete();
     this.observable.next({ loading: false, error: null, data: null });
-    stop();
+    this.stop();
   }
 
   public getValue(): T | null {

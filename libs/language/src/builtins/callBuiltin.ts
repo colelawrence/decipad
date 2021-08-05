@@ -7,7 +7,7 @@ import { getDefined } from '../utils';
 export function callBuiltin(funcName: string, args: Value[]) {
   const builtin = getDefined(
     builtins[funcName],
-    'panic: builtin not found: ' + funcName
+    `panic: builtin not found: ${funcName}`
   );
 
   return automapValues(

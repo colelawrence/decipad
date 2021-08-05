@@ -1,5 +1,8 @@
 /* eslint-env jest */
 
+// existing tests very granular
+/* eslint-disable jest/expect-expect */
+
 import waitForExpect from 'wait-for-expect';
 import { ObservableSubscription } from '@apollo/client';
 import { Workspace, Role, RoleInvitation } from '@decipad/backendtypes';
@@ -146,7 +149,7 @@ test('workspaces changes', ({
     expect(invites).toHaveLength(2);
   });
 
-  it('can subscribe to workspace changes', async () => {
+  it('can subscribe another user to workspace changes', async () => {
     await subscribe('test user id 2', inviteeWorkspaces, subscriptions);
   }, 15000);
 
@@ -209,8 +212,8 @@ test('workspaces changes', ({
 
   async function subscribe(
     userId: string,
-    workspaces: Workspace[],
-    subscriptions: ObservableSubscription[]
+    toWorkspaces: Workspace[],
+    pushToSubscriptions: ObservableSubscription[]
   ) {
     const client = await createClient(userId);
     const sub = client.subscribe({
@@ -231,7 +234,7 @@ test('workspaces changes', ({
       `,
     });
 
-    const subscription = await sub.subscribe({
+    const subscription = sub.subscribe({
       error(err) {
         throw err;
       },
@@ -242,33 +245,34 @@ test('workspaces changes', ({
         const changes = data.workspacesChanged;
         if (changes.added) {
           for (const w of changes.added) {
-            workspaces.push(w);
+            toWorkspaces.push(w);
           }
         }
 
         if (changes.updated) {
           for (const w of changes.updated) {
-            const index = workspaces.findIndex(
+            const index = toWorkspaces.findIndex(
               (w2: Workspace) => w2.id === w.id
             );
             if (index >= 0) {
-              workspaces[index] = Object.assign(workspaces[index], w);
+              // eslint-disable-next-line no-param-reassign
+              toWorkspaces[index] = Object.assign(toWorkspaces[index], w);
             }
           }
         }
 
         if (changes.removed) {
           for (const id of changes.removed) {
-            const index = workspaces.findIndex((w) => id === w.id);
+            const index = toWorkspaces.findIndex((w) => id === w.id);
             if (index >= 0) {
-              workspaces.splice(index, 1);
+              toWorkspaces.splice(index, 1);
             }
           }
         }
       },
     });
 
-    subscriptions.push(subscription);
+    pushToSubscriptions.push(subscription);
 
     // We have to wait because a subscription does not
     // wait for the server to reply.

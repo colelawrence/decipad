@@ -19,7 +19,7 @@ async function userKeyChangesHandler(event: TableRecordChanges<UserKeyRecord>) {
     return;
   }
 
-  const args = event.args;
+  const { args } = event;
 
   if (!args.id.startsWith('email:')) {
     return;

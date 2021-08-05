@@ -1,5 +1,5 @@
 import { ChakraProvider } from '@chakra-ui/react';
-import { render, RenderOptions } from '@testing-library/react';
+import { render, RenderOptions, RenderResult } from '@testing-library/react';
 
 import { buildType } from '@decipad/language';
 import { theme, ResultsContextProvider, GlobalStyles } from '../..';
@@ -15,6 +15,7 @@ const results: ResultsContextValue = {
         {
           blockId: 'test',
           statementIndex: 0,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           valueType: buildType.number({ unit: 'apples' } as any),
           value: 20,
         },
@@ -37,8 +38,8 @@ const AllTheProviders: React.FC = ({ children }) => {
 
 const customRender = (
   ui: JSX.Element,
-  options?: Omit<RenderOptions, 'queries'>
-) => render(ui, { wrapper: AllTheProviders, ...options });
+  options?: Omit<RenderOptions, 'queries' | 'wrapper'>
+): RenderResult => render(ui, { ...options, wrapper: AllTheProviders });
 
 // re-export everything
 export * from '@testing-library/react';

@@ -1,6 +1,6 @@
 interface ITestStorageOptions {
   itemCountLimit: number;
-  getQuotaExceededException: () => any;
+  getQuotaExceededException: () => unknown;
 }
 
 export class LimitedTestStorage implements Storage {

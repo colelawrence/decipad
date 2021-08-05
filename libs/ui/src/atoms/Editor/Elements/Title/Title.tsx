@@ -14,7 +14,9 @@ export const TitleElement: PlatePluginComponent = ({
   children,
   nodeProps,
 }) => {
-  const root = nodeProps!.styles.root;
+  // TODO type root better and make optional
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const { root } = nodeProps!.styles;
   return (
     <h1 css={[styles, root.css]} {...attributes} {...nodeProps}>
       {children}

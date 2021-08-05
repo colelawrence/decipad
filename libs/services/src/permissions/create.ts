@@ -31,12 +31,11 @@ export async function create(args: ResourceCreateArgs) {
 
   const data = await tables();
 
-  const resource = resourceUri
-    ? resourceUri
-    : `/${resourceType}${resourceId ? '/' + resourceId : ''}`;
+  const resource =
+    resourceUri || `/${resourceType}${resourceId ? `/${resourceId}` : ''}`;
   if (!resourceType) {
     const parts = resource.split('/');
-    resourceType = parts[1];
+    [, resourceType] = parts;
     resourceId = parts.splice(2).join('/');
   }
   const id = `/users/${userId}/roles/${roleId}${resource}`;
@@ -44,6 +43,7 @@ export async function create(args: ResourceCreateArgs) {
     id,
     resource_type: resourceType,
     resource_uri: resource,
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     resource_id: resourceId!,
     user_id: userId || 'null',
     role_id: roleId || 'null',

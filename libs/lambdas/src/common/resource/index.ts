@@ -9,7 +9,7 @@ export function encode(id: string) {
 export function decode(id: string | undefined) {
   let newId = (id || '').replace(/:/g, '/');
   if (!newId.startsWith('/')) {
-    newId = '/' + newId;
+    newId = `/${newId}`;
   }
   return newId;
 }

@@ -7,6 +7,7 @@ import {
 } from '@decipad/queries';
 import { LoadingSpinnerPage } from '@decipad/ui';
 import styled from '@emotion/styled';
+import { FC } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
@@ -66,7 +67,7 @@ export interface PadProps {
   padId: string;
 }
 
-export const Pad = ({ workspaceId, padId }: PadProps) => {
+export const Pad = ({ workspaceId, padId }: PadProps): ReturnType<FC> => {
   const { data, loading, error } = useGetPadByIdQuery({
     variables: { id: padId },
   });

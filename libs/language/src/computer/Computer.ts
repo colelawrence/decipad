@@ -81,6 +81,8 @@ export const computeProgram = async (
   const results: InBlockResult[] = [];
 
   for (const location of getAllBlockLocations(program)) {
+    // inherently sequential
+    // eslint-disable-next-line no-await-in-loop
     const result = await computeStatement(program, location, realm);
     results.push(result);
   }
@@ -106,7 +108,6 @@ export class Computer {
 
   async compute({
     program,
-    subscriptions: _,
   }: ComputeRequest): Promise<ComputeResponse | ComputePanic> {
     /* istanbul ignore catch */
     try {
@@ -176,6 +177,6 @@ export class Computer {
       ({ start, end }) => start?.line >= lineNo && end?.line <= lineNo
     );
 
-    return statementIndex != -1 ? [blockId, statementIndex] : null;
+    return statementIndex !== -1 ? [blockId, statementIndex] : null;
   }
 }

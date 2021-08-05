@@ -11,7 +11,7 @@ export default {
           },
         };
       },
-      resolve(_: any, __: any, context: GraphqlContext) {
+      resolve(_: unknown, __: unknown, context: GraphqlContext) {
         requireUser(context);
         return 'Hello World!';
       },

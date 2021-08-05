@@ -94,7 +94,7 @@ async function handleTagDelete({ id }: TableRecordIdentifier) {
 
 function parseTagId(id: string): ResourceWithTag {
   const parts = id.split('/');
-  let resource: string | undefined = undefined;
+  let resource: string | undefined;
   const idParts = [];
   let inTag = false;
   const tag = [];

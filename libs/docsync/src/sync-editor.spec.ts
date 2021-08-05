@@ -1,12 +1,12 @@
 import { timeout } from '@decipad/testutils';
 import { ELEMENT_H1, ELEMENT_PARAGRAPH } from '@udecode/plate';
 import { createEditor } from 'slate';
-import { DocSync, SyncNode } from './';
+import { DocSync, SyncNode } from '.';
 
 const docId = 'docid';
 
 describe('pad editor', () => {
-  test('sends changes', async () => {
+  beforeAll(async () => {
     const sync = new DocSync({
       userId: 'TEST_USER_ID',
       actorId: 'TEST_ACTOR_ID',

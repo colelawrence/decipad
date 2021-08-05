@@ -1,6 +1,13 @@
-import { ELEMENT_H1, ELEMENT_PARAGRAPH } from '@udecode/plate';
-import { getNode } from '@udecode/plate-common';
-import { getPlatePluginWithOverrides, WithOverride } from '@udecode/plate-core';
+/* eslint-disable no-param-reassign */
+// TODO fix node types
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  ELEMENT_H1,
+  ELEMENT_PARAGRAPH,
+  getNode,
+  getPlatePluginWithOverrides,
+  WithOverride,
+} from '@udecode/plate';
 import { Transforms } from 'slate';
 
 export const WithForcedLayout = (): WithOverride => (editor) => {

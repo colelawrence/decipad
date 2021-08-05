@@ -20,7 +20,9 @@ describe('Workspace', () => {
 
   test('creates a new pad and navigates to pad detail', async () => {
     await clickNewPadButton();
-    await page.waitForNavigation({ url: '/workspaces/*/pads/*' });
+    await expect(
+      page.waitForNavigation({ url: '/workspaces/*/pads/*' })
+    ).resolves.not.toThrow();
     await page.goBack();
   });
 
@@ -44,7 +46,7 @@ describe('Workspace', () => {
       expect(pads).toHaveLength(2);
     });
     const pads = await getPadList();
-    const copyIndex = pads.findIndex((pad) => pad.name!.startsWith('Copy of'));
+    const copyIndex = pads.findIndex((pad) => pad.name?.startsWith('Copy of'));
     expect(copyIndex).toBeGreaterThanOrEqual(0);
     const originalIndex = (copyIndex + 1) % pads.length;
     expect(pads[copyIndex].name).toBe(`Copy of ${pads[originalIndex].name}`);

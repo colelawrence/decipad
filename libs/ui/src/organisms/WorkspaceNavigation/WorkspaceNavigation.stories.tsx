@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react';
+import { Meta, Story } from '@storybook/react';
 import { sidePadding } from '../../storybook-utils';
 import { WorkspaceNavigation } from './WorkspaceNavigation';
 
@@ -8,6 +8,6 @@ export default {
   decorators: [sidePadding(8)],
 } as Meta;
 
-export const Normal = () => (
+export const Normal: Story = () => (
   <WorkspaceNavigation allNotebooksHref="" preferencesHref="" />
 );

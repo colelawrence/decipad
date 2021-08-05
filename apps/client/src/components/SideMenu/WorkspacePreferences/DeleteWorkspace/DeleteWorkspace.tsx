@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { Button, Collapse, Heading, Input, Text } from '@chakra-ui/react';
 import {
@@ -17,7 +17,7 @@ interface DeleteWorkspaceProps extends WorkspacePreferencesProps {
 export const DeleteWorkspace = ({
   currentWorkspace,
   onClose,
-}: DeleteWorkspaceProps) => {
+}: DeleteWorkspaceProps): ReturnType<FC> => {
   const { data } = useQuery<GetWorkspaces>(GET_WORKSPACES);
   const [deleteValue, setDeleteValue] = useState('');
   const [deleteMutation] = useDeleteWorkspace({
@@ -65,7 +65,7 @@ export const DeleteWorkspace = ({
                 history.push(`/`);
               })
               .catch((err) => {
-                addToast('Error deleting workspace: ' + err.message, {
+                addToast(`Error deleting workspace: ${err.message}`, {
                   appearance: 'error',
                 });
               });

@@ -32,6 +32,7 @@ export const ToolbarWrapper: FC = ({ children }) => {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const el = ref.current!;
     if (editor) {
       const { selection } = editor;
@@ -44,6 +45,8 @@ export const ToolbarWrapper: FC = ({ children }) => {
             editor,
             Path.parent(selection.anchor.path)
           );
+          // TODO fix node typing
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           return whiteList.includes((node as any).type);
         }
         return false;
@@ -56,8 +59,10 @@ export const ToolbarWrapper: FC = ({ children }) => {
         Editor.string(editor, selection) !== '' &&
         isInCompatibleBlocks()
       ) {
-        const domSelection = window.getSelection();
-        const domRange = domSelection!.getRangeAt(0);
+        // must be present when `selection` is
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const domSelection = window.getSelection()!;
+        const domRange = domSelection.getRangeAt(0);
         const rect = domRange.getBoundingClientRect();
         el.style.opacity = '1';
         el.style.top = `${rect.top + window.scrollY - el.offsetHeight}px`;

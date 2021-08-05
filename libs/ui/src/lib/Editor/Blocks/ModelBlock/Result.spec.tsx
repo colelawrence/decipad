@@ -2,15 +2,16 @@ import { render } from 'test-utils';
 import { AST, buildType } from '@decipad/language';
 import { ResultContent, ResultNumber } from './Result.component';
 
-const nullPos = null as any;
 const meters: AST.Unit[] = [
   {
     unit: 'meter',
     exp: 1,
     known: true,
     multiplier: 1,
-    start: nullPos,
-    end: nullPos,
+    // @ts-expect-error null hopefully ok for test
+    start: null,
+    // @ts-expect-error null hopefully ok for test
+    end: null,
   },
 ];
 

@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react';
+import { Meta, Story } from '@storybook/react';
 import { Globe } from './Globe';
 
 export default {
@@ -6,4 +6,4 @@ export default {
   component: Globe,
 } as Meta;
 
-export const Normal = () => <Globe />;
+export const Normal: Story = () => <Globe />;

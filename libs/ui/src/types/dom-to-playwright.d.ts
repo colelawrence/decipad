@@ -4,6 +4,6 @@ declare module 'dom-to-playwright' {
     node?: Document | Element
   ): Promise<{
     select(element: Element): string;
-    update(node: Document | Element): Promise<void>;
+    update(newNode: Document | Element): Promise<void>;
   }>;
 }

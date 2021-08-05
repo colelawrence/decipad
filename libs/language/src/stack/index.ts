@@ -39,7 +39,7 @@ export class Stack<T> {
       if (value != null) return value;
     }
 
-    throw new Error('panic: not found in stack: ' + varName);
+    throw new Error(`panic: not found in stack: ${varName}`);
   }
 
   delete(varName: string) {

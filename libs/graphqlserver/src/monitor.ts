@@ -1,4 +1,4 @@
-import { ApolloServerPlugin } from 'apollo-server-plugin-base';
+import type { ApolloServerPlugin } from 'apollo-server-plugin-base';
 import {
   withScope,
   Handlers,
@@ -23,10 +23,10 @@ export default {
         withScope((scope) => {
           scope.clear();
           scope.addEventProcessor((event) =>
-            Handlers.parseRequest(event, (rc.context as any).event)
+            Handlers.parseRequest(event, rc.context.event)
           );
 
-          const userId = (rc.context as any).user?.id;
+          const userId = rc.context.user?.id;
           if (userId) {
             scope.setUser({
               id: userId,
@@ -35,8 +35,7 @@ export default {
 
           scope.setTags({
             graphql: rc.operation?.operation || 'parse_err',
-            graphqlName:
-              (rc.operationName as any) || (rc.request.operationName as any),
+            graphqlName: rc.operationName || rc.request.operationName,
           });
 
           rc.errors.forEach((error) => {

@@ -11,6 +11,6 @@ declare namespace jest {
   }
 
   interface Expect {
-    toRoundEqual: (n: RoundEqInput) => any;
+    toRoundEqual: (n: RoundEqInput) => void;
   }
 }

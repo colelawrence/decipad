@@ -22,19 +22,35 @@ export interface DocMetadata {
   createdLocally: boolean;
 }
 
-export interface RemoteWebSocketOp {
-  o: 's' | 'u' | 'c';
-  t: string;
-  c: Change[] | null;
-  type?: string;
-}
+export type RemoteWebSocketOp =
+  | {
+      o: 's' | 'u';
+      t: string;
+      c: null;
+      type?: string;
+    }
+  | {
+      o: 'c';
+      t: string;
+      c: Change[];
+      type?: string;
+    };
 
-export interface RemoteOp {
-  op: 'subscribed' | 'unsubscribed' | 'changed';
-  topic: string;
-  changes: Change[] | null;
-}
+export type RemoteOp =
+  | {
+      op: 'subscribed' | 'unsubscribed';
+      topic: string;
+      changes: null;
+    }
+  | {
+      op: 'changed';
+      topic: string;
+      changes: Change[];
+    };
 
+// false positives, ESLint confused by enum
+/* eslint-disable no-shadow */
+/* eslint-disable no-unused-vars  */
 export enum SyncStatus {
   Unknown = 1,
   LocalChanged,

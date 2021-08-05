@@ -7,8 +7,8 @@ import {
 } from '@udecode/plate';
 
 export const withStyledPlaceHolders = (
-  components: Record<DefaultPlatePluginKey, PlatePluginComponent>
-) =>
+  components: Partial<Record<DefaultPlatePluginKey, PlatePluginComponent>>
+): Partial<Record<DefaultPlatePluginKey, PlatePluginComponent>> =>
   withPlaceholders(components, [
     {
       key: ELEMENT_PARAGRAPH,

@@ -1,4 +1,6 @@
-export default ({ url }: Record<string, any>) => ({
+import { EmailGenerator } from './types';
+
+const authMagiclink: EmailGenerator<{ url: string }> = ({ url }) => ({
   subject: `Deci: Sign in`,
   body: `Hello,
 
@@ -17,3 +19,4 @@ Sincerely,
 The Deci team.
 `,
 });
+export default authMagiclink;

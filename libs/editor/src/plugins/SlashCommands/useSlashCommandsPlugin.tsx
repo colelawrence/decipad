@@ -6,14 +6,20 @@ import {
   KeyboardHandler,
   matchesTriggerAndPattern,
   OnChange,
+  PlatePlugin,
   SPEditor,
 } from '@udecode/plate';
-import { useCallback, useMemo, useState } from 'react';
+import { ComponentProps, useCallback, useMemo, useState } from 'react';
 import { Range, Transforms } from 'slate';
+import { SlashCommandsSelect } from '.';
 import { Command, commands } from './commands';
 import { insertBlock } from './utils/insertBlock';
 
-export const useSlashCommandsPlugin = () => {
+export const useSlashCommandsPlugin = (): {
+  plugin: PlatePlugin;
+  getSlashCommandsProps: () => ComponentProps<typeof SlashCommandsSelect>;
+  searchValue: string;
+} => {
   const [targetRange, setTargetRange] = useState<Range | null>(null);
   const [valueIndex, setValueIndex] = useState(0);
   const [search, setSearch] = useState('');
@@ -62,6 +68,7 @@ export const useSlashCommandsPlugin = () => {
           return false;
         }
       }
+      return undefined;
     },
     [targetRange, valueIndex, values, onAddBlock]
   );

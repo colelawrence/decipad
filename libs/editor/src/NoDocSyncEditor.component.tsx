@@ -1,5 +1,5 @@
 import { Plate, PlateProps } from '@udecode/plate';
-import { useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { FormattingToolbar } from './components/FormattingToolbar';
@@ -9,7 +9,7 @@ import {
   useSlashCommandsPlugin,
 } from './plugins/SlashCommands';
 
-export const Editor = (props: PlateProps) => {
+export const Editor = (props: PlateProps): ReturnType<FC> => {
   const { getSlashCommandsProps, plugin: slashCommandsPlugin } =
     useSlashCommandsPlugin();
 
@@ -33,7 +33,7 @@ export const Editor = (props: PlateProps) => {
   );
 };
 
-export const NoDocSyncEditor = (props: PlateProps) => {
+export const NoDocSyncEditor = (props: PlateProps): ReturnType<FC> => {
   return (
     <DndProvider backend={HTML5Backend}>
       <Editor {...props} />

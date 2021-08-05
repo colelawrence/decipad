@@ -14,7 +14,7 @@ import {
   GetWorkspaceById_getWorkspaceById,
   useRenameWorkspace,
 } from '@decipad/queries';
-import React, { FormEvent, useRef, useState } from 'react';
+import React, { FC, FormEvent, useRef, useState } from 'react';
 import { DeleteWorkspace } from './DeleteWorkspace/DeleteWorkspace';
 
 export interface WorkspacePreferencesProps {
@@ -23,7 +23,7 @@ export interface WorkspacePreferencesProps {
 
 export const WorkspacePreferences = ({
   currentWorkspace,
-}: WorkspacePreferencesProps) => {
+}: WorkspacePreferencesProps): ReturnType<FC> => {
   const history = useHistory();
   const { path, url } = useRouteMatch();
 

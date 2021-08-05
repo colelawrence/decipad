@@ -6,7 +6,9 @@ import {
 } from '@apollo/client';
 import { concatPagination } from '@apollo/client/utilities';
 import merge from 'deepmerge';
-import isEqual from 'lodash/isEqual';
+// false positive, @types only
+// eslint-disable-next-line import/no-extraneous-dependencies
+import isEqual from 'lodash.isequal';
 import { AppProps } from 'next/app';
 import { useMemo } from 'react';
 
@@ -16,7 +18,7 @@ const ORIGIN =
     ? window.location.origin
     : 'http://localhost:4200';
 
-let apolloClient: ApolloClient<NormalizedCacheObject>;
+let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
 function createApolloClient() {
   return new ApolloClient({
@@ -37,14 +39,17 @@ function createApolloClient() {
   });
 }
 
-export function initializeApollo(initialState: any = null) {
-  const _apolloClient = apolloClient ?? createApolloClient();
+export function initializeApollo(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  initialState: any = null
+): ApolloClient<NormalizedCacheObject> {
+  const createdOrExistingClient = apolloClient ?? createApolloClient();
 
   // If your page has Next.js data fetching methods that use Apollo Client, the initial state
   // gets hydrated here
   if (initialState) {
     // Get existing cache, loaded during client side data fetching
-    const existingCache = _apolloClient.extract();
+    const existingCache = createdOrExistingClient.extract();
 
     // Merge the existing cache into data passed from getStaticProps/getServerSideProps
     const data = merge(initialState, existingCache, {
@@ -58,28 +63,31 @@ export function initializeApollo(initialState: any = null) {
     });
 
     // Restore the cache with the merged data
-    _apolloClient.cache.restore(data);
+    createdOrExistingClient.cache.restore(data);
   }
   // For SSG and SSR always create a new Apollo Client
-  if (typeof window === 'undefined') return _apolloClient;
+  if (typeof window === 'undefined') return createdOrExistingClient;
   // Create the Apollo Client once in the client
-  if (!apolloClient) apolloClient = _apolloClient;
+  if (!apolloClient) apolloClient = createdOrExistingClient;
 
-  return _apolloClient;
+  return createdOrExistingClient;
 }
 
 export function addApolloState(
   client: ApolloClient<NormalizedCacheObject>,
   pageProps: AppProps['pageProps']
-) {
+): AppProps['pageProps'] {
   if (pageProps?.props) {
+    // eslint-disable-next-line no-param-reassign
     pageProps.props[APOLLO_STATE_PROP_NAME] = client.cache.extract();
   }
 
   return pageProps;
 }
 
-export function useApollo(pageProps: AppProps['pageProps']) {
+export function useApollo(
+  pageProps: AppProps['pageProps']
+): ApolloClient<NormalizedCacheObject> {
   const state = pageProps[APOLLO_STATE_PROP_NAME];
   const store = useMemo(() => initializeApollo(state), [state]);
   return store;

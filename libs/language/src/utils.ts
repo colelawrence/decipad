@@ -1,4 +1,5 @@
 import { AST, Time } from '.';
+
 export { date } from './date';
 
 type WalkFn = (node: AST.Node, path: number[]) => void;
@@ -197,14 +198,14 @@ export const getDefined = <T>(
   message = 'getDefined did not expect null or undefined'
 ): T => {
   if (anything == null) {
-    throw new Error('panic: ' + message);
+    throw new Error(`panic: ${message}`);
   } else {
     return anything;
   }
 };
 
 type ClassOf<T> = {
-  new (...x: any[]): T;
+  new (...x: unknown[]): T;
 };
 
 export const getInstanceof = <T>(
@@ -217,7 +218,7 @@ export const getInstanceof = <T>(
   if (thing instanceof cls) {
     return thing as T;
   } else {
-    throw new Error('panic: ' + message);
+    throw new Error(`panic: ${message}`);
   }
 };
 

@@ -10,7 +10,7 @@ test('graphql subscriptions', ({
 }) => {
   let client: ApolloClient<StoreObject>;
 
-  it('can create client', async () => {
+  beforeAll(async () => {
     client = await createClient();
   });
 

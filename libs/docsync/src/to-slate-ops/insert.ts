@@ -18,27 +18,30 @@ const insertNodeOp =
   (map: any) => {
     const ops: any = [];
 
-    const iterate = ({ children, ...json }: any, path: any) => {
+    const iterate = ({ children, ...json }: any, currentPath: any) => {
       const node = children ? { ...json, children: [] } : json;
 
       ops.push({
         type: 'insert_node',
-        path,
+        path: currentPath,
         node,
       });
 
-      children &&
+      if (children) {
         children.forEach((n: any, i: number) => {
-          const node = map[n] || Automerge.getObjectById(doc, n);
+          const nextNode = map[n] || Automerge.getObjectById(doc, n);
 
-          iterate((node && toJS(node)) || n, [...path, i]);
+          iterate((nextNode && toJS(nextNode)) || n, [...currentPath, i]);
         });
+      }
     };
 
     const source =
       map[value] || toJS(map[obj] || Automerge.getObjectById(doc, value));
 
-    source && iterate(source, [...toSlatePath(path), index]);
+    if (source) {
+      iterate(source, [...toSlatePath(path), index]);
+    }
 
     return ops;
   };
