@@ -34,6 +34,6 @@ echo "Building frontend..."
 npm run build:frontend
 cp -r dist/apps/client/exported/. apps/backend/public
 
-echo "Deploying client for \"$DEPLOY_NAME\"..."
+echo "Deploying client..."
 cd apps/backend
 ./node_modules/.bin/arc deploy --static --prune --no-hydrate
