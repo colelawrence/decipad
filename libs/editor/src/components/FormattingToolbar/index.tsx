@@ -1,5 +1,4 @@
 import {
-  BalloonToolbar,
   getSlatePluginType,
   MARK_CODE,
   ToolbarMark,
@@ -11,35 +10,14 @@ import { BlockTypeButton } from './BlockTypeButton';
 import { Divider } from './Divider';
 import { TextFormattingOptions } from './TextFormattingOptions';
 import { toolbarButtonStyles } from './toolbarButtonStyles';
+import { ToolbarWrapper } from './ToolbarWrapper/ToolbarWrapper.component';
 import { tooltip } from './tooltipOptions';
 
 export const FormattingToolbar = () => {
   const editor = useStoreEditorRef(useEventEditorId('focus'));
 
-  const arrow = false;
-  const theme = 'light';
-  const direction = 'top';
-  const hiddenDelay = 0;
-
   return (
-    <BalloonToolbar
-      arrow={arrow}
-      theme={theme}
-      direction={direction}
-      hiddenDelay={hiddenDelay}
-      styles={{
-        root: {
-          background: 'white',
-          boxShadow: '0px 2px 24px -4px rgba(36, 36, 41, 0.06)',
-          borderRadius: '6px',
-          border: '1px solid #f0f0f2 !important',
-          height: '48px',
-          display: 'flex',
-          alignItems: 'center',
-          padding: '0 8px',
-        },
-      }}
-    >
+    <ToolbarWrapper>
       <BlockTypeButton />
       <Divider />
       <TextFormattingOptions />
@@ -50,6 +28,6 @@ export const FormattingToolbar = () => {
         tooltip={{ content: 'Inline Code', ...tooltip }}
         styles={toolbarButtonStyles}
       />
-    </BalloonToolbar>
+    </ToolbarWrapper>
   );
 };

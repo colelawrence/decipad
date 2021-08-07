@@ -13,6 +13,9 @@ const codeBlockStyles = {
       lineHeight: '2.5',
       margin: '8px 0',
       boxShadow: '0px 2px 24px -4px rgba(36, 36, 41, 0.06)',
+      '& ::selection': {
+        backgroundColor: 'rgba(196, 202, 251, 0.5)',
+      },
     },
   },
 };

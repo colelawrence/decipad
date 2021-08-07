@@ -23,7 +23,7 @@ exports[`CodeBlock Block matches snapshot 1`] = `
     spellcheck="false"
   >
     <pre
-      class="CodeBlockElement___StyledPre-sc-o8gydl-0 fXXVRp slate-CodeBlockElement"
+      class="CodeBlockElement___StyledPre-sc-o8gydl-0 fOVDla slate-CodeBlockElement"
       data-slate-node="element"
     >
       <code>
@@ -48,7 +48,7 @@ exports[`CodeBlock Block matches snapshot with no results 1`] = `
     spellcheck="false"
   >
     <pre
-      class="CodeBlockElement___StyledPre-sc-o8gydl-0 fXXVRp slate-CodeBlockElement"
+      class="CodeBlockElement___StyledPre-sc-o8gydl-0 fOVDla slate-CodeBlockElement"
       data-slate-node="element"
     >
       <code>
