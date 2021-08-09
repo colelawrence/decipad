@@ -1,6 +1,7 @@
-import parseCSV, { Options as ParseCSVOptions } from 'csv-parse';
+import parseCSV from 'csv-parse';
 import { TabularData } from './TabularData';
 import * as ExternalData from './external-data-types';
+import { cast } from './cast';
 
 export { ExternalData };
 
@@ -35,7 +36,7 @@ async function resolveForContentType(
 ): Promise<TabularData> {
   switch (contentType) {
     case 'text/csv': {
-      return await resolveCSV(response, maxRows);
+      return await resolveCsv(response, maxRows);
     }
     default: {
       throw new Error("don't know how to handle content type " + contentType);
@@ -43,26 +44,13 @@ async function resolveForContentType(
   }
 }
 
-async function resolveCSV(
+export async function resolveCsv(
   response: AsyncIterable<ArrayBuffer>,
   maxRows: number
 ): Promise<TabularData> {
   return new Promise((resolve, reject) => {
     const data = new TabularData();
-    const options: ParseCSVOptions = {
-      cast: true,
-      cast_date: (d: string): Date => {
-        let n = Date.parse(d + 'Z');
-        if (isNaN(n)) {
-          n = Date.parse(d);
-        }
-        if (!isNaN(n)) {
-          return new Date(n);
-        }
-        return d as any as Date;
-      },
-    };
-    const parser = parseCSV(options);
+    const parser = parseCSV({ cast });
     let parserEnded = false;
     let isDone = false;
     let hadFirstRow = false;

@@ -4,7 +4,7 @@ export class TabularData {
 
   addRow(row: any[]) {
     row = trimRow(row);
-    if (this.columnCount >= 0 && row.length !== this.columnCount) {
+    if (this.columnCount > 0 && row.length !== this.columnCount) {
       throw new Error('expected column count to be ' + this.columnCount);
     }
     let columnIndex = -1;
