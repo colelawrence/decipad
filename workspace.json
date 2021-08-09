@@ -136,10 +136,10 @@
       "projectType": "application",
       "targets": {
         "e2e": {
-          "executor": "@nrwl/cypress:cypress",
+          "executor": "@nrwl/jest:jest",
           "options": {
-            "cypressConfig": "cypress.json",
-            "tsConfig": "tsconfig.json"
+            "jestConfig": "apps/client-e2e/jest.config.js",
+            "passWithNoTests": true
           }
         },
         "lint": {

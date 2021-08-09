@@ -3,6 +3,7 @@ module.exports = {
   projects: [
     '<rootDir>/libs/language',
     '<rootDir>/apps/client',
+    '<rootDir>/apps/client-e2e',
     '<rootDir>/libs/ui',
     '<rootDir>/libs/editor',
     '<rootDir>/apps/backend',
