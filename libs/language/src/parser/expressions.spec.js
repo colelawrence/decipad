@@ -721,6 +721,24 @@ runTests({
     },
   },
 
+  'comparison and boolean operators (2)': {
+    sourceMap: false,
+    source: 'true || false',
+    ast: [c('||', l(true), l(false))],
+  },
+
+  'comparison and boolean operators (3)': {
+    sourceMap: false,
+    source: '!A',
+    ast: [c('!', r('A'))],
+  },
+
+  'comparison and boolean operators (4)': {
+    sourceMap: false,
+    source: 'A != B',
+    ast: [c('!=', r('A'), r('B'))],
+  },
+
   'No ambiguity between negation and subtraction': {
     sourceMap: false,
     source: '100 - -a',

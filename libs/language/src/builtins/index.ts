@@ -37,6 +37,13 @@ const dateCmpFunctor = (left: Type, right: Type): Type =>
 const cmpFunctor = (left: Type, right: Type): Type =>
   Type.combine(left.isScalar('number'), right.sameAs(left), t.boolean());
 
+const booleanBinopFunctor = (left: Type, right: Type): Type =>
+  Type.combine(
+    left.isScalar('boolean'),
+    right.isScalar('boolean'),
+    t.boolean()
+  );
+
 export const builtins: { [fname: string]: BuiltinSpec } = {
   sqrt: {
     argCount: 1,
@@ -108,6 +115,7 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
     fn: (a, b) => Math.pow(a, b),
     functor: binopWithUnitlessSecondArgFunctor,
   },
+  // Comparison
   '<': {
     argCount: 2,
     fn: (a, b) => a < b,
@@ -132,6 +140,27 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
     argCount: 2,
     fn: (a, b) => a == b,
     functor: cmpFunctor,
+  },
+  '!=': {
+    argCount: 2,
+    fn: (a, b) => a != b,
+    functor: cmpFunctor,
+  },
+  // Boolean ops
+  '!': {
+    argCount: 1,
+    fn: (a) => !a,
+    functor: (a) => a.isScalar('boolean'),
+  },
+  '&&': {
+    argCount: 2,
+    fn: (a, b) => a && b,
+    functor: booleanBinopFunctor,
+  },
+  '||': {
+    argCount: 2,
+    fn: (a, b) => a || b,
+    functor: booleanBinopFunctor,
   },
   if: {
     argCount: 3,

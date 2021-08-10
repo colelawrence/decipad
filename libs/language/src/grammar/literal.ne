@@ -16,7 +16,7 @@ literal     -> sequence                                 {% id %}
 boolean     -> "true"                                   {%
                                                         (d, l) => ({
                                                           type: 'literal',
-                                                          args: ['boolean', true],
+                                                          args: ['boolean', true, null],
                                                           location: l,
                                                           length: lengthOf(d)
                                                         })
@@ -24,7 +24,7 @@ boolean     -> "true"                                   {%
 boolean     -> "false"                                  {%
                                                         (d, l) => ({
                                                           type: 'literal',
-                                                          args: ['boolean', false],
+                                                          args: ['boolean', false, null],
                                                           location: l,
                                                           length: lengthOf(d)
                                                         })

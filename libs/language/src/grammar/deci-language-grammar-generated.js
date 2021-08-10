@@ -181,7 +181,7 @@
         symbols: ['boolean$string$1'],
         postprocess: (d, l) => ({
           type: 'literal',
-          args: ['boolean', true],
+          args: ['boolean', true, null],
           location: l,
           length: lengthOf(d),
         }),
@@ -204,7 +204,7 @@
         symbols: ['boolean$string$2'],
         postprocess: (d, l) => ({
           type: 'literal',
-          args: ['boolean', false],
+          args: ['boolean', false, null],
           location: l,
           length: lengthOf(d),
         }),
@@ -2317,7 +2317,7 @@
       {
         name: 'primary',
         symbols: [{ literal: '-' }, '_', 'expression'],
-        postprocess: (d, l, reject) => {
+        postprocess: (d, l) => {
           const expr = d[2];
           if (expr.type === 'literal' && expr.args[0] === 'number') {
             expr.args[1] = -expr.args[1];
@@ -2348,6 +2348,31 @@
               length: lengthOf(d),
             };
           }
+        },
+      },
+      {
+        name: 'primary',
+        symbols: [{ literal: '!' }, '_', 'expression'],
+        postprocess: (d, l) => {
+          return {
+            type: 'function-call',
+            args: [
+              {
+                type: 'funcref',
+                args: ['!'],
+                location: l,
+                length: 1,
+              },
+              {
+                type: 'argument-list',
+                args: [d[2]],
+                location: l + lengthOf([d[0], d[1]]),
+                length: lengthOf(d[2]),
+              },
+            ],
+            location: l,
+            length: lengthOf(d),
+          };
         },
       },
       {
@@ -2469,6 +2494,17 @@
       {
         name: 'multiplicativeOperator$subexpression$1',
         symbols: ['multiplicativeOperator$subexpression$1$string$4'],
+      },
+      {
+        name: 'multiplicativeOperator$subexpression$1$string$5',
+        symbols: [{ literal: '!' }, { literal: '=' }],
+        postprocess: function joiner(d) {
+          return d.join('');
+        },
+      },
+      {
+        name: 'multiplicativeOperator$subexpression$1',
+        symbols: ['multiplicativeOperator$subexpression$1$string$5'],
       },
       {
         name: 'multiplicativeOperator',

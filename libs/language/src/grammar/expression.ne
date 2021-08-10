@@ -109,7 +109,7 @@ primary      -> "(" _ expression _ ")"                  {%
                                                         %}
 
 primary      -> "-" _ expression                        {%
-                                                        (d, l, reject) => {
+                                                        (d, l) => {
                                                           const expr = d[2]
                                                           if (
                                                             expr.type === 'literal' &&
@@ -142,6 +142,30 @@ primary      -> "-" _ expression                        {%
                                                               location: l,
                                                               length: lengthOf(d)
                                                             }
+                                                          }
+                                                        }
+                                                        %}
+
+primary      -> "!" _ expression                        {%
+                                                        (d, l) => {
+                                                          return {
+                                                            type: 'function-call',
+                                                            args: [
+                                                              {
+                                                                type: 'funcref',
+                                                                args: ['!'],
+                                                                location: l,
+                                                                length: 1
+                                                              },
+                                                              {
+                                                                type: 'argument-list',
+                                                                args: [d[2]],
+                                                                location: l + lengthOf([d[0], d[1]]),
+                                                                length: lengthOf(d[2])
+                                                              }
+                                                            ],
+                                                            location: l,
+                                                            length: lengthOf(d)
                                                           }
                                                         }
                                                         %}
@@ -185,7 +209,7 @@ additiveOperator  -> __ ("in") __                       {%
                                                         %}
 
 
-multiplicativeOperator -> ("**" | ">" | "<" | "<=" | ">=" | "==") {%
+multiplicativeOperator -> ("**" | ">" | "<" | "<=" | ">=" | "==" | "!=") {%
                                                         (d, l) => {
                                                           const op = d[0][0]
                                                           return {

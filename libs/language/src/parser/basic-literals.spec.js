@@ -91,7 +91,7 @@ runTests({
     ast: [
       {
         type: 'literal',
-        args: ['boolean', true],
+        args: ['boolean', true, null],
         start: {
           char: 1,
           line: 1,
@@ -111,7 +111,7 @@ runTests({
     ast: [
       {
         type: 'literal',
-        args: ['boolean', false],
+        args: ['boolean', false, null],
         start: {
           char: 1,
           line: 1,
