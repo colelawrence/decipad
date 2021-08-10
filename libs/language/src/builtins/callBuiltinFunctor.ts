@@ -1,6 +1,6 @@
 import { Type, build as t } from '../type';
 import { automapTypes } from '../dimtools';
-import { builtins } from '.';
+import { builtins } from './builtins';
 
 export const callBuiltinFunctor = (
   builtinName: string,

@@ -212,23 +212,6 @@ describe('more models', () => {
     });
   });
 
-  it('getting fired in Portugal', async () => {
-    expect(
-      await runCode(
-        `
-          JoinDate = date(2020-01-10)
-          LeaveDate = date(2022-02-13)
-          BeginUnemploymentBenefits = dateadd(JoinDate, [ 2 years ])
-
-          GetsUnemploymentBenefits = dategte(LeaveDate, BeginUnemploymentBenefits)
-        `
-      )
-    ).toMatchObject({
-      value: [true],
-      type: { type: 'boolean' },
-    });
-  });
-
   it('retirement model', async () => {
     const years = Array.from({ length: 3 }, (_, i) =>
       cleanDate(Date.UTC(2020 + i, 0), 'year')

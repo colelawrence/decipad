@@ -1,4 +1,4 @@
-import { builtins } from '.';
+import { builtins } from './builtins';
 import { automapValues } from '../dimtools';
 
 import { Value, AnyValue, fromJS } from '../interpreter/Value';

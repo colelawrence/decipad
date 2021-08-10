@@ -1,4 +1,4 @@
-import { BuiltinSpec } from '.';
+import { BuiltinSpec } from './interfaces';
 import { InferError, Type, build as t } from '../type';
 import { AnyValue, Date, Scalar, TimeQuantity } from '../interpreter/Value';
 import { getDefined } from '../utils';
