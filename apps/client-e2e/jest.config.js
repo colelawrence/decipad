@@ -8,7 +8,7 @@ module.exports = {
   ...baseConfig,
   displayName: 'client-e2e',
   preset: 'jest-playwright-preset',
-  setupFilesAfterEnv: [...setupFilesAfterEnv, './src/setupTests.ts'],
+  setupFilesAfterEnv: [...setupFilesAfterEnv, './src/utils/setup-tests.ts'],
   testEnvironmentOptions: {
     'jest-playwright': {
       contextOptions: {
@@ -16,4 +16,5 @@ module.exports = {
       },
     },
   },
+  testRegex: 'src/[^/]*\\.ts$',
 };

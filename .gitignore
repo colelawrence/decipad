@@ -245,3 +245,8 @@ apps/backend/src/queues/*/index.js*
 
 # Backend shared dir
 apps/backend/src/shared
+
+# Backend build artifacts
+apps/backend/sam.json
+apps/backend/sam.yaml
+apps/backend/public

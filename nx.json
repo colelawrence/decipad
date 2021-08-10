@@ -42,7 +42,7 @@
     },
     "client-e2e": {
       "tags": [],
-      "implicitDependencies": ["client"]
+      "implicitDependencies": ["client", "backend"]
     },
     "config": {
       "tags": []

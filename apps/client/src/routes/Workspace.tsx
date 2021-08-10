@@ -11,21 +11,21 @@ import {
   Square,
   Text,
 } from '@chakra-ui/react';
-import { useToasts } from 'react-toast-notifications';
 import {
+  DuplicatePad,
+  DuplicatePadVariables,
+  DUPLICATE_PAD,
   GetWorkspaceById,
   GetWorkspaceByIdVariables,
   GET_WORKSPACE_BY_ID,
   RemovePad,
   RemovePadVariables,
   REMOVE_PAD,
-  DuplicatePad,
-  DuplicatePadVariables,
-  DUPLICATE_PAD,
 } from '@decipad/queries';
 import { HelpButton, LoadingSpinnerPage } from '@decipad/ui';
 import { FiFile, FiTrash2, FiCopy } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import { useToasts } from 'react-toast-notifications';
 import { SideMenu } from '../components/SideMenu';
 import { Topbar } from '../components/Topbar';
 import { encode as encodeVanityUrlComponent } from '../lib/vanityUrlComponent';
@@ -106,6 +106,7 @@ export function Workspace({ workspaceId }: { workspaceId: string }) {
               </Box>
               <Flex alignItems="center">
                 <Button
+                  alt="Duplicate Notebook"
                   onClick={() =>
                     duplicatePad({
                       variables: { id: item.id },
@@ -125,6 +126,7 @@ export function Workspace({ workspaceId }: { workspaceId: string }) {
                   <Icon as={FiCopy} />
                 </Button>
                 <Button
+                  alt="Remove Notebook"
                   onClick={() =>
                     removePad({
                       variables: { id: item.id },

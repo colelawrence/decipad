@@ -136,7 +136,7 @@ export default function createAdapter() {
     }
 
     async function getSession(_sessionToken: string) {
-      // console.log('getSession', sessionToken);
+      // console.log('getSession', _sessionToken);
       return null;
     }
 

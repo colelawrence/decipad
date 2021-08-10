@@ -1,8 +1,8 @@
 // playwright globals for browser tests
-import 'jest-playwright-preset';
 import fetch from 'isomorphic-fetch';
+import 'jest-playwright-preset';
 import waitForExpect from 'wait-for-expect';
-import { baseUrl } from '../testConfig';
+import { baseUrl } from '../../testConfig';
 
 beforeAll(async () => {
   await waitForExpect(

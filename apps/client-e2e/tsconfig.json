@@ -4,5 +4,9 @@
     "allowJs": true
   },
   "include": ["src"],
-  "files": ["./testConfig.js"]
+  "files": ["./testConfig.js"],
+  "references": [
+    { "path": "../../libs/services" },
+    { "path": "../../libs/backendtypes" }
+  ]
 }
