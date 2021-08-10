@@ -105,7 +105,22 @@ export const inferExpression = withErrorSource(
           expr.args[0].map((a) => () => inferExpression(ctx, a))
         );
 
-        return t.listLike(cellTypes);
+        if (cellTypes.length === 0) {
+          return t.impossible(InferError.unexpectedEmptyColumn());
+        } else {
+          const [cellType, ...hopefullyConsistentTypes] = cellTypes;
+
+          for (const furtherCell of hopefullyConsistentTypes) {
+            const unified = furtherCell.sameAs(cellType);
+            if (unified.errorCause) {
+              return t.impossible(
+                InferError.columnContainsInconsistentType(cellType, furtherCell)
+              );
+            }
+          }
+
+          return t.column(cellType, cellTypes.length);
+        }
       }
       case 'table': {
         const columns = expr.args;

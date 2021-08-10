@@ -22,6 +22,11 @@ type ErrSpec =
       errType: 'unexpectedEmptyColumn';
     }
   | {
+      errType: 'columnContainsInconsistentType';
+      cellType: Type;
+      got: Type;
+    }
+  | {
       errType: 'badOverloadedBuiltinCall';
       functionName: string;
       gotArgTypes: OverloadTypeName[];
@@ -52,9 +57,13 @@ function specToString(spec: ErrSpec) {
     case 'unexpectedEmptyColumn': {
       return `Unexpected empty column`;
     }
+    case 'columnContainsInconsistentType': {
+      const { cellType, got } = spec;
+      return `Column cannot contain both ${cellType} and ${got}`;
+    }
     case 'badOverloadedBuiltinCall': {
       const gotArgTypes = spec.gotArgTypes
-        .map((argType) => argType.replace('-', ' '))
+        .map((argType) => argType.replace('-', ', '))
         .join(', ');
       return `The function ${spec.functionName} cannot be called with (${gotArgTypes})`;
     }
@@ -65,9 +74,11 @@ export class InferError {
   // @ts-expect-error might be uninitialized, TODO fix
   spec: ErrSpec;
 
-  constructor(message?: string) {
-    if (message) {
-      this.spec = { errType: 'free-form', message };
+  constructor(spec?: string | ErrSpec) {
+    if (typeof spec === 'string') {
+      this.spec = { errType: 'free-form', message: spec };
+    } else if (spec != null) {
+      this.spec = spec;
     }
   }
 
@@ -75,9 +86,10 @@ export class InferError {
     expected: Type | string,
     got: Type | string
   ): InferError {
-    const error = new InferError();
-    error.spec = { errType: 'expectedButGot', expectedButGot: [expected, got] };
-    return error;
+    return new InferError({
+      errType: 'expectedButGot',
+      expectedButGot: [expected, got],
+    });
   }
 
   static expectedArgCount(
@@ -85,39 +97,42 @@ export class InferError {
     expected: number,
     got: number
   ): InferError {
-    const error = new InferError();
-    error.spec = {
+    return new InferError({
       errType: 'expectedArgCount',
       expectedArgCount: [fname, expected, got],
-    };
-    return error;
+    });
   }
 
   static expectedUnit(expected: AST.Unit[] | null, got: AST.Unit[] | null) {
-    const error = new InferError();
-    error.spec = { errType: 'expectedUnit', expectedUnit: [expected, got] };
-    return error;
+    return new InferError({
+      errType: 'expectedUnit',
+      expectedUnit: [expected, got],
+    });
   }
 
   static unexpectedEmptyColumn() {
-    const error = new InferError();
-    error.spec = {
+    return new InferError({
       errType: 'unexpectedEmptyColumn',
-    };
-    return error;
+    });
+  }
+
+  static columnContainsInconsistentType(cellType: Type, got: Type) {
+    return new InferError({
+      errType: 'columnContainsInconsistentType',
+      cellType,
+      got,
+    });
   }
 
   static badOverloadedBuiltinCall(
     functionName: string,
     gotArgTypes: OverloadTypeName[]
   ) {
-    const error = new InferError();
-    error.spec = {
+    return new InferError({
       errType: 'badOverloadedBuiltinCall',
       functionName,
       gotArgTypes,
-    };
-    return error;
+    });
   }
 
   get message() {

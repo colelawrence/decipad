@@ -201,30 +201,6 @@ describe('new columns and tuples', () => {
     expect(t.string().reduced().errorCause).not.toBeNull();
     expect(t.tuple([t.string()]).reduced().errorCause).not.toBeNull();
   });
-
-  it('can be built with t.listLike', () => {
-    expect(t.listLike([t.number()])).toEqual(t.column(t.number(), 1));
-
-    expect(t.listLike([t.number(), t.string()])).toEqual(
-      t.tuple([t.number(), t.string()])
-    );
-
-    expect(t.listLike([t.column(t.number(), 1), t.string()])).toEqual(
-      t.tuple([t.column(t.number(), 1), t.string()])
-    );
-
-    expect(
-      t.listLike([t.column(t.number(), 1), t.column(t.number(), 1)])
-    ).toEqual(t.column(t.column(t.number(), 1), 2));
-
-    expect(
-      t.listLike([t.column(t.number(), 1), t.column(t.string(), 1)])
-    ).toEqual(t.tuple([t.column(t.number(), 1), t.column(t.string(), 1)]));
-
-    expect(t.listLike([]).errorCause).toEqual(
-      InferError.unexpectedEmptyColumn()
-    );
-  });
 });
 
 describe('Impossible types', () => {

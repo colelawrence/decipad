@@ -364,9 +364,17 @@ describe('columns', () => {
     );
 
     const mixedCol = col(l(1), l('hi'));
-    expect(await inferExpression(nilCtx, mixedCol)).toEqual(
-      t.tuple([t.number(), t.string()])
-    );
+    expect(await inferExpression(nilCtx, mixedCol)).toMatchObject({
+      errorCause: InferError.columnContainsInconsistentType(
+        t.number(),
+        t.string()
+      ),
+    });
+
+    const emptyCol = col();
+    expect(await inferExpression(nilCtx, emptyCol)).toMatchObject({
+      errorCause: InferError.unexpectedEmptyColumn(),
+    });
   });
 
   it('column-ness is infectious', async () => {
@@ -569,7 +577,7 @@ describe('Given', () => {
     ).toEqual(t.column(t.number(), 3));
   });
 
-  it('Works with non-scalar bodies', async () => {
+  it('Works with column bodies', async () => {
     const scopeWithColumn = makeContext([['Nums', t.column(t.number(), 3)]]);
 
     expect(
@@ -578,10 +586,6 @@ describe('Given', () => {
         given('Nums', col(l('s1'), l('s2')))
       )
     ).toEqual(t.column(t.column(t.string(), 2), 3));
-
-    expect(
-      await inferExpression(scopeWithColumn, given('Nums', col(l('s1'), l(1))))
-    ).toEqual(t.column(t.tuple([t.string(), t.number()]), 3));
   });
 
   it('Works with tables', async () => {

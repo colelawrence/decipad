@@ -78,20 +78,6 @@ export const importedData = (url: string) =>
     t.dataUrl = url;
   });
 
-export const listLike = (types: Type[]) => {
-  if (types.length === 0) {
-    return impossible(InferError.unexpectedEmptyColumn());
-  } else {
-    const unified = types.reduce((a, b) => a.sameAs(b));
-
-    if (unified.errorCause) {
-      return tuple(types);
-    } else {
-      return column(unified, types.length);
-    }
-  }
-};
-
 export const functionPlaceholder = () =>
   produce(impossible(), (fType) => {
     fType.functionness = true;

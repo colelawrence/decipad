@@ -524,12 +524,3 @@ describe('Given', () => {
     });
   });
 });
-
-describe('Inference errors', () => {
-  it.todo('TODO: Complains about missing variables');
-  it.todo('TODO: Complains about mismatched units');
-  it.todo('TODO: complains about mismatched types');
-
-  it.todo('TODO: Complains about mismatched array units');
-  it.todo('TODO: Complains about mismatched array lengths');
-});
