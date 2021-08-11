@@ -33,7 +33,7 @@ const hDefault: TypographyStyles = {
   fontWeight: 600,
   fontSize: `${24 / usualRemPxs}rem`,
   lineHeight: '100%',
-  letterSpacing: 'unset',
+  letterSpacing: '0.01em',
   fontFeatureSettings: 'unset',
 };
 
@@ -41,15 +41,17 @@ export const display: TypographyStyles = {
   ...hDefault,
   fontSize: `${36 / usualRemPxs}rem`,
   lineHeight: '113%',
-  letterSpacing: '0.01em',
   fontFeatureSettings: "'ss04' on, 'ss08' on, 'ss06' on",
 };
 export const h1: TypographyStyles = {
   ...hDefault,
   fontSize: `${24 / usualRemPxs}rem`,
   lineHeight: '130%',
-  letterSpacing: '0.01em',
   fontFeatureSettings: "'ss04' on, 'ss02' on",
+};
+export const h2: TypographyStyles = {
+  ...hDefault,
+  fontSize: `${20 / usualRemPxs}rem`,
 };
 
 // paragraph
@@ -122,12 +124,29 @@ export const p16Regular: TypographyStyles = {
   fontFeatureSettings: "'ss04' on, 'ss02' on",
 };
 
+// monospace
+
+const mFontFamily: TypographyStyles['fontFamily'] =
+  '"JetBrains Mono", monospace';
+
+export const code: TypographyStyles = {
+  ...setCssVar('currentTextColor', cssVar('normalTextColor')),
+  color: cssVar('currentTextColor'),
+  fontFamily: mFontFamily,
+  fontStyle: 'normal',
+  fontWeight: 'normal',
+  fontSize: '1rem',
+  lineHeight: '100%',
+  letterSpacing: 'unset',
+  fontFeatureSettings: 'unset',
+};
+
 // global
 
 export const globalTextStyles: Interpolation<unknown> = [
   // @import is not as good for performance as <link rel>, but the web font URLs will need to change with changes to the styles above,
   // so it's good to have them co-located, which if using <link> would be more difficult to achieve.
-  `@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Open+Sans:wght@600&display=swap');`,
+  `@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Open+Sans:wght@600&family=JetBrains+Mono&display=swap');`,
   {
     html: {
       ...pDefault,

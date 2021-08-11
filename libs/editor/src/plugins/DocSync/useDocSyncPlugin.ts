@@ -1,5 +1,5 @@
 import { Subscription } from 'rxjs';
-import { SlatePlugin } from '@udecode/slate-plugins';
+import { PlatePlugin } from '@udecode/plate';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { HistoryEditor } from 'slate-history';
 import { Editor } from 'slate';
@@ -24,7 +24,7 @@ interface IUseDocSyncPlugin {
 export const useDocSyncPlugin = ({
   padId,
   editor,
-}: IUseDocSyncPlugin): SlatePlugin => {
+}: IUseDocSyncPlugin): PlatePlugin => {
   const { docsync } = useContext(DocSyncContext);
   const [syncEditor, setSyncEditor] = useState<SyncEditor | null>(null);
 

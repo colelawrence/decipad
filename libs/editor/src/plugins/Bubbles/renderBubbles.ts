@@ -1,4 +1,4 @@
-import { ELEMENT_CODE_LINE } from '@udecode/slate-plugins';
+import { ELEMENT_CODE_LINE } from '@udecode/plate';
 import { Editor, Node, Path, Range, Text } from 'slate';
 
 export const renderBubble =

@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { SlatePlugin } from '@udecode/slate-plugins';
+import { PlatePlugin } from '@udecode/plate';
 import { useEffect, useMemo, useState } from 'react';
 import { dequal } from 'dequal';
 import { captureException } from '@sentry/react';
@@ -16,7 +16,7 @@ interface SlateNode {
 }
 
 interface UseLanguagePluginRet {
-  languagePlugin: SlatePlugin;
+  languagePlugin: PlatePlugin;
   results: ResultsContextValue;
 }
 

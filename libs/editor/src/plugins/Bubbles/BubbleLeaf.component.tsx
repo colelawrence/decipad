@@ -1,7 +1,7 @@
-import { RenderLeafProps } from 'slate-react';
+import { PlatePluginComponent } from '@udecode/plate-core';
 import { Bubble } from './Bubble.component';
 
-export const BubbleLeaf = (props: RenderLeafProps): JSX.Element => {
+export const BubbleLeaf: PlatePluginComponent = (props) => {
   const { leaf, attributes } = props;
   let { children } = props;
 

@@ -6,11 +6,11 @@ export default {
   argTypes: { backArrowOnClick: { action: 'back button clicked' } },
 };
 
-export const Default = (args: PadTopbarProps) => <PadTopbar {...args} />;
+export const Normal = (args: PadTopbarProps) => <PadTopbar {...args} />;
 
-Default.args = {
+Normal.args = {
   userName: 'AE',
   notebookTitle: 'Use of funds',
 };
 
-Default.storyName = 'Topbar';
+Normal.storyName = 'Topbar';

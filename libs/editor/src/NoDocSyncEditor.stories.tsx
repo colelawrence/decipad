@@ -5,7 +5,7 @@ import {
   ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_PARAGRAPH,
-} from '@udecode/slate-plugins';
+} from '@udecode/plate';
 import { v4 } from 'uuid';
 import { NoDocSyncEditor } from './NoDocSyncEditor.component';
 
@@ -14,7 +14,7 @@ export default {
   component: NoDocSyncEditor,
 };
 
-export const Default = () => (
+export const Normal = () => (
   <div style={{ maxWidth: '1140px', margin: '25px auto' }}>
     <NoDocSyncEditor
       initialValue={[
@@ -146,4 +146,4 @@ export const Default = () => (
   </div>
 );
 
-Default.storyName = 'No Doc Sync';
+Normal.storyName = 'No Doc Sync';

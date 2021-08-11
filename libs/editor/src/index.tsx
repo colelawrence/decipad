@@ -1,5 +1,5 @@
 import { ResultsContextProvider } from '@decipad/ui';
-import { SlatePlugins, useStoreEditorRef } from '@udecode/slate-plugins';
+import { Plate, useStoreEditorRef } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { useMemo, useState } from 'react';
 import { DndProvider } from 'react-dnd';
@@ -9,11 +9,11 @@ import { FormattingToolbar } from './components/FormattingToolbar';
 import { components, options, plugins } from './configuration';
 import { useDocSyncPlugin } from './plugins/DocSync/useDocSyncPlugin';
 import { useLanguagePlugin } from './plugins/Language/useLanguagePlugin';
+import { useNotebookTitlePlugin } from './plugins/NotebookTitle/useNotebookTitlePlugin';
 import {
   SlashCommandsSelect,
   useSlashCommandsPlugin,
 } from './plugins/SlashCommands';
-import { useNotebookTitlePlugin } from './plugins/Title/useNotebookTitlePlugin';
 
 export { AnonymousDocSyncProvider, DocSyncProvider } from './contexts/DocSync';
 
@@ -49,7 +49,7 @@ const SlateEditor = ({ padId, autoFocus }: EditorProps) => {
   return (
     <ResultsContextProvider value={results}>
       <DropFile editor={editor}>
-        <SlatePlugins
+        <Plate
           id={editorId}
           plugins={editorPlugins}
           options={options}
@@ -58,7 +58,7 @@ const SlateEditor = ({ padId, autoFocus }: EditorProps) => {
         >
           <FormattingToolbar />
           <SlashCommandsSelect {...getSlashCommandsProps()} />
-        </SlatePlugins>
+        </Plate>
       </DropFile>
     </ResultsContextProvider>
   );

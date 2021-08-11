@@ -14,9 +14,12 @@ const colorNames: Record<ColorId, string> = {
   grey300: 'Grey 300',
   grey400: 'Grey 400',
   offWhite: 'Off-White',
+
   purple100: 'Purple 100',
   electricGreen100: 'Electric Green 100',
   electricGreen200: 'Electric Green 200',
+
+  blockquote: 'Blockquote',
 };
 export default {
   title: 'Primitives / Color',

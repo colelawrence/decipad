@@ -4,8 +4,10 @@ import * as storyExports from './text.stories';
 import * as textExports from './text';
 
 import {
+  code,
   display,
   h1,
+  h2,
   p12Bold,
   p12Medium,
   p12Regular,
@@ -31,6 +33,7 @@ export const Display: React.FC = ({ children }) => (
   <h1 css={css(display)}>{children}</h1>
 );
 export const H1: React.FC = ({ children }) => <h1 css={css(h1)}>{children}</h1>;
+export const H2: React.FC = ({ children }) => <h2 css={css(h2)}>{children}</h2>;
 
 export const P12Regular: React.FC = ({ children }) => (
   <p css={css(p12Regular)}>{children}</p>
@@ -58,6 +61,10 @@ export const P15Medium: React.FC = ({ children }) => (
 );
 export const P16Regular: React.FC = ({ children }) => (
   <p css={css(p16Regular)}>{children}</p>
+);
+
+export const Code: React.FC = ({ children }) => (
+  <p css={css(code)}>{children}</p>
 );
 
 // make sure all types of text are covered by stories

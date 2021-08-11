@@ -127,7 +127,7 @@ function getFilesFromEvent(ev: DragEvent): File[] {
       files.push(file);
     }
   } else {
-    throw new Error('Data transfer not suported!');
+    throw new Error('Data transfer not supported!');
   }
 
   return files;

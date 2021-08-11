@@ -3,7 +3,7 @@ import {
   ELEMENT_CODE_BLOCK,
   ELEMENT_H2,
   ELEMENT_H3,
-} from '@udecode/slate-plugins';
+} from '@udecode/plate';
 import { FiCode } from 'react-icons/fi';
 
 export interface Command {

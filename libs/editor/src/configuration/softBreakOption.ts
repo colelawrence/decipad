@@ -2,7 +2,7 @@ import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
   ELEMENT_TD,
-} from '@udecode/slate-plugins';
+} from '@udecode/plate';
 
 export const softBreakOptions = {
   rules: [

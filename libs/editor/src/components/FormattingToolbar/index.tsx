@@ -1,10 +1,10 @@
 import {
-  getSlatePluginType,
+  getPlatePluginType,
   MARK_CODE,
   ToolbarMark,
   useEventEditorId,
   useStoreEditorRef,
-} from '@udecode/slate-plugins';
+} from '@udecode/plate';
 import { FiCode } from 'react-icons/fi';
 import { BlockTypeButton } from './BlockTypeButton';
 import { Divider } from './Divider';
@@ -23,7 +23,7 @@ export const FormattingToolbar = () => {
       <TextFormattingOptions />
       <Divider />
       <ToolbarMark
-        type={getSlatePluginType(editor, MARK_CODE)}
+        type={getPlatePluginType(editor, MARK_CODE)}
         icon={<FiCode />}
         tooltip={{ content: 'Inline Code', ...tooltip }}
         styles={toolbarButtonStyles}

@@ -1,1 +1,1 @@
-export * from './CodeBlock.component';
+export * from './ModelBlock/ModelBlock.component';

@@ -5,3 +5,5 @@ export * from './lib/shared';
 export * from './lib/theme';
 
 export * from './templates';
+
+export * from './atoms/Editor';

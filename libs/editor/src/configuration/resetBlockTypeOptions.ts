@@ -4,7 +4,7 @@ import {
   ELEMENT_TODO_LI,
   isBlockAboveEmpty,
   isSelectionAtBlockStart,
-} from '@udecode/slate-plugins';
+} from '@udecode/plate';
 
 const resetBlockTypesCommonRule = {
   types: [ELEMENT_BLOCKQUOTE, ELEMENT_TODO_LI],

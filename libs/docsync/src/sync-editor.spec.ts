@@ -1,5 +1,5 @@
 import { timeout } from '@decipad/testutils';
-import { ELEMENT_H1, ELEMENT_PARAGRAPH } from '@udecode/slate-plugins';
+import { ELEMENT_H1, ELEMENT_PARAGRAPH } from '@udecode/plate';
 import { createEditor } from 'slate';
 import { DocSync, SyncNode } from './';
 

@@ -1,4 +1,4 @@
-import { isCollapsed } from '@udecode/slate-plugins';
+import { isCollapsed } from '@udecode/plate';
 import { Editor, Range, Text } from 'slate';
 
 function offsetToLineNumber(codeText: string, offset: number) {

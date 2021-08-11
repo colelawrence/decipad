@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { css } from '@emotion/react';
 import Tippy, { TippyProps } from '@tippyjs/react';
 import {
   ELEMENT_BLOCKQUOTE,
@@ -11,14 +11,13 @@ import {
   ELEMENT_TODO_LI,
   ELEMENT_UL,
   withDraggables,
-} from '@udecode/slate-plugins';
+} from '@udecode/plate';
 import { GrDrag } from 'react-icons/gr';
 
 const GrabberTooltipContent = () => (
   <div style={{ fontSize: 12, textAlign: 'center' }}>
     <div>
-      Drag <span style={{ color: 'rgba(0, 0, 0, 0.45)' }}>to move</span> <br />{' '}
-      Click <span style={{ color: 'rgba(0, 0, 0, 0.45)' }}>for options</span>
+      Drag <span style={{ color: 'rgba(0, 0, 0, 0.45)' }}>to move</span> <br />
     </div>
   </div>
 );
@@ -34,7 +33,7 @@ export const grabberTooltipProps: TippyProps = {
   theme: 'light',
 };
 
-const Icon = styled(GrDrag)({
+const iconStyles = css({
   width: 18,
   height: 18,
   opacity: 0.3,
@@ -47,7 +46,7 @@ const Icon = styled(GrDrag)({
 export const withStyledDraggables = (components: any) => {
   return withDraggables(components, [
     {
-      keys: [ELEMENT_PARAGRAPH, ELEMENT_UL, ELEMENT_OL],
+      keys: [ELEMENT_PARAGRAPH],
       level: 0,
     },
     {
@@ -65,12 +64,8 @@ export const withStyledDraggables = (components: any) => {
       onRenderDragHandle: ({ className, styles }) => {
         return (
           <Tippy {...grabberTooltipProps}>
-            <button
-              type="button"
-              className={className}
-              style={{ ...styles[0] }}
-            >
-              <Icon />
+            <button type="button" className={className} css={styles}>
+              <GrDrag css={iconStyles} />
             </button>
           </Tippy>
         );
@@ -80,7 +75,7 @@ export const withStyledDraggables = (components: any) => {
       key: ELEMENT_H2,
       styles: {
         gutterLeft: {
-          padding: '32px 8px 0 0',
+          padding: '16px 8px 0 0',
         },
       },
     },
@@ -88,12 +83,12 @@ export const withStyledDraggables = (components: any) => {
       key: ELEMENT_H3,
       styles: {
         gutterLeft: {
-          padding: '16px 8px 0 0',
+          padding: '14px 8px 0 0',
         },
       },
     },
     {
-      keys: [ELEMENT_PARAGRAPH, ELEMENT_UL, ELEMENT_OL],
+      keys: [ELEMENT_PARAGRAPH],
       styles: {
         gutterLeft: {
           padding: '12px 8px 0 0',
@@ -104,7 +99,7 @@ export const withStyledDraggables = (components: any) => {
       key: ELEMENT_BLOCKQUOTE,
       styles: {
         gutterLeft: {
-          padding: '12px 8px 0 0',
+          padding: '28px 8px 0 0',
         },
       },
     },
@@ -112,7 +107,7 @@ export const withStyledDraggables = (components: any) => {
       key: ELEMENT_CODE_BLOCK,
       styles: {
         gutterLeft: {
-          padding: '36px 8px 0 0',
+          padding: '42px 8px 0 0',
         },
       },
     },

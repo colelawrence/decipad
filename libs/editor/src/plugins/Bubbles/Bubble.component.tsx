@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { RenderLeafProps } from 'slate-react';
+import { PlatePluginComponent } from '@udecode/plate';
 
 const Span = styled('span')({
   backgroundColor: '#DFFAE9',
@@ -10,7 +10,7 @@ const Span = styled('span')({
   borderRadius: '50px',
 });
 
-export const Bubble = ({ attributes, children }: RenderLeafProps) => {
+export const Bubble: PlatePluginComponent = ({ attributes, children }) => {
   return (
     <Span {...attributes} onClick={() => console.log('clicked')}>
       {children}

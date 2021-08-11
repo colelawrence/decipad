@@ -7,7 +7,7 @@ import {
   matchesTriggerAndPattern,
   OnChange,
   SPEditor,
-} from '@udecode/slate-plugins';
+} from '@udecode/plate';
 import { useCallback, useMemo, useState } from 'react';
 import { Range, Transforms } from 'slate';
 import { Command, commands } from './commands';

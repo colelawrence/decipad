@@ -45,3 +45,5 @@ export const grey200 = color(223, 223, 224);
 export const grey300 = color(137, 137, 142);
 export const grey400 = color(67, 67, 71);
 export const black = color(18, 18, 20);
+
+export const blockquote = color(51, 41, 66);

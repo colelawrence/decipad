@@ -1,4 +1,4 @@
-import { ELEMENT_H1, ELEMENT_PARAGRAPH } from '@udecode/slate-plugins';
+import { ELEMENT_H1, ELEMENT_PARAGRAPH } from '@udecode/plate';
 import { toSync } from './to-sync';
 import { SyncDocValue } from '../types';
 

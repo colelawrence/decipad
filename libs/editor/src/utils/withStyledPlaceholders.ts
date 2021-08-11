@@ -1,13 +1,13 @@
 import {
-  DefaultSlatePluginKey,
+  DefaultPlatePluginKey,
   ELEMENT_H1,
   ELEMENT_PARAGRAPH,
-  SlatePluginComponent,
+  PlatePluginComponent,
   withPlaceholders,
-} from '@udecode/slate-plugins';
+} from '@udecode/plate';
 
 export const withStyledPlaceHolders = (
-  components: Record<DefaultSlatePluginKey, SlatePluginComponent>
+  components: Record<DefaultPlatePluginKey, PlatePluginComponent>
 ) =>
   withPlaceholders(components, [
     {

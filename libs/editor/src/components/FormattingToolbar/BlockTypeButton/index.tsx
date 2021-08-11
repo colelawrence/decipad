@@ -3,11 +3,11 @@ import {
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_PARAGRAPH,
-  getSlatePluginType,
+  getPlatePluginType,
   ToolbarElement,
   useEventEditorId,
   useStoreEditorRef,
-} from '@udecode/slate-plugins';
+} from '@udecode/plate';
 import { useState } from 'react';
 import { FiChevronDown } from 'react-icons/fi';
 
@@ -94,7 +94,7 @@ export const BlockTypeButton = () => {
       <OptionsWrapper active={active}>
         <OptionsLabel>Turn into:</OptionsLabel>
         <ToolbarElement
-          type={getSlatePluginType(editor, ELEMENT_H2)}
+          type={getPlatePluginType(editor, ELEMENT_H2)}
           styles={{ root: { width: '100%', marginTop: '1rem', color: '#111' } }}
           icon={
             <OptionWrapper>
@@ -106,7 +106,7 @@ export const BlockTypeButton = () => {
           }
         />
         <ToolbarElement
-          type={getSlatePluginType(editor, ELEMENT_H3)}
+          type={getPlatePluginType(editor, ELEMENT_H3)}
           styles={{ root: { width: '100%', marginTop: '1rem', color: '#111' } }}
           icon={
             <OptionWrapper>
@@ -118,7 +118,7 @@ export const BlockTypeButton = () => {
           }
         />
         <ToolbarElement
-          type={getSlatePluginType(editor, ELEMENT_PARAGRAPH)}
+          type={getPlatePluginType(editor, ELEMENT_PARAGRAPH)}
           styles={{ root: { width: '100%', marginTop: '1rem', color: '#111' } }}
           icon={
             <OptionWrapper>

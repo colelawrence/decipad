@@ -6,7 +6,7 @@ import {
   isCollapsed,
   PortalBody,
   useStoreEditorState,
-} from '@udecode/slate-plugins';
+} from '@udecode/plate';
 import { FC, useEffect, useRef } from 'react';
 import { Editor, Path } from 'slate';
 import { ReactEditor } from 'slate-react';
