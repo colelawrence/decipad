@@ -7,17 +7,16 @@ import {
   createHistoryPlugin,
   createKbdPlugin,
   createNodeIdPlugin,
-  createNormalizeTypesPlugin,
   createReactPlugin,
   createResetNodePlugin,
   createSoftBreakPlugin,
   createTrailingBlockPlugin,
-  ELEMENT_H1,
   ELEMENT_PARAGRAPH,
   WithAutoformatOptions,
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { createBubblePlugin } from '../plugins/Bubbles/createBubblePlugin';
+import { createForcedLayoutPlugin } from '../plugins/ForcedLayout/createForcedLayoutPlugin';
 import { optionsAutoformat } from './autoFormatOptions';
 import { exitBreakOptions } from './exitBreakOptions';
 import { resetBlockTypeOptions } from './resetBlockTypeOptions';
@@ -40,8 +39,6 @@ export const plugins = [
   createKbdPlugin(),
   createNodeIdPlugin({ idCreator: nanoid }),
 
+  createForcedLayoutPlugin(),
   createTrailingBlockPlugin({ type: ELEMENT_PARAGRAPH }),
-  createNormalizeTypesPlugin({
-    rules: [{ path: [0], strictType: ELEMENT_H1 }],
-  }),
 ];
