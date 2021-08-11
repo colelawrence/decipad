@@ -20,7 +20,7 @@ export const useNotebookTitlePlugin = ({
   padId,
 }: UseNotebookTitlePluginProps) => {
   const { addToast } = useToasts();
-  const [newTitle, setNewTitle] = useState('');
+  const [newTitle, setNewTitle] = useState<null | string>(null);
 
   // Getting the current pad's name
   const { data } = useQuery<GetPadById, GetPadByIdVariables>(GET_PAD_BY_ID, {
@@ -47,7 +47,7 @@ export const useNotebookTitlePlugin = ({
   // Change the pad's title after the user has stopped typing by 1 second
   useEffect(() => {
     const timeout = setTimeout(() => {
-      if (newTitle !== '') {
+      if (newTitle !== null) {
         // change the title of the pad
         mutate({
           variables: { padId, name: newTitle },
