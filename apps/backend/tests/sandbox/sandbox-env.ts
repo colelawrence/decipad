@@ -28,7 +28,7 @@ export function createSandboxEnv(workerId: number): ISandboxEnvReturn {
   };
 
   // configure Architect's ports
-  const portBase = `${3333 + workerId * 100 - Math.ceil(Math.random() * 50)}`;
+  const portBase = `${3333 + workerId * 1000 - Math.ceil(Math.random() * 500)}`;
   const eventsPort = `${portBase}1`; // string concat, just like Architect does
   const tablesPort = `${portBase}2`; // string concat, just like Architect does
   const s3Port = `${portBase}3`;
