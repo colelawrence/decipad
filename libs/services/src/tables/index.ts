@@ -1,11 +1,11 @@
 /* eslint-disable no-underscore-dangle */
 import arc from '@architect/functions';
 import {
+  ConcreteDataTable,
+  ConcreteRecord,
+  DataTable,
   DataTables,
   EnhancedDataTables,
-  ConcreteRecord,
-  ConcreteDataTable,
-  DataTable,
   TableRecordIdentifier,
 } from '@decipad/backendtypes';
 import timestamp from '../common/timestamp';
@@ -23,6 +23,7 @@ const enhancedTables: (keyof EnhancedDataTables)[] = [
   'invites',
   'futurefileattachments',
   'fileattachments',
+  'externaldatasources',
 ];
 
 const observedTables: (keyof DataTables)[] = [

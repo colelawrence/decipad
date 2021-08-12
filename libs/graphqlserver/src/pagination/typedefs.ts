@@ -13,5 +13,5 @@ export default gql`
     cursor: String
   }
 
-  union Pageable = SharedResource
+  union Pageable = SharedResource | ExternalDataSource
 `;

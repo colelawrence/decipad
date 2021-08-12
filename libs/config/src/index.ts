@@ -84,3 +84,13 @@ export function email() {
     senderEmailAddress: env('DECI_FROM_EMAIL_ADDRESS'),
   };
 }
+
+export function thirdParty() {
+  return {
+    google: {
+      sheets: {
+        apiKey: env('DECI_GOOGLESHEETS_API_KEY'),
+      },
+    },
+  };
+}

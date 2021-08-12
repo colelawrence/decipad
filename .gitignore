@@ -250,3 +250,6 @@ apps/backend/src/shared
 apps/backend/sam.json
 apps/backend/sam.yaml
 apps/backend/public
+
+# Backend lock
+apps/backend/app.arc.lock

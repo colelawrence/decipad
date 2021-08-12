@@ -51,33 +51,30 @@ export default gql`
 
   extend type Mutation {
     createPad(workspaceId: ID!, pad: PadInput!): Pad!
-
     updatePad(id: ID!, pad: PadInput!): Pad!
-
     removePad(id: ID!): Boolean
-
     duplicatePad(id: ID!): Pad!
 
     sharePadWithRole(
-      padId: ID!
+      id: ID!
       roleId: ID!
       permissionType: PermissionType!
       canComment: Boolean!
     ): Boolean
 
-    unsharePadWithRole(padId: ID!, roleId: ID!): Boolean
+    unsharePadWithRole(id: ID!, roleId: ID!): Boolean
 
     sharePadWithUser(
-      padId: ID!
+      id: ID!
       userId: ID!
       permissionType: PermissionType!
       canComment: Boolean!
     ): Boolean
 
-    unsharePadWithUser(padId: ID!, userId: ID!): Boolean
+    unsharePadWithUser(id: ID!, userId: ID!): Boolean
 
     sharePadWithEmail(
-      padId: ID!
+      id: ID!
       email: String
       permissionType: PermissionType!
       canComment: Boolean!

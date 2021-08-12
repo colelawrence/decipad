@@ -5,7 +5,8 @@
   },
   "include": ["src"],
   "references": [
-    { "path": "../../libs/backendtypes" },
-    { "path": "../../libs/services" }
+    { "path": "../backendtypes" },
+    { "path": "../services" },
+    { "path": "../graphqlresource" }
   ]
 }

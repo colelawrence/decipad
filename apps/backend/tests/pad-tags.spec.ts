@@ -139,7 +139,7 @@ test('pad tags', ({
       mutation: gql`
         mutation {
           sharePadWithRole(
-            padId: "${pad.id}"
+            id: "${pad.id}"
             roleId: "${role.id}"
             permissionType: READ
             canComment: true
@@ -360,7 +360,7 @@ test('pad tags', ({
       mutation: gql`
         mutation {
           unsharePadWithRole(
-            padId: "${pad.id}"
+            id: "${pad.id}"
             roleId: "${role.id}"
           )
         }
@@ -418,7 +418,7 @@ test('pad tags', ({
       mutation: gql`
         mutation {
           sharePadWithUser(
-            padId: "${pad.id}"
+            id: "${pad.id}"
             userId: "test user id 2"
             permissionType: READ
             canComment: true

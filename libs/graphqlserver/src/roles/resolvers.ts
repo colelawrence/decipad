@@ -8,6 +8,7 @@ import {
   RoleRecord,
   PermissionType,
   PermissionRecord,
+  User,
 } from '@decipad/backendtypes';
 import tables, { allPages } from '@decipad/services/tables';
 import { auth as authConfig, app as appConfig } from '@decipad/config';
@@ -27,7 +28,7 @@ async function checkIfCanRemoveUserFromRole({
   if (
     !(await isAuthorized(
       `/roles/${role.id}`,
-      { user: { id: userId } },
+      { user: { id: userId } as User },
       'ADMIN'
     ))
   ) {

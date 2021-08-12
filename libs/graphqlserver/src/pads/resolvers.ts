@@ -1,5 +1,4 @@
 import assert from 'assert';
-import arc from '@architect/functions';
 import { nanoid } from 'nanoid';
 import { UserInputError } from 'apollo-server-lambda';
 import {
@@ -10,43 +9,65 @@ import {
   PadInput,
   Pad,
   PadRecord,
-  PermissionType,
   PadAccessRecord,
   WorkspaceRecord,
   RoleRecord,
   User,
 } from '@decipad/backendtypes';
 import tables from '@decipad/services/tables';
-import {
-  create as createResourcePermission,
-  removeAllPermissionsFor,
-} from '@decipad/services/permissions';
-import { notifyAllWithAccessTo, subscribe } from '@decipad/services/pubsub';
+import { subscribe } from '@decipad/services/pubsub';
 import { create as createPad2 } from '@decipad/services/pads';
 import { duplicate as duplicatePadContent } from '@decipad/services/blobs/pads';
-import { create as createUser } from '@decipad/services/users';
-import { auth as authConfig, app as appConfig } from '@decipad/config';
-import timestamp from '../utils/timestamp';
+import Resource from '@decipad/graphqlresource';
 import { requireUser, check } from '../authorization';
 import by from '../utils/by';
 import paginate from '../utils/paginate';
 
-const { urlBase } = appConfig();
-const { inviteExpirationSeconds } = authConfig();
+const padResource = Resource({
+  resourceTypeName: 'pads',
+  humanName: 'notebook',
+  pubSubChangeTopic: 'padsChanged',
+  dataTable: async () => (await tables()).pads,
+  toGraphql: (d: PadRecord) => d,
+
+  newRecordFrom: ({
+    workspaceId,
+    pad,
+  }: {
+    workspaceId: ID;
+    pad: PadInput;
+  }) => ({
+    id: nanoid(),
+    name: pad.name,
+    workspace_id: workspaceId,
+  }),
+
+  updateRecordFrom: (record: PadRecord, { pad }: { pad: PadInput }) => {
+    return {
+      ...record,
+      ...pad,
+    };
+  },
+
+  beforeCreate: async (
+    { workspaceId }: { workspaceId: ID },
+    context: GraphqlContext
+  ) => {
+    const workspaceResource = `/workspaces/${workspaceId}`;
+    await check(workspaceResource, context, 'WRITE');
+  },
+
+  parentResourceUriFromCreateInput: ({ workspaceId }: { workspaceId: ID }) =>
+    `/workspaces/${workspaceId}`,
+  /* eslint-disable camelcase */
+  parentResourceUriFromRecord: ({ workspace_id }: { workspace_id: ID }) =>
+    /* eslint-disable camelcase */
+    `/workspaces/${workspace_id}`,
+});
 
 const resolvers = {
   Query: {
-    async getPadById(
-      _: unknown,
-      { id }: { id: ID },
-      context: GraphqlContext
-    ): Promise<PadRecord | undefined> {
-      const resource = `/pads/${id}`;
-      await check(resource, context, 'READ');
-
-      const data = await tables();
-      return data.pads.get({ id });
-    },
+    getPadById: padResource.getById,
 
     async pads(
       _: unknown,
@@ -80,15 +101,14 @@ const resolvers = {
   },
 
   Mutation: {
-    async createPad(
-      _: unknown,
-      { workspaceId, pad }: { workspaceId: ID; pad: PadInput },
-      context: GraphqlContext
-    ): Promise<Pad> {
-      const workspaceResource = `/workspaces/${workspaceId}`;
-      const user = await check(workspaceResource, context, 'WRITE');
-      return createPad2(workspaceId, pad, user);
-    },
+    createPad: padResource.create,
+    updatePad: padResource.update,
+    removePad: padResource.remove,
+    sharePadWithRole: padResource.shareWithRole,
+    unsharePadWithRole: padResource.unshareWithRole,
+    sharePadWithUser: padResource.shareWithUser,
+    unsharePadWithUser: padResource.unshareWithUser,
+    sharePadWithEmail: padResource.shareWithEmail,
 
     async duplicatePad(
       _: unknown,
@@ -118,214 +138,6 @@ const resolvers = {
       await duplicatePadContent(clonedPad.id, id);
 
       return clonedPad;
-    },
-
-    async updatePad(
-      _: unknown,
-      { id, pad }: { id: ID; pad: PadInput },
-      context: GraphqlContext
-    ): Promise<Pad> {
-      const resource = `/pads/${id}`;
-      await check(resource, context, 'WRITE');
-
-      const data = await tables();
-      const previousPad = await data.pads.get({ id });
-      if (!previousPad) {
-        throw new UserInputError('No such pad');
-      }
-
-      const changedPad = { ...previousPad, ...pad };
-      await data.pads.put(changedPad);
-      await notifyAllWithAccessTo(resource, 'padsChanged', {
-        updated: [
-          {
-            id,
-            workspace_id: previousPad.workspace_id,
-            ...pad,
-          },
-        ],
-      });
-
-      return changedPad;
-    },
-
-    async removePad(_: unknown, { id }: { id: ID }, context: GraphqlContext) {
-      const resource = `/pads/${id}`;
-      await check(resource, context, 'ADMIN');
-
-      await removeAllPermissionsFor(resource);
-      const data = await tables();
-      await data.pads.delete({ id });
-    },
-
-    async sharePadWithRole(
-      _: unknown,
-      {
-        padId,
-        roleId,
-        permissionType,
-        canComment,
-      }: {
-        padId: ID;
-        roleId: ID;
-        permissionType: PermissionType;
-        canComment: boolean;
-      },
-      context: GraphqlContext
-    ) {
-      const resource = `/pads/${padId}`;
-      const actorUser = await check(resource, context, 'ADMIN');
-
-      const data = await tables();
-      const pad = await data.pads.get({ id: padId });
-      if (!pad) {
-        throw new UserInputError('no such pad');
-      }
-
-      await createResourcePermission({
-        roleId,
-        givenByUserId: actorUser.id,
-        resourceUri: resource,
-        type: permissionType,
-        canComment,
-        parentResourceUri: `/workspaces/${pad.workspace_id}`,
-      });
-    },
-
-    async unsharePadWithRole(
-      _: unknown,
-      { padId, roleId }: { padId: ID; roleId: ID },
-      context: GraphqlContext
-    ) {
-      const resource = `/pads/${padId}`;
-      await check(resource, context, 'ADMIN');
-
-      const data = await tables();
-      await data.permissions.delete({
-        id: `/users/null/roles/${roleId}${resource}`,
-      });
-    },
-
-    async sharePadWithUser(
-      _: unknown,
-      {
-        padId,
-        userId,
-        permissionType,
-        canComment,
-      }: {
-        padId: ID;
-        userId: ID;
-        permissionType: PermissionType;
-        canComment: boolean;
-      },
-      context: GraphqlContext
-    ) {
-      const resource = `/pads/${padId}`;
-      const actorUser = await check(resource, context, 'ADMIN');
-
-      const data = await tables();
-      const pad = await data.pads.get({ id: padId });
-      if (!pad) {
-        throw new UserInputError('no such pad');
-      }
-
-      await createResourcePermission({
-        userId,
-        givenByUserId: actorUser.id,
-        resourceUri: resource,
-        type: permissionType,
-        canComment,
-        parentResourceUri: `/workspaces/${pad.workspace_id}`,
-      });
-    },
-
-    async unsharePadWithUser(
-      _: unknown,
-      { padId, userId }: { padId: ID; userId: ID },
-      context: GraphqlContext
-    ) {
-      const resource = `/pads/${padId}`;
-      await check(resource, context, 'ADMIN');
-      const data = await tables();
-      await data.permissions.delete({
-        id: `/users/${userId}/roles/null${resource}`,
-      });
-    },
-
-    async sharePadWithEmail(
-      _: unknown,
-      {
-        padId,
-        email,
-        permissionType,
-        canComment,
-      }: {
-        padId: ID;
-        email: string;
-        permissionType: PermissionType;
-        canComment: boolean;
-      },
-      context: GraphqlContext
-    ) {
-      const resource = `/pads/${padId}`;
-      const actingUser = await check(resource, context, 'ADMIN');
-      const data = await tables();
-      const pad = await data.pads.get({ id: padId });
-      if (!pad) {
-        throw new UserInputError('No such workspace');
-      }
-
-      const emailKeyId = `email:${email}`;
-      const emailKey = await data.userkeys.get({ id: emailKeyId });
-      if (emailKey) {
-        await resolvers.Mutation.sharePadWithUser(
-          _,
-          {
-            padId,
-            userId: emailKey.user_id,
-            permissionType,
-            canComment,
-          },
-          context
-        );
-        return;
-      }
-
-      const newUser = await createUser({
-        name: email,
-        email,
-      });
-
-      const newInvite = {
-        id: nanoid(),
-        permission_id: `/users/${newUser.id}/roles/null${resource}`,
-        resource_uri: resource,
-        resource_type: 'pads',
-        resource_id: padId,
-        user_id: newUser.id,
-        role_id: 'null',
-        invited_by_user_id: actingUser.id,
-        permission: permissionType,
-        email,
-        can_comment: canComment,
-        parent_resource_uri: `/workspaces/${pad.workspace_id}`,
-        expires_at: timestamp() + inviteExpirationSeconds,
-      };
-      await data.invites.put(newInvite);
-
-      const inviteAcceptLink = `${urlBase}/api/invites/${newInvite.id}/accept`;
-      await arc.queues.publish({
-        name: 'sendemail',
-        payload: {
-          template: 'generic-invite',
-          from: actingUser,
-          to: newUser,
-          resource,
-          inviteAcceptLink,
-          resourceName: pad.name,
-        },
-      });
     },
   },
 

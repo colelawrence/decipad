@@ -132,6 +132,23 @@ export type Tag = {
 
 export type VirtualRecord = Tag; // other virtual record types here
 
+export interface ExternalDataSourceUpdateInput {
+  name: string;
+}
+
+export interface ExternalDataSourceCreateInput
+  extends ExternalDataSourceUpdateInput {
+  id: ID;
+  provider: ExternalDataSourceProvider;
+  externalId: string;
+}
+
+export interface ExternalDataSource extends ExternalDataSourceCreateInput {
+  dataPath: string;
+}
+
+type ExternalDataSourceProvider = 'googlesheets' | 'other';
+
 /* Pagination */
 
 export type PageInput = {
@@ -335,6 +352,12 @@ export type SharedResource = {
   canComment: boolean;
 };
 
+export interface ExternalDataSourceRecord extends TableRecordBase {
+  name: string;
+  provider: ExternalDataSourceProvider;
+  externalId: string;
+}
+
 export interface DataTable<T extends TableRecordBase> {
   delete(key: TableRecordIdentifier): Promise<void>;
   get(key: TableRecordIdentifier): Promise<T | undefined>;
@@ -362,6 +385,7 @@ export interface EnhancedDataTables {
   invites: EnhancedDataTable<InviteRecord>;
   futurefileattachments: EnhancedDataTable<FutureFileAttachmentRecord>;
   fileattachments: EnhancedDataTable<FileAttachmentRecord>;
+  externaldatasources: DataTable<ExternalDataSourceRecord>;
 }
 
 export interface DataTables extends EnhancedDataTables {
@@ -421,6 +445,8 @@ export type GraphqlContext = {
   subscriptionId?: ID;
   connectionId?: ID;
 };
+
+export type GraphqlObjectType = TableRecord | ExternalDataSource; // add others here
 
 /* Attachments */
 

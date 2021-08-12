@@ -27,7 +27,7 @@ export const handler = handle(
     const ids = event.pathParameters!.inviteid!.split(',');
 
     const returns = await Promise.all(
-      ids.map(async (inviteId) => {
+      ids.map(async (inviteId: string) => {
         const invite = await data.invites.get({ id: inviteId });
         if (!invite) {
           return {

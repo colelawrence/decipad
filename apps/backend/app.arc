@@ -171,6 +171,9 @@ fileattachments
   filetype String
   filesize Number
 
+externaldatasources
+  id *String
+
 @indexes
 
 users

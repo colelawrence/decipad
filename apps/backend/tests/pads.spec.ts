@@ -250,7 +250,7 @@ test('pads', ({
       mutation: gql`
         mutation {
           sharePadWithRole (
-            padId: "${pad.id}"
+            id: "${pad.id}"
             roleId: "${role.id}"
             permissionType: READ
             canComment: true)
@@ -376,7 +376,7 @@ test('pads', ({
         mutation: gql`
           mutation {
             sharePadWithRole (
-              padId: "${pad.id}"
+              id: "${pad.id}"
               roleId: "${role.id}"
               permissionType: WRITE
               canComment: true)
@@ -392,7 +392,7 @@ test('pads', ({
     await client.mutate({
       mutation: gql`
         mutation {
-          unsharePadWithRole(padId: "${pad.id}" roleId: "${role.id}")
+          unsharePadWithRole(id: "${pad.id}" roleId: "${role.id}")
         }
       `,
     });
@@ -431,7 +431,7 @@ test('pads', ({
       mutation: gql`
         mutation {
           sharePadWithUser (
-            padId: "${pad.id}"
+            id: "${pad.id}"
             userId: "test user id 2"
             permissionType: READ
             canComment: true)
@@ -517,7 +517,7 @@ test('pads', ({
       mutation: gql`
         mutation {
           unsharePadWithUser (
-            padId: "${pad.id}"
+            id: "${pad.id}"
             userId: "test user id 2"
           )
         }
@@ -556,7 +556,7 @@ test('pads', ({
       mutation: gql`
         mutation {
           sharePadWithEmail (
-            padId: "${pad.id}"
+            id: "${pad.id}"
             email: "test2@decipad.com"
             permissionType: READ
             canComment: true)
@@ -642,7 +642,7 @@ test('pads', ({
       mutation: gql`
         mutation {
           unsharePadWithUser (
-            padId: "${pad.id}"
+            id: "${pad.id}"
             userId: "test user id 2"
           )
         }
@@ -657,8 +657,8 @@ test('pads', ({
       mutation: gql`
         mutation {
           sharePadWithEmail (
-            padId: "${pad.id}"
-            email: "test3@decipad.com"
+            id: "${pad.id}"
+            email: "test100@decipad.com"
             permissionType: READ
             canComment: true)
         }
@@ -669,7 +669,7 @@ test('pads', ({
   it('unregistered user can accept invite', async () => {
     const data = await arc.tables();
 
-    const key = await data.userkeys.get({ id: `email:test3@decipad.com` });
+    const key = await data.userkeys.get({ id: `email:test100@decipad.com` });
     expect(key).toBeDefined();
 
     targetUserId = key.user_id;

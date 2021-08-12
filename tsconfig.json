@@ -53,6 +53,7 @@
       "@decipad/meta": ["libs/meta/src/index.ts"],
       "@decipad/backendtypes": ["libs/backendtypes/src/index.ts"],
       "@decipad/config": ["libs/config/src/index.ts"],
+      "@decipad/graphqlresource": ["libs/graphqlresource/src/index.ts"],
       "@decipad/graphqlserver": ["libs/graphqlserver/src/index.ts"],
       "@decipad/graphqlserver/schema": ["libs/graphqlserver/src/schema.ts"],
       "@decipad/graphqlserver/resolvers": [
@@ -72,7 +73,8 @@
       "@decipad/services/pads": ["libs/services/src/pads"],
       "@decipad/services/tables": ["libs/services/src/tables"],
       "@decipad/services/users": ["libs/services/src/users"],
-      "@decipad/services/workspaces": ["libs/services/src/workspaces"]
+      "@decipad/services/workspaces": ["libs/services/src/workspaces"],
+      "@decipad/services/invites": ["libs/services/src/invites"]
     }
   },
   "files": [],

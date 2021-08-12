@@ -1,15 +1,14 @@
 /* eslint-env jest */
-
 // existing sequential test "story" very granular
 /* eslint-disable jest/expect-expect */
 
+import waitForExpect from 'wait-for-expect';
 import FormData from 'form-data';
 import { createReadStream } from 'fs';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import { Workspace, Pad, Attachment } from '@decipad/backendtypes';
 import test from './sandbox';
-import { timeout } from './utils/timeout';
 
 test('attach files', ({
   test: it,
@@ -67,28 +66,28 @@ test('attach files', ({
       name: 'Pad 1',
       workspace,
     });
-
-    await timeout(2000);
   });
 
   it('an unauthenticated user cannot upload an attachment', async () => {
-    const client = withoutAuth();
+    await waitForExpect(async () => {
+      const client = withoutAuth();
 
-    await expect(
-      client.query({
-        query: gql`
-          query {
-            getCreateAttachmentForm(padId: "${pad.id}", fileName: "filename", fileType: "text/csv") {
-              url
-              fields {
-                key
-                value
+      await expect(
+        client.query({
+          query: gql`
+            query {
+              getCreateAttachmentForm(padId: "${pad.id}", fileName: "filename", fileType: "text/csv") {
+                url
+                fields {
+                  key
+                  value
+                }
               }
             }
-          }
-        `,
-      })
-    ).rejects.toThrow('Forbidden');
+          `,
+        })
+      ).rejects.toThrow('Forbidden');
+    });
   });
 
   it('other user cannot upload an attachment to another users pad', async () => {
@@ -235,7 +234,7 @@ test('attach files', ({
       mutation: gql`
         mutation {
           sharePadWithUser (
-            padId: "${pad.id}"
+            id: "${pad.id}"
             userId: "test user id 2"
             permissionType: READ
             canComment: true)
@@ -244,46 +243,46 @@ test('attach files', ({
     });
   });
 
-  it('waits a bit', () => timeout(3000));
-
   it('other user can list attachment in pad', async () => {
-    const client = withAuth(await auth('test user id 2'));
-    const pad2: Pad = (
-      await client.query({
-        query: gql`
-          query {
-            getPadById(id: "${pad.id}") {
-              id
-              attachments {
+    await waitForExpect(async () => {
+      const client = withAuth(await auth('test user id 2'));
+      const pad2: Pad = (
+        await client.query({
+          query: gql`
+            query {
+              getPadById(id: "${pad.id}") {
                 id
-                fileName
-                fileType
-                fileSize
-                uploadedBy {
+                attachments {
                   id
-                }
-                pad {
-                  id
+                  fileName
+                  fileType
+                  fileSize
+                  uploadedBy {
+                    id
+                  }
+                  pad {
+                    id
+                  }
                 }
               }
             }
-          }
-        `,
-      })
-    ).data.getPadById;
+          `,
+        })
+      ).data.getPadById;
 
-    expect(pad2.attachments).toHaveLength(1);
-    expect(pad2.attachments![0]).toMatchObject({
-      id: attachment!.id,
-      fileName: 'filename',
-      fileType: 'text/csv',
-      fileSize: 233,
-      uploadedBy: {
-        id: 'test user id 1',
-      },
-      pad: {
-        id: pad.id,
-      },
+      expect(pad2.attachments).toHaveLength(1);
+      expect(pad2.attachments![0]).toMatchObject({
+        id: attachment!.id,
+        fileName: 'filename',
+        fileType: 'text/csv',
+        fileSize: 233,
+        uploadedBy: {
+          id: 'test user id 1',
+        },
+        pad: {
+          id: pad.id,
+        },
+      });
     });
   });
 

@@ -146,7 +146,7 @@ test('pad changes', ({
       mutation: gql`
         mutation {
           sharePadWithUser(
-            padId: "${pads[0].id}"
+            id: "${pads[0].id}"
             userId: "test user id 2"
             permissionType: READ
             canComment: true
@@ -189,7 +189,7 @@ test('pad changes', ({
     await client.mutate({
       mutation: gql`
         mutation {
-          unsharePadWithUser(padId: "${pads[0].id}", userId: "test user id 2")
+          unsharePadWithUser(id: "${pads[0].id}", userId: "test user id 2")
         }
       `,
     });

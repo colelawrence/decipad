@@ -26,6 +26,7 @@ export const defaultEnvValues = {
 
   GITHUB_CLIENT_ID: '724d4d510a5e7301d70d',
   GITHUB_CLIENT_SECRET: '288ea1dc0c15a556524042cf2691f54faf393c69',
+  DECI_GOOGLESHEETS_API_KEY: 'AIzaSyCEeSNhYD53VjedhBBhGj44y7Q584ldCFw',
 
   JWT_MAX_AGE: '2592000', // 1 month (30 * 24 * 60 * 60)
   JWT_SECRET: 'catwalklrjqwr92309endasjkdn023eqhjdskajhaskj',

@@ -1,18 +1,19 @@
 import { DocumentNode } from 'graphql';
+import attachments from './attachments';
+import auth from './auth';
 import base from './base';
 import date from './date';
+import externalData from './external-data';
 import glob from './global';
+import hello from './hello';
+import pads from './pads';
 import pagination from './pagination';
 import registration from './registration';
-import users from './users';
-import auth from './auth';
 import roles from './roles';
-import workspaces from './workspaces';
-import pads from './pads';
-import tags from './tags';
 import share from './share';
-import attachments from './attachments';
-import hello from './hello';
+import tags from './tags';
+import users from './users';
+import workspaces from './workspaces';
 
 type GraphqlModule = {
   typedefs: DocumentNode;
@@ -31,6 +32,7 @@ const modules: GraphqlModule[] = [
   pads,
   attachments,
   share,
+  externalData,
 ];
 
 if (process.env.NODE_ENV !== 'production') {
