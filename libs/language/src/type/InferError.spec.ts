@@ -15,4 +15,15 @@ it('can stringify errors', () => {
   expect(InferError.expectedUnit(null, null).message).toEqual(
     'This operation requires matching units'
   );
+
+  expect(
+    InferError.columnContainsInconsistentType(t.number(), t.string()).message
+  ).toMatchInlineSnapshot(`"Column cannot contain both number and string"`);
+
+  expect(
+    InferError.badOverloadedBuiltinCall('+', ['string', 'time-quantity'])
+      .message
+  ).toMatchInlineSnapshot(
+    `"The function + cannot be called with (string, time quantity)"`
+  );
 });

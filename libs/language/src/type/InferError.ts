@@ -61,11 +61,11 @@ function specToString(spec: ErrSpec): string {
     }
     case 'columnContainsInconsistentType': {
       const { cellType, got } = spec;
-      return `Column cannot contain both ${cellType} and ${got}`;
+      return `Column cannot contain both ${cellType.toBasicString()} and ${got.toBasicString()}`;
     }
     case 'badOverloadedBuiltinCall': {
       const gotArgTypes = spec.gotArgTypes
-        .map((argType) => argType.replace('-', ', '))
+        .map((argType) => argType.replace('-', ' '))
         .join(', ');
       return `The function ${spec.functionName} cannot be called with (${gotArgTypes})`;
     }
