@@ -4,6 +4,9 @@ export * from './lib/Contexts/index';
 export * from './lib/shared';
 export * from './lib/theme';
 
+export * from './atoms/Editor';
+
 export * from './templates';
 
-export * from './atoms/Editor';
+// TODO temporary while template unfinished
+export { EmptyWorkspaceCta } from './organisms';

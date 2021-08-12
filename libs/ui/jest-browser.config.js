@@ -12,7 +12,7 @@ module.exports = {
   preset: 'jest-playwright-jsdom',
   setupFilesAfterEnv: [
     ...setupFilesAfterEnv,
-    require.resolve('./src/test-utils/setupTests.ts'),
+    require.resolve('./src/test-utils/jest/setupTests.ts'),
   ],
   // defaults, here for ease of tweaking
   testEnvironmentOptions: {

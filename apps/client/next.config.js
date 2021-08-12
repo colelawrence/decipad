@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const withNx = require('@nrwl/next/plugins/with-nx');
 
-const config = {
+const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -13,6 +13,21 @@ const config = {
       },
     ];
   },
+  webpack({ module: { rules, ...module }, ...config }) {
+    return {
+      ...config,
+      module: {
+        ...module,
+        rules: [
+          ...rules,
+          {
+            test: /\.(gif|jpg|png)$/,
+            use: [{ loader: require.resolve('file-loader') }],
+          },
+        ],
+      },
+    };
+  },
 };
 
-module.exports = withNx(config);
+module.exports = withNx(nextConfig);

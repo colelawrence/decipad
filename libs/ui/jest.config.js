@@ -1,5 +1,6 @@
 const {
   setupFilesAfterEnv = [],
+  transform,
   ...baseConfig
 } = require('../../jest-base.config');
 
@@ -9,10 +10,17 @@ module.exports = {
       ...baseConfig,
       displayName: 'ui',
 
+      transform: {
+        ...transform,
+        '^.+\\.(gif|jpg|png)$': require.resolve(
+          './src/test-utils/jest/filenameTransform.js'
+        ),
+      },
+
       testEnvironment: 'jsdom',
       setupFilesAfterEnv: [
         ...setupFilesAfterEnv,
-        require.resolve('./src/test-utils/setupTests.ts'),
+        require.resolve('./src/test-utils/jest/setupTests.ts'),
       ],
     },
     require.resolve('./jest-browser.config.js'),
