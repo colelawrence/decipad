@@ -397,7 +397,7 @@ runTests({
   },
 
   'table with explicit value as column': {
-    source: ' Table = { abc = [ 1 , 2 ]  }',
+   source: ' Table = { abc = [ 1 , 2 ]  }',
     ast: [
       {
         type: 'assign',
@@ -405,16 +405,8 @@ runTests({
           {
             type: 'def',
             args: ['Table'],
-            start: {
-              char: 1,
-              line: 1,
-              column: 2,
-            },
-            end: {
-              char: 5,
-              line: 1,
-              column: 6,
-            },
+            start: 1,
+            end: 5,
           },
           {
             type: 'table',
@@ -422,16 +414,8 @@ runTests({
               {
                 type: 'coldef',
                 args: ['abc'],
-                start: {
-                  char: 11,
-                  line: 1,
-                  column: 12,
-                },
-                end: {
-                  char: 13,
-                  line: 1,
-                  column: 14,
-                },
+                start: 11,
+                end: 13,
               },
               {
                 type: 'column',
@@ -440,51 +424,27 @@ runTests({
                     {
                       type: 'literal',
                       args: ['number', 1, null],
-                      location: 19,
-                      length: 1,
+                      start: 19,
+                      end: 19,
                     },
                     {
                       type: 'literal',
                       args: ['number', 2, null],
-                      location: 23,
-                      length: 1,
+                      start: 23,
+                      end: 23,
                     },
                   ],
                 ],
-                start: {
-                  char: 17,
-                  line: 1,
-                  column: 18,
-                },
-                end: {
-                  char: 23,
-                  line: 1,
-                  column: 24,
-                },
+                start: 17,
+                end: 25
               },
             ],
-            start: {
-              char: 9,
-              line: 1,
-              column: 10,
-            },
-            end: {
-              char: 26,
-              line: 1,
-              column: 27,
-            },
+            start: 9,
+            end: 28,
           },
         ],
-        start: {
-          char: 1,
-          line: 1,
-          column: 2,
-        },
-        end: {
-          char: 26,
-          line: 1,
-          column: 27,
-        },
+        start: 1,
+        end: 28
       },
     ],
   },
@@ -561,14 +521,14 @@ runTests({
                     {
                       type: 'literal',
                       args: ['number', 1, null],
-                      location: 27,
-                      length: 1,
+                      start: 27,
+                      end: 27,
                     },
                     {
                       type: 'literal',
                       args: ['number', 2, null],
-                      location: 31,
-                      length: 1,
+                      start: 31,
+                      end: 31,
                     },
                   ],
                 ],
@@ -578,9 +538,9 @@ runTests({
                   column: 8,
                 },
                 end: {
-                  char: 31,
+                  char: 33,
                   line: 3,
-                  column: 14,
+                  column: 16,
                 },
               },
             ],
@@ -590,9 +550,9 @@ runTests({
               column: 10,
             },
             end: {
-              char: 36,
+              char: 38,
               line: 4,
-              column: 1,
+              column: 3,
             },
           },
         ],
@@ -602,9 +562,9 @@ runTests({
           column: 2,
         },
         end: {
-          char: 36,
+          char: 38,
           line: 4,
-          column: 1,
+          column: 3,
         },
       },
     ],

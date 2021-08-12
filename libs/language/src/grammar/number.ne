@@ -1,87 +1,65 @@
+@lexer lexer
+
 ##############
 ### Number ###
 ##############
 
-number       -> plainNumber                             {%
-                                                        (d, l) => {
-                                                          const n = d[0]
-                                                          return {
+number       -> unitlessNumber                          {%
+                                                        ([n]) => {
+                                                          return addLoc({
                                                             type: 'literal',
-                                                            args: ['number', n.n, null],
-                                                            location: l,
-                                                            length: n.length
-                                                          }
+                                                            args: ['number', n.n, null]
+                                                          }, n)
                                                         }
                                                         %}
-number      -> plainNumber ___:? units                  {%
-                                                        (d, l) => {
+number      -> unitlessNumber ___:? units               {%
+                                                        (d) => {
                                                           const n = d[0]
                                                           const units = d[2]
-                                                          return {
+                                                          return addArrayLoc({
                                                             type: 'literal',
-                                                            args: ['number', n.n, d[2].units],
-                                                            location: l,
-                                                            length: lengthOf(d)
-                                                          }
+                                                            args: ['number', n.n, d[2].units]
+                                                          }, d)
                                                         }
                                                         %}
 
 percentage -> decimal "%"                               {%
-                                                        (d, l) => {
-                                                          return {
+                                                        (d) => {
+                                                          return addArrayLoc({
                                                             type: 'literal',
                                                             args: ['number', d[0].n / 100, null],
-                                                            location: l,
-                                                            length: lengthOf(d)
+                                                          }, d)
+                                                        }
+                                                        %}
+
+unitlessNumber -> %number                               {%
+                                                        ([number]) => {
+                                                          return addLoc({
+                                                            n: parseFloat(number.value)
+                                                          }, number)
+                                                        }
+                                                        %}
+
+int -> %number                                          {%
+                                                        ([number], _l, reject) => {
+                                                          if (/[.eE]/.test(number.value)) {
+                                                            return reject
+                                                          } else {
+                                                            return addLoc({
+                                                              n: parseInt(number.value)
+                                                            }, number)
                                                           }
                                                         }
                                                         %}
 
-plainNumber -> jsonfloat                                {% id %}
-
-int -> [0-9]:+                                          {%
-                                                        (d, l) => {
-                                                          return {
-                                                            n: parseInt(d[0].join("")),
-                                                            location: l,
-                                                            length: lengthOf(d)
+decimal -> %number                                      {%
+                                                        ([number], _l, reject) => {
+                                                          if (/[eE]/.test(number.value)) {
+                                                            return reject
+                                                          } else {
+                                                            return addLoc({
+                                                              n: parseFloat(number.value)
+                                                            }, number)
                                                           }
                                                         }
                                                         %}
-
-
-jsonfloat -> [0-9]:+ ("." [0-9]:+):? ([eE] [+-]:? [0-9]:+):? {%
-                                                        (d, l) => {
-                                                          const [int, dec, exp] = d
-                                                          const n = parseFloat(
-                                                            int.join("") +
-                                                            (dec ? "." + dec[1].join("") : "") +
-                                                            (exp ? "e" + (exp[1] || "+") + exp[2].join("") : ""))
-
-                                                          return {
-                                                            n,
-                                                            location: l,
-                                                            length: lengthOf([
-                                                              int,
-                                                              ...(dec || []),
-                                                              ...(exp || [])
-                                                            ])
-                                                          }
-                                                        }
-                                                        %}
-
-decimal -> [0-9]:+ ("." [0-9]:+):?                      {%
-                                                        (d, l) => {
-                                                          const [int, dec] = d
-                                                          const n = parseFloat(
-                                                            int.join("") +
-                                                            (dec ? "." + dec[1].join("") : ""))
-
-                                                          return {
-                                                            n,
-                                                            location: l,
-                                                            length: lengthOf(d)
-                                                          }
-                                                        }
-                                                        %}
-

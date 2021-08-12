@@ -1,151 +1,131 @@
+@lexer lexer
 
+@{%
+const abbreviatedPrefixes = {
+  "y": "yocto",
+  "z": "zepto",
+  "a": "atto",
+  "f": "femto",
+  "p": "pico",
+  "n": "nano",
+  "μ": "micro",
+  "m": "milli",
+  "c": "centi",
+  "d": "deci",
+  "da": "deca",
+  "h": "hecto",
+  "k": "kilo",
+  "M": "mega",
+  "G": "giga",
+  "T": "tera",
+  "P": "peta",
+  "E": "exa",
+  "Z": "zetta",
+  "Y": "yotta",
+}
+
+const multiplierPrefixes = {
+  "yocto": 1e-24,
+  "zepto": 1e-21,
+  "atto": 1e-18,
+  "femto": 1e-15,
+  "pico": 1e-12,
+  "nano": 1e-9,
+  "micro": 1e-6,
+  "milli": 1e-3,
+  "centi": 1e-2,
+  "deci": 1e-1,
+  "deca": 1e1,
+  "hecto": 1e2,
+  "kilo": 1e3,
+  "mega": 1e6,
+  "giga": 1e9,
+  "tera": 1e12,
+  "peta": 1e15,
+  "exa": 1e18,
+  "zetta": 1e21,
+  "yotta": 1e24,
+}
+
+const trimPrefix = unitName => {
+  if (unitName.startsWith('da')) {
+    return [multiplierPrefixes.deca, unitName.slice(2)]
+  } else if (unitName[0] in abbreviatedPrefixes) {
+    const prefix = abbreviatedPrefixes[unitName[0]]
+    return [multiplierPrefixes[prefix], unitName.slice(1)]
+  } else {
+    for (const [prefix, multiplier] of Object.entries(multiplierPrefixes)) {
+      if (unitName.startsWith(prefix)) {
+        return [multiplier, unitName.slice(prefix.length)]
+      }
+    }
+    return [1, unitName]
+  }
+}
+
+const parseUnit = unitString => {
+  if (knownUnits.has(unitString)) {
+    return {
+      unit: unitString,
+      exp: 1,
+      multiplier: 1,
+      known: true
+    }
+  } else {
+    let [multiplier, name] = trimPrefix(unitString)
+    const known = knownUnits.has(name)
+
+    if (!known) {
+      name = unitString
+      multiplier = 1
+    }
+
+    return {
+      unit: name,
+      exp: 1,
+      multiplier,
+      known
+    }
+  }
+}
+%}
 
 units -> unit                                           {%
-                                                        (d, l) => {
-                                                          const u = d[0]
-                                                          return {
-                                                            units: [u],
-                                                            location: l,
-                                                            length: u.length
-                                                          }
-                                                        }
+                                                        ([u]) =>
+                                                          addLoc({ units: [u] }, u)
                                                         %}
 
-units -> unit ( "*" ) units                             {%
-                                                        (d, l) => {
-                                                          return {
+units -> unit "*" units                                 {%
+                                                        (d) =>
+                                                          addArrayLoc({
                                                             units: [d[0], ...d[2].units],
-                                                            location: l,
-                                                            length: lengthOf([d[0], d[1][0], d[2]])
-                                                          }
+                                                          }, d)
+                                                        %}
+
+units -> unit "/" units                                 {%
+                                                        (d) => {
+                                                          const [second, ...rest] = d[2].units
+
+                                                          return addArrayLoc({
+                                                            units: [
+                                                              d[0],
+                                                              { ...second, exp: -second.exp },
+                                                              ...rest
+                                                            ],
+                                                          }, d)
                                                         }
                                                         %}
 
-units -> unit ("/" | __ "per" __) units                 {%
-                                                        (d, l) => {
-                                                          let [second, ...rest] = d[2].units
-                                                          second = {
-                                                            unit: second.unit,
-                                                            exp: -second.exp,
-                                                            multiplier: second.multiplier,
-                                                            known: second.known,
-                                                            location: second.location,
-                                                            length: second.length
-                                                          }
-                                                          return {
-                                                            units: [d[0], second, ...rest],
-                                                            location: l,
-                                                            length: lengthOf([d[0], d[1][0], d[2]])
-                                                          }
-                                                        }
+unit -> unitName                                        {% id %}
+
+unitName -> %identifier                                 {%
+                                                        ([ident]) =>
+                                                          addLoc(parseUnit(ident.value), ident)
                                                         %}
 
-unit -> simpleunit                                      {% id %}
-
-simpleunit -> multiplierprefix knownUnitName            {%
-                                                        (d, l) => {
-                                                          const mult = d[0]
-                                                          return {
-                                                            unit: d[1],
-                                                            exp: 1,
-                                                            multiplier: mult.multiplier,
-                                                            known: true,
-                                                            location: l,
-                                                            length: mult.length + d[1].length
-                                                          }
+unit -> unitName "^" int                                {%
+                                                        ([unit, _, exponent]) => {
+                                                          unit.exp *= exponent.n
+                                                          return addLoc(unit, unit, exponent)
                                                         }
                                                         %}
-
-knownUnitName -> [°a-zA-Z]:+                            {%
-                                                        (d, l, reject) => {
-                                                          const candidate = d[0].join('')
-                                                          if (!knownUnits.has(candidate)) {
-                                                            return reject
-                                                          }
-                                                          return candidate
-                                                        }
-                                                        %}
-
-simpleunit -> unknownUnitName                           {% id %}
-
-unknownUnitName -> [yzafpnμmcdhkMGTPEZY] [a-zA-Z]:*     {%
-                                                        (d, l, reject) => {
-                                                          const rest = d[1].join('')
-                                                          if (knownUnits.has(rest) || reservedWords.has(rest)) {
-                                                            return reject
-                                                          }
-                                                          const all = d[0] + rest
-                                                          if (knownUnits.has(all) || reservedWords.has(all)) {
-                                                            return reject
-                                                          }
-
-                                                          return {
-                                                            unit: all,
-                                                            exp: 1,
-                                                            multiplier: 1,
-                                                            known: false,
-                                                            location: l,
-                                                            length: all.length
-                                                          }
-                                                        }
-                                                        %}
-unknownUnitName -> [^yzafpnμmcdhkMGTPEZY0-9=+\%*\- ] [a-zA-Z]:*    {%
-                                                        (d, l, reject) => {
-                                                          if (!/^[°a-zA-Z]$/.test(d[0])) {
-                                                            // Must not be a known multiplier prefix,
-                                                            // but needs to be a valid unit name
-                                                            return reject
-                                                          }
-
-                                                          const candidate = d[0] + d[1].join('')
-                                                          if (knownUnits.has(candidate) || reservedWords.has(candidate)) {
-                                                            return reject
-                                                          }
-
-                                                          return {
-                                                            unit: candidate,
-                                                            exp: 1,
-                                                            multiplier: 1,
-                                                            known: false,
-                                                            location: l,
-                                                            length: candidate.length
-                                                          }
-                                                        }
-                                                        %}
-
-multiplierprefix -> null                                {% (d, l) => ({ multiplier: 1, location: l, length: 0 }) %}
-multiplierprefix -> ("y" | "yocto")                     {% (d, l) => ({ multiplier: 1e-24, location: l, length: d[0][0].length}) %}
-multiplierprefix -> ("z" | "zepto")                     {% (d, l) => ({ multiplier: 1e-21, location: l, length: d[0][0].length}) %}
-multiplierprefix -> ("a" | "atto")                      {% (d, l) => ({ multiplier: 1e-18, location: l, length: d[0][0].length}) %}
-multiplierprefix -> ("f" | "femto")                     {% (d, l) => ({ multiplier: 1e-15, location: l, length: d[0][0].length}) %}
-multiplierprefix -> ("p" | "pico")                      {% (d, l) => ({ multiplier: 1e-12, location: l, length: d[0][0].length}) %}
-multiplierprefix -> ("n" | "nano")                      {% (d, l) => ({ multiplier: 1e-9, location: l, length: d[0][0].length}) %}
-multiplierprefix -> ("μ" | "micro")                     {% (d, l) => ({ multiplier: 1e-6, location: l, length: d[0][0].length}) %}
-multiplierprefix -> ("m" | "milli")                     {% (d, l) => ({ multiplier: 1e-3, location: l, length: d[0][0].length}) %}
-multiplierprefix -> ("c" | "centi")                     {% (d, l) => ({ multiplier: 1e-2, location: l, length: d[0][0].length}) %}
-multiplierprefix -> ("d" | "deci")                      {% (d, l) => ({ multiplier: 1e-1, location: l, length: d[0][0].length}) %}
-multiplierprefix -> ("da" | "deca")                     {% (d, l) => ({ multiplier: 1e1, location: l, length: d[0][0].length}) %}
-multiplierprefix -> ("h" | "hecto")                     {% (d, l) => ({ multiplier: 1e2, location: l, length: d[0][0].length}) %}
-multiplierprefix -> ("k" | "kilo")                      {% (d, l) => ({ multiplier: 1e3, location: l, length: d[0][0].length}) %}
-multiplierprefix -> ("M" | "mega")                      {% (d, l) => ({ multiplier: 1e6, location: l, length: d[0][0].length}) %}
-multiplierprefix -> ("G" | "giga")                      {% (d, l) => ({ multiplier: 1e9, location: l, length: d[0][0].length}) %}
-multiplierprefix -> ("T" | "tera")                      {% (d, l) => ({ multiplier: 1e12, location: l, length: d[0][0].length}) %}
-multiplierprefix -> ("P" | "peta")                      {% (d, l) => ({ multiplier: 1e15, location: l, length: d[0][0].length}) %}
-multiplierprefix -> ("E" | "exa")                       {% (d, l) => ({ multiplier: 1e18, location: l, length: d[0][0].length}) %}
-multiplierprefix -> ("Z" | "zetta")                     {% (d, l) => ({ multiplier: 1e21, location: l, length: d[0][0].length}) %}
-multiplierprefix -> ("Y" | "yotta")                     {% (d, l) => ({ multiplier: 1e24, location: l, length: d[0][0].length}) %}
-
-unit -> simpleunit "^" int                              {%
-                                                        (d, l) => {
-                                                          const u = d[0]
-                                                          const n = d[2]
-                                                          return Object.assign(d[0], {
-                                                            exp: u.exp * n.n,
-                                                            location: l,
-                                                            length: lengthOf(d)
-                                                          })
-                                                        }
-                                                        %}
-
-
-

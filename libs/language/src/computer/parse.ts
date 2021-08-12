@@ -12,7 +12,7 @@ export const wrappedParse = ({
     const parsed = parseBlock({ id, source });
 
     if (parsed.solutions.length !== 1) {
-      throw new Error('Syntax error');
+      throw new Error(`Syntax error: ${parsed.solutions.length} solutions`);
     }
 
     return {

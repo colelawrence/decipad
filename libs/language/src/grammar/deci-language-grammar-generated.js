@@ -5,19 +5,104 @@
     return x[0];
   }
 
-  const returnMonth = (month) => (d, l) => {
-    let obj = d[0];
-    if (Array.isArray(obj)) {
-      obj = obj[0];
-    }
-    return [month, obj.length];
+  // Using require because nearley compiles things into an IIFE
+  const { lexer } = require('./lexer');
+
+  const abbreviatedPrefixes = {
+    y: 'yocto',
+    z: 'zepto',
+    a: 'atto',
+    f: 'femto',
+    p: 'pico',
+    n: 'nano',
+    μ: 'micro',
+    m: 'milli',
+    c: 'centi',
+    d: 'deci',
+    da: 'deca',
+    h: 'hecto',
+    k: 'kilo',
+    M: 'mega',
+    G: 'giga',
+    T: 'tera',
+    P: 'peta',
+    E: 'exa',
+    Z: 'zetta',
+    Y: 'yotta',
   };
+
+  const multiplierPrefixes = {
+    yocto: 1e-24,
+    zepto: 1e-21,
+    atto: 1e-18,
+    femto: 1e-15,
+    pico: 1e-12,
+    nano: 1e-9,
+    micro: 1e-6,
+    milli: 1e-3,
+    centi: 1e-2,
+    deci: 1e-1,
+    deca: 1e1,
+    hecto: 1e2,
+    kilo: 1e3,
+    mega: 1e6,
+    giga: 1e9,
+    tera: 1e12,
+    peta: 1e15,
+    exa: 1e18,
+    zetta: 1e21,
+    yotta: 1e24,
+  };
+
+  const trimPrefix = (unitName) => {
+    if (unitName.startsWith('da')) {
+      return [multiplierPrefixes.deca, unitName.slice(2)];
+    } else if (unitName[0] in abbreviatedPrefixes) {
+      const prefix = abbreviatedPrefixes[unitName[0]];
+      return [multiplierPrefixes[prefix], unitName.slice(1)];
+    } else {
+      for (const [prefix, multiplier] of Object.entries(multiplierPrefixes)) {
+        if (unitName.startsWith(prefix)) {
+          return [multiplier, unitName.slice(prefix.length)];
+        }
+      }
+      return [1, unitName];
+    }
+  };
+
+  const parseUnit = (unitString) => {
+    if (knownUnits.has(unitString)) {
+      return {
+        unit: unitString,
+        exp: 1,
+        multiplier: 1,
+        known: true,
+      };
+    } else {
+      let [multiplier, name] = trimPrefix(unitString);
+      const known = knownUnits.has(name);
+
+      if (!known) {
+        name = unitString;
+        multiplier = 1;
+      }
+
+      return {
+        unit: name,
+        exp: 1,
+        multiplier,
+        known,
+      };
+    }
+  };
+
+  const returnMonth = (month) => () => ({ month });
 
   const joinDateParts = (dateParts) => {
     let parts = dateParts.args;
 
-    if (dateParts.next) {
-      parts = parts.concat(joinDateParts(dateParts.next));
+    if (dateParts.nextDateInner) {
+      parts = parts.concat(joinDateParts(dateParts.nextDateInner));
     }
 
     // Timezone is last, always
@@ -27,6 +112,22 @@
 
     return parts;
   };
+
+  const makeDateFragmentReader =
+    (key, len, min, max) =>
+    ([{ text }], _l, reject) => {
+      const number = parseInt(text);
+      if (
+        text.length !== len ||
+        Number.isNaN(number) ||
+        number < min ||
+        number > max
+      ) {
+        return reject;
+      } else {
+        return { [key]: number };
+      }
+    };
 
   const knownUnits = require('./units').knownUnits;
 
@@ -74,10 +175,10 @@
   const timeUnitStrings = new Set([
     'year',
     'years',
-    'month',
-    'months',
     'quarter',
     'quarters',
+    'month',
+    'months',
     'weeks',
     'week',
     'day',
@@ -96,66 +197,134 @@
     return reservedWords.has(str);
   }
 
-  function lengthOf(d) {
-    if (Array.isArray(d)) {
-      return d.reduce((acc, item) => acc + lengthOf(item), 0);
+  const _getStart = (tokOrNode) =>
+    tokOrNode.offset != null ? tokOrNode.offset : tokOrNode.start;
+
+  const _getEnd = (tokOrNode) =>
+    tokOrNode.offset != null
+      ? tokOrNode.offset + tokOrNode.text.length - 1
+      : tokOrNode.end;
+
+  const noEndToken = Symbol('no end token was passed');
+  function addLoc(node, start, end = start) {
+    node.start = _getStart(start);
+    node.end = _getEnd(end);
+
+    if (typeof node.start !== 'number' || typeof node.end !== 'number') {
+      throw new Error(
+        'Bad start or end at ' +
+          JSON.stringify(node, null, 2) +
+          '\n\n-- given: ' +
+          JSON.stringify({ start, end }, null, 2) +
+          ''
+      );
     } else {
-      return d?.length ?? 0;
+      return node;
+    }
+  }
+
+  function getLocationFromArray(locArray) {
+    // Most of the time it's really easy to find
+    const shortCircuitStart = locArray[0] && _getStart(locArray[0]);
+    const shortCircuitEnd =
+      locArray[locArray.length - 1] && _getEnd(locArray[locArray.length - 1]);
+    if (shortCircuitEnd != null && shortCircuitStart != null) {
+      return [shortCircuitStart, shortCircuitEnd];
+    }
+
+    let start = null;
+    let end = null;
+
+    const foundToken = (tokOrNode) => {
+      if (tokOrNode != null) {
+        const newStart = _getStart(tokOrNode);
+        const newEnd = _getEnd(tokOrNode);
+
+        if (newStart != null && newEnd != null) {
+          if (start == null) {
+            start = newStart;
+          }
+          end = newEnd;
+        }
+      }
+    };
+
+    (function recurse(array) {
+      if (array == null) return;
+
+      if (Array.isArray(array)) {
+        for (const item of array) {
+          recurse(item);
+        }
+      } else {
+        foundToken(array);
+      }
+    })(locArray);
+
+    return [start, end];
+  }
+
+  function addArrayLoc(node, locArray) {
+    const [start, end] = getLocationFromArray(locArray);
+    node.start = start;
+    node.end = end;
+    if (typeof node.start !== 'number' || typeof node.end !== 'number') {
+      throw new Error(
+        'Bad start or end at ' +
+          JSON.stringify(node, null, 2) +
+          '\n\n-- given: ' +
+          JSON.stringify({ start, end }, null, 2) +
+          ''
+      );
+    } else {
+      return node;
     }
   }
 
   var grammar = {
-    Lexer: undefined,
+    Lexer: lexer,
     ParserRules: [
-      { name: '_$ebnf$1', symbols: [] },
       {
         name: '_$ebnf$1',
-        symbols: ['_$ebnf$1', 'wschar'],
-        postprocess: function arrpush(d) {
-          return d[0].concat([d[1]]);
+        symbols: [lexer.has('ws') ? { type: 'ws' } : ws],
+        postprocess: id,
+      },
+      {
+        name: '_$ebnf$1',
+        symbols: [],
+        postprocess: function (d) {
+          return null;
         },
       },
       { name: '_', symbols: ['_$ebnf$1'], postprocess: id },
-      { name: '__$ebnf$1', symbols: ['wschar'] },
       {
-        name: '__$ebnf$1',
-        symbols: ['__$ebnf$1', 'wschar'],
-        postprocess: function arrpush(d) {
-          return d[0].concat([d[1]]);
-        },
-      },
-      { name: '__', symbols: ['__$ebnf$1'], postprocess: id },
-      { name: '___$ebnf$1', symbols: [/[ \t]/] },
-      {
-        name: '___$ebnf$1',
-        symbols: ['___$ebnf$1', /[ \t]/],
-        postprocess: function arrpush(d) {
-          return d[0].concat([d[1]]);
-        },
-      },
-      { name: '___', symbols: ['___$ebnf$1'], postprocess: id },
-      { name: '__n$ebnf$1', symbols: ['wschar'] },
-      {
-        name: '__n$ebnf$1',
-        symbols: ['__n$ebnf$1', 'wschar'],
-        postprocess: function arrpush(d) {
-          return d[0].concat([d[1]]);
-        },
+        name: '__',
+        symbols: [lexer.has('ws') ? { type: 'ws' } : ws],
+        postprocess: id,
       },
       {
-        name: '__n',
-        symbols: ['__n$ebnf$1'],
-        postprocess: (d, l, reject) => {
-          if (!d[0].includes('\n')) {
+        name: '___',
+        symbols: [lexer.has('ws') ? { type: 'ws' } : ws],
+        postprocess: (d, _l, reject) => {
+          if (d[0].value.includes('\n') || d[0].length === 0) {
             return reject;
           } else {
             return d[0];
           }
         },
       },
-      { name: 'wschar', symbols: [/[ \t\n\v\f]/], postprocess: id },
+      {
+        name: '__n',
+        symbols: [lexer.has('ws') ? { type: 'ws' } : ws],
+        postprocess: (d, _l, reject) => {
+          if (!d[0].value.includes('\n')) {
+            return reject;
+          } else {
+            return d[0];
+          }
+        },
+      },
       { name: 'literal', symbols: ['boolean'], postprocess: id },
-      { name: 'literal', symbols: ['character'], postprocess: id },
       { name: 'literal', symbols: ['string'], postprocess: id },
       { name: 'literal', symbols: ['number'], postprocess: id },
       { name: 'literal', symbols: ['percentage'], postprocess: id },
@@ -165,74 +334,40 @@
       { name: 'literal', symbols: ['range'], postprocess: id },
       { name: 'literal', symbols: ['sequence'], postprocess: id },
       {
-        name: 'boolean$string$1',
-        symbols: [
-          { literal: 't' },
-          { literal: 'r' },
-          { literal: 'u' },
-          { literal: 'e' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
+        name: 'boolean',
+        symbols: [{ literal: 'true' }],
+        postprocess: (d) =>
+          addLoc(
+            {
+              type: 'literal',
+              args: ['boolean', true, null],
+            },
+            d[0]
+          ),
       },
       {
         name: 'boolean',
-        symbols: ['boolean$string$1'],
-        postprocess: (d, l) => ({
-          type: 'literal',
-          args: ['boolean', true, null],
-          location: l,
-          length: lengthOf(d),
-        }),
-      },
-      {
-        name: 'boolean$string$2',
-        symbols: [
-          { literal: 'f' },
-          { literal: 'a' },
-          { literal: 'l' },
-          { literal: 's' },
-          { literal: 'e' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'boolean',
-        symbols: ['boolean$string$2'],
-        postprocess: (d, l) => ({
-          type: 'literal',
-          args: ['boolean', false, null],
-          location: l,
-          length: lengthOf(d),
-        }),
-      },
-      {
-        name: 'character',
-        symbols: [{ literal: "'" }, 'sstrchar', { literal: "'" }],
-        postprocess: (d, l) => {
-          const c = d[0];
-          return {
-            type: 'literal',
-            args: ['char', d[1]],
-            location: l,
-            length: 2 + c.length,
-          };
-        },
+        symbols: [{ literal: 'false' }],
+        postprocess: (d) =>
+          addLoc(
+            {
+              type: 'literal',
+              args: ['boolean', false, null],
+            },
+            d[0]
+          ),
       },
       {
         name: 'number',
-        symbols: ['plainNumber'],
-        postprocess: (d, l) => {
-          const n = d[0];
-          return {
-            type: 'literal',
-            args: ['number', n.n, null],
-            location: l,
-            length: n.length,
-          };
+        symbols: ['unitlessNumber'],
+        postprocess: ([n]) => {
+          return addLoc(
+            {
+              type: 'literal',
+              args: ['number', n.n, null],
+            },
+            n
+          );
         },
       },
       { name: 'number$ebnf$1', symbols: ['___'], postprocess: id },
@@ -245,1021 +380,153 @@
       },
       {
         name: 'number',
-        symbols: ['plainNumber', 'number$ebnf$1', 'units'],
-        postprocess: (d, l) => {
+        symbols: ['unitlessNumber', 'number$ebnf$1', 'units'],
+        postprocess: (d) => {
           const n = d[0];
           const units = d[2];
-          return {
-            type: 'literal',
-            args: ['number', n.n, d[2].units],
-            location: l,
-            length: lengthOf(d),
-          };
+          return addArrayLoc(
+            {
+              type: 'literal',
+              args: ['number', n.n, d[2].units],
+            },
+            d
+          );
         },
       },
       {
         name: 'percentage',
         symbols: ['decimal', { literal: '%' }],
-        postprocess: (d, l) => {
-          return {
-            type: 'literal',
-            args: ['number', d[0].n / 100, null],
-            location: l,
-            length: lengthOf(d),
-          };
+        postprocess: (d) => {
+          return addArrayLoc(
+            {
+              type: 'literal',
+              args: ['number', d[0].n / 100, null],
+            },
+            d
+          );
         },
       },
-      { name: 'plainNumber', symbols: ['jsonfloat'], postprocess: id },
-      { name: 'int$ebnf$1', symbols: [/[0-9]/] },
       {
-        name: 'int$ebnf$1',
-        symbols: ['int$ebnf$1', /[0-9]/],
-        postprocess: function arrpush(d) {
-          return d[0].concat([d[1]]);
+        name: 'unitlessNumber',
+        symbols: [lexer.has('number') ? { type: 'number' } : number],
+        postprocess: ([number]) => {
+          return addLoc(
+            {
+              n: parseFloat(number.value),
+            },
+            number
+          );
         },
       },
       {
         name: 'int',
-        symbols: ['int$ebnf$1'],
-        postprocess: (d, l) => {
-          return {
-            n: parseInt(d[0].join('')),
-            location: l,
-            length: lengthOf(d),
-          };
-        },
-      },
-      { name: 'jsonfloat$ebnf$1', symbols: [/[0-9]/] },
-      {
-        name: 'jsonfloat$ebnf$1',
-        symbols: ['jsonfloat$ebnf$1', /[0-9]/],
-        postprocess: function arrpush(d) {
-          return d[0].concat([d[1]]);
-        },
-      },
-      { name: 'jsonfloat$ebnf$2$subexpression$1$ebnf$1', symbols: [/[0-9]/] },
-      {
-        name: 'jsonfloat$ebnf$2$subexpression$1$ebnf$1',
-        symbols: ['jsonfloat$ebnf$2$subexpression$1$ebnf$1', /[0-9]/],
-        postprocess: function arrpush(d) {
-          return d[0].concat([d[1]]);
-        },
-      },
-      {
-        name: 'jsonfloat$ebnf$2$subexpression$1',
-        symbols: [{ literal: '.' }, 'jsonfloat$ebnf$2$subexpression$1$ebnf$1'],
-      },
-      {
-        name: 'jsonfloat$ebnf$2',
-        symbols: ['jsonfloat$ebnf$2$subexpression$1'],
-        postprocess: id,
-      },
-      {
-        name: 'jsonfloat$ebnf$2',
-        symbols: [],
-        postprocess: function (d) {
-          return null;
-        },
-      },
-      {
-        name: 'jsonfloat$ebnf$3$subexpression$1$ebnf$1',
-        symbols: [/[+-]/],
-        postprocess: id,
-      },
-      {
-        name: 'jsonfloat$ebnf$3$subexpression$1$ebnf$1',
-        symbols: [],
-        postprocess: function (d) {
-          return null;
-        },
-      },
-      { name: 'jsonfloat$ebnf$3$subexpression$1$ebnf$2', symbols: [/[0-9]/] },
-      {
-        name: 'jsonfloat$ebnf$3$subexpression$1$ebnf$2',
-        symbols: ['jsonfloat$ebnf$3$subexpression$1$ebnf$2', /[0-9]/],
-        postprocess: function arrpush(d) {
-          return d[0].concat([d[1]]);
-        },
-      },
-      {
-        name: 'jsonfloat$ebnf$3$subexpression$1',
-        symbols: [
-          /[eE]/,
-          'jsonfloat$ebnf$3$subexpression$1$ebnf$1',
-          'jsonfloat$ebnf$3$subexpression$1$ebnf$2',
-        ],
-      },
-      {
-        name: 'jsonfloat$ebnf$3',
-        symbols: ['jsonfloat$ebnf$3$subexpression$1'],
-        postprocess: id,
-      },
-      {
-        name: 'jsonfloat$ebnf$3',
-        symbols: [],
-        postprocess: function (d) {
-          return null;
-        },
-      },
-      {
-        name: 'jsonfloat',
-        symbols: ['jsonfloat$ebnf$1', 'jsonfloat$ebnf$2', 'jsonfloat$ebnf$3'],
-        postprocess: (d, l) => {
-          const [int, dec, exp] = d;
-          const n = parseFloat(
-            int.join('') +
-              (dec ? '.' + dec[1].join('') : '') +
-              (exp ? 'e' + (exp[1] || '+') + exp[2].join('') : '')
-          );
-
-          return {
-            n,
-            location: l,
-            length: lengthOf([int, ...(dec || []), ...(exp || [])]),
-          };
-        },
-      },
-      { name: 'decimal$ebnf$1', symbols: [/[0-9]/] },
-      {
-        name: 'decimal$ebnf$1',
-        symbols: ['decimal$ebnf$1', /[0-9]/],
-        postprocess: function arrpush(d) {
-          return d[0].concat([d[1]]);
-        },
-      },
-      { name: 'decimal$ebnf$2$subexpression$1$ebnf$1', symbols: [/[0-9]/] },
-      {
-        name: 'decimal$ebnf$2$subexpression$1$ebnf$1',
-        symbols: ['decimal$ebnf$2$subexpression$1$ebnf$1', /[0-9]/],
-        postprocess: function arrpush(d) {
-          return d[0].concat([d[1]]);
-        },
-      },
-      {
-        name: 'decimal$ebnf$2$subexpression$1',
-        symbols: [{ literal: '.' }, 'decimal$ebnf$2$subexpression$1$ebnf$1'],
-      },
-      {
-        name: 'decimal$ebnf$2',
-        symbols: ['decimal$ebnf$2$subexpression$1'],
-        postprocess: id,
-      },
-      {
-        name: 'decimal$ebnf$2',
-        symbols: [],
-        postprocess: function (d) {
-          return null;
+        symbols: [lexer.has('number') ? { type: 'number' } : number],
+        postprocess: ([number], _l, reject) => {
+          if (/[.eE]/.test(number.value)) {
+            return reject;
+          } else {
+            return addLoc(
+              {
+                n: parseInt(number.value),
+              },
+              number
+            );
+          }
         },
       },
       {
         name: 'decimal',
-        symbols: ['decimal$ebnf$1', 'decimal$ebnf$2'],
-        postprocess: (d, l) => {
-          const [int, dec] = d;
-          const n = parseFloat(
-            int.join('') + (dec ? '.' + dec[1].join('') : '')
-          );
-
-          return {
-            n,
-            location: l,
-            length: lengthOf(d),
-          };
+        symbols: [lexer.has('number') ? { type: 'number' } : number],
+        postprocess: ([number], _l, reject) => {
+          if (/[eE]/.test(number.value)) {
+            return reject;
+          } else {
+            return addLoc(
+              {
+                n: parseFloat(number.value),
+              },
+              number
+            );
+          }
         },
       },
       {
         name: 'units',
         symbols: ['unit'],
-        postprocess: (d, l) => {
-          const u = d[0];
-          return {
-            units: [u],
-            location: l,
-            length: u.length,
-          };
-        },
-      },
-      { name: 'units$subexpression$1', symbols: [{ literal: '*' }] },
-      {
-        name: 'units',
-        symbols: ['unit', 'units$subexpression$1', 'units'],
-        postprocess: (d, l) => {
-          return {
-            units: [d[0], ...d[2].units],
-            location: l,
-            length: lengthOf([d[0], d[1][0], d[2]]),
-          };
-        },
-      },
-      { name: 'units$subexpression$2', symbols: [{ literal: '/' }] },
-      {
-        name: 'units$subexpression$2$string$1',
-        symbols: [{ literal: 'p' }, { literal: 'e' }, { literal: 'r' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'units$subexpression$2',
-        symbols: ['__', 'units$subexpression$2$string$1', '__'],
+        postprocess: ([u]) => addLoc({ units: [u] }, u),
       },
       {
         name: 'units',
-        symbols: ['unit', 'units$subexpression$2', 'units'],
-        postprocess: (d, l) => {
-          let [second, ...rest] = d[2].units;
-          second = {
-            unit: second.unit,
-            exp: -second.exp,
-            multiplier: second.multiplier,
-            known: second.known,
-            location: second.location,
-            length: second.length,
-          };
-          return {
-            units: [d[0], second, ...rest],
-            location: l,
-            length: lengthOf([d[0], d[1][0], d[2]]),
-          };
-        },
-      },
-      { name: 'unit', symbols: ['simpleunit'], postprocess: id },
-      {
-        name: 'simpleunit',
-        symbols: ['multiplierprefix', 'knownUnitName'],
-        postprocess: (d, l) => {
-          const mult = d[0];
-          return {
-            unit: d[1],
-            exp: 1,
-            multiplier: mult.multiplier,
-            known: true,
-            location: l,
-            length: mult.length + d[1].length,
-          };
-        },
-      },
-      { name: 'knownUnitName$ebnf$1', symbols: [/[°a-zA-Z]/] },
-      {
-        name: 'knownUnitName$ebnf$1',
-        symbols: ['knownUnitName$ebnf$1', /[°a-zA-Z]/],
-        postprocess: function arrpush(d) {
-          return d[0].concat([d[1]]);
-        },
+        symbols: ['unit', { literal: '*' }, 'units'],
+        postprocess: (d) =>
+          addArrayLoc(
+            {
+              units: [d[0], ...d[2].units],
+            },
+            d
+          ),
       },
       {
-        name: 'knownUnitName',
-        symbols: ['knownUnitName$ebnf$1'],
-        postprocess: (d, l, reject) => {
-          const candidate = d[0].join('');
-          if (!knownUnits.has(candidate)) {
-            return reject;
-          }
-          return candidate;
-        },
-      },
-      { name: 'simpleunit', symbols: ['unknownUnitName'], postprocess: id },
-      { name: 'unknownUnitName$ebnf$1', symbols: [] },
-      {
-        name: 'unknownUnitName$ebnf$1',
-        symbols: ['unknownUnitName$ebnf$1', /[a-zA-Z]/],
-        postprocess: function arrpush(d) {
-          return d[0].concat([d[1]]);
-        },
-      },
-      {
-        name: 'unknownUnitName',
-        symbols: [/[yzafpnμmcdhkMGTPEZY]/, 'unknownUnitName$ebnf$1'],
-        postprocess: (d, l, reject) => {
-          const rest = d[1].join('');
-          if (knownUnits.has(rest) || reservedWords.has(rest)) {
-            return reject;
-          }
-          const all = d[0] + rest;
-          if (knownUnits.has(all) || reservedWords.has(all)) {
-            return reject;
-          }
+        name: 'units',
+        symbols: ['unit', { literal: '/' }, 'units'],
+        postprocess: (d) => {
+          const [second, ...rest] = d[2].units;
 
-          return {
-            unit: all,
-            exp: 1,
-            multiplier: 1,
-            known: false,
-            location: l,
-            length: all.length,
-          };
+          return addArrayLoc(
+            {
+              units: [d[0], { ...second, exp: -second.exp }, ...rest],
+            },
+            d
+          );
         },
       },
-      { name: 'unknownUnitName$ebnf$2', symbols: [] },
+      { name: 'unit', symbols: ['unitName'], postprocess: id },
       {
-        name: 'unknownUnitName$ebnf$2',
-        symbols: ['unknownUnitName$ebnf$2', /[a-zA-Z]/],
-        postprocess: function arrpush(d) {
-          return d[0].concat([d[1]]);
-        },
-      },
-      {
-        name: 'unknownUnitName',
+        name: 'unitName',
         symbols: [
-          /[^yzafpnμmcdhkMGTPEZY0-9=+\%*\- ]/,
-          'unknownUnitName$ebnf$2',
+          lexer.has('identifier') ? { type: 'identifier' } : identifier,
         ],
-        postprocess: (d, l, reject) => {
-          if (!/^[°a-zA-Z]$/.test(d[0])) {
-            // Must not be a known multiplier prefix,
-            // but needs to be a valid unit name
-            return reject;
-          }
-
-          const candidate = d[0] + d[1].join('');
-          if (knownUnits.has(candidate) || reservedWords.has(candidate)) {
-            return reject;
-          }
-
-          return {
-            unit: candidate,
-            exp: 1,
-            multiplier: 1,
-            known: false,
-            location: l,
-            length: candidate.length,
-          };
-        },
-      },
-      {
-        name: 'multiplierprefix',
-        symbols: [],
-        postprocess: (d, l) => ({ multiplier: 1, location: l, length: 0 }),
-      },
-      { name: 'multiplierprefix$subexpression$1', symbols: [{ literal: 'y' }] },
-      {
-        name: 'multiplierprefix$subexpression$1$string$1',
-        symbols: [
-          { literal: 'y' },
-          { literal: 'o' },
-          { literal: 'c' },
-          { literal: 't' },
-          { literal: 'o' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'multiplierprefix$subexpression$1',
-        symbols: ['multiplierprefix$subexpression$1$string$1'],
-      },
-      {
-        name: 'multiplierprefix',
-        symbols: ['multiplierprefix$subexpression$1'],
-        postprocess: (d, l) => ({
-          multiplier: 1e-24,
-          location: l,
-          length: d[0][0].length,
-        }),
-      },
-      { name: 'multiplierprefix$subexpression$2', symbols: [{ literal: 'z' }] },
-      {
-        name: 'multiplierprefix$subexpression$2$string$1',
-        symbols: [
-          { literal: 'z' },
-          { literal: 'e' },
-          { literal: 'p' },
-          { literal: 't' },
-          { literal: 'o' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'multiplierprefix$subexpression$2',
-        symbols: ['multiplierprefix$subexpression$2$string$1'],
-      },
-      {
-        name: 'multiplierprefix',
-        symbols: ['multiplierprefix$subexpression$2'],
-        postprocess: (d, l) => ({
-          multiplier: 1e-21,
-          location: l,
-          length: d[0][0].length,
-        }),
-      },
-      { name: 'multiplierprefix$subexpression$3', symbols: [{ literal: 'a' }] },
-      {
-        name: 'multiplierprefix$subexpression$3$string$1',
-        symbols: [
-          { literal: 'a' },
-          { literal: 't' },
-          { literal: 't' },
-          { literal: 'o' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'multiplierprefix$subexpression$3',
-        symbols: ['multiplierprefix$subexpression$3$string$1'],
-      },
-      {
-        name: 'multiplierprefix',
-        symbols: ['multiplierprefix$subexpression$3'],
-        postprocess: (d, l) => ({
-          multiplier: 1e-18,
-          location: l,
-          length: d[0][0].length,
-        }),
-      },
-      { name: 'multiplierprefix$subexpression$4', symbols: [{ literal: 'f' }] },
-      {
-        name: 'multiplierprefix$subexpression$4$string$1',
-        symbols: [
-          { literal: 'f' },
-          { literal: 'e' },
-          { literal: 'm' },
-          { literal: 't' },
-          { literal: 'o' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'multiplierprefix$subexpression$4',
-        symbols: ['multiplierprefix$subexpression$4$string$1'],
-      },
-      {
-        name: 'multiplierprefix',
-        symbols: ['multiplierprefix$subexpression$4'],
-        postprocess: (d, l) => ({
-          multiplier: 1e-15,
-          location: l,
-          length: d[0][0].length,
-        }),
-      },
-      { name: 'multiplierprefix$subexpression$5', symbols: [{ literal: 'p' }] },
-      {
-        name: 'multiplierprefix$subexpression$5$string$1',
-        symbols: [
-          { literal: 'p' },
-          { literal: 'i' },
-          { literal: 'c' },
-          { literal: 'o' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'multiplierprefix$subexpression$5',
-        symbols: ['multiplierprefix$subexpression$5$string$1'],
-      },
-      {
-        name: 'multiplierprefix',
-        symbols: ['multiplierprefix$subexpression$5'],
-        postprocess: (d, l) => ({
-          multiplier: 1e-12,
-          location: l,
-          length: d[0][0].length,
-        }),
-      },
-      { name: 'multiplierprefix$subexpression$6', symbols: [{ literal: 'n' }] },
-      {
-        name: 'multiplierprefix$subexpression$6$string$1',
-        symbols: [
-          { literal: 'n' },
-          { literal: 'a' },
-          { literal: 'n' },
-          { literal: 'o' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'multiplierprefix$subexpression$6',
-        symbols: ['multiplierprefix$subexpression$6$string$1'],
-      },
-      {
-        name: 'multiplierprefix',
-        symbols: ['multiplierprefix$subexpression$6'],
-        postprocess: (d, l) => ({
-          multiplier: 1e-9,
-          location: l,
-          length: d[0][0].length,
-        }),
-      },
-      { name: 'multiplierprefix$subexpression$7', symbols: [{ literal: 'μ' }] },
-      {
-        name: 'multiplierprefix$subexpression$7$string$1',
-        symbols: [
-          { literal: 'm' },
-          { literal: 'i' },
-          { literal: 'c' },
-          { literal: 'r' },
-          { literal: 'o' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'multiplierprefix$subexpression$7',
-        symbols: ['multiplierprefix$subexpression$7$string$1'],
-      },
-      {
-        name: 'multiplierprefix',
-        symbols: ['multiplierprefix$subexpression$7'],
-        postprocess: (d, l) => ({
-          multiplier: 1e-6,
-          location: l,
-          length: d[0][0].length,
-        }),
-      },
-      { name: 'multiplierprefix$subexpression$8', symbols: [{ literal: 'm' }] },
-      {
-        name: 'multiplierprefix$subexpression$8$string$1',
-        symbols: [
-          { literal: 'm' },
-          { literal: 'i' },
-          { literal: 'l' },
-          { literal: 'l' },
-          { literal: 'i' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'multiplierprefix$subexpression$8',
-        symbols: ['multiplierprefix$subexpression$8$string$1'],
-      },
-      {
-        name: 'multiplierprefix',
-        symbols: ['multiplierprefix$subexpression$8'],
-        postprocess: (d, l) => ({
-          multiplier: 1e-3,
-          location: l,
-          length: d[0][0].length,
-        }),
-      },
-      { name: 'multiplierprefix$subexpression$9', symbols: [{ literal: 'c' }] },
-      {
-        name: 'multiplierprefix$subexpression$9$string$1',
-        symbols: [
-          { literal: 'c' },
-          { literal: 'e' },
-          { literal: 'n' },
-          { literal: 't' },
-          { literal: 'i' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'multiplierprefix$subexpression$9',
-        symbols: ['multiplierprefix$subexpression$9$string$1'],
-      },
-      {
-        name: 'multiplierprefix',
-        symbols: ['multiplierprefix$subexpression$9'],
-        postprocess: (d, l) => ({
-          multiplier: 1e-2,
-          location: l,
-          length: d[0][0].length,
-        }),
-      },
-      {
-        name: 'multiplierprefix$subexpression$10',
-        symbols: [{ literal: 'd' }],
-      },
-      {
-        name: 'multiplierprefix$subexpression$10$string$1',
-        symbols: [
-          { literal: 'd' },
-          { literal: 'e' },
-          { literal: 'c' },
-          { literal: 'i' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'multiplierprefix$subexpression$10',
-        symbols: ['multiplierprefix$subexpression$10$string$1'],
-      },
-      {
-        name: 'multiplierprefix',
-        symbols: ['multiplierprefix$subexpression$10'],
-        postprocess: (d, l) => ({
-          multiplier: 1e-1,
-          location: l,
-          length: d[0][0].length,
-        }),
-      },
-      {
-        name: 'multiplierprefix$subexpression$11$string$1',
-        symbols: [{ literal: 'd' }, { literal: 'a' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'multiplierprefix$subexpression$11',
-        symbols: ['multiplierprefix$subexpression$11$string$1'],
-      },
-      {
-        name: 'multiplierprefix$subexpression$11$string$2',
-        symbols: [
-          { literal: 'd' },
-          { literal: 'e' },
-          { literal: 'c' },
-          { literal: 'a' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'multiplierprefix$subexpression$11',
-        symbols: ['multiplierprefix$subexpression$11$string$2'],
-      },
-      {
-        name: 'multiplierprefix',
-        symbols: ['multiplierprefix$subexpression$11'],
-        postprocess: (d, l) => ({
-          multiplier: 1e1,
-          location: l,
-          length: d[0][0].length,
-        }),
-      },
-      {
-        name: 'multiplierprefix$subexpression$12',
-        symbols: [{ literal: 'h' }],
-      },
-      {
-        name: 'multiplierprefix$subexpression$12$string$1',
-        symbols: [
-          { literal: 'h' },
-          { literal: 'e' },
-          { literal: 'c' },
-          { literal: 't' },
-          { literal: 'o' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'multiplierprefix$subexpression$12',
-        symbols: ['multiplierprefix$subexpression$12$string$1'],
-      },
-      {
-        name: 'multiplierprefix',
-        symbols: ['multiplierprefix$subexpression$12'],
-        postprocess: (d, l) => ({
-          multiplier: 1e2,
-          location: l,
-          length: d[0][0].length,
-        }),
-      },
-      {
-        name: 'multiplierprefix$subexpression$13',
-        symbols: [{ literal: 'k' }],
-      },
-      {
-        name: 'multiplierprefix$subexpression$13$string$1',
-        symbols: [
-          { literal: 'k' },
-          { literal: 'i' },
-          { literal: 'l' },
-          { literal: 'o' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'multiplierprefix$subexpression$13',
-        symbols: ['multiplierprefix$subexpression$13$string$1'],
-      },
-      {
-        name: 'multiplierprefix',
-        symbols: ['multiplierprefix$subexpression$13'],
-        postprocess: (d, l) => ({
-          multiplier: 1e3,
-          location: l,
-          length: d[0][0].length,
-        }),
-      },
-      {
-        name: 'multiplierprefix$subexpression$14',
-        symbols: [{ literal: 'M' }],
-      },
-      {
-        name: 'multiplierprefix$subexpression$14$string$1',
-        symbols: [
-          { literal: 'm' },
-          { literal: 'e' },
-          { literal: 'g' },
-          { literal: 'a' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'multiplierprefix$subexpression$14',
-        symbols: ['multiplierprefix$subexpression$14$string$1'],
-      },
-      {
-        name: 'multiplierprefix',
-        symbols: ['multiplierprefix$subexpression$14'],
-        postprocess: (d, l) => ({
-          multiplier: 1e6,
-          location: l,
-          length: d[0][0].length,
-        }),
-      },
-      {
-        name: 'multiplierprefix$subexpression$15',
-        symbols: [{ literal: 'G' }],
-      },
-      {
-        name: 'multiplierprefix$subexpression$15$string$1',
-        symbols: [
-          { literal: 'g' },
-          { literal: 'i' },
-          { literal: 'g' },
-          { literal: 'a' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'multiplierprefix$subexpression$15',
-        symbols: ['multiplierprefix$subexpression$15$string$1'],
-      },
-      {
-        name: 'multiplierprefix',
-        symbols: ['multiplierprefix$subexpression$15'],
-        postprocess: (d, l) => ({
-          multiplier: 1e9,
-          location: l,
-          length: d[0][0].length,
-        }),
-      },
-      {
-        name: 'multiplierprefix$subexpression$16',
-        symbols: [{ literal: 'T' }],
-      },
-      {
-        name: 'multiplierprefix$subexpression$16$string$1',
-        symbols: [
-          { literal: 't' },
-          { literal: 'e' },
-          { literal: 'r' },
-          { literal: 'a' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'multiplierprefix$subexpression$16',
-        symbols: ['multiplierprefix$subexpression$16$string$1'],
-      },
-      {
-        name: 'multiplierprefix',
-        symbols: ['multiplierprefix$subexpression$16'],
-        postprocess: (d, l) => ({
-          multiplier: 1e12,
-          location: l,
-          length: d[0][0].length,
-        }),
-      },
-      {
-        name: 'multiplierprefix$subexpression$17',
-        symbols: [{ literal: 'P' }],
-      },
-      {
-        name: 'multiplierprefix$subexpression$17$string$1',
-        symbols: [
-          { literal: 'p' },
-          { literal: 'e' },
-          { literal: 't' },
-          { literal: 'a' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'multiplierprefix$subexpression$17',
-        symbols: ['multiplierprefix$subexpression$17$string$1'],
-      },
-      {
-        name: 'multiplierprefix',
-        symbols: ['multiplierprefix$subexpression$17'],
-        postprocess: (d, l) => ({
-          multiplier: 1e15,
-          location: l,
-          length: d[0][0].length,
-        }),
-      },
-      {
-        name: 'multiplierprefix$subexpression$18',
-        symbols: [{ literal: 'E' }],
-      },
-      {
-        name: 'multiplierprefix$subexpression$18$string$1',
-        symbols: [{ literal: 'e' }, { literal: 'x' }, { literal: 'a' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'multiplierprefix$subexpression$18',
-        symbols: ['multiplierprefix$subexpression$18$string$1'],
-      },
-      {
-        name: 'multiplierprefix',
-        symbols: ['multiplierprefix$subexpression$18'],
-        postprocess: (d, l) => ({
-          multiplier: 1e18,
-          location: l,
-          length: d[0][0].length,
-        }),
-      },
-      {
-        name: 'multiplierprefix$subexpression$19',
-        symbols: [{ literal: 'Z' }],
-      },
-      {
-        name: 'multiplierprefix$subexpression$19$string$1',
-        symbols: [
-          { literal: 'z' },
-          { literal: 'e' },
-          { literal: 't' },
-          { literal: 't' },
-          { literal: 'a' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'multiplierprefix$subexpression$19',
-        symbols: ['multiplierprefix$subexpression$19$string$1'],
-      },
-      {
-        name: 'multiplierprefix',
-        symbols: ['multiplierprefix$subexpression$19'],
-        postprocess: (d, l) => ({
-          multiplier: 1e21,
-          location: l,
-          length: d[0][0].length,
-        }),
-      },
-      {
-        name: 'multiplierprefix$subexpression$20',
-        symbols: [{ literal: 'Y' }],
-      },
-      {
-        name: 'multiplierprefix$subexpression$20$string$1',
-        symbols: [
-          { literal: 'y' },
-          { literal: 'o' },
-          { literal: 't' },
-          { literal: 't' },
-          { literal: 'a' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'multiplierprefix$subexpression$20',
-        symbols: ['multiplierprefix$subexpression$20$string$1'],
-      },
-      {
-        name: 'multiplierprefix',
-        symbols: ['multiplierprefix$subexpression$20'],
-        postprocess: (d, l) => ({
-          multiplier: 1e24,
-          location: l,
-          length: d[0][0].length,
-        }),
+        postprocess: ([ident]) => addLoc(parseUnit(ident.value), ident),
       },
       {
         name: 'unit',
-        symbols: ['simpleunit', { literal: '^' }, 'int'],
-        postprocess: (d, l) => {
-          const u = d[0];
-          const n = d[2];
-          return Object.assign(d[0], {
-            exp: u.exp * n.n,
-            location: l,
-            length: lengthOf(d),
-          });
+        symbols: ['unitName', { literal: '^' }, 'int'],
+        postprocess: ([unit, _, exponent]) => {
+          unit.exp *= exponent.n;
+          return addLoc(unit, unit, exponent);
         },
       },
       {
         name: 'string',
-        symbols: ['dqstring'],
-        postprocess: (d, l) => {
-          const s = d[0];
-          return {
-            type: 'literal',
-            args: ['string', s],
-            location: l,
-            length: 2 + s.length,
-          };
-        },
-      },
-      { name: 'dqstring$ebnf$1', symbols: [] },
-      {
-        name: 'dqstring$ebnf$1',
-        symbols: ['dqstring$ebnf$1', 'dstrchar'],
-        postprocess: function arrpush(d) {
-          return d[0].concat([d[1]]);
-        },
-      },
-      {
-        name: 'dqstring',
-        symbols: [{ literal: '"' }, 'dqstring$ebnf$1', { literal: '"' }],
-        postprocess: (d) => d[1].join(''),
-      },
-      { name: 'dstrchar', symbols: [/[^\\"\n]/], postprocess: id },
-      {
-        name: 'dstrchar',
-        symbols: [{ literal: '\\' }, 'strescape'],
-        postprocess: (d) => JSON.parse('"' + d.join('') + '"'),
-      },
-      { name: 'sstrchar', symbols: [/[^\\'\n]/], postprocess: id },
-      {
-        name: 'sstrchar',
-        symbols: [{ literal: '\\' }, 'strescape'],
-        postprocess: (d) => JSON.parse('"' + d.join('') + '"'),
-      },
-      {
-        name: 'sstrchar$string$1',
-        symbols: [{ literal: '\\' }, { literal: "'" }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'sstrchar',
-        symbols: ['sstrchar$string$1'],
-        postprocess: (d) => "'",
-      },
-      { name: 'strescape', symbols: [/["\\/bfnrt]/], postprocess: id },
-      {
-        name: 'strescape',
-        symbols: [
-          { literal: 'u' },
-          /[a-fA-F0-9]/,
-          /[a-fA-F0-9]/,
-          /[a-fA-F0-9]/,
-          /[a-fA-F0-9]/,
-        ],
-        postprocess: (d) => d.join(''),
-      },
-      {
-        name: 'date$string$1',
-        symbols: [
-          { literal: 'd' },
-          { literal: 'a' },
-          { literal: 't' },
-          { literal: 'e' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
+        symbols: [lexer.has('string') ? { type: 'string' } : string],
+        postprocess: ([string]) => {
+          return addLoc(
+            {
+              type: 'literal',
+              args: ['string', string.value, null],
+            },
+            string
+          );
         },
       },
       {
         name: 'date',
         symbols: [
-          'date$string$1',
-          '_',
-          { literal: '(' },
+          lexer.has('beginDate') ? { type: 'beginDate' } : beginDate,
           '_',
           'dateInner',
           '_',
-          { literal: ')' },
+          lexer.has('endDate') ? { type: 'endDate' } : endDate,
         ],
-        postprocess: (d, l) => {
-          return {
-            type: 'date',
-            args: joinDateParts(d[4]),
-            location: l,
-            length: lengthOf(d),
-          };
+        postprocess: (d) => {
+          return addLoc(
+            {
+              type: 'date',
+              args: joinDateParts(d[2]),
+            },
+            d[0],
+            d[4]
+          );
         },
       },
       {
@@ -1277,12 +544,10 @@
       {
         name: 'dateInner',
         symbols: ['dateYear', 'dateInner$ebnf$1'],
-        postprocess: (d, l) => ({
+        postprocess: (d) => ({
           type: 'date',
           args: ['year', d[0].year],
-          next: d[1],
-          location: l,
-          length: lengthOf(d),
+          nextDateInner: d[1],
         }),
       },
       {
@@ -1300,12 +565,10 @@
       {
         name: 'dateInnerMonth',
         symbols: ['dateSeparator', 'dateMonth', 'dateInnerMonth$ebnf$1'],
-        postprocess: (d, l) => ({
+        postprocess: (d) => ({
           type: 'date',
           args: ['month', d[1].month],
-          next: d[2],
-          location: l,
-          length: lengthOf(d),
+          nextDateInner: d[2],
         }),
       },
       {
@@ -1323,12 +586,10 @@
       {
         name: 'dateInnerDay',
         symbols: ['dateSeparator', 'dateDay', 'dateInnerDay$ebnf$1'],
-        postprocess: (d, l) => ({
+        postprocess: (d) => ({
           type: 'date',
           args: ['day', d[1].day],
-          next: d[2],
-          location: l,
-          length: lengthOf(d),
+          nextDateInner: d[2],
         }),
       },
       { name: 'dateInnerHour$subexpression$1', symbols: [{ literal: ' ' }] },
@@ -1365,13 +626,11 @@
           'dateInnerHour$ebnf$1',
           'dateInnerHour$ebnf$2',
         ],
-        postprocess: (d, l) => ({
+        postprocess: (d) => ({
           type: 'date',
           args: ['hour', d[1].hour],
-          next: d[2],
+          nextDateInner: d[2],
           timezone: d[3] ? ['timezone', d[3].timezone] : [],
-          location: l,
-          length: lengthOf(d),
         }),
       },
       {
@@ -1388,13 +647,11 @@
       },
       {
         name: 'dateInnerMinute',
-        symbols: ['timeSeparator', 'dateMinute', 'dateInnerMinute$ebnf$1'],
-        postprocess: (d, l) => ({
+        symbols: [{ literal: ':' }, 'dateMinute', 'dateInnerMinute$ebnf$1'],
+        postprocess: (d) => ({
           type: 'date',
           args: ['minute', d[1].minute],
-          next: d[2],
-          location: l,
-          length: lengthOf(d),
+          nextDateInner: d[2],
         }),
       },
       {
@@ -1411,449 +668,155 @@
       },
       {
         name: 'dateInnerSecond',
-        symbols: ['timeSeparator', 'dateSecond', 'dateInnerSecond$ebnf$1'],
-        postprocess: (d, l) => ({
+        symbols: [{ literal: ':' }, 'dateSecond', 'dateInnerSecond$ebnf$1'],
+        postprocess: (d) => ({
           type: 'date',
           args: ['second', d[1].second],
-          next: d[2],
-          location: l,
-          length: lengthOf(d),
+          nextDateInner: d[2],
         }),
       },
       {
         name: 'dateInnerMillisecond',
-        symbols: ['millisecondSeparator', 'dateMillisecond'],
-        postprocess: (d, l) => ({
+        symbols: [{ literal: '.' }, 'dateMillisecond'],
+        postprocess: (d) => ({
           type: 'date',
           args: ['millisecond', d[1].millisecond],
-          next: null,
-          location: l,
-          length: lengthOf(d),
+          nextDateInner: null,
         }),
       },
       {
         name: 'dateYear',
-        symbols: [/[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/],
-        postprocess: (d, l, reject) => {
-          return {
-            year: parseInt(d.join('')),
-            location: l,
-            length: lengthOf(d),
-          };
-        },
+        symbols: [lexer.has('digits') ? { type: 'digits' } : digits],
+        postprocess: makeDateFragmentReader('year', 4, 0, 9999),
       },
       {
         name: 'dateMonth',
-        symbols: [/[0-9]/, /[0-9]/],
-        postprocess: (d, l, reject) => {
-          const month = parseInt(d.join(''));
-          if (month < 1 || month > 12) {
-            return reject;
-          }
-          return {
-            month,
-            location: l,
-            length: lengthOf(d),
-          };
-        },
+        symbols: [lexer.has('digits') ? { type: 'digits' } : digits],
+        postprocess: makeDateFragmentReader('month', 2, 1, 12),
+      },
+      { name: 'dateMonth', symbols: ['literalMonth'], postprocess: id },
+      {
+        name: 'dateDay',
+        symbols: [lexer.has('digits') ? { type: 'digits' } : digits],
+        postprocess: makeDateFragmentReader('day', 2, 1, 31),
       },
       {
-        name: 'dateMonth',
-        symbols: ['literalMonth'],
-        postprocess: (d, l) => {
-          const [month, length] = d[0];
-          return {
-            month,
-            location: l,
-            length,
-          };
-        },
+        name: 'dateHour',
+        symbols: [lexer.has('digits') ? { type: 'digits' } : digits],
+        postprocess: makeDateFragmentReader('hour', 2, 0, 23),
       },
       {
-        name: 'literalMonth$subexpression$1$string$1',
-        symbols: [{ literal: 'J' }, { literal: 'a' }, { literal: 'n' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
+        name: 'dateMinute',
+        symbols: [lexer.has('digits') ? { type: 'digits' } : digits],
+        postprocess: makeDateFragmentReader('minute', 2, 0, 59),
       },
+      {
+        name: 'dateSecond',
+        symbols: [lexer.has('digits') ? { type: 'digits' } : digits],
+        postprocess: makeDateFragmentReader('second', 2, 0, 59),
+      },
+      {
+        name: 'dateMillisecond',
+        symbols: [lexer.has('digits') ? { type: 'digits' } : digits],
+        postprocess: makeDateFragmentReader('millisecond', 3, 0, 999),
+      },
+      { name: 'literalMonth$subexpression$1', symbols: [{ literal: 'Jan' }] },
       {
         name: 'literalMonth$subexpression$1',
-        symbols: ['literalMonth$subexpression$1$string$1'],
-      },
-      {
-        name: 'literalMonth$subexpression$1$string$2',
-        symbols: [
-          { literal: 'J' },
-          { literal: 'a' },
-          { literal: 'n' },
-          { literal: 'u' },
-          { literal: 'a' },
-          { literal: 'r' },
-          { literal: 'y' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'literalMonth$subexpression$1',
-        symbols: ['literalMonth$subexpression$1$string$2'],
+        symbols: [{ literal: 'January' }],
       },
       {
         name: 'literalMonth',
         symbols: ['literalMonth$subexpression$1'],
         postprocess: returnMonth(1),
       },
-      {
-        name: 'literalMonth$subexpression$2$string$1',
-        symbols: [{ literal: 'F' }, { literal: 'e' }, { literal: 'b' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
+      { name: 'literalMonth$subexpression$2', symbols: [{ literal: 'Feb' }] },
       {
         name: 'literalMonth$subexpression$2',
-        symbols: ['literalMonth$subexpression$2$string$1'],
-      },
-      {
-        name: 'literalMonth$subexpression$2$string$2',
-        symbols: [
-          { literal: 'F' },
-          { literal: 'e' },
-          { literal: 'b' },
-          { literal: 'r' },
-          { literal: 'u' },
-          { literal: 'a' },
-          { literal: 'r' },
-          { literal: 'y' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'literalMonth$subexpression$2',
-        symbols: ['literalMonth$subexpression$2$string$2'],
+        symbols: [{ literal: 'February' }],
       },
       {
         name: 'literalMonth',
         symbols: ['literalMonth$subexpression$2'],
         postprocess: returnMonth(2),
       },
-      {
-        name: 'literalMonth$subexpression$3$string$1',
-        symbols: [{ literal: 'M' }, { literal: 'a' }, { literal: 'r' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'literalMonth$subexpression$3',
-        symbols: ['literalMonth$subexpression$3$string$1'],
-      },
-      {
-        name: 'literalMonth$subexpression$3$string$2',
-        symbols: [
-          { literal: 'M' },
-          { literal: 'a' },
-          { literal: 'r' },
-          { literal: 'c' },
-          { literal: 'h' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'literalMonth$subexpression$3',
-        symbols: ['literalMonth$subexpression$3$string$2'],
-      },
+      { name: 'literalMonth$subexpression$3', symbols: [{ literal: 'Mar' }] },
+      { name: 'literalMonth$subexpression$3', symbols: [{ literal: 'March' }] },
       {
         name: 'literalMonth',
         symbols: ['literalMonth$subexpression$3'],
         postprocess: returnMonth(3),
       },
-      {
-        name: 'literalMonth$subexpression$4$string$1',
-        symbols: [{ literal: 'A' }, { literal: 'p' }, { literal: 'r' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'literalMonth$subexpression$4',
-        symbols: ['literalMonth$subexpression$4$string$1'],
-      },
-      {
-        name: 'literalMonth$subexpression$4$string$2',
-        symbols: [
-          { literal: 'A' },
-          { literal: 'p' },
-          { literal: 'r' },
-          { literal: 'i' },
-          { literal: 'l' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'literalMonth$subexpression$4',
-        symbols: ['literalMonth$subexpression$4$string$2'],
-      },
+      { name: 'literalMonth$subexpression$4', symbols: [{ literal: 'Apr' }] },
+      { name: 'literalMonth$subexpression$4', symbols: [{ literal: 'April' }] },
       {
         name: 'literalMonth',
         symbols: ['literalMonth$subexpression$4'],
         postprocess: returnMonth(4),
       },
       {
-        name: 'literalMonth$string$1',
-        symbols: [{ literal: 'M' }, { literal: 'a' }, { literal: 'y' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
         name: 'literalMonth',
-        symbols: ['literalMonth$string$1'],
+        symbols: [{ literal: 'May' }],
         postprocess: returnMonth(5),
       },
-      {
-        name: 'literalMonth$subexpression$5$string$1',
-        symbols: [{ literal: 'J' }, { literal: 'u' }, { literal: 'n' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'literalMonth$subexpression$5',
-        symbols: ['literalMonth$subexpression$5$string$1'],
-      },
-      {
-        name: 'literalMonth$subexpression$5$string$2',
-        symbols: [
-          { literal: 'J' },
-          { literal: 'u' },
-          { literal: 'n' },
-          { literal: 'e' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'literalMonth$subexpression$5',
-        symbols: ['literalMonth$subexpression$5$string$2'],
-      },
+      { name: 'literalMonth$subexpression$5', symbols: [{ literal: 'Jun' }] },
+      { name: 'literalMonth$subexpression$5', symbols: [{ literal: 'June' }] },
       {
         name: 'literalMonth',
         symbols: ['literalMonth$subexpression$5'],
         postprocess: returnMonth(6),
       },
-      {
-        name: 'literalMonth$subexpression$6$string$1',
-        symbols: [{ literal: 'J' }, { literal: 'u' }, { literal: 'l' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'literalMonth$subexpression$6',
-        symbols: ['literalMonth$subexpression$6$string$1'],
-      },
-      {
-        name: 'literalMonth$subexpression$6$string$2',
-        symbols: [
-          { literal: 'J' },
-          { literal: 'u' },
-          { literal: 'l' },
-          { literal: 'y' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'literalMonth$subexpression$6',
-        symbols: ['literalMonth$subexpression$6$string$2'],
-      },
+      { name: 'literalMonth$subexpression$6', symbols: [{ literal: 'Jul' }] },
+      { name: 'literalMonth$subexpression$6', symbols: [{ literal: 'July' }] },
       {
         name: 'literalMonth',
         symbols: ['literalMonth$subexpression$6'],
         postprocess: returnMonth(7),
       },
-      {
-        name: 'literalMonth$subexpression$7$string$1',
-        symbols: [{ literal: 'A' }, { literal: 'u' }, { literal: 'g' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
+      { name: 'literalMonth$subexpression$7', symbols: [{ literal: 'Aug' }] },
       {
         name: 'literalMonth$subexpression$7',
-        symbols: ['literalMonth$subexpression$7$string$1'],
-      },
-      {
-        name: 'literalMonth$subexpression$7$string$2',
-        symbols: [
-          { literal: 'A' },
-          { literal: 'u' },
-          { literal: 'g' },
-          { literal: 'u' },
-          { literal: 's' },
-          { literal: 't' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'literalMonth$subexpression$7',
-        symbols: ['literalMonth$subexpression$7$string$2'],
+        symbols: [{ literal: 'August' }],
       },
       {
         name: 'literalMonth',
         symbols: ['literalMonth$subexpression$7'],
         postprocess: returnMonth(8),
       },
-      {
-        name: 'literalMonth$subexpression$8$string$1',
-        symbols: [{ literal: 'S' }, { literal: 'e' }, { literal: 'p' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
+      { name: 'literalMonth$subexpression$8', symbols: [{ literal: 'Sep' }] },
       {
         name: 'literalMonth$subexpression$8',
-        symbols: ['literalMonth$subexpression$8$string$1'],
-      },
-      {
-        name: 'literalMonth$subexpression$8$string$2',
-        symbols: [
-          { literal: 'S' },
-          { literal: 'e' },
-          { literal: 'p' },
-          { literal: 't' },
-          { literal: 'e' },
-          { literal: 'm' },
-          { literal: 'b' },
-          { literal: 'e' },
-          { literal: 'r' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'literalMonth$subexpression$8',
-        symbols: ['literalMonth$subexpression$8$string$2'],
+        symbols: [{ literal: 'September' }],
       },
       {
         name: 'literalMonth',
         symbols: ['literalMonth$subexpression$8'],
         postprocess: returnMonth(9),
       },
-      {
-        name: 'literalMonth$subexpression$9$string$1',
-        symbols: [{ literal: 'O' }, { literal: 'c' }, { literal: 't' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
+      { name: 'literalMonth$subexpression$9', symbols: [{ literal: 'Oct' }] },
       {
         name: 'literalMonth$subexpression$9',
-        symbols: ['literalMonth$subexpression$9$string$1'],
-      },
-      {
-        name: 'literalMonth$subexpression$9$string$2',
-        symbols: [
-          { literal: 'O' },
-          { literal: 'c' },
-          { literal: 't' },
-          { literal: 'o' },
-          { literal: 'b' },
-          { literal: 'e' },
-          { literal: 'r' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'literalMonth$subexpression$9',
-        symbols: ['literalMonth$subexpression$9$string$2'],
+        symbols: [{ literal: 'October' }],
       },
       {
         name: 'literalMonth',
         symbols: ['literalMonth$subexpression$9'],
         postprocess: returnMonth(10),
       },
-      {
-        name: 'literalMonth$subexpression$10$string$1',
-        symbols: [{ literal: 'N' }, { literal: 'o' }, { literal: 'v' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
+      { name: 'literalMonth$subexpression$10', symbols: [{ literal: 'Nov' }] },
       {
         name: 'literalMonth$subexpression$10',
-        symbols: ['literalMonth$subexpression$10$string$1'],
-      },
-      {
-        name: 'literalMonth$subexpression$10$string$2',
-        symbols: [
-          { literal: 'N' },
-          { literal: 'o' },
-          { literal: 'v' },
-          { literal: 'e' },
-          { literal: 'm' },
-          { literal: 'b' },
-          { literal: 'e' },
-          { literal: 'r' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'literalMonth$subexpression$10',
-        symbols: ['literalMonth$subexpression$10$string$2'],
+        symbols: [{ literal: 'November' }],
       },
       {
         name: 'literalMonth',
         symbols: ['literalMonth$subexpression$10'],
         postprocess: returnMonth(11),
       },
-      {
-        name: 'literalMonth$subexpression$11$string$1',
-        symbols: [{ literal: 'D' }, { literal: 'e' }, { literal: 'c' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
+      { name: 'literalMonth$subexpression$11', symbols: [{ literal: 'Dec' }] },
       {
         name: 'literalMonth$subexpression$11',
-        symbols: ['literalMonth$subexpression$11$string$1'],
-      },
-      {
-        name: 'literalMonth$subexpression$11$string$2',
-        symbols: [
-          { literal: 'D' },
-          { literal: 'e' },
-          { literal: 'c' },
-          { literal: 'e' },
-          { literal: 'm' },
-          { literal: 'b' },
-          { literal: 'e' },
-          { literal: 'r' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'literalMonth$subexpression$11',
-        symbols: ['literalMonth$subexpression$11$string$2'],
+        symbols: [{ literal: 'December' }],
       },
       {
         name: 'literalMonth',
@@ -1861,93 +824,23 @@
         postprocess: returnMonth(12),
       },
       {
-        name: 'dateDay',
-        symbols: [/[0-9]/, /[0-9]/],
-        postprocess: (d, l, reject) => {
-          const day = parseInt(d.join(''));
-          if (day < 1 || day > 31) {
-            return reject;
-          }
-          return {
-            day,
-            location: l,
-            length: lengthOf(d),
-          };
-        },
-      },
-      {
-        name: 'dateHour',
-        symbols: [/[0-9]/, /[0-9]/],
-        postprocess: (d, l, reject) => {
-          const hour = parseInt(d.join(''));
-          if (hour > 23) {
-            return reject;
-          }
-          return {
-            hour,
-            location: l,
-            length: lengthOf(d),
-          };
-        },
-      },
-      {
-        name: 'dateMinute',
-        symbols: [/[0-9]/, /[0-9]/],
-        postprocess: (d, l, reject) => {
-          const minute = parseInt(d.join(''));
-          if (minute > 59) {
-            return reject;
-          }
-          return {
-            minute,
-            location: l,
-            length: lengthOf(d),
-          };
-        },
-      },
-      {
-        name: 'dateSecond',
-        symbols: [/[0-9]/, /[0-9]/],
-        postprocess: (d, l, reject) => {
-          const second = parseInt(d.join(''));
-          if (second > 59) {
-            return reject;
-          }
-          return {
-            second,
-            location: l,
-            length: lengthOf(d),
-          };
-        },
-      },
-      {
-        name: 'dateMillisecond',
-        symbols: [/[0-9]/, /[0-9]/, /[0-9]/],
-        postprocess: (d, l, reject) => {
-          return {
-            millisecond: parseInt(d.join('')),
-            location: l,
-            length: lengthOf(d),
-          };
-        },
-      },
-      {
         name: 'dateTimeZone',
         symbols: [{ literal: 'Z' }],
-        postprocess: (d, l) => ({
+        postprocess: (d) => ({
           timezone: {
             hours: 0,
             minutes: 0,
           },
-          location: l,
-          length: 1,
         }),
       },
       { name: 'dateTimeZone$subexpression$1', symbols: [{ literal: '+' }] },
       { name: 'dateTimeZone$subexpression$1', symbols: [{ literal: '-' }] },
       {
         name: 'dateTimeZone$ebnf$1$subexpression$1',
-        symbols: [{ literal: ':' }, 'int'],
+        symbols: [
+          { literal: ':' },
+          lexer.has('digits') ? { type: 'digits' } : digits,
+        ],
       },
       {
         name: 'dateTimeZone$ebnf$1',
@@ -1963,40 +856,42 @@
       },
       {
         name: 'dateTimeZone',
-        symbols: ['dateTimeZone$subexpression$1', 'int', 'dateTimeZone$ebnf$1'],
-        postprocess: (d, l) => {
-          let hours = d[1].n;
-          let minutes = (d[2] && d[2][1].n) || 0;
+        symbols: [
+          'dateTimeZone$subexpression$1',
+          lexer.has('digits') ? { type: 'digits' } : digits,
+          'dateTimeZone$ebnf$1',
+        ],
+        postprocess: ([sign, h, m]) => {
+          let hours = parseInt(h.value);
+          let minutes = m ? parseInt(m[1].value) : 0;
 
-          if (d[0][0] === '-') {
+          if (sign[0].value === '-') {
             hours = -hours;
             minutes = -minutes;
           }
 
-          return {
-            timezone: {
-              hours,
-              minutes,
-            },
-            location: l,
-            length: 1 + d[1].length + lengthOf(d[2]),
-          };
+          return { timezone: { hours, minutes } };
         },
       },
       { name: 'dateSeparator$subexpression$1', symbols: [{ literal: '-' }] },
       { name: 'dateSeparator$subexpression$1', symbols: [{ literal: '/' }] },
-      { name: 'dateSeparator', symbols: ['dateSeparator$subexpression$1'] },
-      { name: 'timeSeparator', symbols: [{ literal: ':' }] },
-      { name: 'millisecondSeparator', symbols: [{ literal: '.' }] },
+      {
+        name: 'dateSeparator',
+        symbols: ['dateSeparator$subexpression$1'],
+        postprocess: id,
+      },
       {
         name: 'column',
         symbols: [{ literal: '[' }, '_', { literal: ']' }],
-        postprocess: (d, l) => ({
-          type: 'column',
-          args: [[]],
-          location: l,
-          length: lengthOf(d),
-        }),
+        postprocess: (d) =>
+          addLoc(
+            {
+              type: 'column',
+              args: [[]],
+            },
+            d[0],
+            d[2]
+          ),
       },
       { name: 'column$ebnf$1', symbols: [] },
       {
@@ -2020,16 +915,8 @@
           '_',
           { literal: ']' },
         ],
-        postprocess: (d, l, reject) => {
-          const exp1 = d[2];
-          const elems = [exp1];
-          let length = lengthOf([d[0], d[1], d[2]]);
-
-          for (const e of d[3]) {
-            const [s1, c, s2, expr] = e;
-            elems.push(expr);
-            length += lengthOf(e);
-          }
+        postprocess: (d, _l, reject) => {
+          const elems = [d[2], ...d[3].map((listItem) => listItem[3])];
 
           if (
             elems.every((elem) => {
@@ -2043,78 +930,52 @@
             })
           ) {
             return reject;
+          } else {
+            return addArrayLoc(
+              {
+                type: 'column',
+                args: [elems],
+              },
+              d
+            );
           }
-
-          return {
-            type: 'column',
-            args: [elems],
-            location: l,
-            length,
-          };
-        },
-      },
-      {
-        name: 'given$string$1',
-        symbols: [
-          { literal: 'g' },
-          { literal: 'i' },
-          { literal: 'v' },
-          { literal: 'e' },
-          { literal: 'n' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
         },
       },
       {
         name: 'given',
         symbols: [
-          'given$string$1',
+          { literal: 'given' },
           '__',
-          'identifier',
+          'ref',
           '_',
           { literal: ':' },
           '_',
           'expression',
         ],
-        postprocess: (d, l) => {
-          return {
-            type: 'given',
-            args: [
-              {
-                type: 'ref',
-                args: [d[2].name],
-                location: d[2].location,
-                length: d[2].length,
-              },
-              d[6],
-            ],
-            location: l,
-            length: lengthOf(d),
-          };
+        postprocess: (d) => {
+          return addArrayLoc(
+            {
+              type: 'given',
+              args: [d[2], d[6]],
+            },
+            d
+          );
         },
       },
       {
         name: 'table',
         symbols: [{ literal: '{' }, 'tableColDef', { literal: '}' }],
-        postprocess: (d, l) => {
-          return {
-            type: 'table',
-            args: d[1].coldefs,
-            location: l,
-            length: lengthOf(d),
-          };
+        postprocess: (d) => {
+          return addArrayLoc(
+            {
+              type: 'table',
+              args: d[1],
+            },
+            d
+          );
         },
       },
-      {
-        name: 'tableColDef',
-        symbols: ['_'],
-        postprocess: (d, l) => ({
-          coldefs: [],
-          location: l,
-          length: d[0].length,
-        }),
-      },
+      { name: 'tableColDef', symbols: ['_'], postprocess: (d) => [] },
       { name: 'tableColDef$ebnf$1', symbols: [] },
       {
         name: 'tableColDef$ebnf$1$subexpression$1',
@@ -2130,83 +991,50 @@
       {
         name: 'tableColDef',
         symbols: ['_', 'tableOneColDef', 'tableColDef$ebnf$1', '_'],
-        postprocess: (d, l) => {
-          const initial = {
-            coldefs: d[1].coldefs,
-            location: l,
-            length: lengthOf([d[0], d[1], d[3]]),
-          };
+        postprocess: ([_ws, first, rest]) => {
+          const coldefs = [...first];
 
-          return d[2].reduce((coldefs, more) => {
-            const [_, oneColDef] = more;
-            return {
-              coldefs: [...coldefs.coldefs, ...oneColDef.coldefs],
-              location: l,
-              length: coldefs.length + lengthOf(more),
-            };
-          }, initial);
+          for (const [_sep, coldef] of rest ?? []) {
+            coldefs.push(...coldef);
+          }
+
+          return coldefs;
         },
       },
       {
         name: 'tableOneColDef',
         symbols: ['identifier'],
-        postprocess: (d, l) => {
-          const ref = d[0];
-          return {
-            coldefs: [
-              {
-                type: 'coldef',
-                args: [ref.name],
-                location: l,
-                length: ref.length,
-              },
-              {
-                type: 'ref',
-                args: [ref.name],
-                location: l,
-                length: ref.length,
-              },
-            ],
-            location: l,
-            length: ref.length,
-          };
-        },
+        postprocess: ([ref]) => [
+          addLoc({ type: 'coldef', args: [ref.name] }, ref),
+          addLoc({ type: 'ref', args: [ref.name] }, ref),
+        ],
       },
       {
         name: 'tableOneColDef',
         symbols: ['identifier', '_', { literal: '=' }, '_', 'expression'],
-        postprocess: (d, l) => {
+        postprocess: (d) => {
           const ref = d[0];
-          return {
-            coldefs: [
+          return [
+            addLoc(
               {
                 type: 'coldef',
                 args: [ref.name],
-                location: l,
-                length: ref.length,
               },
-              d[4],
-            ],
-            location: l,
-            length: lengthOf(d),
-          };
+              ref
+            ),
+            d[4],
+          ];
         },
       },
+      { name: 'tableDefSeparator$subexpression$1', symbols: ['__n'] },
       {
-        name: 'tableDefSeparator',
-        symbols: ['_', { literal: '\n' }, '_'],
-        postprocess: (d, l) => ({
-          location: l,
-          length: lengthOf(d),
-        }),
+        name: 'tableDefSeparator$subexpression$1',
+        symbols: ['_', { literal: ',' }, '_'],
       },
       {
         name: 'tableDefSeparator',
-        symbols: ['_', { literal: ',' }, '_'],
-        postprocess: (d, l) => ({
-          location: l,
-          length: lengthOf(d),
-        }),
+        symbols: ['tableDefSeparator$subexpression$1'],
+        postprocess: id,
       },
       { name: 'expression', symbols: ['nonGivenExp'], postprocess: id },
       { name: 'expression', symbols: ['given'], postprocess: id },
@@ -2217,11 +1045,10 @@
       {
         name: 'divMulOp',
         symbols: ['divMulOp', '_', 'additiveOperator', '_', 'addSubOp'],
-        postprocess: (d, l, reject) => {
+        postprocess: (d, _l, reject) => {
           const left = d[0];
           const op = d[2];
           const right = d[4];
-          const totalLength = lengthOf(d);
 
           if (
             op.name === '+' &&
@@ -2232,227 +1059,200 @@
             return reject;
           }
 
-          return {
-            type: 'function-call',
-            args: [
-              {
-                type: 'funcref',
-                args: [op.name],
-                location: l + lengthOf([left, d[1]]),
-                length: op.length,
-              },
-              {
-                type: 'argument-list',
-                args: [left, right],
-                location: l,
-                length: totalLength,
-              },
-            ],
-            location: l,
-            length: totalLength,
-          };
+          return addArrayLoc(
+            {
+              type: 'function-call',
+              args: [
+                addLoc(
+                  {
+                    type: 'funcref',
+                    args: [op.name],
+                  },
+                  op
+                ),
+                addArrayLoc(
+                  {
+                    type: 'argument-list',
+                    args: [left, right],
+                  },
+                  d
+                ),
+              ],
+            },
+            d
+          );
         },
       },
       { name: 'addSubOp', symbols: ['primary'], postprocess: id },
       {
         name: 'addSubOp',
         symbols: ['addSubOp', '_', 'multiplicativeOperator', '_', 'primary'],
-        postprocess: (d, l) => {
+        postprocess: (d) => {
           const left = d[0];
           const op = d[2];
           const right = d[4];
-          const totalLength = lengthOf(d);
 
-          return {
-            type: 'function-call',
-            args: [
-              {
-                type: 'funcref',
-                args: [op.name],
-                location: l + lengthOf([left, d[1]]),
-                length: op.length,
-              },
-              {
-                type: 'argument-list',
-                args: [left, right],
-                location: l,
-                length: totalLength,
-              },
-            ],
-            location: l,
-            length: totalLength,
-          };
+          return addArrayLoc(
+            {
+              type: 'function-call',
+              args: [
+                addLoc(
+                  {
+                    type: 'funcref',
+                    args: [op.name],
+                  },
+                  op
+                ),
+                addArrayLoc(
+                  {
+                    type: 'argument-list',
+                    args: [left, right],
+                  },
+                  d
+                ),
+              ],
+            },
+            d
+          );
         },
       },
       {
-        name: 'basicRef',
+        name: 'ref',
         symbols: ['identifier'],
-        postprocess: (d, l, reject) => {
-          const name = d[0];
-          if (reservedWords.has(name.name)) {
+        postprocess: (d, _l, reject) => {
+          const name = d[0].name;
+          if (reservedWords.has(name)) {
             return reject;
+          } else {
+            return addLoc({ type: 'ref', args: [name] }, d[0]);
           }
-          return {
-            type: 'ref',
-            args: [name.name],
-            location: l,
-            length: name.length,
-          };
         },
       },
       { name: 'primary', symbols: ['functionCall'], postprocess: id },
       { name: 'primary', symbols: ['literal'], postprocess: id },
-      { name: 'primary', symbols: ['basicRef'], postprocess: id },
+      { name: 'primary', symbols: ['ref'], postprocess: id },
       {
         name: 'primary',
         symbols: [{ literal: '(' }, '_', 'expression', '_', { literal: ')' }],
-        postprocess: (d, l) => {
-          return {
-            ...d[2],
-            location: l,
-            length: lengthOf(d),
-          };
-        },
+        postprocess: (d) => addArrayLoc(d[2], d),
       },
       {
         name: 'primary',
         symbols: [{ literal: '-' }, '_', 'expression'],
-        postprocess: (d, l) => {
+        postprocess: (d) => {
           const expr = d[2];
           if (expr.type === 'literal' && expr.args[0] === 'number') {
             expr.args[1] = -expr.args[1];
-            return {
-              type: expr.type,
-              args: expr.args,
-              location: l,
-              length: lengthOf(d),
-            };
+            return addArrayLoc(
+              {
+                type: expr.type,
+                args: expr.args,
+              },
+              d
+            );
           } else {
-            return {
-              type: 'function-call',
-              args: [
-                {
-                  type: 'funcref',
-                  args: ['unary-'],
-                  location: l,
-                  length: 1,
-                },
-                {
-                  type: 'argument-list',
-                  args: [d[2]],
-                  location: lengthOf([d[0], d[1]]),
-                  length: d[2].length,
-                },
-              ],
-              location: l,
-              length: lengthOf(d),
-            };
+            return addArrayLoc(
+              {
+                type: 'function-call',
+                args: [
+                  addLoc(
+                    {
+                      type: 'funcref',
+                      args: ['unary-'],
+                    },
+                    d[0]
+                  ),
+                  addLoc(
+                    {
+                      type: 'argument-list',
+                      args: [d[2]],
+                    },
+                    d[2]
+                  ),
+                ],
+              },
+              d
+            );
           }
         },
       },
       {
         name: 'primary',
         symbols: [{ literal: '!' }, '_', 'expression'],
-        postprocess: (d, l) => {
-          return {
-            type: 'function-call',
-            args: [
-              {
-                type: 'funcref',
-                args: ['!'],
-                location: l,
-                length: 1,
-              },
-              {
-                type: 'argument-list',
-                args: [d[2]],
-                location: l + lengthOf([d[0], d[1]]),
-                length: lengthOf(d[2]),
-              },
-            ],
-            location: l,
-            length: lengthOf(d),
-          };
+        postprocess: (d) => {
+          return addArrayLoc(
+            {
+              type: 'function-call',
+              args: [
+                addLoc(
+                  {
+                    type: 'funcref',
+                    args: ['!'],
+                  },
+                  d[0]
+                ),
+                addLoc(
+                  {
+                    type: 'argument-list',
+                    args: [d[2]],
+                  },
+                  d[2]
+                ),
+              ],
+            },
+            d
+          );
         },
       },
       {
         name: 'primary',
-        symbols: ['basicRef', '_', { literal: '.' }, '_', 'basicRef'],
-        postprocess: (d, l) => ({
-          type: 'property-access',
-          args: [d[0], d[4].args[0]],
-          location: l,
-          length: lengthOf(d),
-        }),
+        symbols: ['ref', '_', { literal: '.' }, '_', 'ref'],
+        postprocess: (d) =>
+          addArrayLoc(
+            {
+              type: 'property-access',
+              args: [d[0], d[4].args[0]],
+            },
+            d
+          ),
       },
       { name: 'additiveOperator$subexpression$1', symbols: [{ literal: '-' }] },
       { name: 'additiveOperator$subexpression$1', symbols: [{ literal: '+' }] },
       {
-        name: 'additiveOperator$subexpression$1$string$1',
-        symbols: [{ literal: '&' }, { literal: '&' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
+        name: 'additiveOperator$subexpression$1',
+        symbols: [{ literal: '&&' }],
       },
       {
         name: 'additiveOperator$subexpression$1',
-        symbols: ['additiveOperator$subexpression$1$string$1'],
-      },
-      {
-        name: 'additiveOperator$subexpression$1$string$2',
-        symbols: [{ literal: '|' }, { literal: '|' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'additiveOperator$subexpression$1',
-        symbols: ['additiveOperator$subexpression$1$string$2'],
+        symbols: [{ literal: '||' }],
       },
       {
         name: 'additiveOperator',
         symbols: ['additiveOperator$subexpression$1'],
-        postprocess: (d, l) => {
-          const op = d[0][0];
-          return {
-            name: op,
-            location: l,
-            length: op.length,
-          };
+        postprocess: (d) => {
+          const op = d[0][0].value;
+          return addArrayLoc(
+            {
+              name: op,
+            },
+            d
+          );
         },
-      },
-      {
-        name: 'additiveOperator$subexpression$2$string$1',
-        symbols: [{ literal: 'i' }, { literal: 'n' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'additiveOperator$subexpression$2',
-        symbols: ['additiveOperator$subexpression$2$string$1'],
       },
       {
         name: 'additiveOperator',
-        symbols: ['__', 'additiveOperator$subexpression$2', '__'],
-        postprocess: (d, l) => {
-          return {
-            name: d[1],
-            location: l + d[0].length,
-            length: d[1].length,
-          };
-        },
-      },
-      {
-        name: 'multiplicativeOperator$subexpression$1$string$1',
-        symbols: [{ literal: '*' }, { literal: '*' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
+        symbols: ['__', { literal: 'in' }, '__'],
+        postprocess: (d) =>
+          addArrayLoc(
+            {
+              name: d[1].value,
+            },
+            d
+          ),
       },
       {
         name: 'multiplicativeOperator$subexpression$1',
-        symbols: ['multiplicativeOperator$subexpression$1$string$1'],
+        symbols: [{ literal: '*' }, { literal: '*' }],
       },
       {
         name: 'multiplicativeOperator$subexpression$1',
@@ -2463,115 +1263,63 @@
         symbols: [{ literal: '<' }],
       },
       {
-        name: 'multiplicativeOperator$subexpression$1$string$2',
+        name: 'multiplicativeOperator$subexpression$1',
         symbols: [{ literal: '<' }, { literal: '=' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
       },
       {
         name: 'multiplicativeOperator$subexpression$1',
-        symbols: ['multiplicativeOperator$subexpression$1$string$2'],
-      },
-      {
-        name: 'multiplicativeOperator$subexpression$1$string$3',
         symbols: [{ literal: '>' }, { literal: '=' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
       },
       {
         name: 'multiplicativeOperator$subexpression$1',
-        symbols: ['multiplicativeOperator$subexpression$1$string$3'],
-      },
-      {
-        name: 'multiplicativeOperator$subexpression$1$string$4',
         symbols: [{ literal: '=' }, { literal: '=' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
       },
       {
         name: 'multiplicativeOperator$subexpression$1',
-        symbols: ['multiplicativeOperator$subexpression$1$string$4'],
-      },
-      {
-        name: 'multiplicativeOperator$subexpression$1$string$5',
         symbols: [{ literal: '!' }, { literal: '=' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'multiplicativeOperator$subexpression$1',
-        symbols: ['multiplicativeOperator$subexpression$1$string$5'],
       },
       {
         name: 'multiplicativeOperator',
         symbols: ['multiplicativeOperator$subexpression$1'],
-        postprocess: (d, l) => {
-          const op = d[0][0];
-          return {
-            name: op,
-            location: l,
-            length: op.length,
-          };
-        },
-      },
-      {
-        name: 'multiplicativeOperator$subexpression$2$string$1',
-        symbols: [{ literal: ' ' }, { literal: '*' }, { literal: ' ' }],
-        postprocess: function joiner(d) {
-          return d.join('');
+        postprocess: (d) => {
+          return addArrayLoc(
+            {
+              name: d[0].map((t) => t.value).join(''),
+            },
+            d[0]
+          );
         },
       },
       {
         name: 'multiplicativeOperator$subexpression$2',
-        symbols: ['multiplicativeOperator$subexpression$2$string$1'],
-      },
-      {
-        name: 'multiplicativeOperator$subexpression$2$string$2',
-        symbols: [{ literal: ' ' }, { literal: '/' }, { literal: ' ' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
+        symbols: [{ literal: '*' }],
       },
       {
         name: 'multiplicativeOperator$subexpression$2',
-        symbols: ['multiplicativeOperator$subexpression$2$string$2'],
-      },
-      {
-        name: 'multiplicativeOperator$subexpression$2$string$3',
-        symbols: [{ literal: ' ' }, { literal: '%' }, { literal: ' ' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
+        symbols: [{ literal: '/' }],
       },
       {
         name: 'multiplicativeOperator$subexpression$2',
-        symbols: ['multiplicativeOperator$subexpression$2$string$3'],
-      },
-      {
-        name: 'multiplicativeOperator$subexpression$2$string$4',
-        symbols: [{ literal: ' ' }, { literal: '^' }, { literal: ' ' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
+        symbols: [{ literal: '%' }],
       },
       {
         name: 'multiplicativeOperator$subexpression$2',
-        symbols: ['multiplicativeOperator$subexpression$2$string$4'],
+        symbols: [{ literal: '^' }],
       },
       {
         name: 'multiplicativeOperator',
-        symbols: ['multiplicativeOperator$subexpression$2'],
-        postprocess: (d, l) => {
-          const op = d[0][0];
-          return {
-            name: op.trim(),
-            location: l + 1,
-            length: op.length,
-          };
+        symbols: [
+          { literal: ' ' },
+          'multiplicativeOperator$subexpression$2',
+          { literal: ' ' },
+        ],
+        postprocess: (d) => {
+          return addArrayLoc(
+            {
+              name: d[1][0].value,
+            },
+            d
+          );
         },
       },
       { name: 'timeQuantity$ebnf$1', symbols: [] },
@@ -2596,309 +1344,36 @@
           '_',
           { literal: ']' },
         ],
-        postprocess: (d, l) => {
+        postprocess: (d) => {
           const parcel = d[2];
-          const moreParcels = (d[3] && d[3].map((e) => e[1])) || [];
-          const length =
-            d[0].length +
-            d[1].length +
-            parcel.length +
-            lengthOf(moreParcels) +
-            d[4].length +
-            d[5].length;
+          const moreParcels = (d[3] || []).flatMap(([_ws, parcel]) => parcel);
 
-          return {
-            type: 'time-quantity',
-            args: [
-              ...parcel.parcel,
-              ...moreParcels.map((parcel) => parcel.parcel).flat(),
-            ],
-            location: l,
-            length,
-          };
+          return addArrayLoc(
+            {
+              type: 'time-quantity',
+              args: [...parcel, ...moreParcels],
+            },
+            d
+          );
         },
       },
       {
         name: 'timeQuantityDefParcel',
         symbols: ['int', '__', 'timeQuantityUnit'],
-        postprocess: (d, l) => {
-          return {
-            parcel: [d[2].unit, d[0].n],
-            location: l,
-            length: lengthOf(d),
-          };
-        },
-      },
-      {
-        name: 'timeQuantityUnit$string$1',
-        symbols: [
-          { literal: 'y' },
-          { literal: 'e' },
-          { literal: 'a' },
-          { literal: 'r' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'timeQuantityUnit$ebnf$1',
-        symbols: [{ literal: 's' }],
-        postprocess: id,
-      },
-      {
-        name: 'timeQuantityUnit$ebnf$1',
-        symbols: [],
-        postprocess: function (d) {
-          return null;
-        },
+        postprocess: ([quantity, _ws, unit]) => [unit, quantity.n],
       },
       {
         name: 'timeQuantityUnit',
-        symbols: ['timeQuantityUnit$string$1', 'timeQuantityUnit$ebnf$1'],
-        postprocess: (d) => ({ unit: 'year', length: lengthOf(d) }),
-      },
-      {
-        name: 'timeQuantityUnit$string$2',
-        symbols: [
-          { literal: 'q' },
-          { literal: 'u' },
-          { literal: 'a' },
-          { literal: 'r' },
-          { literal: 't' },
-          { literal: 'e' },
-          { literal: 'r' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
+        symbols: ['identifier'],
+        postprocess: ([unitIdent], _l, reject) => {
+          const unit = unitIdent.name.replace(/s$/, '');
+
+          if (timeUnitStrings.has(unit)) {
+            return unit;
+          } else {
+            return reject;
+          }
         },
-      },
-      {
-        name: 'timeQuantityUnit$ebnf$2',
-        symbols: [{ literal: 's' }],
-        postprocess: id,
-      },
-      {
-        name: 'timeQuantityUnit$ebnf$2',
-        symbols: [],
-        postprocess: function (d) {
-          return null;
-        },
-      },
-      {
-        name: 'timeQuantityUnit',
-        symbols: ['timeQuantityUnit$string$2', 'timeQuantityUnit$ebnf$2'],
-        postprocess: (d) => ({ unit: 'quarter', length: lengthOf(d) }),
-      },
-      {
-        name: 'timeQuantityUnit$string$3',
-        symbols: [
-          { literal: 'm' },
-          { literal: 'o' },
-          { literal: 'n' },
-          { literal: 't' },
-          { literal: 'h' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'timeQuantityUnit$ebnf$3',
-        symbols: [{ literal: 's' }],
-        postprocess: id,
-      },
-      {
-        name: 'timeQuantityUnit$ebnf$3',
-        symbols: [],
-        postprocess: function (d) {
-          return null;
-        },
-      },
-      {
-        name: 'timeQuantityUnit',
-        symbols: ['timeQuantityUnit$string$3', 'timeQuantityUnit$ebnf$3'],
-        postprocess: (d) => ({ unit: 'month', length: lengthOf(d) }),
-      },
-      {
-        name: 'timeQuantityUnit$string$4',
-        symbols: [
-          { literal: 'w' },
-          { literal: 'e' },
-          { literal: 'e' },
-          { literal: 'k' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'timeQuantityUnit$ebnf$4',
-        symbols: [{ literal: 's' }],
-        postprocess: id,
-      },
-      {
-        name: 'timeQuantityUnit$ebnf$4',
-        symbols: [],
-        postprocess: function (d) {
-          return null;
-        },
-      },
-      {
-        name: 'timeQuantityUnit',
-        symbols: ['timeQuantityUnit$string$4', 'timeQuantityUnit$ebnf$4'],
-        postprocess: (d) => ({ unit: 'week', length: lengthOf(d) }),
-      },
-      {
-        name: 'timeQuantityUnit$string$5',
-        symbols: [{ literal: 'd' }, { literal: 'a' }, { literal: 'y' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'timeQuantityUnit$ebnf$5',
-        symbols: [{ literal: 's' }],
-        postprocess: id,
-      },
-      {
-        name: 'timeQuantityUnit$ebnf$5',
-        symbols: [],
-        postprocess: function (d) {
-          return null;
-        },
-      },
-      {
-        name: 'timeQuantityUnit',
-        symbols: ['timeQuantityUnit$string$5', 'timeQuantityUnit$ebnf$5'],
-        postprocess: (d) => ({ unit: 'day', length: lengthOf(d) }),
-      },
-      {
-        name: 'timeQuantityUnit$string$6',
-        symbols: [
-          { literal: 'h' },
-          { literal: 'o' },
-          { literal: 'u' },
-          { literal: 'r' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'timeQuantityUnit$ebnf$6',
-        symbols: [{ literal: 's' }],
-        postprocess: id,
-      },
-      {
-        name: 'timeQuantityUnit$ebnf$6',
-        symbols: [],
-        postprocess: function (d) {
-          return null;
-        },
-      },
-      {
-        name: 'timeQuantityUnit',
-        symbols: ['timeQuantityUnit$string$6', 'timeQuantityUnit$ebnf$6'],
-        postprocess: (d) => ({ unit: 'hour', length: lengthOf(d) }),
-      },
-      {
-        name: 'timeQuantityUnit$string$7',
-        symbols: [
-          { literal: 'm' },
-          { literal: 'i' },
-          { literal: 'n' },
-          { literal: 'u' },
-          { literal: 't' },
-          { literal: 'e' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'timeQuantityUnit$ebnf$7',
-        symbols: [{ literal: 's' }],
-        postprocess: id,
-      },
-      {
-        name: 'timeQuantityUnit$ebnf$7',
-        symbols: [],
-        postprocess: function (d) {
-          return null;
-        },
-      },
-      {
-        name: 'timeQuantityUnit',
-        symbols: ['timeQuantityUnit$string$7', 'timeQuantityUnit$ebnf$7'],
-        postprocess: (d) => ({ unit: 'minute', length: lengthOf(d) }),
-      },
-      {
-        name: 'timeQuantityUnit$string$8',
-        symbols: [
-          { literal: 's' },
-          { literal: 'e' },
-          { literal: 'c' },
-          { literal: 'o' },
-          { literal: 'n' },
-          { literal: 'd' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'timeQuantityUnit$ebnf$8',
-        symbols: [{ literal: 's' }],
-        postprocess: id,
-      },
-      {
-        name: 'timeQuantityUnit$ebnf$8',
-        symbols: [],
-        postprocess: function (d) {
-          return null;
-        },
-      },
-      {
-        name: 'timeQuantityUnit',
-        symbols: ['timeQuantityUnit$string$8', 'timeQuantityUnit$ebnf$8'],
-        postprocess: (d) => ({ unit: 'second', length: lengthOf(d) }),
-      },
-      {
-        name: 'timeQuantityUnit$string$9',
-        symbols: [
-          { literal: 'm' },
-          { literal: 'i' },
-          { literal: 'l' },
-          { literal: 'l' },
-          { literal: 'i' },
-          { literal: 's' },
-          { literal: 'e' },
-          { literal: 'c' },
-          { literal: 'o' },
-          { literal: 'n' },
-          { literal: 'd' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'timeQuantityUnit$ebnf$9',
-        symbols: [{ literal: 's' }],
-        postprocess: id,
-      },
-      {
-        name: 'timeQuantityUnit$ebnf$9',
-        symbols: [],
-        postprocess: function (d) {
-          return null;
-        },
-      },
-      {
-        name: 'timeQuantityUnit',
-        symbols: ['timeQuantityUnit$string$9', 'timeQuantityUnit$ebnf$9'],
-        postprocess: (d) => ({ unit: 'millisecond', length: lengthOf(d) }),
       },
       {
         name: 'timeQuantityDefParcelSeparator$subexpression$1$subexpression$1',
@@ -2911,19 +1386,8 @@
         ],
       },
       {
-        name: 'timeQuantityDefParcelSeparator$subexpression$1$subexpression$2$string$1',
-        symbols: [{ literal: 'a' }, { literal: 'n' }, { literal: 'd' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
         name: 'timeQuantityDefParcelSeparator$subexpression$1$subexpression$2',
-        symbols: [
-          '__',
-          'timeQuantityDefParcelSeparator$subexpression$1$subexpression$2$string$1',
-          '__',
-        ],
+        symbols: ['__', { literal: 'and' }, '__'],
       },
       {
         name: 'timeQuantityDefParcelSeparator$subexpression$1',
@@ -2932,21 +1396,8 @@
         ],
       },
       {
-        name: 'timeQuantityDefParcelSeparator$subexpression$1$subexpression$3$string$1',
-        symbols: [{ literal: 'a' }, { literal: 'n' }, { literal: 'd' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
         name: 'timeQuantityDefParcelSeparator$subexpression$1$subexpression$3',
-        symbols: [
-          '_',
-          { literal: ',' },
-          '_',
-          'timeQuantityDefParcelSeparator$subexpression$1$subexpression$3$string$1',
-          '__',
-        ],
+        symbols: ['_', { literal: ',' }, '_', { literal: 'and' }, '__'],
       },
       {
         name: 'timeQuantityDefParcelSeparator$subexpression$1',
@@ -2957,76 +1408,40 @@
       {
         name: 'timeQuantityDefParcelSeparator',
         symbols: ['timeQuantityDefParcelSeparator$subexpression$1'],
-        postprocess: (d, l) => ({
-          location: l,
-          length: lengthOf(d[0][0]),
-        }),
+        postprocess: id,
       },
       {
         name: 'range',
         symbols: [{ literal: '[' }, '_', 'rangeSpec', '_', { literal: ']' }],
-        postprocess: (d, l) => {
+        postprocess: (d) => {
           const range = d[2];
-          return {
-            ...range,
-            location: l,
-            length: lengthOf(d),
-          };
+          return addArrayLoc(range, d);
         },
       },
       {
         name: 'rangeSpec',
         symbols: ['expression', 'rangeParcelSeparator', 'expression'],
-        postprocess: (d, l) => {
-          return {
-            type: 'range',
-            args: [d[0], d[2]],
-            location: l,
-            length: lengthOf(d),
-          };
-        },
-      },
-      {
-        name: 'rangeParcelSeparator$subexpression$1$subexpression$1$string$1',
-        symbols: [
-          { literal: 't' },
-          { literal: 'h' },
-          { literal: 'r' },
-          { literal: 'o' },
-          { literal: 'u' },
-          { literal: 'g' },
-          { literal: 'h' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
+        postprocess: (d) => {
+          return addArrayLoc(
+            {
+              type: 'range',
+              args: [d[0], d[2]],
+            },
+            d
+          );
         },
       },
       {
         name: 'rangeParcelSeparator$subexpression$1$subexpression$1',
-        symbols: [
-          '__',
-          'rangeParcelSeparator$subexpression$1$subexpression$1$string$1',
-          '__',
-        ],
+        symbols: ['__', { literal: 'through' }, '__'],
       },
       {
         name: 'rangeParcelSeparator$subexpression$1',
         symbols: ['rangeParcelSeparator$subexpression$1$subexpression$1'],
       },
       {
-        name: 'rangeParcelSeparator$subexpression$1$subexpression$2$string$1',
-        symbols: [{ literal: '.' }, { literal: '.' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
         name: 'rangeParcelSeparator$subexpression$1$subexpression$2',
-        symbols: [
-          '_',
-          'rangeParcelSeparator$subexpression$1$subexpression$2$string$1',
-          '_',
-        ],
+        symbols: ['_', { literal: '.' }, { literal: '.' }, '_'],
       },
       {
         name: 'rangeParcelSeparator$subexpression$1',
@@ -3035,126 +1450,81 @@
       {
         name: 'rangeParcelSeparator',
         symbols: ['rangeParcelSeparator$subexpression$1'],
-        postprocess: (d, l) => ({
-          location: l,
-          length: lengthOf(d[0][0]),
-        }),
+        postprocess: () => null,
       },
       {
         name: 'sequence',
-        symbols: [{ literal: '[' }, '_', 'sequenceSpec', '_', { literal: ']' }],
-        postprocess: (d, l) => {
-          const seq = d[2];
-          return {
-            ...seq,
-            location: l,
-            length: lengthOf(d),
-          };
-        },
+        symbols: [
+          { literal: '[' },
+          '_',
+          'sequenceInner',
+          '_',
+          { literal: ']' },
+        ],
+        postprocess: (d) => addArrayLoc(d[2], d),
       },
       {
-        name: 'sequenceSpec$string$1',
-        symbols: [{ literal: 'b' }, { literal: 'y' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'sequenceSpec',
-        symbols: ['rangeSpec', '_', 'sequenceSpec$string$1', '_', 'expression'],
-        postprocess: (d, l) => {
+        name: 'sequenceInner',
+        symbols: ['rangeSpec', '_', { literal: 'by' }, '_', 'expression'],
+        postprocess: (d) => {
           const range = d[0];
           return {
             type: 'sequence',
             args: [range.args[0], range.args[1], d[4]],
-            location: l,
-            length: lengthOf(d),
           };
-        },
-      },
-      {
-        name: 'importData$string$1',
-        symbols: [
-          { literal: 'i' },
-          { literal: 'm' },
-          { literal: 'p' },
-          { literal: 'o' },
-          { literal: 'r' },
-          { literal: 't' },
-          { literal: '_' },
-          { literal: 'd' },
-          { literal: 'a' },
-          { literal: 't' },
-          { literal: 'a' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
         },
       },
       {
         name: 'importData',
-        symbols: ['importData$string$1', '__', 'dqstring'],
-        postprocess: (d, l) => {
-          return {
-            type: 'imported-data',
-            args: [d[2]],
-            location: l,
-            length: lengthOf(d),
-          };
-        },
-      },
-      {
-        name: 'functionDef$string$1',
         symbols: [
-          { literal: 'f' },
-          { literal: 'u' },
-          { literal: 'n' },
-          { literal: 'c' },
-          { literal: 't' },
-          { literal: 'i' },
-          { literal: 'o' },
-          { literal: 'n' },
+          { literal: 'import_data' },
+          '__',
+          lexer.has('string') ? { type: 'string' } : string,
         ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'functionDef$string$2',
-        symbols: [{ literal: '=' }, { literal: '>' }],
-        postprocess: function joiner(d) {
-          return d.join('');
+        postprocess: (d) => {
+          return addArrayLoc(
+            {
+              type: 'imported-data',
+              args: [d[2].value],
+            },
+            d
+          );
         },
       },
       {
         name: 'functionDef',
         symbols: [
-          'functionDef$string$1',
+          { literal: 'function' },
           '___',
           'functionDefName',
           '_',
           'functionDefArgs',
           '_',
-          'functionDef$string$2',
+          { literal: '=' },
+          { literal: '>' },
           '_',
           'functionBody',
         ],
-        postprocess: (d, l) => ({
-          type: 'function-definition',
-          args: [d[2], d[4], d[8]],
-          location: l,
-          length: lengthOf(d),
-        }),
+        postprocess: (d) =>
+          addArrayLoc(
+            {
+              type: 'function-definition',
+              args: [d[2], d[4], d[9]],
+            },
+            d
+          ),
       },
       {
         name: 'functionDefName',
         symbols: ['identifier'],
-        postprocess: (d, l, reject) => ({
-          type: 'funcdef',
-          args: [d[0].name],
-          location: l,
-          length: lengthOf(d),
-        }),
+        postprocess: (d) =>
+          addLoc(
+            {
+              type: 'funcdef',
+              args: [d[0].name],
+            },
+            d[0]
+          ),
       },
       { name: 'functionDefArgs$ebnf$1', symbols: [] },
       {
@@ -3181,65 +1551,78 @@
           '_',
           { literal: ')' },
         ],
-        postprocess: (d, l) => ({
-          type: 'argument-names',
-          args: [d[2], ...d[3].map(([_comma, arg]) => arg)],
-          location: l,
-          length: lengthOf(d),
-        }),
+        postprocess: (d) =>
+          addArrayLoc(
+            {
+              type: 'argument-names',
+              args: [d[2], ...d[3].map(([_comma, arg]) => arg)],
+            },
+            d
+          ),
       },
       {
-        name: 'optionalComma',
+        name: 'optionalComma$subexpression$1',
         symbols: ['_', { literal: ',' }, '_'],
+      },
+      { name: 'optionalComma$subexpression$1', symbols: ['__'] },
+      {
+        name: 'optionalComma',
+        symbols: ['optionalComma$subexpression$1'],
         postprocess: id,
       },
-      { name: 'optionalComma', symbols: ['__'], postprocess: id },
       {
         name: 'argName',
         symbols: ['identifier'],
-        postprocess: (d, l) => ({
-          type: 'def',
-          args: [d[0].name],
-          location: l,
-          length: lengthOf(d),
-        }),
+        postprocess: (d) =>
+          addLoc(
+            {
+              type: 'def',
+              args: [d[0].name],
+            },
+            d[0]
+          ),
       },
       {
         name: 'functionBody',
-        symbols: ['statement'],
-        postprocess: (d, l) => ({
-          type: 'block',
-          args: [d[0]],
-          location: l,
-          length: lengthOf(d),
-        }),
+        symbols: ['expression'],
+        postprocess: ([exp]) =>
+          addLoc(
+            {
+              type: 'block',
+              args: [exp],
+            },
+            exp
+          ),
       },
       {
         name: 'functionCall',
         symbols: ['identifier', '_', 'callArgs'],
-        postprocess: (d, l) => {
+        postprocess: (d) => {
           const func = d[0];
           const args = d[2];
 
-          return {
-            type: 'function-call',
-            args: [
-              {
-                type: 'funcref',
-                args: [func.name],
-                location: func.location,
-                length: func.length,
-              },
-              {
-                type: 'argument-list',
-                args: args.args,
-                location: args.location,
-                length: args.length,
-              },
-            ],
-            location: l,
-            length: lengthOf(d),
-          };
+          return addArrayLoc(
+            {
+              type: 'function-call',
+              args: [
+                addLoc(
+                  {
+                    type: 'funcref',
+                    args: [func.name],
+                  },
+                  func
+                ),
+                addLoc(
+                  {
+                    type: 'argument-list',
+                    args: args.args,
+                  },
+                  args
+                ),
+              ],
+            },
+            d
+          );
         },
       },
       { name: 'callArgs$ebnf$1', symbols: [] },
@@ -3264,12 +1647,14 @@
           '_',
           { literal: ')' },
         ],
-        postprocess: (d, l) => ({
-          type: 'argument-list',
-          args: [d[2], ...d[3].map(([_ws, _comma, _ws2, arg]) => arg)],
-          location: l,
-          length: lengthOf(d),
-        }),
+        postprocess: (d) =>
+          addArrayLoc(
+            {
+              type: 'argument-list',
+              args: [d[2], ...d[3].map(([_ws, _comma, _ws2, arg]) => arg)],
+            },
+            d
+          ),
       },
       { name: 'block$ebnf$1', symbols: [] },
       { name: 'block$ebnf$1$subexpression$1', symbols: ['__n', 'statement'] },
@@ -3283,166 +1668,96 @@
       {
         name: 'block',
         symbols: ['_', 'statement', 'block$ebnf$1', '_'],
-        postprocess: (d, l) => {
+        postprocess: (d) => {
           const stmt = d[1];
           const repetitions = d[2].map(([__n, stmt]) => stmt);
 
-          return {
-            type: 'block',
-            args: [stmt, ...repetitions],
-            location: l,
-            length: lengthOf(d),
-          };
+          return addArrayLoc(
+            {
+              type: 'block',
+              args: [stmt, ...repetitions],
+            },
+            d
+          );
         },
       },
-      {
-        name: 'statement',
-        symbols: ['assign'],
-        postprocess: (d, l) => {
-          const stmt = d[0];
-          return {
-            ...stmt,
-            location: l,
-            length: stmt.length,
-          };
-        },
-      },
-      {
-        name: 'statement',
-        symbols: ['functionDef'],
-        postprocess: (d, l) => {
-          const stmt = d[0];
-          return {
-            ...stmt,
-            location: l,
-            length: stmt.length,
-          };
-        },
-      },
-      {
-        name: 'statement',
-        symbols: ['expression'],
-        postprocess: (d, l) => {
-          const stmt = d[0];
-          return {
-            ...stmt,
-            location: l,
-            length: stmt.length,
-          };
-        },
-      },
+      { name: 'statement', symbols: ['assign'], postprocess: id },
+      { name: 'statement', symbols: ['functionDef'], postprocess: id },
+      { name: 'statement', symbols: ['expression'], postprocess: id },
       {
         name: 'assign',
         symbols: ['identifier', '_', { literal: '=' }, '_', 'expression'],
-        postprocess: (d, l) => ({
-          type: 'assign',
-          args: [
+        postprocess: (d) =>
+          addArrayLoc(
             {
-              type: 'def',
-              args: [d[0].name],
-              location: l,
-              length: d[0].length,
+              type: 'assign',
+              args: [
+                addLoc(
+                  {
+                    type: 'def',
+                    args: [d[0].name],
+                  },
+                  d[0]
+                ),
+                d[4],
+              ],
             },
-            d[4],
-          ],
-          location: l,
-          length: lengthOf(d),
-        }),
-      },
-      { name: 'identifier$subexpression$1$ebnf$1', symbols: [] },
-      {
-        name: 'identifier$subexpression$1$ebnf$1',
-        symbols: ['identifier$subexpression$1$ebnf$1', /[a-zA-Z0-9_\$]/],
-        postprocess: function arrpush(d) {
-          return d[0].concat([d[1]]);
-        },
-      },
-      {
-        name: 'identifier$subexpression$1',
-        symbols: [/[a-zA-Z\$]/, 'identifier$subexpression$1$ebnf$1'],
+            d
+          ),
       },
       {
         name: 'identifier',
-        symbols: ['identifier$subexpression$1'],
-        postprocess: (d, l, reject) => {
-          const identString = d[0][0] + d[0][1].join('');
+        symbols: [
+          lexer.has('identifier') ? { type: 'identifier' } : identifier,
+        ],
+        postprocess: (d, _l, reject) => {
+          const identString = d[0].value;
 
           if (isReservedWord(identString)) {
             return reject;
           } else {
-            return {
-              name: identString,
-              location: l,
-              length: identString.length,
-            };
+            return addLoc({ name: identString }, d[0]);
           }
-        },
-      },
-      {
-        name: 'expression$string$1',
-        symbols: [{ literal: 'i' }, { literal: 'f' }],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'expression$string$2',
-        symbols: [
-          { literal: 't' },
-          { literal: 'h' },
-          { literal: 'e' },
-          { literal: 'n' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
-        },
-      },
-      {
-        name: 'expression$string$3',
-        symbols: [
-          { literal: 'e' },
-          { literal: 'l' },
-          { literal: 's' },
-          { literal: 'e' },
-        ],
-        postprocess: function joiner(d) {
-          return d.join('');
         },
       },
       {
         name: 'expression',
         symbols: [
-          'expression$string$1',
+          { literal: 'if' },
           '__',
           'expression',
           '__',
-          'expression$string$2',
+          { literal: 'then' },
           '__',
           'expression',
           '__',
-          'expression$string$3',
+          { literal: 'else' },
           '__',
           'expression',
         ],
-        postprocess: (d, l) => ({
-          type: 'function-call',
-          args: [
+        postprocess: (d) =>
+          addArrayLoc(
             {
-              type: 'funcref',
-              args: ['if'],
-              location: l,
-              length: 2,
+              type: 'function-call',
+              args: [
+                addLoc(
+                  {
+                    type: 'funcref',
+                    args: ['if'],
+                  },
+                  d[0]
+                ),
+                addArrayLoc(
+                  {
+                    type: 'argument-list',
+                    args: [d[2], d[6], d[10]],
+                  },
+                  d.slice(2)
+                ),
+              ],
             },
-            {
-              type: 'argument-list',
-              args: [d[2], d[6], d[10]],
-              location: d[2].location,
-              length: lengthOf(d.slice(2)),
-            },
-          ],
-          location: l,
-          length: lengthOf(d),
-        }),
+            d
+          ),
       },
     ],
     ParserStart: 'block',

@@ -61,31 +61,6 @@ runTests({
     ],
   },
 
-  'expression is character literal': {
-    source: " 'B' ",
-    ast: [
-      {
-        type: 'literal',
-        args: ['char', 'B'],
-        start: {
-          char: 1,
-          line: 1,
-          column: 2,
-        },
-        end: {
-          char: 3,
-          line: 1,
-          column: 4,
-        },
-      },
-    ],
-  },
-
-  'invalid character syntax': {
-    source: " 'BB' ",
-    expectError: 'Syntax error at line 1 col 4',
-  },
-
   'expression is boolean literal true': {
     source: ' true ',
     ast: [
@@ -104,6 +79,26 @@ runTests({
         },
       },
     ],
+  },
+
+  'expression is string': {
+    source: String.raw` "Hello\nWorld!" `,
+    ast: [
+      {
+        type: 'literal',
+        args: ['string', 'Hello\nWorld!', null],
+        start: {
+          char: 1,
+          line: 1,
+          column: 2,
+        },
+        end: {
+          char: 15,
+          line: 1,
+          column: 16
+        }
+      }
+    ]
   },
 
   'expression is boolean literal false': {

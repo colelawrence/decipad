@@ -6,9 +6,7 @@ import {
 } from '@apollo/client';
 import { concatPagination } from '@apollo/client/utilities';
 import merge from 'deepmerge';
-// false positive, @types only
-// eslint-disable-next-line import/no-extraneous-dependencies
-import isEqual from 'lodash.isequal';
+import { dequal } from 'dequal';
 import { AppProps } from 'next/app';
 import { useMemo } from 'react';
 
@@ -57,7 +55,7 @@ export function initializeApollo(
       arrayMerge: (destinationArray, sourceArray) => [
         ...sourceArray,
         ...destinationArray.filter((d) =>
-          sourceArray.every((s) => !isEqual(d, s))
+          sourceArray.every((s) => !dequal(d, s))
         ),
       ],
     });

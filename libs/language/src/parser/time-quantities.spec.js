@@ -27,16 +27,8 @@ runTests({
       {
         type: 'time-quantity',
         args: ['month', 1, 'hour', 2],
-        start: {
-          char: 2,
-          line: 1,
-          column: 3,
-        },
-        end: {
-          char: 22,
-          line: 1,
-          column: 23,
-        },
+        start: 2,
+        end: 27,
       },
     ],
   },
@@ -47,16 +39,8 @@ runTests({
       {
         type: 'time-quantity',
         args: ['week', 3, 'minute', 2, 'second', 20],
-        start: {
-          char: 2,
-          line: 1,
-          column: 3,
-        },
-        end: {
-          char: 32,
-          line: 1,
-          column: 33,
-        },
+        start: 2,
+        end: 39,
       },
     ],
   },

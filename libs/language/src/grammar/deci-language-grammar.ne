@@ -1,3 +1,12 @@
+@{%
+// Using require because nearley compiles things into an IIFE
+const { lexer } = require('./lexer')
+%}
+
+# Defines that the variable "lexer" above is our lexer here.
+# Needs to be used in every .ne file that uses a %tokenReference
+@lexer lexer
+
 @include "./white-space.ne"
 @include "./literal.ne"
 @include "./number.ne"
@@ -13,6 +22,7 @@
 @include "./sequence.ne"
 @include "./import-data.ne"
 @include "./functions.ne"
+
 @{%
 
 const knownUnits = require('./units').knownUnits
@@ -61,10 +71,10 @@ const monthStrings = new Set([
 const timeUnitStrings = new Set([
   'year',
   'years',
-  'month',
-  'months',
   'quarter',
   'quarters',
+  'month',
+  'months',
   'weeks',
   'week',
   'day',
@@ -83,82 +93,113 @@ function isReservedWord(str) {
   return reservedWords.has(str)
 }
 
-function lengthOf(d) {
-  if (Array.isArray(d)) {
-    return d.reduce((acc, item) => acc + lengthOf(item), 0)
+const _getStart = (tokOrNode) =>
+  tokOrNode.offset != null
+    ? tokOrNode.offset
+    : tokOrNode.start
+
+const _getEnd = (tokOrNode) =>
+  tokOrNode.offset != null
+    ? tokOrNode.offset + tokOrNode.text.length - 1
+    : tokOrNode.end
+
+const noEndToken = Symbol('no end token was passed')
+function addLoc(node, start, end = start) {
+  node.start = _getStart(start)
+  node.end = _getEnd(end)
+
+  if (typeof node.start !== 'number' || typeof node.end !== 'number') {
+    throw new Error('Bad start or end at ' + JSON.stringify(node, null, 2) + '\n\n-- given: ' + JSON.stringify({ start, end }, null, 2) + '')
   } else {
-    return d?.length ?? 0
+    return node
+  }
+}
+
+function getLocationFromArray(locArray) {
+  // Most of the time it's really easy to find
+  const shortCircuitStart = locArray[0] && _getStart(locArray[0])
+  const shortCircuitEnd = locArray[locArray.length - 1] && _getEnd(locArray[locArray.length - 1])
+  if (shortCircuitEnd != null && shortCircuitStart != null) {
+    return [shortCircuitStart, shortCircuitEnd]
+  }
+
+  let start = null
+  let end = null
+
+  const foundToken = (tokOrNode) => {
+    if (tokOrNode != null) {
+      const newStart = _getStart(tokOrNode)
+      const newEnd = _getEnd(tokOrNode)
+
+      if (newStart != null && newEnd != null) {
+        if (start == null) {
+          start = newStart
+        }
+        end = newEnd
+      }
+    }
+  }
+
+  ;(function recurse(array) {
+    if (array == null) return
+
+    if (Array.isArray(array)) {
+      for (const item of array) {
+        recurse(item)
+      }
+    } else {
+      foundToken(array)
+    }
+  })(locArray)
+
+  return [start, end]
+}
+
+function addArrayLoc(node, locArray) {
+  const [start, end] = getLocationFromArray(locArray)
+  node.start = start
+  node.end = end
+  if (typeof node.start !== 'number' || typeof node.end !== 'number') {
+    throw new Error('Bad start or end at ' + JSON.stringify(node, null, 2) + '\n\n-- given: ' + JSON.stringify({ start, end }, null, 2) + '')
+  } else {
+    return node
   }
 }
 
 %}
-
 
 ##################
 ### Statements ###
 ##################
 
 block         -> _ statement (__n statement):* _        {%
-                                                        (d, l) => {
+                                                        (d) => {
                                                           const stmt = d[1]
                                                           const repetitions = d[2]
                                                             .map(([__n, stmt]) => stmt)
 
-                                                          return {
+                                                          return addArrayLoc({
                                                             type: 'block',
                                                             args: [stmt, ...repetitions],
-                                                            location: l,
-                                                            length: lengthOf(d)
-                                                          }
+                                                          }, d)
                                                         }
                                                         %}
 
-statement     -> assign                                 {%
-                                                        (d, l) => {
-                                                          const stmt = d[0]
-                                                          return {
-                                                            ...stmt,
-                                                            location: l,
-                                                            length: stmt.length
-                                                          }
-                                                        }
-                                                        %}
-statement     -> functionDef                            {%
-                                                        (d, l) => {
-                                                          const stmt = d[0]
-                                                          return {
-                                                            ...stmt,
-                                                            location: l,
-                                                            length: stmt.length
-                                                          }
-                                                        }
-                                                        %}
-statement     -> expression                             {%
-                                                        (d, l) => {
-                                                          const stmt = d[0]
-                                                          return {
-                                                            ...stmt,
-                                                            location: l,
-                                                            length: stmt.length
-                                                          }
-                                                        }
-                                                        %}
+statement     -> assign                                 {% id %}
+statement     -> functionDef                            {% id %}
+statement     -> expression                             {% id %}
 
 assign -> identifier _ "=" _ expression                 {%
-                                                        (d, l) => ({
+                                                        (d) => addArrayLoc({
                                                           type: 'assign',
                                                           args: [
-                                                            {
+                                                            addLoc({
                                                               type: 'def',
-                                                              args: [d[0].name],
-                                                              location: l,
-                                                              length: d[0].length
-                                                            },
+                                                              args: [d[0].name]
+                                                            }, d[0]),
                                                             d[4]
-                                                          ],
-                                                          location: l,
-                                                          length: lengthOf(d)
-                                                        })
+                                                          ]
+                                                        }, d)
                                                         %}
 
 
@@ -166,18 +207,14 @@ assign -> identifier _ "=" _ expression                 {%
 ### References ###
 ##################
 
-identifier -> ([a-zA-Z\$] [a-zA-Z0-9_\$]:*)             {%
-                                                        (d, l, reject) => {
-                                                          const identString = d[0][0] + d[0][1].join('')
+identifier -> %identifier                               {%
+                                                        (d, _l, reject) => {
+                                                          const identString = d[0].value
 
                                                           if (isReservedWord(identString)) {
                                                             return reject
                                                           } else {
-                                                            return {
-                                                              name: identString,
-                                                              location: l,
-                                                              length: identString.length
-                                                            }
+                                                            return addLoc({ name: identString }, d[0])
                                                           }
                                                         }
                                                         %}
@@ -188,27 +225,21 @@ identifier -> ([a-zA-Z\$] [a-zA-Z0-9_\$]:*)             {%
 ###################
 
 expression -> "if" __ expression __ "then" __ expression __ "else" __ expression {%
-                                                        (d, l) => ({
+                                                        (d) => addArrayLoc({
                                                           type: 'function-call',
                                                           args: [
-                                                            {
+                                                            addLoc({
                                                               type: 'funcref',
                                                               args: ['if'],
-                                                              location: l,
-                                                              length: 2
-                                                            },
-                                                            {
+                                                            }, d[0]),
+                                                            addArrayLoc({
                                                               type: 'argument-list',
                                                               args: [
                                                                 d[2],
                                                                 d[6],
                                                                 d[10]
                                                               ],
-                                                              location: d[2].location,
-                                                              length: lengthOf(d.slice(2))
-                                                            }
+                                                            }, d.slice(2))
                                                           ],
-                                                          location: l,
-                                                          length: lengthOf(d)
-                                                        })
+                                                        }, d)
                                                         %}

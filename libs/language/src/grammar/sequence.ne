@@ -1,16 +1,11 @@
-sequence -> "[" _ sequenceSpec _ "]"                {%
-                                                    (d, l) => {
-                                                      const seq = d[2]
-                                                      return {
-                                                        ...seq,
-                                                        location: l,
-                                                        length: lengthOf(d)
-                                                      }
-                                                    }
+@lexer lexer
+
+sequence -> "[" _ sequenceInner _ "]"               {%
+                                                    (d) => addArrayLoc(d[2], d)
                                                     %}
 
-sequenceSpec -> rangeSpec _ "by" _ expression       {%
-                                                    (d, l) => {
+sequenceInner -> rangeSpec _ "by" _ expression      {%
+                                                    (d) => {
                                                       const range = d[0]
                                                       return {
                                                         type: "sequence",
@@ -19,8 +14,6 @@ sequenceSpec -> rangeSpec _ "by" _ expression       {%
                                                           range.args[1],
                                                           d[4]
                                                         ],
-                                                        location: l,
-                                                        length: lengthOf(d)
                                                       }
                                                     }
                                                     %}

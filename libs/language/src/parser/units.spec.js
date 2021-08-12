@@ -15,16 +15,8 @@ runTests({
               exp: 1,
               multiplier: 1,
               known: false,
-              start: {
-                char: 3,
-                line: 1,
-                column: 4,
-              },
-              end: {
-                char: 8,
-                line: 1,
-                column: 9,
-              },
+              start: 3,
+              end: 8,
             },
           ],
         ],

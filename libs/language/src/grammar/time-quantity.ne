@@ -1,52 +1,39 @@
+@lexer lexer
+
 #####################
 ### Time Quantity ###
 #####################
 
 
 timeQuantity -> "[" _ timeQuantityDefParcel (timeQuantityDefParcelSeparator timeQuantityDefParcel):* _ "]" {%
-                                                            (d, l) => {
+                                                            (d) => {
                                                               const parcel = d[2]
-                                                              const moreParcels = (d[3] && d[3].map((e) => e[1])) || []
-                                                              const length = d[0].length +
-                                                                d[1].length +
-                                                                parcel.length +
-                                                                lengthOf(moreParcels)+
-                                                                d[4].length + d[5].length
+                                                              const moreParcels = (d[3] || []).flatMap(
+                                                                ([_ws, parcel]) => parcel
+                                                              )
 
-                                                              return {
+                                                              return addArrayLoc({
                                                                 type: 'time-quantity',
-                                                                args: [
-                                                                  ...parcel.parcel,
-                                                                  ...moreParcels.map((parcel) => parcel.parcel).flat()],
-                                                                location: l,
-                                                                length
-                                                              }
+                                                                args: [...parcel, ...moreParcels]
+                                                              }, d)
                                                             }
-%}
+                                                            %}
 
 timeQuantityDefParcel -> int __ timeQuantityUnit            {%
-                                                            (d, l) => {
-                                                              return {
-                                                                parcel: [d[2].unit, d[0].n],
-                                                                location: l,
-                                                                length: lengthOf(d)
+                                                            ([quantity, _ws, unit]) =>
+                                                              [unit, quantity.n]
+                                                            %}
+
+timeQuantityUnit -> identifier                              {%
+                                                            ([unitIdent], _l, reject) => {
+                                                              const unit = unitIdent.name.replace(/s$/, '')
+
+                                                              if (timeUnitStrings.has(unit)) {
+                                                                return unit
+                                                              } else {
+                                                                return reject
                                                               }
                                                             }
                                                             %}
 
-timeQuantityUnit -> "year" "s":?                            {% (d) => ({unit: "year", length: lengthOf(d) }) %}
-timeQuantityUnit -> "quarter" "s":?                         {% (d) => ({unit: "quarter", length: lengthOf(d) }) %}
-timeQuantityUnit -> "month" "s":?                           {% (d) => ({unit: "month", length: lengthOf(d) }) %}
-timeQuantityUnit -> "week" "s":?                            {% (d) => ({unit: "week", length: lengthOf(d) }) %}
-timeQuantityUnit -> "day" "s":?                             {% (d) => ({unit: "day", length: lengthOf(d) }) %}
-timeQuantityUnit -> "hour" "s":?                            {% (d) => ({unit: "hour", length: lengthOf(d) }) %}
-timeQuantityUnit -> "minute" "s":?                          {% (d) => ({unit: "minute", length: lengthOf(d) }) %}
-timeQuantityUnit -> "second" "s":?                          {% (d) => ({unit: "second", length: lengthOf(d) }) %}
-timeQuantityUnit -> "millisecond" "s":?                     {% (d) => ({unit: "millisecond", length: lengthOf(d) }) %}
-
-timeQuantityDefParcelSeparator -> ((_ "," _) | (__ "and" __) | (_ "," _ "and" __)) {%
-                                                            (d, l) => ({
-                                                              location: l,
-                                                              length: lengthOf(d[0][0])
-                                                            })
-                                                            %}
+timeQuantityDefParcelSeparator -> ((_ "," _) | (__ "and" __) | (_ "," _ "and" __)) {% id %}

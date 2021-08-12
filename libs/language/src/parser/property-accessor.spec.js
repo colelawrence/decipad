@@ -10,8 +10,8 @@ runTests({
           {
             type: 'ref',
             args: ['abc'],
-            location: 1,
-            length: 3,
+            start: 1,
+            end: 3,
           },
           'def',
         ],
@@ -92,8 +92,8 @@ runTests({
                           {
                             type: 'ref',
                             args: ['b'],
-                            location: 4,
-                            length: 1,
+                            start: 4,
+                            end: 4,
                           },
                           'c',
                         ],

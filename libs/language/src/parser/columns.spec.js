@@ -31,8 +31,8 @@ runTests({
             {
               type: 'literal',
               args: ['number', 1, null],
-              location: 3,
-              length: 1,
+              start: 3,
+              end: 3
             },
             {
               type: 'function-call',
@@ -40,8 +40,8 @@ runTests({
                 {
                   type: 'funcref',
                   args: ['+'],
-                  location: 8,
-                  length: 1,
+                  start: 8,
+                  end: 8
                 },
                 {
                   type: 'argument-list',
@@ -49,22 +49,22 @@ runTests({
                     {
                       type: 'literal',
                       args: ['number', 2, null],
-                      location: 6,
-                      length: 1,
+                      start: 6,
+                      end: 6
                     },
                     {
                       type: 'literal',
                       args: ['number', 3, null],
-                      location: 10,
-                      length: 1,
+                      start: 10,
+                      end: 10
                     },
                   ],
-                  location: 6,
-                  length: 5,
+                  start: 6,
+                  end: 10,
                 },
               ],
-              location: 6,
-              length: 5,
+              start: 6,
+              end: 10,
             },
           ],
         ],
@@ -74,16 +74,16 @@ runTests({
           column: 2,
         },
         end: {
-          char: 10,
+          char: 12,
           line: 1,
-          column: 11,
+          column: 13,
         },
       },
     ],
   },
 
   'column with 4 components': {
-    source: ' [  1  , 2, 3  ,   4   ]',
+    source: ' [  1  , 2,\n3  ,   4   ]',
     ast: [
       {
         type: 'column',
@@ -92,26 +92,26 @@ runTests({
             {
               type: 'literal',
               args: ['number', 1, null],
-              location: 4,
-              length: 1,
+              start: 4,
+              end: 4,
             },
             {
               type: 'literal',
               args: ['number', 2, null],
-              location: 9,
-              length: 1,
+              start: 9,
+              end: 9,
             },
             {
               type: 'literal',
               args: ['number', 3, null],
-              location: 12,
-              length: 1,
+              start: 12,
+              end: 12
             },
             {
               type: 'literal',
               args: ['number', 4, null],
-              location: 19,
-              length: 1,
+              start: 19,
+              end: 19
             },
           ],
         ],
@@ -121,9 +121,9 @@ runTests({
           column: 2,
         },
         end: {
-          char: 19,
-          line: 1,
-          column: 20,
+          char: 23,
+          line: 2,
+          column: 12,
         },
       },
     ],

@@ -1,57 +1,48 @@
+@lexer lexer
+
 ###########################
 ### Function definition ###
 ###########################
 
-functionDef -> "function" ___ functionDefName _ functionDefArgs _ "=>" _ functionBody {%
-                                                        (d, l) => ({
+functionDef -> "function" ___ functionDefName _ functionDefArgs _ "=" ">" _ functionBody {%
+                                                        (d) => addArrayLoc({
                                                           type: "function-definition",
                                                           args: [
                                                             d[2],
                                                             d[4],
-                                                            d[8]
-                                                          ],
-                                                          location: l,
-                                                          length: lengthOf(d)
-                                                        })
+                                                            d[9]
+                                                          ]
+                                                        }, d)
                                                         %}
 
 functionDefName -> identifier                           {%
-                                                        (d, l, reject) => ({
+                                                        (d) => addLoc({
                                                           type: 'funcdef',
                                                           args: [d[0].name],
-                                                          location: l,
-                                                          length: lengthOf(d)
-                                                        })
+                                                        }, d[0])
                                                         %}
 
 functionDefArgs  -> "(" _ argName (optionalComma argName):* _ ")" {%
-                                                        (d, l) => ({
+                                                        (d) => addArrayLoc({
                                                           type: 'argument-names',
                                                           args: [d[2], ...d[3].map(([_comma, arg]) => arg)],
-                                                          location: l,
-                                                          length: lengthOf(d)
-                                                        })
+                                                        }, d)
                                                         %}
 
-optionalComma    -> _ "," _                             {% id %}
-optionalComma    -> __                                  {% id %}
+optionalComma    -> (_ "," _ | __)                      {% id %}
 
 argName -> identifier                                   {%
-                                                        (d, l) => ({
+                                                        (d) => addLoc({
                                                           type: 'def',
                                                           args: [d[0].name],
-                                                          location: l,
-                                                          length: lengthOf(d)
-                                                        })
+                                                        }, d[0])
                                                         %}
 
-functionBody -> statement                               {%
-                                                        (d, l) => ({
+functionBody -> expression                              {%
+                                                        ([exp]) => addLoc({
                                                           type: 'block',
-                                                          args: [d[0]],
-                                                          location: l,
-                                                          length: lengthOf(d)
-                                                        })
+                                                          args: [exp],
+                                                        }, exp)
                                                         %}
 
 
@@ -60,37 +51,29 @@ functionBody -> statement                               {%
 #####################
 
 functionCall -> identifier _ callArgs                   {%
-                                                        (d, l) => {
+                                                        (d) => {
                                                           const func = d[0]
                                                           const args = d[2]
 
-                                                          return {
+                                                          return addArrayLoc({
                                                             type: 'function-call',
                                                             args: [
-                                                              {
+                                                              addLoc({
                                                                 type: 'funcref',
                                                                 args: [func.name],
-                                                                location: func.location,
-                                                                length: func.length
-                                                              },
-                                                              {
+                                                              }, func),
+                                                              addLoc({
                                                                 type: 'argument-list',
                                                                 args: args.args,
-                                                                location: args.location,
-                                                                length: args.length
-                                                              }
+                                                              }, args),
                                                             ],
-                                                            location: l,
-                                                            length: lengthOf(d)
-                                                          }
+                                                          }, d)
                                                         }
                                                         %}
 
 callArgs -> "(" _ expression (_ "," _ expression):* _ ")"   {%
-                                                        (d, l) => ({
+                                                        (d) => addArrayLoc({
                                                           type: 'argument-list',
                                                           args: [d[2], ...d[3].map(([_ws, _comma, _ws2, arg]) => arg)],
-                                                          location: l,
-                                                          length: lengthOf(d)
-                                                        })
+                                                        }, d)
                                                         %}

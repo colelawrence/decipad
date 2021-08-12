@@ -138,7 +138,6 @@ const unitConversions = {
 const unitAliases = {
   // length
   meters: 'meter',
-  meters: 'meter',
   metre: 'meter',
   metres: 'meter',
   angstroms: 'angstrom',
@@ -206,8 +205,8 @@ const unitAliases = {
 
 const knownUnits = Object.entries(unitAliases).reduce(
   (knownUnits, [fromUnit, toUnit]) => {
-    knownUnits.add(fromUnit.toLowerCase()),
-      knownUnits.add(toUnit.toLowerCase());
+    knownUnits.add(fromUnit.toLowerCase());
+    knownUnits.add(toUnit.toLowerCase());
     return knownUnits;
   },
   new Set()

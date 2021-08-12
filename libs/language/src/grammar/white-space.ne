@@ -1,18 +1,33 @@
+@lexer lexer
+
 ###################
 ### White space ###
 ###################
 
-_  -> wschar:*  {% id %}
-__ -> wschar:+  {% id %}
-___ -> [ \t]:+  {% id %}
-__n -> wschar:+ {%
-                (d, l, reject) => {
-                  if (!d[0].includes('\n')) {
-                    return reject
-                  } else {
-                    return d[0]
-                  }
-                }
-                %}
+# Optional whitespace
+_  -> %ws:? {% id %}
 
-wschar -> [ \t\n\v\f] {% id %}
+# Mandatory whitespace
+__ -> %ws   {% id %}
+
+# Mandatory non-newline whitespace
+___ -> %ws  {%
+            (d, _l, reject) => {
+              if (d[0].value.includes('\n') || d[0].length === 0) {
+                return reject
+              } else {
+                return d[0]
+              }
+            }
+            %}
+
+# Newline and allowed surrounding whitespace
+__n -> %ws  {%
+            (d, _l, reject) => {
+              if (!d[0].value.includes('\n')) {
+                return reject
+              } else {
+                return d[0]
+              }
+            }
+            %}

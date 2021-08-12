@@ -9,8 +9,9 @@ const typesWithArgs = new Set([
   'function-definition',
   'block',
   'table',
-  'table-columns',
   'given',
+  'range',
+  'sequence',
 ]);
 
 export function sourceMapDecorator(
@@ -32,18 +33,17 @@ export function sourceMapDecorator(
   return decorateNode;
 
   function decorateNode(node: ParserNode): AST.Node {
-    // console.log(node)
-    const line = findBorder(locationToLine, node.location as number);
+    const line = findBorder(locationToLine, node.start as unknown as number);
     const column =
-      (node.location as number) - findBorder(lineToLocation, line) + 1;
+      (node.start as unknown as number) - findBorder(lineToLocation, line) + 1;
 
     node.start = {
-      char: node.location as number,
+      char: node.start as unknown as number,
       line,
       column,
     };
 
-    const endChar = (node.location as number) + (node.length as number) - 1;
+    const endChar = node.end as unknown as number;
     const endLine = findBorder(locationToLine, endChar);
     const endColumn = endChar - findBorder(lineToLocation, endLine) + 1;
     node.end = {
@@ -56,20 +56,19 @@ export function sourceMapDecorator(
       node.args = (node.args as AST.Node[]).map((node: unknown) =>
         decorateNode(node as ParserNode)
       ) as unknown as ParserNode[];
+    } else if (node.type === 'property-access') {
+      node.args[0] = decorateNode(node.args[0] as unknown as ParserNode);
     } else if (node.type === 'literal') {
       const n = node as unknown as AST.Literal;
       if (n.args[0] === 'number') {
         const units = n.args[2];
-        if (units !== null) {
+        if (units != null) {
           n.args[2] = units.map((unit: unknown) =>
             decorateNode(unit as ParserNode)
           ) as unknown as AST.Unit[];
         }
       }
     }
-
-    delete node.location;
-    delete node.length;
 
     return node as unknown as AST.Node;
   }

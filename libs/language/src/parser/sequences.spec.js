@@ -10,27 +10,23 @@ runTests({
           {
             type: 'literal',
             args: ['number', 1, null],
-            location: 5,
-            length: 1,
+            start: 5,
+            end: 5,
           },
           {
             type: 'literal',
             args: ['number', 10, null],
-            location: 8,
-            length: 2,
+            start: 8,
+            end: 9,
           },
           {
             type: 'literal',
             args: ['number', 1, null],
-            location: 14,
-            length: 1,
+            start: 14,
+            end: 14,
           },
         ],
-        start: {
-          char: 2,
-          line: 1,
-          column: 3,
-        },
+        start: 2,
         end: {
           char: 16,
           line: 1,
@@ -49,20 +45,20 @@ runTests({
           {
             type: 'literal',
             args: ['number', 1, null],
-            location: 5,
-            length: 1,
+            start: 5,
+            end: 5,
           },
           {
             type: 'literal',
             args: ['number', 10, null],
-            location: 16,
-            length: 2,
+            start: 16,
+            end: 17,
           },
           {
             type: 'literal',
             args: ['number', 0.5, null],
-            location: 23,
-            length: 3,
+            start: 23,
+            end: 25,
           },
         ],
         start: {
@@ -80,6 +76,7 @@ runTests({
   },
 
   'basic time sequence': {
+    sourceMap: false,
     source: '   [date(2020-10)..date(2020-03) by month]',
     ast: [
       {
@@ -88,32 +85,16 @@ runTests({
           {
             type: 'date',
             args: ['year', 2020, 'month', 10],
-            location: 4,
-            length: 13,
           },
           {
             type: 'date',
             args: ['year', 2020, 'month', 3],
-            location: 19,
-            length: 13,
           },
           {
             type: 'ref',
             args: ['month'],
-            location: 36,
-            length: 5,
           },
         ],
-        start: {
-          char: 3,
-          line: 1,
-          column: 4,
-        },
-        end: {
-          char: 41,
-          line: 1,
-          column: 42,
-        },
       },
     ],
   },

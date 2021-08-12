@@ -1,100 +1,50 @@
+@lexer lexer
+
 #############
 ### Table ###
 #############
 
 table -> "{" tableColDef "}"                            {%
-                                                        (d, l) => {
-                                                          return {
+                                                        (d) => {
+                                                          return addArrayLoc({
                                                             type: 'table',
-                                                            args: d[1].coldefs,
-                                                            location: l,
-                                                            length: lengthOf(d)
-                                                          }
+                                                            args: d[1],
+                                                          }, d)
                                                         }
                                                         %}
 
-tableColDef -> _                                        {%
-                                                        (d, l) => ({
-                                                          coldefs: [],
-                                                          location: l,
-                                                          length: d[0].length
-                                                        })
-                                                        %}
+tableColDef -> _                                        {% (d) => [] %}
 
 tableColDef -> _ tableOneColDef (tableDefSeparator tableOneColDef):* _ {%
-                                                        (d, l) => {
-                                                          const initial = {
-                                                            coldefs: d[1].coldefs,
-                                                            location: l,
-                                                            length: lengthOf([d[0], d[1], d[3]])
+                                                        ([_ws, first, rest]) => {
+                                                          const coldefs = [...first]
+
+                                                          for (const [_sep, coldef] of rest ?? []) {
+                                                            coldefs.push(...coldef)
                                                           }
 
-                                                          return d[2].reduce((coldefs, more) => {
-                                                            const [_, oneColDef] = more
-                                                            return {
-                                                              coldefs: [
-                                                                ...coldefs.coldefs,
-                                                                ...oneColDef.coldefs
-                                                              ],
-                                                              location: l,
-                                                              length: coldefs.length + lengthOf(more)
-                                                            }
-                                                          }, initial)
+                                                          return coldefs
                                                         }
                                                         %}
 
-tableOneColDef -> identifier                         {%
-                                                        (d, l) => {
+tableOneColDef -> identifier                            {%
+                                                        ([ref]) => [
+                                                          addLoc({ type: 'coldef', args: [ref.name] }, ref),
+                                                          addLoc({ type: 'ref', args: [ref.name] }, ref),
+                                                        ]
+                                                        %}
+
+tableOneColDef -> identifier _ "=" _ expression         {%
+                                                        (d) => {
                                                           const ref = d[0]
-                                                          return {
-                                                            coldefs: [
-                                                              {
-                                                                type: 'coldef',
-                                                                args: [ref.name],
-                                                                location: l,
-                                                                length: ref.length
-                                                              },
-                                                              {
-                                                                type: 'ref',
-                                                                args: [ ref.name ],
-                                                                location: l,
-                                                                length: ref.length
-                                                              }
-                                                            ],
-                                                            location: l,
-                                                            length: ref.length
-                                                          }
+                                                          return [
+                                                            addLoc({
+                                                              type: 'coldef',
+                                                              args: [ref.name],
+                                                            }, ref),
+                                                            d[4]
+                                                          ]
                                                         }
                                                         %}
 
-tableOneColDef -> identifier _ "=" _ expression      {%
-                                                        (d, l) => {
-                                                          const ref = d[0]
-                                                          return {
-                                                            coldefs: [
-                                                              {
-                                                                type: 'coldef',
-                                                                args: [ref.name],
-                                                                location: l,
-                                                                length: ref.length
-                                                              },
-                                                              d[4]
-                                                            ],
-                                                            location: l,
-                                                            length: lengthOf(d)
-                                                          }
-                                                        }
-                                                        %}
-
-tableDefSeparator -> _ "\n" _                           {%
-                                                        (d, l) => ({
-                                                          location: l,
-                                                          length: lengthOf(d)
-                                                        })
-                                                        %}
-tableDefSeparator -> _ "," _                            {%
-                                                        (d, l) => ({
-                                                          location: l,
-                                                          length: lengthOf(d)
-                                                        })
-                                                        %}
+tableDefSeparator -> (__n | _ "," _)                    {% id %}

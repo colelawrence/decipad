@@ -1,21 +1,17 @@
+@lexer lexer
+
 ############
 ### Date ###
 ############
 
 @{%
-const returnMonth = (month) => (d, l) => {
-  let obj = d[0]
-  if (Array.isArray(obj)) {
-    obj = obj[0]
-  }
-  return [month, obj.length]
-}
+const returnMonth = (month) => () => ({ month })
 
 const joinDateParts = (dateParts) => {
   let parts = dateParts.args
 
-  if (dateParts.next) {
-    parts = parts.concat(joinDateParts(dateParts.next))
+  if (dateParts.nextDateInner) {
+    parts = parts.concat(joinDateParts(dateParts.nextDateInner))
   }
 
   // Timezone is last, always
@@ -25,144 +21,116 @@ const joinDateParts = (dateParts) => {
 
   return parts
 }
+
+const makeDateFragmentReader = (key, len, min, max) => ([{text}], _l, reject) => {
+  const number = parseInt(text)
+  if (
+    text.length !== len ||
+    Number.isNaN(number) ||
+    number < min ||
+    number > max
+  ) {
+    return reject
+  } else {
+    return { [key]: number }
+  }
+}
 %}
 
-date -> "date" _ "(" _ dateInner _ ")"                  {%
-                                                        (d, l) => {
-                                                          return {
+date -> %beginDate _ dateInner _ %endDate               {%
+                                                        (d) => {
+                                                          return addLoc({
                                                             type: 'date',
-                                                            args: joinDateParts(d[4]),
-                                                            location: l,
-                                                            length: lengthOf(d)
-                                                          }
+                                                            args: joinDateParts(d[2]),
+                                                          }, d[0], d[4])
                                                         }
                                                         %}
 
 dateInner -> dateYear dateInnerMonth:?                  {%
-                                                        (d, l) => ({
+                                                        (d) => ({
                                                           type: 'date',
                                                           args: [
                                                             'year',
                                                             d[0].year,
                                                           ],
-                                                          next: d[1],
-                                                          location: l,
-                                                          length: lengthOf(d)
+                                                          nextDateInner: d[1],
                                                         })
                                                         %}
 
 dateInnerMonth -> dateSeparator dateMonth dateInnerDay:? {%
-                                                        (d, l) => ({
+                                                        (d) => ({
                                                           type: 'date',
                                                           args: [
                                                             'month',
                                                             d[1].month,
                                                           ],
-                                                          next: d[2],
-                                                          location: l,
-                                                          length: lengthOf(d)
+                                                          nextDateInner: d[2],
                                                         })
                                                         %}
 
 dateInnerDay -> dateSeparator dateDay dateInnerHour:?   {%
-                                                        (d, l) => ({
+                                                        (d) => ({
                                                           type: 'date',
                                                           args: [
                                                             'day',
                                                             d[1].day
                                                           ],
-                                                          next: d[2],
-                                                          location: l,
-                                                          length: lengthOf(d)
+                                                          nextDateInner: d[2],
                                                         })
                                                         %}
 
 dateInnerHour -> (" " | "T") dateHour dateInnerMinute:? dateTimeZone:? {%
-                                                        (d, l) => ({
+                                                        (d) => ({
                                                           type: 'date',
                                                           args: [
                                                             'hour',
                                                             d[1].hour
                                                           ],
-                                                          next: d[2],
+                                                          nextDateInner: d[2],
                                                           timezone: d[3]
                                                             ? ['timezone', d[3].timezone]
                                                             : [],
-                                                          location: l,
-                                                          length: lengthOf(d)
                                                         })
                                                         %}
 
-dateInnerMinute -> timeSeparator dateMinute dateInnerSecond:? {%
-                                                        (d, l) => ({
+dateInnerMinute -> ":" dateMinute dateInnerSecond:?     {%
+                                                        (d) => ({
                                                           type: 'date',
                                                           args: ['minute', d[1].minute],
-                                                          next: d[2],
-                                                          location: l,
-                                                          length: lengthOf(d)
+                                                          nextDateInner: d[2],
                                                         })
                                                         %}
 
-dateInnerSecond -> timeSeparator dateSecond dateInnerMillisecond:? {%
-                                                        (d, l) => ({
+dateInnerSecond -> ":" dateSecond dateInnerMillisecond:? {%
+                                                        (d) => ({
                                                           type: 'date',
                                                           args: [
                                                             'second',
                                                             d[1].second
                                                           ],
-                                                          next: d[2],
-                                                          location: l,
-                                                          length: lengthOf(d)
+                                                          nextDateInner: d[2],
                                                         })
                                                         %}
 
-dateInnerMillisecond -> millisecondSeparator dateMillisecond {%
-                                                        (d, l) => ({
+dateInnerMillisecond -> "." dateMillisecond             {%
+                                                        (d) => ({
                                                           type: 'date',
                                                           args: [
                                                             'millisecond',
                                                             d[1].millisecond
                                                           ],
-                                                          next: null,
-                                                          location: l,
-                                                          length: lengthOf(d)
+                                                          nextDateInner: null,
                                                         })
                                                         %}
 
-dateYear -> [0-9] [0-9] [0-9] [0-9]                     {%
-                                                        (d, l, reject) => {
-                                                          return {
-                                                            year: parseInt(d.join('')),
-                                                            location: l,
-                                                            length: lengthOf(d)
-                                                          }
-                                                        }
-                                                        %}
-
-dateMonth -> [0-9] [0-9]                                {%
-                                                        (d, l, reject) => {
-                                                          const month = parseInt(d.join(''))
-                                                          if (month < 1 || month > 12) {
-                                                            return reject
-                                                          }
-                                                          return {
-                                                            month,
-                                                            location: l,
-                                                            length: lengthOf(d)
-                                                          }
-                                                        }
-                                                        %}
-
-dateMonth -> literalMonth                               {%
-                                                        (d, l) => {
-                                                          const [month, length] = d[0]
-                                                          return {
-                                                            month,
-                                                            location: l,
-                                                            length
-                                                          }
-                                                        }
-                                                        %}
+dateYear -> %digits                                     {% makeDateFragmentReader('year', 4, 0, 9999) %}
+dateMonth -> %digits                                    {% makeDateFragmentReader('month', 2, 1, 12) %}
+dateMonth -> literalMonth                               {% id %}
+dateDay -> %digits                                      {% makeDateFragmentReader('day', 2, 1, 31) %}
+dateHour -> %digits                                     {% makeDateFragmentReader('hour', 2, 0, 23) %}
+dateMinute -> %digits                                   {% makeDateFragmentReader('minute', 2, 0, 59) %}
+dateSecond -> %digits                                   {% makeDateFragmentReader('second', 2, 0, 59) %}
+dateMillisecond -> %digits                              {% makeDateFragmentReader('millisecond', 3, 0, 999) %}
 
 literalMonth -> ("Jan" | "January")                     {% returnMonth(1) %}
 literalMonth -> ("Feb" | "February")                    {% returnMonth(2) %}
@@ -177,105 +145,28 @@ literalMonth -> ("Oct" | "October")                     {% returnMonth(10) %}
 literalMonth -> ("Nov" | "November")                    {% returnMonth(11) %}
 literalMonth -> ("Dec" | "December")                    {% returnMonth(12) %}
 
-dateDay -> [0-9] [0-9]                                  {%
-                                                        (d, l, reject) => {
-                                                          const day = parseInt(d.join(''))
-                                                          if (day < 1 || day > 31) {
-                                                            return reject
-                                                          }
-                                                          return {
-                                                            day,
-                                                            location: l,
-                                                            length: lengthOf(d)
-                                                          }
-                                                        }
-                                                        %}
-
-dateHour -> [0-9] [0-9]                                 {%
-                                                        (d, l, reject) => {
-                                                          const hour = parseInt(d.join(''))
-                                                          if (hour > 23) {
-                                                            return reject
-                                                          }
-                                                          return {
-                                                            hour,
-                                                            location: l,
-                                                            length: lengthOf(d)
-                                                          }
-                                                        }
-                                                        %}
-
-dateMinute -> [0-9] [0-9]                               {%
-                                                        (d, l, reject) => {
-                                                          const minute = parseInt(d.join(''))
-                                                          if (minute > 59) {
-                                                            return reject
-                                                          }
-                                                          return {
-                                                            minute,
-                                                            location: l,
-                                                            length: lengthOf(d)
-                                                          }
-                                                        }
-                                                        %}
-
-dateSecond -> [0-9] [0-9]                               {%
-                                                        (d, l, reject) => {
-                                                          const second = parseInt(d.join(''))
-                                                          if (second > 59) {
-                                                            return reject
-                                                          }
-                                                          return {
-                                                            second,
-                                                            location: l,
-                                                            length: lengthOf(d)
-                                                          }
-                                                        }
-                                                        %}
-
-dateMillisecond -> [0-9] [0-9] [0-9]                    {%
-                                                        (d, l, reject) => {
-                                                          return {
-                                                            millisecond: parseInt(d.join('')),
-                                                            location: l,
-                                                            length: lengthOf(d)
-                                                          }
-                                                        }
-                                                        %}
-
 dateTimeZone -> "Z"                                     {%
-                                                        (d, l) => ({
+                                                        (d) => ({
                                                           timezone: {
                                                             hours: 0,
                                                             minutes: 0
                                                           },
-                                                          location: l,
-                                                          length: 1
                                                         })
                                                         %}
 
-dateTimeZone -> ("+" | "-") int (":" int):?             {%
-                                                        (d, l) => {
-                                                          let hours = d[1].n
-                                                          let minutes = (d[2] && d[2][1].n) || 0
+dateTimeZone -> ("+" | "-") %digits (":" %digits):?     {%
+                                                        ([sign, h, m]) => {
+                                                          let hours = parseInt(h.value)
+                                                          let minutes = m ? parseInt(m[1].value) : 0
 
-                                                          if (d[0][0] === "-") {
+                                                          if (sign[0].value === "-") {
                                                             hours = -hours
                                                             minutes = -minutes
                                                           }
 
-                                                          return {
-                                                            timezone: {
-                                                              hours,
-                                                              minutes
-                                                            },
-                                                            location: l,
-                                                            length: 1 + d[1].length + lengthOf(d[2])
-                                                          }
+                                                          return { timezone: { hours, minutes } }
                                                         }
                                                         %}
 
 
-dateSeparator -> ("-" | "/")
-timeSeparator -> ":"
-millisecondSeparator -> "."
+dateSeparator -> ("-" | "/")                            {% id %}

@@ -40,13 +40,11 @@ function specToString(spec: ErrSpec): string {
       return spec.message;
     }
     case 'expectedButGot': {
-      const [expected, got] = spec.expectedButGot;
-      const str = (a: Type | string) =>
-        typeof a === 'string' ? a : a.toBasicString();
+      const [expected, got] = spec.expectedButGot.map((t) =>
+        typeof t === 'string' ? t : t.toBasicString()
+      );
 
-      return `This operation requires a ${str(expected)} and a ${str(
-        got
-      )} was entered`;
+      return `This operation requires a ${expected} and a ${got} was entered`;
     }
     case 'expectedUnit': {
       return 'This operation requires matching units';
@@ -73,13 +71,12 @@ function specToString(spec: ErrSpec): string {
 }
 
 export class InferError {
-  // @ts-expect-error might be uninitialized, TODO fix
   spec: ErrSpec;
 
-  constructor(spec?: string | ErrSpec) {
+  constructor(spec: string | ErrSpec) {
     if (typeof spec === 'string') {
       this.spec = { errType: 'free-form', message: spec };
-    } else if (spec != null) {
+    } else {
       this.spec = spec;
     }
   }

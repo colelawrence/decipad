@@ -1,29 +1,25 @@
+@lexer lexer
+
 ##############
 ### Column ###
 ##############
 
 column       -> "[" _ "]"                               {%
-                                                        (d, l) => ({
+                                                        (d) => addLoc({
                                                           type: 'column',
                                                           args: [
                                                             []
                                                           ],
-                                                          location: l,
-                                                          length: lengthOf(d)
-                                                        })
+                                                        }, d[0], d[2])
                                                         %}
+
 column       -> "[" _ expression (_ "," _ expression):* _ "]" {%
-                                                        (d, l, reject) => {
+                                                        (d, _l, reject) => {
 
-                                                        const exp1 = d[2]
-                                                        const elems = [exp1]
-                                                        let length  = lengthOf([d[0], d[1], d[2]])
-
-                                                        for (const e of d[3]) {
-                                                          const [s1, c, s2, expr] = e
-                                                          elems.push(expr)
-                                                          length += lengthOf(e)
-                                                        }
+                                                        const elems = [
+                                                          d[2],
+                                                          ...d[3].map(listItem => listItem[3])
+                                                        ]
 
                                                         if (elems.every((elem) => {
                                                           return (
@@ -34,15 +30,11 @@ column       -> "[" _ expression (_ "," _ expression):* _ "]" {%
                                                             timeUnitStrings.has(elem.args[2][0].unit))
                                                         })) {
                                                           return reject
-                                                        }
-
-                                                        return {
-                                                          type: 'column',
-                                                          args: [
-                                                            elems
-                                                          ],
-                                                          location: l,
-                                                          length
+                                                        } else {
+                                                          return addArrayLoc({
+                                                            type: 'column',
+                                                            args: [ elems ],
+                                                          }, d)
                                                         }
                                                       }
                                                       %}

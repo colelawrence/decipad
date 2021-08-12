@@ -10,14 +10,14 @@ runTests({
           {
             type: 'literal',
             args: ['number', 1, null],
-            location: 5,
-            length: 1,
+            start: 5,
+            end: 5
           },
           {
             type: 'literal',
             args: ['number', 10, null],
-            location: 8,
-            length: 2,
+            start: 8,
+            end: 9
           },
         ],
         start: {
@@ -43,14 +43,14 @@ runTests({
           {
             type: 'literal',
             args: ['number', 1, null],
-            location: 5,
-            length: 1,
+            start: 5,
+            end: 5,
           },
           {
             type: 'literal',
             args: ['number', 10, null],
-            location: 16,
-            length: 2,
+            start: 16,
+            end: 17,
           },
         ],
         start: {
@@ -76,14 +76,14 @@ runTests({
           {
             type: 'date',
             args: ['year', 2020, 'month', 10],
-            location: 4,
-            length: 13,
+            start: 4,
+            end: 16,
           },
           {
             type: 'date',
             args: ['year', 2020, 'month', 3],
-            location: 19,
-            length: 13,
+            start: 19,
+            end: 31,
           },
         ],
         start: {

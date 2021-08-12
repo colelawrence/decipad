@@ -1,9 +1,10 @@
+@lexer lexer
+
 ###############
 ### Literal ###
 ###############
 
 literal     -> boolean                                  {% id %}
-literal     -> character                                {% id %}
 literal     -> string                                   {% id %}
 literal     -> number                                   {% id %}
 literal     -> percentage                               {% id %}
@@ -14,30 +15,15 @@ literal     -> range                                    {% id %}
 literal     -> sequence                                 {% id %}
 
 boolean     -> "true"                                   {%
-                                                        (d, l) => ({
+                                                        (d) => addLoc({
                                                           type: 'literal',
                                                           args: ['boolean', true, null],
-                                                          location: l,
-                                                          length: lengthOf(d)
-                                                        })
-                                                        %}
-boolean     -> "false"                                  {%
-                                                        (d, l) => ({
-                                                          type: 'literal',
-                                                          args: ['boolean', false, null],
-                                                          location: l,
-                                                          length: lengthOf(d)
-                                                        })
+                                                        }, d[0])
                                                         %}
 
-character   -> "'"  sstrchar "'"                        {%
-                                                        (d, l) => {
-                                                          const c = d[0]
-                                                          return {
-                                                            type: 'literal',
-                                                            args: ['char', d[1]],
-                                                            location: l,
-                                                            length: 2 + c.length
-                                                          }
-                                                        }
+boolean     -> "false"                                  {%
+                                                        (d) => addLoc({
+                                                          type: 'literal',
+                                                          args: ['boolean', false, null],
+                                                        }, d[0])
                                                         %}

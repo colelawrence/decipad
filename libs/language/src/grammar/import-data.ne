@@ -1,14 +1,14 @@
+@lexer lexer
+
 ###################
 ### Import Data ###
 ###################
 
-importData -> "import_data" __ dqstring     {%
-                                            (d, l) => {
-                                              return {
+importData -> "import_data" __ %string      {%
+                                            (d) => {
+                                              return addArrayLoc({
                                                 type: 'imported-data',
-                                                args: [d[2]],
-                                                location: l,
-                                                length: lengthOf(d)
-                                              }
+                                                args: [d[2].value]
+                                              }, d)
                                             }
                                             %}

@@ -1,10 +1,21 @@
 import assert from 'assert';
 import { walk, zip } from '../utils';
-import { prettyPrintSolutions, prettyPrintAST } from './utils';
-import { parse } from './';
+import { prettyPrintAST, prettyPrintSolutions } from './utils';
+import { parse } from '.';
+
+const walkWithUnits = (ast, fn) => {
+  walk(ast, (node, path) => {
+    fn(node, path);
+    if (node.type === 'literal' && node.args[2] != null) {
+      node.args[2].forEach((unit, i) => {
+        fn(unit, [...path, i]);
+      });
+    }
+  });
+};
 
 function cleanSourceMap(ast) {
-  walk(ast, (node) => {
+  walkWithUnits(ast, (node) => {
     delete node.end;
     delete node.start;
   });
@@ -20,7 +31,7 @@ function simplifySourceMaps(gots, expecteds) {
     const simplifiedStart = new Set();
     const simplifiedEnd = new Set();
 
-    walk(expected, (node, path) => {
+    walkWithUnits(expected, (node, path) => {
       const pathStr = path.toString();
       if (typeof node.start === 'number') {
         simplifiedStart.add(pathStr);
@@ -30,7 +41,7 @@ function simplifySourceMaps(gots, expecteds) {
       }
     });
 
-    walk(got, (node, path) => {
+    walkWithUnits(got, (node, path) => {
       const pathStr = path.toString();
       if (simplifiedStart.has(pathStr)) {
         node.start = node.start.char;
@@ -81,10 +92,11 @@ export function runTests(tests) {
       skip = false,
       only = false,
     } = spec;
-    let testFunction = skip ? test.skip : only ? test.only : test;
+    const testFunction = skip ? test.skip : only ? test.only : test;
 
     testFunction(name, () => {
-      let results, parseError;
+      let results;
+      let parseError;
       try {
         results = parse([
           {
@@ -100,7 +112,7 @@ export function runTests(tests) {
         (result) => result.errors.length > 0
       );
       if ((resultsWithErrors?.length ?? 0) > 0) {
-        parseError = resultsWithErrors[0].errors[0];
+        [parseError] = resultsWithErrors[0].errors;
       }
 
       if (parseError) {
