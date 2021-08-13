@@ -1,6 +1,8 @@
+@preprocessor esmodule
+
 @{%
 // Using require because nearley compiles things into an IIFE
-const { lexer } = require('./lexer')
+import { lexer } from './lexer'
 %}
 
 # Defines that the variable "lexer" above is our lexer here.

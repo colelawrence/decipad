@@ -41,26 +41,6 @@ runTests({
     ],
   },
 
-  'expression is exp literal': {
-    source: ' -21.3e4 ',
-    ast: [
-      {
-        type: 'literal',
-        args: ['number', -213000, null],
-        start: {
-          char: 1,
-          line: 1,
-          column: 2,
-        },
-        end: {
-          char: 7,
-          line: 1,
-          column: 8,
-        },
-      },
-    ],
-  },
-
   'expression is boolean literal true': {
     source: ' true ',
     ast: [
@@ -95,10 +75,10 @@ runTests({
         end: {
           char: 15,
           line: 1,
-          column: 16
-        }
-      }
-    ]
+          column: 16,
+        },
+      },
+    ],
   },
 
   'expression is boolean literal false': {

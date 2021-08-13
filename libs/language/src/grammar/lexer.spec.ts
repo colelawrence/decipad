@@ -12,20 +12,9 @@ it('can go into date mode and back', () => {
   );
 });
 
-it('can find numbers and exponents', () => {
+it('can find numbers', () => {
   expect(testLexer('100')).toMatchInlineSnapshot(`"number(100)"`);
   expect(testLexer('1.10')).toMatchInlineSnapshot(`"number(1.10)"`);
-  expect(testLexer('1e420')).toMatchInlineSnapshot(`"number(1e420)"`);
-  expect(testLexer('1.1e-420')).toMatchInlineSnapshot(`"number(1.1e-420)"`);
-});
-
-it('can separate exponents', () => {
-  expect(testLexer('1e420e69')).toMatchInlineSnapshot(
-    `"number(1e420) identifier(e69)"`
-  );
-  expect(testLexer('1e420ehello')).toMatchInlineSnapshot(
-    `"number(1e420) identifier(ehello)"`
-  );
 });
 
 it('parses strings using JSON.parse', () => {

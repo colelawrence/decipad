@@ -1,21 +1,20 @@
 import moo from 'moo';
 
+const keywordStrings = [
+  'if',
+  'then',
+  'else',
+  'true',
+  'false',
+  'and',
+  'in',
+  'by',
+  'date',
+  'through',
+  'import_data',
+];
 const keywords = moo.keywords(
-  Object.fromEntries(
-    [
-      'if',
-      'then',
-      'else',
-      'true',
-      'false',
-      'and',
-      'in',
-      'by',
-      'date',
-      'through',
-      'import_data',
-    ].map((kw) => [`${kw} keyword`, kw])
-  )
+  Object.fromEntries(keywordStrings.map((kw) => [`${kw} keyword`, kw]))
 );
 
 export const lexer = moo.states({
@@ -60,7 +59,7 @@ export const lexer = moo.states({
       match: /[a-zA-Z$][a-zA-Z0-9_$]*/,
       type: keywords,
     },
-    number: /[0-9]+(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?/,
+    number: /[0-9]+(?:\.[0-9]+)?/,
     string: {
       // Adding control characters to comply with https://json.org
       /* eslint-disable-next-line no-control-regex */
