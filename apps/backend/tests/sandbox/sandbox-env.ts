@@ -32,11 +32,13 @@ export function createSandboxEnv(workerId: number): ISandboxEnvReturn {
   const eventsPort = `${portBase}1`; // string concat, just like Architect does
   const tablesPort = `${portBase}2`; // string concat, just like Architect does
   const s3Port = `${portBase}3`;
+  const arcPort = `${portBase}4`;
   const appConfig = {
     PORT: portBase,
     NEXTAUTH_URL: new URL('api/auth', baseUrl(portBase)).href,
     ARC_EVENTS_PORT: eventsPort,
     ARC_TABLES_PORT: tablesPort,
+    ARC_INTERNAL: arcPort,
     DECI_S3_ENDPOINT: `localhost:${s3Port}`,
   };
 
