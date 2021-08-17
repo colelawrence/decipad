@@ -3,11 +3,14 @@ import { join } from 'path';
 import { parse as parseDotEnv } from 'dotenv';
 import { Config } from './config';
 import baseUrl from './base-url';
+import getPorts from './get-ports';
 
 export type Env = Record<string, string | undefined>;
 type ISandboxEnvReturn = [Env, Config];
 
-export function createSandboxEnv(workerId: number): ISandboxEnvReturn {
+export async function createSandboxEnv(
+  workerId: number
+): Promise<ISandboxEnvReturn> {
   // read the testing env config file
   // from '../.testing.env'
   const baseConfig = parseDotEnv(
@@ -28,11 +31,10 @@ export function createSandboxEnv(workerId: number): ISandboxEnvReturn {
   };
 
   // configure Architect's ports
-  const portBase = `${3333 + workerId * 1000 - Math.ceil(Math.random() * 500)}`;
-  const eventsPort = `${portBase}1`; // string concat, just like Architect does
-  const tablesPort = `${portBase}2`; // string concat, just like Architect does
-  const s3Port = `${portBase}3`;
-  const arcPort = `${portBase}4`;
+  const [portBase, eventsPort, tablesPort, s3Port, arcPort] = await getPorts(
+    workerId,
+    5
+  );
   const appConfig = {
     PORT: portBase,
     NEXTAUTH_URL: new URL('api/auth', baseUrl(portBase)).href,

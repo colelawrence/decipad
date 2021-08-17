@@ -8,8 +8,9 @@ import { encode } from './utils/resource';
 import test from './sandbox';
 import { create as createResourcePermission } from './utils/permissions';
 
-test('sync docs', ({ test: it, http: { withAuth }, auth }) => {
-  let call: ReturnType<typeof withAuth>;
+test('sync docs', (ctx) => {
+  const { test: it } = ctx;
+  let call: ReturnType<typeof ctx.http.withAuth>;
   const pad = {
     value: {
       id: 'padid1',
@@ -21,8 +22,8 @@ test('sync docs', ({ test: it, http: { withAuth }, auth }) => {
   let doc = Automerge.from(pad, 'agent id 1');
 
   beforeAll(async () => {
-    const { token } = await auth();
-    call = withAuth(token);
+    const { token } = await ctx.auth();
+    call = ctx.http.withAuth(token);
   });
 
   beforeAll(async () => {

@@ -15,21 +15,17 @@ type UserKeyValidation = {
   expires_at: number;
 };
 
-test('registration via magic link', ({
-  test: it,
-  graphql: { withAuth, withoutAuth },
-  http: { call: fetch },
-  gql,
-}) => {
+test('registration via magic link', (ctx) => {
+  const { test: it } = ctx;
   let user: User;
   let userKeyValidation: UserKeyValidation;
   let token: string;
 
   it('registers', async () => {
-    const client = withoutAuth();
+    const client = ctx.graphql.withoutAuth();
     user = (
       await client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             createUserViaMagicLink(email: "testuser1@decipad.com") {
               id
@@ -76,9 +72,9 @@ test('registration via magic link', ({
   // TODO merge WHEN test with THEN test?
   // eslint-disable-next-line jest/expect-expect
   it('can ask to resend link', async () => {
-    const client = withoutAuth();
+    const client = ctx.graphql.withoutAuth();
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           resendRegistrationMagicLinkEmail(email: "testuser1@decipad.com")
         }
@@ -88,17 +84,17 @@ test('registration via magic link', ({
 
   it('can visit that link and get authenticated', async () => {
     const link = `/api/userkeyvalidations/${userKeyValidation.id}/validate?redirect=false`;
-    const resp = await fetch(link);
+    const resp = await ctx.http.call(link);
     const cookie = resp.headers.get('set-cookie');
     expect(cookie).toMatch('next-auth.session-token=');
     token = parseCookie(cookie!).value;
   });
 
   it('no longer can ask to resend link', async () => {
-    const client = withoutAuth();
+    const client = ctx.graphql.withoutAuth();
     await expect(
       client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             resendRegistrationMagicLinkEmail(email: "testuser1@decipad.com")
           }
@@ -108,10 +104,10 @@ test('registration via magic link', ({
   });
 
   it('lets user update their name', async () => {
-    const client = withAuth({ token });
+    const client = ctx.graphql.withAuth({ token });
     const { self } = (
       await client.query({
-        query: gql`
+        query: ctx.gql`
           query {
             self {
               id
@@ -126,7 +122,7 @@ test('registration via magic link', ({
 
     const selfAfter = (
       await client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             updateSelf(props: { name: "My new name" }) {
               id
@@ -141,10 +137,10 @@ test('registration via magic link', ({
   });
 
   it('does not let register twice with the same email', async () => {
-    const client = withoutAuth();
+    const client = ctx.graphql.withoutAuth();
     await expect(
       client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             createUserViaMagicLink(email: "testuser1@decipad.com") {
               id

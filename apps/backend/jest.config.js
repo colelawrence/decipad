@@ -4,7 +4,7 @@ const config = {
   ...baseConfig,
   displayName: 'backend',
   setupFiles: [...setupFiles, './jest.setup.js'],
-  testTimeout: 10000,
+  testTimeout: 15000,
   maxWorkers: 2,
   bail: true,
 };

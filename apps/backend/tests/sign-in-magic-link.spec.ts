@@ -10,16 +10,17 @@ import test from './sandbox';
 
 waitForExpect.defaults.interval = 250;
 
-test('sign-in via magic link', ({ test: it, http: { call } }) => {
+test('sign-in via magic link', (ctx) => {
+  const { test: it } = ctx;
   it('requests sign-in email', async () => {
-    const csrfTokenResp = await call(`/api/auth/csrf`);
+    const csrfTokenResp = await ctx.http.call(`/api/auth/csrf`);
     const cookies = csrfTokenResp.headers.get('set-cookie');
     const parsedCookie = parseCookies(cookies!);
     expect(parsedCookie.name).toBe('next-auth.csrf-token');
     const csrfToken = decodeURIComponent(parsedCookie.value);
     const csrfTokenFirstPart = csrfToken.split('|')[0];
 
-    await call(`/api/auth/signin/email`, {
+    await ctx.http.call(`/api/auth/signin/email`, {
       method: 'POST',
       headers: {
         Cookie: encodeCookie({

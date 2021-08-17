@@ -1,24 +1,14 @@
 /* eslint-env jest */
 
-import { ApolloClient, StoreObject } from '@apollo/client';
 import test from './sandbox';
 
-test('graphql subscriptions', ({
-  test: it,
-  subscriptionClient: createClient,
-  gql,
-}) => {
-  let client: ApolloClient<StoreObject>;
-
-  beforeAll(async () => {
-    client = await createClient();
-  });
-
+test('graphql subscriptions', (ctx) => {
+  const { test: it } = ctx;
   it('can subscribe', async () => {
-    client = await createClient();
+    const client = await ctx.subscriptionClient();
     const result = await new Promise((resolve, reject) => {
       const subscription = client.subscribe({
-        query: gql`
+        query: ctx.gql`
           subscription {
             hello
           }

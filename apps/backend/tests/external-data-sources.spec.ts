@@ -2,20 +2,16 @@ import waitForExpect from 'wait-for-expect';
 import { ExternalDataSource } from '@decipad/backendtypes';
 import test from './sandbox';
 
-test('external data sources', ({
-  test: it,
-  graphql: { withAuth },
-  gql,
-  auth,
-}) => {
+test('external data sources', (ctx) => {
+  const { test: it } = ctx;
   let externalDataSource: ExternalDataSource | undefined;
 
   it('can be created', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     const newDataSource = (
       await client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             createExternalDataSource(
               dataSource: {
@@ -46,11 +42,11 @@ test('external data sources', ({
   });
 
   it('can be fetched', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     const dataSource = (
       await client.query({
-        query: gql`
+        query: ctx.gql`
           query {
             getExternalDataSource(id: "${externalDataSource!.id}") {
               id
@@ -68,11 +64,11 @@ test('external data sources', ({
   });
 
   it('cannot be fetched by other user', async () => {
-    const client = withAuth(await auth('test user id 2'));
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
 
     await expect(
       client.query({
-        query: gql`
+        query: ctx.gql`
           query {
             getExternalDataSource(id: "${externalDataSource!.id}") { id }
           }
@@ -82,10 +78,10 @@ test('external data sources', ({
   });
 
   it('can be modified by owner', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
     const dataSource = (
       await client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             updateExternalDataSource(id: "${
               externalDataSource!.id
@@ -112,10 +108,10 @@ test('external data sources', ({
   });
 
   it('cannot be modified by other user', async () => {
-    const client = withAuth(await auth('test user id 2'));
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
     await expect(
       client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             updateExternalDataSource(id: "${
               externalDataSource!.id
@@ -135,9 +131,9 @@ test('external data sources', ({
   });
 
   it('can be removed', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           removeExternalDataSource(id: "${externalDataSource!.id}")
         }
@@ -146,7 +142,7 @@ test('external data sources', ({
 
     await expect(
       client.query({
-        query: gql`
+        query: ctx.gql`
           query {
             getExternalDataSource(id: "${externalDataSource!.id}") {
               id
@@ -163,7 +159,7 @@ test('external data sources', ({
     // recreate
     const newDataSource = (
       await client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             createExternalDataSource(
               dataSource: {
@@ -187,10 +183,10 @@ test('external data sources', ({
   });
 
   it('can be shared with another user', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           shareExternalDataSourceWithUser(
             id: "${externalDataSource!.id}"
@@ -202,11 +198,11 @@ test('external data sources', ({
     });
 
     await waitForExpect(async () => {
-      const client2 = withAuth(await auth('test user id 2'));
+      const client2 = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
       expect(
         (
           await client2.query({
-            query: gql`
+            query: ctx.gql`
               query {
                 getExternalDataSource(id: "${externalDataSource!.id}") { id }
               }
@@ -218,10 +214,10 @@ test('external data sources', ({
   });
 
   it('can be unshared with another user', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           unshareExternalDataSourceWithUser(
             id: "${externalDataSource!.id}"
@@ -232,10 +228,10 @@ test('external data sources', ({
     });
 
     await waitForExpect(async () => {
-      const client2 = withAuth(await auth('test user id 2'));
+      const client2 = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
       await expect(
         client2.query({
-          query: gql`
+          query: ctx.gql`
             query {
               getExternalDataSource(id: "${externalDataSource!.id}") { id }
             }
@@ -246,10 +242,10 @@ test('external data sources', ({
   });
 
   it('can be shared with another role', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           shareExternalDataSourceWithRole(
             id: "${externalDataSource!.id}"
@@ -261,11 +257,11 @@ test('external data sources', ({
     });
 
     await waitForExpect(async () => {
-      const client2 = withAuth(await auth('test user id 2'));
+      const client2 = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
       expect(
         (
           await client2.query({
-            query: gql`
+            query: ctx.gql`
               query {
                 getExternalDataSource(id: "${externalDataSource!.id}") { id }
               }
@@ -277,10 +273,10 @@ test('external data sources', ({
   });
 
   it('can be unshared with role', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           unshareExternalDataSourceWithRole(
             id: "${externalDataSource!.id}"
@@ -291,10 +287,10 @@ test('external data sources', ({
     });
 
     await waitForExpect(async () => {
-      const client2 = withAuth(await auth('test user id 2'));
+      const client2 = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
       await expect(
         client2.query({
-          query: gql`
+          query: ctx.gql`
             query {
               getExternalDataSource(id: "${externalDataSource!.id}") { id }
             }
@@ -305,10 +301,10 @@ test('external data sources', ({
   });
 
   it('can be shared with another e-mail address', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           shareExternalDataSourceWithEmail(
             id: "${externalDataSource!.id}"
@@ -320,11 +316,11 @@ test('external data sources', ({
     });
 
     await waitForExpect(async () => {
-      const client2 = withAuth(await auth('test user id 2'));
+      const client2 = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
       expect(
         (
           await client2.query({
-            query: gql`
+            query: ctx.gql`
               query {
                 getExternalDataSource(id: "${externalDataSource!.id}") { id }
               }
@@ -336,10 +332,10 @@ test('external data sources', ({
   });
 
   it('cannot be modified by user that has read-only access', async () => {
-    const client = withAuth(await auth('test user id 2'));
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
     await expect(
       client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             updateExternalDataSource(id: "${
               externalDataSource!.id

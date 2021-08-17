@@ -11,24 +11,19 @@ import { timeout } from './utils/timeout';
 
 waitForExpect.defaults.interval = 250;
 
-test('pad changes', ({
-  test: it,
-  subscriptionClient: createClient,
-  graphql: { withAuth },
-  gql,
-  auth,
-}) => {
+test('pad changes', (ctx) => {
+  const { test: it } = ctx;
   let workspace: Workspace;
   const subscriptions: ObservableSubscription[] = [];
   const pads: Pad[] = [];
   const inviteepads: Pad[] = [];
 
   beforeAll(async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     workspace = (
       await client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             createWorkspace(workspace: { name: "Workspace 1" }) {
               id
@@ -53,9 +48,9 @@ test('pad changes', ({
   });
 
   it('notifies you when you add a pad', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           createPad(
             workspaceId: "${workspace.id}"
@@ -77,9 +72,9 @@ test('pad changes', ({
   });
 
   it('notifies you when you remove a pad', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           removePad(id: "${pads[0].id}")
         }
@@ -92,9 +87,9 @@ test('pad changes', ({
   });
 
   it('notifies you when you add a pad again', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           createPad(
             workspaceId: "${workspace.id}"
@@ -116,9 +111,9 @@ test('pad changes', ({
   });
 
   it('notifies you when you update a pad', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           updatePad(id: "${pads[0].id}", pad: { name: "Pad 2 renamed" }) {
             id
@@ -141,9 +136,9 @@ test('pad changes', ({
   });
 
   it('allows admin to share with other user', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           sharePadWithUser(
             id: "${pads[0].id}"
@@ -164,9 +159,9 @@ test('pad changes', ({
   });
 
   it('notifies other user when you update a pad', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           updatePad(id: "${pads[0].id}", pad: { name: "Pad 2 renamed again" }) {
             id
@@ -185,9 +180,9 @@ test('pad changes', ({
   });
 
   it('notifies other user when access is revoked', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           unsharePadWithUser(id: "${pads[0].id}", userId: "test user id 2")
         }
@@ -208,9 +203,9 @@ test('pad changes', ({
     targetPads: Pad[],
     targetSubscriptions: ObservableSubscription[]
   ) {
-    const client = await createClient(userId);
+    const client = await ctx.subscriptionClient(userId);
     const sub = client.subscribe({
-      query: gql`
+      query: ctx.gql`
         subscription {
           padsChanged(workspaceId: "${workspaceId}") {
             added {

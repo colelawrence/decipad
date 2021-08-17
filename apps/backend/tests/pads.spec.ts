@@ -8,13 +8,8 @@ import { Workspace, Pad, Role, RoleInvitation } from '@decipad/backendtypes';
 import test from './sandbox';
 import { timeout } from './utils/timeout';
 
-test('pads', ({
-  test: it,
-  graphql: { withAuth, withoutAuth },
-  gql,
-  http: { withAuth: callWithAuth },
-  auth,
-}) => {
+test('pads', (ctx) => {
+  const { test: it } = ctx;
   let workspace: Workspace;
   let role: Role;
   let invitations: RoleInvitation[];
@@ -22,10 +17,10 @@ test('pads', ({
   let targetUserId: string;
 
   beforeAll(async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
     workspace = (
       await client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             createWorkspace(workspace: { name: "Workspace 1" }) {
               id
@@ -40,11 +35,11 @@ test('pads', ({
   });
 
   beforeAll(async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     role = (
       await client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             createRole(role: {
               name: "read-only role"
@@ -77,11 +72,11 @@ test('pads', ({
   });
 
   beforeAll(async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     invitations = (
       await client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             inviteUserToRole(userId: "test user id 2" roleId: "${role.id}" permission: READ) {
               id
@@ -94,17 +89,17 @@ test('pads', ({
   });
 
   beforeAll(async () => {
-    const call = callWithAuth((await auth('test user id 2')).token);
+    const call = ctx.http.withAuth((await ctx.auth('test user id 2')).token);
     const invitationIds = invitations.map((i) => i.id).join(',');
     const link = `/api/invites/${invitationIds}/accept`;
     await call(link);
   });
 
   it('cannot create if not authenticated', async () => {
-    const client = withoutAuth();
+    const client = ctx.graphql.withoutAuth();
     await expect(
       client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             createPad(
               workspaceId: "${workspace.id}"
@@ -120,10 +115,10 @@ test('pads', ({
   }, 20000);
 
   it('cannot create if workspace does not exist', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
     await expect(
       client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             createPad(
               workspaceId: "workspace id does not exist"
@@ -139,10 +134,10 @@ test('pads', ({
   });
 
   it('can create', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
     pad = (
       await client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             createPad(
               workspaceId: "${workspace.id}"
@@ -167,10 +162,10 @@ test('pads', ({
   });
 
   it('other user cannot update', async () => {
-    const client = withAuth(await auth('test user id 2'));
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
     await expect(
       client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             updatePad(id: "${pad.id}", pad: { name: "Pad 1 renamed" }) {
               id
@@ -183,10 +178,10 @@ test('pads', ({
   });
 
   it('the creator can update', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
     pad = (
       await client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             updatePad(id: "${pad.id}", pad: { name: "Pad 1 renamed" }) {
               id
@@ -203,11 +198,11 @@ test('pads', ({
   });
 
   it('creator can get pad', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     const pad2 = (
       await client.query({
-        query: gql`
+        query: ctx.gql`
           query {
             getPadById(id: "${pad.id}") {
               id
@@ -228,10 +223,10 @@ test('pads', ({
   });
 
   it('invited user cannot get the pad', async () => {
-    const client = withAuth(await auth('test user id 2'));
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
     await expect(
       client.query({
-        query: gql`
+        query: ctx.gql`
         query {
           getPadById(id: "${pad.id}") {
             id
@@ -244,10 +239,10 @@ test('pads', ({
   });
 
   it('the creator can share pad with role', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           sharePadWithRole (
             id: "${pad.id}"
@@ -262,11 +257,11 @@ test('pads', ({
   it('waits for share', async () => timeout(1000));
 
   it('invitee can get pad', async () => {
-    const client = withAuth(await auth('test user id 2'));
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
 
     const pad2 = (
       await client.query({
-        query: gql`
+        query: ctx.gql`
           query {
             getPadById(id: "${pad.id}") {
               id
@@ -284,11 +279,11 @@ test('pads', ({
   });
 
   it('the target user has read access to pad', async () => {
-    const client = withAuth(await auth('test user id 2'));
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
 
     const { pads } = (
       await client.query({
-        query: gql`
+        query: ctx.gql`
           query {
             pads(workspaceId: "${workspace.id}", page: { maxItems: 10 }) {
               items {
@@ -354,10 +349,10 @@ test('pads', ({
   });
 
   it('the target user does not have write access to pad', async () => {
-    const client = withAuth(await auth('test user id 2'));
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
     await expect(
       client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             updatePad(id: "${pad.id}", pad: { name: "Pad 1 renamed again" }) {
               id
@@ -370,10 +365,10 @@ test('pads', ({
   });
 
   it('the target user cannot share pad', async () => {
-    const client = withAuth(await auth('test user id 2'));
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
     await expect(
       client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             sharePadWithRole (
               id: "${pad.id}"
@@ -387,10 +382,10 @@ test('pads', ({
   });
 
   it('admin can unshare with role', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           unsharePadWithRole(id: "${pad.id}" roleId: "${role.id}")
         }
@@ -401,11 +396,11 @@ test('pads', ({
   it('waits for unshare', async () => timeout(1000));
 
   it('target user no longer has access to pad', async () => {
-    const client = withAuth(await auth('test user id 2'));
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
 
     const { pads } = (
       await client.query({
-        query: gql`
+        query: ctx.gql`
           query {
             pads(workspaceId: "${workspace.id}", page: { maxItems: 10 }) {
               items { id name }
@@ -425,10 +420,10 @@ test('pads', ({
   });
 
   it('admin user can share with other user directly', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           sharePadWithUser (
             id: "${pad.id}"
@@ -441,11 +436,11 @@ test('pads', ({
   });
 
   it('target user has access to pad after share', async () => {
-    const client = withAuth(await auth('test user id 2'));
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
 
     const { pads } = (
       await client.query({
-        query: gql`
+        query: ctx.gql`
           query {
             pads(workspaceId: "${workspace.id}", page: { maxItems: 10 }) {
               items {
@@ -511,10 +506,10 @@ test('pads', ({
   });
 
   it('admin user can revoke access to pad after share', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           unsharePadWithUser (
             id: "${pad.id}"
@@ -526,11 +521,11 @@ test('pads', ({
   });
 
   it('target user no longer can access pad', async () => {
-    const client = withAuth(await auth('test user id 2'));
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
 
     const { pads } = (
       await client.query({
-        query: gql`
+        query: ctx.gql`
           query {
             pads(workspaceId: "${workspace.id}", page: { maxItems: 10 }) {
               items { id name }
@@ -550,10 +545,10 @@ test('pads', ({
   });
 
   it('admin can invite using existing email', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           sharePadWithEmail (
             id: "${pad.id}"
@@ -566,11 +561,11 @@ test('pads', ({
   });
 
   it('target user has access to pad after invite', async () => {
-    const client = withAuth(await auth('test user id 2'));
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
 
     const { pads } = (
       await client.query({
-        query: gql`
+        query: ctx.gql`
           query {
             pads(workspaceId: "${workspace.id}", page: { maxItems: 10 }) {
               items {
@@ -636,10 +631,10 @@ test('pads', ({
   });
 
   it('admin user can revoke access to pad after invite', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           unsharePadWithUser (
             id: "${pad.id}"
@@ -651,10 +646,10 @@ test('pads', ({
   });
 
   it('admin can invite unregistered user using email', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           sharePadWithEmail (
             id: "${pad.id}"
@@ -687,16 +682,16 @@ test('pads', ({
     const invite = invites[0];
     const inviteAcceptLink = `/api/invites/${invite.id}/accept`;
 
-    const call = callWithAuth((await auth(targetUserId)).token);
+    const call = ctx.http.withAuth((await ctx.auth(targetUserId)).token);
     await call(inviteAcceptLink);
   });
 
   it('new user can access pad', async () => {
-    const client = withAuth(await auth(targetUserId));
+    const client = ctx.graphql.withAuth(await ctx.auth(targetUserId));
 
     const { pads } = (
       await client.query({
-        query: gql`
+        query: ctx.gql`
           query {
             pads(workspaceId: "${workspace.id}", page: { maxItems: 10 }) {
               items {
@@ -761,11 +756,11 @@ test('pads', ({
   });
 
   it('read only user cannot remove pad', async () => {
-    const client = withAuth(await auth(targetUserId));
+    const client = ctx.graphql.withAuth(await ctx.auth(targetUserId));
 
     await expect(
       client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             removePad (
               id: "${pad.id}"
@@ -777,10 +772,10 @@ test('pads', ({
   });
 
   it('admin can remove pad', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           removePad(id: "${pad.id}")
         }

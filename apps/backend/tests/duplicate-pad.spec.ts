@@ -4,13 +4,8 @@ import { Workspace, Pad } from '@decipad/backendtypes';
 import test from './sandbox';
 import { encode } from './utils/resource';
 
-test('duplicate pads', ({
-  test: it,
-  graphql: { withAuth },
-  gql,
-  http: { withAuth: restWithAuth },
-  auth,
-}) => {
+test('duplicate pads', (ctx) => {
+  const { test: it } = ctx;
   let workspace: Workspace;
   let pad: Pad;
   // TODO type auth result
@@ -18,11 +13,11 @@ test('duplicate pads', ({
   let authRes: any;
 
   beforeAll(async () => {
-    authRes = await auth();
-    const client = withAuth(authRes);
+    authRes = await ctx.auth();
+    const client = ctx.graphql.withAuth(authRes);
     workspace = (
       await client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             createWorkspace(workspace: { name: "Workspace 1" }) {
               id
@@ -35,7 +30,7 @@ test('duplicate pads', ({
 
     pad = (
       await client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             createPad(
               workspaceId: "${workspace.id}"
@@ -55,9 +50,9 @@ test('duplicate pads', ({
   });
 
   it('can duplicate a pad', async () => {
-    const client = withAuth(authRes);
+    const client = ctx.graphql.withAuth(authRes);
 
-    const call = restWithAuth(authRes.token);
+    const call = ctx.http.withAuth(authRes.token);
     await call(`/api/syncdoc/${encode(`/pads/${pad.id}/content`)}`, {
       method: 'PUT',
       body: 'test pad contents!',
@@ -69,7 +64,7 @@ test('duplicate pads', ({
     const {
       data: { duplicatePad },
     } = await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           duplicatePad(id: "${pad.id}") {
             id
@@ -110,10 +105,12 @@ test('duplicate pads', ({
   });
 
   it('refuses to duplicate a pad if you do not have access to it', async () => {
-    const unauthorizedClient = withAuth(await auth('test user id 2'));
+    const unauthorizedClient = ctx.graphql.withAuth(
+      await ctx.auth('test user id 2')
+    );
     await expect(
       unauthorizedClient.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             duplicatePad(id: "${pad.id}") {
               id

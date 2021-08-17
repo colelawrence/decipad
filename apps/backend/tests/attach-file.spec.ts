@@ -10,23 +10,18 @@ import { join } from 'path';
 import { Workspace, Pad, Attachment } from '@decipad/backendtypes';
 import test from './sandbox';
 
-test('attach files', ({
-  test: it,
-  graphql: { withAuth, withoutAuth },
-  gql,
-  http: { call },
-  auth,
-}) => {
+test('attach files', (ctx) => {
+  const { test: it } = ctx;
   let workspace: Workspace;
   let pad: Pad;
   let fileHandle: string | undefined;
   let attachment: Attachment | undefined;
 
   beforeAll(async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
     workspace = (
       await client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             createWorkspace(workspace: { name: "Workspace 1" }) {
               id
@@ -41,10 +36,10 @@ test('attach files', ({
   });
 
   beforeAll(async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
     pad = (
       await client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             createPad(
               workspaceId: "${workspace.id}"
@@ -70,11 +65,11 @@ test('attach files', ({
 
   it('an unauthenticated user cannot upload an attachment', async () => {
     await waitForExpect(async () => {
-      const client = withoutAuth();
+      const client = ctx.graphql.withoutAuth();
 
       await expect(
         client.query({
-          query: gql`
+          query: ctx.gql`
             query {
               getCreateAttachmentForm(padId: "${pad.id}", fileName: "filename", fileType: "text/csv") {
                 url
@@ -91,11 +86,11 @@ test('attach files', ({
   });
 
   it('other user cannot upload an attachment to another users pad', async () => {
-    const client = withAuth(await auth('test user id 2'));
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
 
     await expect(
       client.query({
-        query: gql`
+        query: ctx.gql`
           query {
             getCreateAttachmentForm(padId: "${pad.id}", fileName: "filename", fileType: "text/csv") {
               url
@@ -113,11 +108,11 @@ test('attach files', ({
   it('authenticated user can upload an attachment', async () => {
     await new Promise((resolve, reject) => {
       (async () => {
-        const client = withAuth(await auth());
+        const client = ctx.graphql.withAuth(await ctx.auth());
 
         const formData = (
           await client.query({
-            query: gql`
+            query: ctx.gql`
               query {
                 getCreateAttachmentForm(padId: "${pad.id}", fileName: "filename", fileType: "text/csv") {
                   url
@@ -159,11 +154,11 @@ test('attach files', ({
   });
 
   it('same user can add attachment to pad', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     attachment = (
       await client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             attachFileToPad(handle: "${fileHandle}") {
               id
@@ -193,10 +188,10 @@ test('attach files', ({
   });
 
   it('other user cannot access attachment contents', async () => {
-    const client = withAuth(await auth('test user id 2'));
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
     await expect(
       client.query({
-        query: gql`
+        query: ctx.gql`
           query {
             getAttachmentURL(attachmentId: "${attachment!.id}")
           }
@@ -206,10 +201,10 @@ test('attach files', ({
   });
 
   it('same user can access attachment contents', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
     const url = (
       await client.query({
-        query: gql`
+        query: ctx.gql`
           query {
             getAttachmentURL(attachmentId: "${attachment!.id}")
           }
@@ -218,7 +213,7 @@ test('attach files', ({
     ).data.getAttachmentURL;
     expect(typeof url).toBe('string');
 
-    const result = await call(url);
+    const result = await ctx.http.call(url);
     expect(result.headers.get('Content-Type')).toBe('text/csv');
     const fileContents = new Uint8Array(await result.arrayBuffer());
     const expectedFileContents = await readFile(
@@ -228,10 +223,10 @@ test('attach files', ({
   });
 
   it('shares pad with other user', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           sharePadWithUser (
             id: "${pad.id}"
@@ -245,10 +240,10 @@ test('attach files', ({
 
   it('other user can list attachment in pad', async () => {
     await waitForExpect(async () => {
-      const client = withAuth(await auth('test user id 2'));
+      const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
       const pad2: Pad = (
         await client.query({
-          query: gql`
+          query: ctx.gql`
             query {
               getPadById(id: "${pad.id}") {
                 id
@@ -287,10 +282,10 @@ test('attach files', ({
   });
 
   it('other user now has access to attachment', async () => {
-    const client = withAuth(await auth('test user id 2'));
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
     const url = (
       await client.query({
-        query: gql`
+        query: ctx.gql`
           query {
             getAttachmentURL(attachmentId: "${attachment!.id}")
           }
@@ -299,7 +294,7 @@ test('attach files', ({
     ).data.getAttachmentURL;
     expect(typeof url).toBe('string');
 
-    const result = await call(url);
+    const result = await ctx.http.call(url);
     expect(result.headers.get('Content-Type')).toBe('text/csv');
     const fileContents = new Uint8Array(await result.arrayBuffer());
     const expectedFileContents = await readFile(
@@ -309,11 +304,11 @@ test('attach files', ({
   });
 
   it('other user cannot remove attachment', async () => {
-    const client = withAuth(await auth('test user id 2'));
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
 
     await expect(
       client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             removeAttachmentFromPad (attachmentId: "${attachment!.id}")
           }
@@ -323,10 +318,10 @@ test('attach files', ({
   });
 
   it('owner user can remove attachment', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           removeAttachmentFromPad (attachmentId: "${attachment!.id}")
         }
@@ -335,10 +330,10 @@ test('attach files', ({
   });
 
   it('other user can no longer list attachment in pad', async () => {
-    const client = withAuth(await auth('test user id 2'));
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
     const pad2: Pad = (
       await client.query({
-        query: gql`
+        query: ctx.gql`
           query {
             getPadById(id: "${pad.id}") {
               id

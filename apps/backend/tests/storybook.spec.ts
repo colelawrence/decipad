@@ -5,7 +5,8 @@ import path from 'path';
 import { sync as mkdirp } from 'mkdirp';
 import test from './sandbox';
 
-test('the storybook handler', ({ test: it, http: { call: fetch } }) => {
+test('the storybook handler', (env) => {
+  const { test: it } = env;
   beforeAll(() => {
     const storyBookEntryFolder = path.join(
       __dirname,
@@ -26,7 +27,7 @@ test('the storybook handler', ({ test: it, http: { call: fetch } }) => {
   it.each(['/.storybook/', '/.storybook'])(
     'redirects %s to the storybook index.html',
     async (pathname) => {
-      const resp = await fetch(pathname);
+      const resp = await env.http.call(pathname);
       expect(resp.redirected).toBe(true);
       expect(new URL(resp.url).pathname).toBe('/.storybook/index.html');
     }

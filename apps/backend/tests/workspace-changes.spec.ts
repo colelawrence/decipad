@@ -11,14 +11,8 @@ import { timeout } from './utils/timeout';
 
 waitForExpect.defaults.interval = 250;
 
-test('workspaces changes', ({
-  test: it,
-  subscriptionClient: createClient,
-  graphql: { withAuth },
-  gql,
-  http: { withAuth: callSimpleWithAuth },
-  auth,
-}) => {
+test('workspaces changes', (ctx) => {
+  const { test: it } = ctx;
   const subscriptions: ObservableSubscription[] = [];
   const workspaces: Workspace[] = [];
   const inviteeWorkspaces: Workspace[] = [];
@@ -36,9 +30,9 @@ test('workspaces changes', ({
   });
 
   it('notifies you when you add a workspace', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           createWorkspace(workspace: { name: "Workspace 1" }) {
             id
@@ -57,9 +51,9 @@ test('workspaces changes', ({
   });
 
   it('notifies you when you remove a workspace', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           removeWorkspace(id: "${workspaces[0].id}")
         }
@@ -72,9 +66,9 @@ test('workspaces changes', ({
   });
 
   it('notifies you when you add a workspace again', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           createWorkspace(workspace: { name: "Workspace 2" }) {
             id
@@ -93,9 +87,9 @@ test('workspaces changes', ({
   });
 
   it('notifies you when you update a workspace', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           updateWorkspace(id: "${workspaces[0].id}", workspace: { name: "Workspace 2 renamed" }) {
             id
@@ -114,10 +108,10 @@ test('workspaces changes', ({
   });
 
   it('allows admin to create role in workspace', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
     role = (
       await client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             createRole(role: { name: "Role 1" workspaceId: "${workspaces[0].id}" }) {
               id
@@ -131,10 +125,10 @@ test('workspaces changes', ({
   });
 
   it('allows admin to invite to role', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
     invites = (
       await client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             inviteUserToRole(
               roleId: "${role.id}"
@@ -156,7 +150,7 @@ test('workspaces changes', ({
   it('allows receiving user to accept invitation for role', async () => {
     const invitesForUrl = invites.map((i) => i.id).join(',');
     const inviteAcceptLink = `/api/invites/${invitesForUrl}/accept`;
-    const call = callSimpleWithAuth((await auth('test user id 2')).token);
+    const call = ctx.http.withAuth((await ctx.auth('test user id 2')).token);
     await call(inviteAcceptLink);
 
     await waitForExpect(
@@ -172,9 +166,9 @@ test('workspaces changes', ({
   }, 50000);
 
   it('notifies other user when you update a workspace', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           updateWorkspace(id: "${workspaces[0].id}", workspace: { name: "Workspace 2 renamed again" }) {
             id
@@ -193,9 +187,9 @@ test('workspaces changes', ({
   });
 
   it('notifies other user when access is revoked', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           removeUserFromRole(roleId: "${role.id}", userId: "test user id 2")
         }
@@ -215,9 +209,9 @@ test('workspaces changes', ({
     toWorkspaces: Workspace[],
     pushToSubscriptions: ObservableSubscription[]
   ) {
-    const client = await createClient(userId);
+    const client = await ctx.subscriptionClient(userId);
     const sub = client.subscribe({
-      query: gql`
+      query: ctx.gql`
         subscription {
           workspacesChanged {
             added {

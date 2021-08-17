@@ -6,14 +6,15 @@
 /* eslint-disable jest/no-export */
 
 import sandbox from './sandbox';
-import { createSandboxEnv } from './sandbox-env';
+import { createSandboxEnv, Env } from './sandbox-env';
 import callGraphql, { gql } from './call-graphql';
 import call from './call-simple';
 import auth from './auth';
 import subscriptionClient from './subscription-client';
 
-export interface TestGoodies {
+export interface TestContext {
   test: typeof it;
+  beforeAll: typeof beforeAll;
   graphql: ReturnType<typeof callGraphql>;
   http: ReturnType<typeof call>;
   subscriptionClient: ReturnType<typeof subscriptionClient>;
@@ -23,68 +24,52 @@ export interface TestGoodies {
 
 function testWithSandbox(
   description: string,
-  fn: (args: TestGoodies) => void
+  spec: (ctx: TestContext) => void
 ): void {
   let shownEnv = false;
-  const workerId = process.env.JEST_WORKER_ID;
-  if (typeof workerId === 'undefined') {
-    throw new Error(
-      'expected Jest worker id to be defined in process.env.JEST_WORKER_ID'
-    );
-  }
-  const [env, config] = createSandboxEnv(Number(workerId));
+  let env: Env;
 
-  // enrich test function with jest test helper functions
-  test.only = wrapTestHelper(it.only);
-  test.skip = wrapTestHelper(it.skip);
-  test.todo = it.todo;
-  test.concurrent = wrapTestHelper(it.concurrent);
-  test.each = (collection: Array<unknown>) =>
-    wrapTestHelper(it.each(collection));
+  const sandboxStartedPromise: Promise<void> = new Promise((resolve) => {
+    const workerId = process.env.JEST_WORKER_ID;
+    if (typeof workerId === 'undefined') {
+      throw new Error(
+        'expected Jest worker id to be defined in process.env.JEST_WORKER_ID'
+      );
+    }
+    createSandboxEnv(Number(workerId)).then((sandboxEnv) => {
+      [env] = sandboxEnv;
+      const [, config] = sandboxEnv;
 
-  const testGoodies = {
-    graphql: callGraphql(config),
-    http: call(config),
-    subscriptionClient: subscriptionClient(config),
-    auth: auth(config),
-    gql,
-    test,
-  };
+      testContext.graphql = callGraphql(config);
+      testContext.http = call(config);
+      testContext.subscriptionClient = subscriptionClient(config);
+      testContext.auth = auth(config);
 
-  return describe(description, () => {
-    beforeAll(async () => {
-      try {
-        await sandbox.start(env, config);
-      } catch (err) {
-        showEnv();
-      }
-    }, 20000);
-
-    afterAll(async () => {
-      await sandbox.stop();
+      sandbox.start(env, config).then(resolve);
     });
-
-    fn(testGoodies as TestGoodies);
   });
 
-  function test(description: string, fn: () => Promise<unknown> | void) {
-    return it(description, wrap(fn));
-  }
+  const testContext: TestContext = {
+    test: getTestFunction(),
+    gql,
+  } as TestContext;
+
+  global.describe(description, () => {
+    global.beforeAll(() => sandboxStartedPromise, 20e3);
+
+    global.afterAll(() => sandbox.stop());
+
+    spec(testContext as TestContext);
+  });
 
   function wrap(
-    fn: (arg?: unknown) => Promise<unknown> | void
-  ): (arg?: unknown) => void {
-    return (...args: [firstArg?: unknown]) => {
+    fn: (arg?: unknown) => void | Promise<unknown>
+  ): (arg?: unknown) => Promise<unknown> {
+    return async (...args: [firstArg?: unknown]) => {
       const firstArg = args[0];
+      await sandboxStartedPromise;
       try {
-        const ret = firstArg !== undefined ? fn(firstArg) : fn();
-        if (ret instanceof Promise) {
-          return ret.catch((err) => {
-            showEnv();
-            throw err;
-          });
-        }
-        return undefined;
+        return firstArg !== undefined ? fn(firstArg) : fn();
       } catch (err) {
         showEnv();
         throw err;
@@ -111,6 +96,23 @@ function testWithSandbox(
         )}`
       );
     }
+  }
+
+  function getTestFunction(): typeof global.test {
+    const testFn = function testFn(
+      description: string,
+      fn: () => Promise<unknown> | void,
+      testTimeout = 10e3
+    ) {
+      return it(description, wrap(fn), testTimeout + 10e3);
+    };
+    testFn.only = wrapTestHelper(it.only);
+    testFn.skip = wrapTestHelper(it.skip);
+    testFn.todo = it.todo;
+    testFn.concurrent = wrapTestHelper(it.concurrent);
+    testFn.each = (collection: Array<unknown>) =>
+      wrapTestHelper(it.each(collection));
+    return testFn as typeof global.test;
   }
 }
 

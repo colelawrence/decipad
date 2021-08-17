@@ -6,22 +6,17 @@
 import { Workspace, Role, RoleInvitation } from '@decipad/backendtypes';
 import test from './sandbox';
 
-test('workspaces', ({
-  test: it,
-  graphql: { withAuth, withoutAuth },
-  gql,
-  http: { withAuth: callWithAuth },
-  auth,
-}) => {
+test('workspaces', (ctx) => {
+  const { test: it } = ctx;
   let workspace: Workspace;
   let role: Role;
   let invitations: RoleInvitation[];
 
   it('cannot create if not authenticated', async () => {
-    const client = withoutAuth();
+    const client = ctx.graphql.withoutAuth();
     await expect(
       client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             createWorkspace(workspace: { name: "Workspace 1" }) {
               id
@@ -34,10 +29,10 @@ test('workspaces', ({
   });
 
   it('can create', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
     workspace = (
       await client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             createWorkspace(workspace: { name: "Workspace 1" }) {
               id
@@ -52,11 +47,11 @@ test('workspaces', ({
   });
 
   it('creator can get workspace', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     const workspace2 = (
       await client.query({
-        query: gql`
+        query: ctx.gql`
           query {
             getWorkspaceById(id: "${workspace.id}") {
               id
@@ -74,10 +69,10 @@ test('workspaces', ({
   });
 
   it('other user cannot get', async () => {
-    const client = withAuth(await auth('test user id 2'));
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
     await expect(
       client.query({
-        query: gql`
+        query: ctx.gql`
         query {
           getWorkspaceById(id: "${workspace.id}") {
             id
@@ -90,10 +85,10 @@ test('workspaces', ({
   });
 
   it('other user cannot update', async () => {
-    const client = withAuth(await auth('test user id 2'));
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
     await expect(
       client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             updateWorkspace(id: "${workspace.id}", workspace: { name: "Workspace 1 renamed" }) {
               id
@@ -106,10 +101,10 @@ test('workspaces', ({
   });
 
   it('the creator can update', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
     workspace = (
       await client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
         mutation {
           updateWorkspace(id: "${workspace.id}", workspace: { name: "Workspace 1 renamed" }) {
             id
@@ -126,11 +121,11 @@ test('workspaces', ({
   });
 
   it('can create roles in the workspace', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     role = (
       await client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             createRole(role: {
               name: "read-only role"
@@ -163,11 +158,11 @@ test('workspaces', ({
   });
 
   it('non-admin user cannot invite other user to a role', async () => {
-    const client = withAuth(await auth('test user id 2'));
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
 
     await expect(
       client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             inviteUserToRole(
               userId: "test user id 2"
@@ -182,11 +177,11 @@ test('workspaces', ({
   });
 
   it('admin user can invite other user to a role', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     invitations = (
       await client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             inviteUserToRole(userId: "test user id 2" roleId: "${role.id}" permission: READ) {
               id
@@ -199,7 +194,7 @@ test('workspaces', ({
   });
 
   it('non-target user cannot accept invitation', async () => {
-    const call = callWithAuth((await auth()).token);
+    const call = ctx.http.withAuth((await ctx.auth()).token);
     const invitationIds = invitations.map((i) => i.id).join(',');
     const link = `/api/invites/${invitationIds}/accept`;
 
@@ -207,7 +202,7 @@ test('workspaces', ({
   });
 
   it('target user can accept invitation', async () => {
-    const call = callWithAuth((await auth('test user id 2')).token);
+    const call = ctx.http.withAuth((await ctx.auth('test user id 2')).token);
     const invitationIds = invitations.map((i) => i.id).join(',');
     const link = `/api/invites/${invitationIds}/accept`;
 
@@ -215,11 +210,11 @@ test('workspaces', ({
   });
 
   it('admin user has user in role', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     const { workspaces } = (
       await client.query({
-        query: gql`
+        query: ctx.gql`
           query {
             workspaces {
               id
@@ -265,11 +260,11 @@ test('workspaces', ({
   });
 
   it('invited user has self in role', async () => {
-    const client = withAuth(await auth('test user id 2'));
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
 
     const { workspaces } = (
       await client.query({
-        query: gql`
+        query: ctx.gql`
           query {
             workspaces {
               id
@@ -307,11 +302,11 @@ test('workspaces', ({
   });
 
   it('invitee can get workspace', async () => {
-    const client = withAuth(await auth('test user id 2'));
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
 
     const workspace2 = (
       await client.query({
-        query: gql`
+        query: ctx.gql`
           query {
             getWorkspaceById(id: "${workspace.id}") {
               id
@@ -329,10 +324,10 @@ test('workspaces', ({
   });
 
   it('admin can remove user from role', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           removeUserFromRole(userId: "test user id 2" roleId: "${role.id}")
         }
@@ -341,11 +336,11 @@ test('workspaces', ({
   });
 
   it('user no longer has access to workspace after removed by admin', async () => {
-    const client = withAuth(await auth('test user id 2'));
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
 
     const { workspaces } = (
       await client.query({
-        query: gql`
+        query: ctx.gql`
           query {
             workspaces {
               id
@@ -360,11 +355,11 @@ test('workspaces', ({
   });
 
   it('admin user can invite other user to a role again', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     invitations = (
       await client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             inviteUserToRole(userId: "test user id 2" roleId: "${role.id}" permission: READ) {
               id
@@ -377,7 +372,7 @@ test('workspaces', ({
   });
 
   it('target user can accept the invitation again', async () => {
-    const call = callWithAuth((await auth('test user id 2')).token);
+    const call = ctx.http.withAuth((await ctx.auth('test user id 2')).token);
     const invitationIds = invitations.map((i) => i.id).join(',');
     const link = `/api/invites/${invitationIds}/accept`;
 
@@ -385,11 +380,11 @@ test('workspaces', ({
   });
 
   it('admin cannot remove role containing users', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     await expect(
       client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             removeRole(roleId: "${role.id}")
           }
@@ -399,10 +394,10 @@ test('workspaces', ({
   });
 
   it('user can remove self from role', async () => {
-    const client = withAuth(await auth('test user id 2'));
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
 
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           removeSelfFromRole(roleId: "${role.id}")
         }
@@ -411,11 +406,11 @@ test('workspaces', ({
   });
 
   it('user no longer has access to workspace after removing themselves', async () => {
-    const client = withAuth(await auth('test user id 2'));
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
 
     const { workspaces } = (
       await client.query({
-        query: gql`
+        query: ctx.gql`
           query {
             workspaces {
               id
@@ -430,10 +425,10 @@ test('workspaces', ({
   });
 
   it('admin can remove role', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     await client.mutate({
-      mutation: gql`
+      mutation: ctx.gql`
         mutation {
           removeRole(roleId: "${role.id}")
         }
@@ -442,11 +437,11 @@ test('workspaces', ({
   });
 
   it('sole admin cannot remove themselves from sole admin role', async () => {
-    const client = withAuth(await auth());
+    const client = ctx.graphql.withAuth(await ctx.auth());
 
     const { workspaces } = (
       await client.query({
-        query: gql`
+        query: ctx.gql`
           query {
             workspaces {
               id
@@ -470,7 +465,7 @@ test('workspaces', ({
 
     await expect(
       client.mutate({
-        mutation: gql`
+        mutation: ctx.gql`
           mutation {
             removeSelfFromRole(roleId: "${soleRole.id}")
           }
