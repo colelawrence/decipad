@@ -22,6 +22,9 @@ it.each([
   }
 );
 it('can be rendered without a result count', () => {
-  const { container } = render(<NotebookListHeader Heading="h1" />);
+  const { getByLabelText, container } = render(
+    <NotebookListHeader Heading="h1" />
+  );
   expect(container).not.toHaveTextContent(/result/i);
+  expect(getByLabelText(/loading/i)).toBeInTheDocument();
 });
