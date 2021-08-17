@@ -53,7 +53,7 @@ export const GlobalStyles: React.FC = ({ children }) => (
         '*': {
           boxSizing: 'border-box',
         },
-        'html, body, #root': {
+        'html, body, #root, #__next': {
           width: '100%',
           height: '100%',
           margin: '0 !important',

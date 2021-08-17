@@ -18,6 +18,7 @@ const styles = css({
     [button] auto
   `,
   justifyItems: 'center',
+  alignContent: 'center',
 });
 
 interface EmptyWorkspaceCtaProps {

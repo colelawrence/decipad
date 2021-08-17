@@ -5,7 +5,7 @@ import 'tippy.js/themes/light.css';
 
 function App({ Component, pageProps }: AppProps): ReturnType<FC> {
   return (
-    <div suppressHydrationWarning>
+    <div suppressHydrationWarning style={{ height: '100%' }}>
       {typeof window === 'undefined' ? null : <Component {...pageProps} />}
     </div>
   );

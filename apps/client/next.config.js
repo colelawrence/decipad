@@ -22,7 +22,15 @@ const nextConfig = {
           ...rules,
           {
             test: /\.(gif|jpg|png)$/,
-            use: [{ loader: require.resolve('file-loader') }],
+            use: [
+              {
+                loader: require.resolve('file-loader'),
+                options: {
+                  publicPath: '/_next/static/',
+                  outputPath: 'static/',
+                },
+              },
+            ],
           },
         ],
       },
