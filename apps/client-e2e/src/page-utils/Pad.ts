@@ -1,5 +1,5 @@
 import { ElementHandle } from 'playwright';
-import { withNewUser } from '../utils';
+import { withNewUser, timeout } from '../utils';
 import { getTagName } from './Page';
 import { clickNewPadButton, navigateToWorkspacePage } from './Workspace';
 
@@ -59,4 +59,9 @@ export async function waitForSaveFlush() {
     // TODO: this is bad. Should wait for local storage to flush instead.
     page.waitForTimeout(500),
   ]);
+}
+
+export async function keyPress(k: string) {
+  await page.keyboard.press(k);
+  await timeout(250);
 }

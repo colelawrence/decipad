@@ -3,6 +3,7 @@ import {
   getPadContent,
   setUp,
   waitForEditorToLoad,
+  keyPress,
 } from './page-utils/Pad';
 
 describe('pad content', () => {
@@ -31,7 +32,7 @@ describe('pad content', () => {
   });
 
   it('allows to create a new paragraph', async () => {
-    await page.keyboard.press('Enter');
+    await keyPress('Enter');
     await page.keyboard.type('this is the content for the second paragraph');
     expect(await getPadContent()).toMatchObject([
       { type: 'h1', text: '' },
@@ -41,7 +42,7 @@ describe('pad content', () => {
   });
 
   it('allows to create even another new paragraph', async () => {
-    await page.keyboard.press('Enter');
+    await keyPress('Enter');
     await page.keyboard.type('this is the content for the third paragraph');
     expect(await getPadContent()).toMatchObject([
       { type: 'h1', text: '' },
@@ -52,14 +53,11 @@ describe('pad content', () => {
   });
 
   it('allows to go back to the previous paragraph and remove some text', async () => {
-    await page.keyboard.press('ArrowUp');
-    await page.waitForTimeout(250);
-    await page.keyboard.press('ArrowRight');
-    await page.waitForTimeout(250);
-    await page.keyboard.press('ArrowRight');
-    await page.waitForTimeout(250);
+    await keyPress('ArrowUp');
+    await keyPress('ArrowRight');
+    await keyPress('ArrowRight');
     for (let i = 0; i < 9; i += 1) {
-      await page.keyboard.press('Backspace');
+      await keyPress('Backspace');
     }
     expect(await getPadContent()).toMatchObject([
       { type: 'h1', text: '' },
@@ -81,9 +79,9 @@ describe('pad content', () => {
 
   it('can split a paragraph in two', async () => {
     for (let i = 0; i < 17; i += 1) {
-      await page.keyboard.press('ArrowLeft');
+      await keyPress('ArrowLeft');
     }
-    await page.keyboard.press('Enter');
+    await keyPress('Enter');
     expect(await getPadContent()).toMatchObject([
       { type: 'h1', text: '' },
       { type: 'p', text: 'this is the content for the first paragraph' },
