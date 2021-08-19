@@ -2,31 +2,37 @@ import {
   AutoformatRule,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
-  ELEMENT_CODE_LINE,
   ELEMENT_DEFAULT,
   ELEMENT_H2,
   ELEMENT_H3,
-  ELEMENT_LI,
-  ELEMENT_OL,
-  ELEMENT_TODO_LI,
-  ELEMENT_UL,
+  ELEMENT_PARAGRAPH,
   getParent,
   getPlatePluginType,
   insertEmptyCodeBlock,
   isElement,
-  isType,
   MARK_BOLD,
   MARK_CODE,
   MARK_ITALIC,
-  MARK_STRIKETHROUGH,
   MARK_UNDERLINE,
   SPEditor,
-  toggleList,
+  TEditor,
   unwrapList,
   WithAutoformatOptions,
 } from '@udecode/plate';
 
 const preFormat = (editor: SPEditor): void => unwrapList(editor);
+const query = (editor: TEditor): boolean => {
+  if (editor.selection) {
+    const parentEntry = getParent(editor, editor.selection);
+    if (!parentEntry) return false;
+
+    const [node] = parentEntry;
+
+    if (isElement(node) && node.type === ELEMENT_PARAGRAPH) return true;
+    return false;
+  }
+  return true;
+};
 
 type Modify<T, R> = Omit<T, keyof R> & R;
 
@@ -53,52 +59,6 @@ export const optionsAutoformat: AutoFormatOptions = {
       preFormat,
     },
     {
-      type: ELEMENT_LI,
-      markup: ['*', '-'],
-      preFormat,
-      format: (editor: SPEditor): void => {
-        if (editor.selection) {
-          const parentEntry = getParent(editor, editor.selection);
-          if (!parentEntry) return;
-          const [node] = parentEntry;
-          if (
-            isElement(node) &&
-            !isType(editor, node, ELEMENT_CODE_BLOCK) &&
-            !isType(editor, node, ELEMENT_CODE_LINE)
-          ) {
-            toggleList(editor, {
-              type: ELEMENT_UL,
-            });
-          }
-        }
-      },
-    },
-    {
-      type: ELEMENT_LI,
-      markup: ['1.', '1)'],
-      preFormat,
-      format: (editor: SPEditor): void => {
-        if (editor.selection) {
-          const parentEntry = getParent(editor, editor.selection);
-          if (!parentEntry) return;
-          const [node] = parentEntry;
-          if (
-            isElement(node) &&
-            !isType(editor, node, ELEMENT_CODE_BLOCK) &&
-            !isType(editor, node, ELEMENT_CODE_LINE)
-          ) {
-            toggleList(editor, {
-              type: ELEMENT_OL,
-            });
-          }
-        }
-      },
-    },
-    {
-      type: ELEMENT_TODO_LI,
-      markup: ['[]'],
-    },
-    {
       type: ELEMENT_BLOCKQUOTE,
       markup: ['>'],
       preFormat,
@@ -108,36 +68,35 @@ export const optionsAutoformat: AutoFormatOptions = {
       between: ['**', '**'],
       mode: 'inline',
       insertTrigger: true,
+      query,
     },
     {
       type: MARK_BOLD,
       between: ['__', '__'],
       mode: 'inline',
       insertTrigger: true,
+      query,
     },
     {
       type: MARK_ITALIC,
       between: ['*', '*'],
       mode: 'inline',
       insertTrigger: true,
+      query,
     },
     {
       type: MARK_UNDERLINE,
       between: ['_', '_'],
       mode: 'inline',
       insertTrigger: true,
+      query,
     },
     {
       type: MARK_CODE,
       between: ['`', '`'],
       mode: 'inline',
       insertTrigger: true,
-    },
-    {
-      type: MARK_STRIKETHROUGH,
-      between: ['~~', '~~'],
-      mode: 'inline',
-      insertTrigger: true,
+      query,
     },
     {
       type: ELEMENT_CODE_BLOCK,

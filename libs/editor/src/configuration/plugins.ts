@@ -1,12 +1,14 @@
 import {
   createAutoformatPlugin,
-  createBasicElementPlugins,
-  createBasicMarkPlugins,
+  createBlockquotePlugin,
+  createCodeBlockPlugin,
   createDndPlugin,
   createExitBreakPlugin,
+  createHeadingPlugin,
   createHistoryPlugin,
   createKbdPlugin,
   createNodeIdPlugin,
+  createParagraphPlugin,
   createReactPlugin,
   createResetNodePlugin,
   createSoftBreakPlugin,
@@ -17,6 +19,7 @@ import {
 import { nanoid } from 'nanoid';
 import { createBubblePlugin } from '../plugins/Bubbles/createBubblePlugin';
 import { createForcedLayoutPlugin } from '../plugins/ForcedLayout/createForcedLayoutPlugin';
+import { createMarksPlugins } from '../plugins/Marks/createMarksPlugins';
 import { optionsAutoformat } from './autoFormatOptions';
 import { exitBreakOptions } from './exitBreakOptions';
 import { resetBlockTypeOptions } from './resetBlockTypeOptions';
@@ -26,8 +29,12 @@ export const plugins = [
   createReactPlugin(),
   createHistoryPlugin(),
 
-  ...createBasicElementPlugins({ heading: { levels: 3 } }),
-  ...createBasicMarkPlugins(),
+  createParagraphPlugin(),
+  createBlockquotePlugin(),
+  createHeadingPlugin({ levels: 3 }),
+  createCodeBlockPlugin(),
+
+  ...createMarksPlugins(),
 
   createExitBreakPlugin(exitBreakOptions),
   createSoftBreakPlugin(softBreakOptions),
