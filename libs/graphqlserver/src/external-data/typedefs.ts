@@ -2,6 +2,7 @@ import { gql } from 'apollo-server-lambda';
 
 export default gql`
   enum ExternalProvider {
+    testdatasource
     googlesheets
     other
   }
@@ -15,7 +16,7 @@ export default gql`
 
   type ExternalKey {
     id: ID!
-    status: ExternalKeyStatus!
+    statusCode: ExternalKeyStatus!
     lastError: String
     createdAt: DateTime!
     expiresAt: DateTime
@@ -42,8 +43,9 @@ export default gql`
     name: String!
     provider: ExternalProvider!
     externalId: String!
-    dataPath: String!
-    key: ExternalKey
+    dataUrl: String!
+    authUrl: String!
+    keys: [ExternalKey!]!
     access: ExternalDataSourceAccess!
   }
 

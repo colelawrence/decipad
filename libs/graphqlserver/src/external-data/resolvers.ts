@@ -6,9 +6,19 @@ import {
 } from '@decipad/backendtypes';
 import tables from '@decipad/services/tables';
 import Resource from '@decipad/graphqlresource';
+import { app } from '@decipad/config';
 
-function dataPathFor(externalDataSource: ExternalDataSourceRecord): string {
-  return `/externaldatasources/${externalDataSource.id}`;
+function baseUrlFor(externalDataSource: ExternalDataSourceRecord): string {
+  const { urlBase, apiPathBase } = app();
+  return `${urlBase}${apiPathBase}/externaldatasources/${externalDataSource.id}`;
+}
+
+function dataUrlFor(externalDataSource: ExternalDataSourceRecord): string {
+  return `${baseUrlFor(externalDataSource)}/data`;
+}
+
+function authUrlFor(externalDataSource: ExternalDataSourceRecord): string {
+  return `${baseUrlFor(externalDataSource)}/auth`;
 }
 
 const externalDataResource = Resource({
@@ -17,7 +27,8 @@ const externalDataResource = Resource({
   dataTable: async () => (await tables()).externaldatasources,
   toGraphql: (d: ExternalDataSourceRecord) => ({
     ...d,
-    dataPath: dataPathFor(d),
+    dataUrl: dataUrlFor(d),
+    authUrl: authUrlFor(d),
   }),
   newRecordFrom: ({
     dataSource,
@@ -54,6 +65,24 @@ const resolvers = {
     shareExternalDataSourceWithRole: externalDataResource.shareWithRole,
     unshareExternalDataSourceWithRole: externalDataResource.unshareWithRole,
     shareExternalDataSourceWithEmail: externalDataResource.shareWithEmail,
+  },
+
+  ExternalDataSource: {
+    access: externalDataResource.access,
+    async keys(externalDataSource: ExternalDataSourceRecord) {
+      const data = await tables();
+      const keys = (
+        await data.externaldatasourcekeys.query({
+          IndexName: 'byExternalDataSourceId',
+          KeyConditionExpression:
+            'externaldatasource_id = :externaldatasource_id',
+          ExpressionAttributeValues: {
+            ':externaldatasource_id': externalDataSource.id,
+          },
+        })
+      ).Items;
+      return keys;
+    },
   },
 };
 

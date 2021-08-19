@@ -24,6 +24,7 @@ const enhancedTables: (keyof EnhancedDataTables)[] = [
   'futurefileattachments',
   'fileattachments',
   'externaldatasources',
+  'externaldatasourcekeys',
 ];
 
 const observedTables: (keyof DataTables)[] = [

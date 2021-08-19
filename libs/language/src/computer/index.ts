@@ -13,9 +13,12 @@ import type {
   ComputeRequest,
   ComputeResponse,
   ComputePanic,
+  ParsedBlock,
   IdentifiedResult,
   InBlockResult,
+  Program,
   ValueLocation,
+  UnparsedBlock,
 } from './types';
 import { Computer } from './Computer';
 
@@ -31,7 +34,10 @@ export type {
   ComputePanic,
   InBlockResult,
   IdentifiedResult,
+  ParsedBlock,
+  Program,
   ValueLocation,
+  UnparsedBlock,
 };
 
 // We need to delay errors which are under the cursor, so the user can stop typing

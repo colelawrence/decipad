@@ -1,86 +1,75 @@
 import camelcase from 'camelcase';
-import { FC, ReactNode, useCallback, useState } from 'react';
+import { FC, ReactNode } from 'react';
+import { useDrop, DropTargetMonitor } from 'react-dnd';
+import { NativeTypes } from 'react-dnd-html5-backend';
 import { useToasts } from 'react-toast-notifications';
 import { Editor, Transforms } from 'slate';
 import slug from 'slug';
+import { nanoid } from 'nanoid';
+import { ELEMENT_IMPORT_DATA } from '@decipad/ui';
+import { DropHint } from './DropHint';
 
 interface DropFileProps {
   editor?: Editor;
   children: ReactNode;
 }
 
+type Item = { files: File[] } | undefined;
+
 const acceptableFileTypes = ['text/csv'];
 const maxFileSizeBytes = 100000;
 
-export function DropFile({ editor, children }: DropFileProps): ReturnType<FC> {
-  const [dragIsHovering, setDragIsHovering] = useState(false);
-  const { addToast } = useToasts();
+const baseStyle = { position: 'relative' };
 
-  const importFile = useCallback(
-    (file: File) => {
-      if (!isFileAcceptable(file) || editor == null) {
+export function DropFile({ editor, children }: DropFileProps): ReturnType<FC> {
+  const { addToast } = useToasts();
+  const [{ canDrop, isOver }, drop] = useDrop({
+    accept: [NativeTypes.FILE],
+    drop: async (item: Item) => {
+      if (!item?.files.length || !editor) {
         return;
       }
-      (async () => {
-        const dataUrl = await fileToDataURL(file);
-        const varName = varNamify(file.name);
-        const code = {
-          type: 'code_block',
-          children: [{ text: `${varName} = import_data "${dataUrl}"` }],
-        };
-        Transforms.insertNodes(editor, code);
-        Transforms.move(editor);
-        addToast(`File ${file.name} successfully imported`, {
-          appearance: 'success',
-        });
-      })();
-    },
-    [editor, addToast]
-  );
-
-  const dropHandler = useCallback(
-    (ev) => {
-      ev.preventDefault();
-      if (dragIsHovering) {
-        setDragIsHovering(false);
-      }
-      for (const file of getFilesFromEvent(ev)) {
-        importFile(file);
+      for (const file of item.files) {
+        if (isFileAcceptable(file)) {
+          const block = {
+            id: nanoid(),
+            type: ELEMENT_IMPORT_DATA,
+            'data-varname': varNamify(file.name),
+            // eslint-disable-next-line no-await-in-loop
+            'data-href': await fileToDataURL(file),
+            'data-contenttype': file.type,
+            children: [
+              {
+                text: '', // empty text node
+              },
+            ],
+          };
+          Transforms.insertNodes(editor, [block], { voids: true });
+          Transforms.move(editor);
+          addToast(`File ${file.name} successfully imported`, {
+            appearance: 'success',
+          });
+        }
       }
     },
-    [importFile, dragIsHovering, setDragIsHovering]
-  );
-
-  const dragEnterHandler = useCallback(
-    (ev) => {
-      ev.preventDefault();
-      if (!dragIsHovering) {
-        setDragIsHovering(true);
-      }
+    canDrop: (item: Item) => {
+      return item?.files.some(isFileAcceptable) || false;
     },
-    [dragIsHovering, setDragIsHovering]
-  );
-
-  const dragOverHandler = dragEnterHandler; // lazy
-
-  const dragLeaveHandler = useCallback(
-    (ev) => {
-      ev.preventDefault();
-      if (dragIsHovering) {
-        setDragIsHovering(false);
-      }
+    collect: (monitor: DropTargetMonitor) => {
+      const canDropFile = monitor.getItemType() === NativeTypes.FILE;
+      return {
+        isOver: monitor.isOver(),
+        canDrop: canDropFile,
+      };
     },
-    [dragIsHovering, setDragIsHovering]
-  );
+  });
+
+  const isActive = canDrop && isOver;
+  const style = isActive ? baseStyle : {};
 
   return (
-    <div
-      onDrop={dropHandler}
-      onDragEnter={dragEnterHandler}
-      onDragLeave={dragLeaveHandler}
-      onDragOver={dragOverHandler}
-    >
-      {children}
+    <div ref={drop} style={style}>
+      <DropHint isActive={isActive}>{children}</DropHint>
     </div>
   );
 }
@@ -92,7 +81,6 @@ async function fileToDataURL(file: File): Promise<string> {
 
 function isFileAcceptable(file: File): boolean {
   if (acceptableFileTypes.indexOf(file.type) < 0) {
-    // TODO: show the user the following error:
     // eslint-disable-next-line no-console
     console.error(`Cannot not import file of type ${file.type}`);
     return false;
@@ -108,31 +96,6 @@ function isFileAcceptable(file: File): boolean {
   }
 
   return true;
-}
-
-function getFilesFromEvent(ev: DragEvent): File[] {
-  const files = [];
-  if (ev.dataTransfer && ev.dataTransfer.items) {
-    for (let i = 0; i < ev.dataTransfer.items.length; i += 1) {
-      const item = ev.dataTransfer.items[i];
-      if (item.kind === 'file') {
-        const file = item.getAsFile();
-        if (file) {
-          files.push(file);
-        }
-      }
-    }
-  } else if (ev.dataTransfer) {
-    // Use DataTransfer interface to access the file(s)
-    for (let i = 0; i < ev.dataTransfer.files.length; i += 1) {
-      const file = ev.dataTransfer.files[i];
-      files.push(file);
-    }
-  } else {
-    throw new Error('Data transfer not supported!');
-  }
-
-  return files;
 }
 
 function varNamify(fileName: string): string {

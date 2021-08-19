@@ -39,6 +39,7 @@ export function monitor() {
 export function app() {
   return {
     urlBase: env('DECI_APP_URL_BASE'),
+    apiPathBase: `/api`,
     limits: {
       maxAttachmentSize: Number(env('DECI_MAX_ATTACHMENT_SIZE')),
       maxAttachmentUploadTokenExpirationSeconds: Number(
@@ -90,7 +91,12 @@ export function thirdParty() {
     google: {
       sheets: {
         apiKey: env('DECI_GOOGLESHEETS_API_KEY'),
+        clientId: env('DECI_GOOGLESHEETS_CLIENT_ID'),
+        clientSecret: env('DECI_GOOGLESHEETS_CLIENT_SECRET'),
       },
     },
+    defaultTokenExpirationSeconds: Number(
+      env('DECI_DEFAULT_TOKEN_EXPIRATION_SECONDS')
+    ),
   };
 }

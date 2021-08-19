@@ -1,4 +1,5 @@
 import {
+  ID,
   DataTable,
   ConcreteRecord,
   GraphqlObjectType,
@@ -13,6 +14,13 @@ import { unshareWithUser } from './unshare-with-user';
 import { shareWithRole } from './share-with-role';
 import { unshareWithRole } from './unshare-with-role';
 import { shareWithEmail } from './share-with-email';
+import { access } from './access';
+import { ShareWithUserArgs } from './share-with-user';
+import { UnshareWithUserArgs } from './unshare-with-user';
+import { ShareWithRoleArgs } from './share-with-role';
+import { UnshareWithRoleArgs } from './unshare-with-role';
+import { ShareWithEmailArgs } from './share-with-email';
+import { Access } from './access';
 
 export interface Resource<
   DataTableType extends ConcreteRecord,
@@ -38,19 +46,32 @@ export interface Resource<
   pubSubChangeTopic?: string;
 }
 
+export interface ResourceResolvers<DataT, GraphqlT, CreateT, UpdateT> {
+  getById: (_: unknown, { id }: { id: ID }, context: GraphqlContext) => Promise<GraphqlT>;
+  create: (_: unknown, create: CreateT, context: GraphqlContext) => Promise<GraphqlT>;
+  update: (_: unknown, update: ({ id: ID } & UpdateT), context: GraphqlContext) => Promise<GraphqlT>;
+  remove: (_: unknown, { id }: { id: ID }, context: GraphqlContext) => Promise<void>;
+  shareWithUser: (_: unknown, args: ShareWithUserArgs, context: GraphqlContext) => Promise<void>;
+  unshareWithUser: (_: unknown, args: UnshareWithUserArgs, context: GraphqlContext) => Promise<void>;
+  shareWithRole: (_: unknown, args: ShareWithRoleArgs, context: GraphqlContext) => Promise<void>;
+  unshareWithRole: (_: unknown, args: UnshareWithRoleArgs, context: GraphqlContext) => Promise<void>;
+  shareWithEmail: (_: unknown, args: ShareWithEmailArgs, context: GraphqlContext) => Promise<void>;
+  access: (parent: DataT, _: unknown, context: GraphqlContext) => Promise<Access>;
+}
+
 export default function <
-  DataTableType extends ConcreteRecord,
-  GraphqlType extends GraphqlObjectType,
-  CreateInputType,
-  UpdateInputType
+  DataTableT extends ConcreteRecord,
+  GraphqlT extends GraphqlObjectType,
+  CreateInputT,
+  UpdateInputT
 >(
   resourceType: Resource<
-    DataTableType,
-    GraphqlType,
-    CreateInputType,
-    UpdateInputType
+    DataTableT,
+    GraphqlT,
+    CreateInputT,
+    UpdateInputT
   >
-) {
+): ResourceResolvers<DataTableT, GraphqlT, CreateInputT, UpdateInputT> {
   const shareWithUserFn = shareWithUser(resourceType);
   return {
     getById: getById(resourceType),
@@ -62,5 +83,6 @@ export default function <
     shareWithRole: shareWithRole(resourceType),
     unshareWithRole: unshareWithRole(resourceType),
     shareWithEmail: shareWithEmail(resourceType)(shareWithUserFn),
+    access: access(resourceType),
   };
 }

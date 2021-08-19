@@ -6,18 +6,6 @@ export default gql`
     tags: [String!]
   }
 
-  type RoleAccess {
-    role: Role!
-    permission: PermissionType!
-    canComment: Boolean!
-  }
-
-  type UserAccess {
-    user: User!
-    permission: PermissionType!
-    canComment: Boolean!
-  }
-
   type PadAccess {
     roles: [RoleAccess!]!
     users: [UserAccess!]!

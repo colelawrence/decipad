@@ -14,6 +14,7 @@ import {
   PlatePluginComponent,
   withDraggables,
 } from '@udecode/plate';
+import { ELEMENT_IMPORT_DATA } from '@decipad/ui';
 import { GrDrag } from 'react-icons/gr';
 
 const GrabberTooltipContent = () => (
@@ -64,6 +65,7 @@ export const withStyledDraggables = (
         ELEMENT_OL,
         ELEMENT_UL,
         ELEMENT_CODE_BLOCK,
+        ELEMENT_IMPORT_DATA,
       ],
       onRenderDragHandle: ({ className, styles }) => {
         return (
@@ -109,6 +111,14 @@ export const withStyledDraggables = (
     },
     {
       key: ELEMENT_CODE_BLOCK,
+      styles: {
+        gutterLeft: {
+          padding: '42px 8px 0 0',
+        },
+      },
+    },
+    {
+      key: ELEMENT_IMPORT_DATA,
       styles: {
         gutterLeft: {
           padding: '42px 8px 0 0',

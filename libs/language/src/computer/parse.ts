@@ -1,6 +1,12 @@
+import { dequal } from 'dequal';
 import { Parser } from '..';
 import { parseBlock } from '../parser';
-import { IdentifiedBlock, IdentifiedError } from './types';
+import {
+  Program,
+  IdentifiedBlock,
+  IdentifiedError,
+  ParsedBlock,
+} from './types';
 
 export type ParseRet = IdentifiedBlock | IdentifiedError;
 
@@ -35,22 +41,39 @@ export const wrappedParse = ({
   }
 };
 
+const asParsed = ({ id, value }: ParsedBlock): ParseRet => ({
+  type: 'identified-block',
+  id,
+  source: '',
+  block: {
+    ...value,
+  },
+});
+
 /**
  * Parse the changed bits of a program
  */
 export const updateParse = (
-  unparsedProgram: Parser.UnparsedBlock[],
+  program: Program,
   previousBlocks: ParseRet[] = []
-) => {
-  return unparsedProgram.map((unparsedBlock) => {
-    const prev = previousBlocks.find((prev) => prev.id === unparsedBlock.id);
-
-    if (prev != null && prev.source === unparsedBlock.source) {
-      // Unchanged block -- do not evict this one
-      return prev;
+): ParseRet[] => {
+  return program.map((block) => {
+    const prev = previousBlocks.find((prev) => prev.id === block.id);
+    if (block.type === 'unparsed-block') {
+      if (prev != null && prev.source === block.source) {
+        // Unchanged block -- do not evict this one
+        return prev;
+      } else {
+        // Block source changed
+        return wrappedParse(block);
+      }
     } else {
-      // Block source changed
-      return wrappedParse(unparsedBlock);
+      const newB = asParsed(block);
+      if (prev && dequal(newB, prev)) {
+        return prev;
+      } else {
+        return newB;
+      }
     }
   });
 };

@@ -1,6 +1,6 @@
 import produce from 'immer';
 
-import { AST, Parser } from '..';
+import { AST } from '..';
 import {
   unparsedProgram,
   deeperProgram,
@@ -11,7 +11,7 @@ import {
 } from './testutils';
 import { ComputationRealm } from './ComputationRealm';
 import { computeProgram, Computer } from './Computer';
-import { ValueLocation } from './types';
+import { Program, UnparsedBlock, ValueLocation } from './types';
 
 let computer: Computer;
 beforeEach(() => {
@@ -21,7 +21,7 @@ beforeEach(() => {
 const testCompute = async (program: AST.Block[]) =>
   simplifyInBlockResults(await computeProgram(program, new ComputationRealm()));
 
-const computeOnTestComputer = async (program: Parser.UnparsedBlock[]) => {
+const computeOnTestComputer = async (program: Program) => {
   const res = await computer.compute({ program });
   return simplifyComputeResponse(res);
 };
@@ -42,6 +42,7 @@ it('retrieves syntax errors', async () => {
     await computeOnTestComputer([
       {
         id: 'wrongblock',
+        type: 'unparsed-block',
         source: 'Syntax --/-- Error',
       },
     ])
@@ -76,7 +77,7 @@ describe('caching', () => {
 
     // Change C
     const changedC = produce(unparsedProgram, (program) => {
-      program[1].source = 'C = B + 10.1';
+      (program[1] as UnparsedBlock).source = 'C = B + 10.1';
     });
     expect(await computeOnTestComputer(changedC)).toMatchObject([
       'block-AB/0 -> 0',
@@ -89,7 +90,7 @@ describe('caching', () => {
 
     // Break it by removing B
     const broken = produce(unparsedProgram, (program) => {
-      program[0].source = 'A = 0.5';
+      (program[0] as UnparsedBlock).source = 'A = 0.5';
     });
     expect(await computeOnTestComputer(broken)).toMatchObject([
       'block-AB/0 -> 0.5',
@@ -98,7 +99,7 @@ describe('caching', () => {
     ]);
 
     const noD = produce(unparsedProgram, (program) => {
-      program[2].source = '';
+      (program[2] as UnparsedBlock).source = '';
     });
     expect(await computeOnTestComputer(noD)).toMatchObject([
       'block-AB/0 -> 0',
@@ -146,6 +147,7 @@ it('can turn a cursor location into a ValueLocation', async () => {
   await computeOnTestComputer([
     {
       id: 'id',
+      type: 'unparsed-block',
       source: ['A = 1', '', '', 'B = 2', 'C = 3'].join('\n'),
     },
   ]);

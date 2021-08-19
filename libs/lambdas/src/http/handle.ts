@@ -1,56 +1,57 @@
-import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
-import { HttpResponse } from '@architect/functions';
+import {
+  APIGatewayProxyEventV2 as APIGatewayProxyEvent,
+  APIGatewayProxyResultV2,
+} from 'aws-lambda';
 import { wrapHandler } from '@decipad/services/monitor';
 
-type Handler = (req: APIGatewayProxyEvent) => Promise<string | HttpResponse>;
+type Handler = (req: APIGatewayProxyEvent) => Promise<any>;
 
 export default (handler: Handler) => {
   return wrapHandler(
-    async (req: APIGatewayProxyEvent): Promise<HttpResponse> => {
+    async (req: APIGatewayProxyEvent): Promise<APIGatewayProxyResultV2> => {
       try {
-        const result = await handler(req);
-        if (result === null || result === undefined) {
-          return {
-            statusCode: 404,
-          };
+        let body = await handler(req);
+        if (isFullReturnObject(body)) {
+          return body;
         }
 
-        if (typeof result === 'string') {
-          return {
-            statusCode: okStatusCodeFor(req),
-            body: result,
-            headers: {
-              'content-type': 'text/plain',
-            },
-          };
+        let statusCode = okStatusCodeFor(req);
+        const headers = {
+          'content-type': 'application/json; charset=utf-8',
+        };
+        if (body === null || body === undefined) {
+          statusCode = 404;
         }
-        if (isFullReturnObject(result)) {
-          return result;
+
+        if (body && typeof body !== 'string') {
+          body = JSON.stringify(body);
         }
+
         return {
-          statusCode: okStatusCodeFor(req),
-          headers: {
-            'content-type': 'application/json; charset=utf-8',
-          },
-          body: JSON.stringify(result),
+          statusCode,
+          body,
+          headers,
         };
       } catch (err) {
         console.error(err);
         return {
           statusCode: 500,
-          json: {
+          headers: {
+            'content-type': 'application/json; charset=utf-8',
+          },
+          body: JSON.stringify({
             name: err.name,
             message: err.message,
             stack: err.stack,
-          },
+          }),
         };
       }
     }
   );
 };
 
-function isFullReturnObject(result: HttpResponse) {
-  return !!result.statusCode || !!result.json;
+function isFullReturnObject(result: any) {
+  return result && (!!result.statusCode || !!result.body);
 }
 
 function okStatusCodeFor(req: APIGatewayProxyEvent) {

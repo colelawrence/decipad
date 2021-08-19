@@ -42,6 +42,7 @@ export async function createSandboxEnv(
     ARC_TABLES_PORT: tablesPort,
     ARC_INTERNAL: arcPort,
     DECI_S3_ENDPOINT: `localhost:${s3Port}`,
+    DECI_APP_URL_BASE: `http://localhost:${portBase}`,
   };
 
   // the final sandbox environment:

@@ -94,14 +94,14 @@ export async function evaluate(
     }
     case 'range': {
       const [start, end] = await pSeries(
-        node.args.map((arg) => () => evaluate(realm, arg))
+        node.args.map((arg) => () => evaluate(realm, getDefined(arg)))
       );
 
       return Range.fromBounds(start, end);
     }
     case 'sequence': {
-      const start = await evaluate(realm, node.args[0]);
-      const end = await evaluate(realm, node.args[1]);
+      const start = await evaluate(realm, getDefined(node.args[0]));
+      const end = await evaluate(realm, getDefined(node.args[1]));
 
       if (start instanceof Date && end instanceof Date) {
         return Column.fromDateSequence(

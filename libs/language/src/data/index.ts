@@ -2,8 +2,9 @@ import parseCSV from 'csv-parse';
 import { TabularData } from './TabularData';
 import * as ExternalData from './external-data-types';
 import { cast } from './cast';
+import defaultFetch from './default-fetch';
 
-export { ExternalData };
+export { defaultFetch, ExternalData };
 
 type IResolve = {
   url: string;

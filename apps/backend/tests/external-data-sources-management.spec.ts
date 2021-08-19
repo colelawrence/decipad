@@ -24,7 +24,7 @@ test('external data sources', (ctx) => {
               name
               provider
               externalId
-              dataPath
+              dataUrl
             }
           }
         `,
@@ -53,7 +53,7 @@ test('external data sources', (ctx) => {
               name
               provider
               externalId
-              dataPath
+              dataUrl
             }
           }
         `,
@@ -92,7 +92,7 @@ test('external data sources', (ctx) => {
               name
               provider
               externalId
-              dataPath
+              dataUrl
             }
           }
       `,
@@ -122,7 +122,7 @@ test('external data sources', (ctx) => {
               name
               provider
               externalId
-              dataPath
+              dataUrl
             }
           }
       `,
@@ -149,7 +149,7 @@ test('external data sources', (ctx) => {
               name
               provider
               externalId
-              dataPath
+              dataUrl
             }
           }
         `,
@@ -172,7 +172,7 @@ test('external data sources', (ctx) => {
               name
               provider
               externalId
-              dataPath
+              dataUrl
             }
           }
         `,
@@ -346,7 +346,7 @@ test('external data sources', (ctx) => {
               name
               provider
               externalId
-              dataPath
+              dataUrl
             }
           }
       `,

@@ -1,15 +1,11 @@
 @app
-
 decipad-backend
 
 
 @http
-
 get /graphql
 post /graphql
-
 get /.storybook
-
 get /api/auth/signin
 post /api/auth/signin/:provider
 get /api/auth/callback/:provider
@@ -21,21 +17,18 @@ get /api/auth/providers
 get /api/auth/error
 get /api/auth/token
 get /api/auth/verify-request
-
 get /api/syncdoc/:id
 put /api/syncdoc/:id
 put /api/syncdoc/:id/changes
-
 get /api/invites/:inviteid/accept
-
 get /api/userkeyvalidations/:userkeyvalidationid/validate
-
+get /api/externaldatasources/:id/auth
+get /api/externaldatasources/:id/callback
+get /api/externaldatasources/:id/data
 
 @ws
 
-
 @tables
-
 users
   id *String
   name String
@@ -174,8 +167,14 @@ fileattachments
 externaldatasources
   id *String
 
-@indexes
+externaldatasourcekeys
+  id *String
+  externaldatasource_id String
+  status_code String
+  expiresAt TTL
+  encrypt true
 
+@indexes
 users
   secret *String
   name bySecret
@@ -270,8 +269,17 @@ fileattachments
   resource_uri *String
   name byResource
 
-@queues
+externaldatasourcekeys
+  externaldatasource_id *String
+  name byExternalDataSourceId
 
+externaldatasourcekeys
+  externaldatasource_id *String
+  status_code **String
+  name byExternalDataSourceAndStatus
+
+
+@queues
 sendemail
 notify-subscriptions
 userkeys-changes
@@ -281,14 +289,10 @@ tags-changes
 usertaggedresources-changes
 fileattachments-changes
 
+
 @plugins
 s3
 custom-domain
-#kafka
-
-#@kafka-consumer-groups
-#consumer1 topic1 10
-
 
 @aws
 region eu-west-2

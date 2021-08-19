@@ -21,6 +21,12 @@ export default gql`
     expires_at: DateTime
   }
 
+  type RoleAccess {
+    role: Role!
+    permission: PermissionType!
+    canComment: Boolean!
+  }
+
   extend type Mutation {
     createRole(role: RoleInput): Role!
 

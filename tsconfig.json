@@ -74,7 +74,8 @@
       "@decipad/services/tables": ["libs/services/src/tables"],
       "@decipad/services/users": ["libs/services/src/users"],
       "@decipad/services/workspaces": ["libs/services/src/workspaces"],
-      "@decipad/services/invites": ["libs/services/src/invites"]
+      "@decipad/services/invites": ["libs/services/src/invites"],
+      "@decipad/services/externaldata": ["libs/services/src/externaldata"]
     }
   },
   "files": [],

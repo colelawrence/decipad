@@ -1,5 +1,5 @@
 import { Type } from '../type';
-import { AST, Parser } from '..';
+import { AST } from '..';
 
 export interface IdentifiedBlock {
   type: 'identified-block';
@@ -17,8 +17,22 @@ export interface IdentifiedError {
 
 export type ValueLocation = [blockId: string, statementIdx: number];
 
+export type UnparsedBlock = {
+  type: 'unparsed-block';
+  id: string;
+  source: string;
+};
+export type ParsedBlock = {
+  type: 'parsed-block';
+  id: string;
+  value: AST.Block;
+  source?: string;
+};
+export type ProgramBlock = UnparsedBlock | ParsedBlock;
+export type Program = ProgramBlock[];
+
 export interface ComputeRequest {
-  program: Parser.UnparsedBlock[];
+  program: Program;
   subscriptions?: string[];
 }
 

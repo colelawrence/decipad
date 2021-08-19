@@ -144,10 +144,11 @@ export interface ExternalDataSourceCreateInput
 }
 
 export interface ExternalDataSource extends ExternalDataSourceCreateInput {
-  dataPath: string;
+  dataUrl: string;
+  authUrl: string;
 }
 
-type ExternalDataSourceProvider = 'googlesheets' | 'other';
+type ExternalDataSourceProvider = 'testdatasource' | 'googlesheets' | 'other';
 
 /* Pagination */
 
@@ -345,17 +346,24 @@ interface ConnectionRecord extends TableRecordBase {
   gqlstate?: string;
 }
 
-export type SharedResource = {
-  gqlType?: string;
-  resource: string;
-  permission: PermissionType;
-  canComment: boolean;
-};
-
 export interface ExternalDataSourceRecord extends TableRecordBase {
   name: string;
   provider: ExternalDataSourceProvider;
   externalId: string;
+}
+
+// eslint-disable-next-line no-shadow
+export type ExternalKeyStatus = 'NEW' | 'ACTIVE' | 'EXPIRED' | 'ERROR';
+
+export interface ExternalKeyRecord extends TableRecordBase {
+  externaldatasource_id: ID;
+  access_token: string;
+  refresh_token: string;
+  status_code: ExternalKeyStatus;
+  lastError?: string;
+  createdAt: number;
+  expiresAt: number;
+  lastUsedAt?: number;
 }
 
 export interface DataTable<T extends TableRecordBase> {
@@ -386,6 +394,7 @@ export interface EnhancedDataTables {
   futurefileattachments: EnhancedDataTable<FutureFileAttachmentRecord>;
   fileattachments: EnhancedDataTable<FileAttachmentRecord>;
   externaldatasources: DataTable<ExternalDataSourceRecord>;
+  externaldatasourcekeys: DataTable<ExternalKeyRecord>;
 }
 
 export interface DataTables extends EnhancedDataTables {
@@ -447,6 +456,15 @@ export type GraphqlContext = {
 };
 
 export type GraphqlObjectType = TableRecord | ExternalDataSource; // add others here
+
+/* Shared resources */
+
+export type SharedResource = {
+  gqlType?: string;
+  resource: string;
+  permission: PermissionType;
+  canComment: boolean;
+};
 
 /* Attachments */
 

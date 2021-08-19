@@ -5,6 +5,12 @@ export default gql`
     name: String
   }
 
+  type UserAccess {
+    user: User!
+    permission: PermissionType!
+    canComment: Boolean!
+  }
+
   extend type Query {
     self: User
   }

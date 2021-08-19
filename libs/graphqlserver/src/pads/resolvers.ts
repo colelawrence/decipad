@@ -9,7 +9,6 @@ import {
   PadInput,
   Pad,
   PadRecord,
-  PadAccessRecord,
   WorkspaceRecord,
   RoleRecord,
   User,
@@ -20,7 +19,6 @@ import { create as createPad2 } from '@decipad/services/pads';
 import { duplicate as duplicatePadContent } from '@decipad/services/blobs/pads';
 import Resource from '@decipad/graphqlresource';
 import { requireUser, check } from '../authorization';
-import by from '../utils/by';
 import paginate from '../utils/paginate';
 
 const padResource = Resource({
@@ -163,42 +161,7 @@ const resolvers = {
   },
 
   Pad: {
-    async access(pad: Pad): Promise<PadAccessRecord> {
-      const resource = `/pads/${pad.id}`;
-      const data = await tables();
-      const permissions = (
-        await data.permissions.query({
-          IndexName: 'byResource',
-          KeyConditionExpression: 'resource_uri = :resource_uri',
-          ExpressionAttributeValues: {
-            ':resource_uri': resource,
-          },
-        })
-      ).Items;
-
-      const roles = permissions
-        .filter((p) => p.user_id === 'null')
-        .map((p) => ({
-          role_id: p.role_id,
-          permission: p.type,
-          canComment: p.can_comment,
-        }));
-
-      const users = permissions
-        .filter((p) => p.role_id === 'null')
-        .map((p) => ({
-          user_id: p.user_id,
-          permission: p.type,
-          canComment: p.can_comment,
-          createdAt: p.createdAt,
-        }))
-        .sort(by('permission'));
-
-      return {
-        roles,
-        users,
-      };
-    },
+    access: padResource.access,
 
     async workspace(pad: PadRecord): Promise<WorkspaceRecord | undefined> {
       const data = await tables();

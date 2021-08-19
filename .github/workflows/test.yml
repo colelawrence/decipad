@@ -64,9 +64,6 @@ jobs:
       - name: Run tests
         run: npm run test:coverage
 
-      - name: Run end-to-end tests
-        run: ./scripts/e2e.sh
-
   notify:
     name: Discord Notification
     runs-on: ubuntu-latest

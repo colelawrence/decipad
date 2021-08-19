@@ -1,4 +1,7 @@
-import { ResultsContextProvider } from '@decipad/ui';
+import {
+  ProgramBlocksContextProvider,
+  ResultsContextProvider,
+} from '@decipad/ui';
 import { Plate, useStoreEditorRef } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { FC, useMemo, useState } from 'react';
@@ -8,12 +11,16 @@ import { DropFile } from './components/DropFile';
 import { FormattingToolbar } from './components/FormattingToolbar';
 import { components, options, plugins } from './configuration';
 import { useDocSyncPlugin } from './plugins/DocSync/useDocSyncPlugin';
-import { useLanguagePlugin } from './plugins/Language/useLanguagePlugin';
+import {
+  useLanguagePlugin,
+  editorProgramBlocks,
+} from './plugins/Language/useLanguagePlugin';
 import { useNotebookTitlePlugin } from './plugins/NotebookTitle/useNotebookTitlePlugin';
 import {
   SlashCommandsSelect,
   useSlashCommandsPlugin,
 } from './plugins/SlashCommands';
+import { useImportDataPlugin } from './plugins/ImportData/useImportDataPlugin';
 
 export { AnonymousDocSyncProvider, DocSyncProvider } from './contexts/DocSync';
 
@@ -35,6 +42,8 @@ const SlateEditor = ({ padId, autoFocus }: EditorProps) => {
 
   const notebookTitlePlugin = useNotebookTitlePlugin({ padId });
 
+  const importDataPlugin = useImportDataPlugin();
+
   const editorPlugins = useMemo(
     () => [
       ...plugins,
@@ -42,24 +51,35 @@ const SlateEditor = ({ padId, autoFocus }: EditorProps) => {
       languagePlugin,
       docSyncPlugin,
       notebookTitlePlugin,
+      importDataPlugin,
     ],
-    [slashCommandsPlugin, languagePlugin, docSyncPlugin, notebookTitlePlugin]
+    [
+      slashCommandsPlugin,
+      languagePlugin,
+      docSyncPlugin,
+      notebookTitlePlugin,
+      importDataPlugin,
+    ]
   );
+
+  const programBlocks = editor ? editorProgramBlocks(editor) : {};
 
   return (
     <ResultsContextProvider value={results}>
-      <DropFile editor={editor}>
-        <Plate
-          id={editorId}
-          plugins={editorPlugins}
-          options={options}
-          components={components}
-          editableProps={{ autoFocus }}
-        >
-          <FormattingToolbar />
-          <SlashCommandsSelect {...getSlashCommandsProps()} />
-        </Plate>
-      </DropFile>
+      <ProgramBlocksContextProvider value={programBlocks}>
+        <DropFile editor={editor}>
+          <Plate
+            id={editorId}
+            plugins={editorPlugins}
+            options={options}
+            components={components}
+            editableProps={{ autoFocus }}
+          >
+            <FormattingToolbar />
+            <SlashCommandsSelect {...getSlashCommandsProps()} />
+          </Plate>
+        </DropFile>
+      </ProgramBlocksContextProvider>
     </ResultsContextProvider>
   );
 };

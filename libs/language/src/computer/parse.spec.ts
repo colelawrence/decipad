@@ -1,10 +1,12 @@
 import produce from 'immer';
 import { updateParse } from './parse';
+import { UnparsedBlock } from './types';
 
 it('parses only the necessary parts', () => {
-  const program = [
+  const program: UnparsedBlock[] = [
     {
       id: '0',
+      type: 'unparsed-block',
       source: 'A = 1',
     },
   ];
@@ -35,6 +37,7 @@ it('reports syntax errors', () => {
     updateParse([
       {
         id: '0',
+        type: 'unparsed-block',
         source: 'syntax --/-- error',
       },
     ])

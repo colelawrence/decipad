@@ -1,8 +1,8 @@
-import { css } from '@emotion/react';
 import { PlatePluginComponent } from '@udecode/plate';
-import { Result } from './Result.component';
+import { css } from '@emotion/react';
+import { Result } from '../Result/Result.component';
 
-const modelBlockStyles = css({
+const codeBlockStyles = css({
   borderRadius: '16px',
   padding: '24px',
   backgroundColor: 'rgba(240, 240, 242, 0.2)',
@@ -18,15 +18,15 @@ export const ModelBlockElement: PlatePluginComponent = ({
   children,
   element,
 }) => {
-  // TODO fix types
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const blockId = (element as any).id ?? '';
+  const { id: blockId = '' } = element;
 
   return (
-    <div spellCheck={false}>
-      <pre css={modelBlockStyles} {...attributes}>
-        {children}
-      </pre>
+    <div>
+      <div spellCheck={false}>
+        <pre css={codeBlockStyles} {...attributes}>
+          {children}
+        </pre>
+      </div>
       {blockId && <Result blockId={blockId} />}
     </div>
   );

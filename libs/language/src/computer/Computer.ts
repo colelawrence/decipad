@@ -1,7 +1,7 @@
 import { inferStatement } from '../infer';
 import { evaluate as evaluateStatement } from '../interpreter';
 
-import { AST, Parser } from '..';
+import { AST } from '..';
 import {
   ComputePanic,
   ValueLocation,
@@ -10,6 +10,7 @@ import {
   InBlockResult,
   IdentifiedBlock,
   ComputeRequest,
+  Program,
 } from './types';
 import { ParseRet, updateParse } from './parse';
 import { ComputationRealm } from './ComputationRealm';
@@ -94,8 +95,8 @@ export class Computer {
   private previouslyParsed: ParseRet[] = [];
   private computationRealm = new ComputationRealm();
 
-  private ingestNewBlocks(unparsedProgram: Parser.UnparsedBlock[]) {
-    const newParse = updateParse(unparsedProgram, this.previouslyParsed);
+  private ingestNewBlocks(program: Program) {
+    const newParse = updateParse(program, this.previouslyParsed);
 
     this.computationRealm.evictCache(
       getGoodBlocks(this.previouslyParsed),
@@ -112,7 +113,6 @@ export class Computer {
     /* istanbul ignore catch */
     try {
       const blocks = this.ingestNewBlocks(program);
-
       const goodBlocks = getGoodBlocks(blocks);
       const computeResults = await computeProgram(
         goodBlocks,
@@ -174,7 +174,8 @@ export class Computer {
     if (block == null) return null;
 
     const statementIndex = block.args.findIndex(
-      ({ start, end }) => start?.line >= lineNo && end?.line <= lineNo
+      ({ start, end }) =>
+        start && start.line >= lineNo && end && end.line <= lineNo
     );
 
     return statementIndex !== -1 ? [blockId, statementIndex] : null;

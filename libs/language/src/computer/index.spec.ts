@@ -11,7 +11,7 @@ import { getUnparsed, simplifyComputeResponse } from './testutils';
 
 const makeReqs = (things: string[]): ComputeRequest[] =>
   things.map((source) => ({
-    program: [{ id: 'block-0', source }],
+    program: [{ id: 'block-0', type: 'unparsed-block', source }],
   }));
 
 const makeMultiBlockReqs = (things: string[][]): ComputeRequest[] =>

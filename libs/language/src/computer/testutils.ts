@@ -1,10 +1,12 @@
 import { block, assign, l, r, c } from '../utils';
-import { AST, Parser } from '..';
+import { AST } from '..';
 import {
   ComputePanic,
   ComputeResponse,
   InBlockResult,
   IdentifiedBlock,
+  Program,
+  UnparsedBlock,
 } from './types';
 import { wrappedParse } from './parse';
 
@@ -39,23 +41,30 @@ export const programContainingError = testBlocks(
   )
 );
 
-export const unparsedProgram: Parser.UnparsedBlock[] = [
+export const unparsedProgram: Program = [
   {
     id: 'block-AB',
+    type: 'unparsed-block',
     source: 'A = 0\nB = A + 1',
   },
   {
     id: 'block-C',
+    type: 'unparsed-block',
     source: 'C = B + 10',
   },
   {
     id: 'block-D',
+    type: 'unparsed-block',
     source: 'D = C + 100',
   },
 ];
 
-export const getUnparsed = (...blockSources: string[]) =>
-  blockSources.map((source, index) => ({ id: `block-${index}`, source }));
+export const getUnparsed = (...blockSources: string[]): UnparsedBlock[] =>
+  blockSources.map((source, index) => ({
+    type: 'unparsed-block',
+    id: `block-${index}`,
+    source,
+  }));
 
 export const parse = (...sources: string[]) =>
   sources.map((source, i) => {
