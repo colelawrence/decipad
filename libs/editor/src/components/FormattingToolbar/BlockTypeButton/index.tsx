@@ -27,8 +27,12 @@ const Button = styled('button')({
   borderRadius: '3px',
   transition: 'background-color 0.2s ease-out',
   cursor: 'pointer',
+  color: '#111',
   '&:hover': {
     backgroundColor: '#f0f0f2',
+  },
+  '&:active': {
+    color: '#111',
   },
 });
 
@@ -83,8 +87,10 @@ export const BlockTypeButton = (): ReturnType<FC> => {
   return (
     <Wrapper>
       <Button
-        onClick={() => setActive((prev) => !prev)}
-        onBlur={() => setActive(false)}
+        onMouseDown={(e) => {
+          e.preventDefault();
+          setActive((prev) => !prev);
+        }}
       >
         <span>Text size</span>
         <IconWrapper>

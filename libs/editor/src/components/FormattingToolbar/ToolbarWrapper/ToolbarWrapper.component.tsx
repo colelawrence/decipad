@@ -7,7 +7,7 @@ import {
   PortalBody,
   useStoreEditorState,
 } from '@udecode/plate';
-import { FC, useEffect, useRef } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { Editor, Path } from 'slate';
 import { ReactEditor } from 'slate-react';
 
@@ -30,7 +30,9 @@ const Wrapper = styled('div')({
 export const ToolbarWrapper: FC = ({ children }) => {
   const editor = useStoreEditorState();
   const ref = useRef<HTMLDivElement>(null);
+  const [isActive, setIsActive] = useState(false);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const el = ref.current!;
@@ -64,16 +66,26 @@ export const ToolbarWrapper: FC = ({ children }) => {
         const domSelection = window.getSelection()!;
         const domRange = domSelection.getRangeAt(0);
         const rect = domRange.getBoundingClientRect();
-        el.style.opacity = '1';
-        el.style.top = `${rect.top + window.scrollY - el.offsetHeight}px`;
-        el.style.left = `${
-          rect.left + window.scrollX - el.offsetWidth / 2 + rect.width / 2
-        }px`;
+        setIsActive(true);
+        if (el) {
+          el.style.opacity = '1';
+          el.style.top = `${rect.top + window.scrollY - el.offsetHeight}px`;
+          el.style.left = `${
+            rect.left + window.scrollX - el.offsetWidth / 2 + rect.width / 2
+          }px`;
+        }
       }
     }
 
-    return () => el.removeAttribute('style');
+    return () => {
+      if (el) {
+        el.removeAttribute('style');
+      }
+      setIsActive(false);
+    };
   });
+
+  if (!isActive) return null;
 
   return (
     <PortalBody>
