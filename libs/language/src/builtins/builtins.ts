@@ -1,10 +1,11 @@
 import { produce } from 'immer';
 import { Type, build as t } from '../type';
 import { getDefined } from '../utils';
-import { Scalar } from '../interpreter/Value';
+import { AnyValue, fromJS, Scalar } from '../interpreter/Value';
 
 import { overloadBuiltin } from './overloadBuiltin';
 import { BuiltinSpec } from './interfaces';
+import { dateOverloads } from './dateOverloads';
 
 const binopFunctor = (a: Type, b: Type) =>
   Type.combine(a.isScalar('number'), b.sameAs(a));
@@ -54,12 +55,17 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
       functor: (a, b) =>
         Type.combine(a.isScalar('string'), b.isScalar('string')),
     },
+    ...dateOverloads['+'],
   ]),
-  '-': {
-    argCount: 2,
-    fn: (a, b) => a - b,
-    functor: binopFunctor,
-  },
+  '-': overloadBuiltin('-', 2, [
+    {
+      argTypes: ['number', 'number'],
+      fnValues: (a: AnyValue, b: AnyValue) =>
+        fromJS((a.getData() as number) - (b.getData() as number)),
+      functor: binopFunctor,
+    },
+    ...dateOverloads['-'],
+  ]),
   'unary-': {
     argCount: 1,
     fn: (a) => -a,

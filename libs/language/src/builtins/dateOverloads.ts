@@ -1,0 +1,107 @@
+import { Date, TimeQuantity } from '../interpreter/Value';
+
+import {
+  addTimeQuantities,
+  addTimeQuantity,
+  cmpSpecificities,
+  getHighestSpecificity as getMostSpecific,
+  negateTimeQuantity,
+} from '../date';
+import { getDefined, getInstanceof } from '../utils';
+import { Type, build as t, InferError } from '../type';
+import { OverloadedBuiltinSpec } from './overloadBuiltin';
+
+type OverloadSet = Record<string, OverloadedBuiltinSpec[]>;
+
+export const addDateAndTimeQuantity = (
+  date: Date,
+  timeQuantity: TimeQuantity
+) => {
+  const newDate = addTimeQuantity(
+    date.timeRange.start.getData() as number,
+    timeQuantity
+  );
+
+  return Date.fromDateAndSpecificity(newDate, date.specificity);
+};
+
+export const dateAndTimeQuantityFunctor = (date: Type, timeQuantity: Type) =>
+  Type.combine(date.isDate(), timeQuantity.isTimeQuantity()).mapType(() => {
+    const dateSpecificity = getDefined(date.date);
+
+    const lowestUnit = getMostSpecific(getDefined(timeQuantity.timeUnits));
+
+    if (cmpSpecificities(dateSpecificity, lowestUnit) < 0) {
+      return t.impossible(
+        InferError.expectedButGot(
+          `a time quantity in ${dateSpecificity}s`,
+          `a time quantity in ${lowestUnit}s`
+        )
+      );
+    } else {
+      return date;
+    }
+  });
+
+export const timeQuantityBinopFunctor = (t1: Type, t2: Type) =>
+  Type.combine(t1.isTimeQuantity(), t2.isTimeQuantity()).mapType(() => {
+    const allTimeUnits = new Set([
+      ...getDefined(t1.timeUnits),
+      ...getDefined(t2.timeUnits),
+    ]);
+    return t.timeQuantity([...allTimeUnits]);
+  });
+
+export const dateOverloads: OverloadSet = {
+  '+': [
+    {
+      argTypes: ['date', 'time-quantity'],
+      fnValues: (v1, v2) =>
+        addDateAndTimeQuantity(
+          getInstanceof(v1, Date),
+          getInstanceof(v2, TimeQuantity)
+        ),
+      functor: (date, timeQuantity) =>
+        dateAndTimeQuantityFunctor(date, timeQuantity),
+    },
+    {
+      argTypes: ['time-quantity', 'date'],
+      fnValues: (v1, v2) =>
+        addDateAndTimeQuantity(
+          getInstanceof(v2, Date),
+          getInstanceof(v1, TimeQuantity)
+        ),
+      functor: (timeQuantity, date) =>
+        dateAndTimeQuantityFunctor(date, timeQuantity),
+    },
+    {
+      argTypes: ['time-quantity', 'time-quantity'],
+      fnValues: (v1, v2) =>
+        addTimeQuantities(
+          getInstanceof(v1, TimeQuantity),
+          getInstanceof(v2, TimeQuantity)
+        ),
+      functor: (t1, t2) => timeQuantityBinopFunctor(t1, t2),
+    },
+  ],
+  '-': [
+    {
+      argTypes: ['time-quantity', 'time-quantity'],
+      fnValues: (v1, v2) =>
+        addTimeQuantities(
+          getInstanceof(v1, TimeQuantity),
+          negateTimeQuantity(getInstanceof(v2, TimeQuantity))
+        ),
+      functor: (t1, t2) => timeQuantityBinopFunctor(t1, t2),
+    },
+    {
+      argTypes: ['date', 'time-quantity'],
+      fnValues: (v1, v2) =>
+        addDateAndTimeQuantity(
+          getInstanceof(v1, Date),
+          negateTimeQuantity(getInstanceof(v2, TimeQuantity))
+        ),
+      functor: (t1, t2) => dateAndTimeQuantityFunctor(t1, t2),
+    },
+  ],
+};

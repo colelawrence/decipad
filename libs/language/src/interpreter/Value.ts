@@ -5,6 +5,7 @@ import {
   addTimeQuantity,
   cmpSpecificities,
   getSpecificity,
+  sortTimeUnits,
 } from '../date';
 
 export interface SimpleValue {
@@ -64,11 +65,20 @@ export class Date implements SimpleValue {
 
 export class TimeQuantity implements SimpleValue {
   cardinality = 1;
+  timeUnits = new Map<Time.Unit, number>();
 
-  timeUnits: Map<Time.Unit, number>;
+  constructor(
+    timeUnits: TimeQuantity['timeUnits'] | Partial<Record<Time.Unit, number>>
+  ) {
+    const entries =
+      timeUnits instanceof Map
+        ? timeUnits.entries()
+        : (Object.entries(timeUnits) as Iterable<[Time.Unit, number]>);
 
-  constructor(timeUnits: TimeQuantity['timeUnits']) {
-    this.timeUnits = timeUnits;
+    const unsorted = new Map(entries);
+    for (const unit of sortTimeUnits(unsorted.keys())) {
+      this.timeUnits.set(unit, getDefined(unsorted.get(unit)));
+    }
   }
 
   static fromASTArgs(args: AST.TimeQuantity['args']): TimeQuantity {
@@ -156,7 +166,11 @@ export class Column implements SimpleValue {
 
     const array = [];
 
-    for (let cur = start; cur <= end; cur = addTimeQuantity(cur, [[by, 1]])) {
+    for (
+      let cur = start;
+      cur <= end;
+      cur = addTimeQuantity(cur, new TimeQuantity({ [by]: 1 }))
+    ) {
       array.push(Date.fromDateAndSpecificity(cur, startD.specificity));
     }
 

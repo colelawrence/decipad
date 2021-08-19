@@ -4,6 +4,7 @@ import { AST } from '..';
 import { n, pairwise, getDefined } from '../utils';
 import * as Time from './time-types';
 
+export * from './time-quantities';
 export { Time };
 
 /*
@@ -21,7 +22,10 @@ export { Time };
 const dateSpecificities = ['year', 'month', 'day', 'time'];
 const timeSpecificities = ['hour', 'minute', 'second', 'millisecond'];
 
-const timeUnitToJSDateUnit: Record<Time.Unit, [Time.JSDateUnit, number]> = {
+export const timeUnitToJSDateUnit: Record<
+  Time.Unit,
+  [Time.JSDateUnit, number]
+> = {
   year: ['year', 1],
   quarter: ['month', 3],
   month: ['month', 1],
@@ -36,7 +40,7 @@ const timeUnitToJSDateUnit: Record<Time.Unit, [Time.JSDateUnit, number]> = {
 export const getJSDateUnitAndMultiplier = (unit: Time.Unit) =>
   timeUnitToJSDateUnit[unit];
 
-const jsUnitToIndex: Record<Time.JSDateUnit, number> = {
+export const jsUnitToIndex: Record<Time.JSDateUnit, number> = {
   year: 0,
   month: 1,
   day: 2,
@@ -44,6 +48,18 @@ const jsUnitToIndex: Record<Time.JSDateUnit, number> = {
   minute: 4,
   second: 5,
   millisecond: 6,
+};
+
+export const timeUnitToIndex: Record<Time.Unit, number> = {
+  year: 0,
+  quarter: 1,
+  month: 2,
+  week: 3,
+  day: 4,
+  hour: 5,
+  minute: 6,
+  second: 7,
+  millisecond: 8,
 };
 
 // Deal with annoying intersections
@@ -68,7 +84,7 @@ export const getSpecificity = (thing?: string): Time.Specificity => {
   throw new Error(`panic: expected Time.Specificity, got ${thing}`);
 };
 
-const getJSDateUnit = (thing: AnyUnit) => {
+export const getJSDateUnit = (thing: AnyUnit) => {
   if (thing in timeUnitToJSDateUnit) {
     // Eliminate quarter, week
     [thing] = timeUnitToJSDateUnit[thing as Time.Unit];
@@ -89,10 +105,7 @@ export const getTimeUnit = (thing: string) => {
   }
 };
 
-export const cmpSpecificities = (
-  left: Time.Specificity,
-  right: Time.Specificity
-): number => {
+export const cmpSpecificities = (left: string, right: string): number => {
   const leftIdx = dateSpecificities.indexOf(getSpecificity(left));
   const rightIdx = dateSpecificities.indexOf(getSpecificity(right));
 
@@ -105,6 +118,16 @@ export const sortSpecificities = (specificities: AnyUnit[]) => {
   ];
   return uniqueSpecificities.sort((a, b) => cmpSpecificities(a, b));
 };
+
+export const sortTimeUnits = (toSort: Iterable<Time.Unit>) => {
+  const uniqueUnits = [...new Set(toSort)];
+  return uniqueUnits.sort((a, b) =>
+    Math.sign(timeUnitToIndex[a] - timeUnitToIndex[b])
+  );
+};
+
+export const getHighestSpecificity = (specificities: AnyUnit[]) =>
+  getDefined(sortSpecificities(specificities).pop());
 
 const cmpJSDateUnits = (left: Time.JSDateUnit, right: Time.JSDateUnit) => {
   const leftIdx = jsUnitToIndex[left];
@@ -234,72 +257,6 @@ export function stringifyDate(
 
   return out;
 }
-
-// Strategy taken from date-fns getDaysInMonth -- seems to be timezone agnostic
-const getDaysInMonth = (year: number, month: number) => {
-  const d = new Date(0);
-  d.setFullYear(year, month /* next month */, 0 /* last day of prev month */);
-  d.setHours(0, 0, 0, 0);
-  return d.getDate();
-};
-
-// Strategy taken from date-fns addMonths, but this one works in UTC
-const addMonths = (date: number, months: number) => {
-  const dateArray = dateToArray(date);
-
-  const [desiredYear, desiredMonth] = dateToArray(
-    arrayToDate([dateArray[0], dateArray[1] + months])
-  );
-
-  const daysInDesiredMonth = getDaysInMonth(desiredYear, desiredMonth);
-
-  const [, , day, ...rest] = dateArray;
-
-  return arrayToDate([
-    desiredYear,
-    desiredMonth,
-    Math.min(day, daysInDesiredMonth),
-    ...rest,
-  ]);
-};
-
-export const addSingleQuantity = (
-  date: number,
-  quantity: number,
-  timeUnit: Time.Unit
-): number => {
-  const [composedUnit, compositeMultiplier] = getDefined(
-    timeUnitToJSDateUnit[timeUnit],
-    `bad time unit ${timeUnit}`
-  );
-
-  timeUnit = composedUnit;
-  quantity *= compositeMultiplier;
-
-  if (timeUnit === 'year') {
-    return addMonths(date, quantity * 12);
-  } else if (timeUnit === 'month') {
-    return addMonths(date, quantity);
-  } else {
-    // JS Date and Date.UTC support out-of-bounds values,
-    // by rolling over to the next second/minute/hour/day/year
-    // So a naive += is appropriate.
-    const dateArray = dateToArray(date);
-
-    dateArray[jsUnitToIndex[getJSDateUnit(timeUnit)]] += quantity;
-
-    return arrayToDate(dateArray);
-  }
-};
-
-export const addTimeQuantity = (
-  date: number,
-  quantities: [unit: Time.Unit, quantity: number][]
-) =>
-  quantities.reduce(
-    (date, [unit, quant]) => addSingleQuantity(date, quant, unit),
-    date
-  );
 
 export const dateNodeToSpecificity = (
   nodeArgs: AST.Date['args']

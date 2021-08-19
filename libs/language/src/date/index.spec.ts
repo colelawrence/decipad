@@ -4,9 +4,9 @@ import {
   getDateFromAstForm,
   parseUTCDate,
   stringifyDate,
-  addTimeQuantity,
   getSpecificity,
   sortSpecificities,
+  sortTimeUnits,
   arrayToDate,
 } from './index';
 
@@ -32,6 +32,14 @@ it('can sort specificities', () => {
   ).toEqual(['month', 'day', 'time']);
 });
 
+it('can sort time units', () => {
+  expect(sortTimeUnits(['minute', 'month', 'day'])).toEqual([
+    'month',
+    'day',
+    'minute',
+  ]);
+});
+
 it('can parse a date from an array of elements', () => {
   expect(arrayToDate(['2020', 1, 10, /* T */ 11, 30, 13, 123])).toEqual(
     Date.UTC(2020, 0, 10, 11, 30, 13, 123)
@@ -46,56 +54,6 @@ it('can parse a date from an array of elements', () => {
   expect(arrayToDate([2020])).toEqual(Date.UTC(2020, 0));
 
   expect(arrayToDate([2020, '01'])).toEqual(Date.UTC(2020, 0));
-});
-
-describe('time quantities', () => {
-  it('can add time quantities to a date', () => {
-    expect(addTimeQuantity(parseUTCDate('2020-01-01'), [['day', 10]])).toEqual(
-      parseUTCDate('2020-01-11')
-    );
-
-    expect(
-      addTimeQuantity(parseUTCDate('2020-01-01'), [
-        ['minute', 10],
-        ['second', 1],
-      ])
-    ).toEqual(parseUTCDate('2020-01-01T00:10:01'));
-
-    // Rolling over powered by the JS Date API
-    expect(
-      addTimeQuantity(parseUTCDate('2020-01-01'), [['second', 69]])
-    ).toEqual(parseUTCDate('2020-01-01T00:01:09'));
-  });
-
-  it('can add composite quantities', () => {
-    expect(addTimeQuantity(parseUTCDate('2020-01-01'), [['year', 1]])).toEqual(
-      parseUTCDate('2021-01-01')
-    );
-
-    expect(
-      addTimeQuantity(parseUTCDate('2020-01-01'), [['quarter', 1]])
-    ).toEqual(parseUTCDate('2020-04-01'));
-  });
-
-  it("rounds down the day if it's over the end of a month", () => {
-    // February is a good example
-    expect(addTimeQuantity(parseUTCDate('2020-01-31'), [['month', 1]])).toEqual(
-      parseUTCDate('2020-02-29')
-    );
-    expect(addTimeQuantity(parseUTCDate('2021-01-31'), [['month', 1]])).toEqual(
-      parseUTCDate('2021-02-28')
-    );
-
-    // Same thing but with DST -- we use Date.UTC but just in case
-    expect(addTimeQuantity(parseUTCDate('2020-05-31'), [['month', 1]])).toEqual(
-      parseUTCDate('2020-06-30')
-    );
-
-    // How about an entire year?
-    expect(addTimeQuantity(parseUTCDate('2020-02-29'), [['year', 1]])).toEqual(
-      parseUTCDate('2021-02-28')
-    );
-  });
 });
 
 it('can parse a date', () => {

@@ -1,3 +1,4 @@
+import { Class } from 'utility-types';
 import { AST, Time } from '.';
 
 export { date } from './date';
@@ -204,13 +205,9 @@ export const getDefined = <T>(
   }
 };
 
-type ClassOf<T> = {
-  new (...x: unknown[]): T;
-};
-
 export const getInstanceof = <T>(
   thing: T | unknown,
-  cls: ClassOf<T>,
+  cls: Class<T>,
   message = `getInstanceof expected an instance of ${
     cls?.name ?? 'a specific class'
   }`

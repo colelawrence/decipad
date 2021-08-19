@@ -89,6 +89,13 @@ export const objectToTupleValue = (
   return Column.fromNamedValues(values, Object.keys(obj)).getData();
 };
 
+type ObjectOf<V> = {
+  [key: string]: V;
+};
+export const objectToMap = <K extends string, V, Obj extends ObjectOf<V>>(
+  obj: Obj
+): Map<K, V> => new Map(Object.entries(obj) as [key: K, val: V][]);
+
 // External data utils
 
 export function readFile(path: string): Buffer {

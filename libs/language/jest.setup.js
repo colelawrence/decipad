@@ -1,5 +1,11 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import isoFetch from 'isomorphic-fetch';
 import parseDataUrl from 'data-urls';
+/* eslint-enable import/no-extraneous-dependencies */
+import { Date as IDate, TimeQuantity } from './src/interpreter/Value';
+import { stringifyDate } from './src/date';
+import { InferError } from './src/type';
+
 // import { ReadableStream } from "web-streams-polyfill/ponyfill";
 
 // Rounded equality -- for functional tests not to care about rounding errors
@@ -21,6 +27,35 @@ expect.extend({
 
     return { message, pass };
   },
+});
+
+// Snapshot serializer for interpreter values
+expect.addSnapshotSerializer({
+  test: (v) => v instanceof IDate,
+  print: ({ specificity, timeRange }) =>
+    `DeciDate(${specificity} ${stringifyDate(
+      timeRange.start.value,
+      specificity
+    )})`,
+});
+
+expect.addSnapshotSerializer({
+  test: (v) => v instanceof InferError,
+  print: ({ spec: { errType, ...errData } }) => {
+    const errDataString = Object.entries(errData)
+      .map(([key, value]) => `"${key}" => ${JSON.stringify(value)}`)
+      .join(', ');
+
+    return `InferError.${errType}(${errDataString})`;
+  },
+});
+
+expect.addSnapshotSerializer({
+  test: (v) => v instanceof TimeQuantity,
+  print: ({ timeUnits }) =>
+    `TimeQuantity({ ${[...timeUnits.entries()]
+      .map(([unitName, quantity]) => `${unitName}: ${quantity}`)
+      .join(', ')} })`,
 });
 
 function fetch(resource, init) {
