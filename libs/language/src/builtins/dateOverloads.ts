@@ -17,10 +17,7 @@ export const addDateAndTimeQuantity = (
   date: Date,
   timeQuantity: TimeQuantity
 ) => {
-  const newDate = addTimeQuantity(
-    date.timeRange.start.getData() as number,
-    timeQuantity
-  );
+  const newDate = addTimeQuantity(date.getData(), timeQuantity);
 
   return Date.fromDateAndSpecificity(newDate, date.specificity);
 };

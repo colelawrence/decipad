@@ -7,6 +7,7 @@ import {
   objectToTupleType,
   objectToTupleValue,
 } from './testUtils';
+import { parseUTCDate } from './date';
 
 describe('basic code', () => {
   it('runs basic operations', async () => {
@@ -393,7 +394,7 @@ describe('Dates', () => {
         Time = date(2020-10-10 10:30)
       `)
     ).toMatchObject({
-      value: [Array(2).fill(Date.UTC(2020, 9, 10, 10, 30))],
+      value: [parseUTCDate('2020-10-10T10:30')],
     });
   });
 
@@ -408,11 +409,7 @@ describe('Dates', () => {
     ).toMatchObject({
       value: [
         objectToTupleValue({
-          Months: [
-            [Date.UTC(2020, 8), Date.UTC(2020, 9) - 1],
-            [Date.UTC(2020, 9), Date.UTC(2020, 10) - 1],
-            [Date.UTC(2020, 10), Date.UTC(2020, 11) - 1],
-          ],
+          Months: [Date.UTC(2020, 8), Date.UTC(2020, 9), Date.UTC(2020, 10)],
           Days: [true, false, false],
         }),
       ],

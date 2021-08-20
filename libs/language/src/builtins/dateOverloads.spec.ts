@@ -52,14 +52,14 @@ describe('common functions', () => {
       addDateAndTimeQuantity(
         IDate.fromDateAndSpecificity(parseUTCDate('2020'), 'year'),
         new TimeQuantity({ year: 1 })
-      ).getData()[0]
+      ).getData()
     ).toEqual(parseUTCDate('2021'));
 
     expect(
       addDateAndTimeQuantity(
         IDate.fromDateAndSpecificity(parseUTCDate('2020-01-01'), 'day'),
         new TimeQuantity({ year: -1, month: 1 })
-      ).getData()[0]
+      ).getData()
     ).toEqual(parseUTCDate('2019-02-01'));
 
     expect(

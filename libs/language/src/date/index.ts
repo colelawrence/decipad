@@ -1,5 +1,3 @@
-import produce from 'immer';
-
 import { AST } from '..';
 import { n, pairwise, getDefined } from '../utils';
 import * as Time from './time-types';
@@ -138,21 +136,14 @@ const cmpJSDateUnits = (left: Time.JSDateUnit, right: Time.JSDateUnit) => {
 
 // Dates are ranges -- this function cuts up a date to its closest specificity
 export const cleanDate = (date: number, specificity: Time.Specificity) => {
-  if (specificity === 'time') return [date, date];
+  if (specificity === 'time') return date;
 
-  const segmentsAtRangeStart = dateToArray(date).slice(
+  const necessarySegments = dateToArray(date).slice(
     0,
     jsUnitToIndex[specificity] + 1
   );
-  const segmentsAtRangeEnd = produce(segmentsAtRangeStart, (newSegments) => {
-    const last = newSegments.length - 1;
-    newSegments[last] += 1;
-  });
 
-  return [
-    arrayToDate(segmentsAtRangeStart),
-    arrayToDate(segmentsAtRangeEnd) - 1,
-  ];
+  return arrayToDate(necessarySegments);
 };
 
 export const dateToArray = (date: Date | number) => {

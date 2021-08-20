@@ -372,10 +372,9 @@ ${'' /* Get capital needed */}
 
   // https://www.notion.so/decipad/New-Business-Line-556720d7ca974cd9a88456b44302cc1a
   test('New business line', async () => {
-    const period = Array.from({ length: 5 }, (_, idx) => [
-      Date.UTC(2022, idx, 1),
-      Date.UTC(2022, idx + 1, 1) - 1,
-    ]);
+    const period = Array.from({ length: 5 }, (_, idx) =>
+      Date.UTC(2022, idx, 1)
+    );
     expect(
       await runCodeForVariables(
         `

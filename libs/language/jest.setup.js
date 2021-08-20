@@ -32,10 +32,10 @@ expect.extend({
 // Snapshot serializer for interpreter values
 expect.addSnapshotSerializer({
   test: (v) => v instanceof IDate,
-  print: ({ specificity, timeRange }) =>
-    `DeciDate(${specificity} ${stringifyDate(
-      timeRange.start.value,
-      specificity
+  print: (date) =>
+    `DeciDate(${date.specificity} ${stringifyDate(
+      date.getData(),
+      date.specificity
     )})`,
 });
 

@@ -117,10 +117,7 @@ describe('sequences', () => {
           n('ref', 'month')
         )
       )
-    ).toEqual([
-      [parseUTCDate('2020-01'), parseUTCDate('2020-02') - 1],
-      [parseUTCDate('2020-02'), parseUTCDate('2020-03') - 1],
-    ]);
+    ).toEqual([parseUTCDate('2020-01'), parseUTCDate('2020-02')]);
   });
 
   it('ensures the time quantity is not more specific than the date', async () => {
@@ -218,10 +215,7 @@ describe('dates', () => {
   const d = parseUTCDate;
 
   it('can evaluate dates', async () => {
-    expect(await runOne(date('2021-10-11', 'month'))).toEqual([
-      d('2021-10'),
-      d('2021-11') - 1, // Last millisecond of october
-    ]);
+    expect(await runOne(date('2021-10-11', 'month'))).toEqual(d('2021-10'));
   });
 
   it('can evaluate date functions', async () => {
@@ -241,10 +235,7 @@ describe('dates', () => {
 
 describe('Time quantities', () => {
   it('can be evaluated', async () => {
-    const q = timeQuantity({
-      year: 4,
-      day: 3,
-    });
+    const q = timeQuantity({ year: 4, day: 3 });
     expect(await runOne(q)).toEqual([
       ['year', 4],
       ['day', 3],
@@ -353,16 +344,9 @@ describe('imported data', () => {
       ],
       [1, 2, 3.4, 5, 6.8, 7, 8, 9, 10, 11],
       [
-        [1623974400000, 1623974400000],
-        [1624060800000, 1624060800000],
-        [1624147200000, 1624147200000],
-        [1624233600000, 1624233600000],
-        [1624320000000, 1624320000000],
-        [1624406400000, 1624406400000],
-        [1624492800000, 1624492800000],
-        [1624579200000, 1624579200000],
-        [1624665600000, 1624665600000],
-        [1624752000000, 1624752000000],
+        1623974400000, 1624060800000, 1624147200000, 1624233600000,
+        1624320000000, 1624406400000, 1624492800000, 1624579200000,
+        1624665600000, 1624752000000,
       ],
     ]);
   });

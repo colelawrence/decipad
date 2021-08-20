@@ -77,26 +77,15 @@ it('can stringify a date', () => {
 });
 
 it('can round a date into a range', () => {
-  expect(cleanDate(d('2020-01-15'), 'year')).toEqual([
-    d('2020'),
-    d('2021') - 1,
-  ]);
-
-  expect(cleanDate(d('2020-01-15'), 'month')).toEqual([
-    d('2020-01'),
-    d('2020-02') - 1,
-  ]);
-
-  expect(cleanDate(d('2020-05-05T10:00Z'), 'day')).toEqual([
-    d('2020-05-05'),
-    d('2020-05-06') - 1,
-  ]);
+  expect(cleanDate(d('2020-01-15'), 'year')).toEqual(d('2020'));
+  expect(cleanDate(d('2020-01-15'), 'month')).toEqual(d('2020-01'));
+  expect(cleanDate(d('2020-05-05T10:00Z'), 'day')).toEqual(d('2020-05-05'));
 });
 
 it('does not round times', () => {
   const date = d('2020-05-05T10:00:00.004Z');
   expect(!Number.isNaN(date)).toEqual(true);
-  expect(cleanDate(date, 'time')).toEqual([date, date]);
+  expect(cleanDate(date, 'time')).toEqual(date);
 });
 
 it("gets a date from an AST date's arguments", () => {

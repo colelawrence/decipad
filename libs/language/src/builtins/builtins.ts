@@ -1,7 +1,7 @@
 import { produce } from 'immer';
 import { Type, build as t } from '../type';
-import { getDefined } from '../utils';
-import { AnyValue, fromJS, Scalar } from '../interpreter/Value';
+import { getDefined, getInstanceof } from '../utils';
+import { AnyValue, fromJS, Scalar, Date } from '../interpreter/Value';
 
 import { overloadBuiltin } from './overloadBuiltin';
 import { BuiltinSpec } from './interfaces';
@@ -214,19 +214,23 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
   },
   containsdate: {
     argCount: 2,
-    fn: ([rStart, rEnd], [dStart, dEnd]) => rStart <= dStart && rEnd >= dEnd,
+    fnValues: (range, date) => {
+      const [rStart, rEnd] = range.getData() as number[];
+      const dateVal = getInstanceof(date, Date);
+      return fromJS(rStart <= dateVal.getData() && rEnd >= dateVal.getEnd());
+    },
     functor: (a: Type, b: Type) =>
       Type.combine(a.getRangeOf().isDate(), b.isDate(), t.boolean()),
   },
   // Date stuff (TODO operator overloading)
   dateequals: {
     argCount: 2,
-    fn: ([aStart, aEnd], [bStart, bEnd]) => aStart === bStart && aEnd === bEnd,
+    fn: (date1, date2) => date1 === date2,
     functor: dateCmpFunctor,
   },
   dategte: {
     argCount: 2,
-    fn: ([aStart], [bStart]) => aStart >= bStart,
+    fn: (date1, date2) => date1 >= date2,
     functor: dateCmpFunctor,
   },
   // Reduce funcs

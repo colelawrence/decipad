@@ -25,7 +25,7 @@ const d = parseUTCDate;
 
 it('can represent a date', () => {
   const date = Date.fromDateAndSpecificity(d('2020-01-04'), 'month');
-  expect(date.getData()).toEqual([d('2020-01'), d('2020-02') - 1]);
+  expect(date.getData()).toEqual(d('2020-01'));
 });
 
 it('can represent a time quantity', () => {
@@ -51,8 +51,5 @@ it('can represent a column of dates', () => {
     Date.fromDateAndSpecificity(d('2021-06-15'), 'month'),
   ]);
 
-  expect(dates.getData()).toEqual([
-    [d('2021-02'), d('2021-03') - 1],
-    [d('2021-06'), d('2021-07') - 1],
-  ]);
+  expect(dates.getData()).toEqual([d('2021-02'), d('2021-06')]);
 });

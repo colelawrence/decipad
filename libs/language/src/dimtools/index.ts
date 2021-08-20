@@ -89,7 +89,7 @@ export const automapValues = (
 
         return Values.Column.fromValues(mappedValues);
       } else {
-        throw new Error('panic; mismatched column lengths');
+        throw new Error('panic: mismatched column lengths');
       }
     } else {
       return mapFn(values);

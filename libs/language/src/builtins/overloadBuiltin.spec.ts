@@ -1,11 +1,4 @@
-import {
-  Column,
-  Date,
-  fromJS,
-  Range,
-  Scalar,
-  TimeQuantity,
-} from '../interpreter/Value';
+import { Column, Date, fromJS, TimeQuantity } from '../interpreter/Value';
 import { InferError, build as t } from '../type';
 import {
   getOverloadedTypeFromType,
@@ -48,11 +41,7 @@ describe('utils', () => {
     expect(getOverloadedTypeFromValue(fromJS('hi'))).toEqual('string');
     expect(getOverloadedTypeFromValue(fromJS(10))).toEqual('number');
     expect(
-      getOverloadedTypeFromValue(
-        new Date(
-          new Range({ start: fromJS(0) as Scalar, end: fromJS(1) as Scalar })
-        )
-      )
+      getOverloadedTypeFromValue(Date.fromDateAndSpecificity(0, 'time'))
     ).toEqual('date');
     expect(getOverloadedTypeFromValue(new TimeQuantity(new Map()))).toEqual(
       'time-quantity'

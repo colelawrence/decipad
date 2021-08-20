@@ -1,8 +1,8 @@
 import { AST, Time, Interpreter } from '..';
 import { pairwise, getDefined } from '../utils';
 import {
-  cleanDate,
   addTimeQuantity,
+  cleanDate,
   cmpSpecificities,
   getSpecificity,
   sortTimeUnits,
@@ -40,26 +40,35 @@ export class Date implements SimpleValue {
   cardinality = 1;
 
   specificity: Time.Specificity = 'time';
-  timeRange: Range;
+  moment: number;
 
-  constructor(timeRange: Date['timeRange']) {
-    this.timeRange = timeRange;
+  constructor(date: number, specificity: Time.Specificity) {
+    this.moment = cleanDate(date, specificity);
+    this.specificity = specificity;
   }
 
-  static fromDateAndSpecificity(
-    date: number,
-    specificity: Time.Specificity
-  ): Date {
-    const [start, end] = cleanDate(date, specificity);
-    const d = new Date(
-      Range.fromBounds(Scalar.fromValue(start), Scalar.fromValue(end))
-    );
-    d.specificity = specificity;
-    return d;
+  static fromDateAndSpecificity(date: number, specificity: Time.Specificity) {
+    return new Date(date, specificity);
   }
 
   getData() {
-    return this.timeRange.getData() as number[];
+    return this.moment;
+  }
+
+  /**
+   * Dates such as month, day and year, have a start and end. getData() gets us the first millisecond of that range. getEnd gets us the last.
+   */
+  getEnd() {
+    if (this.specificity === 'time') {
+      return this.moment;
+    } else {
+      return (
+        addTimeQuantity(
+          this.moment,
+          new TimeQuantity({ [this.specificity]: 1 })
+        ) - 1
+      );
+    }
   }
 }
 
@@ -103,12 +112,9 @@ export class Range implements SimpleValue {
 
   static fromBounds(start: Value, end: Value): Range {
     if (start instanceof Date && end instanceof Date) {
-      const startStart = start.timeRange.getData()[0];
-      const endEnd = end.timeRange.getData()[1];
-
       return Range.fromBounds(
-        Scalar.fromValue(startStart),
-        Scalar.fromValue(endEnd)
+        Scalar.fromValue(start.moment),
+        Scalar.fromValue(end.getEnd())
       );
     } else if (start instanceof Scalar && end instanceof Scalar) {
       return new Range({ start, end });
@@ -157,8 +163,8 @@ export class Column implements SimpleValue {
   }
 
   static fromDateSequence(startD: Date, endD: Date, by: Time.Unit): Column {
-    const [start] = startD.getData();
-    const [end] = endD.getData();
+    const start = startD.getData();
+    const end = endD.getData();
 
     if (cmpSpecificities(getSpecificity(by), startD.specificity) > 0) {
       throw new Error('panic: time quantity more specific than the input date');
