@@ -5,24 +5,15 @@ import { Button } from '../../atoms';
 import { NotebookListHeader, AccountAvatar } from '../../molecules';
 import { AccountMenu } from '../../organisms';
 import { smallestDesktop, smallestMobile } from '../../primitives';
+import { notebookList } from '../../styles';
 import { noop, viewportCalc } from '../../utils';
 
 const styles = css({
-  padding: `${viewportCalc(
-    smallestMobile,
-    20,
-    smallestDesktop,
-    36,
-    'px',
-    'vmax'
-  )} ${viewportCalc(
-    smallestMobile,
-    20,
-    smallestDesktop,
-    48,
-    'px',
-    'vw'
-  )} ${viewportCalc(smallestMobile, 12, smallestDesktop, 20, 'px', 'vmax')}`,
+  padding: `
+    ${viewportCalc(smallestMobile, 20, smallestDesktop, 36, 'px', 'vmax')}
+    ${notebookList.sidePadding}
+    ${viewportCalc(smallestMobile, 12, smallestDesktop, 20, 'px', 'vmax')}
+  `,
 
   display: 'flex',
   justifyContent: 'space-between',
