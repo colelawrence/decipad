@@ -33,10 +33,7 @@ export const dateAndTimeQuantityFunctor = (date: Type, timeQuantity: Type) =>
 
     if (cmpSpecificities(dateSpecificity, lowestUnit) < 0) {
       return t.impossible(
-        InferError.expectedButGot(
-          `a time quantity in ${dateSpecificity}s`,
-          `a time quantity in ${lowestUnit}s`
-        )
+        InferError.mismatchedSpecificity(dateSpecificity, lowestUnit)
       );
     } else {
       return date;

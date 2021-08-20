@@ -1,4 +1,4 @@
-import { AST, Type } from '..';
+import { AST, Time, Type } from '..';
 import { OverloadTypeName } from '../builtins/overloadBuiltin';
 
 type ErrSpec =
@@ -20,6 +20,11 @@ type ErrSpec =
     }
   | {
       errType: 'unexpectedEmptyColumn';
+    }
+  | {
+      errType: 'mismatchedSpecificity';
+      expectedSpecificity: Time.Specificity;
+      gotSpecificity: Time.Specificity;
     }
   | {
       errType: 'columnContainsInconsistentType';
@@ -56,6 +61,10 @@ function specToString(spec: ErrSpec): string {
     }
     case 'unexpectedEmptyColumn': {
       return `Unexpected empty column`;
+    }
+    case 'mismatchedSpecificity': {
+      const { expectedSpecificity, gotSpecificity } = spec;
+      return `Expected time specific up to the ${expectedSpecificity}, but got ${gotSpecificity}`;
     }
     case 'columnContainsInconsistentType': {
       const { cellType, got } = spec;
@@ -112,6 +121,17 @@ export class InferError {
   static unexpectedEmptyColumn() {
     return new InferError({
       errType: 'unexpectedEmptyColumn',
+    });
+  }
+
+  static mismatchedSpecificity(
+    expectedSpecificity: Time.Specificity,
+    gotSpecificity: Time.Specificity
+  ) {
+    return new InferError({
+      errType: 'mismatchedSpecificity',
+      expectedSpecificity,
+      gotSpecificity,
     });
   }
 

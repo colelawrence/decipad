@@ -17,6 +17,12 @@ it('can stringify errors', () => {
   );
 
   expect(
+    InferError.mismatchedSpecificity('month', 'time').message
+  ).toMatchInlineSnapshot(
+    `"Expected time specific up to the month, but got time"`
+  );
+
+  expect(
     InferError.columnContainsInconsistentType(t.number(), t.string()).message
   ).toMatchInlineSnapshot(`"Column cannot contain both number and string"`);
 

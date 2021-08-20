@@ -18,13 +18,18 @@ describe('common functions', () => {
       dateAndTimeQuantityFunctor(t.date('month'), t.timeQuantity(['day']))
         .errorCause
     ).toMatchInlineSnapshot(
-      `InferError.expectedButGot("expectedButGot" => ["a time quantity in months","a time quantity in days"])`
+      `InferError.mismatchedSpecificity("expectedSpecificity" => "month", "gotSpecificity" => "day")`
     );
 
     expect(
       dateAndTimeQuantityFunctor(t.date('day'), t.timeQuantity(['quarter']))
         .date
     ).toMatchInlineSnapshot(`"day"`);
+
+    expect(
+      dateAndTimeQuantityFunctor(t.date('time'), t.timeQuantity(['minute']))
+        .date
+    ).toMatchInlineSnapshot(`"time"`);
   });
 
   it('timeQuantityBinopFunctor', () => {
@@ -56,6 +61,13 @@ describe('common functions', () => {
         new TimeQuantity({ year: -1, month: 1 })
       ).getData()[0]
     ).toEqual(parseUTCDate('2019-02-01'));
+
+    expect(
+      addDateAndTimeQuantity(
+        IDate.fromDateAndSpecificity(parseUTCDate('2020-01-01 10:30'), 'time'),
+        new TimeQuantity({ hour: 1 })
+      ).getData()[0]
+    ).toEqual(parseUTCDate('2020-01-01 11:30'));
   });
 });
 
@@ -63,7 +75,7 @@ it('date + time-quantity', () => {
   expect(
     plus.functor(t.date('month'), t.timeQuantity(['day'])).errorCause
   ).toMatchInlineSnapshot(
-    `InferError.expectedButGot("expectedButGot" => ["a time quantity in months","a time quantity in days"])`
+    `InferError.mismatchedSpecificity("expectedSpecificity" => "month", "gotSpecificity" => "day")`
   );
   expect(
     plus.functor(t.date('month'), t.timeQuantity(['year'])).date
