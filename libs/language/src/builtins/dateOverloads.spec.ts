@@ -66,7 +66,7 @@ describe('common functions', () => {
       addDateAndTimeQuantity(
         IDate.fromDateAndSpecificity(parseUTCDate('2020-01-01 10:30'), 'time'),
         new TimeQuantity({ hour: 1 })
-      ).getData()[0]
+      ).getData()
     ).toEqual(parseUTCDate('2020-01-01 11:30'));
   });
 });
