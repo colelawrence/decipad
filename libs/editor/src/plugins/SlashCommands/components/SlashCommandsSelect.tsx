@@ -119,7 +119,7 @@ export const SlashCommandsSelect = ({
                   flexDirection: 'column',
                 }}
               >
-                <p style={{ fontWeight: 'bold', paddingBottom: '3px' }}>
+                <p style={{ fontWeight: 'bold', paddingBottom: '6px' }}>
                   {option.name}
                 </p>
                 <p style={{ fontSize: '12px', color: '#89898E' }}>
