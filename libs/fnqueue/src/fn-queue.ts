@@ -1,29 +1,24 @@
 type AsyncFunction = () => Promise<unknown>;
-// eslint-disable-next-line no-unused-vars
 type Fn = (value: unknown) => void;
 
-export function fnQueue() {
+interface FunctionQueue {
+  push: (fn: AsyncFunction) => Promise<unknown>;
+  flush: () => Promise<unknown>;
+  pendingCount: () => number;
+}
+
+export function fnQueue(): FunctionQueue {
   const fns: AsyncFunction[] = [];
   let processing = 0;
   const flushes: Fn[] = [];
 
-  function push(fn: AsyncFunction) {
-    let resolve: Fn;
-    let reject: Fn;
-    const p = new Promise((res, rej) => {
-      resolve = res;
-      reject = rej;
-    });
-    fns.push(async () => {
-      try {
-        resolve(await fn());
-      } catch (err) {
-        reject(err);
-      }
-    });
-    work();
+  async function processOne() {
+    const fn = fns.shift();
+    if (!fn) {
+      throw new Error('Expected to have a function left in the queue');
+    }
 
-    return p;
+    return fn();
   }
 
   async function work() {
@@ -45,13 +40,23 @@ export function fnQueue() {
     }
   }
 
-  async function processOne() {
-    const fn = fns.shift();
-    if (!fn) {
-      throw new Error('Expected to have a function left in the queue');
-    }
+  function push(fn: AsyncFunction) {
+    let resolve: Fn;
+    let reject: Fn;
+    const p = new Promise((res, rej) => {
+      resolve = res;
+      reject = rej;
+    });
+    fns.push(async () => {
+      try {
+        resolve(await fn());
+      } catch (err) {
+        reject(err);
+      }
+    });
+    work();
 
-    return fn();
+    return p;
   }
 
   async function flush() {

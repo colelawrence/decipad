@@ -1,16 +1,14 @@
-import camelcase from 'camelcase';
 import { FC, ReactNode } from 'react';
 import { useDrop, DropTargetMonitor } from 'react-dnd';
 import { NativeTypes } from 'react-dnd-html5-backend';
-import { useToasts } from 'react-toast-notifications';
-import { Editor, Transforms } from 'slate';
-import slug from 'slug';
-import { nanoid } from 'nanoid';
-import { ELEMENT_IMPORT_DATA } from '@decipad/ui';
+import { Editor } from 'slate';
 import { DropHint } from './DropHint';
+import { UploadDataOptions } from '../plugins/UploadData/useUploadDataPlugin';
 
 interface DropFileProps {
   editor?: Editor;
+  padId: string;
+  startUpload: (options: UploadDataOptions) => void;
   children: ReactNode;
 }
 
@@ -21,8 +19,12 @@ const maxFileSizeBytes = 100000;
 
 const baseStyle = { position: 'relative' };
 
-export function DropFile({ editor, children }: DropFileProps): ReturnType<FC> {
-  const { addToast } = useToasts();
+export function DropFile({
+  editor,
+  padId,
+  children,
+  startUpload,
+}: DropFileProps): ReturnType<FC> {
   const [{ canDrop, isOver }, drop] = useDrop({
     accept: [NativeTypes.FILE],
     drop: async (item: Item) => {
@@ -31,23 +33,10 @@ export function DropFile({ editor, children }: DropFileProps): ReturnType<FC> {
       }
       for (const file of item.files) {
         if (isFileAcceptable(file)) {
-          const block = {
-            id: nanoid(),
-            type: ELEMENT_IMPORT_DATA,
-            'data-varname': varNamify(file.name),
-            // eslint-disable-next-line no-await-in-loop
-            'data-href': await fileToDataURL(file),
-            'data-contenttype': file.type,
-            children: [
-              {
-                text: '', // empty text node
-              },
-            ],
-          };
-          Transforms.insertNodes(editor, [block], { voids: true });
-          Transforms.move(editor);
-          addToast(`File ${file.name} successfully imported`, {
-            appearance: 'success',
+          // eslint-disable-next-line no-await-in-loop
+          startUpload({
+            padId,
+            file,
           });
         }
       }
@@ -74,11 +63,6 @@ export function DropFile({ editor, children }: DropFileProps): ReturnType<FC> {
   );
 }
 
-async function fileToDataURL(file: File): Promise<string> {
-  const data = Buffer.from(await file.arrayBuffer()).toString('base64');
-  return `data:${file.type};base64,${data}`;
-}
-
 function isFileAcceptable(file: File): boolean {
   if (acceptableFileTypes.indexOf(file.type) < 0) {
     // eslint-disable-next-line no-console
@@ -96,11 +80,4 @@ function isFileAcceptable(file: File): boolean {
   }
 
   return true;
-}
-
-function varNamify(fileName: string): string {
-  return camelcase(slug(fileName), {
-    pascalCase: true,
-    preserveConsecutiveUppercase: true,
-  });
 }

@@ -632,6 +632,34 @@
           }
         }
       }
+    },
+    "fnqueue": {
+      "root": "libs/fnqueue",
+      "sourceRoot": "libs/fnqueue/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/fnqueue/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/fnqueue"
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/fnqueue"],
+          "options": {
+            "jestConfig": "libs/fnqueue/jest.config.js",
+            "codeCoverage": true
+          }
+        }
+      }
     }
   }
 }

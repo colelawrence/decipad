@@ -4,6 +4,7 @@ const { nanoid } = require('nanoid');
 const { sync: mkdirpSync} = require('mkdirp');
 const { join } = require('path');
 const { tmpdir } = require('os');
+const { readFileSync: file } = require('fs');
 
 let s3rver;
 
@@ -23,6 +24,7 @@ const options = {
     },
     {
       name: 'attachments',
+      configs: [file(join(__dirname, 'cors-config.xml'))],
     }
   ],
   silent: process.env.NODE_ENV === 'production',

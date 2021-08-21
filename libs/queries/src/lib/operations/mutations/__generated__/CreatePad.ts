@@ -8,7 +8,7 @@
 // ====================================================
 
 export interface CreatePad_createPad {
-  __typename: 'Pad';
+  __typename: "Pad";
   id: string;
   name: string;
 }

@@ -5,5 +5,9 @@
     "allowJs": true
   },
   "include": ["src"],
-  "references": [{ "path": "../testutils" }, { "path": "../interfaces" }]
+  "references": [
+    { "path": "../testutils" },
+    { "path": "../interfaces" },
+    { "path": "../fnqueue" }
+  ]
 }

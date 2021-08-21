@@ -69,7 +69,7 @@ function testWithSandbox(
       const firstArg = args[0];
       await sandboxStartedPromise;
       try {
-        return firstArg !== undefined ? fn(firstArg) : fn();
+        return firstArg !== undefined ? await fn(firstArg) : await fn();
       } catch (err) {
         showEnv();
         throw err;

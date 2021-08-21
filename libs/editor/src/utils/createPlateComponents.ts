@@ -35,6 +35,7 @@ import { withStyledDraggables } from './withStyledDraggables';
 import { withStyledPlaceHolders } from './withStyledPlaceholders';
 
 type PluginKey = DefaultPlatePluginKey | typeof ELEMENT_IMPORT_DATA;
+
 type PluginComponent = FunctionComponent<
   SPRenderElementProps | SPRenderLeafProps | ImportDataElementProps
 >;
@@ -51,6 +52,8 @@ export const createPlateComponents = (): Partial<
     [ELEMENT_H3]: SubheadingElement,
     [ELEMENT_BLOCKQUOTE]: BlockquoteElement,
     [ELEMENT_CODE_BLOCK]: ModelBlockElement,
+
+    // Import data
     [ELEMENT_IMPORT_DATA]: ImportDataElement,
 
     // Marks

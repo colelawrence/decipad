@@ -62,6 +62,9 @@
     "eslint-config-decipad": {
       "tags": []
     },
+    "fnqueue": {
+      "tags": []
+    },
     "graphqlserver": {
       "tags": []
     },

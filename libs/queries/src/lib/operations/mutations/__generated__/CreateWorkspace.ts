@@ -8,7 +8,7 @@
 // ====================================================
 
 export interface CreateWorkspace_createWorkspace {
-  __typename: 'Workspace';
+  __typename: "Workspace";
   id: string;
   name: string;
 }

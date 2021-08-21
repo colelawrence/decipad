@@ -165,6 +165,7 @@ test('attach files', (ctx) => {
               fileName
               fileType
               fileSize
+              url
               uploadedBy {
                 id
               }
@@ -182,38 +183,20 @@ test('attach files', (ctx) => {
       fileType: 'text/csv',
     });
 
+    expect(attachment!.url).toBeDefined();
     expect(attachment!.fileSize).toBe(233);
     expect(attachment!.uploadedBy).toMatchObject({ id: 'test user id 1' });
     expect(attachment!.pad).toMatchObject({ id: pad.id });
   });
 
   it('other user cannot access attachment contents', async () => {
-    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
-    await expect(
-      client.query({
-        query: ctx.gql`
-          query {
-            getAttachmentURL(attachmentId: "${attachment!.id}")
-          }
-        `,
-      })
-    ).rejects.toThrow('Forbidden');
+    const call = ctx.http.withAuth((await ctx.auth('test user id 2')).token);
+    await expect(call(attachment!.url!)).rejects.toThrow('Forbidden');
   });
 
   it('same user can access attachment contents', async () => {
-    const client = ctx.graphql.withAuth(await ctx.auth());
-    const url = (
-      await client.query({
-        query: ctx.gql`
-          query {
-            getAttachmentURL(attachmentId: "${attachment!.id}")
-          }
-        `,
-      })
-    ).data.getAttachmentURL;
-    expect(typeof url).toBe('string');
-
-    const result = await ctx.http.call(url);
+    const call = ctx.http.withAuth((await ctx.auth()).token);
+    const result = await call(attachment!.url!);
     expect(result.headers.get('Content-Type')).toBe('text/csv');
     const fileContents = new Uint8Array(await result.arrayBuffer());
     const expectedFileContents = await readFile(
@@ -252,6 +235,7 @@ test('attach files', (ctx) => {
                   fileName
                   fileType
                   fileSize
+                  url
                   uploadedBy {
                     id
                   }
@@ -282,19 +266,8 @@ test('attach files', (ctx) => {
   });
 
   it('other user now has access to attachment', async () => {
-    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
-    const url = (
-      await client.query({
-        query: ctx.gql`
-          query {
-            getAttachmentURL(attachmentId: "${attachment!.id}")
-          }
-        `,
-      })
-    ).data.getAttachmentURL;
-    expect(typeof url).toBe('string');
-
-    const result = await ctx.http.call(url);
+    const call = ctx.http.withAuth((await ctx.auth('test user id 2')).token);
+    const result = await call(attachment!.url!);
     expect(result.headers.get('Content-Type')).toBe('text/csv');
     const fileContents = new Uint8Array(await result.arrayBuffer());
     const expectedFileContents = await readFile(

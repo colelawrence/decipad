@@ -6,6 +6,7 @@ import assert from 'assert';
 import { createReplica, Replica, ChangeEvent } from '@decipad/replica';
 import { LRUStorage } from '@decipad/lrustorage';
 import { ReplicaStorage } from '@decipad/interfaces';
+import { fnQueue } from '@decipad/fnqueue';
 import { DocSync } from './docsync';
 import {
   fromSlateOpType,
@@ -14,7 +15,6 @@ import {
 } from './from-slate-op';
 import { toSlateOps } from './to-slate-ops';
 import { toJS } from './utils/to-js';
-import { fnQueue } from './utils/fn-queue';
 import { observeSubscriberCount } from './utils/observe-subscriber-count';
 import initialEditorValue from './utils/initial-editor-value';
 import { uri } from './utils/uri';

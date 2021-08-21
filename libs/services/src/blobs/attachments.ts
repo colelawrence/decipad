@@ -28,7 +28,7 @@ export async function getCreateAttachmentForm(
   fileType: string
 ): Promise<CreateAttachmentFormResult> {
   return new Promise((resolve, reject) => {
-    const key = `/pads/${padId}/${fileName}/${nanoid()}`;
+    const key = `pads/${padId}/${fileName}/${nanoid()}`;
     try {
       s3.createPresignedPost(
         {
@@ -60,9 +60,6 @@ export async function getCreateAttachmentForm(
 
 export async function getSize(fileName: string): Promise<number> {
   return new Promise((resolve, reject) => {
-    if (fileName.startsWith('/')) {
-      fileName = fileName.substring(1);
-    }
     try {
       s3.headObject(
         {

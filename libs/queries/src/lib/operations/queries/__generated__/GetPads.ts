@@ -8,13 +8,13 @@
 // ====================================================
 
 export interface GetPads_pads_items {
-  __typename: 'Pad';
+  __typename: "Pad";
   id: string;
   name: string;
 }
 
 export interface GetPads_pads {
-  __typename: 'PagedPadResult';
+  __typename: "PagedPadResult";
   items: GetPads_pads_items[];
 }
 

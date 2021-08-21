@@ -83,7 +83,7 @@ export const inferExpression = withErrorSource(
       }
       case 'range': {
         const [start, end] = await pSeries(
-          expr.args.map((expr) => () => inferExpression(ctx, expr))
+          expr.args.map((expr) => () => inferExpression(ctx, getDefined(expr)))
         );
 
         return Type.combine(start, end).mapType(() => {

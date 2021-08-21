@@ -8,7 +8,7 @@
 // ====================================================
 
 export interface GetPadById_getPadById {
-  __typename: 'Pad';
+  __typename: "Pad";
   id: string;
   name: string;
 }

@@ -25,6 +25,7 @@ get /api/userkeyvalidations/:userkeyvalidationid/validate
 get /api/externaldatasources/:id/auth
 get /api/externaldatasources/:id/callback
 get /api/externaldatasources/:id/data
+get /api/pads/:padid/attachments/:attachmentid
 
 @ws
 
@@ -155,6 +156,7 @@ futurefileattachments
   resource_uri String
   filename String
   filetype String
+  expires_at TTL
 
 fileattachments
   id *String

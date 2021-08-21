@@ -8,7 +8,7 @@
 // ====================================================
 
 export interface DuplicatePad_duplicatePad {
-  __typename: 'Pad';
+  __typename: "Pad";
   id: string;
   name: string;
 }

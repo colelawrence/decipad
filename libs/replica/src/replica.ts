@@ -9,9 +9,9 @@ import {
   combineLatest,
 } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ReplicaStorage, ReplicationStatus } from '@decipad/interfaces';
 import assert from 'assert';
-import { fnQueue } from './utils/fn-queue';
+import { ReplicaStorage, ReplicationStatus } from '@decipad/interfaces';
+import { fnQueue } from '@decipad/fnqueue';
 import { Sync } from './sync';
 import { ReplicaSync } from './replica-sync';
 import { observeSubscriberCount } from './utils/observe-subscriber-count';

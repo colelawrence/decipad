@@ -20,6 +20,8 @@ import {
   SlashCommandsSelect,
   useSlashCommandsPlugin,
 } from './plugins/SlashCommands';
+import { useUploadDataPlugin } from './plugins/UploadData/useUploadDataPlugin';
+import { UploadDialogue } from './plugins/UploadData/components/UploadDialogue';
 import { useImportDataPlugin } from './plugins/ImportData/useImportDataPlugin';
 
 export { AnonymousDocSyncProvider, DocSyncProvider } from './contexts/DocSync';
@@ -42,6 +44,12 @@ const SlateEditor = ({ padId, autoFocus }: EditorProps) => {
 
   const notebookTitlePlugin = useNotebookTitlePlugin({ padId });
 
+  // upload / import data
+  const {
+    startUpload,
+    uploadState,
+    clearAll: clearAllUploads,
+  } = useUploadDataPlugin({ editor });
   const importDataPlugin = useImportDataPlugin();
 
   const editorPlugins = useMemo(
@@ -67,7 +75,7 @@ const SlateEditor = ({ padId, autoFocus }: EditorProps) => {
   return (
     <ResultsContextProvider value={results}>
       <ProgramBlocksContextProvider value={programBlocks}>
-        <DropFile editor={editor}>
+        <DropFile editor={editor} startUpload={startUpload} padId={padId}>
           <Plate
             id={editorId}
             plugins={editorPlugins}
@@ -77,6 +85,10 @@ const SlateEditor = ({ padId, autoFocus }: EditorProps) => {
           >
             <FormattingToolbar />
             <SlashCommandsSelect {...getSlashCommandsProps()} />
+            <UploadDialogue
+              uploadState={uploadState}
+              clearAll={clearAllUploads}
+            />
           </Plate>
         </DropFile>
       </ProgramBlocksContextProvider>

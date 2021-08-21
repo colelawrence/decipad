@@ -19,6 +19,7 @@ export default gql`
     fileSize: Int!
     uploadedBy: User
     createdAt: DateTime
+    url: String!
     pad: Pad
   }
 
@@ -28,8 +29,6 @@ export default gql`
       fileName: String!
       fileType: String!
     ): CreateAttachmentForm!
-
-    getAttachmentURL(attachmentId: ID!): String
   }
 
   extend type Mutation {

@@ -9,6 +9,7 @@
     { "path": "../replica" },
     { "path": "../lrustorage" },
     { "path": "../testutils" },
-    { "path": "../interfaces" }
+    { "path": "../interfaces" },
+    { "path": "../fnqueue" }
   ]
 }

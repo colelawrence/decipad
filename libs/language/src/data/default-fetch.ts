@@ -4,6 +4,9 @@ export default async function defaultFetch(
   url: string
 ): Promise<ExternalData.FetchResult> {
   const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(await response.text());
+  }
   const result: AsyncIterable<Uint8Array> = {
     [Symbol.asyncIterator]() {
       let replied = false;

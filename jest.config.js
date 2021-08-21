@@ -15,5 +15,6 @@ module.exports = {
     '<rootDir>/libs/lrustorage',
     '<rootDir>/libs/interfaces',
     '<rootDir>/libs/services',
+    '<rootDir>/libs/fnqueue',
   ],
 };

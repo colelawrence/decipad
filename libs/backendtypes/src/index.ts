@@ -121,6 +121,7 @@ export type Attachment = {
   uploadedBy?: User;
   padId: string;
   pad?: Pad;
+  url?: string;
   createdAt?: number;
   fileSize: number;
 };

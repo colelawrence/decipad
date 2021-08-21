@@ -8,7 +8,7 @@
 // ====================================================
 
 export interface RenameWorkspace_updateWorkspace {
-  __typename: 'Workspace';
+  __typename: "Workspace";
   id: string;
   name: string;
 }

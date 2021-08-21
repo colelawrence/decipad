@@ -11,16 +11,24 @@ import { strictEqual as expectEqual } from 'assert';
 import {
   getCreateAttachmentForm as getForm,
   getSize,
-  getURL,
 } from '@decipad/services/blobs/attachments';
 import tables, { allPages } from '@decipad/services/tables';
+import { app as appConfig } from '@decipad/config';
 import { requireUser, check } from '../authorization';
 import parseResourceUri from '../utils/resource/parse-uri';
+import timestamp from '../utils/timestamp';
+
+const ONE_HOUR_IN_SECONDS = 60 * 60;
 
 export interface ICreateAttachmentFormParams {
   padId: string;
   fileName: string;
   fileType: string;
+}
+
+function attachmentUrl(padId: string, attachmentId: string): string {
+  const config = appConfig();
+  return `${config.urlBase}${config.apiPathBase}/pads/${padId}/attachments/${attachmentId}`;
 }
 
 export default {
@@ -43,6 +51,7 @@ export default {
         user_filename: userFileName,
         filename: form.fileName,
         filetype: form.fileType,
+        expires_at: timestamp() + ONE_HOUR_IN_SECONDS,
       };
       await data.futurefileattachments.create(newFileAttachment);
 
@@ -54,22 +63,6 @@ export default {
           value,
         })),
       };
-    },
-
-    async getAttachmentURL(
-      _: unknown,
-      { attachmentId }: { attachmentId: string },
-      context: GraphqlContext
-    ): Promise<string> {
-      const data = await tables();
-      const attachment = await data.fileattachments.get({ id: attachmentId });
-      if (!attachment) {
-        throw new UserInputError('No such attachment was found');
-      }
-
-      await check(attachment.resource_uri, context, 'READ');
-
-      return getURL(attachment.filename);
     },
   },
 
@@ -170,6 +163,10 @@ export default {
     async uploadedBy(attachment: Attachment): Promise<User | undefined> {
       const data = await tables();
       return data.users.get({ id: attachment.uploadedByUserId });
+    },
+
+    url(attachment: Attachment): string {
+      return attachmentUrl(attachment.padId, attachment.id);
     },
 
     async pad(attachment: Attachment): Promise<Pad | undefined> {

@@ -8,7 +8,7 @@
 // ====================================================
 
 export interface CountPads_pads {
-  __typename: 'PagedPadResult';
+  __typename: "PagedPadResult";
   count: number;
 }
 
