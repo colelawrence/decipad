@@ -1,3 +1,4 @@
+import { CSSObject } from '@emotion/react';
 import { smallestMobile, smallestDesktop } from '../primitives';
 import { viewportCalc } from '../utils';
 
@@ -10,6 +11,15 @@ export const sidePadding = viewportCalc(
   'vw'
 );
 
-export const gridTemplateColumns = `${542 / 1064}fr ${282 / 1064}fr ${
-  240 / 1064
-}fr`;
+export const gridStyles: CSSObject = {
+  width: '100%',
+  display: 'grid',
+  gridTemplate: `
+    "icon title       updated emptycol actions" 1fr
+    "icon description updated emptycol actions" 1fr
+    /32px 506fr       282fr   240fr    28px
+  `,
+  alignItems: 'center',
+  rowGap: '8px',
+  columnGap: '14px',
+};

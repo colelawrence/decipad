@@ -4,13 +4,12 @@ import { ComponentProps, FC } from 'react';
 import { Divider, IconButton } from '../../atoms';
 import { Create } from '../../icons';
 import { NavigationList, WorkspaceItem } from '../../molecules';
-import { cssVar, p13Regular } from '../../primitives';
+import { p13Regular } from '../../primitives';
+import { card } from '../../styles';
 import { noop } from '../../utils';
 
 const styles = css({
-  backgroundColor: cssVar('backgroundColor'),
-  border: `1px solid ${cssVar('highlightColor')}`,
-  borderRadius: '8px',
+  ...card.styles,
 
   padding: '16px',
 

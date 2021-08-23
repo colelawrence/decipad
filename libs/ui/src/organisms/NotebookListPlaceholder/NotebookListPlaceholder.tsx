@@ -12,12 +12,8 @@ const styles = css({
   rowGap: '28px',
 });
 
-const { gridTemplateColumns } = notebookList;
-const headerStyles = css({
-  display: 'grid',
-  gridTemplateColumns,
-  gridTemplateRows: '8px',
-});
+const { gridStyles } = notebookList;
+const headerStyles = css(gridStyles);
 
 const numberOfItemPlaceholders = 10;
 const bodyStyles = css({
@@ -31,13 +27,13 @@ export const NotebookListPlaceholder = (): ReturnType<FC> => {
   return (
     <div aria-label="Notebook list loading" css={styles}>
       <div css={headerStyles}>
-        <div css={{ width: '32px' }}>
+        <div css={{ gridArea: 'icon', maxWidth: '32px' }}>
           <Placeholder lessRound />
         </div>
-        <div css={{ width: '32px' }}>
+        <div css={{ gridArea: 'updated', maxWidth: '32px' }}>
           <Placeholder lessRound />
         </div>
-        <div css={{ width: '32px' }}>
+        <div css={{ gridArea: 'emptycol', maxWidth: '32px' }}>
           <Placeholder lessRound />
         </div>
       </div>

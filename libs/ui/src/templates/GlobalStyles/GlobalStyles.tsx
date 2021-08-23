@@ -17,6 +17,7 @@ import { ALLOW_DARK_THEME_LOCAL_STORAGE_KEY } from '../../utils';
 
 const darkTheme = {
   ...setCssVar('backgroundColor', black.rgb),
+  ...setCssVar('offColor', grey400.rgb),
 
   ...setCssVar('highlightColor', grey400.rgb),
 

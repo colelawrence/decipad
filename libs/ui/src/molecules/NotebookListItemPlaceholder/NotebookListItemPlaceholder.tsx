@@ -3,36 +3,33 @@ import { FC } from 'react';
 import { Placeholder } from '../../atoms';
 import { notebookList } from '../../styles';
 
-const { gridTemplateColumns } = notebookList;
-const styles = css({
-  display: 'grid',
-  gridTemplateColumns,
+const verticalPadding = 3;
+
+const { gridStyles } = notebookList;
+const styles = css(gridStyles, {
   alignItems: 'end',
+  padding: `${verticalPadding}px 0`,
 });
 
-const leftStyles = css({
-  paddingRight: '80px',
+const iconStyles = css({
+  margin: `${-verticalPadding}px 0`,
+  height: '38px',
 
   display: 'grid',
-  gridTemplateColumns: '32px 1fr',
-  columnGap: '14px',
 });
+const titleStyles = css({
+  height: '12px',
+  maxWidth: `${(100 * 124) / 506}%`,
 
-const twoRowStyles = css({
-  padding: '3px 0',
   display: 'grid',
-  grid: `
-    "top    .     " 12px
-    "bottom bottom" 12px
-    / ${124 / 440}fr ${(440 - 124) / 440}fr
-  `,
-  rowGap: '12px',
 });
+const descriptionStyles = css({
+  height: '12px',
+  maxWidth: `${(100 * 440) / 506}%`,
 
+  display: 'grid',
+});
 const middleAndRightStyles = css({
-  padding: '3px 0',
-
-  boxSizing: 'content-box',
   height: '12px',
   maxWidth: '64px',
 
@@ -42,21 +39,19 @@ const middleAndRightStyles = css({
 export const NotebookListItemPlaceholder = (): ReturnType<FC> => {
   return (
     <div role="presentation" css={styles}>
-      <div css={leftStyles}>
-        <Placeholder />
-        <div css={twoRowStyles}>
-          <div css={{ gridArea: 'top', display: 'grid' }}>
-            <Placeholder />
-          </div>
-          <div css={{ gridArea: 'bottom', display: 'grid' }}>
-            <Placeholder />
-          </div>
-        </div>
-      </div>
-      <div css={middleAndRightStyles}>
+      <div css={[iconStyles, { gridArea: 'icon' }]}>
         <Placeholder />
       </div>
-      <div css={middleAndRightStyles}>
+      <div css={[titleStyles, { gridArea: 'title' }]}>
+        <Placeholder />
+      </div>
+      <div css={[descriptionStyles, { gridArea: 'description' }]}>
+        <Placeholder />
+      </div>
+      <div css={[middleAndRightStyles, { gridArea: 'updated' }]}>
+        <Placeholder />
+      </div>
+      <div css={[middleAndRightStyles, { gridArea: 'emptycol' }]}>
         <Placeholder />
       </div>
     </div>

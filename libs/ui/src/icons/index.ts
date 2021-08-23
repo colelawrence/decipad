@@ -1,6 +1,9 @@
+export { Actions } from './Actions/Actions';
 export { Caret } from './Caret/Caret';
 export { Create } from './Create/Create';
+export { Delete } from './Delete/Delete';
 export { Folder } from './Folder/Folder';
+export { File } from './File/File';
 export { Globe } from './Globe/Globe';
 export { Logout } from './Logout/Logout';
 export { Settings } from './Settings/Settings';

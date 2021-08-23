@@ -25,7 +25,13 @@ export const IconButton = ({
   onClick = noop,
 }: IconButtonProps): ReturnType<FC> => {
   return (
-    <button css={styles} onClick={onClick}>
+    <button
+      css={styles}
+      onClick={(event) => {
+        event.preventDefault();
+        onClick();
+      }}
+    >
       <span css={iconStyles}>{children}</span>
     </button>
   );

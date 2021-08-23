@@ -1,9 +1,10 @@
 import type { Property } from 'csstype';
 
-import { black, grey100, grey300, grey400, white } from './color';
+import { black, grey100, grey300, grey400, offWhite, white } from './color';
 
 export interface CssVariables {
   readonly backgroundColor: Property.Color;
+  readonly offColor: Property.Color;
 
   readonly highlightColor: Property.Color;
 
@@ -15,6 +16,7 @@ export interface CssVariables {
 }
 const defaults: CssVariables = {
   backgroundColor: white.rgb,
+  offColor: offWhite.rgb,
 
   highlightColor: grey100.rgb,
 
