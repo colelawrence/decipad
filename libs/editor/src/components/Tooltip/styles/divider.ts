@@ -1,6 +1,6 @@
-import styled from '@emotion/styled';
+import { css } from '@emotion/react';
 
-export const Divider = styled('div')({
+export const dividerStyle = css({
   backgroundColor: '#f0f0f2',
   margin: '0 8px',
   height: '30px',

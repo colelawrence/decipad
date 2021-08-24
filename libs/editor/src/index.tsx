@@ -8,21 +8,21 @@ import { FC, useMemo, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DropFile } from './components/DropFile';
-import { FormattingToolbar } from './components/FormattingToolbar';
+import { Tooltip } from './components/Tooltip/Tooltip';
 import { components, options, plugins } from './configuration';
 import { useDocSyncPlugin } from './plugins/DocSync/useDocSyncPlugin';
+import { useImportDataPlugin } from './plugins/ImportData/useImportDataPlugin';
 import {
-  useLanguagePlugin,
   editorProgramBlocks,
+  useLanguagePlugin,
 } from './plugins/Language/useLanguagePlugin';
 import { useNotebookTitlePlugin } from './plugins/NotebookTitle/useNotebookTitlePlugin';
 import {
   SlashCommandsSelect,
   useSlashCommandsPlugin,
 } from './plugins/SlashCommands';
-import { useUploadDataPlugin } from './plugins/UploadData/useUploadDataPlugin';
 import { UploadDialogue } from './plugins/UploadData/components/UploadDialogue';
-import { useImportDataPlugin } from './plugins/ImportData/useImportDataPlugin';
+import { useUploadDataPlugin } from './plugins/UploadData/useUploadDataPlugin';
 
 export { AnonymousDocSyncProvider, DocSyncProvider } from './contexts/DocSync';
 
@@ -83,7 +83,7 @@ const SlateEditor = ({ padId, autoFocus }: EditorProps) => {
             components={components}
             editableProps={{ autoFocus }}
           >
-            <FormattingToolbar />
+            <Tooltip />
             <SlashCommandsSelect {...getSlashCommandsProps()} />
             <UploadDialogue
               uploadState={uploadState}

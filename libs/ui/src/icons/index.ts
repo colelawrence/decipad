@@ -4,3 +4,7 @@ export { Folder } from './Folder/Folder';
 export { Globe } from './Globe/Globe';
 export { Logout } from './Logout/Logout';
 export { Settings } from './Settings/Settings';
+export { Bold } from './Bold/Bold';
+export { Code } from './Code/Code';
+export { Italic } from './Italic/Italic';
+export { Underline } from './Underline/Underline';
