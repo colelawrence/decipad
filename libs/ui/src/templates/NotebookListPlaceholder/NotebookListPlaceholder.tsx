@@ -7,6 +7,9 @@ import { notebookList } from '../../styles';
 const styles = css({
   height: '100%',
   overflow: 'hidden',
+
+  padding: `${notebookList.verticalPadding} ${notebookList.horizontalPadding}`,
+
   display: 'grid',
   gridTemplateRows: 'auto 1fr',
   rowGap: '28px',

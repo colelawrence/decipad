@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { IconButton } from '../../atoms';
 import { Actions, File } from '../../icons';
 import { NotebookListItemActions } from '../../molecules';
@@ -82,6 +82,8 @@ interface NotebookListItemProps {
 
   readonly href: string;
 
+  readonly actionsOpen?: boolean;
+  readonly toggleActionsOpen?: () => void;
   readonly onDuplicate?: () => void;
   readonly onDelete?: () => void;
 }
@@ -89,11 +91,11 @@ export const NotebookListItem = ({
   name,
   description,
   href,
+  actionsOpen = false,
+  toggleActionsOpen = noop,
   onDuplicate = noop,
   onDelete = noop,
 }: NotebookListItemProps): ReturnType<FC> => {
-  const [actionsOpen, setActionsOpen] = useState(false);
-
   return (
     <div css={{ position: 'relative' }}>
       <Anchor href={href} css={styles}>
@@ -113,7 +115,7 @@ export const NotebookListItem = ({
             },
           ]}
         >
-          <IconButton onClick={() => setActionsOpen(!actionsOpen)}>
+          <IconButton onClick={toggleActionsOpen}>
             <Actions />
           </IconButton>
         </div>

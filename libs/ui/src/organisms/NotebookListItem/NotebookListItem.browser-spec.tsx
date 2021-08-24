@@ -1,5 +1,4 @@
 import { render, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import domToPlaywright from 'dom-to-playwright';
 import { ComponentProps } from 'react';
 import { findParentWithStyle } from '../../test-utils';
@@ -42,11 +41,9 @@ it('keeps showing the actions menu button when the menu is open', async () => {
   const { getByText, getByTitle } = render(
     <>
       <p>somewhere else</p>
-      <NotebookListItem {...props} name="My Notebook" />
+      <NotebookListItem {...props} name="My Notebook" actionsOpen />
     </>
   );
-  userEvent.click(getByTitle(/actions/i));
-
   const { select } = await domToPlaywright(page, document);
 
   await page.hover(select(getByText('somewhere else')));

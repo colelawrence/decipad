@@ -2,7 +2,7 @@ import { CSSObject } from '@emotion/react';
 import { smallestMobile, smallestDesktop } from '../primitives';
 import { viewportCalc } from '../utils';
 
-export const sidePadding = viewportCalc(
+export const horizontalPadding = viewportCalc(
   smallestMobile,
   20,
   smallestDesktop,
@@ -10,6 +10,7 @@ export const sidePadding = viewportCalc(
   'px',
   'vw'
 );
+export const verticalPadding = '26px';
 
 export const gridStyles: CSSObject = {
   width: '100%',

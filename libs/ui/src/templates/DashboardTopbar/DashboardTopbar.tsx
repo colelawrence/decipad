@@ -11,7 +11,7 @@ import { noop, viewportCalc } from '../../utils';
 const styles = css({
   padding: `
     ${viewportCalc(smallestMobile, 20, smallestDesktop, 36, 'px', 'vmax')}
-    ${notebookList.sidePadding}
+    ${notebookList.horizontalPadding}
     ${viewportCalc(smallestMobile, 12, smallestDesktop, 20, 'px', 'vmax')}
   `,
 
