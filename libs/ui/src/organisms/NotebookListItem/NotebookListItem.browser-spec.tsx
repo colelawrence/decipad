@@ -13,6 +13,36 @@ afterEach(async () => {
   await jestPlaywright.resetPage();
 });
 
+describe('without a desciprtion', () => {
+  test('the title occupies the combined space', async () => {
+    const { getByText, rerender } = render(
+      <NotebookListItem
+        {...props}
+        name="My Notebook"
+        description="The Description"
+      />
+    );
+    const { select, update } = await domToPlaywright(page, document);
+    const { y: titleY } = (await (await page.$(
+      select(getByText('My Notebook'))
+    ))!.boundingBox())!;
+    const { y: descriptionY } = (await (await page.$(
+      select(getByText('The Description'))
+    ))!.boundingBox())!;
+
+    rerender(
+      <NotebookListItem {...props} name="My Notebook" description={undefined} />
+    );
+    update(document);
+    const { y: combinedY } = (await (await page.$(
+      select(getByText('My Notebook'))
+    ))!.boundingBox())!;
+
+    expect(combinedY).toBeGreaterThan(titleY);
+    expect(combinedY).toBeLessThan(descriptionY);
+  });
+});
+
 it('shows the actions menu button on hover', async () => {
   const { getByText, getByTitle } = render(
     <NotebookListItem {...props} name="My Notebook" />

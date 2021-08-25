@@ -54,6 +54,10 @@ const nameStyles = css({
   ...p14Medium,
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
 });
+const noDescriptionNameStyles = css({
+  gridRowEnd: 'description',
+  alignSelf: 'center',
+});
 const descriptionStyles = css(p13Regular, {
   gridArea: 'description',
   gridColumnEnd: 'emptycol',
@@ -104,14 +108,18 @@ export const NotebookListItem = ({
             <File />
           </span>
         </div>
-        <strong css={nameStyles}>{name}</strong>
+        <strong css={[nameStyles, description || noDescriptionNameStyles]}>
+          {name}
+        </strong>
         <div css={descriptionStyles}>{description}</div>
         <div
           css={[
             actionsStyles,
             { position: 'relative', opacity: 1 },
             actionsOpen || {
-              '*:not(:hover):not(:focus) > &': { opacity: 0 },
+              '@media (pointer: fine)': {
+                '*:not(:hover):not(:focus) > &': { opacity: 0 },
+              },
             },
           ]}
         >

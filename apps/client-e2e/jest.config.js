@@ -14,6 +14,9 @@ module.exports = {
       contextOptions: {
         baseURL: baseUrl,
       },
+      // defaults, here for ease of tweaking
+      launchOptions: { headless: true },
+      browsers: ['chromium'],
     },
   },
   testRegex: 'src/[^/]*\\.ts$',

@@ -1,14 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useMutation, useQuery } from '@apollo/client';
-import {
-  Box,
-  Button,
-  Flex,
-  Grid,
-  Heading,
-  HStack,
-  Icon,
-} from '@chakra-ui/react';
+import { Grid } from '@chakra-ui/react';
 import {
   CountPadsVariables,
   COUNT_PADS,
@@ -28,10 +20,9 @@ import {
   RemovePadVariables,
   REMOVE_PAD,
 } from '@decipad/queries';
-import { EmptyWorkspaceCta, HelpButton, LoadingSpinnerPage } from '@decipad/ui';
+import { NotebookList, NotebookListPlaceholder } from '@decipad/ui';
 import { FC, useCallback, useState } from 'react';
-import { FiFile, FiTrash2, FiCopy } from 'react-icons/fi';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
 import { SideMenu } from '../components/SideMenu';
 import { Topbar } from '../components/Topbar';
@@ -46,13 +37,13 @@ export function Workspace({
 
   const { addToast } = useToasts();
 
-  const { data, loading: workspaceLoading } = useQuery<
-    GetWorkspaceById,
-    GetWorkspaceByIdVariables
-  >(GET_WORKSPACE_BY_ID, {
-    variables: { id: workspaceId },
-    fetchPolicy: 'network-only',
-  });
+  const { data } = useQuery<GetWorkspaceById, GetWorkspaceByIdVariables>(
+    GET_WORKSPACE_BY_ID,
+    {
+      variables: { id: workspaceId },
+      fetchPolicy: 'network-only',
+    }
+  );
 
   const [removePad] = useMutation<RemovePad, RemovePadVariables>(REMOVE_PAD);
   const [duplicatePad] =
@@ -96,17 +87,30 @@ export function Workspace({
       }
     }
   }, [creatingPad, createPad, workspaceId, addToast, history]);
-
-  if (workspaceLoading) {
-    return <LoadingSpinnerPage />;
-  }
-  if (!data) {
-    throw new Error(`Failed to load workspace ${workspaceId}`);
-  }
-  const workspace = data.getWorkspaceById;
-  if (!workspace) {
-    return <>Workspace not found</>;
-  }
+  const handleDuplicateNotebook = (id: string) =>
+    duplicatePad({
+      variables: { id },
+      refetchQueries: ['GetWorkspaceById'],
+      awaitRefetchQueries: true,
+    })
+      .then(() => addToast('Pad duplicated', { appearance: 'info' }))
+      .catch((err) =>
+        addToast(`Error duplicating pad: ${err.message}`, {
+          appearance: 'error',
+        })
+      );
+  const handleDeleteNotebook = (id: string) =>
+    removePad({
+      variables: { id },
+      refetchQueries: ['GetWorkspaceById'],
+      awaitRefetchQueries: true,
+    })
+      .then(() => addToast('Pad removed', { appearance: 'info' }))
+      .catch((err) =>
+        addToast(`Error removing pad: ${err.message}`, {
+          appearance: 'error',
+        })
+      );
 
   return (
     <Grid gridTemplateRows="auto 1fr" height="100%">
@@ -115,86 +119,39 @@ export function Workspace({
         onCreateNotebook={handleCreateNotebook}
       />
       <Grid
+        overflow="hidden"
+        gridTemplateRows="1fr"
         gridTemplateColumns="272px 1fr"
         borderTop="2px solid"
         borderColor="gray.100"
       >
-        <SideMenu currentWorkspace={workspace} />
-        <Grid gridTemplateRows="1fr auto">
-          {workspace.pads.items.length === 0 && (
-            <EmptyWorkspaceCta
-              Heading="h1"
-              onCreateNotebook={handleCreateNotebook}
-            />
+        <SideMenu workspaceId={workspaceId} />
+        <Grid as="main" overflowY="auto">
+          {data ? (
+            data.getWorkspaceById ? (
+              <NotebookList
+                Heading="h1"
+                notebooks={data.getWorkspaceById.pads.items.map((notebook) => ({
+                  ...notebook,
+                  href: `/workspaces/${
+                    // checked a couple lines earlier
+                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                    data.getWorkspaceById!.id
+                  }/pads/${encodeVanityUrlComponent(
+                    notebook.name,
+                    notebook.id
+                  )}`,
+                }))}
+                onCreateNotebook={handleCreateNotebook}
+                onDuplicate={handleDuplicateNotebook}
+                onDelete={handleDeleteNotebook}
+              />
+            ) : (
+              'Workspace not found'
+            )
+          ) : (
+            <NotebookListPlaceholder />
           )}
-          {workspace.pads.items.map((item) => (
-            <Box key={item.id}>
-              <Heading p={6}>Notebooks</Heading>
-              <Grid
-                gridTemplateColumns="1fr auto"
-                borderBottom="2px solid"
-                borderColor="gray.100"
-                mx={6}
-              >
-                <Box
-                  as={Link}
-                  to={`/workspaces/${
-                    workspace.id
-                  }/pads/${encodeVanityUrlComponent(item.name, item.id)}`}
-                >
-                  <HStack py={6}>
-                    <Icon as={FiFile} mr={3} fontSize="1.5rem" />
-                    <Heading size="md" fontWeight="normal">
-                      {item.name}
-                    </Heading>
-                  </HStack>
-                </Box>
-                <Flex alignItems="center">
-                  <Button
-                    alt="Duplicate Notebook"
-                    onClick={() =>
-                      duplicatePad({
-                        variables: { id: item.id },
-                        refetchQueries: ['GetWorkspaceById'],
-                        awaitRefetchQueries: true,
-                      })
-                        .then(() =>
-                          addToast('Pad duplicated', { appearance: 'info' })
-                        )
-                        .catch((err) =>
-                          addToast(`Error duplicating pad: ${err.message}`, {
-                            appearance: 'error',
-                          })
-                        )
-                    }
-                  >
-                    <Icon as={FiCopy} />
-                  </Button>
-                  <Button
-                    alt="Remove Notebook"
-                    onClick={() =>
-                      removePad({
-                        variables: { id: item.id },
-                        refetchQueries: ['GetWorkspaceById'],
-                        awaitRefetchQueries: true,
-                      })
-                        .then(() =>
-                          addToast('Pad removed', { appearance: 'info' })
-                        )
-                        .catch((err) =>
-                          addToast(`Error removing pad: ${err.message}`, {
-                            appearance: 'error',
-                          })
-                        )
-                    }
-                  >
-                    <Icon as={FiTrash2} />
-                  </Button>
-                </Flex>
-              </Grid>
-            </Box>
-          ))}
-          <HelpButton />
         </Grid>
       </Grid>
     </Grid>

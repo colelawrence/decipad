@@ -24,12 +24,13 @@ export async function setUp() {
 }
 
 export async function getPadList(): Promise<PadList> {
-  const anchors = await page.$$('a[href*="/pads/"]');
+  const names = await page.$$('//main//li//a//strong');
   const pads: PadList = [];
-  for (const anchor of anchors) {
+  for (const name of names) {
+    const anchor = await name.evaluateHandle((elem) => elem.closest('a'));
     pads.push({
       anchor,
-      name: (await anchor.textContent()) ?? '',
+      name: (await name.textContent()) ?? '',
       href: await anchor.getAttribute('href'),
     });
   }
@@ -43,15 +44,13 @@ export async function clickNewPadButton() {
 }
 
 export async function removePad(index = 0) {
-  const removeButtons = await page.$$('[alt*="Remove Notebook"]');
-  expect(removeButtons.length).toBeGreaterThanOrEqual(index);
-  const removeButton = removeButtons[index];
+  await page.click(`//main//li[${index + 1}]//button`);
+  const removeButton = (await page.$(`button:has-text("Delete")`))!;
   await Promise.all([page.waitForRequest('/graphql'), removeButton.click()]);
 }
 
 export async function duplicatePad(index = 0) {
-  const duplicateButtons = await page.$$('[alt*="Duplicate Notebook"]');
-  expect(duplicateButtons.length).toBeGreaterThanOrEqual(index);
-  const duplicateButton = duplicateButtons[index];
+  await page.click(`//main//li[${index + 1}]//button`);
+  const duplicateButton = (await page.$(`button:has-text("Duplicate")`))!;
   await Promise.all([page.waitForRequest('/graphql'), duplicateButton.click()]);
 }

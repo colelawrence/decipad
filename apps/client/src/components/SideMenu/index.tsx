@@ -1,31 +1,32 @@
 import { useQuery } from '@apollo/client';
 import { DashboardSidebar } from '@decipad/ui';
-import {
-  GetWorkspaceById_getWorkspaceById,
-  GET_WORKSPACES,
-  GetWorkspaces,
-} from '@decipad/queries';
-import React, { FC, useMemo } from 'react';
+import { GET_WORKSPACES, GetWorkspaces } from '@decipad/queries';
+import { FC } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 
+import { Spinner } from '@chakra-ui/react';
 import { WorkspacePreferences } from './WorkspacePreferences';
 import { CreateWorkspaceModal } from './CreateWorkspaceModal';
 
 export interface SideMenuProps {
-  currentWorkspace: GetWorkspaceById_getWorkspaceById;
+  workspaceId: string;
 }
 
-export const SideMenu = ({
-  currentWorkspace,
-}: SideMenuProps): ReturnType<FC> => {
+export const SideMenu = ({ workspaceId }: SideMenuProps): ReturnType<FC> => {
   const history = useHistory();
   const { url } = useRouteMatch();
 
   const { data } = useQuery<GetWorkspaces>(GET_WORKSPACES);
+  if (!data) {
+    return <Spinner />;
+  }
 
-  const allOtherWorkspaces = useMemo(
-    () => data?.workspaces.filter((w) => w.id !== currentWorkspace.id),
-    [currentWorkspace.id, data?.workspaces]
+  const currentWorkspace = data?.workspaces.find((w) => w.id === workspaceId);
+  if (!currentWorkspace) {
+    throw new Error(`Cannot find workspace ${workspaceId}`);
+  }
+  const allOtherWorkspaces = data?.workspaces.filter(
+    (w) => w.id !== workspaceId
   );
 
   return (
