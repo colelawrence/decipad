@@ -16,3 +16,10 @@ it('links to the notebook with its name', () => {
     '/my-notebook'
   );
 });
+
+it('renders a placeholder for an empty name', () => {
+  const { getByText } = render(
+    <NotebookListItem {...props} name="" href="/my-notebook" />
+  );
+  expect(getByText(/un(named|titled)/i)).toBeVisible();
+});

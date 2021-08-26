@@ -58,6 +58,9 @@ const noDescriptionNameStyles = css({
   gridRowEnd: 'description',
   alignSelf: 'center',
 });
+const noNameNameStyles = css({
+  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+});
 const descriptionStyles = css(p13Regular, {
   gridArea: 'description',
   gridColumnEnd: 'emptycol',
@@ -108,8 +111,14 @@ export const NotebookListItem = ({
             <File />
           </span>
         </div>
-        <strong css={[nameStyles, description || noDescriptionNameStyles]}>
-          {name}
+        <strong
+          css={[
+            nameStyles,
+            name || noNameNameStyles,
+            description || noDescriptionNameStyles,
+          ]}
+        >
+          {name || '<unnamed notebook>'}
         </strong>
         <div css={descriptionStyles}>{description}</div>
         <div
