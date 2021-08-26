@@ -7,6 +7,7 @@ export * from './lib/theme';
 export * from './atoms/Editor';
 
 export * from './templates';
+export * from './pages';
 
 // TODO temporary while some visual components are not in `ui`
 export * as Icons from './icons';

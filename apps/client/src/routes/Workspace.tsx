@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useMutation, useQuery } from '@apollo/client';
-import { Grid } from '@chakra-ui/react';
 import {
   CountPadsVariables,
   COUNT_PADS,
@@ -20,7 +19,7 @@ import {
   RemovePadVariables,
   REMOVE_PAD,
 } from '@decipad/queries';
-import { NotebookList, NotebookListPlaceholder } from '@decipad/ui';
+import { Dashboard, NotebookList, NotebookListPlaceholder } from '@decipad/ui';
 import { FC, useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
@@ -113,47 +112,38 @@ export function Workspace({
       );
 
   return (
-    <Grid gridTemplateRows="auto 1fr" height="100%">
-      <Topbar
-        workspaceId={workspaceId}
-        onCreateNotebook={handleCreateNotebook}
-      />
-      <Grid
-        overflow="hidden"
-        gridTemplateRows="1fr"
-        gridTemplateColumns="272px 1fr"
-        borderTop="2px solid"
-        borderColor="gray.100"
-      >
-        <SideMenu workspaceId={workspaceId} />
-        <Grid as="main" overflowY="auto">
-          {data ? (
-            data.getWorkspaceById ? (
-              <NotebookList
-                Heading="h1"
-                notebooks={data.getWorkspaceById.pads.items.map((notebook) => ({
-                  ...notebook,
-                  href: `/workspaces/${
-                    // checked a couple lines earlier
-                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                    data.getWorkspaceById!.id
-                  }/pads/${encodeVanityUrlComponent(
-                    notebook.name,
-                    notebook.id
-                  )}`,
-                }))}
-                onCreateNotebook={handleCreateNotebook}
-                onDuplicate={handleDuplicateNotebook}
-                onDelete={handleDeleteNotebook}
-              />
-            ) : (
-              'Workspace not found'
-            )
+    <Dashboard
+      topbar={
+        <Topbar
+          workspaceId={workspaceId}
+          onCreateNotebook={handleCreateNotebook}
+        />
+      }
+      sidebar={<SideMenu workspaceId={workspaceId} />}
+      notebookList={
+        data ? (
+          data.getWorkspaceById ? (
+            <NotebookList
+              Heading="h1"
+              notebooks={data.getWorkspaceById.pads.items.map((notebook) => ({
+                ...notebook,
+                href: `/workspaces/${
+                  // checked a couple lines earlier
+                  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                  data.getWorkspaceById!.id
+                }/pads/${encodeVanityUrlComponent(notebook.name, notebook.id)}`,
+              }))}
+              onCreateNotebook={handleCreateNotebook}
+              onDuplicate={handleDuplicateNotebook}
+              onDelete={handleDeleteNotebook}
+            />
           ) : (
-            <NotebookListPlaceholder />
-          )}
-        </Grid>
-      </Grid>
-    </Grid>
+            'Workspace not found'
+          )
+        ) : (
+          <NotebookListPlaceholder />
+        )
+      }
+    />
   );
 }

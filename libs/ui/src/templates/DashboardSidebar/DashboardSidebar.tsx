@@ -17,13 +17,13 @@ export const DashboardSidebar = (
   props: DashboardSidebarProps
 ): ReturnType<FC> => {
   return (
-    <aside css={styles}>
+    <div css={styles}>
       <div css={{ gridRow: 'navigation', display: 'grid' }}>
         <WorkspaceNavigation {...props} />
       </div>
       <div css={{ gridRow: 'switcher', display: 'grid' }}>
         <WorkspaceSwitcher {...props} />
       </div>
-    </aside>
+    </div>
   );
 };

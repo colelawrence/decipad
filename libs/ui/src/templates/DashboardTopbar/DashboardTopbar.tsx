@@ -58,7 +58,7 @@ export const DashboardTopbar = ({
 }: DashboardTopbarProps): ReturnType<React.FC> => {
   const [menuOpen, setMenuOpen] = useState(false);
   return (
-    <header css={styles}>
+    <div css={styles}>
       <div css={leftStyles}>
         <NotebookListHeader
           Heading="h1"
@@ -91,6 +91,6 @@ export const DashboardTopbar = ({
           )}
         </div>
       </div>
-    </header>
+    </div>
   );
 };
