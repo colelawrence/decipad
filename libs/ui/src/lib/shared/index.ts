@@ -1,2 +1,1 @@
-export * from './HelpButton/HelpButton.component';
-export * from './LoadingSpinnerPage/LoadingSpinnerPage.component';
+export { LoadingSpinnerPage } from './LoadingSpinnerPage/LoadingSpinnerPage.component';

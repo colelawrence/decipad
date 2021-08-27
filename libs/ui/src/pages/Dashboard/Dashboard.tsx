@@ -1,10 +1,13 @@
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
+import { HelpButton } from '../../molecules';
 import { cssVar, smallestDesktop } from '../../primitives';
 
+const crossBarsQuery = `@media (min-width: ${smallestDesktop.portrait.width}px)`;
 const styles = css({
   height: '100%',
 
+  position: 'relative',
   display: 'grid',
   gridTemplate: `
     "sidebar      " auto
@@ -12,20 +15,29 @@ const styles = css({
     "notebook-list" auto
     /1fr
   `,
-  [`@media (min-width: ${smallestDesktop.portrait.width}px)`]: {
+  [crossBarsQuery]: {
     gridTemplate: `
       "sidebar topbar       " auto
       "sidebar notebook-list" 1fr
       /272px   1fr
     `,
-
-    '> aside': {
-      borderRight: `1px solid ${cssVar('highlightColor')}`,
-    },
   },
 
   '> *': {
     display: 'grid',
+    overflow: 'hidden',
+  },
+});
+const sidebarStyles = css({
+  [crossBarsQuery]: {
+    borderRight: `1px solid ${cssVar('highlightColor')}`,
+  },
+});
+const helpStyles = css({
+  position: 'absolute',
+  right: '26px',
+  [crossBarsQuery]: {
+    bottom: '82px',
   },
 });
 
@@ -41,9 +53,14 @@ export const Dashboard = ({
 }: DashboardProps): ReturnType<FC> => {
   return (
     <div css={styles}>
-      <main css={{ gridArea: 'notebook-list' }}>{notebookList}</main>
+      <main css={{ gridArea: 'notebook-list', overflowY: 'auto' }}>
+        {notebookList}
+      </main>
       <header css={{ gridArea: 'topbar' }}>{topbar}</header>
-      <aside css={{ gridArea: 'sidebar' }}>{sidebar}</aside>
+      <aside css={[{ gridArea: 'sidebar' }, sidebarStyles]}>{sidebar}</aside>
+      <aside css={[{ gridArea: 'notebook-list' }, helpStyles]}>
+        <HelpButton />
+      </aside>
     </div>
   );
 };

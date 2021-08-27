@@ -59,7 +59,10 @@ export const Button = ({
       disabled={disabled}
       type={submit ? 'submit' : 'button'}
       css={[styles, primary && primaryStyles, extraSlim && extraSlimStyles]}
-      onClick={onClick}
+      onClick={(event) => {
+        event.preventDefault();
+        onClick();
+      }}
     >
       {children}
     </button>

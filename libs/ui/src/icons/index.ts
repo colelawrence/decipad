@@ -5,6 +5,7 @@ export { Delete } from './Delete/Delete';
 export { Folder } from './Folder/Folder';
 export { File } from './File/File';
 export { Globe } from './Globe/Globe';
+export { Info } from './Info/Info';
 export { Logout } from './Logout/Logout';
 export { Settings } from './Settings/Settings';
 export { Bold } from './Bold/Bold';
