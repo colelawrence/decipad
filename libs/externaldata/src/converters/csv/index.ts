@@ -1,0 +1,79 @@
+import {
+  Table,
+  Field,
+  Struct,
+  Builder,
+  Utf8,
+  Float64,
+  Bool,
+  DateMillisecond,
+} from '@apache-arrow/es5-cjs';
+import parseCSV from 'csv-parse';
+import { cast } from './cast';
+
+type AcceptableType = number | boolean | string | Date;
+
+export function csv(source: string): Promise<Table> {
+  return new Promise((resolve, reject) => {
+    let columnNames: string[];
+    const data: AcceptableType[][] = [];
+    const parser = parseCSV({ cast });
+    let isDone = false;
+    let hadFirstRow = false;
+    parser.on('readable', () => {
+      let row: AcceptableType[];
+      while ((row = parser.read())) {
+        if (!isDone) {
+          if (!hadFirstRow) {
+            columnNames = row.map((value) => value.toString());
+            hadFirstRow = true;
+          } else {
+            data.push(row);
+          }
+        }
+      }
+    });
+    parser.once('end', () => {
+      isDone = true;
+      resolve(toTable(columnNames, data));
+    });
+    parser.once('error', reject);
+    parser.end(source);
+  });
+}
+
+function toTable(columnNames: string[], data: AcceptableType[][]): Table {
+  const fields = columnNames.map((columnName, columnIndex) => {
+    const type = columnType(data, columnIndex);
+    const nullable = true;
+    return new Field(columnName, type, nullable);
+  });
+
+  const struct = new Struct(fields);
+  const builder = Builder.new({ type: struct });
+  for (const row of data) {
+    builder.append(row);
+  }
+  builder.finish();
+  return Table.fromStruct(builder.toVector());
+}
+
+function columnType(data: AcceptableType[][], columnIndex: number) {
+  for (let rowIndex = 0; rowIndex < data.length; rowIndex += 1) {
+    const row = data[rowIndex] || [];
+    const cell = row[columnIndex];
+    if (cell instanceof Date) {
+      return new DateMillisecond();
+    }
+    switch (typeof cell) {
+      case 'boolean':
+        return new Bool();
+      case 'number':
+        return new Float64();
+      case 'string':
+        return new Utf8();
+    }
+  }
+  // return default type string
+  return new Utf8();
+}

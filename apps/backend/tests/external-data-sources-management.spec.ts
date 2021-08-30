@@ -1,10 +1,47 @@
 import waitForExpect from 'wait-for-expect';
-import { ExternalDataSource } from '@decipad/backendtypes';
+import { ExternalDataSource, Pad } from '@decipad/backendtypes';
 import test from './sandbox';
+import getDefined from './utils/get-defined';
 
 test('external data sources', (ctx) => {
   const { test: it } = ctx;
+  let pad: Pad | undefined;
   let externalDataSource: ExternalDataSource | undefined;
+
+  beforeAll(async () => {
+    const client = ctx.graphql.withAuth(await ctx.auth());
+
+    const workspace = (
+      await client.mutate({
+        mutation: ctx.gql`
+          mutation {
+            createWorkspace(workspace: { name: "Workspace 1" }) {
+              id
+              name
+            }
+          }
+        `,
+      })
+    ).data.createWorkspace;
+
+    expect(workspace).toMatchObject({ name: 'Workspace 1' });
+
+    pad = (
+      await client.mutate({
+        mutation: ctx.gql`
+          mutation {
+            createPad(
+              workspaceId: "${workspace.id}"
+              pad: { name: "Pad 1" }
+            ) {
+              id
+              name
+            }
+          }
+        `,
+      })
+    ).data.createPad;
+  });
 
   it('can be created', async () => {
     const client = ctx.graphql.withAuth(await ctx.auth());
@@ -15,8 +52,9 @@ test('external data sources', (ctx) => {
           mutation {
             createExternalDataSource(
               dataSource: {
+                padId: "${getDefined(pad).id}"
                 name: "test data source 1"
-                provider: other
+                provider: testdatasource
                 externalId: "external id"
               }
             ) {
@@ -34,7 +72,7 @@ test('external data sources', (ctx) => {
     expect(newDataSource).toMatchObject({
       id: expect.stringMatching(/.+/),
       name: 'test data source 1',
-      provider: 'other',
+      provider: 'testdatasource',
       externalId: 'external id',
     });
 
@@ -163,8 +201,9 @@ test('external data sources', (ctx) => {
           mutation {
             createExternalDataSource(
               dataSource: {
+                padId: "${getDefined(pad).id}"
                 name: "test data source 1"
-                provider: other
+                provider: testdatasource
                 externalId: "external id"
               }
             ) {

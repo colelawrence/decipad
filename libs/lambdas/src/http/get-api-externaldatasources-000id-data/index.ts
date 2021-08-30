@@ -1,23 +1,23 @@
-import { request } from 'http';
-import getBody from 'raw-body';
 import {
   APIGatewayProxyEventV2 as APIGatewayProxyEvent,
   APIGatewayProxyResultV2,
 } from 'aws-lambda';
 import {
+  User,
   ExternalDataSourceRecord,
   ExternalKeyRecord,
 } from '@decipad/backendtypes';
 import tables from '@decipad/services/tables';
 import { authenticate } from '@decipad/services/authentication';
 import { isAuthorized } from '@decipad/services/authorization';
+import { provider as getProvider, encodeTable } from '@decipad/externaldata';
+import { getDefined } from '@decipad/utils';
 import handle from '../handle';
-import getDefined from '../../common/get-defined';
 
 async function checkAccess(
-  event: APIGatewayProxyEvent
+  user: User | null,
+  externalDataSource: ExternalDataSourceRecord
 ): Promise<void | APIGatewayProxyResultV2> {
-  const { user } = await authenticate(event);
   if (!user) {
     return {
       statusCode: 401,
@@ -25,14 +25,7 @@ async function checkAccess(
     };
   }
 
-  const { id } = event.pathParameters || {};
-  if (!id) {
-    return {
-      statusCode: 401,
-      body: 'missing parameters',
-    };
-  }
-  const resource = `/externaldatasources/${id}`;
+  const resource = `/pads/${externalDataSource.padId}`;
   if (!(await isAuthorized(resource, user, 'READ'))) {
     return {
       statusCode: 403,
@@ -43,24 +36,6 @@ async function checkAccess(
   return undefined;
 }
 
-async function getAccessKeys(externalSourceId: string) {
-  const data = await tables();
-
-  const keys = (
-    await data.externaldatasourcekeys.query({
-      IndexName: 'byExternalDataSourceAndStatus',
-      KeyConditionExpression:
-        'externaldatasource_id = :externaldatasource_id and status_code = :status_code',
-      ExpressionAttributeValues: {
-        ':externaldatasource_id': externalSourceId,
-        ':status_code': 'ACTIVE',
-      },
-    })
-  ).Items;
-
-  return keys;
-}
-
 async function fetchExternalDataSource(
   id: string
 ): Promise<ExternalDataSourceRecord | undefined> {
@@ -68,72 +43,75 @@ async function fetchExternalDataSource(
   return data.externaldatasources.get({ id });
 }
 
+async function getAccessKey(
+  externalDataSource: ExternalDataSourceRecord
+): Promise<ExternalKeyRecord | null> {
+  const resource = `/pads/${externalDataSource.padId}`;
+  const data = await tables();
+  const keys = (
+    await data.externaldatasourcekeys.query({
+      IndexName: 'byResource',
+      KeyConditionExpression: 'resource_uri = :resource_uri',
+      ExpressionAttributeValues: {
+        ':resource_uri': resource,
+      },
+    })
+  ).Items;
+
+  return keys[0] || null;
+}
+
 async function fetchData(
   event: APIGatewayProxyEvent,
   source: ExternalDataSourceRecord,
   key: ExternalKeyRecord
 ): Promise<APIGatewayProxyResultV2> {
-  const getThirdPartyUrlFromHeaders =
-    source.provider === 'testdatasource' &&
-    event.headers['x-use-third-party-test-server'];
-  const dataUrl = getThirdPartyUrlFromHeaders
-    ? getDefined(event.headers['x-use-third-party-test-server'])
-    : source.externalId;
+  const options = {
+    useThirdPartyUrl: event.headers['x-use-third-party-test-server'],
+  };
 
-  return new Promise<APIGatewayProxyResultV2>((resolve, reject) => {
-    const req = request(
-      dataUrl,
-      {
-        method: 'GET',
-        headers: {
-          Authentication: `Bearer ${key.access_token}`,
-        },
-      },
-      (res) => {
-        res.once('error', reject);
-        // TODO: could we please do this streaming?
-        getBody(res, { encoding: 'utf-8' }, (err, body: string) => {
-          if (err) {
-            reject(err);
-            return;
-          }
-          resolve({
-            statusCode: 200,
-            body,
-          });
-        });
-      }
-    );
-    req.once('error', reject);
-    req.end();
-  });
+  const provider = getProvider(source.provider);
+  const table = await provider.fetch(source.externalId, key, provider, options);
+  return {
+    statusCode: 200,
+    body: encodeTable(table),
+    isBase64Encoded: true,
+    headers: {
+      'Content-Type': 'application/x-apache-arrow-stream',
+    },
+  };
 }
 
 export const handler = handle(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResultV2> => {
-    const ret = await checkAccess(event);
-    if (ret) {
-      return ret;
-    }
+    const externalDataSourceId = getDefined(
+      getDefined(event.pathParameters).id
+    );
 
-    const id = getDefined(getDefined(event.pathParameters).id);
-    const keys = await getAccessKeys(id);
-    if (!keys.length) {
-      return {
-        statusCode: 401,
-        body: 'Needs authentication',
-      };
-    }
-
-    const dataSource = await fetchExternalDataSource(id);
-    if (!dataSource) {
+    const externalDataSource = await fetchExternalDataSource(
+      externalDataSourceId
+    );
+    if (!externalDataSource) {
       return {
         statusCode: 404,
         body: 'No such data source',
       };
     }
 
-    const fetchResult = await fetchData(event, dataSource, getDefined(keys[0]));
-    return fetchResult;
+    const { user } = await authenticate(event);
+    const ret = await checkAccess(user, externalDataSource);
+    if (ret) {
+      return ret;
+    }
+
+    const key = await getAccessKey(externalDataSource);
+    if (!key) {
+      return {
+        statusCode: 401,
+        body: 'Needs authentication',
+      };
+    }
+
+    return fetchData(event, externalDataSource, key);
   }
 );

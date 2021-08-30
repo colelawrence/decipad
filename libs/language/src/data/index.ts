@@ -1,8 +1,8 @@
-import parseCSV from 'csv-parse';
-import { TabularData } from './TabularData';
 import * as ExternalData from './external-data-types';
-import { cast } from './cast';
 import defaultFetch from './default-fetch';
+import { resolveCsv } from './resolve-csv';
+import { resolveArrow } from './resolve-arrow';
+import { DataTable } from './DataTable';
 
 export { defaultFetch, ExternalData };
 
@@ -13,12 +13,24 @@ type IResolve = {
   maxRows?: number | undefined;
 };
 
+type Resolver = (
+  body: AsyncIterable<ArrayBuffer>,
+  maxRows: number
+) => Promise<DataTable>;
+
+type Resolvers = Record<string, Resolver>;
+
+const resolvers: Resolvers = {
+  'text/csv': resolveCsv,
+  'application/x-apache-arrow-stream': resolveArrow,
+};
+
 export async function resolve({
   url,
   contentType,
   maxRows = Infinity,
   fetch,
-}: IResolve): Promise<TabularData> {
+}: IResolve): Promise<DataTable> {
   const response = await fetch(url);
   if (!contentType) {
     contentType = response.contentType;
@@ -30,71 +42,14 @@ export async function resolve({
   );
 }
 
-async function resolveForContentType(
+function resolveForContentType(
   response: AsyncIterable<ArrayBuffer>,
   contentType: string,
   maxRows: number
-): Promise<TabularData> {
-  switch (contentType) {
-    case 'text/csv': {
-      return resolveCsv(response, maxRows);
-    }
-    default: {
-      throw new Error(`don't know how to handle content type ${contentType}`);
-    }
+): Promise<DataTable> {
+  const resolve = resolvers[contentType];
+  if (!resolve) {
+    throw new Error(`don't know how to handle content type ${contentType}`);
   }
-}
-
-export async function resolveCsv(
-  response: AsyncIterable<ArrayBuffer>,
-  maxRows: number
-): Promise<TabularData> {
-  return new Promise((resolve, reject) => {
-    const data = new TabularData();
-    const parser = parseCSV({ cast });
-    let parserEnded = false;
-    let isDone = false;
-    let hadFirstRow = false;
-    parser.on('readable', () => {
-      let row: string[];
-      while ((row = parser.read())) {
-        if (!isDone) {
-          if (!hadFirstRow) {
-            data.setColumnNames(row);
-            hadFirstRow = true;
-          } else {
-            data.addRow(row);
-            if (data.length >= maxRows) {
-              isDone = true;
-              resolve(data);
-            }
-          }
-        }
-      }
-    });
-    parser.once('end', () => {
-      parserEnded = true;
-      isDone = true;
-      resolve(data);
-    });
-    parser.once('error', reject);
-
-    (async () => {
-      try {
-        for await (const content of response) {
-          parser.write(content);
-          if (isDone) {
-            parserEnded = true;
-            parser.end();
-          }
-        }
-      } catch (err) {
-        reject(err);
-      } finally {
-        if (!parserEnded) {
-          parser.end();
-        }
-      }
-    })();
-  });
+  return resolve(response, maxRows);
 }

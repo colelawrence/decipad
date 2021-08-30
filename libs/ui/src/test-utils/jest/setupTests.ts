@@ -7,6 +7,16 @@ import 'jest-playwright-preset';
 // emotion
 import { matchers, createSerializer } from '@emotion/jest';
 
+// TextEncoder and TextDecoder required by @apache-arrow
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { TextEncoder, TextDecoder } from 'fastestsmallesttextencoderdecoder';
+
+if (!global.TextEncoder) {
+  global.TextEncoder = TextEncoder;
+  global.TextDecoder = TextDecoder;
+}
+
 expect.extend(matchers);
 expect.addSnapshotSerializer(createSerializer()); // TODO remove once no element snapshots left
 

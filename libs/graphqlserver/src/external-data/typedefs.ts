@@ -4,19 +4,10 @@ export default gql`
   enum ExternalProvider {
     testdatasource
     googlesheets
-    other
-  }
-
-  enum ExternalKeyStatus {
-    NEW
-    ACTIVE
-    EXPIRED
-    ERROR
   }
 
   type ExternalKey {
     id: ID!
-    statusCode: ExternalKeyStatus!
     lastError: String
     createdAt: DateTime!
     expiresAt: DateTime
@@ -25,6 +16,7 @@ export default gql`
 
   input ExternalDataSourceCreateInput {
     name: String!
+    padId: ID!
     provider: ExternalProvider!
     externalId: String!
   }
@@ -41,11 +33,11 @@ export default gql`
   type ExternalDataSource {
     id: ID!
     name: String!
+    padId: ID!
     provider: ExternalProvider!
     externalId: String!
     dataUrl: String!
     authUrl: String!
-    keys: [ExternalKey!]!
     access: ExternalDataSourceAccess!
   }
 

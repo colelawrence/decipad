@@ -27,12 +27,18 @@ describe('Workspace', () => {
   });
 
   test('can list pads', async () => {
-    const pads = await getPadList();
-    expect(pads).toHaveLength(2);
+    await waitForExpect(async () => {
+      const pads = await getPadList();
+      expect(pads).toHaveLength(2);
+    });
   });
 
   test('can remove pad', async () => {
-    await removePad(1);
+    const padIndex = (await getPadList()).findIndex(
+      (pad) => pad.name !== 'My first pad'
+    );
+    expect(padIndex).toBeGreaterThanOrEqual(0);
+    await removePad(padIndex);
     await waitForExpect(async () => {
       const pads = await getPadList();
       expect(pads).toHaveLength(1);

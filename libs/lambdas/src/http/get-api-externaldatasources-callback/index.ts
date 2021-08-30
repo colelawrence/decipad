@@ -1,16 +1,19 @@
 import {
   APIGatewayProxyEventV2 as APIGatewayProxyEvent,
+  APIGatewayProxyResultV2 as HttpResponse,
   APIGatewayProxyEventQueryStringParameters,
 } from 'aws-lambda';
 import { OAuth2 } from 'oauth';
-import { HttpResponse } from '@architect/functions';
 import { nanoid } from 'nanoid';
+import { parse as decodeCookie } from 'simple-cookie';
+import { ExternalKeyRecord } from '@decipad/backendtypes';
 import tables from '@decipad/services/tables';
 import { authenticate } from '@decipad/services/authentication';
 import { isAuthorized } from '@decipad/services/authorization';
-import { provider as externalDataProvider } from '@decipad/services/externaldata';
-import { thirdParty as thirdPartyConfig } from '@decipad/config';
+import { provider as externalDataProvider } from '@decipad/externaldata';
+import { thirdParty as thirdPartyConfig, app } from '@decipad/config';
 import handle from '../handle';
+import { HttpError } from '../HttpError';
 import getDefined from '../../common/get-defined';
 import timestamp from '../../common/timestamp';
 
@@ -24,7 +27,8 @@ export const handler = handle(
       };
     }
 
-    const { id } = event.pathParameters || {};
+    const cookies = event.cookies?.map((c) => decodeCookie(c));
+    const id = cookies?.find((c) => c.name === 'externaldatasourceid')?.value;
     const { code } =
       event.queryStringParameters as APIGatewayProxyEventQueryStringParameters;
     if (!id || !code) {
@@ -52,7 +56,7 @@ export const handler = handle(
 
     const provider = getDefined(
       externalDataProvider(externalDataSource.provider),
-      'no such provider'
+      `no such provider: ${externalDataSource.provider}`
     );
 
     const authorizationUrl = new URL(provider.authorizationUrl);
@@ -73,29 +77,44 @@ export const handler = handle(
       provider.headers || {}
     );
 
+    const config = app();
     return new Promise((resolve, reject) => {
       oauth2Client.getOAuthAccessToken(
         code,
         {
-          grant_type: 'client_credentials',
+          grant_type: 'authorization_code',
+          scope: provider.scope,
+          redirect_uri: `${config.urlBase}${config.apiPathBase}/externaldatasources/callback`,
         },
         async (err, accessToken, refreshToken, results) => {
           if (err) {
             reject(err);
-          } else if (!accessToken || !refreshToken) {
-            resolve({
-              statusCode: 401,
-              body: 'authentication with third-party failed: no access token and / or refresh token',
-            });
+          } else if (!accessToken) {
+            reject(
+              new HttpError(
+                'authentication with third-party failed: no access token',
+                401
+              )
+            );
           } else {
-            const keyRecord: Parameters<
-              typeof data.externaldatasourcekeys.create
-            >[0] = {
+            // eslint-disable-next-line camelcase
+            const { scope, token_type = 'Bearer' } = results;
+            if (scope && scope !== provider.scope) {
+              reject(
+                new HttpError(
+                  `authentication with third-party failed: scope should be ${provider.scope}`,
+                  401
+                )
+              );
+              return;
+            }
+            const keyRecord: ExternalKeyRecord = {
               id: nanoid(),
-              externaldatasource_id: externalDataSource.id,
+              resource_uri: `/pads/${externalDataSource.padId}`,
+              token_type,
+              scope,
               access_token: accessToken,
               refresh_token: refreshToken,
-              status_code: 'ACTIVE',
               createdAt: timestamp(),
               expiresAt:
                 timestamp() +
@@ -104,9 +123,16 @@ export const handler = handle(
             };
             await data.externaldatasourcekeys.create(keyRecord);
 
+            const redirectUri = cookies?.find(
+              (c) => c.name === 'redirect_uri'
+            )?.value;
+
+            // redirect user back to where they were
             resolve({
-              statusCode: 201,
-              body: 'ok',
+              statusCode: 302,
+              headers: {
+                Location: decodeURIComponent(redirectUri || '/'),
+              },
             });
           }
         }

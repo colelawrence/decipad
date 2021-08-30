@@ -1,0 +1,702 @@
+diff --git a/node_modules/@apache-arrow/es5-cjs/Arrow.dom.ts b/node_modules/@apache-arrow/es5-cjs/Arrow.dom.ts
+index 07f0c8b..8d026c3 100644
+--- a/node_modules/@apache-arrow/es5-cjs/Arrow.dom.ts
++++ b/node_modules/@apache-arrow/es5-cjs/Arrow.dom.ts
+@@ -80,14 +80,13 @@ export {
+     TimeVector, TimeSecondVector, TimeMillisecondVector, TimeMicrosecondVector, TimeNanosecondVector,
+     UnionVector, DenseUnionVector, SparseUnionVector,
+     Utf8Vector,
+-    ByteStream, AsyncByteStream, AsyncByteQueue, ReadableSource, WritableSink,
++    AsyncByteQueue, ByteStream, AsyncByteStream,
+     RecordBatchReader, RecordBatchFileReader, RecordBatchStreamReader, AsyncRecordBatchFileReader, AsyncRecordBatchStreamReader,
+     RecordBatchWriter, RecordBatchFileWriter, RecordBatchStreamWriter, RecordBatchJSONWriter,
+     MessageReader, AsyncMessageReader, JSONMessageReader,
+     Message,
+     RecordBatch,
+-    ArrowJSONLike, FileHandle, Readable, Writable, ReadableWritable, ReadableDOMStreamOptions,
+-    DataFrame, FilteredDataFrame, CountByResult, BindFunc, NextFunc,
++    DataFrame, FilteredDataFrame, CountByResult,
+     predicate,
+     util,
+     Builder,
+@@ -111,3 +110,9 @@ export {
+     Utf8Builder,
+     isTypedArray,
+ } from './Arrow';
++
++export type {
++    ReadableSource, WritableSink, Readable, Writable, ArrowJSONLike,
++    FileHandle, ReadableWritable, ReadableDOMStreamOptions,
++    BindFunc, NextFunc,
++} from './Arrow';
+diff --git a/node_modules/@apache-arrow/es5-cjs/Arrow.ts b/node_modules/@apache-arrow/es5-cjs/Arrow.ts
+index 8bf2963..00754b9 100644
+--- a/node_modules/@apache-arrow/es5-cjs/Arrow.ts
++++ b/node_modules/@apache-arrow/es5-cjs/Arrow.ts
+@@ -16,12 +16,12 @@
+ // under the License.
+ 
+ export {
+-    DateUnit,
+-    TimeUnit,
+-    Precision,
+-    UnionMode,
+-    IntervalUnit,
+-    MetadataVersion,
++  DateUnit,
++  TimeUnit,
++  Precision,
++  UnionMode,
++  IntervalUnit,
++  MetadataVersion,
+ } from './fb/Schema';
+ 
+ export { MessageHeader } from './fb/Message';
+@@ -30,25 +30,25 @@ export { Type, BufferType } from './enum';
+ 
+ export { Data } from './data';
+ export {
+-    DataType,
+-    Null,
+-    Bool,
+-    Int, Int8, Int16, Int32, Int64, Uint8, Uint16, Uint32, Uint64,
+-    Float, Float16, Float32, Float64,
+-    Utf8,
+-    Binary,
+-    FixedSizeBinary,
+-    Date_, DateDay, DateMillisecond,
+-    Timestamp, TimestampSecond, TimestampMillisecond, TimestampMicrosecond, TimestampNanosecond,
+-    Time, TimeSecond, TimeMillisecond, TimeMicrosecond, TimeNanosecond,
+-    Decimal,
+-    List,
+-    Struct,
+-    Union, DenseUnion, SparseUnion,
+-    Dictionary,
+-    Interval, IntervalDayTime, IntervalYearMonth,
+-    FixedSizeList,
+-    Map_,
++  DataType,
++  Null,
++  Bool,
++  Int, Int8, Int16, Int32, Int64, Uint8, Uint16, Uint32, Uint64,
++  Float, Float16, Float32, Float64,
++  Utf8,
++  Binary,
++  FixedSizeBinary,
++  Date_, DateDay, DateMillisecond,
++  Timestamp, TimestampSecond, TimestampMillisecond, TimestampMicrosecond, TimestampNanosecond,
++  Time, TimeSecond, TimeMillisecond, TimeMicrosecond, TimeNanosecond,
++  Decimal,
++  List,
++  Struct,
++  Union, DenseUnion, SparseUnion,
++  Dictionary,
++  Interval, IntervalDayTime, IntervalYearMonth,
++  FixedSizeList,
++  Map_,
+ } from './type';
+ 
+ export { Table } from './table';
+@@ -56,59 +56,61 @@ export { Column } from './column';
+ export { Visitor } from './visitor';
+ export { Schema, Field } from './schema';
+ export {
+-    Vector,
+-    BaseVector,
+-    BinaryVector,
+-    BoolVector,
+-    Chunked,
+-    DateVector, DateDayVector, DateMillisecondVector,
+-    DecimalVector,
+-    DictionaryVector,
+-    FixedSizeBinaryVector,
+-    FixedSizeListVector,
+-    FloatVector, Float16Vector, Float32Vector, Float64Vector,
+-    IntervalVector, IntervalDayTimeVector, IntervalYearMonthVector,
+-    IntVector, Int8Vector, Int16Vector, Int32Vector, Int64Vector, Uint8Vector, Uint16Vector, Uint32Vector, Uint64Vector,
+-    ListVector,
+-    MapVector,
+-    NullVector,
+-    StructVector,
+-    TimestampVector, TimestampSecondVector, TimestampMillisecondVector, TimestampMicrosecondVector, TimestampNanosecondVector,
+-    TimeVector, TimeSecondVector, TimeMillisecondVector, TimeMicrosecondVector, TimeNanosecondVector,
+-    UnionVector, DenseUnionVector, SparseUnionVector,
+-    Utf8Vector,
++  Vector,
++  BaseVector,
++  BinaryVector,
++  BoolVector,
++  Chunked,
++  DateVector, DateDayVector, DateMillisecondVector,
++  DecimalVector,
++  DictionaryVector,
++  FixedSizeBinaryVector,
++  FixedSizeListVector,
++  FloatVector, Float16Vector, Float32Vector, Float64Vector,
++  IntervalVector, IntervalDayTimeVector, IntervalYearMonthVector,
++  IntVector, Int8Vector, Int16Vector, Int32Vector, Int64Vector, Uint8Vector, Uint16Vector, Uint32Vector, Uint64Vector,
++  ListVector,
++  MapVector,
++  NullVector,
++  StructVector,
++  TimestampVector, TimestampSecondVector, TimestampMillisecondVector, TimestampMicrosecondVector, TimestampNanosecondVector,
++  TimeVector, TimeSecondVector, TimeMillisecondVector, TimeMicrosecondVector, TimeNanosecondVector,
++  UnionVector, DenseUnionVector, SparseUnionVector,
++  Utf8Vector,
+ } from './vector/index';
+ 
+ export {
+-    Builder,
+-    BinaryBuilder,
+-    BoolBuilder,
+-    DateBuilder, DateDayBuilder, DateMillisecondBuilder,
+-    DecimalBuilder,
+-    DictionaryBuilder,
+-    FixedSizeBinaryBuilder,
+-    FixedSizeListBuilder,
+-    FloatBuilder, Float16Builder, Float32Builder, Float64Builder,
+-    IntervalBuilder, IntervalDayTimeBuilder, IntervalYearMonthBuilder,
+-    IntBuilder, Int8Builder, Int16Builder, Int32Builder, Int64Builder, Uint8Builder, Uint16Builder, Uint32Builder, Uint64Builder,
+-    ListBuilder,
+-    MapBuilder,
+-    NullBuilder,
+-    StructBuilder,
+-    TimestampBuilder, TimestampSecondBuilder, TimestampMillisecondBuilder, TimestampMicrosecondBuilder, TimestampNanosecondBuilder,
+-    TimeBuilder, TimeSecondBuilder, TimeMillisecondBuilder, TimeMicrosecondBuilder, TimeNanosecondBuilder,
+-    UnionBuilder, DenseUnionBuilder, SparseUnionBuilder,
+-    Utf8Builder,
++  Builder,
++  BinaryBuilder,
++  BoolBuilder,
++  DateBuilder, DateDayBuilder, DateMillisecondBuilder,
++  DecimalBuilder,
++  DictionaryBuilder,
++  FixedSizeBinaryBuilder,
++  FixedSizeListBuilder,
++  FloatBuilder, Float16Builder, Float32Builder, Float64Builder,
++  IntervalBuilder, IntervalDayTimeBuilder, IntervalYearMonthBuilder,
++  IntBuilder, Int8Builder, Int16Builder, Int32Builder, Int64Builder, Uint8Builder, Uint16Builder, Uint32Builder, Uint64Builder,
++  ListBuilder,
++  MapBuilder,
++  NullBuilder,
++  StructBuilder,
++  TimestampBuilder, TimestampSecondBuilder, TimestampMillisecondBuilder, TimestampMicrosecondBuilder, TimestampNanosecondBuilder,
++  TimeBuilder, TimeSecondBuilder, TimeMillisecondBuilder, TimeMicrosecondBuilder, TimeNanosecondBuilder,
++  UnionBuilder, DenseUnionBuilder, SparseUnionBuilder,
++  Utf8Builder,
+ } from './builder/index';
+ 
+-export { ByteStream, AsyncByteStream, AsyncByteQueue, ReadableSource, WritableSink } from './io/stream';
++export { ByteStream, AsyncByteStream, AsyncByteQueue} from './io/stream';
++export type { ReadableSource, WritableSink } from './io/stream';
+ export { RecordBatchReader, RecordBatchFileReader, RecordBatchStreamReader, AsyncRecordBatchFileReader, AsyncRecordBatchStreamReader } from './ipc/reader';
+ export { RecordBatchWriter, RecordBatchFileWriter, RecordBatchStreamWriter, RecordBatchJSONWriter } from './ipc/writer';
+ export { MessageReader, AsyncMessageReader, JSONMessageReader } from './ipc/message';
+ export { Message } from './ipc/metadata/message';
+ export { RecordBatch } from './recordbatch';
+-export { ArrowJSONLike, FileHandle, Readable, Writable, ReadableWritable, ReadableDOMStreamOptions } from './io/interfaces';
+-export { DataFrame, FilteredDataFrame, CountByResult, BindFunc, NextFunc } from './compute/dataframe';
++export type { ArrowJSONLike, FileHandle, Readable, Writable, ReadableWritable, ReadableDOMStreamOptions } from './io/interfaces';
++export { DataFrame, FilteredDataFrame, CountByResult } from './compute/dataframe';
++export type { BindFunc, NextFunc } from './compute/dataframe';
+ 
+ import * as util_bn_ from './util/bn';
+ import * as util_int_ from './util/int';
+@@ -122,15 +124,15 @@ import { compareSchemas, compareFields, compareTypes } from './visitor/typecompa
+ export { predicate };
+ /** @ignore */
+ export const util = {
+-    ...util_bn_,
+-    ...util_int_,
+-    ...util_bit_,
+-    ...util_math_,
+-    ...util_buffer_,
+-    ...util_vector_,
+-    compareSchemas,
+-    compareFields,
+-    compareTypes,
++  ...util_bn_,
++  ...util_int_,
++  ...util_bit_,
++  ...util_math_,
++  ...util_buffer_,
++  ...util_vector_,
++  compareSchemas,
++  compareFields,
++  compareTypes,
+ };
+ 
+ export { isTypedArray } from './util/args';
+diff --git a/node_modules/@apache-arrow/es5-cjs/builder/index.ts b/node_modules/@apache-arrow/es5-cjs/builder/index.ts
+index dfd9d54..fe8e0f5 100644
+--- a/node_modules/@apache-arrow/es5-cjs/builder/index.ts
++++ b/node_modules/@apache-arrow/es5-cjs/builder/index.ts
+@@ -16,7 +16,8 @@
+ // under the License.
+ 
+ /** @ignore */
+-export { Builder, BuilderOptions } from '../builder';
++export { Builder } from '../builder';
++export type { BuilderOptions } from '../builder';
+ export { BoolBuilder } from './bool';
+ export { NullBuilder } from './null';
+ export { DateBuilder, DateDayBuilder, DateMillisecondBuilder } from './date';
+diff --git a/node_modules/@apache-arrow/es5-cjs/builder/map.ts b/node_modules/@apache-arrow/es5-cjs/builder/map.ts
+index 25affef..d24f121 100644
+--- a/node_modules/@apache-arrow/es5-cjs/builder/map.ts
++++ b/node_modules/@apache-arrow/es5-cjs/builder/map.ts
+@@ -26,6 +26,7 @@ import { Builder, VariableWidthBuilder } from '../builder';
+ /** @ignore */
+ export class MapBuilder<K extends DataType = any, V extends DataType = any, TNull = any> extends VariableWidthBuilder<Map_<K, V>, TNull> {
+ 
++    // @ts-ignore
+     protected _pending: MapValues<K, V> | undefined;
+     public set(index: number, value: MapValueExt<K, V> | TNull) {
+         return super.set(index, value as MapValue<K, V> | TNull);
+diff --git a/node_modules/@apache-arrow/es5-cjs/column.ts b/node_modules/@apache-arrow/es5-cjs/column.ts
+index 48b40e5..115c3ad 100644
+--- a/node_modules/@apache-arrow/es5-cjs/column.ts
++++ b/node_modules/@apache-arrow/es5-cjs/column.ts
+@@ -77,6 +77,7 @@ export class Column<T extends DataType = any>
+     }
+ 
+     protected _field: Field<T>;
++    // @ts-ignore
+     protected _children?: Column[];
+ 
+     public get field() { return this._field; }
+diff --git a/node_modules/@apache-arrow/es5-cjs/interfaces.ts b/node_modules/@apache-arrow/es5-cjs/interfaces.ts
+index 43977ca..0cef33f 100644
+--- a/node_modules/@apache-arrow/es5-cjs/interfaces.ts
++++ b/node_modules/@apache-arrow/es5-cjs/interfaces.ts
+@@ -266,9 +266,11 @@ type DataTypeToVector<T extends DataType = any> = {
+     [Type.IntervalDayTime      ]: T extends type.IntervalDayTime      ? vecs.IntervalDayTimeVector                          : never ;
+     [Type.IntervalYearMonth    ]: T extends type.IntervalYearMonth    ? vecs.IntervalYearMonthVector                        : never ;
+     [Type.Map                  ]: T extends type.Map_                 ? vecs.MapVector<T['keyType'], T['valueType']>        : never ;
++    // @ts-ignore
+     [Type.List                 ]: T extends type.List                 ? vecs.ListVector<T['valueType']>                     : never ;
+     [Type.Struct               ]: T extends type.Struct               ? vecs.StructVector<T['dataTypes']>                   : never ;
+     [Type.Dictionary           ]: T extends type.Dictionary           ? vecs.DictionaryVector<T['valueType'], T['indices']> : never ;
++    // @ts-ignore
+     [Type.FixedSizeList        ]: T extends type.FixedSizeList        ? vecs.FixedSizeListVector<T['valueType']>            : never ;
+ }[T['TType']];
+ 
+diff --git a/node_modules/@apache-arrow/es5-cjs/io/adapters.ts b/node_modules/@apache-arrow/es5-cjs/io/adapters.ts
+index a83346e..fb7543d 100644
+--- a/node_modules/@apache-arrow/es5-cjs/io/adapters.ts
++++ b/node_modules/@apache-arrow/es5-cjs/io/adapters.ts
+@@ -204,8 +204,10 @@ async function* fromDOMStream<T extends ArrayBufferViewInput>(source: ReadableSt
+ class AdaptiveByteReader<T extends ArrayBufferViewInput> {
+ 
+     private supportsBYOB: boolean;
++    // @ts-ignore
+     private byobReader: ReadableStreamBYOBReader | null = null;
+     private defaultReader: ReadableStreamDefaultReader<T> | null = null;
++    // @ts-ignore
+     private reader: ReadableStreamBYOBReader | ReadableStreamDefaultReader<T> | null;
+ 
+     constructor(private source: ReadableStream<T>) {
+@@ -261,6 +263,7 @@ class AdaptiveByteReader<T extends ArrayBufferViewInput> {
+     private getBYOBReader() {
+         if (this.defaultReader) { this.releaseLock(); }
+         if (!this.byobReader) {
++            // @ts-ignore
+             this.byobReader = this.source['getReader']({ mode: 'byob' });
+             // We have to catch and swallow errors here to avoid uncaught promise rejection exceptions
+             // that seem to be raised when we call `releaseLock()` on this reader. I'm still mystified
+@@ -280,6 +283,7 @@ class AdaptiveByteReader<T extends ArrayBufferViewInput> {
+ }
+ 
+ /** @ignore */
++// @ts-ignore
+ async function readInto(reader: ReadableStreamBYOBReader, buffer: ArrayBufferLike, offset: number, size: number): Promise<ReadableStreamReadResult<Uint8Array>> {
+     if (offset >= size) {
+         return { done: false, value: new Uint8Array(buffer, 0, size) };
+@@ -298,7 +302,7 @@ type Event = [EventName, (_: any) => void, Promise<[EventName, Error | null]>];
+ /** @ignore */
+ const onEvent = <T extends string>(stream: NodeJS.ReadableStream, event: T) => {
+     const handler = (_: any) => resolve([event, _]);
+-    let resolve: (value?: [T, any] | PromiseLike<[T, any]>) => void;
++    let resolve: (value: [T, any] | PromiseLike<[T, any]>) => void;
+     return [event, handler, new Promise<[T, any]>(
+         (r) => (resolve = r) && stream['once'](event, handler)
+     )] as Event;
+@@ -379,7 +383,7 @@ async function* fromNodeStream(stream: NodeJS.ReadableStream): AsyncUint8ArrayGe
+ 
+     function cleanup<T extends Error | null | void>(events: Event[], err?: T) {
+         buffer = buffers = <any> null;
+-        return new Promise<T>((resolve, reject) => {
++        return new Promise<void>((resolve, reject) => {
+             for (const [evt, fn] of events) {
+                 stream['off'](evt, fn);
+             }
+diff --git a/node_modules/@apache-arrow/es5-cjs/io/interfaces.ts b/node_modules/@apache-arrow/es5-cjs/io/interfaces.ts
+index 4b5641f..012d1a6 100644
+--- a/node_modules/@apache-arrow/es5-cjs/io/interfaces.ts
++++ b/node_modules/@apache-arrow/es5-cjs/io/interfaces.ts
+@@ -17,6 +17,8 @@
+ 
+ import streamAdapters from './adapters';
+ 
++type PipeOptions = Parameters<ReadableStream["pipeTo"]>[1];
++
+ /** @ignore */
+ export const ITERATOR_DONE: any = Object.freeze({ done: true, value: void (0) });
+ 
+@@ -92,7 +94,7 @@ export abstract class ReadableInterop<T> {
+ }
+ 
+ /** @ignore */
+-type Resolution<T> = { resolve: (value?: T | PromiseLike<T>) => void; reject: (reason?: any) => void };
++type Resolution<T> = { resolve: (value: T | PromiseLike<T>) => void; reject: (reason?: any) => void };
+ 
+ /** @ignore */
+ export class AsyncQueue<TReadable = Uint8Array, TWritable = TReadable> extends ReadableInterop<TReadable>
+diff --git a/node_modules/@apache-arrow/es5-cjs/io/whatwg/writer.ts b/node_modules/@apache-arrow/es5-cjs/io/whatwg/writer.ts
+index 49789bd..91ce176 100644
+--- a/node_modules/@apache-arrow/es5-cjs/io/whatwg/writer.ts
++++ b/node_modules/@apache-arrow/es5-cjs/io/whatwg/writer.ts
+@@ -30,6 +30,7 @@ export function recordBatchWriterThroughDOMStream<T extends { [key: string]: Dat
+     const writer = new this<T>(writableStrategy);
+     const reader = new AsyncByteStream(writer);
+     const readable = new ReadableStream({
++      // @ts-ignore
+         type: 'bytes',
+         async cancel() { await reader.cancel(); },
+         async pull(controller) { await next(controller); },
+diff --git a/node_modules/@apache-arrow/es5-cjs/ipc/message.ts b/node_modules/@apache-arrow/es5-cjs/ipc/message.ts
+index 34c0aa3..4b83ddb 100644
+--- a/node_modules/@apache-arrow/es5-cjs/ipc/message.ts
++++ b/node_modules/@apache-arrow/es5-cjs/ipc/message.ts
+@@ -17,7 +17,6 @@
+ 
+ import { MessageHeader } from '../enum';
+ import { flatbuffers } from 'flatbuffers';
+-import ByteBuffer = flatbuffers.ByteBuffer;
+ import { Message } from './metadata/message';
+ import { isFileHandle } from '../util/compat';
+ import { AsyncRandomAccessFile } from '../io/file';
+@@ -25,6 +24,8 @@ import { toUint8Array, ArrayBufferViewInput } from '../util/buffer';
+ import { ByteStream, ReadableSource, AsyncByteStream } from '../io/stream';
+ import { ArrowJSON, ArrowJSONLike, ITERATOR_DONE, FileHandle } from '../io/interfaces';
+ 
++const ByteBuffer = flatbuffers.ByteBuffer;
++
+ /** @ignore */ const invalidMessageType       = (type: MessageHeader) => `Expected ${MessageHeader[type]} Message in stream, but was null or length 0.`;
+ /** @ignore */ const nullMessage              = (type: MessageHeader) => `Header pointer of flatbuffer-encoded ${MessageHeader[type]} Message is null or length 0.`;
+ /** @ignore */ const invalidMessageMetadata   = (expected: number, actual: number) => `Expected to read ${expected} metadata bytes, but only read ${actual}.`;
+diff --git a/node_modules/@apache-arrow/es5-cjs/ipc/metadata/file.ts b/node_modules/@apache-arrow/es5-cjs/ipc/metadata/file.ts
+index 5a1be84..95787cc 100644
+--- a/node_modules/@apache-arrow/es5-cjs/ipc/metadata/file.ts
++++ b/node_modules/@apache-arrow/es5-cjs/ipc/metadata/file.ts
+@@ -24,7 +24,6 @@ import {
+ 
+ import { flatbuffers } from 'flatbuffers';
+ 
+-import Long = flatbuffers.Long;
+ import Builder = flatbuffers.Builder;
+ import ByteBuffer = flatbuffers.ByteBuffer;
+ 
+@@ -33,6 +32,8 @@ import { MetadataVersion } from '../../enum';
+ import { toUint8Array } from '../../util/buffer';
+ import { ArrayBufferViewInput } from '../../util/buffer';
+ 
++const Long = flatbuffers.Long;
++
+ /** @ignore */
+ class Footer_ {
+ 
+@@ -140,6 +141,7 @@ export class FileBlock {
+ 
+     /** @nocollapse */
+     public static decode(block: _Block) {
++        // @ts-ignore
+         return new FileBlock(block.metaDataLength(), block.bodyLength(), block.offset());
+     }
+ 
+@@ -155,6 +157,7 @@ export class FileBlock {
+     public bodyLength: number;
+     public metaDataLength: number;
+ 
++    // @ts-ignore
+     constructor(metaDataLength: number, bodyLength: Long | number, offset: Long | number) {
+         this.metaDataLength = metaDataLength;
+         this.offset = typeof offset === 'number' ? offset : offset.low;
+diff --git a/node_modules/@apache-arrow/es5-cjs/ipc/metadata/message.ts b/node_modules/@apache-arrow/es5-cjs/ipc/metadata/message.ts
+index 2ebb73e..b858dc8 100644
+--- a/node_modules/@apache-arrow/es5-cjs/ipc/metadata/message.ts
++++ b/node_modules/@apache-arrow/es5-cjs/ipc/metadata/message.ts
+@@ -54,7 +54,6 @@ import { MessageHeader, MetadataVersion } from '../../enum';
+ import { instance as typeAssembler } from '../../visitor/typeassembler';
+ import { fieldFromJSON, schemaFromJSON, recordBatchFromJSON, dictionaryBatchFromJSON } from './json';
+ 
+-import Long = flatbuffers.Long;
+ import Builder = flatbuffers.Builder;
+ import ByteBuffer = flatbuffers.ByteBuffer;
+ 
+@@ -65,6 +64,8 @@ import {
+     Bool, Null, Int, Float, Date_, Time, Interval, Timestamp, IntBitWidth, Int32, TKeys,
+ } from '../../type';
+ 
++const Long = flatbuffers.Long;
++
+ /**
+  * @ignore
+  * @private
+@@ -82,6 +83,7 @@ export class Message<T extends MessageHeader = any> {
+     public static decode(buf: ArrayBufferViewInput) {
+         buf = new ByteBuffer(toUint8Array(buf));
+         const _message = _Message.getRootAsMessage(buf);
++        // @ts-ignore
+         const bodyLength: Long = _message.bodyLength()!;
+         const version: MetadataVersion = _message.version();
+         const headerType: MessageHeader = _message.headerType();
+@@ -138,6 +140,7 @@ export class Message<T extends MessageHeader = any> {
+     public isRecordBatch(): this is Message<MessageHeader.RecordBatch> { return this.headerType === MessageHeader.RecordBatch; }
+     public isDictionaryBatch(): this is Message<MessageHeader.DictionaryBatch> { return this.headerType === MessageHeader.DictionaryBatch; }
+ 
++    // @ts-ignore
+     constructor(bodyLength: Long | number, version: MetadataVersion, headerType: T, header?: any) {
+         this._version = version;
+         this._headerType = headerType;
+@@ -158,6 +161,7 @@ export class RecordBatch {
+     public get nodes() { return this._nodes; }
+     public get length() { return this._length; }
+     public get buffers() { return this._buffers; }
++    // @ts-ignore
+     constructor(length: Long | number, nodes: FieldNode[], buffers: BufferRegion[]) {
+         this._nodes = nodes;
+         this._buffers = buffers;
+@@ -181,6 +185,7 @@ export class DictionaryBatch {
+     public get nodes(): FieldNode[] { return this.data.nodes; }
+     public get buffers(): BufferRegion[] { return this.data.buffers; }
+ 
++    // @ts-ignore
+     constructor(data: RecordBatch, id: Long | number, isDelta = false) {
+         this._data = data;
+         this._isDelta = isDelta;
+@@ -195,6 +200,7 @@ export class DictionaryBatch {
+ export class BufferRegion {
+     public offset: number;
+     public length: number;
++    // @ts-ignore
+     constructor(offset: Long | number, length: Long | number) {
+         this.offset = typeof offset === 'number' ? offset : offset.low;
+         this.length = typeof length === 'number' ? length : length.low;
+@@ -208,6 +214,7 @@ export class BufferRegion {
+ export class FieldNode {
+     public length: number;
+     public nullCount: number;
++    // @ts-ignore
+     constructor(length: Long | number, nullCount: Long | number) {
+         this.length = typeof length === 'number' ? length : length.low;
+         this.nullCount = typeof nullCount === 'number' ? nullCount : nullCount.low;
+@@ -302,21 +309,25 @@ function decodeSchema(_schema: _Schema, dictionaries: Map<number, DataType> = ne
+ 
+ /** @ignore */
+ function decodeRecordBatch(batch: _RecordBatch, version = MetadataVersion.V4) {
++    // @ts-ignore
+     return new RecordBatch(batch.length(), decodeFieldNodes(batch), decodeBuffers(batch, version));
+ }
+ 
+ /** @ignore */
+ function decodeDictionaryBatch(batch: _DictionaryBatch, version = MetadataVersion.V4) {
++    // @ts-ignore
+     return new DictionaryBatch(RecordBatch.decode(batch.data()!, version), batch.id(), batch.isDelta());
+ }
+ 
+ /** @ignore */
+ function decodeBufferRegion(b: _Buffer) {
++    // @ts-ignore
+     return new BufferRegion(b.offset(), b.length());
+ }
+ 
+ /** @ignore */
+ function decodeFieldNode(f: _FieldNode) {
++    // @ts-ignore
+     return new FieldNode(f.length(), f.nullCount());
+ }
+ 
+diff --git a/node_modules/@apache-arrow/es5-cjs/ipc/reader.ts b/node_modules/@apache-arrow/es5-cjs/ipc/reader.ts
+index a150ac1..b1a4f8b 100644
+--- a/node_modules/@apache-arrow/es5-cjs/ipc/reader.ts
++++ b/node_modules/@apache-arrow/es5-cjs/ipc/reader.ts
+@@ -522,6 +522,7 @@ class AsyncRecordBatchStreamReaderImpl<T extends { [key: string]: DataType } = a
+ class RecordBatchFileReaderImpl<T extends { [key: string]: DataType } = any> extends RecordBatchStreamReaderImpl<T> {
+ 
+     protected _footer?: Footer;
++    // @ts-ignore
+     protected _handle!: RandomAccessFile;
+     public get footer() { return this._footer!; }
+     public get numDictionaries() { return this._footer ? this._footer.numDictionaries : 0; }
+@@ -592,6 +593,7 @@ class AsyncRecordBatchFileReaderImpl<T extends { [key: string]: DataType } = any
+     implements AsyncRecordBatchFileReaderImpl<T> {
+ 
+     protected _footer?: Footer;
++    // @ts-ignore
+     protected _handle!: AsyncRandomAccessFile;
+     public get footer() { return this._footer!; }
+     public get numDictionaries() { return this._footer ? this._footer.numDictionaries : 0; }
+diff --git a/node_modules/@apache-arrow/es5-cjs/recordbatch.ts b/node_modules/@apache-arrow/es5-cjs/recordbatch.ts
+index 5463a38..d8f0691 100644
+--- a/node_modules/@apache-arrow/es5-cjs/recordbatch.ts
++++ b/node_modules/@apache-arrow/es5-cjs/recordbatch.ts
+@@ -45,6 +45,7 @@ export class RecordBatch<T extends { [key: string]: DataType } = any>
+                Applicative<Struct<T>, Table<T>> {
+ 
+     public static from<T extends { [key: string]: DataType } = any, TNull = any>(options: VectorBuilderOptions<Struct<T>, TNull>): Table<T>;
++    // @ts-ignore
+     public static from<T extends { [key: string]: DataType } = any, TNull = any>(options: VectorBuilderOptionsAsync<Struct<T>, TNull>): Promise<Table<T>>;
+     /** @nocollapse */
+     public static from<T extends { [key: string]: DataType } = any, TNull = any>(options: VectorBuilderOptions<Struct<T>, TNull> | VectorBuilderOptionsAsync<Struct<T>, TNull>) {
+diff --git a/node_modules/@apache-arrow/es5-cjs/table.ts b/node_modules/@apache-arrow/es5-cjs/table.ts
+index d5e121d..8ff8332 100644
+--- a/node_modules/@apache-arrow/es5-cjs/table.ts
++++ b/node_modules/@apache-arrow/es5-cjs/table.ts
+@@ -194,6 +194,7 @@ export class Table<T extends { [key: string]: DataType } = any>
+     protected _schema: Schema<T>;
+     // List of inner RecordBatches
+     protected _chunks: RecordBatch<T>[];
++    // @ts-ignore
+     protected _children?: Column<T[keyof T]>[];
+ 
+     public get schema() { return this._schema; }
+diff --git a/node_modules/@apache-arrow/es5-cjs/type.ts b/node_modules/@apache-arrow/es5-cjs/type.ts
+index 7d5c051..59412fd 100644
+--- a/node_modules/@apache-arrow/es5-cjs/type.ts
++++ b/node_modules/@apache-arrow/es5-cjs/type.ts
+@@ -18,11 +18,9 @@
+ /* eslint-disable @typescript-eslint/naming-convention */
+ 
+ import { Field } from './schema';
+-import { flatbuffers } from 'flatbuffers';
+ import { VectorType as V } from './interfaces';
+ import { TypedArrayConstructor } from './interfaces';
+ 
+-import Long = flatbuffers.Long;
+ import {
+     Type,
+     Precision, UnionMode,
+@@ -197,8 +195,6 @@ export class Float<T extends Floats = Floats> extends DataType<T> {
+             case Precision.SINGLE: return Float32Array;
+             case Precision.DOUBLE: return Float64Array;
+         }
+-        // @ts-ignore
+-        throw new Error(`Unrecognized ${this[Symbol.toStringTag]} type`);
+     }
+     public toString() { return `Float${(this.precision << 5) || 16}`; }
+     protected static [Symbol.toStringTag] = ((proto: Float) => {
+@@ -568,6 +564,7 @@ export class Dictionary<T extends DataType = any, TKey extends TKeys = TKeys> ex
+     public readonly indices: TKey;
+     public readonly dictionary: T;
+     public readonly isOrdered: boolean;
++    // @ts-ignore
+     constructor(dictionary: T, indices: TKey, id?: Long | number | null, isOrdered?: boolean | null) {
+         super();
+         this.indices = indices;
+diff --git a/node_modules/@apache-arrow/es5-cjs/util/buffer.ts b/node_modules/@apache-arrow/es5-cjs/util/buffer.ts
+index 86dae86..0004bdd 100644
+--- a/node_modules/@apache-arrow/es5-cjs/util/buffer.ts
++++ b/node_modules/@apache-arrow/es5-cjs/util/buffer.ts
+@@ -17,11 +17,12 @@
+ 
+ import { flatbuffers } from 'flatbuffers';
+ import { encodeUtf8 } from '../util/utf8';
+-import ByteBuffer = flatbuffers.ByteBuffer;
+ import { TypedArray, TypedArrayConstructor } from '../interfaces';
+ import { BigIntArray, BigIntArrayConstructor } from '../interfaces';
+ import { isPromise, isIterable, isAsyncIterable, isIteratorResult, BigInt64Array, BigUint64Array } from './compat';
+ 
++const ByteBuffer = flatbuffers.ByteBuffer;
++
+ /** @ignore */
+ const SharedArrayBuf = (typeof SharedArrayBuffer !== 'undefined' ? SharedArrayBuffer : ArrayBuffer);
+ 
+@@ -85,9 +86,11 @@ export function joinUint8Arrays(chunks: Uint8Array[], size?: number | null): [Ui
+ }
+ 
+ /** @ignore */
++// @ts-ignore
+ export type ArrayBufferViewInput = ArrayBufferView | ArrayBufferLike | ArrayBufferView | Iterable<number> | ArrayLike<number> | ByteBuffer | string | null | undefined  |
+-                    IteratorResult<ArrayBufferView | ArrayBufferLike | ArrayBufferView | Iterable<number> | ArrayLike<number> | ByteBuffer | string | null | undefined> |
+-          ReadableStreamReadResult<ArrayBufferView | ArrayBufferLike | ArrayBufferView | Iterable<number> | ArrayLike<number> | ByteBuffer | string | null | undefined> ;
++                    // @ts-ignore
++                    IteratorResult<ArrayBufferView | ArrayBufferLike | ArrayBufferView | Iterable<number> | ArrayLike<number> | ByteBuffer | string | null | undefined>;
++          // | ReadableStreamReadResult<ArrayBufferView | ArrayBufferLike | ArrayBufferView | Iterable<number> | ArrayLike<number> | ByteBuffer | string | null | undefined> ;
+ 
+ /** @ignore */
+ export function toArrayBufferView<T extends TypedArray>(ArrayBufferViewCtor: TypedArrayConstructor<T>, input: ArrayBufferViewInput): T;
+diff --git a/node_modules/@apache-arrow/es5-cjs/vector/base.ts b/node_modules/@apache-arrow/es5-cjs/vector/base.ts
+index 2ceecdd..b2e29bb 100644
+--- a/node_modules/@apache-arrow/es5-cjs/vector/base.ts
++++ b/node_modules/@apache-arrow/es5-cjs/vector/base.ts
+@@ -64,6 +64,7 @@ export abstract class BaseVector<T extends DataType = any> extends AbstractVecto
+ 
+     public get [Symbol.toStringTag]() { return `${this.VectorName}<${this.type[Symbol.toStringTag]}>`; }
+ 
++    // @ts-ignore
+     public clone<R extends DataType = T>(data: Data<R>, children = this._children) {
+         return Vector.new<R>(data, children) as any;
+     }
+@@ -72,6 +73,7 @@ export abstract class BaseVector<T extends DataType = any> extends AbstractVecto
+         return Chunked.concat<T>(this, ...others);
+     }
+ 
++    // @ts-ignore
+     public slice(begin?: number, end?: number) {
+         // Adjust args similar to Array.prototype.slice. Normalize begin/end to
+         // clamp between 0 and length, and wrap around on negative indices, e.g.
+@@ -98,6 +100,7 @@ export abstract class BaseVector<T extends DataType = any> extends AbstractVecto
+ 
+     public toJSON() { return [...this]; }
+ 
++    // @ts-ignore
+     protected _sliceInternal(self: this, begin: number, end: number) {
+         return self.clone(self.data.slice(begin, end - begin), null!);
+     }
+diff --git a/node_modules/@apache-arrow/es5-cjs/vector/index.ts b/node_modules/@apache-arrow/es5-cjs/vector/index.ts
+index 30f5e3c..e862cf6 100644
+--- a/node_modules/@apache-arrow/es5-cjs/vector/index.ts
++++ b/node_modules/@apache-arrow/es5-cjs/vector/index.ts
+@@ -85,6 +85,7 @@ Vector.new = newVector;
+ Vector.from = vectorFrom;
+ 
+ /** @ignore */
++// @ts-ignore
+ function newVector<T extends DataType>(data: Data<T>, ...args: VectorCtorArgs<V<T>>): V<T> {
+     return new (getVectorConstructor.getVisitFn<T>(data)())(data, ...args) as V<T>;
+ }
+diff --git a/node_modules/@apache-arrow/es5-cjs/vector/map.ts b/node_modules/@apache-arrow/es5-cjs/vector/map.ts
+index 9975919..8b6e817 100644
+--- a/node_modules/@apache-arrow/es5-cjs/vector/map.ts
++++ b/node_modules/@apache-arrow/es5-cjs/vector/map.ts
+@@ -23,7 +23,7 @@ import { DataType, Map_, Struct, List } from '../type';
+ 
+ /** @ignore */
+ export class MapVector<K extends DataType = any, V extends DataType = any> extends BaseVector<Map_<K, V>> {
+-    public asList() {
++    public asList(): Vector {
+         const child = this.type.children[0] as Field<Struct<{ key: K; value: V }>>;
+         return Vector.new(this.data.clone(new List<Struct<{ key: K; value: V }>>(child)));
+     }
+diff --git a/node_modules/@apache-arrow/es5-cjs/visitor/typeassembler.ts b/node_modules/@apache-arrow/es5-cjs/visitor/typeassembler.ts
+index 4cd65d9..7bed28d 100644
+--- a/node_modules/@apache-arrow/es5-cjs/visitor/typeassembler.ts
++++ b/node_modules/@apache-arrow/es5-cjs/visitor/typeassembler.ts
+@@ -16,7 +16,6 @@
+ // under the License.
+ 
+ import { flatbuffers } from 'flatbuffers';
+-import Long = flatbuffers.Long;
+ import Builder = flatbuffers.Builder;
+ 
+ import * as type from '../type';
+@@ -43,6 +42,8 @@ import {
+     Map as Map_,
+ } from '../fb/Schema';
+ 
++const Long = flatbuffers.Long;
++
+ /** @ignore */
+ export interface TypeAssembler extends Visitor {
+     visit<T extends type.DataType>(node: T, builder: Builder): number | undefined;

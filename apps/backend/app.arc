@@ -23,7 +23,7 @@ put /api/syncdoc/:id/changes
 get /api/invites/:inviteid/accept
 get /api/userkeyvalidations/:userkeyvalidationid/validate
 get /api/externaldatasources/:id/auth
-get /api/externaldatasources/:id/callback
+get /api/externaldatasources/callback
 get /api/externaldatasources/:id/data
 get /api/pads/:padid/attachments/:attachmentid
 
@@ -171,7 +171,8 @@ externaldatasources
 
 externaldatasourcekeys
   id *String
-  externaldatasource_id String
+  resource_uri String
+  user_id String
   status_code String
   expiresAt TTL
   encrypt true
@@ -272,13 +273,13 @@ fileattachments
   name byResource
 
 externaldatasourcekeys
-  externaldatasource_id *String
-  name byExternalDataSourceId
+  resource_uri *String
+  name byResource
 
 externaldatasourcekeys
-  externaldatasource_id *String
-  status_code **String
-  name byExternalDataSourceAndStatus
+  resource_uri *String
+  user_id **String
+  name byResourceAndUser
 
 
 @queues

@@ -56,6 +56,9 @@
     "emails": {
       "tags": []
     },
+    "externaldata": {
+      "tags": []
+    },
     "graphqlresource": {
       "tags": []
     },
@@ -102,6 +105,9 @@
       "tags": []
     },
     "ui": {
+      "tags": []
+    },
+    "utils": {
       "tags": []
     }
   }

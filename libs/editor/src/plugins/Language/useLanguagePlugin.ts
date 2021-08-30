@@ -37,6 +37,13 @@ interface IdentifiableBlock {
   id: string;
 }
 
+interface ParsedProgramBlock {
+  id: string;
+  index: number;
+}
+
+type ParsedProgramBlocks = ParsedProgramBlock[];
+
 export const useLanguagePlugin = (): UseLanguagePluginRet => {
   const [results, setResults] = useState<ResultsContextValue>(
     makeResultsContextValue
@@ -116,36 +123,72 @@ export function editorProgramBlocks(editor: Editor): ProgramBlocksContextValue {
         return {
           id: (block as unknown as IdentifiableBlock).id,
           index,
-          varNameListeners: [],
         };
       }
       return undefined;
     })
-    .filter(Boolean);
+    .filter(Boolean) as ParsedProgramBlocks;
 
   return {
     setBlockVarName(blockId: string, varName: string): void {
-      const idx = parsedProgramBlocks.findIndex((b) => b && b.id === blockId);
-      if (editor && idx >= 0) {
-        const block = parsedProgramBlocks[idx];
-        if (block) {
-          const location = [block.index];
-          Transforms.setNodes(
-            editor,
-            { 'data-varname': varName } as Partial<Node>,
-            { at: location }
-          );
-        }
+      if (!editor) {
+        return;
       }
+      withBlock(blockId, parsedProgramBlocks, (block) => {
+        Transforms.setNodes(
+          editor,
+          { 'data-varname': varName } as Partial<Node>,
+          { at: [block.index] }
+        );
+      });
+    },
+    setBlockProvider(blockId: string, provider: string): void {
+      if (!editor) {
+        return;
+      }
+      withBlock(blockId, parsedProgramBlocks, (block) => {
+        Transforms.setNodes(
+          editor,
+          { 'data-provider': provider } as Partial<Node>,
+          { at: [block.index] }
+        );
+      });
+    },
+    setBlockExternalId(blockId: string, externalId: string): void {
+      if (!editor) {
+        return;
+      }
+      withBlock(blockId, parsedProgramBlocks, (block) => {
+        Transforms.setNodes(
+          editor,
+          { 'data-external-id': externalId } as Partial<Node>,
+          {
+            at: [block.index],
+          }
+        );
+      });
     },
   };
+}
+
+function withBlock(
+  id: string,
+  blocks: ParsedProgramBlocks,
+  fn: (block: ParsedProgramBlock) => void
+) {
+  const block = blocks.find((b) => b?.id === id);
+  if (block != null) {
+    fn(block);
+  }
 }
 
 function getBlocks(value: SlateNode[]): Program {
   return value
     .filter(
       (block) =>
-        block.type === ELEMENT_CODE_BLOCK || block.type === ELEMENT_IMPORT_DATA
+        block.type === ELEMENT_CODE_BLOCK ||
+        (block.type === ELEMENT_IMPORT_DATA &&
+          (block as ImportDataNode)['data-href'])
     )
     .map((block) => {
       if (block.type === ELEMENT_CODE_BLOCK) {

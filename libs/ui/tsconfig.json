@@ -6,5 +6,5 @@
     "jsxImportSource": "@emotion/react"
   },
   "include": ["src", "storybook"],
-  "references": [{ "path": "../language" }]
+  "references": [{ "path": "../language" }, { "path": "../utils" }]
 }

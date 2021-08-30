@@ -140,6 +140,7 @@ export interface ExternalDataSourceUpdateInput {
 export interface ExternalDataSourceCreateInput
   extends ExternalDataSourceUpdateInput {
   id: ID;
+  padId: ID;
   provider: ExternalDataSourceProvider;
   externalId: string;
 }
@@ -349,18 +350,17 @@ interface ConnectionRecord extends TableRecordBase {
 
 export interface ExternalDataSourceRecord extends TableRecordBase {
   name: string;
+  padId: ID;
   provider: ExternalDataSourceProvider;
   externalId: string;
 }
 
-// eslint-disable-next-line no-shadow
-export type ExternalKeyStatus = 'NEW' | 'ACTIVE' | 'EXPIRED' | 'ERROR';
-
 export interface ExternalKeyRecord extends TableRecordBase {
-  externaldatasource_id: ID;
+  resource_uri: string;
   access_token: string;
   refresh_token: string;
-  status_code: ExternalKeyStatus;
+  token_type?: string;
+  scope?: string;
   lastError?: string;
   createdAt: number;
   expiresAt: number;

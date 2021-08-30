@@ -1,4 +1,3 @@
-import { join as pathJoin } from 'path';
 import { AST } from '..';
 import {
   c,
@@ -14,9 +13,7 @@ import {
   tableDef,
   table,
   prop,
-  importedData,
 } from '../utils';
-import { readFile, dataUrl } from '../testUtils';
 import { parseUTCDate } from '../date';
 import { run, runOne } from './index';
 
@@ -318,36 +315,6 @@ describe('Tables', () => {
     ).toEqual([
       [1, 2, 3],
       [1, 2, 3],
-    ]);
-  });
-});
-
-describe('imported data', () => {
-  it('can import CSV data from url', async () => {
-    const contentType = 'text/csv';
-    const url = dataUrl(
-      readFile(pathJoin(__dirname, '..', 'data', 'test1.csv')),
-      contentType
-    );
-    expect(await runOne(importedData(url, contentType))).toEqual([
-      [
-        'Hello',
-        'World',
-        'Deci',
-        'Table',
-        'Here',
-        'How',
-        'Are',
-        'You',
-        'Doing',
-        '?',
-      ],
-      [1, 2, 3.4, 5, 6.8, 7, 8, 9, 10, 11],
-      [
-        1623974400000, 1624060800000, 1624147200000, 1624233600000,
-        1624320000000, 1624406400000, 1624492800000, 1624579200000,
-        1624665600000, 1624752000000,
-      ],
     ]);
   });
 });

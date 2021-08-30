@@ -287,6 +287,26 @@
         }
       }
     },
+    "externaldata": {
+      "root": "libs/externaldata",
+      "sourceRoot": "libs/externaldata/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/externaldata/src/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/externaldata"
+          }
+        }
+      }
+    },
     "eslint-config-decipad": {
       "root": "libs/eslint-config-decipad",
       "sourceRoot": "libs/eslint-config-decipad",
@@ -657,6 +677,26 @@
           "options": {
             "jestConfig": "libs/fnqueue/jest.config.js",
             "codeCoverage": true
+          }
+        }
+      }
+    },
+    "utils": {
+      "root": "libs/utils",
+      "sourceRoot": "libs/utils/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/utils/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/utils"
           }
         }
       }

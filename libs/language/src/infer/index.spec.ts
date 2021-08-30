@@ -1,7 +1,6 @@
 import { produce } from 'immer';
 import { dequal } from 'dequal';
 
-import { join as pathJoin } from 'path';
 import { AST } from '..';
 import { InferError, inverseExponent, build as t } from '../type';
 
@@ -20,10 +19,7 @@ import {
   table,
   funcDef,
   prop,
-  importedData,
 } from '../utils';
-
-import { readFile, dataUrl } from '../testUtils';
 
 import { makeContext } from './context';
 import {
@@ -523,24 +519,6 @@ describe('tables', () => {
 
     expect(await inferStatement(makeContext(), table)).toEqual(
       t.tuple([t.string(), t.number()], ['Col1', 'Col2'])
-    );
-  });
-});
-
-describe('imported data', () => {
-  it('infers imported data from csv', async () => {
-    const contentType = 'text/csv';
-    const url = dataUrl(
-      readFile(pathJoin(__dirname, '..', 'data', 'test1.csv')),
-      contentType
-    );
-    const data = importedData(url, contentType);
-    expect(await inferExpression(nilCtx, data)).toEqual(
-      t.table({
-        length: 10,
-        columns: [t.string(), t.number(), t.date('time')],
-        columnNames: ['Col1', 'Col2', 'Col3'],
-      })
     );
   });
 });

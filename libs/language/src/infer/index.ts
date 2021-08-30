@@ -234,8 +234,19 @@ export const inferExpression = withErrorSource(
       }
       case 'imported-data': {
         const [url, contentType] = expr.args;
-        const data = await resolveData({ url, contentType, fetch: ctx.fetch });
-        return inferData(data, ctx);
+        if (!url) {
+          return t.impossible('No data URL defined');
+        }
+        try {
+          const data = await resolveData({
+            url,
+            contentType,
+            fetch: ctx.fetch,
+          });
+          return inferData(data, ctx);
+        } catch (err) {
+          return t.impossible(err.message);
+        }
       }
     }
   }

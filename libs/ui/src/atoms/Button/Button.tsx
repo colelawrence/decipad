@@ -39,6 +39,8 @@ type ButtonProps = {
 
   readonly submit?: boolean;
 
+  readonly disabled?: boolean;
+
   readonly children: TextChildren;
   readonly onClick?: () => void;
 };
@@ -47,12 +49,14 @@ export const Button = ({
   primary,
   extraSlim = false,
   submit = primary,
+  disabled = false,
 
   children,
   onClick = noop,
 }: ButtonProps): ReturnType<React.FC> => {
   return (
     <button
+      disabled={disabled}
       type={submit ? 'submit' : 'button'}
       css={[styles, primary && primaryStyles, extraSlim && extraSlimStyles]}
       onClick={onClick}

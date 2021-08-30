@@ -1,7 +1,7 @@
 const {
   setupFilesAfterEnv = [],
   ...baseConfig
-} = require('../../jest-base.config.js');
+} = require('../../jest-base.config');
 
 module.exports = {
   ...baseConfig,
@@ -13,10 +13,10 @@ module.exports = {
   coveragePathIgnorePatterns: ['/node_modules/', 'src/testUtils'],
   coverageThreshold: {
     global: {
-      statements: 95,
-      branches: 89,
-      functions: 96,
-      lines: 95,
+      statements: 87,
+      branches: 83,
+      functions: 91,
+      lines: 87,
     },
   },
 };

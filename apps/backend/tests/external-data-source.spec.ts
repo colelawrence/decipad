@@ -1,14 +1,21 @@
 import { createServer } from 'http';
+import { readFileSync as readFile } from 'fs';
+import { join } from 'path';
 import { nanoid } from 'nanoid';
 import getPort from 'get-port';
 import getBody from 'raw-body';
 import qs from 'qs';
-import { ExternalDataSource } from '@decipad/backendtypes';
+import {
+  parse as decodeCookie,
+  stringify as encodeCookie,
+} from 'simple-cookie';
+import { ExternalDataSource, Pad } from '@decipad/backendtypes';
 import test from './sandbox';
 import getDefined from './utils/get-defined';
 
 test('external data source', (ctx) => {
   const { test: it } = ctx;
+  let pad: Pad | undefined;
   let externalDataSource: ExternalDataSource | undefined;
   let thirdPartyServer: ReturnType<typeof createServer> | undefined;
   let thirdPartyServerPort: number | undefined;
@@ -30,12 +37,48 @@ test('external data source', (ctx) => {
   beforeAll(async () => {
     const client = ctx.graphql.withAuth(await ctx.auth());
 
+    const workspace = (
+      await client.mutate({
+        mutation: ctx.gql`
+          mutation {
+            createWorkspace(workspace: { name: "Workspace 1" }) {
+              id
+              name
+            }
+          }
+        `,
+      })
+    ).data.createWorkspace;
+
+    expect(workspace).toMatchObject({ name: 'Workspace 1' });
+
+    pad = (
+      await client.mutate({
+        mutation: ctx.gql`
+          mutation {
+            createPad(
+              workspaceId: "${workspace.id}"
+              pad: { name: "Pad 1" }
+            ) {
+              id
+              name
+            }
+          }
+        `,
+      })
+    ).data.createPad;
+  });
+
+  beforeAll(async () => {
+    const client = ctx.graphql.withAuth(await ctx.auth());
+
     const newDataSource = (
       await client.mutate({
         mutation: ctx.gql`
           mutation {
             createExternalDataSource(
               dataSource: {
+                padId: "${getDefined(pad).id}"
                 name: "test data source 1"
                 provider: testdatasource
                 externalId: "external id"
@@ -44,7 +87,6 @@ test('external data source', (ctx) => {
               id
               dataUrl
               authUrl
-              keys { id }
             }
           }
         `,
@@ -55,7 +97,6 @@ test('external data source', (ctx) => {
       id: expect.stringMatching(/.+/),
       dataUrl: expect.stringMatching(/http:\/\/.+/),
       authUrl: expect.stringMatching(/http:\/\/.+/),
-      keys: [],
     });
 
     externalDataSource = newDataSource;
@@ -92,7 +133,7 @@ test('external data source', (ctx) => {
   });
 
   it('client is able to do the oauth dance', async () => {
-    let saveTokenUrl: string | null = null;
+    let callbackUrl: string | null = null;
     const fetchWithAuthOptions = ctx.http.withAuthOptions(
       (await ctx.auth()).token
     );
@@ -114,6 +155,10 @@ test('external data source', (ctx) => {
     expect(redirectTo).toMatch(
       /^http:\/\/localhost:[0-9]+\/testdatasource\/authorization\?.*$/
     );
+    const cookies = response.headers
+      .get('set-cookie')
+      ?.split(',')
+      .map((c) => decodeCookie(c));
 
     // handle third-party auth request
     thirdPartyServerHandler = (req, res) => {
@@ -126,9 +171,9 @@ test('external data source', (ctx) => {
       expect(params.get('scope')).toBe('testdatasourcescope');
       expect(params.get('client_id')).toBe('testdatasourceclientid');
       expect(params.get('redirect_uri')).toMatch(
-        /^http:\/\/localhost:[0-9]+\/api\/externaldatasources\/.+\/callback/
+        /^http:\/\/localhost:[0-9]+\/api\/externaldatasources\/callback/
       );
-      saveTokenUrl = params.get('redirect_uri');
+      callbackUrl = params.get('redirect_uri');
 
       res.statusCode = 201;
       res.end('ok');
@@ -137,9 +182,13 @@ test('external data source', (ctx) => {
     // simulate client-side redirect
     const authResponse = await fetch(getDefined(redirectTo));
     expect(authResponse.ok).toBe(true);
-    const url = getDefined(saveTokenUrl, 'no save token url');
+    const url = getDefined(callbackUrl, 'no save token url');
     authCode = nanoid();
-    const saveToken = new URL(`${url}?code=${encodeURIComponent(authCode)}`);
+    const saveToken = new URL(
+      `${url}?code=${encodeURIComponent(authCode)}&externaldatasourceid=${
+        getDefined(externalDataSource).id
+      }`
+    );
 
     // handle third-party token fetch request
     thirdPartyServerHandler = (req, res) => {
@@ -164,7 +213,7 @@ test('external data source', (ctx) => {
         }
 
         const reqBody = qs.parse(body);
-        expect(reqBody.grant_type).toBe('client_credentials');
+        expect(reqBody.grant_type).toBe('authorization_code');
         expect(reqBody.client_id).toBe('testdatasourceclientid');
         expect(reqBody.client_secret).toBe('testdatasourceclientsecret');
         expect(reqBody.code).toBe(authCode);
@@ -180,16 +229,16 @@ test('external data source', (ctx) => {
     };
 
     // continue simulating client-side redirect
-    const saveTokenResponse = await fetch(saveToken.toString(), {
+    await fetch(saveToken.toString(), {
       ...fetchWithAuthOptions,
       headers: {
         ...fetchWithAuthOptions.headers,
         'x-use-third-party-test-server': `http://localhost:${getDefined(
           thirdPartyServerPort
         )}`,
+        cookie: cookies?.map((cookie) => encodeCookie(cookie)).join(', ') || '',
       },
     });
-    expect(saveTokenResponse.ok).toBe(true);
   });
 
   it('fetching data works after having access token', async () => {
@@ -198,10 +247,11 @@ test('external data source', (ctx) => {
 
     // handle third-party data fetch request
     thirdPartyServerHandler = (req, res) => {
-      expect(req.headers.authentication).toBe(
+      expect(req.headers.authorization).toBe(
         'Bearer testdatasourcefakeaccesstoken'
       );
-      res.end('here is some test data for you');
+      res.setHeader('content-type', 'text/csv');
+      res.end(readFile(join(__dirname, 'data', 'test1.csv')));
     };
 
     const response = await fetch(dataUrl, {
@@ -214,6 +264,5 @@ test('external data source', (ctx) => {
       },
     });
     expect(response.ok).toBe(true);
-    expect(await response.text()).toBe('here is some test data for you');
   });
 });

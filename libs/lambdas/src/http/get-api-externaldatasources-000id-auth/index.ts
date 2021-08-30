@@ -1,16 +1,20 @@
-import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
+import {
+  APIGatewayProxyEventV2 as APIGatewayProxyEvent,
+  APIGatewayProxyResultV2,
+} from 'aws-lambda';
 import { OAuth2 } from 'oauth';
-import { HttpResponse } from '@architect/functions';
+import { nanoid } from 'nanoid';
+import { stringify as encodeCookie } from 'simple-cookie';
 import tables from '@decipad/services/tables';
 import { authenticate } from '@decipad/services/authentication';
 import { isAuthorized } from '@decipad/services/authorization';
-import { provider as externalDataProvider } from '@decipad/services/externaldata';
+import { provider as externalDataProvider } from '@decipad/externaldata';
 import { app } from '@decipad/config';
+import { getDefined } from '@decipad/utils';
 import handle from '../handle';
-import getDefined from '../../common/get-defined';
 
 export const handler = handle(
-  async (event: APIGatewayProxyEvent): Promise<HttpResponse> => {
+  async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResultV2> => {
     const { user } = await authenticate(event);
     if (!user) {
       return {
@@ -68,13 +72,37 @@ export const handler = handle(
 
     const config = app();
     const authorizeUrl = oauth2Client.getAuthorizeUrl({
+      ...provider.authorizationParams,
       scope: provider.scope,
-      redirect_uri: `${config.urlBase}${config.apiPathBase}/externaldatasources/${id}/callback`,
+      redirect_uri: `${config.urlBase}${config.apiPathBase}/externaldatasources/callback`,
+      cacheBuster: nanoid(),
     });
+
+    // set client cookies
+    const cookies = [
+      encodeCookie({
+        name: 'externaldatasourceid',
+        value: id,
+        httponly: true,
+        path: '/',
+      }),
+    ];
+    const { redirect_uri: redirectUri } = event.queryStringParameters || {};
+    if (redirectUri) {
+      cookies.push(
+        encodeCookie({
+          name: 'redirect_uri',
+          value: redirectUri,
+          httponly: true,
+          path: '/',
+        })
+      );
+    }
 
     // redirect client to provider authorize url
     return {
       statusCode: 302,
+      cookies,
       headers: {
         Location: authorizeUrl,
       },

@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react';
+import { FC } from 'react';
 import {
   Button,
   Modal,
@@ -20,14 +20,10 @@ export function UploadDialogue({
   uploadState: UploadState;
   clearAll: () => void;
 }): ReturnType<FC> {
-  const onClose = useCallback(() => {
-    clearAll();
-  }, [clearAll]);
-
   const isOpen = uploadState.length > 0;
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={clearAll}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Modal Title</ModalHeader>
@@ -37,10 +33,9 @@ export function UploadDialogue({
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
+            <Button colorScheme="blue" mr={3} onClick={clearAll}>
               Close
             </Button>
-            <Button variant="ghost">Secondary Action</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

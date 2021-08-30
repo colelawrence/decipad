@@ -1,30 +1,18 @@
+import { getDefined } from '@decipad/utils';
 import { Context } from './context';
-import { TabularData } from '../data/TabularData';
+import { DataTable, toInternalType } from '../data/DataTable';
 import { Type, build as t } from '../type';
 
-export async function inferData(
-  data: TabularData,
-  ctx: Context
-): Promise<Type> {
+export async function inferData(data: DataTable, ctx: Context): Promise<Type> {
   const tableType = await ctx.stack.withPush(() => {
     const columns: Type[] = [];
-    const { columnNames } = data;
-    for (const columnName of columnNames) {
-      let columnType: Type | undefined;
-      for (let row = 0; row < data.length; row++) {
-        const value = data.get(columnName, row);
-        const newType = typeFromValue(value);
-        if (columnType && !columnType.sameAs(newType)) {
-          throw new Error(
-            `column ${columnName} is inconsistent at data row ${row}`
-          );
-        }
-        columnType = newType;
-      }
-      if (!columnType) {
-        throw new Error(`Unknown column type for column ${columnName}`);
-      }
+    const columnNames: string[] = [];
+    console.log(data);
+    for (let colIndex = 0; colIndex < data.numCols; colIndex += 1) {
+      const column = getDefined(data.getColumnAt(colIndex));
+      const columnType: Type = toInternalType(column.type.toString());
       columns.push(columnType);
+      columnNames.push(column.name);
     }
 
     return t.table({ length: data.length, columns, columnNames });

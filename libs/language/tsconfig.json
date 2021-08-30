@@ -4,5 +4,8 @@
     "lib": ["esnext", "dom"],
     "allowJs": true
   },
-  "include": ["src", "types"]
+  "include": ["src", "types"],
+  "references": [
+    { "path": "../../libs/utils" }
+  ]
 }

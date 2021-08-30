@@ -4,7 +4,9 @@ import {
   ELEMENT_H2,
   ELEMENT_H3,
 } from '@udecode/plate';
+import { ELEMENT_IMPORT_DATA } from '@decipad/ui';
 import { ModelBlock } from './icons/ModelBlock';
+import { ImportData } from './icons/ImportData';
 import { Subheading } from './icons/Subheading';
 import { Subtitle } from './icons/Subtitle';
 import { Zap } from './icons/Zap';
@@ -22,6 +24,12 @@ export const commands: Command[] = [
     name: 'Model',
     description: 'Formulas, calc and deci language.',
     icon: <ModelBlock />,
+  },
+  {
+    type: ELEMENT_IMPORT_DATA,
+    name: 'Import data',
+    description: 'Import external data.',
+    icon: <ImportData />,
   },
   {
     type: ELEMENT_H2,

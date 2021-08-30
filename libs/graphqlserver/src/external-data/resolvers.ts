@@ -37,6 +37,7 @@ const externalDataResource = Resource({
   }) => ({
     id: nanoid(),
     name: dataSource.name,
+    padId: dataSource.padId,
     provider: dataSource.provider,
     externalId: dataSource.externalId,
   }),
@@ -69,20 +70,6 @@ const resolvers = {
 
   ExternalDataSource: {
     access: externalDataResource.access,
-    async keys(externalDataSource: ExternalDataSourceRecord) {
-      const data = await tables();
-      const keys = (
-        await data.externaldatasourcekeys.query({
-          IndexName: 'byExternalDataSourceId',
-          KeyConditionExpression:
-            'externaldatasource_id = :externaldatasource_id',
-          ExpressionAttributeValues: {
-            ':externaldatasource_id': externalDataSource.id,
-          },
-        })
-      ).Items;
-      return keys;
-    },
   },
 };
 

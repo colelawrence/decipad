@@ -1,11 +1,38 @@
 import { ExternalData } from '..';
 
+interface JsonError {
+  message: string;
+  code: number;
+  stack: string;
+}
+
+class HttpError extends Error {
+  code = 500;
+}
+
+async function errorFromResponse(response: Response): Promise<Error> {
+  const text = await response.text();
+  let errorJson: JsonError | undefined;
+  try {
+    errorJson = JSON.parse(text);
+  } catch (err) {
+    // do nothing
+  }
+  if (errorJson) {
+    const err = new HttpError(errorJson.message || errorJson.toString());
+    err.code = errorJson.code;
+    err.stack = errorJson.stack;
+    return err;
+  }
+  return new Error(text);
+}
+
 export default async function defaultFetch(
   url: string
 ): Promise<ExternalData.FetchResult> {
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error(await response.text());
+    throw await errorFromResponse(response);
   }
   const result: AsyncIterable<Uint8Array> = {
     [Symbol.asyncIterator]() {

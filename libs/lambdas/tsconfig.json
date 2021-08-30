@@ -10,6 +10,8 @@
     { "path": "../../libs/meta" },
     { "path": "../../libs/backendtypes" },
     { "path": "../../libs/services" },
-    { "path": "../../libs/graphqlserver" }
+    { "path": "../../libs/graphqlserver" },
+    { "path": "../../libs/utils" },
+    { "path": "../../libs/externaldata" }
   ]
 }
