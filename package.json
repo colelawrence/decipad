@@ -232,7 +232,6 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "7.24.0",
     "eslint-plugin-react-hooks": "4.2.0",
-    "fastestsmallesttextencoderdecoder": "^1.0.22",
     "file-loader": "^6.2.0",
     "get-port": "^5.1.1",
     "husky": "^6.0.0",

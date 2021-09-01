@@ -7,13 +7,11 @@ import 'jest-playwright-preset';
 // emotion
 import { matchers, createSerializer } from '@emotion/jest';
 
-// TextEncoder and TextDecoder required by @apache-arrow
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { TextEncoder, TextDecoder } from 'fastestsmallesttextencoderdecoder';
+import { TextEncoder, TextDecoder } from 'util';
 
 if (!global.TextEncoder) {
   global.TextEncoder = TextEncoder;
+  // @ts-expect-error Node's version is a good enough polyfill
   global.TextDecoder = TextDecoder;
 }
 
