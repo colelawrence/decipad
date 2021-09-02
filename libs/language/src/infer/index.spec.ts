@@ -396,6 +396,13 @@ describe('columns', () => {
       t.number()
     );
   });
+
+  it('propagates errors within', async () => {
+    expect(
+      (await inferExpression(nilCtx, col(1, 2, r('MissingVar')))).errorCause
+        ?.message
+    ).toMatch(/MissingVar/);
+  });
 });
 
 describe('tables', () => {
@@ -521,6 +528,30 @@ describe('tables', () => {
       t.tuple([t.string(), t.number()], ['Col1', 'Col2'])
     );
   });
+
+  it('Propagates errors in its items', async () => {
+    expect(
+      (
+        await inferStatement(
+          makeContext(),
+          tableDef('Table', {
+            Col1: r('MissingVar'),
+          })
+        )
+      ).errorCause?.message
+    ).toMatch(/MissingVar/);
+
+    expect(
+      (
+        await inferStatement(
+          makeContext(),
+          tableDef('Table', {
+            Col1: col(1, 2, r('MissingVar')),
+          })
+        )
+      ).errorCause?.message
+    ).toMatch(/MissingVar/);
+  });
 });
 
 it('infers refs', async () => {
@@ -630,6 +661,24 @@ describe('Given', () => {
       (await inferExpression(scopeWithTupleAndNum, given('Num', l(1))))
         .errorCause
     ).not.toBeNull();
+  });
+
+  it('propagates errors in the given variable', async () => {
+    const scopeWithColumn = makeContext([['Errored', t.impossible('oh no')]]);
+
+    expect(
+      (await inferExpression(scopeWithColumn, given('Errored', l(1))))
+        .errorCause
+    ).not.toBeNull();
+  });
+
+  it('propagates errors inside the expression', async () => {
+    const scopeWithColumn = makeContext([['Nums', t.column(t.number(), 3)]]);
+
+    expect(
+      (await inferExpression(scopeWithColumn, given('Nums', r('MissingVar'))))
+        .errorCause?.message
+    ).toMatch(/MissingVar/);
   });
 });
 

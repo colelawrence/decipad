@@ -107,6 +107,9 @@ export const inferExpression = withErrorSource(
           expr.args[0].map((a) => () => inferExpression(ctx, a))
         );
 
+        const erroredCell = cellTypes.find((cell) => cell.errorCause != null);
+        if (erroredCell != null) return erroredCell;
+
         if (cellTypes.length === 0) {
           return t.impossible(InferError.unexpectedEmptyColumn());
         } else {
@@ -192,10 +195,11 @@ export const inferExpression = withErrorSource(
       case 'given': {
         const [ref, body] = expr.args;
         const refName = getIdentifierString(ref);
+        const refType = await inferExpression(ctx, ref);
 
-        const { cellType, columnSize, tupleTypes, tupleNames } =
-          await inferExpression(ctx, ref);
+        if (refType.errorCause) return refType;
 
+        const { cellType, columnSize, tupleTypes, tupleNames } = refType;
         const largestColumn =
           tupleTypes != null ? getLargestColumn(tupleTypes) : null;
 
