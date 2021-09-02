@@ -51,7 +51,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged && nx affected:test"
     }
   },
   "lint-staged": {
@@ -59,8 +59,7 @@
       "prettier --write"
     ],
     "*.{js,jsx,ts,tsx}": [
-      "eslint --cache --fix",
-      "jest --passWithNoTests"
+      "eslint --cache --fix"
     ]
   },
   "dependencies": {
