@@ -56,16 +56,16 @@
     "emails": {
       "tags": []
     },
-    "externaldata": {
-      "tags": []
-    },
-    "graphqlresource": {
-      "tags": []
-    },
     "eslint-config-decipad": {
       "tags": []
     },
+    "externaldata": {
+      "tags": []
+    },
     "fnqueue": {
+      "tags": []
+    },
+    "graphqlresource": {
       "tags": []
     },
     "graphqlserver": {

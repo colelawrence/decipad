@@ -4,7 +4,6 @@ import parseDataUrl from 'data-urls';
 /* eslint-enable import/no-extraneous-dependencies */
 import { Date as IDate, TimeQuantity } from './src/interpreter/Value';
 import { stringifyDate } from './src/date';
-import { InferError } from './src/type';
 
 // import { ReadableStream } from "web-streams-polyfill/ponyfill";
 
@@ -40,13 +39,17 @@ expect.addSnapshotSerializer({
 });
 
 expect.addSnapshotSerializer({
-  test: (v) => v instanceof InferError,
-  print: ({ spec: { errType, ...errData } }) => {
-    const errDataString = Object.entries(errData)
-      .map(([key, value]) => `"${key}" => ${JSON.stringify(value)}`)
-      .join(', ');
+  test: (v) => v != null && typeof v.errType === 'string',
+  print: ({ errType, ...errData }) => {
+    if (errData[errType] != null && Object.keys(errData).length === 1) {
+      return `ErrSpec:${errType}(${JSON.stringify(errData[errType])})`;
+    } else {
+      const errDataString = Object.entries(errData)
+        .map(([key, value]) => `"${key}" => ${JSON.stringify(value)}`)
+        .join(', ');
 
-    return `InferError.${errType}(${errDataString})`;
+      return `ErrSpec:${errType}(${errDataString})`;
+    }
   },
 });
 

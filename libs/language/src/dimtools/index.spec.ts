@@ -69,7 +69,7 @@ describe('automapTypes', () => {
 
   it('errors with tuples', () => {
     const t1 = num;
-    const tuple = t.tuple([num]);
+    const tuple = t.tuple([num], ['X']);
 
     expect(automapTypes([t1, tuple], typeId)).toEqual(
       t.impossible('Unexpected tuple')

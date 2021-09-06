@@ -1,0 +1,162 @@
+import { buildType as t, AST } from '..';
+import { InferError } from './InferError';
+import {
+  deserializeType,
+  SerializedType,
+  serializeType,
+} from './serialization';
+
+const meter: AST.Unit = { unit: 'meter', exp: 1 } as unknown as AST.Unit;
+const errorCause = InferError.expectedButGot('A', 'B');
+
+it('can stringify a type', () => {
+  expect(serializeType(t.number())).toMatchInlineSnapshot(`
+    Object {
+      "kind": "number",
+      "unit": null,
+    }
+  `);
+  expect(serializeType(t.number([meter]))).toMatchInlineSnapshot(`
+    Object {
+      "kind": "number",
+      "unit": Array [
+        Object {
+          "exp": 1,
+          "unit": "meter",
+        },
+      ],
+    }
+  `);
+  expect(serializeType(t.scalar('string'))).toMatchInlineSnapshot(`
+    Object {
+      "kind": "scalar",
+      "type": "string",
+    }
+  `);
+  expect(serializeType(t.timeQuantity(['month', 'day'])))
+    .toMatchInlineSnapshot(`
+      Object {
+        "kind": "time-quantity",
+        "timeUnits": Array [
+          "month",
+          "day",
+        ],
+      }
+    `);
+  expect(serializeType(t.column(t.number(), 2))).toMatchInlineSnapshot(`
+    Object {
+      "cellType": Object {
+        "kind": "number",
+        "unit": null,
+      },
+      "columnSize": 2,
+      "kind": "column",
+    }
+  `);
+  expect(serializeType(t.tuple([t.number()], ['hi']))).toMatchInlineSnapshot(`
+    Object {
+      "kind": "tuple",
+      "tupleNames": Array [
+        "hi",
+      ],
+      "tupleTypes": Array [
+        Object {
+          "kind": "number",
+          "unit": null,
+        },
+      ],
+    }
+  `);
+  expect(serializeType(t.date('month'))).toMatchInlineSnapshot(`
+    Object {
+      "date": "month",
+      "kind": "date",
+    }
+  `);
+  expect(serializeType(t.functionPlaceholder())).toMatchInlineSnapshot(`
+    Object {
+      "kind": "function",
+    }
+  `);
+  expect(serializeType(t.impossible(errorCause))).toMatchInlineSnapshot(`
+    Object {
+      "errorCause": ErrSpec:expectedButGot(["A","B"]),
+      "kind": "type-error",
+    }
+  `);
+});
+
+it('can parse a type', () => {
+  const unitlessNumber: SerializedType = {
+    kind: 'number',
+    unit: null,
+  };
+  const testDeserialize = (x: SerializedType) => deserializeType(x).toString();
+
+  expect(
+    testDeserialize({ kind: 'date', date: 'month' })
+  ).toMatchInlineSnapshot(`"month"`);
+
+  expect(testDeserialize(unitlessNumber)).toMatchInlineSnapshot(`"<number>"`);
+
+  expect(
+    testDeserialize({
+      kind: 'number',
+      unit: [meter],
+    })
+  ).toMatchInlineSnapshot(`"meter"`);
+
+  expect(
+    testDeserialize({
+      kind: 'scalar',
+      type: 'string',
+    })
+  ).toMatchInlineSnapshot(`"<string>"`);
+
+  expect(
+    testDeserialize({
+      kind: 'range',
+      rangeOf: unitlessNumber,
+    })
+  ).toMatchInlineSnapshot(`"range of <number>"`);
+
+  expect(
+    testDeserialize({
+      kind: 'column',
+      cellType: unitlessNumber,
+      columnSize: 123,
+    })
+  ).toMatchInlineSnapshot(`"<number> x 123"`);
+
+  expect(
+    testDeserialize({
+      kind: 'tuple',
+      tupleTypes: [unitlessNumber, unitlessNumber],
+      tupleNames: ['Hi', 'Hi2'],
+    })
+  ).toMatchInlineSnapshot(`"[ Hi = <number>, Hi2 = <number> ]"`);
+
+  expect(
+    deserializeType({
+      kind: 'time-quantity',
+      timeUnits: ['day', 'year'],
+    })
+  ).toMatchObject({
+    timeUnits: ['day', 'year'],
+  });
+
+  expect(
+    testDeserialize({
+      kind: 'imported-data',
+      dataUrl: 'http://ex.com/1',
+    })
+  ).toMatchInlineSnapshot(`"<data url=\\"http://ex.com/1\\">"`);
+
+  expect(deserializeType({ kind: 'function' })).toMatchObject({
+    functionness: true,
+  });
+
+  expect(
+    deserializeType({ kind: 'type-error', errorCause: errorCause.spec })
+  ).toMatchObject({ errorCause });
+});

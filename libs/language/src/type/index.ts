@@ -14,6 +14,7 @@ import { setUnit } from './utils';
 
 import * as t from './build';
 
+export * from './serialization';
 export { InferError, inverseExponent, t as build };
 
 export const scalarTypeNames = ['number', 'string', 'boolean'];
@@ -53,12 +54,6 @@ export interface ExtendArgs {
 
 export class Type {
   [immerable] = true;
-
-  static Number: Type;
-  static String: Type;
-  static Boolean: Type;
-  static Impossible: Type;
-  static FunctionPlaceholder: Type;
 
   node: AST.Node | null = null;
   errorCause: InferError | null = null;

@@ -17,9 +17,11 @@ describe('common functions', () => {
     expect(
       dateAndTimeQuantityFunctor(t.date('month'), t.timeQuantity(['day']))
         .errorCause
-    ).toMatchInlineSnapshot(
-      `InferError.mismatchedSpecificity("expectedSpecificity" => "month", "gotSpecificity" => "day")`
-    );
+    ).toMatchInlineSnapshot(`
+      InferError {
+        "spec": ErrSpec:mismatchedSpecificity("expectedSpecificity" => "month", "gotSpecificity" => "day"),
+      }
+    `);
 
     expect(
       dateAndTimeQuantityFunctor(t.date('day'), t.timeQuantity(['quarter']))
@@ -72,11 +74,12 @@ describe('common functions', () => {
 });
 
 it('date + time-quantity', () => {
-  expect(
-    plus.functor(t.date('month'), t.timeQuantity(['day'])).errorCause
-  ).toMatchInlineSnapshot(
-    `InferError.mismatchedSpecificity("expectedSpecificity" => "month", "gotSpecificity" => "day")`
-  );
+  expect(plus.functor(t.date('month'), t.timeQuantity(['day'])).errorCause)
+    .toMatchInlineSnapshot(`
+    InferError {
+      "spec": ErrSpec:mismatchedSpecificity("expectedSpecificity" => "month", "gotSpecificity" => "day"),
+    }
+  `);
   expect(
     plus.functor(t.date('month'), t.timeQuantity(['year'])).date
   ).toMatchInlineSnapshot(`"month"`);

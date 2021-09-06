@@ -312,22 +312,30 @@
       "sourceRoot": "libs/eslint-config-decipad",
       "projectType": "library"
     },
-    "graphqlserver": {
-      "root": "libs/graphqlserver",
-      "sourceRoot": "libs/graphqlserver/src",
+    "fnqueue": {
+      "root": "libs/fnqueue",
+      "sourceRoot": "libs/fnqueue/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/graphqlserver/src/**/*.ts"],
+            "lintFilePatterns": ["libs/fnqueue/**/*.ts"],
             "maxWarnings": 0
           }
         },
         "typecheck": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "yarn tsc -b libs/graphqlserver"
+            "command": "yarn tsc -b libs/fnqueue"
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/fnqueue"],
+          "options": {
+            "jestConfig": "libs/fnqueue/jest.config.js",
+            "codeCoverage": true
           }
         }
       }
@@ -347,6 +355,26 @@
           "executor": "@nrwl/workspace:run-commands",
           "options": {
             "command": "yarn tsc -b libs/graphqlresource"
+          }
+        }
+      }
+    },
+    "graphqlserver": {
+      "root": "libs/graphqlserver",
+      "sourceRoot": "libs/graphqlserver/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/graphqlserver/src/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/graphqlserver"
           }
         }
       }

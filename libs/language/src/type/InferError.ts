@@ -1,7 +1,7 @@
 import { AST, Time, Type } from '..';
 import { OverloadTypeName } from '../builtins/overloadBuiltin';
 
-type ErrSpec =
+export type ErrSpec =
   | {
       errType: 'free-form';
       message: string;

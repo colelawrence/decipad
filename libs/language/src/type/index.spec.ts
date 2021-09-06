@@ -70,8 +70,8 @@ it('can be stringified', () => {
   const table = t.tuple([t.number([meter]), t.string()], ['Col1', 'Col2']);
   expect(table.toString()).toEqual('[ Col1 = meter, Col2 = <string> ]');
 
-  const tuple = t.tuple([t.number(), t.string()]);
-  expect(tuple.toString()).toEqual('[ <number>, <string> ]');
+  const tuple = t.tuple([t.number(), t.string()], ['A', 'B']);
+  expect(tuple.toString()).toEqual('[ A = <number>, B = <string> ]');
 
   const col = t.column(t.string(), 4);
   expect(col.toString()).toEqual('<string> x 4');
@@ -102,7 +102,7 @@ it('can be stringified in basic form', () => {
   expect(table.toBasicString()).toEqual('table');
 
   // Actually "tuple" is more correct but we're going to kill tuples
-  const tuple = t.tuple([t.number(), t.string()]);
+  const tuple = t.tuple([t.number(), t.string()], ['A', 'B']);
   expect(tuple.toBasicString()).toEqual('table');
 
   const col = t.column(t.string(), 4);
@@ -125,7 +125,7 @@ describe('sameAs', () => {
     sameAsItself(t.number([meter]));
     sameAsItself(t.number([second, meter]));
     sameAsItself(t.column(t.number(), 6));
-    sameAsItself(t.column(t.tuple([t.number(), t.string()]), 6));
+    sameAsItself(t.column(t.tuple([t.number(), t.string()], ['A', 'B']), 6));
   });
 
   it('checks scalar types and lack thereof', () => {
@@ -187,9 +187,9 @@ describe('new columns and tuples', () => {
       3
     );
 
-    expect(t.tuple([t.number(), t.column(t.number(), 6)]).cardinality).toEqual(
-      3
-    );
+    expect(
+      t.tuple([t.number(), t.column(t.number(), 6)], ['A']).cardinality
+    ).toEqual(3);
   });
 
   it('Can reduce one dimension off the top', () => {
@@ -199,7 +199,7 @@ describe('new columns and tuples', () => {
     );
 
     expect(t.string().reduced().errorCause).not.toBeNull();
-    expect(t.tuple([t.string()]).reduced().errorCause).not.toBeNull();
+    expect(t.tuple([t.string()], ['A']).reduced().errorCause).not.toBeNull();
   });
 });
 

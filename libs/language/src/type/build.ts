@@ -58,7 +58,7 @@ export const column = (cellType: Type, columnSize: number) => {
   }
 };
 
-export const tuple = (tupleTypes: Type[], tupleNames?: string[] | null) => {
+export const tuple = (tupleTypes: Type[], tupleNames: string[]) => {
   const t = new Type();
 
   t.tupleTypes = tupleTypes;
@@ -79,11 +79,11 @@ export const importedData = (url: string) =>
   });
 
 export const functionPlaceholder = () =>
-  produce(impossible(), (fType) => {
+  produce(new Type(), (fType) => {
     fType.functionness = true;
   });
 
-export const impossible = (errorCause?: string | InferError | null) => {
+export const impossible = (errorCause: string | InferError) => {
   const type = produce(number(), (impossibleType) => {
     impossibleType.type = null;
   });
