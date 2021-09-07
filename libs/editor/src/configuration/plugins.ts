@@ -17,6 +17,7 @@ import {
   WithAutoformatOptions,
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
+import { createAutoPairsPlugin } from '../plugins/AutoPairs/createAutoPairsPlugin';
 import { createBubblePlugin } from '../plugins/Bubbles/createBubblePlugin';
 import { createForcedLayoutPlugin } from '../plugins/ForcedLayout/createForcedLayoutPlugin';
 import { createMarksPlugins } from '../plugins/Marks/createMarksPlugins';
@@ -35,6 +36,8 @@ export const plugins = [
   createCodeBlockPlugin(),
 
   ...createMarksPlugins(),
+
+  createAutoPairsPlugin(),
 
   createExitBreakPlugin(exitBreakOptions),
   createSoftBreakPlugin(softBreakOptions),
