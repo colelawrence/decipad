@@ -250,7 +250,11 @@ describe('Tables', () => {
           Col3: c('>', n('ref', 'Col1'), n('ref', 'Col2')),
         })
       )
-    ).toEqual([[1, 2, 3], 2, [false, false, true]]);
+    ).toEqual([
+      [1, 2, 3],
+      [2, 2, 2],
+      [false, false, true],
+    ]);
 
     expect(
       await runOne(
@@ -259,7 +263,7 @@ describe('Tables', () => {
           Col2: l(2),
         })
       )
-    ).toEqual([1, 2]);
+    ).toEqual([[1], [2]]);
 
     expect(
       await runOne(
@@ -274,14 +278,14 @@ describe('Tables', () => {
     ]);
   });
 
-  it('Tables can have one item', async () => {
+  it('Tables with scalar item get turned to tables with 1 row', async () => {
     expect(
       await runOne(
         tableDef('Table', {
           Col1: l(101),
         })
       )
-    ).toEqual([101]);
+    ).toEqual([[101]]);
 
     expect(
       await runOne(

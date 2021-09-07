@@ -69,14 +69,14 @@ describe('automapTypes', () => {
 
   it('errors with tuples', () => {
     const t1 = num;
-    const tuple = t.tuple([num], ['X']);
+    const tuple = t.row([num], ['X']);
 
     expect(automapTypes([t1, tuple], typeId)).toEqual(
-      t.impossible('Unexpected tuple')
+      t.impossible('Unexpected row')
     );
 
     expect(automapTypes([tuple, tuple], typeId)).toEqual(
-      t.impossible('Unexpected tuple')
+      t.impossible('Unexpected row')
     );
   });
 

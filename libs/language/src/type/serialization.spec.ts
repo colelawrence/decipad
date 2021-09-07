@@ -43,6 +43,15 @@ it('can stringify a type', () => {
         ],
       }
     `);
+  expect(serializeType(t.range(t.number()))).toMatchInlineSnapshot(`
+    Object {
+      "kind": "range",
+      "rangeOf": Object {
+        "kind": "number",
+        "unit": null,
+      },
+    }
+  `);
   expect(serializeType(t.column(t.number(), 2))).toMatchInlineSnapshot(`
     Object {
       "cellType": Object {
@@ -53,26 +62,58 @@ it('can stringify a type', () => {
       "kind": "column",
     }
   `);
-  expect(serializeType(t.tuple([t.number()], ['hi']))).toMatchInlineSnapshot(`
+  expect(
+    serializeType(
+      t.table({ length: 123, columnTypes: [t.number()], columnNames: ['hi'] })
+    )
+  ).toMatchInlineSnapshot(`
     Object {
-      "kind": "tuple",
-      "tupleNames": Array [
+      "columnNames": Array [
         "hi",
       ],
-      "tupleTypes": Array [
+      "columnTypes": Array [
         Object {
           "kind": "number",
           "unit": null,
         },
       ],
+      "kind": "table",
+      "tableLength": 123,
     }
   `);
+  expect(serializeType(t.row([t.number(), t.string()], ['Num', 'S'])))
+    .toMatchInlineSnapshot(`
+      Object {
+        "kind": "row",
+        "rowCellNames": Array [
+          "Num",
+          "S",
+        ],
+        "rowCellTypes": Array [
+          Object {
+            "kind": "number",
+            "unit": null,
+          },
+          Object {
+            "kind": "scalar",
+            "type": "string",
+          },
+        ],
+      }
+    `);
   expect(serializeType(t.date('month'))).toMatchInlineSnapshot(`
     Object {
       "date": "month",
       "kind": "date",
     }
   `);
+  expect(serializeType(t.importedData('http://example.com/foo.decidata')))
+    .toMatchInlineSnapshot(`
+      Object {
+        "dataUrl": "http://example.com/foo.decidata",
+        "kind": "imported-data",
+      }
+    `);
   expect(serializeType(t.functionPlaceholder())).toMatchInlineSnapshot(`
     Object {
       "kind": "function",
@@ -130,11 +171,20 @@ it('can parse a type', () => {
 
   expect(
     testDeserialize({
-      kind: 'tuple',
-      tupleTypes: [unitlessNumber, unitlessNumber],
-      tupleNames: ['Hi', 'Hi2'],
+      kind: 'row',
+      rowCellTypes: [unitlessNumber, unitlessNumber],
+      rowCellNames: ['Hi', 'Hi2'],
     })
-  ).toMatchInlineSnapshot(`"[ Hi = <number>, Hi2 = <number> ]"`);
+  ).toMatchInlineSnapshot(`"row [ Hi = <number>, Hi2 = <number> ]"`);
+
+  expect(
+    testDeserialize({
+      kind: 'table',
+      tableLength: 123,
+      columnTypes: [unitlessNumber, unitlessNumber],
+      columnNames: ['Hi', 'Hi2'],
+    })
+  ).toMatchInlineSnapshot(`"table { Hi = <number>, Hi2 = <number> }"`);
 
   expect(
     deserializeType({

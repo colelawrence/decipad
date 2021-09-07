@@ -3,7 +3,7 @@ import { cleanDate } from './date';
 import {
   runCode,
   runCodeForVariables,
-  objectToTupleType,
+  objectToTableType,
   objectToTupleValue,
 } from './testUtils';
 
@@ -41,22 +41,20 @@ describe('use of funds document', () => {
         }
       `)
     ).toMatchObject({
-      type: objectToTupleType({
-        Months: t.column(t.date('month'), 12),
-        Exec: t.column(t.number(), 12),
-        Product: t.column(t.number(), 12),
-        Tech: t.column(t.number(), 12),
-        FrontEnd: t.column(t.number(), 12),
+      type: objectToTableType(12, {
+        Months: t.date('month'),
+        Exec: t.number(),
+        Product: t.number(),
+        Tech: t.number(),
+        FrontEnd: t.number(),
       }),
-      value: [
-        objectToTupleValue({
-          Months: months,
-          Exec: salaryWithBonus,
-          Product: salaryWithBonus.map((salary, i) => (i >= 1 ? salary : 0)),
-          Tech: usualSalary.map((salary, i) => (i >= 2 ? salary : 0)),
-          FrontEnd: salaryWithBonus.map((salary, i) => (i >= 2 ? salary : 0)),
-        }),
-      ],
+      value: objectToTupleValue({
+        Months: months,
+        Exec: salaryWithBonus,
+        Product: salaryWithBonus.map((salary, i) => (i >= 1 ? salary : 0)),
+        Tech: usualSalary.map((salary, i) => (i >= 2 ? salary : 0)),
+        FrontEnd: salaryWithBonus.map((salary, i) => (i >= 2 ? salary : 0)),
+      }),
     });
   });
 
@@ -75,8 +73,10 @@ describe('use of funds document', () => {
             Bonus = [false, true, false]
           }
 
+          function IsWorking(Month StartDate) => dategte(Month, StartDate)
+
           function CostToBusiness(Month, Salary, StartDate, GetsBonus) =>
-            if dategte(Month, StartDate)
+            if IsWorking(Month, StartDate)
               then Salary + (Salary * 20%) + (if GetsBonus then Salary * 30% else 0)
               else 0
 
@@ -90,8 +90,6 @@ describe('use of funds document', () => {
           }
 
           TotalsPerMonth = total(transpose(StaffCosts.Costs))
-
-          function IsWorking(Month StartDate) => dategte(Month, StartDate)
 
           function CountWorking(Month StartDate) =>
             total(given StartDate: if IsWorking(Month, StartDate) then 1 else 0)
@@ -231,22 +229,15 @@ describe('more models', () => {
         `
       )
     ).toMatchObject({
-      value: [[years, [5200, 5404, 5612.08]]],
+      value: [years, [5200, 5404, 5612.08]],
       type: {
-        tupleNames: ['Years', 'Value'],
-        tupleTypes: [
+        tableLength: 3,
+        columnNames: ['Years', 'Value'],
+        columnTypes: [
+          { date: 'year' },
           {
-            columnSize: 3,
-            cellType: {
-              date: 'year',
-            },
-          },
-          {
-            columnSize: 3,
-            cellType: {
-              type: 'number',
-              unit: [{ unit: 'eur' }],
-            },
+            type: 'number',
+            unit: [{ unit: 'eur' }],
           },
         ],
       },

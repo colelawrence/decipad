@@ -2,7 +2,7 @@ import repl from 'repl';
 import util from 'util';
 import chalk from 'chalk';
 
-import { AST, Interpreter } from '.';
+import { AST, buildType, Interpreter } from '.';
 import { getDefined, zip } from './utils';
 import { parse } from './parser';
 import { prettyPrintAST } from './parser/utils';
@@ -40,11 +40,30 @@ export const stringifyResult = (
   }
 
   if (
-    type.tupleTypes != null &&
-    type.tupleNames != null &&
+    type.columnTypes != null &&
+    type.columnNames != null &&
+    type.tableLength != null &&
     Array.isArray(result)
   ) {
-    const cols = zip(result, zip(type.tupleTypes, type.tupleNames))
+    const { tableLength } = type;
+    const cols = zip(result, zip(type.columnTypes, type.columnNames))
+      .map(
+        ([col, [type, name]]) =>
+          `  ${name} = ${stringifyResult(
+            col,
+            buildType.column(type, tableLength)
+          )}`
+      )
+      .join(',\n');
+    return `{\n${cols}\n}`;
+  }
+
+  if (
+    type.rowCellTypes != null &&
+    type.rowCellNames != null &&
+    Array.isArray(result)
+  ) {
+    const cols = zip(result, zip(type.rowCellTypes, type.rowCellNames))
       .map(([col, [type, name]]) => `  ${name} = ${stringifyResult(col, type)}`)
       .join(',\n');
     return `{\n${cols}\n}`;

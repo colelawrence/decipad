@@ -35,15 +35,39 @@ export const timeQuantity = (timeUnits: Time.Unit[]) =>
 
 interface BuildTableArgs {
   length: number;
-  columns: Type[];
+  columnTypes: Type[];
   columnNames: string[];
 }
 
-export const table = ({ length, columns, columnNames }: BuildTableArgs) =>
-  tuple(
-    columns.map((cellType) => column(cellType, length)),
-    columnNames
-  );
+export const table = ({ length, columnTypes, columnNames }: BuildTableArgs) => {
+  const t = new Type();
+
+  t.tableLength = length;
+  t.columnTypes = columnTypes;
+  t.columnNames = columnNames;
+
+  const errored = t.columnTypes.find((t) => t.errorCause != null);
+  if (errored != null) {
+    return t.withErrorCause(getDefined(errored.errorCause));
+  } else {
+    return t;
+  }
+};
+
+export const row = (cells: Type[], cellNames: string[]) => {
+  const t = new Type();
+
+  t.rowCellTypes = cells;
+  t.rowCellNames = cellNames;
+
+  const errored = t.rowCellTypes.find((t) => t.errorCause != null);
+
+  if (errored != null) {
+    return t.withErrorCause(getDefined(errored.errorCause));
+  } else {
+    return t;
+  }
+};
 
 export const column = (cellType: Type, columnSize: number) => {
   const t = new Type();
@@ -53,21 +77,6 @@ export const column = (cellType: Type, columnSize: number) => {
 
   if (cellType.errorCause != null) {
     return t.withErrorCause(cellType.errorCause);
-  } else {
-    return t;
-  }
-};
-
-export const tuple = (tupleTypes: Type[], tupleNames: string[]) => {
-  const t = new Type();
-
-  t.tupleTypes = tupleTypes;
-  t.tupleNames = tupleNames ?? null;
-
-  const errored = t.tupleTypes.find((t) => t.errorCause != null);
-
-  if (errored != null) {
-    return t.withErrorCause(getDefined(errored.errorCause));
   } else {
     return t;
   }

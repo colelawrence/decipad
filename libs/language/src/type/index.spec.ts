@@ -67,11 +67,15 @@ it('can be stringified', () => {
 
   expect(t.date('month').toString()).toEqual('month');
 
-  const table = t.tuple([t.number([meter]), t.string()], ['Col1', 'Col2']);
-  expect(table.toString()).toEqual('[ Col1 = meter, Col2 = <string> ]');
+  const table = t.table({
+    length: 123,
+    columnTypes: [t.number([meter]), t.string()],
+    columnNames: ['Col1', 'Col2'],
+  });
+  expect(table.toString()).toEqual('table { Col1 = meter, Col2 = <string> }');
 
-  const tuple = t.tuple([t.number(), t.string()], ['A', 'B']);
-  expect(tuple.toString()).toEqual('[ A = <number>, B = <string> ]');
+  const row = t.row([t.number([meter]), t.string()], ['Col1', 'Col2']);
+  expect(row.toString()).toEqual('row [ Col1 = meter, Col2 = <string> ]');
 
   const col = t.column(t.string(), 4);
   expect(col.toString()).toEqual('<string> x 4');
@@ -98,12 +102,15 @@ it('can be stringified in basic form', () => {
 
   expect(t.date('month').toBasicString()).toEqual('date(month)');
 
-  const table = t.tuple([t.number([meter]), t.string()], ['Col1', 'Col2']);
+  const table = t.table({
+    length: 123,
+    columnTypes: [t.number([meter]), t.string()],
+    columnNames: ['Col1', 'Col2'],
+  });
   expect(table.toBasicString()).toEqual('table');
 
-  // Actually "tuple" is more correct but we're going to kill tuples
-  const tuple = t.tuple([t.number(), t.string()], ['A', 'B']);
-  expect(tuple.toBasicString()).toEqual('table');
+  const row = t.row([t.number([meter]), t.string()], ['Col1', 'Col2']);
+  expect(row.toBasicString()).toEqual('row');
 
   const col = t.column(t.string(), 4);
   expect(col.toBasicString()).toEqual('column');
@@ -125,7 +132,14 @@ describe('sameAs', () => {
     sameAsItself(t.number([meter]));
     sameAsItself(t.number([second, meter]));
     sameAsItself(t.column(t.number(), 6));
-    sameAsItself(t.column(t.tuple([t.number(), t.string()], ['A', 'B']), 6));
+    sameAsItself(t.column(t.row([t.number(), t.string()], ['A', 'B']), 6));
+    sameAsItself(
+      t.table({
+        length: 123,
+        columnNames: ['A', 'B'],
+        columnTypes: [t.number([meter]), t.column(t.boolean(), 10)],
+      })
+    );
   });
 
   it('checks scalar types and lack thereof', () => {
@@ -188,7 +202,15 @@ describe('new columns and tuples', () => {
     );
 
     expect(
-      t.tuple([t.number(), t.column(t.number(), 6)], ['A']).cardinality
+      t.row([t.number(), t.column(t.number(), 6)], ['A', 'B']).cardinality
+    ).toEqual(3);
+
+    expect(
+      t.table({
+        length: 123,
+        columnNames: ['A', 'B'],
+        columnTypes: [t.number(), t.column(t.number(), 6)],
+      }).cardinality
     ).toEqual(3);
   });
 
@@ -199,7 +221,17 @@ describe('new columns and tuples', () => {
     );
 
     expect(t.string().reduced().errorCause).not.toBeNull();
-    expect(t.tuple([t.string()], ['A']).reduced().errorCause).not.toBeNull();
+    expect(
+      t
+        .table({
+          length: 1,
+          columnNames: ['A'],
+          columnTypes: [t.number()],
+        })
+        .reduced().errorCause
+    ).not.toBeNull();
+
+    expect(t.row([t.string()], ['X']).reduced().errorCause).not.toBeNull();
   });
 });
 

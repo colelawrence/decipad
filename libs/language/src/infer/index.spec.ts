@@ -28,6 +28,7 @@ import {
   inferFunction,
   inferProgram,
 } from './index';
+import { objectToTableType } from '../testUtils';
 
 const nilPos = {
   line: 0,
@@ -411,7 +412,7 @@ describe('tables', () => {
 
     const expectedType = t.table({
       length: 3,
-      columns: [t.number(), t.number()],
+      columnTypes: [t.number(), t.number()],
       columnNames: ['Col1', 'Col2'],
     });
 
@@ -447,7 +448,7 @@ describe('tables', () => {
   it('"previous" references', async () => {
     const expectedType = t.table({
       length: 3,
-      columns: [t.number(), t.number(), t.string()],
+      columnTypes: [t.number(), t.number(), t.string()],
       columnNames: ['Col1', 'Col2', 'Col3'],
     });
 
@@ -470,7 +471,7 @@ describe('tables', () => {
     ).toMatchObject({ cellType: { type: 'number' } });
   });
 
-  it('unifies table sizes', async () => {
+  it('unifies column sizes', async () => {
     const table = tableDef('Table', {
       Col1: l(1),
       Col2: col(1, 2),
@@ -479,7 +480,7 @@ describe('tables', () => {
     expect(await inferStatement(makeContext(), table)).toEqual(
       t.table({
         length: 2,
-        columns: [t.number(), t.number()],
+        columnTypes: [t.number(), t.number()],
         columnNames: ['Col1', 'Col2'],
       })
     );
@@ -496,36 +497,33 @@ describe('tables', () => {
     ).not.toBeNull();
   });
 
-  it('Can be record oriented', async () => {
-    const recordOriented = col(
-      table({ A: l(1), B: l('hi') }),
-      table({ A: l(2), B: l('hello') }),
-      table({ A: l(3), B: l('hiii') })
-    );
-    expect(await inferStatement(nilCtx, recordOriented)).toEqual(
-      t.column(t.tuple([t.number(), t.string()], ['A', 'B']), 3)
-    );
-  });
-
-  it('Supports single items tuples', async () => {
+  it('Supports single items tables', async () => {
     const table = tableDef('Table', {
       Col1: l('hi'),
       Col2: l(2),
     });
 
     expect(await inferStatement(makeContext(), table)).toEqual(
-      t.tuple([t.string(), t.number()], ['Col1', 'Col2'])
+      t.table({
+        length: 1,
+        columnTypes: [t.string(), t.number()],
+        columnNames: ['Col1', 'Col2'],
+      })
     );
   });
 
-  it('Supports previous in single item tuples', async () => {
+  it('Supports previous in single item tables', async () => {
     const table = tableDef('Table', {
       Col1: c('previous', l('hi')),
       Col2: l(2),
     });
 
     expect(await inferStatement(makeContext(), table)).toEqual(
-      t.tuple([t.string(), t.number()], ['Col1', 'Col2'])
+      t.table({
+        length: 1,
+        columnTypes: [t.string(), t.number()],
+        columnNames: ['Col1', 'Col2'],
+      })
     );
   });
 
@@ -554,15 +552,62 @@ describe('tables', () => {
   });
 });
 
+describe('Property access', () => {
+  const scopeWithTable = makeContext([
+    ['Table', objectToTableType(3, { Col: t.number() })],
+    ['Row', t.row([t.string()], ['Name'])],
+    ['NotATable', t.number()],
+  ]);
+
+  it('Accesses columns in tables', async () => {
+    expect(
+      (await inferExpression(scopeWithTable, prop('Table', 'Col'))).toString()
+    ).toMatchInlineSnapshot(`"<number> x 3"`);
+
+    expect(
+      (await inferExpression(scopeWithTable, prop('Row', 'Name'))).toString()
+    ).toMatchInlineSnapshot(`"<string>"`);
+  });
+
+  it('Property access errors', async () => {
+    expect(
+      (await inferExpression(scopeWithTable, prop('Table', 'A'))).errorCause
+    ).toMatchInlineSnapshot(`
+      InferError {
+        "spec": ErrSpec:free-form("message" => "The property A does not exist in Table"),
+      }
+    `);
+
+    expect(
+      (await inferExpression(scopeWithTable, prop('NotATable', 'Col')))
+        .errorCause
+    ).toMatchInlineSnapshot(`
+      InferError {
+        "spec": ErrSpec:free-form("message" => "NotATable is not a table"),
+      }
+    `);
+
+    expect(
+      (await inferExpression(scopeWithTable, prop('MissingVar', 'Col')))
+        .errorCause
+    ).toMatchInlineSnapshot(`
+      InferError {
+        "spec": ErrSpec:missingVariable(["MissingVar"]),
+      }
+    `);
+  });
+});
+
 it('infers refs', async () => {
   const scopeWithVariable = makeContext();
   scopeWithVariable.stack.set('N', t.number());
 
   expect(await inferExpression(scopeWithVariable, r('N'))).toEqual(t.number());
 
-  const errorCause = new InferError('The variable MissingVar does not exist');
   expect(await inferExpression(scopeWithVariable, r('MissingVar'))).toEqual(
-    t.impossible(errorCause).inNode(r('MissingVar'))
+    t
+      .impossible(InferError.missingVariable('MissingVar'))
+      .inNode(r('MissingVar'))
   );
 });
 
@@ -603,12 +648,13 @@ describe('Given', () => {
         'Table',
         t.table({
           length: 4,
-          columns: [t.number(), t.string()],
+          columnTypes: [t.number(), t.string()],
           columnNames: ['Nums', 'Strs'],
         }),
       ],
     ]);
 
+    // Generates a column from a table
     expect(
       await inferExpression(
         scopeWithTable,
@@ -616,6 +662,7 @@ describe('Given', () => {
       )
     ).toEqual(t.column(t.number(), 4));
 
+    // Generates a table from a table
     expect(
       await inferExpression(
         scopeWithTable,
@@ -624,42 +671,27 @@ describe('Given', () => {
     ).toEqual(
       t.table({
         length: 4,
-        columns: [t.number()],
+        columnTypes: [t.number()],
         columnNames: ['Col'],
       })
     );
+
+    // Doesn't willingly nest tables (TODO this is implemented because tables of 1 row are special-cased)
+    expect(
+      (
+        await inferExpression(
+          scopeWithTable,
+          given('Table', table({ Col: col(1, 2, 3) }))
+        )
+      ).errorCause?.message
+    ).toMatch(/nest/i);
   });
 
-  it('Works with record-oriented tables', async () => {
-    const scopeWithTable = makeContext([
-      [
-        'RTable',
-        t.column(t.tuple([t.number(), t.string()], ['Nums', 'Strs']), 3),
-      ],
-    ]);
+  it('Needs a column or table', async () => {
+    const scopeWithNum = makeContext([['Num', t.number()]]);
 
     expect(
-      await inferExpression(
-        scopeWithTable,
-        given('RTable', c('+', prop('RTable', 'Nums'), l(1)))
-      )
-    ).toEqual(t.column(t.number(), 3));
-  });
-
-  it('Needs a column, table, or record-oriented table', async () => {
-    const scopeWithTupleAndNum = makeContext([
-      ['Tuple', t.tuple([t.number(), t.string()], ['A', 'B'])],
-      ['Num', t.number()],
-    ]);
-
-    expect(
-      (await inferExpression(scopeWithTupleAndNum, given('Tuple', l(1))))
-        .errorCause
-    ).not.toBeNull();
-
-    expect(
-      (await inferExpression(scopeWithTupleAndNum, given('Num', l(1))))
-        .errorCause
+      (await inferExpression(scopeWithNum, given('Num', l(1)))).errorCause
     ).not.toBeNull();
   });
 

@@ -7,6 +7,10 @@ export type ErrSpec =
       message: string;
     }
   | {
+      errType: 'missingVariable';
+      missingVariable: [name: string];
+    }
+  | {
       errType: 'expectedButGot';
       expectedButGot: [Type | string, Type | string];
     }
@@ -43,6 +47,10 @@ function specToString(spec: ErrSpec): string {
   switch (spec.errType) {
     case 'free-form': {
       return spec.message;
+    }
+    case 'missingVariable': {
+      const [name] = spec.missingVariable;
+      return `The variable ${name} is missing`;
     }
     case 'expectedButGot': {
       const [expected, got] = spec.expectedButGot.map((t) =>
@@ -88,6 +96,13 @@ export class InferError {
     } else {
       this.spec = spec;
     }
+  }
+
+  static missingVariable(varName: string) {
+    return new InferError({
+      errType: 'missingVariable',
+      missingVariable: [varName],
+    });
   }
 
   static expectedButGot(

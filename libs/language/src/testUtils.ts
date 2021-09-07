@@ -36,7 +36,7 @@ export const runCode = async (source: string) => {
   const erroredType = inferResult.errorCause != null ? inferResult : null;
   expect(erroredType).toEqual(null);
 
-  const value = await run(program, [0]);
+  const [value] = await run(program, [0]);
 
   return {
     value,
@@ -69,17 +69,12 @@ export const runCodeForVariables = async (
   };
 };
 
-export const objectToTupleType = (obj: Record<string, Type>) => {
-  const names = [];
-  const values = [];
-
-  for (const [name, value] of Object.entries(obj)) {
-    names.push(name);
-    values.push(value);
-  }
-
-  return t.tuple(values, names);
-};
+export const objectToTableType = (length: number, obj: Record<string, Type>) =>
+  t.table({
+    length,
+    columnTypes: Object.values(obj),
+    columnNames: Object.keys(obj),
+  });
 
 export const objectToTupleValue = (
   obj: Record<string, Interpreter.OneResult>

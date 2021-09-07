@@ -61,6 +61,9 @@ export const getLargestColumn = (values: Value[], minValue = 1): number => {
   return Math.max(...sizes);
 };
 
+const repeat = <T>(value: T, length: number) =>
+  Array.from({ length }, () => value);
+
 export const evaluateTable = async (
   realm: Realm,
   { args: columns }: AST.Table
@@ -71,17 +74,22 @@ export const evaluateTable = async (
   return realm.stack.withPush(async () => {
     for (const [def, column] of pairwise<AST.ColDef, AST.Expression>(columns)) {
       const colName = getIdentifierString(def);
-      // TODO should this be parallel?
+      const largestColumn = getLargestColumn(colValues);
       // eslint-disable-next-line no-await-in-loop
       const columnData = await evaluateTableColumn(
         realm,
         column,
-        getLargestColumn(colValues)
+        largestColumn
       );
 
       realm.stack.set(colName, columnData);
 
-      colValues.push(columnData);
+      colValues.push(
+        // { Col = 1 } is the same as { Col = [1] }
+        columnData.cardinality === 1
+          ? Column.fromValues(repeat(columnData, largestColumn))
+          : columnData
+      );
       colNames.push(colName);
     }
 

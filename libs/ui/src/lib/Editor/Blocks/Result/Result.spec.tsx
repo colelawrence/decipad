@@ -58,7 +58,7 @@ describe('Result', () => {
       <ResultContent
         type={buildType.table({
           length: 3,
-          columns: [buildType.string(), buildType.number()],
+          columnTypes: [buildType.string(), buildType.number()],
           columnNames: ['Name', 'Bananas'],
         })}
         value={[

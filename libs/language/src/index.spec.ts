@@ -4,7 +4,7 @@ import { build as t } from './type';
 import {
   runCode,
   runCodeForVariables,
-  objectToTupleType,
+  objectToTableType,
   objectToTupleValue,
 } from './testUtils';
 import { parseUTCDate } from './date';
@@ -25,7 +25,7 @@ describe('basic code', () => {
       `)
     ).toMatchObject({
       type: { cellType: { type: 'number' } },
-      value: [[2, -1, 1, 1.01, 0.25, 16, 4]],
+      value: [2, -1, 1, 1.01, 0.25, 16, 4],
     });
   });
 
@@ -42,14 +42,14 @@ describe('basic code', () => {
       `)
     ).toMatchObject({
       type: { cellType: { type: 'boolean' } },
-      value: [[true, false, true, false, true]],
+      value: [true, false, true, false, true],
     });
   });
 
   it('has correct operator precedence', async () => {
     expect(await runCode('1 + 2 / 4 - 5 ** 2 / 4')).toMatchObject({
       type: { type: 'number' },
-      value: [-4.75],
+      value: -4.75,
     });
   });
 
@@ -62,7 +62,7 @@ describe('basic code', () => {
       `)
     ).toMatchObject({
       type: { type: 'number' },
-      value: [2],
+      value: 2,
     });
   });
 
@@ -75,7 +75,7 @@ describe('basic code', () => {
 
     expect(results).toMatchObject({
       type: { type: 'number' },
-      value: [3],
+      value: 3,
     });
   });
 
@@ -88,7 +88,7 @@ describe('basic code', () => {
 
     expect(results).toMatchObject({
       type: { columnSize: 4, cellType: { type: 'number' } },
-      value: [[0, 2, 4, 12]],
+      value: [0, 2, 4, 12],
     });
   });
 
@@ -121,7 +121,7 @@ describe('basic code', () => {
 
     expect(results).toMatchObject({
       type: { columnSize: 3 },
-      value: [[2, 4, 6]],
+      value: [2, 4, 6],
     });
 
     const results2 = await runCode(`
@@ -131,7 +131,7 @@ describe('basic code', () => {
 
     expect(results2).toMatchObject({
       type: { columnSize: 3 },
-      value: [[2, 1, 0.5]],
+      value: [2, 1, 0.5],
     });
   });
 
@@ -143,7 +143,7 @@ describe('basic code', () => {
 
     expect(results).toMatchObject({
       type: { columnSize: 3, cellType: { type: 'number' } },
-      value: [[2, 4, 6]],
+      value: [2, 4, 6],
     });
   });
 
@@ -155,7 +155,7 @@ describe('basic code', () => {
 
     expect(results).toMatchObject({
       type: { columnSize: 3, cellType: { type: 'number' } },
-      value: [[1, 4, 0]],
+      value: [1, 4, 0],
     });
   });
 
@@ -168,7 +168,7 @@ describe('basic code', () => {
       `)
     ).toMatchObject({
       type: { type: 'number' },
-      value: [1],
+      value: 1,
     });
 
     expect(
@@ -177,7 +177,7 @@ describe('basic code', () => {
       `)
     ).toMatchObject({
       type: { type: 'number' },
-      value: [0],
+      value: 0,
     });
   });
 });
@@ -187,16 +187,14 @@ describe('Tables', () => {
     expect(
       await runCode(`Table = { Column1 = [1, 2, 3], Column2 = Column1 * 2 }`)
     ).toMatchObject({
-      type: objectToTupleType({
-        Column1: t.column(t.number(), 3),
-        Column2: t.column(t.number(), 3),
+      type: objectToTableType(3, {
+        Column1: t.number(),
+        Column2: t.number(),
       }),
-      value: [
-        objectToTupleValue({
-          Column1: [1, 2, 3],
-          Column2: [2, 4, 6],
-        }),
-      ],
+      value: objectToTupleValue({
+        Column1: [1, 2, 3],
+        Column2: [2, 4, 6],
+      }),
     });
   });
 
@@ -209,16 +207,14 @@ describe('Tables', () => {
         }
       `)
     ).toEqual({
-      type: objectToTupleType({
-        Column1: t.column(t.number(), 3),
-        Column2: t.column(t.number(), 3),
+      type: objectToTableType(3, {
+        Column1: t.number(),
+        Column2: t.number(),
       }),
-      value: [
-        objectToTupleValue({
-          Column1: [1, 1, 1],
-          Column2: [1, 2, 3],
-        }),
-      ],
+      value: objectToTupleValue({
+        Column1: [1, 1, 1],
+        Column2: [1, 2, 3],
+      }),
     });
   });
 
@@ -232,18 +228,16 @@ describe('Tables', () => {
         }
       `)
     ).toMatchObject({
-      type: objectToTupleType({
-        Column1: t.column(t.number(), 3),
-        Column2: t.column(t.number(), 3),
-        Column3: t.column(t.boolean(), 3),
+      type: objectToTableType(3, {
+        Column1: t.number(),
+        Column2: t.number(),
+        Column3: t.boolean(),
       }),
-      value: [
-        objectToTupleValue({
-          Column1: [1, 2, 3],
-          Column2: [0.5, 1, 1.5],
-          Column3: [false, false, true],
-        }),
-      ],
+      value: objectToTupleValue({
+        Column1: [1, 2, 3],
+        Column2: [0.5, 1, 1.5],
+        Column3: [false, false, true],
+      }),
     });
   });
 
@@ -258,44 +252,7 @@ describe('Tables', () => {
       `)
     ).toMatchObject({
       type: t.column(t.number(), 3),
-      value: [[1, 2, 3]],
-    });
-  });
-
-  it('Supports simple tuples with one item', async () => {
-    expect(
-      await runCodeForVariables(
-        `
-        Table = {
-          Item1 = 1,
-          Item2 = 2
-        }
-
-        PropAccess = Table.Item2
-      `,
-        ['Table', 'PropAccess']
-      )
-    ).toMatchObject({
-      variables: {
-        Table: [1, 2],
-        PropAccess: 2,
-      },
-      types: {
-        Table: t.tuple([t.number(), t.number()], ['Item1', 'Item2']),
-        PropAccess: t.number(),
-      },
-    });
-  });
-
-  it('Are expressions', async () => {
-    const col1Type = t.column(t.number(), 3);
-    expect(
-      await runCode(`
-        [{ Col1 = [1, 2, 3] }]
-      `)
-    ).toMatchObject({
-      type: t.column(t.tuple([col1Type], ['Col1']), 1),
-      value: [[[[1, 2, 3]]]],
+      value: [1, 2, 3],
     });
   });
 });
@@ -313,7 +270,7 @@ describe('Units', () => {
           { exp: -1, known: true, multiplier: 1, unit: 'second' },
         ],
       },
-      value: [1],
+      value: 1,
     });
   });
 
@@ -326,7 +283,7 @@ describe('Units', () => {
         Distance / Time
       `)
     ).toMatchObject({
-      value: [1],
+      value: 1,
       type: {
         unit: [
           {
@@ -354,7 +311,7 @@ describe('Units', () => {
         Distance = Speed * 3 second
       `)
     ).toMatchObject({
-      value: [6],
+      value: 6,
       type: { unit: [{ exp: 1, known: true, multiplier: 1, unit: 'meter' }] },
     });
 
@@ -367,7 +324,7 @@ describe('Units', () => {
         Distance = Speed / 3 meter
       `)
     ).toMatchObject({
-      value: [2],
+      value: 2,
       type: { unit: [{ exp: -1, known: true, multiplier: 1, unit: 'second' }] },
     });
   });
@@ -382,7 +339,7 @@ describe('Ranges', () => {
       `)
     ).toMatchObject({
       type: { type: 'boolean' },
-      value: [true],
+      value: true,
     });
   });
 });
@@ -394,7 +351,7 @@ describe('Dates', () => {
         Time = date(2020-10-10 10:30)
       `)
     ).toMatchObject({
-      value: [parseUTCDate('2020-10-10T10:30')],
+      value: parseUTCDate('2020-10-10T10:30'),
     });
   });
 
@@ -407,12 +364,10 @@ describe('Dates', () => {
         }
       `)
     ).toMatchObject({
-      value: [
-        objectToTupleValue({
-          Months: [Date.UTC(2020, 8), Date.UTC(2020, 9), Date.UTC(2020, 10)],
-          Days: [true, false, false],
-        }),
-      ],
+      value: objectToTupleValue({
+        Months: [Date.UTC(2020, 8), Date.UTC(2020, 9), Date.UTC(2020, 10)],
+        Days: [true, false, false],
+      }),
     });
   });
 });
@@ -458,7 +413,7 @@ describe('Given', () => {
         given Col: Col + 1
       `)
     ).toMatchObject({
-      value: [[2, 3, 4]],
+      value: [2, 3, 4],
       type: {
         columnSize: 3,
         cellType: { type: 'number' },
@@ -474,7 +429,7 @@ describe('Given', () => {
         given Col: Col.Ayy - Col.Bee
       `)
     ).toMatchObject({
-      value: [[0, 0, 0]],
+      value: [0, 0, 0],
       type: {
         columnSize: 3,
         cellType: { type: 'number' },
@@ -491,32 +446,13 @@ describe('Given', () => {
       `)
     ).toMatchObject({
       value: [
-        [
-          [1, 2, 3],
-          [4, 5, 6],
-        ],
+        [1, 2, 3],
+        [4, 5, 6],
       ],
       type: {
-        tupleNames: ['Ayy', 'Bee'],
-        tupleTypes: [{ columnSize: 3 }, { columnSize: 3 }],
-      },
-    });
-
-    expect(
-      await runCode(`
-        SidewaysTbl = [
-          {Ayy = 1, Bee = 0},
-          {Ayy = 1, Bee = 1},
-          {Ayy = 1, Bee = 2}
-        ]
-
-        given SidewaysTbl: SidewaysTbl.Ayy + SidewaysTbl.Bee
-      `)
-    ).toMatchObject({
-      value: [[1, 2, 3]],
-      type: {
-        columnSize: 3,
-        cellType: { type: 'number' },
+        tableLength: 3,
+        columnNames: ['Ayy', 'Bee'],
+        columnTypes: [{ type: 'number' }, { type: 'number' }],
       },
     });
   });

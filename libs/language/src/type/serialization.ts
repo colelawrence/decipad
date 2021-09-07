@@ -9,7 +9,13 @@ export type SerializedType =
   | { kind: 'date'; date: Time.Specificity }
   | { kind: 'range'; rangeOf: SerializedType }
   | { kind: 'column'; cellType: SerializedType; columnSize: number }
-  | { kind: 'tuple'; tupleTypes: SerializedType[]; tupleNames: string[] }
+  | {
+      kind: 'table';
+      tableLength: number;
+      columnTypes: SerializedType[];
+      columnNames: string[];
+    }
+  | { kind: 'row'; rowCellTypes: SerializedType[]; rowCellNames: string[] }
   | { kind: 'time-quantity'; timeUnits: Time.Unit[] }
   | { kind: 'imported-data'; dataUrl: string }
   | { kind: 'function' }
@@ -32,11 +38,18 @@ export function serializeType(type: Type): SerializedType {
       cellType: serializeType(type.cellType),
       columnSize: type.columnSize,
     };
-  } else if (type.tupleTypes && type.tupleNames) {
+  } else if (type.columnTypes && type.columnNames && type.tableLength) {
     return {
-      kind: 'tuple',
-      tupleTypes: type.tupleTypes.map((t) => serializeType(t)),
-      tupleNames: type.tupleNames,
+      kind: 'table',
+      tableLength: type.tableLength,
+      columnTypes: type.columnTypes.map((t) => serializeType(t)),
+      columnNames: type.columnNames,
+    };
+  } else if (type.rowCellTypes && type.rowCellNames) {
+    return {
+      kind: 'row',
+      rowCellTypes: type.rowCellTypes.map((t) => serializeType(t)),
+      rowCellNames: type.rowCellNames,
     };
   } else if (type.dataUrl) {
     return { kind: 'imported-data', dataUrl: type.dataUrl };
@@ -46,6 +59,7 @@ export function serializeType(type: Type): SerializedType {
     return { kind: 'type-error', errorCause: type.errorCause.spec };
   }
 
+  /* istanbul ignore next */
   throw new Error('panic: serializing invalid type');
 }
 
@@ -62,10 +76,17 @@ export function deserializeType(type: SerializedType): Type {
       return t.range(deserializeType(type.rangeOf));
     case 'column':
       return t.column(deserializeType(type.cellType), type.columnSize);
-    case 'tuple':
-      return t.tuple(
-        type.tupleTypes.map((t) => deserializeType(t)),
-        type.tupleNames
+    case 'table':
+      const { tableLength, columnTypes, columnNames } = type;
+      return t.table({
+        length: tableLength,
+        columnTypes: columnTypes.map((t) => deserializeType(t)),
+        columnNames,
+      });
+    case 'row':
+      return t.row(
+        type.rowCellTypes.map((t) => deserializeType(t)),
+        type.rowCellNames
       );
     case 'time-quantity':
       return t.timeQuantity(type.timeUnits);

@@ -64,7 +64,7 @@ describe('stringify', () => {
         ],
         t.table({
           length: 2,
-          columns: [t.number(), t.string()],
+          columnTypes: [t.number(), t.string()],
           columnNames: ['Numbers', 'Strings'],
         })
       )

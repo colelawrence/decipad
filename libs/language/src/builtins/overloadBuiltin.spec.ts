@@ -59,8 +59,11 @@ describe('utils', () => {
     );
     expect(() =>
       getOverloadedTypeFromType(
-        t.table({ length: 1, columns: [], columnNames: [] })
+        t.table({ length: 1, columnTypes: [], columnNames: [] })
       )
+    ).toThrow();
+    expect(() =>
+      getOverloadedTypeFromType(t.row([t.string()], ['A']))
     ).toThrow();
 
     expect(() =>

@@ -1,4 +1,5 @@
 import pSeries from 'p-series';
+import { produce } from 'immer';
 
 import { AST, Time } from '..';
 import { InferError, Type, build as t } from '../type';
@@ -14,7 +15,7 @@ import { getDateFromAstForm } from '../date';
 import { callBuiltinFunctor } from '../builtins';
 import { Context, makeContext } from './context';
 import { inferSequence } from './sequence';
-import { findBadColumn, unifyColumnSizes, getLargestColumn } from './table';
+import { unifyColumnSizes } from './table';
 import { resolve as resolveData } from '../data';
 import { inferData } from './data';
 
@@ -66,7 +67,7 @@ export const inferExpression = withErrorSource(
         if (ctx.stack.has(name)) {
           return ctx.stack.get(name);
         } else {
-          return t.impossible(`The variable ${name} does not exist`);
+          return t.impossible(InferError.missingVariable(name));
         }
       }
       case 'literal': {
@@ -130,8 +131,8 @@ export const inferExpression = withErrorSource(
       case 'table': {
         const columns = expr.args;
 
-        const tableType = await pushStackAndPrevious(ctx, async () => {
-          const columnDefs = [];
+        return pushStackAndPrevious(ctx, async () => {
+          const columnTypes = [];
           const columnNames = [];
 
           for (const [colDef, expr] of pairwise<AST.ColDef, AST.Expression>(
@@ -141,36 +142,54 @@ export const inferExpression = withErrorSource(
             // eslint-disable-next-line no-await-in-loop
             const type = await inferExpression(ctx, expr);
 
+            // Bail on error
+            if (type.errorCause) {
+              return type;
+            }
+
             ctx.stack.set(name, type);
 
-            columnDefs.push(type);
+            columnTypes.push(type);
             columnNames.push(name);
           }
 
-          return t.tuple(columnDefs, columnNames);
-        });
-
-        return tableType.mapType(() => {
-          const unified =
-            findBadColumn(tableType) ?? unifyColumnSizes(expr, tableType);
-          return unified;
+          return unifyColumnSizes(columnTypes, columnNames);
         });
       }
       case 'property-access': {
         const tableName = getIdentifierString(expr.args[0]);
-        const colName = expr.args[1];
-        const table = ctx.stack.get(tableName);
+        const propName = expr.args[1];
+        const table = ctx.stack.has(tableName)
+          ? ctx.stack.get(tableName)
+          : null;
 
-        if (table != null) {
-          const columnIndex = table.tupleNames?.indexOf(colName) ?? -1;
+        const getFromTableOrRow = (names: string[], types: Type[]) => {
+          const index = names.indexOf(propName);
 
-          if (columnIndex !== -1) {
-            return getDefined(table.tupleTypes?.[columnIndex]);
+          if (index !== -1) {
+            return types[index];
           } else {
-            return t.impossible(`The column ${colName} does not exist`);
+            return t.impossible(
+              `The property ${propName} does not exist in ${tableName}`
+            );
           }
+        };
+
+        if (table?.rowCellNames != null && table?.rowCellTypes != null) {
+          return getFromTableOrRow(table.rowCellNames, table.rowCellTypes);
+        } else if (
+          table?.columnNames != null &&
+          table?.columnTypes != null &&
+          table?.tableLength != null
+        ) {
+          return t.column(
+            getFromTableOrRow(table.columnNames, table.columnTypes),
+            table.tableLength
+          );
+        } else if (table != null) {
+          return t.impossible(`${tableName} is not a table`);
         } else {
-          return t.impossible(`The table ${tableName} does not exist`);
+          return t.impossible(InferError.missingVariable(tableName));
         }
       }
       case 'function-call': {
@@ -199,9 +218,8 @@ export const inferExpression = withErrorSource(
 
         if (refType.errorCause) return refType;
 
-        const { cellType, columnSize, tupleTypes, tupleNames } = refType;
-        const largestColumn =
-          tupleTypes != null ? getLargestColumn(tupleTypes) : null;
+        const { cellType, columnSize, tableLength, columnTypes, columnNames } =
+          refType;
 
         return pushStackAndPrevious(ctx, async () => {
           if (cellType != null && columnSize != null) {
@@ -211,25 +229,28 @@ export const inferExpression = withErrorSource(
 
             return t.column(bodyResult, columnSize);
           } else if (
-            tupleTypes != null &&
-            tupleNames != null &&
-            largestColumn != null
+            tableLength != null &&
+            columnTypes != null &&
+            columnNames != null
           ) {
-            const rowTypes = tupleTypes.map((t) => t.reduced());
-            ctx.stack.set(refName, t.tuple(rowTypes, tupleNames));
+            ctx.stack.set(refName, t.row(columnTypes, columnNames));
 
             const bodyType = await inferExpression(ctx, body);
 
-            if (bodyType.tupleTypes != null && bodyType.tupleNames != null) {
-              // Returned a row -- rebuild column-oriented table
-              return t.table({
-                length: largestColumn,
-                columns: bodyType.tupleTypes,
-                columnNames: bodyType.tupleNames,
+            if (
+              bodyType.tableLength === 1 &&
+              bodyType.columnTypes != null &&
+              bodyType.columnNames != null
+            ) {
+              // Returned a single row -- rebuild table with the correct number of rows
+              return produce(bodyType, (type) => {
+                type.tableLength = tableLength;
               });
+            } else if (bodyType.tableLength != null) {
+              return t.impossible('Cannot nest tables');
             } else {
               // Returned a number or something else.
-              return t.column(bodyType, largestColumn);
+              return t.column(bodyType, tableLength);
             }
           } else {
             return t.impossible('Column or table expected');

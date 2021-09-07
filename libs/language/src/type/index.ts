@@ -1,6 +1,7 @@
 import { immerable, produce } from 'immer';
 
 import { Time } from '..';
+import { zip } from '../utils';
 import * as AST from '../parser/ast-types';
 import { InferError } from './InferError';
 import {
@@ -69,9 +70,13 @@ export class Type {
   cellType: Type | null = null;
   columnSize: number | null = null;
 
-  // Tuple
-  tupleTypes: Type[] | null = null;
-  tupleNames: string[] | null = null;
+  // Table
+  tableLength: number | null = null;
+  columnTypes: Type[] | null = null;
+  columnNames: string[] | null = null;
+
+  rowCellTypes: Type[] | null = null;
+  rowCellNames: string[] | null = null;
 
   // Time quantities
   timeUnits: Time.Unit[] | null = null;
@@ -102,18 +107,20 @@ export class Type {
       return `${this.cellType.toString()} x ${this.columnSize}`;
     }
 
-    if (this.tupleTypes != null) {
-      const columnStrings = this.tupleTypes.map((cell, i) => {
-        const name = this.tupleNames?.[i];
+    if (this.columnTypes != null && this.columnNames != null) {
+      const columnStrings = zip(this.columnNames, this.columnTypes).map(
+        ([name, cell]) => `${name} = ${cell.toString()}`
+      );
 
-        if (name) {
-          return `${name} = ${cell.toString()}`;
-        } else {
-          return cell.toString();
-        }
-      });
+      return `table { ${columnStrings.join(', ')} }`;
+    }
 
-      return `[ ${columnStrings.join(', ')} ]`;
+    if (this.rowCellTypes != null && this.rowCellNames != null) {
+      const rowCellStrings = zip(this.rowCellNames, this.rowCellTypes).map(
+        ([name, cell]) => `${name} = ${cell.toString()}`
+      );
+
+      return `row [ ${rowCellStrings.join(', ')} ]`;
     }
 
     if (this.rangeOf != null) {
@@ -147,7 +154,8 @@ export class Type {
     if (this.date != null) return `date(${this.date})`;
     if (this.rangeOf != null) return 'range';
     if (this.columnSize != null) return 'column';
-    if (this.tupleTypes != null) return 'table';
+    if (this.columnTypes != null) return 'table';
+    if (this.rowCellTypes != null) return 'row';
     if (this.timeUnits != null) return `time quantity`;
     if (this.dataUrl != null) return 'imported data';
 
@@ -156,8 +164,10 @@ export class Type {
   }
 
   get cardinality(): number {
-    if (this.tupleTypes != null) {
-      return 1 + Math.max(...this.tupleTypes.map((c) => c.cardinality));
+    if (this.columnTypes != null) {
+      return 1 + Math.max(...this.columnTypes.map((c) => c.cardinality));
+    } else if (this.rowCellTypes != null) {
+      return 1 + Math.max(...this.rowCellTypes.map((c) => c.cardinality));
     } else if (this.cellType != null) {
       return 1 + this.cellType.cardinality;
     } else {

@@ -133,7 +133,7 @@ export const ResultContent = (props: ResultContentProps) => {
   if (type.date) {
     return <DateResult {...props} />;
   }
-  if (type.tupleTypes != null) {
+  if (type.columnTypes != null) {
     return <TableResult {...props} />;
   }
   if (type.columnSize != null && Array.isArray(value)) {
@@ -295,29 +295,19 @@ function DateResult({ type, value }: ResultContentProps) {
 }
 
 function tableByRows(
-  tupleNames: string[],
-  columnsOrCells: any[],
-  tupleTypes: Type[]
+  { columnNames, columnTypes, tableLength }: Type,
+  columnsOrCells: any[]
 ) {
-  const hasMany = tupleTypes.length && !!tupleTypes[0].cellType;
-  const columns = hasMany
-    ? columnsOrCells
-    : columnsOrCells.map((value) => [value]);
-
-  const refCol = columns[0] || [];
   const rows = [];
-  for (let index = 0; index < refCol.length; index += 1) {
+  for (let index = 0; index < tableLength!; index += 1) {
     const row = [];
-    for (const column of columns) {
+    for (const column of columnsOrCells) {
       row.push(column[index]);
     }
     rows.push(row);
   }
 
-  return {
-    columnNames: tupleNames,
-    rows,
-  };
+  return { columnTypes: columnTypes!, columnNames: columnNames!, rows };
 }
 
 function TableResult({
@@ -325,7 +315,7 @@ function TableResult({
   value,
   depth = 0,
 }: ResultContentProps): JSX.Element {
-  const table = tableByRows(type.tupleNames!, value, type.tupleTypes!);
+  const table = tableByRows(type, value);
   const border = {
     borderTopRadius: 6,
     border: '1px',
@@ -339,9 +329,7 @@ function TableResult({
         <Thead>
           <TableRow>
             {table.columnNames.map((columnName, colIndex) => {
-              const t =
-                type.tupleTypes![colIndex].cellType ||
-                type.tupleTypes![colIndex];
+              const t = table.columnTypes[colIndex];
 
               return (
                 <TableHeader key={colIndex}>
@@ -357,8 +345,7 @@ function TableResult({
             return (
               <TableRow key={rowIndex}>
                 {row.map((cell, index) => {
-                  const t =
-                    type.tupleTypes![index].cellType || type.tupleTypes![index];
+                  const t = table.columnTypes[index];
                   return (
                     <TableCell key={index} isNumeric={t.type === 'number'}>
                       <ResultContent

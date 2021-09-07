@@ -5,17 +5,17 @@ import { Type, build as t } from '../type';
 
 export async function inferData(data: DataTable, ctx: Context): Promise<Type> {
   const tableType = await ctx.stack.withPush(() => {
-    const columns: Type[] = [];
+    const columnTypes: Type[] = [];
     const columnNames: string[] = [];
     console.log(data);
     for (let colIndex = 0; colIndex < data.numCols; colIndex += 1) {
       const column = getDefined(data.getColumnAt(colIndex));
       const columnType: Type = toInternalType(column.type.toString());
-      columns.push(columnType);
+      columnTypes.push(columnType);
       columnNames.push(column.name);
     }
 
-    return t.table({ length: data.length, columns, columnNames });
+    return t.table({ length: data.length, columnTypes, columnNames });
   });
 
   return tableType;

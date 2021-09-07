@@ -4,6 +4,10 @@ import { InferError } from './InferError';
 it('can stringify errors', () => {
   expect(new InferError('random string').message).toEqual('random string');
 
+  expect(InferError.missingVariable('Var').message).toEqual(
+    'The variable Var is missing'
+  );
+
   expect(InferError.expectedButGot('REQ', t.number()).message).toEqual(
     'This operation requires a REQ and a number was entered'
   );
