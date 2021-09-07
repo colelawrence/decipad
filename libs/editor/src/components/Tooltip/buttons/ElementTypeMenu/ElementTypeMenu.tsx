@@ -1,6 +1,11 @@
 import { Icons } from '@decipad/ui';
 import { css } from '@emotion/react';
-import { ELEMENT_H2, ELEMENT_H3, ELEMENT_PARAGRAPH } from '@udecode/plate';
+import {
+  ELEMENT_H2,
+  ELEMENT_H3,
+  ELEMENT_PARAGRAPH,
+  ELEMENT_UL,
+} from '@udecode/plate';
 import { FC, MouseEventHandler, useState } from 'react';
 import { ToggleElementButton } from './ToggleElementButton/ToggleElementButton';
 
@@ -87,6 +92,8 @@ export const ElementTypeMenu = ({
         return 'Subheading';
       case ELEMENT_PARAGRAPH:
         return 'Paragraph';
+      case 'lic':
+        return 'Unordered List';
       default:
         return 'Font size';
     }
@@ -116,6 +123,11 @@ export const ElementTypeMenu = ({
           currentBlockType={currentBlockType}
           type={ELEMENT_PARAGRAPH}
           label="Paragraph"
+        />
+        <ToggleElementButton
+          currentBlockType={currentBlockType}
+          type={ELEMENT_UL}
+          label="Unordered list"
         />
       </ul>
     </div>

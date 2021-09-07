@@ -1,14 +1,14 @@
 import {
-  SPEditor,
-  ELEMENT_PARAGRAPH,
   ELEMENT_H2,
   ELEMENT_H3,
+  ELEMENT_PARAGRAPH,
   getNode,
+  SPEditor,
 } from '@udecode/plate';
 import { Path } from 'slate';
 
 export const isInCompatibleBlocks = (editor: SPEditor): boolean => {
-  const whitelist = [ELEMENT_PARAGRAPH, ELEMENT_H2, ELEMENT_H3];
+  const whitelist = [ELEMENT_PARAGRAPH, ELEMENT_H2, ELEMENT_H3, 'lic'];
   if (editor.selection) {
     const node = getNode(editor, Path.parent(editor.selection.anchor.path));
 

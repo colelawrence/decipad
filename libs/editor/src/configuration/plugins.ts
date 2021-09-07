@@ -7,6 +7,7 @@ import {
   createHeadingPlugin,
   createHistoryPlugin,
   createKbdPlugin,
+  createListPlugin,
   createNodeIdPlugin,
   createParagraphPlugin,
   createReactPlugin,
@@ -34,6 +35,8 @@ export const plugins = [
   createBlockquotePlugin(),
   createHeadingPlugin({ levels: 3 }),
   createCodeBlockPlugin(),
+
+  createListPlugin(),
 
   ...createMarksPlugins(),
 

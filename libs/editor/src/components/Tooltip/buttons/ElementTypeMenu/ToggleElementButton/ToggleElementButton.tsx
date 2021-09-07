@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { FC } from 'react';
+import { FC, MouseEventHandler } from 'react';
 import { useEditorTooltip } from '../../../hooks/useEditorTooltip';
 
 const buttonStyles = css({
@@ -44,12 +44,14 @@ interface ToggleElementButtonProps {
   type: string;
   label: string;
   currentBlockType: string | null;
+  onMouseDown?: MouseEventHandler<HTMLButtonElement>;
 }
 
 export const ToggleElementButton = ({
   type,
   label,
   currentBlockType,
+  onMouseDown,
 }: ToggleElementButtonProps): ReturnType<FC> => {
   const { toggleElementType } = useEditorTooltip();
 
@@ -59,10 +61,13 @@ export const ToggleElementButton = ({
     <li>
       <button
         css={[buttonStyles, active && css({ display: 'none' })]}
-        onMouseDown={(e) => {
-          e.preventDefault();
-          toggleElementType(type);
-        }}
+        onMouseDown={
+          onMouseDown ||
+          ((e) => {
+            e.preventDefault();
+            toggleElementType(type);
+          })
+        }
       >
         <span css={iconStyles}>Aa</span>
         {label}

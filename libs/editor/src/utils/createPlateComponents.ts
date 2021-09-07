@@ -1,19 +1,20 @@
-import { FunctionComponent } from 'react';
 import {
   BlockquoteElement,
   BoldLeaf,
   CodeLeaf,
-  ItalicLeaf,
-  ModelBlockElement,
+  ELEMENT_IMPORT_DATA,
   ImportDataElement,
   ImportDataElementProps,
+  ItalicLeaf,
+  ListItemElement,
+  ModelBlockElement,
   ParagraphElement,
   StrikethroughLeaf,
   SubheadingElement,
   SubtitleElement,
   TitleElement,
   UnderlineLeaf,
-  ELEMENT_IMPORT_DATA,
+  UnorderedListElement,
 } from '@decipad/ui';
 import {
   DefaultPlatePluginKey,
@@ -22,7 +23,9 @@ import {
   ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_H3,
+  ELEMENT_LI,
   ELEMENT_PARAGRAPH,
+  ELEMENT_UL,
   MARK_BOLD,
   MARK_CODE,
   MARK_ITALIC,
@@ -31,6 +34,7 @@ import {
   SPRenderElementProps,
   SPRenderLeafProps,
 } from '@udecode/plate';
+import { FunctionComponent } from 'react';
 import { withStyledDraggables } from './withStyledDraggables';
 import { withStyledPlaceHolders } from './withStyledPlaceholders';
 
@@ -52,6 +56,8 @@ export const createPlateComponents = (): Partial<
     [ELEMENT_H3]: SubheadingElement,
     [ELEMENT_BLOCKQUOTE]: BlockquoteElement,
     [ELEMENT_CODE_BLOCK]: ModelBlockElement,
+    [ELEMENT_UL]: UnorderedListElement,
+    [ELEMENT_LI]: ListItemElement,
 
     // Import data
     [ELEMENT_IMPORT_DATA]: ImportDataElement,

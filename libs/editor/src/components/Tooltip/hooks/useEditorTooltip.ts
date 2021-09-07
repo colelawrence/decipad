@@ -1,11 +1,13 @@
 import {
+  ELEMENT_UL,
   getParent,
   isCollapsed,
+  toggleList,
   toggleNodeType,
   useStoreEditorState,
 } from '@udecode/plate';
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
-import { Editor } from 'slate';
+import { Editor, Element } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { isInCompatibleBlocks } from '../utils/isInCompatibleBlocks';
 
@@ -73,7 +75,21 @@ export const useEditorTooltip = (): UseEditorTooltip => {
 
   const toggleElementType = useCallback(
     (type: string) => {
-      if (editor) {
+      if (editor && editor.selection) {
+        const { selection } = editor;
+        if (type === ELEMENT_UL) {
+          toggleList(editor, { type });
+          editor.selection = null;
+          setIsActive(false);
+        }
+        const parentEntry = getParent(editor, selection);
+        if (parentEntry) {
+          const [node] = parentEntry;
+
+          if (Element.isElement(node) && node.type === 'lic') {
+            toggleList(editor, { type: ELEMENT_UL });
+          }
+        }
         toggleNodeType(editor, { activeType: type });
         editor.selection = null;
         setIsActive(false);

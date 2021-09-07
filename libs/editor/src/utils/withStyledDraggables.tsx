@@ -1,3 +1,4 @@
+import { ELEMENT_IMPORT_DATA } from '@decipad/ui';
 import { css } from '@emotion/react';
 import Tippy, { TippyProps } from '@tippyjs/react';
 import {
@@ -7,14 +8,11 @@ import {
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_IMAGE,
-  ELEMENT_OL,
   ELEMENT_PARAGRAPH,
-  ELEMENT_TODO_LI,
   ELEMENT_UL,
   PlatePluginComponent,
   withDraggables,
 } from '@udecode/plate';
-import { ELEMENT_IMPORT_DATA } from '@decipad/ui';
 import { GrDrag } from 'react-icons/gr';
 
 const GrabberTooltipContent = () => (
@@ -58,11 +56,9 @@ export const withStyledDraggables = (
       keys: [
         ELEMENT_PARAGRAPH,
         ELEMENT_BLOCKQUOTE,
-        ELEMENT_TODO_LI,
         ELEMENT_H2,
         ELEMENT_H3,
         ELEMENT_IMAGE,
-        ELEMENT_OL,
         ELEMENT_UL,
         ELEMENT_CODE_BLOCK,
         ELEMENT_IMPORT_DATA,

@@ -5,7 +5,9 @@ import {
   ELEMENT_DEFAULT,
   ELEMENT_H2,
   ELEMENT_H3,
+  ELEMENT_LI,
   ELEMENT_PARAGRAPH,
+  ELEMENT_UL,
   getParent,
   getPlatePluginType,
   insertEmptyCodeBlock,
@@ -16,6 +18,7 @@ import {
   MARK_UNDERLINE,
   SPEditor,
   TEditor,
+  toggleList,
   unwrapList,
   WithAutoformatOptions,
 } from '@udecode/plate';
@@ -109,6 +112,14 @@ export const optionsAutoformat: AutoFormatOptions = {
           defaultType: getPlatePluginType(editor, ELEMENT_DEFAULT),
           insertNodesOptions: { select: true },
         });
+      },
+    },
+    {
+      type: ELEMENT_LI,
+      markup: ['*', '-'],
+      preFormat,
+      format: (editor: TEditor): void => {
+        toggleList(editor as SPEditor, { type: ELEMENT_UL });
       },
     },
   ],
