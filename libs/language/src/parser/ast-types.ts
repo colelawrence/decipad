@@ -29,6 +29,13 @@ export interface Ref {
   end?: Pos;
 }
 
+export interface ExternalRef {
+  type: 'externalref';
+  args: [randomId: string];
+  start?: Pos;
+  end?: Pos;
+}
+
 export interface FuncRef {
   type: 'funcref';
   args: [functionName: string];
@@ -191,6 +198,7 @@ export interface Block {
 export type Expression =
   | FunctionCall
   | Ref
+  | ExternalRef
   | PropertyAccess
   | Literal
   | TimeQuantity
@@ -211,6 +219,7 @@ export type Node = Block | Statement | Identifier | Lists;
 export interface TypeToNode {
   def: Def;
   ref: Ref;
+  externalref: ExternalRef;
   funcref: FuncRef;
   funcdef: FuncDef;
   coldef: ColDef;

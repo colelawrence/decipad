@@ -63,12 +63,17 @@ export const inferExpression = withErrorSource(
     switch (expr.type) {
       case 'ref': {
         const name = getIdentifierString(expr);
+        const value = ctx.stack.get(name);
 
-        if (ctx.stack.has(name)) {
-          return ctx.stack.get(name);
-        } else {
-          return t.impossible(InferError.missingVariable(name));
-        }
+        return value ?? t.impossible(InferError.missingVariable(name));
+      }
+      case 'externalref': {
+        const [id] = expr.args;
+        const { type } = getDefined(
+          ctx.externalData.get(id),
+          `missing external data with ID ${id}`
+        );
+        return type;
       }
       case 'literal': {
         const [litType, , litUnit] = expr.args;
@@ -159,9 +164,7 @@ export const inferExpression = withErrorSource(
       case 'property-access': {
         const tableName = getIdentifierString(expr.args[0]);
         const propName = expr.args[1];
-        const table = ctx.stack.has(tableName)
-          ? ctx.stack.get(tableName)
-          : null;
+        const table = ctx.stack.get(tableName);
 
         const getFromTableOrRow = (names: string[], types: Type[]) => {
           const index = names.indexOf(propName);

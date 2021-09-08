@@ -246,3 +246,15 @@ export const allMatch = <T>(array: T[], matchFn: (a: T, b: T) => boolean) =>
 
     return nextItem != null ? matchFn(thisItem, nextItem) : true;
   });
+
+export type AnyMapping<T> =
+  | Map<string, T>
+  | { [key: string]: T }
+  | Array<[key: string, val: T]>;
+export const anyMappingToMap = <T>(mapping: AnyMapping<T>): Map<string, T> => {
+  if (mapping instanceof Map || Array.isArray(mapping)) {
+    return new Map(mapping);
+  } else {
+    return new Map(Object.entries(mapping));
+  }
+};

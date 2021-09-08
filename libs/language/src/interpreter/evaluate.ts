@@ -55,6 +55,10 @@ export async function evaluate(
     case 'ref': {
       return getDefined(realm.stack.get(getIdentifierString(node)));
     }
+    case 'externalref': {
+      const { value } = getDefined(realm.externalData.get(node.args[0]));
+      return value;
+    }
     case 'function-call': {
       const funcName = getIdentifierString(node.args[0]);
       const funcArgs = getOfType('argument-list', node.args[1]).args;

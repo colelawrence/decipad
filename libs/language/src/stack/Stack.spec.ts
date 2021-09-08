@@ -23,9 +23,9 @@ it('throws when making the stack empty with pop()', () => {
   expect(() => stack.pop()).toThrow(); // I'm sorry Dave, I'm afraid I can't do that
 });
 
-it('throws when getting an undefined variable', () => {
+it('returns null when getting an undefined variable', () => {
   const stack = new Stack();
-  expect(() => stack.get('variable')).toThrow(); // variable only existed before pop()
+  expect(stack.get('missing')).toEqual(null);
 });
 
 it('checks for the presence of a variable', () => {

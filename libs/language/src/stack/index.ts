@@ -1,16 +1,17 @@
 import { immerable } from 'immer';
+import { AnyMapping, anyMappingToMap } from '../utils';
 
 export class Stack<T> {
   [immerable] = true;
   stack: Array<Map<string, T>>;
 
-  constructor(mapInit?: Array<[string, T]>) {
+  constructor(initialGlobalScope: AnyMapping<T> = new Map()) {
     this.stack = [];
-    this.push(mapInit);
+    this.push(anyMappingToMap(initialGlobalScope));
   }
 
-  push(mapInit?: Array<[string, T]>) {
-    this.stack.push(new Map(mapInit));
+  push(mapInit: AnyMapping<T> = new Map()) {
+    this.stack.push(anyMappingToMap(mapInit));
   }
 
   pop() {
@@ -39,7 +40,7 @@ export class Stack<T> {
       if (value != null) return value;
     }
 
-    throw new Error(`panic: not found in stack: ${varName}`);
+    return null;
   }
 
   delete(varName: string) {

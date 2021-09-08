@@ -6,8 +6,11 @@ import {
   runCodeForVariables,
   objectToTableType,
   objectToTupleValue,
+  runAST,
 } from './testUtils';
 import { parseUTCDate } from './date';
+import { Column, Scalar } from './interpreter/Value';
+import { block, n } from './utils';
 
 describe('basic code', () => {
   it('runs basic operations', async () => {
@@ -454,6 +457,27 @@ describe('Given', () => {
         columnNames: ['Ayy', 'Bee'],
         columnTypes: [{ type: 'number' }, { type: 'number' }],
       },
+    });
+  });
+});
+
+describe('Injected external data', () => {
+  it('can be injected into the language', async () => {
+    expect(
+      await runAST(block(n('externalref', 'random-id')), {
+        externalData: {
+          'random-id': {
+            type: t.column(t.string(), 2),
+            value: Column.fromValues([
+              Scalar.fromValue('Hello'),
+              Scalar.fromValue('World'),
+            ]),
+          },
+        },
+      })
+    ).toMatchObject({
+      value: ['Hello', 'World'],
+      type: t.column(t.string(), 2),
     });
   });
 });

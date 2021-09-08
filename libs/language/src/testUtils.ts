@@ -1,15 +1,15 @@
 import { readFileSync } from 'fs';
 
-import { AST, Parser, Interpreter } from '.';
+import { AST, Parser, Interpreter, InjectableExternalData } from '.';
 import { parse } from './parser';
 import { prettyPrintAST } from './parser/utils';
-import { run } from './interpreter';
+import { Realm, run } from './interpreter';
 import { Column, fromJS } from './interpreter/Value';
-import { inferTargetStatement, inferProgram } from './infer';
-import { zip } from './utils';
+import { inferTargetStatement, inferProgram, makeContext } from './infer';
+import { zip, AnyMapping } from './utils';
 import { Type, build as t } from './type';
 
-const parseOneBlock = (source: string): AST.Block[] => {
+const parseOneBlock = (source: string): AST.Block => {
   const parserInput: Parser.UnparsedBlock[] = [{ id: 'block-id', source }];
   const [parsed] = parse(parserInput);
 
@@ -22,21 +22,23 @@ const parseOneBlock = (source: string): AST.Block[] => {
   }
   expect(parsed.solutions.length).toEqual(1);
 
-  return [parsed.solutions[0]];
+  return parsed.solutions[0];
 };
 
-export const runCode = async (source: string) => {
-  const program = parseOneBlock(source);
-
-  const inferResult = await inferTargetStatement(program, [
-    0,
-    program[0].args.length - 1,
-  ]);
+export const runAST = async (
+  block: AST.Block,
+  { externalData }: { externalData?: AnyMapping<InjectableExternalData> } = {}
+) => {
+  const inferResult = await inferTargetStatement(
+    [block],
+    [0, block.args.length - 1],
+    makeContext({ externalData })
+  );
 
   const erroredType = inferResult.errorCause != null ? inferResult : null;
   expect(erroredType).toEqual(null);
 
-  const [value] = await run(program, [0]);
+  const [value] = await run([block], [0], new Realm({ externalData }));
 
   return {
     value,
@@ -44,11 +46,20 @@ export const runCode = async (source: string) => {
   };
 };
 
+export const runCode = async (
+  source: string,
+  { externalData }: { externalData?: AnyMapping<InjectableExternalData> } = {}
+) => {
+  const block = parseOneBlock(source);
+
+  return runAST(block, { externalData });
+};
+
 export const runCodeForVariables = async (
   source: string,
   wantedVariables: string[]
 ) => {
-  const program = parseOneBlock(source);
+  const program = [parseOneBlock(source)];
 
   const inferResult = await inferProgram(program);
 
