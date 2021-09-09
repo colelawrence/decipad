@@ -41,13 +41,11 @@ export const wrappedParse = ({
   }
 };
 
-const asParsed = ({ id, value }: ParsedBlock): ParseRet => ({
+const asParsed = ({ id, block }: ParsedBlock): ParseRet => ({
   type: 'identified-block',
   id,
   source: '',
-  block: {
-    ...value,
-  },
+  block: { ...block },
 });
 
 /**
@@ -59,6 +57,7 @@ export const updateParse = (
 ): ParseRet[] => {
   return program.map((block) => {
     const prev = previousBlocks.find((prev) => prev.id === block.id);
+
     if (block.type === 'unparsed-block') {
       if (prev != null && prev.source === block.source) {
         // Unchanged block -- do not evict this one
@@ -68,11 +67,11 @@ export const updateParse = (
         return wrappedParse(block);
       }
     } else {
-      const newB = asParsed(block);
-      if (prev && dequal(newB, prev)) {
+      const newBlock = asParsed(block);
+      if (prev && dequal(newBlock, prev)) {
         return prev;
       } else {
-        return newB;
+        return newBlock;
       }
     }
   });

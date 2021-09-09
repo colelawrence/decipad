@@ -1,6 +1,12 @@
 import produce from 'immer';
 
-import { AST } from '..';
+import {
+  AST,
+  InjectableExternalData,
+  buildType as t,
+  Scalar,
+  Column,
+} from '..';
 import {
   unparsedProgram,
   deeperProgram,
@@ -11,7 +17,8 @@ import {
 } from './testutils';
 import { ComputationRealm } from './ComputationRealm';
 import { computeProgram, Computer } from './Computer';
-import { Program, UnparsedBlock, ValueLocation } from './types';
+import { ComputeRequest, UnparsedBlock, ValueLocation } from './types';
+import { AnyMapping, assign, n } from '../utils';
 
 let computer: Computer;
 beforeEach(() => {
@@ -21,13 +28,13 @@ beforeEach(() => {
 const testCompute = async (program: AST.Block[]) =>
   simplifyInBlockResults(await computeProgram(program, new ComputationRealm()));
 
-const computeOnTestComputer = async (program: Program) => {
-  const res = await computer.compute({ program });
+const computeOnTestComputer = async (req: ComputeRequest) => {
+  const res = await computer.compute(req);
   return simplifyComputeResponse(res);
 };
 
 it('computes a thing', async () => {
-  const res = await computeOnTestComputer(unparsedProgram);
+  const res = await computeOnTestComputer({ program: unparsedProgram });
 
   expect(res).toEqual([
     'block-AB/0 -> 0',
@@ -39,13 +46,15 @@ it('computes a thing', async () => {
 
 it('retrieves syntax errors', async () => {
   expect(
-    await computeOnTestComputer([
-      {
-        id: 'wrongblock',
-        type: 'unparsed-block',
-        source: 'Syntax --/-- Error',
-      },
-    ])
+    await computeOnTestComputer({
+      program: [
+        {
+          id: 'wrongblock',
+          type: 'unparsed-block',
+          source: 'Syntax --/-- Error',
+        },
+      ],
+    })
   ).toEqual(['wrongblock -> Syntax Error']);
 });
 
@@ -73,13 +82,13 @@ it('returns type errors', async () => {
 describe('caching', () => {
   it('honours cache', async () => {
     // Fill in cache
-    await computeOnTestComputer(unparsedProgram);
+    await computeOnTestComputer({ program: unparsedProgram });
 
     // Change C
     const changedC = produce(unparsedProgram, (program) => {
       (program[1] as UnparsedBlock).source = 'C = B + 10.1';
     });
-    expect(await computeOnTestComputer(changedC)).toMatchObject([
+    expect(await computeOnTestComputer({ program: changedC })).toMatchObject([
       'block-AB/0 -> 0',
       'block-AB/1 -> 1',
       'block-C/0 -> 11.1',
@@ -92,7 +101,7 @@ describe('caching', () => {
     const broken = produce(unparsedProgram, (program) => {
       (program[0] as UnparsedBlock).source = 'A = 0.5';
     });
-    expect(await computeOnTestComputer(broken)).toMatchObject([
+    expect(await computeOnTestComputer({ program: broken })).toMatchObject([
       'block-AB/0 -> 0.5',
       'block-C/0 -> Type Error',
       'block-D/0 -> Type Error',
@@ -101,7 +110,7 @@ describe('caching', () => {
     const noD = produce(unparsedProgram, (program) => {
       (program[2] as UnparsedBlock).source = '';
     });
-    expect(await computeOnTestComputer(noD)).toMatchObject([
+    expect(await computeOnTestComputer({ program: noD })).toMatchObject([
       'block-AB/0 -> 0',
       'block-AB/1 -> 1',
       'block-C/0 -> 11',
@@ -109,34 +118,35 @@ describe('caching', () => {
   });
 
   it('tricky caching problems', async () => {
-    expect(await computeOnTestComputer(getUnparsed('= 1', 'A + 1'))).toContain(
-      'block-1/0 -> Type Error'
-    );
+    expect(
+      await computeOnTestComputer({ program: getUnparsed('= 1', 'A + 1') })
+    ).toContain('block-1/0 -> Type Error');
 
-    expect(await computeOnTestComputer(getUnparsed('A = 1', 'A + 1'))).toEqual([
-      'block-0/0 -> 1',
-      'block-1/0 -> 2',
-    ]);
+    expect(
+      await computeOnTestComputer({ program: getUnparsed('A = 1', 'A + 1') })
+    ).toEqual(['block-0/0 -> 1', 'block-1/0 -> 2']);
   });
 
   it('tricky caching problems (2)', async () => {
     // Use a missing variable B
     expect(
-      await computeOnTestComputer(getUnparsed('A = 1', '', 'A + 1 + B'))
+      await computeOnTestComputer({
+        program: getUnparsed('A = 1', '', 'A + 1 + B'),
+      })
     ).toEqual(['block-0/0 -> 1', 'block-2/0 -> Type Error']);
 
     // Define it out of order
     expect(
-      await computeOnTestComputer(
-        getUnparsed('A = 1', '', 'A + 1 + B', 'B = 1')
-      )
+      await computeOnTestComputer({
+        program: getUnparsed('A = 1', '', 'A + 1 + B', 'B = 1'),
+      })
     ).toEqual(['block-0/0 -> 1', 'block-2/0 -> Type Error', 'block-3/0 -> 1']);
   });
 });
 
 it('can reset itself', async () => {
   // Make the cache dirty
-  await computeOnTestComputer(unparsedProgram);
+  await computeOnTestComputer({ program: unparsedProgram });
   expect(computer).not.toEqual(new Computer());
 
   computer.reset();
@@ -144,13 +154,15 @@ it('can reset itself', async () => {
 });
 
 it('can turn a cursor location into a ValueLocation', async () => {
-  await computeOnTestComputer([
-    {
-      id: 'id',
-      type: 'unparsed-block',
-      source: ['A = 1', '', '', 'B = 2', 'C = 3'].join('\n'),
-    },
-  ]);
+  await computeOnTestComputer({
+    program: [
+      {
+        id: 'id',
+        type: 'unparsed-block',
+        source: ['A = 1', '', '', 'B = 2', 'C = 3'].join('\n'),
+      },
+    ],
+  });
 
   const locOf = (loc: ValueLocation | null) =>
     computer.cursorPosToValueLocation(loc);
@@ -165,4 +177,40 @@ it('can turn a cursor location into a ValueLocation', async () => {
   expect(locOf(['id', 3])).toEqual(null);
   expect(locOf(['id', 4])).toEqual(['id', 1]);
   expect(locOf(['id', 5])).toEqual(['id', 2]);
+});
+
+it('can pass on injected data', async () => {
+  const injectedBlock = n(
+    'block',
+    assign('InjectedVar', n('externalref', 'external-reference-id')),
+    n('ref', 'InjectedVar')
+  );
+  injectedBlock.id = 'blockid';
+  const externalData: AnyMapping<InjectableExternalData> = {
+    'external-reference-id': {
+      type: t.column(t.string(), 2),
+      value: Column.fromValues([
+        Scalar.fromValue('Hello'),
+        Scalar.fromValue('World'),
+      ]),
+    },
+  };
+  expect(
+    await computeOnTestComputer({
+      program: [
+        {
+          id: 'id',
+          type: 'parsed-block',
+          block: injectedBlock,
+        },
+      ],
+
+      externalData,
+    })
+  ).toMatchInlineSnapshot(`
+    Array [
+      "blockid/0 -> [\\"Hello\\",\\"World\\"]",
+      "blockid/1 -> [\\"Hello\\",\\"World\\"]",
+    ]
+  `);
 });

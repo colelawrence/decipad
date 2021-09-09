@@ -15,6 +15,7 @@ import {
 import { ParseRet, updateParse } from './parse';
 import { ComputationRealm } from './ComputationRealm';
 import { getAllBlockLocations, getGoodBlocks, getStatement } from './utils';
+import { anyMappingToMap } from '../utils';
 
 /*
  - Skip cached stuff
@@ -109,10 +110,12 @@ export class Computer {
 
   async compute({
     program,
+    externalData = new Map(),
   }: ComputeRequest): Promise<ComputeResponse | ComputePanic> {
     /* istanbul ignore catch */
     try {
       const blocks = this.ingestNewBlocks(program);
+      this.computationRealm.setExternalData(anyMappingToMap(externalData));
       const goodBlocks = getGoodBlocks(blocks);
       const computeResults = await computeProgram(
         goodBlocks,

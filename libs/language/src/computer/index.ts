@@ -1,4 +1,4 @@
-import { Observable, of } from 'rxjs';
+import { Observable, of, OperatorFunction } from 'rxjs';
 import {
   combineLatestWith,
   concatMap,
@@ -71,13 +71,12 @@ const distinctMap = <In, Out>(
   );
 
 type ComputerRet = ComputeResponse | ComputePanic;
-export interface MakeComputerOptions {
-  pipeErrors?: () => (
-    inObs: Observable<ComputerRet>
-  ) => Observable<ComputerRet>;
+export interface ComputeStreamOptions {
+  pipeErrors?: () => OperatorFunction<ComputerRet, ComputerRet>;
 }
-export const makeComputer =
-  ({ pipeErrors = () => delay(2000) }: MakeComputerOptions = {}) =>
+
+export const makeComputeStream =
+  ({ pipeErrors = () => delay(2000) }: ComputeStreamOptions = {}) =>
   (in$: ReqsWithCursor$): Res$ => {
     const computer = new Computer();
 

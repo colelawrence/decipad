@@ -1,5 +1,6 @@
 import { Type } from '../type';
-import { AST } from '..';
+import { AST, InjectableExternalData } from '..';
+import { AnyMapping } from '../utils';
 
 export interface IdentifiedBlock {
   type: 'identified-block';
@@ -25,7 +26,7 @@ export type UnparsedBlock = {
 export type ParsedBlock = {
   type: 'parsed-block';
   id: string;
-  value: AST.Block;
+  block: AST.Block;
   source?: string;
 };
 export type ProgramBlock = UnparsedBlock | ParsedBlock;
@@ -33,6 +34,7 @@ export type Program = ProgramBlock[];
 
 export interface ComputeRequest {
   program: Program;
+  externalData?: AnyMapping<InjectableExternalData>;
   subscriptions?: string[];
 }
 

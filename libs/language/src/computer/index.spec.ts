@@ -6,7 +6,11 @@ import {
   InBlockResult,
   ValueLocation,
 } from './types';
-import { getShouldDelayResponse, makeComputer, MakeComputerOptions } from '.';
+import {
+  getShouldDelayResponse,
+  makeComputeStream,
+  ComputeStreamOptions,
+} from '.';
 import { getUnparsed, simplifyComputeResponse } from './testutils';
 
 const makeReqs = (things: string[]): ComputeRequest[] =>
@@ -22,12 +26,12 @@ const makeMultiBlockReqs = (things: string[][]): ComputeRequest[] =>
 const runThroughMock = async (
   reqs: ComputeRequest[],
   cursorPositions?: (ValueLocation | null)[],
-  computerOptions?: MakeComputerOptions
+  computerOptions?: ComputeStreamOptions
 ): Promise<string[][]> =>
   lastValueFrom(
     from(reqs).pipe(
       map((t, index) => [t, cursorPositions?.[index] ?? null] as const),
-      makeComputer(computerOptions),
+      makeComputeStream(computerOptions),
       map(([res]) => simplifyComputeResponse(res)),
       toArray()
     )
@@ -52,7 +56,7 @@ it('Always yields the whole response, even if parts of it did not change', async
 });
 
 it('delays requests which are errored and under the cursor', async () => {
-  const options: MakeComputerOptions = {
+  const options: ComputeStreamOptions = {
     pipeErrors: jest.fn(() => (x) => x),
   };
   await runThroughMock(makeReqs(['Syntax ---- / --- Error']), [null], options);

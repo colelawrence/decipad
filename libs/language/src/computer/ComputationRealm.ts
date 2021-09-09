@@ -1,4 +1,4 @@
-import { AST } from '..';
+import { AST, ExternalDataMap } from '..';
 import { makeContext as makeInferContext } from '../infer';
 import { Realm } from '../interpreter';
 
@@ -17,6 +17,11 @@ export class ComputationRealm {
   inferContext = makeInferContext();
   locCache = new LocationMap<CacheContents>();
   errorLocs = new LocationSet();
+
+  setExternalData(externalData: ExternalDataMap) {
+    this.interpreterRealm.externalData = externalData;
+    this.inferContext.externalData = externalData;
+  }
 
   evictCache(oldBlocks: AST.Block[], newBlocks: AST.Block[]) {
     for (const loc of this.errorLocs) {

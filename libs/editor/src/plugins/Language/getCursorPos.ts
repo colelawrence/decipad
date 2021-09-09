@@ -1,5 +1,6 @@
 import { isCollapsed } from '@udecode/plate';
-import { Editor, Range, Text } from 'slate';
+import { Editor, Range } from 'slate';
+import { getCodeFromBlock, isSlateNode } from './common';
 
 function offsetToLineNumber(codeText: string, offset: number) {
   const lines = codeText
@@ -33,17 +34,16 @@ export function getCursorPos(editor: Editor): CursorPos | null {
   if (selection && isCollapsed(selection)) {
     const cursor = Range.start(selection);
 
-    // TODO fix node types
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [parentNode] = Editor.parent(editor, cursor) as any;
-    const [node] = Editor.node(editor, cursor);
+    const codeBlock = Editor.above(editor, {
+      at: cursor,
+      match: (node) => isSlateNode(node) && node.type === 'code_block',
+    })?.[0];
 
-    const isCodeBlock = parentNode.type === 'code_block';
+    if (isSlateNode(codeBlock)) {
+      const codeText = getCodeFromBlock(codeBlock);
+      const foundLine = offsetToLineNumber(codeText, cursor.offset);
 
-    if (isCodeBlock && Text.isText(node)) {
-      const foundLine = offsetToLineNumber(node.text, cursor.offset);
-
-      return [parentNode.id, foundLine];
+      return [codeBlock.id, foundLine];
     }
   }
 

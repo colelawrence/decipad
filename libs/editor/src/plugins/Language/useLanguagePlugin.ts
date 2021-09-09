@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { PlatePlugin, ELEMENT_CODE_BLOCK } from '@udecode/plate';
+import { PlatePlugin } from '@udecode/plate';
 import { useEffect, useMemo, useState } from 'react';
 import { dequal } from 'dequal';
 import { captureException } from '@sentry/react';
@@ -11,21 +11,10 @@ import {
   ELEMENT_IMPORT_DATA,
   ProgramBlocksContextValue,
 } from '@decipad/ui';
-import { ComputeRequest, makeComputer, Program, AST } from '@decipad/language';
+import { ComputeRequest, makeComputeStream } from '@decipad/language';
 import { getCursorPos, CursorPos } from './getCursorPos';
-
-interface SlateNode {
-  type: string;
-  children?: SlateNode[];
-  text?: string;
-  id: string;
-}
-
-interface ImportDataNode extends SlateNode {
-  'data-varname': string;
-  'data-href': string;
-  'data-contenttype': string;
-}
+import { slateDocumentToComputeRequest } from './slateDocumentToComputeRequest';
+import { SlateNode } from './common';
 
 interface UseLanguagePluginRet {
   languagePlugin: PlatePlugin;
@@ -59,7 +48,7 @@ export const useLanguagePlugin = (): UseLanguagePluginRet => {
       .pipe(
         // Debounce to give React an easier time
         debounceTime(100),
-        makeComputer()
+        makeComputeStream()
       )
       // Catch all errors here
       .subscribe({
@@ -102,9 +91,9 @@ export const useLanguagePlugin = (): UseLanguagePluginRet => {
       () => ({
         onChange: (editor) => () => {
           const value = editor.children as SlateNode[];
-          const program = getBlocks(value);
+          const computeRequest = slateDocumentToComputeRequest(value);
 
-          evaluationRequests.next([{ program }, getCursorPos(editor)]);
+          evaluationRequests.next([computeRequest, getCursorPos(editor)]);
         },
       }),
       [evaluationRequests]
@@ -131,9 +120,6 @@ export function editorProgramBlocks(editor: Editor): ProgramBlocksContextValue {
 
   return {
     setBlockVarName(blockId: string, varName: string): void {
-      if (!editor) {
-        return;
-      }
       withBlock(blockId, parsedProgramBlocks, (block) => {
         Transforms.setNodes(
           editor,
@@ -143,9 +129,6 @@ export function editorProgramBlocks(editor: Editor): ProgramBlocksContextValue {
       });
     },
     setBlockProvider(blockId: string, provider: string): void {
-      if (!editor) {
-        return;
-      }
       withBlock(blockId, parsedProgramBlocks, (block) => {
         Transforms.setNodes(
           editor,
@@ -155,9 +138,6 @@ export function editorProgramBlocks(editor: Editor): ProgramBlocksContextValue {
       });
     },
     setBlockExternalId(blockId: string, externalId: string): void {
-      if (!editor) {
-        return;
-      }
       withBlock(blockId, parsedProgramBlocks, (block) => {
         Transforms.setNodes(
           editor,
@@ -180,58 +160,4 @@ function withBlock(
   if (block != null) {
     fn(block);
   }
-}
-
-function getBlocks(value: SlateNode[]): Program {
-  return value
-    .filter(
-      (block) =>
-        block.type === ELEMENT_CODE_BLOCK ||
-        (block.type === ELEMENT_IMPORT_DATA &&
-          (block as ImportDataNode)['data-href'])
-    )
-    .map((block) => {
-      if (block.type === ELEMENT_CODE_BLOCK) {
-        return {
-          id: block.id,
-          type: 'unparsed-block',
-          source: getCodeFromBlock(block),
-        };
-      }
-      // block.type === ELEMENT_IMPORT_DATA) {
-      return {
-        id: block.id,
-        type: 'parsed-block',
-        value: getAstFromImportData(block as ImportDataNode),
-      };
-    });
-}
-
-function getCodeFromBlock(block: SlateNode): string {
-  if (block.text) {
-    return block.text;
-  }
-  return (block.children || []).map(getCodeFromBlock).join('\n');
-}
-
-function getAstFromImportData(importData: ImportDataNode): AST.Block {
-  return {
-    type: 'block',
-    id: importData.id,
-    args: [
-      {
-        type: 'assign',
-        args: [
-          {
-            type: 'def',
-            args: [importData['data-varname']],
-          },
-          {
-            type: 'imported-data',
-            args: [importData['data-href'], importData['data-contenttype']],
-          },
-        ],
-      },
-    ],
-  };
 }
