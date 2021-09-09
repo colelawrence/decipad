@@ -1,21 +1,21 @@
 import { ELEMENT_CODE_LINE, getParent, PlatePlugin } from '@udecode/plate';
 import { Range, Transforms } from 'slate';
 
+const pairs = [
+  {
+    start: '{',
+    end: '}',
+  },
+  { start: '[', end: ']' },
+  {
+    start: '(',
+    end: ')',
+  },
+];
+
 export const createAutoPairsPlugin = (): PlatePlugin => ({
   onKeyDown: (editor) => (event) => {
     const { selection } = editor;
-
-    const pairs = [
-      {
-        start: '{',
-        end: '}',
-      },
-      { start: '[', end: ']' },
-      {
-        start: '(',
-        end: ')',
-      },
-    ];
 
     if (selection) {
       const cursor = Range.start(selection);

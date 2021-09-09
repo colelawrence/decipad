@@ -1,0 +1,113 @@
+import {
+  createEditorPlugins,
+  ELEMENT_CODE_LINE,
+  ELEMENT_PARAGRAPH,
+  SPEditor,
+} from '@udecode/plate';
+import { createAutoPairsPlugin } from './createAutoPairsPlugin';
+
+const insert = (editor: SPEditor, key: string) => {
+  const event = new KeyboardEvent('keydown', { key, cancelable: true });
+  // @ts-expect-error DOM KeyboardEvent vs React event
+  createAutoPairsPlugin().onKeyDown?.(editor)(event);
+  if (!event.defaultPrevented) {
+    switch (true) {
+      case '()[]{}'.includes(key):
+        editor.insertText(key);
+        break;
+      case key === 'Backspace':
+        editor.deleteBackward('character');
+        break;
+      default:
+        throw new Error(`Do not know what to do with key ${key}`);
+    }
+  }
+};
+
+describe('in a code block', () => {
+  it.each`
+    key    | pair
+    ${'('} | ${'()'}
+    ${'['} | ${'[]'}
+    ${'{'} | ${'{}'}
+  `('expands to $pair when pressing $key', ({ key, pair }) => {
+    const editor = createEditorPlugins();
+    editor.children = [{ type: ELEMENT_CODE_LINE, children: [{ text: 'fn' }] }];
+    editor.selection = {
+      anchor: { path: [0, 0], offset: 2 },
+      focus: { path: [0, 0], offset: 2 },
+    };
+
+    insert(editor, key);
+    expect(editor.children).toEqual([
+      { type: ELEMENT_CODE_LINE, children: [{ text: `fn${pair}` }] },
+    ]);
+  });
+
+  it.each`
+    key    | pair
+    ${')'} | ${'()'}
+    ${']'} | ${'[]'}
+    ${'}'} | ${'{}'}
+  `(
+    'skips the $key in $pair when pressing it in the middle of a pair',
+    ({ key, pair }) => {
+      const editor = createEditorPlugins();
+      editor.children = [
+        { type: ELEMENT_CODE_LINE, children: [{ text: pair }] },
+      ];
+      editor.selection = {
+        anchor: { path: [0, 0], offset: 1 },
+        focus: { path: [0, 0], offset: 1 },
+      };
+
+      insert(editor, key);
+      expect(editor.children).toEqual([
+        { type: ELEMENT_CODE_LINE, children: [{ text: pair }] },
+      ]);
+      expect(editor.selection.anchor.offset).toBe(2);
+    }
+  );
+
+  it.each`
+    pair
+    ${'()'}
+    ${'[]'}
+    ${'{}'}
+  `(
+    'deletes the whole pair when pressing backspace in the middle of a pair',
+    ({ pair }) => {
+      const editor = createEditorPlugins();
+      editor.children = [
+        { type: ELEMENT_CODE_LINE, children: [{ text: pair }] },
+      ];
+      editor.selection = {
+        anchor: { path: [0, 0], offset: 1 },
+        focus: { path: [0, 0], offset: 1 },
+      };
+
+      insert(editor, 'Backspace');
+      expect(editor.children).toEqual([
+        { type: ELEMENT_CODE_LINE, children: [{ text: '' }] },
+      ]);
+    }
+  );
+});
+
+describe('outside a code block', () => {
+  it('does not expand a parenthesis', () => {
+    const editor = createEditorPlugins();
+    editor.children = [
+      { type: ELEMENT_PARAGRAPH, children: [{ text: 'John' }] },
+    ];
+    editor.selection = {
+      anchor: { path: [0, 0], offset: 4 },
+      focus: { path: [0, 0], offset: 4 },
+    };
+
+    insert(editor, '(');
+    expect(editor.children).toEqual([
+      { type: ELEMENT_PARAGRAPH, children: [{ text: `John(` }] },
+    ]);
+  });
+});
