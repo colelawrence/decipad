@@ -8,10 +8,10 @@ export type SerializedType =
   | { kind: 'scalar'; type: TypeName }
   | { kind: 'date'; date: Time.Specificity }
   | { kind: 'range'; rangeOf: SerializedType }
-  | { kind: 'column'; cellType: SerializedType; columnSize: number }
+  | { kind: 'column'; cellType: SerializedType; columnSize: number | 'unknown' }
   | {
       kind: 'table';
-      tableLength: number;
+      tableLength: number | 'unknown';
       columnTypes: SerializedType[];
       columnNames: string[];
     }

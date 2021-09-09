@@ -189,7 +189,7 @@ describe('Type.combine', () => {
   });
 });
 
-describe('new columns and tuples', () => {
+describe('new columns and tables', () => {
   it('can get cardinality', () => {
     expect(t.number().cardinality).toEqual(1);
 
@@ -232,6 +232,32 @@ describe('new columns and tuples', () => {
     ).not.toBeNull();
 
     expect(t.row([t.string()], ['X']).reduced().errorCause).not.toBeNull();
+  });
+
+  it('can have unknown lengths', () => {
+    expect(
+      t.column(t.string(), 'unknown').sameAs(t.column(t.string(), 3)).toString()
+    ).toMatchInlineSnapshot(`"<string> x unknown"`);
+    expect(
+      t.column(t.string(), 3).sameAs(t.column(t.string(), 'unknown')).toString()
+    ).toMatchInlineSnapshot(`"<string> x 3"`);
+
+    const fixedTable = t.table({
+      length: 3,
+      columnTypes: [t.string()],
+      columnNames: ['Hi'],
+    });
+    const unknownLengthTable = t.table({
+      length: 'unknown',
+      columnTypes: [t.string()],
+      columnNames: ['Hi'],
+    });
+    expect(
+      unknownLengthTable.sameAs(fixedTable).tableLength
+    ).toMatchInlineSnapshot(`"unknown"`);
+    expect(
+      fixedTable.sameAs(unknownLengthTable).tableLength
+    ).toMatchInlineSnapshot(`3`);
   });
 });
 

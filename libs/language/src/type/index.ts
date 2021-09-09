@@ -68,10 +68,10 @@ export class Type {
 
   // Column
   cellType: Type | null = null;
-  columnSize: number | null = null;
+  columnSize: number | 'unknown' | null = null;
 
   // Table
-  tableLength: number | null = null;
+  tableLength: number | 'unknown' | null = null;
   columnTypes: Type[] | null = null;
   columnNames: string[] | null = null;
 
@@ -264,11 +264,16 @@ export class Type {
     }).call(this, other);
   }
 
-  isColumn(size?: number): Type {
-    return propagate(function propagated(this: Type, size?: number) {
+  isColumn(size?: number | 'unknown'): Type {
+    return propagate(function propagated(
+      this: Type,
+      size?: number | 'unknown'
+    ) {
       if (
         (size === undefined && this.columnSize != null) ||
-        this.columnSize === size
+        this.columnSize === size ||
+        this.columnSize === 'unknown' ||
+        size === 'unknown'
       ) {
         return this;
       } else {
@@ -289,12 +294,16 @@ export class Type {
     }).call(this);
   }
 
-  withColumnSize(columnSize: number | null): Type {
+  withColumnSize(columnSize: number | 'unknown' | null): Type {
     return propagate(function propagated(
       this: Type,
-      columnSize: number | null
+      columnSize: number | 'unknown' | null
     ) {
-      if (this.columnSize === columnSize) {
+      if (
+        this.columnSize === columnSize ||
+        this.columnSize === 'unknown' ||
+        columnSize === 'unknown'
+      ) {
         return this;
       } else {
         return this.withErrorCause(

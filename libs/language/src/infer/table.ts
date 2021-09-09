@@ -3,6 +3,7 @@ import { Type, build as t } from '../type';
 const getLargestColumn = (columnTypes: Type[]) => {
   const columnSizes = new Set([...columnTypes].map((c) => c.columnSize));
   columnSizes.delete(null);
+  columnSizes.delete('unknown');
   return [...columnSizes][0];
 };
 
@@ -12,7 +13,7 @@ export const unifyColumnSizes = (
 ): Type => {
   const length = getLargestColumn(types) ?? 1;
   const columnTypes = types.map((colValue) => {
-    if (colValue.columnSize === length) {
+    if (colValue.columnSize === length || colValue.columnSize === 'unknown') {
       return colValue.reduced();
     } else if (colValue.columnSize != null) {
       return t.impossible('Incompatible column sizes');

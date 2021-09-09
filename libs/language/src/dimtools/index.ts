@@ -36,7 +36,13 @@ export const automapTypes = (
     const mapLength = toMapOver[0]?.columnSize;
 
     if (mapLength != null) {
-      if (allMatch(toMapOver, (a, b) => a.columnSize === b.columnSize)) {
+      if (
+        allMatch(toMapOver, (a, b) =>
+          a.columnSize === 'unknown' || b.columnSize === 'unknown'
+            ? true
+            : a.columnSize === b.columnSize
+        )
+      ) {
         // When an argument is higher-dimensional than expected,
         // the result of the call is also higher dimensional.
         // To achieve this we essentially do .map(fargs => recurse(fargs))

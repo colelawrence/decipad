@@ -34,7 +34,7 @@ export const timeQuantity = (timeUnits: Time.Unit[]) =>
   });
 
 interface BuildTableArgs {
-  length: number;
+  length: number | 'unknown';
   columnTypes: Type[];
   columnNames: string[];
 }
@@ -69,7 +69,7 @@ export const row = (cells: Type[], cellNames: string[]) => {
   }
 };
 
-export const column = (cellType: Type, columnSize: number) => {
+export const column = (cellType: Type, columnSize: number | 'unknown') => {
   const t = new Type();
 
   t.cellType = cellType;
