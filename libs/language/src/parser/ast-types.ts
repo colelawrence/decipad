@@ -57,7 +57,7 @@ export interface ColDef {
   end?: Pos;
 }
 
-export type Identifier = Ref | FuncRef | Def | FuncDef | ColDef;
+export type Identifier = Ref | FuncRef | ExternalRef | Def | FuncDef | ColDef;
 
 // Literal number, char, string etc
 

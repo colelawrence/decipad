@@ -2,7 +2,10 @@ import { AST, ExternalDataMap } from '..';
 import { makeContext as makeInferContext } from '../infer';
 import { Realm } from '../interpreter';
 
-import { getStatementsToEvict } from './getStatementsToEvict';
+import {
+  getStatementsToEvict,
+  GetStatementsToEvictArgs,
+} from './getStatementsToEvict';
 import { InBlockResult, ValueLocation } from './types';
 import {
   parseDefName,
@@ -23,12 +26,14 @@ export class ComputationRealm {
     this.inferContext.externalData = externalData;
   }
 
-  evictCache(oldBlocks: AST.Block[], newBlocks: AST.Block[]) {
+  evictCache({ oldBlocks, ...rest }: GetStatementsToEvictArgs) {
     for (const loc of this.errorLocs) {
       this.evictStatement(oldBlocks, loc);
     }
 
-    for (const loc of getStatementsToEvict(oldBlocks, newBlocks)) {
+    const statementsToEvict = getStatementsToEvict({ oldBlocks, ...rest });
+
+    for (const loc of statementsToEvict) {
       this.evictStatement(oldBlocks, loc);
     }
   }

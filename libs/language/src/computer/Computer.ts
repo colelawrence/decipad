@@ -1,7 +1,7 @@
 import { inferStatement } from '../infer';
 import { evaluate as evaluateStatement } from '../interpreter';
 
-import { AST } from '..';
+import { AST, ExternalDataMap } from '..';
 import {
   ComputePanic,
   ValueLocation,
@@ -10,7 +10,6 @@ import {
   InBlockResult,
   IdentifiedBlock,
   ComputeRequest,
-  Program,
 } from './types';
 import { ParseRet, updateParse } from './parse';
 import { ComputationRealm } from './ComputationRealm';
@@ -94,28 +93,32 @@ export const computeProgram = async (
 
 export class Computer {
   private previouslyParsed: ParseRet[] = [];
+  private previousExternalData: ExternalDataMap = new Map();
   private computationRealm = new ComputationRealm();
 
-  private ingestNewBlocks(program: Program) {
+  private ingestComputeRequest({ program, externalData }: ComputeRequest) {
+    const newExternalData = anyMappingToMap(externalData ?? new Map());
+
     const newParse = updateParse(program, this.previouslyParsed);
 
-    this.computationRealm.evictCache(
-      getGoodBlocks(this.previouslyParsed),
-      getGoodBlocks(newParse)
-    );
+    this.computationRealm.evictCache({
+      oldBlocks: getGoodBlocks(this.previouslyParsed),
+      newBlocks: getGoodBlocks(newParse),
+      oldExternalData: this.previousExternalData,
+      newExternalData,
+    });
 
+    this.computationRealm.setExternalData(newExternalData);
+    this.previousExternalData = newExternalData;
     this.previouslyParsed = newParse;
+
     return newParse;
   }
 
-  async compute({
-    program,
-    externalData = new Map(),
-  }: ComputeRequest): Promise<ComputeResponse | ComputePanic> {
+  async compute(req: ComputeRequest): Promise<ComputeResponse | ComputePanic> {
     /* istanbul ignore catch */
     try {
-      const blocks = this.ingestNewBlocks(program);
-      this.computationRealm.setExternalData(anyMappingToMap(externalData));
+      const blocks = this.ingestComputeRequest(req);
       const goodBlocks = getGoodBlocks(blocks);
       const computeResults = await computeProgram(
         goodBlocks,

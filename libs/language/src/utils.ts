@@ -185,7 +185,8 @@ export const getIdentifierString = ({ type, args }: AST.Identifier): string => {
       type !== 'def' &&
       type !== 'funcdef' &&
       type !== 'funcref' &&
-      type !== 'coldef') ||
+      type !== 'coldef' &&
+      type !== 'externalref') ||
     typeof args[0] !== 'string'
   ) {
     throw new Error('panic: identifier expected');

@@ -143,6 +143,8 @@ export const getReferredSymbol = (node: AST.Node) => {
       return `var:${getIdentifierString(node)}`;
     case 'funcref':
       return `fn:${getIdentifierString(node)}`;
+    case 'externalref':
+      return `externaldata:${getIdentifierString(node)}`;
     default:
       return null;
   }

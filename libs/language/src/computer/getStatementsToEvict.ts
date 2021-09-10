@@ -1,6 +1,6 @@
 import { dequal } from 'dequal';
 
-import { AST } from '..';
+import { AST, ExternalDataMap } from '..';
 import { getDependents } from './dependents';
 import { ValueLocation } from './types';
 import {
@@ -13,17 +13,33 @@ import {
   findSymbolsUsed,
 } from './utils';
 
+const getChangedMapKeys = <T>(
+  oldMap: Map<string, T>,
+  newMap: Map<string, T>
+): string[] => {
+  const allKeys = new Set([...oldMap.keys(), ...newMap.keys()]);
+
+  return [...allKeys].filter((key) => {
+    const oldVal = oldMap.get(key);
+    const newVal = newMap.get(key);
+
+    return !dequal(oldVal, newVal);
+  });
+};
+
+const getChangedExternalData = (
+  oldExternalData: ExternalDataMap,
+  newExternalData: ExternalDataMap
+): string[] =>
+  getChangedMapKeys(oldExternalData, newExternalData).map(
+    (changedKey) => `externaldata:${changedKey}`
+  );
+
+const mapify = (blocks: AST.Block[]) => new Map(blocks.map((b) => [b.id, b]));
 export const getChangedBlocks = (
   oldBlocks: AST.Block[],
   newBlocks: AST.Block[]
-) =>
-  oldBlocks.flatMap((prev) => {
-    const unchanged = newBlocks.some(
-      (block) => block.id === prev.id && dequal(prev, block)
-    );
-
-    return unchanged ? [] : [prev.id];
-  });
+) => getChangedMapKeys(mapify(oldBlocks), mapify(newBlocks));
 
 /**
  * Find reassigned variables, variables being used before being defined
@@ -72,10 +88,19 @@ export const findSymbolsAffectedByChange = (
   return affectedSymbols;
 };
 
-export const getStatementsToEvict = (
-  oldBlocks: AST.Block[],
-  newBlocks: AST.Block[]
-) => {
+export interface GetStatementsToEvictArgs {
+  oldBlocks: AST.Block[];
+  newBlocks: AST.Block[];
+  oldExternalData?: ExternalDataMap;
+  newExternalData?: ExternalDataMap;
+}
+
+export const getStatementsToEvict = ({
+  oldBlocks,
+  newBlocks,
+  oldExternalData = new Map(),
+  newExternalData = new Map(),
+}: GetStatementsToEvictArgs) => {
   const changedBlockIds = getChangedBlocks(oldBlocks, newBlocks);
 
   const dirtyLocs = new LocationSet(
@@ -83,6 +108,7 @@ export const getStatementsToEvict = (
   );
 
   const dirtySymbols = new Set([
+    ...getChangedExternalData(oldExternalData, newExternalData),
     ...findSymbolsAffectedByChange(oldBlocks, newBlocks),
     ...findSymbolErrors(oldBlocks),
     ...findSymbolErrors(newBlocks),

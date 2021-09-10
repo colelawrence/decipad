@@ -1,10 +1,12 @@
-import { AST } from '..';
+import { AST, InjectableExternalData } from '..';
+import { anyMappingToMap, n } from '../utils';
 
 import {
   findSymbolErrors,
   findSymbolsAffectedByChange,
   getChangedBlocks,
   getStatementsToEvict,
+  GetStatementsToEvictArgs,
 } from './getStatementsToEvict';
 import { parse } from './testutils';
 import { ValueLocation } from './types';
@@ -82,19 +84,15 @@ describe('findSymbolsAffectedByChange', () => {
 });
 
 describe('evictCache', () => {
-  const testEvictBlocks = ({
-    oldBlocks,
-    newBlocks,
-    expectEvicted,
-  }: {
-    oldBlocks: AST.Block[];
-    newBlocks: AST.Block[];
+  interface TestArgs extends GetStatementsToEvictArgs {
     expectEvicted: (number | string)[];
-  }) => {
+  }
+
+  const testEvictBlocks = ({ expectEvicted, ...evictOptions }: TestArgs) => {
     const expected: ValueLocation[] = expectEvicted.map((index) =>
       typeof index === 'number' ? [`block-${index}`, 0] : parseLoc(index)
     );
-    expect(getStatementsToEvict(oldBlocks, newBlocks)).toEqual(expected);
+    expect(getStatementsToEvict(evictOptions)).toEqual(expected);
   };
 
   /* eslint-disable jest/expect-expect */
@@ -190,6 +188,52 @@ describe('evictCache', () => {
       newBlocks: parse('A = B + 9', 'B = A + 9'),
 
       expectEvicted: [0, 1],
+    });
+  });
+
+  it('evicts blocks if the external data changed', () => {
+    const externalDataMap1 = anyMappingToMap({
+      extDataId: 1 as unknown as InjectableExternalData,
+    });
+    const externalDataMap2 = anyMappingToMap({
+      extDataId: 2 as unknown as InjectableExternalData,
+    });
+
+    const useExternalData: AST.Block[] = [
+      {
+        id: 'block-0',
+        type: 'block',
+        args: [n('externalref', 'extDataId')],
+      },
+    ];
+
+    testEvictBlocks({
+      oldBlocks: useExternalData,
+      newBlocks: useExternalData,
+      oldExternalData: externalDataMap1,
+      newExternalData: externalDataMap1,
+
+      expectEvicted: [],
+    });
+
+    // Now it evicts the first block
+    testEvictBlocks({
+      oldBlocks: useExternalData,
+      newBlocks: useExternalData,
+      oldExternalData: externalDataMap1,
+      newExternalData: externalDataMap2,
+
+      expectEvicted: [0],
+    });
+
+    // And also if it got removed
+    testEvictBlocks({
+      oldBlocks: useExternalData,
+      newBlocks: useExternalData,
+      oldExternalData: externalDataMap1,
+      newExternalData: new Map(),
+
+      expectEvicted: [0],
     });
   });
   /* eslint-enable jest/expect-expect */
