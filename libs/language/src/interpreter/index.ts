@@ -1,7 +1,8 @@
 import { AST } from '..';
 import { n } from '../utils';
 
-import { evaluate, evaluateTargets } from './evaluate';
+import { evaluate } from './evaluate';
+import { evaluateTargets } from './selective';
 import { Realm } from './Realm';
 import * as Interpreter from './interpreter-types';
 
