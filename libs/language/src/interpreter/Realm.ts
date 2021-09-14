@@ -1,8 +1,9 @@
-import { AST, ExternalDataMap, Context } from '..';
-import { Stack } from '../stack';
 import { Value } from './Value';
 
+import { AST, ExternalDataMap, Context } from '..';
+import { Stack } from '../stack';
 import { FetchFunction } from '../data/external-data-types';
+import { getDefined } from '../utils';
 
 // The name "realm" comes from V8.
 // It's passed around during interpretation and
@@ -26,6 +27,13 @@ export class Realm {
   }
   set externalData(value: ExternalDataMap) {
     this.inferContext.externalData = value;
+  }
+
+  getTypeAt(node: AST.Node) {
+    return getDefined(
+      this.inferContext.nodeTypes.get(node),
+      `Could not find type for ${node.type}`
+    );
   }
 
   constructor(context: Context) {

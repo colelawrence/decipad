@@ -50,44 +50,33 @@ export const evaluateTableColumn = async (
   return Column.fromValues(rows);
 };
 
-export const getLargestColumn = (values: Value[], minValue = 1): number => {
-  const sizes: Set<number> = new Set(
-    values.map((v) => (v instanceof Column ? v.rowCount : minValue))
-  );
-
-  // Make sure it can't be empty
-  sizes.add(minValue);
-
-  return Math.max(...sizes);
-};
-
 const repeat = <T>(value: T, length: number) =>
   Array.from({ length }, () => value);
 
 export const evaluateTable = async (
   realm: Realm,
-  { args: columns }: AST.Table
+  table: AST.Table
 ): Promise<Value> => {
   const colNames: string[] = [];
   const colValues: Value[] = [];
+  const { args: columns } = table;
+  const { tableLength } = realm.getTypeAt(table);
+
+  if (typeof tableLength !== 'number') {
+    throw new Error('panic: unknown table length');
+  }
 
   return realm.stack.withPush(async () => {
     for (const [def, column] of pairwise<AST.ColDef, AST.Expression>(columns)) {
       const colName = getIdentifierString(def);
-      const largestColumn = getLargestColumn(colValues);
       // eslint-disable-next-line no-await-in-loop
-      const columnData = await evaluateTableColumn(
-        realm,
-        column,
-        largestColumn
-      );
+      const columnData = await evaluateTableColumn(realm, column, tableLength);
 
       realm.stack.set(colName, columnData);
 
       colValues.push(
-        // { Col = 1 } is the same as { Col = [1] }
         columnData.cardinality === 1
-          ? Column.fromValues(repeat(columnData, largestColumn))
+          ? Column.fromValues(repeat(columnData, tableLength))
           : columnData
       );
       colNames.push(colName);

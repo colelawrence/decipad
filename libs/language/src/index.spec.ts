@@ -258,6 +258,36 @@ describe('Tables', () => {
       value: [1, 2, 3],
     });
   });
+
+  it('Can expand items', async () => {
+    expect(
+      await runCode(`
+        Table = {
+          Col = [1, 2, 3],
+          Col2 = 1
+        }
+
+        Table.Col2
+      `)
+    ).toMatchObject({
+      type: t.column(t.number(), 3),
+      value: [1, 1, 1],
+    });
+
+    expect(
+      await runCode(`
+        Table = {
+          Col = 1,
+          Col2 = [1, 2, 3]
+        }
+
+        Table.Col
+      `)
+    ).toMatchObject({
+      type: t.column(t.number(), 3),
+      value: [1, 1, 1],
+    });
+  });
 });
 
 describe('Units', () => {
