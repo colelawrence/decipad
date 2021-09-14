@@ -141,7 +141,7 @@ describe('use of funds document', () => {
 });
 
 describe('more models', () => {
-  it('Discounted cash flow (for dogecoin)', async () => {
+  test('Discounted cash flow (for dogecoin)', async () => {
     const years = Array.from({ length: 4 }, (_, i) =>
       cleanDate(Date.UTC(2020 + i, 0), 'year')
     );
@@ -210,7 +210,7 @@ describe('more models', () => {
     });
   });
 
-  it('retirement model', async () => {
+  test('retirement model', async () => {
     const years = Array.from({ length: 3 }, (_, i) =>
       cleanDate(Date.UTC(2020 + i, 0), 'year')
     );
@@ -241,6 +241,24 @@ describe('more models', () => {
           },
         ],
       },
+    });
+  });
+
+  test('burn spare cash in the supermarket', async () => {
+    expect(
+      await runCode(
+        `
+          cash = 6.15 GBP
+          basket = {
+            product = ["Pizza", "Pasta", "Cola", "Orange Juice", "Oat Milk", "Cow Milk", "Sweets"],
+            price = [2.5GBP, 1, 2.15, 1.3, 1.7, 1.2, 1]
+          }
+          buyWithCash = approximateSubsetSum(cash, basket, "price")
+          total(buyWithCash.price)
+        `
+      )
+    ).toMatchObject({
+      value: 6.15,
     });
   });
 });

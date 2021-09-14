@@ -211,7 +211,7 @@ describe('new columns and tables', () => {
         columnNames: ['A', 'B'],
         columnTypes: [t.number(), t.column(t.number(), 6)],
       }).cardinality
-    ).toEqual(3);
+    ).toEqual(4);
   });
 
   it('Can reduce one dimension off the top', () => {

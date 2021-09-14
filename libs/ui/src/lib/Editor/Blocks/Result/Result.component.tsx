@@ -295,11 +295,11 @@ function DateResult({ type, value }: ResultContentProps) {
 }
 
 function tableByRows(
-  { columnNames, columnTypes, tableLength }: Type,
+  { columnNames, columnTypes }: Type,
   columnsOrCells: any[]
 ) {
   const rows = [];
-  for (let index = 0; index < tableLength!; index += 1) {
+  for (let index = 0; index < columnsOrCells[0]?.length ?? 0; index += 1) {
     const row = [];
     for (const column of columnsOrCells) {
       row.push(column[index]);

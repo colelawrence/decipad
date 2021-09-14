@@ -1,11 +1,12 @@
 import { produce } from 'immer';
 import { Type, build as t } from '../type';
 import { getDefined, getInstanceof } from '../utils';
-import { AnyValue, fromJS, Scalar, Date } from '../interpreter/Value';
+import { AnyValue, fromJS, Scalar, Date, Column } from '../interpreter/Value';
 
 import { overloadBuiltin } from './overloadBuiltin';
 import { BuiltinSpec } from './interfaces';
 import { dateOverloads } from './dateOverloads';
+import { approximateSubsetSumIndices } from './table';
 
 const binopFunctor = (a: Type, b: Type) =>
   Type.combine(a.isScalar('number'), b.sameAs(a));
@@ -204,6 +205,48 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
 
         return t.column(t.column(t.number(), horizontal), vertical);
       }),
+  },
+  // Table stuff
+  approximateSubsetSum: {
+    argCount: 3,
+    argCardinalities: [1, 3, 1],
+    fnValues: (upperBound, table, columnName) => {
+      const tableColumn = getInstanceof(table, Column);
+      const valueNames = getDefined(tableColumn.valueNames);
+      const columnIndex = valueNames.indexOf(columnName.getData() as string);
+      if (columnIndex < 0) {
+        throw new Error(`Column ${columnName} does not exist`);
+      }
+
+      const indices = approximateSubsetSumIndices(
+        upperBound.getData() as number,
+        table.getData() as unknown[][],
+        columnIndex
+      );
+
+      return Column.fromNamedValues(
+        tableColumn.values.map((column) =>
+          Column.fromValues(
+            getInstanceof(column, Column).values.filter((_, i) =>
+              indices.includes(i)
+            )
+          )
+        ),
+        getDefined(valueNames)
+      );
+    },
+    functor: (upperBound, table, columnName) =>
+      Type.combine(
+        upperBound.isScalar('number'),
+        table.isTable(),
+        columnName.isScalar('string')
+      ).mapType(() =>
+        t.table({
+          length: 'unknown',
+          columnNames: getDefined(table.columnNames),
+          columnTypes: getDefined(table.columnTypes),
+        })
+      ),
   },
   // Range stuff
   contains: {

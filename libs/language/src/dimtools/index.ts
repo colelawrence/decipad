@@ -23,13 +23,6 @@ export const automapTypes = (
   expectedCardinalities = arrayOfOnes(types.length)
 ): Type => {
   function recurse(types: Type[]): Type {
-    if (types.some((t) => t.columnTypes)) {
-      return t.impossible('Unexpected tuple');
-    }
-    if (types.some((t) => t.rowCellTypes)) {
-      return t.impossible('Unexpected row');
-    }
-
     const toMapOver = types.filter(
       (t, i) => t.cardinality > expectedCardinalities[i]
     );

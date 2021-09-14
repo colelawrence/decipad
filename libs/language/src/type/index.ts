@@ -165,7 +165,7 @@ export class Type {
 
   get cardinality(): number {
     if (this.columnTypes != null) {
-      return 1 + Math.max(...this.columnTypes.map((c) => c.cardinality));
+      return 2 + Math.max(...this.columnTypes.map((c) => c.cardinality));
     } else if (this.rowCellTypes != null) {
       return 1 + Math.max(...this.rowCellTypes.map((c) => c.cardinality));
     } else if (this.cellType != null) {
@@ -282,6 +282,16 @@ export class Type {
         );
       }
     }).call(this, size);
+  }
+
+  isTable(): Type {
+    return propagate(function propagated(this: Type) {
+      if (this.columnNames != null && this.columnTypes != null) {
+        return this;
+      } else {
+        return this.expected('table');
+      }
+    }).call(this);
   }
 
   reduced(): Type {

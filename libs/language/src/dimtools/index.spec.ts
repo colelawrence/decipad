@@ -67,19 +67,6 @@ describe('automapTypes', () => {
     expect(erroredColLengths.errorCause).not.toBeNull();
   });
 
-  it('errors with tuples', () => {
-    const t1 = num;
-    const tuple = t.row([num], ['X']);
-
-    expect(automapTypes([t1, tuple], typeId)).toEqual(
-      t.impossible('Unexpected row')
-    );
-
-    expect(automapTypes([tuple, tuple], typeId)).toEqual(
-      t.impossible('Unexpected row')
-    );
-  });
-
   it('can automap types', () => {
     const total = ([a]: Type[]) => a.reduced();
 
