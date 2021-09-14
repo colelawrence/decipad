@@ -4,7 +4,12 @@ import { SimpleValue } from './interpreter/Value';
 import { Type } from './type';
 
 export { parse, AST, Parser } from './parser';
-export { inferTargetStatement } from './infer';
+export {
+  inferTargetStatement,
+  makeContext,
+  getContextFromProgram,
+} from './infer';
+export type { Context } from './infer';
 export { run, Interpreter } from './interpreter';
 export { Scalar, Date, Range, TimeQuantity, Column } from './interpreter/Value';
 

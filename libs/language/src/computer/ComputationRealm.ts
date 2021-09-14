@@ -16,8 +16,8 @@ import {
 
 type CacheContents = InBlockResult | null;
 export class ComputationRealm {
-  interpreterRealm = new Realm();
   inferContext = makeInferContext();
+  interpreterRealm = new Realm(this.inferContext);
   locCache = new LocationMap<CacheContents>();
   errorLocs = new LocationSet();
 

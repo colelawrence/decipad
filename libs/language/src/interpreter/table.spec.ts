@@ -1,8 +1,10 @@
-import { n, c, l } from '../utils';
+import { AST } from '..';
+import { getContextFromProgram } from '../infer';
+import { n, c, l, block, assign, col } from '../utils';
+import { evaluate } from './evaluate';
 
 import { Realm } from './Realm';
 import { usesRecursion, evaluateTableColumn } from './table';
-import { fromJS } from './Value';
 
 it('can find a previous symbol', () => {
   expect(usesRecursion(c('previous', l(1)))).toEqual(true);
@@ -13,34 +15,35 @@ it('can find a previous symbol', () => {
 });
 
 describe('evaluateTableColumn', () => {
-  it('can emulate a quadratic function', async () => {
-    const realm = new Realm();
+  const testEvaluate = async (exp: AST.Expression, rowCount: number) => {
+    const program = block(assign('numbers', col(1, 2, 3, 4)), exp);
+    const realm = new Realm(await getContextFromProgram([program]));
 
-    expect(
-      (
-        await evaluateTableColumn(realm, c('*', l(2), c('previous', l(1))), 4)
-      ).getData()
-    ).toEqual([2, 4, 8, 16]);
+    // Evaluate first line, to inject "numbers"
+    await evaluate(realm, program.args[0]);
+    const result = await evaluateTableColumn(
+      realm,
+      program.args[1] as AST.Expression,
+      rowCount
+    );
 
     // Should be cleaned
     expect(realm.previousValue).toEqual(null);
+
+    return result;
+  };
+
+  it('can emulate a quadratic function', async () => {
+    expect(
+      (await testEvaluate(c('*', l(2), c('previous', l(1))), 4)).getData()
+    ).toEqual([2, 4, 8, 16]);
   });
 
   it('can be used in a column with inherent size', async () => {
-    const realm = new Realm();
-    realm.stack.set('numbers', fromJS([1, 2, 3, 4]));
-
     expect(
       (
-        await evaluateTableColumn(
-          realm,
-          c('*', n('ref', 'numbers'), c('previous', l(1))),
-          4
-        )
+        await testEvaluate(c('*', n('ref', 'numbers'), c('previous', l(1))), 4)
       ).getData()
     ).toEqual([1, 2, 6, 24]);
-
-    // Should be cleaned
-    expect(realm.previousValue).toEqual(null);
   });
 });

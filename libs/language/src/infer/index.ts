@@ -13,18 +13,20 @@ import {
 import { getDateFromAstForm } from '../date';
 
 import { callBuiltinFunctor } from '../builtins';
-import { Context, makeContext } from './context';
+import { Context, makeContext, getContextFromProgram } from './context';
 import { inferSequence } from './sequence';
 import { unifyColumnSizes } from './table';
 import { resolve as resolveData } from '../data';
 import { inferData } from './data';
 
-export { makeContext };
+export { makeContext, getContextFromProgram };
+export type { Context };
 
-const withErrorSource =
+const wrap =
   <T extends AST.Node>(fn: (ctx: Context, thing: T) => Promise<Type>) =>
   async (ctx: Context, thing: T): Promise<Type> => {
     const type = await fn(ctx, thing);
+    ctx.nodeTypes.set(thing, type);
 
     if (type.errorCause != null && type.node == null) {
       return type.inNode(thing);
@@ -56,7 +58,7 @@ const pushStackAndPrevious = async (
 
  AST.Assign is special-cased by looking at its expression and returning just that
  */
-export const inferExpression = withErrorSource(
+export const inferExpression = wrap(
   // exhaustive switch
   // eslint-disable-next-line consistent-return
   async (ctx: Context, expr: AST.Expression): Promise<Type> => {
@@ -317,7 +319,7 @@ export const inferFunction = async (
   }
 };
 
-export const inferStatement = withErrorSource(
+export const inferStatement = wrap(
   async (
     /* Mutable! */ ctx: Context,
     statement: AST.Statement

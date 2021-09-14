@@ -95,13 +95,13 @@ const wrappedParse = (source: string): AST.Statement | null => {
 };
 
 let accumulatedSource = '';
-let realm = new Realm();
 let inferContext = makeInferContext();
+let realm = new Realm(inferContext);
 
 export const reset = () => {
   accumulatedSource = '';
-  realm = new Realm();
   inferContext = makeInferContext();
+  realm = new Realm(inferContext);
 };
 
 async function execDeci(ast: AST.Statement) {

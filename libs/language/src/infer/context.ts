@@ -3,11 +3,13 @@ import { Type } from '../type';
 import { Stack } from '../stack';
 import defaultFetch from '../data/default-fetch';
 import { AnyMapping, anyMappingToMap } from '../utils';
+import { inferProgram } from '.';
 
 export interface Context {
   stack: Stack<Type>;
   functionDefinitions: Map<string, AST.FunctionDefinition>;
   hasPrevious: boolean;
+  nodeTypes: Map<AST.Node, Type>;
   fetch: ExternalData.FetchFunction;
   externalData: ExternalDataMap;
 }
@@ -27,7 +29,16 @@ export const makeContext = ({
     stack: new Stack(initialGlobalScope),
     functionDefinitions: new Map(),
     hasPrevious: false,
+    nodeTypes: new Map(),
     fetch,
     externalData: anyMappingToMap(externalData),
   };
+};
+
+export const getContextFromProgram = async (program: AST.Block[]) => {
+  const ctx = makeContext();
+
+  await inferProgram(program, ctx);
+
+  return ctx;
 };

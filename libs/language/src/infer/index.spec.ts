@@ -62,6 +62,7 @@ const meters: AST.Unit = {
 };
 
 afterEach(() => {
+  nilCtx.nodeTypes = new Map();
   if (!dequal(nilCtx, makeContext())) {
     // Restore to avoid failing further stillEmpty checks
     nilCtx = makeContext();

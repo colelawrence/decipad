@@ -29,16 +29,18 @@ export const runAST = async (
   block: AST.Block,
   { externalData }: { externalData?: AnyMapping<InjectableExternalData> } = {}
 ) => {
+  const ctx = makeContext({ externalData });
+
   const inferResult = await inferTargetStatement(
     [block],
     [0, block.args.length - 1],
-    makeContext({ externalData })
+    ctx
   );
 
   const erroredType = inferResult.errorCause != null ? inferResult : null;
   expect(erroredType).toEqual(null);
 
-  const [value] = await run([block], [0], new Realm({ externalData }));
+  const [value] = await run([block], [0], new Realm(ctx));
 
   return {
     value,

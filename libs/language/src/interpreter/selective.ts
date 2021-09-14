@@ -48,7 +48,7 @@ export async function evaluateTargets(
   desiredTargets: Array<
     string | number | [blockIdx: number, statementIdx: number]
   >,
-  realm = new Realm()
+  realm: Realm
 ): Promise<Value[]> {
   const targetSet: Map<unknown, Value> = new Map(
     desiredTargetsToStatements(program, desiredTargets).map((target) => [
