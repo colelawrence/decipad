@@ -64,7 +64,10 @@ export const useSlashCommandsPlugin = (): {
 
         if (['Tab', 'Enter'].includes(e.key)) {
           e.preventDefault();
-          onAddBlock(editor, values[valueIndex]);
+          const value = values[valueIndex];
+          if (value) {
+            onAddBlock(editor, value);
+          }
           return false;
         }
       }

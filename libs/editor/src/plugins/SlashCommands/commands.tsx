@@ -1,15 +1,23 @@
+import { ELEMENT_IMPORT_DATA, Icons } from '@decipad/ui';
+import { css } from '@emotion/react';
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
   ELEMENT_H2,
   ELEMENT_H3,
+  ELEMENT_TABLE,
 } from '@udecode/plate';
-import { ELEMENT_IMPORT_DATA } from '@decipad/ui';
-import { ModelBlock } from './icons/ModelBlock';
 import { ImportData } from './icons/ImportData';
+import { ModelBlock } from './icons/ModelBlock';
 import { Subheading } from './icons/Subheading';
 import { Subtitle } from './icons/Subtitle';
 import { Zap } from './icons/Zap';
+
+const iconStyles = css({
+  width: '20px',
+  height: '20px',
+  '> svg > path': { fill: '#111' },
+});
 
 export interface Command {
   type: string;
@@ -24,6 +32,16 @@ export const commands: Command[] = [
     name: 'Model',
     description: 'Formulas, calc and deci language.',
     icon: <ModelBlock />,
+  },
+  {
+    type: ELEMENT_TABLE,
+    name: 'Table',
+    description: 'Insert tabular data.',
+    icon: (
+      <div css={iconStyles}>
+        <Icons.Table />
+      </div>
+    ),
   },
   {
     type: ELEMENT_IMPORT_DATA,

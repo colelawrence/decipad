@@ -5,3 +5,7 @@ export * from './Subheading/Subheading';
 export * from './Subtitle/Subtitle';
 export * from './Title/Title';
 export * from './UnorderedList/UnorderedList';
+export * from './Table/Table';
+export * from './Tr/Tr';
+export * from './Td/Td';
+export * from './Th/Th';

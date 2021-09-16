@@ -9,6 +9,7 @@ import {
   ELEMENT_H3,
   ELEMENT_IMAGE,
   ELEMENT_PARAGRAPH,
+  ELEMENT_TABLE,
   ELEMENT_UL,
   PlatePluginComponent,
   withDraggables,
@@ -62,6 +63,7 @@ export const withStyledDraggables = (
         ELEMENT_UL,
         ELEMENT_CODE_BLOCK,
         ELEMENT_IMPORT_DATA,
+        ELEMENT_TABLE,
       ],
       onRenderDragHandle: ({ className, styles }) => {
         return (
@@ -86,6 +88,14 @@ export const withStyledDraggables = (
       styles: {
         gutterLeft: {
           padding: '14px 8px 0 0',
+        },
+      },
+    },
+    {
+      key: ELEMENT_TABLE,
+      styles: {
+        gutterLeft: {
+          padding: '16px 8px 0 0',
         },
       },
     },

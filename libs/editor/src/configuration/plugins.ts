@@ -13,6 +13,7 @@ import {
   createReactPlugin,
   createResetNodePlugin,
   createSoftBreakPlugin,
+  createTablePlugin,
   createTrailingBlockPlugin,
   ELEMENT_PARAGRAPH,
   WithAutoformatOptions,
@@ -37,6 +38,7 @@ export const plugins = [
   createCodeBlockPlugin(),
 
   createListPlugin(),
+  createTablePlugin(),
 
   ...createMarksPlugins(),
 

@@ -13,6 +13,7 @@ export type { Context } from './infer';
 export { run, Interpreter } from './interpreter';
 export { Scalar, Date, Range, TimeQuantity, Column } from './interpreter/Value';
 
+export { prettyPrintAST } from './parser/utils';
 export { Type, build as buildType } from './type';
 export { Time } from './date';
 export { ExternalData } from './data';

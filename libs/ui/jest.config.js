@@ -13,7 +13,7 @@ module.exports = {
       transform: {
         ...transform,
         '^.+\\.(gif|jpg|png)$': require.resolve(
-          './src/test-utils/jest/filenameTransform.js'
+          '../testutils/src/filename-transform.js'
         ),
       },
 

@@ -12,9 +12,13 @@ import {
   StrikethroughLeaf,
   SubheadingElement,
   SubtitleElement,
+  TableElement,
   TitleElement,
   UnderlineLeaf,
   UnorderedListElement,
+  TrElement,
+  TdElement,
+  ThElement,
 } from '@decipad/ui';
 import {
   DefaultPlatePluginKey,
@@ -25,6 +29,10 @@ import {
   ELEMENT_H3,
   ELEMENT_LI,
   ELEMENT_PARAGRAPH,
+  ELEMENT_TABLE,
+  ELEMENT_TD,
+  ELEMENT_TH,
+  ELEMENT_TR,
   ELEMENT_UL,
   MARK_BOLD,
   MARK_CODE,
@@ -58,6 +66,10 @@ export const createPlateComponents = (): Partial<
     [ELEMENT_CODE_BLOCK]: ModelBlockElement,
     [ELEMENT_UL]: UnorderedListElement,
     [ELEMENT_LI]: ListItemElement,
+    [ELEMENT_TABLE]: TableElement,
+    [ELEMENT_TR]: TrElement,
+    [ELEMENT_TD]: TdElement,
+    [ELEMENT_TH]: ThElement,
 
     // Import data
     [ELEMENT_IMPORT_DATA]: ImportDataElement,

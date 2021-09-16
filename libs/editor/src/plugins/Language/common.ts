@@ -1,4 +1,28 @@
 import { Element } from 'slate';
+import { AST } from '@decipad/language';
+
+export function getAssignmentBlock(
+  id: string,
+  name: string,
+  value: AST.Expression
+): AST.Block {
+  return {
+    type: 'block',
+    id,
+    args: [
+      {
+        type: 'assign',
+        args: [
+          {
+            type: 'def',
+            args: [name],
+          },
+          value,
+        ],
+      },
+    ],
+  };
+}
 
 export function getCodeFromBlock(block: SlateNode): string {
   if (block.text) {
