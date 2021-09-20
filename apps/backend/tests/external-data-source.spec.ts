@@ -102,7 +102,8 @@ test('external data source', (ctx) => {
     externalDataSource = newDataSource;
   });
 
-  it('trying to fetch data from one with no keys results in authentication error', async () => {
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('trying to fetch data from one with no keys results in authentication error', async () => {
     const fetchOptions = ctx.http.withAuthOptions((await ctx.auth()).token);
     const { dataUrl } = getDefined(externalDataSource);
     const response = await fetch(dataUrl, fetchOptions);
@@ -132,7 +133,8 @@ test('external data source', (ctx) => {
     }
   });
 
-  it('client is able to do the oauth dance', async () => {
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('client is able to do the oauth dance', async () => {
     let callbackUrl: string | null = null;
     const fetchWithAuthOptions = ctx.http.withAuthOptions(
       (await ctx.auth()).token
@@ -241,7 +243,8 @@ test('external data source', (ctx) => {
     });
   });
 
-  it('fetching data works after having access token', async () => {
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('fetching data works after having access token', async () => {
     const fetchOptions = ctx.http.withAuthOptions((await ctx.auth()).token);
     const { dataUrl } = getDefined(externalDataSource);
 
