@@ -273,8 +273,8 @@ fileattachments
   name byResource
 
 externaldatasourcekeys
- resource_uri *String
- name byResource
+  resource_uri *String
+  name byResource
 
 externaldatasourcekeys
   resource_uri *String
