@@ -8,13 +8,13 @@ import { Editor, Node, Transforms } from 'slate';
 import {
   makeResultsContextValue,
   ResultsContextValue,
-  ELEMENT_IMPORT_DATA,
   ProgramBlocksContextValue,
 } from '@decipad/ui';
 import { ComputeRequest, makeComputeStream } from '@decipad/language';
 import { getCursorPos, CursorPos } from './getCursorPos';
 import { slateDocumentToComputeRequest } from './slateDocumentToComputeRequest';
 import { SlateNode } from './common';
+import { ELEMENT_IMPORT_DATA } from '../../utils/elementTypes';
 
 interface UseLanguagePluginRet {
   languagePlugin: PlatePlugin;

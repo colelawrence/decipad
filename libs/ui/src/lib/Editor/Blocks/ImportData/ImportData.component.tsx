@@ -37,8 +37,6 @@ const errorStyles = css({
   fontWeight: 'bold',
 });
 
-export const ELEMENT_IMPORT_DATA = 'import-data';
-
 const providers = ['internal', 'googlesheets', 'other'];
 
 function padIdFromPadIdURiComponent(

@@ -7,7 +7,7 @@ const trStyles = css({
   fontSize: '14px',
 });
 
-export const TrElement: PlatePluginComponent = ({
+export const BodyTrElement: PlatePluginComponent = ({
   children,
   attributes,
   nodeProps,

@@ -5,8 +5,8 @@ import { TEditor } from '@udecode/plate';
 import { useToasts } from 'react-toast-notifications';
 import camelcase from 'camelcase';
 import slug from 'slug';
-import { ELEMENT_IMPORT_DATA } from '@decipad/ui';
 import * as upload from './upload';
+import { ELEMENT_IMPORT_DATA } from '../../utils/elementTypes';
 
 export interface OneFileUploadState {
   file: File;

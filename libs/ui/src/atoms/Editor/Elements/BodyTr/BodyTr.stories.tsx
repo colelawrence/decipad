@@ -1,11 +1,11 @@
 import { Meta, Story } from '@storybook/react';
-import { TrElement } from './Tr';
+import { BodyTrElement } from './BodyTr';
 
 export default {
-  title: 'Atoms/Editor/Elements/Tr',
-  component: TrElement,
+  title: 'Atoms/Editor/Elements/BodyTr',
+  component: BodyTrElement,
   args: {
-    children: 'Tr Element',
+    children: 'Body Tr Element',
   },
 } as Meta;
 
@@ -13,13 +13,13 @@ interface ArgsType {
   children: string;
 }
 
-export const Tr: Story<ArgsType> = (args) => (
-  <TrElement
+export const BodyTr: Story<ArgsType> = (args) => (
+  <BodyTrElement
     attributes={{ 'data-slate-leaf': true, 'data-slate-node': 'element' }}
     leaf={{ text: '' }}
     text={{ text: '' }}
     nodeProps={{ styles: { root: { css: null } } }}
   >
     {args.children}
-  </TrElement>
+  </BodyTrElement>
 );
