@@ -276,12 +276,6 @@ externaldatasourcekeys
   resource_uri *String
   name byResource
 
-externaldatasourcekeys
-  resource_uri *String
-  user_id **String
-  name byResourceAndUser
-
-
 @queues
 sendemail
 notify-subscriptions
