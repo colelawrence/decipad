@@ -21,6 +21,7 @@ import { ShareWithRoleArgs } from './share-with-role';
 import { UnshareWithRoleArgs } from './unshare-with-role';
 import { ShareWithEmailArgs } from './share-with-email';
 import { Access } from './access';
+import { shareWithSecret, ShareWithSecretArgs } from './share-with-secret';
 
 export interface Resource<
   DataTableType extends ConcreteRecord,
@@ -47,16 +48,61 @@ export interface Resource<
 }
 
 export interface ResourceResolvers<DataT, GraphqlT, CreateT, UpdateT> {
-  getById: (_: unknown, { id }: { id: ID }, context: GraphqlContext) => Promise<GraphqlT>;
-  create: (_: unknown, create: CreateT, context: GraphqlContext) => Promise<GraphqlT>;
-  update: (_: unknown, update: ({ id: ID } & UpdateT), context: GraphqlContext) => Promise<GraphqlT>;
-  remove: (_: unknown, { id }: { id: ID }, context: GraphqlContext) => Promise<void>;
-  shareWithUser: (_: unknown, args: ShareWithUserArgs, context: GraphqlContext) => Promise<void>;
-  unshareWithUser: (_: unknown, args: UnshareWithUserArgs, context: GraphqlContext) => Promise<void>;
-  shareWithRole: (_: unknown, args: ShareWithRoleArgs, context: GraphqlContext) => Promise<void>;
-  unshareWithRole: (_: unknown, args: UnshareWithRoleArgs, context: GraphqlContext) => Promise<void>;
-  shareWithEmail: (_: unknown, args: ShareWithEmailArgs, context: GraphqlContext) => Promise<void>;
-  access: (parent: DataT, _: unknown, context: GraphqlContext) => Promise<Access>;
+  getById: (
+    _: unknown,
+    { id }: { id: ID },
+    context: GraphqlContext
+  ) => Promise<GraphqlT>;
+  create: (
+    _: unknown,
+    create: CreateT,
+    context: GraphqlContext
+  ) => Promise<GraphqlT>;
+  update: (
+    _: unknown,
+    update: { id: ID } & UpdateT,
+    context: GraphqlContext
+  ) => Promise<GraphqlT>;
+  remove: (
+    _: unknown,
+    { id }: { id: ID },
+    context: GraphqlContext
+  ) => Promise<void>;
+  shareWithUser: (
+    _: unknown,
+    args: ShareWithUserArgs,
+    context: GraphqlContext
+  ) => Promise<void>;
+  unshareWithUser: (
+    _: unknown,
+    args: UnshareWithUserArgs,
+    context: GraphqlContext
+  ) => Promise<void>;
+  shareWithRole: (
+    _: unknown,
+    args: ShareWithRoleArgs,
+    context: GraphqlContext
+  ) => Promise<void>;
+  unshareWithRole: (
+    _: unknown,
+    args: UnshareWithRoleArgs,
+    context: GraphqlContext
+  ) => Promise<void>;
+  shareWithEmail: (
+    _: unknown,
+    args: ShareWithEmailArgs,
+    context: GraphqlContext
+  ) => Promise<void>;
+  shareWithSecret: (
+    _: unknown,
+    args: ShareWithSecretArgs,
+    context: GraphqlContext
+  ) => Promise<string>;
+  access: (
+    parent: DataT,
+    _: unknown,
+    context: GraphqlContext
+  ) => Promise<Access>;
 }
 
 export default function <
@@ -65,12 +111,7 @@ export default function <
   CreateInputT,
   UpdateInputT
 >(
-  resourceType: Resource<
-    DataTableT,
-    GraphqlT,
-    CreateInputT,
-    UpdateInputT
-  >
+  resourceType: Resource<DataTableT, GraphqlT, CreateInputT, UpdateInputT>
 ): ResourceResolvers<DataTableT, GraphqlT, CreateInputT, UpdateInputT> {
   const shareWithUserFn = shareWithUser(resourceType);
   return {
@@ -83,6 +124,7 @@ export default function <
     shareWithRole: shareWithRole(resourceType),
     unshareWithRole: unshareWithRole(resourceType),
     shareWithEmail: shareWithEmail(resourceType)(shareWithUserFn),
+    shareWithSecret: shareWithSecret(resourceType),
     access: access(resourceType),
   };
 }

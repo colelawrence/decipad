@@ -14,7 +14,7 @@ import {
 } from '@decipad/services/blobs/attachments';
 import tables, { allPages } from '@decipad/services/tables';
 import { app as appConfig } from '@decipad/config';
-import { requireUser, check } from '../authorization';
+import { requireUser, isAuthenticatedAndAuthorized } from '../authorization';
 import parseResourceUri from '../utils/resource/parse-uri';
 import timestamp from '../utils/timestamp';
 
@@ -39,7 +39,11 @@ export default {
       context: GraphqlContext
     ) {
       const padResource = `/pads/${padId}`;
-      const user = await check(padResource, context, 'WRITE');
+      const user = await isAuthenticatedAndAuthorized(
+        padResource,
+        context,
+        'WRITE'
+      );
 
       const form = await getForm(padId, userFileName, fileType);
 
@@ -85,7 +89,7 @@ export default {
       }
 
       const resource = attachment.resource_uri;
-      await check(resource, context, 'WRITE');
+      await isAuthenticatedAndAuthorized(resource, context, 'WRITE');
 
       const parsedResource = parseResourceUri(attachment.resource_uri);
       expectEqual(parsedResource.type, 'pads');
@@ -119,7 +123,11 @@ export default {
         throw new UserInputError('No such attachment was found');
       }
 
-      await check(attachment.resource_uri, context, 'WRITE');
+      await isAuthenticatedAndAuthorized(
+        attachment.resource_uri,
+        context,
+        'WRITE'
+      );
       await data.fileattachments.delete({ id: attachmentId });
     },
   },

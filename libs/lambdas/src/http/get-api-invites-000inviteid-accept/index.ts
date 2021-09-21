@@ -1,8 +1,9 @@
 import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
+import Boom from '@hapi/boom';
 import { HttpResponse } from '@architect/functions';
 import { PermissionType } from '@decipad/backendtypes';
 import tables from '@decipad/services/tables';
-import { authenticate } from '@decipad/services/authentication';
+import { expectAuthenticated } from '@decipad/services/authentication';
 import handle from '../handle';
 
 const permissionTypesToLevels = {
@@ -13,15 +14,7 @@ const permissionTypesToLevels = {
 
 export const handler = handle(
   async (event: APIGatewayProxyEvent): Promise<HttpResponse> => {
-    const { user } = await authenticate(event);
-
-    if (!user) {
-      return {
-        statusCode: 403,
-        body: 'Forbidden',
-      };
-    }
-
+    const { user } = await expectAuthenticated(event);
     const data = await tables();
 
     const ids = event.pathParameters!.inviteid!.split(',');
@@ -37,17 +30,13 @@ export const handler = handle(
         }
 
         if (invite.user_id !== user.id) {
-          return {
-            statusCode: 403,
-            body: 'Forbidden',
-          };
+          throw Boom.forbidden('Forbidden');
         }
 
         const resource =
           invite.resource_uri ||
           `/${invite.resource_type}/${invite.resource_id}`;
         const permissionId = invite.permission_id;
-
         const oldPermission = await data.permissions.get({ id: permissionId });
 
         if (

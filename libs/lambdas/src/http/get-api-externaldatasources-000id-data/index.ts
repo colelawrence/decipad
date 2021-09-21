@@ -2,38 +2,29 @@ import {
   APIGatewayProxyEventV2 as APIGatewayProxyEvent,
   APIGatewayProxyResultV2,
 } from 'aws-lambda';
+import Boom from '@hapi/boom';
 import {
   User,
   ExternalDataSourceRecord,
   ExternalKeyRecord,
 } from '@decipad/backendtypes';
 import tables from '@decipad/services/tables';
-import { authenticate } from '@decipad/services/authentication';
-import { isAuthorized } from '@decipad/services/authorization';
+import { expectAuthenticated } from '@decipad/services/authentication';
+import { expectAuthorized } from '@decipad/services/authorization';
 import { provider as getProvider, encodeTable } from '@decipad/externaldata';
 import { getDefined } from '@decipad/utils';
 import handle from '../handle';
 
 async function checkAccess(
-  user: User | null,
+  user: User | undefined,
   externalDataSource: ExternalDataSourceRecord
-): Promise<void | APIGatewayProxyResultV2> {
+): Promise<void> {
   if (!user) {
-    return {
-      statusCode: 401,
-      body: 'Needs authentication',
-    };
+    throw Boom.forbidden('Needs authentication');
   }
 
   const resource = `/pads/${externalDataSource.padId}`;
-  if (!(await isAuthorized(resource, user, 'READ'))) {
-    return {
-      statusCode: 403,
-      body: 'Needs authorization',
-    };
-  }
-
-  return undefined;
+  await expectAuthorized({ resource, user, permissionType: 'READ' });
 }
 
 async function fetchExternalDataSource(
@@ -98,18 +89,12 @@ export const handler = handle(
       };
     }
 
-    const { user } = await authenticate(event);
-    const ret = await checkAccess(user, externalDataSource);
-    if (ret) {
-      return ret;
-    }
+    const { user } = await expectAuthenticated(event);
+    await checkAccess(user, externalDataSource);
 
     const key = await getAccessKey(externalDataSource);
     if (!key) {
-      return {
-        statusCode: 401,
-        body: 'Needs authentication',
-      };
+      throw Boom.forbidden('Needs authentication');
     }
 
     return fetchData(event, externalDataSource, key);

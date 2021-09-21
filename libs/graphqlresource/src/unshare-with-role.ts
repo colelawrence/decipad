@@ -5,7 +5,7 @@ import {
   GraphqlObjectType,
 } from '@decipad/backendtypes';
 import tables from '@decipad/services/tables';
-import { check } from './authorization';
+import { isAuthenticatedAndAuthorized } from './authorization';
 import { Resource } from './';
 
 export type UnshareWithRoleArgs = {
@@ -33,7 +33,7 @@ export function unshareWithRole<
     context: GraphqlContext
   ) {
     const resource = `/${resourceType.resourceTypeName}/${args.id}`;
-    await check(resource, context, 'ADMIN');
+    await isAuthenticatedAndAuthorized(resource, context, 'ADMIN');
     const data = await tables();
     await data.permissions.delete({
       id: `/users/null/roles/${args.roleId}${resource}`,

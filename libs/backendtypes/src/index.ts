@@ -1,3 +1,5 @@
+import { APIGatewayProxyEventV2 } from 'aws-lambda';
+
 /* Basic */
 
 export type URI = string;
@@ -62,21 +64,28 @@ export type WorkspaceInput = {
   name: string;
 };
 
-type UserAccess = {
+export type UserAccess = {
   user: User;
   permission: PermissionType;
   canComment: boolean;
 };
 
-type RoleAccess = {
+export type RoleAccess = {
   role_id: ID;
   permission: PermissionType;
   canComment: boolean;
 };
 
-type PadAccess = {
+export type SecretAccess = {
+  secret: string;
+  permission: PermissionType;
+  canComment: boolean;
+};
+
+export type PadAccess = {
   roles: RoleAccess[];
   users: UserAccess[];
+  secrets: SecretAccess[];
 };
 
 export type Pad = {
@@ -221,6 +230,7 @@ export interface PermissionRecord extends TableRecordBase {
   given_by_user_id: ID;
   type: PermissionType;
   role_id: ID;
+  secret?: string;
   parent_resource_uri?: URI;
   parent_permission_id?: ID;
   can_comment: boolean;
@@ -238,9 +248,16 @@ type RoleAccessRecord = {
   canComment: boolean;
 };
 
+type SecretAccessRecord = {
+  secret: string;
+  permission: PermissionType;
+  canComment: boolean;
+};
+
 export type PadAccessRecord = {
   roles: RoleAccessRecord[];
   users: UserAccessRecord[];
+  secrets: SecretAccessRecord[];
 };
 
 export interface PadRecord extends TableRecordBase {
@@ -481,6 +498,7 @@ export type GraphqlContext = {
   user?: User;
   subscriptionId?: ID;
   connectionId?: ID;
+  event: APIGatewayProxyEventV2;
 };
 
 export type GraphqlObjectType = TableRecord | ExternalDataSource; // add others here

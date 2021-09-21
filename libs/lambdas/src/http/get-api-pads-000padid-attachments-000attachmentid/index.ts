@@ -1,34 +1,19 @@
 import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
-import { authenticate } from '@decipad/services/authentication';
-import { isAuthorized } from '@decipad/services/authorization';
+import Boom from '@hapi/boom';
+import { expectAuthenticated } from '@decipad/services/authentication';
+import { expectAuthorized } from '@decipad/services/authorization';
 import { getURL } from '@decipad/services/blobs/attachments';
 import tables from '@decipad/services/tables';
 import handle from '../handle';
 
 exports.handler = handle(async (event: APIGatewayProxyEvent) => {
-  const { user } = await authenticate(event);
-
-  if (!user) {
-    return {
-      status: 403,
-      body: 'Forbidden',
-    };
-  }
-
+  const { user } = await expectAuthenticated(event);
   if (!event.pathParameters) {
-    return {
-      statusCode: 401,
-      body: 'missing parameters',
-    };
+    throw Boom.notAcceptable('missing parameters');
   }
   const padId = event.pathParameters.padid;
   const resource = `/pads/${padId}`;
-  if (!(await isAuthorized(resource, user, 'READ'))) {
-    return {
-      statusCode: 403,
-      body: 'Forbidden',
-    };
-  }
+  await expectAuthorized({ resource, user, permissionType: 'READ' });
 
   const attachmentId = event.pathParameters.attachmentid;
   if (!attachmentId) {
@@ -40,10 +25,7 @@ exports.handler = handle(async (event: APIGatewayProxyEvent) => {
   const data = await tables();
   const attachment = await data.fileattachments.get({ id: attachmentId });
   if (!attachment) {
-    return {
-      statusCode: 404,
-      body: 'No such attachment',
-    };
+    throw Boom.notFound('No such attachment');
   }
   const url = await getURL(attachment.filename);
   return {

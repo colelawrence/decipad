@@ -17,6 +17,7 @@ type ParsedPermission = {
   roleId: ID;
   resourceType: string;
   resourceId: ID;
+  secret?: ID;
 };
 
 export const handler = handle(permissionsChangesHandler);
@@ -31,6 +32,9 @@ async function permissionsChangesHandler(
 
   if (event.action === 'put') {
     const { args } = event;
+    if (args.secret && args.secret !== 'null') {
+      return;
+    }
     if (
       (args.resource_type === 'workspaces' || resourceType === 'workspaces') &&
       (args.user_id !== 'null' || userId !== 'null')
@@ -227,7 +231,7 @@ async function handleDeleteWorkspaceWithUser(perm: ParsedPermission) {
     perm.resourceId ? `/${perm.resourceId}` : ''
   }`;
   const user = { id: perm.userId };
-  if (!(await isAuthorized(resource, user))) {
+  if (!(await isAuthorized({ resource, user, permissionType: 'READ' }))) {
     await notifyOne(user, 'workspacesChanged', {
       removed: [perm.resourceId],
     });
@@ -282,7 +286,13 @@ async function handlePutPadsWithUser(
 async function handleDeletePadWithUser(perm: ParsedPermission) {
   const resourceUri = `/${perm.resourceType}/${perm.resourceId}`;
   const user = { id: perm.userId };
-  if (!(await isAuthorized(resourceUri, user))) {
+  if (
+    !(await isAuthorized({
+      resource: resourceUri,
+      user,
+      permissionType: 'READ',
+    }))
+  ) {
     await notifyOne(user, 'padsChanged', {
       removed: [perm.resourceId],
     });
@@ -348,11 +358,12 @@ async function handlePutWithUserAndPadResource(perm: PermissionRecord) {
 
 function parsePermissionId(id: string): ParsedPermission {
   const parts = id.split('/');
-  assert.equal(parts[1], 'users');
-  assert.equal(parts[3], 'roles');
+  assert.strictEqual(parts[1], 'users');
+  const roleOrSecret = parts[3];
   return {
     userId: parts[2],
-    roleId: parts[4],
+    roleId: roleOrSecret === 'roles' ? parts[4] : 'null',
+    secret: roleOrSecret === 'secrets' ? parts[4] : 'null',
     resourceType: parts[5],
     resourceId: parts.slice(6).join('/'),
   };

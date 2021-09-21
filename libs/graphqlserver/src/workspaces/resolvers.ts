@@ -17,7 +17,11 @@ import {
 } from '@decipad/services/permissions';
 import { notifyAllWithAccessTo, subscribe } from '@decipad/services/pubsub';
 import { create as createWorkspace2 } from '@decipad/services/workspaces';
-import { requireUser, check, isAuthorized } from '../authorization';
+import {
+  requireUser,
+  isAuthenticatedAndAuthorized,
+  isAuthorized,
+} from '../authorization';
 import by from '../utils/by';
 import paginate from '../utils/paginate';
 
@@ -29,7 +33,7 @@ export default {
       context: GraphqlContext
     ): Promise<WorkspaceRecord | undefined> {
       const resource = `/workspaces/${id}`;
-      await check(resource, context, 'READ');
+      await isAuthenticatedAndAuthorized(resource, context, 'READ');
 
       const data = await tables();
       return data.workspaces.get({ id });
@@ -84,7 +88,7 @@ export default {
       context: GraphqlContext
     ) {
       const resource = `/workspaces/${id}`;
-      await check(resource, context, 'WRITE');
+      await isAuthenticatedAndAuthorized(resource, context, 'WRITE');
 
       const data = await tables();
       const previousWorkspace = await data.workspaces.get({ id });
@@ -116,7 +120,7 @@ export default {
       { id }: { id: ID },
       context: GraphqlContext
     ) {
-      await check(`/workspaces/${id}`, context, 'ADMIN');
+      await isAuthenticatedAndAuthorized(`/workspaces/${id}`, context, 'ADMIN');
 
       const data = await tables();
       const roles = (

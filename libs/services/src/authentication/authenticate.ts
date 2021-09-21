@@ -1,20 +1,27 @@
 /* eslint-disable no-console */
+import Boom from '@hapi/boom';
 import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
 import { parse as parseCookie } from 'simple-cookie';
 import NextAuthJWT from 'next-auth/jwt';
+import { getDefined } from '@decipad/utils';
 import { User, UserWithSecret } from '@decipad/backendtypes';
 import tables from '../tables';
 import { jwt as jwtConf } from './jwt';
 
 type AuthResult = {
-  user: User | null;
-  token: string | null | undefined;
-  secret: string | null;
+  user: User | undefined;
+  token: string | undefined;
+  secret: string | undefined;
   gotFromSecProtocolHeader: boolean;
 };
 
+interface AuthenticatedAuthResult extends AuthResult {
+  user: User;
+  token: string;
+}
+
 type SessionTokenResult = {
-  token: string | null | undefined;
+  token: string | undefined;
   gotFromSecProtocolHeader: boolean;
 };
 
@@ -31,8 +38,8 @@ export const TOKEN_COOKIE_NAMES = [
 
 export async function authenticate(event: Request): Promise<AuthResult> {
   const { token, gotFromSecProtocolHeader } = getSessionToken(event);
-  let user: User | null = null;
-  let secret: string | null = null;
+  let user: User | undefined;
+  let secret: string | undefined;
   if (token) {
     const { decode: decodeJWT } = NextAuthJWT;
     try {
@@ -52,12 +59,26 @@ export async function authenticate(event: Request): Promise<AuthResult> {
         }
       }
     } catch (err) {
-      console.error(err.message);
+      console.error((err as Error).message);
       // do nothing
     }
   }
 
   return { user, token, secret, gotFromSecProtocolHeader };
+}
+
+export async function expectAuthenticated(
+  event: Request
+): Promise<AuthenticatedAuthResult> {
+  const result = await authenticate(event);
+  if (!result.user || !result.token) {
+    throw Boom.forbidden('Forbidden');
+  }
+  return {
+    ...result,
+    user: getDefined(result.user),
+    token: getDefined(result.token),
+  };
 }
 
 function getSessionToken(event: Request): SessionTokenResult {

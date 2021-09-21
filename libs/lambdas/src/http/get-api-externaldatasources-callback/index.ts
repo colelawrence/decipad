@@ -6,10 +6,11 @@ import {
 import { OAuth2 } from 'oauth';
 import { nanoid } from 'nanoid';
 import { parse as decodeCookie } from 'simple-cookie';
+import Boom from '@hapi/boom';
 import { ExternalKeyRecord } from '@decipad/backendtypes';
 import tables from '@decipad/services/tables';
-import { authenticate } from '@decipad/services/authentication';
-import { isAuthorized } from '@decipad/services/authorization';
+import { expectAuthenticated } from '@decipad/services/authentication';
+import { expectAuthorized } from '@decipad/services/authorization';
 import { provider as externalDataProvider } from '@decipad/externaldata';
 import { thirdParty as thirdPartyConfig, app } from '@decipad/config';
 import handle from '../handle';
@@ -19,13 +20,7 @@ import timestamp from '../../common/timestamp';
 
 export const handler = handle(
   async (event: APIGatewayProxyEvent): Promise<HttpResponse> => {
-    const { user } = await authenticate(event);
-    if (!user) {
-      return {
-        statusCode: 401,
-        body: 'Needs authentication',
-      };
-    }
+    const { user } = await expectAuthenticated(event);
 
     const cookies = event.cookies?.map((c) => decodeCookie(c));
     const id = cookies?.find((c) => c.name === 'externaldatasourceid')?.value;
@@ -38,20 +33,12 @@ export const handler = handle(
       };
     }
     const resource = `/externaldatasources/${id}`;
-    if (!(await isAuthorized(resource, user, 'READ'))) {
-      return {
-        statusCode: 403,
-        body: 'Needs authorization',
-      };
-    }
+    await expectAuthorized({ resource, user, permissionType: 'READ' });
 
     const data = await tables();
     const externalDataSource = await data.externaldatasources.get({ id });
     if (!externalDataSource) {
-      return {
-        statusCode: 404,
-        body: 'Not found',
-      };
+      throw Boom.notFound();
     }
 
     const provider = getDefined(

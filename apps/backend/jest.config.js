@@ -13,11 +13,7 @@ const config = {
     ...moduleNameMapper,
     '@decipad/backend-test-sandbox': path.join(
       __dirname,
-      '..',
-      '..',
-      'libs',
-      'backend-test-sandbox',
-      'src'
+      '../../libs/backend-test-sandbox/src'
     ),
   },
   testTimeout: 15000,

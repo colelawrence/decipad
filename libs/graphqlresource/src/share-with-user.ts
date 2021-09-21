@@ -7,7 +7,7 @@ import {
   PermissionType,
 } from '@decipad/backendtypes';
 import { create as createResourcePermission } from '@decipad/services/permissions';
-import { check } from './authorization';
+import { isAuthenticatedAndAuthorized } from './authorization';
 import { Resource } from './';
 
 export type ShareWithUserArgs = {
@@ -37,7 +37,7 @@ export function shareWithUser<
     context: GraphqlContext
   ) {
     const resource = `/${resourceType.resourceTypeName}/${args.id}`;
-    const actorUser = await check(resource, context, 'ADMIN');
+    const actorUser = await isAuthenticatedAndAuthorized(resource, context, 'ADMIN');
 
     const data = await resourceType.dataTable();
     const record = await data.get({ id: args.id });

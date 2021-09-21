@@ -10,7 +10,7 @@ import assert from 'assert';
 import tables, { allPages } from '@decipad/services/tables';
 
 import { subscribe } from '@decipad/services/pubsub';
-import { requireUser, check } from '../authorization';
+import { requireUser, isAuthenticatedAndAuthorized } from '../authorization';
 import paginate from '../utils/paginate';
 import parseResourceUri from '../utils/resource/parse-uri';
 
@@ -87,7 +87,7 @@ const resolvers = {
       context: GraphqlContext
     ) {
       const resource = `/pads/${padId}`;
-      await check(resource, context, 'WRITE');
+      await isAuthenticatedAndAuthorized(resource, context, 'WRITE');
 
       const data = await tables();
       const newTag = {
@@ -104,7 +104,7 @@ const resolvers = {
       context: GraphqlContext
     ) {
       const resource = `/pads/${padId}`;
-      await check(resource, context, 'WRITE');
+      await isAuthenticatedAndAuthorized(resource, context, 'WRITE');
 
       const data = await tables();
       const tagId = `${resource}/tags/${encodeURIComponent(tag)}`;

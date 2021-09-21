@@ -5,7 +5,7 @@ import {
   GraphqlObjectType,
 } from '@decipad/backendtypes';
 import { removeAllPermissionsFor } from '@decipad/services/permissions';
-import { check } from './authorization';
+import { isAuthenticatedAndAuthorized } from './authorization';
 import { Resource } from './';
 
 export type RemoveFunction = (
@@ -24,7 +24,7 @@ export function remove<
 ): RemoveFunction {
   return async function (_: any, args: { id: ID }, context: GraphqlContext) {
     const resource = `/${resourceType.resourceTypeName}/${args.id}`;
-    await check(resource, context, 'ADMIN');
+    await isAuthenticatedAndAuthorized(resource, context, 'ADMIN');
     const data = await resourceType.dataTable();
     await Promise.all([
       data.delete({ id: args.id }),

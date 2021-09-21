@@ -17,6 +17,7 @@ get /api/auth/providers
 get /api/auth/error
 get /api/auth/token
 get /api/auth/verify-request
+get /api/doc/:id/:secret
 get /api/syncdoc/:id
 put /api/syncdoc/:id
 put /api/syncdoc/:id/changes
@@ -77,6 +78,7 @@ permissions
   given_by_user_id String
   type String
   role_id String
+  secret String
   parent_resource_uri String
   parent_permission_id String
   can_comment Boolean
@@ -208,6 +210,11 @@ permissions
   resource_uri *String
   user_id **String
   name byResourceAndUser
+
+permissions
+  resource_uri *String
+  secret **String
+  name byResourceAndSecret
 
 permissions
   user_id *String

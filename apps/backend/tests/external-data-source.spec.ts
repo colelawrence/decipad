@@ -107,7 +107,7 @@ test('external data source', (ctx) => {
     const { dataUrl } = getDefined(externalDataSource);
     const response = await fetch(dataUrl, fetchOptions);
     expect(response.ok).toBe(false);
-    expect(response.status).toBe(401);
+    expect(response.status).toBe(403);
     expect(await response.text()).toMatch(/needs authentication/i);
   });
 

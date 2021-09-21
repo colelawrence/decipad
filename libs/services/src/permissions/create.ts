@@ -4,6 +4,7 @@ import tables from '../tables';
 interface ResourceCreateArgs {
   userId?: string;
   roleId?: string;
+  secret?: string;
   givenByUserId: string;
   resourceType?: string;
   resourceId?: string;
@@ -17,6 +18,7 @@ export async function create(args: ResourceCreateArgs) {
   const {
     userId = null,
     roleId = null,
+    secret,
     givenByUserId,
     resourceType: _resourceType,
     resourceId: _resourceId,
@@ -38,7 +40,20 @@ export async function create(args: ResourceCreateArgs) {
     [, resourceType] = parts;
     resourceId = parts.splice(2).join('/');
   }
-  const id = `/users/${userId}/roles/${roleId}${resource}`;
+  if (userId && secret) {
+    throw new TypeError(
+      'cannot encode permission with both user id and secret'
+    );
+  }
+  if (roleId && secret) {
+    throw new TypeError(
+      'cannot encode permission with both roleId and secret '
+    );
+  }
+  const roleOrSecretEncodedPart = `/${userId || roleId ? 'roles' : 'secrets'}/${
+    roleId || secret || 'null'
+  }`;
+  const id = `/users/${userId}${roleOrSecretEncodedPart}${resource}`;
   const newPermission = {
     id,
     resource_type: resourceType,
@@ -47,6 +62,7 @@ export async function create(args: ResourceCreateArgs) {
     resource_id: resourceId!,
     user_id: userId || 'null',
     role_id: roleId || 'null',
+    secret: secret || 'null',
     given_by_user_id: givenByUserId,
     parent_resource_uri: parentResourceUri,
     can_comment: canComment,

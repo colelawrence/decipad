@@ -20,7 +20,7 @@ import { create as createUser } from '@decipad/services/users';
 import { auth as authConfig, app as appConfig } from '@decipad/config';
 import paginate from '../utils/paginate';
 import timestamp from '../utils/timestamp';
-import { requireUser, check } from '../authorization';
+import { requireUser, isAuthenticatedAndAuthorized } from '../authorization';
 
 const { urlBase } = appConfig();
 const { inviteExpirationSeconds } = authConfig();
@@ -29,7 +29,7 @@ async function checkAdminAccessToResource(
   resource: URI,
   context: GraphqlContext
 ) {
-  return check(resource, context, 'ADMIN');
+  return isAuthenticatedAndAuthorized(resource, context, 'ADMIN');
 }
 
 function resourcePermissionToSharedResource(

@@ -1,3 +1,4 @@
+import Boom from '@hapi/boom';
 import {
   TableRecordIdentifier,
   PermissionType,
@@ -6,25 +7,64 @@ import {
 
 import tables from '../tables';
 
-export async function isAuthorized(
-  resource: string,
-  user: TableRecordIdentifier,
-  permissionType: PermissionType = 'READ'
-): Promise<boolean> {
+export async function isAuthorized({
+  resource,
+  user,
+  secret,
+  permissionType,
+}: {
+  resource: string;
+  user: TableRecordIdentifier | undefined;
+  secret?: string | undefined;
+  permissionType: PermissionType;
+}): Promise<boolean> {
   const data = await tables();
-  const permissions: PermissionRecord[] = (
-    await data.permissions.query({
-      IndexName: 'byResourceAndUser',
-      KeyConditionExpression:
-        'user_id = :user_id and resource_uri = :resource_uri',
-      ExpressionAttributeValues: {
-        ':user_id': user.id,
-        ':resource_uri': canonizeResource(resource),
-      },
-    })
-  ).Items;
+  const userPermissions: PermissionRecord[] = user
+    ? (
+        await data.permissions.query({
+          IndexName: 'byResourceAndUser',
+          KeyConditionExpression:
+            'user_id = :user_id and resource_uri = :resource_uri',
+          ExpressionAttributeValues: {
+            ':user_id': user.id,
+            ':resource_uri': canonizeResource(resource),
+          },
+        })
+      ).Items
+    : [];
+  const secretPermissions = secret
+    ? (
+        await data.permissions.query({
+          IndexName: 'byResourceAndSecret',
+          KeyConditionExpression:
+            'secret = :secret and resource_uri = :resource_uri',
+          ExpressionAttributeValues: {
+            ':secret': secret,
+            ':resource_uri': canonizeResource(resource),
+          },
+        })
+      ).Items
+    : [];
 
-  return permissions.some(isEnoughPermissionFor(permissionType));
+  return [...userPermissions, ...secretPermissions].some(
+    isEnoughPermissionFor(permissionType)
+  );
+}
+
+export async function expectAuthorized({
+  resource,
+  user,
+  secret,
+  permissionType,
+}: {
+  resource: string;
+  user: TableRecordIdentifier | undefined;
+  secret?: string | undefined;
+  permissionType: PermissionType;
+}): Promise<void> {
+  if (!(await isAuthorized({ resource, user, secret, permissionType }))) {
+    throw Boom.unauthorized('Forbidden');
+  }
 }
 
 function isEnoughPermissionFor(requiredPermissionType: PermissionType) {

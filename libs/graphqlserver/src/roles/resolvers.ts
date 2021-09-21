@@ -12,23 +12,26 @@ import {
 } from '@decipad/backendtypes';
 import tables, { allPages } from '@decipad/services/tables';
 import { auth as authConfig, app as appConfig } from '@decipad/config';
-import { check, isAuthorized } from '../authorization';
+import { isAuthenticatedAndAuthorized, isAuthorized } from '../authorization';
 import timestamp from '../utils/timestamp';
 
 const { urlBase } = appConfig();
 const { inviteExpirationSeconds } = authConfig();
 
-async function checkIfCanRemoveUserFromRole({
-  role,
-  userId,
-}: {
-  role: RoleRecord;
-  userId: ID;
-}) {
+async function checkIfCanRemoveUserFromRole(
+  {
+    role,
+    userId,
+  }: {
+    role: RoleRecord;
+    userId: ID;
+  },
+  context: GraphqlContext
+) {
   if (
     !(await isAuthorized(
       `/roles/${role.id}`,
-      { user: { id: userId } as User },
+      { ...context, user: { id: userId } as User },
       'ADMIN'
     ))
   ) {
@@ -83,13 +86,16 @@ async function checkIfCanRemoveUserFromRole({
   }
 }
 
-async function removeUserFromRole({
-  role,
-  userId,
-}: {
-  role: RoleRecord;
-  userId: ID;
-}) {
+async function removeUserFromRole(
+  {
+    role,
+    userId,
+  }: {
+    role: RoleRecord;
+    userId: ID;
+  },
+  context: GraphqlContext
+) {
   const data = await tables();
 
   const permissions = (
@@ -107,7 +113,7 @@ async function removeUserFromRole({
     throw new UserInputError('user not in role');
   }
 
-  await checkIfCanRemoveUserFromRole({ role, userId });
+  await checkIfCanRemoveUserFromRole({ role, userId }, context);
 
   for (const permission of permissions) {
     // TODO parallelize?
@@ -124,7 +130,7 @@ export default {
       context: GraphqlContext
     ): Promise<RoleRecord> {
       const workspaceResource = `/workspaces/${role.workspaceId}`;
-      await check(workspaceResource, context, 'ADMIN');
+      await isAuthenticatedAndAuthorized(workspaceResource, context, 'ADMIN');
 
       const newRole = {
         id: nanoid(),
@@ -195,7 +201,11 @@ export default {
       }
 
       const workspaceResource = `/workspaces/${role.workspace_id}`;
-      const user = await check(workspaceResource, context, 'ADMIN');
+      const user = await isAuthenticatedAndAuthorized(
+        workspaceResource,
+        context,
+        'ADMIN'
+      );
 
       const invitedUser = await data.users.get({ id: userId });
       if (!invitedUser) {
@@ -274,7 +284,7 @@ export default {
         throw new ForbiddenError('Forbidden');
       }
 
-      await removeUserFromRole({ role, userId });
+      await removeUserFromRole({ role, userId }, context);
 
       return true;
     },
@@ -291,9 +301,13 @@ export default {
       }
 
       const roleResource = `/roles/${role.id}`;
-      const user = await check(roleResource, context, 'READ');
+      const user = await isAuthenticatedAndAuthorized(
+        roleResource,
+        context,
+        'READ'
+      );
 
-      await removeUserFromRole({ role, userId: user.id });
+      await removeUserFromRole({ role, userId: user.id }, context);
 
       return true;
     },
@@ -302,7 +316,7 @@ export default {
   Role: {
     async workspace(role: RoleRecord, _: unknown, context: GraphqlContext) {
       const workspaceResource = `/workspaces/${role.workspace_id}`;
-      await check(workspaceResource, context, 'READ');
+      await isAuthenticatedAndAuthorized(workspaceResource, context, 'READ');
 
       const data = await tables();
       return data.workspaces.get({ id: role.workspace_id });

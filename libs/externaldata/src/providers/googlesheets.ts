@@ -1,6 +1,6 @@
 import { stringify as encodeQuery } from 'querystring';
 import { Table } from '@apache-arrow/es5-cjs';
-import { notAcceptable } from 'boom';
+import { notAcceptable } from '@hapi/boom';
 import { ExternalKeyRecord } from '@decipad/backendtypes';
 import { thirdParty } from '@decipad/config';
 import { request } from '../http/request';

@@ -6,9 +6,15 @@ export default gql`
     tags: [String!]
   }
 
+  type SecretAccess {
+    secret: String!
+    permission: PermissionType!
+    canComment: Boolean!
+  }
   type PadAccess {
     roles: [RoleAccess!]!
     users: [UserAccess!]!
+    secrets: [SecretAccess!]!
   }
 
   type Pad {
@@ -63,10 +69,16 @@ export default gql`
 
     sharePadWithEmail(
       id: ID!
-      email: String
+      email: String!
       permissionType: PermissionType!
       canComment: Boolean!
     ): Boolean
+
+    sharePadWithSecret(
+      id: ID!
+      permissionType: PermissionType!
+      canComment: Boolean!
+    ): String!
   }
 
   extend type Subscription {

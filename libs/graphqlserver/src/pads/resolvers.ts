@@ -19,7 +19,7 @@ import { subscribe } from '@decipad/services/pubsub';
 import { create as createPad2 } from '@decipad/services/pads';
 import { duplicate as duplicatePadContent } from '@decipad/services/blobs/pads';
 import Resource from '@decipad/graphqlresource';
-import { requireUser, check } from '../authorization';
+import { requireUser, isAuthenticatedAndAuthorized } from '../authorization';
 import paginate from '../utils/paginate';
 
 const padResource = Resource({
@@ -53,7 +53,7 @@ const padResource = Resource({
     context: GraphqlContext
   ) => {
     const workspaceResource = `/workspaces/${workspaceId}`;
-    await check(workspaceResource, context, 'WRITE');
+    await isAuthenticatedAndAuthorized(workspaceResource, context, 'WRITE');
   },
 
   parentResourceUriFromCreateInput: ({ workspaceId }: { workspaceId: ID }) =>
@@ -108,6 +108,7 @@ const resolvers = {
     sharePadWithUser: padResource.shareWithUser,
     unsharePadWithUser: padResource.unshareWithUser,
     sharePadWithEmail: padResource.shareWithEmail,
+    sharePadWithSecret: padResource.shareWithSecret,
 
     async duplicatePad(
       _: unknown,
@@ -115,7 +116,7 @@ const resolvers = {
       context: GraphqlContext
     ): Promise<Pad> {
       const resource = `/pads/${id}`;
-      await check(resource, context, 'READ');
+      await isAuthenticatedAndAuthorized(resource, context, 'READ');
 
       const data = await tables();
       const previousPad = await data.pads.get({ id });
@@ -127,8 +128,11 @@ const resolvers = {
       previousPad.name = `Copy of ${previousPad.name}`;
 
       const workspaceResource = `/workspaces/${previousPad.workspace_id}`;
-      const user = await check(workspaceResource, context, 'WRITE');
-
+      const user = await isAuthenticatedAndAuthorized(
+        workspaceResource,
+        context,
+        'WRITE'
+      );
       const clonedPad = await createPad2(
         previousPad.workspace_id,
         previousPad,

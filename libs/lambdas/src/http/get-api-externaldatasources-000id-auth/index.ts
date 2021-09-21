@@ -2,12 +2,13 @@ import {
   APIGatewayProxyEventV2 as APIGatewayProxyEvent,
   APIGatewayProxyResultV2,
 } from 'aws-lambda';
+import Boom from '@hapi/boom';
 import { OAuth2 } from 'oauth';
 import { nanoid } from 'nanoid';
 import { stringify as encodeCookie } from 'simple-cookie';
 import tables from '@decipad/services/tables';
-import { authenticate } from '@decipad/services/authentication';
-import { isAuthorized } from '@decipad/services/authorization';
+import { expectAuthenticated } from '@decipad/services/authentication';
+import { expectAuthorized } from '@decipad/services/authorization';
 import { provider as externalDataProvider } from '@decipad/externaldata';
 import { app } from '@decipad/config';
 import { getDefined } from '@decipad/utils';
@@ -15,36 +16,18 @@ import handle from '../handle';
 
 export const handler = handle(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResultV2> => {
-    const { user } = await authenticate(event);
-    if (!user) {
-      return {
-        statusCode: 401,
-        body: 'Needs authentication',
-      };
-    }
-
+    const { user } = await expectAuthenticated(event);
     const { id } = event.pathParameters || {};
     if (!id) {
-      return {
-        statusCode: 401,
-        body: 'missing parameters',
-      };
+      throw Boom.badRequest('missing parameters');
     }
     const resource = `/externaldatasources/${id}`;
-    if (!(await isAuthorized(resource, user, 'READ'))) {
-      return {
-        statusCode: 403,
-        body: 'Needs authorization',
-      };
-    }
+    await expectAuthorized({ resource, user, permissionType: 'READ' });
 
     const data = await tables();
     const externalDataSource = await data.externaldatasources.get({ id });
     if (!externalDataSource) {
-      return {
-        statusCode: 404,
-        body: 'Not found',
-      };
+      throw Boom.notFound();
     }
 
     const provider = getDefined(

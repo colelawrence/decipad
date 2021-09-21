@@ -1,16 +1,25 @@
 import { ForbiddenError } from 'apollo-server-lambda';
 import { PermissionType, User } from '@decipad/backendtypes';
 import { isAuthorized as isAuthorizedBase } from '@decipad/services/authorization';
+import { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 type Context = {
   user?: User;
+  event: APIGatewayProxyEventV2;
 };
 
+export function loadUser(context: Context): User | undefined {
+  return context.user;
+}
 export function requireUser(context: Context): User {
-  if (!context.user) {
+  const user = loadUser(context);
+  if (!user) {
     throw new ForbiddenError('Forbidden');
   }
-  return context.user;
+  return user;
+}
+export function loadSecret(context: Context): string | undefined {
+  return context.event.headers.authorization?.match(/^Bearer (.+)$/)?.[1];
 }
 
 export async function isAuthorized(
@@ -18,11 +27,12 @@ export async function isAuthorized(
   context: Context,
   permissionType: PermissionType = 'READ'
 ): Promise<boolean> {
-  const user = requireUser(context);
-  return isAuthorizedBase(resource, user, permissionType);
+  const user = loadUser(context);
+  const secret = loadSecret(context);
+  return isAuthorizedBase({ resource, user, secret, permissionType });
 }
 
-export async function check(
+export async function isAuthenticatedAndAuthorized(
   resource: string,
   context: Context,
   permissionType: PermissionType

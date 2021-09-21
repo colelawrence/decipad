@@ -1,3 +1,4 @@
+import { boomify } from '@hapi/boom';
 import {
   APIGatewayProxyEventV2 as APIGatewayProxyEvent,
   APIGatewayProxyResultV2,
@@ -32,18 +33,12 @@ export default (handler: Handler) => {
           body,
           headers,
         };
-      } catch (err) {
-        console.error(err);
+      } catch (_err) {
+        const err = boomify(_err as Error).output;
         return {
-          statusCode: 500,
-          headers: {
-            'content-type': 'application/json; charset=utf-8',
-          },
-          body: JSON.stringify({
-            name: (err as Error).name,
-            message: (err as Error).message,
-            stack: (err as Error).stack,
-          }),
+          statusCode: err.statusCode,
+          headers: getErrorHeaders(err.headers),
+          body: JSON.stringify(err.payload),
         };
       }
     }
@@ -64,4 +59,14 @@ function okStatusCodeFor(req: APIGatewayProxyEvent) {
       return 201;
   }
   return 200;
+}
+
+function getErrorHeaders(headers: Record<string, any>): Record<string, string> {
+  const retEntries = new Map<string, string>();
+  for (const [key, value] of Object.entries(headers)) {
+    if (typeof value === 'string') {
+      retEntries.set(key, value);
+    }
+  }
+  return Object.fromEntries(retEntries.entries());
 }

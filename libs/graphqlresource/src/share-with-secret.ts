@@ -1,4 +1,5 @@
 import { UserInputError } from 'apollo-server-lambda';
+import { nanoid } from 'nanoid';
 import {
   ID,
   GraphqlContext,
@@ -10,35 +11,38 @@ import { create as createResourcePermission } from '@decipad/services/permission
 import { isAuthenticatedAndAuthorized } from './authorization';
 import { Resource } from './';
 
-export type ShareWithRoleArgs = {
+export type ShareWithSecretArgs = {
   id: ID;
-  roleId: ID;
   permissionType: PermissionType;
   canComment?: boolean;
 };
 
-export type ShareWithRoleFunction = (
+export type ShareWithSecretFunction = (
   _: any,
-  args: ShareWithRoleArgs,
+  args: ShareWithSecretArgs,
   context: GraphqlContext
-) => Promise<void>;
+) => Promise<string>;
 
-export function shareWithRole<
+export function shareWithSecret<
   RecordT extends ConcreteRecord,
   GraphqlT extends GraphqlObjectType,
   CreateInputT,
   UpdateInputT
 >(
   resourceType: Resource<RecordT, GraphqlT, CreateInputT, UpdateInputT>
-): ShareWithRoleFunction {
+): ShareWithSecretFunction {
   return async function (
     _: any,
-    args: ShareWithRoleArgs,
+    args: ShareWithSecretArgs,
     context: GraphqlContext
   ) {
     const resource = `/${resourceType.resourceTypeName}/${args.id}`;
 
-    const actorUser = await isAuthenticatedAndAuthorized(resource, context, 'ADMIN');
+    const actorUser = await isAuthenticatedAndAuthorized(
+      resource,
+      context,
+      'ADMIN'
+    );
 
     const data = await resourceType.dataTable();
     const record = await data.get({ id: args.id });
@@ -47,7 +51,7 @@ export function shareWithRole<
     }
 
     const permission: Parameters<typeof createResourcePermission>[0] = {
-      roleId: args.roleId,
+      secret: nanoid(),
       givenByUserId: actorUser.id,
       resourceUri: resource,
       type: args.permissionType,
@@ -57,7 +61,7 @@ export function shareWithRole<
       permission.parentResourceUri =
         resourceType.parentResourceUriFromRecord(record);
     }
-
     await createResourcePermission(permission);
+    return permission.secret!;
   };
 }

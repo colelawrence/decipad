@@ -1,36 +1,26 @@
 /* eslint-disable no-underscore-dangle */
 import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
-import { authenticate } from '@decipad/services/authentication';
-import { isAuthorized } from '@decipad/services/authorization';
+import Boom from '@hapi/boom';
+import { expectAuthenticated } from '@decipad/services/authentication';
+import { expectAuthorized } from '@decipad/services/authorization';
 import { get as getPadContent } from '@decipad/services/blobs/pads';
 import tables from '@decipad/services/tables';
 import { decode } from '../../common/resource';
 import handle from '../handle';
 
 exports.handler = handle(async (event: APIGatewayProxyEvent) => {
-  const { user } = await authenticate(event);
+  const { user } = await expectAuthenticated(event);
 
   if (!event.pathParameters) {
-    return {
-      statusCode: 401,
-      body: 'missing parameters',
-    };
+    throw Boom.notAcceptable('missing parameters');
   }
-  const uri = decode(event.pathParameters.id);
-  if (!user || !(await isAuthorized(uri, user, 'READ'))) {
-    return {
-      status: 403,
-      body: 'Forbidden',
-    };
-  }
+  const id = decode(event.pathParameters.id!);
+  await expectAuthorized({ resource: id, user, permissionType: 'READ' });
 
   const data = await tables();
-  const doc = await data.docsync.get({ id: uri });
+  const doc = await data.docsync.get({ id });
   if (!doc) {
-    return {
-      statusCode: 403,
-      body: 'Not found',
-    };
+    throw Boom.notFound('Not found');
   }
-  return getPadContent(uri, doc._version);
+  return getPadContent(id, doc._version);
 });

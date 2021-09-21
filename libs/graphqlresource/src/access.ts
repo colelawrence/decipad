@@ -23,14 +23,20 @@ export interface RoleAccess {
   createdAt?: number;
 }
 
+export interface SecretAccess {
+  secret: string;
+  permission: PermissionType;
+  canComment: boolean;
+  createdAt?: number;
+}
+
 export interface Access {
   roles: RoleAccess[];
   users: UserAccess[];
+  secrets: SecretAccess[];
 }
 
-export type AccessFunction<
-  RecordT extends ConcreteRecord,
-  > = (
+export type AccessFunction<RecordT extends ConcreteRecord> = (
   parent: RecordT,
   _: unknown,
   context: GraphqlContext
@@ -58,18 +64,32 @@ export function access<
     ).Items;
 
     const roleAccesses = permissions
-      .filter((p) => p.user_id === 'null')
+      .filter((p) => p.role_id !== 'null' && p.user_id === 'null')
       .map((p) => ({
         role_id: p.role_id,
         permission: p.type,
         canComment: p.can_comment,
         createdAt: p.createdAt,
-      }));
+      }))
+      .sort(by('permission'));
 
     const userAccesses = permissions
-      .filter((p) => p.role_id === 'null')
+      .filter((p) => p.user_id !== 'null' && p.role_id === 'null')
       .map((p) => ({
         user_id: p.user_id,
+        permission: p.type,
+        canComment: p.can_comment,
+        createdAt: p.createdAt,
+      }))
+      .sort(by('permission'));
+
+    const secretAccesses = permissions
+      .filter(
+        (p) =>
+          p.user_id === 'null' && p.role_id === 'null' && p.secret != 'null'
+      )
+      .map((p) => ({
+        secret: p.secret!,
         permission: p.type,
         canComment: p.can_comment,
         createdAt: p.createdAt,
@@ -79,6 +99,7 @@ export function access<
     return {
       roles: roleAccesses,
       users: userAccesses,
+      secrets: secretAccesses,
     };
   };
 }

@@ -178,7 +178,13 @@ async function handleCollab(
 
   const topic = args as string;
 
-  if (!(await isAuthorized(topic, { id: connection.user_id }))) {
+  if (
+    !(await isAuthorized({
+      resource: topic,
+      user: { id: connection.user_id },
+      permissionType: 'READ',
+    }))
+  ) {
     // The user is not autorized, but don't close the connection
     // He won't be able to fetch the resource through HTTP anyway
     return { statusCode: 200 };

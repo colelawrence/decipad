@@ -1,11 +1,12 @@
 /* eslint-disable no-underscore-dangle */
 import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
+import Boom from '@hapi/boom';
 import Automerge from 'automerge';
 import { getDefined } from '@decipad/utils';
 import arc from '@architect/functions';
 import tables from '@decipad/services/tables';
-import { authenticate } from '@decipad/services/authentication';
-import { isAuthorized } from '@decipad/services/authorization';
+import { expectAuthenticated } from '@decipad/services/authentication';
+import { expectAuthorized } from '@decipad/services/authorization';
 import {
   get as getPadContent,
   putTemp as putPadTempContent,
@@ -18,19 +19,11 @@ import handle from '../handle';
 export const handler = handle(async (event: APIGatewayProxyEvent) => {
   const id = decode(event.pathParameters?.id);
 
-  const { user } = await authenticate(event);
-  if (!user || !(await isAuthorized(id, user, 'WRITE'))) {
-    return {
-      status: 403,
-      body: 'Forbidden',
-    };
-  }
+  const { user } = await expectAuthenticated(event);
+  await expectAuthorized({ resource: id, user, permissionType: 'WRITE' });
 
   if (!event.body) {
-    return {
-      status: 401,
-      body: 'no body',
-    };
+    throw Boom.notAcceptable('no body');
   }
 
   const body = event.isBase64Encoded

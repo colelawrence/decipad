@@ -41,7 +41,9 @@ export default ({ apiPort }: { apiPort: number }): CallSimple => {
     const response = await justFetch(url, options);
     if (!response.ok) {
       throw new Error(
-        `response was not ok: ${response.status} : ${await response.text()}`
+        `response from ${url} was not ok: ${
+          response.status
+        } : ${await response.text()}`
       );
     }
 

@@ -6,7 +6,7 @@ export default () =>
   async ({
     context,
   }: {
-    context: { event: APIGatewayProxyEventV2; user: User | null };
+    context: { event: APIGatewayProxyEventV2; user: User | undefined };
   }) => {
     const { user } = await authenticate(context.event);
     context.user = user;
