@@ -44,8 +44,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-2
 
-      - name: Run end-to-end tests
-        run: ./scripts/e2e.sh
+      #- name: Run end-to-end tests
+      #  run: ./scripts/e2e.sh
 
   notify:
     name: Discord Notification
