@@ -78,7 +78,11 @@
       "@decipad/services/invites": ["libs/services/src/invites"],
       "@decipad/services/externaldata": ["libs/services/src/externaldata"],
       "@decipad/utils": ["libs/utils/src/index.ts"],
-      "@decipad/externaldata": ["libs/externaldata/src/index.ts"]
+      "@decipad/externaldata": ["libs/externaldata/src/index.ts"],
+      "@decipad/backend-test-sandbox": [
+        "libs/backend-test-sandbox/src/index.ts"
+      ],
+      "@decipad/dynamodb-lock": ["libs/dynamodb-lock/src/index.ts"]
     }
   },
   "files": [],

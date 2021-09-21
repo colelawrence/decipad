@@ -1,9 +1,25 @@
-const { setupFiles = [], ...baseConfig } = require('../../jest-base.config.js');
+const path = require('path');
+const {
+  setupFiles = [],
+  moduleNameMapper = {},
+  ...baseConfig
+} = require('../../jest-base.config');
 
 const config = {
   ...baseConfig,
   displayName: 'backend',
   setupFiles: [...setupFiles, './jest.setup.js'],
+  moduleNameMapper: {
+    ...moduleNameMapper,
+    '@decipad/backend-test-sandbox': path.join(
+      __dirname,
+      '..',
+      '..',
+      'libs',
+      'backend-test-sandbox',
+      'src'
+    ),
+  },
   testTimeout: 15000,
   maxWorkers: 2,
   bail: true,

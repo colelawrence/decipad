@@ -10,7 +10,7 @@ import {
   stringify as encodeCookie,
 } from 'simple-cookie';
 import { ExternalDataSource, Pad } from '@decipad/backendtypes';
-import test from './sandbox';
+import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
 import getDefined from './utils/get-defined';
 
 test('external data source', (ctx) => {

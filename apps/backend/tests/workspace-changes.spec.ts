@@ -6,8 +6,8 @@
 import waitForExpect from 'wait-for-expect';
 import { ObservableSubscription } from '@apollo/client';
 import { Workspace, Role, RoleInvitation } from '@decipad/backendtypes';
-import test from './sandbox';
-import { timeout } from './utils/timeout';
+import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
+import { timeout } from '@decipad/utils';
 
 waitForExpect.defaults.interval = 250;
 

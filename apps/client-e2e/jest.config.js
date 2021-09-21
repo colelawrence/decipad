@@ -20,4 +20,5 @@ module.exports = {
     },
   },
   testRegex: 'src/[^/]*\\.ts$',
+  testTimeout: 30000,
 };

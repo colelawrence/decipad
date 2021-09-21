@@ -12,11 +12,11 @@ rm -rf apps/backend/public
 mkdir apps/backend/public
 
 echo "Building frontend..."
-npm run build:frontend
+yarn build:frontend
 cp -r dist/apps/client/exported/. apps/backend/public
 
 echo "Building storybook..."
-npm run build:storybook
+yarn build:storybook
 cp -r dist/storybook/ui/. apps/backend/public/.storybook
 
 

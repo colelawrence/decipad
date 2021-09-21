@@ -4,8 +4,8 @@
 /* eslint-disable jest/expect-expect */
 
 import Automerge from 'automerge';
+import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
 import { encode } from './utils/resource';
-import test from './sandbox';
 import { create as createResourcePermission } from './utils/permissions';
 
 test('sync docs', (ctx) => {

@@ -111,6 +111,7 @@ export type Changes<T extends TableRecord> = {
 export type Resource = {
   type: string;
   id: string;
+  idParts?: string[];
 };
 
 export type Attachment = {
@@ -407,6 +408,7 @@ export interface DataTables extends EnhancedDataTables {
   userkeyvalidations: DataTable<UserKeyValidationRecord>;
   collabs: DataTable<CollabRecord>;
   connections: DataTable<ConnectionRecord>;
+  docsync: VersionedDataTable<DocSyncRecord>;
 }
 
 export type ConcreteRecord =
@@ -423,11 +425,14 @@ export type ConcreteRecord =
   | UserTaggedResourceRecord
   | UserTagRecord
   | VerificationRequestRecord
-  | SubscriptionRecord;
+  | SubscriptionRecord
+  | DocSyncRecord;
 
 export type TableRecord = VirtualRecord | ConcreteRecord;
 
 export type ConcreteDataTable = DataTable<ConcreteRecord>;
+
+/* DynamoDB */
 
 export interface DynamoDbQuery {
   IndexName: string;
@@ -437,6 +442,28 @@ export interface DynamoDbQuery {
   FilterExpression?: string;
   Limit?: number;
   Select?: 'COUNT';
+}
+
+/* Versioned table records */
+
+export interface VersionedTableRecord extends TableRecordBase {
+  _version: number;
+}
+
+export interface DocSyncRecord extends VersionedTableRecord {
+  seq?: number[];
+}
+
+export type VersionedDataTable<T extends VersionedTableRecord> =
+  DataTable<T> & {
+    withLock: (
+      id: string,
+      fn: (record: T | undefined) => Promise<T>
+    ) => Promise<T>;
+  };
+
+export interface VersionedDataTables {
+  docsync: VersionedDataTable<DocSyncRecord>;
 }
 
 /* Lambda */

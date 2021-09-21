@@ -5,7 +5,7 @@
 
 import arc from '@architect/functions';
 import { Workspace, Pad, Role, RoleInvitation } from '@decipad/backendtypes';
-import test from './sandbox';
+import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
 import { timeout } from './utils/timeout';
 
 test('pads', (ctx) => {

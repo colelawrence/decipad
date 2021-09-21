@@ -2,6 +2,7 @@ import assert from 'assert';
 import { nanoid } from 'nanoid';
 import { UserInputError } from 'apollo-server-lambda';
 import {
+  DocSyncRecord,
   ID,
   GraphqlContext,
   PageInput,
@@ -127,13 +128,26 @@ const resolvers = {
 
       const workspaceResource = `/workspaces/${previousPad.workspace_id}`;
       const user = await check(workspaceResource, context, 'WRITE');
+
       const clonedPad = await createPad2(
         previousPad.workspace_id,
         previousPad,
         user
       );
 
-      await duplicatePadContent(clonedPad.id, id);
+      const oldId = `/pads/${id}/content`;
+      const oldDoc = await data.docsync.get({ id: oldId });
+      if (oldDoc) {
+        const newId = `/pads/${clonedPad.id}/content`;
+        await data.docsync.withLock(
+          newId,
+          async (docSync: DocSyncRecord = { id: newId, _version: 0 }) => {
+            // eslint-disable-next-line no-underscore-dangle
+            await duplicatePadContent(oldDoc.id, oldDoc._version, newId);
+            return docSync;
+          }
+        );
+      }
 
       return clonedPad;
     },

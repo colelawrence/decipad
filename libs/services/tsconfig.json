@@ -8,6 +8,7 @@
     { "path": "../../libs/backendtypes" },
     { "path": "../../libs/config" },
     { "path": "../../libs/meta" },
-    { "path": "../../libs/utils" }
+    { "path": "../../libs/utils" },
+    { "path": "../../libs/dynamodb-lock" }
   ]
 }

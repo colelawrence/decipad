@@ -4,7 +4,7 @@
 /* eslint-disable jest/expect-expect */
 
 import { Workspace, Role, RoleInvitation } from '@decipad/backendtypes';
-import test from './sandbox';
+import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
 
 test('workspaces', (ctx) => {
   const { test: it } = ctx;

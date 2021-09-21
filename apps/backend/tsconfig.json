@@ -6,8 +6,9 @@
   "include": ["tests"],
   "references": [
     { "path": "../../libs/interfaces" },
-    { "path": "../../libs/kafka-lite" },
     { "path": "../../libs/services" },
-    { "path": "../../libs/backendtypes" }
+    { "path": "../../libs/backendtypes" },
+    { "path": "../../libs/backend-test-sandbox" },
+    { "path": "../../libs/utils" }
   ]
 }

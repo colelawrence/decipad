@@ -6,9 +6,7 @@ import {
 } from './page-utils/Pad';
 
 describe('Pad name', () => {
-  beforeAll(async () => {
-    await setUp();
-  });
+  beforeAll(setUp);
 
   test('starts empty', async () => {
     expect(await getPadName()).toBe('');

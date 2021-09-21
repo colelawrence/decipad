@@ -13,3 +13,5 @@ export function decode(id: string | undefined) {
   }
   return newId;
 }
+
+export { parseResourceUri } from './parse-uri';

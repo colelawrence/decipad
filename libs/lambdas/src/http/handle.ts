@@ -40,9 +40,9 @@ export default (handler: Handler) => {
             'content-type': 'application/json; charset=utf-8',
           },
           body: JSON.stringify({
-            name: err.name,
-            message: err.message,
-            stack: err.stack,
+            name: (err as Error).name,
+            message: (err as Error).message,
+            stack: (err as Error).stack,
           }),
         };
       }

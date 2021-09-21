@@ -5,7 +5,6 @@ import {
   Pad,
 } from '@decipad/backendtypes';
 import tables, { allPages } from '@decipad/services/tables';
-import { remove } from '@decipad/services/blobs/pads';
 import handle from '../handle';
 
 export const handler = handle(padsChangesHandler);
@@ -13,7 +12,7 @@ export const handler = handle(padsChangesHandler);
 async function padsChangesHandler(event: TableRecordChanges<Pad>) {
   const { table, action, args } = event;
 
-  assert.equal(table, 'pads');
+  assert.strictEqual(table, 'pads');
 
   if (action === 'delete') {
     await handlePadDelete(args);
@@ -44,5 +43,5 @@ async function handlePadDelete({ id }: TableRecordIdentifier) {
     }
   }
 
-  await remove(id);
+  await data.docsync.delete({ id });
 }

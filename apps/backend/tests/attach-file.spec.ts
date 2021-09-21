@@ -8,7 +8,7 @@ import { createReadStream } from 'fs';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import { Workspace, Pad, Attachment } from '@decipad/backendtypes';
-import test from './sandbox';
+import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
 
 test('attach files', (ctx) => {
   const { test: it } = ctx;

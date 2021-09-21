@@ -38,7 +38,7 @@ jobs:
           restore-keys: |
             npm-and-cypress-
 
-      - run: npm ci
+      - run: yarn install
 
       - name: Cache NX things
         id: node-modules-nx-cache
@@ -51,8 +51,8 @@ jobs:
           restore-keys: |
             nx-node-modules-cache-
 
-      - run: npm run lint
-      - run: npm run typecheck
+      - run: yarn lint
+      - run: yarn typecheck
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -62,7 +62,7 @@ jobs:
           aws-region: eu-west-2
 
       - name: Run tests
-        run: npm run test:coverage
+        run: yarn test:coverage
 
   notify:
     name: Discord Notification

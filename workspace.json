@@ -54,6 +54,26 @@
         }
       }
     },
+    "backend-test-sandbox": {
+      "root": "libs/backend-test-sandbox",
+      "sourceRoot": "libs/backend-test-sandbox/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/backend-test-sandbox/src/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/backend-test-sandbox"
+          }
+        }
+      }
+    },
     "backendtypes": {
       "root": "libs/backendtypes",
       "sourceRoot": "libs/backendtypes/src",
@@ -204,6 +224,33 @@
           "executor": "@nrwl/workspace:run-commands",
           "options": {
             "command": "yarn tsc -b libs/docsync"
+          }
+        }
+      }
+    },
+    "dynamodb-lock": {
+      "root": "libs/dynamodb-lock",
+      "sourceRoot": "libs/dynamodb-lock/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/dynamodb-lock/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/dynamodb-lock"],
+          "options": {
+            "jestConfig": "libs/dynamodb-lock/jest.config.js"
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/dynamodb-lock"
           }
         }
       }
@@ -395,28 +442,6 @@
           "executor": "@nrwl/workspace:run-commands",
           "options": {
             "command": "yarn tsc -b libs/interfaces"
-          }
-        }
-      }
-    },
-    "kafka-lite": {
-      "root": "libs/kafka-lite",
-      "sourceRoot": "libs/kafka-lite/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/kafka-lite/**/*.ts"],
-            "maxWarnings": 0
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/kafka-lite"],
-          "options": {
-            "jestConfig": "libs/kafka-lite/jest.config.js",
-            "passWithNoTests": true
           }
         }
       }
@@ -677,34 +702,6 @@
             "ci": {
               "quiet": true
             }
-          }
-        }
-      }
-    },
-    "fnqueue": {
-      "root": "libs/fnqueue",
-      "sourceRoot": "libs/fnqueue/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/fnqueue/**/*.ts"],
-            "maxWarnings": 0
-          }
-        },
-        "typecheck": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "yarn tsc -b libs/fnqueue"
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/fnqueue"],
-          "options": {
-            "jestConfig": "libs/fnqueue/jest.config.js",
-            "codeCoverage": true
           }
         }
       }

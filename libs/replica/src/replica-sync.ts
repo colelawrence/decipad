@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import { Observable, Subscription, Subject, BehaviorSubject } from 'rxjs';
 import Automerge, { Change, Doc } from 'automerge';
 import debounce from 'lodash.debounce';
@@ -227,30 +228,29 @@ export class ReplicaSync<T> {
   }
 
   private async reconcile() {
-    let error: Error | null = null;
+    let error: Error | undefined;
     // intentional sequence
-    /* eslint-disable no-await-in-loop */
     do {
-      error = null;
+      error = undefined;
       try {
         await this.attemptSendChanges();
       } catch (err) {
-        error = err;
+        error = err as Error;
       }
 
       try {
         await this.attemptFetchFromRemote();
       } catch (err) {
-        error = err;
+        error = err as Error;
       }
 
       try {
         await this.attemptSendChanges();
       } catch (err) {
-        error = err;
+        error = err as Error;
       }
     } while (!error && this.lastSentChangeCount > 0);
-    /* eslint-enable no-await-in-loop */
+
     if (error) {
       throw error;
     }

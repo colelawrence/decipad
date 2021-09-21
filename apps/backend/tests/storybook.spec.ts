@@ -3,7 +3,7 @@
 import fs from 'fs';
 import path from 'path';
 import { sync as mkdirp } from 'mkdirp';
-import test from './sandbox';
+import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
 
 test('the storybook handler', (env) => {
   const { test: it } = env;

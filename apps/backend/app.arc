@@ -177,6 +177,10 @@ externaldatasourcekeys
   expiresAt TTL
   encrypt true
 
+docsync
+  id *String
+  _version Number
+
 @indexes
 users
   secret *String
@@ -285,6 +289,7 @@ pads-changes
 tags-changes
 usertaggedresources-changes
 fileattachments-changes
+docsync-changes
 
 
 @plugins

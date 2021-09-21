@@ -1,83 +1,124 @@
-/* eslint-disable no-console */
+import { nanoid } from 'nanoid';
 import S3 from 'aws-sdk/clients/s3';
 import { ID } from '@decipad/backendtypes';
 import { s3 as s3Config } from '@decipad/config';
 
-export function duplicate(id: ID, oldID: ID): Promise<void> {
+interface ErrorWithStatsCode extends Error {
+  statusCode?: number;
+}
+
+export async function duplicate(
+  oldId: ID,
+  oldVersion: number,
+  newId: ID
+): Promise<void> {
   const [client, Bucket] = clientAndBucket();
-  const CopySource = `/${Bucket}/${encodeId(
-    `/pads/${encodeId(oldID)}/content`
-  )}`;
+  const CopySource = `/${Bucket}/${encodeId(oldId, oldVersion)}`;
+  const newVersion = 1;
   const options = {
     Bucket,
-    Key: encodeId(`/pads/${encodeId(id)}/content`),
+    Key: encodeId(newId, newVersion),
     CopySource,
   };
 
-  return client
-    .copyObject(options)
-    .promise()
-    .catch((err) => {
-      if (err.statusCode === 404 || err.statusCode === 403) {
-        return null;
-      }
-      console.log(`Error copying ${id}:`, err);
-      throw err;
-    })
-    .then(() => undefined);
+  await client.copyObject(options).promise();
 }
 
-export function put(id: ID, _body: string): Promise<unknown> {
+export async function putTemp(id: ID, content: string): Promise<string> {
   const [client, Bucket] = clientAndBucket();
-  const Body = Buffer.from(_body, 'utf-8');
-  const Key = encodeId(id);
+  const Body = Buffer.from(content, 'utf-8');
+  const version = nanoid();
+  const Key = encodeTemp(id, version);
+
   const options = {
     Bucket,
     Key,
     Body,
   };
-  return client
-    .putObject(options)
-    .promise()
-    .catch((err) => {
-      console.log(`Error putting ${id} in ${Bucket}:`, err);
-      throw err;
-    });
+  await client.putObject(options).promise();
+
+  return Key;
 }
 
-export function get(id: ID): Promise<string | null> {
+export async function commit(
+  tempSourcePath: string,
+  targetId: string,
+  version: number
+): Promise<void> {
   const [client, Bucket] = clientAndBucket();
+
   const options = {
     Bucket,
-    Key: encodeId(id),
+    Key: encodeId(targetId, version),
+    CopySource: `/${Bucket}/${tempSourcePath}`,
   };
-  return client
-    .getObject(options)
-    .promise()
-    .catch((err) => {
-      if (err.statusCode === 404 || err.statusCode === 403) {
-        return null;
-      }
-      console.log(`Error getting ${id}:`, err);
-      throw err;
-    })
-    .then((data) => {
-      return data?.Body ? data.Body.toString('utf-8') : null;
-    });
-}
-
-export async function remove(id: ID): Promise<void> {
-  const [client, Bucket] = clientAndBucket();
+  await client.copyObject(options).promise();
   await client
     .deleteObject({
       Bucket,
-      Key: encodeId(id),
+      Key: tempSourcePath,
     })
     .promise();
 }
 
-function encodeId(id: string): string {
-  return encodeURIComponent(id);
+export async function put(
+  id: ID,
+  version: number,
+  content: string
+): Promise<void> {
+  const [client, Bucket] = clientAndBucket();
+  const Body = Buffer.from(content, 'utf-8');
+  const Key = encodeId(id, version);
+  const options = {
+    Bucket,
+    Key,
+    Body,
+  };
+  await client.putObject(options).promise();
+}
+
+export async function get(id: ID, version: number): Promise<string | null> {
+  const [client, Bucket] = clientAndBucket();
+  const options = {
+    Bucket,
+    Key: encodeId(id, version),
+  };
+  try {
+    const data = await client.getObject(options).promise();
+    const retValue = data?.Body ? data.Body.toString('utf-8') : null;
+    if (!retValue && version > 1) {
+      return get(id, version - 1); // retry
+    }
+    return retValue;
+  } catch (_err) {
+    const err = _err as ErrorWithStatsCode;
+    const notFound = err.statusCode === 404 || err.statusCode === 403;
+    if (notFound) {
+      if (version > 1) {
+        return get(id, version - 1); // retry
+      }
+      return null;
+    }
+    throw err;
+  }
+}
+
+export async function remove(id: ID, version: number): Promise<void> {
+  const [client, Bucket] = clientAndBucket();
+  await client
+    .deleteObject({
+      Bucket,
+      Key: encodeId(id, version),
+    })
+    .promise();
+}
+
+function encodeId(id: string, version: number | string): string {
+  return encodeURIComponent([id, version.toString()].join(':'));
+}
+
+function encodeTemp(id: string, random: string): string {
+  return `temp/${encodeId(id, random)}`;
 }
 
 function clientAndBucket(): [S3, string] {

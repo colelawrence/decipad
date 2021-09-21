@@ -33,6 +33,9 @@
       "tags": [],
       "implicitDependencies": ["nodelambda", "lambdas"]
     },
+    "backend-test-sandbox": {
+      "tags": []
+    },
     "backendtypes": {
       "tags": []
     },
@@ -48,6 +51,9 @@
       "tags": []
     },
     "docsync": {
+      "tags": []
+    },
+    "dynamodb-lock": {
       "tags": []
     },
     "editor": {
@@ -72,9 +78,6 @@
       "tags": []
     },
     "interfaces": {
-      "tags": []
-    },
-    "kafka-lite": {
       "tags": []
     },
     "lambdas": {

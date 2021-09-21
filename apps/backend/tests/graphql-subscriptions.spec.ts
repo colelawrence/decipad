@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import test from './sandbox';
+import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
 
 test('graphql subscriptions', (ctx) => {
   const { test: it } = ctx;

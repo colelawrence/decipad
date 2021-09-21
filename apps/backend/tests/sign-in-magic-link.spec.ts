@@ -6,7 +6,7 @@ import {
   parse as parseCookies,
 } from 'simple-cookie';
 import { encode as qsEncode } from 'querystring';
-import test from './sandbox';
+import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
 
 waitForExpect.defaults.interval = 250;
 

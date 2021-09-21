@@ -5,15 +5,11 @@
   "directories": {
     "test": "tests"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "N1N",
   "license": "Proprietary",
   "dependencies": {
     "@architect/architect": "8.6.0",
     "@architect/destroy": "decipad/destroy",
-    "aws-sdk": "^2.712.0",
     "dotenv": "^10.0.0",
     "form-data": "^4.0.0",
     "graphql": "^15.5.0",
@@ -24,11 +20,9 @@
   },
   "devDependencies": {
     "@apollo/client": "^3.3.19",
-    "@architect/sandbox": "3.6.0",
     "@types/architect__functions": "^3.13.4",
     "@types/mkdirp": "^1.0.2",
     "@types/proper-lockfile": "^4.1.2",
-    "proper-lockfile": "^4.1.2",
-    "wait-for-expect": "^3.0.2"
+    "proper-lockfile": "^4.1.2"
   }
 }

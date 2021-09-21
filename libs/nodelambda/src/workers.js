@@ -49,7 +49,7 @@ function createWorkerFor(functionName, env, update) {
       fn.working,
       'worker should be working when getting a response message'
     );
-    replyWith(null, message);
+    replyWith(null, message || '');
   });
 
   fn.worker.once('error', (err) => {

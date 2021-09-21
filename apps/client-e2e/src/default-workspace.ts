@@ -1,13 +1,14 @@
+import waitForExpect from 'wait-for-expect';
 import { getPadList, setUp } from './page-utils/Workspace';
 
 describe('Default workspace', () => {
-  beforeEach(async () => {
-    await setUp();
-  });
+  beforeEach(setUp);
 
   test('should display one initial notebook', async () => {
-    const pads = await getPadList();
-    expect(pads).toHaveLength(1);
-    expect(pads[0].name).toMatchInlineSnapshot(`"My first pad"`);
+    await waitForExpect(async () => {
+      const pads = await getPadList();
+      expect(pads).toHaveLength(1);
+      expect(pads[0].name).toMatchInlineSnapshot(`"My first pad"`);
+    });
   });
 });

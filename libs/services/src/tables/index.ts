@@ -1,4 +1,5 @@
 /* eslint-disable no-underscore-dangle */
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import arc from '@architect/functions';
 import {
   ConcreteDataTable,
@@ -7,7 +8,11 @@ import {
   DataTables,
   EnhancedDataTables,
   TableRecordIdentifier,
+  VersionedDataTable,
+  VersionedTableRecord,
+  VersionedDataTables,
 } from '@decipad/backendtypes';
+import { withLock, WithLockUserFunction } from '@decipad/dynamodb-lock';
 import timestamp from '../common/timestamp';
 import allPages from './all-pages';
 
@@ -33,7 +38,10 @@ const observedTables: (keyof DataTables)[] = [
   'tags',
   'usertaggedresources',
   'fileattachments',
+  'docsync',
 ];
+
+const versionedTables: (keyof VersionedDataTables)[] = ['docsync'];
 
 let tablesPromise: Promise<DataTables>;
 
@@ -52,6 +60,9 @@ export default async function tables(): Promise<DataTables> {
         }
         for (const observedTable of observedTables) {
           observe(dataTables, observedTable);
+        }
+        for (const versionedTable of versionedTables) {
+          withWithVersion(dataTables, arc.tables.doc, versionedTable);
         }
         resolve(dataTables);
       })
@@ -137,4 +148,20 @@ function enhance(dataTables: DataTables, tableName: keyof DataTables) {
 
     return table.put(doc);
   };
+}
+
+function withWithVersion(
+  dataTables: DataTables,
+  db: DocumentClient,
+  tableName: keyof VersionedDataTables
+) {
+  const table = dataTables[tableName];
+  if (!table) {
+    throw new Error(`No table named ${tableName}`);
+  }
+  const locking = withLock(db, tableName);
+  (table as VersionedDataTable<VersionedTableRecord>).withLock = (
+    id: string,
+    fn: WithLockUserFunction<VersionedTableRecord>
+  ) => locking(id, fn);
 }
