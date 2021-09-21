@@ -169,13 +169,13 @@ fileattachments
 externaldatasources
   id *String
 
-externaldatasourcekeys
-  id *String
-  resource_uri String
-  user_id String
-  status_code String
-  expiresAt TTL
-  encrypt true
+#externaldatasourcekeys
+#  id *String
+#  resource_uri String
+#  user_id String
+#  status_code String
+#  expiresAt TTL
+#  encrypt true
 
 @indexes
 users
@@ -272,14 +272,14 @@ fileattachments
   resource_uri *String
   name byResource
 
-externaldatasourcekeys
-  resource_uri *String
-  name byResource
+#externaldatasourcekeys
+#  resource_uri *String
+#  name byResource
 
-externaldatasourcekeys
-  resource_uri *String
-  user_id **String
-  name byResourceAndUser
+#externaldatasourcekeys
+#  resource_uri *String
+#  user_id **String
+#  name byResourceAndUser
 
 
 @queues
