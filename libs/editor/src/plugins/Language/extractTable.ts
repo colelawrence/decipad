@@ -133,16 +133,30 @@ interface ExtractedTable {
   externalData: InjectableExternalData;
 }
 
-export function extractTable(block: InteractiveTable): ExtractedTable | null {
-  const variableName = getVariableName(block.children);
-  const dataRows = block.children.filter(isDataTr) as unknown[] as DataTR[];
-  const columnNames = extractColumnNames(block.children);
+const weakMapMemoize = (
+  fn: (arg: InteractiveTable) => ExtractedTable | null
+) => {
+  const cache = new WeakMap<InteractiveTable, ExtractedTable | null>();
 
-  if (variableName && dataRows.length && columnNames) {
-    return {
-      variableName,
-      externalData: getExternalData(dataRows, columnNames),
-    };
+  return (arg: InteractiveTable) => {
+    const cached = cache.get(arg) ?? fn(arg);
+    cache.set(arg, cached);
+    return cached;
+  };
+};
+
+export const extractTable = weakMapMemoize(
+  (block: InteractiveTable): ExtractedTable | null => {
+    const variableName = getVariableName(block.children);
+    const dataRows = block.children.filter(isDataTr) as unknown[] as DataTR[];
+    const columnNames = extractColumnNames(block.children);
+
+    if (variableName && dataRows.length && columnNames) {
+      return {
+        variableName,
+        externalData: getExternalData(dataRows, columnNames),
+      };
+    }
+    return null;
   }
-  return null;
-}
+);
