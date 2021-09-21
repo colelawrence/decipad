@@ -1,9 +1,9 @@
 import { AST } from '..';
 import { stringifyUnits } from '../type/units';
-import { getIdentifierString, isNode, isStatement } from '../utils';
+import { getIdentifierString, isNode, isStatement, pairwise } from '../utils';
 
 const prettyPrint = (node: AST.Node, indent: number) => {
-  const perLine = isStatement(node) || node.type === 'block';
+  const perLine = isStatement(node) || ['block', 'table'].includes(node.type);
 
   let printedArgs: string[];
   let fname: string;
@@ -25,6 +25,14 @@ const prettyPrint = (node: AST.Node, indent: number) => {
       [fname] = node.args[0].args;
       printedArgs = node.args[1].args.map((arg) =>
         prettyPrint(arg, indent + 1)
+      );
+      break;
+    }
+    case 'table': {
+      fname = 'table';
+      printedArgs = Array.from(
+        pairwise<AST.ColDef, AST.Expression>(node.args),
+        ([colName, val]) => `${colName.args[0]} ${prettyPrint(val, indent + 1)}`
       );
       break;
     }

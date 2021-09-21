@@ -1,9 +1,4 @@
-import {
-  ExternalDataMap,
-  ParsedBlock,
-  prettyPrintAST,
-} from '@decipad/language';
-import { getDefined } from '@decipad/utils';
+import { ParsedBlock, prettyPrintAST } from '@decipad/language';
 import { ELEMENT_TABLE } from '@udecode/plate';
 import { SlateNode } from './common';
 import { InteractiveTable } from './extractTable';
@@ -73,7 +68,7 @@ const table = {
 };
 
 it('can find tables in the document', () => {
-  const { externalData, program } = slateDocumentToComputeRequest([
+  const { program } = slateDocumentToComputeRequest([
     table as unknown as SlateNode,
   ]);
 
@@ -82,27 +77,8 @@ it('can find tables in the document', () => {
       "(block
         (assign
           (def TheTitle)
-          (externalref the-table-id)))"
+          (table
+            Col1 (column \\"Hello\\" \\"Row 2\\")
+            Col2 (column \\"World\\" \\"Row 2 Col 2\\"))))"
     `);
-
-  const { type, value } = getDefined(
-    (externalData as ExternalDataMap).get('the-table-id')
-  );
-
-  expect(type.toString()).toMatchInlineSnapshot(
-    `"table { Col1 = <string>, Col2 = <string> }"`
-  );
-  expect(type.tableLength).toEqual(2);
-  expect(value.getData()).toMatchInlineSnapshot(`
-    Array [
-      Array [
-        "Hello",
-        "Row 2",
-      ],
-      Array [
-        "World",
-        "Row 2 Col 2",
-      ],
-    ]
-  `);
 });

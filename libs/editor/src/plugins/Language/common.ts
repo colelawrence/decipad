@@ -1,6 +1,13 @@
 import { Element } from 'slate';
 import { AST } from '@decipad/language';
 
+// Need this retval ambiguity for the typings to adapt to every kind of AST.Node
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const astNode = <T extends string, A extends unknown[]>(
+  type: T,
+  ...args: A
+) => ({ type, args });
+
 export function getAssignmentBlock(
   id: string,
   name: string,
@@ -9,18 +16,7 @@ export function getAssignmentBlock(
   return {
     type: 'block',
     id,
-    args: [
-      {
-        type: 'assign',
-        args: [
-          {
-            type: 'def',
-            args: [name],
-          },
-          value,
-        ],
-      },
-    ],
+    args: [astNode('assign', astNode('def', name), value)],
   };
 }
 

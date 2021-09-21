@@ -1,4 +1,4 @@
-import { assign, block, c, col, l, prop } from '../utils';
+import { assign, block, c, col, l, prop, table } from '../utils';
 import { prettyPrintAST, prettyPrintSolutions } from './utils';
 
 it('can pretty print the AST', () => {
@@ -17,6 +17,24 @@ it('can pretty print the AST', () => {
         (+ 1 2))
       (column 1 2)
       (prop Foo.Bar))"
+  `);
+});
+
+it('can pretty print tables', () => {
+  expect(
+    prettyPrintAST(
+      block(
+        table({
+          Col1: col(1, 2, 3),
+          Col2: l(1),
+        })
+      )
+    )
+  ).toMatchInlineSnapshot(`
+    "(block
+      (table
+        Col1 (column 1 2 3)
+        Col2 1))"
   `);
 });
 

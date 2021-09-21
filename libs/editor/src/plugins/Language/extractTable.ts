@@ -1,11 +1,8 @@
 import { Node } from 'slate';
-import {
-  buildType,
-  Column,
-  Scalar,
-  InjectableExternalData,
-} from '@decipad/language';
+import { AST } from '@decipad/language';
 import { ELEMENT_TABLE } from '@udecode/plate';
+import { zip } from '@decipad/utils';
+import { astNode } from './common';
 
 export interface InteractiveTable {
   type: typeof ELEMENT_TABLE;
@@ -108,29 +105,28 @@ function extractColumnNames(rows: AnyRow[]): string[] | null {
   return null;
 }
 
-function getExternalData(dataRows: DataTR[], columnNames: string[]) {
-  const columnValues = columnNames.map((_, columnIndex) => {
-    const rowValues = dataRows.map((row) =>
-      Scalar.fromValue(Node.string(row.children[columnIndex]))
-    );
-    return Column.fromValues(rowValues);
+function getTableNode(columnNames: string[], dataRows: DataTR[]): AST.Table {
+  const columns: AST.Column[] = columnNames.map((_, columnIndex) => {
+    const colContents: AST.Expression[] = dataRows.map((row) => {
+      const cell = Node.string(row.children[columnIndex]);
+      return astNode('literal', 'string' as const, cell, null);
+    });
+
+    return astNode('column', colContents);
   });
 
-  const externalData: InjectableExternalData = {
-    type: buildType.table({
-      length: dataRows.length,
-      columnTypes: columnNames.map(() => buildType.string()),
-      columnNames,
-    }),
-    value: Column.fromNamedValues(columnValues, columnNames),
-  };
+  const cols: (AST.Column | AST.ColDef)[] = [];
+  for (const [colName, colValue] of zip(columnNames, columns)) {
+    cols.push(astNode('coldef', colName));
+    cols.push(colValue);
+  }
 
-  return externalData;
+  return astNode('table', ...cols);
 }
 
-interface ExtractedTable {
-  variableName: string;
-  externalData: InjectableExternalData;
+export interface ExtractedTable {
+  name: string;
+  node: AST.Table;
 }
 
 const weakMapMemoize = (
@@ -153,8 +149,8 @@ export const extractTable = weakMapMemoize(
 
     if (variableName && dataRows.length && columnNames) {
       return {
-        variableName,
-        externalData: getExternalData(dataRows, columnNames),
+        name: variableName,
+        node: getTableNode(columnNames, dataRows),
       };
     }
     return null;
