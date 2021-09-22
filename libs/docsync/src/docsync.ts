@@ -13,6 +13,7 @@ interface ISyncDocConstructorOptions {
 
 const defaultSyncEditorOptions = {
   startReplicaSync: true,
+  readOnly: true,
 };
 
 const maxReconnectMs = Number(process.env.DECI_MAX_RECONNECT_MS) || 10000;
@@ -37,14 +38,22 @@ export class DocSync {
     this.sync = new Sync({ start: isSynced, maxReconnectMs, fetchPrefix });
   }
 
-  edit(docId: string, options: SyncEditorOptions = defaultSyncEditorOptions) {
+  edit(
+    docId: string,
+    options: Partial<SyncEditorOptions> = defaultSyncEditorOptions
+  ) {
     let editor = this.editors.get(docId);
     if (editor === undefined) {
       const editorOptions = {
+        readOnly: options.readOnly || false,
         startReplicaSync: this.isSynced,
+        headers: options.headers,
         storage: options.storage || new LRUStorage(global.localStorage),
       };
-      editor = new SyncEditor(docId, this, editorOptions);
+      editor = new SyncEditor(docId, this, {
+        ...defaultSyncEditorOptions,
+        ...editorOptions,
+      });
       let hadSubscribers = false;
       editor.slateOpsCountObservable.subscribe((subscriptionCount) => {
         if (subscriptionCount === 0) {
@@ -63,6 +72,10 @@ export class DocSync {
 
   websocketImpl(): typeof WebSocket {
     return this.sync.websocketImpl();
+  }
+
+  setHeaders(headers: HeadersInit): void {
+    this.sync.setHeaders(headers);
   }
 
   stop() {

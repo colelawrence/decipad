@@ -15,6 +15,7 @@ interface SyncConstructorOptions {
 
 export class Sync<T> extends EventEmitter {
   private options: SyncConstructorOptions;
+  private headers: HeadersInit | undefined;
   private subscriptionManager = new SyncSubscriptionManager<T>();
   private subscriptionManagerTopicSubscription: Subscription | null = null;
   private topics = new Set<string>();
@@ -85,6 +86,10 @@ export class Sync<T> extends EventEmitter {
 
   websocketImpl(): typeof WebSocket {
     return createExternalWebsocketImpl(this);
+  }
+
+  setHeaders(headers: HeadersInit): void {
+    this.headers = headers;
   }
 
   private disconnect() {
@@ -272,7 +277,10 @@ export class Sync<T> extends EventEmitter {
 
   private async getAuthToken(): Promise<string> {
     const resp = await fetch(
-      `${this.options.fetchPrefix}/api/auth/token?for=pubsub`
+      `${this.options.fetchPrefix}/api/auth/token?for=pubsub`,
+      {
+        headers: this.headers,
+      }
     );
     if (!resp || !resp.ok) {
       const message = `Failed fetching token from remote: ${

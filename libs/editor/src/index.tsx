@@ -30,10 +30,19 @@ export { AnonymousDocSyncProvider, DocSyncProvider } from './contexts/DocSync';
 
 export interface EditorProps {
   padId: string;
+  readOnly: boolean;
+  authSecret?: string;
   autoFocus: boolean;
 }
 
-const SlateEditor = ({ padId, autoFocus }: EditorProps) => {
+// TODO how to figure out when we have read only permissions on the pad
+
+const SlateEditor = ({
+  padId,
+  authSecret,
+  autoFocus,
+  readOnly,
+}: EditorProps) => {
   const [editorId] = useState(nanoid);
   const editor = useStoreEditorRef(editorId);
 
@@ -42,7 +51,12 @@ const SlateEditor = ({ padId, autoFocus }: EditorProps) => {
 
   const { results, languagePlugin } = useLanguagePlugin();
 
-  const docSyncPlugin = useDocSyncPlugin({ padId, editor });
+  const docSyncPlugin = useDocSyncPlugin({
+    padId,
+    authSecret,
+    editor,
+    readOnly,
+  });
 
   const notebookTitlePlugin = useNotebookTitlePlugin({ padId });
 
@@ -87,7 +101,7 @@ const SlateEditor = ({ padId, autoFocus }: EditorProps) => {
               plugins={editorPlugins}
               options={options}
               components={components}
-              editableProps={{ autoFocus }}
+              editableProps={{ autoFocus, readOnly }}
             >
               <Tooltip />
               <SlashCommandsSelect {...getSlashCommandsProps()} />

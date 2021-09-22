@@ -7,6 +7,17 @@
 // START Enums and Input Objects
 //==============================================================
 
+export enum ExternalProvider {
+  googlesheets = 'googlesheets',
+  testdatasource = 'testdatasource',
+}
+
+export enum PermissionType {
+  ADMIN = 'ADMIN',
+  READ = 'READ',
+  WRITE = 'WRITE',
+}
+
 //==============================================================
 // END Enums and Input Objects
 //==============================================================

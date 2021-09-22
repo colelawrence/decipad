@@ -17,6 +17,7 @@ describe('replica', () => {
       userId: 'test user id',
       actorId: 'test actor id',
       sync: new Sync(syncOptions),
+      readOnly: false,
       initialValue: '',
       createIfAbsent: true,
       maxRetryIntervalMs: 3000,

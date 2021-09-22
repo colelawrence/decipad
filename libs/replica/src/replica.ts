@@ -23,6 +23,7 @@ export interface ICreateReplicaOptions<T> {
   name: string;
   actorId: string;
   userId: string;
+  readOnly: boolean;
   sync: Sync<T>;
   initialValue?: T | null;
   createIfAbsent?: boolean;
@@ -31,6 +32,7 @@ export interface ICreateReplicaOptions<T> {
   maxRetryIntervalMs: number;
   sendChangesDebounceMs: number;
   fetchPrefix: string;
+  headers?: HeadersInit;
   useLocalStoreEvents?: boolean;
   beforeRemoteChanges?: () => Promise<void> | void;
   storage: ReplicaStorage;
@@ -75,6 +77,7 @@ export class Replica<T> {
     name,
     actorId,
     userId,
+    readOnly,
     sync: globalSync,
     initialValue = null,
     createIfAbsent = false,
@@ -84,6 +87,7 @@ export class Replica<T> {
     maxRetryIntervalMs,
     sendChangesDebounceMs,
     fetchPrefix,
+    headers,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     beforeRemoteChanges = () => {},
     storage,
@@ -147,12 +151,14 @@ export class Replica<T> {
     this.sync = new ReplicaSync<T>({
       topic: name,
       sync: globalSync,
+      readOnly,
       localChangesObservable: this.localChanges,
       subscriptionCountObservable: this.subscriptionCountObservable,
       start: startReplicaSync,
       maxRetryIntervalMs,
       sendChangesDebounceMs,
       fetchPrefix,
+      headers,
     });
 
     this.syncStatus = this.sync.syncStatus;

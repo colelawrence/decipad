@@ -32,14 +32,12 @@ export async function isAuthorized(
   return isAuthorizedBase({ resource, user, secret, permissionType });
 }
 
-export async function isAuthenticatedAndAuthorized(
+export async function expectAuthenticatedAndAuthorized(
   resource: string,
   context: Context,
   permissionType: PermissionType
-): Promise<User> {
-  const user = requireUser(context);
+): Promise<void> {
   if (!(await isAuthorized(resource, context, permissionType))) {
     throw new ForbiddenError('Forbidden');
   }
-  return user;
 }

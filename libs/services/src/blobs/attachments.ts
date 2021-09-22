@@ -1,4 +1,5 @@
 import { CreateAttachmentFormResult } from '@decipad/backendtypes';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import S3 from 'aws-sdk/clients/s3';
 import { nanoid } from 'nanoid';
 import { s3 as s3Config, app as appConfig } from '@decipad/config';

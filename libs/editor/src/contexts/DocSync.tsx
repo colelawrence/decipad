@@ -2,10 +2,12 @@ import { DocSync } from '@decipad/docsync';
 import { nanoid } from 'nanoid';
 import { useSession } from 'next-auth/client';
 import React, { FC, useContext, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
-export type DocSyncContextProps =
-  | { docsync: null; status: 'loading' | 'login' }
-  | { docsync: DocSync; status: 'success' };
+export type DocSyncContextProps = {
+  docsync: DocSync | null;
+  status: 'loading' | 'login' | 'success';
+};
 
 export const DocSyncContext = React.createContext<DocSyncContextProps>({
   docsync: null,
@@ -26,18 +28,33 @@ export const DocSyncProvider = ({
   });
 
   const userId = (session?.user as { id: string })?.id;
+  const { search } = useLocation();
+  const secret = new URLSearchParams(search).get('secret');
 
   useEffect(() => {
     if (sessionLoading) {
       return undefined;
     }
-    if (userId) {
+    if (userId || secret) {
       const docsync = new DocSync({ userId, actorId: nanoid() });
-      setValue({ docsync, status: 'success' });
+      if (secret) {
+        docsync.setHeaders({
+          Authorization: `Bearer ${secret}`,
+        });
+      }
+      setValue({ docsync, status: userId ? 'success' : 'login' });
       return () => docsync.stop();
     }
     return setValue({ docsync: null, status: 'login' });
-  }, [userId, session, sessionLoading]);
+  }, [userId, session, sessionLoading, secret]);
+
+  useEffect(() => {
+    if (value.docsync) {
+      value.docsync.setHeaders({
+        Authorization: `Bearer ${secret}`,
+      });
+    }
+  }, [secret, value.docsync]);
 
   return (
     <DocSyncContext.Provider value={value}>{children}</DocSyncContext.Provider>

@@ -356,13 +356,14 @@ interface SubscriptionRecord extends TableRecordBase {
 }
 
 interface CollabRecord extends TableRecordBase {
-  user_id: ID;
+  user_id?: ID;
   room: string;
   conn: string;
 }
 
 interface ConnectionRecord extends TableRecordBase {
-  user_id: ID;
+  user_id?: ID;
+  secret?: string;
   gqlstate?: string;
 }
 
@@ -455,6 +456,7 @@ export interface DynamoDbQuery {
   IndexName: string;
   KeyConditionExpression: string;
   ExpressionAttributeValues: Record<string, string>;
+  ExpressionAttributeNames?: Record<string, string>;
   ExclusiveStartKey?: string;
   FilterExpression?: string;
   Limit?: number;

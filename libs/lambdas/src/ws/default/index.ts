@@ -48,7 +48,8 @@ async function handleGraphql(
     return { statusCode: 403 };
   }
 
-  const user = await data.users.get({ id: connection.user_id });
+  const user =
+    connection.user_id && (await data.users.get({ id: connection.user_id }));
   if (!user) {
     return { statusCode: 403 };
   }
@@ -181,7 +182,8 @@ async function handleCollab(
   if (
     !(await isAuthorized({
       resource: topic,
-      user: { id: connection.user_id },
+      secret: connection.secret,
+      user: connection.user_id ? { id: connection.user_id } : undefined,
       permissionType: 'READ',
     }))
   ) {

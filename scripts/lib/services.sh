@@ -11,6 +11,7 @@ services_teardown () {
     # it's an (air quotes) array. Bash will split in spaces into multiple args.
     echo "Killing these PIDEs:" $SERVICE_PIDS
     kill -s SIGINT -- $SERVICE_PIDS
+    true
   fi
 }
 

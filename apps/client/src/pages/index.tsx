@@ -1,7 +1,7 @@
 import { ApolloProvider } from '@apollo/client';
 import { ChakraProvider } from '@chakra-ui/react';
 import { DocSyncProvider } from '@decipad/editor';
-import { GlobalStyles, LoadingSpinnerPage, theme } from '@decipad/ui';
+import { GlobalStyles, theme } from '@decipad/ui';
 import {
   init,
   reactRouterV5Instrumentation,
@@ -44,11 +44,7 @@ export default withProfiler(Index);
 
 function Index({ pageProps = {} }) {
   const apolloClient = useApollo(pageProps);
-  const [session, loading] = useSession();
-
-  if (loading) {
-    return <LoadingSpinnerPage />;
-  }
+  const [session] = useSession();
 
   if (usingSentry && session?.user) {
     setUser({
@@ -67,11 +63,11 @@ function Index({ pageProps = {} }) {
             <ApolloProvider client={apolloClient}>
               <GlobalStyles>
                 <ChakraProvider theme={theme}>
-                  <DocSyncProvider>
-                    <BrowserRouter>
-                      <Router session={session} />
-                    </BrowserRouter>
-                  </DocSyncProvider>
+                  <BrowserRouter>
+                    <DocSyncProvider>
+                      <Router />
+                    </DocSyncProvider>
+                  </BrowserRouter>
                 </ChakraProvider>
               </GlobalStyles>
             </ApolloProvider>

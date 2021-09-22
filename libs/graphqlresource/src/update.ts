@@ -6,7 +6,7 @@ import {
   GraphqlObjectType,
 } from '@decipad/backendtypes';
 import { notifyAllWithAccessTo } from '@decipad/services/pubsub';
-import { isAuthenticatedAndAuthorized } from './authorization';
+import { expectAuthenticatedAndAuthorized } from './authorization';
 import { Resource } from './';
 
 export type UpdateArgs<T> = T & {
@@ -36,7 +36,7 @@ export function update<
     context: GraphqlContext
   ) {
     const resource = `/${resourceType.resourceTypeName}/${input.id}`;
-    await isAuthenticatedAndAuthorized(resource, context, 'WRITE');
+    await expectAuthenticatedAndAuthorized(resource, context, 'WRITE');
     const data = await resourceType.dataTable();
     const oldRecord = await data.get({ id: input.id });
     if (!oldRecord) {

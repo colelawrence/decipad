@@ -1,4 +1,5 @@
 import { promisify } from 'util';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { tables } from '@architect/functions';
 import {

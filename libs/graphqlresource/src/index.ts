@@ -4,6 +4,7 @@ import {
   ConcreteRecord,
   GraphqlObjectType,
   GraphqlContext,
+  PermissionType,
 } from '@decipad/backendtypes';
 import { getById } from './get-by-id';
 import { create } from './create';
@@ -22,6 +23,7 @@ import { UnshareWithRoleArgs } from './unshare-with-role';
 import { ShareWithEmailArgs } from './share-with-email';
 import { Access } from './access';
 import { shareWithSecret, ShareWithSecretArgs } from './share-with-secret';
+import { myPermissionType } from './my-permission-type';
 
 export interface Resource<
   DataTableType extends ConcreteRecord,
@@ -103,6 +105,11 @@ export interface ResourceResolvers<DataT, GraphqlT, CreateT, UpdateT> {
     _: unknown,
     context: GraphqlContext
   ) => Promise<Access>;
+  myPermissionType: (
+    parent: DataT,
+    _: unknown,
+    context: GraphqlContext
+  ) => Promise<PermissionType | undefined>;
 }
 
 export default function <
@@ -126,5 +133,6 @@ export default function <
     shareWithEmail: shareWithEmail(resourceType)(shareWithUserFn),
     shareWithSecret: shareWithSecret(resourceType),
     access: access(resourceType),
+    myPermissionType: myPermissionType(resourceType),
   };
 }
