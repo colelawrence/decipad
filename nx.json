@@ -7,7 +7,6 @@
     },
     "tsconfig.json": "*",
     "tslint.json": "*",
-    "libs/eslint-config-decipad": "*",
     "nx.json": "*"
   },
   "affected": {
