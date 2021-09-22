@@ -31,7 +31,7 @@ export const HelpButton = (): ReturnType<React.FC> => {
   return (
     <Anchor
       aria-label="Help"
-      href="https://www.notion.so/decipad/WIP-Deci-101-3f3b513b9a82499080eef6eef87d8179"
+      href="https://www.notion.so/decipad/What-is-Deci-d140cc627f1e4380bb8be1855272f732"
       css={styles}
     >
       <span css={innerStyles}>

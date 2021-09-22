@@ -34,7 +34,7 @@ export const WorkspaceNavigation = ({
       </NavigationList>
       <Divider />
       <NavigationList>
-        <NavigationItem href="https://discord.gg/UaJhZdqc" icon={<Globe />}>
+        <NavigationItem href="https://discord.gg/fS43xmQDfY" icon={<Globe />}>
           <span css={itemTextStyles}>Explore community</span>
         </NavigationItem>
         <NavigationItem href={preferencesHref} icon={<Settings />}>
