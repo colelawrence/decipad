@@ -79,8 +79,8 @@ jobs:
           arc env staging DECI_S3_ATTACHMENTS_BUCKET '${{secrets.DECI_S3_ATTACHMENTS_BUCKET}}'
           arc env staging NODE_OPTIONS --enable-source-maps
           cd ../..
-          yarn deploy
           scripts/push-sam.sh
+          yarn deploy
 
   notify:
     name: Discord Notification

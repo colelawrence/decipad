@@ -170,7 +170,7 @@ export const ImportDataElement: PlatePluginComponent = (props) => {
           )}
         </div>
       )}
-      {(!externalDataSourceId || !!error || !!firstResultError) && (
+      {(!externalDataSourceId || error || firstResultError) && (
         <div>
           <Button
             disabled={!needsCreateOrUpdateExternalData}
