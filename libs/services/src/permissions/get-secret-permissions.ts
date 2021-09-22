@@ -17,9 +17,10 @@ export async function getSecretPermissions({
   const data = await tables();
 
   const q: DynamoDbQuery = {
-    IndexName: 'byResourceAndType',
-    KeyConditionExpression: 'resource_uri = :resource_uri AND #type = :type',
-    FilterExpression: 'attribute_exists(secret) AND secret <> :null',
+    IndexName: 'byResource',
+    KeyConditionExpression: 'resource_uri = :resource_uri',
+    FilterExpression:
+      '#type = :type AND attribute_exists(secret) AND secret <> :null',
     ExpressionAttributeValues: {
       ':resource_uri': resourceUri,
       ':type': permissionType,
