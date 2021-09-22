@@ -1,4 +1,3 @@
-import { Session } from 'next-auth';
 import { FC } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { RequireSession } from '../components/RequireSession';
@@ -8,17 +7,13 @@ import { Pad } from './Pad';
 import { Playground } from './Playground';
 import { Workspace } from './Workspace';
 
-export function Router({
-  session,
-}: {
-  session: Session | null;
-}): ReturnType<FC> {
+export function Router(): ReturnType<FC> {
   return (
     <Switch>
       <Route
         path="/workspaces/:workspaceid/pads/:padid"
         render={({ match }) => (
-          <RequireSession session={session}>
+          <RequireSession allowSecret>
             <Pad
               workspaceId={match.params.workspaceid}
               padId={decodeVanityUrlComponent(match.params.padid)}
@@ -29,7 +24,7 @@ export function Router({
       <Route
         path="/workspaces/:workspaceid"
         render={({ match }) => (
-          <RequireSession session={session}>
+          <RequireSession>
             <Workspace workspaceId={match.params.workspaceid} />
           </RequireSession>
         )}
@@ -38,7 +33,7 @@ export function Router({
         <Playground />
       </Route>
       <Route path="/">
-        <RequireSession session={session}>
+        <RequireSession>
           <Home />
         </RequireSession>
       </Route>

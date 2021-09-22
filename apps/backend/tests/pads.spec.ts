@@ -446,6 +446,7 @@ test('pads', (ctx) => {
               items {
                 id
                 name
+                myPermissionType
                 access {
                   roles {
                     role {
@@ -477,6 +478,7 @@ test('pads', (ctx) => {
       items: [
         {
           name: 'Pad 1 renamed',
+          myPermissionType: 'READ',
           access: {
             roles: [],
             users: [
@@ -571,6 +573,7 @@ test('pads', (ctx) => {
               items {
                 id
                 name
+                myPermissionType
                 access {
                   roles {
                     role {
@@ -602,6 +605,7 @@ test('pads', (ctx) => {
       items: [
         {
           name: 'Pad 1 renamed',
+          myPermissionType: 'READ',
           access: {
             roles: [],
             users: [
@@ -697,6 +701,7 @@ test('pads', (ctx) => {
               items {
                 id
                 name
+                myPermissionType
                 access {
                   roles {
                     role {
@@ -728,6 +733,7 @@ test('pads', (ctx) => {
       items: [
         {
           name: 'Pad 1 renamed',
+          myPermissionType: 'READ',
           access: {
             roles: [],
             users: [

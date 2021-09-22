@@ -5,7 +5,7 @@ import {
   ConcreteRecord,
   GraphqlObjectType,
 } from '@decipad/backendtypes';
-import { isAuthenticatedAndAuthorized } from './authorization';
+import { expectAuthenticatedAndAuthorized } from './authorization';
 import { Resource } from './';
 
 export type GetByIdFunction<GraphqlT extends GraphqlObjectType> = (
@@ -23,7 +23,11 @@ export function getById<
   resource: Resource<RecordT, GraphqlT, CreateT, UpdateT>
 ): GetByIdFunction<GraphqlT> {
   return async function (_: any, { id }: { id: ID }, context: GraphqlContext) {
-    await isAuthenticatedAndAuthorized(`/${resource.resourceTypeName}/${id}`, context, 'READ');
+    await expectAuthenticatedAndAuthorized(
+      `/${resource.resourceTypeName}/${id}`,
+      context,
+      'READ'
+    );
     const data = await resource.dataTable();
     const record = await data.get({ id });
     if (record == undefined) {

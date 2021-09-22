@@ -1,4 +1,4 @@
-const { setupFiles = [], ...baseConfig } = require('../../jest-base.config.js');
+const { setupFiles = [], ...baseConfig } = require('../../jest-base.config');
 
 module.exports = {
   ...baseConfig,
@@ -14,7 +14,7 @@ module.exports = {
   coverageThreshold: {
     global: {
       statements: 63,
-      branches: 47,
+      branches: 46,
       lines: 63,
       functions: 66,
     },

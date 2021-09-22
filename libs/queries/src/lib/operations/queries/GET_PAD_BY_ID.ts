@@ -5,6 +5,7 @@ export const GET_PAD_BY_ID = gql`
     getPadById(id: $id) {
       id
       name
+      myPermissionType
     }
   }
 `;

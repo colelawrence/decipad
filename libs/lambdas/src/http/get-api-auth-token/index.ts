@@ -34,7 +34,7 @@ export const handler = handle(async (event: APIGatewayProxyEvent): Promise<
 > => {
   const { user, secret } = await authenticate(event);
 
-  if (user && event.queryStringParameters?.for) {
+  if ((user || secret) && event.queryStringParameters?.for) {
     const purposeName = event.queryStringParameters.for;
     const purpose = purposes[purposeName];
     if (!purpose) {
@@ -43,7 +43,12 @@ export const handler = handle(async (event: APIGatewayProxyEvent): Promise<
         body: 'No such purpose',
       };
     }
-    return generateToken(secret!, purpose);
+    if (user && secret) {
+      return generateToken(secret!, purpose);
+    }
+    if (secret) {
+      return secret;
+    }
   }
   return {
     statusCode: 403,

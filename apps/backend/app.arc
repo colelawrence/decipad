@@ -208,6 +208,11 @@ permissions
 
 permissions
   resource_uri *String
+  type **String
+  name byResourceAndType
+
+permissions
+  resource_uri *String
   user_id **String
   name byResourceAndUser
 
@@ -215,6 +220,10 @@ permissions
   resource_uri *String
   secret **String
   name byResourceAndSecret
+
+permissions
+  secret *String
+  name bySecret
 
 permissions
   user_id *String

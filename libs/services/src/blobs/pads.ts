@@ -1,4 +1,5 @@
 import { nanoid } from 'nanoid';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import S3 from 'aws-sdk/clients/s3';
 import { ID } from '@decipad/backendtypes';
 import { s3 as s3Config } from '@decipad/config';

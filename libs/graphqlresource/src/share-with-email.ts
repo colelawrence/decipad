@@ -9,7 +9,7 @@ import {
 import { create as createInvite } from '@decipad/services/invites';
 import { create as createUser } from '@decipad/services/users';
 import tables from '@decipad/services/tables';
-import { isAuthenticatedAndAuthorized } from './authorization';
+import { expectAuthenticatedAndAuthorized, requireUser } from './authorization';
 import { Resource } from './';
 import { ShareWithUserFunction } from './share-with-user';
 
@@ -37,7 +37,8 @@ export function shareWithEmail<
   return (shareWithUser: ShareWithUserFunction) =>
     async function (_: any, args: ShareWithEmailArgs, context: GraphqlContext) {
       const resource = `/${resourceType.resourceTypeName}/${args.id}`;
-      const actingUser = await isAuthenticatedAndAuthorized(resource, context, 'ADMIN');
+      await expectAuthenticatedAndAuthorized(resource, context, 'ADMIN');
+      const actingUser = requireUser(context);
 
       const data = await resourceType.dataTable();
       const record = await data.get({ id: args.id });

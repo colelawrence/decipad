@@ -69,7 +69,7 @@ export function Playground(): ReturnType<FC> {
           </DocumentationButton>
         </TopBar>
         <EditorWrapper>
-          <Editor padId={randomId} autoFocus />
+          <Editor padId={randomId} readOnly={false} autoFocus />
         </EditorWrapper>
       </Wrapper>
     </AnonymousDocSyncProvider>

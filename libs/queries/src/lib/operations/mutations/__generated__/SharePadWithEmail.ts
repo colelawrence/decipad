@@ -6,20 +6,16 @@
 import { PermissionType } from './../../../../../__generated__/globalTypes';
 
 // ====================================================
-// GraphQL query operation: GetPadById
+// GraphQL mutation operation: SharePadWithEmail
 // ====================================================
 
-export interface GetPadById_getPadById {
-  __typename: 'Pad';
-  id: string;
-  name: string;
-  myPermissionType: PermissionType | null;
+export interface SharePadWithEmail {
+  sharePadWithEmail: boolean | null;
 }
 
-export interface GetPadById {
-  getPadById: GetPadById_getPadById | null;
-}
-
-export interface GetPadByIdVariables {
+export interface SharePadWithEmailVariables {
   id: string;
+  email: string;
+  permissionType: PermissionType;
+  canComment: boolean;
 }

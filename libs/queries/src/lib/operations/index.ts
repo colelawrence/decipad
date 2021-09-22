@@ -7,6 +7,8 @@ export * from './mutations/RENAME_WORKSPACE';
 export * from './mutations/DELETE_WORKSPACE';
 export * from './mutations/ATTACH_FILE_TO_PAD';
 export * from './mutations/CREATE_EXTERNAL_DATA_SOURCE';
+export * from './mutations/SHARE_PAD_WITH_EMAIL';
+export * from './mutations/SHARE_PAD_WITH_SECRET';
 export * from './mutations/__generated__/CreatePad';
 export * from './mutations/__generated__/RenamePad';
 export * from './mutations/__generated__/RemovePad';

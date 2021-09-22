@@ -39,7 +39,7 @@ type ButtonProps = {
 
   readonly submit?: boolean;
 
-  readonly disabled?: boolean;
+  readonly disabled?: boolean; // TODO styles
 
   readonly children: TextChildren;
   readonly onClick?: () => void;

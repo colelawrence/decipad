@@ -18,11 +18,15 @@ function ghostApply(editor: Editor, applier: () => void) {
 
 interface IUseDocSyncPlugin {
   padId: string;
+  authSecret?: string;
   editor?: Editor | null;
+  readOnly: boolean;
 }
 
 export const useDocSyncPlugin = ({
   padId,
+  authSecret,
+  readOnly,
   editor,
 }: IUseDocSyncPlugin): PlatePlugin => {
   const { docsync } = useContext(DocSyncContext);
@@ -30,14 +34,20 @@ export const useDocSyncPlugin = ({
 
   // Create a padEditor
   useEffect(() => {
-    const newSyncEditor = docsync?.edit(padId) ?? null;
+    const newSyncEditor =
+      docsync?.edit(padId, {
+        readOnly,
+        headers: authSecret
+          ? { authorization: `Bearer ${authSecret}` }
+          : undefined,
+      }) ?? null;
     setSyncEditor(newSyncEditor);
 
     return () => {
       setSyncEditor(null);
       newSyncEditor?.stop();
     };
-  }, [docsync, padId]);
+  }, [authSecret, docsync, padId, readOnly]);
 
   // Plug the padEditor and the editor
   useEffect(() => {

@@ -21,6 +21,7 @@ export default gql`
     id: ID!
     name: String!
     access: PadAccess!
+    myPermissionType: PermissionType
     workspace: Workspace!
     createdAt: DateTime
   }

@@ -1,4 +1,5 @@
 /* eslint-disable no-underscore-dangle */
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import arc from '@architect/functions';
 import {

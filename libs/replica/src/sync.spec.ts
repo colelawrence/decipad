@@ -100,6 +100,7 @@ describe('sync', () => {
           userId: nanoid(),
           actorId: nanoid(),
           sync,
+          readOnly: false,
           fetchPrefix,
           maxRetryIntervalMs,
           sendChangesDebounceMs,

@@ -7,8 +7,11 @@ import {
   GraphqlObjectType,
   PermissionType,
 } from '@decipad/backendtypes';
-import { create as createResourcePermission } from '@decipad/services/permissions';
-import { isAuthenticatedAndAuthorized } from './authorization';
+import {
+  create as createResourcePermission,
+  getSecretPermissions,
+} from '@decipad/services/permissions';
+import { expectAuthenticatedAndAuthorized, requireUser } from './authorization';
 import { Resource } from './';
 
 export type ShareWithSecretArgs = {
@@ -38,16 +41,22 @@ export function shareWithSecret<
   ) {
     const resource = `/${resourceType.resourceTypeName}/${args.id}`;
 
-    const actorUser = await isAuthenticatedAndAuthorized(
-      resource,
-      context,
-      'ADMIN'
-    );
+    await expectAuthenticatedAndAuthorized(resource, context, 'ADMIN');
+    const actorUser = requireUser(context);
 
     const data = await resourceType.dataTable();
     const record = await data.get({ id: args.id });
     if (!record) {
       throw new UserInputError(`no such ${resourceType.humanName}`);
+    }
+
+    const existingPermissions = await getSecretPermissions({
+      resourceUri: resource,
+      permissionType: args.permissionType,
+    });
+
+    if (existingPermissions.length > 0) {
+      return existingPermissions[0].secret!;
     }
 
     const permission: Parameters<typeof createResourcePermission>[0] = {

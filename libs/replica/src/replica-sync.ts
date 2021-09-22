@@ -13,9 +13,11 @@ export class ReplicaSync<T> {
   private maxRetryIntervalMs: number;
   private sendChangesDebounceMs: number;
   private fetchPrefix: string;
+  private headers?: HeadersInit;
 
   private topic: string;
   private sync: Sync<T>;
+  private readOnly: boolean;
   private localChangesObservable: Observable<Mutation<Doc<{ value: T }>>>;
   private subscriptionCountObservable: Observable<number>;
 
@@ -40,27 +42,33 @@ export class ReplicaSync<T> {
     maxRetryIntervalMs,
     sendChangesDebounceMs,
     fetchPrefix,
+    headers,
     topic,
     sync,
     localChangesObservable,
     subscriptionCountObservable,
     start,
+    readOnly,
   }: {
     maxRetryIntervalMs: number;
     sendChangesDebounceMs: number;
     fetchPrefix: string;
+    headers?: HeadersInit;
     topic: string;
     sync: Sync<T>;
     localChangesObservable: Observable<Mutation<Doc<{ value: T }>>>;
     subscriptionCountObservable: Observable<number>;
     start: boolean;
+    readOnly: boolean;
   }) {
     this.maxRetryIntervalMs = maxRetryIntervalMs;
     this.sendChangesDebounceMs = sendChangesDebounceMs;
     this.fetchPrefix = fetchPrefix;
+    this.headers = headers;
     this.topic = topic;
 
     this.sync = sync;
+    this.readOnly = readOnly;
     this.localChangesObservable = localChangesObservable;
     this.subscriptionCountObservable = subscriptionCountObservable;
 
@@ -249,14 +257,17 @@ export class ReplicaSync<T> {
       } catch (err) {
         error = err as Error;
       }
-    } while (!error && this.lastSentChangeCount > 0);
-
+    } while (!error && !this.readOnly && this.lastSentChangeCount > 0);
+    /* eslint-enable no-await-in-loop */
     if (error) {
       throw error;
     }
   }
 
   private async attemptSendChanges() {
+    if (this.readOnly) {
+      return;
+    }
     if (this.latest === null) {
       throw new Error('nothing to send');
     }
@@ -271,6 +282,10 @@ export class ReplicaSync<T> {
     latest: Doc<{ value: T }>,
     lastRemoteDoc: Doc<{ value: T }>
   ) {
+    if (this.readOnly) {
+      return;
+    }
+
     let newRemoteDoc;
     try {
       newRemoteDoc = Automerge.merge(latest, lastRemoteDoc);
@@ -285,6 +300,7 @@ export class ReplicaSync<T> {
         method: 'PUT',
         body: JSON.stringify(changes),
         headers: {
+          ...this.headers,
           'Content-Type': 'application/json; charset=utf-8',
         },
       });
@@ -300,10 +316,14 @@ export class ReplicaSync<T> {
   }
 
   private async attemptSendEverything(latest: Doc<{ value: T }>) {
+    if (this.readOnly) {
+      return;
+    }
     const response = await fetch(this.remoteUrl(), {
       method: 'PUT',
       body: Automerge.save(latest),
       headers: {
+        ...this.headers,
         'Content-Type': 'text/plain',
       },
     });
@@ -320,7 +340,7 @@ export class ReplicaSync<T> {
     if (this.stopped) {
       throw new Error('stopped');
     }
-    const resp = await fetch(this.remoteUrl());
+    const resp = await fetch(this.remoteUrl(), { headers: this.headers });
     if (!resp.ok) {
       throw new Error(
         `response was not ok: ${resp.status}: ${await resp.text()}`
@@ -342,7 +362,7 @@ export class ReplicaSync<T> {
           changes
         );
         this.syncStatus.next(SyncStatus.RemoteChanged);
-      } else {
+      } else if (!this.readOnly) {
         this.needsReconcile = true;
       }
       this.tryReconcile();

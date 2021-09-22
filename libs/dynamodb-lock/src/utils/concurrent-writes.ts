@@ -1,6 +1,8 @@
 import { promisify } from 'util';
 import { nanoid } from 'nanoid';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { Endpoint } from 'aws-sdk';
 import { tables } from '@architect/functions';
 import { DocSyncRecord } from '@decipad/backendtypes';

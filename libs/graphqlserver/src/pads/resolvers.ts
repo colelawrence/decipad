@@ -180,6 +180,7 @@ const resolvers = {
 
   Pad: {
     access: padResource.access,
+    myPermissionType: padResource.myPermissionType,
 
     async workspace(pad: PadRecord): Promise<WorkspaceRecord | undefined> {
       const data = await tables();

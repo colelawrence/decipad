@@ -22,7 +22,9 @@ import { config } from './config';
 import { ExtendedSlateOperation, SyncDocValue, SyncValue } from './types';
 
 export interface SyncEditorOptions {
+  readOnly: boolean;
   startReplicaSync?: boolean;
+  headers?: HeadersInit;
   storage?: ReplicaStorage;
 }
 
@@ -52,11 +54,13 @@ export class SyncEditor {
       actorId: docsync.actorId,
       userId: docsync.userId,
       sync: docsync.sync,
+      readOnly: options.readOnly,
       initialValue: initialEditorValue.live(),
       initialStaticValue: initialEditorValue.static,
       createIfAbsent: true,
       beforeRemoteChanges: this.beforeRemoteChanges.bind(this),
       startReplicaSync: options.startReplicaSync,
+      headers: options.headers,
       storage: options.storage || new LRUStorage(global.localStorage),
       fetchPrefix: conf.fetchPrefix,
       maxRetryIntervalMs: conf.maxRetryIntervalMs,

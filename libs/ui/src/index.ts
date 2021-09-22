@@ -12,5 +12,5 @@ export * from './pages';
 // TODO temporary while some visual components are not in `ui`
 export * as Icons from './icons';
 
-// TODO temporary while template unfinished
-export { EmptyWorkspaceCta } from './organisms';
+// TODO temporary while templates unfinished
+export { EmptyWorkspaceCta, NotebookShareMenu } from './organisms';

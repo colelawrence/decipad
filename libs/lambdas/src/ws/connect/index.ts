@@ -7,8 +7,10 @@ import { wrapHandler } from '@decipad/services/monitor';
 export const handler = wrapHandler(async function ws(
   event: WSRequest
 ): Promise<HttpResponse> {
-  const { user, token, gotFromSecProtocolHeader } = await authenticate(event);
-  if (!user) {
+  const { user, secret, token, gotFromSecProtocolHeader } = await authenticate(
+    event
+  );
+  if (!user && !secret) {
     return {
       statusCode: 403,
     };
@@ -17,7 +19,8 @@ export const handler = wrapHandler(async function ws(
   const data = await tables();
   await data.connections.put({
     id: event.requestContext.connectionId,
-    user_id: user.id,
+    user_id: user?.id,
+    secret,
   });
 
   const wsProtocol = gotFromSecProtocolHeader

@@ -1,17 +1,32 @@
 import { Landing } from '@decipad/ui';
-import { Session } from 'next-auth';
-import { FC } from 'react';
+import { useSession } from 'next-auth/client';
+import { FC, ReactNode } from 'react';
+import { useLocation } from 'react-router-dom';
+import { SECRET_URL_PARAM } from '../../lib/secret';
+
+interface RequireSessionProps {
+  readonly allowSecret?: boolean;
+
+  readonly children: ReactNode;
+}
 
 export function RequireSession({
-  session,
+  allowSecret = false,
   children,
-}: {
-  session: Session | null;
-  children: JSX.Element;
-}): ReturnType<FC> {
-  if (!session) {
-    // TODO: we need a login screen. For now, Landing will do.
-    return <Landing />;
+}: RequireSessionProps): ReturnType<FC> {
+  const [session, sessionLoading] = useSession();
+
+  const { search } = useLocation();
+  const secret = new URLSearchParams(search).get(SECRET_URL_PARAM);
+
+  if (session || (allowSecret && secret)) {
+    return <>{children}</>;
   }
-  return children;
+
+  if (sessionLoading) {
+    return <>Loading...</>;
+  }
+
+  // TODO: we need a login screen. For now, Landing will do.
+  return <Landing />;
 }
