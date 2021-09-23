@@ -61,8 +61,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-2
 
-      #- name: Run tests
-      #  run: yarn test:coverage
+      - name: Run tests
+        run: yarn test:coverage
 
   notify:
     name: Discord Notification
