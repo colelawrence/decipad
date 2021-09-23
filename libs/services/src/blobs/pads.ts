@@ -38,9 +38,15 @@ export async function putTemp(id: ID, content: string): Promise<string> {
     Key,
     Body,
   };
-  await client.putObject(options).promise();
 
-  return Key;
+  try {
+    await client.putObject(options).promise();
+    return Key;
+  } catch (err) {
+    console.error('error putting temporary object in s3:', err);
+    console.log('putObject options were:', options);
+    throw err;
+  }
 }
 
 export async function commit(
