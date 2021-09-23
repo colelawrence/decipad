@@ -59,7 +59,7 @@ export function withLock<RecordType extends VersionedTableRecord>(
     };
     try {
       const conditionExpression =
-        '_version = :version OR attribute_not_exists(id)';
+        '#version = :version OR attribute_not_exists(id)';
       const expressionAttributeValues = {
         ':version': previousVersion,
       };
@@ -68,6 +68,9 @@ export function withLock<RecordType extends VersionedTableRecord>(
         Item: newRecord,
         ConditionExpression: conditionExpression,
         ExpressionAttributeValues: expressionAttributeValues,
+        ExpressionAttributeNames: {
+          '#version': '_version',
+        },
       });
     } catch (_err) {
       const err = _err as ErrorWithCode;
