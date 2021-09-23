@@ -61,10 +61,6 @@ async function mergeAndSave(
   let needsCreate = false;
   let changes: Automerge.Change[] = [];
 
-  if (previousVersion > 0 && !doc) {
-    throw new TypeError('Expected previous document version to exist');
-  }
-
   if (!doc) {
     needsCreate = true;
     doc = encodedDoc;
