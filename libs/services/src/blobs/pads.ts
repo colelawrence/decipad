@@ -125,12 +125,17 @@ export async function get(id: ID, version: number): Promise<string | null> {
 
 export async function remove(id: ID, version: number): Promise<void> {
   const [client, Bucket] = clientAndBucket();
-  await client
-    .deleteObject({
-      Bucket,
-      Key: encodeId(id, version),
-    })
-    .promise();
+  const options = {
+    Bucket,
+    Key: encodeId(id, version),
+  };
+  try {
+    await client.deleteObject(options).promise();
+  } catch (err) {
+    console.error('error removing file form s3:', err);
+    console.log('deleteObject options were', options);
+    throw err;
+  }
 }
 
 function encodeId(id: string, version: number | string): string {
