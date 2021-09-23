@@ -102,6 +102,7 @@ export async function get(id: ID, version: number): Promise<string | null> {
   } catch (_err) {
     const err = _err as ErrorWithStatsCode;
     console.error('S3 error:', _err);
+    console.error('S3 getObject options were', options);
     const notFound =
       err.statusCode === 404 ||
       err.statusCode === 403 ||
