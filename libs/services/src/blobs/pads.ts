@@ -94,11 +94,7 @@ export async function get(id: ID, version: number): Promise<string | null> {
   };
   try {
     const data = await client.getObject(options).promise();
-    const retValue = data?.Body ? data.Body.toString('utf-8') : null;
-    if (!retValue && version > 1) {
-      return get(id, version - 1); // retry
-    }
-    return retValue;
+    return data?.Body ? data.Body.toString('utf-8') : null;
   } catch (_err) {
     const err = _err as ErrorWithStatsCode;
     console.error('S3 error:', _err);
@@ -109,9 +105,6 @@ export async function get(id: ID, version: number): Promise<string | null> {
       err.code === 'NoSuchKey';
     console.log('error interpreted as not found: %j', notFound);
     if (notFound) {
-      if (version > 1) {
-        return get(id, version - 1); // retry
-      }
       return null;
     }
     throw err;
