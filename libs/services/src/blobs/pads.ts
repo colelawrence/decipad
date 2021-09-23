@@ -56,22 +56,28 @@ export async function commit(
 ): Promise<void> {
   const [client, Bucket] = clientAndBucket();
 
-  const options = {
+  const copOptions = {
     Bucket,
     Key: encodeId(targetId, version),
     CopySource: `/${Bucket}/${tempSourcePath}`,
   };
-  await client.copyObject(options).promise();
   try {
-    await client
-      .deleteObject({
-        Bucket,
-        Key: tempSourcePath,
-      })
-      .promise();
+    await client.copyObject(copOptions).promise();
   } catch (err) {
-    console.error('Error commiting file into S3', err);
-    console.error('Options were:', options);
+    console.error('Error commiting copying file in S3', err);
+    console.error('copyObject options were:', copOptions);
+    throw err;
+  }
+
+  const deleteOptions = {
+    Bucket,
+    Key: tempSourcePath,
+  };
+  try {
+    await client.deleteObject(deleteOptions).promise();
+  } catch (err) {
+    console.error('Error deleting file from S3', err);
+    console.error('deleteObject ptions were:', deleteOptions);
     throw err;
   }
 }
