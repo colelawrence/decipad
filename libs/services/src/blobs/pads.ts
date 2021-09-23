@@ -16,7 +16,9 @@ export async function duplicate(
   newId: ID
 ): Promise<void> {
   const [client, Bucket] = clientAndBucket();
-  const CopySource = `/${Bucket}/${encodeId(oldId, oldVersion)}`;
+  const CopySource = `/${Bucket}/${encodeURIComponent(
+    encodeId(oldId, oldVersion)
+  )}`;
   const newVersion = 1;
   const options = {
     Bucket,
@@ -59,7 +61,7 @@ export async function commit(
   const copOptions = {
     Bucket,
     Key: encodeId(targetId, version),
-    CopySource: `/${Bucket}/${tempSourcePath}`,
+    CopySource: `/${Bucket}/${encodeURIComponent(tempSourcePath)}`,
   };
   try {
     await client.copyObject(copOptions).promise();
