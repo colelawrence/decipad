@@ -34,7 +34,12 @@ export default (handler: Handler) => {
           headers,
         };
       } catch (_err) {
+        console.error(_err);
         const err = boomify(_err as Error).output;
+        console.log(_err);
+        if (err.statusCode === 500) {
+          throw err; // throw error for wrapper to log and handle
+        }
         return {
           statusCode: err.statusCode,
           headers: getErrorHeaders(err.headers),
