@@ -3,99 +3,40 @@ import { AST } from '@decipad/language';
 import { ELEMENT_TABLE } from '@udecode/plate';
 import { zip } from '@decipad/utils';
 import { astNode } from './common';
-
-export interface InteractiveTable {
-  type: typeof ELEMENT_TABLE;
-  id: string;
-  children: AnyRow[];
-}
-
-// Table header
-interface TitleTR {
-  type: 'tr';
-  id?: string;
-  attributes?: { isHeader: true };
-  children: InteractiveTableHeadingTH[];
-}
-interface InteractiveTableHeadingTH {
-  type: 'th';
-  id?: string;
-  attributes?: { title?: boolean };
-  children: [{ text: string }];
-}
-
-// Column names
-interface ColumnNamesTR {
-  type: 'tr';
-  id?: string;
-  attributes?: { isColumnNames: true };
-  children: InteractiveTableColumnNamesTH[];
-}
-interface InteractiveTableColumnNamesTH {
-  type: 'th';
-  id?: string;
-  attributes?: { title?: boolean };
-  children: [{ text: string }];
-}
-
-// Table data
-interface DataTR {
-  type: 'tr';
-  id?: string;
-  children: InteractiveTableTD[];
-}
-interface InteractiveTableTD {
-  type: 'td';
-  id?: string;
-  children: [{ text: string }];
-}
-
-type AnyRow = DataTR | TitleTR | ColumnNamesTR;
+import {
+  ELEMENT_TABLE_CAPTION,
+  ELEMENT_TBODY,
+  ELEMENT_THEAD,
+} from '../../utils/elementTypes';
+import { BodyTr, InteractiveTable } from '../InteractiveTable/table';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-function isDataTr(arg: AnyRow): arg is DataTR {
-  return (
-    arg?.type === 'tr' &&
-    !(arg as any).attributes?.isHeader &&
-    !(arg as any).attributes?.isColumnNames
-  );
-}
-
-function isTitleTr(row: AnyRow): row is TitleTR {
-  return row != null && row.type === 'tr' && (row as any).attributes?.isHeader;
-}
-
-function isColumnNamesTr(row: AnyRow): row is ColumnNamesTR {
-  return (
-    row != null && row.type === 'tr' && (row as any).attributes?.isColumnNames
-  );
-}
-
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export function isInteractiveTable(block: any): block is InteractiveTable {
   return (
     block?.type === ELEMENT_TABLE &&
     Array.isArray(block.children) &&
-    block.children.some(isDataTr) &&
-    block.children.some(isTitleTr) &&
-    block.children.some(isColumnNamesTr)
+    block.children.length === 3 &&
+    block.children[0].type === ELEMENT_TABLE_CAPTION &&
+    block.children[1].type === ELEMENT_THEAD &&
+    block.children[2].type === ELEMENT_TBODY
   );
 }
+/* eslint-enable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
-function getVariableName(rows: AnyRow[]): string | null {
-  const titleTr = rows.find(isTitleTr);
-  const titleTh = titleTr?.children?.find((child) => child.attributes?.title);
-
-  if (titleTh) {
-    return Node.string(titleTh) || null;
+function getVariableName(table: InteractiveTable): string | null {
+  const [caption] = table.children;
+  if (caption) {
+    return Node.string(caption) || null;
   }
   return null;
 }
 
-function extractColumnNames(rows: AnyRow[]): string[] | null {
-  const columnNamesTr = rows.find(isColumnNamesTr);
-  const columnNames = columnNamesTr?.children.map(
+function extractColumnNames(table: InteractiveTable): string[] | null {
+  const [, thead] = table.children;
+  const [columnNamesTr] = thead.children;
+  const columnNames = columnNamesTr.children.map(
     (th) => Node.string(th) || null
   );
 
@@ -105,7 +46,7 @@ function extractColumnNames(rows: AnyRow[]): string[] | null {
   return null;
 }
 
-function getTableNode(columnNames: string[], dataRows: DataTR[]): AST.Table {
+function getTableNode(columnNames: string[], dataRows: BodyTr[]): AST.Table {
   const columns: AST.Column[] = columnNames.map((_, columnIndex) => {
     const colContents: AST.Expression[] = dataRows.map((row) => {
       const cell = Node.string(row.children[columnIndex]);
@@ -143,9 +84,12 @@ const weakMapMemoize = (
 
 export const extractTable = weakMapMemoize(
   (block: InteractiveTable): ExtractedTable | null => {
-    const variableName = getVariableName(block.children);
-    const dataRows = block.children.filter(isDataTr) as unknown[] as DataTR[];
-    const columnNames = extractColumnNames(block.children);
+    const variableName = getVariableName(block);
+
+    const [, , tbody] = block.children;
+    const dataRows = tbody.children;
+
+    const columnNames = extractColumnNames(block);
 
     if (variableName && dataRows.length && columnNames) {
       return {

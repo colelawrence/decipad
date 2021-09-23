@@ -1,4 +1,4 @@
-import { ELEMENT_IMPORT_DATA, Icons } from '@decipad/ui';
+import { Icons } from '@decipad/ui';
 import { css } from '@emotion/react';
 import {
   ELEMENT_BLOCKQUOTE,
@@ -7,6 +7,7 @@ import {
   ELEMENT_H3,
   ELEMENT_TABLE,
 } from '@udecode/plate';
+import { ELEMENT_IMPORT_DATA } from '../../utils/elementTypes';
 import { ImportData } from './icons/ImportData';
 import { ModelBlock } from './icons/ModelBlock';
 import { Subheading } from './icons/Subheading';

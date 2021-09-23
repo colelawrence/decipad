@@ -1,12 +1,12 @@
 import { render } from '@testing-library/react';
-import { TrElement } from './Tr';
+import { BodyTrElement } from './BodyTr';
 
-describe('Editor Tr Element', () => {
+describe('Editor BodyTr Element', () => {
   it('renders the text', () => {
     const { getByText } = render(
       <table>
         <tbody>
-          <TrElement
+          <BodyTrElement
             attributes={{
               'data-slate-leaf': true,
               'data-slate-node': 'element',
@@ -15,12 +15,12 @@ describe('Editor Tr Element', () => {
             text={{ text: '' }}
             nodeProps={{ styles: { root: { css: null } } }}
           >
-            <td>Tr Element</td>
-          </TrElement>
+            <td>BodyTr Element</td>
+          </BodyTrElement>
         </tbody>
       </table>
     );
 
-    expect(getByText('Tr Element')).toBeVisible();
+    expect(getByText('BodyTr Element')).toBeVisible();
   });
 });

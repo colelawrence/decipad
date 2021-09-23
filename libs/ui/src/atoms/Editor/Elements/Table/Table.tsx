@@ -17,7 +17,7 @@ export const TableElement: PlatePluginComponent = ({
   return (
     <div>
       <table css={tableStyles} {...attributes} {...nodeProps}>
-        <tbody>{children}</tbody>
+        {children}
       </table>
 
       <AddRowButton />

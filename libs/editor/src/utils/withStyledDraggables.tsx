@@ -1,4 +1,3 @@
-import { ELEMENT_IMPORT_DATA } from '@decipad/ui';
 import { css } from '@emotion/react';
 import Tippy, { TippyProps } from '@tippyjs/react';
 import {
@@ -15,6 +14,7 @@ import {
   withDraggables,
 } from '@udecode/plate';
 import { GrDrag } from 'react-icons/gr';
+import { ELEMENT_IMPORT_DATA } from './elementTypes';
 
 const GrabberTooltipContent = () => (
   <div style={{ fontSize: 12, textAlign: 'center' }}>

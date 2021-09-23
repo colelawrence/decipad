@@ -2,7 +2,6 @@ import {
   BlockquoteElement,
   BoldLeaf,
   CodeLeaf,
-  ELEMENT_IMPORT_DATA,
   ImportDataElement,
   ImportDataElementProps,
   ItalicLeaf,
@@ -16,9 +15,13 @@ import {
   TitleElement,
   UnderlineLeaf,
   UnorderedListElement,
-  TrElement,
   TdElement,
   ThElement,
+  CaptionElement,
+  TheadElement,
+  HeadTrElement,
+  TbodyElement,
+  BodyTrElement,
 } from '@decipad/ui';
 import {
   DefaultPlatePluginKey,
@@ -43,10 +46,13 @@ import {
   SPRenderLeafProps,
 } from '@udecode/plate';
 import { FunctionComponent } from 'react';
+import * as elementTypes from './elementTypes';
 import { withStyledDraggables } from './withStyledDraggables';
 import { withStyledPlaceHolders } from './withStyledPlaceholders';
 
-type PluginKey = DefaultPlatePluginKey | typeof ELEMENT_IMPORT_DATA;
+type PluginKey =
+  | DefaultPlatePluginKey
+  | typeof elementTypes[keyof typeof elementTypes];
 
 type PluginComponent = FunctionComponent<
   SPRenderElementProps | SPRenderLeafProps | ImportDataElementProps
@@ -57,7 +63,7 @@ export const createPlateComponents = (): Partial<
   Record<PluginKey, PluginComponent>
 > => {
   const components: Partial<Record<PluginKey, PluginComponent>> = {
-    // Elements
+    // Plate default elements
     [ELEMENT_PARAGRAPH]: ParagraphElement,
     [ELEMENT_H1]: TitleElement,
     [ELEMENT_H2]: SubtitleElement,
@@ -67,12 +73,17 @@ export const createPlateComponents = (): Partial<
     [ELEMENT_UL]: UnorderedListElement,
     [ELEMENT_LI]: ListItemElement,
     [ELEMENT_TABLE]: TableElement,
-    [ELEMENT_TR]: TrElement,
+    [ELEMENT_TR]: BodyTrElement,
     [ELEMENT_TD]: TdElement,
     [ELEMENT_TH]: ThElement,
 
-    // Import data
-    [ELEMENT_IMPORT_DATA]: ImportDataElement,
+    // Custom elements
+    [elementTypes.ELEMENT_IMPORT_DATA]: ImportDataElement,
+
+    [elementTypes.ELEMENT_TABLE_CAPTION]: CaptionElement,
+    [elementTypes.ELEMENT_THEAD]: TheadElement,
+    [elementTypes.ELEMENT_TBODY]: TbodyElement,
+    [elementTypes.ELEMENT_HEAD_TR]: HeadTrElement,
 
     // Marks
     [MARK_BOLD]: BoldLeaf,
