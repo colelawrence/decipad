@@ -107,6 +107,7 @@ export async function get(id: ID, version: number): Promise<string | null> {
       err.statusCode === 404 ||
       err.statusCode === 403 ||
       err.code === 'NoSuchKey';
+    console.log('error interpreted as not found: %j', notFound);
     if (notFound) {
       if (version > 1) {
         return get(id, version - 1); // retry
