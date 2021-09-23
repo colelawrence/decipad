@@ -40,13 +40,11 @@ export const handler = handle(async (event: APIGatewayProxyEvent) => {
       return rec;
     }
   );
-  console.log('saved new version, docSync');
   await commitPadContent(
     getDefined(tempFile, 'temp file handle is not defined'),
     id,
     docSync._version
   );
-  console.log('committed pad content');
   if (changes && changes.length > 0) {
     await publishChanges(id, changes);
   }
