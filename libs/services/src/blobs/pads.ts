@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { nanoid } from 'nanoid';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import S3 from 'aws-sdk/clients/s3';
@@ -6,6 +7,7 @@ import { s3 as s3Config } from '@decipad/config';
 
 interface ErrorWithStatsCode extends Error {
   statusCode?: number;
+  code: string;
 }
 
 export async function duplicate(
@@ -54,12 +56,18 @@ export async function commit(
     CopySource: `/${Bucket}/${tempSourcePath}`,
   };
   await client.copyObject(options).promise();
-  await client
-    .deleteObject({
-      Bucket,
-      Key: tempSourcePath,
-    })
-    .promise();
+  try {
+    await client
+      .deleteObject({
+        Bucket,
+        Key: tempSourcePath,
+      })
+      .promise();
+  } catch (err) {
+    console.error('Error commiting file into S3', err);
+    console.error('Options were:', options);
+    throw err;
+  }
 }
 
 export async function put(
@@ -93,7 +101,11 @@ export async function get(id: ID, version: number): Promise<string | null> {
     return retValue;
   } catch (_err) {
     const err = _err as ErrorWithStatsCode;
-    const notFound = err.statusCode === 404 || err.statusCode === 403;
+    console.error('S3 error:', _err);
+    const notFound =
+      err.statusCode === 404 ||
+      err.statusCode === 403 ||
+      err.code === 'NoSuchKey';
     if (notFound) {
       if (version > 1) {
         return get(id, version - 1); // retry
