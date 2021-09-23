@@ -7,6 +7,7 @@ import {
 } from '@decipad/backend-test-sandbox';
 import { encode } from './utils/resource';
 
+// eslint-disable-next-line jest/no-disabled-tests
 test('share pad with secret', (ctx: TestContext) => {
   const { test: it } = ctx;
   let workspace: Workspace;
