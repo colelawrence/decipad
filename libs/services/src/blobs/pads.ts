@@ -83,7 +83,13 @@ export async function put(
     Key,
     Body,
   };
-  await client.putObject(options).promise();
+  try {
+    await client.putObject(options).promise();
+  } catch (err) {
+    console.error('Unexpected error putting s3 object', err);
+    console.log('options were:', options);
+    throw err;
+  }
 }
 
 export async function get(id: ID, version: number): Promise<string | null> {
