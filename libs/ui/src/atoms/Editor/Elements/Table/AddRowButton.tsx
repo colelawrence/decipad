@@ -1,13 +1,7 @@
 import { css } from '@emotion/react';
-import {
-  getPreventDefaultHandler,
-  SPEditor,
-  useEventEditorId,
-  useStoreEditorState,
-} from '@udecode/plate';
 import { FC } from 'react';
 import { Create } from '../../../../icons';
-import { addRow } from './utils/addRow';
+import { noop } from '../../../../utils/props';
 
 const addRowButtonStyles = css({
   display: 'flex',
@@ -35,15 +29,15 @@ const iconSize = css({
   marginRight: '6px',
 });
 
-export const AddRowButton = (): ReturnType<FC> => {
-  const editor = useStoreEditorState(useEventEditorId('focus'));
+interface AddRowButtonProps {
+  readonly onAddRow?: () => void;
+}
 
+export const AddRowButton = ({
+  onAddRow = noop,
+}: AddRowButtonProps): ReturnType<FC> => {
   return (
-    <button
-      contentEditable={false}
-      css={addRowButtonStyles}
-      onMouseDown={getPreventDefaultHandler(addRow, editor as SPEditor)}
-    >
+    <button contentEditable={false} css={addRowButtonStyles} onClick={onAddRow}>
       <span css={iconSize}>
         <Create />
       </span>{' '}

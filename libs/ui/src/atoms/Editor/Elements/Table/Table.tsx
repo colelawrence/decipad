@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { PlatePluginComponent } from '@udecode/plate';
+import { ComponentProps, FC } from 'react';
 import { AddRowButton } from './AddRowButton';
 
 const tableStyles = css({
@@ -9,18 +10,20 @@ const tableStyles = css({
   fontFamily: 'monospace',
 });
 
-export const TableElement: PlatePluginComponent = ({
+export const TableElement = ({
   attributes,
   children,
   nodeProps,
-}) => {
+  onAddRow,
+}: ComponentProps<PlatePluginComponent> &
+  ComponentProps<typeof AddRowButton>): ReturnType<FC> => {
   return (
     <div>
       <table css={tableStyles} {...attributes} {...nodeProps}>
         {children}
       </table>
 
-      <AddRowButton />
+      <AddRowButton onAddRow={onAddRow} />
     </div>
   );
 };

@@ -11,7 +11,6 @@ import {
   StrikethroughLeaf,
   SubheadingElement,
   SubtitleElement,
-  TableElement,
   TitleElement,
   UnderlineLeaf,
   UnorderedListElement,
@@ -19,9 +18,7 @@ import {
   ThElement,
   CaptionElement,
   TheadElement,
-  HeadTrElement,
   TbodyElement,
-  BodyTrElement,
 } from '@decipad/ui';
 import {
   DefaultPlatePluginKey,
@@ -46,6 +43,9 @@ import {
   SPRenderLeafProps,
 } from '@udecode/plate';
 import { FunctionComponent } from 'react';
+import { BodyTr } from '../components/Table/BodyTr';
+import { HeadTr } from '../components/Table/HeadTr';
+import { Table } from '../components/Table/Table';
 import * as elementTypes from './elementTypes';
 import { withStyledDraggables } from './withStyledDraggables';
 import { withStyledPlaceHolders } from './withStyledPlaceholders';
@@ -72,8 +72,8 @@ export const createPlateComponents = (): Partial<
     [ELEMENT_CODE_BLOCK]: ModelBlockElement,
     [ELEMENT_UL]: UnorderedListElement,
     [ELEMENT_LI]: ListItemElement,
-    [ELEMENT_TABLE]: TableElement,
-    [ELEMENT_TR]: BodyTrElement,
+    [ELEMENT_TABLE]: Table,
+    [ELEMENT_TR]: BodyTr,
     [ELEMENT_TD]: TdElement,
     [ELEMENT_TH]: ThElement,
 
@@ -83,7 +83,7 @@ export const createPlateComponents = (): Partial<
     [elementTypes.ELEMENT_TABLE_CAPTION]: CaptionElement,
     [elementTypes.ELEMENT_THEAD]: TheadElement,
     [elementTypes.ELEMENT_TBODY]: TbodyElement,
-    [elementTypes.ELEMENT_HEAD_TR]: HeadTrElement,
+    [elementTypes.ELEMENT_HEAD_TR]: HeadTr,
 
     // Marks
     [MARK_BOLD]: BoldLeaf,

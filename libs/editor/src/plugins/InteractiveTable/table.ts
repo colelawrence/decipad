@@ -13,20 +13,20 @@ import {
 
 export interface InteractiveTable {
   type: typeof ELEMENT_TABLE;
-  children: [
-    {
-      type: typeof ELEMENT_TABLE_CAPTION;
-      children: [{ text: string }];
-    },
-    {
-      type: typeof ELEMENT_THEAD;
-      children: [HeadTr];
-    },
-    {
-      type: typeof ELEMENT_TBODY;
-      children: BodyTr[];
-    }
-  ];
+  children: [TableCaption, Thead, Tbody];
+}
+
+export interface TableCaption {
+  type: typeof ELEMENT_TABLE_CAPTION;
+  children: [{ text: string }];
+}
+export interface Thead {
+  type: typeof ELEMENT_THEAD;
+  children: [HeadTr];
+}
+export interface Tbody {
+  type: typeof ELEMENT_TBODY;
+  children: BodyTr[];
 }
 
 // Column names
