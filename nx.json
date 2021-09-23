@@ -7,6 +7,8 @@
     },
     "tsconfig.json": "*",
     "tslint.json": "*",
+    "libs/eslint-config-decipad/index.js": "*",
+    "libs/eslint-config-decipad/react.js": "*",
     "nx.json": "*"
   },
   "affected": {
