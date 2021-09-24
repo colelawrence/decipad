@@ -2,7 +2,6 @@
 import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
 import Boom from '@hapi/boom';
 import Automerge from 'automerge';
-import { getDefined } from '@decipad/utils';
 import arc from '@architect/functions';
 import tables from '@decipad/services/tables';
 import { expectAuthenticated } from '@decipad/services/authentication';
@@ -40,11 +39,9 @@ export const handler = handle(async (event: APIGatewayProxyEvent) => {
       return rec;
     }
   );
-  await commitPadContent(
-    getDefined(tempFile, 'temp file handle is not defined'),
-    id,
-    docSync._version
-  );
+  if (tempFile) {
+    await commitPadContent(tempFile, id, docSync._version);
+  }
   if (changes && changes.length > 0) {
     await publishChanges(id, changes);
   }
