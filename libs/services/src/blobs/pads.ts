@@ -5,7 +5,7 @@ import S3 from 'aws-sdk/clients/s3';
 import { ID } from '@decipad/backendtypes';
 import { s3 as s3Config } from '@decipad/config';
 
-interface ErrorWithStatsCode extends Error {
+interface ErrorWithStatusCode extends Error {
   statusCode?: number;
   code: string;
 }
@@ -13,12 +13,15 @@ interface ErrorWithStatsCode extends Error {
 export async function duplicate(
   oldId: ID,
   oldVersion: number,
-  newId: ID
+  newId: ID,
+  encode = true
 ): Promise<void> {
   const [client, Bucket] = clientAndBucket();
-  const CopySource = `/${Bucket}/${encodeURIComponent(
-    encodeId(oldId, oldVersion)
-  )}`;
+  const CopySource = `/${Bucket}/${
+    encode
+      ? encodeURIComponent(encodeId(oldId, oldVersion))
+      : encodeId(oldId, oldVersion)
+  }`;
   const newVersion = 1;
   const options = {
     Bucket,
@@ -26,7 +29,17 @@ export async function duplicate(
     CopySource,
   };
 
-  await client.copyObject(options).promise();
+  try {
+    await client.copyObject(options).promise();
+  } catch (err) {
+    if ((err as ErrorWithStatusCode).code === 'NoSuchKey' && encode) {
+      await duplicate(oldId, oldVersion, newId, false);
+      return;
+    }
+    console.error('error duplicating object in s3:', err);
+    console.log('copyObject options were:', options);
+    throw err;
+  }
 }
 
 export async function putTemp(id: ID, content: string): Promise<string> {
@@ -54,19 +67,27 @@ export async function putTemp(id: ID, content: string): Promise<string> {
 export async function commit(
   tempSourcePath: string,
   targetId: string,
-  version: number
+  version: number,
+  fromError = false,
+  encode = true
 ): Promise<void> {
   const [client, Bucket] = clientAndBucket();
 
   const copOptions = {
     Bucket,
     Key: encodeId(targetId, version),
-    CopySource: `/${Bucket}/${encodeURIComponent(tempSourcePath)}`,
+    CopySource: `/${Bucket}/${
+      encode ? encodeURIComponent(tempSourcePath) : tempSourcePath
+    }`,
   };
   try {
     await client.copyObject(copOptions).promise();
   } catch (err) {
-    console.error('Error commiting copying file in S3', err);
+    if ((err as ErrorWithStatusCode).code === 'NoSuchKey' && !fromError) {
+      await commit(tempSourcePath, targetId, version, true, false);
+      return;
+    }
+    console.error('Error commiting: while copying file in S3', err);
     console.error('copyObject options were:', copOptions);
     throw err;
   }
@@ -116,14 +137,13 @@ export async function get(id: ID, version: number): Promise<string | null> {
     const data = await client.getObject(options).promise();
     return data?.Body ? data.Body.toString('utf-8') : null;
   } catch (_err) {
-    const err = _err as ErrorWithStatsCode;
+    const err = _err as ErrorWithStatusCode;
     console.error('S3 error:', _err);
     console.error('S3 getObject options were', options);
     const notFound =
       err.statusCode === 404 ||
       err.statusCode === 403 ||
       err.code === 'NoSuchKey';
-    console.log('error interpreted as not found: %j', notFound);
     if (notFound) {
       return null;
     }
