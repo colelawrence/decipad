@@ -77,6 +77,9 @@ jobs:
           arc env staging DECI_S3_SECRET_ACCESS_KEY '${{secrets.DECI_S3_SECRET_ACCESS_KEY}}'
           arc env staging DECI_S3_PADS_BUCKET '${{secrets.DECI_S3_PADS_BUCKET}}'
           arc env staging DECI_S3_ATTACHMENTS_BUCKET '${{secrets.DECI_S3_ATTACHMENTS_BUCKET}}'
+          arc env staging DECI_GOOGLESHEETS_API_KEY '${{secrets.DECI_GOOGLESHEETS_API_KEY}}'
+          arc env staging DECI_GOOGLESHEETS_CLIENT_ID '${{secrets.DECI_GOOGLESHEETS_CLIENT_ID}}'
+          arc env staging DECI_GOOGLESHEETS_CLIENT_SECRET '${{secrets.DECI_GOOGLESHEETS_CLIENT_SECRET}}'
           arc env staging NODE_OPTIONS --enable-source-maps
           cd ../..
           scripts/push-sam.sh
