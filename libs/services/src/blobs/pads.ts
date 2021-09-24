@@ -127,7 +127,11 @@ export async function put(
   }
 }
 
-export async function get(id: ID, version: number): Promise<string | null> {
+export async function get(
+  id: ID,
+  version: number,
+  fromError = false
+): Promise<string | null> {
   const [client, Bucket] = clientAndBucket();
   const options = {
     Bucket,
@@ -145,6 +149,9 @@ export async function get(id: ID, version: number): Promise<string | null> {
       err.statusCode === 403 ||
       err.code === 'NoSuchKey';
     if (notFound) {
+      if (!fromError && version > 0) {
+        return get(id, version - 1, true);
+      }
       return null;
     }
     throw err;
@@ -156,6 +163,21 @@ export async function remove(id: ID, version: number): Promise<void> {
   const options = {
     Bucket,
     Key: encodeId(id, version),
+  };
+  try {
+    await client.deleteObject(options).promise();
+  } catch (err) {
+    console.error('error removing file form s3:', err);
+    console.log('deleteObject options were', options);
+    throw err;
+  }
+}
+
+export async function removeTemp(encodedName: string): Promise<void> {
+  const [client, Bucket] = clientAndBucket();
+  const options = {
+    Bucket,
+    Key: encodedName,
   };
   try {
     await client.deleteObject(options).promise();

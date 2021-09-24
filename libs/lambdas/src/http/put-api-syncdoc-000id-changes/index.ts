@@ -10,6 +10,7 @@ import {
   get as getPadContent,
   putTemp as putPadTempContent,
   commit as commitPadContent,
+  removeTemp as removeTempPadContent,
 } from '@decipad/services/blobs/pads';
 import { DocSyncRecord, ID } from '@decipad/backendtypes';
 import { getDefined } from '@decipad/utils';
@@ -37,6 +38,9 @@ export const handler = handle(async (event: APIGatewayProxyEvent) => {
   const newRecord = await data.docsync.withLock(
     id,
     async (docsync: DocSyncRecord = { id, _version: 0 }) => {
+      if (tempHandle) {
+        await removeTempPadContent(tempHandle);
+      }
       const content = getDefined(await getPadContent(id, docsync._version));
       const before = Automerge.load(content);
       changes = JSON.parse(body);

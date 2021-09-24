@@ -10,6 +10,7 @@ import {
 import { Location } from 'slate';
 import { formatCodeBlock } from './formatCodeBlock';
 import { formatTable } from './formatTable';
+import { defaultFormat } from './defaultFormat';
 
 export const insertBlock = (
   editor: SPEditor,
@@ -24,9 +25,10 @@ export const insertBlock = (
     format: () => {
       if (pluginKey === ELEMENT_CODE_BLOCK) {
         formatCodeBlock(editor);
-      }
-      if (pluginKey === ELEMENT_TABLE) {
+      } else if (pluginKey === ELEMENT_TABLE) {
         formatTable(editor, at);
+      } else {
+        defaultFormat(pluginKey)(editor);
       }
     },
   });
