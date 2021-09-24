@@ -34,6 +34,7 @@ export default (handler: Handler) => {
           headers,
         };
       } catch (_err) {
+        console.error('Error caught while processing request', req);
         console.error((_err as Error).message);
         console.error((_err as Error).stack);
         const err = boomify(_err as Error).output;
