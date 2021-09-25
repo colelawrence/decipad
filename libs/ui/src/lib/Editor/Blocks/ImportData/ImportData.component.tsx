@@ -168,29 +168,30 @@ export const ImportDataElement: PlatePluginComponent = (props) => {
           )}
         </div>
       )}
-      {(!externalDataSourceId || error || firstResultError) && (
-        <div>
-          <Button
-            disabled={!needsCreateOrUpdateExternalData}
-            primary
-            onClick={() => {
-              if (createOrUpdateExternalData) {
-                createOrUpdateExternalData({
-                  authUrl,
-                  padId: getDefined(padId),
-                  blockId,
-                  provider,
-                  externalId,
-                  externalDataSourceId,
-                  error: firstResultError?.toString() || undefined,
-                });
-              }
-            }}
-          >
-            {needsAuthentication ? 'Authenticate' : 'Create'}
-          </Button>
-        </div>
-      )}
+      {provider !== 'internal' &&
+        (!externalDataSourceId || error || firstResultError) && (
+          <div>
+            <Button
+              disabled={!needsCreateOrUpdateExternalData}
+              primary
+              onClick={() => {
+                if (createOrUpdateExternalData) {
+                  createOrUpdateExternalData({
+                    authUrl,
+                    padId: getDefined(padId),
+                    blockId,
+                    provider,
+                    externalId,
+                    externalDataSourceId,
+                    error: firstResultError?.toString() || undefined,
+                  });
+                }
+              }}
+            >
+              {needsAuthentication ? 'Authenticate' : 'Create'}
+            </Button>
+          </div>
+        )}
       {blockId && <Result blockId={blockId} />}
     </div>
   );
