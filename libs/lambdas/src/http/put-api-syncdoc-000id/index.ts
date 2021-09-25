@@ -43,6 +43,7 @@ export const handler = handle(async (event: APIGatewayProxyEvent) => {
       return rec;
     }
   );
+
   if (tempFile) {
     await commitPadContent(tempFile, id, docSync._version);
   }

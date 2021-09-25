@@ -130,7 +130,7 @@ export async function put(
 export async function get(
   id: ID,
   version: number,
-  fromError = false
+  creditsLeft = 10
 ): Promise<string | null> {
   const [client, Bucket] = clientAndBucket();
   const options = {
@@ -149,8 +149,8 @@ export async function get(
       err.statusCode === 403 ||
       err.code === 'NoSuchKey';
     if (notFound) {
-      if (!fromError && version > 0) {
-        return get(id, version - 1, true);
+      if (!creditsLeft && version > 0) {
+        return get(id, version - 1, creditsLeft - 1);
       }
       return null;
     }
