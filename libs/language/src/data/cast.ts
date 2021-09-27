@@ -1,4 +1,7 @@
 const castNumber = (input: string) => {
+  if (input.trim() === '0') {
+    return 0;
+  }
   input = input.replace(/^0+/, '');
   if (input === '') {
     return null;
