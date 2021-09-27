@@ -25,7 +25,6 @@ const styles = css({
 
   '> *': {
     display: 'grid',
-    overflow: 'hidden',
   },
 });
 const sidebarStyles = css({
