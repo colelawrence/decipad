@@ -36,17 +36,22 @@ export const DocSyncProvider = ({
       return undefined;
     }
     if (userId || secret) {
-      const docsync = new DocSync({ userId, actorId: nanoid() });
-      if (secret) {
-        docsync.setHeaders({
-          Authorization: `Bearer ${secret}`,
-        });
+      let { docsync } = value;
+      if (!docsync || docsync.userId !== userId) {
+        if (docsync) {
+          docsync.stop();
+        }
+        docsync = new DocSync({ userId, actorId: nanoid() });
+        if (secret) {
+          docsync.setHeaders({
+            Authorization: `Bearer ${secret}`,
+          });
+        }
+        setValue({ docsync, status: userId ? 'success' : 'login' });
       }
-      setValue({ docsync, status: userId ? 'success' : 'login' });
-      return () => docsync.stop();
     }
-    return setValue({ docsync: null, status: 'login' });
-  }, [userId, session, sessionLoading, secret]);
+    return undefined;
+  }, [userId, session, sessionLoading, secret, value]);
 
   useEffect(() => {
     if (value.docsync) {
