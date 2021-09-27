@@ -471,6 +471,7 @@ export interface VersionedTableRecord extends TableRecordBase {
 
 export interface DocSyncRecord extends VersionedTableRecord {
   seq?: number[];
+  path?: string;
 }
 
 export type VersionedDataTable<T extends VersionedTableRecord> =

@@ -1,9 +1,11 @@
 /* eslint-disable no-console */
 import { nanoid } from 'nanoid';
+import Boom from '@hapi/boom';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import S3 from 'aws-sdk/clients/s3';
 import { ID } from '@decipad/backendtypes';
 import { s3 as s3Config } from '@decipad/config';
+import tables from '@decipad/services/tables';
 
 interface ErrorWithStatusCode extends Error {
   statusCode?: number;
@@ -16,21 +18,24 @@ export async function duplicate(
   newId: ID,
   encode = true
 ): Promise<void> {
+  const data = await tables();
+  const docSync = await data.docsync.get({ id: oldId });
+  if (!docSync || !docSync.path) {
+    throw Boom.notFound('no doc sync');
+  }
+  const { path } = docSync;
   const [client, Bucket] = clientAndBucket();
-  const CopySource = `/${Bucket}/${
-    encode
-      ? encodeURIComponent(encodeId(oldId, oldVersion))
-      : encodeId(oldId, oldVersion)
-  }`;
-  const newVersion = 1;
+  const CopySource = `/${Bucket}/${encode ? encodeURIComponent(path) : path}`;
+  const newKey = encodeId(newId, nanoid());
   const options = {
     Bucket,
-    Key: encodeId(newId, newVersion),
+    Key: newKey,
     CopySource,
   };
 
   try {
     await client.copyObject(options).promise();
+    await data.docsync.put({ id: newId, _version: 1, path: newKey });
   } catch (err) {
     if ((err as ErrorWithStatusCode).code === 'NoSuchKey' && encode) {
       await duplicate(oldId, oldVersion, newId, false);
@@ -42,84 +47,19 @@ export async function duplicate(
   }
 }
 
-export async function putTemp(id: ID, content: string): Promise<string> {
+export async function put(id: ID, content: string): Promise<string> {
   const [client, Bucket] = clientAndBucket();
   const Body = Buffer.from(content, 'utf-8');
-  const version = nanoid();
-  const Key = encodeTemp(id, version);
-
+  const random = nanoid();
+  const Key = encodeId(id, random);
   const options = {
     Bucket,
     Key,
     Body,
   };
-
   try {
     await client.putObject(options).promise();
     return Key;
-  } catch (err) {
-    console.error('error putting temporary object in s3:', err);
-    console.log('putObject options were:', options);
-    throw err;
-  }
-}
-
-export async function commit(
-  tempSourcePath: string,
-  targetId: string,
-  version: number,
-  fromError = false,
-  encode = true
-): Promise<void> {
-  const [client, Bucket] = clientAndBucket();
-
-  const copOptions = {
-    Bucket,
-    Key: encodeId(targetId, version),
-    CopySource: `/${Bucket}/${
-      encode ? encodeURIComponent(tempSourcePath) : tempSourcePath
-    }`,
-  };
-  try {
-    await client.copyObject(copOptions).promise();
-  } catch (err) {
-    if ((err as ErrorWithStatusCode).code === 'NoSuchKey' && !fromError) {
-      await commit(tempSourcePath, targetId, version, true, false);
-      return;
-    }
-    console.error('Error commiting: while copying file in S3', err);
-    console.error('copyObject options were:', copOptions);
-    throw err;
-  }
-
-  const deleteOptions = {
-    Bucket,
-    Key: tempSourcePath,
-  };
-  try {
-    await client.deleteObject(deleteOptions).promise();
-  } catch (err) {
-    console.error('Error deleting file from S3', err);
-    console.error('deleteObject ptions were:', deleteOptions);
-    throw err;
-  }
-}
-
-export async function put(
-  id: ID,
-  version: number,
-  content: string
-): Promise<void> {
-  const [client, Bucket] = clientAndBucket();
-  const Body = Buffer.from(content, 'utf-8');
-  const Key = encodeId(id, version);
-  const options = {
-    Bucket,
-    Key,
-    Body,
-  };
-  try {
-    await client.putObject(options).promise();
   } catch (err) {
     console.error('Unexpected error putting s3 object', err);
     console.log('options were:', options);
@@ -127,15 +67,11 @@ export async function put(
   }
 }
 
-export async function get(
-  id: ID,
-  version: number,
-  creditsLeft = 10
-): Promise<string | null> {
+export async function get(path: string): Promise<string | null> {
   const [client, Bucket] = clientAndBucket();
   const options = {
     Bucket,
-    Key: encodeId(id, version),
+    Key: path,
   };
   try {
     const data = await client.getObject(options).promise();
@@ -149,9 +85,6 @@ export async function get(
       err.statusCode === 403 ||
       err.code === 'NoSuchKey';
     if (notFound) {
-      if (!creditsLeft && version > 0) {
-        return get(id, version - 1, creditsLeft - 1);
-      }
       return null;
     }
     throw err;
@@ -173,27 +106,8 @@ export async function remove(id: ID, version: number): Promise<void> {
   }
 }
 
-export async function removeTemp(encodedName: string): Promise<void> {
-  const [client, Bucket] = clientAndBucket();
-  const options = {
-    Bucket,
-    Key: encodedName,
-  };
-  try {
-    await client.deleteObject(options).promise();
-  } catch (err) {
-    console.error('error removing file form s3:', err);
-    console.log('deleteObject options were', options);
-    throw err;
-  }
-}
-
 function encodeId(id: string, version: number | string): string {
   return encodeURIComponent([id, version.toString()].join(':'));
-}
-
-function encodeTemp(id: string, random: string): string {
-  return `temp/${encodeId(id, random)}`;
 }
 
 function clientAndBucket(): [S3, string] {

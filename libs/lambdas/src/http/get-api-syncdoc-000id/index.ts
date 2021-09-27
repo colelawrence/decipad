@@ -25,8 +25,8 @@ exports.handler = handle(async (event: APIGatewayProxyEvent) => {
 
   const data = await tables();
   const doc = await data.docsync.get({ id });
-  if (!doc) {
+  if (!doc || !doc.path) {
     throw Boom.notFound('Not found');
   }
-  return getPadContent(id, doc._version);
+  return getPadContent(doc.path);
 });

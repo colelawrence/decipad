@@ -15,6 +15,7 @@ const activeStyle = css({
   margin: '0 auto',
   zIndex: 1000,
   width: '100%',
+  minHeight: '400px',
   fontSize: '30px',
   fontWeight: 'bold',
   borderRadius: '2%',

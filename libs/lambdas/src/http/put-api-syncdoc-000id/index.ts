@@ -8,9 +8,7 @@ import { expectAuthenticated } from '@decipad/services/authentication';
 import { expectAuthorized } from '@decipad/services/authorization';
 import {
   get as getPadContent,
-  putTemp as putPadTempContent,
-  commit as commitPadContent,
-  removeTemp as removeTempPadContent,
+  put as putPadContent,
 } from '@decipad/services/blobs/pads';
 import { DocSyncRecord } from '@decipad/backendtypes';
 import { decode } from '../../common/resource';
@@ -32,21 +30,19 @@ export const handler = handle(async (event: APIGatewayProxyEvent) => {
 
   const data = await tables();
   let changes: Automerge.Change[] | undefined;
-  let tempFile: string | undefined;
-  const docSync = await data.docsync.withLock(
+  await data.docsync.withLock(
     id,
     async (rec: DocSyncRecord = { id, _version: 0 }) => {
-      if (tempFile) {
-        await removeTempPadContent(tempFile);
+      let filePath: string | undefined;
+      [changes, filePath] = await mergeAndSave(id, rec.path, body);
+      if (filePath) {
+        rec.path = filePath;
       }
-      [changes, tempFile] = await mergeAndSave(id, rec._version, body);
+
       return rec;
     }
   );
 
-  if (tempFile) {
-    await commitPadContent(tempFile, id, docSync._version);
-  }
   if (changes && changes.length > 0) {
     await publishChanges(id, changes);
   }
@@ -56,11 +52,11 @@ export const handler = handle(async (event: APIGatewayProxyEvent) => {
 
 async function mergeAndSave(
   id: string,
-  previousVersion: number,
+  path: string | undefined,
   encodedDoc: string
 ): Promise<[Automerge.Change[], string | undefined]> {
-  let doc = await getPadContent(id, previousVersion);
-  let needsCreate = false;
+  let doc = path && (await getPadContent(path));
+  let needsCreate = !doc;
   let changes: Automerge.Change[] = [];
 
   if (!doc) {
@@ -74,12 +70,12 @@ async function mergeAndSave(
     changes = Automerge.getChanges(before, after);
   }
 
-  let tempHandle: string | undefined;
+  let filePath: string | undefined;
   if (changes.length > 0 || needsCreate) {
-    tempHandle = await putPadTempContent(id, doc);
+    filePath = await putPadContent(id, doc);
   }
 
-  return [changes, tempHandle];
+  return [changes, filePath];
 }
 
 async function publishChanges(id: string, changes: Automerge.Change[]) {

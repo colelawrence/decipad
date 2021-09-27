@@ -8,9 +8,7 @@ import { expectAuthenticated } from '@decipad/services/authentication';
 import { expectAuthorized } from '@decipad/services/authorization';
 import {
   get as getPadContent,
-  putTemp as putPadTempContent,
-  commit as commitPadContent,
-  removeTemp as removeTempPadContent,
+  put as putPadContent,
 } from '@decipad/services/blobs/pads';
 import { DocSyncRecord, ID } from '@decipad/backendtypes';
 import { getDefined } from '@decipad/utils';
@@ -32,30 +30,25 @@ export const handler = handle(async (event: APIGatewayProxyEvent) => {
     : event.body;
 
   let changes: Automerge.Change[] | undefined;
-  let tempHandle: string | undefined;
 
   const data = await tables();
-  const newRecord = await data.docsync.withLock(
+  await data.docsync.withLock(
     id,
-    async (docsync: DocSyncRecord = { id, _version: 0 }) => {
-      if (tempHandle) {
-        await removeTempPadContent(tempHandle);
+    async (docsync: DocSyncRecord | undefined) => {
+      if (!docsync || !docsync.path) {
+        throw Boom.notFound('Unknown path');
       }
-      const content = getDefined(await getPadContent(id, docsync._version));
+      const content = getDefined(await getPadContent(docsync.path));
       const before = Automerge.load(content);
       changes = JSON.parse(body);
       if (changes && changes.length > 0) {
         const after = Automerge.applyChanges(before, changes);
         const newPadContent = Automerge.save(after);
-        tempHandle = await putPadTempContent(id, newPadContent);
+        docsync.path = await putPadContent(id, newPadContent);
       }
       return docsync;
     }
   );
-
-  if (tempHandle) {
-    await commitPadContent(tempHandle, id, newRecord._version);
-  }
 
   // Notify room
   if (changes) {

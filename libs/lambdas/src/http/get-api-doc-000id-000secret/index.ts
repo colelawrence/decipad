@@ -32,10 +32,10 @@ exports.handler = handle(async (event: APIGatewayProxyEvent) => {
 
   const data = await tables();
   const docSync = await data.docsync.get({ id });
-  if (!docSync) {
+  if (!docSync || !docSync.path) {
     throw Boom.notFound();
   }
-  const doc = await get(id, docSync._version);
+  const doc = await get(docSync.path);
   if (!doc) {
     throw Boom.notFound();
   }
