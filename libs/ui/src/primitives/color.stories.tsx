@@ -20,6 +20,8 @@ const colorNames: Record<ColorId, string> = {
   electricGreen200: 'Electric Green 200',
 
   blockquote: 'Blockquote',
+  subtleBorder: 'Subtle border',
+  subtleShadow: 'Subtle shadow',
 };
 export default {
   title: 'Primitives / Color',
