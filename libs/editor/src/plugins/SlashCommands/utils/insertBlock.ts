@@ -1,35 +1,42 @@
 import {
-  autoformatBlock,
   ELEMENT_CODE_BLOCK,
-  ELEMENT_TABLE,
+  ELEMENT_DEFAULT,
+  getPlatePluginType,
+  insertEmptyCodeBlock,
   PlatePluginKey,
+  setNodes,
   SPEditor,
   TEditor,
+  TElement,
   unwrapList,
 } from '@udecode/plate';
-import { Location } from 'slate';
-import { formatCodeBlock } from './formatCodeBlock';
-import { formatTable } from './formatTable';
-import { defaultFormat } from './defaultFormat';
+import { Editor, Location, Transforms } from 'slate';
 
 export const insertBlock = (
   editor: SPEditor,
   at: Location,
   { pluginKey = ELEMENT_CODE_BLOCK }: PlatePluginKey
 ): void => {
-  const preFormat = (editorToFormat: TEditor) =>
-    unwrapList(editorToFormat as SPEditor);
+  const formatCodeBlock = (editorToFormat: TEditor) => {
+    insertEmptyCodeBlock(editorToFormat as SPEditor, {
+      defaultType: getPlatePluginType(
+        editorToFormat as SPEditor,
+        ELEMENT_DEFAULT
+      ),
+      insertNodesOptions: { select: true },
+    });
+  };
 
-  autoformatBlock(editor, pluginKey, at, {
-    preFormat,
-    format: () => {
-      if (pluginKey === ELEMENT_CODE_BLOCK) {
-        formatCodeBlock(editor);
-      } else if (pluginKey === ELEMENT_TABLE) {
-        formatTable(editor, at);
-      } else {
-        defaultFormat(pluginKey)(editor);
-      }
-    },
-  });
+  Transforms.delete(editor, { at });
+  unwrapList(editor);
+
+  if (pluginKey === ELEMENT_CODE_BLOCK) {
+    formatCodeBlock(editor);
+  } else {
+    setNodes<TElement>(
+      editor,
+      { type: pluginKey },
+      { match: (n) => Editor.isBlock(editor, n) }
+    );
+  }
 };
