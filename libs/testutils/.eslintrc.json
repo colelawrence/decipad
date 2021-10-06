@@ -1,5 +1,5 @@
 {
-  "extends": ["../../libs/eslint-config-decipad"],
+  "extends": ["../../libs/eslint-config-decipad/react"],
   "ignorePatterns": ["!**/*"],
   "rules": {
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],

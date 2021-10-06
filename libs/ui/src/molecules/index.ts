@@ -4,4 +4,5 @@ export { NavigationList } from './NavigationList/NavigationList';
 export { NotebookListHeader } from './NotebookListHeader/NotebookListHeader';
 export { NotebookListItemActions } from './NotebookListItemActions/NotebookListItemActions';
 export { NotebookListItemPlaceholder } from './NotebookListItemPlaceholder/NotebookListItemPlaceholder';
+export { TableColumnActions } from './TableColumnActions/TableColumnActions';
 export { WorkspaceItem } from './WorkspaceItem/WorkspaceItem';

@@ -31,10 +31,12 @@ const tableElement: InteractiveTable = {
           children: [
             {
               type: ELEMENT_TH,
+              attributes: { cellType: 'string' },
               children: [{ text: 'FirstName' }],
             },
             {
               type: ELEMENT_TH,
+              attributes: { cellType: 'string' },
               children: [{ text: 'LastName' }],
             },
           ],
@@ -49,23 +51,12 @@ const tableElement: InteractiveTable = {
           children: [
             {
               type: ELEMENT_TD,
+              attributes: { cellType: 'string' },
               children: [{ text: '' }],
             },
             {
               type: ELEMENT_TD,
-              children: [{ text: '' }],
-            },
-          ],
-        },
-        {
-          type: ELEMENT_TR,
-          children: [
-            {
-              type: ELEMENT_TD,
-              children: [{ text: '' }],
-            },
-            {
-              type: ELEMENT_TD,
+              attributes: { cellType: 'string' },
               children: [{ text: '' }],
             },
           ],
@@ -75,10 +66,27 @@ const tableElement: InteractiveTable = {
           children: [
             {
               type: ELEMENT_TD,
+              attributes: { cellType: 'string' },
               children: [{ text: '' }],
             },
             {
               type: ELEMENT_TD,
+              attributes: { cellType: 'string' },
+              children: [{ text: '' }],
+            },
+          ],
+        },
+        {
+          type: ELEMENT_TR,
+          children: [
+            {
+              type: ELEMENT_TD,
+              attributes: { cellType: 'string' },
+              children: [{ text: '' }],
+            },
+            {
+              type: ELEMENT_TD,
+              attributes: { cellType: 'string' },
               children: [{ text: '' }],
             },
           ],

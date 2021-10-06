@@ -31,11 +31,13 @@ const testTableChildren: InteractiveTable['children'] = [
         children: [
           {
             type: ELEMENT_TH,
+            attributes: { cellType: 'string' },
             children: [{ text: 'Col1' }],
           },
           {
             type: ELEMENT_TH,
             children: [{ text: 'Col2' }],
+            attributes: { cellType: 'number' },
           },
         ],
       },
@@ -49,11 +51,13 @@ const testTableChildren: InteractiveTable['children'] = [
         children: [
           {
             type: ELEMENT_TD,
+            attributes: { cellType: 'string' },
             children: [{ text: 'Hello' }],
           },
           {
             type: ELEMENT_TD,
-            children: [{ text: 'World' }],
+            attributes: { cellType: 'number' },
+            children: [{ text: '123' }],
           },
         ],
       },
@@ -62,11 +66,13 @@ const testTableChildren: InteractiveTable['children'] = [
         children: [
           {
             type: ELEMENT_TD,
-            children: [{ text: 'Row 2' }],
+            attributes: { cellType: 'string' },
+            children: [{ text: 'World' }],
           },
           {
             type: ELEMENT_TD,
-            children: [{ text: 'Row 2 Col 2' }],
+            attributes: { cellType: 'number' },
+            children: [{ text: '456' }],
           },
         ],
       },
@@ -91,7 +97,7 @@ it('can find tables in the document', () => {
         (assign
           (def TheTitle)
           (table
-            Col1 (column \\"Hello\\" \\"Row 2\\")
-            Col2 (column \\"World\\" \\"Row 2 Col 2\\"))))"
+            Col1 (column \\"Hello\\" \\"World\\")
+            Col2 (column 123 456))))"
     `);
 });

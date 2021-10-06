@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import { useCallback, useState } from 'react';
-import * as Icons from '../../icons';
+import { useState } from 'react';
+import { TinyArrow, DataType, Number, Text } from '../../icons';
 
 import {
   p14Regular,
@@ -79,7 +79,7 @@ export const MenuButton: React.FC<ButtonProps> = ({
         {text}
         {children && (
           <span role="presentation" css={arrowStyles}>
-            <Icons.TinyArrow />
+            <TinyArrow direction="right" />
           </span>
         )}
       </button>
@@ -88,39 +88,39 @@ export const MenuButton: React.FC<ButtonProps> = ({
   );
 };
 
+type TableCellType = 'string' | 'number';
+
 interface TableColumnMenuProps {
-  onSelect?: (item: MenuItem) => void;
+  onChangeColumnType?: (type: TableCellType) => void;
 }
 
 export const TableColumnActions: React.FC<TableColumnMenuProps> = ({
-  onSelect = noop,
+  onChangeColumnType = noop,
 }) => {
-  const [currentlyOpen, setCurrentlyOpen] = useState<MenuItem | null>();
-
-  const handleSubmenuClick = useCallback((item: MenuItem) => {
-    setCurrentlyOpen((isOpen) => (isOpen ? null : item));
-  }, []);
+  const [currentlyOpen, setCurrentlyOpen] = useState<MenuItem | null>(null);
 
   return (
     <DroopyMenu>
       <MenuButton
-        icon={Icons.DataType}
+        icon={DataType}
         text="Change type"
-        onClick={handleSubmenuClick}
+        onClick={(item) => {
+          setCurrentlyOpen((open) => (open === item ? null : item));
+        }}
         menuItem="change-type"
         isOpen={currentlyOpen === 'change-type'}
       >
         <FloatingMenu>
           <MenuButton
-            icon={Icons.Number}
+            icon={Number}
             text="Number"
-            onClick={onSelect}
+            onClick={() => onChangeColumnType('number')}
             menuItem="change-type/number"
           />
           <MenuButton
-            icon={Icons.Text}
+            icon={Text}
             text="Text"
-            onClick={onSelect}
+            onClick={() => onChangeColumnType('string')}
             menuItem="change-type/text"
           />
         </FloatingMenu>

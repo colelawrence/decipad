@@ -16,6 +16,8 @@ export interface InteractiveTable {
   children: [TableCaption, Thead, Tbody];
 }
 
+export type TableCellType = 'string' | 'number';
+
 export interface TableCaption {
   type: typeof ELEMENT_TABLE_CAPTION;
   children: [{ text: string }];
@@ -37,6 +39,7 @@ export interface HeadTr {
 export interface Th {
   type: typeof ELEMENT_TH;
   children: [{ text: string }];
+  attributes: { cellType: TableCellType };
 }
 
 // Table data
@@ -47,4 +50,5 @@ export interface BodyTr {
 export interface Td {
   type: typeof ELEMENT_TD;
   children: [{ text: string }];
+  attributes: { cellType: TableCellType };
 }

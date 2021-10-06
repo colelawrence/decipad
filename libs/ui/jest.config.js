@@ -20,6 +20,7 @@ module.exports = {
       testEnvironment: 'jsdom',
       setupFilesAfterEnv: [
         ...setupFilesAfterEnv,
+        require.resolve('../testutils/src/dom-extensions-setup-after-env'),
         require.resolve('./src/test-utils/jest/setupTests.ts'),
       ],
     },

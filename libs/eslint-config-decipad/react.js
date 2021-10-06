@@ -7,6 +7,10 @@ module.exports = {
 
     // testing-library's waitFor is sometimes used in beforeEach and requires an expect inside
     'jest/no-standalone-expect': 'off',
+
+    // false positives from testing-lib matchers
+    'playwright/missing-playwright-await': 'off',
+    'array-callback-return': 'off',
   },
   overrides: [
     ...overrides,

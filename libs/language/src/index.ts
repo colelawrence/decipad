@@ -15,7 +15,13 @@ export { run, Interpreter } from './interpreter';
 export { Scalar, Date, Range, TimeQuantity, Column } from './interpreter/Value';
 
 export { prettyPrintAST } from './parser/utils';
-export { Type, build as buildType } from './type';
+export type { SerializedType } from './type';
+export {
+  Type,
+  build as buildType,
+  deserializeType,
+  serializeType,
+} from './type';
 export { Time } from './date';
 export { ExternalData } from './data';
 export * from './computer';

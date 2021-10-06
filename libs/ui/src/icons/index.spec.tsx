@@ -19,6 +19,7 @@ describe.each(Object.entries(icons).filter(isComponent))(
         <Icon
           // some props that will fulfill every icons mandatory props interface
           type="expand"
+          direction="right"
         />
       );
     });

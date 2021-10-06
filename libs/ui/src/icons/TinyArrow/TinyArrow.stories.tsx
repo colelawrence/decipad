@@ -6,4 +6,5 @@ export default {
   component: TinyArrow,
 } as Meta;
 
-export const Normal: Story = () => <TinyArrow />;
+export const Right: Story = () => <TinyArrow direction="right" />;
+export const Down: Story = () => <TinyArrow direction="down" />;

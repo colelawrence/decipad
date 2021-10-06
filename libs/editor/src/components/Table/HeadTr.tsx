@@ -32,6 +32,7 @@ export const addColumn = (editor: Editor): void => {
         editor,
         {
           type: ELEMENT_TH,
+          attributes: { cellType: 'string' },
           // TODO Column default name
           children: [{ text: '' }],
         },
@@ -48,6 +49,7 @@ export const addColumn = (editor: Editor): void => {
         editor,
         {
           type: ELEMENT_TD,
+          attributes: { cellType: 'string' },
           children: [{ text: '' }],
         },
         { at: insertPath }

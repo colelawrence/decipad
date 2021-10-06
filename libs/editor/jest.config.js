@@ -1,4 +1,8 @@
-const { transform, ...baseConfig } = require('../../jest-base.config');
+const {
+  transform,
+  setupFilesAfterEnv = [],
+  ...baseConfig
+} = require('../../jest-base.config');
 
 module.exports = {
   ...baseConfig,
@@ -12,5 +16,8 @@ module.exports = {
   },
 
   testEnvironment: 'jsdom',
-  snapshotSerializers: ['@emotion/jest/serializer'],
+  setupFilesAfterEnv: [
+    ...setupFilesAfterEnv,
+    require.resolve('../testutils/src/dom-extensions-setup-after-env'),
+  ],
 };

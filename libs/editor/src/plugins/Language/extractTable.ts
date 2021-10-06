@@ -1,5 +1,5 @@
 import { Node } from 'slate';
-import { AST } from '@decipad/language';
+import { AST, buildType, serializeType } from '@decipad/language';
 import { ELEMENT_TABLE } from '@udecode/plate';
 import { zip } from '@decipad/utils';
 import { astNode } from './common';
@@ -8,7 +8,11 @@ import {
   ELEMENT_TBODY,
   ELEMENT_THEAD,
 } from '../../utils/elementTypes';
-import { BodyTr, InteractiveTable } from '../InteractiveTable/table';
+import {
+  BodyTr,
+  InteractiveTable,
+  TableCellType,
+} from '../InteractiveTable/table';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
@@ -33,32 +37,50 @@ function getVariableName(table: InteractiveTable): string | null {
   return null;
 }
 
-function extractColumnNames(table: InteractiveTable): string[] | null {
-  const [, thead] = table.children;
-  const [columnNamesTr] = thead.children;
-  const columnNames = columnNamesTr.children.map(
-    (th) => Node.string(th) || null
-  );
-
-  if (columnNames?.every((name) => name != null)) {
-    return columnNames as string[];
-  }
-  return null;
+interface ColSpec {
+  name: string;
+  type: TableCellType;
 }
 
-function getTableNode(columnNames: string[], dataRows: BodyTr[]): AST.Table {
-  const columns: AST.Column[] = columnNames.map((_, columnIndex) => {
+function extractColumnNames(table: InteractiveTable): ColSpec[] | null {
+  const [, thead] = table.children;
+  const [columnNamesTr] = thead.children;
+
+  const cols: ColSpec[] = [];
+
+  for (const th of columnNamesTr.children) {
+    const name = Node.string(th) || null;
+    const type = th.attributes?.cellType ?? serializeType(buildType.string());
+
+    if (!name) return null;
+
+    cols.push({ name, type });
+  }
+
+  return cols;
+}
+
+function getTableNode(columns: ColSpec[], dataRows: BodyTr[]): AST.Table {
+  const columnValues: AST.Column[] = columns.map(({ type }, columnIndex) => {
     const colContents: AST.Expression[] = dataRows.map((row) => {
       const cell = Node.string(row.children[columnIndex]);
-      return astNode('literal', 'string' as const, cell, null);
+
+      switch (type) {
+        case 'number': {
+          return astNode('literal', 'number' as const, Number(cell), null);
+        }
+        case 'string': {
+          return astNode('literal', 'string' as const, cell, null);
+        }
+      }
     });
 
     return astNode('column', colContents);
   });
 
   const cols: (AST.Column | AST.ColDef)[] = [];
-  for (const [colName, colValue] of zip(columnNames, columns)) {
-    cols.push(astNode('coldef', colName));
+  for (const [{ name }, colValue] of zip(columns, columnValues)) {
+    cols.push(astNode('coldef', name));
     cols.push(colValue);
   }
 

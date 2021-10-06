@@ -14,8 +14,6 @@ import {
   TitleElement,
   UnderlineLeaf,
   UnorderedListElement,
-  TdElement,
-  ThElement,
   CaptionElement,
   TheadElement,
   TbodyElement,
@@ -44,7 +42,9 @@ import {
 } from '@udecode/plate';
 import { FunctionComponent } from 'react';
 import { BodyTr } from '../components/Table/BodyTr';
+import { BodyTd } from '../components/Table/BodyTd';
 import { HeadTr } from '../components/Table/HeadTr';
+import { HeadTh } from '../components/Table/HeadTh';
 import { Table } from '../components/Table/Table';
 import * as elementTypes from './elementTypes';
 import { withStyledDraggables } from './withStyledDraggables';
@@ -74,8 +74,8 @@ export const createPlateComponents = (): Partial<
     [ELEMENT_LI]: ListItemElement,
     [ELEMENT_TABLE]: Table,
     [ELEMENT_TR]: BodyTr,
-    [ELEMENT_TD]: TdElement,
-    [ELEMENT_TH]: ThElement,
+    [ELEMENT_TD]: BodyTd,
+    [ELEMENT_TH]: HeadTh,
 
     // Custom elements
     [elementTypes.ELEMENT_IMPORT_DATA]: ImportDataElement,

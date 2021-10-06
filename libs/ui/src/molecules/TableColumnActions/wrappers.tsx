@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react';
-import { css } from '@emotion/react';
+import { css, SerializedStyles } from '@emotion/react';
 import { card } from '../../styles';
 import {
   subtleBorder,
@@ -26,7 +26,7 @@ const menuStyles = css({
   borderTopLeftRadius: 0,
   borderTopRightRadius: 0,
   borderTop: '0 none',
-  width: 195,
+  minWidth: 195,
 });
 
 const floatingMenuStyles = css({
@@ -37,27 +37,31 @@ const floatingMenuStyles = css({
   top: -menuPadding,
 });
 
-export const FloatingMenu: React.FC = ({ children }) => {
-  // Focus the first button
+type WithStyle = { style: SerializedStyles };
+
+const Menu: React.FC<WithStyle> = ({ style, children }) => {
+  // Focus the first button on mount
   const wrapperRef = useRef<HTMLElement>(null);
   useEffect(() => {
-    const firstFocusable = wrapperRef.current?.querySelector(
-      'button'
-    ) as HTMLButtonElement | null;
-    firstFocusable?.focus();
+    const firstButton: HTMLButtonElement | null =
+      wrapperRef.current?.querySelector('button') ?? null;
+
+    if (firstButton != null) {
+      firstButton.focus();
+    }
   }, []);
 
   return (
-    <nav ref={wrapperRef} css={floatingMenuStyles}>
+    <nav ref={wrapperRef} css={style}>
       <ul>{children}</ul>
     </nav>
   );
 };
 
-export const DroopyMenu: React.FC = ({ children }) => {
-  return (
-    <nav css={menuStyles}>
-      <ul>{children}</ul>
-    </nav>
-  );
-};
+export const FloatingMenu: React.FC = ({ children }) => (
+  <Menu style={floatingMenuStyles}>{children}</Menu>
+);
+
+export const DroopyMenu: React.FC = ({ children }) => (
+  <Menu style={menuStyles}>{children}</Menu>
+);

@@ -14,3 +14,4 @@ export * as Icons from './icons';
 
 // TODO temporary while templates unfinished
 export { EmptyWorkspaceCta, NotebookShareMenu } from './organisms';
+export { TableColumnActions } from './molecules';

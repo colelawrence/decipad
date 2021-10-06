@@ -46,6 +46,8 @@ module.exports = {
     'class-methods-use-this': 'off',
 
     'no-restricted-syntax': 'off',
+    'consistent-return': 'off',
+    'array-callback-return': 'off',
     'default-case': 'off',
     'no-nested-ternary': 'off',
     'no-cond-assign': ['error', 'except-parens'],

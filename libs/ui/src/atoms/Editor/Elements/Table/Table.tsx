@@ -8,6 +8,7 @@ const tableStyles = css({
   borderCollapse: 'collapse',
   borderRadius: '6px',
   fontFamily: 'monospace',
+  tableLayout: 'fixed',
 });
 
 export const TableElement = ({
@@ -19,7 +20,12 @@ export const TableElement = ({
   ComponentProps<typeof AddRowButton>): ReturnType<FC> => {
   return (
     <div>
-      <table css={tableStyles} {...attributes} {...nodeProps}>
+      <table
+        spellCheck={false}
+        css={tableStyles}
+        {...attributes}
+        {...nodeProps}
+      >
         {children}
       </table>
 

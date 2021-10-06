@@ -1,1 +1,3 @@
-export default '/url/to/imported/file.rar';
+const mockUrl = '/url/to/imported/file.rar';
+
+export default mockUrl;
