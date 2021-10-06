@@ -4,13 +4,13 @@
 ### Function definition ###
 ###########################
 
-functionDef -> "function" ___ functionDefName _ functionDefArgs _ "=" ">" _ functionBody {%
+functionDef -> "function" ___ functionDefName _ functionDefArgs _ "=>" _ functionBody {%
                                                         (d) => addArrayLoc({
                                                           type: "function-definition",
                                                           args: [
                                                             d[2],
                                                             d[4],
-                                                            d[9]
+                                                            d[8]
                                                           ]
                                                         }, d)
                                                         %}

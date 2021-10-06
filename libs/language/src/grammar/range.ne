@@ -16,4 +16,4 @@ rangeSpec -> expression rangeParcelSeparator expression       {%
                                                               }
                                                               %}
 
-rangeParcelSeparator -> ((__ "through" __) | (_ "." "." _))   {% () => null %}
+rangeParcelSeparator -> _ ("through" | "..") _                {% () => null %}

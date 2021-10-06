@@ -22,7 +22,13 @@ export const tokenizer = moo.states({
     ws: { match: /[ \t\n\v\f]+/, lineBreaks: true },
 
     // Punctuation
-    equalSign: '=',
+    notEquals: '!=',
+    equals: '==',
+    lessThanOrEquals: '<=',
+    greaterThanOrEquals: '>=',
+    arrow: '=>',
+    twoStars: '**',
+    twoDots: '..',
 
     dot: '.',
     bang: '!',
@@ -41,9 +47,8 @@ export const tokenizer = moo.states({
     lessThan: '<',
     greaterThan: '>',
     colon: ':',
-    equals: '==',
-    notEquals: '!=',
     comma: ',',
+    equalSign: '=',
 
     andSign: '&&',
     orSign: '||',

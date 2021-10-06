@@ -4,7 +4,6 @@ function id(x) {
   return x[0];
 }
 
-// Using require because nearley compiles things into an IIFE
 import { tokenizer } from './tokenizer';
 
 const abbreviatedPrefixes = {
@@ -1196,18 +1195,18 @@ let ParserRules = [
   },
   {
     name: 'additiveOperator',
-    symbols: ['__', { literal: 'in' }, '__'],
+    symbols: [{ literal: 'in' }],
     postprocess: (d) =>
       addArrayLoc(
         {
-          name: d[1].value,
+          name: d[0].value,
         },
         d
       ),
   },
   {
     name: 'multiplicativeOperator$subexpression$1',
-    symbols: [{ literal: '*' }, { literal: '*' }],
+    symbols: [{ literal: '**' }],
   },
   {
     name: 'multiplicativeOperator$subexpression$1',
@@ -1219,19 +1218,19 @@ let ParserRules = [
   },
   {
     name: 'multiplicativeOperator$subexpression$1',
-    symbols: [{ literal: '<' }, { literal: '=' }],
+    symbols: [{ literal: '<=' }],
   },
   {
     name: 'multiplicativeOperator$subexpression$1',
-    symbols: [{ literal: '>' }, { literal: '=' }],
+    symbols: [{ literal: '>=' }],
   },
   {
     name: 'multiplicativeOperator$subexpression$1',
-    symbols: [{ literal: '=' }, { literal: '=' }],
+    symbols: [{ literal: '==' }],
   },
   {
     name: 'multiplicativeOperator$subexpression$1',
-    symbols: [{ literal: '!' }, { literal: '=' }],
+    symbols: [{ literal: '!=' }],
   },
   {
     name: 'multiplicativeOperator',
@@ -1239,7 +1238,7 @@ let ParserRules = [
     postprocess: (d) => {
       return addArrayLoc(
         {
-          name: d[0].map((t) => t.value).join(''),
+          name: d[0][0].value,
         },
         d[0]
       );
@@ -1263,11 +1262,7 @@ let ParserRules = [
   },
   {
     name: 'multiplicativeOperator',
-    symbols: [
-      { literal: ' ' },
-      'multiplicativeOperator$subexpression$2',
-      { literal: ' ' },
-    ],
+    symbols: ['__', 'multiplicativeOperator$subexpression$2', '__'],
     postprocess: (d) => {
       return addArrayLoc(
         {
@@ -1381,24 +1376,16 @@ let ParserRules = [
     },
   },
   {
-    name: 'rangeParcelSeparator$subexpression$1$subexpression$1',
-    symbols: ['__', { literal: 'through' }, '__'],
+    name: 'rangeParcelSeparator$subexpression$1',
+    symbols: [{ literal: 'through' }],
   },
   {
     name: 'rangeParcelSeparator$subexpression$1',
-    symbols: ['rangeParcelSeparator$subexpression$1$subexpression$1'],
-  },
-  {
-    name: 'rangeParcelSeparator$subexpression$1$subexpression$2',
-    symbols: ['_', { literal: '.' }, { literal: '.' }, '_'],
-  },
-  {
-    name: 'rangeParcelSeparator$subexpression$1',
-    symbols: ['rangeParcelSeparator$subexpression$1$subexpression$2'],
+    symbols: [{ literal: '..' }],
   },
   {
     name: 'rangeParcelSeparator',
-    symbols: ['rangeParcelSeparator$subexpression$1'],
+    symbols: ['_', 'rangeParcelSeparator$subexpression$1', '_'],
     postprocess: () => null,
   },
   {
@@ -1443,8 +1430,7 @@ let ParserRules = [
       '_',
       'functionDefArgs',
       '_',
-      { literal: '=' },
-      { literal: '>' },
+      { literal: '=>' },
       '_',
       'functionBody',
     ],
@@ -1452,7 +1438,7 @@ let ParserRules = [
       addArrayLoc(
         {
           type: 'function-definition',
-          args: [d[2], d[4], d[9]],
+          args: [d[2], d[4], d[8]],
         },
         d
       ),

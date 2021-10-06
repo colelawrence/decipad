@@ -156,14 +156,14 @@ additiveOperator  -> ("-" | "+" | "&&" | "||")          {%
                                                         }
                                                         %}
 
-additiveOperator  -> __ "in" __                         {%
+additiveOperator  -> "in"                               {%
                                                         (d) =>
                                                           addArrayLoc({
-                                                            name: d[1].value,
+                                                            name: d[0].value,
                                                           }, d)
                                                         %}
 
-multiplicativeOperator -> ("*" "*" | ">" | "<" | "<" "=" | ">" "=" | "=" "=" | "!" "=") {%
+multiplicativeOperator -> ("**" | ">" | "<" | "<=" | ">=" | "==" | "!=") {%
                                                         (d) => {
                                                           return addArrayLoc({
                                                             name: d[0].map(t => t.value).join(''),

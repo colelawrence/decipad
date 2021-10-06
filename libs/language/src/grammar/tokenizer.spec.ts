@@ -5,6 +5,17 @@ const testTokenizer = (input: string) =>
     .map((t) => `${t.type}(${t.text})`)
     .join(' ');
 
+it('finds "==" not two "="', () => {
+  expect(testTokenizer('==')).toMatchInlineSnapshot(`"equals(==)"`);
+  expect(testTokenizer('!=')).toMatchInlineSnapshot(`"notEquals(!=)"`);
+  expect(testTokenizer('<=')).toMatchInlineSnapshot(`"lessThanOrEquals(<=)"`);
+  expect(testTokenizer('>=')).toMatchInlineSnapshot(
+    `"greaterThanOrEquals(>=)"`
+  );
+  expect(testTokenizer('**')).toMatchInlineSnapshot(`"twoStars(**)"`);
+  expect(testTokenizer('..')).toMatchInlineSnapshot(`"twoDots(..)"`);
+});
+
 it('can go into date mode and back', () => {
   // T is an identifier outside date() and a punctuation for ISO 8601 inside
   expect(testTokenizer('T date(T) T')).toMatchInlineSnapshot(

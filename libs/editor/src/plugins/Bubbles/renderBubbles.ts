@@ -7,9 +7,7 @@ const getAssignedIdentifiers = (codeLines: Text[]) =>
     .filter((tok) => tok.type !== 'ws')
     .filter(
       (currentTok, i, all) =>
-        currentTok.type === 'identifier' &&
-        all[i + 1]?.type === 'equalSign' &&
-        all[i + 2]?.type !== 'equalSign'
+        currentTok.type === 'identifier' && all[i + 1]?.type === 'equalSign'
     );
 
 export const getBubbleRanges = (codeLines: Text[], path: Path): Range[] => {

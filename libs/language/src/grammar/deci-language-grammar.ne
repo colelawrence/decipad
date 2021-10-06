@@ -1,12 +1,11 @@
 @preprocessor esmodule
 
 @{%
-// Using require because nearley compiles things into an IIFE
 import { tokenizer } from './tokenizer'
 %}
 
 # Defines that the variable "tokenizer" above is our lexer here.
-# Needs to be used in every .ne file that uses a %tokenReference
+# Needs to be used in every .ne file
 @lexer tokenizer
 
 @include "./white-space.ne"
