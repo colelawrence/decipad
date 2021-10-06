@@ -1,12 +1,32 @@
 import { ELEMENT_CODE_LINE } from '@udecode/plate';
 import { Editor, Node, Path, Range, Text } from 'slate';
+import { tokenize } from '@decipad/language';
+
+const getAssignedIdentifiers = (codeLines: Text[]) =>
+  tokenize(codeLines.map((text) => text.text).join('\n'))
+    .filter((tok) => tok.type !== 'ws')
+    .filter(
+      (currentTok, i, all) =>
+        currentTok.type === 'identifier' &&
+        all[i + 1]?.type === 'equalSign' &&
+        all[i + 2]?.type !== 'equalSign'
+    );
+
+export const getBubbleRanges = (codeLines: Text[], path: Path): Range[] => {
+  return getAssignedIdentifiers(codeLines).map((ident) => {
+    return {
+      bubble: true,
+      variable: ident.text,
+      anchor: { path, offset: ident.offset },
+      focus: { path, offset: ident.offset + ident.text.length },
+    } as Range;
+  });
+};
 
 export const renderBubble =
   (editor: Editor) =>
   ([node, path]: [node: Node, path: Path]): Range[] => {
-    const ranges: Range[] = [];
-
-    if (node === editor) return ranges;
+    if (node === editor) return [];
 
     const [parentNode] = Editor.parent(editor, path);
 
@@ -14,31 +34,12 @@ export const renderBubble =
     /* eslint-disable @typescript-eslint/no-explicit-any */
 
     if (!parentNode || (parentNode as any).type !== ELEMENT_CODE_LINE) {
-      return ranges;
+      return [];
     }
 
     if (!Text.isText(node)) {
-      return ranges;
+      return [];
     }
 
-    let start = 0;
-
-    parentNode.children.forEach((child) => {
-      const line = (child as any).text;
-      const variable = line.match(/^\s*(\w+)\s*(?:=[^=]+)$/)?.[1];
-      const length = variable?.length || 0;
-      const end = start + length;
-
-      if (variable) {
-        (ranges as any).push({
-          bubble: true,
-          variable,
-          anchor: { path, offset: start },
-          focus: { path, offset: end },
-        });
-      }
-      start = start + line.length + 1;
-    });
-
-    return ranges;
+    return getBubbleRanges(parentNode.children as Text[], path);
   };

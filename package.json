@@ -9,7 +9,7 @@
     "serve:storybook": "nx run ui:storybook",
     "build": "nx build",
     "build:grammar": "cd libs/language/src/grammar; nearleyc deci-language-grammar.ne | prettier --stdin-filepath grammar.js > deci-language-grammar-generated.js",
-    "build:grammar:watch": "yarn --quiet build:grammar; chokidar 'libs/language/src/grammar/**/*.ne' -c 'yarn --quiet build:grammar'",
+    "build:grammar:watch": "yarn build:grammar; chokidar 'libs/language/src/grammar/**/*.ne' -c 'yarn build:grammar'",
     "build:frontend": "nx export client",
     "build:storybook": "nx run ui:build-storybook",
     "build:backend:dev": "esbuild libs/lambdas/src/http/*/index.ts libs/lambdas/src/queues/*/index.ts libs/lambdas/src/ws/*/index.ts --bundle --outdir=apps/backend/src --target=node14 --platform=node --format=cjs --external:aws-sdk --external:@vue/compiler-sfc --legal-comments=none --sourcemap --keep-names",

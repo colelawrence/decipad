@@ -1,7 +1,7 @@
-import { tokenizer } from './tokenizer';
+import { tokenize } from './tokenizer';
 
 const testTokenizer = (input: string) =>
-  Array.from(tokenizer.reset(input))
+  tokenize(input)
     .map((t) => `${t.type}(${t.text})`)
     .join(' ');
 
@@ -19,7 +19,7 @@ it('can find numbers', () => {
 
 it('parses strings using JSON.parse', () => {
   const stringWithBS = '\n\f\b\\/ hello';
-  const [stringToken] = tokenizer.reset(JSON.stringify(stringWithBS));
+  const [stringToken] = tokenize(JSON.stringify(stringWithBS));
   expect(stringToken.value).toEqual(stringWithBS);
 });
 

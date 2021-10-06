@@ -1,4 +1,4 @@
-import moo from 'moo';
+import moo, { Token } from 'moo';
 
 const keywordStrings = [
   'if',
@@ -78,3 +78,6 @@ export const tokenizer = moo.states({
     },
   },
 });
+
+export const tokenize = (source: string): Token[] =>
+  Array.from(tokenizer.reset(source));
