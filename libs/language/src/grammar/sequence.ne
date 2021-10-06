@@ -1,4 +1,4 @@
-@lexer lexer
+@lexer tokenizer
 
 sequence -> "[" _ sequenceInner _ "]"               {%
                                                     (d) => addArrayLoc(d[2], d)

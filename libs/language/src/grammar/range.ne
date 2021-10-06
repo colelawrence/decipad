@@ -1,4 +1,4 @@
-@lexer lexer
+@lexer tokenizer
 
 range -> "[" _ rangeSpec _ "]"   {%
                                                               (d) => {

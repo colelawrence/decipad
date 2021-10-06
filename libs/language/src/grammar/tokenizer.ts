@@ -17,7 +17,7 @@ const keywords = moo.keywords(
   Object.fromEntries(keywordStrings.map((kw) => [`${kw} keyword`, kw]))
 );
 
-export const lexer = moo.states({
+export const tokenizer = moo.states({
   main: {
     ws: { match: /[ \t\n\v\f]+/, lineBreaks: true },
 

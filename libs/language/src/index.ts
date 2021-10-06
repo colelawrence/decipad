@@ -3,6 +3,7 @@ import { Interpreter } from './interpreter';
 import { SimpleValue } from './interpreter/Value';
 import { Type } from './type';
 
+export { tokenizer } from './grammar';
 export { parse, AST, Parser } from './parser';
 export {
   inferTargetStatement,

@@ -2,12 +2,12 @@
 
 @{%
 // Using require because nearley compiles things into an IIFE
-import { lexer } from './lexer'
+import { tokenizer } from './tokenizer'
 %}
 
-# Defines that the variable "lexer" above is our lexer here.
+# Defines that the variable "tokenizer" above is our lexer here.
 # Needs to be used in every .ne file that uses a %tokenReference
-@lexer lexer
+@lexer tokenizer
 
 @include "./white-space.ne"
 @include "./literal.ne"

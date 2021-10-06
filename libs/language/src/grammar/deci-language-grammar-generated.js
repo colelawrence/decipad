@@ -5,7 +5,7 @@ function id(x) {
 }
 
 // Using require because nearley compiles things into an IIFE
-import { lexer } from './lexer';
+import { tokenizer } from './tokenizer';
 
 const abbreviatedPrefixes = {
   y: 'yocto',
@@ -280,11 +280,11 @@ function addArrayLoc(node, locArray) {
   }
 }
 
-let Lexer = lexer;
+let Lexer = tokenizer;
 let ParserRules = [
   {
     name: '_$ebnf$1',
-    symbols: [lexer.has('ws') ? { type: 'ws' } : ws],
+    symbols: [tokenizer.has('ws') ? { type: 'ws' } : ws],
     postprocess: id,
   },
   {
@@ -297,12 +297,12 @@ let ParserRules = [
   { name: '_', symbols: ['_$ebnf$1'], postprocess: id },
   {
     name: '__',
-    symbols: [lexer.has('ws') ? { type: 'ws' } : ws],
+    symbols: [tokenizer.has('ws') ? { type: 'ws' } : ws],
     postprocess: id,
   },
   {
     name: '___',
-    symbols: [lexer.has('ws') ? { type: 'ws' } : ws],
+    symbols: [tokenizer.has('ws') ? { type: 'ws' } : ws],
     postprocess: (d, _l, reject) => {
       if (d[0].value.includes('\n') || d[0].length === 0) {
         return reject;
@@ -313,7 +313,7 @@ let ParserRules = [
   },
   {
     name: '__n',
-    symbols: [lexer.has('ws') ? { type: 'ws' } : ws],
+    symbols: [tokenizer.has('ws') ? { type: 'ws' } : ws],
     postprocess: (d, _l, reject) => {
       if (!d[0].value.includes('\n')) {
         return reject;
@@ -406,7 +406,7 @@ let ParserRules = [
   },
   {
     name: 'unitlessNumber',
-    symbols: [lexer.has('number') ? { type: 'number' } : number],
+    symbols: [tokenizer.has('number') ? { type: 'number' } : number],
     postprocess: ([number]) => {
       return addLoc(
         {
@@ -418,7 +418,7 @@ let ParserRules = [
   },
   {
     name: 'int',
-    symbols: [lexer.has('number') ? { type: 'number' } : number],
+    symbols: [tokenizer.has('number') ? { type: 'number' } : number],
     postprocess: ([number], _l, reject) => {
       if (/[.eE]/.test(number.value)) {
         return reject;
@@ -434,7 +434,7 @@ let ParserRules = [
   },
   {
     name: 'decimal',
-    symbols: [lexer.has('number') ? { type: 'number' } : number],
+    symbols: [tokenizer.has('number') ? { type: 'number' } : number],
     postprocess: ([number], _l, reject) => {
       if (/[eE]/.test(number.value)) {
         return reject;
@@ -481,7 +481,9 @@ let ParserRules = [
   { name: 'unit', symbols: ['unitName'], postprocess: id },
   {
     name: 'unitName',
-    symbols: [lexer.has('identifier') ? { type: 'identifier' } : identifier],
+    symbols: [
+      tokenizer.has('identifier') ? { type: 'identifier' } : identifier,
+    ],
     postprocess: ([ident]) => addLoc(parseUnit(ident.value), ident),
   },
   {
@@ -494,7 +496,7 @@ let ParserRules = [
   },
   {
     name: 'string',
-    symbols: [lexer.has('string') ? { type: 'string' } : string],
+    symbols: [tokenizer.has('string') ? { type: 'string' } : string],
     postprocess: ([string]) => {
       return addLoc(
         {
@@ -508,11 +510,11 @@ let ParserRules = [
   {
     name: 'date',
     symbols: [
-      lexer.has('beginDate') ? { type: 'beginDate' } : beginDate,
+      tokenizer.has('beginDate') ? { type: 'beginDate' } : beginDate,
       '_',
       'dateInner',
       '_',
-      lexer.has('endDate') ? { type: 'endDate' } : endDate,
+      tokenizer.has('endDate') ? { type: 'endDate' } : endDate,
     ],
     postprocess: (d) => {
       return addLoc(
@@ -666,38 +668,38 @@ let ParserRules = [
   },
   {
     name: 'dateYear',
-    symbols: [lexer.has('digits') ? { type: 'digits' } : digits],
+    symbols: [tokenizer.has('digits') ? { type: 'digits' } : digits],
     postprocess: makeDateFragmentReader('year', 4, 0, 9999),
   },
   {
     name: 'dateMonth',
-    symbols: [lexer.has('digits') ? { type: 'digits' } : digits],
+    symbols: [tokenizer.has('digits') ? { type: 'digits' } : digits],
     postprocess: makeDateFragmentReader('month', 2, 1, 12),
   },
   { name: 'dateMonth', symbols: ['literalMonth'], postprocess: id },
   {
     name: 'dateDay',
-    symbols: [lexer.has('digits') ? { type: 'digits' } : digits],
+    symbols: [tokenizer.has('digits') ? { type: 'digits' } : digits],
     postprocess: makeDateFragmentReader('day', 2, 1, 31),
   },
   {
     name: 'dateHour',
-    symbols: [lexer.has('digits') ? { type: 'digits' } : digits],
+    symbols: [tokenizer.has('digits') ? { type: 'digits' } : digits],
     postprocess: makeDateFragmentReader('hour', 2, 0, 23),
   },
   {
     name: 'dateMinute',
-    symbols: [lexer.has('digits') ? { type: 'digits' } : digits],
+    symbols: [tokenizer.has('digits') ? { type: 'digits' } : digits],
     postprocess: makeDateFragmentReader('minute', 2, 0, 59),
   },
   {
     name: 'dateSecond',
-    symbols: [lexer.has('digits') ? { type: 'digits' } : digits],
+    symbols: [tokenizer.has('digits') ? { type: 'digits' } : digits],
     postprocess: makeDateFragmentReader('second', 2, 0, 59),
   },
   {
     name: 'dateMillisecond',
-    symbols: [lexer.has('digits') ? { type: 'digits' } : digits],
+    symbols: [tokenizer.has('digits') ? { type: 'digits' } : digits],
     postprocess: makeDateFragmentReader('millisecond', 3, 0, 999),
   },
   { name: 'literalMonth$subexpression$1', symbols: [{ literal: 'Jan' }] },
@@ -798,7 +800,7 @@ let ParserRules = [
     name: 'dateTimeZone$ebnf$1$subexpression$1',
     symbols: [
       { literal: ':' },
-      lexer.has('digits') ? { type: 'digits' } : digits,
+      tokenizer.has('digits') ? { type: 'digits' } : digits,
     ],
   },
   {
@@ -817,7 +819,7 @@ let ParserRules = [
     name: 'dateTimeZone',
     symbols: [
       'dateTimeZone$subexpression$1',
-      lexer.has('digits') ? { type: 'digits' } : digits,
+      tokenizer.has('digits') ? { type: 'digits' } : digits,
       'dateTimeZone$ebnf$1',
     ],
     postprocess: ([sign, h, m]) => {
@@ -1420,7 +1422,7 @@ let ParserRules = [
     symbols: [
       { literal: 'import_data' },
       '__',
-      lexer.has('string') ? { type: 'string' } : string,
+      tokenizer.has('string') ? { type: 'string' } : string,
     ],
     postprocess: (d) => {
       return addArrayLoc(
@@ -1648,7 +1650,9 @@ let ParserRules = [
   },
   {
     name: 'identifier',
-    symbols: [lexer.has('identifier') ? { type: 'identifier' } : identifier],
+    symbols: [
+      tokenizer.has('identifier') ? { type: 'identifier' } : identifier,
+    ],
     postprocess: (d, _l, reject) => {
       const identString = d[0].value;
 
