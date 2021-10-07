@@ -1,4 +1,4 @@
-import moo, { Token } from 'moo';
+import moo, { error, Token } from 'moo';
 
 const keywordStrings = [
   'if',
@@ -71,6 +71,9 @@ export const tokenizer = moo.states({
       match: /"(?:[^\\"\0-\x1F\x7F]|\\u[0-9a-fA-F]{4}|\\["\\/bfnrt])+"/,
       value: (validJsonString: string) => JSON.parse(validJsonString),
     },
+
+    // Moo crashes by default, but we can give it an error token to return us
+    error,
   },
   date: {
     digits: /[0-9]+/,

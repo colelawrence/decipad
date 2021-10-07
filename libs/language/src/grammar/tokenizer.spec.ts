@@ -44,3 +44,7 @@ it('finds identifiers and keywords', () => {
   );
   expect(testTokenizer('then')).toMatchInlineSnapshot(`"then keyword(then)"`);
 });
+
+it('does not crash when it sees an invalid token', () => {
+  expect(testTokenizer('"hi')).toMatchInlineSnapshot(`"error(\\"hi)"`);
+});
