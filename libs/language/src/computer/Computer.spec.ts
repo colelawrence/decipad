@@ -214,3 +214,25 @@ it('can pass on injected data', async () => {
     ]
   `);
 });
+
+describe('tooling data', () => {
+  it('Can get variables and functions available until a certain location', async () => {
+    await computeOnTestComputer({
+      program: getUnparsed('A = 1', 'function f(x) => 1\nC = 3'),
+    });
+
+    const names = await computer.getAutocompleteNames(['block-1', 0]);
+    expect(names).toMatchObject([
+      {
+        kind: 'variable',
+        name: 'A',
+        type: { kind: 'number' },
+      },
+      {
+        kind: 'function',
+        name: 'f',
+        type: { kind: 'function' },
+      },
+    ]);
+  });
+});

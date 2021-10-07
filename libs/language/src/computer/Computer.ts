@@ -1,7 +1,7 @@
 import { inferStatement } from '../infer';
 import { evaluate as evaluateStatement } from '../interpreter';
 
-import { AST, ExternalDataMap } from '..';
+import { AST, ExternalDataMap, AutocompleteName, serializeType } from '..';
 import {
   ComputePanic,
   ValueLocation,
@@ -158,6 +158,48 @@ export class Computer {
    */
   reset() {
     this.constructor.call(this);
+  }
+
+  /**
+   * Get names for the autocomplete, and information about them
+   */
+  async getAutocompleteNames([blockId, stmtIdx]: ValueLocation): Promise<
+    AutocompleteName[]
+  > {
+    const program = getGoodBlocks(this.previouslyParsed);
+
+    // Our search stops at this statement
+    const findUntil = program.find((b) => b.id === blockId)?.args[stmtIdx];
+    if (!findUntil) return [];
+
+    const { nodeTypes } = this.computationRealm.inferContext;
+    function* findNames(): Iterable<AutocompleteName> {
+      for (const block of program) {
+        for (const statement of block.args) {
+          const type = nodeTypes.get(statement);
+
+          if (statement.type === 'assign' && type) {
+            yield {
+              kind: 'variable',
+              type: serializeType(type),
+              name: statement.args[0].args[0],
+            };
+          }
+
+          if (statement.type === 'function-definition' && type) {
+            yield {
+              kind: 'function',
+              type: serializeType(type),
+              name: statement.args[0].args[0],
+            };
+          }
+
+          if (statement === findUntil) return;
+        }
+      }
+    }
+
+    return Array.from(findNames());
   }
 
   /**
