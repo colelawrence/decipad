@@ -30,7 +30,7 @@ export interface Command {
 export const commands: Command[] = [
   {
     type: ELEMENT_CODE_BLOCK,
-    name: 'Model',
+    name: 'Formulas',
     description: 'Formulas, calc and deci language.',
     icon: <ModelBlock />,
   },
