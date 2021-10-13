@@ -16,7 +16,6 @@ import { ComponentProps, useCallback, useMemo, useState } from 'react';
 import { Editor, Element, Range, Transforms } from 'slate';
 import { SlashCommandsSelect } from '.';
 import { Command, commands } from './commands';
-import { insertBlock } from './utils/insertBlock';
 
 export const useSlashCommandsPlugin = (): {
   plugin: PlatePlugin;
@@ -32,17 +31,18 @@ export const useSlashCommandsPlugin = (): {
         .filter(
           (c) =>
             c.name.toLowerCase().includes(search.toLowerCase()) ||
-            c.type.toLowerCase().includes(search.toLowerCase())
+            c.description.toLowerCase().includes(search.toLowerCase())
         )
         .slice(0, 5),
     [search]
   );
 
-  const onAddBlock = useCallback(
+  const executeCommand = useCallback(
     (editor: SPEditor, data: Command) => {
       if (targetRange !== null) {
         Transforms.select(editor, targetRange);
-        insertBlock(editor, targetRange, { pluginKey: data.type });
+        Transforms.delete(editor, {});
+        data.insert(editor, targetRange);
       }
     },
     [targetRange]
@@ -68,14 +68,14 @@ export const useSlashCommandsPlugin = (): {
           e.preventDefault();
           const value = values[valueIndex];
           if (value) {
-            onAddBlock(editor, value);
+            executeCommand(editor, value);
           }
           return false;
         }
       }
       return undefined;
     },
-    [targetRange, valueIndex, values, onAddBlock]
+    [targetRange, valueIndex, values, executeCommand]
   );
 
   const onChangeSlashCommands: OnChange = useCallback(
@@ -134,9 +134,9 @@ export const useSlashCommandsPlugin = (): {
         valueIndex,
         setValueIndex,
         options: values,
-        onClickSlashCommands: onAddBlock,
+        onClickSlashCommands: executeCommand,
       }),
-      [onAddBlock, targetRange, valueIndex, values]
+      [executeCommand, targetRange, valueIndex, values]
     ),
   };
 };

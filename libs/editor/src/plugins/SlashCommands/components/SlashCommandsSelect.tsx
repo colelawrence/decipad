@@ -102,7 +102,7 @@ export const SlashCommandsSelect = ({
       <Wrapper ref={ref}>
         {options.map((option, i) => (
           <OptionItem
-            key={`${i}${option.type}`}
+            key={i}
             active={i === valueIndex}
             onMouseDown={getPreventDefaultHandler(
               onClickSlashCommands,

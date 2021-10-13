@@ -6,7 +6,9 @@ import { TableData } from '../../utils/tableTypes';
 import { getNullReplacementValue, parseCell } from '../../utils/parseCell';
 
 interface InteractiveTableNode {
+  type: typeof TABLE_INPUT;
   tableData: TableData;
+  children: [];
 }
 
 /* eslint-disable @typescript-eslint/no-explicit-any */

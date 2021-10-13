@@ -1,5 +1,5 @@
-import { insertNodes, SPEditor } from '@udecode/plate';
 import { Editor, Transforms } from 'slate';
+import { insertNodes, SPEditor, TDescendant } from '@udecode/plate';
 import { TABLE_INPUT } from '../../../utils/elementTypes';
 
 const tableElement = {
@@ -20,19 +20,17 @@ const tableElement = {
     ],
   },
   children: [],
-};
+} as const;
 
-export const formatTable = (editor: SPEditor): void => {
+export const insertTable = (editor: SPEditor): void => {
   const rootPath = Editor.above(editor, {
     match: (n) => Editor.isBlock(editor, n),
   })?.[1];
 
   if (!rootPath) return;
 
-  // Delete the empty paragraph element above the table
+  // Delete the block where we will put the table
   Transforms.delete(editor, { at: rootPath, unit: 'block' });
   // insert a new table into the document
-  insertNodes(editor, tableElement, {
-    at: rootPath,
-  });
+  insertNodes<TDescendant>(editor, tableElement, { at: rootPath });
 };

@@ -2,16 +2,20 @@ import { Icons } from '@decipad/ui';
 import { css } from '@emotion/react';
 import {
   ELEMENT_BLOCKQUOTE,
-  ELEMENT_CODE_BLOCK,
   ELEMENT_H2,
   ELEMENT_H3,
+  SPEditor,
 } from '@udecode/plate';
-import { ELEMENT_IMPORT_DATA, TABLE_INPUT } from '../../utils/elementTypes';
+import { Location } from 'slate';
+import { ELEMENT_IMPORT_DATA } from '../../utils/elementTypes';
 import { ImportData } from './icons/ImportData';
 import { ModelBlock } from './icons/ModelBlock';
 import { Subheading } from './icons/Subheading';
 import { Subtitle } from './icons/Subtitle';
 import { Zap } from './icons/Zap';
+import { insertBlockOfType } from './utils/insertBlockOfType';
+import { insertCodeBlock } from './utils/insertCodeBlock';
+import { insertTable } from './utils/insertTable';
 
 const iconStyles = css({
   width: '20px',
@@ -20,21 +24,21 @@ const iconStyles = css({
 });
 
 export interface Command {
-  type: string;
-  name: string;
-  description: string;
-  icon: JSX.Element;
+  readonly name: string;
+  readonly description: string;
+  readonly icon: JSX.Element;
+
+  readonly insert: (editor: SPEditor, at: Location) => void;
 }
 
 export const commands: Command[] = [
   {
-    type: ELEMENT_CODE_BLOCK,
     name: 'Formulas',
     description: 'Formulas, calc and deci language.',
     icon: <ModelBlock />,
+    insert: insertCodeBlock,
   },
   {
-    type: TABLE_INPUT,
     name: 'Table',
     description: 'Insert tabular data.',
     icon: (
@@ -42,29 +46,30 @@ export const commands: Command[] = [
         <Icons.Table />
       </div>
     ),
+    insert: insertTable,
   },
   {
-    type: ELEMENT_IMPORT_DATA,
     name: 'Import data',
     description: 'Import external data.',
     icon: <ImportData />,
+    insert: insertBlockOfType(ELEMENT_IMPORT_DATA),
   },
   {
-    type: ELEMENT_H2,
     name: 'Subtitle',
     description: 'Create a new section.',
     icon: <Subtitle />,
+    insert: insertBlockOfType(ELEMENT_H2),
   },
   {
-    type: ELEMENT_H3,
     name: 'Subheading',
     description: 'Create a new sub header.',
     icon: <Subheading />,
+    insert: insertBlockOfType(ELEMENT_H3),
   },
   {
-    type: ELEMENT_BLOCKQUOTE,
     name: 'Quote',
     description: 'A piece of text that stands out.',
     icon: <Zap />,
+    insert: insertBlockOfType(ELEMENT_BLOCKQUOTE),
   },
 ];

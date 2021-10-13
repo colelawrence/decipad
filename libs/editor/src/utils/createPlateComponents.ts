@@ -16,7 +16,6 @@ import {
   UnorderedListElement,
 } from '@decipad/ui';
 import {
-  DefaultPlatePluginKey,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
   ELEMENT_H1,
@@ -35,23 +34,21 @@ import {
 } from '@udecode/plate';
 import { FunctionComponent } from 'react';
 import { Table } from '../components/Table/Table';
-import * as elementTypes from './elementTypes';
 import { withStyledDraggables } from './withStyledDraggables';
 import { withStyledPlaceHolders } from './withStyledPlaceholders';
+import * as elementTypes from './elementTypes';
 
-type PluginKey =
-  | DefaultPlatePluginKey
-  | typeof elementTypes[keyof typeof elementTypes];
-
-type PluginComponent = FunctionComponent<
+type PlateElementComponent = FunctionComponent<
   SPRenderElementProps | SPRenderLeafProps | ImportDataElementProps
 >;
 
 // This function creates the editor components
 export const createPlateComponents = (): Partial<
-  Record<PluginKey, PluginComponent>
+  Record<elementTypes.ElementType, PlateElementComponent>
 > => {
-  const components: Partial<Record<PluginKey, PluginComponent>> = {
+  const components: Partial<
+    Record<elementTypes.ElementType, PlateElementComponent>
+  > = {
     // Plate default elements
     [ELEMENT_PARAGRAPH]: ParagraphElement,
     [ELEMENT_H1]: TitleElement,
