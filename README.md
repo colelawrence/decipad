@@ -45,8 +45,13 @@ If you're using Github Desktop, clone the decipad repo (which installs it locall
 Using the command line, inside your local copy of the decipad repo, you should do:
 
 ```bash
-npm install --legacy-peer-deps
+yarn install
 ```
+
+## Environment setup
+
+There are `.env.example` files in the root and in individual projects like the `backend`. These need to be copied to `.env` (without `.example`) and filled with secret values, such as your personal AWS access token, or other secrets that are shared among developers but not included in the repository for security reasons.
+
 
 ## Important scripts
 
@@ -55,7 +60,7 @@ npm install --legacy-peer-deps
 To run the backend and the frontend, just copy and past the following command in your command line:
 
 ```bash
-npm run serve:all
+yarn serve:all
 ```
 
 ### Testing the project
@@ -63,7 +68,7 @@ npm run serve:all
 To run the unit tests for all the monorepos in the project, you can run the following:
 
 ```bash
-npm test
+yarn test
 ```
 
 ### Running storybook
@@ -71,7 +76,7 @@ npm test
 We use storybook for development and showcasing purposes of all of our components, you can also run storybook by running:
 
 ```bash
-npm run serve:storybook
+yarn serve:storybook
 ```
 
 ### Running the end-to-end tests
@@ -85,10 +90,6 @@ These tests are powered by cypress and are present in apps/client-e2e.
 ```
 
 Interesting options are `--headless` (don't show a window) and `--watch` (don't close after running).
-
-## Environment setup
-
-There are `.env.example` files in the root and in individual projects like the `backend`. These need to be copied to `.env` (without `.example`) and filled with secret values, such as your personal AWS access token, or other secrets that are shared among developers but not included in the repository for security reasons.
 
 ### Amazon SES emails
 
