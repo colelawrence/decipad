@@ -21,11 +21,12 @@ import { Router } from '../routes';
 const inBrowser = typeof window !== 'undefined';
 
 const history = inBrowser ? createBrowserHistory() : null;
-const sentryDSN = process.env.NEXT_SENTRY_DSN;
+const sentryDSN = process.env.NEXT_PUBLIC_SENTRY_DSN;
 const usingSentry = !!sentryDSN;
 
 if (history && usingSentry) {
   init({
+    environment: process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT,
     dsn: sentryDSN,
     integrations: [
       new Integrations.BrowserTracing({

@@ -66,6 +66,8 @@ jobs:
           arc env staging GITHUB_CLIENT_SECRET ${{secrets.DECI_GITHUB_CLIENT_SECRET}}
           arc env staging JWT_SECRET ${{secrets.JWT_SECRET}}
           arc env staging SENTRY_DSN ${{secrets.SENTRY_DSN}}
+          arc env staging NEXT_PUBLIC_SENTRY_DSN ${{secrets.SENTRY_DSN}}
+          arc env staging NEXT_PUBLIC_SENTRY_ENVIRONMENT staging
           arc env staging DECI_SES_ACCESS_KEY_ID '${{secrets.DECI_SES_ACCESS_KEY_ID}}'
           arc env staging DECI_SES_SECRET_ACCESS_KEY '${{secrets.DECI_SES_SECRET_ACCESS_KEY}}'
           arc env staging DECI_INVITE_EXPIRATION_SECONDS '${{secrets.DECI_INVITE_EXPIRATION_SECONDS}}'
