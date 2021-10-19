@@ -1,4 +1,6 @@
 import {
+  AnyObject,
+  ELEMENT_PARAGRAPH,
   getNextIndex,
   getPreviousIndex,
   isCollapsed,
@@ -8,9 +10,10 @@ import {
   OnChange,
   PlatePlugin,
   SPEditor,
+  TAncestor,
 } from '@udecode/plate';
 import { ComponentProps, useCallback, useMemo, useState } from 'react';
-import { Range, Transforms } from 'slate';
+import { Editor, Element, Range, Transforms } from 'slate';
 import { SlashCommandsSelect } from '.';
 import { Command, commands } from './commands';
 import { insertBlock } from './utils/insertBlock';
@@ -18,7 +21,6 @@ import { insertBlock } from './utils/insertBlock';
 export const useSlashCommandsPlugin = (): {
   plugin: PlatePlugin;
   getSlashCommandsProps: () => ComponentProps<typeof SlashCommandsSelect>;
-  searchValue: string;
 } => {
   const [targetRange, setTargetRange] = useState<Range | null>(null);
   const [valueIndex, setValueIndex] = useState(0);
@@ -80,36 +82,50 @@ export const useSlashCommandsPlugin = (): {
     (editor) => () => {
       const { selection } = editor;
 
+      const isParagraph = (node: TAncestor<AnyObject>) =>
+        Element.isElement(node) && node.type === ELEMENT_PARAGRAPH;
+
       if (selection && isCollapsed(selection)) {
         const cursor = Range.start(selection);
 
-        const { range, match: beforeMatch } = matchesTriggerAndPattern(editor, {
-          at: cursor,
-          trigger: '/',
-          pattern: '\\S*',
-        });
+        const isRootParagraph =
+          Editor.above(editor, {
+            at: cursor,
+            match: (n) => isParagraph(n as TAncestor<AnyObject>),
+          }) != null;
 
-        if (beforeMatch && isPointAtWordEnd(editor, { at: cursor })) {
-          setTargetRange(range as Range);
-          const [, word] = beforeMatch;
-          setSearch(word);
-          setValueIndex(0);
-          return;
+        if (isRootParagraph) {
+          const { range, match: beforeMatch } = matchesTriggerAndPattern(
+            editor,
+            {
+              at: cursor,
+              trigger: '/',
+              pattern: '\\S*',
+            }
+          );
+
+          if (beforeMatch && isPointAtWordEnd(editor, { at: cursor })) {
+            setTargetRange(range as Range);
+            const [, word] = beforeMatch;
+            setSearch(word);
+            setValueIndex(0);
+            return;
+          }
         }
 
         setTargetRange(null);
       }
     },
-    [setTargetRange, setSearch, setValueIndex]
+    []
   );
 
   return {
     plugin: useMemo(
       () => ({
-        onChange: onChangeSlashCommands,
         onKeyDown: onKeyDownSlashCommands,
+        onChange: onChangeSlashCommands,
       }),
-      [onChangeSlashCommands, onKeyDownSlashCommands]
+      [onKeyDownSlashCommands, onChangeSlashCommands]
     ),
 
     getSlashCommandsProps: useCallback(
@@ -122,6 +138,5 @@ export const useSlashCommandsPlugin = (): {
       }),
       [onAddBlock, targetRange, valueIndex, values]
     ),
-    searchValue: search,
   };
 };
