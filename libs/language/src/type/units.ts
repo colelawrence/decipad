@@ -1,10 +1,26 @@
 import { produce } from 'immer';
-
+import { addIrregularRule, singular, plural } from 'pluralize';
 import { AST, Type } from '..';
 import { getDefined } from '../utils';
 
+addIrregularRule('USD', 'USD');
+addIrregularRule('EUR', 'EUR');
+
+const byExp = (u1: AST.Unit, u2: AST.Unit): number => u2.exp - u1.exp;
+
+const pluralizeUnit = (baseUnit: AST.Unit): AST.Unit => {
+  const { unit } = baseUnit;
+  const singularUnit = plural(unit);
+  if (singularUnit === unit) {
+    return baseUnit;
+  }
+  return produce(baseUnit, (u) => {
+    u.unit = singularUnit;
+  });
+};
+
 const matchUnits = (u1: AST.Unit, u2: AST.Unit) =>
-  u1.unit === u2.unit && u1.exp === u2.exp;
+  singular(u1.unit) === singular(u2.unit) && u1.exp === u2.exp;
 
 export const matchUnitArrays = (units1: AST.Unit[], units2: AST.Unit[]) => {
   if (units1.length !== units2.length) return false;
@@ -27,7 +43,7 @@ const normalizeUnits = (units: AST.Unit[] | null) => {
     return null;
   }
 
-  const normalized = units.filter((u) => u.exp !== 0);
+  const normalized = units.filter((u) => u.exp !== 0).map(pluralizeUnit);
 
   if (normalized.length === 0) {
     return null;
@@ -83,11 +99,32 @@ const stringifyUnit = (unit: AST.Unit) => {
   return result.join('');
 };
 
-export const stringifyUnits = (unit: AST.Unit[] | null) => {
-  if (unit == null || unit.length === 0) {
+export const stringifyUnits = (units: AST.Unit[] | null): string => {
+  if (units == null || units.length === 0) {
     return 'unitless';
   } else {
-    return unit.map((unit) => stringifyUnit(unit)).join('.');
+    const sortedUnits = produce(units, (units) => units.sort(byExp));
+    return sortedUnits
+      .reduce((parts: string[], unit: AST.Unit): string[] => {
+        if (parts.length > 0) {
+          const op = unit.exp > 0 ? '.' : '/';
+          parts.push(op);
+          parts.push(
+            stringifyUnit(
+              produce(unit, (unit) => {
+                if (unit.exp < 0) {
+                  unit.unit = singular(unit.unit);
+                }
+                unit.exp = Math.abs(unit.exp);
+              })
+            )
+          );
+        } else {
+          parts.push(stringifyUnit(pluralizeUnit(unit)));
+        }
+        return parts;
+      }, [])
+      .join('');
   }
 };
 

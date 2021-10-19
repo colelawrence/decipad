@@ -28,7 +28,7 @@ describe('Result', () => {
       <ResultContent type={buildType.number(meters)} value={1} />
     );
 
-    expect(container.textContent).toEqual('1 meter');
+    expect(container.textContent).toEqual('1 meters');
   });
 
   it('renders strings', () => {

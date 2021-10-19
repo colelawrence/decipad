@@ -1,11 +1,11 @@
 import { build as t } from './type';
 import { cleanDate } from './date';
 import {
-  runCode,
   runCodeForVariables,
   objectToTableType,
   objectToTupleValue,
 } from './testUtils';
+import { runCode } from './run';
 
 // https://observablehq.com/d/0c4bca59558d2985
 describe('use of funds document', () => {

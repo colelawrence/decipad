@@ -1,29 +1,10 @@
-import { readFileSync } from 'fs';
-
-import { AST, Parser, Interpreter, InjectableExternalData } from '.';
-import { parse } from './parser';
-import { prettyPrintAST } from './parser/utils';
+import { AST, Interpreter, InjectableExternalData } from '.';
 import { Realm, run } from './interpreter';
 import { Column, fromJS } from './interpreter/Value';
 import { inferTargetStatement, inferProgram, makeContext } from './infer';
 import { zip, AnyMapping } from './utils';
 import { Type, build as t } from './type';
-
-const parseOneBlock = (source: string): AST.Block => {
-  const parserInput: Parser.UnparsedBlock[] = [{ id: 'block-id', source }];
-  const [parsed] = parse(parserInput);
-
-  expect(parsed.errors).toEqual([]);
-
-  if (parsed.solutions.length !== 1) {
-    const solutions = parsed.solutions.map((s) => prettyPrintAST(s));
-    console.error(`Multiple solutions: \n${solutions.join('\n')}`);
-    throw new Error('Multiple solutions');
-  }
-  expect(parsed.solutions.length).toEqual(1);
-
-  return parsed.solutions[0];
-};
+import { parseOneBlock } from './run';
 
 export const runAST = async (
   block: AST.Block,
@@ -46,15 +27,6 @@ export const runAST = async (
     value,
     type: inferResult,
   };
-};
-
-export const runCode = async (
-  source: string,
-  { externalData }: { externalData?: AnyMapping<InjectableExternalData> } = {}
-) => {
-  const block = parseOneBlock(source);
-
-  return runAST(block, { externalData });
 };
 
 export const runCodeForVariables = async (
@@ -105,10 +77,6 @@ export const objectToMap = <K extends string, V, Obj extends ObjectOf<V>>(
 ): Map<K, V> => new Map(Object.entries(obj) as [key: K, val: V][]);
 
 // External data utils
-
-export function readFile(path: string): Buffer {
-  return readFileSync(path);
-}
 
 export function dataUrl(data: Buffer | string, contentType: string): string {
   return `data:${contentType};base64,${Buffer.from(data).toString('base64')}`;

@@ -69,5 +69,5 @@ export async function evaluateTargets(
     }
   }
 
-  return [...targetSet.values()];
+  return Array.from(targetSet.values());
 }

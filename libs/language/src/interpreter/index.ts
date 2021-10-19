@@ -16,9 +16,9 @@ export const run = async (
 ): Promise<Interpreter.Result> => {
   realm = realm ?? new Realm(await getContextFromProgram(program));
 
-  return (await evaluateTargets(program, desiredTargets, realm)).map((v) =>
-    v.getData()
-  );
+  return (await evaluateTargets(program, desiredTargets, realm)).map((v) => {
+    return v.getData();
+  });
 };
 
 export const runOne = async (statement: AST.Statement, realm?: Realm) => {

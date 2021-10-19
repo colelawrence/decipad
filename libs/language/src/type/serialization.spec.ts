@@ -145,7 +145,7 @@ it('can parse a type', () => {
       kind: 'number',
       unit: [meter],
     })
-  ).toMatchInlineSnapshot(`"meter"`);
+  ).toMatchInlineSnapshot(`"meters"`);
 
   expect(
     testDeserialize({

@@ -12,7 +12,8 @@ export {
   getContextFromProgram,
 } from './infer';
 export type { Context } from './infer';
-export { run, Interpreter } from './interpreter';
+export { Interpreter } from './interpreter';
+export * from './run';
 export { Scalar, Date, Range, TimeQuantity, Column } from './interpreter/Value';
 
 export { prettyPrintAST } from './parser/utils';

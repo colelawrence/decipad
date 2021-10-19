@@ -37,7 +37,7 @@ const nilPos = {
 };
 let nilCtx = makeContext();
 const degC: AST.Unit = {
-  unit: 'celsius',
+  unit: 'degrees',
   exp: 1,
   multiplier: 1,
   known: true,
@@ -45,7 +45,7 @@ const degC: AST.Unit = {
   end: nilPos,
 };
 const seconds: AST.Unit = {
-  unit: 'second',
+  unit: 'seconds',
   exp: 1,
   multiplier: 1,
   known: true,
@@ -53,7 +53,7 @@ const seconds: AST.Unit = {
   end: nilPos,
 };
 const meters: AST.Unit = {
-  unit: 'meter',
+  unit: 'meters',
   exp: 1,
   multiplier: 1,
   known: true,

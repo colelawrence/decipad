@@ -1,8 +1,8 @@
 // E2e tests
 
 import { build as t } from './type';
+import { runCode } from './run';
 import {
-  runCode,
   runCodeForVariables,
   objectToTableType,
   objectToTupleValue,
@@ -323,13 +323,13 @@ describe('Units', () => {
             exp: 1,
             known: true,
             multiplier: 1,
-            unit: 'meter',
+            unit: 'meters',
           },
           {
             exp: -1,
             known: true,
             multiplier: 1,
-            unit: 'second',
+            unit: 'seconds',
           },
         ],
       },
@@ -345,7 +345,7 @@ describe('Units', () => {
       `)
     ).toMatchObject({
       value: 6,
-      type: { unit: [{ exp: 1, known: true, multiplier: 1, unit: 'meter' }] },
+      type: { unit: [{ exp: 1, known: true, multiplier: 1, unit: 'meters' }] },
     });
 
     // TODO internally it's fine but do we actually want to support
@@ -358,7 +358,9 @@ describe('Units', () => {
       `)
     ).toMatchObject({
       value: 2,
-      type: { unit: [{ exp: -1, known: true, multiplier: 1, unit: 'second' }] },
+      type: {
+        unit: [{ exp: -1, known: true, multiplier: 1, unit: 'seconds' }],
+      },
     });
   });
 });

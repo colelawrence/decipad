@@ -10,6 +10,11 @@ echo "Building storybook..."
 yarn build:storybook
 cp -rT dist/storybook/ui/. apps/backend/public/.storybook
 
+echo "Building docs..."
+yarn build:docs
+mkdir -p apps/backend/public/docs
+cp -r apps/docs/build/. apps/backend/public/docs
+
 echo "Building the backend..."
 yarn build:backend
 
@@ -29,3 +34,4 @@ cp -r dist/apps/client/exported/. apps/backend/public
 echo "Deploying client for \"$DEPLOY_NAME\"..."
 cd apps/backend
 ./node_modules/.bin/arc deploy --static --prune --no-hydrate --name "$DEPLOY_NAME"
+

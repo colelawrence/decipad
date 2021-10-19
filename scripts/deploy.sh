@@ -15,6 +15,11 @@ echo "Building storybook..."
 yarn build:storybook
 cp -rT dist/storybook/ui/. apps/backend/public/.storybook
 
+echo "Building docs..."
+yarn build:docs
+mkdir -p apps/backend/public/docs
+cp -rT apps/docs/build/. apps/backend/public/docs
+
 echo "Building the backend..."
 yarn build:backend
 

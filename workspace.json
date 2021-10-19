@@ -180,6 +180,35 @@
         }
       }
     },
+    "docs": {
+      "root": "apps/docs",
+      "sourceRoot": "apps/docs/src",
+      "projectType": "application",
+      "prefix": "docs",
+      "targets": {
+        "serve": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": ["../../node_modules/.bin/docusaurus start"],
+            "cwd": "apps/docs"
+          }
+        },
+        "build": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": ["../../node_modules/.bin/docusaurus build"],
+            "cwd": "apps/docs"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/backend/tests/**/*.ts"],
+            "maxWarnings": 0
+          }
+        }
+      }
+    },
     "config": {
       "root": "libs/config",
       "sourceRoot": "libs/config/src",

@@ -11,7 +11,7 @@ const nilPos = {
 };
 
 const meter: AST.Unit = {
-  unit: 'meter',
+  unit: 'meters',
   exp: 1,
   multiplier: 1,
   known: true,
@@ -19,7 +19,7 @@ const meter: AST.Unit = {
   end: nilPos,
 };
 const second: AST.Unit = {
-  unit: 'second',
+  unit: 'seconds',
   exp: 1,
   multiplier: 1,
   known: true,
@@ -57,10 +57,10 @@ it('Can assert type equivalence', () => {
 
 it('can be stringified', () => {
   expect(t.number().toString()).toEqual('<number>');
-  expect(t.number([meter]).toString()).toEqual('meter');
-  expect(t.number([meter, second]).toString()).toEqual('meter.second');
+  expect(t.number([meter]).toString()).toEqual('meters');
+  expect(t.number([meter, second]).toString()).toEqual('meters.seconds');
   expect(t.number([meter, inverseExponent(second)]).toString()).toEqual(
-    'meter.second^-1'
+    'meters/second'
   );
 
   expect(t.range(t.number()).toString()).toEqual('range of <number>');
@@ -72,10 +72,10 @@ it('can be stringified', () => {
     columnTypes: [t.number([meter]), t.string()],
     columnNames: ['Col1', 'Col2'],
   });
-  expect(table.toString()).toEqual('table { Col1 = meter, Col2 = <string> }');
+  expect(table.toString()).toEqual('table { Col1 = meters, Col2 = <string> }');
 
   const row = t.row([t.number([meter]), t.string()], ['Col1', 'Col2']);
-  expect(row.toString()).toEqual('row [ Col1 = meter, Col2 = <string> ]');
+  expect(row.toString()).toEqual('row [ Col1 = meters, Col2 = <string> ]');
 
   const col = t.column(t.string(), 4);
   expect(col.toString()).toEqual('<string> x 4');
@@ -90,10 +90,10 @@ it('can be stringified', () => {
 it('can be stringified in basic form', () => {
   expect(t.functionPlaceholder().toBasicString()).toEqual('function');
   expect(t.number().toBasicString()).toEqual('number');
-  expect(t.number([meter]).toBasicString()).toEqual('meter');
-  expect(t.number([meter, second]).toBasicString()).toEqual('meter.second');
+  expect(t.number([meter]).toBasicString()).toEqual('meters');
+  expect(t.number([meter, second]).toBasicString()).toEqual('meters.seconds');
   expect(t.number([meter, inverseExponent(second)]).toBasicString()).toEqual(
-    'meter.second^-1'
+    'meters/second'
   );
 
   expect(t.range(t.number()).toBasicString()).toEqual('range');

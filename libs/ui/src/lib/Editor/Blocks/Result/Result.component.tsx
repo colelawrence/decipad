@@ -1,7 +1,6 @@
 // Too much problematic code, hopeless to fix until this component is migrated
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { chakra } from '@chakra-ui/system';
 import { format as formatDate, utcToZonedTime } from 'date-fns-tz';
 import { Box, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
