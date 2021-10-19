@@ -2,49 +2,45 @@ import {
   PlatePluginComponent,
   useEventEditorId,
   useStoreEditorState,
-  ELEMENT_TD,
-  ELEMENT_TR,
-  getAbove,
-  insertNodes,
-  TElement,
 } from '@udecode/plate';
-import { TableElement } from '@decipad/ui';
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
+import { Node, Transforms } from 'slate';
+import { ReactEditor } from 'slate-react';
+import { getDefined } from '@decipad/utils';
 
-import { Editor, Path } from 'slate';
+import { TableData } from './types';
+import { TableInner } from './TableInner';
 
-// TODO should work without focus, just append at the end
-export const addRow = (editor: Editor): void => {
-  const currentRowItem = getAbove(editor, {
-    match: { type: ELEMENT_TR },
-  });
-  if (currentRowItem) {
-    const [currentRowElem, currentRowPath] = currentRowItem;
-    const colCount = currentRowElem.children.length;
-    insertNodes<TElement>(
-      editor,
-      {
-        type: ELEMENT_TR,
-        children: Array(colCount)
-          .fill(colCount)
-          .map(() => ({
-            type: ELEMENT_TD,
-            children: [{ text: '' }],
-          })),
-      },
-      {
-        at: Path.next(currentRowPath),
-        select: true,
-      }
-    );
-  }
-};
+export const Table: PlatePluginComponent = ({
+  children,
+  element,
+  attributes,
+}): ReturnType<FC> => {
+  const editor = getDefined(
+    useStoreEditorState(useEventEditorId('focus')),
+    'missing editor'
+  );
 
-export const Table: PlatePluginComponent = (props): ReturnType<FC> => {
-  const editor = useStoreEditorState(useEventEditorId('focus'));
-  if (!editor) {
-    throw new Error('missing editor');
-  }
+  const onChange = useCallback(
+    (newValue: TableData) => {
+      const at = ReactEditor.findPath(editor, element);
 
-  return <TableElement {...props} onAddRow={() => addRow(editor)} />;
+      Transforms.setNodes(editor, { tableData: newValue } as Partial<Node>, {
+        at,
+      });
+    },
+    [editor, element]
+  );
+
+  const value = element.tableData as TableData;
+
+  // IMPORTANT NOTE: do not remove the children elements from rendering.
+  // Even though they're one element with an empty text property, their absence triggers
+  // an uncaught exception in slate-react.
+  return (
+    <div contentEditable={false} {...attributes}>
+      {children}
+      <TableInner value={value} onChange={onChange} />
+    </div>
+  );
 };

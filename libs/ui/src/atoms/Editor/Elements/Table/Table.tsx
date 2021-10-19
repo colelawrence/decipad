@@ -1,5 +1,4 @@
 import { css } from '@emotion/react';
-import { PlatePluginComponent } from '@udecode/plate';
 import { ComponentProps, FC } from 'react';
 import { AddRowButton } from './AddRowButton';
 
@@ -12,23 +11,13 @@ const tableStyles = css({
 });
 
 export const TableElement = ({
-  attributes,
-  children,
-  nodeProps,
   onAddRow,
-}: ComponentProps<PlatePluginComponent> &
+  ...props
+}: ComponentProps<'table'> &
   ComponentProps<typeof AddRowButton>): ReturnType<FC> => {
   return (
     <div>
-      <table
-        spellCheck={false}
-        css={tableStyles}
-        {...attributes}
-        {...nodeProps}
-      >
-        {children}
-      </table>
-
+      <table css={tableStyles} {...props} />
       <AddRowButton onAddRow={onAddRow} />
     </div>
   );

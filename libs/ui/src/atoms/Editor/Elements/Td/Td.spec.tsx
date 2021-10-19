@@ -7,17 +7,7 @@ describe('Editor Td Element', () => {
       <table>
         <tbody>
           <tr>
-            <TdElement
-              attributes={{
-                'data-slate-leaf': true,
-                'data-slate-node': 'element',
-              }}
-              leaf={{ text: '' }}
-              text={{ text: '' }}
-              nodeProps={{ styles: { root: { css: null } } }}
-            >
-              Td Element
-            </TdElement>
+            <TdElement>Td Element</TdElement>
           </tr>
         </tbody>
       </table>

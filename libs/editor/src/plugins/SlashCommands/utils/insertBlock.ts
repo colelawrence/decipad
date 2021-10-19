@@ -1,7 +1,6 @@
 import {
   ELEMENT_CODE_BLOCK,
   ELEMENT_DEFAULT,
-  ELEMENT_TABLE,
   getPlatePluginType,
   insertEmptyCodeBlock,
   PlatePluginKey,
@@ -12,6 +11,7 @@ import {
   unwrapList,
 } from '@udecode/plate';
 import { Editor, Location, Transforms } from 'slate';
+import { TABLE_INPUT } from '../../../utils/elementTypes';
 import { formatTable } from './formatTable';
 
 export const insertBlock = (
@@ -34,8 +34,8 @@ export const insertBlock = (
 
   if (pluginKey === ELEMENT_CODE_BLOCK) {
     formatCodeBlock(editor);
-  } else if (pluginKey === ELEMENT_TABLE) {
-    formatTable(editor, at);
+  } else if (pluginKey === TABLE_INPUT) {
+    formatTable(editor);
   } else {
     setNodes<TElement>(
       editor,

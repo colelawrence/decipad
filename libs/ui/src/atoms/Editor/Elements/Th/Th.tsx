@@ -1,5 +1,4 @@
 import { css } from '@emotion/react';
-import { PlatePluginComponent } from '@udecode/plate';
 import { ComponentProps, useCallback, useState } from 'react';
 import { noop } from '@decipad/utils';
 import * as Icons from '../../../../icons';
@@ -10,7 +9,6 @@ const openerWidth = 40;
 const columnStyles = css({
   position: 'relative',
   fontWeight: 'normal',
-  padding: '12px',
   textAlign: 'left',
   backgroundColor: '#F5F7FA',
   fontSize: '14px',
@@ -44,11 +42,10 @@ const arrowWrapperStyles = css({
 });
 
 export const ThElement = ({
-  attributes,
-  nodeProps,
   children,
   onChangeColumnType = noop,
-}: ComponentProps<PlatePluginComponent> &
+  ...props
+}: ComponentProps<'th'> &
   ComponentProps<typeof TableColumnActions>): JSX.Element => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const toggleMenuOpen = useCallback(() => {
@@ -64,21 +61,17 @@ export const ThElement = ({
   );
 
   return (
-    <th css={columnStyles} {...attributes} {...nodeProps}>
+    <th css={columnStyles} {...props}>
       {children}
 
-      <button
-        css={openerStyles}
-        contentEditable={false}
-        onClick={toggleMenuOpen}
-      >
+      <button css={openerStyles} onClick={toggleMenuOpen}>
         <span css={arrowWrapperStyles}>
           <Icons.TinyArrow direction="down" />
         </span>
       </button>
 
       {isMenuOpen && (
-        <div css={dropdownStyles} contentEditable={false}>
+        <div css={dropdownStyles}>
           <TableColumnActions onChangeColumnType={handleChangeColumnType} />
         </div>
       )}

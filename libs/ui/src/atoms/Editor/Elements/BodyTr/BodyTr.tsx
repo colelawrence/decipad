@@ -1,5 +1,4 @@
 import { css } from '@emotion/react';
-import { PlatePluginComponent } from '@udecode/plate';
 import { ComponentProps, FC } from 'react';
 import { noop } from '../../../../utils/props';
 
@@ -16,15 +15,13 @@ interface BodyTrElementProps {
 
 export const BodyTrElement = ({
   children,
-  attributes,
-  nodeProps,
   onRemove = noop,
-}: ComponentProps<PlatePluginComponent> &
-  BodyTrElementProps): ReturnType<FC> => {
+  ...props
+}: ComponentProps<'tr'> & BodyTrElementProps): ReturnType<FC> => {
   return (
-    <tr css={trStyles} {...attributes} {...nodeProps}>
+    <tr css={trStyles} {...props}>
       {children}
-      <td contentEditable={false}>
+      <td>
         <button
           onClick={(event) => {
             onRemove();

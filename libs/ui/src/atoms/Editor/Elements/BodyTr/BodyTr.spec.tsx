@@ -6,15 +6,7 @@ describe('Editor BodyTr Element', () => {
     const { getByText } = render(
       <table>
         <tbody>
-          <BodyTrElement
-            attributes={{
-              'data-slate-leaf': true,
-              'data-slate-node': 'element',
-            }}
-            leaf={{ text: '' }}
-            text={{ text: '' }}
-            nodeProps={{ styles: { root: { css: null } } }}
-          >
+          <BodyTrElement>
             <td>BodyTr Element</td>
           </BodyTrElement>
         </tbody>

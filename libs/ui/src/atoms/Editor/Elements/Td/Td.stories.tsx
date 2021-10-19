@@ -14,12 +14,5 @@ interface ArgsType {
 }
 
 export const Td: Story<ArgsType> = (args) => (
-  <TdElement
-    attributes={{ 'data-slate-leaf': true, 'data-slate-node': 'element' }}
-    leaf={{ text: '' }}
-    text={{ text: '' }}
-    nodeProps={{ styles: { root: { css: null } } }}
-  >
-    {args.children}
-  </TdElement>
+  <TdElement>{args.children}</TdElement>
 );

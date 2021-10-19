@@ -1,89 +1,33 @@
 import { ParsedBlock, prettyPrintAST } from '@decipad/language';
-import {
-  ELEMENT_TABLE,
-  ELEMENT_TD,
-  ELEMENT_TH,
-  ELEMENT_TR,
-} from '@udecode/plate';
-import {
-  ELEMENT_HEAD_TR,
-  ELEMENT_TABLE_CAPTION,
-  ELEMENT_TBODY,
-  ELEMENT_THEAD,
-} from '../../utils/elementTypes';
-import { InteractiveTable } from '../InteractiveTable/table';
+import { TableData } from '../../components/Table/types';
+import { TABLE_INPUT } from '../../utils/elementTypes';
 import { SlateNode } from './common';
 import { slateDocumentToComputeRequest } from './slateDocumentToComputeRequest';
 
 // Can't use apache arrow in jest
 jest.mock('@apache-arrow/es5-cjs', () => ({}));
 
-const testTableChildren: InteractiveTable['children'] = [
-  {
-    type: ELEMENT_TABLE_CAPTION,
-    children: [{ text: 'TheTitle' }],
-  },
-  {
-    type: ELEMENT_THEAD,
-    children: [
-      {
-        type: ELEMENT_HEAD_TR,
-        children: [
-          {
-            type: ELEMENT_TH,
-            attributes: { cellType: 'string' },
-            children: [{ text: 'Col1' }],
-          },
-          {
-            type: ELEMENT_TH,
-            children: [{ text: 'Col2' }],
-            attributes: { cellType: 'number' },
-          },
-        ],
-      },
-    ],
-  },
-  {
-    type: ELEMENT_TBODY,
-    children: [
-      {
-        type: ELEMENT_TR,
-        children: [
-          {
-            type: ELEMENT_TD,
-            attributes: { cellType: 'string' },
-            children: [{ text: 'Hello' }],
-          },
-          {
-            type: ELEMENT_TD,
-            attributes: { cellType: 'number' },
-            children: [{ text: '123' }],
-          },
-        ],
-      },
-      {
-        type: ELEMENT_TR,
-        children: [
-          {
-            type: ELEMENT_TD,
-            attributes: { cellType: 'string' },
-            children: [{ text: 'World' }],
-          },
-          {
-            type: ELEMENT_TD,
-            attributes: { cellType: 'number' },
-            children: [{ text: '456' }],
-          },
-        ],
-      },
-    ],
-  },
-];
+const testTableData: TableData = {
+  variableName: 'TheTitle',
+  columns: [
+    {
+      columnName: 'Col1',
+      cellType: 'string',
+      cells: ['Hello', 'World'],
+    },
+    {
+      columnName: 'Col2',
+      cellType: 'number',
+      cells: ['123', '456'],
+    },
+  ],
+};
 
 const table = {
-  type: ELEMENT_TABLE,
+  type: TABLE_INPUT,
   id: 'the-table-id',
-  children: testTableChildren,
+  tableData: testTableData,
+  children: [],
 };
 
 it('can find tables in the document', () => {

@@ -1,85 +1,47 @@
-import { Node } from 'slate';
-import { AST, buildType, serializeType } from '@decipad/language';
-import { ELEMENT_TABLE } from '@udecode/plate';
+import { AST } from '@decipad/language';
 import { zip } from '@decipad/utils';
 import { astNode } from './common';
-import {
-  ELEMENT_TABLE_CAPTION,
-  ELEMENT_TBODY,
-  ELEMENT_THEAD,
-} from '../../utils/elementTypes';
-import {
-  BodyTr,
-  InteractiveTable,
-  TableCellType,
-} from '../InteractiveTable/table';
+import { TABLE_INPUT } from '../../utils/elementTypes';
+import { TableData } from '../../components/Table/types';
+
+interface InteractiveTableNode {
+  tableData: TableData;
+}
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-export function isInteractiveTable(block: any): block is InteractiveTable {
+export function isInteractiveTable(block: any): block is InteractiveTableNode {
   return (
-    block?.type === ELEMENT_TABLE &&
-    Array.isArray(block.children) &&
-    block.children.length === 3 &&
-    block.children[0].type === ELEMENT_TABLE_CAPTION &&
-    block.children[1].type === ELEMENT_THEAD &&
-    block.children[2].type === ELEMENT_TBODY
+    block?.type === TABLE_INPUT &&
+    typeof block?.tableData?.variableName === 'string'
   );
 }
 /* eslint-enable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
-function getVariableName(table: InteractiveTable): string | null {
-  const [caption] = table.children;
-  if (caption) {
-    return Node.string(caption) || null;
-  }
-  return null;
-}
-
-interface ColSpec {
-  name: string;
-  type: TableCellType;
-}
-
-function extractColumnNames(table: InteractiveTable): ColSpec[] | null {
-  const [, thead] = table.children;
-  const [columnNamesTr] = thead.children;
-
-  const cols: ColSpec[] = [];
-
-  for (const th of columnNamesTr.children) {
-    const name = Node.string(th) || null;
-    const type = th.attributes?.cellType ?? serializeType(buildType.string());
-
-    if (!name) return null;
-
-    cols.push({ name, type });
-  }
-
-  return cols;
-}
-
-function getTableNode(columns: ColSpec[], dataRows: BodyTr[]): AST.Table {
-  const columnValues: AST.Column[] = columns.map(({ type }, columnIndex) => {
-    const colContents: AST.Expression[] = dataRows.map((row) => {
-      const cell = Node.string(row.children[columnIndex]);
-
-      switch (type) {
-        case 'number': {
-          return astNode('literal', 'number' as const, Number(cell), null);
+function getTableNode(tableData: TableData): AST.Table {
+  const columnValues: AST.Column[] = tableData.columns.map(
+    ({ cellType: type, cells }) => {
+      const colContents: AST.Expression[] = cells.map((cell) => {
+        switch (type) {
+          case 'number': {
+            return astNode('literal', 'number' as const, Number(cell), null);
+          }
+          case 'string': {
+            return astNode('literal', 'string' as const, cell, null);
+          }
         }
-        case 'string': {
-          return astNode('literal', 'string' as const, cell, null);
-        }
-      }
-    });
+      });
 
-    return astNode('column', colContents);
-  });
+      return astNode('column', colContents);
+    }
+  );
 
   const cols: (AST.Column | AST.ColDef)[] = [];
-  for (const [{ name }, colValue] of zip(columns, columnValues)) {
+  for (const [{ columnName: name }, colValue] of zip(
+    tableData.columns,
+    columnValues
+  )) {
     cols.push(astNode('coldef', name));
     cols.push(colValue);
   }
@@ -93,11 +55,11 @@ export interface ExtractedTable {
 }
 
 const weakMapMemoize = (
-  fn: (arg: InteractiveTable) => ExtractedTable | null
+  fn: (arg: InteractiveTableNode) => ExtractedTable | null
 ) => {
-  const cache = new WeakMap<InteractiveTable, ExtractedTable | null>();
+  const cache = new WeakMap<InteractiveTableNode, ExtractedTable | null>();
 
-  return (arg: InteractiveTable) => {
+  return (arg: InteractiveTableNode) => {
     const cached = cache.get(arg) ?? fn(arg);
     cache.set(arg, cached);
     return cached;
@@ -105,19 +67,13 @@ const weakMapMemoize = (
 };
 
 export const extractTable = weakMapMemoize(
-  (block: InteractiveTable): ExtractedTable | null => {
-    const variableName = getVariableName(block);
+  ({ tableData }: InteractiveTableNode): ExtractedTable | null => {
+    if (!tableData.variableName) return null;
 
-    const [, , tbody] = block.children;
-    const dataRows = tbody.children;
+    const node = getTableNode(tableData);
 
-    const columnNames = extractColumnNames(block);
-
-    if (variableName && dataRows.length && columnNames) {
-      return {
-        name: variableName,
-        node: getTableNode(columnNames, dataRows),
-      };
+    if (node) {
+      return { name: tableData.variableName, node };
     }
     return null;
   }

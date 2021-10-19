@@ -1,5 +1,4 @@
 import { css } from '@emotion/react';
-import { PlatePluginComponent } from '@udecode/plate';
 import { ComponentProps, FC } from 'react';
 import { noop } from '../../../../utils/props';
 
@@ -15,15 +14,13 @@ interface HeadTrElementProps {
 
 export const HeadTrElement = ({
   children,
-  attributes,
-  nodeProps,
   onAddColumn = noop,
-}: ComponentProps<PlatePluginComponent> &
-  HeadTrElementProps): ReturnType<FC> => {
+  ...props
+}: ComponentProps<'tr'> & HeadTrElementProps): ReturnType<FC> => {
   return (
-    <tr css={trStyles} {...attributes} {...nodeProps}>
+    <tr css={trStyles} {...props}>
       {children}
-      <th contentEditable={false}>
+      <th>
         <button onClick={onAddColumn}>+ Add Column</button>
       </th>
     </tr>

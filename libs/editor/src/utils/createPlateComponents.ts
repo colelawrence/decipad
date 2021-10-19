@@ -14,9 +14,6 @@ import {
   TitleElement,
   UnderlineLeaf,
   UnorderedListElement,
-  CaptionElement,
-  TheadElement,
-  TbodyElement,
 } from '@decipad/ui';
 import {
   DefaultPlatePluginKey,
@@ -27,10 +24,6 @@ import {
   ELEMENT_H3,
   ELEMENT_LI,
   ELEMENT_PARAGRAPH,
-  ELEMENT_TABLE,
-  ELEMENT_TD,
-  ELEMENT_TH,
-  ELEMENT_TR,
   ELEMENT_UL,
   MARK_BOLD,
   MARK_CODE,
@@ -41,10 +34,6 @@ import {
   SPRenderLeafProps,
 } from '@udecode/plate';
 import { FunctionComponent } from 'react';
-import { BodyTr } from '../components/Table/BodyTr';
-import { BodyTd } from '../components/Table/BodyTd';
-import { HeadTr } from '../components/Table/HeadTr';
-import { HeadTh } from '../components/Table/HeadTh';
 import { Table } from '../components/Table/Table';
 import * as elementTypes from './elementTypes';
 import { withStyledDraggables } from './withStyledDraggables';
@@ -72,18 +61,10 @@ export const createPlateComponents = (): Partial<
     [ELEMENT_CODE_BLOCK]: ModelBlockElement,
     [ELEMENT_UL]: UnorderedListElement,
     [ELEMENT_LI]: ListItemElement,
-    [ELEMENT_TABLE]: Table,
-    [ELEMENT_TR]: BodyTr,
-    [ELEMENT_TD]: BodyTd,
-    [ELEMENT_TH]: HeadTh,
 
     // Custom elements
     [elementTypes.ELEMENT_IMPORT_DATA]: ImportDataElement,
-
-    [elementTypes.ELEMENT_TABLE_CAPTION]: CaptionElement,
-    [elementTypes.ELEMENT_THEAD]: TheadElement,
-    [elementTypes.ELEMENT_TBODY]: TbodyElement,
-    [elementTypes.ELEMENT_HEAD_TR]: HeadTr,
+    [elementTypes.TABLE_INPUT]: Table,
 
     // Marks
     [MARK_BOLD]: BoldLeaf,

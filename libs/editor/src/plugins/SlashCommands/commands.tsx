@@ -5,9 +5,8 @@ import {
   ELEMENT_CODE_BLOCK,
   ELEMENT_H2,
   ELEMENT_H3,
-  ELEMENT_TABLE,
 } from '@udecode/plate';
-import { ELEMENT_IMPORT_DATA } from '../../utils/elementTypes';
+import { ELEMENT_IMPORT_DATA, TABLE_INPUT } from '../../utils/elementTypes';
 import { ImportData } from './icons/ImportData';
 import { ModelBlock } from './icons/ModelBlock';
 import { Subheading } from './icons/Subheading';
@@ -35,7 +34,7 @@ export const commands: Command[] = [
     icon: <ModelBlock />,
   },
   {
-    type: ELEMENT_TABLE,
+    type: TABLE_INPUT,
     name: 'Table',
     description: 'Insert tabular data.',
     icon: (

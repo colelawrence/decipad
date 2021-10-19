@@ -14,12 +14,5 @@ interface ArgsType {
 }
 
 export const BodyTr: Story<ArgsType> = (args) => (
-  <BodyTrElement
-    attributes={{ 'data-slate-leaf': true, 'data-slate-node': 'element' }}
-    leaf={{ text: '' }}
-    text={{ text: '' }}
-    nodeProps={{ styles: { root: { css: null } } }}
-  >
-    {args.children}
-  </BodyTrElement>
+  <BodyTrElement>{args.children}</BodyTrElement>
 );

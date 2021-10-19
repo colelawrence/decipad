@@ -5,13 +5,6 @@ import { ThElement } from './Th';
 
 const props: ComponentProps<typeof ThElement> = {
   children: 'Text',
-  attributes: {
-    'data-slate-leaf': true,
-    'data-slate-node': 'element',
-  },
-  leaf: { text: '' },
-  text: { text: '' },
-  nodeProps: { styles: { root: { css: null } } },
 };
 
 it('renders the children', () => {

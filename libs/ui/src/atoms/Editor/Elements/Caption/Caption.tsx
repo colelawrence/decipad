@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { PlatePluginComponent } from '@udecode/plate';
+import { ComponentProps, FC } from 'react';
 import { Table as TableIcon } from '../../../../icons';
 
 const titleStyles = css({
@@ -21,15 +21,14 @@ const tableTitleWrapper = css({
   gap: '12px',
 });
 
-export const CaptionElement: PlatePluginComponent = ({
-  attributes,
+export const CaptionElement: FC<ComponentProps<'caption'>> = ({
   children,
-  nodeProps,
+  ...props
 }) => {
   return (
-    <caption css={titleStyles} {...attributes} {...nodeProps}>
+    <caption css={titleStyles} {...props}>
       <div css={tableTitleWrapper}>
-        <div css={tableIconSizeStyles} contentEditable={false}>
+        <div css={tableIconSizeStyles}>
           <TableIcon />
         </div>
         {children}

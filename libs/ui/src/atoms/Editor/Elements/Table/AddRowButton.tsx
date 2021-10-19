@@ -37,7 +37,7 @@ export const AddRowButton = ({
   onAddRow = noop,
 }: AddRowButtonProps): ReturnType<FC> => {
   return (
-    <button contentEditable={false} css={addRowButtonStyles} onClick={onAddRow}>
+    <button css={addRowButtonStyles} onClick={onAddRow}>
       <span css={iconSize}>
         <Create />
       </span>{' '}

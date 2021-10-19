@@ -13,7 +13,6 @@ import {
   createReactPlugin,
   createResetNodePlugin,
   createSoftBreakPlugin,
-  createTablePlugin,
   createTrailingBlockPlugin,
   ELEMENT_PARAGRAPH,
 } from '@udecode/plate';
@@ -38,7 +37,6 @@ export const plugins = [
   createCodeBlockPlugin(),
 
   createListPlugin(),
-  createTablePlugin(),
   createInteractiveTablePlugin(),
 
   ...createMarksPlugins(),

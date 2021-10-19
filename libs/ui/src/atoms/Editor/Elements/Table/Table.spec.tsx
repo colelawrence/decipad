@@ -4,12 +4,7 @@ import { TableElement } from './Table';
 describe('Editor Table Element', () => {
   it('renders the text', () => {
     const { getByText } = render(
-      <TableElement
-        attributes={{ 'data-slate-leaf': true, 'data-slate-node': 'element' }}
-        leaf={{ text: '' }}
-        text={{ text: '' }}
-        nodeProps={{ styles: { root: { css: null } } }}
-      >
+      <TableElement>
         <tbody>
           <tr>
             <td>Table Element</td>
