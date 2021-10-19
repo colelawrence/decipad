@@ -1,6 +1,7 @@
 import { produce } from 'immer';
+import { dequal } from 'dequal';
 import { Type, build as t } from '../type';
-import { getDefined, getInstanceof } from '../utils';
+import { getDefined, getInstanceof, zip } from '../utils';
 import { AnyValue, fromJS, Scalar, Date, Column } from '../interpreter/Value';
 
 import { overloadBuiltin } from './overloadBuiltin';
@@ -247,6 +248,41 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
           columnTypes: getDefined(table.columnTypes),
         })
       ),
+  },
+  concatenate: {
+    argCount: 2,
+    argCardinalities: [3, 3],
+    fnValues: (tab1, tab2) => {
+      const { values: columns1, valueNames } = getInstanceof(tab1, Column);
+      const { values: columns2 } = getInstanceof(tab2, Column);
+
+      return Column.fromNamedValues(
+        zip(columns1 as Column[], columns2 as Column[]).map(([c1, c2]) =>
+          Column.fromValues([...c1.values, ...c2.values])
+        ),
+        getDefined(valueNames)
+      );
+    },
+    functor: (tab1, tab2) =>
+      Type.combine(tab1.isTable(), tab2.isTable()).mapType(() => {
+        if (
+          !dequal(tab1.columnNames, tab2.columnNames) ||
+          !dequal(tab1.columnTypes, tab2.columnTypes)
+        ) {
+          return t.impossible('Incompatible tables');
+        } else {
+          return produce(tab1, (tab1) => {
+            if (
+              typeof tab1.tableLength === 'number' &&
+              typeof tab2.tableLength === 'number'
+            ) {
+              tab1.tableLength += tab2.tableLength;
+            } else {
+              tab1.tableLength = 'unknown';
+            }
+          });
+        }
+      }),
   },
   // Range stuff
   contains: {
