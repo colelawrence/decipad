@@ -28,7 +28,8 @@ cd ../..
 WSS=`grep -Eo "wss://[^/\"]+" ./tmp/deploy/result.txt`
 echo "Found WSS address: ${WSS}"
 echo "NEXT_PUBLIC_DECI_WS_URL=${WSS}/staging" > apps/client/.env.production
-echo "NEXT_SENTRY_DSN=https://95cb017d05284b08b7b24b6dfe258962@o592547.ingest.sentry.io/5741035" >> apps/client/.env.production
+echo "NEXT_PUBLIC_SENTRY_DSN=${NEXT_PUBLIC_SENTRY_DSN:-}" >> apps/client/.env.production
+echo "NEXT_PUBLIC_SENTRY_ENVIRONMENT=${NEXT_PUBLIC_SENTRY_ENVIRONMENT:-}" >> apps/client/.env.production
 
 echo "Building frontend..."
 yarn build:frontend
