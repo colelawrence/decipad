@@ -9,7 +9,7 @@ import {
   Type,
   InBlockResult,
   Interpreter,
-  ValueLocation,
+  OptionalValueLocation,
 } from '@decipad/language';
 import { useResults } from '@decipad/ui';
 
@@ -145,7 +145,8 @@ export const ResultContent = (props: ResultContentProps) => {
 };
 
 const getLineResult = (
-  cursor: ValueLocation | null,
+  currentBlockId: string,
+  cursor: OptionalValueLocation | null,
   results: InBlockResult[]
 ) => {
   let underCursor = null;
@@ -157,8 +158,16 @@ const getLineResult = (
     );
   }
 
+  if (currentBlockId === cursor?.[0] && cursor?.[1] === null) {
+    return null;
+  }
+
   return underCursor ?? results[results.length - 1];
 };
+
+const NilResult = () => (
+  <ResultStyles contentEditable={false}>&nbsp;</ResultStyles>
+);
 
 export const Result = ({
   blockId,
@@ -169,31 +178,34 @@ export const Result = ({
 
   const blockResult = blockResults[blockId];
 
-  if (blockResult == null) return null;
+  if (blockResult == null) {
+    return <NilResult />;
+  }
 
   if (blockResult.isSyntaxError) {
     return <ResultErrorStyles contentEditable={false}>Error</ResultErrorStyles>;
   }
 
-  if (blockResult.results.length === 0) return null;
+  if (blockResult.results.length === 0) {
+    return <NilResult />;
+  }
 
-  const { valueType, value } = getLineResult(cursor, blockResult.results);
-
-  if (valueType.errorCause != null) {
+  const lineResult = getLineResult(blockId, cursor, blockResult.results);
+  if (lineResult?.valueType.errorCause != null) {
     return (
       <ResultErrorStyles contentEditable={false}>
-        {valueType.errorCause.message}
+        {lineResult?.valueType.errorCause.message}
       </ResultErrorStyles>
     );
   }
-  if (value != null) {
+  if (lineResult?.value != null) {
     return (
       <ResultStyles contentEditable={false}>
-        <ResultContent type={valueType} value={value} />
+        <ResultContent type={lineResult.valueType} value={lineResult.value} />
       </ResultStyles>
     );
   }
-  return null;
+  return <NilResult />;
 };
 
 const commatizeEveryThreeDigits = (digits: string) => {

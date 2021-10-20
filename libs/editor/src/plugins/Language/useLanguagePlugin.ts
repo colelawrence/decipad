@@ -59,8 +59,7 @@ export const useLanguagePlugin = (): UseLanguagePluginRet => {
           } else {
             setResults((ctx) => {
               const blockResultsKv = res.updates.map((newResult) => {
-                const { blockId } = newResult;
-                const previousResult = ctx.blockResults[blockId];
+                const previousResult = ctx.blockResults[newResult.blockId];
 
                 // Stabilize newResult here -- it'll be equal but not ===
                 // Don't trigger a re-render for results tables and whatnot
@@ -72,7 +71,7 @@ export const useLanguagePlugin = (): UseLanguagePluginRet => {
               });
 
               return {
-                cursor: cursor ?? null,
+                cursor,
                 blockResults: Object.fromEntries(blockResultsKv),
               };
             });

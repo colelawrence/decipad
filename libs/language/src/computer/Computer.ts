@@ -10,6 +10,7 @@ import {
   InBlockResult,
   IdentifiedBlock,
   ComputeRequest,
+  OptionalValueLocation,
 } from './types';
 import { ParseRet, updateParse } from './parse';
 import { ComputationRealm } from './ComputationRealm';
@@ -208,7 +209,7 @@ export class Computer {
    */
   cursorPosToValueLocation(
     cursorPos?: ValueLocation | null
-  ): ValueLocation | null {
+  ): OptionalValueLocation | null {
     if (cursorPos == null) return null;
 
     const [blockId, lineNo] = cursorPos;
@@ -226,6 +227,6 @@ export class Computer {
         start && start.line >= lineNo && end && end.line <= lineNo
     );
 
-    return statementIndex !== -1 ? [blockId, statementIndex] : null;
+    return statementIndex !== -1 ? [blockId, statementIndex] : [blockId, null];
   }
 }

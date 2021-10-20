@@ -19,13 +19,14 @@ import type {
   Program,
   ValueLocation,
   UnparsedBlock,
+  OptionalValueLocation,
 } from './types';
 import { Computer } from './Computer';
 
 type ReqsWithCursor$ = Observable<
   readonly [ComputeRequest, ValueLocation | null]
 >;
-type ResTuple = [ComputeResponse | ComputePanic, ValueLocation | null];
+type ResTuple = [ComputeResponse | ComputePanic, OptionalValueLocation | null];
 type Res$ = Observable<ResTuple>;
 
 export type {
@@ -37,6 +38,7 @@ export type {
   ParsedBlock,
   Program,
   ValueLocation,
+  OptionalValueLocation,
   UnparsedBlock,
 };
 

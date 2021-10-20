@@ -17,6 +17,10 @@ export interface IdentifiedError {
 }
 
 export type ValueLocation = [blockId: string, statementIdx: number];
+export type OptionalValueLocation = [
+  blockId: string,
+  statementIdx: number | null
+];
 
 export type UnparsedBlock = {
   type: 'unparsed-block';

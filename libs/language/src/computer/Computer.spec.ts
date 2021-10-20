@@ -169,12 +169,12 @@ it('can turn a cursor location into a ValueLocation', async () => {
 
   expect(locOf(null)).toEqual(null);
   expect(locOf(['missing-id', 0])).toEqual(null);
-  expect(locOf(['id', 99999])).toEqual(null);
+  expect(locOf(['id', 99999])).toEqual(['id', null]);
 
-  expect(locOf(['id', 0])).toEqual(null);
+  expect(locOf(['id', 0])).toEqual(['id', null]);
   expect(locOf(['id', 1])).toEqual(['id', 0]);
-  expect(locOf(['id', 2])).toEqual(null);
-  expect(locOf(['id', 3])).toEqual(null);
+  expect(locOf(['id', 2])).toEqual(['id', null]);
+  expect(locOf(['id', 3])).toEqual(['id', null]);
   expect(locOf(['id', 4])).toEqual(['id', 1]);
   expect(locOf(['id', 5])).toEqual(['id', 2]);
 });

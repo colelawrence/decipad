@@ -1,9 +1,8 @@
 import { createContext, useContext } from 'react';
-import { IdentifiedResult } from '@decipad/language';
+import { IdentifiedResult, OptionalValueLocation } from '@decipad/language';
 
-export type CursorPos = [string, number];
 export interface ResultsContextValue {
-  cursor: CursorPos | null;
+  cursor: OptionalValueLocation | null;
   blockResults: { [blockId: string]: IdentifiedResult };
 }
 export const makeResultsContextValue = (): ResultsContextValue => ({
