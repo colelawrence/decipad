@@ -1,4 +1,4 @@
-import { AST, Time } from '..';
+import { AST, Time, Date as IDate } from '..';
 import { getOfType } from '../utils';
 import { build as t } from '../type';
 import {
@@ -48,11 +48,15 @@ const toSimpleTimeUnit: Record<string, [SimplerUnit, number]> = {
   second: ['millisecond', 1000],
 };
 
-export const getDateSequenceCount = (
+export const getDateSequenceLength = (
   start: number,
   end: number,
+  boundsSpecificity: Time.Specificity,
   by: Time.Unit
 ): number | string => {
+  // Get the end of the year, month or day.
+  end = IDate.fromDateAndSpecificity(end, boundsSpecificity).getEnd();
+
   let [stepUnit, steps] = getJSDateUnitAndMultiplier(by);
 
   if (stepUnit in toSimpleTimeUnit) {
@@ -76,7 +80,7 @@ export const getDateSequenceCount = (
 
       const differenceInDays = Math.round((end - start) / millisecondsInDay);
 
-      return getNumberSequenceCount(0, differenceInDays, steps);
+      return getNumberSequenceCount(0, differenceInDays - 1, steps);
     }
     case 'millisecond': {
       return getNumberSequenceCount(start, end, steps);
@@ -90,40 +94,41 @@ export const getDateSequenceCount = (
 
 export const inferSequence = async (ctx: Context, expr: AST.Sequence) => {
   const [startN, endN, byN] = expr.args;
-  const itemType = (await inferExpression(ctx, startN)).sameAs(
+  const boundTypes = (await inferExpression(ctx, startN)).sameAs(
     await inferExpression(ctx, endN)
   );
 
-  if (itemType.errorCause != null) {
-    return itemType;
+  if (boundTypes.errorCause != null) {
+    return boundTypes;
   } else if (startN.type === 'date' && endN.type === 'date') {
     let increment;
+    let specificity;
+
     try {
-      [increment] = getOfType('ref', byN).args;
-      getSpecificity(increment);
+      increment = getTimeUnit(getOfType('ref', byN).args[0]);
+      specificity = getSpecificity(increment);
     } catch {
       return t.impossible('Invalid increment clause in date sequence');
     }
 
     const [start, startSpec] = getDateFromAstForm(startN.args);
-    const [end, endSpec] = getDateFromAstForm(endN.args);
+    const [end] = getDateFromAstForm(endN.args);
+    const boundsSpecificity = getSpecificity(startSpec);
 
-    if (
-      cmpSpecificities(getSpecificity(increment), startSpec) !== 0 ||
-      cmpSpecificities(startSpec, endSpec) !== 0
-    ) {
-      return t.impossible('Mismatched specificities in date sequence');
+    if (cmpSpecificities(specificity, boundsSpecificity) < 0) {
+      return t.impossible(`An increment clause of ${increment} is too broad`);
     }
 
-    const countOrError = getDateSequenceCount(
+    const countOrError = getDateSequenceLength(
       start,
       end,
-      getTimeUnit(increment)
+      boundsSpecificity,
+      increment
     );
 
     return typeof countOrError === 'string'
       ? t.impossible(countOrError)
-      : t.column(itemType, countOrError);
+      : t.column(t.date(specificity), countOrError);
   } else if (
     expr.args.every(
       (n) =>
@@ -140,7 +145,7 @@ export const inferSequence = async (ctx: Context, expr: AST.Sequence) => {
 
     return typeof countOrError === 'string'
       ? t.impossible(countOrError)
-      : t.column(itemType, countOrError);
+      : t.column(boundTypes, countOrError);
   } else {
     return t.impossible('Sequence parameters must be literal');
   }

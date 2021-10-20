@@ -202,10 +202,18 @@ export function arrayToDate(
   return Date.UTC(dateArgs[0], dateArgs[1] || 0, ...dateArgs.slice(2));
 }
 
+// TODO move the following functions to test utils
 export function parseUTCDate(iso: string) {
-  const segments = iso.match(/(\d+)/g);
+  const segments = iso.match(/(\d+)/g)?.map((n) => Number(n));
 
   return arrayToDate(getDefined(segments, `bad date ${iso}`));
+}
+
+export function getUTCDateSpecificity(iso: string): Time.Specificity {
+  const segmentCount = getDefined(iso.match(/(\d+)/g)?.length);
+
+  if (segmentCount >= dateSpecificities.length) return 'time';
+  return dateSpecificities[segmentCount - 1] as Time.Specificity;
 }
 
 export function date(

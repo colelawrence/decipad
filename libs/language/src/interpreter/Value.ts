@@ -3,7 +3,6 @@ import { pairwise, getDefined } from '../utils';
 import {
   addTimeQuantity,
   cleanDate,
-  cmpSpecificities,
   getSpecificity,
   sortTimeUnits,
 } from '../date';
@@ -164,11 +163,8 @@ export class Column implements SimpleValue {
 
   static fromDateSequence(startD: Date, endD: Date, by: Time.Unit): Column {
     const start = startD.getData();
-    const end = endD.getData();
-
-    if (cmpSpecificities(getSpecificity(by), startD.specificity) > 0) {
-      throw new Error('panic: time quantity more specific than the input date');
-    }
+    const end = endD.getEnd();
+    const spec = getSpecificity(by);
 
     const array = [];
 
@@ -177,7 +173,7 @@ export class Column implements SimpleValue {
       cur <= end;
       cur = addTimeQuantity(cur, new TimeQuantity({ [by]: 1 }))
     ) {
-      array.push(Date.fromDateAndSpecificity(cur, startD.specificity));
+      array.push(Date.fromDateAndSpecificity(cur, spec));
     }
 
     return Column.fromValues(array);

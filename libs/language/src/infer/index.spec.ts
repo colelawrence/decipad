@@ -11,7 +11,6 @@ import {
   r,
   col,
   range,
-  seq,
   date,
   timeQuantity,
   given,
@@ -131,180 +130,6 @@ describe('ranges', () => {
     ).toEqual(t.boolean());
     expect(
       (await inferExpression(nilCtx, c('contains', l(1), l(1)))).errorCause
-    ).not.toBeNull();
-  });
-});
-
-describe('sequences', () => {
-  it('infers sequences of numbers', async () => {
-    expect(await inferExpression(nilCtx, seq(l(1), l(1), l(1)))).toEqual(
-      t.column(t.number(), 1)
-    );
-
-    expect(await inferExpression(nilCtx, seq(l(1), l(2), l(1)))).toEqual(
-      t.column(t.number(), 2)
-    );
-
-    expect(await inferExpression(nilCtx, seq(l(1), l(8), l(3)))).toEqual(
-      t.column(t.number(), 3)
-    );
-
-    expect(await inferExpression(nilCtx, seq(l(10), l(1), l(-1)))).toEqual(
-      t.column(t.number(), 10)
-    );
-  });
-
-  it('infers sequences of dates', async () => {
-    const getSize = async (
-      start: AST.Date,
-      end: AST.Date,
-      by: 'year' | 'quarter' | 'month' | 'day' | 'hour' | 'minute'
-    ) => {
-      const t = await inferExpression(nilCtx, seq(start, end, n('ref', by)));
-
-      return t.errorCause ?? t.columnSize;
-    };
-
-    // Years
-    expect(
-      await getSize(date('2020-01', 'year'), date('2020-01', 'year'), 'year')
-    ).toEqual(1);
-
-    // Quarters
-    expect(
-      await getSize(
-        date('2020-01', 'month'),
-        date('2020-02', 'month'),
-        'quarter'
-      )
-    ).toEqual(1);
-
-    expect(
-      await getSize(
-        date('2020-01', 'month'),
-        date('2020-03', 'month'),
-        'quarter'
-      )
-    ).toEqual(1);
-
-    expect(
-      await getSize(
-        date('2020-01', 'month'),
-        date('2020-04', 'month'),
-        'quarter'
-      )
-    ).toEqual(2);
-
-    expect(
-      await getSize(
-        date('2020-01', 'month'),
-        date('2020-05', 'month'),
-        'quarter'
-      )
-    ).toEqual(2);
-
-    expect(
-      await getSize(
-        date('2020-01', 'month'),
-        date('2021-01', 'month'),
-        'quarter'
-      )
-    ).toEqual(5);
-
-    // Months
-    expect(
-      await getSize(date('2020-01', 'month'), date('2020-01', 'month'), 'month')
-    ).toEqual(1);
-
-    expect(
-      await getSize(date('2020-01', 'month'), date('2020-03', 'month'), 'month')
-    ).toEqual(3);
-
-    // Days
-    expect(
-      await getSize(date('2021-01-01', 'day'), date('2022-01-01', 'day'), 'day')
-    ).toEqual(366);
-
-    expect(
-      await getSize(date('2020-01-01', 'day'), date('2021-01-01', 'day'), 'day')
-    ).toEqual(367);
-
-    expect(
-      await getSize(date('2021-02-01', 'day'), date('2021-03-01', 'day'), 'day')
-    ).toEqual(29);
-
-    // Time
-    expect(
-      await getSize(
-        date('2021-02-01', 'hour'),
-        date('2021-02-02', 'hour'),
-        'hour'
-      )
-    ).toEqual(25);
-
-    // Across DST
-    expect(
-      await getSize(
-        date('2021-03-01', 'hour'),
-        date('2021-03-02', 'hour'),
-        'hour'
-      )
-    ).toEqual(25);
-
-    expect(
-      await getSize(
-        date('2021-02-01', 'hour'),
-        date('2021-02-02', 'hour'),
-        'minute'
-      )
-    ).toEqual(60 * 24 + 1);
-  });
-
-  it('catches multiple errors', async () => {
-    const msg = async (start: number, end: number, by: number) =>
-      (await inferExpression(nilCtx, seq(l(start), l(end), l(by)))).errorCause
-        ?.message;
-
-    expect(await msg(10, 1, 1)).toEqual('Divergent sequence');
-    expect(await msg(1, 10, -1)).toEqual('Divergent sequence');
-    expect(await msg(1, 10, 0)).toEqual('Sequence interval must not be zero');
-  });
-
-  it('refuses variable references anywhere in the sequence', async () => {
-    const ctx = makeContext({
-      initialGlobalScope: [
-        ['Bad', t.number()],
-        ['DBad', t.date('month')],
-      ],
-    });
-
-    expect(
-      (await inferExpression(ctx, seq(n('ref', 'Bad'), l(10), l(2)))).errorCause
-    ).not.toBeNull();
-
-    expect(
-      (await inferExpression(ctx, seq(l(10), n('ref', 'Bad'), l(2)))).errorCause
-    ).not.toBeNull();
-
-    expect(
-      (await inferExpression(ctx, seq(l(10), l(2), n('ref', 'Bad')))).errorCause
-    ).not.toBeNull();
-
-    // Dates
-
-    const d = date('2020-01', 'month');
-    expect(
-      (await inferExpression(ctx, seq(n('ref', 'DBad'), d, n('ref', 'month'))))
-        .errorCause
-    ).not.toBeNull();
-
-    expect(
-      (await inferExpression(ctx, seq(d, n('ref', 'DBad'), n('ref', 'month'))))
-        .errorCause
-    ).not.toBeNull();
-
-    expect(
-      (await inferExpression(ctx, seq(d, d, n('ref', 'DBad')))).errorCause
     ).not.toBeNull();
   });
 });
@@ -879,10 +704,13 @@ describe('Units', () => {
       nilCtx,
       c('*', l(1, meters, inverseExponent(seconds)), l(1, seconds))
     );
-    // const withNullUnit = inferExpression(nilCtx, c('*', l(1, seconds), l(1)))
+    const withNullUnit = await inferExpression(
+      nilCtx,
+      c('*', l(1, seconds), l(1))
+    );
 
     expect(type).toMatchObject(t.number([meters]));
-    // TODO expect(withNullUnit).toEqual(t.number())
+    expect(withNullUnit).toEqual(t.number([seconds]));
   });
 
   it('fills in incompatible unit errors', async () => {

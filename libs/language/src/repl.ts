@@ -25,7 +25,7 @@ export const stringifyResult = (
 
   if (type.date != null) {
     return `${type.date} ${chalk.blue(
-      stringifyDate((result as number[])[0], type.date)
+      stringifyDate(result as number, type.date)
     )}`;
   }
 

@@ -115,23 +115,14 @@ describe('sequences', () => {
         )
       )
     ).toEqual([parseUTCDate('2020-01'), parseUTCDate('2020-02')]);
-  });
 
-  it('ensures the time quantity is not more specific than the date', async () => {
-    await expect(
-      runOne(
-        seq(date('2020-01', 'month'), date('2020-02', 'month'), n('ref', 'day'))
-      )
-    ).rejects.toThrow();
-    await expect(
-      runOne(
-        seq(
-          date('2020-01-01', 'day'),
-          date('2020-02-01', 'day'),
-          n('ref', 'hour')
-        )
-      )
-    ).rejects.toThrow();
+    const dates = (await runOne(
+      seq(date('2020-01', 'year'), date('2020-01', 'year'), n('ref', 'month'))
+    )) as number[];
+
+    expect(dates.length).toEqual(12);
+    expect(dates[0]).toEqual(parseUTCDate('2020-01'));
+    expect(dates[11]).toEqual(parseUTCDate('2020-12'));
   });
 });
 

@@ -2,6 +2,7 @@ import { Time } from '..';
 import {
   cleanDate,
   getDateFromAstForm,
+  getUTCDateSpecificity,
   parseUTCDate,
   stringifyDate,
   getSpecificity,
@@ -57,7 +58,13 @@ it('can parse a date from an array of elements', () => {
 });
 
 it('can parse a date', () => {
+  expect(parseUTCDate('2020')).toEqual(Date.UTC(2020, 0, 1));
   expect(parseUTCDate('2020-01-01')).toEqual(Date.UTC(2020, 0, 1));
+
+  expect(getUTCDateSpecificity('2020')).toEqual('year');
+  expect(getUTCDateSpecificity('2020-01-10')).toEqual('day');
+  expect(getUTCDateSpecificity('2020-01-10T10')).toEqual('time');
+  expect(getUTCDateSpecificity('2020-01-10T10:30')).toEqual('time');
 });
 
 it('can stringify a date', () => {

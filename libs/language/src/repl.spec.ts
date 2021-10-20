@@ -45,12 +45,9 @@ describe('stringify', () => {
       )} <number> ]`
     );
 
-    expect(
-      stringifyResult(
-        [Date.UTC(2020, 0), Date.UTC(2020, 1) - 1],
-        t.date('month')
-      )
-    ).toEqual(`month ${chalk.blue('2020-01')}`);
+    expect(stringifyResult(Date.UTC(2020, 0), t.date('month'))).toEqual(
+      `month ${chalk.blue('2020-01')}`
+    );
 
     expect(stringifyResult([1, 2], t.column(t.number(), 2))).toEqual(
       `[ ${chalk.blue('1')} <number>, ${chalk.blue('2')} <number> ]`
