@@ -141,6 +141,9 @@ export const ResultContent = (props: ResultContentProps) => {
   if (type.functionness) {
     return <>ƒ</>;
   }
+  if (type.rangeOf) {
+    return <RangeResult {...props} />;
+  }
   return null;
 };
 
@@ -426,5 +429,26 @@ function IconForType({ type }: { type: Type }): JSX.Element {
     <HeaderIcon>
       <Icon style={{ display: 'inline', verticalAlign: 'text-top' }} />
     </HeaderIcon>
+  );
+}
+
+function RangeResult({ type, value }: ResultContentProps): JSX.Element | null {
+  if (!type.rangeOf) {
+    return null;
+  }
+
+  if (type.rangeOf?.errorCause) {
+    return (
+      <ResultErrorStyles contentEditable={false}>
+        {type.rangeOf?.errorCause.message}
+      </ResultErrorStyles>
+    );
+  }
+
+  return (
+    <>
+      <ResultContent type={type.rangeOf} value={value[0]} /> &rarr;{' '}
+      <ResultContent type={type.rangeOf} value={value[1]} />
+    </>
   );
 }
