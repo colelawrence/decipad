@@ -7,9 +7,8 @@ import {
   removeRow,
   changeCell,
   changeColumnType,
-  validateCell,
 } from './actions';
-import { TableData } from './types';
+import { TableData } from '../../utils/tableTypes';
 
 expect.addSnapshotSerializer({
   test: (val) =>
@@ -72,12 +71,6 @@ it('can rename columns', () => {
     ---------
     Hey | 123
   `);
-});
-
-it('can validate a cell', () => {
-  expect(validateCell('number', '1')).toEqual(true);
-  expect(validateCell('number', 'Hey')).toEqual(false);
-  expect(validateCell('string', 'Hey')).toEqual(true);
 });
 
 it('can change the column type and clear now-invalid data', () => {

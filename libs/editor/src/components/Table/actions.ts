@@ -1,5 +1,6 @@
 import { produce } from 'immer';
-import type { TableCellType, TableData } from './types';
+import { parseCell } from '../../utils/parseCell';
+import type { TableCellType, TableData } from '../../utils/tableTypes';
 
 // We'll be reassigning parameters this entire file, since it's all immer.
 /* eslint-disable no-param-reassign */
@@ -20,19 +21,8 @@ export const addColumn = produce((data: TableData) => {
   });
 });
 
-export const validateCell = (
-  cellType: TableCellType,
-  text: string
-): boolean => {
-  switch (cellType) {
-    case 'number': {
-      return !Number.isNaN(Number(text));
-    }
-    case 'string': {
-      return true;
-    }
-  }
-};
+const validateCell = (cellType: TableCellType, text: string) =>
+  parseCell(cellType, text) != null;
 
 export const changeColumnType = produce(
   (data: TableData, columnIndex: number, newType: TableCellType) => {

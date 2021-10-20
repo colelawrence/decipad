@@ -18,9 +18,9 @@ import {
   changeColumnName,
   removeRow,
   changeColumnType,
-  validateCell,
 } from './actions';
-import { TableData } from './types';
+import { TableData } from '../../utils/tableTypes';
+import { parseCell } from '../../utils/parseCell';
 
 interface TableInnerProps {
   value: TableData;
@@ -46,7 +46,6 @@ export const TableInner = ({
           onChange={(newVariableName) => {
             onChange(changeVariableName(value, newVariableName));
           }}
-          validate={() => true}
         ></EditableCellContents>
       </CaptionElement>
       <thead>
@@ -95,7 +94,9 @@ export const TableInner = ({
                           changeCell(value, { colIndex, rowIndex, newText })
                         );
                       }}
-                      validate={(text) => validateCell(column.cellType, text)}
+                      validate={(text) =>
+                        parseCell(column.cellType, text) != null
+                      }
                     />
                   </TdElement>
                 );

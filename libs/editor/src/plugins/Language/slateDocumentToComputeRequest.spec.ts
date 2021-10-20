@@ -1,5 +1,5 @@
 import { ParsedBlock, prettyPrintAST } from '@decipad/language';
-import { TableData } from '../../components/Table/types';
+import { TableData } from '../../utils/tableTypes';
 import { TABLE_INPUT } from '../../utils/elementTypes';
 import { SlateNode } from './common';
 import { slateDocumentToComputeRequest } from './slateDocumentToComputeRequest';
@@ -19,6 +19,11 @@ const testTableData: TableData = {
       columnName: 'Col2',
       cellType: 'number',
       cells: ['123', '456'],
+    },
+    {
+      columnName: 'Col3',
+      cellType: 'date/year',
+      cells: ['2020', '2030'],
     },
   ],
 };
@@ -42,6 +47,7 @@ it('can find tables in the document', () => {
           (def TheTitle)
           (table
             Col1 (column \\"Hello\\" \\"World\\")
-            Col2 (column 123 456))))"
+            Col2 (column 123 456)
+            Col3 (column (date year 2020) (date year 2030)))))"
     `);
 });

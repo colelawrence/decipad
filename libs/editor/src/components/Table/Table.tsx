@@ -8,7 +8,7 @@ import { Node, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { getDefined } from '@decipad/utils';
 
-import { TableData } from './types';
+import { TableData } from '../../utils/tableTypes';
 import { TableInner } from './TableInner';
 
 export const Table: PlatePluginComponent = ({

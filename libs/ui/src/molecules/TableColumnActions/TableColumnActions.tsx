@@ -16,7 +16,6 @@ const itemStyles = css(p14Regular, {
   display: 'grid',
   position: 'relative',
   height: '32px',
-
   rowGap: '10px',
 });
 
@@ -51,20 +50,18 @@ const buttonStyles = css(p14Regular, {
   },
 });
 
-type MenuItem = 'change-type' | 'change-type/number' | 'change-type/text';
-
 interface ButtonProps {
-  menuItem: MenuItem;
   icon: React.FC<React.HTMLProps<HTMLElement>>;
+  iconTitle?: string;
   text: string;
-  onClick: (item: MenuItem) => void;
+  onClick: () => void;
   isOpen?: boolean;
   children?: JSX.Element;
 }
 
 export const MenuButton: React.FC<ButtonProps> = ({
-  menuItem,
   icon: Icon,
+  iconTitle,
   text,
   onClick,
   isOpen,
@@ -72,9 +69,15 @@ export const MenuButton: React.FC<ButtonProps> = ({
 }) => {
   return (
     <li css={itemStyles}>
-      <button css={buttonStyles} onClick={() => onClick(menuItem)}>
+      <button
+        css={buttonStyles}
+        onClick={(e) => {
+          e.stopPropagation();
+          onClick();
+        }}
+      >
         <span role="presentation" css={iconStyles}>
-          <Icon />
+          <Icon title={iconTitle} />
         </span>
         {text}
         {children && (
@@ -88,41 +91,85 @@ export const MenuButton: React.FC<ButtonProps> = ({
   );
 };
 
-type TableCellType = 'string' | 'number';
+type TableCellType =
+  | 'string'
+  | 'number'
+  | 'date/time'
+  | 'date/day'
+  | 'date/month'
+  | 'date/year';
 
 interface TableColumnMenuProps {
   onChangeColumnType?: (type: TableCellType) => void;
 }
 
+type Submenu = 'change-type' | 'change-type/date';
+
 export const TableColumnActions: React.FC<TableColumnMenuProps> = ({
   onChangeColumnType = noop,
 }) => {
-  const [currentlyOpen, setCurrentlyOpen] = useState<MenuItem | null>(null);
+  const [submenu, setSubmenu] = useState<Submenu | null>(null);
+  const toggleSubmenu = (item: Submenu) => {
+    setSubmenu(submenu === item ? null : item);
+  };
 
   return (
     <DroopyMenu>
       <MenuButton
         icon={DataType}
         text="Change type"
-        onClick={(item) => {
-          setCurrentlyOpen((open) => (open === item ? null : item));
+        onClick={() => {
+          toggleSubmenu('change-type');
         }}
-        menuItem="change-type"
-        isOpen={currentlyOpen === 'change-type'}
+        isOpen={submenu?.startsWith('change-type')}
       >
         <FloatingMenu>
           <MenuButton
             icon={Number}
             text="Number"
             onClick={() => onChangeColumnType('number')}
-            menuItem="change-type/number"
           />
           <MenuButton
             icon={Text}
             text="Text"
             onClick={() => onChangeColumnType('string')}
-            menuItem="change-type/text"
           />
+          <MenuButton
+            icon={DataType}
+            text="Date"
+            iconTitle="Date"
+            onClick={() => {
+              toggleSubmenu('change-type/date');
+            }}
+            isOpen={submenu?.startsWith('change-type/date')}
+          >
+            <FloatingMenu>
+              <MenuButton
+                icon={DataType}
+                iconTitle="Year"
+                text="Year"
+                onClick={() => onChangeColumnType('date/year')}
+              />
+              <MenuButton
+                icon={DataType}
+                iconTitle="Month"
+                text="Month"
+                onClick={() => onChangeColumnType('date/month')}
+              />
+              <MenuButton
+                icon={DataType}
+                iconTitle="Day"
+                text="Day"
+                onClick={() => onChangeColumnType('date/day')}
+              />
+              <MenuButton
+                icon={DataType}
+                iconTitle="Time"
+                text="Time"
+                onClick={() => onChangeColumnType('date/time')}
+              />
+            </FloatingMenu>
+          </MenuButton>
         </FloatingMenu>
       </MenuButton>
     </DroopyMenu>

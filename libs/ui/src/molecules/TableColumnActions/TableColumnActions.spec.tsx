@@ -30,3 +30,19 @@ it('some buttons result in onChangeColumnType when clicked', async () => {
   userEvent.click(getByTitle(/number/i));
   expect(onChange).toHaveBeenCalledWith('number');
 });
+
+it('can open a nested menu', async () => {
+  const onChange = jest.fn();
+  const { getByTitle, getAllByRole } = render(
+    <TableColumnActions onChangeColumnType={onChange} />
+  );
+
+  userEvent.click(getByTitle(/type/i));
+  userEvent.click(getByTitle(/date/i));
+
+  expect(getAllByRole('list').length).toEqual(3);
+
+  userEvent.click(getByTitle(/month/i));
+
+  expect(onChange).toHaveBeenCalledWith('date/month');
+});

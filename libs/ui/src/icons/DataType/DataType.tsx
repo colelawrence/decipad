@@ -1,8 +1,9 @@
+import { FC } from 'react';
 import { cssVar } from '../../primitives';
 
-export const DataType = (): ReturnType<React.FC> => (
+export const DataType: FC<{ title?: string }> = ({ title = 'Data type' }) => (
   <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <title>Data type</title>
+    <title>{title}</title>
     <path
       d="M9.59998 13V10.6C9.59998 10.0477 10.0477 9.60001 10.6 9.60001H13C13.5523 9.60001 14 10.0477 14 10.6V13C14 13.5523 13.5523 14 13 14H10.6C10.0477 14 9.59998 13.5523 9.59998 13Z"
       fill="white"

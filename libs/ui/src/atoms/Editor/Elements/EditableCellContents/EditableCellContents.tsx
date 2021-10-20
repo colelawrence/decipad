@@ -36,7 +36,7 @@ export const EditableCellContents: FC<EditableCellContentsProps> = ({
   const submit = () => {
     const newValue = inputRef.current?.value;
 
-    if (!newValue) return;
+    if (newValue == null) return;
 
     if (validate(newValue)) {
       onChange(newValue);

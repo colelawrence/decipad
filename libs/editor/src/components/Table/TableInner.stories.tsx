@@ -1,7 +1,7 @@
 import { Meta, Story } from '@storybook/react';
 import { useState } from 'react';
 import { TableInner } from './TableInner';
-import { TableData } from './types';
+import { TableData } from '../../utils/tableTypes';
 
 export default {
   title: 'Editor/Table',
