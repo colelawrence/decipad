@@ -9,6 +9,20 @@ const validateCardinalities = <T extends { cardinality: number }>(
   expectedCardinalities: number[]
 ) => args.every((arg, i) => arg.cardinality >= expectedCardinalities[i]);
 
+const compareDimensions = (a: Type, b: Type) => {
+  const columnSizesMatch =
+    a.columnSize === 'unknown' || b.columnSize === 'unknown'
+      ? true
+      : a.columnSize === b.columnSize;
+
+  const dimensionsMatch =
+    a.indexedBy == null || b.indexedBy == null
+      ? true
+      : a.indexedBy === b.indexedBy;
+
+  return columnSizesMatch && dimensionsMatch;
+};
+
 // Takes a function expects a certain cardinality in each argument,
 // and arguments that might have a higher cardinality. Higher cardinality
 // arguments are looped over, constructing a result that's higher dimension.
@@ -19,7 +33,7 @@ const validateCardinalities = <T extends { cardinality: number }>(
 // [[a, b], [c, d]] calls the function with (a, c) and (b, d)
 export const automapTypes = (
   types: Type[],
-  mapFn: (types: Type[]) => Type,
+  op: (types: Type[]) => Type,
   expectedCardinalities = arrayOfOnes(types.length)
 ): Type => {
   function recurse(types: Type[]): Type {
@@ -29,26 +43,21 @@ export const automapTypes = (
     const mapLength = toMapOver[0]?.columnSize;
 
     if (mapLength != null) {
-      if (
-        allMatch(toMapOver, (a, b) =>
-          a.columnSize === 'unknown' || b.columnSize === 'unknown'
-            ? true
-            : a.columnSize === b.columnSize
-        )
-      ) {
+      if (allMatch(toMapOver, compareDimensions)) {
         // When an argument is higher-dimensional than expected,
         // the result of the call is also higher dimensional.
         // To achieve this we essentially do .map(fargs => recurse(fargs))
         const mappedValues = types.map((t) =>
           toMapOver.includes(t) ? getDefined(t.cellType) : t
         );
+        const idx = toMapOver[0].indexedBy;
 
-        return t.column(recurse(mappedValues), mapLength);
+        return t.column(recurse(mappedValues), mapLength, idx);
       } else {
         return t.impossible('Mismatched column lengths');
       }
     } else {
-      return mapFn(types);
+      return op(types);
     }
   }
 

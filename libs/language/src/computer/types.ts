@@ -51,6 +51,7 @@ export interface ComputePanic {
 export interface ComputeResponse {
   type: 'compute-response';
   updates: IdentifiedResult[];
+  indexLabels: Map<string, string[]>;
 }
 
 export interface IdentifiedResult {

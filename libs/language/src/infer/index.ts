@@ -160,7 +160,7 @@ export const inferExpression = wrap(
             columnNames.push(name);
           }
 
-          return unifyColumnSizes(columnTypes, columnNames);
+          return unifyColumnSizes(ctx.inAssignment, columnTypes, columnNames);
         });
       }
       case 'property-access': {
@@ -189,7 +189,8 @@ export const inferExpression = wrap(
         ) {
           return t.column(
             getFromTableOrRow(table.columnNames, table.columnTypes),
-            table.tableLength
+            table.tableLength,
+            table.indexName
           );
         } else if (table != null) {
           return t.impossible(`${tableName} is not a table`);
@@ -232,7 +233,7 @@ export const inferExpression = wrap(
 
             const bodyResult = await inferExpression(ctx, body);
 
-            return t.column(bodyResult, columnSize);
+            return t.column(bodyResult, columnSize, refType.indexedBy);
           } else if (
             tableLength != null &&
             columnTypes != null &&
@@ -247,15 +248,16 @@ export const inferExpression = wrap(
               bodyType.columnTypes != null &&
               bodyType.columnNames != null
             ) {
-              // Returned a single row -- rebuild table with the correct number of rows
+              // Returned a single row -- rebuild table with the correct number of rows and index
               return produce(bodyType, (type) => {
                 type.tableLength = tableLength;
+                type.indexName = refType.indexName;
               });
             } else if (bodyType.tableLength != null) {
               return t.impossible('Cannot nest tables');
             } else {
               // Returned a number or something else.
-              return t.column(bodyType, tableLength);
+              return t.column(bodyType, tableLength, refType.indexName);
             }
           } else {
             return t.impossible('Column or table expected');
@@ -273,7 +275,7 @@ export const inferExpression = wrap(
             contentType,
             fetch: ctx.fetch,
           });
-          return inferData(data, ctx);
+          return inferData(ctx, ctx.inAssignment, data);
         } catch (err) {
           return t.impossible(err.message);
         }
@@ -329,9 +331,12 @@ export const inferStatement = wrap(
         const [nName, nValue] = statement.args;
 
         const varName = getIdentifierString(nName);
+
+        ctx.inAssignment = varName;
         const type = await (!ctx.stack.top.has(varName)
           ? inferExpression(ctx, nValue)
           : t.impossible(`A variable with the name ${varName} already exists`));
+        ctx.inAssignment = null;
 
         ctx.stack.set(varName, type);
         return type;

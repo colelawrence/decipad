@@ -54,8 +54,13 @@ export const runCodeForVariables = async (
   };
 };
 
-export const objectToTableType = (length: number, obj: Record<string, Type>) =>
+export const objectToTableType = (
+  indexName: string,
+  length: number,
+  obj: Record<string, Type>
+) =>
   t.table({
+    indexName,
     length,
     columnTypes: Object.values(obj),
     columnNames: Object.keys(obj),

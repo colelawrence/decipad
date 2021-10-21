@@ -1,4 +1,4 @@
-import { AST, ExternalDataMap } from '..';
+import { AST, Column, ExternalDataMap } from '..';
 import { makeContext as makeInferContext } from '../infer';
 import { Realm } from '../interpreter';
 
@@ -58,6 +58,25 @@ export class ComputationRealm {
 
   getFromCache(loc: ValueLocation) {
     return this.locCache.get(loc) ?? null;
+  }
+
+  /** Retrieve labels (first column) for each table, indexed by table name. */
+  getIndexLabels(): Map<string, string[]> {
+    const ret = new Map();
+
+    for (const [name, type] of this.inferContext.stack.top.entries()) {
+      if (type.indexName) {
+        const table = this.interpreterRealm.stack.top.get(name);
+        if (table instanceof Column && table.values[0] instanceof Column) {
+          const labels = table.values[0].getData();
+          if (typeof labels[0] === 'string') {
+            ret.set(name, labels as string[]);
+          }
+        }
+      }
+    }
+
+    return ret;
   }
 
   addToCache(loc: ValueLocation, result: CacheContents) {

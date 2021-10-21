@@ -8,6 +8,7 @@ const getLargestColumn = (columnTypes: Type[]) => {
 };
 
 export const unifyColumnSizes = (
+  indexName: string | null,
   types: Type[],
   columnNames: string[]
 ): Type => {
@@ -23,5 +24,5 @@ export const unifyColumnSizes = (
     }
   });
 
-  return t.table({ length, columnTypes, columnNames });
+  return t.table({ indexName, length, columnTypes, columnNames });
 };

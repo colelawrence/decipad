@@ -9,6 +9,7 @@ export interface Context {
   stack: Stack<Type>;
   functionDefinitions: Map<string, AST.FunctionDefinition>;
   hasPrevious: boolean;
+  inAssignment: string | null;
   nodeTypes: Map<AST.Node, Type>;
   fetch: ExternalData.FetchFunction;
   externalData: ExternalDataMap;
@@ -29,6 +30,7 @@ export const makeContext = ({
     stack: new Stack(initialGlobalScope),
     functionDefinitions: new Map(),
     hasPrevious: false,
+    inAssignment: null,
     nodeTypes: new Map(),
     fetch,
     externalData: anyMappingToMap(externalData),

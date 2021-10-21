@@ -73,6 +73,7 @@ export const useLanguagePlugin = (): UseLanguagePluginRet => {
               return {
                 cursor,
                 blockResults: Object.fromEntries(blockResultsKv),
+                indexLabels: res.indexLabels,
               };
             });
           }

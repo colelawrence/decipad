@@ -79,6 +79,7 @@ it('getShouldDelayResponse returns true for if there is an error under the curso
 
   const syntaxError: ComputeResponse = {
     type: 'compute-response',
+    indexLabels: new Map(),
     updates: [
       {
         blockId: 'block-0',
@@ -95,6 +96,7 @@ it('getShouldDelayResponse returns true for if there is an error under the curso
 
   const typeError: ComputeResponse = {
     type: 'compute-response',
+    indexLabels: new Map(),
     updates: [
       {
         blockId: 'block-0',

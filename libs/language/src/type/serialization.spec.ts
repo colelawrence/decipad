@@ -52,19 +52,26 @@ it('can stringify a type', () => {
       },
     }
   `);
-  expect(serializeType(t.column(t.number(), 2))).toMatchInlineSnapshot(`
+  expect(serializeType(t.column(t.number(), 2, 'Index')))
+    .toMatchInlineSnapshot(`
     Object {
       "cellType": Object {
         "kind": "number",
         "unit": null,
       },
       "columnSize": 2,
+      "indexedBy": "Index",
       "kind": "column",
     }
   `);
   expect(
     serializeType(
-      t.table({ length: 123, columnTypes: [t.number()], columnNames: ['hi'] })
+      t.table({
+        indexName: 'Idx',
+        length: 123,
+        columnTypes: [t.number()],
+        columnNames: ['hi'],
+      })
     )
   ).toMatchInlineSnapshot(`
     Object {
@@ -77,6 +84,7 @@ it('can stringify a type', () => {
           "unit": null,
         },
       ],
+      "indexName": "Idx",
       "kind": "table",
       "tableLength": 123,
     }
@@ -164,6 +172,7 @@ it('can parse a type', () => {
   expect(
     testDeserialize({
       kind: 'column',
+      indexedBy: null,
       cellType: unitlessNumber,
       columnSize: 123,
     })
@@ -180,6 +189,7 @@ it('can parse a type', () => {
   expect(
     testDeserialize({
       kind: 'table',
+      indexName: null,
       tableLength: 123,
       columnTypes: [unitlessNumber, unitlessNumber],
       columnNames: ['Hi', 'Hi2'],
@@ -198,6 +208,7 @@ it('can parse a type', () => {
   expect(
     testDeserialize({
       kind: 'imported-data',
+      indexName: null,
       dataUrl: 'http://ex.com/1',
     })
   ).toMatchInlineSnapshot(`"<data url=\\"http://ex.com/1\\">"`);

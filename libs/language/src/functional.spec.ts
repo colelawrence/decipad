@@ -41,7 +41,7 @@ describe('use of funds document', () => {
         }
       `)
     ).toMatchObject({
-      type: objectToTableType(12, {
+      type: objectToTableType('SalaryStaff', 12, {
         Months: t.date('month'),
         Exec: t.number(),
         Product: t.number(),

@@ -18,6 +18,8 @@ import {
   table,
   funcDef,
   prop,
+  importedData,
+  assign,
 } from '../utils';
 
 import { makeContext } from './context';
@@ -239,6 +241,7 @@ describe('tables', () => {
     const tableContext = makeContext();
 
     const expectedType = t.table({
+      indexName: 'Table',
       length: 3,
       columnTypes: [t.number(), t.number()],
       columnNames: ['Col1', 'Col2'],
@@ -269,12 +272,13 @@ describe('tables', () => {
     );
 
     expect((await inferProgram([block])).variables.get('Col')).toEqual(
-      t.column(t.number(), 3)
+      t.column(t.number(), 3, 'Table')
     );
   });
 
   it('"previous" references', async () => {
     const expectedType = t.table({
+      indexName: 'Table',
       length: 3,
       columnTypes: [t.number(), t.number(), t.string()],
       columnNames: ['Col1', 'Col2', 'Col3'],
@@ -307,6 +311,7 @@ describe('tables', () => {
 
     expect(await inferStatement(makeContext(), table)).toEqual(
       t.table({
+        indexName: 'Table',
         length: 2,
         columnTypes: [t.number(), t.number()],
         columnNames: ['Col1', 'Col2'],
@@ -333,6 +338,7 @@ describe('tables', () => {
 
     expect(await inferStatement(makeContext(), table)).toEqual(
       t.table({
+        indexName: 'Table',
         length: 1,
         columnTypes: [t.string(), t.number()],
         columnNames: ['Col1', 'Col2'],
@@ -348,6 +354,7 @@ describe('tables', () => {
 
     expect(await inferStatement(makeContext(), table)).toEqual(
       t.table({
+        indexName: 'Table',
         length: 1,
         columnTypes: [t.string(), t.number()],
         columnNames: ['Col1', 'Col2'],
@@ -383,7 +390,7 @@ describe('tables', () => {
 describe('Property access', () => {
   const scopeWithTable = makeContext({
     initialGlobalScope: [
-      ['Table', objectToTableType(3, { Col: t.number() })],
+      ['Table', objectToTableType('Table', 3, { Col: t.number() })],
       ['Row', t.row([t.string()], ['Name'])],
       ['NotATable', t.number()],
     ],
@@ -736,5 +743,35 @@ describe('Units', () => {
     expect(
       await inferExpression(nilCtx, c('^', l(1, meters), l(1, degC)))
     ).toEqual(t.number([meters]));
+  });
+});
+
+jest.mock('../data', () => ({
+  // Mock dataTable
+  resolve: jest.fn(() => ({
+    numCols: 0,
+    length: 0,
+  })),
+}));
+
+describe('Data', () => {
+  it('infers imported data', async () => {
+    const ctx = makeContext();
+    expect(
+      await inferStatement(
+        ctx,
+        assign(
+          'IndexName',
+          importedData('http://example.com/data', 'text/whatever')
+        )
+      )
+    ).toEqual(
+      t.table({
+        indexName: 'IndexName',
+        length: 0,
+        columnNames: [],
+        columnTypes: [],
+      })
+    );
   });
 });

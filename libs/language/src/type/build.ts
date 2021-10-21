@@ -34,14 +34,21 @@ export const timeQuantity = (timeUnits: Time.Unit[]) =>
   });
 
 interface BuildTableArgs {
+  indexName?: string | null;
   length: number | 'unknown';
   columnTypes: Type[];
   columnNames: string[];
 }
 
-export const table = ({ length, columnTypes, columnNames }: BuildTableArgs) => {
+export const table = ({
+  indexName,
+  length,
+  columnTypes,
+  columnNames,
+}: BuildTableArgs) => {
   const t = new Type();
 
+  t.indexName = indexName ?? null;
   t.tableLength = length;
   t.columnTypes = columnTypes;
   t.columnNames = columnNames;
@@ -69,9 +76,14 @@ export const row = (cells: Type[], cellNames: string[]) => {
   }
 };
 
-export const column = (cellType: Type, columnSize: number | 'unknown') => {
+export const column = (
+  cellType: Type,
+  columnSize: number | 'unknown',
+  index?: string | null
+) => {
   const t = new Type();
 
+  t.indexedBy = index ?? null;
   t.cellType = cellType;
   t.columnSize = columnSize;
 

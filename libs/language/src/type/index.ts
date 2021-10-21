@@ -66,6 +66,10 @@ export class Type {
 
   rangeOf: Type | null = null;
 
+  // Indices (columns, tables, imported tables)
+  indexName: string | null = null;
+  indexedBy: string | null = null;
+
   // Column
   cellType: Type | null = null;
   columnSize: number | 'unknown' | null = null;

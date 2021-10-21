@@ -46,7 +46,9 @@ const UnselectableCommaStyles = chakra(Box, {
 });
 
 const ResultTable = chakra(Table, {
-  baseStyle: {},
+  baseStyle: {
+    tableLayout: 'fixed',
+  },
 });
 
 const TableHeader = chakra(Th, {
@@ -97,20 +99,9 @@ const TableCell = chakra(Td, {
   },
 });
 
-// Cannot be imported from @decipad/runtime
-interface ComputationError {
-  message: string;
-  lineNumber?: number;
-  columnNumber?: number;
-}
-
-interface ComputationResult {
+interface ResultContentProps {
   type: Type;
   value: any | any[];
-  errors: ComputationError[];
-}
-
-interface ResultContentProps extends Pick<ComputationResult, 'type' | 'value'> {
   depth?: number;
 }
 
@@ -385,6 +376,8 @@ function ColumnResult({
   value,
   depth = 0,
 }: ResultContentProps): JSX.Element {
+  const { indexLabels } = useResults();
+
   const border = {
     borderTopRadius: 6,
     border: '1px',
@@ -396,17 +389,26 @@ function ColumnResult({
       <ResultTable role="table">
         {/* TODO: Column caption should say the name of the variable (if there is one. */}
         <Tbody>
-          {(value as Interpreter.ResultColumn).map((row, rowIndex) => (
-            <TableRow key={rowIndex}>
-              <TableCell isNumeric={type.cellType!.type === 'number'}>
-                <ResultContent
-                  type={type.cellType!}
-                  value={row}
-                  depth={depth + 1}
-                />
-              </TableCell>
-            </TableRow>
-          ))}
+          {(value as Interpreter.ResultColumn).map((row, rowIndex) => {
+            const labels = indexLabels.get(type.indexedBy ?? '');
+
+            return (
+              <TableRow key={rowIndex}>
+                {labels && (
+                  <TableCell isNumeric={false}>
+                    <span style={{ color: 'gray' }}>{labels[rowIndex]}</span>
+                  </TableCell>
+                )}
+                <TableCell isNumeric={type.cellType!.type === 'number'}>
+                  <ResultContent
+                    type={type.cellType!}
+                    value={row}
+                    depth={depth + 1}
+                  />
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </Tbody>
       </ResultTable>
     </Box>

@@ -190,7 +190,7 @@ describe('Tables', () => {
     expect(
       await runCode(`Table = { Column1 = [1, 2, 3], Column2 = Column1 * 2 }`)
     ).toMatchObject({
-      type: objectToTableType(3, {
+      type: objectToTableType('Table', 3, {
         Column1: t.number(),
         Column2: t.number(),
       }),
@@ -210,7 +210,7 @@ describe('Tables', () => {
         }
       `)
     ).toEqual({
-      type: objectToTableType(3, {
+      type: objectToTableType('Table', 3, {
         Column1: t.number(),
         Column2: t.number(),
       }),
@@ -231,7 +231,7 @@ describe('Tables', () => {
         }
       `)
     ).toMatchObject({
-      type: objectToTableType(3, {
+      type: objectToTableType('Table', 3, {
         Column1: t.number(),
         Column2: t.number(),
         Column3: t.boolean(),
@@ -254,7 +254,7 @@ describe('Tables', () => {
         Table.Col
       `)
     ).toMatchObject({
-      type: t.column(t.number(), 3),
+      type: t.column(t.number(), 3, 'Table'),
       value: [1, 2, 3],
     });
   });
@@ -270,7 +270,7 @@ describe('Tables', () => {
         Table.Col2
       `)
     ).toMatchObject({
-      type: t.column(t.number(), 3),
+      type: t.column(t.number(), 3, 'Table'),
       value: [1, 1, 1],
     });
 
@@ -284,7 +284,7 @@ describe('Tables', () => {
         Table.Col
       `)
     ).toMatchObject({
-      type: t.column(t.number(), 3),
+      type: t.column(t.number(), 3, 'Table'),
       value: [1, 1, 1],
     });
   });

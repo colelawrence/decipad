@@ -30,9 +30,6 @@ const computeStatement = async (
   let result = realm.getFromCache(location);
 
   if (result == null) {
-    const cached = realm.getFromCache(location);
-    if (cached != null) return cached;
-
     const [blockId, statementIndex] = location;
     const statement = getStatement(program, location);
     const valueType = await inferStatement(realm.inferContext, statement);
@@ -143,6 +140,7 @@ export class Computer {
       return {
         type: 'compute-response',
         updates,
+        indexLabels: this.computationRealm.getIndexLabels(),
       };
     } catch (error) {
       console.error(error);

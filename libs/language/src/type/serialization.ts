@@ -8,16 +8,22 @@ export type SerializedType =
   | { kind: 'scalar'; type: TypeName }
   | { kind: 'date'; date: Time.Specificity }
   | { kind: 'range'; rangeOf: SerializedType }
-  | { kind: 'column'; cellType: SerializedType; columnSize: number | 'unknown' }
+  | {
+      kind: 'column';
+      indexedBy: string | null;
+      cellType: SerializedType;
+      columnSize: number | 'unknown';
+    }
   | {
       kind: 'table';
+      indexName: string | null;
       tableLength: number | 'unknown';
       columnTypes: SerializedType[];
       columnNames: string[];
     }
   | { kind: 'row'; rowCellTypes: SerializedType[]; rowCellNames: string[] }
   | { kind: 'time-quantity'; timeUnits: Time.Unit[] }
-  | { kind: 'imported-data'; dataUrl: string }
+  | { kind: 'imported-data'; indexName: string | null; dataUrl: string }
   | { kind: 'function' }
   | { kind: 'type-error'; errorCause: ErrSpec };
 
@@ -35,12 +41,14 @@ export function serializeType(type: Type): SerializedType {
   } else if (type.cellType && type.columnSize) {
     return {
       kind: 'column',
+      indexedBy: type.indexedBy,
       cellType: serializeType(type.cellType),
       columnSize: type.columnSize,
     };
   } else if (type.columnTypes && type.columnNames && type.tableLength) {
     return {
       kind: 'table',
+      indexName: type.indexName,
       tableLength: type.tableLength,
       columnTypes: type.columnTypes.map((t) => serializeType(t)),
       columnNames: type.columnNames,
@@ -52,7 +60,11 @@ export function serializeType(type: Type): SerializedType {
       rowCellNames: type.rowCellNames,
     };
   } else if (type.dataUrl) {
-    return { kind: 'imported-data', dataUrl: type.dataUrl };
+    return {
+      kind: 'imported-data',
+      indexName: type.indexName,
+      dataUrl: type.dataUrl,
+    };
   } else if (type.functionness) {
     return { kind: 'function' };
   } else if (type.errorCause) {

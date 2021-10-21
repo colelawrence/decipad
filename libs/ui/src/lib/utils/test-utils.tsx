@@ -7,6 +7,7 @@ import { ResultsContextValue } from '../Contexts';
 
 const results: ResultsContextValue = {
   cursor: null,
+  indexLabels: new Map(),
   blockResults: {
     test: {
       blockId: 'test',

@@ -89,6 +89,32 @@ describe('automapTypes', () => {
       t.impossible('A column is required')
     );
   });
+
+  it('takes indexedBy of operands into account', () => {
+    expect(
+      automapTypes(
+        [t.column(num, 5, 'Idx1'), t.column(num, 5, 'Idx1')],
+        () => str
+      )
+    ).toMatchObject({
+      indexedBy: 'Idx1',
+    });
+
+    const twoIndices = t.column(t.column(str, 1, 'Idx2d'), 5, 'Idx1');
+    expect(automapTypes([twoIndices], () => str)).toMatchObject({
+      indexedBy: 'Idx1',
+      cellType: {
+        indexedBy: 'Idx2d',
+      },
+    });
+
+    expect(
+      automapTypes(
+        [t.column(num, 5, 'Idx1'), t.column(num, 5, 'DifferentIdx')],
+        () => str
+      ).errorCause
+    ).not.toBeNull();
+  });
 });
 
 describe('automapValues', () => {
