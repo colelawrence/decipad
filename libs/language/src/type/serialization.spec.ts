@@ -115,13 +115,15 @@ it('can stringify a type', () => {
       "kind": "date",
     }
   `);
-  expect(serializeType(t.importedData('http://example.com/foo.decidata')))
-    .toMatchInlineSnapshot(`
-      Object {
-        "dataUrl": "http://example.com/foo.decidata",
-        "kind": "imported-data",
-      }
-    `);
+  expect(
+    serializeType(t.importedData('http://example.com/foo.decidata', 'Index'))
+  ).toMatchInlineSnapshot(`
+    Object {
+      "dataUrl": "http://example.com/foo.decidata",
+      "indexName": "Index",
+      "kind": "imported-data",
+    }
+  `);
   expect(serializeType(t.functionPlaceholder())).toMatchInlineSnapshot(`
     Object {
       "kind": "function",

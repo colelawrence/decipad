@@ -79,11 +79,11 @@ export const row = (cells: Type[], cellNames: string[]) => {
 export const column = (
   cellType: Type,
   columnSize: number | 'unknown',
-  index?: string | null
+  indexedBy?: string | null
 ) => {
   const t = new Type();
 
-  t.indexedBy = index ?? null;
+  t.indexedBy = indexedBy ?? null;
   t.cellType = cellType;
   t.columnSize = columnSize;
 
@@ -94,9 +94,10 @@ export const column = (
   }
 };
 
-export const importedData = (url: string) =>
+export const importedData = (url: string, indexName?: string | null) =>
   produce(new Type(), (t) => {
     t.dataUrl = url;
+    t.indexName = indexName ?? null;
   });
 
 export const functionPlaceholder = () =>
