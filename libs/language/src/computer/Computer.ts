@@ -224,7 +224,7 @@ export class Computer {
 
     const statementIndex = block.args.findIndex(
       ({ start, end }) =>
-        start && start.line >= lineNo && end && end.line <= lineNo
+        start && start.line <= lineNo && end && end.line >= lineNo
     );
 
     return statementIndex !== -1 ? [blockId, statementIndex] : [blockId, null];
