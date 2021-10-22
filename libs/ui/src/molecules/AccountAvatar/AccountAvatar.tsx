@@ -1,4 +1,4 @@
-import { v4 as uuidV4 } from 'uuid';
+import { nanoid } from 'nanoid';
 import { ComponentProps, useState } from 'react';
 import { css } from '@emotion/react';
 
@@ -32,7 +32,7 @@ export const AccountAvatar = ({
   onClick = noop,
   ...props
 }: AccountAvatarProps): ReturnType<React.FC> => {
-  const [hoverTargetClassName] = useState(`account-avatar-${uuidV4()}`);
+  const [hoverTargetClassName] = useState(`account-avatar-${nanoid()}`);
   const hoverSelector = menuOpen ? '' : `.${hoverTargetClassName}:hover`;
   return (
     <button onClick={onClick} className={hoverTargetClassName} css={styles}>

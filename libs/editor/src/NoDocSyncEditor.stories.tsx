@@ -7,7 +7,7 @@ import {
   ELEMENT_H2,
   ELEMENT_PARAGRAPH,
 } from '@udecode/plate';
-import { v4 } from 'uuid';
+import { nanoid } from 'nanoid';
 import { NoDocSyncEditor } from './NoDocSyncEditor.component';
 
 export default {
@@ -21,12 +21,12 @@ export const Normal: Story = () => (
       initialValue={[
         {
           type: ELEMENT_H1,
-          id: v4(),
+          id: nanoid(),
           children: [{ text: 'Funding needs' }],
         },
         {
           type: ELEMENT_BLOCKQUOTE,
-          id: v4(),
+          id: nanoid(),
           children: [
             {
               text: `This notebook calculates how much funding your startup needs. Assuming your expenses are constant and your revenue is growing, it shows when you'll reach profitability and how much capital you'll burn through before then. Once you're profitable, you control your destiny: you can raise more to grow faster if you want.`,
@@ -35,12 +35,12 @@ export const Normal: Story = () => (
         },
         {
           type: ELEMENT_H2,
-          id: v4(),
+          id: nanoid(),
           children: [{ text: `Business actuals` }],
         },
         {
           type: ELEMENT_PARAGRAPH,
-          id: v4(),
+          id: nanoid(),
           children: [
             {
               text: `To understand our funding needs we need to know our current level of spending and our starting point in terms of revenue.`,
@@ -49,11 +49,11 @@ export const Normal: Story = () => (
         },
         {
           type: ELEMENT_CODE_BLOCK,
-          id: v4(),
+          id: nanoid(),
           children: [
             {
               type: ELEMENT_CODE_LINE,
-              id: v4(),
+              id: nanoid(),
               children: [
                 {
                   text: 'Monthly_expenses = 130,000 £',
@@ -62,7 +62,7 @@ export const Normal: Story = () => (
             },
             {
               type: ELEMENT_CODE_LINE,
-              id: v4(),
+              id: nanoid(),
               children: [
                 {
                   text: 'Initial_Monthly_Revenue = 2500 £',
@@ -73,7 +73,7 @@ export const Normal: Story = () => (
         },
         {
           type: ELEMENT_H2,
-          id: v4(),
+          id: nanoid(),
           children: [
             {
               text: 'Business assumptions',
@@ -82,7 +82,7 @@ export const Normal: Story = () => (
         },
         {
           type: ELEMENT_PARAGRAPH,
-          id: v4(),
+          id: nanoid(),
           children: [
             {
               text: `We also have to set our target growth rate. Don't be too over realistic here. You don't want to fall short of expectations otherwise you'll need additional funding until break-even.`,
@@ -91,10 +91,10 @@ export const Normal: Story = () => (
         },
         {
           type: ELEMENT_CODE_BLOCK,
-          id: v4(),
+          id: nanoid(),
           children: [
             {
-              id: v4(),
+              id: nanoid(),
               type: ELEMENT_CODE_LINE,
               children: [
                 {
@@ -106,12 +106,12 @@ export const Normal: Story = () => (
         },
         {
           type: ELEMENT_H2,
-          id: v4(),
+          id: nanoid(),
           children: [{ text: `Capital needed & time to profitability` }],
         },
         {
           type: ELEMENT_PARAGRAPH,
-          id: v4(),
+          id: nanoid(),
           children: [
             {
               text: 'So we have set our monthly expenses, our starting monthly revenue and our assumption for the target growth rate. Now we are ready to create a model which outputs the level of funding we need and the time it will take to burn that cash and reach profitability.',
@@ -120,10 +120,10 @@ export const Normal: Story = () => (
         },
         {
           type: ELEMENT_CODE_BLOCK,
-          id: v4(),
+          id: nanoid(),
           children: [
             {
-              id: v4(),
+              id: nanoid(),
               type: ELEMENT_CODE_LINE,
               children: [
                 {
@@ -132,7 +132,7 @@ export const Normal: Story = () => (
               ],
             },
             {
-              id: v4(),
+              id: nanoid(),
               type: ELEMENT_CODE_LINE,
               children: [
                 {

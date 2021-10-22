@@ -4,7 +4,6 @@ import { join } from 'path';
 import { nanoid } from 'nanoid';
 import getPort from 'get-port';
 import getBody from 'raw-body';
-import qs from 'qs';
 import {
   parse as decodeCookie,
   stringify as encodeCookie,
@@ -212,11 +211,11 @@ test('external data source', (ctx) => {
           return;
         }
 
-        const reqBody = qs.parse(body);
-        expect(reqBody.grant_type).toBe('authorization_code');
-        expect(reqBody.client_id).toBe('testdatasourceclientid');
-        expect(reqBody.client_secret).toBe('testdatasourceclientsecret');
-        expect(reqBody.code).toBe(authCode);
+        const reqBody = new URLSearchParams(body);
+        expect(reqBody.get('grant_type')).toBe('authorization_code');
+        expect(reqBody.get('client_id')).toBe('testdatasourceclientid');
+        expect(reqBody.get('client_secret')).toBe('testdatasourceclientsecret');
+        expect(reqBody.get('code')).toBe(authCode);
 
         const tokenResponse = {
           access_token: 'testdatasourcefakeaccesstoken',
