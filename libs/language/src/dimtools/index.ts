@@ -1,115 +1,112 @@
-import { getDefined, allMatch } from '../utils';
+import { allMatch, getDefined, getInstanceof } from '../utils';
 import { Type, build as t } from '../type';
 import * as Values from '../interpreter/Value';
+import { getReductionPlan } from './getReductionPlan';
+import {
+  arrayOfOnes,
+  validateCardinalities,
+  IndexNames,
+  compareDimensions,
+} from './common';
 
-const arrayOfOnes = (length: number) => Array.from({ length }, () => 1);
-
-const validateCardinalities = <T extends { cardinality: number }>(
-  args: T[],
-  expectedCardinalities: number[]
-) => args.every((arg, i) => arg.cardinality >= expectedCardinalities[i]);
-
-const compareDimensions = (a: Type, b: Type) => {
-  const columnSizesMatch =
-    a.columnSize === 'unknown' || b.columnSize === 'unknown'
-      ? true
-      : a.columnSize === b.columnSize;
-
-  const dimensionsMatch =
-    a.indexedBy == null || b.indexedBy == null
-      ? true
-      : a.indexedBy === b.indexedBy;
-
-  return columnSizesMatch && dimensionsMatch;
-};
-
-// Takes a function expects a certain cardinality in each argument,
-// and arguments that might have a higher cardinality. Higher cardinality
-// arguments are looped over, constructing a result that's higher dimension.
-//
-// Examples:
-// [a, b] calls the function with (a, b)
-// [[a], [b]] calls the function with (a, b)
-// [[a, b], [c, d]] calls the function with (a, c) and (b, d)
+/**
+ * Takes a function expects a certain cardinality in each argument,
+ * and arguments that might have a higher cardinality. Higher cardinality
+ * arguments are looped over, constructing a result that's higher dimension.
+ *
+ * Examples:
+ * [a, b] calls the function with (a, b)
+ * [[a], [b]] calls the function with (a, b)
+ * [[a, b], [c, d]] calls the function with (a, c) and (b, d)
+ * */
 export const automapTypes = (
-  types: Type[],
-  op: (types: Type[]) => Type,
-  expectedCardinalities = arrayOfOnes(types.length)
+  argTypes: Type[],
+  mapFn: (types: Type[]) => Type,
+  expectedCardinalities = arrayOfOnes(argTypes.length),
+  indexNames: IndexNames = argTypes.map((a) => a.indexedBy)
 ): Type => {
-  function recurse(types: Type[]): Type {
-    const toMapOver = types.filter(
-      (t, i) => t.cardinality > expectedCardinalities[i]
-    );
-    const mapLength = toMapOver[0]?.columnSize;
-
-    if (mapLength != null) {
-      if (allMatch(toMapOver, compareDimensions)) {
-        // When an argument is higher-dimensional than expected,
-        // the result of the call is also higher dimensional.
-        // To achieve this we essentially do .map(fargs => recurse(fargs))
-        const mappedValues = types.map((t) =>
-          toMapOver.includes(t) ? getDefined(t.cellType) : t
-        );
-        const idx = toMapOver[0].indexedBy;
-
-        return t.column(recurse(mappedValues), mapLength, idx);
-      } else {
-        return t.impossible('Mismatched column lengths');
-      }
-    } else {
-      return op(types);
-    }
-  }
-
-  if (validateCardinalities(types, expectedCardinalities)) {
-    return recurse(types);
-  } else {
+  if (!validateCardinalities(argTypes, expectedCardinalities)) {
     return t.impossible('A column is required');
   }
+
+  function recurse(argTypes: Type[]): Type {
+    // When an argument is higher-dimensional than expected,
+    // the result of the call is also higher dimensional.
+    // To achieve this we essentially do .map(fargs => recurse(fargs))
+    const { whichToReduce, firstToReduce } = getReductionPlan(
+      argTypes,
+      expectedCardinalities,
+      indexNames
+    );
+
+    if (!firstToReduce) {
+      return mapFn(argTypes);
+    }
+
+    const argumentsToReduce = argTypes.filter((_arg, i) => whichToReduce[i]);
+    if (!allMatch(argumentsToReduce, compareDimensions)) {
+      return t.impossible('Mismatched column lengths');
+    }
+
+    const reducedArguments = argTypes.map((type, argIndex) => {
+      if (whichToReduce[argIndex]) {
+        return getDefined(type.cellType);
+      } else {
+        return type;
+      }
+    });
+
+    return t.column(
+      recurse(reducedArguments),
+      getDefined(firstToReduce.columnSize),
+      firstToReduce.indexedBy
+    );
+  }
+
+  return recurse(argTypes);
 };
 
-const getRowCount = (v?: Values.Value) =>
-  (v as Values.Column | undefined)?.rowCount ?? null;
-
-// Extremely symmetric with the above function
+// Extremely symmetrical with the above function
 export const automapValues = (
-  values: Values.Value[],
+  argValues: Values.Value[],
   mapFn: (values: Values.Value[]) => Values.Value,
-  expectedCardinalities = arrayOfOnes(values.length)
+  expectedCardinalities = arrayOfOnes(argValues.length),
+  indexNames: IndexNames = argValues.map(() => null)
 ): Values.Value => {
-  function recurse(values: Values.Value[]): Values.Value {
-    const toMapOver = values.filter(
-      (t, i) => t.cardinality > expectedCardinalities[i]
-    );
-    const mapLength = (toMapOver[0] as Values.Column | undefined)?.rowCount;
-
-    if (mapLength != null) {
-      if (allMatch(toMapOver, (a, b) => getRowCount(a) === getRowCount(b))) {
-        // When an argument is higher-dimensional than expected,
-        // the result of the call is also higher dimensional.
-        // To achieve this we essentially do .map(fargs => recurse(fargs))
-        const mappedValues = Array.from({ length: mapLength }, (_, i) => {
-          const thisRow = values.map((v) =>
-            toMapOver.includes(v)
-              ? getDefined((v as Values.Column).values?.[i])
-              : v
-          );
-
-          return recurse(thisRow);
-        });
-
-        return Values.Column.fromValues(mappedValues);
-      } else {
-        throw new Error('panic: mismatched column lengths');
-      }
-    } else {
-      return mapFn(values);
-    }
-  }
-
-  if (validateCardinalities(values, expectedCardinalities)) {
-    return recurse(values);
-  } else {
+  if (!validateCardinalities(argValues, expectedCardinalities)) {
     throw new Error('panic: one or more cardinalities are too low');
   }
+
+  function recurse(argValues: Values.Value[]): Values.Value {
+    // When an argument is higher-dimensional than expected,
+    // the result of the call is also higher dimensional.
+    // To achieve this we essentially do .map(fargs => recurse(fargs))
+    const { whichToReduce, firstToReduce } = getReductionPlan(
+      argValues,
+      expectedCardinalities,
+      indexNames
+    );
+
+    if (!firstToReduce) {
+      return mapFn(argValues);
+    }
+
+    const length = getInstanceof(firstToReduce, Values.Column).rowCount;
+
+    return Values.Column.fromValues(
+      Array.from({ length }, (_, rowIndex) => {
+        const reducedArguments = argValues.map((arg, argIndex) => {
+          if (whichToReduce[argIndex]) {
+            return getInstanceof(arg, Values.Column).values[rowIndex];
+          } else {
+            return arg;
+          }
+        });
+
+        return recurse(reducedArguments);
+      })
+    );
+  }
+
+  return recurse(argValues);
 };

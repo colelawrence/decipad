@@ -60,11 +60,11 @@ describe('automapTypes', () => {
   const typeId = (t: Type[]) => t[0];
 
   it('errors with incompatible dims', () => {
-    const erroredColLengths = automapTypes(
+    const diffColLengths = automapTypes(
       [t.column(num, 1), t.column(num, 2)],
       typeId
     );
-    expect(erroredColLengths.errorCause).not.toBeNull();
+    expect(diffColLengths.errorCause).not.toBeNull();
   });
 
   it('can automap types', () => {
@@ -107,13 +107,39 @@ describe('automapTypes', () => {
         indexedBy: 'Idx2d',
       },
     });
+  });
+
+  it('Can heighten dimensions when it sees two index names', () => {
+    expect(
+      automapTypes(
+        [t.column(num, 2, 'Index1'), t.column(num, 3, 'Index2')],
+        () => str
+      )
+    ).toMatchObject({
+      indexedBy: 'Index1',
+      cellType: {
+        indexedBy: 'Index2',
+      },
+    });
 
     expect(
       automapTypes(
-        [t.column(num, 5, 'Idx1'), t.column(num, 5, 'DifferentIdx')],
+        [
+          t.column(num, 2, 'Index1'),
+          t.column(num, 3, 'Index2'),
+          t.column(num, 1, 'Index3'),
+        ],
         () => str
-      ).errorCause
-    ).not.toBeNull();
+      )
+    ).toMatchObject({
+      indexedBy: 'Index1',
+      cellType: {
+        indexedBy: 'Index2',
+        cellType: {
+          indexedBy: 'Index3',
+        },
+      },
+    });
   });
 });
 
@@ -200,6 +226,125 @@ describe('automapValues', () => {
         [2, 3, 4],
         [3, 4, 5],
       ]);
+    });
+
+    describe('raising a dimension', () => {
+      const combine = (values: Values.SimpleValue[]) =>
+        Values.fromJS(
+          values
+            .map((v) => v.getData())
+            .map(String)
+            .join('')
+        );
+
+      it('supports raising a dimension', () => {
+        expect(
+          automapValues(
+            [Values.fromJS(['A', 'B']), Values.fromJS([1, 2, 3])],
+            combine,
+            [1, 1],
+            ['Dimone', null]
+          ).getData()
+        ).toMatchInlineSnapshot(`
+          Array [
+            Array [
+              "A1",
+              "A2",
+              "A3",
+            ],
+            Array [
+              "B1",
+              "B2",
+              "B3",
+            ],
+          ]
+        `);
+      });
+
+      it('supports not raising all the dimensions', () => {
+        expect(
+          automapValues(
+            [
+              Values.fromJS(['A', 'B']),
+              Values.fromJS('-'),
+              Values.fromJS([1, 2, 3]),
+            ],
+            combine,
+            [1, 1, 1],
+            ['IndexOne', null, 'IndexTwo']
+          ).getData()
+        ).toMatchInlineSnapshot(`
+          Array [
+            Array [
+              "A-1",
+              "A-2",
+              "A-3",
+            ],
+            Array [
+              "B-1",
+              "B-2",
+              "B-3",
+            ],
+          ]
+        `);
+      });
+
+      it('supports raising dims deeply', () => {
+        expect(
+          automapValues(
+            [
+              Values.fromJS(['A']),
+              Values.fromJS([1, 2]),
+              Values.fromJS(['a', 'b', 'c']),
+            ],
+            combine,
+            [1, 1, 1],
+            ['DimZero', 'DimOne', 'DimTwo']
+          ).getData()
+        ).toMatchInlineSnapshot(`
+          Array [
+            Array [
+              Array [
+                "A1a",
+                "A1b",
+                "A1c",
+              ],
+              Array [
+                "A2a",
+                "A2b",
+                "A2c",
+              ],
+            ],
+          ]
+        `);
+      });
+
+      it('can raise the same dimension together in 2 different args', () => {
+        expect(
+          automapValues(
+            [
+              Values.fromJS(['A', 'B']),
+              Values.fromJS([',', ';']),
+              Values.fromJS([1, 2]),
+            ],
+
+            combine,
+            [1, 1, 1],
+            ['Index1', 'DiffIndex', 'Index1']
+          ).getData()
+        ).toMatchInlineSnapshot(`
+          Array [
+            Array [
+              "A,1",
+              "A;1",
+            ],
+            Array [
+              "B,2",
+              "B;2",
+            ],
+          ]
+        `);
+      });
     });
 
     it('panics with less than 1 dimension', () => {

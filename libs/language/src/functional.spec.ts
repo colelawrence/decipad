@@ -379,6 +379,40 @@ ${'' /* Get capital needed */}
     });
   });
 
+  test('Cars', async () => {
+    expect(
+      await runCode(
+        `
+          Cars = {
+            Type = ["Electric", "Hybrid"],
+            Cost = [100, 200]
+          }
+
+          Countries = {
+            Name = ["Atlantis", "Wakanda"],
+            Tax = [1, 2]
+          }
+
+          Cars.Cost + Countries.Tax
+        `
+      )
+    ).toMatchObject({
+      value: [
+        [101, 102],
+        [201, 202],
+      ],
+      type: {
+        indexedBy: 'Cars',
+        cellType: {
+          indexedBy: 'Countries',
+          cellType: {
+            type: 'number',
+          },
+        },
+      },
+    });
+  });
+
   // https://www.notion.so/decipad/New-Business-Line-556720d7ca974cd9a88456b44302cc1a
   test('New business line', async () => {
     const period = Array.from({ length: 5 }, (_, idx) =>
@@ -387,20 +421,20 @@ ${'' /* Get capital needed */}
     expect(
       await runCodeForVariables(
         `
-        Period = [ date(2022-Jan) through date(2022-May) by month ]
+          Period = [ date(2022-Jan) through date(2022-May) by month ]
 
-        RevenuePerUser = [ 3 eur, 80 eur ]
-        InitialUsers = [ 100000, 2500 ]
+          RevenuePerUser = [ 3 eur, 80 eur ]
+          InitialUsers = [ 100000, 2500 ]
 
-        GrowthRate = 10%
-        ProfitMargin = 45%
+          GrowthRate = 10%
+          ProfitMargin = 45%
 
-        Users = grow(InitialUsers, GrowthRate, Period)
+          Users = grow(InitialUsers, GrowthRate, Period)
 
-        Revenue = Users * RevenuePerUser
+          Revenue = Users * RevenuePerUser
 
-        Profit = Revenue * ProfitMargin
-      `,
+          Profit = Revenue * ProfitMargin
+        `,
         ['Period', 'RevenuePerUser', 'Users', 'Revenue', 'Profit']
       )
     ).toMatchObject({

@@ -3,8 +3,9 @@ import { automapValues } from '../dimtools';
 
 import { Value, AnyValue, fromJS } from '../interpreter/Value';
 import { getDefined } from '../utils';
+import type { Type } from '..';
 
-export function callBuiltin(funcName: string, args: Value[]) {
+export function callBuiltin(funcName: string, args: Value[], argTypes: Type[]) {
   const builtin = getDefined(
     builtins[funcName],
     `panic: builtin not found: ${funcName}`
@@ -23,6 +24,7 @@ export function callBuiltin(funcName: string, args: Value[]) {
         throw new Error('unreachable');
       }
     },
-    builtin.argCardinalities
+    builtin.argCardinalities,
+    argTypes.map((arg) => arg.indexedBy)
   );
 }

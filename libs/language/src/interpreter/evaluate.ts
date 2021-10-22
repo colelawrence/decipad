@@ -92,7 +92,10 @@ export async function evaluate(
           throw new Error('function is empty');
         });
       } else {
-        return callBuiltin(funcName, args);
+        const argTypes = funcArgs.map((arg) =>
+          getDefined(realm.inferContext.nodeTypes.get(arg))
+        );
+        return callBuiltin(funcName, args, argTypes);
       }
     }
     case 'range': {
