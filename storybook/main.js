@@ -1,5 +1,11 @@
 module.exports = {
   stories: [],
+  core: {
+    builder: 'webpack5',
+  },
+  typescript: {
+    reactDocgen: false,
+  },
   addons: [
     {
       name: '@storybook/addon-essentials',
@@ -9,9 +15,6 @@ module.exports = {
     },
     'storybook-dark-mode',
   ],
-  typescript: {
-    reactDocgen: false,
-  },
   previewHead: (head) =>
     head.replace('<base target="_parent"', '<base target="_self"'),
 };
