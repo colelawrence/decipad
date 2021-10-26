@@ -33,7 +33,7 @@ If you have two lists you can operate on each corresponding item like this:
 You can also operate on lists with dates:
 
 ```deci live
-[date(2021-01), date(2021-02), date(2021-03)] + [1 year and 1 month]
+[date(2021-01), date(2021-02), date(2021-03)] + [1 year, 1 month]
 ```
 
 Or strings:
