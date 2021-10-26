@@ -60,7 +60,7 @@
       "prettier --write"
     ],
     "*.{js,jsx,ts,tsx}": [
-      "eslint --cache --fix"
+      "eslint --cache --fix --max-warnings 0"
     ]
   },
   "dependencies": {
