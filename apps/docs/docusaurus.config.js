@@ -1,7 +1,6 @@
-// @ts-check
-// Note: type annotations allow type checking and IDEs autocompletion
-
+// eslint-disable-next-line import/no-extraneous-dependencies
 const lightCodeTheme = require('prism-react-renderer/themes/github').default;
+// eslint-disable-next-line import/no-extraneous-dependencies
 const darkCodeTheme = require('prism-react-renderer/themes/dracula').default;
 
 /** @type {import('@docusaurus/types').Config} */
@@ -77,7 +76,7 @@ const config = {
             items: [
               {
                 label: 'Deci language',
-                to: '/docs/docs/language',
+                to: '/',
               },
             ],
           },

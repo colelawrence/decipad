@@ -4,7 +4,7 @@ const getLargestColumn = (columnTypes: Type[]) => {
   const columnSizes = new Set([...columnTypes].map((c) => c.columnSize));
   columnSizes.delete(null);
   columnSizes.delete('unknown');
-  return [...columnSizes][0];
+  return Array.from(columnSizes)[0];
 };
 
 export const unifyColumnSizes = (

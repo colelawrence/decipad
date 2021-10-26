@@ -6,6 +6,9 @@ import {
   cmpSpecificities,
   getHighestSpecificity as getMostSpecific,
   negateTimeQuantity,
+  timeUnitsUpTo,
+  timeSpecificityToTimeUnit,
+  subtractDates,
 } from '../date';
 import { getDefined, getInstanceof } from '../utils';
 import { Type, build as t, InferError } from '../type';
@@ -43,8 +46,24 @@ export const timeQuantityBinopFunctor = (t1: Type, t2: Type) =>
       ...getDefined(t1.timeUnits),
       ...getDefined(t2.timeUnits),
     ]);
-    return t.timeQuantity([...allTimeUnits]);
+    return t.timeQuantity(Array.from(allTimeUnits));
   });
+
+export const subtractDatesFunctor = (t1: Type, t2: Type) => {
+  const d1Specificity = getDefined(t1.date);
+  const d2Specificity = getDefined(t2.date);
+  if (cmpSpecificities(d1Specificity, d2Specificity) !== 0) {
+    return t.impossible(
+      InferError.mismatchedSpecificity(d1Specificity, d2Specificity)
+    );
+  }
+
+  return Type.combine(
+    t1.isDate(),
+    t2.isDate(),
+    t.timeQuantity(timeUnitsUpTo(timeSpecificityToTimeUnit(d1Specificity)))
+  );
+};
 
 export const dateOverloads: OverloadSet = {
   '+': [
@@ -96,6 +115,12 @@ export const dateOverloads: OverloadSet = {
           negateTimeQuantity(getInstanceof(v2, TimeQuantity))
         ),
       functor: (t1, t2) => dateAndTimeQuantityFunctor(t1, t2),
+    },
+    {
+      argTypes: ['date', 'date'],
+      fnValues: (v1, v2) =>
+        subtractDates(getInstanceof(v1, Date), getInstanceof(v2, Date)),
+      functor: (t1, t2) => subtractDatesFunctor(t1, t2),
     },
   ],
 };

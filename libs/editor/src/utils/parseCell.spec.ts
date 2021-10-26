@@ -42,9 +42,9 @@ describe('dates', () => {
     ['14-10-2020', 'date/day', '2020-10-14'],
     ['2020-10-13', 'date/day', '2020-10-13'],
     ['2020/10/13', 'date/day', '2020-10-13'],
-    ['2020/10/13 10:30', 'date/time', '2020-10-13T10:30'],
-    ['2020-10-13 1:30', 'date/time', '2020-10-13T01:30'],
-    ['2020/10/13 1:30 AM', 'date/time', '2020-10-13T01:30'],
+    ['2020/10/13 10:30', 'date/time', '2020-10-13T10:30Z'],
+    ['2020-10-13 1:30', 'date/time', '2020-10-13T01:30Z'],
+    ['2020/10/13 1:30 AM', 'date/time', '2020-10-13T01:30Z'],
   ] as ValidateTest[])('%s is a good %s', (format, type, result) => {
     expect(parseDate(type, format)).toEqual(new Date(result));
   });

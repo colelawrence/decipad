@@ -1,6 +1,12 @@
 import { BuiltinSpec } from './interfaces';
 import { InferError, Type, build as t } from '../type';
-import { AnyValue, Date, Scalar, TimeQuantity } from '../interpreter/Value';
+import {
+  AnyValue,
+  Date,
+  Scalar,
+  TimeQuantity,
+  Range,
+} from '../interpreter/Value';
 import { getDefined } from '../utils';
 
 export type OverloadTypeName =
@@ -65,6 +71,8 @@ export const getOverloadedTypeFromValue = (val: AnyValue): OverloadTypeName => {
     return 'date';
   } else if (val instanceof TimeQuantity) {
     return 'time-quantity';
+  } else if (val instanceof Range) {
+    return 'number';
   } else {
     throw new Error('Could not call overloaded function');
   }
@@ -77,6 +85,8 @@ export const getOverloadedTypeFromType = (t: Type): OverloadTypeName => {
     return 'date';
   } else if (t.timeUnits != null) {
     return 'time-quantity';
+  } else if (t.rangeOf?.type) {
+    return t.rangeOf.type as 'number' | 'string' | 'boolean';
   } else {
     throw new Error('Could not call overloaded function');
   }

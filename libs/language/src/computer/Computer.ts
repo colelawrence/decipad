@@ -96,7 +96,6 @@ export class Computer {
 
   private ingestComputeRequest({ program, externalData }: ComputeRequest) {
     const newExternalData = anyMappingToMap(externalData ?? new Map());
-
     const newParse = updateParse(program, this.previouslyParsed);
 
     this.computationRealm.evictCache({
@@ -130,6 +129,7 @@ export class Computer {
           updates.push({
             blockId: block.id,
             isSyntaxError: true,
+            error: block.error,
             results: [],
           });
         }
@@ -147,7 +147,7 @@ export class Computer {
       this.reset();
       return {
         type: 'compute-panic',
-        message: error.message,
+        message: (error as Error).message,
       };
     }
   }

@@ -1,5 +1,7 @@
+import differenceInMilliseconds from 'date-fns/differenceInMilliseconds';
 import { AST } from '..';
 import { n, pairwise, getDefined } from '../utils';
+import { Date as LanguageDate, TimeQuantity } from '../interpreter/Value';
 import * as Time from './time-types';
 
 export * from './time-quantities';
@@ -48,6 +50,16 @@ export const jsUnitToIndex: Record<Time.JSDateUnit, number> = {
   millisecond: 6,
 };
 
+export const jsIndexToUnit: Record<number, Time.JSDateUnit> = {
+  0: 'year',
+  1: 'month',
+  2: 'day',
+  3: 'hour',
+  4: 'minute',
+  5: 'second',
+  6: 'millisecond',
+};
+
 export const timeUnitToIndex: Record<Time.Unit, number> = {
   year: 0,
   quarter: 1,
@@ -58,6 +70,39 @@ export const timeUnitToIndex: Record<Time.Unit, number> = {
   minute: 6,
   second: 7,
   millisecond: 8,
+};
+
+export const timeIndexToUnit: Record<number, Time.Unit> = {
+  0: 'year',
+  1: 'quarter',
+  2: 'month',
+  3: 'week',
+  4: 'day',
+  5: 'hour',
+  6: 'minute',
+  7: 'second',
+  8: 'millisecond',
+};
+
+export const timeUnitToNormalMax: Record<Time.Unit, number> = {
+  year: Infinity,
+  quarter: 3,
+  month: 11,
+  week: Infinity,
+  day: Infinity,
+  hour: 24,
+  minute: 59,
+  second: 59,
+  millisecond: 999,
+};
+
+const convertFromMsSpecificityOrder = ['day', 'hour', 'minute', 'second'];
+
+export const convertFromMs: Partial<Record<Time.Unit, number>> = {
+  day: 24 * 60 * 60 * 1000,
+  hour: 60 * 60 * 1000,
+  minute: 60 * 1000,
+  second: 1000,
 };
 
 // Deal with annoying intersections
@@ -111,14 +156,14 @@ export const cmpSpecificities = (left: string, right: string): number => {
 };
 
 export const sortSpecificities = (specificities: AnyUnit[]) => {
-  const uniqueSpecificities = [
-    ...new Set(specificities.map((s) => getSpecificity(s))),
-  ];
+  const uniqueSpecificities = Array.from(
+    new Set(specificities.map((s) => getSpecificity(s)))
+  );
   return uniqueSpecificities.sort((a, b) => cmpSpecificities(a, b));
 };
 
-export const sortTimeUnits = (toSort: Iterable<Time.Unit>) => {
-  const uniqueUnits = [...new Set(toSort)];
+export const sortTimeUnits = (toSort: Iterable<Time.Unit>): Time.Unit[] => {
+  const uniqueUnits = Array.from(new Set(toSort));
   return uniqueUnits.sort((a, b) =>
     Math.sign(timeUnitToIndex[a] - timeUnitToIndex[b])
   );
@@ -283,3 +328,72 @@ export const getDateFromAstForm = (
 
   return [dateNum, dateNodeToSpecificity(segments)];
 };
+
+function subtractDatesPlainDiff(
+  d1: LanguageDate,
+  d2: LanguageDate
+): Partial<Record<Time.Unit, number>> {
+  const diffMs = differenceInMilliseconds(d1.getData(), d2.getData());
+  const timeQuantities: Partial<Record<Time.Unit, number>> = {};
+
+  let diffCarryMs = diffMs;
+
+  // eslint-disable-next-line no-underscore-dangle
+  for (const _specificity of convertFromMsSpecificityOrder) {
+    const specificity = _specificity as Time.Unit;
+    const divideBy = convertFromMs[specificity];
+    if (!divideBy) {
+      break;
+    }
+
+    // Have to convert to absolute value before applying Math.floor
+    // (because Math.floor is symmetrical around the 0, which we don't want).
+    let nextUnitValue =
+      Math.floor(Math.abs(diffCarryMs) / divideBy) * Math.sign(diffCarryMs);
+    const max = timeUnitToNormalMax[specificity];
+    if (nextUnitValue > max) {
+      nextUnitValue = max;
+    }
+    if (nextUnitValue !== 0) {
+      timeQuantities[specificity] = nextUnitValue;
+    }
+    diffCarryMs -= nextUnitValue * divideBy;
+  }
+
+  if (diffCarryMs !== 0) {
+    timeQuantities.millisecond = diffCarryMs;
+  }
+
+  return timeQuantities;
+}
+
+function subtractDatesDiff(
+  d1: LanguageDate,
+  d2: LanguageDate
+): Partial<Record<Time.Unit, number>> {
+  const d1Parts = dateToArray(d1.getData());
+  const d2Parts = dateToArray(d2.getData());
+  const diff = d1Parts.map((part1, partIndex) => {
+    const part2 = d2Parts[partIndex];
+    return part1 - part2;
+  });
+  return diff.reduce(
+    (
+      acc: Partial<Record<Time.Unit, number>>,
+      diffPart: number,
+      partIndex: number
+    ) => {
+      if (diffPart !== 0) {
+        acc[jsIndexToUnit[partIndex]] = diffPart;
+      }
+      return acc;
+    },
+    {}
+  );
+}
+
+export const subtractDates = (
+  d1: LanguageDate,
+  d2: LanguageDate
+): TimeQuantity =>
+  new TimeQuantity(subtractDatesPlainDiff(d1, d2), subtractDatesDiff(d1, d2));

@@ -23,6 +23,8 @@ import type {
 } from './types';
 import { Computer } from './Computer';
 
+export { Computer };
+
 type ReqsWithCursor$ = Observable<
   readonly [ComputeRequest, ValueLocation | null]
 >;

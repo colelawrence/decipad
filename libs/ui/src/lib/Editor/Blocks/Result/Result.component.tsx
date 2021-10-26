@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { chakra } from '@chakra-ui/system';
 import { Box } from '@chakra-ui/react';
 import { Type, InBlockResult, OptionalValueLocation } from '@decipad/language';
@@ -8,6 +10,7 @@ import { DateResult } from './DateResult';
 import { ColumnResult } from './ColumnResult';
 import { TableResult } from './TableResult';
 import { RangeResult } from './RangeResult';
+import { TimeUnitsResult } from './TimeUnitsResult';
 
 const commonStyles = {
   py: 2,
@@ -26,7 +29,7 @@ export const ResultErrorStyles = chakra(Box, {
   },
 });
 
-export const ResultStyles = chakra(Box, {
+export const DefaultResultStyles = chakra(Box, {
   baseStyle: {
     bg: 'rgb(252,252,263)',
     color: 'black',
@@ -69,10 +72,13 @@ export const ResultContent = (props: ResultContentProps) => {
   if (type.functionness) {
     return <>ƒ</>;
   }
+  if (type.timeUnits) {
+    return <TimeUnitsResult {...props} />;
+  }
   if (type.rangeOf) {
     return <RangeResult {...props} />;
   }
-  return null;
+  return value.toString();
 };
 
 const getLineResult = (
@@ -97,13 +103,15 @@ const getLineResult = (
 };
 
 const NilResult = () => (
-  <ResultStyles contentEditable={false}>&nbsp;</ResultStyles>
+  <DefaultResultStyles contentEditable={false}>&nbsp;</DefaultResultStyles>
 );
 
 export const Result = ({
   blockId,
+  useDefaultStyles = true,
 }: {
   blockId: string;
+  useDefaultStyles?: boolean;
 }): JSX.Element | null => {
   const { cursor, blockResults } = useResults();
 
@@ -130,11 +138,15 @@ export const Result = ({
     );
   }
   if (lineResult?.value != null) {
-    return (
-      <ResultStyles contentEditable={false}>
-        <ResultContent type={lineResult.valueType} value={lineResult.value} />
-      </ResultStyles>
+    const result = (
+      <ResultContent type={lineResult.valueType} value={lineResult.value} />
     );
+    const resultWithStyles = useDefaultStyles ? (
+      <DefaultResultStyles>{result}</DefaultResultStyles>
+    ) : (
+      result
+    );
+    return <div contentEditable={false}>{resultWithStyles}</div>;
   }
   return <NilResult />;
 };

@@ -1,5 +1,6 @@
 import { Column, Date, fromJS, TimeQuantity } from '../interpreter/Value';
 import { InferError, build as t } from '../type';
+import { getDefined } from '../utils';
 import {
   getOverloadedTypeFromType,
   getOverloadedTypeFromValue,
@@ -29,9 +30,9 @@ it('chooses the correct overload for a value', () => {
 });
 
 it('chooses the correct overload for a type', () => {
-  expect(plus.functor(t.number(), t.number())).toEqual(t.number());
-  expect(plus.functor(t.string(), t.string())).toEqual(t.string());
-  expect(plus.functor(t.number(), t.string()).errorCause).toEqual(
+  expect(getDefined(plus.functor)(t.number(), t.number())).toEqual(t.number());
+  expect(getDefined(plus.functor)(t.string(), t.string())).toEqual(t.string());
+  expect(getDefined(plus.functor)(t.number(), t.string()).errorCause).toEqual(
     InferError.badOverloadedBuiltinCall('+', ['number', 'string'])
   );
 });

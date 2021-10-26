@@ -10,6 +10,7 @@ import {
   removeSingleUnitless,
   matchUnitArrays,
   stringifyUnits,
+  multiplyExponent,
 } from './units';
 import { setUnit } from './utils';
 
@@ -236,6 +237,19 @@ export class Type {
     }).call(this, type);
   }
 
+  sameUnitsAs(other: Type): Type {
+    if (!matchUnitArrays(this.unit ?? [], other.unit ?? [])) {
+      return this.withErrorCause(
+        InferError.expectedUnit(other.unit, this.unit)
+      );
+    }
+    return this;
+  }
+
+  noUnitsOrSameUnitsAs(other: Type): Type {
+    return !this.unit ? this : this.sameUnitsAs(other);
+  }
+
   sameScalarnessAs(other: Type): Type {
     return propagate(function propagated(this: Type, other: Type) {
       const meScalar = this.type != null;
@@ -304,6 +318,16 @@ export class Type {
         return this.cellType;
       } else {
         return this.expected('column');
+      }
+    }).call(this);
+  }
+
+  reducedOrSelf(): Type {
+    return propagate(function propagated(this: Type) {
+      if (this.cellType != null) {
+        return this.cellType;
+      } else {
+        return this;
       }
     }).call(this);
   }
@@ -416,15 +440,23 @@ export class Type {
     }).call(this, withUnits);
   }
 
-  divideUnit(withUnits: AST.Unit[] | null): Type {
+  divideUnit(divideBy: AST.Unit[] | number | null): Type {
     return propagate(function propagated(
       this: Type,
-      withUnit: AST.Unit[] | null
+      divideBy: AST.Unit[] | number | null
     ) {
-      const invTheirUnits =
-        withUnit == null ? null : withUnit.map((u) => inverseExponent(u));
+      if (typeof divideBy === 'number') {
+        const multiplyBy = 1 / divideBy;
+        if (this.unit) {
+          return setUnit(this, multiplyExponent(this.unit, multiplyBy));
+        }
+        return this;
+      } else {
+        const invTheirUnits =
+          divideBy == null ? null : divideBy.map((u) => inverseExponent(u));
 
-      return setUnit(this, combineUnits(this.unit, invTheirUnits));
-    }).call(this, withUnits);
+        return setUnit(this, combineUnits(this.unit, invTheirUnits));
+      }
+    }).call(this, divideBy);
   }
 }

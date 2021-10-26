@@ -49,7 +49,7 @@ function resolveForContentType(
 ): Promise<DataTable> {
   const resolve = resolvers[contentType];
   if (!resolve) {
-    throw new Error(`don't know how to handle content type ${contentType}`);
+    throw new Error(`don't know how to handle content of type ${contentType}`);
   }
   return resolve(response, maxRows);
 }

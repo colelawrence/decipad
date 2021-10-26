@@ -415,7 +415,7 @@ describe('Time quantities', () => {
         Years = [ 7 years ]
         Quarters = [ 3 quarters ]
         Seconds = [ 999 seconds ]
-        Combined = [ 4 quarters and 3 second and 1 millisecond ]
+        Combined = [ 4 quarters, 3 second, 1 millisecond ]
       `,
         ['Years', 'Quarters', 'Seconds', 'Combined']
       )

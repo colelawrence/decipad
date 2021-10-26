@@ -56,6 +56,7 @@ export interface ComputeResponse {
 
 export interface IdentifiedResult {
   blockId: string;
+  error?: Error;
   isSyntaxError: boolean;
   results: InBlockResult[];
 }

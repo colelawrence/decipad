@@ -70,7 +70,8 @@ const dateFormats = (text: string, formatStrings: string[]) => {
   for (const fmt of formatStrings) {
     const d = parse(normalized, fmt, new Date(2020, 0, 1));
 
-    if (!Number.isNaN(d.valueOf())) return d;
+    if (!Number.isNaN(d.valueOf()))
+      return new Date(d.getTime() - d.getTimezoneOffset() * 60 * 1000);
   }
   return null;
 };

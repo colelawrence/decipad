@@ -5,11 +5,23 @@ import { Value, AnyValue, fromJS } from '../interpreter/Value';
 import { getDefined } from '../utils';
 import type { Type } from '..';
 
-export function callBuiltin(funcName: string, args: Value[], argTypes: Type[]) {
+export function callBuiltin(
+  funcName: string,
+  args: Value[],
+  argTypes: Type[]
+): Value {
   const builtin = getDefined(
     builtins[funcName],
     `panic: builtin not found: ${funcName}`
   );
+
+  if (builtin.aliasFor) {
+    return callBuiltin(builtin.aliasFor, args, argTypes);
+  }
+
+  if (builtin.fnValuesNoAutomap) {
+    return builtin.fnValuesNoAutomap(args);
+  }
 
   return automapValues(
     args,

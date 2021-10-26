@@ -40,6 +40,10 @@ describe('callBuiltin', () => {
 
   it('contains', () => {
     expect(
+      callBuiltinFunctor('contains', t.range(t.number([meter])), t.number())
+    ).toEqual(t.boolean());
+
+    expect(
       callBuiltinFunctor(
         'contains',
         t.range(t.number([meter])),
@@ -72,12 +76,62 @@ describe('callBuiltin', () => {
     ).not.toBeNull();
 
     expect(
+      callBuiltinFunctor('contains', t.date('month'), t.date('day'))
+    ).toEqual(t.boolean());
+
+    expect(
       callBuiltinFunctor(
         'contains',
         t.number([meter]),
         t.range(t.number([meter]))
       ).errorCause
     ).not.toBeNull();
+  });
+
+  it('cat', () => {
+    expect(
+      callBuiltinFunctor(
+        'cat',
+        t.column(t.number([meter]), 2),
+        t.column(t.number([meter]), 3)
+      )
+    ).toEqual(t.column(t.number([meter]), 5));
+
+    expect(
+      callBuiltinFunctor(
+        'cat',
+        t.number([meter]),
+        t.column(t.number([meter]), 3)
+      )
+    ).toEqual(t.column(t.number([meter]), 4));
+
+    expect(
+      callBuiltinFunctor(
+        'cat',
+        t.column(t.number([meter]), 3),
+        t.number([meter])
+      )
+    ).toEqual(t.column(t.number([meter]), 4));
+  });
+
+  it('first', () => {
+    expect(callBuiltinFunctor('first', t.number([meter]))).toEqual(
+      t.number([meter])
+    );
+
+    expect(callBuiltinFunctor('first', t.column(t.number([meter]), 3))).toEqual(
+      t.number([meter])
+    );
+  });
+
+  it('last', () => {
+    expect(callBuiltinFunctor('last', t.number([meter]))).toEqual(
+      t.number([meter])
+    );
+
+    expect(callBuiltinFunctor('last', t.column(t.number([meter]), 3))).toEqual(
+      t.number([meter])
+    );
   });
 
   it('errors', () => {

@@ -1,5 +1,5 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
 ---
 
 # Basic arithmetic functions
@@ -34,4 +34,10 @@ Deci tries its best to match plural and singular units:
 
 ```deci live
 5 bananas + 1 banana
+```
+
+Other operations, like exponentiation, do their best to compute the correct units:
+
+```deci live
+3 meters ** 2
 ```

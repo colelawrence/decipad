@@ -6,10 +6,38 @@
 
 expression    -> nonGivenExp                            {% id %}
 expression    -> given                                  {% id %}
+expression    -> inExp                                  {% id %}
 
 nonGivenExp   -> divMulOp                               {% id %}
 nonGivenExp   -> table                                  {% id %}
 nonGivenExp   -> importData                             {% id %}
+
+inExp         -> expression _ "in" _ identifier         {%
+                                                        (d, _l, reject) => {
+                                                          const left = d[0]
+                                                          const op = d[2]
+                                                          const right = d[4]
+
+                                                          const units = addLoc({
+                                                            type: 'literal',
+                                                            args: ['string', right.name, null],
+                                                          }, right)
+
+                                                          return addArrayLoc({
+                                                            type: 'function-call',
+                                                            args: [
+                                                              addLoc({
+                                                                type: 'funcref',
+                                                                args: [op.value],
+                                                              }, op),
+                                                              addArrayLoc({
+                                                                type: 'argument-list',
+                                                                args: [left, units],
+                                                              }, d)
+                                                            ],
+                                                          }, d);
+                                                        }
+                                                        %}
 
 divMulOp      -> addSubOp                               {% id %}
 divMulOp      -> divMulOp _ additiveOperator _ addSubOp {%
@@ -116,15 +144,15 @@ primary      -> "-" _ expression                        {%
                                                         }
                                                         %}
 
-primary      -> "!" _ expression                        {%
+primary      -> ("!" | "not") _ expression              {%
                                                         (d) => {
                                                           return addArrayLoc({
                                                             type: 'function-call',
                                                             args: [
                                                               addLoc({
                                                                 type: 'funcref',
-                                                                args: ['!'],
-                                                              }, d[0]),
+                                                                args: ['not'],
+                                                              }, d[0][0]),
                                                               addLoc({
                                                                 type: 'argument-list',
                                                                 args: [d[2]],
@@ -147,7 +175,7 @@ primary      -> ref      _ "." _ ref                    {%
 ### Operators ###
 #################
 
-additiveOperator  -> ("-" | "+" | "&&" | "||")          {%
+additiveOperator  -> ("-" | "+" | "&&" | "||" | "or" | "and")  {%
                                                         (d) => {
                                                           const op = d[0][0].value
                                                           return addArrayLoc({
@@ -156,14 +184,7 @@ additiveOperator  -> ("-" | "+" | "&&" | "||")          {%
                                                         }
                                                         %}
 
-additiveOperator  -> "in"                               {%
-                                                        (d) =>
-                                                          addArrayLoc({
-                                                            name: d[0].value,
-                                                          }, d)
-                                                        %}
-
-multiplicativeOperator -> ("**" | ">" | "<" | "<=" | ">=" | "==" | "!=") {%
+multiplicativeOperator -> ("**" | ">" | "<" | "<=" | ">=" | "==" | "!=" | "contains") {%
                                                         (d) => {
                                                           return addArrayLoc({
                                                             name: d[0].map(t => t.value).join(''),

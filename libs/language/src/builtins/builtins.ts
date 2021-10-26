@@ -1,13 +1,23 @@
 import { produce } from 'immer';
 import { dequal } from 'dequal';
+import { singular } from 'pluralize';
 import { Type, build as t } from '../type';
 import { getDefined, getInstanceof, zip } from '../utils';
-import { AnyValue, fromJS, Scalar, Date, Column } from '../interpreter/Value';
+import {
+  Value,
+  AnyValue,
+  fromJS,
+  Scalar,
+  Date,
+  Column,
+  TimeQuantity,
+} from '../interpreter/Value';
 
 import { overloadBuiltin } from './overloadBuiltin';
 import { BuiltinSpec } from './interfaces';
 import { dateOverloads } from './dateOverloads';
 import { approximateSubsetSumIndices } from './table';
+import { convertTimeQuantityTo, Time } from '../date';
 
 const binopFunctor = (a: Type, b: Type) =>
   Type.combine(a.isScalar('number'), b.sameAs(a));
@@ -33,10 +43,24 @@ const booleanBinopFunctor = (left: Type, right: Type): Type =>
   );
 
 export const builtins: { [fname: string]: BuiltinSpec } = {
+  abs: {
+    argCount: 1,
+    fn: (n) => Math.abs(n as number),
+    functor: (n) => n.isScalar('number'),
+  },
+  round: {
+    argCount: 2,
+    fn: (n, decimalPrecision) => {
+      const factor = 10 ** decimalPrecision;
+      return Math.round(n * factor) / factor;
+    },
+    functor: (n: Type, decimalPrecision: Type) =>
+      Type.combine(decimalPrecision.isScalar('number'), n.isScalar('number')),
+  },
   sqrt: {
     argCount: 1,
     fn: (n) => Math.sqrt(n as number),
-    functor: (n) => n.isScalar('number'),
+    functor: (n) => Type.combine(n.isScalar('number'), n.divideUnit(2)),
   },
   ln: {
     argCount: 1,
@@ -144,15 +168,24 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
     fn: (a) => !a,
     functor: (a) => a.isScalar('boolean'),
   },
+  not: {
+    aliasFor: '!',
+  },
   '&&': {
     argCount: 2,
     fn: (a, b) => a && b,
     functor: booleanBinopFunctor,
   },
+  and: {
+    aliasFor: '&&',
+  },
   '||': {
     argCount: 2,
     fn: (a, b) => a || b,
     functor: booleanBinopFunctor,
+  },
+  or: {
+    aliasFor: '||',
   },
   if: {
     argCount: 3,
@@ -161,6 +194,57 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
       Type.combine(a.isScalar('boolean'), c.sameAs(b)),
   },
   // List stuff
+  len: {
+    argCount: 1,
+    fnValuesNoAutomap: (a: Value[]) => {
+      const v = a[0];
+      if (v instanceof Column) {
+        return fromJS(v.rowCount);
+      }
+      return fromJS(1);
+    },
+    functor: () => t.number(),
+  },
+  cat: {
+    argCount: 2,
+    // TODO: make this a varargs function
+    fnValuesNoAutomap: (args: Value[]) => {
+      const [a, b] = args;
+      const aData = a.getData();
+      const aElements = Array.isArray(aData) ? aData : [aData];
+      const bData = b.getData();
+      const bElements = Array.isArray(bData) ? bData : [bData];
+      return fromJS(aElements.concat(bElements));
+    },
+    functorNoAutomap: (a: Type, b: Type) =>
+      Type.combine(a.reducedOrSelf().sameAs(b.reducedOrSelf())).mapType(() => {
+        const resultColumnSize =
+          a.columnSize === 'unknown' || b.columnSize === 'unknown'
+            ? 'unknown'
+            : (a.columnSize || 1) + (b.columnSize || 1);
+        return t.column(a.reducedOrSelf(), resultColumnSize);
+      }),
+  },
+  first: {
+    argCount: 1,
+    fnValuesNoAutomap: (args: Value[]) => {
+      const [a] = args;
+      const aData = a.getData();
+      const aElements = Array.isArray(aData) ? aData : [aData];
+      return fromJS(aElements[0]);
+    },
+    functorNoAutomap: (a: Type) => Type.combine(a.reducedOrSelf()),
+  },
+  last: {
+    argCount: 1,
+    fnValuesNoAutomap: (args: Value[]) => {
+      const [a] = args;
+      const aData = a.getData();
+      const aElements = Array.isArray(aData) ? aData : [aData];
+      return fromJS(aElements[aElements.length - 1]);
+    },
+    functorNoAutomap: (a: Type) => Type.combine(a.reducedOrSelf()),
+  },
   stepgrowth: {
     argCount: 1,
     argCardinalities: [2],
@@ -285,12 +369,34 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
       }),
   },
   // Range stuff
-  contains: {
-    argCount: 2,
-    fn: ([bStart, bEnd], a) => a >= bStart && a <= bEnd,
-    functor: (a: Type, b: Type) =>
-      Type.combine(b.sameAs(a.getRangeOf()), t.boolean()),
-  },
+  contains: overloadBuiltin('contains', 2, [
+    {
+      argTypes: ['number', 'number'],
+      fnValues: (a, b) => {
+        const [aStart, aEnd] = a.getData() as number[];
+        const bNumber = b.getData() as number;
+        return fromJS(bNumber >= aStart && bNumber <= aEnd);
+      },
+      functor: (a: Type, b: Type): Type =>
+        Type.combine(
+          a.isRange(),
+          b.isScalar('number').noUnitsOrSameUnitsAs(a.getRangeOf()),
+          t.boolean()
+        ),
+    },
+    {
+      argTypes: ['date', 'date'],
+      fnValues: (a, b) => {
+        const aVal = getInstanceof(a, Date);
+        const bVal = getInstanceof(b, Date);
+        return fromJS(
+          aVal.getData() <= bVal.getData() && aVal.getEnd() >= bVal.getEnd()
+        );
+      },
+      functor: (a: Type, b: Type) =>
+        Type.combine(a.isDate(), b.isDate(), t.boolean()),
+    },
+  ]),
   containsdate: {
     argCount: 2,
     fnValues: (range, date) => {
@@ -312,6 +418,23 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
     fn: (date1, date2) => date1 >= date2,
     functor: dateCmpFunctor,
   },
+  in: overloadBuiltin('in', 2, [
+    {
+      argTypes: ['time-quantity', 'string'],
+      fnValues: (timeQuantity, unit) => {
+        return fromJS(
+          convertTimeQuantityTo(
+            timeQuantity as TimeQuantity,
+            singular(unit.getData() as string) as Time.Unit
+          )
+        );
+      },
+      functor: (a: Type, b: Type) =>
+        Type.combine(a.isTimeQuantity(), b.isScalar('string')).mapType(
+          () => t.number() // TODO: number should have same units as b string runtime value..
+        ),
+    },
+  ]),
   // Reduce funcs
   total: {
     argCount: 1,

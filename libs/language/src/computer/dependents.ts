@@ -7,16 +7,27 @@ import {
   getStatement,
 } from './utils';
 
+const getSymbolsDefinedInLocs = (
+  program: AST.Block[],
+  dependentsOf: ValueLocation[]
+) =>
+  dependentsOf.flatMap((loc) => {
+    const sym = getDefinedSymbol(getStatement(program, loc));
+    if (sym != null) return [sym];
+    else return [];
+  });
+
 export const getDependents = (
   program: AST.Block[],
   dependentsOf: ValueLocation[],
   initialSymbols = new Set<string>()
 ) => {
   const dependents: ValueLocation[] = [];
-  const dependencySymbols = new Set([
-    ...getSymbolsDefinedInLocs(program, dependentsOf),
-    ...initialSymbols,
-  ]);
+  const dependencySymbols = new Set(
+    Array.from(getSymbolsDefinedInLocs(program, dependentsOf)).concat(
+      Array.from(initialSymbols)
+    )
+  );
 
   iterProgram(program, (stmt, loc) => {
     const usedSymbols = findSymbolsUsed(stmt);
@@ -38,13 +49,3 @@ export const getDependents = (
 
   return dependents;
 };
-
-const getSymbolsDefinedInLocs = (
-  program: AST.Block[],
-  dependentsOf: ValueLocation[]
-) =>
-  dependentsOf.flatMap((loc) => {
-    const sym = getDefinedSymbol(getStatement(program, loc));
-    if (sym != null) return [sym];
-    else return [];
-  });

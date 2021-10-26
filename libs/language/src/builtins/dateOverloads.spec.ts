@@ -1,6 +1,7 @@
 import { buildType as t } from '..';
 import { TimeQuantity, Date as IDate } from '../interpreter/Value';
 import { parseUTCDate } from '../date';
+import { getDefined } from '../utils';
 import { overloadBuiltin } from './overloadBuiltin';
 import {
   dateOverloads,
@@ -74,17 +75,20 @@ describe('common functions', () => {
 });
 
 it('date + time-quantity', () => {
-  expect(plus.functor(t.date('month'), t.timeQuantity(['day'])).errorCause)
-    .toMatchInlineSnapshot(`
+  expect(
+    getDefined(plus.functor)(t.date('month'), t.timeQuantity(['day']))
+      .errorCause
+  ).toMatchInlineSnapshot(`
     InferError {
       "spec": ErrSpec:mismatchedSpecificity("expectedSpecificity" => "month", "gotSpecificity" => "day"),
     }
   `);
   expect(
-    plus.functor(t.date('month'), t.timeQuantity(['year'])).date
+    getDefined(plus.functor)(t.date('month'), t.timeQuantity(['year'])).date
   ).toMatchInlineSnapshot(`"month"`);
   expect(
-    plus.functor(t.date('day'), t.timeQuantity(['year', 'day'])).date
+    getDefined(plus.functor)(t.date('day'), t.timeQuantity(['year', 'day']))
+      .date
   ).toMatchInlineSnapshot(`"day"`);
 
   expect(
@@ -97,7 +101,7 @@ it('date + time-quantity', () => {
 
 it('time-quantity + date', () => {
   expect(
-    plus.functor(t.timeQuantity(['month']), t.date('day')).date
+    getDefined(plus.functor)(t.timeQuantity(['month']), t.date('day')).date
   ).toMatchInlineSnapshot(`"day"`);
 
   expect(
@@ -110,7 +114,8 @@ it('time-quantity + date', () => {
 
 it('time-quantity + time-quantity', () => {
   expect(
-    plus.functor(t.timeQuantity(['month']), t.timeQuantity(['day'])).timeUnits
+    getDefined(plus.functor)(t.timeQuantity(['month']), t.timeQuantity(['day']))
+      .timeUnits
   ).toMatchInlineSnapshot(`
     Array [
       "month",
@@ -118,7 +123,10 @@ it('time-quantity + time-quantity', () => {
     ]
   `);
   expect(
-    plus.functor(t.timeQuantity(['month']), t.timeQuantity(['year'])).timeUnits
+    getDefined(plus.functor)(
+      t.timeQuantity(['month']),
+      t.timeQuantity(['year'])
+    ).timeUnits
   ).toMatchInlineSnapshot(`
     Array [
       "month",
@@ -126,7 +134,10 @@ it('time-quantity + time-quantity', () => {
     ]
   `);
   expect(
-    plus.functor(t.timeQuantity(['month']), t.timeQuantity(['month'])).timeUnits
+    getDefined(plus.functor)(
+      t.timeQuantity(['month']),
+      t.timeQuantity(['month'])
+    ).timeUnits
   ).toMatchInlineSnapshot(`
     Array [
       "month",
@@ -143,8 +154,10 @@ it('time-quantity + time-quantity', () => {
 
 it('time-quantity - time-quantity', () => {
   expect(
-    minus.functor(t.timeQuantity(['month']), t.timeQuantity(['month']))
-      .timeUnits
+    getDefined(minus.functor)(
+      t.timeQuantity(['month']),
+      t.timeQuantity(['month'])
+    ).timeUnits
   ).toMatchInlineSnapshot(`
     Array [
       "month",
@@ -161,7 +174,7 @@ it('time-quantity - time-quantity', () => {
 
 it('date - time-quantity', () => {
   expect(
-    minus.functor(t.date('day'), t.timeQuantity(['year'])).date
+    getDefined(minus.functor)(t.date('day'), t.timeQuantity(['year'])).date
   ).toMatchInlineSnapshot(`"day"`);
 
   expect(
@@ -170,4 +183,24 @@ it('date - time-quantity', () => {
       new TimeQuantity({ month: 1, day: -1 })
     )
   ).toMatchInlineSnapshot(`DeciDate(day 2019-12-02)`);
+});
+
+it('date - date => time-quantity', () => {
+  expect(getDefined(minus.functor)(t.date('day'), t.date('day')).timeUnits)
+    .toMatchInlineSnapshot(`
+    Array [
+      "year",
+      "quarter",
+      "month",
+      "week",
+      "day",
+    ]
+  `);
+
+  expect(
+    minus.fnValues?.(
+      IDate.fromDateAndSpecificity(parseUTCDate('2021-02-01'), 'day'),
+      IDate.fromDateAndSpecificity(parseUTCDate('2021-01-01'), 'day')
+    )
+  ).toMatchInlineSnapshot(`TimeQuantity({ day: 31 })`);
 });

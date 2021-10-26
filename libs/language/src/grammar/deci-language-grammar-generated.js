@@ -142,6 +142,10 @@ const reservedWords = new Set([
   'through',
   'date',
   'function',
+  'and',
+  'not',
+  'or',
+  'with',
 ]);
 
 const monthStrings = new Set([
@@ -998,9 +1002,50 @@ let ParserRules = [
   },
   { name: 'expression', symbols: ['nonGivenExp'], postprocess: id },
   { name: 'expression', symbols: ['given'], postprocess: id },
+  { name: 'expression', symbols: ['inExp'], postprocess: id },
   { name: 'nonGivenExp', symbols: ['divMulOp'], postprocess: id },
   { name: 'nonGivenExp', symbols: ['table'], postprocess: id },
   { name: 'nonGivenExp', symbols: ['importData'], postprocess: id },
+  {
+    name: 'inExp',
+    symbols: ['expression', '_', { literal: 'in' }, '_', 'identifier'],
+    postprocess: (d, _l, reject) => {
+      const left = d[0];
+      const op = d[2];
+      const right = d[4];
+
+      const units = addLoc(
+        {
+          type: 'literal',
+          args: ['string', right.name, null],
+        },
+        right
+      );
+
+      return addArrayLoc(
+        {
+          type: 'function-call',
+          args: [
+            addLoc(
+              {
+                type: 'funcref',
+                args: [op.value],
+              },
+              op
+            ),
+            addArrayLoc(
+              {
+                type: 'argument-list',
+                args: [left, units],
+              },
+              d
+            ),
+          ],
+        },
+        d
+      );
+    },
+  },
   { name: 'divMulOp', symbols: ['addSubOp'], postprocess: id },
   {
     name: 'divMulOp',
@@ -1136,9 +1181,11 @@ let ParserRules = [
       }
     },
   },
+  { name: 'primary$subexpression$1', symbols: [{ literal: '!' }] },
+  { name: 'primary$subexpression$1', symbols: [{ literal: 'not' }] },
   {
     name: 'primary',
-    symbols: [{ literal: '!' }, '_', 'expression'],
+    symbols: ['primary$subexpression$1', '_', 'expression'],
     postprocess: (d) => {
       return addArrayLoc(
         {
@@ -1147,9 +1194,9 @@ let ParserRules = [
             addLoc(
               {
                 type: 'funcref',
-                args: ['!'],
+                args: ['not'],
               },
-              d[0]
+              d[0][0]
             ),
             addLoc(
               {
@@ -1180,6 +1227,8 @@ let ParserRules = [
   { name: 'additiveOperator$subexpression$1', symbols: [{ literal: '+' }] },
   { name: 'additiveOperator$subexpression$1', symbols: [{ literal: '&&' }] },
   { name: 'additiveOperator$subexpression$1', symbols: [{ literal: '||' }] },
+  { name: 'additiveOperator$subexpression$1', symbols: [{ literal: 'or' }] },
+  { name: 'additiveOperator$subexpression$1', symbols: [{ literal: 'and' }] },
   {
     name: 'additiveOperator',
     symbols: ['additiveOperator$subexpression$1'],
@@ -1192,17 +1241,6 @@ let ParserRules = [
         d
       );
     },
-  },
-  {
-    name: 'additiveOperator',
-    symbols: [{ literal: 'in' }],
-    postprocess: (d) =>
-      addArrayLoc(
-        {
-          name: d[0].value,
-        },
-        d
-      ),
   },
   {
     name: 'multiplicativeOperator$subexpression$1',
@@ -1233,12 +1271,16 @@ let ParserRules = [
     symbols: [{ literal: '!=' }],
   },
   {
+    name: 'multiplicativeOperator$subexpression$1',
+    symbols: [{ literal: 'contains' }],
+  },
+  {
     name: 'multiplicativeOperator',
     symbols: ['multiplicativeOperator$subexpression$1'],
     postprocess: (d) => {
       return addArrayLoc(
         {
-          name: d[0][0].value,
+          name: d[0].map((t) => t.value).join(''),
         },
         d[0]
       );
@@ -1262,7 +1304,11 @@ let ParserRules = [
   },
   {
     name: 'multiplicativeOperator',
-    symbols: ['__', 'multiplicativeOperator$subexpression$2', '__'],
+    symbols: [
+      { literal: ' ' },
+      'multiplicativeOperator$subexpression$2',
+      { literal: ' ' },
+    ],
     postprocess: (d) => {
       return addArrayLoc(
         {

@@ -51,6 +51,5 @@ export const runCode = async (
   { externalData }: { externalData?: AnyMapping<InjectableExternalData> } = {}
 ) => {
   const block = parseOneBlock(source);
-
   return runAST(block, { externalData });
 };

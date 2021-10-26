@@ -730,7 +730,7 @@ runTests({
   'comparison and boolean operators (3)': {
     sourceMap: false,
     source: '!A',
-    ast: [c('!', r('A'))],
+    ast: [c('not', r('A'))],
   },
 
   'comparison and boolean operators (4)': {

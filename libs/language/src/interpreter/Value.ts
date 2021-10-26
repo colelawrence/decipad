@@ -74,18 +74,36 @@ export class Date implements SimpleValue {
 export class TimeQuantity implements SimpleValue {
   cardinality = 1;
   timeUnits = new Map<Time.Unit, number>();
+  timeUnitsDiff = new Map<Time.Unit, number>();
 
   constructor(
-    timeUnits: TimeQuantity['timeUnits'] | Partial<Record<Time.Unit, number>>
+    timeUnits: TimeQuantity['timeUnits'] | Partial<Record<Time.Unit, number>>,
+    timeUnitsDiff?:
+      | TimeQuantity['timeUnits']
+      | Partial<Record<Time.Unit, number>>
   ) {
-    const entries =
-      timeUnits instanceof Map
-        ? timeUnits.entries()
-        : (Object.entries(timeUnits) as Iterable<[Time.Unit, number]>);
+    {
+      const entries =
+        timeUnits instanceof Map
+          ? timeUnits.entries()
+          : (Object.entries(timeUnits) as Iterable<[Time.Unit, number]>);
 
-    const unsorted = new Map(entries);
-    for (const unit of sortTimeUnits(unsorted.keys())) {
-      this.timeUnits.set(unit, getDefined(unsorted.get(unit)));
+      const unsorted = new Map(entries);
+      for (const unit of sortTimeUnits(unsorted.keys())) {
+        this.timeUnits.set(unit, getDefined(unsorted.get(unit)));
+      }
+    }
+
+    if (timeUnitsDiff) {
+      const entries =
+        timeUnitsDiff instanceof Map
+          ? timeUnitsDiff.entries()
+          : (Object.entries(timeUnitsDiff) as Iterable<[Time.Unit, number]>);
+
+      const unsorted = new Map(entries);
+      for (const unit of sortTimeUnits(unsorted.keys())) {
+        this.timeUnitsDiff.set(unit, getDefined(unsorted.get(unit)));
+      }
     }
   }
 
@@ -94,7 +112,7 @@ export class TimeQuantity implements SimpleValue {
   }
 
   getData() {
-    return [...this.timeUnits.entries()];
+    return Array.from(this.timeUnits.entries());
   }
 }
 

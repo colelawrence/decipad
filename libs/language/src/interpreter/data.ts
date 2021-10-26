@@ -18,6 +18,7 @@ export async function evaluateData(
         data.getColumnAt(colIndex),
         `expected column at ${colIndex}`
       );
+      colNames.push(column.name);
       // TODO: Here we're extracting the values and copying them to a column.
       // TODO: This is extremely innefficient. We should instead use values in the table directly.
       const values: Scalar[] = [];

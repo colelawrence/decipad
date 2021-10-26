@@ -52,7 +52,6 @@ yarn install
 
 There are `.env.example` files in the root and in individual projects like the `backend`. These need to be copied to `.env` (without `.example`) and filled with secret values, such as your personal AWS access token, or other secrets that are shared among developers but not included in the repository for security reasons.
 
-
 ## Important scripts
 
 ### Running the project
@@ -79,6 +78,18 @@ We use storybook for development and showcasing purposes of all of our component
 yarn serve:storybook
 ```
 
+### Running docs
+
+We document Deci by using [Docusaurus](https://docusaurus.io) in [the `apps/docs` folder](apps/docs).
+
+You can start the docs server by running:
+
+```bash
+yarn serve:docs
+```
+
+To contribute with changes, you can edit the documents at [the apps/docs/docs folder](apps/docs/docs).
+
 ### Running the end-to-end tests
 
 These tests are powered by cypress and are present in apps/client-e2e.
@@ -95,22 +106,21 @@ Interesting options are `--headless` (don't show a window) and `--watch` (don't 
 
 To receive e-mails from the application (like when signing in through e-mail), verify your e-mail in SES (it's in sandbox mode so it only sends to verified e-mails)
 
-* Go to the AWS web console
-* Search for the SES service and go there
-* If you are offered to switch to "Use the new console" in the menu (and thus are on the "classic console"), do it
-* Click "Verified identities" in the menu
-* Click on the button "Create identity"
-* Choose identity type "Email address"
-* Enter the email address you want to send email to
-* Confirm by clicking "Create identity"
-* You will then receive a verification e-mail with instructions to complete the confirmation
+- Go to the AWS web console
+- Search for the SES service and go there
+- If you are offered to switch to "Use the new console" in the menu (and thus are on the "classic console"), do it
+- Click "Verified identities" in the menu
+- Click on the button "Create identity"
+- Choose identity type "Email address"
+- Enter the email address you want to send email to
+- Confirm by clicking "Create identity"
+- You will then receive a verification e-mail with instructions to complete the confirmation
 
 ## Private deploys and fast client updates
 
 You can deploy your own private instance by following these instructions:
 
 https://www.loom.com/share/a0b33c1071d343fb8a216ef64ad217ea
-
 
 ## Developing new or changing GraphQL queries
 
@@ -165,7 +175,6 @@ Alternatively, you can watch the file for changes and run the test every time th
 $ jest apps/backend/tests/<file>.spec.ts --testTimeout=10000 --watch
 ```
 
-
 ### Generating your GraqphQL client stuffs
 
 If you're also doing client-side stuff that depends on the changes, you will need to run the following commands:
@@ -189,8 +198,6 @@ If you need to add or change a query, you need to add or change a file in `libs/
 If you add or change a file in `libs/queries/src/lib`, you'll need to re-run the `npm run build:graphql:queries` command to (re)generate the Typescript files.
 
 If you're adding a file to You may also need to `libs/queries/src/lib/operations/{mutations,queries}`, you'll also need to export it in `libs/queries/src/lib/index.ts`, so that the client code may use it.
-
-
 
 ## Sub-package documentation
 

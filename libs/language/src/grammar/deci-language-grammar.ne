@@ -41,6 +41,10 @@ const reservedWords = new Set([
   'through',
   'date',
   'function',
+  'and',
+  'not',
+  'or',
+  'with'
 ])
 
 const monthStrings = new Set([

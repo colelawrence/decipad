@@ -159,3 +159,14 @@ export const combineUnits = (
 
   return normalizeUnits(outputUnits);
 };
+
+export const multiplyExponent = (
+  myUnits: AST.Unit[],
+  by: number
+): AST.Unit[] => {
+  return myUnits.map((u) =>
+    produce(u, (u) => {
+      u.exp *= by;
+    })
+  );
+};

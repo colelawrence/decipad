@@ -36,7 +36,9 @@ export class LocationSet {
   }
 
   [Symbol.iterator]() {
-    return [...this.set].map((loc) => parseLoc(loc))[Symbol.iterator]();
+    return Array.from(this.set)
+      .map((loc) => parseLoc(loc))
+      [Symbol.iterator]();
   }
 }
 

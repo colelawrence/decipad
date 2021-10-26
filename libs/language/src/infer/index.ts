@@ -277,7 +277,7 @@ export const inferExpression = wrap(
           });
           return inferData(ctx, ctx.inAssignment, data);
         } catch (err) {
-          return t.impossible(err.message);
+          return t.impossible((err as Error).message);
         }
       }
     }

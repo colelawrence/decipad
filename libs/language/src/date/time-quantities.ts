@@ -5,9 +5,20 @@ import {
   jsUnitToIndex,
   Time,
   timeUnitToJSDateUnit,
+  timeUnitToIndex,
+  timeIndexToUnit,
 } from '.';
 import { TimeQuantity } from '../interpreter/Value';
 import { getDefined } from '../utils';
+
+export const convertToMs: Partial<Record<Time.Unit, number>> = {
+  week: 7 * 24 * 60 * 60 * 1000,
+  day: 24 * 60 * 60 * 1000,
+  hour: 60 * 60 * 1000,
+  minute: 60 * 1000,
+  second: 1000,
+  millisecond: 1,
+};
 
 // Strategy taken from date-fns getDaysInMonth -- seems to be timezone agnostic
 const getDaysInMonth = (year: number, month: number) => {
@@ -67,7 +78,7 @@ const addSingleQuantity = (
 };
 
 export const addTimeQuantity = (date: number, quantities: TimeQuantity) =>
-  [...quantities.timeUnits.entries()].reduce(
+  Array.from(quantities.timeUnits.entries()).reduce(
     (date, [unit, quant]) => addSingleQuantity(date, quant, unit),
     date
   );
@@ -96,4 +107,59 @@ export const negateTimeQuantity = (quantity: TimeQuantity) => {
   });
 
   return new TimeQuantity(retMap);
+};
+
+export const timeUnitsUpTo = (maxInclusive: Time.Unit): Time.Unit[] => {
+  const maxInclusiveIndex = timeUnitToIndex[maxInclusive];
+  const units: Time.Unit[] = [];
+  for (let i = 0; i <= maxInclusiveIndex; i += 1) {
+    units.push(timeIndexToUnit[i]);
+  }
+  return units;
+};
+
+export const timeSpecificityToTimeUnit = (
+  timeSpecificity: Time.Specificity
+): Time.Unit => {
+  return timeSpecificity === 'time' ? 'millisecond' : timeSpecificity;
+};
+
+export const convertTimeQuantityTo = (
+  quantity: TimeQuantity,
+  convertTo: Time.Unit
+): number => {
+  if (
+    quantity.timeUnitsDiff &&
+    quantity.timeUnitsDiff.size === 1 &&
+    quantity.timeUnitsDiff.has(convertTo)
+  ) {
+    return quantity.timeUnitsDiff.get(convertTo) as number;
+  }
+  const { timeUnits } = quantity;
+  if (timeUnits.size === 0) {
+    return 0;
+  }
+  if (timeUnits.size === 1 && timeUnits.has(convertTo)) {
+    return timeUnits.get(convertTo) as number;
+  }
+
+  let accInMs = BigInt(0);
+  for (const [unit, value] of timeUnits.entries()) {
+    const convertRatio = convertToMs[unit];
+    if (!convertRatio) {
+      throw new TypeError(
+        `time quantity: don't know how to convert from ${unit}`
+      );
+    }
+    accInMs += BigInt(value * convertRatio);
+  }
+
+  const convertRatio = convertToMs[convertTo];
+  if (!convertRatio) {
+    throw new TypeError(
+      `time quantity: don't know how to convert time quantity to ${convertTo}`
+    );
+  }
+
+  return Number(accInMs / BigInt(convertRatio));
 };

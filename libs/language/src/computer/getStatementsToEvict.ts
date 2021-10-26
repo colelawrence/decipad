@@ -17,9 +17,11 @@ const getChangedMapKeys = <T>(
   oldMap: Map<string, T>,
   newMap: Map<string, T>
 ): string[] => {
-  const allKeys = new Set([...oldMap.keys(), ...newMap.keys()]);
+  const allKeys = new Set(
+    Array.from(oldMap.keys()).concat(Array.from(newMap.keys()))
+  );
 
-  return [...allKeys].filter((key) => {
+  return Array.from(allKeys).filter((key) => {
     const oldVal = oldMap.get(key);
     const newVal = newMap.get(key);
 
@@ -69,7 +71,7 @@ export const findSymbolErrors = (program: AST.Block[]) => {
   // It's only used before def, if it's actually defined
   const usedBeforeDef = setIntersection(maybeUsedBeforeDef, seen);
 
-  return new Set([...reassigned, ...usedBeforeDef]);
+  return new Set(Array.from(reassigned).concat(Array.from(usedBeforeDef)));
 };
 
 export const findSymbolsAffectedByChange = (
@@ -78,11 +80,13 @@ export const findSymbolsAffectedByChange = (
 ) => {
   const changedBlockIds = getChangedBlocks(oldBlocks, newBlocks);
 
-  const codeWhichChanged = [...oldBlocks, ...newBlocks].filter(
-    (block) =>
-      changedBlockIds.includes(block.id) ||
-      !oldBlocks.some((b) => b.id === block.id)
-  );
+  const codeWhichChanged = Array.from(oldBlocks)
+    .concat(Array.from(newBlocks))
+    .filter(
+      (block) =>
+        changedBlockIds.includes(block.id) ||
+        !oldBlocks.some((b) => b.id === block.id)
+    );
   const affectedSymbols = new Set(getAllSymbolsDefined(codeWhichChanged));
 
   return affectedSymbols;
@@ -107,16 +111,16 @@ export const getStatementsToEvict = ({
     getSomeBlockLocations(oldBlocks, changedBlockIds)
   );
 
-  const dirtySymbols = new Set([
-    ...getChangedExternalData(oldExternalData, newExternalData),
-    ...findSymbolsAffectedByChange(oldBlocks, newBlocks),
-    ...findSymbolErrors(oldBlocks),
-    ...findSymbolErrors(newBlocks),
-  ]);
+  const dirtySymbols = new Set(
+    Array.from(getChangedExternalData(oldExternalData, newExternalData))
+      .concat(Array.from(findSymbolsAffectedByChange(oldBlocks, newBlocks)))
+      .concat(Array.from(findSymbolErrors(oldBlocks)))
+      .concat(Array.from(findSymbolErrors(newBlocks)))
+  );
 
   const dependentsOfBlocksAndSymbols = getDependents(
     oldBlocks,
-    [...dirtyLocs],
+    Array.from(dirtyLocs),
     dirtySymbols
   );
 
