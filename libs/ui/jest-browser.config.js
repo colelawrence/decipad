@@ -13,11 +13,14 @@ module.exports = {
   setupFilesAfterEnv: [
     ...setupFilesAfterEnv,
     require.resolve('./src/test-utils/jest/setupTests.ts'),
+    require.resolve('./src/test-utils/jest/setupPlaywright.ts'),
   ],
-  // defaults, here for ease of tweaking
   testEnvironmentOptions: {
     'jest-playwright': {
-      launchOptions: { headless: true },
+      // defaults, here for ease of tweaking
+      launchOptions: {
+        headless: true,
+      },
       browsers: ['chromium'],
     },
   },

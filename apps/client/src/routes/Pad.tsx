@@ -15,7 +15,7 @@ import {
   useSharePadWithEmail,
   useSharePadWithSecret,
 } from '@decipad/queries';
-import { LoadingSpinnerPage, NotebookShareMenu } from '@decipad/ui';
+import { LoadingSpinnerPage, organisms } from '@decipad/ui';
 import styled from '@emotion/styled';
 import { FC, useState } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
@@ -149,7 +149,7 @@ export const Pad = ({
             <ModalOverlay />
             <ModalBody>
               <ModalContent>
-                <NotebookShareMenu
+                <organisms.NotebookShareMenu
                   link={
                     shareSecret
                       ? getSecretPadLink(workspaceId, padId, shareSecret)

@@ -1,4 +1,4 @@
-import { Icons } from '@decipad/ui';
+import { icons } from '@decipad/ui';
 import { css } from '@emotion/react';
 import {
   MARK_BOLD,
@@ -23,7 +23,7 @@ const marks = [
     type: MARK_BOLD,
     icon: (
       <div css={iconWrapper}>
-        <Icons.Bold />
+        <icons.Bold />
       </div>
     ),
     divider: true,
@@ -32,7 +32,7 @@ const marks = [
     type: MARK_ITALIC,
     icon: (
       <div css={iconWrapper}>
-        <Icons.Italic />
+        <icons.Italic />
       </div>
     ),
     divider: false,
@@ -41,7 +41,7 @@ const marks = [
     type: MARK_UNDERLINE,
     icon: (
       <div css={iconWrapper}>
-        <Icons.Underline />
+        <icons.Underline />
       </div>
     ),
     divider: false,
@@ -50,7 +50,7 @@ const marks = [
     type: MARK_CODE,
     icon: (
       <div css={iconWrapper}>
-        <Icons.Code />
+        <icons.Code />
       </div>
     ),
     divider: true,

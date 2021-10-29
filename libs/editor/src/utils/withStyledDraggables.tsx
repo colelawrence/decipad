@@ -103,7 +103,7 @@ export const withStyledDraggables = (
       keys: [ELEMENT_PARAGRAPH],
       styles: {
         gutterLeft: {
-          padding: '12px 8px 0 0',
+          padding: '8px 8px 0 0',
         },
       },
     },

@@ -11,7 +11,7 @@ import { nanoid } from 'nanoid';
 import { NoDocSyncEditor } from './NoDocSyncEditor.component';
 
 export default {
-  title: 'Editor/Examples',
+  title: 'Legacy/Editor/Examples',
   component: NoDocSyncEditor,
 } as Meta;
 

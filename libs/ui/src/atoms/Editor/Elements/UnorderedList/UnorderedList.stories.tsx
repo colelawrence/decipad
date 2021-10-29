@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { UnorderedListElement } from './UnorderedList';
 
 export default {
-  title: 'Atoms/Editor/Elements/Title',
+  title: 'Legacy/Editor/Elements/Unordered List',
   component: UnorderedListElement,
   args: {
     children: 'Notebook Title',

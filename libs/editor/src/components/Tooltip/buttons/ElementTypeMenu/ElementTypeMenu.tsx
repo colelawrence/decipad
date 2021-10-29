@@ -1,4 +1,4 @@
-import { Icons } from '@decipad/ui';
+import { icons } from '@decipad/ui';
 import { css } from '@emotion/react';
 import {
   ELEMENT_H2,
@@ -104,7 +104,7 @@ export const ElementTypeMenu = ({
       <button css={buttonStyles} onMouseDown={buttonOnClick}>
         {blockTypeToName()}{' '}
         <span css={iconStyles}>
-          <Icons.Chevron type={isActive ? 'collapse' : 'expand'} />
+          <icons.Chevron type={isActive ? 'collapse' : 'expand'} />
         </span>
       </button>
       <ul css={[menuStyles, isActive && activeMenuStyles]}>

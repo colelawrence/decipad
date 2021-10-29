@@ -1,4 +1,4 @@
-import { Icons } from '@decipad/ui';
+import { icons } from '@decipad/ui';
 import { css } from '@emotion/react';
 import {
   ELEMENT_BLOCKQUOTE,
@@ -43,7 +43,7 @@ export const commands: Command[] = [
     description: 'Insert tabular data.',
     icon: (
       <div css={iconStyles}>
-        <Icons.Table />
+        <icons.Table />
       </div>
     ),
     insert: insertTable,

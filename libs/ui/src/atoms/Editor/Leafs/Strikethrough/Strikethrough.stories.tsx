@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { StrikethroughLeaf } from './Strikethrough';
 
 export default {
-  title: 'Atoms/Editor/Leafs/Strikethrough',
+  title: 'Legacy/Editor/Leafs/Strikethrough',
   component: StrikethroughLeaf,
   args: {
     text: 'This text is crossed out',

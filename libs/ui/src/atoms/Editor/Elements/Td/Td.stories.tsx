@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { TdElement } from './Td';
 
 export default {
-  title: 'Atoms/Editor/Elements/Td',
+  title: 'Legacy/Editor/Elements/Td',
   component: TdElement,
   args: {
     children: 'Td Element',

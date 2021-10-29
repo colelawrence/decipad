@@ -9,10 +9,6 @@ const props: ComponentProps<typeof NotebookListItem> = {
   href: '/my-notebook',
 };
 
-afterEach(async () => {
-  await jestPlaywright.resetPage();
-});
-
 describe('without a desciprtion', () => {
   test('the title occupies the combined space', async () => {
     const { getByText, rerender } = render(

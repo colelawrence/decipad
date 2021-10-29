@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { BodyTrElement } from './BodyTr';
 
 export default {
-  title: 'Atoms/Editor/Elements/BodyTr',
+  title: 'Legacy/Editor/Elements/BodyTr',
   component: BodyTrElement,
   args: {
     children: 'Body Tr Element',

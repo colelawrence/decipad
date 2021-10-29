@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import { ComponentProps, useCallback, useState } from 'react';
 import { noop } from '@decipad/utils';
-import * as Icons from '../../../../icons';
 import { TableColumnActions } from '../../../../molecules';
+import { TinyArrow } from '../../../../icons';
 
 const openerWidth = 40;
 
@@ -66,7 +66,7 @@ export const ThElement = ({
 
       <button css={openerStyles} onClick={toggleMenuOpen}>
         <span css={arrowWrapperStyles}>
-          <Icons.TinyArrow direction="down" />
+          <TinyArrow direction="down" />
         </span>
       </button>
 

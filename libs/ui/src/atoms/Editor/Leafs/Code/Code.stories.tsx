@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { CodeLeaf } from './Code';
 
 export default {
-  title: 'Atoms/Editor/Leafs/Code',
+  title: 'Legacy/Editor/Leafs/Code',
   component: CodeLeaf,
   args: {
     text: '10 apples',

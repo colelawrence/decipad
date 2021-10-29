@@ -3,10 +3,6 @@ import domToPlaywright from 'dom-to-playwright';
 
 import { AccountAvatar } from './AccountAvatar';
 
-afterEach(async () => {
-  await jestPlaywright.resetPage();
-});
-
 it('moves the caret down on hover', async () => {
   const { getByLabelText, getByTitle } = render(
     <AccountAvatar name="John Doe" menuOpen={false} />

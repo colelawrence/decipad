@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { SubheadingElement } from './Subheading';
 
 export default {
-  title: 'Atoms/Editor/Elements/Subheading',
+  title: 'Legacy/Editor/Elements/Subheading',
   component: SubheadingElement,
   args: {
     children: 'Subheading Element',

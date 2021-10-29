@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { BlockquoteElement } from './Blockquote';
 
 export default {
-  title: 'Atoms/Editor/Elements/Blockquote',
+  title: 'Legacy/Editor/Elements/Blockquote',
   component: BlockquoteElement,
   args: {
     children: 'Blockquote Element',

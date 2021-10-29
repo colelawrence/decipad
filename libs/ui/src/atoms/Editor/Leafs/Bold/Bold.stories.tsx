@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { BoldLeaf } from './Bold';
 
 export default {
-  title: 'Atoms/Editor/Leafs/Bold',
+  title: 'Legacy/Editor/Leafs/Bold',
   component: BoldLeaf,
   children: {
     text: 'Bold text',

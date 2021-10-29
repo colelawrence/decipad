@@ -4,7 +4,7 @@ import { TableInner } from './TableInner';
 import { TableData } from '../../utils/tableTypes';
 
 export default {
-  title: 'Editor/Table',
+  title: 'Legacy/Editor/Table',
   component: TableInner,
 } as Meta;
 

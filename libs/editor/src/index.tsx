@@ -8,8 +8,6 @@ import { Plate, useStoreEditorRef } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { DropFile } from './components/DropFile';
-import { Tooltip } from './components/Tooltip/Tooltip';
 import { components, options, plugins } from './configuration';
 import { useDocSyncPlugin } from './plugins/DocSync/useDocSyncPlugin';
 import {
@@ -25,6 +23,7 @@ import { UploadDialogue } from './plugins/UploadData/components/UploadDialogue';
 import { useImportDataPlugin } from './plugins/ImportData/useImportDataPlugin';
 import { useExternalDataPlugin } from './plugins/ExternalData/useExternalDataPlugin';
 import { useUploadDataPlugin } from './plugins/UploadData/useUploadDataPlugin';
+import { DropFile, Tooltip } from './components';
 
 export { AnonymousDocSyncProvider, DocSyncProvider } from './contexts/DocSync';
 

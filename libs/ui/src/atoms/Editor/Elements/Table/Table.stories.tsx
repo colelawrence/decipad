@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { TableElement } from './Table';
 
 export default {
-  title: 'Atoms/Editor/Elements/Table',
+  title: 'Legacy/Editor/Elements/Table',
   component: TableElement,
   args: {
     children: 'Table Element',

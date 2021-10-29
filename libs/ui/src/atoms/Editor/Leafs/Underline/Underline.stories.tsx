@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { UnderlineLeaf } from './Underline';
 
 export default {
-  title: 'Atoms/Editor/Leafs/Underline',
+  title: 'Legacy/Editor/Leafs/Underline',
   component: UnderlineLeaf,
   args: {
     text: 'Underlined text',

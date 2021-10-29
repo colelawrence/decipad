@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { ItalicLeaf } from './Italic';
 
 export default {
-  title: 'Atoms/Editor/Leafs/Italic',
+  title: 'Legacy/Editor/Leafs/Italic',
   component: ItalicLeaf,
   args: {
     text: 'Italic text',

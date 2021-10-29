@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { EditableCellContents } from './EditableCellContents';
 
 export default {
-  title: 'Atoms/Editor/Elements/EditableCellContents',
+  title: 'Legacy/Editor/Elements/EditableCellContents',
   component: EditableCellContents,
   args: {
     value: 'Value',

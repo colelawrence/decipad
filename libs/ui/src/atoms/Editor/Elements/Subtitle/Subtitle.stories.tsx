@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { SubtitleElement } from './Subtitle';
 
 export default {
-  title: 'Atoms/Editor/Elements/Subtitle',
+  title: 'Legacy/Editor/Elements/Subtitle',
   component: SubtitleElement,
   args: { children: 'Subtitle Element' },
 } as Meta;

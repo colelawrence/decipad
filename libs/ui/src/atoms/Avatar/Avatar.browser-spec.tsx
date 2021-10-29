@@ -4,10 +4,6 @@ import waitFor from 'wait-for-expect';
 
 import { Avatar } from './Avatar';
 
-afterEach(async () => {
-  await jestPlaywright.resetPage();
-});
-
 it('changes background on hover', async () => {
   const { getByText, getByLabelText } = render(<Avatar name="John Doe" />);
   const { select } = await domToPlaywright(page, document);

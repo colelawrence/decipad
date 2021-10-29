@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { TitleElement } from './Title';
 
 export default {
-  title: 'Atoms/Editor/Elements/Title',
+  title: 'Legacy/Editor/Elements/Title',
   component: TitleElement,
   args: {
     children: 'Notebook Title',

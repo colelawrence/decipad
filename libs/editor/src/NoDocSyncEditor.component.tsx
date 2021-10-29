@@ -2,7 +2,7 @@ import { Plate, PlateProps } from '@udecode/plate';
 import { FC, useMemo } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { Tooltip } from './components/Tooltip/Tooltip';
+import { Tooltip } from './components';
 import { components, options, plugins } from './configuration';
 import {
   SlashCommandsSelect,

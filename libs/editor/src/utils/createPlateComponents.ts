@@ -7,7 +7,6 @@ import {
   ItalicLeaf,
   ListItemElement,
   ModelBlockElement,
-  ParagraphElement,
   StrikethroughLeaf,
   SubheadingElement,
   SubtitleElement,
@@ -33,10 +32,10 @@ import {
   SPRenderLeafProps,
 } from '@udecode/plate';
 import { FunctionComponent } from 'react';
-import { Table } from '../components/Table/Table';
 import { withStyledDraggables } from './withStyledDraggables';
 import { withStyledPlaceHolders } from './withStyledPlaceholders';
 import * as elementTypes from './elementTypes';
+import { Paragraph, Table } from '../components';
 
 type PlateElementComponent = FunctionComponent<
   SPRenderElementProps | SPRenderLeafProps | ImportDataElementProps
@@ -50,7 +49,7 @@ export const createPlateComponents = (): Partial<
     Record<elementTypes.ElementType, PlateElementComponent>
   > = {
     // Plate default elements
-    [ELEMENT_PARAGRAPH]: ParagraphElement,
+    [ELEMENT_PARAGRAPH]: Paragraph,
     [ELEMENT_H1]: TitleElement,
     [ELEMENT_H2]: SubtitleElement,
     [ELEMENT_H3]: SubheadingElement,
