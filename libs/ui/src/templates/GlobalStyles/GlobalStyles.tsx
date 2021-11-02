@@ -5,7 +5,13 @@ import { Global } from '@emotion/react';
 import emotionNormalize from 'emotion-normalize';
 import emotionReset from 'emotion-reset';
 
-import { cssVar, globalTextStyles, setCssVar } from '../../primitives';
+import {
+  cssVar,
+  CssVariableKey,
+  CssVariables,
+  globalTextStyles,
+  setCssVar,
+} from '../../primitives';
 import {
   black,
   grey100,
@@ -16,7 +22,10 @@ import {
 } from '../../primitives/color';
 import { ALLOW_DARK_THEME_LOCAL_STORAGE_KEY } from '../../utils';
 
-const darkTheme = {
+const darkTheme: Record<
+  CssVariableKey<keyof CssVariables>,
+  CssVariables[keyof CssVariables]
+> = {
   ...setCssVar('backgroundColor', black.rgb),
   ...setCssVar('iconBackgroundColor', grey300.rgb),
   ...setCssVar('offColor', grey400.rgb),

@@ -32,6 +32,10 @@ const defaults: CssVariables = {
   },
 };
 
+const cssVariablePrefix = '--deci-';
+export type CssVariableKey<V extends keyof CssVariables> =
+  `${typeof cssVariablePrefix}${V}`;
+
 export function cssVar<V extends keyof CssVariables>(
   name: V
 ): Exclude<CssVariables[V], undefined> {
@@ -40,7 +44,7 @@ export function cssVar<V extends keyof CssVariables>(
   // but really we're always returning a `var(--deci-something)` string.
   // However, this has the advantage that it prevents assigning a CSS variable to an unsuitable CSS property,
   // e.g. `var(--deci-some-color)` to `display`.
-  return `var(--deci-${name}, ${defaults[name]})` as Exclude<
+  return `var(${cssVariablePrefix}${name}, ${defaults[name]})` as Exclude<
     CssVariables[V],
     undefined
   >;
@@ -48,10 +52,10 @@ export function cssVar<V extends keyof CssVariables>(
 export function setCssVar<V extends keyof CssVariables>(
   name: V,
   value: CssVariables[V]
-): Record<`--deci-${V}`, CssVariables[V]> {
+): Record<CssVariableKey<V>, CssVariables[V]> {
   // This needs to be cast because
   // TypeScript widens the dynamic propery key to plain `string`
   return {
-    [`--deci-${name}`]: value,
-  } as unknown as Record<`--deci-${V}`, CssVariables[V]>;
+    [`${cssVariablePrefix}${name}`]: value,
+  } as unknown as Record<CssVariableKey<V>, CssVariables[V]>;
 }
