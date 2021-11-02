@@ -104,7 +104,7 @@ export const ElementTypeMenu = ({
       <button css={buttonStyles} onMouseDown={buttonOnClick}>
         {blockTypeToName()}{' '}
         <span css={iconStyles}>
-          <Icons.Caret type={isActive ? 'collapse' : 'expand'} />
+          <Icons.Chevron type={isActive ? 'collapse' : 'expand'} />
         </span>
       </button>
       <ul css={[menuStyles, isActive && activeMenuStyles]}>

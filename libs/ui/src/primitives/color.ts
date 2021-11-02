@@ -40,11 +40,13 @@ export const electricGreen200 = color(225, 249, 128);
 
 export const white = color(255, 255, 255);
 export const offWhite = color(249, 249, 250);
-export const grey100 = color(240, 240, 242);
-export const grey200 = color(223, 223, 224);
-export const grey300 = color(137, 137, 142);
-export const grey400 = color(67, 67, 71);
-export const black = color(18, 18, 20);
+export const grey100 = color(245, 247, 250);
+export const grey200 = color(236, 240, 246);
+export const grey250 = color(229, 233, 240);
+export const grey270 = color(170, 177, 189);
+export const grey300 = color(119, 126, 137);
+export const grey400 = color(77, 86, 100);
+export const black = color(22, 31, 44);
 
 export const blockquote = color(51, 41, 66);
 export const subtleShadow = color(119, 126, 137);

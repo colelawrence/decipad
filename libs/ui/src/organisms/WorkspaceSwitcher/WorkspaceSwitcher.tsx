@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { ComponentProps, FC, useState } from 'react';
 import { Avatar, NavigationItem } from '../../atoms';
-import { Caret } from '../../icons';
+import { Chevron } from '../../icons';
 import { p15Medium } from '../../primitives';
 import { WorkspaceMenu } from '..';
 
@@ -36,7 +36,7 @@ export const WorkspaceSwitcher = (
         <strong css={nameStyles}>
           {props.activeWorkspace.name}
           <span css={caretStyles}>
-            <Caret type={menuOpen ? 'collapse' : 'expand'} />
+            <Chevron type={menuOpen ? 'collapse' : 'expand'} />
           </span>
         </strong>
       </NavigationItem>

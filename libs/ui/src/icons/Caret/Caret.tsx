@@ -2,23 +2,22 @@ import { FC } from 'react';
 import { cssVar } from '../../primitives';
 
 interface CaretProps {
-  readonly type: 'expand' | 'collapse';
+  readonly variant: 'down' | 'right';
 }
 
-export const Caret = ({ type }: CaretProps): ReturnType<FC> => {
+export const Caret = ({ variant }: CaretProps): ReturnType<FC> => {
   return (
-    <svg viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <title>{type}</title>
+    <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <title>Caret {variant}</title>
       <path
         d={
           {
-            expand: 'M9.5 1.25L5 5.75L0.5 1.25',
-            collapse: 'M0.5 5.75L5 1.25L9.5 5.75',
-          }[type]
+            down: 'M7.05792 9.8224L6.07961 8.59951C5.41387 7.76734 5.081 7.35125 5.08063 7.00108C5.0803 6.69654 5.21876 6.40845 5.45677 6.21846C5.73045 6 6.2633 6 7.329 6H8.90742C10.0456 6 10.6146 6 10.892 6.22944C11.133 6.42875 11.2668 6.72929 11.2538 7.04172C11.2387 7.40139 10.8581 7.82438 10.0967 8.67035L9.00885 9.87906C8.66168 10.2648 8.4881 10.4577 8.28585 10.5242C8.10837 10.5826 7.91604 10.577 7.74225 10.5084C7.5442 10.4303 7.38211 10.2276 7.05792 9.8224Z',
+            right:
+              'M9.5724 9.69208L8.34951 10.6704C7.51734 11.3361 7.10125 11.669 6.75108 11.6694C6.44654 11.6697 6.15845 11.5312 5.96846 11.2932C5.75 11.0196 5.75 10.4867 5.75 9.421L5.75 7.84258C5.75 6.70445 5.75 6.13538 5.97944 5.85799C6.17875 5.61704 6.47929 5.48319 6.79172 5.49623C7.15139 5.51125 7.57438 5.89194 8.42035 6.65331L9.62906 7.74115C10.0148 8.08832 10.2077 8.2619 10.2742 8.46415C10.3326 8.64163 10.327 8.83396 10.2584 9.00775C10.1803 9.2058 9.97763 9.36789 9.5724 9.69208Z',
+          }[variant]
         }
-        stroke={cssVar('currentTextColor')}
-        strokeWidth="1.4"
-        strokeLinejoin="round"
+        fill={cssVar('normalTextColor')}
       />
     </svg>
   );

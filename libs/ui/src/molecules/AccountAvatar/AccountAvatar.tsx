@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 
 import { Avatar } from '../../atoms';
 import { noop } from '../../utils';
-import { Caret } from '../../icons';
+import { Chevron } from '../../icons';
 import { p12Bold, shortAnimationDuration } from '../../primitives';
 
 const styles = css(p12Bold, {
@@ -38,7 +38,7 @@ export const AccountAvatar = ({
     <button onClick={onClick} className={hoverTargetClassName} css={styles}>
       <Avatar hoverSelector={hoverSelector} {...props} />
       <div css={caretStyles(hoverSelector)}>
-        <Caret type={menuOpen ? 'collapse' : 'expand'} />
+        <Chevron type={menuOpen ? 'collapse' : 'expand'} />
       </div>
     </button>
   );

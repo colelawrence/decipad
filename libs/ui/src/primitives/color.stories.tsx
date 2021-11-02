@@ -11,6 +11,8 @@ const colorNames: Record<ColorId, string> = {
   white: 'White',
   grey100: 'Grey 100',
   grey200: 'Grey 200',
+  grey250: 'Grey 250',
+  grey270: 'Grey 270',
   grey300: 'Grey 300',
   grey400: 'Grey 400',
   offWhite: 'Off-White',

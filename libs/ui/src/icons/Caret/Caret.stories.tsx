@@ -6,5 +6,6 @@ export default {
   component: Caret,
 } as Meta;
 
-export const Expand: Story = () => <Caret type="expand" />;
-export const Collapse: Story = () => <Caret type="collapse" />;
+export const Down: Story = () => <Caret variant="down" />;
+
+export const Right: Story = () => <Caret variant="right" />;

@@ -42,7 +42,7 @@ it('opens and closes the menu', () => {
 });
 
 it('closes the menu when you change the type', () => {
-  const { queryByText, getByTitle } = render(
+  const { queryByText, getByText, getByTitle } = render(
     <table>
       <thead>
         <tr>
@@ -53,7 +53,7 @@ it('closes the menu when you change the type', () => {
   );
 
   userEvent.click(getByTitle(/arrow down/i));
-  userEvent.click(getByTitle(/type/i));
+  userEvent.click(getByText(/type/i));
   userEvent.click(getByTitle(/number/i));
   expect(
     queryByText(/type/i, { selector: 'li button' })

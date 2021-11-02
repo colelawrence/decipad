@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { useState } from 'react';
-import { TinyArrow, DataType, Number, Text } from '../../icons';
+import { TinyArrow, Shapes, Number, Text } from '../../icons';
 
 import {
   p14Regular,
@@ -116,7 +116,7 @@ export const TableColumnActions: React.FC<TableColumnMenuProps> = ({
   return (
     <DroopyMenu>
       <MenuButton
-        icon={DataType}
+        icon={Shapes}
         text="Change type"
         onClick={() => {
           toggleSubmenu('change-type');
@@ -135,7 +135,7 @@ export const TableColumnActions: React.FC<TableColumnMenuProps> = ({
             onClick={() => onChangeColumnType('string')}
           />
           <MenuButton
-            icon={DataType}
+            icon={Shapes}
             text="Date"
             iconTitle="Date"
             onClick={() => {
@@ -145,25 +145,25 @@ export const TableColumnActions: React.FC<TableColumnMenuProps> = ({
           >
             <FloatingMenu>
               <MenuButton
-                icon={DataType}
+                icon={Shapes}
                 iconTitle="Year"
                 text="Year"
                 onClick={() => onChangeColumnType('date/year')}
               />
               <MenuButton
-                icon={DataType}
+                icon={Shapes}
                 iconTitle="Month"
                 text="Month"
                 onClick={() => onChangeColumnType('date/month')}
               />
               <MenuButton
-                icon={DataType}
+                icon={Shapes}
                 iconTitle="Day"
                 text="Day"
                 onClick={() => onChangeColumnType('date/day')}
               />
               <MenuButton
-                icon={DataType}
+                icon={Shapes}
                 iconTitle="Time"
                 text="Time"
                 onClick={() => onChangeColumnType('date/time')}

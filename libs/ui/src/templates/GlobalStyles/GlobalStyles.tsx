@@ -10,6 +10,7 @@ import {
   black,
   grey100,
   grey200,
+  grey300,
   grey400,
   white,
 } from '../../primitives/color';
@@ -17,6 +18,7 @@ import { ALLOW_DARK_THEME_LOCAL_STORAGE_KEY } from '../../utils';
 
 const darkTheme = {
   ...setCssVar('backgroundColor', black.rgb),
+  ...setCssVar('iconBackgroundColor', grey300.rgb),
   ...setCssVar('offColor', grey400.rgb),
 
   ...setCssVar('highlightColor', grey400.rgb),
