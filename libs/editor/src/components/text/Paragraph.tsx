@@ -1,6 +1,7 @@
 import { atoms } from '@decipad/ui';
 import { PlatePluginComponent, useEditorState } from '@udecode/plate';
 import { Editor } from 'slate';
+import { useSelected } from 'slate-react';
 
 export const Paragraph: PlatePluginComponent = ({
   attributes,
@@ -8,6 +9,7 @@ export const Paragraph: PlatePluginComponent = ({
   element,
 }) => {
   const editor = useEditorState();
+  const selected = useSelected();
 
   if ('data-slate-leaf' in attributes) {
     throw new Error('Paragraph is not a leaf');
@@ -16,7 +18,7 @@ export const Paragraph: PlatePluginComponent = ({
   return (
     <atoms.Paragraph
       placeholder={
-        Editor.isEmpty(editor, element)
+        Editor.isEmpty(editor, element) && selected
           ? 'Type “/” for commands or write text'
           : undefined
       }
