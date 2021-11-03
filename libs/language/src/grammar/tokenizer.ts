@@ -84,6 +84,8 @@ export const tokenizer = moo.states({
       match: /\)/,
       pop: 1,
     },
+    // See above. This needs to be passed into date mode as well
+    error,
   },
 });
 

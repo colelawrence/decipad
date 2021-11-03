@@ -48,3 +48,9 @@ it('finds identifiers and keywords', () => {
 it('does not crash when it sees an invalid token', () => {
   expect(testTokenizer('"hi')).toMatchInlineSnapshot(`"error(\\"hi)"`);
 });
+
+it('does not crash when it sees an invalid token in date mode', () => {
+  expect(testTokenizer('date(")')).toMatchInlineSnapshot(
+    `"beginDate(date() error(\\"))"`
+  );
+});
