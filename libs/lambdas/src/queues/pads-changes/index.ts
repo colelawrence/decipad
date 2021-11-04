@@ -43,5 +43,16 @@ async function handlePadDelete({ id }: TableRecordIdentifier) {
     }
   }
 
+  for await (const update of allPages(data.docsyncupdates, {
+    KeyConditionExpression: 'id = :id',
+    ExpressionAttributeValues: {
+      id: resource,
+    },
+  })) {
+    if (update) {
+      await data.docsyncupdates.delete({ id: update.id, seq: update.seq });
+    }
+  }
+
   await data.docsync.delete({ id });
 }
