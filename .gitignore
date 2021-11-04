@@ -257,3 +257,6 @@ apps/backend/app.arc.lock
 # Docs
 .docusaurus
 apps/docs/build
+
+# Tests
+.sandboxlock

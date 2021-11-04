@@ -9,7 +9,7 @@ import {
   useSlashCommandsPlugin,
 } from './plugins/SlashCommands';
 
-export const Editor = (props: PlateProps): ReturnType<FC> => {
+export const NoDocSyncEditorBase = (props: PlateProps): ReturnType<FC> => {
   const { getSlashCommandsProps, plugin: slashCommandsPlugin } =
     useSlashCommandsPlugin();
 
@@ -36,7 +36,7 @@ export const Editor = (props: PlateProps): ReturnType<FC> => {
 export const NoDocSyncEditor = (props: PlateProps): ReturnType<FC> => {
   return (
     <DndProvider backend={HTML5Backend}>
-      <Editor {...props} />
+      <NoDocSyncEditorBase {...props} />
     </DndProvider>
   );
 };

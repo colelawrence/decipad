@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["esnext", "dom"]
+  },
+  "include": ["src"],
+  "references": [
+    { "path": "../utils" },
+    { "path": "../fnqueue" },
+    { "path": "../services" },
+    { "path": "../backendtypes" }
+  ]
+}

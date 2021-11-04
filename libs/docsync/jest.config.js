@@ -3,20 +3,5 @@ const { setupFiles = [], ...baseConfig } = require('../../jest-base.config');
 module.exports = {
   ...baseConfig,
   displayName: 'docsync',
-
-  testEnvironment: 'jsdom',
-  setupFiles: [...setupFiles, './jest.setup.js'],
-
-  maxWorkers: 1,
-  bail: true,
-
-  collectCoverageFrom: ['src/**/*.ts'],
-  coverageThreshold: {
-    global: {
-      statements: 96,
-      branches: 73,
-      functions: 98,
-      lines: 97,
-    },
-  },
+  setupFiles: [...setupFiles, 'fake-indexeddb/auto', './jest.setup.js'],
 };

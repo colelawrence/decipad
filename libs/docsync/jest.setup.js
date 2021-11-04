@@ -1,24 +1,25 @@
-import fetchMock, { enableFetchMocks } from 'jest-fetch-mock';
-import { WebSocket } from 'mock-socket';
+/* eslint-disable import/no-extraneous-dependencies */
+const { join } = require('path');
+const WebSocket = require('ws');
+require('jest-fetch-mock').enableMocks();
 
-enableFetchMocks();
-fetchMock.dontMock();
+process.env.DECI_ENV_CONFIG_FILE_PATH = join(
+  __dirname,
+  '..',
+  '..',
+  'apps',
+  'backend',
+  'tests',
+  '.testing.env'
+);
 
-process.env.DECI_API_URL = 'http://localhost:3333';
-process.env.DECI_MAX_RETRY_INTERVAL_MS = 3000;
-process.env.DECI_MAX_RECONNECT_MS = 3000;
-process.env.DECI_SEND_CHANGES_DEBOUNCE_MS = 1;
-process.env.DECI_DEBOUNCE_PROCESS_SLATE_OPS = 1;
+process.env.DECI_SANDBOX_LOCK_FILE_PATH = join(
+  __dirname,
+  '..',
+  '..',
+  'apps',
+  'backend',
+  'app.arc'
+);
 
-window.WebSocket = WebSocket;
-
-const originalSetItem = Storage.prototype.setItem;
-Storage.prototype.setItem = function setItem(key, value) {
-  originalSetItem.call(this, key, value);
-  window.dispatchEvent(new StorageEvent('storage', { key }));
-};
-const originalRemoveItem = Storage.prototype.removeItem;
-Storage.prototype.removeItem = function removeItem(key) {
-  originalRemoveItem.call(this, key);
-  window.dispatchEvent(new StorageEvent('storage', { key }));
-};
+global.WebSocket = WebSocket;

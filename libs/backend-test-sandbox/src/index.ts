@@ -11,14 +11,16 @@ import { createSandboxEnv, Env } from './sandbox-env';
 import callGraphql, { gql } from './call-graphql';
 import call from './call-simple';
 import auth from './auth';
-import subscriptionClient from './subscription-client';
+import { websocketURL } from './websocket-url';
+import { createWebsocket } from './websocket';
 
 export interface TestContext {
   test: typeof it;
   beforeAll: typeof beforeAll;
   graphql: ReturnType<typeof callGraphql>;
   http: ReturnType<typeof call>;
-  subscriptionClient: ReturnType<typeof subscriptionClient>;
+  websocketURL: (docId: string) => string;
+  websocket: (docId: string, token: string) => WebSocket;
   auth: ReturnType<typeof auth>;
   gql: typeof gql;
 }
@@ -43,8 +45,10 @@ export function testWithSandbox(
 
       testContext.graphql = callGraphql(config);
       testContext.http = call(config);
-      testContext.subscriptionClient = subscriptionClient(config);
       testContext.auth = auth(config);
+      testContext.websocketURL = (docId: string) => websocketURL(config, docId);
+      testContext.websocket = (docId: string, token: string) =>
+        createWebsocket(docId, config, token);
 
       sandbox.start(env, config).then(resolve);
     });

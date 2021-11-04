@@ -18,3 +18,5 @@ process.env.DECI_SANDBOX_LOCK_FILE_PATH = join(
   'backend',
   'app.arc'
 );
+
+process.chdir(__dirname);

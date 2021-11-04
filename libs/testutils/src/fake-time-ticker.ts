@@ -1,34 +1,34 @@
 export function createFakeTimeTicker(granularity: number) {
   let stopped = false;
 
-  function doTickUntil(promise: Promise<unknown>): Promise<unknown> {
+  return function doTickUntil(fn: () => Promise<unknown>): Promise<unknown> {
     if (stopped) {
       throw new Error('ticker is already stopped');
     }
 
-    return Promise.race([
-      tick(),
-      promise.finally(() => {
-        stopped = true;
-      }),
-    ]);
-  }
-
-  async function tick(): Promise<void> {
-    while (!stopped) {
-      // eslint-disable-next-line no-await-in-loop
-      await Promise.resolve().then(() => {
-        jest.advanceTimersByTime(granularity);
-      });
+    async function tick(): Promise<void> {
+      while (!stopped) {
+        // eslint-disable-next-line no-await-in-loop
+        await Promise.resolve().then(() => {
+          jest.advanceTimersByTime(granularity);
+        });
+      }
     }
-  }
 
-  return doTickUntil;
+    tick();
+    return fn()
+      .finally(() => {
+        stopped = true;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  };
 }
 
 export function tickUntil(
-  promise: Promise<unknown>,
+  fn: () => Promise<unknown>,
   granularity: number
 ): Promise<unknown> {
-  return createFakeTimeTicker(granularity)(promise);
+  return createFakeTimeTicker(granularity)(fn);
 }

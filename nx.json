@@ -75,6 +75,9 @@
     "externaldata": {
       "tags": []
     },
+    "fetch": {
+      "tags": []
+    },
     "fnqueue": {
       "tags": []
     },
@@ -93,9 +96,6 @@
     "language": {
       "tags": []
     },
-    "lrustorage": {
-      "tags": []
-    },
     "meta": {
       "tags": []
     },
@@ -103,9 +103,6 @@
       "tags": []
     },
     "queries": {
-      "tags": []
-    },
-    "replica": {
       "tags": []
     },
     "services": {
@@ -118,6 +115,21 @@
       "tags": []
     },
     "utils": {
+      "tags": []
+    },
+    "y-indexeddb": {
+      "tags": []
+    },
+    "y-websocket": {
+      "tags": []
+    },
+    "y-dynamodb": {
+      "tags": []
+    },
+    "y-lambdawebsocket": {
+      "tags": []
+    },
+    "slate-yjs": {
       "tags": []
     }
   }

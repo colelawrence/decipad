@@ -41,14 +41,11 @@
       "@decipad/language": ["libs/language/src/index.ts"],
       "@decipad/ui": ["libs/ui/src/index.ts"],
       "@decipad/editor": ["libs/editor/src/index.tsx"],
-      "@decipad/fnqueue": ["libs/fnqueue/src/index.ts"],
       "@decipad/kafka-lite": ["libs/kafka-lite/src/index.ts"],
       "test-utils": ["libs/ui/src/lib/utils/test-utils.tsx"],
       "@decipad/queries": ["libs/queries/src/index.ts"],
-      "@decipad/replica": ["libs/replica/src/index.ts"],
       "@decipad/testutils": ["libs/testutils/src/index.ts"],
       "@decipad/interfaces": ["libs/interfaces/src/index.ts"],
-      "@decipad/lrustorage": ["libs/lrustorage/src/index.ts"],
       "@decipad/emails": ["libs/emails/src/index.ts"],
       "@decipad/eslint-config-decipad": ["libs/eslint-config-decipad/index.js"],
       "@decipad/meta": ["libs/meta/src/index.ts"],
@@ -81,6 +78,16 @@
       "@decipad/externaldata": ["libs/externaldata/src/index.ts"],
       "@decipad/backend-test-sandbox": [
         "libs/backend-test-sandbox/src/index.ts"
+      ],
+      "@decipad/y-indexeddb": ["libs/y-indexeddb/src/index.ts"],
+      "@decipad/y-websocket": ["libs/y-websocket/src/index.ts"],
+      "@decipad/y-lambdawebsocket": ["libs/y-lambdawebsocket/src/index.ts"],
+      "@decipad/y-dynamodb": ["libs/y-dynamodb/src/index.ts"],
+      "@decipad/fnqueue": ["libs/fnqueue/src/index.ts"],
+      "@decipad/fetch": ["libs/fetch/src/index.ts"],
+      "@decipad/slate-yjs": ["libs/slate-yjs/src/index.ts"],
+      "@decipad/sync-connection-lambdas": [
+        "libs/sync-connection-lambdas/src/index.ts"
       ],
       "@decipad/dynamodb-lock": ["libs/dynamodb-lock/src/index.ts"]
     }

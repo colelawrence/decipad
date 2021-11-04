@@ -39,7 +39,7 @@ const observedTables: (keyof DataTables)[] = [
   'tags',
   'usertaggedresources',
   'fileattachments',
-  'docsync',
+  'docsyncupdates',
 ];
 
 const versionedTables: (keyof VersionedDataTables)[] = ['docsync'];
@@ -83,27 +83,28 @@ function observe(dataTables: DataTables, tableName: keyof DataTables) {
   }
   table.__deci_observed__ = true;
 
-  const put = putReplacer(table, tableName, table.put);
-  const del = deleteReplacer(table, tableName, table.delete);
-  Object.assign(table, { put, delete: del });
+  table.put = putReplacer(table, tableName, table.put);
+  table.delete = deleteReplacer(table, tableName, table.delete);
 }
 
 function putReplacer<T extends ConcreteRecord>(
   table: DataTable<T>,
   tableName: keyof DataTables,
   method: (doc: T) => Promise<void>
-): (doc: T) => Promise<void> {
-  return async function replacePut(args: T) {
+): (doc: T, noEvents?: boolean) => Promise<void> {
+  return async function replacePut(args: T, noEvents = false) {
     const ret = await method.call(table, args);
 
-    await arc.queues.publish({
-      name: `${tableName}-changes`,
-      payload: {
-        table: tableName,
-        action: 'put',
-        args,
-      },
-    });
+    if (!noEvents) {
+      await arc.queues.publish({
+        name: `${tableName}-changes`,
+        payload: {
+          table: tableName,
+          action: 'put',
+          args,
+        },
+      });
+    }
 
     return ret;
   };
@@ -113,20 +114,25 @@ function deleteReplacer<T extends ConcreteRecord>(
   table: DataTable<T>,
   tableName: keyof DataTables,
   method: (id: TableRecordIdentifier) => Promise<void>
-): (id: TableRecordIdentifier) => Promise<void> {
-  return async function replaceDelete(args: TableRecordIdentifier) {
-    const recordBeforeDelete = await table.get({ id: args.id });
+): (id: TableRecordIdentifier, noEvents: boolean) => Promise<void> {
+  return async function replaceDelete(
+    args: TableRecordIdentifier,
+    noEvents = false
+  ) {
+    const recordBeforeDelete = !noEvents ?? (await table.get({ id: args.id }));
     await method.call(table, args);
 
-    await arc.queues.publish({
-      name: `${tableName}-changes`,
-      payload: {
-        table: tableName,
-        action: 'delete',
-        args,
-        recordBeforeDelete,
-      },
-    });
+    if (!noEvents) {
+      await arc.queues.publish({
+        name: `${tableName}-changes`,
+        payload: {
+          table: tableName,
+          action: 'delete',
+          args,
+          recordBeforeDelete,
+        },
+      });
+    }
   };
 }
 
@@ -142,12 +148,12 @@ function enhance(dataTables: DataTables, tableName: keyof DataTables) {
 
   // TODO type this magic property
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  table.create = async function create(doc: any) {
+  table.create = async function create(doc: any, noEvents = false) {
     if (!doc.createdAt) {
       doc.createdAt = timestamp();
     }
 
-    return table.put(doc);
+    return table.put(doc, noEvents);
   };
 }
 

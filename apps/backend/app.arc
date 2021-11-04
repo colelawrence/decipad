@@ -21,10 +21,6 @@ get /api/auth/providers
 get /api/auth/error
 get /api/auth/token
 get /api/auth/verify-request
-get /api/doc/:id/:secret
-get /api/syncdoc/:id
-put /api/syncdoc/:id
-put /api/syncdoc/:id/changes
 get /api/invites/:inviteid/accept
 get /api/userkeyvalidations/:userkeyvalidationid/validate
 get /api/externaldatasources/:id/auth
@@ -64,6 +60,7 @@ userkeyvalidations
 
 connections
   id *String
+  room String
   user_id String
   encrypt true
 
@@ -185,12 +182,19 @@ externaldatasourcekeys
 
 docsync
   id *String
-  _version Number
+
+docsyncupdates
+  id *String
+  seq **String
 
 @indexes
 users
   secret *String
   name bySecret
+
+connections
+  room *String
+  name byRoom
 
 collabs
   room *String
@@ -304,8 +308,8 @@ pads-changes
 tags-changes
 usertaggedresources-changes
 fileattachments-changes
-docsync-changes
-
+docsyncupdates-changes
+sync-after-connect
 
 @plugins
 s3

@@ -8,12 +8,16 @@ type Event = {
   }>;
 };
 
-export default function queueHandler(handler: Handler) {
+export default function queueHandler(userHandler: Handler) {
   return wrapHandler(
     async (event: Event) => {
-      for (const record of event.Records) {
-        const message = JSON.parse(record.body);
-        await handler(message);
+      const results = await Promise.allSettled(
+        event.Records.map((record) => userHandler(JSON.parse(record.body)))
+      );
+      for (const result of results) {
+        if (result.status === 'rejected') {
+          throw result.reason;
+        }
       }
       return { statusCode: 200 };
     },

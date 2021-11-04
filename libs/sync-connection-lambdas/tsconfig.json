@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["esnext", "dom"]
+  },
+  "include": ["src"],
+  "references": [
+    { "path": "../utils" },
+    { "path": "../services" },
+    { "path": "../backend-test-sandbox" },
+    { "path": "../y-websocket" },
+    { "path": "../y-dynamodb" },
+    { "path": "../y-lambdawebsocket" },
+    { "path": "../backendtypes" }
+  ]
+}

@@ -78,7 +78,7 @@ export function Workspace({
           )}`
         );
       } catch (err) {
-        addToast(`Error creating pad: ${err.message}`, {
+        addToast(`Error creating pad: ${(err as Error).message}`, {
           appearance: 'error',
         });
       } finally {

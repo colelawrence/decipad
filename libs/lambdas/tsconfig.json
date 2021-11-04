@@ -5,13 +5,14 @@
   },
   "include": ["src"],
   "references": [
-    { "path": "../../libs/interfaces" },
-    { "path": "../../libs/emails" },
-    { "path": "../../libs/meta" },
-    { "path": "../../libs/backendtypes" },
-    { "path": "../../libs/services" },
-    { "path": "../../libs/graphqlserver" },
-    { "path": "../../libs/utils" },
-    { "path": "../../libs/externaldata" }
+    { "path": "../interfaces" },
+    { "path": "../emails" },
+    { "path": "../meta" },
+    { "path": "../backendtypes" },
+    { "path": "../services" },
+    { "path": "../graphqlserver" },
+    { "path": "../utils" },
+    { "path": "../externaldata" },
+    { "path": "../sync-connection-lambdas" }
   ]
 }

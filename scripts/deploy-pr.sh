@@ -21,7 +21,7 @@ yarn build:backend
 echo "Deploying \"$DEPLOY_NAME\"..."
 mkdir -p tmp/deploy
 cd apps/backend
-./node_modules/.bin/arc deploy --prune --no-hydrate --name "$DEPLOY_NAME" | tee ../../tmp/deploy/result.txt
+../../node_modules/.bin/arc deploy --no-hydrate --name "$DEPLOY_NAME" | tee ../../tmp/deploy/result.txt
 cd ../..
 WSS=`grep -Eo "wss://[^/\"]+" ./tmp/deploy/result.txt`
 echo "Found WSS address: ${WSS}"

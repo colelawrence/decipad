@@ -29,7 +29,7 @@ let CHARS = [
 ];
 CHARS = CHARS.concat(CHARS.map((c) => c.toUpperCase()));
 
-export default function randomChar(): string {
+export function randomChar(): string {
   const charIndex = Math.floor(Math.random() * CHARS.length);
   return CHARS[charIndex];
 }

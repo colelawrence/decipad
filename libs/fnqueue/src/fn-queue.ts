@@ -1,16 +1,16 @@
-type AsyncFunction = () => Promise<unknown>;
-type Fn = (value: unknown) => void;
+type AsyncFunction<T> = () => Promise<T>;
+type Fn<T> = (value: T) => void;
 
-interface FunctionQueue {
-  push: (fn: AsyncFunction) => Promise<unknown>;
+type FunctionQueue = {
+  push: <T>(fn: AsyncFunction<T>) => Promise<T>;
   flush: () => Promise<unknown>;
   pendingCount: () => number;
-}
+};
 
 export function fnQueue(): FunctionQueue {
-  const fns: AsyncFunction[] = [];
+  const fns: AsyncFunction<unknown>[] = [];
   let processing = 0;
-  const flushes: Fn[] = [];
+  const flushes: Fn<void>[] = [];
 
   async function processOne() {
     const fn = fns.shift();
@@ -35,15 +35,15 @@ export function fnQueue(): FunctionQueue {
         // just checked length
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const resolveFlush = flushes.shift()!;
-        resolveFlush(null);
+        resolveFlush();
       }
     }
   }
 
-  function push(fn: AsyncFunction) {
-    let resolve: Fn;
-    let reject: Fn;
-    const p = new Promise((res, rej) => {
+  function push<T>(fn: AsyncFunction<T>): Promise<T> {
+    let resolve: Fn<T>;
+    let reject: Fn<Error>;
+    const p = new Promise<T>((res, rej) => {
       resolve = res;
       reject = rej;
     });
@@ -51,7 +51,7 @@ export function fnQueue(): FunctionQueue {
       try {
         resolve(await fn());
       } catch (err) {
-        reject(err);
+        reject(err as Error);
       }
     });
     work();

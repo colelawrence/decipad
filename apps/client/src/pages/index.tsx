@@ -1,6 +1,5 @@
 import { ApolloProvider } from '@apollo/client';
 import { ChakraProvider } from '@chakra-ui/react';
-import { DocSyncProvider } from '@decipad/editor';
 import { GlobalStyles, theme } from '@decipad/ui';
 import {
   init,
@@ -65,9 +64,7 @@ function Index({ pageProps = {} }) {
               <GlobalStyles>
                 <ChakraProvider theme={theme}>
                   <BrowserRouter>
-                    <DocSyncProvider>
-                      <Router />
-                    </DocSyncProvider>
+                    <Router />
                   </BrowserRouter>
                 </ChakraProvider>
               </GlobalStyles>

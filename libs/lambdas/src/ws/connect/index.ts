@@ -1,38 +1,32 @@
+import Boom from '@hapi/boom';
 import { HttpResponse } from '@architect/functions';
 import { WSRequest } from '@decipad/backendtypes';
-import tables from '@decipad/services/tables';
 import { authenticate } from '@decipad/services/authentication';
 import { wrapHandler } from '@decipad/services/monitor';
+import { getDefined } from '@decipad/utils';
+import { onConnect } from '@decipad/sync-connection-lambdas';
+import { docIdFromPath } from '../path';
 
 export const handler = wrapHandler(async function ws(
   event: WSRequest
 ): Promise<HttpResponse> {
-  const { user, secret, token, gotFromSecProtocolHeader } = await authenticate(
-    event
-  );
-  if (!user && !secret) {
+  const authResult = await authenticate(event);
+  if (!authResult.user && !authResult.secret) {
     return {
       statusCode: 403,
     };
   }
 
-  const data = await tables();
-  await data.connections.put({
-    id: event.requestContext.connectionId,
-    user_id: user?.id,
-    secret,
-  });
-
-  const wsProtocol = gotFromSecProtocolHeader
-    ? token
-    : event.headers['sec-websocket-protocol'] ||
-      event.headers['Sec-WebSocket-Protocol'];
-  const reply = {
-    statusCode: 200,
-    headers: {
-      'Sec-WebSocket-Protocol': wsProtocol!,
-    },
-  };
-
-  return reply;
+  const connId = event.requestContext.connectionId;
+  const docId = docIdFromPath(
+    getDefined(
+      getDefined(event.queryStringParameters).doc,
+      'no doc in qs params'
+    )
+  );
+  if (!docId) {
+    throw Boom.notAcceptable('no doc id');
+  }
+  const resource = `/pads/${docId}`;
+  return onConnect(connId, resource, authResult, event);
 });

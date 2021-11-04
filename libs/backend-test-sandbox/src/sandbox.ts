@@ -17,11 +17,11 @@ assert(!!workerId, 'need JEST_WORKER_ID env var to be defined');
 
 const verbose = !!process.env.DECI_VERBOSE;
 
-const lockingFilePath = process.env.DECI_SANDBOX_LOCK_FILE_PATH || 'app.arc';
-const lockUnlock = lockingFile(lockingFilePath);
 let stopping = false;
 
 async function start(env: Env, config: Config): Promise<void> {
+  const lockingFilePath = process.env.DECI_SANDBOX_LOCK_FILE_PATH || 'app.arc';
+  const lockUnlock = lockingFile(lockingFilePath);
   await lockUnlock(() => doStart(env, config));
 }
 

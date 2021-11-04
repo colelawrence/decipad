@@ -8,16 +8,13 @@
   "include": ["src", "storybook"],
   "references": [
     {
-      "path": "../docsync"
-    },
-    {
       "path": "../ui"
     },
     {
-      "path": "../queries"
+      "path": "../docsync"
     },
     {
-      "path": "../fnqueue"
+      "path": "../queries"
     },
     {
       "path": "../utils"

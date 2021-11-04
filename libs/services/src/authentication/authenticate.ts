@@ -8,7 +8,7 @@ import { User, UserWithSecret } from '@decipad/backendtypes';
 import tables from '../tables';
 import { jwt as jwtConf } from './jwt';
 
-type AuthResult = {
+export type AuthResult = {
   user: User | undefined;
   token: string | undefined;
   secret: string | undefined;

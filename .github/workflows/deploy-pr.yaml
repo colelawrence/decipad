@@ -62,7 +62,7 @@ jobs:
           scripts/pull-sam.sh
 
           cd apps/backend
-          export PATH=./node_modules/.bin:$PATH
+          export PATH=../../node_modules/.bin:$PATH
           arc env staging JWT_SIGNING_PRIVATE_KEY ${{secrets.JWT_SIGNING_PRIVATE_KEY}}
           arc env staging NEXTAUTH_URL "https://${{ github.event.pull_request.number }}.dev.decipad.com/api/auth"
           arc env staging GITHUB_CLIENT_ID ${{secrets.DECI_GITHUB_CLIENT_ID}}

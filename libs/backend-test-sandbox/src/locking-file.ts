@@ -1,5 +1,9 @@
 import { lock as lockFile } from 'proper-lockfile';
-import { timeout } from '@decipad/utils';
+import { timeout } from '../../utils/src';
+
+type ErrorWithCode = Error & {
+  code: string;
+};
 
 const retryLockMs = 1000;
 
@@ -12,8 +16,8 @@ async function lock(path: string) {
       break;
     } catch (err) {
       if (
-        err.message.indexOf('already being held') >= 0 ||
-        err.code === 'ENOENT'
+        (err as ErrorWithCode).message.indexOf('already being held') >= 0 ||
+        (err as ErrorWithCode).code === 'ENOENT'
       ) {
         await timeout(retryLockMs);
       } else {

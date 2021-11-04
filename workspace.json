@@ -245,8 +245,7 @@
           "executor": "@nrwl/jest:jest",
           "outputs": ["coverage/libs/docsync"],
           "options": {
-            "jestConfig": "libs/docsync/jest.config.js",
-            "codeCoverage": true
+            "jestConfig": "libs/docsync/jest.config.js"
           }
         },
         "typecheck": {
@@ -388,34 +387,6 @@
       "sourceRoot": "libs/eslint-config-decipad",
       "projectType": "library"
     },
-    "fnqueue": {
-      "root": "libs/fnqueue",
-      "sourceRoot": "libs/fnqueue/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/fnqueue/**/*.ts"],
-            "maxWarnings": 0
-          }
-        },
-        "typecheck": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "yarn tsc -b libs/fnqueue"
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/fnqueue"],
-          "options": {
-            "jestConfig": "libs/fnqueue/jest.config.js",
-            "codeCoverage": true
-          }
-        }
-      }
-    },
     "graphqlresource": {
       "root": "libs/graphqlresource",
       "sourceRoot": "libs/graphqlresource/src",
@@ -523,35 +494,6 @@
         }
       }
     },
-    "lrustorage": {
-      "root": "libs/lrustorage",
-      "sourceRoot": "libs/lrustorage/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/lrustorage/**/*.{ts,tsx,js,jsx}"],
-            "maxWarnings": 0
-          }
-        },
-        "typecheck": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "yarn tsc -b libs/lrustorage"
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/lrustorage/ui"],
-          "options": {
-            "jestConfig": "libs/lrustorage/jest.config.js",
-            "codeCoverage": true,
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "meta": {
       "root": "libs/meta",
       "sourceRoot": "libs/meta/src",
@@ -608,34 +550,6 @@
         }
       }
     },
-    "replica": {
-      "root": "libs/replica",
-      "sourceRoot": "libs/replica/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/replica/**/*.ts"],
-            "maxWarnings": 0
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/replica"],
-          "options": {
-            "jestConfig": "libs/replica/jest.config.js",
-            "codeCoverage": true
-          }
-        },
-        "typecheck": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "yarn tsc -b libs/replica"
-          }
-        }
-      }
-    },
     "services": {
       "root": "libs/services",
       "sourceRoot": "libs/services/src",
@@ -652,6 +566,35 @@
           "executor": "@nrwl/workspace:run-commands",
           "options": {
             "command": "yarn tsc -b libs/services"
+          }
+        }
+      }
+    },
+    "sync-connection-lambdas": {
+      "root": "libs/sync-connection-lambdas",
+      "sourceRoot": "libs/sync-connection-lambdas/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/sync-connection-lambdas/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/sync-connection-lambdas"],
+          "options": {
+            "jestConfig": "libs/sync-connection-lambdas/jest.config.js",
+            "passWithNoTests": false,
+            "testCoverage": true
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/sync-connection-lambdas"
           }
         }
       }
@@ -751,6 +694,155 @@
           "executor": "@nrwl/workspace:run-commands",
           "options": {
             "command": "yarn tsc -b libs/utils"
+          }
+        }
+      }
+    },
+    "fnqueue": {
+      "root": "libs/fnqueue",
+      "sourceRoot": "libs/fnqueue/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/fnqueue/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/fnqueue"
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/fnqueue"],
+          "options": {
+            "jestConfig": "libs/fnqueue/jest.config.js",
+            "passWithNoTests": false,
+            "testCoverage": true
+          }
+        }
+      }
+    },
+    "y-indexeddb": {
+      "root": "libs/y-indexeddb",
+      "sourceRoot": "libs/y-indexeddb/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/y-indexeddb/**/*.ts"],
+            "maxWarnings": 0
+          },
+          "typecheck": {
+            "executor": "@nrwl/workspace:run-commands",
+            "options": {
+              "command": "yarn tsc -b libs/y-indexeddb"
+            }
+          }
+        }
+      }
+    },
+    "y-dynamodb": {
+      "root": "libs/y-dynamodb",
+      "sourceRoot": "libs/y-dynamodb/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/y-dynamodb/**/*.ts"],
+            "maxWarnings": 0
+          },
+          "typecheck": {
+            "executor": "@nrwl/workspace:run-commands",
+            "options": {
+              "command": "yarn tsc -b libs/y-dynamodb"
+            }
+          }
+        }
+      }
+    },
+    "y-websocket": {
+      "root": "libs/y-websocket",
+      "sourceRoot": "libs/y-websocket/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/y-websocket/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/y-websocket"
+          }
+        }
+      }
+    },
+    "y-lambdawebsocket": {
+      "root": "libs/y-lambdawebsocket",
+      "sourceRoot": "libs/y-lambdawebsocket/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/y-lambdawebsocket/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/y-lambdawebsocket"
+          }
+        }
+      }
+    },
+    "slate-yjs": {
+      "root": "libs/slate-yjs",
+      "sourceRoot": "libs/slate-yjs/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/slate-yjs/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/slate-yjs"
+          }
+        }
+      }
+    },
+    "fetch": {
+      "root": "libs/fetch",
+      "sourceRoot": "libs/fetch/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/fetch/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/fetch"
           }
         }
       }

@@ -363,6 +363,7 @@ interface CollabRecord extends TableRecordBase {
 
 interface ConnectionRecord extends TableRecordBase {
   user_id?: ID;
+  room?: string;
   secret?: string;
   gqlstate?: string;
 }
@@ -387,10 +388,13 @@ export interface ExternalKeyRecord extends TableRecordBase {
 }
 
 export interface DataTable<T extends TableRecordBase> {
-  delete(key: TableRecordIdentifier): Promise<void>;
+  delete(
+    key: TableRecordIdentifier | (TableRecordIdentifier & { seq: string }),
+    noEvents?: boolean
+  ): Promise<void>;
   get(key: TableRecordIdentifier): Promise<T | undefined>;
-  create(doc: T): Promise<void>;
-  put(doc: T): Promise<void>;
+  create(doc: T, noEvents?: boolean): Promise<void>;
+  put(doc: T, noEvents?: boolean): Promise<void>;
   query(params: DynamoDbQuery): Promise<{
     Items: Array<T>;
     Count: number;
@@ -427,6 +431,7 @@ export interface DataTables extends EnhancedDataTables {
   collabs: DataTable<CollabRecord>;
   connections: DataTable<ConnectionRecord>;
   docsync: VersionedDataTable<DocSyncRecord>;
+  docsyncupdates: DataTable<DocSyncUpdateRecord>;
 }
 
 export type ConcreteRecord =
@@ -444,7 +449,8 @@ export type ConcreteRecord =
   | UserTagRecord
   | VerificationRequestRecord
   | SubscriptionRecord
-  | DocSyncRecord;
+  | DocSyncRecord
+  | DocSyncUpdateRecord;
 
 export type TableRecord = VirtualRecord | ConcreteRecord;
 
@@ -453,7 +459,7 @@ export type ConcreteDataTable = DataTable<ConcreteRecord>;
 /* DynamoDB */
 
 export interface DynamoDbQuery {
-  IndexName: string;
+  IndexName?: string;
   KeyConditionExpression: string;
   ExpressionAttributeValues: Record<string, string>;
   ExpressionAttributeNames?: Record<string, string>;
@@ -470,10 +476,14 @@ export interface VersionedTableRecord extends TableRecordBase {
 }
 
 export interface DocSyncRecord extends VersionedTableRecord {
+  data?: string;
   seq?: number[];
-  path?: string;
 }
 
+export interface DocSyncUpdateRecord extends TableRecordBase {
+  seq: string;
+  data: string;
+}
 export type VersionedDataTable<T extends VersionedTableRecord> =
   DataTable<T> & {
     withLock: (

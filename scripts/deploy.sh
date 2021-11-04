@@ -26,7 +26,7 @@ yarn build:backend
 echo "Deploying..."
 mkdir -p tmp/deploy
 cd apps/backend
-./node_modules/.bin/arc deploy --no-hydrate | tee ../../tmp/deploy/result.txt
+../../node_modules/.bin/arc deploy --no-hydrate | tee ../../tmp/deploy/result.txt
 
 echo "Configuring the client..."
 cd ../..
@@ -42,4 +42,4 @@ cp -r dist/apps/client/exported/. apps/backend/public
 
 echo "Deploying client..."
 cd apps/backend
-./node_modules/.bin/arc deploy --static --prune --no-hydrate
+../../node_modules/.bin/arc deploy --static --prune --no-hydrate

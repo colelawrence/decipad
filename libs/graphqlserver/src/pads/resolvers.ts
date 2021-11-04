@@ -2,7 +2,6 @@ import assert from 'assert';
 import { nanoid } from 'nanoid';
 import { UserInputError } from 'apollo-server-lambda';
 import {
-  DocSyncRecord,
   ID,
   GraphqlContext,
   PageInput,
@@ -14,13 +13,32 @@ import {
   RoleRecord,
   User,
 } from '@decipad/backendtypes';
-import tables from '@decipad/services/tables';
+import tables, { allPages } from '@decipad/services/tables';
 import { subscribe } from '@decipad/services/pubsub';
 import { create as createPad2 } from '@decipad/services/pads';
-import { duplicate as duplicatePadContent } from '@decipad/services/blobs/pads';
 import Resource from '@decipad/graphqlresource';
 import { requireUser, isAuthenticatedAndAuthorized } from '../authorization';
 import paginate from '../utils/paginate';
+
+async function duplicateSharedDoc(oldId: string, newId: string): Promise<void> {
+  const data = await tables();
+  const oldResource = `/pads/${oldId}`;
+  const newResource = `/pads/${newId}`;
+  for await (const update of allPages(data.docsyncupdates, {
+    KeyConditionExpression: 'id = :id',
+    ExpressionAttributeValues: {
+      ':id': oldResource,
+    },
+  })) {
+    if (update) {
+      await data.docsyncupdates.put({
+        id: newResource,
+        seq: update?.seq,
+        data: update?.data,
+      });
+    }
+  }
+}
 
 const padResource = Resource({
   resourceTypeName: 'pads',
@@ -139,19 +157,7 @@ const resolvers = {
         user
       );
 
-      const oldId = `/pads/${id}/content`;
-      const oldDoc = await data.docsync.get({ id: oldId });
-      if (oldDoc) {
-        const newId = `/pads/${clonedPad.id}/content`;
-        await data.docsync.withLock(
-          newId,
-          async (docSync: DocSyncRecord = { id: newId, _version: 0 }) => {
-            // eslint-disable-next-line no-underscore-dangle
-            await duplicatePadContent(oldDoc.id, oldDoc._version, newId);
-            return docSync;
-          }
-        );
-      }
+      await duplicateSharedDoc(id, clonedPad.id);
 
       return clonedPad;
     },

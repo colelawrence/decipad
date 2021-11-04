@@ -23,6 +23,6 @@ cp -r dist/storybook/ui/. apps/backend/public/.storybook
 echo "Deploying client on \"$DEPLOY_NAME\"...";
 cd apps/backend
 
-./node_modules/.bin/arc deploy --static --prune --name "$DEPLOY_NAME"
+../../node_modules/.bin/arc deploy --static --prune --name "$DEPLOY_NAME"
 
 echo "Go to $DECI_APP_URL_BASE"

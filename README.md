@@ -48,6 +48,18 @@ Using the command line, inside your local copy of the decipad repo, you should d
 yarn install
 ```
 
+## AWS local setup
+
+For you to be able to develop you will need access to a Deci development AWS user account.
+
+Also, you'll need to install the AWS CLI. Once you have done that, you'll need to generate an access key, which you'll need to introduce when running:
+
+```sh
+$ aws configure
+```
+
+If asked for a _AWS region_, use `eu-west-2`.
+
 ## Environment setup
 
 There are `.env.example` files in the root and in individual projects like the `backend`. These need to be copied to `.env` (without `.example`) and filled with secret values, such as your personal AWS access token, or other secrets that are shared among developers but not included in the repository for security reasons.

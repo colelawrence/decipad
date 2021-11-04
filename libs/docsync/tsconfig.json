@@ -1,15 +1,17 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "lib": ["esnext", "dom"],
-    "allowJs": true
+    "lib": ["esnext", "dom"]
   },
   "include": ["src"],
   "references": [
-    { "path": "../replica" },
-    { "path": "../lrustorage" },
     { "path": "../testutils" },
-    { "path": "../interfaces" },
-    { "path": "../fnqueue" }
+    { "path": "../utils" },
+    { "path": "../y-indexeddb" },
+    { "path": "../y-websocket" },
+    { "path": "../slate-yjs" },
+    { "path": "../fetch" },
+    { "path": "../sync-connection-lambdas" },
+    { "path": "../backend-test-sandbox" }
   ]
 }

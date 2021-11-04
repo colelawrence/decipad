@@ -1,4 +1,4 @@
-import { ElementHandle } from 'playwright';
+import { ElementHandle, Page } from 'playwright';
 import { URL } from 'url';
 import { withNewUser } from '../utils';
 
@@ -10,12 +10,20 @@ interface Pad {
 
 type PadList = Pad[];
 
+function isOnWorkspacePage(page: Page | URL): boolean {
+  const url = page instanceof URL ? page : new URL(page.url());
+  return url.pathname.match(/^\/workspaces\/[^/]+/) !== null;
+}
+
 export async function navigateToWorkspacePage() {
-  if (!new URL(page.url()).pathname.match(/\/workspaces\/[^/]+/)) {
+  if (!isOnWorkspacePage(page)) {
     await page.goto('/');
-    await page.waitForNavigation({ url: '/workspaces/*' });
+    if (!isOnWorkspacePage(page)) {
+      await page.waitForNavigation({
+        url: isOnWorkspacePage,
+      });
+    }
   }
-  await page.waitForSelector('text=workspace');
 }
 
 export async function setUp() {

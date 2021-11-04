@@ -1,9 +1,5 @@
-import {
-  getPadName,
-  setUp,
-  waitForEditorToLoad,
-  waitForSaveFlush,
-} from './page-utils/Pad';
+import { timeout } from '@decipad/utils';
+import { getPadName, setUp, waitForEditorToLoad } from './page-utils/Pad';
 
 describe('Pad name', () => {
   beforeAll(setUp);
@@ -15,8 +11,9 @@ describe('Pad name', () => {
   test('can be typed', async () => {
     await page.keyboard.type('hello world');
     await page.keyboard.press('Enter');
-    await waitForSaveFlush();
     expect(await getPadName()).toBe('hello world');
+    // pause for some time to give a chance to sync
+    await timeout(1000);
   });
 
   test('got saved', async () => {
