@@ -8,3 +8,14 @@ export const sidePadding =
         {story()}
       </div>
     );
+
+export const padding =
+  (paddingWidth: number): DecoratorFn =>
+  (story) =>
+    (
+      <div
+        style={{ width: '100%', height: '100%', padding: `${paddingWidth}px` }}
+      >
+        {story()}
+      </div>
+    );

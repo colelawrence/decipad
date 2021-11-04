@@ -7,5 +7,6 @@ export { NavigationItem } from './NavigationItem/NavigationItem';
 export { Paragraph } from './Paragraph/Paragraph';
 export { Placeholder } from './Placeholder/Placeholder';
 export { TriggerMenuItem } from './TriggerMenuItem/TriggerMenuItem';
+export { SlashCommandsMenuItem } from './SlashCommandsMenuItem/SlashCommandsMenuItem';
 
 export * from './Editor';

@@ -1,5 +1,6 @@
 export { AccountAvatar } from './AccountAvatar/AccountAvatar';
 export { HelpButton } from './HelpButton/HelpButton';
+export { SlashCommandsMenuGroup } from './SlashCommandsMenuGroup/SlashCommandsMenuGroup';
 export { MenuList } from './MenuList/MenuList';
 export { NavigationList } from './NavigationList/NavigationList';
 export { NotebookListHeader } from './NotebookListHeader/NotebookListHeader';

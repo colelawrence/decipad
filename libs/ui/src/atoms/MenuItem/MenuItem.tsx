@@ -6,16 +6,14 @@ import { cssVar, p14Regular } from '../../primitives';
 export const menuItemStyles = css(p14Regular, {
   display: 'flex',
   alignItems: 'center',
-  borderRadius: '6px',
   gap: '4px',
+
   padding: '6px',
+  borderRadius: '6px',
 
   backgroundColor: cssVar('backgroundColor'),
   '&:hover, &:focus': {
     backgroundColor: cssVar('highlightColor'),
-  },
-  '&:focus': {
-    outline: 0,
   },
 });
 

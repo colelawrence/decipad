@@ -1,28 +1,32 @@
 import { render } from '@testing-library/react';
+import { FC } from 'react';
 
-import { MenuList } from '../../molecules';
+import { MenuWrapper } from '../../test-utils';
 import { TriggerMenuItem } from './TriggerMenuItem';
 
 // TriggerMenuItem must be created instantiated inside a nested menu
-const renderMenu = (children: React.ReactNode) =>
-  render(
-    <MenuList defaultOpen trigger={<span></span>}>
-      <MenuList defaultOpen trigger={children}></MenuList>
-    </MenuList>
-  );
+const wrapper: FC = ({ children }) => (
+  <MenuWrapper>
+    <MenuWrapper>{children}</MenuWrapper>
+  </MenuWrapper>
+);
 
 it('renders the children', () => {
-  const { getByText } = renderMenu(<TriggerMenuItem>Text</TriggerMenuItem>);
+  const { getByText } = render(<TriggerMenuItem>Text</TriggerMenuItem>, {
+    wrapper,
+  });
   expect(getByText('Text')).toBeInTheDocument();
 });
 
 it('renders the right caret icon', () => {
-  const { getByTitle } = renderMenu(<TriggerMenuItem>Text</TriggerMenuItem>);
+  const { getByTitle } = render(<TriggerMenuItem>Text</TriggerMenuItem>, {
+    wrapper,
+  });
   expect(getByTitle(/caret right/i)).toBeInTheDocument();
 });
 
 it('renders an optional icon', () => {
-  const { getByTitle } = renderMenu(
+  const { getByTitle } = render(
     <TriggerMenuItem
       icon={
         <svg>
@@ -31,7 +35,8 @@ it('renders an optional icon', () => {
       }
     >
       Text
-    </TriggerMenuItem>
+    </TriggerMenuItem>,
+    { wrapper }
   );
   expect(getByTitle('Pretty Icon')).toBeInTheDocument();
 });

@@ -10,8 +10,12 @@ const styles = css({
 const iconStyles = css({
   display: 'flex',
   flexDirection: 'column',
+
+  minWidth: '16px',
+  minHeight: '16px',
   maxWidth: '32px',
   maxHeight: '32px',
+
   padding: `20%`,
 });
 

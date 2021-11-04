@@ -73,6 +73,10 @@ export const GlobalStyles: React.FC = ({ children }) => (
           padding: '0 !important',
           backgroundColor: cssVar('backgroundColor'),
         },
+        // further resets
+        '*:focus-visible': {
+          outline: 'none',
+        },
       }}
     />
     <Global styles={globalTextStyles} />
