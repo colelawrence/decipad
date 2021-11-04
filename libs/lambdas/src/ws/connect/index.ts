@@ -12,18 +12,12 @@ export const handler = wrapHandler(async function ws(
 ): Promise<HttpResponse> {
   const authResult = await authenticate(event);
   if (!authResult.user && !authResult.secret) {
-    return {
-      statusCode: 403,
-    };
+    throw Boom.unauthorized();
   }
 
   const connId = event.requestContext.connectionId;
-  const docId = docIdFromPath(
-    getDefined(
-      getDefined(event.queryStringParameters).doc,
-      'no doc in qs params'
-    )
-  );
+  const qs = getDefined(event.queryStringParameters);
+  const docId = docIdFromPath(qs.doc || '');
   if (!docId) {
     throw Boom.notAcceptable('no doc id');
   }
