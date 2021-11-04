@@ -1,0 +1,102 @@
+name: Deploy Alpha
+
+on:
+  release:
+    types: ['published']
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-2
+
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Cache NPM
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.npm
+            ~/.cache
+          key: npm-and-cypress-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            npm-and-cypress-
+
+      - name: Install
+        run: yarn install
+
+      - name: Cache NX things
+        id: node-modules-nx-cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules/.cache
+            dist
+          key: nx-node-modules-cache-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            nx-node-modules-cache-
+
+      - name: Deploy
+        env:
+          DEPLOY_NAME: 'alpha'
+          DECI_CUSTOM_DOMAIN: 'alpha.dev.decipad.com'
+        run: |
+          export SAM_LOCATION="s3://decipad-backend-sam/alpha.decipad.com"
+          scripts/pull-sam.sh
+
+          cd apps/backend
+          export PATH=./node_modules/.bin:$PATH
+          arc env staging JWT_SIGNING_PRIVATE_KEY ${{secrets.ALPHA_JWT_SIGNING_PRIVATE_KEY}}
+          arc env staging NEXTAUTH_URL https://alpha.decipad.com/api/auth
+          arc env staging GITHUB_CLIENT_ID ${{secrets.DECI_GITHUB_CLIENT_ID}}
+          arc env staging GITHUB_CLIENT_SECRET ${{secrets.DECI_GITHUB_CLIENT_SECRET}}
+          arc env staging JWT_SECRET ${{secrets.ALPHA_JWT_SECRET}}
+          arc env staging SENTRY_DSN ${{secrets.SENTRY_DSN}}
+          arc env staging DECI_SES_ACCESS_KEY_ID '${{secrets.DECI_SES_ACCESS_KEY_ID}}'
+          arc env staging DECI_SES_SECRET_ACCESS_KEY '${{secrets.DECI_SES_SECRET_ACCESS_KEY}}'
+          arc env staging DECI_INVITE_EXPIRATION_SECONDS '${{secrets.DECI_INVITE_EXPIRATION_SECONDS}}'
+          arc env staging DECI_KEY_VALIDATION_EXPIRATION_SECONDS '${{secrets.DECI_KEY_VALIDATION_EXPIRATION_SECONDS}}'
+          arc env staging DECI_FROM_EMAIL_ADDRESS '${{secrets.DECI_FROM_EMAIL_ADDRESS}}'
+          arc env staging DECI_APP_URL_BASE https://alpha.decipad.com
+          arc env staging DECI_S3_ENDPOINT 's3.eu-west-2.amazonaws.com'
+          arc env staging DECI_S3_ACCESS_KEY_ID '${{secrets.DECI_S3_ACCESS_KEY_ID}}'
+          arc env staging DECI_S3_SECRET_ACCESS_KEY '${{secrets.DECI_S3_SECRET_ACCESS_KEY}}'
+          arc env staging DECI_S3_PADS_BUCKET '${{secrets.DECI_S3_PADS_BUCKET}}'
+          arc env staging DECI_S3_ATTACHMENTS_BUCKET '${{secrets.ALPHA_DECI_S3_ATTACHMENTS_BUCKET}}'
+          arc env staging DECI_GOOGLESHEETS_API_KEY '${{secrets.ALPHA_DECI_GOOGLESHEETS_API_KEY}}'
+          arc env staging DECI_GOOGLESHEETS_CLIENT_ID '${{secrets.ALPHA_DECI_GOOGLESHEETS_CLIENT_ID}}'
+          arc env staging DECI_GOOGLESHEETS_CLIENT_SECRET '${{secrets.ALPHA_DECI_GOOGLESHEETS_CLIENT_SECRET}}'
+          arc env staging NODE_OPTIONS --enable-source-maps
+          cd ../..
+          scripts/push-sam.sh
+
+          export NEXT_PUBLIC_SENTRY_DSN=${{secrets.SENTRY_DSN}}
+          export NEXT_PUBLIC_SENTRY_ENVIRONMENT=alpha
+          yarn deploy:pr
+
+  notify:
+    name: Discord Notification
+    runs-on: ubuntu-latest
+    needs: # make sure the notification is sent AFTER the jobs you want included have completed
+      - deploy
+    if: ${{ failure() }}
+    steps:
+      - name: Notify
+        uses: nobrayner/discord-webhook@v1
+        with:
+          title: "${{ needs.deploy.result == 'failure' && '🔴' || '💚'}} #${{ github.event.pull_request.number }} ${{github.event.pull_request.title }} "
+          description: 'https://${{  github.event.pull_request.number  }}.dev.decipad.com'
+          github-token: ${{ secrets.github_token }}
+          avatar-url: "https://singlecolorimage.com/get/${{ needs.deploy.result == 'failure' && 'f6dae1' || 'd2ec7b' }}/100x100"
+          discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          include-details: true
