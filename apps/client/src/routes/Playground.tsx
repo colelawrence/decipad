@@ -56,11 +56,7 @@ export function Playground(): ReturnType<FC> {
           </HomeButton>
           <h1>Deci Playground</h1>
         </div>
-        <DocumentationButton
-          href="https://www.notion.so/decipad/What-is-Deci-d140cc627f1e4380bb8be1855272f732"
-          target="_blank"
-          rel="noreferrer"
-        >
+        <DocumentationButton href="/docs" target="_blank" rel="noreferrer">
           Documentation
         </DocumentationButton>
       </TopBar>

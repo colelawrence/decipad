@@ -172,11 +172,7 @@ export const Pad = ({
             </ModalBody>
           </Modal>
         )}
-        <a
-          href="https://www.notion.so/decipad/What-is-Deci-d140cc627f1e4380bb8be1855272f732"
-          target="_blank"
-          rel="noreferrer"
-        >
+        <a href="/docs" target="_blank" rel="noreferrer">
           Documentation
         </a>
       </TopBarWrapper>

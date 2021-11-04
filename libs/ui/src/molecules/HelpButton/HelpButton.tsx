@@ -29,11 +29,7 @@ const innerStyles = css({
 
 export const HelpButton = (): ReturnType<React.FC> => {
   return (
-    <Anchor
-      aria-label="Help"
-      href="https://www.notion.so/decipad/What-is-Deci-d140cc627f1e4380bb8be1855272f732"
-      css={styles}
-    >
+    <Anchor aria-label="Help" href="/docs" css={styles}>
       <span css={innerStyles}>
         <Info />
       </span>
