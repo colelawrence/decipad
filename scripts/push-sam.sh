@@ -2,5 +2,12 @@
 
 set -euo pipefail
 
-aws s3 cp --no-progress apps/backend/sam.yaml "${SAM_LOCATION}/sam.yaml"
-aws s3 cp --no-progress apps/backend/sam.json "${SAM_LOCATION}/sam.json"
+FILE="${SAM_LOCATION}/sam.yaml"
+if [ -f "${FILE}" ]; then
+  aws s3 cp --no-progress apps/backend/sam.yaml "${FILE}"
+fi
+
+FILE="${SAM_LOCATION}/sam.json"
+if [ -f "${FILE}" ]; then
+  aws s3 cp --no-progress apps/backend/sam.yaml "${FILE}"
+fi
