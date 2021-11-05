@@ -61,6 +61,7 @@ export const TableInner = ({
                   onChange(changeColumnType(value, columnIndex, newType));
                 }}
                 key={columnIndex}
+                type={col.cellType}
               >
                 <EditableCellContents
                   value={col.columnName}

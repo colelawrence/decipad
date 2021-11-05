@@ -117,7 +117,6 @@ export const p14Medium: TypographyStyles = {
   ...pDefault,
   fontWeight: 500,
   fontSize: `${14 / usualRemPxs}rem`,
-  lineHeight: '140%',
 };
 export const p15Medium: TypographyStyles = {
   ...pDefault,

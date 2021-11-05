@@ -1,5 +1,6 @@
 const {
   setupFilesAfterEnv = [],
+  transform,
   ...baseConfig
 } = require('../../jest-base.config');
 
@@ -8,6 +9,13 @@ module.exports = {
   displayName: 'browser:ui',
 
   testMatch: ['**/*.browser-{test,spec}.{js,jsx,ts,tsx}'],
+
+  transform: {
+    ...transform,
+    '^.+\\.(gif|jpg|png)$': require.resolve(
+      '../testutils/src/filename-transform.js'
+    ),
+  },
 
   preset: 'jest-playwright-jsdom',
   setupFilesAfterEnv: [

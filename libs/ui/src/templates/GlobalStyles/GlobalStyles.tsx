@@ -31,6 +31,7 @@ const darkTheme: Record<
   ...setCssVar('offColor', grey400.rgb),
 
   ...setCssVar('highlightColor', grey400.rgb),
+  ...setCssVar('strongHighlightColor', grey300.rgb),
 
   ...setCssVar('weakTextColor', grey200.rgb),
   ...setCssVar('normalTextColor', grey100.rgb),

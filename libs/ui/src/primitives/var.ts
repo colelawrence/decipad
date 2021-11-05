@@ -9,6 +9,7 @@ export interface CssVariables {
   readonly offColor: Property.Color;
 
   readonly highlightColor: Property.Color;
+  readonly strongHighlightColor: Property.Color;
 
   readonly weakTextColor: Property.Color;
   readonly normalTextColor: Property.Color;
@@ -22,6 +23,7 @@ const defaults: CssVariables = {
   offColor: offWhite.rgb,
 
   highlightColor: grey100.rgb,
+  strongHighlightColor: grey200.rgb,
 
   weakTextColor: grey300.rgb,
   normalTextColor: grey400.rgb,
