@@ -84,19 +84,19 @@ jobs:
           yarn deploy:pr
           scripts/push-sam.sh
 
-  notify:
-    name: Discord Notification
-    runs-on: ubuntu-latest
-    needs: # make sure the notification is sent AFTER the jobs you want included have completed
-      - deploy
-    if: ${{ failure() }}
-    steps:
-      - name: Notify
-        uses: nobrayner/discord-webhook@v1
-        with:
-          title: "${{ needs.deploy.result == 'failure' && '🔴' || '💚'}} #${{ github.event.pull_request.number }} ${{github.event.pull_request.title }} "
-          description: 'https://${{  github.event.pull_request.number  }}.dev.decipad.com'
-          github-token: ${{ secrets.github_token }}
-          avatar-url: "https://singlecolorimage.com/get/${{ needs.deploy.result == 'failure' && 'f6dae1' || 'd2ec7b' }}/100x100"
-          discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          include-details: true
+  # notify:
+  #   name: Discord Notification
+  #   runs-on: ubuntu-latest
+  #   needs: # make sure the notification is sent AFTER the jobs you want included have completed
+  #     - deploy
+  #   if: ${{ failure() }}
+  #   steps:
+  #     - name: Notify
+  #       uses: nobrayner/discord-webhook@v1
+  #       with:
+  #         title: "${{ needs.deploy.result == 'failure' && '🔴' || '💚'}} alpha deploy"
+  #         description: 'https://alpha.dev.decipad.com'
+  #         github-token: ${{ secrets.github_token }}
+  #         avatar-url: "https://singlecolorimage.com/get/${{ needs.deploy.result == 'failure' && 'f6dae1' || 'd2ec7b' }}/100x100"
+  #         discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
+  #         include-details: true
