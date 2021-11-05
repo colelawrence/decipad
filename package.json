@@ -29,6 +29,7 @@
     "deploy:private": "./scripts/deploy-private.sh",
     "deploy:private:client": "./scripts/deploy-private-client.sh",
     "deploy:pr": "./scripts/deploy-pr.sh",
+    "deploy:alpha": "./scripts/deploy-alpha.sh",
     "undeploy:pr": "cd apps/backend && ../../node_modules/.bin/arc-destroy ",
     "repl": "babel-node --extensions=.js,.jsx,.ts,.tsx libs/language/src/repl.ts",
     "nx": "nx",

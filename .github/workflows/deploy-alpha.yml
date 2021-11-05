@@ -81,7 +81,7 @@ jobs:
 
           export NEXT_PUBLIC_SENTRY_DSN=${{secrets.SENTRY_DSN}}
           export NEXT_PUBLIC_SENTRY_ENVIRONMENT=alpha
-          yarn deploy:pr
+          yarn deploy:alpha
           scripts/push-sam.sh
 
   # notify:
