@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
-import { ComponentProps, useCallback, useState } from 'react';
+import { ComponentProps } from 'react';
 import { noop } from '@decipad/utils';
-import { TableColumnActions } from '../../../../molecules';
-import { TinyArrow } from '../../../../icons';
+import { Number, Text, Placeholder } from '../../../../icons';
+import { TableColumnMenu } from '../../../../organisms';
 
-const openerWidth = 40;
+const openerWidth = 32;
 
 const columnStyles = css({
   position: 'relative',
@@ -16,65 +16,57 @@ const columnStyles = css({
   color: '#4D5664',
 });
 
-const dropdownStyles = css({
-  position: 'absolute',
-  left: 0,
-  right: 0,
-  top: '100%',
-});
-
-const openerStyles = css({
-  display: 'inline-flex',
-  position: 'absolute',
-  right: 0,
-  top: 0,
-  height: '100%',
-  width: openerWidth,
-  boxSizing: 'content-box',
-  userSelect: 'none',
-  justifyContent: 'center',
+const headerWrapperStyles = css({
+  display: 'flex',
   alignItems: 'center',
+  paddingLeft: '12px',
+  '& > button': {
+    display: 'none',
+  },
+  '&:hover > button, &:focus > button, & > input:focus + button, & > button:focus':
+    {
+      display: 'flex',
+    },
 });
 
-const arrowWrapperStyles = css({
-  width: 8.5,
+const iconWrapperStyles = css({
+  fontSize: '16px',
+  height: '16px',
+  width: '16px',
   display: 'block',
 });
 
+const typeIcons = {
+  string: Text,
+  number: Number,
+  'date/time': Placeholder,
+  'date/day': Placeholder,
+  'date/month': Placeholder,
+  'date/year': Placeholder,
+};
+
+type Type = keyof typeof typeIcons;
+
+export type ThElementProps = ComponentProps<'th'> &
+  ComponentProps<typeof TableColumnMenu> & { type: Type };
+
 export const ThElement = ({
   children,
+  type,
   onChangeColumnType = noop,
   ...props
-}: ComponentProps<'th'> &
-  ComponentProps<typeof TableColumnActions>): JSX.Element => {
-  const [isMenuOpen, setMenuOpen] = useState(false);
-  const toggleMenuOpen = useCallback(() => {
-    setMenuOpen((open) => !open);
-  }, []);
-
-  const handleChangeColumnType = useCallback(
-    (newType) => {
-      setMenuOpen(false);
-      onChangeColumnType(newType);
-    },
-    [onChangeColumnType]
-  );
+}: ThElementProps): JSX.Element => {
+  const Icon = typeIcons[type];
 
   return (
     <th css={columnStyles} {...props}>
-      {children}
-
-      <button css={openerStyles} onClick={toggleMenuOpen}>
-        <span css={arrowWrapperStyles}>
-          <TinyArrow direction="down" />
+      <div css={headerWrapperStyles}>
+        <span css={iconWrapperStyles}>
+          <Icon />
         </span>
-      </button>
-
-      {isMenuOpen && (
-        <div css={dropdownStyles}>
-          <TableColumnActions onChangeColumnType={handleChangeColumnType} />
-        </div>
-      )}
+        {children}
+        <TableColumnMenu onChangeColumnType={onChangeColumnType} />
+      </div>
     </th>
   );
 };

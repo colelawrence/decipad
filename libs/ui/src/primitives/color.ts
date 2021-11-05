@@ -49,5 +49,3 @@ export const grey400 = color(77, 86, 100);
 export const black = color(22, 31, 44);
 
 export const blockquote = color(51, 41, 66);
-export const subtleShadow = color(119, 126, 137);
-export const subtleBorder = color(236, 240, 246);
