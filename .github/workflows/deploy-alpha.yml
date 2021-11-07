@@ -7,7 +7,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    concurrency:
+      group: deploy-alpha
+      cancel-in-progress: true
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -58,8 +60,8 @@ jobs:
           export PATH=./node_modules/.bin:$PATH
           arc env staging JWT_SIGNING_PRIVATE_KEY ${{secrets.ALPHA_JWT_SIGNING_PRIVATE_KEY}}
           arc env staging NEXTAUTH_URL https://alpha.decipad.com/api/auth
-          arc env staging GITHUB_CLIENT_ID ${{secrets.DECI_GITHUB_CLIENT_ID}}
-          arc env staging GITHUB_CLIENT_SECRET ${{secrets.DECI_GITHUB_CLIENT_SECRET}}
+          arc env staging GITHUB_CLIENT_ID ${{secrets.DECI_ALPHA_GITHUB_CLIENT_ID}}
+          arc env staging GITHUB_CLIENT_SECRET ${{secrets.DECI_ALPHA_GITHUB_CLIENT_SECRET}}
           arc env staging JWT_SECRET ${{secrets.ALPHA_JWT_SECRET}}
           arc env staging SENTRY_DSN ${{secrets.SENTRY_DSN}}
           arc env staging DECI_SES_ACCESS_KEY_ID '${{secrets.DECI_SES_ACCESS_KEY_ID}}'
