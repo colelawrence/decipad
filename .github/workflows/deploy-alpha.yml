@@ -52,6 +52,8 @@ jobs:
         env:
           DEPLOY_NAME: 'alpha'
           DECI_CUSTOM_DOMAIN: 'alpha.decipad.com'
+          DECI_ZONE_ID: '${{secrets.DECI_ZONE_ID}}'
+          DECI_CERTIFICATE_ARN: '${{secrets.DECI_ALPHA_CERTIFICATE_ARN}}'
         run: |
           export SAM_LOCATION="s3://decipad-backend-sam/alpha.decipad.com"
           scripts/pull-sam.sh
