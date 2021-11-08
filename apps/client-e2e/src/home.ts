@@ -8,7 +8,7 @@ beforeAll(async () => {
 
 test('Should display welcome message', async () => {
   await waitForExpect(async () =>
-    expect(await page.isVisible('text=/make better decisions/i')).toBe(true)
+    expect(await page.isVisible('text=/make/i')).toBe(true)
   );
 });
 

@@ -12,11 +12,13 @@ export const GithubSignInButton = ({
   return (
     <Button
       colorScheme="blackAlpha"
+      borderRadius="6px"
       bg="blackAlpha.800"
       _hover={{ bg: 'blackAlpha.900' }}
-      mt={3}
-      size="lg"
+      mt={2}
+      w={['100%', '100%', 'auto']}
       leftIcon={<Icon as={FiGithub} />}
+      size="sm"
       onClick={onClick}
     >
       Sign in With GitHub

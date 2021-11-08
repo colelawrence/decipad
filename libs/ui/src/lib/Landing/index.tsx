@@ -7,10 +7,11 @@ import {
   Icon,
   Image,
   Input,
+  Text,
 } from '@chakra-ui/react';
 import { signIn } from 'next-auth/client';
 import { useState } from 'react';
-import { FiLogIn, FiPlay } from 'react-icons/fi';
+import { FiLogIn } from 'react-icons/fi';
 import { Link, useHistory } from 'react-router-dom';
 import { GithubSignInButton } from './GithubSignInButton/GithubSignInButton.component';
 import { BodyText, Layout, Wrapper } from './index.styles';
@@ -24,28 +25,30 @@ export const Landing = () => {
       <Layout>
         <Box>
           <Image
-            src="/assets/deci-logo-brand.png"
+            src="/assets/decipad-logo-mark-one-color-rgb.svg"
             alt="Logo"
-            width="60px"
-            height="60px"
+            width={['30px', '30px', '50px']}
+            height={['30px', '30px', '50px']}
             borderRadius="5px"
           />
         </Box>
-        <Center justifyContent="flex-start">
-          <Box>
-            <Heading size="2xl" mb={3}>
-              MAKE BETTER DECISIONS
+        <Center
+          textAlign={['center', 'center', 'left']}
+          justifyContent="flex-start"
+        >
+          <Box maxW="70ch">
+            <Heading fontSize={['24px', '24px', '36px']} mb={2}>
+              Make sense of numbers
             </Heading>
-            <BodyText maxW="70ch">
-              Deci is a way to build, report and model your data. Make better
-              decisions. Use it on its own or with other tools such as Tableau,
-              Power BI, Rapise and Excel. It enables you to construct rich
-              interactive stories that can be analysed using timelines, gauges,
-              maps and pivot tables.
+            <BodyText fontSize={['13px', '13px', '16px']}>
+              A new way to create, collaborate and build anything you want with
+              numbers. No code. No spreadsheets. No fuss.
             </BodyText>
             <HStack
               as="form"
               mt={3}
+              flexWrap={['wrap', 'wrap', 'nowrap']}
+              gridGap={['0', '0', '1rem']}
               onSubmit={(e) => {
                 e.preventDefault();
                 history.push({}); // signIn `replace`s
@@ -56,17 +59,27 @@ export const Landing = () => {
                 type="text"
                 placeholder="Email Address..."
                 value={inputValue}
+                borderRadius="6px"
+                borderColor="gray.400"
+                size="sm"
+                _hover={{ borderColor: 'gray.600' }}
+                _focus={{ outline: 'none', borderColor: 'gray.600' }}
                 onChange={(e) => setInputValue(e.target.value)}
-                size="lg"
+                mb={[3, 3, 0]}
+                flex={['auto', 'auto', '1']}
               />
               <Button
                 type="submit"
-                px={12}
+                flex="1"
                 leftIcon={<Icon as={FiLogIn} />}
-                colorScheme="messenger"
-                size="lg"
+                bg="rgb(225, 249, 128)"
+                mx="0 !important"
+                p="0"
+                maxW={['auto', 'auto', '200px']}
+                size="sm"
+                _hover={{ bg: 'rgb(225, 249, 128)' }}
               >
-                Sign in
+                Sign in with email
               </Button>
             </HStack>
             <GithubSignInButton
@@ -77,19 +90,26 @@ export const Landing = () => {
             />
             <Link to="/playground">
               <Button
-                size="lg"
-                colorScheme="messenger"
-                mt={3}
+                variant="unstyled"
                 cursor="pointer"
-                ml={2}
-                leftIcon={<Icon as={FiPlay} />}
+                w={['100%', '100%', 'auto']}
+                ml={['0', '0', '15px']}
+                fontSize="13px"
+                textDecor="underline"
+                fontWeight="light"
               >
-                Playground
+                or try out the playground!
               </Button>
             </Link>
           </Box>
         </Center>
-        <BodyText>&copy; Copyright 2021 Deci. All Rights Reserved.</BodyText>
+        <Text
+          opacity={0.7}
+          fontSize="13px"
+          textAlign={['center', 'center', 'left']}
+        >
+          &copy; Copyright 2021 N1N Inc. All Rights Reserved
+        </Text>
       </Layout>
     </Wrapper>
   );

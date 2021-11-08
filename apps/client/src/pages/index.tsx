@@ -56,6 +56,15 @@ function Index({ pageProps = {} }) {
     <>
       <Head>
         <title>Decipad</title>
+        <link
+          href="/assets/decipad-logo-mark-one-color-rgb-864px@72ppi.png"
+          rel="shortcut icon"
+          type="image/x-icon"
+        />
+        <link
+          href="/assets/decipad-logo-mark-one-color-rgb-864px@72ppi.png"
+          rel="apple-touch-icon"
+        />
       </Head>
       <GlobalErrorHandler>
         <ToastProvider autoDismiss placement="top-right">
