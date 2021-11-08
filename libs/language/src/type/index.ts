@@ -168,18 +168,6 @@ export class Type {
     throw new Error('toBasicString: unknown type');
   }
 
-  get cardinality(): number {
-    if (this.columnTypes != null) {
-      return 2 + Math.max(...this.columnTypes.map((c) => c.cardinality));
-    } else if (this.rowCellTypes != null) {
-      return 1 + Math.max(...this.rowCellTypes.map((c) => c.cardinality));
-    } else if (this.cellType != null) {
-      return 1 + this.cellType.cardinality;
-    } else {
-      return 1;
-    }
-  }
-
   mapType(fn: (t: Type) => Type) {
     if (this.errorCause) {
       return this;

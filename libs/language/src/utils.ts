@@ -235,6 +235,14 @@ export const zip = <K, V>(keys: K[], values: V[]): [K, V][] => {
   return out;
 };
 
+export function* enumerate<T>(items: Iterable<T>): Generator<[number, T]> {
+  let index = 0;
+  for (const item of items) {
+    yield [index, item];
+    index++;
+  }
+}
+
 export function* pairwise<T1, T2>(array: (T1 | T2)[]) {
   for (let i = 0; i < array.length - 1; i += 2) {
     yield [array[i], array[i + 1]] as [T1, T2];

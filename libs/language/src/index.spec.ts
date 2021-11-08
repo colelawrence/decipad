@@ -185,6 +185,50 @@ describe('basic code', () => {
   });
 });
 
+describe('Multidimensional operations', () => {
+  it('Can work on multi-d values', async () => {
+    expect(
+      await runCode(`
+        X = { Col = [1, 2, 3] }
+        Y = { Col = [100, 200] }
+
+        (X.Col + Y.Col) + (X.Col / 10)
+      `)
+    ).toMatchObject({
+      type: t.column(t.column(t.number(), 2, 'Y'), 3, 'X'),
+      value: [
+        [101.1, 201.1],
+        [102.2, 202.2],
+        [103.3, 203.3],
+      ],
+    });
+
+    expect(
+      await runCode(`
+        X = { Col = [1, 2, 3] }
+        Y = { Col = [100, 200] }
+
+        (X.Col + Y.Col) + (Y.Col / 1000)
+      `)
+    ).toMatchObject({
+      type: t.column(t.column(t.number(), 2, 'Y'), 3, 'X'),
+      value: [
+        [101.1, 201.2],
+        [102.1, 202.2],
+        [103.1, 203.2],
+      ],
+    });
+  });
+
+  it('Can error during runtime if the dimensions are wrong', async () => {
+    await expect(
+      runCode(`
+        [ [1, 2], [3, 4], [5, 6] ] + [ [100, 300, 500], [200, 400, 600] ]
+      `)
+    ).rejects.toBeInstanceOf(Error);
+  });
+});
+
 describe('Tables', () => {
   it('can be created', async () => {
     expect(

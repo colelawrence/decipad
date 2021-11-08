@@ -64,27 +64,21 @@ it('concatenates lists', () => {
       "valueNames": null,
       "values": Array [
         Scalar {
-          "cardinality": 1,
           "value": 1,
         },
         Scalar {
-          "cardinality": 1,
           "value": 2,
         },
         Scalar {
-          "cardinality": 1,
           "value": 3,
         },
         Scalar {
-          "cardinality": 1,
           "value": 4,
         },
         Scalar {
-          "cardinality": 1,
           "value": 5,
         },
         Scalar {
-          "cardinality": 1,
           "value": 6,
         },
       ],
@@ -97,15 +91,12 @@ it('concatenates lists', () => {
       "valueNames": null,
       "values": Array [
         Scalar {
-          "cardinality": 1,
           "value": 1,
         },
         Scalar {
-          "cardinality": 1,
           "value": 2,
         },
         Scalar {
-          "cardinality": 1,
           "value": 3,
         },
       ],
@@ -118,15 +109,12 @@ it('concatenates lists', () => {
       "valueNames": null,
       "values": Array [
         Scalar {
-          "cardinality": 1,
           "value": 1,
         },
         Scalar {
-          "cardinality": 1,
           "value": 2,
         },
         Scalar {
-          "cardinality": 1,
           "value": 3,
         },
       ],
@@ -139,7 +127,6 @@ it('calculates columns and scalar lengths', () => {
 
   expect(builtins.len.fnValuesNoAutomap?.([fromJS(2)])).toMatchInlineSnapshot(`
     Scalar {
-      "cardinality": 1,
       "value": 1,
     }
   `);
@@ -151,7 +138,6 @@ it('calculates columns and scalar lengths', () => {
   expect(builtins.len.fnValuesNoAutomap?.([fromJS([1, 2, 3])]))
     .toMatchInlineSnapshot(`
     Scalar {
-      "cardinality": 1,
       "value": 3,
     }
   `);
@@ -161,7 +147,6 @@ it('retrieves the first element of a list', () => {
   expect(builtins.first.fnValuesNoAutomap?.([fromJS(2)]))
     .toMatchInlineSnapshot(`
     Scalar {
-      "cardinality": 1,
       "value": 2,
     }
   `);
@@ -169,7 +154,6 @@ it('retrieves the first element of a list', () => {
   expect(builtins.first.fnValuesNoAutomap?.([fromJS([4, 5, 6])]))
     .toMatchInlineSnapshot(`
     Scalar {
-      "cardinality": 1,
       "value": 4,
     }
   `);
@@ -178,7 +162,6 @@ it('retrieves the first element of a list', () => {
 it('retrieves the last element of a list', () => {
   expect(builtins.last.fnValuesNoAutomap?.([fromJS(2)])).toMatchInlineSnapshot(`
     Scalar {
-      "cardinality": 1,
       "value": 2,
     }
   `);
@@ -186,7 +169,6 @@ it('retrieves the last element of a list', () => {
   expect(builtins.last.fnValuesNoAutomap?.([fromJS([4, 5, 6])]))
     .toMatchInlineSnapshot(`
     Scalar {
-      "cardinality": 1,
       "value": 6,
     }
   `);
@@ -196,7 +178,6 @@ it('converts a time quantity into a number', () => {
   expect(builtins.in.fnValues?.(new TimeQuantity({ year: 2 }), fromJS('years')))
     .toMatchInlineSnapshot(`
     Scalar {
-      "cardinality": 1,
       "value": 2,
     }
   `);
@@ -210,7 +191,6 @@ it('knows whether a range contains a value', () => {
     )
   ).toMatchInlineSnapshot(`
     Scalar {
-      "cardinality": 1,
       "value": true,
     }
   `);
@@ -222,7 +202,6 @@ it('knows whether a range contains a value', () => {
     )
   ).toMatchInlineSnapshot(`
     Scalar {
-      "cardinality": 1,
       "value": false,
     }
   `);
@@ -234,7 +213,6 @@ it('knows whether a range contains a value', () => {
     )
   ).toMatchInlineSnapshot(`
     Scalar {
-      "cardinality": 1,
       "value": true,
     }
   `);
@@ -246,7 +224,6 @@ it('knows whether a range contains a value', () => {
     )
   ).toMatchInlineSnapshot(`
     Scalar {
-      "cardinality": 1,
       "value": false,
     }
   `);

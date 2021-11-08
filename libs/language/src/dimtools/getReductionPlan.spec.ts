@@ -1,6 +1,6 @@
-import { fromJS } from '../interpreter/Value';
 import { IndexNames } from './common';
 import { getReductionPlan } from './getReductionPlan';
+import { build, Type } from '../type';
 
 const testReduction = (
   cardinalities: number[],
@@ -8,17 +8,19 @@ const testReduction = (
   indexNames: IndexNames
 ) => {
   // getReductionPlan wants something that's instanceof Column
-  const mockCardinality = (cardinality: number) =>
-    Object.create(fromJS([1, 2, 3]), {
-      cardinality: {
-        get: () => cardinality,
-      },
-    });
+  const mockCardinality = (cardinality: number, index: string | null): Type => {
+    if (cardinality === 1) {
+      return build.string();
+    } else {
+      return build.column(mockCardinality(cardinality - 1, null), 123, index);
+    }
+  };
 
-  const { whichToReduce } = getReductionPlan(
-    cardinalities.map(mockCardinality),
-    expectedCardinalities,
-    indexNames
+  const whichToReduce = getReductionPlan(
+    cardinalities.map((cardinality, index) =>
+      mockCardinality(cardinality, indexNames[index])
+    ),
+    expectedCardinalities
   );
 
   return whichToReduce.flatMap((doReduce, index) => (doReduce ? [index] : []));
@@ -29,7 +31,7 @@ it('figures out what to reduce first', () => {
   expect(testReduction([2, 2], [1, 2], [null, null])).toEqual([0]);
 });
 
-it('given two possible dimensions, picks both', () => {
+it('given two possible, unnamed dimensions, picks both', () => {
   expect(testReduction([2, 3], [1, 2], [null, null])).toEqual([0, 1]);
 });
 
@@ -61,4 +63,53 @@ it('can choose the first index if two different ones are given and available', (
   expect(
     testReduction([2, 1, 2], [1, 1, 1], ['IndexOne', null, 'IndexTwo'])
   ).toEqual([0]);
+});
+
+describe('multi-index arguments', () => {
+  interface MockArg {
+    indices: IndexNames;
+    targetCardinality?: number;
+  }
+  const testMultiIndexReduction = (...mockArgs: MockArg[]) => {
+    const mockType = (indices: IndexNames): Type => {
+      if (!indices.length) {
+        return build.number();
+      } else {
+        const [index, ...nextIndices] = indices;
+        return build.column(mockType(nextIndices), 123, index);
+      }
+    };
+
+    return getReductionPlan(
+      mockArgs.map((a) => mockType(a.indices)),
+      mockArgs.map((a) => a.targetCardinality ?? 1)
+    ).join(', ');
+  };
+
+  it('Supports arguments with more than one index', () => {
+    expect(
+      testMultiIndexReduction({ indices: ['X', 'Y', 'Z'] })
+    ).toMatchInlineSnapshot(`"true"`);
+  });
+
+  it('Finds a common index', () => {
+    expect(
+      testMultiIndexReduction({ indices: ['X', 'Y'] }, { indices: ['X', 'Y'] })
+    ).toMatchInlineSnapshot(`"true, true"`);
+  });
+
+  it('Finds a common index even if it is out of order', () => {
+    expect(
+      testMultiIndexReduction(
+        { indices: ['X', 'Y'] },
+        { indices: ['Rows', 'Y'] }
+      )
+    ).toMatchInlineSnapshot(`"true, true"`);
+  });
+
+  it('Supports null index names', () => {
+    expect(
+      testMultiIndexReduction({ indices: [null] }, { indices: [null] })
+    ).toMatchInlineSnapshot(`"true, true"`);
+  });
 });

@@ -1,4 +1,4 @@
-import { buildType as t } from '..';
+import { build as t } from '../type';
 import { TimeQuantity, Date as IDate } from '../interpreter/Value';
 import { parseUTCDate } from '../date';
 import { overloadBuiltin } from './overloadBuiltin';

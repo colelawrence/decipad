@@ -2,7 +2,6 @@ import { Value } from './Value';
 
 import { AST, ExternalDataMap, Context } from '..';
 import { Stack } from '../stack';
-import { FetchFunction } from '../data/external-data-types';
 import { getDefined } from '../utils';
 
 // The name "realm" comes from V8.
@@ -14,13 +13,6 @@ export class Realm {
   functions = new Map<string, AST.FunctionDefinition>();
   previousValue: Value | null = null;
   inferContext: Context;
-
-  get fetch() {
-    return this.inferContext.fetch;
-  }
-  set fetch(newFetch: FetchFunction) {
-    this.inferContext.fetch = newFetch;
-  }
 
   get externalData() {
     return this.inferContext.externalData;

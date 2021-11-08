@@ -190,30 +190,6 @@ describe('Type.combine', () => {
 });
 
 describe('new columns and tables', () => {
-  it('can get cardinality', () => {
-    expect(t.number().cardinality).toEqual(1);
-
-    expect(t.column(t.column(t.number(), 2), 2).cardinality).toEqual(3);
-
-    expect(t.column(t.column(t.date('month'), 9), 9).cardinality).toEqual(3);
-
-    expect(t.column(t.column(t.range(t.number()), 9), 9).cardinality).toEqual(
-      3
-    );
-
-    expect(
-      t.row([t.number(), t.column(t.number(), 6)], ['A', 'B']).cardinality
-    ).toEqual(3);
-
-    expect(
-      t.table({
-        length: 123,
-        columnNames: ['A', 'B'],
-        columnTypes: [t.number(), t.column(t.number(), 6)],
-      }).cardinality
-    ).toEqual(4);
-  });
-
   it('Can reduce one dimension off the top', () => {
     expect(t.column(t.string(), 3).reduced()).toEqual(t.string());
     expect(t.column(t.column(t.string(), 3), 1).reduced()).toEqual(

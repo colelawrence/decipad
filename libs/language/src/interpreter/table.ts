@@ -75,9 +75,9 @@ export const evaluateTable = async (
       realm.stack.set(colName, columnData);
 
       colValues.push(
-        columnData.cardinality === 1
-          ? Column.fromValues(repeat(columnData, tableLength))
-          : columnData
+        columnData instanceof Column
+          ? columnData
+          : Column.fromValues(repeat(columnData, tableLength))
       );
       colNames.push(colName);
     }

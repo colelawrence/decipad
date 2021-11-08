@@ -17,6 +17,7 @@ export const callBuiltinFunctor = (
     if (builtin.aliasFor) {
       return callBuiltinFunctor(builtin.aliasFor, givenArguments, givenValues);
     }
+
     if (givenArguments.length !== builtin.argCount) {
       return t.impossible(
         `The function ${builtinName} requires ${builtin.argCount} parameters and ${givenArguments.length} parameters were entered`

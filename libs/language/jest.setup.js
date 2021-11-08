@@ -1,3 +1,4 @@
+/* eslint-env node,browser */
 /* eslint-disable import/no-extraneous-dependencies */
 import isoFetch from 'isomorphic-fetch';
 import parseDataUrl from 'data-urls';

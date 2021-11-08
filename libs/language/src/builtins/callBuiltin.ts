@@ -3,7 +3,7 @@ import { automapValues } from '../dimtools';
 
 import { Value, AnyValue, fromJS } from '../interpreter/Value';
 import { getDefined } from '../utils';
-import type { Type } from '..';
+import type { Type } from '../type';
 
 export function callBuiltin(
   funcName: string,
@@ -24,6 +24,7 @@ export function callBuiltin(
   }
 
   return automapValues(
+    argTypes,
     args,
     (argsLowerDims) => {
       if (builtin.fn != null) {
@@ -36,7 +37,6 @@ export function callBuiltin(
         throw new Error('unreachable');
       }
     },
-    builtin.argCardinalities,
-    argTypes.map((arg) => arg.indexedBy)
+    builtin.argCardinalities
   );
 }

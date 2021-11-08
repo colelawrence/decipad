@@ -181,7 +181,7 @@ const typeDimTests: Record<string, Test> = {
       callBuiltinFunctor('>', [
         build({ type: 'number', unit: [meter] }),
         build2({ type: 'number', unit: [second] }),
-      ]).errorCause!.spec
+      ]).errorCause?.spec
     ).toHaveProperty('expectedUnit', [[meter], [second]]);
   },
   if: (build, build2, build3, buildOut) => {

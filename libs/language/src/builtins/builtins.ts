@@ -313,7 +313,6 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
   // Table stuff
   approximateSubsetSum: {
     argCount: 3,
-    argCardinalities: [1, 3, 1],
     fnValues: (upperBound, table, columnName) => {
       const tableColumn = getInstanceof(table, Column);
       const valueNames = getDefined(tableColumn.valueNames);
@@ -354,7 +353,6 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
   },
   concatenate: {
     argCount: 2,
-    argCardinalities: [3, 3],
     fnValues: (tab1, tab2) => {
       const { values: columns1, valueNames } = getInstanceof(tab1, Column);
       const { values: columns2 } = getInstanceof(tab2, Column);

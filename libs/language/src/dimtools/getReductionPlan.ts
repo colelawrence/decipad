@@ -1,20 +1,62 @@
-import * as Value from '../interpreter/Value';
 import { Type } from '../type';
-import { IndexNames, someTrue } from './common';
+import { enumerate } from '../utils';
+import { getCardinality, IndexNames } from './common';
 
-export const dimensionForProduct = (
-  indexNames: IndexNames,
-  whichToReduce: boolean[]
-) => indexNames.find((name, index) => name != null && whichToReduce[index]);
+const isColumn = (arg: Type) => arg.cellType != null;
 
-export const removeDimensionName = (indexNames: IndexNames, dim: string) =>
-  indexNames.map((x) => (x === dim ? null : x));
+/** Get all the indices in this column */
+const getIndexNames = (t: Type): IndexNames => {
+  if (t.cellType) {
+    return [t.indexedBy, ...getIndexNames(t.cellType)];
+  } else {
+    return [];
+  }
+};
 
-const getFirstToReduce = <T>(whichToReduce: boolean[], items: T[]): T | null =>
-  items[whichToReduce.indexOf(true)] ?? null;
+const findCommonIndexBetweenArguments = <T>(
+  argIndices: T[][],
+  highCardinality: boolean[],
+  exclude = new Set<T>()
+): T | null => {
+  const seen = new Set();
 
-const isColumn = (arg: Value.Value | Type) =>
-  arg instanceof Type ? arg.cellType != null : arg instanceof Value.Column;
+  for (const [index, arg] of enumerate(argIndices)) {
+    if (!highCardinality[index]) continue;
+
+    for (const indexName of arg) {
+      if (indexName != null) {
+        if (seen.has(indexName) && !exclude.has(indexName)) {
+          return indexName;
+        }
+        seen.add(indexName);
+      }
+    }
+  }
+
+  return null;
+};
+
+const findAnyIndex = <T>(
+  argIndices: (T | null)[][],
+  highCardinality: boolean[],
+  exclude = new Set<T>()
+) => {
+  for (const [index, arg] of enumerate(argIndices)) {
+    if (!highCardinality[index]) continue;
+
+    for (const indexName of arg) {
+      if (
+        typeof indexName === 'string' &&
+        !(!indexName.startsWith || indexName.startsWith('\0')) &&
+        !exclude.has(indexName)
+      ) {
+        return indexName;
+      }
+    }
+  }
+
+  return null;
+};
 
 /**
  * Given a call with higher-dimension arguments, which dimension are we going
@@ -27,30 +69,34 @@ const isColumn = (arg: Value.Value | Type) =>
  * (below in the recursion stack), further calls to getReductionPlan will find
  * where to reduce next.
  */
-export const getReductionPlan = <Arg extends Value.Value | Type>(
-  args: Arg[],
-  targetCardinalities: number[],
-  indexNames: IndexNames
-) => {
-  let whichToReduce = args.map(
-    (arg, i) => isColumn(arg) && arg.cardinality > targetCardinalities[i]
+export const getReductionPlan = (
+  args: Type[],
+  wantedCardinalities: number[]
+): boolean[] => {
+  /** Given an arg index, does it have more dimensions than wantedCardinalities? */
+  const highCardinality = args.map(
+    (arg, i) => isColumn(arg) && getCardinality(arg) > wantedCardinalities[i]
   );
 
-  if (!someTrue(whichToReduce)) {
-    return { whichToReduce, firstToReduce: null };
-  }
-
-  const differentDimension = indexNames.find(
-    (indexName, index) => indexName != null && whichToReduce[index]
+  const argIndices = args.map(getIndexNames);
+  const commonIndex = findCommonIndexBetweenArguments(
+    argIndices,
+    highCardinality
   );
-  if (differentDimension) {
-    whichToReduce = indexNames.map(
-      (indexName, i) => indexName === differentDimension && whichToReduce[i]
+  if (commonIndex) {
+    return argIndices.map(
+      (indices, i) => indices.includes(commonIndex) && highCardinality[i]
     );
   }
 
-  return {
-    whichToReduce,
-    firstToReduce: getFirstToReduce(whichToReduce, args),
-  };
+  // Expand dims when any named index is spotted
+  const namedIndex = findAnyIndex(argIndices, highCardinality);
+  if (namedIndex) {
+    return argIndices.map(
+      (indexName, i) => indexName.includes(namedIndex) && highCardinality[i]
+    );
+  }
+
+  // Iterate all unnamed higher-cardinality columns at once
+  return highCardinality;
 };

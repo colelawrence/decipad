@@ -26,7 +26,6 @@ export async function evaluateData(
         values.push(column.get(rowIndex));
       }
       colValues.push({
-        cardinality: 1,
         getData: () => values,
       });
     }

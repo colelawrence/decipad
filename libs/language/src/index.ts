@@ -1,6 +1,6 @@
 /* istanbul ignore file: just config and re-export */
 import { Interpreter } from './interpreter';
-import { SimpleValue } from './interpreter/Value';
+import { Value } from './interpreter/Value';
 import { Type, build as t, serializeType, SerializedType } from './type';
 import { builtins } from './builtins';
 
@@ -35,11 +35,9 @@ export interface Result {
 
 export interface InjectableExternalData {
   type: Type;
-  value: SimpleValue;
+  value: Value;
 }
 export type ExternalDataMap = Map<string, InjectableExternalData>;
-
-export type { SimpleValue };
 
 export interface AutocompleteName {
   kind: 'function' | 'variable';

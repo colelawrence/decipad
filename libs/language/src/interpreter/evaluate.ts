@@ -6,14 +6,7 @@ import { getOfType, getDefined, getIdentifierString } from '../utils';
 import { getDateFromAstForm, getTimeUnit } from '../date';
 
 import { Realm } from './Realm';
-import {
-  Scalar,
-  Range,
-  Date,
-  Column,
-  SimpleValue,
-  TimeQuantity,
-} from './Value';
+import { Scalar, Range, Date, Column, Value, TimeQuantity } from './Value';
 import { evaluateTable } from './table';
 import { evaluateGiven } from './given';
 import { evaluateData } from './data';
@@ -26,7 +19,7 @@ import { resolve as resolveData } from '../data';
 export async function evaluate(
   realm: Realm,
   node: AST.Statement | AST.Expression
-): Promise<SimpleValue> {
+): Promise<Value> {
   switch (node.type) {
     case 'literal': {
       switch (node.args[0]) {
@@ -128,7 +121,7 @@ export async function evaluate(
       return Date.fromDateAndSpecificity(dateMs, specificity);
     }
     case 'column': {
-      const values: SimpleValue[] = await pSeries(
+      const values: Value[] = await pSeries(
         node.args[0].map((v) => () => evaluate(realm, v))
       );
 
@@ -162,7 +155,7 @@ export async function evaluate(
       const [url, contentType] = node.args;
       return evaluateData(
         realm,
-        await resolveData({ url, contentType, fetch: realm.fetch })
+        await resolveData({ url, contentType, fetch: realm.inferContext.fetch })
       );
     }
   }

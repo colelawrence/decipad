@@ -1,13 +1,20 @@
-import { allMatch, getDefined, getInstanceof } from '../utils';
+import { allMatch, zip } from '../utils';
 import { Type, build as t } from '../type';
-import * as Values from '../interpreter/Value';
+import * as Value from '../interpreter/Value';
 import { getReductionPlan } from './getReductionPlan';
 import {
   arrayOfOnes,
-  validateCardinalities,
-  IndexNames,
   compareDimensions,
+  deLinearizeType,
+  linearizeType,
+  validateCardinalities,
 } from './common';
+import { Hypercube } from './hypercube';
+import {
+  DimensionalValue,
+  groupTypesByDimension,
+  hypercubeLikeToValue,
+} from './multidimensional-utils';
 
 /**
  * Takes a function expects a certain cardinality in each argument,
@@ -22,91 +29,65 @@ import {
 export const automapTypes = (
   argTypes: Type[],
   mapFn: (types: Type[]) => Type,
-  expectedCardinalities = arrayOfOnes(argTypes.length),
-  indexNames: IndexNames = argTypes.map((a) => a.indexedBy)
+  expectedCardinalities = arrayOfOnes(argTypes.length)
 ): Type => {
   if (!validateCardinalities(argTypes, expectedCardinalities)) {
     return t.impossible('A column is required');
   }
 
-  function recurse(argTypes: Type[]): Type {
-    // When an argument is higher-dimensional than expected,
-    // the result of the call is also higher dimensional.
-    // To achieve this we essentially do .map(fargs => recurse(fargs))
-    const { whichToReduce, firstToReduce } = getReductionPlan(
-      argTypes,
-      expectedCardinalities,
-      indexNames
+  if (expectedCardinalities.every((c) => c === 1)) {
+    // Expand dimensions by returning the union of all arguments' dims
+    const linearTypedArgs = argTypes.map((t) => linearizeType(t));
+    const scalarArgs = linearTypedArgs.map((types) => types[types.length - 1]);
+    const allDimensions = groupTypesByDimension(
+      ...linearTypedArgs.map((item) => item.slice(0, -1))
     );
 
-    if (!firstToReduce) {
+    if (!allDimensions.every((types) => allMatch(types, compareDimensions))) {
+      return t.impossible('Mismatched dimensions');
+    }
+
+    return deLinearizeType([
+      ...allDimensions.map((t) => t[0]),
+      mapFn(scalarArgs),
+    ]);
+  } else {
+    const whichToReduce = getReductionPlan(argTypes, expectedCardinalities);
+
+    if (whichToReduce.every((w) => w === false)) {
+      // Reduce nothing -- input dimensions are correct
       return mapFn(argTypes);
+    } else {
+      throw new Error('Selective reduction is not supported yet');
     }
-
-    const argumentsToReduce = argTypes.filter((_arg, i) => whichToReduce[i]);
-    if (!allMatch(argumentsToReduce, compareDimensions)) {
-      return t.impossible('Mismatched column lengths');
-    }
-
-    const reducedArguments = argTypes.map((type, argIndex) => {
-      if (whichToReduce[argIndex]) {
-        return getDefined(type.cellType);
-      } else {
-        return type;
-      }
-    });
-
-    return t.column(
-      recurse(reducedArguments),
-      getDefined(firstToReduce.columnSize),
-      firstToReduce.indexedBy
-    );
   }
-
-  return recurse(argTypes);
 };
 
 // Extremely symmetrical with the above function
 export const automapValues = (
-  argValues: Values.Value[],
-  mapFn: (values: Values.Value[]) => Values.Value,
-  expectedCardinalities = arrayOfOnes(argValues.length),
-  indexNames: IndexNames = argValues.map(() => null)
-): Values.Value => {
-  if (!validateCardinalities(argValues, expectedCardinalities)) {
+  argTypes: Type[],
+  argValues: Value.Value[],
+  mapFn: (values: Value.Value[]) => Value.Value,
+  expectedCardinalities = arrayOfOnes(argValues.length)
+): Value.Value => {
+  if (!validateCardinalities(argTypes, expectedCardinalities)) {
     throw new Error('panic: one or more cardinalities are too low');
   }
 
-  function recurse(argValues: Values.Value[]): Values.Value {
-    // When an argument is higher-dimensional than expected,
-    // the result of the call is also higher dimensional.
-    // To achieve this we essentially do .map(fargs => recurse(fargs))
-    const { whichToReduce, firstToReduce } = getReductionPlan(
-      argValues,
-      expectedCardinalities,
-      indexNames
-    );
+  const dimensionalArgs = zip(argTypes, argValues).map(([type, value]) =>
+    DimensionalValue.fromValue(value, type)
+  );
 
-    if (!firstToReduce) {
-      return mapFn(argValues);
+  if (expectedCardinalities.every((c) => c === 1)) {
+    return hypercubeLikeToValue(new Hypercube(mapFn, ...dimensionalArgs));
+  } else {
+    const whichToReduce = getReductionPlan(argTypes, expectedCardinalities);
+
+    if (whichToReduce.every((doReduce) => doReduce === false)) {
+      // Reduce nothing -- input dimensions are correct
+      return mapFn(dimensionalArgs.map(hypercubeLikeToValue));
+    } else {
+      throw new Error('Selective reduction is not supported yet');
     }
-
-    const length = getInstanceof(firstToReduce, Values.Column).rowCount;
-
-    return Values.Column.fromValues(
-      Array.from({ length }, (_, rowIndex) => {
-        const reducedArguments = argValues.map((arg, argIndex) => {
-          if (whichToReduce[argIndex]) {
-            return getInstanceof(arg, Values.Column).values[rowIndex];
-          } else {
-            return arg;
-          }
-        });
-
-        return recurse(reducedArguments);
-      })
-    );
   }
-
-  return recurse(argValues);
 };

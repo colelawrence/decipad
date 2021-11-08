@@ -7,19 +7,14 @@ import {
   sortTimeUnits,
 } from '../date';
 
-export interface SimpleValue {
-  cardinality: number;
+export interface Value {
   getData(): Interpreter.OneResult;
 }
 
 export type NonColumn = Scalar | Range | Date | TimeQuantity;
 export type AnyValue = NonColumn | Column;
 
-export type Value = SimpleValue;
-
-export class Scalar implements SimpleValue {
-  cardinality = 1;
-
+export class Scalar implements Value {
   value: number | boolean | string;
 
   constructor(value: Scalar['value']) {
@@ -35,9 +30,7 @@ export class Scalar implements SimpleValue {
   }
 }
 
-export class Date implements SimpleValue {
-  cardinality = 1;
-
+export class Date implements Value {
   specificity: Time.Specificity = 'time';
   moment: number;
 
@@ -71,8 +64,7 @@ export class Date implements SimpleValue {
   }
 }
 
-export class TimeQuantity implements SimpleValue {
-  cardinality = 1;
+export class TimeQuantity implements Value {
   timeUnits = new Map<Time.Unit, number>();
   timeUnitsDiff = new Map<Time.Unit, number>();
 
@@ -116,9 +108,7 @@ export class TimeQuantity implements SimpleValue {
   }
 }
 
-export class Range implements SimpleValue {
-  cardinality = 1;
-
+export class Range implements Value {
   start: Scalar;
   end: Scalar;
 
@@ -147,19 +137,19 @@ export class Range implements SimpleValue {
   }
 }
 
-export class Column implements SimpleValue {
-  values: SimpleValue[];
+export class Column implements Value {
+  values: Value[];
   valueNames: string[] | null = null;
 
   constructor(values: Column['values']) {
     this.values = values;
   }
 
-  static fromValues(values: SimpleValue[]): Column {
+  static fromValues(values: Value[]): Column {
     return new Column(values);
   }
 
-  static fromNamedValues(values: SimpleValue[], names: string[]): Column {
+  static fromNamedValues(values: Value[], names: string[]): Column {
     const column = Column.fromValues(values);
     column.valueNames = names;
     return column;
@@ -199,10 +189,6 @@ export class Column implements SimpleValue {
 
   get rowCount() {
     return this.values.length;
-  }
-
-  get cardinality() {
-    return 1 + Math.max(...this.values.map((v) => v.cardinality));
   }
 
   atIndex(i: number) {
