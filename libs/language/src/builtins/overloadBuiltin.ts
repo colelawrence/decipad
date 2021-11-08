@@ -8,6 +8,7 @@ import {
   Range,
 } from '../interpreter/Value';
 import { getDefined } from '../utils';
+import { AST } from '..';
 
 export type OverloadTypeName =
   | 'number'
@@ -19,7 +20,7 @@ export type OverloadTypeName =
 export interface OverloadedBuiltinSpec {
   argTypes: OverloadTypeName[];
   fnValues: (...args: AnyValue[]) => AnyValue;
-  functor: (...types: Type[]) => Type;
+  functor: (types: Type[], values?: AST.Expression[]) => Type;
 }
 
 export const overloadBuiltin = (
@@ -41,7 +42,7 @@ export const overloadBuiltin = (
     return overload.fnValues(...values);
   };
 
-  const functor = (...types: Type[]) => {
+  const functor = (types: Type[]) => {
     const argTypeNames = types.map(getOverloadedTypeFromType);
     const overload = byArgTypes.get(argTypesKey(argTypeNames));
 
@@ -50,7 +51,7 @@ export const overloadBuiltin = (
         InferError.badOverloadedBuiltinCall(fName, argTypeNames)
       );
     } else {
-      return overload.functor(...types);
+      return overload.functor(types);
     }
   };
 

@@ -25,7 +25,7 @@ export const addDateAndTimeQuantity = (
   return Date.fromDateAndSpecificity(newDate, date.specificity);
 };
 
-export const dateAndTimeQuantityFunctor = (date: Type, timeQuantity: Type) =>
+export const dateAndTimeQuantityFunctor = ([date, timeQuantity]: Type[]) =>
   Type.combine(date.isDate(), timeQuantity.isTimeQuantity()).mapType(() => {
     const dateSpecificity = getDefined(date.date);
 
@@ -40,7 +40,7 @@ export const dateAndTimeQuantityFunctor = (date: Type, timeQuantity: Type) =>
     }
   });
 
-export const timeQuantityBinopFunctor = (t1: Type, t2: Type) =>
+export const timeQuantityBinopFunctor = ([t1, t2]: Type[]) =>
   Type.combine(t1.isTimeQuantity(), t2.isTimeQuantity()).mapType(() => {
     const allTimeUnits = new Set([
       ...getDefined(t1.timeUnits),
@@ -49,7 +49,7 @@ export const timeQuantityBinopFunctor = (t1: Type, t2: Type) =>
     return t.timeQuantity(Array.from(allTimeUnits));
   });
 
-export const subtractDatesFunctor = (t1: Type, t2: Type) => {
+export const subtractDatesFunctor = ([t1, t2]: Type[]) => {
   const d1Specificity = getDefined(t1.date);
   const d2Specificity = getDefined(t2.date);
   if (cmpSpecificities(d1Specificity, d2Specificity) !== 0) {
@@ -74,8 +74,7 @@ export const dateOverloads: OverloadSet = {
           getInstanceof(v1, Date),
           getInstanceof(v2, TimeQuantity)
         ),
-      functor: (date, timeQuantity) =>
-        dateAndTimeQuantityFunctor(date, timeQuantity),
+      functor: dateAndTimeQuantityFunctor,
     },
     {
       argTypes: ['time-quantity', 'date'],
@@ -84,8 +83,7 @@ export const dateOverloads: OverloadSet = {
           getInstanceof(v2, Date),
           getInstanceof(v1, TimeQuantity)
         ),
-      functor: (timeQuantity, date) =>
-        dateAndTimeQuantityFunctor(date, timeQuantity),
+      functor: ([a, b]) => dateAndTimeQuantityFunctor([b, a]),
     },
     {
       argTypes: ['time-quantity', 'time-quantity'],
@@ -94,7 +92,7 @@ export const dateOverloads: OverloadSet = {
           getInstanceof(v1, TimeQuantity),
           getInstanceof(v2, TimeQuantity)
         ),
-      functor: (t1, t2) => timeQuantityBinopFunctor(t1, t2),
+      functor: timeQuantityBinopFunctor,
     },
   ],
   '-': [
@@ -105,7 +103,7 @@ export const dateOverloads: OverloadSet = {
           getInstanceof(v1, TimeQuantity),
           negateTimeQuantity(getInstanceof(v2, TimeQuantity))
         ),
-      functor: (t1, t2) => timeQuantityBinopFunctor(t1, t2),
+      functor: timeQuantityBinopFunctor,
     },
     {
       argTypes: ['date', 'time-quantity'],
@@ -114,13 +112,13 @@ export const dateOverloads: OverloadSet = {
           getInstanceof(v1, Date),
           negateTimeQuantity(getInstanceof(v2, TimeQuantity))
         ),
-      functor: (t1, t2) => dateAndTimeQuantityFunctor(t1, t2),
+      functor: dateAndTimeQuantityFunctor,
     },
     {
       argTypes: ['date', 'date'],
       fnValues: (v1, v2) =>
         subtractDates(getInstanceof(v1, Date), getInstanceof(v2, Date)),
-      functor: (t1, t2) => subtractDatesFunctor(t1, t2),
+      functor: subtractDatesFunctor,
     },
   ],
 };

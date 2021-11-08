@@ -7,7 +7,7 @@ import { compiledGrammar } from '../grammar';
 import { ParserNode } from './types';
 import { sourceMapDecorator } from './source-map-decorator';
 
-export { AST, Parser };
+export { AST, Parser, n };
 
 const grammar = nearley.Grammar.fromCompiled(compiledGrammar);
 

@@ -1,5 +1,6 @@
 import { Value, AnyValue } from '../interpreter/Value';
 import { Type } from '../type';
+import { AST } from '../parser';
 
 export interface BuiltinSpec {
   argCount?: number;
@@ -14,6 +15,6 @@ export interface BuiltinSpec {
   // Variant that operates on Value specifically
   fnValuesNoAutomap?: (args: Value[]) => AnyValue;
   fnValues?: (...args: AnyValue[]) => AnyValue;
-  functorNoAutomap?: (...types: Type[]) => Type;
-  functor?: (...types: Type[]) => Type;
+  functor?: (types: Type[], values?: AST.Expression[]) => Type;
+  functorNoAutomap?: (types: Type[], values?: AST.Expression[]) => Type;
 }

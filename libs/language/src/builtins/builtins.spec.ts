@@ -8,6 +8,7 @@ import {
 } from '../interpreter/Value';
 import { build as t } from '../type';
 import { builtins } from './builtins';
+import { n } from '../utils';
 
 it('concatenates tables', () => {
   expect(
@@ -48,7 +49,9 @@ it('concatenates tables', () => {
       columnTypes: [t.number()],
     });
 
-  expect(builtins.concatenate.functor?.(tNumber(1), tNumber(2))).toMatchObject({
+  expect(
+    builtins.concatenate.functor?.([tNumber(1), tNumber(2)])
+  ).toMatchObject({
     tableLength: 3,
   });
 });
@@ -132,7 +135,7 @@ it('concatenates lists', () => {
 });
 
 it('calculates columns and scalar lengths', () => {
-  expect(builtins.len.functor?.(t.number())).toMatchObject(t.number());
+  expect(builtins.len.functor?.([t.number()])).toMatchObject(t.number());
 
   expect(builtins.len.fnValuesNoAutomap?.([fromJS(2)])).toMatchInlineSnapshot(`
     Scalar {
@@ -141,7 +144,7 @@ it('calculates columns and scalar lengths', () => {
     }
   `);
 
-  expect(builtins.len.functor?.(t.column(t.number(), 3))).toMatchObject(
+  expect(builtins.len.functor?.([t.column(t.number(), 3)])).toMatchObject(
     t.number()
   );
 
@@ -263,7 +266,7 @@ it("calculates a number's ln", () => {
 });
 
 it('negates a boolean', () => {
-  expect(builtins['!'].functor?.(t.boolean(), t.boolean())).toMatchObject(
+  expect(builtins['!'].functor?.([t.boolean(), t.boolean()])).toMatchObject(
     t.boolean()
   );
   expect(builtins['!'].fn?.(true)).toBe(false);
@@ -271,9 +274,57 @@ it('negates a boolean', () => {
 });
 
 it('ands two booleans', () => {
-  expect(builtins['&&'].functor?.(t.boolean(), t.boolean())).toMatchObject(
+  expect(builtins['&&'].functor?.([t.boolean(), t.boolean()])).toMatchObject(
     t.boolean()
   );
   expect(builtins['&&'].fn?.(true, true)).toBe(true);
   expect(builtins['&&'].fn?.(false, true)).toBe(false);
+});
+
+it('exponentiates number with unit', () => {
+  expect(
+    builtins['**'].functor?.(
+      [
+        t.number([{ unit: 'meters', exp: 1, multiplier: 1, known: false }]),
+        t.number(),
+      ],
+
+      [n('literal', 'number', 1, []), n('literal', 'number', 2, [])]
+    )
+  ).toMatchObject(
+    t.number([{ unit: 'meters', exp: 2, multiplier: 1, known: false }])
+  );
+
+  expect(
+    builtins['**'].functor?.(
+      [
+        t.number([{ unit: 'meters', exp: 1, multiplier: 1, known: false }]),
+        t.number(),
+      ],
+
+      [n('literal', 'number', 1, []), n('literal', 'string', 'hey', [])]
+    )
+  ).toMatchObject(t.impossible('exponent value must be a literal number'));
+
+  expect(
+    builtins['**'].functor?.(
+      [
+        t.number([{ unit: 'meters', exp: 1, multiplier: 1, known: false }]),
+        t.number(),
+      ],
+
+      [
+        n('literal', 'number', 1, []),
+        n(
+          'function-call',
+          n('funcref', '+'),
+          n(
+            'argument-list',
+            n('literal', 'number', 2, []),
+            n('literal', 'number', 2, [])
+          )
+        ),
+      ]
+    )
+  ).toMatchObject(t.impossible('exponent value must be a literal number'));
 });

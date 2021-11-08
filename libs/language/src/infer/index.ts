@@ -214,7 +214,7 @@ export const inferExpression = wrap(
         if (functionDefinition != null) {
           return inferFunction(ctx, functionDefinition, givenArguments);
         } else {
-          return callBuiltinFunctor(fName, ...givenArguments);
+          return callBuiltinFunctor(fName, givenArguments, fArgs);
         }
       }
       case 'given': {

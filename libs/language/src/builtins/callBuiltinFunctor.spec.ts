@@ -30,116 +30,108 @@ const second: AST.Unit = {
 describe('callBuiltin', () => {
   it('dateCmpFunctor', () => {
     expect(
-      callBuiltinFunctor('dateequals', t.date('month'), t.date('month'))
+      callBuiltinFunctor('dateequals', [t.date('month'), t.date('month')])
     ).toEqual(t.boolean());
 
     expect(
-      callBuiltinFunctor('dategte', t.date('day'), t.date('month')).errorCause
+      callBuiltinFunctor('dategte', [t.date('day'), t.date('month')]).errorCause
     ).not.toBeNull();
   });
 
   it('contains', () => {
     expect(
-      callBuiltinFunctor('contains', t.range(t.number([meter])), t.number())
+      callBuiltinFunctor('contains', [t.range(t.number([meter])), t.number()])
     ).toEqual(t.boolean());
 
     expect(
-      callBuiltinFunctor(
-        'contains',
+      callBuiltinFunctor('contains', [
         t.range(t.number([meter])),
-        t.number([meter])
-      )
+        t.number([meter]),
+      ])
     ).toEqual(t.boolean());
 
     expect(
-      callBuiltinFunctor(
-        'contains',
+      callBuiltinFunctor('contains', [
         t.column(t.range(t.number([meter])), 3),
-        t.number([meter])
-      )
+        t.number([meter]),
+      ])
     ).toEqual(t.column(t.boolean(), 3));
 
     expect(
-      callBuiltinFunctor(
-        'contains',
+      callBuiltinFunctor('contains', [
         t.range(t.number([meter])),
-        t.column(t.number([meter]), 3)
-      )
+        t.column(t.number([meter]), 3),
+      ])
     ).toEqual(t.column(t.boolean(), 3));
 
     expect(
-      callBuiltinFunctor(
-        'contains',
+      callBuiltinFunctor('contains', [
         t.range(t.number([meter])),
-        t.number([second])
-      ).errorCause
+        t.number([second]),
+      ]).errorCause
     ).not.toBeNull();
 
     expect(
-      callBuiltinFunctor('contains', t.date('month'), t.date('day'))
+      callBuiltinFunctor('contains', [t.date('month'), t.date('day')])
     ).toEqual(t.boolean());
 
     expect(
-      callBuiltinFunctor(
-        'contains',
+      callBuiltinFunctor('contains', [
         t.number([meter]),
-        t.range(t.number([meter]))
-      ).errorCause
+        t.range(t.number([meter])),
+      ]).errorCause
     ).not.toBeNull();
   });
 
   it('cat', () => {
     expect(
-      callBuiltinFunctor(
-        'cat',
+      callBuiltinFunctor('cat', [
         t.column(t.number([meter]), 2),
-        t.column(t.number([meter]), 3)
-      )
+        t.column(t.number([meter]), 3),
+      ])
     ).toEqual(t.column(t.number([meter]), 5));
 
     expect(
-      callBuiltinFunctor(
-        'cat',
+      callBuiltinFunctor('cat', [
         t.number([meter]),
-        t.column(t.number([meter]), 3)
-      )
+        t.column(t.number([meter]), 3),
+      ])
     ).toEqual(t.column(t.number([meter]), 4));
 
     expect(
-      callBuiltinFunctor(
-        'cat',
+      callBuiltinFunctor('cat', [
         t.column(t.number([meter]), 3),
-        t.number([meter])
-      )
+        t.number([meter]),
+      ])
     ).toEqual(t.column(t.number([meter]), 4));
   });
 
   it('first', () => {
-    expect(callBuiltinFunctor('first', t.number([meter]))).toEqual(
+    expect(callBuiltinFunctor('first', [t.number([meter])])).toEqual(
       t.number([meter])
     );
 
-    expect(callBuiltinFunctor('first', t.column(t.number([meter]), 3))).toEqual(
-      t.number([meter])
-    );
+    expect(
+      callBuiltinFunctor('first', [t.column(t.number([meter]), 3)])
+    ).toEqual(t.number([meter]));
   });
 
   it('last', () => {
-    expect(callBuiltinFunctor('last', t.number([meter]))).toEqual(
+    expect(callBuiltinFunctor('last', [t.number([meter])])).toEqual(
       t.number([meter])
     );
 
-    expect(callBuiltinFunctor('last', t.column(t.number([meter]), 3))).toEqual(
-      t.number([meter])
-    );
+    expect(
+      callBuiltinFunctor('last', [t.column(t.number([meter]), 3)])
+    ).toEqual(t.number([meter]));
   });
 
   it('errors', () => {
     expect(
-      callBuiltinFunctor('unknownFn', t.number()).errorCause
+      callBuiltinFunctor('unknownFn', [t.number()]).errorCause
     ).not.toBeNull();
 
-    expect(callBuiltinFunctor('if', t.number()).errorCause).not.toBeNull();
+    expect(callBuiltinFunctor('if', [t.number()]).errorCause).not.toBeNull();
   });
 });
 
@@ -162,56 +154,51 @@ const typeDimTests: Record<string, Test> = {
     const n2 = build2({ type: 'number' });
     const out = buildOut({ type: 'number' });
 
-    expect(callBuiltinFunctor('+', n, n2)).toEqual(out);
+    expect(callBuiltinFunctor('+', [n, n2])).toEqual(out);
   },
   cmpFunctor: (build, build2, _, buildOut) => {
     const n = build({ type: 'number' });
     const n2 = build2({ type: 'number' });
     const out = buildOut({ type: 'boolean' });
 
-    expect(callBuiltinFunctor('>', n, n2)).toEqual(out);
+    expect(callBuiltinFunctor('>', [n, n2])).toEqual(out);
 
     expect(
-      callBuiltinFunctor(
-        '>',
+      callBuiltinFunctor('>', [
         build({ type: 'number', unit: [meter] }),
-        build2({ type: 'number', unit: [meter] })
-      )
+        build2({ type: 'number', unit: [meter] }),
+      ])
     ).toEqual(out);
 
     expect(
-      callBuiltinFunctor(
-        '>',
+      callBuiltinFunctor('>', [
         build({ type: 'number', unit: [meter] }),
-        build2({ type: 'number', unit: null })
-      )
+        build2({ type: 'number', unit: null }),
+      ])
     ).toEqual(out);
 
     expect(
-      callBuiltinFunctor(
-        '>',
+      callBuiltinFunctor('>', [
         build({ type: 'number', unit: [meter] }),
-        build2({ type: 'number', unit: [second] })
-      ).errorCause!.spec
+        build2({ type: 'number', unit: [second] }),
+      ]).errorCause!.spec
     ).toHaveProperty('expectedUnit', [[meter], [second]]);
   },
   if: (build, build2, build3, buildOut) => {
     expect(
-      callBuiltinFunctor(
-        'if',
+      callBuiltinFunctor('if', [
         build({ type: 'boolean' }),
         build2({ type: 'number' }),
-        build3({ type: 'number' })
-      )
+        build3({ type: 'number' }),
+      ])
     ).toEqual(buildOut({ type: 'number' }));
 
     expect(
-      callBuiltinFunctor(
-        'if',
+      callBuiltinFunctor('if', [
         build({ type: 'boolean' }),
         build2({ type: 'string' }),
-        build3({ type: 'number' })
-      ).errorCause
+        build3({ type: 'number' }),
+      ]).errorCause
     ).not.toBeNull();
   },
 };

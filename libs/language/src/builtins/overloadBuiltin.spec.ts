@@ -10,12 +10,12 @@ import {
 
 const numberPlus: OverloadedBuiltinSpec = {
   argTypes: ['number', 'number'],
-  functor: (a, b) => a.isScalar('number').sameAs(b),
+  functor: ([a, b]) => a.isScalar('number').sameAs(b),
   fnValues: (a, b) => fromJS(Number(a.getData()) + Number(b.getData())),
 };
 const stringPlus: OverloadedBuiltinSpec = {
   argTypes: ['string', 'string'],
-  functor: (a, b) => a.isScalar('string').sameAs(b),
+  functor: ([a, b]) => a.isScalar('string').sameAs(b),
   fnValues: (a, b) => fromJS(String(a.getData()) + String(b.getData())),
 };
 
@@ -30,9 +30,13 @@ it('chooses the correct overload for a value', () => {
 });
 
 it('chooses the correct overload for a type', () => {
-  expect(getDefined(plus.functor)(t.number(), t.number())).toEqual(t.number());
-  expect(getDefined(plus.functor)(t.string(), t.string())).toEqual(t.string());
-  expect(getDefined(plus.functor)(t.number(), t.string()).errorCause).toEqual(
+  expect(getDefined(plus.functor)([t.number(), t.number()])).toEqual(
+    t.number()
+  );
+  expect(getDefined(plus.functor)([t.string(), t.string()])).toEqual(
+    t.string()
+  );
+  expect(getDefined(plus.functor)([t.number(), t.string()]).errorCause).toEqual(
     InferError.badOverloadedBuiltinCall('+', ['number', 'string'])
   );
 });
