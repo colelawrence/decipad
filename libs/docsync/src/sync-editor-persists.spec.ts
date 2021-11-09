@@ -118,7 +118,6 @@ Array [
         "text": "A new string of text to be inserted.",
       },
     ],
-    "type": "h1",
   },
   Object {
     "children": Array [

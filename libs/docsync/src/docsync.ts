@@ -49,47 +49,33 @@ export type DocSyncEditor = Editor &
 
 function ensureInitialDocument(doc: YDoc, root: DocTypes.Doc) {
   doc.transact(() => {
+    if (root.length > 1) {
+      return;
+    }
     if (root.length < 1) {
       root.push([new YMap()]);
     }
     const h1 = root.get(0);
-    if (!h1.get('type')) {
-      h1.set('type', 'h1');
-    }
-    if (!h1.get('children')) {
-      h1.set('children', new YArray());
-    }
+    h1.set('type', 'h1');
+    h1.set('children', new YArray());
+
     const h1Leafs = getDefined(
       h1.get('children')
     ) as YArray<DocTypes.LeafElement>;
-    if (h1Leafs.length < 1) {
-      h1Leafs.push([new YMap()]);
-    }
+    h1Leafs.push([new YMap()]);
     const h1Leaf = getDefined(h1Leafs.get(0));
-    if (!h1Leaf.get('text')) {
-      h1Leaf.set('text', new YText());
-    }
+    h1Leaf.set('text', new YText());
 
-    if (root.length < 2) {
-      root.push([new YMap()]);
-    }
+    root.push([new YMap()]);
     const p = root.get(1);
-    if (!p.get('type')) {
-      p.set('type', 'p');
-    }
-    if (!p.get('children')) {
-      p.set('children', new YArray());
-    }
+    p.set('type', 'p');
+    p.set('children', new YArray());
     const pLeafs = getDefined(
       p.get('children')
     ) as YArray<DocTypes.LeafElement>;
-    if (pLeafs.length < 1) {
-      pLeafs.push([new YMap()]);
-    }
+    pLeafs.push([new YMap()]);
     const pLeaf = getDefined(pLeafs.get(0));
-    if (!pLeaf.get('text')) {
-      pLeaf.set('text', new YText());
-    }
+    pLeaf.set('text', new YText());
   });
 }
 
