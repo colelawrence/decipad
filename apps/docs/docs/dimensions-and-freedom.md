@@ -60,7 +60,7 @@ BaseFuelPrice = 4 USD/galon
 
 Fuel = {
   Year,
-  InterestRateFromYear = 1.08 ** (Year - date(2020) in years),
+  InterestRateFromYear = 1.08 ** (Year - date(2020) as years),
   Price = round(BaseFuelPrice * InterestRateFromYear, 2)
 }
 ```
@@ -79,7 +79,7 @@ BaseFuelPrice = 4 USD/galon
 
 Fuel = {
   Year,
-  InterestRateFromYear = 1.08 ** (Year - date(2020) in years),
+  InterestRateFromYear = 1.08 ** (Year - date(2020) as years),
   Price = round(BaseFuelPrice * InterestRateFromYear, 2)
 }
 

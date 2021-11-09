@@ -175,7 +175,7 @@ it('retrieves the last element of a list', () => {
 });
 
 it('converts a time quantity into a number', () => {
-  expect(builtins.in.fnValues?.(new TimeQuantity({ year: 2 }), fromJS('years')))
+  expect(builtins.as.fnValues?.(new TimeQuantity({ year: 2 }), fromJS('years')))
     .toMatchInlineSnapshot(`
     Scalar {
       "value": 2,

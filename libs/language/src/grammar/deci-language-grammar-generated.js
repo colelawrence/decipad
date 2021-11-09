@@ -131,6 +131,7 @@ const knownUnits = require('./units').knownUnits;
 
 const reservedWords = new Set([
   'in',
+  'as',
   'where',
   'given',
   'per',
@@ -1002,13 +1003,13 @@ let ParserRules = [
   },
   { name: 'expression', symbols: ['nonGivenExp'], postprocess: id },
   { name: 'expression', symbols: ['given'], postprocess: id },
-  { name: 'expression', symbols: ['inExp'], postprocess: id },
+  { name: 'expression', symbols: ['asExp'], postprocess: id },
   { name: 'nonGivenExp', symbols: ['divMulOp'], postprocess: id },
   { name: 'nonGivenExp', symbols: ['table'], postprocess: id },
   { name: 'nonGivenExp', symbols: ['importData'], postprocess: id },
   {
-    name: 'inExp',
-    symbols: ['expression', '_', { literal: 'in' }, '_', 'identifier'],
+    name: 'asExp',
+    symbols: ['expression', '_', { literal: 'as' }, '_', 'identifier'],
     postprocess: (d, _l, reject) => {
       const left = d[0];
       const op = d[2];

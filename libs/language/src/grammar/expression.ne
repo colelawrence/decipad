@@ -6,13 +6,13 @@
 
 expression    -> nonGivenExp                            {% id %}
 expression    -> given                                  {% id %}
-expression    -> inExp                                  {% id %}
+expression    -> asExp                                  {% id %}
 
 nonGivenExp   -> divMulOp                               {% id %}
 nonGivenExp   -> table                                  {% id %}
 nonGivenExp   -> importData                             {% id %}
 
-inExp         -> expression _ "in" _ identifier         {%
+asExp         -> expression _ "as" _ identifier         {%
                                                         (d, _l, reject) => {
                                                           const left = d[0]
                                                           const op = d[2]

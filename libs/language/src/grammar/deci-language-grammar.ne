@@ -30,6 +30,7 @@ const knownUnits = require('./units').knownUnits
 
 const reservedWords = new Set([
   'in',
+  'as',
   'where',
   'given',
   'per',

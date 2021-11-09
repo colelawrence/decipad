@@ -19,29 +19,29 @@ date(2020-02-23) - date(2020-01-12)
 You can then convert a time interval to, let's say, days:
 
 ```deci live
-date(2020-02-23) - date(2020-01-12) in days
+date(2020-02-23) - date(2020-01-12) as days
 ```
 
 or hours:
 
 ```deci live
-date(2020-02-23 17:35) - date(2020-01-12 05:23) in hours
+date(2020-02-23 17:35) - date(2020-01-12 05:23) as hours
 ```
 
 or minutes:
 
 ```deci live
-date(2020-02-23 17:35) - date(2020-01-12 05:23) in minutes
+date(2020-02-23 17:35) - date(2020-01-12 05:23) as minutes
 ```
 
 or seconds:
 
 ```deci live
-date(2020-02-23 17:35:43) - date(2020-01-12 05:23:12) in seconds
+date(2020-02-23 17:35:43) - date(2020-01-12 05:23:12) as seconds
 ```
 
 or milliseconds:
 
 ```deci live
-date(2020-02-23 17:35:43) - date(2020-01-12 05:23:12) in milliseconds
+date(2020-02-23 17:35:43) - date(2020-01-12 05:23:12) as milliseconds
 ```

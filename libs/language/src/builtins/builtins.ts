@@ -434,7 +434,7 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
     fn: (date1, date2) => date1 >= date2,
     functor: dateCmpFunctor,
   },
-  in: overloadBuiltin('in', 2, [
+  as: overloadBuiltin('as', 2, [
     {
       argTypes: ['time-quantity', 'string'],
       fnValues: (timeQuantity, unit) => {
