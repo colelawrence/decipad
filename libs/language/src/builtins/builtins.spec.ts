@@ -55,6 +55,32 @@ it('concatenates tables', () => {
   });
 });
 
+it('looks things up', () => {
+  const tableType = t.table({
+    length: 123,
+    columnNames: ['Index', 'Value'],
+    columnTypes: [t.string(), t.number()],
+  });
+  const tableValue = Column.fromNamedValues(
+    [fromJS(['The Thing']), fromJS([12345])],
+    ['Index', 'Value']
+  );
+  const { functor, fnValues } = builtins.lookup;
+
+  expect(functor?.([tableType, t.string()]).toString()).toMatchInlineSnapshot(
+    `"row [ Index = <string>, Value = <number> ]"`
+  );
+  expect(fnValues?.(tableValue, fromJS('The Thing')).getData()).toEqual([
+    'The Thing',
+    12345,
+  ]);
+  expect(() =>
+    fnValues?.(tableValue, fromJS('Not found'))
+  ).toThrowErrorMatchingInlineSnapshot(
+    `"Could not find row by index \\"Not found\\""`
+  );
+});
+
 it('concatenates lists', () => {
   expect(
     builtins.cat.fnValuesNoAutomap?.([fromJS([1, 2, 3]), fromJS([4, 5, 6])])

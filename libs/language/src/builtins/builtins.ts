@@ -1,5 +1,7 @@
 import { produce } from 'immer';
 import { dequal } from 'dequal';
+
+import type { AST } from '../parser';
 import { Type, build as t } from '../type';
 import { getDefined, getInstanceof, zip } from '../utils';
 import {
@@ -10,12 +12,12 @@ import {
   Date,
   Column,
 } from '../interpreter/Value';
+import { RuntimeError } from '../interpreter/RuntimeError';
 
 import { overloadBuiltin } from './overloadBuiltin';
 import { BuiltinSpec } from './interfaces';
 import { dateOverloads } from './dateOverloads';
 import { approximateSubsetSumIndices } from './table';
-import { AST } from '..';
 
 const binopFunctor = ([a, b]: Type[]) =>
   Type.combine(a.isScalar('number'), b.sameAs(a));
@@ -381,6 +383,38 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
           });
         }
       }),
+  },
+  lookup: {
+    argCount: 2,
+    functor: ([table, index]) =>
+      Type.combine(
+        table
+          .isTable()
+          .mapType((t) => getDefined(t.columnTypes?.[0]?.isScalar('string'))),
+        index.isScalar('string'),
+        t.row(getDefined(table.columnTypes), getDefined(table.columnNames))
+      ),
+    fnValues: (table, needle) => {
+      table = getInstanceof(table, Column);
+      const needleString = getInstanceof(needle, Scalar).value as string;
+      const firstColumn = getInstanceof(table.values[0], Column);
+
+      const rowIndex = firstColumn.values.findIndex(
+        (value) => value instanceof Scalar && value.value === needleString
+      );
+
+      if (rowIndex === -1) {
+        throw new RuntimeError(`Could not find row by index "${needleString}"`);
+      }
+
+      return Column.fromNamedValues(
+        Array.from(
+          table.values,
+          (column) => (column as Column).values[rowIndex]
+        ),
+        table.valueNames as string[]
+      );
+    },
   },
   // Range stuff
   contains: overloadBuiltin('contains', 2, [

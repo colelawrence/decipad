@@ -7,6 +7,7 @@ import { Realm } from './Realm';
 import * as Interpreter from './interpreter-types';
 import { inferProgram } from '../infer';
 
+export { RuntimeError } from './RuntimeError';
 export { Realm, Interpreter, evaluate };
 
 export const run = async (
