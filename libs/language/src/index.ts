@@ -6,11 +6,7 @@ import { builtins } from './builtins';
 
 export { tokenize } from './grammar';
 export { parse, AST, Parser } from './parser';
-export {
-  inferTargetStatement,
-  makeContext,
-  getContextFromProgram,
-} from './infer';
+export { inferBlock, makeContext } from './infer';
 export type { Context } from './infer';
 export { Interpreter } from './interpreter';
 export * from './run';

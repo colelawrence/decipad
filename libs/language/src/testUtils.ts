@@ -1,7 +1,7 @@
 import { AST, Interpreter, InjectableExternalData } from '.';
 import { Realm, run } from './interpreter';
 import { Column, fromJS } from './interpreter/Value';
-import { inferTargetStatement, inferProgram, makeContext } from './infer';
+import { inferProgram, inferBlock, makeContext } from './infer';
 import { zip, AnyMapping } from './utils';
 import { Type, build as t } from './type';
 import { parseOneBlock } from './run';
@@ -12,11 +12,7 @@ export const runAST = async (
 ) => {
   const ctx = makeContext({ externalData });
 
-  const inferResult = await inferTargetStatement(
-    [block],
-    [0, block.args.length - 1],
-    ctx
-  );
+  const inferResult = await inferBlock(block, ctx);
 
   const erroredType = inferResult.errorCause != null ? inferResult : null;
   expect(erroredType).toEqual(null);
@@ -37,7 +33,7 @@ export const runCodeForVariables = async (
 
   const inferResult = await inferProgram(program);
 
-  const types = Object.fromEntries(inferResult.variables.entries());
+  const types = Object.fromEntries(inferResult.stack.top.entries());
 
   const erroredType = Object.values(types).find((t) => t.errorCause != null);
   if (erroredType != null) {

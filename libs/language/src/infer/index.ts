@@ -13,13 +13,13 @@ import {
 import { getDateFromAstForm } from '../date';
 
 import { callBuiltinFunctor } from '../builtins';
-import { Context, makeContext, getContextFromProgram } from './context';
+import { Context, makeContext } from './context';
 import { inferSequence } from './sequence';
 import { unifyColumnSizes } from './table';
 import { resolve as resolveData } from '../data';
 import { inferData } from './data';
 
-export { makeContext, getContextFromProgram };
+export { makeContext };
 export type { Context };
 
 const wrap =
@@ -355,65 +355,25 @@ export const inferStatement = wrap(
   }
 );
 
-export interface InferProgramResult {
-  variables: Map<string, Type>;
-  blockReturns: Array<Type>;
-}
+export const inferBlock = async (
+  block: AST.Block,
+  ctx = makeContext()
+): Promise<Type> => {
+  let last;
+  for (const stmt of block.args) {
+    // eslint-disable-next-line no-await-in-loop
+    last = await inferStatement(ctx, stmt);
+  }
+  return getDefined(last, 'Unexpected empty block');
+};
 
 export const inferProgram = async (
   program: AST.Block[],
   ctx = makeContext()
-): Promise<InferProgramResult> => {
-  const blockReturns: Array<Type> = [];
-
+): Promise<Context> => {
   for (const block of program) {
-    if (block.args.length === 0) {
-      throw new Error('panic: unexpected empty block');
-    }
-
-    for (let i = 0; i < block.args.length; i++) {
-      // eslint-disable-next-line no-await-in-loop
-      const returnedValue = await inferStatement(ctx, block.args[i]);
-
-      if (i === block.args.length - 1) {
-        blockReturns.push(getDefined(returnedValue));
-      }
-    }
+    // eslint-disable-next-line no-await-in-loop
+    await inferBlock(block, ctx);
   }
-
-  return {
-    variables: ctx.stack.top,
-    blockReturns,
-  };
-};
-
-export const inferTargetStatement = async (
-  program: AST.Block[],
-  [blockId, statementOffset]: [blockId: number, statementOffset: number],
-  ctx = makeContext()
-): Promise<Type> => {
-  for (let blockIndex = 0; blockIndex < program.length; blockIndex++) {
-    const block = program[blockIndex];
-
-    for (
-      let statementIndex = 0;
-      statementIndex < block.args.length;
-      statementIndex++
-    ) {
-      // eslint-disable-next-line no-await-in-loop
-      const type = await inferStatement(ctx, block.args[statementIndex]);
-
-      if (blockIndex === blockId && statementOffset === statementIndex) {
-        if (type instanceof Type) {
-          return type;
-        } else {
-          throw new Error('panic: trying to infer the type of a function');
-        }
-      }
-    }
-  }
-
-  throw new Error(
-    `panic: target not found: ${JSON.stringify([blockId, statementOffset])}`
-  );
+  return ctx;
 };

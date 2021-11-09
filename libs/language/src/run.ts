@@ -1,5 +1,5 @@
 import { AST, Parser, InjectableExternalData } from '.';
-import { inferTargetStatement, makeContext } from './infer';
+import { inferBlock, makeContext } from './infer';
 import { AnyMapping } from './utils';
 import { parse } from './parser';
 import { prettyPrintAST } from './parser/utils';
@@ -27,22 +27,18 @@ export const runAST = async (
 ) => {
   const ctx = makeContext({ externalData });
 
-  const inferResult = await inferTargetStatement(
-    [block],
-    [0, block.args.length - 1],
-    ctx
-  );
+  const type = await inferBlock(block, ctx);
 
-  const erroredType = inferResult.errorCause != null ? inferResult : null;
+  const erroredType = type.errorCause != null ? type : null;
   if (erroredType) {
-    throw new TypeError(inferResult.errorCause?.message || 'Type error');
+    throw new TypeError(type.errorCause?.message || 'Type error');
   }
 
   const [value] = await run([block], [0], new Realm(ctx));
 
   return {
     value,
-    type: inferResult,
+    type,
   };
 };
 

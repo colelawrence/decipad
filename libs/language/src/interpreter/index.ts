@@ -5,7 +5,7 @@ import { evaluate } from './evaluate';
 import { evaluateTargets } from './selective';
 import { Realm } from './Realm';
 import * as Interpreter from './interpreter-types';
-import { getContextFromProgram } from '../infer';
+import { inferProgram } from '../infer';
 
 export { Realm, Interpreter, evaluate };
 
@@ -14,7 +14,7 @@ export const run = async (
   desiredTargets: Array<string | number | [number, number]>,
   realm?: Realm
 ): Promise<Interpreter.Result> => {
-  realm = realm ?? new Realm(await getContextFromProgram(program));
+  realm = realm ?? new Realm(await inferProgram(program));
 
   return (await evaluateTargets(program, desiredTargets, realm)).map((v) => {
     return v.getData();

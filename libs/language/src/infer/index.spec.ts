@@ -1,4 +1,3 @@
-import { produce } from 'immer';
 import { dequal } from 'dequal';
 
 import { AST } from '..';
@@ -29,7 +28,7 @@ import {
   inferFunction,
   inferProgram,
 } from './index';
-import { objectToTableType } from '../testUtils';
+import { objectToMap, objectToTableType } from '../testUtils';
 
 const nilPos = {
   line: 0,
@@ -90,8 +89,7 @@ describe('variables', () => {
     );
 
     expect(
-      (await inferProgram([reassigning])).variables.get('Reassigned')
-        ?.errorCause
+      (await inferProgram([reassigning])).stack.get('Reassigned')?.errorCause
     ).not.toBeNull();
   });
 });
@@ -271,7 +269,7 @@ describe('tables', () => {
       )
     );
 
-    expect((await inferProgram([block])).variables.get('Col')).toEqual(
+    expect((await inferProgram([block])).stack.get('Col')).toEqual(
       t.column(t.number(), 3, 'Table')
     );
   });
@@ -636,48 +634,29 @@ describe('inferFunction', () => {
 });
 
 describe('inferProgram', () => {
-  it('infers the whole program', async () => {
-    const program: AST.Block[] = [
-      n('block', n('assign', n('def', 'A'), l(3)), c('+', r('A'), l(1.1))),
-    ];
-
-    expect(await inferProgram(program)).toEqual({
-      variables: new Map([['A', t.number()]]),
-      blockReturns: [t.number()],
-    });
-
-    const wrongProgram = produce(program, (wrongProgram: AST.Block[]) => {
-      const argList = wrongProgram[0].args[1].args[1] as AST.ArgList;
-
-      argList.args[1] = l('bad string, bad string!');
-    });
-
-    expect(await inferProgram(wrongProgram)).toMatchObject({
-      variables: new Map([['A', t.number()]]),
-      blockReturns: [
-        {
-          errorCause: InferError.badOverloadedBuiltinCall('+', [
-            'number',
-            'string',
-          ]),
-        },
-      ],
-    });
-  });
-
-  it('supports calling functions', async () => {
+  it('skips over errors', async () => {
+    const errorNode = c('+', r('A'), l('hi'));
     const program: AST.Block[] = [
       n(
         'block',
-        funcDef('Plus', ['A', 'B'], c('+', r('A'), r('B'))),
-        n('assign', n('def', 'Result'), c('Plus', l(2), l(2)))
+        assign('A', l(1)),
+        assign('Error', errorNode),
+        assign('B', l(2))
       ),
     ];
 
-    expect(await inferProgram(program)).toEqual({
-      variables: new Map([['Result', t.number()]]),
-      blockReturns: [t.number()],
-    });
+    const ctx = await inferProgram(program);
+
+    expect(ctx.stack.top).toEqual(
+      objectToMap({
+        A: t.number(),
+        Error: expect.objectContaining({
+          errorCause: expect.anything(),
+          node: errorNode,
+        }),
+        B: t.number(),
+      })
+    );
   });
 });
 

@@ -1,5 +1,5 @@
 import { AST } from '..';
-import { getContextFromProgram } from '../infer';
+import { inferProgram } from '../infer';
 import { n, c, l, block, assign, col } from '../utils';
 import { evaluate } from './evaluate';
 
@@ -16,14 +16,14 @@ it('can find a previous symbol', () => {
 
 describe('evaluateTableColumn', () => {
   const testEvaluate = async (exp: AST.Expression, rowCount: number) => {
-    const program = block(assign('numbers', col(1, 2, 3, 4)), exp);
-    const realm = new Realm(await getContextFromProgram([program]));
+    const testBlock = block(assign('numbers', col(1, 2, 3, 4)), exp);
+    const realm = new Realm(await inferProgram([testBlock]));
 
     // Evaluate first line, to inject "numbers"
-    await evaluate(realm, program.args[0]);
+    await evaluate(realm, testBlock.args[0]);
     const result = await evaluateTableColumn(
       realm,
-      program.args[1] as AST.Expression,
+      testBlock.args[1] as AST.Expression,
       rowCount
     );
 
