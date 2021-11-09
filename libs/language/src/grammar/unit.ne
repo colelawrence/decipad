@@ -64,7 +64,7 @@ const trimPrefix = unitName => {
 }
 
 const parseUnit = unitString => {
-  if (knownUnits.has(unitString)) {
+  if (knowsUnit(unitString)) {
     return {
       unit: unitString,
       exp: 1,
@@ -73,7 +73,7 @@ const parseUnit = unitString => {
     }
   } else {
     let [multiplier, name] = trimPrefix(unitString)
-    const known = knownUnits.has(name)
+    const known = knowsUnit(name)
 
     if (!known) {
       name = unitString

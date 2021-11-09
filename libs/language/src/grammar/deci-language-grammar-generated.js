@@ -69,7 +69,7 @@ const trimPrefix = (unitName) => {
 };
 
 const parseUnit = (unitString) => {
-  if (knownUnits.has(unitString)) {
+  if (knowsUnit(unitString)) {
     return {
       unit: unitString,
       exp: 1,
@@ -78,7 +78,7 @@ const parseUnit = (unitString) => {
     };
   } else {
     let [multiplier, name] = trimPrefix(unitString);
-    const known = knownUnits.has(name);
+    const known = knowsUnit(name);
 
     if (!known) {
       name = unitString;
@@ -127,7 +127,7 @@ const makeDateFragmentReader =
     }
   };
 
-const knownUnits = require('./units').knownUnits;
+import { knowsUnit } from '../units';
 
 const reservedWords = new Set([
   'in',
@@ -1009,39 +1009,15 @@ let ParserRules = [
   { name: 'nonGivenExp', symbols: ['importData'], postprocess: id },
   {
     name: 'asExp',
-    symbols: ['expression', '_', { literal: 'as' }, '_', 'identifier'],
+    symbols: ['expression', '_', { literal: 'as' }, '_', 'units'],
     postprocess: (d, _l, reject) => {
-      const left = d[0];
-      const op = d[2];
-      const right = d[4];
-
-      const units = addLoc(
-        {
-          type: 'literal',
-          args: ['string', right.name, null],
-        },
-        right
-      );
+      const exp = d[0];
+      const unit = d[4];
 
       return addArrayLoc(
         {
-          type: 'function-call',
-          args: [
-            addLoc(
-              {
-                type: 'funcref',
-                args: [op.value],
-              },
-              op
-            ),
-            addArrayLoc(
-              {
-                type: 'argument-list',
-                args: [left, units],
-              },
-              d
-            ),
-          ],
+          type: 'as',
+          args: [exp, unit.units],
         },
         d
       );

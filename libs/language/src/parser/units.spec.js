@@ -158,9 +158,9 @@ runTests({
           10,
           [
             {
-              unit: 'm',
+              unit: 'km',
               exp: 1,
-              multiplier: 1000,
+              multiplier: 1,
               known: true,
               start: {
                 char: 3,
@@ -240,9 +240,9 @@ runTests({
           3,
           [
             {
-              unit: 'm',
+              unit: 'km',
               exp: 2,
-              multiplier: 1000,
+              multiplier: 1,
               known: true,
               start: {
                 char: 2,
@@ -281,9 +281,9 @@ runTests({
           3,
           [
             {
-              unit: 'kg',
+              unit: 'g',
               exp: 3,
-              multiplier: 1,
+              multiplier: 1000,
               known: true,
               start: {
                 char: 2,
@@ -338,9 +338,9 @@ runTests({
           3,
           [
             {
-              unit: 'kg',
+              unit: 'g',
               exp: 3,
-              multiplier: 1,
+              multiplier: 1000,
               known: true,
               start: {
                 char: 2,

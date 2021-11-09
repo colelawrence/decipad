@@ -107,6 +107,15 @@ export interface Date {
   end?: Pos;
 }
 
+// As
+
+export interface As {
+  type: 'as';
+  args: [Expression, Unit[]];
+  start?: Pos;
+  end?: Pos;
+}
+
 // Columns, tables
 export interface Column {
   type: 'column';
@@ -208,7 +217,8 @@ export type Expression =
   | Date
   | Given
   | Table
-  | ImportedData;
+  | ImportedData
+  | As;
 
 export type Statement = FunctionDefinition | Assign | Expression;
 
@@ -239,4 +249,5 @@ export interface TypeToNode {
   given: Given;
   block: Block;
   'imported-data': ImportedData;
+  as: As;
 }

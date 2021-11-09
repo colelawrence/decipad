@@ -1,6 +1,5 @@
 import { produce } from 'immer';
 import { dequal } from 'dequal';
-import { singular } from 'pluralize';
 import { Type, build as t } from '../type';
 import { getDefined, getInstanceof, zip } from '../utils';
 import {
@@ -10,14 +9,12 @@ import {
   Scalar,
   Date,
   Column,
-  TimeQuantity,
 } from '../interpreter/Value';
 
 import { overloadBuiltin } from './overloadBuiltin';
 import { BuiltinSpec } from './interfaces';
 import { dateOverloads } from './dateOverloads';
 import { approximateSubsetSumIndices } from './table';
-import { convertTimeQuantityTo, Time } from '../date';
 import { AST } from '..';
 
 const binopFunctor = ([a, b]: Type[]) =>
@@ -434,23 +431,6 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
     fn: (date1, date2) => date1 >= date2,
     functor: dateCmpFunctor,
   },
-  as: overloadBuiltin('as', 2, [
-    {
-      argTypes: ['time-quantity', 'string'],
-      fnValues: (timeQuantity, unit) => {
-        return fromJS(
-          convertTimeQuantityTo(
-            timeQuantity as TimeQuantity,
-            singular(unit.getData() as string) as Time.Unit
-          )
-        );
-      },
-      functor: ([a, b]) =>
-        Type.combine(a.isTimeQuantity(), b.isScalar('string')).mapType(
-          () => t.number() // TODO: number should have same units as b string runtime value..
-        ),
-    },
-  ]),
   // Reduce funcs
   total: {
     argCount: 1,

@@ -1,7 +1,6 @@
 import {
   Column,
   fromJS,
-  TimeQuantity,
   Date as LanguageDate,
   Range,
   Scalar,
@@ -170,15 +169,6 @@ it('retrieves the last element of a list', () => {
     .toMatchInlineSnapshot(`
     Scalar {
       "value": 6,
-    }
-  `);
-});
-
-it('converts a time quantity into a number', () => {
-  expect(builtins.as.fnValues?.(new TimeQuantity({ year: 2 }), fromJS('years')))
-    .toMatchInlineSnapshot(`
-    Scalar {
-      "value": 2,
     }
   `);
 });

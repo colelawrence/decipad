@@ -26,7 +26,7 @@ import { tokenizer } from './tokenizer'
 
 @{%
 
-const knownUnits = require('./units').knownUnits
+import { knowsUnit } from '../units'
 
 const reservedWords = new Set([
   'in',

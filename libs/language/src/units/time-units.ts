@@ -1,0 +1,43 @@
+import { identity } from '../utils';
+import { UnitOfMeasure } from './known-units';
+
+export const baseUnit = 'second';
+
+export const units: UnitOfMeasure[] = [
+  {
+    name: 'millisecond',
+    baseQuantity: 'time',
+    toBaseQuantity: (ms) => ms / 1000,
+    fromBaseQuantity: (seconds) => seconds * 1000,
+  },
+  {
+    name: 'second',
+    baseQuantity: 'time',
+    toBaseQuantity: identity,
+    fromBaseQuantity: identity,
+  },
+  {
+    name: 'minute',
+    baseQuantity: 'time',
+    toBaseQuantity: (minutes) => minutes * 60,
+    fromBaseQuantity: (seconds) => seconds / 60,
+  },
+  {
+    name: 'hour',
+    baseQuantity: 'time',
+    toBaseQuantity: (hours) => hours * 3600,
+    fromBaseQuantity: (seconds) => seconds / 3600,
+  },
+  {
+    name: 'day',
+    baseQuantity: 'time',
+    toBaseQuantity: (days) => days * 86400,
+    fromBaseQuantity: (seconds) => seconds / 86400,
+  },
+  {
+    name: 'week',
+    baseQuantity: 'time',
+    toBaseQuantity: (weeks) => weeks * 604800,
+    fromBaseQuantity: (seconds) => seconds / 604800,
+  },
+];

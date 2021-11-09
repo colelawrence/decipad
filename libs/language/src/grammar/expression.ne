@@ -12,28 +12,15 @@ nonGivenExp   -> divMulOp                               {% id %}
 nonGivenExp   -> table                                  {% id %}
 nonGivenExp   -> importData                             {% id %}
 
-asExp         -> expression _ "as" _ identifier         {%
+asExp         -> expression _ "as" _ units              {%
                                                         (d, _l, reject) => {
-                                                          const left = d[0]
-                                                          const op = d[2]
-                                                          const right = d[4]
-
-                                                          const units = addLoc({
-                                                            type: 'literal',
-                                                            args: ['string', right.name, null],
-                                                          }, right)
+                                                          const exp = d[0]
+                                                          const unit = d[4]
 
                                                           return addArrayLoc({
-                                                            type: 'function-call',
+                                                            type: 'as',
                                                             args: [
-                                                              addLoc({
-                                                                type: 'funcref',
-                                                                args: [op.value],
-                                                              }, op),
-                                                              addArrayLoc({
-                                                                type: 'argument-list',
-                                                                args: [left, units],
-                                                              }, d)
+                                                              exp, unit.units
                                                             ],
                                                           }, d);
                                                         }

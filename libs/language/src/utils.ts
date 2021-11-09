@@ -111,6 +111,10 @@ export function r(fName: string) {
   return n('ref', fName);
 }
 
+export function as(left: AST.Expression, units: AST.Unit[]) {
+  return n('as', left, units);
+}
+
 export function funcDef(
   fName: string,
   args: string[],
@@ -166,6 +170,7 @@ const expressionTypesSet = new Set([
   'sequence',
   'date',
   'given',
+  'as',
 ]);
 
 export const isExpression = (
@@ -267,3 +272,7 @@ export const anyMappingToMap = <T>(mapping: AnyMapping<T>): Map<string, T> => {
     return new Map(Object.entries(mapping));
   }
 };
+
+export function identity<T>(o: T): T {
+  return o;
+}

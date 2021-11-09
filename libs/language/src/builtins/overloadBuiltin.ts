@@ -14,6 +14,7 @@ export type OverloadTypeName =
   | 'number'
   | 'string'
   | 'boolean'
+  | 'unit'
   | 'date'
   | 'time-quantity';
 

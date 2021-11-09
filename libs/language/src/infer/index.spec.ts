@@ -8,6 +8,7 @@ import {
   c,
   n,
   r,
+  as,
   col,
   range,
   date,
@@ -37,7 +38,15 @@ const nilPos = {
 };
 let nilCtx = makeContext();
 const degC: AST.Unit = {
-  unit: 'degrees',
+  unit: 'celcius',
+  exp: 1,
+  multiplier: 1,
+  known: true,
+  start: nilPos,
+  end: nilPos,
+};
+const degF: AST.Unit = {
+  unit: 'fahrenheit',
   exp: 1,
   multiplier: 1,
   known: true,
@@ -751,6 +760,19 @@ describe('Data', () => {
         columnNames: [],
         columnTypes: [],
       })
+    );
+  });
+});
+
+describe('as', () => {
+  it('converts unit-less number to united number', async () => {
+    expect(await inferExpression(nilCtx, as(l(3), [degC]))).toEqual(
+      t.number([degC])
+    );
+  });
+  it('converts unit number to other unit number', async () => {
+    expect(await inferExpression(nilCtx, as(l(3, degC), [degF]))).toEqual(
+      t.number([degF])
     );
   });
 });

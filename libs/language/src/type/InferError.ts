@@ -1,5 +1,6 @@
 import { AST, Time, Type } from '..';
 import { OverloadTypeName } from '../builtins/overloadBuiltin';
+import { stringifyUnits } from './units';
 
 export type ErrSpec =
   | {
@@ -39,6 +40,15 @@ export type ErrSpec =
       errType: 'badOverloadedBuiltinCall';
       functionName: string;
       gotArgTypes: OverloadTypeName[];
+    }
+  | {
+      errType: 'cannotConvertBetweenUnits';
+      fromUnit: AST.Unit[];
+      toUnit: AST.Unit[];
+    }
+  | {
+      errType: 'cannotConvertToUnit';
+      toUnit: AST.Unit[];
     };
 
 // exhaustive switch
@@ -83,6 +93,14 @@ function specToString(spec: ErrSpec): string {
         .map((argType) => argType.replace('-', ' '))
         .join(', ');
       return `The function ${spec.functionName} cannot be called with (${gotArgTypes})`;
+    }
+    case 'cannotConvertBetweenUnits': {
+      return `Don't know how to convert between units ${stringifyUnits(
+        spec.fromUnit
+      )} and ${stringifyUnits(spec.toUnit)}`;
+    }
+    case 'cannotConvertToUnit': {
+      return `Cannot convert to unit ${stringifyUnits(spec.toUnit)}`;
     }
   }
 }
@@ -166,6 +184,21 @@ export class InferError {
       errType: 'badOverloadedBuiltinCall',
       functionName,
       gotArgTypes,
+    });
+  }
+
+  static cannotConvertBetweenUnits(fromUnit: AST.Unit[], toUnit: AST.Unit[]) {
+    return new InferError({
+      errType: 'cannotConvertBetweenUnits',
+      fromUnit,
+      toUnit,
+    });
+  }
+
+  static cannotConvertToUnit(toUnit: AST.Unit[]) {
+    return new InferError({
+      errType: 'cannotConvertToUnit',
+      toUnit,
     });
   }
 

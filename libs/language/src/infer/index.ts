@@ -18,6 +18,7 @@ import { inferSequence } from './sequence';
 import { unifyColumnSizes } from './table';
 import { resolve as resolveData } from '../data';
 import { inferData } from './data';
+import { inferAs } from './as';
 
 export { makeContext };
 export type { Context };
@@ -279,6 +280,10 @@ export const inferExpression = wrap(
         } catch (err) {
           return t.impossible((err as Error).message);
         }
+      }
+      case 'as': {
+        const [left, unit] = expr.args;
+        return inferAs(ctx, left, unit);
       }
     }
   }

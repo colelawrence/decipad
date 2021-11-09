@@ -10,6 +10,7 @@ import { Scalar, Range, Date, Column, Value, TimeQuantity } from './Value';
 import { evaluateTable } from './table';
 import { evaluateGiven } from './given';
 import { evaluateData } from './data';
+import { evaluateAs } from './as';
 import { resolve as resolveData } from '../data';
 
 // Gets a single value from an expanded AST.
@@ -151,12 +152,15 @@ export async function evaluate(
       return evaluateGiven(realm, node);
     }
     case 'imported-data': {
-      // TODO
       const [url, contentType] = node.args;
       return evaluateData(
         realm,
         await resolveData({ url, contentType, fetch: realm.inferContext.fetch })
       );
+    }
+    case 'as': {
+      const [exp, units] = node.args;
+      return evaluateAs(realm, exp, units);
     }
   }
 }
