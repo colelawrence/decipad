@@ -21,7 +21,7 @@ export const GithubSignInButton = ({
       size="sm"
       onClick={onClick}
     >
-      Sign in With GitHub
+      Sign in with GitHub
     </Button>
   );
 };
