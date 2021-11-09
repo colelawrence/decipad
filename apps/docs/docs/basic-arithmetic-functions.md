@@ -24,7 +24,7 @@ Here you can see what happens when you try to add numbers with different units:
 5 apples + 5 oranges
 ```
 
-But if you're adding or subtracting two numbers, you can omit the units in one of them:
+When doing any basic arithmetic operation with two numbers, you can omit the units in one of them:
 
 ```deci live
 5 apples - 2
