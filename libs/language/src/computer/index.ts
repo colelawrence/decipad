@@ -77,13 +77,15 @@ const distinctMap = <In, Out>(
 type ComputerRet = ComputeResponse | ComputePanic;
 export interface ComputeStreamOptions {
   pipeErrors?: () => OperatorFunction<ComputerRet, ComputerRet>;
+  computer?: Computer;
 }
 
 export const makeComputeStream =
-  ({ pipeErrors = () => delay(2000) }: ComputeStreamOptions = {}) =>
+  ({
+    pipeErrors = () => delay(2000),
+    computer = new Computer(),
+  }: ComputeStreamOptions = {}) =>
   (in$: ReqsWithCursor$): Res$ => {
-    const computer = new Computer();
-
     const req$ = distinctMap(in$, ([req]) => req);
     const cursors$ = distinctMap(in$, ([, cursor]) => cursor);
     const blockIds$ = distinctMap(cursors$, (cursor) => cursor?.[0] ?? '');

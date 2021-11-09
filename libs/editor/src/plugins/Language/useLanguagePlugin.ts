@@ -10,7 +10,7 @@ import {
   ResultsContextValue,
   ProgramBlocksContextValue,
 } from '@decipad/ui';
-import { ComputeRequest, makeComputeStream } from '@decipad/language';
+import { Computer, ComputeRequest, makeComputeStream } from '@decipad/language';
 import { getCursorPos, CursorPos } from './getCursorPos';
 import { slateDocumentToComputeRequest } from './slateDocumentToComputeRequest';
 import { SlateNode } from './common';
@@ -34,6 +34,7 @@ interface ParsedProgramBlock {
 type ParsedProgramBlocks = ParsedProgramBlock[];
 
 export const useLanguagePlugin = (): UseLanguagePluginRet => {
+  const [computer] = useState(() => new Computer());
   const [results, setResults] = useState<ResultsContextValue>(
     makeResultsContextValue
   );
@@ -48,7 +49,7 @@ export const useLanguagePlugin = (): UseLanguagePluginRet => {
       .pipe(
         // Debounce to give React an easier time
         debounceTime(100),
-        makeComputeStream()
+        makeComputeStream({ computer })
       )
       // Catch all errors here
       .subscribe({
@@ -84,7 +85,7 @@ export const useLanguagePlugin = (): UseLanguagePluginRet => {
     return () => {
       sub.unsubscribe();
     };
-  }, [evaluationRequests]);
+  }, [evaluationRequests, computer]);
 
   return {
     languagePlugin: useMemo(

@@ -162,7 +162,7 @@ export class Computer {
   /**
    * Get names for the autocomplete, and information about them
    */
-  async getAutocompleteNames([blockId, stmtIdx]: ValueLocation): Promise<
+  async getNamesDefinedBefore([blockId, stmtIdx]: ValueLocation): Promise<
     AutocompleteName[]
   > {
     const program = getGoodBlocks(this.previouslyParsed);
@@ -175,6 +175,8 @@ export class Computer {
     function* findNames(): Iterable<AutocompleteName> {
       for (const block of program) {
         for (const statement of block.args) {
+          if (statement === findUntil) return;
+
           const type = nodeTypes.get(statement);
 
           if (statement.type === 'assign' && type) {
@@ -192,8 +194,6 @@ export class Computer {
               name: statement.args[0].args[0],
             };
           }
-
-          if (statement === findUntil) return;
         }
       }
     }

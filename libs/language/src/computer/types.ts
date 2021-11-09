@@ -54,6 +54,7 @@ export interface ComputeResponse {
   indexLabels: Map<string, string[]>;
 }
 
+/** Contains the results  */
 export interface IdentifiedResult {
   blockId: string;
   error?: Error;
