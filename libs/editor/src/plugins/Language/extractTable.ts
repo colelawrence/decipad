@@ -1,5 +1,4 @@
 import { AST } from '@decipad/language';
-import { zip } from '@decipad/utils';
 import { astNode } from '../../utils/astNode';
 import { TABLE_INPUT } from '../../utils/elementTypes';
 import { TableData } from '../../utils/tableTypes';
@@ -23,25 +22,19 @@ export function isInteractiveTable(block: any): block is InteractiveTableNode {
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
 function getTableNode(tableData: TableData): AST.Table {
-  const columnValues: AST.Column[] = tableData.columns.map(
-    ({ cellType, cells }) => {
+  const cols: AST.Table['args'] = tableData.columns.map(
+    ({ columnName, cellType, cells }) => {
+      const cellNodes = cells.map(
+        (cell) => parseCell(cellType, cell) ?? getNullReplacementValue(cellType)
+      );
+
       return astNode(
-        'column',
-        cells.map((cell) => {
-          return parseCell(cellType, cell) ?? getNullReplacementValue(cellType);
-        })
+        'table-column',
+        astNode('coldef', columnName),
+        astNode('column', astNode('column-items', ...cellNodes))
       );
     }
   );
-
-  const cols: (AST.Column | AST.ColDef)[] = [];
-  for (const [{ columnName }, colValue] of zip(
-    tableData.columns,
-    columnValues
-  )) {
-    cols.push(astNode('coldef', columnName));
-    cols.push(colValue);
-  }
 
   return astNode('table', ...cols);
 }

@@ -117,16 +117,30 @@ export interface As {
 }
 
 // Columns, tables
+export interface ColumnItems {
+  type: 'column-items';
+  args: Expression[];
+  start?: Pos;
+  end?: Pos;
+}
+
 export interface Column {
   type: 'column';
-  args: [contents: Expression[]];
+  args: [items: ColumnItems];
+  start?: Pos;
+  end?: Pos;
+}
+
+export interface TableColumn {
+  type: 'table-column';
+  args: [name: ColDef, column: Expression];
   start?: Pos;
   end?: Pos;
 }
 
 export interface Table {
   type: 'table';
-  args: (ColDef | Expression)[];
+  args: TableColumn[];
   start?: Pos;
   end?: Pos;
 }
@@ -222,9 +236,9 @@ export type Expression =
 
 export type Statement = FunctionDefinition | Assign | Expression;
 
-export type Lists = FunctionArgumentNames | ArgList;
+type Lists = FunctionArgumentNames | ArgList | ColumnItems;
 
-export type Node = Block | Statement | Identifier | Lists;
+export type Node = Block | Statement | Identifier | Lists | TableColumn;
 
 export interface TypeToNode {
   def: Def;
@@ -240,7 +254,9 @@ export interface TypeToNode {
   range: Range;
   sequence: Sequence;
   date: Date;
+  'column-items': ColumnItems;
   column: Column;
+  'table-column': TableColumn;
   table: Table;
   'property-access': PropertyAccess;
   assign: Assign;

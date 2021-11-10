@@ -852,58 +852,69 @@ let ParserRules = [
       addLoc(
         {
           type: 'column',
-          args: [[]],
+          args: [
+            addLoc(
+              {
+                type: 'column-items',
+                args: [],
+              },
+              d[1]
+            ),
+          ],
         },
         d[0],
         d[2]
       ),
   },
-  { name: 'column$ebnf$1', symbols: [] },
-  {
-    name: 'column$ebnf$1$subexpression$1',
-    symbols: ['_', { literal: ',' }, '_', 'expression'],
-  },
-  {
-    name: 'column$ebnf$1',
-    symbols: ['column$ebnf$1', 'column$ebnf$1$subexpression$1'],
-    postprocess: function arrpush(d) {
-      return d[0].concat([d[1]]);
-    },
-  },
   {
     name: 'column',
-    symbols: [
-      { literal: '[' },
-      '_',
-      'expression',
-      'column$ebnf$1',
-      '_',
-      { literal: ']' },
-    ],
+    symbols: [{ literal: '[' }, 'colContents', { literal: ']' }],
     postprocess: (d, _l, reject) => {
-      const elems = [d[2], ...d[3].map((listItem) => listItem[3])];
-
       if (
-        elems.every((elem) => {
-          return (
+        d[1].args.every(
+          (elem) =>
             elem.type === 'literal' &&
             elem.args[0] === 'number' &&
             elem.args[2] &&
             elem.args[2].length === 1 &&
             timeUnitStrings.has(elem.args[2][0].unit)
-          );
-        })
+        )
       ) {
         return reject;
       } else {
         return addArrayLoc(
           {
             type: 'column',
-            args: [elems],
+            args: [d[1]],
           },
           d
         );
       }
+    },
+  },
+  { name: 'colContents$ebnf$1', symbols: [] },
+  {
+    name: 'colContents$ebnf$1$subexpression$1',
+    symbols: ['_', { literal: ',' }, '_', 'expression'],
+  },
+  {
+    name: 'colContents$ebnf$1',
+    symbols: ['colContents$ebnf$1', 'colContents$ebnf$1$subexpression$1'],
+    postprocess: function arrpush(d) {
+      return d[0].concat([d[1]]);
+    },
+  },
+  {
+    name: 'colContents',
+    symbols: ['_', 'expression', 'colContents$ebnf$1', '_'],
+    postprocess: (d, _l, reject) => {
+      return addArrayLoc(
+        {
+          type: 'column-items',
+          args: [d[1], ...d[2].map((listItem) => listItem[3])],
+        },
+        d
+      );
     },
   },
   {
@@ -929,7 +940,7 @@ let ParserRules = [
   },
   {
     name: 'table',
-    symbols: [{ literal: '{' }, 'tableColDef', { literal: '}' }],
+    symbols: [{ literal: '{' }, 'tableContents', { literal: '}' }],
     postprocess: (d) => {
       return addArrayLoc(
         {
@@ -940,67 +951,73 @@ let ParserRules = [
       );
     },
   },
-  { name: 'tableColDef', symbols: ['_'], postprocess: (d) => [] },
-  { name: 'tableColDef$ebnf$1', symbols: [] },
+  { name: 'tableContents', symbols: ['_'], postprocess: (d) => [] },
+  { name: 'tableContents$ebnf$1', symbols: [] },
   {
-    name: 'tableColDef$ebnf$1$subexpression$1',
-    symbols: ['tableDefSeparator', 'tableOneColDef'],
+    name: 'tableContents$ebnf$1$subexpression$1',
+    symbols: ['tableSep', 'tableOneItem'],
   },
   {
-    name: 'tableColDef$ebnf$1',
-    symbols: ['tableColDef$ebnf$1', 'tableColDef$ebnf$1$subexpression$1'],
+    name: 'tableContents$ebnf$1',
+    symbols: ['tableContents$ebnf$1', 'tableContents$ebnf$1$subexpression$1'],
     postprocess: function arrpush(d) {
       return d[0].concat([d[1]]);
     },
   },
   {
-    name: 'tableColDef',
-    symbols: ['_', 'tableOneColDef', 'tableColDef$ebnf$1', '_'],
+    name: 'tableContents',
+    symbols: ['_', 'tableOneItem', 'tableContents$ebnf$1', '_'],
     postprocess: ([_ws, first, rest]) => {
-      const coldefs = [...first];
+      const coldefs = [first];
 
       for (const [_sep, coldef] of rest ?? []) {
-        coldefs.push(...coldef);
+        coldefs.push(coldef);
       }
 
       return coldefs;
     },
   },
   {
-    name: 'tableOneColDef',
+    name: 'tableOneItem',
     symbols: ['identifier'],
-    postprocess: ([ref]) => [
-      addLoc({ type: 'coldef', args: [ref.name] }, ref),
-      addLoc({ type: 'ref', args: [ref.name] }, ref),
-    ],
+    postprocess: ([ref]) => {
+      return addLoc(
+        {
+          type: 'table-column',
+          args: [
+            addLoc({ type: 'coldef', args: [ref.name] }, ref),
+            addLoc({ type: 'ref', args: [ref.name] }, ref),
+          ],
+        },
+        ref
+      );
+    },
   },
   {
-    name: 'tableOneColDef',
+    name: 'tableOneItem',
     symbols: ['identifier', '_', { literal: '=' }, '_', 'expression'],
     postprocess: (d) => {
       const ref = d[0];
-      return [
-        addLoc(
-          {
-            type: 'coldef',
-            args: [ref.name],
-          },
-          ref
-        ),
-        d[4],
-      ];
+      const colDef = addLoc(
+        {
+          type: 'coldef',
+          args: [ref.name],
+        },
+        ref
+      );
+
+      return addArrayLoc(
+        {
+          type: 'table-column',
+          args: [colDef, d[4]],
+        },
+        d
+      );
     },
   },
-  { name: 'tableDefSeparator$subexpression$1', symbols: ['__n'] },
-  {
-    name: 'tableDefSeparator$subexpression$1',
-    symbols: ['_', { literal: ',' }, '_'],
-  },
-  {
-    name: 'tableDefSeparator',
-    symbols: ['tableDefSeparator$subexpression$1'],
-    postprocess: id,
-  },
+  { name: 'tableSep$subexpression$1', symbols: ['__n'] },
+  { name: 'tableSep$subexpression$1', symbols: ['_', { literal: ',' }, '_'] },
+  { name: 'tableSep', symbols: ['tableSep$subexpression$1'], postprocess: id },
   { name: 'expression', symbols: ['nonGivenExp'], postprocess: id },
   { name: 'expression', symbols: ['given'], postprocess: id },
   { name: 'expression', symbols: ['asExp'], postprocess: id },

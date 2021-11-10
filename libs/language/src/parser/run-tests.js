@@ -98,12 +98,7 @@ export function runTests(tests) {
       let results;
       let parseError;
       try {
-        results = parse([
-          {
-            id: name,
-            source,
-          },
-        ]);
+        results = parse([{ id: name, source }]);
       } catch (err) {
         parseError = err;
       }

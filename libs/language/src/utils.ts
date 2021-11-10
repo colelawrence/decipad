@@ -58,7 +58,10 @@ export function timeQuantity(items: { [unit in Time.Unit]?: number }) {
 export function col(...values: (LitType | AST.Expression)[]): AST.Column {
   return n(
     'column',
-    values.map((value) => (isExpression(value) ? value : l(value)))
+    n(
+      'column-items',
+      ...values.map((value) => (isExpression(value) ? value : l(value)))
+    )
   );
 }
 
@@ -84,13 +87,13 @@ export function range(
 }
 
 export function table(items: Record<string, AST.Expression>): AST.Table {
-  const tableCols = [];
+  const args: AST.Table['args'] = [];
+
   for (const [key, value] of Object.entries(items)) {
-    tableCols.push(n('coldef', key));
-    tableCols.push(value);
+    args.push(n('table-column', n('coldef', key), value));
   }
 
-  return n('table', ...tableCols);
+  return n('table', ...args);
 }
 
 export function tableDef(

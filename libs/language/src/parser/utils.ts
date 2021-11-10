@@ -1,6 +1,6 @@
 import { AST } from '..';
 import { stringifyUnits } from '../type/units';
-import { getIdentifierString, isNode, isStatement, pairwise } from '../utils';
+import { getIdentifierString, isNode, isStatement } from '../utils';
 
 const prettyPrint = (node: AST.Node, indent: number) => {
   const perLine = isStatement(node) || ['block', 'table'].includes(node.type);
@@ -30,10 +30,17 @@ const prettyPrint = (node: AST.Node, indent: number) => {
     }
     case 'table': {
       fname = 'table';
-      printedArgs = Array.from(
-        pairwise<AST.ColDef, AST.Expression>(node.args),
-        ([colName, val]) => `${colName.args[0]} ${prettyPrint(val, indent + 1)}`
-      );
+      printedArgs = Array.from(node.args, ({ args }) => {
+        const [colName, val] = args;
+        return `${colName.args[0]} ${prettyPrint(val, indent + 1)}`;
+      });
+      break;
+    }
+    case 'column': {
+      fname = 'column';
+      printedArgs = Array.from(node.args[0].args, (item) => {
+        return prettyPrint(item, indent + 1);
+      });
       break;
     }
     default: {

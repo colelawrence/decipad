@@ -3,13 +3,7 @@ import { produce } from 'immer';
 
 import { AST, Time } from '..';
 import { InferError, Type, build as t } from '../type';
-import {
-  getDefined,
-  zip,
-  getIdentifierString,
-  getOfType,
-  pairwise,
-} from '../utils';
+import { getDefined, zip, getIdentifierString, getOfType } from '../utils';
 import { getDateFromAstForm } from '../date';
 
 import { callBuiltinFunctor } from '../builtins';
@@ -113,7 +107,7 @@ export const inferExpression = wrap(
       }
       case 'column': {
         const cellTypes = await pSeries(
-          expr.args[0].map((a) => () => inferExpression(ctx, a))
+          expr.args[0].args.map((a) => () => inferExpression(ctx, a))
         );
 
         const erroredCell = cellTypes.find((cell) => cell.errorCause != null);
@@ -143,9 +137,9 @@ export const inferExpression = wrap(
           const columnTypes = [];
           const columnNames = [];
 
-          for (const [colDef, expr] of pairwise<AST.ColDef, AST.Expression>(
-            columns
-          )) {
+          for (const {
+            args: [colDef, expr],
+          } of columns) {
             const name = getIdentifierString(colDef);
             // eslint-disable-next-line no-await-in-loop
             const type = await inferExpression(ctx, expr);

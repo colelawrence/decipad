@@ -1,5 +1,5 @@
 import { AST } from '..';
-import { walk, getIdentifierString, isExpression, pairwise } from '../utils';
+import { walk, getIdentifierString, isExpression } from '../utils';
 import { evaluate } from './evaluate';
 import { mapWithPrevious } from './previous';
 import { Realm } from './Realm';
@@ -59,7 +59,7 @@ export const evaluateTable = async (
 ): Promise<Value> => {
   const colNames: string[] = [];
   const colValues: Value[] = [];
-  const { args: columns } = table;
+  const { args: items } = table;
   const { tableLength } = realm.getTypeAt(table);
 
   if (typeof tableLength !== 'number') {
@@ -67,7 +67,8 @@ export const evaluateTable = async (
   }
 
   return realm.stack.withPush(async () => {
-    for (const [def, column] of pairwise<AST.ColDef, AST.Expression>(columns)) {
+    for (const item of items) {
+      const [def, column] = item.args;
       const colName = getIdentifierString(def);
       // eslint-disable-next-line no-await-in-loop
       const columnData = await evaluateTableColumn(realm, column, tableLength);

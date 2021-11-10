@@ -123,7 +123,7 @@ export async function evaluate(
     }
     case 'column': {
       const values: Value[] = await pSeries(
-        node.args[0].map((v) => () => evaluate(realm, v))
+        node.args[0].args.map((v) => () => evaluate(realm, v))
       );
 
       return Column.fromValues(values);
