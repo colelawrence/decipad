@@ -7,12 +7,14 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'millisecond',
     baseQuantity: 'time',
+    abbreviations: ['ms'],
     toBaseQuantity: (ms) => ms / 1000,
     fromBaseQuantity: (seconds) => seconds * 1000,
   },
   {
     name: 'second',
     baseQuantity: 'time',
+    abbreviations: ['sec', 's'],
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
   },

@@ -2,6 +2,7 @@ import { produce } from 'immer';
 import { addIrregularRule, singular, plural } from 'pluralize';
 import { AST, Type } from '..';
 import { getDefined, units } from '../utils';
+import { knowsUnit } from '../units';
 
 addIrregularRule('USD', 'USD');
 addIrregularRule('EUR', 'EUR');
@@ -10,12 +11,16 @@ const byExp = (u1: AST.Unit, u2: AST.Unit): number => u2.exp - u1.exp;
 
 const pluralizeUnit = (baseUnit: AST.Unit): AST.Unit => {
   const { unit } = baseUnit;
-  const singularUnit = plural(unit);
-  if (singularUnit === unit) {
+  if (knowsUnit(unit)) {
+    // do not pluralize well-known units
+    return baseUnit;
+  }
+  const pluralUnit = plural(unit);
+  if (pluralUnit === unit) {
     return baseUnit;
   }
   return produce(baseUnit, (u) => {
-    u.unit = singularUnit;
+    u.unit = pluralUnit;
   });
 };
 
