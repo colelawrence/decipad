@@ -13,32 +13,16 @@ import {
   RoleRecord,
   User,
 } from '@decipad/backendtypes';
-import tables, { allPages } from '@decipad/services/tables';
+import tables from '@decipad/services/tables';
 import { subscribe } from '@decipad/services/pubsub';
-import { create as createPad2 } from '@decipad/services/pads';
+import {
+  create as createPad2,
+  duplicate as duplicateSharedDoc,
+} from '@decipad/services/pads';
 import Resource from '@decipad/graphqlresource';
+
 import { requireUser, isAuthenticatedAndAuthorized } from '../authorization';
 import paginate from '../utils/paginate';
-
-async function duplicateSharedDoc(oldId: string, newId: string): Promise<void> {
-  const data = await tables();
-  const oldResource = `/pads/${oldId}`;
-  const newResource = `/pads/${newId}`;
-  for await (const update of allPages(data.docsyncupdates, {
-    KeyConditionExpression: 'id = :id',
-    ExpressionAttributeValues: {
-      ':id': oldResource,
-    },
-  })) {
-    if (update) {
-      await data.docsyncupdates.put({
-        id: newResource,
-        seq: update?.seq,
-        data: update?.data,
-      });
-    }
-  }
-}
 
 const padResource = Resource({
   resourceTypeName: 'pads',
@@ -157,7 +141,7 @@ const resolvers = {
         user
       );
 
-      await duplicateSharedDoc(id, clonedPad.id);
+      await duplicateSharedDoc(id, clonedPad.id, previousPad.name);
 
       return clonedPad;
     },

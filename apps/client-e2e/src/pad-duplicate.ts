@@ -53,7 +53,7 @@ describe('Duplicate pad', () => {
     await waitForExpect(async () => {
       expect((await getPadContent()).slice(0, 4)).toMatchObject([
         {
-          text: 'pad title here',
+          text: 'Copy of pad title here',
           type: 'h1',
         },
         {
