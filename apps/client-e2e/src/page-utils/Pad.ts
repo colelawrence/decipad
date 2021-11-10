@@ -29,18 +29,18 @@ export async function getPadName() {
   return (await $name!.textContent())!.trim();
 }
 
-export async function getPadRoot(): Promise<ElementHandle | null> {
-  return page.$('[data-slate-node="value"]');
+export async function getPadRoot($page = page): Promise<ElementHandle | null> {
+  return $page.$('[data-slate-node="value"]');
 }
 
-export async function getPadContent() {
-  const $padValue = await getPadRoot();
+export async function getPadContent($page = page) {
+  const $padValue = await getPadRoot($page);
   expect($padValue).not.toBeNull();
   const $elements = await $padValue!.$$('[data-slate-node="element"]');
   const padContent: PadContent = [];
   for (const $element of $elements) {
     padContent.push({
-      type: (await getTagName($element)).toLowerCase(),
+      type: (await getTagName($element, $page)).toLowerCase(),
       text: (await $element.innerText()).trim(),
     });
   }

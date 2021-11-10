@@ -20,11 +20,11 @@ type ErrorWithCode = Error & {
   code: string;
 };
 
-type MessageType = 0 | 1 | 2 | 3;
-const messageSync = 0;
-const messageQueryAwareness = 3;
-const messageAwareness = 1;
-const messageAuth = 2;
+export type MessageType = 0 | 1 | 2 | 3;
+export const messageSync = 0;
+export const messageQueryAwareness = 3;
+export const messageAwareness = 1;
+export const messageAuth = 2;
 
 type ClientId = number;
 

@@ -1,4 +1,5 @@
 import { ElementHandle, Page } from 'playwright';
+import { getDefined } from '@decipad/utils';
 import { URL } from 'url';
 import { withNewUser } from '../utils';
 
@@ -12,7 +13,7 @@ type PadList = Pad[];
 
 function isOnWorkspacePage(page: Page | URL): boolean {
   const url = page instanceof URL ? page : new URL(page.url());
-  return url.pathname.match(/^\/workspaces\/[^/]+/) !== null;
+  return url.pathname.match(/^\/workspaces\/[^/]+$/) !== null;
 }
 
 export async function navigateToWorkspacePage() {
@@ -61,4 +62,9 @@ export async function duplicatePad(index = 0) {
   await page.click(`//main//li[${index + 1}]//button`);
   const duplicateButton = (await page.$(`button:has-text("Duplicate")`))!;
   await Promise.all([page.waitForRequest('/graphql'), duplicateButton.click()]);
+}
+
+export async function followPad(index: number) {
+  const pads = await getPadList();
+  await page.goto(getDefined(pads[index]?.href));
 }

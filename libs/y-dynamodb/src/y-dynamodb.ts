@@ -25,9 +25,7 @@ export class DynamodbPersistence extends Observable<string> {
     this.doc = doc;
     this.name = name;
     this.whenSynced = this._init();
-    this._storeUpdate = this._storeUpdate.bind(this);
     this.destroy = this.destroy.bind(this);
-    doc.on('update', this._storeUpdate);
     doc.on('destroy', this.destroy);
   }
 
@@ -74,7 +72,7 @@ export class DynamodbPersistence extends Observable<string> {
     });
   }
 
-  private async _storeUpdate(update: Uint8Array, origin: unknown) {
+  async storeUpdate(update: Uint8Array, origin: unknown): Promise<void> {
     if (origin === DynamodbPersistence) {
       return;
     }
@@ -105,9 +103,9 @@ export class DynamodbPersistence extends Observable<string> {
       })
     ).Items;
     if (updates.length > 1) {
-      await this._storeUpdate(
+      await this.storeUpdate(
         mergeUpdates(updates.map((u) => Buffer.from(u.data, 'base64'))),
-        DynamodbPersistence
+        'compaction'
       );
       await Promise.all(
         updates.map((update) =>
@@ -122,7 +120,6 @@ export class DynamodbPersistence extends Observable<string> {
   }
 
   async destroy(): Promise<void> {
-    this.doc.off('update', this._storeUpdate);
     this.doc.off('destroy', this.destroy);
   }
 }

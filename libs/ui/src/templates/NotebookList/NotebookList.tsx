@@ -41,7 +41,7 @@ export const NotebookList = ({
           >
             Name
           </strong>
-          <ol>
+          <ol className="notebookList">
             {notebooks.map(({ id, ...notebook }, i) => (
               <li
                 key={id}

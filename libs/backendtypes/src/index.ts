@@ -435,6 +435,7 @@ export interface DataTables extends EnhancedDataTables {
 }
 
 export type ConcreteRecord =
+  | ConnectionRecord
   | UserRecord
   | UserKeyRecord
   | PermissionRecord
