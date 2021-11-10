@@ -1,4 +1,9 @@
-import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate';
+import {
+  ELEMENT_H1,
+  ELEMENT_H2,
+  ELEMENT_H3,
+  ELEMENT_PARAGRAPH,
+} from '@udecode/plate';
 
 export const exitBreakOptions = {
   rules: [
@@ -14,7 +19,7 @@ export const exitBreakOptions = {
       query: {
         start: true,
         end: true,
-        allow: [ELEMENT_H1, ELEMENT_H2, ELEMENT_H3],
+        allow: [ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, ELEMENT_PARAGRAPH],
       },
     },
   ],
