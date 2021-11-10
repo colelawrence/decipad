@@ -1,5 +1,5 @@
-import { produce } from 'immer';
 import { AST } from '..';
+import { units } from '../utils';
 import { InferError } from './InferError';
 import { inverseExponent, setExponent } from './units';
 import { Type, build as t } from './index';
@@ -38,15 +38,9 @@ const dollar: AST.Unit = {
 const invMeter: AST.Unit = inverseExponent(meter);
 const invSecond: AST.Unit = inverseExponent(second);
 
-const numberInMeter = produce(t.number(), (type) => {
-  type.unit = [meter];
-});
-const numberInMeterBySecond = produce(t.number(), (type) => {
-  type.unit = [meter, second];
-});
-const numberInMeterPerSecond = produce(t.number(), (type) => {
-  type.unit = [meter, invSecond];
-});
+const numberInMeter = t.number([meter]);
+const numberInMeterBySecond = t.number([meter, second]);
+const numberInMeterPerSecond = t.number([meter, invSecond]);
 
 it('Can assert type equivalence', () => {
   const type = t.string();
@@ -58,7 +52,7 @@ it('Can assert type equivalence', () => {
 it('can be stringified', () => {
   expect(t.number().toString()).toEqual('<number>');
   expect(t.number([meter]).toString()).toEqual('meters');
-  expect(t.number([meter, second]).toString()).toEqual('meters.seconds');
+  expect(t.number(units(meter, second)).toString()).toEqual('meters.seconds');
   expect(t.number([meter, inverseExponent(second)]).toString()).toEqual(
     'meters/second'
   );
@@ -91,7 +85,9 @@ it('can be stringified in basic form', () => {
   expect(t.functionPlaceholder().toBasicString()).toEqual('function');
   expect(t.number().toBasicString()).toEqual('number');
   expect(t.number([meter]).toBasicString()).toEqual('meters');
-  expect(t.number([meter, second]).toBasicString()).toEqual('meters.seconds');
+  expect(t.number(units(meter, second)).toBasicString()).toEqual(
+    'meters.seconds'
+  );
   expect(t.number([meter, inverseExponent(second)]).toBasicString()).toEqual(
     'meters/second'
   );
@@ -160,10 +156,10 @@ describe('sameAs', () => {
 
     // Mismatched units
     expect(n(meter).sameAs(n(second)).errorCause).toEqual(
-      InferError.expectedUnit([second], [meter])
+      InferError.expectedUnit(units(second), units(meter))
     );
     expect(n(meter, second).sameAs(n(second)).errorCause).toEqual(
-      InferError.expectedUnit([second], [meter, second])
+      InferError.expectedUnit(units(second), units(meter, second))
     );
   });
 
@@ -260,8 +256,8 @@ describe('Impossible types', () => {
 
     expect(imp.isScalar('string')).toEqual(imp);
 
-    expect(imp.multiplyUnit([meter])).toEqual(imp);
-    expect(imp.divideUnit([meter])).toEqual(imp);
+    expect(imp.multiplyUnit(units(meter))).toEqual(imp);
+    expect(imp.divideUnit(units(meter))).toEqual(imp);
 
     expect(imp.withErrorCause('ignored different error')).toEqual(imp);
   });
@@ -269,58 +265,60 @@ describe('Impossible types', () => {
 
 describe('divideUnit', () => {
   it('divides units', () => {
-    expect(t.number([meter]).divideUnit([second])).toEqual(
+    expect(t.number([meter]).divideUnit(units(second))).toEqual(
       numberInMeterPerSecond
     );
   });
 
   it('exponentiates units', () => {
-    expect(t.number([invSecond]).divideUnit([second])).toEqual(
+    expect(t.number([invSecond]).divideUnit(units(second))).toEqual(
       t.number([setExponent(second, -2)])
     );
 
-    expect(t.number([setExponent(second, -2)]).divideUnit([second])).toEqual(
-      t.number([setExponent(second, -3)])
-    );
+    expect(
+      t.number([setExponent(second, -2)]).divideUnit(units(second))
+    ).toEqual(t.number([setExponent(second, -3)]));
   });
 
   it('exponentiation that results in 0-exponent eliminates the unit', () => {
-    expect(t.number([meter]).divideUnit([meter])).toEqual(t.number());
+    expect(t.number([meter]).divideUnit(units(meter))).toEqual(t.number());
   });
 
   it('divides units even further', () => {
-    expect(t.number([meter, invSecond]).divideUnit([dollar]).unit).toEqual([
-      setExponent(dollar, -1), // first because of sort
-      meter,
-      invSecond,
-    ]);
+    expect(t.number([meter, invSecond]).divideUnit(units(dollar)).unit).toEqual(
+      units(
+        setExponent(dollar, -1), // first because of sort
+        meter,
+        invSecond
+      )
+    );
   });
 
   it('maintains units when one of the operands is unitless', () => {
     expect(t.number([meter]).divideUnit(null)).toEqual(t.number([meter]));
-    expect(t.number().divideUnit([invMeter])).toEqual(t.number([meter]));
+    expect(t.number().divideUnit(units(invMeter))).toEqual(t.number([meter]));
   });
 });
 
 describe('multiplyUnit', () => {
   it('multiplies units', () => {
-    expect(numberInMeterPerSecond.multiplyUnit([second])).toEqual(
+    expect(numberInMeterPerSecond.multiplyUnit(units(second))).toEqual(
       t.number([meter])
     );
   });
 
   it('when one of the numbers has no unit, the other unit prevails', () => {
-    expect(t.number([meter, second]).multiplyUnit(null)).toEqual(
-      t.number([meter, second])
+    expect(t.number(units(meter, second)).multiplyUnit(null)).toEqual(
+      t.number(units(meter, second))
     );
-    expect(t.number().multiplyUnit([meter, second])).toEqual(
-      t.number([meter, second])
+    expect(t.number().multiplyUnit(units(meter, second))).toEqual(
+      t.number(units(meter, second))
     );
   });
 
   it('eliminates units that are opposite on both sides', () => {
     expect(
-      t.number([invMeter, invSecond]).multiplyUnit([meter, second])
+      t.number([invMeter, invSecond]).multiplyUnit(units(meter, second))
     ).toEqual(t.number());
   });
 });

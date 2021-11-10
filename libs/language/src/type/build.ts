@@ -1,7 +1,7 @@
 import produce from 'immer';
 import { AST, Time } from '..';
 import { InferError, Type, TypeName } from '.';
-import { getDefined } from '../utils';
+import { getDefined, units } from '../utils';
 
 // "scalar" is a legacy name
 export const scalar = (type: TypeName) =>
@@ -9,9 +9,9 @@ export const scalar = (type: TypeName) =>
     t.type = type;
   });
 
-export const number = (unit: AST.Unit[] | null = null) =>
+export const number = (unit: AST.Units | AST.Unit[] | null = null) =>
   produce(scalar('number'), (t) => {
-    t.unit = unit;
+    t.unit = Array.isArray(unit) ? units(...unit) : unit;
   });
 
 export const string = () => scalar('string');

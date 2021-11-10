@@ -1,4 +1,4 @@
-import { l, as, timeQuantity, block } from '../utils';
+import { l, as, timeQuantity, block, n } from '../utils';
 import { run } from '.';
 import { Unit } from '../parser/ast-types';
 
@@ -28,12 +28,12 @@ const minutes: Unit = {
 
 describe('as', () => {
   it('converts time quantity to number', async () => {
-    const b = block(as(timeQuantity({ day: 2 }), [hours]));
+    const b = block(as(timeQuantity({ day: 2 }), n('units', hours)));
     expect(await run([b], [0])).toEqual([48]);
   });
 
   it('converts number to number', async () => {
-    const b = block(as(l(2.5, hours), [minutes]));
+    const b = block(as(l(2.5, hours), n('units', minutes)));
     expect(await run([b], [0])).toEqual([150]);
   });
 });

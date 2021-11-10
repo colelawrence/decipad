@@ -183,15 +183,18 @@ describe('more models', () => {
       types: {
         InitialCashFlow: {
           type: 'number',
-          unit: [
-            {
-              // TODO this unit is million USD,
-              // multiplier/exponent should reflect that
-              unit: 'musd',
-              exp: 1,
-              multiplier: 1,
-            },
-          ],
+          unit: {
+            type: 'units',
+            args: [
+              {
+                // TODO this unit is million USD,
+                // multiplier/exponent should reflect that
+                unit: 'musd',
+                exp: 1,
+                multiplier: 1,
+              },
+            ],
+          },
         },
         Years: {
           columnSize: 4,
@@ -238,7 +241,7 @@ describe('more models', () => {
           { date: 'year' },
           {
             type: 'number',
-            unit: [{ unit: 'eur' }],
+            unit: { type: 'units', args: [{ unit: 'eur' }] },
           },
         ],
       },
@@ -324,10 +327,22 @@ ${'' /* Get capital needed */}
       types: {
         MonthlyRevenueGrowthRate: { type: 'number', unit: null },
         TimeToProfitability: { type: 'number', unit: null },
-        CumulativeMonthlyRevenue: { type: 'number', unit: [{ unit: 'eur' }] },
-        CumulativeMonthlyExpenses: { type: 'number', unit: [{ unit: 'eur' }] },
-        CapitalNeeded: { type: 'number', unit: [{ unit: 'eur' }] },
-        IPOTargetMonthlyRevenue: { type: 'number', unit: [{ unit: 'eur' }] },
+        CumulativeMonthlyRevenue: {
+          type: 'number',
+          unit: { type: 'units', args: [{ unit: 'eur' }] },
+        },
+        CumulativeMonthlyExpenses: {
+          type: 'number',
+          unit: { type: 'units', args: [{ unit: 'eur' }] },
+        },
+        CapitalNeeded: {
+          type: 'number',
+          unit: { type: 'units', args: [{ unit: 'eur' }] },
+        },
+        IPOTargetMonthlyRevenue: {
+          type: 'number',
+          unit: { type: 'units', args: [{ unit: 'eur' }] },
+        },
         TimeToIPO: { type: 'number', unit: null },
       },
     });
@@ -461,7 +476,7 @@ ${'' /* Get capital needed */}
           cellType: { date: 'month' },
         },
         RevenuePerUser: {
-          cellType: { unit: [{ unit: 'eur' }] },
+          cellType: { unit: { type: 'units', args: [{ unit: 'eur' }] } },
         },
         Users: { cellType: { cellType: { type: 'number', unit: null } } },
         Revenue: {

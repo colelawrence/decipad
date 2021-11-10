@@ -1,7 +1,7 @@
 import { immerable, produce } from 'immer';
 
 import { Time } from '..';
-import { zip } from '../utils';
+import { units, zip } from '../utils';
 import * as AST from '../parser/ast-types';
 import { InferError } from './InferError';
 import {
@@ -11,8 +11,8 @@ import {
   matchUnitArrays,
   stringifyUnits,
   multiplyExponent,
+  setUnit,
 } from './units';
-import { setUnit } from './utils';
 
 import * as t from './build';
 
@@ -44,16 +44,6 @@ const propagate = <P extends Array<unknown>>(
   };
 };
 
-type TimeDotSpecificityBecauseNextJsIsVeryBadAndWrong = Time.Specificity;
-
-export interface ExtendArgs {
-  type?: TypeName;
-  unit?: AST.Unit[] | null;
-  columnSize?: number | null;
-  rangeness?: boolean;
-  date?: Time.Specificity | null;
-}
-
 export class Type {
   [immerable] = true;
 
@@ -61,7 +51,7 @@ export class Type {
   errorCause: InferError | null = null;
 
   type: string | null = null;
-  unit: AST.Unit[] | null = null;
+  unit: AST.Units | null = null;
 
   date: Time.Specificity | null = null;
 
@@ -132,7 +122,7 @@ export class Type {
       return `range of ${this.rangeOf.toString()}`;
     }
 
-    if (this.unit != null && this.unit.length > 0) {
+    if (this.unit != null && this.unit.args.length > 0) {
       return stringifyUnits(this.unit);
     }
 
@@ -226,7 +216,7 @@ export class Type {
   }
 
   sameUnitsAs(other: Type): Type {
-    if (!matchUnitArrays(this.unit ?? [], other.unit ?? [])) {
+    if (!matchUnitArrays(this.unit, other.unit)) {
       return this.withErrorCause(
         InferError.expectedUnit(other.unit, this.unit)
       );
@@ -245,10 +235,7 @@ export class Type {
 
       if (meScalar && theyScalar) {
         const matchingTypes = this.type === other.type;
-        const matchingUnits = matchUnitArrays(
-          this.unit ?? [],
-          other.unit ?? []
-        );
+        const matchingUnits = matchUnitArrays(this.unit, other.unit);
         const onlyOneHasAUnit = removeSingleUnitless(this, other);
 
         if (matchingTypes && matchingUnits) {
@@ -393,10 +380,10 @@ export class Type {
     }).call(this);
   }
 
-  isDate(specificity?: TimeDotSpecificityBecauseNextJsIsVeryBadAndWrong): Type {
+  isDate(specificity?: Time.Specificity): Type {
     return propagate(function propagated(
       this: Type,
-      specificity?: TimeDotSpecificityBecauseNextJsIsVeryBadAndWrong
+      specificity?: Time.Specificity
     ) {
       if (
         this.date != null &&
@@ -419,19 +406,19 @@ export class Type {
     }).call(this, other);
   }
 
-  multiplyUnit(withUnits: AST.Unit[] | null): Type {
+  multiplyUnit(withUnits: AST.Units | null): Type {
     return propagate(function propagated(
       this: Type,
-      withUnits: AST.Unit[] | null
+      withUnits: AST.Units | null
     ) {
       return setUnit(this, combineUnits(this.unit, withUnits));
     }).call(this, withUnits);
   }
 
-  divideUnit(divideBy: AST.Unit[] | number | null): Type {
+  divideUnit(divideBy: AST.Units | number | null): Type {
     return propagate(function propagated(
       this: Type,
-      divideBy: AST.Unit[] | number | null
+      divideBy: AST.Units | number | null
     ) {
       if (typeof divideBy === 'number') {
         const multiplyBy = 1 / divideBy;
@@ -441,9 +428,9 @@ export class Type {
         return this;
       } else {
         const invTheirUnits =
-          divideBy == null ? null : divideBy.map((u) => inverseExponent(u));
+          divideBy?.args.map((u) => inverseExponent(u)) ?? [];
 
-        return setUnit(this, combineUnits(this.unit, invTheirUnits));
+        return setUnit(this, combineUnits(this.unit, units(...invTheirUnits)));
       }
     }).call(this, divideBy);
   }

@@ -389,7 +389,7 @@ let ParserRules = [
       return addArrayLoc(
         {
           type: 'literal',
-          args: ['number', n.n, d[2].units],
+          args: ['number', n.n, d[2]],
         },
         d
       );
@@ -454,12 +454,24 @@ let ParserRules = [
   },
   {
     name: 'units',
+    symbols: ['unitBit'],
+    postprocess: ([units]) =>
+      addLoc(
+        {
+          type: 'units',
+          args: units.units,
+        },
+        units
+      ),
+  },
+  {
+    name: 'unitBit',
     symbols: ['unit'],
     postprocess: ([u]) => addLoc({ units: [u] }, u),
   },
   {
-    name: 'units',
-    symbols: ['unit', { literal: '*' }, 'units'],
+    name: 'unitBit',
+    symbols: ['unit', { literal: '*' }, 'unitBit'],
     postprocess: (d) =>
       addArrayLoc(
         {
@@ -469,8 +481,8 @@ let ParserRules = [
       ),
   },
   {
-    name: 'units',
-    symbols: ['unit', { literal: '/' }, 'units'],
+    name: 'unitBit',
+    symbols: ['unit', { literal: '/' }, 'unitBit'],
     postprocess: (d) => {
       const [second, ...rest] = d[2].units;
 
@@ -875,9 +887,8 @@ let ParserRules = [
           (elem) =>
             elem.type === 'literal' &&
             elem.args[0] === 'number' &&
-            elem.args[2] &&
-            elem.args[2].length === 1 &&
-            timeUnitStrings.has(elem.args[2][0].unit)
+            elem.args[2]?.args.length === 1 &&
+            timeUnitStrings.has(elem.args[2].args[0].unit)
         )
       ) {
         return reject;
@@ -1034,7 +1045,7 @@ let ParserRules = [
       return addArrayLoc(
         {
           type: 'as',
-          args: [exp, unit.units],
+          args: [exp, unit],
         },
         d
       );

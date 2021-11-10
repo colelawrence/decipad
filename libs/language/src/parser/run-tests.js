@@ -6,8 +6,9 @@ import { parse } from '.';
 const walkWithUnits = (ast, fn) => {
   walk(ast, (node, path) => {
     fn(node, path);
+
     if (node.type === 'literal' && node.args[2] != null) {
-      node.args[2].forEach((unit, i) => {
+      node.args[2].args.forEach((unit, i) => {
         fn(unit, [...path, i]);
       });
     }

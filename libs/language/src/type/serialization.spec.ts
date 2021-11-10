@@ -1,4 +1,5 @@
 import { buildType as t, AST } from '..';
+import { units } from '../utils';
 import { InferError } from './InferError';
 import {
   deserializeType,
@@ -19,12 +20,15 @@ it('can stringify a type', () => {
   expect(serializeType(t.number([meter]))).toMatchInlineSnapshot(`
     Object {
       "kind": "number",
-      "unit": Array [
-        Object {
-          "exp": 1,
-          "unit": "meter",
-        },
-      ],
+      "unit": Object {
+        "args": Array [
+          Object {
+            "exp": 1,
+            "unit": "meter",
+          },
+        ],
+        "type": "units",
+      },
     }
   `);
   expect(serializeType(t.scalar('string'))).toMatchInlineSnapshot(`
@@ -153,7 +157,7 @@ it('can parse a type', () => {
   expect(
     testDeserialize({
       kind: 'number',
-      unit: [meter],
+      unit: units(meter),
     })
   ).toMatchInlineSnapshot(`"meters"`);
 

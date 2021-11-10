@@ -7,7 +7,7 @@ import {
 } from '../interpreter/Value';
 import { build as t } from '../type';
 import { builtins } from './builtins';
-import { n } from '../utils';
+import { n, l } from '../utils';
 
 it('concatenates tables', () => {
   expect(
@@ -282,7 +282,7 @@ it('exponentiates number with unit', () => {
         t.number(),
       ],
 
-      [n('literal', 'number', 1, []), n('literal', 'number', 2, [])]
+      [l(1), l(2)]
     )
   ).toMatchObject(
     t.number([{ unit: 'meters', exp: 2, multiplier: 1, known: false }])
@@ -295,7 +295,7 @@ it('exponentiates number with unit', () => {
         t.number(),
       ],
 
-      [n('literal', 'number', 1, []), n('literal', 'string', 'hey', [])]
+      [l(1), l('hey')]
     )
   ).toMatchObject(t.impossible('exponent value must be a literal number'));
 
@@ -307,16 +307,8 @@ it('exponentiates number with unit', () => {
       ],
 
       [
-        n('literal', 'number', 1, []),
-        n(
-          'function-call',
-          n('funcref', '+'),
-          n(
-            'argument-list',
-            n('literal', 'number', 2, []),
-            n('literal', 'number', 2, [])
-          )
-        ),
+        l(1),
+        n('function-call', n('funcref', '+'), n('argument-list', l(2), l(2))),
       ]
     )
   ).toMatchObject(t.impossible('exponent value must be a literal number'));

@@ -18,7 +18,7 @@ number      -> unitlessNumber ___:? units               {%
                                                           const units = d[2]
                                                           return addArrayLoc({
                                                             type: 'literal',
-                                                            args: ['number', n.n, d[2].units]
+                                                            args: ['number', n.n, d[2]]
                                                           }, d)
                                                         }
                                                         %}

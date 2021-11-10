@@ -15,6 +15,13 @@ export interface Unit {
   end?: Pos;
 }
 
+export interface Units {
+  type: 'units';
+  args: Unit[];
+  start?: Pos;
+  end?: Pos;
+}
+
 export interface Def {
   type: 'def';
   args: [varName: string];
@@ -61,11 +68,10 @@ export type Identifier = Ref | FuncRef | ExternalRef | Def | FuncDef | ColDef;
 
 // Literal number, char, string etc
 
-type U = Unit[] | null;
 type LitArgs =
-  | ['number', number, U]
-  | ['boolean', boolean, U]
-  | ['string', string, U];
+  | ['number', number, Units | null]
+  | ['boolean', boolean, Units | null]
+  | ['string', string, Units | null];
 
 export interface Literal {
   type: 'literal';
@@ -111,7 +117,7 @@ export interface Date {
 
 export interface As {
   type: 'as';
-  args: [Expression, Unit[]];
+  args: [Expression, Units];
   start?: Pos;
   end?: Pos;
 }
@@ -238,7 +244,7 @@ export type Statement = FunctionDefinition | Assign | Expression;
 
 type Lists = FunctionArgumentNames | ArgList | ColumnItems;
 
-export type Node = Block | Statement | Identifier | Lists | TableColumn;
+export type Node = Block | Statement | Identifier | Lists | TableColumn | Units;
 
 export interface TypeToNode {
   def: Def;
@@ -265,5 +271,6 @@ export interface TypeToNode {
   given: Given;
   block: Block;
   'imported-data': ImportedData;
+  units: Units;
   as: As;
 }

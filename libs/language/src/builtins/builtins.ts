@@ -30,23 +30,18 @@ const exponentiationFunctor = ([a, b]: Type[], values?: AST.Expression[]) => {
   const bValue = getDefined(getDefined(values)[1]);
   if (
     a.unit &&
-    a.unit.length > 0 &&
+    a.unit.args.length > 0 &&
     (bValue.type !== 'literal' || bValue.args[0] !== 'number')
   ) {
     return t.impossible('exponent value must be a literal number');
   }
-  return binopFunctor([a, removeUnit(b)]).mapType((a) =>
-    a.unit
-      ? produce(a, (arg1) => {
-          arg1.unit = getDefined(arg1.unit).map((u) =>
-            produce(u, (unit) => {
-              unit.exp =
-                (unit.exp || 1) *
-                (getDefined(bValue.args[1]).valueOf() as number);
-            })
-          );
-        })
-      : a
+  return binopFunctor([a, removeUnit(b)]).mapType(
+    produce((arg1) => {
+      for (const unit of arg1.unit?.args ?? []) {
+        unit.exp =
+          (unit.exp || 1) * (getDefined(bValue.args[1]).valueOf() as number);
+      }
+    })
   );
 };
 

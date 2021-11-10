@@ -4,7 +4,7 @@ import { Time } from '../date';
 import { ErrSpec, InferError } from './InferError';
 
 export type SerializedType =
-  | { kind: 'number'; unit: AST.Unit[] | null }
+  | { kind: 'number'; unit: AST.Units | null }
   | { kind: 'scalar'; type: TypeName }
   | { kind: 'date'; date: Time.Specificity }
   | { kind: 'range'; rangeOf: SerializedType }

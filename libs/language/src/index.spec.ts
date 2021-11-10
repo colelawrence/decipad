@@ -10,7 +10,7 @@ import {
 } from './testUtils';
 import { parseUTCDate } from './date';
 import { Column, Scalar } from './interpreter/Value';
-import { block, n } from './utils';
+import { block, n, units } from './utils';
 
 describe('basic code', () => {
   it('runs basic operations', async () => {
@@ -342,10 +342,10 @@ describe('Units', () => {
       `)
     ).toMatchObject({
       type: {
-        unit: [
+        unit: units(
           { exp: 1, known: true, multiplier: 1, unit: 'meter' },
-          { exp: -1, known: true, multiplier: 1, unit: 'second' },
-        ],
+          { exp: -1, known: true, multiplier: 1, unit: 'second' }
+        ),
       },
       value: 1,
     });
@@ -362,7 +362,7 @@ describe('Units', () => {
     ).toMatchObject({
       value: 1,
       type: {
-        unit: [
+        unit: units(
           {
             exp: 1,
             known: true,
@@ -374,8 +374,8 @@ describe('Units', () => {
             known: true,
             multiplier: 1,
             unit: 'seconds',
-          },
-        ],
+          }
+        ),
       },
     });
   });
@@ -389,7 +389,9 @@ describe('Units', () => {
       `)
     ).toMatchObject({
       value: 6,
-      type: { unit: [{ exp: 1, known: true, multiplier: 1, unit: 'meters' }] },
+      type: {
+        unit: units({ exp: 1, known: true, multiplier: 1, unit: 'meters' }),
+      },
     });
 
     // TODO internally it's fine but do we actually want to support
@@ -403,7 +405,7 @@ describe('Units', () => {
     ).toMatchObject({
       value: 2,
       type: {
-        unit: [{ exp: -1, known: true, multiplier: 1, unit: 'seconds' }],
+        unit: units({ exp: -1, known: true, multiplier: 1, unit: 'seconds' }),
       },
     });
   });

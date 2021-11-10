@@ -20,6 +20,7 @@ import {
   prop,
   importedData,
   assign,
+  units,
 } from '../utils';
 
 import { makeContext } from './context';
@@ -712,7 +713,7 @@ describe('Units', () => {
     const badUnits = c('+', l(1, degC), l(1, seconds));
     const ctxForError = makeContext();
 
-    const badUnitsError = InferError.expectedUnit([degC], [seconds]);
+    const badUnitsError = InferError.expectedUnit(units(degC), units(seconds));
     expect(await inferExpression(ctxForError, badUnits)).toEqual(
       t.impossible(badUnitsError).inNode(badUnits)
     );
@@ -766,13 +767,13 @@ describe('Data', () => {
 
 describe('as', () => {
   it('converts unit-less number to united number', async () => {
-    expect(await inferExpression(nilCtx, as(l(3), [degC]))).toEqual(
+    expect(await inferExpression(nilCtx, as(l(3), n('units', degC)))).toEqual(
       t.number([degC])
     );
   });
   it('converts unit number to other unit number', async () => {
-    expect(await inferExpression(nilCtx, as(l(3, degC), [degF]))).toEqual(
-      t.number([degF])
-    );
+    expect(
+      await inferExpression(nilCtx, as(l(3, degC), n('units', degF)))
+    ).toEqual(t.number([degF]));
   });
 });

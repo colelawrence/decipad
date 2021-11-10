@@ -2,7 +2,7 @@ import { AST } from '..';
 import { stringifyUnits } from '../type/units';
 import { getIdentifierString, isNode, isStatement } from '../utils';
 
-const prettyPrint = (node: AST.Node, indent: number) => {
+const prettyPrint = (node: AST.Node, indent: number): string => {
   const perLine = isStatement(node) || ['block', 'table'].includes(node.type);
 
   let printedArgs: string[];
@@ -10,12 +10,14 @@ const prettyPrint = (node: AST.Node, indent: number) => {
 
   switch (node.type) {
     case 'literal': {
-      const [type, value, units] = node.args;
-      if (type === 'number' && units != null && units.length > 0) {
-        return `${value}${stringifyUnits(units)}`;
-      } else {
-        return JSON.stringify(value);
-      }
+      const [, value, units] = node.args;
+      return [
+        JSON.stringify(value),
+        units && prettyPrint(units, indent + 1),
+      ].join('');
+    }
+    case 'units': {
+      return stringifyUnits(node);
     }
     case 'property-access': {
       const [ref, prop] = node.args;

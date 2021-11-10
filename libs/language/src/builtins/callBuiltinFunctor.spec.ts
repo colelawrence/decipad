@@ -1,5 +1,6 @@
 import { AST } from '..';
 import { Type, build as t } from '../type';
+import { units } from '../utils';
 
 import { callBuiltinFunctor } from './callBuiltinFunctor';
 
@@ -182,7 +183,7 @@ const typeDimTests: Record<string, Test> = {
         build({ type: 'number', unit: [meter] }),
         build2({ type: 'number', unit: [second] }),
       ]).errorCause?.spec
-    ).toHaveProperty('expectedUnit', [[meter], [second]]);
+    ).toHaveProperty('expectedUnit', [units(meter), units(second)]);
   },
   if: (build, build2, build3, buildOut) => {
     expect(

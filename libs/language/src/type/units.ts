@@ -1,7 +1,7 @@
 import { produce } from 'immer';
 import { addIrregularRule, singular, plural } from 'pluralize';
 import { AST, Type } from '..';
-import { getDefined } from '../utils';
+import { getDefined, units } from '../utils';
 
 addIrregularRule('USD', 'USD');
 addIrregularRule('EUR', 'EUR');
@@ -22,9 +22,14 @@ const pluralizeUnit = (baseUnit: AST.Unit): AST.Unit => {
 const matchUnits = (u1: AST.Unit, u2: AST.Unit) =>
   singular(u1.unit) === singular(u2.unit) && u1.exp === u2.exp;
 
-export const matchUnitArrays = (units1: AST.Unit[], units2: AST.Unit[]) => {
-  if (units1.length !== units2.length) return false;
-  return units1.every((u1, i) => matchUnits(u1, units2[i]));
+export const matchUnitArrays = (
+  units1: AST.Units | null,
+  units2: AST.Units | null
+) => {
+  const array1 = units1?.args ?? [];
+  const array2 = units2?.args ?? [];
+  if (array1.length !== array2.length) return false;
+  return array1.every((u1, i) => matchUnits(u1, array2[i]));
 };
 
 export const removeSingleUnitless = (a: Type, b: Type) => {
@@ -99,12 +104,14 @@ const stringifyUnit = (unit: AST.Unit) => {
   return result.join('');
 };
 
-export const stringifyUnits = (units: AST.Unit[] | null): string => {
-  if (units == null || units.length === 0) {
+export const stringifyUnits = (units: AST.Units | null): string => {
+  if (units == null || units.args.length === 0) {
     return 'unitless';
   } else {
-    const sortedUnits = produce(units, (units) => units.sort(byExp));
-    return sortedUnits
+    const sortedUnits = produce(units, (units) => {
+      units.args.sort(byExp);
+    });
+    return sortedUnits.args
       .reduce((parts: string[], unit: AST.Unit): string[] => {
         if (parts.length > 0) {
           const op = unit.exp > 0 ? '.' : '/';
@@ -129,11 +136,11 @@ export const stringifyUnits = (units: AST.Unit[] | null): string => {
 };
 
 export const combineUnits = (
-  myUnits: AST.Unit[] | null,
-  theirUnits: AST.Unit[] | null
-) => {
-  myUnits = normalizeUnits(myUnits) ?? [];
-  theirUnits = normalizeUnits(theirUnits) ?? [];
+  myUnitsObj: AST.Units | null,
+  theirUnitsObj: AST.Units | null
+): AST.Units | null => {
+  const myUnits = normalizeUnits(myUnitsObj?.args ?? null) ?? [];
+  const theirUnits = normalizeUnits(theirUnitsObj?.args ?? null) ?? [];
 
   const existingUnits = new Set([...myUnits.map((u) => u.unit)]);
   const outputUnits: AST.Unit[] = [...myUnits];
@@ -157,16 +164,20 @@ export const combineUnits = (
     }
   }
 
-  return normalizeUnits(outputUnits);
+  const ret = normalizeUnits(outputUnits);
+  return ret == null ? ret : units(...ret);
 };
 
-export const multiplyExponent = (
-  myUnits: AST.Unit[],
-  by: number
-): AST.Unit[] => {
-  return myUnits.map((u) =>
-    produce(u, (u) => {
+export const multiplyExponent = (myUnits: AST.Units, by: number): AST.Units =>
+  produce(myUnits, (myUnits) => {
+    for (const u of myUnits.args) {
       u.exp *= by;
-    })
-  );
-};
+    }
+  });
+
+export const setUnit = (t: Type, newUnit: AST.Units | null) =>
+  produce(t, (t) => {
+    if (t.type === 'number') {
+      t.unit = newUnit;
+    }
+  });

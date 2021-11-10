@@ -19,9 +19,7 @@ asExp         -> expression _ "as" _ units              {%
 
                                                           return addArrayLoc({
                                                             type: 'as',
-                                                            args: [
-                                                              exp, unit.units
-                                                            ],
+                                                            args: [exp, unit],
                                                           }, d);
                                                         }
                                                         %}

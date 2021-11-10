@@ -8,8 +8,6 @@ type WalkFn = (node: AST.Node, path: number[]) => void;
 export const walk = (node: AST.Node, fn: WalkFn, path: number[] = []) => {
   fn(node, path);
 
-  if (node.type === 'literal') return;
-
   for (let index = 0; index < node.args.length; index++) {
     const arg = node.args[index];
     if (isNode(arg)) {
@@ -32,9 +30,12 @@ export function n<K extends AST.Node['type'], N extends AST.TypeToNode[K]>(
 
 export const block = (...contents: AST.Statement[]) => n('block', ...contents);
 
+export const units = (...units: AST.Unit[]) =>
+  units.length > 0 ? n('units', ...units) : null;
+
 type LitType = number | string | boolean;
 export function l(value: LitType, ...units: AST.Unit[]): AST.Literal {
-  const unitArg = units.length > 0 ? units : null;
+  const unitArg = units.length > 0 ? n('units', ...units) : null;
 
   if (typeof value === 'number') {
     return n('literal', 'number', value, unitArg);
@@ -114,7 +115,7 @@ export function r(fName: string) {
   return n('ref', fName);
 }
 
-export function as(left: AST.Expression, units: AST.Unit[]) {
+export function as(left: AST.Expression, units: AST.Units) {
   return n('as', left, units);
 }
 

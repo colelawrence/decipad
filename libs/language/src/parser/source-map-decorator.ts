@@ -14,6 +14,7 @@ const typesWithArgs = new Set([
   'table-column',
   'given',
   'range',
+  'units',
   'sequence',
 ]);
 
@@ -62,14 +63,9 @@ export function sourceMapDecorator(
     } else if (node.type === 'property-access') {
       node.args[0] = decorateNode(node.args[0] as unknown as ParserNode);
     } else if (node.type === 'literal') {
-      const n = node as unknown as AST.Literal;
-      if (n.args[0] === 'number') {
-        const units = n.args[2];
-        if (units != null) {
-          n.args[2] = units.map((unit: unknown) =>
-            decorateNode(unit as ParserNode)
-          ) as unknown as AST.Unit[];
-        }
+      const { args } = node as unknown as AST.Literal;
+      if (args[2]) {
+        args[2] = decorateNode(args[2] as unknown as ParserNode) as AST.Units;
       }
     }
 

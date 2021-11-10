@@ -1,3 +1,4 @@
+import { units } from '../utils';
 import { runTests } from './run-tests';
 
 runTests({
@@ -9,16 +10,21 @@ runTests({
         args: [
           'number',
           10,
-          [
-            {
-              unit: 'apples',
-              exp: 1,
-              multiplier: 1,
-              known: false,
-              start: 3,
-              end: 8,
-            },
-          ],
+          {
+            type: 'units',
+            args: [
+              {
+                unit: 'apples',
+                exp: 1,
+                multiplier: 1,
+                known: false,
+                start: 3,
+                end: 8,
+              },
+            ],
+            start: 3,
+            end: 8,
+          },
         ],
         start: {
           char: 0,
@@ -42,40 +48,45 @@ runTests({
         args: [
           'number',
           10,
-          [
-            {
-              unit: 'apples',
-              exp: 1,
-              multiplier: 1,
-              known: false,
-              start: {
-                char: 3,
-                line: 1,
-                column: 4,
+          {
+            type: 'units',
+            args: [
+              {
+                unit: 'apples',
+                exp: 1,
+                multiplier: 1,
+                known: false,
+                start: {
+                  char: 3,
+                  line: 1,
+                  column: 4,
+                },
+                end: {
+                  char: 8,
+                  line: 1,
+                  column: 9,
+                },
               },
-              end: {
-                char: 8,
-                line: 1,
-                column: 9,
+              {
+                unit: 'oranges',
+                exp: 1,
+                multiplier: 1,
+                known: false,
+                start: {
+                  char: 10,
+                  line: 1,
+                  column: 11,
+                },
+                end: {
+                  char: 16,
+                  line: 1,
+                  column: 17,
+                },
               },
-            },
-            {
-              unit: 'oranges',
-              exp: 1,
-              multiplier: 1,
-              known: false,
-              start: {
-                char: 10,
-                line: 1,
-                column: 11,
-              },
-              end: {
-                char: 16,
-                line: 1,
-                column: 17,
-              },
-            },
-          ],
+            ],
+            start: 3,
+            end: 16,
+          },
         ],
         start: {
           char: 0,
@@ -99,40 +110,53 @@ runTests({
         args: [
           'number',
           10,
-          [
-            {
-              unit: 'apples',
-              exp: 1,
-              multiplier: 1,
-              known: false,
-              start: {
-                char: 3,
-                line: 1,
-                column: 4,
+          {
+            type: 'units',
+            args: [
+              {
+                unit: 'apples',
+                exp: 1,
+                multiplier: 1,
+                known: false,
+                start: {
+                  char: 3,
+                  line: 1,
+                  column: 4,
+                },
+                end: {
+                  char: 8,
+                  line: 1,
+                  column: 9,
+                },
               },
-              end: {
-                char: 8,
-                line: 1,
-                column: 9,
+              {
+                unit: 'oranges',
+                exp: -1,
+                multiplier: 1,
+                known: false,
+                start: {
+                  char: 10,
+                  line: 1,
+                  column: 11,
+                },
+                end: {
+                  char: 16,
+                  line: 1,
+                  column: 17,
+                },
               },
+            ],
+            start: {
+              char: 3,
+              line: 1,
+              column: 4,
             },
-            {
-              unit: 'oranges',
-              exp: -1,
-              multiplier: 1,
-              known: false,
-              start: {
-                char: 10,
-                line: 1,
-                column: 11,
-              },
-              end: {
-                char: 16,
-                line: 1,
-                column: 17,
-              },
+            end: {
+              char: 16,
+              line: 1,
+              column: 17,
             },
-          ],
+          },
         ],
         start: {
           char: 0,
@@ -150,82 +174,40 @@ runTests({
 
   'expression is number with multiplier simple unit': {
     source: '10 km',
+    sourceMap: false,
     ast: [
       {
         type: 'literal',
         args: [
           'number',
           10,
-          [
-            {
-              unit: 'km',
-              exp: 1,
-              multiplier: 1,
-              known: true,
-              start: {
-                char: 3,
-                line: 1,
-                column: 4,
-              },
-              end: {
-                char: 4,
-                line: 1,
-                column: 5,
-              },
-            },
-          ],
+          units({
+            unit: 'km',
+            exp: 1,
+            multiplier: 1,
+            known: true,
+          }),
         ],
-        start: {
-          char: 0,
-          line: 1,
-          column: 1,
-        },
-        end: {
-          char: 4,
-          line: 1,
-          column: 5,
-        },
       },
     ],
   },
 
   'expression is number with simple known unit': {
     source: '2 Gbytes',
+    sourceMap: false,
     ast: [
       {
         type: 'literal',
         args: [
           'number',
           2,
-          [
-            {
-              unit: 'bytes',
-              exp: 1,
-              multiplier: 1e9,
-              known: true,
-              start: {
-                char: 2,
-                line: 1,
-                column: 3,
-              },
-              end: {
-                char: 7,
-                line: 1,
-                column: 8,
-              },
-            },
-          ],
+          units({
+            unit: 'bytes',
+            exp: 1,
+            multiplier: 1e9,
+            known: true,
+          }),
         ],
-        start: {
-          char: 0,
-          line: 1,
-          column: 1,
-        },
-        end: {
-          char: 7,
-          line: 1,
-          column: 8,
-        },
       },
     ],
   },
@@ -238,24 +220,37 @@ runTests({
         args: [
           'number',
           3,
-          [
-            {
-              unit: 'km',
-              exp: 2,
-              multiplier: 1,
-              known: true,
-              start: {
-                char: 2,
-                line: 1,
-                column: 3,
+          {
+            type: 'units',
+            args: [
+              {
+                unit: 'km',
+                exp: 2,
+                multiplier: 1,
+                known: true,
+                start: {
+                  char: 2,
+                  line: 1,
+                  column: 3,
+                },
+                end: {
+                  char: 5,
+                  line: 1,
+                  column: 6,
+                },
               },
-              end: {
-                char: 5,
-                line: 1,
-                column: 6,
-              },
+            ],
+            start: {
+              char: 2,
+              line: 1,
+              column: 3,
             },
-          ],
+            end: {
+              char: 5,
+              line: 1,
+              column: 6,
+            },
+          },
         ],
         start: {
           char: 0,
@@ -279,40 +274,53 @@ runTests({
         args: [
           'number',
           3,
-          [
-            {
-              unit: 'g',
-              exp: 3,
-              multiplier: 1000,
-              known: true,
-              start: {
-                char: 2,
-                line: 1,
-                column: 3,
+          {
+            type: 'units',
+            args: [
+              {
+                unit: 'g',
+                exp: 3,
+                multiplier: 1000,
+                known: true,
+                start: {
+                  char: 2,
+                  line: 1,
+                  column: 3,
+                },
+                end: {
+                  char: 5,
+                  line: 1,
+                  column: 6,
+                },
               },
-              end: {
-                char: 5,
-                line: 1,
-                column: 6,
+              {
+                unit: 'm',
+                exp: -2,
+                multiplier: 100,
+                known: true,
+                start: {
+                  char: 7,
+                  line: 1,
+                  column: 8,
+                },
+                end: {
+                  char: 10,
+                  line: 1,
+                  column: 11,
+                },
               },
+            ],
+            start: {
+              char: 2,
+              line: 1,
+              column: 3,
             },
-            {
-              unit: 'm',
-              exp: -2,
-              multiplier: 100,
-              known: true,
-              start: {
-                char: 7,
-                line: 1,
-                column: 8,
-              },
-              end: {
-                char: 10,
-                line: 1,
-                column: 11,
-              },
+            end: {
+              char: 10,
+              line: 1,
+              column: 11,
             },
-          ],
+          },
         ],
         start: {
           char: 0,
@@ -336,56 +344,69 @@ runTests({
         args: [
           'number',
           3,
-          [
-            {
-              unit: 'g',
-              exp: 3,
-              multiplier: 1000,
-              known: true,
-              start: {
-                char: 2,
-                line: 1,
-                column: 3,
+          {
+            type: 'units',
+            args: [
+              {
+                unit: 'g',
+                exp: 3,
+                multiplier: 1000,
+                known: true,
+                start: {
+                  char: 2,
+                  line: 1,
+                  column: 3,
+                },
+                end: {
+                  char: 5,
+                  line: 1,
+                  column: 6,
+                },
               },
-              end: {
-                char: 5,
-                line: 1,
-                column: 6,
+              {
+                unit: 'm',
+                exp: -2,
+                multiplier: 100,
+                known: true,
+                start: {
+                  char: 7,
+                  line: 1,
+                  column: 8,
+                },
+                end: {
+                  char: 10,
+                  line: 1,
+                  column: 11,
+                },
               },
+              {
+                unit: 'Watt',
+                exp: 1,
+                multiplier: 1000000,
+                known: true,
+                start: {
+                  char: 12,
+                  line: 1,
+                  column: 13,
+                },
+                end: {
+                  char: 16,
+                  line: 1,
+                  column: 17,
+                },
+              },
+            ],
+            start: {
+              char: 2,
+              line: 1,
+              column: 3,
             },
-            {
-              unit: 'm',
-              exp: -2,
-              multiplier: 100,
-              known: true,
-              start: {
-                char: 7,
-                line: 1,
-                column: 8,
-              },
-              end: {
-                char: 10,
-                line: 1,
-                column: 11,
-              },
+            end: {
+              char: 16,
+              line: 1,
+              column: 17,
             },
-            {
-              unit: 'Watt',
-              exp: 1,
-              multiplier: 1000000,
-              known: true,
-              start: {
-                char: 12,
-                line: 1,
-                column: 13,
-              },
-              end: {
-                char: 16,
-                line: 1,
-                column: 17,
-              },
-            },
-          ],
+          },
         ],
         start: {
           char: 0,

@@ -90,19 +90,27 @@ const parseUnit = unitString => {
 }
 %}
 
-units -> unit                                           {%
+units -> unitBit                                        {%
+                                                        ([units]) =>
+                                                          addLoc({
+                                                            type: 'units',
+                                                            args: units.units
+                                                          }, units)
+                                                        %}
+
+unitBit -> unit                                         {%
                                                         ([u]) =>
                                                           addLoc({ units: [u] }, u)
                                                         %}
 
-units -> unit "*" units                                 {%
+unitBit -> unit "*" unitBit                             {%
                                                         (d) =>
                                                           addArrayLoc({
                                                             units: [d[0], ...d[2].units],
                                                           }, d)
                                                         %}
 
-units -> unit "/" units                                 {%
+unitBit -> unit "/" unitBit                             {%
                                                         (d) => {
                                                           const [second, ...rest] = d[2].units
 

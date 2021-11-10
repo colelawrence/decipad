@@ -21,7 +21,7 @@ export type ErrSpec =
     }
   | {
       errType: 'expectedUnit';
-      expectedUnit: [AST.Unit[] | null, AST.Unit[] | null];
+      expectedUnit: [AST.Units | null, AST.Units | null];
     }
   | {
       errType: 'unexpectedEmptyColumn';
@@ -43,12 +43,12 @@ export type ErrSpec =
     }
   | {
       errType: 'cannotConvertBetweenUnits';
-      fromUnit: AST.Unit[];
-      toUnit: AST.Unit[];
+      fromUnit: AST.Units;
+      toUnit: AST.Units;
     }
   | {
       errType: 'cannotConvertToUnit';
-      toUnit: AST.Unit[];
+      toUnit: AST.Units;
     };
 
 // exhaustive switch
@@ -144,7 +144,7 @@ export class InferError {
     });
   }
 
-  static expectedUnit(expected: AST.Unit[] | null, got: AST.Unit[] | null) {
+  static expectedUnit(expected: AST.Units | null, got: AST.Units | null) {
     return new InferError({
       errType: 'expectedUnit',
       expectedUnit: [expected, got],
@@ -187,7 +187,7 @@ export class InferError {
     });
   }
 
-  static cannotConvertBetweenUnits(fromUnit: AST.Unit[], toUnit: AST.Unit[]) {
+  static cannotConvertBetweenUnits(fromUnit: AST.Units, toUnit: AST.Units) {
     return new InferError({
       errType: 'cannotConvertBetweenUnits',
       fromUnit,
@@ -195,7 +195,7 @@ export class InferError {
     });
   }
 
-  static cannotConvertToUnit(toUnit: AST.Unit[]) {
+  static cannotConvertToUnit(toUnit: AST.Units) {
     return new InferError({
       errType: 'cannotConvertToUnit',
       toUnit,
