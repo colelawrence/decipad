@@ -367,13 +367,13 @@ describe('Units', () => {
             exp: 1,
             known: true,
             multiplier: 1,
-            unit: 'meters',
+            unit: 'meter',
           },
           {
             exp: -1,
             known: true,
             multiplier: 1,
-            unit: 'seconds',
+            unit: 'second',
           }
         ),
       },
@@ -390,7 +390,7 @@ describe('Units', () => {
     ).toMatchObject({
       value: 6,
       type: {
-        unit: units({ exp: 1, known: true, multiplier: 1, unit: 'meters' }),
+        unit: units({ exp: 1, known: true, multiplier: 1, unit: 'meter' }),
       },
     });
 
@@ -405,7 +405,7 @@ describe('Units', () => {
     ).toMatchObject({
       value: 2,
       type: {
-        unit: units({ exp: -1, known: true, multiplier: 1, unit: 'seconds' }),
+        unit: units({ exp: -1, known: true, multiplier: 1, unit: 'second' }),
       },
     });
   });
