@@ -1,4 +1,5 @@
 import { runTests } from './run-tests';
+import { c, l, prop } from '../utils';
 
 runTests({
   'property accessor': {
@@ -171,5 +172,11 @@ runTests({
         },
       },
     ],
+  },
+
+  'can get a property of a function call': {
+    source: 'fn(1).Prop',
+    sourceMap: false,
+    ast: [prop(c('fn', l(1)), 'Prop')],
   },
 });

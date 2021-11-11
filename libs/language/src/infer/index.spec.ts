@@ -471,29 +471,20 @@ describe('Property access', () => {
   it('Property access errors', async () => {
     expect(
       (await inferExpression(scopeWithTable, prop('Table', 'A'))).errorCause
-    ).toMatchInlineSnapshot(`
-      InferError {
-        "spec": ErrSpec:free-form("message" => "The property A does not exist in Table"),
-      }
-    `);
+        ?.spec
+    ).toMatchInlineSnapshot(
+      `ErrSpec:free-form("message" => "The property A does not exist in Table")`
+    );
 
     expect(
       (await inferExpression(scopeWithTable, prop('NotATable', 'Col')))
-        .errorCause
-    ).toMatchInlineSnapshot(`
-      InferError {
-        "spec": ErrSpec:free-form("message" => "NotATable is not a table"),
-      }
-    `);
+        .errorCause?.spec.errType
+    ).toEqual('expectedButGot');
 
     expect(
       (await inferExpression(scopeWithTable, prop('MissingVar', 'Col')))
-        .errorCause
-    ).toMatchInlineSnapshot(`
-      InferError {
-        "spec": ErrSpec:missingVariable(["MissingVar"]),
-      }
-    `);
+        .errorCause?.spec
+    ).toMatchInlineSnapshot(`ErrSpec:missingVariable(["MissingVar"])`);
   });
 });
 

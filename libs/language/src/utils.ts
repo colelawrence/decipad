@@ -136,8 +136,9 @@ export function given(varName: string, body: AST.Expression) {
   return n('given', n('ref', varName), body);
 }
 
-export function prop(varName: string, propName: string) {
-  return n('property-access', n('ref', varName), propName);
+export function prop(thing: string | AST.Expression, propName: string) {
+  const asExp = typeof thing === 'string' ? n('ref', thing) : thing;
+  return n('property-access', asExp, propName);
 }
 
 export function getOfType<

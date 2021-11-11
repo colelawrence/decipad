@@ -132,10 +132,7 @@ export async function evaluate(
       return evaluateTable(realm, node);
     }
     case 'property-access': {
-      const table = getDefined(
-        realm.stack.get(getIdentifierString(node.args[0]))
-      ) as Column;
-
+      const table = (await evaluate(realm, node.args[0])) as Column;
       const valueIndex = getDefined(table.valueNames?.indexOf(node.args[1]));
 
       return getDefined(table.values[valueIndex]);

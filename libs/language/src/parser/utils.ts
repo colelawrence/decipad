@@ -21,7 +21,7 @@ const prettyPrint = (node: AST.Node, indent: number): string => {
     }
     case 'property-access': {
       const [ref, prop] = node.args;
-      return `(prop ${getIdentifierString(ref)}.${prop})`;
+      return `(prop ${prettyPrint(ref, indent + 1)}.${prop})`;
     }
     case 'function-call': {
       [fname] = node.args[0].args;

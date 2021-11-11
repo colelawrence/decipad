@@ -94,9 +94,7 @@ primary      -> functionCall                            {% id %}
 primary      -> literal                                 {% id %}
 primary      -> ref                                     {% id %}
 
-primary      -> "(" _ expression _ ")"                  {%
-                                                        (d) => addArrayLoc(d[2], d)
-                                                        %}
+primary      -> parenthesizedExpression                 {% id %}
 
 primary      -> "-" _ expression                        {%
                                                         (d) => {
@@ -146,12 +144,21 @@ primary      -> ("!" | "not") _ expression              {%
                                                         }
                                                         %}
 
-primary      -> ref      _ "." _ ref                    {%
+primary      -> (ref | functionCall | parenthesizedExpression) _ "." _ %identifier {%
                                                         (d) =>
                                                           addArrayLoc({
                                                             type: 'property-access',
-                                                            args: [ d[0], d[4].args[0] ]
+                                                            args: [
+                                                              d[0][0],
+                                                              d[4].value
+                                                            ]
                                                           }, d)
+                                                        %}
+
+# This acts like a precedence black hole, where a composed expression can
+# become a primary expression
+parenthesizedExpression -> "(" _ expression _ ")"       {%
+                                                        (d) => addArrayLoc(d[2], d)
                                                         %}
 
 

@@ -18,7 +18,7 @@ it('can pretty print the AST', () => {
         (def A)
         (+ 1 2))
       (column 1 2)
-      (prop Foo.Bar))"
+      (prop (ref Foo).Bar))"
   `);
 });
 

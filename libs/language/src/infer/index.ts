@@ -120,24 +120,19 @@ export const inferExpression = wrap(
         return inferTable(ctx, expr);
       }
       case 'property-access': {
-        const tableName = getIdentifierString(expr.args[0]);
-        const propName = expr.args[1];
-        const table = ctx.stack.get(tableName);
+        const [thing, propName] = expr.args;
+        const table = (await inferExpression(ctx, thing)).isTableOrRow();
+        const tableName =
+          thing.type === 'ref' ? thing.args[0] : table.indexName;
 
-        const getFromTableOrRow = (names: string[], types: Type[]) => {
-          const index = names.indexOf(propName);
+        const getFromTableOrRow = (names: string[], types: Type[]) =>
+          types[names.indexOf(propName)] ??
+          t.impossible(
+            `The property ${propName} does not exist in ${tableName}`
+          );
 
-          if (index !== -1) {
-            return types[index];
-          } else {
-            return t.impossible(
-              `The property ${propName} does not exist in ${tableName}`
-            );
-          }
-        };
-
-        if (table?.rowCellNames != null && table?.rowCellTypes != null) {
-          return getFromTableOrRow(table.rowCellNames, table.rowCellTypes);
+        if (table.errorCause) {
+          return table;
         } else if (
           table?.columnNames != null &&
           table?.columnTypes != null &&
@@ -148,10 +143,12 @@ export const inferExpression = wrap(
             table.tableLength,
             table.indexName
           );
-        } else if (table != null) {
-          return t.impossible(`${tableName} is not a table`);
         } else {
-          return t.impossible(InferError.missingVariable(tableName));
+          const { rowCellNames, rowCellTypes } = table;
+          return getFromTableOrRow(
+            getDefined(rowCellNames),
+            getDefined(rowCellTypes)
+          );
         }
       }
       case 'function-call': {

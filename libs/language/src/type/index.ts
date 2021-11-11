@@ -287,6 +287,19 @@ export class Type {
     }).call(this);
   }
 
+  isTableOrRow(): Type {
+    return propagate(function propagated(this: Type) {
+      if (
+        (this.columnNames != null && this.columnTypes != null) ||
+        (this.rowCellTypes != null && this.rowCellNames != null)
+      ) {
+        return this;
+      } else {
+        return this.expected('table or row');
+      }
+    }).call(this);
+  }
+
   reduced(): Type {
     return propagate(function propagated(this: Type) {
       if (this.cellType != null) {

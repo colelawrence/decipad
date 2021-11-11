@@ -160,7 +160,7 @@ export interface Table {
 
 export interface PropertyAccess {
   type: 'property-access';
-  args: [Ref, string];
+  args: [Expression, string];
   start?: Pos;
   end?: Pos;
 }

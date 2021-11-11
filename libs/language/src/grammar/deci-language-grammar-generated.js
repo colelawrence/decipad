@@ -1155,11 +1155,7 @@ let ParserRules = [
   { name: 'primary', symbols: ['functionCall'], postprocess: id },
   { name: 'primary', symbols: ['literal'], postprocess: id },
   { name: 'primary', symbols: ['ref'], postprocess: id },
-  {
-    name: 'primary',
-    symbols: [{ literal: '(' }, '_', 'expression', '_', { literal: ')' }],
-    postprocess: (d) => addArrayLoc(d[2], d),
-  },
+  { name: 'primary', symbols: ['parenthesizedExpression'], postprocess: id },
   {
     name: 'primary',
     symbols: [{ literal: '-' }, '_', 'expression'],
@@ -1230,17 +1226,31 @@ let ParserRules = [
       );
     },
   },
+  { name: 'primary$subexpression$2', symbols: ['ref'] },
+  { name: 'primary$subexpression$2', symbols: ['functionCall'] },
+  { name: 'primary$subexpression$2', symbols: ['parenthesizedExpression'] },
   {
     name: 'primary',
-    symbols: ['ref', '_', { literal: '.' }, '_', 'ref'],
+    symbols: [
+      'primary$subexpression$2',
+      '_',
+      { literal: '.' },
+      '_',
+      tokenizer.has('identifier') ? { type: 'identifier' } : identifier,
+    ],
     postprocess: (d) =>
       addArrayLoc(
         {
           type: 'property-access',
-          args: [d[0], d[4].args[0]],
+          args: [d[0][0], d[4].value],
         },
         d
       ),
+  },
+  {
+    name: 'parenthesizedExpression',
+    symbols: [{ literal: '(' }, '_', 'expression', '_', { literal: ')' }],
+    postprocess: (d) => addArrayLoc(d[2], d),
   },
   { name: 'additiveOperator$subexpression$1', symbols: [{ literal: '-' }] },
   { name: 'additiveOperator$subexpression$1', symbols: [{ literal: '+' }] },
