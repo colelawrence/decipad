@@ -23,7 +23,7 @@ runTests({
           },
           {
             type: 'literal',
-            args: ['number', 1, null],
+            args: ['number', 1, null, { d: 1, n: 1, s: 1 }],
             start: {
               char: 11,
               line: 1,
@@ -66,7 +66,7 @@ runTests({
           },
           {
             type: 'literal',
-            args: ['number', 2, null],
+            args: ['number', 2, null, { d: 1, n: 2, s: 1 }],
             start: {
               char: 24,
               line: 2,
@@ -115,7 +115,7 @@ runTests({
           },
           {
             type: 'literal',
-            args: ['number', 1, null],
+            args: ['number', 1, null, { d: 1, n: 1, s: 1 }],
             start: {
               char: 11,
               line: 3,
@@ -158,7 +158,7 @@ runTests({
           },
           {
             type: 'literal',
-            args: ['number', 2, null],
+            args: ['number', 2, null, { d: 1, n: 2, s: 1 }],
             start: {
               char: 24,
               line: 6,

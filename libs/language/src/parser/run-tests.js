@@ -125,7 +125,7 @@ export function runTests(tests) {
         const solution = getCleanSolution(results, source, sourceMap, ast);
 
         try {
-          expect(solution.args).toStrictEqual(ast);
+          expect(solution.args).toMatchObject(ast);
         } catch (err) {
           console.error(prettyPrintAST(solution));
 

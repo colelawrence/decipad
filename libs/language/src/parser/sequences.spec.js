@@ -9,19 +9,19 @@ runTests({
         args: [
           {
             type: 'literal',
-            args: ['number', 1, null],
+            args: ['number', 1, null, { d: 1, n: 1, s: 1 }],
             start: 5,
             end: 5,
           },
           {
             type: 'literal',
-            args: ['number', 10, null],
+            args: ['number', 10, null, { d: 1, n: 10, s: 1 }],
             start: 8,
             end: 9,
           },
           {
             type: 'literal',
-            args: ['number', 1, null],
+            args: ['number', 1, null, { d: 1, n: 1, s: 1 }],
             start: 14,
             end: 14,
           },
@@ -44,19 +44,19 @@ runTests({
         args: [
           {
             type: 'literal',
-            args: ['number', 1, null],
+            args: ['number', 1, null, { d: 1, n: 1, s: 1 }],
             start: 5,
             end: 5,
           },
           {
             type: 'literal',
-            args: ['number', 10, null],
+            args: ['number', 10, null, { d: 1, n: 10, s: 1 }],
             start: 16,
             end: 17,
           },
           {
             type: 'literal',
-            args: ['number', 0.5, null],
+            args: ['number', 0.5, null, { d: 2, n: 1, s: 1 }],
             start: 23,
             end: 25,
           },

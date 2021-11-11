@@ -9,15 +9,15 @@ runTests({
         args: [
           {
             type: 'literal',
-            args: ['number', 1, null],
+            args: ['number', 1, null, { d: 1, n: 1, s: 1 }],
             start: 5,
-            end: 5
+            end: 5,
           },
           {
             type: 'literal',
-            args: ['number', 10, null],
+            args: ['number', 10, null, { d: 1, n: 10, s: 1 }],
             start: 8,
-            end: 9
+            end: 9,
           },
         ],
         start: {
@@ -42,13 +42,13 @@ runTests({
         args: [
           {
             type: 'literal',
-            args: ['number', 1, null],
+            args: ['number', 1, null, { d: 1, n: 1, s: 1 }],
             start: 5,
             end: 5,
           },
           {
             type: 'literal',
-            args: ['number', 10, null],
+            args: ['number', 10, null, { d: 1, n: 10, s: 1 }],
             start: 16,
             end: 17,
           },

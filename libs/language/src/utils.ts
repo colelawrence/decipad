@@ -1,3 +1,4 @@
+import Fraction from 'fraction.js';
 import { Class } from 'utility-types';
 import { AST, Time } from '.';
 
@@ -33,12 +34,19 @@ export const block = (...contents: AST.Statement[]) => n('block', ...contents);
 export const units = (...units: AST.Unit[]) =>
   units.length > 0 ? n('units', ...units) : null;
 
+const multiplierFromUnit = (units: AST.Unit[]): number => {
+  return units
+    .map((unit) => unit.multiplier ** unit.exp)
+    .reduce((acc, n) => acc * n, 1);
+};
+
 type LitType = number | string | boolean;
 export function l(value: LitType, ...units: AST.Unit[]): AST.Literal {
   const unitArg = units.length > 0 ? n('units', ...units) : null;
 
   if (typeof value === 'number') {
-    return n('literal', 'number', value, unitArg);
+    const fraction = new Fraction(value, 1 / multiplierFromUnit(units));
+    return n('literal', 'number', value, unitArg, fraction);
   } else if (typeof value === 'boolean') {
     return n('literal', 'boolean', value, unitArg);
   } else {

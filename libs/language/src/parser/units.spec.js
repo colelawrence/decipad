@@ -25,6 +25,7 @@ runTests({
             start: 3,
             end: 8,
           },
+          { d: 1, n: 10, s: 1 },
         ],
         start: {
           char: 0,
@@ -87,6 +88,7 @@ runTests({
             start: 3,
             end: 16,
           },
+          { d: 1, n: 10, s: 1 },
         ],
         start: {
           char: 0,
@@ -157,6 +159,7 @@ runTests({
               column: 17,
             },
           },
+          { d: 1, n: 10, s: 1 },
         ],
         start: {
           char: 0,
@@ -187,6 +190,7 @@ runTests({
             multiplier: 1,
             known: true,
           }),
+          { d: 1, n: 10, s: 1 },
         ],
       },
     ],
@@ -207,6 +211,7 @@ runTests({
             multiplier: 1e9,
             known: true,
           }),
+          { d: 4835703278458517, n: 9.671406556917033e24, s: 1 },
         ],
       },
     ],
@@ -251,6 +256,7 @@ runTests({
               column: 6,
             },
           },
+          { d: 1, n: 3, s: 1 },
         ],
         start: {
           char: 0,
@@ -321,6 +327,7 @@ runTests({
               column: 11,
             },
           },
+          { d: 5902958103587057, n: 1.770887431076117e21, s: 1 },
         ],
         start: {
           char: 0,
@@ -407,6 +414,7 @@ runTests({
               column: 17,
             },
           },
+          { d: 3094850098213451, n: 9.284550294640352e26, s: 1 },
         ],
         start: {
           char: 0,

@@ -363,13 +363,13 @@ runTests({
                       [
                         {
                           type: 'literal',
-                          args: ['number', 1, null],
+                          args: ['number', 1, null, { d: 1, n: 1, s: 1 }],
                           start: 19,
                           end: 19,
                         },
                         {
                           type: 'literal',
-                          args: ['number', 2, null],
+                          args: ['number', 2, null, { d: 1, n: 2, s: 1 }],
                           start: 23,
                           end: 23,
                         },

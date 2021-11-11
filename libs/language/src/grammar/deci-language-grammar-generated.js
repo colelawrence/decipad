@@ -6,6 +6,27 @@ function id(x) {
 
 import { tokenizer } from './tokenizer';
 
+import Fraction from 'fraction.js';
+
+function numberLiteralFromUnits(parentNode, n, units = null) {
+  const mult =
+    (!units && 1) ||
+    units.args
+      .map((unit) => unit.multiplier ** (unit.exp || 1))
+      .reduce((acc, mult) => acc * mult, 1);
+
+  const fraction = new Fraction(n, 1 / mult);
+
+  const node = {
+    type: 'literal',
+    args: ['number', n, units, fraction],
+  };
+  if (Array.isArray(parentNode)) {
+    return addArrayLoc(node, parentNode);
+  }
+  return addLoc(node, parentNode);
+}
+
 const abbreviatedPrefixes = {
   y: 'yocto',
   z: 'zepto',
@@ -363,13 +384,7 @@ let ParserRules = [
     name: 'number',
     symbols: ['unitlessNumber'],
     postprocess: ([n]) => {
-      return addLoc(
-        {
-          type: 'literal',
-          args: ['number', n.n, null],
-        },
-        n
-      );
+      return numberLiteralFromUnits(n, n.n);
     },
   },
   { name: 'number$ebnf$1', symbols: ['___'], postprocess: id },
@@ -384,28 +399,15 @@ let ParserRules = [
     name: 'number',
     symbols: ['unitlessNumber', 'number$ebnf$1', 'units'],
     postprocess: (d) => {
-      const n = d[0];
-      const units = d[2];
-      return addArrayLoc(
-        {
-          type: 'literal',
-          args: ['number', n.n, d[2]],
-        },
-        d
-      );
+      const [n, _, units] = d;
+      return numberLiteralFromUnits(d, n.n, units);
     },
   },
   {
     name: 'percentage',
     symbols: ['decimal', { literal: '%' }],
     postprocess: (d) => {
-      return addArrayLoc(
-        {
-          type: 'literal',
-          args: ['number', d[0].n / 100, null],
-        },
-        d
-      );
+      return numberLiteralFromUnits(d, d[0].n / 100);
     },
   },
   {
@@ -1163,6 +1165,7 @@ let ParserRules = [
       const expr = d[2];
       if (expr.type === 'literal' && expr.args[0] === 'number') {
         expr.args[1] = -expr.args[1];
+        expr.args[3] = !expr.args[3] || expr.args[3].neg();
         return addArrayLoc(
           {
             type: expr.type,

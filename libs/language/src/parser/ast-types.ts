@@ -1,3 +1,4 @@
+import Fraction from 'fraction.js';
 import { Time } from '..';
 
 export interface Pos {
@@ -69,7 +70,7 @@ export type Identifier = Ref | FuncRef | ExternalRef | Def | FuncDef | ColDef;
 // Literal number, char, string etc
 
 type LitArgs =
-  | ['number', number, Units | null]
+  | ['number', number, Units | null, Fraction]
   | ['boolean', boolean, Units | null]
   | ['string', string, Units | null];
 

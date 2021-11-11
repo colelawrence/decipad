@@ -83,67 +83,38 @@ it('looks things up', () => {
 
 it('concatenates lists', () => {
   expect(
-    builtins.cat.fnValuesNoAutomap?.([fromJS([1, 2, 3]), fromJS([4, 5, 6])])
+    builtins.cat
+      .fnValuesNoAutomap?.([fromJS([1, 2, 3]), fromJS([4, 5, 6])])
+      .getData()
   ).toMatchInlineSnapshot(`
-    Column {
-      "valueNames": null,
-      "values": Array [
-        Scalar {
-          "value": 1,
-        },
-        Scalar {
-          "value": 2,
-        },
-        Scalar {
-          "value": 3,
-        },
-        Scalar {
-          "value": 4,
-        },
-        Scalar {
-          "value": 5,
-        },
-        Scalar {
-          "value": 6,
-        },
-      ],
-    }
+    Array [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+    ]
   `);
 
-  expect(builtins.cat.fnValuesNoAutomap?.([fromJS(1), fromJS([2, 3])]))
-    .toMatchInlineSnapshot(`
-    Column {
-      "valueNames": null,
-      "values": Array [
-        Scalar {
-          "value": 1,
-        },
-        Scalar {
-          "value": 2,
-        },
-        Scalar {
-          "value": 3,
-        },
-      ],
-    }
+  expect(
+    builtins.cat.fnValuesNoAutomap?.([fromJS(1), fromJS([2, 3])]).getData()
+  ).toMatchInlineSnapshot(`
+    Array [
+      1,
+      2,
+      3,
+    ]
   `);
 
-  expect(builtins.cat.fnValuesNoAutomap?.([fromJS([1, 2]), fromJS(3)]))
-    .toMatchInlineSnapshot(`
-    Column {
-      "valueNames": null,
-      "values": Array [
-        Scalar {
-          "value": 1,
-        },
-        Scalar {
-          "value": 2,
-        },
-        Scalar {
-          "value": 3,
-        },
-      ],
-    }
+  expect(
+    builtins.cat.fnValuesNoAutomap?.([fromJS([1, 2]), fromJS(3)]).getData()
+  ).toMatchInlineSnapshot(`
+    Array [
+      1,
+      2,
+      3,
+    ]
   `);
 });
 
