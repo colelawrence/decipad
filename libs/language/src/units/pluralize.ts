@@ -1,5 +1,5 @@
 import pluralize, { singular } from 'pluralize';
 
-pluralize.addIrregularRule('celcius', 'celcius');
+pluralize.addIrregularRule('celsius', 'celsius');
 
 export { singular };

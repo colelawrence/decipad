@@ -11,9 +11,9 @@ export const units: UnitOfMeasure[] = [
     fromBaseQuantity: identity,
   },
   {
-    name: 'celcius',
+    name: 'celsius',
     baseQuantity: 'temperature',
-    toBaseQuantity: (celcius) => celcius + 273.15,
+    toBaseQuantity: (celsius) => celsius + 273.15,
     fromBaseQuantity: (kelvin) => kelvin - 273.15,
   },
   {

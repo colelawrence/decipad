@@ -82,8 +82,8 @@ describe('convert', () => {
   });
 
   it('converts between temperature units', () => {
-    expect(convertBetweenUnits(2000, 'celcius', 'kelvin')).toBe(2273.15);
-    expect(convertBetweenUnits(2273.15, 'kelvin', 'celcius')).toBe(2000);
+    expect(convertBetweenUnits(2000, 'celsius', 'kelvin')).toBe(2273.15);
+    expect(convertBetweenUnits(2273.15, 'kelvin', 'celsius')).toBe(2000);
     expect(Math.round(convertBetweenUnits(2000, 'fahrenheit', 'kelvin'))).toBe(
       1366
     );

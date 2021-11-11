@@ -41,7 +41,7 @@ const nilPos = {
 };
 let nilCtx = makeContext();
 const degC: AST.Unit = {
-  unit: 'celcius',
+  unit: 'celsius',
   exp: 1,
   multiplier: 1,
   known: true,

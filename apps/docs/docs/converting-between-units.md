@@ -54,7 +54,7 @@ Here is a list of all the units Deci knows:
 ## Temperature units
 
 - **kelvin**
-- celcius
+- celsius
 - fahrenheit
 
 ## Time units
