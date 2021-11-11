@@ -64,3 +64,36 @@ it('renders the nested dropdown when the trigger item is clicked', async () => {
 
   expect(await findAllByRole('menuitem')).toHaveLength(4);
 });
+
+describe('onOpenChange prop', () => {
+  it('gets called when dropdown is opened', async () => {
+    const onOpenChange = jest.fn();
+    const { getByText } = render(
+      <MenuList onOpenChange={onOpenChange} trigger={<button>Click me</button>}>
+        <MenuItem>Text1</MenuItem>
+        <MenuItem>Text2</MenuItem>
+      </MenuList>
+    );
+
+    // Dropdown trigger uses a pointerdown event
+    fireEvent.pointerDown(getByText('Click me'));
+
+    expect(onOpenChange).toHaveBeenCalledWith(true);
+  });
+
+  it('gets called when dropdown is closed', async () => {
+    const onOpenChange = jest.fn();
+    const { getByText } = render(
+      <MenuList onOpenChange={onOpenChange} trigger={<button>Click me</button>}>
+        <MenuItem>Text1</MenuItem>
+        <MenuItem>Text2</MenuItem>
+      </MenuList>
+    );
+
+    // Dropdown trigger uses a pointerdown event
+    fireEvent.pointerDown(getByText('Click me'));
+    fireEvent.pointerDown(getByText('Click me'));
+
+    expect(onOpenChange).toHaveBeenLastCalledWith(false);
+  });
+});

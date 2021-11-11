@@ -5,15 +5,10 @@ import { TABLE_INPUT } from '../../../utils/elementTypes';
 const tableElement = {
   type: TABLE_INPUT,
   tableData: {
-    variableName: 'TableName',
+    variableName: '',
     columns: [
       {
-        columnName: 'FirstName',
-        cells: ['', '', ''],
-        cellType: 'string',
-      },
-      {
-        columnName: 'LastName',
+        columnName: '',
         cells: ['', '', ''],
         cellType: 'string',
       },

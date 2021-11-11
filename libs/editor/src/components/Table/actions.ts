@@ -10,6 +10,9 @@ export const changeVariableName = produce(
   }
 );
 
+export const getTableColumnsLength = (data: TableData): number =>
+  data.columns.length;
+
 export const getTableLength = (data: TableData): number =>
   data.columns[0].cells.length;
 
@@ -43,6 +46,13 @@ export const changeColumnName = produce(
     data.columns[columnIndex].columnName = newName;
   }
 );
+
+export const removeColumn = produce((data: TableData, columnIndex: number) => {
+  // Can't remove the last standing column
+  if (getTableColumnsLength(data) > 1) {
+    data.columns.splice(columnIndex, 1);
+  }
+});
 
 export const removeRow = produce((data: TableData, rowIndex: number) => {
   if (getTableLength(data) === 1) {

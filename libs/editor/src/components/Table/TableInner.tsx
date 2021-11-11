@@ -1,14 +1,6 @@
 import { FC } from 'react';
 
-import {
-  BodyTrElement,
-  CaptionElement,
-  HeadTrElement,
-  TableElement,
-  TdElement,
-  ThElement,
-  EditableCellContents,
-} from '@decipad/ui';
+import { organisms } from '@decipad/ui';
 
 import {
   changeVariableName,
@@ -16,8 +8,9 @@ import {
   addRow,
   changeCell,
   changeColumnName,
-  removeRow,
   changeColumnType,
+  removeColumn,
+  removeRow,
 } from './actions';
 import { TableData } from '../../utils/tableTypes';
 import { parseCell } from '../../utils/parseCell';
@@ -32,80 +25,36 @@ export const TableInner = ({
   value,
   onChange,
 }: TableInnerProps): ReturnType<FC> => {
-  const tableLength = value.columns[0].cells.length;
-
   return (
-    <TableElement
+    <organisms.EditorTable
+      onAddColumn={() => {
+        onChange(addColumn(value));
+      }}
       onAddRow={() => {
         onChange(addRow(value));
       }}
-    >
-      <CaptionElement>
-        <EditableCellContents
-          value={value.variableName}
-          onChange={(newVariableName) => {
-            onChange(changeVariableName(value, newVariableName));
-          }}
-        ></EditableCellContents>
-      </CaptionElement>
-      <thead>
-        <HeadTrElement
-          onAddColumn={() => {
-            onChange(addColumn(value));
-          }}
-        >
-          {value.columns.map((col, columnIndex) => {
-            return (
-              <ThElement
-                onChangeColumnType={(newType) => {
-                  onChange(changeColumnType(value, columnIndex, newType));
-                }}
-                key={columnIndex}
-                type={col.cellType}
-              >
-                <EditableCellContents
-                  value={col.columnName}
-                  onChange={(newColumnName) => {
-                    onChange(
-                      changeColumnName(value, columnIndex, newColumnName)
-                    );
-                  }}
-                />
-              </ThElement>
-            );
-          })}
-        </HeadTrElement>
-      </thead>
-      <tbody>
-        {Array.from({ length: tableLength }, (_, rowIndex) => {
-          return (
-            <BodyTrElement
-              key={rowIndex}
-              onRemove={() => {
-                onChange(removeRow(value, rowIndex));
-              }}
-            >
-              {value.columns.map((column, colIndex) => {
-                return (
-                  <TdElement key={colIndex}>
-                    <EditableCellContents
-                      value={column.cells[rowIndex]}
-                      onChange={(newText) => {
-                        onChange(
-                          changeCell(value, { colIndex, rowIndex, newText })
-                        );
-                      }}
-                      validate={(text) =>
-                        parseCell(column.cellType, text) != null
-                      }
-                    />
-                  </TdElement>
-                );
-              })}
-            </BodyTrElement>
-          );
-        })}
-      </tbody>
-    </TableElement>
+      onChangeCaption={(newVariableName) => {
+        onChange(changeVariableName(value, newVariableName));
+      }}
+      onChangeCell={(colIndex, rowIndex, newText) => {
+        onChange(changeCell(value, { colIndex, rowIndex, newText }));
+      }}
+      onChangeColumnType={(columnIndex, newType) => {
+        onChange(changeColumnType(value, columnIndex, newType));
+      }}
+      onChangeColumnName={(columnIndex, newColumnName) => {
+        onChange(changeColumnName(value, columnIndex, newColumnName));
+      }}
+      onRemoveColumn={(columnIndex) => {
+        onChange(removeColumn(value, columnIndex));
+      }}
+      onRemoveRow={(rowIndex) => {
+        onChange(removeRow(value, rowIndex));
+      }}
+      onValidateCell={(column, text) =>
+        parseCell(column.cellType, text) != null
+      }
+      value={value}
+    />
   );
 };

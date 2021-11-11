@@ -1,3 +1,4 @@
+export * from './counter';
 export * from './link';
 export * from './props';
 export * from './routing';

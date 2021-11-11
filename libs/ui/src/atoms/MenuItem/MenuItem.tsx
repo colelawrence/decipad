@@ -4,6 +4,7 @@ import { Item } from '@radix-ui/react-dropdown-menu';
 import { cssVar, p14Regular } from '../../primitives';
 
 export const menuItemStyles = css(p14Regular, {
+  cursor: 'pointer',
   display: 'flex',
   alignItems: 'center',
   gap: '4px',

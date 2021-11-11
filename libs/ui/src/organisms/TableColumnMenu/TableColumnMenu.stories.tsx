@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { TableColumnMenu } from './TableColumnMenu';
 
 export default {
-  title: 'Organisms / Table Column Menu',
+  title: 'Organisms / Table / Column Menu',
   component: TableColumnMenu,
 } as Meta;
 

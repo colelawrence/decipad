@@ -25,7 +25,8 @@ const styles = css({
   borderRadius: '8px',
 });
 
-interface MenuListProps extends Pick<DropdownMenuProps, 'defaultOpen'> {
+interface MenuListProps
+  extends Pick<DropdownMenuProps, 'defaultOpen' | 'onOpenChange'> {
   readonly children?: ReactNode;
   readonly trigger: ReactNode;
 }
@@ -33,10 +34,11 @@ interface MenuListProps extends Pick<DropdownMenuProps, 'defaultOpen'> {
 export const MenuList = ({
   children,
   defaultOpen,
+  onOpenChange,
   trigger,
 }: MenuListProps): ReturnType<FC> => {
   return (
-    <MenuRoot defaultOpen={defaultOpen}>
+    <MenuRoot defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
       {isElement(trigger) && trigger.type === TriggerMenuItem ? (
         trigger
       ) : (

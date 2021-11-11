@@ -1,4 +1,6 @@
 export { AccountMenu } from './AccountMenu/AccountMenu';
+export { EditableTableHeader } from './EditableTableHeader/EditableTableHeader';
+export { EditorTable } from './EditorTable/EditorTable';
 export { EmptyWorkspaceCta } from './EmptyWorkspaceCta/EmptyWorkspaceCta';
 export { NotebookListItem } from './NotebookListItem/NotebookListItem';
 export { NotebookShareMenu } from './NotebookShareMenu/NotebookShareMenu';

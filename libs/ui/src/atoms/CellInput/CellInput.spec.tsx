@@ -1,0 +1,73 @@
+import { render, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+
+import { CellInput } from './CellInput';
+
+it('renders the cell text', () => {
+  const { getByRole } = render(<CellInput value="Inner text" />);
+
+  expect(getByRole('textbox')).toHaveValue('Inner text');
+});
+
+it('submits a new value when blurring', async () => {
+  const onChange = jest.fn();
+  const { getByRole } = render(<CellInput value="text" onChange={onChange} />);
+
+  userEvent.type(getByRole('textbox'), ' newtext');
+
+  expect(onChange).not.toHaveBeenCalled();
+
+  fireEvent.blur(getByRole('textbox'));
+
+  expect(onChange).toHaveBeenCalledTimes(1);
+  expect(onChange).toHaveBeenCalledWith('text newtext');
+});
+
+it('submits a new value when pressing enter', async () => {
+  const onChange = jest.fn();
+  const { getByRole } = render(<CellInput value="text" onChange={onChange} />);
+
+  userEvent.type(getByRole('textbox'), ' newtext');
+
+  expect(onChange).not.toHaveBeenCalled();
+
+  fireEvent.keyDown(getByRole('textbox'), { key: 'Enter' });
+
+  expect(onChange).toHaveBeenCalledTimes(1);
+  expect(onChange).toHaveBeenCalledWith('text newtext');
+});
+
+it('takes a new value from the props', async () => {
+  const { getByRole, rerender } = render(<CellInput value="old" />);
+
+  expect(getByRole('textbox')).toHaveValue('old');
+
+  rerender(<CellInput value="new" />);
+
+  expect(getByRole('textbox')).toHaveValue('new');
+});
+
+describe('validate prop', () => {
+  it('validates the input before submitting', async () => {
+    const validate = jest.fn(() => true);
+    const { getByRole, rerender } = render(
+      <CellInput validate={validate} value="" />
+    );
+
+    userEvent.type(getByRole('textbox'), 'text');
+    fireEvent.blur(getByRole('textbox'));
+
+    expect(validate).toHaveBeenCalledTimes(1);
+    expect(validate).toHaveBeenCalledWith('text');
+    expect(getByRole('textbox')).toHaveValue('text');
+
+    const noValidate = jest.fn(() => false);
+    rerender(<CellInput validate={noValidate} value="" />);
+
+    userEvent.type(getByRole('textbox'), 'text');
+    fireEvent.blur(getByRole('textbox'));
+
+    expect(noValidate).toHaveBeenCalledTimes(1);
+    expect(getByRole('textbox')).toHaveValue('');
+  });
+});

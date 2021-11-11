@@ -15,7 +15,7 @@ it('renders menu when clicking the trigger icon', async () => {
   expect(await queryAllByRole('menuitem')).toHaveLength(0);
 
   // Internally the dropdown uses a pointerdown event.
-  fireEvent.pointerDown(getByTitle(/caret down/i).closest('svg')!);
+  fireEvent.pointerDown(getByTitle(/caret down/i).closest('button')!);
 
   expect(await findAllByRole('menuitem')).not.toHaveLength(0);
 });

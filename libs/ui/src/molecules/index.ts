@@ -1,4 +1,7 @@
 export { AccountAvatar } from './AccountAvatar/AccountAvatar';
+export { AddTableRowButton } from './AddTableRowButton/AddTableRowButton';
+export { EditableTableCaption } from './EditableTableCaption/EditableTableCaption';
+export { EditableTableData } from './EditableTableData/EditableTableData';
 export { HelpButton } from './HelpButton/HelpButton';
 export { SlashCommandsMenuGroup } from './SlashCommandsMenuGroup/SlashCommandsMenuGroup';
 export { MenuList } from './MenuList/MenuList';
@@ -6,4 +9,6 @@ export { NavigationList } from './NavigationList/NavigationList';
 export { NotebookListHeader } from './NotebookListHeader/NotebookListHeader';
 export { NotebookListItemActions } from './NotebookListItemActions/NotebookListItemActions';
 export { NotebookListItemPlaceholder } from './NotebookListItemPlaceholder/NotebookListItemPlaceholder';
+export { TableHeaderRow } from './TableHeaderRow/TableHeaderRow';
+export { TableRow } from './TableRow/TableRow';
 export { WorkspaceItem } from './WorkspaceItem/WorkspaceItem';
