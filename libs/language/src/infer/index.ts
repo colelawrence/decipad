@@ -7,9 +7,9 @@ import { getDefined, zip, getIdentifierString, getOfType } from '../utils';
 import { getDateFromAstForm } from '../date';
 
 import { callBuiltinFunctor } from '../builtins';
-import { Context, makeContext } from './context';
+import { Context, makeContext, pushStackAndPrevious } from './context';
 import { inferSequence } from './sequence';
-import { unifyColumnSizes } from './table';
+import { inferTable } from './table';
 import { resolve as resolveData } from '../data';
 import { inferData } from './data';
 import { inferAs } from './as';
@@ -29,20 +29,6 @@ const wrap =
       return type;
     }
   };
-
-/** Push the stack and set Context.hasPrevious for the duration of `fn` */
-const pushStackAndPrevious = async (
-  ctx: Context,
-  fn: () => Promise<Type>
-): Promise<Type> => {
-  const savedHasPrevious = ctx.hasPrevious;
-  ctx.hasPrevious = true;
-  try {
-    return await ctx.stack.withPush(fn);
-  } finally {
-    ctx.hasPrevious = savedHasPrevious;
-  }
-};
 
 /*
  Walk depth-first into an expanded AST.Expression, collecting the type of things beneath and checking it against the current iteration's constraints.
@@ -131,32 +117,7 @@ export const inferExpression = wrap(
         }
       }
       case 'table': {
-        const columns = expr.args;
-
-        return pushStackAndPrevious(ctx, async () => {
-          const columnTypes = [];
-          const columnNames = [];
-
-          for (const {
-            args: [colDef, expr],
-          } of columns) {
-            const name = getIdentifierString(colDef);
-            // eslint-disable-next-line no-await-in-loop
-            const type = await inferExpression(ctx, expr);
-
-            // Bail on error
-            if (type.errorCause) {
-              return type;
-            }
-
-            ctx.stack.set(name, type);
-
-            columnTypes.push(type);
-            columnNames.push(name);
-          }
-
-          return unifyColumnSizes(ctx.inAssignment, columnTypes, columnNames);
-        });
+        return inferTable(ctx, expr);
       }
       case 'property-access': {
         const tableName = getIdentifierString(expr.args[0]);

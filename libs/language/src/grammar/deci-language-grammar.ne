@@ -195,7 +195,7 @@ statement     -> assign                                 {% id %}
 statement     -> functionDef                            {% id %}
 statement     -> expression                             {% id %}
 
-assign -> identifier _ "=" _ expression                 {%
+assign -> identifier _ "=" _ assignable                 {%
                                                         (d) => addArrayLoc({
                                                           type: 'assign',
                                                           args: [
@@ -208,6 +208,8 @@ assign -> identifier _ "=" _ expression                 {%
                                                         }, d)
                                                         %}
 
+assignable -> expression                                {% id %}
+assignable -> table                                     {% id %}
 
 ##################
 ### References ###

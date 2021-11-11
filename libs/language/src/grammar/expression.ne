@@ -9,7 +9,6 @@ expression    -> given                                  {% id %}
 expression    -> asExp                                  {% id %}
 
 nonGivenExp   -> divMulOp                               {% id %}
-nonGivenExp   -> table                                  {% id %}
 nonGivenExp   -> importData                             {% id %}
 
 asExp         -> expression _ "as" _ units              {%

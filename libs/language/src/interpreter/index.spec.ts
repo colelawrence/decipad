@@ -13,9 +13,13 @@ import {
   tableDef,
   table,
   prop,
+  block,
+  assign,
+  r,
 } from '../utils';
 import { parseUTCDate } from '../date';
 import { run, runOne } from './index';
+import { runAST } from '../testUtils';
 
 it('evaluates and returns', async () => {
   const basicProgram = [
@@ -310,6 +314,38 @@ describe('Tables', () => {
     ).toEqual([
       [1, 2, 3],
       [1, 2, 3],
+    ]);
+  });
+
+  it('can spread another table and add columns', async () => {
+    const { value } = await runAST(
+      block(
+        tableDef('OldTable', {
+          Idx: col('One', 'Two'),
+        }),
+
+        assign(
+          'Extended',
+          n(
+            'table',
+            n('table-spread', r('OldTable')),
+            n('table-column', n('coldef', 'Col'), col(1, 2)),
+            n(
+              'table-column',
+              n('coldef', 'UsingPrevious'),
+              c('+', l(1), c('previous', l(10)))
+            ),
+            n('table-column', n('coldef', 'JustOne'), l(1))
+          )
+        )
+      )
+    );
+
+    expect(value).toEqual([
+      ['One', 'Two'],
+      [1, 2],
+      [11, 12],
+      [1, 1],
     ]);
   });
 });

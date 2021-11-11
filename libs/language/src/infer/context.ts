@@ -35,3 +35,17 @@ export const makeContext = ({
     externalData: anyMappingToMap(externalData),
   };
 };
+
+/** Push the stack and set Context.hasPrevious for the duration of `fn` */
+export const pushStackAndPrevious = async (
+  ctx: Context,
+  fn: () => Promise<Type>
+): Promise<Type> => {
+  const savedHasPrevious = ctx.hasPrevious;
+  ctx.hasPrevious = true;
+  try {
+    return await ctx.stack.withPush(fn);
+  } finally {
+    ctx.hasPrevious = savedHasPrevious;
+  }
+};

@@ -4,7 +4,7 @@
 ### Given ###
 #############
 
-given -> "given" __ ref _ ":" _ expression        {%
+given -> "given" __ ref _ ":" _ givenBody         {%
                                                   (d) => {
                                                     return addArrayLoc({
                                                       type: 'given',
@@ -12,3 +12,6 @@ given -> "given" __ ref _ ":" _ expression        {%
                                                     }, d)
                                                   }
                                                   %}
+
+givenBody -> table                                {% id %}
+givenBody -> expression                           {% id %}

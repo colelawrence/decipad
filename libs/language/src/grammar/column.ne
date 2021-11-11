@@ -16,7 +16,7 @@ column       -> "[" _ "]"                               {%
                                                         }, d[0], d[2])
                                                         %}
 
-column       -> "[" colContents "]"                     {%
+column       -> "[" columnItems "]"                     {%
                                                         (d, _l, reject) => {
                                                           if (d[1].args.every((elem) => (
                                                             elem.type === 'literal' &&
@@ -34,7 +34,7 @@ column       -> "[" colContents "]"                     {%
                                                         }
                                                         %}
 
-colContents -> _ expression (_ "," _ expression):* _    {%
+columnItems -> _ expression (_ "," _ expression):* _    {%
                                                         (d, _l, reject) => {
                                                           return addArrayLoc({
                                                             type: 'column-items',

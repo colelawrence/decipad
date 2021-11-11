@@ -200,7 +200,7 @@ it('can parse a type', () => {
       columnTypes: [unitlessNumber, unitlessNumber],
       columnNames: ['Hi', 'Hi2'],
     })
-  ).toMatchInlineSnapshot(`"table { Hi = <number>, Hi2 = <number> }"`);
+  ).toMatchInlineSnapshot(`"table (123) { Hi = <number>, Hi2 = <number> }"`);
 
   expect(
     deserializeType({

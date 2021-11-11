@@ -1,7 +1,7 @@
 import { dequal } from 'dequal';
 
-import { AST } from '..';
-import { InferError, inverseExponent, build as t } from '../type';
+import { AST, inferBlock } from '..';
+import { InferError, Type, inverseExponent, build as t } from '../type';
 
 import {
   l,
@@ -21,6 +21,7 @@ import {
   importedData,
   assign,
   units,
+  block,
 } from '../utils';
 
 import { makeContext } from './context';
@@ -31,6 +32,7 @@ import {
   inferProgram,
 } from './index';
 import { objectToMap, objectToTableType } from '../testUtils';
+import { TableColumn, TableSpread } from '../parser/ast-types';
 
 const nilPos = {
   line: 0,
@@ -70,6 +72,11 @@ const meters: AST.Unit = {
   start: nilPos,
   end: nilPos,
 };
+
+expect.addSnapshotSerializer({
+  test: (item) => item instanceof Type,
+  serialize: (item: Type) => item.toString(),
+});
 
 afterEach(() => {
   nilCtx.nodeTypes = new Map();
@@ -392,6 +399,53 @@ describe('tables', () => {
         )
       ).errorCause?.message
     ).toMatch(/MissingVar/);
+  });
+
+  describe('table spreads', () => {
+    const base = tableDef('Base', { Idx: col('1', '2') });
+    const extend = (...cols: (TableColumn | TableSpread)[]) =>
+      assign('Extended', n('table', n('table-spread', r('Base')), ...cols));
+
+    it('extending with no new columns is just a copy', async () => {
+      expect(await inferBlock(block(base, extend()))).toMatchInlineSnapshot(
+        `table (2) { Idx = <string> }`
+      );
+    });
+
+    it('can add a column', async () => {
+      expect(
+        await inferBlock(
+          block(base, extend(n('table-column', n('coldef', 'New'), col(1, 2))))
+        )
+      ).toMatchInlineSnapshot(`table (2) { Idx = <string>, New = <number> }`);
+    });
+
+    it('needs the source table to be a table', async () => {
+      expect(
+        await inferBlock(block(assign('Base', l(1)), extend()))
+      ).toMatchInlineSnapshot(
+        `Error: This operation requires a table and a number was entered`
+      );
+    });
+
+    it('supports (previous)', async () => {
+      expect(
+        await inferBlock(
+          block(
+            base,
+            extend(
+              n(
+                'table-column',
+                n('coldef', 'WithPrev'),
+                c('previous', l(false))
+              )
+            )
+          )
+        )
+      ).toMatchInlineSnapshot(
+        `table (2) { Idx = <string>, WithPrev = <boolean> }`
+      );
+    });
   });
 });
 

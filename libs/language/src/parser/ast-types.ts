@@ -144,9 +144,16 @@ export interface TableColumn {
   end?: Pos;
 }
 
+export interface TableSpread {
+  type: 'table-spread';
+  args: [spreadTableRef: Ref];
+  start?: Pos;
+  end?: Pos;
+}
+
 export interface Table {
   type: 'table';
-  args: TableColumn[];
+  args: (TableColumn | TableSpread)[];
   start?: Pos;
   end?: Pos;
 }
@@ -244,7 +251,14 @@ export type Statement = FunctionDefinition | Assign | Expression;
 
 type Lists = FunctionArgumentNames | ArgList | ColumnItems;
 
-export type Node = Block | Statement | Identifier | Lists | TableColumn | Units;
+export type Node =
+  | Block
+  | Statement
+  | Identifier
+  | Lists
+  | TableColumn
+  | TableSpread
+  | Units;
 
 export interface TypeToNode {
   def: Def;
@@ -263,6 +277,7 @@ export interface TypeToNode {
   'column-items': ColumnItems;
   column: Column;
   'table-column': TableColumn;
+  'table-spread': TableSpread;
   table: Table;
   'property-access': PropertyAccess;
   assign: Assign;

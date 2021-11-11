@@ -880,7 +880,7 @@ let ParserRules = [
   },
   {
     name: 'column',
-    symbols: [{ literal: '[' }, 'colContents', { literal: ']' }],
+    symbols: [{ literal: '[' }, 'columnItems', { literal: ']' }],
     postprocess: (d, _l, reject) => {
       if (
         d[1].args.every(
@@ -903,21 +903,21 @@ let ParserRules = [
       }
     },
   },
-  { name: 'colContents$ebnf$1', symbols: [] },
+  { name: 'columnItems$ebnf$1', symbols: [] },
   {
-    name: 'colContents$ebnf$1$subexpression$1',
+    name: 'columnItems$ebnf$1$subexpression$1',
     symbols: ['_', { literal: ',' }, '_', 'expression'],
   },
   {
-    name: 'colContents$ebnf$1',
-    symbols: ['colContents$ebnf$1', 'colContents$ebnf$1$subexpression$1'],
+    name: 'columnItems$ebnf$1',
+    symbols: ['columnItems$ebnf$1', 'columnItems$ebnf$1$subexpression$1'],
     postprocess: function arrpush(d) {
       return d[0].concat([d[1]]);
     },
   },
   {
-    name: 'colContents',
-    symbols: ['_', 'expression', 'colContents$ebnf$1', '_'],
+    name: 'columnItems',
+    symbols: ['_', 'expression', 'columnItems$ebnf$1', '_'],
     postprocess: (d, _l, reject) => {
       return addArrayLoc(
         {
@@ -937,7 +937,7 @@ let ParserRules = [
       '_',
       { literal: ':' },
       '_',
-      'expression',
+      'givenBody',
     ],
     postprocess: (d) => {
       return addArrayLoc(
@@ -949,6 +949,8 @@ let ParserRules = [
       );
     },
   },
+  { name: 'givenBody', symbols: ['table'], postprocess: id },
+  { name: 'givenBody', symbols: ['expression'], postprocess: id },
   {
     name: 'table',
     symbols: [{ literal: '{' }, 'tableContents', { literal: '}' }],
@@ -966,7 +968,7 @@ let ParserRules = [
   { name: 'tableContents$ebnf$1', symbols: [] },
   {
     name: 'tableContents$ebnf$1$subexpression$1',
-    symbols: ['tableSep', 'tableOneItem'],
+    symbols: ['tableSep', 'tableItem'],
   },
   {
     name: 'tableContents$ebnf$1',
@@ -977,7 +979,7 @@ let ParserRules = [
   },
   {
     name: 'tableContents',
-    symbols: ['_', 'tableOneItem', 'tableContents$ebnf$1', '_'],
+    symbols: ['_', 'tableItem', 'tableContents$ebnf$1', '_'],
     postprocess: ([_ws, first, rest]) => {
       const coldefs = [first];
 
@@ -989,7 +991,7 @@ let ParserRules = [
     },
   },
   {
-    name: 'tableOneItem',
+    name: 'tableItem',
     symbols: ['identifier'],
     postprocess: ([ref]) => {
       return addLoc(
@@ -1005,7 +1007,20 @@ let ParserRules = [
     },
   },
   {
-    name: 'tableOneItem',
+    name: 'tableItem',
+    symbols: [{ literal: '...' }, 'ref'],
+    postprocess: (d) => {
+      return addArrayLoc(
+        {
+          type: 'table-spread',
+          args: [d[1]],
+        },
+        d
+      );
+    },
+  },
+  {
+    name: 'tableItem',
     symbols: ['identifier', '_', { literal: '=' }, '_', 'expression'],
     postprocess: (d) => {
       const ref = d[0];
@@ -1033,7 +1048,6 @@ let ParserRules = [
   { name: 'expression', symbols: ['given'], postprocess: id },
   { name: 'expression', symbols: ['asExp'], postprocess: id },
   { name: 'nonGivenExp', symbols: ['divMulOp'], postprocess: id },
-  { name: 'nonGivenExp', symbols: ['table'], postprocess: id },
   { name: 'nonGivenExp', symbols: ['importData'], postprocess: id },
   {
     name: 'asExp',
@@ -1666,7 +1680,7 @@ let ParserRules = [
   { name: 'statement', symbols: ['expression'], postprocess: id },
   {
     name: 'assign',
-    symbols: ['identifier', '_', { literal: '=' }, '_', 'expression'],
+    symbols: ['identifier', '_', { literal: '=' }, '_', 'assignable'],
     postprocess: (d) =>
       addArrayLoc(
         {
@@ -1685,6 +1699,8 @@ let ParserRules = [
         d
       ),
   },
+  { name: 'assignable', symbols: ['expression'], postprocess: id },
+  { name: 'assignable', symbols: ['table'], postprocess: id },
   {
     name: 'identifier',
     symbols: [

@@ -107,7 +107,7 @@ export class Type {
         ([name, cell]) => `${name} = ${cell.toString()}`
       );
 
-      return `table { ${columnStrings.join(', ')} }`;
+      return `table (${this.tableLength}) { ${columnStrings.join(', ')} }`;
     }
 
     if (this.rowCellTypes != null && this.rowCellNames != null) {

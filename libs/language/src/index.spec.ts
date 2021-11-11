@@ -303,7 +303,7 @@ describe('Tables', () => {
     });
   });
 
-  it('Can expand items', async () => {
+  it('Can expand items if a column is not passed', async () => {
     expect(
       await runCode(`
         Table = {
@@ -330,6 +330,30 @@ describe('Tables', () => {
     ).toMatchObject({
       type: t.column(t.number(), 3, 'Table'),
       value: [1, 1, 1],
+    });
+  });
+
+  it('Can spread new tables', async () => {
+    expect(
+      await runCode(`
+        OldTable = { Idx = ["One", "Two"] }
+
+        NewTable = {
+          ...OldTable,
+          NewCol = Idx + " Apples"
+        }
+      `)
+    ).toMatchObject({
+      type: t.table({
+        length: 2,
+        indexName: 'OldTable',
+        columnNames: ['Idx', 'NewCol'],
+        columnTypes: [t.string(), t.string()],
+      }),
+      value: [
+        ['One', 'Two'],
+        ['One Apples', 'Two Apples'],
+      ],
     });
   });
 });

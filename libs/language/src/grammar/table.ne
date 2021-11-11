@@ -15,7 +15,7 @@ table -> "{" tableContents "}"                          {%
 
 tableContents -> _                                      {% (d) => [] %}
 
-tableContents -> _ tableOneItem (tableSep tableOneItem):* _ {%
+tableContents -> _ tableItem (tableSep tableItem):* _   {%
                                                         ([_ws, first, rest]) => {
                                                           const coldefs = [first]
 
@@ -27,7 +27,7 @@ tableContents -> _ tableOneItem (tableSep tableOneItem):* _ {%
                                                         }
                                                         %}
 
-tableOneItem -> identifier                              {%
+tableItem -> identifier                                 {%
                                                         ([ref]) => {
                                                           return addLoc({
                                                             type: 'table-column',
@@ -39,7 +39,16 @@ tableOneItem -> identifier                              {%
                                                         }
                                                         %}
 
-tableOneItem -> identifier _ "=" _ expression           {%
+tableItem -> "..." ref                                  {%
+                                                        (d) => {
+                                                          return addArrayLoc({
+                                                            type: 'table-spread',
+                                                            args: [d[1]]
+                                                          }, d)
+                                                        }
+                                                        %}
+
+tableItem -> identifier _ "=" _ expression              {%
                                                         (d) => {
                                                           const ref = d[0]
                                                           const colDef = addLoc({

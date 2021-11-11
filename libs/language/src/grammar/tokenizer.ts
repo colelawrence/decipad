@@ -28,6 +28,7 @@ export const tokenizer = moo.states({
     greaterThanOrEquals: '>=',
     arrow: '=>',
     twoStars: '**',
+    threeDots: '...',
     twoDots: '..',
 
     dot: '.',

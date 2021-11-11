@@ -416,4 +416,84 @@ runTests({
       },
     ],
   },
+
+  'table with spreads': {
+    source: ' Table = {...A } ',
+    only: true,
+    ast: [
+      {
+        type: 'assign',
+        args: [
+          {
+            type: 'def',
+            args: ['Table'],
+            start: {
+              char: 1,
+              line: 1,
+              column: 2,
+            },
+            end: {
+              char: 5,
+              line: 1,
+              column: 6,
+            },
+          },
+          {
+            type: 'table',
+            args: [
+              {
+                type: 'table-spread',
+                args: [
+                  {
+                    type: 'ref',
+                    args: ['A'],
+                    start: {
+                      char: 13,
+                      line: 1,
+                      column: 14,
+                    },
+                    end: {
+                      char: 13,
+                      line: 1,
+                      column: 14,
+                    },
+                  },
+                ],
+                start: {
+                  char: 10,
+                  line: 1,
+                  column: 11,
+                },
+                end: {
+                  char: 13,
+                  line: 1,
+                  column: 14,
+                },
+              },
+            ],
+            start: {
+              char: 9,
+              line: 1,
+              column: 10,
+            },
+            end: {
+              char: 15,
+              line: 1,
+              column: 16,
+            },
+          },
+        ],
+        start: {
+          char: 1,
+          line: 1,
+          column: 2,
+        },
+        end: {
+          char: 15,
+          line: 1,
+          column: 16,
+        },
+      },
+    ],
+  },
 });

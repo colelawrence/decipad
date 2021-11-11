@@ -66,7 +66,9 @@ it('can be stringified', () => {
     columnTypes: [t.number([meter]), t.string()],
     columnNames: ['Col1', 'Col2'],
   });
-  expect(table.toString()).toEqual('table { Col1 = meters, Col2 = <string> }');
+  expect(table.toString()).toEqual(
+    'table (123) { Col1 = meters, Col2 = <string> }'
+  );
 
   const row = t.row([t.number([meter]), t.string()], ['Col1', 'Col2']);
   expect(row.toString()).toEqual('row [ Col1 = meters, Col2 = <string> ]');

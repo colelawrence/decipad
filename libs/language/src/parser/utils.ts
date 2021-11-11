@@ -32,9 +32,13 @@ const prettyPrint = (node: AST.Node, indent: number): string => {
     }
     case 'table': {
       fname = 'table';
-      printedArgs = Array.from(node.args, ({ args }) => {
-        const [colName, val] = args;
-        return `${colName.args[0]} ${prettyPrint(val, indent + 1)}`;
+      printedArgs = Array.from(node.args, (item) => {
+        if (item.type === 'table-column') {
+          const [colName, val] = item.args;
+          return `${colName.args[0]} ${prettyPrint(val, indent + 1)}`;
+        } else {
+          return `...${getIdentifierString(item.args[0])}`;
+        }
       });
       break;
     }
