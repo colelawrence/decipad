@@ -1,3 +1,4 @@
+import Fraction from 'fraction.js';
 import { AST } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
 import { parse } from 'date-fns';
@@ -10,13 +11,20 @@ export function parseCell(
 ): AST.Expression | null {
   switch (cellType) {
     case 'number': {
-      if (!Number.isNaN(Number(text))) {
-        return astNode('literal', 'number' as const, Number(text) || 0, null);
+      const n = Number(text);
+      if (!Number.isNaN(n)) {
+        return astNode(
+          'literal',
+          'number' as const,
+          n || 0,
+          null,
+          new Fraction(n || 0)
+        );
       }
       return null;
     }
     case 'string': {
-      return astNode('literal', 'string' as const, text, null);
+      return astNode('literal', 'string' as const, text);
     }
     default: {
       const asDate: Date | null = parseDate(cellType, text);
