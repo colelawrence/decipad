@@ -42,4 +42,4 @@ cp -r dist/apps/client/exported/. apps/backend/public
 
 echo "Deploying client..."
 cd apps/backend
-../../node_modules/.bin/arc deploy --static --prune --no-hydrate
+../../node_modules/.bin/arc deploy --static --no-hydrate

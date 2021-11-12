@@ -33,4 +33,4 @@ cp -r dist/apps/client/exported/. apps/backend/public
 
 echo "Deploying client for \"$DEPLOY_NAME\"..."
 cd apps/backend
-../../node_modules/.bin/arc deploy --static --prune --no-hydrate --name "$DEPLOY_NAME"
+../../node_modules/.bin/arc deploy --static --no-hydrate --name "$DEPLOY_NAME"
