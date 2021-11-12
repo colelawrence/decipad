@@ -104,7 +104,7 @@ primary      -> "-" _ expression                        {%
                                                             expr.args[0] === 'number'
                                                           ) {
                                                             expr.args[1] = -expr.args[1]
-                                                            expr.args[3] = !expr.args[3] || expr.args[3].neg()
+                                                            expr.args[3] = expr.args[3] ? expr.args[3].neg() : expr.args[3]
                                                             return addArrayLoc({
                                                               type: expr.type,
                                                               args: expr.args,
