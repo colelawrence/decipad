@@ -48,9 +48,9 @@ export function l(value: LitType, ...units: AST.Unit[]): AST.Literal {
     const fraction = new Fraction(value, 1 / multiplierFromUnit(units));
     return n('literal', 'number', value, unitArg, fraction);
   } else if (typeof value === 'boolean') {
-    return n('literal', 'boolean', value, unitArg);
+    return n('literal', 'boolean', value);
   } else {
-    return n('literal', 'string', value, unitArg);
+    return n('literal', 'string', value);
   }
 }
 

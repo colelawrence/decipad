@@ -71,8 +71,8 @@ export type Identifier = Ref | FuncRef | ExternalRef | Def | FuncDef | ColDef;
 
 type LitArgs =
   | ['number', number, Units | null, Fraction]
-  | ['boolean', boolean, Units | null]
-  | ['string', string, Units | null];
+  | ['boolean', boolean]
+  | ['string', string];
 
 export interface Literal {
   type: 'literal';
