@@ -811,6 +811,14 @@ describe('Data', () => {
 });
 
 describe('as', () => {
+  it('converts time quantity to number', async () => {
+    expect(
+      await inferExpression(
+        nilCtx,
+        as(timeQuantity({ second: 300 }), n('units', seconds))
+      )
+    ).toEqual(t.number([seconds]));
+  });
   it('converts unit-less number to united number', async () => {
     expect(await inferExpression(nilCtx, as(l(3), n('units', degC)))).toEqual(
       t.number([degC])

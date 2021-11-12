@@ -139,11 +139,7 @@ describe('functions', () => {
         ['Arg 1', 'Arg 2'],
         c('+', n('ref', 'Arg 1'), n('ref', 'Arg 2'))
       ),
-      c(
-        'Function Name',
-        n('literal', 'number', 1, null),
-        n('literal', 'number', 2, null)
-      )
+      c('Function Name', l(1), l(2))
     );
 
     expect(await run([usingFunctions], [0])).toEqual([3]);

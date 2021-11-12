@@ -16,13 +16,15 @@ export async function inferAs(
     return t.impossible(InferError.cannotConvertToUnit(unit));
   }
 
-  const targetUnitName = getDefined(unit.args[0].unit);
+  const targetUnit = getDefined(unit.args[0]);
+  const targetUnitName = targetUnit.unit;
 
   if (expressionType.timeUnits) {
-    const targetUnit = getUnitByName(targetUnitName);
-    if (!targetUnit || targetUnit.baseQuantity !== 'time') {
+    const targetUnitOfMeasure = getUnitByName(targetUnitName);
+    if (!targetUnitOfMeasure || targetUnitOfMeasure.baseQuantity !== 'time') {
       return t.impossible(InferError.cannotConvertToUnit(unit));
     }
+    return t.number([targetUnit]);
   }
 
   if (expressionType.type === 'number') {
