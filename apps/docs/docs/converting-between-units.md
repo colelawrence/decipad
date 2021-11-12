@@ -14,8 +14,14 @@ Deci understands some basic units. To convert between them you can use the `as` 
 2 atm as Pa
 ```
 
+Since Deci understands unit multiplers (`deca` `mili`, `centi`, `h`, `k`), you can use them as unit prefixes:
+
 ```deci live
 3431 kJoules as calories
+```
+
+```deci live
+30 cm as m
 ```
 
 Here is a list of all the units Deci knows:
