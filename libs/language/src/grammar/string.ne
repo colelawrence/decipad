@@ -8,7 +8,7 @@ string      -> %string                                  {%
                                                         ([string]) => {
                                                           return addLoc({
                                                             type: 'literal',
-                                                            args: ['string', string.value, null],
+                                                            args: ['string', string.value],
                                                           }, string)
                                                         }
                                                         %}

@@ -17,13 +17,13 @@ literal     -> sequence                                 {% id %}
 boolean     -> "true"                                   {%
                                                         (d) => addLoc({
                                                           type: 'literal',
-                                                          args: ['boolean', true, null],
+                                                          args: ['boolean', true],
                                                         }, d[0])
                                                         %}
 
 boolean     -> "false"                                  {%
                                                         (d) => addLoc({
                                                           type: 'literal',
-                                                          args: ['boolean', false, null],
+                                                          args: ['boolean', false],
                                                         }, d[0])
                                                         %}

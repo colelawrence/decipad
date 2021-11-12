@@ -363,7 +363,7 @@ let ParserRules = [
       addLoc(
         {
           type: 'literal',
-          args: ['boolean', true, null],
+          args: ['boolean', true],
         },
         d[0]
       ),
@@ -375,7 +375,7 @@ let ParserRules = [
       addLoc(
         {
           type: 'literal',
-          args: ['boolean', false, null],
+          args: ['boolean', false],
         },
         d[0]
       ),
@@ -519,7 +519,7 @@ let ParserRules = [
       return addLoc(
         {
           type: 'literal',
-          args: ['string', string.value, null],
+          args: ['string', string.value],
         },
         string
       );

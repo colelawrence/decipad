@@ -46,7 +46,7 @@ runTests({
     ast: [
       {
         type: 'literal',
-        args: ['boolean', true, null],
+        args: ['boolean', true],
         start: {
           char: 1,
           line: 1,
@@ -66,7 +66,7 @@ runTests({
     ast: [
       {
         type: 'literal',
-        args: ['string', 'Hello\nWorld!', null],
+        args: ['string', 'Hello\nWorld!'],
         start: {
           char: 1,
           line: 1,
@@ -86,7 +86,7 @@ runTests({
     ast: [
       {
         type: 'literal',
-        args: ['boolean', false, null],
+        args: ['boolean', false],
         start: {
           char: 1,
           line: 1,
