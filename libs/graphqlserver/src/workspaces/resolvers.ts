@@ -8,7 +8,6 @@ import {
   Workspace,
   PageInput,
   PermissionRecord,
-  PadRecord,
 } from '@decipad/backendtypes';
 import tables from '@decipad/services/tables';
 import {
@@ -222,7 +221,7 @@ export default {
 
       const data = await tables();
 
-      return paginate<PermissionRecord, PadRecord>(
+      return paginate(
         data.permissions,
         query,
         page,
