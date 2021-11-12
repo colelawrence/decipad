@@ -77,30 +77,8 @@ export const setExponent = (unit: AST.Unit, newExponent: number) =>
 
 export const inverseExponent = (unit: AST.Unit) => setExponent(unit, -unit.exp);
 
-const multipliersToPrefixes: Record<number, string> = {
-  1e-18: 'a',
-  1e-15: 'f',
-  1e-12: 'p',
-  1e-9: 'n',
-  1e-6: 'μ',
-  1e-3: 'm',
-  1e-2: 'c',
-  1e-1: 'd',
-  1: '',
-  1e1: 'da',
-  1e2: 'h',
-  1e3: 'k',
-  1e6: 'M',
-  1e9: 'g',
-  1e12: 't',
-  1e15: 'p',
-  1e18: 'e',
-  1e21: 'z',
-  1e24: 'y',
-};
-
 const stringifyUnit = (unit: AST.Unit) => {
-  const result = [multipliersToPrefixes[unit.multiplier], unit.unit];
+  const result = [unit.unit];
 
   if (unit.exp !== 1) {
     result.push(`^${unit.exp}`);

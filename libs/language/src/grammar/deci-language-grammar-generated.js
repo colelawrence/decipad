@@ -19,7 +19,7 @@ function numberLiteralFromUnits(parentNode, n, units = null) {
 
   const node = {
     type: 'literal',
-    args: ['number', n, units, fraction],
+    args: ['number', n * mult, units, fraction],
   };
   if (Array.isArray(parentNode)) {
     return addArrayLoc(node, parentNode);
@@ -74,6 +74,14 @@ const multiplierPrefixes = {
 };
 
 const trimPrefix = (unitName) => {
+  for (const fullPrefix of Object.keys(multiplierPrefixes)) {
+    if (unitName.indexOf(fullPrefix) === 0) {
+      return [
+        multiplierPrefixes[fullPrefix],
+        unitName.substring(fullPrefix.length),
+      ];
+    }
+  }
   if (unitName.startsWith('da')) {
     return [multiplierPrefixes.deca, unitName.slice(2)];
   } else if (unitName[0] in abbreviatedPrefixes) {

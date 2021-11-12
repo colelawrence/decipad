@@ -29,11 +29,4 @@ export const units: UnitOfMeasure[] = [
     toBaseQuantity: (miles) => miles * 1609,
     fromBaseQuantity: (meters) => meters / 1609,
   },
-  {
-    name: 'kilometer',
-    abbreviations: ['km', 'kilometre'],
-    baseQuantity: 'length',
-    toBaseQuantity: (kms) => kms * 1000,
-    fromBaseQuantity: (meters) => meters / 1000,
-  },
 ];

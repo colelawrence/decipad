@@ -7,5 +7,5 @@ sidebar_position: 200
 Here you can freely try the Deci language:
 
 ```deci live
-"try me"
+2 kmeters + 1meters
 ```

@@ -12,7 +12,7 @@ function numberLiteralFromUnits(parentNode, n, units = null) {
 
   const node = {
     type: 'literal',
-    args: ['number', n, units, fraction]
+    args: ['number', n * mult, units, fraction]
   };
   if (Array.isArray(parentNode)) {
     return addArrayLoc(node, parentNode);
