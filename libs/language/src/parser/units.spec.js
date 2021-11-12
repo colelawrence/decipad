@@ -183,14 +183,14 @@ runTests({
         type: 'literal',
         args: [
           'number',
-          10,
+          10000,
           units({
-            unit: 'km',
+            unit: 'm',
             exp: 1,
-            multiplier: 1,
+            multiplier: 1000,
             known: true,
           }),
-          { d: 1, n: 10, s: 1 },
+          { d: 1152921504606847, n: 11529215046068470000, s: 1 },
         ],
       },
     ],
@@ -204,7 +204,7 @@ runTests({
         type: 'literal',
         args: [
           'number',
-          2,
+          2000000000,
           units({
             unit: 'bytes',
             exp: 1,
@@ -224,14 +224,14 @@ runTests({
         type: 'literal',
         args: [
           'number',
-          3,
+          3000000,
           {
             type: 'units',
             args: [
               {
-                unit: 'km',
+                unit: 'm',
                 exp: 2,
-                multiplier: 1,
+                multiplier: 1000,
                 known: true,
                 start: {
                   char: 2,
@@ -256,7 +256,7 @@ runTests({
               column: 6,
             },
           },
-          { d: 1, n: 3, s: 1 },
+          { d: 4722366482869645, n: 1.4167099448608936e22, s: 1 },
         ],
         start: {
           char: 0,
@@ -279,7 +279,7 @@ runTests({
         type: 'literal',
         args: [
           'number',
-          3,
+          299999.99999999994,
           {
             type: 'units',
             args: [
@@ -350,7 +350,7 @@ runTests({
         type: 'literal',
         args: [
           'number',
-          3,
+          299999999999.99994,
           {
             type: 'units',
             args: [

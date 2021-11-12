@@ -41,8 +41,6 @@ describe('convert', () => {
       1243
     );
     expect(Math.round(convertBetweenUnits(1.243, 'mile', 'meter'))).toBe(2000);
-    expect(Math.round(convertBetweenUnits(2000, 'meter', 'kilometer'))).toBe(2);
-    expect(Math.round(convertBetweenUnits(2, 'km', 'm'))).toBe(2000);
   });
 
   it('converts between volume units', () => {
