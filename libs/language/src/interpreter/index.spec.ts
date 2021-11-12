@@ -149,7 +149,7 @@ describe('functions', () => {
 it('Can use variables', async () => {
   const withVariables = n(
     'block',
-    n('assign', n('def', 'Some Variable'), n('literal', 'number', 1, null)),
+    n('assign', n('def', 'Some Variable'), l(1)),
     n('ref', 'Some Variable')
   );
 

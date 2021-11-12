@@ -1,4 +1,26 @@
 @lexer tokenizer
+@{%
+
+import Fraction from 'fraction.js';
+
+function numberLiteralFromUnits(parentNode, n, units = null) {
+  const mult = (!units && 1) || units.args
+    .map((unit) => unit.multiplier ** (unit.exp || 1))
+    .reduce((acc, mult) => acc * mult, 1);
+
+  const fraction = new Fraction(n, 1/mult);
+
+  const node = {
+    type: 'literal',
+    args: ['number', n * mult, units, fraction]
+  };
+  if (Array.isArray(parentNode)) {
+    return addArrayLoc(node, parentNode);
+  }
+  return addLoc(node, parentNode);
+}
+
+%}
 
 ##############
 ### Number ###
@@ -6,29 +28,19 @@
 
 number       -> unitlessNumber                          {%
                                                         ([n]) => {
-                                                          return addLoc({
-                                                            type: 'literal',
-                                                            args: ['number', n.n, null]
-                                                          }, n)
+                                                          return numberLiteralFromUnits(n, n.n);
                                                         }
                                                         %}
 number      -> unitlessNumber ___:? units               {%
                                                         (d) => {
-                                                          const n = d[0]
-                                                          const units = d[2]
-                                                          return addArrayLoc({
-                                                            type: 'literal',
-                                                            args: ['number', n.n, d[2]]
-                                                          }, d)
+                                                          const [n, _, units] = d;
+                                                          return numberLiteralFromUnits(d, n.n, units)
                                                         }
                                                         %}
 
 percentage -> decimal "%"                               {%
                                                         (d) => {
-                                                          return addArrayLoc({
-                                                            type: 'literal',
-                                                            args: ['number', d[0].n / 100, null],
-                                                          }, d)
+                                                          return numberLiteralFromUnits(d, d[0].n / 100)
                                                         }
                                                         %}
 

@@ -7,7 +7,12 @@ runTests({
     ast: [
       {
         type: 'literal',
-        args: ['number', 1.9, null],
+        args: [
+          'number',
+          1.9,
+          null,
+          { d: 2251799813685248, n: 4278419646001971, s: 1 },
+        ],
         start: 1,
         end: 4,
       },
@@ -18,7 +23,12 @@ runTests({
     ast: [
       {
         type: 'literal',
-        args: ['number', -1.9, null],
+        args: [
+          'number',
+          -1.9,
+          null,
+          { d: 2251799813685248, n: 4278419646001971, s: -1 },
+        ],
         start: 1,
         end: 5,
       },
