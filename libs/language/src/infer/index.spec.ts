@@ -829,4 +829,10 @@ describe('as', () => {
       await inferExpression(nilCtx, as(l(3, degC), n('units', degF)))
     ).toEqual(t.number([degF]));
   });
+
+  it('converts unitless column to other unitful column', async () => {
+    expect(
+      await inferExpression(nilCtx, as(col(l(1), l(2)), n('units', degF)))
+    ).toEqual(t.column(t.number([degF]), 2));
+  });
 });
