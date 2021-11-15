@@ -13,9 +13,37 @@ export const units: UnitOfMeasure[] = [
   },
   {
     name: 'inch',
+    abbreviations: ['in'],
     baseQuantity: 'length',
     toBaseQuantity: (inches) => inches.div(39.3701),
     fromBaseQuantity: (meters) => meters.mul(39.3701),
+  },
+  {
+    name: 'yard',
+    abbreviations: ['yd'],
+    baseQuantity: 'length',
+    toBaseQuantity: (yards) => yards.mul(0.9144),
+    fromBaseQuantity: (meters) => meters.div(0.9144),
+  },
+  {
+    name: 'furlong',
+    baseQuantity: 'length',
+    toBaseQuantity: (furlongs) => furlongs.mul(201.168),
+    fromBaseQuantity: (furlongs) => furlongs.div(201.168),
+  },
+  {
+    name: 'mile',
+    abbreviations: ['mi'],
+    baseQuantity: 'length',
+    toBaseQuantity: (miles) => miles.mul(1609),
+    fromBaseQuantity: (meters) => meters.div(1609),
+  },
+  {
+    name: 'nauticalmile',
+    abbreviations: ['nmi'],
+    baseQuantity: 'length',
+    toBaseQuantity: (nauticalMiles) => nauticalMiles.mul(1852),
+    fromBaseQuantity: (meters) => meters.div(1852),
   },
   {
     name: 'angstrom',
@@ -24,9 +52,9 @@ export const units: UnitOfMeasure[] = [
     fromBaseQuantity: (meters) => meters.mul(1e10),
   },
   {
-    name: 'mile',
+    name: 'smoot',
     baseQuantity: 'length',
-    toBaseQuantity: (miles) => miles.mul(1609),
-    fromBaseQuantity: (meters) => meters.div(1609),
+    toBaseQuantity: (smoots) => smoots.mul(1.702),
+    fromBaseQuantity: (meters) => meters.div(1.702),
   },
 ];
