@@ -1,6 +1,7 @@
 import repl from 'repl';
 import util from 'util';
 import chalk from 'chalk';
+import Fraction from 'fraction.js';
 
 import { AST, buildType, Interpreter } from '.';
 import { getDefined, zip } from './utils';
@@ -11,26 +12,33 @@ import { inferStatement, makeContext as makeInferContext } from './infer';
 import { stringifyDate } from './date';
 import { Type } from './type';
 
+type Colorizer = (s: string) => string;
 export const stringifyResult = (
   result: Interpreter.OneResult,
-  type: Type
+  type: Type,
+  color: Colorizer = chalk.blue
 ): string => {
   if (type.rangeOf != null) {
     const [start, end] = result as Interpreter.OneResult[];
     return `range [ ${stringifyResult(
       start,
-      type.rangeOf
-    )} through ${stringifyResult(end, type.rangeOf)} ]`;
+      type.rangeOf,
+      color
+    )} through ${stringifyResult(end, type.rangeOf, color)} ]`;
   }
 
   if (type.date != null) {
-    return `${type.date} ${chalk.blue(
-      stringifyDate(result as number, type.date)
-    )}`;
+    return `${type.date} ${color(stringifyDate(result as number, type.date))}`;
   }
 
   if (type.type === 'number') {
-    return [chalk.blue(result.toString()), type.toString()].join(' ');
+    const numStr = (result as Fraction).toString(4);
+    if (type.unit == null) return color(numStr);
+    return [color(numStr), type.toString()].join(' ');
+  }
+
+  if (type.type === 'string' || type.type === 'boolean') {
+    return color(util.inspect(result));
   }
 
   if (
@@ -39,7 +47,7 @@ export const stringifyResult = (
     Array.isArray(result)
   ) {
     return `[ ${result
-      .map((item) => stringifyResult(item, getDefined(type.cellType)))
+      .map((item) => stringifyResult(item, getDefined(type.cellType), color))
       .join(', ')} ]`;
   }
 
@@ -55,7 +63,8 @@ export const stringifyResult = (
         ([col, [type, name]]) =>
           `  ${name} = ${stringifyResult(
             col,
-            buildType.column(type, tableLength)
+            buildType.column(type, tableLength),
+            color
           )}`
       )
       .join(',\n');
@@ -68,12 +77,15 @@ export const stringifyResult = (
     Array.isArray(result)
   ) {
     const cols = zip(result, zip(type.rowCellTypes, type.rowCellNames))
-      .map(([col, [type, name]]) => `  ${name} = ${stringifyResult(col, type)}`)
+      .map(
+        ([col, [type, name]]) =>
+          `  ${name} = ${stringifyResult(col, type, color)}`
+      )
       .join(',\n');
     return `{\n${cols}\n}`;
   }
 
-  return [chalk.blue(util.inspect(result)), type?.toString()].join(' ');
+  return [color(util.inspect(result)), type?.toString()].join(' ');
 };
 
 const wrappedParse = (source: string): AST.Statement | null => {

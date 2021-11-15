@@ -12,6 +12,7 @@ You can declare a string value by placing text between quotation marks ("):
 
 ```deci live
 "Hello world!"
+==> 'Hello world!'
 ```
 
 ## Joining two strings
@@ -22,4 +23,5 @@ You can join two strings by using the `+` operator like this:
 a = "Hello "
 b = "World!"
 a + b
+==> 'Hello World!'
 ```

@@ -17,6 +17,7 @@ To call a function you must write the name of that function, followed by parenth
 ```deci live
 time = -10 days
 time_span = abs(time)
+==> 10 days
 ```
 
 > [Here you can see some of the built-in functions that Deci has](/docs/built-in%20functions/functions-for-numbers).

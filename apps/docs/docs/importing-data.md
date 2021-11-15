@@ -10,6 +10,7 @@ In this example I've uploaded a CSV file to Github and I have the URL for it.
 
 ```deci live
 import_data "https://decipad-packages.s3.eu-west-2.amazonaws.com/static/example-1.csv"
+==> fetch is not defined
 ```
 
 Deci supports the following file types:
@@ -25,6 +26,7 @@ As usual, you can give a name to imported data like this, so that you can use la
 my_table_name = import_data "https://decipad-packages.s3.eu-west-2.amazonaws.com/static/example-1.csv"
 
 my_table_name.Col1
+==> fetch is not defined
 ```
 
 ## Access columns
@@ -35,6 +37,7 @@ In this previous example we were extracting a list from a table by using the `.`
 my_table_name = import_data "https://decipad-packages.s3.eu-west-2.amazonaws.com/static/example-1.csv"
 
 my_table_name.Col2
+==> fetch is not defined
 ```
 
 You can check [the section about lists](/docs/lists) if you want to learn what you can do with them.

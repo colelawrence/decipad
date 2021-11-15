@@ -206,6 +206,13 @@
             "lintFilePatterns": ["apps/backend/tests/**/*.ts"],
             "maxWarnings": 0
           }
+        },
+        "test": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "node apps/docs/snapshots.mjs",
+            "cwd": "."
+          }
         }
       }
     },

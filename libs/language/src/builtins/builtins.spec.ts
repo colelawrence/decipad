@@ -119,7 +119,9 @@ it('concatenates lists', () => {
 });
 
 it('calculates columns and scalar lengths', () => {
-  expect(builtins.len.functor?.([t.number()])).toMatchObject(t.number());
+  expect(builtins.len.functorNoAutomap?.([t.number()])).toMatchObject(
+    t.number()
+  );
 
   expect(builtins.len.fnValuesNoAutomap?.([fromJS(2)])).toMatchInlineSnapshot(`
     FractionValue {
@@ -127,9 +129,9 @@ it('calculates columns and scalar lengths', () => {
     }
   `);
 
-  expect(builtins.len.functor?.([t.column(t.number(), 3)])).toMatchObject(
-    t.number()
-  );
+  expect(
+    builtins.len.functorNoAutomap?.([t.column(t.number(), 3)])
+  ).toMatchObject(t.number());
 
   expect(builtins.len.fnValuesNoAutomap?.([fromJS([1, 2, 3])]))
     .toMatchInlineSnapshot(`

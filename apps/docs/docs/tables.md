@@ -11,6 +11,10 @@ my_table = {
   column_A = [1, 2, 3]
   column_B = [4, 5, 6]
 }
+==> {
+  column_A = [ 1, 2, 3 ],
+  column_B = [ 4, 5, 6 ]
+}
 ```
 
 ## Units of columns
@@ -22,6 +26,10 @@ my_table = {
   column_A = [1 bananas, 2, 3]
   column_B = [4 oranges, 5, 6]
 }
+==> {
+  column_A = [ 1 bananas, 2 bananas, 3 bananas ],
+  column_B = [ 4 oranges, 5 oranges, 6 oranges ]
+}
 ```
 
 ## Columns with ranges
@@ -31,6 +39,9 @@ Since you can define a column as you would normally define a list, you can also 
 ```deci live
 my_table = {
   arrival_date = [date(2022-02-20) through date(2022-03-05) by day]
+}
+==> {
+  arrival_date = [ day 2022-02-20, day 2022-02-21, day 2022-02-22, day 2022-02-23, day 2022-02-24, day 2022-02-25, day 2022-02-26, day 2022-02-27, day 2022-02-28, day 2022-03-01, day 2022-03-02, day 2022-03-03, day 2022-03-04, day 2022-03-05 ]
 }
 ```
 
@@ -42,6 +53,10 @@ Instead of inputting the values by hand or defining them declaratively, you can 
 my_table = {
   arrival_date = [date(2022-02-20) through date(2022-03-05) by day]
   departure_date = arrival_date + [7 days]
+}
+==> {
+  arrival_date = [ day 2022-02-20, day 2022-02-21, day 2022-02-22, day 2022-02-23, day 2022-02-24, day 2022-02-25, day 2022-02-26, day 2022-02-27, day 2022-02-28, day 2022-03-01, day 2022-03-02, day 2022-03-03, day 2022-03-04, day 2022-03-05 ],
+  departure_date = [ day 2022-02-27, day 2022-02-28, day 2022-03-01, day 2022-03-02, day 2022-03-03, day 2022-03-04, day 2022-03-05, day 2022-03-06, day 2022-03-07, day 2022-03-08, day 2022-03-09, day 2022-03-10, day 2022-03-11, day 2022-03-12 ]
 }
 ```
 
@@ -68,6 +83,7 @@ my_table = {
 }
 
 my_table.column_B
+==> [ 4 oranges, 5 oranges, 6 oranges ]
 ```
 
 You can then use them as lists:
@@ -79,6 +95,7 @@ my_table = {
 }
 
 my_table.column_A / my_table.column_B
+==> [ 0.25 bananas/orange, 0.4 bananas/orange, 0.5 bananas/orange ]
 ```
 
 ## Index column
@@ -89,6 +106,10 @@ You can use the first column as an index for the row by using cells of text:
 flights = {
   number = ["TP123", "BA456", "EJ789"]
   passenger_count = [100, 150, 200]
+}
+==> {
+  number = [ 'TP123', 'BA456', 'EJ789' ],
+  passenger_count = [ 100, 150, 200 ]
 }
 ```
 
@@ -101,6 +122,7 @@ flights = {
 }
 
 flights.passenger_count
+==> [ 100, 150, 200 ]
 ```
 
 You can still do operations on that column, and it will still remember the original index:
@@ -112,6 +134,7 @@ flights = {
 }
 
 flights.passenger_count - 100
+==> [ 0, 50, 100 ]
 ```
 
 ## Accessing rows
@@ -125,6 +148,10 @@ flights = {
 }
 
 lookup(flights, "TP123")
+==> {
+  number = 'TP123',
+  passenger_count = 100
+}
 ```
 
 ## Augmenting tables
@@ -140,6 +167,10 @@ flights = {
 flights2 = {
   ...flights
 }
+==> {
+  number = [ 'TP123', 'BA456', 'EJ789' ],
+  passenger_count = [ 100, 150, 200 ]
+}
 ```
 
 Now you can add some columns of their own:
@@ -153,5 +184,10 @@ flights = {
 flights2 = {
   ...flights
   accumulated_passenger_count = previous(0) + passenger_count
+}
+==> {
+  number = [ 'TP123', 'BA456', 'EJ789' ],
+  passenger_count = [ 100, 150, 200 ],
+  accumulated_passenger_count = [ 100, 250, 450 ]
 }
 ```

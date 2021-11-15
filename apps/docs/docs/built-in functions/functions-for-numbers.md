@@ -12,6 +12,7 @@ This function gives you the absolute value of a number. If the given number is p
 
 ```deci live
 abs(-10 days)
+==> 10 days
 ```
 
 ## ln
@@ -20,6 +21,7 @@ abs(-10 days)
 
 ```deci live
 ln(12 steps)
+==> 2.4849 steps
 ```
 
 ## sqrt
@@ -28,4 +30,5 @@ This function gives you the square root of a number:
 
 ```deci live
 sqrt(9 meters^2)
+==> 3 meters
 ```

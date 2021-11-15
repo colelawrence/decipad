@@ -246,7 +246,7 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
       }
       return fromJS(1);
     },
-    functor: () => t.number(),
+    functorNoAutomap: () => t.number(),
   },
   cat: {
     argCount: 2,

@@ -58,7 +58,7 @@
     }
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,yml,yaml}": [
+    "*.{js,jsx,ts,tsx,json,yml,yaml,md}": [
       "prettier --write"
     ],
     "*.{js,jsx,ts,tsx}": [
@@ -189,7 +189,7 @@
     "@nrwl/jest": "^12.9.0",
     "@nrwl/linter": "^12.9.0",
     "@nrwl/next": "^12.9.0",
-    "@nrwl/node": "12.9.0",
+    "@nrwl/node": "^13.1.4",
     "@nrwl/react": "^12.9.0",
     "@nrwl/storybook": "^12.9.0",
     "@nrwl/tao": "^12.9.0",
@@ -238,6 +238,7 @@
     "css-vars-ponyfill": "^2.4.5",
     "csstype": "^3.0.8",
     "data-urls": "^2.0.0",
+    "diff": "^5.0.0",
     "dom-to-playwright": "^0.1.2",
     "esbuild": "^0.12.16",
     "eslint": "7.27.0",
@@ -269,6 +270,10 @@
     "prettier": "2.3.0",
     "proper-lockfile": "^4.1.2",
     "realpath": "^1.1.0",
+    "remark": "^14.0.1",
+    "remark-frontmatter": "^4.0.1",
+    "remark-gfm": "^3.0.1",
+    "remark-mdx": "^1.6.22",
     "rimraf": "^3.0.2",
     "s3rver": "^3.7.0",
     "tsconfig-paths-webpack-plugin": "^3.5.1",

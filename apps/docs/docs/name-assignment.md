@@ -10,6 +10,7 @@ You can declare a variable by using the `=` operator:
 
 ```deci live
 office_space = 120 meters^2
+==> 120 meters^2
 ```
 
 > Variables should start with a letter ("a" through "z" and "A" through "Z") cannot contain spaces or characters other than numbers, letters or underscore ("\_").
@@ -20,6 +21,7 @@ You can then use these variables throughout the code
 office_space = 120 m^2
 office_price = 50 USD/m^2/month
 office_cost = office_space * office_price
+==> 6000 USD/month
 ```
 
 You cannot change the value of an existing variable after it has been declared. This is invalid:
@@ -27,6 +29,7 @@ You cannot change the value of an existing variable after it has been declared. 
 ```deci live
 a = 1
 a = a + 1
+==> A variable with the name a already exists
 ```
 
 Instead, you will need to declare a new variable:
@@ -34,4 +37,5 @@ Instead, you will need to declare a new variable:
 ```deci live
 a = 1
 b = a + 1
+==> 2
 ```

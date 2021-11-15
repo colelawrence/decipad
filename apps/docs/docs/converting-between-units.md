@@ -8,20 +8,24 @@ Deci understands some basic units. To convert between them you can use the `as` 
 
 ```deci live
 3 km as miles
+==> 1.8645 miles
 ```
 
 ```deci live
 2 atm as Pa
+==> 202650.(05479452) Pa
 ```
 
 Since Deci understands unit multiplers (`deca` `mili`, `centi`, `h`, `k`), you can use them as unit prefixes:
 
 ```deci live
 3431 kJoules as calories
+==> 820.0286 calories
 ```
 
 ```deci live
 30 cm as m
+==> 0.3 m
 ```
 
 Here is a list of all the units Deci knows:

@@ -12,6 +12,7 @@ This operator negates a boolean:
 
 ```deci live
 not true
+==> false
 ```
 
 ## and
@@ -22,6 +23,7 @@ This binary operator takes two booleans and results `true` if and only if both a
 can_travel = true
 can_afford_traveling = false
 will_travel = can_travel and can_afford_traveling
+==> false
 ```
 
 ## or
@@ -32,4 +34,5 @@ This binary operator takes two booleans and results `false` if and only if both 
 on_vacation = false
 sick = true
 skip_work = on_vacation or sick
+==> true
 ```

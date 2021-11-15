@@ -12,6 +12,7 @@ You can create a sequence by typing `[start .. end by step]` like this:
 
 ```deci live
 [1 .. 5 by 1]
+==> [ 1, 2, 3, 4, 5 ]
 ```
 
 > As you can see, in Deci, sequences can be expressed similarly to ranges, but adding a `by step`.
@@ -20,6 +21,7 @@ You can create a sequence by typing `[start .. end by step]` like this:
 
 ```deci live
 [0 through 6 miles by 2]
+==> [ 0 miles, 2 miles, 4 miles, 6 miles ]
 ```
 
 ## Date sequences
@@ -28,10 +30,12 @@ You can have sequences of dates by specifying the step:
 
 ```deci live
 [date(2021-01) .. date(2021-06) by month]
+==> [ month 2021-01, month 2021-02, month 2021-03, month 2021-04, month 2021-05, month 2021-06 ]
 ```
 
 The step can be any of `year`, `quarter`, `month`, `day`, `hour`, `minute`, `second` or `millisecond`:
 
 ```deci live
 [date(2021-03-15) .. date(2021-03-15) by hour]
+==> [ time 2021-03-15 00:00, time 2021-03-15 01:00, time 2021-03-15 02:00, time 2021-03-15 03:00, time 2021-03-15 04:00, time 2021-03-15 05:00, time 2021-03-15 06:00, time 2021-03-15 07:00, time 2021-03-15 08:00, time 2021-03-15 09:00, time 2021-03-15 10:00, time 2021-03-15 11:00, time 2021-03-15 12:00, time 2021-03-15 13:00, time 2021-03-15 14:00, time 2021-03-15 15:00, time 2021-03-15 16:00, time 2021-03-15 17:00, time 2021-03-15 18:00, time 2021-03-15 19:00, time 2021-03-15 20:00, time 2021-03-15 21:00, time 2021-03-15 22:00, time 2021-03-15 23:00 ]
 ```

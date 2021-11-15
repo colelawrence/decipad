@@ -1,6 +1,7 @@
 import chalk from 'chalk';
 import repl from 'repl';
 
+import { F } from './utils';
 import { build as t } from './type';
 import { replEval, stringifyResult, reset } from './repl';
 
@@ -20,7 +21,7 @@ it('ignores empty lines', async () => {
 });
 
 it('can evaluate stuff', async () => {
-  expect(await testEval('1 + 1')).toEqual(`${chalk.blue('2')} <number>`);
+  expect(await testEval('1 + 1')).toEqual(`${chalk.blue('2')}`);
 });
 
 it('can display type errors', async () => {
@@ -35,14 +36,10 @@ it('detects unfinished syntax and raises a Recoverable error', async () => {
 
 describe('stringify', () => {
   it('stringifies basic stuff', () => {
-    expect(stringifyResult(10, t.number())).toEqual(
-      `${chalk.blue('10')} <number>`
-    );
+    expect(stringifyResult(F(10), t.number())).toEqual(`${chalk.blue('10')}`);
 
-    expect(stringifyResult([1, 10], t.range(t.number()))).toEqual(
-      `range [ ${chalk.blue('1')} <number> through ${chalk.blue(
-        '10'
-      )} <number> ]`
+    expect(stringifyResult([F(1), F(10)], t.range(t.number()))).toEqual(
+      `range [ ${chalk.blue('1')} through ${chalk.blue('10')} ]`
     );
 
     expect(stringifyResult(Date.UTC(2020, 0), t.date('month'))).toEqual(
@@ -50,7 +47,7 @@ describe('stringify', () => {
     );
 
     expect(stringifyResult([1, 2], t.column(t.number(), 2))).toEqual(
-      `[ ${chalk.blue('1')} <number>, ${chalk.blue('2')} <number> ]`
+      `[ ${chalk.blue('1')}, ${chalk.blue('2')} ]`
     );
 
     expect(
@@ -67,8 +64,8 @@ describe('stringify', () => {
       )
     ).toEqual(
       `{
-  Numbers = [ ${chalk.blue('1')} <number>, ${chalk.blue('2')} <number> ],
-  Strings = [ ${chalk.blue("'hi'")} <string>, ${chalk.blue("'lol'")} <string> ]
+  Numbers = [ ${chalk.blue('1')}, ${chalk.blue('2')} ],
+  Strings = [ ${chalk.blue("'hi'")}, ${chalk.blue("'lol'")} ]
 }`
     );
   });
