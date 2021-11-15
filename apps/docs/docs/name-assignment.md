@@ -2,19 +2,19 @@
 sidebar_position: 4
 ---
 
-# Assigning names
+# Declaring variables
 
-In Deci you can store values in names, to be used later in the remaining of the code.
+In Deci you can declare a name and assign it a value. This is called declaring a variable. It is helpful to think of variables as a way to store a value in a name that can be used later in the code.
 
-You can declare a name and assign it a value by using the `=` operator:
+You can declare a variable by using the `=` operator:
 
 ```deci live
 office_space = 120 meters^2
 ```
 
-> Names should start with a letter ("a" through "z" and "A" through "Z") cannot contain spaces or characters other numbers, a letters or underscore ("\_").
+> Variables should start with a letter ("a" through "z" and "A" through "Z") cannot contain spaces or characters other than numbers, letters or underscore ("\_").
 
-You can then use these names throughout the code
+You can then use these variables throughout the code
 
 ```deci live
 office_space = 120 m^2
@@ -22,14 +22,14 @@ office_price = 50 USD/m^2/month
 office_cost = office_space * office_price
 ```
 
-You cannot change the value of a name after it has been declared. This is invalid:
+You cannot change the value of an existing variable after it has been declared. This is invalid:
 
 ```deci live
 a = 1
 a = a + 1
 ```
 
-Instead, you will need to declare a new name:
+Instead, you will need to declare a new variable:
 
 ```deci live
 a = 1
