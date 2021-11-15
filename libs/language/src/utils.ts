@@ -289,3 +289,7 @@ export const anyMappingToMap = <T>(mapping: AnyMapping<T>): Map<string, T> => {
 export function identity<T>(o: T): T {
   return o;
 }
+
+export function F(n: number, d = 1) {
+  return new Fraction(n, d);
+}

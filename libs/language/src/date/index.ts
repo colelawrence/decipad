@@ -180,7 +180,10 @@ const cmpJSDateUnits = (left: Time.JSDateUnit, right: Time.JSDateUnit) => {
 };
 
 // Dates are ranges -- this function cuts up a date to its closest specificity
-export const cleanDate = (date: number, specificity: Time.Specificity) => {
+export const cleanDate = (
+  date: number,
+  specificity: Time.Specificity
+): number => {
   if (specificity === 'time') return date;
 
   const necessarySegments = dateToArray(date).slice(

@@ -15,7 +15,10 @@ it('can get from JS for testing', () => {
 it('can represent a range', () => {
   expect(
     Range.fromBounds(Scalar.fromValue(0), Scalar.fromValue(10)).getData()
-  ).toEqual([0, 10]);
+  ).toEqual([
+    { d: 1, n: 0, s: 1 },
+    { d: 1, n: 10, s: 1 },
+  ]);
 
   const r = Range.fromBounds(fromJS(0), fromJS(10));
   expect(() => Range.fromBounds(r, r).getData()).toThrow();

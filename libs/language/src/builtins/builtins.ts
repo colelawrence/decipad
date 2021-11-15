@@ -1,16 +1,17 @@
 import { produce } from 'immer';
 import { dequal } from 'dequal';
+import Fraction from 'fraction.js';
 
 import type { AST } from '../parser';
 import { Type, build as t } from '../type';
 import { getDefined, getInstanceof, zip } from '../utils';
 import {
   Value,
-  AnyValue,
   fromJS,
   Scalar,
   Date,
   Column,
+  StringValue,
 } from '../interpreter/Value';
 import { RuntimeError } from '../interpreter/RuntimeError';
 
@@ -75,7 +76,9 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
   },
   sqrt: {
     argCount: 1,
-    fn: (n) => Math.sqrt(n as number),
+    fn: (n: Fraction) => {
+      return getInstanceof(n, Fraction).pow(0.5);
+    },
     functor: ([n]) => Type.combine(n.isScalar('number'), n.divideUnit(2)),
   },
   ln: {
@@ -87,13 +90,15 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
     {
       argTypes: ['number', 'number'],
       fnValues: (n1, n2) =>
-        new Scalar(Number(n1.getData()) + Number(n2.getData())),
+        Scalar.fromValue(
+          (n1.getData() as Fraction).add(n2.getData() as Fraction)
+        ),
       functor: binopFunctor,
     },
     {
       argTypes: ['string', 'string'],
       fnValues: (n1, n2) =>
-        new Scalar(String(n1.getData()) + String(n2.getData())),
+        Scalar.fromValue(String(n1.getData()) + String(n2.getData())),
       functor: ([a, b]) =>
         Type.combine(a.isScalar('string'), b.isScalar('string')),
     },
@@ -102,20 +107,27 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
   '-': overloadBuiltin('-', 2, [
     {
       argTypes: ['number', 'number'],
-      fnValues: (a: AnyValue, b: AnyValue) =>
-        fromJS((a.getData() as number) - (b.getData() as number)),
+      fnValues: (a, b) =>
+        Scalar.fromValue(
+          (a.getData() as Fraction).sub(b.getData() as Fraction)
+        ),
       functor: binopFunctor,
     },
     ...dateOverloads['-'],
   ]),
   'unary-': {
     argCount: 1,
-    fn: (a) => -a,
+    fn: (a: Fraction) => a.neg(),
     functor: ([n]) => n.isScalar('number'),
   },
   '*': {
     argCount: 2,
-    fn: (a, b) => a * b,
+    fn: (a, b) => {
+      if (!(a instanceof Fraction)) {
+        throw new Error('a needs to be a fraction');
+      }
+      return a.mul(b);
+    },
     functor: ([a, b]) =>
       Type.combine(
         a.isScalar('number'),
@@ -125,7 +137,12 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
   },
   '/': {
     argCount: 2,
-    fn: (a, b) => a / b,
+    fn: (a, b) => {
+      if (!(a instanceof Fraction)) {
+        throw new Error('a needs to be a fraction');
+      }
+      return a.div(b);
+    },
     functor: ([a, b]) =>
       Type.combine(
         a.isScalar('number'),
@@ -135,12 +152,24 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
   },
   '%': {
     argCount: 2,
-    fn: (a, b) => a % b,
+    fn: (a: Fraction, b: Fraction) => a.mod(b),
     functor: binopFunctor,
   },
   '**': {
     argCount: 2,
-    fn: (a, b) => a ** b,
+    fn: (a: Fraction, b: Fraction) => {
+      const result = a.pow(b);
+      if (result == null) {
+        const resultNumber = a.valueOf() ** b.valueOf();
+        if (Number.isNaN(resultNumber)) {
+          throw new TypeError(
+            `**: result of applying ${b.toString()} is not rational`
+          );
+        }
+        return new Fraction(resultNumber);
+      }
+      return result;
+    },
     noAutoconvert: true,
     functor: exponentiationFunctor,
   },
@@ -149,32 +178,32 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
   },
   '<': {
     argCount: 2,
-    fn: (a, b) => a < b,
+    fn: (a: Fraction, b: Fraction) => a.compare(b) < 0,
     functor: cmpFunctor,
   },
   '>': {
     argCount: 2,
-    fn: (a, b) => a > b,
+    fn: (a: Fraction, b: Fraction) => a.compare(b) > 0,
     functor: cmpFunctor,
   },
   '<=': {
     argCount: 2,
-    fn: (a, b) => a <= b,
+    fn: (a: Fraction, b: Fraction) => a.compare(b) <= 0,
     functor: cmpFunctor,
   },
   '>=': {
     argCount: 2,
-    fn: (a, b) => a >= b,
+    fn: (a: Fraction, b: Fraction) => a.compare(b) >= 0,
     functor: cmpFunctor,
   },
   '==': {
     argCount: 2,
-    fn: (a, b) => a === b,
+    fn: (a: Fraction, b: Fraction) => a.compare(b) === 0,
     functor: cmpFunctor,
   },
   '!=': {
     argCount: 2,
-    fn: (a, b) => a !== b,
+    fn: (a: Fraction, b: Fraction) => a.compare(b) !== 0,
     functor: cmpFunctor,
   },
   // Boolean ops
@@ -392,11 +421,11 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
       ),
     fnValues: (table, needle) => {
       table = getInstanceof(table, Column);
-      const needleString = getInstanceof(needle, Scalar).value as string;
+      const needleString = getInstanceof(needle, StringValue).getData();
       const firstColumn = getInstanceof(table.values[0], Column);
 
       const rowIndex = firstColumn.values.findIndex(
-        (value) => value instanceof Scalar && value.value === needleString
+        (value) => value.getData() === needleString
       );
 
       if (rowIndex === -1) {

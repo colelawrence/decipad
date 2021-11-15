@@ -1,3 +1,4 @@
+import Fraction from 'fraction.js';
 import { AST, Time, Interpreter } from '..';
 import { pairwise, getDefined } from '../utils';
 import {
@@ -11,21 +12,77 @@ export interface Value {
   getData(): Interpreter.OneResult;
 }
 
-export type NonColumn = Scalar | Range | Date | TimeQuantity;
+export type NonColumn =
+  | FractionValue
+  | StringValue
+  | BooleanValue
+  | Range
+  | Date
+  | TimeQuantity;
 export type AnyValue = NonColumn | Column;
 
-export class Scalar implements Value {
-  value: number | boolean | string;
+export class Scalar {
+  static fromValue(value: number | Fraction | boolean | string): NonColumn {
+    if (value instanceof Fraction) {
+      return FractionValue.fromValue(value);
+    }
+    const t = typeof value;
+    if (t === 'number') {
+      return FractionValue.fromValue(value as number);
+    }
+    if (t === 'boolean') {
+      return BooleanValue.fromValue(value as boolean);
+    }
+    return StringValue.fromValue(value as string);
+  }
+}
 
-  constructor(value: Scalar['value']) {
+export class FractionValue implements Value {
+  value: Fraction;
+
+  constructor(varValue: number | Fraction) {
+    if (typeof varValue === 'number') {
+      this.value = new Fraction(varValue);
+    } else {
+      this.value = varValue;
+    }
+  }
+
+  getData() {
+    return this.value;
+  }
+
+  static fromValue(value: number | Fraction): FractionValue {
+    return new FractionValue(value);
+  }
+}
+
+export class StringValue implements Value {
+  value: string;
+  constructor(value: string) {
     this.value = value;
   }
 
-  static fromValue(value: number | boolean | string): Scalar {
-    return new Scalar(value);
+  static fromValue(value: string): StringValue {
+    return new StringValue(value);
   }
 
-  getData(): Interpreter.ResultScalar {
+  getData() {
+    return this.value;
+  }
+}
+
+export class BooleanValue implements Value {
+  value: boolean;
+  constructor(value: boolean) {
+    this.value = value;
+  }
+
+  static fromValue(value: boolean): BooleanValue {
+    return new BooleanValue(value);
+  }
+
+  getData() {
     return this.value;
   }
 }
@@ -109,8 +166,8 @@ export class TimeQuantity implements Value {
 }
 
 export class Range implements Value {
-  start: Scalar;
-  end: Scalar;
+  start: Value;
+  end: Value;
 
   constructor({ start, end }: Pick<Range, 'start' | 'end'>) {
     this.start = start;
@@ -123,7 +180,7 @@ export class Range implements Value {
         Scalar.fromValue(start.moment),
         Scalar.fromValue(end.getEnd())
       );
-    } else if (start instanceof Scalar && end instanceof Scalar) {
+    } else if (start instanceof FractionValue && end instanceof FractionValue) {
       return new Range({ start, end });
     } else {
       throw new Error(
@@ -200,8 +257,11 @@ export class Column implements Value {
   }
 }
 
-export const fromJS = (thing: Interpreter.OneResult): Scalar | Column => {
+export const fromJS = (thing: Interpreter.OneResult): AnyValue => {
   // TODO this doesn't distinguish Range/Date from Column, and it can't possibly do it!
+  if (thing == null) {
+    throw new TypeError('result cannot be null');
+  }
   if (!Array.isArray(thing)) {
     return Scalar.fromValue(thing);
   } else {

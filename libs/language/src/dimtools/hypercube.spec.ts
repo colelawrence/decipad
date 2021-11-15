@@ -1,8 +1,9 @@
+import Fraction from 'fraction.js';
 import { objectToMap } from '../testUtils';
 import { getInstanceof } from '../utils';
 import { build as t } from '../type';
 
-import { Column, fromJS, Value, Scalar } from '../interpreter/Value';
+import { Column, FractionValue, fromJS, Value } from '../interpreter/Value';
 import { Hypercube } from './hypercube';
 import {
   DimensionalValue,
@@ -11,15 +12,17 @@ import {
   uniqDimensions,
 } from './multidimensional-utils';
 
-const jsCol = (items: (number | number[] | number[][])[]) =>
-  fromJS(items) as Column;
+const jsCol = (
+  items: (Fraction | number | (Fraction | number)[] | (Fraction | number)[][])[]
+) => fromJS(items) as Column;
 
-const op = (simpleCallback: (...args: number[]) => number) => (args: Value[]) =>
-  fromJS(
-    simpleCallback(
-      ...args.map((a) => getInstanceof(a, Scalar).getData() as number)
-    )
-  );
+const op =
+  (simpleCallback: (...args: Fraction[]) => Fraction) => (args: Value[]) =>
+    fromJS(
+      simpleCallback(
+        ...args.map((a) => getInstanceof(a, FractionValue).getData())
+      )
+    );
 
 const multiDimX = new Hypercube(
   op((a) => a),
@@ -27,13 +30,13 @@ const multiDimX = new Hypercube(
 );
 
 const multiDimXTwice = new Hypercube(
-  op((a, b) => a / b),
+  op((a, b) => a.div(b)),
   DimensionalValue.fromColAndDim(jsCol([1, 2, 3]), 'X'),
   DimensionalValue.fromColAndDim(jsCol([2, 4, 6]), 'X')
 );
 
 const multidimDivision = new Hypercube(
-  op((a, b) => a / b),
+  op((a, b) => a.div(b)),
   DimensionalValue.fromColAndDim(jsCol([100, 200, 300]), 'X'),
   DimensionalValue.fromColAndDim(jsCol([1, 2, 3]), 'Y')
 );
@@ -44,7 +47,7 @@ const anonDimHaver = new Hypercube(
 );
 
 const twoAnonDims = new Hypercube(
-  op((a, b) => a + b),
+  op((a, b) => a.add(b)),
   DimensionalValue.fromColAndDim(jsCol([1, 2, 3]), 0),
   DimensionalValue.fromColAndDim(jsCol([10, 100, 1000]), 1)
 );
@@ -61,8 +64,12 @@ it('uniqDimensions can find out what dimensions are involved and give them to ya
 
 describe('getAt', () => {
   it('can get a deep key from the MD', () => {
-    expect(multiDimX.lowLevelGet(1).getData()).toEqual(2);
-    expect(multidimDivision.lowLevelGet(0, 1).getData()).toEqual(50);
+    expect(multiDimX.lowLevelGet(1).getData()).toEqual({ d: 1, n: 2, s: 1 });
+    expect(multidimDivision.lowLevelGet(0, 1).getData()).toEqual({
+      d: 1,
+      n: 50,
+      s: 1,
+    });
 
     expect(() => multidimDivision.lowLevelGet(0, 5).getData()).toThrow();
     expect(() => multidimDivision.lowLevelGet(5, 0).getData()).toThrow();
@@ -74,7 +81,11 @@ describe('getAt', () => {
   });
 
   it('can get a map of dimension names to keys', () => {
-    expect(getAt(multiDimX, objectToMap({ X: 1 })).getData()).toEqual(2);
+    expect(getAt(multiDimX, objectToMap({ X: 1 })).getData()).toEqual({
+      d: 1,
+      n: 2,
+      s: 1,
+    });
   });
 
   it('does not accept incomplete key maps', () => {
@@ -82,12 +93,24 @@ describe('getAt', () => {
   });
 
   it('can get from duplicate dimensions', () => {
-    expect(getAt(multiDimXTwice, objectToMap({ X: 0 })).getData()).toEqual(0.5);
-    expect(getAt(multiDimXTwice, objectToMap({ X: 2 })).getData()).toEqual(0.5);
+    expect(getAt(multiDimXTwice, objectToMap({ X: 0 })).getData()).toEqual({
+      d: 2,
+      n: 1,
+      s: 1,
+    });
+    expect(getAt(multiDimXTwice, objectToMap({ X: 2 })).getData()).toEqual({
+      d: 2,
+      n: 1,
+      s: 1,
+    });
   });
 
   it('accepts unnamed dimensions', () => {
-    expect(getAt(anonDimHaver, new Map([[0, 1]])).getData()).toEqual(2);
+    expect(getAt(anonDimHaver, new Map([[0, 1]])).getData()).toEqual({
+      d: 1,
+      n: 2,
+      s: 1,
+    });
     expect(
       getAt(
         twoAnonDims,
@@ -96,47 +119,71 @@ describe('getAt', () => {
           [1, 1],
         ])
       ).getData()
-    ).toEqual(102);
+    ).toEqual({ d: 1, n: 102, s: 1 });
   });
 });
 
 describe('materializing', () => {
   it('can return an interpreter Result with getData()', () => {
-    expect(multiDimX.materialize()).toEqual([1, 2, 3]);
+    expect(multiDimX.materialize()).toEqual([
+      { d: 1, n: 1, s: 1 },
+      { d: 1, n: 2, s: 1 },
+      { d: 1, n: 3, s: 1 },
+    ]);
   });
 
   it('can return a 2D array', () => {
     expect(multidimDivision.materialize()).toMatchInlineSnapshot(`
-      Array [
-        Array [
-          100,
-          50,
-          33.333333333333336,
-        ],
-        Array [
-          200,
-          100,
-          66.66666666666667,
-        ],
-        Array [
-          300,
-          150,
-          100,
-        ],
-      ]
-    `);
+Array [
+  Array [
+    Fraction(100),
+    Fraction(50),
+    Fraction(33.(3)),
+  ],
+  Array [
+    Fraction(200),
+    Fraction(100),
+    Fraction(66.(6)),
+  ],
+  Array [
+    Fraction(300),
+    Fraction(150),
+    Fraction(100),
+  ],
+]
+`);
   });
 
   it('can materialize if 2 dims are the same', () => {
-    expect(multiDimXTwice.materialize()).toEqual([0.5, 0.5, 0.5]);
+    expect(multiDimXTwice.materialize()).toEqual([
+      { d: 2, n: 1, s: 1 },
+      { d: 2, n: 1, s: 1 },
+      { d: 2, n: 1, s: 1 },
+    ]);
   });
 
   it('can materialize with anon indices', () => {
-    expect(anonDimHaver.materialize()).toEqual([1, 2, 3]);
+    expect(anonDimHaver.materialize()).toEqual([
+      { s: 1, n: 1, d: 1 },
+      { s: 1, n: 2, d: 1 },
+      { s: 1, n: 3, d: 1 },
+    ]);
     expect(twoAnonDims.materialize()).toEqual([
-      [11, 101, 1001],
-      [12, 102, 1002],
-      [13, 103, 1003],
+      [
+        { s: 1, n: 11, d: 1 },
+        { s: 1, n: 101, d: 1 },
+        { s: 1, n: 1001, d: 1 },
+      ],
+      [
+        { s: 1, n: 12, d: 1 },
+        { s: 1, n: 102, d: 1 },
+        { s: 1, n: 1002, d: 1 },
+      ],
+      [
+        { s: 1, n: 13, d: 1 },
+        { s: 1, n: 103, d: 1 },
+        { s: 1, n: 1003, d: 1 },
+      ],
     ]);
   });
 });
@@ -144,17 +191,17 @@ describe('materializing', () => {
 describe('nesting', () => {
   it('can lowLevelGet into nested hypercubes', () => {
     const nested2 = new Hypercube(
-      op((a) => a + 100),
+      op((a) => a.add(100)),
       multiDimX
     );
-    expect(nested2.lowLevelGet(0).getData()).toEqual(101);
+    expect(nested2.lowLevelGet(0).getData()).toEqual({ s: 1, n: 101, d: 1 });
 
     const nested3 = new Hypercube(
-      op((a, b) => a * 100 + b),
+      op((a, b) => a.mul(100).add(b)),
       multiDimX,
       multiDimX
     );
-    expect(nested3.lowLevelGet(0, 1).getData()).toEqual(102);
+    expect(nested3.lowLevelGet(0, 1).getData()).toEqual({ s: 1, n: 102, d: 1 });
   });
 });
 
@@ -169,8 +216,16 @@ describe('can be turned from, and into, Column values', () => {
 
   it('can be created from a column', () => {
     expect(fromCol.materialize()).toEqual([
-      [1, 2, 3],
-      [4, 5, 6],
+      [
+        { s: 1, n: 1, d: 1 },
+        { s: 1, n: 2, d: 1 },
+        { s: 1, n: 3, d: 1 },
+      ],
+      [
+        { s: 1, n: 4, d: 1 },
+        { s: 1, n: 5, d: 1 },
+        { s: 1, n: 6, d: 1 },
+      ],
     ]);
 
     expect(uniqDimensions(fromCol.dimensions)).toEqual([
@@ -200,7 +255,10 @@ describe('can be turned from, and into, Column values', () => {
       ]),
       t.column(t.column(t.number(), 1, null), 2, null)
     );
-    expect(hypercubeLikeToValue(oneD).getData()).toEqual([1, 2]);
+    expect(hypercubeLikeToValue(oneD).getData()).toEqual([
+      { s: 1, n: 1, d: 1 },
+      { s: 1, n: 2, d: 1 },
+    ]);
     expect(oneD.dimensions).toEqual([
       {
         dimensionLength: 2,
@@ -219,8 +277,14 @@ describe('can be turned from, and into, Column values', () => {
       },
     ]);
     expect(hypercubeLikeToValue(twoD).getData()).toEqual([
-      [1, 2],
-      [2, 3],
+      [
+        { s: 1, n: 1, d: 1 },
+        { s: 1, n: 2, d: 1 },
+      ],
+      [
+        { s: 1, n: 2, d: 1 },
+        { s: 1, n: 3, d: 1 },
+      ],
     ]);
   });
 });

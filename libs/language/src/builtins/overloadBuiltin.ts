@@ -3,9 +3,11 @@ import { InferError, Type, build as t } from '../type';
 import {
   AnyValue,
   Date,
-  Scalar,
   TimeQuantity,
   Range,
+  StringValue,
+  BooleanValue,
+  FractionValue,
 } from '../interpreter/Value';
 import { getDefined } from '../utils';
 import { AST } from '..';
@@ -67,8 +69,12 @@ export const overloadBuiltin = (
 const argTypesKey = (types: OverloadTypeName[]) => types.join(';');
 
 export const getOverloadedTypeFromValue = (val: AnyValue): OverloadTypeName => {
-  if (val instanceof Scalar) {
-    return typeof val.value as 'number' | 'string' | 'boolean';
+  if (val instanceof StringValue) {
+    return 'string';
+  } else if (val instanceof BooleanValue) {
+    return 'boolean';
+  } else if (val instanceof FractionValue) {
+    return 'number';
   } else if (val instanceof Date) {
     return 'date';
   } else if (val instanceof TimeQuantity) {

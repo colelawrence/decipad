@@ -3,7 +3,7 @@ import { Realm } from './Realm';
 import { Expression, Units } from '../parser/ast-types';
 import { convertTimeQuantityTo, Time } from '../date';
 import { evaluate } from './evaluate';
-import { fromJS, Value, TimeQuantity, Scalar } from './Value';
+import { fromJS, Value, TimeQuantity, FractionValue } from './Value';
 import { stringifyUnits } from '../type/units';
 import { convertBetweenUnits } from '../units';
 import { automapValues } from '../dimtools';
@@ -34,7 +34,7 @@ export async function evaluateAs(
       );
     }
 
-    if (value instanceof Scalar) {
+    if (value instanceof FractionValue) {
       const sourceUnits = expressionType.unit;
       if (!sourceUnits || sourceUnits.args.length < 1) {
         return evalResult;
@@ -48,7 +48,7 @@ export async function evaluateAs(
       }
       return fromJS(
         convertBetweenUnits(
-          value.getData() as number,
+          value.getData(),
           sourceUnits.args[0].unit,
           targetUnitAsString
         )

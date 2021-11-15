@@ -13,7 +13,7 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'liter',
     baseQuantity: 'volume',
-    toBaseQuantity: (liters) => liters / 1000,
-    fromBaseQuantity: (meters) => meters * 1000,
+    toBaseQuantity: (liters) => liters.div(1000),
+    fromBaseQuantity: (meters) => meters.mul(1000),
   },
 ];

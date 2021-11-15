@@ -1,3 +1,4 @@
+import Fraction from 'fraction.js';
 import { Type } from '..';
 import { Value } from '../interpreter';
 import { fromJS } from '../interpreter/Value';
@@ -13,8 +14,10 @@ export function autoconvertResult(value: Value, type: Type): Value {
     return fromJS(
       units.reduce(
         (acc, unit) =>
-          acc * convertFromBaseUnitIfKnown(1, unit.unit) ** unit.exp,
-        value.getData() as number
+          acc.mul(
+            convertFromBaseUnitIfKnown(new Fraction(1), unit.unit).pow(unit.exp)
+          ),
+        value.getData() as Fraction
       )
     );
   }
@@ -26,8 +29,11 @@ function autoconvertArgument(value: Value, type: Type): Value {
     const units = (type.unit && type.unit.args) || [];
     return fromJS(
       units.reduce(
-        (acc, unit) => acc * convertToBaseUnitIfKnown(1, unit.unit) ** unit.exp,
-        value.getData() as number
+        (acc, unit) =>
+          acc.mul(
+            convertToBaseUnitIfKnown(new Fraction(1), unit.unit).pow(unit.exp)
+          ),
+        value.getData() as Fraction
       )
     );
   }

@@ -225,21 +225,52 @@ describe('automapValues', () => {
       }
     );
 
-    expect(result.getData()).toEqual([
-      [
-        [4, 8],
-        [16, 32],
-        [64, 128],
-      ],
-    ]);
-    expect(calledOnValues.map((v) => v.getData())).toEqual([
-      [2, 2],
-      [4, 2],
-      [8, 2],
-      [16, 2],
-      [32, 2],
-      [64, 2],
-    ]);
+    expect(result.getData()).toMatchInlineSnapshot(`
+Array [
+  Array [
+    Array [
+      Fraction(4),
+      Fraction(8),
+    ],
+    Array [
+      Fraction(16),
+      Fraction(32),
+    ],
+    Array [
+      Fraction(64),
+      Fraction(128),
+    ],
+  ],
+]
+`);
+    expect(calledOnValues.map((v) => v.getData())).toMatchInlineSnapshot(`
+Array [
+  Array [
+    Fraction(2),
+    Fraction(2),
+  ],
+  Array [
+    Fraction(4),
+    Fraction(2),
+  ],
+  Array [
+    Fraction(8),
+    Fraction(2),
+  ],
+  Array [
+    Fraction(16),
+    Fraction(2),
+  ],
+  Array [
+    Fraction(32),
+    Fraction(2),
+  ],
+  Array [
+    Fraction(64),
+    Fraction(2),
+  ],
+]
+`);
   });
 
   describe('automapping', () => {
@@ -275,7 +306,7 @@ describe('automapValues', () => {
         [2]
       );
 
-      expect(result.getData()).toEqual(7);
+      expect(result.getData()).toEqual({ d: 1, n: 7, s: 1 });
     });
 
     /* eslint-disable-next-line jest/no-disabled-tests */

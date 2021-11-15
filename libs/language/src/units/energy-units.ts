@@ -14,7 +14,7 @@ export const units: UnitOfMeasure[] = [
     name: 'calorie',
     abbreviations: ['calory'],
     baseQuantity: 'energy',
-    toBaseQuantity: (calories) => calories * 4184,
-    fromBaseQuantity: (joules) => joules / 4184,
+    toBaseQuantity: (calories) => calories.mul(4184),
+    fromBaseQuantity: (joules) => joules.div(4184),
   },
 ];

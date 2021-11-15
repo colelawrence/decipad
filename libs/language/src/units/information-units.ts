@@ -7,8 +7,8 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'byte',
     baseQuantity: 'information',
-    toBaseQuantity: (byte) => byte * 8,
-    fromBaseQuantity: (bits) => Math.ceil(bits / 8),
+    toBaseQuantity: (byte) => byte.mul(8),
+    fromBaseQuantity: (bits) => bits.div(8).ceil(),
   },
   {
     name: 'bit',

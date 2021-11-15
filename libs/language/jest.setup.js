@@ -2,6 +2,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import isoFetch from 'isomorphic-fetch';
 import parseDataUrl from 'data-urls';
+import Fraction from 'fraction.js';
 /* eslint-enable import/no-extraneous-dependencies */
 import { Date as IDate, TimeQuantity } from './src/interpreter/Value';
 import { stringifyDate } from './src/date';
@@ -60,6 +61,11 @@ expect.addSnapshotSerializer({
     `TimeQuantity({ ${[...timeUnits.entries()]
       .map(([unitName, quantity]) => `${unitName}: ${quantity}`)
       .join(', ')} })`,
+});
+
+expect.addSnapshotSerializer({
+  test: (v) => v instanceof Fraction,
+  print: (f) => `Fraction(${f.toString()})`,
 });
 
 function fetch(resource, init) {

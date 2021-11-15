@@ -1,3 +1,4 @@
+import Fraction from 'fraction.js';
 import { normalizeUnitName } from './utils';
 import * as LengthUnits from './length-units';
 import * as VolumeUnits from './volume-units';
@@ -28,8 +29,8 @@ export type UnitOfMeasure = {
   name: string;
   baseQuantity: BaseQuantity;
   abbreviations?: string[];
-  toBaseQuantity: (n: number) => number;
-  fromBaseQuantity: (n: number) => number;
+  toBaseQuantity: (n: Fraction) => Fraction;
+  fromBaseQuantity: (n: Fraction) => Fraction;
 };
 
 const allUnits: UnitOfMeasure[] = [

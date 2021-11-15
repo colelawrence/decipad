@@ -7,7 +7,15 @@ import type { Type } from '../type';
 import { autoconvertResult, autoconvertArguments } from '../units';
 import { BuiltinSpec } from './interfaces';
 
+function requireNonNull<T>(thing: T): T {
+  if (thing == null) {
+    throw new TypeError('null value detected');
+  }
+  return thing;
+}
+
 function callBuiltinAfterAutoconvert(
+  funcName: string,
   builtin: BuiltinSpec,
   args: Value[],
   argTypes: Type[]
@@ -21,8 +29,17 @@ function callBuiltinAfterAutoconvert(
     args,
     (argsLowerDims) => {
       if (builtin.fn != null) {
-        const argData = argsLowerDims.map((a) => a.getData());
-        return fromJS(builtin.fn(...argData));
+        const argData = argsLowerDims
+          .map((a) => a.getData())
+          .map(requireNonNull);
+        try {
+          return fromJS(builtin.fn(...argData));
+        } catch (err) {
+          console.error(err);
+          throw new TypeError(
+            `Error calling builtin ${funcName}: ${(err as Error).message}`
+          );
+        }
       } else if (builtin.fnValues != null) {
         return builtin.fnValues(...(argsLowerDims as AnyValue[]));
       } else {
@@ -55,11 +72,16 @@ export function callBuiltin(
   }
 
   if (builtin.noAutoconvert) {
-    return callBuiltinAfterAutoconvert(builtin, argsBeforeConvert, argTypes);
+    return callBuiltinAfterAutoconvert(
+      funcName,
+      builtin,
+      argsBeforeConvert,
+      argTypes
+    );
   }
   const args = autoconvertArguments(argsBeforeConvert, argTypes);
   return autoconvertResult(
-    callBuiltinAfterAutoconvert(builtin, args, argTypes),
+    callBuiltinAfterAutoconvert(funcName, builtin, args, argTypes),
     returnType
   );
 }

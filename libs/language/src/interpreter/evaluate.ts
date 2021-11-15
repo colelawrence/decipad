@@ -25,6 +25,7 @@ export async function evaluate(
     case 'literal': {
       switch (node.args[0]) {
         case 'number':
+          return Scalar.fromValue(node.args[3]);
         case 'string':
         case 'boolean': {
           return Scalar.fromValue(node.args[1]);

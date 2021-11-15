@@ -14,19 +14,19 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'inch',
     baseQuantity: 'length',
-    toBaseQuantity: (inches) => inches / 39.3701,
-    fromBaseQuantity: (meters) => meters * 39.3701,
+    toBaseQuantity: (inches) => inches.div(39.3701),
+    fromBaseQuantity: (meters) => meters.mul(39.3701),
   },
   {
     name: 'angstrom',
     baseQuantity: 'length',
-    toBaseQuantity: (angstroms) => angstroms * 1e-10,
-    fromBaseQuantity: (meters) => meters / 1e-10,
+    toBaseQuantity: (angstroms) => angstroms.div(1e10),
+    fromBaseQuantity: (meters) => meters.mul(1e10),
   },
   {
     name: 'mile',
     baseQuantity: 'length',
-    toBaseQuantity: (miles) => miles * 1609,
-    fromBaseQuantity: (meters) => meters / 1609,
+    toBaseQuantity: (miles) => miles.mul(1609),
+    fromBaseQuantity: (meters) => meters.div(1609),
   },
 ];

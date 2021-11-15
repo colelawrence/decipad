@@ -29,6 +29,10 @@ export const stringifyResult = (
     )}`;
   }
 
+  if (type.type === 'number') {
+    return [chalk.blue(result.toString()), type.toString()].join(' ');
+  }
+
   if (
     type.columnSize != null &&
     type.cellType != null &&

@@ -1,3 +1,4 @@
+import Fraction from 'fraction.js';
 import { getDefined } from '@decipad/utils';
 import { getUnitByName } from './known-units';
 
@@ -19,10 +20,10 @@ export function areUnitsConvertible(a: string, b: string): boolean {
 }
 
 export function convertBetweenUnits(
-  n: number,
+  n: Fraction,
   from: string,
   to: string
-): number {
+): Fraction {
   if (from === to) {
     return n;
   }
@@ -36,7 +37,10 @@ export function convertBetweenUnits(
   return toUnit.fromBaseQuantity(fromUnit.toBaseQuantity(n));
 }
 
-export function convertFromBaseUnitIfKnown(n: number, from: string): number {
+export function convertFromBaseUnitIfKnown(
+  n: Fraction,
+  from: string
+): Fraction {
   const unit = getUnitByName(from);
   if (unit) {
     return unit.fromBaseQuantity(n);
@@ -44,7 +48,7 @@ export function convertFromBaseUnitIfKnown(n: number, from: string): number {
   return n;
 }
 
-export function convertToBaseUnitIfKnown(n: number, to: string): number {
+export function convertToBaseUnitIfKnown(n: Fraction, to: string): Fraction {
   const unit = getUnitByName(to);
   if (unit) {
     return unit.toBaseQuantity(n);

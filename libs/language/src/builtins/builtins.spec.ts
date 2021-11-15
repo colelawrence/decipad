@@ -1,9 +1,9 @@
+import Fraction from 'fraction.js';
 import {
   Column,
   fromJS,
   Date as LanguageDate,
   Range,
-  Scalar,
 } from '../interpreter/Value';
 import { build as t } from '../type';
 import { builtins } from './builtins';
@@ -27,10 +27,10 @@ it('concatenates tables', () => {
   ).toMatchInlineSnapshot(`
     Array [
       Array [
-        1,
-        2,
-        3,
-        4,
+        Fraction(1),
+        Fraction(2),
+        Fraction(3),
+        Fraction(4),
       ],
       Array [
         "Hello",
@@ -72,7 +72,7 @@ it('looks things up', () => {
   );
   expect(fnValues?.(tableValue, fromJS('The Thing')).getData()).toEqual([
     'The Thing',
-    12345,
+    { d: 1, n: 12345, s: 1 },
   ]);
   expect(() =>
     fnValues?.(tableValue, fromJS('Not found'))
@@ -88,12 +88,12 @@ it('concatenates lists', () => {
       .getData()
   ).toMatchInlineSnapshot(`
     Array [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
+      Fraction(1),
+      Fraction(2),
+      Fraction(3),
+      Fraction(4),
+      Fraction(5),
+      Fraction(6),
     ]
   `);
 
@@ -101,9 +101,9 @@ it('concatenates lists', () => {
     builtins.cat.fnValuesNoAutomap?.([fromJS(1), fromJS([2, 3])]).getData()
   ).toMatchInlineSnapshot(`
     Array [
-      1,
-      2,
-      3,
+      Fraction(1),
+      Fraction(2),
+      Fraction(3),
     ]
   `);
 
@@ -111,9 +111,9 @@ it('concatenates lists', () => {
     builtins.cat.fnValuesNoAutomap?.([fromJS([1, 2]), fromJS(3)]).getData()
   ).toMatchInlineSnapshot(`
     Array [
-      1,
-      2,
-      3,
+      Fraction(1),
+      Fraction(2),
+      Fraction(3),
     ]
   `);
 });
@@ -122,8 +122,8 @@ it('calculates columns and scalar lengths', () => {
   expect(builtins.len.functor?.([t.number()])).toMatchObject(t.number());
 
   expect(builtins.len.fnValuesNoAutomap?.([fromJS(2)])).toMatchInlineSnapshot(`
-    Scalar {
-      "value": 1,
+    FractionValue {
+      "value": Fraction(1),
     }
   `);
 
@@ -133,8 +133,8 @@ it('calculates columns and scalar lengths', () => {
 
   expect(builtins.len.fnValuesNoAutomap?.([fromJS([1, 2, 3])]))
     .toMatchInlineSnapshot(`
-    Scalar {
-      "value": 3,
+    FractionValue {
+      "value": Fraction(3),
     }
   `);
 });
@@ -142,30 +142,30 @@ it('calculates columns and scalar lengths', () => {
 it('retrieves the first element of a list', () => {
   expect(builtins.first.fnValuesNoAutomap?.([fromJS(2)]))
     .toMatchInlineSnapshot(`
-    Scalar {
-      "value": 2,
+    FractionValue {
+      "value": Fraction(2),
     }
   `);
 
   expect(builtins.first.fnValuesNoAutomap?.([fromJS([4, 5, 6])]))
     .toMatchInlineSnapshot(`
-    Scalar {
-      "value": 4,
+    FractionValue {
+      "value": Fraction(4),
     }
   `);
 });
 
 it('retrieves the last element of a list', () => {
   expect(builtins.last.fnValuesNoAutomap?.([fromJS(2)])).toMatchInlineSnapshot(`
-    Scalar {
-      "value": 2,
+    FractionValue {
+      "value": Fraction(2),
     }
   `);
 
   expect(builtins.last.fnValuesNoAutomap?.([fromJS([4, 5, 6])]))
     .toMatchInlineSnapshot(`
-    Scalar {
-      "value": 6,
+    FractionValue {
+      "value": Fraction(6),
     }
   `);
 });
@@ -173,22 +173,22 @@ it('retrieves the last element of a list', () => {
 it('knows whether a range contains a value', () => {
   expect(
     builtins.contains.fnValues?.(
-      new Range({ start: fromJS(1) as Scalar, end: fromJS(2) as Scalar }),
+      new Range({ start: fromJS(1), end: fromJS(2) }),
       fromJS(1)
     )
   ).toMatchInlineSnapshot(`
-    Scalar {
+    BooleanValue {
       "value": true,
     }
   `);
 
   expect(
     builtins.contains.fnValues?.(
-      new Range({ start: fromJS(1) as Scalar, end: fromJS(2) as Scalar }),
+      new Range({ start: fromJS(1), end: fromJS(2) }),
       fromJS(3)
     )
   ).toMatchInlineSnapshot(`
-    Scalar {
+    BooleanValue {
       "value": false,
     }
   `);
@@ -199,7 +199,7 @@ it('knows whether a range contains a value', () => {
       new LanguageDate(new Date('2021-01-31').getTime(), 'day')
     )
   ).toMatchInlineSnapshot(`
-    Scalar {
+    BooleanValue {
       "value": true,
     }
   `);
@@ -210,7 +210,7 @@ it('knows whether a range contains a value', () => {
       new LanguageDate(new Date('2021-01-31').getTime(), 'month')
     )
   ).toMatchInlineSnapshot(`
-    Scalar {
+    BooleanValue {
       "value": false,
     }
   `);
@@ -222,7 +222,11 @@ it('rounds a number', () => {
 });
 
 it('calculates sqrt', () => {
-  expect(builtins.sqrt.fn?.(4)).toBe(2);
+  expect(builtins.sqrt.fn?.(new Fraction(4))).toMatchObject({
+    d: 1,
+    n: 2,
+    s: 1,
+  });
 });
 
 it("calculates a number's ln", () => {

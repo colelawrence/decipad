@@ -34,9 +34,15 @@ describe('evaluateTableColumn', () => {
   };
 
   it('can emulate a quadratic function', async () => {
-    expect(
-      (await testEvaluate(c('*', l(2), c('previous', l(1))), 4)).getData()
-    ).toEqual([2, 4, 8, 16]);
+    expect((await testEvaluate(c('*', l(2), c('previous', l(1))), 4)).getData())
+      .toMatchInlineSnapshot(`
+      Array [
+        Fraction(2),
+        Fraction(4),
+        Fraction(8),
+        Fraction(16),
+      ]
+    `);
   });
 
   it('can be used in a column with inherent size', async () => {
@@ -44,6 +50,13 @@ describe('evaluateTableColumn', () => {
       (
         await testEvaluate(c('*', n('ref', 'numbers'), c('previous', l(1))), 4)
       ).getData()
-    ).toEqual([1, 2, 6, 24]);
+    ).toMatchInlineSnapshot(`
+      Array [
+        Fraction(1),
+        Fraction(2),
+        Fraction(6),
+        Fraction(24),
+      ]
+    `);
   });
 });

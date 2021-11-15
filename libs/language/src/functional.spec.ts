@@ -1,61 +1,117 @@
 import { build as t } from './type';
 import { cleanDate } from './date';
-import {
-  runCodeForVariables,
-  objectToTableType,
-  objectToTupleValue,
-} from './testUtils';
+import { runCodeForVariables, objectToTableType } from './testUtils';
 import { runCode } from './run';
 
 // https://observablehq.com/d/0c4bca59558d2985
 describe('use of funds document', () => {
-  const months = Array.from({ length: 12 }, (_, i) =>
-    cleanDate(Date.UTC(2021, i), 'month')
-  );
-
-  const baseSalary = new Array(12).fill(10000);
-  const usualSalary = baseSalary.map((s) => s + s * 0.2);
-  const salaryWithBonus = baseSalary.map((s) => s + s * 0.2 + s * 0.2);
-
   it('Can MVP the use of funds document', async () => {
-    expect(
-      await runCode(`
-        InitialInvestment = 300000
-        IncomeTax = 20%
+    const result = await runCode(`
+      InitialInvestment = 300000
+      IncomeTax = 20%
 
-        function CostToBusiness(Month Salary StartDate Bonus) => (
-          if dategte(Month, StartDate)
-            then Salary + (Salary * 20%) + (if Bonus then Salary * 20% else 0)
-            else 0
-        )
+      function CostToBusiness(Month Salary StartDate Bonus) => (
+        if dategte(Month, StartDate)
+          then Salary + (Salary * 20%) + (if Bonus then Salary * 20% else 0)
+          else 0
+      )
 
-        Months = [ date(2021-01) through date(2021-12) by month ]
-        StandardSalary = 120000 / 12
+      Months = [ date(2021-01) through date(2021-12) by month ]
+      StandardSalary = 120000 / 12
 
-        SalaryStaff = {
-          Months,
-          Exec = CostToBusiness(Months, StandardSalary, date(2021-01), true),
-          Product = CostToBusiness(Months, StandardSalary, date(2021-02), true),
-          Tech = CostToBusiness(Months, StandardSalary, date(2021-03), false),
-          FrontEnd = CostToBusiness(Months, StandardSalary, date(2021-03), true)
-        }
-      `)
-    ).toMatchObject({
-      type: objectToTableType('SalaryStaff', 12, {
+      SalaryStaff = {
+        Months,
+        Exec = CostToBusiness(Months, StandardSalary, date(2021-01), true),
+        Product = CostToBusiness(Months, StandardSalary, date(2021-02), true),
+        Tech = CostToBusiness(Months, StandardSalary, date(2021-03), false),
+        FrontEnd = CostToBusiness(Months, StandardSalary, date(2021-03), true)
+      }
+    `);
+
+    expect(result.type).toMatchObject(
+      objectToTableType('SalaryStaff', 12, {
         Months: t.date('month'),
         Exec: t.number(),
         Product: t.number(),
         Tech: t.number(),
         FrontEnd: t.number(),
-      }),
-      value: objectToTupleValue({
-        Months: months,
-        Exec: salaryWithBonus,
-        Product: salaryWithBonus.map((salary, i) => (i >= 1 ? salary : 0)),
-        Tech: usualSalary.map((salary, i) => (i >= 2 ? salary : 0)),
-        FrontEnd: salaryWithBonus.map((salary, i) => (i >= 2 ? salary : 0)),
-      }),
-    });
+      })
+    );
+
+    expect(result.value).toMatchInlineSnapshot(`
+Array [
+  Array [
+    1609459200000,
+    1612137600000,
+    1614556800000,
+    1617235200000,
+    1619827200000,
+    1622505600000,
+    1625097600000,
+    1627776000000,
+    1630454400000,
+    1633046400000,
+    1635724800000,
+    1638316800000,
+  ],
+  Array [
+    Fraction(14000),
+    Fraction(14000),
+    Fraction(14000),
+    Fraction(14000),
+    Fraction(14000),
+    Fraction(14000),
+    Fraction(14000),
+    Fraction(14000),
+    Fraction(14000),
+    Fraction(14000),
+    Fraction(14000),
+    Fraction(14000),
+  ],
+  Array [
+    Fraction(0),
+    Fraction(14000),
+    Fraction(14000),
+    Fraction(14000),
+    Fraction(14000),
+    Fraction(14000),
+    Fraction(14000),
+    Fraction(14000),
+    Fraction(14000),
+    Fraction(14000),
+    Fraction(14000),
+    Fraction(14000),
+  ],
+  Array [
+    Fraction(0),
+    Fraction(0),
+    Fraction(12000),
+    Fraction(12000),
+    Fraction(12000),
+    Fraction(12000),
+    Fraction(12000),
+    Fraction(12000),
+    Fraction(12000),
+    Fraction(12000),
+    Fraction(12000),
+    Fraction(12000),
+  ],
+  Array [
+    Fraction(0),
+    Fraction(0),
+    Fraction(14000),
+    Fraction(14000),
+    Fraction(14000),
+    Fraction(14000),
+    Fraction(14000),
+    Fraction(14000),
+    Fraction(14000),
+    Fraction(14000),
+    Fraction(14000),
+    Fraction(14000),
+  ],
+]
+`);
   });
 
   /* eslint-disable-next-line jest/no-disabled-tests */
@@ -174,11 +230,21 @@ describe('more models', () => {
       )
     ).toMatchObject({
       variables: {
-        InitialCashFlow: 10,
+        InitialCashFlow: { d: 1, n: 10, s: 1 },
         Years: years,
-        GrowthRate: 0.25,
-        CashFlows: [10, 12.5, 15.625, 19.53125],
-        YearlyCashFlows: [8, 10, 12.5, 15.625],
+        GrowthRate: { d: 4, n: 1, s: 1 },
+        CashFlows: [
+          { d: 1, n: 10, s: 1 },
+          { d: 2, n: 25, s: 1 },
+          { d: 8, n: 125, s: 1 },
+          { d: 32, n: 625, s: 1 },
+        ],
+        YearlyCashFlows: [
+          { d: 1, n: 8, s: 1 },
+          { d: 1, n: 10, s: 1 },
+          { d: 2, n: 25, s: 1 },
+          { d: 8, n: 125, s: 1 },
+        ],
       },
       types: {
         InitialCashFlow: {
@@ -233,7 +299,14 @@ describe('more models', () => {
         `
       )
     ).toMatchObject({
-      value: [years, [5200, 5404, 5612.08]],
+      value: [
+        years,
+        [
+          { d: 1, n: 5200, s: 1 },
+          { d: 1, n: 5404, s: 1 },
+          { d: 549755813888, n: 3085273608004567, s: 1 },
+        ],
+      ],
       type: {
         tableLength: 3,
         columnNames: ['Years', 'Value'],
@@ -262,7 +335,7 @@ describe('more models', () => {
         `
       )
     ).toMatchObject({
-      value: 6.15,
+      value: { d: 20, n: 123, s: 1 },
     });
   });
 });
@@ -316,12 +389,16 @@ ${'' /* Get capital needed */}
       )
     ).toMatchObject({
       variables: {
-        MonthlyRevenueGrowthRate: 0.05,
+        MonthlyRevenueGrowthRate: {
+          d: 72057594037927940,
+          n: 3602879701896397,
+          s: 1,
+        },
         TimeToProfitability: expect.toRoundEqual(81),
         CumulativeMonthlyRevenue: expect.toRoundEqual(-43395),
         CumulativeMonthlyExpenses: expect.toRoundEqual(10527976),
         CapitalNeeded: expect.toRoundEqual(-10571371),
-        IPOTargetMonthlyRevenue: 10_000_000,
+        IPOTargetMonthlyRevenue: { d: 1, n: 10000000, s: 1 },
         TimeToIPO: expect.toRoundEqual(170),
       },
       types: {
@@ -414,8 +491,14 @@ ${'' /* Get capital needed */}
       )
     ).toMatchObject({
       value: [
-        [101, 102],
-        [201, 202],
+        [
+          { d: 1, n: 101, s: 1 },
+          { d: 1, n: 102, s: 1 },
+        ],
+        [
+          { d: 1, n: 201, s: 1 },
+          { d: 1, n: 202, s: 1 },
+        ],
       ],
       type: {
         indexedBy: 'Cars',

@@ -15,14 +15,18 @@ export const units: UnitOfMeasure[] = [
     name: 'celsius',
     abbreviations: ['°c'],
     baseQuantity: 'temperature',
-    toBaseQuantity: (celsius) => celsius + 273.15,
-    fromBaseQuantity: (kelvin) => kelvin - 273.15,
+    toBaseQuantity: (celsius) => celsius.add(273.15),
+    fromBaseQuantity: (kelvin) => kelvin.sub(273.15),
   },
   {
     name: 'fahrenheit',
     abbreviations: ['°f'],
     baseQuantity: 'temperature',
-    toBaseQuantity: (fahrenheit) => (fahrenheit - 32) * (5 / 9) + 273.15,
-    fromBaseQuantity: (kelvin) => ((kelvin - 273.15) * 9) / 5 + 32,
+    toBaseQuantity: (fahrenheit) =>
+      fahrenheit
+        .sub(32)
+        .mul(5 / 9)
+        .add(273.15),
+    fromBaseQuantity: (kelvin) => kelvin.sub(273.15).mul(9).div(5).add(32),
   },
 ];
