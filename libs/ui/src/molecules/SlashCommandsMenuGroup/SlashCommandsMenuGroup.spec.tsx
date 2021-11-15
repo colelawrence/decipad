@@ -1,8 +1,10 @@
 import { render } from '@testing-library/react';
 import { SlashCommandsMenuItem } from '../../atoms';
+import { mockConsoleError } from '../../test-utils';
 
-import { MenuWrapper as wrapper } from '../../test-utils';
 import { SlashCommandsMenuGroup } from './SlashCommandsMenuGroup';
+
+mockConsoleError();
 
 it('renders given items in a group', () => {
   const { getByRole } = render(
@@ -17,8 +19,7 @@ it('renders given items in a group', () => {
         description="desc 1"
         icon={<svg />}
       />
-    </SlashCommandsMenuGroup>,
-    { wrapper }
+    </SlashCommandsMenuGroup>
   );
   expect(getByRole('group')).toHaveTextContent(/item 0.*item 1/);
 });
@@ -30,8 +31,7 @@ it.each([
 ])('does not allow %s children', (_, children) => {
   expect(() =>
     render(
-      <SlashCommandsMenuGroup title="group">{children}</SlashCommandsMenuGroup>,
-      { wrapper }
+      <SlashCommandsMenuGroup title="group">{children}</SlashCommandsMenuGroup>
     )
   ).toThrow(/child/i);
 });
@@ -42,8 +42,7 @@ it.each([
 ])('allows %s children', (_, children) => {
   expect(() =>
     render(
-      <SlashCommandsMenuGroup title="group">{children}</SlashCommandsMenuGroup>,
-      { wrapper }
+      <SlashCommandsMenuGroup title="group">{children}</SlashCommandsMenuGroup>
     )
   ).not.toThrow();
 });

@@ -4,6 +4,7 @@ export { EditorTable } from './EditorTable/EditorTable';
 export { EmptyWorkspaceCta } from './EmptyWorkspaceCta/EmptyWorkspaceCta';
 export { NotebookListItem } from './NotebookListItem/NotebookListItem';
 export { NotebookShareMenu } from './NotebookShareMenu/NotebookShareMenu';
+export { SlashCommandsMenu } from './SlashCommandsMenu/SlashCommandsMenu';
 export { TableColumnMenu } from './TableColumnMenu/TableColumnMenu';
 export { WorkspaceMenu } from './WorkspaceMenu/WorkspaceMenu';
 export { WorkspaceNavigation } from './WorkspaceNavigation/WorkspaceNavigation';

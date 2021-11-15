@@ -1,5 +1,4 @@
 import { Children, FC, ReactNode } from 'react';
-import { Group, Label } from '@radix-ui/react-dropdown-menu';
 import { isElement } from 'react-is';
 import { css } from '@emotion/react';
 import { SlashCommandsMenuItem } from '../../atoms';
@@ -26,8 +25,8 @@ export const SlashCommandsMenuGroup = ({
   children,
 }: SlashCommandsMenuGroupProps): ReturnType<FC> => {
   return (
-    <Group>
-      <Label css={titleStyles}>{title}</Label>
+    <div role="group">
+      <div css={titleStyles}>{title}</div>
       <div css={itemsStyles}>
         {Children.map(children, (child) => {
           if (child == null) {
@@ -45,6 +44,6 @@ export const SlashCommandsMenuGroup = ({
           );
         })}
       </div>
-    </Group>
+    </div>
   );
 };
