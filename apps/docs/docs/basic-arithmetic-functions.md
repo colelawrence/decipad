@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# Basic arithmetic functions
+# Basic arithmetic operations
 
 In the Deci language you can do all the basic arithmetic operations with numbers you would expect:
 
