@@ -1,6 +1,6 @@
 // E2e tests
 
-import { build as t } from './type';
+import { build as t, Type } from './type';
 import { runCode } from './run';
 import {
   runCodeForVariables,
@@ -11,6 +11,12 @@ import {
 import { parseUTCDate } from './date';
 import { Column, Scalar } from './interpreter/Value';
 import { block, n, units, F } from './utils';
+
+expect.addSnapshotSerializer({
+  test: (arg) => arg.type instanceof Type && arg.value != null,
+  serialize: ({ type, value }) =>
+    `Result(${JSON.stringify(value)} ${type.toString()})`,
+});
 
 describe('basic code', () => {
   it('runs basic operations', async () => {
@@ -492,6 +498,14 @@ describe('Units', () => {
       },
     });
   });
+
+  it('can avoid converting months to seconds', async () => {
+    const { type, value } = await runCode(
+      '(120 meter^2) * (50 USD/meter^2/month)'
+    );
+    expect(type.toString()).toEqual('USD/month');
+    expect(value.valueOf()).toEqual(6000);
+  });
 });
 
 describe('Ranges', () => {
@@ -881,15 +895,15 @@ describe('number units work together', () => {
   it('exponentiation works with expression as exponent', async () => {
     expect(
       await runCode(`
-      Year = [date(2020) .. date(2025) by year]
+        Year = [date(2020) .. date(2025) by year]
 
-      BaseFuelPrice = 4 USD/galon
+        BaseFuelPrice = 4 USD/galon
 
-      Fuel = {
-        Year,
-        InterestRateFromYear = 1.08 ** ((Year - date(2020)) as years),
-        Price = round(BaseFuelPrice * InterestRateFromYear, 2)
-      }
+        Fuel = {
+          Year,
+          InterestRateFromYear = 1.08 ** ((Year - date(2020)) as years),
+          Price = round(BaseFuelPrice * InterestRateFromYear, 2)
+        }
       `)
     ).toMatchObject({
       value: [

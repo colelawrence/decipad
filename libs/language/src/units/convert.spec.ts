@@ -132,18 +132,12 @@ describe('convert', () => {
     expect(convertBetweenUnits(F(0.75), 'hours', 'minutes')).toMatchObject(
       F(45)
     );
-    expect(convertBetweenUnits(F(43200), 'seconds', 'days')).toMatchObject(
-      F(0.5)
+    expect(convertBetweenUnits(F(2), 'weeks', 'days')).toMatchObject(F(14));
+    expect(convertBetweenUnits(F(14), 'days', 'weeks')).toMatchObject(F(2));
+    expect(convertBetweenUnits(F(2), 'months', 'years')).toMatchObject(
+      F(2).div(12)
     );
-    expect(convertBetweenUnits(F(1.5), 'days', 'seconds')).toMatchObject(
-      F(129600)
-    );
-    expect(convertBetweenUnits(F(2), 'weeks', 'seconds')).toMatchObject(
-      F(1209600)
-    );
-    expect(convertBetweenUnits(F(1209600), 'seconds', 'weeks')).toMatchObject(
-      F(2)
-    );
+    expect(convertBetweenUnits(F(1), 'year', 'months')).toMatchObject(F(12));
   });
 
   it('converts between information units', () => {

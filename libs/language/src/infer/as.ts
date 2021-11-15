@@ -23,7 +23,10 @@ export async function inferAs(
 
     if (expressionType.timeUnits) {
       const targetUnitOfMeasure = getUnitByName(targetUnitName);
-      if (!targetUnitOfMeasure || targetUnitOfMeasure.baseQuantity !== 'time') {
+      if (
+        !targetUnitOfMeasure ||
+        !['month', 'day', 'second'].includes(targetUnitOfMeasure.baseQuantity)
+      ) {
         return t.impossible(InferError.cannotConvertToUnit(unit));
       }
       return t.number(unit);
