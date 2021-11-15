@@ -45,21 +45,13 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'month',
     baseQuantity: 'time',
-    toBaseQuantity: () => {
-      throw new TypeError(`Don't know how to convert months to seconds`);
-    },
-    fromBaseQuantity: () => {
-      throw new TypeError(`Don't know how to seconds to months`);
-    },
+    toBaseQuantity: (months) => months * 259200,
+    fromBaseQuantity: (seconds) => seconds / 259200,
   },
   {
     name: 'year',
     baseQuantity: 'time',
-    toBaseQuantity: () => {
-      throw new TypeError(`Don't know how to convert years to seconds`);
-    },
-    fromBaseQuantity: () => {
-      throw new TypeError(`Don't know how to seconds to years`);
-    },
+    toBaseQuantity: (years) => years * 31536000,
+    fromBaseQuantity: (seconds) => seconds / 31536000,
   },
 ];
