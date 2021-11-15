@@ -7,7 +7,7 @@ slug: /
 
 Let's discover The **Deci language in less than 5 minutes**.
 
-In this tutorial you will be able to try the Deci language by typing into our interactive editor and watch the results.
+In this document you will be able to try out the Deci language by typing into our interactive editor and watch the results.
 
 ## Numbers and units
 
