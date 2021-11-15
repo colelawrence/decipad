@@ -1,4 +1,7 @@
 {
   "extends": ["../../libs/eslint-config-decipad/react"],
-  "ignorePatterns": ["!**/*"]
+  "ignorePatterns": ["!**/*"],
+  "rules": {
+    "no-console": ["error", { "allow": ["error"] }]
+  }
 }

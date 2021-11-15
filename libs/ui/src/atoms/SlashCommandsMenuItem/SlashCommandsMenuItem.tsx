@@ -74,7 +74,11 @@ export const SlashCommandsMenuItem = ({
     <button
       role="menuitem"
       css={styles}
-      onClick={onExecute}
+      onMouseDown={(event) => {
+        onExecute();
+        event.stopPropagation();
+        event.preventDefault();
+      }}
       data-focused={focused}
     >
       <span css={iconStyles}>{icon}</span>

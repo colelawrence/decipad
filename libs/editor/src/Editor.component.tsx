@@ -15,10 +15,6 @@ import {
   useLanguagePlugin,
 } from './plugins/Language/useLanguagePlugin';
 import { useNotebookTitlePlugin } from './plugins/NotebookTitle/useNotebookTitlePlugin';
-import {
-  SlashCommandsSelect,
-  useSlashCommandsPlugin,
-} from './plugins/SlashCommands';
 import { UploadDialogue } from './plugins/UploadData/components/UploadDialogue';
 import { useImportDataPlugin } from './plugins/ImportData/useImportDataPlugin';
 import { useExternalDataPlugin } from './plugins/ExternalData/useExternalDataPlugin';
@@ -42,9 +38,6 @@ const SlateEditor = ({
 }: EditorProps) => {
   const [editorId] = useState(nanoid);
   const editor1 = useStoreEditorRef(editorId);
-
-  const { getSlashCommandsProps, plugin: slashCommandsPlugin } =
-    useSlashCommandsPlugin();
 
   const { results, languagePlugin } = useLanguagePlugin();
 
@@ -79,14 +72,8 @@ const SlateEditor = ({
   const { createOrUpdateExternalData } = useExternalDataPlugin({ editor });
 
   const editorPlugins = useMemo(
-    () => [
-      ...plugins,
-      slashCommandsPlugin,
-      languagePlugin,
-      notebookTitlePlugin,
-      importDataPlugin,
-    ],
-    [slashCommandsPlugin, languagePlugin, notebookTitlePlugin, importDataPlugin]
+    () => [...plugins, languagePlugin, notebookTitlePlugin, importDataPlugin],
+    [languagePlugin, notebookTitlePlugin, importDataPlugin]
   );
 
   const programBlocks = editor ? editorProgramBlocks(editor) : {};
@@ -106,7 +93,6 @@ const SlateEditor = ({
               editableProps={{ autoFocus, readOnly }}
             >
               <Tooltip />
-              <SlashCommandsSelect {...getSlashCommandsProps()} />
               <UploadDialogue
                 uploadState={uploadState}
                 clearAll={clearAllUploads}

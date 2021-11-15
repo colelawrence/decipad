@@ -13,10 +13,6 @@ import {
 } from './plugins/Language/useLanguagePlugin';
 import { Tooltip } from './components';
 import { components, options, plugins } from './configuration';
-import {
-  SlashCommandsSelect,
-  useSlashCommandsPlugin,
-} from './plugins/SlashCommands';
 
 export const NoDocSyncEditorBase = (props: PlateProps): ReturnType<FC> => {
   const [editorId] = useState(nanoid);
@@ -48,12 +44,9 @@ export const NoDocSyncEditorBase = (props: PlateProps): ReturnType<FC> => {
   const { results, languagePlugin } = useLanguagePlugin();
   const programBlocks = editor ? editorProgramBlocks(editor) : {};
 
-  const { getSlashCommandsProps, plugin: slashCommandsPlugin } =
-    useSlashCommandsPlugin();
-
   const editorPlugins = useMemo(
-    () => [...plugins, slashCommandsPlugin, languagePlugin],
-    [slashCommandsPlugin, languagePlugin]
+    () => [...plugins, languagePlugin],
+    [languagePlugin]
   );
 
   return (
@@ -68,7 +61,6 @@ export const NoDocSyncEditorBase = (props: PlateProps): ReturnType<FC> => {
           {...props}
         >
           <Tooltip />
-          <SlashCommandsSelect {...getSlashCommandsProps()} />
         </Plate>
       </ProgramBlocksContextProvider>
     </ResultsContextProvider>

@@ -65,14 +65,13 @@ export function DropFile({
 
 function isFileAcceptable(file: File): boolean {
   if (acceptableFileTypes.indexOf(file.type) < 0) {
-    // eslint-disable-next-line no-console
+    // TODO: show the user the following error:
     console.error(`Cannot not import file of type ${file.type}`);
     return false;
   }
 
   if (file.size > maxFileSizeBytes) {
     // TODO: show the user the following error:
-    // eslint-disable-next-line no-console
     console.error(
       `File too big (${file.size}). Will only accept files smaller than ${maxFileSizeBytes} bytes`
     );

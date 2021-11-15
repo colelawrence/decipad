@@ -4,4 +4,5 @@ export { Error } from './Error';
 export { Table } from './Table';
 export { Tooltip } from './Tooltip';
 
+export * from './slash-commands';
 export * from './text';

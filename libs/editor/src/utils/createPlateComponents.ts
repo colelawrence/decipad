@@ -35,7 +35,7 @@ import { FunctionComponent } from 'react';
 import { withStyledDraggables } from './withStyledDraggables';
 import { withStyledPlaceHolders } from './withStyledPlaceholders';
 import * as elementTypes from './elementTypes';
-import { Paragraph, Table } from '../components';
+import { SlashCommandsParagraph, Table } from '../components';
 
 type PlateElementComponent = FunctionComponent<
   SPRenderElementProps | SPRenderLeafProps | ImportDataElementProps
@@ -49,7 +49,7 @@ export const createPlateComponents = (): Partial<
     Record<elementTypes.ElementType, PlateElementComponent>
   > = {
     // Plate default elements
-    [ELEMENT_PARAGRAPH]: Paragraph,
+    [ELEMENT_PARAGRAPH]: SlashCommandsParagraph,
     [ELEMENT_H1]: TitleElement,
     [ELEMENT_H2]: SubtitleElement,
     [ELEMENT_H3]: SubheadingElement,
