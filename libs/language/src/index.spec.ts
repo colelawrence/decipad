@@ -583,3 +583,241 @@ describe('Injected external data', () => {
     });
   });
 });
+
+describe('number units work together', () => {
+  it('handles no units', async () => {
+    expect(
+      await runCode(`
+        1 + 2
+      `)
+    ).toMatchObject({
+      value: 3,
+      type: t.number(),
+    });
+  });
+
+  it('handles unknown units', async () => {
+    expect(
+      await runCode(`
+        1 banana + 2 bananas
+      `)
+    ).toMatchObject({
+      value: 3,
+      type: t.number({
+        type: 'units',
+        args: [
+          {
+            unit: 'bananas',
+            exp: 1,
+            multiplier: 1,
+            known: false,
+          },
+        ],
+      }),
+    });
+  });
+
+  it('handles known units', async () => {
+    expect(
+      await runCode(`
+        1 meter + 2 meters
+      `)
+    ).toMatchObject({
+      value: 3,
+      type: t.number({
+        type: 'units',
+        args: [
+          {
+            unit: 'meters',
+            exp: 1,
+            multiplier: 1,
+            known: true,
+          },
+        ],
+      }),
+    });
+  });
+
+  it('handles known units with multipliers', async () => {
+    expect(
+      await runCode(`
+        10 centimeters + 2 meters
+      `)
+    ).toMatchObject({
+      value: 2.1,
+      type: t.number({
+        type: 'units',
+        args: [
+          {
+            unit: 'meters',
+            exp: 1,
+            multiplier: 1,
+            known: true,
+          },
+        ],
+      }),
+    });
+  });
+
+  it('handles exponentiated known units with multipliers', async () => {
+    expect(
+      await runCode(`
+        1 centimeters^2 + 2 meters^2
+      `)
+    ).toMatchObject({
+      value: 2.0001,
+      type: t.number({
+        type: 'units',
+        args: [
+          {
+            unit: 'meters',
+            exp: 2,
+            multiplier: 1,
+            known: true,
+          },
+        ],
+      }),
+    });
+  });
+
+  it('multiplies units', async () => {
+    expect(
+      await runCode(`
+        10 kilometers * 3 hours
+      `)
+    ).toMatchObject({
+      value: 30000,
+      type: t.number({
+        type: 'units',
+        args: [
+          {
+            unit: 'hours',
+            exp: 1,
+            multiplier: 1,
+            known: true,
+          },
+          {
+            unit: 'meters',
+            exp: 1,
+            multiplier: 1000,
+            known: true,
+          },
+        ],
+      }),
+    });
+  });
+
+  it('can use divided units', async () => {
+    expect(
+      await runCode(`
+        3 kilometers/minute
+      `)
+    ).toMatchObject({
+      value: 3000,
+      type: t.number({
+        type: 'units',
+        args: [
+          {
+            unit: 'meters',
+            exp: 1,
+            multiplier: 1000,
+            known: true,
+          },
+          {
+            unit: 'minute',
+            exp: -1,
+            multiplier: 1,
+            known: true,
+          },
+        ],
+      }),
+    });
+  });
+
+  it('divides two simple units', async () => {
+    expect(
+      await runCode(`
+        3 kilometers / 1 minute
+      `)
+    ).toMatchObject({
+      value: 3000,
+      type: t.number({
+        type: 'units',
+        args: [
+          {
+            unit: 'meters',
+            exp: 1,
+            multiplier: 1000,
+            known: true,
+          },
+          {
+            unit: 'minute',
+            exp: -1,
+            multiplier: 1,
+            known: true,
+          },
+        ],
+      }),
+    });
+  });
+
+  it('cancels out units', async () => {
+    expect(
+      await runCode(`
+        4 miles/hour * 2 hour
+      `)
+    ).toMatchObject({
+      value: 8,
+      type: t.number({
+        type: 'units',
+        args: [
+          {
+            unit: 'miles',
+            exp: 1,
+            multiplier: 1,
+            known: true,
+          },
+        ],
+      }),
+    });
+  });
+
+  it('does the right thing when exponentiating with units', async () => {
+    expect(
+      await runCode(`
+        2 ** (4 as years)
+      `)
+    ).toMatchObject({
+      value: 16,
+      type: t.number(),
+    });
+  });
+
+  it('exponentiation works with expression as exponent', async () => {
+    expect(
+      await runCode(`
+      Year = [date(2020) .. date(2025) by year]
+
+      BaseFuelPrice = 4 USD/galon
+
+      Fuel = {
+        Year,
+        InterestRateFromYear = 1.08 ** ((Year - date(2020)) as years),
+        Price = round(BaseFuelPrice * InterestRateFromYear, 2)
+      }
+      `)
+    ).toMatchObject({
+      value: [
+        [
+          1577836800000, 1609459200000, 1640995200000, 1672531200000,
+          1704067200000, 1735689600000,
+        ],
+        [
+          1, 1.08, 1.1664, 1.2597120000000004, 1.3604889600000003,
+          1.4693280768000005,
+        ],
+        [4, 4.32, 4.67, 5.04, 5.44, 5.88],
+      ],
+    });
+  });
+});
