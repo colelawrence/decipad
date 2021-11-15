@@ -94,13 +94,13 @@ export class Type {
     throw new Error('panic: Type.combine() called with 0 arguments');
   }
 
-  toString(): string {
+  toString(value?: number): string {
     if (this.errorCause != null) {
       return `Error: ${this.errorCause.message}`;
     }
 
     if (this.columnSize != null && this.cellType != null) {
-      return `${this.cellType.toString()} x ${this.columnSize}`;
+      return `${this.cellType.toString(value)} x ${this.columnSize}`;
     }
 
     if (this.columnTypes != null && this.columnNames != null) {
@@ -124,7 +124,7 @@ export class Type {
     }
 
     if (this.unit != null && this.unit.args.length > 0) {
-      return stringifyUnits(this.unit);
+      return stringifyUnits(this.unit, value);
     }
 
     if (this.date != null) {

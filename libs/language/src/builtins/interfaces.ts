@@ -12,6 +12,7 @@ export interface BuiltinSpec {
   aliasFor?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fn?: (...args: any[]) => any;
+  noAutoconvert?: boolean;
   // Variant that operates on Value specifically
   fnValuesNoAutomap?: (args: Value[]) => AnyValue;
   fnValues?: (...args: AnyValue[]) => AnyValue;

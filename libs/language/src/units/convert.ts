@@ -35,3 +35,19 @@ export function convertBetweenUnits(
 
   return toUnit.fromBaseQuantity(fromUnit.toBaseQuantity(n));
 }
+
+export function convertFromBaseUnitIfKnown(n: number, from: string): number {
+  const unit = getUnitByName(from);
+  if (unit) {
+    return unit.fromBaseQuantity(n);
+  }
+  return n;
+}
+
+export function convertToBaseUnitIfKnown(n: number, to: string): number {
+  const unit = getUnitByName(to);
+  if (unit) {
+    return unit.toBaseQuantity(n);
+  }
+  return n;
+}

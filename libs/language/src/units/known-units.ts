@@ -1,4 +1,4 @@
-import { singular } from './pluralize';
+import { normalizeUnitName } from './utils';
 import * as LengthUnits from './length-units';
 import * as VolumeUnits from './volume-units';
 import * as PressureUnits from './pressure-units';
@@ -22,7 +22,6 @@ type BaseQuantity =
   | 'substance'
   | 'electric current'
   | 'power'
-  | 'luminous intensity'
   | 'information';
 
 export type UnitOfMeasure = {
@@ -47,18 +46,21 @@ const allUnits: UnitOfMeasure[] = [
   ...PowerUnits.units,
 ];
 
+const allSymbols = new Map<string, UnitOfMeasure>();
+
 const unitsByName = allUnits.reduce((byName, unit) => {
   byName.set(unit.name, unit);
   if (unit.abbreviations) {
     for (const abbreviation of unit.abbreviations) {
-      byName.set(abbreviation, unit);
+      allSymbols.set(abbreviation, unit);
+      byName.set(abbreviation.toLowerCase(), unit);
     }
   }
   return byName;
 }, new Map());
 
-function normalizeUnitName(unit: string): string {
-  return singular(unit.toLocaleLowerCase());
+export function isKnownSymbol(symbol: string): boolean {
+  return allSymbols.has(symbol.toLowerCase());
 }
 
 export function getUnitByName(unit: string): UnitOfMeasure | null {
@@ -68,4 +70,22 @@ export function getUnitByName(unit: string): UnitOfMeasure | null {
 
 export function knowsUnit(unit: string): boolean {
   return unitsByName.has(normalizeUnitName(unit));
+}
+
+export function areUnitsCompatible(
+  unitAName: string,
+  unitBName: string
+): boolean {
+  const unitA = getUnitByName(unitAName);
+  const unitB = getUnitByName(unitBName);
+
+  if (!unitA && !unitB) {
+    return normalizeUnitName(unitAName) === normalizeUnitName(unitBName);
+  }
+
+  if (!unitA || !unitB) {
+    return false;
+  }
+
+  return unitA.baseQuantity === unitB.baseQuantity;
 }

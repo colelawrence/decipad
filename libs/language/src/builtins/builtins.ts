@@ -141,6 +141,7 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
   '**': {
     argCount: 2,
     fn: (a, b) => a ** b,
+    noAutoconvert: true,
     functor: exponentiationFunctor,
   },
   '^': {

@@ -62,7 +62,7 @@ export const tokenizer = moo.states({
     },
 
     identifier: {
-      match: /[a-zA-Z$][a-zA-Z0-9_$]*/,
+      match: /[a-zA-Z°$][a-zA-Z0-9_°$]*/,
       type: keywords,
     },
     number: /[0-9]+(?:\.[0-9]+)?/,
@@ -72,7 +72,6 @@ export const tokenizer = moo.states({
       match: /"(?:[^\\"\0-\x1F\x7F]|\\u[0-9a-fA-F]{4}|\\["\\/bfnrt])+"/,
       value: (validJsonString: string) => JSON.parse(validJsonString),
     },
-
     // Moo crashes by default, but we can give it an error token to return us
     error,
   },

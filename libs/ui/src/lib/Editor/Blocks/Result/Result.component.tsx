@@ -53,7 +53,7 @@ export const ResultContent = (props: ResultContentProps) => {
     return (
       <>
         <NumberResult value={value} />
-        {type.unit ? ` ${type.toString()}` : ''}
+        {type.unit ? ` ${type.toString(value)}` : ''}
       </>
     );
   }

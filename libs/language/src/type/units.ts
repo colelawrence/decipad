@@ -1,21 +1,20 @@
 import { produce } from 'immer';
-import { addIrregularRule, singular, plural } from 'pluralize';
+import pluralize, { addIrregularRule, singular } from 'pluralize';
 import { AST, Type } from '..';
 import { getDefined, units } from '../utils';
-import { knowsUnit } from '../units';
+import { isKnownSymbol, areUnitsCompatible, sameUnit } from '../units';
 
 addIrregularRule('USD', 'USD');
 addIrregularRule('EUR', 'EUR');
 
 const byExp = (u1: AST.Unit, u2: AST.Unit): number => u2.exp - u1.exp;
 
-const pluralizeUnit = (baseUnit: AST.Unit): AST.Unit => {
+const pluralizeUnit = (baseUnit: AST.Unit, value?: number): AST.Unit => {
   const { unit } = baseUnit;
-  if (knowsUnit(unit)) {
-    // do not pluralize well-known units
+  if (isKnownSymbol(unit)) {
     return baseUnit;
   }
-  const pluralUnit = plural(unit);
+  const pluralUnit = pluralize(unit, value || 2);
   if (pluralUnit === unit) {
     return baseUnit;
   }
@@ -25,7 +24,7 @@ const pluralizeUnit = (baseUnit: AST.Unit): AST.Unit => {
 };
 
 const matchUnits = (u1: AST.Unit, u2: AST.Unit) =>
-  singular(u1.unit) === singular(u2.unit) && u1.exp === u2.exp;
+  areUnitsCompatible(u1.unit, u2.unit) && u1.exp === u2.exp;
 
 export const matchUnitArrays = (
   units1: AST.Units | null,
@@ -53,7 +52,9 @@ const normalizeUnits = (units: AST.Unit[] | null) => {
     return null;
   }
 
-  const normalized = units.filter((u) => u.exp !== 0).map(pluralizeUnit);
+  const normalized = units
+    .filter((u) => u.exp !== 0)
+    .map((u) => pluralizeUnit(u));
 
   if (normalized.length === 0) {
     return null;
@@ -87,7 +88,10 @@ const stringifyUnit = (unit: AST.Unit) => {
   return result.join('');
 };
 
-export const stringifyUnits = (units: AST.Units | null): string => {
+export const stringifyUnits = (
+  units: AST.Units | null,
+  value?: number
+): string => {
   if (units == null || units.args.length === 0) {
     return 'unitless';
   } else {
@@ -104,13 +108,13 @@ export const stringifyUnits = (units: AST.Units | null): string => {
               produce(unit, (unit) => {
                 if (unit.exp < 0) {
                   unit.unit = singular(unit.unit);
+                  unit.exp = Math.abs(unit.exp);
                 }
-                unit.exp = Math.abs(unit.exp);
               })
             )
           );
         } else {
-          parts.push(stringifyUnit(pluralizeUnit(unit)));
+          parts.push(stringifyUnit(pluralizeUnit(unit, value)));
         }
         return parts;
       }, [])
@@ -135,8 +139,8 @@ export const combineUnits = (
       outputUnits.push(theirUnit);
     } else {
       // m^2 * m => m^3
-      const existingUnitIndex = myUnits.findIndex(
-        (u) => u.unit === theirUnit.unit
+      const existingUnitIndex = myUnits.findIndex((u) =>
+        sameUnit(u.unit, theirUnit.unit)
       );
       outputUnits[existingUnitIndex] = produce(
         outputUnits[existingUnitIndex],

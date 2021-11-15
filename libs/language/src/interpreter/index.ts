@@ -10,6 +10,7 @@ import { Realm } from './Realm';
 import * as Interpreter from './interpreter-types';
 import type { Value } from './Value';
 
+export type { Value };
 export { RuntimeError } from './RuntimeError';
 export { Realm, Interpreter, evaluate };
 

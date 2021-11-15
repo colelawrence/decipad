@@ -391,13 +391,13 @@ describe('Units', () => {
             exp: 1,
             known: true,
             multiplier: 1,
-            unit: 'meter',
+            unit: 'meters',
           },
           {
             exp: -1,
             known: true,
             multiplier: 1,
-            unit: 'second',
+            unit: 'seconds',
           }
         ),
       },
@@ -414,7 +414,7 @@ describe('Units', () => {
     ).toMatchObject({
       value: 6,
       type: {
-        unit: units({ exp: 1, known: true, multiplier: 1, unit: 'meter' }),
+        unit: units({ exp: 1, known: true, multiplier: 1, unit: 'meters' }),
       },
     });
 
@@ -429,7 +429,7 @@ describe('Units', () => {
     ).toMatchObject({
       value: 2,
       type: {
-        unit: units({ exp: -1, known: true, multiplier: 1, unit: 'second' }),
+        unit: units({ exp: -1, known: true, multiplier: 1, unit: 'seconds' }),
       },
     });
   });
@@ -751,7 +751,7 @@ describe('number units work together', () => {
             known: true,
           },
           {
-            unit: 'minute',
+            unit: 'minutes',
             exp: -1,
             multiplier: 1,
             known: true,
@@ -767,7 +767,7 @@ describe('number units work together', () => {
         4 miles/hour * 2 hour
       `)
     ).toMatchObject({
-      value: 8,
+      value: 7.999999999999999,
       type: t.number({
         type: 'units',
         args: [
