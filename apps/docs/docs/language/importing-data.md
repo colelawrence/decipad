@@ -40,4 +40,4 @@ my_table_name.Col2
 ==> fetch is not defined
 ```
 
-You can check [the section about lists](/docs/lists) if you want to learn what you can do with them.
+You can check [the section about lists](/docs/language/lists) if you want to learn what you can do with them.

@@ -20,4 +20,4 @@ time_span = abs(time)
 ==> 10 days
 ```
 
-> [Here you can see some of the built-in functions that Deci has](/docs/built-in%20functions/functions-for-numbers).
+> [Here you can see some of the built-in functions that Deci has](/docs/docs/language/built-in-functions/functions-for-numbers).

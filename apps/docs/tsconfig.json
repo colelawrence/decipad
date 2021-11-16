@@ -9,7 +9,7 @@
   "exclude": [],
   "references": [
     {
-      "path": "../../libs/ui",
+      "path": "../../libs/ui"
     },
     {
       "path": "../../libs/language"

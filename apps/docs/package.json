@@ -1,8 +1,5 @@
 {
-  "name": "@decipad/docs",
-  "version": "0.0.1",
-  "description": "This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.",
-  "author": "N1N Ltd.",
-  "license": "Proprietary",
+  "name": "website",
+  "version": "0.0.0",
   "private": true
 }

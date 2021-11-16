@@ -5,8 +5,8 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula').default;
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Deci',
-  tagline: 'Making sense out of numbers',
+  title: 'Decipad',
+  tagline: 'Make sense of numbers',
   url: 'https://decipad.com',
   baseUrl: '/docs/',
   onBrokenLinks: 'warn',
@@ -23,13 +23,12 @@ const config = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
-          editUrl: 'https://github.com/decipad/decipad/edit/main/apps/docs/',
-          routeBasePath: '/',
+          editUrl: 'https://github.com/decipad/decipad/edit/main/apps/docs',
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
-          editUrl: 'https://github.com/decipad/decipad/edit/main/apps/docs/',
+          editUrl: 'https://github.com/decipad/decipad/edit/main/apps/docs',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -44,25 +43,27 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
-        title: 'Deci',
+        title: 'Decipad',
         logo: {
-          alt: 'Deci',
-          src: 'img/deci-logo-brand.png',
+          alt: 'Decipad',
+          src: '/img/deci-logo-brand.png',
         },
         items: [
           {
-            href: 'https://dev.decipad.com/playground',
-            label: 'Playground',
+            type: 'doc',
+            docId: 'examples/start',
             position: 'left',
+            label: 'Examples',
           },
           {
             type: 'doc',
-            docId: 'language',
-            position: 'right',
-            label: 'Documentation',
+            docId: 'language/start',
+            position: 'left',
+            label: 'Technical Docs',
           },
+          { to: '/blog', label: 'Articles', position: 'left' },
           {
-            href: 'https://github.com/decipad/decipad',
+            href: 'https://github.com/decipad/docs',
             label: 'GitHub',
             position: 'right',
           },
@@ -75,14 +76,26 @@ const config = {
             title: 'Docs',
             items: [
               {
-                label: 'Deci language',
-                to: '/',
+                label: 'Examples',
+                to: '/docs/docs/examples',
+              },
+              {
+                label: 'Technical Docs',
+                to: '/docs/docs/language',
+              },
+              {
+                label: 'Help Articles',
+                to: '/docs/blog',
               },
             ],
           },
           {
             title: 'Community',
             items: [
+              {
+                label: 'Stack Overflow',
+                href: 'https://stackoverflow.com/questions/tagged/deci',
+              },
               {
                 label: 'Discord',
                 href: 'https://discordapp.com/invite/HwDMqwbGmc',
@@ -97,8 +110,12 @@ const config = {
             title: 'More',
             items: [
               {
+                label: 'Articles',
+                to: '/docs/blog',
+              },
+              {
                 label: 'GitHub',
-                href: 'https://github.com/decipad',
+                href: 'https://github.com/decipad/docs',
               },
             ],
           },
