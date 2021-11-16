@@ -8,11 +8,11 @@ function numberLiteralFromUnits(parentNode, n, units = null) {
     .map((unit) => unit.multiplier ** (unit.exp || 1))
     .reduce((acc, mult) => acc * mult, 1);
 
-  const fraction = new Fraction(n, 1/mult);
+  const fraction = new Fraction(n);
 
   const node = {
     type: 'literal',
-    args: ['number', n * mult, units, fraction]
+    args: ['number', n, units, fraction]
   };
   if (Array.isArray(parentNode)) {
     return addArrayLoc(node, parentNode);

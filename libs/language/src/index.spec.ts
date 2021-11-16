@@ -38,7 +38,7 @@ describe('basic code', () => {
         { d: 1, n: 2, s: 1 },
         { d: 1, n: 1, s: -1 },
         { d: 1, n: 1, s: 1 },
-        { d: 4503599627370496, n: 4548635623644201, s: 1 },
+        { d: 100, n: 101, s: 1 },
         { d: 4, n: 1, s: 1 },
         { d: 1, n: 16, s: 1 },
         { d: 1, n: 4, s: 1 },
@@ -764,7 +764,7 @@ describe('number units work together', () => {
         1 centimeters^2 + 2 meters^2
       `)
     ).toMatchObject({
-      value: F(20001, 10000),
+      value: F(201, 100),
       type: t.number({
         type: 'units',
         args: [
@@ -785,7 +785,7 @@ describe('number units work together', () => {
         10 kilometers * 3 hours
       `)
     ).toMatchObject({
-      value: F(243194379878006800000, 8106479329266893),
+      value: F(30, 1),
       type: t.number({
         type: 'units',
         args: [
@@ -812,7 +812,7 @@ describe('number units work together', () => {
         3 kilometers/minute
       `)
     ).toMatchObject({
-      value: F(3458764513820541000, 1152921504606847),
+      value: F(3, 1),
       type: t.number({
         type: 'units',
         args: [
@@ -839,7 +839,7 @@ describe('number units work together', () => {
         3 kilometers / 1 minute
       `)
     ).toMatchObject({
-      value: F(3242591731706757000, 1080863910568919),
+      value: F(3, 1),
       type: t.number({
         type: 'units',
         args: [
@@ -913,11 +913,11 @@ describe('number units work together', () => {
         ],
         [
           F(1),
-          F(607985949695017, 562949953421312),
-          F(5252998605364947, 4503599627370496),
-          F(177288702931067, 140737488355328),
-          F(6127097573297675, 4503599627370496),
-          F(3308632689580745, 2251799813685248),
+          F(27, 25),
+          F(729, 625),
+          F(19683, 15625),
+          F(531441, 390625),
+          F(14348907, 9765625),
         ],
         [F(4), F(108, 25), F(467, 100), F(126, 25), F(136, 25), F(147, 25)],
       ],

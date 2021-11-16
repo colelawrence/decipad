@@ -34,18 +34,12 @@ export const block = (...contents: AST.Statement[]) => n('block', ...contents);
 export const units = (...units: AST.Unit[]) =>
   units.length > 0 ? n('units', ...units) : null;
 
-const multiplierFromUnit = (units: AST.Unit[]): number => {
-  return units
-    .map((unit) => unit.multiplier ** unit.exp)
-    .reduce((acc, n) => acc * n, 1);
-};
-
 type LitType = number | string | boolean;
 export function l(value: LitType, ...units: AST.Unit[]): AST.Literal {
   const unitArg = units.length > 0 ? n('units', ...units) : null;
 
   if (typeof value === 'number') {
-    const fraction = new Fraction(value, 1 / multiplierFromUnit(units));
+    const fraction = new Fraction(value);
     return n('literal', 'number', value, unitArg, fraction);
   } else if (typeof value === 'boolean') {
     return n('literal', 'boolean', value);
@@ -292,4 +286,13 @@ export function identity<T>(o: T): T {
 
 export function F(n: number, d = 1) {
   return new Fraction(n, d);
+}
+
+export function u(unit: string): AST.Unit {
+  return {
+    unit,
+    exp: 1,
+    multiplier: 1,
+    known: true,
+  };
 }

@@ -37,13 +37,13 @@ it('computes a thing', async () => {
   const res = await computeOnTestComputer({ program: unparsedProgram });
 
   expect(res).toMatchInlineSnapshot(`
-Array [
-  "block-AB/0 -> {\\"s\\":1,\\"n\\":0,\\"d\\":1}",
-  "block-AB/1 -> {\\"s\\":1,\\"n\\":1,\\"d\\":1}",
-  "block-C/0 -> {\\"s\\":1,\\"n\\":11,\\"d\\":1}",
-  "block-D/0 -> {\\"s\\":1,\\"n\\":111,\\"d\\":1}",
-]
-`);
+    Array [
+      "block-AB/0 -> {\\"s\\":1,\\"n\\":0,\\"d\\":1}",
+      "block-AB/1 -> {\\"s\\":1,\\"n\\":1,\\"d\\":1}",
+      "block-C/0 -> {\\"s\\":1,\\"n\\":11,\\"d\\":1}",
+      "block-D/0 -> {\\"s\\":1,\\"n\\":111,\\"d\\":1}",
+    ]
+  `);
 });
 
 it('retrieves syntax errors', async () => {
@@ -99,8 +99,8 @@ describe('caching', () => {
       Array [
         "block-AB/0 -> {\\"s\\":1,\\"n\\":0,\\"d\\":1}",
         "block-AB/1 -> {\\"s\\":1,\\"n\\":1,\\"d\\":1}",
-        "block-C/0 -> {\\"s\\":1,\\"n\\":6248744482976563,\\"d\\":562949953421312}",
-        "block-D/0 -> {\\"s\\":1,\\"n\\":3908983739069235,\\"d\\":35184372088832}",
+        "block-C/0 -> {\\"s\\":1,\\"n\\":111,\\"d\\":10}",
+        "block-D/0 -> {\\"s\\":1,\\"n\\":1111,\\"d\\":10}",
       ]
     `);
 

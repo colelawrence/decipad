@@ -69,6 +69,7 @@ export async function getType(
 
       const resultUnit = produce(sourceUnit, (unit) => {
         unit.unit = targetUnitName;
+        unit.multiplier = targetUnit.multiplier;
       });
 
       return t.number([resultUnit]);
@@ -117,11 +118,7 @@ export async function getValue(
         );
       }
       return fromJS(
-        convertBetweenUnits(
-          value.getData(),
-          sourceUnits.args[0].unit,
-          targetUnitAsString
-        )
+        convertBetweenUnits(value.getData(), sourceUnits.args[0], units.args[0])
       );
     }
 

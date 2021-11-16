@@ -183,14 +183,14 @@ runTests({
         type: 'literal',
         args: [
           'number',
-          10000,
+          10,
           units({
             unit: 'm',
             exp: 1,
             multiplier: 1000,
             known: true,
           }),
-          { d: 1152921504606847, n: 11529215046068470000, s: 1 },
+          { d: 1, n: 10, s: 1 },
         ],
       },
     ],
@@ -204,14 +204,14 @@ runTests({
         type: 'literal',
         args: [
           'number',
-          2000000000,
+          2,
           units({
             unit: 'bytes',
             exp: 1,
             multiplier: 1e9,
             known: true,
           }),
-          { d: 4835703278458517, n: 9.671406556917033e24, s: 1 },
+          { d: 1, n: 2, s: 1 },
         ],
       },
     ],
@@ -224,7 +224,7 @@ runTests({
         type: 'literal',
         args: [
           'number',
-          3000000,
+          3,
           {
             type: 'units',
             args: [
@@ -256,7 +256,7 @@ runTests({
               column: 6,
             },
           },
-          { d: 4722366482869645, n: 1.4167099448608936e22, s: 1 },
+          { d: 1, n: 3, s: 1 },
         ],
         start: {
           char: 0,
@@ -279,7 +279,7 @@ runTests({
         type: 'literal',
         args: [
           'number',
-          299999.99999999994,
+          3,
           {
             type: 'units',
             args: [
@@ -327,7 +327,7 @@ runTests({
               column: 11,
             },
           },
-          { d: 5902958103587057, n: 1.770887431076117e21, s: 1 },
+          { d: 1, n: 3, s: 1 },
         ],
         start: {
           char: 0,
@@ -350,7 +350,7 @@ runTests({
         type: 'literal',
         args: [
           'number',
-          299999999999.99994,
+          3,
           {
             type: 'units',
             args: [
@@ -414,7 +414,7 @@ runTests({
               column: 17,
             },
           },
-          { d: 3094850098213451, n: 9.284550294640352e26, s: 1 },
+          { d: 1, n: 3, s: 1 },
         ],
         start: {
           char: 0,

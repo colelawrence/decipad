@@ -14,7 +14,11 @@ export function autoconvertResult(value: Value, type: Type): Value {
     return fromJS(
       units.reduce(
         (acc, unit) =>
-          convertFromBaseUnitIfKnown(acc, unit.unit, unit.exp || 1),
+          convertFromBaseUnitIfKnown(
+            acc.div(unit.multiplier),
+            unit.unit,
+            unit.exp || 1
+          ),
         value.getData() as Fraction
       )
     );
@@ -27,7 +31,12 @@ function autoconvertArgument(value: Value, type: Type): Value {
     const units = (type.unit && type.unit.args) || [];
     return fromJS(
       units.reduce(
-        (acc, unit) => convertToBaseUnitIfKnown(acc, unit.unit, unit.exp || 1),
+        (acc, unit) =>
+          convertToBaseUnitIfKnown(
+            acc.mul(unit.multiplier),
+            unit.unit,
+            unit.exp || 1
+          ),
         value.getData() as Fraction
       )
     );

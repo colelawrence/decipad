@@ -1,6 +1,7 @@
 import Fraction from 'fraction.js';
 import { getDefined } from '@decipad/utils';
 import { getUnitByName } from './known-units';
+import { Unit } from '../parser/ast-types';
 
 const FROM = 'from';
 const TO = 'to';
@@ -24,20 +25,28 @@ export function areUnitsConvertible(a: string, b: string): boolean {
 
 export function convertBetweenUnits(
   n: Fraction,
-  from: string,
-  to: string
+  from: Unit,
+  to: Unit
 ): Fraction {
-  if (from === to) {
+  if (
+    from.unit === to.unit &&
+    from.multiplier === to.multiplier &&
+    from.exp === to.exp
+  ) {
     return n;
   }
-  if (!areUnitsConvertible(from, to)) {
-    throw new TypeError(`Don't know how to convert between ${from} and ${to}`);
+  if (!areUnitsConvertible(from.unit, to.unit)) {
+    throw new TypeError(
+      `Don't know how to convert between ${from.unit} and ${to.unit}`
+    );
   }
 
-  const fromUnit = getDefined(getUnitByName(from));
-  const toUnit = getDefined(getUnitByName(to));
+  const fromUnit = getDefined(getUnitByName(from.unit));
+  const toUnit = getDefined(getUnitByName(to.unit));
 
-  return toUnit.fromBaseQuantity(fromUnit.toBaseQuantity(n));
+  return toUnit
+    .fromBaseQuantity(fromUnit.toBaseQuantity(n.mul(from.multiplier)))
+    .div(to.multiplier || 1);
 }
 
 function convert(

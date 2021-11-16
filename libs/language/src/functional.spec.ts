@@ -304,7 +304,7 @@ describe('more models', () => {
         [
           { d: 1, n: 5200, s: 1 },
           { d: 1, n: 5404, s: 1 },
-          { d: 549755813888, n: 3085273608004567, s: 1 },
+          { d: 25, n: 140302, s: 1 },
         ],
       ],
       type: {
@@ -390,8 +390,8 @@ ${'' /* Get capital needed */}
     ).toMatchObject({
       variables: {
         MonthlyRevenueGrowthRate: {
-          d: 72057594037927940,
-          n: 3602879701896397,
+          d: 20,
+          n: 1,
           s: 1,
         },
         TimeToProfitability: expect.toRoundEqual(81),

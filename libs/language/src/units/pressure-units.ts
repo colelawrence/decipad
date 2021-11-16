@@ -15,8 +15,8 @@ export const units: UnitOfMeasure[] = [
     name: 'pascal',
     abbreviations: ['pa'],
     baseQuantity: 'pressure',
-    toBaseQuantity: (pascals) => pascals.mul(9.86923e-6),
-    fromBaseQuantity: (atmospheres) => atmospheres.div(9.86923e-6),
+    toBaseQuantity: (pascals) => pascals.div(101325),
+    fromBaseQuantity: (atmospheres) => atmospheres.mul(101325),
   },
   {
     name: 'bar',
