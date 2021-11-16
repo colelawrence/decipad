@@ -2,6 +2,9 @@ import Fraction from 'fraction.js';
 import { getDefined } from '@decipad/utils';
 import { getUnitByName } from './known-units';
 
+const FROM = 'from';
+const TO = 'to';
+
 export function areUnitsConvertible(a: string, b: string): boolean {
   const aUnit = getUnitByName(a);
   if (!aUnit) {
@@ -37,21 +40,39 @@ export function convertBetweenUnits(
   return toUnit.fromBaseQuantity(fromUnit.toBaseQuantity(n));
 }
 
-export function convertFromBaseUnitIfKnown(
+function convert(
+  direction: 'from' | 'to',
   n: Fraction,
-  from: string
-): Fraction {
-  const unit = getUnitByName(from);
+  unitName: string,
+  pow: number
+) {
+  const unit = getUnitByName(unitName);
   if (unit) {
-    return unit.fromBaseQuantity(n);
+    const convert =
+      direction === FROM ? unit.fromBaseQuantity : unit.toBaseQuantity;
+    if (unit.doesNotScaleOnConversion && pow !== 1) {
+      throw new TypeError(`Cannot convert from ${unitName} with pow not 1`);
+    }
+    if (pow === 1) {
+      return convert(n);
+    }
+    return n.mul(convert(new Fraction(1)).pow(pow));
   }
   return n;
 }
 
-export function convertToBaseUnitIfKnown(n: Fraction, to: string): Fraction {
-  const unit = getUnitByName(to);
-  if (unit) {
-    return unit.toBaseQuantity(n);
-  }
-  return n;
+export function convertFromBaseUnitIfKnown(
+  n: Fraction,
+  from: string,
+  pow: number
+): Fraction {
+  return convert(FROM, n, from, pow);
+}
+
+export function convertToBaseUnitIfKnown(
+  n: Fraction,
+  to: string,
+  pow: number
+): Fraction {
+  return convert(TO, n, to, pow);
 }

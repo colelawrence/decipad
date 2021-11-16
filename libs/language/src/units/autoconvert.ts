@@ -14,9 +14,7 @@ export function autoconvertResult(value: Value, type: Type): Value {
     return fromJS(
       units.reduce(
         (acc, unit) =>
-          acc.mul(
-            convertFromBaseUnitIfKnown(new Fraction(1), unit.unit).pow(unit.exp)
-          ),
+          convertFromBaseUnitIfKnown(acc, unit.unit, unit.exp || 1),
         value.getData() as Fraction
       )
     );
@@ -29,10 +27,7 @@ function autoconvertArgument(value: Value, type: Type): Value {
     const units = (type.unit && type.unit.args) || [];
     return fromJS(
       units.reduce(
-        (acc, unit) =>
-          acc.mul(
-            convertToBaseUnitIfKnown(new Fraction(1), unit.unit).pow(unit.exp)
-          ),
+        (acc, unit) => convertToBaseUnitIfKnown(acc, unit.unit, unit.exp || 1),
         value.getData() as Fraction
       )
     );

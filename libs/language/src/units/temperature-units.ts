@@ -15,6 +15,7 @@ export const units: UnitOfMeasure[] = [
     name: 'celsius',
     abbreviations: ['°c'],
     baseQuantity: 'temperature',
+    doesNotScaleOnConversion: true,
     toBaseQuantity: (celsius) => celsius.add(273.15),
     fromBaseQuantity: (kelvin) => kelvin.sub(273.15),
   },
@@ -22,6 +23,7 @@ export const units: UnitOfMeasure[] = [
     name: 'fahrenheit',
     abbreviations: ['°f'],
     baseQuantity: 'temperature',
+    doesNotScaleOnConversion: true,
     toBaseQuantity: (fahrenheit) =>
       fahrenheit
         .sub(32)

@@ -923,4 +923,25 @@ describe('number units work together', () => {
       ],
     });
   });
+
+  it('handles non-scalar unit conversions', async () => {
+    expect(
+      await runCode(`
+        1K + 2°C + 3°F
+      `)
+    ).toMatchObject({
+      value: F(50007, 100),
+      type: t.number({
+        type: 'units',
+        args: [
+          {
+            unit: '°F',
+            multiplier: 1,
+            exp: 1,
+            known: true,
+          },
+        ],
+      }),
+    });
+  });
 });

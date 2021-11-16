@@ -31,6 +31,7 @@ export type UnitOfMeasure = {
   name: string;
   baseQuantity: BaseQuantity;
   abbreviations?: string[];
+  doesNotScaleOnConversion?: true;
   toBaseQuantity: (n: Fraction) => Fraction;
   fromBaseQuantity: (n: Fraction) => Fraction;
 };
