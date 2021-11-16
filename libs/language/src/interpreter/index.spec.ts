@@ -18,8 +18,9 @@ import {
   r,
 } from '../utils';
 import { parseUTCDate } from '../date';
-import { run, runOne } from './index';
 import { runAST } from '../testUtils';
+
+import { run, runOne } from './index';
 
 it('evaluates and returns', async () => {
   const basicProgram = [
@@ -630,4 +631,22 @@ it('Can create columns with disparate types / dims', async () => {
     ],
     ['s', { d: 1, n: 5, s: 1 }, false, [{ d: 1, n: 1, s: 1 }]],
   ]);
+});
+
+it('can expand directives', async () => {
+  const minutes: AST.Unit = {
+    unit: 'minutes',
+    exp: 1,
+    multiplier: 1,
+    known: true,
+  };
+  const hours: AST.Unit = {
+    unit: 'hours',
+    exp: 1,
+    multiplier: 1,
+    known: true,
+  };
+  expect(
+    await runOne(n('as', l(1, hours), n('units', minutes)))
+  ).toMatchInlineSnapshot(`Fraction(60)`);
 });

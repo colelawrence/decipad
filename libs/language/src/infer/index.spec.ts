@@ -2,7 +2,6 @@ import { dequal } from 'dequal';
 
 import { AST, inferBlock } from '..';
 import { InferError, Type, inverseExponent, build as t } from '../type';
-
 import {
   l,
   c,
@@ -23,16 +22,16 @@ import {
   units,
   block,
 } from '../utils';
+import { objectToMap, objectToTableType } from '../testUtils';
+import { TableColumn, TableSpread } from '../parser/ast-types';
 
-import { makeContext } from './context';
 import {
   inferStatement,
   inferExpression,
   inferFunction,
   inferProgram,
 } from './index';
-import { objectToMap, objectToTableType } from '../testUtils';
-import { TableColumn, TableSpread } from '../parser/ast-types';
+import { makeContext } from './context';
 
 const nilPos = {
   line: 0,
@@ -42,14 +41,6 @@ const nilPos = {
 let nilCtx = makeContext();
 const degC: AST.Unit = {
   unit: 'celsius',
-  exp: 1,
-  multiplier: 1,
-  known: true,
-  start: nilPos,
-  end: nilPos,
-};
-const degF: AST.Unit = {
-  unit: 'fahrenheit',
   exp: 1,
   multiplier: 1,
   known: true,
@@ -810,29 +801,8 @@ describe('Data', () => {
   });
 });
 
-describe('as', () => {
-  it('converts time quantity to number', async () => {
-    expect(
-      await inferExpression(
-        nilCtx,
-        as(timeQuantity({ second: 300 }), n('units', seconds))
-      )
-    ).toEqual(t.number([seconds]));
-  });
-  it('converts unit-less number to united number', async () => {
-    expect(await inferExpression(nilCtx, as(l(3), n('units', degC)))).toEqual(
-      t.number([degC])
-    );
-  });
-  it('converts unit number to other unit number', async () => {
-    expect(
-      await inferExpression(nilCtx, as(l(3, degC), n('units', degF)))
-    ).toEqual(t.number([degF]));
-  });
-
-  it('converts unitless column to other unitful column', async () => {
-    expect(
-      await inferExpression(nilCtx, as(col(l(1), l(2)), n('units', degF)))
-    ).toEqual(t.column(t.number([degF]), 2));
-  });
+it('expands directives such as `as`', async () => {
+  expect(await inferExpression(nilCtx, as(l(3), n('units', degC)))).toEqual(
+    t.number([degC])
+  );
 });

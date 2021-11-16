@@ -5,14 +5,14 @@ import { AST, Time } from '..';
 import { InferError, Type, build as t } from '../type';
 import { getDefined, zip, getIdentifierString, getOfType } from '../utils';
 import { getDateFromAstForm } from '../date';
-
 import { callBuiltinFunctor } from '../builtins';
+import { resolve as resolveData } from '../data';
+import { expandDirectiveToType } from '../directives';
+
 import { Context, makeContext, pushStackAndPrevious } from './context';
 import { inferSequence } from './sequence';
 import { inferTable } from './table';
-import { resolve as resolveData } from '../data';
 import { inferData } from './data';
-import { inferAs } from './as';
 
 export { makeContext };
 export type { Context };
@@ -234,8 +234,7 @@ export const inferExpression = wrap(
         }
       }
       case 'as': {
-        const [left, unit] = expr.args;
-        return inferAs(ctx, left, unit);
+        return expandDirectiveToType(ctx, 'as', expr.args);
       }
     }
   }

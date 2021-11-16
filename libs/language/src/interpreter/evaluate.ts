@@ -4,14 +4,14 @@ import { AST } from '..';
 import { callBuiltin } from '../builtins';
 import { getOfType, getDefined, getIdentifierString } from '../utils';
 import { getDateFromAstForm, getTimeUnit } from '../date';
+import { resolve as resolveData } from '../data';
+import { expandDirectiveToValue } from '../directives';
 
 import { Realm } from './Realm';
 import { Scalar, Range, Date, Column, Value, TimeQuantity } from './Value';
 import { evaluateTable } from './table';
 import { evaluateGiven } from './given';
 import { evaluateData } from './data';
-import { evaluateAs } from './as';
-import { resolve as resolveData } from '../data';
 
 // Gets a single value from an expanded AST.
 
@@ -158,8 +158,7 @@ export async function evaluate(
       );
     }
     case 'as': {
-      const [exp, units] = node.args;
-      return evaluateAs(realm, exp, units);
+      return expandDirectiveToValue(realm, 'as', node.args);
     }
   }
 }
