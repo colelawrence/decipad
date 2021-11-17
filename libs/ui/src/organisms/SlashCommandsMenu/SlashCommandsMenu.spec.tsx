@@ -43,3 +43,60 @@ it('does not focus menuitems when holding shift', () => {
   userEvent.keyboard('{shift}{arrowdown}{/shift}{enter}');
   expect(handleExecute).not.toBeCalled();
 });
+
+describe('search', () => {
+  it('filters out non-matching groups and items', () => {
+    const { getByText, getAllByRole } = render(
+      <SlashCommandsMenu search="port data" />
+    );
+
+    expect(getAllByRole('group')).toHaveLength(1);
+    expect(getAllByRole('menuitem')).toHaveLength(1);
+
+    expect(getByText(/import data/i)).toBeInTheDocument();
+  });
+
+  it('shows all group items if the group matches', () => {
+    const { getByText, getAllByRole } = render(
+      <SlashCommandsMenu search="modeling" />
+    );
+
+    expect(getAllByRole('group')).toHaveLength(1);
+    expect(getAllByRole('menuitem')).toHaveLength(2);
+
+    expect(getByText(/calculation block/i)).toBeInTheDocument();
+    expect(getByText(/empty table/i)).toBeInTheDocument();
+  });
+
+  it('affects arrow key selection', () => {
+    const handleExecute = jest.fn();
+    const { getAllByRole } = render(
+      <SlashCommandsMenu search="port data" onExecute={handleExecute} />
+    );
+
+    expect(getAllByRole('menuitem')).toHaveLength(1);
+
+    userEvent.keyboard('{arrowdown}{enter}');
+    expect(handleExecute).toHaveBeenCalledTimes(1);
+    const [[firstCommand]] = handleExecute.mock.calls;
+    handleExecute.mockClear();
+
+    userEvent.keyboard('{arrowdown}{enter}');
+    expect(handleExecute).toHaveBeenCalledTimes(1);
+    const [[secondCommand]] = handleExecute.mock.calls;
+
+    expect(secondCommand).toEqual(firstCommand);
+  });
+
+  it('resets the selection when changing', () => {
+    const handleExecute = jest.fn();
+    const { rerender } = render(
+      <SlashCommandsMenu onExecute={handleExecute} />
+    );
+
+    userEvent.keyboard('{arrowdown}');
+    rerender(<SlashCommandsMenu onExecute={handleExecute} search="a" />);
+    userEvent.keyboard('{enter}');
+    expect(handleExecute).not.toHaveBeenCalled();
+  });
+});

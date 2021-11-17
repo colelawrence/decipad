@@ -32,8 +32,9 @@ export const SlashCommandsParagraph: PlatePluginComponent = (props) => {
     }
   }, [selected]);
 
+  const search = /^\/([a-z]*)$/i.exec(text)?.[1];
   const showSlashCommands =
-    selected && focused && !menuSuppressed && /^\/[a-z]*$/i.test(text);
+    selected && focused && !menuSuppressed && search !== undefined;
 
   const onKeyDown = useCallback(
     (event: KeyboardEvent) => {
@@ -66,6 +67,7 @@ export const SlashCommandsParagraph: PlatePluginComponent = (props) => {
         >
           <organisms.SlashCommandsMenu
             onExecute={(cmd) => execute(editor, elementPath, cmd)}
+            search={search}
           />
         </div>
       </>
