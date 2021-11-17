@@ -457,6 +457,23 @@ describe('Tables', () => {
     });
   });
 
+  it('can create a new table with a few columns', async () => {
+    expect(
+      await runCode(`
+        SourceTable = {
+          ThisOne = [1],
+          NotThisOne = ["No"]
+        }
+
+        select(SourceTable, ThisOne)
+      `)
+    ).toMatchInlineSnapshot(`
+      Result({
+        ThisOne = [ 1 ]
+      })
+    `);
+  });
+
   it('Can use a spread table to dictate the tables length', async () => {
     expect(
       await runCode(`

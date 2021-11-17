@@ -1157,9 +1157,15 @@ let ParserRules = [
     ],
     postprocess: (d) => {
       const ref = d[0];
-      const cols = d[4].map(([ident]) => ident);
+      const cols = addArrayLoc(
+        {
+          type: 'generic-list',
+          args: d[4].map(([ident]) => ident),
+        },
+        d[4]
+      );
 
-      return [ref, ...cols];
+      return [ref, cols];
     },
   },
   { name: 'expression', symbols: ['nonGivenExp'], postprocess: id },
@@ -1349,6 +1355,7 @@ let ParserRules = [
   { name: 'primary$subexpression$2', symbols: ['ref'] },
   { name: 'primary$subexpression$2', symbols: ['functionCall'] },
   { name: 'primary$subexpression$2', symbols: ['parenthesizedExpression'] },
+  { name: 'primary$subexpression$2', symbols: ['select'] },
   {
     name: 'primary',
     symbols: [

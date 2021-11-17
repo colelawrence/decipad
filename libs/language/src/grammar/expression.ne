@@ -146,7 +146,7 @@ primary      -> ("!" | "not") _ expression              {%
                                                         }
                                                         %}
 
-primary      -> (ref | functionCall | parenthesizedExpression) _ "." _ %identifier {%
+primary      -> (ref | functionCall | parenthesizedExpression | select) _ "." _ %identifier {%
                                                         (d) =>
                                                           addArrayLoc({
                                                             type: 'property-access',

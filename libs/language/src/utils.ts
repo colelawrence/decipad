@@ -196,6 +196,7 @@ export const getIdentifierString = ({ type, args }: AST.Identifier): string => {
     (type !== 'ref' &&
       type !== 'def' &&
       type !== 'funcdef' &&
+      type !== 'generic-identifier' &&
       type !== 'funcref' &&
       type !== 'coldef' &&
       type !== 'externalref') ||

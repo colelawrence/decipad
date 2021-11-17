@@ -13,6 +13,7 @@ const typesWithArgs = new Set([
   'table',
   'table-column',
   'table-spread',
+  'generic-list',
   'given',
   'range',
   'units',

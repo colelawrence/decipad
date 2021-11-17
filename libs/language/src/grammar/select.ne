@@ -14,8 +14,11 @@ select -> "select" _ "(" _ selectedColumns _ ")"            {%
 selectedColumns -> ref _ ",":? _ (genericIdentifier _ ",":? _):+  {%
                                                             (d) => {
                                                               const ref = d[0];
-                                                              const cols = d[4].map(([ident]) => ident);
+                                                              const cols = addArrayLoc({
+                                                                type: 'generic-list',
+                                                                args: d[4].map(([ident]) => ident)
+                                                              }, d[4])
 
-                                                              return [ref, ...cols];
+                                                              return [ref, cols];
                                                             }
                                                             %}

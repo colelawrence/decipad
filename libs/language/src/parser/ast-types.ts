@@ -44,13 +44,6 @@ export interface ExternalRef {
   end?: Pos;
 }
 
-export interface GenericIdentifier {
-  type: 'generic-identifier';
-  args: [name: string];
-  start?: Pos;
-  end?: Pos;
-}
-
 export interface FuncRef {
   type: 'funcref';
   args: [functionName: string];
@@ -180,7 +173,24 @@ export interface PropertyAccess {
   end?: Pos;
 }
 
+// Generic stuff
+
+export interface GenericIdentifier {
+  type: 'generic-identifier';
+  args: [name: string];
+  start?: Pos;
+  end?: Pos;
+}
+
+export interface GenericList {
+  type: 'generic-list';
+  args: Node[];
+  start?: Pos;
+  end?: Pos;
+}
+
 // Imported data
+
 export interface ImportedData {
   type: 'imported-data';
   args: [string, string?];
@@ -264,7 +274,7 @@ export type Expression =
 
 export type Statement = FunctionDefinition | Assign | Expression;
 
-type Lists = FunctionArgumentNames | ArgList | ColumnItems;
+type Lists = FunctionArgumentNames | ArgList | ColumnItems | GenericList;
 
 export type Node =
   | Block
@@ -293,6 +303,7 @@ export interface TypeToNode {
   date: Date;
   'column-items': ColumnItems;
   column: Column;
+  'generic-list': GenericList;
   'table-column': TableColumn;
   'table-spread': TableSpread;
   table: Table;

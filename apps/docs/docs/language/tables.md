@@ -191,3 +191,21 @@ flights2 = {
   accumulated_passenger_count = [ 100, 250, 450 ]
 }
 ```
+
+## selecting table columns
+
+You can use the `select` directive to pick some columns from your table, and create a smaller table.
+
+```deci live
+flights = {
+  number = ["TP123", "BA456", "EJ789"]
+  passenger_count = [100, 150, 200]
+  unwanted_column = ["Let's", "keep this", "out"]
+}
+
+flights2 = select(flights, number, passenger_count)
+==> {
+  number = [ 'TP123', 'BA456', 'EJ789' ],
+  passenger_count = [ 100, 150, 200 ]
+}
+```

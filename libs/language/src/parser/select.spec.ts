@@ -18,10 +18,17 @@ runTests({
             args: ['Table'],
           },
           {
-            type: 'generic-identifier',
+            type: 'generic-list',
             start: 14,
             end: 17,
-            args: ['Col1'],
+            args: [
+              {
+                type: 'generic-identifier',
+                start: 14,
+                end: 17,
+                args: ['Col1'],
+              },
+            ],
           },
         ],
       },
@@ -31,7 +38,12 @@ runTests({
     source: 'select(Table, Col1)',
     sourceMap: false,
     ast: [
-      n('directive', 'select', r('Table'), n('generic-identifier', 'Col1')),
+      n(
+        'directive',
+        'select',
+        r('Table'),
+        n('generic-list', n('generic-identifier', 'Col1'))
+      ),
     ],
   },
 });
