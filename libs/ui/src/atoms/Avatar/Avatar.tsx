@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
-
 import {
+  grey200,
   p12Bold,
   purple100,
   shortAnimationDuration,
@@ -28,12 +28,15 @@ const containerStyles = css(p12Bold, {
   },
 });
 
-const initialBackgroundStyles = (hoverSelector = 'svg:hover') =>
+const initialBackgroundStyles = (
+  hoverSelector = 'svg:hover',
+  greyedOut: boolean
+) =>
   css({
     transition: `fill ${shortAnimationDuration} ease-in-out`,
-    fill: purple100.rgb,
+    fill: greyedOut ? grey200.rgb : purple100.rgb,
     [`${hoverSelector} &`]: {
-      fill: transparency(purple100, 0.65).rgba,
+      fill: transparency(greyedOut ? grey200 : purple100, 0.65).rgba,
     },
   });
 const initialTextStyles = css(p12Bold, {
@@ -48,12 +51,14 @@ interface AvatarProps {
   readonly roundedSquare?: boolean;
 
   readonly hoverSelector?: string;
+  readonly greyedOut?: boolean;
 }
 
 export const Avatar = ({
   name,
   roundedSquare = false,
   hoverSelector,
+  greyedOut = false,
 }: AvatarProps): ReturnType<FC> => {
   return (
     <div role="img" aria-label={`Avatar of user ${name}`} css={containerStyles}>
@@ -67,7 +72,7 @@ export const Avatar = ({
         <rect
           width="100%"
           height="100%"
-          css={initialBackgroundStyles(hoverSelector)}
+          css={initialBackgroundStyles(hoverSelector, greyedOut)}
         />
         <text x="50%" y="50%" css={initialTextStyles}>
           {name[0]}

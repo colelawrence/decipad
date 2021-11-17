@@ -1,12 +1,11 @@
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
-const rootWebpackConfig = require('../../../storybook/webpack.config');
 /**
  * Export a function. Accept the base config as the only param.
  *
  * @param {Parameters<typeof rootWebpackConfig>[0]} options
  */
-module.exports = async ({ config, mode }) => {
-  const newConfig = await rootWebpackConfig({ config, mode });
+module.exports = async ({ config }) => {
+  const newConfig = config;
 
   const tsPaths = new TsconfigPathsPlugin({
     configFile: './tsconfig.json',

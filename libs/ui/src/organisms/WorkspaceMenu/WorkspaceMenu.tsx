@@ -46,7 +46,7 @@ export const WorkspaceMenu = ({
     <nav css={styles}>
       <div css={headerStyles}>
         <Heading css={css(p13Regular)}>Workspaces</Heading>
-        <IconButton onClick={onCreateWorkspace}>
+        <IconButton roundedSquare onClick={onCreateWorkspace}>
           <Create />
         </IconButton>
       </div>

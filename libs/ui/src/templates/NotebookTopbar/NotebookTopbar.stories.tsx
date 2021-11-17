@@ -1,0 +1,24 @@
+import { Meta, Story } from '@storybook/react';
+import { ComponentProps } from 'react';
+import { NotebookTopbar } from './NotebookTopbar';
+
+const args: Omit<ComponentProps<typeof NotebookTopbar>, 'workspaceHref'> = {
+  workspaceName: "John's Workspace",
+  notebookName: 'My first pad',
+  users: [
+    {
+      user: { id: '1', name: 'John Doe' },
+      permission: 'ADMIN',
+    },
+  ],
+  isAdmin: true,
+  link: 'peanut-butter-jelly-',
+};
+export default {
+  title: 'Templates / Notebook / Topbar',
+  args,
+} as Meta;
+
+export const Normal: Story<typeof args> = (props) => (
+  <NotebookTopbar workspaceHref="" {...props} />
+);

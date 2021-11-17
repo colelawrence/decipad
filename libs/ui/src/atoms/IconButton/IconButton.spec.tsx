@@ -23,3 +23,19 @@ it('emits click events', () => {
   userEvent.click(getByRole('button'));
   expect(handleClick).toHaveBeenCalled();
 });
+
+describe('roundedSquare', () => {
+  it('changes the border radius', () => {
+    const { rerender, getByRole } = render(<IconButton>icon</IconButton>);
+    const { borderRadius: normalBorderRadius } = getComputedStyle(
+      getByRole('button')
+    );
+
+    rerender(<IconButton roundedSquare>icon</IconButton>);
+    const { borderRadius: roundedSquareBorderRadius } = getComputedStyle(
+      getByRole('button')
+    );
+
+    expect(roundedSquareBorderRadius).not.toEqual(normalBorderRadius);
+  });
+});

@@ -17,4 +17,18 @@ module.exports = {
   ],
   previewHead: (head) =>
     head.replace('<base target="_parent"', '<base target="_self"'),
+  webpackFinal: async (config) => {
+    config.module.rules = [
+      {
+        oneOf: [
+          {
+            resourceQuery: /raw/,
+            type: 'asset/source',
+          },
+          ...config.module.rules,
+        ],
+      },
+    ];
+    return config;
+  },
 };

@@ -180,6 +180,26 @@
         }
       }
     },
+    "config": {
+      "root": "libs/config",
+      "sourceRoot": "libs/config/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/config/src/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/config"
+          }
+        }
+      }
+    },
     "docs": {
       "root": "apps/docs",
       "sourceRoot": "apps/docs/src",
@@ -212,26 +232,6 @@
           "options": {
             "command": "node apps/docs/snapshots.mjs",
             "cwd": "."
-          }
-        }
-      }
-    },
-    "config": {
-      "root": "libs/config",
-      "sourceRoot": "libs/config/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/config/src/**/*.ts"],
-            "maxWarnings": 0
-          }
-        },
-        "typecheck": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "yarn tsc -b libs/config"
           }
         }
       }
@@ -369,6 +369,11 @@
         }
       }
     },
+    "eslint-config-decipad": {
+      "root": "libs/eslint-config-decipad",
+      "sourceRoot": "libs/eslint-config-decipad",
+      "projectType": "library"
+    },
     "externaldata": {
       "root": "libs/externaldata",
       "sourceRoot": "libs/externaldata/src",
@@ -389,10 +394,54 @@
         }
       }
     },
-    "eslint-config-decipad": {
-      "root": "libs/eslint-config-decipad",
-      "sourceRoot": "libs/eslint-config-decipad",
-      "projectType": "library"
+    "fetch": {
+      "root": "libs/fetch",
+      "sourceRoot": "libs/fetch/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/fetch/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/fetch"
+          }
+        }
+      }
+    },
+    "fnqueue": {
+      "root": "libs/fnqueue",
+      "sourceRoot": "libs/fnqueue/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/fnqueue/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/fnqueue"
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/fnqueue"],
+          "options": {
+            "jestConfig": "libs/fnqueue/jest.config.js",
+            "passWithNoTests": false,
+            "testCoverage": true
+          }
+        }
+      }
     },
     "graphqlresource": {
       "root": "libs/graphqlresource",
@@ -577,6 +626,26 @@
         }
       }
     },
+    "slate-yjs": {
+      "root": "libs/slate-yjs",
+      "sourceRoot": "libs/slate-yjs/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/slate-yjs/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/slate-yjs"
+          }
+        }
+      }
+    },
     "sync-connection-lambdas": {
       "root": "libs/sync-connection-lambdas",
       "sourceRoot": "libs/sync-connection-lambdas/src",
@@ -705,31 +774,22 @@
         }
       }
     },
-    "fnqueue": {
-      "root": "libs/fnqueue",
-      "sourceRoot": "libs/fnqueue/src",
+    "y-dynamodb": {
+      "root": "libs/y-dynamodb",
+      "sourceRoot": "libs/y-dynamodb/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/fnqueue/**/*.ts"],
+            "lintFilePatterns": ["libs/y-dynamodb/**/*.ts"],
             "maxWarnings": 0
-          }
-        },
-        "typecheck": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "yarn tsc -b libs/fnqueue"
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/fnqueue"],
-          "options": {
-            "jestConfig": "libs/fnqueue/jest.config.js",
-            "passWithNoTests": false,
-            "testCoverage": true
+          },
+          "typecheck": {
+            "executor": "@nrwl/workspace:run-commands",
+            "options": {
+              "command": "yarn tsc -b libs/y-dynamodb"
+            }
           }
         }
       }
@@ -754,46 +814,6 @@
         }
       }
     },
-    "y-dynamodb": {
-      "root": "libs/y-dynamodb",
-      "sourceRoot": "libs/y-dynamodb/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/y-dynamodb/**/*.ts"],
-            "maxWarnings": 0
-          },
-          "typecheck": {
-            "executor": "@nrwl/workspace:run-commands",
-            "options": {
-              "command": "yarn tsc -b libs/y-dynamodb"
-            }
-          }
-        }
-      }
-    },
-    "y-websocket": {
-      "root": "libs/y-websocket",
-      "sourceRoot": "libs/y-websocket/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/y-websocket/**/*.ts"],
-            "maxWarnings": 0
-          }
-        },
-        "typecheck": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "yarn tsc -b libs/y-websocket"
-          }
-        }
-      }
-    },
     "y-lambdawebsocket": {
       "root": "libs/y-lambdawebsocket",
       "sourceRoot": "libs/y-lambdawebsocket/src",
@@ -814,42 +834,22 @@
         }
       }
     },
-    "slate-yjs": {
-      "root": "libs/slate-yjs",
-      "sourceRoot": "libs/slate-yjs/src",
+    "y-websocket": {
+      "root": "libs/y-websocket",
+      "sourceRoot": "libs/y-websocket/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/slate-yjs/**/*.ts"],
+            "lintFilePatterns": ["libs/y-websocket/**/*.ts"],
             "maxWarnings": 0
           }
         },
         "typecheck": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "yarn tsc -b libs/slate-yjs"
-          }
-        }
-      }
-    },
-    "fetch": {
-      "root": "libs/fetch",
-      "sourceRoot": "libs/fetch/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/fetch/**/*.ts"],
-            "maxWarnings": 0
-          }
-        },
-        "typecheck": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "yarn tsc -b libs/fetch"
+            "command": "yarn tsc -b libs/y-websocket"
           }
         }
       }

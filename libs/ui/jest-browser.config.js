@@ -1,26 +1,20 @@
 const {
+  // intentionally taken out of the config because we have a preset
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  testEnvironment,
   setupFilesAfterEnv = [],
-  transform,
-  ...baseConfig
-} = require('../../jest-base.config');
+  ...domConfig
+} = require('../../jest-dom.config');
 
 module.exports = {
-  ...baseConfig,
+  ...domConfig,
   displayName: 'browser:ui',
 
   testMatch: ['**/*.browser-{test,spec}.{js,jsx,ts,tsx}'],
 
-  transform: {
-    ...transform,
-    '^.+\\.(gif|jpg|png)$': require.resolve(
-      '../testutils/src/filename-transform.js'
-    ),
-  },
-
   preset: 'jest-playwright-jsdom',
   setupFilesAfterEnv: [
     ...setupFilesAfterEnv,
-    require.resolve('./src/test-utils/jest/setupTests.ts'),
     require.resolve('./src/test-utils/jest/setupPlaywright.ts'),
   ],
   testEnvironmentOptions: {

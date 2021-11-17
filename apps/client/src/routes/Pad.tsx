@@ -1,29 +1,35 @@
-import { QueryHookOptions, useQuery } from '@apollo/client';
-import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalOverlay,
-} from '@chakra-ui/react';
 import { Editor } from '@decipad/editor';
-import {
-  PermissionType,
-  GetPadById,
-  GetPadByIdVariables,
-  GET_PAD_BY_ID,
-  useSharePadWithEmail,
-  useSharePadWithSecret,
-} from '@decipad/queries';
-import { LoadingSpinnerPage, organisms } from '@decipad/ui';
+import { PermissionType, useSharePadWithSecret } from '@decipad/queries';
+import { LoadingSpinnerPage, NotebookTopbar } from '@decipad/ui';
 import styled from '@emotion/styled';
 import { FC, useState } from 'react';
-import { FiArrowLeft } from 'react-icons/fi';
 import { Link, useLocation } from 'react-router-dom';
 import { getSecretPadLink } from '../lib/secret';
+import { useGetPadById } from '../queries/useGetPadById';
 
 const Wrapper = styled('div')({
-  padding: '16px 32px',
+  display: 'grid',
+  gridTemplate: `
+    "topbar" auto
+    "editor" 1fr
+    /100%
+  `,
+
+  padding: '16px',
+});
+
+const EditorWrapper = styled('main')({
+  gridArea: 'editor',
+  position: 'relative',
+  marginTop: '32px',
+});
+const EditorInner = styled('div')({
+  maxWidth: '120ch',
+  margin: 'auto',
+});
+
+const TopbarWrapper = styled('header')({
+  gridArea: 'topbar',
 });
 
 const ErrorWrapper = styled('div')({
@@ -52,51 +58,22 @@ const LinkButton = styled(Link)({
   gap: '0.75rem',
 });
 
-const TopBarWrapper = styled('div')({
-  display: 'flex',
-  width: '100%',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  paddingBottom: '16px',
-});
-
-const EditorWrapper = styled('div')({
-  position: 'relative',
-});
-
-const EditorInner = styled('div')({
-  maxWidth: '120ch',
-  margin: 'auto',
-});
-
-const useGetPadByIdQuery = (
-  options: QueryHookOptions<GetPadById, GetPadByIdVariables>
-) => useQuery<GetPadById, GetPadByIdVariables>(GET_PAD_BY_ID, options);
-
 export interface PadProps {
   workspaceId: string;
   padId: string;
-  // TODO make it so that only admins can share?
-  enableShare?: boolean;
 }
 
-export const Pad = ({
-  workspaceId,
-  padId,
-  enableShare = true,
-}: PadProps): ReturnType<FC> => {
+export const Pad = ({ workspaceId, padId }: PadProps): ReturnType<FC> => {
   const { search } = useLocation();
   const secret = new URLSearchParams(search).get('secret') ?? undefined;
 
-  const { data, loading, error } = useGetPadByIdQuery({
+  const { data, loading, error } = useGetPadById({
     variables: { id: padId },
-    // TODO share this with other queries, and the docsync authorization header
     context: secret
       ? { headers: { authorization: `Bearer ${secret}` } }
       : undefined,
   });
-  const [shareMenuOpen, setShareMenuOpen] = useState(false);
-  const [sharePadWithEmail] = useSharePadWithEmail();
+
   const [sharePadWithSecret, { loading: secretLoading }] =
     useSharePadWithSecret();
   const [shareSecret, setShareSecret] = useState<string>();
@@ -105,10 +82,10 @@ export const Pad = ({
     return <LoadingSpinnerPage />;
   }
 
-  if (error) {
+  if (error || !data) {
     return (
       <ErrorWrapper>
-        <ErrorHeader>Error loading pad: ${error.message}</ErrorHeader>
+        <ErrorHeader>Error loading pad: ${error?.message}</ErrorHeader>
         <LinkButton to={`/workspaces/${workspaceId}`}>
           Back to workspace
         </LinkButton>
@@ -118,64 +95,6 @@ export const Pad = ({
 
   return (
     <Wrapper>
-      <TopBarWrapper>
-        <LinkButton to={`/workspaces/${workspaceId}`}>
-          <FiArrowLeft />
-          Workspace
-        </LinkButton>
-        {enableShare && (
-          <Button
-            onClick={async () => {
-              setShareMenuOpen(!shareMenuOpen);
-              if (!shareSecret && !secretLoading) {
-                const response = await sharePadWithSecret({
-                  variables: {
-                    id: padId,
-                    permissionType: PermissionType.READ,
-                    canComment: false,
-                  },
-                });
-                if (response?.data?.sharePadWithSecret) {
-                  setShareSecret(response.data.sharePadWithSecret);
-                }
-              }
-            }}
-          >
-            Share
-          </Button>
-        )}
-        {shareMenuOpen && (
-          <Modal isOpen onClose={() => setShareMenuOpen(false)}>
-            <ModalOverlay />
-            <ModalBody>
-              <ModalContent>
-                <organisms.NotebookShareMenu
-                  link={
-                    shareSecret
-                      ? getSecretPadLink(workspaceId, padId, shareSecret)
-                      : 'Loading...'
-                  }
-                  onShareWithEmail={async (email, write) => {
-                    await sharePadWithEmail({
-                      variables: {
-                        id: padId,
-                        email,
-                        permissionType: write
-                          ? PermissionType.WRITE
-                          : PermissionType.READ,
-                        canComment: true,
-                      },
-                    });
-                  }}
-                />
-              </ModalContent>
-            </ModalBody>
-          </Modal>
-        )}
-        <a href="/docs" target="_blank" rel="noreferrer">
-          Documentation
-        </a>
-      </TopBarWrapper>
       <EditorWrapper>
         <EditorInner>
           {data && data.getPadById && (
@@ -188,6 +107,34 @@ export const Pad = ({
           )}
         </EditorInner>
       </EditorWrapper>
+      <TopbarWrapper>
+        <NotebookTopbar
+          workspaceName={data.getPadById?.workspace.name || ''}
+          notebookName={data.getPadById?.name || '<unnamed notebook>'}
+          workspaceHref={`/workspaces/${workspaceId}`}
+          users={data.getPadById?.access.users || []}
+          isAdmin={data.getPadById?.myPermissionType === 'ADMIN'}
+          link={
+            shareSecret
+              ? getSecretPadLink(workspaceId, padId, shareSecret)
+              : 'Loading...'
+          }
+          onToggleShare={async () => {
+            if (!shareSecret && !secretLoading) {
+              const response = await sharePadWithSecret({
+                variables: {
+                  id: padId,
+                  permissionType: PermissionType.READ,
+                  canComment: false,
+                },
+              });
+              if (response?.data?.sharePadWithSecret) {
+                setShareSecret(response.data.sharePadWithSecret);
+              }
+            }
+          }}
+        />
+      </TopbarWrapper>
     </Wrapper>
   );
 };

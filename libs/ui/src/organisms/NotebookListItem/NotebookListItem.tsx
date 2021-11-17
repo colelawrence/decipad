@@ -132,7 +132,7 @@ export const NotebookListItem = ({
             },
           ]}
         >
-          <IconButton onClick={toggleActionsOpen}>
+          <IconButton roundedSquare onClick={toggleActionsOpen}>
             <Actions />
           </IconButton>
         </div>

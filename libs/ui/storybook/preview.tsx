@@ -1,13 +1,12 @@
+import { ChakraProvider } from '@chakra-ui/react';
+import { DecoratorFn, Parameters } from '@storybook/react';
 import { useEffect } from 'react';
 import { useDarkMode } from 'storybook-dark-mode';
-import { ChakraProvider } from '@chakra-ui/react';
-import { Parameters, DecoratorFn } from '@storybook/react';
-
-import { theme, GlobalStyles } from '../src';
+import { GlobalStyles, theme } from '../src';
 import {
-  smallestMobile,
-  smallestDesktop,
   largestDesktop,
+  smallestDesktop,
+  smallestMobile,
 } from '../src/primitives';
 import { ALLOW_DARK_THEME_LOCAL_STORAGE_KEY } from '../src/utils';
 

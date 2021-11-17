@@ -7,4 +7,8 @@ export default {
   component: IconButton,
 } as Meta;
 
-export const RoundedSquare: Story = () => <IconButton>{circleIcon}</IconButton>;
+export const Round: Story = () => <IconButton>{circleIcon}</IconButton>;
+
+export const RoundedSquare: Story = () => (
+  <IconButton roundedSquare>{circleIcon}</IconButton>
+);

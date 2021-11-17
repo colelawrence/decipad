@@ -3,7 +3,7 @@ import { PlatePluginComponent } from '@udecode/plate';
 import { code, cssVar } from '../../../../primitives';
 
 const codeStyles = css(code, {
-  borderRadius: '100vh',
+  borderRadius: '100vmax',
   backgroundColor: cssVar('highlightColor'),
   padding: '6px 12px',
   margin: '0 6px',

@@ -43,6 +43,7 @@ Array [
   test('click share button and extract text', async () => {
     const linkSelector = 'text=/workspaces/[^/]+/';
     await page.click('text=share');
+    await page.click('[aria-checked="false"]');
     await page.waitForSelector(linkSelector);
     link = await page.innerText(linkSelector);
   });

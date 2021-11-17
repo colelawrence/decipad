@@ -1,3 +1,6 @@
+// playwright globals for browser tests
+import 'jest-playwright-preset';
+
 beforeEach(async () => {
   page.setDefaultTimeout(1_000);
 });
@@ -5,5 +8,3 @@ beforeEach(async () => {
 afterEach(async () => {
   await jestPlaywright.resetPage();
 });
-
-export {};

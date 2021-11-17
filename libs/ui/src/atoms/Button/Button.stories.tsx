@@ -12,7 +12,15 @@ export default {
   },
 } as Meta;
 
-export const PrimaryDefault: Story<{ children: string }> = (args) => (
+export const Secondary: Story<{ children: string }> = (args) => (
+  <Button {...args} />
+);
+
+export const SecondaryExtraSlim: Story<{ children: string }> = (args) => (
+  <Button extraSlim {...args} />
+);
+
+export const Primary: Story<{ children: string }> = (args) => (
   <Button primary {...args} />
 );
 export const PrimaryExtraSlim: Story<{ children: string }> = (args) => (

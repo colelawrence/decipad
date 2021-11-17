@@ -1,23 +1,6 @@
-const {
-  transform,
-  setupFilesAfterEnv = [],
-  ...baseConfig
-} = require('../../jest-base.config');
+const domConfig = require('../../jest-dom.config');
 
 module.exports = {
-  ...baseConfig,
+  ...domConfig,
   displayName: 'editor',
-
-  transform: {
-    ...transform,
-    '^.+\\.(gif|jpg|png)$': require.resolve(
-      '../testutils/src/filename-transform.js'
-    ),
-  },
-
-  testEnvironment: 'jsdom',
-  setupFilesAfterEnv: [
-    ...setupFilesAfterEnv,
-    require.resolve('../testutils/src/dom-extensions-setup-after-env'),
-  ],
 };

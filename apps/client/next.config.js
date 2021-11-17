@@ -22,10 +22,18 @@ const nextConfig = {
       module: {
         ...module,
         rules: [
-          ...rules,
           {
-            test: /\.(gif|jpg|png)$/,
-            type: 'asset/resource',
+            oneOf: [
+              {
+                resourceQuery: /raw/,
+                type: 'asset/source',
+              },
+              {
+                test: /\.(gif|jpg|png)$/,
+                type: 'asset/resource',
+              },
+              ...rules,
+            ],
           },
         ],
       },

@@ -6,6 +6,19 @@ export const GET_PAD_BY_ID = gql`
       id
       name
       myPermissionType
+      access {
+        users {
+          user {
+            id
+            name
+          }
+          permission
+        }
+      }
+      workspace {
+        id
+        name
+      }
     }
   }
 `;
