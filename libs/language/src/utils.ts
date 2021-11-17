@@ -118,7 +118,7 @@ export function r(fName: string) {
 }
 
 export function as(left: AST.Expression, units: AST.Units) {
-  return n('as', left, units);
+  return n('directive', 'as', left, units);
 }
 
 export function funcDef(
@@ -177,7 +177,7 @@ const expressionTypesSet = new Set([
   'sequence',
   'date',
   'given',
-  'as',
+  'directive',
 ]);
 
 export const isExpression = (

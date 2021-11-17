@@ -114,11 +114,11 @@ export interface Date {
   end?: Pos;
 }
 
-// As
+// Directives
 
-export interface As {
-  type: 'as';
-  args: [Expression, Units];
+export interface Directive {
+  type: 'directive';
+  args: [string, ...Node[]];
   start?: Pos;
   end?: Pos;
 }
@@ -246,7 +246,7 @@ export type Expression =
   | Given
   | Table
   | ImportedData
-  | As;
+  | Directive;
 
 export type Statement = FunctionDefinition | Assign | Expression;
 
@@ -262,6 +262,7 @@ export type Node =
   | Units;
 
 export interface TypeToNode {
+  directive: Directive;
   def: Def;
   ref: Ref;
   externalref: ExternalRef;
@@ -288,5 +289,4 @@ export interface TypeToNode {
   block: Block;
   'imported-data': ImportedData;
   units: Units;
-  as: As;
 }

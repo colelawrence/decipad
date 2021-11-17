@@ -17,8 +17,8 @@ asExp         -> expression _ "as" _ units              {%
                                                           const unit = d[4]
 
                                                           return addArrayLoc({
-                                                            type: 'as',
-                                                            args: [exp, unit],
+                                                            type: 'directive',
+                                                            args: ['as', exp, unit],
                                                           }, d);
                                                         }
                                                         %}

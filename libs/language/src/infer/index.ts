@@ -233,8 +233,9 @@ export const inferExpression = wrap(
           return t.impossible((err as Error).message);
         }
       }
-      case 'as': {
-        return expandDirectiveToType(ctx, 'as', expr.args);
+      case 'directive': {
+        const [name, ...args] = expr.args;
+        return expandDirectiveToType(ctx, name, args);
       }
     }
   }

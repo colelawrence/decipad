@@ -1068,8 +1068,8 @@ let ParserRules = [
 
       return addArrayLoc(
         {
-          type: 'as',
-          args: [exp, unit],
+          type: 'directive',
+          args: ['as', exp, unit],
         },
         d
       );

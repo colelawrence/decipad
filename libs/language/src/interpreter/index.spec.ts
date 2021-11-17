@@ -16,6 +16,7 @@ import {
   block,
   assign,
   r,
+  as,
 } from '../utils';
 import { parseUTCDate } from '../date';
 import { runAST } from '../testUtils';
@@ -647,6 +648,6 @@ it('can expand directives', async () => {
     known: true,
   };
   expect(
-    await runOne(n('as', l(1, hours), n('units', minutes)))
+    await runOne(as(l(1, hours), n('units', minutes)))
   ).toMatchInlineSnapshot(`Fraction(60)`);
 });

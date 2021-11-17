@@ -157,8 +157,9 @@ export async function evaluate(
         await resolveData({ url, contentType, fetch: realm.inferContext.fetch })
       );
     }
-    case 'as': {
-      return expandDirectiveToValue(realm, 'as', node.args);
+    case 'directive': {
+      const [name, ...args] = node.args;
+      return expandDirectiveToValue(realm, name, args);
     }
   }
 }

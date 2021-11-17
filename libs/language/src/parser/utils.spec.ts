@@ -1,6 +1,5 @@
 import { getDefined } from '@decipad/utils';
-import { n } from '.';
-import { assign, block, c, col, l, prop, table, units } from '../utils';
+import { as, assign, block, c, col, l, prop, table, units } from '../utils';
 import { prettyPrintAST, prettyPrintSolutions } from './utils';
 
 it('can pretty print the AST', () => {
@@ -30,7 +29,7 @@ const meters = {
 };
 it('can pretty print units', () => {
   expect(
-    prettyPrintAST(n('as', l(10, meters), getDefined(units(meters))))
+    prettyPrintAST(as(l(10, meters), getDefined(units(meters))))
   ).toMatchInlineSnapshot(`"(as 10meters meters)"`);
 });
 
