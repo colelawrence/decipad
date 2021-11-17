@@ -14,6 +14,7 @@ module.exports = {
     '<rootDir>/libs/testutils',
     '<rootDir>/libs/services',
     '<rootDir>/libs/utils',
+    '<rootDir>/libs/react-utils',
     '<rootDir>/libs/backend-test-sandbox',
     '<rootDir>/libs/sync-connection-lambdas',
     '<rootDir>/libs/slate-yjs',

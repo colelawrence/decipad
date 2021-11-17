@@ -606,6 +606,33 @@
         }
       }
     },
+    "react-utils": {
+      "root": "libs/react-utils",
+      "sourceRoot": "libs/react-utils/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/react-utils/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/react-utils"
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/react-utils"],
+          "options": {
+            "jestConfig": "libs/react-utils/jest.config.js"
+          }
+        }
+      }
+    },
     "services": {
       "root": "libs/services",
       "sourceRoot": "libs/services/src",

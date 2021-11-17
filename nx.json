@@ -105,6 +105,9 @@
     "queries": {
       "tags": []
     },
+    "react-utils": {
+      "tags": []
+    },
     "services": {
       "tags": []
     },

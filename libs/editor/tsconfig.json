@@ -7,17 +7,10 @@
   },
   "include": ["src", "storybook"],
   "references": [
-    {
-      "path": "../ui"
-    },
-    {
-      "path": "../docsync"
-    },
-    {
-      "path": "../queries"
-    },
-    {
-      "path": "../utils"
-    }
+    { "path": "../ui" },
+    { "path": "../docsync" },
+    { "path": "../queries" },
+    { "path": "../utils" },
+    { "path": "../react-utils" }
   ]
 }

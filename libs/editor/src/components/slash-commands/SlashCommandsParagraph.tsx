@@ -1,6 +1,7 @@
 import { organisms } from '@decipad/ui';
+import { useWindowListener } from '@decipad/react-utils';
 import { PlatePluginComponent, useEditorState } from '@udecode/plate';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Editor } from 'slate';
 import { ReactEditor, useFocused, useSelected } from 'slate-react';
 import { execute } from '../../utils/slashCommands';
@@ -34,27 +35,21 @@ export const SlashCommandsParagraph: PlatePluginComponent = (props) => {
   const showSlashCommands =
     selected && focused && !menuSuppressed && /^\/[a-z]*$/i.test(text);
 
-  useEffect(() => {
-    if (showSlashCommands) {
-      const onKeyDown = (event: KeyboardEvent) => {
-        if (!event.shiftKey) {
-          switch (event.key) {
-            case 'Escape':
-              setMenuSuppressed(true);
-              event.stopPropagation();
-              event.preventDefault();
-              break;
-          }
+  const onKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (showSlashCommands && !event.shiftKey) {
+        switch (event.key) {
+          case 'Escape':
+            setMenuSuppressed(true);
+            event.stopPropagation();
+            event.preventDefault();
+            break;
         }
-      };
-
-      window.addEventListener('keydown', onKeyDown, { capture: true });
-      return () =>
-        window.removeEventListener('keydown', onKeyDown, { capture: true });
-    }
-
-    return undefined;
-  }, [showSlashCommands]);
+      }
+    },
+    [showSlashCommands]
+  );
+  useWindowListener('keydown', onKeyDown, true);
 
   if (showSlashCommands) {
     return (

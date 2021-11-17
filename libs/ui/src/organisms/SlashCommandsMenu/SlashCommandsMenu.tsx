@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
+import { useWindowListener } from '@decipad/react-utils';
 import { SlashCommandsMenuItem } from '../../atoms';
 import { Shapes, Table, Text } from '../../icons';
 import { SlashCommandsMenuGroup } from '../../molecules';
@@ -36,8 +37,8 @@ export const SlashCommandsMenu = ({
   // SlashCommandsMenuItems do not use real browser focus, see their docs
   const [focusedCommand, setFocusedCommand] = useState<SlashCommand>();
 
-  useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
+  const onKeyDown = useCallback(
+    (event: KeyboardEvent) => {
       if (!event.shiftKey) {
         switch (event.key) {
           case 'ArrowDown':
@@ -63,12 +64,10 @@ export const SlashCommandsMenu = ({
             break;
         }
       }
-    };
-
-    window.addEventListener('keydown', onKeyDown, { capture: true });
-    return () =>
-      window.removeEventListener('keydown', onKeyDown, { capture: true });
-  }, [focusedCommand, onExecute]);
+    },
+    [focusedCommand]
+  );
+  useWindowListener('keydown', onKeyDown, true);
 
   return (
     <div role="menu" aria-orientation="vertical" css={styles}>

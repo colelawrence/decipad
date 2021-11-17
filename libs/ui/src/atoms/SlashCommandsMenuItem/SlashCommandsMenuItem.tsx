@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
-import { FC, ReactNode, useEffect } from 'react';
+import { useWindowListener } from '@decipad/react-utils';
+import { FC, ReactNode, useCallback } from 'react';
 import { cssVar, p12Regular, p14Medium } from '../../primitives';
 import { noop } from '../../utils';
 
@@ -52,23 +53,21 @@ export const SlashCommandsMenuItem = ({
   focused,
   onExecute = noop,
 }: SlashCommandsMenuItemProps): ReturnType<FC> => {
-  useEffect(() => {
-    if (focused) {
-      const onKeyDown = (event: KeyboardEvent) => {
-        if (!event.shiftKey && (event.key === 'Enter' || event.key === 'Tab')) {
-          onExecute();
-          event.stopPropagation();
-          event.preventDefault();
-        }
-      };
-
-      window.addEventListener('keydown', onKeyDown, { capture: true });
-      return () =>
-        window.removeEventListener('keydown', onKeyDown, { capture: true });
-    }
-
-    return undefined;
-  }, [focused, onExecute]);
+  const onKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (
+        focused &&
+        !event.shiftKey &&
+        (event.key === 'Enter' || event.key === 'Tab')
+      ) {
+        onExecute();
+        event.stopPropagation();
+        event.preventDefault();
+      }
+    },
+    [onExecute, focused]
+  );
+  useWindowListener('keydown', onKeyDown, true);
 
   return (
     <button
