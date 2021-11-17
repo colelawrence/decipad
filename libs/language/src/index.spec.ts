@@ -969,7 +969,7 @@ describe('number units work together', () => {
       await runCode(`
         Year = [date(2020) .. date(2025) by year]
 
-        BaseFuelPrice = 4 USD/galon
+        BaseFuelPrice = 4 USD/gallon
 
         Fuel = {
           Year,

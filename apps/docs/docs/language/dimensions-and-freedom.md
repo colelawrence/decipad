@@ -26,11 +26,11 @@ In the first column you place a name, and in the second column you place a value
 ```deci live
 Cars = {
   Type = ["suv", "hybrid", "standard"],
-  FuelConsumption = [ 23 miles/galon, 45 miles/galon, 28 miles/galon]
+  FuelConsumption = [ 23 miles/gallon, 45 miles/gallon, 28 miles/gallon]
 }
 ==> {
   Type = [ 'suv', 'hybrid', 'standard' ],
-  FuelConsumption = [ 23 miles/galon, 45 miles/galon, 28 miles/galon ]
+  FuelConsumption = [ 23 miles/gallon, 45 miles/gallon, 28 miles/gallon ]
 }
 ```
 
@@ -39,14 +39,14 @@ In the previous example, the column named `FuelConsumption` is indexed by the co
 ```deci live
 Cars = {
   Type = ["suv", "hybrid", "standard"],
-  FuelConsumption = [ 23 miles/galon, 45 miles/galon, 28 miles/galon]
+  FuelConsumption = [ 23 miles/gallon, 45 miles/gallon, 28 miles/gallon]
 }
 
 Cars.FuelConsumption
-==> [ 23 miles/galon, 45 miles/galon, 28 miles/galon ]
+==> [ 23 miles/gallon, 45 miles/gallon, 28 miles/gallon ]
 ```
 
-This column (`Cars.FuelConsumption`) is a one-dimensional value. Given an index value, it can have, in this case, one of three values (23, 45 or 28 miles per galon).
+This column (`Cars.FuelConsumption`) is a one-dimensional value. Given an index value, it can have, in this case, one of three values (23, 45 or 28 miles per gallon).
 
 ## Two degrees of freedom
 
@@ -62,7 +62,7 @@ Which we now can use to calculate an interest rate and the price of fuel per yea
 ```deci live
 Year = [date(2020) .. date(2025) by year]
 
-BaseFuelPrice = 4 USD/galon
+BaseFuelPrice = 4 USD/gallon
 
 Fuel = {
   Year,
@@ -72,7 +72,7 @@ Fuel = {
 ==> {
   Year = [ year 2020, year 2021, year 2022, year 2023, year 2024, year 2025 ],
   InterestRateFromYear = [ 1, 1.08, 1.1664, 1.2597, 1.3604, 1.4693 ],
-  Price = [ 4 USD/galon, 4.32 USD/galon, 4.67 USD/galon, 5.04 USD/galon, 5.44 USD/galon, 5.88 USD/galon ]
+  Price = [ 4 USD/gallon, 4.32 USD/gallon, 4.67 USD/gallon, 5.04 USD/gallon, 5.44 USD/gallon, 5.88 USD/gallon ]
 }
 ```
 
@@ -81,12 +81,12 @@ We can now relate both `Cars.FuelConsumption` and `Fuel.Price` to know how many 
 ```deci live
 Cars = {
   Type = ["suv", "hybrid", "standard"],
-  FuelConsumption = [ 23 miles/galon, 45 miles/galon, 28 miles/galon]
+  FuelConsumption = [ 23 miles/gallon, 45 miles/gallon, 28 miles/gallon]
 }
 
 Year = [date(2020) .. date(2025) by year]
 
-BaseFuelPrice = 4 USD/galon
+BaseFuelPrice = 4 USD/gallon
 
 Fuel = {
   Year,
