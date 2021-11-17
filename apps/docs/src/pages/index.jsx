@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
 import clsx from 'clsx';
 // eslint-disable-next-line import/no-unresolved

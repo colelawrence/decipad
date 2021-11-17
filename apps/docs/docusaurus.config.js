@@ -1,6 +1,4 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 const lightCodeTheme = require('prism-react-renderer/themes/github').default;
-// eslint-disable-next-line import/no-extraneous-dependencies
 const darkCodeTheme = require('prism-react-renderer/themes/dracula').default;
 
 /** @type {import('@docusaurus/types').Config} */

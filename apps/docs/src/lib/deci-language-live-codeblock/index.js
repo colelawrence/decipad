@@ -1,4 +1,5 @@
 const path = require('path');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const { validateThemeConfig } = require('./validateThemeConfig');
 
 function theme() {
@@ -12,23 +13,21 @@ function theme() {
     configureWebpack() {
       return {
         resolve: {
+          plugins: [new TsconfigPathsPlugin()],
           alias: {
             stream: 'stream-browserify',
             process: 'browserify-process',
-            '@decipad/utils': path.resolve(
-              __dirname,
-              '../../../../../libs/utils/src'
-            ),
-            '@decipad/language': path.resolve(
-              __dirname,
-              '../../../../../libs/language/src'
-            ),
-            '@decipad/ui': path.resolve(
-              __dirname,
-              '../../../../../libs/ui/src'
-            ),
           },
         },
+        module: {
+          rules: [
+            {
+              resourceQuery: /raw/,
+              type: 'asset/source',
+            },
+          ],
+        },
+        mergeStrategy: { 'module.rules': 'prepend' },
       };
     },
   };
