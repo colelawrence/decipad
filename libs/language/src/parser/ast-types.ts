@@ -44,6 +44,13 @@ export interface ExternalRef {
   end?: Pos;
 }
 
+export interface GenericIdentifier {
+  type: 'generic-identifier';
+  args: [name: string];
+  start?: Pos;
+  end?: Pos;
+}
+
 export interface FuncRef {
   type: 'funcref';
   args: [functionName: string];
@@ -65,7 +72,14 @@ export interface ColDef {
   end?: Pos;
 }
 
-export type Identifier = Ref | FuncRef | ExternalRef | Def | FuncDef | ColDef;
+export type Identifier =
+  | Ref
+  | FuncRef
+  | ExternalRef
+  | GenericIdentifier
+  | Def
+  | FuncDef
+  | ColDef;
 
 // Literal number, char, string etc
 
@@ -266,6 +280,7 @@ export interface TypeToNode {
   def: Def;
   ref: Ref;
   externalref: ExternalRef;
+  'generic-identifier': GenericIdentifier;
   funcref: FuncRef;
   funcdef: FuncDef;
   coldef: ColDef;

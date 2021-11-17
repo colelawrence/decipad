@@ -60,14 +60,17 @@ export function sourceMapDecorator(
     if (typesWithArgs.has(node.type)) {
       node.args = (node.args as AST.Node[]).map((node: unknown) =>
         decorateNode(node as ParserNode)
-      ) as unknown as ParserNode[];
+      ) as ParserNode[];
     } else if (node.type === 'property-access') {
-      node.args[0] = decorateNode(node.args[0] as unknown as ParserNode);
+      node.args[0] = decorateNode(node.args[0] as ParserNode);
     } else if (node.type === 'literal') {
-      const { args } = node as unknown as AST.Literal;
+      const { args } = node as AST.Literal;
       if (args[2]) {
         args[2] = decorateNode(args[2] as unknown as ParserNode) as AST.Units;
       }
+    } else if (node.type === 'directive') {
+      const [type, ...rest] = node.args as ParserNode[];
+      node.args = [type, ...rest.map(decorateNode)] as AST.Node[];
     }
 
     return node as unknown as AST.Node;

@@ -172,6 +172,7 @@ const reservedWords = new Set([
   'through',
   'date',
   'function',
+  'select',
   'and',
   'not',
   'or',
@@ -1054,6 +1055,113 @@ let ParserRules = [
   { name: 'tableSep$subexpression$1', symbols: ['__n'] },
   { name: 'tableSep$subexpression$1', symbols: ['_', { literal: ',' }, '_'] },
   { name: 'tableSep', symbols: ['tableSep$subexpression$1'], postprocess: id },
+  {
+    name: 'select',
+    symbols: [
+      { literal: 'select' },
+      '_',
+      { literal: '(' },
+      '_',
+      'selectedColumns',
+      '_',
+      { literal: ')' },
+    ],
+    postprocess: (d) => {
+      const ref = d[4];
+
+      return addArrayLoc(
+        {
+          type: 'directive',
+          args: ['select', ...ref],
+        },
+        d
+      );
+    },
+  },
+  {
+    name: 'selectedColumns$ebnf$1',
+    symbols: [{ literal: ',' }],
+    postprocess: id,
+  },
+  {
+    name: 'selectedColumns$ebnf$1',
+    symbols: [],
+    postprocess: function (d) {
+      return null;
+    },
+  },
+  {
+    name: 'selectedColumns$ebnf$2$subexpression$1$ebnf$1',
+    symbols: [{ literal: ',' }],
+    postprocess: id,
+  },
+  {
+    name: 'selectedColumns$ebnf$2$subexpression$1$ebnf$1',
+    symbols: [],
+    postprocess: function (d) {
+      return null;
+    },
+  },
+  {
+    name: 'selectedColumns$ebnf$2$subexpression$1',
+    symbols: [
+      'genericIdentifier',
+      '_',
+      'selectedColumns$ebnf$2$subexpression$1$ebnf$1',
+      '_',
+    ],
+  },
+  {
+    name: 'selectedColumns$ebnf$2',
+    symbols: ['selectedColumns$ebnf$2$subexpression$1'],
+  },
+  {
+    name: 'selectedColumns$ebnf$2$subexpression$2$ebnf$1',
+    symbols: [{ literal: ',' }],
+    postprocess: id,
+  },
+  {
+    name: 'selectedColumns$ebnf$2$subexpression$2$ebnf$1',
+    symbols: [],
+    postprocess: function (d) {
+      return null;
+    },
+  },
+  {
+    name: 'selectedColumns$ebnf$2$subexpression$2',
+    symbols: [
+      'genericIdentifier',
+      '_',
+      'selectedColumns$ebnf$2$subexpression$2$ebnf$1',
+      '_',
+    ],
+  },
+  {
+    name: 'selectedColumns$ebnf$2',
+    symbols: [
+      'selectedColumns$ebnf$2',
+      'selectedColumns$ebnf$2$subexpression$2',
+    ],
+    postprocess: function arrpush(d) {
+      return d[0].concat([d[1]]);
+    },
+  },
+  {
+    name: 'selectedColumns',
+    symbols: [
+      'ref',
+      '_',
+      'selectedColumns$ebnf$1',
+      '_',
+      'selectedColumns$ebnf$2',
+    ],
+    postprocess: (d) => {
+      const ref = d[0];
+      const cols = d[4].map(([ident]) => ident);
+
+      return [ref, ...cols];
+    },
+  },
   { name: 'expression', symbols: ['nonGivenExp'], postprocess: id },
   { name: 'expression', symbols: ['given'], postprocess: id },
   { name: 'expression', symbols: ['asExp'], postprocess: id },
@@ -1163,6 +1271,7 @@ let ParserRules = [
     },
   },
   { name: 'primary', symbols: ['functionCall'], postprocess: id },
+  { name: 'primary', symbols: ['select'], postprocess: id },
   { name: 'primary', symbols: ['literal'], postprocess: id },
   { name: 'primary', symbols: ['ref'], postprocess: id },
   { name: 'primary', symbols: ['parenthesizedExpression'], postprocess: id },
@@ -1735,6 +1844,21 @@ let ParserRules = [
       } else {
         return addLoc({ name: identString }, d[0]);
       }
+    },
+  },
+  {
+    name: 'genericIdentifier',
+    symbols: [
+      tokenizer.has('identifier') ? { type: 'identifier' } : identifier,
+    ],
+    postprocess: (d) => {
+      return addArrayLoc(
+        {
+          type: 'generic-identifier',
+          args: [d[0].value],
+        },
+        d
+      );
     },
   },
   {

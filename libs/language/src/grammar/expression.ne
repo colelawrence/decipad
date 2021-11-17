@@ -90,6 +90,7 @@ ref          -> identifier                              {%
                                                         %}
 
 primary      -> functionCall                            {% id %}
+primary      -> select                                  {% id %}
 
 primary      -> literal                                 {% id %}
 primary      -> ref                                     {% id %}

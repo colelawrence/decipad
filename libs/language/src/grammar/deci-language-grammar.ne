@@ -17,6 +17,7 @@ import { tokenizer } from './tokenizer'
 @include "./column.ne"
 @include "./given.ne"
 @include "./table.ne"
+@include "./select.ne"
 @include "./expression.ne"
 @include "./time-quantity.ne"
 @include "./range.ne"
@@ -42,6 +43,7 @@ const reservedWords = new Set([
   'through',
   'date',
   'function',
+  'select',
   'and',
   'not',
   'or',
@@ -227,6 +229,14 @@ identifier -> %identifier                               {%
                                                         }
                                                         %}
 
+genericIdentifier -> %identifier                        {%
+                                                        (d) => {
+                                                          return addArrayLoc({
+                                                            type: 'generic-identifier',
+                                                            args: [d[0].value]
+                                                          }, d)
+                                                        }
+                                                        %}
 
 ###################
 ### Conditional ###
