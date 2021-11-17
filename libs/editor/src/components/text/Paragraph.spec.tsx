@@ -6,8 +6,8 @@ import {
 } from '@udecode/plate';
 import { render, waitFor } from '@testing-library/react';
 import { Transforms } from 'slate';
-import { ReactEditor } from 'slate-react';
 import { Paragraph } from './Paragraph';
+import { findDomNodePath } from '../../utils/slateReact';
 
 it('shows a placeholder when empty and selected', async () => {
   const editor = createEditorPlugins();
@@ -23,17 +23,11 @@ it('shows a placeholder when empty and selected', async () => {
   const paragraphElement = textElement.closest('p');
 
   Transforms.delete(editor, {
-    at: ReactEditor.findPath(
-      editor,
-      ReactEditor.toSlateNode(editor, textElement)
-    ),
+    at: findDomNodePath(editor, textElement),
     unit: 'word',
   });
   Transforms.select(editor, {
-    path: ReactEditor.findPath(
-      editor,
-      ReactEditor.toSlateNode(editor, textElement)
-    ),
+    path: findDomNodePath(editor, textElement),
     offset: 0,
   });
   await waitFor(() => expect(paragraphElement).toHaveTextContent(/^$/));
@@ -61,17 +55,11 @@ it('does not show a placeholder when not selected', async () => {
   const otherTextElement = getByText('other');
 
   Transforms.delete(editor, {
-    at: ReactEditor.findPath(
-      editor,
-      ReactEditor.toSlateNode(editor, textElement)
-    ),
+    at: findDomNodePath(editor, textElement),
     unit: 'word',
   });
   Transforms.select(editor, {
-    path: ReactEditor.findPath(
-      editor,
-      ReactEditor.toSlateNode(editor, otherTextElement)
-    ),
+    path: findDomNodePath(editor, otherTextElement),
     offset: 0,
   });
   await waitFor(() => expect(paragraphElement).toHaveTextContent(/^$/));

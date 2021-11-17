@@ -17,6 +17,7 @@ import {
 } from '@udecode/plate';
 import { Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
+import { findDomNodePath } from '../../utils/slateReact';
 import { SlashCommandsParagraph } from './SlashCommandsParagraph';
 
 let editor: SPEditor & ReactEditor;
@@ -39,10 +40,7 @@ it('renders the menu when typing in the selected paragraph starting with a /', a
     ReactEditor.focus(editor);
   });
   Transforms.select(editor, {
-    path: ReactEditor.findPath(
-      editor,
-      ReactEditor.toSlateNode(editor, getByText('/cmd'))
-    ),
+    path: findDomNodePath(editor, getByText('/cmd')),
     offset: '/cmd'.length,
   });
   Transforms.insertText(editor, 'X');
@@ -56,10 +54,7 @@ it('does not render the menu when the editor is not focused', async () => {
   );
 
   Transforms.select(editor, {
-    path: ReactEditor.findPath(
-      editor,
-      ReactEditor.toSlateNode(editor, getByText('/cmd'))
-    ),
+    path: findDomNodePath(editor, getByText('/cmd')),
     offset: '/cmd'.length,
   });
   Transforms.insertText(editor, 'X');
@@ -77,10 +72,7 @@ it('does not render the menu when the paragraph is not selected', async () => {
   });
   Transforms.insertText(editor, 'X', {
     at: {
-      path: ReactEditor.findPath(
-        editor,
-        ReactEditor.toSlateNode(editor, getByText('/cmd'))
-      ),
+      path: findDomNodePath(editor, getByText('/cmd')),
       offset: '/cmd'.length,
     },
   });
@@ -97,10 +89,7 @@ it('does not render the menu before typing', async () => {
     ReactEditor.focus(editor);
   });
   Transforms.select(editor, {
-    path: ReactEditor.findPath(
-      editor,
-      ReactEditor.toSlateNode(editor, getByText('/cmd'))
-    ),
+    path: findDomNodePath(editor, getByText('/cmd')),
     offset: '/cmd'.length,
   });
 
@@ -117,10 +106,7 @@ it.each([' /cmd', '/cmd#', '/42'])(
     act(() => {
       ReactEditor.focus(editor);
     });
-    const textPath = ReactEditor.findPath(
-      editor,
-      ReactEditor.toSlateNode(editor, getByText('/cmd'))
-    );
+    const textPath = findDomNodePath(editor, getByText('/cmd'));
     Transforms.select(editor, {
       anchor: {
         path: textPath,
@@ -150,10 +136,7 @@ describe('the escape key', () => {
       ReactEditor.focus(editor);
     });
     Transforms.select(editor, {
-      path: ReactEditor.findPath(
-        editor,
-        ReactEditor.toSlateNode(editor, getByText('/cmd'))
-      ),
+      path: findDomNodePath(editor, getByText('/cmd')),
       offset: '/cmd'.length,
     });
     Transforms.insertText(editor, 'X');
@@ -173,10 +156,7 @@ describe('the escape key', () => {
       ReactEditor.focus(editor);
     });
     Transforms.select(editor, {
-      path: ReactEditor.findPath(
-        editor,
-        ReactEditor.toSlateNode(editor, getByText('/cmd'))
-      ),
+      path: findDomNodePath(editor, getByText('/cmd')),
       offset: '/cmd'.length,
     });
     Transforms.insertText(editor, 'X');
@@ -194,10 +174,7 @@ it('executes a command on click', async () => {
     ReactEditor.focus(editor);
   });
   Transforms.select(editor, {
-    path: ReactEditor.findPath(
-      editor,
-      ReactEditor.toSlateNode(editor, getByText('/cmd'))
-    ),
+    path: findDomNodePath(editor, getByText('/cmd')),
     offset: '/cmd'.length,
   });
   Transforms.insertText(editor, 'X');
