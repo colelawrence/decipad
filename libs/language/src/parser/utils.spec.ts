@@ -30,7 +30,7 @@ const meters = {
 it('can pretty print units', () => {
   expect(
     prettyPrintAST(as(l(10, meters), getDefined(units(meters))))
-  ).toMatchInlineSnapshot(`"(as 10meters meters)"`);
+  ).toMatchInlineSnapshot(`"(directive as 10meters meters)"`);
 });
 
 it('can pretty print tables', () => {
