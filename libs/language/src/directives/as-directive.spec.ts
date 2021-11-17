@@ -1,28 +1,12 @@
-import type { AST } from '..';
 import { build as t } from '../type';
-import { c, col, l, n } from '../utils';
+import { c, col, l, n, u, timeQuantity } from '../utils';
 import { date } from '../date';
 import { getType, getValue } from './as-directive';
 import { testGetType, testGetValue } from './testUtils';
 
-const hours: AST.Unit = {
-  unit: 'hours',
-  exp: 1,
-  multiplier: 1,
-  known: true,
-};
-const minute: AST.Unit = {
-  unit: 'minute',
-  exp: 1,
-  multiplier: 1,
-  known: true,
-};
-const year: AST.Unit = {
-  unit: 'year',
-  exp: 1,
-  multiplier: 1,
-  known: true,
-};
+const hours = u('hours');
+const minute = u('minutes');
+const year = u('years');
 
 describe('getType', () => {
   it('adds a unit to a unitless type', async () => {
@@ -67,5 +51,27 @@ describe('getValue', () => {
           "value": Fraction(2),
         }
       `);
+  });
+
+  it('with fractions (1)', async () => {
+    const quantity = timeQuantity({ day: 1, hour: 12 });
+
+    expect(await testGetValue(getValue, quantity, n('units', u('days'))))
+      .toMatchInlineSnapshot(`
+      FractionValue {
+        "value": Fraction(1.5),
+      }
+    `);
+  });
+
+  it('with fractions (2)', async () => {
+    const quantity = timeQuantity({ minute: 90 });
+
+    expect(await testGetValue(getValue, quantity, n('units', u('hours'))))
+      .toMatchInlineSnapshot(`
+      FractionValue {
+        "value": Fraction(1.5),
+      }
+    `);
   });
 });

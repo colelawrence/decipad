@@ -29,7 +29,7 @@ or hours:
 
 ```deci live
 date(2020-02-23 17:35) - date(2020-01-12 05:23) as hours
-==> 1020 hours
+==> 1020.2 hours
 ```
 
 or minutes:

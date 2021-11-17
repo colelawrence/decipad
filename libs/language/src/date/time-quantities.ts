@@ -1,3 +1,4 @@
+import Fraction from 'fraction.js';
 import {
   arrayToDate,
   dateToArray,
@@ -127,23 +128,23 @@ export const timeSpecificityToTimeUnit = (
 export const convertTimeQuantityTo = (
   quantity: TimeQuantity,
   convertTo: Time.Unit
-): number => {
+): Fraction => {
   if (
     quantity.timeUnitsDiff &&
     quantity.timeUnitsDiff.size === 1 &&
     quantity.timeUnitsDiff.has(convertTo)
   ) {
-    return quantity.timeUnitsDiff.get(convertTo) as number;
+    return new Fraction(quantity.timeUnitsDiff.get(convertTo) as number);
   }
   const { timeUnits } = quantity;
   if (timeUnits.size === 0) {
-    return 0;
+    return new Fraction(0);
   }
   if (timeUnits.size === 1 && timeUnits.has(convertTo)) {
-    return timeUnits.get(convertTo) as number;
+    return new Fraction(timeUnits.get(convertTo) as number);
   }
 
-  let accInMs = BigInt(0);
+  let accInMs = 0;
   for (const [unit, value] of timeUnits.entries()) {
     const convertRatio = convertToMs[unit];
     if (!convertRatio) {
@@ -151,7 +152,7 @@ export const convertTimeQuantityTo = (
         `time quantity: don't know how to convert from ${unit}`
       );
     }
-    accInMs += BigInt(value * convertRatio);
+    accInMs += value * convertRatio;
   }
 
   const convertRatio = convertToMs[convertTo];
@@ -161,5 +162,5 @@ export const convertTimeQuantityTo = (
     );
   }
 
-  return Number(accInMs / BigInt(convertRatio));
+  return new Fraction(accInMs, convertRatio);
 };

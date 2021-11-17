@@ -100,7 +100,7 @@ export async function getValue(
       return fromJS(
         convertTimeQuantityTo(
           value as TimeQuantity,
-          singular(targetUnitAsString) as Time.Unit
+          singular(targetUnitAsString.toLocaleLowerCase()) as Time.Unit
         )
       );
     }
