@@ -68,3 +68,12 @@ You can reduce a list to the sum of all the elements in it:
 total([1 apples, 2 apples, 3 apples])
 ==> 6 apples
 ```
+
+## Find the growth of a list of numbers
+
+If you have a list of numbers, like a profit per month, you might want a list that shows how each item compares to the previous one:
+
+```deci live
+stepgrowth([10 USD, 11 USD, 9 USD, 14 USD])
+==> [ 10 USD, 1 USD, -2 USD, 5 USD ]
+```

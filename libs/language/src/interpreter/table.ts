@@ -71,14 +71,14 @@ export const evaluateTable = async (
 
   return realm.stack.withPush(async () => {
     const addColumn = (name: string, value: Value) => {
+      if (!(value instanceof Column)) {
+        value = Column.fromValues(repeat(value, tableLength));
+      }
+
       realm.stack.set(name, value);
 
       colNames.push(name);
-      colValues.push(
-        value instanceof Column
-          ? value
-          : Column.fromValues(repeat(value, tableLength))
-      );
+      colValues.push(value);
     };
 
     for (const item of items) {

@@ -22,11 +22,8 @@ export const unifyColumnSizes = (
   const columnTypes = types.map((colValue) => {
     if (colValue.columnSize === length || colValue.columnSize === 'unknown') {
       return colValue.reduced();
-    } else if (colValue.columnSize != null) {
-      return t.impossible('Incompatible column sizes');
     } else {
-      // Because we're so very nice, allow `Column = 1` as syntax sugar.
-      return colValue;
+      return t.impossible('Incompatible column sizes');
     }
   });
 
@@ -34,12 +31,20 @@ export const unifyColumnSizes = (
 };
 
 export const inferTable = (ctx: Context, expr: AST.Table) => {
+  let tableLength: number | 'unknown' = 'unknown';
   return pushStackAndPrevious(ctx, async () => {
     const columnNames: string[] = [];
     const columnTypes: Type[] = [];
     let indexName = ctx.inAssignment;
 
     const addColumn = (name: string, type: Type) => {
+      if (type.columnSize == null) {
+        // Because we're so very nice, allow `Column = 1` as syntax sugar.
+        type = t.column(type, tableLength);
+      } else if (tableLength === 'unknown') {
+        tableLength = type.columnSize;
+      }
+
       ctx.stack.set(name, type);
 
       columnTypes.push(type);

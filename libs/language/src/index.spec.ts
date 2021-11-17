@@ -11,11 +11,12 @@ import {
 import { parseUTCDate } from './date';
 import { Column, Scalar } from './interpreter/Value';
 import { block, n, units, F } from './utils';
+import { stringifyResult } from './repl';
 
 expect.addSnapshotSerializer({
   test: (arg) => arg.type instanceof Type && arg.value != null,
   serialize: ({ type, value }) =>
-    `Result(${JSON.stringify(value)} ${type.toString()})`,
+    `Result(${stringifyResult(value, type, (x) => x)})`,
 });
 
 describe('basic code', () => {
@@ -398,6 +399,40 @@ describe('Tables', () => {
     });
   });
 
+  it('can call functions with auto-expanded columns as arguments', async () => {
+    expect(
+      await runCode(`
+        Growth = {
+          Period = [1, 2, 3]
+          Profit = 1
+          MoneyInTheBank = stepgrowth(Profit)
+        }
+      `)
+    ).toMatchInlineSnapshot(`
+      Result({
+        Period = [ 1, 2, 3 ],
+        Profit = [ 1, 1, 1 ],
+        MoneyInTheBank = [ 1, 0, 0 ]
+      })
+    `);
+
+    expect(
+      await runCode(`
+        Growth = {
+          Period = [1, 2, 3]
+          Profit = 500 USD + previous(0)
+          MoneyInTheBank = stepgrowth(Profit)
+        }
+      `)
+    ).toMatchInlineSnapshot(`
+      Result({
+        Period = [ 1, 2, 3 ],
+        Profit = [ 500 USD, 1000 USD, 1500 USD ],
+        MoneyInTheBank = [ 500 USD, 500 USD, 500 USD ]
+      })
+    `);
+  });
+
   it('Can spread new tables', async () => {
     expect(
       await runCode(`
@@ -420,6 +455,26 @@ describe('Tables', () => {
         ['One Apples', 'Two Apples'],
       ],
     });
+  });
+
+  it('Can use a spread table to dictate the tables length', async () => {
+    expect(
+      await runCode(`
+        LengthDictator = {
+          Col = [1, 2, 3]
+        }
+
+        DictatedLength = {
+          ...LengthDictator,
+          Item = 1
+        }
+      `)
+    ).toMatchInlineSnapshot(`
+      Result({
+        Col = [ 1, 2, 3 ],
+        Item = [ 1, 1, 1 ]
+      })
+    `);
   });
 });
 
