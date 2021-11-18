@@ -1,5 +1,9 @@
 import { atoms } from '@decipad/ui';
-import { PlatePluginComponent, useEditorState } from '@udecode/plate';
+import {
+  PlatePluginComponent,
+  useEditorState,
+  isSelectionExpanded,
+} from '@udecode/plate';
 import { Editor } from 'slate';
 import { useSelected } from 'slate-react';
 
@@ -18,7 +22,9 @@ export const Paragraph: PlatePluginComponent = ({
   return (
     <atoms.Paragraph
       placeholder={
-        Editor.isEmpty(editor, element) && selected
+        Editor.isEmpty(editor, element) &&
+        selected &&
+        !isSelectionExpanded(editor)
           ? 'Type “/” for commands or write text'
           : undefined
       }

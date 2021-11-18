@@ -65,3 +65,38 @@ it('does not show a placeholder when not selected', async () => {
   await waitFor(() => expect(paragraphElement).toHaveTextContent(/^$/));
   expect(paragraphElement).not.toHaveAttribute('aria-placeholder');
 });
+
+it('does not show a placeholder when selecting more than the paragraph', async () => {
+  const editor = createEditorPlugins();
+  const { getByText } = render(
+    <Plate
+      editor={editor}
+      initialValue={[
+        { type: ELEMENT_PARAGRAPH, children: [{ text: 'text' }] },
+        { type: ELEMENT_PARAGRAPH, children: [{ text: 'other' }] },
+      ]}
+      plugins={[createParagraphPlugin()]}
+      components={{ [ELEMENT_PARAGRAPH]: Paragraph }}
+    />
+  );
+  const textElement = getByText('text');
+  const paragraphElement = textElement.closest('p');
+  const otherTextElement = getByText('other');
+
+  Transforms.delete(editor, {
+    at: findDomNodePath(editor, textElement),
+    unit: 'word',
+  });
+  Transforms.select(editor, {
+    anchor: {
+      path: findDomNodePath(editor, textElement),
+      offset: 0,
+    },
+    focus: {
+      path: findDomNodePath(editor, otherTextElement),
+      offset: 0,
+    },
+  });
+  await waitFor(() => expect(paragraphElement).toHaveTextContent(/^$/));
+  expect(paragraphElement).not.toHaveAttribute('aria-placeholder');
+});
