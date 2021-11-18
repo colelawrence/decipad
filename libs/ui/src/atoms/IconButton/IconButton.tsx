@@ -1,9 +1,10 @@
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { cssVar } from '../../primitives';
-import { noop } from '../../utils';
+import { Anchor } from '../../utils';
 
 const styles = css({
+  display: 'inline-block',
   borderRadius: '100vmax',
   backgroundColor: cssVar('highlightColor'),
 });
@@ -23,18 +24,28 @@ const iconStyles = css({
   padding: `20%`,
 });
 
-interface IconButtonProps {
+type IconButtonProps = {
   readonly children: ReactNode;
   readonly roundedSquare?: boolean;
-  readonly onClick?: () => void;
-}
+} & (
+  | {
+      readonly href: string;
+      readonly onClick?: undefined;
+    }
+  | {
+      readonly onClick: () => void;
+      readonly href?: undefined;
+    }
+);
 
 export const IconButton = ({
   children,
   roundedSquare = false,
-  onClick = noop,
+
+  onClick,
+  href,
 }: IconButtonProps): ReturnType<FC> => {
-  return (
+  return onClick ? (
     <button
       css={[styles, roundedSquare && roundedSquareStyles]}
       onClick={(event) => {
@@ -44,5 +55,12 @@ export const IconButton = ({
     >
       <span css={iconStyles}>{children}</span>
     </button>
+  ) : (
+    <Anchor
+      href={href}
+      css={css([styles, roundedSquare && roundedSquareStyles])}
+    >
+      <span css={iconStyles}>{children}</span>
+    </Anchor>
   );
 };

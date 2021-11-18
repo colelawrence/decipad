@@ -1,11 +1,12 @@
 import userEvent from '@testing-library/user-event';
 import { render } from '@testing-library/react';
+import { noop } from '@decipad/utils';
 
 import { IconButton } from './IconButton';
 
 it('renders the button icon', () => {
   const { getByTitle } = render(
-    <IconButton>
+    <IconButton onClick={noop}>
       <svg>
         <title>Pretty Icon</title>
       </svg>
@@ -26,16 +27,29 @@ it('emits click events', () => {
 
 describe('roundedSquare', () => {
   it('changes the border radius', () => {
-    const { rerender, getByRole } = render(<IconButton>icon</IconButton>);
+    const { rerender, getByRole } = render(
+      <IconButton onClick={noop}>icon</IconButton>
+    );
     const { borderRadius: normalBorderRadius } = getComputedStyle(
       getByRole('button')
     );
 
-    rerender(<IconButton roundedSquare>icon</IconButton>);
+    rerender(
+      <IconButton onClick={noop} roundedSquare>
+        icon
+      </IconButton>
+    );
     const { borderRadius: roundedSquareBorderRadius } = getComputedStyle(
       getByRole('button')
     );
 
     expect(roundedSquareBorderRadius).not.toEqual(normalBorderRadius);
+  });
+});
+
+describe('with an href', () => {
+  it('renders as a link', () => {
+    const { getByRole } = render(<IconButton href="/page">icon</IconButton>);
+    expect(getByRole('link')).toHaveAttribute('href', '/page');
   });
 });

@@ -1,5 +1,4 @@
 export { Avatar } from './Avatar/Avatar';
-export { BackButton } from './BackButton/BackButton';
 export { Button } from './Button/Button';
 export { CellInput } from './CellInput/CellInput';
 export { Divider } from './Divider/Divider';

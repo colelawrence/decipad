@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { ComponentProps, FC } from 'react';
-import { BackButton } from '../../atoms';
+import { IconButton } from '../../atoms';
+import { LeftArrow } from '../../icons';
 import { NotebookPath } from '../../molecules';
 import { NotebookSharingPopUp, NotebookUsers } from '../../organisms';
 import { noop } from '../../utils';
@@ -11,9 +12,15 @@ const topbarWrapperStyles = css({
   alignItems: 'center',
 });
 
-const topbarSideStyles = css({
+const topbarLeftSideStyles = css({
+  height: '32px',
+  display: 'grid',
+  gridTemplateColumns: '32px auto',
+  gap: '1rem',
+});
+
+const topbarRightSideStyles = css({
   display: 'flex',
-  alignItems: 'center',
   gap: '1rem',
 });
 
@@ -40,8 +47,12 @@ export const NotebookTopbar = ({
   return (
     <div css={topbarWrapperStyles}>
       {/* Left side */}
-      <div css={topbarSideStyles}>
-        {isAdmin && <BackButton href={workspaceHref} />}
+      <div css={topbarLeftSideStyles}>
+        {isAdmin && (
+          <IconButton href={workspaceHref}>
+            <LeftArrow />
+          </IconButton>
+        )}
         <NotebookPath
           workspaceName={workspaceName}
           notebookName={notebookName}
@@ -50,7 +61,7 @@ export const NotebookTopbar = ({
       </div>
 
       {/* Right side */}
-      <div css={topbarSideStyles}>
+      <div css={topbarRightSideStyles}>
         <NotebookUsers users={users} />
         {isAdmin && (
           <NotebookSharingPopUp onToggleShare={onToggleShare} link={link} />
