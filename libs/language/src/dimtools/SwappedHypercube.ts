@@ -1,33 +1,19 @@
-import { Dimension, DimensionId, Hypercube, HypercubeLike } from './hypercube';
-
-export const swapFirst = <T>(indexOnTop: number, items: T[]): T[] => {
-  if (indexOnTop < 0) {
-    throw new Error(
-      `panic: SwappedHypercube could not find dimension with index ${indexOnTop}`
-    );
-  }
-
-  const swapped = [
-    items[indexOnTop],
-    ...items.filter((_, i) => i !== indexOnTop),
-  ];
-
-  return swapped;
-};
+import { chooseFirst } from './common';
+import { Dimension, DimensionId, HypercubeLike } from './hypercube';
 
 export class SwappedHypercube implements HypercubeLike {
-  unswappedHC: Hypercube;
+  unswappedHC: HypercubeLike;
 
   dimensions: Dimension[];
   dominantDimensionIndex: number;
 
-  constructor(unswappedHC: Hypercube, dominantDimensionId: DimensionId) {
+  constructor(unswappedHC: HypercubeLike, dominantDimensionId: DimensionId) {
     this.unswappedHC = unswappedHC;
 
     this.dominantDimensionIndex = unswappedHC.dimensions.findIndex(
       (dim) => dominantDimensionId === dim.dimensionId
     );
-    this.dimensions = swapFirst(
+    this.dimensions = chooseFirst(
       this.dominantDimensionIndex,
       unswappedHC.dimensions
     );
@@ -35,7 +21,7 @@ export class SwappedHypercube implements HypercubeLike {
 
   lowLevelGet(...indices: number[]) {
     return this.unswappedHC.lowLevelGet(
-      ...swapFirst(this.dominantDimensionIndex, indices)
+      ...chooseFirst(this.dominantDimensionIndex, indices)
     );
   }
 }

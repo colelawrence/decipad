@@ -49,6 +49,10 @@ export type ErrSpec =
   | {
       errType: 'cannotConvertToUnit';
       toUnit: AST.Units;
+    }
+  | {
+      errType: 'unknownCategory';
+      dimensionId: string | number;
     };
 
 // exhaustive switch
@@ -101,6 +105,9 @@ function specToString(spec: ErrSpec): string {
     }
     case 'cannotConvertToUnit': {
       return `Cannot convert to unit ${stringifyUnits(spec.toUnit)}`;
+    }
+    case 'unknownCategory': {
+      return `Unknown category ${spec.dimensionId}`;
     }
   }
 }
@@ -199,6 +206,13 @@ export class InferError {
     return new InferError({
       errType: 'cannotConvertToUnit',
       toUnit,
+    });
+  }
+
+  static unknownCategory(dimensionId: number | string) {
+    return new InferError({
+      errType: 'unknownCategory',
+      dimensionId,
     });
   }
 

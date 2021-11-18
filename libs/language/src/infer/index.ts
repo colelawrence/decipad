@@ -92,8 +92,9 @@ export const inferExpression = wrap(
         return t.date(specificity);
       }
       case 'column': {
+        const [columnItems, optionalIndex] = expr.args;
         const cellTypes = await pSeries(
-          expr.args[0].args.map((a) => () => inferExpression(ctx, a))
+          columnItems.args.map((a) => () => inferExpression(ctx, a))
         );
 
         const erroredCell = cellTypes.find((cell) => cell.errorCause != null);
@@ -113,7 +114,7 @@ export const inferExpression = wrap(
             }
           }
 
-          return t.column(cellType, cellTypes.length);
+          return t.column(cellType, cellTypes.length, optionalIndex?.args[0]);
         }
       }
       case 'table': {

@@ -38,3 +38,8 @@ export const deLinearizeType = (types: Type[]): Type =>
           type.cellType = deLinearizeType(types.slice(1));
         })
   );
+
+export const chooseFirst = <T>(indexOnTop: number, items: T[]): T[] => [
+  items[indexOnTop],
+  ...items.filter((_, i) => i !== indexOnTop),
+];

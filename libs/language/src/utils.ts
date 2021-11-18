@@ -68,6 +68,22 @@ export function col(...values: (LitType | AST.Expression)[]): AST.Column {
   );
 }
 
+export const genericIdent = (name: string) => n('generic-identifier', name);
+
+export function indexedCol(
+  indexName: string | null,
+  ...values: (LitType | AST.Expression)[]
+): AST.Column {
+  return n(
+    'column',
+    n(
+      'column-items',
+      ...values.map((value) => (isExpression(value) ? value : l(value)))
+    ),
+    indexName != null ? genericIdent(indexName) : undefined
+  );
+}
+
 export function importedData(url: string, contentType?: string) {
   return n('imported-data', url, contentType);
 }

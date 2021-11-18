@@ -140,7 +140,7 @@ export interface ColumnItems {
 
 export interface Column {
   type: 'column';
-  args: [items: ColumnItems];
+  args: [items: ColumnItems, indexName?: GenericIdentifier];
   start?: Pos;
   end?: Pos;
 }
