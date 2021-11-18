@@ -22,7 +22,3 @@ export const AnotherType: Story<ComponentProps<typeof TableHeader>> = (
 export const Highlighted: Story<ComponentProps<typeof TableHeader>> = (
   args
 ) => <TableHeader highlight {...args} />;
-
-export const RightSlot: Story<ComponentProps<typeof TableHeader>> = (args) => (
-  <TableHeader rightSlot="R" {...args} />
-);

@@ -47,6 +47,22 @@ it('takes a new value from the props', async () => {
   expect(getByRole('textbox')).toHaveValue('new');
 });
 
+describe('onKeyDown prop', () => {
+  it('gets called once per key', () => {
+    const onKeyDown = jest.fn();
+    const { getByRole } = render(
+      <CellInput value="text" onKeyDown={onKeyDown} />
+    );
+
+    expect(onKeyDown).not.toHaveBeenCalled();
+
+    const newText = 'newtext';
+    userEvent.type(getByRole('textbox'), newText);
+
+    expect(onKeyDown).toHaveBeenCalledTimes(newText.length);
+  });
+});
+
 describe('validate prop', () => {
   it('validates the input before submitting', async () => {
     const validate = jest.fn(() => true);

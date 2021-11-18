@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { useRef, useEffect, FC } from 'react';
+import { KeyboardEvent, useRef, useEffect, FC } from 'react';
 import { h2, p13Medium, p14Medium } from '../../primitives';
 import { noop } from '../../utils';
 
@@ -32,6 +32,7 @@ export interface CellInputProps {
   readonly variant?: Variant;
   readonly value: string;
   readonly onChange?: (newValue: string) => void;
+  readonly onKeyDown?: (event: KeyboardEvent<HTMLInputElement>) => void;
   readonly validate?: (value: string) => boolean;
 }
 
@@ -41,6 +42,7 @@ export const CellInput = ({
   variant = 'data',
   value,
   onChange = noop,
+  onKeyDown = noop,
   validate = alwaysTrue,
 }: CellInputProps): ReturnType<FC> => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -78,6 +80,8 @@ export const CellInput = ({
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
           submit();
+        } else {
+          onKeyDown(e);
         }
       }}
       placeholder={placeholder}

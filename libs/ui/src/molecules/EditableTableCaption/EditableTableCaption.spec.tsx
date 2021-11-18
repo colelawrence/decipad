@@ -6,12 +6,12 @@ import { EditableTableCaption } from './EditableTableCaption';
 it('renders the text', () => {
   const { getByRole } = render(
     <table>
-      <EditableTableCaption value="Table Name" />
+      <EditableTableCaption value="TableName" />
     </table>
   );
 
   expect(getByRole('textbox')).toBeVisible();
-  expect(getByRole('textbox')).toHaveValue('Table Name');
+  expect(getByRole('textbox')).toHaveValue('TableName');
 });
 
 describe('onChange prop', () => {
@@ -19,17 +19,35 @@ describe('onChange prop', () => {
     const onChange = jest.fn();
     const { getByRole } = render(
       <table>
-        <EditableTableCaption onChange={onChange} value="Table Name" />
+        <EditableTableCaption onChange={onChange} value="TableName" />
       </table>
     );
 
-    userEvent.type(getByRole('textbox'), ' Edited');
+    userEvent.type(getByRole('textbox'), 'Edited');
 
     expect(onChange).not.toHaveBeenCalled();
 
     fireEvent.keyDown(getByRole('textbox'), { key: 'Enter' });
 
     expect(onChange).toHaveBeenCalledTimes(1);
-    expect(onChange).toHaveBeenCalledWith('Table Name Edited');
+    expect(onChange).toHaveBeenCalledWith('TableNameEdited');
+  });
+
+  it('ignores white spaces', () => {
+    const onChange = jest.fn();
+    const { getByRole } = render(
+      <table>
+        <EditableTableCaption onChange={onChange} value="TableName" />
+      </table>
+    );
+
+    userEvent.type(getByRole('textbox'), '       Edited');
+
+    expect(onChange).not.toHaveBeenCalled();
+
+    fireEvent.keyDown(getByRole('textbox'), { key: 'Enter' });
+
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledWith('TableNameEdited');
   });
 });

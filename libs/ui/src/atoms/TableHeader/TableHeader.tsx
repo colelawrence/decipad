@@ -17,19 +17,6 @@ const columnStyles = css({
   verticalAlign: 'middle',
 });
 
-const hasRightSlotStyles = css({
-  '& > div > div:last-of-type': {
-    opacity: 0,
-  },
-
-  // Display the right-side slot when hovering the cell, focusing the cell or
-  // when the menu itself is opened.
-  '&:hover > div > div:last-of-type, &:focus-within > div > div:last-of-type, &[data-highlight="true"] > div > div:last-of-type':
-    {
-      opacity: 1,
-    },
-});
-
 const headerWrapperStyles = css({
   display: 'flex',
   alignItems: 'center',
@@ -43,10 +30,6 @@ const columnTypeStyles = css({
     height: '16px',
     width: '16px',
   },
-});
-
-const rightSlotStyles = css({
-  marginLeft: 'auto',
 });
 
 export const typeIcons = {
@@ -63,28 +46,26 @@ type Type = keyof typeof typeIcons;
 export interface TableHeaderProps {
   children?: React.ReactNode;
   highlight?: boolean;
-  rightSlot?: React.ReactNode;
+  icon?: React.ReactNode;
   type?: Type;
 }
 
 export const TableHeader = ({
   children,
   highlight = false,
-  rightSlot,
+  icon,
   type = 'string',
 }: TableHeaderProps): ReturnType<FC> => {
   const Icon = typeIcons[type];
   return (
-    <th
-      css={[columnStyles, rightSlot != null && hasRightSlotStyles]}
-      data-highlight={highlight}
-    >
+    <th css={columnStyles} data-highlight={highlight}>
       <div css={headerWrapperStyles}>
-        <span css={columnTypeStyles}>
-          <Icon />
-        </span>
+        {icon ?? (
+          <span css={columnTypeStyles}>
+            <Icon />
+          </span>
+        )}
         {children}
-        {rightSlot != null && <div css={rightSlotStyles}>{rightSlot}</div>}
       </div>
     </th>
   );

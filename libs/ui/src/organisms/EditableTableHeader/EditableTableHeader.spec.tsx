@@ -52,5 +52,5 @@ it('renders the trigger for the dropdown menu', () => {
     </table>
   );
 
-  expect(getByTitle(/caret down/i)).toBeInTheDocument();
+  expect(getByTitle(/text/i)).toBeInTheDocument();
 });

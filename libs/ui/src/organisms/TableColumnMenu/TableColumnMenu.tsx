@@ -1,26 +1,8 @@
-import { css } from '@emotion/react';
-import { ComponentProps } from 'react';
-import { grey400 } from '../../primitives';
-import { Caret, Number, Placeholder, Shapes, Text, Trash } from '../../icons';
+import { ComponentProps, ReactNode } from 'react';
+import { Number, Placeholder, Shapes, Text, Trash } from '../../icons';
 import { MenuItem, TriggerMenuItem } from '../../atoms';
 import { MenuList } from '../../molecules';
 import { noop } from '../../utils';
-
-const buttonStyles = css({
-  cursor: 'pointer',
-  display: 'flex',
-  padding: '4px',
-
-  '&:focus': {
-    borderRadius: '6px',
-    boxShadow: `0 0 0 1.5px ${grey400.rgb}`,
-  },
-});
-
-const iconWrapperStyles = css({
-  height: '16px',
-  width: '16px',
-});
 
 type TableCellType =
   | 'string'
@@ -34,23 +16,16 @@ interface TableColumnMenuProps
   extends Pick<ComponentProps<typeof MenuList>, 'onOpenChange'> {
   readonly onChangeColumnType?: (type: TableCellType) => void;
   readonly onRemoveColumn?: () => void;
+  readonly trigger: ReactNode;
 }
 
 export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
   onChangeColumnType = noop,
   onOpenChange,
   onRemoveColumn = noop,
+  trigger,
 }) => (
-  <MenuList
-    onOpenChange={onOpenChange}
-    trigger={
-      <button css={buttonStyles}>
-        <span css={iconWrapperStyles}>
-          <Caret variant="down" />
-        </span>
-      </button>
-    }
-  >
+  <MenuList onOpenChange={onOpenChange} trigger={trigger}>
     <MenuList
       trigger={<TriggerMenuItem icon={<Shapes />}>Change type</TriggerMenuItem>}
     >

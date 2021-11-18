@@ -34,7 +34,13 @@ export const EditableTableCaption = ({
         </div>
         <CellInput
           onChange={onChange}
-          placeholder="Table name"
+          onKeyDown={(e) => {
+            if (e.key === ' ') {
+              // Table names cannot contain spaces.
+              e.preventDefault();
+            }
+          }}
+          placeholder="TableName"
           variant="heading"
           value={value}
           validate={alwaysValid}

@@ -15,6 +15,22 @@ it('renders the children', () => {
   expect(getByText('Th Element')).toBeVisible();
 });
 
+describe('icon prop', () => {
+  it('renders icon', () => {
+    const { getByText } = render(
+      <table>
+        <thead>
+          <tr>
+            <TableHeader icon={<span>icon</span>}>Th Element</TableHeader>
+          </tr>
+        </thead>
+      </table>
+    );
+
+    expect(getByText('icon')).toBeVisible();
+  });
+});
+
 describe('type prop', () => {
   it.each(Object.entries(typeIcons))(
     'renders icon for type %s',
@@ -34,21 +50,4 @@ describe('type prop', () => {
       expect(getByTitle(new RegExp(Icon.name))).toBeInTheDocument();
     }
   );
-});
-
-describe('rightSlot prop', () => {
-  it('renders hidden when provided', () => {
-    const { getByText } = render(
-      <table>
-        <thead>
-          <tr>
-            <TableHeader rightSlot="Right">Th Element</TableHeader>
-          </tr>
-        </thead>
-      </table>
-    );
-
-    expect(getByText('Right')).toBeInTheDocument();
-    expect(getByText('Right')).not.toBeVisible();
-  });
 });

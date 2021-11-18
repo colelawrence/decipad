@@ -6,4 +6,6 @@ export default {
   component: TableColumnMenu,
 } as Meta;
 
-export const Normal: Story = () => <TableColumnMenu />;
+export const Normal: Story = () => (
+  <TableColumnMenu trigger={<button>click me</button>} />
+);
