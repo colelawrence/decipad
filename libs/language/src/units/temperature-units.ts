@@ -25,10 +25,7 @@ export const units: UnitOfMeasure[] = [
     baseQuantity: 'temperature',
     doesNotScaleOnConversion: true,
     toBaseQuantity: (fahrenheit) =>
-      fahrenheit
-        .sub(32)
-        .mul(5 / 9)
-        .add(273.15),
+      fahrenheit.sub(32).mul(5).div(9).add(273.15),
     fromBaseQuantity: (kelvin) => kelvin.sub(273.15).mul(9).div(5).add(32),
   },
 ];
