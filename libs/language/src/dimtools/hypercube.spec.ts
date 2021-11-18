@@ -8,9 +8,9 @@ import { Hypercube } from './hypercube';
 import {
   DimensionalValue,
   getAt,
-  hypercubeLikeToValue,
   uniqDimensions,
 } from './multidimensional-utils';
+import { materializeToValue } from './materialize';
 
 const jsCol = (
   items: (Fraction | number | (Fraction | number)[] | (Fraction | number)[][])[]
@@ -235,7 +235,7 @@ describe('can be turned from, and into, Column values', () => {
   });
 
   it('can be turned back into a column', () => {
-    expect(hypercubeLikeToValue(fromCol)).toEqual(
+    expect(materializeToValue(fromCol)).toEqual(
       jsCol([
         [1, 2, 3],
         [4, 5, 6],
@@ -255,7 +255,7 @@ describe('can be turned from, and into, Column values', () => {
       ]),
       t.column(t.column(t.number(), 1, null), 2, null)
     );
-    expect(hypercubeLikeToValue(oneD).getData()).toEqual([
+    expect(materializeToValue(oneD).getData()).toEqual([
       { s: 1, n: 1, d: 1 },
       { s: 1, n: 2, d: 1 },
     ]);
@@ -276,7 +276,7 @@ describe('can be turned from, and into, Column values', () => {
         dimensionId: 1,
       },
     ]);
-    expect(hypercubeLikeToValue(twoD).getData()).toEqual([
+    expect(materializeToValue(twoD).getData()).toEqual([
       [
         { s: 1, n: 1, d: 1 },
         { s: 1, n: 2, d: 1 },

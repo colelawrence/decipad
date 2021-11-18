@@ -1,11 +1,9 @@
 import uniqBy from 'lodash.uniqby';
-import { produce } from 'immer';
 
+import { Column, Value } from '../interpreter/Value';
 import type { Type } from '../type';
-import { linearizeType } from './common';
 import { enumerate, getDefined, getInstanceof } from '../utils';
-
-import { Value, Column } from '../interpreter/Value';
+import { linearizeType } from './common';
 import type { Dimension, HypercubeLike } from './hypercube';
 
 function getDimensions(value: Value, type: Type) {
@@ -45,27 +43,6 @@ export function groupTypesByDimension(...args: Type[][]) {
     }
   }
   return [...allDimensions.values()];
-}
-
-export function hypercubeLikeToValue(hc: HypercubeLike): Value {
-  return (function recurse(
-    dims: Dimension[],
-    coordinates: Map<string | number, number>
-  ): Value {
-    if (dims.length > 0) {
-      const [firstDim, ...restDims] = dims;
-      return Column.fromValues(
-        Array.from({ length: firstDim.dimensionLength }, (_, i) => {
-          const furtherCoordinates = produce(coordinates, (cursor) => {
-            cursor.set(firstDim.dimensionId, i);
-          });
-          return recurse(restDims, furtherCoordinates);
-        })
-      );
-    } else {
-      return getAt(hc, coordinates);
-    }
-  })(uniqDimensions(hc.dimensions), new Map());
 }
 
 export function getAt(

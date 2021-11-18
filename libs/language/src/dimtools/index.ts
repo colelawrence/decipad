@@ -13,8 +13,8 @@ import { Hypercube } from './hypercube';
 import {
   DimensionalValue,
   groupTypesByDimension,
-  hypercubeLikeToValue,
 } from './multidimensional-utils';
+import { materializeToValue } from './materialize';
 
 /**
  * Takes a function expects a certain cardinality in each argument,
@@ -79,13 +79,13 @@ export const automapValues = (
   );
 
   if (expectedCardinalities.every((c) => c === 1)) {
-    return hypercubeLikeToValue(new Hypercube(mapFn, ...dimensionalArgs));
+    return materializeToValue(new Hypercube(mapFn, ...dimensionalArgs));
   } else {
     const whichToReduce = getReductionPlan(argTypes, expectedCardinalities);
 
     if (whichToReduce.every((doReduce) => doReduce === false)) {
       // Reduce nothing -- input dimensions are correct
-      return mapFn(dimensionalArgs.map(hypercubeLikeToValue));
+      return mapFn(dimensionalArgs.map(materializeToValue));
     } else {
       throw new Error('Selective reduction is not supported yet');
     }

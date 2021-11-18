@@ -1,14 +1,13 @@
-import uniqBy from 'lodash.uniqby';
-import { produce, enableMapSet } from 'immer';
+import { enableMapSet } from 'immer';
 
-import { OneResult } from '../interpreter/interpreter-types';
-import { getAt } from './multidimensional-utils';
 import type { Value } from '../interpreter/Value';
+import { materialize } from './materialize';
 
 enableMapSet();
 
+export type DimensionId = string | number;
 export interface Dimension {
-  dimensionId: string | number;
+  dimensionId: DimensionId;
   dimensionLength: number;
 }
 
@@ -47,25 +46,6 @@ export class Hypercube implements HypercubeLike {
 
   /** Materialize a multi-dimensional hypercube wholesale. Needed to integrate with Value */
   materialize() {
-    const dims = uniqBy(this.dimensions, 'dimensionId');
-
-    const recurse = (
-      dims: Dimension[],
-      coordinates: Map<string | number, number>
-    ): OneResult => {
-      if (dims.length > 0) {
-        const [firstDim, ...restDims] = dims;
-        return Array.from({ length: firstDim.dimensionLength }, (_, i) => {
-          const innerCoords = produce(coordinates, (cursor) => {
-            cursor.set(firstDim.dimensionId, i);
-          });
-          return recurse(restDims, innerCoords);
-        });
-      } else {
-        return getAt(this, coordinates).getData();
-      }
-    };
-
-    return recurse(dims, new Map());
+    return materialize(this);
   }
 }
