@@ -281,6 +281,13 @@ export const anyMappingToMap = <T>(mapping: AnyMapping<T>): Map<string, T> => {
   }
 };
 
+export function equalOrUnknown(a: number | 'unknown', b: number | 'unknown') {
+  if (a === 'unknown' || b === 'unknown') {
+    return true;
+  }
+  return a === b;
+}
+
 export function identity<T>(o: T): T {
   return o;
 }

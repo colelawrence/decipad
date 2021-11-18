@@ -1,39 +1,13 @@
+import produce from 'immer';
+
 import { AST } from '..';
-import { units } from '../utils';
+import { l, u, units } from '../utils';
 import { InferError } from './InferError';
 import { inverseExponent, setExponent } from './units';
 import { Type, build as t } from './index';
 
-const nilPos = {
-  line: 2,
-  column: 0,
-  char: 0,
-};
-
-const meter: AST.Unit = {
-  unit: 'meters',
-  exp: 1,
-  multiplier: 1,
-  known: true,
-  start: nilPos,
-  end: nilPos,
-};
-const second: AST.Unit = {
-  unit: 'seconds',
-  exp: 1,
-  multiplier: 1,
-  known: true,
-  start: nilPos,
-  end: nilPos,
-};
-const dollar: AST.Unit = {
-  unit: 'USD',
-  exp: 1,
-  multiplier: 1,
-  known: false,
-  start: nilPos,
-  end: nilPos,
-};
+const meter = u('meters');
+const second = u('seconds');
 
 const invMeter: AST.Unit = inverseExponent(meter);
 const invSecond: AST.Unit = inverseExponent(second);
@@ -41,13 +15,6 @@ const invSecond: AST.Unit = inverseExponent(second);
 const numberInMeter = t.number([meter]);
 const numberInMeterBySecond = t.number([meter, second]);
 const numberInMeterPerSecond = t.number([meter, invSecond]);
-
-it('Can assert type equivalence', () => {
-  const type = t.string();
-
-  expect(type.isScalar('string')).toEqual(type);
-  expect(type.sameAs(type)).toEqual(type);
-});
 
 it('can be stringified', () => {
   expect(t.number().toString()).toEqual('<number>');
@@ -169,6 +136,49 @@ describe('sameAs', () => {
     expect(n(meter).sameAs(n())).toEqual(n(meter));
     expect(n().sameAs(n(meter))).toEqual(n(meter));
   });
+
+  it('checks tables are the same', () => {
+    const table = t.table({
+      length: 123,
+      columnNames: ['A', 'B'],
+      columnTypes: [t.number([meter]), t.column(t.boolean(), 10)],
+      indexName: 'Table1',
+    });
+
+    const getError = (recipe: (t: Type) => void) =>
+      table.sameAs(produce(table, recipe)).errorCause;
+
+    expect(
+      getError((table) => {
+        table.indexName = 'Table2';
+      })
+    ).not.toBeNull();
+    expect(
+      getError((table) => {
+        table.columnNames?.push('Heyy');
+        table.columnTypes?.push(t.number());
+      })
+    ).not.toBeNull();
+    expect(
+      getError((table) => {
+        table.tableLength = 1234;
+      })
+    ).not.toBeNull();
+
+    // Unknown lengths should be fine
+    expect(
+      getError((table) => {
+        table.tableLength = 'unknown';
+      })
+    ).toBeNull();
+
+    // Column comparisons are done with sameAs
+    expect(
+      getError((table) => {
+        table.node = l('A different source node should not change the outcome');
+      })
+    ).toBeNull();
+  });
 });
 
 describe('Type.combine', () => {
@@ -287,9 +297,11 @@ describe('divideUnit', () => {
   });
 
   it('divides units even further', () => {
-    expect(t.number([meter, invSecond]).divideUnit(units(dollar)).unit).toEqual(
+    expect(
+      t.number([meter, invSecond]).divideUnit(units(u('USD'))).unit
+    ).toEqual(
       units(
-        setExponent(dollar, -1), // first because of sort
+        setExponent(u('USD'), -1), // first because of sort
         meter,
         invSecond
       )

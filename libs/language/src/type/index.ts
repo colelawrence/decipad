@@ -1,7 +1,9 @@
 import { immerable, produce } from 'immer';
+import { dequal } from 'dequal';
+import { getDefined } from '@decipad/utils';
 
 import { Time } from '..';
-import { units, zip } from '../utils';
+import { equalOrUnknown, units, zip } from '../utils';
 import * as AST from '../parser/ast-types';
 import { InferError } from './InferError';
 import {
@@ -202,7 +204,8 @@ export class Type {
       return this.sameScalarnessAs(other)
         .sameColumnessAs(other)
         .sameDatenessAs(other)
-        .sameRangenessAs(other);
+        .sameRangenessAs(other)
+        .sameTablenessAs(other);
     }).call(this, other);
   }
 
@@ -377,6 +380,32 @@ export class Type {
       if (this.rangeOf != null && other.rangeOf != null) {
         return this.rangeOf.sameAs(other.rangeOf).mapType(() => this);
       } else if (this.rangeOf == null && other.rangeOf == null) {
+        return this;
+      } else {
+        return this.expected(other);
+      }
+    }).call(this, other);
+  }
+
+  sameTablenessAs(other: Type): Type {
+    return propagate(function propagated(this: Type, other: Type) {
+      if (this.columnTypes != null && other.columnTypes != null) {
+        if (
+          dequal(this.columnNames, other.columnNames) &&
+          zip(this.columnTypes, other.columnTypes).every(
+            ([myT, otherT]) => myT.sameAs(otherT).errorCause == null
+          ) &&
+          this.indexName === other.indexName &&
+          equalOrUnknown(
+            getDefined(this.tableLength),
+            getDefined(other.tableLength)
+          )
+        ) {
+          return this;
+        } else {
+          return this.expected(other);
+        }
+      } else if (this.columnTypes == null && other.columnTypes == null) {
         return this;
       } else {
         return this.expected(other);

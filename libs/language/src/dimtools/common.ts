@@ -1,4 +1,5 @@
 import { produce } from 'immer';
+import { equalOrUnknown } from '../utils';
 import { Type } from '../type';
 
 export type IndexNames = (string | null)[];
@@ -20,12 +21,7 @@ export const validateCardinalities = (
 
 export const compareDimensions = (a: Type, b: Type) => {
   if (a.columnSize != null && b.columnSize != null) {
-    const columnSizesSame =
-      a.columnSize === 'unknown' || b.columnSize === 'unknown'
-        ? true
-        : a.columnSize === b.columnSize;
-
-    return columnSizesSame;
+    return equalOrUnknown(a.columnSize, b.columnSize);
   }
 
   return false;
