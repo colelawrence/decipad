@@ -1,6 +1,7 @@
 // TODO fix types
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { buildType, Column } from '..';
+import { buildType, Column, Date } from '..';
+import { parseUTCDate } from '../date';
 import { fromJS } from '../interpreter/Value';
 import { ComputationRealm } from './ComputationRealm';
 import { program } from './testutils';
@@ -31,8 +32,8 @@ it('getIndexLabels', () => {
     buildType.table({
       indexName: 'DimName',
       length: 1,
-      columnTypes: [],
-      columnNames: [],
+      columnTypes: [buildType.string(), buildType.number()],
+      columnNames: ['Names', 'Numbers'],
     })
   );
   realm.interpreterRealm.stack.set(
@@ -49,6 +50,64 @@ it('getIndexLabels', () => {
         "One",
         "Two",
         "Three",
+      ],
+    }
+  `);
+});
+
+it('getIndexLabels with numbers', () => {
+  realm.inferContext.stack.set(
+    'Diabetes',
+    buildType.table({
+      indexName: 'Diabetes',
+      length: 1,
+      columnTypes: [buildType.number()],
+      columnNames: ['Nums'],
+    })
+  );
+
+  realm.interpreterRealm.stack.set(
+    'Diabetes',
+    Column.fromNamedValues([fromJS([1, 2])], ['Nums'])
+  );
+
+  expect(realm.getIndexLabels()).toMatchInlineSnapshot(`
+    Map {
+      "Diabetes" => Array [
+        "1",
+        "2",
+      ],
+    }
+  `);
+});
+
+it('getIndexLabels with dates', () => {
+  realm.inferContext.stack.set(
+    'Dates',
+    buildType.table({
+      indexName: 'Dates',
+      length: 1,
+      columnTypes: [buildType.date('month')],
+      columnNames: ['Dates'],
+    })
+  );
+
+  realm.interpreterRealm.stack.set(
+    'Dates',
+    Column.fromNamedValues(
+      [
+        Column.fromValues([
+          Date.fromDateAndSpecificity(parseUTCDate('2020-01'), 'month'),
+        ]),
+      ],
+      ['Dates']
+    )
+  );
+
+  expect(realm.getIndexLabels()).toMatchInlineSnapshot(`
+    Map {
+      "Dates" => Array [
+        "2020-01",
       ],
     }
   `);
