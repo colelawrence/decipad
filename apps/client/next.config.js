@@ -31,6 +31,9 @@ const nextConfig = {
               {
                 test: /\.(gif|jpg|png)$/,
                 type: 'asset/resource',
+                generator: {
+                  filename: 'static/chunks/[hash]-[name][ext]',
+                },
               },
               ...rules,
             ],
