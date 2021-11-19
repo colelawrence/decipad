@@ -69,20 +69,6 @@ describe('an execute event', () => {
     userEvent.keyboard(`{enter}`);
     expect(handleExecute).toHaveBeenCalled();
   });
-  it('is emitted on pressing tab when focused', () => {
-    const handleExecute = jest.fn();
-    render(
-      <SlashCommandsMenuItem
-        {...props}
-        title="Title"
-        focused
-        onExecute={handleExecute}
-      />
-    );
-
-    userEvent.tab();
-    expect(handleExecute).toHaveBeenCalled();
-  });
   it('is not emitted when not focused', () => {
     const handleExecute = jest.fn();
     render(

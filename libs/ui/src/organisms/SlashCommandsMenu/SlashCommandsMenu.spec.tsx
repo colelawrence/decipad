@@ -43,6 +43,28 @@ it('does not focus menuitems when holding shift', () => {
   userEvent.keyboard('{shift}{arrowdown}{/shift}{enter}');
   expect(handleExecute).not.toBeCalled();
 });
+it('focuses menuitems using tab and shift+tab', () => {
+  const handleExecute = jest.fn();
+  render(<SlashCommandsMenu onExecute={handleExecute} />);
+
+  userEvent.tab();
+  userEvent.keyboard('{enter}');
+  expect(handleExecute).toHaveBeenCalledTimes(1);
+
+  userEvent.tab();
+  userEvent.keyboard('{enter}');
+  expect(handleExecute).toHaveBeenCalledTimes(2);
+
+  const [[firstCommand], [secondCommand]] = handleExecute.mock.calls;
+  expect(secondCommand).not.toEqual(firstCommand);
+
+  userEvent.tab({ shift: true });
+  userEvent.keyboard('{enter}');
+  expect(handleExecute).toHaveBeenCalledTimes(3);
+
+  const [, , [thirdCommand]] = handleExecute.mock.calls;
+  expect(thirdCommand).toEqual(firstCommand);
+});
 
 describe('search', () => {
   it('filters out non-matching groups and items', () => {

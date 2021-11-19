@@ -55,11 +55,7 @@ export const SlashCommandsMenuItem = ({
 }: SlashCommandsMenuItemProps): ReturnType<FC> => {
   const onKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      if (
-        focused &&
-        !event.shiftKey &&
-        (event.key === 'Enter' || event.key === 'Tab')
-      ) {
+      if (focused && event.key === 'Enter' && !event.shiftKey) {
         onExecute();
         event.stopPropagation();
         event.preventDefault();

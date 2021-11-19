@@ -146,31 +146,30 @@ export const SlashCommandsMenu = ({
 
   const onKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      if (!event.shiftKey) {
-        switch (event.key) {
-          case 'ArrowDown':
-            setFocusedCommand(
-              matchingCommands[
-                (focusedCommand
-                  ? matchingCommands.indexOf(focusedCommand)
-                  : -1) + 1
-              ] ?? matchingCommands[0]
-            );
-            event.stopPropagation();
-            event.preventDefault();
-            break;
-          case 'ArrowUp':
-            setFocusedCommand(
-              matchingCommands[
-                (focusedCommand
-                  ? matchingCommands.indexOf(focusedCommand)
-                  : matchingCommands.length) - 1
-              ] ?? matchingCommands.slice(-1)[0]
-            );
-            event.stopPropagation();
-            event.preventDefault();
-            break;
-        }
+      switch (true) {
+        case event.key === 'ArrowDown' && !event.shiftKey:
+        case event.key === 'Tab' && !event.shiftKey:
+          setFocusedCommand(
+            matchingCommands[
+              (focusedCommand ? matchingCommands.indexOf(focusedCommand) : -1) +
+                1
+            ] ?? matchingCommands[0]
+          );
+          event.stopPropagation();
+          event.preventDefault();
+          break;
+        case event.key === 'ArrowUp' && !event.shiftKey:
+        case event.key === 'Tab' && event.shiftKey:
+          setFocusedCommand(
+            matchingCommands[
+              (focusedCommand
+                ? matchingCommands.indexOf(focusedCommand)
+                : matchingCommands.length) - 1
+            ] ?? matchingCommands.slice(-1)[0]
+          );
+          event.stopPropagation();
+          event.preventDefault();
+          break;
       }
     },
     [focusedCommand, matchingCommands]
