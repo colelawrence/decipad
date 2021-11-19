@@ -494,6 +494,7 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
   total: {
     argCount: 1,
     argCardinalities: [2],
+    isReducer: true,
     fn: (nums: number[]) => nums.reduce((a, b) => a + b, 0),
     functor: ([nums]) => nums.reduced().isScalar('number'),
   },

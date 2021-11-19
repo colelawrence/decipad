@@ -1,6 +1,11 @@
 import * as Values from '../interpreter/Value';
 import { Type, build as t } from '../type';
-import { automapTypes, automapValues } from '.';
+import {
+  automapTypes,
+  automapTypesForReducer,
+  automapValues,
+  automapValuesForReducer,
+} from '.';
 
 const bool = t.boolean();
 const num = t.number();
@@ -226,51 +231,51 @@ describe('automapValues', () => {
     );
 
     expect(result.getData()).toMatchInlineSnapshot(`
-Array [
-  Array [
-    Array [
-      Fraction(4),
-      Fraction(8),
-    ],
-    Array [
-      Fraction(16),
-      Fraction(32),
-    ],
-    Array [
-      Fraction(64),
-      Fraction(128),
-    ],
-  ],
-]
-`);
+      Array [
+        Array [
+          Array [
+            Fraction(4),
+            Fraction(8),
+          ],
+          Array [
+            Fraction(16),
+            Fraction(32),
+          ],
+          Array [
+            Fraction(64),
+            Fraction(128),
+          ],
+        ],
+      ]
+    `);
     expect(calledOnValues.map((v) => v.getData())).toMatchInlineSnapshot(`
-Array [
-  Array [
-    Fraction(2),
-    Fraction(2),
-  ],
-  Array [
-    Fraction(4),
-    Fraction(2),
-  ],
-  Array [
-    Fraction(8),
-    Fraction(2),
-  ],
-  Array [
-    Fraction(16),
-    Fraction(2),
-  ],
-  Array [
-    Fraction(32),
-    Fraction(2),
-  ],
-  Array [
-    Fraction(64),
-    Fraction(2),
-  ],
-]
-`);
+      Array [
+        Array [
+          Fraction(2),
+          Fraction(2),
+        ],
+        Array [
+          Fraction(4),
+          Fraction(2),
+        ],
+        Array [
+          Fraction(8),
+          Fraction(2),
+        ],
+        Array [
+          Fraction(16),
+          Fraction(2),
+        ],
+        Array [
+          Fraction(32),
+          Fraction(2),
+        ],
+        Array [
+          Fraction(64),
+          Fraction(2),
+        ],
+      ]
+    `);
   });
 
   describe('automapping', () => {
@@ -572,5 +577,83 @@ Array [
     );
     expect(callee).toHaveBeenCalledWith([tableVal]);
     callee.mockClear();
+  });
+});
+
+describe('automap for reducers', () => {
+  const sum = ([value]: Values.Value[]) =>
+    Values.fromJS((value.getData() as number[]).reduce((a, b) => a + b));
+  const sumFunctor = ([type]: Type[]) => type.reduced().isScalar('number');
+
+  it('automapTypesForReducer can call a reducer', () => {
+    const oneDeeType = t.column(t.number(), 1, 'X');
+
+    expect(
+      automapTypesForReducer(oneDeeType, sumFunctor).toString()
+    ).toMatchInlineSnapshot(`"<number>"`);
+  });
+
+  it('automapTypesForReducer can reduce', () => {
+    const twoDeeType = t.column(t.column(t.number(), 1, 'X'), 2, 'Y');
+
+    expect(
+      automapTypesForReducer(twoDeeType, sumFunctor).toString()
+    ).toMatchInlineSnapshot(`"<number> x 2"`);
+  });
+
+  it('automapTypesForReducer can reduce the other way', () => {
+    const twoDeeType = t.column(t.column(t.number(), 2, 'X'), 1, 'Y');
+
+    expect(
+      automapTypesForReducer(twoDeeType, sumFunctor).toString()
+    ).toMatchInlineSnapshot(`"<number> x 1"`);
+  });
+
+  it('automapValuesForReducer can call a reducer', () => {
+    const oneDeeType = t.column(t.number(), 1, 'X');
+    const oneDeeValue = Values.fromJS([1, 2]);
+
+    expect(
+      automapValuesForReducer(
+        oneDeeType,
+        oneDeeValue as Values.Column,
+        sum
+      )?.getData()
+    ).toMatchInlineSnapshot(`Fraction(3)`);
+  });
+
+  it('automapValuesForReducer can reduce', () => {
+    const twoDeeType = t.column(t.column(t.number(), 1, 'X'), 2, 'Y');
+    const twoDeeValue = Values.fromJS([[1], [2]]);
+
+    expect(
+      automapValuesForReducer(
+        twoDeeType,
+        twoDeeValue as Values.Column,
+        sum
+      )?.getData()
+    ).toMatchInlineSnapshot(`
+      Array [
+        Fraction(1),
+        Fraction(2),
+      ]
+    `);
+  });
+
+  it('automapValuesForReducer can reduce the other way', () => {
+    const twoDeeType = t.column(t.column(t.number(), 2, 'X'), 1, 'Y');
+    const twoDeeValue = Values.fromJS([[1, 2]]);
+
+    expect(
+      automapValuesForReducer(
+        twoDeeType,
+        twoDeeValue as Values.Column,
+        sum
+      )?.getData()
+    ).toMatchInlineSnapshot(`
+      Array [
+        Fraction(3),
+      ]
+    `);
   });
 });

@@ -1,8 +1,8 @@
 import { builtins } from './builtins';
-import { automapValues } from '../dimtools';
+import { automapValues, automapValuesForReducer } from '../dimtools';
 
-import { Value, AnyValue, fromJS } from '../interpreter/Value';
-import { getDefined } from '../utils';
+import { Value, AnyValue, Column, fromJS } from '../interpreter/Value';
+import { getDefined, getInstanceof } from '../utils';
 import type { Type } from '../type';
 import { autoconvertResult, autoconvertArguments } from '../units';
 import { BuiltinSpec } from './interfaces';
@@ -24,31 +24,34 @@ function callBuiltinAfterAutoconvert(
     return builtin.fnValuesNoAutomap(args);
   }
 
-  return automapValues(
-    argTypes,
-    args,
-    (argsLowerDims) => {
-      if (builtin.fn != null) {
-        const argData = argsLowerDims
-          .map((a) => a.getData())
-          .map(requireNonNull);
-        try {
-          return fromJS(builtin.fn(...argData));
-        } catch (err) {
-          console.error(err);
-          throw new TypeError(
-            `Error calling builtin ${funcName}: ${(err as Error).message}`
-          );
-        }
-      } else if (builtin.fnValues != null) {
-        return builtin.fnValues(...(argsLowerDims as AnyValue[]));
-      } else {
-        /* istanbul ignore next */
-        throw new Error('unreachable');
+  const lowerDimFn = (argsLowerDims: Value[]) => {
+    if (builtin.fn != null) {
+      const argData = argsLowerDims.map((a) => a.getData()).map(requireNonNull);
+      try {
+        return fromJS(builtin.fn(...argData));
+      } catch (err) {
+        console.error(err);
+        throw new TypeError(
+          `Error calling builtin ${funcName}: ${(err as Error).message}`
+        );
       }
-    },
-    builtin.argCardinalities
-  );
+    } else if (builtin.fnValues != null) {
+      return builtin.fnValues(...(argsLowerDims as AnyValue[]));
+    } else {
+      /* istanbul ignore next */
+      throw new Error('unreachable');
+    }
+  };
+
+  if (builtin.isReducer) {
+    return automapValuesForReducer(
+      argTypes[0],
+      getInstanceof(args[0], Column),
+      lowerDimFn
+    );
+  }
+
+  return automapValues(argTypes, args, lowerDimFn, builtin.argCardinalities);
 }
 
 export function callBuiltin(

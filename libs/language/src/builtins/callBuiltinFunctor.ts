@@ -1,5 +1,5 @@
 import { Type, build as t } from '../type';
-import { automapTypes } from '../dimtools';
+import { automapTypes, automapTypesForReducer } from '../dimtools';
 import { getDefined } from '../utils';
 import { builtins } from './builtins';
 import { AST } from '../parser';
@@ -24,7 +24,14 @@ export const callBuiltinFunctor = (
       );
     }
 
-    if (builtin.functorNoAutomap) {
+    if (builtin.isReducer) {
+      return automapTypesForReducer(
+        givenArguments[0],
+        getDefined(builtin.functor)
+      );
+    }
+
+    if (builtin.functorNoAutomap != null) {
       return builtin.functorNoAutomap(givenArguments, givenValues);
     }
 

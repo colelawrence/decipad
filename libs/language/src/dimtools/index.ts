@@ -1,4 +1,4 @@
-import { allMatch, zip } from '../utils';
+import { allMatch, getInstanceof, zip } from '../utils';
 import { Type, build as t } from '../type';
 import * as Value from '../interpreter/Value';
 import { getReductionPlan } from './getReductionPlan';
@@ -6,6 +6,7 @@ import {
   arrayOfOnes,
   compareDimensions,
   deLinearizeType,
+  getCardinality,
   linearizeType,
   validateCardinalities,
 } from './common';
@@ -89,5 +90,50 @@ export const automapValues = (
     } else {
       throw new Error('Selective reduction is not supported yet');
     }
+  }
+};
+
+export const automapTypesForReducer = (
+  argType: Type,
+  mapFn: (types: Type[]) => Type
+): Type => {
+  if (!validateCardinalities([argType], [2])) {
+    return t.impossible('A column is required');
+  }
+
+  if (getCardinality(argType) === 2) {
+    return mapFn([argType]);
+  } else if (argType.columnSize != null) {
+    return t.column(
+      automapTypesForReducer(argType.reduced(), mapFn),
+      argType.columnSize,
+      argType.indexedBy
+    );
+  } else {
+    throw new Error('panic: unreachable');
+  }
+};
+
+export const automapValuesForReducer = (
+  argType: Type,
+  argValue: Value.Column,
+  mapFn: (values: Value.Value[]) => Value.Value
+): Value.Value => {
+  if (!validateCardinalities([argType], [2])) {
+    throw new Error('panic: cardinality is too low');
+  }
+
+  if (getCardinality(argType) === 2) {
+    return mapFn([argValue]);
+  } else {
+    return Value.Column.fromValues(
+      argValue.values.map((v) =>
+        automapValuesForReducer(
+          argType.reduced(),
+          getInstanceof(v, Value.Column),
+          mapFn
+        )
+      )
+    );
   }
 };
