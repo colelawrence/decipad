@@ -67,7 +67,7 @@ You can access previous column values by using the word `previous` and providing
 ```devi live
 harvest = {
   harvest_date = [date(2022-02-20) through date(2022-03-05) by day]
-  oranges = [10, 15, 20, 9, 4, 54, 23, 45, 53, 63, 54, 12, 0, 1],
+  oranges = [10 oranges, 15, 20, 9, 4, 54, 23, 45, 53, 63, 54, 12, 0, 1],
   accumulated_oranges = previous(0) + oranges
 }
 ```

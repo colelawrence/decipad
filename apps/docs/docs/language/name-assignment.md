@@ -27,15 +27,15 @@ office_cost = office_space * office_price
 You cannot change the value of an existing variable after it has been declared. This is invalid:
 
 ```deci live
-a = 1
-a = a + 1
-==> A variable with the name a already exists
+beans = 1 bean
+beans = beans + 1
+==> A variable with the name beans already exists
 ```
 
 Instead, you will need to declare a new variable:
 
 ```deci live
-a = 1
-b = a + 1
-==> 2
+beans = 1 bean
+more_beans = beans + 1
+==> 2 beans
 ```

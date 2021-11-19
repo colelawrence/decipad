@@ -79,6 +79,6 @@ Or subtract two dates to get a time duration:
 ```deci live
 start = date(2022-06-30)
 end = date(2022-09-15)
-diff = start - end
-==> [ [ 'day', -77 ] ] <null>
+diff = end - start
+==> [ [ 'day', 77 ] ] <null>
 ```
