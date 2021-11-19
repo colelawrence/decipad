@@ -234,16 +234,16 @@ describe('more models', () => {
         Years: years,
         GrowthRate: { d: 4, n: 1, s: 1 },
         CashFlows: [
-          { d: 1, n: 10, s: 1 },
-          { d: 2, n: 25, s: 1 },
-          { d: 8, n: 125, s: 1 },
-          { d: 32, n: 625, s: 1 },
+          { d: 100, n: 1, s: 1 },
+          { d: 80, n: 1, s: 1 },
+          { d: 64, n: 1, s: 1 },
+          { d: 256, n: 5, s: 1 },
         ],
         YearlyCashFlows: [
-          { d: 1, n: 8, s: 1 },
-          { d: 1, n: 10, s: 1 },
-          { d: 2, n: 25, s: 1 },
-          { d: 8, n: 125, s: 1 },
+          { d: 125, n: 1, s: 1 },
+          { d: 100, n: 1, s: 1 },
+          { d: 80, n: 1, s: 1 },
+          { d: 64, n: 1, s: 1 },
         ],
       },
       types: {
@@ -255,9 +255,9 @@ describe('more models', () => {
               {
                 // TODO this unit is million USD,
                 // multiplier/exponent should reflect that
-                unit: 'musd',
+                unit: 'usd',
                 exp: 1,
-                multiplier: 1,
+                multiplier: 0.001,
               },
             ],
           },

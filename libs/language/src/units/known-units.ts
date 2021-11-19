@@ -11,6 +11,7 @@ import * as InformationUnits from './information-units';
 import * as SubstanceUnits from './substance-units';
 import * as ElectricCurrentUnits from './electric-current-units';
 import * as PowerUnits from './power-units';
+import * as CurrencyUnits from './currency-units';
 
 type BaseQuantity =
   | 'length'
@@ -25,7 +26,11 @@ type BaseQuantity =
   | 'substance'
   | 'electric current'
   | 'power'
-  | 'information';
+  | 'information'
+  | '$EUR'
+  | '$USD'
+  | '$GBP'
+  | '$SEK';
 
 export type UnitOfMeasure = {
   name: string;
@@ -48,6 +53,7 @@ const allUnits: UnitOfMeasure[] = [
   ...SubstanceUnits.units,
   ...ElectricCurrentUnits.units,
   ...PowerUnits.units,
+  ...CurrencyUnits.units,
 ];
 
 const allSymbols = new Map<string, UnitOfMeasure>();

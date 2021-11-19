@@ -62,7 +62,7 @@ export const tokenizer = moo.states({
     },
 
     identifier: {
-      match: /[a-zA-Z°$][a-zA-Z0-9_°$]*/,
+      match: /[a-zA-Z°€£$$][a-zA-Z0-9_°€£$$]*/,
       type: keywords,
     },
     number: /[0-9]+(?:\.[0-9]+)?/,
