@@ -32,7 +32,7 @@ export const SlashCommandsParagraph: PlatePluginComponent = (props) => {
     }
   }, [selected]);
 
-  const search = /^\/([a-z]*)$/i.exec(text)?.[1];
+  const search = /^\/([a-z ]*)$/i.exec(text)?.[1];
   const showSlashCommands =
     selected && focused && !menuSuppressed && search !== undefined;
 
