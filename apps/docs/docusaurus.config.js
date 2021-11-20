@@ -126,15 +126,9 @@ const config = {
       },
       algolia: {
         appId: 'TV8XZ0RFSZ',
-
         // Public API key: it is safe to commit it
         apiKey: '79605e8d8a0277fe1804b4899df3ce42',
         indexName: 'docs.decipad.com',
-        // Optional: see doc section below
-        contextualSearch: true,
-
-        // Optional: Algolia search parameters
-        searchParameters: {},
       },
     }),
 };
