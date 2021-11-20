@@ -28,7 +28,7 @@ jobs:
     name: Discord Notification
     runs-on: ubuntu-latest
     needs: # make sure the notification is sent AFTER the jobs you want included have completed
-      - deploy
+      - index
     if: ${{ failure() && github.ref == 'refs/heads/main' }}
     steps:
       - name: Notify
