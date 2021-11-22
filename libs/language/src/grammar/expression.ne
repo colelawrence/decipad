@@ -6,12 +6,22 @@
 
 expression    -> nonGivenExp                            {% id %}
 expression    -> given                                  {% id %}
-expression    -> asExp                                  {% id %}
 
-nonGivenExp   -> divMulOp                               {% id %}
+nonGivenExp   -> overExp                                {% id %}
 nonGivenExp   -> importData                             {% id %}
 
-asExp         -> expression _ "as" _ units              {%
+overExp       -> asExp                                  {% id %}
+overExp       -> overExp _ "over" _ genericIdentifier   {%
+                                                        (d) => {
+                                                          return addArrayLoc({
+                                                            type: 'directive',
+                                                            args: ['over', d[0], d[4]]
+                                                          }, d)
+                                                        }
+                                                        %}
+
+asExp         -> divMulOp                               {% id %}
+asExp         -> asExp _ "as" _ units                   {%
                                                         (d, _l, reject) => {
                                                           const exp = d[0]
                                                           const unit = d[4]

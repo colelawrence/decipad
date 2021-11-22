@@ -64,9 +64,6 @@ jobs:
       - name: Run tests
         run: yarn test:coverage
 
-      - name: Test docs
-        run: ./node_modules/.bin/nx test docs
-
   notify:
     name: Discord Notification
     runs-on: ubuntu-latest

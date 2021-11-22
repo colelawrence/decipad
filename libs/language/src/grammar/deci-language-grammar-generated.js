@@ -1170,12 +1170,26 @@ let ParserRules = [
   },
   { name: 'expression', symbols: ['nonGivenExp'], postprocess: id },
   { name: 'expression', symbols: ['given'], postprocess: id },
-  { name: 'expression', symbols: ['asExp'], postprocess: id },
-  { name: 'nonGivenExp', symbols: ['divMulOp'], postprocess: id },
+  { name: 'nonGivenExp', symbols: ['overExp'], postprocess: id },
   { name: 'nonGivenExp', symbols: ['importData'], postprocess: id },
+  { name: 'overExp', symbols: ['asExp'], postprocess: id },
+  {
+    name: 'overExp',
+    symbols: ['overExp', '_', { literal: 'over' }, '_', 'genericIdentifier'],
+    postprocess: (d) => {
+      return addArrayLoc(
+        {
+          type: 'directive',
+          args: ['over', d[0], d[4]],
+        },
+        d
+      );
+    },
+  },
+  { name: 'asExp', symbols: ['divMulOp'], postprocess: id },
   {
     name: 'asExp',
-    symbols: ['expression', '_', { literal: 'as' }, '_', 'units'],
+    symbols: ['asExp', '_', { literal: 'as' }, '_', 'units'],
     postprocess: (d, _l, reject) => {
       const exp = d[0];
       const unit = d[4];
