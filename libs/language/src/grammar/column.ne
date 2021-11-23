@@ -34,7 +34,7 @@ column       -> "[" columnItems "]"                     {%
                                                         }
                                                         %}
 
-columnItems -> _ expression (_ "," _ expression):* _    {%
+columnItems -> _ expression (_ "," _ expression):* (_ ","):? _    {%
                                                         (d, _l, reject) => {
                                                           return addArrayLoc({
                                                             type: 'column-items',

@@ -22,7 +22,7 @@ functionDefName -> identifier                           {%
                                                         }, d[0])
                                                         %}
 
-functionDefArgs  -> "(" _ argName (optionalComma argName):* _ ")" {%
+functionDefArgs  -> "(" _ argName (optionalComma argName):* (_ ","):? _ ")" {%
                                                         (d) => addArrayLoc({
                                                           type: 'argument-names',
                                                           args: [d[2], ...d[3].map(([_comma, arg]) => arg)],
@@ -71,7 +71,7 @@ functionCall -> identifier _ callArgs                   {%
                                                         }
                                                         %}
 
-callArgs -> "(" _ expression (_ "," _ expression):* _ ")"   {%
+callArgs -> "(" _ expression (_ "," _ expression):* (_ ","):? _ ")"   {%
                                                         (d) => addArrayLoc({
                                                           type: 'argument-list',
                                                           args: [d[2], ...d[3].map(([_ws, _comma, _ws2, arg]) => arg)],

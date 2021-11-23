@@ -927,8 +927,30 @@ let ParserRules = [
     },
   },
   {
+    name: 'columnItems$ebnf$2$subexpression$1',
+    symbols: ['_', { literal: ',' }],
+  },
+  {
+    name: 'columnItems$ebnf$2',
+    symbols: ['columnItems$ebnf$2$subexpression$1'],
+    postprocess: id,
+  },
+  {
+    name: 'columnItems$ebnf$2',
+    symbols: [],
+    postprocess: function (d) {
+      return null;
+    },
+  },
+  {
     name: 'columnItems',
-    symbols: ['_', 'expression', 'columnItems$ebnf$1', '_'],
+    symbols: [
+      '_',
+      'expression',
+      'columnItems$ebnf$1',
+      'columnItems$ebnf$2',
+      '_',
+    ],
     postprocess: (d, _l, reject) => {
       return addArrayLoc(
         {
@@ -1687,12 +1709,29 @@ let ParserRules = [
     },
   },
   {
+    name: 'functionDefArgs$ebnf$2$subexpression$1',
+    symbols: ['_', { literal: ',' }],
+  },
+  {
+    name: 'functionDefArgs$ebnf$2',
+    symbols: ['functionDefArgs$ebnf$2$subexpression$1'],
+    postprocess: id,
+  },
+  {
+    name: 'functionDefArgs$ebnf$2',
+    symbols: [],
+    postprocess: function (d) {
+      return null;
+    },
+  },
+  {
     name: 'functionDefArgs',
     symbols: [
       { literal: '(' },
       '_',
       'argName',
       'functionDefArgs$ebnf$1',
+      'functionDefArgs$ebnf$2',
       '_',
       { literal: ')' },
     ],
@@ -1782,6 +1821,19 @@ let ParserRules = [
       return d[0].concat([d[1]]);
     },
   },
+  { name: 'callArgs$ebnf$2$subexpression$1', symbols: ['_', { literal: ',' }] },
+  {
+    name: 'callArgs$ebnf$2',
+    symbols: ['callArgs$ebnf$2$subexpression$1'],
+    postprocess: id,
+  },
+  {
+    name: 'callArgs$ebnf$2',
+    symbols: [],
+    postprocess: function (d) {
+      return null;
+    },
+  },
   {
     name: 'callArgs',
     symbols: [
@@ -1789,6 +1841,7 @@ let ParserRules = [
       '_',
       'expression',
       'callArgs$ebnf$1',
+      'callArgs$ebnf$2',
       '_',
       { literal: ')' },
     ],

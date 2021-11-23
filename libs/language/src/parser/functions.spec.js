@@ -103,6 +103,57 @@ runTests({
     ],
   },
 
+  'function definition with commas': {
+    source: 'function name (arg1, arg2,) => Ref1',
+    ast: [
+      {
+        type: 'function-definition',
+        args: [
+          {
+            type: 'funcdef',
+            args: ['name'],
+            start: 9,
+            end: 12,
+          },
+          {
+            type: 'argument-names',
+            args: [
+              {
+                type: 'def',
+                args: ['arg1'],
+                start: 15,
+                end: 18,
+              },
+              {
+                type: 'def',
+                args: ['arg2'],
+                start: 21,
+                end: 24,
+              },
+            ],
+            start: 14,
+            end: 26,
+          },
+          {
+            type: 'block',
+            args: [
+              {
+                type: 'ref',
+                args: ['Ref1'],
+                start: 31,
+                end: 34,
+              },
+            ],
+            start: 31,
+            end: 34,
+          },
+        ],
+        start: 0,
+        end: 34,
+      },
+    ],
+  },
+
   'function call': {
     source: 'functionname(1, 2)',
     ast: [
@@ -141,6 +192,37 @@ runTests({
     ],
   },
 
+  'function call with trailing comma': {
+    source: 'functionname(1,)',
+    ast: [
+      {
+        type: 'function-call',
+        args: [
+          {
+            type: 'funcref',
+            args: ['functionname'],
+            start: 0,
+            end: 11,
+          },
+          {
+            type: 'argument-list',
+            args: [
+              {
+                type: 'literal',
+                args: ['number', 1, null, { d: 1, n: 1, s: 1 }],
+                start: 13,
+                end: 13,
+              },
+            ],
+            start: 12,
+            end: 15,
+          },
+        ],
+        start: 0,
+        end: 15,
+      },
+    ],
+  },
   'function declaration and use': {
     source: 'function name(a b) => a + b\n\nfunctionname(1, 2)',
     ast: [

@@ -101,6 +101,56 @@ runTests({
     ],
   },
 
+  'trailing comma': {
+    source: ' [ 1, ] ',
+    ast: [
+      {
+        type: 'column',
+        args: [
+          {
+            type: 'column-items',
+            args: [
+              {
+                type: 'literal',
+                args: ['number', 1, null, { d: 1, n: 1, s: 1 }],
+                start: {
+                  char: 3,
+                  line: 1,
+                  column: 4,
+                },
+                end: {
+                  char: 3,
+                  line: 1,
+                  column: 4,
+                },
+              },
+            ],
+            start: {
+              char: 2,
+              line: 1,
+              column: 3,
+            },
+            end: {
+              char: 5,
+              line: 1,
+              column: 6,
+            },
+          },
+        ],
+        start: {
+          char: 1,
+          line: 1,
+          column: 2,
+        },
+        end: {
+          char: 6,
+          line: 1,
+          column: 7,
+        },
+      },
+    ],
+  },
+
   'column with two expressions': {
     source: ' [ 1, 2 + 3 ] ',
     sourceMap: false,

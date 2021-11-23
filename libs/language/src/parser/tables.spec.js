@@ -145,6 +145,99 @@ runTests({
     ],
   },
 
+  'table with trailing comma': {
+    source: ' Table = { abc, } ',
+    ast: [
+      {
+        type: 'assign',
+        args: [
+          {
+            type: 'def',
+            args: ['Table'],
+            start: {
+              char: 1,
+              line: 1,
+              column: 2,
+            },
+            end: {
+              char: 5,
+              line: 1,
+              column: 6,
+            },
+          },
+          {
+            type: 'table',
+            args: [
+              {
+                type: 'table-column',
+                args: [
+                  {
+                    type: 'coldef',
+                    args: ['abc'],
+                    start: {
+                      char: 11,
+                      line: 1,
+                      column: 12,
+                    },
+                    end: {
+                      char: 13,
+                      line: 1,
+                      column: 14,
+                    },
+                  },
+                  {
+                    type: 'ref',
+                    args: ['abc'],
+                    start: {
+                      char: 11,
+                      line: 1,
+                      column: 12,
+                    },
+                    end: {
+                      char: 13,
+                      line: 1,
+                      column: 14,
+                    },
+                  },
+                ],
+                start: {
+                  char: 11,
+                  line: 1,
+                  column: 12,
+                },
+                end: {
+                  char: 13,
+                  line: 1,
+                  column: 14,
+                },
+              },
+            ],
+            start: {
+              char: 9,
+              line: 1,
+              column: 10,
+            },
+            end: {
+              char: 16,
+              line: 1,
+              column: 17,
+            },
+          },
+        ],
+        start: {
+          char: 1,
+          line: 1,
+          column: 2,
+        },
+        end: {
+          char: 16,
+          line: 1,
+          column: 17,
+        },
+      },
+    ],
+  },
+
   'table with three implicit coldefs': {
     source: ' Table = { abc  ,  def,   ghi} ',
     ast: [
