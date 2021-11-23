@@ -34,18 +34,18 @@ export default (handler: Handler) => {
           headers,
         };
       } catch (_err) {
-        console.error('Error caught while processing request', req);
-        console.error((_err as Error).message);
-        console.error((_err as Error).stack);
-        const err = boomify(_err as Error).output;
-        console.log(_err);
-        if (err.statusCode === 500) {
+        const err = boomify(_err as Error);
+        if (err.isServer) {
+          console.error('Error caught while processing request', req);
+          console.error((_err as Error).message);
+          console.error((_err as Error).stack);
+          console.log(_err);
           throw err; // throw error for wrapper to log and handle
         }
         return {
-          statusCode: err.statusCode,
-          headers: getErrorHeaders(err.headers),
-          body: JSON.stringify(err.payload),
+          statusCode: err.output.statusCode,
+          headers: getErrorHeaders(err.output.headers),
+          body: JSON.stringify(err.output.payload),
         };
       }
     }

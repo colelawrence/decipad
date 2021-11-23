@@ -1,10 +1,6 @@
 import { lock as lockFile } from 'proper-lockfile';
 import { timeout } from '../../utils/src';
 
-type ErrorWithCode = Error & {
-  code: string;
-};
-
 const retryLockMs = 1000;
 
 async function lock(path: string) {
@@ -15,14 +11,8 @@ async function lock(path: string) {
       release = await lockFile(path);
       break;
     } catch (err) {
-      if (
-        (err as ErrorWithCode).message.indexOf('already being held') >= 0 ||
-        (err as ErrorWithCode).code === 'ENOENT'
-      ) {
-        await timeout(retryLockMs);
-      } else {
-        throw err;
-      }
+      // let's assume that this was a failure at acquirting the lock
+      await timeout(retryLockMs);
     }
   }
   /* eslint-enable no-await-in-loop */
