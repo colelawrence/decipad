@@ -18,6 +18,8 @@ Deci supports the following file types:
 - CSV files (comma-separated text format, which is exportable from most spreadsheet apps)
 - [Arrow files](https://arrow.apache.org)
 
+You can check [the section about tables](/docs/language/tables) if you want to learn what you can do with them.
+
 ## Name imported data
 
 As usual, you can give a name to imported data like this, so that you can use later:
