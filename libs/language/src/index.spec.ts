@@ -281,6 +281,22 @@ describe('Multidimensional operations', () => {
       `)
     ).rejects.toBeInstanceOf(Error);
   });
+
+  it('can run Total over multiple dims', async () => {
+    expect(
+      await runCode(`
+        X = { Nums = [1, 2, 3] }
+        total([100, 1000] * X.Nums)
+      `)
+    ).toMatchInlineSnapshot(`Result([ 600, 6000 ])`);
+
+    expect(
+      await runCode(`
+        X = { Nums = [1, 2, 3] }
+        total(([100, 1000] * X.Nums) over X)
+      `)
+    ).toMatchInlineSnapshot(`Result([ 1100, 2200, 3300 ])`);
+  });
 });
 
 describe('Tables', () => {

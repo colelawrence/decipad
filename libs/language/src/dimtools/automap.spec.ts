@@ -5,7 +5,7 @@ import {
   automapTypesForReducer,
   automapValues,
   automapValuesForReducer,
-} from '.';
+} from './automap';
 
 const bool = t.boolean();
 const num = t.number();
