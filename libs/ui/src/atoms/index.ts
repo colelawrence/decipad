@@ -1,16 +1,21 @@
 export { Avatar } from './Avatar/Avatar';
 export { Button } from './Button/Button';
 export { CellInput } from './CellInput/CellInput';
+export { CodeLine } from './CodeLine/CodeLine';
+export { CodeVariable } from './CodeVariable/CodeVariable';
+export { DateResult } from './DateResult/DateResult';
 export { Divider } from './Divider/Divider';
 export { IconButton } from './IconButton/IconButton';
 export { MenuItem } from './MenuItem/MenuItem';
 export { NavigationItem } from './NavigationItem/NavigationItem';
 export { NotebookTopbarTooltip } from './NotebookTopbarTooltip/NotebookTopbarTooltip';
+export { NumberResult } from './NumberResult/NumberResult';
 export { Paragraph } from './Paragraph/Paragraph';
 export { Placeholder } from './Placeholder/Placeholder';
 export { SlashCommandsMenuItem } from './SlashCommandsMenuItem/SlashCommandsMenuItem';
 export { TableData } from './TableData/TableData';
 export { TableHeader } from './TableHeader/TableHeader';
+export { TimeUnitsResult } from './TimeUnitsResult/TimeUnitsResult';
 export { Toggle } from './Toggle/Toggle';
 export { TriggerMenuItem } from './TriggerMenuItem/TriggerMenuItem';
 

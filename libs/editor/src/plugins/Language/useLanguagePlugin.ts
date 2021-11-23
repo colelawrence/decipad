@@ -10,11 +10,12 @@ import {
   ResultsContextValue,
   ProgramBlocksContextValue,
 } from '@decipad/ui';
-import { Computer, ComputeRequest, makeComputeStream } from '@decipad/language';
+import { ComputeRequest, makeComputeStream } from '@decipad/language';
 import { getCursorPos, CursorPos } from './getCursorPos';
 import { slateDocumentToComputeRequest } from './slateDocumentToComputeRequest';
 import { SlateNode } from './common';
 import { ELEMENT_IMPORT_DATA } from '../../utils/elementTypes';
+import { useComputer } from '../../contexts/Computer';
 
 interface UseLanguagePluginRet {
   languagePlugin: PlatePlugin;
@@ -34,7 +35,7 @@ interface ParsedProgramBlock {
 type ParsedProgramBlocks = ParsedProgramBlock[];
 
 export const useLanguagePlugin = (): UseLanguagePluginRet => {
-  const [computer] = useState(() => new Computer());
+  const computer = useComputer();
   const [results, setResults] = useState<ResultsContextValue>(
     makeResultsContextValue
   );

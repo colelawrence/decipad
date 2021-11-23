@@ -1,7 +1,7 @@
 import { render } from 'test-utils';
-import { AST, buildType } from '@decipad/language';
+import { AST, buildType, Type } from '@decipad/language';
 import { ResultContent } from './Result.component';
-import { NumberResult } from './NumberResult';
+import { NumberResult } from '../../../../atoms';
 
 const meters: AST.Unit[] = [
   {
@@ -95,7 +95,9 @@ describe('ResultNumber', () => {
     [1000.1234, '1,000.1234'],
     [1e69, '1e+69'],
   ])('Commatizes %s', (num, expected) => {
-    const { container } = render(<NumberResult value={num} />);
+    const { container } = render(
+      <NumberResult type={{ type: 'number' } as Type} value={num} />
+    );
     expect(container.textContent).toEqual(expected);
   });
 
@@ -103,7 +105,9 @@ describe('ResultNumber', () => {
     [0.1 + 0.2, '0.3'],
     [0.123456789, '0.123456789'],
   ])('Removes ugly FP rounding error in %s', (num, expected) => {
-    const { container } = render(<NumberResult value={num} />);
+    const { container } = render(
+      <NumberResult type={{ type: 'number' } as Type} value={num} />
+    );
     expect(container.textContent).toEqual(expected);
   });
 });

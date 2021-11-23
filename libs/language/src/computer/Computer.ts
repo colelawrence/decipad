@@ -227,4 +227,14 @@ export class Computer {
 
     return statementIndex !== -1 ? [blockId, statementIndex] : [blockId, null];
   }
+
+  getStatement(blockId: string, statementIndex: number): AST.Statement | null {
+    const block = (
+      this.previouslyParsed.find(
+        (block) => block.id === blockId
+      ) as IdentifiedBlock
+    )?.block;
+
+    return block?.args[statementIndex] ?? null;
+  }
 }

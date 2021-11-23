@@ -137,14 +137,14 @@ const mFontFamily: TypographyStyles['fontFamily'] =
   '"JetBrains Mono", monospace';
 
 export const code: TypographyStyles = {
-  ...setCssVar('currentTextColor', cssVar('normalTextColor')),
+  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
   color: cssVar('currentTextColor'),
   fontFamily: mFontFamily,
   fontStyle: 'normal',
   fontWeight: 'normal',
-  fontSize: '1rem',
-  lineHeight: '100%',
-  letterSpacing: 'unset',
+  fontSize: `${12 / usualRemPxs}rem`,
+  lineHeight: '125%',
+  letterSpacing: '0.01em',
   fontFeatureSettings: 'unset',
 };
 

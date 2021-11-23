@@ -1,3 +1,5 @@
+export { CodeLine } from './CodeLine';
+export { CodeBlock } from './CodeBlock';
 export { DropFile } from './DropFile';
 export { DropHint } from './DropHint';
 export { Error } from './Error';

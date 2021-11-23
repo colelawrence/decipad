@@ -9,7 +9,8 @@ import {
   TableHeader,
   HeaderIcon,
 } from './tableStyles';
-import { ResultContent, ResultContentProps } from './Result.component';
+import { ResultContent } from './Result.component';
+import { ResultTypeProps } from '../../../results';
 
 function IconForType({ type }: { type: Type }): JSX.Element {
   let Icon;
@@ -51,8 +52,12 @@ function tableByRows(
 export function TableResult({
   type: { columnNames, columnTypes },
   value,
-  depth = 0,
-}: ResultContentProps): JSX.Element | null {
+  variant = 'block',
+}: ResultTypeProps): JSX.Element | null {
+  if (variant === 'inline') {
+    return <span>Table</span>;
+  }
+
   if (!columnNames || !columnTypes) return null;
 
   const table = tableByRows(columnNames, columnTypes, value);
@@ -88,12 +93,7 @@ export function TableResult({
                   const t = table.columnTypes[index];
                   return (
                     <TableCell key={index} isNumeric={t.type === 'number'}>
-                      <ResultContent
-                        key={index}
-                        type={t}
-                        value={cell}
-                        depth={depth + 1}
-                      />
+                      <ResultContent key={index} type={t} value={cell} />
                     </TableCell>
                   );
                 })}

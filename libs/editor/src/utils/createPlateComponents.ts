@@ -6,7 +6,6 @@ import {
   ImportDataElementProps,
   ItalicLeaf,
   ListItemElement,
-  ModelBlockElement,
   StrikethroughLeaf,
   SubheadingElement,
   SubtitleElement,
@@ -17,6 +16,7 @@ import {
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
+  ELEMENT_CODE_LINE,
   ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_H3,
@@ -35,7 +35,12 @@ import { FunctionComponent } from 'react';
 import { withStyledDraggables } from './withStyledDraggables';
 import { withStyledPlaceHolders } from './withStyledPlaceholders';
 import * as elementTypes from './elementTypes';
-import { SlashCommandsParagraph, Table } from '../components';
+import {
+  CodeLine,
+  CodeBlock,
+  SlashCommandsParagraph,
+  Table,
+} from '../components';
 
 type PlateElementComponent = FunctionComponent<
   SPRenderElementProps | SPRenderLeafProps | ImportDataElementProps
@@ -54,7 +59,8 @@ export const createPlateComponents = (): Partial<
     [ELEMENT_H2]: SubtitleElement,
     [ELEMENT_H3]: SubheadingElement,
     [ELEMENT_BLOCKQUOTE]: BlockquoteElement,
-    [ELEMENT_CODE_BLOCK]: ModelBlockElement,
+    [ELEMENT_CODE_BLOCK]: CodeBlock,
+    [ELEMENT_CODE_LINE]: CodeLine,
     [ELEMENT_UL]: UnorderedListElement,
     [ELEMENT_LI]: ListItemElement,
 

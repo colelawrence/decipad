@@ -27,5 +27,6 @@ module.exports = {
   setupFilesAfterEnv: [
     ...setupFilesAfterEnv,
     require.resolve('./libs/testutils/src/dom-extensions-setup-after-env'),
+    require.resolve('./libs/testutils/src/setup-chakra'),
   ],
 };

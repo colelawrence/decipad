@@ -20,6 +20,7 @@ import { useImportDataPlugin } from './plugins/ImportData/useImportDataPlugin';
 import { useExternalDataPlugin } from './plugins/ExternalData/useExternalDataPlugin';
 import { useUploadDataPlugin } from './plugins/UploadData/useUploadDataPlugin';
 import { DropFile, Tooltip } from './components';
+import { ComputerContextProvider } from './contexts/Computer';
 
 export interface EditorProps {
   padId: string;
@@ -108,7 +109,9 @@ const SlateEditor = ({
 export const Editor = (props: EditorProps): ReturnType<FC> => {
   return (
     <DndProvider backend={HTML5Backend}>
-      <SlateEditor key={props.padId} {...props} />
+      <ComputerContextProvider>
+        <SlateEditor key={props.padId} {...props} />
+      </ComputerContextProvider>
     </DndProvider>
   );
 };

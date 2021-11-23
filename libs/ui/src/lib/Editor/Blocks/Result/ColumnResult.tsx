@@ -1,15 +1,23 @@
 import { Box, Tbody } from '@chakra-ui/react';
 import { Interpreter } from '@decipad/language';
+import { InlineColumnResult } from '../../../../organisms';
 import { ResultTable, TableRow, TableCell } from './tableStyles';
-import { ResultContent, ResultContentProps } from './Result.component';
+import { ResultContent } from './Result.component';
+import { ResultTypeProps } from '../../../results';
 import { useResults } from '../../../Contexts/Results';
 
 export function ColumnResult({
-  type: { indexedBy, cellType },
+  type,
   value,
-  depth = 0,
-}: ResultContentProps): JSX.Element | null {
+  variant = 'block',
+}: ResultTypeProps): JSX.Element | null {
   const { indexLabels } = useResults();
+
+  if (variant === 'inline') {
+    return <InlineColumnResult type={type} value={value} />;
+  }
+
+  const { indexedBy, cellType } = type;
 
   if (!cellType) return null;
 
@@ -35,11 +43,7 @@ export function ColumnResult({
                   </TableCell>
                 )}
                 <TableCell isNumeric={cellType.type === 'number'}>
-                  <ResultContent
-                    type={cellType}
-                    value={row}
-                    depth={depth + 1}
-                  />
+                  <ResultContent type={cellType} value={row} />
                 </TableCell>
               </TableRow>
             );

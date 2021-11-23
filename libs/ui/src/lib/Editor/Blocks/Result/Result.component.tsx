@@ -5,12 +5,11 @@ import { Box } from '@chakra-ui/react';
 import { Type, InBlockResult, OptionalValueLocation } from '@decipad/language';
 import { useResults } from '@decipad/ui';
 
-import { NumberResult } from './NumberResult';
-import { DateResult } from './DateResult';
+import { DateResult, NumberResult, TimeUnitsResult } from '../../../../atoms';
+import { RangeResult } from '../../../../organisms';
+
 import { ColumnResult } from './ColumnResult';
 import { TableResult } from './TableResult';
-import { RangeResult } from './RangeResult';
-import { TimeUnitsResult } from './TimeUnitsResult';
 
 const commonStyles = {
   py: 2,
@@ -50,12 +49,7 @@ export const ResultContent = (props: ResultContentProps) => {
   if (type == null) return null;
 
   if (type.type === 'number') {
-    return (
-      <>
-        <NumberResult value={value} />
-        {type.unit ? ` ${type.toString(value)}` : ''}
-      </>
-    );
+    return <NumberResult {...props} />;
   }
   if (type.type === 'boolean' || type.type === 'string') {
     return <>{String(value)}</>;

@@ -22,6 +22,8 @@ const colorNames: Record<ColorId, string> = {
   electricGreen200: 'Electric Green 200',
 
   blockquote: 'Blockquote',
+  codeBubbleBackground: 'Code Bubble Background',
+  codeBubbleBorder: 'Code Bubble Border',
 };
 export default {
   title: 'Primitives / Color',

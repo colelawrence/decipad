@@ -13,6 +13,7 @@ import {
 } from './plugins/Language/useLanguagePlugin';
 import { Tooltip } from './components';
 import { components, options, plugins } from './configuration';
+import { ComputerContextProvider } from './contexts/Computer';
 
 export const NoDocSyncEditorBase = (props: PlateProps): ReturnType<FC> => {
   const [editorId] = useState(nanoid);
@@ -70,7 +71,9 @@ export const NoDocSyncEditorBase = (props: PlateProps): ReturnType<FC> => {
 export const NoDocSyncEditor = (props: PlateProps): ReturnType<FC> => {
   return (
     <DndProvider backend={HTML5Backend}>
-      <NoDocSyncEditorBase {...props} />
+      <ComputerContextProvider>
+        <NoDocSyncEditorBase {...props} />
+      </ComputerContextProvider>
     </DndProvider>
   );
 };

@@ -1,10 +1,9 @@
-import { chakra } from '@chakra-ui/system';
-import { Box } from '@chakra-ui/react';
+import { FC } from 'react';
+import { css } from '@emotion/react';
+import { ResultTypeProps } from '../../lib/results';
 
-const UnselectableCommaStyles = chakra(Box, {
-  baseStyle: {
-    userSelect: 'none',
-  },
+const commaStyles = css({
+  userSelect: 'none',
 });
 
 const commatizeEveryThreeDigits = (digits: string) => {
@@ -20,9 +19,9 @@ const commatizeEveryThreeDigits = (digits: string) => {
     const threeDigits = digits.slice(i, i + 3);
 
     segments.push(
-      <UnselectableCommaStyles as="span" key={i}>
+      <span key={i} css={commaStyles}>
         ,
-      </UnselectableCommaStyles>
+      </span>
     );
     segments.push(threeDigits);
   }
@@ -46,7 +45,10 @@ const removeFpArtifacts = (decimalPart: string) => {
   return decimalPart;
 };
 
-export const NumberResult = ({ value }: { value: number }) => {
+export const NumberResult = ({
+  type,
+  value,
+}: ResultTypeProps): ReturnType<FC> => {
   const asString = String(value);
 
   // Numbers' toString isn't always formatted like [-]####.###
@@ -60,13 +62,14 @@ export const NumberResult = ({ value }: { value: number }) => {
         : integerPart;
 
     return (
-      <>
+      <span>
         {sign}
         {formattedIntegerPart}
         {decimalPart && removeFpArtifacts(decimalPart)}
-      </>
+        {type.unit ? ` ${type.toString(value)}` : ''}
+      </span>
     );
   }
 
-  return <>{asString}</>;
+  return <span>{asString}</span>;
 };
