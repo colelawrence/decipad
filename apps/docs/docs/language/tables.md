@@ -154,6 +154,20 @@ lookup(flights, "TP123")
 }
 ```
 
+## Accessing values
+
+If you have a table index, you can extract a value by using the `lookup` function and specifying the column name in which said value is located:
+
+```deci live
+flights = {
+  number = ["TP123", "BA456", "EJ789"]
+  passenger_count = [100, 150, 200]
+}
+
+lookup(flights, "BA456").passenger_count
+==> 150
+```
+
 ## Augmenting tables
 
 If you have a table, you can copy it to another table using the `...` sign:
