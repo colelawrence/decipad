@@ -18,5 +18,6 @@ export { TableHeader } from './TableHeader/TableHeader';
 export { TimeUnitsResult } from './TimeUnitsResult/TimeUnitsResult';
 export { Toggle } from './Toggle/Toggle';
 export { TriggerMenuItem } from './TriggerMenuItem/TriggerMenuItem';
+export { Tooltip } from './Tooltip/Tooltip';
 
 export * from './Editor';

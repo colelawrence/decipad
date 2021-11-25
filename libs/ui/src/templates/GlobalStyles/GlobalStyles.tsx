@@ -5,40 +5,9 @@ import { Global } from '@emotion/react';
 import emotionNormalize from 'emotion-normalize';
 import emotionReset from 'emotion-reset';
 
-import {
-  cssVar,
-  CssVariableKey,
-  CssVariables,
-  globalTextStyles,
-  setCssVar,
-} from '../../primitives';
-import {
-  black,
-  grey100,
-  grey200,
-  grey300,
-  grey400,
-  white,
-} from '../../primitives/color';
+import { cssVar, darkTheme, globalTextStyles } from '../../primitives';
 import { ALLOW_DARK_THEME_LOCAL_STORAGE_KEY } from '../../utils';
 
-const darkTheme: Record<
-  CssVariableKey<keyof CssVariables>,
-  CssVariables[keyof CssVariables]
-> = {
-  ...setCssVar('backgroundColor', black.rgb),
-  ...setCssVar('iconBackgroundColor', grey300.rgb),
-  ...setCssVar('offColor', grey400.rgb),
-
-  ...setCssVar('highlightColor', grey400.rgb),
-  ...setCssVar('strongHighlightColor', grey300.rgb),
-
-  ...setCssVar('weakTextColor', grey200.rgb),
-  ...setCssVar('normalTextColor', grey100.rgb),
-  ...setCssVar('strongTextColor', white.rgb),
-
-  ...setCssVar('currentTextColor', cssVar('normalTextColor')),
-};
 const allowDarkTheme = () =>
   window.localStorage.getItem(ALLOW_DARK_THEME_LOCAL_STORAGE_KEY) === 'true';
 const DarkThemeStyles = (): ReturnType<React.FC> => {
