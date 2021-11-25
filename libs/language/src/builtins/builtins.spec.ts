@@ -172,6 +172,19 @@ it('retrieves the last element of a list', () => {
   `);
 });
 
+it('countif: counts the true elements in a list', () => {
+  expect(
+    builtins.countif.functorNoAutomap!([t.column(t.boolean(), 3)])
+  ).toMatchObject(t.number());
+
+  expect(builtins.countif.fnValuesNoAutomap?.([fromJS([true, false, true])]))
+    .toMatchInlineSnapshot(`
+    FractionValue {
+      "value": Fraction(2),
+    }
+  `);
+});
+
 it('knows whether a range contains a value', () => {
   expect(
     builtins.contains.fnValues?.(

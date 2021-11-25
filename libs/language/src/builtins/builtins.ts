@@ -288,6 +288,22 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
     },
     functorNoAutomap: ([a]) => Type.combine(a.reducedOrSelf()),
   },
+  countif: {
+    argCount: 1,
+    fnValuesNoAutomap: (args: Value[]) => {
+      const [a] = args;
+      const aData = a.getData();
+      const aElements = Array.isArray(aData) ? aData : [aData];
+      return fromJS(
+        aElements.reduce<number>(
+          (count, elem) => (elem.valueOf() ? count + 1 : count),
+          0
+        )
+      );
+    },
+    functorNoAutomap: ([a]) =>
+      Type.combine(a.reducedOrSelf().isScalar('boolean'), t.number()),
+  },
   stepgrowth: {
     argCount: 1,
     argCardinalities: [2],
@@ -497,5 +513,8 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
     isReducer: true,
     fn: (nums: number[]) => nums.reduce((a, b) => a + b, 0),
     functor: ([nums]) => nums.reduced().isScalar('number'),
+  },
+  sum: {
+    aliasFor: 'total',
   },
 };
