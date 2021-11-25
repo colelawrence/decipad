@@ -852,7 +852,7 @@ describe('number units work together', () => {
         1 centimeters^2 + 2 meters^2
       `)
     ).toMatchObject({
-      value: F(201, 100),
+      value: F(20001, 10000),
       type: t.number({
         type: 'units',
         args: [
@@ -1024,6 +1024,27 @@ describe('number units work together', () => {
         args: [
           {
             unit: '°F',
+            multiplier: 1,
+            exp: 1,
+            known: true,
+          },
+        ],
+      }),
+    });
+  });
+
+  it('handles negative exp unit multipliers when converting', async () => {
+    expect(
+      await runCode(`
+      2 liter/km * 3 km
+      `)
+    ).toMatchObject({
+      value: F(6),
+      type: t.number({
+        type: 'units',
+        args: [
+          {
+            unit: 'liters',
             multiplier: 1,
             exp: 1,
             known: true,

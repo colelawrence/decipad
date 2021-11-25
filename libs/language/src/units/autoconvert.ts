@@ -6,21 +6,19 @@ import {
   convertFromBaseUnitIfKnown,
   convertToBaseUnitIfKnown,
 } from './convert';
-import { zip } from '../utils';
+import { zip, getInstanceof } from '../utils';
 
 export function autoconvertResult(value: Value, type: Type): Value {
   if (type.type === 'number') {
     const units = (type.unit && type.unit.args) || [];
     return fromJS(
-      units.reduce(
-        (acc, unit) =>
-          convertFromBaseUnitIfKnown(
-            acc.div(unit.multiplier),
-            unit.unit,
-            unit.exp || 1
-          ),
-        value.getData() as Fraction
-      )
+      units.reduce((acc, unit) => {
+        return convertFromBaseUnitIfKnown(
+          acc.div(unit.multiplier),
+          unit.unit,
+          unit.exp || 1
+        );
+      }, getInstanceof(value.getData(), Fraction))
     );
   }
   return value;
@@ -33,11 +31,11 @@ function autoconvertArgument(value: Value, type: Type): Value {
       units.reduce(
         (acc, unit) =>
           convertToBaseUnitIfKnown(
-            acc.mul(unit.multiplier),
+            acc.mul(unit.multiplier ** unit.exp),
             unit.unit,
             unit.exp || 1
           ),
-        value.getData() as Fraction
+        getInstanceof(value.getData(), Fraction)
       )
     );
   }

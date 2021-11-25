@@ -62,10 +62,7 @@ function convert(
     if (unit.doesNotScaleOnConversion && pow !== 1) {
       throw new TypeError(`Cannot convert from ${unitName} with pow not 1`);
     }
-    if (pow === 1) {
-      return convert(n);
-    }
-    return n.mul(convert(new Fraction(1)).pow(pow));
+    return pow === 1 ? convert(n) : n.mul(convert(new Fraction(1)).pow(pow));
   }
   return n;
 }

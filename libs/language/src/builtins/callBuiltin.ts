@@ -74,15 +74,10 @@ export function callBuiltin(
     );
   }
 
-  if (builtin.noAutoconvert) {
-    return callBuiltinAfterAutoconvert(
-      funcName,
-      builtin,
-      argsBeforeConvert,
-      argTypes
-    );
-  }
-  const args = autoconvertArguments(argsBeforeConvert, argTypes);
+  const args = builtin.noAutoconvert
+    ? argsBeforeConvert
+    : autoconvertArguments(argsBeforeConvert, argTypes);
+
   return autoconvertResult(
     callBuiltinAfterAutoconvert(funcName, builtin, args, argTypes),
     returnType
