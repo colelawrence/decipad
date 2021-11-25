@@ -1209,9 +1209,12 @@ let ParserRules = [
     },
   },
   { name: 'asExp', symbols: ['divMulOp'], postprocess: id },
+  { name: 'asExp$subexpression$1', symbols: [{ literal: 'as' }] },
+  { name: 'asExp$subexpression$1', symbols: [{ literal: 'to' }] },
+  { name: 'asExp$subexpression$1', symbols: [{ literal: 'in' }] },
   {
     name: 'asExp',
-    symbols: ['asExp', '_', { literal: 'as' }, '_', 'units'],
+    symbols: ['asExp', '_', 'asExp$subexpression$1', '_', 'units'],
     postprocess: (d, _l, reject) => {
       const exp = d[0];
       const unit = d[4];

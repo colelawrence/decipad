@@ -32,6 +32,7 @@ import { knowsUnit } from '../units'
 const reservedWords = new Set([
   'in',
   'as',
+  'to',
   'where',
   'given',
   'per',

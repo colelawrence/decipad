@@ -21,7 +21,7 @@ overExp       -> overExp _ "over" _ genericIdentifier   {%
                                                         %}
 
 asExp         -> divMulOp                               {% id %}
-asExp         -> asExp _ "as" _ units                   {%
+asExp         -> asExp _ ("as" | "to" | "in") _ units   {%
                                                         (d, _l, reject) => {
                                                           const exp = d[0]
                                                           const unit = d[4]
