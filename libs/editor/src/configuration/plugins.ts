@@ -22,10 +22,10 @@ import { createBubblePlugin } from '../plugins/Bubbles/createBubblePlugin';
 import { createForcedLayoutPlugin } from '../plugins/ForcedLayout/createForcedLayoutPlugin';
 import { createInteractiveTablePlugin } from '../plugins/InteractiveTable/createInteractiveTablePlugin';
 import { createMarksPlugins } from '../plugins/Marks/createMarksPlugins';
-import { autoFormatRules } from './autoFormat';
+import { autoformatRules } from './autoformat';
 import { exitBreakOptions } from './exitBreakOptions';
 import { resetBlockTypeOptions } from './resetBlockTypeOptions';
-import { softBreakOptions } from './softBreakOption';
+import { softBreakOptions } from './softBreakOptions';
 
 export const plugins = [
   createReactPlugin(),
@@ -46,7 +46,7 @@ export const plugins = [
   createExitBreakPlugin(exitBreakOptions),
   createSoftBreakPlugin(softBreakOptions),
   createResetNodePlugin(resetBlockTypeOptions),
-  createAutoformatPlugin(autoFormatRules),
+  createAutoformatPlugin(autoformatRules),
   createBubblePlugin(),
   createDndPlugin(),
 
