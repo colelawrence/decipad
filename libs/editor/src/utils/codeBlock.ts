@@ -2,8 +2,8 @@ import {
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
   insertNodes,
-  SPEditor,
   TDescendant,
+  TEditor,
 } from '@udecode/plate';
 import { Path } from 'slate';
 import { getPathBelowBlock } from './path';
@@ -18,8 +18,13 @@ const codeBlockElement = {
   ],
 } as const;
 
-export const insertCodeBlockBelow = (editor: SPEditor, path: Path): void => {
+export const insertCodeBlockBelow = (
+  editor: TEditor,
+  path: Path,
+  select = false
+): void => {
   insertNodes<TDescendant>(editor, codeBlockElement, {
     at: getPathBelowBlock(editor, path),
+    select,
   });
 };

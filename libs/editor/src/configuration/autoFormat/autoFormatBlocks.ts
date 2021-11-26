@@ -2,14 +2,13 @@ import {
   AutoformatRule,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
-  ELEMENT_DEFAULT,
   ELEMENT_H2,
   ELEMENT_H3,
-  getPlatePluginType,
-  insertEmptyCodeBlock,
-  SPEditor,
   TEditor,
 } from '@udecode/plate';
+import { Editor, Transforms } from 'slate';
+import { insertCodeBlockBelow } from '../../utils/codeBlock';
+import { getBlockParentPath } from '../../utils/path';
 import { preFormat } from './utils/preFormat';
 
 export const autoFormatBlocks: AutoformatRule[] = [
@@ -38,10 +37,22 @@ export const autoFormatBlocks: AutoformatRule[] = [
     triggerAtBlockStart: false,
     preFormat,
     format: (editor: TEditor): void => {
-      insertEmptyCodeBlock(editor as SPEditor, {
-        defaultType: getPlatePluginType(editor as SPEditor, ELEMENT_DEFAULT),
-        insertNodesOptions: { select: true },
-      });
+      if (!editor.selection) {
+        throw new Error('Cannot autoformat code block without a selection');
+      }
+      const triggeringBlockPath = getBlockParentPath(
+        editor,
+        editor.selection.anchor.path
+      );
+      const triggeringBlockNowEmpty = !Editor.string(
+        editor,
+        triggeringBlockPath
+      );
+
+      insertCodeBlockBelow(editor, triggeringBlockPath, true);
+      if (triggeringBlockNowEmpty) {
+        Transforms.delete(editor, { at: triggeringBlockPath });
+      }
     },
   },
 ];
