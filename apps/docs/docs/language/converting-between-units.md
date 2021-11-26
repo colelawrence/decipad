@@ -47,7 +47,8 @@ Here is a list of all the units Deci knows:
 - **atmosphere**, atm
 - Pascal, Pa
 - Bar, Ba
-- mmHg
+- mmHg, torr
+- psi
 
 ## Energy units
 

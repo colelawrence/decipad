@@ -90,6 +90,15 @@ describe('convert', () => {
     expect(convertBetweenUnits(F(1520), u('mmhg'), u('atm'))).toMatchObject(
       F(2)
     );
+    expect(convertBetweenUnits(F(1520), u('torr'), u('atm'))).toMatchObject(
+      F(2)
+    );
+    expect(convertBetweenUnits(F(14.696), u('psi'), u('atm'))).toMatchObject(
+      F(1)
+    );
+    expect(convertBetweenUnits(F(2.9), u('bar'), u('psi'))).toMatchObject(
+      F(852368, 20265)
+    );
   });
 
   it('converts between energy units', () => {

@@ -28,7 +28,14 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'mmhg',
     baseQuantity: 'pressure',
+    abbreviations: ['torr'],
     toBaseQuantity: (mmhg) => mmhg.div(760),
     fromBaseQuantity: (atmospheres) => atmospheres.mul(760),
+  },
+  {
+    name: 'psi',
+    baseQuantity: 'pressure',
+    toBaseQuantity: (psi) => psi.div(14.696),
+    fromBaseQuantity: (atmospheres) => atmospheres.mul(14.696),
   },
 ];
