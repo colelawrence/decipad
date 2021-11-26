@@ -1,5 +1,4 @@
 import { getDefined } from '@decipad/utils';
-import produce from 'immer';
 import { singular } from 'pluralize';
 
 import { convertTimeQuantityTo, Time } from '../date';
@@ -29,14 +28,13 @@ export async function getType(
 ): Promise<Type> {
   const expressionType = await infer(expr);
   return automapTypes([expressionType], ([expressionType]: Type[]): Type => {
-    if (unit.args.length !== 1) {
-      return t.impossible(InferError.cannotConvertToUnit(unit));
-    }
-
-    const targetUnit = getDefined(unit.args[0]);
-    const targetUnitName = targetUnit.unit;
-
     if (expressionType.timeUnits) {
+      if (unit.args.length !== 1) {
+        return t.impossible(InferError.cannotConvertToUnit(unit));
+      }
+
+      const targetUnit = getDefined(unit.args[0]);
+      const targetUnitName = targetUnit.unit;
       const targetUnitOfMeasure = getUnitByName(targetUnitName);
       if (
         !targetUnitOfMeasure ||
@@ -49,30 +47,17 @@ export async function getType(
 
     if (expressionType.type === 'number') {
       const sourceUnits = expressionType.unit;
-      if (sourceUnits && sourceUnits.args.length > 1) {
-        return t.impossible(
-          InferError.cannotConvertBetweenUnits(sourceUnits, unit)
-        );
-      }
       if (!sourceUnits || sourceUnits.args.length === 0) {
         return t.number(unit);
       }
 
-      const sourceUnit = sourceUnits.args[0];
-      const sourceUnitName = sourceUnit.unit;
-
-      if (!areUnitsConvertible(sourceUnitName, targetUnitName)) {
+      if (!areUnitsConvertible(sourceUnits, unit)) {
         return t.impossible(
           InferError.cannotConvertBetweenUnits(sourceUnits, unit)
         );
       }
 
-      const resultUnit = produce(sourceUnit, (unit) => {
-        unit.unit = targetUnitName;
-        unit.multiplier = targetUnit.multiplier;
-      });
-
-      return t.number([resultUnit]);
+      return t.number(unit);
     }
 
     return expressionType.mapType((expType) => setUnit(expType, unit));
@@ -86,17 +71,16 @@ export async function getValue(
 ): Promise<Value> {
   const evalResult = await evaluate(expression);
 
-  if (units.args.length > 1) {
-    throw new TypeError(
-      `Don't know how to convert to composed unit ${stringifyUnits(units)}`
-    );
-  }
-
-  const targetUnitAsString = units.args[0].unit;
-
   const expressionType = await getNodeType(expression);
   return automapValues([expressionType], [evalResult], ([value]) => {
     if (value instanceof TimeQuantity) {
+      if (units.args.length > 1) {
+        throw new TypeError(
+          `Don't know how to convert to composed unit ${stringifyUnits(units)}`
+        );
+      }
+
+      const targetUnitAsString = units.args[0].unit;
       return fromJS(
         convertTimeQuantityTo(
           value as TimeQuantity,
@@ -110,16 +94,7 @@ export async function getValue(
       if (!sourceUnits || sourceUnits.args.length < 1) {
         return evalResult;
       }
-      if (sourceUnits.args.length > 1) {
-        throw new TypeError(
-          `Don't know how to convert to composed units ${stringifyUnits(
-            sourceUnits
-          )}`
-        );
-      }
-      return fromJS(
-        convertBetweenUnits(value.getData(), sourceUnits.args[0], units.args[0])
-      );
+      return fromJS(convertBetweenUnits(value.getData(), sourceUnits, units));
     }
 
     throw new TypeError(

@@ -4,6 +4,8 @@ sidebar_position: 16
 
 # Converting between units
 
+## Simple units
+
 Deci understands some basic units. To convert between them you can use the `as` operator like this:
 
 ```deci live
@@ -28,56 +30,20 @@ Since Deci understands unit multiplers (`deca` `mili`, `centi`, `h`, `k`), you c
 ==> 0.3 m
 ```
 
-Here is a list of all the units Deci knows:
+[Here is a list of all the units Deci knows](/docs/docs/language/supported-units).
 
-## Length units
+## Complex units
 
-- **meter**, m, metre
-- inch
-- mile
-- angstrom
+You can also convert more complex units. For instance, you may have the number of bananas per unit of area, and you wish to convert to the number of bananas per another unit of area:
 
-## Volume units
+```deci live
+10 bananas/meter^2 to bananas/yard^2
+==> 8.3612 bananas/yard^2
+```
 
-- **cubicmeter**
-- liter
+Or, with more known units:
 
-## Pressure units
-
-- **atmosphere**, atm
-- Pascal, Pa
-- Bar, Ba
-- mmHg, torr
-- psi
-
-## Energy units
-
-- **joule**
-- calorie
-
-## Mass units
-
-- **gram**, gr, g
-- pound
-- ouce
-- ton
-
-## Temperature units
-
-- **kelvin**
-- celsius
-- fahrenheit
-
-## Time units
-
-- **second**
-- milisecond
-- minute
-- hour
-- day
-- week
-
-## Information units
-
-- **bit**
-- byte
+```deci live
+4184 joules/hour to calories/day
+==> 24 calories/day
+```

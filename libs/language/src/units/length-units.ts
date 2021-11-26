@@ -19,6 +19,13 @@ export const units: UnitOfMeasure[] = [
     fromBaseQuantity: (meters) => meters.mul(39.3701),
   },
   {
+    name: 'foot',
+    abbreviations: ['ft'],
+    baseQuantity: 'length',
+    toBaseQuantity: (inches) => inches.div(3.281),
+    fromBaseQuantity: (meters) => meters.mul(3.281),
+  },
+  {
     name: 'yard',
     abbreviations: ['yd'],
     baseQuantity: 'length',
@@ -56,5 +63,12 @@ export const units: UnitOfMeasure[] = [
     baseQuantity: 'length',
     toBaseQuantity: (smoots) => smoots.mul(1.702),
     fromBaseQuantity: (meters) => meters.div(1.702),
+  },
+  {
+    name: 'foot',
+    baseQuantity: 'length',
+    abbreviations: ['ft'],
+    toBaseQuantity: (feet) => feet.div(3.281),
+    fromBaseQuantity: (meters) => meters.mul(3.281),
   },
 ];

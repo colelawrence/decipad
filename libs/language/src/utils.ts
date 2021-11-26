@@ -312,11 +312,28 @@ export function F(n: number, d = 1) {
   return new Fraction(n, d);
 }
 
-export function u(unit: string): AST.Unit {
+export function u(
+  unit: string | AST.Unit,
+  opts: Partial<AST.Unit> = {}
+): AST.Unit {
+  if (typeof unit === 'string') {
+    unit = {
+      unit,
+      exp: 1,
+      multiplier: 1,
+      known: true,
+    };
+  }
+  return { ...unit, ...opts };
+}
+
+export function U(
+  units: string | AST.Unit | AST.Unit[],
+  opts?: Partial<AST.Unit>
+): AST.Units {
+  const unitsA = Array.isArray(units) ? units : [units];
   return {
-    unit,
-    exp: 1,
-    multiplier: 1,
-    known: true,
+    type: 'units',
+    args: unitsA.map((unit) => u(unit, opts)),
   };
 }

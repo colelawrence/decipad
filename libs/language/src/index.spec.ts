@@ -10,7 +10,7 @@ import {
 } from './testUtils';
 import { parseUTCDate } from './date';
 import { Column, Scalar } from './interpreter/Value';
-import { block, n, units, F } from './utils';
+import { block, n, units, F, U, u } from './utils';
 import { stringifyResult } from './repl';
 
 expect.addSnapshotSerializer({
@@ -1036,7 +1036,7 @@ describe('number units work together', () => {
   it('handles negative exp unit multipliers when converting', async () => {
     expect(
       await runCode(`
-      2 liter/km * 3 km
+        2 liter/km * 3 km
       `)
     ).toMatchObject({
       value: F(6),
@@ -1051,6 +1051,30 @@ describe('number units work together', () => {
           },
         ],
       }),
+    });
+  });
+
+  it('converts between complex units', async () => {
+    expect(
+      await runCode(`
+        100 joules/km as calories/foot
+      `)
+    ).toMatchObject({
+      value: F(25, 3431926),
+      type: t.number(U([u('calories'), u('foot', { exp: -1 })])),
+    });
+  });
+
+  it('converts between mixed known and unknown units', async () => {
+    expect(
+      await runCode(`
+        1 bananas/second as bananas/minute
+      `)
+    ).toMatchObject({
+      value: F(60),
+      type: t.number(
+        U([u('bananas', { known: false }), u('minute', { exp: -1 })])
+      ),
     });
   });
 });

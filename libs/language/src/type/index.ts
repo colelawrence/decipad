@@ -18,7 +18,7 @@ import {
 
 import * as t from './build';
 
-export { setUnit };
+export { setUnit, stringifyUnits };
 export * from './serialization';
 export { InferError, inverseExponent, t as build };
 

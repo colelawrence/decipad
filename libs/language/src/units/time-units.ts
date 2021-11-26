@@ -32,15 +32,15 @@ export const units: UnitOfMeasure[] = [
   },
   {
     name: 'day',
-    baseQuantity: 'day',
-    toBaseQuantity: identity,
-    fromBaseQuantity: identity,
+    baseQuantity: 'second',
+    toBaseQuantity: (days) => days.mul(86400),
+    fromBaseQuantity: (seconds) => seconds.div(86400),
   },
   {
     name: 'week',
-    baseQuantity: 'day',
-    toBaseQuantity: (weeks) => weeks.mul(7),
-    fromBaseQuantity: (seconds) => seconds.div(7),
+    baseQuantity: 'second',
+    toBaseQuantity: (weeks) => weeks.mul(604800),
+    fromBaseQuantity: (seconds) => seconds.div(604800),
   },
   {
     name: 'month',
