@@ -5,7 +5,6 @@ import {
   ImportDataElement,
   ImportDataElementProps,
   ItalicLeaf,
-  ListItemElement,
   StrikethroughLeaf,
   SubheadingElement,
   SubtitleElement,
@@ -21,6 +20,7 @@ import {
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_LI,
+  ELEMENT_OL,
   ELEMENT_PARAGRAPH,
   ELEMENT_UL,
   MARK_BOLD,
@@ -40,6 +40,8 @@ import {
   CodeBlock,
   SlashCommandsParagraph,
   Table,
+  OrderedList,
+  ListItem,
 } from '../components';
 
 type PlateElementComponent = FunctionComponent<
@@ -61,8 +63,10 @@ export const createPlateComponents = (): Partial<
     [ELEMENT_BLOCKQUOTE]: BlockquoteElement,
     [ELEMENT_CODE_BLOCK]: CodeBlock,
     [ELEMENT_CODE_LINE]: CodeLine,
+
     [ELEMENT_UL]: UnorderedListElement,
-    [ELEMENT_LI]: ListItemElement,
+    [ELEMENT_OL]: OrderedList,
+    [ELEMENT_LI]: ListItem,
 
     // Custom elements
     [elementTypes.ELEMENT_IMPORT_DATA]: ImportDataElement,

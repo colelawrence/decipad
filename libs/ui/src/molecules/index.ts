@@ -10,6 +10,7 @@ export { NotebookListItemActions } from './NotebookListItemActions/NotebookListI
 export { NotebookListItemPlaceholder } from './NotebookListItemPlaceholder/NotebookListItemPlaceholder';
 export { NotebookAvatar } from './NotebookAvatar/NotebookAvatar';
 export { NotebookPath } from './NotebookPath/NotebookPath';
+export { OrderedList } from './OrderedList/OrderedList';
 export { SlashCommandsMenuGroup } from './SlashCommandsMenuGroup/SlashCommandsMenuGroup';
 export { TableHeaderRow } from './TableHeaderRow/TableHeaderRow';
 export { TableRow } from './TableRow/TableRow';

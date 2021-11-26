@@ -1,0 +1,23 @@
+import { Meta, Story } from '@storybook/react';
+import { ListItem } from '../../atoms';
+import { OrderedList } from './OrderedList';
+
+const args = {
+  numberOfItems: 10,
+};
+
+export default {
+  title: 'Molecules / List / Ordered',
+  component: OrderedList,
+  args,
+} as Meta;
+
+export const Normal: Story<typeof args> = ({ numberOfItems }) => (
+  <OrderedList>
+    {Array(numberOfItems)
+      .fill(null)
+      .map((_, i) => (
+        <ListItem key={i}>Item {i + 1}</ListItem>
+      ))}
+  </OrderedList>
+);
