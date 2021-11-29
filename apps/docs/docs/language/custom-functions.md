@@ -1,8 +1,8 @@
 ---
-sidebar_position: 31
+sidebar_position: 320
 ---
 
-# Custom Functions
+# Creating custom functions
 
 Functions allow you to create your own dialects inside Deci.
 

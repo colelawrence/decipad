@@ -3,9 +3,9 @@ import { UnitOfMeasure } from './known-units';
 
 export const units: UnitOfMeasure[] = [
   {
-    name: 'watt',
-    abbreviations: ['W'],
-    baseQuantity: 'power',
+    name: 'hertz',
+    abbreviations: ['hz'],
+    baseQuantity: 'frequency',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
   },

@@ -53,6 +53,7 @@ export const NumberResult = ({
 
   // Numbers' toString isn't always formatted like [-]####.###
   const basicNumberMatch = asString.match(/^(-?)(\d+)(\.\d+)?$/);
+  const unitPart = type.unit ? ` ${type.toString(value)}` : '';
   if (basicNumberMatch != null) {
     const [, sign, integerPart, decimalPart] = basicNumberMatch;
 
@@ -66,10 +67,10 @@ export const NumberResult = ({
         {sign}
         {formattedIntegerPart}
         {decimalPart && removeFpArtifacts(decimalPart)}
-        {type.unit ? ` ${type.toString(value)}` : ''}
+        {unitPart}
       </span>
     );
   }
 
-  return <span>{asString}</span>;
+  return <span>{[asString, unitPart].filter(Boolean).join(' ')}</span>;
 };

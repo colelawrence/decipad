@@ -99,7 +99,7 @@ describe('convert', () => {
     ).toMatchObject(F(202650, 1));
     expect(
       convertBetweenUnits(F(202650.0547661773), U('pascal'), U('atmosphere'))
-    ).toMatchObject(F(6963002862026723, 3481500490137600));
+    ).toMatchObject(F(3504386867060551, 1752192960000000));
     expect(convertBetweenUnits(F(2), U('atmosphere'), U('bar'))).toMatchObject(
       F(4053, 2000)
     );

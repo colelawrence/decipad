@@ -1,8 +1,6 @@
 import { UnitOfMeasure } from './known-units';
 import { identity } from '../utils';
 
-export const baseUnit = 'joule';
-
 export const units: UnitOfMeasure[] = [
   {
     name: 'joule',

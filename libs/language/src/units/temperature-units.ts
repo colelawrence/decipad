@@ -1,8 +1,6 @@
 import { identity } from '../utils';
 import { UnitOfMeasure } from './known-units';
 
-export const baseUnit = 'kelvin';
-
 export const units: UnitOfMeasure[] = [
   {
     name: 'kelvin',

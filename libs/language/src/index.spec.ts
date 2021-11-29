@@ -1077,4 +1077,81 @@ describe('number units work together', () => {
       ),
     });
   });
+
+  it('autoconverts complex units', async () => {
+    expect(
+      await runCode(`
+      1 joule/meter^2 + 2 calories/inch^2
+      `)
+    ).toMatchObject({
+      value: F(7549790286526364, 3774894852224877),
+      type: t.number(U([u('calories'), u('inch', { exp: -2 })])),
+    });
+  });
+
+  it('expands expandable units (1)', async () => {
+    expect(
+      await runCode(`
+        1 squaremeter + 2 m^2
+      `)
+    ).toMatchObject({
+      value: F(3),
+      type: t.number(U('m', { exp: 2 })),
+    });
+  });
+
+  it('autoconverts expanding expandable units (2)', async () => {
+    expect(
+      await runCode(`
+        1 newton/meter^2 + 2 bar
+      `)
+    ).toMatchObject({
+      value: F(200001, 100000),
+      type: t.number(U('bar')),
+    });
+  });
+
+  it('autoconverts expanding expandable units (3)', async () => {
+    expect(
+      await runCode(`
+        2 bar + 1 newton/meter^2
+      `)
+    ).toMatchObject({
+      value: F(200001),
+      type: t.number(U([u('newton'), u('meter', { exp: -2 })])),
+    });
+  });
+
+  it('autoconverts expanding expandable units (4)', async () => {
+    expect(
+      await runCode(`
+        2 bar + 1 newton/inch^2
+      `)
+    ).toMatchObject({
+      value: F(328043627561865200, 2522794228531901),
+      type: t.number(U([u('newton'), u('inch', { exp: -2 })])),
+    });
+  });
+
+  it('converts to contracted unit (1)', async () => {
+    expect(
+      await runCode(`
+        1 newtons/meter^2 in bars
+      `)
+    ).toMatchObject({
+      value: F(1, 100000),
+      type: t.number(U('bars')),
+    });
+  });
+
+  it('converts to contracted unit (2)', async () => {
+    expect(
+      await runCode(`
+        10 kg*m/sec^2 in newtons
+      `)
+    ).toMatchObject({
+      value: F(10),
+      type: t.number(U('newtons')),
+    });
+  });
 });

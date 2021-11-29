@@ -1,5 +1,5 @@
 ---
-sidebar_position: 16
+sidebar_position: 40
 ---
 
 # Converting between units
@@ -46,4 +46,25 @@ Or, with more known units:
 ```deci live
 4184 joules/hour to calories/day
 ==> 24 calories/day
+```
+
+## Expanding and contracting units
+
+Deci understands how some units can be decomposed in other units. For instance, pressure is force divided by area. So Deci understands this and tries to do the right thing when you mix these units in conversions:
+
+```deci live
+30 newtons/m^2 to bars
+==> 0.0003 bars
+```
+
+```deci live
+30 bars to newton/m^2
+==> 3000000 newtons/m^2
+```
+
+Or in operations:
+
+```deci live
+30 psi + 1 newton/inch^2
+==> 134.4460 newtons/inch^2
 ```

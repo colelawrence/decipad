@@ -1,11 +1,11 @@
-import { identity } from '../utils';
 import { UnitOfMeasure } from './known-units';
+import { identity } from '../utils';
 
 export const units: UnitOfMeasure[] = [
   {
-    name: 'watt',
-    abbreviations: ['W'],
-    baseQuantity: 'power',
+    name: 'farad',
+    abbreviations: ['F'],
+    baseQuantity: 'electrical capacitance',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
   },

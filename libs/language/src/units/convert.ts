@@ -3,6 +3,7 @@ import { getDefined } from '@decipad/utils';
 import { getUnitByName } from './known-units';
 import { Unit, Units } from '../parser/ast-types';
 import { stringifyUnits } from '../type';
+import { expandUnits } from './expand';
 
 const FROM = 'from';
 const TO = 'to';
@@ -26,26 +27,31 @@ function areSingleUnitsConvertible(a: Unit, b: Unit): boolean {
 }
 
 export function areUnitsConvertible(unitsA: Units, unitsB: Units): boolean {
-  if (unitsA.args.length !== unitsB.args.length) {
+  const [sourceUnits] = expandUnits(unitsA.args);
+  const [pendingMatchUnits] = expandUnits(Array.from(unitsB.args));
+
+  if ((sourceUnits ?? []).length !== (pendingMatchUnits ?? []).length) {
     return false;
   }
 
-  const pendingMatchUnits = Array.from(unitsB.args);
-  for (const oneSourceUnit of unitsA.args) {
+  for (const oneSourceUnit of sourceUnits ?? []) {
     let convertibleTo: Unit | undefined;
-    for (const oneTargetUnit of pendingMatchUnits) {
+    for (const oneTargetUnit of pendingMatchUnits ?? []) {
       if (areSingleUnitsConvertible(oneSourceUnit, oneTargetUnit)) {
         convertibleTo = oneTargetUnit;
         break;
       }
     }
     if (convertibleTo) {
-      pendingMatchUnits.splice(pendingMatchUnits.indexOf(convertibleTo), 1);
+      getDefined(pendingMatchUnits).splice(
+        getDefined(pendingMatchUnits).indexOf(convertibleTo),
+        1
+      );
     }
   }
 
   // are every source unit matched to target unit?
-  return pendingMatchUnits.length === 0;
+  return (pendingMatchUnits ?? []).length === 0;
 }
 
 function convertBetweenSimpleUnits(
@@ -94,18 +100,24 @@ export function convertBetweenUnits(
   from: Units,
   to: Units
 ): Fraction {
-  const sourceUnits = from.args;
-  const unmatchedUnits = Array.from(to.args);
-  return sourceUnits.reduce((result, sourceUnit) => {
+  const [sourceUnits, convertToExpandedSource] = expandUnits(from.args);
+  const [unmatchedUnits, convertToExpandedTarget] = expandUnits(
+    Array.from(to.args)
+  );
+
+  return (sourceUnits ?? []).reduce((result, sourceUnit) => {
     let matchedUnit: Unit | undefined;
-    for (const targetUnit of unmatchedUnits) {
+    for (const targetUnit of unmatchedUnits ?? []) {
       if (areSingleUnitsConvertible(sourceUnit, targetUnit)) {
         matchedUnit = targetUnit;
         break;
       }
     }
     if (matchedUnit) {
-      unmatchedUnits.splice(unmatchedUnits.indexOf(matchedUnit), 1);
+      getDefined(unmatchedUnits).splice(
+        getDefined(unmatchedUnits).indexOf(matchedUnit),
+        1
+      );
       return convertBetweenSimpleUnits(result, sourceUnit, matchedUnit);
     } else {
       throw new TypeError(
@@ -116,7 +128,7 @@ export function convertBetweenUnits(
         } has no match to convert to`
       );
     }
-  }, n);
+  }, convertToExpandedSource(n).div(convertToExpandedTarget(new Fraction(1))));
 }
 
 function convert(

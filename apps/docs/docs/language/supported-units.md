@@ -1,4 +1,8 @@
-# Supported units
+---
+sidebar_position: 390
+---
+
+# Appendix A: Supported units
 
 Deci supports the following units, and compositions of them:
 
@@ -13,10 +17,17 @@ Deci supports the following units, and compositions of them:
 - angstrom
 - furlong
 - smoot
+- yard
+
+## Area units
+
+- **squaremeter**, m^2
+- acre
+- are
 
 ## Volume units
 
-- **cubicmeter**
+- **cubicmeter**, m^3
 - liter
 
 ## Pressure units
@@ -31,6 +42,10 @@ Deci supports the following units, and compositions of them:
 
 - **joule**
 - calorie
+
+## Force units
+
+- **Newton**, N
 
 ## Mass units
 
@@ -56,6 +71,10 @@ Deci supports the following units, and compositions of them:
 - month
 - year
 
+## Frequency units
+
+- **Hertz**, Hz
+
 ## Information units
 
 - **bit**
@@ -72,3 +91,19 @@ Deci supports the following units, and compositions of them:
 ## Electric current units
 
 - **Ampere**, amp
+
+## Electric charge units
+
+- **Coulomb**, C
+
+## Electrical capacitance
+
+- **Farad**, F
+
+## Electrical resistance
+
+- **Ohm**, Ω
+
+## Voltage
+
+- **Volts**, V

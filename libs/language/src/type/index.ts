@@ -14,11 +14,11 @@ import {
   stringifyUnits,
   multiplyExponent,
   setUnit,
+  normalizeUnits,
 } from './units';
-
 import * as t from './build';
 
-export { setUnit, stringifyUnits };
+export { setUnit, stringifyUnits, normalizeUnits };
 export * from './serialization';
 export { InferError, inverseExponent, t as build };
 

@@ -2,7 +2,12 @@ import { produce } from 'immer';
 import pluralize, { addIrregularRule, singular } from 'pluralize';
 import { AST, Type } from '..';
 import { getDefined, units } from '../utils';
-import { isKnownSymbol, areUnitsCompatible, sameUnit } from '../units';
+import {
+  isKnownSymbol,
+  areUnitsCompatible,
+  sameUnit,
+  expandUnits,
+} from '../units';
 
 addIrregularRule('USD', 'USD');
 addIrregularRule('EUR', 'EUR');
@@ -45,17 +50,34 @@ const pluralizeUnit = (baseUnit: AST.Unit, value?: number): AST.Unit => {
   });
 };
 
-const matchUnits = (u1: AST.Unit, u2: AST.Unit) =>
-  areUnitsCompatible(u1.unit, u2.unit) && u1.exp === u2.exp;
-
 export const matchUnitArrays = (
   units1: AST.Units | null,
   units2: AST.Units | null
 ) => {
-  const array1 = units1?.args ?? [];
-  const array2 = units2?.args ?? [];
-  if (array1.length !== array2.length) return false;
-  return array1.every((u1, i) => matchUnits(u1, array2[i]));
+  const [array1] = expandUnits(units1?.args ?? []) ?? [];
+  const [array2] = expandUnits(units2?.args ?? []) ?? [];
+  if ((array1 ?? []).length !== (array2 ?? []).length) return false;
+
+  const pendingMatch = (array2 && Array.from(array2)) ?? [];
+  for (const unit of array1 ?? []) {
+    let match: AST.Unit | undefined;
+    for (const matchingUnit of pendingMatch) {
+      if (
+        unit.exp === matchingUnit.exp &&
+        areUnitsCompatible(unit.unit, matchingUnit.unit)
+      ) {
+        match = matchingUnit;
+        break;
+      }
+    }
+    if (match) {
+      pendingMatch.splice(pendingMatch.indexOf(match), 1);
+    } else {
+      return false;
+    }
+  }
+
+  return pendingMatch.length === 0;
 };
 
 export const removeSingleUnitless = (a: Type, b: Type) => {
@@ -69,7 +91,7 @@ export const removeSingleUnitless = (a: Type, b: Type) => {
   }
 };
 
-const normalizeUnits = (units: AST.Unit[] | null) => {
+export const normalizeUnits = (units: AST.Unit[] | null) => {
   if (units == null) {
     return null;
   }
