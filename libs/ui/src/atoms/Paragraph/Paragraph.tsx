@@ -9,6 +9,8 @@ const placeholderStyles = css({
   '::before': {
     ...p16Regular,
     ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+    cursor: 'text',
+    pointerEvents: 'none',
 
     position: 'absolute',
 

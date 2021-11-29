@@ -7,6 +7,9 @@ const styles = css(display, {
   borderColor: cssVar('highlightColor'),
   paddingBottom: '24px',
   marginBottom: '16px',
+  '::before': {
+    pointerEvents: 'none',
+  },
 });
 
 export const TitleElement: PlatePluginComponent = ({
