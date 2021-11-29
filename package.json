@@ -98,7 +98,6 @@
     "@udecode/plate-test-utils": "^3.2.0",
     "apollo-server-lambda": "^2.25.2",
     "aws-lambda": "^1.0.6",
-    "browserify-process": "^0.11.10",
     "camelcase": "^6.2.0",
     "chalk": "^4.1.2",
     "core-js": "^3.13.1",

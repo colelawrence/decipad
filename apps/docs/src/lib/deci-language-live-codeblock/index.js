@@ -16,7 +16,7 @@ function theme() {
           plugins: [new TsconfigPathsPlugin()],
           alias: {
             stream: 'stream-browserify',
-            process: 'browserify-process',
+            process: 'process/browser',
           },
         },
         module: {
