@@ -4,6 +4,7 @@ import { IconButton } from '../../atoms';
 import { LeftArrow } from '../../icons';
 import { NotebookPath } from '../../molecules';
 import { NotebookSharingPopUp, NotebookUsers } from '../../organisms';
+import { p14Medium } from '../../primitives';
 import { noop } from '../../utils';
 
 const topbarWrapperStyles = css({
@@ -21,7 +22,12 @@ const topbarLeftSideStyles = css({
 
 const topbarRightSideStyles = css({
   display: 'flex',
+  alignItems: 'center',
   gap: '1rem',
+});
+
+const helpButtonStyles = css(p14Medium, {
+  marginRight: '32px',
 });
 
 export type NotebookTopbarProps = Pick<
@@ -62,6 +68,9 @@ export const NotebookTopbar = ({
 
       {/* Right side */}
       <div css={topbarRightSideStyles}>
+        <a href="/docs" css={helpButtonStyles}>
+          Need help?
+        </a>
         <NotebookUsers users={users} />
         {isAdmin && (
           <NotebookSharingPopUp onToggleShare={onToggleShare} link={link} />
