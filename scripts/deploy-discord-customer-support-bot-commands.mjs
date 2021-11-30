@@ -10,20 +10,22 @@ process.on('unhandledRejection', (err) => {
 (async () => {
   const url = `https://discord.com/api/v8/applications/${process.env.DISCORD_APP_ID}/commands`;
 
-  const commands = {
-    name: 'allowlist-get',
-    application_id: process.env.DISCORD_APP_ID,
-    type: 1, // This is an example CHAT_INPUT or Slash Command, with a type of 1
-    description: 'find an entry in the allow list',
-    options: [
-      {
-        name: 'email',
-        description: "The email address you're searching for",
-        type: 1,
-        required: true,
-      },
-    ],
-  };
+  const commands = [
+    {
+      name: 'allowlist-get',
+      application_id: process.env.DISCORD_APP_ID,
+      type: 1, // This is an example CHAT_INPUT or Slash Command, with a type of 1
+      description: 'find an entry in the allow list',
+      options: [
+        {
+          name: 'email',
+          description: "The email address you're searching for",
+          type: 1,
+          required: true,
+        },
+      ],
+    },
+  ];
 
   // For authorization, you can use either your bot token
   const headers = {
