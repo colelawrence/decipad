@@ -18,7 +18,7 @@ export const autoFormatLists: AutoformatRule[] = [
   {
     mode: 'block',
     type: ELEMENT_LI,
-    match: ['0 ', '0. ', '0) ', '1 ', '1. ', '1) '],
+    match: ['0. ', '0) ', '1. ', '1) '],
     preFormat,
     format: (editor) => formatList(editor, ELEMENT_OL),
   },
