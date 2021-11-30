@@ -2,6 +2,11 @@
 
 import fetch from 'isomorphic-fetch';
 
+process.on('unhandledRejection', (err) => {
+  console.error(err);
+  process.exit(1);
+});
+
 (async () => {
   const url = `https://discord.com/api/v8/applications/${process.env.DISCORD_APP_ID}/commands`;
 
@@ -22,6 +27,7 @@ import fetch from 'isomorphic-fetch';
 
   // For authorization, you can use either your bot token
   const headers = {
+    'Content-Type': 'application/json',
     Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`,
   };
 
