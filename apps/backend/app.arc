@@ -211,6 +211,11 @@ invites
   user_id *String
   name byUser
 
+pads
+  workspace_id *String
+  sequence **Number
+  name byWorkspace
+
 permissions
   resource_uri *String
   name byResource

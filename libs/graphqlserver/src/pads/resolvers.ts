@@ -5,7 +5,6 @@ import {
   ID,
   GraphqlContext,
   PageInput,
-  PermissionRecord,
   PadInput,
   Pad,
   PadRecord,
@@ -14,6 +13,7 @@ import {
   User,
 } from '@decipad/backendtypes';
 import tables from '@decipad/services/tables';
+import { expectAuthorized } from '@decipad/services/authorization';
 import { subscribe } from '@decipad/services/pubsub';
 import {
   create as createPad2,
@@ -76,28 +76,22 @@ const resolvers = {
       context: GraphqlContext
     ) {
       const user = requireUser(context);
+      await expectAuthorized({
+        resource: `/workspaces/${workspaceId}`,
+        user,
+        permissionType: 'READ',
+      });
       const data = await tables();
 
       const query = {
-        IndexName: 'byUserId',
-        KeyConditionExpression:
-          'user_id = :user_id and resource_type = :resource_type',
-        FilterExpression: 'parent_resource_uri = :parent_resource_uri',
+        IndexName: 'byWorkspace',
+        KeyConditionExpression: 'workspace_id = :workspace_id',
         ExpressionAttributeValues: {
-          ':user_id': user.id,
-          ':resource_type': 'pads',
-          ':parent_resource_uri': `/workspaces/${workspaceId}`,
+          ':workspace_id': workspaceId,
         },
       };
 
-      return paginate<PermissionRecord, PadRecord>(
-        data.permissions,
-        query,
-        page,
-        async (permission: PermissionRecord) => {
-          return data.pads.get({ id: permission.resource_id });
-        }
-      );
+      return paginate(data.pads, query, page);
     },
   },
 
