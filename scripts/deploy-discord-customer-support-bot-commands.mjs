@@ -10,16 +10,16 @@ process.on('unhandledRejection', (err) => {
 (async () => {
   const url = `https://discord.com/api/v8/applications/${process.env.DISCORD_APP_ID}/commands`;
 
-  // This is an example CHAT_INPUT or Slash Command, with a type of 1
-  const json = {
+  const commands = {
     name: 'allowlist-get',
-    type: 1,
-    description: 'get an entry from the allow list',
+    application_id: process.env.DISCORD_APP_ID,
+    type: 1, // This is an example CHAT_INPUT or Slash Command, with a type of 1
+    description: 'find an entry in the allow list',
     options: [
       {
         name: 'email',
         description: "The email address you're searching for",
-        type: 3,
+        type: 1,
         required: true,
       },
     ],
@@ -33,7 +33,7 @@ process.on('unhandledRejection', (err) => {
 
   const response = await fetch(url, {
     method: 'PUT',
-    body: JSON.stringify(json),
+    body: JSON.stringify(commands),
     headers,
   });
 
