@@ -1,3 +1,4 @@
+import { Buffer } from 'buffer';
 import { fail } from 'assert';
 import { defaultEnv, SupportedEnvKey } from './default';
 
@@ -98,5 +99,12 @@ export function thirdParty() {
     defaultTokenExpirationSeconds: Number(
       env('DECI_DEFAULT_TOKEN_EXPIRATION_SECONDS')
     ),
+  };
+}
+
+export function discord() {
+  return {
+    publicKey: Buffer.from(env('DISCORD_PUBLIC_KEY'), 'hex'),
+    appId: env('DISCORD_APP_ID'),
   };
 }

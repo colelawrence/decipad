@@ -392,7 +392,7 @@ export interface DataTable<T extends TableRecordBase> {
     key: TableRecordIdentifier | (TableRecordIdentifier & { seq: string }),
     noEvents?: boolean
   ): Promise<void>;
-  get(key: TableRecordIdentifier): Promise<T | undefined>;
+  get(key: Record<string, string>): Promise<T | undefined>;
   create(doc: T, noEvents?: boolean): Promise<void>;
   put(doc: T, noEvents?: boolean): Promise<void>;
   query(params: DynamoDbQuery): Promise<{
@@ -485,6 +485,7 @@ export interface DocSyncUpdateRecord extends TableRecordBase {
   seq: string;
   data: string;
 }
+
 export type VersionedDataTable<T extends VersionedTableRecord> =
   DataTable<T> & {
     withLock: (

@@ -13,6 +13,7 @@
     { "path": "../graphqlserver" },
     { "path": "../utils" },
     { "path": "../externaldata" },
-    { "path": "../sync-connection-lambdas" }
+    { "path": "../sync-connection-lambdas" },
+    { "path": "../config" }
   ]
 }

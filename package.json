@@ -31,6 +31,7 @@
     "deploy:pr": "./scripts/deploy-pr.sh",
     "deploy:alpha": "./scripts/deploy-alpha.sh",
     "undeploy:pr": "cd apps/backend && ../../node_modules/.bin/arc-destroy ",
+    "deploy:discord-customer-support-bot": "./scripts/deploy-discord-customer-support-bot-commands.js",
     "repl": "babel-node --extensions=.js,.jsx,.ts,.tsx libs/language/src/repl.ts",
     "nx": "nx",
     "affected:apps": "nx affected:apps",
@@ -106,6 +107,7 @@
     "date-fns-tz": "^1.1.4",
     "deepmerge": "^4.2.2",
     "dequal": "^2.0.2",
+    "discord-api-types": "^0.24.0",
     "document-register-element": "1.13.1",
     "dotenv": "^10.0.0",
     "emotion-normalize": "^11.0.1",
@@ -169,6 +171,7 @@
     "tiny-invariant": "^1.1.0",
     "tippy.js": "^6.3.1",
     "tslib": "^2.2.0",
+    "tweetnacl": "^1.0.3",
     "utility-types": "^3.10.0",
     "y-protocols": "^1.0.5",
     "yjs": "^13.5.12"

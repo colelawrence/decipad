@@ -43,6 +43,7 @@ export async function createSandboxEnv(
     DECI_S3_ENDPOINT: `localhost:${s3Port}`,
     DECI_APP_URL_BASE: `http://localhost:${portBase}`,
     NEXT_PUBLIC_DECI_WS_URL: `ws://localhost:${portBase}/ws`,
+    DISCORD_PUBLIC_KEY: process.env.DISCORD_PUBLIC_KEY,
   };
 
   // the final sandbox environment:

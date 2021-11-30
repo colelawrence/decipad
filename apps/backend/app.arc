@@ -27,6 +27,7 @@ get /api/externaldatasources/:id/auth
 get /api/externaldatasources/callback
 get /api/externaldatasources/:id/data
 get /api/pads/:padid/attachments/:attachmentid
+post /api/discord
 
 @ws
 

@@ -41,6 +41,9 @@ export const defaultEnvValues = {
   NEXTAUTH_URL: 'http://localhost:4200/api/auth',
 
   SENTRY_DSN: '',
+
+  DISCORD_PUBLIC_KEY: 'LjZeWHYTwsps07NJfu1J',
+  DISCORD_APP_ID: 'discord app id',
 };
 
 export type SupportedEnvKey = keyof typeof defaultEnvValues;
