@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { Buffer } from 'buffer';
-import { Doc as YDoc } from 'yjs';
+import { Doc as YDoc, mergeUpdates } from 'yjs';
 import * as bc from 'lib0/broadcastchannel';
 import * as time from 'lib0/time';
 import * as encoding from 'lib0/encoding';
@@ -11,6 +11,7 @@ import * as awarenessProtocol from 'y-protocols/awareness';
 import * as mutex from 'lib0/mutex';
 import { Observable } from 'lib0/observable';
 import * as math from 'lib0/math';
+import debounce from 'lodash.debounce';
 
 export interface WSStatus {
   status: 'disconnected' | 'connected' | 'connecting';
@@ -112,6 +113,7 @@ const reconnectTimeoutBase = 1200;
 const maxReconnectTimeout = 2500;
 // @todo - this should depend on awareness.outdatedTime
 const messageReconnectTimeout = 30000;
+const debounceBroadcast = 1000;
 
 const encodeMessage = (message: Uint8Array): string => {
   // we have to do this awful encoding because <backendReasons />...
@@ -322,6 +324,16 @@ export class WebsocketProvider extends Observable<string> {
   messageHandlers: MessageHandler[];
   mux: mutex.mutex;
   destroyed = false;
+  outUpdates: Uint8Array[] = [];
+  debouncedBroadcastUpdateMessage = debounce(
+    this.broadcastPendingUpdateMessages.bind(this),
+    debounceBroadcast
+  );
+  outAwarenessUpdates: number[] = [];
+  debouncedBroadcastAwarenessUpdateMessage = debounce(
+    this.broadcastPendingAwarenessUpdateMessages.bind(this),
+    debounceBroadcast
+  );
 
   private _selfAwareness = false;
   private _synced = false;
@@ -431,28 +443,43 @@ export class WebsocketProvider extends Observable<string> {
 
   private _updateHandler(update: Uint8Array, origin: unknown) {
     if (origin !== this) {
-      const encoder = encoding.createEncoder();
-      encoding.writeVarUint(encoder, messageSync);
-      syncProtocol.writeUpdate(encoder, update);
-      if (encoding.length(encoder) > 1) {
-        broadcastMessage(this, encoding.toUint8Array(encoder));
-      }
-
-      this.emit('saved', [this]);
+      this.outUpdates.push(update);
+      this.debouncedBroadcastUpdateMessage();
     }
+  }
+
+  private broadcastPendingUpdateMessages() {
+    const toSend = Array.from(this.outUpdates);
+    this.outUpdates = [];
+    const encoder = encoding.createEncoder();
+    encoding.writeVarUint(encoder, messageSync);
+    syncProtocol.writeUpdate(encoder, mergeUpdates(toSend));
+    if (encoding.length(encoder) > 1) {
+      broadcastMessage(this, encoding.toUint8Array(encoder));
+    }
+    this.emit('saved', [this]);
   }
 
   private _awarenessUpdateHandler(changes: AwarenessUpdate) {
     const { added, updated, removed } = changes;
     const changedClients = added.concat(updated).concat(removed);
-    const encoder = encoding.createEncoder();
-    encoding.writeVarUint(encoder, messageAwareness);
-    encoding.writeVarUint8Array(
-      encoder,
-      awarenessProtocol.encodeAwarenessUpdate(this.awareness, changedClients)
-    );
-    if (encoding.length(encoder) > 1) {
-      broadcastMessage(this, encoding.toUint8Array(encoder));
+    this.outAwarenessUpdates.concat(changedClients);
+    this.debouncedBroadcastAwarenessUpdateMessage();
+  }
+
+  private broadcastPendingAwarenessUpdateMessages() {
+    const changedClients = Array.from(this.outAwarenessUpdates);
+    if (changedClients.length > 0) {
+      this.outAwarenessUpdates = [];
+      const update = awarenessProtocol.encodeAwarenessUpdate(
+        this.awareness,
+        changedClients
+      );
+      const encoder = encoding.createEncoder();
+      encoding.writeVarUint8Array(encoder, update);
+      if (encoding.length(encoder) > 1) {
+        broadcastMessage(this, encoding.toUint8Array(encoder));
+      }
     }
   }
 
