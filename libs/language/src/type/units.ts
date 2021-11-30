@@ -2,12 +2,7 @@ import { produce } from 'immer';
 import pluralize, { addIrregularRule, singular } from 'pluralize';
 import { AST, Type } from '..';
 import { getDefined, units } from '../utils';
-import {
-  isKnownSymbol,
-  areUnitsCompatible,
-  sameUnit,
-  expandUnits,
-} from '../units';
+import { isKnownSymbol, areUnitsCompatible, expandUnits } from '../units';
 
 addIrregularRule('USD', 'USD');
 addIrregularRule('EUR', 'EUR');
@@ -115,6 +110,15 @@ export const normalizeUnits = (units: AST.Unit[] | null) => {
   }
 };
 
+export const normalizeUnitsOf = (unit: AST.Units | null): AST.Units | null => {
+  if (unit == null) {
+    return null;
+  }
+  return produce(unit, (unit) => {
+    unit.args = normalizeUnits(unit.args) || [];
+  });
+};
+
 export const setExponent = (unit: AST.Unit, newExponent: number) =>
   produce(unit, (unit) => {
     unit.exp = newExponent;
@@ -173,25 +177,22 @@ export const combineUnits = (
   const myUnits = normalizeUnits(myUnitsObj?.args ?? null) ?? [];
   const theirUnits = normalizeUnits(theirUnitsObj?.args ?? null) ?? [];
 
-  const existingUnits = new Set([...myUnits.map((u) => u.unit)]);
-  const outputUnits: AST.Unit[] = [...myUnits];
+  const outputUnits: AST.Unit[] = [...theirUnits];
 
   // Combine their units in
-  for (const theirUnit of theirUnits) {
-    if (!existingUnits.has(theirUnit.unit)) {
-      // m * s => m.s
-      outputUnits.push(theirUnit);
-    } else {
-      // m^2 * m => m^3
-      const existingUnitIndex = myUnits.findIndex((u) =>
-        sameUnit(u.unit, theirUnit.unit)
-      );
+  for (const myUnit of myUnits) {
+    const existingUnitIndex = outputUnits.findIndex((u) =>
+      areUnitsCompatible(u.unit, myUnit.unit)
+    );
+    if (existingUnitIndex >= 0) {
       outputUnits[existingUnitIndex] = produce(
         outputUnits[existingUnitIndex],
         (inversed) => {
-          inversed.exp += theirUnit.exp;
+          inversed.exp += myUnit.exp;
         }
       );
+    } else {
+      outputUnits.push(myUnit);
     }
   }
 
@@ -199,12 +200,17 @@ export const combineUnits = (
   return ret == null ? ret : units(...ret);
 };
 
-export const multiplyExponent = (myUnits: AST.Units, by: number): AST.Units =>
-  produce(myUnits, (myUnits) => {
-    for (const u of myUnits.args) {
-      u.exp *= by;
-    }
-  });
+export const multiplyExponent = (
+  myUnits: AST.Units,
+  by: number
+): AST.Units | null =>
+  normalizeUnitsOf(
+    produce(myUnits, (myUnits) => {
+      for (const u of myUnits.args) {
+        u.exp *= by;
+      }
+    })
+  );
 
 export const setUnit = (t: Type, newUnit: AST.Units | null) =>
   produce(t, (t) => {

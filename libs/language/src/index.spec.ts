@@ -1154,4 +1154,48 @@ describe('number units work together', () => {
       type: t.number(U('newtons')),
     });
   });
+
+  it('divides and cancels unknown units', async () => {
+    expect(
+      await runCode(`
+        1 banana / 3 bananas
+      `)
+    ).toMatchObject({
+      value: F(1, 3),
+      type: t.number(),
+    });
+  });
+
+  it('divides and cancels known units', async () => {
+    expect(
+      await runCode(`
+        1 hour / 3 hours
+      `)
+    ).toMatchObject({
+      value: F(1, 3),
+      type: t.number(),
+    });
+  });
+
+  it('divides and cancels time units', async () => {
+    expect(
+      await runCode(`
+        1 hour / 3 minutes
+      `)
+    ).toMatchObject({
+      value: F(20),
+      type: t.number(),
+    });
+  });
+
+  it('autoconverts time units correctly', async () => {
+    expect(
+      await runCode(`
+        1 hour / 3 minutes^2
+      `)
+    ).toMatchObject({
+      value: F(20),
+      type: t.number(U('minutes', { exp: -1 })),
+    });
+  });
 });

@@ -1,7 +1,6 @@
 import { immerable, produce } from 'immer';
 import { dequal } from 'dequal';
 import { getDefined } from '@decipad/utils';
-
 import { Time } from '..';
 import { equalOrUnknown, units, zip } from '../utils';
 import * as AST from '../parser/ast-types';
