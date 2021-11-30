@@ -31,7 +31,7 @@
     "deploy:pr": "./scripts/deploy-pr.sh",
     "deploy:alpha": "./scripts/deploy-alpha.sh",
     "undeploy:pr": "cd apps/backend && ../../node_modules/.bin/arc-destroy ",
-    "deploy:discord-customer-support-bot": "./scripts/deploy-discord-customer-support-bot-commands.js",
+    "deploy:discord-customer-support-bot": "./scripts/deploy-discord-customer-support-bot-commands.mjs",
     "repl": "babel-node --extensions=.js,.jsx,.ts,.tsx libs/language/src/repl.ts",
     "nx": "nx",
     "affected:apps": "nx affected:apps",
