@@ -1,3 +1,4 @@
+import { docs } from '@decipad/routing';
 import { css } from '@emotion/react';
 import { ComponentProps, FC } from 'react';
 import { IconButton } from '../../atoms';
@@ -5,7 +6,7 @@ import { LeftArrow } from '../../icons';
 import { NotebookPath } from '../../molecules';
 import { NotebookSharingPopUp, NotebookUsers } from '../../organisms';
 import { p14Medium } from '../../primitives';
-import { noop } from '../../utils';
+import { Anchor, noop } from '../../utils';
 
 const topbarWrapperStyles = css({
   display: 'flex',
@@ -68,9 +69,9 @@ export const NotebookTopbar = ({
 
       {/* Right side */}
       <div css={topbarRightSideStyles}>
-        <a href="/docs" css={helpButtonStyles}>
+        <Anchor href={docs({}).$} css={helpButtonStyles}>
           Need help?
-        </a>
+        </Anchor>
         <NotebookUsers users={users} />
         {isAdmin && (
           <NotebookSharingPopUp onToggleShare={onToggleShare} link={link} />

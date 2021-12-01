@@ -1,5 +1,7 @@
 import { SerializedStyles } from '@emotion/react';
 import { AnchorHTMLAttributes, ComponentProps } from 'react';
+import { matchPath } from 'react-router-dom';
+import { SERVER_SIDE_ROUTES } from '@decipad/routing';
 import { NavHashLink, HashLink } from 'react-router-hash-link';
 import { useHasRouter } from './routing';
 
@@ -54,22 +56,34 @@ export const Anchor: React.FC<AnchorProps> = ({
   exact,
   ...props
 }) => {
+  const hasRouter = useHasRouter();
   const { internal = false, resolved = href } = href ? resolveHref(href) : {};
-  if (useHasRouter() && resolved && internal) {
-    if (activeStyles) {
-      return (
-        <NavHashLink
-          {...props}
-          activeClassName={activeClassName}
-          css={[props.css, { [`&.${activeClassName}`]: activeStyles }]}
-          to={resolved}
-          exact={exact}
-          smooth
-        />
-      );
+
+  // like href, resolved can still be falsy from here, indicating an empty href that does not navigate
+  if (resolved) {
+    if (
+      hasRouter &&
+      internal &&
+      SERVER_SIDE_ROUTES.every(
+        (route) => matchPath(resolved, { path: route.template }) == null
+      )
+    ) {
+      if (activeStyles) {
+        return (
+          <NavHashLink
+            {...props}
+            activeClassName={activeClassName}
+            css={[props.css, { [`&.${activeClassName}`]: activeStyles }]}
+            to={resolved}
+            exact={exact}
+            smooth
+          />
+        );
+      }
+      return <HashLink {...props} to={resolved} smooth />;
     }
-    return <HashLink {...props} to={resolved} smooth />;
   }
+
   return (
     <a
       {...props}

@@ -3,8 +3,10 @@ import { createMemoryHistory } from 'history';
 import { css } from '@emotion/react';
 import { render, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { docs } from '@decipad/routing';
 
 import { Anchor, resolveHref } from './link';
+import { mockConsoleError } from '../test-utils';
 
 describe('resolveHref', () => {
   it.each`
@@ -102,6 +104,7 @@ describe('Anchor', () => {
       expect(relList).toContain('noopener');
     });
 
+    mockConsoleError();
     it('triggers a full page navigation on click', () => {
       const { getByRole } = render(
         <Anchor href="https://parkinsonsroadmap.org/">text</Anchor>
@@ -112,12 +115,15 @@ describe('Anchor', () => {
   });
 
   describe.each`
-    description           | wrapper
-    ${'with a router'}    | ${StaticRouter}
-    ${'without a router'} | ${undefined}
-  `('for an internal link $description to /', ({ wrapper }) => {
+    description           | wrapper         | href
+    ${'with a router'}    | ${StaticRouter} | ${'/'}
+    ${'without a router'} | ${undefined}    | ${'/'}
+    ${'without a router'} | ${undefined}    | ${docs({}).$}
+  `('for an internal link $description to $href', ({ wrapper, href }) => {
     it('does not set the anchor target', () => {
-      const { getByRole } = render(<Anchor href="/">text</Anchor>, { wrapper });
+      const { getByRole } = render(<Anchor href={href}>text</Anchor>, {
+        wrapper,
+      });
       const { target } = getByRole('link') as HTMLAnchorElement;
       expect(target).toBe('');
     });
@@ -131,6 +137,22 @@ describe('Anchor', () => {
   });
 
   describe('for an internal link with a router', () => {
+    mockConsoleError();
+    it('triggers a normal full page navigation on click if the link is server-side', () => {
+      const { getByRole } = render(
+        <Anchor
+          href={`${window.location.protocol}//${window.location.host}${
+            docs({}).$
+          }`}
+        >
+          text
+        </Anchor>,
+        { wrapper: StaticRouter }
+      );
+      const anchor = getByRole('link') as HTMLAnchorElement;
+      expect(fireEvent.click(anchor)).toBe(true);
+    });
+
     it('does not trigger a full page navigation on click', () => {
       const { getByRole } = render(
         <Anchor
