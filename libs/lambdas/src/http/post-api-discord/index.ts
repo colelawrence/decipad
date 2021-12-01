@@ -12,10 +12,10 @@ async function handleRequest(
         type: 1,
       };
     }
-    case 3: {
+    case 2: {
       // Message
       return {
-        type: 3,
+        type: 2,
         data: {
           content: 'hey',
         },
