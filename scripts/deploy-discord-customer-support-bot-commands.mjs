@@ -21,7 +21,6 @@ process.on('unhandledRejection', (err) => {
           name: 'email',
           description: "The email address you're searching for",
           type: 1,
-          required: true,
         },
       ],
     },
