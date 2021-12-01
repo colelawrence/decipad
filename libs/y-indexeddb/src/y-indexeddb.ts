@@ -73,7 +73,7 @@ export async function storeState(
   await fetchUpdates(idbPersistence);
 
   if (forceStore || idbPersistence._dbsize >= PREFERRED_TRIM_SIZE) {
-    await maybeWithStore(idbPersistence, false, async (store) => {
+    await maybeWithStore(idbPersistence, true, async (store) => {
       await idb.addAutoKey(store, Y.encodeStateAsUpdate(idbPersistence.doc));
       idbPersistence.emit('saved', [idbPersistence]);
       await maybeWithStore(idbPersistence, true, async (store2) => {
