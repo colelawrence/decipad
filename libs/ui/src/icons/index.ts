@@ -1,5 +1,6 @@
 export { Actions } from './Actions/Actions';
 export { Bold } from './Bold/Bold';
+export { Bullet } from './Bullet/Bullet';
 export { Caret } from './Caret/Caret';
 export { Chevron } from './Chevron/Chevron';
 export { Code } from './Code/Code';

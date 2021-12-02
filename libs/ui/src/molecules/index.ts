@@ -14,4 +14,5 @@ export { OrderedList } from './OrderedList/OrderedList';
 export { SlashCommandsMenuGroup } from './SlashCommandsMenuGroup/SlashCommandsMenuGroup';
 export { TableHeaderRow } from './TableHeaderRow/TableHeaderRow';
 export { TableRow } from './TableRow/TableRow';
+export { UnorderedList } from './UnorderedList/UnorderedList';
 export { WorkspaceItem } from './WorkspaceItem/WorkspaceItem';

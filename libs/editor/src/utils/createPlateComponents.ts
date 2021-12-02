@@ -10,7 +10,6 @@ import {
   SubtitleElement,
   TitleElement,
   UnderlineLeaf,
-  UnorderedListElement,
 } from '@decipad/ui';
 import {
   ELEMENT_BLOCKQUOTE,
@@ -42,6 +41,7 @@ import {
   Table,
   OrderedList,
   ListItem,
+  UnorderedList,
 } from '../components';
 
 type PlateElementComponent = FunctionComponent<
@@ -64,7 +64,7 @@ export const createPlateComponents = (): Partial<
     [ELEMENT_CODE_BLOCK]: CodeBlock,
     [ELEMENT_CODE_LINE]: CodeLine,
 
-    [ELEMENT_UL]: UnorderedListElement,
+    [ELEMENT_UL]: UnorderedList,
     [ELEMENT_OL]: OrderedList,
     [ELEMENT_LI]: ListItem,
 
