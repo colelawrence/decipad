@@ -240,6 +240,7 @@
     "babel-jest": "^27.0.2",
     "babel-loader": "^8.2.2",
     "babel-plugin-tsconfig-paths": "^1.0.1",
+    "buffer": "^6.0.3",
     "chokidar-cli": "^2.1.0",
     "css-vars-ponyfill": "^2.4.5",
     "csstype": "^3.0.8",
@@ -288,6 +289,7 @@
     "typescript": "~4.3.2",
     "url-loader": "^4.1.1",
     "wait-for-expect": "^3.0.2",
+    "webpack": "^5.64.4",
     "ws": "^7.5.3",
     "yarn": "^1.22.11"
   }

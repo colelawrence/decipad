@@ -50,10 +50,10 @@ describe('onChangeColumnName', () => {
     );
 
     const columnInput = getByDisplayValue('FirstName');
-    userEvent.type(columnInput, ' Edited');
+    userEvent.type(columnInput, 'Edited');
     fireEvent.keyDown(columnInput, { key: 'Enter' });
 
-    expect(onChangeColumnName).toHaveBeenCalledWith(0, 'FirstName Edited');
+    expect(onChangeColumnName).toHaveBeenCalledWith(0, 'FirstNameEdited');
   });
 });
 

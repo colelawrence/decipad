@@ -17,7 +17,7 @@ const keywords = moo.keywords(
   Object.fromEntries(keywordStrings.map((kw) => [`${kw} keyword`, kw]))
 );
 
-export const tokenizer = moo.states({
+export const tokenRules = {
   main: {
     ws: { match: /[ \t\n\v\f]+/, lineBreaks: true },
 
@@ -87,7 +87,9 @@ export const tokenizer = moo.states({
     // See above. This needs to be passed into date mode as well
     error,
   },
-});
+} as const;
+
+export const tokenizer = moo.states(tokenRules);
 
 export const tokenize = (source: string): Token[] =>
   Array.from(tokenizer.reset(source));

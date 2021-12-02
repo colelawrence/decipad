@@ -13,7 +13,7 @@ export const menuItemStyles = css(p14Regular, {
   borderRadius: '6px',
 
   backgroundColor: cssVar('backgroundColor'),
-  '&:hover, &:focus': {
+  '&:hover, &:focus, &[data-selected="true"]': {
     backgroundColor: cssVar('highlightColor'),
   },
 });
@@ -31,11 +31,17 @@ export interface MenuItemProps {
   readonly children: ReactNode;
   readonly icon?: ReactNode;
   readonly onSelect?: () => void;
+  readonly selected?: boolean;
 }
 
-export const MenuItem: FC<MenuItemProps> = ({ children, icon, onSelect }) => {
+export const MenuItem: FC<MenuItemProps> = ({
+  children,
+  icon,
+  onSelect,
+  selected,
+}) => {
   return (
-    <Item css={menuItemStyles} onSelect={onSelect}>
+    <Item css={menuItemStyles} onSelect={onSelect} data-selected={selected}>
       {icon != null && <span css={iconWrapperStyles}>{icon}</span>}
       <span css={childrenWrapperStyles}>{children}</span>
     </Item>

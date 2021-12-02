@@ -4,8 +4,7 @@ import { CellInput, TableHeader } from '../../atoms';
 import { typeIcons } from '../../atoms/TableHeader/TableHeader';
 
 import { TableColumnMenu } from '..';
-
-const alwaysValid = () => true;
+import { identifierNamePattern } from '../../utils/language';
 
 const triggerStyles = css({
   cursor: 'pointer',
@@ -52,6 +51,7 @@ export const EditableTableHeader: FC<EditableTableHeaderProps> = ({
           onChangeColumnType={onChangeColumnType}
           onRemoveColumn={onRemoveColumn}
           onOpenChange={setMenuOpen}
+          type={type}
         />
       }
       highlight={isMenuOpen}
@@ -59,8 +59,10 @@ export const EditableTableHeader: FC<EditableTableHeaderProps> = ({
     >
       <CellInput
         onChange={onChange}
-        placeholder="Column name"
-        validate={alwaysValid}
+        placeholder="ColumnName"
+        transform={(newValue) =>
+          newValue.match(identifierNamePattern)?.join('') ?? ''
+        }
         value={value}
         variant="header"
       />
