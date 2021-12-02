@@ -3,7 +3,7 @@ import { useDrop, DropTargetMonitor } from 'react-dnd';
 import { NativeTypes } from 'react-dnd-html5-backend';
 import { Editor } from 'slate';
 import { DropHint } from './DropHint';
-import { UploadDataOptions } from '../plugins/UploadData/useUploadDataPlugin';
+import { UploadDataOptions } from '../../plugins/UploadData/useUploadDataPlugin';
 
 interface DropFileProps {
   editor?: Editor;
