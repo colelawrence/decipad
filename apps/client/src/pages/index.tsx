@@ -13,7 +13,6 @@ import { Provider as AuthProvider, useSession } from 'next-auth/client';
 import Head from 'next/head';
 import { BrowserRouter } from 'react-router-dom';
 import { ToastProvider } from 'react-toast-notifications';
-import { GlobalErrorHandler } from '../components/GlobalErrorHandler';
 import { useApollo } from '../lib/apolloClient';
 import { Router } from '../routes';
 
@@ -66,21 +65,19 @@ function Index({ pageProps = {} }) {
           rel="apple-touch-icon"
         />
       </Head>
-      <GlobalErrorHandler>
-        <ToastProvider autoDismiss placement="top-right">
-          <AuthProvider session={session ?? undefined}>
-            <ApolloProvider client={apolloClient}>
-              <GlobalStyles>
-                <ChakraProvider theme={theme}>
-                  <BrowserRouter>
-                    <Router />
-                  </BrowserRouter>
-                </ChakraProvider>
-              </GlobalStyles>
-            </ApolloProvider>
-          </AuthProvider>
-        </ToastProvider>
-      </GlobalErrorHandler>
+      <ToastProvider autoDismiss placement="top-right">
+        <AuthProvider session={session ?? undefined}>
+          <ApolloProvider client={apolloClient}>
+            <GlobalStyles>
+              <ChakraProvider theme={theme}>
+                <BrowserRouter>
+                  <Router />
+                </BrowserRouter>
+              </ChakraProvider>
+            </GlobalStyles>
+          </ApolloProvider>
+        </AuthProvider>
+      </ToastProvider>
     </>
   );
 }
