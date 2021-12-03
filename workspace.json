@@ -633,6 +633,26 @@
         }
       }
     },
+    "routing": {
+      "root": "libs/routing",
+      "sourceRoot": "libs/routing/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/routing/src/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/routing"
+          }
+        }
+      }
+    },
     "services": {
       "root": "libs/services",
       "sourceRoot": "libs/services/src",

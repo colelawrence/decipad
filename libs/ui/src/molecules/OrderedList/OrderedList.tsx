@@ -5,9 +5,13 @@ import { cssVar, p16Regular, setCssVar } from '../../primitives';
 
 const styles = css({
   display: 'grid',
-  gridTemplateColumns: 'auto 1fr',
+  gridTemplateColumns: 'minmax(24px, auto) 1fr',
   gridAutoFlow: 'row',
 
+  padding: '6px 0',
+  'li &': {
+    paddingBottom: 0,
+  },
   rowGap: '6px',
   columnGap: '8px',
 

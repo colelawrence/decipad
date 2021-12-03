@@ -1,5 +1,5 @@
 import { AST } from '..';
-import { dimSwapTypes, dimSwapValues } from '../dimtools/dimSwap';
+import { dimSwapTypes, dimSwapValues } from '../dimtools';
 import { getIdentifierString, getOfType } from '../utils';
 import { Directive } from './types';
 

@@ -1,3 +1,5 @@
+var webpack = require('webpack');
+
 module.exports = {
   stories: [],
   core: {
@@ -29,6 +31,17 @@ module.exports = {
         ],
       },
     ];
+
+    // Fallback for node APIs used in dependencies such as csv-parse.
+    config.resolve.fallback = {
+      stream: require.resolve('stream-browserify'),
+    };
+    config.plugins.push(
+      new webpack.ProvidePlugin({
+        Buffer: ['buffer', 'Buffer'],
+      })
+    );
+
     return config;
   },
 };

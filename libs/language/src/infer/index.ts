@@ -1,5 +1,4 @@
 import pSeries from 'p-series';
-import { produce } from 'immer';
 
 import { AST, Time } from '..';
 import { InferError, Type, build as t } from '../type';
@@ -9,7 +8,7 @@ import { callBuiltinFunctor } from '../builtins';
 import { resolve as resolveData } from '../data';
 import { expandDirectiveToType } from '../directives';
 
-import { Context, makeContext, pushStackAndPrevious } from './context';
+import { Context, makeContext } from './context';
 import { inferSequence } from './sequence';
 import { inferTable } from './table';
 import { inferData } from './data';
@@ -170,53 +169,6 @@ export const inferExpression = wrap(
         } else {
           return callBuiltinFunctor(fName, givenArguments, fArgs);
         }
-      }
-      case 'given': {
-        const [ref, body] = expr.args;
-        const refName = getIdentifierString(ref);
-        const refType = await inferExpression(ctx, ref);
-
-        if (refType.errorCause) return refType;
-
-        const { cellType, columnSize, tableLength, columnTypes, columnNames } =
-          refType;
-
-        return pushStackAndPrevious(ctx, async () => {
-          if (cellType != null && columnSize != null) {
-            ctx.stack.set(refName, cellType);
-
-            const bodyResult = await inferExpression(ctx, body);
-
-            return t.column(bodyResult, columnSize, refType.indexedBy);
-          } else if (
-            tableLength != null &&
-            columnTypes != null &&
-            columnNames != null
-          ) {
-            ctx.stack.set(refName, t.row(columnTypes, columnNames));
-
-            const bodyType = await inferExpression(ctx, body);
-
-            if (
-              bodyType.tableLength === 1 &&
-              bodyType.columnTypes != null &&
-              bodyType.columnNames != null
-            ) {
-              // Returned a single row -- rebuild table with the correct number of rows and index
-              return produce(bodyType, (type) => {
-                type.tableLength = tableLength;
-                type.indexName = refType.indexName;
-              });
-            } else if (bodyType.tableLength != null) {
-              return t.impossible('Cannot nest tables');
-            } else {
-              // Returned a number or something else.
-              return t.column(bodyType, tableLength, refType.indexName);
-            }
-          } else {
-            return t.impossible('Column or table expected');
-          }
-        });
       }
       case 'imported-data': {
         const [url, contentType] = expr.args;

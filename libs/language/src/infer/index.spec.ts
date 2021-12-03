@@ -12,9 +12,7 @@ import {
   range,
   date,
   timeQuantity,
-  given,
   tableDef,
-  table,
   funcDef,
   prop,
   importedData,
@@ -266,6 +264,12 @@ describe('tables', () => {
     expect(tableContext.stack.get('Table')).toEqual(expectedType);
   });
 
+  it('Errors on empty tables', async () => {
+    expect(
+      await inferStatement(makeContext(), tableDef('Table', {}))
+    ).toMatchInlineSnapshot(`Error: Unexpected empty table`);
+  });
+
   it('References to table columns', async () => {
     const block = n(
       'block',
@@ -297,16 +301,6 @@ describe('tables', () => {
     });
 
     expect(await inferStatement(makeContext(), table)).toEqual(expectedType);
-  });
-
-  it('"previous" references in given: expressions', async () => {
-    const ctx = makeContext();
-
-    ctx.stack.set('A', t.column(t.number(), 3));
-
-    expect(
-      await inferStatement(ctx, given('A', c('previous', l(1))))
-    ).toMatchObject({ cellType: { type: 'number' } });
   });
 
   it('unifies column sizes', async () => {
@@ -390,6 +384,23 @@ describe('tables', () => {
         )
       ).errorCause?.message
     ).toMatch(/MissingVar/);
+  });
+
+  it('tracks the index through columns', async () => {
+    expect(
+      (
+        await inferStatement(
+          makeContext(),
+          tableDef('Table', {
+            Col1: col(1, 2, 3),
+            Col2: l(2),
+            Col3: c('>', n('ref', 'Col1'), n('ref', 'Col2')),
+          })
+        )
+      ).toString()
+    ).toMatchInlineSnapshot(
+      `"table (3) { Col1 = <number>, Col2 = <number>, Col3 = <boolean> }"`
+    );
   });
 
   describe('table spreads', () => {
@@ -490,121 +501,6 @@ it('infers refs', async () => {
       .impossible(InferError.missingVariable('MissingVar'))
       .inNode(r('MissingVar'))
   );
-});
-
-describe('Given', () => {
-  it('Works on scalars', async () => {
-    const scopeWithColumn = makeContext({
-      initialGlobalScope: [['Nums', t.column(t.number(), 3)]],
-    });
-
-    expect(await inferExpression(scopeWithColumn, given('Nums', l(1)))).toEqual(
-      t.column(t.number(), 3)
-    );
-
-    expect(
-      await inferExpression(scopeWithColumn, given('Nums', l('hi')))
-    ).toEqual(t.column(t.string(), 3));
-
-    expect(
-      await inferExpression(
-        scopeWithColumn,
-        given('Nums', c('+', r('Nums'), l(1)))
-      )
-    ).toEqual(t.column(t.number(), 3));
-  });
-
-  it('Works with column bodies', async () => {
-    const scopeWithColumn = makeContext({
-      initialGlobalScope: [['Nums', t.column(t.number(), 3)]],
-    });
-
-    expect(
-      await inferExpression(
-        scopeWithColumn,
-        given('Nums', col(l('s1'), l('s2')))
-      )
-    ).toEqual(t.column(t.column(t.string(), 2), 3));
-  });
-
-  it('Works with tables', async () => {
-    const scopeWithTable = makeContext({
-      initialGlobalScope: [
-        [
-          'Table',
-          t.table({
-            length: 4,
-            columnTypes: [t.number(), t.string()],
-            columnNames: ['Nums', 'Strs'],
-          }),
-        ],
-      ],
-    });
-
-    // Generates a column from a table
-    expect(
-      await inferExpression(
-        scopeWithTable,
-        given('Table', c('+', prop('Table', 'Nums'), l(1)))
-      )
-    ).toEqual(t.column(t.number(), 4));
-
-    // Generates a table from a table
-    expect(
-      await inferExpression(
-        scopeWithTable,
-        given('Table', table({ Col: prop('Table', 'Nums') }))
-      )
-    ).toEqual(
-      t.table({
-        length: 4,
-        columnTypes: [t.number()],
-        columnNames: ['Col'],
-      })
-    );
-
-    // Doesn't willingly nest tables (TODO this is implemented because tables of 1 row are special-cased)
-    expect(
-      (
-        await inferExpression(
-          scopeWithTable,
-          given('Table', table({ Col: col(1, 2, 3) }))
-        )
-      ).errorCause?.message
-    ).toMatch(/nest/i);
-  });
-
-  it('Needs a column or table', async () => {
-    const scopeWithNum = makeContext({
-      initialGlobalScope: [['Num', t.number()]],
-    });
-
-    expect(
-      (await inferExpression(scopeWithNum, given('Num', l(1)))).errorCause
-    ).not.toBeNull();
-  });
-
-  it('propagates errors in the given variable', async () => {
-    const scopeWithColumn = makeContext({
-      initialGlobalScope: [['Errored', t.impossible('oh no')]],
-    });
-
-    expect(
-      (await inferExpression(scopeWithColumn, given('Errored', l(1))))
-        .errorCause
-    ).not.toBeNull();
-  });
-
-  it('propagates errors inside the expression', async () => {
-    const scopeWithColumn = makeContext({
-      initialGlobalScope: [['Nums', t.column(t.number(), 3)]],
-    });
-
-    expect(
-      (await inferExpression(scopeWithColumn, given('Nums', r('MissingVar'))))
-        .errorCause?.message
-    ).toMatch(/MissingVar/);
-  });
 });
 
 it('infers binops', async () => {

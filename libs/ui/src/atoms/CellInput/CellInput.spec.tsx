@@ -47,19 +47,24 @@ it('takes a new value from the props', async () => {
   expect(getByRole('textbox')).toHaveValue('new');
 });
 
-describe('onKeyDown prop', () => {
-  it('gets called once per key', () => {
-    const onKeyDown = jest.fn();
+describe('transform prop', () => {
+  it('transforms the input before submitting', () => {
+    const onChange = jest.fn(() => 'transformed');
+    const transform = jest.fn(() => 'transformed');
     const { getByRole } = render(
-      <CellInput value="text" onKeyDown={onKeyDown} />
+      <CellInput onChange={onChange} transform={transform} value="text" />
     );
 
-    expect(onKeyDown).not.toHaveBeenCalled();
+    expect(onChange).not.toHaveBeenCalled();
+    expect(transform).not.toHaveBeenCalled();
 
-    const newText = 'newtext';
-    userEvent.type(getByRole('textbox'), newText);
+    userEvent.type(getByRole('textbox'), 'text');
+    fireEvent.blur(getByRole('textbox'));
 
-    expect(onKeyDown).toHaveBeenCalledTimes(newText.length);
+    expect(transform).toHaveBeenCalledTimes(1);
+    expect(transform).toHaveBeenCalledWith('texttext');
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledWith('transformed');
   });
 });
 

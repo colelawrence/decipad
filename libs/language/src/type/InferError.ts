@@ -23,9 +23,8 @@ export type ErrSpec =
       errType: 'expectedUnit';
       expectedUnit: [AST.Units | null, AST.Units | null];
     }
-  | {
-      errType: 'unexpectedEmptyColumn';
-    }
+  | { errType: 'unexpectedEmptyColumn' }
+  | { errType: 'unexpectedEmptyTable' }
   | {
       errType: 'mismatchedSpecificity';
       expectedSpecificity: Time.Specificity;
@@ -83,6 +82,9 @@ function specToString(spec: ErrSpec): string {
     }
     case 'unexpectedEmptyColumn': {
       return `Unexpected empty column`;
+    }
+    case 'unexpectedEmptyTable': {
+      return `Unexpected empty table`;
     }
     case 'mismatchedSpecificity': {
       const { expectedSpecificity, gotSpecificity } = spec;
@@ -161,6 +163,12 @@ export class InferError {
   static unexpectedEmptyColumn() {
     return new InferError({
       errType: 'unexpectedEmptyColumn',
+    });
+  }
+
+  static unexpectedEmptyTable() {
+    return new InferError({
+      errType: 'unexpectedEmptyTable',
     });
   }
 

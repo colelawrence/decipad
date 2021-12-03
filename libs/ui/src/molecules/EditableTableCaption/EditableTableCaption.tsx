@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { ComponentProps, FC } from 'react';
 import { Table as TableIcon } from '../../icons';
 import { CellInput } from '../../atoms/CellInput/CellInput';
+import { identifierNamePattern } from '../../utils/language';
 
 const tableTitleWrapper = css({
   alignItems: 'center',
@@ -14,8 +15,6 @@ const tableIconSizeStyles = css({
   width: '16px',
   height: '16px',
 });
-
-const alwaysValid = () => true;
 
 type EditableTableCaptionProps = Omit<
   ComponentProps<typeof CellInput>,
@@ -34,16 +33,12 @@ export const EditableTableCaption = ({
         </div>
         <CellInput
           onChange={onChange}
-          onKeyDown={(e) => {
-            if (e.key === ' ') {
-              // Table names cannot contain spaces.
-              e.preventDefault();
-            }
-          }}
           placeholder="TableName"
+          transform={(newValue) =>
+            newValue.match(identifierNamePattern)?.join('') ?? ''
+          }
           variant="heading"
           value={value}
-          validate={alwaysValid}
         />
       </div>
     </caption>

@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
-import { KeyboardEvent, useRef, useEffect, FC } from 'react';
+import { useRef, useEffect, FC } from 'react';
+import { identity, noop } from '@decipad/utils';
 import { h2, p13Medium, p14Medium } from '../../primitives';
-import { noop } from '../../utils';
 
 const inputStyles = css({
   width: '100%',
@@ -32,8 +32,8 @@ export interface CellInputProps {
   readonly variant?: Variant;
   readonly value: string;
   readonly onChange?: (newValue: string) => void;
-  readonly onKeyDown?: (event: KeyboardEvent<HTMLInputElement>) => void;
   readonly validate?: (value: string) => boolean;
+  readonly transform?: (newValue: string) => string;
 }
 
 /** Sort of coupled to tables. Once blurred, commits changes by calling onChange */
@@ -42,8 +42,8 @@ export const CellInput = ({
   variant = 'data',
   value,
   onChange = noop,
-  onKeyDown = noop,
   validate = alwaysTrue,
+  transform = identity,
 }: CellInputProps): ReturnType<FC> => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -59,7 +59,7 @@ export const CellInput = ({
     if (newValue == null) return;
 
     if (validate(newValue)) {
-      onChange(newValue);
+      onChange(transform(newValue));
     } else if (inputRef.current) {
       inputRef.current.value = '';
       onChange('');
@@ -80,8 +80,6 @@ export const CellInput = ({
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
           submit();
-        } else {
-          onKeyDown(e);
         }
       }}
       placeholder={placeholder}

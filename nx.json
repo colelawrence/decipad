@@ -108,6 +108,9 @@
     "react-utils": {
       "tags": []
     },
+    "routing": {
+      "tags": []
+    },
     "services": {
       "tags": []
     },

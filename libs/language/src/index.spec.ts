@@ -509,6 +509,61 @@ describe('Tables', () => {
       })
     `);
   });
+
+  it('can have multidimensional columns', async () => {
+    const fuelTable = (costColumn = '') => `
+      Cars = { Num = [100, 200] }
+
+      Fuel = {
+        Years = [1, 2, 3]
+        Cost = ${costColumn}
+      }
+    `;
+
+    const result = await runCode(fuelTable('Years * Cars.Num'));
+    expect(result).toMatchInlineSnapshot(`
+      Result({
+        Years = [ 1, 2, 3 ],
+        Cost = [ [ 100, 200 ], [ 200, 400 ], [ 300, 600 ] ]
+      })
+    `);
+    expect(result.type.toString()).toMatchInlineSnapshot(
+      `"table (3) { Years = <number>, Cost = <number> x 2 }"`
+    );
+
+    const resultInvertedDims = await runCode(fuelTable('Cars.Num * Years'));
+    expect(resultInvertedDims).toMatchInlineSnapshot(`
+      Result({
+        Years = [ 1, 2, 3 ],
+        Cost = [ [ 100, 200, 300 ], [ 200, 400, 600 ] ]
+      })
+    `);
+    expect(resultInvertedDims.type.toString()).toMatchInlineSnapshot(
+      `"table (3) { Years = <number>, Cost = <number> x 3 }"`
+    );
+
+    const resultExtraDim = await runCode(fuelTable('Cars.Num * Years * [1]'));
+    expect(resultExtraDim).toMatchInlineSnapshot(`
+      Result({
+        Years = [ 1, 2, 3 ],
+        Cost = [ [ [ 100 ], [ 200 ], [ 300 ] ], [ [ 200 ], [ 400 ], [ 600 ] ] ]
+      })
+    `);
+    expect(resultExtraDim.type.toString()).toMatchInlineSnapshot(
+      `"table (3) { Years = <number>, Cost = <number> x 1 x 3 }"`
+    );
+
+    const resultExtraDim2 = await runCode(fuelTable('Cars.Num * [1] * Years'));
+    expect(resultExtraDim2).toMatchInlineSnapshot(`
+      Result({
+        Years = [ 1, 2, 3 ],
+        Cost = [ [ [ 100, 200, 300 ] ], [ [ 200, 400, 600 ] ] ]
+      })
+    `);
+    expect(resultExtraDim2.type.toString()).toMatchInlineSnapshot(
+      `"table (3) { Years = <number>, Cost = <number> x 3 x 1 }"`
+    );
+  });
 });
 
 describe('Units', () => {
@@ -623,27 +678,19 @@ describe('Dates', () => {
 
   it('Evaluates tables of dates', async () => {
     expect(
-      (
-        await runCode(`
+      await runCode(`
         Table = {
           Months = [ date(2020-09), date(2020-10), date(2020-11) ],
-          Days = dateequals(Months, [ date(2020-09), date(2020-11), date(2020-10) ])
+          MaybeEqualMonths = [ date(2020-09), date(2020-11), date(2020-10) ],
+          Days = dateequals(Months, MaybeEqualMonths)
         }
       `)
-      ).value
     ).toMatchInlineSnapshot(`
-      Array [
-        Array [
-          1598918400000,
-          1601510400000,
-          1604188800000,
-        ],
-        Array [
-          true,
-          false,
-          false,
-        ],
-      ]
+      Result({
+        Months = [ month 2020-09, month 2020-10, month 2020-11 ],
+        MaybeEqualMonths = [ month 2020-09, month 2020-11, month 2020-10 ],
+        Days = [ true, false, false ]
+      })
     `);
   });
 });
@@ -676,75 +723,6 @@ describe('Time quantities', () => {
         Quarters: t.timeQuantity(['quarter']),
         Seconds: t.timeQuantity(['second']),
         Combined: t.timeQuantity(['quarter', 'second', 'millisecond']),
-      },
-    });
-  });
-});
-
-describe('Given', () => {
-  it('Works on single dims and tables', async () => {
-    expect(
-      await runCode(`
-        Col = [1, 2, 3]
-        given Col: Col + 1
-      `)
-    ).toMatchObject({
-      value: [
-        { d: 1, n: 2, s: 1 },
-        { d: 1, n: 3, s: 1 },
-        { d: 1, n: 4, s: 1 },
-      ],
-      type: {
-        columnSize: 3,
-        cellType: { type: 'number' },
-      },
-    });
-
-    expect(
-      await runCode(`
-        Col = {
-          Ayy = [1, 2, 3],
-          Bee = [1, 2, 3]
-        }
-        given Col: Col.Ayy - Col.Bee
-      `)
-    ).toMatchObject({
-      value: [
-        { d: 1, n: 0, s: 1 },
-        { d: 1, n: 0, s: 1 },
-        { d: 1, n: 0, s: 1 },
-      ],
-      type: {
-        columnSize: 3,
-        cellType: { type: 'number' },
-      },
-    });
-
-    expect(
-      await runCode(`
-        Tbl = {
-          Ayy = [1, 2, 3],
-          Bee = [4, 5, 6]
-        }
-        given Tbl: { Ayy = Tbl.Ayy, Bee = Tbl.Bee }
-      `)
-    ).toMatchObject({
-      value: [
-        [
-          { d: 1, n: 1, s: 1 },
-          { d: 1, n: 2, s: 1 },
-          { d: 1, n: 3, s: 1 },
-        ],
-        [
-          { d: 1, n: 4, s: 1 },
-          { d: 1, n: 5, s: 1 },
-          { d: 1, n: 6, s: 1 },
-        ],
-      ],
-      type: {
-        tableLength: 3,
-        columnNames: ['Ayy', 'Bee'],
-        columnTypes: [{ type: 'number' }, { type: 'number' }],
       },
     });
   });

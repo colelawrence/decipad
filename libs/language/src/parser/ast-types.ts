@@ -214,15 +214,6 @@ export interface FunctionCall {
   end?: Pos;
 }
 
-// Expansion operator
-
-export interface Given {
-  type: 'given';
-  args: [ref: Ref, body: Expression];
-  start?: Pos;
-  end?: Pos;
-}
-
 // Definitions
 
 export interface Assign {
@@ -267,7 +258,6 @@ export type Expression =
   | Range
   | Sequence
   | Date
-  | Given
   | Table
   | ImportedData
   | Directive;
@@ -311,7 +301,6 @@ export interface TypeToNode {
   assign: Assign;
   'argument-names': FunctionArgumentNames;
   'function-definition': FunctionDefinition;
-  given: Given;
   block: Block;
   'imported-data': ImportedData;
   units: Units;

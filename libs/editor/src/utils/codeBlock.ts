@@ -5,8 +5,8 @@ import {
   TDescendant,
   TEditor,
 } from '@udecode/plate';
-import { Path } from 'slate';
-import { getPathBelowBlock } from './path';
+import { Editor, Path, Transforms } from 'slate';
+import { getBlockParentPath, getPathBelowBlock } from './path';
 
 const codeBlockElement = {
   type: ELEMENT_CODE_BLOCK,
@@ -27,4 +27,18 @@ export const insertCodeBlockBelow = (
     at: getPathBelowBlock(editor, path),
     select,
   });
+};
+
+export const insertCodeBlockBelowOrReplace = (
+  editor: TEditor,
+  path: Path,
+  select = false
+): void => {
+  const blockPath = getBlockParentPath(editor, path);
+  const isBlockEmpty = !Editor.string(editor, blockPath);
+
+  insertCodeBlockBelow(editor, blockPath, select);
+  if (isBlockEmpty) {
+    Transforms.delete(editor, { at: blockPath });
+  }
 };

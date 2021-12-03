@@ -10,7 +10,7 @@ module.exports = {
   ...domConfig,
   displayName: 'browser:ui',
 
-  testMatch: ['**/*.browser-{test,spec}.{js,jsx,ts,tsx}'],
+  testMatch: ['**/*.visual-{test,spec}.{js,jsx,ts,tsx}'],
 
   preset: 'jest-playwright-jsdom',
   setupFilesAfterEnv: [

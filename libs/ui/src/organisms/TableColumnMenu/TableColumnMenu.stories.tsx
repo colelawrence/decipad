@@ -7,5 +7,5 @@ export default {
 } as Meta;
 
 export const Normal: Story = () => (
-  <TableColumnMenu trigger={<button>click me</button>} />
+  <TableColumnMenu trigger={<button>click me</button>} type="number" />
 );

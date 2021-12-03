@@ -4,7 +4,7 @@ import { Value } from './interpreter/Value';
 import { Type, build as t, serializeType, SerializedType } from './type';
 import { builtins } from './builtins';
 
-export { tokenize } from './grammar';
+export { tokenize, tokenRules } from './grammar';
 export { parse, AST, Parser } from './parser';
 export { inferBlock, makeContext } from './infer';
 export type { Context } from './infer';

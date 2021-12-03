@@ -67,10 +67,7 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
   },
   round: {
     argCount: 2,
-    fn: (n, decimalPrecision) => {
-      const factor = 10 ** decimalPrecision;
-      return Math.round(n * factor) / factor;
-    },
+    fn: (n, decimalPrecision) => n.round(decimalPrecision),
     functor: ([n, decimalPrecision]) =>
       Type.combine(decimalPrecision.isScalar('number'), n.isScalar('number')),
   },

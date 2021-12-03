@@ -161,6 +161,7 @@ import { knowsUnit } from '../units';
 const reservedWords = new Set([
   'in',
   'as',
+  'to',
   'where',
   'given',
   'per',
@@ -962,29 +963,6 @@ let ParserRules = [
     },
   },
   {
-    name: 'given',
-    symbols: [
-      { literal: 'given' },
-      '__',
-      'ref',
-      '_',
-      { literal: ':' },
-      '_',
-      'givenBody',
-    ],
-    postprocess: (d) => {
-      return addArrayLoc(
-        {
-          type: 'given',
-          args: [d[2], d[6]],
-        },
-        d
-      );
-    },
-  },
-  { name: 'givenBody', symbols: ['table'], postprocess: id },
-  { name: 'givenBody', symbols: ['expression'], postprocess: id },
-  {
     name: 'table',
     symbols: [{ literal: '{' }, 'tableContents', { literal: '}' }],
     postprocess: (d) => {
@@ -1190,10 +1168,8 @@ let ParserRules = [
       return [ref, cols];
     },
   },
-  { name: 'expression', symbols: ['nonGivenExp'], postprocess: id },
-  { name: 'expression', symbols: ['given'], postprocess: id },
-  { name: 'nonGivenExp', symbols: ['overExp'], postprocess: id },
-  { name: 'nonGivenExp', symbols: ['importData'], postprocess: id },
+  { name: 'expression', symbols: ['overExp'], postprocess: id },
+  { name: 'expression', symbols: ['importData'], postprocess: id },
   { name: 'overExp', symbols: ['asExp'], postprocess: id },
   {
     name: 'overExp',

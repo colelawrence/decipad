@@ -10,7 +10,6 @@ import { expandDirectiveToValue } from '../directives';
 import { Realm } from './Realm';
 import { Scalar, Range, Date, Column, Value, TimeQuantity } from './Value';
 import { evaluateTable } from './table';
-import { evaluateGiven } from './given';
 import { evaluateData } from './data';
 
 // Gets a single value from an expanded AST.
@@ -146,9 +145,6 @@ export async function evaluate(
       // Typecheck ensures this isn't used as a result
       // but we want to always return something
       return Scalar.fromValue(NaN);
-    }
-    case 'given': {
-      return evaluateGiven(realm, node);
     }
     case 'imported-data': {
       const [url, contentType] = node.args;
