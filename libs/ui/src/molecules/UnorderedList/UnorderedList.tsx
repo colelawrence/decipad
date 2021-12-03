@@ -1,12 +1,14 @@
-import { FC, ReactNode, Children } from 'react';
+import { FC, ReactNode, Children, createContext, useContext } from 'react';
 import { css } from '@emotion/react';
 import { listItemCounter, SlateElementProps } from '../../utils';
 import { cssVar, setCssVar } from '../../primitives';
 import { Bullet } from '../../icons';
 
+const Depth = createContext(0);
+
 const styles = css({
   display: 'grid',
-  gridTemplateColumns: 'minmax(24px, auto) 1fr',
+  gridTemplateColumns: '24px 1fr',
   gridAutoFlow: 'row',
 
   padding: '6px 0',
@@ -27,14 +29,15 @@ const itemStyles = css({
 const bulletStyles = css({
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
 
-  display: 'flex',
   justifySelf: 'center',
-  width: '3px',
+  display: 'flex',
+  width: '6px',
 
   // align vertically with the first line, even if the item is multiline
   alignSelf: 'start',
   '::before': {
     content: '" "',
+    whiteSpace: 'pre',
     width: 0,
     visibility: 'hidden',
   },
@@ -47,16 +50,24 @@ export const UnorderedList = ({
   children,
   slateAttrs,
 }: UnorderedListProps): ReturnType<FC> => {
+  const depth = useContext(Depth) + 1;
+
   return (
     <ol css={styles} {...slateAttrs}>
-      {Children.map(children, (child) => (
-        <li css={itemStyles}>
-          <span role="presentation" contentEditable={false} css={bulletStyles}>
-            <Bullet />
-          </span>
-          {child}
-        </li>
-      ))}
+      <Depth.Provider value={depth}>
+        {Children.map(children, (child) => (
+          <li css={itemStyles}>
+            <span
+              role="presentation"
+              contentEditable={false}
+              css={bulletStyles}
+            >
+              <Bullet depth={depth} />
+            </span>
+            {child}
+          </li>
+        ))}
+      </Depth.Provider>
     </ol>
   );
 };

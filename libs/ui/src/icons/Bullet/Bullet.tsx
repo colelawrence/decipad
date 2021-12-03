@@ -1,8 +1,20 @@
 import { cssVar } from '../../primitives';
 
-export const Bullet = (): ReturnType<React.FC> => (
-  <svg viewBox="0 0 3 3" fill="none" xmlns="http://www.w3.org/2000/svg">
+const shapes = [
+  <circle cx="3" cy="3.5" r="3" fill={cssVar('currentTextColor')} />,
+  <circle cx="3" cy="3.5" r="2.5" stroke={cssVar('currentTextColor')} />,
+  <rect y="0.5" width="6" height="6" fill={cssVar('currentTextColor')} />,
+];
+
+interface BulletProps {
+  /**
+   * The number of <ul> ancestors this bullet has
+   */
+  readonly depth?: number;
+}
+export const Bullet = ({ depth = 1 }: BulletProps): ReturnType<React.FC> => (
+  <svg viewBox="0 0 6 7" fill="none" xmlns="http://www.w3.org/2000/svg">
     <title>Bullet</title>
-    <circle cx="1.5" cy="1.5" r="1.5" fill={cssVar('currentTextColor')} />
+    {shapes[(depth - 1) % shapes.length]}
   </svg>
 );

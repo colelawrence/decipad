@@ -19,3 +19,19 @@ export const Normal: Story<typeof args> = ({ numberOfItems }) => (
     ))}
   </UnorderedList>
 );
+
+const nestedArgs = { numberOfItems: 2, levels: 2 };
+export const Nested: Story<typeof nestedArgs> = (
+  { numberOfItems, levels },
+  context
+) => (
+  <UnorderedList>
+    {Array.from({ length: numberOfItems }, (_, i) => (
+      <ListItem key={i}>
+        Item {i + 1}
+        {levels > 1 && Nested({ numberOfItems, levels: levels - 1 }, context)}
+      </ListItem>
+    ))}
+  </UnorderedList>
+);
+Nested.args = nestedArgs;
