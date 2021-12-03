@@ -94,12 +94,6 @@ export const column = (
   }
 };
 
-export const importedData = (url: string, indexName?: string | null) =>
-  produce(new Type(), (t) => {
-    t.dataUrl = url;
-    t.indexName = indexName ?? null;
-  });
-
 export const functionPlaceholder = () =>
   produce(new Type(), (fType) => {
     fType.functionness = true;

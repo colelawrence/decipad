@@ -23,7 +23,6 @@ export type SerializedType =
     }
   | { kind: 'row'; rowCellTypes: SerializedType[]; rowCellNames: string[] }
   | { kind: 'time-quantity'; timeUnits: Time.Unit[] }
-  | { kind: 'imported-data'; indexName: string | null; dataUrl: string }
   | { kind: 'function' }
   | { kind: 'type-error'; errorCause: ErrSpec };
 
@@ -58,12 +57,6 @@ export function serializeType(type: Type): SerializedType {
       kind: 'row',
       rowCellTypes: type.rowCellTypes.map((t) => serializeType(t)),
       rowCellNames: type.rowCellNames,
-    };
-  } else if (type.dataUrl) {
-    return {
-      kind: 'imported-data',
-      indexName: type.indexName,
-      dataUrl: type.dataUrl,
     };
   } else if (type.functionness) {
     return { kind: 'function' };
@@ -102,8 +95,6 @@ export function deserializeType(type: SerializedType): Type {
       );
     case 'time-quantity':
       return t.timeQuantity(type.timeUnits);
-    case 'imported-data':
-      return t.importedData(type.dataUrl);
     case 'function':
       return t.functionPlaceholder();
     case 'type-error':

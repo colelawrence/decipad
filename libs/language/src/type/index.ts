@@ -78,9 +78,6 @@ export class Type {
   // Time quantities
   timeUnits: Time.Unit[] | null = null;
 
-  // Imported data
-  dataUrl: string | null = null;
-
   // Functions are impossible types with functionness = true
   functionness = false;
 
@@ -132,10 +129,6 @@ export class Type {
       return this.date;
     }
 
-    if (this.dataUrl != null) {
-      return `<data url="${this.dataUrl}">`;
-    }
-
     return `<${this.type}>`;
   }
 
@@ -154,7 +147,6 @@ export class Type {
     if (this.columnTypes != null) return 'table';
     if (this.rowCellTypes != null) return 'row';
     if (this.timeUnits != null) return `time quantity`;
-    if (this.dataUrl != null) return 'imported data';
 
     /* istanbul ignore next */
     throw new Error('toBasicString: unknown type');

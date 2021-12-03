@@ -119,15 +119,6 @@ it('can stringify a type', () => {
       "kind": "date",
     }
   `);
-  expect(
-    serializeType(t.importedData('http://example.com/foo.decidata', 'Index'))
-  ).toMatchInlineSnapshot(`
-    Object {
-      "dataUrl": "http://example.com/foo.decidata",
-      "indexName": "Index",
-      "kind": "imported-data",
-    }
-  `);
   expect(serializeType(t.functionPlaceholder())).toMatchInlineSnapshot(`
     Object {
       "kind": "function",
@@ -210,14 +201,6 @@ it('can parse a type', () => {
   ).toMatchObject({
     timeUnits: ['day', 'year'],
   });
-
-  expect(
-    testDeserialize({
-      kind: 'imported-data',
-      indexName: null,
-      dataUrl: 'http://ex.com/1',
-    })
-  ).toMatchInlineSnapshot(`"<data url=\\"http://ex.com/1\\">"`);
 
   expect(deserializeType({ kind: 'function' })).toMatchObject({
     functionness: true,

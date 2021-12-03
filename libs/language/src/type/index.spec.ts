@@ -45,9 +45,6 @@ it('can be stringified', () => {
 
   const nestedCol = t.column(t.column(t.string(), 4), 6);
   expect(nestedCol.toString()).toEqual('<string> x 4 x 6');
-
-  const importedData = t.importedData('data:someurl');
-  expect(importedData.toString()).toEqual('<data url="data:someurl">');
 });
 
 it('can be stringified in basic form', () => {
@@ -79,9 +76,6 @@ it('can be stringified in basic form', () => {
 
   const col = t.column(t.string(), 4);
   expect(col.toBasicString()).toEqual('column');
-
-  const importedData = t.importedData('data:someurl');
-  expect(importedData.toBasicString()).toEqual('imported data');
 
   expect(() => t.number().withErrorCause('').toBasicString()).toThrow();
 });

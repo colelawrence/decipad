@@ -14,7 +14,7 @@ import { block, n, units, F, U, u } from './utils';
 import { stringifyResult } from './repl';
 
 expect.addSnapshotSerializer({
-  test: (arg) => arg.type instanceof Type && arg.value != null,
+  test: (arg) => arg?.type instanceof Type && arg.value != null,
   serialize: ({ type, value }) =>
     `Result(${stringifyResult(value, type, (x) => x)})`,
 });
@@ -751,22 +751,14 @@ describe('Injected external data', () => {
 
 describe('number units work together', () => {
   it('handles no units', async () => {
-    expect(
-      await runCode(`
-        1 + 2
-      `)
-    ).toMatchObject({
+    expect(await runCode(`1 + 2`)).toMatchObject({
       value: F(3),
       type: t.number(),
     });
   });
 
   it('handles unknown units', async () => {
-    expect(
-      await runCode(`
-        1 banana + 2 bananas
-      `)
-    ).toMatchObject({
+    expect(await runCode(`1 banana + 2 bananas`)).toMatchObject({
       value: F(3),
       type: t.number({
         type: 'units',
@@ -783,11 +775,7 @@ describe('number units work together', () => {
   });
 
   it('handles known units', async () => {
-    expect(
-      await runCode(`
-        1 meter + 2 meters
-      `)
-    ).toMatchObject({
+    expect(await runCode(`1 meter + 2 meters`)).toMatchObject({
       value: F(3),
       type: t.number({
         type: 'units',
@@ -804,11 +792,7 @@ describe('number units work together', () => {
   });
 
   it('handles known units with multipliers', async () => {
-    expect(
-      await runCode(`
-        10 centimeters + 2 meters
-      `)
-    ).toMatchObject({
+    expect(await runCode(`10 centimeters + 2 meters`)).toMatchObject({
       value: F(21, 10),
       type: t.number({
         type: 'units',
@@ -825,11 +809,7 @@ describe('number units work together', () => {
   });
 
   it('handles exponentiated known units with multipliers', async () => {
-    expect(
-      await runCode(`
-        1 centimeters^2 + 2 meters^2
-      `)
-    ).toMatchObject({
+    expect(await runCode(`1 centimeters^2 + 2 meters^2`)).toMatchObject({
       value: F(20001, 10000),
       type: t.number({
         type: 'units',
@@ -846,11 +826,7 @@ describe('number units work together', () => {
   });
 
   it('multiplies units', async () => {
-    expect(
-      await runCode(`
-        10 kilometers * 3 hours
-      `)
-    ).toMatchObject({
+    expect(await runCode(`10 kilometers * 3 hours`)).toMatchObject({
       value: F(30, 1),
       type: t.number({
         type: 'units',
@@ -873,11 +849,7 @@ describe('number units work together', () => {
   });
 
   it('can use divided units', async () => {
-    expect(
-      await runCode(`
-        3 kilometers/minute
-      `)
-    ).toMatchObject({
+    expect(await runCode(`3 kilometers/minute`)).toMatchObject({
       value: F(3, 1),
       type: t.number({
         type: 'units',
@@ -900,11 +872,7 @@ describe('number units work together', () => {
   });
 
   it('divides two simple units', async () => {
-    expect(
-      await runCode(`
-        3 kilometers / 1 minute
-      `)
-    ).toMatchObject({
+    expect(await runCode(`3 kilometers / 1 minute`)).toMatchObject({
       value: F(3, 1),
       type: t.number({
         type: 'units',
@@ -927,11 +895,7 @@ describe('number units work together', () => {
   });
 
   it('cancels out units', async () => {
-    expect(
-      await runCode(`
-        4 miles/hour * 2 hour
-      `)
-    ).toMatchObject({
+    expect(await runCode(`4 miles/hour * 2 hour`)).toMatchObject({
       value: F(8),
       type: t.number({
         type: 'units',
@@ -948,11 +912,7 @@ describe('number units work together', () => {
   });
 
   it('does the right thing when exponentiating with units', async () => {
-    expect(
-      await runCode(`
-        2 ** (4 as years)
-      `)
-    ).toMatchObject({
+    expect(await runCode(`2 ** (4 as years)`)).toMatchObject({
       value: F(16),
       type: t.number(),
     });
@@ -991,11 +951,7 @@ describe('number units work together', () => {
   });
 
   it('handles non-scalar unit conversions', async () => {
-    expect(
-      await runCode(`
-        1K + 2°C + 3°F
-      `)
-    ).toMatchObject({
+    expect(await runCode(`1K + 2°C + 3°F`)).toMatchObject({
       value: F(50007, 100),
       type: t.number({
         type: 'units',
@@ -1012,11 +968,7 @@ describe('number units work together', () => {
   });
 
   it('handles negative exp unit multipliers when converting', async () => {
-    expect(
-      await runCode(`
-        2 liter/km * 3 km
-      `)
-    ).toMatchObject({
+    expect(await runCode(`2 liter/km * 3 km`)).toMatchObject({
       value: F(6),
       type: t.number({
         type: 'units',
@@ -1033,22 +985,14 @@ describe('number units work together', () => {
   });
 
   it('converts between complex units', async () => {
-    expect(
-      await runCode(`
-        100 joules/km as calories/foot
-      `)
-    ).toMatchObject({
+    expect(await runCode(`100 joules/km as calories/foot`)).toMatchObject({
       value: F(25, 3431926),
       type: t.number(U([u('calories'), u('foot', { exp: -1 })])),
     });
   });
 
   it('converts between mixed known and unknown units', async () => {
-    expect(
-      await runCode(`
-        1 bananas/second as bananas/minute
-      `)
-    ).toMatchObject({
+    expect(await runCode(`1 bananas/second as bananas/minute`)).toMatchObject({
       value: F(60),
       type: t.number(
         U([u('bananas', { known: false }), u('minute', { exp: -1 })])
@@ -1057,121 +1001,77 @@ describe('number units work together', () => {
   });
 
   it('autoconverts complex units', async () => {
-    expect(
-      await runCode(`
-      1 joule/meter^2 + 2 calories/inch^2
-      `)
-    ).toMatchObject({
+    expect(await runCode(`1 joule/meter^2 + 2 calories/inch^2`)).toMatchObject({
       value: F(7549790286526364, 3774894852224877),
       type: t.number(U([u('calories'), u('inch', { exp: -2 })])),
     });
   });
 
   it('expands expandable units (1)', async () => {
-    expect(
-      await runCode(`
-        1 squaremeter + 2 m^2
-      `)
-    ).toMatchObject({
+    expect(await runCode(`1 squaremeter + 2 m^2`)).toMatchObject({
       value: F(3),
       type: t.number(U('m', { exp: 2 })),
     });
   });
 
   it('autoconverts expanding expandable units (2)', async () => {
-    expect(
-      await runCode(`
-        1 newton/meter^2 + 2 bar
-      `)
-    ).toMatchObject({
+    expect(await runCode(`1 newton/meter^2 + 2 bar`)).toMatchObject({
       value: F(200001, 100000),
       type: t.number(U('bar')),
     });
   });
 
   it('autoconverts expanding expandable units (3)', async () => {
-    expect(
-      await runCode(`
-        2 bar + 1 newton/meter^2
-      `)
-    ).toMatchObject({
+    expect(await runCode(`2 bar + 1 newton/meter^2`)).toMatchObject({
       value: F(200001),
       type: t.number(U([u('newton'), u('meter', { exp: -2 })])),
     });
   });
 
   it('autoconverts expanding expandable units (4)', async () => {
-    expect(
-      await runCode(`
-        2 bar + 1 newton/inch^2
-      `)
-    ).toMatchObject({
+    expect(await runCode(`2 bar + 1 newton/inch^2`)).toMatchObject({
       value: F(328043627561865200, 2522794228531901),
       type: t.number(U([u('newton'), u('inch', { exp: -2 })])),
     });
   });
 
   it('converts to contracted unit (1)', async () => {
-    expect(
-      await runCode(`
-        1 newtons/meter^2 in bars
-      `)
-    ).toMatchObject({
+    expect(await runCode(`1 newtons/meter^2 in bars`)).toMatchObject({
       value: F(1, 100000),
       type: t.number(U('bars')),
     });
   });
 
   it('converts to contracted unit (2)', async () => {
-    expect(
-      await runCode(`
-        10 kg*m/sec^2 in newtons
-      `)
-    ).toMatchObject({
+    expect(await runCode(`10 kg*m/sec^2 in newtons`)).toMatchObject({
       value: F(10),
       type: t.number(U('newtons')),
     });
   });
 
   it('divides and cancels unknown units', async () => {
-    expect(
-      await runCode(`
-        1 banana / 3 bananas
-      `)
-    ).toMatchObject({
+    expect(await runCode(`1 banana / 3 bananas`)).toMatchObject({
       value: F(1, 3),
       type: t.number(),
     });
   });
 
   it('divides and cancels known units', async () => {
-    expect(
-      await runCode(`
-        1 hour / 3 hours
-      `)
-    ).toMatchObject({
+    expect(await runCode(`1 hour / 3 hours`)).toMatchObject({
       value: F(1, 3),
       type: t.number(),
     });
   });
 
   it('divides and cancels time units', async () => {
-    expect(
-      await runCode(`
-        1 hour / 3 minutes
-      `)
-    ).toMatchObject({
+    expect(await runCode(`1 hour / 3 minutes`)).toMatchObject({
       value: F(20),
       type: t.number(),
     });
   });
 
   it('autoconverts time units correctly', async () => {
-    expect(
-      await runCode(`
-        1 hour / 3 minutes^2
-      `)
-    ).toMatchObject({
+    expect(await runCode(`1 hour / 3 minutes^2`)).toMatchObject({
       value: F(20),
       type: t.number(U('minutes', { exp: -1 })),
     });
