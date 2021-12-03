@@ -7,7 +7,7 @@ import {
 } from '../interpreter/Value';
 import { build as t } from '../type';
 import { builtins } from './builtins';
-import { n, l } from '../utils';
+import { n, l, F } from '../utils';
 
 it('concatenates tables', () => {
   expect(
@@ -232,8 +232,8 @@ it('knows whether a range contains a value', () => {
 });
 
 it('rounds a number', () => {
-  expect(builtins.round.fn?.(1.127, 2)).toBe(1.13);
-  expect(builtins.round.fn?.(112.7, 0)).toBe(113);
+  expect(builtins.round.fn?.(F(1.127), F(2)).valueOf()).toBe(1.13);
+  expect(builtins.round.fn?.(F(112.7), F(0)).valueOf()).toBe(113);
 });
 
 it('calculates sqrt', () => {
