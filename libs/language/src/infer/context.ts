@@ -18,18 +18,20 @@ interface MakeContextArgs {
   initialGlobalScope: AnyMapping<Type>;
   fetch: ExternalData.FetchFunction;
   externalData: AnyMapping<InjectableExternalData>;
+  inAssignment: string | null;
 }
 
 export const makeContext = ({
   initialGlobalScope = new Map(),
   fetch = defaultFetch,
   externalData = new Map(),
+  inAssignment = null,
 }: Partial<MakeContextArgs> = {}): Context => {
   return {
     stack: new Stack(initialGlobalScope),
     functionDefinitions: new Map(),
     hasPrevious: false,
-    inAssignment: null,
+    inAssignment,
     nodeTypes: new Map(),
     fetch,
     externalData: anyMappingToMap(externalData),
@@ -37,10 +39,10 @@ export const makeContext = ({
 };
 
 /** Push the stack and set Context.hasPrevious for the duration of `fn` */
-export const pushStackAndPrevious = async (
+export const pushStackAndPrevious = async <T>(
   ctx: Context,
-  fn: () => Promise<Type>
-): Promise<Type> => {
+  fn: () => Promise<T>
+): Promise<T> => {
   const savedHasPrevious = ctx.hasPrevious;
   ctx.hasPrevious = true;
   try {

@@ -266,6 +266,12 @@ describe('tables', () => {
     expect(tableContext.stack.get('Table')).toEqual(expectedType);
   });
 
+  it('Errors on empty tables', async () => {
+    expect(
+      await inferStatement(makeContext(), tableDef('Table', {}))
+    ).toMatchInlineSnapshot(`Error: Unexpected empty table`);
+  });
+
   it('References to table columns', async () => {
     const block = n(
       'block',
@@ -390,6 +396,23 @@ describe('tables', () => {
         )
       ).errorCause?.message
     ).toMatch(/MissingVar/);
+  });
+
+  it('tracks the index through columns', async () => {
+    expect(
+      (
+        await inferStatement(
+          makeContext(),
+          tableDef('Table', {
+            Col1: col(1, 2, 3),
+            Col2: l(2),
+            Col3: c('>', n('ref', 'Col1'), n('ref', 'Col2')),
+          })
+        )
+      ).toString()
+    ).toMatchInlineSnapshot(
+      `"table (3) { Col1 = <number>, Col2 = <number>, Col3 = <boolean> }"`
+    );
   });
 
   describe('table spreads', () => {
