@@ -14,7 +14,6 @@ const typesWithArgs = new Set([
   'table-column',
   'table-spread',
   'generic-list',
-  'given',
   'range',
   'units',
   'sequence',

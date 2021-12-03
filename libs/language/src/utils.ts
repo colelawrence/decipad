@@ -150,10 +150,6 @@ export function funcDef(
   );
 }
 
-export function given(varName: string, body: AST.Expression) {
-  return n('given', n('ref', varName), body);
-}
-
 export function prop(thing: string | AST.Expression, propName: string) {
   const asExp = typeof thing === 'string' ? n('ref', thing) : thing;
   return n('property-access', asExp, propName);
@@ -192,7 +188,6 @@ const expressionTypesSet = new Set([
   'range',
   'sequence',
   'date',
-  'given',
   'directive',
 ]);
 

@@ -15,7 +15,6 @@ import { tokenizer } from './tokenizer'
 @include "./string.ne"
 @include "./date.ne"
 @include "./column.ne"
-@include "./given.ne"
 @include "./table.ne"
 @include "./select.ne"
 @include "./expression.ne"

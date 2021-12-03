@@ -4,11 +4,9 @@
 ### Expression ###
 ##################
 
-expression    -> nonGivenExp                            {% id %}
-expression    -> given                                  {% id %}
 
-nonGivenExp   -> overExp                                {% id %}
-nonGivenExp   -> importData                             {% id %}
+expression    -> overExp                                {% id %}
+expression    -> importData                             {% id %}
 
 overExp       -> asExp                                  {% id %}
 overExp       -> overExp _ "over" _ genericIdentifier   {%

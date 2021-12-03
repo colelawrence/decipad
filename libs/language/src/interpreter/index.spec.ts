@@ -8,7 +8,6 @@ import {
   seq,
   date,
   timeQuantity,
-  given,
   funcDef,
   tableDef,
   table,
@@ -497,125 +496,6 @@ describe('higher dimensions', () => {
         { d: 1, n: 3, s: 1 },
       ],
     ]);
-  });
-});
-
-describe('Dimensions', () => {
-  describe('given', () => {
-    const runWithCol = async (expr: AST.Expression) => {
-      const assignCol = n('assign', n('def', 'Col'), col(l(1), l(2), l(3)));
-      const [result] = await run(
-        [n('block', assignCol, given('Col', expr))],
-        [0]
-      );
-
-      return result;
-    };
-
-    it('can raise a dimension by acting like a map function', async () => {
-      expect(await runWithCol(l('hi'))).toEqual(['hi', 'hi', 'hi']);
-
-      expect(await runWithCol(c('+', n('ref', 'Col'), l(1)))).toEqual([
-        { d: 1, n: 2, s: 1 },
-        { d: 1, n: 3, s: 1 },
-        { d: 1, n: 4, s: 1 },
-      ]);
-
-      expect(await runWithCol(col(n('ref', 'Col'), l(1)))).toEqual([
-        [
-          { d: 1, n: 1, s: 1 },
-          { d: 1, n: 1, s: 1 },
-        ],
-        [
-          { d: 1, n: 2, s: 1 },
-          { d: 1, n: 1, s: 1 },
-        ],
-        [
-          { d: 1, n: 3, s: 1 },
-          { d: 1, n: 1, s: 1 },
-        ],
-      ]);
-    });
-
-    const runWithTable = async (expr: AST.Expression) => {
-      const assignTable = tableDef('Table', {
-        Nums: col(1, 2, 3),
-      });
-      const [result] = await run(
-        [n('block', assignTable, given('Table', expr))],
-        [0]
-      );
-
-      return result;
-    };
-
-    it('can map over a table by providing rows', async () => {
-      expect(await runWithTable(l('hi'))).toEqual(['hi', 'hi', 'hi']);
-
-      expect(await runWithTable(c('+', prop('Table', 'Nums'), l(1)))).toEqual([
-        { d: 1, n: 2, s: 1 },
-        { d: 1, n: 3, s: 1 },
-        { d: 1, n: 4, s: 1 },
-      ]);
-
-      expect(await runWithTable(col(prop('Table', 'Nums'), l(1)))).toEqual([
-        [
-          { d: 1, n: 1, s: 1 },
-          { d: 1, n: 1, s: 1 },
-        ],
-        [
-          { d: 1, n: 2, s: 1 },
-          { d: 1, n: 1, s: 1 },
-        ],
-        [
-          { d: 1, n: 3, s: 1 },
-          { d: 1, n: 1, s: 1 },
-        ],
-      ]);
-    });
-
-    it('supports the previous function', async () => {
-      expect(await runWithCol(c('+', l(2), c('previous', l(-1)))))
-        .toMatchInlineSnapshot(`
-        Array [
-          Fraction(1),
-          Fraction(3),
-          Fraction(5),
-        ]
-      `);
-    });
-
-    it('supports the previous function in tables', async () => {
-      expect(await runWithTable(c('+', l(1), c('previous', l(-1)))))
-        .toMatchInlineSnapshot(`
-        Array [
-          Fraction(0),
-          Fraction(1),
-          Fraction(2),
-        ]
-      `);
-
-      expect(
-        await runWithTable(c('+', prop('Table', 'Nums'), c('previous', l(-1))))
-      ).toMatchInlineSnapshot(`
-        Array [
-          Fraction(0),
-          Fraction(2),
-          Fraction(5),
-        ]
-      `);
-    });
-  });
-
-  describe('(sum nums)', () => {
-    /* eslint-disable-next-line jest/no-disabled-tests */
-    it.skip('evaluates total', async () => {
-      expect(await runOne(c('total', col(1, 2, 3)))).toEqual(6);
-
-      expect(await runOne(c('total', col(col(1, 2, 3), col(3, 3, 3))))).toEqual(
-        [6, 9]
-      );
-    });
   });
 });
 
