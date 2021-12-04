@@ -381,17 +381,15 @@ describe('dates', () => {
   it('can be compared with other types', () => {
     expect(month.sameAs(month)).toEqual(month);
 
-    expect(month.sameDatenessAs(month)).toEqual(month);
-
     // Differing dateness
-    expect(t.number().sameDatenessAs(day)).toEqual(t.number().expected(day));
+    expect(t.number().sameAs(day)).toEqual(t.number().expected(day));
 
-    expect(day.sameDatenessAs(t.number())).toEqual(day.expected(t.number()));
+    expect(day.sameAs(t.number())).toEqual(day.expected(t.number()));
 
     // Differing specificity
-    expect(month.sameDatenessAs(day)).toEqual(month.expected(day));
+    expect(month.sameAs(day)).toEqual(month.expected(day));
 
-    expect(month.sameDatenessAs(day)).toEqual(month.sameAs(day));
+    expect(month.sameAs(day)).toEqual(month.sameAs(day));
   });
 });
 

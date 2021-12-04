@@ -1,50 +1,41 @@
 import { immerable, produce } from 'immer';
-import { dequal } from 'dequal';
-import { getDefined } from '@decipad/utils';
 import { Time } from '..';
-import { equalOrUnknown, units, zip } from '../utils';
 import * as AST from '../parser/ast-types';
+import { zip } from '../utils';
+import * as t from './build';
+import {
+  divideUnit,
+  getRangeOf,
+  isColumn,
+  isDate,
+  isRange,
+  isScalar,
+  isTable,
+  isTableOrRow,
+  isTimeQuantity,
+  multiplyUnit,
+  noUnitsOrSameUnitsAs,
+  reduced,
+  reducedOrSelf,
+  sameAs,
+  sameUnitsAs,
+  withColumnSize,
+} from './checks';
 import { InferError } from './InferError';
 import {
   inverseExponent,
-  combineUnits,
-  removeSingleUnitless,
-  matchUnitArrays,
-  stringifyUnits,
-  multiplyExponent,
-  setUnit,
   normalizeUnits,
+  setUnit,
+  stringifyUnits,
 } from './units';
-import * as t from './build';
 
-export { setUnit, stringifyUnits, normalizeUnits };
 export * from './serialization';
+export { setUnit, stringifyUnits, normalizeUnits };
 export { InferError, inverseExponent, t as build };
 
 export const scalarTypeNames = ['number', 'string', 'boolean'];
 
 export type TypeName = typeof scalarTypeNames[number];
-
-// wraps a method propagating errors found in `this` or any argument.
-const propagate = <P extends Array<unknown>>(
-  method: (this: Type, ...params: P) => Type
-): ((this: Type, ...params: P) => Type) => {
-  return function propagated(...args) {
-    /* istanbul ignore if */
-    if (
-      this.functionness ||
-      args.some((a) => a instanceof Type && a.functionness)
-    ) {
-      throw new Error('panic: functions cannot be used');
-    }
-
-    const errored = [this, ...args].find(
-      (a) => a instanceof Type && a.errorCause != null
-    ) as Type | undefined;
-
-    return errored ?? method.call(this, ...args);
-  };
-};
 
 export class Type {
   [immerable] = true;
@@ -167,305 +158,86 @@ export class Type {
   }
 
   withErrorCause(error: InferError | string): Type {
-    return propagate(function propagated(
-      this: Type,
-      error: InferError | string
-    ) {
-      if (typeof error === 'string') {
-        return this.withErrorCause(new InferError(error));
-      } else {
-        return produce(this, (newType) => {
-          newType.type = null;
-          newType.unit = null;
-          newType.errorCause = error;
-        });
-      }
-    }).call(this, error);
+    if (typeof error === 'string') {
+      return this.withErrorCause(new InferError(error));
+    }
+    return this.mapType(() => {
+      return produce(this, (newType) => {
+        newType.type = null;
+        newType.unit = null;
+        newType.errorCause = error;
+      });
+    });
   }
 
   expected(expected: Type | string): Type {
-    return propagate(function propagated(this: Type, expected: Type | string) {
-      return this.withErrorCause(InferError.expectedButGot(expected, this));
-    }).call(this, expected);
+    return this.mapType(() =>
+      this.withErrorCause(InferError.expectedButGot(expected, this))
+    );
   }
 
   // Type assertions -- these return a new type possibly with an error
   sameAs(other: Type): Type {
-    return propagate(function propagated(this: Type, other: Type) {
-      return this.sameScalarnessAs(other)
-        .sameColumnessAs(other)
-        .sameDatenessAs(other)
-        .sameRangenessAs(other)
-        .sameTablenessAs(other);
-    }).call(this, other);
+    return sameAs(this, other);
   }
 
   isScalar(type: TypeName): Type {
-    return propagate(function propagated(this: Type, type: TypeName) {
-      if (type === this.type) {
-        return this;
-      } else {
-        return this.expected(t.scalar(type));
-      }
-    }).call(this, type);
+    return isScalar(this, type);
   }
 
   sameUnitsAs(other: Type): Type {
-    if (!matchUnitArrays(this.unit, other.unit)) {
-      return this.withErrorCause(
-        InferError.expectedUnit(other.unit, this.unit)
-      );
-    }
-    return this;
+    return sameUnitsAs(this, other);
   }
 
   noUnitsOrSameUnitsAs(other: Type): Type {
-    return !this.unit ? this : this.sameUnitsAs(other);
-  }
-
-  sameScalarnessAs(other: Type): Type {
-    return propagate(function propagated(this: Type, other: Type) {
-      const meScalar = this.type != null;
-      const theyScalar = this.type != null;
-
-      if (meScalar && theyScalar) {
-        const matchingTypes = this.type === other.type;
-        const matchingUnits = matchUnitArrays(this.unit, other.unit);
-        const onlyOneHasAUnit = removeSingleUnitless(this, other);
-
-        if (matchingTypes && matchingUnits) {
-          return this;
-        } else if (!matchingTypes) {
-          return this.expected(other);
-        } else if (onlyOneHasAUnit != null) {
-          return setUnit(this, onlyOneHasAUnit);
-        } else {
-          return this.withErrorCause(
-            InferError.expectedUnit(other.unit, this.unit)
-          );
-        }
-      } else if (!meScalar && !theyScalar) {
-        return this;
-      } else {
-        return this.expected(other);
-      }
-    }).call(this, other);
+    return noUnitsOrSameUnitsAs(this, other);
   }
 
   isColumn(size?: number | 'unknown'): Type {
-    return propagate(function propagated(
-      this: Type,
-      size?: number | 'unknown'
-    ) {
-      if (
-        (size === undefined && this.columnSize != null) ||
-        this.columnSize === size ||
-        this.columnSize === 'unknown' ||
-        size === 'unknown'
-      ) {
-        return this;
-      } else {
-        return this.withErrorCause(
-          `Incompatible column sizes: ${this.columnSize} and ${size ?? 'any'}`
-        );
-      }
-    }).call(this, size);
+    return isColumn(this, size);
   }
 
   isTable(): Type {
-    return propagate(function propagated(this: Type) {
-      if (this.columnNames != null && this.columnTypes != null) {
-        return this;
-      } else {
-        return this.expected('table');
-      }
-    }).call(this);
+    return isTable(this);
   }
 
   isTableOrRow(): Type {
-    return propagate(function propagated(this: Type) {
-      if (
-        (this.columnNames != null && this.columnTypes != null) ||
-        (this.rowCellTypes != null && this.rowCellNames != null)
-      ) {
-        return this;
-      } else {
-        return this.expected('table or row');
-      }
-    }).call(this);
+    return isTableOrRow(this);
   }
 
   reduced(): Type {
-    return propagate(function propagated(this: Type) {
-      if (this.cellType != null) {
-        return this.cellType;
-      } else {
-        return this.expected('column');
-      }
-    }).call(this);
+    return reduced(this);
   }
 
   reducedOrSelf(): Type {
-    return propagate(function propagated(this: Type) {
-      if (this.cellType != null) {
-        return this.cellType;
-      } else {
-        return this;
-      }
-    }).call(this);
+    return reducedOrSelf(this);
   }
 
   withColumnSize(columnSize: number | 'unknown' | null): Type {
-    return propagate(function propagated(
-      this: Type,
-      columnSize: number | 'unknown' | null
-    ) {
-      if (
-        this.columnSize === columnSize ||
-        this.columnSize === 'unknown' ||
-        columnSize === 'unknown'
-      ) {
-        return this;
-      } else {
-        return this.withErrorCause(
-          `Incompatible column sizes: ${this.columnSize} and ${columnSize}`
-        );
-      }
-    }).call(this, columnSize);
-  }
-
-  sameColumnessAs(other: Type): Type {
-    return propagate(function propagated(this: Type, other: Type) {
-      return this.withColumnSize(other.columnSize).mapType((t) => {
-        if (t.columnSize) {
-          // Recurse to make sure it's a colummn of the same size
-          return t
-            .reduced()
-            .sameAs(other.reduced())
-            .mapType(() => t);
-        } else {
-          return t;
-        }
-      });
-    }).call(this, other);
+    return withColumnSize(this, columnSize);
   }
 
   isRange(): Type {
-    return propagate(function propagated(this: Type) {
-      if (this.rangeOf != null) {
-        return this;
-      } else {
-        return this.expected('range');
-      }
-    }).call(this);
+    return isRange(this);
   }
 
   getRangeOf(): Type {
-    return propagate(function propagated(this: Type) {
-      return this.rangeOf ?? this.expected('range');
-    }).call(this);
-  }
-
-  sameRangenessAs(other: Type): Type {
-    return propagate(function propagated(this: Type, other: Type) {
-      if (this.rangeOf != null && other.rangeOf != null) {
-        return this.rangeOf.sameAs(other.rangeOf).mapType(() => this);
-      } else if (this.rangeOf == null && other.rangeOf == null) {
-        return this;
-      } else {
-        return this.expected(other);
-      }
-    }).call(this, other);
-  }
-
-  sameTablenessAs(other: Type): Type {
-    return propagate(function propagated(this: Type, other: Type) {
-      if (this.columnTypes != null && other.columnTypes != null) {
-        if (
-          dequal(this.columnNames, other.columnNames) &&
-          zip(this.columnTypes, other.columnTypes).every(
-            ([myT, otherT]) => myT.sameAs(otherT).errorCause == null
-          ) &&
-          this.indexName === other.indexName &&
-          equalOrUnknown(
-            getDefined(this.tableLength),
-            getDefined(other.tableLength)
-          )
-        ) {
-          return this;
-        } else {
-          return this.expected(other);
-        }
-      } else if (this.columnTypes == null && other.columnTypes == null) {
-        return this;
-      } else {
-        return this.expected(other);
-      }
-    }).call(this, other);
+    return getRangeOf(this);
   }
 
   isTimeQuantity(): Type {
-    return propagate(function propagated(this: Type) {
-      if (this.timeUnits != null) {
-        return this;
-      } else {
-        return this.expected('time quantity');
-      }
-    }).call(this);
+    return isTimeQuantity(this);
   }
 
   isDate(specificity?: Time.Specificity): Type {
-    return propagate(function propagated(
-      this: Type,
-      specificity?: Time.Specificity
-    ) {
-      if (
-        this.date != null &&
-        (specificity == null || this.date === specificity)
-      ) {
-        return this;
-      } else {
-        return this.expected(specificity ? t.date(specificity) : 'date');
-      }
-    }).call(this, specificity);
-  }
-
-  sameDatenessAs(other: Type): Type {
-    return propagate(function propagated(this: Type, other: Type) {
-      if (this.date === other.date) {
-        return this;
-      } else {
-        return this.expected(other);
-      }
-    }).call(this, other);
+    return isDate(this, specificity);
   }
 
   multiplyUnit(withUnits: AST.Units | null): Type {
-    return propagate(function propagated(
-      this: Type,
-      withUnits: AST.Units | null
-    ) {
-      return setUnit(this, combineUnits(this.unit, withUnits));
-    }).call(this, withUnits);
+    return multiplyUnit(this, withUnits);
   }
 
   divideUnit(divideBy: AST.Units | number | null): Type {
-    return propagate(function propagated(
-      this: Type,
-      divideBy: AST.Units | number | null
-    ) {
-      if (typeof divideBy === 'number') {
-        const multiplyBy = 1 / divideBy;
-        if (this.unit) {
-          return setUnit(this, multiplyExponent(this.unit, multiplyBy));
-        }
-        return this;
-      } else {
-        const invTheirUnits =
-          divideBy?.args.map((u) => inverseExponent(u)) ?? [];
-
-        return setUnit(this, combineUnits(this.unit, units(...invTheirUnits)));
-      }
-    }).call(this, divideBy);
+    return divideUnit(this, divideBy);
   }
 }
