@@ -33,8 +33,7 @@ it('can stringify a type', () => {
   `);
   expect(serializeType(t.scalar('string'))).toMatchInlineSnapshot(`
     Object {
-      "kind": "scalar",
-      "type": "string",
+      "kind": "string",
     }
   `);
   expect(serializeType(t.timeQuantity(['month', 'day'])))
@@ -107,8 +106,7 @@ it('can stringify a type', () => {
             "unit": null,
           },
           Object {
-            "kind": "scalar",
-            "type": "string",
+            "kind": "string",
           },
         ],
       }
@@ -152,12 +150,13 @@ it('can parse a type', () => {
     })
   ).toMatchInlineSnapshot(`"meters"`);
 
-  expect(
-    testDeserialize({
-      kind: 'scalar',
-      type: 'string',
-    })
-  ).toMatchInlineSnapshot(`"<string>"`);
+  expect(testDeserialize({ kind: 'string' })).toMatchInlineSnapshot(
+    `"<string>"`
+  );
+
+  expect(testDeserialize({ kind: 'boolean' })).toMatchInlineSnapshot(
+    `"<boolean>"`
+  );
 
   expect(
     testDeserialize({

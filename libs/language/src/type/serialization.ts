@@ -1,11 +1,11 @@
 import { buildType as t, Type, AST } from '..';
-import { TypeName } from '.';
 import { Time } from '../date';
 import { ErrSpec, InferError } from './InferError';
 
 export type SerializedType =
   | { kind: 'number'; unit: AST.Units | null }
-  | { kind: 'scalar'; type: TypeName }
+  | { kind: 'boolean' }
+  | { kind: 'string' }
   | { kind: 'date'; date: Time.Specificity }
   | { kind: 'range'; rangeOf: SerializedType }
   | {
@@ -29,8 +29,10 @@ export type SerializedType =
 export function serializeType(type: Type): SerializedType {
   if (type.type === 'number') {
     return { kind: 'number', unit: type.unit };
-  } else if (type.type) {
-    return { kind: 'scalar', type: type.type };
+  } else if (type.type === 'string') {
+    return { kind: 'string' };
+  } else if (type.type === 'boolean') {
+    return { kind: 'boolean' };
   } else if (type.date) {
     return { kind: 'date', date: type.date };
   } else if (type.timeUnits) {
@@ -73,8 +75,10 @@ export function deserializeType(type: SerializedType): Type {
   switch (type.kind) {
     case 'number':
       return t.number(type.unit);
-    case 'scalar':
-      return t.scalar(type.type);
+    case 'string':
+      return t.scalar('string');
+    case 'boolean':
+      return t.scalar('boolean');
     case 'date':
       return t.date(type.date);
     case 'range':
