@@ -1,5 +1,5 @@
 import { F, U, u } from '../utils';
-import { convertBetweenUnits } from '.';
+import { convertBetweenUnits, normalizeUnitName } from '.';
 
 describe('convert', () => {
   it('throws when from unit is unknown', () => {
@@ -12,6 +12,14 @@ describe('convert', () => {
     expect(() => convertBetweenUnits(F(1), U('meters'), U('jeeters'))).toThrow(
       "Don't know how to convert between meters and jeeters"
     );
+  });
+
+  it('should pluralize', () => {
+    // are is pluralized as `is`
+    // but for us are is a unit of measure
+    expect(normalizeUnitName('are')).toEqual('are');
+    expect(normalizeUnitName('Meter')).toEqual('meter');
+    expect(normalizeUnitName('meters')).toEqual('meter');
   });
 
   it('converts between the same unit', () => {
@@ -91,6 +99,27 @@ describe('convert', () => {
     expect(
       convertBetweenUnits(F(2000), U('liters'), U('cubicmeters'))
     ).toMatchObject(F(2));
+  });
+
+  it('converts areas', () => {
+    expect(convertBetweenUnits(F(1), U('hectare'), U('m2'))).toEqual(F(10000));
+    expect(convertBetweenUnits(F(1), U('acre'), U('m2'))).toEqual(
+      F(404686, 100)
+    );
+    expect(convertBetweenUnits(F(100), U('m2'), U('a'))).toEqual(F(1));
+    expect(convertBetweenUnits(F(1), U('m2'), U('are'))).toEqual(F(1, 100));
+    expect(convertBetweenUnits(F(2589988.110336), U('m2'), U('sqmi'))).toEqual(
+      F(1)
+    );
+    expect(convertBetweenUnits(F(1000000), U('m²'), U('km²'))).toEqual(F(1));
+    expect(convertBetweenUnits(F(0.83612736), U('m2'), U('sqyd'))).toEqual(
+      F(1)
+    );
+    expect(convertBetweenUnits(F(0.09290304), U('m2'), U('sqft'))).toEqual(
+      F(1)
+    );
+    expect(convertBetweenUnits(F(1), U('sqyd'), U('sqft'))).toEqual(F(9));
+    expect(convertBetweenUnits(F(1), U('sqft'), U('sqin'))).toEqual(F(144));
   });
 
   it('converts between pressure units', () => {

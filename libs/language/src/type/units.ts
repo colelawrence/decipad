@@ -6,6 +6,7 @@ import { isKnownSymbol, areUnitsCompatible, expandUnits } from '../units';
 
 addIrregularRule('USD', 'USD');
 addIrregularRule('EUR', 'EUR');
+addIrregularRule('are', 'are');
 
 const multipliersToPrefixes: Record<number, string> = {
   1e-18: 'a',
