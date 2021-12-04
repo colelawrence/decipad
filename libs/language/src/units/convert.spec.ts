@@ -1,5 +1,5 @@
 import { F, U, u } from '../utils';
-import { convertBetweenUnits, normalizeUnitName } from '.';
+import { convertBetweenUnits, normalizeUnitName, prettyUnits } from '.';
 
 describe('convert', () => {
   it('throws when from unit is unknown', () => {
@@ -17,9 +17,28 @@ describe('convert', () => {
   it('should pluralize', () => {
     // are is pluralized as `is`
     // but for us are is a unit of measure
-    expect(normalizeUnitName('are')).toEqual('are');
-    expect(normalizeUnitName('Meter')).toEqual('meter');
-    expect(normalizeUnitName('meters')).toEqual('meter');
+    expect(normalizeUnitName('are')).toMatch('are');
+    expect(normalizeUnitName('Meter')).toMatch('meter');
+    expect(normalizeUnitName('meters')).toMatch('meter');
+    expect(normalizeUnitName('s')).toMatch('s');
+    expect(normalizeUnitName('seconds')).toMatch('second');
+    expect(normalizeUnitName('sec')).toMatch('sec');
+  });
+
+  it('should be pretty', () => {
+    expect(prettyUnits(F(1), u('meter'))).toMatch('1 m');
+    expect(prettyUnits(F(1), u('squaremeter'))).toMatch('1 m²');
+    expect(prettyUnits(F(1), u('squarekilometre'))).toMatch('1 km²');
+    expect(prettyUnits(F(1), u('squaremile'))).toMatch('1 sq mi');
+    expect(prettyUnits(F(1), u('squareyard'))).toMatch('1 sq yd');
+    expect(prettyUnits(F(1), u('squarefoot'))).toMatch('1 sq ft');
+    expect(prettyUnits(F(1), u('squareinch'))).toMatch('1 sq in');
+    expect(prettyUnits(F(1), u('euro'))).toMatch('1 €');
+    expect(prettyUnits(F(1), u('angstrom'))).toMatch('1 Å');
+    expect(prettyUnits(F(1), u('usdollar'))).toMatch('1 $');
+    expect(prettyUnits(F(1), u('britishpound'))).toMatch('£1');
+    expect(prettyUnits(F(1, 4), u('britishpound'))).toMatch('£0.25');
+    expect(prettyUnits(F(1000000), u('britishpound'))).toMatch('£1000000');
   });
 
   it('converts between the same unit', () => {
@@ -35,6 +54,10 @@ describe('convert', () => {
     expect(convertBetweenUnits(F(1), U('meters'), U('m'))).toMatchObject(F(1));
     expect(convertBetweenUnits(F(1), U('m'), U('meters'))).toMatchObject(F(1));
     expect(convertBetweenUnits(F(1), U('m'), U('metres'))).toMatchObject(F(1));
+    expect(convertBetweenUnits(F(567), U('seconds'), U('sec'))).toMatchObject(
+      F(567)
+    );
+    expect(convertBetweenUnits(F(420), U('s'), U('sec'))).toMatchObject(F(420));
   });
 
   it('converts between unknown units if they are the same', () => {

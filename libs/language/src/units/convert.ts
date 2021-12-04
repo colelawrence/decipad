@@ -94,6 +94,28 @@ function convertBetweenSimpleUnits(
 
   return n.mul(c1).div(c2);
 }
+//
+// fixme: once front end specs exist
+// this should be compliant with workspace definitions
+// left simple as a start
+//
+// note: potentially this could auto conform, like
+// 0.10m are 100cm.
+//
+// 1×10^−6 m = 1 μm
+//
+export function prettyUnits(n: Fraction, unit: Unit): string {
+  const unitDefinition = getDefined(getUnitByName(unit.unit));
+
+  if (unitDefinition.pretty) {
+    return unitDefinition.pretty(n);
+  } else {
+    return `${n} ${
+      (unitDefinition.abbreviations && unitDefinition.abbreviations[0]) ||
+      unitDefinition.name
+    }`;
+  }
+}
 
 export function convertBetweenUnits(
   n: Fraction,

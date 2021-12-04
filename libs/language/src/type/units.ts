@@ -1,5 +1,5 @@
 import { produce } from 'immer';
-import pluralize, { addIrregularRule, singular } from 'pluralize';
+import pluralize, { singular, addIrregularRule } from 'pluralize';
 import { AST, Type } from '..';
 import { getDefined, units } from '../utils';
 import { isKnownSymbol, areUnitsCompatible, expandUnits } from '../units';

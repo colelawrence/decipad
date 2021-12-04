@@ -5,7 +5,7 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'squaremeter',
     abbreviations: ['m2', 'm²'],
-    pretty: 'm²',
+    pretty: (n) => `${n} m²`,
     baseQuantity: 'area',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
@@ -13,7 +13,7 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'squarekilometre',
     abbreviations: ['km2', 'km²'],
-    pretty: 'km²',
+    pretty: (n) => `${n} km²`,
     baseQuantity: 'area',
     toBaseQuantity: (km2) => km2.mul(1000000),
     fromBaseQuantity: (sqm) => sqm.div(100000),
@@ -21,7 +21,7 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'squaremile',
     abbreviations: ['sqmi'],
-    pretty: 'sq mi',
+    pretty: (n) => `${n} sq mi`,
     baseQuantity: 'area',
     toBaseQuantity: (sqmi) => sqmi.mul(2589988110336).div(1000000),
     fromBaseQuantity: (sqm) => sqm.mul(100000).div(2589988110336),
@@ -29,7 +29,7 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'squareyard',
     abbreviations: ['sqyd'],
-    pretty: 'sq yd',
+    pretty: (n) => `${n} sq yd`,
     baseQuantity: 'area',
     toBaseQuantity: (sqyd) => sqyd.mul(83612736).div(100000000),
     fromBaseQuantity: (sqm) => sqm.mul(100000000).div(83612736),
@@ -37,7 +37,7 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'squarefoot',
     abbreviations: ['sqft'],
-    pretty: 'sq ft',
+    pretty: (n) => `${n} sq ft`,
     baseQuantity: 'area',
     toBaseQuantity: (sqft) => sqft.mul(9290304).div(100000000),
     fromBaseQuantity: (sqm) => sqm.mul(100000000).div(9290304),
@@ -45,7 +45,7 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'squareinch',
     abbreviations: ['sqin'],
-    pretty: 'sq in',
+    pretty: (n) => `${n} sq in`,
     baseQuantity: 'area',
     toBaseQuantity: (sqft) => sqft.mul(64516).div(100000000),
     fromBaseQuantity: (sqm) => sqm.mul(100000000).div(64516),
