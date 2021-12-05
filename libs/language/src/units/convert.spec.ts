@@ -21,6 +21,7 @@ describe('convert', () => {
     expect(normalizeUnitName('Meter')).toMatch('meter');
     expect(normalizeUnitName('meters')).toMatch('meter');
     expect(normalizeUnitName('s')).toMatch('s');
+    expect(normalizeUnitName('h')).toMatch('h');
     expect(normalizeUnitName('seconds')).toMatch('second');
     expect(normalizeUnitName('sec')).toMatch('sec');
   });
@@ -245,6 +246,8 @@ describe('convert', () => {
     expect(convertBetweenUnits(F(1), U('year'), U('months'))).toMatchObject(
       F(12)
     );
+    expect(convertBetweenUnits(F(1), U('h'), U('s'))).toMatchObject(F(3600));
+    expect(convertBetweenUnits(F(1), U('min'), U('sec'))).toMatchObject(F(60));
   });
 
   it('converts between information units', () => {

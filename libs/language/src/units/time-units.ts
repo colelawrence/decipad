@@ -18,12 +18,14 @@ export const units: UnitOfMeasure[] = [
   },
   {
     name: 'minute',
+    abbreviations: ['min'],
     baseQuantity: 'second',
     toBaseQuantity: (minutes) => minutes.mul(60),
     fromBaseQuantity: (seconds) => seconds.div(60),
   },
   {
     name: 'hour',
+    abbreviations: ['h'],
     baseQuantity: 'second',
     toBaseQuantity: (hours) => hours.mul(3600),
     fromBaseQuantity: (seconds) => seconds.div(3600),

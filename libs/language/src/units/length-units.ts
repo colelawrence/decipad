@@ -53,6 +53,7 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'angstrom',
     baseQuantity: 'length',
+    abbreviations: ['Å'],
     pretty: (n) => `${n} Å`,
     toBaseQuantity: (angstroms) => angstroms.div(1e10),
     fromBaseQuantity: (meters) => meters.mul(1e10),

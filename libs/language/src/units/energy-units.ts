@@ -10,7 +10,7 @@ export const units: UnitOfMeasure[] = [
   },
   {
     name: 'calorie',
-    abbreviations: ['calory'],
+    abbreviations: ['calory'], // why?
     baseQuantity: 'energy',
     toBaseQuantity: (calories) => calories.mul(4184),
     fromBaseQuantity: (joules) => joules.div(4184),
