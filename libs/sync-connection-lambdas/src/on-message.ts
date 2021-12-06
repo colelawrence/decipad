@@ -11,6 +11,10 @@ import {
 import * as decoding from 'lib0/decoding';
 import { getDefined } from '@decipad/utils';
 import { messageYjsSyncStep2, messageYjsUpdate } from 'y-protocols/sync';
+import {
+  hasMinimumPermission,
+  parsePermissionType,
+} from '@decipad/services/authorization';
 
 type ErrorWithCode = Error & {
   code: string;
@@ -86,10 +90,11 @@ async function maybeStoreMessage(
 async function processMessage(
   resource: string,
   message: Uint8Array,
-  connId: string
+  connId: string,
+  readOnly: boolean
 ): Promise<void> {
   const doc = new YDoc();
-  const persistence = new DynamodbPersistence(resource, doc);
+  const persistence = new DynamodbPersistence(resource, doc, readOnly);
   const comms = new LambdaWebsocketProvider(resource, connId, doc);
   await persistence.flush();
 
@@ -112,13 +117,29 @@ export async function onMessage(
   if (!conn) {
     throw Boom.resourceGone();
   }
-  const resource = getDefined(conn.room, 'no room in connection');
 
-  await Promise.all([
-    broadcast(getDefined(conn.room), message, connId),
-    maybeStoreMessage(resource, message),
-    processMessage(resource, message, connId),
-  ]);
+  // let's assume that all messages are an attempt to write
+  // and as such, we'll ignore any message coming from a connection
+  // that doesn't have that permission.
+  const type = conn.authorizationType;
+  if (!type) {
+    return { statusCode: 401 };
+  }
+  const permissions = [{ type: parsePermissionType(type) }];
+  const canRead = hasMinimumPermission('READ')(permissions);
+  if (!canRead) {
+    return { statusCode: 401 };
+  }
+
+  const canWrite = hasMinimumPermission('WRITE')(permissions);
+
+  const resource = getDefined(conn.room, 'no room in connection');
+  const ops = [processMessage(resource, message, connId, !!canRead)];
+  if (canWrite) {
+    ops.push(broadcast(resource, message, connId));
+    ops.push(maybeStoreMessage(resource, message));
+  }
+  await Promise.all(ops);
 
   return { statusCode: 200 };
 }

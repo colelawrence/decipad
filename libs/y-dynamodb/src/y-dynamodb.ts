@@ -19,11 +19,13 @@ export class DynamodbPersistence extends Observable<string> {
   public whenSynced: Promise<DynamodbPersistence>;
 
   private _mux = fnQueue();
+  private _readOnly: boolean;
 
-  constructor(name: string, doc: YDoc) {
+  constructor(name: string, doc: YDoc, readOnly = false) {
     super();
     this.doc = doc;
     this.name = name;
+    this._readOnly = readOnly;
     this.whenSynced = this._init();
     this.destroy = this.destroy.bind(this);
     doc.on('destroy', this.destroy);
@@ -73,7 +75,7 @@ export class DynamodbPersistence extends Observable<string> {
   }
 
   async storeUpdate(update: Uint8Array, origin: unknown): Promise<void> {
-    if (origin === DynamodbPersistence) {
+    if (this._readOnly || origin === DynamodbPersistence) {
       return;
     }
     await this._mux.push(async () => {
@@ -92,6 +94,9 @@ export class DynamodbPersistence extends Observable<string> {
   }
 
   async compact(): Promise<void> {
+    if (this._readOnly) {
+      return;
+    }
     await this.whenSynced;
     const data = await tables();
     const updates = (

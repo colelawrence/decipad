@@ -2,6 +2,8 @@
 import waitForExpect from 'wait-for-expect';
 import { getPadContent, setUp } from './page-utils/Pad';
 
+waitForExpect.defaults.interval = 1000;
+
 describe('Share pad', () => {
   let link: string;
   beforeAll(setUp);
@@ -46,11 +48,13 @@ Array [
     await page.click('[aria-checked="false"]');
     await page.waitForSelector(linkSelector);
     link = await page.innerText(linkSelector);
+    expect(link.length).toBeGreaterThan(0);
   });
 
   test('another browser joins on the given link', async () => {
     const context = await browser.newContext();
     const newPage = await context.newPage();
+    expect(link.length).toBeGreaterThan(0);
     await newPage.goto(link);
     await waitForExpect(async () => {
       expect(await getPadContent(newPage)).toMatchObject([

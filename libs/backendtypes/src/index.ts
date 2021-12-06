@@ -365,6 +365,7 @@ interface ConnectionRecord extends TableRecordBase {
   user_id?: ID;
   room?: string;
   secret?: string;
+  authorizationType?: string;
   gqlstate?: string;
 }
 

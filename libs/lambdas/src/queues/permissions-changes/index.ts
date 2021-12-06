@@ -231,7 +231,9 @@ async function handleDeleteWorkspaceWithUser(perm: ParsedPermission) {
     perm.resourceId ? `/${perm.resourceId}` : ''
   }`;
   const user = { id: perm.userId };
-  if (!(await isAuthorized({ resource, user, permissionType: 'READ' }))) {
+  if (
+    !(await isAuthorized({ resource, user, minimumPermissionType: 'READ' }))
+  ) {
     await notifyOne(user, 'workspacesChanged', {
       removed: [perm.resourceId],
     });
@@ -290,7 +292,7 @@ async function handleDeletePadWithUser(perm: ParsedPermission) {
     !(await isAuthorized({
       resource: resourceUri,
       user,
-      permissionType: 'READ',
+      minimumPermissionType: 'READ',
     }))
   ) {
     await notifyOne(user, 'padsChanged', {

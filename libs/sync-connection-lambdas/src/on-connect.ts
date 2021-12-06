@@ -12,14 +12,13 @@ export async function onConnect(
   auth: AuthResult,
   event: WSRequest
 ): Promise<HttpResponse> {
-  if (
-    !(await isAuthorized({
-      resource,
-      user: auth.user,
-      secret: auth.secret,
-      permissionType: 'READ',
-    }))
-  ) {
+  const authorizationType = await isAuthorized({
+    resource,
+    user: auth.user,
+    secret: auth.secret,
+    minimumPermissionType: 'READ',
+  });
+  if (!authorizationType) {
     throw Boom.unauthorized();
   }
 
@@ -28,6 +27,7 @@ export async function onConnect(
     id: connId,
     user_id: auth.user?.id,
     room: resource,
+    authorizationType,
     secret: auth.secret,
   });
 

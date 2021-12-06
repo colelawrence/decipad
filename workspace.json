@@ -670,6 +670,13 @@
           "options": {
             "command": "yarn tsc -b libs/services"
           }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/services"],
+          "options": {
+            "jestConfig": "libs/services/jest.config.js"
+          }
         }
       }
     },

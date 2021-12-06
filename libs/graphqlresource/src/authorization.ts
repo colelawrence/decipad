@@ -26,10 +26,15 @@ export async function isAuthorized(
   resource: string,
   context: Context,
   permissionType: PermissionType = 'READ'
-): Promise<boolean> {
+): Promise<PermissionType | null> {
   const user = loadUser(context);
   const secret = loadSecret(context);
-  return isAuthorizedBase({ resource, user, secret, permissionType });
+  return isAuthorizedBase({
+    resource,
+    user,
+    secret,
+    minimumPermissionType: permissionType,
+  });
 }
 
 export async function expectAuthenticatedAndAuthorized(

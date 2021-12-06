@@ -138,7 +138,5 @@ test('connection', (ctx) => {
       expect(text).toBeDefined();
       expect(text?.toString()).toBe('hey');
     });
-    // eslint-disable-next-line no-console
-    console.log('DONE HERE');
   });
 });

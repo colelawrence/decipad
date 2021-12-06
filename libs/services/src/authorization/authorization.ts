@@ -4,20 +4,29 @@ import {
   PermissionType,
   PermissionRecord,
 } from '@decipad/backendtypes';
-
 import tables from '../tables';
+import { hasMinimumPermission } from './minimum-permission';
+
+function canonizeResource(resource: string): string {
+  const [type, id] = resource.split('/').filter(notEmpty);
+  return `/${type}/${id}`;
+}
+
+function notEmpty(str: string): boolean {
+  return str.length > 0;
+}
 
 export async function isAuthorized({
   resource,
   user,
   secret,
-  permissionType,
+  minimumPermissionType,
 }: {
   resource: string;
   user: TableRecordIdentifier | undefined;
   secret?: string | undefined;
-  permissionType: PermissionType;
-}): Promise<boolean> {
+  minimumPermissionType: PermissionType;
+}): Promise<PermissionType | null> {
   const data = await tables();
   const userPermissions: PermissionRecord[] = user
     ? (
@@ -46,9 +55,9 @@ export async function isAuthorized({
       ).Items
     : [];
 
-  return [...userPermissions, ...secretPermissions].some(
-    isEnoughPermissionFor(permissionType)
-  );
+  const verify = hasMinimumPermission(minimumPermissionType);
+  const allUserPermissions = [...userPermissions, ...secretPermissions];
+  return verify(allUserPermissions);
 }
 
 export async function expectAuthorized({
@@ -62,31 +71,14 @@ export async function expectAuthorized({
   secret?: string | undefined;
   permissionType: PermissionType;
 }): Promise<void> {
-  if (!(await isAuthorized({ resource, user, secret, permissionType }))) {
+  if (
+    !(await isAuthorized({
+      resource,
+      user,
+      secret,
+      minimumPermissionType: permissionType,
+    }))
+  ) {
     throw Boom.unauthorized('Forbidden');
   }
-}
-
-function isEnoughPermissionFor(requiredPermissionType: PermissionType) {
-  return (existingPermission: PermissionRecord): boolean => {
-    if (requiredPermissionType === 'READ') {
-      return true;
-    }
-    if (requiredPermissionType === 'WRITE') {
-      return (
-        existingPermission.type === 'WRITE' ||
-        existingPermission.type === 'ADMIN'
-      );
-    }
-    return existingPermission.type === requiredPermissionType;
-  };
-}
-
-function canonizeResource(resource: string): string {
-  const [type, id] = resource.split('/').filter(notEmpty);
-  return `/${type}/${id}`;
-}
-
-function notEmpty(str: string): boolean {
-  return str.length > 0;
 }
