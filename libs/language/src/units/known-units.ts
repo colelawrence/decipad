@@ -1,4 +1,6 @@
 import Fraction from 'fraction.js';
+import produce from 'immer';
+import { AST } from '..';
 import { normalizeUnitName } from './utils';
 import * as LengthUnits from './length-units';
 import * as AreaUnits from './area-units';
@@ -42,10 +44,10 @@ export type BaseQuantity =
   | 'power'
   | 'frequency'
   | 'information'
-  | '$EUR'
-  | '$USD'
-  | '$GBP'
-  | '$SEK';
+  | 'EUR'
+  | 'USD'
+  | 'GBP'
+  | 'SEK';
 
 export type UnitOfMeasure = {
   name: string;
@@ -97,8 +99,8 @@ export const unitsByName = allUnits.reduce((byName, unit) => {
   return byName;
 }, new Map());
 
-export function isKnownSymbol(symbol: string): boolean {
-  return allSymbols.has(symbol.toLowerCase());
+export function isKnownSymbol(symbol = ''): boolean {
+  return !!symbol && allSymbols.has(symbol.toLowerCase());
 }
 
 export function getUnitByName(unit: string): UnitOfMeasure | null {
@@ -126,4 +128,22 @@ export function areUnitsCompatible(
   }
 
   return unitA.baseQuantity === unitB.baseQuantity;
+}
+
+export function toCanonicalUnitArgs(units: AST.Unit[]): AST.Unit[] {
+  return units.map((unit) => {
+    return produce(unit, (u) => {
+      const knownUnit = getUnitByName(u.unit);
+      if (knownUnit && knownUnit.name !== u.unit) {
+        u.unit = knownUnit.name;
+      }
+      u.multiplier = 1;
+    });
+  });
+}
+
+export function toCanonicalUnits(units: AST.Units): AST.Units {
+  return produce(units, (units) => {
+    units.args = toCanonicalUnitArgs(units.args);
+  });
 }

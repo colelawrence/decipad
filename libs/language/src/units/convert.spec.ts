@@ -151,8 +151,8 @@ describe('convert', () => {
       convertBetweenUnits(F(2), U('atmosphere'), U('pascal'))
     ).toMatchObject(F(202650, 1));
     expect(
-      convertBetweenUnits(F(202650.0547661773), U('pascal'), U('atmosphere'))
-    ).toMatchObject(F(3504386867060551, 1752192960000000));
+      convertBetweenUnits(F(202650), U('pascal'), U('atmosphere'))
+    ).toMatchObject(F(2));
     expect(convertBetweenUnits(F(2), U('atmosphere'), U('bar'))).toMatchObject(
       F(4053, 2000)
     );
@@ -178,10 +178,10 @@ describe('convert', () => {
 
   it('converts between energy units', () => {
     expect(convertBetweenUnits(F(2), U('joules'), U('calories'))).toMatchObject(
-      F(1, 2092)
+      F(250, 523)
     );
     expect(
-      convertBetweenUnits(F(0.0004780114722753346), U('calorie'), U('joule'))
+      convertBetweenUnits(F(0.4780114722753346), U('calorie'), U('joule'))
     ).toMatchObject(F(2));
   });
 
@@ -259,33 +259,141 @@ describe('convert', () => {
     );
   });
 
-  it('can convert complex units', () => {
+  it('can convert between known units with negative exponent', () => {
+    expect(
+      convertBetweenUnits(
+        F(100),
+        U('feet', { exp: -1 }),
+        U('meters', { exp: -1 })
+      )
+    ).toMatchObject(F(3281, 10));
+  });
+
+  it('can convert between known units with negative exponent (2)', () => {
+    expect(
+      convertBetweenUnits(
+        F(120),
+        U('minute', { exp: -1 }),
+        U('second', { exp: -1 })
+      )
+    ).toMatchObject(F(2));
+  });
+
+  it('can convert between known units with negative exponent (3)', () => {
+    expect(
+      convertBetweenUnits(
+        F(2),
+        U('second', { exp: -1 }),
+        U('minute', { exp: -1 })
+      )
+    ).toMatchObject(F(120));
+  });
+
+  it('can convert between known units with negative exponent (4)', () => {
+    expect(
+      convertBetweenUnits(
+        F(2),
+        U('minute', { exp: -1 }),
+        U('minute', { exp: -1 })
+      )
+    ).toMatchObject(F(2));
+  });
+
+  it('can convert between complex units (1)', () => {
+    expect(convertBetweenUnits(F(100), U('joules'), U('joules'))).toMatchObject(
+      F(100)
+    );
+  });
+
+  it('can convert between complex units (2)', () => {
+    expect(
+      convertBetweenUnits(F(100), U('joules'), U('calories'))
+    ).toMatchObject(F(12500, 523));
+  });
+
+  it('can convert between complex units (3)', () => {
     expect(
       convertBetweenUnits(
         F(100),
         U([u('joules'), u('m', { exp: -1 })]),
         U([u('calories'), u('foot', { exp: -1 })])
       )
-    ).toMatchObject(F(12500, 1715963));
+    ).toMatchObject(F(12500000, 1715963));
   });
 
   it('can convert mixed known and unknown units (1)', () => {
     expect(
       convertBetweenUnits(
-        F(1),
+        F(2),
         U([u('bananas', { known: false }), u('second', { exp: -1 })]),
         U([u('bananas', { known: false }), u('minute', { exp: -1 })])
       )
-    ).toMatchObject(F(60));
+    ).toMatchObject(F(120));
   });
 
   it('can convert mixed known and unknown units (2)', () => {
     expect(
       convertBetweenUnits(
-        F(1),
+        F(120),
         U([u('bananas', { known: false }), u('minute', { exp: -1 })]),
         U([u('bananas', { known: false }), u('second', { exp: -1 })])
       )
-    ).toMatchObject(F(1, 60));
+    ).toMatchObject(F(2));
+  });
+
+  it('can convert between units with multipliers', () => {
+    expect(
+      convertBetweenUnits(
+        F(1),
+        U([u('meters', { multiplier: 1000 })]),
+        U([u('meters', { multiplier: 1 })])
+      )
+    ).toMatchObject(F(1000));
+  });
+
+  it('can convert between units with multipliers expoentiated', () => {
+    expect(
+      convertBetweenUnits(
+        F(2),
+        U([u('meters', { multiplier: 1000, exp: 2 })]),
+        U([u('meters', { multiplier: 1, exp: 2 })])
+      )
+    ).toMatchObject(F(2_000_000));
+  });
+
+  it('can convert between units with multipliers negatively expoentiated', () => {
+    expect(
+      convertBetweenUnits(
+        F(2),
+        U([u('meters', { multiplier: 1000, exp: -2 })]),
+        U([u('meters', { multiplier: 1, exp: -2 })])
+      )
+    ).toMatchObject(F(2, 1000000));
+  });
+
+  it('can convert complex units with multipliers negatively expoentiated', () => {
+    expect(
+      convertBetweenUnits(
+        F(2),
+        U([u('grams'), u('meter', { exp: -1 }), u('second', { exp: -1 })]),
+        U([u('grams'), u('meter', { exp: -1 }), u('second', { exp: -1 })])
+      )
+    ).toMatchObject(F(2));
+  });
+
+  it('expands on conversion', () => {
+    expect(
+      convertBetweenUnits(
+        F(2),
+        U('newton'),
+        U([u('grams'), u('meter', { exp: 1 }), u('second', { exp: -2 })])
+      )
+    ).toMatchObject(F(2000));
+  });
+
+  it('converts between cubic meters and liters', () => {
+    expect(
+      convertBetweenUnits(F(2), U('meters', { exp: 3 }), U('liters'))
+    ).toMatchObject(F(2000));
   });
 });

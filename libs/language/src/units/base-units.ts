@@ -21,10 +21,10 @@ const baseQuantityToBaseUnit: Record<BaseQuantity, string> = {
   'electrical conductance': 'siemens',
   frequency: 'hertz',
   information: 'bit',
-  $EUR: '$EUR',
-  $USD: '$USD',
-  $GBP: '$GBP',
-  $SEK: '$SEK',
+  EUR: 'EUR',
+  USD: 'USD',
+  GBP: 'GBP',
+  SEK: 'SEK',
 };
 
 export function baseUnitForBaseQuantity(baseQuantity: BaseQuantity): string {

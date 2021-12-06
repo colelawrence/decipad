@@ -626,8 +626,6 @@ describe('Units', () => {
       },
     });
 
-    // TODO internally it's fine but do we actually want to support
-    // calculations that result in a unit^-1?
     expect(
       await runCode(`
         Speed = 6 meter/second
@@ -791,8 +789,75 @@ describe('number units work together', () => {
     });
   });
 
-  it('handles known units with multipliers', async () => {
-    expect(await runCode(`10 centimeters + 2 meters`)).toMatchObject({
+  it('handles known units with multipliers (1)', async () => {
+    expect(
+      await runCode(`
+        10 centimeters
+      `)
+    ).toMatchObject({
+      value: F(10),
+      type: t.number({
+        type: 'units',
+        args: [
+          {
+            unit: 'meters',
+            exp: 1,
+            multiplier: 0.01,
+            known: true,
+          },
+        ],
+      }),
+    });
+  });
+
+  it('handles known units without multipliers (2)', async () => {
+    expect(
+      await runCode(`
+        2 meters + 4 meters
+      `)
+    ).toMatchObject({
+      value: F(6),
+      type: t.number({
+        type: 'units',
+        args: [
+          {
+            unit: 'meters',
+            exp: 1,
+            multiplier: 1,
+            known: true,
+          },
+        ],
+      }),
+    });
+  });
+
+  it('handles known units with multipliers (3)', async () => {
+    expect(
+      await runCode(`
+        10 centimeters + 2 centimeters
+      `)
+    ).toMatchObject({
+      value: F(12),
+      type: t.number({
+        type: 'units',
+        args: [
+          {
+            unit: 'meters',
+            exp: 1,
+            multiplier: 0.01,
+            known: true,
+          },
+        ],
+      }),
+    });
+  });
+
+  it('handles known units with multipliers (4)', async () => {
+    expect(
+      await runCode(`
+        10 centimeters + 2 meters
+      `)
+    ).toMatchObject({
       value: F(21, 10),
       type: t.number({
         type: 'units',
@@ -953,40 +1018,20 @@ describe('number units work together', () => {
   it('handles non-scalar unit conversions', async () => {
     expect(await runCode(`1K + 2°C + 3°F`)).toMatchObject({
       value: F(50007, 100),
-      type: t.number({
-        type: 'units',
-        args: [
-          {
-            unit: '°F',
-            multiplier: 1,
-            exp: 1,
-            known: true,
-          },
-        ],
-      }),
+      type: t.number(U('°F')),
     });
   });
 
   it('handles negative exp unit multipliers when converting', async () => {
     expect(await runCode(`2 liter/km * 3 km`)).toMatchObject({
       value: F(6),
-      type: t.number({
-        type: 'units',
-        args: [
-          {
-            unit: 'liters',
-            multiplier: 1,
-            exp: 1,
-            known: true,
-          },
-        ],
-      }),
+      type: t.number(U('liters')),
     });
   });
 
   it('converts between complex units', async () => {
-    expect(await runCode(`100 joules/km as calories/foot`)).toMatchObject({
-      value: F(25, 3431926),
+    expect(await runCode(`100 joules/km to calories/foot`)).toMatchObject({
+      value: F(12500, 1715963),
       type: t.number(U([u('calories'), u('foot', { exp: -1 })])),
     });
   });
@@ -1001,9 +1046,13 @@ describe('number units work together', () => {
   });
 
   it('autoconverts complex units', async () => {
-    expect(await runCode(`1 joule/meter^2 + 2 calories/inch^2`)).toMatchObject({
-      value: F(7549790286526364, 3774894852224877),
-      type: t.number(U([u('calories'), u('inch', { exp: -2 })])),
+    expect(
+      await runCode(`1 joule/meter^2 + 2 calories/inch^2 as kg/second^2`)
+    ).toMatchObject({
+      value: F(12355223382040881000, 952494359199781),
+      type: t.number(
+        U([u('g', { multiplier: 1000 }), u('second', { exp: -2 })])
+      ),
     });
   });
 
@@ -1029,9 +1078,9 @@ describe('number units work together', () => {
   });
 
   it('autoconverts expanding expandable units (4)', async () => {
-    expect(await runCode(`2 bar + 1 newton/inch^2`)).toMatchObject({
-      value: F(328043627561865200, 2522794228531901),
-      type: t.number(U([u('newton'), u('inch', { exp: -2 })])),
+    expect(await runCode(`2 bar + 1 newton/inch^2 as Pa`)).toMatchObject({
+      value: F(1691245835821442000, 8391197200505),
+      type: t.number(U('Pa')),
     });
   });
 
@@ -1074,6 +1123,61 @@ describe('number units work together', () => {
     expect(await runCode(`1 hour / 3 minutes^2`)).toMatchObject({
       value: F(20),
       type: t.number(U('minutes', { exp: -1 })),
+    });
+  });
+
+  it('multiplies units correctly (1)', async () => {
+    expect(
+      await runCode(`
+        30 watts * 50 hours/month
+      `)
+    ).toMatchObject({
+      value: F(1500),
+      type: t.number(U([u('hours'), u('months', { exp: -1 }), u('watts')])),
+    });
+  });
+
+  it('multiplies units correctly (2)', async () => {
+    expect(
+      await runCode(`
+        2 usd/watt * 3 watt
+      `)
+    ).toMatchObject({
+      value: F(6),
+      type: t.number(U([u('usd')])),
+    });
+  });
+
+  it('multiplies units correctly (3.1)', async () => {
+    expect(
+      await runCode(`
+        2 usd/watt/hour * 3 watt
+      `)
+    ).toMatchObject({
+      value: F(6),
+      type: t.number(U([u('hours', { exp: -1 }), u('usd')])),
+    });
+  });
+
+  it('multiplies units correctly (3.2)', async () => {
+    expect(
+      await runCode(`
+      3 watt * 2 usd/watt/hour
+      `)
+    ).toMatchObject({
+      value: F(6),
+      type: t.number(U([u('hours', { exp: -1 }), u('usd')])),
+    });
+  });
+
+  it('multiplies units correctly (4)', async () => {
+    expect(
+      await runCode(`
+        1500 watt*hours/month * 1 usd/watt/hour
+      `)
+    ).toMatchObject({
+      value: F(1500),
+      type: t.number(U([u('months', { exp: -1 }), u('usd')])),
     });
   });
 });

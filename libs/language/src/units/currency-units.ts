@@ -5,7 +5,7 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'euro',
     abbreviations: ['eur', '€'],
-    baseQuantity: '$EUR',
+    baseQuantity: 'EUR',
     pretty: (n) => `${n} €`,
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
@@ -13,7 +13,7 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'usdollar',
     abbreviations: ['$', 'usd', 'dollar'],
-    baseQuantity: '$USD',
+    baseQuantity: 'USD',
     pretty: (n) => `${n} $`,
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
@@ -21,7 +21,7 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'britishpound',
     abbreviations: ['£', 'gbp'],
-    baseQuantity: '$GBP',
+    baseQuantity: 'GBP',
     pretty: (n) => `£${n}`,
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
@@ -29,7 +29,7 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'swedishkrona',
     abbreviations: ['sek'],
-    baseQuantity: '$SEK',
+    baseQuantity: 'SEK',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
   },

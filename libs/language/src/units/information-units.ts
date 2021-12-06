@@ -11,6 +11,7 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'byte',
     baseQuantity: 'information',
+    doesNotScaleOnConversion: true,
     toBaseQuantity: (byte) => byte.mul(8),
     fromBaseQuantity: (bits) => bits.div(8).ceil(),
   },

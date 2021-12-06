@@ -1,0 +1,144 @@
+import { F, U, u } from '../../utils';
+import { expandUnits } from '.';
+
+describe('expand', () => {
+  it('expands unknown unit to the same unit and value', () => {
+    const [resultUnits, convert] = expandUnits(U('bananas', { known: false }));
+    expect(resultUnits).toMatchObject(U('bananas', { known: false }));
+    expect(convert(F(2))).toMatchObject(F(2));
+  });
+
+  it('converts to base unit on expansionless unit', () => {
+    const [resultUnits, convert] = expandUnits(U('inches'));
+    expect(resultUnits).toMatchObject(U('meters'));
+    expect(convert(F(13))).toMatchObject(F(130000, 393701));
+  });
+
+  it('expands known unit to the same unit and value', () => {
+    const [resultUnits, convert] = expandUnits(U('watts'));
+    expect(resultUnits).toMatchObject(
+      U([u('grams'), u('meters', { exp: 2 }), u('seconds', { exp: -3 })])
+    );
+    expect(convert(F(2))).toMatchObject(F(2000));
+  });
+
+  it('expands known unit to the same unit and value (2)', () => {
+    const [resultUnits, convert] = expandUnits(
+      U('watts', { multiplier: 1000 })
+    );
+    expect(resultUnits).toMatchObject(
+      U([
+        u('grams', { multiplier: 1000 }),
+        u('meters', { exp: 2 }),
+        u('seconds', { exp: -3 }),
+      ])
+    );
+    expect(convert(F(2))).toMatchObject(F(2000));
+  });
+
+  it('expands known negative exp unit to the same unit and value (2)', () => {
+    const [resultUnits, convert] = expandUnits(U('second', { exp: -1 }));
+    expect(resultUnits).toMatchObject(U('seconds', { exp: -1 }));
+    expect(convert(F(2))).toMatchObject(F(2));
+  });
+
+  it('expands known and unknown negative exp units to the same units and value (1)', () => {
+    const [resultUnits, convert] = expandUnits(
+      U([u('bananas'), u('second', { exp: -1 })])
+    );
+    expect(resultUnits).toMatchObject(
+      U([u('bananas'), u('seconds', { exp: -1 })])
+    );
+    expect(convert(F(2))).toMatchObject(F(2));
+  });
+
+  it('expands known and unknown negative exp units to the same units and value (2)', () => {
+    const [resultUnits, convert] = expandUnits(
+      U([u('bananas'), u('second', { exp: -1, multiplier: 0.001 })])
+    );
+    expect(resultUnits).toMatchObject(
+      U([u('bananas'), u('seconds', { exp: -1, multiplier: 0.001 })])
+    );
+    expect(convert(F(2))).toMatchObject(F(2));
+  });
+
+  it('expands known exp units to the same units and value', () => {
+    const [resultUnits, convert] = expandUnits(
+      U([
+        u('watt'), // grams.m^2.s^-3
+        u('hour'),
+      ])
+    );
+    expect(resultUnits).toMatchObject(
+      U([u('grams'), u('meters', { exp: 2 }), u('seconds', { exp: -2 })])
+    );
+    expect(convert(F(2))).toMatchObject(F(2000 * 3600));
+  });
+
+  it('expands unknown unit with exp and multiplier to the same units and value', () => {
+    const [resultUnits, convert] = expandUnits(
+      U('bananas', { exp: 2, multiplier: 100 })
+    );
+    expect(resultUnits).toMatchObject(
+      U('bananas', { exp: 2, multiplier: 100 })
+    );
+    expect(convert(F(2))).toMatchObject(F(2));
+  });
+
+  it('expands known unit with exp and multiplier to the same units and value', () => {
+    const [resultUnits, convert] = expandUnits(
+      U([u('meters', { exp: 2, multiplier: 0.001 })])
+    );
+    expect(resultUnits).toMatchObject(
+      U('meters', { exp: 2, multiplier: 0.001 })
+    );
+    expect(convert(F(2))).toMatchObject(F(2));
+  });
+
+  it('expands standard known unit to the correct units', () => {
+    const [resultUnits, convert] = expandUnits(U('calories'));
+
+    expect(resultUnits).toMatchObject(
+      U([
+        u('grams', { exp: 1 }),
+        u('meters', { exp: 2 }),
+        u('seconds', { exp: -2 }),
+      ])
+    );
+    expect(convert(F(2))).toMatchObject(F(8368));
+  });
+
+  it('expands standard known unit with multiplier to the correct units', () => {
+    const [resultUnits, convert] = expandUnits(
+      U('calories', { multiplier: 0.001 })
+    );
+
+    expect(resultUnits).toMatchObject(
+      U([
+        u('grams', { exp: 1, multiplier: 0.001 }),
+        u('meters', { exp: 2 }),
+        u('seconds', { exp: -2 }),
+      ])
+    );
+    expect(convert(F(2))).toMatchObject(F(8368));
+  });
+
+  it('expands standard known unit positive exponent and multiplier to the correct units', () => {
+    const [resultUnits, convert] = expandUnits(U('calories', { exp: 2 }));
+
+    expect(resultUnits).toMatchObject(
+      U([
+        u('grams', { exp: 2 }),
+        u('meters', { exp: 4 }),
+        u('seconds', { exp: -4 }),
+      ])
+    );
+    expect(convert(F(2))).toMatchObject(F(35011712));
+  });
+
+  it('expands non-scalar unit', () => {
+    const [resultUnits, convert] = expandUnits(U('celsius'));
+    expect(resultUnits).toMatchObject(U('kelvin'));
+    expect(convert(F(2))).toMatchObject(F(27515, 100));
+  });
+});

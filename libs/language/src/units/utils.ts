@@ -1,4 +1,4 @@
-import { singular } from './pluralize';
+import { singular } from '../pluralize';
 
 export function normalizeUnitName(unit: string): string {
   return singular(unit.toLocaleLowerCase());

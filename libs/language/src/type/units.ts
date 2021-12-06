@@ -1,12 +1,8 @@
 import { produce } from 'immer';
-import pluralize, { singular, addIrregularRule } from 'pluralize';
+import pluralize, { singular } from '../pluralize';
 import { AST, Type } from '..';
 import { getDefined, units } from '../utils';
 import { isKnownSymbol, areUnitsCompatible, expandUnits } from '../units';
-
-addIrregularRule('USD', 'USD');
-addIrregularRule('EUR', 'EUR');
-addIrregularRule('are', 'are');
 
 const multipliersToPrefixes: Record<number, string> = {
   1e-18: 'a',
@@ -50,12 +46,16 @@ export const matchUnitArrays = (
   units1: AST.Units | null,
   units2: AST.Units | null
 ) => {
-  const [array1] = expandUnits(units1?.args ?? []) ?? [];
-  const [array2] = expandUnits(units2?.args ?? []) ?? [];
-  if ((array1 ?? []).length !== (array2 ?? []).length) return false;
+  const [expandedUnit1] = expandUnits(units1);
+  const expandedUnits1 = expandedUnit1?.args ?? [];
+  const [expandedUnit2] = expandUnits(units2);
+  const expandedUnits2 = expandedUnit2?.args ?? [];
+  if (expandedUnits1.length !== expandedUnits2.length) {
+    return false;
+  }
 
-  const pendingMatch = (array2 && Array.from(array2)) ?? [];
-  for (const unit of array1 ?? []) {
+  const pendingMatch = Array.from(expandedUnits2);
+  for (const unit of expandedUnits1) {
     let match: AST.Unit | undefined;
     for (const matchingUnit of pendingMatch) {
       if (
@@ -87,19 +87,47 @@ export const removeSingleUnitless = (a: Type, b: Type) => {
   }
 };
 
-export const normalizeUnits = (units: AST.Unit[] | null) => {
+const simplifyUnitsArgs = (units: AST.Unit[]): AST.Unit[] => {
+  return units
+    .map((u) => pluralizeUnit(u))
+    .reduce<AST.Unit[]>((units, unit) => {
+      const matchingUnitIndex = units.findIndex(
+        (candidate) => unit.unit === candidate.unit
+      );
+      if (matchingUnitIndex >= 0) {
+        const matchingUnit = units[matchingUnitIndex];
+        units[matchingUnitIndex] = produce(matchingUnit, (match) => {
+          match.exp += unit.exp;
+          match.multiplier *= unit.multiplier ** unit.exp;
+        });
+        return units;
+      } else {
+        return [...units, unit];
+      }
+    }, [])
+    .filter((unit) => unit.exp !== 0);
+};
+
+export const simplifyUnits = (units: AST.Units | null): AST.Units | null => {
+  if (units == null) {
+    return units;
+  }
+  return produce(units, (u) => {
+    u.args = simplifyUnitsArgs(u.args);
+  });
+};
+
+export const normalizeUnits = (units: AST.Unit[] | null): AST.Unit[] | null => {
   if (units == null) {
     return null;
   }
 
-  const normalized = units
-    .filter((u) => u.exp !== 0)
-    .map((u) => pluralizeUnit(u));
+  const simplified = simplifyUnitsArgs(units);
 
-  if (normalized.length === 0) {
+  if (simplified.length === 0) {
     return null;
   } else {
-    return normalized.sort((a, b) => {
+    return simplified.sort((a, b) => {
       if (a.unit > b.unit) {
         return 1;
       } else if (a.unit < b.unit) {
@@ -137,6 +165,33 @@ const stringifyUnit = (unit: AST.Unit) => {
   return result.join('');
 };
 
+export const stringifyUnitArgs = (
+  units: AST.Unit[] | null,
+  value?: number
+): string => {
+  return (units ?? [])
+    .reduce((parts: string[], unit: AST.Unit): string[] => {
+      if (parts.length > 0) {
+        const op = unit.exp > 0 ? '.' : '/';
+        parts.push(op);
+        parts.push(
+          stringifyUnit(
+            produce(unit, (unit) => {
+              if (unit.exp < 0) {
+                unit.unit = singular(unit.unit);
+                unit.exp = Math.abs(unit.exp);
+              }
+            })
+          )
+        );
+      } else {
+        parts.push(stringifyUnit(pluralizeUnit(unit, value)));
+      }
+      return parts;
+    }, [])
+    .join('');
+};
+
 export const stringifyUnits = (
   units: AST.Units | null,
   value?: number
@@ -147,27 +202,7 @@ export const stringifyUnits = (
     const sortedUnits = produce(units, (units) => {
       units.args.sort(byExp);
     });
-    return sortedUnits.args
-      .reduce((parts: string[], unit: AST.Unit): string[] => {
-        if (parts.length > 0) {
-          const op = unit.exp > 0 ? '.' : '/';
-          parts.push(op);
-          parts.push(
-            stringifyUnit(
-              produce(unit, (unit) => {
-                if (unit.exp < 0) {
-                  unit.unit = singular(unit.unit);
-                  unit.exp = Math.abs(unit.exp);
-                }
-              })
-            )
-          );
-        } else {
-          parts.push(stringifyUnit(pluralizeUnit(unit, value)));
-        }
-        return parts;
-      }, [])
-      .join('');
+    return stringifyUnitArgs(sortedUnits.args, value);
   }
 };
 

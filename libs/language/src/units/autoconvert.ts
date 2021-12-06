@@ -1,49 +1,47 @@
 import Fraction from 'fraction.js';
+import { Units } from '../parser/ast-types';
 import { Type } from '..';
 import { Value } from '../interpreter';
 import { fromJS } from '../interpreter/Value';
-import {
-  convertFromBaseUnitIfKnown,
-  convertToBaseUnitIfKnown,
-} from './convert';
+import { toExpandedBaseQuantity, fromExpandedBaseQuantity } from './convert';
 import { zip, getInstanceof } from '../utils';
-import { expandUnits } from './expand';
 
-export function autoconvertResult(value: Value, type: Type): Value {
-  if (type.type === 'number') {
-    const units = type.unit?.args ?? [];
-    const [expandedUnits, convert] = expandUnits(units);
+function convertToNoMultipliers(n: Fraction, units: Units | null): Fraction {
+  return (units?.args ?? []).reduce(
+    (n, { multiplier, exp }) => n.mul(multiplier ** exp),
+    n
+  );
+}
+
+function convertFromNoMultipliers(n: Fraction, units: Units | null): Fraction {
+  return (units?.args ?? []).reduce(
+    (n, { multiplier, exp }) => n.div(multiplier ** exp),
+    n
+  );
+}
+
+function autoconvertArgument(value: Value, type: Type): Value {
+  if (type.unit) {
     const n = getInstanceof(value.getData(), Fraction);
-    const contractedN = n.div(convert(new Fraction(1)));
-    return fromJS(
-      (expandedUnits ?? []).reduce((acc, unit) => {
-        return convertFromBaseUnitIfKnown(
-          acc.div(unit.multiplier ** unit.exp),
-          unit.unit,
-          unit.exp || 1
-        );
-      }, contractedN)
+    const [, convertedValue] = toExpandedBaseQuantity(n, type.unit);
+    const convertedToNoMultipliers = convertToNoMultipliers(
+      convertedValue,
+      type.unit
     );
+    return fromJS(convertedToNoMultipliers);
   }
   return value;
 }
 
-function autoconvertArgument(value: Value, type: Type): Value {
-  if (type.type === 'number') {
-    const units = (type.unit && type.unit.args) || [];
+export function autoconvertResult(value: Value, type: Type): Value {
+  if (type.unit) {
     const n = getInstanceof(value.getData(), Fraction);
-    const [expandedUnits, convert] = expandUnits(units);
-    const expandedN = convert(n);
-    const result = (expandedUnits || []).reduce(
-      (acc, unit) =>
-        convertToBaseUnitIfKnown(
-          acc.mul(unit.multiplier ** unit.exp),
-          unit.unit,
-          unit.exp
-        ),
-      expandedN
+    const [, reconvertedValue] = fromExpandedBaseQuantity(n, type.unit);
+    const convertedFromNoMultipliers = convertFromNoMultipliers(
+      reconvertedValue,
+      type.unit
     );
-    return fromJS(result);
+    return fromJS(convertedFromNoMultipliers);
   }
   return value;
 }

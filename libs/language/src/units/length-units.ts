@@ -20,8 +20,8 @@ export const units: UnitOfMeasure[] = [
     name: 'foot',
     abbreviations: ['ft'],
     baseQuantity: 'length',
-    toBaseQuantity: (inches) => inches.div(3.281),
-    fromBaseQuantity: (meters) => meters.mul(3.281),
+    toBaseQuantity: (feet) => feet.div(32808399).mul(1000000),
+    fromBaseQuantity: (meters) => meters.mul(32808399).div(1000000),
   },
   {
     name: 'yard',

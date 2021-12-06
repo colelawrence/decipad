@@ -326,9 +326,9 @@ export function U(
   units: string | AST.Unit | AST.Unit[],
   opts?: Partial<AST.Unit>
 ): AST.Units {
-  const unitsA = Array.isArray(units) ? units : [units];
+  const unitsArr = Array.isArray(units) ? units : [units];
   return {
     type: 'units',
-    args: unitsA.map((unit) => u(unit, opts)),
+    args: unitsArr.map((unit) => u(unit, opts)),
   };
 }
