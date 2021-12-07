@@ -72,6 +72,8 @@ export async function getValue(
   const evalResult = await evaluate(expression);
 
   const expressionType = await getNodeType(expression);
+  const reducedType = expressionType.reducedOrSelf();
+  const sourceUnits = reducedType.unit;
   return automapValues([expressionType], [evalResult], ([value]) => {
     if (value instanceof TimeQuantity) {
       if (units.args.length > 1) {
@@ -90,11 +92,15 @@ export async function getValue(
     }
 
     if (value instanceof FractionValue) {
-      const sourceUnits = expressionType.unit;
       if (!sourceUnits || sourceUnits.args.length < 1) {
-        return evalResult;
+        return value;
       }
-      return fromJS(convertBetweenUnits(value.getData(), sourceUnits, units));
+      const converted = convertBetweenUnits(
+        value.getData(),
+        sourceUnits,
+        units
+      );
+      return fromJS(converted);
     }
 
     throw new TypeError(

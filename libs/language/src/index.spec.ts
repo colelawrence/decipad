@@ -1181,3 +1181,16 @@ describe('number units work together', () => {
     });
   });
 });
+
+describe('units work on columns', () => {
+  it('as can be applied to columns', async () => {
+    expect(
+      await runCode(`
+        [1, 2, 3] as watts
+      `)
+    ).toMatchObject({
+      value: [F(1), F(2), F(3)],
+      type: t.column(t.number(U('watts')), 3),
+    });
+  });
+});
