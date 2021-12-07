@@ -1,10 +1,14 @@
 export { Avatar } from './Avatar/Avatar';
+export { Blockquote } from './Blockquote/Blockquote';
 export { Button } from './Button/Button';
 export { CellInput } from './CellInput/CellInput';
 export { CodeLine } from './CodeLine/CodeLine';
 export { CodeVariable } from './CodeVariable/CodeVariable';
 export { DateResult } from './DateResult/DateResult';
+export { Display } from './Display/Display';
 export { Divider } from './Divider/Divider';
+export { Heading1 } from './Heading1/Heading1';
+export { Heading2 } from './Heading2/Heading2';
 export { IconButton } from './IconButton/IconButton';
 export { InlineCodeError } from './InlineCodeError/InlineCodeError';
 export { ListItem } from './ListItem/ListItem';
@@ -19,7 +23,7 @@ export { TableData } from './TableData/TableData';
 export { TableHeader } from './TableHeader/TableHeader';
 export { TimeUnitsResult } from './TimeUnitsResult/TimeUnitsResult';
 export { Toggle } from './Toggle/Toggle';
-export { TriggerMenuItem } from './TriggerMenuItem/TriggerMenuItem';
 export { Tooltip } from './Tooltip/Tooltip';
+export { TriggerMenuItem } from './TriggerMenuItem/TriggerMenuItem';
 
 export * from './Editor';

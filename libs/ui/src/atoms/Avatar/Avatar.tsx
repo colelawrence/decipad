@@ -3,7 +3,7 @@ import { FC } from 'react';
 import {
   grey200,
   p12Bold,
-  purple100,
+  purple300,
   shortAnimationDuration,
   transparency,
 } from '../../primitives';
@@ -34,9 +34,9 @@ const initialBackgroundStyles = (
 ) =>
   css({
     transition: `fill ${shortAnimationDuration} ease-in-out`,
-    fill: greyedOut ? grey200.rgb : purple100.rgb,
+    fill: greyedOut ? grey200.rgb : purple300.rgb,
     [`${hoverSelector} &`]: {
-      fill: transparency(greyedOut ? grey200 : purple100, 0.65).rgba,
+      fill: transparency(greyedOut ? grey200 : purple300, 0.65).rgba,
     },
   });
 const initialTextStyles = css(p12Bold, {

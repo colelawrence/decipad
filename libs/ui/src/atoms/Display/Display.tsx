@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
-import { cssVar, p16Regular, setCssVar } from '../../primitives';
+import { cssVar, display, setCssVar } from '../../primitives';
 import { SlateElementProps } from '../../utils';
 
 const placeholderStyles = css({
@@ -13,7 +13,7 @@ const placeholderStyles = css({
   },
 
   '::before': {
-    ...p16Regular,
+    ...display,
     ...setCssVar('currentTextColor', cssVar('weakTextColor')),
 
     pointerEvents: 'none',
@@ -22,12 +22,13 @@ const placeholderStyles = css({
   },
 });
 
-const styles = css(p16Regular, placeholderStyles, {
-  padding: '6px 0',
+const styles = css(display, placeholderStyles, {
+  padding: '24px 0',
 });
 
-interface ParagraphProps extends SlateElementProps {
+interface DisplayProps extends SlateElementProps {
   readonly children: ReactNode;
+  readonly Heading: 'h1';
   /**
    * Note: Since this is not a plain-text element like an `<input>`,
    * it is up to the consumer to ensure the placeholder is removed
@@ -36,14 +37,15 @@ interface ParagraphProps extends SlateElementProps {
   readonly placeholder?: string;
 }
 
-export const Paragraph = ({
+export const Display = ({
   children,
+  Heading,
   placeholder,
   slateAttrs,
-}: ParagraphProps): ReturnType<React.FC> => {
+}: DisplayProps): ReturnType<React.FC> => {
   return (
-    <p aria-placeholder={placeholder} css={styles} {...slateAttrs}>
+    <Heading aria-placeholder={placeholder} css={styles} {...slateAttrs}>
       <span>{children}</span>
-    </p>
+    </Heading>
   );
 };

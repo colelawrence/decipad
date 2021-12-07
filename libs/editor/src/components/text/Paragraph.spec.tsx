@@ -37,6 +37,30 @@ it('shows a placeholder when empty and selected', async () => {
   );
 });
 
+it('does not show a placeholder when not empty', async () => {
+  const editor = createEditorPlugins();
+  const { getByText } = render(
+    <Plate
+      editor={editor}
+      initialValue={[{ type: ELEMENT_PARAGRAPH, children: [{ text: 'text' }] }]}
+      plugins={[createParagraphPlugin()]}
+      components={{ [ELEMENT_PARAGRAPH]: Paragraph }}
+    />
+  );
+  const textElement = getByText('text');
+  const paragraphElement = textElement.closest('p');
+
+  Transforms.insertText(editor, 'text2', {
+    at: findDomNodePath(editor, textElement),
+  });
+  Transforms.select(editor, {
+    path: findDomNodePath(editor, textElement),
+    offset: 0,
+  });
+  await waitFor(() => expect(paragraphElement).toHaveTextContent('text2'));
+  expect(paragraphElement).not.toHaveAttribute('aria-placeholder');
+});
+
 it('does not show a placeholder when not selected', async () => {
   const editor = createEditorPlugins();
   const { getByText } = render(

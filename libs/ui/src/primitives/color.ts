@@ -34,7 +34,7 @@ export function transparency(
   };
 }
 
-export const purple100 = color(157, 139, 241);
+export const purple300 = color(171, 165, 252);
 export const electricGreen100 = color(235, 249, 186);
 export const electricGreen200 = color(225, 249, 128);
 

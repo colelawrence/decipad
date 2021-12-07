@@ -1,14 +1,10 @@
 import {
-  BlockquoteElement,
   BoldLeaf,
   CodeLeaf,
   ImportDataElement,
   ImportDataElementProps,
   ItalicLeaf,
   StrikethroughLeaf,
-  SubheadingElement,
-  SubtitleElement,
-  TitleElement,
   UnderlineLeaf,
 } from '@decipad/ui';
 import {
@@ -32,7 +28,6 @@ import {
 } from '@udecode/plate';
 import { FunctionComponent } from 'react';
 import { withStyledDraggables } from './withStyledDraggables';
-import { withStyledPlaceHolders } from './withStyledPlaceholders';
 import * as elementTypes from './elementTypes';
 import {
   CodeLine,
@@ -42,6 +37,10 @@ import {
   OrderedList,
   ListItem,
   UnorderedList,
+  Title,
+  Blockquote,
+  Heading1,
+  Heading2,
 } from '../components';
 
 type PlateElementComponent = FunctionComponent<
@@ -57,10 +56,10 @@ export const createPlateComponents = (): Partial<
   > = {
     // Plate default elements
     [ELEMENT_PARAGRAPH]: SlashCommandsParagraph,
-    [ELEMENT_H1]: TitleElement,
-    [ELEMENT_H2]: SubtitleElement,
-    [ELEMENT_H3]: SubheadingElement,
-    [ELEMENT_BLOCKQUOTE]: BlockquoteElement,
+    [ELEMENT_H1]: Title,
+    [ELEMENT_H2]: Heading1,
+    [ELEMENT_H3]: Heading2,
+    [ELEMENT_BLOCKQUOTE]: Blockquote,
     [ELEMENT_CODE_BLOCK]: CodeBlock,
     [ELEMENT_CODE_LINE]: CodeLine,
 
@@ -80,6 +79,5 @@ export const createPlateComponents = (): Partial<
     [MARK_CODE]: CodeLeaf,
   };
 
-  // returns the components with placeholders and the drag icon
-  return withStyledPlaceHolders(withStyledDraggables(components));
+  return withStyledDraggables(components);
 };

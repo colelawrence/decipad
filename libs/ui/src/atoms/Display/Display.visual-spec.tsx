@@ -1,15 +1,17 @@
 import { render } from '@testing-library/react';
 import domToPlaywright from 'dom-to-playwright';
-import { Paragraph } from './Paragraph';
+import { Display } from './Display';
 
 it('displays the placeholder text', async () => {
   const { getByText } = render(
-    <Paragraph placeholder="text goes here">text</Paragraph>
+    <Display Heading="h1" placeholder="text goes here">
+      text
+    </Display>
   );
   const { select } = await domToPlaywright(page, document);
 
   const paragraph = await page.waitForSelector(
-    select(getByText('text').closest('p')!)
+    select(getByText('text').closest('h1')!)
   );
   const { content } = await paragraph.evaluate((p) =>
     getComputedStyle(p, '::before')

@@ -3,7 +3,7 @@ import { Meta, Story } from '@storybook/react';
 import { CodeLine } from './CodeLine';
 
 export default {
-  title: 'Atoms / Editor / Code Line',
+  title: 'Atoms / Editor / Code / Line',
   component: CodeLine,
   args: {
     children: '10 + 10',

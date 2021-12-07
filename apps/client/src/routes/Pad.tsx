@@ -21,7 +21,6 @@ const Wrapper = styled('div')({
 const EditorWrapper = styled('main')({
   gridArea: 'editor',
   position: 'relative',
-  marginTop: '32px',
 });
 const EditorInner = styled('div')({
   maxWidth: '120ch',

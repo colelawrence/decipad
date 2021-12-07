@@ -1,17 +1,19 @@
 import { Meta, Story } from '@storybook/react';
-import { Paragraph } from './Paragraph';
+import { Display } from './Display';
 
 export default {
-  title: 'Atoms / Editor / Text / Paragraph',
-  component: Paragraph,
+  title: 'Atoms / Editor / Text / Display',
+  component: Display,
 } as Meta;
 
 export const Normal: Story<{ children: string }> = (args) => (
-  <Paragraph {...args} />
+  <Display Heading="h1" {...args} />
 );
 Normal.args = { children: 'Text' };
 
 export const Placeholder: Story<{ placeholder: string }> = (args) => (
-  <Paragraph {...args}>{null}</Paragraph>
+  <Display Heading="h1" {...args}>
+    {null}
+  </Display>
 );
 Placeholder.args = { placeholder: 'Text goes here' };
