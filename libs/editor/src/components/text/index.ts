@@ -6,3 +6,5 @@ export { OrderedList } from './OrderedList';
 export { Paragraph } from './Paragraph';
 export { Title } from './Title';
 export { UnorderedList } from './UnorderedList';
+
+export * from './inline';

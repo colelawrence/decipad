@@ -130,6 +130,13 @@ export const p16Regular: TypographyStyles = {
   letterSpacing: '-0.004em',
   fontFeatureSettings: "'ss04' on, 'ss02' on",
 };
+export const p16Bold: TypographyStyles = {
+  ...pDefault,
+  fontWeight: 600,
+  lineHeight: '170%',
+  letterSpacing: '-0.004em',
+  fontFeatureSettings: "'ss04' on, 'ss02' on",
+};
 
 // monospace
 

@@ -1,12 +1,4 @@
-import {
-  BoldLeaf,
-  CodeLeaf,
-  ImportDataElement,
-  ImportDataElementProps,
-  ItalicLeaf,
-  StrikethroughLeaf,
-  UnderlineLeaf,
-} from '@decipad/ui';
+import { ImportDataElement, ImportDataElementProps } from '@decipad/ui';
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
@@ -41,6 +33,11 @@ import {
   Blockquote,
   Heading1,
   Heading2,
+  Bold,
+  Strikethrough,
+  Underline,
+  Italic,
+  Code,
 } from '../components';
 
 type PlateElementComponent = FunctionComponent<
@@ -72,11 +69,11 @@ export const createPlateComponents = (): Partial<
     [elementTypes.TABLE_INPUT]: Table,
 
     // Marks
-    [MARK_BOLD]: BoldLeaf,
-    [MARK_UNDERLINE]: UnderlineLeaf,
-    [MARK_STRIKETHROUGH]: StrikethroughLeaf,
-    [MARK_ITALIC]: ItalicLeaf,
-    [MARK_CODE]: CodeLeaf,
+    [MARK_BOLD]: Bold,
+    [MARK_UNDERLINE]: Underline,
+    [MARK_STRIKETHROUGH]: Strikethrough,
+    [MARK_ITALIC]: Italic,
+    [MARK_CODE]: Code,
   };
 
   return withStyledDraggables(components);

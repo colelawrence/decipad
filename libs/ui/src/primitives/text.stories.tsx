@@ -67,6 +67,9 @@ export const P15Medium: React.FC = ({ children }) => (
 export const P16Regular: React.FC = ({ children }) => (
   <p css={css(p16Regular)}>{children}</p>
 );
+export const P16Bold: React.FC = ({ children }) => (
+  <p css={css(p16Regular)}>{children}</p>
+);
 
 export const Code: React.FC = ({ children }) => (
   <p css={css(code)}>{children}</p>

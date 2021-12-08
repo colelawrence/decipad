@@ -2,10 +2,12 @@ import {
   createBoldPlugin,
   createCodePlugin,
   createItalicPlugin,
+  createStrikethroughPlugin,
   createUnderlinePlugin,
   MARK_BOLD,
   MARK_CODE,
   MARK_ITALIC,
+  MARK_STRIKETHROUGH,
   MARK_UNDERLINE,
   PlatePlugin,
 } from '@udecode/plate';
@@ -26,6 +28,11 @@ const underlinePlugin = (): PlatePlugin => ({
   onKeyDown: getToggleMarkOnKeyDown(MARK_UNDERLINE),
 });
 
+const strikethroughPlugin = (): PlatePlugin => ({
+  ...createStrikethroughPlugin(),
+  onKeyDown: getToggleMarkOnKeyDown(MARK_STRIKETHROUGH),
+});
+
 const inlineCodePlugin = (): PlatePlugin => ({
   ...createCodePlugin(),
   onKeyDown: getToggleMarkOnKeyDown(MARK_CODE),
@@ -36,4 +43,5 @@ export const createMarksPlugins = (): PlatePlugin[] => [
   italicPlugin(),
   underlinePlugin(),
   inlineCodePlugin(),
+  strikethroughPlugin(),
 ];
