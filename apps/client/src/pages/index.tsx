@@ -15,6 +15,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { ToastProvider } from 'react-toast-notifications';
 import { useApollo } from '../lib/apolloClient';
 import { Router } from '../routes';
+import { GlobalErrorHandler } from '../components/GlobalErrorHandler';
 
 const inBrowser = typeof window !== 'undefined';
 
@@ -35,7 +36,7 @@ if (history && usingSentry) {
     // Set tracesSampleRate to 1.0 to capture 100%
     // of transactions for performance monitoring.
     // We recommend adjusting this value in production
-    tracesSampleRate: 1.0,
+    tracesSampleRate: 0.1,
   });
 }
 
@@ -65,19 +66,21 @@ function Index({ pageProps = {} }) {
           rel="apple-touch-icon"
         />
       </Head>
-      <ToastProvider autoDismiss placement="top-right">
-        <AuthProvider session={session ?? undefined}>
-          <ApolloProvider client={apolloClient}>
-            <GlobalStyles>
-              <ChakraProvider theme={theme}>
-                <BrowserRouter>
-                  <Router />
-                </BrowserRouter>
-              </ChakraProvider>
-            </GlobalStyles>
-          </ApolloProvider>
-        </AuthProvider>
-      </ToastProvider>
+      <GlobalErrorHandler>
+        <ToastProvider autoDismiss placement="top-right">
+          <AuthProvider session={session ?? undefined}>
+            <ApolloProvider client={apolloClient}>
+              <GlobalStyles>
+                <ChakraProvider theme={theme}>
+                  <BrowserRouter>
+                    <Router />
+                  </BrowserRouter>
+                </ChakraProvider>
+              </GlobalStyles>
+            </ApolloProvider>
+          </AuthProvider>
+        </ToastProvider>
+      </GlobalErrorHandler>
     </>
   );
 }

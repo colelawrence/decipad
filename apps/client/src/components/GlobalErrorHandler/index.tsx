@@ -13,7 +13,9 @@ export function GlobalErrorHandler({
   children: JSX.Element;
 }): ReturnType<FC> {
   return process.env.NODE_ENV === 'production' ? (
-    <ErrorBoundary fallback={fallback}>{children}</ErrorBoundary>
+    <ErrorBoundary fallback={fallback} showDialog>
+      {children}
+    </ErrorBoundary>
   ) : (
     children
   );

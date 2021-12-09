@@ -1,3 +1,4 @@
+import { ForbiddenError } from 'apollo-server-lambda';
 import type { ApolloServerPlugin } from 'apollo-server-plugin-base';
 import {
   withScope,
@@ -39,6 +40,9 @@ export default {
           });
 
           rc.errors.forEach((error) => {
+            if (error instanceof ForbiddenError) {
+              return; // user error, do nothing
+            }
             if (error.path || error.name !== 'GraphQLError') {
               scope.setExtras({
                 path: error.path,
