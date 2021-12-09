@@ -994,7 +994,6 @@ describe('number units work together', () => {
     });
   });
 
-  it.todo('is this failing because of gallons? OR because of calcs?');
   it('exponentiation works with expression as exponent', async () => {
     expect(
       await runCode(`

@@ -1,5 +1,11 @@
-import { identity } from '../utils';
 import { UnitOfMeasure } from './known-units';
+import { identity, invert } from '../utils';
+
+type Converter = UnitOfMeasure['toBaseQuantity'];
+const pascal: Converter = (x) => x.div(101_325);
+const bar: Converter = (x) => x.div(101_325).mul(1e5);
+const mmhg: Converter = (x) => x.div(760);
+const psi: Converter = (x) => x.div(14_696).mul(1e3);
 
 export const units: UnitOfMeasure[] = [
   {
@@ -13,27 +19,27 @@ export const units: UnitOfMeasure[] = [
     name: 'pascal',
     abbreviations: ['pa'],
     baseQuantity: 'pressure',
-    toBaseQuantity: (pascals) => pascals.div(101325),
-    fromBaseQuantity: (atmospheres) => atmospheres.mul(101325),
+    toBaseQuantity: pascal,
+    fromBaseQuantity: invert(pascal),
   },
   {
     name: 'bar',
     abbreviations: ['ba'],
     baseQuantity: 'pressure',
-    toBaseQuantity: (bars) => bars.div(1.01325),
-    fromBaseQuantity: (atmospheres) => atmospheres.mul(1.01325),
+    toBaseQuantity: bar,
+    fromBaseQuantity: invert(bar),
   },
   {
     name: 'mmhg',
     baseQuantity: 'pressure',
     abbreviations: ['torr'],
-    toBaseQuantity: (mmhg) => mmhg.div(760),
-    fromBaseQuantity: (atmospheres) => atmospheres.mul(760),
+    toBaseQuantity: mmhg,
+    fromBaseQuantity: invert(mmhg),
   },
   {
     name: 'psi',
     baseQuantity: 'pressure',
-    toBaseQuantity: (psi) => psi.div(14.696),
-    fromBaseQuantity: (atmospheres) => atmospheres.mul(14.696),
+    toBaseQuantity: psi,
+    fromBaseQuantity: invert(psi),
   },
 ];

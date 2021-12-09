@@ -1,14 +1,17 @@
-import { identity } from '../utils';
 import { UnitOfMeasure } from './known-units';
+import { identity, invert } from '../utils';
+
+type Converter = UnitOfMeasure['toBaseQuantity'];
+// base: second
+const ms: Converter = (x) => x.div(1000);
+const minute: Converter = (x) => x.mul(60);
+const hour: Converter = (x) => x.mul(3600); // 60*60
+const day: Converter = (x) => x.mul(86_400); // 60*60*24
+const week: Converter = (x) => x.mul(604_800); // 60*60*24*7
+// base: month
+const year: Converter = (x) => x.mul(12); // months * 12
 
 export const units: UnitOfMeasure[] = [
-  {
-    name: 'millisecond',
-    baseQuantity: 'second',
-    abbreviations: ['ms'],
-    toBaseQuantity: (ms) => ms.div(1000),
-    fromBaseQuantity: (seconds) => seconds.mul(1000),
-  },
   {
     name: 'second',
     baseQuantity: 'second',
@@ -17,30 +20,37 @@ export const units: UnitOfMeasure[] = [
     fromBaseQuantity: identity,
   },
   {
+    name: 'millisecond',
+    baseQuantity: 'second',
+    abbreviations: ['ms'],
+    toBaseQuantity: ms,
+    fromBaseQuantity: invert(ms),
+  },
+  {
     name: 'minute',
     abbreviations: ['min'],
     baseQuantity: 'second',
-    toBaseQuantity: (minutes) => minutes.mul(60),
-    fromBaseQuantity: (seconds) => seconds.div(60),
+    toBaseQuantity: minute,
+    fromBaseQuantity: invert(minute),
   },
   {
     name: 'hour',
     abbreviations: ['h'],
     baseQuantity: 'second',
-    toBaseQuantity: (hours) => hours.mul(3600),
-    fromBaseQuantity: (seconds) => seconds.div(3600),
+    toBaseQuantity: hour,
+    fromBaseQuantity: invert(hour),
   },
   {
     name: 'day',
     baseQuantity: 'second',
-    toBaseQuantity: (days) => days.mul(86400),
-    fromBaseQuantity: (seconds) => seconds.div(86400),
+    toBaseQuantity: day,
+    fromBaseQuantity: invert(day),
   },
   {
     name: 'week',
     baseQuantity: 'second',
-    toBaseQuantity: (weeks) => weeks.mul(604800),
-    fromBaseQuantity: (seconds) => seconds.div(604800),
+    toBaseQuantity: week,
+    fromBaseQuantity: invert(week),
   },
   {
     name: 'month',
@@ -51,7 +61,7 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'year',
     baseQuantity: 'month',
-    toBaseQuantity: (years) => years.mul(12),
-    fromBaseQuantity: (years) => years.div(12),
+    toBaseQuantity: year,
+    fromBaseQuantity: invert(year),
   },
 ];

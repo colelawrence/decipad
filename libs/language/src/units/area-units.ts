@@ -94,7 +94,6 @@ export const units: UnitOfMeasure[] = [
     // https://en.wikipedia.org/wiki/Conversion_of_units
     // ≡ 100 m2
     name: 'are',
-    abbreviations: ['a'],
     baseQuantity: 'area',
     toBaseQuantity: are,
     fromBaseQuantity: invert(are),

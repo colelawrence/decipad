@@ -4,18 +4,26 @@ sidebar_position: 390
 
 # Appendix A: Supported units
 
-Deci supports the following units, and compositions of them:
+Deci supports the following units, and compositions of them. Unless stated, units default to the international standard.
+
+For example, when we say Inch we mean Inch (International), i.e. `0.0254 m`.
+
+All definitions are exact.
+
+Some conversions (e.g. bohr radius) are not exact by definition.
+
+Please bear that in mind when using our units. Approximations are marked with a `*` for your convenience
 
 ## Length units
 
-The default length unit is Meter (`meter`, `m`).
+The default unit is Metre (`meter`, `m`).
 
 The following are also supported:
 
-- International Mile (`mile`, `mi`) = `1609.344 m` = `1,760 yards`
+- Mile (`mile`, `mi`) = `1609.344 m` = `1,760 yards`
 - Yard (`yard`, `yd`) = `3 ft`
 - Foot (`foot`, `ft`) = `12 inches`
-- Inch (`inch`) = `0.0254 m`
+- Inch (`inch`, `in`) = `0.0254 m`
 
 ```deci live
 1 mile in inches
@@ -24,7 +32,7 @@ The following are also supported:
 
 Typography & Displays:
 
-- Point (`point`, `pt`) = `1/72.272 inches`
+- Point (American, English) (`point`, `pt`) = `1/72.272 inches`
 - Twip (`twip`) = `1/1440 inches`
 - Pica (`pica`) = `12 points`
 
@@ -49,7 +57,7 @@ Natural Sciences:
 - Ångström (`angstrom`, `Å`) = `0.1 nm`
 - Attometre (`attometre`, `am`) = `1×10e−18 m`
 - Fermi (`fermi`, `fm`) = `0.000001 nm`
-- Bohr (`bohr`, `a0`, `a₀`) = `5.29177210903e11 m`
+- Bohr(\*) (`bohr`, `a0`, `a₀`) = `5.29177210903e-11 m`
 
 ```deci live
 1 angstrom in am
@@ -72,7 +80,7 @@ Astronomy:
 
 - Astronomical unit (`austronomicalunit`, `au`) = `1.495978707×10e11 m`
 - Light Year (`lightyear`, `ly`) = `9.4607304725808×10e15 m`
-- Light Hour (`lightday`, `ld`) = `24 lh`
+- Light Day (`lightday`, `ld`) = `24 lh`
 - Light Hour (`lighthour`, `lh`) = `60 lm`
 - Light Minutes (`lightminute`, `lm`) = `60 ls`
 - Light Second (`lightsecond`, `ls`) = `299792458 m`
@@ -100,7 +108,7 @@ It takes over 26 horse races to make a marathon.
 
 ## Area units
 
-The default length unit is Square Meter (`squaremeter`, `m2`, `m²`).
+The default unit is Square Meter (`squaremeter`, `m2`, `m²`).
 
 The following are also supported:
 
@@ -133,31 +141,25 @@ Surveyor:
 
 ## Volume units
 
-The default length unit is Square Meter (`cubicmeter`, `m3`, `m²`).
+The default unit is Square Meter (`cubicmeter`, `m3`, `m³`).
 
 The following are also supported:
 
-- Cubic Mile (`cubicmile`, `cumi`) ≡ `4168181825.440579584 m3`
-
-- Cubic Yard (`cubicyard`, `yd3`, `cuyd`) = `27 ft3`
-
-- Cubic Foot (`cubicfoot`, `ft3`, `cuft`) = `1,728 sqin`
-
-- Cubic Inch (`cubicinch`, `in3`, `cuin`) = `16.387064×10e−6 m3`
-
-- Acre Foot (`acrefoot`, `acft`) = `1 ac x 1 ft`
-
-- Ton (`ton`) = `0.99108963072 m3`
-
-- Barrel (`barrel`, `bl`) = `36 gal`
-
-- Bushel (`bushel`, `bu`) = `8 gallons`
-
-- Bucket (`bucket`, `bkt`) = `4 gallons`
-
-- Gallon (`gallon`, `gal`) = `4.54609 liters`
-
 - Liter (`liter`, `l`) = `0.001 m3`
+
+- Cubic Mile (`cumi`) ≡ `4168181825.440579584 m3`
+- Cubic Inch (`in3`, `in³`, `cuin`) = `16.387064×10e−6 m3`
+- Cubic Yard (`yd3`, `yd³`,`cuyd`) = `27 ft3`
+- Cubic Foot (`ft3`, `ft³`, `cuft`) = `1,728 sqin`
+- Acre Foot (`acrefoot`, `acft`) = `1 ac x 1 ft`
+- Ton (`ton_displacement`) = `0.99108963072 m3`
+
+- Gallon (Imperial) (`gallon`, `gal`) = `4.54609 liters`
+- Barrel (Imperial) (`barrel`, `bl`) = `36 gal`
+- Bushel (Imperial) (`bushel`, `bu`) = `8 gallons`
+- Bucket (Imperial) (`bucket`, `bkt`) = `4 gallons`
+- Pint (Imperial) (`pint`) = `≡ 1/8 gal`
+- Ounce (Imperial) (`floz`) = `28.4130625×10e−6 m3`
 
 ```deci live
 1 barrel in gallon
@@ -171,13 +173,11 @@ The following are also supported:
 
 Cooking:
 
-- Cup (`cup`) = `250×10e−6 m3`
-- Pint (`pint`) = `≡ 1/8 gal`
-- Table Spoon (`tablespoon`, `tbsp`) = `3 tsp`
-- Tea Spoon (`teaspoon`, `tsp`) = `5×10e−6 m3`
-- Ounce (`ounce`, `floz`) = `1⁄160 gal`
-- Pinch (`pinch`) = `1/16 tsp`
-- Dash (`dash`) = `1/2 pinch`
+- Cup (Metric) (`cup`) = `250×10e−6 m3`
+- Tea Spoon (Metric) (`teaspoon`, `tsp`) = `5×10e−6 m3`
+- Table Spoon (Metric) (`tablespoon`, `tbsp`) = `3 tsp`
+- Pinch (Metric) (`pinch`) = `1/16 tsp`
+- Dash (Metric) (`dash`) = `1/2 pinch`
 
 ```deci live
 20 tbsp in cups
@@ -186,78 +186,95 @@ Cooking:
 
 ## Pressure units
 
-- **atmosphere**, atm
-- Pascal, Pa
-- Bar, Ba
-- Torr, mmHg
-- PSI
+The default unit is Atmosphere (`atmosphere`, `atm`).
+
+The following are also supported:
+
+- Pascal (`pascal`, `pa`) = `1/101325 atm`
+- Bar (`bar`, `ba`) = `105 Pa`
+- Torr (`torr`, `mmHg`) = `1/760 atm`
+- Pound per square inch(\*) (`psi`) =
 
 ## Energy units
 
-- **joule**
-- calorie
+The default unit is Joule (`joule`, `j`).
+
+The following are also supported:
+
+- Calorie (`calorie`, `cal`) = `4.1868 J`
 
 ## Force units
 
-- **Newton**, N
+The default unit is Netwon (`newton`, `n`).
 
 ## Mass units
 
-- **gram**, gr, g
-- pound
-- ounce
-- ton
+The default unit is Gram (`g`, `gr`).
+
+The following are also supported:
+
+- Tonne (`tonne`) = `1000 kg`
+- Ton (`ton`) = `2240 lbav`
+- Pound (Imperial) (`lbav`) = `0.45359237 kg`
+- Ounce (Imperial) (`ozav`) = `1⁄16 lbav`
+- Ounce (US food nutrition labelling) (`oz`) = `28 g`
 
 ## Temperature units
 
-- **kelvin**, °K
-- celsius, °C
-- fahrenheit, °F
+The default unit is Kelvin (`kelvin`, `k`).
+
+The following are also supported:
+
+- Celsius (`celsius`, `°c`) = `[K] ≡ [°C] + 273.15`
+- Fahrenheit (`fahrenheit`, `°f`) = `[K] ≡ ([°F] + 459.67) × 5⁄9`
 
 ## Time units
 
-- **second**
-- millisecond
-- minute
-- hour
-- day
-- week
-- month
-- year
+The default unit is Second (`second`, `sec`, `s`).
+
+The following are also supported:
+
+- Year (`year`, `y`) = `12 months`
+- Month (`month`, `m`) = `1/12 year`
+- Week (`day`, `day`) = `7 days`
+- Day (`day`, `day`) = `24 h`
+- Hour (`hour`, `h`) = `60 m`
+- Minutes (`minute`, `m`) = `60 s`
 
 ## Frequency units
 
-- **Hertz**, Hz
+The default unit is Netwon (`hertz`, `hz`).
 
 ## Information units
 
-- **bit**
-- byte
+The default unit is Bit (`bit`).
+
+Byte (`byte`) is also available and defined as `8 bits`.
 
 ## Power units
 
-- **Watt**, W
+The default unit is Watt (`watt`, `W`).
 
 ## Substance units
 
-- **mole**
+The default unit is Mole (`mole`, `mol`).
 
 ## Electric current units
 
-- **Ampere**, amp
+The default unit is Watt (`ampere`, `A`).
 
 ## Electric charge units
 
-- **Coulomb**, C
+The default unit is Coulomb (`coulomb`, `C`).
 
 ## Electrical capacitance
 
-- **Farad**, F
+The default unit is Farad (`farad`, `F`).
 
 ## Electrical resistance
 
-- **Ohm**, Ω
+The default unit is Omh (`omh`, `Ω`).
 
 ## Voltage
 
-- **Volts**, V
+The default unit is Volt (`volt`, `v`).

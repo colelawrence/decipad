@@ -1,9 +1,13 @@
 import { UnitOfMeasure } from './known-units';
-import { identity } from '../utils';
+import { identity, invert } from '../utils';
+
+type Converter = UnitOfMeasure['toBaseQuantity'];
+const calorie: Converter = (x) => x.mul(4184).div(1000);
 
 export const units: UnitOfMeasure[] = [
   {
     name: 'joule',
+    abbreviations: ['j'],
     baseQuantity: 'energy',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
@@ -12,7 +16,7 @@ export const units: UnitOfMeasure[] = [
     name: 'calorie',
     abbreviations: ['cal'],
     baseQuantity: 'energy',
-    toBaseQuantity: (calories) => calories.mul(4184).div(1000),
-    fromBaseQuantity: (joules) => joules.div(4184).mul(1000),
+    toBaseQuantity: calorie,
+    fromBaseQuantity: invert(calorie),
   },
 ];

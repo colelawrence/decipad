@@ -1,9 +1,10 @@
-import { singular } from '../pluralize';
+import { singular, addIrregularRule } from '../pluralize';
 
 export function normalizeUnitName(unit: string): string {
   return singular(unit.toLocaleLowerCase());
 }
 
-export function sameUnit(unitA: string, unitB: string): boolean {
-  return normalizeUnitName(unitA) === normalizeUnitName(unitB);
+export function doNotPluralize(abbr: string): void {
+  const aux = abbr.toLocaleLowerCase();
+  addIrregularRule(aux, aux);
 }

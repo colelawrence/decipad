@@ -1,5 +1,5 @@
 import Fraction from 'fraction.js';
-import { normalizeUnitName } from './utils';
+import { normalizeUnitName, doNotPluralize } from './utils';
 import * as LengthUnits from './length-units';
 import * as AreaUnits from './area-units';
 import * as VolumeUnits from './volume-units';
@@ -79,6 +79,30 @@ const allUnitPackages = [
   FrequencyUnits,
   CurrencyUnits,
 ];
+
+const duplicates: Record<string, string> = {};
+
+const abbreviations: string[] = [];
+
+allUnitPackages.map((x) => {
+  x.units.map((unit) => {
+    if (duplicates[unit.name]) {
+      throw new Error(`Trying to declare twice ${unit.name}`);
+    }
+    duplicates[unit.name] = unit.name;
+    (unit.abbreviations || []).forEach((abbr) => {
+      if (duplicates[abbr]) {
+        throw new Error(`Trying to declare twice ${abbr}`);
+      }
+      abbreviations.push(abbr);
+      duplicates[abbr] = abbr;
+    });
+  });
+});
+
+abbreviations.map((abbr) => {
+  doNotPluralize(abbr);
+});
 
 const allUnits: UnitOfMeasure[] = allUnitPackages.flatMap(
   (unitPackage) => unitPackage.units

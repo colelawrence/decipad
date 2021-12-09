@@ -85,7 +85,7 @@ export const units: UnitOfMeasure[] = [
   {
     // https://en.wikipedia.org/wiki/Conversion_of_units
     // ≡ 0.99108963072 m3
-    name: 'ton',
+    name: 'ton_displacement',
     baseQuantity: 'volume',
     toBaseQuantity: ton,
     fromBaseQuantity: invert(ton),
@@ -110,7 +110,7 @@ export const units: UnitOfMeasure[] = [
   {
     // https://en.wikipedia.org/wiki/Conversion_of_units
     // ≡ 28.4130625×10e−6 m3
-    name: 'ounce',
+    name: 'ounce_fluid_imperial',
     baseQuantity: 'volume',
     abbreviations: ['floz'],
     toBaseQuantity: ounce,

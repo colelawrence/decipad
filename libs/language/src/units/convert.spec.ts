@@ -15,9 +15,12 @@ describe('convert', () => {
   });
 
   it('should pluralize', () => {
-    // are is pluralized as `is`
-    // but for us are is a unit of measure
+    expect(normalizeUnitName('ares')).toMatch('are');
     expect(normalizeUnitName('are')).toMatch('are');
+    expect(normalizeUnitName('celsius')).toMatch('celsius');
+    expect(normalizeUnitName('calories')).toMatch('calorie');
+    expect(normalizeUnitName('eur')).toMatch('eur');
+    expect(normalizeUnitName('usd')).toMatch('usd');
     expect(normalizeUnitName('Meter')).toMatch('meter');
     expect(normalizeUnitName('meters')).toMatch('meter');
     expect(normalizeUnitName('s')).toMatch('s');
@@ -89,7 +92,7 @@ describe('convert', () => {
 
   it('converts between length units', () => {
     expect(
-      convertBetweenUnits(F(0.0254), U('meters'), U('inches'))
+      convertBetweenUnits(F(254, 1e4), U('meters'), U('inches'))
     ).toMatchObject(F(1));
     expect(convertBetweenUnits(F(1), U('in'), U('yd'))).toMatchObject(F(1, 36));
     expect(convertBetweenUnits(F(1), U('in'), U('ft'))).toMatchObject(F(1, 12));
@@ -156,7 +159,9 @@ describe('convert', () => {
     expect(convertBetweenUnits(F(1), U('rope'), U('ft'))).toMatchObject(F(20));
     expect(convertBetweenUnits(F(1), U('rd'), U('ft'))).toMatchObject(F(16.5));
     expect(convertBetweenUnits(F(1), U('nl'), U('nmi'))).toMatchObject(F(3));
-    expect(convertBetweenUnits(F(0.001), U('fm'), U('am'))).toMatchObject(F(1));
+    expect(convertBetweenUnits(F(1, 1000), U('fm'), U('am'))).toMatchObject(
+      F(1)
+    );
     expect(convertBetweenUnits(F(1), U('hand'), U('in'))).toMatchObject(F(4));
     expect(convertBetweenUnits(F(1), U('league'), U('m'))).toMatchObject(
       F(4_828)
@@ -173,7 +178,7 @@ describe('convert', () => {
 
   //
   // A sample test case that also doesn't work
-  //   1 Å in nm ==> 0.1 nm
+  //   1 Å in nmeter ==> 0.1 nmeter
   //
   it('converts the big numbers', () => {
     expect(convertBetweenUnits(F(10e11), U('bohr'), U('m'))).toMatchObject(
@@ -197,7 +202,9 @@ describe('convert', () => {
     expect(convertBetweenUnits(F(1), U('rope'), U('ft'))).toMatchObject(F(20));
     expect(convertBetweenUnits(F(1), U('rd'), U('ft'))).toMatchObject(F(16.5));
     expect(convertBetweenUnits(F(1), U('nl'), U('nmi'))).toMatchObject(F(3));
-    expect(convertBetweenUnits(F(0.001), U('fm'), U('am'))).toMatchObject(F(1));
+    expect(convertBetweenUnits(F(1, 1000), U('fm'), U('am'))).toMatchObject(
+      F(1)
+    );
     expect(convertBetweenUnits(F(1), U('hand'), U('in'))).toMatchObject(F(4));
     expect(convertBetweenUnits(F(1), U('league'), U('m'))).toMatchObject(
       F(4_828)
@@ -257,11 +264,6 @@ describe('convert', () => {
     expect(convertBetweenUnits(F(8), U('floz'), U('gallon'))).toMatchObject(
       F(8, 160)
     );
-    /*
-    expect(convertBetweenUnits(F(1), U('ton'), U('ft3'))).toMatchObject(
-      F(35)
-    );
-    */
   });
 
   it.todo('need to test for ounce. floz works, but ounce throws!');
@@ -269,17 +271,17 @@ describe('convert', () => {
   it('converts areas', () => {
     expect(convertBetweenUnits(F(1), U('hectare'), U('m2'))).toEqual(F(10_000));
     expect(convertBetweenUnits(F(10_000), U('m2'), U('hectare'))).toEqual(F(1));
-    expect(convertBetweenUnits(F(0.83612736), U('m2'), U('sqyd'))).toEqual(
+    expect(convertBetweenUnits(F(83_612_736, 1e8), U('m2'), U('sqyd'))).toEqual(
       F(1)
     );
-    expect(convertBetweenUnits(F(100), U('m2'), U('a'))).toEqual(F(1));
+    expect(convertBetweenUnits(F(100), U('m2'), U('are'))).toEqual(F(1));
     expect(convertBetweenUnits(F(1), U('m2'), U('are'))).toEqual(F(1, 100));
     expect(
       convertBetweenUnits(F(2_589_988.110336), U('m2'), U('sqmi'))
     ).toEqual(F(1));
     expect(convertBetweenUnits(F(1_000_000), U('m²'), U('km²'))).toEqual(F(1));
     expect(convertBetweenUnits(F(1), U('km²'), U('m²'))).toEqual(F(1_000_000));
-    expect(convertBetweenUnits(F(0.09290304), U('m2'), U('sqft'))).toEqual(
+    expect(convertBetweenUnits(F(9_290_304, 1e8), U('m2'), U('sqft'))).toEqual(
       F(1)
     );
     expect(convertBetweenUnits(F(1), U('sqmi'), U('sqyd'))).toEqual(
@@ -329,32 +331,39 @@ describe('convert', () => {
     expect(convertBetweenUnits(F(2.9), U('bar'), U('psi'))).toMatchObject(
       F(852368, 20265)
     );
+    expect(convertBetweenUnits(F(1), U('pascal'), U('bar'))).toMatchObject(
+      F(1, 1e5)
+    );
   });
 
   it('converts between energy units', () => {
     expect(convertBetweenUnits(F(2), U('joules'), U('calories'))).toMatchObject(
       F(250, 523)
     );
+    expect(convertBetweenUnits(F(2), U('j'), U('cal'))).toMatchObject(
+      F(250, 523)
+    );
     expect(
-      convertBetweenUnits(F(0.4780114722753346), U('calorie'), U('joule'))
+      convertBetweenUnits(F(4780114722753346, 1e16), U('calorie'), U('joule'))
     ).toMatchObject(F(2));
   });
 
   it('converts between mass units', () => {
-    expect(convertBetweenUnits(F(2), U('pounds'), U('gram'))).toMatchObject(
-      F(181437, 200)
+    expect(convertBetweenUnits(F(1), U('lbav'), U('gram'))).toMatchObject(
+      F(45_359_237, 1e5)
     );
-    expect(
-      convertBetweenUnits(F(907.185), U('grams'), U('pound'))
-    ).toMatchObject(F(2));
-    expect(convertBetweenUnits(F(2), U('ounces'), U('grams'))).toMatchObject(
-      F(56699, 1000)
+    expect(convertBetweenUnits(F(1), U('ozav'), U('lbav'))).toMatchObject(
+      F(1, 16)
     );
-    expect(
-      convertBetweenUnits(F(56.699), U('grams'), U('ounces'))
-    ).toMatchObject(F(2));
     expect(convertBetweenUnits(F(2), U('tonne'), U('grams'))).toMatchObject(
       F(2e6)
+    );
+    expect(convertBetweenUnits(F(1), U('ton'), U('g'))).toMatchObject(
+      F(10_160_469_088, 1e4)
+    );
+    expect(convertBetweenUnits(F(1), U('oz'), U('g'))).toMatchObject(F(26));
+    expect(convertBetweenUnits(F(1), U('ton'), U('lbav'))).toMatchObject(
+      F(2240)
     );
     expect(convertBetweenUnits(F(2e6), U('grams'), U('tonne'))).toMatchObject(
       F(2)
@@ -380,14 +389,14 @@ describe('convert', () => {
     expect(
       convertBetweenUnits(F(120), U('seconds'), U('minutes'))
     ).toMatchObject(F(2));
-    expect(convertBetweenUnits(F(0.5), U('minute'), U('second'))).toMatchObject(
-      F(30)
-    );
+    expect(
+      convertBetweenUnits(F(1, 2), U('minute'), U('second'))
+    ).toMatchObject(F(30));
     expect(
       convertBetweenUnits(F(5_400), U('seconds'), U('hours'))
     ).toMatchObject(F(1.5));
     expect(
-      convertBetweenUnits(F(0.75), U('hours'), U('minutes'))
+      convertBetweenUnits(F(3, 4), U('hours'), U('minutes'))
     ).toMatchObject(F(45));
     expect(convertBetweenUnits(F(2), U('weeks'), U('days'))).toMatchObject(
       F(14)
@@ -553,16 +562,8 @@ describe('convert', () => {
     expect(convertBetweenUnits(F(1), U('ton'), U('grams'))).toMatchObject(
       F(10160469088, 10e6)
     );
-    expect(convertBetweenUnits(F(1), U('ton'), U('ft3'))).toMatchObject(F(35));
+    expect(
+      convertBetweenUnits(F(1), U('ton_displacement'), U('ft3')).valueOf()
+    ).toBe(35);
   });
-
-  /*
-
-  it cannot convert ton(volume) into mass
-  it can convert ton(mass) into grams
-  it converts ambiguous units with expansions
-  it converts ton/s into g/s
-  it converts ounce/m into ft3/h
-
-  */
 });
