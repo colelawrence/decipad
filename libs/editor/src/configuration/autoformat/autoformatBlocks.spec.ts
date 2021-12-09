@@ -28,7 +28,7 @@ describe('a block', () => {
     expect(editor.children).toMatchObject([{ type: ELEMENT_H2 }]);
   });
 
-  it('cannot be changed from another type', () => {
+  it('cannot be changed from a forbidden type', () => {
     editor.children = [{ type: ELEMENT_H3, children: [{ text: '' }] }];
 
     editor.insertText('#');

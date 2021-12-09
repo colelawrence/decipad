@@ -1,4 +1,5 @@
 import {
+  ELEMENT_LIC,
   ELEMENT_UL,
   getParent,
   isCollapsed,
@@ -9,7 +10,8 @@ import {
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { Editor, Element } from 'slate';
 import { ReactEditor } from 'slate-react';
-import { isInCompatibleBlocks } from '../utils/isInCompatibleBlocks';
+import { allowsTextStyling } from '../../../utils/block';
+import { getPathContainingSelection } from '../../../utils/selection';
 
 interface UseEditorTooltip {
   ref: RefObject<HTMLDivElement>;
@@ -37,7 +39,7 @@ export const useEditorTooltip = (): UseEditorTooltip => {
         ReactEditor.isFocused(editor) &&
         !isCollapsed(selection) &&
         Editor.string(editor, selection) !== '' &&
-        isInCompatibleBlocks(editor)
+        allowsTextStyling(editor, getPathContainingSelection(editor))
       ) {
         const parentEntry = getParent(editor, selection);
 
@@ -86,7 +88,7 @@ export const useEditorTooltip = (): UseEditorTooltip => {
         if (parentEntry) {
           const [node] = parentEntry;
 
-          if (Element.isElement(node) && node.type === 'lic') {
+          if (Element.isElement(node) && node.type === ELEMENT_LIC) {
             toggleList(editor, { type: ELEMENT_UL });
           }
         }

@@ -7,7 +7,7 @@ import { ELEMENT_IMPORT_DATA } from './elementTypes';
 import { insertBlockOfTypeBelow } from './block';
 import { insertCodeBlockBelow } from './codeBlock';
 import { insertTableBelow } from './table';
-import { getBlockParentPath } from './path';
+import { requireBlockParentPath } from './path';
 
 type SlashCommandHandler = Exclude<
   ComponentProps<typeof organisms.SlashCommandsMenu>['onExecute'],
@@ -37,5 +37,5 @@ export const execute = (
       insertBlockOfTypeBelow(editor, path, ELEMENT_H3);
       break;
   }
-  Transforms.delete(editor, { at: getBlockParentPath(editor, path) });
+  Transforms.delete(editor, { at: requireBlockParentPath(editor, path) });
 };

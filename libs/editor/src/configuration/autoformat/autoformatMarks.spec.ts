@@ -30,7 +30,7 @@ it('formats text in paragraphs', () => {
   expect(editor.children[0].children[0]).toHaveProperty('italic', true);
 });
 
-it('does not format text in a different block', () => {
+it('does not format text in a forbidden block', () => {
   editor.children = [{ type: ELEMENT_H2, children: [{ text: '' }] }];
   editor.insertText('*');
   editor.insertText('_');

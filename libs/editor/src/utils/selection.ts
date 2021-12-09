@@ -14,3 +14,7 @@ export const requireSelectionPath = (editor: Editor): Path => {
   }
   return editor.selection.anchor.path;
 };
+
+export const getPathContainingSelection = (editor: Editor): Path | null => {
+  return editor.selection && Editor.node(editor, editor.selection)?.[1];
+};

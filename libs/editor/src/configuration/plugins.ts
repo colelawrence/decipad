@@ -18,7 +18,7 @@ import {
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { createAutoPairsPlugin } from '../plugins/AutoPairs/createAutoPairsPlugin';
-import { createBubblePlugin } from '../plugins/Bubbles/createBubblePlugin';
+import { createCodeVariableHighlightingPlugin } from '../plugins/CodeVariableHighlighting/createCodeVariableHighlightingPlugin';
 import { createForcedLayoutPlugin } from '../plugins/ForcedLayout/createForcedLayoutPlugin';
 import { createInteractiveTablePlugin } from '../plugins/InteractiveTable/createInteractiveTablePlugin';
 import { createMarksPlugins } from '../plugins/Marks/createMarksPlugins';
@@ -47,7 +47,7 @@ export const plugins = [
   createSoftBreakPlugin(softBreakOptions),
   createResetNodePlugin(resetBlockTypeOptions),
   createAutoformatPlugin(autoformatRules),
-  createBubblePlugin(),
+  createCodeVariableHighlightingPlugin(),
   createDndPlugin(),
 
   createKbdPlugin(),

@@ -6,21 +6,21 @@ import {
   SPEditor,
   toggleList,
 } from '@udecode/plate';
-import { isSelectionInParagraph } from './isSelectionInParagraph';
+import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
 
 export const autoformatLists: AutoformatRule[] = [
   {
     mode: 'block',
     type: ELEMENT_LI,
     match: ['* ', '- '],
-    query: isSelectionInParagraph,
+    query: doesSelectionAllowTextStyling,
     format: (editor) => toggleList(editor as SPEditor, { type: ELEMENT_UL }),
   },
   {
     mode: 'block',
     type: ELEMENT_LI,
     match: ['0. ', '0) ', '1. ', '1) '],
-    query: isSelectionInParagraph,
+    query: doesSelectionAllowTextStyling,
     format: (editor) => toggleList(editor as SPEditor, { type: ELEMENT_OL }),
   },
 ];

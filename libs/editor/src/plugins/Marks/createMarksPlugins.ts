@@ -4,39 +4,38 @@ import {
   createItalicPlugin,
   createStrikethroughPlugin,
   createUnderlinePlugin,
-  MARK_BOLD,
-  MARK_CODE,
-  MARK_ITALIC,
-  MARK_STRIKETHROUGH,
-  MARK_UNDERLINE,
   PlatePlugin,
 } from '@udecode/plate';
-import { getToggleMarkOnKeyDown } from '../../utils/getToggleMarkOnKeyDown';
+import { allowsTextStyling } from '../../utils/block';
+import { getPathContainingSelection } from '../../utils/selection';
 
-const boldPlugin = (): PlatePlugin => ({
-  ...createBoldPlugin(),
-  onKeyDown: getToggleMarkOnKeyDown(MARK_BOLD),
+const withHotkeyRestrictedToAllowedBlocks = (
+  plugin: PlatePlugin
+): PlatePlugin => ({
+  ...plugin,
+  onKeyDown:
+    (editor) =>
+    (...args) => {
+      if (allowsTextStyling(editor, getPathContainingSelection(editor))) {
+        return plugin.onKeyDown?.(editor)(...args);
+      }
+    },
 });
 
-const italicPlugin = (): PlatePlugin => ({
-  ...createItalicPlugin(),
-  onKeyDown: getToggleMarkOnKeyDown(MARK_ITALIC),
-});
+const boldPlugin = () =>
+  withHotkeyRestrictedToAllowedBlocks(createBoldPlugin());
 
-const underlinePlugin = (): PlatePlugin => ({
-  ...createUnderlinePlugin(),
-  onKeyDown: getToggleMarkOnKeyDown(MARK_UNDERLINE),
-});
+const italicPlugin = () =>
+  withHotkeyRestrictedToAllowedBlocks(createItalicPlugin());
 
-const strikethroughPlugin = (): PlatePlugin => ({
-  ...createStrikethroughPlugin(),
-  onKeyDown: getToggleMarkOnKeyDown(MARK_STRIKETHROUGH),
-});
+const underlinePlugin = () =>
+  withHotkeyRestrictedToAllowedBlocks(createUnderlinePlugin());
 
-const inlineCodePlugin = (): PlatePlugin => ({
-  ...createCodePlugin(),
-  onKeyDown: getToggleMarkOnKeyDown(MARK_CODE),
-});
+const strikethroughPlugin = () =>
+  withHotkeyRestrictedToAllowedBlocks(createStrikethroughPlugin());
+
+const inlineCodePlugin = () =>
+  withHotkeyRestrictedToAllowedBlocks(createCodePlugin());
 
 export const createMarksPlugins = (): PlatePlugin[] => [
   boldPlugin(),

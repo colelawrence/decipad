@@ -1,18 +1,45 @@
-import { getNode, insertNodes, TEditor, TElement } from '@udecode/plate';
+import {
+  ELEMENT_LIC,
+  ELEMENT_PARAGRAPH,
+  getNode,
+  insertNodes,
+  TEditor,
+  TElement,
+} from '@udecode/plate';
 import { Editor, Path } from 'slate';
 import { ElementType } from './elementTypes';
-import { getBlockParentPath, getPathBelowBlock } from './path';
+import { getBlockParentPath, requirePathBelowBlock } from './path';
 
 export const closestBlockAncestorHasType = (
   editor: TEditor,
   path: Path,
   type: ElementType
 ): boolean => {
-  const block = getNode<TElement>(editor, getBlockParentPath(editor, path));
+  const blockParentPath = getBlockParentPath(editor, path);
+  if (!blockParentPath) {
+    return false;
+  }
+
+  const block = getNode<TElement>(editor, blockParentPath);
   if (!block) {
     throw new Error('Cannot find node at the block path');
   }
   return block.type === type;
+};
+
+const BLOCKS_ALLOWING_TEXT_STYLING: ReadonlyArray<ElementType> = [
+  ELEMENT_PARAGRAPH,
+  ELEMENT_LIC,
+];
+export const allowsTextStyling = (
+  editor: Editor,
+  path: Path | null
+): boolean => {
+  return path
+    ? BLOCKS_ALLOWING_TEXT_STYLING.some((type) =>
+        closestBlockAncestorHasType(editor, path, type)
+      )
+    : false;
 };
 
 export const insertBlockOfTypeBelow = (
@@ -23,6 +50,6 @@ export const insertBlockOfTypeBelow = (
   insertNodes<TElement>(
     editor,
     { type, children: [{ text: '' }] },
-    { at: getPathBelowBlock(editor, path) }
+    { at: requirePathBelowBlock(editor, path) }
   );
 };

@@ -48,7 +48,7 @@ describe('a block', () => {
     ]);
   });
 
-  it('cannot be changed to a list from another type', () => {
+  it('cannot be changed to a list from a forbidden type', () => {
     editor.children = [{ type: ELEMENT_H2, children: [{ text: '' }] }];
 
     editor.insertText('*');

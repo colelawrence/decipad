@@ -122,7 +122,6 @@
     "graphql-ws": "^4.9.0",
     "history": "^4.0.0",
     "immer": "^9.0.2",
-    "is-hotkey": "^0.2.0",
     "isomorphic-fetch": "^3.0.0",
     "lib0": "^0.2.42",
     "lodash.debounce": "^4.0.8",
