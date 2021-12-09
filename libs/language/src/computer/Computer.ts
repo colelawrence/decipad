@@ -1,5 +1,5 @@
 import { inferStatement } from '../infer';
-import { evaluate as evaluateStatement } from '../interpreter';
+import { evaluate as evaluateStatement, RuntimeError } from '../interpreter';
 
 import { AST, ExternalDataMap, AutocompleteName, serializeType } from '..';
 import {
@@ -14,6 +14,7 @@ import {
 } from './types';
 import { ParseRet, updateParse } from './parse';
 import { ComputationRealm } from './ComputationRealm';
+import { build as t } from '../type';
 import { getAllBlockLocations, getGoodBlocks, getStatement } from './utils';
 import { anyMappingToMap } from '../utils';
 
@@ -73,6 +74,19 @@ const resultsToUpdates = (results: InBlockResult[]) => {
   return ret;
 };
 
+const resultFromRuntimeError = (
+  error: RuntimeError,
+  location: ValueLocation
+): InBlockResult => {
+  const [blockId, statementIndex] = location;
+  return {
+    blockId,
+    statementIndex,
+    value: null,
+    valueType: t.impossible(error.message),
+  };
+};
+
 export const computeProgram = async (
   program: AST.Block[],
   realm: ComputationRealm
@@ -80,10 +94,17 @@ export const computeProgram = async (
   const results: InBlockResult[] = [];
 
   for (const location of getAllBlockLocations(program)) {
-    // inherently sequential
-    // eslint-disable-next-line no-await-in-loop
-    const result = await computeStatement(program, location, realm);
-    results.push(result);
+    try {
+      // eslint-disable-next-line no-await-in-loop
+      const result = await computeStatement(program, location, realm);
+      results.push(result);
+    } catch (err) {
+      if (err instanceof RuntimeError) {
+        results.push(resultFromRuntimeError(err, location));
+      } else {
+        throw err;
+      }
+    }
   }
 
   return results;
