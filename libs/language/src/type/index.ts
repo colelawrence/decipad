@@ -17,6 +17,7 @@ import {
   noUnitsOrSameUnitsAs,
   reduced,
   reducedOrSelf,
+  reducedToLowest,
   sameAs,
   sameUnitsAs,
   withColumnSize,
@@ -36,6 +37,8 @@ export { InferError, inverseExponent, t as build };
 export const scalarTypeNames = ['number', 'string', 'boolean'];
 
 export type TypeName = typeof scalarTypeNames[number];
+
+type CombineArg = Type | ((t: Type) => Type);
 
 export class Type {
   [immerable] = true;
@@ -73,14 +76,21 @@ export class Type {
   functionness = false;
 
   // Return the first type that has an error, or the last one.
-  static combine(...types: Type[]): Type {
-    for (let i = 0; i < types.length; i++) {
-      if (types[i].errorCause != null || i === types.length - 1) {
-        return types[i];
+  static combine(initialType: Type, ...types: CombineArg[]): Type {
+    let lastNonErrorType = initialType;
+    if (lastNonErrorType.errorCause != null) {
+      return lastNonErrorType;
+    }
+    for (const type of types) {
+      const resultingType =
+        typeof type === 'function' ? type(lastNonErrorType) : type;
+      if (resultingType.errorCause != null) {
+        return resultingType;
       }
+      lastNonErrorType = resultingType;
     }
 
-    throw new Error('panic: Type.combine() called with 0 arguments');
+    return lastNonErrorType;
   }
 
   toString(value?: number): string {
@@ -211,6 +221,10 @@ export class Type {
 
   reducedOrSelf(): Type {
     return reducedOrSelf(this);
+  }
+
+  reducedToLowest(): Type {
+    return reducedToLowest(this);
   }
 
   withColumnSize(columnSize: number | 'unknown' | null): Type {

@@ -415,7 +415,7 @@ describe('Tables', () => {
     });
   });
 
-  it('can call functions with auto-expanded columns as arguments', async () => {
+  it('can call functions with auto-expanded columns as arguments (1)', async () => {
     expect(
       await runCode(`
         Growth = {
@@ -431,7 +431,9 @@ describe('Tables', () => {
         MoneyInTheBank = [ 1, 0, 0 ]
       })
     `);
+  });
 
+  it('can call functions with auto-expanded columns as arguments (2)', async () => {
     expect(
       await runCode(`
         Growth = {
@@ -983,6 +985,16 @@ describe('number units work together', () => {
     });
   });
 
+  it('has common sense about a marathon', async () => {
+    expect(
+      await runCode(`round(26 miles + 385 yards in meters, 1) == 1 marathon`)
+    ).toMatchObject({
+      value: true,
+      type: t.boolean(),
+    });
+  });
+
+  it.todo('is this failing because of gallons? OR because of calcs?');
   it('exponentiation works with expression as exponent', async () => {
     expect(
       await runCode(`
@@ -1031,7 +1043,7 @@ describe('number units work together', () => {
 
   it('converts between complex units', async () => {
     expect(await runCode(`100 joules/km to calories/foot`)).toMatchObject({
-      value: F(12500, 1715963),
+      value: F(381, 52300),
       type: t.number(U([u('calories'), u('foot', { exp: -1 })])),
     });
   });
@@ -1049,7 +1061,7 @@ describe('number units work together', () => {
     expect(
       await runCode(`1 joule/meter^2 + 2 calories/inch^2 as kg/second^2`)
     ).toMatchObject({
-      value: F(12355223382040881000, 952494359199781),
+      value: F(209216129, 16129),
       type: t.number(
         U([u('g', { multiplier: 1000 }), u('second', { exp: -2 })])
       ),
@@ -1079,8 +1091,27 @@ describe('number units work together', () => {
 
   it('autoconverts expanding expandable units (4)', async () => {
     expect(await runCode(`2 bar + 1 newton/inch^2 as Pa`)).toMatchObject({
-      value: F(1691245835821442000, 8391197200505),
+      value: F(3250800000, 16129),
       type: t.number(U('Pa')),
+    });
+  });
+
+  it('volume expanding units', async () => {
+    expect(await runCode(`(1 ft * 1 ft * 1 ft) as ft3`)).toMatchObject({
+      value: F(1),
+      type: t.number(U('ft3')),
+    });
+    expect(await runCode(`(1 inch * 1 inch * 1 inch) as in3`)).toMatchObject({
+      value: F(1),
+      type: t.number(U('in3')),
+    });
+    expect(await runCode(`(1 yd * 1 yd * 1 yd) as yd3`)).toMatchObject({
+      value: F(1),
+      type: t.number(U('yd3')),
+    });
+    expect(await runCode(`(1 mi * 1 mi * 1 mi) as cumi`)).toMatchObject({
+      value: F(1),
+      type: t.number(U('cumi')),
     });
   });
 
@@ -1178,6 +1209,45 @@ describe('number units work together', () => {
     ).toMatchObject({
       value: F(1500),
       type: t.number(U([u('months', { exp: -1 }), u('usd')])),
+    });
+  });
+
+  it('multiplies units correctly (5)', async () => {
+    expect(
+      await runCode(`
+        round(30 gallons * 1.4 * 100 USD/gallon, 2)
+      `)
+    ).toMatchObject({
+      value: F(4200),
+      type: t.number(U('USD')),
+    });
+  });
+
+  it('multiplies units correctly inside a table formula', async () => {
+    expect(
+      await runCode(`
+        Fuel = {
+          Seq = [0, 1]
+          InterestRate = 1.08 ** Seq
+          Price = 4 USD/gallon * InterestRate
+        }
+      `)
+    ).toMatchObject({
+      value: [
+        [F(0), F(1)], // YearSeq
+        [F(1), F(27, 25)], // InterestRate
+        [F(4), F(432, 100)], // Price
+      ],
+      type: t.table({
+        indexName: 'Fuel',
+        length: 2,
+        columnTypes: [
+          t.number(),
+          t.number(),
+          t.number(U([u('USD'), u('gallons', { exp: -1 })])),
+        ],
+        columnNames: ['Seq', 'InterestRate', 'Price'],
+      }),
     });
   });
 });

@@ -37,10 +37,10 @@ export const callBuiltinFunctor = (
 
     return automapTypes(
       givenArguments,
-      (types) =>
-        Type.combine(...types).mapType(() =>
+      ([type, ...rest]) =>
+        Type.combine(type, ...rest).mapType(() =>
           getDefined(builtin.functor, 'need a builtin functor')(
-            types,
+            [type, ...rest],
             givenValues
           )
         ),

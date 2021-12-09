@@ -1,6 +1,4 @@
 import Fraction from 'fraction.js';
-import produce from 'immer';
-import { AST } from '..';
 import { normalizeUnitName } from './utils';
 import * as LengthUnits from './length-units';
 import * as AreaUnits from './area-units';
@@ -128,22 +126,4 @@ export function areUnitsCompatible(
   }
 
   return unitA.baseQuantity === unitB.baseQuantity;
-}
-
-export function toCanonicalUnitArgs(units: AST.Unit[]): AST.Unit[] {
-  return units.map((unit) => {
-    return produce(unit, (u) => {
-      const knownUnit = getUnitByName(u.unit);
-      if (knownUnit && knownUnit.name !== u.unit) {
-        u.unit = knownUnit.name;
-      }
-      u.multiplier = 1;
-    });
-  });
-}
-
-export function toCanonicalUnits(units: AST.Units): AST.Units {
-  return produce(units, (units) => {
-    units.args = toCanonicalUnitArgs(units.args);
-  });
 }

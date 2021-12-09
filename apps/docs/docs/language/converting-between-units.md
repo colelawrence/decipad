@@ -10,7 +10,7 @@ Deci understands some basic units. To convert between them you can use the `in` 
 
 ```deci live
 3 km in miles
-==> 1.(864512119328775637041640770665009322560596643878185208203853325046612802983219390926041019266625233064014916096954630205096333126165320074580484773151025481665630826600372902423865755127408328154133001) miles
+==> 1.8(641135767120019088523025530899546647578143) miles
 ```
 
 ```deci live
@@ -66,7 +66,14 @@ Or in operations:
 
 ```deci live
 30 psi + 1 newton/inch^2
-==> 134.4460 newtons/inch^2
+==> 134.4461 newtons/inch^2
+```
+
+Deci will even auto-convert units when you need the same units for some non-numeric operations:
+
+```deci live
+cat([1 meters, 2], [3 centimeters, 4])
+==> [ 1 meters, 2 meters, 0.03 meters, 0.04 meters ]
 ```
 
 ## Conversion Factors

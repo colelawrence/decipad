@@ -22,9 +22,15 @@ export const units: UnitOfMeasure[] = [
     fromBaseQuantity: (g) => g.div(28.3495),
   },
   {
+    name: 'tonne',
+    baseQuantity: 'mass',
+    toBaseQuantity: (x) => x.mul(1000000),
+    fromBaseQuantity: (x) => x.div(1000000),
+  },
+  {
     name: 'ton',
     baseQuantity: 'mass',
-    toBaseQuantity: (tons) => tons.mul(1000000),
-    fromBaseQuantity: (g) => g.div(1000000),
+    toBaseQuantity: (x) => x.mul(10160469088).div(10e6),
+    fromBaseQuantity: (x) => x.div(10160469088).mul(10e6),
   },
 ];

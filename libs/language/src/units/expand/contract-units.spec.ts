@@ -13,7 +13,7 @@ describe('expand', () => {
   it('expands and converts from base unit', () => {
     const [resultUnits, convert] = contractUnits(U('inches'));
     expect(resultUnits).toMatchObject(U('inches'));
-    expect(convert(F(130000, 393701))).toMatchObject(F(13));
+    expect(convert(F(1651, 5000))).toMatchObject(F(13));
   });
 
   it('contracts known unit to the same unit and value', () => {

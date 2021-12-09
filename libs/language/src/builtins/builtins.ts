@@ -62,16 +62,19 @@ const booleanBinopFunctor = ([left, right]: Type[]): Type =>
 export const builtins: { [fname: string]: BuiltinSpec } = {
   abs: {
     argCount: 1,
+    noAutoconvert: true,
     fn: (n) => Math.abs(n as number),
     functor: ([n]) => n.isScalar('number'),
   },
   round: {
     argCount: 2,
+    noAutoconvert: true,
     fn: (n, decimalPrecision) => n.round(decimalPrecision),
     functor: ([n, decimalPrecision]) =>
       Type.combine(decimalPrecision.isScalar('number'), n.isScalar('number')),
   },
   sqrt: {
+    noAutoconvert: true,
     argCount: 1,
     fn: (n: Fraction) => {
       return getInstanceof(n, Fraction).pow(0.5);
@@ -80,6 +83,7 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
   },
   ln: {
     argCount: 1,
+    noAutoconvert: true,
     fn: (n) => Math.log(n),
     functor: ([n]) => n.isScalar('number'),
   },
@@ -114,6 +118,7 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
   ]),
   'unary-': {
     argCount: 1,
+    noAutoconvert: true,
     fn: (a: Fraction) => a.neg(),
     functor: ([n]) => n.isScalar('number'),
   },
@@ -236,6 +241,7 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
   // List stuff
   len: {
     argCount: 1,
+    noAutoconvert: true,
     fnValuesNoAutomap: (a: Value[]) => {
       const v = a[0];
       if (v instanceof Column) {
@@ -426,11 +432,14 @@ export const builtins: { [fname: string]: BuiltinSpec } = {
     argCount: 2,
     functor: ([table, index]) =>
       Type.combine(
-        table
-          .isTable()
-          .mapType((t) => getDefined(t.columnTypes?.[0]?.isScalar('string'))),
+        table.isTable(),
+        (t) => getDefined(getDefined(t).columnTypes?.[0]?.isScalar('string')),
         index.isScalar('string'),
-        t.row(getDefined(table.columnTypes), getDefined(table.columnNames))
+        () =>
+          t.row(
+            getDefined(table.columnTypes, `no column types in ${table}`),
+            getDefined(table.columnNames, `no column names in ${table}`)
+          )
       ),
     fnValues: (table, needle) => {
       table = getInstanceof(table, Column);

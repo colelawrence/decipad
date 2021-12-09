@@ -30,14 +30,16 @@ export const compareDimensions = (a: Type, b: Type) => {
 export const linearizeType = (type: Type): Type[] =>
   type.cellType ? [type, ...linearizeType(type.cellType)] : [type];
 
-export const deLinearizeType = (types: Type[]): Type =>
-  Type.combine(...types).mapType(() =>
+export const deLinearizeType = (types: Type[]): Type => {
+  const [initialType, ...rest] = types;
+  return Type.combine(initialType, ...rest).mapType(() =>
     types.length === 1
-      ? types[0]
+      ? initialType
       : produce(types[0], (type) => {
-          type.cellType = deLinearizeType(types.slice(1));
+          type.cellType = deLinearizeType(rest);
         })
   );
+};
 
 export const chooseFirst = <T>(indexOnTop: number, items: T[]): T[] => [
   items[indexOnTop],

@@ -11,7 +11,7 @@ describe('expand', () => {
   it('converts to base unit on expansionless unit', () => {
     const [resultUnits, convert] = expandUnits(U('inches'));
     expect(resultUnits).toMatchObject(U('meters'));
-    expect(convert(F(13))).toMatchObject(F(130000, 393701));
+    expect(convert(F(13))).toMatchObject(F(1651, 5000));
   });
 
   it('expands known unit to the same unit and value', () => {

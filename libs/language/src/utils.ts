@@ -303,8 +303,15 @@ export function identity<T>(o: T): T {
   return o;
 }
 
-export function F(n: number, d = 1) {
-  return new Fraction(n, d);
+export function invert(
+  f: (n: Fraction) => Fraction
+): (n: Fraction) => Fraction {
+  const reversingFactor = f(new Fraction(1)).inverse();
+  return (n) => n.mul(reversingFactor);
+}
+
+export function F(n: number | string, d = 1) {
+  return typeof n === 'number' ? new Fraction(n, d) : new Fraction(n);
 }
 
 export function u(

@@ -124,6 +124,13 @@ export const reducedOrSelf = checker((me: Type) => {
   }
 });
 
+export const reducedToLowest = checker((me: Type) => {
+  while (me.cellType) {
+    me = me.cellType;
+  }
+  return me;
+});
+
 export const withColumnSize = checker(
   (me: Type, columnSize: number | 'unknown' | null) => {
     if (

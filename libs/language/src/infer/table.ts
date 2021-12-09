@@ -106,13 +106,13 @@ export const inferTable = async (ctx: Context, table: AST.Table) => {
     if (columnTypes.length === 0) {
       return t.impossible(InferError.unexpectedEmptyTable());
     } else {
-      const reduced = columnTypes.map((col) => col.reduced());
+      const [firstType, ...rest] = columnTypes.map((col) => col.reduced());
 
-      return Type.combine(...reduced).mapType(() =>
+      return Type.combine(firstType, ...rest).mapType(() =>
         t.table({
           indexName,
           length: tableLength,
-          columnTypes: reduced,
+          columnTypes: [firstType, ...rest],
           columnNames,
         })
       );

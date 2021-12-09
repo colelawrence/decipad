@@ -185,10 +185,6 @@ describe('Type.combine', () => {
     expect(Type.combine(t.number(), badType)).toEqual(badType);
     expect(Type.combine(badType, t.number())).toEqual(badType);
   });
-
-  it('panicks when called with zero arguments', () => {
-    expect(() => Type.combine()).toThrow();
-  });
 });
 
 describe('new columns and tables', () => {

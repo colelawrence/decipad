@@ -1,10 +1,12 @@
 import Fraction from 'fraction.js';
+import { getDefined } from '@decipad/utils';
 import { Units } from '../parser/ast-types';
 import { Type } from '..';
 import { Value } from '../interpreter';
 import { fromJS } from '../interpreter/Value';
 import { toExpandedBaseQuantity, fromExpandedBaseQuantity } from './convert';
 import { zip, getInstanceof } from '../utils';
+import { automapValues } from '../dimtools';
 
 function convertToNoMultipliers(n: Fraction, units: Units | null): Fraction {
   return (units?.args ?? []).reduce(
@@ -21,27 +23,39 @@ function convertFromNoMultipliers(n: Fraction, units: Units | null): Fraction {
 }
 
 function autoconvertArgument(value: Value, type: Type): Value {
-  if (type.unit) {
-    const n = getInstanceof(value.getData(), Fraction);
-    const [, convertedValue] = toExpandedBaseQuantity(n, type.unit);
-    const convertedToNoMultipliers = convertToNoMultipliers(
-      convertedValue,
-      type.unit
-    );
-    return fromJS(convertedToNoMultipliers);
+  const typeLowestDims = type.reducedToLowest();
+  if (typeLowestDims.unit) {
+    return automapValues([type], [value], ([value]) => {
+      const n = getInstanceof(value.getData(), Fraction);
+      const [, convertedValue] = toExpandedBaseQuantity(
+        n,
+        getDefined(typeLowestDims.unit)
+      );
+      const convertedToNoMultipliers = convertToNoMultipliers(
+        convertedValue,
+        typeLowestDims.unit
+      );
+      return fromJS(convertedToNoMultipliers);
+    });
   }
   return value;
 }
 
 export function autoconvertResult(value: Value, type: Type): Value {
-  if (type.unit) {
-    const n = getInstanceof(value.getData(), Fraction);
-    const [, reconvertedValue] = fromExpandedBaseQuantity(n, type.unit);
-    const convertedFromNoMultipliers = convertFromNoMultipliers(
-      reconvertedValue,
-      type.unit
-    );
-    return fromJS(convertedFromNoMultipliers);
+  const typeLowestDims = type.reducedToLowest();
+  if (typeLowestDims.unit) {
+    return automapValues([type], [value], ([value]) => {
+      const n = getInstanceof(value.getData(), Fraction);
+      const [, reconvertedValue] = fromExpandedBaseQuantity(
+        n,
+        getDefined(typeLowestDims.unit)
+      );
+      const convertedFromNoMultipliers = convertFromNoMultipliers(
+        reconvertedValue,
+        typeLowestDims.unit
+      );
+      return fromJS(convertedFromNoMultipliers);
+    });
   }
   return value;
 }
