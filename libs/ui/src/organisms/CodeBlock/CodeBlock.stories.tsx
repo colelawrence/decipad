@@ -18,9 +18,12 @@ const block = {
     {
       blockId: 'block-one',
       statementIndex: 1,
-      value: 42 + 1337,
+      value: null,
       valueType: {
-        type: 'number',
+        errorCause: {
+          message: 'This operation requires matching units',
+          url: 'https://dev.decipad.com/docs/docs/language/composing-units',
+        },
       } as Type,
     },
     {
@@ -49,7 +52,7 @@ export default {
 
 export const Normal: Story = (props) => (
   <CodeBlock {...props} block={block} getStatement={getStatement}>
-    <CodeLine>42 + 1337</CodeLine>
+    <CodeLine>1 banana + 2 apples</CodeLine>
     <CodeLine>["Lorem", "Ipsum", "Dolor", "Sit", "Amet"]</CodeLine>
   </CodeBlock>
 );

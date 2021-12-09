@@ -36,7 +36,7 @@ export const wrappedParse = ({
       type: 'identified-error',
       id,
       source,
-      error,
+      error: error as Error,
     };
   }
 };

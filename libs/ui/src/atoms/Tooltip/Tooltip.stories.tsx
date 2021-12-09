@@ -1,11 +1,10 @@
-import { css } from '@emotion/react';
 import { Meta, Story } from '@storybook/react';
+import { css } from '@emotion/react';
+import { cssVar } from '../../primitives';
 import { Tooltip } from './Tooltip';
-import { p14Regular } from '../../primitives';
 
 const args = {
-  children: 'John Doe',
-  triggerText: 'Hover me',
+  children: 'Tooltip text',
 };
 
 export default {
@@ -14,8 +13,18 @@ export default {
   args,
 } as Meta;
 
-export const Normal: Story<typeof args> = ({ children, triggerText }) => (
-  <Tooltip button={<button css={css(p14Regular)}>{triggerText}</button>}>
-    {children}
-  </Tooltip>
+export const Normal: Story<typeof args> = (props) => (
+  <Tooltip
+    {...props}
+    trigger={
+      <div
+        css={css({
+          color: cssVar('strongTextColor'),
+          textAlign: 'center',
+        })}
+      >
+        Hover me
+      </div>
+    }
+  />
 );

@@ -1,7 +1,7 @@
 import { AST } from '..';
 import { walk, getIdentifierString, getDefined } from '../utils';
 import { ParseRet } from './parse';
-import { ValueLocation } from './types';
+import { SyntaxError, ValueLocation } from './types';
 
 export const stringifyLoc = (loc: ValueLocation) => loc.join('/');
 export const parseLoc = (loc: string) => {
@@ -174,3 +174,6 @@ export const findSymbolsUsed = (stmt: AST.Statement) => {
 
 export const setIntersection = <T>(setA: Set<T>, setB: Set<T>) =>
   new Set([...setA].filter((itemA) => setB.has(itemA)));
+
+export const isSyntaxError = (error: unknown): error is SyntaxError =>
+  error instanceof Error && 'token' in error;

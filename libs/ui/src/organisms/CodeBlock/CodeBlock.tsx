@@ -5,6 +5,7 @@ import { InlineCodeResult } from '..';
 import { Result as BlockCodeResult } from '../../lib/Editor/Blocks/Result/Result.component';
 import { code, cssVar, grey200, transparency } from '../../primitives';
 import { SlateElementProps } from '../../utils';
+import { InlineCodeError } from '../../atoms';
 
 const codeBlockStyles = css(code, {
   backgroundColor: transparency(grey200, 0.08).rgba,
@@ -26,15 +27,23 @@ function getGridStyles(rows: number) {
   });
 }
 
+interface SyntaxError {
+  line: number;
+  message: string;
+  url: string;
+}
+
 interface CodeBlockProps extends SlateElementProps {
   readonly block?: IdentifiedResult;
   readonly children?: ReactNode;
+  readonly error?: SyntaxError;
   readonly getStatement?: (statementIndex: number) => AST.Statement | null;
 }
 
 export const CodeBlock = ({
   block,
   children,
+  error,
   getStatement = () => null,
   slateAttrs,
 }: CodeBlockProps): ReturnType<FC> => {
@@ -45,6 +54,11 @@ export const CodeBlock = ({
       <div spellCheck={false}>
         <pre css={[codeBlockStyles, getGridStyles(rows)]} {...slateAttrs}>
           {children}
+          {error != null && (
+            <Result align="end" startLine={1} endLine={error.line}>
+              <InlineCodeError {...error} />
+            </Result>
+          )}
           {block != null &&
             block.results.map(({ statementIndex, value, valueType }) => {
               const statement = getStatement(statementIndex);
@@ -54,11 +68,18 @@ export const CodeBlock = ({
                   startLine={statement?.start?.line}
                   endLine={statement?.end?.line}
                 >
-                  <InlineCodeResult
-                    statement={statement}
-                    value={value}
-                    type={valueType}
-                  />
+                  {valueType.errorCause != null ? (
+                    <InlineCodeError
+                      message={valueType.errorCause.message}
+                      url={valueType.errorCause.url}
+                    />
+                  ) : (
+                    <InlineCodeResult
+                      statement={statement}
+                      value={value}
+                      type={valueType}
+                    />
+                  )}
                 </Result>
               );
             })}
@@ -74,17 +95,25 @@ const resultStyles = css({
   maxWidth: '100%', // guarantees cell contents don't bleed.
 });
 
-function getResultLineStyles(startRow: number, endRow: number) {
+function getLineStyles(startRow: number, endRow: number) {
   return css({
     gridRow: `${startRow} / ${endRow}`,
   });
 }
 
+function getAlignStyles(align: 'start' | 'end') {
+  return css({
+    alignSelf: align,
+  });
+}
+
 const Result = ({
+  align = 'start',
   children,
   endLine,
   startLine,
 }: {
+  align?: 'start' | 'end';
   children?: React.ReactNode;
   endLine?: number;
   startLine?: number;
@@ -92,9 +121,8 @@ const Result = ({
   <div
     css={[
       resultStyles,
-      startLine != null &&
-        endLine != null &&
-        getResultLineStyles(startLine, endLine),
+      startLine != null && endLine != null && getLineStyles(startLine, endLine),
+      getAlignStyles(align),
     ]}
     contentEditable={false}
   >

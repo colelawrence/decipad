@@ -51,3 +51,4 @@ export const black = color(22, 31, 44);
 export const blockquote = color(51, 41, 66);
 export const codeBubbleBackground = color(223, 250, 233);
 export const codeBubbleBorder = color(179, 229, 198);
+export const codeErrorIconFill = color(253, 101, 101);

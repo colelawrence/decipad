@@ -6,6 +6,7 @@ export { CodeVariable } from './CodeVariable/CodeVariable';
 export { DateResult } from './DateResult/DateResult';
 export { Divider } from './Divider/Divider';
 export { IconButton } from './IconButton/IconButton';
+export { InlineCodeError } from './InlineCodeError/InlineCodeError';
 export { ListItem } from './ListItem/ListItem';
 export { MenuItem } from './MenuItem/MenuItem';
 export { NavigationItem } from './NavigationItem/NavigationItem';

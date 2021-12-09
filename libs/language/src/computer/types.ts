@@ -1,6 +1,12 @@
+import { Token } from 'moo';
 import { Type } from '../type';
 import { AST, InjectableExternalData } from '..';
 import { AnyMapping } from '../utils';
+
+export interface SyntaxError extends Error {
+  offset: number;
+  token: Token;
+}
 
 export interface IdentifiedBlock {
   type: 'identified-block';

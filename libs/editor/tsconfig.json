@@ -11,6 +11,7 @@
     { "path": "../docsync" },
     { "path": "../queries" },
     { "path": "../utils" },
-    { "path": "../react-utils" }
+    { "path": "../react-utils" },
+    { "path": "../routing" }
   ]
 }

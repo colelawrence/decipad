@@ -1,6 +1,8 @@
 import { useCallback } from 'react';
 import { organisms, useResults } from '@decipad/ui';
 import { PlatePluginComponent } from '@udecode/plate';
+import { IdentifiedResult, isSyntaxError } from '@decipad/language';
+import { docs } from '@decipad/routing';
 import { useComputer } from '../../contexts/Computer';
 
 export const CodeBlock: PlatePluginComponent = ({
@@ -36,9 +38,20 @@ export const CodeBlock: PlatePluginComponent = ({
     <organisms.CodeBlock
       block={block}
       getStatement={getStatement}
+      error={getSyntaxError(block)}
       slateAttrs={attributes}
     >
       {children}
     </organisms.CodeBlock>
   );
 };
+
+function getSyntaxError(block: IdentifiedResult) {
+  return block != null && block.isSyntaxError
+    ? {
+        line: isSyntaxError(block.error) ? block.error.token.line + 1 : 1,
+        message: 'Syntax Error',
+        url: `${docs({}).$}/docs/language`,
+      }
+    : undefined;
+}

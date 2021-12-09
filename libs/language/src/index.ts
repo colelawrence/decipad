@@ -13,7 +13,7 @@ export * from './run';
 export { Scalar, Date, Range, TimeQuantity, Column } from './interpreter/Value';
 
 export { prettyPrintAST } from './parser/utils';
-export type { SerializedType } from './type';
+export type { InferError, SerializedType } from './type';
 export {
   Type,
   build as buildType,

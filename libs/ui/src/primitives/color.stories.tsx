@@ -24,6 +24,7 @@ const colorNames: Record<ColorId, string> = {
   blockquote: 'Blockquote',
   codeBubbleBackground: 'Code Bubble Background',
   codeBubbleBorder: 'Code Bubble Border',
+  codeErrorIconFill: 'Code Error Icon Fill',
 };
 export default {
   title: 'Primitives / Color',

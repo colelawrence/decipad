@@ -119,7 +119,10 @@ export class InferError {
 
   constructor(spec: string | ErrSpec) {
     if (typeof spec === 'string') {
-      this.spec = { errType: 'free-form', message: spec };
+      this.spec = {
+        errType: 'free-form',
+        message: spec,
+      };
     } else {
       this.spec = spec;
     }
@@ -226,5 +229,9 @@ export class InferError {
 
   get message() {
     return specToString(this.spec);
+  }
+
+  get url() {
+    return `/docs/docs/language/${this.spec.errType}`;
   }
 }
