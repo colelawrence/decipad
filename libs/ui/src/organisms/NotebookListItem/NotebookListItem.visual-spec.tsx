@@ -1,7 +1,7 @@
 import { render, waitFor } from '@testing-library/react';
 import domToPlaywright from 'dom-to-playwright';
 import { ComponentProps } from 'react';
-import { findParentWithStyle } from '../../test-utils';
+import { findParentWithStyle } from '@decipad/dom-test-utils';
 import { NotebookListItem } from './NotebookListItem';
 
 const props: ComponentProps<typeof NotebookListItem> = {

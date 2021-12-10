@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { findParentWithStyle } from '../../test-utils';
+import { findParentWithStyle } from '@decipad/dom-test-utils';
 import { Strikethrough } from './Strikethrough';
 
 it('renders the children striked through', () => {

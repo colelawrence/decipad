@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { findParentWithStyle } from '../../test-utils';
+import { findParentWithStyle } from '@decipad/dom-test-utils';
 import { Avatar } from './Avatar';
 
 it('generates a label text', () => {

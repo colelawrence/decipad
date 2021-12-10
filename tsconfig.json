@@ -43,6 +43,7 @@
       "@decipad/backendtypes": ["libs/backendtypes/src/index.ts"],
       "@decipad/config": ["libs/config/src/index.ts"],
       "@decipad/docsync": ["libs/docsync/src/index.ts"],
+      "@decipad/dom-test-utils": ["libs/dom-test-utils/src/index.ts"],
       "@decipad/dynamodb-lock": ["libs/dynamodb-lock/src/index.ts"],
       "@decipad/editor": ["libs/editor/src/index.tsx"],
       "@decipad/emails": ["libs/emails/src/index.ts"],

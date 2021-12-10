@@ -7,9 +7,11 @@
   },
   "include": ["src", "storybook"],
   "references": [
+    { "path": "../dom-test-utils" },
     { "path": "../language" },
-    { "path": "../utils" },
     { "path": "../react-utils" },
-    { "path": "../routing" }
+    { "path": "../routing" },
+    { "path": "../testutils" },
+    { "path": "../utils" }
   ]
 }

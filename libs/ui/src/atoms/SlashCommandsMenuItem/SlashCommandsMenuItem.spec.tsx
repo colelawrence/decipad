@@ -1,12 +1,8 @@
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
-
-import {
-  applyCssVars,
-  findParentWithStyle,
-  mockConsoleWarn,
-} from '../../test-utils';
+import { mockConsoleWarn } from '@decipad/testutils';
+import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
 import { SlashCommandsMenuItem } from './SlashCommandsMenuItem';
 
 const props: ComponentProps<typeof SlashCommandsMenuItem> = {

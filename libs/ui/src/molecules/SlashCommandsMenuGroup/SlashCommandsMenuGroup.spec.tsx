@@ -1,7 +1,6 @@
 import { render } from '@testing-library/react';
+import { mockConsoleError } from '@decipad/testutils';
 import { SlashCommandsMenuItem } from '../../atoms';
-import { mockConsoleError } from '../../test-utils';
-
 import { SlashCommandsMenuGroup } from './SlashCommandsMenuGroup';
 
 mockConsoleError();

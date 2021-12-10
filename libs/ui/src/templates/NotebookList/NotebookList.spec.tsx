@@ -1,7 +1,7 @@
 import { getByTitle, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
-import { findParentWithStyle } from '../../test-utils';
+import { findParentWithStyle } from '@decipad/dom-test-utils';
 import { NotebookList } from './NotebookList';
 
 const props: ComponentProps<typeof NotebookList> = {

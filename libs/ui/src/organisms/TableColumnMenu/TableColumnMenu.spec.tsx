@@ -1,10 +1,7 @@
 import { fireEvent, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {
-  applyCssVars,
-  findParentWithStyle,
-  mockConsoleWarn,
-} from '../../test-utils';
+import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
+import { mockConsoleWarn } from '@decipad/testutils';
 import { TableCellType, TableColumnMenu } from './TableColumnMenu';
 
 it('renders trigger icon', () => {

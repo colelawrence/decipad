@@ -4,9 +4,9 @@ import { css } from '@emotion/react';
 import { render, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { docs } from '@decipad/routing';
+import { mockConsoleError } from '@decipad/testutils';
 
 import { Anchor, resolveHref } from './link';
-import { mockConsoleError } from '../test-utils';
 
 describe('resolveHref', () => {
   it.each`

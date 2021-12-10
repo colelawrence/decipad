@@ -263,6 +263,34 @@
         }
       }
     },
+    "dom-test-utils": {
+      "root": "libs/dom-test-utils",
+      "sourceRoot": "libs/dom-test-utils/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/dom-test-utils/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/dom-test-utils"
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/dom-test-utils"],
+          "options": {
+            "jestConfig": "libs/dom-test-utils/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "dynamodb-lock": {
       "root": "libs/dynamodb-lock",
       "sourceRoot": "libs/dynamodb-lock/src",

@@ -1,9 +1,9 @@
 import { render } from '@testing-library/react';
+import { mockConsoleError } from '@decipad/testutils';
 
 import { noop } from '../../utils';
 import { NavigationItem } from '../../atoms';
 import { NavigationList } from './NavigationList';
-import { mockConsoleError } from '../../test-utils';
 
 mockConsoleError();
 

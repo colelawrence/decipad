@@ -60,6 +60,9 @@
     "docsync": {
       "tags": []
     },
+    "dom-test-utils": {
+      "tags": []
+    },
     "dynamodb-lock": {
       "tags": []
     },

@@ -1,13 +1,13 @@
 import { act, render, waitFor } from '@testing-library/react';
-
-import { black } from '../../primitives';
 import {
   applyPrefersColorScheme,
   findParentWithStyle,
-  mockConsoleWarn,
-} from '../../test-utils';
+} from '@decipad/dom-test-utils';
+import { mockConsoleWarn } from '@decipad/testutils';
+
 import { noop } from '../../utils';
 import { GlobalStyles } from './GlobalStyles';
+import { black } from '../../primitives';
 
 mockConsoleWarn();
 

@@ -1,11 +1,8 @@
+import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
+import { mockConsoleWarn } from '@decipad/testutils';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {
-  applyCssVars,
-  findParentWithStyle,
-  MenuWrapper as wrapper,
-  mockConsoleWarn,
-} from '../../test-utils';
+import { MenuWrapper as wrapper } from '../../test-utils';
 import { MenuItem } from './MenuItem';
 
 it('renders the children', () => {

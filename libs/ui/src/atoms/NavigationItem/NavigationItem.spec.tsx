@@ -2,11 +2,8 @@ import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMemoryHistory } from 'history';
 import { MemoryRouter, Router } from 'react-router-dom';
-import {
-  applyCssVars,
-  findParentWithStyle,
-  mockConsoleWarn,
-} from '../../test-utils';
+import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
+import { mockConsoleWarn } from '@decipad/testutils';
 import { noop } from '../../utils';
 import { NavigationItem } from './NavigationItem';
 
