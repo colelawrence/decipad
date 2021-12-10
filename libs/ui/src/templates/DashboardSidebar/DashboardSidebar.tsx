@@ -1,9 +1,10 @@
 import { css } from '@emotion/react';
 import { ComponentProps, FC } from 'react';
 import { WorkspaceNavigation, WorkspaceSwitcher } from '../../organisms';
+import { dashboard } from '../../styles';
 
 const styles = css({
-  padding: `20px 24px 56px`,
+  padding: `${dashboard.topPadding} 24px 56px`,
 
   display: 'grid',
   gridTemplateRows: '[switcher] auto [navigation] 1fr',

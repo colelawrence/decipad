@@ -6,7 +6,7 @@ export const horizontalPadding = viewportCalc(
   smallestMobile,
   20,
   smallestDesktop,
-  48,
+  28,
   'px',
   'vw'
 );

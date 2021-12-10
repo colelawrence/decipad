@@ -4,15 +4,13 @@ import { ComponentProps, useState } from 'react';
 import { Button } from '../../atoms';
 import { NotebookListHeader, AccountAvatar } from '../../molecules';
 import { AccountMenu } from '../../organisms';
-import { smallestDesktop, smallestMobile } from '../../primitives';
-import { notebookList } from '../../styles';
-import { noop, viewportCalc } from '../../utils';
+import { dashboard, notebookList } from '../../styles';
+import { noop } from '../../utils';
 
 const styles = css({
   padding: `
-    ${viewportCalc(smallestMobile, 20, smallestDesktop, 36, 'px', 'vmax')}
+    ${dashboard.topPadding}
     ${notebookList.horizontalPadding}
-    ${viewportCalc(smallestMobile, 12, smallestDesktop, 20, 'px', 'vmax')}
   `,
 
   display: 'flex',
