@@ -4,7 +4,7 @@ import { NotebookTopbar } from './NotebookTopbar';
 
 const args: Omit<ComponentProps<typeof NotebookTopbar>, 'workspaceHref'> = {
   workspaceName: "John's Workspace",
-  notebookName: 'My first pad',
+  notebookName: 'My first notebook',
   users: [
     {
       user: { id: '1', name: 'John Doe' },

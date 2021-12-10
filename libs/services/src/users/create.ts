@@ -49,7 +49,7 @@ export async function create(user: UserInput): Promise<UserWithSecret> {
   await createPad(
     workspace.id,
     {
-      name: 'My first pad',
+      name: 'My first notebook',
     },
     newUser
   );

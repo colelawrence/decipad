@@ -8,7 +8,7 @@ describe('Default workspace', () => {
     await waitForExpect(async () => {
       const pads = await getPadList();
       expect(pads).toHaveLength(1);
-      expect(pads[0].name).toMatchInlineSnapshot(`"My first pad"`);
+      expect(pads[0].name).toMatchInlineSnapshot(`"My first notebook"`);
     });
   });
 });

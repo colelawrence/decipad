@@ -26,7 +26,7 @@ describe('Pad Topbar', () => {
       <NotebookTopbar
         workspaceHref="/workspaces/johndoespad"
         workspaceName="John's Workspace"
-        notebookName="my first pad"
+        notebookName="my first notebook"
         users={[
           {
             user: { id: '1', name: 'john doe' },
