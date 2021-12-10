@@ -15,7 +15,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { ToastProvider } from 'react-toast-notifications';
 import { useApollo } from '../lib/apolloClient';
 import { Router } from '../routes';
-import { GlobalErrorHandler } from '../components/GlobalErrorHandler';
 
 const inBrowser = typeof window !== 'undefined';
 
@@ -66,21 +65,19 @@ function Index({ pageProps = {} }) {
           rel="apple-touch-icon"
         />
       </Head>
-      <GlobalErrorHandler>
-        <ToastProvider autoDismiss placement="top-right">
-          <AuthProvider session={session ?? undefined}>
-            <ApolloProvider client={apolloClient}>
-              <GlobalStyles>
-                <ChakraProvider theme={theme}>
-                  <BrowserRouter>
-                    <Router />
-                  </BrowserRouter>
-                </ChakraProvider>
-              </GlobalStyles>
-            </ApolloProvider>
-          </AuthProvider>
-        </ToastProvider>
-      </GlobalErrorHandler>
+      <ToastProvider autoDismiss placement="top-right">
+        <AuthProvider session={session ?? undefined}>
+          <ApolloProvider client={apolloClient}>
+            <GlobalStyles>
+              <ChakraProvider theme={theme}>
+                <BrowserRouter>
+                  <Router />
+                </BrowserRouter>
+              </ChakraProvider>
+            </GlobalStyles>
+          </ApolloProvider>
+        </AuthProvider>
+      </ToastProvider>
     </>
   );
 }
