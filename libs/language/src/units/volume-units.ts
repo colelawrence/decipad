@@ -79,6 +79,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 0.001 m3
     name: 'liter',
     baseQuantity: 'volume',
+    abbreviations: ['l'],
     toBaseQuantity: liters,
     fromBaseQuantity: invert(liters),
   },
