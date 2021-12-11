@@ -1,10 +1,14 @@
-import * as Interactions from 'discord-api-types/payloads/v9/interactions';
+import {
+  APIApplicationCommand,
+  APIInteractionResponse,
+  InteractionResponseType,
+} from 'discord-api-types/v9';
 import handle from '../handle';
 import { validate } from './validate';
 
 async function handleRequest(
-  request: Interactions.APIApplicationCommand
-): Promise<Interactions.APIInteractionResponse> {
+  request: APIApplicationCommand
+): Promise<APIInteractionResponse> {
   switch (request.type) {
     case 1: {
       // Ping
@@ -16,7 +20,7 @@ async function handleRequest(
     case 3: {
       // Message
       return {
-        type: 4,
+        type: InteractionResponseType.ChannelMessageWithSource,
         data: {
           content: 'hey',
         },
@@ -31,7 +35,7 @@ async function handleRequest(
 }
 
 export const handler = handle(async (event) => {
-  const request = (await validate(event)) as Interactions.APIApplicationCommand;
+  const request = validate(event);
   const response = await handleRequest(request);
 
   return {

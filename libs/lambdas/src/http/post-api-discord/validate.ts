@@ -5,7 +5,7 @@ import {
 } from 'aws-lambda';
 import Boom from '@hapi/boom';
 import nacl from 'tweetnacl';
-import * as Interactions from 'discord-api-types/payloads/v9/interactions';
+import { APIApplicationCommand } from 'discord-api-types/payloads/v9/interactions';
 import { discord, discord as discordConfig } from '@decipad/config';
 import { getHeader } from '../get-header';
 
@@ -39,13 +39,13 @@ function validateRequestHeaders(
   }
 }
 
-function validateRequest(request: Interactions.APIApplicationCommand) {
+function validateRequest(request: APIApplicationCommand) {
   if (request.application_id !== discord().appId) {
     throw Boom.badRequest('Invalid app id');
   }
 }
 
-export async function validate(event: APIGatewayProxyEvent): Promise<any> {
+export function validate(event: APIGatewayProxyEvent): APIApplicationCommand {
   let { body } = event;
   if (!body) {
     throw Boom.badRequest('Need request body');
@@ -55,7 +55,7 @@ export async function validate(event: APIGatewayProxyEvent): Promise<any> {
   }
 
   validateRequestHeaders(body, event.headers);
-  let request: Interactions.APIApplicationCommand;
+  let request: APIApplicationCommand;
   try {
     request = JSON.parse(body);
     validateRequest(request);
