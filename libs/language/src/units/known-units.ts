@@ -17,6 +17,9 @@ import * as VoltageUnits from './voltage-units';
 import * as ElectricalCapacitanceUnits from './electrical-capacitance-units';
 import * as ElectricalResistanceUnits from './electrical-resistance-units';
 import * as ElectricalConductanceUnits from './electrical-conductance-units';
+import * as LuminousIntensityUnits from './luminous-intensity-units';
+import * as LuminousFlowUnits from './luminous-flow-units';
+import * as SolidAngleUnits from './solid-angle-units';
 import * as PowerUnits from './power-units';
 import * as FrequencyUnits from './frequency-units';
 import * as CurrencyUnits from './currency-units';
@@ -38,6 +41,9 @@ export type BaseQuantity =
   | 'electrical capacitance'
   | 'electrical resistance'
   | 'electrical conductance'
+  | 'luminous intensity'
+  | 'luminous flow'
+  | 'solid angle'
   | 'voltage'
   | 'power'
   | 'frequency'
@@ -78,6 +84,9 @@ const allUnitPackages = [
   PowerUnits,
   FrequencyUnits,
   CurrencyUnits,
+  LuminousIntensityUnits,
+  LuminousFlowUnits,
+  SolidAngleUnits,
 ];
 
 const duplicates: Record<string, string> = {};

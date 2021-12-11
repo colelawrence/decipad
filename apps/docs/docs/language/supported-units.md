@@ -82,7 +82,7 @@ Astronomy:
 - Light Year (`lightyear`, `ly`) = `9.4607304725808×10e15 m`
 - Light Day (`lightday`, `ld`) = `24 lh`
 - Light Hour (`lighthour`, `lh`) = `60 lm`
-- Light Minutes (`lightminute`, `lm`) = `60 ls`
+- Light Minutes (`lightminute`) = `60 ls`
 - Light Second (`lightsecond`, `ls`) = `299792458 m`
 - Parsec (`parsec`, `pc`) = `30856775814913700 m`
 
@@ -109,6 +109,8 @@ It takes over 26 horse races to make a marathon.
 ## Area units
 
 The default unit is Square Meter (`squaremeter`, `m2`, `m²`).
+
+Square inch can be expressed as `m2` and we support expanding (or contracting) any area unit to si units.
 
 The following are also supported:
 
@@ -142,6 +144,8 @@ Surveyor:
 ## Volume units
 
 The default unit is Square Meter (`cubicmeter`, `m3`, `m³`).
+
+Gallon can be expressed as `m3` and we support expanding (or contracting) any volume unit to si units.
 
 The following are also supported:
 
@@ -188,6 +192,8 @@ Cooking:
 
 The default unit is Atmosphere (`atmosphere`, `atm`).
 
+Pascal can be expressed as `kg⋅m−1⋅s−2` and we support expanding (or contracting) any pressure unit to si units.
+
 The following are also supported:
 
 - Pascal (`pascal`, `pa`) = `1/101325 atm`
@@ -199,13 +205,15 @@ The following are also supported:
 
 The default unit is Joule (`joule`, `j`).
 
+Joule can be expressed as `kg⋅m2⋅s−2` and we support expanding (or contracting) any energy unit to si units.
+
 The following are also supported:
 
 - Calorie (`calorie`, `cal`) = `4.1868 J`
 
 ## Force units
 
-The default unit is Netwon (`newton`, `n`).
+The default unit is Netwon (`newton`, `n`). Newton is expressed as `1 kg⋅m⋅s−2` and we support expanding (or contracting) any force unit to si units.
 
 ## Mass units
 
@@ -245,6 +253,8 @@ The following are also supported:
 
 The default unit is Netwon (`hertz`, `hz`).
 
+Hertz can be expressed as `s−1` and we support expanding (or contracting) any frequency unit to si units.
+
 ## Information units
 
 The default unit is Bit (`bit`).
@@ -255,6 +265,8 @@ Byte (`byte`) is also available and defined as `8 bits`.
 
 The default unit is Watt (`watt`, `W`).
 
+Watt can be expressed as `kg⋅m2⋅s−3` and we support expanding (or contracting) any power unit to si units.
+
 ## Substance units
 
 The default unit is Mole (`mole`, `mol`).
@@ -263,18 +275,48 @@ The default unit is Mole (`mole`, `mol`).
 
 The default unit is Watt (`ampere`, `A`).
 
+Watt can be expressed as `kg⋅m2⋅s−3⋅A−2` and we support expanding (or contracting) any eletrical current unit to si units.
+
 ## Electric charge units
 
 The default unit is Coulomb (`coulomb`, `C`).
+
+Coulomb can be expressed as `s⋅A` and we support expanding (or contracting) any eletric charge unit to si units.
 
 ## Electrical capacitance
 
 The default unit is Farad (`farad`, `F`).
 
+Farad can be expressed as `kg−1⋅m−2⋅s4⋅A2` and we support expanding (or contracting) any eletrical capacitance unit to si units.
+
 ## Electrical resistance
 
 The default unit is Omh (`omh`, `Ω`).
 
+Ohm can be expressed as `kg⋅m2⋅s−3⋅A−2` and we support expanding (or contracting) any eletrical resistance unit to si units.
+
+## Electrical conductance
+
+The default unit is Siemen (`siemen`).
+
+Siemen can be expressed as `kg−1⋅m−2⋅s3⋅A2` and we support expanding (or contracting) any eletrical conductance unit to si units.
+
 ## Voltage
 
 The default unit is Volt (`volt`, `v`).
+
+Volt can be expressed as `kg⋅m2⋅s−3⋅A−1` and we support expanding (or contracting) any voltage unit to si units.
+
+## Luminous Intensity
+
+The default unit is Candela (`candela`, `cd`).
+
+## Luminous Flow
+
+The default unit is Lumen (`lumen`, `lm`).
+
+Lumen can be expressed as `cd⋅sr` and we support expanding (or contracting) any luminous flow unit to si units.
+
+## Solid Angle
+
+The default unit is Lumen (`steraradian`, `sr`).

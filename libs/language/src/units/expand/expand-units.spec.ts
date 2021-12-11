@@ -36,6 +36,14 @@ describe('expand', () => {
     expect(convert(F(2))).toMatchObject(F(2000));
   });
 
+  it('expands 1 lm === 1 cd⋅sr', () => {
+    const [resultUnits, convert] = expandUnits(U('lumens'));
+    expect(resultUnits).toMatchObject(
+      U([u('candelas', { exp: 1 }), u('steradians', { exp: 1 })])
+    );
+    expect(convert(F(1))).toMatchObject(F(1));
+  });
+
   it('expands known negative exp unit to the same unit and value (2)', () => {
     const [resultUnits, convert] = expandUnits(U('second', { exp: -1 }));
     expect(resultUnits).toMatchObject(U('seconds', { exp: -1 }));

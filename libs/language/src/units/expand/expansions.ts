@@ -64,6 +64,13 @@ export const expansions: Partial<Expansions> = {
     ],
     convertToExpanded: identity,
   },
+  'luminous flow': {
+    expandedUnits: [
+      { baseQuantity: 'luminous intensity', exp: 1 },
+      { baseQuantity: 'solid angle', exp: 1 },
+    ],
+    convertToExpanded: identity,
+  },
   voltage: {
     expandedUnits: [
       { baseQuantity: 'mass', exp: 1 },

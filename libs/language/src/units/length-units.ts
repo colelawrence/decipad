@@ -179,7 +179,6 @@ export const units: UnitOfMeasure[] = [
     // https://en.wikipedia.org/wiki/Conversion_of_units
     // ≡ 60 light-seconds
     name: 'lightminute',
-    abbreviations: ['lm'],
     baseQuantity: 'length',
     toBaseQuantity: lightminute,
     fromBaseQuantity: invert(lightminute),

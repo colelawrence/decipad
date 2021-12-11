@@ -147,8 +147,12 @@ describe('convert', () => {
     expect(convertBetweenUnits(F(1), U('lightsecond'), U('m'))).toMatchObject(
       F(299792458)
     );
-    expect(convertBetweenUnits(F(1), U('lm'), U('ls'))).toMatchObject(F(60));
-    expect(convertBetweenUnits(F(1), U('lh'), U('lm'))).toMatchObject(F(60));
+    expect(convertBetweenUnits(F(1), U('lightminute'), U('ls'))).toMatchObject(
+      F(60)
+    );
+    expect(convertBetweenUnits(F(1), U('lh'), U('lightminute'))).toMatchObject(
+      F(60)
+    );
     expect(convertBetweenUnits(F(1), U('lh'), U('ls'))).toMatchObject(F(3600));
     expect(convertBetweenUnits(F(72.272), U('point'), U('in'))).toMatchObject(
       F(1)
