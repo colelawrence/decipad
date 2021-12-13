@@ -3,14 +3,14 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { ExternalProvider } from './../../../../../__generated__/globalTypes';
+import { ExternalProvider } from "./../../../../../__generated__/globalTypes";
 
 // ====================================================
 // GraphQL mutation operation: CreateExternalDataSource
 // ====================================================
 
 export interface CreateExternalDataSource_createExternalDataSource {
-  __typename: 'ExternalDataSource';
+  __typename: "ExternalDataSource";
   id: string;
   dataUrl: string;
   authUrl: string;

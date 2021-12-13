@@ -8,14 +8,14 @@
 //==============================================================
 
 export enum ExternalProvider {
-  googlesheets = 'googlesheets',
-  testdatasource = 'testdatasource',
+  googlesheets = "googlesheets",
+  testdatasource = "testdatasource",
 }
 
 export enum PermissionType {
-  ADMIN = 'ADMIN',
-  READ = 'READ',
-  WRITE = 'WRITE',
+  ADMIN = "ADMIN",
+  READ = "READ",
+  WRITE = "WRITE",
 }
 
 //==============================================================
