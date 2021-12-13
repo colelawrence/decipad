@@ -150,14 +150,12 @@ Gallon can be expressed as `m3` and we support expanding (or contracting) any vo
 The following are also supported:
 
 - Liter (`liter`, `l`) = `0.001 m3`
-
 - Cubic Mile (`cumi`) ≡ `4168181825.440579584 m3`
 - Cubic Inch (`in3`, `in³`, `cuin`) = `16.387064×10e−6 m3`
 - Cubic Yard (`yd3`, `yd³`,`cuyd`) = `27 ft3`
 - Cubic Foot (`ft3`, `ft³`, `cuft`) = `1,728 sqin`
 - Acre Foot (`acrefoot`, `acft`) = `1 ac x 1 ft`
 - Ton (`ton_displacement`) = `0.99108963072 m3`
-
 - Gallon (Imperial) (`gallon`, `gal`) = `4.54609 liters`
 - Barrel (Imperial) (`barrel`, `bl`) = `36 gal`
 - Bushel (Imperial) (`bushel`, `bu`) = `8 gallons`

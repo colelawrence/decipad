@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import Fraction from 'fraction.js';
 import { AST, Time, Interpreter } from '..';
 import { pairwise, getDefined } from '../utils';
@@ -7,6 +8,7 @@ import {
   getSpecificity,
   sortTimeUnits,
 } from '../date';
+import { OneResult } from './interpreter-types';
 
 export interface Value {
   getData(): Interpreter.OneResult;
@@ -38,7 +40,7 @@ export class Scalar {
 }
 
 export class FractionValue implements Value {
-  value: Fraction;
+  readonly value: Fraction;
 
   constructor(varValue: number | Fraction) {
     if (typeof varValue === 'number') {
@@ -195,7 +197,7 @@ export class Range implements Value {
 }
 
 export class Column implements Value {
-  values: Value[];
+  readonly values: Value[];
   valueNames: string[] | null = null;
 
   constructor(values: Column['values']) {
@@ -206,7 +208,7 @@ export class Column implements Value {
     return new Column(values);
   }
 
-  static fromNamedValues(values: Value[], names: string[]): Column {
+  static fromNamedValues(values: Value[], names: string[] | null): Column {
     const column = Column.fromValues(values);
     column.valueNames = names;
     return column;
@@ -252,7 +254,7 @@ export class Column implements Value {
     return getDefined(this.values[i], `index ${i} out of bounds`);
   }
 
-  getData() {
+  getData(): OneResult[] {
     return this.values.map((v) => v.getData());
   }
 }

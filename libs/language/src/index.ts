@@ -2,7 +2,7 @@
 import { Interpreter } from './interpreter';
 import { Value } from './interpreter/Value';
 import { Type, build as t, serializeType, SerializedType } from './type';
-import { builtins } from './builtins';
+import { builtinsForAutocomplete } from './builtins';
 
 export { tokenize, tokenRules } from './grammar';
 export { parse, AST, Parser } from './parser';
@@ -45,7 +45,7 @@ let cachedBuiltins: AutocompleteName[] | null = null;
 /* Always returns the same array. It's a function, so as to avoid an import cycle */
 export const getBuiltinsForAutocomplete = (): AutocompleteName[] => {
   if (!cachedBuiltins) {
-    cachedBuiltins = Object.keys(builtins).map((name) => ({
+    cachedBuiltins = builtinsForAutocomplete.map((name) => ({
       kind: 'function',
       type: serializeType(t.functionPlaceholder()),
       name,

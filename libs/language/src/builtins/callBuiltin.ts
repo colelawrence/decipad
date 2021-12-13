@@ -1,4 +1,4 @@
-import { builtins } from './builtins';
+import { getOperatorByName } from './operators';
 import { automapValues, automapValuesForReducer } from '../dimtools';
 
 import { Value, AnyValue, Column, fromJS } from '../interpreter/Value';
@@ -60,32 +60,27 @@ export function callBuiltin(
   argTypes: Type[],
   returnType: Type
 ): Value {
-  const builtin = getDefined(
-    builtins[funcName],
+  const op = getDefined(
+    getOperatorByName(funcName),
     `panic: builtin not found: ${funcName}`
   );
 
-  if (builtin.aliasFor) {
-    return callBuiltin(
-      builtin.aliasFor,
-      argsBeforeConvert,
-      argTypes,
-      returnType
-    );
+  if (op.aliasFor) {
+    return callBuiltin(op.aliasFor, argsBeforeConvert, argTypes, returnType);
   }
 
-  const args = builtin.noAutoconvert
+  const args = op.noAutoconvert
     ? argsBeforeConvert
     : autoconvertArguments(argsBeforeConvert, argTypes);
 
   const resultBeforeConvertingBack = callBuiltinAfterAutoconvert(
     funcName,
-    builtin,
+    op,
     args,
     argTypes
   );
 
-  const result = builtin.noAutoconvert
+  const result = op.noAutoconvert
     ? resultBeforeConvertingBack
     : autoconvertResult(resultBeforeConvertingBack, returnType);
 

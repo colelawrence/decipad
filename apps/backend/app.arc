@@ -7,9 +7,10 @@ get /graphql
 post /graphql
 get /.storybook
 get /docs
-get /docs/:doc
+get /docs/*
 get /docs/:folder/:doc
 get /docs/:folder1/:folder2/:doc
+get /docs/:folder1/:folder2/:folder3/:doc
 get /api/auth/signin
 post /api/auth/signin/:provider
 get /api/auth/callback/:provider

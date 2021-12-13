@@ -42,7 +42,60 @@ round(5.76543, 2)
 ==> 5.77
 ```
 
-## total
+You can also leave out the number of decimals, and it will round to the units:
+
+```deci live
+round(5.76543)
+==> 6
+```
+
+## roundup / ceil
+
+Rounds the number to the nearest largest integer or number with the given decimal places:
+
+```deci live
+roundup(2.3)
+==> 3
+```
+
+```deci live
+roundup(5.2345, 2)
+==> 5.24
+```
+
+## rounddown / floor
+
+Rounds the number to the nearest smallest integer or number with the given decimal places:
+
+```deci live
+rounddown(2.9)
+==> 2
+```
+
+```deci live
+rounddown(5.789, 2)
+==> 5.78
+```
+
+## max
+
+This function gives you the maximum value of a list or table column:
+
+```deci live
+max([1, 3, 2])
+==> 3
+```
+
+## min
+
+This function gives you the minimum value of a list or table column:
+
+```deci live
+min([3, 1, 2])
+==> 1
+```
+
+## sum / total
 
 This function gives you the sum of all numbers in a list or a table column:
 
@@ -54,6 +107,29 @@ my_table = {
 
 total(my_table.column_B)
 ==> 15
+```
+
+## average / mean / avg
+
+This function gives you the mean of a list of numbers:
+
+```deci live
+average([1, 2, 3, 4])
+==> 2.5
+```
+
+## averageif / meanif / avgif
+
+This function gives you the mean of a list of numbers that respect a certain condition:
+
+```deci live
+my_table = {
+  column_A = [1, 2, 3]
+  column_B = [4, 5, 6]
+}
+
+averageif(my_table.column_A, my_table.column_B < 6)
+==> 1.5
 ```
 
 ## grow

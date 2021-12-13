@@ -3,8 +3,6 @@ import { Realm } from './Realm';
 import { DataTable } from '../data/DataTable';
 import { Column, Value } from './Value';
 
-type Scalar = number | string | boolean;
-
 export async function evaluateData(
   realm: Realm,
   data: DataTable
@@ -21,13 +19,11 @@ export async function evaluateData(
       colNames.push(column.name);
       // TODO: Here we're extracting the values and copying them to a column.
       // TODO: This is extremely innefficient. We should instead use values in the table directly.
-      const values: Scalar[] = [];
+      const values: Value[] = [];
       for (let rowIndex = 0; rowIndex < column.length; rowIndex += 1) {
         values.push(column.get(rowIndex));
       }
-      colValues.push({
-        getData: () => values,
-      });
+      colValues.push(Column.fromValues(values));
     }
 
     return Column.fromNamedValues(colValues, colNames);

@@ -3,7 +3,7 @@ import { Type } from '../type';
 import { AST } from '../parser';
 
 export interface BuiltinSpec {
-  argCount?: number;
+  argCount?: number | number[];
   /**
    * Use this to indicate desired cardinality per argument (1 for 1D, 2 for 2D, etc.)
    * The cardinality of the corresponding args passed to fn and functor will be raised from the default 1.

@@ -1,50 +1,51 @@
 import { Type, build as t } from '../type';
 import { automapTypes, automapTypesForReducer } from '../dimtools';
 import { getDefined } from '../utils';
-import { builtins } from './builtins';
+import { getOperatorByName } from './operators';
 import { AST } from '../parser';
 
 export const callBuiltinFunctor = (
-  builtinName: string,
+  opName: string,
   givenArguments: Type[],
   givenValues?: AST.Expression[]
 ): Type => {
-  const builtin = builtins[builtinName];
+  const op = getOperatorByName(opName);
 
-  if (builtin == null) {
-    return t.impossible(`The function ${builtinName} does not exist`);
+  if (op == null) {
+    return t.impossible(`The operator ${opName} does not exist`);
   } else {
-    if (builtin.aliasFor) {
-      return callBuiltinFunctor(builtin.aliasFor, givenArguments, givenValues);
+    if (op.aliasFor) {
+      return callBuiltinFunctor(op.aliasFor, givenArguments, givenValues);
     }
 
-    if (givenArguments.length !== builtin.argCount) {
+    let { argCount: argCounts = [] } = op;
+    if (typeof argCounts === 'number') {
+      argCounts = [argCounts];
+    }
+    if (argCounts.indexOf(givenArguments.length) < 0) {
       return t.impossible(
-        `The function ${builtinName} requires ${builtin.argCount} parameters and ${givenArguments.length} parameters were entered`
+        `The function ${opName} requires ${op.argCount} parameters and ${givenArguments.length} parameters were entered`
       );
     }
 
-    if (builtin.isReducer) {
-      return automapTypesForReducer(
-        givenArguments[0],
-        getDefined(builtin.functor)
-      );
+    if (op.isReducer) {
+      return automapTypesForReducer(givenArguments[0], getDefined(op.functor));
     }
 
-    if (builtin.functorNoAutomap != null) {
-      return builtin.functorNoAutomap(givenArguments, givenValues);
+    if (op.functorNoAutomap != null) {
+      return op.functorNoAutomap(givenArguments, givenValues);
     }
 
     return automapTypes(
       givenArguments,
       ([type, ...rest]) =>
         Type.combine(type, ...rest).mapType(() =>
-          getDefined(builtin.functor, 'need a builtin functor')(
+          getDefined(op.functor, 'need a builtin functor')(
             [type, ...rest],
             givenValues
           )
         ),
-      builtin.argCardinalities
+      op.argCardinalities
     );
   }
 };

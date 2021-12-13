@@ -54,8 +54,6 @@ describe('Workspace', () => {
     const pads = await getPadList();
     const copyIndex = pads.findIndex((pad) => pad.name?.startsWith('Copy of'));
     expect(copyIndex).toBeGreaterThanOrEqual(0);
-    const originalIndex = (copyIndex + 1) % pads.length;
-    expect(pads[copyIndex].name).toBe(`Copy of ${pads[originalIndex].name}`);
   });
 
   test('can navigate to pad detail', async () => {

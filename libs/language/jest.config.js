@@ -9,14 +9,22 @@ module.exports = {
 
   setupFilesAfterEnv: [...setupFilesAfterEnv, './jest.setup.js'],
 
-  collectCoverageFrom: ['src/**/*.ts'],
-  coveragePathIgnorePatterns: ['/node_modules/', 'src/testUtils'],
+  collectCoverageFrom: [
+    'src/**/*.ts',
+    '!src/data/*.ts',
+    '!src/builtins/operators/*.ts',
+  ],
+  coveragePathIgnorePatterns: [
+    '/node_modules/',
+    'src/testUtils',
+    'src/data/*.ts',
+  ],
   coverageThreshold: {
     global: {
-      statements: 89,
-      branches: 83,
-      functions: 90,
-      lines: 88,
+      statements: 92,
+      branches: 85,
+      functions: 95,
+      lines: 92,
     },
   },
 };
