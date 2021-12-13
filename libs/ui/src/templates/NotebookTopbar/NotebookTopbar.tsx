@@ -3,8 +3,8 @@ import { css } from '@emotion/react';
 import { ComponentProps, FC } from 'react';
 import { Button, IconButton } from '../../atoms';
 import { LeftArrow } from '../../icons';
-import { NotebookPath } from '../../molecules';
-import { NotebookSharingPopUp, NotebookUsers } from '../../organisms';
+import { NotebookAvatars, NotebookPath } from '../../molecules';
+import { NotebookSharingPopUp } from '../../organisms';
 import { cssVar, p14Medium } from '../../primitives';
 import { Anchor, noop } from '../../utils';
 
@@ -31,14 +31,14 @@ const topbarRightSideStyles = css({
 });
 
 const helpButtonStyles = css(p14Medium, {
-  marginRight: '32px',
+  marginRight: '16px',
 });
 
 export type NotebookTopbarProps = Pick<
   ComponentProps<typeof NotebookPath>,
   'workspaceName' | 'notebookName'
 > &
-  Pick<ComponentProps<typeof NotebookUsers>, 'users'> & {
+  Pick<ComponentProps<typeof NotebookAvatars>, 'usersWithAccess'> & {
     workspaceHref: string;
     permission?: string | null;
     link: string;
@@ -48,9 +48,9 @@ export type NotebookTopbarProps = Pick<
 export const NotebookTopbar = ({
   workspaceName,
   notebookName,
-  users,
-  permission,
   onToggleShare = noop,
+  usersWithAccess,
+  permission,
   link,
   workspaceHref,
 }: NotebookTopbarProps): ReturnType<FC> => {
@@ -74,14 +74,10 @@ export const NotebookTopbar = ({
 
       {/* Right side */}
       <div css={topbarRightSideStyles}>
-        {!isNotUser && (
-          <>
-            <Anchor href={docs({}).$} css={helpButtonStyles}>
-              Need help?
-            </Anchor>
-            <NotebookUsers users={users} />
-          </>
-        )}
+        <Anchor href={docs({}).$} css={helpButtonStyles}>
+          Need help?
+        </Anchor>
+        <NotebookAvatars usersWithAccess={usersWithAccess} />
         {isAdmin && (
           <NotebookSharingPopUp onToggleShare={onToggleShare} link={link} />
         )}

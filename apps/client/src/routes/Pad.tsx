@@ -111,7 +111,7 @@ export const Pad = ({ workspaceId, padId }: PadProps): ReturnType<FC> => {
           workspaceName={data.getPadById?.workspace.name || ''}
           notebookName={data.getPadById?.name || '<unnamed notebook>'}
           workspaceHref={`/workspaces/${workspaceId}`}
-          users={data.getPadById?.access.users || []}
+          usersWithAccess={data.getPadById?.access.users || []}
           permission={data.getPadById?.myPermissionType}
           link={
             shareSecret

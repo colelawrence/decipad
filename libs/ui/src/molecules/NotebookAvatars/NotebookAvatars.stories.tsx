@@ -1,10 +1,10 @@
 import { Meta, Story } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { sidePadding } from '../../storybook-utils';
-import { NotebookUsers } from './NotebookUsers';
+import { NotebookAvatars } from './NotebookAvatars';
 
-const args: ComponentProps<typeof NotebookUsers> = {
-  users: [
+const args: ComponentProps<typeof NotebookAvatars> = {
+  usersWithAccess: [
     {
       user: {
         id: '0',
@@ -23,12 +23,12 @@ const args: ComponentProps<typeof NotebookUsers> = {
 };
 
 export default {
-  title: 'Organisms / Notebook / Users',
-  component: NotebookUsers,
+  title: 'Molecules / Notebook / Users',
+  component: NotebookAvatars,
   args,
   decorators: [sidePadding(6)],
 } as Meta;
 
 export const Normal: Story<typeof args> = (props) => (
-  <NotebookUsers {...props} />
+  <NotebookAvatars {...props} />
 );

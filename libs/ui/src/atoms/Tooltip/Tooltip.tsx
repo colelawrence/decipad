@@ -1,6 +1,6 @@
-import { FC } from 'react';
 import { css } from '@emotion/react';
-import { Root, Trigger, Content, Arrow } from '@radix-ui/react-hover-card';
+import { Arrow, Content, Root, Trigger } from '@radix-ui/react-hover-card';
+import { FC } from 'react';
 import {
   black,
   cssVar,
@@ -44,7 +44,7 @@ export const Tooltip = ({
   trigger,
 }: TooltipProps): ReturnType<FC> => {
   return (
-    <Root openDelay={100} closeDelay={300}>
+    <Root openDelay={100} closeDelay={100}>
       <Trigger asChild>{trigger}</Trigger>
       <Content css={contentWrapperStyles}>
         <Arrow css={arrowStyles} width={18} height={9} offset={6} />

@@ -1,14 +1,14 @@
 import { render } from '@testing-library/react';
 import { NotebookTopbar } from './NotebookTopbar';
 
-describe('Pad Topbar', () => {
+describe('Notebook Topbar', () => {
   it("doesn't render the sharing button when not admin", () => {
     const { queryByText } = render(
       <NotebookTopbar
         workspaceHref="/workspaces/johndoespad"
         workspaceName="John's Workspace"
         notebookName="my first pad"
-        users={[
+        usersWithAccess={[
           {
             user: { id: '1', name: 'john doe' },
             permission: 'ADMIN',
@@ -27,7 +27,7 @@ describe('Pad Topbar', () => {
         workspaceHref="/workspaces/johndoespad"
         workspaceName="John's Workspace"
         notebookName="my first notebook"
-        users={[
+        usersWithAccess={[
           {
             user: { id: '1', name: 'john doe' },
             permission: 'ADMIN',

@@ -1,14 +1,13 @@
 export { AccountMenu } from './AccountMenu/AccountMenu';
+export { CodeBlock } from './CodeBlock/CodeBlock';
+export { CodeResult } from './CodeResult/CodeResult';
 export { EditableTableHeader } from './EditableTableHeader/EditableTableHeader';
 export { EditorTable } from './EditorTable/EditorTable';
 export { EmptyWorkspaceCta } from './EmptyWorkspaceCta/EmptyWorkspaceCta';
-export { CodeBlock } from './CodeBlock/CodeBlock';
-export { CodeResult } from './CodeResult/CodeResult';
 export { InlineCodeResult } from './InlineCodeResult/InlineCodeResult';
 export { InlineColumnResult } from './InlineColumnResult/InlineColumnResult';
 export { NotebookListItem } from './NotebookListItem/NotebookListItem';
 export { NotebookSharingPopUp } from './NotebookSharingPopUp/NotebookSharingPopUp';
-export { NotebookUsers } from './NotebookUsers/NotebookUsers';
 export { RangeResult } from './RangeResult/RangeResult';
 export { SlashCommandsMenu } from './SlashCommandsMenu/SlashCommandsMenu';
 export { TableColumnMenu } from './TableColumnMenu/TableColumnMenu';

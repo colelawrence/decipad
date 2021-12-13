@@ -17,7 +17,6 @@ export { Italic } from './Italic/Italic';
 export { ListItem } from './ListItem/ListItem';
 export { MenuItem } from './MenuItem/MenuItem';
 export { NavigationItem } from './NavigationItem/NavigationItem';
-export { NotebookTopbarTooltip } from './NotebookTopbarTooltip/NotebookTopbarTooltip';
 export { NumberResult } from './NumberResult/NumberResult';
 export { Paragraph } from './Paragraph/Paragraph';
 export { Placeholder } from './Placeholder/Placeholder';
