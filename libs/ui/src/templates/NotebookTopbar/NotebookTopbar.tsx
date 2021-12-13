@@ -1,24 +1,27 @@
 import { docs } from '@decipad/routing';
 import { css } from '@emotion/react';
 import { ComponentProps, FC } from 'react';
-import { IconButton } from '../../atoms';
+import { Button, IconButton } from '../../atoms';
 import { LeftArrow } from '../../icons';
 import { NotebookPath } from '../../molecules';
 import { NotebookSharingPopUp, NotebookUsers } from '../../organisms';
-import { p14Medium } from '../../primitives';
+import { cssVar, p14Medium } from '../../primitives';
 import { Anchor, noop } from '../../utils';
 
 const topbarWrapperStyles = css({
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
+  borderBottom: '1px solid',
+  borderColor: cssVar('highlightColor'),
+  padding: '16px 0',
 });
 
 const topbarLeftSideStyles = css({
   height: '32px',
   display: 'grid',
-  gridTemplateColumns: '32px auto',
-  gap: '1rem',
+  gridTemplateColumns: 'repeat(2, minmax(32px, auto))',
+  gap: '6px',
 });
 
 const topbarRightSideStyles = css({
@@ -37,7 +40,7 @@ export type NotebookTopbarProps = Pick<
 > &
   Pick<ComponentProps<typeof NotebookUsers>, 'users'> & {
     workspaceHref: string;
-    isAdmin: boolean;
+    permission?: string | null;
     link: string;
     onToggleShare?: () => void;
   };
@@ -46,11 +49,13 @@ export const NotebookTopbar = ({
   workspaceName,
   notebookName,
   users,
-  isAdmin,
+  permission,
   onToggleShare = noop,
   link,
   workspaceHref,
 }: NotebookTopbarProps): ReturnType<FC> => {
+  const isAdmin = permission === 'ADMIN';
+  const isNotUser = permission === 'READ';
   return (
     <div css={topbarWrapperStyles}>
       {/* Left side */}
@@ -69,13 +74,18 @@ export const NotebookTopbar = ({
 
       {/* Right side */}
       <div css={topbarRightSideStyles}>
-        <Anchor href={docs({}).$} css={helpButtonStyles}>
-          Need help?
-        </Anchor>
-        <NotebookUsers users={users} />
+        {!isNotUser && (
+          <>
+            <Anchor href={docs({}).$} css={helpButtonStyles}>
+              Need help?
+            </Anchor>
+            <NotebookUsers users={users} />
+          </>
+        )}
         {isAdmin && (
           <NotebookSharingPopUp onToggleShare={onToggleShare} link={link} />
         )}
+        {isNotUser && <Button href="/">Try Decipad</Button>}
       </div>
     </div>
   );

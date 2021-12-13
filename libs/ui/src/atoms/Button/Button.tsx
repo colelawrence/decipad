@@ -8,7 +8,7 @@ import {
   transparency,
   white,
 } from '../../primitives';
-import { noop, TextChildren } from '../../utils';
+import { Anchor, noop, TextChildren } from '../../utils';
 
 const styles = css(p13SemiBold, {
   flexGrow: 1,
@@ -43,14 +43,20 @@ const extraSlimStyles = css({
 type ButtonProps = {
   readonly primary?: boolean;
   readonly extraSlim?: boolean;
-
-  readonly submit?: boolean;
-
-  readonly disabled?: boolean; // TODO styles
-
   readonly children: TextChildren;
-  readonly onClick?: () => void;
-};
+  readonly disabled?: boolean;
+} & (
+  | {
+      readonly href: string;
+      readonly onClick?: undefined;
+      readonly submit?: undefined;
+    }
+  | {
+      readonly href?: undefined;
+      readonly onClick?: () => void;
+      readonly submit?: boolean;
+    }
+);
 
 export const Button = ({
   primary = false,
@@ -60,8 +66,20 @@ export const Button = ({
 
   children,
   onClick = noop,
+  href,
 }: ButtonProps): ReturnType<React.FC> => {
-  return (
+  return href ? (
+    <Anchor
+      href={disabled ? '' : href}
+      css={css([
+        styles,
+        primary && primaryStyles,
+        extraSlim && extraSlimStyles,
+      ])}
+    >
+      {children}
+    </Anchor>
+  ) : (
     <button
       disabled={disabled}
       type={submit ? 'submit' : 'button'}

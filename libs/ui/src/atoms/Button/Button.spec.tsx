@@ -67,3 +67,19 @@ describe('the type', () => {
     expect(getByRole('button')).not.toHaveAttribute('type', 'submit');
   });
 });
+
+describe('with an href', () => {
+  it('renders as a link', () => {
+    const { getByRole } = render(<Button href="/page">icon</Button>);
+    expect(getByRole('link')).toHaveAttribute('href', '/page');
+  });
+
+  it('renders a noop href when disabled', () => {
+    const { getByRole } = render(
+      <Button href="/page" disabled>
+        icon
+      </Button>
+    );
+    expect(getByRole('link')).toHaveAttribute('href', '');
+  });
+});

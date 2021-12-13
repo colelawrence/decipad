@@ -11,7 +11,7 @@ const args: Omit<ComponentProps<typeof NotebookTopbar>, 'workspaceHref'> = {
       permission: 'ADMIN',
     },
   ],
-  isAdmin: true,
+  permission: 'ADMIN',
   link: 'peanut-butter-jelly-',
 };
 export default {

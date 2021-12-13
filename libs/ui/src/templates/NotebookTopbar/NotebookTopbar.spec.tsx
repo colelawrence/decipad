@@ -14,7 +14,7 @@ describe('Pad Topbar', () => {
             permission: 'ADMIN',
           },
         ]}
-        isAdmin={false}
+        permission="READ"
         link=""
       />
     );
@@ -33,7 +33,7 @@ describe('Pad Topbar', () => {
             permission: 'ADMIN',
           },
         ]}
-        isAdmin
+        permission="ADMIN"
         link=""
       />
     );

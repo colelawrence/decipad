@@ -15,7 +15,7 @@ const Wrapper = styled('div')({
     /100%
   `,
 
-  padding: '16px',
+  padding: '0 16px',
 });
 
 const EditorWrapper = styled('main')({
@@ -112,7 +112,7 @@ export const Pad = ({ workspaceId, padId }: PadProps): ReturnType<FC> => {
           notebookName={data.getPadById?.name || '<unnamed notebook>'}
           workspaceHref={`/workspaces/${workspaceId}`}
           users={data.getPadById?.access.users || []}
-          isAdmin={data.getPadById?.myPermissionType === 'ADMIN'}
+          permission={data.getPadById?.myPermissionType}
           link={
             shareSecret
               ? getSecretPadLink(workspaceId, padId, shareSecret)
