@@ -8,7 +8,7 @@
 const returnMonth = (month) => () => ({ month })
 
 const joinDateParts = (dateParts) => {
-  let parts = dateParts.args
+  let parts = dateParts.args;
 
   if (dateParts.nextDateInner) {
     parts = parts.concat(joinDateParts(dateParts.nextDateInner))
@@ -23,16 +23,19 @@ const joinDateParts = (dateParts) => {
 }
 
 const makeDateFragmentReader = (key, len, min, max) => ([{text}], _l, reject) => {
-  const number = parseInt(text)
-  if (
-    text.length !== len ||
-    Number.isNaN(number) ||
-    number < min ||
-    number > max
-  ) {
-    return reject
-  } else {
-    return { [key]: number }
+  try {
+    const number = BigInt(text)
+    if (
+      text.length !== len ||
+      number < min ||
+      number > max
+    ) {
+      return reject
+    } else {
+      return { [key]: number }
+    }
+  } catch (err) {
+    return reject;
   }
 }
 %}
@@ -132,18 +135,18 @@ dateMinute -> %digits                                   {% makeDateFragmentReade
 dateSecond -> %digits                                   {% makeDateFragmentReader('second', 2, 0, 59) %}
 dateMillisecond -> %digits                              {% makeDateFragmentReader('millisecond', 3, 0, 999) %}
 
-literalMonth -> ("Jan" | "January")                     {% returnMonth(1) %}
-literalMonth -> ("Feb" | "February")                    {% returnMonth(2) %}
-literalMonth -> ("Mar" | "March")                       {% returnMonth(3) %}
-literalMonth -> ("Apr" | "April")                       {% returnMonth(4) %}
-literalMonth -> "May"                                   {% returnMonth(5) %}
-literalMonth -> ("Jun" | "June")                        {% returnMonth(6) %}
-literalMonth -> ("Jul" | "July")                        {% returnMonth(7) %}
-literalMonth -> ("Aug" | "August")                      {% returnMonth(8) %}
-literalMonth -> ("Sep" | "September")                   {% returnMonth(9) %}
-literalMonth -> ("Oct" | "October")                     {% returnMonth(10) %}
-literalMonth -> ("Nov" | "November")                    {% returnMonth(11) %}
-literalMonth -> ("Dec" | "December")                    {% returnMonth(12) %}
+literalMonth -> ("Jan" | "January")                     {% returnMonth(1n) %}
+literalMonth -> ("Feb" | "February")                    {% returnMonth(2n) %}
+literalMonth -> ("Mar" | "March")                       {% returnMonth(3n) %}
+literalMonth -> ("Apr" | "April")                       {% returnMonth(4n) %}
+literalMonth -> "May"                                   {% returnMonth(5n) %}
+literalMonth -> ("Jun" | "June")                        {% returnMonth(6n) %}
+literalMonth -> ("Jul" | "July")                        {% returnMonth(7n) %}
+literalMonth -> ("Aug" | "August")                      {% returnMonth(8n) %}
+literalMonth -> ("Sep" | "September")                   {% returnMonth(9n) %}
+literalMonth -> ("Oct" | "October")                     {% returnMonth(10n) %}
+literalMonth -> ("Nov" | "November")                    {% returnMonth(11n) %}
+literalMonth -> ("Dec" | "December")                    {% returnMonth(12n) %}
 
 dateTimeZone -> "Z"                                     {%
                                                         (d) => ({
@@ -156,8 +159,8 @@ dateTimeZone -> "Z"                                     {%
 
 dateTimeZone -> ("+" | "-") %digits (":" %digits):?     {%
                                                         ([sign, h, m]) => {
-                                                          let hours = parseInt(h.value)
-                                                          let minutes = m ? parseInt(m[1].value) : 0
+                                                          let hours = Number(h.value)
+                                                          let minutes = m ? Number(m[1].value) : 0
 
                                                           if (sign[0].value === "-") {
                                                             hours = -hours

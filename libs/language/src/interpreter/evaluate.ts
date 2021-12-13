@@ -8,7 +8,15 @@ import { resolve as resolveData } from '../data';
 import { expandDirectiveToValue } from '../directives';
 
 import { Realm } from './Realm';
-import { Scalar, Range, Date, Column, Value, TimeQuantity } from './Value';
+import {
+  Scalar,
+  Range,
+  Date,
+  Column,
+  Value,
+  TimeQuantity,
+  UnknownValue,
+} from './Value';
 import { evaluateTable } from './table';
 import { evaluateData } from './data';
 
@@ -24,7 +32,6 @@ export async function evaluate(
     case 'literal': {
       switch (node.args[0]) {
         case 'number':
-          return Scalar.fromValue(node.args[3]);
         case 'string':
         case 'boolean': {
           return Scalar.fromValue(node.args[1]);
@@ -144,7 +151,7 @@ export async function evaluate(
 
       // Typecheck ensures this isn't used as a result
       // but we want to always return something
-      return Scalar.fromValue(NaN);
+      return UnknownValue;
     }
     case 'imported-data': {
       const [url, contentType] = node.args;

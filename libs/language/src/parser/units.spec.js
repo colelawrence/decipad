@@ -1,4 +1,4 @@
-import { units } from '../utils';
+import { units, F } from '../utils';
 import { runTests } from './run-tests';
 
 runTests({
@@ -9,13 +9,13 @@ runTests({
         type: 'literal',
         args: [
           'number',
-          10,
+          F(10),
           {
             type: 'units',
             args: [
               {
                 unit: 'apples',
-                exp: 1,
+                exp: 1n,
                 multiplier: 1,
                 known: false,
                 start: 3,
@@ -25,7 +25,6 @@ runTests({
             start: 3,
             end: 8,
           },
-          { d: 1, n: 10, s: 1 },
         ],
         start: {
           char: 0,
@@ -48,13 +47,13 @@ runTests({
         type: 'literal',
         args: [
           'number',
-          10,
+          F(10),
           {
             type: 'units',
             args: [
               {
                 unit: 'apples',
-                exp: 1,
+                exp: 1n,
                 multiplier: 1,
                 known: false,
                 start: {
@@ -70,7 +69,7 @@ runTests({
               },
               {
                 unit: 'oranges',
-                exp: 1,
+                exp: 1n,
                 multiplier: 1,
                 known: false,
                 start: {
@@ -88,7 +87,6 @@ runTests({
             start: 3,
             end: 16,
           },
-          { d: 1, n: 10, s: 1 },
         ],
         start: {
           char: 0,
@@ -111,13 +109,13 @@ runTests({
         type: 'literal',
         args: [
           'number',
-          10,
+          F(10),
           {
             type: 'units',
             args: [
               {
                 unit: 'apples',
-                exp: 1,
+                exp: 1n,
                 multiplier: 1,
                 known: false,
                 start: {
@@ -133,7 +131,7 @@ runTests({
               },
               {
                 unit: 'oranges',
-                exp: -1,
+                exp: -1n,
                 multiplier: 1,
                 known: false,
                 start: {
@@ -159,7 +157,6 @@ runTests({
               column: 17,
             },
           },
-          { d: 1, n: 10, s: 1 },
         ],
         start: {
           char: 0,
@@ -183,14 +180,13 @@ runTests({
         type: 'literal',
         args: [
           'number',
-          10,
+          F(10),
           units({
             unit: 'm',
-            exp: 1,
+            exp: 1n,
             multiplier: 1000,
             known: true,
           }),
-          { d: 1, n: 10, s: 1 },
         ],
       },
     ],
@@ -204,14 +200,13 @@ runTests({
         type: 'literal',
         args: [
           'number',
-          2,
+          F(2),
           units({
             unit: 'bytes',
-            exp: 1,
+            exp: 1n,
             multiplier: 1e9,
             known: true,
           }),
-          { d: 1, n: 2, s: 1 },
         ],
       },
     ],
@@ -224,13 +219,13 @@ runTests({
         type: 'literal',
         args: [
           'number',
-          3,
+          F(3),
           {
             type: 'units',
             args: [
               {
                 unit: 'm',
-                exp: 2,
+                exp: 2n,
                 multiplier: 1000,
                 known: true,
                 start: {
@@ -256,7 +251,6 @@ runTests({
               column: 6,
             },
           },
-          { d: 1, n: 3, s: 1 },
         ],
         start: {
           char: 0,
@@ -279,13 +273,13 @@ runTests({
         type: 'literal',
         args: [
           'number',
-          3,
+          F(3),
           {
             type: 'units',
             args: [
               {
                 unit: 'g',
-                exp: 3,
+                exp: 3n,
                 multiplier: 1000,
                 known: true,
                 start: {
@@ -301,7 +295,7 @@ runTests({
               },
               {
                 unit: 'm',
-                exp: -2,
+                exp: -2n,
                 multiplier: 100,
                 known: true,
                 start: {
@@ -327,7 +321,6 @@ runTests({
               column: 11,
             },
           },
-          { d: 1, n: 3, s: 1 },
         ],
         start: {
           char: 0,
@@ -350,13 +343,13 @@ runTests({
         type: 'literal',
         args: [
           'number',
-          3,
+          F(3),
           {
             type: 'units',
             args: [
               {
                 unit: 'g',
-                exp: 3,
+                exp: 3n,
                 multiplier: 1000,
                 known: true,
                 start: {
@@ -372,7 +365,7 @@ runTests({
               },
               {
                 unit: 'm',
-                exp: -2,
+                exp: -2n,
                 multiplier: 100,
                 known: true,
                 start: {
@@ -388,7 +381,7 @@ runTests({
               },
               {
                 unit: 'Watt',
-                exp: 1,
+                exp: 1n,
                 multiplier: 1000000,
                 known: true,
                 start: {
@@ -414,7 +407,6 @@ runTests({
               column: 17,
             },
           },
-          { d: 1, n: 3, s: 1 },
         ],
         start: {
           char: 0,

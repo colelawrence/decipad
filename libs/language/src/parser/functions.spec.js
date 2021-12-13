@@ -1,3 +1,4 @@
+import { F } from '../utils';
 import { runTests } from './run-tests';
 
 runTests({
@@ -171,13 +172,13 @@ runTests({
             args: [
               {
                 type: 'literal',
-                args: ['number', 1, null, { d: 1, n: 1, s: 1 }],
+                args: ['number', F(1), null],
                 start: 13,
                 end: 13,
               },
               {
                 type: 'literal',
-                args: ['number', 2, null, { d: 1, n: 2, s: 1 }],
+                args: ['number', F(2), null],
                 start: 16,
                 end: 16,
               },
@@ -209,7 +210,7 @@ runTests({
             args: [
               {
                 type: 'literal',
-                args: ['number', 1, null, { d: 1, n: 1, s: 1 }],
+                args: ['number', F(1), null],
                 start: 13,
                 end: 13,
               },
@@ -375,7 +376,7 @@ runTests({
             args: [
               {
                 type: 'literal',
-                args: ['number', 1, null, { d: 1, n: 1, s: 1 }],
+                args: ['number', F(1), null],
                 start: {
                   char: 42,
                   line: 3,
@@ -389,7 +390,7 @@ runTests({
               },
               {
                 type: 'literal',
-                args: ['number', 2, null, { d: 1, n: 2, s: 1 }],
+                args: ['number', F(2), null],
                 start: 45,
                 end: 45,
               },

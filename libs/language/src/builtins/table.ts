@@ -1,5 +1,7 @@
+import Fraction from '@decipad/fraction';
+
 export const approximateSubsetSumIndices = (
-  upperBound: number,
+  upperBound: Fraction,
   table: unknown[][],
   columnIndex: number
 ): number[] => {
@@ -28,7 +30,10 @@ export const approximateSubsetSumIndices = (
     // for each element z of Ui in increasing order do
     for (const z of u) {
       // if y +  ε T/n < z ≤ T then
-      if (y.value + EPSILON < z.value && z.value <= upperBound) {
+      if (
+        y.value + EPSILON < z.value &&
+        new Fraction(upperBound).compare(z.value) >= 0
+      ) {
         y = z;
         l.push(z);
       }

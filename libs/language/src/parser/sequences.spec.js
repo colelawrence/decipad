@@ -1,3 +1,4 @@
+import { F } from '../utils';
 import { runTests } from './run-tests';
 
 runTests({
@@ -9,19 +10,19 @@ runTests({
         args: [
           {
             type: 'literal',
-            args: ['number', 1, null, { d: 1, n: 1, s: 1 }],
+            args: ['number', F(1), null],
             start: 5,
             end: 5,
           },
           {
             type: 'literal',
-            args: ['number', 10, null, { d: 1, n: 10, s: 1 }],
+            args: ['number', F(10), null],
             start: 8,
             end: 9,
           },
           {
             type: 'literal',
-            args: ['number', 1, null, { d: 1, n: 1, s: 1 }],
+            args: ['number', F(1), null],
             start: 14,
             end: 14,
           },
@@ -44,19 +45,19 @@ runTests({
         args: [
           {
             type: 'literal',
-            args: ['number', 1, null, { d: 1, n: 1, s: 1 }],
+            args: ['number', F(1), null],
             start: 5,
             end: 5,
           },
           {
             type: 'literal',
-            args: ['number', 10, null, { d: 1, n: 10, s: 1 }],
+            args: ['number', F(10), null],
             start: 16,
             end: 17,
           },
           {
             type: 'literal',
-            args: ['number', 0.5, null, { d: 2, n: 1, s: 1 }],
+            args: ['number', F(1, 2), null],
             start: 23,
             end: 25,
           },
@@ -84,11 +85,11 @@ runTests({
         args: [
           {
             type: 'date',
-            args: ['year', 2020, 'month', 10],
+            args: ['year', 2020n, 'month', 10n],
           },
           {
             type: 'date',
-            args: ['year', 2020, 'month', 3],
+            args: ['year', 2020n, 'month', 3n],
           },
           {
             type: 'ref',

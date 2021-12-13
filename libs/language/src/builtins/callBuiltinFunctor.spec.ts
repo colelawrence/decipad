@@ -12,7 +12,7 @@ const nilPos = {
 
 const meter: AST.Unit = {
   unit: 'meter',
-  exp: 1,
+  exp: 1n,
   multiplier: 1,
   known: true,
   start: nilPos,
@@ -21,7 +21,7 @@ const meter: AST.Unit = {
 
 const second: AST.Unit = {
   unit: 'second',
-  exp: 1,
+  exp: 1n,
   multiplier: 1,
   known: true,
   start: nilPos,

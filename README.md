@@ -214,5 +214,3 @@ If you're adding a file to You may also need to `libs/queries/src/lib/operations
 ## Sub-package documentation
 
 - [backend](apps/backend/README.md)
-- [docsync](libs/docsync/README.md)
-- [lrustorage](libs/lru-storage/README.md)

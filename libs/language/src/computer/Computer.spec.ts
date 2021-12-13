@@ -38,10 +38,10 @@ it('computes a thing', async () => {
 
   expect(res).toMatchInlineSnapshot(`
     Array [
-      "block-AB/0 -> {\\"s\\":1,\\"n\\":0,\\"d\\":1}",
-      "block-AB/1 -> {\\"s\\":1,\\"n\\":1,\\"d\\":1}",
-      "block-C/0 -> {\\"s\\":1,\\"n\\":11,\\"d\\":1}",
-      "block-D/0 -> {\\"s\\":1,\\"n\\":111,\\"d\\":1}",
+      "block-AB/0 -> 0",
+      "block-AB/1 -> 1",
+      "block-C/0 -> 11",
+      "block-D/0 -> 111",
     ]
   `);
 });
@@ -63,26 +63,26 @@ it('retrieves syntax errors', async () => {
 it('infers+evaluates a deep program', async () => {
   expect(await testCompute(deeperProgram)).toMatchInlineSnapshot(`
     Array [
-      "block-0/0 -> {\\"s\\":1,\\"n\\":1,\\"d\\":1}",
-      "block-0/1 -> {\\"s\\":1,\\"n\\":123,\\"d\\":1}",
-      "block-1/0 -> {\\"s\\":1,\\"n\\":2,\\"d\\":1}",
-      "block-1/1 -> {\\"s\\":1,\\"n\\":2,\\"d\\":1}",
-      "block-1/2 -> {\\"s\\":1,\\"n\\":3,\\"d\\":1}",
-      "block-2/0 -> {\\"s\\":1,\\"n\\":2,\\"d\\":1}",
-      "block-2/1 -> {\\"s\\":1,\\"n\\":2,\\"d\\":1}",
+      "block-0/0 -> 1",
+      "block-0/1 -> 123",
+      "block-1/0 -> 2",
+      "block-1/1 -> 2",
+      "block-1/2 -> 3",
+      "block-2/0 -> 2",
+      "block-2/1 -> 2",
     ]
-`);
+  `);
 });
 
 it('returns type errors', async () => {
   expect(await testCompute(programContainingError)).toMatchInlineSnapshot(`
     Array [
-      "block-0/0 -> {\\"s\\":1,\\"n\\":1,\\"d\\":1}",
+      "block-0/0 -> 1",
       "block-0/1 -> Type Error",
-      "block-0/2 -> {\\"s\\":1,\\"n\\":2,\\"d\\":1}",
+      "block-0/2 -> 2",
       "block-0/3 -> Type Error",
     ]
-`);
+  `);
 });
 
 describe('caching', () => {
@@ -96,13 +96,13 @@ describe('caching', () => {
     });
     expect(await computeOnTestComputer({ program: changedC }))
       .toMatchInlineSnapshot(`
-      Array [
-        "block-AB/0 -> {\\"s\\":1,\\"n\\":0,\\"d\\":1}",
-        "block-AB/1 -> {\\"s\\":1,\\"n\\":1,\\"d\\":1}",
-        "block-C/0 -> {\\"s\\":1,\\"n\\":111,\\"d\\":10}",
-        "block-D/0 -> {\\"s\\":1,\\"n\\":1111,\\"d\\":10}",
-      ]
-    `);
+        Array [
+          "block-AB/0 -> 0",
+          "block-AB/1 -> 1",
+          "block-C/0 -> 11.1",
+          "block-D/0 -> 111.1",
+        ]
+      `);
 
     computer.reset();
 
@@ -113,11 +113,11 @@ describe('caching', () => {
     expect(await computeOnTestComputer({ program: broken }))
       .toMatchInlineSnapshot(`
         Array [
-          "block-AB/0 -> {\\"s\\":1,\\"n\\":1,\\"d\\":2}",
+          "block-AB/0 -> 0.5",
           "block-C/0 -> Type Error",
           "block-D/0 -> Type Error",
         ]
-    `);
+      `);
 
     const noD = produce(unparsedProgram, (program) => {
       (program[2] as UnparsedBlock).source = '';
@@ -125,11 +125,11 @@ describe('caching', () => {
     expect(await computeOnTestComputer({ program: noD }))
       .toMatchInlineSnapshot(`
         Array [
-          "block-AB/0 -> {\\"s\\":1,\\"n\\":0,\\"d\\":1}",
-          "block-AB/1 -> {\\"s\\":1,\\"n\\":1,\\"d\\":1}",
-          "block-C/0 -> {\\"s\\":1,\\"n\\":11,\\"d\\":1}",
+          "block-AB/0 -> 0",
+          "block-AB/1 -> 1",
+          "block-C/0 -> 11",
         ]
-    `);
+      `);
   });
 
   it('tricky caching problems', async () => {
@@ -141,8 +141,8 @@ describe('caching', () => {
       await computeOnTestComputer({ program: getUnparsed('A = 1', 'A + 1') })
     ).toMatchInlineSnapshot(`
       Array [
-        "block-0/0 -> {\\"s\\":1,\\"n\\":1,\\"d\\":1}",
-        "block-1/0 -> {\\"s\\":1,\\"n\\":2,\\"d\\":1}",
+        "block-0/0 -> 1",
+        "block-1/0 -> 2",
       ]
     `);
   });
@@ -155,7 +155,7 @@ describe('caching', () => {
       })
     ).toMatchInlineSnapshot(`
       Array [
-        "block-0/0 -> {\\"s\\":1,\\"n\\":1,\\"d\\":1}",
+        "block-0/0 -> 1",
         "block-2/0 -> Type Error",
       ]
     `);
@@ -167,9 +167,9 @@ describe('caching', () => {
       })
     ).toMatchInlineSnapshot(`
       Array [
-        "block-0/0 -> {\\"s\\":1,\\"n\\":1,\\"d\\":1}",
+        "block-0/0 -> 1",
         "block-2/0 -> Type Error",
-        "block-3/0 -> {\\"s\\":1,\\"n\\":1,\\"d\\":1}",
+        "block-3/0 -> 1",
       ]
     `);
   });

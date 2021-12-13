@@ -2,7 +2,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import isoFetch from 'isomorphic-fetch';
 import parseDataUrl from 'data-urls';
-import Fraction from 'fraction.js';
+import Fraction from '@decipad/fraction';
 /* eslint-enable import/no-extraneous-dependencies */
 import { Date as IDate, TimeQuantity } from './src/interpreter/Value';
 import { stringifyDate } from './src/date';
@@ -85,3 +85,8 @@ function fetch(resource, init) {
 }
 
 global.fetch = fetch;
+
+// eslint-disable-next-line no-undef
+BigInt.prototype.toJSON = function toJSON() {
+  return this.toString();
+};

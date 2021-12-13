@@ -60,6 +60,7 @@ export const ToggleElementButton = ({
   return (
     <li>
       <button
+        className="toggle"
         css={[buttonStyles, active && css({ display: 'none' })]}
         onMouseDown={
           onMouseDown ||

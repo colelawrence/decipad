@@ -1,3 +1,4 @@
+import { F } from './utils';
 import { build as t } from './type';
 import { cleanDate } from './date';
 import { runCodeForVariables, objectToTableType } from './testUtils';
@@ -41,18 +42,18 @@ describe('use of funds document', () => {
     expect(result.value).toMatchInlineSnapshot(`
 Array [
   Array [
-    1609459200000,
-    1612137600000,
-    1614556800000,
-    1617235200000,
-    1619827200000,
-    1622505600000,
-    1625097600000,
-    1627776000000,
-    1630454400000,
-    1633046400000,
-    1635724800000,
-    1638316800000,
+    1609459200000n,
+    1612137600000n,
+    1614556800000n,
+    1617235200000n,
+    1619827200000n,
+    1622505600000n,
+    1625097600000n,
+    1627776000000n,
+    1630454400000n,
+    1633046400000n,
+    1635724800000n,
+    1638316800000n,
   ],
   Array [
     Fraction(14000),
@@ -200,7 +201,7 @@ Array [
 describe('more models', () => {
   test('Discounted cash flow (for dogecoin)', async () => {
     const years = Array.from({ length: 4 }, (_, i) =>
-      cleanDate(Date.UTC(2020 + i, 0), 'year')
+      cleanDate(BigInt(Date.UTC(2020 + i, 0)), 'year')
     );
 
     expect(
@@ -230,21 +231,11 @@ describe('more models', () => {
       )
     ).toMatchObject({
       variables: {
-        InitialCashFlow: { d: 1, n: 10, s: 1 },
+        InitialCashFlow: F(10),
         Years: years,
-        GrowthRate: { d: 4, n: 1, s: 1 },
-        CashFlows: [
-          { d: 100, n: 1, s: 1 },
-          { d: 80, n: 1, s: 1 },
-          { d: 64, n: 1, s: 1 },
-          { d: 256, n: 5, s: 1 },
-        ],
-        YearlyCashFlows: [
-          { d: 125, n: 1, s: 1 },
-          { d: 100, n: 1, s: 1 },
-          { d: 80, n: 1, s: 1 },
-          { d: 64, n: 1, s: 1 },
-        ],
+        GrowthRate: F(1, 4),
+        CashFlows: [F(1, 100), F(1, 80), F(1, 64), F(5, 256)],
+        YearlyCashFlows: [F(1, 125), F(1, 100), F(1, 80), F(1, 64)],
       },
       types: {
         InitialCashFlow: {
@@ -256,7 +247,7 @@ describe('more models', () => {
                 // TODO this unit is million USD,
                 // multiplier/exponent should reflect that
                 unit: 'usd',
-                exp: 1,
+                exp: 1n,
                 multiplier: 0.001,
               },
             ],
@@ -282,7 +273,7 @@ describe('more models', () => {
 
   test('retirement model', async () => {
     const years = Array.from({ length: 3 }, (_, i) =>
-      cleanDate(Date.UTC(2020 + i, 0), 'year')
+      cleanDate(BigInt(Date.UTC(2020 + i, 0)), 'year')
     );
 
     expect(
@@ -299,14 +290,7 @@ describe('more models', () => {
         `
       )
     ).toMatchObject({
-      value: [
-        years,
-        [
-          { d: 1, n: 5200, s: 1 },
-          { d: 1, n: 5404, s: 1 },
-          { d: 25, n: 140302, s: 1 },
-        ],
-      ],
+      value: [years, [F(5200), F(5404), F(140302, 25)]],
       type: {
         tableLength: 3,
         columnNames: ['Years', 'Value'],
@@ -335,7 +319,7 @@ describe('more models', () => {
         `
       )
     ).toMatchObject({
-      value: { d: 20, n: 123, s: 1 },
+      value: F(123, 20),
     });
   });
 });
@@ -389,16 +373,12 @@ ${'' /* Get capital needed */}
       )
     ).toMatchObject({
       variables: {
-        MonthlyRevenueGrowthRate: {
-          d: 20,
-          n: 1,
-          s: 1,
-        },
+        MonthlyRevenueGrowthRate: F(1, 20),
         TimeToProfitability: expect.toRoundEqual(81),
         CumulativeMonthlyRevenue: expect.toRoundEqual(-43395),
         CumulativeMonthlyExpenses: expect.toRoundEqual(10527976),
         CapitalNeeded: expect.toRoundEqual(-10571371),
-        IPOTargetMonthlyRevenue: { d: 1, n: 10000000, s: 1 },
+        IPOTargetMonthlyRevenue: F(10000000),
         TimeToIPO: expect.toRoundEqual(170),
       },
       types: {
@@ -491,14 +471,8 @@ ${'' /* Get capital needed */}
       )
     ).toMatchObject({
       value: [
-        [
-          { d: 1, n: 101, s: 1 },
-          { d: 1, n: 102, s: 1 },
-        ],
-        [
-          { d: 1, n: 201, s: 1 },
-          { d: 1, n: 202, s: 1 },
-        ],
+        [F(101), F(102)],
+        [F(201), F(202)],
       ],
       type: {
         indexedBy: 'Cars',

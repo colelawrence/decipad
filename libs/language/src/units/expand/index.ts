@@ -1,4 +1,4 @@
-import Fraction from 'fraction.js';
+import Fraction from '@decipad/fraction';
 import { AST } from '../../parser';
 
 export type Converter = (n: Fraction) => Fraction;

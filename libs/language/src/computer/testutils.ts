@@ -1,3 +1,4 @@
+import Fraction from '@decipad/fraction';
 import { block, assign, l, r, c } from '../utils';
 import { AST } from '..';
 import {
@@ -84,7 +85,9 @@ export const simplifyInBlockResults = (results: InBlockResult[]) => {
     if (valueType.errorCause != null) {
       simpleUpdates.push(`${prefix}Type Error`);
     } else {
-      simpleUpdates.push(prefix + JSON.stringify(value));
+      const asString =
+        value instanceof Fraction ? value.toString() : JSON.stringify(value);
+      simpleUpdates.push(prefix + asString);
     }
   }
   return simpleUpdates;

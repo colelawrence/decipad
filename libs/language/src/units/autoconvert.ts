@@ -1,4 +1,4 @@
-import Fraction from 'fraction.js';
+import Fraction from '@decipad/fraction';
 import { getDefined } from '@decipad/utils';
 import { Units } from '../parser/ast-types';
 import { Type } from '..';
@@ -10,14 +10,16 @@ import { automapValues } from '../dimtools';
 
 function convertToNoMultipliers(n: Fraction, units: Units | null): Fraction {
   return (units?.args ?? []).reduce(
-    (n, { multiplier, exp }) => n.mul(multiplier ** exp),
+    (n, { multiplier, exp }) =>
+      n.mul(new Fraction(multiplier).pow(new Fraction(exp))),
     n
   );
 }
 
 function convertFromNoMultipliers(n: Fraction, units: Units | null): Fraction {
   return (units?.args ?? []).reduce(
-    (n, { multiplier, exp }) => n.div(multiplier ** exp),
+    (n, { multiplier, exp }) =>
+      n.div(new Fraction(multiplier).pow(new Fraction(exp))),
     n
   );
 }

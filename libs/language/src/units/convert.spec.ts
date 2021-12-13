@@ -104,7 +104,7 @@ describe('convert', () => {
       F(2)
     );
     expect(
-      convertBetweenUnits(F(1609.344), U('meters'), U('miles'))
+      convertBetweenUnits(F(1609344, 1000), U('meters'), U('miles'))
     ).toMatchObject(F(1));
     expect(convertBetweenUnits(F(1), U('mile'), U('ft'))).toMatchObject(
       F(5_280)
@@ -154,14 +154,16 @@ describe('convert', () => {
       F(60)
     );
     expect(convertBetweenUnits(F(1), U('lh'), U('ls'))).toMatchObject(F(3600));
-    expect(convertBetweenUnits(F(72.272), U('point'), U('in'))).toMatchObject(
-      F(1)
-    );
+    expect(
+      convertBetweenUnits(F(72272, 1000), U('point'), U('in'))
+    ).toMatchObject(F(1));
     expect(convertBetweenUnits(F(1), U('in'), U('twip'))).toMatchObject(
       F(1_440)
     );
     expect(convertBetweenUnits(F(1), U('rope'), U('ft'))).toMatchObject(F(20));
-    expect(convertBetweenUnits(F(1), U('rd'), U('ft'))).toMatchObject(F(16.5));
+    expect(convertBetweenUnits(F(1), U('rd'), U('ft'))).toMatchObject(
+      F(165, 10)
+    );
     expect(convertBetweenUnits(F(1), U('nl'), U('nmi'))).toMatchObject(F(3));
     expect(convertBetweenUnits(F(1, 1000), U('fm'), U('am'))).toMatchObject(
       F(1)
@@ -192,19 +194,19 @@ describe('convert', () => {
       //
       // so we multiply `d` and `n` by `95367.431640625`
       //
-      F(529_177_210_903 * 95367.431640625, 1e9 * 95367.431640625)
+      F(529177210903, 1000000000)
     );
     expect(convertBetweenUnits(F(1), U('ft3'), U('in3'))).toMatchObject(
-      F(864161578125000000, 500093505859375)
+      F(1728)
     );
-    expect(convertBetweenUnits(F(1), U('yd3'), U('ft3'))).toMatchObject(
-      F(91142041442871090, 3375631164550781)
-    );
+    expect(convertBetweenUnits(F(1), U('yd3'), U('ft3'))).toMatchObject(F(27));
     expect(convertBetweenUnits(F(1), U('in'), U('twip'))).toMatchObject(
       F(1_440)
     );
     expect(convertBetweenUnits(F(1), U('rope'), U('ft'))).toMatchObject(F(20));
-    expect(convertBetweenUnits(F(1), U('rd'), U('ft'))).toMatchObject(F(16.5));
+    expect(convertBetweenUnits(F(1), U('rd'), U('ft'))).toMatchObject(
+      F(165, 10)
+    );
     expect(convertBetweenUnits(F(1), U('nl'), U('nmi'))).toMatchObject(F(3));
     expect(convertBetweenUnits(F(1, 1000), U('fm'), U('am'))).toMatchObject(
       F(1)
@@ -281,7 +283,7 @@ describe('convert', () => {
     expect(convertBetweenUnits(F(100), U('m2'), U('are'))).toEqual(F(1));
     expect(convertBetweenUnits(F(1), U('m2'), U('are'))).toEqual(F(1, 100));
     expect(
-      convertBetweenUnits(F(2_589_988.110336), U('m2'), U('sqmi'))
+      convertBetweenUnits(F(2_589_988_110_336, 1_000_000), U('m2'), U('sqmi'))
     ).toEqual(F(1));
     expect(convertBetweenUnits(F(1_000_000), U('m²'), U('km²'))).toEqual(F(1));
     expect(convertBetweenUnits(F(1), U('km²'), U('m²'))).toEqual(F(1_000_000));
@@ -299,9 +301,9 @@ describe('convert', () => {
     expect(convertBetweenUnits(F(1), U('acre'), U('m2'))).toEqual(
       F(40_468_564_224, 1e7)
     );
-    expect(convertBetweenUnits(F(4_046.8564224), U('m2'), U('acre'))).toEqual(
-      F(1)
-    );
+    expect(
+      convertBetweenUnits(F(40_468_564_224, 10_000_000), U('m2'), U('acre'))
+    ).toEqual(F(1));
     expect(convertBetweenUnits(F(1), U('acre'), U('sqyd'))).toEqual(F(4_840));
     expect(convertBetweenUnits(F(1), U('barony'), U('acre'))).toEqual(F(4000));
     expect(convertBetweenUnits(F(1e29), U('barn'), U('m2'))).toEqual(F(1));
@@ -318,7 +320,7 @@ describe('convert', () => {
       F(4053, 2000)
     );
     expect(
-      convertBetweenUnits(F(2.0265), U('bar'), U('atmosphere'))
+      convertBetweenUnits(F(20265, 10000), U('bar'), U('atmosphere'))
     ).toMatchObject(F(2));
     expect(convertBetweenUnits(F(2), U('atm'), U('mmhg'))).toMatchObject(
       F(1520)
@@ -329,10 +331,10 @@ describe('convert', () => {
     expect(convertBetweenUnits(F(1520), U('torr'), U('atm'))).toMatchObject(
       F(2)
     );
-    expect(convertBetweenUnits(F(14.696), U('psi'), U('atm'))).toMatchObject(
-      F(1)
-    );
-    expect(convertBetweenUnits(F(2.9), U('bar'), U('psi'))).toMatchObject(
+    expect(
+      convertBetweenUnits(F(14696, 1000), U('psi'), U('atm'))
+    ).toMatchObject(F(1));
+    expect(convertBetweenUnits(F(29, 10), U('bar'), U('psi'))).toMatchObject(
       F(852368, 20265)
     );
     expect(convertBetweenUnits(F(1), U('pascal'), U('bar'))).toMatchObject(
@@ -348,13 +350,26 @@ describe('convert', () => {
       F(250, 523)
     );
     expect(
-      convertBetweenUnits(F(4780114722753346, 1e16), U('calorie'), U('joule'))
+      convertBetweenUnits(F(2_000, 4184), U('calorie'), U('joule'))
     ).toMatchObject(F(2));
   });
 
   it('converts between mass units', () => {
     expect(convertBetweenUnits(F(1), U('lbav'), U('gram'))).toMatchObject(
       F(45_359_237, 1e5)
+    );
+    expect(
+      convertBetweenUnits(F(907185, 1000), U('grams'), U('pound'))
+    ).toMatchObject(F(90718500, 45359237));
+    expect(
+      convertBetweenUnits(
+        F(2_000_000_000, 28_349_523_125),
+        U('ounces'),
+        U('grams')
+      )
+    ).toMatchObject(F(2));
+    expect(convertBetweenUnits(F(2), U('grams'), U('ounces'))).toMatchObject(
+      F(2_000_000_000, 28_349_523_125)
     );
     expect(convertBetweenUnits(F(1), U('ozav'), U('lbav'))).toMatchObject(
       F(1, 16)
@@ -379,13 +394,13 @@ describe('convert', () => {
       convertBetweenUnits(F(2_000), U('celsius'), U('kelvin'))
     ).toMatchObject(F(45463, 20));
     expect(
-      convertBetweenUnits(F(2_273.15), U('kelvin'), U('celsius'))
+      convertBetweenUnits(F(227315, 100), U('kelvin'), U('celsius'))
     ).toMatchObject(F(2000));
     expect(
       convertBetweenUnits(F(2_000), U('fahrenheit'), U('kelvin'))
     ).toMatchObject(F(81989, 60));
     expect(
-      convertBetweenUnits(F(1_366.48445), U('kelvin'), U('fahrenheit'))
+      convertBetweenUnits(F(136648445, 100000), U('kelvin'), U('fahrenheit'))
     ).toMatchObject(F(200000201, 100000));
   });
 
@@ -398,7 +413,7 @@ describe('convert', () => {
     ).toMatchObject(F(30));
     expect(
       convertBetweenUnits(F(5_400), U('seconds'), U('hours'))
-    ).toMatchObject(F(1.5));
+    ).toMatchObject(F(15, 10));
     expect(
       convertBetweenUnits(F(3, 4), U('hours'), U('minutes'))
     ).toMatchObject(F(45));
@@ -429,7 +444,14 @@ describe('convert', () => {
 
   it('can convert between known units with negative exponent', () => {
     expect(
-      convertBetweenUnits(F(1), U('ft', { exp: -1 }), U('in', { exp: -1 }))
+      convertBetweenUnits(
+        F(100),
+        U('feet', { exp: -1n }),
+        U('meters', { exp: -1n })
+      )
+    ).toMatchObject(F(125000, 381));
+    expect(
+      convertBetweenUnits(F(1), U('ft', { exp: -1n }), U('in', { exp: -1n }))
     ).toMatchObject(F(1, 12));
   });
 
@@ -437,8 +459,8 @@ describe('convert', () => {
     expect(
       convertBetweenUnits(
         F(120),
-        U('minute', { exp: -1 }),
-        U('second', { exp: -1 })
+        U('minute', { exp: -1n }),
+        U('second', { exp: -1n })
       )
     ).toMatchObject(F(2));
   });
@@ -447,8 +469,8 @@ describe('convert', () => {
     expect(
       convertBetweenUnits(
         F(2),
-        U('second', { exp: -1 }),
-        U('minute', { exp: -1 })
+        U('second', { exp: -1n }),
+        U('minute', { exp: -1n })
       )
     ).toMatchObject(F(120));
   });
@@ -457,8 +479,8 @@ describe('convert', () => {
     expect(
       convertBetweenUnits(
         F(2),
-        U('minute', { exp: -1 }),
-        U('minute', { exp: -1 })
+        U('minute', { exp: -1n }),
+        U('minute', { exp: -1n })
       )
     ).toMatchObject(F(2));
   });
@@ -479,8 +501,8 @@ describe('convert', () => {
     expect(
       convertBetweenUnits(
         F(100),
-        U([u('joules'), u('m', { exp: -1 })]),
-        U([u('calories'), u('foot', { exp: -1 })])
+        U([u('joules'), u('m', { exp: -1n })]),
+        U([u('calories'), u('foot', { exp: -1n })])
       )
     ).toMatchObject(F(3810, 523));
   });
@@ -489,8 +511,8 @@ describe('convert', () => {
     expect(
       convertBetweenUnits(
         F(2),
-        U([u('bananas', { known: false }), u('second', { exp: -1 })]),
-        U([u('bananas', { known: false }), u('minute', { exp: -1 })])
+        U([u('bananas', { known: false }), u('second', { exp: -1n })]),
+        U([u('bananas', { known: false }), u('minute', { exp: -1n })])
       )
     ).toMatchObject(F(120));
   });
@@ -499,8 +521,8 @@ describe('convert', () => {
     expect(
       convertBetweenUnits(
         F(120),
-        U([u('bananas', { known: false }), u('minute', { exp: -1 })]),
-        U([u('bananas', { known: false }), u('second', { exp: -1 })])
+        U([u('bananas', { known: false }), u('minute', { exp: -1n })]),
+        U([u('bananas', { known: false }), u('second', { exp: -1n })])
       )
     ).toMatchObject(F(2));
   });
@@ -519,8 +541,8 @@ describe('convert', () => {
     expect(
       convertBetweenUnits(
         F(2),
-        U([u('meters', { multiplier: 1000, exp: 2 })]),
-        U([u('meters', { multiplier: 1, exp: 2 })])
+        U([u('meters', { multiplier: 1000, exp: 2n })]),
+        U([u('meters', { multiplier: 1, exp: 2n })])
       )
     ).toMatchObject(F(2_000_000));
   });
@@ -529,8 +551,8 @@ describe('convert', () => {
     expect(
       convertBetweenUnits(
         F(2),
-        U([u('meters', { multiplier: 1000, exp: -2 })]),
-        U([u('meters', { multiplier: 1, exp: -2 })])
+        U([u('meters', { multiplier: 1000, exp: -2n })]),
+        U([u('meters', { multiplier: 1, exp: -2n })])
       )
     ).toMatchObject(F(2, 1000000));
   });
@@ -539,8 +561,8 @@ describe('convert', () => {
     expect(
       convertBetweenUnits(
         F(2),
-        U([u('grams'), u('meter', { exp: -1 }), u('second', { exp: -1 })]),
-        U([u('grams'), u('meter', { exp: -1 }), u('second', { exp: -1 })])
+        U([u('grams'), u('meter', { exp: -1n }), u('second', { exp: -1n })]),
+        U([u('grams'), u('meter', { exp: -1n }), u('second', { exp: -1n })])
       )
     ).toMatchObject(F(2));
   });
@@ -550,14 +572,14 @@ describe('convert', () => {
       convertBetweenUnits(
         F(2),
         U('newton'),
-        U([u('grams'), u('meter', { exp: 1 }), u('second', { exp: -2 })])
+        U([u('grams'), u('meter', { exp: 1n }), u('second', { exp: -2n })])
       )
     ).toMatchObject(F(2000));
   });
 
   it('converts between cubic meters and liters', () => {
     expect(
-      convertBetweenUnits(F(2), U('meters', { exp: 3 }), U('liters'))
+      convertBetweenUnits(F(2), U('meters', { exp: 3n }), U('liters'))
     ).toMatchObject(F(2000));
   });
 

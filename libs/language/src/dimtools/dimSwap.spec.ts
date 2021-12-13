@@ -4,9 +4,9 @@ import { dimSwapTypes, dimSwapValues } from './dimSwap';
 
 const twoDColumn = t.column(t.column(t.number(), 2, 'X'), 3, 'Y');
 const twoDColumnVal = fromJS([
-  [1, 2],
-  [3, 4],
-  [5, 6],
+  [1n, 2n],
+  [3n, 4n],
+  [5n, 6n],
 ]);
 
 it('does nothing if wanted dimension is already dominant', async () => {

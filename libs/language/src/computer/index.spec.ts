@@ -38,12 +38,17 @@ const runThroughMock = async (
   );
 
 it('can run requests through a computer', async () => {
-  expect(
-    await runThroughMock(makeReqs(['A = 1', 'Syntax ---- / --- Error']))
-  ).toEqual([
-    ['block-0/0 -> {"s":1,"n":1,"d":1}'],
-    ['block-0 -> Syntax Error'],
-  ]);
+  expect(await runThroughMock(makeReqs(['A = 1', 'Syntax ---- / --- Error'])))
+    .toMatchInlineSnapshot(`
+      Array [
+        Array [
+          "block-0/0 -> 1",
+        ],
+        Array [
+          "block-0 -> Syntax Error",
+        ],
+      ]
+    `);
 });
 
 it('Always yields the whole response, even if parts of it did not change', async () => {
@@ -52,10 +57,18 @@ it('Always yields the whole response, even if parts of it did not change', async
     ['A = 2', '1 + 1'],
   ]);
 
-  expect(await runThroughMock(reqs)).toEqual([
-    ['block-0/0 -> {"s":1,"n":1,"d":1}', 'block-1/0 -> {"s":1,"n":2,"d":1}'],
-    ['block-0/0 -> {"s":1,"n":2,"d":1}', 'block-1/0 -> {"s":1,"n":2,"d":1}'],
-  ]);
+  expect(await runThroughMock(reqs)).toMatchInlineSnapshot(`
+    Array [
+      Array [
+        "block-0/0 -> 1",
+        "block-1/0 -> 2",
+      ],
+      Array [
+        "block-0/0 -> 2",
+        "block-1/0 -> 2",
+      ],
+    ]
+  `);
 });
 
 it('delays requests which are errored and under the cursor', async () => {

@@ -1,18 +1,14 @@
 @lexer tokenizer
 @{%
 
-import Fraction from 'fraction.js';
+import Fraction from '@decipad/fraction';
 
 function numberLiteralFromUnits(parentNode, n, units = null) {
-  const mult = (!units && 1) || units.args
-    .map((unit) => unit.multiplier ** (unit.exp || 1))
-    .reduce((acc, mult) => acc * mult, 1);
-
-  const fraction = new Fraction(n);
+  const fraction = n instanceof Fraction ? n : new Fraction(n);
 
   const node = {
     type: 'literal',
-    args: ['number', n, units, fraction]
+    args: ['number', fraction, units]
   };
   if (Array.isArray(parentNode)) {
     return addArrayLoc(node, parentNode);
@@ -40,14 +36,14 @@ number      -> unitlessNumber ___:? units               {%
 
 percentage -> decimal "%"                               {%
                                                         (d) => {
-                                                          return numberLiteralFromUnits(d, d[0].n / 100)
+                                                          return numberLiteralFromUnits(d, new Fraction(d[0].n, 100))
                                                         }
                                                         %}
 
 unitlessNumber -> %number                               {%
                                                         ([number]) => {
                                                           return addLoc({
-                                                            n: parseFloat(number.value)
+                                                            n: number.value
                                                           }, number)
                                                         }
                                                         %}
@@ -58,7 +54,7 @@ int -> %number                                          {%
                                                             return reject
                                                           } else {
                                                             return addLoc({
-                                                              n: parseInt(number.value)
+                                                              n: BigInt(number.value)
                                                             }, number)
                                                           }
                                                         }
@@ -70,7 +66,7 @@ decimal -> %number                                      {%
                                                             return reject
                                                           } else {
                                                             return addLoc({
-                                                              n: parseFloat(number.value)
+                                                              n: new Fraction(number.value)
                                                             }, number)
                                                           }
                                                         }

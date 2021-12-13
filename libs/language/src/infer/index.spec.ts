@@ -39,7 +39,7 @@ const nilPos = {
 let nilCtx = makeContext();
 const degC: AST.Unit = {
   unit: 'celsius',
-  exp: 1,
+  exp: 1n,
   multiplier: 1,
   known: true,
   start: nilPos,
@@ -47,7 +47,7 @@ const degC: AST.Unit = {
 };
 const seconds: AST.Unit = {
   unit: 'seconds',
-  exp: 1,
+  exp: 1n,
   multiplier: 1,
   known: true,
   start: nilPos,
@@ -55,7 +55,7 @@ const seconds: AST.Unit = {
 };
 const meters: AST.Unit = {
   unit: 'meters',
-  exp: 1,
+  exp: 1n,
   multiplier: 1,
   known: true,
   start: nilPos,
@@ -176,8 +176,8 @@ describe('time quantities', () => {
       await inferExpression(
         nilCtx,
         timeQuantity({
-          year: 2020,
-          minute: 3,
+          year: 2020n,
+          minute: 3n,
         })
       )
     ).toEqual(t.timeQuantity(['year', 'minute']));

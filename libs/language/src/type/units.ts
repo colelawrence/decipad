@@ -26,14 +26,17 @@ const multipliersToPrefixes: Record<number, string> = {
   1e24: 'y',
 };
 
-const byExp = (u1: AST.Unit, u2: AST.Unit): number => u2.exp - u1.exp;
+const byExp = (u1: AST.Unit, u2: AST.Unit): number => Number(u2.exp - u1.exp);
 
-const pluralizeUnit = (baseUnit: AST.Unit, value?: number): AST.Unit => {
+const pluralizeUnit = (
+  baseUnit: AST.Unit,
+  value: bigint | number = 2n
+): AST.Unit => {
   const { unit } = baseUnit;
   if (isKnownSymbol(unit)) {
     return baseUnit;
   }
-  const pluralUnit = pluralize(unit, value || 2);
+  const pluralUnit = pluralize(unit, value);
   if (pluralUnit === unit) {
     return baseUnit;
   }
@@ -98,14 +101,14 @@ const simplifyUnitsArgs = (units: AST.Unit[]): AST.Unit[] => {
         const matchingUnit = units[matchingUnitIndex];
         units[matchingUnitIndex] = produce(matchingUnit, (match) => {
           match.exp += unit.exp;
-          match.multiplier *= unit.multiplier ** unit.exp;
+          match.multiplier *= unit.multiplier ** Number(unit.exp);
         });
         return units;
       } else {
         return [...units, unit];
       }
     }, [])
-    .filter((unit) => unit.exp !== 0);
+    .filter((unit) => unit.exp !== 0n);
 };
 
 export const simplifyUnits = (units: AST.Units | null): AST.Units | null => {
@@ -148,7 +151,7 @@ export const normalizeUnitsOf = (unit: AST.Units | null): AST.Units | null => {
   });
 };
 
-export const setExponent = (unit: AST.Unit, newExponent: number) =>
+export const setExponent = (unit: AST.Unit, newExponent: bigint) =>
   produce(unit, (unit) => {
     unit.exp = newExponent;
   });
@@ -158,7 +161,7 @@ export const inverseExponent = (unit: AST.Unit) => setExponent(unit, -unit.exp);
 const stringifyUnit = (unit: AST.Unit) => {
   const result = [multipliersToPrefixes[unit.multiplier], unit.unit];
 
-  if (unit.exp !== 1) {
+  if (unit.exp !== 1n) {
     result.push(`^${unit.exp}`);
   }
 
@@ -177,9 +180,9 @@ export const stringifyUnitArgs = (
         parts.push(
           stringifyUnit(
             produce(unit, (unit) => {
-              if (unit.exp < 0) {
+              if (unit.exp < 0n) {
                 unit.unit = singular(unit.unit);
-                unit.exp = Math.abs(unit.exp);
+                unit.exp = BigInt(Math.abs(Number(unit.exp)));
               }
             })
           )
@@ -238,12 +241,19 @@ export const combineUnits = (
 
 export const multiplyExponent = (
   myUnits: AST.Units,
-  by: number
+  by: bigint | number
 ): AST.Units | null =>
   normalizeUnitsOf(
     produce(myUnits, (myUnits) => {
       for (const u of myUnits.args) {
-        u.exp *= by;
+        try {
+          u.exp = BigInt(Number(u.exp) * Number(by));
+        } catch (err) {
+          const error = new Error(
+            `error multiplying ${u.exp} by ${by}: ${(err as Error).message}`
+          );
+          throw error;
+        }
       }
     })
   );

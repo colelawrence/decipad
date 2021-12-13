@@ -91,6 +91,7 @@
       "@decipad/y-indexeddb": ["libs/y-indexeddb/src/index.ts"],
       "@decipad/y-lambdawebsocket": ["libs/y-lambdawebsocket/src/index.ts"],
       "@decipad/y-websocket": ["libs/y-websocket/src/index.ts"],
+      "@decipad/fraction": ["libs/fraction/src/index.ts"],
       "test-utils": ["libs/ui/src/lib/utils/test-utils.tsx"]
     }
   },

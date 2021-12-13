@@ -1,5 +1,5 @@
 // E2e tests
-
+import Fraction from '@decipad/fraction';
 import { build as t, Type } from './type';
 import { runCode } from './run';
 import {
@@ -35,15 +35,7 @@ describe('basic code', () => {
       `)
     ).toMatchObject({
       type: { cellType: { type: 'number' } },
-      value: [
-        { d: 1, n: 2, s: 1 },
-        { d: 1, n: 1, s: -1 },
-        { d: 1, n: 1, s: 1 },
-        { d: 100, n: 101, s: 1 },
-        { d: 4, n: 1, s: 1 },
-        { d: 1, n: 16, s: 1 },
-        { d: 1, n: 4, s: 1 },
-      ],
+      value: [F(2), F(-1), F(1), F(101, 100), F(1, 4), F(16), F(4)],
     });
   });
 
@@ -67,7 +59,7 @@ describe('basic code', () => {
   it('has correct operator precedence', async () => {
     expect(await runCode('1 + 2 / 4 - 5 ** 2 / 4')).toMatchObject({
       type: { type: 'number' },
-      value: { d: 4, n: 19, s: -1 },
+      value: F(-19, 4),
     });
   });
 
@@ -80,7 +72,7 @@ describe('basic code', () => {
       `)
     ).toMatchObject({
       type: { type: 'number' },
-      value: { d: 1, n: 2, s: 1 },
+      value: F(2),
     });
   });
 
@@ -93,7 +85,7 @@ describe('basic code', () => {
 
     expect(results).toMatchObject({
       type: { type: 'number' },
-      value: { d: 1, n: 3, s: 1 },
+      value: F(3),
     });
   });
 
@@ -106,12 +98,7 @@ describe('basic code', () => {
 
     expect(results).toMatchObject({
       type: { columnSize: 4, cellType: { type: 'number' } },
-      value: [
-        { d: 1, n: 0, s: 1 },
-        { d: 1, n: 2, s: 1 },
-        { d: 1, n: 4, s: 1 },
-        { d: 1, n: 12, s: 1 },
-      ],
+      value: [F(0), F(2), F(4), F(12)],
     });
   });
 
@@ -130,7 +117,7 @@ describe('basic code', () => {
         Eleven: t.string(),
       },
       variables: {
-        Two: { d: 1, n: 2, s: 1 },
+        Two: F(2),
         Eleven: '11',
       },
     });
@@ -144,11 +131,7 @@ describe('basic code', () => {
 
     expect(results).toMatchObject({
       type: { columnSize: 3 },
-      value: [
-        { d: 1, n: 2, s: 1 },
-        { d: 1, n: 4, s: 1 },
-        { d: 1, n: 6, s: 1 },
-      ],
+      value: [F(2), F(4), F(6)],
     });
 
     const results2 = await runCode(`
@@ -158,11 +141,7 @@ describe('basic code', () => {
 
     expect(results2).toMatchObject({
       type: { columnSize: 3 },
-      value: [
-        { d: 1, n: 2, s: 1 },
-        { d: 1, n: 1, s: 1 },
-        { d: 2, n: 1, s: 1 },
-      ],
+      value: [F(2), F(1), F(1, 2)],
     });
   });
 
@@ -174,11 +153,7 @@ describe('basic code', () => {
 
     expect(results).toMatchObject({
       type: { columnSize: 3, cellType: { type: 'number' } },
-      value: [
-        { d: 1, n: 2, s: 1 },
-        { d: 1, n: 4, s: 1 },
-        { d: 1, n: 6, s: 1 },
-      ],
+      value: [F(2), F(4), F(6)],
     });
   });
 
@@ -190,11 +165,7 @@ describe('basic code', () => {
 
     expect(results).toMatchObject({
       type: { columnSize: 3, cellType: { type: 'number' } },
-      value: [
-        { d: 1, n: 1, s: 1 },
-        { d: 1, n: 4, s: 1 },
-        { d: 1, n: 0, s: 1 },
-      ],
+      value: [F(1), F(4), F(0)],
     });
   });
 
@@ -207,7 +178,7 @@ describe('basic code', () => {
       `)
     ).toMatchObject({
       type: { type: 'number' },
-      value: { d: 1, n: 1, s: 1 },
+      value: F(1),
     });
 
     expect(
@@ -216,7 +187,7 @@ describe('basic code', () => {
       `)
     ).toMatchObject({
       type: { type: 'number' },
-      value: { d: 1, n: 0, s: 1 },
+      value: F(0),
     });
   });
 });
@@ -233,18 +204,9 @@ describe('Multidimensional operations', () => {
     ).toMatchObject({
       type: t.column(t.column(t.number(), 2, 'Y'), 3, 'X'),
       value: [
-        [
-          { d: 10, n: 1011, s: 1 },
-          { d: 10, n: 2011, s: 1 },
-        ],
-        [
-          { d: 5, n: 511, s: 1 },
-          { d: 5, n: 1011, s: 1 },
-        ],
-        [
-          { d: 10, n: 1033, s: 1 },
-          { d: 10, n: 2033, s: 1 },
-        ],
+        [F(1011, 10), F(2011, 10)],
+        [F(511, 5), F(1011, 5)],
+        [F(1033, 10), F(2033, 10)],
       ],
     });
 
@@ -258,18 +220,9 @@ describe('Multidimensional operations', () => {
     ).toMatchObject({
       type: t.column(t.column(t.number(), 2, 'Y'), 3, 'X'),
       value: [
-        [
-          { d: 10, n: 1011, s: 1 },
-          { d: 5, n: 1006, s: 1 },
-        ],
-        [
-          { d: 10, n: 1021, s: 1 },
-          { d: 5, n: 1011, s: 1 },
-        ],
-        [
-          { d: 10, n: 1031, s: 1 },
-          { d: 5, n: 1016, s: 1 },
-        ],
+        [F(1011, 10), F(1006, 5)],
+        [F(1021, 10), F(1011, 5)],
+        [F(1031, 10), F(1016, 5)],
       ],
     });
   });
@@ -302,15 +255,17 @@ describe('Multidimensional operations', () => {
 describe('Tables', () => {
   it('can be created', async () => {
     expect(
-      await runCode(`Table = { Column1 = [1, 2, 3], Column2 = Column1 * 2 }`)
+      await runCode(
+        `Table = { Column1 = [1.1, 2.2, 3.3], Column2 = Column1 * 2 }`
+      )
     ).toMatchObject({
       type: objectToTableType('Table', 3, {
         Column1: t.number(),
         Column2: t.number(),
       }),
       value: objectToTupleValue({
-        Column1: [1, 2, 3],
-        Column2: [2, 4, 6],
+        Column1: [F(11, 10), F(22, 10), F(33, 10)],
+        Column2: [F(22, 10), F(44, 10), F(66, 10)],
       }),
     });
   });
@@ -319,7 +274,7 @@ describe('Tables', () => {
     expect(
       await runCode(`
         Table = {
-          Column1 = [1, 1, 1],
+          Column1 = [1.1, 2.2, 3.3],
           Column2 = Column1 + previous(0)
         }
       `)
@@ -329,8 +284,8 @@ describe('Tables', () => {
         Column2: t.number(),
       }),
       value: objectToTupleValue({
-        Column1: [1, 1, 1],
-        Column2: [1, 2, 3],
+        Column1: [F(11, 10), F(22, 10), F(33, 10)],
+        Column2: [F(11, 10), F(33, 10), F(66, 10)],
       }),
     });
   });
@@ -351,8 +306,8 @@ describe('Tables', () => {
         Column3: t.boolean(),
       }),
       value: objectToTupleValue({
-        Column1: [1, 2, 3],
-        Column2: [0.5, 1, 1.5],
+        Column1: [F(1), F(2), F(3)],
+        Column2: [new Fraction(1, 2), 1n, new Fraction(3, 2)],
         Column3: [false, false, true],
       }),
     });
@@ -369,11 +324,7 @@ describe('Tables', () => {
       `)
     ).toMatchObject({
       type: t.column(t.number(), 3, 'Table'),
-      value: [
-        { d: 1, n: 1, s: 1 },
-        { d: 1, n: 2, s: 1 },
-        { d: 1, n: 3, s: 1 },
-      ],
+      value: [F(1), F(2), F(3)],
     });
   });
 
@@ -389,11 +340,7 @@ describe('Tables', () => {
       `)
     ).toMatchObject({
       type: t.column(t.number(), 3, 'Table'),
-      value: [
-        { d: 1, n: 1, s: 1 },
-        { d: 1, n: 1, s: 1 },
-        { d: 1, n: 1, s: 1 },
-      ],
+      value: [F(1), F(1), F(1)],
     });
 
     expect(
@@ -407,11 +354,7 @@ describe('Tables', () => {
       `)
     ).toMatchObject({
       type: t.column(t.number(), 3, 'Table'),
-      value: [
-        { d: 1, n: 1, s: 1 },
-        { d: 1, n: 1, s: 1 },
-        { d: 1, n: 1, s: 1 },
-      ],
+      value: [F(1), F(1), F(1)],
     });
   });
 
@@ -577,11 +520,11 @@ describe('Units', () => {
     ).toMatchObject({
       type: {
         unit: units(
-          { exp: 1, known: true, multiplier: 1, unit: 'meter' },
-          { exp: -1, known: true, multiplier: 1, unit: 'second' }
+          { exp: 1n, known: true, multiplier: 1, unit: 'meter' },
+          { exp: -1n, known: true, multiplier: 1, unit: 'second' }
         ),
       },
-      value: { d: 1, n: 1, s: 1 },
+      value: F(1),
     });
   });
 
@@ -594,17 +537,17 @@ describe('Units', () => {
         Distance / Time
       `)
     ).toMatchObject({
-      value: { d: 1, n: 1, s: 1 },
+      value: F(1),
       type: {
         unit: units(
           {
-            exp: 1,
+            exp: 1n,
             known: true,
             multiplier: 1,
             unit: 'meters',
           },
           {
-            exp: -1,
+            exp: -1n,
             known: true,
             multiplier: 1,
             unit: 'seconds',
@@ -622,9 +565,9 @@ describe('Units', () => {
         Distance = Speed * 3 second
       `)
     ).toMatchObject({
-      value: { d: 1, n: 6, s: 1 },
+      value: F(6),
       type: {
-        unit: units({ exp: 1, known: true, multiplier: 1, unit: 'meters' }),
+        unit: units({ exp: 1n, known: true, multiplier: 1, unit: 'meters' }),
       },
     });
 
@@ -635,9 +578,9 @@ describe('Units', () => {
         Distance = Speed / 3 meter
       `)
     ).toMatchObject({
-      value: { d: 1, n: 2, s: 1 },
+      value: F(2),
       type: {
-        unit: units({ exp: -1, known: true, multiplier: 1, unit: 'seconds' }),
+        unit: units({ exp: -1n, known: true, multiplier: 1, unit: 'seconds' }),
       },
     });
   });
@@ -709,13 +652,13 @@ describe('Time quantities', () => {
       )
     ).toEqual({
       variables: {
-        Years: [['year', 7]],
-        Quarters: [['quarter', 3]],
-        Seconds: [['second', 999]],
+        Years: [['year', 7n]],
+        Quarters: [['quarter', 3n]],
+        Seconds: [['second', 999n]],
         Combined: [
-          ['quarter', 4],
-          ['second', 3],
-          ['millisecond', 1],
+          ['quarter', 4n],
+          ['second', 3n],
+          ['millisecond', 1n],
         ],
       },
       types: {
@@ -765,7 +708,7 @@ describe('number units work together', () => {
         args: [
           {
             unit: 'bananas',
-            exp: 1,
+            exp: 1n,
             multiplier: 1,
             known: false,
           },
@@ -782,7 +725,7 @@ describe('number units work together', () => {
         args: [
           {
             unit: 'meters',
-            exp: 1,
+            exp: 1n,
             multiplier: 1,
             known: true,
           },
@@ -803,7 +746,7 @@ describe('number units work together', () => {
         args: [
           {
             unit: 'meters',
-            exp: 1,
+            exp: 1n,
             multiplier: 0.01,
             known: true,
           },
@@ -824,7 +767,7 @@ describe('number units work together', () => {
         args: [
           {
             unit: 'meters',
-            exp: 1,
+            exp: 1n,
             multiplier: 1,
             known: true,
           },
@@ -845,7 +788,7 @@ describe('number units work together', () => {
         args: [
           {
             unit: 'meters',
-            exp: 1,
+            exp: 1n,
             multiplier: 0.01,
             known: true,
           },
@@ -866,7 +809,7 @@ describe('number units work together', () => {
         args: [
           {
             unit: 'meters',
-            exp: 1,
+            exp: 1n,
             multiplier: 1,
             known: true,
           },
@@ -883,7 +826,7 @@ describe('number units work together', () => {
         args: [
           {
             unit: 'meters',
-            exp: 2,
+            exp: 2n,
             multiplier: 1,
             known: true,
           },
@@ -900,13 +843,13 @@ describe('number units work together', () => {
         args: [
           {
             unit: 'hours',
-            exp: 1,
+            exp: 1n,
             multiplier: 1,
             known: true,
           },
           {
             unit: 'meters',
-            exp: 1,
+            exp: 1n,
             multiplier: 1000,
             known: true,
           },
@@ -923,13 +866,13 @@ describe('number units work together', () => {
         args: [
           {
             unit: 'meters',
-            exp: 1,
+            exp: 1n,
             multiplier: 1000,
             known: true,
           },
           {
             unit: 'minute',
-            exp: -1,
+            exp: -1n,
             multiplier: 1,
             known: true,
           },
@@ -946,13 +889,13 @@ describe('number units work together', () => {
         args: [
           {
             unit: 'meters',
-            exp: 1,
+            exp: 1n,
             multiplier: 1000,
             known: true,
           },
           {
             unit: 'minutes',
-            exp: -1,
+            exp: -1n,
             multiplier: 1,
             known: true,
           },
@@ -969,7 +912,7 @@ describe('number units work together', () => {
         args: [
           {
             unit: 'miles',
-            exp: 1,
+            exp: 1n,
             multiplier: 1,
             known: true,
           },
@@ -1010,8 +953,12 @@ describe('number units work together', () => {
     ).toMatchObject({
       value: [
         [
-          1577836800000, 1609459200000, 1640995200000, 1672531200000,
-          1704067200000, 1735689600000,
+          1577836800000n,
+          1609459200000n,
+          1640995200000n,
+          1672531200000n,
+          1704067200000n,
+          1735689600000n,
         ],
         [
           F(1),
@@ -1043,7 +990,7 @@ describe('number units work together', () => {
   it('converts between complex units', async () => {
     expect(await runCode(`100 joules/km to calories/foot`)).toMatchObject({
       value: F(381, 52300),
-      type: t.number(U([u('calories'), u('foot', { exp: -1 })])),
+      type: t.number(U([u('calories'), u('foot', { exp: -1n })])),
     });
   });
 
@@ -1051,7 +998,7 @@ describe('number units work together', () => {
     expect(await runCode(`1 bananas/second as bananas/minute`)).toMatchObject({
       value: F(60),
       type: t.number(
-        U([u('bananas', { known: false }), u('minute', { exp: -1 })])
+        U([u('bananas', { known: false }), u('minute', { exp: -1n })])
       ),
     });
   });
@@ -1062,7 +1009,7 @@ describe('number units work together', () => {
     ).toMatchObject({
       value: F(209216129, 16129),
       type: t.number(
-        U([u('g', { multiplier: 1000 }), u('second', { exp: -2 })])
+        U([u('g', { multiplier: 1000 }), u('second', { exp: -2n })])
       ),
     });
   });
@@ -1070,7 +1017,7 @@ describe('number units work together', () => {
   it('expands expandable units (1)', async () => {
     expect(await runCode(`1 squaremeter + 2 m^2`)).toMatchObject({
       value: F(3),
-      type: t.number(U('m', { exp: 2 })),
+      type: t.number(U('m', { exp: 2n })),
     });
   });
 
@@ -1084,7 +1031,7 @@ describe('number units work together', () => {
   it('autoconverts expanding expandable units (3)', async () => {
     expect(await runCode(`2 bar + 1 newton/meter^2`)).toMatchObject({
       value: F(200001),
-      type: t.number(U([u('newton'), u('meter', { exp: -2 })])),
+      type: t.number(U([u('newton'), u('meter', { exp: -2n })])),
     });
   });
 
@@ -1152,7 +1099,7 @@ describe('number units work together', () => {
   it('autoconverts time units correctly', async () => {
     expect(await runCode(`1 hour / 3 minutes^2`)).toMatchObject({
       value: F(20),
-      type: t.number(U('minutes', { exp: -1 })),
+      type: t.number(U('minutes', { exp: -1n })),
     });
   });
 
@@ -1163,7 +1110,7 @@ describe('number units work together', () => {
       `)
     ).toMatchObject({
       value: F(1500),
-      type: t.number(U([u('hours'), u('months', { exp: -1 }), u('watts')])),
+      type: t.number(U([u('hours'), u('months', { exp: -1n }), u('watts')])),
     });
   });
 
@@ -1185,7 +1132,7 @@ describe('number units work together', () => {
       `)
     ).toMatchObject({
       value: F(6),
-      type: t.number(U([u('hours', { exp: -1 }), u('usd')])),
+      type: t.number(U([u('hours', { exp: -1n }), u('usd')])),
     });
   });
 
@@ -1196,7 +1143,7 @@ describe('number units work together', () => {
       `)
     ).toMatchObject({
       value: F(6),
-      type: t.number(U([u('hours', { exp: -1 }), u('usd')])),
+      type: t.number(U([u('hours', { exp: -1n }), u('usd')])),
     });
   });
 
@@ -1207,7 +1154,7 @@ describe('number units work together', () => {
       `)
     ).toMatchObject({
       value: F(1500),
-      type: t.number(U([u('months', { exp: -1 }), u('usd')])),
+      type: t.number(U([u('months', { exp: -1n }), u('usd')])),
     });
   });
 
@@ -1243,7 +1190,7 @@ describe('number units work together', () => {
         columnTypes: [
           t.number(),
           t.number(),
-          t.number(U([u('USD'), u('gallons', { exp: -1 })])),
+          t.number(U([u('USD'), u('gallons', { exp: -1n })])),
         ],
         columnNames: ['Seq', 'InterestRate', 'Price'],
       }),

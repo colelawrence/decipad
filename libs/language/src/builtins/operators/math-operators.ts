@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
-import Fraction from 'fraction.js';
 import produce from 'immer';
+import Fraction from '@decipad/fraction';
 import { getDefined } from '@decipad/utils';
 import { getInstanceof } from '../../utils';
 import { Type, build as t } from '../../type';
@@ -45,7 +45,8 @@ const exponentiationFunctor = ([a, b]: Type[], values?: AST.Expression[]) => {
     produce((arg1) => {
       for (const unit of arg1.unit?.args ?? []) {
         unit.exp =
-          (unit.exp || 1) * (getDefined(bValue.args[1]).valueOf() as number);
+          (unit.exp || 1n) *
+          BigInt(getDefined(bValue.args[1]).valueOf() as number);
       }
     })
   );

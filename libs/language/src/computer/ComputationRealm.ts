@@ -80,7 +80,7 @@ export class ComputationRealm {
 
           const { date } = colType;
           if (date) {
-            labels = (data as number[]).map((d) => stringifyDate(d, date));
+            labels = (data as bigint[]).map((d) => stringifyDate(d, date));
           }
         }
       }

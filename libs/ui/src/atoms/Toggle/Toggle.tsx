@@ -44,6 +44,7 @@ export const Toggle = ({
 }: ToggleProps): ReturnType<FC> => {
   return (
     <button
+      className="toggle"
       css={[toggleStyles, active && activeToggleStyles]}
       onClick={() => {
         onChange(!active);

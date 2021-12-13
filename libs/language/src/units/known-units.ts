@@ -1,4 +1,4 @@
-import Fraction from 'fraction.js';
+import Fraction from '@decipad/fraction';
 import { normalizeUnitName, doNotPluralize } from './utils';
 import * as LengthUnits from './length-units';
 import * as AreaUnits from './area-units';

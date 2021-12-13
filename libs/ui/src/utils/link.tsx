@@ -27,6 +27,7 @@ type AnchorProps = {
   // hrefs may conditionally be undefined, but the prop is mandatory so it cannot be forgotten
   readonly href: string | undefined;
   readonly css?: SerializedStyles;
+  readonly role?: string;
 } & (
   | ({
       readonly activeStyles?: undefined;
@@ -51,6 +52,7 @@ type AnchorProps = {
 /* eslint-disable jsx-a11y/anchor-has-content */
 /* eslint-disable react/jsx-no-target-blank */
 export const Anchor: React.FC<AnchorProps> = ({
+  role = '',
   href,
   activeStyles,
   exact,
@@ -72,6 +74,7 @@ export const Anchor: React.FC<AnchorProps> = ({
         return (
           <NavHashLink
             {...props}
+            className={role}
             activeClassName={activeClassName}
             css={[props.css, { [`&.${activeClassName}`]: activeStyles }]}
             to={resolved}
@@ -87,6 +90,7 @@ export const Anchor: React.FC<AnchorProps> = ({
   return (
     <a
       {...props}
+      className={role}
       href={resolved}
       target={internal ? undefined : '_blank'}
       rel={internal ? undefined : 'noreferrer noopener'}

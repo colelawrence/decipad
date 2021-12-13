@@ -1,3 +1,4 @@
+import { F } from '../utils';
 import { runTests } from './run-tests';
 
 runTests({
@@ -9,13 +10,13 @@ runTests({
         args: [
           {
             type: 'literal',
-            args: ['number', 1, null, { d: 1, n: 1, s: 1 }],
+            args: ['number', F(1), null],
             start: 5,
             end: 5,
           },
           {
             type: 'literal',
-            args: ['number', 10, null, { d: 1, n: 10, s: 1 }],
+            args: ['number', F(10), null],
             start: 8,
             end: 9,
           },
@@ -42,13 +43,13 @@ runTests({
         args: [
           {
             type: 'literal',
-            args: ['number', 1, null, { d: 1, n: 1, s: 1 }],
+            args: ['number', F(1), null],
             start: 5,
             end: 5,
           },
           {
             type: 'literal',
-            args: ['number', 10, null, { d: 1, n: 10, s: 1 }],
+            args: ['number', F(10), null],
             start: 16,
             end: 17,
           },
@@ -75,13 +76,13 @@ runTests({
         args: [
           {
             type: 'date',
-            args: ['year', 2020, 'month', 10],
+            args: ['year', 2020n, 'month', 10n],
             start: 4,
             end: 16,
           },
           {
             type: 'date',
-            args: ['year', 2020, 'month', 3],
+            args: ['year', 2020n, 'month', 3n],
             start: 19,
             end: 31,
           },

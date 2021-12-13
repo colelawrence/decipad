@@ -42,12 +42,12 @@ it('can find tables in the document', () => {
 
   expect(prettyPrintAST((program[0] as ParsedBlock).block))
     .toMatchInlineSnapshot(`
-      "(block
-        (assign
-          (def TheTitle)
-          (table
-            Col1 (column \\"Hello\\" \\"World\\")
-            Col2 (column 123 456)
-            Col3 (column (date year 2020) (date year 2030)))))"
-    `);
+    "(block
+      (assign
+        (def TheTitle)
+        (table
+          Col1 (column \\"Hello\\" \\"World\\")
+          Col2 (column 123 456)
+          Col3 (column (date year 2020) (date year 2030)))))"
+  `);
 });

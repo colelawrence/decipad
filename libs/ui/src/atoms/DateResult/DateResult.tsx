@@ -11,8 +11,9 @@ export const DateResult = ({
   type,
   value,
 }: ResultTypeProps): ReturnType<FC> => {
-  const date = new Date(Array.isArray(value) ? value[0] : value);
-  let format;
+  const dateArg = Array.isArray(value) ? value[0] : value;
+  const date = dateArg instanceof Date ? dateArg : new Date(Number(dateArg));
+  let format: string | undefined;
   switch (type.date) {
     case 'year': {
       format = 'uuuu';

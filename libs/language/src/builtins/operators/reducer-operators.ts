@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import Fraction from 'fraction.js';
+import Fraction from '@decipad/fraction';
 import { BuiltinSpec } from '../interfaces';
 import { Value, fromJS } from '../../interpreter/Value';
 import { Type } from '../../type';

@@ -12,6 +12,7 @@
     { "path": "../queries" },
     { "path": "../utils" },
     { "path": "../react-utils" },
+    { "path": "../fraction" },
     { "path": "../routing" }
   ]
 }

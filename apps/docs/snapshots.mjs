@@ -37,13 +37,21 @@ const runCode = (sources) => {
   );
 
   if (stderr && stderr.length) {
-    console.error('STDERR: ' + stderr);
+    // eslint-disable-next-line no-console
+    console.error(`STDERR: ${stderr.toString('utf-8')}`);
   }
 
   if (error) {
     throw error;
   } else {
-    return JSON.parse(stdout + '');
+    const out = stdout.toString('utf-8');
+    try {
+      return JSON.parse(out);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(`Error parsing output ${out}`);
+      throw err;
+    }
   }
 };
 
@@ -65,13 +73,14 @@ const snapshotTestingPlugin =
 
     const results = await runCode(nodes.map((n) => n.code));
 
-    for (let i = 0; i < nodes.length; i++) {
+    for (let i = 0; i < nodes.length; i += 1) {
       const { node, code, snapshot } = nodes[i];
       const actualValue = results[i];
 
       if (snapshot !== actualValue) {
-        failures++;
-        console.error('--\ndifferent result in ' + fileName);
+        failures += 1;
+        // eslint-disable-next-line no-console
+        console.error(`--\ndifferent result in ${fileName}`);
 
         diffLines(snapshot, actualValue).forEach((part) => {
           const colorizeLine = part.added
@@ -113,10 +122,12 @@ async function testOneFile(fileName, relativeFileName) {
 
 async function runDocTests() {
   for (const file of glob.sync('docs/**/*.md', { cwd: docsDir })) {
+    // eslint-disable-next-line no-await-in-loop
     await testOneFile(pathJoin(docsDir, file), file);
   }
 
   if (failures > 0 && !isUpdating) {
+    // eslint-disable-next-line no-console
     console.error(
       'There are failed doctests. Add --update to this command to update the snapshots.'
     );
@@ -125,6 +136,7 @@ async function runDocTests() {
 }
 
 runDocTests().catch((e) => {
+  // eslint-disable-next-line no-console
   console.error(e);
   process.exit(1);
 });

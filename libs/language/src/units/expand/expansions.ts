@@ -1,4 +1,4 @@
-import Fraction from 'fraction.js';
+import Fraction from '@decipad/fraction';
 import { identity } from '../../utils';
 import type { BaseQuantity } from '../known-units';
 

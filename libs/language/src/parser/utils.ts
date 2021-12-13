@@ -1,4 +1,4 @@
-import Fraction from 'fraction.js';
+import Fraction from '@decipad/fraction';
 import { AST } from '..';
 import { stringifyUnits } from '../type/units';
 import { getIdentifierString, isNode, isStatement } from '../utils';
@@ -11,12 +11,11 @@ const prettyPrint = (node: AST.Node, indent: number): string => {
 
   switch (node.type) {
     case 'literal': {
-      const [, value, units, fraction] = node.args;
-      const valueStr =
-        fraction instanceof Fraction
-          ? fraction.toString()
-          : JSON.stringify(value);
-      return [valueStr, units && prettyPrint(units, indent + 1)].join('');
+      const [, value, units] = node.args;
+      return [
+        value instanceof Fraction ? value.toString() : JSON.stringify(value),
+        units && prettyPrint(units, indent + 1),
+      ].join('');
     }
     case 'units': {
       return stringifyUnits(node);

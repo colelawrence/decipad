@@ -1,3 +1,4 @@
+import Fraction from '@decipad/fraction';
 import * as Values from '../interpreter/Value';
 import { Type, build as t } from '../type';
 import {
@@ -6,6 +7,13 @@ import {
   automapValues,
   automapValuesForReducer,
 } from './automap';
+import { F } from '../utils';
+
+// needed because JSON.stringify(BigInt) does not work
+(BigInt.prototype as unknown as { toJSON: () => string }).toJSON =
+  function toJSON() {
+    return this.toString();
+  };
 
 const bool = t.boolean();
 const num = t.number();
@@ -225,7 +233,7 @@ describe('automapValues', () => {
       ([v1, v2]) => {
         calledOnValues.push(Values.Column.fromValues([v1, v2]));
         return Values.fromJS(
-          (v1.getData() as number) * (v2.getData() as number)
+          (v1.getData() as Fraction).mul(v2.getData() as Fraction)
         );
       }
     );
@@ -280,7 +288,7 @@ describe('automapValues', () => {
 
   describe('automapping', () => {
     const sumOne = ([val]: Values.Value[]) =>
-      Values.fromJS((val.getData() as number[]).reduce((a, b) => a + b));
+      Values.fromJS((val.getData() as Fraction[]).reduce((a, b) => a.add(b)));
 
     const combine = (values: Values.Value[]) =>
       Values.fromJS(
@@ -311,14 +319,14 @@ describe('automapValues', () => {
         [2]
       );
 
-      expect(result.getData()).toEqual({ d: 1, n: 7, s: 1 });
+      expect(result.getData()).toEqual(F(7));
     });
 
     /* eslint-disable-next-line jest/no-disabled-tests */
     it.skip('supports reducing the last of many dimensions', () => {
       const deepValues = Values.fromJS([
-        [1, 2, 4],
-        [8, 16, 32],
+        [1n, 2n, 4n],
+        [8n, 16n, 32n],
       ]);
 
       const result = automapValues(
@@ -340,12 +348,12 @@ describe('automapValues', () => {
         [t.column(t.number(), 2), t.column(t.number(), 3)],
         args,
         ([a1, a2]: Values.Value[]) => {
-          const v1 = a1.getData() as number;
-          const v2 = a2.getData() as number[];
+          const v1 = a1.getData() as Fraction;
+          const v2 = a2.getData() as Fraction[];
 
           calls.push([v1, v2]);
 
-          return Values.fromJS(v2.map((v) => v + v1));
+          return Values.fromJS(v2.map((v) => v.add(v1)));
         },
         [1, 2]
       );
@@ -582,7 +590,7 @@ describe('automapValues', () => {
 
 describe('automap for reducers', () => {
   const sum = ([value]: Values.Value[]) =>
-    Values.fromJS((value.getData() as number[]).reduce((a, b) => a + b));
+    Values.fromJS((value.getData() as Fraction[]).reduce((a, b) => a.add(b)));
   const sumFunctor = ([type]: Type[]) => type.reduced().isScalar('number');
 
   it('automapTypesForReducer can call a reducer', () => {
@@ -624,7 +632,7 @@ describe('automap for reducers', () => {
 
   it('automapValuesForReducer can reduce', () => {
     const twoDeeType = t.column(t.column(t.number(), 1, 'X'), 2, 'Y');
-    const twoDeeValue = Values.fromJS([[1], [2]]);
+    const twoDeeValue = Values.fromJS([[1n], [2n]]);
 
     expect(
       automapValuesForReducer(
@@ -642,7 +650,7 @@ describe('automap for reducers', () => {
 
   it('automapValuesForReducer can reduce the other way', () => {
     const twoDeeType = t.column(t.column(t.number(), 2, 'X'), 1, 'Y');
-    const twoDeeValue = Values.fromJS([[1, 2]]);
+    const twoDeeValue = Values.fromJS([[1n, 2n]]);
 
     expect(
       automapValuesForReducer(

@@ -54,6 +54,7 @@ export const ToggleMarkButton = ({
     <>
       {divider && <div css={dividerStyle} />}
       <button
+        className="toggle"
         css={[buttonStyles, isActive && activeButtonStyles]}
         onMouseDown={
           editor

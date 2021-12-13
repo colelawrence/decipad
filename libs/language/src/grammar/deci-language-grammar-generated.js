@@ -6,20 +6,14 @@ function id(x) {
 
 import { tokenizer } from './tokenizer';
 
-import Fraction from 'fraction.js';
+import Fraction from '@decipad/fraction';
 
 function numberLiteralFromUnits(parentNode, n, units = null) {
-  const mult =
-    (!units && 1) ||
-    units.args
-      .map((unit) => unit.multiplier ** (unit.exp || 1))
-      .reduce((acc, mult) => acc * mult, 1);
-
-  const fraction = new Fraction(n);
+  const fraction = n instanceof Fraction ? n : new Fraction(n);
 
   const node = {
     type: 'literal',
-    args: ['number', n, units, fraction],
+    args: ['number', fraction, units],
   };
   if (Array.isArray(parentNode)) {
     return addArrayLoc(node, parentNode);
@@ -101,7 +95,7 @@ const parseUnit = (unitString) => {
   if (knowsUnit(unitString)) {
     return {
       unit: unitString,
-      exp: 1,
+      exp: 1n,
       multiplier: 1,
       known: true,
     };
@@ -116,7 +110,7 @@ const parseUnit = (unitString) => {
 
     return {
       unit: name,
-      exp: 1,
+      exp: 1n,
       multiplier,
       known,
     };
@@ -143,16 +137,15 @@ const joinDateParts = (dateParts) => {
 const makeDateFragmentReader =
   (key, len, min, max) =>
   ([{ text }], _l, reject) => {
-    const number = parseInt(text);
-    if (
-      text.length !== len ||
-      Number.isNaN(number) ||
-      number < min ||
-      number > max
-    ) {
+    try {
+      const number = BigInt(text);
+      if (text.length !== len || number < min || number > max) {
+        return reject;
+      } else {
+        return { [key]: number };
+      }
+    } catch (err) {
       return reject;
-    } else {
-      return { [key]: number };
     }
   };
 
@@ -417,7 +410,7 @@ let ParserRules = [
     name: 'percentage',
     symbols: ['decimal', { literal: '%' }],
     postprocess: (d) => {
-      return numberLiteralFromUnits(d, d[0].n / 100);
+      return numberLiteralFromUnits(d, new Fraction(d[0].n, 100));
     },
   },
   {
@@ -426,7 +419,7 @@ let ParserRules = [
     postprocess: ([number]) => {
       return addLoc(
         {
-          n: parseFloat(number.value),
+          n: number.value,
         },
         number
       );
@@ -441,7 +434,7 @@ let ParserRules = [
       } else {
         return addLoc(
           {
-            n: parseInt(number.value),
+            n: BigInt(number.value),
           },
           number
         );
@@ -457,7 +450,7 @@ let ParserRules = [
       } else {
         return addLoc(
           {
-            n: parseFloat(number.value),
+            n: new Fraction(number.value),
           },
           number
         );
@@ -518,7 +511,7 @@ let ParserRules = [
     name: 'unit',
     symbols: ['unitName', { literal: '^' }, 'int'],
     postprocess: ([unit, _, exponent]) => {
-      unit.exp *= exponent.n;
+      unit.exp *= BigInt(exponent.n);
       return addLoc(unit, unit, exponent);
     },
   },
@@ -735,82 +728,82 @@ let ParserRules = [
   {
     name: 'literalMonth',
     symbols: ['literalMonth$subexpression$1'],
-    postprocess: returnMonth(1),
+    postprocess: returnMonth(1n),
   },
   { name: 'literalMonth$subexpression$2', symbols: [{ literal: 'Feb' }] },
   { name: 'literalMonth$subexpression$2', symbols: [{ literal: 'February' }] },
   {
     name: 'literalMonth',
     symbols: ['literalMonth$subexpression$2'],
-    postprocess: returnMonth(2),
+    postprocess: returnMonth(2n),
   },
   { name: 'literalMonth$subexpression$3', symbols: [{ literal: 'Mar' }] },
   { name: 'literalMonth$subexpression$3', symbols: [{ literal: 'March' }] },
   {
     name: 'literalMonth',
     symbols: ['literalMonth$subexpression$3'],
-    postprocess: returnMonth(3),
+    postprocess: returnMonth(3n),
   },
   { name: 'literalMonth$subexpression$4', symbols: [{ literal: 'Apr' }] },
   { name: 'literalMonth$subexpression$4', symbols: [{ literal: 'April' }] },
   {
     name: 'literalMonth',
     symbols: ['literalMonth$subexpression$4'],
-    postprocess: returnMonth(4),
+    postprocess: returnMonth(4n),
   },
   {
     name: 'literalMonth',
     symbols: [{ literal: 'May' }],
-    postprocess: returnMonth(5),
+    postprocess: returnMonth(5n),
   },
   { name: 'literalMonth$subexpression$5', symbols: [{ literal: 'Jun' }] },
   { name: 'literalMonth$subexpression$5', symbols: [{ literal: 'June' }] },
   {
     name: 'literalMonth',
     symbols: ['literalMonth$subexpression$5'],
-    postprocess: returnMonth(6),
+    postprocess: returnMonth(6n),
   },
   { name: 'literalMonth$subexpression$6', symbols: [{ literal: 'Jul' }] },
   { name: 'literalMonth$subexpression$6', symbols: [{ literal: 'July' }] },
   {
     name: 'literalMonth',
     symbols: ['literalMonth$subexpression$6'],
-    postprocess: returnMonth(7),
+    postprocess: returnMonth(7n),
   },
   { name: 'literalMonth$subexpression$7', symbols: [{ literal: 'Aug' }] },
   { name: 'literalMonth$subexpression$7', symbols: [{ literal: 'August' }] },
   {
     name: 'literalMonth',
     symbols: ['literalMonth$subexpression$7'],
-    postprocess: returnMonth(8),
+    postprocess: returnMonth(8n),
   },
   { name: 'literalMonth$subexpression$8', symbols: [{ literal: 'Sep' }] },
   { name: 'literalMonth$subexpression$8', symbols: [{ literal: 'September' }] },
   {
     name: 'literalMonth',
     symbols: ['literalMonth$subexpression$8'],
-    postprocess: returnMonth(9),
+    postprocess: returnMonth(9n),
   },
   { name: 'literalMonth$subexpression$9', symbols: [{ literal: 'Oct' }] },
   { name: 'literalMonth$subexpression$9', symbols: [{ literal: 'October' }] },
   {
     name: 'literalMonth',
     symbols: ['literalMonth$subexpression$9'],
-    postprocess: returnMonth(10),
+    postprocess: returnMonth(10n),
   },
   { name: 'literalMonth$subexpression$10', symbols: [{ literal: 'Nov' }] },
   { name: 'literalMonth$subexpression$10', symbols: [{ literal: 'November' }] },
   {
     name: 'literalMonth',
     symbols: ['literalMonth$subexpression$10'],
-    postprocess: returnMonth(11),
+    postprocess: returnMonth(11n),
   },
   { name: 'literalMonth$subexpression$11', symbols: [{ literal: 'Dec' }] },
   { name: 'literalMonth$subexpression$11', symbols: [{ literal: 'December' }] },
   {
     name: 'literalMonth',
     symbols: ['literalMonth$subexpression$11'],
-    postprocess: returnMonth(12),
+    postprocess: returnMonth(12n),
   },
   {
     name: 'dateTimeZone',
@@ -851,8 +844,8 @@ let ParserRules = [
       'dateTimeZone$ebnf$1',
     ],
     postprocess: ([sign, h, m]) => {
-      let hours = parseInt(h.value);
-      let minutes = m ? parseInt(m[1].value) : 0;
+      let hours = Number(h.value);
+      let minutes = m ? Number(m[1].value) : 0;
 
       if (sign[0].value === '-') {
         hours = -hours;
@@ -1302,8 +1295,7 @@ let ParserRules = [
     postprocess: (d) => {
       const expr = d[2];
       if (expr.type === 'literal' && expr.args[0] === 'number') {
-        expr.args[1] = -expr.args[1];
-        expr.args[3] = expr.args[3] ? expr.args[3].neg() : expr.args[3];
+        expr.args[1] = expr.args[1].neg();
         return addArrayLoc(
           {
             type: expr.type,

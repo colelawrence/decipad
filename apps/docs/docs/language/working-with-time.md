@@ -54,14 +54,14 @@ For instance, in Deci, a span of 9 weeks and three days can be specified as:
 
 ```deci live
 [9 weeks, 3 days]
-==> [ [ 'week', 9 ], [ 'day', 3 ] ] <null>
+==> [ [ 'week', 9n ], [ 'day', 3n ] ] <null>
 ```
 
 In a time duration you can specify years, months, weeks, days, hours, minutes or seconds. Here's another example:
 
 ```deci live
 [3 years, 8 months, 6 weeks]
-==> [ [ 'year', 3 ], [ 'month', 8 ], [ 'week', 6 ] ] <null>
+==> [ [ 'year', 3n ], [ 'month', 8n ], [ 'week', 6n ] ] <null>
 ```
 
 ## Time traveling
@@ -80,5 +80,5 @@ Or subtract two dates to get a time duration:
 start = date(2022-06-30)
 end = date(2022-09-15)
 diff = end - start
-==> [ [ 'day', 77 ] ] <null>
+==> [ [ 'day', 77n ] ] <null>
 ```

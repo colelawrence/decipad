@@ -22,7 +22,7 @@ it('can pretty print the AST', () => {
 });
 
 const meters = {
-  exp: 1,
+  exp: 1n,
   known: true,
   multiplier: 1,
   unit: 'meters',

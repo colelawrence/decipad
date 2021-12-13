@@ -1,3 +1,4 @@
+import { F } from '../utils';
 import { runTests } from './run-tests';
 
 runTests({
@@ -6,7 +7,7 @@ runTests({
     ast: [
       {
         type: 'literal',
-        args: ['number', -41, null, { d: 1, n: 41, s: -1 }],
+        args: ['number', F(-41), null],
         start: {
           char: 1,
           line: 1,
@@ -26,7 +27,7 @@ runTests({
     ast: [
       {
         type: 'literal',
-        args: ['number', -41.5, null, { d: 2, n: 83, s: -1 }],
+        args: ['number', F(-415, 10), null],
         start: {
           char: 4,
           line: 3,

@@ -274,12 +274,12 @@ describe('divideUnit', () => {
 
   it('exponentiates units', () => {
     expect(t.number([invSecond]).divideUnit(units(second))).toEqual(
-      t.number([setExponent(second, -2)])
+      t.number([setExponent(second, -2n)])
     );
 
     expect(
-      t.number([setExponent(second, -2)]).divideUnit(units(second))
-    ).toEqual(t.number([setExponent(second, -3)]));
+      t.number([setExponent(second, -2n)]).divideUnit(units(second))
+    ).toEqual(t.number([setExponent(second, -3n)]));
   });
 
   it('exponentiation that results in 0-exponent eliminates the unit', () => {
@@ -291,7 +291,7 @@ describe('divideUnit', () => {
       t.number([meter, invSecond]).divideUnit(units(u('USD'))).unit
     ).toEqual(
       units(
-        setExponent(u('USD'), -1), // first because of sort
+        setExponent(u('USD'), -1n), // first because of sort
         meter,
         invSecond
       )

@@ -72,7 +72,7 @@ const parseUnit = unitString => {
   if (knowsUnit(unitString)) {
     return {
       unit: unitString,
-      exp: 1,
+      exp: 1n,
       multiplier: 1,
       known: true
     }
@@ -87,7 +87,7 @@ const parseUnit = unitString => {
 
     return {
       unit: name,
-      exp: 1,
+      exp: 1n,
       multiplier,
       known
     }
@@ -138,7 +138,7 @@ unitName -> %identifier                                 {%
 
 unit -> unitName "^" int                                {%
                                                         ([unit, _, exponent]) => {
-                                                          unit.exp *= exponent.n
+                                                          unit.exp *= BigInt(exponent.n)
                                                           return addLoc(unit, unit, exponent)
                                                         }
                                                         %}

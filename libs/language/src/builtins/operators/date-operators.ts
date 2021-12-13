@@ -10,7 +10,7 @@ export const dateOperators: Record<string, BuiltinSpec> = {
   containsdate: {
     argCount: 2,
     fnValues: (range, date) => {
-      const [rStart, rEnd] = range.getData() as number[];
+      const [rStart, rEnd] = range.getData() as bigint[];
       const dateVal = getInstanceof(date, Date);
       return fromJS(rStart <= dateVal.getData() && rEnd >= dateVal.getEnd());
     },

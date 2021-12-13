@@ -10,25 +10,25 @@ describe('simplify units', () => {
 
   it('simplifies exponentiated unknown unit', () => {
     expect(
-      simplifyUnits(U('bananas', { multiplier: 1000, exp: 2, known: false }))
-    ).toMatchObject(U('bananas', { multiplier: 1000, exp: 2, known: false }));
+      simplifyUnits(U('bananas', { multiplier: 1000, exp: 2n, known: false }))
+    ).toMatchObject(U('bananas', { multiplier: 1000, exp: 2n, known: false }));
   });
 
   it('simplifies exponentiated unknown unit (2)', () => {
     expect(
       simplifyUnits(
         U([
-          u('bananas', { known: false, exp: 2 }),
-          u('bananas', { known: false, exp: 3 }),
+          u('bananas', { known: false, exp: 2n }),
+          u('bananas', { known: false, exp: 3n }),
         ])
       )
-    ).toMatchObject(U('bananas', { exp: 5, known: false }));
+    ).toMatchObject(U('bananas', { exp: 5n, known: false }));
   });
 
   it('simplifies exponentiated known unit', () => {
     // km^-1.meters^3
     expect(
-      simplifyUnits(U([u('m', { exp: -1 }), u('m', { exp: 3 })]))
-    ).toMatchObject(U('m', { exp: 2 }));
+      simplifyUnits(U([u('m', { exp: -1n }), u('m', { exp: 3n })]))
+    ).toMatchObject(U('m', { exp: 2n }));
   });
 });

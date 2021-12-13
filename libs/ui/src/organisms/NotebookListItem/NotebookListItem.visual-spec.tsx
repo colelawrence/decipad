@@ -34,7 +34,7 @@ describe('without a desciprtion', () => {
       select(getByText('My Notebook'))
     ))!.boundingBox())!;
 
-    expect(combinedY).toBeGreaterThan(titleY);
+    expect(combinedY).toBeGreaterThanOrEqual(titleY);
     expect(combinedY).toBeLessThan(descriptionY);
   });
 });

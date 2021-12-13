@@ -1,5 +1,6 @@
 import { AST } from '..';
 import {
+  F,
   c,
   l,
   n,
@@ -28,13 +29,13 @@ it('evaluates and returns', async () => {
     n('block', n('assign', n('def', 'A'), l(42))),
   ];
 
-  expect(await run(basicProgram, ['A'])).toEqual([{ d: 1, n: 42, s: 1 }]);
+  expect(await run(basicProgram, ['A'])).toEqual([F(42)]);
 });
 
 it('Gets specific statement', async () => {
   const basicProgram = [n('block', c('+', l(1), l(1)))];
 
-  expect(await run(basicProgram, [[0, 0]])).toEqual([{ d: 1, n: 2, s: 1 }]);
+  expect(await run(basicProgram, [[0, 0]])).toEqual([F(2)]);
 });
 
 it('can return multiple results', async () => {
@@ -45,25 +46,22 @@ it('can return multiple results', async () => {
   );
 
   expect(await run([multipleResults], ['Variable', [0, 1]])).toEqual([
-    { d: 1, n: 1, s: 1 },
-    { d: 1, n: 3, s: 1 },
+    F(1),
+    F(3),
   ]);
 });
 
 it('evaluates conditions', async () => {
   const condition = c('if', l(true), l(1), l(0));
 
-  expect(await runOne(condition)).toEqual({ d: 1, n: 1, s: 1 });
+  expect(await runOne(condition)).toEqual(F(1));
 });
 
 describe('ranges', () => {
   it('evaluates ranges', async () => {
     const r = range(1, 10);
 
-    expect(await runOne(r)).toEqual([
-      { d: 1, n: 1, s: 1 },
-      { d: 1, n: 10, s: 1 },
-    ]);
+    expect(await runOne(r)).toEqual([F(1), F(10)]);
 
     // Contains
     expect(await runOne(c('contains', r, l(1)))).toEqual(true);
@@ -80,8 +78,8 @@ describe('ranges', () => {
     const r = range(date('2020-01', 'month'), date('2020-11', 'month'));
 
     expect(await runOne(r)).toEqual([
-      { d: 1, n: d('2020-01-01'), s: 1 },
-      { d: 1, n: d('2020-12-01') - 1, s: 1 },
+      F(d('2020-01-01')),
+      F(d('2020-12-01') - 1n),
     ]);
 
     expect(
@@ -111,22 +109,19 @@ describe('ranges', () => {
 
   it('evaluates ranges of dates (2)', async () => {
     expect(
-      await runOne(range(n('date', 'year', 2020), n('date', 'year', 2022)))
-    ).toEqual([
-      { d: 1, n: Date.UTC(2020, 0), s: 1 },
-      { d: 1, n: Date.UTC(2023, 0) - 1, s: 1 },
-    ]);
+      await runOne(range(n('date', 'year', 2020n), n('date', 'year', 2022n)))
+    ).toEqual([F(Date.UTC(2020, 0)), F(Date.UTC(2023, 0) - 1)]);
   });
 });
 
 describe('sequences', () => {
   it('can be evaluated', async () => {
     expect(await runOne(seq(l(1), l(5), l(1)))).toEqual([
-      { d: 1, n: 1, s: 1 },
-      { d: 1, n: 2, s: 1 },
-      { d: 1, n: 3, s: 1 },
-      { d: 1, n: 4, s: 1 },
-      { d: 1, n: 5, s: 1 },
+      F(1),
+      F(2),
+      F(3),
+      F(4),
+      F(5),
     ]);
 
     expect(
@@ -141,7 +136,7 @@ describe('sequences', () => {
 
     const dates = (await runOne(
       seq(date('2020-01', 'year'), date('2020-01', 'year'), n('ref', 'month'))
-    )) as number[];
+    )) as bigint[];
 
     expect(dates.length).toEqual(12);
     expect(dates[0]).toEqual(parseUTCDate('2020-01'));
@@ -161,7 +156,7 @@ describe('functions', () => {
       c('Function Name', l(1), l(2))
     );
 
-    expect(await run([usingFunctions], [0])).toEqual([{ d: 1, n: 3, s: 1 }]);
+    expect(await run([usingFunctions], [0])).toEqual([F(3)]);
   });
 });
 
@@ -172,7 +167,7 @@ it('Can use variables', async () => {
     n('ref', 'Some Variable')
   );
 
-  expect(await run([withVariables], [0])).toEqual([{ d: 1, n: 1, s: 1 }]);
+  expect(await run([withVariables], [0])).toEqual([F(1)]);
 });
 
 describe('columns', () => {
@@ -184,32 +179,26 @@ describe('columns', () => {
       c('+', n('ref', 'Array'), col(3, c('+', l(1), l(1)), 1))
     );
 
-    expect(await run([programWithArray], [0])).toEqual([
-      [
-        { d: 1, n: 4, s: 1 },
-        { d: 1, n: 4, s: 1 },
-        { d: 1, n: 4, s: 1 },
-      ],
-    ]);
+    expect(await run([programWithArray], [0])).toEqual([[F(4), F(4), F(4)]]);
   });
 
   it('can perform calculations between columns and single numbers', async () => {
     expect(await runOne(c('*', col(1, 2, 3), l(2)))).toEqual([
-      { d: 1, n: 2, s: 1 },
-      { d: 1, n: 4, s: 1 },
-      { d: 1, n: 6, s: 1 },
+      F(2),
+      F(4),
+      F(6),
     ]);
 
     expect(await runOne(c('/', col(1, 2, 3), l(2)))).toEqual([
-      { d: 2, n: 1, s: 1 },
-      { d: 1, n: 1, s: 1 },
-      { d: 2, n: 3, s: 1 },
+      F(1, 2),
+      F(1),
+      F(3, 2),
     ]);
 
     expect(await runOne(c('+', l(1), col(1, 2, 3)))).toEqual([
-      { d: 1, n: 2, s: 1 },
-      { d: 1, n: 3, s: 1 },
-      { d: 1, n: 4, s: 1 },
+      F(2),
+      F(3),
+      F(4),
     ]);
   });
 
@@ -217,18 +206,9 @@ describe('columns', () => {
     const column = col(range(1, 2), range(3, 4), range(5, 6));
 
     expect(await runOne(column)).toEqual([
-      [
-        { d: 1, n: 1, s: 1 },
-        { d: 1, n: 2, s: 1 },
-      ],
-      [
-        { d: 1, n: 3, s: 1 },
-        { d: 1, n: 4, s: 1 },
-      ],
-      [
-        { d: 1, n: 5, s: 1 },
-        { d: 1, n: 6, s: 1 },
-      ],
+      [F(1), F(2)],
+      [F(3), F(4)],
+      [F(5), F(6)],
     ]);
 
     expect(await runOne(c('contains', column, l(3)))).toEqual([
@@ -269,10 +249,10 @@ describe('dates', () => {
 
 describe('Time quantities', () => {
   it('can be evaluated', async () => {
-    const q = timeQuantity({ year: 4, day: 3 });
+    const q = timeQuantity({ year: 4n, day: 3n });
     expect(await runOne(q)).toEqual([
-      ['year', 4],
-      ['day', 3],
+      ['year', 4n],
+      ['day', 3n],
     ]);
   });
 });
@@ -288,16 +268,8 @@ describe('Tables', () => {
         })
       )
     ).toEqual([
-      [
-        { d: 1, n: 1, s: 1 },
-        { d: 1, n: 2, s: 1 },
-        { d: 1, n: 3, s: 1 },
-      ],
-      [
-        { d: 1, n: 2, s: 1 },
-        { d: 1, n: 2, s: 1 },
-        { d: 1, n: 2, s: 1 },
-      ],
+      [F(1), F(2), F(3)],
+      [F(2), F(2), F(2)],
       [false, false, true],
     ]);
 
@@ -308,7 +280,7 @@ describe('Tables', () => {
           Col2: l(2),
         })
       )
-    ).toEqual([[{ d: 1, n: 1, s: 1 }], [{ d: 1, n: 2, s: 1 }]]);
+    ).toEqual([[F(1)], [F(2)]]);
 
     expect(
       await runOne(
@@ -318,16 +290,8 @@ describe('Tables', () => {
         })
       )
     ).toEqual([
-      [
-        { d: 1, n: 1, s: 1 },
-        { d: 1, n: 2, s: 1 },
-        { d: 1, n: 3, s: 1 },
-      ],
-      [
-        { d: 1, n: 2, s: 1 },
-        { d: 1, n: 4, s: 1 },
-        { d: 1, n: 6, s: 1 },
-      ],
+      [F(1), F(2), F(3)],
+      [F(2), F(4), F(6)],
     ]);
   });
 
@@ -338,7 +302,7 @@ describe('Tables', () => {
           Col1: l(101),
         })
       )
-    ).toEqual([[{ d: 1, n: 101, s: 1 }]]);
+    ).toEqual([[F(101)]]);
 
     expect(
       await runOne(
@@ -346,7 +310,7 @@ describe('Tables', () => {
           Col1: c('previous', l(101)),
         })
       )
-    ).toEqual([[{ d: 1, n: 101, s: 1 }]]);
+    ).toEqual([[F(101)]]);
   });
 
   it('can get a column from a table', async () => {
@@ -370,16 +334,8 @@ describe('Tables', () => {
         })
       )
     ).toEqual([
-      [
-        { d: 1, n: 1, s: 1 },
-        { d: 1, n: 2, s: 1 },
-        { d: 1, n: 3, s: 1 },
-      ],
-      [
-        { d: 1, n: 1, s: 1 },
-        { d: 1, n: 2, s: 1 },
-        { d: 1, n: 3, s: 1 },
-      ],
+      [F(1), F(2), F(3)],
+      [F(1), F(2), F(3)],
     ]);
   });
 
@@ -409,18 +365,9 @@ describe('Tables', () => {
 
     expect(value).toEqual([
       ['One', 'Two'],
-      [
-        { d: 1, n: 1, s: 1 },
-        { d: 1, n: 2, s: 1 },
-      ],
-      [
-        { d: 1, n: 11, s: 1 },
-        { d: 1, n: 12, s: 1 },
-      ],
-      [
-        { d: 1, n: 1, s: 1 },
-        { d: 1, n: 1, s: 1 },
-      ],
+      [F(1), F(2)],
+      [F(11), F(12)],
+      [F(1), F(1)],
     ]);
   });
 });
@@ -430,29 +377,13 @@ describe('higher dimensions', () => {
     const column = col(col(l(1), l(2), l(3)), col(l(4), l(5), l(6)));
 
     expect(await runOne(column)).toEqual([
-      [
-        { d: 1, n: 1, s: 1 },
-        { d: 1, n: 2, s: 1 },
-        { d: 1, n: 3, s: 1 },
-      ],
-      [
-        { d: 1, n: 4, s: 1 },
-        { d: 1, n: 5, s: 1 },
-        { d: 1, n: 6, s: 1 },
-      ],
+      [F(1), F(2), F(3)],
+      [F(4), F(5), F(6)],
     ]);
 
     expect(await runOne(c('+', column, column))).toEqual([
-      [
-        { d: 1, n: 2, s: 1 },
-        { d: 1, n: 4, s: 1 },
-        { d: 1, n: 6, s: 1 },
-      ],
-      [
-        { d: 1, n: 8, s: 1 },
-        { d: 1, n: 10, s: 1 },
-        { d: 1, n: 12, s: 1 },
-      ],
+      [F(2), F(4), F(6)],
+      [F(8), F(10), F(12)],
     ]);
   });
 
@@ -460,41 +391,17 @@ describe('higher dimensions', () => {
     const column = col(col(l(1), l(2), l(3)), col(l(4), l(5), l(6)));
 
     expect(await runOne(c('+', column, l(1)))).toEqual([
-      [
-        { d: 1, n: 2, s: 1 },
-        { d: 1, n: 3, s: 1 },
-        { d: 1, n: 4, s: 1 },
-      ],
-      [
-        { d: 1, n: 5, s: 1 },
-        { d: 1, n: 6, s: 1 },
-        { d: 1, n: 7, s: 1 },
-      ],
+      [F(2), F(3), F(4)],
+      [F(5), F(6), F(7)],
     ]);
     expect(await runOne(c('+', l(1), column))).toEqual([
-      [
-        { d: 1, n: 2, s: 1 },
-        { d: 1, n: 3, s: 1 },
-        { d: 1, n: 4, s: 1 },
-      ],
-      [
-        { d: 1, n: 5, s: 1 },
-        { d: 1, n: 6, s: 1 },
-        { d: 1, n: 7, s: 1 },
-      ],
+      [F(2), F(3), F(4)],
+      [F(5), F(6), F(7)],
     ]);
 
     expect(await runOne(c('/', column, col(l(1), l(2))))).toEqual([
-      [
-        { d: 1, n: 1, s: 1 },
-        { d: 1, n: 2, s: 1 },
-        { d: 1, n: 3, s: 1 },
-      ],
-      [
-        { d: 1, n: 2, s: 1 },
-        { d: 2, n: 5, s: 1 },
-        { d: 1, n: 3, s: 1 },
-      ],
+      [F(1), F(2), F(3)],
+      [F(2), F(5, 2), F(3)],
     ]);
   });
 });
@@ -505,25 +412,21 @@ it('Can create columns with disparate types / dims', async () => {
       col(col(l(1), l(2), l(3)), col(l('s'), l(5), l(false), col(l(1))))
     )
   ).toEqual([
-    [
-      { d: 1, n: 1, s: 1 },
-      { d: 1, n: 2, s: 1 },
-      { d: 1, n: 3, s: 1 },
-    ],
-    ['s', { d: 1, n: 5, s: 1 }, false, [{ d: 1, n: 1, s: 1 }]],
+    [F(1), F(2), F(3)],
+    ['s', F(5), false, [F(1)]],
   ]);
 });
 
 it('can expand directives', async () => {
   const minutes: AST.Unit = {
     unit: 'minutes',
-    exp: 1,
+    exp: 1n,
     multiplier: 1,
     known: true,
   };
   const hours: AST.Unit = {
     unit: 'hours',
-    exp: 1,
+    exp: 1n,
     multiplier: 1,
     known: true,
   };

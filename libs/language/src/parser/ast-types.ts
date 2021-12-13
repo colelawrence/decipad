@@ -1,4 +1,4 @@
-import Fraction from 'fraction.js';
+import Fraction from '@decipad/fraction';
 import { Time } from '..';
 
 export interface Pos {
@@ -9,7 +9,7 @@ export interface Pos {
 
 export interface Unit {
   unit: string;
-  exp: number;
+  exp: bigint;
   multiplier: number;
   known: boolean;
   start?: Pos;
@@ -77,7 +77,7 @@ export type Identifier =
 // Literal number, char, string etc
 
 type LitArgs =
-  | ['number', number, Units | null, Fraction]
+  | ['number', Fraction, Units | null]
   | ['boolean', boolean]
   | ['string', string];
 
@@ -90,7 +90,7 @@ export interface Literal {
 
 export interface TimeQuantity {
   type: 'time-quantity';
-  args: (Time.Unit | number)[];
+  args: (Time.Unit | bigint)[];
   start?: Pos;
   end?: Pos;
 }
@@ -116,7 +116,7 @@ export interface TZInfo {
 
 export interface Date {
   type: 'date';
-  args: (Time.Unit | number | TZInfo)[];
+  args: (Time.Unit | bigint | TZInfo)[];
   start?: Pos;
   end?: Pos;
 }

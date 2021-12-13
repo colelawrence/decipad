@@ -63,5 +63,5 @@ export async function waitForSaveFlush() {
 
 export async function keyPress(k: string) {
   await page.keyboard.press(k);
-  await timeout(250);
+  await timeout(500);
 }

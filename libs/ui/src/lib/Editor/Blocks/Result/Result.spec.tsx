@@ -6,7 +6,7 @@ import { NumberResult } from '../../../../atoms';
 const meters: AST.Unit[] = [
   {
     unit: 'meter',
-    exp: 1,
+    exp: 1n,
     known: true,
     multiplier: 1,
     // @ts-expect-error null hopefully ok for test

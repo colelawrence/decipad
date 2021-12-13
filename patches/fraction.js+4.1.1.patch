@@ -1,3 +1,67 @@
+diff --git a/node_modules/fraction.js/bigfraction.d.ts b/node_modules/fraction.js/bigfraction.d.ts
+new file mode 100644
+index 0000000..1b5e11c
+--- /dev/null
++++ b/node_modules/fraction.js/bigfraction.d.ts
+@@ -0,0 +1,58 @@
++declare module 'Fraction';
++
++export interface NumeratorDenominator {
++  n: BigInt;
++  d: BigInt;
++}
++
++type FractionConstructor = {
++  (fraction: Fraction): Fraction;
++  (num: number | string): Fraction;
++  (numerator: number, denominator: number): Fraction;
++  (numbers: (number | string)[]): Fraction;
++  (fraction: NumeratorDenominator): Fraction;
++};
++
++export default class Fraction {
++  constructor (fraction: Fraction);
++  constructor (num: number | string | BigInt);
++  constructor (numerator: number | BigInt, denominator: number | BigInt);
++  constructor (numbers: (number | string | BigInt)[]);
++  constructor (fraction: NumeratorDenominator);
++
++  s: number;
++  n: number;
++  d: number;
++
++  abs(): Fraction;
++  neg(): Fraction;
++
++  add: FractionConstructor;
++  sub: FractionConstructor;
++  mul: FractionConstructor;
++  div: FractionConstructor;
++  pow: FractionConstructor;
++  gcd: FractionConstructor;
++  lcm: FractionConstructor;
++
++  mod(n?: number | string | Fraction): Fraction;
++
++  ceil(places?: number): Fraction;
++  floor(places?: number): Fraction;
++  round(places?: number): Fraction;
++
++  inverse(): Fraction;
++
++  simplify(eps?: number): Fraction;
++
++  equals(n: number | string | Fraction): boolean;
++  compare(n: number | string | Fraction): number;
++  divisible(n: number | string | Fraction): boolean;
++
++  valueOf(): number;
++  toString(decimalPlaces?: number): string;
++  toLatex(excludeWhole?: boolean): string;
++  toFraction(excludeWhole?: boolean): string;
++  toContinued(): number[];
++  clone(): Fraction;
++}
 diff --git a/node_modules/fraction.js/fraction.js b/node_modules/fraction.js/fraction.js
 index 6338725..cd622cc 100644
 --- a/node_modules/fraction.js/fraction.js

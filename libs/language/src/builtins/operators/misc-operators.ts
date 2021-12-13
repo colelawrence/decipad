@@ -1,8 +1,10 @@
+import Fraction from '@decipad/fraction';
 import { getInstanceof } from '../../utils';
 import { Date, fromJS } from '../../interpreter/Value';
 import { Type, build as t } from '../../type';
 import { overloadBuiltin } from '../overloadBuiltin';
 import { BuiltinSpec } from '../interfaces';
+import { compare } from '../../interpreter/compare-values';
 
 export const miscOperators: Record<string, BuiltinSpec> = {
   if: {
@@ -16,9 +18,11 @@ export const miscOperators: Record<string, BuiltinSpec> = {
     {
       argTypes: ['number', 'number'],
       fnValues: (a, b) => {
-        const [aStart, aEnd] = a.getData() as number[];
-        const bNumber = b.getData() as number;
-        return fromJS(bNumber >= aStart && bNumber <= aEnd);
+        const [aStart, aEnd] = a.getData() as Fraction[];
+        const bNumber = b.getData() as Fraction;
+        return fromJS(
+          compare(bNumber, aStart) >= 0 && compare(bNumber, aEnd) <= 0
+        );
       },
       functor: ([a, b]): Type =>
         Type.combine(

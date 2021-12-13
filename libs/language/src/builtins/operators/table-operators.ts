@@ -21,8 +21,8 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
             getDefined(table.columnNames, `no column names in ${table}`)
           )
       ),
-    fnValues: (table, needle) => {
-      table = getInstanceof(table, Column);
+    fnValues: (_table, needle) => {
+      const table = getInstanceof(_table, Column);
       const needleString = getInstanceof(needle, StringValue).getData();
       const firstColumn = getInstanceof(table.values[0], Column);
 

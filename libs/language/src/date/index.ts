@@ -24,17 +24,17 @@ const timeSpecificities = ['hour', 'minute', 'second', 'millisecond'];
 
 export const timeUnitToJSDateUnit: Record<
   Time.Unit,
-  [Time.JSDateUnit, number]
+  [Time.JSDateUnit, bigint]
 > = {
-  year: ['year', 1],
-  quarter: ['month', 3],
-  month: ['month', 1],
-  week: ['day', 7],
-  day: ['day', 1],
-  hour: ['hour', 1],
-  minute: ['minute', 1],
-  second: ['second', 1],
-  millisecond: ['millisecond', 1],
+  year: ['year', 1n],
+  quarter: ['month', 3n],
+  month: ['month', 1n],
+  week: ['day', 7n],
+  day: ['day', 1n],
+  hour: ['hour', 1n],
+  minute: ['minute', 1n],
+  second: ['second', 1n],
+  millisecond: ['millisecond', 1n],
 };
 
 export const getJSDateUnitAndMultiplier = (unit: Time.Unit) =>
@@ -181,9 +181,10 @@ const cmpJSDateUnits = (left: Time.JSDateUnit, right: Time.JSDateUnit) => {
 
 // Dates are ranges -- this function cuts up a date to its closest specificity
 export const cleanDate = (
-  date: number,
+  _date: bigint | number,
   specificity: Time.Specificity
-): number => {
+): bigint => {
+  const date = BigInt(_date);
   if (specificity === 'time') return date;
 
   const necessarySegments = dateToArray(date).slice(
@@ -194,39 +195,39 @@ export const cleanDate = (
   return arrayToDate(necessarySegments);
 };
 
-export const dateToArray = (date: Date | number) => {
-  const d = new Date(date);
+export const dateToArray = (date: Date | number | bigint) => {
+  const d = typeof date === 'bigint' ? new Date(Number(date)) : new Date(date);
 
   return [
-    d.getUTCFullYear(),
-    d.getUTCMonth() + 1,
-    d.getUTCDate(),
-    d.getUTCHours(),
-    d.getUTCMinutes(),
-    d.getUTCSeconds(),
-    d.getUTCMilliseconds(),
+    BigInt(d.getUTCFullYear()),
+    BigInt(d.getUTCMonth() + 1),
+    BigInt(d.getUTCDate()),
+    BigInt(d.getUTCHours()),
+    BigInt(d.getUTCMinutes()),
+    BigInt(d.getUTCSeconds()),
+    BigInt(d.getUTCMilliseconds()),
   ];
 };
 
 const getDateSegment = (
-  thing: number | string | AST.TZInfo | undefined,
+  thing: bigint | string | AST.TZInfo | undefined,
   isMonth: boolean
-): number | null => {
+): bigint | null => {
   if (typeof thing === 'string') {
-    thing = Number(thing.replace(/^0+/, ''));
+    thing = BigInt(thing.replace(/^0+/, ''));
   }
 
-  if (typeof thing === 'number' && !Number.isNaN(thing)) {
-    return thing - Number(isMonth);
+  if (typeof thing === 'bigint') {
+    return thing - (isMonth ? 1n : 0n);
   } else {
     return null;
   }
 };
 
 export function arrayToDate(
-  segments: (string | number | AST.TZInfo | undefined)[]
-): number {
-  const nameAndNumber: [string, string | number | AST.TZInfo | undefined][] = [
+  segments: (string | bigint | AST.TZInfo | undefined)[]
+): bigint {
+  const nameAndNumber: [string, string | bigint | AST.TZInfo | undefined][] = [
     ['year', segments[0]],
     ['month', segments[1]],
     ['day', segments[2]],
@@ -236,7 +237,7 @@ export function arrayToDate(
     ['time', segments[6]],
   ];
 
-  const dateArgs: number[] = [];
+  const dateArgs: bigint[] = [];
   for (const [segName, segValue] of nameAndNumber) {
     const segNumber = getDateSegment(segValue, segName === 'month');
 
@@ -247,12 +248,18 @@ export function arrayToDate(
     }
   }
 
-  return Date.UTC(dateArgs[0], dateArgs[1] || 0, ...dateArgs.slice(2));
+  const utcArgs = [
+    Number(dateArgs[0]),
+    Number(dateArgs[1] || 0n),
+    ...dateArgs.slice(2).map(Number),
+  ];
+  const d = Date.UTC(utcArgs[0], utcArgs[1], ...utcArgs.slice(2));
+  return BigInt(d);
 }
 
 // TODO move the following functions to test utils
 export function parseUTCDate(iso: string) {
-  const segments = iso.match(/(\d+)/g)?.map((n) => Number(n));
+  const segments = iso.match(/(\d+)/g)?.map((n) => BigInt(n));
 
   return arrayToDate(getDefined(segments, `bad date ${iso}`));
 }
@@ -273,7 +280,7 @@ export function date(
   const args: AST.Date['args'] = [];
 
   for (const [unit, index] of Object.entries(jsUnitToIndex)) {
-    args.push(unit as Time.JSDateUnit, dateArray[index]);
+    args.push(unit as Time.JSDateUnit, BigInt(dateArray[index]));
 
     if (cmpJSDateUnits(unit as Time.JSDateUnit, specificity) === 0) {
       break;
@@ -283,13 +290,13 @@ export function date(
   return n('date', ...args);
 }
 
+const pad = (x: bigint | string) => String(x).padStart(2, '0');
+
 export function stringifyDate(
-  date: number,
+  date: bigint,
   specificity: Time.Specificity
 ): string {
   const segments = dateToArray(date);
-
-  const pad = (x: number | string) => String(x).padStart(2, '0');
 
   let out = String(segments[0]);
   if (specificity === 'year') return out;
@@ -319,7 +326,7 @@ export const dateNodeToSpecificity = (
 
 export const getDateFromAstForm = (
   segments: AST.Date['args']
-): [number, Time.Specificity] => {
+): [bigint, Time.Specificity] => {
   const dateNum = arrayToDate([
     segments[1],
     segments[3],
@@ -335,9 +342,12 @@ export const getDateFromAstForm = (
 function subtractDatesPlainDiff(
   d1: LanguageDate,
   d2: LanguageDate
-): Partial<Record<Time.Unit, number>> {
-  const diffMs = differenceInMilliseconds(d1.getData(), d2.getData());
-  const timeQuantities: Partial<Record<Time.Unit, number>> = {};
+): Partial<Record<Time.Unit, bigint>> {
+  const diffMs = differenceInMilliseconds(
+    Number(d1.getData()),
+    Number(d2.getData())
+  );
+  const timeQuantities: Partial<Record<Time.Unit, bigint>> = {};
 
   let diffCarryMs = diffMs;
 
@@ -358,13 +368,13 @@ function subtractDatesPlainDiff(
       nextUnitValue = max;
     }
     if (nextUnitValue !== 0) {
-      timeQuantities[specificity] = nextUnitValue;
+      timeQuantities[specificity] = BigInt(nextUnitValue);
     }
     diffCarryMs -= nextUnitValue * divideBy;
   }
 
   if (diffCarryMs !== 0) {
-    timeQuantities.millisecond = diffCarryMs;
+    timeQuantities.millisecond = BigInt(diffCarryMs);
   }
 
   return timeQuantities;
@@ -373,7 +383,7 @@ function subtractDatesPlainDiff(
 function subtractDatesDiff(
   d1: LanguageDate,
   d2: LanguageDate
-): Partial<Record<Time.Unit, number>> {
+): Partial<Record<Time.Unit, bigint>> {
   const d1Parts = dateToArray(d1.getData());
   const d2Parts = dateToArray(d2.getData());
   const diff = d1Parts.map((part1, partIndex) => {
@@ -382,11 +392,11 @@ function subtractDatesDiff(
   });
   return diff.reduce(
     (
-      acc: Partial<Record<Time.Unit, number>>,
-      diffPart: number,
+      acc: Partial<Record<Time.Unit, bigint>>,
+      diffPart: bigint,
       partIndex: number
     ) => {
-      if (diffPart !== 0) {
+      if (diffPart !== 0n) {
         acc[jsIndexToUnit[partIndex]] = diffPart;
       }
       return acc;

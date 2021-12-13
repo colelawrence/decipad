@@ -65,7 +65,7 @@ function Index({ pageProps = {} }) {
           rel="apple-touch-icon"
         />
       </Head>
-      <ToastProvider autoDismiss placement="top-right">
+      <ToastProvider autoDismiss placement="bottom-right">
         <AuthProvider session={session ?? undefined}>
           <ApolloProvider client={apolloClient}>
             <GlobalStyles>

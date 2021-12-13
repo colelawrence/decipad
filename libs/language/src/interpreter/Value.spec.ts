@@ -1,3 +1,4 @@
+import { F } from '../utils';
 import { parseUTCDate } from '../date';
 import { Scalar, Column, Range, Date, TimeQuantity, fromJS } from './Value';
 
@@ -15,10 +16,7 @@ it('can get from JS for testing', () => {
 it('can represent a range', () => {
   expect(
     Range.fromBounds(Scalar.fromValue(0), Scalar.fromValue(10)).getData()
-  ).toEqual([
-    { d: 1, n: 0, s: 1 },
-    { d: 1, n: 10, s: 1 },
-  ]);
+  ).toEqual([F(0), F(10)]);
 
   const r = Range.fromBounds(fromJS(0), fromJS(10));
   expect(() => Range.fromBounds(r, r).getData()).toThrow();
@@ -34,17 +32,17 @@ it('can represent a date', () => {
 it('can represent a time quantity', () => {
   const quantity = TimeQuantity.fromASTArgs([
     'year',
-    10,
+    10n,
     'quarter',
-    3,
+    3n,
     'minute',
-    5,
+    5n,
   ]);
 
   expect(Object.fromEntries(quantity.timeUnits.entries())).toEqual({
-    year: 10,
-    quarter: 3,
-    minute: 5,
+    year: 10n,
+    quarter: 3n,
+    minute: 5n,
   });
 });
 

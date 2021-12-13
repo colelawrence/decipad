@@ -1,6 +1,7 @@
 import { Column, fromJS } from '../../interpreter/Value';
 import { build as t } from '../../type';
 import { tableOperators as operators } from './table-operators';
+import { F } from '../../utils';
 
 describe('table operators', () => {
   it('concatenates tables', () => {
@@ -66,7 +67,7 @@ describe('table operators', () => {
     );
     expect(fnValues?.(tableValue, fromJS('The Thing')).getData()).toEqual([
       'The Thing',
-      { d: 1, n: 12345, s: 1 },
+      F(12345),
     ]);
     expect(() =>
       fnValues?.(tableValue, fromJS('Not found'))

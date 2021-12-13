@@ -1,4 +1,4 @@
-import Fraction from 'fraction.js';
+import Fraction from '@decipad/fraction';
 import {
   arrayToDate,
   dateToArray,
@@ -12,58 +12,65 @@ import {
 import { TimeQuantity } from '../interpreter/Value';
 import { getDefined } from '../utils';
 
-export const convertToMs: Partial<Record<Time.Unit, number>> = {
-  week: 7 * 24 * 60 * 60 * 1000,
-  day: 24 * 60 * 60 * 1000,
-  hour: 60 * 60 * 1000,
-  minute: 60 * 1000,
-  second: 1000,
-  millisecond: 1,
+export const convertToMs: Partial<Record<Time.Unit, bigint>> = {
+  week: BigInt(7 * 24 * 60 * 60 * 1000),
+  day: BigInt(24 * 60 * 60 * 1000),
+  hour: BigInt(60 * 60 * 1000),
+  minute: BigInt(60 * 1000),
+  second: BigInt(1000),
+  millisecond: BigInt(1),
 };
 
 // Strategy taken from date-fns getDaysInMonth -- seems to be timezone agnostic
-const getDaysInMonth = (year: number, month: number) => {
+const getDaysInMonth = (year: bigint | number, month: bigint | number) => {
   const d = new Date(0);
-  d.setFullYear(year, month /* next month */, 0 /* last day of prev month */);
+  d.setFullYear(
+    Number(year),
+    Number(month) /* next month */,
+    0 /* last day of prev month */
+  );
   d.setHours(0, 0, 0, 0);
   return d.getDate();
 };
 
 // Strategy taken from date-fns addMonths, but this one works in UTC
-const addMonths = (date: number, months: number) => {
+const addMonths = (date: bigint, months: bigint) => {
   const dateArray = dateToArray(date);
 
   const [desiredYear, desiredMonth] = dateToArray(
-    arrayToDate([dateArray[0], dateArray[1] + months])
+    arrayToDate([dateArray[0], BigInt(dateArray[1]) + months])
   );
 
-  const daysInDesiredMonth = getDaysInMonth(desiredYear, desiredMonth);
+  const daysInDesiredMonth = getDaysInMonth(
+    BigInt(desiredYear),
+    BigInt(desiredMonth)
+  );
 
   const [, , day, ...rest] = dateArray;
 
   return arrayToDate([
     desiredYear,
     desiredMonth,
-    Math.min(day, daysInDesiredMonth),
+    BigInt(Math.min(Number(day), daysInDesiredMonth)),
     ...rest,
   ]);
 };
 
 const addSingleQuantity = (
-  date: number,
-  quantity: number,
+  date: bigint,
+  quantity: bigint,
   timeUnit: Time.Unit
-): number => {
+): bigint => {
   const [composedUnit, compositeMultiplier] = getDefined(
     timeUnitToJSDateUnit[timeUnit],
     `bad time unit ${timeUnit}`
   );
 
   timeUnit = composedUnit;
-  quantity *= compositeMultiplier;
+  quantity = BigInt(quantity) * compositeMultiplier;
 
   if (timeUnit === 'year') {
-    return addMonths(date, quantity * 12);
+    return addMonths(date, quantity * 12n);
   } else if (timeUnit === 'month') {
     return addMonths(date, quantity);
   } else {
@@ -78,7 +85,7 @@ const addSingleQuantity = (
   }
 };
 
-export const addTimeQuantity = (date: number, quantities: TimeQuantity) =>
+export const addTimeQuantity = (date: bigint, quantities: TimeQuantity) =>
   Array.from(quantities.timeUnits.entries()).reduce(
     (date, [unit, quant]) => addSingleQuantity(date, quant, unit),
     date
@@ -88,7 +95,7 @@ export const addTimeQuantities = (
   quantities1: TimeQuantity,
   quantities2: TimeQuantity
 ): TimeQuantity => {
-  const quantitiesMap = new Map(quantities1.timeUnits);
+  const quantitiesMap = new Map<Time.Unit, bigint>(quantities1.timeUnits);
   for (const [unit, value] of quantities2.timeUnits.entries()) {
     const existing = quantitiesMap.get(unit);
     if (existing != null) {
@@ -134,17 +141,17 @@ export const convertTimeQuantityTo = (
     quantity.timeUnitsDiff.size === 1 &&
     quantity.timeUnitsDiff.has(convertTo)
   ) {
-    return new Fraction(quantity.timeUnitsDiff.get(convertTo) as number);
+    return new Fraction(quantity.timeUnitsDiff.get(convertTo) as bigint);
   }
   const { timeUnits } = quantity;
   if (timeUnits.size === 0) {
     return new Fraction(0);
   }
   if (timeUnits.size === 1 && timeUnits.has(convertTo)) {
-    return new Fraction(timeUnits.get(convertTo) as number);
+    return new Fraction(timeUnits.get(convertTo) as bigint);
   }
 
-  let accInMs = 0;
+  let accInMs = 0n;
   for (const [unit, value] of timeUnits.entries()) {
     const convertRatio = convertToMs[unit];
     if (!convertRatio) {

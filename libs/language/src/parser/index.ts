@@ -75,7 +75,7 @@ export function parse(blocks: Parser.UnparsedBlock[]): Parser.ParsedBlock[] {
       return {
         id: block.id,
         solutions: [],
-        errors: [fromParseError(block.id, err)],
+        errors: [fromParseError(block.id, err as Error)],
       };
     }
   });

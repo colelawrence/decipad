@@ -170,7 +170,7 @@ The following are also supported:
 
 ```deci live
 (1 ac * 1 ft) in acft
-==> 999.9999 acft
+==> 1000 acft
 ```
 
 Cooking:

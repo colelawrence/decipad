@@ -1,5 +1,4 @@
-/* eslint-disable no-underscore-dangle */
-import Fraction from 'fraction.js';
+import Fraction from '@decipad/fraction';
 import { AST, Time, Interpreter } from '..';
 import { pairwise, getDefined } from '../utils';
 import {
@@ -8,13 +7,20 @@ import {
   getSpecificity,
   sortTimeUnits,
 } from '../date';
-import { OneResult } from './interpreter-types';
+import { Unknown } from './Unknown';
 
 export interface Value {
   getData(): Interpreter.OneResult;
 }
 
+export const UnknownValue: Value = {
+  getData() {
+    return Unknown;
+  },
+};
+
 export type NonColumn =
+  | typeof UnknownValue
   | FractionValue
   | StringValue
   | BooleanValue
@@ -24,13 +30,15 @@ export type NonColumn =
 export type AnyValue = NonColumn | Column;
 
 export class Scalar {
-  static fromValue(value: number | Fraction | boolean | string): NonColumn {
+  static fromValue(
+    value: number | bigint | Fraction | boolean | string | symbol
+  ): NonColumn {
     if (value instanceof Fraction) {
       return FractionValue.fromValue(value);
     }
     const t = typeof value;
-    if (t === 'number') {
-      return FractionValue.fromValue(value as number);
+    if (t === 'number' || t === 'bigint') {
+      return FractionValue.fromValue(value as number | bigint);
     }
     if (t === 'boolean') {
       return BooleanValue.fromValue(value as boolean);
@@ -42,11 +50,15 @@ export class Scalar {
 export class FractionValue implements Value {
   readonly value: Fraction;
 
-  constructor(varValue: number | Fraction) {
-    if (typeof varValue === 'number') {
-      this.value = new Fraction(varValue);
+  constructor(varValue: number | bigint | Fraction) {
+    const t = typeof varValue;
+    if (t === 'number' || t === 'bigint') {
+      if (Number.isNaN(varValue)) {
+        throw new TypeError('not a number');
+      }
+      this.value = new Fraction(varValue as number | bigint);
     } else {
-      this.value = varValue;
+      this.value = varValue as Fraction;
     }
   }
 
@@ -54,7 +66,7 @@ export class FractionValue implements Value {
     return this.value;
   }
 
-  static fromValue(value: number | Fraction): FractionValue {
+  static fromValue(value: number | bigint | Fraction): FractionValue {
     return new FractionValue(value);
   }
 }
@@ -91,14 +103,14 @@ export class BooleanValue implements Value {
 
 export class Date implements Value {
   specificity: Time.Specificity = 'time';
-  moment: number;
+  moment: bigint;
 
-  constructor(date: number, specificity: Time.Specificity) {
+  constructor(date: bigint | number, specificity: Time.Specificity) {
     this.moment = cleanDate(date, specificity);
     this.specificity = specificity;
   }
 
-  static fromDateAndSpecificity(date: number, specificity: Time.Specificity) {
+  static fromDateAndSpecificity(date: bigint, specificity: Time.Specificity) {
     return new Date(date, specificity);
   }
 
@@ -117,27 +129,27 @@ export class Date implements Value {
         addTimeQuantity(
           this.moment,
           new TimeQuantity({ [this.specificity]: 1 })
-        ) - 1
+        ) - 1n
       );
     }
   }
 }
 
 export class TimeQuantity implements Value {
-  timeUnits = new Map<Time.Unit, number>();
-  timeUnitsDiff = new Map<Time.Unit, number>();
+  timeUnits = new Map<Time.Unit, bigint>();
+  timeUnitsDiff = new Map<Time.Unit, bigint>();
 
   constructor(
-    timeUnits: TimeQuantity['timeUnits'] | Partial<Record<Time.Unit, number>>,
+    timeUnits: TimeQuantity['timeUnits'] | Partial<Record<Time.Unit, bigint>>,
     timeUnitsDiff?:
       | TimeQuantity['timeUnits']
-      | Partial<Record<Time.Unit, number>>
+      | Partial<Record<Time.Unit, bigint>>
   ) {
     {
       const entries =
         timeUnits instanceof Map
           ? timeUnits.entries()
-          : (Object.entries(timeUnits) as Iterable<[Time.Unit, number]>);
+          : (Object.entries(timeUnits) as Iterable<[Time.Unit, bigint]>);
 
       const unsorted = new Map(entries);
       for (const unit of sortTimeUnits(unsorted.keys())) {
@@ -149,7 +161,7 @@ export class TimeQuantity implements Value {
       const entries =
         timeUnitsDiff instanceof Map
           ? timeUnitsDiff.entries()
-          : (Object.entries(timeUnitsDiff) as Iterable<[Time.Unit, number]>);
+          : (Object.entries(timeUnitsDiff) as Iterable<[Time.Unit, bigint]>);
 
       const unsorted = new Map(entries);
       for (const unit of sortTimeUnits(unsorted.keys())) {
@@ -159,7 +171,7 @@ export class TimeQuantity implements Value {
   }
 
   static fromASTArgs(args: AST.TimeQuantity['args']): TimeQuantity {
-    return new TimeQuantity(new Map(pairwise<Time.Unit, number>(args)));
+    return new TimeQuantity(new Map(pairwise<Time.Unit, bigint>(args)));
   }
 
   getData() {
@@ -216,12 +228,12 @@ export class Column implements Value {
 
   static fromSequence(startV: Value, endV: Value, byV: Value): Column {
     const [start, end, by] = [startV, endV, byV].map(
-      (val) => val.getData() as number
+      (val) => val.getData() as Fraction
     );
 
     const array = [];
 
-    for (let i = start; i <= end; i += by) {
+    for (let i = start; i.compare(end) <= 0; i = i.add(by)) {
       array.push(Scalar.fromValue(i));
     }
 
@@ -254,12 +266,15 @@ export class Column implements Value {
     return getDefined(this.values[i], `index ${i} out of bounds`);
   }
 
-  getData(): OneResult[] {
+  getData(): Interpreter.OneResult[] {
     return this.values.map((v) => v.getData());
   }
 }
 
-export const fromJS = (thing: Interpreter.OneResult): AnyValue => {
+type FromJSOneArg = Interpreter.OneResult | number;
+type FromJSArg = FromJSOneArg | FromJSOneArg[];
+
+export const fromJS = (thing: FromJSArg): AnyValue => {
   // TODO this doesn't distinguish Range/Date from Column, and it can't possibly do it!
   if (thing == null) {
     throw new TypeError('result cannot be null');

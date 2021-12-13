@@ -1,4 +1,4 @@
-import Fraction from 'fraction.js';
+import Fraction from '@decipad/fraction';
 import { Value } from '../interpreter';
 import { FractionValue, fromJS, Column } from '../interpreter/Value';
 import { getInstanceof } from '../utils';

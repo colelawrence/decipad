@@ -54,7 +54,7 @@ describe('getValue', () => {
   });
 
   it('with fractions (1)', async () => {
-    const quantity = timeQuantity({ day: 1, hour: 12 });
+    const quantity = timeQuantity({ day: 1n, hour: 12n });
 
     expect(await testGetValue(getValue, quantity, n('units', u('days'))))
       .toMatchInlineSnapshot(`
@@ -65,7 +65,7 @@ describe('getValue', () => {
   });
 
   it('with fractions (2)', async () => {
-    const quantity = timeQuantity({ minute: 90 });
+    const quantity = timeQuantity({ minute: 90n });
 
     expect(await testGetValue(getValue, quantity, n('units', u('hours'))))
       .toMatchInlineSnapshot(`

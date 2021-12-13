@@ -1,3 +1,4 @@
+import Fraction from '@decipad/fraction';
 import { AST, Time, Date as IDate } from '..';
 import { getOfType } from '../utils';
 import { build as t } from '../type';
@@ -11,6 +12,8 @@ import {
 } from '../date';
 import { inferExpression } from './index';
 import { Context } from './context';
+
+const millisecondsInDay = 24 * 60 * 60 * 1000;
 
 export const getNumberSequenceCountBigInt = (
   start: bigint,
@@ -33,9 +36,9 @@ export const getNumberSequenceCountBigInt = (
 };
 
 export const getNumberSequenceCount = (
-  start: number,
-  end: number,
-  by: number
+  start: number | bigint,
+  end: number | bigint,
+  by: number | bigint
 ): number | string =>
   getNumberSequenceCountBigInt(BigInt(start), BigInt(end), BigInt(by));
 
@@ -49,8 +52,8 @@ const toSimpleTimeUnit: Record<string, [SimplerUnit, number]> = {
 };
 
 export const getDateSequenceLength = (
-  start: number,
-  end: number,
+  start: bigint,
+  end: bigint,
   boundsSpecificity: Time.Specificity,
   by: Time.Unit
 ): number | string => {
@@ -63,7 +66,7 @@ export const getDateSequenceLength = (
     const [newUnit, multiplier] = toSimpleTimeUnit[stepUnit];
 
     stepUnit = newUnit;
-    steps *= multiplier;
+    steps *= BigInt(multiplier);
   }
 
   switch (stepUnit) {
@@ -71,14 +74,15 @@ export const getDateSequenceLength = (
       const [startYear, startMonth] = dateToArray(start);
       const [endYear, endMonth] = dateToArray(end);
 
-      const monthDiff = (endYear - startYear) * 12 + (endMonth - startMonth);
+      const monthDiff = (endYear - startYear) * 12n + (endMonth - startMonth);
       return getNumberSequenceCount(0, monthDiff, steps);
     }
     case 'day': {
       // Taken from date-fns differenceInCalendarDays
-      const millisecondsInDay = 24 * 60 * 60 * 1000;
 
-      const differenceInDays = Math.round((end - start) / millisecondsInDay);
+      const differenceInDays = Math.round(
+        Number(end - start) / millisecondsInDay
+      );
 
       return getNumberSequenceCount(0, differenceInDays - 1, steps);
     }
@@ -134,13 +138,13 @@ export const inferSequence = async (ctx: Context, expr: AST.Sequence) => {
       (n) =>
         n.type === 'literal' &&
         n.args[0] === 'number' &&
-        typeof n.args[1] === 'number'
+        n.args[1] instanceof Fraction
     )
   ) {
     const countOrError = getNumberSequenceCount(
-      startN.args[1] as number,
-      endN.args[1] as number,
-      byN.args[1] as number
+      (startN.args[1] as Fraction).valueOf(),
+      (endN.args[1] as Fraction).valueOf(),
+      (byN.args[1] as Fraction).valueOf()
     );
 
     return typeof countOrError === 'string'

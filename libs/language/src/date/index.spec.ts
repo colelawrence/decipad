@@ -42,24 +42,24 @@ it('can sort time units', () => {
 });
 
 it('can parse a date from an array of elements', () => {
-  expect(arrayToDate(['2020', 1, 10, /* T */ 11, 30, 13, 123])).toEqual(
-    Date.UTC(2020, 0, 10, 11, 30, 13, 123)
+  expect(arrayToDate(['2020', 1n, 10n, /* T */ 11n, 30n, 13n, 123n])).toEqual(
+    BigInt(Date.UTC(2020, 0, 10, 11, 30, 13, 123))
   );
 
-  expect(arrayToDate(['2020', 5, 10, /* T */ 11, 30, 13, 123])).toEqual(
-    Date.UTC(2020, 4, 10, 11, 30, 13, 123)
+  expect(arrayToDate(['2020', 5n, 10n, /* T */ 11n, 30n, 13n, 123n])).toEqual(
+    BigInt(Date.UTC(2020, 4, 10, 11, 30, 13, 123))
   );
 
-  expect(arrayToDate(['2020'])).toEqual(Date.UTC(2020, 0));
+  expect(arrayToDate(['2020'])).toEqual(BigInt(Date.UTC(2020, 0)));
 
-  expect(arrayToDate([2020])).toEqual(Date.UTC(2020, 0));
+  expect(arrayToDate([2020n])).toEqual(BigInt(Date.UTC(2020, 0)));
 
-  expect(arrayToDate([2020, '01'])).toEqual(Date.UTC(2020, 0));
+  expect(arrayToDate([2020n, '01'])).toEqual(BigInt(Date.UTC(2020, 0)));
 });
 
 it('can parse a date', () => {
-  expect(parseUTCDate('2020')).toEqual(Date.UTC(2020, 0, 1));
-  expect(parseUTCDate('2020-01-01')).toEqual(Date.UTC(2020, 0, 1));
+  expect(parseUTCDate('2020')).toEqual(BigInt(Date.UTC(2020, 0, 1)));
+  expect(parseUTCDate('2020-01-01')).toEqual(BigInt(Date.UTC(2020, 0, 1)));
 
   expect(getUTCDateSpecificity('2020')).toEqual('year');
   expect(getUTCDateSpecificity('2020-01-10')).toEqual('day');
@@ -96,31 +96,34 @@ it('does not round times', () => {
 });
 
 it("gets a date from an AST date's arguments", () => {
-  expect(getDateFromAstForm(['year', 2020])).toEqual([d('2020-01-01'), 'year']);
+  expect(getDateFromAstForm(['year', 2020n])).toEqual([
+    d('2020-01-01'),
+    'year',
+  ]);
 
-  expect(getDateFromAstForm(['year', 2020, 'month', 3])).toEqual([
+  expect(getDateFromAstForm(['year', 2020n, 'month', 3n])).toEqual([
     d('2020-03-01'),
     'month',
   ]);
 
   expect(
-    getDateFromAstForm(['year', 2020, 'month', 3, 'day', 10, 'hour', 10])
+    getDateFromAstForm(['year', 2020n, 'month', 3n, 'day', 10n, 'hour', 10n])
   ).toEqual([d('2020-03-10T10:00:00'), 'time']);
 
   expect(
     getDateFromAstForm([
       'year',
-      2020,
+      2020n,
       'month',
-      3,
+      3n,
       'day',
-      10,
+      10n,
       'hour',
-      10,
+      10n,
       'minute',
-      30,
+      30n,
       'second',
-      10,
+      10n,
     ])
   ).toEqual([d('2020-03-10T10:30:10'), 'time']);
 });

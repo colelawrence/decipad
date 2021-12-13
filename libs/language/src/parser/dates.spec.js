@@ -6,7 +6,7 @@ runTests({
     ast: [
       {
         type: 'date',
-        args: ['year', 1978],
+        args: ['year', 1978n],
         start: {
           char: 1,
           line: 1,
@@ -26,7 +26,7 @@ runTests({
     ast: [
       {
         type: 'date',
-        args: ['year', 1978, 'month', 1],
+        args: ['year', 1978n, 'month', 1n],
         start: {
           char: 0,
           line: 1,
@@ -46,7 +46,7 @@ runTests({
     ast: [
       {
         type: 'date',
-        args: ['year', 1978, 'month', 1],
+        args: ['year', 1978n, 'month', 1n],
         start: {
           char: 0,
           line: 1,
@@ -66,7 +66,7 @@ runTests({
     ast: [
       {
         type: 'date',
-        args: ['year', 1978, 'month', 1],
+        args: ['year', 1978n, 'month', 1n],
         start: {
           char: 0,
           line: 1,
@@ -86,7 +86,7 @@ runTests({
     ast: [
       {
         type: 'date',
-        args: ['year', 2010, 'month', 1, 'day', 4],
+        args: ['year', 2010n, 'month', 1n, 'day', 4n],
         start: {
           char: 0,
           line: 1,
@@ -106,7 +106,7 @@ runTests({
     ast: [
       {
         type: 'date',
-        args: ['year', 2010, 'month', 3, 'day', 4],
+        args: ['year', 2010n, 'month', 3n, 'day', 4n],
         start: {
           char: 0,
           line: 1,
@@ -126,7 +126,7 @@ runTests({
     ast: [
       {
         type: 'date',
-        args: ['year', 2010, 'month', 4, 'day', 21, 'hour', 10],
+        args: ['year', 2010n, 'month', 4n, 'day', 21n, 'hour', 10n],
         start: {
           char: 2,
           line: 1,
@@ -146,7 +146,18 @@ runTests({
     ast: [
       {
         type: 'date',
-        args: ['year', 2010, 'month', 4, 'day', 21, 'hour', 10, 'minute', 26],
+        args: [
+          'year',
+          2010n,
+          'month',
+          4n,
+          'day',
+          21n,
+          'hour',
+          10n,
+          'minute',
+          26n,
+        ],
         start: {
           char: 2,
           line: 1,
@@ -168,17 +179,17 @@ runTests({
         type: 'date',
         args: [
           'year',
-          2010,
+          2010n,
           'month',
-          4,
+          4n,
           'day',
-          21,
+          21n,
           'hour',
-          10,
+          10n,
           'minute',
-          26,
+          26n,
           'second',
-          59,
+          59n,
         ],
         start: {
           char: 2,
@@ -201,17 +212,17 @@ runTests({
         type: 'date',
         args: [
           'year',
-          2010,
+          2010n,
           'month',
-          4,
+          4n,
           'day',
-          21,
+          21n,
           'hour',
-          10,
+          10n,
           'minute',
-          26,
+          26n,
           'second',
-          59,
+          59n,
           'timezone',
           {
             hours: 0,
@@ -239,17 +250,17 @@ runTests({
         type: 'date',
         args: [
           'year',
-          2010,
+          2010n,
           'month',
-          10,
+          10n,
           'day',
-          21,
+          21n,
           'hour',
-          10,
+          10n,
           'minute',
-          26,
+          26n,
           'second',
-          59,
+          59n,
           'timezone',
           {
             hours: 5,
@@ -277,17 +288,17 @@ runTests({
         type: 'date',
         args: [
           'year',
-          2010,
+          2010n,
           'month',
-          6,
+          6n,
           'day',
-          21,
+          21n,
           'hour',
-          10,
+          10n,
           'minute',
-          26,
+          26n,
           'second',
-          59,
+          59n,
           'timezone',
           {
             hours: -3,
@@ -316,19 +327,19 @@ runTests({
         type: 'date',
         args: [
           'year',
-          2021,
+          2021n,
           'month',
-          6,
+          6n,
           'day',
-          18,
+          18n,
           'hour',
-          13,
+          13n,
           'minute',
-          6,
+          6n,
           'second',
-          39,
+          39n,
           'millisecond',
-          198,
+          198n,
           'timezone',
           {
             hours: 0,

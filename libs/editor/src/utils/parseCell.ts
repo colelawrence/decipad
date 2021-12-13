@@ -1,4 +1,4 @@
-import Fraction from 'fraction.js';
+import Fraction from '@decipad/fraction';
 import { AST } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
 import { parse } from 'date-fns';
@@ -16,9 +16,8 @@ export function parseCell(
         return astNode(
           'literal',
           'number' as const,
-          n || 0,
-          null,
-          new Fraction(n || 0)
+          new Fraction(n || 0),
+          null
         );
       }
       return null;
@@ -52,17 +51,17 @@ function dateToAST(cellType: TableCellType, asDate: Date) {
   const parts: AST.Date['args'] = [];
 
   (() => {
-    parts.push('year', asDate.getUTCFullYear());
+    parts.push('year', BigInt(asDate.getUTCFullYear()));
     if (cellType === 'date/year') return;
 
-    parts.push('month', asDate.getUTCMonth() + 1);
+    parts.push('month', BigInt(asDate.getUTCMonth() + 1));
     if (cellType === 'date/month') return;
 
-    parts.push('day', asDate.getUTCDate());
+    parts.push('day', BigInt(asDate.getUTCDate()));
     if (cellType === 'date/day') return;
 
-    parts.push('hour', asDate.getUTCHours());
-    parts.push('minute', asDate.getUTCMinutes());
+    parts.push('hour', BigInt(asDate.getUTCHours()));
+    parts.push('minute', BigInt(asDate.getUTCMinutes()));
   })();
 
   return astNode('date', ...parts);

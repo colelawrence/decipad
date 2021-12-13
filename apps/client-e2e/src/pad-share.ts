@@ -40,16 +40,16 @@ Array [
   },
 ]
 `);
-  });
+  }, 60000);
 
   test('click share button and extract text', async () => {
     const linkSelector = 'text=/workspaces/[^/]+/';
-    await page.click('text=share');
-    await page.click('[aria-checked="false"]');
+    await page.click('button.share');
+    await page.click('button.toggle');
     await page.waitForSelector(linkSelector);
     link = await page.innerText(linkSelector);
     expect(link.length).toBeGreaterThan(0);
-  });
+  }, 60000);
 
   test('another browser joins on the given link', async () => {
     const context = await browser.newContext();
@@ -79,6 +79,6 @@ Array [
           type: 'p',
         },
       ]);
-    }, 12000);
-  }, 15000);
+    });
+  });
 });

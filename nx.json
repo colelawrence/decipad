@@ -137,6 +137,9 @@
     },
     "y-websocket": {
       "tags": []
+    },
+    "fraction": {
+      "tags": []
     }
   }
 }

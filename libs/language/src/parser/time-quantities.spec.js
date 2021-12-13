@@ -6,7 +6,7 @@ runTests({
     ast: [
       {
         type: 'time-quantity',
-        args: ['year', 1],
+        args: ['year', 1n],
         start: {
           char: 1,
           line: 1,
@@ -26,7 +26,7 @@ runTests({
     ast: [
       {
         type: 'time-quantity',
-        args: ['month', 1, 'hour', 2],
+        args: ['month', 1n, 'hour', 2n],
         start: 2,
         end: 27,
       },
@@ -38,7 +38,7 @@ runTests({
     ast: [
       {
         type: 'time-quantity',
-        args: ['week', 3, 'minute', 2, 'second', 20],
+        args: ['week', 3n, 'minute', 2n, 'second', 20n],
         start: 2,
         end: 39,
       },

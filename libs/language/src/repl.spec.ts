@@ -42,18 +42,18 @@ describe('stringify', () => {
       `range [ ${chalk.blue('1')} through ${chalk.blue('10')} ]`
     );
 
-    expect(stringifyResult(Date.UTC(2020, 0), t.date('month'))).toEqual(
+    expect(stringifyResult(BigInt(Date.UTC(2020, 0)), t.date('month'))).toEqual(
       `month ${chalk.blue('2020-01')}`
     );
 
-    expect(stringifyResult([1, 2], t.column(t.number(), 2))).toEqual(
+    expect(stringifyResult([1n, 2n], t.column(t.number(), 2))).toEqual(
       `[ ${chalk.blue('1')}, ${chalk.blue('2')} ]`
     );
 
     expect(
       stringifyResult(
         [
-          [1, 2],
+          [1n, 2n],
           ['hi', 'lol'],
         ],
         t.table({

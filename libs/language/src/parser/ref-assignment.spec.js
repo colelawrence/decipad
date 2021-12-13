@@ -1,3 +1,4 @@
+import { F } from '../utils';
 import { runTests } from './run-tests';
 
 runTests({
@@ -23,7 +24,7 @@ runTests({
           },
           {
             type: 'literal',
-            args: ['number', 12, null, { d: 1, n: 12, s: 1 }],
+            args: ['number', F(12), null],
             start: {
               char: 14,
               line: 1,
@@ -72,7 +73,7 @@ runTests({
           },
           {
             type: 'literal',
-            args: ['number', 12, null, { d: 1, n: 12, s: 1 }],
+            args: ['number', F(12), null],
             start: {
               char: 22,
               line: 1,

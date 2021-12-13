@@ -53,21 +53,21 @@ describe('common functions', () => {
     expect(
       addDateAndTimeQuantity(
         IDate.fromDateAndSpecificity(parseUTCDate('2020'), 'year'),
-        new TimeQuantity({ year: 1 })
+        new TimeQuantity({ year: 1n })
       ).getData()
     ).toEqual(parseUTCDate('2021'));
 
     expect(
       addDateAndTimeQuantity(
         IDate.fromDateAndSpecificity(parseUTCDate('2020-01-01'), 'day'),
-        new TimeQuantity({ year: -1, month: 1 })
+        new TimeQuantity({ year: -1n, month: 1n })
       ).getData()
     ).toEqual(parseUTCDate('2019-02-01'));
 
     expect(
       addDateAndTimeQuantity(
         IDate.fromDateAndSpecificity(parseUTCDate('2020-01-01 10:30'), 'time'),
-        new TimeQuantity({ hour: 1 })
+        new TimeQuantity({ hour: 1n })
       ).getData()
     ).toEqual(parseUTCDate('2020-01-01 11:30'));
   });
@@ -89,8 +89,11 @@ it('date + time-quantity', () => {
 
   expect(
     plus.fnValues?.(
-      IDate.fromDateAndSpecificity(Number(new Date('2020-01-01')), 'day'),
-      new TimeQuantity({ month: 1, day: 1 })
+      IDate.fromDateAndSpecificity(
+        BigInt(Number(new Date('2020-01-01'))),
+        'day'
+      ),
+      new TimeQuantity({ month: 1n, day: 1n })
     )
   ).toMatchInlineSnapshot(`DeciDate(day 2020-02-02)`);
 });
@@ -102,8 +105,11 @@ it('time-quantity + date', () => {
 
   expect(
     plus.fnValues?.(
-      new TimeQuantity({ month: 1, day: 1 }),
-      IDate.fromDateAndSpecificity(Number(new Date('2020-01-01')), 'day')
+      new TimeQuantity({ month: 1n, day: 1n }),
+      IDate.fromDateAndSpecificity(
+        BigInt(Number(new Date('2020-01-01'))),
+        'day'
+      )
     )
   ).toMatchInlineSnapshot(`DeciDate(day 2020-02-02)`);
 });
@@ -138,8 +144,8 @@ it('time-quantity + time-quantity', () => {
 
   expect(
     plus.fnValues?.(
-      new TimeQuantity({ month: 1, day: 1 }),
-      new TimeQuantity({ quarter: 1, day: 1 })
+      new TimeQuantity({ month: 1n, day: 1n }),
+      new TimeQuantity({ quarter: 1n, day: 1n })
     )
   ).toMatchInlineSnapshot(`TimeQuantity({ quarter: 1, month: 1, day: 2 })`);
 });
@@ -156,8 +162,8 @@ it('time-quantity - time-quantity', () => {
 
   expect(
     minus.fnValues?.(
-      new TimeQuantity({ month: 1, day: 1 }),
-      new TimeQuantity({ quarter: 1, day: 1 })
+      new TimeQuantity({ month: 1n, day: 1n }),
+      new TimeQuantity({ quarter: 1n, day: 1n })
     )
   ).toMatchInlineSnapshot(`TimeQuantity({ quarter: -1, month: 1, day: 0 })`);
 });
@@ -170,7 +176,7 @@ it('date - time-quantity', () => {
   expect(
     minus.fnValues?.(
       IDate.fromDateAndSpecificity(parseUTCDate('2020-01-01'), 'day'),
-      new TimeQuantity({ month: 1, day: -1 })
+      new TimeQuantity({ month: 1n, day: -1n })
     )
   ).toMatchInlineSnapshot(`DeciDate(day 2019-12-02)`);
 });

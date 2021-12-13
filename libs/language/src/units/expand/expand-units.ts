@@ -1,5 +1,5 @@
 import { produce } from 'immer';
-import Fraction from 'fraction.js';
+import Fraction from '@decipad/fraction';
 import { getDefined } from '@decipad/utils';
 import { UnitOfMeasure, getUnitByName } from '../known-units';
 import { AST } from '../../parser';
@@ -51,7 +51,7 @@ function expandUnitWith(
     const targetUnitName = baseUnitForBaseQuantity(expandedUnit.baseQuantity);
     const newUnit = {
       unit: targetUnitName,
-      exp: expandedUnit.exp * unit.exp,
+      exp: BigInt(expandedUnit.exp) * unit.exp,
       multiplier: first ? unit.multiplier ** expandedUnit.exp : 1,
       known: true,
     };
@@ -73,7 +73,7 @@ function convertKnownUnitToBase(
   });
   const baseConversionFactor = uom
     .toBaseQuantity(new Fraction(1))
-    .pow(unit.exp);
+    .pow(new Fraction(unit.exp));
   const convert = convertingBy(baseConversionFactor);
   return [newUnit, convert];
 }
@@ -92,7 +92,7 @@ function expandUnit(unit: AST.Unit): ExpandUnitResult {
         const newUnits = expandUnitWith(baseUnit, expandTo);
         const expansionFactor = expandTo
           .convertToExpanded(new Fraction(1))
-          .pow(unit.exp);
+          .pow(new Fraction(unit.exp));
         const convert: Converter = (n) =>
           convertToBaseUnit(n).mul(expansionFactor);
 

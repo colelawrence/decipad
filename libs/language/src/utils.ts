@@ -1,4 +1,4 @@
-import Fraction from 'fraction.js';
+import Fraction from '@decipad/fraction';
 import { Class } from 'utility-types';
 import { AST, Time } from '.';
 
@@ -34,21 +34,22 @@ export const block = (...contents: AST.Statement[]) => n('block', ...contents);
 export const units = (...units: AST.Unit[]) =>
   units.length > 0 ? n('units', ...units) : null;
 
-type LitType = number | string | boolean;
+type LitType = number | bigint | string | boolean;
 export function l(value: LitType, ...units: AST.Unit[]): AST.Literal {
   const unitArg = units.length > 0 ? n('units', ...units) : null;
 
-  if (typeof value === 'number') {
-    const fraction = new Fraction(value);
-    return n('literal', 'number', value, unitArg, fraction);
-  } else if (typeof value === 'boolean') {
-    return n('literal', 'boolean', value);
+  const t = typeof value;
+  if (t === 'number' || t === 'bigint') {
+    const fraction = new Fraction(value as number | bigint);
+    return n('literal', 'number', fraction, unitArg);
+  } else if (t === 'boolean') {
+    return n('literal', 'boolean', value as boolean);
   } else {
-    return n('literal', 'string', value);
+    return n('literal', 'string', value as string);
   }
 }
 
-export function timeQuantity(items: { [unit in Time.Unit]?: number }) {
+export function timeQuantity(items: { [unit in Time.Unit]?: bigint }) {
   return n(
     'time-quantity',
     ...Object.entries(items).flatMap(([k, v]) => [
@@ -310,8 +311,12 @@ export function invert(
   return (n) => n.mul(reversingFactor);
 }
 
-export function F(n: number | string, d = 1) {
-  return typeof n === 'number' ? new Fraction(n, d) : new Fraction(n);
+export function F(n: number | bigint, d?: number | bigint): Fraction;
+export function F(n: string): Fraction;
+export function F(n: number | bigint | string, d: number | bigint = 1n) {
+  return typeof n === 'number' || typeof n === 'bigint'
+    ? new Fraction(n, d)
+    : new Fraction(n);
 }
 
 export function u(
@@ -321,7 +326,7 @@ export function u(
   if (typeof unit === 'string') {
     unit = {
       unit,
-      exp: 1,
+      exp: 1n,
       multiplier: 1,
       known: true,
     };

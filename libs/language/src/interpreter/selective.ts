@@ -4,7 +4,7 @@ import { AST } from '..';
 import { getDefined, getIdentifierString } from '../utils';
 import { evaluate } from './evaluate';
 import { Realm } from './Realm';
-import { Scalar, Value } from './Value';
+import { UnknownValue, Value } from './Value';
 
 // (object identity equality) of the returned statements.
 const desiredTargetsToStatements = (
@@ -53,7 +53,7 @@ export async function evaluateTargets(
   const targetSet: Map<unknown, Value> = new Map(
     desiredTargetsToStatements(program, desiredTargets).map((target) => [
       target,
-      Scalar.fromValue(NaN),
+      UnknownValue,
     ])
   );
 

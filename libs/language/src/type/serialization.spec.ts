@@ -7,7 +7,7 @@ import {
   serializeType,
 } from './serialization';
 
-const meter: AST.Unit = { unit: 'meter', exp: 1 } as unknown as AST.Unit;
+const meter: AST.Unit = { unit: 'meter', exp: 1n } as unknown as AST.Unit;
 const errorCause = InferError.expectedButGot('A', 'B');
 
 it('can stringify a type', () => {
@@ -23,7 +23,7 @@ it('can stringify a type', () => {
       "unit": Object {
         "args": Array [
           Object {
-            "exp": 1,
+            "exp": 1n,
             "unit": "meter",
           },
         ],

@@ -1,4 +1,4 @@
-import Fraction from 'fraction.js';
+import Fraction from '@decipad/fraction';
 import { getDefined } from '@decipad/utils';
 import { AST } from '../../parser';
 import { identity } from '../../utils';

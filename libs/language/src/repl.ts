@@ -1,7 +1,7 @@
 import repl from 'repl';
 import util from 'util';
 import chalk from 'chalk';
-import Fraction from 'fraction.js';
+import Fraction from '@decipad/fraction';
 
 import { AST, buildType, Interpreter } from '.';
 import { getDefined, zip } from './utils';
@@ -28,7 +28,7 @@ export const stringifyResult = (
   }
 
   if (type.date != null) {
-    return `${type.date} ${color(stringifyDate(result as number, type.date))}`;
+    return `${type.date} ${color(stringifyDate(result as bigint, type.date))}`;
   }
 
   if (type.type === 'number') {

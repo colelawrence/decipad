@@ -117,7 +117,9 @@ export const NotebookSharingPopUp = ({
   const [shareMenuOpen, setShareMenuOpen] = useState(false);
   return (
     <div css={{ position: 'relative' }}>
-      <Button onClick={() => setShareMenuOpen(!shareMenuOpen)}>Share</Button>
+      <Button role="share" onClick={() => setShareMenuOpen(!shareMenuOpen)}>
+        Share
+      </Button>
 
       {shareMenuOpen && (
         <div css={[popUpStyles]}>

@@ -8,14 +8,14 @@ In Deci, a time interval can be expressed like this:
 
 ```deci live
 [10 days, 5 hours]
-==> [ [ 'day', 10 ], [ 'hour', 5 ] ] <null>
+==> [ [ 'day', 10n ], [ 'hour', 5n ] ] <null>
 ```
 
 You can also calculate a time interval between two dates:
 
 ```deci live
 date(2020-02-23) - date(2020-01-12)
-==> [ [ 'day', 42 ] ] <null>
+==> [ [ 'day', 42n ] ] <null>
 ```
 
 You can then convert a time interval to, let's say, days:
