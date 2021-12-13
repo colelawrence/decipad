@@ -24,6 +24,7 @@ export default gql`
     myPermissionType: PermissionType
     workspace: Workspace!
     createdAt: DateTime
+    isPublic: Boolean
   }
 
   type PagedPadResult {
@@ -49,6 +50,8 @@ export default gql`
     updatePad(id: ID!, pad: PadInput!): Pad!
     removePad(id: ID!): Boolean
     duplicatePad(id: ID!): Pad!
+
+    setPadPublic(id: ID!, isPublic: Boolean!): Pad!
 
     sharePadWithRole(
       id: ID!

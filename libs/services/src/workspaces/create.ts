@@ -14,6 +14,7 @@ export async function create(
   const newWorkspace = {
     id: nanoid(),
     name: workspace.name,
+    isPublic: workspace.isPublic || false,
   };
 
   const data = await tables();

@@ -57,11 +57,13 @@ export type RoleInvitation = {
 export type Workspace = {
   id: ID;
   name: string;
+  isPublic?: boolean;
   roles: Role[];
 };
 
 export type WorkspaceInput = {
   name: string;
+  isPublic?: boolean;
 };
 
 export type UserAccess = {
@@ -263,10 +265,12 @@ export type PadAccessRecord = {
 export interface PadRecord extends TableRecordBase {
   name: string;
   workspace_id: ID;
+  isPublic?: boolean;
 }
 
 export interface WorkspaceRecord extends TableRecordBase {
   name: string;
+  isPublic?: boolean;
 }
 
 export interface TagRecord extends TableRecordBase {
@@ -463,7 +467,7 @@ export type ConcreteDataTable = DataTable<ConcreteRecord>;
 export interface DynamoDbQuery {
   IndexName?: string;
   KeyConditionExpression: string;
-  ExpressionAttributeValues: Record<string, string>;
+  ExpressionAttributeValues: Record<string, string | boolean>;
   ExpressionAttributeNames?: Record<string, string>;
   ExclusiveStartKey?: string;
   FilterExpression?: string;

@@ -34,6 +34,7 @@ export interface Resource<
   resourceTypeName: string;
   humanName: string;
   dataTable: () => Promise<DataTable<DataTableType>>;
+  isPublic?: (d: DataTableType) => boolean;
   toGraphql: (d: DataTableType) => GraphqlType;
   newRecordFrom: (d: CreateInputType) => DataTableType;
   updateRecordFrom: (

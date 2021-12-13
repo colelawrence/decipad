@@ -14,22 +14,31 @@ import {
 } from '@decipad/backendtypes';
 import tables from '@decipad/services/tables';
 import { expectAuthorized } from '@decipad/services/authorization';
+import {
+  ensurePublicWorkspaceForUser,
+  ensurePrivateWorkspaceForUser,
+} from '@decipad/services/workspaces';
 import { subscribe } from '@decipad/services/pubsub';
 import {
   create as createPad2,
   duplicate as duplicateSharedDoc,
 } from '@decipad/services/pads';
 import Resource from '@decipad/graphqlresource';
+import { identity } from '@decipad/utils';
 
-import { requireUser, isAuthenticatedAndAuthorized } from '../authorization';
+import {
+  loadUser,
+  requireUser,
+  isAuthenticatedAndAuthorized,
+} from '../authorization';
 import paginate from '../utils/paginate';
 
 const padResource = Resource({
   resourceTypeName: 'pads',
   humanName: 'notebook',
-  pubSubChangeTopic: 'padsChanged',
   dataTable: async () => (await tables()).pads,
-  toGraphql: (d: PadRecord) => d,
+  toGraphql: identity,
+  isPublic: (d: PadRecord) => Boolean(d.isPublic),
 
   newRecordFrom: ({
     workspaceId,
@@ -75,13 +84,21 @@ const resolvers = {
       { page, workspaceId }: { page: PageInput; workspaceId: ID },
       context: GraphqlContext
     ) {
-      const user = requireUser(context);
-      await expectAuthorized({
-        resource: `/workspaces/${workspaceId}`,
-        user,
-        permissionType: 'READ',
-      });
       const data = await tables();
+
+      const workspace = await data.workspaces.get({ id: workspaceId });
+      if (!workspace) {
+        throw new UserInputError(`Unknown workspace with id ${workspaceId}`);
+      }
+
+      if (!workspace.isPublic) {
+        const user = loadUser(context);
+        await expectAuthorized({
+          resource: `/workspaces/${workspaceId}`,
+          user,
+          permissionType: 'READ',
+        });
+      }
 
       const query = {
         IndexName: 'byWorkspace',
@@ -138,6 +155,29 @@ const resolvers = {
       await duplicateSharedDoc(id, clonedPad.id, previousPad.name);
 
       return clonedPad;
+    },
+
+    async setPadPublic(
+      _: unknown,
+      { id, isPublic }: { id: ID; isPublic: boolean },
+      context: GraphqlContext
+    ): Promise<Pad> {
+      const resource = `/pads/${id}`;
+      await isAuthenticatedAndAuthorized(resource, context, 'ADMIN');
+      const data = await tables();
+      const pad = await data.pads.get({ id });
+      if (!pad) {
+        throw new UserInputError('No such pad');
+      }
+      const user = requireUser(context);
+      const targetWorkspace = await (isPublic
+        ? ensurePublicWorkspaceForUser(user)
+        : ensurePrivateWorkspaceForUser(user));
+
+      pad.isPublic = isPublic;
+      pad.workspace_id = targetWorkspace.id;
+      await data.pads.put(pad);
+      return pad;
     },
   },
 

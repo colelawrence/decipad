@@ -54,9 +54,27 @@ export async function create(user: UserInput): Promise<UserWithSecret> {
     newUser
   );
 
+  await createWorkspace(
+    {
+      name: publicWorkspaceNameFor(newUser),
+      isPublic: true,
+    },
+    newUser
+  );
+
   return newUser;
 }
 
-function userFirstName(user: User): string {
+export function userFirstName(user: User): string {
   return user.name.split(' ')[0];
+}
+
+export function publicWorkspaceNameFor(user: User) {
+  const firstName = userFirstName(user);
+  return firstName ? `${firstName}'s Public Workspace` : 'My Public Workspace';
+}
+
+export function privateWorkspaceNameFor(user: User) {
+  const firstName = userFirstName(user);
+  return firstName ? `${firstName}'s Workspace` : 'My Workspace';
 }

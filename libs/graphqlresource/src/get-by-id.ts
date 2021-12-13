@@ -22,16 +22,19 @@ export function getById<
 >(
   resource: Resource<RecordT, GraphqlT, CreateT, UpdateT>
 ): GetByIdFunction<GraphqlT> {
-  return async function (_: any, { id }: { id: ID }, context: GraphqlContext) {
-    await expectAuthenticatedAndAuthorized(
-      `/${resource.resourceTypeName}/${id}`,
-      context,
-      'READ'
-    );
+  return async function (_: any, args, context: GraphqlContext) {
+    const { id } = args;
     const data = await resource.dataTable();
     const record = await data.get({ id });
     if (record == undefined) {
-      throw new UserInputError(`No such ${resource.resourceTypeName}`);
+      throw new UserInputError(`No such ${resource.humanName}`);
+    }
+    if (!resource.isPublic?.(record)) {
+      await expectAuthenticatedAndAuthorized(
+        `/${resource.resourceTypeName}/${id}`,
+        context,
+        'READ'
+      );
     }
 
     return resource.toGraphql(record);

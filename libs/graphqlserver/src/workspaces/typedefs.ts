@@ -11,6 +11,7 @@ export default gql`
     roles: [Role!]!
     pads(page: PageInput!): PagedPadResult!
     createdAt: DateTime
+    isPublic: Boolean
   }
 
   type WorkspacesChanges {

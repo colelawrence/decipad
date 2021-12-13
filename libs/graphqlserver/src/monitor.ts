@@ -43,6 +43,8 @@ export default {
             if (error instanceof ForbiddenError) {
               return; // user error, do nothing
             }
+            // eslint-disable-next-line no-console
+            console.error(error);
             if (error.path || error.name !== 'GraphQLError') {
               scope.setExtras({
                 path: error.path,

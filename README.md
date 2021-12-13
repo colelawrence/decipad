@@ -146,7 +146,7 @@ Then you will need to change or add the typedef with the GraphQL interface and t
 
 You should have a server up and running, so that you can manually test your GraphQL server. To do that, you can run:
 
-`$ npm run serve:all`
+`$ yarn serve:all`
 
 or, if you prefer to run things in separate terminal windows, in two separate terminal windows:
 
@@ -158,7 +158,7 @@ $ nx serve client
 You should also run the following watch in a separate window to generate the back-end from your typescripts:
 
 ```bash
-$ npm run build:backend:watch
+$ yarn build:backend:watch
 ```
 
 (The `nx serve backend` runs everything you should need in the backend for you: database, queues and respective lambdas, graphQL server, HTTP lambdas and websockets).
@@ -192,7 +192,7 @@ $ jest apps/backend/tests/<file>.spec.ts --testTimeout=10000 --watch
 If you're also doing client-side stuff that depends on the changes, you will need to run the following commands:
 
 ```bash
-$ npm run build:graphql:schema
+$ yarn build:graphql:schema
 ```
 
 This command will build a schema file from your local server schema.
@@ -200,14 +200,14 @@ This command will build a schema file from your local server schema.
 Then you'll need to generate the client-side typescript files:
 
 ```bash
-$ npm run build:graphql:queries
+$ yarn build:graphql:queries
 ```
 
 This will generate files in `libs/queries`.
 
 If you need to add or change a query, you need to add or change a file in `libs/queries/src/lib/operations/{mutations,queries}` (depending on whether it's a mutation or a query).
 
-If you add or change a file in `libs/queries/src/lib`, you'll need to re-run the `npm run build:graphql:queries` command to (re)generate the Typescript files.
+If you add or change a file in `libs/queries/src/lib`, you'll need to re-run the `yarn build:graphql:queries` command to (re)generate the Typescript files.
 
 If you're adding a file to You may also need to `libs/queries/src/lib/operations/{mutations,queries}`, you'll also need to export it in `libs/queries/src/lib/index.ts`, so that the client code may use it.
 
