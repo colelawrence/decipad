@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import { NotebookPath } from '..';
 
-describe('Pad Path', () => {
+describe('Notebook Path', () => {
   it('links to the workspace', () => {
     const { getByText } = render(
       <NotebookPath
@@ -17,7 +17,7 @@ describe('Pad Path', () => {
     );
   });
 
-  it('renders the pad name', () => {
+  it('renders the notebook name', () => {
     const { getByText } = render(
       <NotebookPath
         workspaceName="John's Workspace"

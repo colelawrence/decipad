@@ -54,7 +54,7 @@ Now you can use the GraphQL playground by accessing [http://localhost:4200/graph
 
 Our GraphQL API allows users to upload attachments. Since our attachments are stored in S3, the client uploads them to S3 directly (saving us $money$).
 
-You can check out the code to how to upload and attach a file to a pad in this test file:
+You can check out the code to how to upload and attach a file to a notebook in this test file:
 
 [tests/attach-file.spec.ts](tests/attach-file.spec.ts)
 

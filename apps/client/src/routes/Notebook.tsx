@@ -57,17 +57,20 @@ const LinkButton = styled(Link)({
   gap: '0.75rem',
 });
 
-export interface PadProps {
+export interface NotebookProps {
   workspaceId: string;
-  padId: string;
+  notebookId: string;
 }
 
-export const Pad = ({ workspaceId, padId }: PadProps): ReturnType<FC> => {
+export const Notebook = ({
+  workspaceId,
+  notebookId,
+}: NotebookProps): ReturnType<FC> => {
   const { search } = useLocation();
   const secret = new URLSearchParams(search).get('secret') ?? undefined;
 
   const { data, loading, error } = useGetPadById({
-    variables: { id: padId },
+    variables: { id: notebookId },
     context: secret
       ? { headers: { authorization: `Bearer ${secret}` } }
       : undefined,
@@ -115,14 +118,14 @@ export const Pad = ({ workspaceId, padId }: PadProps): ReturnType<FC> => {
           permission={data.getPadById?.myPermissionType}
           link={
             shareSecret
-              ? getSecretPadLink(workspaceId, padId, shareSecret)
+              ? getSecretPadLink(workspaceId, notebookId, shareSecret)
               : 'Loading...'
           }
           onToggleShare={async () => {
             if (!shareSecret && !secretLoading) {
               const response = await sharePadWithSecret({
                 variables: {
-                  id: padId,
+                  id: notebookId,
                   permissionType: PermissionType.READ,
                   canComment: false,
                 },

@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import { RequireSession } from '../components/RequireSession';
 import { decode as decodeVanityUrlComponent } from '../lib/vanityUrlComponent';
 import { Home } from './Home';
-import { Pad } from './Pad';
+import { Notebook } from './Notebook';
 import { Playground } from './Playground';
 import { Workspace } from './Workspace';
 
@@ -14,9 +14,9 @@ export function Router(): ReturnType<FC> {
         path="/workspaces/:workspaceid/pads/:padid"
         render={({ match }) => (
           <RequireSession allowSecret>
-            <Pad
+            <Notebook
               workspaceId={match.params.workspaceid}
-              padId={decodeVanityUrlComponent(match.params.padid)}
+              notebookId={decodeVanityUrlComponent(match.params.padid)}
             />
           </RequireSession>
         )}

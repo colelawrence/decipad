@@ -2,7 +2,7 @@ import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { NotebookSharingPopUp } from './NotebookSharingPopUp';
 
-describe('Pad Sharing Pop Up', () => {
+describe('Notebook Sharing Pop Up', () => {
   it('shows the share menu when clicking share', () => {
     const { getByText } = render(
       <NotebookSharingPopUp link="peanut-butter-jelly-time-peanut-" />

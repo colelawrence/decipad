@@ -105,9 +105,9 @@ export interface NotebookSharingPopUpProps {
 }
 
 /**
- * A component that handles the rendering of the pad sharing pop up and the toggle logic.
- * @param link The pad link to be rendered in the text box and copied to the clipboard on button click.
- * @returns The pad sharing pop up.
+ * A component that handles the rendering of the notebook sharing pop up and the toggle logic.
+ * @param link The notebook link to be rendered in the text box and copied to the clipboard on button click.
+ * @returns The notebook sharing pop up.
  */
 export const NotebookSharingPopUp = ({
   link,
