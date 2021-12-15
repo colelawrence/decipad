@@ -64,3 +64,31 @@ describe('onAddColumn prop', () => {
     expect(onAddColumn).toHaveBeenCalled();
   });
 });
+
+describe('readOnly prop', () => {
+  it('does not render the actions column', () => {
+    const { getAllByRole, rerender } = render(
+      <table>
+        <tbody>
+          <TableHeaderRow>
+            <TableHeader type="string">Table Data</TableHeader>
+          </TableHeaderRow>
+        </tbody>
+      </table>
+    );
+
+    expect(getAllByRole('columnheader')).toHaveLength(2);
+
+    rerender(
+      <table>
+        <tbody>
+          <TableHeaderRow readOnly>
+            <TableHeader type="string">Table Data</TableHeader>
+          </TableHeaderRow>
+        </tbody>
+      </table>
+    );
+
+    expect(getAllByRole('columnheader')).toHaveLength(1);
+  });
+});

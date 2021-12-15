@@ -15,7 +15,7 @@ async function getPropsForCode(code: string) {
 
 it('renders nothing on invalid blocks', async () => {
   const { container } = render(
-    <InlineCodeResult {...await getPropsForCode(literal)} statement={null} />
+    <InlineCodeResult {...await getPropsForCode(literal)} />
   );
 
   expect(container.firstChild).toBeNull();

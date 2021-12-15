@@ -1,14 +1,18 @@
 import { InBlockResult } from '@decipad/language';
 import { DateResult, NumberResult, TimeUnitsResult } from '../atoms';
-import { RangeResult } from '../organisms';
-import { ColumnResult } from './Editor/Blocks/Result/ColumnResult';
-import { TableResult } from './Editor/Blocks/Result/TableResult';
+import {
+  ColumnResult,
+  InlineColumnResult,
+  RangeResult,
+  TableResult,
+} from '../organisms';
 
 type Variant = 'block' | 'inline';
 
 export interface ResultTypeProps {
-  readonly value: InBlockResult['value'];
+  readonly parentType?: InBlockResult['valueType'];
   readonly type: InBlockResult['valueType'];
+  readonly value: InBlockResult['value'];
   readonly variant?: Variant;
 }
 
@@ -21,8 +25,9 @@ interface ResultTypeMatcher {
 
 export const DefaultResult = ({
   value,
-}: ResultTypeProps): ReturnType<React.FC> => <>{String(value ?? '')}</>;
-export const FunctionResult = () => <>ƒ</>;
+}: ResultTypeProps): ReturnType<React.FC> => <span>{String(value ?? '')}</span>;
+export const FunctionResult = () => <span>ƒ</span>;
+export const InlineTableResult = () => <span>Table</span>;
 
 export function getResultTypeComponent(
   props: ResultTypeProps
@@ -40,12 +45,23 @@ export function getResultTypeComponent(
     },
     {
       component: TableResult,
-      match: ({ type }) => type.columnTypes != null,
+      match: ({ type, variant }) =>
+        type.columnTypes != null && variant === 'block',
+    },
+    {
+      component: InlineTableResult,
+      match: ({ type, variant }) =>
+        type.columnTypes != null && variant === 'inline',
     },
     {
       component: ColumnResult,
-      match: ({ type, value }) =>
-        type.columnSize != null && Array.isArray(value),
+      match: ({ type, value, variant }) =>
+        type.columnSize != null && Array.isArray(value) && variant === 'block',
+    },
+    {
+      component: InlineColumnResult,
+      match: ({ type, value, variant }) =>
+        type.columnSize != null && Array.isArray(value) && variant === 'inline',
     },
     {
       component: FunctionResult,

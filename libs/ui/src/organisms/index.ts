@@ -1,6 +1,7 @@
 export { AccountMenu } from './AccountMenu/AccountMenu';
 export { CodeBlock } from './CodeBlock/CodeBlock';
 export { CodeResult } from './CodeResult/CodeResult';
+export { ColumnResult } from './ColumnResult/ColumnResult';
 export { EditableTableHeader } from './EditableTableHeader/EditableTableHeader';
 export { EditorTable } from './EditorTable/EditorTable';
 export { EmptyWorkspaceCta } from './EmptyWorkspaceCta/EmptyWorkspaceCta';
@@ -10,7 +11,9 @@ export { NotebookListItem } from './NotebookListItem/NotebookListItem';
 export { NotebookSharingPopUp } from './NotebookSharingPopUp/NotebookSharingPopUp';
 export { RangeResult } from './RangeResult/RangeResult';
 export { SlashCommandsMenu } from './SlashCommandsMenu/SlashCommandsMenu';
+export { Table } from './Table/Table';
 export { TableColumnMenu } from './TableColumnMenu/TableColumnMenu';
+export { TableResult } from './TableResult/TableResult';
 export { WorkspaceMenu } from './WorkspaceMenu/WorkspaceMenu';
 export { WorkspaceNavigation } from './WorkspaceNavigation/WorkspaceNavigation';
 export { WorkspaceSwitcher } from './WorkspaceSwitcher/WorkspaceSwitcher';

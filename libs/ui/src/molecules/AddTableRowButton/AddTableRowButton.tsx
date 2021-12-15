@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { cssVar, setCssVar, p13Medium } from '../../primitives';
 import { Create } from '../../icons';
 import { noop } from '../../utils';
+import { table } from '../../styles';
 
 const tdStyles = css({
   backgroundColor: cssVar('backgroundColor'),
@@ -22,7 +23,7 @@ const buttonStyles = css(p13Medium, {
   gap: '6px',
   width: '100%',
   height: '100%',
-  padding: '0 12px',
+  padding: `0 ${table.cellSidePadding}`,
 });
 
 const iconWrapperStyles = css({

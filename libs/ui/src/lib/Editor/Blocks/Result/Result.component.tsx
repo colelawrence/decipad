@@ -2,14 +2,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { chakra } from '@chakra-ui/system';
 import { Box } from '@chakra-ui/react';
-import { Type, InBlockResult, OptionalValueLocation } from '@decipad/language';
+import { InBlockResult, OptionalValueLocation } from '@decipad/language';
 import { useResults } from '@decipad/ui';
 
-import { DateResult, NumberResult, TimeUnitsResult } from '../../../../atoms';
-import { RangeResult } from '../../../../organisms';
-
-import { ColumnResult } from './ColumnResult';
-import { TableResult } from './TableResult';
+import { CodeResult } from '../../../../organisms';
 
 const commonStyles = {
   py: 2,
@@ -34,46 +30,10 @@ export const DefaultResultStyles = chakra(Box, {
     color: 'black',
     ...commonStyles,
     w: '100%',
+
+    display: 'grid',
   },
 });
-
-export interface ResultContentProps {
-  type: Type;
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  value: any | any[];
-  depth?: number;
-}
-
-export const ResultContent = (props: ResultContentProps) => {
-  const { type, value } = props;
-  if (type == null) return null;
-
-  if (type.type === 'number') {
-    return <NumberResult {...props} />;
-  }
-  if (type.type === 'boolean' || type.type === 'string') {
-    return <>{String(value)}</>;
-  }
-  if (type.date) {
-    return <DateResult {...props} />;
-  }
-  if (type.columnTypes != null) {
-    return <TableResult {...props} />;
-  }
-  if (type.columnSize != null && Array.isArray(value)) {
-    return <ColumnResult {...props} />;
-  }
-  if (type.functionness) {
-    return <>ƒ</>;
-  }
-  if (type.timeUnits) {
-    return <TimeUnitsResult {...props} />;
-  }
-  if (type.rangeOf) {
-    return <RangeResult {...props} />;
-  }
-  return value.toString();
-};
 
 const getLineResult = (
   currentBlockId: string,
@@ -133,7 +93,11 @@ export const Result = ({
   }
   if (lineResult?.value != null) {
     const result = (
-      <ResultContent type={lineResult.valueType} value={lineResult.value} />
+      <CodeResult
+        type={lineResult.valueType}
+        value={lineResult.value}
+        variant="block"
+      />
     );
     const resultWithStyles = useDefaultStyles ? (
       <DefaultResultStyles>{result}</DefaultResultStyles>

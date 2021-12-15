@@ -1,6 +1,4 @@
-import { css } from '@emotion/react';
 import { FC } from 'react';
-import { cssVar } from '../../primitives';
 import {
   AddTableRowButton,
   EditableTableCaption,
@@ -8,46 +6,9 @@ import {
   TableHeaderRow,
   TableRow,
 } from '../../molecules';
-import { EditableTableHeader } from '../index';
+import { EditableTableHeader, Table } from '..';
 import { TableCellType, TableColumn, TableData } from './types';
-import { noop, tableRowCounter } from '../../utils';
-
-const border = `1px solid ${cssVar('strongHighlightColor')}`;
-const borderRadius = '6px';
-
-const tableStyles = css({
-  borderCollapse: 'inherit',
-  borderSpacing: '0',
-  tableLayout: 'fixed',
-  // NOTE: border radius on the table does not work with `borderCollapse: collapse`,
-  // that's why we need `borderCollapse: separate` on the table and to style <th>
-  // and <td> separately for borders and border radius.
-  '> thead > tr > th, > tbody > tr > td, > tfoot > tr > td': {
-    borderRight: border,
-    borderBottom: border,
-  },
-  '> thead > tr > th': {
-    borderTop: border,
-  },
-  '> thead > tr > th:first-of-type, > tbody > tr > td:first-of-type, > tfoot > tr > td:first-of-type':
-    {
-      borderLeft: border,
-    },
-  '> thead > tr > th:first-of-type': {
-    borderTopLeftRadius: borderRadius,
-  },
-  '> thead > tr > th:last-of-type': {
-    borderTopRightRadius: borderRadius,
-  },
-  '> tfoot > tr > td:first-of-type': {
-    borderBottomLeftRadius: borderRadius,
-  },
-  '> tfoot > tr > td:last-of-type': {
-    borderBottomRightRadius: borderRadius,
-  },
-
-  counterReset: tableRowCounter,
-});
+import { noop } from '../../utils';
 
 const alwaysTrue = () => true;
 
@@ -83,7 +44,7 @@ export const EditorTable = ({
   const tableLength = value.columns[0].cells.length;
   return (
     <div>
-      <table css={tableStyles}>
+      <Table>
         <EditableTableCaption
           value={value.variableName}
           onChange={onChangeCaption}
@@ -141,7 +102,7 @@ export const EditorTable = ({
             onAddRow={onAddRow}
           />
         </tfoot>
-      </table>
+      </Table>
     </div>
   );
 };

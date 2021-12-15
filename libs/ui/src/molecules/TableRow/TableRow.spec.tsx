@@ -64,3 +64,31 @@ describe('onRemove prop', () => {
     expect(onRemove).toHaveBeenCalled();
   });
 });
+
+describe('readOnly prop', () => {
+  it('does not render the actions column', () => {
+    const { getAllByRole, rerender } = render(
+      <table>
+        <tbody>
+          <TableRow>
+            <TableData>Table Data</TableData>
+          </TableRow>
+        </tbody>
+      </table>
+    );
+
+    expect(getAllByRole('cell')).toHaveLength(2);
+
+    rerender(
+      <table>
+        <tbody>
+          <TableRow readOnly>
+            <TableData>Table Data</TableData>
+          </TableRow>
+        </tbody>
+      </table>
+    );
+
+    expect(getAllByRole('cell')).toHaveLength(1);
+  });
+});

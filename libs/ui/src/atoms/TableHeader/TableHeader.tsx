@@ -1,9 +1,14 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Number, Text, Placeholder } from '../../icons';
-import { cssVar, grey250 } from '../../primitives';
+import { cssVar, grey250, p13Medium } from '../../primitives';
+import { table } from '../../styles';
 
-const columnStyles = css({
+const columnStyles = css(p13Medium, {
+  display: 'grid',
+  overflowX: 'hidden',
+  alignItems: 'center',
+
   backgroundColor: cssVar('highlightColor'),
   // Keep hover effect when hovered, focused or the dropdown menu is opened.
   '&:hover, &:focus-within, &[data-highlight="true"]': {
@@ -12,7 +17,8 @@ const columnStyles = css({
 
   boxShadow: `inset 0px -2px 0px ${grey250.rgb}`,
 
-  paddingLeft: '12px',
+  minHeight: table.thMinHeight,
+  paddingLeft: table.cellSidePadding,
   paddingRight: '8px',
   verticalAlign: 'middle',
 });
@@ -20,7 +26,7 @@ const columnStyles = css({
 const headerWrapperStyles = css({
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'center',
+  justifyContent: 'left',
   gap: '6px',
   minHeight: '100%',
 });

@@ -6,8 +6,9 @@ import { Create } from '../../icons';
 import { noop } from '../../utils';
 import { TableHeader } from '../../atoms';
 import { EditableTableHeader } from '../../organisms';
+import { table } from '../../styles';
 
-const thStyles = css({
+const createColumnThStyles = css({
   backgroundColor: cssVar('highlightColor'),
   '&:hover, &:focus-within': {
     backgroundColor: cssVar('strongHighlightColor'),
@@ -16,8 +17,8 @@ const thStyles = css({
   boxShadow: `inset 0px -2px 0px ${grey250.rgb}`,
 
   // Each row is as tall as the tallest cell, so our rows are at least this high.
-  height: '32px',
-  width: '44px',
+  minHeight: table.thMinHeight,
+  width: table.buttonColumnWidth,
 
   padding: 0,
 });
@@ -38,14 +39,24 @@ const iconWrapperStyles = css({
 interface TableHeaderRowProps {
   readonly children: ReactNode;
   readonly onAddColumn?: () => void;
+  readonly readOnly?: boolean;
 }
 
 export const TableHeaderRow = ({
   children,
   onAddColumn = noop,
+  readOnly = false,
 }: TableHeaderRowProps): ReturnType<FC> => {
   return (
-    <tr>
+    <tr
+      css={{
+        display: 'grid',
+        gridTemplate: table.rowTemplate(
+          Children.toArray(children).length,
+          readOnly
+        ),
+      }}
+    >
       {Children.map(children, (child) => {
         if (child == null) {
           return null;
@@ -62,13 +73,15 @@ export const TableHeaderRow = ({
         );
         throw new Error('Expected all children to be table header components');
       })}
-      <th css={thStyles}>
-        <button css={buttonStyles} onClick={onAddColumn}>
-          <span css={iconWrapperStyles}>
-            <Create />
-          </span>
-        </button>
-      </th>
+      {!readOnly && (
+        <th css={createColumnThStyles}>
+          <button css={buttonStyles} onClick={onAddColumn}>
+            <span css={iconWrapperStyles}>
+              <Create />
+            </span>
+          </button>
+        </th>
+      )}
     </tr>
   );
 };

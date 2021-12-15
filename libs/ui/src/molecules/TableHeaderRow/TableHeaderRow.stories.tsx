@@ -15,3 +15,12 @@ export const Normal: Story = () => (
     </TableHeaderRow>
   </table>
 );
+
+export const ReadOnly: Story = () => (
+  <table>
+    <TableHeaderRow readOnly>
+      <TableHeader type="string">Header1</TableHeader>
+      <TableHeader type="number">Header2</TableHeader>
+    </TableHeaderRow>
+  </table>
+);

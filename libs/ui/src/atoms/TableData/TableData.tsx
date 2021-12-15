@@ -1,21 +1,37 @@
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { cssVar, grey400, p12Medium, setCssVar } from '../../primitives';
+import {
+  cssVar,
+  grey400,
+  p12Medium,
+  p14Medium,
+  setCssVar,
+} from '../../primitives';
+import { table } from '../../styles';
 import { tableRowCounter } from '../../utils';
 
-const tdStyles = css({
-  padding: '0 12px',
+const lineNumberWidth = '22px';
+
+const tdBaseStyles = css(p14Medium, {
+  display: 'grid',
+  overflowX: 'hidden',
+  alignItems: 'center',
+
+  background: cssVar('backgroundColor'),
+
+  minHeight: table.tdMinHeight,
   verticalAlign: 'middle',
 
   '&:focus-within': {
     borderRadius: '6px',
     boxShadow: `0 0 0 1.5px ${grey400.rgb}`,
+    zIndex: 1,
   },
 
   // Show line numbers on the first cell of each row.
   position: 'relative',
   '&:first-of-type': {
-    paddingLeft: '34px',
+    paddingLeft: lineNumberWidth,
   },
   '&:first-of-type::before': {
     ...setCssVar('normalTextColor', cssVar('weakTextColor')),
@@ -26,7 +42,7 @@ const tdStyles = css({
     content: `counter(${tableRowCounter})`,
 
     position: 'absolute',
-    right: 'calc(100% - 22px)',
+    right: `calc(100% - ${lineNumberWidth})`,
     top: '50%',
     transform: 'translateY(-50%)',
   },
@@ -42,7 +58,7 @@ export const TableData = ({
   children,
 }: TableDataProps): ReturnType<FC> => {
   return (
-    <td css={tdStyles} className={className}>
+    <td css={[tdBaseStyles]} className={className}>
       {children}
     </td>
   );
