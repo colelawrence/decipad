@@ -6,6 +6,7 @@ export const units: UnitOfMeasure[] = [
     name: 'watt',
     abbreviations: ['W'],
     baseQuantity: 'power',
+    pretty: 'W',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
   },

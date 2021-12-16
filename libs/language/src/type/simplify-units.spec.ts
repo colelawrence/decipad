@@ -1,4 +1,4 @@
-import { U, u } from '../utils';
+import { U, u, F } from '../utils';
 import { simplifyUnits } from './units';
 
 describe('simplify units', () => {
@@ -10,8 +10,12 @@ describe('simplify units', () => {
 
   it('simplifies exponentiated unknown unit', () => {
     expect(
-      simplifyUnits(U('bananas', { multiplier: 1000, exp: 2n, known: false }))
-    ).toMatchObject(U('bananas', { multiplier: 1000, exp: 2n, known: false }));
+      simplifyUnits(
+        U('bananas', { multiplier: F(1000), exp: 2n, known: false })
+      )
+    ).toMatchObject(
+      U('bananas', { multiplier: F(1000), exp: 2n, known: false })
+    );
   });
 
   it('simplifies exponentiated unknown unit (2)', () => {

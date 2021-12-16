@@ -21,7 +21,7 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'squaremeter',
     abbreviations: ['m2', 'm²'],
-    pretty: (n) => `${n} m²`,
+    pretty: 'm²',
     baseQuantity: 'area',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
@@ -31,7 +31,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 10e6 m2
     name: 'squarekilometre',
     abbreviations: ['km2', 'km²'],
-    pretty: (n) => `${n} km²`,
+    pretty: 'km²',
     baseQuantity: 'area',
     toBaseQuantity: squarekilometre,
     fromBaseQuantity: invert(squarekilometre),
@@ -42,7 +42,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 1 m × 1 m
     name: 'squaremile',
     abbreviations: ['sqmi'],
-    pretty: (n) => `${n} sq mi`,
+    pretty: 'sq mi',
     baseQuantity: 'area',
     toBaseQuantity: squaremile,
     fromBaseQuantity: invert(squaremile),
@@ -53,7 +53,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 1 yd × 1 yd
     name: 'squareyard',
     abbreviations: ['sqyd'],
-    pretty: (n) => `${n} sq yd`,
+    pretty: 'sq yd',
     baseQuantity: 'area',
     toBaseQuantity: squareyard,
     fromBaseQuantity: invert(squareyard),
@@ -64,7 +64,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 1 ft × 1 ft
     name: 'squarefoot',
     abbreviations: ['sqft'],
-    pretty: (n) => `${n} sq ft`,
+    pretty: 'sq ft',
     baseQuantity: 'area',
     toBaseQuantity: squarefoot,
     fromBaseQuantity: invert(squarefoot),
@@ -75,7 +75,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 1 inch × 1 inch
     name: 'squareinch',
     abbreviations: ['sqin'],
-    pretty: (n) => `${n} sq in`,
+    pretty: 'sq in',
     baseQuantity: 'area',
     toBaseQuantity: squareinch,
     fromBaseQuantity: invert(squareinch),

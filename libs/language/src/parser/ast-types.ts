@@ -10,7 +10,7 @@ export interface Pos {
 export interface Unit {
   unit: string;
   exp: bigint;
-  multiplier: number;
+  multiplier: Fraction;
   known: boolean;
   start?: Pos;
   end?: Pos;

@@ -38,14 +38,14 @@ You can also convert more complex units. For instance, you may have the number o
 
 ```deci live
 10 bananas/meter^2 in bananas/yard^2
-==> 8.3612 bananas/yard^2
+==> 8.3612 bananas·yard⁻²
 ```
 
 Or, with more known units:
 
 ```deci live
 4184 joules/hour in calories/day
-==> 24000 calories/day
+==> 24000 calories per day
 ```
 
 ## Expanding and contracting units
@@ -59,14 +59,14 @@ Deci understands how some units can be decomposed in other units. For instance, 
 
 ```deci live
 30 bars in newton/m^2
-==> 3000000 newtons/m^2
+==> 3000000 N·m⁻²
 ```
 
 Or in operations:
 
 ```deci live
 30 psi + 1 newton/inch^2
-==> 134.44618(3315187806205770277626565051714752313554708764289602612955906369080021774632553075666848121937942297223734349482852476864452912357103973870440936309199782253674469243) newtons/inch^2
+==> 134.44618(3315187806205770277626565051714752313554708764289602612955906369080021774632553075666848121937942297223734349482852476864452912357103973870440936309199782253674469243) N·inch⁻²
 ```
 
 Deci will even auto-convert units when you need the same units for some non-numeric operations:

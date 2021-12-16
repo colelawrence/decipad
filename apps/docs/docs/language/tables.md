@@ -95,7 +95,7 @@ my_table = {
 }
 
 my_table.column_A / my_table.column_B
-==> [ 0.25 bananas/orange, 0.4 bananas/orange, 0.5 bananas/orange ]
+==> [ 0.25 bananas per orange, 0.4 bananas per orange, 0.5 bananas per orange ]
 ```
 
 ## Index column

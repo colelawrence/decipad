@@ -1,3 +1,4 @@
+import Fraction from '@decipad/fraction';
 import { getDefined } from '@decipad/utils';
 import { as, assign, block, c, col, l, prop, table, units } from '../utils';
 import { prettyPrintAST, prettyPrintSolutions } from './utils';
@@ -24,7 +25,7 @@ it('can pretty print the AST', () => {
 const meters = {
   exp: 1n,
   known: true,
-  multiplier: 1,
+  multiplier: new Fraction(1),
   unit: 'meters',
 };
 it('can pretty print units', () => {

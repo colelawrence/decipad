@@ -1,3 +1,4 @@
+import Fraction from '@decipad/fraction';
 import { F, U, u } from '../../utils';
 import { expandUnits } from '.';
 
@@ -24,11 +25,11 @@ describe('expand', () => {
 
   it('expands known unit to the same unit and value (2)', () => {
     const [resultUnits, convert] = expandUnits(
-      U('watts', { multiplier: 1000 })
+      U('watts', { multiplier: new Fraction(1000) })
     );
     expect(resultUnits).toMatchObject(
       U([
-        u('grams', { multiplier: 1000 }),
+        u('grams', { multiplier: new Fraction(1000) }),
         u('meters', { exp: 2n }),
         u('seconds', { exp: -3n }),
       ])
@@ -62,10 +63,16 @@ describe('expand', () => {
 
   it('expands known and unknown negative exp units to the same units and value (2)', () => {
     const [resultUnits, convert] = expandUnits(
-      U([u('bananas'), u('second', { exp: -1n, multiplier: 0.001 })])
+      U([
+        u('bananas'),
+        u('second', { exp: -1n, multiplier: new Fraction(0.001) }),
+      ])
     );
     expect(resultUnits).toMatchObject(
-      U([u('bananas'), u('seconds', { exp: -1n, multiplier: 0.001 })])
+      U([
+        u('bananas'),
+        u('seconds', { exp: -1n, multiplier: new Fraction(0.001) }),
+      ])
     );
     expect(convert(F(2))).toMatchObject(F(2));
   });
@@ -85,20 +92,20 @@ describe('expand', () => {
 
   it('expands unknown unit with exp and multiplier to the same units and value', () => {
     const [resultUnits, convert] = expandUnits(
-      U('bananas', { exp: 2n, multiplier: 100 })
+      U('bananas', { exp: 2n, multiplier: new Fraction(100) })
     );
     expect(resultUnits).toMatchObject(
-      U('bananas', { exp: 2n, multiplier: 100 })
+      U('bananas', { exp: 2n, multiplier: new Fraction(100) })
     );
     expect(convert(F(2))).toMatchObject(F(2));
   });
 
   it('expands known unit with exp and multiplier to the same units and value', () => {
     const [resultUnits, convert] = expandUnits(
-      U([u('meters', { exp: 2n, multiplier: 0.001 })])
+      U([u('meters', { exp: 2n, multiplier: new Fraction(0.001) })])
     );
     expect(resultUnits).toMatchObject(
-      U('meters', { exp: 2n, multiplier: 0.001 })
+      U('meters', { exp: 2n, multiplier: new Fraction(0.001) })
     );
     expect(convert(F(2))).toMatchObject(F(2));
   });
@@ -118,12 +125,12 @@ describe('expand', () => {
 
   it('expands standard known unit with multiplier to the correct units', () => {
     const [resultUnits, convert] = expandUnits(
-      U('calories', { multiplier: 0.001 })
+      U('calories', { multiplier: new Fraction(0.001) })
     );
 
     expect(resultUnits).toMatchObject(
       U([
-        u('grams', { exp: 1n, multiplier: 0.001 }),
+        u('grams', { exp: 1n, multiplier: new Fraction(0.001) }),
         u('meters', { exp: 2n }),
         u('seconds', { exp: -2n }),
       ])

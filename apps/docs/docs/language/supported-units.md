@@ -14,6 +14,15 @@ Some conversions (e.g. bohr radius) are not exact by definition.
 
 Please bear that in mind when using our units. Approximations are marked with a `*` for your convenience
 
+## Unit prefixes
+
+The standard [metric unit prefixes](https://en.wikipedia.org/wiki/Metric_prefix) are available in Decipad.
+
+```deci live
+1 metre in cm
+==> 100 cm
+```
+
 ## Length units
 
 The default unit is Metre (`meter`, `m`).
@@ -258,6 +267,8 @@ Hertz can be expressed as `s−1` and we support expanding (or contracting) any 
 The default unit is Bit (`bit`).
 
 Byte (`byte`) is also available and defined as `8 bits`.
+
+Currently we don't support [binary unit prefixes](https://en.wikipedia.org/wiki/Binary_prefix).
 
 ## Power units
 

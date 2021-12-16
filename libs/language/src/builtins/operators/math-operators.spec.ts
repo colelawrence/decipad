@@ -87,20 +87,34 @@ describe('math operators', () => {
     expect(
       operators['**'].functor?.(
         [
-          t.number([{ unit: 'meters', exp: 1n, multiplier: 1, known: false }]),
+          t.number([
+            {
+              unit: 'meters',
+              exp: 1n,
+              multiplier: F(1),
+              known: false,
+            },
+          ]),
           t.number(),
         ],
 
         [l(1), l(2)]
       )
     ).toMatchObject(
-      t.number([{ unit: 'meters', exp: 2n, multiplier: 1, known: false }])
+      t.number([{ unit: 'meters', exp: 2n, multiplier: F(1), known: false }])
     );
 
     expect(
       operators['**'].functor?.(
         [
-          t.number([{ unit: 'meters', exp: 1n, multiplier: 1, known: false }]),
+          t.number([
+            {
+              unit: 'meters',
+              exp: 1n,
+              multiplier: F(1),
+              known: false,
+            },
+          ]),
           t.number(),
         ],
 
@@ -111,7 +125,14 @@ describe('math operators', () => {
     expect(
       operators['**'].functor?.(
         [
-          t.number([{ unit: 'meters', exp: 1n, multiplier: 1, known: false }]),
+          t.number([
+            {
+              unit: 'meters',
+              exp: 1n,
+              multiplier: F(1),
+              known: false,
+            },
+          ]),
           t.number(),
         ],
 

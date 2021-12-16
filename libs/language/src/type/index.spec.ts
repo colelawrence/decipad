@@ -1,3 +1,4 @@
+import Fraction from '@decipad/fraction';
 import produce from 'immer';
 
 import { AST } from '..';
@@ -8,6 +9,7 @@ import { Type, build as t } from './index';
 
 const meter = u('meters');
 const second = u('seconds');
+const cm = u('m', { multiplier: new Fraction(1, 100) });
 
 const invMeter: AST.Unit = inverseExponent(meter);
 const invSecond: AST.Unit = inverseExponent(second);
@@ -16,12 +18,44 @@ const numberInMeter = t.number([meter]);
 const numberInMeterBySecond = t.number([meter, second]);
 const numberInMeterPerSecond = t.number([meter, invSecond]);
 
+it('can follow SI rules and style conventions', () => {
+  expect(t.number([u('s')]).toString()).toEqual('s');
+  expect(t.number([second]).toString()).toEqual('seconds');
+  // cm = 0.01m
+  expect(t.number([cm]).toString()).toEqual('cm');
+  expect(
+    t.number([u('meter', { multiplier: new Fraction(1, 100) })]).toString()
+  ).toEqual('centimeters');
+  expect(t.number([meter, inverseExponent(second)]).toBasicString()).toEqual(
+    'meters per second'
+  );
+  expect(t.number([u('m'), inverseExponent(u('s'))]).toBasicString()).toEqual(
+    'm/s'
+  );
+  expect(t.number([u('meter'), u('banana')]).toBasicString()).toEqual(
+    'meters·banana'
+  );
+  // cm3 = 0.01m3
+  const cm3 = t.number([u('m', { multiplier: new Fraction(1, 100), exp: 3n })]);
+  expect(cm3.toString()).toEqual('cm³');
+  expect(t.number([u('cubicmeter')]).toString()).toEqual('m³');
+  expect(t.number([u('lightyear')]).toString()).toEqual('light year');
+  expect(t.number([u('ly')]).toString()).toEqual('ly');
+  expect(t.number([u('$')]).toString()).toEqual('$');
+  expect(
+    t.number([u('m'), u('kg'), inverseExponent(u('s'))]).toBasicString()
+  ).toEqual('m·kg·s⁻¹');
+  expect(t.number(units(cm, cm, cm)).toString()).toEqual('μm³');
+});
+
+it.todo('support yotta and zetta');
+
 it('can be stringified', () => {
   expect(t.number().toString()).toEqual('<number>');
   expect(t.number([meter]).toString()).toEqual('meters');
-  expect(t.number(units(meter, second)).toString()).toEqual('meters.seconds');
+  expect(t.number(units(meter, second)).toString()).toEqual('meters·second');
   expect(t.number([meter, inverseExponent(second)]).toString()).toEqual(
-    'meters/second'
+    'meters per second'
   );
 
   expect(t.range(t.number()).toString()).toEqual('range of <number>');
@@ -52,10 +86,10 @@ it('can be stringified in basic form', () => {
   expect(t.number().toBasicString()).toEqual('number');
   expect(t.number([meter]).toBasicString()).toEqual('meters');
   expect(t.number(units(meter, second)).toBasicString()).toEqual(
-    'meters.seconds'
+    'meters·second'
   );
   expect(t.number([meter, inverseExponent(second)]).toBasicString()).toEqual(
-    'meters/second'
+    'meters per second'
   );
 
   expect(t.range(t.number()).toBasicString()).toEqual('range');

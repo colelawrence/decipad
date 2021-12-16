@@ -57,7 +57,7 @@ export type UnitOfMeasure = {
   name: string;
   baseQuantity: BaseQuantity;
   abbreviations?: string[];
-  pretty?: (n: Fraction) => string;
+  pretty?: string;
   doesNotScaleOnConversion?: true;
   toBaseQuantity: (n: Fraction) => Fraction;
   fromBaseQuantity: (n: Fraction) => Fraction;
@@ -92,6 +92,13 @@ const allUnitPackages = [
 const duplicates: Record<string, string> = {};
 
 const abbreviations: string[] = [];
+export const prettyForSymbol: Record<string, string> = {};
+
+function makePrettyRecord(symbol: string, prty: string | undefined) {
+  if (prty) {
+    prettyForSymbol[symbol] = prty;
+  }
+}
 
 allUnitPackages.map((x) => {
   x.units.map((unit) => {
@@ -99,15 +106,25 @@ allUnitPackages.map((x) => {
       throw new Error(`Trying to declare twice ${unit.name}`);
     }
     duplicates[unit.name] = unit.name;
+    makePrettyRecord(unit.name, unit.pretty);
     (unit.abbreviations || []).forEach((abbr) => {
       if (duplicates[abbr]) {
         throw new Error(`Trying to declare twice ${abbr}`);
       }
       abbreviations.push(abbr);
       duplicates[abbr] = abbr;
+      makePrettyRecord(abbr, unit.pretty);
     });
   });
 });
+
+//
+// is this unit a symbol
+// (we call symbols abbreviations in our codebase)
+//
+export const unitIsSymbol = (unit: string): boolean => {
+  return abbreviations.some((u) => u === unit);
+};
 
 abbreviations.map((abbr) => {
   doNotPluralize(abbr);

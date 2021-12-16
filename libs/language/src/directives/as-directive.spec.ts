@@ -1,5 +1,5 @@
 import { build as t } from '../type';
-import { c, col, l, n, u, timeQuantity } from '../utils';
+import { c, col, l, n, u, timeQuantity, F } from '../utils';
 import { date } from '../date';
 import { getType, getValue } from './as-directive';
 import { testGetType, testGetValue } from './testUtils';
@@ -92,7 +92,7 @@ describe('getValue', () => {
   });
 
   it('works on a unitful column', async () => {
-    const km = u('meters', { multiplier: 1000 });
+    const km = u('meters', { multiplier: F(1000) });
     const quantity = col(l(1, km), l(2, km), l(3, km));
 
     expect(await testGetValue(getValue, quantity, n('units', u('miles'))))

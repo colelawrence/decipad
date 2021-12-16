@@ -520,8 +520,8 @@ describe('Units', () => {
     ).toMatchObject({
       type: {
         unit: units(
-          { exp: 1n, known: true, multiplier: 1, unit: 'meter' },
-          { exp: -1n, known: true, multiplier: 1, unit: 'second' }
+          { exp: 1n, known: true, multiplier: new Fraction(1), unit: 'meter' },
+          { exp: -1n, known: true, multiplier: new Fraction(1), unit: 'second' }
         ),
       },
       value: F(1),
@@ -543,13 +543,13 @@ describe('Units', () => {
           {
             exp: 1n,
             known: true,
-            multiplier: 1,
+            multiplier: new Fraction(1),
             unit: 'meters',
           },
           {
             exp: -1n,
             known: true,
-            multiplier: 1,
+            multiplier: new Fraction(1),
             unit: 'seconds',
           }
         ),
@@ -567,7 +567,12 @@ describe('Units', () => {
     ).toMatchObject({
       value: F(6),
       type: {
-        unit: units({ exp: 1n, known: true, multiplier: 1, unit: 'meters' }),
+        unit: units({
+          exp: 1n,
+          known: true,
+          multiplier: new Fraction(1),
+          unit: 'meters',
+        }),
       },
     });
 
@@ -580,7 +585,12 @@ describe('Units', () => {
     ).toMatchObject({
       value: F(2),
       type: {
-        unit: units({ exp: -1n, known: true, multiplier: 1, unit: 'seconds' }),
+        unit: units({
+          exp: -1n,
+          known: true,
+          multiplier: new Fraction(1),
+          unit: 'seconds',
+        }),
       },
     });
   });
@@ -589,7 +599,7 @@ describe('Units', () => {
     const { type, value } = await runCode(
       '(120 meter^2) * (50 USD/meter^2/month)'
     );
-    expect(type.toString()).toEqual('USD/month');
+    expect(type.toString()).toEqual('USD per month');
     expect(value.valueOf()).toEqual(6000);
   });
 });
@@ -709,7 +719,7 @@ describe('number units work together', () => {
           {
             unit: 'bananas',
             exp: 1n,
-            multiplier: 1,
+            multiplier: new Fraction(1),
             known: false,
           },
         ],
@@ -726,7 +736,7 @@ describe('number units work together', () => {
           {
             unit: 'meters',
             exp: 1n,
-            multiplier: 1,
+            multiplier: new Fraction(1),
             known: true,
           },
         ],
@@ -747,7 +757,7 @@ describe('number units work together', () => {
           {
             unit: 'meters',
             exp: 1n,
-            multiplier: 0.01,
+            multiplier: new Fraction(0.01),
             known: true,
           },
         ],
@@ -768,7 +778,7 @@ describe('number units work together', () => {
           {
             unit: 'meters',
             exp: 1n,
-            multiplier: 1,
+            multiplier: new Fraction(1),
             known: true,
           },
         ],
@@ -789,7 +799,7 @@ describe('number units work together', () => {
           {
             unit: 'meters',
             exp: 1n,
-            multiplier: 0.01,
+            multiplier: new Fraction(0.01),
             known: true,
           },
         ],
@@ -810,7 +820,7 @@ describe('number units work together', () => {
           {
             unit: 'meters',
             exp: 1n,
-            multiplier: 1,
+            multiplier: new Fraction(1),
             known: true,
           },
         ],
@@ -827,7 +837,7 @@ describe('number units work together', () => {
           {
             unit: 'meters',
             exp: 2n,
-            multiplier: 1,
+            multiplier: new Fraction(1),
             known: true,
           },
         ],
@@ -844,13 +854,13 @@ describe('number units work together', () => {
           {
             unit: 'hours',
             exp: 1n,
-            multiplier: 1,
+            multiplier: new Fraction(1),
             known: true,
           },
           {
             unit: 'meters',
             exp: 1n,
-            multiplier: 1000,
+            multiplier: new Fraction(1000),
             known: true,
           },
         ],
@@ -867,13 +877,13 @@ describe('number units work together', () => {
           {
             unit: 'meters',
             exp: 1n,
-            multiplier: 1000,
+            multiplier: new Fraction(1000),
             known: true,
           },
           {
             unit: 'minute',
             exp: -1n,
-            multiplier: 1,
+            multiplier: new Fraction(1),
             known: true,
           },
         ],
@@ -890,13 +900,13 @@ describe('number units work together', () => {
           {
             unit: 'meters',
             exp: 1n,
-            multiplier: 1000,
+            multiplier: new Fraction(1000),
             known: true,
           },
           {
             unit: 'minutes',
             exp: -1n,
-            multiplier: 1,
+            multiplier: new Fraction(1),
             known: true,
           },
         ],
@@ -913,7 +923,7 @@ describe('number units work together', () => {
           {
             unit: 'miles',
             exp: 1n,
-            multiplier: 1,
+            multiplier: new Fraction(1),
             known: true,
           },
         ],
@@ -1009,7 +1019,10 @@ describe('number units work together', () => {
     ).toMatchObject({
       value: F(209216129, 16129),
       type: t.number(
-        U([u('g', { multiplier: 1000 }), u('second', { exp: -2n })])
+        U([
+          u('g', { multiplier: new Fraction(1000) }),
+          u('second', { exp: -2n }),
+        ])
       ),
     });
   });
@@ -1065,6 +1078,54 @@ describe('number units work together', () => {
     expect(await runCode(`1 newtons/meter^2 in bars`)).toMatchObject({
       value: F(1, 100000),
       type: t.number(U('bars')),
+    });
+  });
+
+  it('should convert 1cm into mm', async () => {
+    const run = await runCode(`1 cm in mm`);
+
+    expect(run).toMatchObject({
+      value: F(10),
+      type: t.number(U([u('m', { multiplier: new Fraction(0.001) })])),
+    });
+  });
+
+  it('should convert 1 decimetre into centimetre', async () => {
+    const run = await runCode(`1 decimetre in centimetre`);
+
+    expect(run).toMatchObject({
+      value: F(10),
+      type: t.number(U([u('metre', { multiplier: new Fraction(0.01) })])),
+    });
+  });
+
+  //
+  // > (new Fraction(1)).div(new Fraction(10).mul(9))
+  // { s: 1n, n: 1n, d: 90n }
+  // first we need to change the muiltipliers to be fractions instead of JS numbers
+  // (change the type)
+  // then, change the way we create multipliers in unit.ne
+  // then, compile the grammar
+  // then, run the typechecker
+  // and fix the errors
+  //
+  it('should convert 1mm into nm', async () => {
+    const run = await runCode(`1 mm in nm`);
+
+    expect(run).toMatchObject({
+      value: F(1_000_000),
+      type: t.number(
+        U([u('m', { multiplier: new Fraction(1, 1_000_000_000) })])
+      ),
+    });
+  });
+
+  it('should convert 1mm into μm', async () => {
+    const run = await runCode(`1 mm in μm`);
+
+    expect(run).toMatchObject({
+      value: F(1_000),
+      type: t.number(U([u('m', { multiplier: new Fraction(0.000001) })])),
     });
   });
 

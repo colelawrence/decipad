@@ -1,12 +1,12 @@
-import { produce } from 'immer';
 import Fraction from '@decipad/fraction';
+import { produce } from 'immer';
 import { getDefined } from '@decipad/utils';
 import { UnitOfMeasure, getUnitByName } from '../known-units';
 import { AST } from '../../parser';
 import { normalizeUnits } from '../../type';
 import { BaseQuantityExpansion, expansions } from './expansions';
 import { baseUnitForBaseQuantity } from '../base-units';
-import { identity } from '../../utils';
+import { identity, F } from '../../utils';
 import { Converter, ExpandUnitResult } from '.';
 import { stringifyUnits } from '../../type/units';
 
@@ -52,7 +52,8 @@ function expandUnitWith(
     const newUnit = {
       unit: targetUnitName,
       exp: BigInt(expandedUnit.exp) * unit.exp,
-      multiplier: first ? unit.multiplier ** expandedUnit.exp : 1,
+      // multiplier: first ? unit.multiplier ** expandedUnit.exp : 1,
+      multiplier: first ? unit.multiplier.pow(Number(expandedUnit.exp)) : F(1),
       known: true,
     };
     first = false;
@@ -71,9 +72,7 @@ function convertKnownUnitToBase(
   const newUnit = produce(unit, (unit) => {
     unit.unit = baseUnit;
   });
-  const baseConversionFactor = uom
-    .toBaseQuantity(new Fraction(1))
-    .pow(new Fraction(unit.exp));
+  const baseConversionFactor = uom.toBaseQuantity(F(1)).pow(F(unit.exp));
   const convert = convertingBy(baseConversionFactor);
   return [newUnit, convert];
 }
@@ -91,8 +90,8 @@ function expandUnit(unit: AST.Unit): ExpandUnitResult {
       if (expandTo) {
         const newUnits = expandUnitWith(baseUnit, expandTo);
         const expansionFactor = expandTo
-          .convertToExpanded(new Fraction(1))
-          .pow(new Fraction(unit.exp));
+          .convertToExpanded(F(1))
+          .pow(F(unit.exp));
         const convert: Converter = (n) =>
           convertToBaseUnit(n).mul(expansionFactor);
 

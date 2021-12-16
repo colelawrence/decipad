@@ -1,13 +1,16 @@
 import Fraction from '@decipad/fraction';
 import produce from 'immer';
-import { getDefined } from '@decipad/utils';
 import { getUnitByName } from './known-units';
 import { Unit, Units } from '../parser/ast-types';
 import { expandUnits, contractUnits } from './expand';
 import { simplifyUnits, stringifyUnits } from '../type/units';
 
 function areQuantityUnitsCompatible(a: Unit, b: Unit): boolean {
-  return a.unit === b.unit && a.exp === b.exp && a.multiplier === b.multiplier;
+  return (
+    a.unit === b.unit &&
+    a.exp === b.exp &&
+    a.multiplier.compare(b.multiplier) === 0
+  );
 }
 
 function baseQuantityUnits(units: Units | null): Units | null {
@@ -21,7 +24,7 @@ function baseQuantityUnits(units: Units | null): Units | null {
           const knownUnit = getUnitByName(unit.unit);
           return produce(unit, (unit) => {
             unit.unit = knownUnit ? knownUnit.baseQuantity : unit.unit;
-            unit.multiplier = 1;
+            unit.multiplier = new Fraction(1);
           });
         });
       });
@@ -63,44 +66,18 @@ export function toExpandedBaseQuantity(
   const [expandedUnits, convert] = expandUnits(sourceUnits);
   return [expandedUnits, convert(n)];
 }
-//
-// fixme: once front end specs exist
-// this should be compliant with workspace definitions
-// left simple as a start
-//
-// note: potentially this could auto conform, like
-// 0.10m are 100cm.
-//
-// 1×10^−6 m = 1 μm
-//
-export function prettyUnits(n: Fraction, unit: Unit): string {
-  const unitDefinition = getDefined(getUnitByName(unit.unit));
-
-  if (unitDefinition.pretty) {
-    return unitDefinition.pretty(n);
-  } else {
-    return `${n} ${
-      (unitDefinition.abbreviations && unitDefinition.abbreviations[0]) ||
-      unitDefinition.name
-    }`;
-  }
-}
 
 function convertToOutputMultipliers(
   n: Fraction,
   fromUnits: Units | null,
   toUnits: Units | null
 ): Fraction {
-  const from = (fromUnits?.args ?? []).reduce(
-    (n, { multiplier, exp }) =>
-      n.mul(new Fraction(multiplier).pow(new Fraction(exp))),
-    n
-  );
-  const to = (toUnits?.args ?? []).reduce(
-    (n, { multiplier, exp }) =>
-      n.div(new Fraction(multiplier).pow(new Fraction(exp))),
-    from
-  );
+  const from = (fromUnits?.args ?? []).reduce((n, { multiplier, exp }) => {
+    return n.mul(multiplier.pow(new Fraction(exp)));
+  }, n);
+  const to = (toUnits?.args ?? []).reduce((n, { multiplier, exp }) => {
+    return n.div(multiplier.pow(new Fraction(exp)));
+  }, from);
   return to;
 }
 

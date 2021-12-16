@@ -45,5 +45,5 @@ Other operations, like exponentiation, do their best to compute the correct unit
 
 ```deci live
 3 meters ** 2
-==> 9 meters^2
+==> 9 meters²
 ```

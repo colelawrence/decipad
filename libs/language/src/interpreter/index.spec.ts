@@ -421,13 +421,13 @@ it('can expand directives', async () => {
   const minutes: AST.Unit = {
     unit: 'minutes',
     exp: 1n,
-    multiplier: 1,
+    multiplier: F(1),
     known: true,
   };
   const hours: AST.Unit = {
     unit: 'hours',
     exp: 1n,
-    multiplier: 1,
+    multiplier: F(1),
     known: true,
   };
   expect(

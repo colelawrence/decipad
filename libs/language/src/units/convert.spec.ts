@@ -1,5 +1,5 @@
 import { F, U, u } from '../utils';
-import { convertBetweenUnits, normalizeUnitName, prettyUnits } from '.';
+import { convertBetweenUnits, normalizeUnitName } from '.';
 
 describe('convert', () => {
   it('throws when from unit is unknown', () => {
@@ -27,32 +27,6 @@ describe('convert', () => {
     expect(normalizeUnitName('h')).toMatch('h');
     expect(normalizeUnitName('seconds')).toMatch('second');
     expect(normalizeUnitName('sec')).toMatch('sec');
-  });
-
-  //
-  // fixme: see https://physics.nist.gov/cuu/Units/checklist.html
-  //
-  it.todo('https://physics.nist.gov/cuu/Units/checklist.html');
-  it('should be pretty', () => {
-    expect(prettyUnits(F(1), u('meter'))).toMatch('1 m');
-    expect(prettyUnits(F(1), u('squaremeter'))).toMatch('1 m²');
-    expect(prettyUnits(F(1), u('squarekilometre'))).toMatch('1 km²');
-    expect(prettyUnits(F(1), u('squaremile'))).toMatch('1 sq mi');
-    expect(prettyUnits(F(1), u('squareyard'))).toMatch('1 sq yd');
-    expect(prettyUnits(F(1), u('squarefoot'))).toMatch('1 sq ft');
-    expect(prettyUnits(F(1), u('squareinch'))).toMatch('1 sq in');
-    expect(prettyUnits(F(1), u('euro'))).toMatch('1 €');
-    expect(prettyUnits(F(1), u('angstrom'))).toMatch('1 Å');
-    expect(prettyUnits(F(1), u('usdollar'))).toMatch('1 $');
-    expect(prettyUnits(F(1), u('britishpound'))).toMatch('£1');
-    expect(prettyUnits(F(1, 4), u('britishpound'))).toMatch('£0.25');
-    expect(prettyUnits(F(1), u('a0'))).toMatch('1 a₀');
-    expect(prettyUnits(F(1), u('m3'))).toMatch('1 m³');
-    expect(prettyUnits(F(1), u('in3'))).toMatch('1 in³');
-    expect(prettyUnits(F(1), u('ft3'))).toMatch('1 ft³');
-    expect(prettyUnits(F(1), u('cubicmile'))).toMatch('1 cu mi');
-    expect(prettyUnits(F(1), u('yd3'))).toMatch('1 yd³');
-    expect(prettyUnits(F(1000000), u('britishpound'))).toMatch('£1000000');
   });
 
   it('converts between the same unit', () => {
@@ -180,8 +154,6 @@ describe('convert', () => {
     ).toMatchObject(F(1, 1e2));
   });
 
-  it.todo('nanometers');
-
   //
   // A sample test case that also doesn't work
   //   1 Å in nmeter ==> 0.1 nmeter
@@ -271,8 +243,6 @@ describe('convert', () => {
       F(8, 160)
     );
   });
-
-  it.todo('need to test for ounce. floz works, but ounce throws!');
 
   it('converts areas', () => {
     expect(convertBetweenUnits(F(1), U('hectare'), U('m2'))).toEqual(F(10_000));
@@ -531,8 +501,8 @@ describe('convert', () => {
     expect(
       convertBetweenUnits(
         F(1),
-        U([u('meters', { multiplier: 1000 })]),
-        U([u('meters', { multiplier: 1 })])
+        U([u('meters', { multiplier: F(1000) })]),
+        U([u('meters', { multiplier: F(1) })])
       )
     ).toMatchObject(F(1000));
   });
@@ -541,8 +511,8 @@ describe('convert', () => {
     expect(
       convertBetweenUnits(
         F(2),
-        U([u('meters', { multiplier: 1000, exp: 2n })]),
-        U([u('meters', { multiplier: 1, exp: 2n })])
+        U([u('meters', { multiplier: F(1000), exp: 2n })]),
+        U([u('meters', { multiplier: F(1), exp: 2n })])
       )
     ).toMatchObject(F(2_000_000));
   });
@@ -551,8 +521,8 @@ describe('convert', () => {
     expect(
       convertBetweenUnits(
         F(2),
-        U([u('meters', { multiplier: 1000, exp: -2n })]),
-        U([u('meters', { multiplier: 1, exp: -2n })])
+        U([u('meters', { multiplier: F(1000), exp: -2n })]),
+        U([u('meters', { multiplier: F(1), exp: -2n })])
       )
     ).toMatchObject(F(2, 1000000));
   });

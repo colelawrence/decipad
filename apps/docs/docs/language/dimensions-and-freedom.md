@@ -30,7 +30,7 @@ Cars = {
 }
 ==> {
   Type = [ 'suv', 'hybrid', 'standard' ],
-  FuelConsumption = [ 23 miles/gallon, 45 miles/gallon, 28 miles/gallon ]
+  FuelConsumption = [ 23 miles per gallon, 45 miles per gallon, 28 miles per gallon ]
 }
 ```
 
@@ -43,7 +43,7 @@ Cars = {
 }
 
 Cars.FuelConsumption
-==> [ 23 miles/gallon, 45 miles/gallon, 28 miles/gallon ]
+==> [ 23 miles per gallon, 45 miles per gallon, 28 miles per gallon ]
 ```
 
 This column (`Cars.FuelConsumption`) is a one-dimensional value. Given an index value, it can have, in this case, one of three values (23, 45 or 28 miles per gallon).
@@ -72,7 +72,7 @@ Fuel = {
 ==> {
   Year = [ year 2020, year 2021, year 2022, year 2023, year 2024, year 2025 ],
   InterestRateFromYear = [ 1, 1.08, 1.1664, 1.2597, 1.3604, 1.4693 ],
-  Price = [ 4 USD/gallon, 4.32 USD/gallon, 4.67 USD/gallon, 5.04 USD/gallon, 5.44 USD/gallon, 5.88 USD/gallon ]
+  Price = [ 4 USD per gallon, 4.32 USD per gallon, 4.67 USD per gallon, 5.04 USD per gallon, 5.44 USD per gallon, 5.88 USD per gallon ]
 }
 ```
 
@@ -95,7 +95,7 @@ Fuel = {
 }
 
 round(Fuel.Price / Cars.FuelConsumption, 2)
-==> [ [ 0.17 USD/mile, 0.09 USD/mile, 0.14 USD/mile ], [ 0.19 USD/mile, 0.1 USD/mile, 0.15 USD/mile ], [ 0.2 USD/mile, 0.1 USD/mile, 0.17 USD/mile ], [ 0.22 USD/mile, 0.11 USD/mile, 0.18 USD/mile ], [ 0.24 USD/mile, 0.12 USD/mile, 0.19 USD/mile ], [ 0.26 USD/mile, 0.13 USD/mile, 0.21 USD/mile ] ]
+==> [ [ 0.17 USD per mile, 0.09 USD per mile, 0.14 USD per mile ], [ 0.19 USD per mile, 0.1 USD per mile, 0.15 USD per mile ], [ 0.2 USD per mile, 0.1 USD per mile, 0.17 USD per mile ], [ 0.22 USD per mile, 0.11 USD per mile, 0.18 USD per mile ], [ 0.24 USD per mile, 0.12 USD per mile, 0.19 USD per mile ], [ 0.26 USD per mile, 0.13 USD per mile, 0.21 USD per mile ] ]
 ```
 
 ## Reducing, or: removing degrees of freedom

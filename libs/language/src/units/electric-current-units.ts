@@ -5,6 +5,7 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'ampere',
     abbreviations: ['a'],
+    pretty: 'A',
     baseQuantity: 'electric current',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,

@@ -5,6 +5,7 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'newton',
     abbreviations: ['n'],
+    pretty: 'N',
     baseQuantity: 'force',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,

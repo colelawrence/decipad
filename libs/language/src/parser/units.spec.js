@@ -16,7 +16,7 @@ runTests({
               {
                 unit: 'apples',
                 exp: 1n,
-                multiplier: 1,
+                multiplier: F(1),
                 known: false,
                 start: 3,
                 end: 8,
@@ -40,6 +40,44 @@ runTests({
     ],
   },
 
+  'expression micrometers': {
+    source: '10 μm',
+    ast: [
+      {
+        type: 'literal',
+        args: [
+          'number',
+          F(10),
+          {
+            type: 'units',
+            args: [
+              {
+                unit: 'm',
+                exp: 1n,
+                multiplier: F(1, 1_000_000),
+                known: true,
+                start: 3,
+                end: 4,
+              },
+            ],
+            start: 3,
+            end: 4,
+          },
+        ],
+        start: {
+          char: 0,
+          line: 1,
+          column: 1,
+        },
+        end: {
+          char: 4,
+          line: 1,
+          column: 5,
+        },
+      },
+    ],
+  },
+
   'expression is number with composed units': {
     source: '10 apples*oranges',
     ast: [
@@ -54,7 +92,7 @@ runTests({
               {
                 unit: 'apples',
                 exp: 1n,
-                multiplier: 1,
+                multiplier: F(1),
                 known: false,
                 start: {
                   char: 3,
@@ -70,7 +108,7 @@ runTests({
               {
                 unit: 'oranges',
                 exp: 1n,
-                multiplier: 1,
+                multiplier: F(1),
                 known: false,
                 start: {
                   char: 10,
@@ -116,7 +154,7 @@ runTests({
               {
                 unit: 'apples',
                 exp: 1n,
-                multiplier: 1,
+                multiplier: F(1),
                 known: false,
                 start: {
                   char: 3,
@@ -132,7 +170,7 @@ runTests({
               {
                 unit: 'oranges',
                 exp: -1n,
-                multiplier: 1,
+                multiplier: F(1),
                 known: false,
                 start: {
                   char: 10,
@@ -184,7 +222,7 @@ runTests({
           units({
             unit: 'm',
             exp: 1n,
-            multiplier: 1000,
+            multiplier: F(1000),
             known: true,
           }),
         ],
@@ -204,7 +242,7 @@ runTests({
           units({
             unit: 'bytes',
             exp: 1n,
-            multiplier: 1e9,
+            multiplier: F(1000000000),
             known: true,
           }),
         ],
@@ -226,7 +264,7 @@ runTests({
               {
                 unit: 'm',
                 exp: 2n,
-                multiplier: 1000,
+                multiplier: F(1000),
                 known: true,
                 start: {
                   char: 2,
@@ -280,7 +318,7 @@ runTests({
               {
                 unit: 'g',
                 exp: 3n,
-                multiplier: 1000,
+                multiplier: F(1000),
                 known: true,
                 start: {
                   char: 2,
@@ -296,7 +334,7 @@ runTests({
               {
                 unit: 'm',
                 exp: -2n,
-                multiplier: 100,
+                multiplier: F(100),
                 known: true,
                 start: {
                   char: 7,
@@ -350,7 +388,7 @@ runTests({
               {
                 unit: 'g',
                 exp: 3n,
-                multiplier: 1000,
+                multiplier: F(1000),
                 known: true,
                 start: {
                   char: 2,
@@ -366,7 +404,7 @@ runTests({
               {
                 unit: 'm',
                 exp: -2n,
-                multiplier: 100,
+                multiplier: F(100),
                 known: true,
                 start: {
                   char: 7,
@@ -382,7 +420,7 @@ runTests({
               {
                 unit: 'Watt',
                 exp: 1n,
-                multiplier: 1000000,
+                multiplier: F(1000000),
                 known: true,
                 start: {
                   char: 12,

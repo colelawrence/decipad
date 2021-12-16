@@ -327,7 +327,7 @@ export function u(
     unit = {
       unit,
       exp: 1n,
-      multiplier: 1,
+      multiplier: new Fraction(1),
       known: true,
     };
   }

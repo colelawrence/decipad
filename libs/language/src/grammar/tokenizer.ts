@@ -62,7 +62,7 @@ export const tokenRules = {
     },
 
     identifier: {
-      match: /[a-zA-Z°€£$$][a-zA-Z0-9_°€£$$]*/,
+      match: /[a-zA-Zμ°€£$$][a-zA-Z0-9_μ°€£$$]*/,
       type: keywords,
     },
     number: /[0-9]+(?:\.[0-9]+)?/,

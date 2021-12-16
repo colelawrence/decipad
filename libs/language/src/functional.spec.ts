@@ -1,3 +1,4 @@
+import Fraction from 'fraction.js/bigfraction';
 import { F } from './utils';
 import { build as t } from './type';
 import { cleanDate } from './date';
@@ -248,7 +249,7 @@ describe('more models', () => {
                 // multiplier/exponent should reflect that
                 unit: 'usd',
                 exp: 1n,
-                multiplier: 0.001,
+                multiplier: new Fraction(1, 1000),
               },
             ],
           },

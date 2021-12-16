@@ -25,26 +25,26 @@ const abbreviatedPrefixes = {
 }
 
 const multiplierPrefixes = {
-  "yocto": 1e-24,
-  "zepto": 1e-21,
-  "atto": 1e-18,
-  "femto": 1e-15,
-  "pico": 1e-12,
-  "nano": 1e-9,
-  "micro": 1e-6,
-  "milli": 1e-3,
-  "centi": 1e-2,
-  "deci": 1e-1,
-  "deca": 1e1,
-  "hecto": 1e2,
-  "kilo": 1e3,
-  "mega": 1e6,
-  "giga": 1e9,
-  "tera": 1e12,
-  "peta": 1e15,
-  "exa": 1e18,
-  "zetta": 1e21,
-  "yotta": 1e24,
+  "yocto": new Fraction (1, 1_000_000_000_000_000_000_000_000), // 1e-24,
+  "zepto": new Fraction (1, 1_000_000_000_000_000_000_000), // 1e-21,
+  "atto":  new Fraction (1, 1_000_000_000_000_000_000), // 1e-18,
+  "femto": new Fraction (1, 1_000_000_000_000_000), // 1e-15,
+  "pico":  new Fraction (1, 1_000_000_000_000), // 1e-12,
+  "nano":  new Fraction (1, 1_000_000_000), // 1e-9,
+  "micro": new Fraction (1, 1_000_000), // 1e-6,
+  "milli": new Fraction (1, 1_000), // 1e-3,
+  "centi": new Fraction (1, 100), // 1e-2,
+  "deci":  new Fraction (1, 10), // 1e-1,
+  "deca":  new Fraction (10), // 1e1,
+  "hecto": new Fraction (100), // 1e2,
+  "kilo":  new Fraction (1_000), // 1e3,
+  "mega":  new Fraction (1_000_000), // 1e6,
+  "giga":  new Fraction (1_000_000_000), // 1e9,
+  "tera":  new Fraction (1_000_000_000_000), // 1e12,
+  "peta":  new Fraction (1_000_000_000_000_000), // 1e15,
+  "exa":   new Fraction (1_000_000_000_000_000_000), // 1e18,
+  "zetta": new Fraction (1_000_000_000_000_000_000_000), // 1e21,
+  "yotta": new Fraction (1_000_000_000_000_000_000_000_000), // 1e24,
 }
 
 const trimPrefix = unitName => {
@@ -64,7 +64,7 @@ const trimPrefix = unitName => {
         return [multiplier, unitName.slice(prefix.length)]
       }
     }
-    return [1, unitName]
+    return [new Fraction(1), unitName]
   }
 }
 
@@ -73,7 +73,7 @@ const parseUnit = unitString => {
     return {
       unit: unitString,
       exp: 1n,
-      multiplier: 1,
+      multiplier: new Fraction(1),
       known: true
     }
   } else {
@@ -82,7 +82,7 @@ const parseUnit = unitString => {
 
     if (!known) {
       name = unitString
-      multiplier = 1
+      multiplier = new Fraction(1)
     }
 
     return {

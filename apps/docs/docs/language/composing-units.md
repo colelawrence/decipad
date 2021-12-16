@@ -8,7 +8,7 @@ Units can be simple, like in `4 apples`, but it also can be composed:
 
 ```deci live
 40 miles/hour
-==> 40 miles/hour
+==> 40 miles per hour
 ```
 
 When operating over numbers with units, Deci will try to compute the units of the new values occordingly. For instance, when multiplying numbers, Deci will also multiply the units:
@@ -28,5 +28,5 @@ The same goes for division:
 distance = 40 miles
 duration = 2 hours
 speed = distance / duration
-==> 20 miles/hour
+==> 20 miles per hour
 ```

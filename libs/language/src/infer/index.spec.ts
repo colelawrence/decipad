@@ -1,3 +1,4 @@
+import Fraction from '@decipad/fraction';
 import { dequal } from 'dequal';
 
 import { AST, inferBlock } from '..';
@@ -40,7 +41,7 @@ let nilCtx = makeContext();
 const degC: AST.Unit = {
   unit: 'celsius',
   exp: 1n,
-  multiplier: 1,
+  multiplier: new Fraction(1),
   known: true,
   start: nilPos,
   end: nilPos,
@@ -48,7 +49,7 @@ const degC: AST.Unit = {
 const seconds: AST.Unit = {
   unit: 'seconds',
   exp: 1n,
-  multiplier: 1,
+  multiplier: new Fraction(1),
   known: true,
   start: nilPos,
   end: nilPos,
@@ -56,7 +57,7 @@ const seconds: AST.Unit = {
 const meters: AST.Unit = {
   unit: 'meters',
   exp: 1n,
-  multiplier: 1,
+  multiplier: new Fraction(1),
   known: true,
   start: nilPos,
   end: nilPos,

@@ -1,3 +1,4 @@
+import Fraction from '@decipad/fraction';
 import { AST } from '..';
 import { Type, build as t } from '../type';
 import { units } from '../utils';
@@ -13,7 +14,7 @@ const nilPos = {
 const meter: AST.Unit = {
   unit: 'meter',
   exp: 1n,
-  multiplier: 1,
+  multiplier: new Fraction(1),
   known: true,
   start: nilPos,
   end: nilPos,
@@ -22,7 +23,7 @@ const meter: AST.Unit = {
 const second: AST.Unit = {
   unit: 'second',
   exp: 1n,
-  multiplier: 1,
+  multiplier: new Fraction(1),
   known: true,
   start: nilPos,
   end: nilPos,

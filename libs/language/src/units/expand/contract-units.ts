@@ -1,7 +1,6 @@
-import Fraction from '@decipad/fraction';
 import { getDefined } from '@decipad/utils';
 import { AST } from '../../parser';
-import { identity } from '../../utils';
+import { identity, F } from '../../utils';
 import { Converter } from '.';
 import { expandUnits, doesNotScaleOnConversion } from './expand-units';
 import { stringifyUnits } from '../../type';
@@ -9,7 +8,7 @@ import { getUnitByName } from '..';
 
 function invert(convert: Converter): Converter {
   return (n) => {
-    const div = convert(new Fraction(1));
+    const div = convert(F(1));
     return n.div(div);
   };
 }

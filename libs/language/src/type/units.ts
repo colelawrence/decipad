@@ -1,30 +1,76 @@
 import { produce } from 'immer';
+import Fraction from 'fraction.js/bigfraction';
 import pluralize, { singular } from '../pluralize';
 import { AST, Type } from '..';
 import { getDefined, units } from '../utils';
-import { isKnownSymbol, areUnitsCompatible, expandUnits } from '../units';
+import {
+  isKnownSymbol,
+  areUnitsCompatible,
+  expandUnits,
+  unitIsSymbol,
+  prettyForSymbol,
+} from '../units';
 
-const multipliersToPrefixes: Record<number, string> = {
-  1e-18: 'a',
-  1e-15: 'f',
-  1e-12: 'p',
-  1e-9: 'n',
-  1e-6: 'μ',
-  1e-3: 'm',
-  1e-2: 'c',
-  1e-1: 'd',
-  1: '',
-  1e1: 'da',
-  1e2: 'h',
-  1e3: 'k',
-  1e6: 'M',
-  1e9: 'g',
-  1e12: 't',
-  1e15: 'p',
-  1e18: 'e',
-  1e21: 'z',
-  1e24: 'y',
+export type AvailablePrefixes =
+  | 1e24
+  | 1e21
+  | 1_000_000_000_000_000_000
+  | 1_000_000_000_000_000
+  | 1_000_000_000_000
+  | 1_000_000_000
+  | 1_000_000
+  | 1_000
+  | 100
+  | 10
+  | 1
+  | 0.1
+  | 0.01
+  | 0.001
+  | 0.000001
+  | 1e-9
+  | 1e-12
+  | 1e-15
+  | 1e-18;
+
+const multipliersToPrefixes: Record<AvailablePrefixes, string[]> = {
+  1e-18: ['a', 'atto'],
+  1e-15: ['f', 'femto'],
+  1e-12: ['p', 'pico'],
+  1e-9: ['n', 'nano'],
+  0.000001: ['μ', 'micro'], // 1e-6
+  0.001: ['m', 'milli'], // 1e-3
+  0.01: ['c', 'centi'], // 1e-2
+  0.1: ['d', 'deci'], // 1e-1
+  1: ['', ''],
+  10: ['da', 'deca'], // 1e1
+  100: ['h', 'hecto'], // 1e2
+  1000: ['k', 'kilo'], // 1e3
+  1000000: ['M', 'mega'], // 1e6
+  1000000000: ['G', 'giga'], // 1e9
+  1000000000000: ['T', 'tera'], // 1e12
+  1000000000000000: ['P', 'peta'], // 1e15
+  1000000000000000000: ['E', 'exa'], // 1e18
+  1e21: ['Z', 'zetta'],
+  1e24: ['Y', 'yotta'],
 };
+
+const numberToSubOrSuperscript: Record<string, string[]> = {
+  '0': ['₀', '⁰'], // subscript not used for now
+  '1': ['₁', '¹'],
+  '2': ['₂', '²'],
+  '3': ['₃', '³'],
+  '4': ['₄', '⁴'],
+  '5': ['₅', '⁵'],
+  '6': ['₆', '⁶'],
+  '7': ['₇', '⁷'],
+  '8': ['₈', '⁸'],
+  '9': ['₉', '⁹'],
+  '-': ['₋', '⁻'], // minus
+};
+
+function scriptFromNumber(n: string) {
+  return numberToSubOrSuperscript[n][1];
+}
 
 const byExp = (u1: AST.Unit, u2: AST.Unit): number => Number(u2.exp - u1.exp);
 
@@ -101,7 +147,12 @@ const simplifyUnitsArgs = (units: AST.Unit[]): AST.Unit[] => {
         const matchingUnit = units[matchingUnitIndex];
         units[matchingUnitIndex] = produce(matchingUnit, (match) => {
           match.exp += unit.exp;
-          match.multiplier *= unit.multiplier ** Number(unit.exp);
+          //
+          // match.multiplier *= unit.multiplier ** Number(unit.exp);
+          //
+          match.multiplier = match.multiplier.mul(
+            unit.multiplier.pow(Number(unit.exp))
+          );
         });
         return units;
       } else {
@@ -159,14 +210,38 @@ export const setExponent = (unit: AST.Unit, newExponent: bigint) =>
 export const inverseExponent = (unit: AST.Unit) => setExponent(unit, -unit.exp);
 
 const stringifyUnit = (unit: AST.Unit) => {
-  const result = [multipliersToPrefixes[unit.multiplier], unit.unit];
+  const symbol = singular(unit.unit);
+  const pretty = prettyForSymbol[symbol];
+  const isSymbol = unitIsSymbol(symbol);
+  if (!isSymbol && pretty) {
+    return pretty;
+  } else {
+    const multiPrefix: AvailablePrefixes = (
+      unit.multiplier ? unit.multiplier.valueOf() : new Fraction(1)
+    ) as AvailablePrefixes;
+    const multiplier = multipliersToPrefixes[multiPrefix];
+    const result = [
+      unitIsSymbol(symbol) ? multiplier[0] : multiplier[1],
+      unit.unit,
+    ];
 
-  if (unit.exp !== 1n) {
-    result.push(`^${unit.exp}`);
+    if (unit.exp !== 1n) {
+      const exp = `${unit.exp}`.replace(/./g, scriptFromNumber);
+      result.push(exp);
+    }
+
+    return result.join('');
   }
-
-  return result.join('');
 };
+
+function produceExp(unit: AST.Unit, makePositive: boolean): AST.Unit {
+  return produce(unit, (unit) => {
+    unit.unit = singular(unit.unit);
+    if (makePositive) {
+      unit.exp = BigInt(Math.abs(Number(unit.exp)));
+    }
+  });
+}
 
 export const stringifyUnitArgs = (
   units: AST.Unit[] | null,
@@ -175,20 +250,31 @@ export const stringifyUnitArgs = (
   return (units ?? [])
     .reduce((parts: string[], unit: AST.Unit): string[] => {
       if (parts.length > 0) {
-        const op = unit.exp > 0 ? '.' : '/';
-        parts.push(op);
+        let prefix: string;
+        //
+        // when you have two units you show
+        // meter per second
+        // but when you have more
+        // you use international system like `m.s-1`
+        //
+        if (units?.length === 2 && unit.exp === -1n) {
+          prefix = unitIsSymbol(unit.unit) ? '/' : ' per ';
+          parts.push(prefix);
+          parts.push(stringifyUnit(produceExp(unit, true)));
+        } else {
+          prefix = '·';
+          parts.push(prefix);
+          parts.push(stringifyUnit(produceExp(unit, false)));
+        }
+      } else {
+        //
+        // turn off pluralisation if there's more than 2 unit
+        //
         parts.push(
           stringifyUnit(
-            produce(unit, (unit) => {
-              if (unit.exp < 0n) {
-                unit.unit = singular(unit.unit);
-                unit.exp = BigInt(Math.abs(Number(unit.exp)));
-              }
-            })
+            pluralizeUnit(unit, units && units.length > 2 ? 1n : value)
           )
         );
-      } else {
-        parts.push(stringifyUnit(pluralizeUnit(unit, value)));
       }
       return parts;
     }, [])
@@ -202,7 +288,8 @@ export const stringifyUnits = (
   if (units == null || units.args.length === 0) {
     return 'unitless';
   } else {
-    const sortedUnits = produce(units, (units) => {
+    const simplified = simplifyUnits(units) || units;
+    const sortedUnits = produce(simplified, (units) => {
       units.args.sort(byExp);
     });
     return stringifyUnitArgs(sortedUnits.args, value);
