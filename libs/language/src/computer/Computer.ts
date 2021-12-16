@@ -177,7 +177,9 @@ export class Computer {
    * Reset computer's state -- called when it panicks
    */
   reset() {
-    this.constructor.call(this);
+    this.previouslyParsed = [];
+    this.previousExternalData = new Map();
+    this.computationRealm = new ComputationRealm();
   }
 
   /**

@@ -1,5 +1,6 @@
-import { fromJS } from '../../interpreter/Value';
+import { Column, fromJS } from '../../interpreter/Value';
 import { build as t } from '../../type';
+import { U } from '../../utils';
 import { listOperators as operators } from './list-operators';
 
 describe('list operators', () => {
@@ -9,35 +10,35 @@ describe('list operators', () => {
         .fnValuesNoAutomap?.([fromJS([1, 2, 3]), fromJS([4, 5, 6])])
         .getData()
     ).toMatchInlineSnapshot(`
-    Array [
-      Fraction(1),
-      Fraction(2),
-      Fraction(3),
-      Fraction(4),
-      Fraction(5),
-      Fraction(6),
-    ]
-  `);
+          Array [
+            Fraction(1),
+            Fraction(2),
+            Fraction(3),
+            Fraction(4),
+            Fraction(5),
+            Fraction(6),
+          ]
+      `);
 
     expect(
       operators.cat.fnValuesNoAutomap?.([fromJS(1), fromJS([2, 3])]).getData()
     ).toMatchInlineSnapshot(`
-    Array [
-      Fraction(1),
-      Fraction(2),
-      Fraction(3),
-    ]
-  `);
+          Array [
+            Fraction(1),
+            Fraction(2),
+            Fraction(3),
+          ]
+      `);
 
     expect(
       operators.cat.fnValuesNoAutomap?.([fromJS([1, 2]), fromJS(3)]).getData()
     ).toMatchInlineSnapshot(`
-    Array [
-      Fraction(1),
-      Fraction(2),
-      Fraction(3),
-    ]
-  `);
+          Array [
+            Fraction(1),
+            Fraction(2),
+            Fraction(3),
+          ]
+      `);
   });
 
   it('calculates columns and scalar lengths', () => {
@@ -47,10 +48,10 @@ describe('list operators', () => {
 
     expect(operators.len.fnValuesNoAutomap?.([fromJS(2)]))
       .toMatchInlineSnapshot(`
-    FractionValue {
-      "value": Fraction(1),
-    }
-  `);
+          FractionValue {
+            "value": Fraction(1),
+          }
+      `);
 
     expect(
       operators.len.functorNoAutomap?.([t.column(t.number(), 3)])
@@ -58,42 +59,42 @@ describe('list operators', () => {
 
     expect(operators.len.fnValuesNoAutomap?.([fromJS([1, 2, 3])]))
       .toMatchInlineSnapshot(`
-    FractionValue {
-      "value": Fraction(3),
-    }
-  `);
+          FractionValue {
+            "value": Fraction(3),
+          }
+      `);
   });
 
   it('retrieves the first element of a list', () => {
     expect(operators.first.fnValuesNoAutomap?.([fromJS(2)]))
       .toMatchInlineSnapshot(`
-    FractionValue {
-      "value": Fraction(2),
-    }
-  `);
+          FractionValue {
+            "value": Fraction(2),
+          }
+      `);
 
     expect(operators.first.fnValuesNoAutomap?.([fromJS([4, 5, 6])]))
       .toMatchInlineSnapshot(`
-    FractionValue {
-      "value": Fraction(4),
-    }
-  `);
+          FractionValue {
+            "value": Fraction(4),
+          }
+      `);
   });
 
   it('retrieves the last element of a list', () => {
     expect(operators.last.fnValuesNoAutomap?.([fromJS(2)]))
       .toMatchInlineSnapshot(`
-    FractionValue {
-      "value": Fraction(2),
-    }
-  `);
+          FractionValue {
+            "value": Fraction(2),
+          }
+      `);
 
     expect(operators.last.fnValuesNoAutomap?.([fromJS([4, 5, 6])]))
       .toMatchInlineSnapshot(`
-    FractionValue {
-      "value": Fraction(6),
-    }
-  `);
+          FractionValue {
+            "value": Fraction(6),
+          }
+      `);
   });
 
   it('count: counts the number of elements in a list', () => {
@@ -103,10 +104,10 @@ describe('list operators', () => {
 
     expect(operators.countif.fnValuesNoAutomap?.([fromJS([1, 2, 3])]))
       .toMatchInlineSnapshot(`
-    FractionValue {
-      "value": Fraction(3),
-    }
-  `);
+          FractionValue {
+            "value": Fraction(3),
+          }
+      `);
   });
 
   it('countif: counts the true elements in a list', () => {
@@ -116,9 +117,92 @@ describe('list operators', () => {
 
     expect(operators.countif.fnValuesNoAutomap?.([fromJS([true, false, true])]))
       .toMatchInlineSnapshot(`
-    FractionValue {
-      "value": Fraction(2),
-    }
-  `);
+          FractionValue {
+            "value": Fraction(2),
+          }
+      `);
+  });
+
+  it('sorts a list', () => {
+    expect(
+      operators.sort.functorNoAutomap!([t.column(t.number(U('bananas')), 3)])
+    ).toMatchObject(t.column(t.number(U('bananas')), 3));
+
+    expect(operators.sort.fnValuesNoAutomap?.([fromJS([2, 3, 1])]).getData())
+      .toMatchInlineSnapshot(`
+      Array [
+        Fraction(1),
+        Fraction(2),
+        Fraction(3),
+      ]
+    `);
+  });
+
+  it('uniques list', () => {
+    expect(
+      operators.unique.functorNoAutomap!([t.column(t.number(U('bananas')), 3)])
+    ).toMatchObject(t.column(t.number(U('bananas')), 'unknown'));
+
+    expect(
+      operators.unique
+        .fnValuesNoAutomap?.([fromJS([1, 3, 2, 1, 3, 4])])
+        .getData()
+    ).toMatchInlineSnapshot(`
+      Array [
+        Fraction(1),
+        Fraction(2),
+        Fraction(3),
+        Fraction(4),
+      ]
+    `);
+  });
+
+  it('reverses a list', () => {
+    const columnType = t.column(t.number(U('bananas')), 3);
+    expect(operators.reverse.functorNoAutomap!([columnType])).toMatchObject(
+      columnType
+    );
+
+    expect(
+      operators.reverse
+        .fnValuesNoAutomap?.([fromJS([1, 2, 3])], [columnType])
+        .getData()
+    ).toMatchInlineSnapshot(`
+      Array [
+        Fraction(3),
+        Fraction(2),
+        Fraction(1),
+      ]
+    `);
+  });
+
+  it('reverses a table', () => {
+    const table = t.table({
+      length: 3,
+      columnNames: ['indexcolumn'],
+      columnTypes: [t.number(U('bananas'))],
+    });
+    expect(operators.reverse.functorNoAutomap!([table])).toMatchObject(table);
+
+    const tableValue = Column.fromValues([
+      fromJS([1, 2, 3]),
+      fromJS([6, 4, 5]),
+    ]);
+    expect(
+      operators.reverse.fnValuesNoAutomap?.([tableValue], [table]).getData()
+    ).toMatchInlineSnapshot(`
+      Array [
+        Array [
+          Fraction(3),
+          Fraction(2),
+          Fraction(1),
+        ],
+        Array [
+          Fraction(5),
+          Fraction(4),
+          Fraction(6),
+        ],
+      ]
+    `);
   });
 });

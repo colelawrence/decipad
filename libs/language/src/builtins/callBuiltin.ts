@@ -21,7 +21,7 @@ function callBuiltinAfterAutoconvert(
   argTypes: Type[]
 ): Value {
   if (builtin.fnValuesNoAutomap) {
-    return builtin.fnValuesNoAutomap(args);
+    return builtin.fnValuesNoAutomap(args, argTypes);
   }
 
   const lowerDimFn = (argsLowerDims: Value[]) => {

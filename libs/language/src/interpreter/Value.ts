@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import Fraction from '@decipad/fraction';
 import { AST, Time, Interpreter } from '..';
 import { pairwise, getDefined } from '../utils';
@@ -7,6 +8,7 @@ import {
   getSpecificity,
   sortTimeUnits,
 } from '../date';
+import { compare } from './compare-values';
 import { Unknown } from './Unknown';
 
 export interface Value {
@@ -208,12 +210,15 @@ export class Range implements Value {
   }
 }
 
+export type SliceRange = [start: number, end: number];
+export type SlicesMap = SliceRange[];
+
 export class Column implements Value {
-  readonly values: Value[];
+  readonly _values: Value[];
   valueNames: string[] | null = null;
 
   constructor(values: Column['values']) {
-    this.values = values;
+    this._values = values;
   }
 
   static fromValues(values: Value[]): Column {
@@ -258,6 +263,10 @@ export class Column implements Value {
     return Column.fromValues(array);
   }
 
+  get values() {
+    return this._values;
+  }
+
   get rowCount() {
     return this.values.length;
   }
@@ -268,6 +277,140 @@ export class Column implements Value {
 
   getData(): Interpreter.OneResult[] {
     return this.values.map((v) => v.getData());
+  }
+
+  filter(fn: (value: Value, index?: number) => boolean): Column {
+    const names = this.valueNames;
+    const newNames: string[] = [];
+    const newValues = this.values.filter((value, index) => {
+      const accept = fn(value, index);
+      if (accept && names) {
+        newNames.push(names[index]);
+      }
+      return accept;
+    });
+    return Column.fromNamedValues(newValues, names ? newNames : null);
+  }
+
+  sortMap(): number[] {
+    const unsortedIndexes = Array.from({ length: this.rowCount }, (_, i) => i);
+    return unsortedIndexes.sort((aIndex, bIndex) => {
+      return compare(this.values[aIndex], this.values[bIndex]);
+    });
+  }
+
+  sort(): Column {
+    return MappedColumn.fromColumnAndMap(this, this.sortMap());
+  }
+
+  unique(): Column {
+    const sorted = this.sort();
+    const slices = sorted.contiguousSlices().map(([index]) => index);
+    return sorted.applyMap(slices);
+  }
+
+  reverseMap() {
+    const length = this.rowCount;
+    return Array.from({ length: this.values.length }, (_, i) => length - i - 1);
+  }
+
+  reverse(): Column {
+    return MappedColumn.fromColumnAndMap(this, this.reverseMap());
+  }
+
+  reverseEach(): Column {
+    return Column.fromNamedValues(
+      this.values.map((value) =>
+        value instanceof Column ? value.reverse() : value
+      ),
+      this.valueNames
+    );
+  }
+
+  slice(begin: number, end: number): ColumnSlice {
+    return ColumnSlice.fromColumnAndRange(this, begin, end);
+  }
+
+  sliceEach(begin: number, end: number): Column {
+    return Column.fromNamedValues(
+      this.values.map((value) =>
+        value instanceof Column ? value.slice(begin, end) : value
+      ),
+      this.valueNames
+    );
+  }
+
+  applyMap(map: number[]): Column {
+    return MappedColumn.fromColumnAndMap(this, map);
+  }
+
+  applyMapToEach(map: number[]): Column {
+    return Column.fromNamedValues(
+      this.values.map((value) =>
+        value instanceof Column ? value.applyMap(map) : value
+      ),
+      this.valueNames
+    );
+  }
+
+  contiguousSlices(): SlicesMap {
+    const slices: SlicesMap = [];
+    let lastValue: undefined | Value;
+    let nextSliceBeginsAt = 0;
+    this.values.forEach((currentValue, index) => {
+      if (lastValue && compare(lastValue, currentValue) !== 0) {
+        // at the beginning of a new slice
+        slices.push([nextSliceBeginsAt, index - 1]);
+        nextSliceBeginsAt = index;
+      }
+      lastValue = currentValue;
+    });
+
+    if (nextSliceBeginsAt <= this.values.length - 1) {
+      slices.push([nextSliceBeginsAt, this.values.length - 1]);
+    }
+
+    return slices;
+  }
+}
+
+export class ColumnSlice extends Column {
+  begin: number;
+  end: number;
+
+  constructor(values: Column['values'], begin: number, end: number) {
+    super(values);
+    this.begin = begin;
+    this.end = end;
+  }
+
+  static fromColumnAndRange(column: Column, begin: number, end: number) {
+    const newColumn = new ColumnSlice(column.values, begin, end);
+    newColumn.valueNames = column.valueNames;
+    return newColumn;
+  }
+
+  get values(): Value[] {
+    return this._values.slice(this.begin, this.end + 1);
+  }
+}
+
+export class MappedColumn extends Column {
+  private map: number[];
+
+  constructor(values: Column['values'], map: number[]) {
+    super(values);
+    this.map = map;
+  }
+
+  get values(): Value[] {
+    return this.map.map((index) => this._values[index]);
+  }
+
+  static fromColumnAndMap(column: Column, map: number[]): MappedColumn {
+    const newColumn = new MappedColumn(column.values, map);
+    newColumn.valueNames = column.valueNames;
+    return newColumn;
   }
 }
 

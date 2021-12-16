@@ -6,6 +6,7 @@ import { listOperators } from './list-operators';
 import { reducerOperators } from './reducer-operators';
 import { dateOperators } from './date-operators';
 import { tableOperators } from './table-operators';
+import { tableGroupingOperators } from './table-grouping-operators';
 import { miscOperators } from './misc-operators';
 
 export const operators: { [fname: string]: BuiltinSpec } = {
@@ -16,5 +17,6 @@ export const operators: { [fname: string]: BuiltinSpec } = {
   ...reducerOperators,
   ...dateOperators,
   ...tableOperators,
+  ...tableGroupingOperators,
   ...miscOperators,
 };

@@ -147,6 +147,35 @@ export const withColumnSize = checker(
   }
 );
 
+export const withMinimumColumnCount = (
+  me: Type,
+  minimumColumnSize: number | 'unknown' | null
+) => {
+  const columnCount = (me.columnTypes ?? []).length;
+  if (
+    minimumColumnSize === 'unknown' ||
+    minimumColumnSize === null ||
+    (minimumColumnSize !== null && columnCount >= minimumColumnSize)
+  ) {
+    return me;
+  } else {
+    return me.withErrorCause(
+      `Incompatible minimum column count: ${columnCount} and ${minimumColumnSize}`
+    );
+  }
+};
+
+export const withAtParentIndex = checker((me: Type, atParentIndex?: number) => {
+  if (
+    (atParentIndex == null && me.atParentIndex != null) ||
+    (atParentIndex != null && me.atParentIndex === atParentIndex)
+  ) {
+    return me;
+  } else {
+    return me.withErrorCause(InferError.expectedColumnContained());
+  }
+});
+
 export const sameColumnessAs = checker((me: Type, other: Type) => {
   return me.withColumnSize(other.columnSize).mapType((t) => {
     if (t.columnSize) {

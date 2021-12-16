@@ -21,6 +21,8 @@ import {
   sameAs,
   sameUnitsAs,
   withColumnSize,
+  withMinimumColumnCount,
+  withAtParentIndex,
 } from './checks';
 import { InferError } from './InferError';
 import {
@@ -60,6 +62,7 @@ export class Type {
   // Column
   cellType: Type | null = null;
   columnSize: number | 'unknown' | null = null;
+  atParentIndex: number | null = null;
 
   // Table
   tableLength: number | 'unknown' | null = null;
@@ -83,7 +86,7 @@ export class Type {
     }
     for (const type of types) {
       const resultingType =
-        typeof type === 'function' ? type(lastNonErrorType) : type;
+        typeof type === 'function' ? lastNonErrorType.mapType(type) : type;
       if (resultingType.errorCause != null) {
         return resultingType;
       }
@@ -229,6 +232,14 @@ export class Type {
 
   withColumnSize(columnSize: number | 'unknown' | null): Type {
     return withColumnSize(this, columnSize);
+  }
+
+  withAtParentIndex(parentIndex?: number): Type {
+    return withAtParentIndex(this, parentIndex);
+  }
+
+  withMinimumColumnCount(columnSize: number | 'unknown' | null): Type {
+    return withMinimumColumnCount(this, columnSize);
   }
 
   isRange(): Type {

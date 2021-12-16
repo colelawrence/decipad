@@ -78,22 +78,16 @@ describe('getValue', () => {
   it('works on a unit-less column', async () => {
     const quantity = col(l(1), l(2), l(3));
 
-    expect(await testGetValue(getValue, quantity, n('units', u('watts'))))
-      .toMatchInlineSnapshot(`
-      Column {
-        "valueNames": null,
-        "values": Array [
-          FractionValue {
-            "value": Fraction(1),
-          },
-          FractionValue {
-            "value": Fraction(2),
-          },
-          FractionValue {
-            "value": Fraction(3),
-          },
-        ],
-      }
+    expect(
+      await (
+        await testGetValue(getValue, quantity, n('units', u('watts')))
+      ).getData()
+    ).toMatchInlineSnapshot(`
+      Array [
+        Fraction(1),
+        Fraction(2),
+        Fraction(3),
+      ]
     `);
   });
 
@@ -104,8 +98,7 @@ describe('getValue', () => {
     expect(await testGetValue(getValue, quantity, n('units', u('miles'))))
       .toMatchInlineSnapshot(`
       Column {
-        "valueNames": null,
-        "values": Array [
+        "_values": Array [
           FractionValue {
             "value": Fraction(0.6(213711922373339696174341843633182215859381)),
           },
@@ -116,6 +109,7 @@ describe('getValue', () => {
             "value": Fraction(1.8(641135767120019088523025530899546647578143)),
           },
         ],
+        "valueNames": null,
       }
     `);
   });

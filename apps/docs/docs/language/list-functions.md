@@ -69,6 +69,33 @@ total([1 apples, 2 apples, 3 apples])
 ==> 6 apples
 ```
 
+## Sort the elements on a list
+
+You can generate a new list that contains all the elements in the source list sorted:
+
+```deci live
+sort([date(2021-03), date(2020-12), date(2023-01)])
+==> [ month 2020-12, month 2021-03, month 2023-01 ]
+```
+
+## Retrieve the unique elements in a list
+
+You can generate a new list that contains all the unique elements in the source list sorted:
+
+```deci live
+unique([4 USD, 3 USD, 1 USD, 1 USD, 4 USD, 3 USD, 3 USD])
+==> [ 1 USD, 3 USD, 4 USD ]
+```
+
+## Reverse a list
+
+You can generate a new list that contains all the elements in the source list in reverse order:
+
+```deci live
+reverse([1 duck, 2 ducks, 3 ducks])
+==> [ 3 ducks, 2 ducks, 1 ducks ]
+```
+
 ## Find the growth of a list of numbers
 
 If you have a list of numbers, like a profit per month, you might want a list that shows how each item compares to the previous one:

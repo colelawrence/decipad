@@ -125,11 +125,21 @@ export const inferExpression = wrap(
         const tableName =
           thing.type === 'ref' ? thing.args[0] : table.indexName;
 
-        const getFromTableOrRow = (names: string[], types: Type[]) =>
-          types[names.indexOf(propName)] ??
-          t.impossible(
-            `The property ${propName} does not exist in ${tableName}`
-          );
+        const getFromTableOrRow = (
+          names: string[],
+          types: Type[]
+        ): [Type, number] => {
+          const index = names.indexOf(propName);
+          if (index < 0) {
+            return [
+              t.impossible(
+                `The property ${propName} does not exist in ${tableName}`
+              ),
+              index,
+            ];
+          }
+          return [types[index], index];
+        };
 
         if (table.errorCause) {
           return table;
@@ -138,17 +148,23 @@ export const inferExpression = wrap(
           table?.columnTypes != null &&
           table?.tableLength != null
         ) {
+          const [column, columnIndex] = getFromTableOrRow(
+            table.columnNames,
+            table.columnTypes
+          );
           return t.column(
-            getFromTableOrRow(table.columnNames, table.columnTypes),
+            column,
             table.tableLength,
-            table.indexName
+            table.indexName,
+            columnIndex
           );
         } else {
           const { rowCellNames, rowCellTypes } = table;
-          return getFromTableOrRow(
+          const [type] = getFromTableOrRow(
             getDefined(rowCellNames),
             getDefined(rowCellTypes)
           );
+          return type;
         }
       }
       case 'function-call': {

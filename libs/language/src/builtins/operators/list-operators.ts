@@ -1,5 +1,6 @@
 import Fraction from '@decipad/fraction';
 import { getDefined } from '@decipad/utils';
+import produce from 'immer';
 import { Value, Column, fromJS } from '../../interpreter/Value';
 import { Type, build as t } from '../../type';
 import { BuiltinSpec } from '../interfaces';
@@ -129,6 +130,44 @@ export const listOperators: Record<string, BuiltinSpec> = {
         return t.column(t.column(t.number(), horizontal), vertical);
       }),
   },
+
+  sort: {
+    argCount: 1,
+    functorNoAutomap: ([column]) => column.isColumn(),
+    fnValuesNoAutomap: ([_column]) => {
+      const column = getInstanceof(_column, Column);
+      return column.sort();
+    },
+  },
+
+  unique: {
+    argCount: 1,
+    functorNoAutomap: ([column]) =>
+      Type.combine(column.isColumn(), (column) =>
+        produce(column, (column) => {
+          column.columnSize = 'unknown';
+        })
+      ),
+    fnValuesNoAutomap: ([_column]) => {
+      const column = getInstanceof(_column, Column);
+      return column.unique();
+    },
+  },
+
+  reverse: {
+    argCount: 1,
+    functorNoAutomap: ([column]) =>
+      column.isTable().errorCause ? column.isColumn() : column.isTable(),
+    fnValuesNoAutomap: ([_column], columnTypes) => {
+      const column = getInstanceof(_column, Column);
+      const columnType = getDefined(getDefined(columnTypes)[0]);
+      if (columnType.isTable().errorCause == null) {
+        return column.reverseEach();
+      }
+      return column.reverse();
+    },
+  },
+
   // Table stuff
   approximatesubsetsum: {
     argCount: 3,

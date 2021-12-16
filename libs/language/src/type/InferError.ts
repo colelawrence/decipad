@@ -23,6 +23,9 @@ export type ErrSpec =
       errType: 'expectedUnit';
       expectedUnit: [AST.Units | null, AST.Units | null];
     }
+  | {
+      errType: 'expectedColumnContained';
+    }
   | { errType: 'unexpectedEmptyColumn' }
   | { errType: 'unexpectedEmptyTable' }
   | {
@@ -79,6 +82,9 @@ function specToString(spec: ErrSpec): string {
       const [fname, expected, got] = spec.expectedArgCount;
 
       return `The function ${fname} requires ${expected} parameters and ${got} parameters were entered`;
+    }
+    case 'expectedColumnContained': {
+      return `expected column to belong to table`;
     }
     case 'unexpectedEmptyColumn': {
       return `Unexpected empty column`;
@@ -153,6 +159,12 @@ export class InferError {
     return new InferError({
       errType: 'expectedArgCount',
       expectedArgCount: [fname, expected, got],
+    });
+  }
+
+  static expectedColumnContained() {
+    return new InferError({
+      errType: 'expectedColumnContained',
     });
   }
 

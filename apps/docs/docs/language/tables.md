@@ -223,3 +223,7 @@ flights2 = select(flights, number, passenger_count)
   passenger_count = [ 100, 150, 200 ]
 }
 ```
+
+## More table operations
+
+[Here is a list of all the operations specific to tables](/docs/docs/language/built-in-functions/functions-for-tables).

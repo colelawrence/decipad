@@ -79,13 +79,15 @@ export const row = (cells: Type[], cellNames: string[]) => {
 export const column = (
   cellType: Type,
   columnSize: number | 'unknown',
-  indexedBy?: string | null
+  indexedBy?: string | null,
+  atParentIndex?: number | null
 ) => {
   const t = new Type();
 
   t.indexedBy = indexedBy ?? null;
   t.cellType = cellType;
   t.columnSize = columnSize;
+  t.atParentIndex = atParentIndex ?? null;
 
   if (cellType.errorCause != null) {
     return t.withErrorCause(cellType.errorCause);

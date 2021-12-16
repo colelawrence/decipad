@@ -282,7 +282,7 @@ describe('tables', () => {
     );
 
     expect((await inferProgram([block])).stack.get('Col')).toEqual(
-      t.column(t.number(), 3, 'Table')
+      t.column(t.number(), 3, 'Table', 0)
     );
   });
 
@@ -675,9 +675,9 @@ jest.mock('../data', () => ({
   })),
 }));
 
-// eslint-disable-next-line jest/no-disabled-tests
-describe.skip('Data', () => {
-  it('infers imported data', async () => {
+describe('Data', () => {
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('infers imported data', async () => {
     const ctx = makeContext();
     expect(
       await inferStatement(

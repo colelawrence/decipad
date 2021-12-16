@@ -202,7 +202,7 @@ describe('Multidimensional operations', () => {
         (X.Col + Y.Col) + (X.Col / 10)
       `)
     ).toMatchObject({
-      type: t.column(t.column(t.number(), 2, 'Y'), 3, 'X'),
+      type: t.column(t.column(t.number(), 2, 'Y', 0), 3, 'X', 0),
       value: [
         [F(1011, 10), F(2011, 10)],
         [F(511, 5), F(1011, 5)],
@@ -218,7 +218,7 @@ describe('Multidimensional operations', () => {
         (X.Col + Y.Col) + (Y.Col / 1000)
       `)
     ).toMatchObject({
-      type: t.column(t.column(t.number(), 2, 'Y'), 3, 'X'),
+      type: t.column(t.column(t.number(), 2, 'Y', 0), 3, 'X', 0),
       value: [
         [F(1011, 10), F(1006, 5)],
         [F(1021, 10), F(1011, 5)],
@@ -323,7 +323,7 @@ describe('Tables', () => {
         Table.Col
       `)
     ).toMatchObject({
-      type: t.column(t.number(), 3, 'Table'),
+      type: t.column(t.number(), 3, 'Table', 0),
       value: [F(1), F(2), F(3)],
     });
   });
@@ -339,7 +339,7 @@ describe('Tables', () => {
         Table.Col2
       `)
     ).toMatchObject({
-      type: t.column(t.number(), 3, 'Table'),
+      type: t.column(t.number(), 3, 'Table', 1),
       value: [F(1), F(1), F(1)],
     });
 
@@ -353,7 +353,7 @@ describe('Tables', () => {
         Table.Col
       `)
     ).toMatchObject({
-      type: t.column(t.number(), 3, 'Table'),
+      type: t.column(t.number(), 3, 'Table', 0),
       value: [F(1), F(1), F(1)],
     });
   });
