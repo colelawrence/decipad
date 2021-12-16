@@ -1,5 +1,4 @@
 import { produce } from 'immer';
-import Fraction from 'fraction.js/bigfraction';
 import pluralize, { singular } from '../pluralize';
 import { AST, Type } from '..';
 import { getDefined, units } from '../utils';
@@ -216,12 +215,14 @@ const stringifyUnit = (unit: AST.Unit) => {
   if (!isSymbol && pretty) {
     return pretty;
   } else {
-    const multiPrefix: AvailablePrefixes = (
-      unit.multiplier ? unit.multiplier.valueOf() : new Fraction(1)
-    ) as AvailablePrefixes;
-    const multiplier = multipliersToPrefixes[multiPrefix];
+    const multiPrefix = unit.multiplier ? unit.multiplier.valueOf() : 1;
+    const multiplier = multipliersToPrefixes[multiPrefix as AvailablePrefixes];
     const result = [
-      unitIsSymbol(symbol) ? multiplier[0] : multiplier[1],
+      multiplier != null
+        ? unitIsSymbol(symbol)
+          ? multiplier[0]
+          : multiplier[1]
+        : multiPrefix.toString(),
       unit.unit,
     ];
 
