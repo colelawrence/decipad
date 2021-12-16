@@ -4,7 +4,7 @@
 ### Function definition ###
 ###########################
 
-functionDef -> "function" ___ functionDefName _ functionDefArgs _ "=>" _ functionBody {%
+functionDef -> "function" __ functionDefName _ functionDefArgs _ "=>" _ functionBody {%
                                                         (d) => addArrayLoc({
                                                           type: "function-definition",
                                                           args: [

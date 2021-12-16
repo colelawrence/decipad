@@ -339,7 +339,14 @@ runTests({
   },
 
   'one expression spans multiple lines': {
-    source: 'RefName1\n=\n1\n+\n2\n2\n+\n3',
+    source: `RefName1 = (
+      1
+      +
+      2)
+      (2
+      +
+      3)`,
+    sourceMap: false,
     ast: [
       {
         type: 'assign',
@@ -347,16 +354,6 @@ runTests({
           {
             type: 'def',
             args: ['RefName1'],
-            start: {
-              char: 0,
-              line: 1,
-              column: 1,
-            },
-            end: {
-              char: 7,
-              line: 1,
-              column: 8,
-            },
           },
           {
             type: 'function-call',
@@ -364,16 +361,6 @@ runTests({
               {
                 type: 'funcref',
                 args: ['+'],
-                start: {
-                  char: 13,
-                  line: 4,
-                  column: 1,
-                },
-                end: {
-                  char: 13,
-                  line: 4,
-                  column: 1,
-                },
               },
               {
                 type: 'argument-list',
@@ -381,66 +368,16 @@ runTests({
                   {
                     type: 'literal',
                     args: ['number', F(1), null],
-                    start: {
-                      char: 11,
-                      line: 3,
-                      column: 1,
-                    },
-                    end: {
-                      char: 11,
-                      line: 3,
-                      column: 1,
-                    },
                   },
                   {
                     type: 'literal',
                     args: ['number', F(2), null],
-                    start: {
-                      char: 15,
-                      line: 5,
-                      column: 1,
-                    },
-                    end: {
-                      char: 15,
-                      line: 5,
-                      column: 1,
-                    },
                   },
                 ],
-                start: {
-                  char: 11,
-                  line: 3,
-                  column: 1,
-                },
-                end: {
-                  char: 15,
-                  line: 5,
-                  column: 1,
-                },
               },
             ],
-            start: {
-              char: 11,
-              line: 3,
-              column: 1,
-            },
-            end: {
-              char: 15,
-              line: 5,
-              column: 1,
-            },
           },
         ],
-        start: {
-          char: 0,
-          line: 1,
-          column: 1,
-        },
-        end: {
-          char: 15,
-          line: 5,
-          column: 1,
-        },
       },
       {
         type: 'function-call',
@@ -448,16 +385,6 @@ runTests({
           {
             type: 'funcref',
             args: ['+'],
-            start: {
-              char: 19,
-              line: 7,
-              column: 1,
-            },
-            end: {
-              char: 19,
-              line: 7,
-              column: 1,
-            },
           },
           {
             type: 'argument-list',
@@ -465,54 +392,14 @@ runTests({
               {
                 type: 'literal',
                 args: ['number', F(2), null],
-                start: {
-                  char: 17,
-                  line: 6,
-                  column: 1,
-                },
-                end: {
-                  char: 17,
-                  line: 6,
-                  column: 1,
-                },
               },
               {
                 type: 'literal',
                 args: ['number', F(3), null],
-                start: {
-                  char: 21,
-                  line: 8,
-                  column: 1,
-                },
-                end: {
-                  char: 21,
-                  line: 8,
-                  column: 1,
-                },
               },
             ],
-            start: {
-              char: 17,
-              line: 6,
-              column: 1,
-            },
-            end: {
-              char: 21,
-              line: 8,
-              column: 1,
-            },
           },
         ],
-        start: {
-          char: 17,
-          line: 6,
-          column: 1,
-        },
-        end: {
-          char: 21,
-          line: 8,
-          column: 1,
-        },
       },
     ],
   },

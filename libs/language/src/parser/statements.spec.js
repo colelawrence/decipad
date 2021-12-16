@@ -95,7 +95,7 @@ runTests({
   },
 
   'one statement spans multiple lines': {
-    source: 'RefName1\n=\n1\nRefName2\n=\n2',
+    source: 'RefName1 =(\n1)\nRefName2 =(\n2)',
     ast: [
       {
         type: 'assign',
@@ -103,42 +103,18 @@ runTests({
           {
             type: 'def',
             args: ['RefName1'],
-            start: {
-              char: 0,
-              line: 1,
-              column: 1,
-            },
-            end: {
-              char: 7,
-              line: 1,
-              column: 8,
-            },
+            start: 0,
+            end: 7,
           },
           {
             type: 'literal',
             args: ['number', F(1), null],
-            start: {
-              char: 11,
-              line: 3,
-              column: 1,
-            },
-            end: {
-              char: 11,
-              line: 3,
-              column: 1,
-            },
+            start: 10,
+            end: 13,
           },
         ],
-        start: {
-          char: 0,
-          line: 1,
-          column: 1,
-        },
-        end: {
-          char: 11,
-          line: 3,
-          column: 1,
-        },
+        start: 0,
+        end: 13,
       },
       {
         type: 'assign',
@@ -146,42 +122,18 @@ runTests({
           {
             type: 'def',
             args: ['RefName2'],
-            start: {
-              char: 13,
-              line: 4,
-              column: 1,
-            },
-            end: {
-              char: 20,
-              line: 4,
-              column: 8,
-            },
+            start: 15,
+            end: 22,
           },
           {
             type: 'literal',
             args: ['number', F(2), null],
-            start: {
-              char: 24,
-              line: 6,
-              column: 1,
-            },
-            end: {
-              char: 24,
-              line: 6,
-              column: 1,
-            },
+            start: 25,
+            end: 28,
           },
         ],
-        start: {
-          char: 13,
-          line: 4,
-          column: 1,
-        },
-        end: {
-          char: 24,
-          line: 6,
-          column: 1,
-        },
+        start: 15,
+        end: 28,
       },
     ],
   },

@@ -1,4 +1,5 @@
 import moo, { error, Token } from 'moo';
+import { BracketCounter, doSeparateStatement } from './statementSeparation';
 
 const keywordStrings = [
   'if',
@@ -90,6 +91,80 @@ export const tokenRules = {
 } as const;
 
 export const tokenizer = moo.states(tokenRules);
+
+export interface ParensCountingTokenizer extends moo.Lexer {
+  peek: () => moo.Token | undefined;
+  prev: () => moo.Token | undefined;
+}
+/**
+ * A tokenizer that keeps track of how many parens are open,
+ * so that it knows when there's a new statement.
+ *
+ * Emits the special token type "statementSep" for this purpose
+ */
+export const parensCountingTokenizer = (() => {
+  let openCounter = new BracketCounter();
+  let peeked: moo.Token | undefined;
+  let prev: moo.Token | undefined;
+
+  const getNextToken = () => {
+    if (peeked) {
+      const tok = peeked;
+      peeked = undefined;
+      return tok;
+    }
+    return tokenizer.next();
+  };
+
+  const extendedTokenizer: ParensCountingTokenizer = Object.assign(
+    Object.create(tokenizer),
+    {
+      next() {
+        const tok = getNextToken();
+        openCounter.feed(tok);
+
+        if (
+          tok &&
+          doSeparateStatement({
+            tok,
+            prevTok: this.prev(),
+            nextTok: this.peek(),
+            openCounter,
+          })
+        ) {
+          // Clear any negative parens
+          openCounter = new BracketCounter();
+
+          prev = Object.assign(Object.create(tok), {
+            type: 'statementSep',
+          });
+        } else {
+          prev = tok;
+        }
+
+        return prev;
+      },
+      peek() {
+        // if peek() has been called already, don't call next() again
+        if (peeked) return peeked;
+
+        peeked = tokenizer.next();
+        return peeked;
+      },
+      prev() {
+        return prev;
+      },
+      reset(code: string, info?: moo.LexerState) {
+        openCounter = new BracketCounter();
+        tokenizer.reset(code, info);
+        peeked = undefined;
+        return this;
+      },
+    }
+  );
+
+  return extendedTokenizer;
+})();
 
 export const tokenize = (source: string): Token[] =>
   Array.from(tokenizer.reset(source));

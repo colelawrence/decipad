@@ -1,7 +1,7 @@
 @preprocessor esmodule
 
 @{%
-import { tokenizer } from './tokenizer'
+import { parensCountingTokenizer as tokenizer } from './tokenizer'
 %}
 
 # Defines that the variable "tokenizer" above is our lexer here.
@@ -180,7 +180,7 @@ function addArrayLoc(node, locArray) {
 ### Statements ###
 ##################
 
-block         -> _ statement (__n statement):* _        {%
+block         -> (%statementSep | %ws):? statement (%statementSep statement):* (%statementSep | %ws):? {%
                                                         (d) => {
                                                           const stmt = d[1]
                                                           const repetitions = d[2]

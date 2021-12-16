@@ -5,6 +5,7 @@ import { Type, build as t, serializeType, SerializedType } from './type';
 import { builtinsForAutocomplete } from './builtins';
 
 export { tokenize, tokenRules } from './grammar';
+export * from './grammar/statementSeparation';
 export { parse, AST, Parser } from './parser';
 export { inferBlock, makeContext } from './infer';
 export type { Context } from './infer';

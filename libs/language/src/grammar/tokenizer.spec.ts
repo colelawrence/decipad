@@ -1,8 +1,11 @@
-import { tokenize } from './tokenizer';
+import { parensCountingTokenizer, tokenize } from './tokenizer';
 
 const testTokenizer = (input: string) =>
-  tokenize(input)
-    .map((t) => `${t.type}(${t.text})`)
+  Array.from(parensCountingTokenizer.reset(input))
+    .map((t) => {
+      if (t.type === 'statementSep') return '/stmt/';
+      return `${t.type}(${t.text})`;
+    })
     .join(' ');
 
 it('finds "==" not two "="', () => {
@@ -54,4 +57,58 @@ it('does not crash when it sees an invalid token in date mode', () => {
   expect(testTokenizer('date(")')).toMatchInlineSnapshot(
     `"beginDate(date() error(\\"))"`
   );
+});
+
+describe('extended tokenizer', () => {
+  it('finds statement-ending lines', () => {
+    expect(testTokenizer('1\n+\n1')).toMatchInlineSnapshot(
+      `"number(1) /stmt/ plus(+) /stmt/ number(1)"`
+    );
+    expect(testTokenizer('(1\n+\n1)')).toMatchInlineSnapshot(`
+          "leftParen(() number(1) ws(
+          ) plus(+) ws(
+          ) number(1) rightParen())"
+      `);
+    expect(testTokenizer(`X=date(2020-01-01)\nY=10`)).toMatchInlineSnapshot(
+      `"identifier(X) equalSign(=) beginDate(date() digits(2020) punc(-) digits(01) punc(-) digits(01) endDate()) /stmt/ identifier(Y) equalSign(=) number(10)"`
+    );
+  });
+
+  it('can peek', () => {
+    const tokens = parensCountingTokenizer.reset('.,!');
+    expect(tokens.peek()).toMatchObject({ text: '.' });
+    expect(tokens.peek()).toMatchObject({ text: '.' });
+
+    expect(tokens.next()).toMatchObject({ text: '.' });
+    expect(tokens.next()).toMatchObject({ text: ',' });
+    expect(tokens.next()).toMatchObject({ text: '!' });
+
+    expect(tokens.next()).toEqual(undefined);
+    expect(tokens.peek()).toEqual(undefined);
+  });
+
+  it('can get the previous tok', () => {
+    const tokens = parensCountingTokenizer.reset('.,!');
+    expect(tokens.prev()).toEqual(undefined);
+    tokens.next();
+    expect(tokens.prev()).toMatchObject({ text: '.' });
+    tokens.peek();
+    expect(tokens.prev()).toMatchObject({ text: '.' });
+    tokens.next();
+    expect(tokens.prev()).toMatchObject({ text: ',' });
+  });
+
+  it('does not separate statement before an else keyword, or after a function arrow', () => {
+    expect(testTokenizer('if this\nthen that\nelse that'))
+      .toMatchInlineSnapshot(`
+      "if keyword(if) ws( ) identifier(this) ws(
+      ) then keyword(then) ws( ) identifier(that) ws(
+      ) else keyword(else) ws( ) identifier(that)"
+    `);
+
+    expect(testTokenizer('=>\n1')).toMatchInlineSnapshot(`
+      "arrow(=>) ws(
+      ) number(1)"
+    `);
+  });
 });

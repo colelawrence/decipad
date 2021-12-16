@@ -27,7 +27,7 @@ number       -> unitlessNumber                          {%
                                                           return numberLiteralFromUnits(n, n.n);
                                                         }
                                                         %}
-number      -> unitlessNumber ___:? units               {%
+number      -> unitlessNumber __:? units               {%
                                                         (d) => {
                                                           const [n, _, units] = d;
                                                           return numberLiteralFromUnits(d, n.n, units)

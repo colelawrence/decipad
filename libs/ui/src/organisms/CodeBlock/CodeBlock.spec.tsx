@@ -71,7 +71,7 @@ it('renders both inline and block result', async () => {
 
 describe('inline results', () => {
   it('renders multi-line statements result in multiple lines', async () => {
-    const [block, getStatement] = await getResultFor('9 \n+ \n1');
+    const [block, getStatement] = await getResultFor('(9 \n+ \n1)');
     const { getByText } = render(
       <CodeBlock block={block} getStatement={getStatement}>
         <span>Code</span>

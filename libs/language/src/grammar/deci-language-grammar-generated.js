@@ -4,7 +4,7 @@ function id(x) {
   return x[0];
 }
 
-import { tokenizer } from './tokenizer';
+import { parensCountingTokenizer as tokenizer } from './tokenizer';
 
 import Fraction from '@decipad/fraction';
 
@@ -329,17 +329,6 @@ let ParserRules = [
     postprocess: id,
   },
   {
-    name: '___',
-    symbols: [tokenizer.has('ws') ? { type: 'ws' } : ws],
-    postprocess: (d, _l, reject) => {
-      if (d[0].value.includes('\n') || d[0].length === 0) {
-        return reject;
-      } else {
-        return d[0];
-      }
-    },
-  },
-  {
     name: '__n',
     symbols: [tokenizer.has('ws') ? { type: 'ws' } : ws],
     postprocess: (d, _l, reject) => {
@@ -390,7 +379,7 @@ let ParserRules = [
       return numberLiteralFromUnits(n, n.n);
     },
   },
-  { name: 'number$ebnf$1', symbols: ['___'], postprocess: id },
+  { name: 'number$ebnf$1', symbols: ['__'], postprocess: id },
   {
     name: 'number$ebnf$1',
     symbols: [],
@@ -1634,7 +1623,7 @@ let ParserRules = [
     name: 'functionDef',
     symbols: [
       { literal: 'function' },
-      '___',
+      '__',
       'functionDefName',
       '_',
       'functionDefArgs',
@@ -1825,18 +1814,68 @@ let ParserRules = [
         d
       ),
   },
-  { name: 'block$ebnf$1', symbols: [] },
-  { name: 'block$ebnf$1$subexpression$1', symbols: ['__n', 'statement'] },
+  {
+    name: 'block$ebnf$1$subexpression$1',
+    symbols: [
+      tokenizer.has('statementSep') ? { type: 'statementSep' } : statementSep,
+    ],
+  },
+  {
+    name: 'block$ebnf$1$subexpression$1',
+    symbols: [tokenizer.has('ws') ? { type: 'ws' } : ws],
+  },
   {
     name: 'block$ebnf$1',
-    symbols: ['block$ebnf$1', 'block$ebnf$1$subexpression$1'],
+    symbols: ['block$ebnf$1$subexpression$1'],
+    postprocess: id,
+  },
+  {
+    name: 'block$ebnf$1',
+    symbols: [],
+    postprocess: function (d) {
+      return null;
+    },
+  },
+  { name: 'block$ebnf$2', symbols: [] },
+  {
+    name: 'block$ebnf$2$subexpression$1',
+    symbols: [
+      tokenizer.has('statementSep') ? { type: 'statementSep' } : statementSep,
+      'statement',
+    ],
+  },
+  {
+    name: 'block$ebnf$2',
+    symbols: ['block$ebnf$2', 'block$ebnf$2$subexpression$1'],
     postprocess: function arrpush(d) {
       return d[0].concat([d[1]]);
     },
   },
   {
+    name: 'block$ebnf$3$subexpression$1',
+    symbols: [
+      tokenizer.has('statementSep') ? { type: 'statementSep' } : statementSep,
+    ],
+  },
+  {
+    name: 'block$ebnf$3$subexpression$1',
+    symbols: [tokenizer.has('ws') ? { type: 'ws' } : ws],
+  },
+  {
+    name: 'block$ebnf$3',
+    symbols: ['block$ebnf$3$subexpression$1'],
+    postprocess: id,
+  },
+  {
+    name: 'block$ebnf$3',
+    symbols: [],
+    postprocess: function (d) {
+      return null;
+    },
+  },
+  {
     name: 'block',
-    symbols: ['_', 'statement', 'block$ebnf$1', '_'],
+    symbols: ['block$ebnf$1', 'statement', 'block$ebnf$2', 'block$ebnf$3'],
     postprocess: (d) => {
       const stmt = d[1];
       const repetitions = d[2].map(([__n, stmt]) => stmt);

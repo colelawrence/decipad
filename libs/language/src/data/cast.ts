@@ -42,10 +42,10 @@ export const cast = (input: string): CastResult => {
   let castResult: CastResult | null = null;
 
   const trimmedInput = input.trim();
-  castResult ??= castNumber(trimmedInput);
-  castResult ??= castBoolean(trimmedInput);
-  castResult ??= castDate(trimmedInput);
-  castResult ??= input;
+  castResult = castResult ?? castNumber(trimmedInput);
+  castResult = castResult ?? castBoolean(trimmedInput);
+  castResult = castResult ?? castDate(trimmedInput);
+  castResult = castResult ?? input;
 
   return castResult;
 };
