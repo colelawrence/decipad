@@ -5,6 +5,7 @@ module.exports = {
       require.resolve('@babel/preset-react'),
       { runtime: 'automatic', importSource: '@emotion/react' },
     ],
+    require.resolve('@docusaurus/core/lib/babel/preset'),
   ],
   plugins: [
     [
