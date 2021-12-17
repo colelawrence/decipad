@@ -18,7 +18,7 @@ export const run = async (
   program: AST.Block[],
   desiredTargets: Array<string | number | [number, number]>,
   realm?: Realm
-): Promise<Interpreter.Result> => {
+): Promise<Interpreter.OneResult[]> => {
   realm = realm ?? new Realm(await inferProgram(program));
 
   return (await evaluateTargets(program, desiredTargets, realm)).map((v) => {

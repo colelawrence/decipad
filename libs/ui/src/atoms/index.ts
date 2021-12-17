@@ -12,7 +12,7 @@ export { Divider } from './Divider/Divider';
 export { Heading1 } from './Heading1/Heading1';
 export { Heading2 } from './Heading2/Heading2';
 export { IconButton } from './IconButton/IconButton';
-export { InlineCodeError } from './InlineCodeError/InlineCodeError';
+export { CodeError } from './CodeError/CodeError';
 export { Italic } from './Italic/Italic';
 export { ListItem } from './ListItem/ListItem';
 export { MenuItem } from './MenuItem/MenuItem';

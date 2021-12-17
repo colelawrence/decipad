@@ -1,15 +1,15 @@
 import { FC } from 'react';
 import plural from 'pluralize';
 
-import { ResultTypeProps } from '../../lib/results';
+import { ResultProps } from '../../lib/results';
 
 export const TimeUnitsResult = ({
   value: entries,
-}: ResultTypeProps): ReturnType<FC> => {
+}: ResultProps<'time-quantity'>): ReturnType<FC> => {
   return (
     <span>
-      {(entries as [string, number][])
-        .map(([name, val]) => `${val} ${plural(name, val)}`)
+      {entries
+        .map(([name, val]) => `${val} ${plural(name, Number(val))}`)
         .join(', ')}
     </span>
   );

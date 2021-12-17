@@ -14,5 +14,7 @@ export * from './lib/Contexts/index';
 export * from './lib/theme';
 export * from './lib/shared';
 
+export * from './lib/results';
+
 // TODO temporary while some visual components are not in `ui`
 export * as icons from './icons';

@@ -26,6 +26,8 @@ export type SerializedType =
   | { kind: 'function' }
   | { kind: 'type-error'; errorCause: ErrSpec };
 
+export type SerializedTypeKind = SerializedType['kind'];
+
 export function serializeType(type: Type): SerializedType {
   if (type.type === 'number') {
     return { kind: 'number', unit: type.unit };

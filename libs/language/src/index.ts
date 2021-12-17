@@ -1,5 +1,4 @@
 /* istanbul ignore file: just config and re-export */
-import { Interpreter } from './interpreter';
 import { Value } from './interpreter/Value';
 import { Type, build as t, serializeType, SerializedType } from './type';
 import { builtinsForAutocomplete } from './builtins';
@@ -14,21 +13,18 @@ export * from './run';
 export { Scalar, Date, Range, TimeQuantity, Column } from './interpreter/Value';
 
 export { prettyPrintAST } from './parser/utils';
-export type { InferError, SerializedType } from './type';
+export type { SerializedType, SerializedTypeKind } from './type';
 export {
   Type,
   build as buildType,
   deserializeType,
+  InferError,
   serializeType,
+  stringifyUnits,
 } from './type';
 export { Time } from './date';
 export { ExternalData } from './data';
 export * from './computer';
-
-export interface Result {
-  type: Type;
-  value: Interpreter.Result;
-}
 
 export interface InjectableExternalData {
   type: Type;

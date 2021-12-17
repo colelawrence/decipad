@@ -3,8 +3,8 @@ import {
   render,
   getAllByRole as getAllDescendantsByRole,
 } from '@testing-library/react';
-import { runCode } from '@decipad/language';
 import { findParentWithStyle } from '@decipad/dom-test-utils';
+import { runCode } from '../../test-utils';
 
 import { ColumnResult } from '..';
 import {
@@ -43,7 +43,7 @@ it('renders padding on cells contents', async () => {
 
   const cellPaddings = ['1', '2', '3']
     .map((text) => getByText(text))
-    .map((cell) => findParentWithStyle(cell, 'padding')!.padding);
+    .map((cell) => findParentWithStyle(cell, 'paddingLeft')!.paddingLeft);
   expect(cellPaddings).toEqual([
     expect.stringMatching(/.+/),
     expect.stringMatching(/.+/),

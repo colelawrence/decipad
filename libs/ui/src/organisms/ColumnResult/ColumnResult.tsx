@@ -1,16 +1,16 @@
 import { FC } from 'react';
 import { css } from '@emotion/react';
-import { Interpreter, Type } from '@decipad/language';
+import { SerializedType } from '@decipad/language';
 import { cssVar, setCssVar } from '../../primitives';
 import { TableData } from '../../atoms';
 import { TableRow } from '../../molecules';
 import { CodeResult, Table } from '..';
-import { ResultTypeProps } from '../../lib/results';
+import { ResultProps } from '../../lib/results';
 import { useResults } from '../../lib/Contexts/Results';
 import { table } from '../../styles';
 
-function isNestedColumnOrTable(type: Type | undefined) {
-  return type?.cellType?.cellType != null;
+function isNestedColumnOrTable(type: SerializedType | undefined) {
+  return type != null && (type.kind === 'column' || type.kind === 'table');
 }
 
 const rowLabelStyles = css({
@@ -30,20 +30,15 @@ export const ColumnResult = ({
   parentType,
   type,
   value,
-}: ResultTypeProps): ReturnType<FC> => {
-  const { indexLabels } = useResults();
-
+}: ResultProps<'column'>): ReturnType<FC> => {
   const { indexedBy, cellType } = type;
-
-  if (!cellType) {
-    return null;
-  }
+  const { indexLabels } = useResults();
 
   return (
     <Table border={isNestedColumnOrTable(parentType) ? 'inner' : 'all'}>
       {/* TODO: Column caption should say the name of the variable (if there is one. */}
       <tbody>
-        {(value as Interpreter.ResultColumn).map((row, rowIndex) => {
+        {value.map((row, rowIndex) => {
           const labels = indexLabels.get(indexedBy ?? '');
 
           return (

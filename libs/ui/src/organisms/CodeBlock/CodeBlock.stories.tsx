@@ -1,15 +1,9 @@
 import { Meta, Story } from '@storybook/react';
-import { AST, Type } from '@decipad/language';
-
+import { serializeResult, Type } from '@decipad/language';
+import { Statement } from '../../lib/results';
 import { withResults } from '../../storybook-utils/results';
 import { CodeLine } from '../../atoms';
 import { CodeBlock } from './CodeBlock';
-
-function getStatement(): AST.Statement {
-  return {
-    type: 'column',
-  } as AST.Statement;
-}
 
 const block = {
   blockId: 'block-one',
@@ -40,6 +34,21 @@ const block = {
   ],
 };
 
+const statements: Statement[] = [
+  {
+    displayInline: true,
+    startLine: 1,
+    endLine: 1,
+    result: serializeResult(block.results[0].valueType, block.results[0].value),
+  },
+  {
+    displayInline: true,
+    startLine: 2,
+    endLine: 2,
+    result: serializeResult(block.results[1].valueType, block.results[1].value),
+  },
+];
+
 export default {
   title: 'Organisms / Editor / Code Block',
   component: CodeBlock,
@@ -51,8 +60,8 @@ export default {
 } as Meta;
 
 export const Normal: Story = (props) => (
-  <CodeBlock {...props} block={block} getStatement={getStatement}>
-    <CodeLine>1 banana + 2 apples</CodeLine>
+  <CodeBlock {...props} blockId={block.blockId} statements={statements}>
+    <CodeLine>42 + 1337</CodeLine>
     <CodeLine>["Lorem", "Ipsum", "Dolor", "Sit", "Amet"]</CodeLine>
   </CodeBlock>
 );

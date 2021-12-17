@@ -1,45 +1,29 @@
+import { ComponentProps } from 'react';
 import { Meta, Story } from '@storybook/react';
-import { Type } from '@decipad/language';
-
+import { withCode } from '../../storybook-utils';
 import { NumberResult } from './NumberResult';
-
-const type = { type: 'number' } as Type;
-const unitType = {
-  type: 'number',
-  unit: { type: 'units' },
-  toString() {
-    return `bananas`;
-  },
-} as Type;
-
-const args = {
-  value: 10,
-};
 
 export default {
   title: 'Atoms / Editor / Result / Number',
   component: NumberResult,
-  args,
 } as Meta;
 
-export const Normal: Story<typeof args> = (props) => (
-  <NumberResult {...props} type={type} />
+export const Normal: Story<ComponentProps<typeof NumberResult>> = (props) => (
+  <NumberResult {...props} />
 );
+Normal.decorators = [withCode('10')];
 
-export const Formatted: Story<typeof args> = (props) => (
-  <NumberResult {...props} type={type} />
-);
-Formatted.args = {
-  value: 10000,
-};
+export const Formatted: Story<ComponentProps<typeof NumberResult>> = (
+  props
+) => <NumberResult {...props} />;
+Formatted.decorators = [withCode('10000')];
 
-export const Decimal: Story<typeof args> = (props) => (
-  <NumberResult {...props} type={type} />
+export const Decimal: Story<ComponentProps<typeof NumberResult>> = (props) => (
+  <NumberResult {...props} />
 );
-Decimal.args = {
-  value: 0.1,
-};
+Decimal.decorators = [withCode('0.1')];
 
-export const Unit: Story<typeof args> = (props) => (
-  <NumberResult {...props} type={unitType} />
+export const Unit: Story<ComponentProps<typeof NumberResult>> = (props) => (
+  <NumberResult {...props} />
 );
+Unit.decorators = [withCode('1 banana + 1 banana')];

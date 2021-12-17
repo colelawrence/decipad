@@ -1,6 +1,5 @@
 import { render } from '@testing-library/react';
-import { runCode } from '@decipad/language';
-
+import { runCode } from '../../test-utils';
 import { RangeResult } from './RangeResult';
 
 it('renders range', async () => {

@@ -1,14 +1,10 @@
 import { render } from '@testing-library/react';
-import { Type } from '@decipad/language';
-
+import { runCode } from '../../test-utils';
 import { InlineColumnResult } from './InlineColumnResult';
 
-it('renders value', () => {
+it('renders value', async () => {
   const { container } = render(
-    <InlineColumnResult
-      value={[10, 20, 30]}
-      type={{ columnSize: 3, cellType: { type: 'number' } } as Type}
-    />
+    <InlineColumnResult {...await runCode('[10, 20, 30]')} />
   );
 
   expect(container.textContent).toBe('10, 20, 30');

@@ -1,5 +1,6 @@
 export { AccountAvatar } from './AccountAvatar/AccountAvatar';
 export { AddTableRowButton } from './AddTableRowButton/AddTableRowButton';
+export { InlineCodeError } from './InlineCodeError/InlineCodeError';
 export { EditableTableCaption } from './EditableTableCaption/EditableTableCaption';
 export { EditableTableData } from './EditableTableData/EditableTableData';
 export { HelpButton } from './HelpButton/HelpButton';

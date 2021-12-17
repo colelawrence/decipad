@@ -1,11 +1,11 @@
 import { Children, FC, ReactNode } from 'react';
 import { css } from '@emotion/react';
-import { AST, IdentifiedResult } from '@decipad/language';
 import { InlineCodeResult } from '..';
 import { Result as BlockCodeResult } from '../../lib/Editor/Blocks/Result/Result.component';
 import { code, cssVar, grey200, transparency } from '../../primitives';
+import { Statement } from '../../lib/results';
 import { SlateElementProps } from '../../utils';
-import { InlineCodeError } from '../../atoms';
+import { CodeError } from '../../atoms';
 
 const codeBlockStyles = css(code, {
   backgroundColor: transparency(grey200, 0.08).rgba,
@@ -34,21 +34,20 @@ interface SyntaxError {
 }
 
 interface CodeBlockProps extends SlateElementProps {
-  readonly block?: IdentifiedResult;
+  readonly blockId?: string;
+  readonly statements?: Statement[];
   readonly children?: ReactNode;
   readonly error?: SyntaxError;
-  readonly getStatement?: (statementIndex: number) => AST.Statement | null;
 }
 
 export const CodeBlock = ({
-  block,
+  blockId,
+  statements = [],
   children,
   error,
-  getStatement = () => null,
   slateAttrs,
 }: CodeBlockProps): ReturnType<FC> => {
   const rows = Children.count(children);
-
   return (
     <div>
       <div spellCheck={false}>
@@ -56,36 +55,19 @@ export const CodeBlock = ({
           {children}
           {error != null && (
             <Result align="end" startLine={1} endLine={error.line}>
-              <InlineCodeError {...error} />
+              <CodeError {...error} />
             </Result>
           )}
-          {block != null &&
-            block.results.map(({ statementIndex, value, valueType }) => {
-              const statement = getStatement(statementIndex);
-              return (
-                <Result
-                  key={statementIndex}
-                  startLine={statement?.start?.line}
-                  endLine={statement?.end?.line}
-                >
-                  {valueType.errorCause != null ? (
-                    <InlineCodeError
-                      message={valueType.errorCause.message}
-                      url={valueType.errorCause.url}
-                    />
-                  ) : (
-                    <InlineCodeResult
-                      statement={statement}
-                      value={value}
-                      type={valueType}
-                    />
-                  )}
-                </Result>
-              );
-            })}
+          {statements.map(
+            ({ displayInline, endLine, result, startLine }, index) => (
+              <Result key={index} startLine={startLine} endLine={endLine}>
+                {displayInline && <InlineCodeResult {...result} />}
+              </Result>
+            )
+          )}
         </pre>
       </div>
-      {block != null && <BlockCodeResult blockId={block.blockId} />}
+      {blockId != null && <BlockCodeResult blockId={blockId} />}
     </div>
   );
 };

@@ -1,12 +1,12 @@
 import { Fragment } from 'react';
 import { Interpreter } from '@decipad/language';
 import { CodeResult } from '..';
-import { ResultTypeProps } from '../../lib/results';
+import { ResultProps } from '../../lib/results';
 
 export const InlineColumnResult = ({
   value,
   type,
-}: ResultTypeProps): ReturnType<React.FC> => {
+}: ResultProps<'column'>): ReturnType<React.FC> => {
   const { cellType } = type;
 
   if (!cellType) {

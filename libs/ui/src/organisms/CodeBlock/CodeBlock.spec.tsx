@@ -5,29 +5,38 @@ import {
   runCode,
   IdentifiedResult,
   InBlockResult,
-  AST,
 } from '@decipad/language';
 import {
   ResultsContextProvider,
   makeResultsContextValue,
 } from '../../lib/Contexts/Results';
+import { Statement } from '../../lib/results';
+import { runCode as serializedRunCode } from '../../test-utils';
 import { CodeBlock } from './CodeBlock';
 
 const getResultFor = async (
   code: string
-): Promise<[IdentifiedResult, () => AST.Statement, FC]> => {
+): Promise<[IdentifiedResult, Statement[], FC]> => {
   const { value, type: valueType } = await runCode(code);
+  const result = await serializedRunCode(code);
 
   const block = {
     blockId: 'block-1',
     results: [{ statementIndex: 0, value, valueType }] as InBlockResult[],
   };
 
-  const getStatement = () => parseOneBlock(code).args[0];
+  const stmt = parseOneBlock(code).args[0];
 
   return [
     block as IdentifiedResult,
-    getStatement,
+    [
+      {
+        displayInline: true,
+        startLine: stmt.start?.line ?? 0,
+        endLine: stmt.end?.line ?? 0,
+        result,
+      },
+    ],
     ({ children }) => (
       <ResultsContextProvider
         value={{
@@ -58,9 +67,9 @@ it('renders children', async () => {
 });
 
 it('renders both inline and block result', async () => {
-  const [block, getStatement, wrapper] = await getResultFor('9 + 1');
+  const [block, statements, wrapper] = await getResultFor('9 + 1');
   const { getAllByText } = render(
-    <CodeBlock block={block} getStatement={getStatement}>
+    <CodeBlock blockId={block.blockId} statements={statements}>
       <span>Code</span>
     </CodeBlock>,
     { wrapper }
@@ -71,9 +80,9 @@ it('renders both inline and block result', async () => {
 
 describe('inline results', () => {
   it('renders multi-line statements result in multiple lines', async () => {
-    const [block, getStatement] = await getResultFor('(9 \n+ \n1)');
+    const [block, statements] = await getResultFor('(9 \n+ \n1)');
     const { getByText } = render(
-      <CodeBlock block={block} getStatement={getStatement}>
+      <CodeBlock blockId={block.blockId} statements={statements}>
         <span>Code</span>
       </CodeBlock>
     );

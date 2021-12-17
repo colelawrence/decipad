@@ -1,5 +1,3 @@
-import { Type } from '@decipad/language';
-
 import { DateResult, NumberResult, TimeUnitsResult } from '../atoms';
 import {
   ColumnResult,
@@ -7,107 +5,64 @@ import {
   RangeResult,
   TableResult,
 } from '../organisms';
-
+import { runCode } from '../test-utils';
 import {
+  getResultComponent,
   DefaultResult,
-  getResultTypeComponent,
   FunctionResult,
   InlineTableResult,
+  Variant,
+  ResultComponent,
 } from './results';
 
-it('matches number result type', () => {
-  const props = {
-    value: undefined,
-    type: { type: 'number' } as Type,
-  } as const;
-  expect(getResultTypeComponent(props)).toBe(NumberResult);
+it('matches number result type', async () => {
+  expect(getResultComponent(await runCode('1'))).toBe(NumberResult);
 });
 
-it('matches date result type', () => {
-  const props = {
-    value: undefined,
-    type: { date: 'day' } as Type,
-  } as const;
-  expect(getResultTypeComponent(props)).toBe(DateResult);
+it('matches scalar result type', async () => {
+  expect(getResultComponent(await runCode('true'))).toBe(DefaultResult);
+  expect(getResultComponent(await runCode('"foo"'))).toBe(DefaultResult);
 });
 
-it('matches table result type', () => {
-  const props = {
-    value: undefined,
-    variant: 'block',
-    type: { columnTypes: {} } as Type,
-  } as const;
-  expect(getResultTypeComponent(props)).toBe(TableResult);
+it('matches date result type', async () => {
+  expect(getResultComponent(await runCode('date(2021)'))).toBe(DateResult);
 });
 
-it('matches column result type', () => {
-  const props = {
-    value: [10, 20, 30],
-    variant: 'block',
-    type: { columnSize: 3 } as Type,
-  } as const;
-  expect(getResultTypeComponent(props)).toBe(ColumnResult);
+it('matches range result type', async () => {
+  expect(getResultComponent(await runCode('[1 .. 10]'))).toBe(RangeResult);
 });
 
-it('matches inline table result type', () => {
-  const props = {
-    value: undefined,
-    variant: 'inline',
-    type: { columnTypes: {} } as Type,
-  } as const;
-  expect(getResultTypeComponent(props)).toBe(InlineTableResult);
+describe('column result', () => {
+  it.each<[Variant, ResultComponent<'column'>]>([
+    ['block', ColumnResult],
+    ['inline', InlineColumnResult],
+  ])('matches %s result type', async (variant, Component) => {
+    expect(
+      getResultComponent({ ...(await runCode('[1, 2, 3]')), variant })
+    ).toBe(Component);
+  });
 });
 
-it('matches inline column result type', () => {
-  const props = {
-    value: [10, 20, 30],
-    variant: 'inline',
-    type: { columnSize: 3 } as Type,
-  } as const;
-  expect(getResultTypeComponent(props)).toBe(InlineColumnResult);
+describe('table result', () => {
+  it.each<[Variant, ResultComponent<'table'>]>([
+    ['block', TableResult],
+    ['inline', InlineTableResult],
+  ])('matches %s result type', async (variant, Component) => {
+    expect(
+      getResultComponent({
+        ...(await runCode('table = {A = ["A"], B = [1]}')),
+        variant,
+      })
+    ).toBe(Component);
+  });
 });
 
-it('matches function result type', () => {
-  const props = {
-    value: undefined,
-    type: { functionness: true } as Type,
-  } as const;
-  expect(getResultTypeComponent(props)).toBe(FunctionResult);
+it('matches time units result type', async () => {
+  expect(getResultComponent(await runCode('[10 days]'))).toBe(TimeUnitsResult);
 });
 
-it('matches time units result type', () => {
-  const props = {
-    value: undefined,
-    type: { timeUnits: ['day'] } as Type,
-  } as const;
-  expect(getResultTypeComponent(props)).toBe(TimeUnitsResult);
-});
-
-it('matches range result type', () => {
-  const props = {
-    value: undefined,
-    type: { rangeOf: { type: 'number' } } as Type,
-  } as const;
-  expect(getResultTypeComponent(props)).toBe(RangeResult);
-});
-
-it('matches any other types with a default result type', () => {
+it('matches function result type', async () => {
   expect(
-    getResultTypeComponent({
-      value: undefined,
-      type: { type: 'boolean' } as Type,
-    })
-  ).toBe(DefaultResult);
-  expect(
-    getResultTypeComponent({
-      value: undefined,
-      type: { type: 'string' } as Type,
-    })
-  ).toBe(DefaultResult);
-  expect(
-    getResultTypeComponent({
-      value: undefined,
-      type: { type: 'made-up-type' } as Type,
-    })
-  ).toBe(DefaultResult);
+    getResultComponent(await runCode('function even (n) => n % 2 == 0'))
+  ).toBe(FunctionResult);
 });

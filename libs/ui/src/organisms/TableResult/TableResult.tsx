@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { css } from '@emotion/react';
-import { Type } from '@decipad/language';
+import { SerializedType } from '@decipad/language';
 import { CodeResult, Table } from '..';
-import { ResultTypeProps } from '../../lib/results';
+import { ResultProps } from '../../lib/results';
 import { TableCellType } from '../EditorTable/types';
 import { TableData, TableHeader } from '../../atoms';
 import { TableHeaderRow, TableRow } from '../../molecules';
@@ -13,19 +13,19 @@ const cellWrapperStyles = css({
   padding: `2px ${table.cellSidePadding}`,
 });
 
-export function toTableHeaderType(type: Type): TableCellType {
+export function toTableHeaderType(type: SerializedType): TableCellType {
   switch (true) {
-    case type.type === 'number':
+    case type.kind === 'number':
       return 'number';
-    case type.type === 'string':
+    case type.kind === 'string':
       return 'string';
-    case type.date === 'time':
+    case type.kind === 'date' && type.date === 'time':
       return 'date/time';
-    case type.date === 'day':
+    case type.kind === 'date' && type.date === 'day':
       return 'date/day';
-    case type.date === 'month':
+    case type.kind === 'date' && type.date === 'month':
       return 'date/month';
-    case type.date === 'year':
+    case type.kind === 'date' && type.date === 'year':
       return 'date/year';
     default:
       return 'string' as never;
@@ -35,16 +35,8 @@ export function toTableHeaderType(type: Type): TableCellType {
 export const TableResult = ({
   type,
   value,
-}: ResultTypeProps): ReturnType<FC> => {
+}: ResultProps<'table'>): ReturnType<FC> => {
   const { columnNames, columnTypes } = type;
-  if (!columnNames || !columnTypes) {
-    return null;
-  }
-
-  if (value == null || value.length === 0) {
-    return null;
-  }
-
   const tableLength = value[0].length;
 
   return (
@@ -64,7 +56,7 @@ export const TableResult = ({
       <tbody>
         {Array.from({ length: tableLength }, (_, rowIndex) => (
           <TableRow key={rowIndex} readOnly>
-            {value.map((column: unknown[], colIndex: number) => (
+            {value.map((column, colIndex) => (
               <TableData key={colIndex}>
                 <div css={cellWrapperStyles}>
                   <CodeResult

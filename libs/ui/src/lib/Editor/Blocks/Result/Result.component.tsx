@@ -2,7 +2,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { chakra } from '@chakra-ui/system';
 import { Box } from '@chakra-ui/react';
-import { InBlockResult, OptionalValueLocation } from '@decipad/language';
+import {
+  InBlockResult,
+  OptionalValueLocation,
+  serializeType,
+} from '@decipad/language';
 import { useResults } from '@decipad/ui';
 
 import { CodeResult } from '../../../../organisms';
@@ -94,7 +98,7 @@ export const Result = ({
   if (lineResult?.value != null) {
     const result = (
       <CodeResult
-        type={lineResult.valueType}
+        type={serializeType(lineResult.valueType)}
         value={lineResult.value}
         variant="block"
       />

@@ -1,16 +1,16 @@
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { InlineCodeError } from './InlineCodeError';
+import { CodeError } from './CodeError';
 
 it('renders error icon', () => {
-  const { getByTitle } = render(<InlineCodeError message="" url="" />);
+  const { getByTitle } = render(<CodeError message="" url="" />);
   expect(getByTitle(/info/i)).toBeInTheDocument();
 });
 
 it('renders message when hovering the icon', async () => {
   const { findByText, getByTitle, queryByText } = render(
-    <InlineCodeError message="Message" url="" />
+    <CodeError message="Message" url="" />
   );
 
   expect(await queryByText('Message')).toBeNull();
@@ -22,7 +22,7 @@ it('renders message when hovering the icon', async () => {
 
 it('renders documentation url when hovering the icon', async () => {
   const { findByText, getByTitle, queryByText } = render(
-    <InlineCodeError message="" url="http://decipad.com" />
+    <CodeError message="" url="http://decipad.com" />
   );
 
   expect(await queryByText(/doc/i)).toBeNull();

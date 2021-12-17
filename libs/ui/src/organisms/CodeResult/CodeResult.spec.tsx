@@ -1,11 +1,11 @@
 import { render } from '@testing-library/react';
-import { Type } from '@decipad/language';
+import { runCode } from '../../test-utils';
 
 import { CodeResult } from './CodeResult';
 
-it('renders value of the given type', () => {
+it('renders value of the given type', async () => {
   const { getByText } = render(
-    <CodeResult value={10} variant="inline" type={{ type: 'number' } as Type} />
+    <CodeResult {...await runCode('10')} variant="inline" />
   );
 
   expect(getByText('10')).toBeVisible();

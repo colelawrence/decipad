@@ -1,6 +1,8 @@
 import { FC } from 'react';
 import { css } from '@emotion/react';
-import { ResultTypeProps } from '../../lib/results';
+import { stringifyUnits } from '@decipad/language';
+import Fraction from '@decipad/fraction';
+import { ResultProps } from '../../lib/results';
 
 const commaStyles = css({
   userSelect: 'none',
@@ -48,12 +50,15 @@ const removeFpArtifacts = (decimalPart: string) => {
 export const NumberResult = ({
   type,
   value,
-}: ResultTypeProps): ReturnType<FC> => {
-  const asString = String(value);
+}: ResultProps<'number'>): ReturnType<FC> => {
+  const fraction = new Fraction(value);
+  const asString = fraction.toString();
 
   // Numbers' toString isn't always formatted like [-]####.###
   const basicNumberMatch = asString.match(/^(-?)(\d+)(\.\d+)?$/);
-  const unitPart = type.unit ? ` ${type.toString(value)}` : '';
+  const unitPart = type.unit
+    ? ` ${stringifyUnits(type.unit, fraction.valueOf())}`
+    : '';
   if (basicNumberMatch != null) {
     const [, sign, integerPart, decimalPart] = basicNumberMatch;
 

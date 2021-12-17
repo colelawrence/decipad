@@ -1,19 +1,14 @@
+import { ComponentProps } from 'react';
 import { Meta, Story } from '@storybook/react';
-import { Type } from '@decipad/language';
-
+import { withCode } from '../../storybook-utils';
 import { RangeResult } from './RangeResult';
-
-const type = { rangeOf: { type: 'number' } } as Type;
-const args = {
-  value: [1, 10],
-};
 
 export default {
   title: 'Organisms / Editor / Result / Range',
   component: RangeResult,
-  args,
+  decorators: [withCode('[1 .. 10]')],
 } as Meta;
 
-export const Normal: Story<typeof args> = (props) => (
-  <RangeResult {...props} type={type} />
+export const Normal: Story<ComponentProps<typeof RangeResult>> = (props) => (
+  <RangeResult {...props} />
 );

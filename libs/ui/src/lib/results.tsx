@@ -1,5 +1,6 @@
-import { InBlockResult } from '@decipad/language';
+import { Result, SerializedType, SerializedTypeKind } from '@decipad/language';
 import { DateResult, NumberResult, TimeUnitsResult } from '../atoms';
+import { InlineCodeError } from '../molecules';
 import {
   ColumnResult,
   InlineColumnResult,
@@ -7,84 +8,89 @@ import {
   TableResult,
 } from '../organisms';
 
-type Variant = 'block' | 'inline';
+export type Variant = 'block' | 'inline';
 
-export interface ResultTypeProps {
-  readonly parentType?: InBlockResult['valueType'];
-  readonly type: InBlockResult['valueType'];
-  readonly value: InBlockResult['value'];
+export interface ResultProps<T extends SerializedTypeKind> extends Result<T> {
+  readonly parentType?: SerializedType;
   readonly variant?: Variant;
 }
 
-type ResultTypeComponent = (props: ResultTypeProps) => ReturnType<React.FC>;
+export type ResultComponent<T extends SerializedTypeKind> = (
+  props: ResultProps<T>
+) => ReturnType<React.FC>;
+interface ResultMatcher {
+  component: Partial<ResultComponent<SerializedTypeKind>>;
+  match: <T extends SerializedTypeKind>(props: ResultProps<T>) => boolean;
+}
 
-interface ResultTypeMatcher {
-  component: ResultTypeComponent;
-  match: (props: ResultTypeProps) => boolean;
+export interface Statement {
+  displayInline: boolean;
+  endLine: number;
+  startLine: number;
+  result: Result;
 }
 
 export const DefaultResult = ({
   value,
-}: ResultTypeProps): ReturnType<React.FC> => <span>{String(value ?? '')}</span>;
+}: ResultProps<SerializedTypeKind>): ReturnType<React.FC> => (
+  <span>{String(value ?? '')}</span>
+);
 export const FunctionResult = () => <span>ƒ</span>;
 export const InlineTableResult = () => <span>Table</span>;
 
-export function getResultTypeComponent(
-  props: ResultTypeProps
-): ResultTypeComponent {
+export function getResultComponent<T extends SerializedTypeKind>(
+  props: ResultProps<T>
+): ResultComponent<T> {
   // Result types are declared here to avoid dependency cycles of result components also importing
   // this file.
-  const resultTypes: ResultTypeMatcher[] = [
+  const resultTypes: ResultMatcher[] = [
     {
       component: NumberResult,
-      match: ({ type }) => type.type === 'number',
+      match: ({ type }) => type.kind === 'number',
     },
     {
       component: DateResult,
-      match: ({ type }) => !!type.date,
+      match: ({ type }) => type.kind === 'date',
     },
     {
       component: TableResult,
       match: ({ type, variant }) =>
-        type.columnTypes != null && variant === 'block',
+        type.kind === 'table' && variant === 'block',
     },
     {
       component: InlineTableResult,
       match: ({ type, variant }) =>
-        type.columnTypes != null && variant === 'inline',
+        type.kind === 'table' && variant === 'inline',
     },
     {
       component: ColumnResult,
-      match: ({ type, value, variant }) =>
-        type.columnSize != null && Array.isArray(value) && variant === 'block',
+      match: ({ type, variant }) =>
+        type.kind === 'column' && variant === 'block',
     },
     {
       component: InlineColumnResult,
-      match: ({ type, value, variant }) =>
-        type.columnSize != null && Array.isArray(value) && variant === 'inline',
+      match: ({ type, variant }) =>
+        type.kind === 'column' && variant === 'inline',
     },
     {
       component: FunctionResult,
-      match: ({ type }) => type.functionness,
+      match: ({ type }) => type.kind === 'function',
     },
     {
       component: TimeUnitsResult,
-      match: ({ type }) => !!type.timeUnits,
+      match: ({ type }) => type.kind === 'time-quantity',
     },
     {
       component: RangeResult,
-      match: ({ type }) => !!type.rangeOf,
+      match: ({ type }) => type.kind === 'range',
     },
     {
-      component: DefaultResult,
-      match: () => true,
+      component: InlineCodeError,
+      match: ({ type, variant }) =>
+        type.kind === 'type-error' && variant === 'inline',
     },
   ];
 
-  // The last element in `resultTypes` is always a match.
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  return resultTypes.find(({ match }) => {
-    const trueish = match(props);
-    return trueish;
-  })!.component;
+  return (resultTypes.find(({ match }) => match(props))?.component ??
+    DefaultResult) as ResultComponent<T>;
 }

@@ -260,4 +260,12 @@ export class Computer {
 
     return block?.args[statementIndex] ?? null;
   }
+
+  isLiteralValueOrAssignment(stmt: AST.Statement | null): boolean {
+    return (
+      stmt != null &&
+      (stmt.type === 'literal' ||
+        (stmt.type === 'assign' && stmt.args[1].type === 'literal'))
+    );
+  }
 }

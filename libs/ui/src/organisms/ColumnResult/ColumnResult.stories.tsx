@@ -1,22 +1,14 @@
+import { ComponentProps } from 'react';
 import { Meta, Story } from '@storybook/react';
-import { Type } from '@decipad/language';
+import { withCode } from '../../storybook-utils';
 import { ColumnResult } from './ColumnResult';
-
-const type = { cellType: { type: 'number' } } as Type;
-const args = {
-  value: [1, 2, 3],
-};
 
 export default {
   title: 'Organisms / Editor / Result / Column',
   component: ColumnResult,
-  args,
+  decorators: [withCode('[1, 2, 3]')],
 } as Meta;
 
-export const Normal: Story<typeof args> = (props) => {
-  return <ColumnResult {...props} type={type} />;
-};
-
-export const Inline: Story<typeof args> = (props) => {
-  return <ColumnResult {...props} type={type} variant="inline" />;
+export const Normal: Story<ComponentProps<typeof ColumnResult>> = (props) => {
+  return <ColumnResult {...props} />;
 };

@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { runCode } from '@decipad/language';
+import { runCode } from '../../test-utils';
 
 import { TableResult } from './TableResult';
 
