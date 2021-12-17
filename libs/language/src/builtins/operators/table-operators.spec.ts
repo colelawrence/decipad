@@ -171,4 +171,42 @@ describe('table operators', () => {
       ]
     `);
   });
+
+  it('filters a table by a column', () => {
+    const table = t.table({
+      length: 3,
+      columnNames: ['indexcolumn', 'booooleans'],
+      columnTypes: [t.number(U('bananas')), t.boolean()],
+    });
+    const column = t.column(t.boolean(), 3, undefined, 1);
+    expect(operators.filter.functorNoAutomap!([table, column])).toMatchObject(
+      t.table({
+        length: 'unknown',
+        columnNames: ['indexcolumn', 'booooleans'],
+        columnTypes: [t.number(U('bananas')), t.boolean()],
+      })
+    );
+
+    const tableValue = Column.fromValues([
+      fromJS([1, 2, 3, 4, 5, 6]),
+      fromJS([false, true, true, false, false, true]),
+    ]);
+    const columnValue = tableValue.atIndex(1);
+    expect(
+      operators.filter.fnValuesNoAutomap?.([tableValue, columnValue]).getData()
+    ).toMatchInlineSnapshot(`
+      Array [
+        Array [
+          Fraction(2),
+          Fraction(3),
+          Fraction(6),
+        ],
+        Array [
+          true,
+          true,
+          true,
+        ],
+      ]
+    `);
+  });
 });

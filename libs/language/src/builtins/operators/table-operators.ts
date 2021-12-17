@@ -96,4 +96,22 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
       return table.applyMapToEach(sortMap);
     },
   },
+
+  filter: {
+    argCount: 2,
+    functorNoAutomap: ([table, column]) =>
+      Type.combine(
+        column.isColumn().reduced().isScalar('boolean'),
+        table.isTable(),
+        (table) =>
+          produce(table, (table) => {
+            table.tableLength = 'unknown';
+          })
+      ),
+    fnValuesNoAutomap: ([_table, _column]) => {
+      const column = getInstanceof(_column, Column);
+      const table = getInstanceof(_table, Column);
+      return table.applyFilterMapToEach(column.getData() as boolean[]);
+    },
+  },
 };

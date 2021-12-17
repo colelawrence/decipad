@@ -292,6 +292,10 @@ export class Column implements Value {
     return Column.fromNamedValues(newValues, names ? newNames : null);
   }
 
+  filterMap(fn: (value: Value, index?: number) => boolean): boolean[] {
+    return this.values.map(fn);
+  }
+
   sortMap(): number[] {
     const unsortedIndexes = Array.from({ length: this.rowCount }, (_, i) => i);
     return unsortedIndexes.sort((aIndex, bIndex) => {
@@ -353,6 +357,19 @@ export class Column implements Value {
     );
   }
 
+  applyFilterMap(map: boolean[]): Column {
+    return FilteredColumn.fromColumnAndMap(this, map);
+  }
+
+  applyFilterMapToEach(map: boolean[]): Column {
+    return Column.fromNamedValues(
+      this.values.map((value) =>
+        value instanceof Column ? value.applyFilterMap(map) : value
+      ),
+      this.valueNames
+    );
+  }
+
   contiguousSlices(): SlicesMap {
     const slices: SlicesMap = [];
     let lastValue: undefined | Value;
@@ -409,6 +426,33 @@ export class MappedColumn extends Column {
 
   static fromColumnAndMap(column: Column, map: number[]): MappedColumn {
     const newColumn = new MappedColumn(column.values, map);
+    newColumn.valueNames = column.valueNames;
+    return newColumn;
+  }
+}
+
+export class FilteredColumn extends Column {
+  private map: boolean[];
+
+  constructor(values: Column['values'], map: boolean[]) {
+    super(values);
+    this.map = map;
+  }
+
+  get values(): Value[] {
+    const { map } = this;
+    let cursor = -1;
+    return Array.from({ length: this.map.filter(Boolean).length }, () => {
+      cursor += 1;
+      while (!map[cursor]) {
+        cursor += 1;
+      }
+      return this._values[cursor];
+    });
+  }
+
+  static fromColumnAndMap(column: Column, map: boolean[]): FilteredColumn {
+    const newColumn = new FilteredColumn(column.values, map);
     newColumn.valueNames = column.valueNames;
     return newColumn;
   }

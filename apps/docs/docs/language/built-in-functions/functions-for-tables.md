@@ -62,3 +62,20 @@ reverse(flights)
   flight_number = [ 'TP210', 'EZJ432', 'BA765', 'TP098', 'BA789', 'TP456', 'EZJ123' ]
 }
 ```
+
+## filter
+
+You can select the elements from a table based on a condition:
+
+```deci live
+flights = {
+  flight_number = ["EZJ123", "TP456", "BA789", "TP098", "BA765", "EZJ432", "TP210"]
+  passenger_count = [100, 200, 150, 125, 210, 240, 80]
+}
+
+filter(flights, flights.passenger_count <= 140)
+==> {
+  flight_number = [ 'EZJ123', 'TP098', 'TP210' ],
+  passenger_count = [ 100, 125, 80 ]
+}
+```
