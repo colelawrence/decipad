@@ -2,7 +2,7 @@ import { getDefined } from '@decipad/utils';
 import produce from 'immer';
 import { dequal } from 'dequal';
 import { getInstanceof, zip } from '../../utils';
-import { Column, StringValue } from '../../interpreter/Value';
+import { Column } from '../../interpreter/Value';
 import { RuntimeError } from '../../interpreter/RuntimeError';
 import { BuiltinSpec } from '../interfaces';
 import { Type, build as t } from '../../type';
@@ -10,28 +10,35 @@ import { Type, build as t } from '../../type';
 export const tableOperators: { [fname: string]: BuiltinSpec } = {
   lookup: {
     argCount: 2,
-    functor: ([table, index]) =>
+    functorNoAutomap: ([table, cond]) =>
       Type.combine(
-        table.isTable(),
-        (t) => getDefined(getDefined(t).columnTypes?.[0]?.isScalar('string')),
-        index.isScalar('string'),
+        table.isTable().withMinimumColumnCount(1),
+        Type.either(
+          cond.isColumn().reduced().isScalar('boolean'),
+          getDefined(table.columnTypes?.[0]?.sameAs(cond))
+        ),
         () =>
           t.row(
             getDefined(table.columnTypes, `no column types in ${table}`),
             getDefined(table.columnNames, `no column names in ${table}`)
           )
       ),
-    fnValues: (_table, needle) => {
+    fnValuesNoAutomap: ([_table, needle]) => {
       const table = getInstanceof(_table, Column);
-      const needleString = getInstanceof(needle, StringValue).getData();
-      const firstColumn = getInstanceof(table.values[0], Column);
+      let rowIndex: number;
+      if (needle instanceof Column) {
+        rowIndex = needle.getData().findIndex(Boolean);
+      } else {
+        const needleVal = needle.getData();
+        const firstColumn = getInstanceof(table.values[0], Column);
 
-      const rowIndex = firstColumn.values.findIndex(
-        (value) => value.getData() === needleString
-      );
+        rowIndex = firstColumn.values.findIndex(
+          (value) => value.getData() === needleVal
+        );
+      }
 
       if (rowIndex === -1) {
-        throw new RuntimeError(`Could not find row by index "${needleString}"`);
+        throw new RuntimeError(`Could not find a row with the given condition`);
       }
 
       return Column.fromNamedValues(

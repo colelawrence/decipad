@@ -96,6 +96,12 @@ export class Type {
     return lastNonErrorType;
   }
 
+  /** Return the first non-error type */
+  static either(...types: Type[]): Type {
+    const notErrored = types.find((t) => !t.errorCause);
+    return notErrored ?? types[0];
+  }
+
   toString(value?: number): string {
     if (this.errorCause != null) {
       return `Error: ${this.errorCause.message}`;
