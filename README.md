@@ -60,6 +60,12 @@ $ aws configure
 
 If asked for a _AWS region_, use `eu-west-2`.
 
+## Newer MacOS port setup
+
+In newer MacOS versions (starting from Monterey) Apple runs it’s Airplay Receiver on Port 5000. This directly conflicts with architect running on Port 5000.
+
+To solve this simply run or add `export ARC_TABLES_PORT=6000`to your .bashrc, .zshrc or equivalent script.
+
 ## Environment setup
 
 There are `.env.example` files in the root and in individual projects like the `backend`. These need to be copied to `.env` (without `.example`) and filled with secret values, such as your personal AWS access token, or other secrets that are shared among developers but not included in the repository for security reasons.
