@@ -1,5 +1,5 @@
 import moo, { error, Token } from 'moo';
-import { BracketCounter, doSeparateStatement } from './statementSeparation';
+import { BracketCounter, doSeparateStatement } from './containmentCounting';
 
 const keywordStrings = [
   'if',

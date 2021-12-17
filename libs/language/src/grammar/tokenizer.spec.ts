@@ -4,7 +4,7 @@ const testTokenizer = (input: string) =>
   Array.from(parensCountingTokenizer.reset(input))
     .map((t) => {
       if (t.type === 'statementSep') return '/stmt/';
-      return `${t.type}(${t.text})`;
+      return `${t.type}(${t.text.replace(/\n/g, '<newline>')})`;
     })
     .join(' ');
 
@@ -64,11 +64,9 @@ describe('extended tokenizer', () => {
     expect(testTokenizer('1\n+\n1')).toMatchInlineSnapshot(
       `"number(1) /stmt/ plus(+) /stmt/ number(1)"`
     );
-    expect(testTokenizer('(1\n+\n1)')).toMatchInlineSnapshot(`
-          "leftParen(() number(1) ws(
-          ) plus(+) ws(
-          ) number(1) rightParen())"
-      `);
+    expect(testTokenizer('(1\n+\n1)')).toMatchInlineSnapshot(
+      `"leftParen(() number(1) ws(<newline>) plus(+) ws(<newline>) number(1) rightParen())"`
+    );
     expect(testTokenizer(`X=date(2020-01-01)\nY=10`)).toMatchInlineSnapshot(
       `"identifier(X) equalSign(=) beginDate(date() digits(2020) punc(-) digits(01) punc(-) digits(01) endDate()) /stmt/ identifier(Y) equalSign(=) number(10)"`
     );
@@ -99,16 +97,27 @@ describe('extended tokenizer', () => {
   });
 
   it('does not separate statement before an else keyword, or after a function arrow', () => {
-    expect(testTokenizer('if this\nthen that\nelse that'))
-      .toMatchInlineSnapshot(`
-      "if keyword(if) ws( ) identifier(this) ws(
-      ) then keyword(then) ws( ) identifier(that) ws(
-      ) else keyword(else) ws( ) identifier(that)"
-    `);
+    expect(
+      testTokenizer('if this\nthen that\nelse that')
+    ).toMatchInlineSnapshot(
+      `"if keyword(if) ws( ) identifier(this) ws(<newline>) then keyword(then) ws( ) identifier(that) ws(<newline>) else keyword(else) ws( ) identifier(that)"`
+    );
 
-    expect(testTokenizer('=>\n1')).toMatchInlineSnapshot(`
-      "arrow(=>) ws(
-      ) number(1)"
-    `);
+    expect(testTokenizer('=>\n1')).toMatchInlineSnapshot(
+      `"arrow(=>) ws(<newline>) number(1)"`
+    );
+  });
+
+  it('can tell an if statement is still "opened"', () => {
+    expect(testTokenizer('if\n1')).toMatchInlineSnapshot(
+      `"if keyword(if) ws(<newline>) number(1)"`
+    );
+    expect(testTokenizer('if 1 then 2\n')).toMatchInlineSnapshot(
+      `"if keyword(if) ws( ) number(1) ws( ) then keyword(then) ws( ) number(2) ws(<newline>)"`
+    );
+    // But after an "else" all bets are off
+    expect(testTokenizer('if 1 then 2 else\n')).toMatchInlineSnapshot(
+      `"if keyword(if) ws( ) number(1) ws( ) then keyword(then) ws( ) number(2) ws( ) else keyword(else) /stmt/"`
+    );
   });
 });

@@ -1,33 +1,42 @@
 import moo from 'moo';
 
-const parenTypes = ['Paren', 'SquareBracket', 'CurlyBracket'];
-const openers = parenTypes.map((type) => `left${type}`);
-const closers = parenTypes.map((type) => `right${type}`);
+const parenTypes = ['Paren', 'SquareBracket', 'CurlyBracket', 'PartialIf'];
+
+type ParenType = typeof parenTypes[number];
+
+const openersToTypes: Record<string, ParenType> = {
+  leftParen: 'Paren',
+  leftSquareBracket: 'SquareBracket',
+  leftCurlyBracket: 'CurlyBracket',
+  'if keyword': 'PartialIf',
+};
+
+const closersToTypes: Record<string, ParenType> = {
+  rightParen: 'Paren',
+  rightSquareBracket: 'SquareBracket',
+  rightCurlyBracket: 'CurlyBracket',
+  'else keyword': 'PartialIf',
+};
 
 /**
  * Keeps track of open ([{}])
  * Helps implement https://xkcd.com/859/
  */
 export class BracketCounter {
-  counts: Record<string, number> = {
+  counts: Record<ParenType, number> = {
     Paren: 0,
     SquareBracket: 0,
     CurlyBracket: 0,
+    PartialIf: 0,
   };
   feed(tok?: moo.Token) {
-    if (tok?.text.length !== 1) return;
+    if (!tok?.type) return;
 
-    const opener = openers.indexOf(tok.type ?? '');
-    const closer = closers.indexOf(tok.type ?? '');
+    const opener = openersToTypes[tok.type];
+    const closer = closersToTypes[tok.type];
 
-    const isOpen = opener >= 0;
-    const isClose = closer >= 0;
-
-    if (!isOpen && !isClose) return;
-
-    const parenType = parenTypes[isOpen ? opener : closer];
-
-    this.counts[parenType] += isOpen ? 1 : -1;
+    if (opener) this.counts[opener] += 1;
+    if (closer) this.counts[closer] -= 1;
   }
   noBrackets() {
     return Object.values(this.counts).every((count) => count === 0);
