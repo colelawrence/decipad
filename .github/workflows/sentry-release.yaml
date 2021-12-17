@@ -24,7 +24,7 @@ jobs:
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
         with:
-          environment: development
+          environment: staging
           sourcemaps: './apps/clients/src, ./libs/config/src, ./libs/editor/src, ./libs/graphqlserver/src, ./libs/services/src'
 
   notify:
