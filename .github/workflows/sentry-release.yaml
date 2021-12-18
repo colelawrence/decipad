@@ -1,23 +1,22 @@
 name: Sentry Release
 
 on:
-  workflow_run:
-    workflows: ['Deploy']
+  push:
     branches: [main]
-    types:
-      - completed
 
 jobs:
   index:
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     concurrency:
       group: sentry-release-${{ github.head_ref }}
       cancel-in-progress: true
 
     steps:
+      - name: Create Source Maps
+        run: scripts/build-source-maps.sh
+
       - uses: actions/checkout@v2
-      - name: Create Sentry release
+      - name: Create Sentry Release
         uses: getsentry/action-release@v1
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
@@ -25,7 +24,7 @@ jobs:
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
         with:
           environment: staging
-          sourcemaps: 'dist/**/*.map'
+          sourcemaps: 'dist/sourcemaps/'
 
   notify:
     name: Discord Notification
@@ -37,5 +36,9 @@ jobs:
       - name: Notify
         uses: nobrayner/discord-webhook@v1
         with:
+          title: 'Sourcemaps'
+          description: 'Sourcemaps uploaded to sentry'
+          avatar-url: 'https://singlecolorimage.com/get/d2ec7b/100x100'
+          include-details: false
           github-token: ${{ secrets.github_token }}
           discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
