@@ -12,11 +12,30 @@ jobs:
       cancel-in-progress: true
 
     steps:
+      - uses: actions/checkout@v2
+      - name: Get the Decipad Repo
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Set NPM Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.npm
+            ~/.cache
+          key: npm-and-cypress-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            npm-and-cypress-
+
+      - name: Install Dependencies
+        run: yarn install
+
       - name: Create Source Maps
         run: scripts/build-source-maps.sh
 
       - uses: actions/checkout@v2
-      - name: Create Sentry Release
+      - name: Upload Sourcemaps to Sentry
         uses: getsentry/action-release@v1
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
