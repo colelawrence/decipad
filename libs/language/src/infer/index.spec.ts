@@ -476,7 +476,7 @@ describe('Property access', () => {
       (await inferExpression(scopeWithTable, prop('Table', 'A'))).errorCause
         ?.spec
     ).toMatchInlineSnapshot(
-      `ErrSpec:free-form("message" => "The property A does not exist in Table")`
+      `ErrSpec:free-form("message" => "A column named A does not exist in Table")`
     );
 
     expect(

@@ -133,7 +133,7 @@ export const inferExpression = wrap(
           if (index < 0) {
             return [
               t.impossible(
-                `The property ${propName} does not exist in ${tableName}`
+                `A column named ${propName} does not exist in ${tableName}`
               ),
               index,
             ];
