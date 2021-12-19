@@ -16,7 +16,7 @@ export const InlineColumnResult = ({
   const columnValue = value as Interpreter.ResultColumn;
   return (
     <span>
-      {columnValue.map((row, rowIndex) => {
+      {columnValue?.map((row, rowIndex) => {
         return (
           <Fragment key={rowIndex}>
             <CodeResult value={row} variant="inline" type={cellType} />

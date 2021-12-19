@@ -90,4 +90,83 @@ describe('pad content', () => {
       { type: 'p', text: 'this is the content for the third paragraph' },
     ]);
   });
+
+  it('can create a table', async () => {
+    await keyPress('ArrowDown');
+    await keyPress('ArrowDown'); // Move cursor back to end of text
+    await keyPress('Enter'); // And make a new line
+    await page.keyboard.type('/calc');
+    await keyPress('Tab');
+    await keyPress('Enter');
+    // don't need ]} because of auto-complete
+    // this test will break when we remove that auto-complete
+    await page.keyboard.type('A = { B = [1,2,3');
+    await keyPress('ArrowDown');
+
+    expect(await getPadContent()).toMatchObject([
+      { type: 'h1', text: '' },
+      { type: 'p', text: 'this is the content for the first paragraph' },
+      { type: 'p', text: 'this is the content for the' },
+      { type: 'p', text: 'second para-graph' },
+      { type: 'p', text: 'this is the content for the third paragraph' },
+      // code block
+      // and inline visualisation
+      { type: 'pre', text: 'A = { B = [1,2,3]}\nTable' },
+      // result below
+      { type: 'div', text: 'A = { B = [1,2,3]}' },
+      // new paragraph
+      { type: 'p', text: '' },
+    ]);
+  });
+
+  it('Get `A.B` from the table', async () => {
+    await page.keyboard.type('/calc');
+    await keyPress('Tab');
+    await keyPress('Enter');
+    await page.keyboard.type('A.B');
+    await keyPress('ArrowDown');
+
+    expect(await getPadContent()).toMatchObject([
+      { type: 'h1', text: '' },
+      { type: 'p', text: 'this is the content for the first paragraph' },
+      { type: 'p', text: 'this is the content for the' },
+      { type: 'p', text: 'second para-graph' },
+      { type: 'p', text: 'this is the content for the third paragraph' },
+      // code block
+      // and inline visualisation
+      { type: 'pre', text: 'A = { B = [1,2,3]}\nTable' },
+      // result below
+      { type: 'div', text: 'A = { B = [1,2,3]}' },
+      // new paragraph
+      { type: 'pre', text: 'A.B\n1, 2, 3' },
+      { type: 'div', text: 'A.B' },
+      { type: 'p', text: '' },
+    ]);
+  });
+
+  it('Get an error from getting column that doesnt exist `A.C`', async () => {
+    await keyPress('ArrowDown');
+    await page.keyboard.type('/calc');
+    await keyPress('Tab');
+    await keyPress('Enter');
+    await page.keyboard.type('A.C');
+    await keyPress('ArrowDown');
+    // errors from language are async
+    await page.waitForTimeout(500);
+
+    expect(await getPadContent()).toMatchObject([
+      { type: 'h1', text: '' },
+      { type: 'p', text: 'this is the content for the first paragraph' },
+      { type: 'p', text: 'this is the content for the' },
+      { type: 'p', text: 'second para-graph' },
+      { type: 'p', text: 'this is the content for the third paragraph' },
+      { type: 'pre', text: 'A = { B = [1,2,3]}\nTable' },
+      { type: 'div', text: 'A = { B = [1,2,3]}' },
+      { type: 'pre', text: 'A.B\n1, 2, 3' },
+      { type: 'div', text: 'A.B' },
+      { type: 'pre', text: 'A.C' },
+      { type: 'div', text: 'A.C' },
+      { type: 'p', text: '' },
+    ]);
+  });
 });
