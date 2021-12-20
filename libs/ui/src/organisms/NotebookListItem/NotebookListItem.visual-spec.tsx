@@ -9,7 +9,7 @@ const props: ComponentProps<typeof NotebookListItem> = {
   href: '/my-notebook',
 };
 
-describe('without a desciprtion', () => {
+describe('without a description', () => {
   test('the title occupies the combined space', async () => {
     const { getByText, rerender } = render(
       <NotebookListItem
@@ -34,7 +34,7 @@ describe('without a desciprtion', () => {
       select(getByText('My Notebook'))
     ))!.boundingBox())!;
 
-    expect(combinedY).toBeGreaterThanOrEqual(titleY);
+    expect(combinedY).toBeGreaterThan(titleY);
     expect(combinedY).toBeLessThan(descriptionY);
   });
 });

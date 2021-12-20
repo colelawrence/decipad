@@ -45,7 +45,6 @@ type ButtonProps = {
   readonly extraSlim?: boolean;
   readonly children: TextChildren;
   readonly disabled?: boolean;
-  readonly role?: string;
 } & (
   | {
       readonly href: string;
@@ -60,7 +59,6 @@ type ButtonProps = {
 );
 
 export const Button = ({
-  role = '',
   primary = false,
   extraSlim = false,
   submit = primary,
@@ -73,7 +71,6 @@ export const Button = ({
   return href ? (
     <Anchor
       href={disabled ? '' : href}
-      role={role}
       css={css([
         styles,
         primary && primaryStyles,
@@ -84,7 +81,6 @@ export const Button = ({
     </Anchor>
   ) : (
     <button
-      className={role}
       disabled={disabled}
       type={submit ? 'submit' : 'button'}
       css={[styles, primary && primaryStyles, extraSlim && extraSlimStyles]}
