@@ -8,7 +8,7 @@ import handle from '../handle';
 import { validate } from './validate';
 
 async function replyToCommand(command: any) {
-  const interactionId = command.data.id;
+  const interactionId = command.id;
   const interactionToken = command.token;
   const url = `https://discord.com/api/v8/interactions/${interactionId}/${interactionToken}/callback`;
   const reply = {
