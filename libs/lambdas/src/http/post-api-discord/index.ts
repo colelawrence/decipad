@@ -22,7 +22,10 @@ async function handleRequest(
       return {
         type: InteractionResponseType.ChannelMessageWithSource,
         data: {
+          tts: false,
           content: 'hey',
+          embeds: [],
+          allowed_mentions: { parse: [] },
         },
       };
     }
