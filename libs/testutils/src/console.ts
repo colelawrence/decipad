@@ -3,7 +3,7 @@ export const mockConsoleWarn = () => {
   const mockConsoleWarn: jest.MockedFunction<typeof console.warn> = jest.fn();
 
   beforeEach(() => {
-    console.warn = jest.fn();
+    console.warn = mockConsoleWarn;
     mockConsoleWarn.mockClear();
   });
   afterEach(() => {
@@ -17,7 +17,7 @@ export const mockConsoleError = () => {
   const mockConsoleError: jest.MockedFunction<typeof console.error> = jest.fn();
 
   beforeEach(() => {
-    console.error = jest.fn();
+    console.error = mockConsoleError;
     mockConsoleError.mockClear();
   });
   afterEach(() => {
