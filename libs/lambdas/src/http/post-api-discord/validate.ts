@@ -67,5 +67,7 @@ export function validate(event: APIGatewayProxyEvent): APIApplicationCommand {
     throw Boom.badRequest('Need request body');
   }
 
+  console.log(request);
+
   return request;
 }
