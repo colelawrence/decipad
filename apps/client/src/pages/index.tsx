@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { ApolloProvider } from '@apollo/client';
 import { ChakraProvider } from '@chakra-ui/react';
 import { GlobalStyles, theme } from '@decipad/ui';
@@ -39,6 +40,15 @@ if (history && usingSentry) {
   });
 }
 
+if (inBrowser && process.env.NEXT_HOTJAR_SITE_ID) {
+  // HOTJAR POLLUTION
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (window as any)._hjSettings = {
+    hjid: process.env.NEXT_HOTJAR_SITE_ID,
+    hjsv: 6,
+  };
+}
+
 export default withProfiler(Index);
 
 function Index({ pageProps = {} }) {
@@ -64,6 +74,12 @@ function Index({ pageProps = {} }) {
           href="/assets/decipad-logo-mark-one-color-rgb-864px@72ppi.png"
           rel="apple-touch-icon"
         />
+        {process.env.NEXT_HOTJAR_SITE_ID && (
+          <script
+            async
+            src={`https://static.hotjar.com/c/hotjar-${process.env.NEXT_HOTJAR_SITE_ID}.js?sv=6`}
+          />
+        )}
       </Head>
       <ToastProvider autoDismiss placement="bottom-right">
         <AuthProvider session={session ?? undefined}>

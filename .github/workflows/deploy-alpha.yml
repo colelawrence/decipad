@@ -54,6 +54,7 @@ jobs:
           DECI_CUSTOM_DOMAIN: 'alpha.decipad.com'
           DECI_ZONE_ID: '${{secrets.DECI_ZONE_ID}}'
           DECI_CERTIFICATE_ARN: '${{secrets.DECI_ALPHA_CERTIFICATE_ARN}}'
+
         run: |
           export SAM_LOCATION="s3://decipad-backend-sam/alpha.decipad.com"
           scripts/pull-sam.sh
@@ -87,6 +88,7 @@ jobs:
 
           export NEXT_PUBLIC_SENTRY_DSN=${{secrets.SENTRY_DSN}}
           export NEXT_PUBLIC_SENTRY_ENVIRONMENT=alpha
+          export NEXT_HOTJAR_SITE_ID=${{secrets.ALPHA_HOTJAR_SITE_ID}}
           yarn deploy:alpha
           scripts/push-sam.sh
 
