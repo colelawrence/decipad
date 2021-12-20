@@ -18,7 +18,7 @@ const {
 if (sentryDSN) {
   SentryAWSLambda.init({
     dsn: sentryDSN,
-    tracesSampleRate: 1.0,
+    tracesSampleRate: 0.01,
     environment: process.env.NODE_ENV,
     release: meta().version,
   });
