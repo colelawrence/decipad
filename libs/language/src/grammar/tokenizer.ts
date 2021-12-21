@@ -90,8 +90,6 @@ export const tokenRules = {
   },
 } as const;
 
-export const STATEMENT_SEP_TOKEN_TYPE = 'statementSep';
-
 export const tokenizer = moo.states(tokenRules);
 
 export interface ParensCountingTokenizer extends moo.Lexer {
@@ -138,7 +136,7 @@ export const parensCountingTokenizer = (() => {
           openCounter = new BracketCounter();
 
           prev = Object.assign(Object.create(tok), {
-            type: STATEMENT_SEP_TOKEN_TYPE,
+            type: 'statementSep',
           });
         } else {
           prev = tok;

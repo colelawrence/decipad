@@ -3,12 +3,7 @@ import { Value } from './interpreter/Value';
 import { Type, build as t, serializeType, SerializedType } from './type';
 import { builtinsForAutocomplete } from './builtins';
 
-export {
-  tokenize,
-  tokenRules,
-  parensCountingTokenizer,
-  STATEMENT_SEP_TOKEN_TYPE,
-} from './grammar';
+export { tokenize, tokenRules } from './grammar';
 export * from './grammar/containmentCounting';
 export { parse, AST, Parser } from './parser';
 export { inferBlock, makeContext } from './infer';
