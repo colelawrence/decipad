@@ -25,17 +25,20 @@ If what you are looking for is to play with numbers, then you'll have fun with t
 
 ### 👉🏽 Step 3 - Name your data
 
-In a calculation block, you can assign a name to your data by using the `=` operator - we call it creating [variables](docs/docs/language/name-assignment.md#declaring-variables). This is a useful way to quickly reuse data throughout your notebook as you build your model. For now, variables can't use spaces, symbols or emoji, and are also case sensitive. We recommend using underscore or dash when you name_something_in_Decipad.
+In a calculation block, you can assign a name to your data by using the `=` operator - we call it creating [variables](docs/docs/language/name-assignment.md#declaring-variables). This is a useful way to quickly reuse data throughout your notebook as you build your model. For now, variables can't use spaces, symbols or emoji, and are also case sensitive.
 
 ```deci live
-Total_Guests = 300
+name_something_in_Decipad = 300
 ==> 300
 ```
 
 ### 👉🏽 Step 4 - <3 Tables, tables, tables
 
 Type `/table` and easily add a table to your notebook. Data in a table can be text, numbers or dates. Same as with variables, you can name your table and use it as an input in an operation. Operations are not yet possible on tables, but we're working on it 💪
-If you prefer, you can always build your own table using the [Deci language](docs/docs/language/start.md#deci-language-intro).
+
+![tables](https://user-images.githubusercontent.com/76447845/146926068-463a1bc4-e70d-443d-a05b-6f49dcecf310.gif)
+
+If you prefer, you can always build your table using the [Deci language](docs/docs/language/start.md#deci-language-intro).
 
 ```deci live
 Simple_table = {
