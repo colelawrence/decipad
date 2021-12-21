@@ -8,12 +8,12 @@ Functions allow you to create your own dialects inside Deci.
 
 They can be defined as follows:
 
-`function name (first argument, ..., last argument) => expression`
+`name (first argument, ..., last argument) = expression`
 
 To illustrate, we will create a function to determine if a given number is even.
 
 ```deci live
-function even (n) => n % 2 == 0
+even (n) = n % 2 == 0
 even(10)
 ==> true
 ```

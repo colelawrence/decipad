@@ -1622,13 +1622,11 @@ let ParserRules = [
   {
     name: 'functionDef',
     symbols: [
-      { literal: 'function' },
-      '__',
       'functionDefName',
       '_',
       'functionDefArgs',
       '_',
-      { literal: '=>' },
+      { literal: '=' },
       '_',
       'functionBody',
     ],
@@ -1636,7 +1634,7 @@ let ParserRules = [
       addArrayLoc(
         {
           type: 'function-definition',
-          args: [d[2], d[4], d[8]],
+          args: [d[0], d[2], d[6]],
         },
         d
       ),

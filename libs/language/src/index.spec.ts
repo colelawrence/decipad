@@ -78,7 +78,7 @@ describe('basic code', () => {
 
   it('supports functions', async () => {
     const results = await runCode(`
-      function functionname(a b) => a + b
+      functionname(a b) = a + b
 
       functionname(1, 2)
     `);
@@ -147,7 +147,7 @@ describe('basic code', () => {
 
   it('Can run a function with a column as only the first argument', async () => {
     const results = await runCode(`
-      function multiply(A B) => A * B
+      multiply(A B) = A * B
       multiply([ 1, 2, 3 ], 2)
     `);
 
@@ -159,7 +159,7 @@ describe('basic code', () => {
 
   it('Can run a function with two columns as arguments', async () => {
     const results = await runCode(`
-      function multiply(A B) => A * B
+      multiply(A B) = A * B
       multiply([ 1, 2, 3 ], [ 1, 2, 0 ])
     `);
 

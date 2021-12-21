@@ -35,7 +35,7 @@ it('parses things in multiple lines', () => {
 Y = 10
 Table = { Column = [1, 2, 3 ]}
 Range = [ 10 .. 20 ]
-function func(a b) => a + b`,
+func(a b) = a + b`,
     n('assign', n('def', 'X'), date('2020-01-01', 'day')),
     n('assign', n('def', 'Y'), l(10)),
     tableDef('Table', {
@@ -56,8 +56,7 @@ it('perceives the correct precedence between operators', () => {
 it('can parse functions with multiline conditions', () => {
   testParse(
     [
-      'function costtobusiness(salary working bonus) =>',
-      'if working',
+      'costtobusiness(salary working bonus) = if working',
       'then salary + (salary * 0.2) + (if bonus then salary * 0.2 else 0)',
       'else 0',
     ].join('\n'),

@@ -12,7 +12,7 @@ describe('use of funds document', () => {
       InitialInvestment = 300000
       IncomeTax = 20%
 
-      function CostToBusiness(Month Salary StartDate Bonus) => (
+      CostToBusiness(Month Salary StartDate Bonus) = (
         if dategte(Month, StartDate)
           then Salary + (Salary * 20%) + (if Bonus then Salary * 20% else 0)
           else 0
@@ -132,10 +132,9 @@ Array [
             Bonus = [false, true, false]
           }
 
-          function IsWorking(Month StartDate) => dategte(Month, StartDate)
+          IsWorking(Month StartDate) = dategte(Month, StartDate)
 
-          function CostToBusiness(Month, Salary, StartDate, GetsBonus) =>
-            if IsWorking(Month, StartDate)
+          CostToBusiness(Month, Salary, StartDate, GetsBonus) = if IsWorking(Month, StartDate)
               then Salary + (Salary * 20%) + (if GetsBonus then Salary * 30% else 0)
               else 0
 
@@ -150,8 +149,7 @@ Array [
 
           TotalsPerMonth = total(StaffCosts.Costs)
 
-          function CountWorking(Month StartDate) =>
-            total(given StartDate: if IsWorking(Month, StartDate) then 1 else 0)
+          CountWorking(Month StartDate) = total(given StartDate: if IsWorking(Month, StartDate) then 1 else 0)
 
           HeadCountPerMonth = given Months: CountWorking(Months, Salaries.StartDate)
 

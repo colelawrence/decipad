@@ -62,7 +62,7 @@ it('matches time units result type', async () => {
 });
 
 it('matches function result type', async () => {
-  expect(
-    getResultComponent(await runCode('function even (n) => n % 2 == 0'))
-  ).toBe(FunctionResult);
+  expect(getResultComponent(await runCode('even (n) = n % 2 == 0'))).toBe(
+    FunctionResult
+  );
 });
