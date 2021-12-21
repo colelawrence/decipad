@@ -27,6 +27,7 @@ import { exitBreakOptions } from './exitBreakOptions';
 import { resetBlockTypeOptions } from './resetBlockTypeOptions';
 import { softBreakOptions } from './softBreakOptions';
 import { createAutoFormatCodePlugin } from '../plugins/AutoFormatCode/createAutoFormatCodePlugin';
+import { createSplitAndMergeCodeStatementsPlugin } from '../plugins/SplitAndMergeCodeStatements/createSplitAndMergeCodeStatementsPlugin';
 
 export const plugins = [
   createReactPlugin(),
@@ -57,4 +58,5 @@ export const plugins = [
   createForcedLayoutPlugin(),
   createTrailingBlockPlugin({ type: ELEMENT_PARAGRAPH }),
   createAutoFormatCodePlugin(),
+  createSplitAndMergeCodeStatementsPlugin(),
 ];
