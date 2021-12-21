@@ -1,28 +1,30 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { IconButton } from '../../atoms';
-import { Actions, File } from '../../icons';
+import { Ellipsis, Table } from '../../icons';
 import { NotebookListItemActions } from '../../molecules';
 import {
+  black,
   cssVar,
   p13Regular,
   p14Medium,
   setCssVar,
   shortAnimationDuration,
+  transparency,
 } from '../../primitives';
 import { notebookList } from '../../styles';
 import { Anchor, noop } from '../../utils';
 
 const { gridStyles } = notebookList;
 const styles = css(gridStyles, {
-  padding: `18px 0`,
+  padding: `16px 0`,
   whiteSpace: 'nowrap',
 
   clipPath: 'inset(0 -12px 0 -12px round 12px)',
   transition: `background-color ${shortAnimationDuration} ease-out, box-shadow ${shortAnimationDuration} ease-out`,
   ':hover, :focus': {
-    backgroundColor: cssVar('offColor'),
-    boxShadow: `0px 0px 0px 12px ${cssVar('offColor')}`,
+    backgroundColor: cssVar('highlightColor'),
+    boxShadow: `0px 0px 0px 12px ${cssVar('highlightColor')}`,
   },
 });
 
@@ -31,14 +33,16 @@ const iconStyles = css({
   height: '38px',
 
   display: 'grid',
-  gridTemplateColumns: '8px',
+  gridTemplateColumns: '14px',
   justifyContent: 'center',
   alignContent: 'center',
 
-  border: `2px solid ${cssVar('highlightColor')}`,
+  border: `1px solid ${cssVar('strongHighlightColor')}`,
   borderRadius: '4px',
   backgroundColor: cssVar('backgroundColor'),
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
+
+  boxShadow: `0px 2px 24px -4px ${transparency(black, 0.08).rgba}`,
 });
 const nameStyles = css({
   gridArea: 'title',
@@ -108,7 +112,7 @@ export const NotebookListItem = ({
       <Anchor href={href} css={styles}>
         <div css={iconStyles}>
           <span>
-            <File />
+            <Table />
           </span>
         </div>
         <strong
@@ -133,7 +137,7 @@ export const NotebookListItem = ({
           ]}
         >
           <IconButton roundedSquare onClick={toggleActionsOpen}>
-            <Actions />
+            <Ellipsis />
           </IconButton>
         </div>
       </Anchor>

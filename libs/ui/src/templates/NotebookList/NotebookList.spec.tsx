@@ -41,7 +41,7 @@ it('renders an item with actions open on top', () => {
       ]}
     />
   );
-  userEvent.click(getByTitle(getByText('First').closest('li')!, /action/i));
+  userEvent.click(getByTitle(getByText('First').closest('li')!, /ellipsis/i));
 
   expect(
     Number(findParentWithStyle(getByText('First'), 'zIndex')!.zIndex)
@@ -60,8 +60,8 @@ it('only allows one open actions menu at a time', () => {
       ]}
     />
   );
-  userEvent.click(getByTitle(getByText('Second').closest('li')!, /action/i));
-  userEvent.click(getByTitle(getByText('First').closest('li')!, /action/i));
+  userEvent.click(getByTitle(getByText('Second').closest('li')!, /ellipsis/i));
+  userEvent.click(getByTitle(getByText('First').closest('li')!, /ellipsis/i));
 
   expect(getByText('First').closest('li')).toContainElement(getByText(/dup/i));
 });
@@ -79,7 +79,7 @@ it('emits duplicate events', () => {
     />
   );
 
-  userEvent.click(getByTitle(getByText('Second').closest('li')!, /action/i));
+  userEvent.click(getByTitle(getByText('Second').closest('li')!, /ellipsis/i));
   userEvent.click(getByText(/dup/i, { selector: 'button' }));
   expect(handleDuplicate).toHaveBeenCalledWith('1');
 });
@@ -96,7 +96,7 @@ it('emits delete events', () => {
     />
   );
 
-  userEvent.click(getByTitle(getByText('Second').closest('li')!, /action/i));
+  userEvent.click(getByTitle(getByText('Second').closest('li')!, /ellipsis/i));
   userEvent.click(getByText(/delete|remove/i, { selector: 'button' }));
   expect(handleDelete).toHaveBeenCalledWith('1');
 });

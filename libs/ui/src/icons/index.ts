@@ -7,6 +7,7 @@ export { Code } from './Code/Code';
 export { Create } from './Create/Create';
 export { Shapes } from './Shapes/Shapes';
 export { Delete } from './Delete/Delete';
+export { Ellipsis } from './Ellipsis/Ellipsis';
 export { File } from './File/File';
 export { Folder } from './Folder/Folder';
 export { Globe } from './Globe/Globe';

@@ -7,6 +7,10 @@ const styles = css({
   display: 'inline-block',
   borderRadius: '100vmax',
   backgroundColor: cssVar('highlightColor'),
+
+  ':hover, :focus': {
+    backgroundColor: cssVar('strongHighlightColor'),
+  },
 });
 const roundedSquareStyles = css({
   borderRadius: '6px',

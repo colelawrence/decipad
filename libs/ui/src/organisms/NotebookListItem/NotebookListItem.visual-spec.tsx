@@ -47,7 +47,7 @@ it('shows the actions menu button on hover', async () => {
 
   expect(
     await page.$eval(
-      select(findParentWithStyle(getByTitle(/actions/i), 'opacity')!.element),
+      select(findParentWithStyle(getByTitle(/ellipsis/i), 'opacity')!.element),
       (button) => getComputedStyle(button).opacity
     )
   ).toBe('0');
@@ -56,7 +56,9 @@ it('shows the actions menu button on hover', async () => {
   await waitFor(async () => {
     expect(
       await page.$eval(
-        select(findParentWithStyle(getByTitle(/actions/i), 'opacity')!.element),
+        select(
+          findParentWithStyle(getByTitle(/ellipsis/i), 'opacity')!.element
+        ),
         (button) => getComputedStyle(button).opacity
       )
     ).toBe('1');
@@ -75,7 +77,7 @@ it('keeps showing the actions menu button when the menu is open', async () => {
   await page.hover(select(getByText('somewhere else')));
   expect(
     await page.$eval(
-      select(findParentWithStyle(getByTitle(/actions/i), 'opacity')!.element),
+      select(findParentWithStyle(getByTitle(/ellipsis/i), 'opacity')!.element),
       (button) => getComputedStyle(button).opacity
     )
   ).toBe('1');
