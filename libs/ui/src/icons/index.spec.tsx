@@ -31,8 +31,9 @@ describe.each(Object.entries(icons).filter(isComponent))(
 
     it('does not have fixed dimensions', () => {
       // so that it will fill even a large container without having to set styles like 'svg { width: 100% }'
-      expect(result.container).not.toHaveAttribute('width');
-      expect(result.container).not.toHaveAttribute('height');
+      const svg = result.container.querySelector('svg');
+      expect(svg).not.toHaveAttribute('width');
+      expect(svg).not.toHaveAttribute('height');
     });
   }
 );
