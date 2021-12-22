@@ -4,11 +4,20 @@ import { getDefined } from '../utils';
 import { getOperatorByName } from './operators';
 import { AST } from '../parser';
 
+function typeHasError(t: Type) {
+  return t.errorCause != null;
+}
+
 export const callBuiltinFunctor = (
   opName: string,
   givenArguments: Type[],
   givenValues?: AST.Expression[]
 ): Type => {
+  const error = givenArguments.find(typeHasError);
+  if (error) {
+    return error;
+  }
+
   const op = getOperatorByName(opName);
 
   if (op == null) {

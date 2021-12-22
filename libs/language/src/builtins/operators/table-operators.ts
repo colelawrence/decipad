@@ -10,19 +10,23 @@ import { Type, build as t } from '../../type';
 export const tableOperators: { [fname: string]: BuiltinSpec } = {
   lookup: {
     argCount: 2,
-    functorNoAutomap: ([table, cond]) =>
-      Type.combine(
+    functorNoAutomap: ([table, cond]) => {
+      return Type.combine(
         table.isTable().withMinimumColumnCount(1),
         Type.either(
           cond.isColumn().reduced().isScalar('boolean'),
-          getDefined(table.columnTypes?.[0]?.sameAs(cond))
+          getDefined(
+            table.columnTypes?.[0]?.sameAs(cond),
+            'no first column on table'
+          )
         ),
         () =>
           t.row(
             getDefined(table.columnTypes, `no column types in ${table}`),
             getDefined(table.columnNames, `no column names in ${table}`)
           )
-      ),
+      );
+    },
     fnValuesNoAutomap: ([_table, needle]) => {
       const table = getInstanceof(_table, Column);
       let rowIndex: number;
