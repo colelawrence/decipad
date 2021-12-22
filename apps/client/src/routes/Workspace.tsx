@@ -67,10 +67,10 @@ export function Workspace({
           },
         });
         if (!creation) {
-          throw new Error('No pad creation result');
+          throw new Error('No notebook creation result');
         }
         const newPad = creation.createPad;
-        addToast('Pad created successfully', { appearance: 'success' });
+        addToast('Notebook created successfully', { appearance: 'success' });
         history.push(
           `/workspaces/${workspaceId}/pads/${encodeVanityUrlComponent(
             '',
@@ -78,7 +78,7 @@ export function Workspace({
           )}`
         );
       } catch (err) {
-        addToast(`Error creating pad: ${(err as Error).message}`, {
+        addToast(`Error creating notebook: ${(err as Error).message}`, {
           appearance: 'error',
         });
       } finally {
@@ -92,9 +92,9 @@ export function Workspace({
       refetchQueries: ['GetWorkspaceById'],
       awaitRefetchQueries: true,
     })
-      .then(() => addToast('Pad duplicated', { appearance: 'info' }))
+      .then(() => addToast('Notebook duplicated', { appearance: 'info' }))
       .catch((err) =>
-        addToast(`Error duplicating pad: ${err.message}`, {
+        addToast(`Error duplicating notebook: ${err.message}`, {
           appearance: 'error',
         })
       );
@@ -104,9 +104,9 @@ export function Workspace({
       refetchQueries: ['GetWorkspaceById'],
       awaitRefetchQueries: true,
     })
-      .then(() => addToast('Pad removed', { appearance: 'info' }))
+      .then(() => addToast('Notebook removed', { appearance: 'info' }))
       .catch((err) =>
-        addToast(`Error removing pad: ${err.message}`, {
+        addToast(`Error removing notebook: ${err.message}`, {
           appearance: 'error',
         })
       );
