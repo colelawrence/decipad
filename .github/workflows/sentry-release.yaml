@@ -1,8 +1,11 @@
 name: Sentry Release
 
 on:
-  push:
+  workflow_run:
+    workflows: ['Deploy']
     branches: [main]
+    types:
+      - completed
 
 jobs:
   index:
