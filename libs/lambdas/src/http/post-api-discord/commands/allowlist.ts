@@ -45,7 +45,6 @@ async function remove(
 async function list(): Promise<string> {
   const data = await tables();
   const query: DynamoDbQuery = {
-    ExpressionAttributeValues: {},
     KeyConditionExpression: 'attribute_exists(id)',
   };
   const entries: string[] = [];
