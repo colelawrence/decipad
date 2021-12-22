@@ -1,7 +1,8 @@
 import { FC } from 'react';
 import { css } from '@emotion/react';
+import { docs } from '@decipad/routing';
 import { Divider, NavigationItem } from '../../atoms';
-import { Folder, Globe, Settings } from '../../icons';
+import { Chat, Docs, Folder, Settings } from '../../icons';
 import { NavigationList } from '../../molecules';
 import { cssVar, p14Regular, setCssVar } from '../../primitives';
 
@@ -34,8 +35,11 @@ export const WorkspaceNavigation = ({
       </NavigationList>
       <Divider />
       <NavigationList>
-        <NavigationItem href="https://discord.gg/HwDMqwbGmc" icon={<Globe />}>
-          <span css={itemTextStyles}>Explore community</span>
+        <NavigationItem href={docs({}).$} icon={<Docs />}>
+          <span css={itemTextStyles}>Check the docs</span>
+        </NavigationItem>
+        <NavigationItem href="https://discord.gg/HwDMqwbGmc" icon={<Chat />}>
+          <span css={itemTextStyles}>Join our Discord</span>
         </NavigationItem>
         <NavigationItem href={preferencesHref} icon={<Settings />}>
           <span css={itemTextStyles}>Preferences</span>

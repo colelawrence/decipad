@@ -8,12 +8,12 @@ it('renders navigation links', () => {
       preferencesHref="/preferences"
     />
   );
-  expect(getAllByRole('listitem')).toHaveLength(3);
+  expect(getAllByRole('listitem')).toHaveLength(4);
   expect(getByText(/notebook/i).closest('a')).toHaveAttribute(
     'href',
     '/all-notebooks'
   );
-  expect(getByText(/community/i).closest('a')).toHaveAttribute('href');
+  expect(getByText(/discord/i).closest('a')).toHaveAttribute('href');
   expect(getByText(/preference/i).closest('a')).toHaveAttribute(
     'href',
     '/preferences'

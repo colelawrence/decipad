@@ -4,10 +4,48 @@ export const Settings = (): ReturnType<React.FC> => (
   <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
     <title>Settings</title>
     <path
-      fillRule="evenodd"
-      clipRule="evenodd"
-      d="M9 0H7V2.08296C6.08835 2.23591 5.2464 2.59444 4.52347 3.10925L3.05026 1.63604L1.63605 3.05025L3.10925 4.52346C2.59444 5.2464 2.23591 6.08834 2.08296 7H0V9H2.08296C2.23591 9.91165 2.59444 10.7536 3.10925 11.4765L1.63603 12.9497L3.05024 14.364L4.52346 12.8907C5.24639 13.4056 6.08834 13.7641 7 13.917V16H9V13.917C9.91166 13.7641 10.7536 13.4056 11.4765 12.8907L12.9498 14.364L14.364 12.9497L12.8907 11.4765C13.4056 10.7536 13.7641 9.91165 13.917 9H16V7H13.917C13.7641 6.08834 13.4056 5.24639 12.8907 4.52346L14.364 3.05025L12.9497 1.63604L11.4765 3.10925C10.7536 2.59444 9.91165 2.2359 9 2.08296V0ZM8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6C6.89543 6 6 6.89543 6 8C6 9.10457 6.89543 10 8 10Z"
-      fill={cssVar('currentTextColor')}
+      d="M3.16669 5.33331H4.83335"
+      stroke={cssVar('weakTextColor')}
+      strokeWidth="1.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M8.5 5.33331H12.8333"
+      stroke={cssVar('weakTextColor')}
+      strokeWidth="1.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M3.16669 10.6667H8.16669"
+      stroke={cssVar('weakTextColor')}
+      strokeWidth="1.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M11.8333 10.6667H12.8333"
+      stroke={cssVar('weakTextColor')}
+      strokeWidth="1.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M6.66669 6.83331C7.49511 6.83331 8.16669 6.16174 8.16669 5.33331C8.16669 4.50489 7.49511 3.83331 6.66669 3.83331C5.83826 3.83331 5.16669 4.50489 5.16669 5.33331C5.16669 6.16174 5.83826 6.83331 6.66669 6.83331Z"
+      fill={cssVar('highlightColor')}
+      stroke={cssVar('normalTextColor')}
+      strokeWidth="1.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M10 12.1667C10.8284 12.1667 11.5 11.4951 11.5 10.6667C11.5 9.83826 10.8284 9.16669 10 9.16669C9.17157 9.16669 8.5 9.83826 8.5 10.6667C8.5 11.4951 9.17157 12.1667 10 12.1667Z"
+      fill={cssVar('highlightColor')}
+      stroke={cssVar('normalTextColor')}
+      strokeWidth="1.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );

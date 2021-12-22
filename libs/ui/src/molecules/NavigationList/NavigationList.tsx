@@ -7,7 +7,7 @@ import { WorkspaceItem } from '..';
 
 const styles = css({
   display: 'grid',
-  rowGap: '8px',
+  rowGap: '2px',
 });
 
 interface NavigationListProps {
