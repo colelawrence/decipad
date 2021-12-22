@@ -2,7 +2,7 @@ name: Deploy Discord Customer Support Bot
 
 on:
   workflow_run:
-    workflows: ['Run Tests']
+    workflows: ['Deploy']
     branches: [main]
     types:
       - completed
