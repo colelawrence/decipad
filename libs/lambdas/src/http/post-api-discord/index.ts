@@ -20,7 +20,7 @@ ${JSON.stringify(error.output.payload, null, '\t')}
 \`\`\`
 `;
   return {
-    tts: true,
+    tts: false,
     content: errorMessage,
     embeds: [],
     allowed_mentions: { parse: [] },

@@ -39,14 +39,14 @@ async function remove(
     );
   }
   await data.allowlist.delete({ id: email });
-  return `Email address \`${email}\` successfully added to the allow list`;
+  return `Email address \`${email}\` successfully removed from the allow list`;
 }
 
 async function list(): Promise<string> {
   const data = await tables();
   const query: DynamoDbQuery = {
     ExpressionAttributeValues: {},
-    KeyConditionExpression: '',
+    KeyConditionExpression: 'attribute_exists(id)',
   };
   const entries: string[] = [];
   for await (const entry of allPages(data.allowlist, query)) {
