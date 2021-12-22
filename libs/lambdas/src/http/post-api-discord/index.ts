@@ -1,34 +1,69 @@
 import {
-  APIApplicationCommand,
-  APIInteractionResponse,
+  APIInteraction,
+  APIInteractionResponsePong,
   InteractionResponseType,
-} from 'discord-api-types/v9';
+} from 'discord-api-types/payloads/v9';
 import fetch from 'isomorphic-fetch';
+import { boomify, Boom } from '@hapi/boom';
 import handle from '../handle';
 import { validate } from './validate';
+import { processCommand } from './process-command';
+import type { Command, CommandReply } from './command';
 
-async function replyToCommand(command: any) {
+function processError(error: Boom): CommandReply {
+  console.error(error);
+  const errorMessage = `Error processing request: ${
+    error.output.payload.message
+  }:
+\`\`\`
+${JSON.stringify(error.output.payload, null, '\t')}
+\`\`\`
+`;
+  return {
+    tts: true,
+    content: errorMessage,
+    embeds: [],
+    allowed_mentions: { parse: [] },
+  };
+}
+
+async function replyToCommand(command: Command) {
+  let reply: CommandReply;
+  try {
+    reply = await processCommand(command);
+  } catch (err) {
+    reply = await processError(boomify(err as Error));
+  }
+
   const interactionId = command.id;
   const interactionToken = command.token;
   const url = `https://discord.com/api/v8/interactions/${interactionId}/${interactionToken}/callback`;
-  const reply = {
+  const response = {
     type: InteractionResponseType.ChannelMessageWithSource,
-    data: {
-      tts: false,
-      content: 'hey',
-      embeds: [],
-      allowed_mentions: { parse: [] },
-    },
+    data: reply,
   };
 
-  console.log('replying to %s with', url, reply);
+  console.log('replying to %s with', url, response);
 
-  await fetch(url, { method: 'POST', body: JSON.stringify(reply) });
+  const discordResponse = await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(response),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  const responseText = await discordResponse.text();
+  console.log('RESPONSE:', responseText);
+  if (!discordResponse.ok) {
+    throw new Error(
+      `Discord response while trying to post reply message was: ${responseText}`
+    );
+  }
 }
 
 async function handleRequest(
-  request: APIApplicationCommand
-): Promise<APIInteractionResponse | void> {
+  request: Command | APIInteraction
+): Promise<APIInteractionResponsePong | void> {
   switch (request.type) {
     case 1: {
       // Ping
@@ -38,7 +73,7 @@ async function handleRequest(
     }
     case 2:
     case 3: {
-      await replyToCommand(request);
+      await replyToCommand(request as Command);
       break;
     }
     default: {
@@ -55,6 +90,6 @@ export const handler = handle(async (event) => {
 
   return {
     statusCode: 200,
-    body: response && JSON.stringify(response),
+    body: response ? JSON.stringify(response) : null,
   };
 });

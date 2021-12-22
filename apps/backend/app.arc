@@ -189,6 +189,16 @@ docsyncupdates
   id *String
   seq **String
 
+allowlist
+  id *String
+
+superadminusers
+  user_id *String
+
+superadminactionlogs
+  id *String
+  expiresAt TTL
+
 @indexes
 users
   secret *String
@@ -317,6 +327,7 @@ usertaggedresources-changes
 fileattachments-changes
 docsyncupdates-changes
 sync-after-connect
+allowlist-changes
 
 @plugins
 s3

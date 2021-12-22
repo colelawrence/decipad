@@ -12,14 +12,40 @@ process.on('unhandledRejection', (err) => {
 
   const commands = [
     {
-      name: 'allowlist-get',
+      name: 'allowlist',
+      type: 1,
       application_id: process.env.DISCORD_APP_ID,
-      type: 1, // This is an example CHAT_INPUT or Slash Command, with a type of 1
-      description: 'find an entry in the allow list',
+      description: 'manage the Deci allow list',
       options: [
         {
-          name: 'email',
-          description: "The email address you're searching for",
+          name: 'add',
+          description: 'adds an entry to the allow list',
+          type: 1,
+          options: [
+            {
+              name: 'email',
+              description: 'The email address to add to the allow-list',
+              required: true,
+              type: 3, // string
+            },
+          ],
+        },
+        {
+          name: 'remove',
+          description: 'removes an entry from the allow list',
+          type: 1,
+          options: [
+            {
+              name: 'email',
+              description: 'The email address to remove from the allow-list',
+              required: true,
+              type: 3, // string
+            },
+          ],
+        },
+        {
+          name: 'list',
+          description: 'lists all entries in the allow list',
           type: 1,
         },
       ],

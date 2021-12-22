@@ -201,9 +201,12 @@ type TableRecordPut<T extends TableRecord> = {
   args: T;
 };
 
-export type TableRecordChanges<T extends TableRecord> =
+export type TableRecordChanges<T extends TableRecord> = (
   | TableRecordPut<T>
-  | TableRecordDelete<T>;
+  | TableRecordDelete<T>
+) & {
+  user_id?: string;
+};
 
 export interface UserRecord extends TableRecordBase {
   name: string;
@@ -437,6 +440,9 @@ export interface DataTables extends EnhancedDataTables {
   connections: DataTable<ConnectionRecord>;
   docsync: VersionedDataTable<DocSyncRecord>;
   docsyncupdates: DataTable<DocSyncUpdateRecord>;
+  allowlist: DataTable<AllowListRecord>;
+  superadminusers: DataTable<SuperAdminUserRecord>;
+  superadminactionlogs: DataTable<SuperAdminActionLogRecord>;
 }
 
 export type ConcreteRecord =
@@ -490,6 +496,18 @@ export interface DocSyncUpdateRecord extends TableRecordBase {
   seq: string;
   data: string;
 }
+
+export type AllowListRecord = TableRecordBase;
+
+export type SuperAdminUserRecord = TableRecordBase;
+
+export type SuperAdminActionLogRecord = TableRecordBase & {
+  user_id: string;
+  subject: string;
+  action: string;
+  args: string;
+  expiresAt: number;
+};
 
 export type VersionedDataTable<T extends VersionedTableRecord> =
   DataTable<T> & {

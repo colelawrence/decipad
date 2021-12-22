@@ -16,6 +16,7 @@ import { auth as authConfig } from '@decipad/config';
 import { Github, Email } from './providers';
 import adaptReqRes from './adapt-req-res';
 import createDbAdapter from './db-adapter';
+import { isAllowedToLogIn } from './is-allowed';
 
 const {
   providers: { github: githubConfig },
@@ -97,6 +98,10 @@ async function signInGithub(
     email: metadata.email,
   };
 
+  if (!(await isAllowedToLogIn(metadata.email))) {
+    return false;
+  }
+
   let existingUser;
   const data = await tables();
   const userKeyId = `github:${githubUser.id}`;
@@ -135,6 +140,10 @@ async function signInGithub(
 }
 
 async function signInEmail(user: UserWithSecret, account: any, metadata: any) {
+  if (!(await isAllowedToLogIn(metadata.email))) {
+    return false;
+  }
+
   let existingUser;
   const data = await tables();
   const userKeyId = `email:${metadata.email}`;

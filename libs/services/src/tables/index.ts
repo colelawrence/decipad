@@ -40,14 +40,15 @@ const observedTables: (keyof DataTables)[] = [
   'usertaggedresources',
   'fileattachments',
   'docsyncupdates',
+  'allowlist',
 ];
 
 const versionedTables: (keyof VersionedDataTables)[] = ['docsync'];
 
 let tablesPromise: Promise<DataTables>;
 
-export default async function tables(): Promise<DataTables> {
-  if (tablesPromise) {
+export default async function tables(userId?: string): Promise<DataTables> {
+  if (tablesPromise && !userId) {
     return tablesPromise;
   }
 
@@ -55,12 +56,12 @@ export default async function tables(): Promise<DataTables> {
     arc
       .tables()
       .then((_tables) => {
-        const dataTables = _tables as unknown as DataTables;
+        const dataTables = { ..._tables } as unknown as DataTables;
         for (const enhancedTableName of enhancedTables) {
           enhance(dataTables, enhancedTableName);
         }
         for (const observedTable of observedTables) {
-          observe(dataTables, observedTable);
+          observe(dataTables, observedTable, userId);
         }
         for (const versionedTable of versionedTables) {
           withWithVersion(dataTables, arc.tables.doc, versionedTable);
@@ -70,10 +71,18 @@ export default async function tables(): Promise<DataTables> {
       .catch(reject);
   });
 
+  if (!userId) {
+    tablesPromise = p;
+  }
+
   return p;
 }
 
-function observe(dataTables: DataTables, tableName: keyof DataTables) {
+function observe(
+  dataTables: DataTables,
+  tableName: keyof DataTables,
+  userId?: string
+) {
   const table = dataTables[tableName] as ConcreteDataTable;
   if (!table) {
     throw new Error(`No table named ${tableName}`);
@@ -83,14 +92,15 @@ function observe(dataTables: DataTables, tableName: keyof DataTables) {
   }
   table.__deci_observed__ = true;
 
-  table.put = putReplacer(table, tableName, table.put);
-  table.delete = deleteReplacer(table, tableName, table.delete);
+  table.put = putReplacer(table, tableName, table.put, userId);
+  table.delete = deleteReplacer(table, tableName, table.delete, userId);
 }
 
 function putReplacer<T extends ConcreteRecord>(
   table: DataTable<T>,
   tableName: keyof DataTables,
-  method: (doc: T) => Promise<void>
+  method: (doc: T) => Promise<void>,
+  userId?: string
 ): (doc: T, noEvents?: boolean) => Promise<void> {
   return async function replacePut(args: T, noEvents = false) {
     const ret = await method.call(table, args);
@@ -102,6 +112,7 @@ function putReplacer<T extends ConcreteRecord>(
           table: tableName,
           action: 'put',
           args,
+          user_id: userId,
         },
       });
     }
@@ -113,7 +124,8 @@ function putReplacer<T extends ConcreteRecord>(
 function deleteReplacer<T extends ConcreteRecord>(
   table: DataTable<T>,
   tableName: keyof DataTables,
-  method: (id: TableRecordIdentifier) => Promise<void>
+  method: (id: TableRecordIdentifier) => Promise<void>,
+  userId?: string
 ): (id: TableRecordIdentifier, noEvents: boolean) => Promise<void> {
   return async function replaceDelete(
     args: TableRecordIdentifier,
@@ -130,6 +142,7 @@ function deleteReplacer<T extends ConcreteRecord>(
           action: 'delete',
           args,
           recordBeforeDelete,
+          user_id: userId,
         },
       });
     }
