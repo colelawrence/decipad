@@ -101,4 +101,24 @@ runTests({
       },
     ],
   },
+
+  'expression is percentage literal': {
+    source: '10.5%',
+    ast: [
+      {
+        type: 'literal',
+        args: ['number', F(105, 1000), null],
+        start: {
+          char: 0,
+          line: 1,
+          column: 1,
+        },
+        end: {
+          char: 4,
+          line: 1,
+          column: 5,
+        },
+      },
+    ],
+  },
 });

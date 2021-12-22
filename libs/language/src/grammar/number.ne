@@ -36,7 +36,7 @@ number      -> unitlessNumber __:? units               {%
 
 percentage -> decimal "%"                               {%
                                                         (d) => {
-                                                          return numberLiteralFromUnits(d, new Fraction(d[0].n, 100))
+                                                          return addArrayLoc(numberLiteralFromUnits(d, new Fraction((d[0].n)).div(new Fraction(100))), d)
                                                         }
                                                         %}
 
