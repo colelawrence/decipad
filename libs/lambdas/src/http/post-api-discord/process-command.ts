@@ -15,7 +15,7 @@ async function verifyAuth(command: Command) {
   }
 
   const superAdmin = await data.superadminusers.get({
-    id: userKey.user_id,
+    user_id: userKey.user_id,
   });
   if (!superAdmin) {
     throw Boom.forbidden(
