@@ -8,6 +8,9 @@ export const CodeResult = ({
   variant = 'block',
 }: ResultProps<SerializedTypeKind>): ReturnType<React.FC> => {
   const Result = getResultComponent({ value, variant, type });
+  if (value == null) {
+    return null;
+  }
   return (
     <Result
       parentType={parentType}
