@@ -40,11 +40,11 @@ if (history && usingSentry) {
   });
 }
 
-if (inBrowser && process.env.NEXT_HOTJAR_SITE_ID) {
+if (inBrowser && process.env.NEXT_PUBLIC_HOTJAR_SITE_ID) {
   // HOTJAR POLLUTION
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (window as any)._hjSettings = {
-    hjid: process.env.NEXT_HOTJAR_SITE_ID,
+    hjid: process.env.NEXT_PUBLIC_HOTJAR_SITE_ID,
     hjsv: 6,
   };
 }
