@@ -6,12 +6,22 @@ import {
 
 export type AllowlistAddApplicationCommandDataOption = {
   name: 'add';
-  options: [{ email: string }];
+  options: [
+    {
+      name: 'email';
+      value: string;
+    }
+  ];
 };
 
 export type AllowlistRemoveApplicationCommandDataOption = {
   name: 'remove';
-  options: [{ email: string }];
+  options: [
+    {
+      name: 'email';
+      value: string;
+    }
+  ];
 };
 
 export type AllowlistListApplicationCommandDataOption = {
