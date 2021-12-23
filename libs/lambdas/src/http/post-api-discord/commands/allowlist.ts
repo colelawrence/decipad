@@ -1,5 +1,5 @@
 import Boom from '@hapi/boom';
-import tables, { allPages } from '@decipad/services/tables';
+import tables, { allScanPages } from '@decipad/services/tables';
 import { getDefined } from '@decipad/utils';
 import {
   AllowlistAddApplicationCommandDataOption,
@@ -44,7 +44,7 @@ async function remove(
 async function list(): Promise<string> {
   const data = await tables();
   const entries: string[] = [];
-  for await (const entry of allPages(data.allowlist, {})) {
+  for await (const entry of allScanPages(data.allowlist)) {
     if (entry) {
       entries.push(entry.id);
     }

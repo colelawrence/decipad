@@ -25,12 +25,18 @@ export default async function* allPages<T extends ConcreteRecord, T2 = T>(
 
 export async function* allScanPages<T extends ConcreteRecord, T2 = T>(
   table: DataTable<T>,
-  query: DynamoDbQuery = {},
+  query: DynamoDbQuery | undefined = undefined,
   map: (rec: T) => T2 | Promise<T2 | undefined> = identity
 ) {
   let cursor;
   do {
-    query.ExclusiveStartKey = cursor;
+    if (cursor) {
+      if (!query) {
+        query = {};
+      }
+      query.ExclusiveStartKey = cursor;
+    }
+
     // sequential
     // eslint-disable-next-line no-await-in-loop
     const result = await table.scan(query);
