@@ -1,6 +1,5 @@
 import Boom from '@hapi/boom';
 import tables, { allPages } from '@decipad/services/tables';
-import { DynamoDbQuery } from '@decipad/backendtypes';
 import { getDefined } from '@decipad/utils';
 import {
   AllowlistAddApplicationCommandDataOption,
@@ -44,11 +43,8 @@ async function remove(
 
 async function list(): Promise<string> {
   const data = await tables();
-  const query: DynamoDbQuery = {
-    KeyConditionExpression: 'attribute_exists(id)',
-  };
   const entries: string[] = [];
-  for await (const entry of allPages(data.allowlist, query)) {
+  for await (const entry of allPages(data.allowlist, {})) {
     if (entry) {
       entries.push(entry.id);
     }
