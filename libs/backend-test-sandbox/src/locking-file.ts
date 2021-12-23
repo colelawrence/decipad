@@ -26,7 +26,17 @@ export default function lockingFile(path: string) {
     try {
       await fn();
     } finally {
-      await release();
+      let released = false;
+      while (!released) {
+        try {
+          release();
+          released = true;
+          break;
+        } catch (err) {
+          // eslint-disable-next-line no-await-in-loop
+          await timeout(retryLockMs);
+        }
+      }
     }
   };
 }
