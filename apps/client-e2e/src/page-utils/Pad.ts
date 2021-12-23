@@ -65,3 +65,18 @@ export async function keyPress(k: string) {
   await page.keyboard.press(k);
   await timeout(500);
 }
+
+export async function createCalculationBlock(decilang: string) {
+  await keyPress('ArrowDown');
+  await keyPress('Enter'); // And make a new line
+  await page.keyboard.type('/calc');
+  await keyPress('Tab');
+  await keyPress('Enter');
+  await page.keyboard.type(decilang);
+  await keyPress('ArrowDown');
+}
+
+export const emptyPad = [
+  { type: 'h1', text: '' },
+  { type: 'p', text: '' },
+];
