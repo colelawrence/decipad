@@ -31,6 +31,9 @@ export async function queryAccessibleResources({
 
   if (parentResourceUri) {
     q.FilterExpression = 'parent_resource_uri = :parent_resource_uri';
+    if (!q.ExpressionAttributeValues) {
+      q.ExpressionAttributeValues = {};
+    }
     q.ExpressionAttributeValues[':parent_resource_uri'] = parentResourceUri;
   }
 

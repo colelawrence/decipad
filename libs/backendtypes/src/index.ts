@@ -473,7 +473,7 @@ export type ConcreteDataTable = DataTable<ConcreteRecord>;
 export interface DynamoDbQuery {
   IndexName?: string;
   KeyConditionExpression: string;
-  ExpressionAttributeValues: Record<string, string | boolean>;
+  ExpressionAttributeValues?: Record<string, string | boolean>;
   ExpressionAttributeNames?: Record<string, string>;
   ExclusiveStartKey?: string;
   FilterExpression?: string;
