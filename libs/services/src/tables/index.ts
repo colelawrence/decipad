@@ -15,9 +15,9 @@ import {
 } from '@decipad/backendtypes';
 import { withLock, WithLockUserFunction } from '@decipad/dynamodb-lock';
 import timestamp from '../common/timestamp';
-import allPages from './all-pages';
+import allPages, { allScanPages } from './all-pages';
 
-export { allPages };
+export { allPages, allScanPages };
 
 const enhancedTables: (keyof EnhancedDataTables)[] = [
   'users',

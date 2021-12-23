@@ -408,6 +408,11 @@ export interface DataTable<T extends TableRecordBase> {
     Count: number;
     LastEvaluatedKey?: string;
   }>;
+  scan(params?: DynamoDbQuery): Promise<{
+    Items: Array<T>;
+    Count: number;
+    LastEvaluatedKey?: string;
+  }>;
   __deci_observed__?: boolean;
 }
 
