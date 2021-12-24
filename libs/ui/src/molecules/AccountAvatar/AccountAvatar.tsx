@@ -16,6 +16,7 @@ const styles = css(p12Bold, {
 
 const caretStyles = (hoverSelector: string) =>
   css({
+    width: '8px',
     transition: `padding-top ease-in-out ${shortAnimationDuration}`,
     [`${hoverSelector} &`]: {
       paddingTop: '4px',

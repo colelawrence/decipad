@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { cssVar, p12Regular, setCssVar } from '../../primitives';
+import { cssVar, p14Regular, setCssVar } from '../../primitives';
 import { Anchor } from '../../utils';
 
 const containerStyles = css({
@@ -12,7 +12,7 @@ const activeStyles = css({
   backgroundColor: cssVar('highlightColor'),
   boxShadow: `0px 0px 0px 8px ${cssVar('highlightColor')}`,
 });
-const styles = css(p12Regular, {
+const styles = css(p14Regular, {
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
 
   display: 'flex',
