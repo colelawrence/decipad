@@ -1,7 +1,7 @@
 import { atoms } from '@decipad/ui';
-import { PlatePluginComponent } from '@udecode/plate';
+import { PlateComponent } from '../../utils/components';
 
-export const Heading1: PlatePluginComponent = ({ attributes, children }) => {
+export const Heading1: PlateComponent = ({ attributes, children }) => {
   if ('data-slate-leaf' in attributes) {
     throw new Error('Heading1 is not a leaf');
   }

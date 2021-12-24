@@ -14,6 +14,7 @@ import {
   PlateProps,
   SPEditor,
   ELEMENT_H2,
+  PlatePluginComponent,
 } from '@udecode/plate';
 import { Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
@@ -29,7 +30,9 @@ beforeEach(() => {
     editableProps: { scrollSelectionIntoView: noop },
     initialValue: [{ type: ELEMENT_PARAGRAPH, children: [{ text: '/' }] }],
     plugins: [createParagraphPlugin()],
-    components: { [ELEMENT_PARAGRAPH]: SlashCommandsParagraph },
+    components: {
+      [ELEMENT_PARAGRAPH]: SlashCommandsParagraph as PlatePluginComponent,
+    },
   };
 });
 

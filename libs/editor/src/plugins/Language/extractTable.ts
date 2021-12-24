@@ -1,11 +1,11 @@
 import { AST } from '@decipad/language';
 import { astNode } from '../../utils/astNode';
-import { TABLE_INPUT } from '../../utils/elementTypes';
+import { ELEMENT_TABLE_INPUT } from '../../utils/elementTypes';
 import { TableData } from '../../utils/tableTypes';
 import { getNullReplacementValue, parseCell } from '../../utils/parseCell';
 
 interface InteractiveTableNode {
-  type: typeof TABLE_INPUT;
+  type: typeof ELEMENT_TABLE_INPUT;
   tableData: TableData;
   children: [];
 }
@@ -14,7 +14,7 @@ interface InteractiveTableNode {
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export function isInteractiveTable(block: any): block is InteractiveTableNode {
   return (
-    block?.type === TABLE_INPUT &&
+    block?.type === ELEMENT_TABLE_INPUT &&
     typeof block?.tableData?.variableName === 'string'
   );
 }

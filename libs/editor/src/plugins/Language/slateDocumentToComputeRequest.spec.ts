@@ -1,6 +1,6 @@
 import { ParsedBlock, prettyPrintAST } from '@decipad/language';
 import { TableData } from '../../utils/tableTypes';
-import { TABLE_INPUT } from '../../utils/elementTypes';
+import { ELEMENT_TABLE_INPUT } from '../../utils/elementTypes';
 import { SlateNode } from './common';
 import { slateDocumentToComputeRequest } from './slateDocumentToComputeRequest';
 
@@ -29,7 +29,7 @@ const testTableData: TableData = {
 };
 
 const table = {
-  type: TABLE_INPUT,
+  type: ELEMENT_TABLE_INPUT,
   id: 'the-table-id',
   tableData: testTableData,
   children: [],

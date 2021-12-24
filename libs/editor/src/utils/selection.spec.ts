@@ -3,7 +3,11 @@ import {
   ELEMENT_PARAGRAPH,
   SPEditor,
 } from '@udecode/plate';
-import { requireSelectionPath, getPathContainingSelection } from './selection';
+import { Point } from 'slate';
+import {
+  requireCollapsedSelection,
+  getPathContainingSelection,
+} from './selection';
 
 let editor: SPEditor;
 beforeEach(() => {
@@ -11,24 +15,27 @@ beforeEach(() => {
   editor.children = [{ type: ELEMENT_PARAGRAPH, children: [{ text: 'text' }] }];
 });
 
-describe('requireSelectionPath', () => {
-  it('returns the path for a collapsed selection', () => {
+describe('requireCollapsedSelection', () => {
+  it('returns the point for a collapsed selection', () => {
     editor.selection = {
       anchor: { path: [0, 0], offset: 0 },
       focus: { path: [0, 0], offset: 0 },
     };
-    expect(requireSelectionPath(editor)).toEqual([0, 0]);
+    expect(requireCollapsedSelection(editor)).toEqual({
+      path: [0, 0],
+      offset: 0,
+    } as Point);
   });
   it('throws for no selection', () => {
     editor.selection = null;
-    expect(() => requireSelectionPath(editor)).toThrow(/no select/i);
+    expect(() => requireCollapsedSelection(editor)).toThrow(/no select/i);
   });
   it('throws for an expanded selection', () => {
     editor.selection = {
       anchor: { path: [0, 0], offset: 0 },
       focus: { path: [0, 0], offset: 1 },
     };
-    expect(() => requireSelectionPath(editor)).toThrow(/expand/i);
+    expect(() => requireCollapsedSelection(editor)).toThrow(/expand/i);
   });
 });
 

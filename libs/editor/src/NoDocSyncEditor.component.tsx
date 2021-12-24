@@ -1,5 +1,10 @@
 import { nanoid } from 'nanoid';
-import { Plate, PlateProps, useStoreEditorRef } from '@udecode/plate';
+import {
+  Plate,
+  PlatePluginComponent,
+  PlateProps,
+  useStoreEditorRef,
+} from '@udecode/plate';
 import { FC, useMemo, useEffect, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -57,7 +62,7 @@ export const NoDocSyncEditorBase = (props: PlateProps): ReturnType<FC> => {
           id={editorId}
           plugins={editorPlugins}
           options={options}
-          components={components}
+          components={components as Record<string, PlatePluginComponent>}
           editableProps={{ autoFocus: true }}
           {...props}
         >

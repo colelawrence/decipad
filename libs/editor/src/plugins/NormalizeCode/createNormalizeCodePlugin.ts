@@ -12,7 +12,7 @@ type TypedNode = Node & {
   type: string;
 };
 
-export const WithAutoFormatCode = (): WithOverride => (editor) => {
+export const WithNormalizeCode = (): WithOverride => (editor) => {
   const { normalizeNode } = editor;
 
   editor.normalizeNode = (entry) => {
@@ -41,5 +41,5 @@ export const WithAutoFormatCode = (): WithOverride => (editor) => {
   return editor;
 };
 
-export const createAutoFormatCodePlugin =
-  getPlatePluginWithOverrides(WithAutoFormatCode);
+export const createNormalizeCodePlugin =
+  getPlatePluginWithOverrides(WithNormalizeCode);

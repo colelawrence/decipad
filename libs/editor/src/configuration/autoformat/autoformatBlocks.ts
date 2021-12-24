@@ -7,7 +7,7 @@ import {
   TEditor,
 } from '@udecode/plate';
 import { insertCodeBlockBelowOrReplace } from '../../utils/codeBlock';
-import { requireSelectionPath } from '../../utils/selection';
+import { requireCollapsedSelection } from '../../utils/selection';
 import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
 
 export const autoformatBlocks: AutoformatRule[] = [
@@ -36,6 +36,10 @@ export const autoformatBlocks: AutoformatRule[] = [
     query: doesSelectionAllowTextStyling,
     triggerAtBlockStart: false,
     format: (editor: TEditor): void =>
-      insertCodeBlockBelowOrReplace(editor, requireSelectionPath(editor), true),
+      insertCodeBlockBelowOrReplace(
+        editor,
+        requireCollapsedSelection(editor).path,
+        true
+      ),
   },
 ];

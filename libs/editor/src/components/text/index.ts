@@ -8,3 +8,4 @@ export { Title } from './Title';
 export { UnorderedList } from './UnorderedList';
 
 export * from './inline';
+export * from './mark';

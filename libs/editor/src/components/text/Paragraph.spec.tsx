@@ -3,6 +3,7 @@ import {
   ELEMENT_PARAGRAPH,
   Plate,
   createEditorPlugins,
+  PlatePluginComponent,
 } from '@udecode/plate';
 import { render, waitFor } from '@testing-library/react';
 import { Transforms } from 'slate';
@@ -16,7 +17,7 @@ it('shows a placeholder when empty and selected', async () => {
       editor={editor}
       initialValue={[{ type: ELEMENT_PARAGRAPH, children: [{ text: 'text' }] }]}
       plugins={[createParagraphPlugin()]}
-      components={{ [ELEMENT_PARAGRAPH]: Paragraph }}
+      components={{ [ELEMENT_PARAGRAPH]: Paragraph as PlatePluginComponent }}
     />
   );
   const textElement = getByText('text');
@@ -44,7 +45,7 @@ it('does not show a placeholder when not empty', async () => {
       editor={editor}
       initialValue={[{ type: ELEMENT_PARAGRAPH, children: [{ text: 'text' }] }]}
       plugins={[createParagraphPlugin()]}
-      components={{ [ELEMENT_PARAGRAPH]: Paragraph }}
+      components={{ [ELEMENT_PARAGRAPH]: Paragraph as PlatePluginComponent }}
     />
   );
   const textElement = getByText('text');
@@ -71,7 +72,7 @@ it('does not show a placeholder when not selected', async () => {
         { type: ELEMENT_PARAGRAPH, children: [{ text: 'other' }] },
       ]}
       plugins={[createParagraphPlugin()]}
-      components={{ [ELEMENT_PARAGRAPH]: Paragraph }}
+      components={{ [ELEMENT_PARAGRAPH]: Paragraph as PlatePluginComponent }}
     />
   );
   const textElement = getByText('text');
@@ -100,7 +101,7 @@ it('does not show a placeholder when selecting more than the paragraph', async (
         { type: ELEMENT_PARAGRAPH, children: [{ text: 'other' }] },
       ]}
       plugins={[createParagraphPlugin()]}
-      components={{ [ELEMENT_PARAGRAPH]: Paragraph }}
+      components={{ [ELEMENT_PARAGRAPH]: Paragraph as PlatePluginComponent }}
     />
   );
   const textElement = getByText('text');

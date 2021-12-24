@@ -14,6 +14,7 @@ export { Heading2 } from './Heading2/Heading2';
 export { IconButton } from './IconButton/IconButton';
 export { CodeError } from './CodeError/CodeError';
 export { Italic } from './Italic/Italic';
+export { Link } from './Link/Link';
 export { ListItem } from './ListItem/ListItem';
 export { MenuItem } from './MenuItem/MenuItem';
 export { NavigationItem } from './NavigationItem/NavigationItem';

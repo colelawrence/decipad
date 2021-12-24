@@ -1,0 +1,22 @@
+import { css } from '@emotion/react';
+import { ReactNode } from 'react';
+import { p16Regular } from '../../primitives';
+import { Anchor, SlateElementProps } from '../../utils';
+
+const styles = css(p16Regular, {
+  textDecoration: 'underline',
+  cursor: 'pointer',
+});
+
+interface LinkProps extends SlateElementProps {
+  readonly children: ReactNode;
+  readonly href: string;
+}
+
+export const Link = ({ children, href }: LinkProps): ReturnType<React.FC> => {
+  return (
+    <Anchor css={styles} href={href}>
+      {children}
+    </Anchor>
+  );
+};

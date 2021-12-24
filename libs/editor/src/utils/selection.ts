@@ -1,18 +1,18 @@
 import { isSelectionExpanded } from '@udecode/plate';
-import { Editor, Path } from 'slate';
+import { Editor, Path, Point } from 'slate';
 
 /**
- * Get the path of the current selection,
+ * Get the point of the current selection,
  * throwing if there is no selection or the selection is expanded.
  */
-export const requireSelectionPath = (editor: Editor): Path => {
+export const requireCollapsedSelection = (editor: Editor): Point => {
   if (!editor.selection) {
     throw new Error('There is no selection');
   }
   if (isSelectionExpanded(editor)) {
     throw new Error('The selection is expanded');
   }
-  return editor.selection.anchor.path;
+  return editor.selection.anchor;
 };
 
 export const getPathContainingSelection = (editor: Editor): Path | null => {

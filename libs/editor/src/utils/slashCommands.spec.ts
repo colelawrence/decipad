@@ -6,11 +6,15 @@ import {
   ELEMENT_H3,
   ELEMENT_PARAGRAPH,
 } from '@udecode/plate';
-import { ElementType, ELEMENT_IMPORT_DATA, TABLE_INPUT } from './elementTypes';
+import {
+  ElementType,
+  ELEMENT_IMPORT_DATA,
+  ELEMENT_TABLE_INPUT,
+} from './elementTypes';
 import { execute, SlashCommand } from './slashCommands';
 
 const expectedTypes: Record<SlashCommand, ElementType> = {
-  table: TABLE_INPUT,
+  table: ELEMENT_TABLE_INPUT,
   heading1: ELEMENT_H2,
   heading2: ELEMENT_H3,
   'import-data': ELEMENT_IMPORT_DATA,

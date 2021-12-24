@@ -4,6 +4,7 @@ import {
   Plate,
   createHeadingPlugin,
   ELEMENT_H1,
+  PlatePluginComponent,
 } from '@udecode/plate';
 import { Transforms } from 'slate';
 import { Title } from './Title';
@@ -16,7 +17,7 @@ it('shows a placeholder only when empty', async () => {
       editor={editor}
       initialValue={[{ type: ELEMENT_H1, children: [{ text: 'text' }] }]}
       plugins={[createHeadingPlugin({ levels: 1 })]}
-      components={{ [ELEMENT_H1]: Title }}
+      components={{ [ELEMENT_H1]: Title as PlatePluginComponent }}
     />
   );
   const h1Element = getByText('text').closest('h1');

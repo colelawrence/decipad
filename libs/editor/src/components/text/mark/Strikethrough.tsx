@@ -1,10 +1,7 @@
 import { atoms } from '@decipad/ui';
-import { PlatePluginComponent } from '@udecode/plate';
+import { PlateComponent } from '../../../utils/components';
 
-export const Strikethrough: PlatePluginComponent = ({
-  attributes,
-  children,
-}) => {
+export const Strikethrough: PlateComponent = ({ attributes, children }) => {
   if (!('data-slate-leaf' in attributes)) {
     throw new Error('Strikethrough is a leaf');
   }

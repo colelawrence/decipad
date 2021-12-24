@@ -1,8 +1,4 @@
-import {
-  PlatePluginComponent,
-  useEventEditorId,
-  useStoreEditorState,
-} from '@udecode/plate';
+import { useEventEditorId, useStoreEditorState } from '@udecode/plate';
 import { FC, useCallback } from 'react';
 import { Node, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
@@ -10,12 +6,18 @@ import { getDefined } from '@decipad/utils';
 
 import { TableData } from '../../utils/tableTypes';
 import { TableInner } from './TableInner';
+import { PlateComponent } from '../../utils/components';
+import { ELEMENT_TABLE_INPUT } from '../../utils/elementTypes';
 
-export const Table: PlatePluginComponent = ({
+export const Table: PlateComponent = ({
   children,
   element,
   attributes,
 }): ReturnType<FC> => {
+  if (element?.type !== ELEMENT_TABLE_INPUT) {
+    throw new Error('Table is meant to render table elements');
+  }
+
   const editor = getDefined(
     useStoreEditorState(useEventEditorId('focus')),
     'missing editor'
@@ -32,7 +34,7 @@ export const Table: PlatePluginComponent = ({
     [editor, element]
   );
 
-  const value = element.tableData as TableData;
+  const value = element.tableData;
 
   // IMPORTANT NOTE: do not remove the children elements from rendering.
   // Even though they're one element with an empty text property, their absence triggers

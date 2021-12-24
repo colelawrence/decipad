@@ -4,7 +4,7 @@ import {
   ResultsContextProvider,
   ExternalAuthenticationContextProvider,
 } from '@decipad/ui';
-import { Plate, useStoreEditorRef } from '@udecode/plate';
+import { Plate, PlatePluginComponent, useStoreEditorRef } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -28,8 +28,6 @@ export interface EditorProps {
   authSecret?: string;
   autoFocus: boolean;
 }
-
-// TODO how to figure out when we have read only permissions on the pad
 
 const SlateEditor = ({
   padId,
@@ -90,7 +88,7 @@ const SlateEditor = ({
               id={editorId}
               plugins={editorPlugins}
               options={options}
-              components={components}
+              components={components as Record<string, PlatePluginComponent>}
               editableProps={{ autoFocus, readOnly }}
             >
               <Tooltip />

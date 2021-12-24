@@ -1,7 +1,7 @@
 import { atoms } from '@decipad/ui';
-import { PlatePluginComponent } from '@udecode/plate';
+import { PlateComponent } from '../../../utils/components';
 
-export const Italic: PlatePluginComponent = ({ attributes, children }) => {
+export const Italic: PlateComponent = ({ attributes, children }) => {
   if (!('data-slate-leaf' in attributes)) {
     throw new Error('Italic is a leaf');
   }

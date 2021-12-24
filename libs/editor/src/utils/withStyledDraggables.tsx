@@ -10,10 +10,10 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_TABLE,
   ELEMENT_UL,
-  PlatePluginComponent,
   withDraggables,
 } from '@udecode/plate';
 import { GrDrag } from 'react-icons/gr';
+import { PlateComponent } from './components';
 import { ELEMENT_IMPORT_DATA } from './elementTypes';
 
 const GrabberTooltipContent = () => (
@@ -46,8 +46,8 @@ const iconStyles = css({
 });
 
 export const withStyledDraggables = (
-  components: Partial<Record<DefaultPlatePluginKey, PlatePluginComponent>>
-): Partial<Record<DefaultPlatePluginKey, PlatePluginComponent>> => {
+  components: Partial<Record<DefaultPlatePluginKey, PlateComponent>>
+): Partial<Record<DefaultPlatePluginKey, PlateComponent>> => {
   return withDraggables(components, [
     {
       keys: [ELEMENT_PARAGRAPH],

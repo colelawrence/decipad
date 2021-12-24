@@ -36,7 +36,7 @@ export async function getPadList(): Promise<PadList> {
   const names = await page.$$('//main//li//a//strong');
   const pads: PadList = [];
   for (const name of names) {
-    const anchor = await name.evaluateHandle((elem) => elem.closest('a'));
+    const anchor = await name.evaluateHandle((elem) => elem.closest('a')!);
     pads.push({
       anchor,
       name: (await name.textContent()) ?? '',

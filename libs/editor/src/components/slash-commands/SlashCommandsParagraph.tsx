@@ -1,13 +1,18 @@
 import { organisms } from '@decipad/ui';
 import { useWindowListener } from '@decipad/react-utils';
-import { PlatePluginComponent, useEditorState } from '@udecode/plate';
+import { useEditorState } from '@udecode/plate';
 import { useCallback, useEffect, useState } from 'react';
 import { Editor } from 'slate';
 import { ReactEditor, useFocused, useSelected } from 'slate-react';
+import { PlateComponent } from '../../utils/components';
 import { execute } from '../../utils/slashCommands';
 import { Paragraph } from '../text';
 
-export const SlashCommandsParagraph: PlatePluginComponent = (props) => {
+export const SlashCommandsParagraph: PlateComponent = (props) => {
+  if (!props.element) {
+    throw new Error('SlashCommandsParagraph is not a leaf');
+  }
+
   const editor = useEditorState();
   const selected = useSelected();
   const focused = useFocused();

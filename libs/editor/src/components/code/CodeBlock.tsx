@@ -1,5 +1,4 @@
 import { organisms, useResults, Statement } from '@decipad/ui';
-import { PlatePluginComponent } from '@udecode/plate';
 import { docs } from '@decipad/routing';
 import {
   Computer,
@@ -8,12 +7,17 @@ import {
   serializeResult,
 } from '@decipad/language';
 import { useComputer } from '../../contexts/Computer';
+import { PlateComponent } from '../../utils/components';
 
-export const CodeBlock: PlatePluginComponent = ({
+export const CodeBlock: PlateComponent = ({
   attributes,
   children,
   element,
 }) => {
+  if (!element) {
+    throw new Error('CodeBlock is not a leaf');
+  }
+
   const computer = useComputer();
   const { blockResults } = useResults();
 

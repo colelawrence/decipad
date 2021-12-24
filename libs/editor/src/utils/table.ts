@@ -1,10 +1,10 @@
 import { insertNodes, TDescendant, TEditor } from '@udecode/plate';
 import { Path } from 'slate';
-import { TABLE_INPUT } from './elementTypes';
+import { ELEMENT_TABLE_INPUT } from './elementTypes';
 import { requirePathBelowBlock } from './path';
 
 const tableElement = {
-  type: TABLE_INPUT,
+  type: ELEMENT_TABLE_INPUT,
   tableData: {
     variableName: '',
     columns: [

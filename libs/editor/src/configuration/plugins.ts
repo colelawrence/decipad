@@ -6,7 +6,6 @@ import {
   createExitBreakPlugin,
   createHeadingPlugin,
   createHistoryPlugin,
-  createKbdPlugin,
   createListPlugin,
   createNodeIdPlugin,
   createParagraphPlugin,
@@ -22,39 +21,48 @@ import { createCodeVariableHighlightingPlugin } from '../plugins/CodeVariableHig
 import { createForcedLayoutPlugin } from '../plugins/ForcedLayout/createForcedLayoutPlugin';
 import { createInteractiveTablePlugin } from '../plugins/InteractiveTable/createInteractiveTablePlugin';
 import { createMarksPlugins } from '../plugins/Marks/createMarksPlugins';
+import { createLinkPlugin } from '../plugins/Link/createLinkPlugin';
+import { createNormalizeCodePlugin } from '../plugins/NormalizeCode/createNormalizeCodePlugin';
 import { autoformatRules } from './autoformat';
 import { exitBreakOptions } from './exitBreakOptions';
 import { resetBlockTypeOptions } from './resetBlockTypeOptions';
 import { softBreakOptions } from './softBreakOptions';
-import { createAutoFormatCodePlugin } from '../plugins/AutoFormatCode/createAutoFormatCodePlugin';
 
 export const plugins = [
+  // fundamentals
   createReactPlugin(),
   createHistoryPlugin(),
 
+  // basic blocks
   createParagraphPlugin(),
   createBlockquotePlugin(),
   createHeadingPlugin({ levels: 3 }),
+  createListPlugin(),
+
+  // custom blocks
+  createInteractiveTablePlugin(),
   createCodeBlockPlugin(),
 
-  createListPlugin(),
-  createInteractiveTablePlugin(),
+  // structure enforcement
+  createForcedLayoutPlugin(),
+  createTrailingBlockPlugin({ type: ELEMENT_PARAGRAPH }),
 
-  ...createMarksPlugins(),
-
-  createAutoPairsPlugin(),
-
+  // block manipulation
   createExitBreakPlugin(exitBreakOptions),
   createSoftBreakPlugin(softBreakOptions),
   createResetNodePlugin(resetBlockTypeOptions),
-  createAutoformatPlugin(autoformatRules),
-  createCodeVariableHighlightingPlugin(),
   createDndPlugin(),
 
-  createKbdPlugin(),
-  createNodeIdPlugin({ idCreator: nanoid }),
+  // creating elements
+  ...createMarksPlugins(),
+  createAutoformatPlugin(autoformatRules),
+  createLinkPlugin(),
 
-  createForcedLayoutPlugin(),
-  createTrailingBlockPlugin({ type: ELEMENT_PARAGRAPH }),
-  createAutoFormatCodePlugin(),
+  // code editing
+  createNormalizeCodePlugin(),
+  createCodeVariableHighlightingPlugin(),
+  createAutoPairsPlugin(),
+
+  // needed for the language integration
+  createNodeIdPlugin({ idCreator: nanoid }),
 ];

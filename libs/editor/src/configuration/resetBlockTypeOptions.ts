@@ -1,13 +1,12 @@
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_PARAGRAPH,
-  ELEMENT_TODO_LI,
   isBlockAboveEmpty,
   isSelectionAtBlockStart,
 } from '@udecode/plate';
 
 const resetBlockTypesCommonRule = {
-  types: [ELEMENT_BLOCKQUOTE, ELEMENT_TODO_LI],
+  types: [ELEMENT_BLOCKQUOTE],
   defaultType: ELEMENT_PARAGRAPH,
 };
 

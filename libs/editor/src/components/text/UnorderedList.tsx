@@ -1,10 +1,7 @@
 import { molecules } from '@decipad/ui';
-import { PlatePluginComponent } from '@udecode/plate';
+import { PlateComponent } from '../../utils/components';
 
-export const UnorderedList: PlatePluginComponent = ({
-  attributes,
-  children,
-}) => {
+export const UnorderedList: PlateComponent = ({ attributes, children }) => {
   if ('data-slate-leaf' in attributes) {
     throw new Error('UnorderedList is not a leaf');
   }

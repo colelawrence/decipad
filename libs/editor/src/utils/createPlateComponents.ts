@@ -1,4 +1,4 @@
-import { ImportDataElement, ImportDataElementProps } from '@decipad/ui';
+import { ImportDataElement } from '@decipad/ui';
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
@@ -7,6 +7,7 @@ import {
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_LI,
+  ELEMENT_LINK,
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
   ELEMENT_UL,
@@ -15,10 +16,7 @@ import {
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
   MARK_UNDERLINE,
-  SPRenderElementProps,
-  SPRenderLeafProps,
 } from '@udecode/plate';
-import { FunctionComponent } from 'react';
 import { withStyledDraggables } from './withStyledDraggables';
 import * as elementTypes from './elementTypes';
 import {
@@ -38,43 +36,42 @@ import {
   Underline,
   Italic,
   Code,
+  Link,
 } from '../components';
-
-type PlateElementComponent = FunctionComponent<
-  SPRenderElementProps | SPRenderLeafProps | ImportDataElementProps
->;
+import type { PlateComponent } from './components';
 
 // This function creates the editor components
 export const createPlateComponents = (): Partial<
-  Record<elementTypes.ElementType, PlateElementComponent>
+  Record<elementTypes.ElementType, PlateComponent>
 > => {
-  const components: Partial<
-    Record<elementTypes.ElementType, PlateElementComponent>
-  > = {
-    // Plate default elements
-    [ELEMENT_PARAGRAPH]: SlashCommandsParagraph,
-    [ELEMENT_H1]: Title,
-    [ELEMENT_H2]: Heading1,
-    [ELEMENT_H3]: Heading2,
-    [ELEMENT_BLOCKQUOTE]: Blockquote,
-    [ELEMENT_CODE_BLOCK]: CodeBlock,
-    [ELEMENT_CODE_LINE]: CodeLine,
+  const components: Partial<Record<elementTypes.ElementType, PlateComponent>> =
+    {
+      // Plate default elements
+      [ELEMENT_PARAGRAPH]: SlashCommandsParagraph,
+      [ELEMENT_H1]: Title,
+      [ELEMENT_H2]: Heading1,
+      [ELEMENT_H3]: Heading2,
+      [ELEMENT_BLOCKQUOTE]: Blockquote,
+      [ELEMENT_CODE_BLOCK]: CodeBlock,
+      [ELEMENT_CODE_LINE]: CodeLine,
 
-    [ELEMENT_UL]: UnorderedList,
-    [ELEMENT_OL]: OrderedList,
-    [ELEMENT_LI]: ListItem,
+      [ELEMENT_UL]: UnorderedList,
+      [ELEMENT_OL]: OrderedList,
+      [ELEMENT_LI]: ListItem,
 
-    // Custom elements
-    [elementTypes.ELEMENT_IMPORT_DATA]: ImportDataElement,
-    [elementTypes.TABLE_INPUT]: Table,
+      [ELEMENT_LINK]: Link,
 
-    // Marks
-    [MARK_BOLD]: Bold,
-    [MARK_UNDERLINE]: Underline,
-    [MARK_STRIKETHROUGH]: Strikethrough,
-    [MARK_ITALIC]: Italic,
-    [MARK_CODE]: Code,
-  };
+      // Custom elements
+      [elementTypes.ELEMENT_IMPORT_DATA]: ImportDataElement as PlateComponent, // TODO rewrite with editor/UI separation
+      [elementTypes.ELEMENT_TABLE_INPUT]: Table,
+
+      // Marks
+      [MARK_BOLD]: Bold,
+      [MARK_UNDERLINE]: Underline,
+      [MARK_STRIKETHROUGH]: Strikethrough,
+      [MARK_ITALIC]: Italic,
+      [MARK_CODE]: Code,
+    };
 
   return withStyledDraggables(components);
 };

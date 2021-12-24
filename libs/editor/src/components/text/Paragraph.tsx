@@ -1,13 +1,10 @@
 import { atoms } from '@decipad/ui';
-import {
-  PlatePluginComponent,
-  useEditorState,
-  isSelectionExpanded,
-} from '@udecode/plate';
+import { useEditorState, isSelectionExpanded } from '@udecode/plate';
 import { Editor } from 'slate';
 import { useSelected } from 'slate-react';
+import { PlateComponent } from '../../utils/components';
 
-export const Paragraph: PlatePluginComponent = ({
+export const Paragraph: PlateComponent = ({
   attributes,
   children,
   element,
@@ -15,7 +12,7 @@ export const Paragraph: PlatePluginComponent = ({
   const editor = useEditorState();
   const selected = useSelected();
 
-  if ('data-slate-leaf' in attributes) {
+  if ('data-slate-leaf' in attributes || !element) {
     throw new Error('Paragraph is not a leaf');
   }
 

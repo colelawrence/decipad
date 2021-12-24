@@ -1,17 +1,14 @@
 import { atoms } from '@decipad/ui';
-import { PlatePluginComponent, useEditorState } from '@udecode/plate';
+import { useEditorState } from '@udecode/plate';
 import { Editor } from 'slate';
+import { PlateComponent } from '../../utils/components';
 
 // TODO Title should probably not be a part of the editor in the first place
 
-export const Title: PlatePluginComponent = ({
-  attributes,
-  children,
-  element,
-}) => {
+export const Title: PlateComponent = ({ attributes, children, element }) => {
   const editor = useEditorState();
 
-  if ('data-slate-leaf' in attributes) {
+  if ('data-slate-leaf' in attributes || !element) {
     throw new Error('Title is not a leaf');
   }
 
