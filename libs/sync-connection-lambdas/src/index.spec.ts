@@ -74,14 +74,24 @@ test('connection', (ctx) => {
     const user = await ctx.auth();
     await new Promise<void>((resolve) => {
       doc = new YDoc();
-      provider = new WebsocketProvider(ctx.websocketURL(pad.id), doc, {
+      provider = new WebsocketProvider(doc, {
         protocol: user.token,
+        beforeConnect: (p) => {
+          // eslint-disable-next-line no-param-reassign
+          p.serverUrl = `${ctx.websocketURL()}?doc=${pad.id}`;
+        },
       });
-      provider.once('status', (status: WSStatus) => {
-        expect(status).toMatchObject({
-          status: 'connected',
+
+      provider.once('status', (status1: WSStatus) => {
+        expect(status1).toMatchObject({
+          status: 'connecting',
         });
-        resolve();
+        provider!.once('status', (status2: WSStatus) => {
+          expect(status2).toMatchObject({
+            status: 'connected',
+          });
+          resolve();
+        });
       });
     });
   });
@@ -115,15 +125,25 @@ test('connection', (ctx) => {
     const user = await ctx.auth();
     await new Promise<void>((resolve) => {
       doc = new YDoc();
-      provider = new WebsocketProvider(ctx.websocketURL(pad.id), doc, {
+      provider = new WebsocketProvider(doc, {
         protocol: user.token,
         connectBc: false,
+        beforeConnect: (p) => {
+          // eslint-disable-next-line no-param-reassign
+          p.serverUrl = `${ctx.websocketURL()}?doc=${pad.id}`;
+        },
       });
-      provider.once('status', (status: WSStatus) => {
-        expect(status).toMatchObject({
-          status: 'connected',
+
+      provider.once('status', (status1: WSStatus) => {
+        expect(status1).toMatchObject({
+          status: 'connecting',
         });
-        resolve();
+        provider!.once('status', (status2: WSStatus) => {
+          expect(status2).toMatchObject({
+            status: 'connected',
+          });
+          resolve();
+        });
       });
     });
   });

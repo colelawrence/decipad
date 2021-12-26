@@ -64,8 +64,21 @@ test('sync many', (ctx) => {
 
   it('all editors connect', async () => {
     const auth = await ctx.auth();
+    fetch.mockClear();
     fetch.enableMocks();
-    fetch.mockResponse(auth.token);
+    fetch.mockResponse(async (req) => {
+      switch (req.url) {
+        case 'http://localhost:4200/api/ws': {
+          return ctx.websocketURL();
+        }
+        case 'http://localhost:4200/api/auth/token?for=pubsub': {
+          return auth.token;
+        }
+        default:
+          throw new Error(`Unknown URL${req.url}`);
+      }
+    });
+    fetch.mockIf((req) => req.url.startsWith('http://localhost:4200/api'));
 
     for (let i = 0; i < replicaCount; i += 1) {
       const editor = withDocSync(createEditor(), pad.id, {
@@ -87,6 +100,8 @@ test('sync many', (ctx) => {
   it('makes random changes to the editors and pad contents converge', async () => {
     expect(editors.length).toBeGreaterThan(0);
     await randomChangesToEditors(editors, randomChangeCountPerReplica);
+
+    console.log('random changes completed');
 
     await waitForExpect(async () => {
       const expectedContents = clone(editors[0].children);

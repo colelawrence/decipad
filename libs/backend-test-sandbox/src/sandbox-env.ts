@@ -36,6 +36,7 @@ export async function createSandboxEnv(
   );
   const appConfig = {
     PORT: portBase,
+    ARC_WSS_URL: `ws://localhost:${portBase}/`,
     NEXTAUTH_URL: new URL('api/auth', baseUrl(portBase)).href,
     ARC_EVENTS_PORT: eventsPort,
     ARC_TABLES_PORT: tablesPort,

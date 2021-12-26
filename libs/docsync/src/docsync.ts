@@ -165,6 +165,10 @@ async function fetchToken(): Promise<string> {
   return resp.text();
 }
 
+async function wsAddress(docId: string): Promise<string> {
+  return `${await (await fetch('/api/ws')).text()}?doc=${docId}`;
+}
+
 export function withDocSync(
   editor: Editor,
   docId: string,
@@ -182,8 +186,8 @@ export function withDocSync(
 
   const beforeConnect = async (provider: WebsocketProvider) => {
     try {
-      const token = authSecret || (await fetchToken());
-      provider.protocol = token;
+      provider.serverUrl = await wsAddress(docId);
+      provider.protocol = authSecret || (await fetchToken());
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);
@@ -193,11 +197,7 @@ export function withDocSync(
   let wsp: WebsocketProvider | undefined;
   let awareness: Awareness | undefined;
   if (ws) {
-    const wsAddress = `${
-      process.env.NEXT_PUBLIC_DECI_WS_URL || 'ws://localhost:3333/ws'
-    }?doc=${docId}`;
-
-    wsp = new WebsocketProvider(wsAddress, doc, {
+    wsp = new WebsocketProvider(doc, {
       WebSocketPolyfill,
       connect,
       beforeConnect,

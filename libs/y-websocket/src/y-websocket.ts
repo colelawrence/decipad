@@ -12,6 +12,7 @@ import * as mutex from 'lib0/mutex';
 import { Observable } from 'lib0/observable';
 import * as math from 'lib0/math';
 import debounce from 'lodash.debounce';
+import { getDefined } from '@decipad/utils';
 
 export interface WSStatus {
   status: 'disconnected' | 'connected' | 'connecting';
@@ -185,7 +186,10 @@ const readMessage = (
 
 const setupWS = (provider: WebsocketProvider) => {
   if (provider.shouldConnect && !provider.ws) {
-    const websocket = new provider._WS(provider.url, provider.protocol);
+    const websocket = new provider._WS(
+      getDefined(provider.url),
+      provider.protocol
+    );
     websocket.binaryType = 'arraybuffer';
     provider.ws = websocket;
     provider.wsconnecting = true;
@@ -300,7 +304,7 @@ const broadcastMessage = (provider: WebsocketProvider, buf: Uint8Array) => {
   }
   if (provider.bcconnected) {
     provider.mux(() => {
-      bc.publish(provider.bcChannel, buf);
+      bc.publish(getDefined(provider.bcChannel), buf);
     });
   }
 };
@@ -312,8 +316,8 @@ export class WebsocketProvider extends Observable<string> {
   _WS: typeof WebSocket;
   awareness: awarenessProtocol.Awareness;
   willConnectBc: boolean;
-  bcChannel: string;
-  url: string;
+  bcChannel?: string;
+  url?: string;
   shouldConnect: boolean;
   ws: WebSocket | undefined;
   wsconnected = false;
@@ -340,7 +344,7 @@ export class WebsocketProvider extends Observable<string> {
   private _resyncInterval: 0 | ReturnType<typeof setInterval> = 0;
   private _checkInterval: ReturnType<typeof setInterval> | undefined;
 
-  constructor(serverUrl: string, doc: YDoc, options: Options = {}) {
+  constructor(doc: YDoc, options: Options = {}) {
     super();
     const {
       connect = true,
@@ -353,11 +357,6 @@ export class WebsocketProvider extends Observable<string> {
     } = options;
 
     // ensure that url is always ends with /
-    while (serverUrl[serverUrl.length - 1] === '/') {
-      serverUrl = serverUrl.slice(0, serverUrl.length - 1);
-    }
-    this.bcChannel = serverUrl;
-    this.url = serverUrl;
     this.doc = doc;
     this.protocol = protocol;
     this.beforeConnect = beforeConnect;
@@ -426,6 +425,12 @@ export class WebsocketProvider extends Observable<string> {
     }
   }
 
+  set serverUrl(serverUrl: string) {
+    const url = new URL(serverUrl).href;
+    this.bcChannel = url;
+    this.url = url;
+  }
+
   send(message: Uint8Array): void {
     if (this.wsconnected && this.ws) {
       this.ws.send(encodeMessage(message));
@@ -436,7 +441,7 @@ export class WebsocketProvider extends Observable<string> {
     this.mux(() => {
       const encoder = readMessage(this, new Uint8Array(data), false);
       if (encoding.length(encoder) > 1) {
-        bc.publish(this.bcChannel, encoding.toUint8Array(encoder));
+        bc.publish(getDefined(this.bcChannel), encoding.toUint8Array(encoder));
       }
     });
   }
@@ -529,7 +534,7 @@ export class WebsocketProvider extends Observable<string> {
 
   connectBc(): void {
     if (!this.bcconnected) {
-      bc.subscribe(this.bcChannel, this._bcSubscriber);
+      bc.subscribe(getDefined(this.bcChannel), this._bcSubscriber);
       this.bcconnected = true;
     }
     // send sync step1 to bc
@@ -538,16 +543,25 @@ export class WebsocketProvider extends Observable<string> {
       const encoderSync = encoding.createEncoder();
       encoding.writeVarUint(encoderSync, messageSync);
       syncProtocol.writeSyncStep1(encoderSync, this.doc);
-      bc.publish(this.bcChannel, encoding.toUint8Array(encoderSync));
+      bc.publish(
+        getDefined(this.bcChannel),
+        encoding.toUint8Array(encoderSync)
+      );
       // broadcast local state
       const encoderState = encoding.createEncoder();
       encoding.writeVarUint(encoderState, messageSync);
       syncProtocol.writeSyncStep2(encoderState, this.doc);
-      bc.publish(this.bcChannel, encoding.toUint8Array(encoderState));
+      bc.publish(
+        getDefined(this.bcChannel),
+        encoding.toUint8Array(encoderState)
+      );
       // write queryAwareness
       const encoderAwarenessQuery = encoding.createEncoder();
       encoding.writeVarUint(encoderAwarenessQuery, messageQueryAwareness);
-      bc.publish(this.bcChannel, encoding.toUint8Array(encoderAwarenessQuery));
+      bc.publish(
+        getDefined(this.bcChannel),
+        encoding.toUint8Array(encoderAwarenessQuery)
+      );
       // broadcast local awareness state
       const encoderAwarenessState = encoding.createEncoder();
       encoding.writeVarUint(encoderAwarenessState, messageAwareness);
@@ -557,7 +571,10 @@ export class WebsocketProvider extends Observable<string> {
           this.doc.clientID,
         ])
       );
-      bc.publish(this.bcChannel, encoding.toUint8Array(encoderAwarenessState));
+      bc.publish(
+        getDefined(this.bcChannel),
+        encoding.toUint8Array(encoderAwarenessState)
+      );
     });
   }
 
@@ -575,7 +592,7 @@ export class WebsocketProvider extends Observable<string> {
     );
     broadcastMessage(this, encoding.toUint8Array(encoder));
     if (this.bcconnected) {
-      bc.unsubscribe(this.bcChannel, this._bcSubscriber);
+      bc.unsubscribe(getDefined(this.bcChannel), this._bcSubscriber);
       this.bcconnected = false;
     }
   }

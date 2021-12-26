@@ -19,7 +19,7 @@ export interface TestContext {
   beforeAll: typeof beforeAll;
   graphql: ReturnType<typeof callGraphql>;
   http: ReturnType<typeof call>;
-  websocketURL: (docId: string) => string;
+  websocketURL: () => string;
   websocket: (docId: string, token: string) => WebSocket;
   auth: ReturnType<typeof auth>;
   gql: typeof gql;
@@ -46,9 +46,8 @@ export function testWithSandbox(
       testContext.graphql = callGraphql(config);
       testContext.http = call(config);
       testContext.auth = auth(config);
-      testContext.websocketURL = (docId: string) => websocketURL(config, docId);
-      testContext.websocket = (docId: string, token: string) =>
-        createWebsocket(docId, config, token);
+      testContext.websocketURL = () => websocketURL(config);
+      testContext.websocket = (token: string) => createWebsocket(config, token);
 
       sandbox.start(env, config).then(resolve);
     });

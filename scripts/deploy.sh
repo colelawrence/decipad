@@ -7,6 +7,10 @@ echo "Preparing the public files folder...";
 rm -rf apps/backend/public
 mkdir apps/backend/public
 
+echo "Configuring the client..."
+echo "NEXT_PUBLIC_SENTRY_DSN=${NEXT_PUBLIC_SENTRY_DSN:-}" > apps/client/.env.production
+echo "NEXT_PUBLIC_SENTRY_ENVIRONMENT=${NEXT_PUBLIC_SENTRY_ENVIRONMENT:-}" >> apps/client/.env.production
+
 echo "Building frontend..."
 yarn build:frontend
 cp -r dist/apps/client/exported/. apps/backend/public
@@ -26,20 +30,4 @@ yarn build:backend
 echo "Deploying..."
 mkdir -p tmp/deploy
 cd apps/backend
-../../node_modules/.bin/arc deploy --no-hydrate | tee ../../tmp/deploy/result.txt
-
-echo "Configuring the client..."
-cd ../..
-WSS=`grep -Eo "wss://[^/\"]+" ./tmp/deploy/result.txt`
-echo "Found WSS address: ${WSS}"
-echo "NEXT_PUBLIC_DECI_WS_URL=${WSS}/staging" > apps/client/.env.production
-echo "NEXT_PUBLIC_SENTRY_DSN=${NEXT_PUBLIC_SENTRY_DSN:-}" >> apps/client/.env.production
-echo "NEXT_PUBLIC_SENTRY_ENVIRONMENT=${NEXT_PUBLIC_SENTRY_ENVIRONMENT:-}" >> apps/client/.env.production
-
-echo "Building frontend..."
-yarn build:frontend
-cp -r dist/apps/client/exported/. apps/backend/public
-
-echo "Deploying client..."
-cd apps/backend
-../../node_modules/.bin/arc deploy --static --no-hydrate
+../../node_modules/.bin/arc deploy --no-hydrate
