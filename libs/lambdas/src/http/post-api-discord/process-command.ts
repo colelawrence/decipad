@@ -37,7 +37,7 @@ async function parseAndReplyToCommand(command: Command): Promise<string> {
 export async function processCommand(command: Command): Promise<CommandReply> {
   const replyContent = await parseAndReplyToCommand(command);
   return {
-    tts: true,
+    tts: false,
     content: replyContent,
     embeds: [],
     allowed_mentions: { parse: [] },
