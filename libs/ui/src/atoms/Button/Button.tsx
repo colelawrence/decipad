@@ -3,6 +3,8 @@ import {
   black,
   cssVar,
   electricGreen200,
+  grey200,
+  grey270,
   p13SemiBold,
   shortAnimationDuration,
   transparency,
@@ -42,6 +44,12 @@ const extraSlimStyles = css({
 
 const extraLargeStyles = css({
   padding: '12px 24px',
+});
+
+const disabledStyles = css({
+  backgroundColor: grey200.rgb,
+  color: grey270.rgb,
+  cursor: 'not-allowed',
 });
 
 type ButtonSizes =
@@ -92,6 +100,7 @@ export const Button = ({
         primary && primaryStyles,
         extraSlim && extraSlimStyles,
         extraLarge && extraLargeStyles,
+        disabled && disabledStyles,
       ])}
     >
       {children}
@@ -105,6 +114,7 @@ export const Button = ({
         primary && primaryStyles,
         extraSlim && extraSlimStyles,
         extraLarge && extraLargeStyles,
+        disabled && disabledStyles,
       ]}
       onClick={(event) => {
         event.preventDefault();

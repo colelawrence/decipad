@@ -35,3 +35,15 @@ export const PrimaryExtraSlim: Story<{ children: string }> = (args) => (
 export const PrimaryExtraLarge: Story<{ children: string }> = (args) => (
   <Button primary extraLarge {...args} />
 );
+
+export const Disabled: Story<{ children: string }> = (args) => (
+  <Button disabled {...args} />
+);
+
+export const DisabledExtraSlim: Story<{ children: string }> = (args) => (
+  <Button disabled extraSlim {...args} />
+);
+
+export const DisabledExtraLarge: Story<{ children: string }> = (args) => (
+  <Button disabled extraLarge {...args} />
+);
