@@ -20,9 +20,18 @@ export const SecondaryExtraSlim: Story<{ children: string }> = (args) => (
   <Button extraSlim {...args} />
 );
 
+export const SecondaryExtraLarge: Story<{ children: string }> = (args) => (
+  <Button extraLarge {...args} />
+);
+
 export const Primary: Story<{ children: string }> = (args) => (
   <Button primary {...args} />
 );
+
 export const PrimaryExtraSlim: Story<{ children: string }> = (args) => (
   <Button primary extraSlim {...args} />
+);
+
+export const PrimaryExtraLarge: Story<{ children: string }> = (args) => (
+  <Button primary extraLarge {...args} />
 );

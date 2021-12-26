@@ -31,6 +31,22 @@ describe('when primary', () => {
   });
 });
 
+describe('when extra large', () => {
+  it('has bigger vertical padding', () => {
+    const { rerender, getByRole } = render(<Button>text</Button>);
+    const normalPaddingTop = Number(
+      getComputedStyle(getByRole('button')).paddingTop.replace(/px$/, '')
+    );
+
+    rerender(<Button extraLarge>text</Button>);
+    const extraLargePaddingTop = Number(
+      getComputedStyle(getByRole('button')).paddingTop.replace(/px$/, '')
+    );
+
+    expect(extraLargePaddingTop).toBeGreaterThan(normalPaddingTop);
+  });
+});
+
 describe('when extra slim', () => {
   it('has lower vertical padding', () => {
     const { rerender, getByRole } = render(<Button>text</Button>);

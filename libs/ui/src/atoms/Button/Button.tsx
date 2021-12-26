@@ -40,12 +40,21 @@ const extraSlimStyles = css({
   padding: '6px 14px',
 });
 
-type ButtonProps = {
-  readonly primary?: boolean;
-  readonly extraSlim?: boolean;
-  readonly children: TextChildren;
-  readonly disabled?: boolean;
-} & (
+const extraLargeStyles = css({
+  padding: '12px 24px',
+});
+
+type ButtonSizes =
+  | {
+      readonly extraSlim?: boolean;
+      readonly extraLarge?: undefined;
+    }
+  | {
+      readonly extraSlim?: undefined;
+      readonly extraLarge?: boolean;
+    };
+
+type ButtonTypes =
   | {
       readonly href: string;
       readonly onClick?: undefined;
@@ -55,12 +64,19 @@ type ButtonProps = {
       readonly href?: undefined;
       readonly onClick?: () => void;
       readonly submit?: boolean;
-    }
-);
+    };
+
+type ButtonProps = {
+  readonly primary?: boolean;
+  readonly children: TextChildren;
+  readonly disabled?: boolean;
+} & ButtonTypes &
+  ButtonSizes;
 
 export const Button = ({
   primary = false,
   extraSlim = false,
+  extraLarge = false,
   submit = primary,
   disabled = false,
 
@@ -75,6 +91,7 @@ export const Button = ({
         styles,
         primary && primaryStyles,
         extraSlim && extraSlimStyles,
+        extraLarge && extraLargeStyles,
       ])}
     >
       {children}
@@ -83,7 +100,12 @@ export const Button = ({
     <button
       disabled={disabled}
       type={submit ? 'submit' : 'button'}
-      css={[styles, primary && primaryStyles, extraSlim && extraSlimStyles]}
+      css={[
+        styles,
+        primary && primaryStyles,
+        extraSlim && extraSlimStyles,
+        extraLarge && extraLargeStyles,
+      ]}
       onClick={(event) => {
         event.preventDefault();
         onClick();
