@@ -50,6 +50,54 @@ process.on('unhandledRejection', (err) => {
         },
       ],
     },
+    {
+      name: 'superadmins',
+      type: 1,
+      application_id: process.env.DISCORD_APP_ID,
+      description: 'manage the Deci superadmins list',
+      options: [
+        {
+          name: 'add',
+          description: 'adds a discord user to the superadmins list',
+          type: 1,
+          options: [
+            {
+              name: 'user',
+              description: 'The discord user to add to the superadmins list',
+              required: true,
+              type: 6, // user
+            },
+          ],
+        },
+        {
+          name: 'remove',
+          description: 'removes a discord user from the superadmins list',
+          type: 1,
+          options: [
+            {
+              name: 'user',
+              description:
+                'The discord user to remove from the superadmins list',
+              required: true,
+              type: 6, // user
+            },
+          ],
+        },
+        {
+          name: 'is',
+          description: 'lists all discord users in the superadmins list',
+          type: 1,
+          options: [
+            {
+              name: 'user',
+              description: 'The discord user to inquire',
+              required: true,
+              type: 6, // user
+            },
+          ],
+        },
+      ],
+    },
   ];
 
   // For authorization, you can use either your bot token

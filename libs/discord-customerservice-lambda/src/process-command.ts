@@ -15,7 +15,7 @@ async function verifyAuth(command: Command) {
   }
 
   const superAdmin = await data.superadminusers.get({
-    user_id: userKey.user_id,
+    id: userKey.user_id,
   });
   if (!superAdmin) {
     throw Boom.forbidden(
@@ -27,15 +27,25 @@ async function verifyAuth(command: Command) {
 async function parseAndReplyToCommand(command: Command): Promise<string> {
   await verifyAuth(command);
   const commandData = getDefined(command.data, 'no command data');
-  const processor = commands[commandData.name];
-  if (!processor) {
-    throw Boom.notFound(`Invalid command name ${commandData.name}`);
+  switch (commandData.name) {
+    case 'allowlist': {
+      return commands.allowlist(commandData.options);
+    }
+    case 'superadmins': {
+      return commands.superadmins(commandData.options);
+    }
+    default: {
+      throw Boom.notImplemented(
+        `command not recognized: ${(commandData as Command['data'])?.name}`
+      );
+    }
   }
-  return processor(commandData.options);
 }
 
 export async function processCommand(command: Command): Promise<CommandReply> {
+  console.log('processCommand:', command);
   const replyContent = await parseAndReplyToCommand(command);
+  console.log('reply:', replyContent);
   return {
     tts: false,
     content: replyContent,

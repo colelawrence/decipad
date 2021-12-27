@@ -194,7 +194,7 @@ allowlist
   id *String
 
 superadminusers
-  user_id *String
+  id *String
 
 superadminactionlogs
   id *String

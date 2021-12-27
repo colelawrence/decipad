@@ -1,0 +1,107 @@
+import {
+  APIBaseInteraction,
+  InteractionType,
+  APIInteractionResponseChannelMessageWithSource,
+} from 'discord-api-types/payloads/v9/interactions';
+
+// allowlist
+
+export type AllowlistAddApplicationCommandDataOption = {
+  name: 'add';
+  options: [
+    {
+      name: 'email';
+      value: string;
+    }
+  ];
+};
+
+export type AllowlistRemoveApplicationCommandDataOption = {
+  name: 'remove';
+  options: [
+    {
+      name: 'email';
+      value: string;
+    }
+  ];
+};
+
+export type AllowlistListApplicationCommandDataOption = {
+  name: 'list';
+};
+
+export type AllowListApplicationCommandDataOption =
+  | AllowlistAddApplicationCommandDataOption
+  | AllowlistRemoveApplicationCommandDataOption
+  | AllowlistListApplicationCommandDataOption;
+
+export type AllowlistCommandData = {
+  name: 'allowlist';
+  options: AllowListApplicationCommandDataOption[];
+};
+
+// superadmins
+
+export type SuperadminsAddApplicationCommandDataOption = {
+  name: 'add';
+  options: [
+    {
+      name: 'user';
+      value: string;
+    }
+  ];
+};
+
+export type SuperadminsRemoveApplicationCommandDataOption = {
+  name: 'remove';
+  options: [
+    {
+      name: 'user';
+      value: string;
+    }
+  ];
+};
+
+export type SuperadminsListApplicationCommandDataOption = {
+  name: 'is';
+  options: [
+    {
+      name: 'user';
+      value: string;
+    }
+  ];
+};
+
+export type SuperadminsApplicationCommandDataOption =
+  | SuperadminsAddApplicationCommandDataOption
+  | SuperadminsRemoveApplicationCommandDataOption
+  | SuperadminsListApplicationCommandDataOption;
+
+export type SuperadminsCommandData = {
+  name: 'superadmins';
+  options: SuperadminsApplicationCommandDataOption[];
+};
+
+// ----------
+
+export type ApplicationCommandDataOption =
+  | AllowlistAddApplicationCommandDataOption
+  | AllowlistRemoveApplicationCommandDataOption
+  | AllowlistListApplicationCommandDataOption
+  | SuperadminsAddApplicationCommandDataOption
+  | SuperadminsRemoveApplicationCommandDataOption
+  | SuperadminsListApplicationCommandDataOption;
+
+export type ApplicationCommandDataOptions = ApplicationCommandDataOption[];
+
+export type ApplicationCommandData =
+  | AllowlistCommandData
+  | SuperadminsCommandData;
+
+export type Command = APIBaseInteraction<
+  InteractionType.ApplicationCommand,
+  ApplicationCommandData
+>;
+
+export type CommandReply =
+  APIInteractionResponseChannelMessageWithSource['data'];

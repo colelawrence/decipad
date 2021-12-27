@@ -67,6 +67,7 @@ jobs:
   notify:
     name: Discord Notification
     runs-on: ubuntu-latest
+    if: ${{ failure() }}
     needs: # make sure the notification is sent AFTER the jobs you want included have completed
       - deploy-bot
     steps:

@@ -15,6 +15,7 @@
     { "path": "../utils" },
     { "path": "../externaldata" },
     { "path": "../sync-connection-lambdas" },
-    { "path": "../config" }
+    { "path": "../config" },
+    { "path": "../discord-customerservice-lambda" }
   ]
 }

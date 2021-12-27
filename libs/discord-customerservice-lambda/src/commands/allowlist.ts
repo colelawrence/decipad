@@ -4,8 +4,7 @@ import { getDefined } from '@decipad/utils';
 import {
   AllowlistAddApplicationCommandDataOption,
   AllowlistRemoveApplicationCommandDataOption,
-  ApplicationCommandDataOption,
-  ApplicationCommandDataOptions,
+  AllowListApplicationCommandDataOption,
 } from '../command';
 
 async function add(
@@ -61,7 +60,7 @@ ${entries.map((entry) => `${entry}\n`)}
 }
 
 export default function allowlist(
-  options: ApplicationCommandDataOptions
+  options: AllowListApplicationCommandDataOption[]
 ): Promise<string> {
   if (options.length !== 1) {
     throw Boom.notAcceptable('allowlist command should only have one option');
@@ -79,7 +78,9 @@ export default function allowlist(
     }
     default: {
       throw Boom.notAcceptable(
-        `Unknown option ${(option as ApplicationCommandDataOption).name}`
+        `Unknown option ${
+          (option as AllowListApplicationCommandDataOption).name
+        }`
       );
     }
   }
