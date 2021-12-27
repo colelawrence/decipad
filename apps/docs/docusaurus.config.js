@@ -40,6 +40,15 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      colorMode: {
+        defaultMode: 'light',
+        disableSwitch: false,
+        respectPrefersColorScheme: false,
+        switchConfig: {
+          darkIcon: ' ',
+          lightIcon: ' ',
+        },
+      },
       navbar: {
         title: 'Decipad',
         logo: {
@@ -49,26 +58,26 @@ const config = {
         items: [
           {
             type: 'doc',
-            docId: 'examples/start',
+            docId: 'language/start',
             position: 'left',
-            label: 'Examples',
+            label: 'Getting started',
           },
           {
             type: 'doc',
-            docId: 'language/start',
+            docId: 'examples/start',
             position: 'left',
-            label: 'Technical Docs',
+            label: 'Examples',
           },
           { to: '/blog', label: 'Articles', position: 'left' },
           {
             href: 'https://github.com/decipad/docs',
             label: 'GitHub',
-            position: 'right',
+            position: 'left',
           },
         ],
       },
       footer: {
-        style: 'dark',
+        style: 'light',
         links: [
           {
             title: 'Docs',
