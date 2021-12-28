@@ -72,6 +72,22 @@ There are `.env.example` files in the root and in individual projects like the `
 
 ## Important scripts
 
+### Nx CLI
+
+The project is currently maintained by the nx cli, the nx cli is the one to use to test, lint, format and run libraries and apps across the project, here are some of the most common nx cli commands you could use in the project:
+
+`nx test <lib>` # Runs jest on a library or an app.
+`nx test <lib> --testFile=<filename.ts>` # Runs jest test on a specific file in a specific library or an application.
+`nx test <lib> --watch` # Runs jest on a library or an application in watch mode.
+
+`nx e2e client-e2e` # Runs the e2e tests (headless)
+`PWDEBUG=1 nx e2e client-e2e` # Runs the e2e tests (headed)
+
+`nx lint <lib>` # Runs the linter on an app or a library.
+`nx typecheck <lib>` # Runs typescript check on an app or library.
+
+You can even use the nx cli to generate libraries, apps, react components, stories and much more. [Check out nx docs](https://nx.dev/l/r/getting-started/nx-cli)
+
 ### Running the project
 
 To run the backend and the frontend, just copy and past the following command in your command line:
