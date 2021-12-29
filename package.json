@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "decipad",
-  "version": "0.0.0",
+  "version": "0.2.1-alpha",
   "license": "UNLICENSED",
   "scripts": {
     "start": "nx serve",
