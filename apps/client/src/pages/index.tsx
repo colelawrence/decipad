@@ -47,6 +47,11 @@ if (inBrowser && process.env.NEXT_PUBLIC_HOTJAR_SITE_ID) {
     hjid: process.env.NEXT_PUBLIC_HOTJAR_SITE_ID,
     hjsv: 6,
   };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (window as any).hj = (...args: unknown[]) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ((window as any).hj.q = (window as any).hj.q || []).push(args);
+  };
 }
 
 export default withProfiler(Index);
