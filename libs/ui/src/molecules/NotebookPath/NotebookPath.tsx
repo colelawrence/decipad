@@ -22,21 +22,25 @@ const iconStyles = css({
 });
 
 interface NotebookPathProps {
+  isAdmin: boolean;
   workspaceName: string;
   notebookName: string;
   workspaceHref: string;
 }
 
 export const NotebookPath = ({
+  isAdmin,
   workspaceName,
   notebookName,
   workspaceHref,
 }: NotebookPathProps): ReturnType<FC> => {
   return (
     <div css={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-      <Anchor href={workspaceHref} css={workspaceNameStyles}>
-        {workspaceName}
-      </Anchor>
+      {isAdmin ? (
+        <Anchor href={workspaceHref}>{workspaceName}</Anchor>
+      ) : (
+        <h2 css={{ cursor: 'default' }}>{workspaceName}</h2>
+      )}
       <div css={iconStyles}>
         <Slash />
       </div>

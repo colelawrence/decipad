@@ -66,6 +66,7 @@ export const NotebookTopbar = ({
           </IconButton>
         )}
         <NotebookPath
+          isAdmin={isAdmin}
           workspaceName={workspaceName}
           notebookName={notebookName}
           workspaceHref={workspaceHref}

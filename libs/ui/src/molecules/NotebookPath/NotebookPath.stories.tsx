@@ -4,6 +4,7 @@ import { NotebookPath } from './NotebookPath';
 const args = {
   workspaceName: "John's workspace",
   notebookName: 'Use of funds',
+  isAdmin: true,
 };
 export default {
   title: 'Molecules / Notebook / Path',
