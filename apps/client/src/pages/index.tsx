@@ -74,16 +74,13 @@ function Index({ pageProps = {} }) {
   return (
     <>
       <Head>
-        <title>Decipad</title>
+        <title>Decipad - Make sense of numbers</title>
         <link
-          href="/assets/decipad-logo-mark-one-color-rgb-864px@72ppi.png"
+          href="/assets/favicon.png"
           rel="shortcut icon"
           type="image/x-icon"
         />
-        <link
-          href="/assets/decipad-logo-mark-one-color-rgb-864px@72ppi.png"
-          rel="apple-touch-icon"
-        />
+        <link href="/assets/favicon.png" rel="apple-touch-icon" />
         {process.env.NEXT_PUBLIC_HOTJAR_SITE_ID && (
           <script
             async
