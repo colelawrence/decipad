@@ -37,9 +37,13 @@ export const NotebookPath = ({
   return (
     <div css={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
       {isAdmin ? (
-        <Anchor href={workspaceHref}>{workspaceName}</Anchor>
+        <Anchor href={workspaceHref} css={workspaceNameStyles}>
+          {workspaceName}
+        </Anchor>
       ) : (
-        <h2 css={{ cursor: 'default' }}>{workspaceName}</h2>
+        <h2 css={css([workspaceNameStyles, { cursor: 'default' }])}>
+          {workspaceName}
+        </h2>
       )}
       <div css={iconStyles}>
         <Slash />
