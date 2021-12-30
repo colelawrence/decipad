@@ -77,7 +77,7 @@ function Index({ pageProps = {} }) {
         {process.env.NEXT_PUBLIC_HOTJAR_SITE_ID && (
           <script
             async
-            src={`https://static.hotjar.com/c/hotjar-${process.env.NEXT_HOTJAR_SITE_ID}.js?sv=6`}
+            src={`https://static.hotjar.com/c/hotjar-${process.env.NEXT_PUBLIC_HOTJAR_SITE_ID}.js?sv=6`}
           />
         )}
       </Head>
