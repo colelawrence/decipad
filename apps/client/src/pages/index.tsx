@@ -74,7 +74,7 @@ function Index({ pageProps = {} }) {
           href="/assets/decipad-logo-mark-one-color-rgb-864px@72ppi.png"
           rel="apple-touch-icon"
         />
-        {process.env.NEXT_HOTJAR_SITE_ID && (
+        {process.env.NEXT_PUBLIC_HOTJAR_SITE_ID && (
           <script
             async
             src={`https://static.hotjar.com/c/hotjar-${process.env.NEXT_HOTJAR_SITE_ID}.js?sv=6`}
