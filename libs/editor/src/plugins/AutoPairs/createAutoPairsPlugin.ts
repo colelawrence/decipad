@@ -28,7 +28,7 @@ export const createAutoPairsPlugin = (): PlatePlugin => ({
           const activePair = pairs.find((pair) => pair.start === event.key);
           if (
             activePair &&
-            node.children[0].text[cursor.offset] !== activePair.start
+            node.children[0].text[cursor.offset + 1] === undefined
           ) {
             event.preventDefault();
             editor.insertText(activePair.start + activePair.end);
