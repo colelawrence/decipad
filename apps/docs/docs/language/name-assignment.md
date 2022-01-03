@@ -29,7 +29,7 @@ You cannot change the value of an existing variable after it has been declared. 
 ```deci live
 beans = 1 bean
 beans = beans + 1
-==> A variable with the name beans already exists
+==> The name beans is already being used. You cannot have duplicate names
 ```
 
 Instead, you will need to declare a new variable:

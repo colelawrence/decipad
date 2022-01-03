@@ -204,6 +204,6 @@ it('uses the text after the slash to search for commands', async () => {
   });
   Transforms.insertText(editor, 'import');
 
-  expect(await findByText(/import data/i)).toBeVisible();
+  expect(await findByText(/import.+csv/i)).toBeVisible();
   expect(queryByText(/heading/i)).not.toBeInTheDocument();
 });

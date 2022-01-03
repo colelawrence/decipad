@@ -37,19 +37,24 @@ type SlashCommandItem = Omit<
 };
 const groups: ReadonlyArray<SlashCommandGroup> = [
   {
-    title: 'Modeling',
+    title: 'Data',
     items: [
       {
         command: 'calculation-block',
         title: 'Calculations',
-        description: 'Calculation block that uses Deci language',
+        description: 'Play with your data, add inputs and see results',
         icon: <Shapes />,
-        extraSearchTerms: ['language block', 'model block'],
+        extraSearchTerms: [
+          'deci language',
+          'calculation block',
+          'language block',
+          'model block',
+        ],
       },
       {
         command: 'table',
         title: 'Table',
-        description: 'Empty table to structure your data',
+        description: 'Input data in a tabular format',
         icon: <Table />,
         extraSearchTerms: [],
       },
@@ -61,14 +66,14 @@ const groups: ReadonlyArray<SlashCommandGroup> = [
       {
         command: 'heading1',
         title: 'Heading 1',
-        description: 'Main text heading',
+        description: 'Add main text heading',
         icon: <Text />,
         extraSearchTerms: [],
       },
       {
         command: 'heading2',
         title: 'Heading 2',
-        description: 'Secondary text heading',
+        description: 'Add secondary text heading',
         icon: <Text />,
         extraSearchTerms: [],
       },
@@ -79,8 +84,8 @@ const groups: ReadonlyArray<SlashCommandGroup> = [
     items: [
       {
         command: 'import-data',
-        title: 'Import data',
-        description: 'Import a CSV file or data from a gSheets spreadsheet',
+        title: 'Import Table',
+        description: 'Import table from CSV file or Google Sheets',
         icon: <Table />,
         extraSearchTerms: [
           'import csv',

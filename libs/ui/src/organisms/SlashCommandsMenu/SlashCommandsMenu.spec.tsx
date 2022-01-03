@@ -6,7 +6,7 @@ it('renders menuitems triggering different commands', () => {
   const handleExecute = jest.fn();
   const { getByText } = render(<SlashCommandsMenu onExecute={handleExecute} />);
 
-  userEvent.click(getByText(/import data/i));
+  userEvent.click(getByText(/import.+csv/i));
   expect(handleExecute).toHaveBeenLastCalledWith(
     expect.stringContaining('import')
   );
@@ -69,31 +69,31 @@ it('focuses menuitems using tab and shift+tab', () => {
 describe('search', () => {
   it('filters out non-matching groups and items', () => {
     const { getByText, getAllByRole } = render(
-      <SlashCommandsMenu search="port data" />
+      <SlashCommandsMenu search="port table" />
     );
 
     expect(getAllByRole('group')).toHaveLength(1);
     expect(getAllByRole('menuitem')).toHaveLength(1);
 
-    expect(getByText(/import data/i)).toBeInTheDocument();
+    expect(getByText(/import.+csv/i)).toBeInTheDocument();
   });
 
   it('shows all group items if the group matches', () => {
     const { getByText, getAllByRole } = render(
-      <SlashCommandsMenu search="modeling" />
+      <SlashCommandsMenu search="text" />
     );
 
     expect(getAllByRole('group')).toHaveLength(1);
     expect(getAllByRole('menuitem')).toHaveLength(2);
 
-    expect(getByText(/calculation block/i)).toBeInTheDocument();
-    expect(getByText(/empty table/i)).toBeInTheDocument();
+    expect(getByText(/heading.+1/i)).toBeInTheDocument();
+    expect(getByText(/heading.+2/i)).toBeInTheDocument();
   });
 
   it('affects arrow key selection', () => {
     const handleExecute = jest.fn();
     const { getAllByRole } = render(
-      <SlashCommandsMenu search="port data" onExecute={handleExecute} />
+      <SlashCommandsMenu search="port table" onExecute={handleExecute} />
     );
 
     expect(getAllByRole('menuitem')).toHaveLength(1);
