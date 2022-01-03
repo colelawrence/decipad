@@ -4,7 +4,6 @@ import { docs } from '@decipad/routing';
 import { Divider, NavigationItem } from '../../atoms';
 import { Chat, Docs, Folder, Settings } from '../../icons';
 import { NavigationList } from '../../molecules';
-import { cssVar, p14Regular, setCssVar } from '../../primitives';
 
 const styles = css({
   display: 'grid',
@@ -12,11 +11,7 @@ const styles = css({
   rowGap: '24px',
 });
 
-const itemTextStyles = css(
-  p14Regular,
-  setCssVar('currentTextColor', cssVar('strongTextColor')),
-  { padding: '8px 0' }
-);
+const itemTextStyles = css({ padding: '8px 0' });
 
 interface WorkspaceNavigationProps {
   readonly allNotebooksHref: string;

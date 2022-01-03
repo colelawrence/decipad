@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { Divider } from '../../atoms';
 import { Delete } from '../../icons';
-import { cssVar, p14Regular, setCssVar } from '../../primitives';
+import { p14Regular } from '../../primitives';
 import { card } from '../../styles';
 import { Anchor, noop } from '../../utils';
 
@@ -49,7 +49,6 @@ export const NotebookListItemActions = ({
               css={{
                 height: '16px',
                 width: '16px',
-                ...setCssVar('currentTextColor', cssVar('weakTextColor')),
               }}
             >
               <Delete />

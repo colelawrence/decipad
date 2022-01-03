@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { ComponentProps, FC, useState } from 'react';
 import { Avatar, NavigationItem } from '../../atoms';
 import { Chevron } from '../../icons';
-import { p15Medium } from '../../primitives';
+import { cssVar, p15Medium, setCssVar } from '../../primitives';
 import { WorkspaceMenu } from '..';
 
 const nameStyles = css(p15Medium, {
@@ -10,16 +10,19 @@ const nameStyles = css(p15Medium, {
   padding: '12px 0',
 });
 
-const caretStyles = css({
-  boxSizing: 'content-box',
-  width: '9px',
-  paddingLeft: `${4 + (16 - 9) / 2}px`,
-  paddingRight: `${(16 - 9) / 2}px`,
+const chevronStyles = css(
+  setCssVar('currentTextColor', cssVar('weakTextColor')),
+  {
+    boxSizing: 'content-box',
+    width: '9px',
+    paddingLeft: `${4 + (16 - 9) / 2}px`,
+    paddingRight: `${(16 - 9) / 2}px`,
 
-  verticalAlign: 'middle',
+    verticalAlign: 'middle',
 
-  display: 'inline-grid',
-});
+    display: 'inline-grid',
+  }
+);
 
 type WorkspaceSwitcherProps = ComponentProps<typeof WorkspaceMenu>;
 
@@ -35,7 +38,7 @@ export const WorkspaceSwitcher = (
       >
         <strong css={nameStyles}>
           {props.activeWorkspace.name}
-          <span css={caretStyles}>
+          <span css={chevronStyles}>
             <Chevron type={menuOpen ? 'collapse' : 'expand'} />
           </span>
         </strong>

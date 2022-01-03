@@ -16,7 +16,7 @@ export const Delete = (): ReturnType<React.FC> => (
     />
     <path
       d="M6.07147 4.14461V3.50182C6.07147 2.55515 6.83887 1.78772 7.78557 1.78772H8.2141C9.16079 1.78772 9.9282 2.55515 9.9282 3.50182V4.14461"
-      stroke={cssVar('normalTextColor')}
+      stroke={cssVar('currentTextColor')}
       strokeWidth="1.28"
       strokeLinecap="round"
       strokeLinejoin="round"

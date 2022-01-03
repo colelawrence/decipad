@@ -5,7 +5,12 @@ import { css } from '@emotion/react';
 import { Avatar } from '../../atoms';
 import { noop } from '../../utils';
 import { Chevron } from '../../icons';
-import { p12Bold, shortAnimationDuration } from '../../primitives';
+import {
+  cssVar,
+  p12Bold,
+  setCssVar,
+  shortAnimationDuration,
+} from '../../primitives';
 
 const styles = css(p12Bold, {
   display: 'grid',
@@ -14,8 +19,8 @@ const styles = css(p12Bold, {
   columnGap: '6px',
 });
 
-const caretStyles = (hoverSelector: string) =>
-  css({
+const chevronStyles = (hoverSelector: string) =>
+  css(setCssVar('currentTextColor', cssVar('weakTextColor')), {
     width: '8px',
     transition: `padding-top ease-in-out ${shortAnimationDuration}`,
     [`${hoverSelector} &`]: {
@@ -38,7 +43,7 @@ export const AccountAvatar = ({
   return (
     <button onClick={onClick} className={hoverTargetClassName} css={styles}>
       <Avatar hoverSelector={hoverSelector} {...props} />
-      <div css={caretStyles(hoverSelector)}>
+      <div css={chevronStyles(hoverSelector)}>
         <Chevron type={menuOpen ? 'collapse' : 'expand'} />
       </div>
     </button>

@@ -29,10 +29,10 @@ export const WorkspaceItem = ({
     <NavigationItem href={href} icon={<Avatar name={name} roundedSquare />}>
       <span css={styles}>
         <strong
-          css={css({
-            ...p14Medium,
-            ...setCssVar('currentTextColor', cssVar('strongTextColor')),
-          })}
+          css={css(
+            p14Medium,
+            setCssVar('currentTextColor', cssVar('strongTextColor'))
+          )}
         >
           {name}
         </strong>

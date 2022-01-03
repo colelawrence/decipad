@@ -22,22 +22,25 @@ const styles = css(p14Regular, {
   ':hover, :focus': activeStyles,
 });
 
-const iconStyles = css({
-  height: 0,
-  minHeight: '50%',
+const iconStyles = css(
+  setCssVar('currentTextColor', cssVar('normalTextColor')),
+  {
+    height: 0,
+    minHeight: '50%',
 
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  // essentially 50% padding-right
-  aspectRatio: '1.5 / 1',
-  alignItems: 'start',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    // essentially 50% padding-right
+    aspectRatio: '1.5 / 1',
+    alignItems: 'start',
 
-  '@supports not (aspect-ratio: 1.5 / 1)': {
-    minWidth: '24px',
-    paddingRight: '8px',
-  },
-});
+    '@supports not (aspect-ratio: 1.5 / 1)': {
+      minWidth: '24px',
+      paddingRight: '8px',
+    },
+  }
+);
 
 export type NavigationItemProps = {
   readonly children: ReactNode;
