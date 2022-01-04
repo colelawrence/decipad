@@ -22,12 +22,12 @@ export async function isAllowedToLogIn(email?: string): Promise<boolean> {
   if (process.env.NODE_ENV === 'testing') {
     return true;
   }
-  if (!email) {
-    return false;
-  }
   const urlBase = process.env.DECI_APP_URL_BASE;
   if (!urlBase || ALLOWLIST_REQUIRED_URL_BASES.indexOf(urlBase) < 0) {
     return true;
+  }
+  if (!email) {
+    return false;
   }
 
   return (await alreadyIn(email)) || isInAllowList(email);
