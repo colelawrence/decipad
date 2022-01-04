@@ -74,7 +74,7 @@ function Index({ pageProps = {} }) {
   return (
     <>
       <Head>
-        <title>Decipad - Make sense of numbers</title>
+        <title>Decipad — Make sense of numbers</title>
         <link
           href="/assets/favicon.png"
           rel="shortcut icon"
