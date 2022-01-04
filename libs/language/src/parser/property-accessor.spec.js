@@ -74,14 +74,14 @@ runTests({
                     type: 'funcref',
                     args: ['*'],
                     start: {
-                      char: 7,
+                      char: 8,
                       line: 1,
-                      column: 8,
+                      column: 9,
                     },
                     end: {
-                      char: 9,
+                      char: 8,
                       line: 1,
-                      column: 10,
+                      column: 9,
                     },
                   },
                   {

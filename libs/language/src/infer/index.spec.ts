@@ -1,24 +1,23 @@
 import Fraction from '@decipad/fraction';
 import { dequal } from 'dequal';
 
-import { AST, inferBlock } from '..';
-import { InferError, Type, inverseExponent, build as t } from '../type';
+import { AST, inferBlock, Unit } from '..';
+import { InferError, Type, build as t } from '../type';
 import {
   l,
   c,
   n,
   r,
+  ne,
   as,
   col,
   range,
   date,
-  timeQuantity,
   tableDef,
   funcDef,
   prop,
   importedData,
   assign,
-  units,
   block,
 } from '../utils';
 import { objectToMap, objectToTableType } from '../testUtils';
@@ -32,37 +31,13 @@ import {
 } from './index';
 import { makeContext } from './context';
 
-const nilPos = {
-  line: 0,
-  column: 0,
-  char: 0,
-};
 let nilCtx = makeContext();
-const degC: AST.Unit = {
+const degC: Unit = {
   unit: 'celsius',
   exp: 1n,
   multiplier: new Fraction(1),
   known: true,
-  start: nilPos,
-  end: nilPos,
 };
-const seconds: AST.Unit = {
-  unit: 'seconds',
-  exp: 1n,
-  multiplier: new Fraction(1),
-  known: true,
-  start: nilPos,
-  end: nilPos,
-};
-const meters: AST.Unit = {
-  unit: 'meters',
-  exp: 1n,
-  multiplier: new Fraction(1),
-  known: true,
-  start: nilPos,
-  end: nilPos,
-};
-
 expect.addSnapshotSerializer({
   test: (item) => item instanceof Type,
   serialize: (item: Type) => item.toString(),
@@ -174,14 +149,8 @@ describe('dates', () => {
 describe('time quantities', () => {
   it('can be inferred', async () => {
     expect(
-      await inferExpression(
-        nilCtx,
-        timeQuantity({
-          year: 2020n,
-          minute: 3n,
-        })
-      )
-    ).toEqual(t.timeQuantity(['year', 'minute']));
+      await inferExpression(nilCtx, col(ne(2020, 'years'), ne(3, 'minutes')))
+    ).toEqual(t.timeQuantity(['years', 'minutes']));
   });
 });
 
@@ -231,13 +200,6 @@ describe('columns', () => {
     expect(await inferExpression(nilCtx, c('total', col(1, 2, 3)))).toEqual(
       t.number()
     );
-  });
-
-  it('propagates errors within', async () => {
-    expect(
-      (await inferExpression(nilCtx, col(1, 2, r('MissingVar')))).errorCause
-        ?.message
-    ).toMatch(/MissingVar/);
   });
 });
 
@@ -369,18 +331,7 @@ describe('tables', () => {
         await inferStatement(
           makeContext(),
           tableDef('Table', {
-            Col1: r('MissingVar'),
-          })
-        )
-      ).errorCause?.message
-    ).toMatch(/MissingVar/);
-
-    expect(
-      (
-        await inferStatement(
-          makeContext(),
-          tableDef('Table', {
-            Col1: col(1, 2, r('MissingVar')),
+            Col1: prop(r('MissingVar'), 'nosuchprop'),
           })
         )
       ).errorCause?.message
@@ -487,7 +438,9 @@ describe('Property access', () => {
     expect(
       (await inferExpression(scopeWithTable, prop('MissingVar', 'Col')))
         .errorCause?.spec
-    ).toMatchInlineSnapshot(`ErrSpec:missingVariable(["MissingVar"])`);
+    ).toMatchInlineSnapshot(
+      `ErrSpec:expectedButGot(["table or row",{"node":null,"errorCause":null,"type":"number","unit":{"type":"units","args":[{"unit":"MissingVar","exp":"1","multiplier":{"s":"1","n":"1","d":"1"},"known":false}]},"date":null,"rangeOf":null,"indexName":null,"indexedBy":null,"cellType":null,"columnSize":null,"atParentIndex":null,"tableLength":null,"columnTypes":null,"columnNames":null,"rowCellTypes":null,"rowCellNames":null,"functionness":false}])`
+    );
   });
 });
 
@@ -496,12 +449,6 @@ it('infers refs', async () => {
   scopeWithVariable.stack.set('N', t.number());
 
   expect(await inferExpression(scopeWithVariable, r('N'))).toEqual(t.number());
-
-  expect(await inferExpression(scopeWithVariable, r('MissingVar'))).toEqual(
-    t
-      .impossible(InferError.missingVariable('MissingVar'))
-      .inNode(r('MissingVar'))
-  );
 });
 
 it('infers binops', async () => {
@@ -603,71 +550,6 @@ describe('inferProgram', () => {
   });
 });
 
-describe('Units', () => {
-  it("infers literals' units", async () => {
-    expect(await inferExpression(nilCtx, l(1))).toEqual(t.number());
-    expect(await inferExpression(nilCtx, l(1, degC))).toEqual(t.number([degC]));
-  });
-
-  it('infers expressions units', async () => {
-    const type = await inferExpression(nilCtx, c('+', l(1, degC), l(1, degC)));
-    expect(type).toMatchObject(t.number([degC]));
-  });
-
-  it('composes units', async () => {
-    const type = await inferExpression(
-      nilCtx,
-      c('/', l(1, degC), l(1, seconds))
-    );
-    const withNullUnit = await inferExpression(
-      nilCtx,
-      c('/', l(1, degC), l(1))
-    );
-
-    expect(type).toMatchObject(t.number([degC, inverseExponent(seconds)]));
-    expect(withNullUnit).toMatchObject(t.number([degC]));
-  });
-
-  it('decomposes units', async () => {
-    const type = await inferExpression(
-      nilCtx,
-      c('*', l(1, meters, inverseExponent(seconds)), l(1, seconds))
-    );
-    const withNullUnit = await inferExpression(
-      nilCtx,
-      c('*', l(1, seconds), l(1))
-    );
-
-    expect(type).toMatchObject(t.number([meters]));
-    expect(withNullUnit).toEqual(t.number([seconds]));
-  });
-
-  it('fills in incompatible unit errors', async () => {
-    const badUnits = c('+', l(1, degC), l(1, seconds));
-    const ctxForError = makeContext();
-
-    const badUnitsError = InferError.expectedUnit(units(degC), units(seconds));
-    expect(await inferExpression(ctxForError, badUnits)).toEqual(
-      t.impossible(badUnitsError).inNode(badUnits)
-    );
-  });
-
-  it('fills in missing units', async () => {
-    expect(await inferExpression(nilCtx, c('+', l(1), l(1, degC)))).toEqual(
-      t.number([degC])
-    );
-    expect(await inferExpression(nilCtx, c('+', l(1, degC), l(1)))).toEqual(
-      t.number([degC])
-    );
-  });
-
-  it('removes units from some functions', async () => {
-    expect(
-      await inferExpression(nilCtx, c('^', l(1, meters), l(1, degC)))
-    ).toEqual(t.number([meters]));
-  });
-});
-
 jest.mock('../data', () => ({
   // Mock dataTable
   resolve: jest.fn(() => ({
@@ -700,7 +582,7 @@ describe('Data', () => {
 });
 
 it('expands directives such as `as`', async () => {
-  expect(await inferExpression(nilCtx, as(l(3), n('units', degC)))).toEqual(
+  expect(await inferExpression(nilCtx, as(l(3), ne(1, 'celsius')))).toEqual(
     t.number([degC])
   );
 });

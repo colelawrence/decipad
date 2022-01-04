@@ -17,7 +17,7 @@ export const miscOperators: Record<string, BuiltinSpec> = {
   contains: overloadBuiltin('contains', 2, [
     {
       argTypes: ['number', 'number'],
-      fnValues: (a, b) => {
+      fnValues: ([a, b]) => {
         const [aStart, aEnd] = a.getData() as Fraction[];
         const bNumber = b.getData() as Fraction;
         return fromJS(
@@ -33,7 +33,7 @@ export const miscOperators: Record<string, BuiltinSpec> = {
     },
     {
       argTypes: ['date', 'date'],
-      fnValues: (a, b) => {
+      fnValues: ([a, b]) => {
         const aVal = getInstanceof(a, Date);
         const bVal = getInstanceof(b, Date);
         return fromJS(

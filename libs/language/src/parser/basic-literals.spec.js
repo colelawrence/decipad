@@ -7,16 +7,16 @@ runTests({
     ast: [
       {
         type: 'literal',
-        args: ['number', F(-41), null],
+        args: ['number', F(41).neg()],
         start: {
           char: 1,
-          line: 1,
           column: 2,
+          line: 1,
         },
         end: {
           char: 3,
-          line: 1,
           column: 4,
+          line: 1,
         },
       },
     ],
@@ -27,16 +27,16 @@ runTests({
     ast: [
       {
         type: 'literal',
-        args: ['number', F(-415, 10), null],
+        args: ['number', F(415, 10).neg()],
         start: {
           char: 4,
-          line: 3,
           column: 3,
+          line: 3,
         },
         end: {
           char: 8,
-          line: 3,
           column: 7,
+          line: 3,
         },
       },
     ],
@@ -107,7 +107,7 @@ runTests({
     ast: [
       {
         type: 'literal',
-        args: ['number', F(105, 1000), null],
+        args: ['number', F(105, 1000)],
         start: {
           char: 0,
           line: 1,
@@ -118,6 +118,34 @@ runTests({
           line: 1,
           column: 5,
         },
+      },
+    ],
+  },
+
+  'expression is negated number with units': {
+    source: '-10 days',
+    ast: [
+      {
+        type: 'function-call',
+        args: [
+          {
+            type: 'funcref',
+            args: ['*'],
+          },
+          {
+            type: 'argument-list',
+            args: [
+              {
+                type: 'literal',
+                args: ['number', F(10).neg()],
+              },
+              {
+                type: 'ref',
+                args: ['days'],
+              },
+            ],
+          },
+        ],
       },
     ],
   },

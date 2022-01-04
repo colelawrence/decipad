@@ -1,9 +1,8 @@
 import { getDefined } from '@decipad/utils';
-import { AST } from '../../parser';
 import { identity, F } from '../../utils';
 import { Converter } from '.';
 import { expandUnits, doesNotScaleOnConversion } from './expand-units';
-import { stringifyUnits } from '../../type';
+import { stringifyUnits, Units } from '../../type';
 import { getUnitByName } from '..';
 
 function invert(convert: Converter): Converter {
@@ -13,7 +12,7 @@ function invert(convert: Converter): Converter {
   };
 }
 
-function nonScalarContraction(units: AST.Units): [AST.Units, Converter] {
+function nonScalarContraction(units: Units): [Units, Converter] {
   const u = units?.args || [];
   if (u.length !== 1) {
     throw new TypeError(
@@ -24,9 +23,7 @@ function nonScalarContraction(units: AST.Units): [AST.Units, Converter] {
   return [units, knownUnit.fromBaseQuantity];
 }
 
-export function contractUnits(
-  units: AST.Units | null
-): [AST.Units | null, Converter] {
+export function contractUnits(units: Units | null): [Units | null, Converter] {
   if (units === null) {
     return [null, identity];
   }

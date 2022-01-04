@@ -228,15 +228,16 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   '+': overloadBuiltin('+', 2, [
     {
       argTypes: ['number', 'number'],
-      fnValues: (n1, n2) =>
-        Scalar.fromValue(
+      fnValues: ([n1, n2]) => {
+        return Scalar.fromValue(
           (n1.getData() as Fraction).add(n2.getData() as Fraction)
-        ),
+        );
+      },
       functor: binopFunctor,
     },
     {
       argTypes: ['string', 'string'],
-      fnValues: (n1, n2) =>
+      fnValues: ([n1, n2]) =>
         Scalar.fromValue(String(n1.getData()) + String(n2.getData())),
       functor: ([a, b]) =>
         Type.combine(a.isScalar('string'), b.isScalar('string')),
@@ -246,7 +247,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   '-': overloadBuiltin('-', 2, [
     {
       argTypes: ['number', 'number'],
-      fnValues: (a, b) =>
+      fnValues: ([a, b]) =>
         Scalar.fromValue(
           (a.getData() as Fraction).sub(b.getData() as Fraction)
         ),
@@ -261,6 +262,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     functor: ([n]) => n.isScalar('number'),
   },
   '*': {
+    noAutoconvert: true,
     argCount: 2,
     fn: (a, b) => {
       if (!(a instanceof Fraction)) {

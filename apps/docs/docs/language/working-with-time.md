@@ -43,25 +43,9 @@ You can then inquire if a certain time value is contained inside another:
 ```deci live
 day = date(2022-06-30)
 minute = date(2022-06-30 11:59)
-contains(day, minute)
+
+day contains minute
 ==> true
-```
-
-## Time durations
-
-In Deci you can specify a time duration, which is a span of time that is not bound to specific dates.
-For instance, in Deci, a span of 9 weeks and three days can be specified as:
-
-```deci live
-[9 weeks, 3 days]
-==> [ [ 'week', 9n ], [ 'day', 3n ] ] <null>
-```
-
-In a time duration you can specify years, months, weeks, days, hours, minutes or seconds. Here's another example:
-
-```deci live
-[3 years, 8 months, 6 weeks]
-==> [ [ 'year', 3n ], [ 'month', 8n ], [ 'week', 6n ] ] <null>
 ```
 
 ## Time traveling
@@ -70,7 +54,7 @@ In Deci it's easy to travel through time. You can add a time duration to a date:
 
 ```deci live
 start = date(2021-01-01)
-end = start + [1 year, 6 months, 5 days]
+end = start + 1 year + 6 months + 5 days
 ==> day 2022-07-06
 ```
 
@@ -80,5 +64,5 @@ Or subtract two dates to get a time duration:
 start = date(2022-06-30)
 end = date(2022-09-15)
 diff = end - start
-==> [ [ 'day', 77n ] ] <null>
+==> [ [ 'day', 77n ] ] days
 ```

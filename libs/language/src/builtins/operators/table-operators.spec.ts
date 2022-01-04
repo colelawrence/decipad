@@ -7,7 +7,7 @@ describe('table operators', () => {
   it('concatenates tables', () => {
     expect(
       operators.concatenate
-        .fnValues?.(
+        .fnValues?.([
           Column.fromNamedValues(
             [fromJS([1, 2, 3]), fromJS(['Hello', 'World', 'Sup'])],
             ['Numbers', 'Strings']
@@ -16,8 +16,8 @@ describe('table operators', () => {
           Column.fromNamedValues(
             [fromJS([4]), fromJS(['Mate'])],
             ['Numbers', 'Strings']
-          )
-        )
+          ),
+        ])
         ?.getData()
     ).toMatchInlineSnapshot(`
       Array [

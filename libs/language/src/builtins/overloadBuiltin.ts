@@ -22,7 +22,7 @@ export type OverloadTypeName =
 
 export interface OverloadedBuiltinSpec {
   argTypes: OverloadTypeName[];
-  fnValues: (...args: AnyValue[]) => AnyValue;
+  fnValues: (values: AnyValue[], types?: Type[]) => AnyValue;
   functor: (types: Type[], values?: AST.Expression[]) => Type;
 }
 
@@ -34,15 +34,19 @@ export const overloadBuiltin = (
   const byArgTypes = new Map(
     overloads.map((o) => [argTypesKey(o.argTypes), o])
   );
-  const fnValues = (...values: AnyValue[]) => {
+
+  function getOverload(values: AnyValue[]): OverloadedBuiltinSpec {
     const argTypeNames = values.map(getOverloadedTypeFromValue);
-    const overload: OverloadedBuiltinSpec = getDefined(
+    return getDefined(
       byArgTypes.get(argTypesKey(argTypeNames)),
       `panic: did not find version of function ${fName} for arg types ${argTypeNames.join(
         ', '
       )}`
     );
-    return overload.fnValues(...values);
+  }
+
+  const fnValues = (values: AnyValue[], types?: Type[]) => {
+    return getOverload(values).fnValues(values, types);
   };
 
   const functor = (types: Type[]) => {
@@ -82,7 +86,11 @@ export const getOverloadedTypeFromValue = (val: AnyValue): OverloadTypeName => {
   } else if (val instanceof Range) {
     return 'number';
   } else {
-    throw new Error('Could not call overloaded function');
+    throw new Error(
+      `Could not call overloaded function on ${
+        (val as { constructor: { name: string } })?.constructor.name
+      }`
+    );
   }
 };
 
@@ -91,8 +99,6 @@ export const getOverloadedTypeFromType = (t: Type): OverloadTypeName => {
     return t.type as 'number' | 'string' | 'boolean';
   } else if (t.date != null) {
     return 'date';
-  } else if (t.timeUnits != null) {
-    return 'time-quantity';
   } else if (t.rangeOf?.type) {
     return t.rangeOf.type as 'number' | 'string' | 'boolean';
   } else {

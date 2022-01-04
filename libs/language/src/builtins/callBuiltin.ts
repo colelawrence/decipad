@@ -7,6 +7,16 @@ import type { Type } from '../type';
 import { autoconvertResult, autoconvertArguments } from '../units';
 import { BuiltinSpec } from './interfaces';
 
+function shouldAutoconvert(types: Type[]): boolean {
+  if (types.length === 2) {
+    const [typeA, typeB] = types;
+    if ((typeA.unit && !typeB.unit) || (typeB.unit && !typeA.unit)) {
+      return false;
+    }
+  }
+  return true;
+}
+
 function requireNonNull<T>(thing: T): T {
   if (thing == null) {
     throw new TypeError('null value detected');
@@ -36,7 +46,7 @@ function callBuiltinAfterAutoconvert(
         );
       }
     } else if (builtin.fnValues != null) {
-      return builtin.fnValues(...(argsLowerDims as AnyValue[]));
+      return builtin.fnValues(argsLowerDims as AnyValue[], argTypes);
     } else {
       /* istanbul ignore next */
       throw new Error('unreachable');
@@ -69,9 +79,10 @@ export function callBuiltin(
     return callBuiltin(op.aliasFor, argsBeforeConvert, argTypes, returnType);
   }
 
-  const args = op.noAutoconvert
-    ? argsBeforeConvert
-    : autoconvertArguments(argsBeforeConvert, argTypes);
+  const autoConvert = !op.noAutoconvert && shouldAutoconvert(argTypes);
+  const args = autoConvert
+    ? autoconvertArguments(argsBeforeConvert, argTypes)
+    : argsBeforeConvert;
 
   const resultBeforeConvertingBack = callBuiltinAfterAutoconvert(
     funcName,
@@ -80,9 +91,9 @@ export function callBuiltin(
     argTypes
   );
 
-  const result = op.noAutoconvert
-    ? resultBeforeConvertingBack
-    : autoconvertResult(resultBeforeConvertingBack, returnType);
+  const result = autoConvert
+    ? autoconvertResult(resultBeforeConvertingBack, returnType)
+    : resultBeforeConvertingBack;
 
   return result;
 }

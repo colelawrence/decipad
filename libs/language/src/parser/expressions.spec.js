@@ -111,7 +111,7 @@ runTests({
             args: [
               {
                 type: 'literal',
-                args: ['number', F(2), null],
+                args: ['number', F(2)],
                 start: {
                   char: 1,
                   line: 1,
@@ -125,7 +125,7 @@ runTests({
               },
               {
                 type: 'literal',
-                args: ['number', F(3), null],
+                args: ['number', F(3)],
                 start: {
                   char: 5,
                   line: 1,
@@ -173,8 +173,8 @@ runTests({
           {
             type: 'funcref',
             args: ['/'],
-            start: 9,
-            end: 11,
+            start: 10,
+            end: 10,
           },
           {
             type: 'argument-list',
@@ -227,7 +227,7 @@ runTests({
             args: [
               {
                 type: 'literal',
-                args: ['number', F(2), null],
+                args: ['number', F(2)],
                 start: {
                   char: 0,
                   line: 1,
@@ -246,14 +246,14 @@ runTests({
                     type: 'funcref',
                     args: ['*'],
                     start: {
-                      char: 5,
+                      char: 6,
                       line: 1,
-                      column: 6,
+                      column: 7,
                     },
                     end: {
-                      char: 7,
+                      char: 6,
                       line: 1,
-                      column: 8,
+                      column: 7,
                     },
                   },
                   {
@@ -261,7 +261,7 @@ runTests({
                     args: [
                       {
                         type: 'literal',
-                        args: ['number', F(3), null],
+                        args: ['number', F(3)],
                         start: {
                           char: 4,
                           line: 1,
@@ -275,7 +275,7 @@ runTests({
                       },
                       {
                         type: 'literal',
-                        args: ['number', F(4), null],
+                        args: ['number', F(4)],
                         start: {
                           char: 8,
                           line: 1,
@@ -367,11 +367,11 @@ runTests({
                 args: [
                   {
                     type: 'literal',
-                    args: ['number', F(1), null],
+                    args: ['number', F(1)],
                   },
                   {
                     type: 'literal',
-                    args: ['number', F(2), null],
+                    args: ['number', F(2)],
                   },
                 ],
               },
@@ -391,11 +391,11 @@ runTests({
             args: [
               {
                 type: 'literal',
-                args: ['number', F(2), null],
+                args: ['number', F(2)],
               },
               {
                 type: 'literal',
-                args: ['number', F(3), null],
+                args: ['number', F(3)],
               },
             ],
           },
@@ -652,7 +652,7 @@ runTests({
 
   'No ambiguity between negation and subtraction (5)': {
     sourceMap: false,
-    source: '100- - 1',
+    source: '100- -1',
     ast: [c('-', l(100), l(-1))],
   },
 
@@ -660,5 +660,17 @@ runTests({
     sourceMap: false,
     source: '100 - -1',
     ast: [c('-', l(100), l(-1))],
+  },
+
+  'multiply by default': {
+    sourceMap: false,
+    source: '100 200',
+    ast: [c('*', l(100), l(200))],
+  },
+
+  'multiply by default (2)': {
+    sourceMap: false,
+    source: '38 a 25',
+    ast: [c('*', c('*', l(38), r('a')), l(25))],
   },
 });

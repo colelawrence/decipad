@@ -5,7 +5,7 @@ import { l, n, seq, date } from '../utils';
 import { makeContext } from './context';
 import {
   getDateSequenceLength,
-  getNumberSequenceCount,
+  getNumberSequenceCountN,
   inferSequence,
 } from './sequence';
 
@@ -25,28 +25,6 @@ it('catches multiple errors', async () => {
   expect(await msg(10, 1, 1)).toEqual('Divergent sequence');
   expect(await msg(1, 10, -1)).toEqual('Divergent sequence');
   expect(await msg(1, 10, 0)).toEqual('Sequence interval must not be zero');
-});
-
-it('refuses variable references anywhere in the sequence', async () => {
-  const ctx = makeContext({
-    initialGlobalScope: [
-      ['Bad', t.number()],
-      ['Month', t.date('month')],
-    ],
-  });
-
-  const err = async (...args: Parameters<typeof seq>) =>
-    (await inferSequence(ctx, seq(...args))).errorCause;
-
-  expect(await err(n('ref', 'Bad'), l(10), l(2))).not.toBeNull();
-  expect(await err(l(10), n('ref', 'Bad'), l(2))).not.toBeNull();
-  expect(await err(l(10), l(2), n('ref', 'Bad'))).not.toBeNull();
-
-  // Dates
-  const d = date('2020-01', 'month');
-  expect(await err(n('ref', 'Month'), d, n('ref', 'month'))).not.toBeNull();
-  expect(await err(d, n('ref', 'Month'), n('ref', 'month'))).not.toBeNull();
-  expect(await err(d, d, n('ref', 'Month'))).not.toBeNull();
 });
 
 describe('sequences of dates', () => {
@@ -97,15 +75,15 @@ describe('sequences of dates', () => {
 
 describe('sequence counts', () => {
   it('gets the size of a sequence of numbers', () => {
-    expect(getNumberSequenceCount(1, 1, 1)).toEqual(1);
-    expect(getNumberSequenceCount(1, 2, 1)).toEqual(2);
-    expect(getNumberSequenceCount(1, 8, 3)).toEqual(3);
-    expect(getNumberSequenceCount(10, 1, -1)).toEqual(10);
+    expect(getNumberSequenceCountN(1, 1, 1)).toEqual(1);
+    expect(getNumberSequenceCountN(1, 2, 1)).toEqual(2);
+    expect(getNumberSequenceCountN(1, 8, 3)).toEqual(3);
+    expect(getNumberSequenceCountN(10, 1, -1)).toEqual(10);
   });
 
   it('avoids overflow', () => {
-    expect(getNumberSequenceCount(1, 7, 5)).toEqual(2);
-    expect(getNumberSequenceCount(7, 1, -5)).toEqual(2);
+    expect(getNumberSequenceCountN(1, 7, 5)).toEqual(2);
+    expect(getNumberSequenceCountN(7, 1, -5)).toEqual(2);
   });
 
   const dateSeqSize = (

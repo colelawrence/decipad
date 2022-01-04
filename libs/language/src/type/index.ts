@@ -31,9 +31,12 @@ import {
   setUnit,
   stringifyUnits,
 } from './units';
+import { Unit, Units, units } from './unit-type';
+
+export type { Unit, Units };
 
 export * from './serialization';
-export { setUnit, stringifyUnits, normalizeUnits };
+export { setUnit, stringifyUnits, normalizeUnits, units };
 export { InferError, inverseExponent, t as build };
 
 export const scalarTypeNames = ['number', 'string', 'boolean'];
@@ -49,7 +52,7 @@ export class Type {
   errorCause: InferError | null = null;
 
   type: string | null = null;
-  unit: AST.Units | null = null;
+  unit: Units | null = null;
 
   date: Time.Specificity | null = null;
 
@@ -71,9 +74,6 @@ export class Type {
 
   rowCellTypes: Type[] | null = null;
   rowCellNames: string[] | null = null;
-
-  // Time quantities
-  timeUnits: Time.Unit[] | null = null;
 
   // Functions are impossible types with functionness = true
   functionness = false;
@@ -151,12 +151,12 @@ export class Type {
 
     if (this.unit != null) return stringifyUnits(this.unit);
     if (this.type != null) return this.type;
+    if (this.isTimeQuantity().errorCause == null) return 'time quantity';
     if (this.date != null) return `date(${this.date})`;
     if (this.rangeOf != null) return 'range';
     if (this.columnSize != null) return 'column';
     if (this.columnTypes != null) return 'table';
     if (this.rowCellTypes != null) return 'row';
-    if (this.timeUnits != null) return `time quantity`;
 
     /* istanbul ignore next */
     throw new Error('toBasicString: unknown type');
@@ -264,11 +264,11 @@ export class Type {
     return isDate(this, specificity);
   }
 
-  multiplyUnit(withUnits: AST.Units | null): Type {
+  multiplyUnit(withUnits: Units | null): Type {
     return multiplyUnit(this, withUnits);
   }
 
-  divideUnit(divideBy: AST.Units | number | null): Type {
+  divideUnit(divideBy: Units | number | null): Type {
     return divideUnit(this, divideBy);
   }
 }

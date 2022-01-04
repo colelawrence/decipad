@@ -10,19 +10,19 @@ runTests({
         args: [
           {
             type: 'literal',
-            args: ['number', F(1), null],
+            args: ['number', F(1)],
             start: 5,
             end: 5,
           },
           {
             type: 'literal',
-            args: ['number', F(10), null],
+            args: ['number', F(10)],
             start: 8,
             end: 9,
           },
           {
             type: 'literal',
-            args: ['number', F(1), null],
+            args: ['number', F(1)],
             start: 14,
             end: 14,
           },
@@ -45,19 +45,19 @@ runTests({
         args: [
           {
             type: 'literal',
-            args: ['number', F(1), null],
+            args: ['number', F(1)],
             start: 5,
             end: 5,
           },
           {
             type: 'literal',
-            args: ['number', F(10), null],
+            args: ['number', F(10)],
             start: 16,
             end: 17,
           },
           {
             type: 'literal',
-            args: ['number', F(1, 2), null],
+            args: ['number', F(1, 2)],
             start: 23,
             end: 25,
           },
@@ -78,7 +78,7 @@ runTests({
 
   'basic time sequence': {
     sourceMap: false,
-    source: '   [date(2020-10)..date(2020-03) by month]',
+    source: '   [ date(2020-10) .. date(2020-03) by month]',
     ast: [
       {
         type: 'sequence',

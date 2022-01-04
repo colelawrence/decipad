@@ -1,7 +1,9 @@
 import produce from 'immer';
-import { AST, Time } from '..';
+import Fraction from '@decipad/fraction';
+import { Time } from '..';
 import { InferError, Type, TypeName } from '.';
-import { getDefined, units } from '../utils';
+import { getDefined } from '../utils';
+import { Unit, Units, units } from './unit-type';
 
 // "scalar" is a legacy name
 export const scalar = (type: TypeName) =>
@@ -9,7 +11,7 @@ export const scalar = (type: TypeName) =>
     t.type = type;
   });
 
-export const number = (unit: AST.Units | AST.Unit[] | null = null) =>
+export const number = (unit: Units | Unit[] | null = null) =>
   produce(scalar('number'), (t) => {
     t.unit = Array.isArray(unit) ? units(...unit) : unit;
   });
@@ -28,9 +30,18 @@ export const date = (specificity: Time.Specificity) =>
     t.date = specificity;
   });
 
-export const timeQuantity = (timeUnits: Time.Unit[]) =>
+export const timeQuantity = (timeUnits: (Unit | string)[]) =>
   produce(new Type(), (t) => {
-    t.timeUnits = timeUnits;
+    t.type = 'time-quantity';
+    t.unit = {
+      type: 'units',
+      args: timeUnits.map((unit) => ({
+        unit: typeof unit === 'string' ? unit : unit.unit,
+        exp: 1n,
+        multiplier: new Fraction(1),
+        known: true,
+      })),
+    };
   });
 
 interface BuildTableArgs {
@@ -101,7 +112,7 @@ export const functionPlaceholder = () =>
     fType.functionness = true;
   });
 
-export const impossible = (errorCause: string | InferError) => {
+export const impossible = (errorCause: string | InferError): Type => {
   const type = produce(number(), (impossibleType) => {
     impossibleType.type = null;
   });

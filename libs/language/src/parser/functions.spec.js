@@ -172,13 +172,13 @@ runTests({
             args: [
               {
                 type: 'literal',
-                args: ['number', F(1), null],
+                args: ['number', F(1)],
                 start: 13,
                 end: 13,
               },
               {
                 type: 'literal',
-                args: ['number', F(2), null],
+                args: ['number', F(2)],
                 start: 16,
                 end: 16,
               },
@@ -210,7 +210,7 @@ runTests({
             args: [
               {
                 type: 'literal',
-                args: ['number', F(1), null],
+                args: ['number', F(1)],
                 start: 13,
                 end: 13,
               },
@@ -224,6 +224,7 @@ runTests({
       },
     ],
   },
+
   'function declaration and use': {
     source: 'name(a b) = a + b\n\nfunctionname(1, 2)',
     ast: [
@@ -376,7 +377,7 @@ runTests({
             args: [
               {
                 type: 'literal',
-                args: ['number', F(1), null],
+                args: ['number', F(1)],
                 start: {
                   char: 32,
                   line: 3,
@@ -390,7 +391,7 @@ runTests({
               },
               {
                 type: 'literal',
-                args: ['number', F(2), null],
+                args: ['number', F(2)],
                 start: 35,
                 end: 35,
               },

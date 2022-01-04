@@ -171,7 +171,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
   // Table stuff
   approximatesubsetsum: {
     argCount: 3,
-    fnValues: (upperBound, table, columnName) => {
+    fnValues: ([upperBound, table, columnName]) => {
       const tableColumn = getInstanceof(table, Column);
       const valueNames = getDefined(tableColumn.valueNames);
       const columnIndex = valueNames.indexOf(columnName.getData() as string);

@@ -7,7 +7,7 @@ runTests({
     ast: [
       {
         type: 'literal',
-        args: ['number', F(19, 10), null],
+        args: ['number', F(19, 10)],
         start: 1,
         end: 4,
       },
@@ -18,9 +18,17 @@ runTests({
     ast: [
       {
         type: 'literal',
-        args: ['number', F(-19, 10), null],
-        start: 1,
-        end: 5,
+        args: ['number', F(19, 10).neg()],
+        start: {
+          char: 1,
+          column: 2,
+          line: 1,
+        },
+        end: {
+          char: 5,
+          column: 6,
+          line: 1,
+        },
       },
     ],
   },

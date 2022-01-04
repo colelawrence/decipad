@@ -112,12 +112,12 @@ describe('caching', () => {
     });
     expect(await computeOnTestComputer({ program: broken }))
       .toMatchInlineSnapshot(`
-        Array [
-          "block-AB/0 -> 0.5",
-          "block-C/0 -> Type Error",
-          "block-D/0 -> Type Error",
-        ]
-      `);
+      Array [
+        "block-AB/0 -> 0.5",
+        "block-C/0 -> 11",
+        "block-D/0 -> 111",
+      ]
+    `);
 
     const noD = produce(unparsedProgram, (program) => {
       (program[2] as UnparsedBlock).source = '';
@@ -135,7 +135,7 @@ describe('caching', () => {
   it('tricky caching problems', async () => {
     expect(
       await computeOnTestComputer({ program: getUnparsed('= 1', 'A + 1') })
-    ).toContain('block-1/0 -> Type Error');
+    ).toContain('block-1/0 -> 2');
 
     expect(
       await computeOnTestComputer({ program: getUnparsed('A = 1', 'A + 1') })
@@ -156,7 +156,7 @@ describe('caching', () => {
     ).toMatchInlineSnapshot(`
       Array [
         "block-0/0 -> 1",
-        "block-2/0 -> Type Error",
+        "block-2/0 -> 3",
       ]
     `);
 
@@ -168,7 +168,7 @@ describe('caching', () => {
     ).toMatchInlineSnapshot(`
       Array [
         "block-0/0 -> 1",
-        "block-2/0 -> Type Error",
+        "block-2/0 -> 3",
         "block-3/0 -> 1",
       ]
     `);

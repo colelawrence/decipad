@@ -1,6 +1,6 @@
 import Fraction from '@decipad/fraction';
 import { Class } from 'utility-types';
-import { AST, Time } from '.';
+import { AST, Unit, Units } from '.';
 
 export { date } from './date';
 
@@ -31,32 +31,17 @@ export function n<K extends AST.Node['type'], N extends AST.TypeToNode[K]>(
 
 export const block = (...contents: AST.Statement[]) => n('block', ...contents);
 
-export const units = (...units: AST.Unit[]) =>
-  units.length > 0 ? n('units', ...units) : null;
-
 type LitType = number | bigint | string | boolean;
-export function l(value: LitType, ...units: AST.Unit[]): AST.Literal {
-  const unitArg = units.length > 0 ? n('units', ...units) : null;
-
+export function l(value: LitType): AST.Literal {
   const t = typeof value;
   if (t === 'number' || t === 'bigint') {
     const fraction = new Fraction(value as number | bigint);
-    return n('literal', 'number', fraction, unitArg);
+    return n('literal', 'number', fraction);
   } else if (t === 'boolean') {
     return n('literal', 'boolean', value as boolean);
   } else {
     return n('literal', 'string', value as string);
   }
-}
-
-export function timeQuantity(items: { [unit in Time.Unit]?: bigint }) {
-  return n(
-    'time-quantity',
-    ...Object.entries(items).flatMap(([k, v]) => [
-      k as Time.Unit,
-      getDefined(v),
-    ])
-  );
 }
 
 export function col(...values: (LitType | AST.Expression)[]): AST.Column {
@@ -134,7 +119,7 @@ export function r(fName: string) {
   return n('ref', fName);
 }
 
-export function as(left: AST.Expression, units: AST.Units) {
+export function as(left: AST.Expression, units: AST.Expression) {
   return n('directive', 'as', left, units);
 }
 
@@ -236,7 +221,7 @@ export const getInstanceof = <T>(
   cls: Class<T>,
   message = `getInstanceof expected an instance of ${
     cls?.name ?? 'a specific class'
-  }`
+  } and got ${(thing as { constructor: { name: string } })?.constructor?.name}`
 ): T => {
   if (thing instanceof cls) {
     return thing as T;
@@ -319,10 +304,7 @@ export function F(n: number | bigint | string, d: number | bigint = 1n) {
     : new Fraction(n);
 }
 
-export function u(
-  unit: string | AST.Unit,
-  opts: Partial<AST.Unit> = {}
-): AST.Unit {
+export function u(unit: string | Unit, opts: Partial<Unit> = {}): Unit {
   if (typeof unit === 'string') {
     unit = {
       unit,
@@ -334,13 +316,27 @@ export function u(
   return { ...unit, ...opts };
 }
 
-export function U(
-  units: string | AST.Unit | AST.Unit[],
-  opts?: Partial<AST.Unit>
-): AST.Units {
+export function U(units: string | Unit | Unit[], opts?: Partial<Unit>): Units {
   const unitsArr = Array.isArray(units) ? units : [units];
   return {
     type: 'units',
     args: unitsArr.map((unit) => u(unit, opts)),
+  };
+}
+
+// ne = number expression
+export function ne(n: number, unit: string): AST.Expression {
+  return {
+    type: 'function-call',
+    args: [
+      {
+        type: 'funcref',
+        args: ['*'],
+      },
+      {
+        type: 'argument-list',
+        args: [l(n), r(unit)],
+      },
+    ],
   };
 }

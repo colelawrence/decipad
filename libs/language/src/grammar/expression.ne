@@ -1,5 +1,54 @@
 @lexer tokenizer
 
+@{%
+const implicitMultHandler = (d, _l, reject) => {
+  const left = d[0]
+  const right = d[2] || d[1]
+
+  // disambiguate things like `2 - 1` <- this is not `2 * (- 1)`!
+  if (right.type === 'function-call') {
+    const funcRef = right.args[0];
+    if (funcRef.type === 'funcref') {
+      const funcName = funcRef.args[0];
+      if (funcName === 'unary-') {
+        return reject;
+      }
+    }
+  }
+
+  return addArrayLoc({
+    type: 'function-call',
+    args: [
+      {
+        type: 'funcref',
+        args: ['*'],
+      },
+      addArrayLoc({
+        type: 'argument-list',
+        args: [left, right]
+      }, d)
+    ],
+  }, d)
+};
+
+const unaryMinusHandler = (d) => {
+  const expr = d[2]
+  return addArrayLoc({
+    type: 'function-call',
+    args: [
+      addLoc({
+        type: 'funcref',
+        args: ['unary-'],
+      }, d[0]),
+      addLoc({
+        type: 'argument-list',
+        args: [d[2]],
+      }, d[2])
+    ],
+  }, d)
+};
+%}
+
 ##################
 ### Expression ###
 ##################
@@ -19,11 +68,10 @@ overExp       -> overExp _ "over" _ genericIdentifier   {%
                                                         %}
 
 asExp         -> divMulOp                               {% id %}
-asExp         -> asExp _ ("as" | "to" | "in") _ units   {%
-                                                        (d, _l, reject) => {
+asExp         -> asExp _ ("as" | "to" | "in") _ divMulOp   {%
+                                                        (d) => {
                                                           const exp = d[0]
                                                           const unit = d[4]
-
                                                           return addArrayLoc({
                                                             type: 'directive',
                                                             args: ['as', exp, unit],
@@ -63,8 +111,8 @@ divMulOp      -> divMulOp _ additiveOperator _ addSubOp {%
                                                         }
                                                         %}
 
-addSubOp     -> primary                                 {% id %}
-addSubOp     -> addSubOp _ multiplicativeOperator _ primary {%
+addSubOp     -> implicitMult                            {% id %}
+addSubOp     -> addSubOp _ multOp _ implicitMult        {%
                                                         (d) => {
                                                           const left = d[0]
                                                           const op = d[2]
@@ -86,16 +134,10 @@ addSubOp     -> addSubOp _ multiplicativeOperator _ primary {%
                                                         }
                                                         %}
 
-ref          -> identifier                              {%
-                                                        (d, _l, reject) => {
-                                                          const name = d[0].name
-                                                          if (reservedWords.has(name)) {
-                                                            return reject
-                                                          } else {
-                                                            return addLoc({ type: 'ref', args: [ name ] }, d[0])
-                                                          }
-                                                        }
-                                                        %}
+implicitMult  -> primary                                {% id %}
+implicitMult  -> implicitMult ref                       {% implicitMultHandler %}
+implicitMult  -> implicitMult __ primary                {% implicitMultHandler %}
+
 
 primary      -> functionCall                            {% id %}
 primary      -> select                                  {% id %}
@@ -105,35 +147,8 @@ primary      -> ref                                     {% id %}
 
 primary      -> parenthesizedExpression                 {% id %}
 
-primary      -> "-" _ expression                        {%
-                                                        (d) => {
-                                                          const expr = d[2]
-                                                          if (
-                                                            expr.type === 'literal' &&
-                                                            expr.args[0] === 'number'
-                                                          ) {
-                                                            expr.args[1] = expr.args[1].neg();
-                                                            return addArrayLoc({
-                                                              type: expr.type,
-                                                              args: expr.args,
-                                                            }, d)
-                                                          } else {
-                                                            return addArrayLoc({
-                                                              type: 'function-call',
-                                                              args: [
-                                                                addLoc({
-                                                                  type: 'funcref',
-                                                                  args: ['unary-'],
-                                                                }, d[0]),
-                                                                addLoc({
-                                                                  type: 'argument-list',
-                                                                  args: [d[2]],
-                                                                }, d[2])
-                                                              ],
-                                                            }, d)
-                                                          }
-                                                        }
-                                                        %}
+primary      -> "-" _ parenthesizedExpression           {% unaryMinusHandler %}
+primary      -> "-" _ ref                               {% unaryMinusHandler %}
 
 primary      -> ("!" | "not") _ expression              {%
                                                         (d) => {
@@ -153,7 +168,28 @@ primary      -> ("!" | "not") _ expression              {%
                                                         }
                                                         %}
 
-primary      -> (ref | functionCall | parenthesizedExpression | select) _ "." _ %identifier {%
+primary     -> primary _ "^" _ int                      {%
+                                                        (d) => {
+                                                          const left = d[0]
+                                                          const right = numberLiteralFromUnits(d, d[4].n)
+
+                                                          return addArrayLoc({
+                                                            type: 'function-call',
+                                                            args: [
+                                                              {
+                                                                type: 'funcref',
+                                                                args: ['^'],
+                                                              },
+                                                              addArrayLoc({
+                                                                type: 'argument-list',
+                                                                args: [left, right]
+                                                              }, d)
+                                                            ],
+                                                          }, d)
+                                                        }
+                                                        %}
+
+primary -> (ref | functionCall | parenthesizedExpression | select) _ "." _ %identifier {%
                                                         (d) =>
                                                           addArrayLoc({
                                                             type: 'property-access',
@@ -184,7 +220,7 @@ additiveOperator  -> ("-" | "+" | "&&" | "||" | "or" | "and")  {%
                                                         }
                                                         %}
 
-multiplicativeOperator -> ("**" | ">" | "<" | "<=" | ">=" | "==" | "!=" | "contains") {%
+multOp -> ("**" | ">" | "<" | "<=" | ">=" | "==" | "!=" | "contains" | " %") {%
                                                         (d) => {
                                                           return addArrayLoc({
                                                             name: d[0].map(t => t.value).join(''),
@@ -192,10 +228,18 @@ multiplicativeOperator -> ("**" | ">" | "<" | "<=" | ">=" | "==" | "!=" | "conta
                                                         }
                                                         %}
 
-multiplicativeOperator -> " " ("*" | "/" | "%" | "^") " " {%
+multOp -> __ "%"                                        {%
                                                         (d) => {
                                                           return addArrayLoc({
-                                                            name: d[1][0].value
+                                                            name: d[1].value,
+                                                          }, d)
+                                                        }
+                                                        %}
+
+multOp -> ("*" | "/")                                   {%
+                                                        (d) => {
+                                                          return addArrayLoc({
+                                                            name: d[0][0].value
                                                           }, d)
                                                         }
                                                         %}

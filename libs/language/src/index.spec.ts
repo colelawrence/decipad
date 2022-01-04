@@ -1,6 +1,6 @@
 // E2e tests
 import Fraction from '@decipad/fraction';
-import { build as t, Type } from './type';
+import { build as t, Type, units } from './type';
 import { runCode } from './run';
 import {
   runCodeForVariables,
@@ -10,8 +10,9 @@ import {
 } from './testUtils';
 import { parseUTCDate } from './date';
 import { Column, Scalar } from './interpreter/Value';
-import { block, n, units, F, U, u } from './utils';
+import { block, n, F, U, u } from './utils';
 import { stringifyResult } from './repl';
+import { number } from './type/build';
 
 expect.addSnapshotSerializer({
   test: (arg) => arg?.type instanceof Type && arg.value != null,
@@ -28,8 +29,8 @@ describe('basic code', () => {
           -1,
           55 % 2,
           101%,
-          1 / 4,
-          2 ^ 4,
+          1/4,
+          2^4,
           sqrt(16)
         ]
       `)
@@ -520,8 +521,13 @@ describe('Units', () => {
     ).toMatchObject({
       type: {
         unit: units(
-          { exp: 1n, known: true, multiplier: new Fraction(1), unit: 'meter' },
-          { exp: -1n, known: true, multiplier: new Fraction(1), unit: 'second' }
+          { exp: 1n, known: true, multiplier: new Fraction(1), unit: 'meters' },
+          {
+            exp: -1n,
+            known: true,
+            multiplier: new Fraction(1),
+            unit: 'seconds',
+          }
         ),
       },
       value: F(1),
@@ -557,7 +563,7 @@ describe('Units', () => {
     });
   });
 
-  it('units can be collapsed', async () => {
+  it('units can be collapsed (1)', async () => {
     expect(
       await runCode(`
         Speed = 2 meter/second
@@ -575,7 +581,9 @@ describe('Units', () => {
         }),
       },
     });
+  });
 
+  it('units can be collapsed (2)', async () => {
     expect(
       await runCode(`
         Speed = 6 meter/second
@@ -609,9 +617,16 @@ describe('Ranges', () => {
     expect(
       await runCode(`
         Range = [1..3]
-        Containment = contains(Range, 3)
+        Containment = Range contains 3
       `)
     ).toMatchObject({
+      type: { type: 'boolean' },
+      value: true,
+    });
+  });
+
+  it('can use contain on range', async () => {
+    expect(await runCode(`[1 through 10] contains 5`)).toMatchObject({
       type: { type: 'boolean' },
       value: true,
     });
@@ -645,39 +660,6 @@ describe('Dates', () => {
         Days = [ true, false, false ]
       })
     `);
-  });
-});
-
-describe('Time quantities', () => {
-  it('evaluates time quantities', async () => {
-    expect(
-      await runCodeForVariables(
-        `
-        Years = [ 7 years ]
-        Quarters = [ 3 quarters ]
-        Seconds = [ 999 seconds ]
-        Combined = [ 4 quarters, 3 second, 1 millisecond ]
-      `,
-        ['Years', 'Quarters', 'Seconds', 'Combined']
-      )
-    ).toEqual({
-      variables: {
-        Years: [['year', 7n]],
-        Quarters: [['quarter', 3n]],
-        Seconds: [['second', 999n]],
-        Combined: [
-          ['quarter', 4n],
-          ['second', 3n],
-          ['millisecond', 1n],
-        ],
-      },
-      types: {
-        Years: t.timeQuantity(['year']),
-        Quarters: t.timeQuantity(['quarter']),
-        Seconds: t.timeQuantity(['second']),
-        Combined: t.timeQuantity(['quarter', 'second', 'millisecond']),
-      },
-    });
   });
 });
 
@@ -881,7 +863,7 @@ describe('number units work together', () => {
             known: true,
           },
           {
-            unit: 'minute',
+            unit: 'minutes',
             exp: -1n,
             multiplier: new Fraction(1),
             known: true,
@@ -947,6 +929,34 @@ describe('number units work together', () => {
     });
   });
 
+  it('calculates date difference', async () => {
+    expect(await runCode(`date(2021) - date(2020)`)).toMatchObject({
+      value: [['day', 366n]],
+      type: t.timeQuantity(['year']),
+    });
+  });
+
+  it('calculates date sequence', async () => {
+    expect(await runCode(`[date(2020) .. date(2025) by year]`)).toMatchObject({
+      value: [
+        1577836800000n,
+        1609459200000n,
+        1640995200000n,
+        1672531200000n,
+        1704067200000n,
+        1735689600000n,
+      ],
+      type: t.column(t.date('year'), 6),
+    });
+  });
+
+  it('calculates number from time quantity', async () => {
+    expect(await runCode(`(date(2021) - date(2020)) as years`)).toMatchObject({
+      value: F(1),
+      type: number(U('years')),
+    });
+  });
+
   it('exponentiation works with expression as exponent', async () => {
     expect(
       await runCode(`
@@ -985,6 +995,8 @@ describe('number units work together', () => {
 
   it('handles non-scalar unit conversions', async () => {
     expect(await runCode(`1K + 2°C + 3°F`)).toMatchObject({
+      // 1 + (2 + 273.15) + ((3 - 32) * 5 / 9 + 273.15)
+      // = 1 + 275.15 + 257.03(8) =  533.18(8)
       value: F(50007, 100),
       type: t.number(U('°F')),
     });
@@ -1000,7 +1012,7 @@ describe('number units work together', () => {
   it('converts between complex units', async () => {
     expect(await runCode(`100 joules/km to calories/foot`)).toMatchObject({
       value: F(381, 52300),
-      type: t.number(U([u('calories'), u('foot', { exp: -1n })])),
+      type: t.number(U([u('calories'), u('feet', { exp: -1n })])),
     });
   });
 
@@ -1008,7 +1020,7 @@ describe('number units work together', () => {
     expect(await runCode(`1 bananas/second as bananas/minute`)).toMatchObject({
       value: F(60),
       type: t.number(
-        U([u('bananas', { known: false }), u('minute', { exp: -1n })])
+        U([u('bananas', { known: false }), u('minutes', { exp: -1n })])
       ),
     });
   });
@@ -1021,7 +1033,7 @@ describe('number units work together', () => {
       type: t.number(
         U([
           u('g', { multiplier: new Fraction(1000) }),
-          u('second', { exp: -2n }),
+          u('seconds', { exp: -2n }),
         ])
       ),
     });
@@ -1037,14 +1049,14 @@ describe('number units work together', () => {
   it('autoconverts expanding expandable units (2)', async () => {
     expect(await runCode(`1 newton/meter^2 + 2 bar`)).toMatchObject({
       value: F(200001, 100000),
-      type: t.number(U('bar')),
+      type: t.number(U('bars')),
     });
   });
 
   it('autoconverts expanding expandable units (3)', async () => {
     expect(await runCode(`2 bar + 1 newton/meter^2`)).toMatchObject({
       value: F(200001),
-      type: t.number(U([u('newton'), u('meter', { exp: -2n })])),
+      type: t.number(U([u('meters', { exp: -2n }), u('newtons')])),
     });
   });
 
@@ -1227,6 +1239,13 @@ describe('number units work together', () => {
     ).toMatchObject({
       value: F(4200),
       type: t.number(U('USD')),
+    });
+  });
+
+  it('autoconverts units', async () => {
+    expect(await runCode(`30 psi + 1 newton/inch^2`)).toMatchObject({
+      value: F(197582111, 1469600),
+      type: t.number(U([u('inches', { exp: -2n }), u('newtons')])),
     });
   });
 

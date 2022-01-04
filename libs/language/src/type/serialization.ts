@@ -1,9 +1,11 @@
-import { buildType as t, Type, AST } from '..';
+import { getDefined } from '@decipad/utils';
+import { buildType as t, Type } from '..';
 import { Time } from '../date';
 import { ErrSpec, InferError } from './InferError';
+import { Units } from './unit-type';
 
 export type SerializedType =
-  | { kind: 'number'; unit: AST.Units | null }
+  | { kind: 'number'; unit: Units | null }
   | { kind: 'boolean' }
   | { kind: 'string' }
   | { kind: 'date'; date: Time.Specificity }
@@ -37,8 +39,13 @@ export function serializeType(type: Type): SerializedType {
     return { kind: 'boolean' };
   } else if (type.date) {
     return { kind: 'date', date: type.date };
-  } else if (type.timeUnits) {
-    return { kind: 'time-quantity', timeUnits: type.timeUnits };
+  } else if (type.type === 'time-quantity') {
+    return {
+      kind: 'time-quantity',
+      timeUnits: getDefined(
+        type.unit?.args.map((unit) => unit.unit as Time.Unit)
+      ),
+    };
   } else if (type.rangeOf) {
     return { kind: 'range', rangeOf: serializeType(type.rangeOf) };
   } else if (type.cellType && type.columnSize) {
@@ -69,7 +76,8 @@ export function serializeType(type: Type): SerializedType {
   }
 
   /* istanbul ignore next */
-  throw new Error('panic: serializing invalid type');
+  console.error(type);
+  throw new Error(`panic: serializing invalid type ${type.type}`);
 }
 
 /* eslint-disable-next-line consistent-return */

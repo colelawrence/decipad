@@ -1,5 +1,4 @@
-import { buildType as t, AST } from '..';
-import { units } from '../utils';
+import { buildType as t, Unit, units } from '..';
 import { InferError } from './InferError';
 import {
   deserializeType,
@@ -7,7 +6,7 @@ import {
   serializeType,
 } from './serialization';
 
-const meter: AST.Unit = { unit: 'meter', exp: 1n } as unknown as AST.Unit;
+const meter: Unit = { unit: 'meter', exp: 1n } as unknown as Unit;
 const errorCause = InferError.expectedButGot('A', 'B');
 
 it('can stringify a type', () => {
@@ -67,6 +66,7 @@ it('can stringify a type', () => {
       "kind": "column",
     }
   `);
+
   expect(
     serializeType(
       t.table({
@@ -197,9 +197,44 @@ it('can parse a type', () => {
       kind: 'time-quantity',
       timeUnits: ['day', 'year'],
     })
-  ).toMatchObject({
-    timeUnits: ['day', 'year'],
-  });
+  ).toMatchInlineSnapshot(`
+    Type {
+      "atParentIndex": null,
+      "cellType": null,
+      "columnNames": null,
+      "columnSize": null,
+      "columnTypes": null,
+      "date": null,
+      "errorCause": null,
+      "functionness": false,
+      "indexName": null,
+      "indexedBy": null,
+      "node": null,
+      "rangeOf": null,
+      "rowCellNames": null,
+      "rowCellTypes": null,
+      "tableLength": null,
+      "type": "time-quantity",
+      "unit": Object {
+        "args": Array [
+          Object {
+            "exp": 1n,
+            "known": true,
+            "multiplier": Fraction(1),
+            "unit": "day",
+          },
+          Object {
+            "exp": 1n,
+            "known": true,
+            "multiplier": Fraction(1),
+            "unit": "year",
+          },
+        ],
+        "type": "units",
+      },
+      Symbol(immer-draftable): true,
+    }
+  `);
 
   expect(deserializeType({ kind: 'function' })).toMatchObject({
     functionness: true,

@@ -1,5 +1,4 @@
 import pSeries from 'p-series';
-
 import { AST } from '..';
 import { callBuiltin } from '../builtins';
 import { getOfType, getDefined, getIdentifierString } from '../utils';
@@ -8,15 +7,7 @@ import { resolve as resolveData } from '../data';
 import { expandDirectiveToValue } from '../directives';
 
 import { Realm } from './Realm';
-import {
-  Scalar,
-  Range,
-  Date,
-  Column,
-  Value,
-  TimeQuantity,
-  UnknownValue,
-} from './Value';
+import { Scalar, Range, Date, Column, Value, UnknownValue } from './Value';
 import { evaluateTable } from './table';
 import { evaluateData } from './data';
 
@@ -43,9 +34,6 @@ export async function evaluate(
         }
       }
     }
-    case 'time-quantity': {
-      return TimeQuantity.fromASTArgs(node.args);
-    }
     case 'assign': {
       const varName = getIdentifierString(node.args[0]);
       const value = await evaluate(realm, node.args[1]);
@@ -53,7 +41,12 @@ export async function evaluate(
       return value;
     }
     case 'ref': {
-      return getDefined(realm.stack.get(getIdentifierString(node)));
+      const identifier = getIdentifierString(node);
+      const value = realm.stack.get(identifier);
+      if (value != null) {
+        return value;
+      }
+      return Scalar.fromValue(1);
     }
     case 'externalref': {
       const { value } = getDefined(realm.externalData.get(node.args[0]));

@@ -48,7 +48,7 @@ runTests({
             args: [
               {
                 type: 'literal',
-                args: ['number', F(1), null],
+                args: ['number', F(1)],
                 start: {
                   char: 3,
                   line: 1,
@@ -62,7 +62,7 @@ runTests({
               },
               {
                 type: 'literal',
-                args: ['number', F(3), null],
+                args: ['number', F(3)],
                 start: {
                   char: 5,
                   line: 1,
@@ -112,7 +112,7 @@ runTests({
             args: [
               {
                 type: 'literal',
-                args: ['number', F(1), null],
+                args: ['number', F(1)],
                 start: {
                   char: 3,
                   line: 1,
@@ -163,7 +163,7 @@ runTests({
             args: [
               {
                 type: 'literal',
-                args: ['number', F(1), null],
+                args: ['number', F(1)],
               },
               {
                 type: 'function-call',
@@ -177,11 +177,11 @@ runTests({
                     args: [
                       {
                         type: 'literal',
-                        args: ['number', F(2), null],
+                        args: ['number', F(2)],
                       },
                       {
                         type: 'literal',
-                        args: ['number', F(3), null],
+                        args: ['number', F(3)],
                       },
                     ],
                   },

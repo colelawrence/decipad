@@ -13,12 +13,7 @@ export function parseCell(
     case 'number': {
       const n = Number(text);
       if (!Number.isNaN(n)) {
-        return astNode(
-          'literal',
-          'number' as const,
-          new Fraction(n || 0),
-          null
-        );
+        return astNode('literal', 'number' as const, new Fraction(n || 0));
       }
       return null;
     }

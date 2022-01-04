@@ -1,8 +1,17 @@
 /* istanbul ignore file: just config and re-export */
 import { Value } from './interpreter/Value';
-import { Type, build as t, serializeType, SerializedType } from './type';
+import {
+  Type,
+  build as t,
+  serializeType,
+  SerializedType,
+  Units,
+  Unit,
+  units,
+} from './type';
 import { builtinsForAutocomplete } from './builtins';
 
+export { units };
 export { tokenize, tokenRules } from './grammar';
 export * from './grammar/containmentCounting';
 export { parse, AST, Parser } from './parser';
@@ -14,6 +23,7 @@ export { Scalar, Date, Range, TimeQuantity, Column } from './interpreter/Value';
 
 export { prettyPrintAST } from './parser/utils';
 export type { SerializedType, SerializedTypeKind } from './type';
+export type { Unit, Units };
 export {
   Type,
   build as buildType,

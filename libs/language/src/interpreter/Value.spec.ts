@@ -1,6 +1,6 @@
 import { F } from '../utils';
 import { parseUTCDate } from '../date';
-import { Scalar, Column, Range, Date, TimeQuantity, fromJS } from './Value';
+import { Scalar, Column, Range, Date, fromJS } from './Value';
 
 it('can get from JS for testing', () => {
   expect(fromJS(1)).toEqual(Scalar.fromValue(1));
@@ -27,23 +27,6 @@ const d = parseUTCDate;
 it('can represent a date', () => {
   const date = Date.fromDateAndSpecificity(d('2020-01-04'), 'month');
   expect(date.getData()).toEqual(d('2020-01'));
-});
-
-it('can represent a time quantity', () => {
-  const quantity = TimeQuantity.fromASTArgs([
-    'year',
-    10n,
-    'quarter',
-    3n,
-    'minute',
-    5n,
-  ]);
-
-  expect(Object.fromEntries(quantity.timeUnits.entries())).toEqual({
-    year: 10n,
-    quarter: 3n,
-    minute: 5n,
-  });
 });
 
 it('can represent a column of dates', () => {

@@ -1,7 +1,7 @@
 import Fraction from '@decipad/fraction';
 import { AST, Time, Date as IDate } from '..';
 import { getOfType } from '../utils';
-import { build as t } from '../type';
+import { build as t, Type } from '../type';
 import {
   dateToArray,
   getJSDateUnitAndMultiplier,
@@ -15,32 +15,35 @@ import { Context } from './context';
 
 const millisecondsInDay = 24 * 60 * 60 * 1000;
 
-export const getNumberSequenceCountBigInt = (
-  start: bigint,
-  end: bigint,
-  by: bigint
+export const getNumberSequenceCount = (
+  start: Fraction,
+  end: Fraction,
+  by: Fraction
 ): number | string => {
-  if (start === end) {
+  const diff = start.compare(end);
+  if (diff === 0) {
     return 1;
-  } else if (start > end) {
-    return getNumberSequenceCountBigInt(end, start, -by);
-  } else if (by === BigInt(0)) {
+  } else if (diff > 0) {
+    return getNumberSequenceCount(end, start, by.neg());
+  } else if (by.equals(0)) {
     return 'Sequence interval must not be zero';
-  } else if (by < 0) {
+  } else if (by.valueOf() < 0) {
     return 'Divergent sequence';
   } else {
-    const divided = (end - start) / by;
-
-    return Number(divided) + 1;
+    return end.sub(start).div(by).add(new Fraction(1)).floor().valueOf();
   }
 };
 
-export const getNumberSequenceCount = (
+export const getNumberSequenceCountN = (
   start: number | bigint,
   end: number | bigint,
   by: number | bigint
 ): number | string =>
-  getNumberSequenceCountBigInt(BigInt(start), BigInt(end), BigInt(by));
+  getNumberSequenceCount(
+    new Fraction(start),
+    new Fraction(end),
+    new Fraction(by)
+  );
 
 type SimplerUnit = 'month' | 'day' | 'millisecond';
 
@@ -75,7 +78,7 @@ export const getDateSequenceLength = (
       const [endYear, endMonth] = dateToArray(end);
 
       const monthDiff = (endYear - startYear) * 12n + (endMonth - startMonth);
-      return getNumberSequenceCount(0, monthDiff, steps);
+      return getNumberSequenceCountN(0, monthDiff, steps);
     }
     case 'day': {
       // Taken from date-fns differenceInCalendarDays
@@ -84,10 +87,10 @@ export const getDateSequenceLength = (
         Number(end - start) / millisecondsInDay
       );
 
-      return getNumberSequenceCount(0, differenceInDays - 1, steps);
+      return getNumberSequenceCountN(0, differenceInDays - 1, steps);
     }
     case 'millisecond': {
-      return getNumberSequenceCount(start, end, steps);
+      return getNumberSequenceCountN(start, end, steps);
     }
     /* istanbul ignore next */
     default: {
@@ -96,11 +99,21 @@ export const getDateSequenceLength = (
   }
 };
 
-export const inferSequence = async (ctx: Context, expr: AST.Sequence) => {
+const tryGetNumber = (n: AST.Expression): Fraction | undefined => {
+  if (n.type === 'literal' && n.args[0] === 'number') {
+    return n.args[1];
+  }
+  return undefined;
+};
+
+export const inferSequence = async (
+  ctx: Context,
+  expr: AST.Sequence
+): Promise<Type> => {
   const [startN, endN, byN] = expr.args;
-  const boundTypes = (await inferExpression(ctx, startN)).sameAs(
-    await inferExpression(ctx, endN)
-  );
+  const startType = await inferExpression(ctx, startN);
+  const endType = await inferExpression(ctx, endN);
+  const boundTypes = startType.sameAs(endType);
 
   if (boundTypes.errorCause != null) {
     return boundTypes;
@@ -133,24 +146,21 @@ export const inferSequence = async (ctx: Context, expr: AST.Sequence) => {
     return typeof countOrError === 'string'
       ? t.impossible(countOrError)
       : t.column(t.date(specificity), countOrError);
-  } else if (
-    expr.args.every(
-      (n) =>
-        n.type === 'literal' &&
-        n.args[0] === 'number' &&
-        n.args[1] instanceof Fraction
-    )
-  ) {
-    const countOrError = getNumberSequenceCount(
-      (startN.args[1] as Fraction).valueOf(),
-      (endN.args[1] as Fraction).valueOf(),
-      (byN.args[1] as Fraction).valueOf()
-    );
-
-    return typeof countOrError === 'string'
-      ? t.impossible(countOrError)
-      : t.column(boundTypes, countOrError);
   } else {
-    return t.impossible('Sequence parameters must be literal');
+    const type = startType.isScalar('number');
+    if (type.errorCause) {
+      return type;
+    }
+    const start = tryGetNumber(startN);
+    const end = tryGetNumber(endN);
+    const by = tryGetNumber(byN);
+    if (start && end && by) {
+      const countOrError = getNumberSequenceCount(start, end, by);
+      return typeof countOrError === 'string'
+        ? t.impossible(countOrError)
+        : t.column(boundTypes, countOrError);
+    } else {
+      return t.column(boundTypes, 'unknown');
+    }
   }
 };

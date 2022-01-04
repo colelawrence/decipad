@@ -52,7 +52,7 @@ Instead of inputting the values by hand or defining them declaratively, you can 
 ```deci live
 my_table = {
   arrival_date = [date(2022-02-20) through date(2022-03-05) by day]
-  departure_date = arrival_date + [7 days]
+  departure_date = arrival_date + 7 days
 }
 ==> {
   arrival_date = [ day 2022-02-20, day 2022-02-21, day 2022-02-22, day 2022-02-23, day 2022-02-24, day 2022-02-25, day 2022-02-26, day 2022-02-27, day 2022-02-28, day 2022-03-01, day 2022-03-02, day 2022-03-03, day 2022-03-04, day 2022-03-05 ],

@@ -16,7 +16,7 @@ export interface BuiltinSpec {
   noAutoconvert?: boolean;
   // Variant that operates on Value specifically
   fnValuesNoAutomap?: (args: Value[], argTypes?: Type[]) => AnyValue;
-  fnValues?: (...args: AnyValue[]) => AnyValue;
+  fnValues?: (args: AnyValue[], argTypes?: Type[]) => AnyValue;
   functor?: (types: Type[], values?: AST.Expression[]) => Type;
   functorNoAutomap?: (types: Type[], values?: AST.Expression[]) => Type;
 }

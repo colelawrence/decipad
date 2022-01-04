@@ -1,7 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 import Fraction from '@decipad/fraction';
-import { AST, Time, Interpreter } from '..';
-import { pairwise, getDefined } from '../utils';
+import { singular } from 'pluralize';
+import { Time, Interpreter, Units } from '..';
+import { getDefined } from '../utils';
 import {
   addTimeQuantity,
   cleanDate,
@@ -10,6 +11,7 @@ import {
 } from '../date';
 import { compare } from './compare-values';
 import { Unknown } from './Unknown';
+import { RuntimeError } from '.';
 
 export interface Value {
   getData(): Interpreter.OneResult;
@@ -30,6 +32,8 @@ export type NonColumn =
   | Date
   | TimeQuantity;
 export type AnyValue = NonColumn | Column;
+
+const MAX_ITERATIONS = 10_000; // Failsafe
 
 export class Scalar {
   static fromValue(
@@ -172,8 +176,14 @@ export class TimeQuantity implements Value {
     }
   }
 
-  static fromASTArgs(args: AST.TimeQuantity['args']): TimeQuantity {
-    return new TimeQuantity(new Map(pairwise<Time.Unit, bigint>(args)));
+  static fromUnits(number: bigint, units: Units): TimeQuantity {
+    if (units.args.length !== 1) {
+      throw new RuntimeError(
+        'Cannot construct time quantity from more than one unit of time'
+      );
+    }
+    const unit = singular(units.args[0].unit);
+    return new TimeQuantity({ [unit]: number });
   }
 
   getData() {
@@ -237,8 +247,14 @@ export class Column implements Value {
     );
 
     const array = [];
+    let iterations = 0;
 
     for (let i = start; i.compare(end) <= 0; i = i.add(by)) {
+      if (++iterations > MAX_ITERATIONS) {
+        throw new RuntimeError(
+          `A maximum number of ${MAX_ITERATIONS} has been reached in sequence. Check for an unbound sequence in your code.`
+        );
+      }
       array.push(Scalar.fromValue(i));
     }
 

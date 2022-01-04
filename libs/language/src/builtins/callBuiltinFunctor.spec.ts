@@ -1,32 +1,20 @@
 import Fraction from '@decipad/fraction';
-import { AST } from '..';
-import { Type, build as t } from '../type';
-import { units } from '../utils';
+import { Type, build as t, Unit, units } from '../type';
 
 import { callBuiltinFunctor } from './callBuiltinFunctor';
 
-const nilPos = {
-  line: 2,
-  column: 0,
-  char: 0,
-};
-
-const meter: AST.Unit = {
+const meter: Unit = {
   unit: 'meter',
   exp: 1n,
   multiplier: new Fraction(1),
   known: true,
-  start: nilPos,
-  end: nilPos,
 };
 
-const second: AST.Unit = {
+const second: Unit = {
   unit: 'second',
   exp: 1n,
   multiplier: new Fraction(1),
   known: true,
-  start: nilPos,
-  end: nilPos,
 };
 
 describe('callBuiltin', () => {
@@ -139,7 +127,7 @@ describe('callBuiltin', () => {
 
 interface TestBuilderArgs {
   type: 'string' | 'boolean' | 'number';
-  unit?: AST.Unit[] | null;
+  unit?: Unit[] | null;
 }
 type Builder = (a: TestBuilderArgs) => Type;
 // build, build2, build3, and buildOut will switch dimensionality to test propagation

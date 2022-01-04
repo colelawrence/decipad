@@ -1,6 +1,5 @@
 import Fraction from '@decipad/fraction';
 import { AST } from '..';
-import { stringifyUnits } from '../type/units';
 import { getIdentifierString, isNode, isStatement } from '../utils';
 
 const prettyPrint = (node: AST.Node, indent: number): string => {
@@ -11,14 +10,10 @@ const prettyPrint = (node: AST.Node, indent: number): string => {
 
   switch (node.type) {
     case 'literal': {
-      const [, value, units] = node.args;
-      return [
-        value instanceof Fraction ? value.toString() : JSON.stringify(value),
-        units && prettyPrint(units, indent + 1),
-      ].join('');
-    }
-    case 'units': {
-      return stringifyUnits(node);
+      const [, value] = node.args;
+      return value instanceof Fraction
+        ? value.toString()
+        : JSON.stringify(value);
     }
     case 'property-access': {
       const [ref, prop] = node.args;

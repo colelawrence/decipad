@@ -84,7 +84,7 @@ An integer is a whole number, not a fractional number, that can be positive, neg
 
 ```deci live
 21
-- 21
+-21
 0
 ==> 0
 ```

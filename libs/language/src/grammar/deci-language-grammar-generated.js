@@ -6,155 +6,12 @@ function id(x) {
 
 import { parensCountingTokenizer as tokenizer } from './tokenizer';
 
-import Fraction from '@decipad/fraction';
-
-function numberLiteralFromUnits(parentNode, n, units = null) {
-  const fraction = n instanceof Fraction ? n : new Fraction(n);
-
-  const node = {
-    type: 'literal',
-    args: ['number', fraction, units],
-  };
-  if (Array.isArray(parentNode)) {
-    return addArrayLoc(node, parentNode);
-  }
-  return addLoc(node, parentNode);
-}
-
-const abbreviatedPrefixes = {
-  y: 'yocto',
-  z: 'zepto',
-  a: 'atto',
-  f: 'femto',
-  p: 'pico',
-  n: 'nano',
-  μ: 'micro',
-  m: 'milli',
-  c: 'centi',
-  d: 'deci',
-  da: 'deca',
-  h: 'hecto',
-  k: 'kilo',
-  M: 'mega',
-  G: 'giga',
-  T: 'tera',
-  P: 'peta',
-  E: 'exa',
-  Z: 'zetta',
-  Y: 'yotta',
-};
-
-const multiplierPrefixes = {
-  yocto: new Fraction(1, 1_000_000_000_000_000_000_000_000), // 1e-24,
-  zepto: new Fraction(1, 1_000_000_000_000_000_000_000), // 1e-21,
-  atto: new Fraction(1, 1_000_000_000_000_000_000), // 1e-18,
-  femto: new Fraction(1, 1_000_000_000_000_000), // 1e-15,
-  pico: new Fraction(1, 1_000_000_000_000), // 1e-12,
-  nano: new Fraction(1, 1_000_000_000), // 1e-9,
-  micro: new Fraction(1, 1_000_000), // 1e-6,
-  milli: new Fraction(1, 1_000), // 1e-3,
-  centi: new Fraction(1, 100), // 1e-2,
-  deci: new Fraction(1, 10), // 1e-1,
-  deca: new Fraction(10), // 1e1,
-  hecto: new Fraction(100), // 1e2,
-  kilo: new Fraction(1_000), // 1e3,
-  mega: new Fraction(1_000_000), // 1e6,
-  giga: new Fraction(1_000_000_000), // 1e9,
-  tera: new Fraction(1_000_000_000_000), // 1e12,
-  peta: new Fraction(1_000_000_000_000_000), // 1e15,
-  exa: new Fraction(1_000_000_000_000_000_000), // 1e18,
-  zetta: new Fraction(1_000_000_000_000_000_000_000), // 1e21,
-  yotta: new Fraction(1_000_000_000_000_000_000_000_000), // 1e24,
-};
-
-const trimPrefix = (unitName) => {
-  for (const fullPrefix of Object.keys(multiplierPrefixes)) {
-    if (unitName.indexOf(fullPrefix) === 0) {
-      return [
-        multiplierPrefixes[fullPrefix],
-        unitName.substring(fullPrefix.length),
-      ];
-    }
-  }
-  if (unitName.startsWith('da')) {
-    return [multiplierPrefixes.deca, unitName.slice(2)];
-  } else if (unitName[0] in abbreviatedPrefixes) {
-    const prefix = abbreviatedPrefixes[unitName[0]];
-    return [multiplierPrefixes[prefix], unitName.slice(1)];
-  } else {
-    for (const [prefix, multiplier] of Object.entries(multiplierPrefixes)) {
-      if (unitName.startsWith(prefix)) {
-        return [multiplier, unitName.slice(prefix.length)];
-      }
-    }
-    return [new Fraction(1), unitName];
-  }
-};
-
-const parseUnit = (unitString) => {
-  if (knowsUnit(unitString)) {
-    return {
-      unit: unitString,
-      exp: 1n,
-      multiplier: new Fraction(1),
-      known: true,
-    };
-  } else {
-    let [multiplier, name] = trimPrefix(unitString);
-    const known = knowsUnit(name);
-
-    if (!known) {
-      name = unitString;
-      multiplier = new Fraction(1);
-    }
-
-    return {
-      unit: name,
-      exp: 1n,
-      multiplier,
-      known,
-    };
-  }
-};
-
-const returnMonth = (month) => () => ({ month });
-
-const joinDateParts = (dateParts) => {
-  let parts = dateParts.args;
-
-  if (dateParts.nextDateInner) {
-    parts = parts.concat(joinDateParts(dateParts.nextDateInner));
-  }
-
-  // Timezone is last, always
-  if (dateParts.timezone) {
-    parts = parts.concat(dateParts.timezone);
-  }
-
-  return parts;
-};
-
-const makeDateFragmentReader =
-  (key, len, min, max) =>
-  ([{ text }], _l, reject) => {
-    try {
-      const number = BigInt(text);
-      if (text.length !== len || number < min || number > max) {
-        return reject;
-      } else {
-        return { [key]: number };
-      }
-    } catch (err) {
-      return reject;
-    }
-  };
-
-import { knowsUnit } from '../units';
-
-const reservedWords = new Set([
+const initialReservedWords = new Set([
   'in',
   'as',
   'to',
+  'by',
+  'contains',
   'where',
   'given',
   'per',
@@ -164,13 +21,13 @@ const reservedWords = new Set([
   'then',
   'else',
   'through',
-  'date',
-  'function',
   'select',
+  'date',
   'and',
   'not',
   'or',
   'with',
+  'over',
 ]);
 
 const monthStrings = new Set([
@@ -219,6 +76,8 @@ const timeUnitStrings = new Set([
   'millisecond',
   'milliseconds',
 ]);
+
+const reservedWords = new Set(initialReservedWords);
 
 function isReservedWord(str) {
   return reservedWords.has(str);
@@ -308,6 +167,114 @@ function addArrayLoc(node, locArray) {
   }
 }
 
+import Fraction from '@decipad/fraction';
+
+function numberLiteralFromUnits(parentNode, n, units) {
+  const fraction = n instanceof Fraction ? n : new Fraction(n);
+
+  const node = {
+    type: 'literal',
+    args: ['number', fraction],
+  };
+  if (Array.isArray(parentNode)) {
+    return addArrayLoc(node, parentNode);
+  }
+  return addLoc(node, parentNode);
+}
+
+const returnMonth = (month) => () => ({ month });
+
+const joinDateParts = (dateParts) => {
+  let parts = dateParts.args;
+
+  if (dateParts.nextDateInner) {
+    parts = parts.concat(joinDateParts(dateParts.nextDateInner));
+  }
+
+  // Timezone is last, always
+  if (dateParts.timezone) {
+    parts = parts.concat(dateParts.timezone);
+  }
+
+  return parts;
+};
+
+const makeDateFragmentReader =
+  (key, len, min, max) =>
+  ([{ text }], _l, reject) => {
+    try {
+      const number = BigInt(text);
+      if (text.length !== len || number < min || number > max) {
+        return reject;
+      } else {
+        return { [key]: number };
+      }
+    } catch (err) {
+      return reject;
+    }
+  };
+
+const implicitMultHandler = (d, _l, reject) => {
+  const left = d[0];
+  const right = d[2] || d[1];
+
+  // disambiguate things like `2 - 1` <- this is not `2 * (- 1)`!
+  if (right.type === 'function-call') {
+    const funcRef = right.args[0];
+    if (funcRef.type === 'funcref') {
+      const funcName = funcRef.args[0];
+      if (funcName === 'unary-') {
+        return reject;
+      }
+    }
+  }
+
+  return addArrayLoc(
+    {
+      type: 'function-call',
+      args: [
+        {
+          type: 'funcref',
+          args: ['*'],
+        },
+        addArrayLoc(
+          {
+            type: 'argument-list',
+            args: [left, right],
+          },
+          d
+        ),
+      ],
+    },
+    d
+  );
+};
+
+const unaryMinusHandler = (d) => {
+  const expr = d[2];
+  return addArrayLoc(
+    {
+      type: 'function-call',
+      args: [
+        addLoc(
+          {
+            type: 'funcref',
+            args: ['unary-'],
+          },
+          d[0]
+        ),
+        addLoc(
+          {
+            type: 'argument-list',
+            args: [d[2]],
+          },
+          d[2]
+        ),
+      ],
+    },
+    d
+  );
+};
 let Lexer = tokenizer;
 let ParserRules = [
   {
@@ -343,7 +310,6 @@ let ParserRules = [
   { name: 'literal', symbols: ['string'], postprocess: id },
   { name: 'literal', symbols: ['number'], postprocess: id },
   { name: 'literal', symbols: ['percentage'], postprocess: id },
-  { name: 'literal', symbols: ['timeQuantity'], postprocess: id },
   { name: 'literal', symbols: ['column'], postprocess: id },
   { name: 'literal', symbols: ['date'], postprocess: id },
   { name: 'literal', symbols: ['range'], postprocess: id },
@@ -379,20 +345,24 @@ let ParserRules = [
       return numberLiteralFromUnits(n, n.n);
     },
   },
-  { name: 'number$ebnf$1', symbols: ['__'], postprocess: id },
   {
-    name: 'number$ebnf$1',
-    symbols: [],
-    postprocess: function (d) {
-      return null;
+    name: 'number',
+    symbols: [{ literal: '-' }, 'unitlessNumber'],
+    postprocess: (d) => {
+      return numberLiteralFromUnits(d, new Fraction(d[1].n).neg());
     },
   },
   {
-    name: 'number',
-    symbols: ['unitlessNumber', 'number$ebnf$1', 'units'],
+    name: 'percentage',
+    symbols: [{ literal: '-' }, 'decimal', { literal: '%' }],
     postprocess: (d) => {
-      const [n, _, units] = d;
-      return numberLiteralFromUnits(d, n.n, units);
+      return addArrayLoc(
+        numberLiteralFromUnits(
+          d,
+          new Fraction(d[1].n.neg()).div(new Fraction(100))
+        ),
+        d
+      );
     },
   },
   {
@@ -447,64 +417,6 @@ let ParserRules = [
           number
         );
       }
-    },
-  },
-  {
-    name: 'units',
-    symbols: ['unitBit'],
-    postprocess: ([units]) =>
-      addLoc(
-        {
-          type: 'units',
-          args: units.units,
-        },
-        units
-      ),
-  },
-  {
-    name: 'unitBit',
-    symbols: ['unit'],
-    postprocess: ([u]) => addLoc({ units: [u] }, u),
-  },
-  {
-    name: 'unitBit',
-    symbols: ['unit', { literal: '*' }, 'unitBit'],
-    postprocess: (d) =>
-      addArrayLoc(
-        {
-          units: [d[0], ...d[2].units],
-        },
-        d
-      ),
-  },
-  {
-    name: 'unitBit',
-    symbols: ['unit', { literal: '/' }, 'unitBit'],
-    postprocess: (d) => {
-      const [second, ...rest] = d[2].units;
-
-      return addArrayLoc(
-        {
-          units: [d[0], { ...second, exp: -second.exp }, ...rest],
-        },
-        d
-      );
-    },
-  },
-  { name: 'unit', symbols: ['unitName'], postprocess: id },
-  {
-    name: 'unitName',
-    symbols: [
-      tokenizer.has('identifier') ? { type: 'identifier' } : identifier,
-    ],
-    postprocess: ([ident]) => addLoc(parseUnit(ident.value), ident),
-  },
-  {
-    name: 'unit',
-    symbols: ['unitName', { literal: '^' }, 'int'],
-    postprocess: ([unit, _, exponent]) => {
-      unit.exp *= BigInt(exponent.n);
-      return addLoc(unit, unit, exponent);
     },
   },
   {
@@ -1175,11 +1087,10 @@ let ParserRules = [
   { name: 'asExp$subexpression$1', symbols: [{ literal: 'in' }] },
   {
     name: 'asExp',
-    symbols: ['asExp', '_', 'asExp$subexpression$1', '_', 'units'],
-    postprocess: (d, _l, reject) => {
+    symbols: ['asExp', '_', 'asExp$subexpression$1', '_', 'divMulOp'],
+    postprocess: (d) => {
       const exp = d[0];
       const unit = d[4];
-
       return addArrayLoc(
         {
           type: 'directive',
@@ -1231,10 +1142,10 @@ let ParserRules = [
       );
     },
   },
-  { name: 'addSubOp', symbols: ['primary'], postprocess: id },
+  { name: 'addSubOp', symbols: ['implicitMult'], postprocess: id },
   {
     name: 'addSubOp',
-    symbols: ['addSubOp', '_', 'multiplicativeOperator', '_', 'primary'],
+    symbols: ['addSubOp', '_', 'multOp', '_', 'implicitMult'],
     postprocess: (d) => {
       const left = d[0];
       const op = d[2];
@@ -1264,17 +1175,16 @@ let ParserRules = [
       );
     },
   },
+  { name: 'implicitMult', symbols: ['primary'], postprocess: id },
   {
-    name: 'ref',
-    symbols: ['identifier'],
-    postprocess: (d, _l, reject) => {
-      const name = d[0].name;
-      if (reservedWords.has(name)) {
-        return reject;
-      } else {
-        return addLoc({ type: 'ref', args: [name] }, d[0]);
-      }
-    },
+    name: 'implicitMult',
+    symbols: ['implicitMult', 'ref'],
+    postprocess: implicitMultHandler,
+  },
+  {
+    name: 'implicitMult',
+    symbols: ['implicitMult', '__', 'primary'],
+    postprocess: implicitMultHandler,
   },
   { name: 'primary', symbols: ['functionCall'], postprocess: id },
   { name: 'primary', symbols: ['select'], postprocess: id },
@@ -1283,43 +1193,13 @@ let ParserRules = [
   { name: 'primary', symbols: ['parenthesizedExpression'], postprocess: id },
   {
     name: 'primary',
-    symbols: [{ literal: '-' }, '_', 'expression'],
-    postprocess: (d) => {
-      const expr = d[2];
-      if (expr.type === 'literal' && expr.args[0] === 'number') {
-        expr.args[1] = expr.args[1].neg();
-        return addArrayLoc(
-          {
-            type: expr.type,
-            args: expr.args,
-          },
-          d
-        );
-      } else {
-        return addArrayLoc(
-          {
-            type: 'function-call',
-            args: [
-              addLoc(
-                {
-                  type: 'funcref',
-                  args: ['unary-'],
-                },
-                d[0]
-              ),
-              addLoc(
-                {
-                  type: 'argument-list',
-                  args: [d[2]],
-                },
-                d[2]
-              ),
-            ],
-          },
-          d
-        );
-      }
-    },
+    symbols: [{ literal: '-' }, '_', 'parenthesizedExpression'],
+    postprocess: unaryMinusHandler,
+  },
+  {
+    name: 'primary',
+    symbols: [{ literal: '-' }, '_', 'ref'],
+    postprocess: unaryMinusHandler,
   },
   { name: 'primary$subexpression$1', symbols: [{ literal: '!' }] },
   { name: 'primary$subexpression$1', symbols: [{ literal: 'not' }] },
@@ -1344,6 +1224,34 @@ let ParserRules = [
                 args: [d[2]],
               },
               d[2]
+            ),
+          ],
+        },
+        d
+      );
+    },
+  },
+  {
+    name: 'primary',
+    symbols: ['primary', '_', { literal: '^' }, '_', 'int'],
+    postprocess: (d) => {
+      const left = d[0];
+      const right = numberLiteralFromUnits(d, d[4].n);
+
+      return addArrayLoc(
+        {
+          type: 'function-call',
+          args: [
+            {
+              type: 'funcref',
+              args: ['^'],
+            },
+            addArrayLoc(
+              {
+                type: 'argument-list',
+                args: [left, right],
+              },
+              d
             ),
           ],
         },
@@ -1397,41 +1305,18 @@ let ParserRules = [
       );
     },
   },
+  { name: 'multOp$subexpression$1', symbols: [{ literal: '**' }] },
+  { name: 'multOp$subexpression$1', symbols: [{ literal: '>' }] },
+  { name: 'multOp$subexpression$1', symbols: [{ literal: '<' }] },
+  { name: 'multOp$subexpression$1', symbols: [{ literal: '<=' }] },
+  { name: 'multOp$subexpression$1', symbols: [{ literal: '>=' }] },
+  { name: 'multOp$subexpression$1', symbols: [{ literal: '==' }] },
+  { name: 'multOp$subexpression$1', symbols: [{ literal: '!=' }] },
+  { name: 'multOp$subexpression$1', symbols: [{ literal: 'contains' }] },
+  { name: 'multOp$subexpression$1', symbols: [{ literal: ' %' }] },
   {
-    name: 'multiplicativeOperator$subexpression$1',
-    symbols: [{ literal: '**' }],
-  },
-  {
-    name: 'multiplicativeOperator$subexpression$1',
-    symbols: [{ literal: '>' }],
-  },
-  {
-    name: 'multiplicativeOperator$subexpression$1',
-    symbols: [{ literal: '<' }],
-  },
-  {
-    name: 'multiplicativeOperator$subexpression$1',
-    symbols: [{ literal: '<=' }],
-  },
-  {
-    name: 'multiplicativeOperator$subexpression$1',
-    symbols: [{ literal: '>=' }],
-  },
-  {
-    name: 'multiplicativeOperator$subexpression$1',
-    symbols: [{ literal: '==' }],
-  },
-  {
-    name: 'multiplicativeOperator$subexpression$1',
-    symbols: [{ literal: '!=' }],
-  },
-  {
-    name: 'multiplicativeOperator$subexpression$1',
-    symbols: [{ literal: 'contains' }],
-  },
-  {
-    name: 'multiplicativeOperator',
-    symbols: ['multiplicativeOperator$subexpression$1'],
+    name: 'multOp',
+    symbols: ['multOp$subexpression$1'],
     postprocess: (d) => {
       return addArrayLoc(
         {
@@ -1442,118 +1327,30 @@ let ParserRules = [
     },
   },
   {
-    name: 'multiplicativeOperator$subexpression$2',
-    symbols: [{ literal: '*' }],
-  },
-  {
-    name: 'multiplicativeOperator$subexpression$2',
-    symbols: [{ literal: '/' }],
-  },
-  {
-    name: 'multiplicativeOperator$subexpression$2',
-    symbols: [{ literal: '%' }],
-  },
-  {
-    name: 'multiplicativeOperator$subexpression$2',
-    symbols: [{ literal: '^' }],
-  },
-  {
-    name: 'multiplicativeOperator',
-    symbols: [
-      { literal: ' ' },
-      'multiplicativeOperator$subexpression$2',
-      { literal: ' ' },
-    ],
+    name: 'multOp',
+    symbols: ['__', { literal: '%' }],
     postprocess: (d) => {
       return addArrayLoc(
         {
-          name: d[1][0].value,
+          name: d[1].value,
         },
         d
       );
     },
   },
-  { name: 'timeQuantity$ebnf$1', symbols: [] },
+  { name: 'multOp$subexpression$2', symbols: [{ literal: '*' }] },
+  { name: 'multOp$subexpression$2', symbols: [{ literal: '/' }] },
   {
-    name: 'timeQuantity$ebnf$1$subexpression$1',
-    symbols: ['timeQuantityDefParcelSeparator', 'timeQuantityDefParcel'],
-  },
-  {
-    name: 'timeQuantity$ebnf$1',
-    symbols: ['timeQuantity$ebnf$1', 'timeQuantity$ebnf$1$subexpression$1'],
-    postprocess: function arrpush(d) {
-      return d[0].concat([d[1]]);
-    },
-  },
-  {
-    name: 'timeQuantity',
-    symbols: [
-      { literal: '[' },
-      '_',
-      'timeQuantityDefParcel',
-      'timeQuantity$ebnf$1',
-      '_',
-      { literal: ']' },
-    ],
+    name: 'multOp',
+    symbols: ['multOp$subexpression$2'],
     postprocess: (d) => {
-      const parcel = d[2];
-      const moreParcels = (d[3] || []).flatMap(([_ws, parcel]) => parcel);
-
       return addArrayLoc(
         {
-          type: 'time-quantity',
-          args: [...parcel, ...moreParcels],
+          name: d[0][0].value,
         },
         d
       );
     },
-  },
-  {
-    name: 'timeQuantityDefParcel',
-    symbols: ['int', '__', 'timeQuantityUnit'],
-    postprocess: ([quantity, _ws, unit]) => [unit, quantity.n],
-  },
-  {
-    name: 'timeQuantityUnit',
-    symbols: ['identifier'],
-    postprocess: ([unitIdent], _l, reject) => {
-      const unit = unitIdent.name.replace(/s$/, '');
-
-      if (timeUnitStrings.has(unit)) {
-        return unit;
-      } else {
-        return reject;
-      }
-    },
-  },
-  {
-    name: 'timeQuantityDefParcelSeparator$subexpression$1$subexpression$1',
-    symbols: ['_', { literal: ',' }, '_'],
-  },
-  {
-    name: 'timeQuantityDefParcelSeparator$subexpression$1',
-    symbols: ['timeQuantityDefParcelSeparator$subexpression$1$subexpression$1'],
-  },
-  {
-    name: 'timeQuantityDefParcelSeparator$subexpression$1$subexpression$2',
-    symbols: ['__', { literal: 'and' }, '__'],
-  },
-  {
-    name: 'timeQuantityDefParcelSeparator$subexpression$1',
-    symbols: ['timeQuantityDefParcelSeparator$subexpression$1$subexpression$2'],
-  },
-  {
-    name: 'timeQuantityDefParcelSeparator$subexpression$1$subexpression$3',
-    symbols: ['_', { literal: ',' }, '_', { literal: 'and' }, '__'],
-  },
-  {
-    name: 'timeQuantityDefParcelSeparator$subexpression$1',
-    symbols: ['timeQuantityDefParcelSeparator$subexpression$1$subexpression$3'],
-  },
-  {
-    name: 'timeQuantityDefParcelSeparator',
-    symbols: ['timeQuantityDefParcelSeparator$subexpression$1'],
-    postprocess: id,
   },
   {
     name: 'range',
@@ -1944,6 +1741,18 @@ let ParserRules = [
         },
         d
       );
+    },
+  },
+  {
+    name: 'ref',
+    symbols: ['identifier'],
+    postprocess: (d, _l, reject) => {
+      const name = d[0].name;
+      if (reservedWords.has(name)) {
+        return reject;
+      } else {
+        return addLoc({ type: 'ref', args: [name] }, d[0]);
+      }
     },
   },
   {

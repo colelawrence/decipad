@@ -1,8 +1,8 @@
 import Fraction from '@decipad/fraction';
-import { AST } from '../../parser';
+import { Unit } from '../..';
 
 export type Converter = (n: Fraction) => Fraction;
-export type ExpandUnitResult = [AST.Unit[], Converter];
+export type ExpandUnitResult = [Unit[], Converter];
 
 export * from './expand-units';
 export * from './contract-units';

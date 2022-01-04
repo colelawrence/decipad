@@ -1,4 +1,4 @@
-import { Date, TimeQuantity } from '../interpreter/Value';
+import { Date, TimeQuantity, FractionValue } from '../interpreter/Value';
 
 import {
   addTimeQuantities,
@@ -6,7 +6,6 @@ import {
   cmpSpecificities,
   getHighestSpecificity as getMostSpecific,
   negateTimeQuantity,
-  timeUnitsUpTo,
   timeSpecificityToTimeUnit,
   subtractDates,
 } from '../date';
@@ -29,7 +28,7 @@ export const dateAndTimeQuantityFunctor = ([date, timeQuantity]: Type[]) =>
   Type.combine(date.isDate(), timeQuantity.isTimeQuantity()).mapType(() => {
     const dateSpecificity = getDefined(date.date);
 
-    const lowestUnit = getMostSpecific(getDefined(timeQuantity.timeUnits));
+    const lowestUnit = getMostSpecific(getDefined(timeQuantity.unit?.args));
 
     if (cmpSpecificities(dateSpecificity, lowestUnit) < 0) {
       return t.impossible(
@@ -43,8 +42,8 @@ export const dateAndTimeQuantityFunctor = ([date, timeQuantity]: Type[]) =>
 export const timeQuantityBinopFunctor = ([t1, t2]: Type[]) =>
   Type.combine(t1.isTimeQuantity(), t2.isTimeQuantity()).mapType(() => {
     const allTimeUnits = new Set([
-      ...getDefined(t1.timeUnits),
-      ...getDefined(t2.timeUnits),
+      ...getDefined(t1.unit?.args),
+      ...getDefined(t2.unit?.args),
     ]);
     return t.timeQuantity(Array.from(allTimeUnits));
   });
@@ -61,7 +60,7 @@ export const subtractDatesFunctor = ([t1, t2]: Type[]) => {
   return Type.combine(
     t1.isDate(),
     t2.isDate(),
-    t.timeQuantity(timeUnitsUpTo(timeSpecificityToTimeUnit(d1Specificity)))
+    t.timeQuantity([timeSpecificityToTimeUnit(d1Specificity)])
   );
 };
 
@@ -69,7 +68,7 @@ export const dateOverloads: OverloadSet = {
   '+': [
     {
       argTypes: ['date', 'time-quantity'],
-      fnValues: (v1, v2) =>
+      fnValues: ([v1, v2]) =>
         addDateAndTimeQuantity(
           getInstanceof(v1, Date),
           getInstanceof(v2, TimeQuantity)
@@ -77,8 +76,38 @@ export const dateOverloads: OverloadSet = {
       functor: dateAndTimeQuantityFunctor,
     },
     {
+      argTypes: ['date', 'number'],
+      fnValues: ([v1, v2], [, t2] = []) =>
+        addDateAndTimeQuantity(
+          getInstanceof(v1, Date),
+          TimeQuantity.fromUnits(
+            BigInt(getInstanceof(v2, FractionValue).getData().valueOf()),
+            getDefined(t2.unit)
+          )
+        ),
+      functor: ([t1, t2]) =>
+        Type.combine(t2.isTimeQuantity(), () =>
+          dateAndTimeQuantityFunctor([t1, t2])
+        ),
+    },
+    {
+      argTypes: ['number', 'date'],
+      fnValues: ([v1, v2], [t1] = []) =>
+        addDateAndTimeQuantity(
+          getInstanceof(v2, Date),
+          TimeQuantity.fromUnits(
+            BigInt(getInstanceof(v1, FractionValue).getData().valueOf()),
+            getDefined(t1.unit)
+          )
+        ),
+      functor: ([t1, t2]) =>
+        Type.combine(t2.isTimeQuantity(), () =>
+          dateAndTimeQuantityFunctor([t1, t2])
+        ),
+    },
+    {
       argTypes: ['time-quantity', 'date'],
-      fnValues: (v1, v2) =>
+      fnValues: ([v1, v2]) =>
         addDateAndTimeQuantity(
           getInstanceof(v2, Date),
           getInstanceof(v1, TimeQuantity)
@@ -87,7 +116,7 @@ export const dateOverloads: OverloadSet = {
     },
     {
       argTypes: ['time-quantity', 'time-quantity'],
-      fnValues: (v1, v2) =>
+      fnValues: ([v1, v2]) =>
         addTimeQuantities(
           getInstanceof(v1, TimeQuantity),
           getInstanceof(v2, TimeQuantity)
@@ -98,7 +127,7 @@ export const dateOverloads: OverloadSet = {
   '-': [
     {
       argTypes: ['time-quantity', 'time-quantity'],
-      fnValues: (v1, v2) =>
+      fnValues: ([v1, v2]) =>
         addTimeQuantities(
           getInstanceof(v1, TimeQuantity),
           negateTimeQuantity(getInstanceof(v2, TimeQuantity))
@@ -107,7 +136,7 @@ export const dateOverloads: OverloadSet = {
     },
     {
       argTypes: ['date', 'time-quantity'],
-      fnValues: (v1, v2) =>
+      fnValues: ([v1, v2]) =>
         addDateAndTimeQuantity(
           getInstanceof(v1, Date),
           negateTimeQuantity(getInstanceof(v2, TimeQuantity))
@@ -116,7 +145,7 @@ export const dateOverloads: OverloadSet = {
     },
     {
       argTypes: ['date', 'date'],
-      fnValues: (v1, v2) =>
+      fnValues: ([v1, v2]) =>
         subtractDates(getInstanceof(v1, Date), getInstanceof(v2, Date)),
       functor: subtractDatesFunctor,
     },

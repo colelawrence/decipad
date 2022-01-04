@@ -1,7 +1,7 @@
 import { dequal } from 'dequal';
 
-import type { AST, Time } from '..';
-import { equalOrUnknown, getDefined, units, zip } from '../utils';
+import type { Time } from '..';
+import { equalOrUnknown, getDefined, zip } from '../utils';
 import { TypeName, Type } from '.';
 import * as t from './build';
 import { InferError } from './InferError';
@@ -12,16 +12,14 @@ import {
   multiplyExponent,
   removeSingleUnitless,
   setUnit,
+  timeUnits,
 } from './units';
+import { Units, units } from './unit-type';
 
 const checker = <Args extends unknown[]>(
   fn: (...args: Args) => Type
 ): typeof fn => {
   return function typeChecker(...args: Args) {
-    if (args.some((a) => a instanceof Type && a.functionness)) {
-      throw new Error('panic: functions cannot be used');
-    }
-
     const errored = args.find(
       (a) => a instanceof Type && a.errorCause != null
     ) as Type | undefined;
@@ -234,11 +232,14 @@ export const sameTablenessAs = checker((me: Type, other: Type) => {
 });
 
 export const isTimeQuantity = checker((me: Type) => {
-  if (me.timeUnits != null) {
-    return me;
-  } else {
+  if (
+    me.unit == null ||
+    me.unit.args.length === 0 ||
+    !me.unit.args.every((unit) => timeUnits.has(unit.unit))
+  ) {
     return me.expected('time quantity');
   }
+  return me;
 });
 
 export const isDate = checker((me: Type, specificity?: Time.Specificity) => {
@@ -257,12 +258,12 @@ export const sameDatenessAs = checker((me: Type, other: Type) => {
   }
 });
 
-export const multiplyUnit = checker((me: Type, withUnits: AST.Units | null) => {
+export const multiplyUnit = checker((me: Type, withUnits: Units | null) => {
   return setUnit(me, combineUnits(me.unit, withUnits));
 });
 
 export const divideUnit = checker(
-  (me: Type, divideBy: AST.Units | number | null) => {
+  (me: Type, divideBy: Units | number | null) => {
     if (typeof divideBy === 'number') {
       const multiplyBy = 1 / divideBy;
       if (me.unit) {

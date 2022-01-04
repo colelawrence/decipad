@@ -88,10 +88,10 @@ Bolt = 44.72 km/hour in meter/sec
 is equivalent to
 
 ```deci live
-Speed = 44.72 km/hour
-HoursToSec = 3600 sec/hour
+Speed = 44.72
+HoursToSec = 3600
 SpeedInSeconds = Speed / HoursToSec
-KmToMeters = 1000 meter/km
+KmToMeters = 1000
 SpeedInMetersSecond = SpeedInSeconds * KmToMeters
-==> 12.4(2) meters/sec
+==> 12.4(2)
 ```

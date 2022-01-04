@@ -1,7 +1,8 @@
 import { produce } from 'immer';
 import pluralize, { singular } from '../pluralize';
-import { AST, Type } from '..';
-import { getDefined, units } from '../utils';
+import { Type } from '..';
+import { getDefined } from '../utils';
+import { Unit, Units, units } from './unit-type';
 import {
   isKnownSymbol,
   areUnitsCompatible,
@@ -67,16 +68,32 @@ const numberToSubOrSuperscript: Record<string, string[]> = {
   '-': ['₋', '⁻'], // minus
 };
 
+export const timeUnits = new Set([
+  'year',
+  'years',
+  'quarter',
+  'quarters',
+  'month',
+  'months',
+  'day',
+  'days',
+  'hour',
+  'hours',
+  'minute',
+  'minutes',
+  'second',
+  'seconds',
+  'millisecond',
+  'milliseconds',
+]);
+
 function scriptFromNumber(n: string) {
   return numberToSubOrSuperscript[n][1];
 }
 
-const byExp = (u1: AST.Unit, u2: AST.Unit): number => Number(u2.exp - u1.exp);
+const byExp = (u1: Unit, u2: Unit): number => Number(u2.exp - u1.exp);
 
-const pluralizeUnit = (
-  baseUnit: AST.Unit,
-  value: bigint | number = 2n
-): AST.Unit => {
+const pluralizeUnit = (baseUnit: Unit, value: bigint | number = 2n): Unit => {
   const { unit } = baseUnit;
   if (isKnownSymbol(unit)) {
     return baseUnit;
@@ -90,10 +107,7 @@ const pluralizeUnit = (
   });
 };
 
-export const matchUnitArrays = (
-  units1: AST.Units | null,
-  units2: AST.Units | null
-) => {
+export const matchUnitArrays = (units1: Units | null, units2: Units | null) => {
   const [expandedUnit1] = expandUnits(units1);
   const expandedUnits1 = expandedUnit1?.args ?? [];
   const [expandedUnit2] = expandUnits(units2);
@@ -104,7 +118,7 @@ export const matchUnitArrays = (
 
   const pendingMatch = Array.from(expandedUnits2);
   for (const unit of expandedUnits1) {
-    let match: AST.Unit | undefined;
+    let match: Unit | undefined;
     for (const matchingUnit of pendingMatch) {
       if (
         unit.exp === matchingUnit.exp &&
@@ -135,10 +149,10 @@ export const removeSingleUnitless = (a: Type, b: Type) => {
   }
 };
 
-const simplifyUnitsArgs = (units: AST.Unit[]): AST.Unit[] => {
+const simplifyUnitsArgs = (units: Unit[]): Unit[] => {
   return units
     .map((u) => pluralizeUnit(u))
-    .reduce<AST.Unit[]>((units, unit) => {
+    .reduce<Unit[]>((units, unit) => {
       const matchingUnitIndex = units.findIndex(
         (candidate) => unit.unit === candidate.unit
       );
@@ -161,7 +175,7 @@ const simplifyUnitsArgs = (units: AST.Unit[]): AST.Unit[] => {
     .filter((unit) => unit.exp !== 0n);
 };
 
-export const simplifyUnits = (units: AST.Units | null): AST.Units | null => {
+export const simplifyUnits = (units: Units | null): Units | null => {
   if (units == null) {
     return units;
   }
@@ -170,7 +184,7 @@ export const simplifyUnits = (units: AST.Units | null): AST.Units | null => {
   });
 };
 
-export const normalizeUnits = (units: AST.Unit[] | null): AST.Unit[] | null => {
+export const normalizeUnits = (units: Unit[] | null): Unit[] | null => {
   if (units == null) {
     return null;
   }
@@ -192,7 +206,7 @@ export const normalizeUnits = (units: AST.Unit[] | null): AST.Unit[] | null => {
   }
 };
 
-export const normalizeUnitsOf = (unit: AST.Units | null): AST.Units | null => {
+export const normalizeUnitsOf = (unit: Units | null): Units | null => {
   if (unit == null) {
     return null;
   }
@@ -201,14 +215,14 @@ export const normalizeUnitsOf = (unit: AST.Units | null): AST.Units | null => {
   });
 };
 
-export const setExponent = (unit: AST.Unit, newExponent: bigint) =>
+export const setExponent = (unit: Unit, newExponent: bigint) =>
   produce(unit, (unit) => {
     unit.exp = newExponent;
   });
 
-export const inverseExponent = (unit: AST.Unit) => setExponent(unit, -unit.exp);
+export const inverseExponent = (unit: Unit) => setExponent(unit, -unit.exp);
 
-const stringifyUnit = (unit: AST.Unit) => {
+const stringifyUnit = (unit: Unit) => {
   const symbol = singular(unit.unit);
   const pretty = prettyForSymbol[symbol];
   const isSymbol = unitIsSymbol(symbol);
@@ -235,7 +249,7 @@ const stringifyUnit = (unit: AST.Unit) => {
   }
 };
 
-function produceExp(unit: AST.Unit, makePositive: boolean): AST.Unit {
+function produceExp(unit: Unit, makePositive: boolean): Unit {
   return produce(unit, (unit) => {
     unit.unit = singular(unit.unit);
     if (makePositive) {
@@ -245,11 +259,11 @@ function produceExp(unit: AST.Unit, makePositive: boolean): AST.Unit {
 }
 
 export const stringifyUnitArgs = (
-  units: AST.Unit[] | null,
+  units: Unit[] | null,
   value?: number
 ): string => {
   return (units ?? [])
-    .reduce((parts: string[], unit: AST.Unit): string[] => {
+    .reduce((parts: string[], unit: Unit): string[] => {
       if (parts.length > 0) {
         let prefix: string;
         //
@@ -282,10 +296,7 @@ export const stringifyUnitArgs = (
     .join('');
 };
 
-export const stringifyUnits = (
-  units: AST.Units | null,
-  value?: number
-): string => {
+export const stringifyUnits = (units: Units | null, value?: number): string => {
   if (units == null || units.args.length === 0) {
     return 'unitless';
   } else {
@@ -298,13 +309,13 @@ export const stringifyUnits = (
 };
 
 export const combineUnits = (
-  myUnitsObj: AST.Units | null,
-  theirUnitsObj: AST.Units | null
-): AST.Units | null => {
+  myUnitsObj: Units | null,
+  theirUnitsObj: Units | null
+): Units | null => {
   const myUnits = normalizeUnits(myUnitsObj?.args ?? null) ?? [];
   const theirUnits = normalizeUnits(theirUnitsObj?.args ?? null) ?? [];
 
-  const outputUnits: AST.Unit[] = [...theirUnits];
+  const outputUnits: Unit[] = [...theirUnits];
 
   // Combine their units in
   for (const myUnit of myUnits) {
@@ -328,9 +339,9 @@ export const combineUnits = (
 };
 
 export const multiplyExponent = (
-  myUnits: AST.Units,
+  myUnits: Units,
   by: bigint | number
-): AST.Units | null =>
+): Units | null =>
   normalizeUnitsOf(
     produce(myUnits, (myUnits) => {
       for (const u of myUnits.args) {
@@ -346,7 +357,7 @@ export const multiplyExponent = (
     })
   );
 
-export const setUnit = (t: Type, newUnit: AST.Units | null) =>
+export const setUnit = (t: Type, newUnit: Units | null) =>
   produce(t, (t) => {
     if (t.type === 'number') {
       t.unit = newUnit;

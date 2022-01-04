@@ -2,15 +2,14 @@ import Fraction from '@decipad/fraction';
 import { produce } from 'immer';
 import { getDefined } from '@decipad/utils';
 import { UnitOfMeasure, getUnitByName } from '../known-units';
-import { AST } from '../../parser';
-import { normalizeUnits } from '../../type';
+import { normalizeUnits, Unit, Units } from '../../type';
 import { BaseQuantityExpansion, expansions } from './expansions';
 import { baseUnitForBaseQuantity } from '../base-units';
 import { identity, F } from '../../utils';
 import { Converter, ExpandUnitResult } from '.';
 import { stringifyUnits } from '../../type/units';
 
-function nonScalarExpansion(units: AST.Units): [AST.Units, Converter] {
+function nonScalarExpansion(units: Units): [Units, Converter] {
   const u = units?.args || [];
   if (u.length !== 1) {
     throw new TypeError(
@@ -30,7 +29,7 @@ function nonScalarExpansion(units: AST.Units): [AST.Units, Converter] {
   return [newUnits, knownUnit.toBaseQuantity];
 }
 
-export function doesNotScaleOnConversion(unit: AST.Unit): boolean {
+export function doesNotScaleOnConversion(unit: Unit): boolean {
   const knownUnit = getUnitByName(unit.unit);
   if (knownUnit) {
     return !!knownUnit.doesNotScaleOnConversion;
@@ -42,10 +41,7 @@ function convertingBy(mul: Fraction): Converter {
   return (n: Fraction) => n.mul(mul);
 }
 
-function expandUnitWith(
-  unit: AST.Unit,
-  expansion: BaseQuantityExpansion
-): AST.Unit[] {
+function expandUnitWith(unit: Unit, expansion: BaseQuantityExpansion): Unit[] {
   let first = true;
   return expansion.expandedUnits.map((expandedUnit) => {
     const targetUnitName = baseUnitForBaseQuantity(expandedUnit.baseQuantity);
@@ -63,8 +59,8 @@ function expandUnitWith(
 
 function convertKnownUnitToBase(
   uom: UnitOfMeasure,
-  unit: AST.Unit
-): [AST.Unit, Converter] {
+  unit: Unit
+): [Unit, Converter] {
   const baseUnit = baseUnitForBaseQuantity(uom.baseQuantity);
   if (baseUnit === uom.name) {
     return [unit, identity];
@@ -77,7 +73,7 @@ function convertKnownUnitToBase(
   return [newUnit, convert];
 }
 
-function expandUnit(unit: AST.Unit): ExpandUnitResult {
+function expandUnit(unit: Unit): ExpandUnitResult {
   if (unit.unit) {
     const knownUnit = getUnitByName(unit.unit);
     if (knownUnit) {
@@ -104,7 +100,7 @@ function expandUnit(unit: AST.Unit): ExpandUnitResult {
   return [[unit], identity];
 }
 
-function expandUnitArgs(_units: AST.Unit[]): [AST.Unit[] | null, Converter] {
+function expandUnitArgs(_units: Unit[]): [Unit[] | null, Converter] {
   let units = _units;
   let converter: Converter = identity;
   let beforeCount = units.length;
@@ -129,9 +125,7 @@ function expandUnitArgs(_units: AST.Unit[]): [AST.Unit[] | null, Converter] {
   return [units, converter];
 }
 
-export function expandUnits(
-  units: AST.Units | null
-): [AST.Units | null, Converter] {
+export function expandUnits(units: Units | null): [Units | null, Converter] {
   if (units === null) {
     return [null, identity];
   }

@@ -1,4 +1,4 @@
-import { Column, Date, fromJS, TimeQuantity } from '../interpreter/Value';
+import { Date, fromJS, TimeQuantity } from '../interpreter/Value';
 import { InferError, build as t } from '../type';
 import { getDefined } from '../utils';
 import {
@@ -11,22 +11,22 @@ import {
 const numberPlus: OverloadedBuiltinSpec = {
   argTypes: ['number', 'number'],
   functor: ([a, b]) => a.isScalar('number').sameAs(b),
-  fnValues: (a, b) => fromJS(Number(a.getData()) + Number(b.getData())),
+  fnValues: ([a, b]) => fromJS(Number(a.getData()) + Number(b.getData())),
 };
 const stringPlus: OverloadedBuiltinSpec = {
   argTypes: ['string', 'string'],
   functor: ([a, b]) => a.isScalar('string').sameAs(b),
-  fnValues: (a, b) => fromJS(String(a.getData()) + String(b.getData())),
+  fnValues: ([a, b]) => fromJS(String(a.getData()) + String(b.getData())),
 };
 
 const plus = overloadBuiltin('+', 2, [numberPlus, stringPlus]);
 
 it('chooses the correct overload for a value', () => {
-  expect(plus.fnValues!(fromJS(1), fromJS(2))).toEqual(fromJS(3));
-  expect(plus.fnValues!(fromJS('hello '), fromJS('world'))).toEqual(
+  expect(plus.fnValues!([fromJS(1), fromJS(2)])).toEqual(fromJS(3));
+  expect(plus.fnValues!([fromJS('hello '), fromJS('world')])).toEqual(
     fromJS('hello world')
   );
-  expect(() => plus.fnValues!(fromJS('notnumberpls'), fromJS(1))).toThrow();
+  expect(() => plus.fnValues!([fromJS('notnumberpls'), fromJS(1)])).toThrow();
 });
 
 it('chooses the correct overload for a type', () => {
@@ -51,7 +51,6 @@ describe('utils', () => {
     expect(getOverloadedTypeFromValue(new TimeQuantity(new Map()))).toEqual(
       'time-quantity'
     );
-    expect(() => getOverloadedTypeFromValue(new Column([fromJS(1)]))).toThrow();
   });
 
   it('getOverloadTypeFromType', () => {
@@ -59,7 +58,7 @@ describe('utils', () => {
     expect(getOverloadedTypeFromType(t.number())).toEqual('number');
     expect(getOverloadedTypeFromType(t.boolean())).toEqual('boolean');
     expect(getOverloadedTypeFromType(t.date('day'))).toEqual('date');
-    expect(getOverloadedTypeFromType(t.timeQuantity([]))).toEqual(
+    expect(getOverloadedTypeFromType(t.timeQuantity(['day']))).toEqual(
       'time-quantity'
     );
     expect(() =>

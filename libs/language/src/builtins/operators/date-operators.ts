@@ -9,7 +9,7 @@ const dateCmpFunctor = ([left, right]: Type[]): Type =>
 export const dateOperators: Record<string, BuiltinSpec> = {
   containsdate: {
     argCount: 2,
-    fnValues: (range, date) => {
+    fnValues: ([range, date]) => {
       const [rStart, rEnd] = range.getData() as bigint[];
       const dateVal = getInstanceof(date, Date);
       return fromJS(rStart <= dateVal.getData() && rEnd >= dateVal.getEnd());

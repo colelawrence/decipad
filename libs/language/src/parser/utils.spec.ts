@@ -1,6 +1,4 @@
-import Fraction from '@decipad/fraction';
-import { getDefined } from '@decipad/utils';
-import { as, assign, block, c, col, l, prop, table, units } from '../utils';
+import { assign, block, c, col, l, prop, table } from '../utils';
 import { prettyPrintAST, prettyPrintSolutions } from './utils';
 
 it('can pretty print the AST', () => {
@@ -20,18 +18,6 @@ it('can pretty print the AST', () => {
       (column 1 2)
       (prop (ref Foo).Bar))"
   `);
-});
-
-const meters = {
-  exp: 1n,
-  known: true,
-  multiplier: new Fraction(1),
-  unit: 'meters',
-};
-it('can pretty print units', () => {
-  expect(
-    prettyPrintAST(as(l(10, meters), getDefined(units(meters))))
-  ).toMatchInlineSnapshot(`"(directive as 10meters meters)"`);
 });
 
 it('can pretty print tables', () => {

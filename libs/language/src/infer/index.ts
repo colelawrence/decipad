@@ -7,6 +7,7 @@ import { getDateFromAstForm } from '../date';
 import { callBuiltinFunctor } from '../builtins';
 import { resolve as resolveData } from '../data';
 import { expandDirectiveToType } from '../directives';
+import { parseUnit } from '../units';
 
 import { Context, makeContext } from './context';
 import { inferSequence } from './sequence';
@@ -47,7 +48,7 @@ export const inferExpression = wrap(
         const name = getIdentifierString(expr);
         const value = ctx.stack.get(name);
 
-        return value ?? t.impossible(InferError.missingVariable(name));
+        return value ?? t.number([parseUnit(name)]);
       }
       case 'externalref': {
         const [id] = expr.args;
@@ -58,16 +59,9 @@ export const inferExpression = wrap(
         return type;
       }
       case 'literal': {
-        const [litType, , litUnit] = expr.args;
+        const [litType] = expr.args;
 
-        return litType === 'number' ? t.number(litUnit) : t[litType]();
-      }
-      case 'time-quantity': {
-        const units = expr.args.filter(
-          (a) => typeof a === 'string'
-        ) as Time.Unit[];
-
-        return t.timeQuantity(units);
+        return t[litType]();
       }
       case 'range': {
         const [start, end] = await pSeries(
@@ -101,6 +95,13 @@ export const inferExpression = wrap(
 
         if (cellTypes.length === 0) {
           return t.impossible(InferError.unexpectedEmptyColumn());
+        } else if (
+          cellTypes.every((t) => t.isTimeQuantity().errorCause == null)
+        ) {
+          const timeUnits = cellTypes.flatMap((type) =>
+            getDefined(type.unit).args.map((unit) => unit.unit)
+          );
+          return t.timeQuantity(timeUnits as Time.Unit[]);
         } else {
           const [cellType, ...hopefullyConsistentTypes] = cellTypes;
 

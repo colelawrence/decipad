@@ -56,7 +56,7 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
   },
   concatenate: {
     argCount: 2,
-    fnValues: (tab1, tab2) => {
+    fnValues: ([tab1, tab2]) => {
       const { values: columns1, valueNames } = getInstanceof(tab1, Column);
       const { values: columns2 } = getInstanceof(tab2, Column);
 

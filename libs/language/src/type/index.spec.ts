@@ -1,18 +1,18 @@
 import Fraction from '@decipad/fraction';
 import produce from 'immer';
 
-import { AST } from '..';
-import { l, u, units } from '../utils';
+import { l, u, U } from '../utils';
 import { InferError } from './InferError';
 import { inverseExponent, setExponent } from './units';
 import { Type, build as t } from './index';
+import { Unit, units } from './unit-type';
 
 const meter = u('meters');
 const second = u('seconds');
 const cm = u('m', { multiplier: new Fraction(1, 100) });
 
-const invMeter: AST.Unit = inverseExponent(meter);
-const invSecond: AST.Unit = inverseExponent(second);
+const invMeter: Unit = inverseExponent(meter);
+const invSecond: Unit = inverseExponent(second);
 
 const numberInMeter = t.number([meter]);
 const numberInMeterBySecond = t.number([meter, second]);
@@ -94,8 +94,6 @@ it('can be stringified in basic form', () => {
 
   expect(t.range(t.number()).toBasicString()).toEqual('range');
 
-  expect(t.timeQuantity([]).toBasicString()).toEqual('time quantity');
-
   expect(t.date('month').toBasicString()).toEqual('date(month)');
 
   const table = t.table({
@@ -143,7 +141,7 @@ describe('sameAs', () => {
     ).not.toBeNull();
   });
 
-  const n = (...units: AST.Unit[]) => t.number(units.length > 0 ? units : null);
+  const n = (...units: Unit[]) => t.number(units.length > 0 ? units : null);
 
   it('sameAs checks units', () => {
     expect(n(meter)).toEqual(numberInMeter);
@@ -158,11 +156,6 @@ describe('sameAs', () => {
     expect(n(meter, second).sameAs(n(second)).errorCause).toEqual(
       InferError.expectedUnit(units(second), units(meter, second))
     );
-  });
-
-  it('sameAs fills in the gap in two units', () => {
-    expect(n(meter).sameAs(n())).toEqual(n(meter));
-    expect(n().sameAs(n(meter))).toEqual(n(meter));
   });
 
   it('checks tables are the same', () => {
@@ -425,7 +418,7 @@ describe('dates', () => {
 
 it('time quantities', () => {
   const q = t.timeQuantity(['quarter', 'month']);
-  expect(q.timeUnits).toEqual(['quarter', 'month']);
+  expect(q.unit).toEqual(U(['quarter', 'month'].map((unit) => u(unit))));
 
   expect(q.isTimeQuantity()).toEqual(q);
 

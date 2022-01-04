@@ -7,22 +7,6 @@ export interface Pos {
   char: number;
 }
 
-export interface Unit {
-  unit: string;
-  exp: bigint;
-  multiplier: Fraction;
-  known: boolean;
-  start?: Pos;
-  end?: Pos;
-}
-
-export interface Units {
-  type: 'units';
-  args: Unit[];
-  start?: Pos;
-  end?: Pos;
-}
-
 export interface Def {
   type: 'def';
   args: [varName: string];
@@ -76,21 +60,11 @@ export type Identifier =
 
 // Literal number, char, string etc
 
-type LitArgs =
-  | ['number', Fraction, Units | null]
-  | ['boolean', boolean]
-  | ['string', string];
+type LitArgs = ['number', Fraction] | ['boolean', boolean] | ['string', string];
 
 export interface Literal {
   type: 'literal';
   args: LitArgs;
-  start?: Pos;
-  end?: Pos;
-}
-
-export interface TimeQuantity {
-  type: 'time-quantity';
-  args: (Time.Unit | bigint)[];
   start?: Pos;
   end?: Pos;
 }
@@ -253,7 +227,6 @@ export type Expression =
   | ExternalRef
   | PropertyAccess
   | Literal
-  | TimeQuantity
   | Column
   | Range
   | Sequence
@@ -272,8 +245,7 @@ export type Node =
   | Identifier
   | Lists
   | TableColumn
-  | TableSpread
-  | Units;
+  | TableSpread;
 
 export interface TypeToNode {
   directive: Directive;
@@ -285,7 +257,6 @@ export interface TypeToNode {
   funcdef: FuncDef;
   coldef: ColDef;
   literal: Literal;
-  'time-quantity': TimeQuantity;
   'argument-list': ArgList;
   'function-call': FunctionCall;
   range: Range;
@@ -303,5 +274,4 @@ export interface TypeToNode {
   'function-definition': FunctionDefinition;
   block: Block;
   'imported-data': ImportedData;
-  units: Units;
 }

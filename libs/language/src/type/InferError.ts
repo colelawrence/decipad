@@ -1,4 +1,4 @@
-import { AST, Time, Type } from '..';
+import { Time, Type, Units } from '..';
 import { OverloadTypeName } from '../builtins/overloadBuiltin';
 import { stringifyUnits } from './units';
 
@@ -21,7 +21,7 @@ export type ErrSpec =
     }
   | {
       errType: 'expectedUnit';
-      expectedUnit: [AST.Units | null, AST.Units | null];
+      expectedUnit: [Units | null, Units | null];
     }
   | {
       errType: 'expectedColumnContained';
@@ -45,12 +45,12 @@ export type ErrSpec =
     }
   | {
       errType: 'cannotConvertBetweenUnits';
-      fromUnit: AST.Units;
-      toUnit: AST.Units;
+      fromUnit: Units;
+      toUnit: Units;
     }
   | {
       errType: 'cannotConvertToUnit';
-      toUnit: AST.Units;
+      toUnit: Units;
     }
   | {
       errType: 'unknownCategory';
@@ -168,7 +168,7 @@ export class InferError {
     });
   }
 
-  static expectedUnit(expected: AST.Units | null, got: AST.Units | null) {
+  static expectedUnit(expected: Units | null, got: Units | null) {
     return new InferError({
       errType: 'expectedUnit',
       expectedUnit: [expected, got],
@@ -217,7 +217,7 @@ export class InferError {
     });
   }
 
-  static cannotConvertBetweenUnits(fromUnit: AST.Units, toUnit: AST.Units) {
+  static cannotConvertBetweenUnits(fromUnit: Units, toUnit: Units) {
     return new InferError({
       errType: 'cannotConvertBetweenUnits',
       fromUnit,
@@ -225,7 +225,7 @@ export class InferError {
     });
   }
 
-  static cannotConvertToUnit(toUnit: AST.Units) {
+  static cannotConvertToUnit(toUnit: Units) {
     return new InferError({
       errType: 'cannotConvertToUnit',
       toUnit,

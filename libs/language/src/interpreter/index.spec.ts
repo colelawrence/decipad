@@ -1,4 +1,3 @@
-import { AST } from '..';
 import {
   F,
   c,
@@ -8,7 +7,6 @@ import {
   range,
   seq,
   date,
-  timeQuantity,
   funcDef,
   tableDef,
   table,
@@ -16,7 +14,6 @@ import {
   block,
   assign,
   r,
-  as,
 } from '../utils';
 import { parseUTCDate } from '../date';
 import { runAST } from '../testUtils';
@@ -247,16 +244,6 @@ describe('dates', () => {
   });
 });
 
-describe('Time quantities', () => {
-  it('can be evaluated', async () => {
-    const q = timeQuantity({ year: 4n, day: 3n });
-    expect(await runOne(q)).toEqual([
-      ['year', 4n],
-      ['day', 3n],
-    ]);
-  });
-});
-
 describe('Tables', () => {
   it('can evaluate tables', async () => {
     expect(
@@ -415,22 +402,4 @@ it('Can create columns with disparate types / dims', async () => {
     [F(1), F(2), F(3)],
     ['s', F(5), false, [F(1)]],
   ]);
-});
-
-it('can expand directives', async () => {
-  const minutes: AST.Unit = {
-    unit: 'minutes',
-    exp: 1n,
-    multiplier: F(1),
-    known: true,
-  };
-  const hours: AST.Unit = {
-    unit: 'hours',
-    exp: 1n,
-    multiplier: F(1),
-    known: true,
-  };
-  expect(
-    await runOne(as(l(1, hours), n('units', minutes)))
-  ).toMatchInlineSnapshot(`Fraction(60)`);
 });

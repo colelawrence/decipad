@@ -4,18 +4,11 @@ sidebar_position: 100
 
 # Converting time intervals to numbers
 
-In Deci, a time interval can be expressed like this:
-
-```deci live
-[10 days, 5 hours]
-==> [ [ 'day', 10n ], [ 'hour', 5n ] ] <null>
-```
-
-You can also calculate a time interval between two dates:
+In Deci, you can calculate a time interval between two dates:
 
 ```deci live
 date(2020-02-23) - date(2020-01-12)
-==> [ [ 'day', 42n ] ] <null>
+==> [ [ 'day', 42n ] ] days
 ```
 
 You can then convert a time interval to, let's say, days:

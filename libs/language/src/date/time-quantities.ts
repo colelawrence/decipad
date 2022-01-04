@@ -6,8 +6,6 @@ import {
   jsUnitToIndex,
   Time,
   timeUnitToJSDateUnit,
-  timeUnitToIndex,
-  timeIndexToUnit,
 } from '.';
 import { TimeQuantity } from '../interpreter/Value';
 import { getDefined } from '../utils';
@@ -115,15 +113,6 @@ export const negateTimeQuantity = (quantity: TimeQuantity) => {
   });
 
   return new TimeQuantity(retMap);
-};
-
-export const timeUnitsUpTo = (maxInclusive: Time.Unit): Time.Unit[] => {
-  const maxInclusiveIndex = timeUnitToIndex[maxInclusive];
-  const units: Time.Unit[] = [];
-  for (let i = 0; i <= maxInclusiveIndex; i += 1) {
-    units.push(timeIndexToUnit[i]);
-  }
-  return units;
 };
 
 export const timeSpecificityToTimeUnit = (

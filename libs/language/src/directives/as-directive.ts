@@ -1,5 +1,6 @@
-import { getDefined } from '@decipad/utils';
 import { singular } from 'pluralize';
+import { getDefined } from '@decipad/utils';
+import Fraction from '@decipad/fraction';
 
 import { convertTimeQuantityTo, Time } from '../date';
 import { automapTypes, automapValues } from '../dimtools';
@@ -10,70 +11,65 @@ import {
   Value,
 } from '../interpreter/Value';
 import { AST } from '../parser';
-import { Expression, Units } from '../parser/ast-types';
-import { build as t, InferError, setUnit, Type } from '../type';
+import { Expression } from '../parser/ast-types';
+import { build as t, InferError, Type } from '../type';
 import { stringifyUnits } from '../type/units';
-import {
-  areUnitsConvertible,
-  convertBetweenUnits,
-  getUnitByName,
-} from '../units';
+import { areUnitsConvertible, convertBetweenUnits } from '../units';
 
 import type { GetTypeCtx, GetValueCtx, Directive } from './types';
+import { RuntimeError } from '../interpreter';
 
 export async function getType(
   { infer }: GetTypeCtx,
   expr: AST.Expression,
-  unit: AST.Units
+  unitExpr: AST.Expression
 ): Promise<Type> {
   const expressionType = await infer(expr);
+  if (expressionType.errorCause) {
+    return expressionType;
+  }
+  const unitExpressionType = (await infer(unitExpr)).isScalar('number');
+  if (unitExpressionType.errorCause) {
+    return unitExpressionType;
+  }
+  const { unit } = unitExpressionType.reducedOrSelf();
+  if (unit == null) {
+    return t.impossible(`in/as right-side expression needs to have units`);
+  }
   return automapTypes([expressionType], ([expressionType]: Type[]): Type => {
-    if (expressionType.timeUnits) {
-      if (unit.args.length !== 1) {
-        return t.impossible(InferError.cannotConvertToUnit(unit));
-      }
-
-      const targetUnit = getDefined(unit.args[0]);
-      const targetUnitName = targetUnit.unit;
-      const targetUnitOfMeasure = getUnitByName(targetUnitName);
-      if (
-        !targetUnitOfMeasure ||
-        !['month', 'day', 'second'].includes(targetUnitOfMeasure.baseQuantity)
-      ) {
-        return t.impossible(InferError.cannotConvertToUnit(unit));
-      }
+    const sourceUnits = expressionType.unit;
+    if (!sourceUnits || sourceUnits.args.length === 0) {
       return t.number(unit);
     }
 
-    if (expressionType.type === 'number') {
-      const sourceUnits = expressionType.unit;
-      if (!sourceUnits || sourceUnits.args.length === 0) {
-        return t.number(unit);
-      }
-
-      if (!areUnitsConvertible(sourceUnits, unit)) {
-        return t.impossible(
-          InferError.cannotConvertBetweenUnits(sourceUnits, unit)
-        );
-      }
-
-      return t.number(unit);
+    if (!areUnitsConvertible(sourceUnits, unit)) {
+      return t.impossible(
+        InferError.cannotConvertBetweenUnits(sourceUnits, unit)
+      );
     }
 
-    return expressionType.mapType((expType) => setUnit(expType, unit));
+    return t.number(unit);
   });
 }
 
 export async function getValue(
   { evaluate, getNodeType }: GetValueCtx,
   expression: Expression,
-  units: Units
+  unitsExpression: Expression
 ): Promise<Value> {
   const evalResult = await evaluate(expression);
-
+  const unitsEvalResult = await evaluate(unitsExpression);
+  const unitsData = unitsEvalResult.getData();
+  if (!(unitsData instanceof Fraction)) {
+    throw new RuntimeError(`units needs to be a number`);
+  }
+  if (unitsData.compare(new Fraction(1)) !== 0) {
+    throw new RuntimeError(`units needs to be 1`);
+  }
   const expressionType = await getNodeType(expression);
-  const reducedType = expressionType.reducedOrSelf();
-  const sourceUnits = reducedType.unit;
+  const sourceUnits = expressionType.reducedOrSelf().unit;
+  const targetUnitsExpressionType = await getNodeType(unitsExpression);
+  const units = getDefined(targetUnitsExpressionType.unit);
   return automapValues([expressionType], [evalResult], ([value]) => {
     if (value instanceof TimeQuantity) {
       if (units.args.length > 1) {

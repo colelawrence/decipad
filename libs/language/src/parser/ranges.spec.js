@@ -10,13 +10,13 @@ runTests({
         args: [
           {
             type: 'literal',
-            args: ['number', F(1), null],
+            args: ['number', F(1)],
             start: 5,
             end: 5,
           },
           {
             type: 'literal',
-            args: ['number', F(10), null],
+            args: ['number', F(10)],
             start: 8,
             end: 9,
           },
@@ -43,13 +43,13 @@ runTests({
         args: [
           {
             type: 'literal',
-            args: ['number', F(1), null],
+            args: ['number', F(1)],
             start: 5,
             end: 5,
           },
           {
             type: 'literal',
-            args: ['number', F(10), null],
+            args: ['number', F(10)],
             start: 16,
             end: 17,
           },

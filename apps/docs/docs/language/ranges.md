@@ -28,7 +28,7 @@ Much like dates, you can also as whether a certain range contains a number:
 
 ```deci live
 range = [1 .. 10]
-contains(range, 5)
+range contains 5
 ==> true
 ```
 
@@ -36,7 +36,7 @@ Note that a range contains _every_ number between two numbers, so this should be
 
 ```deci live
 range = [1.4 .. 9.5]
-contains(range, 5.72832)
+range contains 5.72832
 ==> true
 ```
 

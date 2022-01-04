@@ -1,8 +1,8 @@
 import Fraction from '@decipad/fraction';
 import produce from 'immer';
 import { getUnitByName } from './known-units';
-import { Unit, Units } from '../parser/ast-types';
 import { expandUnits, contractUnits } from './expand';
+import { Unit, Units } from '../type/unit-type';
 import { simplifyUnits, stringifyUnits } from '../type/units';
 
 function areQuantityUnitsCompatible(a: Unit, b: Unit): boolean {

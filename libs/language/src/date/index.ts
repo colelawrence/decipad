@@ -1,5 +1,6 @@
 import differenceInMilliseconds from 'date-fns/differenceInMilliseconds';
-import { AST } from '..';
+import { singular } from 'pluralize';
+import { AST, Unit } from '..';
 import { n, pairwise, getDefined } from '../utils';
 import { Date as LanguageDate, TimeQuantity } from '../interpreter/Value';
 import * as Time from './time-types';
@@ -37,6 +38,8 @@ export const timeUnitToJSDateUnit: Record<
   millisecond: ['millisecond', 1n],
 };
 
+const timeUnits = new Set(Object.keys(timeUnitToJSDateUnit));
+
 export const getJSDateUnitAndMultiplier = (unit: Time.Unit) =>
   timeUnitToJSDateUnit[unit];
 
@@ -60,7 +63,7 @@ export const jsIndexToUnit: Record<number, Time.JSDateUnit> = {
   6: 'millisecond',
 };
 
-export const timeUnitToIndex: Record<Time.Unit, number> = {
+const timeUnitToIndex: Record<Time.Unit, number> = {
   year: 0,
   quarter: 1,
   month: 2,
@@ -108,23 +111,33 @@ export const convertFromMs: Partial<Record<Time.Unit, number>> = {
 // Deal with annoying intersections
 type AnyUnit = Time.Unit | Time.Specificity | Time.JSDateUnit;
 
-export const getSpecificity = (thing?: string): Time.Specificity => {
-  /* istanbul ignore else */
-  if (typeof thing === 'string') {
-    if (thing in timeUnitToJSDateUnit) {
+export const timeUnitFromUnit = (unit: Unit | string): Time.Unit => {
+  const u = singular((unit as Unit).unit ?? unit);
+  if (!timeUnits.has(u)) {
+    throw new Error(`Expected time unit and got ${u}`);
+  }
+  return u as Time.Unit;
+};
+
+export const getSpecificity = (thing?: string | Unit): Time.Specificity => {
+  let unit = typeof thing === 'string' ? thing : thing && thing.unit;
+  if (unit) {
+    unit = singular(unit);
+    if (unit in timeUnitToJSDateUnit) {
       // Eliminate quarter, week
-      [thing] = timeUnitToJSDateUnit[thing as Time.Unit];
+      [unit] = timeUnitToJSDateUnit[unit as Time.Unit];
     }
 
-    if (dateSpecificities.includes(thing)) {
-      return thing as Time.Specificity;
+    if (unit && dateSpecificities.indexOf(unit as Time.Specificity) >= 0) {
+      return unit as Time.Specificity;
     }
-    if (timeSpecificities.includes(thing)) {
+
+    if (timeSpecificities.indexOf(unit as string) >= 0) {
       return 'time';
     }
   }
 
-  throw new Error(`panic: expected Time.Specificity, got ${thing}`);
+  throw new Error(`panic: Expected Time.JSDateUnit, got ${unit}`);
 };
 
 export const getJSDateUnit = (thing: AnyUnit) => {
@@ -155,21 +168,25 @@ export const cmpSpecificities = (left: string, right: string): number => {
   return Math.sign(leftIdx - rightIdx);
 };
 
-export const sortSpecificities = (specificities: AnyUnit[]) => {
+export const sortSpecificities = (specificities: (Unit | string)[]) => {
   const uniqueSpecificities = Array.from(
     new Set(specificities.map((s) => getSpecificity(s)))
   );
   return uniqueSpecificities.sort((a, b) => cmpSpecificities(a, b));
 };
 
-export const sortTimeUnits = (toSort: Iterable<Time.Unit>): Time.Unit[] => {
+export const sortTimeUnits = <T extends string | Unit>(
+  toSort: Iterable<T>
+): T[] => {
   const uniqueUnits = Array.from(new Set(toSort));
-  return uniqueUnits.sort((a, b) =>
-    Math.sign(timeUnitToIndex[a] - timeUnitToIndex[b])
-  );
+  return uniqueUnits.sort((a, b) => {
+    const tua = timeUnitFromUnit(a);
+    const tub = timeUnitFromUnit(b);
+    return Math.sign(timeUnitToIndex[tua] - timeUnitToIndex[tub]);
+  });
 };
 
-export const getHighestSpecificity = (specificities: AnyUnit[]) =>
+export const getHighestSpecificity = (specificities: Unit[]) =>
   getDefined(sortSpecificities(specificities).pop());
 
 const cmpJSDateUnits = (left: Time.JSDateUnit, right: Time.JSDateUnit) => {
