@@ -94,7 +94,6 @@
     "@storybook/addon-knobs": "^6.2.9",
     "@storybook/react": "^6.2.9",
     "@tippyjs/react": "^4.2.5",
-    "@types/proper-lockfile": "^4.1.2",
     "@udecode/plate": "^4.2.0",
     "@udecode/plate-test-utils": "^3.2.0",
     "apollo-server-lambda": "^2.25.2",
