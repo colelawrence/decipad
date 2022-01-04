@@ -4,7 +4,6 @@
 import { spawn, ChildProcess } from 'child_process';
 import assert from 'assert';
 import { join } from 'path';
-import lockingFile from './locking-file';
 import { Env } from './sandbox-env';
 import { Config } from './config';
 
@@ -19,13 +18,7 @@ const verbose = !!process.env.DECI_VERBOSE;
 
 let stopping = false;
 
-async function start(env: Env, config: Config): Promise<void> {
-  const lockingFilePath = process.env.DECI_SANDBOX_LOCK_FILE_PATH || 'app.arc';
-  const lockUnlock = lockingFile(lockingFilePath);
-  await lockUnlock(() => doStart(env, config));
-}
-
-function doStart(env: Env, config: Config): Promise<void> {
+function start(env: Env, config: Config): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
       if (child !== undefined) {
