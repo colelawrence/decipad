@@ -1,8 +1,7 @@
 import { css } from '@emotion/react';
 import { ComponentProps, useState } from 'react';
-
 import { Button } from '../../atoms';
-import { NotebookListHeader, AccountAvatar } from '../../molecules';
+import { AccountAvatar, NotebookListHeader } from '../../molecules';
 import { AccountMenu } from '../../organisms';
 import { dashboard, notebookList } from '../../styles';
 import { noop } from '../../utils';
@@ -64,7 +63,7 @@ export const DashboardTopbar = ({
         />
       </div>
       <div css={rightStyles}>
-        <Button primary extraSlim onClick={onCreateNotebook}>
+        <Button primary size="extraSlim" onClick={onCreateNotebook}>
           Create New
         </Button>
         <div css={{ position: 'relative' }}>

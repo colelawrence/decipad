@@ -17,11 +17,11 @@ export const Secondary: Story<{ children: string }> = (args) => (
 );
 
 export const SecondaryExtraSlim: Story<{ children: string }> = (args) => (
-  <Button extraSlim {...args} />
+  <Button size="extraSlim" {...args} />
 );
 
 export const SecondaryExtraLarge: Story<{ children: string }> = (args) => (
-  <Button extraLarge {...args} />
+  <Button size="extraLarge" {...args} />
 );
 
 export const Primary: Story<{ children: string }> = (args) => (
@@ -29,11 +29,11 @@ export const Primary: Story<{ children: string }> = (args) => (
 );
 
 export const PrimaryExtraSlim: Story<{ children: string }> = (args) => (
-  <Button primary extraSlim {...args} />
+  <Button primary size="extraSlim" {...args} />
 );
 
 export const PrimaryExtraLarge: Story<{ children: string }> = (args) => (
-  <Button primary extraLarge {...args} />
+  <Button primary size="extraLarge" {...args} />
 );
 
 export const Disabled: Story<{ children: string }> = (args) => (
@@ -41,9 +41,9 @@ export const Disabled: Story<{ children: string }> = (args) => (
 );
 
 export const DisabledExtraSlim: Story<{ children: string }> = (args) => (
-  <Button disabled extraSlim {...args} />
+  <Button disabled size="extraSlim" {...args} />
 );
 
 export const DisabledExtraLarge: Story<{ children: string }> = (args) => (
-  <Button disabled extraLarge {...args} />
+  <Button disabled size="extraLarge" {...args} />
 );

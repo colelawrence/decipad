@@ -52,16 +52,6 @@ const disabledStyles = css({
   cursor: 'not-allowed',
 });
 
-type ButtonSizes =
-  | {
-      readonly extraSlim?: boolean;
-      readonly extraLarge?: undefined;
-    }
-  | {
-      readonly extraSlim?: undefined;
-      readonly extraLarge?: boolean;
-    };
-
 type ButtonTypes =
   | {
       readonly href: string;
@@ -78,13 +68,12 @@ type ButtonProps = {
   readonly primary?: boolean;
   readonly children: TextChildren;
   readonly disabled?: boolean;
-} & ButtonTypes &
-  ButtonSizes;
+  readonly size?: 'extraSlim' | 'extraLarge';
+} & ButtonTypes;
 
 export const Button = ({
   primary = false,
-  extraSlim = false,
-  extraLarge = false,
+  size,
   submit = primary,
   disabled = false,
 
@@ -98,8 +87,8 @@ export const Button = ({
       css={css([
         styles,
         primary && primaryStyles,
-        extraSlim && extraSlimStyles,
-        extraLarge && extraLargeStyles,
+        size === 'extraSlim' && extraSlimStyles,
+        size === 'extraLarge' && extraLargeStyles,
         disabled && disabledStyles,
       ])}
     >
@@ -112,8 +101,8 @@ export const Button = ({
       css={[
         styles,
         primary && primaryStyles,
-        extraSlim && extraSlimStyles,
-        extraLarge && extraLargeStyles,
+        size === 'extraSlim' && extraSlimStyles,
+        size === 'extraLarge' && extraLargeStyles,
         disabled && disabledStyles,
       ]}
       onClick={(event) => {

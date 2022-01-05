@@ -50,7 +50,7 @@ describe('when extra large', () => {
       getComputedStyle(getByRole('button')).paddingTop.replace(/px$/, '')
     );
 
-    rerender(<Button extraLarge>text</Button>);
+    rerender(<Button size="extraLarge">text</Button>);
     const extraLargePaddingTop = Number(
       getComputedStyle(getByRole('button')).paddingTop.replace(/px$/, '')
     );
@@ -66,7 +66,7 @@ describe('when extra slim', () => {
       getComputedStyle(getByRole('button')).paddingTop.replace(/px$/, '')
     );
 
-    rerender(<Button extraSlim>text</Button>);
+    rerender(<Button size="extraSlim">text</Button>);
     const extraSlimPaddingTop = Number(
       getComputedStyle(getByRole('button')).paddingTop.replace(/px$/, '')
     );
