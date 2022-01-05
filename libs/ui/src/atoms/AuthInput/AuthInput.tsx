@@ -17,7 +17,7 @@ const inputStyles = css({
   padding: '12px',
   borderRadius: '6px',
   '&::placeholder': {
-    color: grey300.rgb,
+    ...setCssVar('currentTextColor', cssVar('weakTextColor')),
   },
 });
 
