@@ -1,12 +1,6 @@
 import { css } from '@emotion/react';
 import { ClassAttributes, FC, InputHTMLAttributes } from 'react';
-import {
-  cssVar,
-  grey250,
-  grey300,
-  p14Regular,
-  setCssVar,
-} from '../../primitives';
+import { cssVar, grey250, p14Regular, setCssVar } from '../../primitives';
 
 const inputStyles = css({
   ...p14Regular,
