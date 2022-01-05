@@ -13,6 +13,7 @@ module.exports = {
     'jest-playwright': {
       contextOptions: {
         baseURL: baseUrl,
+        acceptDownloads: true,
       },
       // defaults, here for ease of tweaking
       launchOptions: { headless: true },

@@ -5,6 +5,8 @@ import { NotebookListItem } from './NotebookListItem';
 const props: ComponentProps<typeof NotebookListItem> = {
   name: 'My Notebook',
   href: '/my-notebook',
+  exportFileName: '',
+  exportHref: '',
 };
 
 it('links to the notebook with its name', () => {

@@ -1,6 +1,10 @@
 import { ElementHandle, Page } from 'playwright';
 import { getDefined } from '@decipad/utils';
 import { URL } from 'url';
+import os from 'os';
+import path from 'path';
+import { readFile } from 'fs/promises';
+import { nanoid } from 'nanoid';
 import { withNewUser } from '../utils';
 
 interface Pad {
@@ -46,6 +50,24 @@ export async function getPadList(): Promise<PadList> {
   return pads;
 }
 
+function waitForDownload(): Promise<Buffer> {
+  return new Promise((resolve, reject) => {
+    try {
+      page.once('download', async (download) => {
+        try {
+          const filePath = path.join(os.tmpdir(), nanoid());
+          await download.saveAs(filePath);
+          resolve(await readFile(filePath));
+        } catch (err) {
+          reject(err);
+        }
+      });
+    } catch (err) {
+      reject(err);
+    }
+  });
+}
+
 export async function clickNewPadButton() {
   const createNewPadButton = await page.$('text=create new');
   expect(createNewPadButton).not.toBeNull();
@@ -62,6 +84,16 @@ export async function duplicatePad(index = 0) {
   await page.click(`//main//li[${index + 1}]//button`);
   const duplicateButton = (await page.$(`button:has-text("Duplicate")`))!;
   await Promise.all([page.waitForRequest('/graphql'), duplicateButton.click()]);
+}
+
+export async function exportPad(index = 0): Promise<string> {
+  await page.click(`//main//li[${index + 1}]//button`);
+  const exportButton = (await page.$(`a:has-text("Export")`))!;
+  const [fileContent] = await Promise.all([
+    waitForDownload(),
+    exportButton.click(),
+  ]);
+  return fileContent.toString('utf8');
 }
 
 export async function followPad(index: number) {

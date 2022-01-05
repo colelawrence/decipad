@@ -92,6 +92,8 @@ interface NotebookListItemProps {
   readonly description?: string;
 
   readonly href: string;
+  readonly exportHref: string;
+  readonly exportFileName: string;
 
   readonly actionsOpen?: boolean;
   readonly toggleActionsOpen?: () => void;
@@ -102,6 +104,8 @@ export const NotebookListItem = ({
   name,
   description,
   href,
+  exportHref,
+  exportFileName,
   actionsOpen = false,
   toggleActionsOpen = noop,
   onDuplicate = noop,
@@ -152,6 +156,8 @@ export const NotebookListItem = ({
         >
           <NotebookListItemActions
             href={href}
+            exportHref={exportHref}
+            exportFileName={exportFileName}
             onDuplicate={onDuplicate}
             onDelete={onDelete}
           />

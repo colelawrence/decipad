@@ -132,6 +132,8 @@ export function Workspace({
                   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                   data.getWorkspaceById!.id
                 }/pads/${encodeVanityUrlComponent(notebook.name, notebook.id)}`,
+                exportHref: `/api/pads/${notebook.id}/export`,
+                exportFileName: `notebook-${notebook.id}.json`,
               }))}
               onCreateNotebook={handleCreateNotebook}
               onDuplicate={handleDuplicateNotebook}

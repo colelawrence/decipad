@@ -15,11 +15,12 @@ type NotebookListProps = {
   readonly notebooks: ReadonlyArray<
     Pick<
       ComponentProps<typeof NotebookListItem>,
-      'name' | 'description' | 'href'
+      'name' | 'description' | 'href' | 'exportHref' | 'exportFileName'
     > & { readonly id: string }
   >;
   readonly onDuplicate?: (id: string) => void;
   readonly onDelete?: (id: string) => void;
+  readonly onExport?: (id: string) => void;
 } & ComponentProps<typeof EmptyWorkspaceCta>;
 export const NotebookList = ({
   notebooks,

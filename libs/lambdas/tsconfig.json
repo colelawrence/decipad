@@ -16,6 +16,7 @@
     { "path": "../externaldata" },
     { "path": "../sync-connection-lambdas" },
     { "path": "../config" },
-    { "path": "../discord-customerservice-lambda" }
+    { "path": "../discord-customerservice-lambda" },
+    { "path": "../y-dynamodb" }
   ]
 }

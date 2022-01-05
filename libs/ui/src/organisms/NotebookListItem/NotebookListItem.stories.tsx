@@ -20,5 +20,5 @@ export default {
 } as Meta<Args>;
 
 export const Normal: Story<Args> = (args) => (
-  <NotebookListItem {...args} href="" />
+  <NotebookListItem {...args} href="" exportFileName="" exportHref="" />
 );

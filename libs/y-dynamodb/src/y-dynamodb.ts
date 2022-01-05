@@ -71,6 +71,8 @@ export class DynamodbPersistence extends Observable<string> {
           applyUpdate(this.doc, val, DynamodbPersistence)
         )
       );
+
+      this.emit('fetched', [this]);
     });
   }
 

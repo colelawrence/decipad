@@ -24,6 +24,8 @@ export const Normal: Story<typeof args> = ({ numberOfNotebooks }) => (
       .map((_, i) => ({
         id: String(i),
         href: '',
+        exportFileName: '',
+        exportHref: '',
         name: `Notebook ${i + 1}`,
         description: 'A really cool notebook',
       }))}

@@ -1,21 +1,42 @@
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { ComponentProps } from 'react';
 import { NotebookListItemActions } from './NotebookListItemActions';
 
-it('renders a list of 3 actions', () => {
-  const { getAllByRole } = render(<NotebookListItemActions href="" />);
-  expect(getAllByRole('listitem')).toHaveLength(3);
+const props: ComponentProps<typeof NotebookListItemActions> = {
+  href: '',
+  exportFileName: '',
+  exportHref: '',
+};
+
+it('renders a list of 4 actions', () => {
+  const { getAllByRole } = render(<NotebookListItemActions {...props} />);
+  expect(getAllByRole('listitem')).toHaveLength(4);
 });
 
 it('links to the notebook', () => {
-  const { getByRole } = render(<NotebookListItemActions href="/notebook" />);
-  expect(getByRole('link')).toHaveAttribute('href', '/notebook');
+  const { getByText } = render(
+    <NotebookListItemActions {...props} href="/notebook" />
+  );
+  expect(getByText(/open/i)).toHaveAttribute('href', '/notebook');
+});
+
+it('links to an export download', () => {
+  const { getByText } = render(
+    <NotebookListItemActions
+      {...props}
+      exportFileName="export.json"
+      exportHref="/exporthref"
+    />
+  );
+  expect(getByText(/export/i)).toHaveAttribute('href', '/exporthref');
+  expect(getByText(/export/i)).toHaveAttribute('download', 'export.json');
 });
 
 it('can duplicate an notebook', () => {
   const handleDuplicate = jest.fn();
   const { getByText } = render(
-    <NotebookListItemActions href="" onDuplicate={handleDuplicate} />
+    <NotebookListItemActions {...props} onDuplicate={handleDuplicate} />
   );
 
   userEvent.click(getByText(/dup/i));
@@ -25,7 +46,7 @@ it('can duplicate an notebook', () => {
 it('can delete an notebook', () => {
   const handleDelete = jest.fn();
   const { getByText } = render(
-    <NotebookListItemActions href="" onDelete={handleDelete} />
+    <NotebookListItemActions {...props} onDelete={handleDelete} />
   );
 
   userEvent.click(getByText(/del|rem/i, { selector: 'button' }));

@@ -18,8 +18,20 @@ it('renders a list of notebooks', () => {
     <NotebookList
       {...props}
       notebooks={[
-        { id: '0', name: 'First', href: '' },
-        { id: '1', name: 'Second', href: '' },
+        {
+          id: '0',
+          name: 'First',
+          href: '',
+          exportFileName: '',
+          exportHref: '',
+        },
+        {
+          id: '1',
+          name: 'Second',
+          href: '',
+          exportFileName: '',
+          exportHref: '',
+        },
       ]}
     />
   );
@@ -36,8 +48,20 @@ it('renders an item with actions open on top', () => {
     <NotebookList
       {...props}
       notebooks={[
-        { id: '0', name: 'First', href: '' },
-        { id: '1', name: 'Second', href: '' },
+        {
+          id: '0',
+          name: 'First',
+          href: '',
+          exportFileName: '',
+          exportHref: '',
+        },
+        {
+          id: '1',
+          name: 'Second',
+          href: '',
+          exportFileName: '',
+          exportHref: '',
+        },
       ]}
     />
   );
@@ -55,8 +79,20 @@ it('only allows one open actions menu at a time', () => {
     <NotebookList
       {...props}
       notebooks={[
-        { id: '0', name: 'First', href: '' },
-        { id: '1', name: 'Second', href: '' },
+        {
+          id: '0',
+          name: 'First',
+          href: '',
+          exportFileName: '',
+          exportHref: '',
+        },
+        {
+          id: '1',
+          name: 'Second',
+          href: '',
+          exportFileName: '',
+          exportHref: '',
+        },
       ]}
     />
   );
@@ -72,8 +108,20 @@ it('emits duplicate events', () => {
     <NotebookList
       {...props}
       notebooks={[
-        { id: '0', name: 'First', href: '' },
-        { id: '1', name: 'Second', href: '' },
+        {
+          id: '0',
+          name: 'First',
+          href: '',
+          exportFileName: '',
+          exportHref: '',
+        },
+        {
+          id: '1',
+          name: 'Second',
+          href: '',
+          exportFileName: '',
+          exportHref: '',
+        },
       ]}
       onDuplicate={handleDuplicate}
     />
@@ -89,8 +137,20 @@ it('emits delete events', () => {
     <NotebookList
       {...props}
       notebooks={[
-        { id: '0', name: 'First', href: '' },
-        { id: '1', name: 'Second', href: '' },
+        {
+          id: '0',
+          name: 'First',
+          href: '',
+          exportFileName: '',
+          exportHref: '',
+        },
+        {
+          id: '1',
+          name: 'Second',
+          href: '',
+          exportFileName: '',
+          exportHref: '',
+        },
       ]}
       onDelete={handleDelete}
     />

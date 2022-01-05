@@ -7,6 +7,8 @@ import { NotebookListItem } from './NotebookListItem';
 const props: ComponentProps<typeof NotebookListItem> = {
   name: 'My Notebook',
   href: '/my-notebook',
+  exportFileName: '',
+  exportHref: '',
 };
 
 describe('without a description', () => {
