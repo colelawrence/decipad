@@ -45,6 +45,25 @@ describe('in a code block', () => {
   });
 
   it.each`
+    key
+    ${'('}
+    ${'['}
+    ${'{'}
+  `('does not expand when $key is pressed with text on right', ({ key }) => {
+    const editor = createEditorPlugins();
+    editor.children = [{ type: ELEMENT_CODE_LINE, children: [{ text: 'fn' }] }];
+    editor.selection = {
+      anchor: { path: [0, 0], offset: 0 },
+      focus: { path: [0, 0], offset: 0 },
+    };
+
+    insert(editor, key);
+    expect(editor.children).toEqual([
+      { type: ELEMENT_CODE_LINE, children: [{ text: `${key}fn` }] },
+    ]);
+  });
+
+  it.each`
     key    | pair
     ${')'} | ${'()'}
     ${']'} | ${'[]'}
