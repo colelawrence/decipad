@@ -28,7 +28,7 @@ describe('Notebook Path', () => {
       />
     );
 
-    expect(container.querySelector('a')).not.toBeInTheDocument();
+    expect(queryByRole('link')).not.toBeInTheDocument();
   });
 
   it('renders the notebook name', () => {
