@@ -20,11 +20,15 @@ const colorNames: Record<ColorId, string> = {
   purple300: 'Purple 300',
   electricGreen100: 'Electric Green 100',
   electricGreen200: 'Electric Green 200',
+  electricGreen500: 'Electric Green 500',
 
   blockquote: 'Blockquote',
   codeBubbleBackground: 'Code Bubble Background',
   codeBubbleBorder: 'Code Bubble Border',
   codeErrorIconFill: 'Code Error Icon Fill',
+
+  logoSecondColor: 'Logo Second Color',
+  logoThirdColor: 'Logo Third Color',
 };
 export default {
   title: 'Primitives / Color',
