@@ -1,4 +1,4 @@
-function package({ arc, cloudformation, stage='staging', inventory, createFunction }) {
+function pkg({ arc, cloudformation, stage='staging', inventory, createFunction }) {
 
   const customDomain = process.env.DECI_CUSTOM_DOMAIN;
   const CertificateArn = process.env.DECI_CERTIFICATE_ARN;
@@ -19,4 +19,4 @@ function package({ arc, cloudformation, stage='staging', inventory, createFuncti
   return cloudformation;
 }
 
-module.exports = { package };
+module.exports = { 'package': pkg };

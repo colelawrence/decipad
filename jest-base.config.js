@@ -1,5 +1,6 @@
 module.exports = {
-  coverageDirectory: '<rootDir>/coverage',
+  collectCoverageFrom: ['<rootDir>/src/**'],
+  coveragePathIgnorePatterns: ['^((?!<rootDir>).)*$'],
 
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   resolver: require.resolve('@nrwl/jest/plugins/resolver'),

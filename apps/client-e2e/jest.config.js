@@ -6,6 +6,7 @@ const { baseUrl } = require('./testConfig');
 
 module.exports = {
   ...baseConfig,
+  rootDir: __dirname,
   displayName: 'client-e2e',
   preset: 'jest-playwright-preset',
   setupFilesAfterEnv: [...setupFilesAfterEnv, './src/utils/setup-tests.ts'],

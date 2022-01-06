@@ -30,7 +30,7 @@ const options = {
   silent: process.env.NODE_ENV === 'production',
 };
 
-function package({ arc, cloudformation, stage='staging', inventory, createFunction }) {
+function pkg({ arc, cloudformation, stage='staging', inventory, createFunction }) {
   // no changes
   return cloudformation;
 }
@@ -53,6 +53,6 @@ function end({ arc, inventory, services }, callback) {
 const sandbox = { start, end };
 
 module.exports = {
-  package,
+  'package': pkg,
   sandbox,
 };

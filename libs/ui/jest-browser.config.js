@@ -1,16 +1,22 @@
 const {
-  // intentionally taken out of the config because we have a preset
+  coveragePathIgnorePatterns,
+  setupFilesAfterEnv = [],
+  // environment intentionally taken out of the config because we have a preset
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   testEnvironment,
-  setupFilesAfterEnv = [],
   ...domConfig
 } = require('../../jest-dom.config');
 
 module.exports = {
   ...domConfig,
+  rootDir: __dirname,
   displayName: 'browser:ui',
 
   testMatch: ['**/*.visual-{test,spec}.{js,jsx,ts,tsx}'],
+  coveragePathIgnorePatterns: [
+    ...coveragePathIgnorePatterns,
+    '<rootDir>/src/lib',
+  ],
 
   preset: 'jest-playwright-jsdom',
   setupFilesAfterEnv: [
