@@ -41,14 +41,14 @@ export const NotebookPath = ({
           {workspaceName}
         </Anchor>
       ) : (
-        <h2 css={css([workspaceNameStyles, { cursor: 'default' }])}>
+        <em css={css([workspaceNameStyles, { cursor: 'default' }])}>
           {workspaceName}
-        </h2>
+        </em>
       )}
       <div css={iconStyles}>
         <Slash />
       </div>
-      <h2 css={notebookNameStyles}>{notebookName}</h2>
+      <em css={notebookNameStyles}>{notebookName}</em>
     </div>
   );
 };
