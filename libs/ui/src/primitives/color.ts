@@ -21,7 +21,7 @@ export interface TransparentColor extends Color {
 }
 // Only list the few opacities we use here so that
 // we do not end up with all kinds of similar but not identical transparent colors.
-export type Opacity = 0.02 | 0.08 | 0.65;
+export type Opacity = 0.02 | 0.08 | 0.65 | 0.8;
 export function transparency(
   { red, green, blue }: OpaqueColor,
   opacity: Opacity
@@ -37,6 +37,7 @@ export function transparency(
 export const purple300 = color(171, 165, 252);
 export const electricGreen100 = color(235, 249, 186);
 export const electricGreen200 = color(225, 249, 128);
+export const electricGreen500 = color(193, 250, 107);
 
 export const white = color(255, 255, 255);
 export const offWhite = color(249, 249, 250);
@@ -52,3 +53,5 @@ export const blockquote = color(51, 41, 66);
 export const codeBubbleBackground = color(223, 250, 233);
 export const codeBubbleBorder = color(179, 229, 198);
 export const codeErrorIconFill = color(253, 101, 101);
+export const logoSecondColor = color(207, 253, 136);
+export const logoThirdColor = color(175, 245, 72);

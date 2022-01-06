@@ -1,14 +1,24 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Deci } from '../../icons';
-import { cssVar, p16Regular, p24Bold, setCssVar } from '../../primitives';
+import {
+  cssVar,
+  electricGreen500,
+  logoSecondColor,
+  logoThirdColor,
+  p16Regular,
+  p24Bold,
+  setCssVar,
+  transparency,
+} from '../../primitives';
 
 const deciLogoWrapper = css({
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
   width: '60px',
   height: '60px',
-  background:
-    'linear-gradient(145.97deg, #C1FA6B 10.08%, rgba(207, 253, 136, 0.8) 75.32%, #AFF548 94.81%)',
+  background: `linear-gradient(145.97deg, ${electricGreen500.rgb} 10.08%, ${
+    transparency(logoSecondColor, 0.8).rgba
+  } 75.32%, ${logoThirdColor.rgb} 94.81%)`,
   borderRadius: '12px',
   padding: '12px',
   marginBottom: '24px',
