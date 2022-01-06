@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { HelpButton } from '../../molecules';
 import { cssVar, smallestDesktop } from '../../primitives';
 
 const crossBarsQuery = `@media (min-width: ${smallestDesktop.portrait.width}px)`;
@@ -32,13 +31,6 @@ const sidebarStyles = css({
     borderRight: `1px solid ${cssVar('highlightColor')}`,
   },
 });
-const helpStyles = css({
-  position: 'absolute',
-  right: '26px',
-  [crossBarsQuery]: {
-    bottom: '82px',
-  },
-});
 
 interface DashboardProps {
   readonly sidebar: ReactNode;
@@ -57,9 +49,6 @@ export const Dashboard = ({
       </main>
       <header css={{ gridArea: 'topbar' }}>{topbar}</header>
       <aside css={[{ gridArea: 'sidebar' }, sidebarStyles]}>{sidebar}</aside>
-      <aside css={[{ gridArea: 'notebook-list' }, helpStyles]}>
-        <HelpButton />
-      </aside>
     </div>
   );
 };
