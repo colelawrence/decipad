@@ -131,18 +131,18 @@ export const p16Regular: TypographyStyles = {
   fontFeatureSettings: "'ss04' on, 'ss02' on",
 };
 
-export const p24Bold: TypographyStyles = {
-  ...pDefault,
-  fontWeight: 600,
-  fontSize: `${24 / usualRemPxs}rem`,
-};
-
 export const p16Bold: TypographyStyles = {
   ...pDefault,
   fontWeight: 600,
   lineHeight: '170%',
   letterSpacing: '-0.004em',
   fontFeatureSettings: "'ss04' on, 'ss02' on",
+};
+
+export const p24Bold: TypographyStyles = {
+  ...pDefault,
+  fontWeight: 600,
+  fontSize: `${24 / usualRemPxs}rem`,
 };
 
 // monospace
