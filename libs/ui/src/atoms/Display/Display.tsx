@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
 import { cssVar, display, setCssVar } from '../../primitives';
-import { SlateElementProps } from '../../utils';
 
 const placeholderStyles = css({
   cursor: 'text',
@@ -26,7 +25,7 @@ const styles = css(display, placeholderStyles, {
   padding: '24px 0',
 });
 
-interface DisplayProps extends SlateElementProps {
+interface DisplayProps {
   readonly children: ReactNode;
   readonly Heading: 'h1';
   /**
@@ -41,10 +40,9 @@ export const Display = ({
   children,
   Heading,
   placeholder,
-  slateAttrs,
 }: DisplayProps): ReturnType<React.FC> => {
   return (
-    <Heading aria-placeholder={placeholder} css={styles} {...slateAttrs}>
+    <Heading aria-placeholder={placeholder} css={styles}>
       <span>{children}</span>
     </Heading>
   );

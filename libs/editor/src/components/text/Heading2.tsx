@@ -2,13 +2,9 @@ import { atoms } from '@decipad/ui';
 import { PlateComponent } from '../../utils/components';
 
 export const Heading2: PlateComponent = ({ attributes, children }) => {
-  if ('data-slate-leaf' in attributes) {
-    throw new Error('Heading2 is not a leaf');
-  }
-
   return (
-    <atoms.Heading2 Heading="h3" slateAttrs={attributes}>
-      {children}
-    </atoms.Heading2>
+    <div {...attributes}>
+      <atoms.Heading2 Heading="h3">{children}</atoms.Heading2>
+    </div>
   );
 };

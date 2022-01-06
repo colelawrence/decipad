@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
 import { code, cssVar, p16Regular } from '../../primitives';
-import { SlateLeafProps } from '../../utils';
 
 const styles = css(code, {
   backgroundColor: cssVar('highlightColor'),
@@ -10,7 +9,7 @@ const styles = css(code, {
   margin: '0 6px',
 });
 
-interface CodeProps extends SlateLeafProps {
+interface CodeProps {
   readonly children: ReactNode;
 }
 export const Code = ({ children }: CodeProps): ReturnType<React.FC> => {

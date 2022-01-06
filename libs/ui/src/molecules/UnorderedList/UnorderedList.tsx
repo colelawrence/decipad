@@ -1,6 +1,6 @@
 import { FC, ReactNode, Children, createContext, useContext } from 'react';
 import { css } from '@emotion/react';
-import { listItemCounter, SlateElementProps } from '../../utils';
+import { listItemCounter } from '../../utils';
 import { cssVar, setCssVar } from '../../primitives';
 import { Bullet } from '../../icons';
 
@@ -43,17 +43,16 @@ const bulletStyles = css({
   },
 });
 
-type UnorderedListProps = SlateElementProps & {
+type UnorderedListProps = {
   readonly children?: ReactNode;
 };
 export const UnorderedList = ({
   children,
-  slateAttrs,
 }: UnorderedListProps): ReturnType<FC> => {
   const depth = useContext(Depth) + 1;
 
   return (
-    <ol css={styles} {...slateAttrs}>
+    <ol css={styles}>
       <Depth.Provider value={depth}>
         {Children.map(children, (child) => (
           <li css={itemStyles}>

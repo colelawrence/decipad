@@ -1,14 +1,14 @@
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
 import { p16Regular } from '../../primitives';
-import { Anchor, SlateElementProps } from '../../utils';
+import { Anchor } from '../../utils';
 
 const styles = css(p16Regular, {
   textDecoration: 'underline',
   cursor: 'pointer',
 });
 
-interface LinkProps extends SlateElementProps {
+interface LinkProps {
   readonly children: ReactNode;
   readonly href: string;
 }

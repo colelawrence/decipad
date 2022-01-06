@@ -4,7 +4,6 @@ import { InlineCodeResult } from '..';
 import { Result as BlockCodeResult } from '../../lib/Editor/Blocks/Result/Result.component';
 import { code, cssVar, grey200, transparency } from '../../primitives';
 import { Statement } from '../../lib/results';
-import { SlateElementProps } from '../../utils';
 import { CodeError } from '../../atoms';
 
 const codeBlockStyles = css(code, {
@@ -33,7 +32,7 @@ interface SyntaxError {
   url: string;
 }
 
-interface CodeBlockProps extends SlateElementProps {
+interface CodeBlockProps {
   readonly blockId?: string;
   readonly statements?: Statement[];
   readonly children?: ReactNode;
@@ -45,13 +44,12 @@ export const CodeBlock = ({
   statements = [],
   children,
   error,
-  slateAttrs,
 }: CodeBlockProps): ReturnType<FC> => {
   const rows = Children.count(children);
   return (
     <div>
       <div spellCheck={false}>
-        <pre css={[codeBlockStyles, getGridStyles(rows)]} {...slateAttrs}>
+        <pre css={[codeBlockStyles, getGridStyles(rows)]}>
           {children}
           {error != null && (
             <Result align="end" startLine={1} endLine={error.line}>

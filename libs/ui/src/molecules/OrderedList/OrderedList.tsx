@@ -1,6 +1,6 @@
 import { FC, ReactNode, Children } from 'react';
 import { css } from '@emotion/react';
-import { listItemCounter, SlateElementProps } from '../../utils';
+import { listItemCounter } from '../../utils';
 import { cssVar, p16Regular, setCssVar } from '../../primitives';
 
 const styles = css({
@@ -31,15 +31,12 @@ const itemStyles = css({
   },
 });
 
-type OrderedListProps = SlateElementProps & {
+type OrderedListProps = {
   readonly children?: ReactNode;
 };
-export const OrderedList = ({
-  children,
-  slateAttrs,
-}: OrderedListProps): ReturnType<FC> => {
+export const OrderedList = ({ children }: OrderedListProps): ReturnType<FC> => {
   return (
-    <ol css={styles} {...slateAttrs}>
+    <ol css={styles}>
       {Children.map(children, (child) => (
         <li css={itemStyles}>{child}</li>
       ))}
