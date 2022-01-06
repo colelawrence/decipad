@@ -7,7 +7,6 @@ const inputStyles = css({
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
   border: '1px solid',
   borderColor: grey250.rgb,
-  minWidth: '374px',
   padding: '12px',
   borderRadius: '6px',
   '&::placeholder': {
@@ -17,7 +16,7 @@ const inputStyles = css({
 
 export type AuthInputProps = {
   readonly placeholder: string;
-  readonly value?: string;
+  readonly value: string;
   readonly onChange?: ChangeEventHandler<HTMLInputElement>;
 };
 

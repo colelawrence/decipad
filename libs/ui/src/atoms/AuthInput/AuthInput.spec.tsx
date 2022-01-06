@@ -3,22 +3,33 @@ import userEvent from '@testing-library/user-event';
 import { AuthInput } from './AuthInput';
 
 describe('Auth Input', () => {
-  it('renders with min width', () => {
-    const { getByRole } = render(<AuthInput placeholder="Placeholder" />);
+  it('renders the input value', () => {
+    const { getByRole } = render(
+      <AuthInput
+        placeholder="Placeholder"
+        value="This is an input"
+        onChange={jest.fn()}
+      />
+    );
 
     const input = getByRole('textbox');
 
-    expect(
-      Number(getComputedStyle(input).minWidth.replace('px', ''))
-    ).toBeGreaterThanOrEqual(374);
+    expect(input).toHaveValue('This is an input');
   });
 
-  it('types into the input', () => {
-    const { getByRole } = render(<AuthInput placeholder="Placeholder" />);
+  it('onChange gets called', () => {
+    const onChange = jest.fn();
+    const { getByRole } = render(
+      <AuthInput
+        placeholder="Placeholder"
+        value="This is an input"
+        onChange={onChange}
+      />
+    );
 
     const input = getByRole('textbox');
+    userEvent.type(input, 'hello');
 
-    userEvent.type(input, 'johndoe@gmail.com');
-    expect(input).toHaveValue('johndoe@gmail.com');
+    expect(onChange).toHaveBeenCalled();
   });
 });
