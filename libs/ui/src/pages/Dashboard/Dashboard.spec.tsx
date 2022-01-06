@@ -29,8 +29,3 @@ it('renders the side bar (which may have popups) stacked above the notebook list
   ).toBeTruthy();
 });
 /* eslint-enable no-bitwise */
-
-it('renders a help button', () => {
-  const { getByLabelText } = render(<Dashboard {...props} />);
-  expect(getByLabelText(/help/i)).toBeVisible();
-});
