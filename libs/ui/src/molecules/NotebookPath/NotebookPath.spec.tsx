@@ -19,7 +19,7 @@ describe('Notebook Path', () => {
   });
 
   it("doesn't link to a workspace when shared", () => {
-    const { container } = render(
+    const { queryByRole } = render(
       <NotebookPath
         isAdmin={false}
         workspaceName="John's Workspace"
