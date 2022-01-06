@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { ClassAttributes, FC, InputHTMLAttributes } from 'react';
+import { ChangeEventHandler, FC } from 'react';
 import { cssVar, grey250, p14Regular, setCssVar } from '../../primitives';
 
 const inputStyles = css({
@@ -15,9 +15,23 @@ const inputStyles = css({
   },
 });
 
-export type AuthInputProps = ClassAttributes<HTMLInputElement> &
-  InputHTMLAttributes<HTMLInputElement>;
+export type AuthInputProps = {
+  readonly placeholder: string;
+  readonly value: string;
+  readonly onChange?: ChangeEventHandler<HTMLInputElement>;
+};
 
-export const AuthInput = (props: AuthInputProps): ReturnType<FC> => {
-  return <input css={inputStyles} {...props} />;
+export const AuthInput = ({
+  placeholder,
+  value,
+  onChange,
+}: AuthInputProps): ReturnType<FC> => {
+  return (
+    <input
+      css={inputStyles}
+      placeholder={placeholder}
+      value={value}
+      onChange={onChange}
+    />
+  );
 };
