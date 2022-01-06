@@ -17,7 +17,7 @@ const inputStyles = css({
 
 export type AuthInputProps = {
   readonly placeholder: string;
-  readonly value: string;
+  readonly value?: string;
   readonly onChange?: ChangeEventHandler<HTMLInputElement>;
 };
 
