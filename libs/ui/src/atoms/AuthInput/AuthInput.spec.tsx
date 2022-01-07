@@ -20,16 +20,12 @@ describe('Auth Input', () => {
   it('onChange gets called', () => {
     const onChange = jest.fn();
     const { getByRole } = render(
-      <AuthInput
-        placeholder="Placeholder"
-        value="This is an input"
-        onChange={onChange}
-      />
+      <AuthInput placeholder="Placeholder" value="" onChange={onChange} />
     );
 
     const input = getByRole('textbox');
-    userEvent.type(input, 'hello');
+    userEvent.type(input, 'x');
 
-    expect(onChange).toHaveBeenCalled();
+    expect(onChange).toHaveBeenLastCalledWith('x');
   });
 });

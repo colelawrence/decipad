@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
-import { ChangeEventHandler, FC } from 'react';
+import { FC } from 'react';
 import { cssVar, grey250, p14Regular, setCssVar } from '../../primitives';
+import { noop } from '../../utils';
 
 const inputStyles = css({
   ...p14Regular,
@@ -17,20 +18,20 @@ const inputStyles = css({
 export type AuthInputProps = {
   readonly placeholder: string;
   readonly value: string;
-  readonly onChange?: ChangeEventHandler<HTMLInputElement>;
+  readonly onChange?: (newValue: string) => void;
 };
 
 export const AuthInput = ({
   placeholder,
   value,
-  onChange,
+  onChange = noop,
 }: AuthInputProps): ReturnType<FC> => {
   return (
     <input
       css={inputStyles}
       placeholder={placeholder}
       value={value}
-      onChange={onChange}
+      onChange={(event) => onChange(event.currentTarget.value)}
     />
   );
 };
