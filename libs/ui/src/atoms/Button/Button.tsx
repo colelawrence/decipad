@@ -49,7 +49,6 @@ const extraLargeStyles = css({
 const disabledStyles = css({
   backgroundColor: grey200.rgb,
   color: grey270.rgb,
-  cursor: 'not-allowed',
 });
 
 type ButtonTypes =
