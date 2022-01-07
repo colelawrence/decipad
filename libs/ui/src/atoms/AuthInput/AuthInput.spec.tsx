@@ -30,6 +30,6 @@ describe('Auth Input', () => {
     const input = getByRole('textbox');
     userEvent.type(input, 'hello');
 
-    expect(onChange).toHaveBeenCalled();
+    expect(onChange).toHaveBeenLastCalledWith('hello');
   });
 });
