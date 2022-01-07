@@ -3,7 +3,7 @@ import { AuthInput, AuthInputProps } from './AuthInput';
 
 const args: AuthInputProps = {
   placeholder: 'Placeholder',
-  value: 'Placeholder',
+  value: 'Input Value',
 };
 
 export default {
