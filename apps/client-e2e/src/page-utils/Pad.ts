@@ -59,6 +59,13 @@ export async function focusOnBody() {
   await $firstP!.click();
 }
 
+export async function focusOnLastParagraph() {
+  const $lastP = await page.$(
+    'div[contenteditable = "true"] div:nth-last-child(1) p[data-slate-node="element"]'
+  );
+  expect($lastP).not.toBeNull();
+  await $lastP!.click();
+}
 export async function waitForSaveFlush() {
   await Promise.all([
     page.waitForLoadState('networkidle'),
