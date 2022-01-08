@@ -88,6 +88,10 @@ table thead svg {
   opacity: 0;
 }
 
+table tr:nth-child(2n) {
+  background-color: #ccc
+}
+
 .theme-doc-markdown p {
   max-width: 652px;
   color: var(--ifm-color-primary-dark);
