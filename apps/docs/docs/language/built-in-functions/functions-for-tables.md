@@ -45,6 +45,29 @@ sortby(Flights, Flights.DepartureTime)
 }
 ```
 
+## splitby
+
+This function splits the table into several different tables, splitted by the unique values of a column:
+
+```
+Flights = {
+  Company = ["EZJ", "TAP", "BA", "TAP", "BA", "EZJ", "TAP"]
+  FlightNumber = ["EZJ123", "TP456", "BA789", "TP098", "BA765", "EZJ432", "TP210"]
+}
+
+splitby(Flights, Flights.Company)
+==> {
+  Company = [ 'BA', 'EZJ', 'TAP' ],
+  Values = [ {
+  FlightNumber = [ 'BA789', 'BA765' ]
+}, {
+  FlightNumber = [ 'EZJ123', 'EZJ432' ]
+}, {
+  FlightNumber = [ 'TP456', 'TP098', 'TP210' ]
+} ]
+}
+```
+
 ## reverse
 
 This function reverses a table:

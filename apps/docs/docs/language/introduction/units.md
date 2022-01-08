@@ -36,11 +36,12 @@ Duration = 2 hours
 Speed = Distance / Duration
 ==> 20 miles per hour
 ```
+
 ## Converting between units
 
 ### Simple units
 
-Decipad understands some basic units. To convert between them you can use the `in` operator like this:
+Decipad understands some basic units. To convert between them you can use the `in` directive like this:
 
 ```deci live
 3 km in miles
@@ -103,7 +104,17 @@ cat([1 meters, 2], [3 centimeters, 4])
 ==> [ 1 meters, 2 meters, 0.03 meters, 0.04 meters ]
 ```
 
-### Conversion Factors
+### Creating your own units
+
+We don't support all units. However you can create your own:
+
+```
+SpeedOfSound = 1234.8 km/h
+Bolt = 44.72 km/hour
+SpeedOfSound in Bolt
+```
+
+### Conversion factors
 
 In Decipad the following
 

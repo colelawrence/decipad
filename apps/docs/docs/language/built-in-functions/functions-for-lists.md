@@ -105,6 +105,24 @@ reverse([1 duck, 2 ducks, 3 ducks])
 ==> [ 3 ducks, 2 ducks, 1 ducks ]
 ```
 
+## Transpose
+
+Transpose a list:
+
+```deci live
+transpose([[5$],[10$],[15$]])
+==> [ [ 5, 10, 15 ] ]
+```
+
+## grow
+
+This function compounds an initial value by a specific rate over any sequence or list of values.
+
+```deci live
+grow(100, 10%, [1, 2, 3, 4, 5])
+==> [ 100, 110, 121, 133.1, 146.41 ]
+```
+
 ## stepgrowth
 
 If you have a list of numbers, like a profit per month, you might want a list that shows how each item compares to the previous one:
