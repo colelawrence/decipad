@@ -82,6 +82,12 @@ p {
 div.markdown a {
   text-decoration: underline;
 }
+
+table thead svg {
+  display: none;
+  opacity: 0;
+}
+
 .theme-doc-markdown p {
   max-width: 652px;
   color: var(--ifm-color-primary-dark);
