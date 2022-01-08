@@ -39,3 +39,7 @@ The step can be any of `year`, `quarter`, `month`, `day`, `hour`, `minute`, `sec
 [date(2021-03-15) .. date(2021-03-15) by hour]
 ==> [ time 2021-03-15 00:00, time 2021-03-15 01:00, time 2021-03-15 02:00, time 2021-03-15 03:00, time 2021-03-15 04:00, time 2021-03-15 05:00, time 2021-03-15 06:00, time 2021-03-15 07:00, time 2021-03-15 08:00, time 2021-03-15 09:00, time 2021-03-15 10:00, time 2021-03-15 11:00, time 2021-03-15 12:00, time 2021-03-15 13:00, time 2021-03-15 14:00, time 2021-03-15 15:00, time 2021-03-15 16:00, time 2021-03-15 17:00, time 2021-03-15 18:00, time 2021-03-15 19:00, time 2021-03-15 20:00, time 2021-03-15 21:00, time 2021-03-15 22:00, time 2021-03-15 23:00 ]
 ```
+
+## Functions on lists
+
+[Here is a list of all the functions that work on lists](/docs/docs/language/built-in-functions/functions-for-lists).

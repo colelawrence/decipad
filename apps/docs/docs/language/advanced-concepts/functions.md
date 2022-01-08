@@ -1,10 +1,10 @@
 ---
-sidebar_position: 320
+sidebar_position: 50
 ---
 
-# Creating custom functions
+# Functions
 
-Functions allow you to create your own dialects inside Deci.
+Custom functions allow you to create your dialects inside Decipad.
 
 They can be defined as follows:
 
@@ -18,4 +18,3 @@ even(10)
 ==> true
 ```
 
-Expressions can use references declared in the arguments and also references in the outer scope.

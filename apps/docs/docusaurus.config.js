@@ -58,40 +58,25 @@ const config = {
         items: [
           {
             type: 'doc',
-            docId: 'language/start',
+            docId: 'language/introduction/introduction-to-the-language',
             position: 'left',
             label: 'Getting started',
           },
-          {
-            type: 'doc',
-            docId: 'examples/start',
-            position: 'left',
-            label: 'Examples',
-          },
-          { to: '/blog', label: 'Articles', position: 'left' },
-          {
-            href: 'https://github.com/decipad/docs',
-            label: 'GitHub',
-            position: 'left',
-          },
+          { to: '/blog', label: 'Blog', position: 'left' },
         ],
       },
       footer: {
         style: 'light',
         links: [
           {
-            title: 'Docs',
+            title: 'Documentation',
             items: [
               {
-                label: 'Examples',
-                to: '/docs/docs/examples',
+                label: 'Getting started',
+                to: '/docs/docs/introduction/introduction-to-the-language',
               },
               {
-                label: 'Technical Docs',
-                to: '/docs/docs/language',
-              },
-              {
-                label: 'Help Articles',
+                label: 'Blog',
                 to: '/docs/blog',
               },
             ],
@@ -101,7 +86,7 @@ const config = {
             items: [
               {
                 label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/deci',
+                href: 'https://stackoverflow.com/questions/tagged/decipad',
               },
               {
                 label: 'Discord',
@@ -117,8 +102,8 @@ const config = {
             title: 'More',
             items: [
               {
-                label: 'Articles',
-                to: '/docs/blog',
+                label: 'Website',
+                to: 'https://decipad.com',
               },
               {
                 label: 'GitHub',

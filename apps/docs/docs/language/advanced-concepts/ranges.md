@@ -4,7 +4,7 @@ sidebar_position: 100
 
 # Ranges
 
-In Deci, a range is all the numbers between two numbers. Let's see how you can work with ranges.
+A range is all the numbers between two numbers. Let's see how you can work with ranges.
 
 ## Create a range
 
@@ -24,19 +24,19 @@ If you prefer, you can also type a range as `[start through end]`:
 
 ## Contains
 
-Much like dates, you can also as whether a certain range contains a number:
+Much like dates, you can also as to whether a certain range contains a number:
 
 ```deci live
-range = [1 .. 10]
-range contains 5
+Range = [1 .. 10]
+Range contains 5
 ==> true
 ```
 
 Note that a range contains _every_ number between two numbers, so this should be true:
 
 ```deci live
-range = [1.4 .. 9.5]
-range contains 5.72832
+Range = [1.4 .. 9.5]
+Range contains 5.72832
 ==> true
 ```
 
@@ -57,3 +57,7 @@ You can have ranges of dates, like this:
 [date(2022-01) through date(2022-06)]
 ==> range [ month 2022-01 through month 2022-06 ]
 ```
+
+## Functions on ranges
+
+[Here is a list of all the functions that work on ranges](/docs/docs/language/built-in-functions/functions-for-ranges).

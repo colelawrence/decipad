@@ -4,7 +4,7 @@ sidebar_position: 10
 
 # Functions for numbers
 
-Deci has a bunch of built-in functions that operate on numbers. They are:
+Our built-in functions that operate on numbers:
 
 ## abs
 
@@ -123,12 +123,12 @@ average([1, 2, 3, 4])
 This function gives you the mean of a list of numbers that respect a certain condition:
 
 ```deci live
-my_table = {
-  column_A = [1, 2, 3]
-  column_B = [4, 5, 6]
+Table = {
+  A = [1, 2, 3]
+  B = [4, 5, 6]
 }
 
-averageif(my_table.column_A, my_table.column_B < 6)
+averageif(Table.A, Table.B < 6)
 ==> 1.5
 ```
 
@@ -137,9 +137,9 @@ averageif(my_table.column_A, my_table.column_B < 6)
 This function compounds an initial value by a specific rate over any sequence or list of values.
 
 ```deci live
-years = [date(2022), date(2023), date(2024), date(2025)]
+Years = [date(2022), date(2023), date(2024), date(2025)]
 
-grow(500, 10%, years)
+grow(500, 10%, Years)
 ==> [ 500, 550, 605, 665.5 ]
 ```
 
@@ -148,11 +148,11 @@ grow(500, 10%, years)
 This function gives you the increments (or decrements) between values in a sequence or list.
 
 ```deci live
-books_read = {
-  year = [date(2018), date(2019), date(2020), date(2021)]
-  total = [15, 12, 25, 20]
+BooksRead = {
+  Year = [date(2018), date(2019), date(2020), date(2021)]
+  Total = [15, 12, 25, 20]
 }
 
-stepgrowth(books_read.total)
+stepgrowth(BooksRead.Total)
 ==> [ 15, -3, 13, -5 ]
 ```

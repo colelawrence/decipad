@@ -2,13 +2,13 @@
 sidebar_position: 65
 ---
 
-# Comparing values
+# Booleans
 
-## Booleans
+## What they are
 
-The simplest value in the Deci language is a boolean. A boolean value can either be true or false.
+A boolean value can either be true or false.
 
-You can express boolean values literally:
+You can express boolean values like this:
 
 ```deci live
 true
@@ -45,4 +45,8 @@ You can use other comparators:
 ==> false
 ```
 
-> Notice here that we're using parenthesis. This is because we want to make sure that the operation on the right side of the `==` is done **before** we compare it. If you're using many operators at once, use parenthesis to make sure the operations are done in the order you want.
+> We're using parenthesis to ensure that the operation on the right side of the `==` is done **before** we compare. If you are chaining operators, we recommend you use parenthesis.
+
+## Functions on booleans
+
+[Here is a list of all the functions that work on booleans](/docs/docs/language/built-in-functions/functions-for-booleans).

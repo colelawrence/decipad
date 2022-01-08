@@ -70,7 +70,7 @@ An expression is a combination of numbers, variables, functions such as `+`, `-`
 
 ### Function
 
-A function is a special type of value that you can call by passing arguments to it. A function returns a value that you can use.
+A function is a block of reusable Decipad language used to perform a set of operations.
 
 ```deci live
 max([1, 3, 2])
@@ -126,15 +126,15 @@ An operator is a symbol used to perform a mathematical operation.
 ==> 60
 ```
 
-### String
+## String
 
 A string is a data type used to represent text.
 
-### Text block
+## Text block
 
 A text block is a paragraph of text with different text styling options.
 
-### Unit
+## Unit
 
 A unit is any type of measurement. The Deci language understands some units and knows how to convert between units of that same quantity. Units can be simple and composed.
 
@@ -144,7 +144,7 @@ A unit is any type of measurement. The Deci language understands some units and 
 ==> 50 miles per hour
 ```
 
-### Variable
+## Variable
 
 A variable is a way to store a value in a name, which can then be used in further calculations. Declaring a variable is assigning it a value using the `=` operator.
 

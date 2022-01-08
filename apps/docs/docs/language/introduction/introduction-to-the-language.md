@@ -1,13 +1,11 @@
 ---
 sidebar_position: 10
-slug: /language
+slug: /introduction/introduction-to-the-language
 ---
 
-# Deci language intro
+# Introduction to the language
 
 Let's discover The **Deci language in less than 5 minutes**.
-
-In this document you will be able to try out the Deci language by typing into our interactive editor and watch the results.
 
 ## Numbers and units
 

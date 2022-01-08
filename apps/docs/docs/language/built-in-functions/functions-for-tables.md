@@ -1,31 +1,30 @@
 ---
-sidebar_position: 50
+sidebar_position: 180
 ---
 
 # Functions for tables
 
-Deci has a bunch of built-in functions that operate on tables. They are:
+Built-in functions that operate on tables:
 
-## splitby
+## lookup
 
-This function splits the table into several different tables, splitted by the unique values of a column:
+[Here is documentation on the lookup function](/docs/docs/language/advanced-concepts/lookups).
+
+## select
+
+You can use the `select` directive to pick some columns from your table, and create a smaller table.
 
 ```deci live
-flights = {
-  company = ["EZJ", "TAP", "BA", "TAP", "BA", "EZJ", "TAP"]
-  flight_number = ["EZJ123", "TP456", "BA789", "TP098", "BA765", "EZJ432", "TP210"]
+Flights = {
+  Number = ["TP123", "BA456", "EJ789"]
+  PassengerCount = [100, 150, 200]
+  UnwantedColumn = ["Let's", "keep this", "out"]
 }
 
-splitby(flights, flights.company)
+Flights2 = select(Flights, Number, PassengerCount)
 ==> {
-  company = [ 'BA' <string> x unknown, 'EZJ' <string> x unknown, 'TAP' <string> x unknown ],
-  values = [ {
-  flight_number = [ 'BA789', 'BA765' ]
-}, {
-  flight_number = [ 'EZJ123', 'EZJ432' ]
-}, {
-  flight_number = [ 'TP456', 'TP098', 'TP210' ]
-} ]
+  Number = [ 'TP123', 'BA456', 'EJ789' ],
+  PassengerCount = [ 100, 150, 200 ]
 }
 ```
 
@@ -34,15 +33,15 @@ splitby(flights, flights.company)
 This function sorts a table by the values of a column:
 
 ```deci live
-flights = {
-  flight_number = ["EZJ123", "TP456", "BA789", "TP098", "BA765"]
-  departure_time = [date(2022-03-11 15:20), date(2022-03-11 16:20), date(2022-03-10 10:05), date(2022-03-13 12:20), date(2022-03-11 15:20)]
+Flights = {
+  FlightNumber = ["EZJ123", "TP456", "BA789", "TP098", "BA765"]
+  DepartureTime = [date(2022-03-11 15:20), date(2022-03-11 16:20), date(2022-03-10 10:05), date(2022-03-13 12:20), date(2022-03-11 15:20)]
 }
 
-sortby(flights, flights.departure_time)
+sortby(Flights, Flights.DepartureTime)
 ==> {
-  flight_number = [ 'BA789', 'EZJ123', 'BA765', 'TP456', 'TP098' ],
-  departure_time = [ time 2022-03-10 10:05, time 2022-03-11 15:20, time 2022-03-11 15:20, time 2022-03-11 16:20, time 2022-03-13 12:20 ]
+  FlightNumber = [ 'BA789', 'EZJ123', 'BA765', 'TP456', 'TP098' ],
+  DepartureTime = [ time 2022-03-10 10:05, time 2022-03-11 15:20, time 2022-03-11 15:20, time 2022-03-11 16:20, time 2022-03-13 12:20 ]
 }
 ```
 
@@ -51,15 +50,15 @@ sortby(flights, flights.departure_time)
 This function reverses a table:
 
 ```deci live
-flights = {
-  company = ["EZJ", "TAP", "BA", "TAP", "BA", "EZJ", "TAP"]
-  flight_number = ["EZJ123", "TP456", "BA789", "TP098", "BA765", "EZJ432", "TP210"]
+Flights = {
+  Company = ["EZJ", "TAP", "BA", "TAP", "BA", "EZJ", "TAP"]
+  FlightNumber = ["EZJ123", "TP456", "BA789", "TP098", "BA765", "EZJ432", "TP210"]
 }
 
-reverse(flights)
+reverse(Flights)
 ==> {
-  company = [ 'TAP', 'EZJ', 'BA', 'TAP', 'BA', 'TAP', 'EZJ' ],
-  flight_number = [ 'TP210', 'EZJ432', 'BA765', 'TP098', 'BA789', 'TP456', 'EZJ123' ]
+  Company = [ 'TAP', 'EZJ', 'BA', 'TAP', 'BA', 'TAP', 'EZJ' ],
+  FlightNumber = [ 'TP210', 'EZJ432', 'BA765', 'TP098', 'BA789', 'TP456', 'EZJ123' ]
 }
 ```
 
@@ -68,14 +67,14 @@ reverse(flights)
 You can select the elements from a table based on a condition:
 
 ```deci live
-flights = {
-  flight_number = ["EZJ123", "TP456", "BA789", "TP098", "BA765", "EZJ432", "TP210"]
-  passenger_count = [100, 200, 150, 125, 210, 240, 80]
+Flights = {
+  FlightNumber = ["EZJ123", "TP456", "BA789", "TP098", "BA765", "EZJ432", "TP210"]
+  PassengerCount = [100, 200, 150, 125, 210, 240, 80]
 }
 
-filter(flights, flights.passenger_count <= 140)
+filter(Flights, Flights.PassengerCount <= 140)
 ==> {
-  flight_number = [ 'EZJ123', 'TP098', 'TP210' ],
-  passenger_count = [ 100, 125, 80 ]
+  FlightNumber = [ 'EZJ123', 'TP098', 'TP210' ],
+  PassengerCount = [ 100, 125, 80 ]
 }
 ```

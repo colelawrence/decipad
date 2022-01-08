@@ -2,15 +2,15 @@
 sidebar_position: 310
 ---
 
-# Dimensions and freedom
+# Dimensions
 
-In Deci, _dimensions_ help you model and deal with complexity in a way that you can easily reason about them without having to worry too much about the internals. Let's see how.
+A dimension is a characteristic of an object that can be given different values. For example, a geographic location could have dimensions called latitude, longitude, or country.
 
 ## Degrees of freedom
 
-In Deci, any quantity has a defined number of degrees of freedom.
+Any quantity has a defined number of degrees of freedom.
 
-The space of numbers have _one_ degree of freedom. They can vary from -Infinity to +Infinity:
+The space of numbers has _one_ degree of freedom. They can vary from -Infinity to +Infinity:
 
 ![One dimension axis](/img/dimensions-one-axis.svg)
 
@@ -20,7 +20,7 @@ But once you define a numeric value, they have 0 dimensions, since they can no l
 
 ## One degree of freedom
 
-In Deci you can define 1-dimensional value by creating a table with at least two columns.
+You can define 1-dimensional value by creating a table with at least two columns.
 In the first column you place a name, and in the second column you place a value, like this:
 
 ```deci live
@@ -34,7 +34,7 @@ Cars = {
 }
 ```
 
-In the previous example, the column named `FuelConsumption` is indexed by the column named `Type`. You can access the fuel consumption values using the `.` character like this:
+In the previous example, the column named `FuelConsumption` is indexed by `Type`. You can access the fuel consumption values using the `.` character like this:
 
 ```deci live
 Cars = {
@@ -119,13 +119,13 @@ Fuel = {
 EstimatedUsage = 100000 miles
 
 GallonsSpent = (1 / Cars.FuelConsumption) * EstimatedUsage
-DollarsSpentPerYear = Fuel.Price * GallonsSpent
+DollarsSpentPerYear = round(Fuel.Price * GallonsSpent)
 
 total(DollarsSpentPerYear)
-==> [ 40565.(907522429261559696342305037957211870255348516218081435472739820565) USD, 43811.(180124223602484472049689440993788819875776397515527950310559006211) USD, 47360.(697032436162870945479641131815044858523119392684610075914423740510) USD, 51113.(0434782608695652173913) USD, 55169.(634230503795721187025534851621808143547273982056590752242926155969) USD, 59631.(8840579710144927536231) USD ]
+==> [ 40566 USD, 43812 USD, 47361 USD, 51113 USD, 55170 USD, 59632 USD ]
 ```
 
-This should display the total on a per-year basis. This is because `Consumption`'s first degree of freedom is based on the Fuel table. But this probably doesn't make sense for us unless we're going to buy all 3 cars.
+This should display the total on a per-year basis. This is because `Consumption`'s first degree of freedom is based on the Fuel table. But this  doesn't make sense for us unless we're going to buy all 3 cars.
 
 We want to know how much Then we would replace the last line with `total(Consumption over Cars)`, meaning it would calculate the total per car.
 
@@ -146,8 +146,8 @@ Fuel = {
 EstimatedUsage = 100000 miles
 
 GallonsSpent = (1 / Cars.FuelConsumption) * EstimatedUsage
-DollarsSpentPerYear = Fuel.Price * GallonsSpent
+DollarsSpentPerYear = round(Fuel.Price * GallonsSpent)
 
 total(DollarsSpentPerYear over Cars)
-==> [ 127608.(6956521739130434782608) USD, 65222.(2) USD, 104821.(428571) USD ]
+==> [ 127608 USD, 65223 USD, 104823 USD ]
 ```

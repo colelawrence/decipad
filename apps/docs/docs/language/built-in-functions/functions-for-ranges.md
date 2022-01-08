@@ -4,7 +4,7 @@ sidebar_position: 40
 
 # Functions for ranges
 
-Deci has a bunch of built-in functions that operate on ranges. They are:
+Built-in functions that operate on ranges:
 
 ## contains
 

@@ -4,15 +4,15 @@ sidebar_position: 20
 
 # Functions for dates
 
-Deci has a bunch of built-in functions that operate on dates. They are:
+Built-in functions that operate on dates:
 
 ## containsdate
 
 This function gives you the ability to check whether a certain range contains a specific date:
 
 ```deci live
-range = [date(2050-Jan-01) through date(2050-Dec-31)]
-containsdate(range, date(2050-Feb-02 15:30))
+Range = [date(2050-Jan-01) through date(2050-Dec-31)]
+containsdate(Range, date(2050-Feb-02 15:30))
 ==> true
 ```
 

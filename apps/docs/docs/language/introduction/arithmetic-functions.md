@@ -2,9 +2,11 @@
 sidebar_position: 20
 ---
 
-# Basic arithmetic operations
+# Arithmetic operations
 
-In the Deci language you can do all the basic arithmetic operations with numbers you would expect:
+## Operations
+
+In Decipad you have all the arithmetic operations you would expect:
 
 ```deci live
 3 + 5 / 2 * 4 - 7
@@ -27,7 +29,7 @@ Here you can see what happens when you try to add numbers with different units:
 ==> This operation requires matching units
 ```
 
-When doing any basic arithmetic operation with two numbers, you can omit the units in one of them:
+When doing any arithmetic operation with two numbers, you can omit the units in one of them:
 
 ```deci live
 5 apples - 2
@@ -46,4 +48,11 @@ Other operations, like exponentiation, do their best to compute the correct unit
 ```deci live
 3 meters ** 2
 ==> 9 meters²
+```
+
+You can also use percentages:
+
+```deci live
+20% * 5000kg
+==> 1000 kg
 ```

@@ -79,6 +79,9 @@ p {
   padding: 48px;
 }
 
+div.markdown a {
+  text-decoration: underline;
+}
 .theme-doc-markdown p {
   max-width: 652px;
   color: var(--ifm-color-primary-dark);

@@ -2,11 +2,20 @@
 sidebar_position: 160
 ---
 
-# Specific functions for lists
+# Functions for lists
 
 When you have a list, you can apply some functions that are specific to working with lists. Here are some:
 
-## List length
+## abs
+
+Can calculate all the absolute numbers of the numbers contained in a list:
+
+```deci live
+abs([-1, 2, -3])
+==> [ 1, 2, 3 ]
+```
+
+## len
 
 You can know the number of elements a list has by using the `len` operator:
 
@@ -15,7 +24,7 @@ len([1, 2, 3])
 ==> 3
 ```
 
-## Join (concatenate) two lists
+## cat
 
 Also, you can join two lists (as long as they have the same type) by using the `cat` function:
 
@@ -42,7 +51,7 @@ cat(1, [2, 3, 4])
 ==> [ 1, 2, 3, 4 ]
 ```
 
-## Get the first element of a list
+## first
 
 If you have a list and want to extract the first element, you can use the `first` function:
 
@@ -51,7 +60,7 @@ first([1 apples, 2 apples, 3 apples])
 ==> 1 apples
 ```
 
-## Get the last element of a list
+## last
 
 Conversely, if you want to extract the last element of a list, you can use the `last` function:
 
@@ -60,7 +69,7 @@ last([1 apples, 2 apples, 3 apples])
 ==> 3 apples
 ```
 
-## Sum all the elements in a list
+## total
 
 You can reduce a list to the sum of all the elements in it:
 
@@ -69,7 +78,7 @@ total([1 apples, 2 apples, 3 apples])
 ==> 6 apples
 ```
 
-## Sort the elements on a list
+## sort
 
 You can generate a new list that contains all the elements in the source list sorted:
 
@@ -78,7 +87,7 @@ sort([date(2021-03), date(2020-12), date(2023-01)])
 ==> [ month 2020-12, month 2021-03, month 2023-01 ]
 ```
 
-## Retrieve the unique elements in a list
+## unique
 
 You can generate a new list that contains all the unique elements in the source list sorted:
 
@@ -87,7 +96,7 @@ unique([4 USD, 3 USD, 1 USD, 1 USD, 4 USD, 3 USD, 3 USD])
 ==> [ 1 USD, 3 USD, 4 USD ]
 ```
 
-## Reverse a list
+## reverse
 
 You can generate a new list that contains all the elements in the source list in reverse order:
 
@@ -96,7 +105,7 @@ reverse([1 duck, 2 ducks, 3 ducks])
 ==> [ 3 ducks, 2 ducks, 1 ducks ]
 ```
 
-## Find the growth of a list of numbers
+## stepgrowth
 
 If you have a list of numbers, like a profit per month, you might want a list that shows how each item compares to the previous one:
 
