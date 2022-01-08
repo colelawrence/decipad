@@ -104,16 +104,6 @@ cat([1 meters, 2], [3 centimeters, 4])
 ==> [ 1 meters, 2 meters, 0.03 meters, 0.04 meters ]
 ```
 
-### Creating your own units
-
-We don't support all units. However you can create your own:
-
-```
-SpeedOfSound = 1234.8 km/h
-Bolt = 44.72 km/hour
-SpeedOfSound in Bolt
-```
-
 ### Conversion factors
 
 In Decipad the following
@@ -132,6 +122,43 @@ SpeedInSeconds = Speed / HoursToSec
 KmToMeters = 1000
 SpeedInMetersSecond = SpeedInSeconds * KmToMeters
 ==> 12.4(2)
+```
+
+### Creating your own units
+
+We don't support all units. However you can create your own:
+
+```
+SpeedOfSound = 1234.8 km/h
+Bolt = 44.72 km/hour
+ceil(SpeedOfSound in Bolt)
+==> 28 Bolts
+```
+
+### Proportions
+
+Simplified units can end up as a proportion, for example:
+
+```
+45 sec/minute
+==> 0.75
+```
+
+You can even use the unit simplifier for numbers.
+
+School children are often asked how many tens, or how many ones in a number:
+
+```
+Number = 23
+HowManyTens = round(Number in 10)
+==> 2
+```
+
+```
+Number = 23
+HowManyTens = round(Number in 10)
+HowManyOnes = Number % 10
+==> 3
 ```
 
 ### Supported units
