@@ -377,6 +377,20 @@ describe('Tables', () => {
     `);
   });
 
+  it('Regression: tables inside tables', async () => {
+    expect(
+      await runCode(`
+        A = { B = [1,2,3] }
+        C = { A = A }
+        C.A
+      `)
+    ).toMatchInlineSnapshot(`
+      Result([ {
+        B = [ 1, 2, 3 ]
+      } ])
+    `);
+  });
+
   it('can call functions with auto-expanded columns as arguments (2)', async () => {
     expect(
       await runCode(`

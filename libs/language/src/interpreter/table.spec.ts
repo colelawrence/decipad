@@ -36,13 +36,13 @@ describe('evaluateTableColumn', () => {
   it('can emulate a quadratic function', async () => {
     expect((await testEvaluate(c('*', l(2), c('previous', l(1))), 4)).getData())
       .toMatchInlineSnapshot(`
-      Array [
-        Fraction(2),
-        Fraction(4),
-        Fraction(8),
-        Fraction(16),
-      ]
-    `);
+        Array [
+          Fraction(2),
+          Fraction(4),
+          Fraction(8),
+          Fraction(16),
+        ]
+      `);
   });
 
   it('can be used in a column with inherent size', async () => {
