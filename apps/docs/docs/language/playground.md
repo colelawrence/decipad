@@ -4,21 +4,22 @@ sidebar_position: 350
 
 # Playground
 
-Here you can freely try the Deci language:
+Here you can freely try the Decipad:
 
 ```deci live
-Year = [date(2020) .. date(2025) by year]
+Salary = 2000€
+Rent = 500€
+FoodAndStuff = 400€
+Savings = Salary - Rent - FoodAndStuff
+==> 1100 €
+```
 
-BaseFuelPrice = 4 USD/gallon
+Maybe calculate how much you weight in bananas?
 
-Fuel = {
-  Year,
-  InterestRateFromYear = 1.08 ** (Year - date(2020) as years),
-  Price = round(BaseFuelPrice * InterestRateFromYear, 2)
-}
-==> {
-  Year = [ year 2020, year 2021, year 2022, year 2023, year 2024, year 2025 ],
-  InterestRateFromYear = [ 1, 1.08, 1.1664, 1.2597, 1.3604, 1.4693 ],
-  Price = [ 4 USD per gallon, 4.32 USD per gallon, 4.67 USD per gallon, 5.04 USD per gallon, 5.44 USD per gallon, 5.88 USD per gallon ]
-}
+```deci live
+You = 50kg
+Banana = 118g
+
+round(You in Banana)
+==> 424 Bananas
 ```

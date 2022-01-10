@@ -1,10 +1,10 @@
 import { EmailGenerator } from './types';
 
 const authMagiclink: EmailGenerator<{ url: string }> = ({ url }) => ({
-  subject: `Deci: Sign in`,
+  subject: `Decipad: Sign in`,
   body: `Hello,
 
-You have recently asked to sign into Deci.
+You have recently asked to sign into Decipad.
 
 To be able to do that, you can click on this link:
 
@@ -16,7 +16,7 @@ Whatever you do, please don't forward this e-mail to anyone.
 
 Sincerely,
 
-The Deci team.
+The Decipad team.
 `,
 });
 export default authMagiclink;

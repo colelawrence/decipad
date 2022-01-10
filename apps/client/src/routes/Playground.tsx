@@ -54,7 +54,7 @@ export function Playground(): ReturnType<FC> {
             <FiArrowLeft />
             Home
           </HomeButton>
-          <h1>Deci Playground</h1>
+          <h1>Decipad Playground</h1>
         </div>
         <DocumentationButton href="/docs" target="_blank" rel="noreferrer">
           Documentation
