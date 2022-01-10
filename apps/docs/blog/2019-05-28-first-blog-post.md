@@ -1,6 +1,6 @@
 ---
-slug: deci-launched
-title: Deci launched
+slug: decipad-launched
+title: Decipad launched
 authors: [dolivetree]
 tags: [deci, low-code, no-code]
 ---

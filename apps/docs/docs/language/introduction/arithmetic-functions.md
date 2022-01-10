@@ -36,7 +36,7 @@ When doing any arithmetic operation with two numbers, you can omit the units in 
 ==> 3 apples
 ```
 
-Deci tries its best to match plural and singular units:
+Decipad tries its best to match plural and singular units:
 
 ```deci live
 5 bananas + 1 banana

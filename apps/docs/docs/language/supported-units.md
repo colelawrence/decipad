@@ -4,7 +4,7 @@ sidebar_position: 390
 
 # Appendix A: Supported units
 
-Deci supports the following units, and compositions of them. Unless stated, units default to the international standard.
+Decipad supports the following units, and compositions of them. Unless stated, units default to the international standard.
 
 For example, when we say Inch we mean Inch (International), i.e. `0.0254 m`.
 

@@ -22,7 +22,7 @@ If you don't want to accept this invitation you can safely ignore this email.
 
 Sincerely,
 
-The Deci team.
+The Decipad team.
 `,
 });
 export default genericInvite;

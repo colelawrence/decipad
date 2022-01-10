@@ -14,7 +14,7 @@ export const handler = function http(req: HttpRequest): HttpResponse {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Deci</title>
+  <title>Decipad</title>
   <style>
     * {
       box-sizing: border-box;

@@ -5,11 +5,11 @@ slug: /introduction/introduction-to-the-language
 
 # Introduction to the language
 
-Let's discover The **Deci language in less than 5 minutes**.
+Let's discover The **Decipad language in less than 5 minutes**.
 
 ## Numbers and units
 
-In Deci you can express simple integer numbers like this:
+You can express simple integer numbers like this:
 
 ```deci live
 42

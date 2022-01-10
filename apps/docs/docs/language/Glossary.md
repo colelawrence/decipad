@@ -20,7 +20,7 @@ A Boolean is a data type with two possible values: `true` or `false`.
 
 ### Calculation block
 
-The calculation block is the place where you can type numbers and perform operations in a more natural way powered by the Deci language. In the calculation block, you can type numbers, units, variables, functions, as well as create tables.
+The calculation block is the place where you can type numbers and perform operations in a more natural way powered by the Decipad language. In the calculation block, you can type numbers, units, variables, functions, as well as create tables.
 
 ```deci live
 2 + 2
@@ -37,9 +37,9 @@ if sun_is_down then "dinner👩‍🍳" else "lunch💪"
 ==> 'lunch💪'
 ```
 
-### Deci language
+### Decipad language
 
-The Deci language is how you interact and use data in a calculation block.
+The language is how you interact and use data in a calculation block.
 
 ```deci live
 CurrentSavings = 50000
@@ -136,7 +136,7 @@ A text block is a paragraph of text with different text styling options.
 
 ## Unit
 
-A unit is any type of measurement. The Deci language understands some units and knows how to convert between units of that same quantity. Units can be simple and composed.
+A unit is any type of measurement. The Decipad language understands some units and knows how to convert between units of that same quantity. Units can be simple and composed.
 
 ```deci live
 2 apples

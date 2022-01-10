@@ -34,7 +34,7 @@ export default function Home() {
   return (
     <Layout
       title={`Decipad Docs`}
-      description="Documentation and articles about Deci"
+      description="Documentation and articles about Decipad"
     >
       <HomepageHeader />
       <main>

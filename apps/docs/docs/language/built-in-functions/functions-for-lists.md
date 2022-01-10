@@ -42,7 +42,7 @@ cat([1, 2, 3], 4)
 ==> [ 1, 2, 3, 4 ]
 ```
 
-> In Deci, every operation returns a new value. Here, `cat` returns a new list and leaves the arguments untouched.
+> In Decipad, every operation returns a new value. Here, `cat` returns a new list and leaves the arguments untouched.
 
 Or add an element to the beginning of a list:
 

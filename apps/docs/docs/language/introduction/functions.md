@@ -6,7 +6,7 @@ sidebar_position: 80
 
 A function is a block of reusable Decipad language used to perform a set of operations.
 
-Deci has a series of built-in functions that you can call. Some of them you've seen, like the `+`, `-`, `*`, and `/` operators, or the comparison operators like `==` or `>=`.
+Decipad has a series of built-in functions that you can call. Some of them you've seen, like the `+`, `-`, `*`, and `/` operators, or the comparison operators like `==` or `>=`.
 
 Other functions include mathematical functions such as `abs` or `ln`.
 

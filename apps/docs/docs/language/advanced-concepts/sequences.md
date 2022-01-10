@@ -4,7 +4,7 @@ sidebar_position: 110
 
 # Sequences
 
-In Deci, a sequence is a list of quantities separated by a step.
+In Decipad, a sequence is a list of quantities separated by a step.
 
 ## Creating a sequence
 
@@ -15,7 +15,7 @@ You can create a sequence by typing `[start .. end by step]` like this:
 ==> [ 1, 2, 3, 4, 5 ]
 ```
 
-> As you can see, in Deci, sequences can be expressed similarly to ranges, but adding a `by step`.
+> As you can see, in Decipad, sequences can be expressed similarly to ranges, but adding a `by step`.
 
 ## Sequences with units
 
