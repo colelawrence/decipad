@@ -9,6 +9,7 @@ export { Create } from './Create/Create';
 export { Deci } from './Deci/Deci';
 export { Delete } from './Delete/Delete';
 export { Docs } from './Docs/Docs';
+export { DragHandle } from './DragHandle/DragHandle';
 export { Ellipsis } from './Ellipsis/Ellipsis';
 export { File } from './File/File';
 export { Folder } from './Folder/Folder';

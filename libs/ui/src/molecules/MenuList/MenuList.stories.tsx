@@ -3,21 +3,35 @@ import { MenuItem, TriggerMenuItem } from '../../atoms';
 import { MenuList } from './MenuList';
 import { circleIcon } from '../../storybook-utils';
 
+const args = { open: true };
+
 export default {
   title: 'Molecules / Menu List',
   component: MenuList,
+  args,
 } as Meta;
 
-export const Normal: Story = () => {
+const children = [
+  <MenuItem icon={circleIcon}>Item 1</MenuItem>,
+  <MenuList
+    itemTrigger={<TriggerMenuItem icon={circleIcon}>Item 2</TriggerMenuItem>}
+  >
+    <MenuItem icon={circleIcon}>Item 2.1</MenuItem>
+    <MenuItem icon={circleIcon}>Item 2.2</MenuItem>
+  </MenuList>,
+];
+
+export const Normal: Story<typeof args> = (props) => {
   return (
-    <MenuList trigger={<button>Click me</button>}>
-      <MenuItem icon={circleIcon}>Item 1</MenuItem>
-      <MenuList
-        trigger={<TriggerMenuItem icon={circleIcon}>Item 2</TriggerMenuItem>}
-      >
-        <MenuItem icon={circleIcon}>Item 2.1</MenuItem>
-        <MenuItem icon={circleIcon}>Item 2.2</MenuItem>
-      </MenuList>
+    <MenuList {...props} root>
+      {children}
+    </MenuList>
+  );
+};
+export const Dropdown: Story<typeof args> = (props) => {
+  return (
+    <MenuList {...props} root dropdown trigger={<button>anchor</button>}>
+      {children}
     </MenuList>
   );
 };

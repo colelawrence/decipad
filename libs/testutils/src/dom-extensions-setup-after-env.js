@@ -53,3 +53,21 @@ window.ResizeObserver = class ResizeObserver {
 // pressure and other hardware specific inputs, we can simply fake a MouseEvent
 // as a PointerEvent.
 window.PointerEvent = MouseEvent;
+
+// very basic viewBox polyfill
+class SVGRect {
+  constructor(x, y, width, height) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+  }
+}
+Object.defineProperty(SVGSVGElement.prototype, 'viewBox', {
+  configurable: true,
+  enumerable: true,
+  get() {
+    const rect = new SVGRect(...this.getAttribute('viewBox').split(' '));
+    return { baseVal: rect, animVal: rect };
+  },
+});

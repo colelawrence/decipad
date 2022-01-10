@@ -17,15 +17,15 @@ export default {
 } as Meta<Args>;
 
 export const TextOnly: Story<Args> = (args) => (
-  <MenuList defaultOpen trigger={<span></span>}>
-    <MenuList trigger={<TriggerMenuItem {...args} />}>
+  <MenuList root open>
+    <MenuList itemTrigger={<TriggerMenuItem {...args} />}>
       <MenuItem {...args} />
     </MenuList>
   </MenuList>
 );
 export const Icon: Story<Args> = (args) => (
-  <MenuList defaultOpen trigger={<span></span>}>
-    <MenuList trigger={<TriggerMenuItem icon={circleIcon} {...args} />}>
+  <MenuList root open>
+    <MenuList itemTrigger={<TriggerMenuItem icon={circleIcon} {...args} />}>
       <MenuItem {...args} />
     </MenuList>
   </MenuList>

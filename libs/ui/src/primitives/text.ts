@@ -14,7 +14,9 @@ type TypographyStyles = Readonly<
       | 'lineHeight'
       | 'letterSpacing'
       | 'fontFeatureSettings'
-    >
+    > & {
+      lineHeight: number;
+    }
   >
 >;
 
@@ -32,7 +34,7 @@ const hDefault: TypographyStyles = {
   fontStyle: 'normal',
   fontWeight: 600,
   fontSize: `${24 / usualRemPxs}rem`,
-  lineHeight: '100%',
+  lineHeight: 1,
   letterSpacing: '0.01em',
   fontFeatureSettings: 'unset',
 };
@@ -40,13 +42,13 @@ const hDefault: TypographyStyles = {
 export const display: TypographyStyles = {
   ...hDefault,
   fontSize: `${36 / usualRemPxs}rem`,
-  lineHeight: '113%',
+  lineHeight: 1.13,
   fontFeatureSettings: "'ss04' on, 'ss08' on, 'ss06' on",
 };
 export const h1: TypographyStyles = {
   ...hDefault,
   fontSize: `${24 / usualRemPxs}rem`,
-  lineHeight: '130%',
+  lineHeight: 1.3,
   fontFeatureSettings: "'ss04' on, 'ss02' on",
 };
 export const h2: TypographyStyles = {
@@ -65,7 +67,7 @@ const pDefault: TypographyStyles = {
   fontStyle: 'normal',
   fontWeight: 'normal',
   fontSize: '1rem',
-  lineHeight: '100%',
+  lineHeight: 1,
   letterSpacing: 'unset',
   fontFeatureSettings: 'unset',
 };
@@ -79,14 +81,14 @@ export const p12Medium: TypographyStyles = {
   ...pDefault,
   fontWeight: 500,
   fontSize: `${12 / usualRemPxs}rem`,
-  lineHeight: '140%',
+  lineHeight: 1.4,
 };
 export const p12Bold: TypographyStyles = {
   ...pDefault,
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
   fontWeight: 600,
   fontSize: `${12 / usualRemPxs}rem`,
-  lineHeight: '136%',
+  lineHeight: 1.36,
   letterSpacing: '-0.008em',
 };
 export const p13Regular: TypographyStyles = {
@@ -97,20 +99,20 @@ export const p13Medium: TypographyStyles = {
   ...pDefault,
   fontWeight: 500,
   fontSize: `${13 / usualRemPxs}rem`,
-  lineHeight: '136%',
+  lineHeight: 1.36,
   letterSpacing: '-0.008em',
 };
 export const p13SemiBold: TypographyStyles = {
   ...pDefault,
   fontWeight: 600,
   fontSize: `${13 / usualRemPxs}rem`,
-  lineHeight: '136%',
+  lineHeight: 1.36,
   letterSpacing: '-0.008em',
 };
 export const p14Regular: TypographyStyles = {
   ...pDefault,
   fontSize: `${14 / usualRemPxs}rem`,
-  lineHeight: '140%',
+  lineHeight: 1.4,
   letterSpacing: '-0.002em',
 };
 export const p14Medium: TypographyStyles = {
@@ -126,14 +128,14 @@ export const p15Medium: TypographyStyles = {
 };
 export const p16Regular: TypographyStyles = {
   ...pDefault,
-  lineHeight: '170%',
+  lineHeight: 1.7,
   letterSpacing: '-0.004em',
   fontFeatureSettings: "'ss04' on, 'ss02' on",
 };
 export const p16Bold: TypographyStyles = {
   ...pDefault,
   fontWeight: 600,
-  lineHeight: '170%',
+  lineHeight: 1.7,
   letterSpacing: '-0.004em',
   fontFeatureSettings: "'ss04' on, 'ss02' on",
 };
@@ -155,7 +157,7 @@ export const code: TypographyStyles = {
   fontStyle: 'normal',
   fontWeight: 'normal',
   fontSize: `${14 / usualRemPxs}rem`,
-  lineHeight: '140%',
+  lineHeight: 1.4,
   letterSpacing: '0.01em',
   fontFeatureSettings: 'unset',
 };

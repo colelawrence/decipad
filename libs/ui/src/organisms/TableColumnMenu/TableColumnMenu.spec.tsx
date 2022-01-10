@@ -1,26 +1,43 @@
-import { fireEvent, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { ComponentProps } from 'react';
 import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
 import { mockConsoleWarn } from '@decipad/testutils';
 import { TableCellType, TableColumnMenu } from './TableColumnMenu';
 
+const props: ComponentProps<typeof TableColumnMenu> = {
+  type: 'string',
+  trigger: 'trigger',
+};
+
 it('renders trigger icon', () => {
   const { getByText } = render(
-    <TableColumnMenu trigger={<button>trigger</button>} type="string" />
+    <TableColumnMenu {...props} trigger={<button>trigger</button>} />
   );
   expect(getByText('trigger')).toBeInTheDocument();
 });
-
-it('renders menu when clicking the trigger icon', async () => {
-  const { getByText, findAllByRole, queryAllByRole } = render(
-    <TableColumnMenu trigger={<button>trigger</button>} type="string" />
+it('emits a changeOpen event when clicking the trigger', () => {
+  const handleChangeOpen = jest.fn();
+  const { getByText } = render(
+    <TableColumnMenu
+      {...props}
+      trigger={<button>trigger</button>}
+      onChangeOpen={handleChangeOpen}
+    />
   );
+  expect(getByText('trigger')).toBeInTheDocument();
 
+  userEvent.click(getByText('trigger'));
+  expect(handleChangeOpen).toHaveBeenLastCalledWith(true);
+});
+
+it('renders the menu only when open', async () => {
+  const { rerender, findAllByRole, queryAllByRole } = render(
+    <TableColumnMenu {...props} />
+  );
   expect(queryAllByRole('menuitem')).toHaveLength(0);
 
-  // Internally the dropdown uses a pointerdown event.
-  fireEvent.pointerDown(getByText('trigger'));
-
+  rerender(<TableColumnMenu {...props} open />);
   expect(await findAllByRole('menuitem')).not.toHaveLength(0);
 });
 
@@ -37,12 +54,11 @@ const types: [TableCellType, string][] = [
   ['date/year', 'Year'],
 ];
 it.each(types)('highlights selected type %s', async (type, textContent) => {
-  const { findByRole, findAllByRole, findByText, getByText } = render(
-    <TableColumnMenu trigger={<button>trigger</button>} type={type} />
+  const { findByRole, findAllByRole, findByText } = render(
+    <TableColumnMenu trigger={<button>trigger</button>} type={type} open />
   );
 
   // Open every dropdown level
-  fireEvent.pointerDown(getByText('trigger'));
   userEvent.click(await findByText(/change type/i));
   userEvent.click(await findByText(/date/i));
   await findByText(/month/i);

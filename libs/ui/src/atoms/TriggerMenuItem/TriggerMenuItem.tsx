@@ -1,8 +1,8 @@
 import { FC, ReactNode } from 'react';
 import { css } from '@emotion/react';
-import { TriggerItem } from '@radix-ui/react-dropdown-menu';
+import * as RadixDropdownMenu from '@radix-ui/react-dropdown-menu';
 import { Caret } from '../../icons';
-import { menuItemStyles } from '../MenuItem/MenuItem';
+import { menu } from '../../styles';
 
 const iconWrapperStyles = css({
   height: '16px',
@@ -28,12 +28,12 @@ export const TriggerMenuItem: FC<TriggerMenuItemProps> = ({
   icon,
 }) => {
   return (
-    <TriggerItem css={menuItemStyles}>
+    <RadixDropdownMenu.TriggerItem css={menu.itemStyles}>
       {icon != null && <span css={iconWrapperStyles}>{icon}</span>}
       <span css={childrenWrapperStyles}>{children}</span>
       <span css={caretRightWrapper}>
         <Caret variant="right" />
       </span>
-    </TriggerItem>
+    </RadixDropdownMenu.TriggerItem>
   );
 };

@@ -1,22 +1,7 @@
 import { FC, ReactNode } from 'react';
 import { css } from '@emotion/react';
-import { Item } from '@radix-ui/react-dropdown-menu';
-import { cssVar, p14Regular } from '../../primitives';
-
-export const menuItemStyles = css(p14Regular, {
-  cursor: 'pointer',
-  display: 'flex',
-  alignItems: 'center',
-  gap: '4px',
-
-  padding: '6px',
-  borderRadius: '6px',
-
-  backgroundColor: cssVar('backgroundColor'),
-  '&:hover, &:focus, &[data-selected="true"]': {
-    backgroundColor: cssVar('highlightColor'),
-  },
-});
+import * as RadixDropdownMenu from '@radix-ui/react-dropdown-menu';
+import { menu } from '../../styles';
 
 const iconWrapperStyles = css({
   height: '16px',
@@ -41,9 +26,13 @@ export const MenuItem: FC<MenuItemProps> = ({
   selected,
 }) => {
   return (
-    <Item css={menuItemStyles} onSelect={onSelect} data-selected={selected}>
+    <RadixDropdownMenu.Item
+      css={menu.itemStyles}
+      onSelect={onSelect}
+      data-selected={selected}
+    >
       {icon != null && <span css={iconWrapperStyles}>{icon}</span>}
       <span css={childrenWrapperStyles}>{children}</span>
-    </Item>
+    </RadixDropdownMenu.Item>
   );
 };

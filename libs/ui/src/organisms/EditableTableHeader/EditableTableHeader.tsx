@@ -48,9 +48,10 @@ export const EditableTableHeader: FC<EditableTableHeaderProps> = ({
               <Icon />
             </button>
           }
+          open={isMenuOpen}
+          onChangeOpen={setMenuOpen}
           onChangeColumnType={onChangeColumnType}
           onRemoveColumn={onRemoveColumn}
-          onOpenChange={setMenuOpen}
           type={type}
         />
       }

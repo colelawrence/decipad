@@ -13,7 +13,7 @@ export type TableCellType =
   | 'date/year';
 
 interface TableColumnMenuProps
-  extends Pick<ComponentProps<typeof MenuList>, 'onOpenChange'> {
+  extends Pick<ComponentProps<typeof MenuList>, 'open' | 'onChangeOpen'> {
   readonly onChangeColumnType?: (type: TableCellType) => void;
   readonly onRemoveColumn?: () => void;
   readonly trigger: ReactNode;
@@ -21,15 +21,26 @@ interface TableColumnMenuProps
 }
 
 export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
+  open,
+  onChangeOpen,
   onChangeColumnType = noop,
-  onOpenChange,
   onRemoveColumn = noop,
   trigger,
   type,
 }) => (
-  <MenuList onOpenChange={onOpenChange} trigger={trigger}>
+  <MenuList
+    root
+    dropdown
+    open={open}
+    onChangeOpen={onChangeOpen}
+    trigger={trigger}
+  >
     <MenuList
-      trigger={<TriggerMenuItem icon={<Shapes />}>Change type</TriggerMenuItem>}
+      itemTrigger={
+        <TriggerMenuItem icon={<Shapes />}>
+          <div css={{ minWidth: '132px' }}>Change type</div>
+        </TriggerMenuItem>
+      }
     >
       <MenuItem
         icon={<Number />}
@@ -46,7 +57,11 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
         Text
       </MenuItem>
       <MenuList
-        trigger={<TriggerMenuItem icon={<Placeholder />}>Date</TriggerMenuItem>}
+        itemTrigger={
+          <TriggerMenuItem icon={<Placeholder />}>
+            <div css={{ minWidth: '116px' }}>Date</div>
+          </TriggerMenuItem>
+        }
       >
         <MenuItem
           icon={<Placeholder />}
