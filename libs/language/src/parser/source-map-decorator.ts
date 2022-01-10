@@ -21,7 +21,7 @@ const typesWithArgs = new Set([
 
 export function sourceMapDecorator(
   source: string
-): (nodes: ParserNode) => AST.Node {
+): (nodes: ParserNode) => AST.Block {
   const lines: string[] = source.split('\n');
   const locationToLine: Array<[number, number]> = [];
   const lineToLocation: Array<[number, number]> = [];
@@ -35,7 +35,7 @@ export function sourceMapDecorator(
     locationToLine.push([location - 1, line]);
   }
 
-  return decorateNode;
+  return (block: ParserNode) => decorateNode(block) as AST.Block;
 
   function decorateNode(node: ParserNode): AST.Node {
     const line = findBorder(locationToLine, node.start as unknown as number);

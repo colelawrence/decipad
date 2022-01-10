@@ -12,22 +12,23 @@ export const Paragraph: PlateComponent = ({
   const editor = useEditorState();
   const selected = useSelected();
 
-  if ('data-slate-leaf' in attributes || !element) {
+  if (!element) {
     throw new Error('Paragraph is not a leaf');
   }
 
   return (
-    <atoms.Paragraph
-      placeholder={
-        Editor.isEmpty(editor, element) &&
-        selected &&
-        !isSelectionExpanded(editor)
-          ? 'Type “/” for commands or write text'
-          : undefined
-      }
-      slateAttrs={attributes}
-    >
-      {children}
-    </atoms.Paragraph>
+    <div {...attributes}>
+      <atoms.Paragraph
+        placeholder={
+          Editor.isEmpty(editor, element) &&
+          selected &&
+          !isSelectionExpanded(editor)
+            ? 'Type “/” for commands or write text'
+            : undefined
+        }
+      >
+        {children}
+      </atoms.Paragraph>
+    </div>
   );
 };

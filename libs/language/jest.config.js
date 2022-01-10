@@ -1,20 +1,24 @@
 const {
   setupFilesAfterEnv = [],
+  collectCoverageFrom,
+  coveragePathIgnorePatterns,
   ...baseConfig
 } = require('../../jest-base.config');
 
 module.exports = {
   ...baseConfig,
+  rootDir: __dirname,
   displayName: 'language',
 
   setupFilesAfterEnv: [...setupFilesAfterEnv, './jest.setup.js'],
 
   collectCoverageFrom: [
-    'src/**/*.ts',
-    '!src/data/*.ts',
-    '!src/builtins/operators/*.ts',
+    ...collectCoverageFrom,
+    '!<rootDir>/src/data/*.ts',
+    '!<rootDir>/src/builtins/operators/*.ts',
   ],
   coveragePathIgnorePatterns: [
+    ...coveragePathIgnorePatterns,
     '/node_modules/',
     'src/testUtils',
     'src/data/*.ts',
@@ -22,7 +26,7 @@ module.exports = {
   coverageThreshold: {
     global: {
       statements: 92,
-      branches: 84,
+      branches: 82,
       functions: 94,
       lines: 92,
     },

@@ -377,6 +377,20 @@ describe('Tables', () => {
     `);
   });
 
+  it('Regression: tables inside tables', async () => {
+    expect(
+      await runCode(`
+        A = { B = [1,2,3] }
+        C = { A = A }
+        C.A
+      `)
+    ).toMatchInlineSnapshot(`
+      Result([ {
+        B = [ 1, 2, 3 ]
+      } ])
+    `);
+  });
+
   it('can call functions with auto-expanded columns as arguments (2)', async () => {
     expect(
       await runCode(`
@@ -1278,7 +1292,7 @@ describe('number units work together', () => {
   });
 });
 
-describe('units work on columns', () => {
+describe('unit conversion', () => {
   it('as can be applied to columns', async () => {
     expect(
       await runCode(`
@@ -1287,6 +1301,33 @@ describe('units work on columns', () => {
     ).toMatchObject({
       value: [F(1), F(2), F(3)],
       type: t.column(t.number(U('watts')), 3),
+    });
+  });
+});
+
+describe('user-defined units', () => {
+  it('a unit can be defined by the user', async () => {
+    expect(
+      await runCode(`
+      nuno = 100 kg
+      2 tonnes in nuno
+    `)
+    ).toMatchObject({
+      value: F(20),
+      type: t.number(U('nuno', { known: false })),
+    });
+  });
+
+  it('a user unit can be defined on another user unit', async () => {
+    expect(
+      await runCode(`
+        nuno = 100 kg
+        fatnuno = 2 nuno
+        2 tonnes in fatnuno
+      `)
+    ).toMatchObject({
+      value: F(10),
+      type: t.number(U('fatnuno', { known: false })),
     });
   });
 });

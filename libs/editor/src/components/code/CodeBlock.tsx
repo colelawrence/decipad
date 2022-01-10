@@ -27,21 +27,18 @@ export const CodeBlock: PlateComponent = ({
     throw new Error('Missing block id.');
   }
 
-  if ('data-slate-leaf' in attributes) {
-    throw new Error('CodeBlock is not a leaf');
-  }
-
   const block = blockResults[blockId];
 
   return (
-    <organisms.CodeBlock
-      blockId={blockId}
-      error={getSyntaxError(block)}
-      statements={blockToProps(block, computer)}
-      slateAttrs={attributes}
-    >
-      {children}
-    </organisms.CodeBlock>
+    <div {...attributes}>
+      <organisms.CodeBlock
+        blockId={blockId}
+        error={getSyntaxError(block)}
+        statements={blockToProps(block, computer)}
+      >
+        {children}
+      </organisms.CodeBlock>
+    </div>
   );
 };
 

@@ -1,7 +1,7 @@
 /* eslint-disable jest/expect-expect */
 import { timeout } from '@decipad/utils';
 import waitForExpect from 'wait-for-expect';
-import { setUp, waitForEditorToLoad, getPadContent } from './page-utils/Pad';
+import { setUp, waitForEditorToLoad } from './page-utils/Pad';
 import {
   navigateToWorkspacePage,
   duplicatePad,
@@ -22,6 +22,8 @@ describe('Duplicate pad', () => {
     await page.keyboard.type('this is the second paragraph');
     await page.keyboard.press('Enter');
     await page.keyboard.type('this is the third paragraph');
+    expect(await page.$$('[contenteditable] p')).toHaveLength(4);
+
     await timeout(10000);
     await navigateToWorkspacePage();
 
@@ -51,24 +53,10 @@ describe('Duplicate pad', () => {
     await followPad(padCopyIndex);
     await waitForEditorToLoad();
     await waitForExpect(async () => {
-      expect((await getPadContent()).slice(0, 4)).toMatchObject([
-        {
-          text: 'Copy of pad title here',
-          type: 'h1',
-        },
-        {
-          text: 'this is the first paragraph',
-          type: 'p',
-        },
-        {
-          text: 'this is the second paragraph',
-          type: 'p',
-        },
-        {
-          text: 'this is the third paragraph',
-          type: 'p',
-        },
-      ]);
+      expect(await page.textContent('[contenteditable] h1')).toBe(
+        'Copy of pad title here'
+      );
+      expect(await page.$$('[contenteditable] p')).toHaveLength(4);
     });
   });
 });

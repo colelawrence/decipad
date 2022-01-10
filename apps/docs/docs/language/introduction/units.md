@@ -161,6 +161,36 @@ HowManyOnes = Number % 10
 ==> 3
 ```
 
+## Custom conversions
+
+An interesting aspect of how units work in Deci is that you can define your  units and customize conversions according to your needs.
+
+For instance, in Decipad a cup is equivalent to 0.25 litres, which is the standard UK metric:
+
+```deci live
+1 cup in L
+==> 0.25 L
+```
+
+But different countries can have different cup sizes, so you can overwrite the default conversion as you wish:
+
+```deci live
+Flour = 0.75 L
+cup = 0.2 L
+Flour in cups
+==> 3 cups
+```
+
+This also means that you can create your custom units:
+
+```deci live
+Sugar = 1 cup
+Glass = 0.33 L
+Sugar in Glass
+==> 0.(75) Glasses
+```
+
+
 ### Supported units
 
 [Here is a list of all the units Decipad knows](/docs/docs/language/supported-units).

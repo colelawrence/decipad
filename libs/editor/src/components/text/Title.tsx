@@ -8,22 +8,21 @@ import { PlateComponent } from '../../utils/components';
 export const Title: PlateComponent = ({ attributes, children, element }) => {
   const editor = useEditorState();
 
-  if ('data-slate-leaf' in attributes || !element) {
+  if (!element) {
     throw new Error('Title is not a leaf');
   }
 
   return (
-    <>
+    <div {...attributes}>
       <atoms.Display
         Heading="h1"
         placeholder={Editor.isEmpty(editor, element) ? 'Untitled' : undefined}
-        slateAttrs={attributes}
       >
         {children}
       </atoms.Display>
       <div contentEditable={false} css={{ paddingBottom: '16px' }}>
         <atoms.Divider />
       </div>
-    </>
+    </div>
   );
 };

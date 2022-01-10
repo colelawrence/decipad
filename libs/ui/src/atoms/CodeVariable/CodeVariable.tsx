@@ -7,7 +7,6 @@ import {
   cssVar,
   setCssVar,
 } from '../../primitives';
-import { SlateLeafProps } from '../../utils';
 
 const styles = css(code, {
   ...setCssVar('normalTextColor', cssVar('strongTextColor')),
@@ -17,17 +16,12 @@ const styles = css(code, {
   padding: '4px 8px',
 });
 
-interface CodeVariableProps extends SlateLeafProps {
+interface CodeVariableProps {
   readonly children: ReactNode;
 }
 
 export const CodeVariable = ({
   children,
-  slateAttrs,
 }: CodeVariableProps): ReturnType<React.FC> => {
-  return (
-    <span css={styles} {...slateAttrs}>
-      {children}
-    </span>
-  );
+  return <span css={styles}>{children}</span>;
 };

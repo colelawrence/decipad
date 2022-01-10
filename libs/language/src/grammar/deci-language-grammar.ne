@@ -1,7 +1,7 @@
 @preprocessor esmodule
 
 @{%
-import { parensCountingTokenizer as tokenizer } from './tokenizer'
+import { tokenizer } from './tokenizer'
 %}
 
 # Defines that the variable "tokenizer" above is our lexer here.

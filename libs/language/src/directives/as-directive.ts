@@ -1,7 +1,7 @@
 import { singular } from 'pluralize';
-import { getDefined } from '@decipad/utils';
 import Fraction from '@decipad/fraction';
 
+import produce from 'immer';
 import { convertTimeQuantityTo, Time } from '../date';
 import { automapTypes, automapValues } from '../dimtools';
 import {
@@ -12,12 +12,19 @@ import {
 } from '../interpreter/Value';
 import { AST } from '../parser';
 import { Expression } from '../parser/ast-types';
-import { build as t, InferError, Type } from '../type';
-import { stringifyUnits } from '../type/units';
-import { areUnitsConvertible, convertBetweenUnits } from '../units';
-
+import { build as t, InferError, Type, Unit, Units } from '../type';
+import { matchUnitArrays, stringifyUnits } from '../type/units';
+import { areUnitsConvertible, convertBetweenUnits, parseUnit } from '../units';
 import type { GetTypeCtx, GetValueCtx, Directive } from './types';
-import { RuntimeError } from '../interpreter';
+import { getIdentifierString, getInstanceof, U, u } from '../utils';
+
+function isUserUnit(exp: AST.Ref, targetUnit: Units) {
+  const unit: Units = {
+    type: 'units',
+    args: [parseUnit(getIdentifierString(exp))],
+  };
+  return !matchUnitArrays(unit, targetUnit);
+}
 
 export async function getType(
   { infer }: GetTypeCtx,
@@ -33,22 +40,41 @@ export async function getType(
     return unitExpressionType;
   }
   const { unit } = unitExpressionType.reducedOrSelf();
-  if (unit == null) {
-    return t.impossible(`in/as right-side expression needs to have units`);
+  let targetUnit = unit;
+  if (unitExpr.type === 'ref' && unit && isUserUnit(unitExpr, unit)) {
+    targetUnit = U(
+      u(getIdentifierString(unitExpr), { known: false, aliasFor: unit })
+    );
   }
   return automapTypes([expressionType], ([expressionType]: Type[]): Type => {
     const sourceUnits = expressionType.unit;
     if (!sourceUnits || sourceUnits.args.length === 0) {
-      return t.number(unit);
+      return t.number(targetUnit);
     }
 
-    if (!areUnitsConvertible(sourceUnits, unit)) {
+    if (unit && !areUnitsConvertible(sourceUnits, unit)) {
       return t.impossible(
         InferError.cannotConvertBetweenUnits(sourceUnits, unit)
       );
     }
 
-    return t.number(unit);
+    return t.number(targetUnit);
+  });
+}
+
+function inlineUnitAliases(unit: Units): Units {
+  return produce(unit, (unit) => {
+    unit.args = unit.args.reduce<Unit[]>((units, oneUnit) => {
+      if (oneUnit.aliasFor != null) {
+        const unit = inlineUnitAliases(oneUnit.aliasFor);
+        for (const u of unit.args) {
+          units.push(u);
+        }
+      } else {
+        units.push(oneUnit);
+      }
+      return units;
+    }, []);
   });
 }
 
@@ -59,48 +85,54 @@ export async function getValue(
 ): Promise<Value> {
   const evalResult = await evaluate(expression);
   const unitsEvalResult = await evaluate(unitsExpression);
-  const unitsData = unitsEvalResult.getData();
-  if (!(unitsData instanceof Fraction)) {
-    throw new RuntimeError(`units needs to be a number`);
-  }
-  if (unitsData.compare(new Fraction(1)) !== 0) {
-    throw new RuntimeError(`units needs to be 1`);
-  }
+  const unitsData = getInstanceof(
+    unitsEvalResult.getData(),
+    Fraction,
+    `units needs to be a number`
+  );
+
   const expressionType = await getNodeType(expression);
   const sourceUnits = expressionType.reducedOrSelf().unit;
   const targetUnitsExpressionType = await getNodeType(unitsExpression);
-  const units = getDefined(targetUnitsExpressionType.unit);
+  const units = targetUnitsExpressionType.unit
+    ? inlineUnitAliases(targetUnitsExpressionType.unit)
+    : undefined;
+
   return automapValues([expressionType], [evalResult], ([value]) => {
     if (value instanceof TimeQuantity) {
-      if (units.args.length > 1) {
+      if (units && units.args.length > 1) {
         throw new TypeError(
           `Don't know how to convert to composed unit ${stringifyUnits(units)}`
         );
       }
 
-      const targetUnitAsString = units.args[0].unit;
+      const targetUnitAsString = singular(
+        (units?.args[0].unit ?? '').toLocaleLowerCase()
+      );
       return fromJS(
         convertTimeQuantityTo(
           value as TimeQuantity,
-          singular(targetUnitAsString.toLocaleLowerCase()) as Time.Unit
+          targetUnitAsString as Time.Unit
         )
       );
     }
 
     if (value instanceof FractionValue) {
-      if (!sourceUnits || sourceUnits.args.length < 1) {
-        return value;
+      if (!units || !sourceUnits || sourceUnits.args.length < 1) {
+        return fromJS(value.getData().div(unitsData));
       }
       const converted = convertBetweenUnits(
         value.getData(),
         sourceUnits,
         units
-      );
+      ).div(unitsData);
       return fromJS(converted);
     }
 
     throw new TypeError(
-      `Don't know how to convert value to ${stringifyUnits(units)}`
+      `Don't know how to convert value to ${
+        (units && stringifyUnits(units)) || value.getData().toString()
+      }`
     );
   });
 }

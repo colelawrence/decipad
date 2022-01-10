@@ -7,8 +7,11 @@ const {
 
 const config = {
   ...baseConfig,
+  rootDir: __dirname,
   displayName: 'backend',
   setupFiles: [...setupFiles, './jest.setup.js'],
+
+  modulePathIgnorePatterns: ['<rootDir>/src/'],
   moduleNameMapper: {
     ...moduleNameMapper,
     '@decipad/backend-test-sandbox': path.join(
@@ -16,6 +19,7 @@ const config = {
       '../../libs/backend-test-sandbox/src'
     ),
   },
+
   testTimeout: 15000,
   maxWorkers: 2,
   bail: true,

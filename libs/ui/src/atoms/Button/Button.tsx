@@ -3,6 +3,8 @@ import {
   black,
   cssVar,
   electricGreen200,
+  grey200,
+  grey270,
   p13SemiBold,
   shortAnimationDuration,
   transparency,
@@ -40,12 +42,16 @@ const extraSlimStyles = css({
   padding: '6px 14px',
 });
 
-type ButtonProps = {
-  readonly primary?: boolean;
-  readonly extraSlim?: boolean;
-  readonly children: TextChildren;
-  readonly disabled?: boolean;
-} & (
+const extraLargeStyles = css({
+  padding: '12px 24px',
+});
+
+const disabledStyles = css({
+  backgroundColor: grey200.rgb,
+  color: grey270.rgb,
+});
+
+type ButtonTypes =
   | {
       readonly href: string;
       readonly onClick?: undefined;
@@ -55,12 +61,18 @@ type ButtonProps = {
       readonly href?: undefined;
       readonly onClick?: () => void;
       readonly submit?: boolean;
-    }
-);
+    };
+
+type ButtonProps = {
+  readonly primary?: boolean;
+  readonly children: TextChildren;
+  readonly disabled?: boolean;
+  readonly size?: 'extraSlim' | 'extraLarge';
+} & ButtonTypes;
 
 export const Button = ({
   primary = false,
-  extraSlim = false,
+  size,
   submit = primary,
   disabled = false,
 
@@ -74,7 +86,9 @@ export const Button = ({
       css={css([
         styles,
         primary && primaryStyles,
-        extraSlim && extraSlimStyles,
+        size === 'extraSlim' && extraSlimStyles,
+        size === 'extraLarge' && extraLargeStyles,
+        disabled && disabledStyles,
       ])}
     >
       {children}
@@ -83,7 +97,13 @@ export const Button = ({
     <button
       disabled={disabled}
       type={submit ? 'submit' : 'button'}
-      css={[styles, primary && primaryStyles, extraSlim && extraSlimStyles]}
+      css={[
+        styles,
+        primary && primaryStyles,
+        size === 'extraSlim' && extraSlimStyles,
+        size === 'extraLarge' && extraLargeStyles,
+        disabled && disabledStyles,
+      ]}
       onClick={(event) => {
         event.preventDefault();
         onClick();

@@ -1,10 +1,9 @@
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
-import { SlateLeafProps } from '../../utils';
 
 const styles = css({ textDecoration: 'line-through' });
 
-interface StrikethroughProps extends SlateLeafProps {
+interface StrikethroughProps {
   readonly children: ReactNode;
 }
 export const Strikethrough = ({

@@ -2,6 +2,7 @@ import { Token } from 'moo';
 import { Type } from '../type';
 import { AST, InjectableExternalData } from '..';
 import { AnyMapping } from '../utils';
+import { ParserError } from '../parser/parser-types';
 
 export interface SyntaxError extends Error {
   offset: number;
@@ -19,7 +20,7 @@ export interface IdentifiedError {
   type: 'identified-error';
   id: string;
   source: string;
-  error: Error;
+  error: ParserError;
 }
 
 export type ValueLocation = [blockId: string, statementIdx: number];
@@ -63,7 +64,7 @@ export interface ComputeResponse {
 /** Contains the results  */
 export interface IdentifiedResult {
   blockId: string;
-  error?: Error;
+  error?: ParserError;
   isSyntaxError: boolean;
   results: InBlockResult[];
 }

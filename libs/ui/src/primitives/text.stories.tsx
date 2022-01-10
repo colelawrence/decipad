@@ -1,9 +1,6 @@
 import { css } from '@emotion/react';
 import { Meta } from '@storybook/react';
-// eslint-disable-next-line import/no-self-import
-import * as storyExports from './text.stories';
 import * as textExports from './text';
-
 import {
   code,
   display,
@@ -12,14 +9,17 @@ import {
   p12Bold,
   p12Medium,
   p12Regular,
-  p13Regular,
   p13Medium,
+  p13Regular,
   p13SemiBold,
   p14Medium,
   p14Regular,
   p15Medium,
   p16Regular,
+  p24Bold,
 } from './text';
+// eslint-disable-next-line import/no-self-import
+import * as storyExports from './text.stories';
 
 export default {
   title: 'Primitives / Text',
@@ -69,6 +69,9 @@ export const P16Regular: React.FC = ({ children }) => (
 );
 export const P16Bold: React.FC = ({ children }) => (
   <p css={css(p16Regular)}>{children}</p>
+);
+export const P24Bold: React.FC = ({ children }) => (
+  <p css={css(p24Bold)}>{children}</p>
 );
 
 export const Code: React.FC = ({ children }) => (

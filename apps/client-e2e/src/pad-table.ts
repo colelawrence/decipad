@@ -1,6 +1,5 @@
 import {
   focusOnBody,
-  getPadContent,
   waitForEditorToLoad,
   createTable,
   keyPress,
@@ -12,23 +11,15 @@ describe('pad table', () => {
   beforeAll(goToPlayground);
   beforeEach(waitForEditorToLoad);
 
-  it('starts with an empty title and an empty body', async () => {
-    expect(await getPadContent()).toMatchObject([
-      { type: 'h1', text: '' },
-      { type: 'p', text: '' },
-    ]);
-  });
-
   it('creates a table', async () => {
+    expect(await page.$('[contenteditable] table')).toBe(null);
+
     await focusOnBody();
     await createTable();
 
-    expect(await getPadContent()).toMatchObject([
-      { type: 'h1', text: '' },
-      { type: 'p', text: '' },
-      { type: 'div', text: 'Add row' },
-      { type: 'p', text: '' },
-    ]);
+    expect(await page.waitForSelector('[contenteditable] table')).not.toBe(
+      null
+    );
   });
 
   it('can name a table using [tab]s', async () => {

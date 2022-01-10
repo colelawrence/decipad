@@ -1,5 +1,6 @@
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { electricGreen200 } from '../../primitives';
 import { Button } from './Button';
 
 it('renders the button text', () => {
@@ -31,6 +32,38 @@ describe('when primary', () => {
   });
 });
 
+describe('when disabled', () => {
+  it("doesn't render with green background", () => {
+    const { getByRole, rerender } = render(<Button>text</Button>);
+
+    expect(getComputedStyle(getByRole('button')).backgroundColor).toBe(
+      electricGreen200.rgb
+    );
+
+    rerender(<Button disabled>text</Button>);
+
+    expect(getComputedStyle(getByRole('button')).backgroundColor).not.toBe(
+      electricGreen200.rgb
+    );
+  });
+});
+
+describe('when extra large', () => {
+  it('has bigger vertical padding', () => {
+    const { rerender, getByRole } = render(<Button>text</Button>);
+    const normalPaddingTop = Number(
+      getComputedStyle(getByRole('button')).paddingTop.replace(/px$/, '')
+    );
+
+    rerender(<Button size="extraLarge">text</Button>);
+    const extraLargePaddingTop = Number(
+      getComputedStyle(getByRole('button')).paddingTop.replace(/px$/, '')
+    );
+
+    expect(extraLargePaddingTop).toBeGreaterThan(normalPaddingTop);
+  });
+});
+
 describe('when extra slim', () => {
   it('has lower vertical padding', () => {
     const { rerender, getByRole } = render(<Button>text</Button>);
@@ -38,7 +71,7 @@ describe('when extra slim', () => {
       getComputedStyle(getByRole('button')).paddingTop.replace(/px$/, '')
     );
 
-    rerender(<Button extraSlim>text</Button>);
+    rerender(<Button size="extraSlim">text</Button>);
     const extraSlimPaddingTop = Number(
       getComputedStyle(getByRole('button')).paddingTop.replace(/px$/, '')
     );

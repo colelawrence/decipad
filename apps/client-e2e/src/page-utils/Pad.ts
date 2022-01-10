@@ -1,17 +1,10 @@
 import { ElementHandle } from 'playwright';
 import { withNewUser, timeout } from '../utils';
-import { getTagName } from './Page';
 import { clickNewPadButton, navigateToWorkspacePage } from './Workspace';
 import { navigateToPlayground } from './Playground';
 
-interface PadElement {
-  type: string;
-  text: string;
-}
-type PadContent = PadElement[];
-
 export async function waitForEditorToLoad() {
-  await page.waitForSelector('h1[data-slate-node="element"]');
+  await page.waitForSelector('[contenteditable] h1');
 }
 
 export async function setUp() {
@@ -30,7 +23,8 @@ export async function goToPlayground() {
 }
 
 export async function getPadName() {
-  const $name = await page.$('h1[data-slate-node="element"]');
+  const $name = await page.$('[contenteditable] h1');
+  await page.pause();
   expect($name).not.toBeNull();
   return (await $name!.textContent())!.trim();
 }
@@ -39,22 +33,8 @@ export async function getPadRoot($page = page): Promise<ElementHandle | null> {
   return $page.$('[data-slate-node="value"]');
 }
 
-export async function getPadContent($page = page) {
-  const $padValue = await getPadRoot($page);
-  expect($padValue).not.toBeNull();
-  const $elements = await $padValue!.$$('[data-slate-node="element"]');
-  const padContent: PadContent = [];
-  for (const $element of $elements) {
-    padContent.push({
-      type: (await getTagName($element, $page)).toLowerCase(),
-      text: (await $element.innerText()).trim(),
-    });
-  }
-  return padContent;
-}
-
 export async function focusOnBody() {
-  const $firstP = await page.$('p[data-slate-node="element"]');
+  const $firstP = await page.$('[contenteditable] p');
   expect($firstP).not.toBeNull();
   await $firstP!.click();
 }
@@ -102,8 +82,3 @@ export async function createCalculationBlock(decilang: string) {
   await page.keyboard.type(decilang);
   await keyPress('ArrowDown');
 }
-
-export const emptyPad = [
-  { type: 'h1', text: '' },
-  { type: 'p', text: '' },
-];

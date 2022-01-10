@@ -2,7 +2,6 @@ const baseConfig = require('../../jest-base.config');
 
 module.exports = {
   ...baseConfig,
+  rootDir: __dirname,
   displayName: 'queries',
-
-  coverageDirectory: '../../coverage/libs/queries',
 };

@@ -225,6 +225,7 @@
     "@types/oauth": "^0.9.1",
     "@types/pluralize": "^0.0.29",
     "@types/prismjs": "^1.16.5",
+    "@types/proper-lockfile": "^4.1.2",
     "@types/ramda": "^0.27.60",
     "@types/react": "17.0.8",
     "@types/react-copy-to-clipboard": "^5.0.2",

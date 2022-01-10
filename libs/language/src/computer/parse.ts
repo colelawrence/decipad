@@ -14,31 +14,27 @@ export const wrappedParse = ({
   id,
   source,
 }: Parser.UnparsedBlock): ParseRet => {
-  try {
-    const parsed = parseBlock({ id, source });
+  const parsed = parseBlock({ id, source });
 
-    if (parsed.solutions.length !== 1) {
-      throw new Error(`Syntax error: ${parsed.solutions.length} solutions`);
-    }
-
-    return {
-      type: 'identified-block',
-      id,
-      source,
-      block: {
-        ...parsed.solutions[0],
-        // AST.Block doesn't *really* have an ID :(
-        id,
-      },
-    };
-  } catch (error) {
+  if (parsed.errors.length) {
     return {
       type: 'identified-error',
       id,
       source,
-      error: error as Error,
+      error: parsed.errors[0],
     };
   }
+
+  return {
+    type: 'identified-block',
+    id,
+    source,
+    block: {
+      ...parsed.solutions[0],
+      // AST.Block doesn't *really* have an ID :(
+      id,
+    },
+  };
 };
 
 const asParsed = ({ id, block }: ParsedBlock): ParseRet => ({

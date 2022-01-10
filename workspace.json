@@ -334,8 +334,7 @@
           "executor": "@nrwl/jest:jest",
           "outputs": ["coverage/libs/editor"],
           "options": {
-            "jestConfig": "libs/editor/jest.config.js",
-            "passWithNoTests": true
+            "jestConfig": "libs/editor/jest.config.js"
           }
         },
         "typecheck": {
@@ -464,9 +463,7 @@
           "executor": "@nrwl/jest:jest",
           "outputs": ["coverage/libs/fnqueue"],
           "options": {
-            "jestConfig": "libs/fnqueue/jest.config.js",
-            "passWithNoTests": false,
-            "testCoverage": true
+            "jestConfig": "libs/fnqueue/jest.config.js"
           }
         }
       }
@@ -744,9 +741,7 @@
           "executor": "@nrwl/jest:jest",
           "outputs": ["coverage/libs/sync-connection-lambdas"],
           "options": {
-            "jestConfig": "libs/sync-connection-lambdas/jest.config.js",
-            "passWithNoTests": false,
-            "testCoverage": true
+            "jestConfig": "libs/sync-connection-lambdas/jest.config.js"
           }
         },
         "typecheck": {
@@ -793,8 +788,7 @@
           "executor": "@nrwl/jest:jest",
           "outputs": ["coverage/libs/ui"],
           "options": {
-            "jestConfig": "libs/ui/jest.config.js",
-            "passWithNoTests": true
+            "jestConfig": "libs/ui/jest.config.js"
           }
         },
         "typecheck": {

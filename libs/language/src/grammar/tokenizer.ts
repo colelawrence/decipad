@@ -1,6 +1,8 @@
 import moo, { error, Token } from 'moo';
 import { BracketCounter, doSeparateStatement } from './containmentCounting';
 
+export { BracketCounter };
+
 const keywordStrings = [
   'if',
   'then',
@@ -90,7 +92,7 @@ export const tokenRules = {
   },
 } as const;
 
-export const tokenizer = moo.states(tokenRules);
+const basicTokenizer = moo.states(tokenRules);
 
 export interface ParensCountingTokenizer extends moo.Lexer {
   peek: () => moo.Token | undefined;
@@ -102,7 +104,7 @@ export interface ParensCountingTokenizer extends moo.Lexer {
  *
  * Emits the special token type "statementSep" for this purpose
  */
-export const parensCountingTokenizer = (() => {
+export const tokenizer = (() => {
   let openCounter = new BracketCounter();
   let peeked: moo.Token | undefined;
   let prev: moo.Token | undefined;
@@ -113,11 +115,11 @@ export const parensCountingTokenizer = (() => {
       peeked = undefined;
       return tok;
     }
-    return tokenizer.next();
+    return basicTokenizer.next();
   };
 
   const extendedTokenizer: ParensCountingTokenizer = Object.assign(
-    Object.create(tokenizer),
+    Object.create(basicTokenizer),
     {
       next() {
         const tok = getNextToken();
@@ -148,7 +150,7 @@ export const parensCountingTokenizer = (() => {
         // if peek() has been called already, don't call next() again
         if (peeked) return peeked;
 
-        peeked = tokenizer.next();
+        peeked = basicTokenizer.next();
         return peeked;
       },
       prev() {
@@ -156,7 +158,7 @@ export const parensCountingTokenizer = (() => {
       },
       reset(code: string, info?: moo.LexerState) {
         openCounter = new BracketCounter();
-        tokenizer.reset(code, info);
+        basicTokenizer.reset(code, info);
         peeked = undefined;
         return this;
       },

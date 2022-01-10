@@ -1,24 +1,12 @@
 /* eslint-disable jest/expect-expect */
+import { getDefined } from '@decipad/utils';
 import { AST } from '..';
 import { n, c, l, date, range, col, tableDef, funcDef } from '../utils';
-import { parse } from './index';
-import { prettyPrintAST } from './utils';
+import { parse, parseBlock } from './index';
 
 const testParse = (source: string, ...expected: AST.Statement[]) => {
   const p = (source: string) => {
     const parsed = parse([{ id: 'ignored', source }])[0];
-
-    if (parsed.solutions.length > 1) {
-      for (const solution of parsed.solutions) {
-        console.log(prettyPrintAST(solution));
-        console.log(' ----- ');
-      }
-      throw new Error('multiple solutions');
-    }
-
-    if (parsed.solutions.length === 0) {
-      throw new Error('No solutions');
-    }
 
     return parsed.solutions[0];
   };
@@ -77,6 +65,21 @@ it('can parse functions with multiline conditions', () => {
   );
 });
 
+const getError = (source: string) =>
+  getDefined(parseBlock({ id: '', source }).errors[0]);
+
 it('can yield syntax errors', () => {
-  expect(() => testParse('syntax --/-- error')).toThrow(/No solutions/);
+  expect(getError('syntax --/-- error')).toBeDefined();
+});
+
+it('can explain mismatched bracket errors', () => {
+  expect(getError('(').bracketError).toMatchObject({
+    type: 'never-closed',
+    open: { value: '(' },
+  });
+  expect(getError('(]').bracketError).toMatchObject({
+    type: 'mismatched-brackets',
+    open: { value: '(' },
+    close: { value: ']' },
+  });
 });

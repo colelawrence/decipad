@@ -1,4 +1,7 @@
+const baseConfig = require('../../jest-base.config');
+
 module.exports = {
-  ...require('../../jest-base.config.js'),
+  ...baseConfig,
+  rootDir: __dirname,
   displayName: 'fnqueue',
 };

@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
 import { cssVar, p16Regular, setCssVar } from '../../primitives';
-import { SlateElementProps } from '../../utils';
 
 const placeholderStyles = css({
   cursor: 'text',
@@ -26,7 +25,7 @@ const styles = css(p16Regular, placeholderStyles, {
   padding: '6px 0',
 });
 
-interface ParagraphProps extends SlateElementProps {
+interface ParagraphProps {
   readonly children: ReactNode;
   /**
    * Note: Since this is not a plain-text element like an `<input>`,
@@ -39,10 +38,9 @@ interface ParagraphProps extends SlateElementProps {
 export const Paragraph = ({
   children,
   placeholder,
-  slateAttrs,
 }: ParagraphProps): ReturnType<React.FC> => {
   return (
-    <p aria-placeholder={placeholder} css={styles} {...slateAttrs}>
+    <p aria-placeholder={placeholder} css={styles}>
       <span>{children}</span>
     </p>
   );
