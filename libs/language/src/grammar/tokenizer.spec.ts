@@ -1,9 +1,10 @@
-import { parensCountingTokenizer, tokenize } from './tokenizer';
+import { tokenizer, tokenize } from './tokenizer';
 
 const testTokenizer = (input: string) =>
-  Array.from(parensCountingTokenizer.reset(input))
+  Array.from(tokenizer.reset(input))
     .map((t) => {
       if (t.type === 'statementSep') return '/stmt/';
+      if (t.type?.includes('keyword')) return `<${t.text}>`;
       return `${t.type}(${t.text.replace(/\n/g, '<newline>')})`;
     })
     .join(' ');
@@ -46,7 +47,7 @@ it('finds identifiers and keywords', () => {
   expect(testTokenizer('ident2With3Numbers4')).toMatchInlineSnapshot(
     `"identifier(ident2With3Numbers4)"`
   );
-  expect(testTokenizer('then')).toMatchInlineSnapshot(`"then keyword(then)"`);
+  expect(testTokenizer('then')).toMatchInlineSnapshot(`"<then>"`);
 });
 
 it('does not crash when it sees an invalid token', () => {
@@ -73,7 +74,7 @@ describe('extended tokenizer', () => {
   });
 
   it('can peek', () => {
-    const tokens = parensCountingTokenizer.reset('.,!');
+    const tokens = tokenizer.reset('.,!');
     expect(tokens.peek()).toMatchObject({ text: '.' });
     expect(tokens.peek()).toMatchObject({ text: '.' });
 
@@ -86,7 +87,7 @@ describe('extended tokenizer', () => {
   });
 
   it('can get the previous tok', () => {
-    const tokens = parensCountingTokenizer.reset('.,!');
+    const tokens = tokenizer.reset('.,!');
     expect(tokens.prev()).toEqual(undefined);
     tokens.next();
     expect(tokens.prev()).toMatchObject({ text: '.' });
@@ -100,7 +101,7 @@ describe('extended tokenizer', () => {
     expect(
       testTokenizer('if this\nthen that\nelse that')
     ).toMatchInlineSnapshot(
-      `"if keyword(if) ws( ) identifier(this) ws(<newline>) then keyword(then) ws( ) identifier(that) ws(<newline>) else keyword(else) ws( ) identifier(that)"`
+      `"<if> ws( ) identifier(this) ws(<newline>) <then> ws( ) identifier(that) ws(<newline>) <else> ws( ) identifier(that)"`
     );
 
     expect(testTokenizer('=>\n1')).toMatchInlineSnapshot(
@@ -110,14 +111,22 @@ describe('extended tokenizer', () => {
 
   it('can tell an if statement is still "opened"', () => {
     expect(testTokenizer('if\n1')).toMatchInlineSnapshot(
-      `"if keyword(if) ws(<newline>) number(1)"`
+      `"<if> ws(<newline>) number(1)"`
     );
     expect(testTokenizer('if 1 then 2\n')).toMatchInlineSnapshot(
-      `"if keyword(if) ws( ) number(1) ws( ) then keyword(then) ws( ) number(2) ws(<newline>)"`
+      `"<if> ws( ) number(1) ws( ) <then> ws( ) number(2) ws(<newline>)"`
     );
     // But after an "else" all bets are off
     expect(testTokenizer('if 1 then 2 else\n')).toMatchInlineSnapshot(
-      `"if keyword(if) ws( ) number(1) ws( ) then keyword(then) ws( ) number(2) ws( ) else keyword(else) /stmt/"`
+      `"<if> ws( ) number(1) ws( ) <then> ws( ) number(2) ws( ) <else> /stmt/"`
+    );
+  });
+});
+
+describe("extended tokenizer's mismatch tracker", () => {
+  it('will separate a statement if we are in an invalid state', () => {
+    expect(testTokenizer('(]\n')).toMatchInlineSnapshot(
+      `"leftParen(() rightSquareBracket(]) /stmt/"`
     );
   });
 });

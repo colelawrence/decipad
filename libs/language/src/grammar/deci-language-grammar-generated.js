@@ -4,7 +4,7 @@ function id(x) {
   return x[0];
 }
 
-import { parensCountingTokenizer as tokenizer } from './tokenizer';
+import { tokenizer } from './tokenizer';
 
 const initialReservedWords = new Set([
   'in',

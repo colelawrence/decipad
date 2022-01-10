@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { walk, zip } from '../utils';
-import { prettyPrintAST, prettyPrintSolutions } from './utils';
+import { prettyPrintAST } from './utils';
 import { parse } from '.';
 
 const walkWithUnits = (ast, fn) => {
@@ -58,18 +58,6 @@ function getCleanSolution(results, source, sourceMap, ast) {
   assert(results.length === 1);
 
   const result = results[0];
-
-  if (result.solutions.length === 0) {
-    throw new Error(`No solutions found for source "${source}"`);
-  }
-
-  if (result.solutions.length > 1) {
-    throw new Error(
-      `Ambiguous results.\nSource:\n  ${source}\nAlternatives:\n${prettyPrintSolutions(
-        result.solutions
-      )}`
-    );
-  }
 
   const solution = result.solutions[0];
 

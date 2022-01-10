@@ -1,3 +1,4 @@
+import { BracketError } from '..';
 import * as AST from './ast-types';
 
 export interface UnparsedBlock {
@@ -6,11 +7,10 @@ export interface UnparsedBlock {
 }
 
 export interface ParserError {
+  blockId: string;
   message: string;
-  details: string;
-  fileName: string;
-  lineNumber: number;
-  columnNumber: number;
+  bracketError?: BracketError;
+  token?: moo.Token;
 }
 
 export interface ParsedBlock {

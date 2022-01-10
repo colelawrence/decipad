@@ -1,4 +1,5 @@
 import moo from 'moo';
+import { getDefined } from '@decipad/utils';
 
 const parenTypes = ['Paren', 'SquareBracket', 'CurlyBracket', 'PartialIf'];
 
@@ -18,28 +19,56 @@ const closersToTypes: Record<string, ParenType> = {
   'else keyword': 'PartialIf',
 };
 
+export type BracketError =
+  | { type: 'never-opened'; close: moo.Token }
+  | { type: 'mismatched-brackets'; open: moo.Token; close: moo.Token }
+  | { type: 'never-closed'; open: moo.Token };
+
 /**
  * Keeps track of open ([{}])
  * Helps implement https://xkcd.com/859/
  */
 export class BracketCounter {
-  counts: Record<ParenType, number> = {
-    Paren: 0,
-    SquareBracket: 0,
-    CurlyBracket: 0,
-    PartialIf: 0,
-  };
+  openStack: moo.Token[] = [];
+  validationError?: BracketError;
+  get isValid() {
+    return !this.validationError;
+  }
   feed(tok?: moo.Token) {
-    if (!tok?.type) return;
+    if (!tok?.type || !this.isValid) return;
 
     const opener = openersToTypes[tok.type];
     const closer = closersToTypes[tok.type];
 
-    if (opener) this.counts[opener] += 1;
-    if (closer) this.counts[closer] -= 1;
+    if (opener) this.openStack.push(tok);
+    if (closer) {
+      const previouslyOpened = this.openStack.pop();
+      const previouslyOpenedType = openersToTypes[previouslyOpened?.type ?? ''];
+
+      if (!previouslyOpened) {
+        this.validationError = {
+          type: 'never-opened',
+          close: tok,
+        };
+      } else if (previouslyOpenedType !== closer) {
+        this.validationError = {
+          type: 'mismatched-brackets',
+          open: previouslyOpened,
+          close: tok,
+        };
+      }
+    }
   }
   noBrackets() {
-    return Object.values(this.counts).every((count) => count === 0);
+    return !this.isValid || this.openStack.length === 0;
+  }
+  finalize() {
+    if (this.isValid && this.openStack.length) {
+      this.validationError = {
+        type: 'never-closed',
+        open: getDefined(this.openStack.pop()),
+      };
+    }
   }
 }
 

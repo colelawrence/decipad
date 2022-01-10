@@ -1,23 +1,16 @@
-import { AST, Parser, InjectableExternalData } from '.';
+import { AST, InjectableExternalData } from '.';
 import { inferBlock, makeContext } from './infer';
 import { AnyMapping } from './utils';
-import { parse } from './parser';
-import { prettyPrintAST } from './parser/utils';
+import { parseBlock } from './parser';
 import { Realm, run } from './interpreter';
 
 export const parseOneBlock = (source: string): AST.Block => {
-  const parserInput: Parser.UnparsedBlock[] = [{ id: 'block-id', source }];
-  const [parsed] = parse(parserInput);
+  const parsed = parseBlock({ id: 'block-id', source });
 
   if (parsed.errors.length > 0) {
     throw new TypeError(parsed.errors[0].message);
   }
 
-  if (parsed.solutions.length !== 1) {
-    const solutions = parsed.solutions.map((s) => prettyPrintAST(s));
-    console.error(`Multiple solutions: \n${solutions.join('\n')}`);
-    throw new TypeError('Multiple solutions');
-  }
   return parsed.solutions[0];
 };
 

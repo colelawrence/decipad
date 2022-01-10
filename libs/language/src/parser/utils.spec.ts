@@ -1,5 +1,5 @@
 import { assign, block, c, col, l, prop, table } from '../utils';
-import { prettyPrintAST, prettyPrintSolutions } from './utils';
+import { prettyPrintAST } from './utils';
 
 it('can pretty print the AST', () => {
   expect(
@@ -32,17 +32,5 @@ it('can pretty print tables', () => {
     "(table
       Col1 (column 1 2 3)
       Col2 1)"
-  `);
-});
-
-it('can print multiple parsed solutions', () => {
-  expect(prettyPrintSolutions([l(1), l(2)])).toMatchInlineSnapshot(`
-    "Result:
-    1
-    -------
-    Result:
-    2
-    -------
-    "
   `);
 });

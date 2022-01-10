@@ -5,8 +5,7 @@ import Fraction from '@decipad/fraction';
 
 import { AST, buildType, Interpreter } from '.';
 import { getDefined, zip } from './utils';
-import { parse } from './parser';
-import { prettyPrintAST } from './parser/utils';
+import { parseBlock } from './parser';
 import { runOne, Realm } from './interpreter';
 import { inferStatement, makeContext as makeInferContext } from './infer';
 import { stringifyDate } from './date';
@@ -89,23 +88,7 @@ export const stringifyResult = (
 };
 
 const wrappedParse = (source: string): AST.Statement | null => {
-  const parsed = parse([
-    {
-      id: '<repl>',
-      source,
-    },
-  ])[0];
-
-  /* istanbul ignore if */
-  if (parsed.solutions.length > 1) {
-    console.error('Ambiguous parsed syntax!');
-
-    for (let i = 0; i < parsed.solutions.length; i++) {
-      console.error(`Solution ${i + 1}: `, prettyPrintAST(parsed.solutions[i]));
-    }
-
-    return null;
-  }
+  const parsed = parseBlock({ id: '<repl>', source });
 
   return parsed.solutions[0]?.args?.[0] ?? null;
 };
