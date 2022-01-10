@@ -70,7 +70,7 @@ InMeters = {
 }
 ==> {
   Name = [ 'Bhakta Construction', 'Precido Builders', 'MBD Firm' ],
-  Price = [ 8,073 £·m⁻², 9,688 £·m⁻², 4,683 £·m⁻² ]
+  Price = [ 8073 £·m⁻², 9688 £·m⁻², 4683 £·m⁻² ]
 }
 ```
 

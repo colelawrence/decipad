@@ -9,8 +9,8 @@ sidebar_position: 70
 You can now use a boolean value to perform an operation conditionally by using `if ... then ... else` like this:
 
 ```deci live
-IsTheSunDown = false
-if IsTheSunDown then "Dinner" else "Lunch"
+TheSunIsDown = false
+if TheSunIsDown then "Dinner" else "Lunch"
 ==> 'Lunch'
 ```
 
@@ -21,8 +21,8 @@ You can have more complex values inside `if ... then ... else` expressions, but 
 For instance, the following is invalid:
 
 ```deci live
-IsTheSunDown = true
-if IsTheSunDown then "dinner" else 337
+TheSunIsDown = true
+if TheSunIsDown then "dinner" else 337
 ==> This operation requires a string and a number was entered
 ```
 

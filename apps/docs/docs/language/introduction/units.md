@@ -128,7 +128,7 @@ SpeedInMetersSecond = SpeedInSeconds * KmToMeters
 
 We don't support all units. However you can create your own:
 
-```
+```deci live
 SpeedOfSound = 1234.8 km/h
 Bolt = 44.72 km/hour
 ceil(SpeedOfSound in Bolt)
@@ -139,7 +139,7 @@ ceil(SpeedOfSound in Bolt)
 
 Simplified units can end up as a proportion, for example:
 
-```
+```deci live
 45 sec/minute
 ==> 0.75
 ```
@@ -148,13 +148,13 @@ You can even use the unit simplifier for numbers.
 
 School children are often asked how many tens, or how many ones in a number:
 
-```
+```deci live
 Number = 23
 HowManyTens = round(Number in 10)
 ==> 2
 ```
 
-```
+```deci live
 Number = 23
 HowManyTens = round(Number in 10)
 HowManyOnes = Number % 10
@@ -163,7 +163,7 @@ HowManyOnes = Number % 10
 
 ## Custom conversions
 
-An interesting aspect of how units work in Deci is that you can define your  units and customize conversions according to your needs.
+An interesting aspect of how units work in Deci is that you can define your units and customize conversions according to your needs.
 
 For instance, in Decipad a cup is equivalent to 0.25 litres, which is the standard UK metric:
 
@@ -189,7 +189,6 @@ Glass = 0.33 L
 Sugar in Glass
 ==> 0.(75) Glasses
 ```
-
 
 ### Supported units
 

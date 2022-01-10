@@ -21,7 +21,5 @@ You = 50kg
 Banana = 118g
 
 round(You in Banana)
-==> units needs to be 1
+==> 424 Bananas
 ```
-
-No pun intended.
