@@ -5,6 +5,7 @@ export interface Unit {
   exp: bigint;
   multiplier: Fraction;
   known: boolean;
+  aliasFor?: Units;
 }
 
 export interface Units {

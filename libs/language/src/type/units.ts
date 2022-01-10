@@ -107,7 +107,10 @@ const pluralizeUnit = (baseUnit: Unit, value: bigint | number = 2n): Unit => {
   });
 };
 
-export const matchUnitArrays = (units1: Units | null, units2: Units | null) => {
+export const matchUnitArrays = (
+  units1: Units | null,
+  units2: Units | null
+): boolean => {
   const [expandedUnit1] = expandUnits(units1);
   const expandedUnits1 = expandedUnit1?.args ?? [];
   const [expandedUnit2] = expandUnits(units2);

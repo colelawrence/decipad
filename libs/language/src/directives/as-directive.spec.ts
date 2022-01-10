@@ -1,8 +1,10 @@
 import { build as t } from '../type';
-import { c, col, l, u, ne } from '../utils';
+import { c, col, l, U, u, ne, r, F } from '../utils';
 import { date } from '../date';
 import { getType, getValue } from './as-directive';
 import { testGetType, testGetValue } from './testUtils';
+import { makeContext } from '../infer';
+import * as expand from './expand';
 
 const year = u('years');
 
@@ -22,6 +24,23 @@ describe('getType', () => {
   it('converts unitless column to other unitful column', async () => {
     expect(await testGetType(getType, col(l(1), l(2)), ne(1, 'years'))).toEqual(
       t.column(t.number([year]), 2)
+    );
+  });
+
+  it('assigns the ref name as the target unit', async () => {
+    const ctx = makeContext();
+    ctx.stack.set(
+      'nuno',
+      t.number(U('g', { known: true, multiplier: F(1000) }))
+    );
+    const quantity = ne(2, 'ton');
+    const ref = r('nuno');
+    expect(await expand.getType(ctx, getType, [quantity, ref])).toMatchObject(
+      t.number(
+        U(
+          u('nuno', { known: false, aliasFor: U('g', { multiplier: F(1000) }) })
+        )
+      )
     );
   });
 });
