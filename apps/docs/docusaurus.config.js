@@ -62,7 +62,6 @@ const config = {
             position: 'left',
             label: 'Getting started',
           },
-          { to: '/blog', label: 'Blog', position: 'left' },
         ],
       },
       footer: {
@@ -74,10 +73,6 @@ const config = {
               {
                 label: 'Getting started',
                 to: '/docs/docs/introduction/introduction-to-the-language',
-              },
-              {
-                label: 'Blog',
-                to: '/docs/blog',
               },
             ],
           },
