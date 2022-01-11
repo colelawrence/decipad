@@ -1,15 +1,15 @@
 import { getDefined } from '@decipad/utils';
 import { Realm } from './Realm';
 import { DataTable } from '../data/DataTable';
-import { Column, Value } from './Value';
+import { Column, Table, Value } from './Value';
 
 export async function evaluateData(
   realm: Realm,
   data: DataTable
-): Promise<Value> {
+): Promise<Table> {
   return realm.stack.withPush(async () => {
     const colNames: string[] = [];
-    const colValues: Value[] = [];
+    const colValues: Column[] = [];
 
     for (let colIndex = 0; colIndex < data.numCols; colIndex += 1) {
       const column = getDefined(
@@ -26,6 +26,6 @@ export async function evaluateData(
       colValues.push(Column.fromValues(values));
     }
 
-    return Column.fromNamedValues(colValues, colNames);
+    return Table.fromNamedColumns(colValues, colNames);
   });
 }

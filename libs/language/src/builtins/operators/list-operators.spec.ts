@@ -1,4 +1,4 @@
-import { Column, fromJS } from '../../interpreter/Value';
+import { Table, fromJS } from '../../interpreter/Value';
 import { build as t } from '../../type';
 import { U } from '../../utils';
 import { listOperators as operators } from './list-operators';
@@ -177,20 +177,12 @@ describe('list operators', () => {
   });
 
   it('reverses a table', () => {
-    const table = t.table({
-      length: 3,
-      columnNames: ['indexcolumn'],
-      columnTypes: [t.number(U('bananas'))],
-    });
-    expect(operators.reverse.functorNoAutomap!([table])).toMatchObject(table);
-
-    const tableValue = Column.fromValues([
-      fromJS([1, 2, 3]),
-      fromJS([6, 4, 5]),
-    ]);
-    expect(
-      operators.reverse.fnValuesNoAutomap?.([tableValue], [table]).getData()
-    ).toMatchInlineSnapshot(`
+    const tableValue = Table.fromNamedColumns(
+      [fromJS([1, 2, 3]), fromJS([6, 4, 5])],
+      ['A', 'B']
+    );
+    expect(operators.reverse.fnValuesNoAutomap?.([tableValue]).getData())
+      .toMatchInlineSnapshot(`
       Array [
         Array [
           Fraction(3),

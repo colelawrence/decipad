@@ -1,6 +1,6 @@
 // TODO fix types
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { buildType, Column, Date } from '..';
+import { buildType, Column, Table, Date } from '..';
 import { parseUTCDate } from '../date';
 import { fromJS } from '../interpreter/Value';
 import { ComputationRealm } from './ComputationRealm';
@@ -38,7 +38,7 @@ it('getIndexLabels', () => {
   );
   realm.interpreterRealm.stack.set(
     'DimName',
-    Column.fromNamedValues(
+    Table.fromNamedColumns(
       [fromJS(['One', 'Two', 'Three']), fromJS([1, 2, 3])],
       ['Names', 'Numbers']
     )
@@ -68,7 +68,7 @@ it('getIndexLabels with numbers', () => {
 
   realm.interpreterRealm.stack.set(
     'Diabetes',
-    Column.fromNamedValues([fromJS([1, 2])], ['Nums'])
+    Table.fromNamedColumns([fromJS([1, 2])], ['Nums'])
   );
 
   expect(realm.getIndexLabels()).toMatchInlineSnapshot(`
@@ -94,7 +94,7 @@ it('getIndexLabels with dates', () => {
 
   realm.interpreterRealm.stack.set(
     'Dates',
-    Column.fromNamedValues(
+    Table.fromNamedColumns(
       [
         Column.fromValues([
           Date.fromDateAndSpecificity(parseUTCDate('2020-01'), 'month'),

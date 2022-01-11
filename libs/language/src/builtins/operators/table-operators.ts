@@ -2,7 +2,7 @@ import { getDefined } from '@decipad/utils';
 import produce from 'immer';
 import { dequal } from 'dequal';
 import { getInstanceof, zip } from '../../utils';
-import { Column } from '../../interpreter/Value';
+import { Column, Table, Row } from '../../interpreter/Value';
 import { RuntimeError } from '../../interpreter/RuntimeError';
 import { BuiltinSpec } from '../interfaces';
 import { Type, build as t } from '../../type';
@@ -11,30 +11,27 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
   lookup: {
     argCount: 2,
     functorNoAutomap: ([table, cond]) => {
-      return Type.combine(
-        table.isTable().withMinimumColumnCount(1),
-        Type.either(
-          cond.isColumn().reduced().isScalar('boolean'),
-          getDefined(
-            table.columnTypes?.[0]?.sameAs(cond),
-            'no first column on table'
-          )
-        ),
-        () =>
-          t.row(
-            getDefined(table.columnTypes, `no column types in ${table}`),
-            getDefined(table.columnNames, `no column names in ${table}`)
-          )
-      );
+      return table
+        .isTable()
+        .withMinimumColumnCount(1)
+        .mapType((table) => {
+          const columnTypes = getDefined(table.columnTypes);
+          const columnNames = getDefined(table.columnNames);
+
+          return Type.either(
+            cond.isColumn().reduced().isScalar('boolean'),
+            columnTypes[0].sameAs(cond)
+          ).mapType(() => t.row(columnTypes, columnNames));
+        });
     },
     fnValuesNoAutomap: ([_table, needle]) => {
-      const table = getInstanceof(_table, Column);
+      const table = getInstanceof(_table, Table);
       let rowIndex: number;
       if (needle instanceof Column) {
         rowIndex = needle.getData().findIndex(Boolean);
       } else {
         const needleVal = needle.getData();
-        const firstColumn = getInstanceof(table.values[0], Column);
+        const firstColumn = table.columns[0];
 
         rowIndex = firstColumn.values.findIndex(
           (value) => value.getData() === needleVal
@@ -45,28 +42,14 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
         throw new RuntimeError(`Could not find a row with the given condition`);
       }
 
-      return Column.fromNamedValues(
-        Array.from(
-          table.values,
-          (column) => (column as Column).values[rowIndex]
-        ),
-        table.valueNames as string[]
+      return Row.fromNamedCells(
+        table.columns.map((column) => column.values[rowIndex]),
+        table.columnNames
       );
     },
   },
   concatenate: {
     argCount: 2,
-    fnValues: ([tab1, tab2]) => {
-      const { values: columns1, valueNames } = getInstanceof(tab1, Column);
-      const { values: columns2 } = getInstanceof(tab2, Column);
-
-      return Column.fromNamedValues(
-        zip(columns1 as Column[], columns2 as Column[]).map(([c1, c2]) =>
-          Column.fromValues([...c1.values, ...c2.values])
-        ),
-        getDefined(valueNames)
-      );
-    },
     functor: ([tab1, tab2]) =>
       Type.combine(tab1.isTable(), tab2.isTable()).mapType(() => {
         if (
@@ -87,6 +70,17 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
           });
         }
       }),
+    fnValues: ([tab1, tab2]) => {
+      const { columns: columns1, columnNames } = getInstanceof(tab1, Table);
+      const { columns: columns2 } = getInstanceof(tab2, Table);
+
+      return Table.fromNamedColumns(
+        zip(columns1, columns2).map(([c1, c2]) =>
+          Column.fromValues([...c1.values, ...c2.values])
+        ),
+        getDefined(columnNames)
+      );
+    },
   },
 
   sortby: {
@@ -96,8 +90,8 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
     fnValuesNoAutomap: ([_table, _column]) => {
       const column = getInstanceof(_column, Column);
       const sortMap = column.sortMap();
-      const table = getInstanceof(_table, Column);
-      return table.applyMapToEach(sortMap);
+      const table = getInstanceof(_table, Table);
+      return table.mapColumns((col) => col.applyMap(sortMap));
     },
   },
 
@@ -113,9 +107,9 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
           })
       ),
     fnValuesNoAutomap: ([_table, _column]) => {
-      const column = getInstanceof(_column, Column);
-      const table = getInstanceof(_table, Column);
-      return table.applyFilterMapToEach(column.getData() as boolean[]);
+      const filterMap = getInstanceof(_column, Column).getData() as boolean[];
+      const table = getInstanceof(_table, Table);
+      return table.mapColumns((col) => col.applyFilterMap(filterMap));
     },
   },
 };

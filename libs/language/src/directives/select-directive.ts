@@ -1,26 +1,8 @@
-import { getDefined, zip } from '@decipad/utils';
-import { AST, Column } from '..';
+import { getDefined } from '@decipad/utils';
+import { AST, Table } from '..';
 import { build as t } from '../type';
-import { getInstanceof, getOfType } from '../utils';
+import { filterUnzipped, getInstanceof, getOfType } from '../utils';
 import { Directive } from './types';
-
-const zipFilterUnzip = <T>(
-  keys: string[] | null,
-  values: T[] | null,
-  acceptable: string[]
-) => {
-  const outKeys: string[] = [];
-  const outValues: T[] = [];
-
-  for (const [key, value] of zip(getDefined(keys), getDefined(values))) {
-    if (acceptable.includes(key)) {
-      outKeys.push(key);
-      outValues.push(value);
-    }
-  }
-
-  return [outKeys, outValues] as const;
-};
 
 const cleanAST = (...args: AST.Node[]) =>
   [
@@ -40,10 +22,10 @@ export const select: Directive = {
     return table.mapType((table) => {
       const { indexName, tableLength } = table;
 
-      const [columnNames, columnTypes] = zipFilterUnzip(
-        table.columnNames,
-        table.columnTypes,
-        columns
+      const [columnNames, columnTypes] = filterUnzipped(
+        getDefined(table.columnNames),
+        getDefined(table.columnTypes),
+        (key) => columns.includes(key)
       );
 
       return t.table({
@@ -57,14 +39,8 @@ export const select: Directive = {
   async getValue({ evaluate }, ...args) {
     const [tableRef, columns] = cleanAST(...args);
 
-    const table = getInstanceof(await evaluate(tableRef), Column);
+    const table = getInstanceof(await evaluate(tableRef), Table);
 
-    const [names, values] = zipFilterUnzip(
-      table.valueNames,
-      table.values,
-      columns
-    );
-
-    return Column.fromNamedValues(values, names);
+    return table.filterColumns((colName) => columns.includes(colName));
   },
 };

@@ -2,7 +2,7 @@ import produce from 'immer';
 import { getDefined } from '@decipad/utils';
 import { BuiltinSpec } from '../interfaces';
 import { Type } from '../../type';
-import { Column } from '../../interpreter/Value';
+import { Column, Table } from '../../interpreter/Value';
 import { getInstanceof } from '../../utils';
 
 export const tableGroupingOperators: { [fname: string]: BuiltinSpec } = {
@@ -37,18 +37,19 @@ export const tableGroupingOperators: { [fname: string]: BuiltinSpec } = {
           })
       ),
     fnValuesNoAutomap: ([_table, _byColumn]) => {
-      const table = getInstanceof(_table, Column);
+      const table = getInstanceof(_table, Table);
       const byColumn = getInstanceof(_byColumn, Column);
 
       const sortMap = byColumn.sortMap();
       const sortedColumn = byColumn.applyMap(sortMap);
       const slices = sortedColumn.contiguousSlices();
-      const slicedTables = slices.map(([sliceStartIndex, sliceEndIndex]) => {
-        const filteredTable = table.filter((col) => col !== byColumn);
-        return filteredTable
-          .applyMapToEach(sortMap)
-          .sliceEach(sliceStartIndex, sliceEndIndex);
-      });
+      const slicedTables = slices.map(([sliceStartIndex, sliceEndIndex]) =>
+        table
+          .filterColumns((_colName, col) => col !== byColumn)
+          .mapColumns((col) =>
+            col.applyMap(sortMap).slice(sliceStartIndex, sliceEndIndex)
+          )
+      );
       const uniqueIndexes = slices.map(([uniqueIndex]) => uniqueIndex);
       const uniqueSortedColumn = sortedColumn.applyMap(uniqueIndexes);
       const columnsForNewTable = [

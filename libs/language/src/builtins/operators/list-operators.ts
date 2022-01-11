@@ -1,10 +1,10 @@
 import Fraction from '@decipad/fraction';
 import { getDefined } from '@decipad/utils';
 import produce from 'immer';
-import { Value, Column, fromJS } from '../../interpreter/Value';
+import { Value, Column, Table, fromJS } from '../../interpreter/Value';
 import { Type, build as t } from '../../type';
-import { BuiltinSpec } from '../interfaces';
 import { getInstanceof } from '../../utils';
+import { BuiltinSpec } from '../interfaces';
 import { approximateSubsetSumIndices } from '../table';
 
 export const listOperators: Record<string, BuiltinSpec> = {
@@ -157,24 +157,22 @@ export const listOperators: Record<string, BuiltinSpec> = {
   reverse: {
     argCount: 1,
     functorNoAutomap: ([column]) =>
-      column.isTable().errorCause ? column.isColumn() : column.isTable(),
-    fnValuesNoAutomap: ([_column], columnTypes) => {
-      const column = getInstanceof(_column, Column);
-      const columnType = getDefined(getDefined(columnTypes)[0]);
-      if (columnType.isTable().errorCause == null) {
-        return column.reverseEach();
+      Type.either(column.isColumn(), column.isTable()),
+    fnValuesNoAutomap: ([column]) => {
+      if (column instanceof Table) {
+        return column.mapColumns((column) => column.reverse());
       }
-      return column.reverse();
+      return getInstanceof(column, Column).reverse();
     },
   },
 
   // Table stuff
   approximatesubsetsum: {
     argCount: 3,
-    fnValues: ([upperBound, table, columnName]) => {
-      const tableColumn = getInstanceof(table, Column);
-      const valueNames = getDefined(tableColumn.valueNames);
-      const columnIndex = valueNames.indexOf(columnName.getData() as string);
+    fnValues: ([upperBound, _table, columnName]) => {
+      const table = getInstanceof(_table, Table);
+      const { columnNames } = table;
+      const columnIndex = columnNames.indexOf(columnName.getData() as string);
       if (columnIndex < 0) {
         throw new Error(`Column ${columnName} does not exist`);
       }
@@ -185,15 +183,8 @@ export const listOperators: Record<string, BuiltinSpec> = {
         columnIndex
       );
 
-      return Column.fromNamedValues(
-        tableColumn.values.map((column) =>
-          Column.fromValues(
-            getInstanceof(column, Column).values.filter((_, i) =>
-              indices.includes(i)
-            )
-          )
-        ),
-        getDefined(valueNames)
+      return table.mapColumns((column) =>
+        Column.fromValues(column.values.filter((_, i) => indices.includes(i)))
       );
     },
     functor: ([upperBound, table, columnName]) =>

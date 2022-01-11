@@ -1,4 +1,4 @@
-import { Column, fromJS } from '../../interpreter/Value';
+import { Column, Table, fromJS } from '../../interpreter/Value';
 import { build as t } from '../../type';
 import { tableGroupingOperators as operators } from './table-grouping-operators';
 
@@ -25,7 +25,7 @@ describe('table splitting and grouping operators', () => {
     const initialIndexColumn = Column.fromValues(
       ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'].map(fromJS)
     );
-    const table = Column.fromNamedValues(
+    const table = Table.fromNamedColumns(
       [initialIndexColumn, groupByColumn],
       ['initial_index', 'other_column']
     );

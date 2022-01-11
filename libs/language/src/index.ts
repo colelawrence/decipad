@@ -19,8 +19,16 @@ export { inferBlock, makeContext } from './infer';
 export type { Context } from './infer';
 export { Interpreter } from './interpreter';
 export * from './run';
-export { Scalar, Date, Range, TimeQuantity, Column } from './interpreter/Value';
 export { setErrorReporter } from './reporting';
+export {
+  Scalar,
+  Date,
+  Range,
+  TimeQuantity,
+  Column,
+  Table,
+  Row,
+} from './interpreter/Value';
 
 export { prettyPrintAST } from './parser/utils';
 export type { SerializedType, SerializedTypeKind } from './type';

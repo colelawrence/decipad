@@ -101,7 +101,6 @@ describe('getValue', () => {
             "value": Fraction(1.8(641135767120019088523025530899546647578143)),
           },
         ],
-        "valueNames": null,
       }
     `);
   });

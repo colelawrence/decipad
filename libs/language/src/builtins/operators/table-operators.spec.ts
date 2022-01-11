@@ -1,4 +1,9 @@
-import { Column, Date as DateValue, fromJS } from '../../interpreter/Value';
+import {
+  Column,
+  Table,
+  Date as DateValue,
+  fromJS,
+} from '../../interpreter/Value';
 import { build as t } from '../../type';
 import { tableOperators as operators } from './table-operators';
 import { F, U } from '../../utils';
@@ -8,12 +13,12 @@ describe('table operators', () => {
     expect(
       operators.concatenate
         .fnValues?.([
-          Column.fromNamedValues(
+          Table.fromNamedColumns(
             [fromJS([1, 2, 3]), fromJS(['Hello', 'World', 'Sup'])],
             ['Numbers', 'Strings']
           ),
 
-          Column.fromNamedValues(
+          Table.fromNamedColumns(
             [fromJS([4]), fromJS(['Mate'])],
             ['Numbers', 'Strings']
           ),
@@ -56,7 +61,7 @@ describe('table operators', () => {
       columnNames: ['Index', 'Value'],
       columnTypes: [t.string(), t.number()],
     });
-    const tableValue = Column.fromNamedValues(
+    const tableValue = Table.fromNamedColumns(
       [fromJS(['The Thing']), fromJS([12345])],
       ['Index', 'Value']
     );
@@ -83,7 +88,7 @@ describe('table operators', () => {
       columnNames: ['Index', 'Value'],
       columnTypes: [t.string(), t.date('day')],
     });
-    const tableValue = Column.fromNamedValues(
+    const tableValue = Table.fromNamedColumns(
       [
         fromJS(['The Thing']),
         Column.fromValues([
@@ -118,7 +123,7 @@ describe('table operators', () => {
       columnNames: ['col1', 'col2'],
       columnTypes: [t.string(), t.number()],
     });
-    const tableValue = Column.fromNamedValues(
+    const tableValue = Table.fromNamedColumns(
       [fromJS(['a', 'b', 'c']), fromJS([1, 2, 3])],
       ['Index', 'Value']
     );
@@ -149,11 +154,11 @@ describe('table operators', () => {
       table
     );
 
-    const tableValue = Column.fromValues([
-      fromJS([1, 2, 3]),
-      fromJS([6, 4, 5]),
-    ]);
-    const columnValue = tableValue.atIndex(1);
+    const tableValue = Table.fromNamedColumns(
+      [fromJS([1, 2, 3]), fromJS([6, 4, 5])],
+      ['A', 'B']
+    );
+    const columnValue = tableValue.getColumn('B');
     expect(
       operators.sortby.fnValuesNoAutomap?.([tableValue, columnValue]).getData()
     ).toMatchInlineSnapshot(`
@@ -187,11 +192,14 @@ describe('table operators', () => {
       })
     );
 
-    const tableValue = Column.fromValues([
-      fromJS([1, 2, 3, 4, 5, 6]),
-      fromJS([false, true, true, false, false, true]),
-    ]);
-    const columnValue = tableValue.atIndex(1);
+    const tableValue = Table.fromNamedColumns(
+      [
+        fromJS([1, 2, 3, 4, 5, 6]),
+        fromJS([false, true, true, false, false, true]),
+      ],
+      ['Nums', 'Bools']
+    );
+    const columnValue = tableValue.getColumn('Bools');
     expect(
       operators.filter.fnValuesNoAutomap?.([tableValue, columnValue]).getData()
     ).toMatchInlineSnapshot(`

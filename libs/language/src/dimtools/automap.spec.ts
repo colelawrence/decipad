@@ -564,11 +564,11 @@ describe('automapValues', () => {
       columnTypes: [t.number()],
       length: 123,
     });
-    const tableVal = Values.Column.fromNamedValues(
+    const tableVal = Values.Table.fromNamedColumns(
       [Values.fromJS([1])],
       ['Col']
     );
-    const otherTable = Values.Column.fromNamedValues(
+    const otherTable = Values.Table.fromNamedColumns(
       [Values.fromJS([2])],
       ['Col']
     );

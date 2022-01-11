@@ -1,4 +1,4 @@
-import { AST, Column, ExternalDataMap } from '..';
+import { AST, Table, ExternalDataMap } from '..';
 import { stringifyDate } from '../date';
 import { makeContext as makeInferContext } from '../infer';
 import { Realm } from '../interpreter';
@@ -71,8 +71,8 @@ export class ComputationRealm {
         const table = this.interpreterRealm.stack.top.get(name);
         const [colType] = type.columnTypes;
 
-        if (table instanceof Column && table.values[0] instanceof Column) {
-          const data = table.values[0].getData();
+        if (table instanceof Table) {
+          const data = table.columns[0].getData();
 
           if (colType.type === 'string' || colType.type === 'number') {
             labels = (data as string[]).map((s) => String(s));

@@ -9,7 +9,7 @@ import {
 import { evaluate } from './evaluate';
 import { mapWithPrevious } from './previous';
 import { Realm } from './Realm';
-import { Column, Value } from './Value';
+import { Column, Row, Table, Value } from './Value';
 
 const isRecursiveReference = (expr: AST.Expression) =>
   expr.type === 'function-call' &&
@@ -30,7 +30,7 @@ export const usesRecursion = (expr: AST.Expression) => {
 const atIndex = (v: Value, index: number): Value => {
   if (!(v instanceof Column)) return v;
 
-  return (v as Column).atIndex(index);
+  return v.atIndex(index);
 };
 
 export const evaluateTableColumn = async (
@@ -59,7 +59,7 @@ const repeat = <T>(value: T, length: number) =>
 export const evaluateTable = async (
   realm: Realm,
   table: AST.Table
-): Promise<Value> => {
+): Promise<Table> => {
   const colNames: string[] = [];
   const colValues: Value[] = [];
   const { args: items } = table;
@@ -71,7 +71,7 @@ export const evaluateTable = async (
 
   return realm.stack.withPush(async () => {
     const addColumn = (name: string, value: Value) => {
-      if (!(value instanceof Column) || value.valueNames != null) {
+      if (!(value instanceof Column)) {
         value = Column.fromValues(repeat(value, tableLength));
       }
 
@@ -97,13 +97,21 @@ export const evaluateTable = async (
         // eslint-disable-next-line no-await-in-loop
         const baseTable = await evaluate(realm, item.args[0]);
 
-        const { valueNames, values } = getInstanceof(baseTable, Column);
-        for (const [name, value] of zip(getDefined(valueNames), values)) {
+        const { columnNames, columns } = getInstanceof(baseTable, Table);
+        for (const [name, value] of zip(getDefined(columnNames), columns)) {
           addColumn(name, value);
         }
       }
     }
 
-    return Column.fromNamedValues(colValues, colNames);
+    return Table.fromNamedColumns(colValues, colNames);
   });
+};
+
+export const getProperty = (object: Value, property: string): Value => {
+  if (object instanceof Row) {
+    return object.getCell(property);
+  } else {
+    return getInstanceof(object, Table).getColumn(property);
+  }
 };

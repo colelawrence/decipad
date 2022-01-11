@@ -5,7 +5,7 @@ import { runCode } from './run';
 import {
   runCodeForVariables,
   objectToTableType,
-  objectToTupleValue,
+  objectToTableValue,
   runAST,
 } from './testUtils';
 import { parseUTCDate } from './date';
@@ -264,7 +264,7 @@ describe('Tables', () => {
         Column1: t.number(),
         Column2: t.number(),
       }),
-      value: objectToTupleValue({
+      value: objectToTableValue({
         Column1: [F(11, 10), F(22, 10), F(33, 10)],
         Column2: [F(22, 10), F(44, 10), F(66, 10)],
       }),
@@ -284,7 +284,7 @@ describe('Tables', () => {
         Column1: t.number(),
         Column2: t.number(),
       }),
-      value: objectToTupleValue({
+      value: objectToTableValue({
         Column1: [F(11, 10), F(22, 10), F(33, 10)],
         Column2: [F(11, 10), F(33, 10), F(66, 10)],
       }),
@@ -306,7 +306,7 @@ describe('Tables', () => {
         Column2: t.number(),
         Column3: t.boolean(),
       }),
-      value: objectToTupleValue({
+      value: objectToTableValue({
         Column1: [F(1), F(2), F(3)],
         Column2: [new Fraction(1, 2), 1n, new Fraction(3, 2)],
         Column3: [false, false, true],

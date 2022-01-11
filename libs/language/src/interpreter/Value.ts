@@ -2,7 +2,7 @@
 import Fraction from '@decipad/fraction';
 import { singular } from 'pluralize';
 import { Time, Interpreter, Units } from '..';
-import { getDefined } from '../utils';
+import { filterUnzipped, getDefined, getInstanceof } from '../utils';
 import {
   addTimeQuantity,
   cleanDate,
@@ -30,7 +30,9 @@ export type NonColumn =
   | BooleanValue
   | Range
   | Date
-  | TimeQuantity;
+  | TimeQuantity
+  | Table
+  | Row;
 export type AnyValue = NonColumn | Column;
 
 const MAX_ITERATIONS = 10_000; // Failsafe
@@ -225,7 +227,6 @@ export type SlicesMap = SliceRange[];
 
 export class Column implements Value {
   readonly _values: Value[];
-  valueNames: string[] | null = null;
 
   constructor(values: Column['values']) {
     this._values = values;
@@ -233,12 +234,6 @@ export class Column implements Value {
 
   static fromValues(values: Value[]): Column {
     return new Column(values);
-  }
-
-  static fromNamedValues(values: Value[], names: string[] | null): Column {
-    const column = Column.fromValues(values);
-    column.valueNames = names;
-    return column;
   }
 
   static fromSequence(startV: Value, endV: Value, byV: Value): Column {
@@ -295,19 +290,6 @@ export class Column implements Value {
     return this.values.map((v) => v.getData());
   }
 
-  filter(fn: (value: Value, index?: number) => boolean): Column {
-    const names = this.valueNames;
-    const newNames: string[] = [];
-    const newValues = this.values.filter((value, index) => {
-      const accept = fn(value, index);
-      if (accept && names) {
-        newNames.push(names[index]);
-      }
-      return accept;
-    });
-    return Column.fromNamedValues(newValues, names ? newNames : null);
-  }
-
   filterMap(fn: (value: Value, index?: number) => boolean): boolean[] {
     return this.values.map(fn);
   }
@@ -338,52 +320,16 @@ export class Column implements Value {
     return MappedColumn.fromColumnAndMap(this, this.reverseMap());
   }
 
-  reverseEach(): Column {
-    return Column.fromNamedValues(
-      this.values.map((value) =>
-        value instanceof Column ? value.reverse() : value
-      ),
-      this.valueNames
-    );
-  }
-
   slice(begin: number, end: number): ColumnSlice {
     return ColumnSlice.fromColumnAndRange(this, begin, end);
-  }
-
-  sliceEach(begin: number, end: number): Column {
-    return Column.fromNamedValues(
-      this.values.map((value) =>
-        value instanceof Column ? value.slice(begin, end) : value
-      ),
-      this.valueNames
-    );
   }
 
   applyMap(map: number[]): Column {
     return MappedColumn.fromColumnAndMap(this, map);
   }
 
-  applyMapToEach(map: number[]): Column {
-    return Column.fromNamedValues(
-      this.values.map((value) =>
-        value instanceof Column ? value.applyMap(map) : value
-      ),
-      this.valueNames
-    );
-  }
-
   applyFilterMap(map: boolean[]): Column {
     return FilteredColumn.fromColumnAndMap(this, map);
-  }
-
-  applyFilterMapToEach(map: boolean[]): Column {
-    return Column.fromNamedValues(
-      this.values.map((value) =>
-        value instanceof Column ? value.applyFilterMap(map) : value
-      ),
-      this.valueNames
-    );
   }
 
   contiguousSlices(): SlicesMap {
@@ -418,9 +364,7 @@ export class ColumnSlice extends Column {
   }
 
   static fromColumnAndRange(column: Column, begin: number, end: number) {
-    const newColumn = new ColumnSlice(column.values, begin, end);
-    newColumn.valueNames = column.valueNames;
-    return newColumn;
+    return new ColumnSlice(column.values, begin, end);
   }
 
   get values(): Value[] {
@@ -441,9 +385,7 @@ export class MappedColumn extends Column {
   }
 
   static fromColumnAndMap(column: Column, map: number[]): MappedColumn {
-    const newColumn = new MappedColumn(column.values, map);
-    newColumn.valueNames = column.valueNames;
-    return newColumn;
+    return new MappedColumn(column.values, map);
   }
 }
 
@@ -468,9 +410,70 @@ export class FilteredColumn extends Column {
   }
 
   static fromColumnAndMap(column: Column, map: boolean[]): FilteredColumn {
-    const newColumn = new FilteredColumn(column.values, map);
-    newColumn.valueNames = column.valueNames;
-    return newColumn;
+    return new FilteredColumn(column.values, map);
+  }
+}
+
+export class Table implements Value {
+  columns: Column[];
+  columnNames: string[];
+
+  constructor(values: Column[], columnNames: string[]) {
+    this.columns = values;
+    this.columnNames = columnNames;
+  }
+
+  static fromNamedColumns(values: Value[], columnNames: string[]) {
+    const columns = values.map((v) => getInstanceof(v, Column));
+    return new Table(columns, columnNames);
+  }
+
+  getColumn(name: string) {
+    const index = this.columnNames.indexOf(name);
+    if (index < 0 || index >= this.columns.length) {
+      throw new RuntimeError(`Missing column ${name}`);
+    }
+    return this.columns[index];
+  }
+
+  getData() {
+    return this.columns.map((v) => v.getData());
+  }
+
+  mapColumns(mapFn: (col: Column, index: number) => Column): Table {
+    return Table.fromNamedColumns(this.columns.map(mapFn), this.columnNames);
+  }
+
+  filterColumns(fn: (colName: string, col: Column) => boolean): Table {
+    const [names, columns] = filterUnzipped(this.columnNames, this.columns, fn);
+
+    return Table.fromNamedColumns(columns, names);
+  }
+}
+
+export class Row implements Value {
+  cells: Value[];
+  cellNames: string[];
+
+  constructor(values: Value[], cellNames: string[]) {
+    this.cells = values;
+    this.cellNames = cellNames;
+  }
+
+  static fromNamedCells(cells: Value[], cellNames: string[]) {
+    return new Row(cells, cellNames);
+  }
+
+  getCell(name: string): Value {
+    const index = this.cellNames.indexOf(name);
+    if (index < 0 || index >= this.cells.length) {
+      throw new RuntimeError(`Missing cell ${name}`);
+    }
+    return this.cells[index];
+  }
+
+  getData() {
+    return this.cells.map((v) => v.getData());
   }
 }
 

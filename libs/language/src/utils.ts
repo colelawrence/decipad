@@ -245,6 +245,28 @@ export const zip = <K, V>(keys: K[], values: V[]): [K, V][] => {
   return out;
 };
 
+/** Filter two same-length arrays. Calls `filterFn` with each pair. */
+export const filterUnzipped = <K, V>(
+  keys: K[],
+  values: V[],
+  filterFn: (key: K, val: V) => boolean
+): [K[], V[]] => {
+  if (keys.length !== values.length) {
+    throw new Error('panic: cannot filter arrays of different lengths');
+  }
+
+  const outKeys: K[] = [];
+  const outValues: V[] = [];
+  for (let i = 0; i < keys.length; i++) {
+    if (filterFn(keys[i], values[i])) {
+      outKeys.push(keys[i]);
+      outValues.push(values[i]);
+    }
+  }
+
+  return [outKeys, outValues];
+};
+
 export function* enumerate<T>(items: Iterable<T>): Generator<[number, T]> {
   let index = 0;
   for (const item of items) {

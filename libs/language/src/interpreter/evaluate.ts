@@ -8,7 +8,7 @@ import { expandDirectiveToValue } from '../directives';
 
 import { Realm } from './Realm';
 import { Scalar, Range, Date, Column, Value, UnknownValue } from './Value';
-import { evaluateTable } from './table';
+import { evaluateTable, getProperty } from './table';
 import { evaluateData } from './data';
 
 // Gets a single value from an expanded AST.
@@ -133,10 +133,8 @@ export async function evaluate(
       return evaluateTable(realm, node);
     }
     case 'property-access': {
-      const table = (await evaluate(realm, node.args[0])) as Column;
-      const valueIndex = getDefined(table.valueNames?.indexOf(node.args[1]));
-
-      return getDefined(table.values[valueIndex]);
+      const tableOrRow = await evaluate(realm, node.args[0]);
+      return getProperty(tableOrRow, node.args[1]);
     }
     case 'function-definition': {
       const funcName = getIdentifierString(getDefined(node.args[0]));
