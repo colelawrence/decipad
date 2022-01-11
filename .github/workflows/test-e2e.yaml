@@ -24,18 +24,17 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Npm cache
-        id: npm-cache
+      - name: Cache yarn
+        id: yarn-cache
         uses: actions/cache@v2
         with:
-          path: |
-            ~/.npm
-            ~/.cache
-          key: npm-and-cypress-${{ hashFiles('package-lock.json') }}
+          path: ~/.cache/yarn
+          key: yarn-cache-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            npm-and-cypress-
+            yarn-cache-
 
-      - run: yarn install
+      - name: Install
+        run: yarn install
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1

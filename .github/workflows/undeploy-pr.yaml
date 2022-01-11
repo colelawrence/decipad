@@ -18,15 +18,14 @@ jobs:
         with:
           node-version: 14
 
-      - name: Cache NPM
+      - name: Cache yarn
+        id: yarn-cache
         uses: actions/cache@v2
         with:
-          path: |
-            ~/.npm
-            ~/.cache
-          key: npm-and-cypress-${{ hashFiles('package-lock.json') }}
+          path: ~/.cache/yarn
+          key: yarn-cache-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            npm-and-cypress-
+            yarn-cache-
 
       - name: Install
         run: yarn install
