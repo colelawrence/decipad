@@ -2,6 +2,7 @@ import { inferStatement } from '../infer';
 import { evaluate as evaluateStatement, RuntimeError } from '../interpreter';
 
 import { AST, ExternalDataMap, AutocompleteName, serializeType } from '..';
+import { captureException } from '../reporting';
 import {
   ComputePanic,
   ValueLocation,
@@ -74,16 +75,25 @@ const resultsToUpdates = (results: InBlockResult[]) => {
   return ret;
 };
 
-const resultFromRuntimeError = (
-  error: RuntimeError,
+export const resultFromError = (
+  error: Error,
   location: ValueLocation
 ): InBlockResult => {
   const [blockId, statementIndex] = location;
+
+  let { message } = error;
+
+  if (!(error instanceof RuntimeError)) {
+    // Not a user-facing error, so let's hide internal details
+    message = 'An internal fatal error has occurred';
+    captureException(error);
+  }
+
   return {
     blockId,
     statementIndex,
     value: null,
-    valueType: t.impossible(error.message),
+    valueType: t.impossible(message),
   };
 };
 
@@ -99,11 +109,7 @@ export const computeProgram = async (
       const result = await computeStatement(program, location, realm);
       results.push(result);
     } catch (err) {
-      if (err instanceof RuntimeError) {
-        results.push(resultFromRuntimeError(err, location));
-      } else {
-        throw err;
-      }
+      results.push(resultFromError(err as Error, location));
     }
   }
 

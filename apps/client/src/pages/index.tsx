@@ -7,6 +7,7 @@ import {
   reactRouterV5Instrumentation,
   setUser,
   withProfiler,
+  captureException,
 } from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
 import { createBrowserHistory } from 'history';
@@ -14,6 +15,7 @@ import { Provider as AuthProvider, useSession } from 'next-auth/client';
 import Head from 'next/head';
 import { BrowserRouter } from 'react-router-dom';
 import { ToastProvider } from 'react-toast-notifications';
+import { setErrorReporter } from '@decipad/language';
 import { useApollo } from '../lib/apolloClient';
 import { Router } from '../routes';
 
@@ -38,6 +40,7 @@ if (history && usingSentry) {
     // We recommend adjusting this value in production
     tracesSampleRate: 0.1,
   });
+  setErrorReporter(captureException);
 }
 
 if (inBrowser && process.env.NEXT_PUBLIC_HOTJAR_SITE_ID) {

@@ -20,6 +20,7 @@ export type { Context } from './infer';
 export { Interpreter } from './interpreter';
 export * from './run';
 export { Scalar, Date, Range, TimeQuantity, Column } from './interpreter/Value';
+export { setErrorReporter } from './reporting';
 
 export { prettyPrintAST } from './parser/utils';
 export type { SerializedType, SerializedTypeKind } from './type';

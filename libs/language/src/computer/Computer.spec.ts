@@ -7,6 +7,8 @@ import {
   Scalar,
   Column,
 } from '..';
+import { AnyMapping, assign, n } from '../utils';
+import { RuntimeError } from '../interpreter';
 import {
   unparsedProgram,
   deeperProgram,
@@ -16,9 +18,8 @@ import {
   getUnparsed,
 } from './testutils';
 import { ComputationRealm } from './ComputationRealm';
-import { computeProgram, Computer } from './Computer';
+import { computeProgram, Computer, resultFromError } from './Computer';
 import { ComputeRequest, UnparsedBlock, ValueLocation } from './types';
-import { AnyMapping, assign, n } from '../utils';
 
 let computer: Computer;
 beforeEach(() => {
@@ -266,4 +267,20 @@ describe('tooling data', () => {
       },
     ]);
   });
+});
+
+it('creates a result from an error', () => {
+  expect(
+    resultFromError(new RuntimeError('Message!'), [
+      'blockid',
+      3,
+    ]).valueType.toString()
+  ).toMatchInlineSnapshot(`"Error: Message!"`);
+
+  expect(
+    resultFromError(new Error('panic: Message!'), [
+      'blockid',
+      3,
+    ]).valueType.toString()
+  ).toMatchInlineSnapshot(`"Error: An internal fatal error has occurred"`);
 });

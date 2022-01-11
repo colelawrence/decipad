@@ -1,0 +1,20 @@
+type ReporterFn = (error: Error) => void;
+
+let captureExceptionFn: ReporterFn | undefined;
+
+export const captureException: ReporterFn = (error) => {
+  if (captureExceptionFn != null) {
+    captureExceptionFn(error);
+  }
+};
+
+/**
+ * Call this with Sentry's captureException function
+ *
+ * The language exposes this instead of importing Sentry, because
+ * there are multiple versions of captureException for browser, node
+ * and whatnot.
+ */
+export function setErrorReporter(reporterFn: ReporterFn) {
+  captureExceptionFn = reporterFn;
+}
