@@ -78,7 +78,7 @@ describe('convert', () => {
       F(2)
     );
     expect(
-      convertBetweenUnits(F(1609344, 1000), U('meters'), U('miles'))
+      convertBetweenUnits(F(1_609_344, 1_000), U('meters'), U('miles'))
     ).toMatchObject(F(1));
     expect(convertBetweenUnits(F(1), U('mile'), U('ft'))).toMatchObject(
       F(5_280)
@@ -241,6 +241,15 @@ describe('convert', () => {
     );
     expect(convertBetweenUnits(F(8), U('floz'), U('gallon'))).toMatchObject(
       F(8, 160)
+    );
+  });
+
+  it('converts speed', () => {
+    expect(convertBetweenUnits(F(1), U('mph'), U('kph'))).toMatchObject(
+      F(1_609_344, 1_000_000)
+    );
+    expect(convertBetweenUnits(F(1), U('knot'), U('kph'))).toMatchObject(
+      F(1_852, 1_000)
     );
   });
 

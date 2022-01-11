@@ -2,6 +2,7 @@ import Fraction from '@decipad/fraction';
 import { normalizeUnitName, doNotPluralize } from './utils';
 import * as LengthUnits from './length-units';
 import * as AreaUnits from './area-units';
+import * as SpeedUnits from './speed-units';
 import * as VolumeUnits from './volume-units';
 import * as PressureUnits from './pressure-units';
 import * as EnergyUnits from './energy-units';
@@ -45,6 +46,7 @@ export type BaseQuantity =
   | 'luminous flow'
   | 'solid angle'
   | 'voltage'
+  | 'speed'
   | 'power'
   | 'frequency'
   | 'information'
@@ -83,6 +85,7 @@ const allUnitPackages = [
   ElectricalConductanceUnits,
   PowerUnits,
   FrequencyUnits,
+  SpeedUnits,
   CurrencyUnits,
   LuminousIntensityUnits,
   LuminousFlowUnits,

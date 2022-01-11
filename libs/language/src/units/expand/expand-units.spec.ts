@@ -45,6 +45,14 @@ describe('expand', () => {
     expect(convert(F(1))).toMatchObject(F(1));
   });
 
+  it('expands 18 kph === 5 m/s', () => {
+    const [resultUnits, convert] = expandUnits(U('kph'));
+    expect(resultUnits).toMatchObject(
+      U([u('meters', { exp: 1n }), u('seconds', { exp: -1n })])
+    );
+    expect(convert(F(18))).toMatchObject(F(5));
+  });
+
   it('expands known negative exp unit to the same unit and value (2)', () => {
     const [resultUnits, convert] = expandUnits(U('second', { exp: -1n }));
     expect(resultUnits).toMatchObject(U('seconds', { exp: -1n }));

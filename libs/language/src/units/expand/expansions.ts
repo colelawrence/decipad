@@ -71,6 +71,13 @@ export const expansions: Partial<Expansions> = {
     ],
     convertToExpanded: identity,
   },
+  speed: {
+    expandedUnits: [
+      { baseQuantity: 'length', exp: 1 },
+      { baseQuantity: 'second', exp: -1 },
+    ],
+    convertToExpanded: (kph) => kph.mul(10).div(36),
+  },
   voltage: {
     expandedUnits: [
       { baseQuantity: 'mass', exp: 1 },

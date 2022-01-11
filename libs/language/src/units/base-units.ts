@@ -24,6 +24,7 @@ const baseQuantityToBaseUnit: Record<BaseQuantity, string> = {
   'luminous intensity': 'candela',
   'luminous flow': 'lumen',
   'solid angle': 'steradian',
+  speed: 'kph',
   EUR: 'EUR',
   USD: 'USD',
   GBP: 'GBP',

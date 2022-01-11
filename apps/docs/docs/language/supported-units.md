@@ -115,11 +115,27 @@ It takes over 26 horse races to make a marathon.
 ==> 26.2187(574564543068480076354092102123598186590312) furlongs
 ```
 
+## Speed units
+
+The default unit is Kilometer per hour (`kph`).
+
+Kilometer per hour can be expressed as `kilometer/hour` and we support expanding (or contracting) any area unit to si units, i.e. `meters/second`.
+
+The following are also supported:
+
+- Mile per hour (`mph`)
+- Knot (`knot`) = `1 nmi/hour` = `1.852 kilometer/hour`
+
+```deci live
+3.6 kph in m/s
+==> 1 m/s
+```
+
 ## Area units
 
 The default unit is Square Meter (`squaremeter`, `m2`, `m²`).
 
-Square inch can be expressed as `m2` and we support expanding (or contracting) any area unit to si units.
+Square meter can be expressed as `m2` and we support expanding (or contracting) any area unit to si units.
 
 The following are also supported:
 
