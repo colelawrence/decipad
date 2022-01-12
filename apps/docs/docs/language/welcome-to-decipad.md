@@ -12,12 +12,12 @@ Decipad is an interactive document to gather information, build models in minute
 
 You can build anything in Decipad -  your company’s business plan, a physics model, a bitcoin mining company model, a crypto portfolio tracker. The sky is the limit!
 
-We are still be at the beginning of our journey, but that’s our goal - **we want to empower everyone to use numbers to make better decisions.**
+We're still at the beginning of our journey, but that’s our goal - **we want to empower everyone to use numbers to make better decisions.**
 
 We’re working hard to get there 💪 but for now, you can start by exploring:
 
 - **The Notebook** - having text and data together ❤️
-- **The Decipad language** - using a more human way to make sense of numbers, don’t be shy and take a look at our [language docs](docs/docs/language/introduction/introduction-to-the-language)
+- **The Decipad language** - using a more human way to make sense of numbers. Don’t be shy and take a look at our [language docs](docs/docs/language/introduction/introduction-to-the-language) 👀
 
 ## 👉🏽 A few tips before you get started
 
