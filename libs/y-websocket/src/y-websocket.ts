@@ -617,21 +617,26 @@ export class WebsocketProvider extends Observable<string> {
   }
 
   disconnect(): void {
-    this.shouldConnect = false;
-    this.disconnectBc();
-    if (this.ws != null) {
-      try {
-        this.ws.close();
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error('Error closing websocket:', err);
-      }
+    try {
+      this.shouldConnect = false;
+      this.disconnectBc();
+      if (this.ws != null) {
+        try {
+          this.ws.close();
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.error('Error closing websocket:', err);
+        }
 
-      this.emit('status', [
-        {
-          status: 'disconnected',
-        },
-      ]);
+        this.emit('status', [
+          {
+            status: 'disconnected',
+          },
+        ]);
+      }
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('Error closing websocket:', err);
     }
   }
 
