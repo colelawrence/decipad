@@ -1,4 +1,5 @@
 import { FC, useMemo, useState, useEffect } from 'react';
+import { captureException } from '@sentry/react';
 import {
   ProgramBlocksContextProvider,
   ResultsContextProvider,
@@ -45,6 +46,7 @@ const SlateEditor = ({
     padId,
     editor: editor1,
     authSecret,
+    onError: captureException,
   });
 
   useEffect(() => {

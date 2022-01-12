@@ -18,6 +18,7 @@ import * as DocTypes from './types';
 interface Options {
   authSecret?: string;
   WebSocketPolyfill?: typeof WebSocket;
+  onError?: (event: Error | Event) => void;
   ws?: boolean;
   connect?: boolean;
   connectBc?: boolean;
@@ -176,6 +177,7 @@ export function withDocSync(
 ): DocSyncEditor {
   const {
     authSecret,
+    onError,
     ws = true,
     connect = ws,
     connectBc = true,
@@ -203,6 +205,7 @@ export function withDocSync(
       beforeConnect,
       connectBc,
       resyncInterval: 60000,
+      onError,
     });
     awareness = wsp.awareness;
   } else {

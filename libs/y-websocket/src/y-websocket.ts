@@ -27,6 +27,7 @@ interface Options {
   resyncInterval?: number;
   protocol?: string;
   beforeConnect?: (provider: WebsocketProvider) => Promise<void> | void;
+  onError?: (err: Error | Event) => void;
 }
 
 type MessageType = 0 | 1 | 2 | 3;
@@ -199,14 +200,29 @@ const setupWS = (provider: WebsocketProvider) => {
     websocket.onerror = (event) => {
       // eslint-disable-next-line no-console
       console.error('Websocket error:', event);
+      if (provider.onError) {
+        provider.onError(event);
+      }
     };
 
     websocket.onmessage = (event) => {
       provider.wsLastMessageReceived = time.getUnixTime();
-      const encoder = readMessage(provider, event.data, true, true);
-      if (encoding.length(encoder) > 1) {
-        const message = encoding.toUint8Array(encoder);
-        provider.send(message);
+      try {
+        const encoder = readMessage(provider, event.data, true, true);
+        if (encoding.length(encoder) > 1) {
+          const message = encoding.toUint8Array(encoder);
+          provider.send(message);
+        }
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(
+          'An error was detected while reading a message from a websocket'
+        );
+        // eslint-disable-next-line no-console
+        console.error(err);
+        if (provider.onError) {
+          provider.onError(err);
+        }
       }
     };
 
@@ -319,6 +335,7 @@ export class WebsocketProvider extends Observable<string> {
   bcChannel?: string;
   url?: string;
   shouldConnect: boolean;
+  onError?: Options['onError'];
   ws: WebSocket | undefined;
   wsconnected = false;
   wsconnecting = false;
@@ -354,6 +371,7 @@ export class WebsocketProvider extends Observable<string> {
       resyncInterval = -1,
       protocol,
       beforeConnect,
+      onError,
     } = options;
 
     // ensure that url is always ends with /
@@ -361,6 +379,7 @@ export class WebsocketProvider extends Observable<string> {
     this.protocol = protocol;
     this.beforeConnect = beforeConnect;
     this._WS = WebSocketPolyfill;
+    this.onError = onError;
 
     if (!awareness) {
       this.awareness = new awarenessProtocol.Awareness(doc);
