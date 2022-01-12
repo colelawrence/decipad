@@ -76,9 +76,13 @@ export interface Range {
   end?: Pos;
 }
 
+type SequenceArgs =
+  | [start: Expression, end: Expression, by: Expression]
+  | [start: Expression, end: Expression];
+
 export interface Sequence {
   type: 'sequence';
-  args: [start: Expression, end: Expression, by: Expression];
+  args: SequenceArgs;
   start?: Pos;
   end?: Pos;
 }

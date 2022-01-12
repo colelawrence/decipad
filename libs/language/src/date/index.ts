@@ -331,11 +331,13 @@ export function stringifyDate(
 
 export const dateNodeToSpecificity = (
   nodeArgs: AST.Date['args']
-): Time.Specificity => {
-  let lowestSegment: Time.Specificity = 'year';
+): Time.Specificity => getSpecificity(dateNodeToTimeUnit(nodeArgs));
+
+export const dateNodeToTimeUnit = (nodeArgs: AST.Date['args']): Time.Unit => {
+  let lowestSegment: Time.Unit = 'year';
 
   for (const [segment] of pairwise<Time.Unit, unknown>(nodeArgs)) {
-    lowestSegment = getSpecificity(segment);
+    lowestSegment = segment;
   }
 
   return lowestSegment;

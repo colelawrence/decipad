@@ -29,7 +29,7 @@ it('matches date result type', async () => {
 });
 
 it('matches range result type', async () => {
-  expect(getResultComponent(await runCode('[1 .. 10]'))).toBe(RangeResult);
+  expect(getResultComponent(await runCode('range(1 .. 10)'))).toBe(RangeResult);
 });
 
 describe('column result', () => {

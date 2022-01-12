@@ -16,11 +16,13 @@ const initialReservedWords = new Set([
   'else',
   'through',
   'select',
+  'range',
   'date',
   'and',
   'not',
   'or',
   'with',
+  'when',
   'over'
 ]);
 

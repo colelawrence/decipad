@@ -8,18 +8,19 @@ A range is all the numbers between two numbers. Let's see how you can work with 
 
 ## Create a range
 
-You can declare a range by typing `[start .. end]` like this:
+You can declare a range by typing `range(start .. end)` like this:
 
 ```deci live
-[1 .. 10]
-==> range [ 1 through 10 ]
+range(1 .. 10)
+==> range(1 to 10)
 ```
 
-If you prefer, you can also type a range as `[start through end]`:
+If you prefer, you can also type a range as `range(start through end)`, or `range(start to end)`:
 
 ```deci live
-[5 through 20]
-==> range [ 5 through 20 ]
+range(5 through 20)
+range(1 to 37)
+==> range(1 to 37)
 ```
 
 ## Contains
@@ -27,7 +28,7 @@ If you prefer, you can also type a range as `[start through end]`:
 Much like dates, you can also as to whether a certain range contains a number:
 
 ```deci live
-Range = [1 .. 10]
+Range = range(1 .. 10)
 Range contains 5
 ==> true
 ```
@@ -35,7 +36,7 @@ Range contains 5
 Note that a range contains _every_ number between two numbers, so this should be true:
 
 ```deci live
-Range = [1.4 .. 9.5]
+Range = range(1.4 .. 9.5)
 Range contains 5.72832
 ==> true
 ```
@@ -45,8 +46,8 @@ Range contains 5.72832
 Much like a number, a range can have a unit:
 
 ```deci live
-[10 .. 30 oranges]
-==> range [ 10 oranges through 30 oranges ]
+range(10 .. 30 oranges)
+==> range(10 oranges to 30 oranges)
 ```
 
 ## Ranges of dates
@@ -54,8 +55,8 @@ Much like a number, a range can have a unit:
 You can have ranges of dates, like this:
 
 ```deci live
-[date(2022-01) through date(2022-06)]
-==> range [ month 2022-01 through month 2022-06 ]
+range(date(2022-01) through date(2022-06))
+==> range(month 2022-01 to month 2022-06)
 ```
 
 ## Functions on ranges

@@ -283,7 +283,7 @@ describe('more models', () => {
           ExpectedYearlyGrowth = 2%
 
           InvestmentValue = {
-            Years = [ date(2020) through date(2022) by year ],
+            Years = [ date(2020) through date(2022) ],
             Value = previous(InitialInvestment) * (1 + ExpectedYearlyGrowth) + YearlyReinforcement
           }
         `

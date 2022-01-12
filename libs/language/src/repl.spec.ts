@@ -39,7 +39,7 @@ describe('stringify', () => {
     expect(stringifyResult(F(10), t.number())).toEqual(`${chalk.blue('10')}`);
 
     expect(stringifyResult([F(1), F(10)], t.range(t.number()))).toEqual(
-      `range [ ${chalk.blue('1')} through ${chalk.blue('10')} ]`
+      `range(${chalk.blue('1')} to ${chalk.blue('10')})`
     );
 
     expect(stringifyResult(BigInt(Date.UTC(2020, 0)), t.date('month'))).toEqual(

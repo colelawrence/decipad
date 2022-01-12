@@ -22,11 +22,13 @@ const initialReservedWords = new Set([
   'else',
   'through',
   'select',
+  'range',
   'date',
   'and',
   'not',
   'or',
   'with',
+  'when',
   'over',
 ]);
 
@@ -1354,24 +1356,29 @@ let ParserRules = [
   },
   {
     name: 'range',
-    symbols: [{ literal: '[' }, '_', 'rangeSpec', '_', { literal: ']' }],
-    postprocess: (d) => {
-      const range = d[2];
-      return addArrayLoc(range, d);
-    },
-  },
-  {
-    name: 'rangeSpec',
-    symbols: ['expression', 'rangeParcelSeparator', 'expression'],
+    symbols: [
+      { literal: 'range' },
+      '_',
+      { literal: '(' },
+      '_',
+      'rangeInner',
+      '_',
+      { literal: ')' },
+    ],
     postprocess: (d) => {
       return addArrayLoc(
         {
           type: 'range',
-          args: [d[0], d[2]],
+          args: d[4],
         },
         d
       );
     },
+  },
+  {
+    name: 'rangeInner',
+    symbols: ['expression', 'rangeParcelSeparator', 'expression'],
+    postprocess: ([start, _through, end]) => [start, end],
   },
   {
     name: 'rangeParcelSeparator$subexpression$1',
@@ -1380,6 +1387,10 @@ let ParserRules = [
   {
     name: 'rangeParcelSeparator$subexpression$1',
     symbols: [{ literal: '..' }],
+  },
+  {
+    name: 'rangeParcelSeparator$subexpression$1',
+    symbols: [{ literal: 'to' }],
   },
   {
     name: 'rangeParcelSeparator',
@@ -1393,14 +1404,48 @@ let ParserRules = [
   },
   {
     name: 'sequenceInner',
-    symbols: ['rangeSpec', '_', { literal: 'by' }, '_', 'expression'],
+    symbols: ['expression', 'sequenceThrough', 'expression', 'sequenceBy'],
     postprocess: (d) => {
-      const range = d[0];
-      return {
-        type: 'sequence',
-        args: [range.args[0], range.args[1], d[4]],
-      };
+      const [start, _through, end, by] = d;
+
+      const args = [start, end];
+      if (by) {
+        args.push(by);
+      }
+
+      return addArrayLoc({ type: 'sequence', args }, d);
     },
+  },
+  {
+    name: 'sequenceBy$ebnf$1$subexpression$1',
+    symbols: ['_', { literal: 'by' }, '_', 'expression'],
+  },
+  {
+    name: 'sequenceBy$ebnf$1',
+    symbols: ['sequenceBy$ebnf$1$subexpression$1'],
+    postprocess: id,
+  },
+  {
+    name: 'sequenceBy$ebnf$1',
+    symbols: [],
+    postprocess: function (d) {
+      return null;
+    },
+  },
+  {
+    name: 'sequenceBy',
+    symbols: ['sequenceBy$ebnf$1'],
+    postprocess: (d) => d[0]?.[3] ?? null,
+  },
+  {
+    name: 'sequenceThrough$subexpression$1',
+    symbols: [{ literal: 'through' }],
+  },
+  { name: 'sequenceThrough$subexpression$1', symbols: [{ literal: '..' }] },
+  {
+    name: 'sequenceThrough',
+    symbols: ['_', 'sequenceThrough$subexpression$1', '_'],
+    postprocess: () => null,
   },
   {
     name: 'importData',

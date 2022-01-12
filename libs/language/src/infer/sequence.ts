@@ -1,6 +1,7 @@
 import Fraction from '@decipad/fraction';
+import { getDefined } from '@decipad/utils';
 import { AST, Time, Date as IDate } from '..';
-import { getOfType } from '../utils';
+import { getIdentifierString, getOfType } from '../utils';
 import { build as t, Type } from '../type';
 import {
   dateToArray,
@@ -9,6 +10,8 @@ import {
   getSpecificity,
   getTimeUnit,
   getDateFromAstForm,
+  dateNodeToTimeUnit,
+  sortTimeUnits,
 } from '../date';
 import { inferExpression } from './index';
 import { Context } from './context';
@@ -106,6 +109,18 @@ const tryGetNumber = (n: AST.Expression): Fraction | undefined => {
   return undefined;
 };
 
+export const getDateSequenceIncrement = (
+  byExpr: AST.Expression | void,
+  startUnit: Time.Unit,
+  endUnit: Time.Unit
+) => {
+  if (byExpr) {
+    return getTimeUnit(getIdentifierString(getOfType('ref', byExpr)));
+  }
+
+  return getDefined(sortTimeUnits([startUnit, endUnit]).pop());
+};
+
 export const inferSequence = async (
   ctx: Context,
   expr: AST.Sequence
@@ -118,19 +133,23 @@ export const inferSequence = async (
   if (boundTypes.errorCause != null) {
     return boundTypes;
   } else if (startN.type === 'date' && endN.type === 'date') {
+    const [start, startSpec] = getDateFromAstForm(startN.args);
+    const [end] = getDateFromAstForm(endN.args);
+    const boundsSpecificity = getSpecificity(startSpec);
+
     let increment;
     let specificity;
 
     try {
-      increment = getTimeUnit(getOfType('ref', byN).args[0]);
+      increment = getDateSequenceIncrement(
+        byN,
+        dateNodeToTimeUnit(startN.args),
+        dateNodeToTimeUnit(endN.args)
+      );
       specificity = getSpecificity(increment);
     } catch {
       return t.impossible('Invalid increment clause in date sequence');
     }
-
-    const [start, startSpec] = getDateFromAstForm(startN.args);
-    const [end] = getDateFromAstForm(endN.args);
-    const boundsSpecificity = getSpecificity(startSpec);
 
     if (cmpSpecificities(specificity, boundsSpecificity) < 0) {
       return t.impossible(`An increment clause of ${increment} is too broad`);
@@ -153,7 +172,7 @@ export const inferSequence = async (
     }
     const start = tryGetNumber(startN);
     const end = tryGetNumber(endN);
-    const by = tryGetNumber(byN);
+    const by = byN ? tryGetNumber(byN) : new Fraction(1n);
     if (start && end && by) {
       const countOrError = getNumberSequenceCount(start, end, by);
       return typeof countOrError === 'string'

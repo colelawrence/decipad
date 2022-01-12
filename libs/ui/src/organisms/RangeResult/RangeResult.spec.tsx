@@ -4,7 +4,7 @@ import { RangeResult } from './RangeResult';
 
 it('renders range', async () => {
   const { getByText } = render(
-    <RangeResult {...await runCode('[1 through 10]')} />
+    <RangeResult {...await runCode('range(1 through 10)')} />
   );
 
   expect(getByText('1')).toBeVisible();
@@ -13,7 +13,7 @@ it('renders range', async () => {
 
 it('renders date range', async () => {
   const { getByText } = render(
-    <RangeResult {...await runCode('[date(2021) through date(2031)]')} />
+    <RangeResult {...await runCode('range(date(2021) through date(2031))')} />
   );
 
   expect(getByText('2021')).toBeVisible();

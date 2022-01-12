@@ -22,7 +22,7 @@ it('parses things in multiple lines', () => {
     `X = date(2020-01-01)
 Y = 10
 Table = { Column = [1, 2, 3 ]}
-Range = [ 10 .. 20 ]
+Range = range(10 .. 20)
 func(a b) = a + b`,
     n('assign', n('def', 'X'), date('2020-01-01', 'day')),
     n('assign', n('def', 'Y'), l(10)),

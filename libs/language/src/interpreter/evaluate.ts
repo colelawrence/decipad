@@ -2,7 +2,7 @@ import pSeries from 'p-series';
 import { AST } from '..';
 import { callBuiltin } from '../builtins';
 import { getOfType, getDefined, getIdentifierString } from '../utils';
-import { getDateFromAstForm, getTimeUnit } from '../date';
+import { dateNodeToTimeUnit, getDateFromAstForm } from '../date';
 import { resolve as resolveData } from '../data';
 import { expandDirectiveToValue } from '../directives';
 
@@ -10,6 +10,7 @@ import { Realm } from './Realm';
 import { Scalar, Range, Date, Column, Value, UnknownValue } from './Value';
 import { evaluateTable, getProperty } from './table';
 import { evaluateData } from './data';
+import { getDateSequenceIncrement } from '../infer/sequence';
 
 // Gets a single value from an expanded AST.
 
@@ -105,16 +106,23 @@ export async function evaluate(
       const end = await evaluate(realm, getDefined(node.args[1]));
 
       if (start instanceof Date && end instanceof Date) {
+        const startUnit = dateNodeToTimeUnit(
+          getOfType('date', node.args[0]).args
+        );
+        const endUnit = dateNodeToTimeUnit(
+          getOfType('date', node.args[1]).args
+        );
+
         return Column.fromDateSequence(
           start,
           end,
-          getTimeUnit(getIdentifierString(node.args[2] as AST.Ref))
+          getDateSequenceIncrement(node.args[2], startUnit, endUnit)
         );
       } else {
         return Column.fromSequence(
           start,
           end,
-          await evaluate(realm, node.args[2])
+          node.args[2] ? await evaluate(realm, node.args[2]) : undefined
         );
       }
     }

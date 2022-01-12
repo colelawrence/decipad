@@ -11,6 +11,6 @@ Built-in functions that operate on ranges:
 This function gives you whether a range contains a certain value.
 
 ```deci live
-[1 through 10] contains 5
+range(1 through 10) contains 5
 ==> true
 ```

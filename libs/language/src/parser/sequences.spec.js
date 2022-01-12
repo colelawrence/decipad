@@ -99,4 +99,79 @@ runTests({
       },
     ],
   },
+
+  'basic numeric sequence using .. (shorthand)': {
+    source: '  [  1..10  ]',
+    ast: [
+      {
+        type: 'sequence',
+        args: [
+          {
+            type: 'literal',
+            args: ['number', F(1)],
+            start: 5,
+            end: 5,
+          },
+          {
+            type: 'literal',
+            args: ['number', F(10)],
+            start: 8,
+            end: 9,
+          },
+        ],
+        start: 2,
+        end: 12,
+      },
+    ],
+  },
+
+  'basic numeric sequence using "through" (shorthand)': {
+    source: '  [  1  through 10   ]',
+    ast: [
+      {
+        type: 'sequence',
+        args: [
+          {
+            type: 'literal',
+            args: ['number', F(1)],
+            start: 5,
+            end: 5,
+          },
+          {
+            type: 'literal',
+            args: ['number', F(10)],
+            start: 16,
+            end: 17,
+          },
+        ],
+        start: 2,
+        end: 21,
+      },
+    ],
+  },
+
+  'basic time sequence (shorthand)': {
+    source: '   [date(2020-10)..date(2020-03)]',
+    ast: [
+      {
+        type: 'sequence',
+        args: [
+          {
+            type: 'date',
+            args: ['year', 2020n, 'month', 10n],
+            start: 4,
+            end: 16,
+          },
+          {
+            type: 'date',
+            args: ['year', 2020n, 'month', 3n],
+            start: 19,
+            end: 31,
+          },
+        ],
+        start: 3,
+        end: 32,
+      },
+    ],
+  },
 });

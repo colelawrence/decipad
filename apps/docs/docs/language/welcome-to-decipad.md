@@ -10,7 +10,7 @@ Decipad is an interactive document to gather information, build models in minute
 
 ## What is possible with Decipad
 
-You can build anything in Decipad -  your company’s business plan, a physics model, a bitcoin mining company model, a crypto portfolio tracker. The sky is the limit!
+You can build anything in Decipad - your company’s business plan, a physics model, a bitcoin mining company model, a crypto portfolio tracker. The sky is the limit!
 
 We're still at the beginning of our journey, but that’s our goal - **we want to empower everyone to use numbers to make better decisions.**
 

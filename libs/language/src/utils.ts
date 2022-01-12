@@ -77,9 +77,13 @@ export function importedData(url: string, contentType?: string) {
 export function seq(
   start: AST.Expression,
   end: AST.Expression,
-  by: AST.Expression
+  by: AST.Expression | null = null
 ): AST.Sequence {
-  return n('sequence', start, end, by);
+  if (by) {
+    return n('sequence', start, end, by);
+  } else {
+    return n('sequence', start, end);
+  }
 }
 
 export function range(

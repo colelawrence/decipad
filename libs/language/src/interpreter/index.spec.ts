@@ -139,6 +139,14 @@ describe('sequences', () => {
     expect(dates[0]).toEqual(parseUTCDate('2020-01'));
     expect(dates[11]).toEqual(parseUTCDate('2020-12'));
   });
+
+  it('can omit the increment', async () => {
+    expect(
+      await runOne(seq(date('2020-01', 'month'), date('2020-02', 'month')))
+    ).toEqual([parseUTCDate('2020-01'), parseUTCDate('2020-02')]);
+
+    expect(await runOne(seq(l(1), l(3)))).toEqual([F(1), F(2), F(3)]);
+  });
 });
 
 describe('functions', () => {

@@ -236,7 +236,11 @@ export class Column implements Value {
     return new Column(values);
   }
 
-  static fromSequence(startV: Value, endV: Value, byV: Value): Column {
+  static fromSequence(
+    startV: Value,
+    endV: Value,
+    byV: Value = Scalar.fromValue(1)
+  ): Column {
     const [start, end, by] = [startV, endV, byV].map(
       (val) => val.getData() as Fraction
     );

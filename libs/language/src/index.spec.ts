@@ -630,7 +630,7 @@ describe('Ranges', () => {
   it('Evaluates and types ranges', async () => {
     expect(
       await runCode(`
-        Range = [1..3]
+        Range = range(1..3)
         Containment = Range contains 3
       `)
     ).toMatchObject({
@@ -640,10 +640,14 @@ describe('Ranges', () => {
   });
 
   it('can use contain on range', async () => {
-    expect(await runCode(`[1 through 10] contains 5`)).toMatchObject({
+    expect(await runCode(`(range(1 .. 10)) contains 5`)).toMatchObject({
       type: { type: 'boolean' },
       value: true,
     });
+  });
+
+  it('reserves the word "range"', async () => {
+    await expect(runCode('range + 1')).rejects.toBeDefined();
   });
 });
 

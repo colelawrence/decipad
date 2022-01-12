@@ -19,11 +19,11 @@ export const stringifyResult = (
 ): string => {
   if (type.rangeOf != null) {
     const [start, end] = result as Interpreter.OneResult[];
-    return `range [ ${stringifyResult(
+    return `range(${stringifyResult(
       start,
       type.rangeOf,
       color
-    )} through ${stringifyResult(end, type.rangeOf, color)} ]`;
+    )} to ${stringifyResult(end, type.rangeOf, color)})`;
   }
 
   if (type.date != null) {

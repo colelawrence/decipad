@@ -11,7 +11,7 @@ Built-in functions that operate on dates:
 This function gives you the ability to check whether a certain range contains a specific date:
 
 ```deci live
-Range = [date(2050-Jan-01) through date(2050-Dec-31)]
+Range = range(date(2050-Jan-01) through date(2050-Dec-31))
 containsdate(Range, date(2050-Feb-02 15:30))
 ==> true
 ```

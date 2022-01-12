@@ -1,9 +1,10 @@
 import { getUTCDateSpecificity, parseUTCDate } from '../date';
 import { build as t } from '../type';
-import { l, n, seq, date } from '../utils';
+import { l, n, seq, date, r } from '../utils';
 
 import { makeContext } from './context';
 import {
+  getDateSequenceIncrement,
   getDateSequenceLength,
   getNumberSequenceCountN,
   inferSequence,
@@ -144,5 +145,22 @@ describe('sequence counts', () => {
     expect(dateSeqSize('2020-02-01', '2020-02-01', 'hour')).toEqual(24);
     expect(dateSeqSize('2020-02-01', '2020-02-02', 'hour')).toEqual(48);
     expect(dateSeqSize('2020-02-01', '2020-02-01', 'minute')).toEqual(24 * 60);
+  });
+
+  it('allows to omit the "by" clause', async () => {
+    expect((await inferSequence(nilCtx, seq(l(1), l(10)))).columnSize).toEqual(
+      10
+    );
+
+    expect(getDateSequenceIncrement(undefined, 'month', 'month')).toEqual(
+      'month'
+    );
+    expect(getDateSequenceIncrement(undefined, 'hour', 'hour')).toEqual('hour');
+    expect(getDateSequenceIncrement(undefined, 'week', 'hour')).toEqual('hour');
+    expect(getDateSequenceIncrement(undefined, 'hour', 'week')).toEqual('hour');
+
+    expect(getDateSequenceIncrement(r('month'), 'hour', 'hour')).toEqual(
+      'month'
+    );
   });
 });
