@@ -62,7 +62,7 @@ describe('pad content', () => {
   });
 
   it('allows appending some text to an existing paragraph', async () => {
-    page.keyboard.type(' para-graph');
+    await page.keyboard.type(' para-graph');
     const [, p2] = await page.$$('[contenteditable] p');
     expect(await p2.textContent()).toBe(
       'this is the content for the second para-graph'
