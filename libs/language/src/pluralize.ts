@@ -6,8 +6,10 @@ addIrregularRule('USD', 'USD');
 addIrregularRule('EUR', 'EUR');
 addIrregularRule('are', 'ares');
 addIrregularRule('s', 's');
-pluralize.addIrregularRule('h', 'h');
-pluralize.addIrregularRule('psi', 'psi');
+addIrregularRule('h', 'h');
+addIrregularRule('psi', 'psi');
+addIrregularRule('kph', 'kph');
+addIrregularRule('mph', 'mph');
 
 function pluralizeBigint(str: string, n: number | bigint = 2n) {
   return pluralize(str, Number(n));
