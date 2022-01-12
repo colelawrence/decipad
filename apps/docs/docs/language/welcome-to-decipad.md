@@ -8,45 +8,19 @@ sidebar_position: 5
 
 Decipad is an interactive document to gather information, build models in minutes and bring data-driven ideas to life.
 
-## Get started with Decipad in 4 easy steps
+## What is possible with Decipad
 
-### Step 1 - Create your first notebook
+You can build anything in Decipad -  your company’s business plan, a physics model, a bitcoin mining company model, a crypto portfolio tracker. The sky is the limit!
 
-Think of a notebook as a place where narrative and data coexist. In a notebook, you can type text as well as type `/`to create calculation blocks and tables and easily move all of these up and down.
+We are still be at the beginning of our journey, but that’s our goal - **we want to empower everyone to use numbers to make better decisions.**
 
-### Step 2 - How much is `2+2`
+We’re working hard to get there 💪 but for now, you can start by exploring:
 
-If what you are looking for is to play with numbers, then you'll have fun with the `/calculation block`. The calculation block is the place where you can type numbers and perform operations in a more natural way powered by the [Decipad language](docs/docs/language/introduction/introduction-to-the-language).
+- **The Notebook** - having text and data together ❤️
+- **The Decipad language** - using a more human way to make sense of numbers, don’t be shy and take a look at our [language docs](docs/docs/language/introduction/introduction-to-the-language)
 
-```deci live
-2 + 2
-==> 4
-```
+## 👉🏽 A few tips before you get started
 
-### Step 3 - Name your data
-
-In a calculation block, you can assign a name to your data by using the `=` operator - we call it creating [variables](docs/docs/language/introduction/variables). This is a useful way to quickly reuse data throughout your notebook as you build your model. For now, variables can't use spaces, symbols or emoji, and are also case sensitive.
-
-```deci live
-NameSomethingInDecipad = 300
-==> 300
-```
-
-### Step 4 - <3 Tables, tables, tables
-
-Type `/table` and easily add a table to your notebook. Data in a table can be text, numbers or dates. Same as with variables, you can name your table and use it as an input in an operation. Operations are not yet possible on tables, but we're working on it 💪
-
-![tables](https://user-images.githubusercontent.com/76447845/146926068-463a1bc4-e70d-443d-a05b-6f49dcecf310.gif)
-
-If you prefer, you can always build your table using the [Decipad language](docs/docs/language/introduction/introduction-to-the-language).
-
-```deci live
-SimpleTable = {
-  column_A = [1, 2, 3]
-  column_B = [4, 5, 6]
-}
-==> {
-  column_A = [ 1, 2, 3 ],
-  column_B = [ 4, 5, 6 ]
-}
-```
+- Decipad works best in chromium based desktop browsers. We recommend you use a browser like Brave, Edge, Chrome, or similar.
+- It's early, you may run into some bugs or glitches 🐞. Just report them to our team on our [Discord channel](https://t.co/fJDR4AVWeY?amp=1) or use the Feedback button on Decipad
+- You can access Decipad on Safari, Firefox, or a mobile phone, but the experience might not be the best yet. We're working on it.
