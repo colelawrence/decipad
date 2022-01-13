@@ -110,10 +110,6 @@ const min = ([value]: Value[]): Value => {
   return min;
 };
 
-const valueToResult = (fn: ([value]: Value[]) => Value) => {
-  return (values: Value[]): AnyValue => fromJS(fn(values).getData());
-};
-
 const average = ([value]: Value[]): AnyValue => {
   const fractions = coherceToArray(value.getData()).map(coherceToFraction);
   if (fractions.length === 0) {
@@ -163,12 +159,12 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   max: {
     argCount: 1,
     functorNoAutomap: firstArgumentReducedOrSelfFunctor,
-    fnValuesNoAutomap: valueToResult(max),
+    fnValuesNoAutomap: max,
   },
   min: {
     argCount: 1,
     functorNoAutomap: firstArgumentReducedOrSelfFunctor,
-    fnValuesNoAutomap: valueToResult(min),
+    fnValuesNoAutomap: min,
   },
   average: {
     argCount: 1,

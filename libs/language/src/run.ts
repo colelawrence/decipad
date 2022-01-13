@@ -3,6 +3,7 @@ import { inferBlock, makeContext } from './infer';
 import { AnyMapping } from './utils';
 import { parseBlock } from './parser';
 import { Realm, run } from './interpreter';
+import { validateResult } from './result';
 
 export const parseOneBlock = (source: string): AST.Block => {
   const parsed = parseBlock({ id: 'block-id', source });
@@ -29,10 +30,9 @@ export const runAST = async (
 
   const [value] = await run([block], [0], new Realm(ctx));
 
-  return {
-    value,
-    type,
-  };
+  validateResult(type, value);
+
+  return { type, value };
 };
 
 export const runCode = async (

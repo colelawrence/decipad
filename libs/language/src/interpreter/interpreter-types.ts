@@ -1,16 +1,26 @@
 import Fraction from '@decipad/fraction';
 
-export type ResultDate = bigint;
 export type ResultNumber = Fraction;
-export type ResultRange = [ResultScalar, ResultScalar];
+export type ResultString = string;
+export type ResultBoolean = boolean;
+export type ResultDate = bigint;
+export type ResultRange =
+  | [ResultNumber, ResultNumber]
+  | [ResultDate, ResultDate];
 export type ResultTimeQuantity = [string, bigint][];
-export type ResultScalar = bigint | boolean | string | ResultNumber | symbol;
 export type ResultColumn = OneResult[];
+export type ResultRow = OneResult[];
 export type ResultTable = OneResult[][];
+export type ResultUnknown = symbol;
 
 export type OneResult =
-  | ResultScalar
-  | ResultColumn
+  | ResultNumber
+  | ResultString
+  | ResultBoolean
+  | ResultDate
   | ResultRange
   | ResultTimeQuantity
-  | ResultTable;
+  | ResultColumn
+  | ResultRow
+  | ResultTable
+  | ResultUnknown;

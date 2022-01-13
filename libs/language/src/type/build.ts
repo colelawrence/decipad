@@ -4,6 +4,7 @@ import { Time } from '..';
 import { InferError, Type, TypeName } from '.';
 import { getDefined } from '../utils';
 import { Unit, Units, units } from './unit-type';
+import { timeUnitFromUnit } from '../date';
 
 // "scalar" is a legacy name
 export const scalar = (type: TypeName) =>
@@ -36,7 +37,7 @@ export const timeQuantity = (timeUnits: (Unit | string)[]) =>
     t.unit = {
       type: 'units',
       args: timeUnits.map((unit) => ({
-        unit: typeof unit === 'string' ? unit : unit.unit,
+        unit: timeUnitFromUnit(typeof unit === 'string' ? unit : unit.unit),
         exp: 1n,
         multiplier: new Fraction(1),
         known: true,

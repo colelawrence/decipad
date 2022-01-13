@@ -150,7 +150,7 @@ describe('time quantities', () => {
   it('can be inferred', async () => {
     expect(
       await inferExpression(nilCtx, col(ne(2020, 'years'), ne(3, 'minutes')))
-    ).toEqual(t.timeQuantity(['years', 'minutes']));
+    ).toEqual(t.timeQuantity(['year', 'minute']));
   });
 });
 

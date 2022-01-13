@@ -10,6 +10,7 @@ import { runOne, Realm } from './interpreter';
 import { inferStatement, makeContext as makeInferContext } from './infer';
 import { stringifyDate } from './date';
 import { Type } from './type';
+import { validateResult } from './result';
 
 type Colorizer = (s: string) => string;
 export const stringifyResult = (
@@ -17,6 +18,8 @@ export const stringifyResult = (
   type: Type,
   color: Colorizer = chalk.blue
 ): string => {
+  validateResult(type, result);
+
   if (type.rangeOf != null) {
     const [start, end] = result as Interpreter.OneResult[];
     return `range(${stringifyResult(

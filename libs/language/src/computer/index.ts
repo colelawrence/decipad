@@ -9,7 +9,7 @@ import {
 } from 'rxjs/operators';
 import { dequal } from 'dequal';
 
-import type { Result } from './result';
+import type { Result } from '../result';
 import type {
   ComputeRequest,
   ComputeResponse,
@@ -28,7 +28,7 @@ export { isSyntaxError } from './utils';
 
 export { Computer };
 
-export { serializeResult } from './result';
+export { serializeResult } from '../result';
 
 type ReqsWithCursor$ = Observable<
   readonly [ComputeRequest, ValueLocation | null]

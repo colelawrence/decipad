@@ -2,12 +2,19 @@
 import Fraction from '@decipad/fraction';
 import { singular } from 'pluralize';
 import { Time, Interpreter, Units } from '..';
-import { filterUnzipped, getDefined, getInstanceof } from '../utils';
+import {
+  AnyMapping,
+  anyMappingToMap,
+  filterUnzipped,
+  getDefined,
+  getInstanceof,
+} from '../utils';
 import {
   addTimeQuantity,
   cleanDate,
   getSpecificity,
   sortTimeUnits,
+  timeUnitFromUnit,
 } from '../date';
 import { compare } from './compare-values';
 import { Unknown } from './Unknown';
@@ -113,13 +120,16 @@ export class Date implements Value {
   specificity: Time.Specificity = 'time';
   moment: bigint;
 
-  constructor(date: bigint | number, specificity: Time.Specificity) {
-    this.moment = cleanDate(date, specificity);
+  constructor(moment: bigint, specificity: Time.Specificity) {
+    this.moment = moment;
     this.specificity = specificity;
   }
 
-  static fromDateAndSpecificity(date: bigint, specificity: Time.Specificity) {
-    return new Date(date, specificity);
+  static fromDateAndSpecificity(
+    date: bigint | number,
+    specificity: Time.Specificity
+  ) {
+    return new Date(cleanDate(date, specificity), specificity);
   }
 
   getData() {
@@ -141,6 +151,11 @@ export class Date implements Value {
       );
     }
   }
+
+  getEndDate() {
+    const moment = this.getEnd();
+    return new Date(moment, this.specificity);
+  }
 }
 
 export class TimeQuantity implements Value {
@@ -161,7 +176,10 @@ export class TimeQuantity implements Value {
 
       const unsorted = new Map(entries);
       for (const unit of sortTimeUnits(unsorted.keys())) {
-        this.timeUnits.set(unit, getDefined(unsorted.get(unit)));
+        this.timeUnits.set(
+          timeUnitFromUnit(unit),
+          getDefined(unsorted.get(unit))
+        );
       }
     }
 
@@ -173,9 +191,16 @@ export class TimeQuantity implements Value {
 
       const unsorted = new Map(entries);
       for (const unit of sortTimeUnits(unsorted.keys())) {
-        this.timeUnitsDiff.set(unit, getDefined(unsorted.get(unit)));
+        this.timeUnitsDiff.set(
+          timeUnitFromUnit(unit),
+          getDefined(unsorted.get(unit))
+        );
       }
     }
+  }
+
+  static fromMapping(mapping: AnyMapping<bigint>) {
+    return new TimeQuantity(anyMappingToMap(mapping) as Map<Time.Unit, bigint>);
   }
 
   static fromUnits(number: bigint, units: Units): TimeQuantity {
@@ -204,10 +229,10 @@ export class Range implements Value {
 
   static fromBounds(start: Value, end: Value): Range {
     if (start instanceof Date && end instanceof Date) {
-      return Range.fromBounds(
-        Scalar.fromValue(start.moment),
-        Scalar.fromValue(end.getEnd())
-      );
+      return new Range({
+        start,
+        end: end.getEndDate(),
+      });
     } else if (start instanceof FractionValue && end instanceof FractionValue) {
       return new Range({ start, end });
     } else {

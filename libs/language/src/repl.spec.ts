@@ -3,6 +3,7 @@ import repl from 'repl';
 
 import { F } from './utils';
 import { build as t } from './type';
+import { parseUTCDate } from './date';
 import { replEval, stringifyResult, reset } from './repl';
 
 const testEval = (source: string) =>
@@ -42,18 +43,18 @@ describe('stringify', () => {
       `range(${chalk.blue('1')} to ${chalk.blue('10')})`
     );
 
-    expect(stringifyResult(BigInt(Date.UTC(2020, 0)), t.date('month'))).toEqual(
+    expect(stringifyResult(parseUTCDate('2020-01'), t.date('month'))).toEqual(
       `month ${chalk.blue('2020-01')}`
     );
 
-    expect(stringifyResult([1n, 2n], t.column(t.number(), 2))).toEqual(
+    expect(stringifyResult([F(1n), F(2n)], t.column(t.number(), 2))).toEqual(
       `[ ${chalk.blue('1')}, ${chalk.blue('2')} ]`
     );
 
     expect(
       stringifyResult(
         [
-          [1n, 2n],
+          [F(1n), F(2n)],
           ['hi', 'lol'],
         ],
         t.table({

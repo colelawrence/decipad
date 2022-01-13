@@ -74,10 +74,7 @@ describe('ranges', () => {
 
     const r = range(date('2020-01', 'month'), date('2020-11', 'month'));
 
-    expect(await runOne(r)).toEqual([
-      F(d('2020-01-01')),
-      F(d('2020-12-01') - 1n),
-    ]);
+    expect(await runOne(r)).toEqual([d('2020-01-01'), d('2020-12-01') - 1n]);
 
     expect(
       await runOne(c('containsdate', r, date('2020-01', 'month')))
@@ -107,7 +104,7 @@ describe('ranges', () => {
   it('evaluates ranges of dates (2)', async () => {
     expect(
       await runOne(range(n('date', 'year', 2020n), n('date', 'year', 2022n)))
-    ).toEqual([F(Date.UTC(2020, 0)), F(Date.UTC(2023, 0) - 1)]);
+    ).toEqual([parseUTCDate('2020'), parseUTCDate('2023') - 1n]);
   });
 });
 

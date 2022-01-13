@@ -3,6 +3,11 @@ type ReporterFn = (error: Error) => void;
 let captureExceptionFn: ReporterFn | undefined;
 
 export const captureException: ReporterFn = (error) => {
+  if (typeof test === 'undefined') {
+    // eslint-disable-next-line no-console
+    console.error(error);
+  }
+
   if (captureExceptionFn != null) {
     captureExceptionFn(error);
   }

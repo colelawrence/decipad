@@ -18,6 +18,7 @@ import { ComputationRealm } from './ComputationRealm';
 import { build as t } from '../type';
 import { getAllBlockLocations, getGoodBlocks, getStatement } from './utils';
 import { anyMappingToMap } from '../utils';
+import { validateResult } from '../result';
 
 /*
  - Skip cached stuff
@@ -45,6 +46,8 @@ const computeStatement = async (
       );
       value = evaluated.getData();
     }
+
+    validateResult(valueType, value);
 
     result = { blockId, statementIndex, value, valueType };
   }

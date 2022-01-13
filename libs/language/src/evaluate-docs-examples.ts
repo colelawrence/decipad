@@ -9,6 +9,8 @@ async function getDocTestString(codeExample: string) {
     if (error instanceof TypeError) {
       return error.message;
     } else {
+      console.error('Error in getDocTestString for the followingCode:');
+      console.error(codeExample);
       throw error;
     }
   }

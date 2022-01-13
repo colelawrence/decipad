@@ -33,10 +33,10 @@ export type SerializedTypeKind = SerializedType['kind'];
 export function serializeType(type: Type): SerializedType {
   if (type.type === 'number') {
     return { kind: 'number', unit: type.unit };
-  } else if (type.type === 'string') {
-    return { kind: 'string' };
   } else if (type.type === 'boolean') {
     return { kind: 'boolean' };
+  } else if (type.type === 'string') {
+    return { kind: 'string' };
   } else if (type.date) {
     return { kind: 'date', date: type.date };
   } else if (type.type === 'time-quantity') {

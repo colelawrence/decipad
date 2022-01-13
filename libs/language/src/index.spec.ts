@@ -679,6 +679,24 @@ describe('Dates', () => {
       })
     `);
   });
+
+  it('can get the max of a list of dates', async () => {
+    expect(
+      await runCode(`max([date(2050-Jan-01), date(2025-Jun-01)])`)
+    ).toMatchInlineSnapshot(`Result(day 2050-01-01)`);
+  });
+});
+
+describe('Time quantities', () => {
+  it('can be returned', async () => {
+    expect(await runCode(`[10 days]`)).toMatchInlineSnapshot(
+      `Result([ [ 'day', 10n ] ] days)`
+    );
+
+    expect(
+      await runCode(`date(2020-01-11) - date(2020-01-01)`)
+    ).toMatchInlineSnapshot(`Result([ [ 'day', 10n ] ] days)`);
+  });
 });
 
 describe('Injected external data', () => {
