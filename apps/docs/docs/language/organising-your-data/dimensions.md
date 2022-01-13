@@ -17,7 +17,7 @@ Quote = {
 }
 ==> {
   Name = [ 'Bhakta Construction', 'Precido Builders', 'MBD Firm' ],
-  Price = [ 750 £/sqft, 900 £/sqft, 435 £/sqft ]
+  Price = [ 750 £/ft², 900 £/ft², 435 £/ft² ]
 }
 ```
 
@@ -30,7 +30,7 @@ Job = {
 }
 ==> {
   Name = [ 'Small', 'Medium', 'Large' ],
-  Size = [ 10 sqft, 15 sqft, 25 sqft ]
+  Size = [ 10 ft², 15 ft², 25 ft² ]
 }
 ```
 

@@ -42,7 +42,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 1 m × 1 m
     name: 'squaremile',
     abbreviations: ['sqmi'],
-    pretty: 'sq mi',
+    pretty: 'mi²',
     baseQuantity: 'area',
     toBaseQuantity: squaremile,
     fromBaseQuantity: invert(squaremile),
@@ -53,7 +53,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 1 yd × 1 yd
     name: 'squareyard',
     abbreviations: ['sqyd'],
-    pretty: 'sq yd',
+    pretty: 'yd²',
     baseQuantity: 'area',
     toBaseQuantity: squareyard,
     fromBaseQuantity: invert(squareyard),
@@ -64,7 +64,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 1 ft × 1 ft
     name: 'squarefoot',
     abbreviations: ['sqft'],
-    pretty: 'sq ft',
+    pretty: 'ft²',
     baseQuantity: 'area',
     toBaseQuantity: squarefoot,
     fromBaseQuantity: invert(squarefoot),
@@ -75,7 +75,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 1 inch × 1 inch
     name: 'squareinch',
     abbreviations: ['sqin'],
-    pretty: 'sq in',
+    pretty: 'in²',
     baseQuantity: 'area',
     toBaseQuantity: squareinch,
     fromBaseQuantity: invert(squareinch),

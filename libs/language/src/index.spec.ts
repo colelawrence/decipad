@@ -1159,6 +1159,24 @@ describe('number units work together', () => {
     });
   });
 
+  it('should calculate 1cF + 1cF', async () => {
+    const run = await runCode(`1 cF + 1 cF`);
+
+    expect(run).toMatchObject({
+      value: F(2),
+      type: t.number(U([u('F', { multiplier: new Fraction(1, 100) })])),
+    });
+  });
+
+  it('should calculate 1 centifarad + 1 centifarad', async () => {
+    const run = await runCode(`1 centifarad + 1 centifarad`);
+
+    expect(run).toMatchObject({
+      value: F(2),
+      type: t.number(U([u('farads', { multiplier: new Fraction(1, 100) })])),
+    });
+  });
+
   it('converts to contracted unit (2)', async () => {
     expect(await runCode(`10 kg*m/sec^2 in newtons`)).toMatchObject({
       value: F(10),
@@ -1339,7 +1357,7 @@ describe('user-defined units', () => {
 describe('wat', () => {
   it('runs', async () => {
     await expect(() => runCode(`1 m * 1 m * 1 cm in ya`)).rejects.toThrowError(
-      "Don't know how to convert between units cm³ and 1.0000000000000001e-24a"
+      "Don't know how to convert between units cm³ and 1.0000000000000001e-24A"
     );
   });
 });

@@ -40,12 +40,30 @@ it('can follow SI rules and style conventions', () => {
   expect(cm3.toString()).toEqual('cm³');
   expect(t.number([u('cubicmeter')]).toString()).toEqual('m³');
   expect(t.number([u('lightyear')]).toString()).toEqual('light year');
-  expect(t.number([u('ly')]).toString()).toEqual('ly');
+  expect(t.number([u('ly')]).toString()).toEqual('light year');
   expect(t.number([u('$')]).toString()).toEqual('$');
   expect(
     t.number([u('m'), u('kg'), inverseExponent(u('s'))]).toBasicString()
   ).toEqual('m·kg·s⁻¹');
   expect(t.number(units(cm, cm, cm)).toString()).toEqual('μm³');
+  expect(
+    t.number([u('f', { multiplier: new Fraction(1, 100) })]).toString()
+  ).toEqual('cF');
+  expect(
+    t.number([u('m2', { multiplier: new Fraction(1, 100) })]).toString()
+  ).toEqual('cm²');
+  expect(
+    t.number([u('sqmi', { multiplier: new Fraction(1, 100) })]).toString()
+  ).toEqual('cmi²');
+  expect(
+    t.number([u('sqyd', { multiplier: new Fraction(1, 100) })]).toString()
+  ).toEqual('cyd²');
+  expect(
+    t.number([u('sqft', { multiplier: new Fraction(1, 100) })]).toString()
+  ).toEqual('cft²');
+  expect(
+    t.number([u('sqin', { multiplier: new Fraction(1, 100) })]).toString()
+  ).toEqual('cin²');
 });
 
 it.todo('support yotta and zetta');

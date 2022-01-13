@@ -228,28 +228,31 @@ export const inverseExponent = (unit: Unit) => setExponent(unit, -unit.exp);
 const stringifyUnit = (unit: Unit) => {
   const symbol = singular(unit.unit);
   const pretty = prettyForSymbol[symbol];
-  const isSymbol = unitIsSymbol(symbol);
-  if (!isSymbol && pretty) {
-    return pretty;
-  } else {
-    const multiPrefix = unit.multiplier ? unit.multiplier.valueOf() : 1;
-    const multiplier = multipliersToPrefixes[multiPrefix as AvailablePrefixes];
-    const result = [
-      multiplier != null
-        ? unitIsSymbol(symbol)
-          ? multiplier[0]
-          : multiplier[1]
-        : multiPrefix.toString(),
-      unit.unit,
-    ];
+  let isSymbol = unitIsSymbol(symbol);
+  let baseUnitName = unit.unit;
 
-    if (unit.exp !== 1n) {
-      const exp = `${unit.exp}`.replace(/./g, scriptFromNumber);
-      result.push(exp);
-    }
-
-    return result.join('');
+  if (pretty) {
+    isSymbol = true;
+    baseUnitName = pretty;
   }
+
+  const multiPrefix = unit.multiplier ? unit.multiplier.valueOf() : 1;
+  const prefix = multipliersToPrefixes[multiPrefix as AvailablePrefixes];
+  const result = [
+    prefix != null
+      ? isSymbol
+        ? prefix[0]
+        : prefix[1]
+      : multiPrefix.toString(),
+    baseUnitName,
+  ];
+
+  if (unit.exp !== 1n) {
+    const exp = `${unit.exp}`.replace(/./g, scriptFromNumber);
+    result.push(exp);
+  }
+
+  return result.join('');
 };
 
 function produceExp(unit: Unit, makePositive: boolean): Unit {

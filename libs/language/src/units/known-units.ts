@@ -99,7 +99,7 @@ export const prettyForSymbol: Record<string, string> = {};
 
 function makePrettyRecord(symbol: string, prty: string | undefined) {
   if (prty) {
-    prettyForSymbol[symbol] = prty;
+    prettyForSymbol[symbol.toLowerCase()] = prty;
   }
 }
 

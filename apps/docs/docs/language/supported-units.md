@@ -58,7 +58,7 @@ Nautical:
 
 ```deci live
 3 nmi in nl
-==> 1 nl
+==> 1 nautical league
 ```
 
 Natural Sciences:
@@ -163,7 +163,7 @@ Surveyor:
 
 ```deci live
 1 ac in sqyd
-==> 4840 sqyd
+==> 4840 yd²
 ```
 
 ## Volume units
