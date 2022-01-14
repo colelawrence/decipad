@@ -27,4 +27,11 @@ export type JSDateUnit =
 /**
  * Specificity of a date in the language. quarter, week get turned into months, days. hours, minutes etc get turned into "time" because to the language all the time of day is the same type.
  */
-export type Specificity = 'year' | 'month' | 'day' | 'time';
+export type Specificity =
+  | 'year'
+  | 'month'
+  | 'day'
+  | 'hour'
+  | 'minute'
+  | 'second'
+  | 'millisecond';

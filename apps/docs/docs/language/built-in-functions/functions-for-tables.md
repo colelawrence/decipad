@@ -41,7 +41,7 @@ Flights = {
 sortby(Flights, Flights.DepartureTime)
 ==> {
   FlightNumber = [ 'BA789', 'EZJ123', 'BA765', 'TP456', 'TP098' ],
-  DepartureTime = [ time 2022-03-10 10:05, time 2022-03-11 15:20, time 2022-03-11 15:20, time 2022-03-11 16:20, time 2022-03-13 12:20 ]
+  DepartureTime = [ minute 2022-03-10 10:05, minute 2022-03-11 15:20, minute 2022-03-11 15:20, minute 2022-03-11 16:20, minute 2022-03-13 12:20 ]
 }
 ```
 

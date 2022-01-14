@@ -19,14 +19,14 @@ You can specify a time value to the hour:
 
 ```deci live
 date(2022-06-30 16)
-==> time 2022-06-30 16:00
+==> hour 2022-06-30 16:00
 ```
 
 Or to the minute:
 
 ```deci live
 date(2022-06-30 16:45)
-==> time 2022-06-30 16:45
+==> minute 2022-06-30 16:45
 ```
 
 A time value can have any of the following granularities:

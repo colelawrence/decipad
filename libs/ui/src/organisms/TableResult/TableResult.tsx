@@ -19,14 +19,14 @@ export function toTableHeaderType(type: SerializedType): TableCellType {
       return 'number';
     case type.kind === 'string':
       return 'string';
-    case type.kind === 'date' && type.date === 'time':
-      return 'date/time';
     case type.kind === 'date' && type.date === 'day':
       return 'date/day';
     case type.kind === 'date' && type.date === 'month':
       return 'date/month';
     case type.kind === 'date' && type.date === 'year':
       return 'date/year';
+    case type.kind === 'date':
+      return 'date/time';
     default:
       return 'string' as never;
   }

@@ -14,7 +14,7 @@ import {
 const d = parseUTCDate;
 
 it('can turn any kind of time unit into date specificities', () => {
-  expect(getSpecificity('time')).toEqual('time');
+  expect(getSpecificity('second')).toEqual('second');
   expect(getSpecificity('quarter')).toEqual('month');
   expect(getSpecificity('week')).toEqual('day');
 
@@ -22,15 +22,16 @@ it('can turn any kind of time unit into date specificities', () => {
 });
 
 it('can sort specificities', () => {
-  expect(sortSpecificities(['time', 'month', 'day'])).toEqual([
+  expect(sortSpecificities(['second', 'month', 'hour', 'day'])).toEqual([
     'month',
     'day',
-    'time',
+    'hour',
+    'second',
   ]);
 
   expect(
-    sortSpecificities(['time', 'month', 'quarter', 'day', 'week', 'second'])
-  ).toEqual(['month', 'day', 'time']);
+    sortSpecificities(['second', 'month', 'quarter', 'day', 'week', 'second'])
+  ).toEqual(['month', 'day', 'second']);
 });
 
 it('can sort time units', () => {
@@ -63,8 +64,8 @@ it('can parse a date', () => {
 
   expect(getUTCDateSpecificity('2020')).toEqual('year');
   expect(getUTCDateSpecificity('2020-01-10')).toEqual('day');
-  expect(getUTCDateSpecificity('2020-01-10T10')).toEqual('time');
-  expect(getUTCDateSpecificity('2020-01-10T10:30')).toEqual('time');
+  expect(getUTCDateSpecificity('2020-01-10T10')).toEqual('hour');
+  expect(getUTCDateSpecificity('2020-01-10T10:30')).toEqual('minute');
 });
 
 it('can stringify a date', () => {
@@ -75,12 +76,12 @@ it('can stringify a date', () => {
   expect(stringifyDate(parseUTCDate('2020-01-10T10:30'), 'month')).toEqual(
     '2020-01'
   );
-  expect(stringifyDate(parseUTCDate('2020-10-21'), 'time')).toEqual(
+  expect(stringifyDate(parseUTCDate('2020-10-21'), 'minute')).toEqual(
     '2020-10-21 00:00'
   );
-  expect(stringifyDate(parseUTCDate('2020-10-21T10:30'), 'time')).toEqual(
-    '2020-10-21 10:30'
-  );
+  expect(
+    stringifyDate(parseUTCDate('2020-10-21T10:30'), 'millisecond')
+  ).toEqual('2020-10-21 10:30');
 });
 
 it('can round a date into a range', () => {
@@ -92,7 +93,7 @@ it('can round a date into a range', () => {
 it('does not round times', () => {
   const date = d('2020-05-05T10:00:00.004Z');
   expect(!Number.isNaN(date)).toEqual(true);
-  expect(cleanDate(date, 'time')).toEqual(date);
+  expect(cleanDate(date, 'millisecond')).toEqual(date);
 });
 
 it("gets a date from an AST date's arguments", () => {
@@ -108,7 +109,7 @@ it("gets a date from an AST date's arguments", () => {
 
   expect(
     getDateFromAstForm(['year', 2020n, 'month', 3n, 'day', 10n, 'hour', 10n])
-  ).toEqual([d('2020-03-10T10:00:00'), 'time']);
+  ).toEqual([d('2020-03-10T10:00:00'), 'hour']);
 
   expect(
     getDateFromAstForm([
@@ -125,5 +126,5 @@ it("gets a date from an AST date's arguments", () => {
       'second',
       10n,
     ])
-  ).toEqual([d('2020-03-10T10:30:10'), 'time']);
+  ).toEqual([d('2020-03-10T10:30:10'), 'second']);
 });

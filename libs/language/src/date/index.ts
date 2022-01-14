@@ -20,8 +20,15 @@ export { Time };
  * For now, here's some nonsense about turning dates into arrays and back:
  */
 
-const dateSpecificities = ['year', 'month', 'day', 'time'];
-const timeSpecificities = ['hour', 'minute', 'second', 'millisecond'];
+const specificities: Time.Specificity[] = [
+  'year',
+  'month',
+  'day',
+  'hour',
+  'minute',
+  'second',
+  'millisecond',
+];
 
 export const timeUnitToJSDateUnit: Record<
   Time.Unit,
@@ -106,6 +113,7 @@ export const convertFromMs: Partial<Record<Time.Unit, number>> = {
   hour: 60 * 60 * 1000,
   minute: 60 * 1000,
   second: 1000,
+  millisecond: 1,
 };
 
 // Deal with annoying intersections
@@ -123,17 +131,13 @@ export const getSpecificity = (thing?: string | Unit): Time.Specificity => {
   let unit = typeof thing === 'string' ? thing : thing && thing.unit;
   if (unit) {
     unit = singular(unit);
-    if (unit in timeUnitToJSDateUnit) {
-      // Eliminate quarter, week
-      [unit] = timeUnitToJSDateUnit[unit as Time.Unit];
-    }
 
-    if (unit && dateSpecificities.indexOf(unit as Time.Specificity) >= 0) {
+    if (unit === 'quarter') return 'month';
+
+    if (unit === 'week') return 'day';
+
+    if (specificities.includes(unit as Time.Specificity)) {
       return unit as Time.Specificity;
-    }
-
-    if (timeSpecificities.indexOf(unit as string) >= 0) {
-      return 'time';
     }
   }
 
@@ -162,8 +166,8 @@ export const getTimeUnit = (thing: string) => {
 };
 
 export const cmpSpecificities = (left: string, right: string): number => {
-  const leftIdx = dateSpecificities.indexOf(getSpecificity(left));
-  const rightIdx = dateSpecificities.indexOf(getSpecificity(right));
+  const leftIdx = specificities.indexOf(getSpecificity(left));
+  const rightIdx = specificities.indexOf(getSpecificity(right));
 
   return Math.sign(leftIdx - rightIdx);
 };
@@ -198,12 +202,9 @@ const cmpJSDateUnits = (left: Time.JSDateUnit, right: Time.JSDateUnit) => {
 
 // Dates are ranges -- this function cuts up a date to its closest specificity
 export const cleanDate = (
-  _date: bigint | number,
+  date: bigint | number,
   specificity: Time.Specificity
 ): bigint => {
-  const date = BigInt(_date);
-  if (specificity === 'time') return date;
-
   const necessarySegments = dateToArray(date).slice(
     0,
     jsUnitToIndex[specificity] + 1
@@ -248,10 +249,10 @@ export function arrayToDate(
     ['year', segments[0]],
     ['month', segments[1]],
     ['day', segments[2]],
-    ['time', segments[3]],
-    ['time', segments[4]],
-    ['time', segments[5]],
-    ['time', segments[6]],
+    ['hour', segments[3]],
+    ['minute', segments[4]],
+    ['second', segments[5]],
+    ['millisecond', segments[6]],
   ];
 
   const dateArgs: bigint[] = [];
@@ -284,8 +285,7 @@ export function parseUTCDate(iso: string) {
 export function getUTCDateSpecificity(iso: string): Time.Specificity {
   const segmentCount = getDefined(iso.match(/(\d+)/g)?.length);
 
-  if (segmentCount >= dateSpecificities.length) return 'time';
-  return dateSpecificities[segmentCount - 1] as Time.Specificity;
+  return specificities[segmentCount - 1] as Time.Specificity;
 }
 
 export function date(

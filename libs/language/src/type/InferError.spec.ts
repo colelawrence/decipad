@@ -21,9 +21,9 @@ it('can stringify errors', () => {
   );
 
   expect(
-    InferError.mismatchedSpecificity('month', 'time').message
+    InferError.mismatchedSpecificity('month', 'hour').message
   ).toMatchInlineSnapshot(
-    `"Expected time specific up to the month, but got time"`
+    `"Expected time specific up to the month, but got hour"`
   );
 
   expect(

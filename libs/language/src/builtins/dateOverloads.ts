@@ -6,7 +6,6 @@ import {
   cmpSpecificities,
   getHighestSpecificity as getMostSpecific,
   negateTimeQuantity,
-  timeSpecificityToTimeUnit,
   subtractDates,
 } from '../date';
 import { getDefined, getInstanceof } from '../utils';
@@ -60,7 +59,7 @@ export const subtractDatesFunctor = ([t1, t2]: Type[]) => {
   return Type.combine(
     t1.isDate(),
     t2.isDate(),
-    t.timeQuantity([timeSpecificityToTimeUnit(d1Specificity)])
+    t.timeQuantity([d1Specificity])
   );
 };
 

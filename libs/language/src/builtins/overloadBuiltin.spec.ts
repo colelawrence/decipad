@@ -46,7 +46,7 @@ describe('utils', () => {
     expect(getOverloadedTypeFromValue(fromJS('hi'))).toEqual('string');
     expect(getOverloadedTypeFromValue(fromJS(10))).toEqual('number');
     expect(
-      getOverloadedTypeFromValue(Date.fromDateAndSpecificity(0n, 'time'))
+      getOverloadedTypeFromValue(Date.fromDateAndSpecificity(0n, 'hour'))
     ).toEqual('date');
     expect(getOverloadedTypeFromValue(new TimeQuantity(new Map()))).toEqual(
       'time-quantity'

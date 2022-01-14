@@ -26,7 +26,7 @@ export const DateResult = ({
       format = 'MMM do uuuu';
       break;
     }
-    case 'time': {
+    default: {
       if (date.getUTCSeconds() === 0 && date.getUTCMilliseconds() === 0) {
         format = 'MMM do uuuu kk:mm';
       }

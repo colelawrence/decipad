@@ -34,9 +34,14 @@ describe('common functions', () => {
     ).toMatchInlineSnapshot(`"day"`);
 
     expect(
-      dateAndTimeQuantityFunctor([t.date('time'), t.timeQuantity(['minute'])])
+      dateAndTimeQuantityFunctor([t.date('second'), t.timeQuantity(['minute'])])
         .date
-    ).toMatchInlineSnapshot(`"time"`);
+    ).toMatchInlineSnapshot(`"second"`);
+
+    expect(
+      dateAndTimeQuantityFunctor([t.date('second'), t.timeQuantity(['minute'])])
+        .date
+    ).toMatchInlineSnapshot(`"second"`);
   });
 
   it('timeQuantityBinopFunctor', () => {
@@ -89,7 +94,10 @@ describe('common functions', () => {
 
     expect(
       addDateAndTimeQuantity(
-        IDate.fromDateAndSpecificity(parseUTCDate('2020-01-01 10:30'), 'time'),
+        IDate.fromDateAndSpecificity(
+          parseUTCDate('2020-01-01 10:30'),
+          'minute'
+        ),
         new TimeQuantity({ hour: 1n })
       ).getData()
     ).toEqual(parseUTCDate('2020-01-01 11:30'));

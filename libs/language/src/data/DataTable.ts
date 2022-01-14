@@ -24,7 +24,7 @@ export function toInternalType(_type: ArrowType): Type {
     case 'Date64<MILLISECOND>':
     case ArrowType.DateMillisecond:
       // TODO: get granularity from date
-      return t.date('time');
+      return t.date('millisecond');
     case 'Float':
     case 'Float16':
     case 'Float32':

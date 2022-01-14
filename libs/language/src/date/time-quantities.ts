@@ -115,12 +115,6 @@ export const negateTimeQuantity = (quantity: TimeQuantity) => {
   return new TimeQuantity(retMap);
 };
 
-export const timeSpecificityToTimeUnit = (
-  timeSpecificity: Time.Specificity
-): Time.Unit => {
-  return timeSpecificity === 'time' ? 'millisecond' : timeSpecificity;
-};
-
 export const convertTimeQuantityTo = (
   quantity: TimeQuantity,
   convertTo: Time.Unit

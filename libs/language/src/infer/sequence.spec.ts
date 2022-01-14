@@ -1,4 +1,4 @@
-import { getUTCDateSpecificity, parseUTCDate } from '../date';
+import { getUTCDateSpecificity, parseUTCDate, Time } from '../date';
 import { build as t } from '../type';
 import { l, n, seq, date, r } from '../utils';
 
@@ -87,11 +87,7 @@ describe('sequence counts', () => {
     expect(getNumberSequenceCountN(7, 1, -5)).toEqual(2);
   });
 
-  const dateSeqSize = (
-    start: string,
-    end: string,
-    by: 'year' | 'quarter' | 'month' | 'day' | 'hour' | 'minute'
-  ) => {
+  const dateSeqSize = (start: string, end: string, by: Time.Unit) => {
     const spec = getUTCDateSpecificity(start);
     return getDateSequenceLength(
       parseUTCDate(start),
@@ -120,6 +116,11 @@ describe('sequence counts', () => {
     expect(dateSeqSize('2021-01-01', '2022-01-01', 'day')).toEqual(366);
     expect(dateSeqSize('2020-01-01', '2021-01-01', 'day')).toEqual(367);
     expect(dateSeqSize('2021-02-01', '2021-03-01', 'day')).toEqual(29);
+
+    // Weeks
+    expect(dateSeqSize('2021-02-01', '2021-03-01', 'week')).toEqual(5);
+    expect(dateSeqSize('2021-02-01', '2021-02-08', 'week')).toEqual(2);
+    expect(dateSeqSize('2021-02-01', '2021-02-03', 'week')).toEqual(1);
 
     // Time
     expect(dateSeqSize('2021-02-01T10:30', '2021-02-02T10:30', 'hour')).toEqual(

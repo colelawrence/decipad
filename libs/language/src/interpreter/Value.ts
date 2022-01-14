@@ -2,13 +2,7 @@
 import Fraction from '@decipad/fraction';
 import { singular } from 'pluralize';
 import { Time, Interpreter, Units } from '..';
-import {
-  AnyMapping,
-  anyMappingToMap,
-  filterUnzipped,
-  getDefined,
-  getInstanceof,
-} from '../utils';
+import { filterUnzipped, getDefined, getInstanceof } from '../utils';
 import {
   addTimeQuantity,
   cleanDate,
@@ -117,7 +111,7 @@ export class BooleanValue implements Value {
 }
 
 export class Date implements Value {
-  specificity: Time.Specificity = 'time';
+  specificity: Time.Specificity;
   moment: bigint;
 
   constructor(moment: bigint, specificity: Time.Specificity) {
@@ -140,16 +134,12 @@ export class Date implements Value {
    * Dates such as month, day and year, have a start and end. getData() gets us the first millisecond of that range. getEnd gets us the last.
    */
   getEnd() {
-    if (this.specificity === 'time') {
-      return this.moment;
-    } else {
-      return (
-        addTimeQuantity(
-          this.moment,
-          new TimeQuantity({ [this.specificity]: 1 })
-        ) - 1n
-      );
-    }
+    return (
+      addTimeQuantity(
+        this.moment,
+        new TimeQuantity({ [this.specificity]: 1 })
+      ) - 1n
+    );
   }
 
   getEndDate() {
@@ -197,10 +187,6 @@ export class TimeQuantity implements Value {
         );
       }
     }
-  }
-
-  static fromMapping(mapping: AnyMapping<bigint>) {
-    return new TimeQuantity(anyMappingToMap(mapping) as Map<Time.Unit, bigint>);
   }
 
   static fromUnits(number: bigint, units: Units): TimeQuantity {
