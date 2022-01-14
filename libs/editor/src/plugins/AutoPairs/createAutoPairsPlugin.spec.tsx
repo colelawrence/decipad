@@ -65,26 +65,26 @@ describe('in a code block', () => {
 
   it.each`
     key    | pair
-    ${')'} | ${'()'}
-    ${']'} | ${'[]'}
-    ${'}'} | ${'{}'}
+    ${')'} | ${'(x)'}
+    ${']'} | ${'[x]'}
+    ${'}'} | ${'{x}'}
   `(
-    'skips the $key in $pair when pressing it in the middle of a pair',
+    'skips the $key in $pair when pressing it at the end of a pair',
     ({ key, pair }) => {
       const editor = createEditorPlugins();
       editor.children = [
         { type: ELEMENT_CODE_LINE, children: [{ text: pair }] },
       ];
       editor.selection = {
-        anchor: { path: [0, 0], offset: 1 },
-        focus: { path: [0, 0], offset: 1 },
+        anchor: { path: [0, 0], offset: 2 },
+        focus: { path: [0, 0], offset: 2 },
       };
 
       insert(editor, key);
       expect(editor.children).toEqual([
         { type: ELEMENT_CODE_LINE, children: [{ text: pair }] },
       ]);
-      expect(editor.selection.anchor.offset).toBe(2);
+      expect(editor.selection.anchor.offset).toBe(3);
     }
   );
 

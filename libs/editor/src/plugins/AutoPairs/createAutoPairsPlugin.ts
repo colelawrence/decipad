@@ -40,10 +40,7 @@ export const createAutoPairsPlugin = (): PlatePlugin => ({
           }
 
           const endPair = pairs.find((pair) => pair.end === event.key);
-          if (
-            endPair &&
-            node.children[0].text[cursor.offset - 1] === endPair.start
-          ) {
+          if (endPair && node.children[0].text[cursor.offset] === endPair.end) {
             event.preventDefault();
             Transforms.move(editor, {
               distance: 1,

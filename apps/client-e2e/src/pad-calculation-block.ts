@@ -21,14 +21,14 @@ describe('pad content', () => {
   it('can create a table using a calculation block', async () => {
     await focusOnBody();
     await keyPress('Enter');
-    await createCalculationBlock('A = { B = [1,2,3');
+    await createCalculationBlock('A = { B = [1,2,3] }');
 
     const blocks = await getCalculationBlocks();
     expect(blocks).toMatchObject([
       {
         lines: [
           {
-            code: 'A = { B = [1,2,3]}',
+            code: 'A = { B = [1,2,3] }',
           },
         ],
       },
