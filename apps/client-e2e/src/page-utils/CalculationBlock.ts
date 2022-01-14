@@ -1,4 +1,6 @@
+import { timeout } from '@decipad/utils';
 import { ElementHandle } from 'playwright';
+import waitForExpect from 'wait-for-expect';
 import { keyPress } from './Pad';
 
 interface CalculationBlockLine {
@@ -31,13 +33,18 @@ async function fetchCalculationBlock(
   codeBlock: ElementHandle
 ): Promise<CalculationBlock> {
   // wait for the results to show up
-  await codeBlock.waitForSelector('output');
+  await Promise.all([
+    waitForExpect(async () =>
+      expect(await codeBlock.$$('output')).not.toHaveLength(0)
+    ),
+    timeout(500),
+  ]);
 
   const codeLines = await codeBlock.$$('code');
   const codeLinesWithResults = await Promise.all(
     codeLines.map(
       async (codeLine) =>
-        [codeLine, (await codeLine.$('//following::output'))!] as const
+        [codeLine, (await codeLine.$$('//following::output'))[0]] as const
     )
   );
 
