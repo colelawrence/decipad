@@ -1,9 +1,6 @@
 import pSeries from 'p-series';
 
-import { zip } from '@decipad/utils';
-import Fraction from '@decipad/fraction';
-
-import { AST, serializeType, TimeQuantity } from '..';
+import { AST } from '..';
 import { callBuiltin } from '../builtins';
 import { getOfType, getDefined, getIdentifierString } from '../utils';
 import { dateNodeToTimeUnit, getDateFromAstForm } from '../date';
@@ -138,16 +135,6 @@ export async function evaluate(
       const values: Value[] = await pSeries(
         node.args[0].args.map((v) => () => evaluate(realm, v))
       );
-
-      const type = serializeType(realm.getTypeAt(node));
-      if (type.kind === 'time-quantity') {
-        const quantities = values.map((v) =>
-          BigInt((v.getData() as Fraction).n)
-        );
-
-        // It's a time quantity, let's return one instead of a column
-        return TimeQuantity.fromMapping(zip(type.timeUnits, quantities));
-      }
 
       return Column.fromValues(values);
     }

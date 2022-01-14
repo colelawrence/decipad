@@ -687,18 +687,6 @@ describe('Dates', () => {
   });
 });
 
-describe('Time quantities', () => {
-  it('can be returned', async () => {
-    expect(await runCode(`[10 days]`)).toMatchInlineSnapshot(
-      `Result([ [ 'day', 10n ] ] days)`
-    );
-
-    expect(
-      await runCode(`date(2020-01-11) - date(2020-01-01)`)
-    ).toMatchInlineSnapshot(`Result([ [ 'day', 10n ] ] days)`);
-  });
-});
-
 describe('Injected external data', () => {
   it('can be injected into the language', async () => {
     expect(

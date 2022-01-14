@@ -58,7 +58,9 @@ describe('table result', () => {
 });
 
 it('matches time units result type', async () => {
-  expect(getResultComponent(await runCode('[10 days]'))).toBe(TimeUnitsResult);
+  expect(
+    getResultComponent(await runCode('date(2020-01-11) - date(2020-01-01)'))
+  ).toBe(TimeUnitsResult);
 });
 
 it('matches function result type', async () => {

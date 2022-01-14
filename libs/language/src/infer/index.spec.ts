@@ -146,14 +146,6 @@ describe('dates', () => {
   });
 });
 
-describe('time quantities', () => {
-  it('can be inferred', async () => {
-    expect(
-      await inferExpression(nilCtx, col(ne(2020, 'years'), ne(3, 'minutes')))
-    ).toEqual(t.timeQuantity(['year', 'minute']));
-  });
-});
-
 describe('columns', () => {
   it('infers columns', async () => {
     expect(await inferExpression(nilCtx, col(1, 2, 3))).toEqual(

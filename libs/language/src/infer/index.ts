@@ -1,9 +1,9 @@
 import pSeries from 'p-series';
 
-import { AST, Time } from '..';
+import { AST } from '..';
 import { InferError, Type, build as t } from '../type';
 import { getDefined, zip, getIdentifierString, getOfType } from '../utils';
-import { getDateFromAstForm, timeUnitFromUnit } from '../date';
+import { getDateFromAstForm } from '../date';
 import { callBuiltinFunctor } from '../builtins';
 import { resolve as resolveData } from '../data';
 import { expandDirectiveToType } from '../directives';
@@ -95,15 +95,6 @@ export const inferExpression = wrap(
 
         if (cellTypes.length === 0) {
           return t.impossible(InferError.unexpectedEmptyColumn());
-        } else if (
-          cellTypes.every((t) => t.isTimeQuantity().errorCause == null)
-        ) {
-          const timeUnits = cellTypes.flatMap((type) =>
-            getDefined(type.unit).args.map((unit) =>
-              timeUnitFromUnit(unit.unit)
-            )
-          );
-          return t.timeQuantity(timeUnits as Time.Unit[]);
         } else {
           const [cellType, ...hopefullyConsistentTypes] = cellTypes;
 
