@@ -977,6 +977,34 @@
           }
         }
       }
+    },
+    "client-events": {
+      "root": "libs/client-events",
+      "sourceRoot": "libs/client-events/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/client-events/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/client-events"
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/client-events"],
+          "options": {
+            "jestConfig": "libs/client-events/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   }
 }

@@ -1,7 +1,9 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { organisms } from '@decipad/ui';
 import { useWindowListener } from '@decipad/react-utils';
+import { ClientEventsContext } from '@decipad/client-events';
 import { useEditorState } from '@udecode/plate';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useContext } from 'react';
 import { Editor } from 'slate';
 import { ReactEditor, useFocused, useSelected } from 'slate-react';
 import { PlateComponent } from '../../utils/components';
@@ -16,6 +18,7 @@ export const SlashCommandsParagraph: PlateComponent = (props) => {
   const editor = useEditorState();
   const selected = useSelected();
   const focused = useFocused();
+  const clientEvent = useContext(ClientEventsContext);
 
   const elementPath = ReactEditor.findPath(editor, props.element);
   const text = Editor.string(editor, elementPath);
@@ -71,7 +74,14 @@ export const SlashCommandsParagraph: PlateComponent = (props) => {
           }}
         >
           <organisms.SlashCommandsMenu
-            onExecute={(cmd) => execute(editor, elementPath, cmd)}
+            onExecute={(command) => {
+              execute(editor, elementPath, command);
+              clientEvent({
+                type: 'action',
+                action: 'slash command',
+                props: { command },
+              });
+            }}
             search={search}
           />
         </div>

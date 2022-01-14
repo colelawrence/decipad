@@ -18,5 +18,6 @@ module.exports = {
     '<rootDir>/libs/backend-test-sandbox',
     '<rootDir>/libs/sync-connection-lambdas',
     '<rootDir>/libs/slate-yjs',
+    '<rootDir>/libs/client-events',
   ],
 };

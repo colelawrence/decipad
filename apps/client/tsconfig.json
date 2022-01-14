@@ -22,6 +22,9 @@
     },
     {
       "path": "../../libs/queries"
+    },
+    {
+      "path": "../../libs/client-events"
     }
   ]
 }

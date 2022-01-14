@@ -96,7 +96,8 @@
       "test-utils": ["libs/ui/src/lib/utils/test-utils.tsx"],
       "@decipad/discord-customerservice-lambda": [
         "libs/discord-customerservice-lambda/src/index.ts"
-      ]
+      ],
+      "@decipad/client-events": ["libs/client-events/src/index.ts"]
     }
   },
   "files": [],

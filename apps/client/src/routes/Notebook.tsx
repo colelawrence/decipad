@@ -1,8 +1,9 @@
 import { Editor } from '@decipad/editor';
 import { PermissionType, useSharePadWithSecret } from '@decipad/queries';
 import { LoadingSpinnerPage, NotebookTopbar } from '@decipad/ui';
+import { ClientEventsContext } from '@decipad/client-events';
 import styled from '@emotion/styled';
-import { FC, useState } from 'react';
+import { FC, useContext, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { getSecretPadLink } from '../lib/secret';
 import { useGetPadById } from '../queries/useGetPadById';
@@ -80,6 +81,8 @@ export const Notebook = ({
     useSharePadWithSecret();
   const [shareSecret, setShareSecret] = useState<string>();
 
+  const clientEvent = useContext(ClientEventsContext);
+
   if (loading) {
     return <LoadingSpinnerPage />;
   }
@@ -132,6 +135,17 @@ export const Notebook = ({
               });
               if (response?.data?.sharePadWithSecret) {
                 setShareSecret(response.data.sharePadWithSecret);
+                clientEvent({
+                  type: 'action',
+                  action: 'notebook shared',
+                  props: {
+                    url: getSecretPadLink(
+                      workspaceId,
+                      notebookId,
+                      shareSecret ?? ''
+                    ),
+                  },
+                });
               }
             }
           }}

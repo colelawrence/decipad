@@ -13,6 +13,7 @@
     { "path": "../utils" },
     { "path": "../react-utils" },
     { "path": "../fraction" },
-    { "path": "../routing" }
+    { "path": "../routing" },
+    { "path": "../client-events" }
   ]
 }

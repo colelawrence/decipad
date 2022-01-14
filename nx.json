@@ -146,6 +146,9 @@
     },
     "discord-customerservice-lambda": {
       "tags": []
+    },
+    "client-events": {
+      "tags": []
     }
   }
 }

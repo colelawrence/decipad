@@ -88,6 +88,7 @@ jobs:
           export NEXT_PUBLIC_SENTRY_DSN=${{secrets.SENTRY_DSN}}
           export NEXT_PUBLIC_SENTRY_ENVIRONMENT=alpha
           export NEXT_PUBLIC_HOTJAR_SITE_ID=${{secrets.ALPHA_HOTJAR_SITE_ID}}
+          export NEXT_PUBLIC_ANALYTICS_WRITE_KEY=${{secrets.ALPHA_ANALYTICS_WRITE_KEY}}
           yarn deploy:alpha
           scripts/push-sam.sh
 

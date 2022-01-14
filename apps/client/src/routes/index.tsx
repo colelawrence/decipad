@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { RequireSession } from '../components/RequireSession';
+import { RouteEvents } from '../components/RouteEvents';
 import { decode as decodeVanityUrlComponent } from '../lib/vanityUrlComponent';
 import { Home } from './Home';
 import { Notebook } from './Notebook';
@@ -14,10 +15,12 @@ export function Router(): ReturnType<FC> {
         path="/workspaces/:workspaceid/pads/:padid"
         render={({ match }) => (
           <RequireSession allowSecret>
-            <Notebook
-              workspaceId={match.params.workspaceid}
-              notebookId={decodeVanityUrlComponent(match.params.padid)}
-            />
+            <RouteEvents category="notebook">
+              <Notebook
+                workspaceId={match.params.workspaceid}
+                notebookId={decodeVanityUrlComponent(match.params.padid)}
+              />
+            </RouteEvents>
           </RequireSession>
         )}
       />
@@ -25,12 +28,16 @@ export function Router(): ReturnType<FC> {
         path="/workspaces/:workspaceid"
         render={({ match }) => (
           <RequireSession>
-            <Workspace workspaceId={match.params.workspaceid} />
+            <RouteEvents category="workspace">
+              <Workspace workspaceId={match.params.workspaceid} />
+            </RouteEvents>
           </RequireSession>
         )}
       />
       <Route path="/playground">
-        <Playground />
+        <RouteEvents category="playground">
+          <Playground />
+        </RouteEvents>
       </Route>
       <Route path="/">
         <RequireSession>

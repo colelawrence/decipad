@@ -6,6 +6,10 @@ echo "Preparing the public files folder...";
 rm -rf apps/backend/public
 mkdir apps/backend/public
 
+echo "Configuring the client..."
+echo "NEXT_PUBLIC_ANALYTICS_WRITE_KEY=${NEXT_PUBLIC_ANALYTICS_WRITE_KEY:-}" > apps/client/.env.production
+
+
 echo "Building frontend..."
 yarn build:frontend
 cp -r dist/apps/client/exported/. apps/backend/public

@@ -40,10 +40,12 @@ import {
 } from '../components';
 import type { PlateComponent } from './components';
 
-// This function creates the editor components
-export const createPlateComponents = (): Partial<
+export type PlateComponents = Partial<
   Record<elementTypes.ElementType, PlateComponent>
-> => {
+>;
+
+// This function creates the editor components
+export const createPlateComponents = (): PlateComponents => {
   const components: Partial<Record<elementTypes.ElementType, PlateComponent>> =
     {
       // Plate default elements

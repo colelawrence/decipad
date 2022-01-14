@@ -88,6 +88,9 @@ jobs:
           arc env staging DISCORD_APP_ID '${{secrets.DISCORD_APP_ID}}'
           arc env staging NODE_OPTIONS --enable-source-maps
           cd ../..
+
+          export NEXT_PUBLIC_ANALYTICS_WRITE_KEY=${{secrets.DEV_ANALYTICS_WRITE_KEY}}
+
           yarn deploy:pr
           scripts/push-sam.sh
 

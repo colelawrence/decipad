@@ -1,6 +1,16 @@
 const lightCodeTheme = require('prism-react-renderer/themes/github').default;
 const darkCodeTheme = require('prism-react-renderer/themes/dracula').default;
 
+const plugins = [];
+if (process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY) {
+  plugins.push([
+    'docusaurus-plugin-segment',
+    {
+      apiKey: process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY,
+    },
+  ]);
+}
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Decipad',
@@ -32,6 +42,8 @@ const config = {
       }),
     ],
   ],
+
+  plugins,
 
   themes: ['./src/lib/deci-language-live-codeblock'],
 

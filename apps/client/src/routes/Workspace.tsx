@@ -20,7 +20,8 @@ import {
   REMOVE_PAD,
 } from '@decipad/queries';
 import { Dashboard, NotebookList, NotebookListPlaceholder } from '@decipad/ui';
-import { FC, useCallback, useState } from 'react';
+import { ClientEventsContext } from '@decipad/client-events';
+import { FC, useCallback, useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
 import { SideMenu } from '../components/SideMenu';
@@ -33,8 +34,8 @@ export function Workspace({
   workspaceId: string;
 }): ReturnType<FC> {
   const history = useHistory();
-
   const { addToast } = useToasts();
+  const clientEvent = useContext(ClientEventsContext);
 
   const { data } = useQuery<GetWorkspaceById, GetWorkspaceByIdVariables>(
     GET_WORKSPACE_BY_ID,
@@ -77,6 +78,7 @@ export function Workspace({
             newPad.id
           )}`
         );
+        clientEvent({ type: 'action', action: 'notebook created' });
       } catch (err) {
         addToast(`Error creating notebook: ${(err as Error).message}`, {
           appearance: 'error',
@@ -85,14 +87,17 @@ export function Workspace({
         setCreatingPad(false);
       }
     }
-  }, [creatingPad, createPad, workspaceId, addToast, history]);
+  }, [creatingPad, createPad, workspaceId, addToast, history, clientEvent]);
   const handleDuplicateNotebook = (id: string) =>
     duplicatePad({
       variables: { id },
       refetchQueries: ['GetWorkspaceById'],
       awaitRefetchQueries: true,
     })
-      .then(() => addToast('Notebook duplicated', { appearance: 'info' }))
+      .then(() => {
+        addToast('Notebook duplicated', { appearance: 'info' });
+        clientEvent({ type: 'action', action: 'notebook duplicated' });
+      })
       .catch((err) =>
         addToast(`Error duplicating notebook: ${err.message}`, {
           appearance: 'error',
@@ -104,7 +109,10 @@ export function Workspace({
       refetchQueries: ['GetWorkspaceById'],
       awaitRefetchQueries: true,
     })
-      .then(() => addToast('Notebook removed', { appearance: 'info' }))
+      .then(() => {
+        addToast('Notebook removed', { appearance: 'info' });
+        clientEvent({ type: 'action', action: 'notebook deleted' });
+      })
       .catch((err) =>
         addToast(`Error removing notebook: ${err.message}`, {
           appearance: 'error',

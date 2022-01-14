@@ -18,6 +18,8 @@ import { ToastProvider } from 'react-toast-notifications';
 import { setErrorReporter } from '@decipad/language';
 import { useApollo } from '../lib/apolloClient';
 import { Router } from '../routes';
+import { IdentifyUserAnalytics } from '../components/IdentifyUserAnalytics';
+import { ClientEventsAnalytics } from '../components/ClientEventsAnalytics';
 
 const inBrowser = typeof window !== 'undefined';
 
@@ -89,19 +91,23 @@ function Index({ pageProps = {} }) {
           />
         )}
       </Head>
-      <ToastProvider autoDismiss placement="bottom-right">
-        <AuthProvider session={session ?? undefined}>
-          <ApolloProvider client={apolloClient}>
-            <GlobalStyles>
-              <ChakraProvider theme={theme}>
-                <BrowserRouter>
-                  <Router />
-                </BrowserRouter>
-              </ChakraProvider>
-            </GlobalStyles>
-          </ApolloProvider>
-        </AuthProvider>
-      </ToastProvider>
+      <ClientEventsAnalytics>
+        <ToastProvider autoDismiss placement="bottom-right">
+          <AuthProvider session={session ?? undefined}>
+            <IdentifyUserAnalytics>
+              <ApolloProvider client={apolloClient}>
+                <GlobalStyles>
+                  <ChakraProvider theme={theme}>
+                    <BrowserRouter>
+                      <Router />
+                    </BrowserRouter>
+                  </ChakraProvider>
+                </GlobalStyles>
+              </ApolloProvider>
+            </IdentifyUserAnalytics>
+          </AuthProvider>
+        </ToastProvider>
+      </ClientEventsAnalytics>
     </>
   );
 }
