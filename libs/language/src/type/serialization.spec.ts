@@ -30,7 +30,7 @@ it('can stringify a type', () => {
       },
     }
   `);
-  expect(serializeType(t.scalar('string'))).toMatchInlineSnapshot(`
+  expect(serializeType(t.string())).toMatchInlineSnapshot(`
     Object {
       "kind": "string",
     }

@@ -1,6 +1,6 @@
 import produce from 'immer';
 import Fraction from '@decipad/fraction';
-import { Time } from '..';
+import { AST, Time } from '..';
 import { InferError, Type, TypeName } from '.';
 import { getDefined } from '../utils';
 import { Unit, Units, units } from './unit-type';
@@ -113,13 +113,17 @@ export const functionPlaceholder = () =>
     fType.functionness = true;
   });
 
-export const impossible = (errorCause: string | InferError): Type => {
-  const type = produce(number(), (impossibleType) => {
-    impossibleType.type = null;
+export const impossible = (
+  errorCause: string | InferError,
+  inNode: AST.Node | null = null
+): Type =>
+  produce(new Type(), (impossibleType) => {
+    if (typeof errorCause === 'string') {
+      errorCause = new InferError(errorCause);
+    }
+
+    impossibleType.errorCause = errorCause;
+    if (inNode) {
+      impossibleType.node = inNode;
+    }
   });
-  if (errorCause != null) {
-    return type.withErrorCause(errorCause);
-  } else {
-    return type;
-  }
-};

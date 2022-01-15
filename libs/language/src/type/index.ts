@@ -177,16 +177,13 @@ export class Type {
   }
 
   withErrorCause(error: InferError | string): Type {
-    if (typeof error === 'string') {
-      return this.withErrorCause(new InferError(error));
+    const { node, errorCause } = this;
+
+    if (errorCause) {
+      return this;
+    } else {
+      return t.impossible(error, node);
     }
-    return this.mapType(() => {
-      return produce(this, (newType) => {
-        newType.type = null;
-        newType.unit = null;
-        newType.errorCause = error;
-      });
-    });
   }
 
   expected(expected: Type | string): Type {

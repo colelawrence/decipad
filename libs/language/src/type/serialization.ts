@@ -86,9 +86,9 @@ export function deserializeType(type: SerializedType): Type {
     case 'number':
       return t.number(type.unit);
     case 'string':
-      return t.scalar('string');
+      return t.string();
     case 'boolean':
-      return t.scalar('boolean');
+      return t.boolean();
     case 'date':
       return t.date(type.date);
     case 'range':
