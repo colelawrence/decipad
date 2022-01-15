@@ -1,5 +1,4 @@
 import { Time, Type, Units } from '..';
-import { OverloadTypeName } from '../builtins/overloadBuiltin';
 import { stringifyUnits } from './units';
 
 export type ErrSpec =
@@ -41,7 +40,7 @@ export type ErrSpec =
   | {
       errType: 'badOverloadedBuiltinCall';
       functionName: string;
-      gotArgTypes: OverloadTypeName[];
+      gotArgTypes: Type[];
     }
   | {
       errType: 'cannotConvertBetweenUnits';
@@ -102,7 +101,7 @@ function specToString(spec: ErrSpec): string {
     }
     case 'badOverloadedBuiltinCall': {
       const gotArgTypes = spec.gotArgTypes
-        .map((argType) => argType.replace('-', ' '))
+        .map((argType) => argType.toBasicString())
         .join(', ');
       return `The function ${spec.functionName} cannot be called with (${gotArgTypes})`;
     }
@@ -206,10 +205,7 @@ export class InferError {
     });
   }
 
-  static badOverloadedBuiltinCall(
-    functionName: string,
-    gotArgTypes: OverloadTypeName[]
-  ) {
+  static badOverloadedBuiltinCall(functionName: string, gotArgTypes: Type[]) {
     return new InferError({
       errType: 'badOverloadedBuiltinCall',
       functionName,

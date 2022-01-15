@@ -3,6 +3,7 @@ import { automapValues, automapValuesForReducer } from '../dimtools';
 
 import { Value, AnyValue, Column, fromJS } from '../interpreter/Value';
 import { getDefined, getInstanceof } from '../utils';
+import { RuntimeError } from '../interpreter';
 import type { Type } from '../type';
 import { autoconvertResult, autoconvertArguments } from '../units';
 import { BuiltinSpec } from './interfaces';
@@ -17,13 +18,6 @@ function shouldAutoconvert(types: Type[]): boolean {
   return true;
 }
 
-function requireNonNull<T>(thing: T): T {
-  if (thing == null) {
-    throw new TypeError('null value detected');
-  }
-  return thing;
-}
-
 function callBuiltinAfterAutoconvert(
   funcName: string,
   builtin: BuiltinSpec,
@@ -36,10 +30,13 @@ function callBuiltinAfterAutoconvert(
 
   const lowerDimFn = (argsLowerDims: Value[]) => {
     if (builtin.fn != null) {
-      const argData = argsLowerDims.map((a) => a.getData()).map(requireNonNull);
+      const argData = argsLowerDims.map((a) => getDefined(a.getData()));
       try {
         return fromJS(builtin.fn(...argData));
       } catch (err) {
+        if (err instanceof RuntimeError) {
+          throw err;
+        }
         console.error(err);
         throw new TypeError(
           `Error calling builtin ${funcName}: ${(err as Error).message}`

@@ -54,9 +54,7 @@ export const overloadBuiltin = (
     const overload = byArgTypes.get(argTypesKey(argTypeNames));
 
     if (overload == null) {
-      return t.impossible(
-        InferError.badOverloadedBuiltinCall(fName, argTypeNames)
-      );
+      return t.impossible(InferError.badOverloadedBuiltinCall(fName, types));
     } else {
       return overload.functor(types);
     }
@@ -70,9 +68,11 @@ export const overloadBuiltin = (
 };
 
 // for string Maps
-const argTypesKey = (types: OverloadTypeName[]) => types.join(';');
+const argTypesKey = (types: (OverloadTypeName | null)[]) => types.join(';');
 
-export const getOverloadedTypeFromValue = (val: AnyValue): OverloadTypeName => {
+export const getOverloadedTypeFromValue = (
+  val: AnyValue
+): OverloadTypeName | null => {
   if (val instanceof StringValue) {
     return 'string';
   } else if (val instanceof BooleanValue) {
@@ -86,15 +86,11 @@ export const getOverloadedTypeFromValue = (val: AnyValue): OverloadTypeName => {
   } else if (val instanceof Range) {
     return 'number';
   } else {
-    throw new Error(
-      `Could not call overloaded function on ${
-        (val as { constructor: { name: string } })?.constructor.name
-      }`
-    );
+    return null;
   }
 };
 
-export const getOverloadedTypeFromType = (t: Type): OverloadTypeName => {
+export const getOverloadedTypeFromType = (t: Type): OverloadTypeName | null => {
   if (t.type != null) {
     return t.type as 'number' | 'string' | 'boolean';
   } else if (t.date != null) {
@@ -102,6 +98,6 @@ export const getOverloadedTypeFromType = (t: Type): OverloadTypeName => {
   } else if (t.rangeOf?.type) {
     return t.rangeOf.type as 'number' | 'string' | 'boolean';
   } else {
-    throw new Error('Could not call overloaded function');
+    return null;
   }
 };

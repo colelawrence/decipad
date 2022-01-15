@@ -31,9 +31,8 @@ it('can stringify errors', () => {
   ).toMatchInlineSnapshot(`"Column cannot contain both number and string"`);
 
   expect(
-    InferError.badOverloadedBuiltinCall('+', ['string', 'time-quantity'])
-      .message
+    InferError.badOverloadedBuiltinCall('+', [t.string(), t.number()]).message
   ).toMatchInlineSnapshot(
-    `"The function + cannot be called with (string, time quantity)"`
+    `"The function + cannot be called with (string, number)"`
   );
 });

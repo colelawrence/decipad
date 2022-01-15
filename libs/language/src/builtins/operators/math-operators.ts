@@ -2,6 +2,7 @@
 import produce from 'immer';
 import Fraction from '@decipad/fraction';
 import { getDefined } from '@decipad/utils';
+import { RuntimeError } from '../../interpreter';
 import { getInstanceof } from '../../utils';
 import { Type, build as t } from '../../type';
 import {
@@ -15,7 +16,6 @@ import { AST } from '../../parser';
 import { overloadBuiltin } from '../overloadBuiltin';
 import { dateOverloads } from '../dateOverloads';
 import { BuiltinSpec } from '../interfaces';
-import { RuntimeError } from '../../interpreter';
 import { compare } from '../../interpreter/compare-values';
 
 const ZERO = new Fraction(0);
@@ -260,12 +260,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   '*': {
     noAutoconvert: true,
     argCount: 2,
-    fn: (a, b) => {
-      if (!(a instanceof Fraction)) {
-        throw new Error('a needs to be a fraction');
-      }
-      return a.mul(b);
-    },
+    fn: (a, b) => getInstanceof(a, Fraction).mul(b),
     functor: ([a, b]) =>
       Type.combine(
         a.isScalar('number'),
@@ -295,8 +290,8 @@ export const mathOperators: Record<string, BuiltinSpec> = {
       if (result == null) {
         const resultNumber = a.valueOf() ** b.valueOf();
         if (Number.isNaN(resultNumber)) {
-          throw new TypeError(
-            `**: result of applying ${b.toString()} is not rational`
+          throw new RuntimeError(
+            `**: result of raising to ${b.toString()} is not rational`
           );
         }
         return new Fraction(resultNumber);

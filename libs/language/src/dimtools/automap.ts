@@ -59,7 +59,9 @@ export const automapTypes = (
       // Reduce nothing -- input dimensions are correct
       return mapFn(argTypes);
     } else {
-      throw new Error('Selective reduction is not supported yet');
+      return t.impossible(
+        'Operating upon multiple dimensional values is not supported yet'
+      );
     }
   }
 };
@@ -88,7 +90,9 @@ export const automapValues = (
       // Reduce nothing -- input dimensions are correct
       return mapFn(dimensionalArgs.map(materializeToValue));
     } else {
-      throw new Error('Selective reduction is not supported yet');
+      throw new Error(
+        'panic: Operating upon multiple dimensional values is not supported yet'
+      );
     }
   }
 };

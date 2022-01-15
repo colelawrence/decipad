@@ -37,7 +37,7 @@ it('chooses the correct overload for a type', () => {
     t.string()
   );
   expect(getDefined(plus.functor)([t.number(), t.string()]).errorCause).toEqual(
-    InferError.badOverloadedBuiltinCall('+', ['number', 'string'])
+    InferError.badOverloadedBuiltinCall('+', [t.number(), t.string()])
   );
 });
 
@@ -61,17 +61,12 @@ describe('utils', () => {
     expect(getOverloadedTypeFromType(t.timeQuantity(['day']))).toEqual(
       'time-quantity'
     );
-    expect(() =>
+    expect(
       getOverloadedTypeFromType(
         t.table({ length: 1, columnTypes: [], columnNames: [] })
       )
-    ).toThrow();
-    expect(() =>
-      getOverloadedTypeFromType(t.row([t.string()], ['A']))
-    ).toThrow();
-
-    expect(() =>
-      getOverloadedTypeFromType(t.column(t.number(), 123))
-    ).toThrow();
+    ).toEqual(null);
+    expect(getOverloadedTypeFromType(t.row([t.string()], ['A']))).toEqual(null);
+    expect(getOverloadedTypeFromType(t.column(t.number(), 123))).toEqual(null);
   });
 });

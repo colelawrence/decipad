@@ -1,6 +1,7 @@
 import Fraction from '@decipad/fraction';
 import { produce } from 'immer';
 import { getDefined } from '@decipad/utils';
+import { RuntimeError } from '../../interpreter';
 import { UnitOfMeasure, getUnitByName } from '../known-units';
 import { normalizeUnits, Unit, Units } from '../../type';
 import { BaseQuantityExpansion, expansions } from './expansions';
@@ -12,7 +13,7 @@ import { stringifyUnits } from '../../type/units';
 function nonScalarExpansion(units: Units): [Units, Converter] {
   const u = units?.args || [];
   if (u.length !== 1) {
-    throw new TypeError(
+    throw new RuntimeError(
       `Don't know how to expand non-scalar unit ${stringifyUnits(units)}`
     );
   }

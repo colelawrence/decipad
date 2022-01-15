@@ -2,6 +2,7 @@ import Fraction from '@decipad/fraction';
 import produce from 'immer';
 import { getUnitByName } from './known-units';
 import { expandUnits, contractUnits } from './expand';
+import { RuntimeError } from '../interpreter';
 import { Unit, Units } from '../type/unit-type';
 import { simplifyUnits, stringifyUnits } from '../type/units';
 
@@ -95,7 +96,7 @@ export function convertBetweenUnits(
   to: Units
 ): Fraction {
   if (!areUnitsConvertible(from, to)) {
-    throw new TypeError(
+    throw new RuntimeError(
       `Don't know how to convert between ${stringifyUnits(
         from
       )} and ${stringifyUnits(to)}`

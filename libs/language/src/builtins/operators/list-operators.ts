@@ -1,6 +1,7 @@
 import Fraction from '@decipad/fraction';
 import { getDefined } from '@decipad/utils';
 import produce from 'immer';
+import { RuntimeError } from '../../interpreter';
 import { Value, Column, Table, fromJS } from '../../interpreter/Value';
 import { Type, build as t } from '../../type';
 import { getInstanceof } from '../../utils';
@@ -174,7 +175,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
       const { columnNames } = table;
       const columnIndex = columnNames.indexOf(columnName.getData() as string);
       if (columnIndex < 0) {
-        throw new Error(`Column ${columnName} does not exist`);
+        throw new RuntimeError(`Column ${columnName} does not exist`);
       }
 
       const indices = approximateSubsetSumIndices(

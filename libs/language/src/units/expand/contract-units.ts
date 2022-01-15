@@ -1,5 +1,6 @@
 import { getDefined } from '@decipad/utils';
 import { identity, F } from '../../utils';
+import { RuntimeError } from '../../interpreter';
 import { Converter } from '.';
 import { expandUnits, doesNotScaleOnConversion } from './expand-units';
 import { stringifyUnits, Units } from '../../type';
@@ -15,7 +16,7 @@ function invert(convert: Converter): Converter {
 function nonScalarContraction(units: Units): [Units, Converter] {
   const u = units?.args || [];
   if (u.length !== 1) {
-    throw new TypeError(
+    throw new RuntimeError(
       `Don't know how to expand non-scalar unit ${stringifyUnits(units)}`
     );
   }

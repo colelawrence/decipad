@@ -2,6 +2,7 @@ import { singular } from 'pluralize';
 import Fraction from '@decipad/fraction';
 
 import produce from 'immer';
+import { RuntimeError } from '../interpreter';
 import { convertTimeQuantityTo, Time } from '../date';
 import { automapTypes, automapValues } from '../dimtools';
 import {
@@ -101,7 +102,7 @@ export async function getValue(
   return automapValues([expressionType], [evalResult], ([value]) => {
     if (value instanceof TimeQuantity) {
       if (units && units.args.length > 1) {
-        throw new TypeError(
+        throw new RuntimeError(
           `Don't know how to convert to composed unit ${stringifyUnits(units)}`
         );
       }
@@ -129,7 +130,7 @@ export async function getValue(
       return fromJS(converted);
     }
 
-    throw new TypeError(
+    throw new RuntimeError(
       `Don't know how to convert value to ${
         (units && stringifyUnits(units)) || value.getData().toString()
       }`
