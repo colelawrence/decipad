@@ -240,6 +240,6 @@ export class InferError {
   }
 
   get url() {
-    return `/docs/language/errors#${this.spec.errType}`;
+    return `/docs/errors#${this.spec.errType}`;
   }
 }

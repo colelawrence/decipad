@@ -192,4 +192,4 @@ Sugar in Glass
 
 ### Supported units
 
-[Here is a list of all the units Decipad knows](/docs/docs/language/supported-units).
+[Here is a list of all the units Decipad knows](/docs/supported-units).

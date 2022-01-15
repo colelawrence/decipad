@@ -36,4 +36,4 @@ even(10)
 
 ## Functions on numbers
 
-[Here you can see some of the supported built-in functions](/docs/docs/language/built-in-functions/functions-for-numbers).
+[Here you can see some of the supported built-in functions](/docs/built-in-functions/functions-for-numbers).

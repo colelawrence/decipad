@@ -49,4 +49,4 @@ You can use other comparators:
 
 ## Functions on booleans
 
-[Here is a list of all the functions that work on booleans](/docs/docs/language/built-in-functions/functions-for-booleans).
+[Here is a list of all the functions that work on booleans](/docs/built-in-functions/functions-for-booleans).

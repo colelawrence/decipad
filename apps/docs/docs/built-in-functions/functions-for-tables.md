@@ -8,7 +8,7 @@ Built-in functions that operate on tables:
 
 ## lookup
 
-[Here is documentation on the lookup function](/docs/docs/language/advanced-concepts/lookups).
+[Here is documentation on the lookup function](/docs/advanced-concepts/lookups).
 
 ## select
 

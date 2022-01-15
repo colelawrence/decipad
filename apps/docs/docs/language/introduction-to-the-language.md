@@ -1,6 +1,5 @@
 ---
 sidebar_position: 10
-slug: /introduction/introduction-to-the-language
 ---
 
 # Introduction to the language

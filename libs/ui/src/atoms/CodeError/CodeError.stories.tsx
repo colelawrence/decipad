@@ -4,7 +4,7 @@ import { CodeError } from './CodeError';
 
 const args = {
   message: 'This operation requires compatible units',
-  url: 'https://decipad.com/docs/language/errors#expected-unit',
+  url: 'https://decipad.com/docs/errors#expected-unit',
 };
 
 export default {

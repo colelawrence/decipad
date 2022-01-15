@@ -2,19 +2,9 @@
   "index_name": "docs.decipad.com",
   "start_urls": [
     {
-      "url": "https://dev.decipad.com/docs/docs/language",
+      "url": "https://dev.decipad.com/docs/",
       "selectors_key": "language",
       "tags": ["language"]
-    },
-    {
-      "url": "https://dev.decipad.com/docs/docs/examples",
-      "selectors_key": "examples",
-      "tags": ["examples"]
-    },
-    {
-      "url": "https://dev.decipad.com/docs/blog",
-      "selectors_key": "articles",
-      "tags": ["articles"]
     }
   ],
   "selectors": {

@@ -69,4 +69,4 @@ Difference = End - Start
 
 ## Functions on dates
 
-[Here is a list of all the functions that work on dates](/docs/docs/language/built-in-functions/functions-for-dates).
+[Here is a list of all the functions that work on dates](/docs/built-in-functions/functions-for-dates).

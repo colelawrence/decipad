@@ -18,7 +18,7 @@ Decipad supports the following file types:
 - CSV files (comma-separated text format, which is exportable from most spreadsheet apps)
 - [Arrow files](https://arrow.apache.org)
 
-You can check [the section about tables](/docs/docs/language/organising-your-data/tables) if you want to learn what you can do with them.
+You can check [the section about tables](/docs/organising-your-data/tables) if you want to learn what you can do with them.
 
 ## Name imported data
 
@@ -42,4 +42,4 @@ MyExample.Col2
 ==> fetch is not defined
 ```
 
-You can check [the section about lists](/docs/docs/language/organising-your-data/lists) if you want to learn what you can do with them.
+You can check [the section about lists](/docs/organising-your-data/lists) if you want to learn what you can do with them.

@@ -19,7 +19,7 @@ const config = {
   baseUrl: '/docs/',
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/deci-logo-brand.png',
+  favicon: '/img/deci-logo-brand.png',
   organizationName: 'decipad', // Usually your GitHub org/user name.
   projectName: 'decipad', // Usually your repo name.
 
@@ -29,6 +29,7 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
+          routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl: 'https://github.com/decipad/documentation/edit/main',
         },
@@ -68,9 +69,15 @@ const config = {
         items: [
           {
             type: 'doc',
-            docId: 'language/introduction/introduction-to-the-language',
+            docId: 'quick-start/get-started-with-decipad',
             position: 'left',
             label: 'Getting started',
+          },
+          {
+            type: 'doc',
+            docId: 'quick-start/help-and-support',
+            position: 'left',
+            label: 'Help',
           },
         ],
       },
@@ -82,7 +89,15 @@ const config = {
             items: [
               {
                 label: 'Getting started',
-                to: '/docs/docs/introduction/introduction-to-the-language',
+                to: '/docs/quick-start/get-started-with-decipad',
+              },
+              {
+                label: 'Help & Support',
+                to: '/docs/quick-start/help-and-support',
+              },
+              {
+                label: 'Technical Documentation',
+                to: '/docs/language/introduction-to-the-language',
               },
             ],
           },
@@ -112,7 +127,7 @@ const config = {
               },
               {
                 label: 'GitHub',
-                href: 'https://github.com/decipad/docs',
+                href: 'https://github.com/decipad/documentation',
               },
             ],
           },
