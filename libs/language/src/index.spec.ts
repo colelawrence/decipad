@@ -1381,4 +1381,16 @@ describe('user-defined units', () => {
       type: t.number(U('fatnuno', { known: false })),
     });
   });
+
+  it('user-defined units auto-convert', async () => {
+    expect(
+      await runCode(`
+        FlourDensity = 0.8 g/ml
+        FlourDensity * 1 cup
+      `)
+    ).toMatchObject({
+      value: F(200),
+      type: t.number(U('g')),
+    });
+  });
 });

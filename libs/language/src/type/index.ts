@@ -1,4 +1,5 @@
 import { immerable, produce } from 'immer';
+import Fraction from '@decipad/fraction';
 import { Time } from '..';
 import * as AST from '../parser/ast-types';
 import { zip } from '../utils';
@@ -102,7 +103,7 @@ export class Type {
     return notErrored ?? types[0];
   }
 
-  toString(value?: number): string {
+  toString(value?: Fraction): string {
     if (this.errorCause != null) {
       return `Error: ${this.errorCause.message}`;
     }

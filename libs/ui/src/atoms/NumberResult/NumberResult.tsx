@@ -56,9 +56,7 @@ export const NumberResult = ({
 
   // Numbers' toString isn't always formatted like [-]####.###
   const basicNumberMatch = asString.match(/^(-?)(\d+)(\.\d+)?$/);
-  const unitPart = type.unit
-    ? ` ${stringifyUnits(type.unit, fraction.valueOf())}`
-    : '';
+  const unitPart = type.unit ? ` ${stringifyUnits(type.unit, fraction)}` : '';
   if (basicNumberMatch != null) {
     const [, sign, integerPart, decimalPart] = basicNumberMatch;
 

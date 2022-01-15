@@ -258,7 +258,6 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     functor: ([n]) => n.isScalar('number'),
   },
   '*': {
-    noAutoconvert: true,
     argCount: 2,
     fn: (a, b) => getInstanceof(a, Fraction).mul(b),
     functor: ([a, b]) =>

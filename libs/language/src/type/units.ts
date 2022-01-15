@@ -1,4 +1,5 @@
 import { produce } from 'immer';
+import Fraction from '@decipad/fraction';
 import pluralize, { singular } from '../pluralize';
 import { Type } from '..';
 import { getDefined } from '../utils';
@@ -266,7 +267,7 @@ function produceExp(unit: Unit, makePositive: boolean): Unit {
 
 export const stringifyUnitArgs = (
   units: Unit[] | null,
-  value?: number
+  value?: Fraction
 ): string => {
   return (units ?? [])
     .reduce((parts: string[], unit: Unit): string[] => {
@@ -293,7 +294,10 @@ export const stringifyUnitArgs = (
         //
         parts.push(
           stringifyUnit(
-            pluralizeUnit(unit, units && units.length > 2 ? 1n : value)
+            pluralizeUnit(
+              unit,
+              units && units.length > 2 ? 2 : value?.valueOf() || 2
+            )
           )
         );
       }
@@ -302,7 +306,10 @@ export const stringifyUnitArgs = (
     .join('');
 };
 
-export const stringifyUnits = (units: Units | null, value?: number): string => {
+export const stringifyUnits = (
+  units: Units | null,
+  value?: Fraction
+): string => {
   if (units == null || units.args.length === 0) {
     return 'unitless';
   } else {
