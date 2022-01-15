@@ -1,4 +1,4 @@
-import { ELEMENT_CODE_BLOCK } from '@udecode/plate';
+import { ELEMENT_CODE_BLOCK, ELEMENT_CODE_LINE } from '@udecode/plate';
 import { ComputeRequest, Program, AST } from '@decipad/language';
 import {
   getCodeFromBlock,
@@ -20,11 +20,16 @@ export function slateDocumentToComputeRequest(
 
   for (const block of slateDoc) {
     if (block.type === ELEMENT_CODE_BLOCK) {
-      program.push({
-        id: block.id,
-        type: 'unparsed-block',
-        source: getCodeFromBlock(block),
-      });
+      // Add each line of a code block as its own block.
+      for (const innerBlock of block.children ?? []) {
+        if (innerBlock.type === ELEMENT_CODE_LINE) {
+          program.push({
+            id: innerBlock.id,
+            type: 'unparsed-block',
+            source: getCodeFromBlock(innerBlock),
+          });
+        }
+      }
     }
 
     if (

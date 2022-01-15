@@ -7,52 +7,52 @@ export type ErrSpec =
       message: string;
     }
   | {
-      errType: 'missingVariable';
+      errType: 'missing-variable';
       missingVariable: [name: string];
     }
   | {
-      errType: 'expectedButGot';
+      errType: 'expected-but-got';
       expectedButGot: [Type | string, Type | string];
     }
   | {
-      errType: 'expectedArgCount';
+      errType: 'expected-arg-count';
       expectedArgCount: [string, number, number];
     }
   | {
-      errType: 'expectedUnit';
+      errType: 'expected-unit';
       expectedUnit: [Units | null, Units | null];
     }
   | {
-      errType: 'expectedColumnContained';
+      errType: 'expected-column-contained';
     }
-  | { errType: 'unexpectedEmptyColumn' }
-  | { errType: 'unexpectedEmptyTable' }
+  | { errType: 'unexpected-empty-column' }
+  | { errType: 'unexpected-empty-table' }
   | {
-      errType: 'mismatchedSpecificity';
+      errType: 'mismatched-specificity';
       expectedSpecificity: Time.Specificity;
       gotSpecificity: Time.Specificity;
     }
   | {
-      errType: 'columnContainsInconsistentType';
+      errType: 'column-contains-inconsistent-type';
       cellType: Type;
       got: Type;
     }
   | {
-      errType: 'badOverloadedBuiltinCall';
+      errType: 'bad-overloaded-builtin-call';
       functionName: string;
       gotArgTypes: Type[];
     }
   | {
-      errType: 'cannotConvertBetweenUnits';
+      errType: 'cannot-convert-between-units';
       fromUnit: Units;
       toUnit: Units;
     }
   | {
-      errType: 'cannotConvertToUnit';
+      errType: 'cannot-convert-to-unit';
       toUnit: Units;
     }
   | {
-      errType: 'unknownCategory';
+      errType: 'unknown-category';
       dimensionId: string | number;
     };
 
@@ -63,57 +63,57 @@ function specToString(spec: ErrSpec): string {
     case 'free-form': {
       return spec.message;
     }
-    case 'missingVariable': {
+    case 'missing-variable': {
       const [name] = spec.missingVariable;
       return `The variable ${name} is missing`;
     }
-    case 'expectedButGot': {
+    case 'expected-but-got': {
       const [expected, got] = spec.expectedButGot.map((t) =>
         typeof t === 'string' ? t : t.toBasicString()
       );
 
       return `This operation requires a ${expected} and a ${got} was entered`;
     }
-    case 'expectedUnit': {
-      return 'This operation requires matching units';
+    case 'expected-unit': {
+      return 'This operation requires compatible units';
     }
-    case 'expectedArgCount': {
+    case 'expected-arg-count': {
       const [fname, expected, got] = spec.expectedArgCount;
 
       return `The function ${fname} requires ${expected} parameters and ${got} parameters were entered`;
     }
-    case 'expectedColumnContained': {
+    case 'expected-column-contained': {
       return `expected column to belong to table`;
     }
-    case 'unexpectedEmptyColumn': {
+    case 'unexpected-empty-column': {
       return `Unexpected empty column`;
     }
-    case 'unexpectedEmptyTable': {
+    case 'unexpected-empty-table': {
       return `Unexpected empty table`;
     }
-    case 'mismatchedSpecificity': {
+    case 'mismatched-specificity': {
       const { expectedSpecificity, gotSpecificity } = spec;
       return `Expected time specific up to the ${expectedSpecificity}, but got ${gotSpecificity}`;
     }
-    case 'columnContainsInconsistentType': {
+    case 'column-contains-inconsistent-type': {
       const { cellType, got } = spec;
       return `Column cannot contain both ${cellType.toBasicString()} and ${got.toBasicString()}`;
     }
-    case 'badOverloadedBuiltinCall': {
+    case 'bad-overloaded-builtin-call': {
       const gotArgTypes = spec.gotArgTypes
         .map((argType) => argType.toBasicString())
         .join(', ');
       return `The function ${spec.functionName} cannot be called with (${gotArgTypes})`;
     }
-    case 'cannotConvertBetweenUnits': {
+    case 'cannot-convert-between-units': {
       return `Don't know how to convert between units ${stringifyUnits(
         spec.fromUnit
       )} and ${stringifyUnits(spec.toUnit)}`;
     }
-    case 'cannotConvertToUnit': {
+    case 'cannot-convert-to-unit': {
       return `Cannot convert to unit ${stringifyUnits(spec.toUnit)}`;
     }
-    case 'unknownCategory': {
+    case 'unknown-category': {
       return `Unknown category ${spec.dimensionId}`;
     }
   }
@@ -135,7 +135,7 @@ export class InferError {
 
   static missingVariable(varName: string) {
     return new InferError({
-      errType: 'missingVariable',
+      errType: 'missing-variable',
       missingVariable: [varName],
     });
   }
@@ -145,7 +145,7 @@ export class InferError {
     got: Type | string
   ): InferError {
     return new InferError({
-      errType: 'expectedButGot',
+      errType: 'expected-but-got',
       expectedButGot: [expected, got],
     });
   }
@@ -156,33 +156,33 @@ export class InferError {
     got: number
   ): InferError {
     return new InferError({
-      errType: 'expectedArgCount',
+      errType: 'expected-arg-count',
       expectedArgCount: [fname, expected, got],
     });
   }
 
   static expectedColumnContained() {
     return new InferError({
-      errType: 'expectedColumnContained',
+      errType: 'expected-column-contained',
     });
   }
 
   static expectedUnit(expected: Units | null, got: Units | null) {
     return new InferError({
-      errType: 'expectedUnit',
+      errType: 'expected-unit',
       expectedUnit: [expected, got],
     });
   }
 
   static unexpectedEmptyColumn() {
     return new InferError({
-      errType: 'unexpectedEmptyColumn',
+      errType: 'unexpected-empty-column',
     });
   }
 
   static unexpectedEmptyTable() {
     return new InferError({
-      errType: 'unexpectedEmptyTable',
+      errType: 'unexpected-empty-table',
     });
   }
 
@@ -191,7 +191,7 @@ export class InferError {
     gotSpecificity: Time.Specificity
   ) {
     return new InferError({
-      errType: 'mismatchedSpecificity',
+      errType: 'mismatched-specificity',
       expectedSpecificity,
       gotSpecificity,
     });
@@ -199,7 +199,7 @@ export class InferError {
 
   static columnContainsInconsistentType(cellType: Type, got: Type) {
     return new InferError({
-      errType: 'columnContainsInconsistentType',
+      errType: 'column-contains-inconsistent-type',
       cellType,
       got,
     });
@@ -207,7 +207,7 @@ export class InferError {
 
   static badOverloadedBuiltinCall(functionName: string, gotArgTypes: Type[]) {
     return new InferError({
-      errType: 'badOverloadedBuiltinCall',
+      errType: 'bad-overloaded-builtin-call',
       functionName,
       gotArgTypes,
     });
@@ -215,7 +215,7 @@ export class InferError {
 
   static cannotConvertBetweenUnits(fromUnit: Units, toUnit: Units) {
     return new InferError({
-      errType: 'cannotConvertBetweenUnits',
+      errType: 'cannot-convert-between-units',
       fromUnit,
       toUnit,
     });
@@ -223,14 +223,14 @@ export class InferError {
 
   static cannotConvertToUnit(toUnit: Units) {
     return new InferError({
-      errType: 'cannotConvertToUnit',
+      errType: 'cannot-convert-to-unit',
       toUnit,
     });
   }
 
   static unknownCategory(dimensionId: number | string) {
     return new InferError({
-      errType: 'unknownCategory',
+      errType: 'unknown-category',
       dimensionId,
     });
   }
@@ -240,6 +240,6 @@ export class InferError {
   }
 
   get url() {
-    return `/docs/docs/language/${this.spec.errType}`;
+    return `/docs/language/errors#${this.spec.errType}`;
   }
 }

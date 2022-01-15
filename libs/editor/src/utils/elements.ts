@@ -1,5 +1,10 @@
 import { ELEMENT_LINK } from '@udecode/plate';
-import { ElementType, ELEMENT_TABLE_INPUT } from './elementTypes';
+import {
+  ElementType,
+  ELEMENT_TABLE_INPUT,
+  ELEMENT_CODE_BLOCK,
+  ELEMENT_CODE_LINE,
+} from './elementTypes';
 import { TableData } from './tableTypes';
 
 export interface BaseElement {
@@ -15,12 +20,28 @@ export interface TableElement extends BaseElement {
   type: typeof ELEMENT_TABLE_INPUT;
   tableData: TableData;
 }
+export interface CodeLineElement extends BaseElement {
+  type: typeof ELEMENT_CODE_LINE;
+  children: Array<Text>;
+}
+export interface CodeBlockElement {
+  type: typeof ELEMENT_CODE_BLOCK;
+  children: Array<CodeLineElement>;
+  id?: string;
+}
 // TODO type our remaining elements
 export interface OtherElement extends BaseElement {
-  type: Exclude<ElementType, typeof ELEMENT_LINK | typeof ELEMENT_TABLE_INPUT>;
+  type: Exclude<
+    ElementType,
+    typeof ELEMENT_LINK | typeof ELEMENT_TABLE_INPUT | typeof ELEMENT_CODE_BLOCK
+  >;
 }
 
-export type Element = LinkElement | TableElement | OtherElement;
+export type Element =
+  | LinkElement
+  | TableElement
+  | CodeBlockElement
+  | OtherElement;
 
 export type Text = {
   text: string;

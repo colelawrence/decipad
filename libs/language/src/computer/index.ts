@@ -65,9 +65,7 @@ export const getShouldDelayResponse = (
 
   return (
     updateUnderCursor.isSyntaxError ||
-    updateUnderCursor.results.some(
-      ({ valueType }) => valueType.errorCause != null
-    )
+    updateUnderCursor.results.some(({ type }) => type?.kind === 'type-error')
   );
 };
 

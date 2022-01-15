@@ -7,17 +7,13 @@ import {
 
 describe('pad content', () => {
   beforeAll(() => setUp());
+  beforeAll(waitForEditorToLoad);
 
-  beforeEach(waitForEditorToLoad);
-
-  // TODO: uncomment this if we get some flakyness in these tests,
-  // specifically if we get detached errors.
-  // beforeEach(async () => await page.waitForTimeout(250));
-
-  it('starts with an empty title and an empty body', async () => {
+  it('starts empty', async () => {
     expect((await page.textContent('[contenteditable] h1'))!.trim()).toBe('');
     expect((await page.textContent('[contenteditable] p'))!.trim()).toBe('');
   });
+
   it('allows changing the first paragraph on the body', async () => {
     await focusOnBody();
     await page.keyboard.type('this is the content for the first paragraph');

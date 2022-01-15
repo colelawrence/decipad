@@ -12,12 +12,13 @@ import styles from './styles.module.css';
 // global shenanigans
 require('./pollute-global');
 
-const { Computer } = require('@decipad/language');
+const { Computer, InferError } = require('@decipad/language');
 const {
-  Result,
-} = require('../../../../../../../libs/ui/src/lib/Editor/Blocks/Result/Result.component');
+  CodeResult,
+} = require('../../../../../../../libs/ui/src/organisms/CodeResult/CodeResult');
 
 const {
+  useResults,
   ResultsContextProvider,
   makeResultsContextValue,
 } = require('../../../../../../../libs/ui/src/lib/Contexts/Results');
@@ -29,18 +30,23 @@ function identityFn(o) {
 function resultsContextFromComputerResult(blockId, result) {
   for (const update of result.updates) {
     if (update.blockId === blockId) {
-      let error = update.isSyntaxError ? new TypeError(update.error) : null;
-      if (update.results.length > 0 && update.results[0].valueType.errorCause) {
-        error = update.results[0].valueType.errorCause;
-        update.results = [];
+      let error = update.error && update.error.message;
+      if (!error) {
+        const resultWithError = update.results.find(
+          (res) => res.type.errorCause != null
+        );
+        if (resultWithError) {
+          error = new InferError(resultWithError.type.errorCause).message;
+        }
       }
+      const lastResult = update.results[update.results.length - 1];
       return [
         error,
         {
           blockResults: {
             [blockId]: {
               isSyntaxError: update.isSyntaxError,
-              results: update.results,
+              results: [lastResult],
             },
           },
           indexLabels: result.indexLabels,
@@ -51,9 +57,16 @@ function resultsContextFromComputerResult(blockId, result) {
 }
 
 function Preview({ blockId }) {
+  const { blockResults } = useResults();
+  const block = blockResults[blockId];
   return (
     <div className={styles.playgroundPreview}>
-      <Result blockId={blockId} useDefaultStyles={false} />
+      {block?.results[0] && (
+        <CodeResult
+          type={block.results[0].type}
+          value={block.results[0].value}
+        />
+      )}
     </div>
   );
 }
@@ -130,7 +143,7 @@ function LivePreviewOrError({ code: liveCode }) {
         clearTimeout(timeout);
       }
     };
-  }, [blockId, code, needsCompute, resultsContext]);
+  }, [blockId, code, computer, needsCompute, resultsContext]);
 
   return (
     <ResultsContextProvider value={resultsContext}>

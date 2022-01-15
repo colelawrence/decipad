@@ -10,6 +10,7 @@ addIrregularRule('h', 'h');
 addIrregularRule('psi', 'psi');
 addIrregularRule('kph', 'kph');
 addIrregularRule('mph', 'mph');
+addIrregularRule('u', 'u');
 
 function pluralizeBigint(str: string, n: number | bigint = 2n) {
   return pluralize(str, Number(n));

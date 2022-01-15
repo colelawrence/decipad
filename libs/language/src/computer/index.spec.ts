@@ -119,7 +119,10 @@ it('getShouldDelayResponse returns true for if there is an error under the curso
         isSyntaxError: false,
         results: [
           {
-            valueType: { errorCause: 'yes' },
+            type: {
+              kind: 'type-error',
+              errorCause: { errType: 'free-form', message: 'yes' },
+            },
           } as unknown as InBlockResult,
         ],
       },

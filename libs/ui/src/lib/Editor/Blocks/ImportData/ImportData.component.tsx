@@ -3,7 +3,8 @@ import { css } from '@emotion/react';
 import { useParams as useRouteParams } from 'react-router-dom';
 import { SPRenderElementProps, PlatePluginComponent } from '@udecode/plate';
 import { getDefined } from '@decipad/utils';
-import { Result } from '../Result/Result.component';
+import { InferError } from '@decipad/language';
+import { CodeResult } from '../../../../organisms';
 import { ImportDataIconElement } from './ImportDataIcon.component';
 import { useResults } from '../../../Contexts/Results';
 import { Button } from '../../../../atoms/Button/Button';
@@ -75,8 +76,8 @@ export const ImportDataElement: PlatePluginComponent = (props) => {
 
   const blockResults = blocksResults && blocksResults[blockId];
   const firstResultError = blockResults?.results?.find(
-    (r) => !r.value && r?.valueType?.errorCause
-  )?.valueType?.errorCause;
+    (r) => !r.value && r?.type?.kind === 'type-error'
+  );
 
   const externalIdEditable = !externalDataSourceId;
 
@@ -183,7 +184,12 @@ export const ImportDataElement: PlatePluginComponent = (props) => {
                     provider,
                     externalId,
                     externalDataSourceId,
-                    error: firstResultError?.toString() || undefined,
+                    error:
+                      firstResultError?.type.kind === 'type-error'
+                        ? new InferError(
+                            firstResultError?.type.errorCause
+                          ).toString()
+                        : undefined,
                   });
                 }
               }}
@@ -192,7 +198,7 @@ export const ImportDataElement: PlatePluginComponent = (props) => {
             </Button>
           </div>
         )}
-      {blockId && <Result blockId={blockId} />}
+      {blockResults?.results[0] && <CodeResult {...blockResults.results[0]} />}
     </div>
   );
 };

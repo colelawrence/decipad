@@ -1,6 +1,5 @@
 import { Token } from 'moo';
-import { Type } from '../type';
-import { AST, InjectableExternalData } from '..';
+import { AST, InjectableExternalData, Result } from '..';
 import { AnyMapping } from '../utils';
 import { ParserError } from '../parser/parser-types';
 
@@ -69,11 +68,7 @@ export interface IdentifiedResult {
   results: InBlockResult[];
 }
 
-export interface InBlockResult {
+export interface InBlockResult extends Result {
   blockId: string;
   statementIndex: number;
-  // TODO Interpreter.Result is not exportable
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  value: any | null;
-  valueType: Type;
 }

@@ -26,7 +26,7 @@ Here you can see what happens when you try to add numbers with different units:
 
 ```deci live
 5 apples + 5 oranges
-==> This operation requires matching units
+==> This operation requires compatible units
 ```
 
 When doing any arithmetic operation with two numbers, you can omit the units in one of them:

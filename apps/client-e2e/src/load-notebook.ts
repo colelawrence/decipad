@@ -27,19 +27,19 @@ describe('load notebook', () => {
 
   it('navigates to notebook and loads it', async () => {
     await navigateToNotebook(workspace.id, notebook.id);
+    // some time for the notebook to render
+    await page.waitForTimeout(1000);
     await waitForEditorToLoad();
     expect(await getPadName()).toBe(
       'Negotiating your VC first priced round as a founder'
     );
 
-    const textNode = await page.$(
-      'text=You can change the participation and multiplier above, and it will be reflected in the calculation below'
-    );
-    expect(textNode).not.toBeNull();
+    expect(
+      await page.$(
+        'text=You can change the participation and multiplier above, and it will be reflected in the calculation below'
+      )
+    ).toBeDefined();
 
-    await page.pause();
-
-    const cellNode = await page.$('text=1,024,000,000');
-    expect(cellNode).not.toBeNull();
+    expect(await page.$('text=1,024,000,000')).toBeDefined();
   });
 });

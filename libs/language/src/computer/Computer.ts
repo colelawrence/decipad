@@ -1,7 +1,13 @@
 import { inferStatement } from '../infer';
 import { evaluate as evaluateStatement, RuntimeError } from '../interpreter';
 
-import { AST, ExternalDataMap, AutocompleteName, serializeType } from '..';
+import {
+  AST,
+  ExternalDataMap,
+  AutocompleteName,
+  serializeType,
+  serializeResult,
+} from '..';
 import { captureException } from '../reporting';
 import {
   ComputePanic,
@@ -49,7 +55,7 @@ const computeStatement = async (
 
     validateResult(valueType, value);
 
-    result = { blockId, statementIndex, value, valueType };
+    result = { blockId, statementIndex, ...serializeResult(valueType, value) };
   }
 
   realm.addToCache(location, result);
@@ -84,19 +90,21 @@ export const resultFromError = (
 ): InBlockResult => {
   const [blockId, statementIndex] = location;
 
-  let { message } = error;
+  const message = error.message.replace(
+    /^panic: (.+)$/,
+    'Internal Error: $1. Please contact support'
+  );
 
   if (!(error instanceof RuntimeError)) {
     // Not a user-facing error, so let's hide internal details
-    message = 'An internal fatal error has occurred';
+    console.error(error);
     captureException(error);
   }
 
   return {
     blockId,
     statementIndex,
-    value: null,
-    valueType: t.impossible(message),
+    ...serializeResult(t.impossible(message), null),
   };
 };
 

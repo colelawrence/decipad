@@ -5,14 +5,19 @@ import { runCode } from '../test-utils';
 
 type CodeDecoratorFactory = (code: string) => DecoratorFn;
 
-export const withCode: CodeDecoratorFactory = (code: string) => (Story) => {
-  const [resultProps, setResultProps] = useState<Result | null>(null);
+export const withCode: CodeDecoratorFactory =
+  (code: string) => (Story, context) => {
+    const [resultProps, setResultProps] = useState<Result | null>(null);
 
-  useEffect(() => {
-    (async () => {
-      setResultProps(await runCode(code));
-    })();
-  }, []);
+    useEffect(() => {
+      (async () => {
+        setResultProps(await runCode(code));
+      })();
+    }, []);
 
-  return resultProps == null ? <div /> : <Story args={resultProps} />;
-};
+    return resultProps == null ? (
+      <div />
+    ) : (
+      <Story args={{ ...context.args, ...resultProps }} />
+    );
+  };

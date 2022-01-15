@@ -129,4 +129,10 @@ describe("extended tokenizer's mismatch tracker", () => {
       `"leftParen(() rightSquareBracket(]) /stmt/"`
     );
   });
+
+  it('parses newlines correctly', () => {
+    expect(testTokenizer('a = 1\nt = {\n}\nb = 2')).toMatchInlineSnapshot(
+      `"identifier(a) ws( ) equalSign(=) ws( ) number(1) /stmt/ identifier(t) ws( ) equalSign(=) ws( ) leftCurlyBracket({) ws(<newline>) rightCurlyBracket(}) /stmt/ identifier(b) ws( ) equalSign(=) ws( ) number(2)"`
+    );
+  });
 });

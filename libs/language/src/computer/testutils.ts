@@ -79,10 +79,10 @@ export const parse = (...sources: string[]) =>
 
 export const simplifyInBlockResults = (results: InBlockResult[]) => {
   const simpleUpdates = [];
-  for (const { blockId, statementIndex, valueType, value } of results) {
+  for (const { blockId, statementIndex, type, value } of results) {
     const prefix = `${blockId}/${statementIndex} -> `;
 
-    if (valueType.errorCause != null) {
+    if (type.kind === 'type-error') {
       simpleUpdates.push(`${prefix}Type Error`);
     } else {
       const asString =

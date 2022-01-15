@@ -4,6 +4,8 @@ const {
 } = require('../../jest-base.config');
 const { baseUrl } = require('./testConfig');
 
+const debug = process.env.DEBUG === 'true';
+
 module.exports = {
   ...baseConfig,
   rootDir: __dirname,
@@ -17,10 +19,10 @@ module.exports = {
         acceptDownloads: true,
       },
       // defaults, here for ease of tweaking
-      launchOptions: { headless: true },
+      launchOptions: { headless: !debug },
       browsers: ['chromium'],
     },
   },
   testRegex: 'src/[^/]*\\.ts$',
-  testTimeout: 45000,
+  testTimeout: debug ? 0 : 45000,
 };

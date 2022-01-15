@@ -92,7 +92,7 @@ export class ComputationRealm {
   }
 
   addToCache(loc: ValueLocation, result: CacheContents) {
-    if (result?.valueType?.errorCause == null) {
+    if (result?.type?.kind !== 'type-error') {
       this.locCache.set(loc, result);
     } else {
       this.errorLocs.add(loc);

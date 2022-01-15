@@ -154,8 +154,8 @@ export const code: TypographyStyles = {
   fontFamily: mFontFamily,
   fontStyle: 'normal',
   fontWeight: 'normal',
-  fontSize: `${12 / usualRemPxs}rem`,
-  lineHeight: '125%',
+  fontSize: `${14 / usualRemPxs}rem`,
+  lineHeight: '140%',
   letterSpacing: '0.01em',
   fontFeatureSettings: 'unset',
 };

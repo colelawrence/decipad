@@ -7,7 +7,7 @@ it('renders error in tooltip', async () => {
     <InlineCodeError
       type={{
         kind: 'type-error',
-        errorCause: { errType: 'missingVariable', missingVariable: ['foo'] },
+        errorCause: { errType: 'missing-variable', missingVariable: ['foo'] },
       }}
       value={null}
     />
@@ -18,5 +18,5 @@ it('renders error in tooltip', async () => {
   const docLink = (await findByText(/docs/i)).closest('a')!;
 
   expect(getByText(/foo/i)).toBeInTheDocument();
-  expect(docLink.href).toContain('missingVariable');
+  expect(docLink.href).toContain('missing-variable');
 });

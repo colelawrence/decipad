@@ -79,7 +79,7 @@ export async function waitForSaveFlush() {
 
 export async function keyPress(k: string) {
   await page.keyboard.press(k);
-  await timeout(500);
+  await timeout(250);
 }
 
 export async function createTable() {
@@ -101,16 +101,6 @@ export async function writeInTable(text: string, columns = 1) {
   });
   await Promise.all(tabs);
   await page.keyboard.type(text);
-}
-
-export async function createCalculationBlock(decilang: string) {
-  await keyPress('ArrowDown');
-  await keyPress('Enter'); // And make a new line
-  await page.keyboard.type('/calc');
-  await keyPress('Tab');
-  await keyPress('Enter');
-  await page.keyboard.type(decilang);
-  await keyPress('ArrowDown');
 }
 
 export async function navigateToNotebook(

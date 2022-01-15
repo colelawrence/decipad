@@ -1,7 +1,6 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import { render, RenderOptions, RenderResult } from '@testing-library/react';
-
-import { buildType } from '@decipad/language';
+import Fraction from '@decipad/fraction';
 import { theme, ResultsContextProvider, GlobalStyles } from '../..';
 import { ResultsContextValue } from '../Contexts';
 
@@ -16,9 +15,8 @@ const results: ResultsContextValue = {
         {
           blockId: 'test',
           statementIndex: 0,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          valueType: buildType.number({ unit: 'apples' } as any),
-          value: 20,
+          type: { kind: 'number', unit: null },
+          value: new Fraction(20n),
         },
       ],
     },

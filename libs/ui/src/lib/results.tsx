@@ -25,8 +25,6 @@ interface ResultMatcher {
 
 export interface Statement {
   displayInline: boolean;
-  endLine: number;
-  startLine: number;
   result: Result;
 }
 

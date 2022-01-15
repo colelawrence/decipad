@@ -14,6 +14,7 @@
     { "path": "../react-utils" },
     { "path": "../fraction" },
     { "path": "../routing" },
+    { "path": "../utils" },
     { "path": "../client-events" }
   ]
 }

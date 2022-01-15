@@ -50,8 +50,8 @@ export const grey400 = color(77, 86, 100);
 export const black = color(22, 31, 44);
 
 export const blockquote = color(51, 41, 66);
-export const codeBubbleBackground = color(223, 250, 233);
-export const codeBubbleBorder = color(179, 229, 198);
+export const codeBubbleBackground = color(230, 237, 255);
+export const codeBubbleText = color(50, 102, 245);
 export const codeErrorIconFill = color(253, 101, 101);
 export const logoSecondColor = color(207, 253, 136);
 export const logoThirdColor = color(175, 245, 72);

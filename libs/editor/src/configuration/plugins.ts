@@ -11,7 +11,6 @@ import {
   createParagraphPlugin,
   createReactPlugin,
   createResetNodePlugin,
-  createSoftBreakPlugin,
   createTrailingBlockPlugin,
   ELEMENT_PARAGRAPH,
 } from '@udecode/plate';
@@ -23,10 +22,11 @@ import { createInteractiveTablePlugin } from '../plugins/InteractiveTable/create
 import { createMarksPlugins } from '../plugins/Marks/createMarksPlugins';
 import { createLinkPlugin } from '../plugins/Link/createLinkPlugin';
 import { createNormalizeCodePlugin } from '../plugins/NormalizeCode/createNormalizeCodePlugin';
+import { createNormalizeCodeBlockPlugin } from '../plugins/NormalizeCodeBlock/createNormalizeCodeBlockPlugin';
 import { autoformatRules } from './autoformat';
 import { exitBreakOptions } from './exitBreakOptions';
 import { resetBlockTypeOptions } from './resetBlockTypeOptions';
-import { softBreakOptions } from './softBreakOptions';
+import { createSoftBreakPlugin } from '../plugins/createSoftBreakPlugin/createSoftBreakPlugin';
 
 export const plugins = [
   // fundamentals
@@ -39,6 +39,9 @@ export const plugins = [
   createHeadingPlugin({ levels: 3 }),
   createListPlugin(),
 
+  // needed for the language integration
+  createNodeIdPlugin({ idCreator: nanoid }),
+
   // custom blocks
   createInteractiveTablePlugin(),
   createCodeBlockPlugin(),
@@ -49,7 +52,7 @@ export const plugins = [
 
   // block manipulation
   createExitBreakPlugin(exitBreakOptions),
-  createSoftBreakPlugin(softBreakOptions),
+  createSoftBreakPlugin(),
   createResetNodePlugin(resetBlockTypeOptions),
   createDndPlugin(),
 
@@ -60,9 +63,7 @@ export const plugins = [
 
   // code editing
   createNormalizeCodePlugin(),
+  createNormalizeCodeBlockPlugin(),
   createCodeVariableHighlightingPlugin(),
   createAutoPairsPlugin(),
-
-  // needed for the language integration
-  createNodeIdPlugin({ idCreator: nanoid }),
 ];

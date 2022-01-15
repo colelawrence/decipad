@@ -228,14 +228,6 @@ describe('Multidimensional operations', () => {
     });
   });
 
-  it('Can error during runtime if the dimensions are wrong', async () => {
-    await expect(
-      runCode(`
-        [ [1, 2], [3, 4], [5, 6] ] + [ [100, 300, 500], [200, 400, 600] ]
-      `)
-    ).rejects.toBeInstanceOf(Error);
-  });
-
   it('can run Total over multiple dims', async () => {
     expect(
       await runCode(`
@@ -1388,13 +1380,5 @@ describe('user-defined units', () => {
       value: F(10),
       type: t.number(U('fatnuno', { known: false })),
     });
-  });
-});
-
-describe('wat', () => {
-  it('runs', async () => {
-    await expect(() => runCode(`1 m * 1 m * 1 cm in ya`)).rejects.toThrowError(
-      "Don't know how to convert between units cm³ and 1.0000000000000001e-24A"
-    );
   });
 });

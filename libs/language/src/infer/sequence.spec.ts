@@ -70,7 +70,7 @@ describe('sequences of dates', () => {
           )
         )
       ).errorCause?.spec.errType
-    ).toMatchInlineSnapshot(`"expectedButGot"`);
+    ).toMatchInlineSnapshot(`"expected-but-got"`);
   });
 });
 

@@ -270,17 +270,19 @@ describe('tooling data', () => {
 });
 
 it('creates a result from an error', () => {
-  expect(
-    resultFromError(new RuntimeError('Message!'), [
-      'blockid',
-      3,
-    ]).valueType.toString()
-  ).toMatchInlineSnapshot(`"Error: Message!"`);
+  expect(resultFromError(new RuntimeError('Message!'), ['blockid', 3]).type)
+    .toMatchInlineSnapshot(`
+    Object {
+      "errorCause": ErrSpec:free-form("message" => "Message!"),
+      "kind": "type-error",
+    }
+  `);
 
-  expect(
-    resultFromError(new Error('panic: Message!'), [
-      'blockid',
-      3,
-    ]).valueType.toString()
-  ).toMatchInlineSnapshot(`"Error: An internal fatal error has occurred"`);
+  expect(resultFromError(new Error('panic: Message!'), ['blockid', 3]).type)
+    .toMatchInlineSnapshot(`
+    Object {
+      "errorCause": ErrSpec:free-form("message" => "Internal Error: Message!. Please contact support"),
+      "kind": "type-error",
+    }
+  `);
 });

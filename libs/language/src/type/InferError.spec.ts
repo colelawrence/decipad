@@ -17,7 +17,7 @@ it('can stringify errors', () => {
   );
 
   expect(InferError.expectedUnit(null, null).message).toEqual(
-    'This operation requires matching units'
+    'This operation requires compatible units'
   );
 
   expect(

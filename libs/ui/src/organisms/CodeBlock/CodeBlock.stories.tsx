@@ -1,8 +1,8 @@
 import { Meta, Story } from '@storybook/react';
-import { serializeResult, Type } from '@decipad/language';
-import { Statement } from '../../lib/results';
+import { SerializedType } from '@decipad/language';
+import { docs } from '@decipad/routing';
 import { withResults } from '../../storybook-utils/results';
-import { CodeLine } from '../../atoms';
+import { CodeLine } from '..';
 import { CodeBlock } from './CodeBlock';
 
 const block = {
@@ -11,46 +11,37 @@ const block = {
   results: [
     {
       blockId: 'block-one',
-      statementIndex: 1,
-      value: null,
-      valueType: {
-        errorCause: {
-          message: 'This operation requires matching units',
-          url: 'https://dev.decipad.com/docs/docs/language/composing-units',
-        },
-      } as Type,
-    },
-    {
-      blockId: 'block-one',
       statementIndex: 0,
       value: ['Lorem', 'Ipsum', 'Dolor', 'Sit', 'Amet'],
-      valueType: {
-        cellType: {
-          type: 'string',
-        } as Type,
+      type: {
+        kind: 'column',
+        cellType: { kind: 'string' },
         columnSize: 5,
-      } as Type,
+        indexedBy: null,
+      } as SerializedType,
     },
   ],
 };
 
-const statements: Statement[] = [
+const lines = [
   {
     displayInline: true,
-    startLine: 1,
-    endLine: 1,
-    result: serializeResult(block.results[0].valueType, block.results[0].value),
+    syntaxError: {
+      message: 'SyntaxError',
+      url: docs({}).$,
+    },
   },
   {
     displayInline: true,
-    startLine: 2,
-    endLine: 2,
-    result: serializeResult(block.results[1].valueType, block.results[1].value),
+    result: {
+      type: block.results[0].type,
+      value: block.results[0].value,
+    },
   },
 ];
 
 export default {
-  title: 'Organisms / Editor / Code Block',
+  title: 'Organisms / Editor / Code / Block',
   component: CodeBlock,
   decorators: [
     withResults({
@@ -59,9 +50,11 @@ export default {
   ],
 } as Meta;
 
-export const Normal: Story = (props) => (
-  <CodeBlock {...props} blockId={block.blockId} statements={statements}>
-    <CodeLine>42 + 1337</CodeLine>
-    <CodeLine>["Lorem", "Ipsum", "Dolor", "Sit", "Amet"]</CodeLine>
+export const Normal: Story = () => (
+  <CodeBlock blockId={block.blockId} expandedResult={block.results[0]}>
+    <CodeLine {...lines[0]}>42 + 1337;</CodeLine>
+    <CodeLine {...lines[1]}>
+      ["Lorem", "Ipsum", "Dolor", "Sit", "Amet"]
+    </CodeLine>
   </CodeBlock>
 );

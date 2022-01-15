@@ -9,9 +9,12 @@ const iconWrapperStyles = css({
 
   cursor: 'pointer',
 
-  display: 'flex',
-  height: '14px',
-  width: '14px',
+  alignSelf: 'center',
+  display: 'inline-flex',
+  '> svg': {
+    height: '14px',
+    width: '14px',
+  },
 });
 
 const messageStyles = css({

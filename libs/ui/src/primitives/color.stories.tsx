@@ -24,7 +24,7 @@ const colorNames: Record<ColorId, string> = {
 
   blockquote: 'Blockquote',
   codeBubbleBackground: 'Code Bubble Background',
-  codeBubbleBorder: 'Code Bubble Border',
+  codeBubbleText: 'Code Bubble Text',
   codeErrorIconFill: 'Code Error Icon Fill',
 
   logoSecondColor: 'Logo Second Color',

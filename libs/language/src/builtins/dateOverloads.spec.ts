@@ -24,7 +24,7 @@ describe('common functions', () => {
         .errorCause
     ).toMatchInlineSnapshot(`
       InferError {
-        "spec": ErrSpec:mismatchedSpecificity("expectedSpecificity" => "month", "gotSpecificity" => "day"),
+        "spec": ErrSpec:mismatched-specificity("expectedSpecificity" => "month", "gotSpecificity" => "day"),
       }
     `);
 
@@ -108,7 +108,7 @@ it('date + number', () => {
   expect(plus.functor!([t.date('month'), t.number(U('day'))]).errorCause)
     .toMatchInlineSnapshot(`
     InferError {
-      "spec": ErrSpec:mismatchedSpecificity("expectedSpecificity" => "month", "gotSpecificity" => "day"),
+      "spec": ErrSpec:mismatched-specificity("expectedSpecificity" => "month", "gotSpecificity" => "day"),
     }
   `);
   expect(

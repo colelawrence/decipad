@@ -10,14 +10,14 @@ export function getCursorPos(editor: Editor): CursorPos | null {
   if (selection && isCollapsed(selection)) {
     const cursor = Range.start(selection);
 
-    const codeBlock = Editor.above(editor, {
+    const codeLine = Editor.above(editor, {
       at: cursor,
-      match: (node) => isSlateNode(node) && node.type === 'code_block',
+      match: (node) => isSlateNode(node) && node.type === 'code_line',
     })?.[0];
 
-    if (isSlateNode(codeBlock)) {
-      const foundLine = cursor.path[1] + 1; // Program lines are one-based.
-      return [codeBlock.id, foundLine];
+    if (isSlateNode(codeLine)) {
+      // Defaults to index 1 as a code line is a single statement
+      return [codeLine.id, 1];
     }
   }
 

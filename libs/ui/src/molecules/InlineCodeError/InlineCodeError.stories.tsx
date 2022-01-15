@@ -6,7 +6,7 @@ import { InlineCodeError } from './InlineCodeError';
 const args = {
   type: {
     kind: 'type-error',
-    errorCause: { errType: 'missingVariable', missingVariable: ['foo'] },
+    errorCause: { errType: 'missing-variable', missingVariable: ['foo'] },
   },
   value: null,
 } as Result<'type-error'>;

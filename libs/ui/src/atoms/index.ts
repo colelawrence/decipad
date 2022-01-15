@@ -6,7 +6,6 @@ export { Button } from './Button/Button';
 export { CellInput } from './CellInput/CellInput';
 export { Code } from './Code/Code';
 export { CodeError } from './CodeError/CodeError';
-export { CodeLine } from './CodeLine/CodeLine';
 export { CodeVariable } from './CodeVariable/CodeVariable';
 export { DateResult } from './DateResult/DateResult';
 export { Display } from './Display/Display';

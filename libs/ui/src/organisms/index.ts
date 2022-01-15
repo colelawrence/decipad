@@ -1,11 +1,11 @@
 export { AccountMenu } from './AccountMenu/AccountMenu';
 export { CodeBlock } from './CodeBlock/CodeBlock';
+export { CodeLine } from './CodeLine/CodeLine';
 export { CodeResult } from './CodeResult/CodeResult';
 export { ColumnResult } from './ColumnResult/ColumnResult';
 export { EditableTableHeader } from './EditableTableHeader/EditableTableHeader';
 export { EditorTable } from './EditorTable/EditorTable';
 export { EmptyWorkspaceCta } from './EmptyWorkspaceCta/EmptyWorkspaceCta';
-export { InlineCodeResult } from './InlineCodeResult/InlineCodeResult';
 export { InlineColumnResult } from './InlineColumnResult/InlineColumnResult';
 export { NotebookListItem } from './NotebookListItem/NotebookListItem';
 export { NotebookSharingPopUp } from './NotebookSharingPopUp/NotebookSharingPopUp';
