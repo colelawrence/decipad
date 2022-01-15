@@ -34,7 +34,7 @@ export default function createAdapter() {
     const data = await tables();
 
     async function createUser(profile: any) {
-      return createUser2(profile as UserInput);
+      return (await createUser2(profile as UserInput)).user;
     }
 
     async function getUser(id: string): Promise<User | undefined> {

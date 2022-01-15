@@ -62,10 +62,12 @@ export function shareWithEmail<
         );
       }
 
-      const newUser = await createUser({
-        name: args.email,
-        email: args.email,
-      });
+      const newUser = (
+        await createUser({
+          name: args.email,
+          email: args.email,
+        })
+      ).user;
 
       const invite: Parameters<typeof createInvite>[0] = {
         resourceType: resourceType.resourceTypeName,

@@ -126,7 +126,7 @@ async function signInGithub(
     // In the future, we might want to redirect the user
     // to a registration page by defining next-auth options.pages.newUser.
 
-    existingUser = await createUser(userInput);
+    existingUser = (await createUser(userInput)).user;
   }
 
   // let's make next-auth happy:
@@ -165,11 +165,13 @@ async function signInEmail(user: UserWithSecret, account: any, metadata: any) {
     // In the future, we might want to redirect the user
     // to a registration page by defining next-auth options.pages.newUser.
 
-    existingUser = await createUser({
-      name: metadata.email,
-      email: metadata.email as string,
-      provider: account.provider,
-    });
+    existingUser = (
+      await createUser({
+        name: metadata.email,
+        email: metadata.email as string,
+        provider: account.provider,
+      })
+    ).user;
   }
 
   user.accessToken = existingUser.secret;

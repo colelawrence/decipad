@@ -4,11 +4,12 @@
     "allowJs": true,
     "lib": ["esnext", "dom", "dom.iterable"]
   },
-  "include": ["src"],
+  "include": ["src", "src/__fixtures__/*.json"],
   "files": ["./testConfig.js"],
   "references": [
     { "path": "../../libs/services" },
     { "path": "../../libs/backendtypes" },
-    { "path": "../../libs/utils" }
+    { "path": "../../libs/utils" },
+    { "path": "../../libs/services" }
   ]
 }

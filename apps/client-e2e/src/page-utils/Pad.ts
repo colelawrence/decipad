@@ -1,20 +1,33 @@
 import { ElementHandle } from 'playwright';
+import { nanoid } from 'nanoid';
+import { Pad, User, WorkspaceRecord } from '@decipad/backendtypes';
+import { pads, tables } from '@decipad/services';
 import { withNewUser, timeout } from '../utils';
 import { clickNewPadButton, navigateToWorkspacePage } from './Workspace';
 import { navigateToPlayground } from './Playground';
+import { parseHTML, simplifyHTML } from '../utils/html';
+
+interface SetupOptions {
+  createAndNavigateToNewPad?: boolean;
+}
 
 export async function waitForEditorToLoad() {
   await page.waitForSelector('[contenteditable] h1');
 }
 
-export async function setUp() {
-  await withNewUser();
+export async function setUp(options: SetupOptions = {}) {
+  const { createAndNavigateToNewPad = true } = options;
+  const newUser = await withNewUser();
   await navigateToWorkspacePage();
-  await Promise.all([
-    clickNewPadButton(),
-    page.waitForNavigation({ url: '/workspaces/*/pads/*' }),
-  ]);
-  await waitForEditorToLoad();
+  if (createAndNavigateToNewPad) {
+    await Promise.all([
+      clickNewPadButton(),
+      page.waitForNavigation({ url: '/workspaces/*/pads/*' }),
+    ]);
+    await waitForEditorToLoad();
+  }
+
+  return newUser;
 }
 
 export async function goToPlayground() {
@@ -24,9 +37,26 @@ export async function goToPlayground() {
 
 export async function getPadName() {
   const $name = await page.$('[contenteditable] h1');
-  await page.pause();
   expect($name).not.toBeNull();
   return (await $name!.textContent())!.trim();
+}
+
+export async function getPadContent() {
+  return (
+    await Promise.all(
+      await (
+        await Promise.all(
+          await Promise.all(
+            (
+              await page.$$('[contenteditable]')
+            ).map((element) => element.innerHTML())
+          )
+        )
+      ).map(parseHTML)
+    )
+  )
+    .flat()
+    .map(simplifyHTML);
 }
 
 export async function getPadRoot($page = page): Promise<ElementHandle | null> {
@@ -81,4 +111,31 @@ export async function createCalculationBlock(decilang: string) {
   await keyPress('Enter');
   await page.keyboard.type(decilang);
   await keyPress('ArrowDown');
+}
+
+export async function navigateToNotebook(
+  workspaceId: string,
+  notebookId: string
+) {
+  await page.goto(`/workspaces/${workspaceId}/pads/pad-title:${notebookId}`);
+}
+
+export async function createPadFromUpdates(
+  updates: string[],
+  user: User,
+  workspace: WorkspaceRecord
+): Promise<Pad> {
+  const newPad = await pads.create(workspace.id, { name: 'test pad' }, user);
+  const data = await tables();
+  await Promise.all(
+    updates.map((update) =>
+      data.docsyncupdates.put({
+        id: `/pads/${newPad.id}`,
+        seq: `${Date.now()}:${nanoid()}`,
+        data: update,
+      })
+    )
+  );
+
+  return newPad;
 }

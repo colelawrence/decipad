@@ -10,7 +10,7 @@ import {
 
 describe('Duplicate pad', () => {
   let padToCopyIndex = -1;
-  beforeAll(setUp);
+  beforeAll(() => setUp());
 
   beforeAll(async () => {
     await page.keyboard.type('pad title here');

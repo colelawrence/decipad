@@ -1,11 +1,23 @@
-import { UserInput, User, UserWithSecret } from '@decipad/backendtypes';
+import {
+  UserInput,
+  User,
+  UserWithSecret,
+  WorkspaceRecord,
+  PadRecord,
+} from '@decipad/backendtypes';
 import { nanoid } from 'nanoid';
 import tables from '../tables';
 import { create as createWorkspace } from '../workspaces/create';
 import { create as createPad } from '../pads/create';
 import timestamp from '../common/timestamp';
 
-export async function create(user: UserInput): Promise<UserWithSecret> {
+export interface UserCreationResult {
+  user: UserWithSecret;
+  workspaces: WorkspaceRecord[];
+  notebooks: PadRecord[];
+}
+
+export async function create(user: UserInput): Promise<UserCreationResult> {
   const data = await tables();
 
   const newUser = {
@@ -46,7 +58,7 @@ export async function create(user: UserInput): Promise<UserWithSecret> {
     newUser
   );
 
-  await createPad(
+  const introPad = await createPad(
     workspace.id,
     {
       name: 'My first notebook',
@@ -54,15 +66,11 @@ export async function create(user: UserInput): Promise<UserWithSecret> {
     newUser
   );
 
-  await createWorkspace(
-    {
-      name: publicWorkspaceNameFor(newUser),
-      isPublic: true,
-    },
-    newUser
-  );
-
-  return newUser;
+  return {
+    user: newUser,
+    workspaces: [workspace],
+    notebooks: [introPad],
+  };
 }
 
 export function userFirstName(user: User): string {

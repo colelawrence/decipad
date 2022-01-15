@@ -6,7 +6,7 @@ waitForExpect.defaults.interval = 1000;
 
 describe('Share pad', () => {
   let link: string;
-  beforeAll(setUp);
+  beforeAll(() => setUp());
 
   beforeAll(async () => {
     await page.keyboard.type('hello world');

@@ -6,7 +6,7 @@ import {
 } from './page-utils/Pad';
 
 describe('pad content', () => {
-  beforeAll(setUp);
+  beforeAll(() => setUp());
 
   beforeEach(waitForEditorToLoad);
 

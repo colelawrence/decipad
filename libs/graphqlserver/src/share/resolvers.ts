@@ -240,10 +240,12 @@ const resolvers = {
         return;
       }
 
-      const newUser = await createUser({
-        name: email,
-        email,
-      });
+      const newUser = (
+        await createUser({
+          name: email,
+          email,
+        })
+      ).user;
 
       const parsedResource = parseResource(resource);
       const newInvite = {

@@ -12,7 +12,7 @@ import {
 describe('Duplicate pad', () => {
   let padToCopyIndex = -1;
   let padCopyIndex = -1;
-  beforeAll(setUp);
+  beforeAll(() => setUp());
 
   beforeAll(async () => {
     await page.keyboard.type('pad title here');
@@ -22,6 +22,7 @@ describe('Duplicate pad', () => {
     await page.keyboard.type('this is the second paragraph');
     await page.keyboard.press('Enter');
     await page.keyboard.type('this is the third paragraph');
+    await page.pause();
     expect(await page.$$('[contenteditable] p')).toHaveLength(4);
 
     await timeout(10000);
