@@ -17,3 +17,11 @@ describe('Error messages are intuitive for users', () => {
     );
   });
 });
+
+describe('Contracts to be uphelp', () => {
+  it('Assert a condition that is false', async () => {
+    await expect(() => runCode(`assert(1==2)`)).rejects.toThrowError(
+      'User defined pre-condition was not met'
+    );
+  });
+});

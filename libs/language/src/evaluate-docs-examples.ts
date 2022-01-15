@@ -1,12 +1,13 @@
 import { stringifyResult } from './repl';
 import { runCode } from '.';
+import { RuntimeError } from './interpreter';
 
 async function getDocTestString(codeExample: string) {
   try {
     const { value, type } = await runCode(codeExample);
     return stringifyResult(value, type, (x) => x);
   } catch (error) {
-    if (error instanceof TypeError) {
+    if (error instanceof TypeError || error instanceof RuntimeError) {
       return error.message;
     } else {
       console.error('Error in getDocTestString for the followingCode:');

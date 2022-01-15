@@ -8,6 +8,7 @@ import { dateOperators } from './date-operators';
 import { tableOperators } from './table-operators';
 import { tableGroupingOperators } from './table-grouping-operators';
 import { miscOperators } from './misc-operators';
+import { contractOperators } from './contract-operators';
 
 export const operators: { [fname: string]: BuiltinSpec } = {
   ...mathOperators,
@@ -19,4 +20,5 @@ export const operators: { [fname: string]: BuiltinSpec } = {
   ...tableOperators,
   ...tableGroupingOperators,
   ...miscOperators,
+  ...contractOperators,
 };
