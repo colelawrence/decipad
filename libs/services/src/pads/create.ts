@@ -5,7 +5,7 @@ import {
   PadRecord,
 } from '@decipad/backendtypes';
 import { nanoid } from 'nanoid';
-import tables from '../tables';
+import tables from '@decipad/tables';
 import { create as createResourcePermission } from '../permissions';
 
 export async function create(

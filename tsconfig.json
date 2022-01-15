@@ -78,7 +78,6 @@
       "@decipad/services/pads": ["libs/services/src/pads"],
       "@decipad/services/permissions": ["libs/services/src/permissions"],
       "@decipad/services/pubsub": ["libs/services/src/pubsub"],
-      "@decipad/services/tables": ["libs/services/src/tables"],
       "@decipad/services/users": ["libs/services/src/users"],
       "@decipad/services/workspaces": ["libs/services/src/workspaces"],
       "@decipad/slate-yjs": ["libs/slate-yjs/src/index.ts"],
@@ -97,6 +96,8 @@
       "@decipad/discord-customerservice-lambda": [
         "libs/discord-customerservice-lambda/src/index.ts"
       ],
+      "@decipad/initial-workspace": ["libs/initial-workspace/src/index.ts"],
+      "@decipad/tables": ["libs/tables/src"],
       "@decipad/client-events": ["libs/client-events/src/index.ts"]
     }
   },

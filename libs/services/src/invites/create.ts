@@ -1,7 +1,7 @@
 import { ID, PermissionType, User } from '@decipad/backendtypes';
 import { nanoid } from 'nanoid';
 import { queues } from '@architect/functions';
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 import { auth as authConfig, app as appConfig } from '@decipad/config';
 import timestamp from '../utils/timestamp';
 

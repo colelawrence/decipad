@@ -9,7 +9,7 @@ import {
   PageInput,
   PermissionRecord,
 } from '@decipad/backendtypes';
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 import {
   queryAccessibleResources,
   removeAllPermissionsFor,

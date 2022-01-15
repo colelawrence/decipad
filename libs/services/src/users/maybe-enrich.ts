@@ -1,5 +1,5 @@
 import { UserInput, UserRecord } from '@decipad/backendtypes';
-import tables from '../tables';
+import tables from '@decipad/tables';
 
 export async function maybeEnrich(
   existingUser: UserRecord,

@@ -10,7 +10,7 @@ import {
   PermissionRecord,
   User,
 } from '@decipad/backendtypes';
-import tables, { allPages } from '@decipad/services/tables';
+import tables, { allPages } from '@decipad/tables';
 import { auth as authConfig, app as appConfig } from '@decipad/config';
 import { isAuthenticatedAndAuthorized, isAuthorized } from '../authorization';
 import timestamp from '../utils/timestamp';

@@ -5,7 +5,7 @@ import {
   SuperAdminActionLogRecord,
 } from '@decipad/backendtypes';
 import { nanoid } from 'nanoid';
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
 import handle from '../handle';
 import timestamp from '../../common/timestamp';

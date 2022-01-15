@@ -1,7 +1,8 @@
 import { ElementHandle } from 'playwright';
 import { nanoid } from 'nanoid';
 import { Pad, User, WorkspaceRecord } from '@decipad/backendtypes';
-import { pads, tables } from '@decipad/services';
+import { pads } from '@decipad/services';
+import tables from '@decipad/tables';
 import { withNewUser, timeout } from '../utils';
 import { clickNewPadButton, navigateToWorkspacePage } from './Workspace';
 import { navigateToPlayground } from './Playground';

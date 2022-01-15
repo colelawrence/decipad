@@ -26,7 +26,7 @@ describe('Duplicate pad', () => {
     // make sure pad is there
     await waitForExpect(async () => {
       const pads = await getPadList();
-      expect(pads).toHaveLength(2);
+      expect(pads).toHaveLength(5);
       padToCopyIndex = pads.findIndex((pad) => pad.name === 'pad title here');
       expect(padToCopyIndex).toBeGreaterThanOrEqual(0);
     });

@@ -6,15 +6,49 @@ import {
   PadRecord,
 } from '@decipad/backendtypes';
 import { nanoid } from 'nanoid';
-import tables from '../tables';
+import { initialWorkspace } from '@decipad/initial-workspace';
+import tables from '@decipad/tables';
 import { create as createWorkspace } from '../workspaces/create';
 import { create as createPad } from '../pads/create';
+import { create as createContent } from '../pad-content';
 import timestamp from '../common/timestamp';
 
 export interface UserCreationResult {
   user: UserWithSecret;
   workspaces: WorkspaceRecord[];
   notebooks: PadRecord[];
+}
+
+async function createInitialWorkspace(
+  workspaceName: string,
+  user: User
+): Promise<Omit<UserCreationResult, 'user'>> {
+  const workspace = await createWorkspace(
+    {
+      name: workspaceName,
+    },
+    user
+  );
+
+  const notebooks = await Promise.all(
+    initialWorkspace.notebooks.map(async (notebook) => {
+      const pad = await createPad(
+        workspace.id,
+        {
+          name: notebook.title,
+        },
+        user
+      );
+
+      await createContent(pad.id, notebook.content.children);
+      return pad;
+    })
+  );
+
+  return {
+    workspaces: [workspace],
+    notebooks,
+  };
 }
 
 export async function create(user: UserInput): Promise<UserCreationResult> {
@@ -51,25 +85,23 @@ export async function create(user: UserInput): Promise<UserCreationResult> {
 
   const firstName = userFirstName(newUser);
   const workspaceName = firstName ? `${firstName}'s Workspace` : 'My Workspace';
-  const workspace = await createWorkspace(
-    {
-      name: workspaceName,
-    },
+
+  const { workspaces, notebooks } = await createInitialWorkspace(
+    workspaceName,
     newUser
   );
-
-  const introPad = await createPad(
-    workspace.id,
+  await createWorkspace(
     {
-      name: 'My first notebook',
+      name: publicWorkspaceNameFor(newUser),
+      isPublic: true,
     },
     newUser
   );
 
   return {
     user: newUser,
-    workspaces: [workspace],
-    notebooks: [introPad],
+    workspaces,
+    notebooks,
   };
 }
 

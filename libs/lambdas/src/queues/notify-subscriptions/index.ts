@@ -1,6 +1,6 @@
 import arc from '@architect/functions';
 import { Changes, TableRecord } from '@decipad/backendtypes';
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 import handle from '../handle';
 
 type NotifySubscriptionsArgs = {

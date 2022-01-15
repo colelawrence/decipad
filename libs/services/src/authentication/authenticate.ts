@@ -5,7 +5,7 @@ import { parse as parseCookie } from 'simple-cookie';
 import NextAuthJWT from 'next-auth/jwt';
 import { getDefined } from '@decipad/utils';
 import { User, UserWithSecret } from '@decipad/backendtypes';
-import tables from '../tables';
+import tables from '@decipad/tables';
 import { jwt as jwtConf } from './jwt';
 
 export type AuthResult = {

@@ -6,7 +6,7 @@ import {
   Text as YText,
   applyUpdate,
 } from 'yjs';
-import { tables, allPages } from '@decipad/services';
+import tables, { allPages } from '@decipad/tables';
 import { getDefined, noop } from '@decipad/utils';
 import { nanoid } from 'nanoid';
 

@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["esnext"]
+  },
+  "include": ["src"],
+  "references": [
+    { "path": "../backendtypes" },
+    { "path": "../dynamodb-lock" },
+  ]
+}

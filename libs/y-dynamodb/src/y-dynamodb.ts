@@ -8,8 +8,8 @@ import {
 import { Observable } from 'lib0/observable';
 import { noop } from '@decipad/utils';
 import { fnQueue } from '@decipad/fnqueue';
-import tables, { allPages } from '@decipad/services/tables';
 import { DocSyncRecord } from '@decipad/backendtypes';
+import tables, { allPages } from '@decipad/tables';
 
 export class DynamodbPersistence extends Observable<string> {
   public db: IDBDatabase | null = null;

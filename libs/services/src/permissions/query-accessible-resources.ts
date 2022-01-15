@@ -4,7 +4,7 @@ import {
   PermissionRecord,
 } from '@decipad/backendtypes';
 import uniqBy from 'lodash.uniqby';
-import tables from '../tables';
+import tables from '@decipad/tables';
 
 type QueryAccessibleResourcesParams = {
   userId: string;

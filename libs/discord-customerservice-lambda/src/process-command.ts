@@ -1,6 +1,6 @@
 import Boom from '@hapi/boom';
 import { getDefined } from '@decipad/utils';
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 import { Command, CommandReply } from './command';
 import commands from './commands';
 

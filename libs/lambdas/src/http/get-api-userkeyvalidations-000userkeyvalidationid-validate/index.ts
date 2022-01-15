@@ -2,7 +2,7 @@ import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
 import assert from 'assert';
 import { HttpResponse } from '@architect/functions';
 import NextAuthJWT from 'next-auth/jwt';
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 import { jwt as jwtConf } from '@decipad/services/authentication';
 import timestamp from '../../common/timestamp';
 import handle from '../handle';

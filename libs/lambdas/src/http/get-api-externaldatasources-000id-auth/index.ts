@@ -6,7 +6,7 @@ import Boom from '@hapi/boom';
 import { OAuth2 } from 'oauth';
 import { nanoid } from 'nanoid';
 import { stringify as encodeCookie } from 'simple-cookie';
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 import { expectAuthenticated } from '@decipad/services/authentication';
 import { expectAuthorized } from '@decipad/services/authorization';
 import { provider as externalDataProvider } from '@decipad/externaldata';

@@ -14,7 +14,7 @@ import {
   VersionedDataTables,
 } from '@decipad/backendtypes';
 import { withLock, WithLockUserFunction } from '@decipad/dynamodb-lock';
-import timestamp from '../common/timestamp';
+import timestamp from './timestamp';
 import allPages, { allScanPages } from './all-pages';
 
 export { allPages, allScanPages };

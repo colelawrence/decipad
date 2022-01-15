@@ -8,7 +8,7 @@ import {
 } from '@decipad/backendtypes';
 import { create as createInvite } from '@decipad/services/invites';
 import { create as createUser } from '@decipad/services/users';
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 import { expectAuthenticatedAndAuthorized, requireUser } from './authorization';
 import { Resource } from './';
 import { ShareWithUserFunction } from './share-with-user';

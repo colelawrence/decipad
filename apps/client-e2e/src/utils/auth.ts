@@ -2,7 +2,8 @@ import assert from 'assert';
 import NextAuthJWT from 'next-auth/jwt';
 import { Cookie } from 'playwright';
 import { User } from '@decipad/backendtypes';
-import { tables, authentication } from '@decipad/services';
+import { authentication } from '@decipad/services';
+import tables from '@decipad/tables';
 import { now } from './now';
 
 interface Credentials {

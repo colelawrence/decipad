@@ -8,7 +8,7 @@ import {
   ExternalDataSourceRecord,
   ExternalKeyRecord,
 } from '@decipad/backendtypes';
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 import { expectAuthenticated } from '@decipad/services/authentication';
 import { expectAuthorized } from '@decipad/services/authorization';
 import { provider as getProvider, encodeTable } from '@decipad/externaldata';

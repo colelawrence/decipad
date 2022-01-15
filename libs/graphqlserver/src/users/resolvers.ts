@@ -1,6 +1,6 @@
 import { AuthenticationError } from 'apollo-server-lambda';
 import { UserInput, User, GraphqlContext } from '@decipad/backendtypes';
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 import { requireUser } from '../authorization';
 
 export default {

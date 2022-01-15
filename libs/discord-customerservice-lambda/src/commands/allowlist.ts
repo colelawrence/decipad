@@ -1,5 +1,5 @@
 import Boom from '@hapi/boom';
-import tables, { allScanPages } from '@decipad/services/tables';
+import tables, { allScanPages } from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
 import {
   AllowlistAddApplicationCommandDataOption,

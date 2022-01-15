@@ -4,7 +4,7 @@ import {
   ExternalDataSourceUpdateInput,
   ExternalDataSourceRecord,
 } from '@decipad/backendtypes';
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 import Resource from '@decipad/graphqlresource';
 import { app } from '@decipad/config';
 

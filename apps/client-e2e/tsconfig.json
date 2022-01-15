@@ -8,6 +8,7 @@
   "files": ["./testConfig.js"],
   "references": [
     { "path": "../../libs/services" },
+    { "path": "../../libs/tables" },
     { "path": "../../libs/backendtypes" },
     { "path": "../../libs/utils" },
     { "path": "../../libs/services" }

@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
 import { DynamoDbQuery } from '@decipad/backendtypes';
-import tables from '../tables';
+import tables from '@decipad/tables';
 
 export async function removeAllPermissionsFor(resource: string): Promise<void> {
   const data = await tables();

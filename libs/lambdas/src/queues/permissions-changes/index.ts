@@ -9,7 +9,7 @@ import {
 } from '@decipad/backendtypes';
 import { isAuthorized } from '@decipad/services/authorization';
 import { notifyOne } from '@decipad/services/pubsub';
-import tables, { allPages } from '@decipad/services/tables';
+import tables, { allPages } from '@decipad/tables';
 import handle from '../handle';
 
 type ParsedPermission = {

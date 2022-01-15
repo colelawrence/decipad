@@ -4,7 +4,7 @@ import {
   PermissionType,
   PermissionRecord,
 } from '@decipad/backendtypes';
-import tables from '../tables';
+import tables from '@decipad/tables';
 import { hasMinimumPermission } from './minimum-permission';
 
 function canonizeResource(resource: string): string {

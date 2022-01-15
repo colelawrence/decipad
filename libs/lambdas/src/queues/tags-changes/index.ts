@@ -5,7 +5,7 @@ import {
   TableRecordIdentifier,
   Resource,
 } from '@decipad/backendtypes';
-import tables, { allPages } from '@decipad/services/tables';
+import tables, { allPages } from '@decipad/tables';
 import parseResourceUri from '../../common/resource/parse-uri';
 import handle from '../handle';
 

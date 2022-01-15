@@ -1,0 +1,717 @@
+{
+  "children": [
+    {
+      "type": "h1",
+      "children": [
+        {
+          "text": "🍏 The Pulling Force"
+        }
+      ]
+    },
+    {
+      "children": [
+        {
+          "text": "Wondering why you land on the ground when you jump up instead of floating off into space? Why do things fall down when you throw them or drop them? 🤔"
+        }
+      ],
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "text": "The answer is "
+        },
+        {
+          "text": "gravity",
+          "bold": true
+        },
+        {
+          "text": ": an invisible force that pulls objects toward each other. Earth's gravity is what keeps you on the ground and what makes things fall. I'll try to find out how much force she exerts on me while explaining some of the physics fundamentals behind this concept️. Bear with me ☄️"
+        }
+      ],
+      "type": "p",
+      "id": "XHM71ZbPnZNvHJtpGx_-q"
+    },
+    {
+      "children": [
+        {
+          "text": "Gravity"
+        }
+      ],
+      "type": "h2",
+      "id": "nrfihCQ8nCZsadcE2O16P"
+    },
+    {
+      "children": [
+        {
+          "text": "Let's start with Newton's 2nd law of motion that force is proportional to acceleration:"
+        },
+        {
+          "text": "force = mass * acceleration ",
+          "code": true
+        },
+        {
+          "text": "[1]."
+        }
+      ],
+      "type": "p",
+      "id": "TctfnXa_x1RRQeQcogw92"
+    },
+    {
+      "children": [
+        {
+          "text": "Since Deci allows me to create custom functions I'll create one for this law (in the future, we want to allow you to publish your functions so you can reuse them in other docs and share with others):"
+        }
+      ],
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Force (Mass, Acceleration) = Mass * Acceleration"
+            }
+          ],
+          "type": "code_line"
+        }
+      ],
+      "type": "code_block"
+    },
+    {
+      "children": [
+        {
+          "text": "When I'm standing on earth, it is constantly accelerating me so that I stay glued to the ground. That acceleration is called standard gravity."
+        }
+      ],
+      "type": "p",
+      "id": "V0oi2yHuT3dzm3lyp9WYQ"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "g = 9.80665 m/s^2"
+            }
+          ],
+          "type": "code_line",
+          "id": "yfj0r9xlinDsBbKeiGb23"
+        }
+      ],
+      "type": "code_block",
+      "id": "1wj17Mm96InI75PxczkPN"
+    },
+    {
+      "children": [
+        {
+          "text": "Some personal info:"
+        }
+      ],
+      "type": "p",
+      "id": "JxNoPNI2ehABipa0m8hT6"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "MyMass = 71 kg"
+            }
+          ],
+          "type": "code_line"
+        }
+      ],
+      "type": "code_block"
+    },
+    {
+      "children": [
+        {
+          "text": "Yes, I'm calling it mass instead of weight 🙂 . We often use the words ‘mass’ and ‘weight’ interchangeably, but they mean quite different things. Your mass is the same no matter where you go in the universe; your weight, on the other hand, changes from place to place depending on gravity! Mass is measured in kilograms and even though we usually talk about weight in kilograms, strictly speaking it should be measured in Newtons, the units of force."
+        }
+      ],
+      "type": "p",
+      "id": "i8eB9U3V1CykXRwTSbOow"
+    },
+    {
+      "children": [
+        {
+          "text": "With that out of the way, we can use Newton’s 2nd law and measure the force that the earth exerts on me (or my weight if you will):"
+        }
+      ],
+      "type": "p",
+      "id": "S9Zde-EG9kkyKJeXUBXxJ"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "EarthForce = Force(MyMass, g)"
+            }
+          ],
+          "type": "code_line"
+        }
+      ],
+      "type": "code_block"
+    },
+    {
+      "children": [
+        {
+          "text": "kg.m/s^2",
+          "code": true
+        },
+        {
+          "text": " is the SI base unit for force quantities, but it’s more usual to represent them in Newtons ("
+        },
+        {
+          "text": "N",
+          "code": true
+        },
+        {
+          "text": ") so let’s ask Deci to convert units:"
+        }
+      ],
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "EarthForce in N"
+            }
+          ],
+          "type": "code_line"
+        }
+      ],
+      "type": "code_block"
+    },
+    {
+      "children": [
+        {
+          "text": "Nice ✨ Well now I know how much force earth exerts of force on me, "
+        },
+        {
+          "text": "697 N",
+          "bold": true
+        },
+        {
+          "text": "! Which btw is more or less the same as the average force of the human bite. Damn Earth."
+        }
+      ],
+      "type": "p",
+      "id": "F0dsQ15Nx_XTey-uEd0b_"
+    },
+    {
+      "children": [
+        {
+          "text": "On to another concept:"
+        }
+      ],
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "text": "Newton's Universal Gravitation"
+        }
+      ],
+      "type": "h2",
+      "id": "0ZqHBmOa9lTu7nuGH1j5l"
+    },
+    {
+      "children": [
+        {
+          "text": "Previously, we used the fact that the earth constantly accelerates us at the rate "
+        },
+        {
+          "text": "g",
+          "code": true
+        },
+        {
+          "text": " to keep us on the ground."
+        }
+      ],
+      "type": "p",
+      "id": "Km9Jx8daI4Yr0-0UdGuQb"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "g"
+            }
+          ],
+          "type": "code_line"
+        }
+      ],
+      "type": "code_block"
+    },
+    {
+      "children": [
+        {
+          "text": "But where did this number come from? It came from Newton’s Law of Universal Gravitation, which you can see below as a Deci custom function again 😛 [2]:"
+        }
+      ],
+      "type": "p",
+      "id": "nmR-v4HBxaIkNt_E6-nin"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "GravitationalAcceleration (G, Mass, Distance) = G * Mass / (Distance**2)"
+            }
+          ],
+          "type": "code_line"
+        }
+      ],
+      "type": "code_block"
+    },
+    {
+      "children": [
+        {
+          "text": "The constant of proportionality is "
+        },
+        {
+          "text": "G",
+          "code": true
+        },
+        {
+          "text": " - an universal gravitational constant and a very different number from the "
+        },
+        {
+          "text": "g",
+          "code": true
+        },
+        {
+          "text": " we saw before [3]:"
+        }
+      ],
+      "type": "p",
+      "id": "1u95Fua8yxH_55unCI4LK"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "G = 6.67384 * (10**-11) in m^3/kg/s^2"
+            }
+          ],
+          "type": "code_line"
+        }
+      ],
+      "type": "code_block"
+    },
+    {
+      "children": [
+        {
+          "text": "Don't worry, the number is there as you'll see on the next calculations. We just still have some problems displaying very small and big numbers. Will be solved soon!"
+        }
+      ],
+      "type": "blockquote"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "text": "Ok so let us now use the function above to calculate the gravitational acceleration on three different planets of our solar system, and check the veracity of the value we used previously for Earth -- "
+        },
+        {
+          "text": "g = 9.8m/s^2",
+          "code": true
+        },
+        {
+          "text": ". To do so, we'll need the mass and the distance from surface to the inner core of each planet [4]."
+        }
+      ],
+      "type": "p",
+      "id": "-5UinzeMoD7eRNfYkYw7v"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "table-input",
+      "tableData": {
+        "variableName": "Planets",
+        "columns": [
+          {
+            "columnName": "Name",
+            "cells": ["Earth", "Moon", "Jupiter", "Mars"],
+            "cellType": "string"
+          },
+          {
+            "columnName": "Mass",
+            "cellType": "number",
+            "cells": ["5.97", "0.073", "1898", "0.642"]
+          },
+          {
+            "columnName": "Diameter",
+            "cellType": "number",
+            "cells": ["12756", "3475", "142984", "6792"]
+          }
+        ]
+      },
+      "id": "q9melOLUBgjTgMNF3sETQ"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "text": "I got those values from Nasa's website, but in the future they might be easily available to me in Deci through Deci global variables shared by Nasa itself ✨"
+        }
+      ],
+      "type": "p",
+      "id": "SZtXNQRbzpM8SiA4Uc7tm"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Mass = Planets.Mass * (10**24) in kg"
+            }
+          ],
+          "type": "code_line"
+        },
+        {
+          "children": [
+            {
+              "text": "Radius = (Planets.Diameter / 2) + 0 km"
+            }
+          ],
+          "type": "code_line"
+        }
+      ],
+      "type": "code_block"
+    },
+    {
+      "children": [
+        {
+          "text": "We’re using "
+        },
+        {
+          "text": "m",
+          "code": true
+        },
+        {
+          "text": " as a length unit in our universal gravitational constant "
+        },
+        {
+          "text": "G",
+          "code": true
+        },
+        {
+          "text": " , hence we need to convert "
+        },
+        {
+          "text": "Radius",
+          "code": true
+        },
+        {
+          "text": " units from "
+        },
+        {
+          "text": "km",
+          "code": true
+        },
+        {
+          "text": " to "
+        },
+        {
+          "text": "m",
+          "code": true
+        },
+        {
+          "text": " if we want to calculate the acceleration correctly:"
+        }
+      ],
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "GravitationalAcceleration = GravitationalAcceleration(G, Mass, Radius in m)"
+            }
+          ],
+          "type": "code_line"
+        }
+      ],
+      "type": "code_block"
+    },
+    {
+      "children": [
+        {
+          "text": "And here they are! The gravitational accelerations every object is subjected to - on average* - on the surface of each of these planets. You can also notice that Earth's value is not quite "
+        },
+        {
+          "text": "9.81 m/s",
+          "bold": true
+        },
+        {
+          "text": ", but that's just because our input numbers for s mass and radius weren't exactly what is used to calculate standard gravity, but still it's super close!"
+        }
+      ],
+      "type": "p",
+      "id": "090Pq4wEbKVuSed2Pe8Zp"
+    },
+    {
+      "children": [
+        {
+          "text": "Let’s then find out the forces I would be subjected to in each of these planets:"
+        }
+      ],
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "PlanetForce = Force(MyMass, GravitationalAcceleration) in N"
+            }
+          ],
+          "type": "code_line"
+        }
+      ],
+      "type": "code_block"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "text": "➡️  Now duplicate this document to your own workspace and add your weight to find out how much force these planets would exert on you! You can also easily add any new planet to the "
+        },
+        {
+          "text": "Planets",
+          "code": true
+        },
+        {
+          "text": " table and see the results you would get for them 🪄  No need to make sure that formulas referencing that table are picking all the items!"
+        }
+      ],
+      "type": "p",
+      "id": "WZh78_NkFRIAp6pvsnmSe"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "text": "Footnotes"
+        }
+      ],
+      "type": "h3",
+      "id": "RCGc-XX3to57sT6c7HEDB"
+    },
+    {
+      "children": [
+        {
+          "text": "* Actually the precise strength of each planet's gravity varies depending on location, but it’s common to just use the nominal \"average\" value at the surface, known as standard gravity as we saw above."
+        }
+      ],
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "text": "References"
+        }
+      ],
+      "type": "h2"
+    },
+    {
+      "children": [
+        {
+          "text": "[1] "
+        },
+        {
+          "children": [
+            {
+              "text": "https://en.wikipedia.org/wiki/Newton%27s_laws_of_motion"
+            }
+          ],
+          "type": "a",
+          "url": "https://en.wikipedia.org/wiki/Newton%27s_laws_of_motion"
+        },
+        {
+          "text": ""
+        }
+      ],
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "text": "[2] "
+        },
+        {
+          "children": [
+            {
+              "text": "https://en.wikipedia.org/wiki/Newton%27s_law_of_universal_gravitation"
+            }
+          ],
+          "type": "a",
+          "url": "https://en.wikipedia.org/wiki/Newton%27s_law_of_universal_gravitation"
+        },
+        {
+          "text": ""
+        }
+      ],
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "text": "[3] "
+        },
+        {
+          "children": [
+            {
+              "text": "https://en.wikipedia.org/wiki/Gravitational_constant"
+            }
+          ],
+          "type": "a",
+          "url": "https://en.wikipedia.org/wiki/Gravitational_constant"
+        },
+        {
+          "text": ""
+        }
+      ],
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "text": "[4] "
+        },
+        {
+          "children": [
+            {
+              "text": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/"
+            }
+          ],
+          "type": "a",
+          "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/"
+        },
+        {
+          "text": ""
+        }
+      ],
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "a",
+          "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/",
+          "id": "sL_J8aFabDCFfJlkGkv4l"
+        },
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "2epXAsY7IUbr5KwP9sB6d"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "a",
+          "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/",
+          "id": "esOa1qR-v3zDlILf7ZW89"
+        },
+        {
+          "text": "If you liked this model, help us make it even better and share your thoughts and ideas with us on Discord 👐"
+        }
+      ],
+      "type": "p",
+      "id": "nYBvCa17mz1VtGPaW9dLa"
+    },
+    {
+      "children": [
+        {
+          "text": "The Decipad Team"
+        }
+      ],
+      "type": "p",
+      "id": "zWlwbP24hKSBetANVXKio"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p"
+    }
+  ]
+}

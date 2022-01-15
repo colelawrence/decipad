@@ -12,7 +12,7 @@ import {
   getCreateAttachmentForm as getForm,
   getSize,
 } from '@decipad/services/blobs/attachments';
-import tables, { allPages } from '@decipad/services/tables';
+import tables, { allPages } from '@decipad/tables';
 import { app as appConfig } from '@decipad/config';
 import { requireUser, isAuthenticatedAndAuthorized } from '../authorization';
 import parseResourceUri from '../utils/resource/parse-uri';

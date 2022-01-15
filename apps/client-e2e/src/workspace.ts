@@ -29,7 +29,7 @@ describe('Workspace', () => {
   test('can list pads', async () => {
     await waitForExpect(async () => {
       const pads = await getPadList();
-      expect(pads).toHaveLength(2);
+      expect(pads).toHaveLength(5);
     });
   });
 
@@ -41,7 +41,7 @@ describe('Workspace', () => {
     await removePad(padIndex);
     await waitForExpect(async () => {
       const pads = await getPadList();
-      expect(pads).toHaveLength(1);
+      expect(pads).toHaveLength(4);
     });
   });
 
@@ -49,7 +49,7 @@ describe('Workspace', () => {
     await duplicatePad(0);
     await waitForExpect(async () => {
       const pads = await getPadList();
-      expect(pads).toHaveLength(2);
+      expect(pads).toHaveLength(5);
     });
     const pads = await getPadList();
     const copyIndex = pads.findIndex((pad) => pad.name?.startsWith('Copy of'));

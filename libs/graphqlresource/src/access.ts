@@ -5,7 +5,7 @@ import {
   GraphqlObjectType,
   PermissionType,
 } from '@decipad/backendtypes';
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 import { Resource } from './';
 import by from './utils/by';
 

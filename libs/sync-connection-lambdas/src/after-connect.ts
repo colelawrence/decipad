@@ -1,7 +1,7 @@
 import { Doc as YDoc } from 'yjs';
 import { HttpResponse } from '@architect/functions';
 import Boom from '@hapi/boom';
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 import { DynamodbPersistence } from '@decipad/y-dynamodb';
 import { LambdaWebsocketProvider } from '@decipad/y-lambdawebsocket';
 import { getDefined } from '@decipad/utils';

@@ -2,7 +2,7 @@ import { queues, HttpResponse } from '@architect/functions';
 import Boom from '@hapi/boom';
 import { AuthResult } from '@decipad/services/authentication';
 import { isAuthorized } from '@decipad/services/authorization';
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 import { WSRequest } from '@decipad/backendtypes';
 import { getDefined } from '@decipad/utils';
 

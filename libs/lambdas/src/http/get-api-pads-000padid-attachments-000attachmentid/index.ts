@@ -3,7 +3,7 @@ import Boom from '@hapi/boom';
 import { expectAuthenticated } from '@decipad/services/authentication';
 import { expectAuthorized } from '@decipad/services/authorization';
 import { getURL } from '@decipad/services/blobs/attachments';
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 import handle from '../handle';
 
 exports.handler = handle(async (event: APIGatewayProxyEvent) => {

@@ -1,6 +1,6 @@
 import { OAuth2 } from 'oauth';
 import { ExternalKeyRecord } from '@decipad/backendtypes';
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 import { Provider } from '.';
 
 interface RenewResult {

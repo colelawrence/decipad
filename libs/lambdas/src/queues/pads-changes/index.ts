@@ -4,7 +4,7 @@ import {
   TableRecordIdentifier,
   Pad,
 } from '@decipad/backendtypes';
-import tables, { allPages } from '@decipad/services/tables';
+import tables, { allPages } from '@decipad/tables';
 import handle from '../handle';
 
 export const handler = handle(padsChangesHandler);

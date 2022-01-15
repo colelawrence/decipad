@@ -7,6 +7,6 @@
   "references": [
     { "path": "../utils" },
     { "path": "../fnqueue" },
-    { "path": "../services" }
+    { "path": "../tables" }
   ]
 }

@@ -1,4 +1,4 @@
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 
 const ALLOWLIST_REQUIRED_URL_BASES = [
   'https://alpha.dev.decipad.com',

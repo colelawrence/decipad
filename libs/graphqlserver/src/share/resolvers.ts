@@ -14,7 +14,7 @@ import {
   PagedResult,
   PermissionType,
 } from '@decipad/backendtypes';
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 import { create as createResourcePermission } from '@decipad/services/permissions';
 import { create as createUser } from '@decipad/services/users';
 import { auth as authConfig, app as appConfig } from '@decipad/config';

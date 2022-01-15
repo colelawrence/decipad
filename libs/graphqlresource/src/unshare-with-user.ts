@@ -4,7 +4,7 @@ import {
   ConcreteRecord,
   GraphqlObjectType,
 } from '@decipad/backendtypes';
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 import { expectAuthenticatedAndAuthorized } from './authorization';
 import { Resource } from './';
 

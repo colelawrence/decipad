@@ -8,7 +8,7 @@ import { nanoid } from 'nanoid';
 import { parse as decodeCookie } from 'simple-cookie';
 import Boom from '@hapi/boom';
 import { ExternalKeyRecord } from '@decipad/backendtypes';
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 import { expectAuthenticated } from '@decipad/services/authentication';
 import { expectAuthorized } from '@decipad/services/authorization';
 import { provider as externalDataProvider } from '@decipad/externaldata';

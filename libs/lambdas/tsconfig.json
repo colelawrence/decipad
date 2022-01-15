@@ -11,6 +11,7 @@
     { "path": "../meta" },
     { "path": "../backendtypes" },
     { "path": "../services" },
+    { "path": "../tables" },
     { "path": "../graphqlserver" },
     { "path": "../utils" },
     { "path": "../externaldata" },

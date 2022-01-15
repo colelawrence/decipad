@@ -3,7 +3,7 @@ import assert from 'assert';
 import { UserInputError, ForbiddenError } from 'apollo-server-lambda';
 import NextAuthJWT, { JWTEncodeParams } from 'next-auth/jwt';
 import { tokenize as tokenizeCookies } from 'simple-cookie';
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 import { jwt as jwtConf } from '@decipad/services/authentication';
 
 const inTesting = process.env.ARC_ENV === 'testing';

@@ -2,7 +2,7 @@ import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
 import Boom from '@hapi/boom';
 import { HttpResponse } from '@architect/functions';
 import { PermissionType } from '@decipad/backendtypes';
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 import { expectAuthenticated } from '@decipad/services/authentication';
 import handle from '../handle';
 

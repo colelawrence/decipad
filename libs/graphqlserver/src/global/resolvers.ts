@@ -1,5 +1,5 @@
 import { GraphqlContext, PermissionRecord, User } from '@decipad/backendtypes';
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 
 export default {
   Query: {

@@ -3,7 +3,7 @@ import {
   PermissionRecord,
   PermissionType,
 } from '@decipad/backendtypes';
-import tables from '../tables';
+import tables from '@decipad/tables';
 
 type GetSecretPermissionsParams = {
   resourceUri: string;

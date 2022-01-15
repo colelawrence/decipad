@@ -4,7 +4,7 @@ import {
   TableRecordIdentifier,
   WorkspaceRecord,
 } from '@decipad/backendtypes';
-import tables from '../tables';
+import tables from '@decipad/tables';
 import { create as createResourcePermission } from '../permissions/create';
 
 export async function create(

@@ -12,7 +12,7 @@ import {
   RoleRecord,
   User,
 } from '@decipad/backendtypes';
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 import { expectAuthorized } from '@decipad/services/authorization';
 import {
   ensurePublicWorkspaceForUser,

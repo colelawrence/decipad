@@ -5,7 +5,7 @@ import {
   UserInput,
   VerificationRequestRecord,
 } from '@decipad/backendtypes';
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 import { create as createUser2 } from '@decipad/services/users';
 import timestamp from '../common/timestamp';
 

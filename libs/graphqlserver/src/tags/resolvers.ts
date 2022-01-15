@@ -7,7 +7,7 @@ import {
   Pad,
 } from '@decipad/backendtypes';
 import assert from 'assert';
-import tables, { allPages } from '@decipad/services/tables';
+import tables, { allPages } from '@decipad/tables';
 
 import { subscribe } from '@decipad/services/pubsub';
 import { requireUser, isAuthenticatedAndAuthorized } from '../authorization';

@@ -4,7 +4,7 @@ import { HttpResponse } from '@architect/functions';
 import { WSRequest } from '@decipad/backendtypes';
 import { wrapHandler } from '@decipad/services/monitor';
 import { onMessage } from '@decipad/sync-connection-lambdas';
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 
 export const handler = wrapHandler(
   async (event: WSRequest): Promise<HttpResponse> => {

@@ -978,6 +978,46 @@
         }
       }
     },
+    "initial-workspace": {
+      "root": "libs/initial-workspace",
+      "sourceRoot": "libs/initial-workspace/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/client-events/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/client-events"
+          }
+        }
+      }
+    },
+    "tables": {
+      "root": "libs/tables",
+      "sourceRoot": "libs/tables/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/client-events/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/client-events"
+          }
+        }
+      }
+    },
     "client-events": {
       "root": "libs/client-events",
       "sourceRoot": "libs/client-events/src",

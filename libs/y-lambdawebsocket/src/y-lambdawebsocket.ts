@@ -8,7 +8,7 @@ import * as authProtocol from 'y-protocols/auth';
 import * as awarenessProtocol from 'y-protocols/awareness';
 import { Observable } from 'lib0/observable';
 import { ws } from '@architect/functions';
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 import { fnQueue } from '@decipad/fnqueue';
 import { noop } from '@decipad/utils';
 

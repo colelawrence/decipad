@@ -7,8 +7,9 @@ describe('Default workspace', () => {
   test('should display one initial notebook', async () => {
     await waitForExpect(async () => {
       const pads = await getPadList();
-      expect(pads).toHaveLength(1);
-      expect(pads[0].name).toMatchInlineSnapshot(`"My first notebook"`);
+      expect(pads).toHaveLength(4);
+      const pad = pads.find((p) => p.name.match('Getting Started'));
+      expect(pad).toBeDefined();
     });
   });
 });

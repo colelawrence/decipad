@@ -2,7 +2,7 @@ import { Doc as YDoc } from 'yjs';
 import { nanoid } from 'nanoid';
 import { HttpResponse, ws } from '@architect/functions';
 import Boom from '@hapi/boom';
-import tables from '@decipad/services/tables';
+import tables from '@decipad/tables';
 import { DynamodbPersistence } from '@decipad/y-dynamodb';
 import {
   LambdaWebsocketProvider,
