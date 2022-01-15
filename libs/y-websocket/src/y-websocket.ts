@@ -157,15 +157,7 @@ const readMessage = (
       // do nothing
     }
   }
-  if (isBase64Encoded && typeof buf !== 'string') {
-    throw new TypeError('Expected string as message');
-  }
-  if (!isBase64Encoded && typeof buf === 'string') {
-    throw new TypeError('Expected buffer as message');
-  }
-  const message = isBase64Encoded
-    ? Buffer.from(buf as string, 'base64')
-    : (buf as Uint8Array);
+  const message = Buffer.from(buf as string, 'base64');
   const decoder = decoding.createDecoder(message);
   const encoder = encoding.createEncoder();
   const messageType = decoding.readVarUint(decoder);
