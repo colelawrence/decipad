@@ -26,7 +26,6 @@ export { SlashCommandsMenuItem } from './SlashCommandsMenuItem/SlashCommandsMenu
 export { Strikethrough } from './Strikethrough/Strikethrough';
 export { TableData } from './TableData/TableData';
 export { TableHeader } from './TableHeader/TableHeader';
-export { TimeUnitsResult } from './TimeUnitsResult/TimeUnitsResult';
 export { Toggle } from './Toggle/Toggle';
 export { Tooltip } from './Tooltip/Tooltip';
 export { TriggerMenuItem } from './TriggerMenuItem/TriggerMenuItem';

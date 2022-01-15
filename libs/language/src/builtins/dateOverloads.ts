@@ -1,11 +1,10 @@
-import { Date, TimeQuantity, FractionValue } from '../interpreter/Value';
+import Fraction from '@decipad/fraction';
 
+import { Date, TimeQuantity, FractionValue } from '../interpreter/Value';
 import {
-  addTimeQuantities,
   addTimeQuantity,
   cmpSpecificities,
   getHighestSpecificity as getMostSpecific,
-  negateTimeQuantity,
   subtractDates,
 } from '../date';
 import { getDefined, getInstanceof } from '../utils';
@@ -50,6 +49,7 @@ export const timeQuantityBinopFunctor = ([t1, t2]: Type[]) =>
 export const subtractDatesFunctor = ([t1, t2]: Type[]) => {
   const d1Specificity = getDefined(t1.date);
   const d2Specificity = getDefined(t2.date);
+
   if (cmpSpecificities(d1Specificity, d2Specificity) !== 0) {
     return t.impossible(
       InferError.mismatchedSpecificity(d1Specificity, d2Specificity)
@@ -59,21 +59,19 @@ export const subtractDatesFunctor = ([t1, t2]: Type[]) => {
   return Type.combine(
     t1.isDate(),
     t2.isDate(),
-    t.timeQuantity([d1Specificity])
+    t.number([
+      {
+        unit: d1Specificity,
+        exp: 1n,
+        multiplier: new Fraction(1),
+        known: true,
+      },
+    ])
   );
 };
 
 export const dateOverloads: OverloadSet = {
   '+': [
-    {
-      argTypes: ['date', 'time-quantity'],
-      fnValues: ([v1, v2]) =>
-        addDateAndTimeQuantity(
-          getInstanceof(v1, Date),
-          getInstanceof(v2, TimeQuantity)
-        ),
-      functor: dateAndTimeQuantityFunctor,
-    },
     {
       argTypes: ['date', 'number'],
       fnValues: ([v1, v2], [, t2] = []) =>
@@ -81,7 +79,7 @@ export const dateOverloads: OverloadSet = {
           getInstanceof(v1, Date),
           TimeQuantity.fromUnits(
             BigInt(getInstanceof(v2, FractionValue).getData().valueOf()),
-            getDefined(t2.unit)
+            getDefined(t2?.unit)
           )
         ),
       functor: ([t1, t2]) =>
@@ -100,52 +98,35 @@ export const dateOverloads: OverloadSet = {
           )
         ),
       functor: ([t1, t2]) =>
-        Type.combine(t2.isTimeQuantity(), () =>
-          dateAndTimeQuantityFunctor([t1, t2])
+        Type.combine(t1.isTimeQuantity(), () =>
+          dateAndTimeQuantityFunctor([t2, t1])
         ),
-    },
-    {
-      argTypes: ['time-quantity', 'date'],
-      fnValues: ([v1, v2]) =>
-        addDateAndTimeQuantity(
-          getInstanceof(v2, Date),
-          getInstanceof(v1, TimeQuantity)
-        ),
-      functor: ([a, b]) => dateAndTimeQuantityFunctor([b, a]),
-    },
-    {
-      argTypes: ['time-quantity', 'time-quantity'],
-      fnValues: ([v1, v2]) =>
-        addTimeQuantities(
-          getInstanceof(v1, TimeQuantity),
-          getInstanceof(v2, TimeQuantity)
-        ),
-      functor: timeQuantityBinopFunctor,
     },
   ],
   '-': [
     {
-      argTypes: ['time-quantity', 'time-quantity'],
-      fnValues: ([v1, v2]) =>
-        addTimeQuantities(
-          getInstanceof(v1, TimeQuantity),
-          negateTimeQuantity(getInstanceof(v2, TimeQuantity))
-        ),
-      functor: timeQuantityBinopFunctor,
-    },
-    {
-      argTypes: ['date', 'time-quantity'],
-      fnValues: ([v1, v2]) =>
-        addDateAndTimeQuantity(
-          getInstanceof(v1, Date),
-          negateTimeQuantity(getInstanceof(v2, TimeQuantity))
-        ),
+      argTypes: ['date', 'number'],
+      fnValues: ([v1, v2], [, t2] = []) => {
+        const number = getInstanceof(v2, FractionValue);
+
+        const negatedQuantity = TimeQuantity.fromUnits(
+          BigInt(number.getData().neg().valueOf()),
+          getDefined(t2?.unit, 'the unit of time must exist')
+        );
+
+        return addDateAndTimeQuantity(getInstanceof(v1, Date), negatedQuantity);
+      },
       functor: dateAndTimeQuantityFunctor,
     },
     {
       argTypes: ['date', 'date'],
-      fnValues: ([v1, v2]) =>
-        subtractDates(getInstanceof(v1, Date), getInstanceof(v2, Date)),
+      fnValues: ([v1, v2]) => {
+        const d1 = getInstanceof(v1, Date);
+        const d2 = getInstanceof(v2, Date);
+        const difference = subtractDates(d1, d2, d1.specificity);
+
+        return FractionValue.fromValue(difference);
+      },
       functor: subtractDatesFunctor,
     },
   ],

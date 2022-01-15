@@ -1,4 +1,4 @@
-import { DateResult, NumberResult, TimeUnitsResult } from '../atoms';
+import { DateResult, NumberResult } from '../atoms';
 import {
   ColumnResult,
   InlineColumnResult,
@@ -55,12 +55,6 @@ describe('table result', () => {
       })
     ).toBe(Component);
   });
-});
-
-it('matches time units result type', async () => {
-  expect(
-    getResultComponent(await runCode('date(2020-01-11) - date(2020-01-01)'))
-  ).toBe(TimeUnitsResult);
 });
 
 it('matches function result type', async () => {

@@ -10,17 +10,10 @@ You can calculate a time interval between two dates:
 
 ```deci live
 date(2020-02-23) - date(2020-01-12)
-==> [ [ 'day', 42n ] ] days
-```
-
-You can then convert a time interval to, let's say, days:
-
-```deci live
-date(2020-02-23) - date(2020-01-12) as days
 ==> 42 days
 ```
 
-or hours:
+You can then convert a time interval to, let's say, hours:
 
 ```deci live
 date(2020-02-23 17:35) - date(2020-01-12 05:23) as hours

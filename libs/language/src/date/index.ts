@@ -1,8 +1,13 @@
-import differenceInMilliseconds from 'date-fns/differenceInMilliseconds';
+// eslint-disable-next-line import/no-duplicates
+import differenceInMonths from 'date-fns/differenceInMonths';
+// eslint-disable-next-line import/no-duplicates
+import differenceInYears from 'date-fns/differenceInYears';
+
 import { singular } from 'pluralize';
+import Fraction from '@decipad/fraction';
 import { AST, Unit } from '..';
 import { n, pairwise, getDefined } from '../utils';
-import { Date as LanguageDate, TimeQuantity } from '../interpreter/Value';
+import { Date as LanguageDate } from '../interpreter/Value';
 import * as Time from './time-types';
 
 export * from './time-quantities';
@@ -104,16 +109,6 @@ export const timeUnitToNormalMax: Record<Time.Unit, number> = {
   minute: 59,
   second: 59,
   millisecond: 999,
-};
-
-const convertFromMsSpecificityOrder = ['day', 'hour', 'minute', 'second'];
-
-export const convertFromMs: Partial<Record<Time.Unit, number>> = {
-  day: 24 * 60 * 60 * 1000,
-  hour: 60 * 60 * 1000,
-  minute: 60 * 1000,
-  second: 1000,
-  millisecond: 1,
 };
 
 // Deal with annoying intersections
@@ -358,74 +353,25 @@ export const getDateFromAstForm = (
   return [dateNum, dateNodeToSpecificity(segments)];
 };
 
-function subtractDatesPlainDiff(
-  d1: LanguageDate,
-  d2: LanguageDate
-): Partial<Record<Time.Unit, bigint>> {
-  const diffMs = differenceInMilliseconds(
-    Number(d1.getData()),
-    Number(d2.getData())
-  );
-  const timeQuantities: Partial<Record<Time.Unit, bigint>> = {};
-
-  let diffCarryMs = diffMs;
-
-  // eslint-disable-next-line no-underscore-dangle
-  for (const _specificity of convertFromMsSpecificityOrder) {
-    const specificity = _specificity as Time.Unit;
-    const divideBy = convertFromMs[specificity];
-    if (!divideBy) {
-      break;
-    }
-
-    // Have to convert to absolute value before applying Math.floor
-    // (because Math.floor is symmetrical around the 0, which we don't want).
-    let nextUnitValue =
-      Math.floor(Math.abs(diffCarryMs) / divideBy) * Math.sign(diffCarryMs);
-    const max = timeUnitToNormalMax[specificity];
-    if (nextUnitValue > max) {
-      nextUnitValue = max;
-    }
-    if (nextUnitValue !== 0) {
-      timeQuantities[specificity] = BigInt(nextUnitValue);
-    }
-    diffCarryMs -= nextUnitValue * divideBy;
-  }
-
-  if (diffCarryMs !== 0) {
-    timeQuantities.millisecond = BigInt(diffCarryMs);
-  }
-
-  return timeQuantities;
-}
-
-function subtractDatesDiff(
-  d1: LanguageDate,
-  d2: LanguageDate
-): Partial<Record<Time.Unit, bigint>> {
-  const d1Parts = dateToArray(d1.getData());
-  const d2Parts = dateToArray(d2.getData());
-  const diff = d1Parts.map((part1, partIndex) => {
-    const part2 = d2Parts[partIndex];
-    return part1 - part2;
-  });
-  return diff.reduce(
-    (
-      acc: Partial<Record<Time.Unit, bigint>>,
-      diffPart: bigint,
-      partIndex: number
-    ) => {
-      if (diffPart !== 0n) {
-        acc[jsIndexToUnit[partIndex]] = diffPart;
-      }
-      return acc;
-    },
-    {}
-  );
-}
-
 export const subtractDates = (
   d1: LanguageDate,
-  d2: LanguageDate
-): TimeQuantity =>
-  new TimeQuantity(subtractDatesPlainDiff(d1, d2), subtractDatesDiff(d1, d2));
+  d2: LanguageDate,
+  specificity: Time.Specificity
+): Fraction => {
+  const ms1 = Number(d1.getData());
+  const ms2 = Number(d2.getData());
+
+  switch (specificity) {
+    case 'year': {
+      return new Fraction(differenceInYears(ms1, ms2) * 12);
+    }
+    case 'month': {
+      return new Fraction(differenceInMonths(ms1, ms2));
+    }
+    default: {
+      const msDifference = d1.getData() - d2.getData();
+
+      return new Fraction(msDifference, 1000n);
+    }
+  }
+};

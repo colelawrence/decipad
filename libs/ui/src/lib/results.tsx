@@ -1,5 +1,5 @@
 import { Result, SerializedType, SerializedTypeKind } from '@decipad/language';
-import { DateResult, NumberResult, TimeUnitsResult } from '../atoms';
+import { DateResult, NumberResult } from '../atoms';
 import { InlineCodeError } from '../molecules';
 import {
   ColumnResult,
@@ -75,10 +75,6 @@ export function getResultComponent<T extends SerializedTypeKind>(
     {
       component: FunctionResult,
       match: ({ type }) => type.kind === 'function',
-    },
-    {
-      component: TimeUnitsResult,
-      match: ({ type }) => type.kind === 'time-quantity',
     },
     {
       component: RangeResult,

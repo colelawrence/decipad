@@ -685,6 +685,37 @@ describe('Dates', () => {
       await runCode(`max([date(2050-Jan-01), date(2025-Jun-01)])`)
     ).toMatchInlineSnapshot(`Result(day 2050-01-01)`);
   });
+
+  it('can operate between dates', async () => {
+    expect(await runCode(`date(2020) - date(2010)`)).toMatchInlineSnapshot(
+      `Result(10 years)`
+    );
+    expect(
+      await runCode(`date(2020-01) - date(2010-01)`)
+    ).toMatchInlineSnapshot(`Result(120 months)`);
+    expect(
+      await runCode(`date(2020-01-01) - date(2010-01-01)`)
+    ).toMatchInlineSnapshot(`Result(3652 days)`);
+    expect(
+      await runCode(`date(2020-01-01T10:30) - date(2020-01-01T09:30)`)
+    ).toMatchInlineSnapshot(`Result(60 minutes)`);
+    expect(
+      await runCode(`date(2020-01-01T10:30:16) - date(2020-01-01T10:30:00)`)
+    ).toMatchInlineSnapshot(`Result(16 seconds)`);
+
+    expect(await runCode(`1 year + date(2020)`)).toMatchInlineSnapshot(
+      `Result(year 2021)`
+    );
+    expect(await runCode(`date(2020-01) + 12 months`)).toMatchInlineSnapshot(
+      `Result(month 2021-01)`
+    );
+    expect(await runCode(`date(2020-01) + 1 year`)).toMatchInlineSnapshot(
+      `Result(month 2021-01)`
+    );
+    expect(
+      await runCode(`date(2020-01-01T10:30:16) - 16 seconds`)
+    ).toMatchInlineSnapshot(`Result(second 2020-01-01 10:30)`);
+  });
 });
 
 describe('Injected external data', () => {
@@ -955,8 +986,8 @@ describe('number units work together', () => {
 
   it('calculates date difference', async () => {
     expect(await runCode(`date(2021) - date(2020)`)).toMatchObject({
-      value: [['day', 366n]],
-      type: t.timeQuantity(['year']),
+      value: new Fraction(1),
+      type: t.number(U('year')),
     });
   });
 

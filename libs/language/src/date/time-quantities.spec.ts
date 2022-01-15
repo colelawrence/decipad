@@ -1,10 +1,6 @@
 import { parseUTCDate as d } from '.';
 import { TimeQuantity } from '../interpreter/Value';
-import {
-  addTimeQuantities,
-  addTimeQuantity,
-  negateTimeQuantity,
-} from './time-quantities';
+import { addTimeQuantity } from './time-quantities';
 
 it('can add composite quantities', () => {
   expect(
@@ -17,22 +13,6 @@ it('can add composite quantities', () => {
       new TimeQuantity({ quarter: 1n, month: 1n })
     )
   ).toEqual(d('2020-05-01'));
-});
-
-it('can add two time quantities', () => {
-  expect(
-    addTimeQuantities(
-      new TimeQuantity({ year: 1n, quarter: 1n }),
-      new TimeQuantity({ year: 1n, month: 2n })
-    )
-  ).toMatchInlineSnapshot(`TimeQuantity({ year: 2, quarter: 1, month: 2 })`);
-
-  expect(
-    addTimeQuantities(
-      new TimeQuantity({ hour: 1n }),
-      new TimeQuantity({ second: 1n })
-    )
-  ).toMatchInlineSnapshot(`TimeQuantity({ hour: 1, second: 1 })`);
 });
 
 it('can add time quantities to a date', () => {
@@ -71,16 +51,4 @@ it("rounds down the day if it's over the end of a month", () => {
   expect(
     addTimeQuantity(d('2020-02-29'), new TimeQuantity({ year: 1n }))
   ).toEqual(d('2021-02-28'));
-});
-
-it('can negate a time quantity', () => {
-  expect(
-    negateTimeQuantity(
-      new TimeQuantity({
-        year: -1n,
-        month: 12n,
-        second: 42n,
-      })
-    )
-  ).toMatchInlineSnapshot(`TimeQuantity({ year: 1, month: -12, second: -42 })`);
 });

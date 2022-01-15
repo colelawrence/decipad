@@ -4,7 +4,7 @@ import {
   Date as IDate,
   FractionValue,
 } from '../interpreter/Value';
-import { parseUTCDate } from '../date';
+import { parseUTCDate, Time } from '../date';
 import { overloadBuiltin } from './overloadBuiltin';
 import {
   dateOverloads,
@@ -104,31 +104,6 @@ describe('common functions', () => {
   });
 });
 
-it('date + time-quantity', () => {
-  expect(plus.functor!([t.date('month'), t.timeQuantity(['day'])]).errorCause)
-    .toMatchInlineSnapshot(`
-    InferError {
-      "spec": ErrSpec:mismatchedSpecificity("expectedSpecificity" => "month", "gotSpecificity" => "day"),
-    }
-  `);
-  expect(
-    plus.functor!([t.date('month'), t.timeQuantity(['year'])]).date
-  ).toMatchInlineSnapshot(`"month"`);
-  expect(
-    plus.functor!([t.date('day'), t.timeQuantity(['year', 'day'])]).date
-  ).toMatchInlineSnapshot(`"day"`);
-
-  expect(
-    plus.fnValues?.([
-      IDate.fromDateAndSpecificity(
-        BigInt(Number(new Date('2020-01-01'))),
-        'day'
-      ),
-      new TimeQuantity({ month: 1n, day: 1n }),
-    ])
-  ).toMatchInlineSnapshot(`DeciDate(day 2020-02-02)`);
-});
-
 it('date + number', () => {
   expect(plus.functor!([t.date('month'), t.number(U('day'))]).errorCause)
     .toMatchInlineSnapshot(`
@@ -157,159 +132,100 @@ it('date + number', () => {
   ).toMatchInlineSnapshot(`DeciDate(day 2020-02-01)`);
 });
 
-it('time-quantity + date', () => {
+it('date - number', () => {
   expect(
-    plus.functor!([t.timeQuantity(['month']), t.date('day')]).date
+    minus.functor!([t.date('day'), t.number(U('day'))]).date
   ).toMatchInlineSnapshot(`"day"`);
 
   expect(
-    plus.fnValues?.([
-      new TimeQuantity({ month: 1n, day: 1n }),
-      IDate.fromDateAndSpecificity(
-        BigInt(Number(new Date('2020-01-01'))),
-        'day'
-      ),
-    ])
-  ).toMatchInlineSnapshot(`DeciDate(day 2020-02-02)`);
-});
+    minus.fnValues?.(
+      [
+        IDate.fromDateAndSpecificity(
+          parseUTCDate('2020-01-01T10:30'),
+          'minute'
+        ),
 
-it('time-quantity + time-quantity', () => {
-  expect(
-    plus.functor!([t.timeQuantity(['month']), t.timeQuantity(['day'])]).unit
-  ).toMatchInlineSnapshot(`
-    Object {
-      "args": Array [
-        Object {
-          "exp": 1n,
-          "known": true,
-          "multiplier": Fraction(1),
-          "unit": "month",
-        },
-        Object {
-          "exp": 1n,
-          "known": true,
-          "multiplier": Fraction(1),
-          "unit": "day",
-        },
+        FractionValue.fromValue(60),
       ],
-      "type": "units",
-    }
-  `);
-  expect(
-    plus.functor!([t.timeQuantity(['month']), t.timeQuantity(['year'])]).unit
-  ).toMatchInlineSnapshot(`
-    Object {
-      "args": Array [
-        Object {
-          "exp": 1n,
-          "known": true,
-          "multiplier": Fraction(1),
-          "unit": "month",
-        },
-        Object {
-          "exp": 1n,
-          "known": true,
-          "multiplier": Fraction(1),
-          "unit": "year",
-        },
-      ],
-      "type": "units",
-    }
-  `);
-  expect(
-    plus.functor!([t.timeQuantity(['month']), t.timeQuantity(['month'])]).unit
-  ).toMatchInlineSnapshot(`
-    Object {
-      "args": Array [
-        Object {
-          "exp": 1n,
-          "known": true,
-          "multiplier": Fraction(1),
-          "unit": "month",
-        },
-        Object {
-          "exp": 1n,
-          "known": true,
-          "multiplier": Fraction(1),
-          "unit": "month",
-        },
-      ],
-      "type": "units",
-    }
-  `);
 
-  expect(
-    plus.fnValues?.([
-      new TimeQuantity({ month: 1n, day: 1n }),
-      new TimeQuantity({ quarter: 1n, day: 1n }),
-    ])
-  ).toMatchInlineSnapshot(`TimeQuantity({ quarter: 1, month: 1, day: 2 })`);
-});
-
-it('time-quantity - time-quantity', () => {
-  expect(
-    minus.functor!([t.timeQuantity(['month']), t.timeQuantity(['month'])]).unit
-  ).toMatchInlineSnapshot(`
-    Object {
-      "args": Array [
-        Object {
-          "exp": 1n,
-          "known": true,
-          "multiplier": Fraction(1),
-          "unit": "month",
-        },
-        Object {
-          "exp": 1n,
-          "known": true,
-          "multiplier": Fraction(1),
-          "unit": "month",
-        },
-      ],
-      "type": "units",
-    }
-  `);
-
-  expect(
-    minus.fnValues?.([
-      new TimeQuantity({ month: 1n, day: 1n }),
-      new TimeQuantity({ quarter: 1n, day: 1n }),
-    ])
-  ).toMatchInlineSnapshot(`TimeQuantity({ quarter: -1, month: 1, day: 0 })`);
-});
-
-it('date - time-quantity', () => {
-  expect(
-    minus.functor!([t.date('day'), t.timeQuantity(['year'])]).date
-  ).toMatchInlineSnapshot(`"day"`);
-
-  expect(
-    minus.fnValues?.([
-      IDate.fromDateAndSpecificity(parseUTCDate('2020-01-01'), 'day'),
-      new TimeQuantity({ month: 1n, day: -1n }),
-    ])
-  ).toMatchInlineSnapshot(`DeciDate(day 2019-12-02)`);
+      [t.date('minute'), t.number(U('minute'))]
+    )
+  ).toMatchInlineSnapshot(`DeciDate(minute 2020-01-01 09:30)`);
 });
 
 it('date - date => time-quantity', () => {
   expect(minus.functor!([t.date('day'), t.date('day')]).unit)
     .toMatchInlineSnapshot(`
-    Object {
-      "args": Array [
+      Object {
+        "args": Array [
+          Object {
+            "exp": 1n,
+            "known": true,
+            "multiplier": Fraction(1),
+            "unit": "day",
+          },
+        ],
+        "type": "units",
+      }
+    `);
+  expect(minus.functor!([t.date('minute'), t.date('minute')]).unit)
+    .toMatchInlineSnapshot(`
         Object {
-          "exp": 1n,
-          "known": true,
-          "multiplier": Fraction(1),
-          "unit": "day",
-        },
-      ],
-      "type": "units",
-    }
-  `);
+          "args": Array [
+            Object {
+              "exp": 1n,
+              "known": true,
+              "multiplier": Fraction(1),
+              "unit": "minute",
+            },
+          ],
+          "type": "units",
+        }
+      `);
+
+  const testDateMinus = (
+    date1: string,
+    date1Specificity: Time.Specificity,
+    date2: string,
+    date2Specificity: Time.Specificity
+  ) =>
+    (
+      minus.fnValues?.([
+        IDate.fromDateAndSpecificity(parseUTCDate(date1), date1Specificity),
+        IDate.fromDateAndSpecificity(parseUTCDate(date2), date2Specificity),
+      ]) as FractionValue
+    ).value;
 
   expect(
-    minus.fnValues?.([
-      IDate.fromDateAndSpecificity(parseUTCDate('2021-02-01'), 'day'),
-      IDate.fromDateAndSpecificity(parseUTCDate('2021-01-01'), 'day'),
-    ])
-  ).toMatchInlineSnapshot(`TimeQuantity({ day: 31 })`);
+    testDateMinus('2021-01', 'year', '2021-01', 'year')
+  ).toMatchInlineSnapshot(`Fraction(0)`);
+
+  expect(
+    testDateMinus('2022-01', 'year', '2021-01', 'year')
+  ).toMatchInlineSnapshot(`Fraction(12)`);
+
+  expect(
+    testDateMinus('2021-02', 'month', '2021-01', 'month')
+  ).toMatchInlineSnapshot(`Fraction(1)`);
+
+  expect(
+    testDateMinus('2022-02', 'month', '2021-01', 'month')
+  ).toMatchInlineSnapshot(`Fraction(13)`);
+
+  expect(
+    testDateMinus('2021-02-01', 'day', '2021-01-01', 'day')
+  ).toMatchInlineSnapshot(`Fraction(2678400)`);
+
+  expect(
+    testDateMinus('2021-02-01', 'day', '2022-01-01', 'day')
+  ).toMatchInlineSnapshot(`Fraction(-28857600)`);
+
+  expect(
+    testDateMinus(
+      '2021-02-01T10:30',
+      'millisecond',
+      '2021-02-01T10:31',
+      'millisecond'
+    )
+  ).toMatchInlineSnapshot(`Fraction(-60)`);
 });

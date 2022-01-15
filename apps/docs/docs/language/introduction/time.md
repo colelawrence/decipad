@@ -64,7 +64,7 @@ Or subtract two dates to get a time duration:
 Start = date(2022-06-30)
 End = date(2022-09-15)
 Difference = End - Start
-==> [ [ 'day', 77n ] ] days
+==> 77 days
 ```
 
 ## Functions on dates
