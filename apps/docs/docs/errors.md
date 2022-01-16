@@ -172,3 +172,41 @@ Date = date(2025)
 Date + 1 year
 ==> year 2026
 ```
+
+## Syntax error
+
+:::caution `syntax-error`
+Syntax Error
+:::
+
+The calculation you wrote is not valid in the language.
+
+You may have miss-spelled something, or even tried to insert data in a way what is not supported yet:
+
+```
+1==2 ? 10 : 20
+```
+
+doesn't work because that is not the right syntax for an `if.. then.. else` statement.
+
+```deci live
+if 1==2 then 10 else 20
+==> 20
+```
+
+Or you might have inputted data in a way we don't support (**yet**)
+
+```
+money = 8,000 $
+dinheiro = 8.000,00 €
+quid = £8,000.00
+```
+
+The correct calculation would be:
+
+```deci live
+money = 8000 $
+dinheiro = 800000 €
+quid = 800000 £
+==> 800000 £
+```
