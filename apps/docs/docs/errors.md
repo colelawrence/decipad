@@ -21,10 +21,10 @@ This is because cup is a volume, and kg is mass. So the question is how many
 
 So for a liter of water we have:
 
-```
+```deci live
 FlourDensity = 0.8 g/ml
 1 cup * FlourDensity
-==> 200 ml
+==> 200 g
 ```
 
 ## Column contains inconsistent type
