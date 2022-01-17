@@ -217,7 +217,6 @@ export const sameTablenessAs = checker((me: Type, other: Type) => {
       zip(me.columnTypes, other.columnTypes).every(
         ([myT, otherT]) => myT.sameAs(otherT).errorCause == null
       ) &&
-      me.indexName === other.indexName &&
       equalOrUnknown(getDefined(me.tableLength), getDefined(other.tableLength))
     ) {
       return me;

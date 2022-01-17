@@ -9,8 +9,9 @@ import { compare } from '../../interpreter/compare-values';
 export const miscOperators: Record<string, BuiltinSpec> = {
   if: {
     argCount: 3,
-    fn: (a, b, c) => (a ? b : c),
-    functor: ([a, b, c]) => Type.combine(a.isScalar('boolean'), c.sameAs(b)),
+    fnValues: ([cond, then, otherwise]) => (cond.getData() ? then : otherwise),
+    functor: ([cond, then, otherwise]) =>
+      Type.combine(cond.isScalar('boolean'), otherwise.sameAs(then)),
   },
 
   // Range stuff

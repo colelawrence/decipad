@@ -201,6 +201,18 @@ describe('more models', () => {
     const years = Array.from({ length: 4 }, (_, i) =>
       cleanDate(BigInt(Date.UTC(2020 + i, 0)), 'year')
     );
+    const unit = {
+      type: 'units',
+      args: [
+        {
+          // TODO this unit is million USD,
+          // multiplier/exponent should reflect that
+          unit: 'usd',
+          exp: F(1),
+          multiplier: F(1, 1000),
+        },
+      ],
+    };
 
     expect(
       await runCodeForVariables(
@@ -232,24 +244,13 @@ describe('more models', () => {
         InitialCashFlow: F(10),
         Years: years,
         GrowthRate: F(1, 4),
-        CashFlows: [F(1, 100), F(1, 80), F(1, 64), F(5, 256)],
-        YearlyCashFlows: [F(1, 125), F(1, 100), F(1, 80), F(1, 64)],
+        CashFlows: [F(10, 1), F(25, 2), F(125, 8), F(625, 32)],
+        YearlyCashFlows: [F(8, 1), F(10, 1), F(25, 2), F(125, 8)],
       },
       types: {
         InitialCashFlow: {
           type: 'number',
-          unit: {
-            type: 'units',
-            args: [
-              {
-                // TODO this unit is million USD,
-                // multiplier/exponent should reflect that
-                unit: 'usd',
-                exp: F(1),
-                multiplier: F(1, 1000),
-              },
-            ],
-          },
+          unit,
         },
         Years: {
           columnSize: 4,
@@ -261,8 +262,7 @@ describe('more models', () => {
           columnSize: 4,
           cellType: {
             type: 'number',
-            unit: null,
-            date: null,
+            unit,
           },
         },
       },

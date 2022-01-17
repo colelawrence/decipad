@@ -188,7 +188,7 @@ describe('basic code', () => {
   it('supports conditions', async () => {
     expect(
       await runCode(`
-        A = if 1 < 3 then 1 else 0
+        if 1 < 3 then 1 else 0
       `)
     ).toMatchObject({
       type: { type: 'number' },
@@ -197,12 +197,26 @@ describe('basic code', () => {
 
     expect(
       await runCode(`
-        A = if 1 > 3 then 1 else 0
+        if 1 > 3 then 1 else 0
       `)
     ).toMatchObject({
       type: { type: 'number' },
       value: F(0),
     });
+  });
+
+  it('conditions branches can be of any type', async () => {
+    expect(
+      await runCode(`
+        TableCorrect = { Correct = [true] }
+        TableWrong = { Correct = [false] }
+        if 1 < 3 then TableCorrect else TableWrong
+      `)
+    ).toMatchInlineSnapshot(`
+      Result({
+        Correct = [ true ]
+      })
+    `);
   });
 });
 

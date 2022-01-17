@@ -113,27 +113,35 @@ export const listOperators: Record<string, BuiltinSpec> = {
         initial.isScalar('number'),
         growthRate.isScalar('number'),
         period.isColumn()
-      ).mapType(() => t.column(t.number(), getDefined(period.columnSize))),
+      ).mapType(() => t.column(initial, getDefined(period.columnSize))),
   },
   transpose: {
     argCount: 1,
     argCardinalities: [3],
-    fn: (twoDee: number[][]) =>
-      Array.from({ length: twoDee[0].length }, (_, y) =>
-        Array.from({ length: twoDee.length }, (_, x) =>
-          getDefined(twoDee[x][y])
-        )
-      ),
-    functor: ([twoDee]) =>
-      Type.combine(
-        twoDee.isColumn().reduced().isColumn().reduced().isScalar('number'),
-        twoDee
-      ).mapType((matrix) => {
-        const horizontal = getDefined(matrix.columnSize);
-        const vertical = getDefined(matrix.reduced().columnSize);
+    fnValues: ([_matrix]) => {
+      const matrix = getInstanceof(_matrix, Column);
+      const matrixWidth = matrix.rowCount;
+      const matrixHeight = getInstanceof(matrix.values[0], Column).rowCount;
 
-        return t.column(t.column(t.number(), horizontal), vertical);
-      }),
+      return Column.fromValues(
+        Array.from({ length: matrixHeight }, (_, y) =>
+          Column.fromValues(
+            Array.from({ length: matrixWidth }, (_, x) =>
+              getDefined((matrix.values[x] as Column).values[y])
+            )
+          )
+        )
+      );
+    },
+    functor: ([matrix]) =>
+      Type.combine(matrix.isColumn().reduced().isColumn().reduced()).mapType(
+        (cell) => {
+          const horizontal = getDefined(matrix.columnSize);
+          const vertical = getDefined(matrix.reduced().columnSize);
+
+          return t.column(t.column(cell, horizontal), vertical);
+        }
+      ),
   },
 
   sort: {

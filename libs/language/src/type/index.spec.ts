@@ -191,11 +191,6 @@ describe('sameAs', () => {
 
     expect(
       getError((table) => {
-        table.indexName = 'Table2';
-      })
-    ).not.toBeNull();
-    expect(
-      getError((table) => {
         table.columnNames?.push('Heyy');
         table.columnTypes?.push(t.number());
       })

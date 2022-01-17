@@ -111,7 +111,7 @@ Transpose a list:
 
 ```deci live
 transpose([[5$],[10$],[15$]])
-==> [ [ 5, 10, 15 ] ]
+==> [ [ 5 $, 10 $, 15 $ ] ]
 ```
 
 ## grow
