@@ -8,13 +8,13 @@ describe('table splitting and grouping operators', () => {
     const tableType = t.table({
       length: 3,
       columnNames: ['initial_index', 'other_column'],
-      columnTypes: [t.column(t.string(), 3), groupByColumnType],
+      columnTypes: [t.string(), groupByColumnType],
     });
 
     expect(
       operators.splitby.functorNoAutomap?.([tableType, groupByColumnType])
     ).toMatchObject({
-      columnNames: ['other_column', 'values'],
+      columnNames: ['other_column', 'Values'],
       errorCause: null,
       tableLength: 'unknown',
     });

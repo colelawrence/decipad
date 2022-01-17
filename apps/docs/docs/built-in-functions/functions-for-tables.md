@@ -49,7 +49,7 @@ sortby(Flights, Flights.DepartureTime)
 
 This function splits the table into several different tables, splitted by the unique values of a column:
 
-```
+```deci live
 Flights = {
   Company = ["EZJ", "TAP", "BA", "TAP", "BA", "EZJ", "TAP"]
   FlightNumber = ["EZJ123", "TP456", "BA789", "TP098", "BA765", "EZJ432", "TP210"]

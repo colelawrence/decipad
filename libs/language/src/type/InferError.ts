@@ -54,6 +54,11 @@ export type ErrSpec =
   | {
       errType: 'unknown-category';
       dimensionId: string | number;
+    }
+  | {
+      errType: 'expected-table-and-associated-column';
+      gotTable: Type;
+      gotColumn: Type;
     };
 
 // exhaustive switch
@@ -115,6 +120,9 @@ function specToString(spec: ErrSpec): string {
     }
     case 'unknown-category': {
       return `Unknown category ${spec.dimensionId}`;
+    }
+    case 'expected-table-and-associated-column': {
+      return `Expected table and associated column`;
     }
   }
 }
@@ -232,6 +240,14 @@ export class InferError {
     return new InferError({
       errType: 'unknown-category',
       dimensionId,
+    });
+  }
+
+  static expectedTableAndAssociatedColumn(gotTable: Type, gotColumn: Type) {
+    return new InferError({
+      errType: 'expected-table-and-associated-column',
+      gotTable,
+      gotColumn,
     });
   }
 

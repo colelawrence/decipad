@@ -173,6 +173,48 @@ Date + 1 year
 ==> year 2026
 ```
 
+## Expected table and associated column
+
+:::caution `expected-table-and-associated-column`
+Expected table and associated column
+:::
+
+You passed a column that's not associated to the table.
+
+When creating a table, its columns are inherently associated to it. Functions such as `splitby` need this association.
+
+```deci live
+OtherTable = {
+  Column
+}
+
+TableToSplitBy = {
+  SplitKey = [1, 2, 3]
+}
+
+splitby(TableToSplitBy, OtherTable.Column)
+==> Incompatible column sizes: 1 and 3
+```
+
+Make sure this association exists by using a table, and then its column, `splitby()`
+
+```deci live
+TableToSplitBy = {
+  Name = ["group 1: A", "group 1: B", "group 2"]
+  SplitKey = [1, 1, 2]
+}
+
+splitby(TableToSplitBy, TableToSplitBy.SplitKey)
+==> {
+  SplitKey = [ 1, 2 ],
+  Values = [ {
+  Name = [ 'group 1: A', 'group 1: B' ]
+}, {
+  Name = [ 'group 2' ]
+} ]
+}
+```
+
 ## Syntax error
 
 :::caution `syntax-error`
@@ -183,9 +225,7 @@ The calculation you wrote is not valid in the language.
 
 You may have miss-spelled something, or even tried to insert data in a way what is not supported yet:
 
-```
-1==2 ? 10 : 20
-```
+    1==2 ? 10 : 20
 
 doesn't work because that is not the right syntax for an `if.. then.. else` statement.
 
@@ -196,11 +236,9 @@ if 1==2 then 10 else 20
 
 Or you might have inputted data in a way we don't support (**yet**)
 
-```
-money = 8,000 $
-dinheiro = 8.000,00 €
-quid = £8,000.00
-```
+    money = 8,000 $
+    dinheiro = 8.000,00 €
+    quid = £8,000.00
 
 The correct calculation would be:
 

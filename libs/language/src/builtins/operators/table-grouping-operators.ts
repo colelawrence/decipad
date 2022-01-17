@@ -1,7 +1,7 @@
 import produce from 'immer';
 import { getDefined } from '@decipad/utils';
 import { BuiltinSpec } from '../interfaces';
-import { Type } from '../../type';
+import { Type, build as t, InferError } from '../../type';
 import { Column, Table } from '../../interpreter/Value';
 import { getInstanceof } from '../../utils';
 
@@ -13,28 +13,27 @@ export const tableGroupingOperators: { [fname: string]: BuiltinSpec } = {
         table.isTableOrRow(),
         column.isColumn().withColumnSize(table.tableLength).withAtParentIndex(),
         table.withMinimumColumnCount(1),
-        (table) =>
-          produce(table, (t) => {
-            const columnIndex = getDefined(column.atParentIndex);
-            const columnName = table.columnNames?.[columnIndex] ?? 'index';
-            t.tableLength = 'unknown';
-            t.columnNames = [columnName, 'values'];
-            const tableWithout = produce(table, (table) => {
-              table.columnTypes =
-                table.columnTypes?.filter(
-                  (_ct, index) => index !== columnIndex
-                ) ?? null;
-              table.columnNames =
-                table.columnNames?.filter(
-                  (_, index) => index !== columnIndex
-                ) ?? null;
-            });
+        (table) => {
+          if (column.indexedBy !== table.indexName) {
+            return t.impossible(
+              InferError.expectedTableAndAssociatedColumn(table, column)
+            );
+          }
 
-            const newIndexColumn = produce(column, (column) => {
-              column.columnSize = 'unknown';
-            });
-            t.columnTypes = [newIndexColumn, tableWithout];
-          })
+          const columnIndex = getDefined(column.atParentIndex);
+          const columnName = getDefined(table.columnNames?.[columnIndex]);
+
+          const tableWithout = produce(table, (table) => {
+            table.columnTypes?.splice(columnIndex, 1);
+            table.columnNames?.splice(columnIndex, 1);
+          });
+
+          return t.table({
+            length: 'unknown',
+            columnNames: [columnName, 'Values'],
+            columnTypes: [getDefined(column.cellType), tableWithout],
+          });
+        }
       ),
     fnValuesNoAutomap: ([_table, _byColumn]) => {
       const table = getInstanceof(_table, Table);
