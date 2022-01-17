@@ -4,4 +4,4 @@ sidebar_position: 6
 
 # Tutorials
 
-## Creating Your First Notebook: a product tour
+## Creating your first notebook: a product tour
