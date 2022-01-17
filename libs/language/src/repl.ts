@@ -151,17 +151,28 @@ export const replEval = (
 
 /* istanbul ignore if */
 if (module.parent == null) {
-  console.log('\nWelcome to the deci language REPL');
-  const r = repl.start({
-    prompt: '🐙 > ',
-    eval: replEval,
-    writer: (str) => str,
-  });
+  if (process.argv.length > 2) {
+    const string = process.argv[2];
+    replEval(string, null, null, (error, result) => {
+      if (error) {
+        console.error(error);
+      } else {
+        console.log(result);
+      }
+    });
+  } else {
+    console.log('\nWelcome to the deci language REPL');
+    const r = repl.start({
+      prompt: '🐙 > ',
+      eval: replEval,
+      writer: (str) => str,
+    });
 
-  reset();
-  r.on('reset', reset);
+    reset();
+    r.on('reset', reset);
 
-  r.defineCommand('print', () => {
-    console.log(accumulatedSource);
-  });
+    r.defineCommand('print', () => {
+      console.log(accumulatedSource);
+    });
+  }
 }

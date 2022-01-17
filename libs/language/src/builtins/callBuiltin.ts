@@ -28,7 +28,7 @@ function callBuiltinAfterAutoconvert(
     return builtin.fnValuesNoAutomap(args, argTypes);
   }
 
-  const lowerDimFn = (argsLowerDims: Value[]) => {
+  const lowerDimFn = (argsLowerDims: Value[], typesLowerDims: Type[]) => {
     if (builtin.fn != null) {
       const argData = argsLowerDims.map((a) => getDefined(a.getData()));
       try {
@@ -43,7 +43,7 @@ function callBuiltinAfterAutoconvert(
         );
       }
     } else if (builtin.fnValues != null) {
-      return builtin.fnValues(argsLowerDims as AnyValue[], argTypes);
+      return builtin.fnValues(argsLowerDims as AnyValue[], typesLowerDims);
     } else {
       /* istanbul ignore next */
       throw new Error('unreachable');

@@ -90,14 +90,13 @@ export const resultFromError = (
 ): InBlockResult => {
   const [blockId, statementIndex] = location;
 
+  // Not a user-facing error, so let's hide internal details
   const message = error.message.replace(
     /^panic: (.+)$/,
     'Internal Error: $1. Please contact support'
   );
 
   if (!(error instanceof RuntimeError)) {
-    // Not a user-facing error, so let's hide internal details
-    console.error(error);
     captureException(error);
   }
 

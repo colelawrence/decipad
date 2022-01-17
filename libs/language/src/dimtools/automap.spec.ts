@@ -575,7 +575,7 @@ describe('automapValues', () => {
     const callee = jest.fn(() => otherTable);
 
     expect(automapValues([table], [tableVal], callee)).toEqual(otherTable);
-    expect(callee).toHaveBeenCalledWith([tableVal]);
+    expect(callee).toHaveBeenCalledWith([tableVal], [table]);
     callee.mockClear();
 
     const colVal = Values.Column.fromValues([tableVal]);
@@ -583,8 +583,32 @@ describe('automapValues', () => {
     expect(automapValues([col], [colVal], callee)).toEqual(
       Values.Column.fromValues([otherTable])
     );
-    expect(callee).toHaveBeenCalledWith([tableVal]);
+    expect(callee).toHaveBeenCalledWith([tableVal], [table]);
     callee.mockClear();
+  });
+
+  it('can pass the correct types to the map function', () => {
+    const mapFn = jest.fn(() => Values.fromJS(1n));
+
+    const type = t.number();
+    const value = Values.fromJS(1n);
+
+    automapValues([type], [value], mapFn);
+
+    expect(mapFn).toHaveBeenCalledWith([value], [type]);
+  });
+
+  it('can pass the correct types to the map function (when reducing)', () => {
+    const mapFn = jest.fn(() => Values.fromJS(1n));
+
+    const reducedType = t.number();
+    const type = t.column(reducedType, 1);
+    const reducedValue = Values.fromJS(1n);
+    const value = Values.Column.fromValues([reducedValue]);
+
+    automapValues([type], [value], mapFn);
+
+    expect(mapFn).toHaveBeenCalledWith([reducedValue], [reducedType]);
   });
 });
 
@@ -663,5 +687,29 @@ describe('automap for reducers', () => {
         Fraction(3),
       ]
     `);
+  });
+
+  it('can pass the correct types to the function', () => {
+    const mapFn = jest.fn(() => Values.fromJS(1));
+
+    const oneDeeType = t.column(t.number(), 2, 'X');
+    const oneDeeValue = Values.fromJS([1n, 2n]);
+
+    automapValuesForReducer(oneDeeType, oneDeeValue as Values.Column, mapFn);
+
+    expect(mapFn).toHaveBeenCalledWith([oneDeeValue], [oneDeeType]);
+  });
+
+  it('can pass the correct types to the function (with higher-dimensional args)', () => {
+    const mapFn = jest.fn(() => Values.fromJS(1));
+
+    const oneDeeType = t.column(t.number(), 2, 'X');
+    const twoDeeType = t.column(oneDeeType, 1, 'Y');
+    const oneDeeValue = Values.fromJS([1n, 2n]);
+    const twoDeeValue = Values.Column.fromValues([oneDeeValue]);
+
+    automapValuesForReducer(twoDeeType, twoDeeValue as Values.Column, mapFn);
+
+    expect(mapFn).toHaveBeenCalledWith([oneDeeValue], [oneDeeType]);
   });
 });

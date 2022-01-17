@@ -70,7 +70,7 @@ export const automapTypes = (
 export const automapValues = (
   argTypes: Type[],
   argValues: Value.Value[],
-  mapFn: (values: Value.Value[]) => Value.Value,
+  mapFn: (values: Value.Value[], types: Type[]) => Value.Value,
   expectedCardinalities = arrayOfOnes(argValues.length)
 ): Value.Value => {
   if (!validateCardinalities(argTypes, expectedCardinalities)) {
@@ -82,19 +82,47 @@ export const automapValues = (
   );
 
   if (expectedCardinalities.every((c) => c === 1)) {
-    return materializeToValue(new Hypercube(mapFn, ...dimensionalArgs));
+    const reducedArgTypes = hackilyReduceArgTypes(
+      argTypes,
+      expectedCardinalities
+    );
+    const mapFnAndTypes = (values: Value.Value[]) =>
+      mapFn(values, reducedArgTypes);
+
+    return materializeToValue(new Hypercube(mapFnAndTypes, ...dimensionalArgs));
   } else {
     const whichToReduce = getReductionPlan(argTypes, expectedCardinalities);
 
     if (whichToReduce.every((doReduce) => doReduce === false)) {
       // Reduce nothing -- input dimensions are correct
-      return mapFn(dimensionalArgs.map(materializeToValue));
+      return mapFn(dimensionalArgs.map(materializeToValue), argTypes);
     } else {
       throw new Error(
         'panic: Operating upon multiple dimensional values is not supported yet'
       );
     }
   }
+};
+
+// Minor hack: use the automaptypes function to retrieve the arg types
+// Better solution: Make Hypercube type-aware and pass the types from there.
+const hackilyReduceArgTypes = (
+  argTypes: Type[],
+  expectedCardinalities: number[]
+) => {
+  let argTypesLowerDims: Type[] = [];
+  automapTypes(
+    argTypes,
+    (argTypesFromMapTypes) => {
+      argTypesLowerDims = argTypesFromMapTypes;
+      return t.impossible(
+        'Just satisfying mapFn protocol, nothing to see here'
+      );
+    },
+    expectedCardinalities
+  );
+
+  return argTypesLowerDims;
 };
 
 export const automapTypesForReducer = (
@@ -121,14 +149,14 @@ export const automapTypesForReducer = (
 export const automapValuesForReducer = (
   argType: Type,
   argValue: Value.Column,
-  mapFn: (values: Value.Value[]) => Value.Value
+  mapFn: (values: Value.Value[], types: Type[]) => Value.Value
 ): Value.Value => {
   if (!validateCardinalities([argType], [2])) {
     throw new Error('panic: cardinality is too low');
   }
 
   if (getCardinality(argType) === 2) {
-    return mapFn([argValue]);
+    return mapFn([argValue], [argType]);
   } else {
     return Value.Column.fromValues(
       argValue.values.map((v) =>
