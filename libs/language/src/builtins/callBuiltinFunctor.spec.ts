@@ -98,20 +98,12 @@ describe('callBuiltin', () => {
   });
 
   it('first', () => {
-    expect(callBuiltinFunctor('first', [t.number([meter])])).toEqual(
-      t.number([meter])
-    );
-
     expect(
       callBuiltinFunctor('first', [t.column(t.number([meter]), 3)])
     ).toEqual(t.number([meter]));
   });
 
   it('last', () => {
-    expect(callBuiltinFunctor('last', [t.number([meter])])).toEqual(
-      t.number([meter])
-    );
-
     expect(
       callBuiltinFunctor('last', [t.column(t.number([meter]), 3)])
     ).toEqual(t.number([meter]));

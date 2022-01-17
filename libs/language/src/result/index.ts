@@ -94,7 +94,7 @@ export function validateResult(
           `invalid date specificity ${type.date}`
         ) &&
         getTrue(
-          typeof value === 'bigint',
+          typeof value === 'bigint' || value instanceof Fraction,
           'expected date to be represented as a bigint'
         )
       );

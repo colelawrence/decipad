@@ -43,35 +43,39 @@ export const listOperators: Record<string, BuiltinSpec> = {
   },
   first: {
     argCount: 1,
-    fnValuesNoAutomap: (args: Value[]) => {
+    argCardinalities: [2],
+    fnValues: (args: Value[]) => {
       const [a] = args;
       const aData = a.getData();
       const aElements = Array.isArray(aData) ? aData : [aData];
       return fromJS(aElements[0]);
     },
-    functorNoAutomap: ([a]) => Type.combine(a.reducedOrSelf()),
+    functor: ([a]) => Type.combine(a.reducedOrSelf()),
   },
   last: {
     argCount: 1,
-    fnValuesNoAutomap: (args: Value[]) => {
+    argCardinalities: [2],
+    fnValues: (args: Value[]) => {
       const [a] = args;
       const aData = a.getData();
       const aElements = Array.isArray(aData) ? aData : [aData];
       return fromJS(aElements[aElements.length - 1]);
     },
-    functorNoAutomap: ([a]) => Type.combine(a.reducedOrSelf()),
+    functor: ([a]) => Type.combine(a.reducedOrSelf()),
   },
   count: {
     argCount: 1,
-    fnValuesNoAutomap: ([a]: Value[]) => {
+    argCardinalities: [2],
+    fnValues: ([a]: Value[]) => {
       const aData = a.getData();
       return fromJS(Array.isArray(aData) ? aData.length : 1);
     },
-    functorNoAutomap: () => t.number(),
+    functor: () => t.number(),
   },
   countif: {
     argCount: 1,
-    fnValuesNoAutomap: (args: Value[]) => {
+    argCardinalities: [2],
+    fnValues: (args: Value[]) => {
       const [a] = args;
       const aData = a.getData();
       const aElements = Array.isArray(aData) ? aData : [aData];
@@ -82,7 +86,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
         )
       );
     },
-    functorNoAutomap: ([a]) =>
+    functor: ([a]) =>
       Type.combine(a.reducedOrSelf().isScalar('boolean'), t.number()),
   },
   stepgrowth: {

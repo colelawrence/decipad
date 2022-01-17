@@ -66,14 +66,39 @@ describe('list operators', () => {
   });
 
   it('retrieves the first element of a list', () => {
-    expect(operators.first.fnValuesNoAutomap?.([fromJS(2)]))
-      .toMatchInlineSnapshot(`
-          FractionValue {
-            "value": Fraction(2),
-          }
-      `);
+    expect(
+      operators.first.functor?.([t.column(t.number(U('bananas')), 2)])
+    ).toEqual(t.number(U('bananas')));
+    expect(operators.first.functor?.([t.column(t.date('day'), 2)])).toEqual(
+      t.date('day')
+    );
+    expect(
+      operators.first.fnValues?.([
+        fromJS(BigInt(new Date('2020-01-01').getTime())),
+      ])
+    ).toMatchInlineSnapshot(`
+      FractionValue {
+        "value": Fraction(1577836800000),
+      }
+    `);
 
-    expect(operators.first.fnValuesNoAutomap?.([fromJS([4, 5, 6])]))
+    expect(
+      operators.first.fnValues?.([
+        fromJS([BigInt(new Date('2020-01-01').getTime())]),
+      ])
+    ).toMatchInlineSnapshot(`
+      FractionValue {
+        "value": Fraction(1577836800000),
+      }
+    `);
+
+    expect(operators.first.fnValues?.([fromJS(2)])).toMatchInlineSnapshot(`
+      FractionValue {
+        "value": Fraction(2),
+      }
+  `);
+
+    expect(operators.first.fnValues?.([fromJS([4, 5, 6])]))
       .toMatchInlineSnapshot(`
           FractionValue {
             "value": Fraction(4),
@@ -82,14 +107,13 @@ describe('list operators', () => {
   });
 
   it('retrieves the last element of a list', () => {
-    expect(operators.last.fnValuesNoAutomap?.([fromJS(2)]))
-      .toMatchInlineSnapshot(`
+    expect(operators.last.fnValues?.([fromJS(2)])).toMatchInlineSnapshot(`
           FractionValue {
             "value": Fraction(2),
           }
       `);
 
-    expect(operators.last.fnValuesNoAutomap?.([fromJS([4, 5, 6])]))
+    expect(operators.last.fnValues?.([fromJS([4, 5, 6])]))
       .toMatchInlineSnapshot(`
           FractionValue {
             "value": Fraction(6),
@@ -98,11 +122,11 @@ describe('list operators', () => {
   });
 
   it('count: counts the number of elements in a list', () => {
-    expect(
-      operators.count.functorNoAutomap!([t.column(t.number(), 3)])
-    ).toMatchObject(t.number());
+    expect(operators.count.functor!([t.column(t.number(), 3)])).toMatchObject(
+      t.number()
+    );
 
-    expect(operators.countif.fnValuesNoAutomap?.([fromJS([1, 2, 3])]))
+    expect(operators.countif.fnValues?.([fromJS([1, 2, 3])]))
       .toMatchInlineSnapshot(`
           FractionValue {
             "value": Fraction(3),
@@ -112,10 +136,10 @@ describe('list operators', () => {
 
   it('countif: counts the true elements in a list', () => {
     expect(
-      operators.countif.functorNoAutomap!([t.column(t.boolean(), 3)])
+      operators.countif.functor!([t.column(t.boolean(), 3)])
     ).toMatchObject(t.number());
 
-    expect(operators.countif.fnValuesNoAutomap?.([fromJS([true, false, true])]))
+    expect(operators.countif.fnValues?.([fromJS([true, false, true])]))
       .toMatchInlineSnapshot(`
           FractionValue {
             "value": Fraction(2),
