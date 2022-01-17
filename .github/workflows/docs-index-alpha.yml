@@ -1,0 +1,37 @@
+name: Index Alpha Docs
+
+on:
+  workflow_run:
+    workflows: ['Deploy Alpha']
+    types:
+      - completed
+
+jobs:
+  index:
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event_name != 'pull_request' }}
+    runs-on: ubuntu-latest
+    concurrency:
+      group: index-docs-alpha-${{ github.head_ref }}
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Scrape docs
+        uses: darrenjennings/algolia-docsearch-action@master
+        with:
+          algolia_application_id: ${{ secrets.ALGOLIA_APP_ID }}
+          algolia_api_key: ${{ secrets.ALGOLIA_API_KEY }}
+          file: '.algolia-config.alpha.json'
+
+  notify:
+    name: Discord Notification
+    runs-on: ubuntu-latest
+    needs: # make sure the notification is sent AFTER the jobs you want included have completed
+      - index
+    if: ${{ failure() && github.ref == 'refs/heads/main' }}
+    steps:
+      - name: Notify
+        uses: nobrayner/discord-webhook@v1
+        with:
+          github-token: ${{ secrets.github_token }}
+          discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}

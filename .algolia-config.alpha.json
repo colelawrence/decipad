@@ -1,8 +1,8 @@
 {
-  "index_name": "docs.dev.decipad.com",
+  "index_name": "docs.alpha.decipad.com",
   "start_urls": [
     {
-      "url": "https://dev.decipad.com/docs",
+      "url": "https://alpha.decipad.com/docs",
       "selectors_key": "language",
       "tags": ["language"]
     }
