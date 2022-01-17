@@ -67,6 +67,53 @@ Difference = End - Start
 ==> 77 days
 ```
 
+## Time conversions
+
+Unlike other units, in units of time different units might have different base.
+
+For example, some years have 365 days while other years have 366. May has 31 days, June 29.
+
+That means that Decipad cannot convert months into weeks:
+
+```deci live
+1 month in weeks
+==> Don't know how to convert between units months and weeks
+```
+
+You can create a custom unit, in case you know how many days the specific month has:
+
+```deci live
+month = 31 days
+1 month in weeks
+==> 4.(428571) weeks
+```
+
+Or, if you want to use the average amount of days that exist in a month:
+
+```deci live
+year = 365 days
+month = year / 12
+round(1 month in weeks, 1)
+==> 4.3 weeks
+```
+
+However you need to be mindful. Now, `year` is defined as a number of days. So you can't convert a year into a decade for example:
+
+```deci live
+year = 365 days
+1 year in decades
+==> Don't know how to convert between units days and decades
+```
+
+But you still can convert a decade into years, since the definition of `decade` is unchanged and it will ignore your user defined `year`.
+
+```deci live
+year = 365 days
+1 decade in years
+==> 10 years
+```
+
 ## Functions on dates
 
 [Here is a list of all the functions that work on dates](/docs/built-in-functions/functions-for-dates).
+[Read more on sequences and how they work with time](/docs/advanced-concepts/sequences).

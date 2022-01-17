@@ -1025,6 +1025,40 @@ describe('number units work together', () => {
     });
   });
 
+  it('calculates number from time quantity decade', async () => {
+    expect(await runCode(`(date(2040) - date(2030)) as decade`)).toMatchObject({
+      value: F(1),
+      type: number(U('decade')),
+    });
+  });
+
+  it('calculates number from time quantity century', async () => {
+    expect(await runCode(`(date(2130) - date(2030)) as century`)).toMatchObject(
+      {
+        value: F(1),
+        type: number(U('century')),
+      }
+    );
+  });
+
+  it('calculates number from time quantity millennia', async () => {
+    expect(
+      await runCode(`(date(4000) - date(1000)) as millennia`)
+    ).toMatchObject({
+      value: F(3),
+      type: number(U('millennia')),
+    });
+  });
+
+  it('calculates number from time quantity millenniums', async () => {
+    expect(
+      await runCode(`(date(8000) - date(1000)) as millenniums`)
+    ).toMatchObject({
+      value: F(7),
+      type: number(U('millenniums')),
+    });
+  });
+
   it('exponentiation works with expression as exponent', async () => {
     expect(
       await runCode(`

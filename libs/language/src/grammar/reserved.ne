@@ -52,7 +52,16 @@ const monthStrings = new Set([
   'December'
 ]);
 
+// fixme: this is repeated in units.ts
+// fixme: lots of other reserved words i think
 const timeUnitStrings = new Set([
+  'millennium',
+  'millenniums',
+  'millennia',
+  'century',
+  'centuries',
+  'decade',
+  'decades',
   'year',
   'years',
   'quarter',

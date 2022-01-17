@@ -10,6 +10,9 @@ const day: Converter = (x) => x.mul(86_400); // 60*60*24
 const week: Converter = (x) => x.mul(604_800); // 60*60*24*7
 // base: month
 const year: Converter = (x) => x.mul(12); // months * 12
+const decade: Converter = (x) => x.mul(10 * 12); // year * 10
+const century: Converter = (x) => x.mul(100 * 12); // year * 100
+const millennium: Converter = (x) => x.mul(1000 * 12); // year * 1000
 
 export const units: UnitOfMeasure[] = [
   {
@@ -63,5 +66,24 @@ export const units: UnitOfMeasure[] = [
     baseQuantity: 'month',
     toBaseQuantity: year,
     fromBaseQuantity: invert(year),
+  },
+  {
+    name: 'decade',
+    baseQuantity: 'month',
+    toBaseQuantity: decade,
+    fromBaseQuantity: invert(decade),
+  },
+  {
+    name: 'century',
+    baseQuantity: 'month',
+    toBaseQuantity: century,
+    fromBaseQuantity: invert(century),
+  },
+  {
+    name: 'millennium',
+    abbreviations: ['millenniums'],
+    baseQuantity: 'month',
+    toBaseQuantity: millennium,
+    fromBaseQuantity: invert(millennium),
   },
 ];

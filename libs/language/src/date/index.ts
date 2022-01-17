@@ -39,6 +39,9 @@ export const timeUnitToJSDateUnit: Record<
   Time.Unit,
   [Time.JSDateUnit, bigint]
 > = {
+  millennium: ['year', 1000n],
+  century: ['year', 100n],
+  decade: ['year', 10n],
   year: ['year', 1n],
   quarter: ['month', 3n],
   month: ['month', 1n],
@@ -76,30 +79,40 @@ export const jsIndexToUnit: Record<number, Time.JSDateUnit> = {
 };
 
 const timeUnitToIndex: Record<Time.Unit, number> = {
-  year: 0,
-  quarter: 1,
-  month: 2,
-  week: 3,
-  day: 4,
-  hour: 5,
-  minute: 6,
-  second: 7,
-  millisecond: 8,
+  millennium: 0,
+  century: 1,
+  decade: 2,
+  year: 3,
+  quarter: 4,
+  month: 5,
+  week: 6,
+  day: 7,
+  hour: 8,
+  minute: 9,
+  second: 10,
+  millisecond: 11,
 };
 
+// fixme: this doesnt seem to be used. dead code?
 export const timeIndexToUnit: Record<number, Time.Unit> = {
-  0: 'year',
-  1: 'quarter',
-  2: 'month',
-  3: 'week',
-  4: 'day',
-  5: 'hour',
-  6: 'minute',
-  7: 'second',
-  8: 'millisecond',
+  0: 'millennium',
+  1: 'century',
+  2: 'decade',
+  3: 'year',
+  4: 'quarter',
+  5: 'month',
+  6: 'week',
+  7: 'day',
+  8: 'hour',
+  9: 'minute',
+  10: 'second',
+  11: 'millisecond',
 };
 
 export const timeUnitToNormalMax: Record<Time.Unit, number> = {
+  millennium: Infinity,
+  century: Infinity,
+  decade: Infinity,
   year: Infinity,
   quarter: 3,
   month: 11,
@@ -126,6 +139,10 @@ export const getSpecificity = (thing?: string | Unit): Time.Specificity => {
   let unit = typeof thing === 'string' ? thing : thing && thing.unit;
   if (unit) {
     unit = singular(unit);
+
+    if (unit === 'millennium') return 'year';
+    if (unit === 'century') return 'year';
+    if (unit === 'decade') return 'year';
 
     if (unit === 'quarter') return 'month';
 

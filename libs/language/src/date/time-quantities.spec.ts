@@ -13,6 +13,10 @@ it('can add composite quantities', () => {
       new TimeQuantity({ quarter: 1n, month: 1n })
     )
   ).toEqual(d('2020-05-01'));
+
+  expect(
+    addTimeQuantity(d('2020'), new TimeQuantity({ decade: 1n, year: 1n }))
+  ).toEqual(d('2031'));
 });
 
 it('can add time quantities to a date', () => {

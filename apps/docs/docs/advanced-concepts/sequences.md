@@ -33,7 +33,7 @@ You can have sequences of dates by specifying the step:
 ==> [ month 2021-01, month 2021-02, month 2021-03, month 2021-04, month 2021-05, month 2021-06 ]
 ```
 
-The step can be any of `year`, `quarter`, `month`, `day`, `hour`, `minute`, `second` or `millisecond`:
+The step can be any of `millennium`, `century`, `decade`, `year`, `quarter`, `month`, `day`, `hour`, `minute`, `second` or `millisecond`:
 
 ```deci live
 [date(2021-03-15) .. date(2021-03-15) by hour]

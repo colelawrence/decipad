@@ -98,6 +98,21 @@ describe('sequence counts', () => {
   };
 
   it('gets the size of a sequence of dates', () => {
+    // We've got stars directing our fate
+    // And we're praying it's not too late
+    // Millennium
+    expect(dateSeqSize('2000', '3000', 'millennium')).toEqual(2);
+    expect(dateSeqSize('2000', '5000', 'millennium')).toEqual(4);
+
+    // Centuries
+    expect(dateSeqSize('2100', '2199', 'century')).toEqual(1);
+    expect(dateSeqSize('2100', '2200', 'century')).toEqual(2);
+    expect(dateSeqSize('2100', '3000', 'century')).toEqual(10);
+
+    // Decades
+    expect(dateSeqSize('2020', '2030', 'decade')).toEqual(2);
+    expect(dateSeqSize('2020', '2119', 'decade')).toEqual(10);
+
     // Years
     expect(dateSeqSize('2020', '2020', 'year')).toEqual(1);
 

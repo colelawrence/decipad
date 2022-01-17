@@ -73,6 +73,13 @@ const numberToSubOrSuperscript: Record<string, string[]> = {
 };
 
 export const timeUnits = new Set([
+  'millennium',
+  'millenniums',
+  'millennia',
+  'century',
+  'centuries',
+  'decade',
+  'decades',
   'year',
   'years',
   'quarter',
