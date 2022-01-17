@@ -12,6 +12,25 @@ test('Should display welcome message', async () => {
   );
 });
 
+test('should allow the user to type their email for login', async () => {
+  await page.type('input', 'johndoe123@gmail.com');
+  const inputValue = await page.inputValue('input');
+  expect(inputValue).toBe('johndoe123@gmail.com');
+});
+
+test('should show confirmation email on login attempt', async () => {
+  await page.fill('[placeholder~="email" i]', 'johndoe123@gmail.com');
+  await page.click('text=/continue/i');
+
+  await expect(
+    page.waitForNavigation({
+      url: /auth/,
+    })
+  ).resolves.not.toThrow();
+
+  expect(await page.isVisible('text=/check.+email/i')).toBe(true);
+});
+
 test('should redirect to workspace if authenticated', async () => {
   await withNewUser();
   await page.goto('/');

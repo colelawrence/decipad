@@ -26,7 +26,7 @@ const styles = css(p13SemiBold, {
   color: black.rgb,
   boxShadow: `0 0 0 1px ${cssVar('backgroundColor')}`,
 
-  transition: `box-shadow ${shortAnimationDuration} ease-out`,
+  transition: `box-shadow ${shortAnimationDuration} ease-out, background-color ${shortAnimationDuration} ease-out`,
   ':hover, :focus': {
     boxShadow: `0px 4px 8px ${transparency(black, 0.08).rgba}`,
   },

@@ -9,7 +9,6 @@ export * as organisms from './organisms';
 
 // TODO temporary while these are not yet reworked to be design system components
 export * from './lib/Editor';
-export * from './lib/Landing';
 export * from './lib/Contexts/index';
 export * from './lib/theme';
 export * from './lib/shared';

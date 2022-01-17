@@ -1,5 +1,5 @@
-import { Landing } from '@decipad/ui';
-import { useSession } from 'next-auth/client';
+import { LoginPage } from '@decipad/ui';
+import { signIn, useSession } from 'next-auth/client';
 import { FC, ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
 import { SECRET_URL_PARAM } from '../../lib/secret';
@@ -27,6 +27,5 @@ export function RequireSession({
     return <>Loading...</>;
   }
 
-  // TODO: we need a login screen. For now, Landing will do.
-  return <Landing />;
+  return <LoginPage onSubmit={(email) => signIn('email', { email })} />;
 }

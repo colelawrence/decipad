@@ -17,12 +17,18 @@ const inputStyles = css({
 
 export type AuthInputProps = {
   readonly placeholder: string;
+  readonly type?: string;
+  readonly required?: boolean;
+
   readonly value: string;
   readonly onChange?: (newValue: string) => void;
 };
 
 export const AuthInput = ({
   placeholder,
+  type = 'text',
+  required = false,
+
   value,
   onChange = noop,
 }: AuthInputProps): ReturnType<FC> => {
@@ -31,6 +37,8 @@ export const AuthInput = ({
       css={inputStyles}
       placeholder={placeholder}
       value={value}
+      type={type}
+      required={required}
       onChange={(event) => onChange(event.currentTarget.value)}
     />
   );
