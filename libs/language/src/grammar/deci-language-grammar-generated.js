@@ -406,6 +406,14 @@ let ParserRules = [
     },
   },
   {
+    name: 'int',
+    symbols: [{ literal: '-' }, 'int'],
+    postprocess: (d) => {
+      const n = -d[1].n;
+      return addArrayLoc({ n }, d);
+    },
+  },
+  {
     name: 'decimal',
     symbols: [tokenizer.has('number') ? { type: 'number' } : number],
     postprocess: ([number], _l, reject) => {

@@ -63,6 +63,13 @@ int -> %number                                          {%
                                                         }
                                                         %}
 
+int -> "-" int                                          {%
+                                                        (d) => {
+                                                          const n = -d[1].n
+                                                          return addArrayLoc({ n }, d)
+                                                        }
+                                                        %}
+
 decimal -> %number                                      {%
                                                         ([number], _l, reject) => {
                                                           if (/[eE]/.test(number.value)) {
