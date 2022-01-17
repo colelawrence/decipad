@@ -1,6 +1,6 @@
 import Fraction from '@decipad/fraction';
 import { Type, build as t, Unit, units } from '../type';
-import { F } from '../utils';
+import { U, F } from '../utils';
 
 import { callBuiltinFunctor } from './callBuiltinFunctor';
 
@@ -119,7 +119,7 @@ describe('callBuiltin', () => {
 });
 
 interface TestBuilderArgs {
-  type: 'string' | 'boolean' | 'number';
+  type: 'string' | 'boolean' | 'number' | 'month' | 'year';
   unit?: Unit[] | null;
 }
 type Builder = (a: TestBuilderArgs) => Type;
@@ -184,12 +184,58 @@ const typeDimTests: Record<string, Test> = {
       ]).errorCause
     ).not.toBeNull();
   },
+  '+': (build, build2, _, buildOut) => {
+    expect(
+      callBuiltinFunctor('+', [
+        build({ type: 'number' }),
+        build2({ type: 'number' }),
+      ])
+    ).toEqual(buildOut({ type: 'number' }));
+
+    expect(
+      callBuiltinFunctor('+', [
+        build({ type: 'month' }),
+        build2({ type: 'number', unit: U('month').args }),
+      ])
+    ).toEqual(buildOut({ type: 'month' }));
+
+    expect(
+      callBuiltinFunctor('+', [
+        build2({ type: 'number', unit: U('month').args }),
+        build({ type: 'month' }),
+      ])
+    ).toEqual(buildOut({ type: 'month' }));
+  },
+  '-': (build, build2, _, buildOut) => {
+    expect(
+      callBuiltinFunctor('-', [
+        build({ type: 'number' }),
+        build2({ type: 'number' }),
+      ])
+    ).toEqual(buildOut({ type: 'number' }));
+
+    expect(
+      callBuiltinFunctor('-', [
+        build({ type: 'month' }),
+        build2({ type: 'number', unit: U('month').args }),
+      ])
+    ).toEqual(buildOut({ type: 'month' }));
+
+    expect(
+      callBuiltinFunctor('-', [
+        build2({ type: 'number', unit: U('month').args }),
+        build({ type: 'month' }),
+      ]).errorCause
+    ).not.toBeNull();
+  },
 };
 
 for (const [testName, testFn] of Object.entries(typeDimTests)) {
   const buildScalar = ({ type, unit }: TestBuilderArgs) => {
     if (type === 'number') {
       return t.number(unit);
+    } else if (type === 'month' || type === 'year') {
+      return t.date(type);
     } else {
       return t[type]();
     }

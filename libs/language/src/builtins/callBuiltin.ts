@@ -10,7 +10,7 @@ import { BuiltinSpec } from './interfaces';
 
 function shouldAutoconvert(types: Type[]): boolean {
   if (types.length === 2) {
-    const [typeA, typeB] = types;
+    const [typeA, typeB] = types.map((t) => t.reducedToLowest());
     if ((typeA.unit && !typeB.unit) || (typeB.unit && !typeA.unit)) {
       return false;
     }

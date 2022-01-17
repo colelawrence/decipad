@@ -710,6 +710,9 @@ describe('Dates', () => {
       `Result(month 2021-01)`
     );
     expect(
+      await runCode(`[ date(2020-01) ] + [ 1 year ]`)
+    ).toMatchInlineSnapshot(`Result([ month 2021-01 ])`);
+    expect(
       await runCode(`date(2020-01-01T10:30:16) - 16 seconds`)
     ).toMatchInlineSnapshot(`Result(second 2020-01-01 10:30)`);
   });
