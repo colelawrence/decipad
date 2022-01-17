@@ -40,6 +40,7 @@ export {
   InferError,
   serializeType,
   stringifyUnits,
+  deserializeUnit,
 } from './type';
 export { Time } from './date';
 export { ExternalData } from './data';

@@ -38,7 +38,7 @@ export const timeQuantity = (timeUnits: (Unit | string)[]) =>
       type: 'units',
       args: timeUnits.map((unit) => ({
         unit: timeUnitFromUnit(typeof unit === 'string' ? unit : unit.unit),
-        exp: 1n,
+        exp: new Fraction(1),
         multiplier: new Fraction(1),
         known: true,
       })),

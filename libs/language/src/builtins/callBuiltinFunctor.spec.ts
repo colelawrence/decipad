@@ -1,18 +1,19 @@
 import Fraction from '@decipad/fraction';
 import { Type, build as t, Unit, units } from '../type';
+import { F } from '../utils';
 
 import { callBuiltinFunctor } from './callBuiltinFunctor';
 
 const meter: Unit = {
   unit: 'meter',
-  exp: 1n,
+  exp: F(1),
   multiplier: new Fraction(1),
   known: true,
 };
 
 const second: Unit = {
   unit: 'second',
-  exp: 1n,
+  exp: F(1),
   multiplier: new Fraction(1),
   known: true,
 };

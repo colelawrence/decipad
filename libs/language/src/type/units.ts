@@ -2,7 +2,7 @@ import { produce } from 'immer';
 import Fraction from '@decipad/fraction';
 import pluralize, { singular } from '../pluralize';
 import { Type } from '..';
-import { getDefined } from '../utils';
+import { F, getDefined } from '../utils';
 import { Unit, Units, units } from './unit-type';
 import {
   isKnownSymbol,
@@ -92,7 +92,7 @@ function scriptFromNumber(n: string) {
   return numberToSubOrSuperscript[n][1];
 }
 
-const byExp = (u1: Unit, u2: Unit): number => Number(u2.exp - u1.exp);
+const byExp = (u1: Unit, u2: Unit): number => Number(u2.exp.sub(u1.exp));
 
 const pluralizeUnit = (baseUnit: Unit, value: bigint | number = 2n): Unit => {
   const { unit } = baseUnit;
@@ -125,7 +125,7 @@ export const matchUnitArrays = (
     let match: Unit | undefined;
     for (const matchingUnit of pendingMatch) {
       if (
-        unit.exp === matchingUnit.exp &&
+        unit.exp.compare(matchingUnit.exp) === 0 &&
         areUnitsCompatible(unit.unit, matchingUnit.unit)
       ) {
         match = matchingUnit;
@@ -163,12 +163,12 @@ const simplifyUnitsArgs = (units: Unit[]): Unit[] => {
       if (matchingUnitIndex >= 0) {
         const matchingUnit = units[matchingUnitIndex];
         units[matchingUnitIndex] = produce(matchingUnit, (match) => {
-          match.exp += unit.exp;
+          match.exp = match.exp.add(unit.exp);
           //
           // match.multiplier *= unit.multiplier ** Number(unit.exp);
           //
           match.multiplier = match.multiplier.mul(
-            unit.multiplier.pow(Number(unit.exp))
+            unit.multiplier.pow(unit.exp)
           );
         });
         return units;
@@ -176,7 +176,7 @@ const simplifyUnitsArgs = (units: Unit[]): Unit[] => {
         return [...units, unit];
       }
     }, [])
-    .filter((unit) => unit.exp !== 0n);
+    .filter((unit) => unit.exp.compare(F(0)) !== 0);
 };
 
 export const simplifyUnits = (units: Units | null): Units | null => {
@@ -219,12 +219,13 @@ export const normalizeUnitsOf = (unit: Units | null): Units | null => {
   });
 };
 
-export const setExponent = (unit: Unit, newExponent: bigint) =>
+export const setExponent = (unit: Unit, newExponent: Fraction) =>
   produce(unit, (unit) => {
     unit.exp = newExponent;
   });
 
-export const inverseExponent = (unit: Unit) => setExponent(unit, -unit.exp);
+export const inverseExponent = (unit: Unit) =>
+  setExponent(unit, unit.exp.neg());
 
 const stringifyUnit = (unit: Unit) => {
   const symbol = singular(unit.unit);
@@ -248,7 +249,7 @@ const stringifyUnit = (unit: Unit) => {
     baseUnitName,
   ];
 
-  if (unit.exp !== 1n) {
+  if (unit.exp.compare(F(1)) !== 0) {
     const exp = `${unit.exp}`.replace(/./g, scriptFromNumber);
     result.push(exp);
   }
@@ -260,7 +261,7 @@ function produceExp(unit: Unit, makePositive: boolean): Unit {
   return produce(unit, (unit) => {
     unit.unit = singular(unit.unit);
     if (makePositive) {
-      unit.exp = BigInt(Math.abs(Number(unit.exp)));
+      unit.exp = unit.exp.abs();
     }
   });
 }
@@ -279,7 +280,7 @@ export const stringifyUnitArgs = (
         // but when you have more
         // you use international system like `m.s-1`
         //
-        if (units?.length === 2 && unit.exp === -1n) {
+        if (units?.length === 2 && unit.exp.compare(F(-1)) === 0) {
           prefix = unitIsSymbol(unit.unit) ? '/' : ' per ';
           parts.push(prefix);
           parts.push(stringifyUnit(produceExp(unit, true)));
@@ -339,7 +340,7 @@ export const combineUnits = (
       outputUnits[existingUnitIndex] = produce(
         outputUnits[existingUnitIndex],
         (inversed) => {
-          inversed.exp += myUnit.exp;
+          inversed.exp = inversed.exp.add(myUnit.exp);
         }
       );
     } else {
@@ -351,15 +352,12 @@ export const combineUnits = (
   return ret == null ? ret : units(...ret);
 };
 
-export const multiplyExponent = (
-  myUnits: Units,
-  by: bigint | number
-): Units | null =>
+export const multiplyExponent = (myUnits: Units, by: number): Units | null =>
   normalizeUnitsOf(
     produce(myUnits, (myUnits) => {
       for (const u of myUnits.args) {
         try {
-          u.exp = BigInt(Number(u.exp) * Number(by));
+          u.exp = u.exp.mul(by);
         } catch (err) {
           const error = new Error(
             `error multiplying ${u.exp} by ${by}: ${(err as Error).message}`

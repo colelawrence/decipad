@@ -3,7 +3,7 @@ import produce from 'immer';
 import Fraction from '@decipad/fraction';
 import { getDefined } from '@decipad/utils';
 import { RuntimeError } from '../../interpreter';
-import { getInstanceof } from '../../utils';
+import { F, getInstanceof } from '../../utils';
 import { Type, build as t } from '../../type';
 import {
   Column,
@@ -44,9 +44,9 @@ const exponentiationFunctor = ([a, b]: Type[], values?: AST.Expression[]) => {
   return binopFunctor([a, removeUnit(b)]).mapType(
     produce((arg1) => {
       for (const unit of arg1.unit?.args ?? []) {
-        unit.exp =
-          (unit.exp || 1n) *
-          BigInt(getDefined(bValue.args[1]).valueOf() as number);
+        unit.exp = (unit.exp || F(1)).mul(
+          getDefined(bValue.args[1]) as Fraction
+        );
       }
     })
   );

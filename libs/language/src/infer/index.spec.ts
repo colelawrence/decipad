@@ -1,9 +1,9 @@
-import Fraction from '@decipad/fraction';
 import { dequal } from 'dequal';
 
 import { AST, inferBlock, Unit } from '..';
 import { InferError, Type, build as t } from '../type';
 import {
+  F,
   l,
   c,
   n,
@@ -34,8 +34,8 @@ import { makeContext } from './context';
 let nilCtx = makeContext();
 const degC: Unit = {
   unit: 'celsius',
-  exp: 1n,
-  multiplier: new Fraction(1),
+  exp: F(1),
+  multiplier: F(1),
   known: true,
 };
 expect.addSnapshotSerializer({
@@ -431,7 +431,7 @@ describe('Property access', () => {
       (await inferExpression(scopeWithTable, prop('MissingVar', 'Col')))
         .errorCause?.spec
     ).toMatchInlineSnapshot(
-      `ErrSpec:expected-but-got("expectedButGot" => ["table or row",{"node":null,"errorCause":null,"type":"number","unit":{"type":"units","args":[{"unit":"MissingVar","exp":"1","multiplier":{"s":"1","n":"1","d":"1"},"known":false}]},"date":null,"rangeOf":null,"indexName":null,"indexedBy":null,"cellType":null,"columnSize":null,"atParentIndex":null,"tableLength":null,"columnTypes":null,"columnNames":null,"rowCellTypes":null,"rowCellNames":null,"functionness":false}])`
+      `ErrSpec:expected-but-got("expectedButGot" => ["table or row",{"node":null,"errorCause":null,"type":"number","unit":{"type":"units","args":[{"unit":"MissingVar","exp":{"s":"1","n":"1","d":"1"},"multiplier":{"s":"1","n":"1","d":"1"},"known":false}]},"date":null,"rangeOf":null,"indexName":null,"indexedBy":null,"cellType":null,"columnSize":null,"atParentIndex":null,"tableLength":null,"columnTypes":null,"columnNames":null,"rowCellTypes":null,"rowCellNames":null,"functionness":false}])`
     );
   });
 });

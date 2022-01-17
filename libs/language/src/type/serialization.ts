@@ -1,11 +1,15 @@
 import { getDefined } from '@decipad/utils';
 import { buildType as t, Type } from '..';
 import { Time } from '../date';
+import { F } from '../utils';
 import { ErrSpec, InferError } from './InferError';
-import { Units } from './unit-type';
+import { Unit, Units } from './unit-type';
+
+export type SerializedUnit = Unit<string>;
+export type SerializedUnits = Units<string>;
 
 export type SerializedType =
-  | { kind: 'number'; unit: Units | null }
+  | { kind: 'number'; unit: SerializedUnits | null }
   | { kind: 'boolean' }
   | { kind: 'string' }
   | { kind: 'date'; date: Time.Specificity }
@@ -30,9 +34,23 @@ export type SerializedType =
 
 export type SerializedTypeKind = SerializedType['kind'];
 
+function serializeUnit(unit: Units | null): SerializedUnits | null {
+  if (unit == null) {
+    return unit;
+  }
+  return {
+    type: 'units',
+    args: unit.args.map((u) => ({
+      ...u,
+      multiplier: u.multiplier.toString(),
+      exp: u.exp.toString(),
+    })),
+  };
+}
+
 export function serializeType(type: Type): SerializedType {
   if (type.type === 'number') {
-    return { kind: 'number', unit: type.unit };
+    return { kind: 'number', unit: serializeUnit(type.unit) };
   } else if (type.type === 'boolean') {
     return { kind: 'boolean' };
   } else if (type.type === 'string') {
@@ -80,11 +98,25 @@ export function serializeType(type: Type): SerializedType {
   throw new Error(`panic: serializing invalid type ${type.type}`);
 }
 
+export function deserializeUnit(unit: SerializedUnits | null): Units | null {
+  if (unit == null) {
+    return unit;
+  }
+  return {
+    type: 'units',
+    args: unit.args.map((u) => ({
+      ...u,
+      multiplier: F(u.multiplier),
+      exp: F(u.exp),
+    })),
+  };
+}
+
 /* eslint-disable-next-line consistent-return */
 export function deserializeType(type: SerializedType): Type {
   switch (type.kind) {
     case 'number':
-      return t.number(type.unit);
+      return t.number(deserializeUnit(type.unit));
     case 'string':
       return t.string();
     case 'boolean':

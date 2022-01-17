@@ -48,7 +48,7 @@ function expandUnitWith(unit: Unit, expansion: BaseQuantityExpansion): Unit[] {
     const targetUnitName = baseUnitForBaseQuantity(expandedUnit.baseQuantity);
     const newUnit = {
       unit: targetUnitName,
-      exp: BigInt(expandedUnit.exp) * unit.exp,
+      exp: expandedUnit.exp.mul(unit.exp),
       // multiplier: first ? unit.multiplier ** expandedUnit.exp : 1,
       multiplier: first ? unit.multiplier.pow(Number(expandedUnit.exp)) : F(1),
       known: true,

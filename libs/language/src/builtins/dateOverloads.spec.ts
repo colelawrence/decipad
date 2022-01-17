@@ -54,19 +54,19 @@ describe('common functions', () => {
       Object {
         "args": Array [
           Object {
-            "exp": 1n,
+            "exp": Fraction(1),
             "known": true,
             "multiplier": Fraction(1),
             "unit": "day",
           },
           Object {
-            "exp": 1n,
+            "exp": Fraction(1),
             "known": true,
             "multiplier": Fraction(1),
             "unit": "month",
           },
           Object {
-            "exp": 1n,
+            "exp": Fraction(1),
             "known": true,
             "multiplier": Fraction(1),
             "unit": "quarter",
@@ -156,32 +156,32 @@ it('date - number', () => {
 it('date - date => time-quantity', () => {
   expect(minus.functor!([t.date('day'), t.date('day')]).unit)
     .toMatchInlineSnapshot(`
-      Object {
-        "args": Array [
-          Object {
-            "exp": 1n,
-            "known": true,
-            "multiplier": Fraction(1),
-            "unit": "day",
-          },
-        ],
-        "type": "units",
-      }
-    `);
+    Object {
+      "args": Array [
+        Object {
+          "exp": Fraction(1),
+          "known": true,
+          "multiplier": Fraction(1),
+          "unit": "day",
+        },
+      ],
+      "type": "units",
+    }
+  `);
   expect(minus.functor!([t.date('minute'), t.date('minute')]).unit)
     .toMatchInlineSnapshot(`
+    Object {
+      "args": Array [
         Object {
-          "args": Array [
-            Object {
-              "exp": 1n,
-              "known": true,
-              "multiplier": Fraction(1),
-              "unit": "minute",
-            },
-          ],
-          "type": "units",
-        }
-      `);
+          "exp": Fraction(1),
+          "known": true,
+          "multiplier": Fraction(1),
+          "unit": "minute",
+        },
+      ],
+      "type": "units",
+    }
+  `);
 
   const testDateMinus = (
     date1: string,

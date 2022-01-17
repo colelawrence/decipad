@@ -34,17 +34,17 @@ describe('expand', () => {
   });
 
   it('contracts known negative exp unit to the same unit and value (2)', () => {
-    const [resultUnits, convert] = contractUnits(U('second', { exp: -1n }));
-    expect(resultUnits).toMatchObject(U('second', { exp: -1n }));
+    const [resultUnits, convert] = contractUnits(U('second', { exp: F(-1) }));
+    expect(resultUnits).toMatchObject(U('second', { exp: F(-1) }));
     expect(convert(F(2))).toMatchObject(F(2));
   });
 
   it('contracts known and unknown negative exp units to the same units and value (1)', () => {
     const [resultUnits, convert] = contractUnits(
-      U([u('bananas'), u('second', { exp: -1n })])
+      U([u('bananas'), u('second', { exp: F(-1) })])
     );
     expect(resultUnits).toMatchObject(
-      U([u('bananas'), u('second', { exp: -1n })])
+      U([u('bananas'), u('second', { exp: F(-1) })])
     );
     expect(convert(F(2))).toMatchObject(F(2));
   });
@@ -53,13 +53,13 @@ describe('expand', () => {
     const [resultUnits, convert] = contractUnits(
       U([
         u('bananas'),
-        u('second', { exp: -1n, multiplier: new Fraction(0.001) }),
+        u('second', { exp: F(-1), multiplier: new Fraction(0.001) }),
       ])
     );
     expect(resultUnits).toMatchObject(
       U([
         u('bananas'),
-        u('second', { exp: -1n, multiplier: new Fraction(0.001) }),
+        u('second', { exp: F(-1), multiplier: new Fraction(0.001) }),
       ])
     );
     expect(convert(F(2))).toMatchObject(F(2));
@@ -83,20 +83,20 @@ describe('expand', () => {
 
   it('contracts unknown unit with exp and multiplier to the same units and value', () => {
     const [resultUnits, convert] = contractUnits(
-      U('bananas', { exp: 2n, multiplier: new Fraction(100) })
+      U('bananas', { exp: F(2), multiplier: new Fraction(100) })
     );
     expect(resultUnits).toMatchObject(
-      U('bananas', { exp: 2n, multiplier: new Fraction(100) })
+      U('bananas', { exp: F(2), multiplier: new Fraction(100) })
     );
     expect(convert(F(2))).toMatchObject(F(2));
   });
 
   it('contracts known unit with exp and multiplier to the same units and value', () => {
     const [resultUnits, convert] = contractUnits(
-      U([u('meters', { exp: 2n, multiplier: new Fraction(0.001) })])
+      U([u('meters', { exp: F(2), multiplier: new Fraction(0.001) })])
     );
     expect(resultUnits).toMatchObject(
-      U('meters', { exp: 2n, multiplier: new Fraction(0.001) })
+      U('meters', { exp: F(2), multiplier: new Fraction(0.001) })
     );
     expect(convert(F(2))).toMatchObject(F(2));
   });
@@ -120,9 +120,9 @@ describe('expand', () => {
   });
 
   it('contracts standard known unit positive exponent and multiplier to the correct units', () => {
-    const [resultUnits, convert] = contractUnits(U('calories', { exp: 2n }));
+    const [resultUnits, convert] = contractUnits(U('calories', { exp: F(2) }));
 
-    expect(resultUnits).toMatchObject(U('calories', { exp: 2n }));
+    expect(resultUnits).toMatchObject(U('calories', { exp: F(2) }));
     expect(convert(F(35011712))).toMatchObject(F(2));
   });
 

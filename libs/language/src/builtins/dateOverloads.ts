@@ -7,7 +7,7 @@ import {
   getHighestSpecificity as getMostSpecific,
   subtractDates,
 } from '../date';
-import { getDefined, getInstanceof } from '../utils';
+import { F, getDefined, getInstanceof } from '../utils';
 import { Type, build as t, InferError } from '../type';
 import { OverloadedBuiltinSpec } from './overloadBuiltin';
 
@@ -62,7 +62,7 @@ export const subtractDatesFunctor = ([t1, t2]: Type[]) => {
     t.number([
       {
         unit: d1Specificity,
-        exp: 1n,
+        exp: F(1),
         multiplier: new Fraction(1),
         known: true,
       },

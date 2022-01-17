@@ -323,18 +323,21 @@ export function invert(
 }
 
 export function F(n: number | bigint, d?: number | bigint): Fraction;
-export function F(n: string): Fraction;
-export function F(n: number | bigint | string, d: number | bigint = 1n) {
+export function F(n: string | Fraction): Fraction;
+export function F(
+  n: number | bigint | string | Fraction,
+  d: number | bigint = 1n
+) {
   return typeof n === 'number' || typeof n === 'bigint'
     ? new Fraction(n, d)
-    : new Fraction(n);
+    : new Fraction(n as string);
 }
 
 export function u(unit: string | Unit, opts: Partial<Unit> = {}): Unit {
   if (typeof unit === 'string') {
     unit = {
       unit,
-      exp: 1n,
+      exp: new Fraction(1),
       multiplier: new Fraction(1),
       known: true,
     };

@@ -9,7 +9,7 @@ import { simplifyUnits, stringifyUnits } from '../type/units';
 function areQuantityUnitsCompatible(a: Unit, b: Unit): boolean {
   return (
     a.unit === b.unit &&
-    a.exp === b.exp &&
+    a.exp.compare(b.exp) === 0 &&
     a.multiplier.compare(b.multiplier) === 0
   );
 }

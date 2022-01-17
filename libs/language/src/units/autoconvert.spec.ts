@@ -31,7 +31,7 @@ describe('autoconvert arguments', () => {
     expect(
       autoconvertArguments(
         [fromJS(F(2))],
-        [number(U([u('newton'), u('meter', { exp: -2n })]))]
+        [number(U([u('newton'), u('meter', { exp: F(-2) })]))]
       )
     ).toMatchObject([fromJS(F(2000))]);
   });

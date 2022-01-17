@@ -1,6 +1,6 @@
 import { fromJS } from '../../interpreter/Value';
 import { build as t } from '../../type';
-import { n, l, F } from '../../utils';
+import { n, l, F, U } from '../../utils';
 import { mathOperators as operators } from './math-operators';
 
 describe('math operators', () => {
@@ -76,6 +76,10 @@ describe('math operators', () => {
   });
 
   it('calculates sqrt', () => {
+    expect(operators.sqrt.functor?.([t.number()])).toEqual(t.number());
+    expect(operators.sqrt.functor?.([t.number(U('W'))])).toEqual(
+      t.number(U('W', { exp: F(1, 2) }))
+    );
     expect(operators.sqrt.fn?.(F(4))).toMatchObject(F(2));
   });
 
@@ -90,7 +94,7 @@ describe('math operators', () => {
           t.number([
             {
               unit: 'meters',
-              exp: 1n,
+              exp: F(1),
               multiplier: F(1),
               known: false,
             },
@@ -101,7 +105,7 @@ describe('math operators', () => {
         [l(1), l(2)]
       )
     ).toMatchObject(
-      t.number([{ unit: 'meters', exp: 2n, multiplier: F(1), known: false }])
+      t.number([{ unit: 'meters', exp: F(2), multiplier: F(1), known: false }])
     );
 
     expect(
@@ -110,7 +114,7 @@ describe('math operators', () => {
           t.number([
             {
               unit: 'meters',
-              exp: 1n,
+              exp: F(1),
               multiplier: F(1),
               known: false,
             },
@@ -128,7 +132,7 @@ describe('math operators', () => {
           t.number([
             {
               unit: 'meters',
-              exp: 1n,
+              exp: F(1),
               multiplier: F(1),
               known: false,
             },

@@ -1,7 +1,7 @@
 import Fraction from '@decipad/fraction';
 import produce from 'immer';
 
-import { l, u, U } from '../utils';
+import { F, l, u, U } from '../utils';
 import { InferError } from './InferError';
 import { inverseExponent, setExponent } from './units';
 import { Type, build as t } from './index';
@@ -36,7 +36,9 @@ it('can follow SI rules and style conventions', () => {
     'meters·banana'
   );
   // cm3 = 0.01m3
-  const cm3 = t.number([u('m', { multiplier: new Fraction(1, 100), exp: 3n })]);
+  const cm3 = t.number([
+    u('m', { multiplier: new Fraction(1, 100), exp: F(3) }),
+  ]);
   expect(cm3.toString()).toEqual('cm³');
   expect(t.number([u('cubicmeter')]).toString()).toEqual('m³');
   expect(t.number([u('lightyear')]).toString()).toEqual('light year');
@@ -319,12 +321,12 @@ describe('divideUnit', () => {
 
   it('exponentiates units', () => {
     expect(t.number([invSecond]).divideUnit(units(second))).toEqual(
-      t.number([setExponent(second, -2n)])
+      t.number([setExponent(second, F(-2))])
     );
 
     expect(
-      t.number([setExponent(second, -2n)]).divideUnit(units(second))
-    ).toEqual(t.number([setExponent(second, -3n)]));
+      t.number([setExponent(second, F(-2))]).divideUnit(units(second))
+    ).toEqual(t.number([setExponent(second, F(-3))]));
   });
 
   it('exponentiation that results in 0-exponent eliminates the unit', () => {
@@ -336,7 +338,7 @@ describe('divideUnit', () => {
       t.number([meter, invSecond]).divideUnit(units(u('USD'))).unit
     ).toEqual(
       units(
-        setExponent(u('USD'), -1n), // first because of sort
+        setExponent(u('USD'), F(-1)), // first because of sort
         meter,
         invSecond
       )

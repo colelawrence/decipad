@@ -18,7 +18,7 @@ describe('expand', () => {
   it('expands known unit to the same unit and value', () => {
     const [resultUnits, convert] = expandUnits(U('watts'));
     expect(resultUnits).toMatchObject(
-      U([u('grams'), u('meters', { exp: 2n }), u('seconds', { exp: -3n })])
+      U([u('grams'), u('meters', { exp: F(2) }), u('seconds', { exp: F(-3) })])
     );
     expect(convert(F(2))).toMatchObject(F(2000));
   });
@@ -30,8 +30,8 @@ describe('expand', () => {
     expect(resultUnits).toMatchObject(
       U([
         u('grams', { multiplier: new Fraction(1000) }),
-        u('meters', { exp: 2n }),
-        u('seconds', { exp: -3n }),
+        u('meters', { exp: F(2) }),
+        u('seconds', { exp: F(-3) }),
       ])
     );
     expect(convert(F(2))).toMatchObject(F(2000));
@@ -40,7 +40,7 @@ describe('expand', () => {
   it('expands 1 lm === 1 cd⋅sr', () => {
     const [resultUnits, convert] = expandUnits(U('lumens'));
     expect(resultUnits).toMatchObject(
-      U([u('candelas', { exp: 1n }), u('steradians', { exp: 1n })])
+      U([u('candelas', { exp: F(1) }), u('steradians', { exp: F(1) })])
     );
     expect(convert(F(1))).toMatchObject(F(1));
   });
@@ -48,39 +48,33 @@ describe('expand', () => {
   it('expands 18 kph === 5 m/s', () => {
     const [resultUnits, convert] = expandUnits(U('kph'));
     expect(resultUnits).toMatchObject(
-      U([u('meters', { exp: 1n }), u('seconds', { exp: -1n })])
+      U([u('meters', { exp: F(1) }), u('seconds', { exp: F(-1) })])
     );
     expect(convert(F(18))).toMatchObject(F(5));
   });
 
   it('expands known negative exp unit to the same unit and value (2)', () => {
-    const [resultUnits, convert] = expandUnits(U('second', { exp: -1n }));
-    expect(resultUnits).toMatchObject(U('seconds', { exp: -1n }));
+    const [resultUnits, convert] = expandUnits(U('second', { exp: F(-1) }));
+    expect(resultUnits).toMatchObject(U('seconds', { exp: F(-1) }));
     expect(convert(F(2))).toMatchObject(F(2));
   });
 
   it('expands known and unknown negative exp units to the same units and value (1)', () => {
     const [resultUnits, convert] = expandUnits(
-      U([u('bananas'), u('second', { exp: -1n })])
+      U([u('bananas'), u('second', { exp: F(-1) })])
     );
     expect(resultUnits).toMatchObject(
-      U([u('bananas'), u('seconds', { exp: -1n })])
+      U([u('bananas'), u('seconds', { exp: F(-1) })])
     );
     expect(convert(F(2))).toMatchObject(F(2));
   });
 
   it('expands known and unknown negative exp units to the same units and value (2)', () => {
     const [resultUnits, convert] = expandUnits(
-      U([
-        u('bananas'),
-        u('second', { exp: -1n, multiplier: new Fraction(0.001) }),
-      ])
+      U([u('bananas'), u('second', { exp: F(-1), multiplier: F(1, 1000) })])
     );
     expect(resultUnits).toMatchObject(
-      U([
-        u('bananas'),
-        u('seconds', { exp: -1n, multiplier: new Fraction(0.001) }),
-      ])
+      U([u('bananas'), u('seconds', { exp: F(-1), multiplier: F(1, 1000) })])
     );
     expect(convert(F(2))).toMatchObject(F(2));
   });
@@ -93,27 +87,27 @@ describe('expand', () => {
       ])
     );
     expect(resultUnits).toMatchObject(
-      U([u('grams'), u('meters', { exp: 2n }), u('seconds', { exp: -2n })])
+      U([u('grams'), u('meters', { exp: F(2) }), u('seconds', { exp: F(-2) })])
     );
     expect(convert(F(2))).toMatchObject(F(2000 * 3600));
   });
 
   it('expands unknown unit with exp and multiplier to the same units and value', () => {
     const [resultUnits, convert] = expandUnits(
-      U('bananas', { exp: 2n, multiplier: new Fraction(100) })
+      U('bananas', { exp: F(2), multiplier: F(100) })
     );
     expect(resultUnits).toMatchObject(
-      U('bananas', { exp: 2n, multiplier: new Fraction(100) })
+      U('bananas', { exp: F(2), multiplier: F(100) })
     );
     expect(convert(F(2))).toMatchObject(F(2));
   });
 
   it('expands known unit with exp and multiplier to the same units and value', () => {
     const [resultUnits, convert] = expandUnits(
-      U([u('meters', { exp: 2n, multiplier: new Fraction(0.001) })])
+      U([u('meters', { exp: F(2), multiplier: F(1, 1000) })])
     );
     expect(resultUnits).toMatchObject(
-      U('meters', { exp: 2n, multiplier: new Fraction(0.001) })
+      U('meters', { exp: F(2), multiplier: F(1, 1000) })
     );
     expect(convert(F(2))).toMatchObject(F(2));
   });
@@ -123,9 +117,9 @@ describe('expand', () => {
 
     expect(resultUnits).toMatchObject(
       U([
-        u('grams', { exp: 1n }),
-        u('meters', { exp: 2n }),
-        u('seconds', { exp: -2n }),
+        u('grams', { exp: F(1) }),
+        u('meters', { exp: F(2) }),
+        u('seconds', { exp: F(-2) }),
       ])
     );
     expect(convert(F(2))).toMatchObject(F(8368));
@@ -133,27 +127,27 @@ describe('expand', () => {
 
   it('expands standard known unit with multiplier to the correct units', () => {
     const [resultUnits, convert] = expandUnits(
-      U('calories', { multiplier: new Fraction(0.001) })
+      U('calories', { multiplier: new Fraction(1, 1000) })
     );
 
     expect(resultUnits).toMatchObject(
       U([
-        u('grams', { exp: 1n, multiplier: new Fraction(0.001) }),
-        u('meters', { exp: 2n }),
-        u('seconds', { exp: -2n }),
+        u('grams', { exp: F(1), multiplier: F(1, 1000) }),
+        u('meters', { exp: F(2) }),
+        u('seconds', { exp: F(-2) }),
       ])
     );
     expect(convert(F(2))).toMatchObject(F(8368));
   });
 
   it('expands standard known unit positive exponent and multiplier to the correct unit', () => {
-    const [resultUnits, convert] = expandUnits(U('calories', { exp: 2n }));
+    const [resultUnits, convert] = expandUnits(U('calories', { exp: F(2) }));
 
     expect(resultUnits).toMatchObject(
       U([
-        u('grams', { exp: 2n }),
-        u('meters', { exp: 4n }),
-        u('seconds', { exp: -4n }),
+        u('grams', { exp: F(2) }),
+        u('meters', { exp: F(4) }),
+        u('seconds', { exp: F(-4) }),
       ])
     );
     expect(convert(F(2))).toMatchObject(F(35011712));

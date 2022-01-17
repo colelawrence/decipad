@@ -527,9 +527,14 @@ describe('Units', () => {
     ).toMatchObject({
       type: {
         unit: units(
-          { exp: 1n, known: true, multiplier: new Fraction(1), unit: 'meters' },
           {
-            exp: -1n,
+            exp: F(1),
+            known: true,
+            multiplier: new Fraction(1),
+            unit: 'meters',
+          },
+          {
+            exp: F(-1),
             known: true,
             multiplier: new Fraction(1),
             unit: 'seconds',
@@ -553,13 +558,13 @@ describe('Units', () => {
       type: {
         unit: units(
           {
-            exp: 1n,
+            exp: F(1),
             known: true,
             multiplier: new Fraction(1),
             unit: 'meters',
           },
           {
-            exp: -1n,
+            exp: F(-1),
             known: true,
             multiplier: new Fraction(1),
             unit: 'seconds',
@@ -580,7 +585,7 @@ describe('Units', () => {
       value: F(6),
       type: {
         unit: units({
-          exp: 1n,
+          exp: F(1),
           known: true,
           multiplier: new Fraction(1),
           unit: 'meters',
@@ -600,7 +605,7 @@ describe('Units', () => {
       value: F(2),
       type: {
         unit: units({
-          exp: -1n,
+          exp: F(-1),
           known: true,
           multiplier: new Fraction(1),
           unit: 'seconds',
@@ -747,7 +752,7 @@ describe('number units work together', () => {
         args: [
           {
             unit: 'bananas',
-            exp: 1n,
+            exp: F(1),
             multiplier: new Fraction(1),
             known: false,
           },
@@ -764,7 +769,7 @@ describe('number units work together', () => {
         args: [
           {
             unit: 'meters',
-            exp: 1n,
+            exp: F(1),
             multiplier: new Fraction(1),
             known: true,
           },
@@ -785,7 +790,7 @@ describe('number units work together', () => {
         args: [
           {
             unit: 'meters',
-            exp: 1n,
+            exp: F(1),
             multiplier: new Fraction(0.01),
             known: true,
           },
@@ -806,7 +811,7 @@ describe('number units work together', () => {
         args: [
           {
             unit: 'meters',
-            exp: 1n,
+            exp: F(1),
             multiplier: new Fraction(1),
             known: true,
           },
@@ -827,7 +832,7 @@ describe('number units work together', () => {
         args: [
           {
             unit: 'meters',
-            exp: 1n,
+            exp: F(1),
             multiplier: new Fraction(0.01),
             known: true,
           },
@@ -848,7 +853,7 @@ describe('number units work together', () => {
         args: [
           {
             unit: 'meters',
-            exp: 1n,
+            exp: F(1),
             multiplier: new Fraction(1),
             known: true,
           },
@@ -865,7 +870,7 @@ describe('number units work together', () => {
         args: [
           {
             unit: 'meters',
-            exp: 2n,
+            exp: F(2),
             multiplier: new Fraction(1),
             known: true,
           },
@@ -882,13 +887,13 @@ describe('number units work together', () => {
         args: [
           {
             unit: 'hours',
-            exp: 1n,
+            exp: F(1),
             multiplier: new Fraction(1),
             known: true,
           },
           {
             unit: 'meters',
-            exp: 1n,
+            exp: F(1),
             multiplier: new Fraction(1000),
             known: true,
           },
@@ -905,13 +910,13 @@ describe('number units work together', () => {
         args: [
           {
             unit: 'meters',
-            exp: 1n,
+            exp: F(1),
             multiplier: new Fraction(1000),
             known: true,
           },
           {
             unit: 'minutes',
-            exp: -1n,
+            exp: F(-1),
             multiplier: new Fraction(1),
             known: true,
           },
@@ -928,13 +933,13 @@ describe('number units work together', () => {
         args: [
           {
             unit: 'meters',
-            exp: 1n,
+            exp: F(1),
             multiplier: new Fraction(1000),
             known: true,
           },
           {
             unit: 'minutes',
-            exp: -1n,
+            exp: F(-1),
             multiplier: new Fraction(1),
             known: true,
           },
@@ -951,7 +956,7 @@ describe('number units work together', () => {
         args: [
           {
             unit: 'miles',
-            exp: 1n,
+            exp: F(1),
             multiplier: new Fraction(1),
             known: true,
           },
@@ -1059,7 +1064,7 @@ describe('number units work together', () => {
   it('converts between complex units', async () => {
     expect(await runCode(`100 joules/km to calories/foot`)).toMatchObject({
       value: F(381, 52300),
-      type: t.number(U([u('calories'), u('feet', { exp: -1n })])),
+      type: t.number(U([u('calories'), u('feet', { exp: F(-1) })])),
     });
   });
 
@@ -1067,7 +1072,7 @@ describe('number units work together', () => {
     expect(await runCode(`1 bananas/second as bananas/minute`)).toMatchObject({
       value: F(60),
       type: t.number(
-        U([u('bananas', { known: false }), u('minutes', { exp: -1n })])
+        U([u('bananas', { known: false }), u('minutes', { exp: F(-1) })])
       ),
     });
   });
@@ -1080,7 +1085,7 @@ describe('number units work together', () => {
       type: t.number(
         U([
           u('g', { multiplier: new Fraction(1000) }),
-          u('seconds', { exp: -2n }),
+          u('seconds', { exp: F(-2) }),
         ])
       ),
     });
@@ -1089,7 +1094,7 @@ describe('number units work together', () => {
   it('expands expandable units (1)', async () => {
     expect(await runCode(`1 squaremeter + 2 m^2`)).toMatchObject({
       value: F(3),
-      type: t.number(U('m', { exp: 2n })),
+      type: t.number(U('m', { exp: F(2) })),
     });
   });
 
@@ -1103,7 +1108,7 @@ describe('number units work together', () => {
   it('autoconverts expanding expandable units (3)', async () => {
     expect(await runCode(`2 bar + 1 newton/meter^2`)).toMatchObject({
       value: F(200001),
-      type: t.number(U([u('meters', { exp: -2n }), u('newtons')])),
+      type: t.number(U([u('meters', { exp: F(-2) }), u('newtons')])),
     });
   });
 
@@ -1237,7 +1242,7 @@ describe('number units work together', () => {
   it('autoconverts time units correctly', async () => {
     expect(await runCode(`1 hour / 3 minutes^2`)).toMatchObject({
       value: F(20),
-      type: t.number(U('minutes', { exp: -1n })),
+      type: t.number(U('minutes', { exp: F(-1) })),
     });
   });
 
@@ -1248,7 +1253,7 @@ describe('number units work together', () => {
       `)
     ).toMatchObject({
       value: F(1500),
-      type: t.number(U([u('hours'), u('months', { exp: -1n }), u('watts')])),
+      type: t.number(U([u('hours'), u('months', { exp: F(-1) }), u('watts')])),
     });
   });
 
@@ -1270,7 +1275,7 @@ describe('number units work together', () => {
       `)
     ).toMatchObject({
       value: F(6),
-      type: t.number(U([u('hours', { exp: -1n }), u('usd')])),
+      type: t.number(U([u('hours', { exp: F(-1) }), u('usd')])),
     });
   });
 
@@ -1281,7 +1286,7 @@ describe('number units work together', () => {
       `)
     ).toMatchObject({
       value: F(6),
-      type: t.number(U([u('hours', { exp: -1n }), u('usd')])),
+      type: t.number(U([u('hours', { exp: F(-1) }), u('usd')])),
     });
   });
 
@@ -1292,7 +1297,7 @@ describe('number units work together', () => {
       `)
     ).toMatchObject({
       value: F(1500),
-      type: t.number(U([u('months', { exp: -1n }), u('usd')])),
+      type: t.number(U([u('months', { exp: F(-1) }), u('usd')])),
     });
   });
 
@@ -1310,7 +1315,7 @@ describe('number units work together', () => {
   it('autoconverts units', async () => {
     expect(await runCode(`30 psi + 1 newton/inch^2`)).toMatchObject({
       value: F(197582111, 1469600),
-      type: t.number(U([u('inches', { exp: -2n }), u('newtons')])),
+      type: t.number(U([u('inches', { exp: F(-2) }), u('newtons')])),
     });
   });
 
@@ -1335,7 +1340,7 @@ describe('number units work together', () => {
         columnTypes: [
           t.number(),
           t.number(),
-          t.number(U([u('USD'), u('gallons', { exp: -1n })])),
+          t.number(U([u('USD'), u('gallons', { exp: F(-1) })])),
         ],
         columnNames: ['Seq', 'InterestRate', 'Price'],
       }),

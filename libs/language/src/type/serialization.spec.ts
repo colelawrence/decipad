@@ -1,13 +1,29 @@
-import { buildType as t, Unit, units } from '..';
+import { buildType as t, Unit } from '..';
+import { F } from '../utils';
 import { InferError } from './InferError';
 import {
   deserializeType,
   SerializedType,
   serializeType,
+  SerializedUnit,
+  SerializedUnits,
 } from './serialization';
 
-const meter: Unit = { unit: 'meter', exp: 1n } as unknown as Unit;
+const meter: Unit = { unit: 'meter', exp: F(1), multiplier: F(1), known: true };
+const smeter: SerializedUnit = {
+  unit: 'meter',
+  exp: '1',
+  multiplier: '1',
+  known: true,
+};
 const errorCause = InferError.expectedButGot('A', 'B');
+
+function units(unit: SerializedUnit): SerializedUnits {
+  return {
+    type: 'units',
+    args: [unit],
+  };
+}
 
 it('can stringify a type', () => {
   expect(serializeType(t.number())).toMatchInlineSnapshot(`
@@ -22,14 +38,16 @@ it('can stringify a type', () => {
       "unit": Object {
         "args": Array [
           Object {
-            "exp": 1n,
+            "exp": "1",
+            "known": true,
+            "multiplier": "1",
             "unit": "meter",
           },
         ],
         "type": "units",
       },
     }
-  `);
+`);
   expect(serializeType(t.string())).toMatchInlineSnapshot(`
     Object {
       "kind": "string",
@@ -146,7 +164,7 @@ it('can parse a type', () => {
   expect(
     testDeserialize({
       kind: 'number',
-      unit: units(meter),
+      unit: units(smeter),
     })
   ).toMatchInlineSnapshot(`"meters"`);
 
@@ -218,13 +236,13 @@ it('can parse a type', () => {
       "unit": Object {
         "args": Array [
           Object {
-            "exp": 1n,
+            "exp": Fraction(1),
             "known": true,
             "multiplier": Fraction(1),
             "unit": "day",
           },
           Object {
-            "exp": 1n,
+            "exp": Fraction(1),
             "known": true,
             "multiplier": Fraction(1),
             "unit": "year",

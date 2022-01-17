@@ -1,6 +1,7 @@
 import Fraction from '@decipad/fraction';
 import { knowsUnit } from '.';
 import { Unit } from '..';
+import { F } from '../utils';
 
 const abbreviatedPrefixes = {
   y: 'yocto',
@@ -80,8 +81,8 @@ export function parseUnit(unitString: string): Unit {
   if (knowsUnit(unitString)) {
     return {
       unit: unitString,
-      exp: 1n,
-      multiplier: new Fraction(1),
+      exp: F(1),
+      multiplier: F(1),
       known: true,
     };
   } else {
@@ -92,12 +93,12 @@ export function parseUnit(unitString: string): Unit {
 
     if (!known && smallPrefix) {
       name = unitString;
-      multiplier = new Fraction(1);
+      multiplier = F(1);
     }
 
     return {
       unit: name,
-      exp: 1n,
+      exp: F(1),
       multiplier,
       known,
     };
