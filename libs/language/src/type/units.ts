@@ -10,6 +10,7 @@ import {
   expandUnits,
   unitIsSymbol,
   prettyForSymbol,
+  getUnitByName,
 } from '../units';
 
 export type AvailablePrefixes =
@@ -186,6 +187,20 @@ export const simplifyUnits = (units: Units | null): Units | null => {
   return produce(units, (u) => {
     u.args = simplifyUnitsArgs(u.args);
   });
+};
+
+export const normalizeUnitName = (unit: Unit): Unit => {
+  const symbolUnit = getUnitByName(unit.unit);
+  if (symbolUnit) {
+    return produce(unit, (unit) => {
+      unit.unit = symbolUnit.name;
+    });
+  }
+  return unit;
+};
+
+export const normalizeUnitNames = (units: Unit[]): Unit[] => {
+  return units.map(normalizeUnitName);
 };
 
 export const normalizeUnits = (units: Unit[] | null): Unit[] | null => {

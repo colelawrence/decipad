@@ -1320,6 +1320,11 @@ describe('number units work together', () => {
       value: F(197582111, 1469600),
       type: t.number(U([u('inches', { exp: F(-2) }), u('newtons')])),
     });
+
+    expect(await runCode(`30 bar + 100000 N/m^2`)).toMatchObject({
+      value: F(3100000),
+      type: t.number(U([u('N'), u('m', { exp: F(-2) })])),
+    });
   });
 
   it('multiplies units correctly inside a table formula', async () => {

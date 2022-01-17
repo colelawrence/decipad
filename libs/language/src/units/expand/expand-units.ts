@@ -8,7 +8,7 @@ import { BaseQuantityExpansion, expansions } from './expansions';
 import { baseUnitForBaseQuantity } from '../base-units';
 import { identity, F } from '../../utils';
 import { Converter, ExpandUnitResult } from '.';
-import { stringifyUnits } from '../../type/units';
+import { normalizeUnitNames, stringifyUnits } from '../../type/units';
 
 function nonScalarExpansion(units: Units): [Units, Converter] {
   const u = units?.args || [];
@@ -133,7 +133,8 @@ export function expandUnits(units: Units | null): [Units | null, Converter] {
   if (units.args.some(doesNotScaleOnConversion)) {
     return nonScalarExpansion(units);
   }
-  const [unitArgs, converter] = expandUnitArgs(units.args);
+  const [unitArgs, converter] = expandUnitArgs(normalizeUnitNames(units.args));
+
   return [
     produce(units, (u) => {
       u.args = unitArgs ?? [];

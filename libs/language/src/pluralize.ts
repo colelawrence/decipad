@@ -11,6 +11,7 @@ addIrregularRule('psi', 'psi');
 addIrregularRule('kph', 'kph');
 addIrregularRule('mph', 'mph');
 addIrregularRule('u', 'u');
+addIrregularRule('lumen', 'lumen');
 
 function pluralizeBigint(str: string, n: number | bigint = 2n) {
   return pluralize(str, Number(n));
