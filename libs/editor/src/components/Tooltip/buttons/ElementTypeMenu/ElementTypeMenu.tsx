@@ -1,11 +1,6 @@
 import { icons } from '@decipad/ui';
 import { css } from '@emotion/react';
-import {
-  ELEMENT_H2,
-  ELEMENT_H3,
-  ELEMENT_PARAGRAPH,
-  ELEMENT_UL,
-} from '@udecode/plate';
+import { ELEMENT_H2, ELEMENT_H3, ELEMENT_PARAGRAPH } from '@udecode/plate';
 import { FC, MouseEventHandler, useState } from 'react';
 import { ToggleElementButton } from './ToggleElementButton/ToggleElementButton';
 
@@ -112,22 +107,17 @@ export const ElementTypeMenu = ({
         <ToggleElementButton
           currentBlockType={currentBlockType}
           type={ELEMENT_H2}
-          label="Subtitle"
+          label="Heading 1"
         />
         <ToggleElementButton
           currentBlockType={currentBlockType}
           type={ELEMENT_H3}
-          label="Subheading"
+          label="Heading 2"
         />
         <ToggleElementButton
           currentBlockType={currentBlockType}
           type={ELEMENT_PARAGRAPH}
           label="Paragraph"
-        />
-        <ToggleElementButton
-          currentBlockType={currentBlockType}
-          type={ELEMENT_UL}
-          label="Unordered list"
         />
       </ul>
     </div>
