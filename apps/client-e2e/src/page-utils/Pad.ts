@@ -1,4 +1,3 @@
-import { ElementHandle } from 'playwright';
 import { nanoid } from 'nanoid';
 import { Pad, User, WorkspaceRecord } from '@decipad/backendtypes';
 import { pads } from '@decipad/services';
@@ -6,7 +5,6 @@ import tables from '@decipad/tables';
 import { withNewUser, timeout } from '../utils';
 import { clickNewPadButton, navigateToWorkspacePage } from './Workspace';
 import { navigateToPlayground } from './Playground';
-import { parseHTML, simplifyHTML } from '../utils/html';
 
 interface SetupOptions {
   createAndNavigateToNewPad?: boolean;
@@ -40,28 +38,6 @@ export async function getPadName() {
   const $name = await page.$('[contenteditable] h1');
   expect($name).not.toBeNull();
   return (await $name!.textContent())!.trim();
-}
-
-export async function getPadContent() {
-  return (
-    await Promise.all(
-      await (
-        await Promise.all(
-          await Promise.all(
-            (
-              await page.$$('[contenteditable]')
-            ).map((element) => element.innerHTML())
-          )
-        )
-      ).map(parseHTML)
-    )
-  )
-    .flat()
-    .map(simplifyHTML);
-}
-
-export async function getPadRoot($page = page): Promise<ElementHandle | null> {
-  return $page.$('[data-slate-node="value"]');
 }
 
 export async function focusOnBody() {
