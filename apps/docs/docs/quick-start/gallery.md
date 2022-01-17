@@ -12,4 +12,4 @@ _Insert links to examples here_
 This is just the start! We hope to have many notebooks coming in from people like you. 
 
 Couldn't find what you needed? Looking to build something? 
-Send us your idea - talk to our team on our Discord channel or write to us through the feedback button.
+Send us your idea - talk to our team on our [Discord channel](https://discord.com/invite/HwDMqwbGmc) or write to us through the feedback button.
