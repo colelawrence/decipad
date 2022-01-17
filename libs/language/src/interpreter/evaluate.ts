@@ -66,7 +66,7 @@ export async function evaluate(
       } else if (realm.functions.has(funcName)) {
         const customFunc = getDefined(realm.functions.get(funcName));
 
-        return realm.stack.withPush(async () => {
+        return realm.stack.withPushCall(async () => {
           for (let i = 0; i < args.length; i++) {
             const argName = getIdentifierString(customFunc.args[1].args[i]);
 
@@ -156,7 +156,6 @@ export async function evaluate(
     case 'imported-data': {
       const [url, contentType] = node.args;
       return evaluateData(
-        realm,
         await resolveData({ url, contentType, fetch: realm.inferContext.fetch })
       );
     }

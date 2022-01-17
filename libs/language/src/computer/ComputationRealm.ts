@@ -48,8 +48,8 @@ export class ComputationRealm {
       const [type, name] = parseDefName(sym);
 
       if (type === 'var') {
-        this.interpreterRealm.stack.delete(name);
-        this.inferContext.stack.delete(name);
+        this.interpreterRealm.stack.globalVariables.delete(name);
+        this.inferContext.stack.globalVariables.delete(name);
       } else {
         this.interpreterRealm.functions.delete(name);
         this.inferContext.functionDefinitions.delete(name);

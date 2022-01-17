@@ -191,7 +191,7 @@ export const inferExpression = wrap(
             contentType,
             fetch: ctx.fetch,
           });
-          return inferData(ctx, ctx.inAssignment, data);
+          return inferData(ctx.inAssignment, data);
         } catch (err) {
           return t.impossible((err as Error).message);
         }
@@ -209,9 +209,7 @@ export const inferFunction = async (
   func: AST.FunctionDefinition,
   givenArguments: Type[]
 ): Promise<Type> => {
-  try {
-    ctx.stack.push();
-
+  return ctx.stack.withPushCall(async () => {
     const [fName, fArgs, fBody] = func.args;
 
     if (givenArguments.length !== fArgs.args.length) {
@@ -229,16 +227,13 @@ export const inferFunction = async (
     }
 
     let returned;
-
     for (const statement of fBody.args) {
       // eslint-disable-next-line no-await-in-loop
       returned = await inferStatement(ctx, statement);
     }
 
     return getDefined(returned, 'panic: function did not return');
-  } finally {
-    ctx.stack.pop();
-  }
+  });
 };
 
 export const inferStatement = wrap(

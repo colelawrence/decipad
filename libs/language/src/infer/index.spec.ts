@@ -513,6 +513,19 @@ describe('inferFunction', () => {
         .errorCause
     ).toEqual(badArgumentCountError2);
   });
+
+  it("gets a separate stack so as to not see another function's arg", async () => {
+    const funcs = block(
+      funcDef('ShouldFail', [], r('OtherFunctionsArgument')),
+      funcDef('Func', ['OtherFunctionsArgument'], c('ShouldFail')),
+      c('Func', l('string'))
+    );
+
+    const ctx = makeContext();
+    expect((await inferBlock(funcs, ctx)).toString()).toMatch(
+      /OtherFunctionsArgument/
+    );
+  });
 });
 
 describe('inferProgram', () => {

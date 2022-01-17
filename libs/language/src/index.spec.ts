@@ -90,6 +90,19 @@ describe('basic code', () => {
     });
   });
 
+  it('supports lexical scoping', async () => {
+    expect(
+      await runCode(`
+        Variable = "expect this"
+
+        Function(Arg) = Variable == "expect this"
+        OnceRemoved(Variable) = Function(1)
+
+        [Variable == "expect this", OnceRemoved("do not expect this")]
+      `)
+    ).toMatchInlineSnapshot(`Result([ true, true ])`);
+  });
+
   it('Can perform operations between columns', async () => {
     const results = await runCode(`
       Column = [ 0, 1, 2, 4 ]
