@@ -11,6 +11,10 @@ if (process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY) {
   ]);
 }
 
+const algoliaIndexName = `docs.${
+  window?.location?.hostname || 'dev.decipad.com'
+}`;
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Decipad',
@@ -142,7 +146,7 @@ const config = {
         appId: 'TV8XZ0RFSZ',
         // Public API key: it is safe to commit it
         apiKey: '79605e8d8a0277fe1804b4899df3ce42',
-        indexName: 'docs.decipad.com',
+        indexName: algoliaIndexName,
       },
     }),
 };
