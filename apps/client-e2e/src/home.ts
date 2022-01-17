@@ -22,11 +22,7 @@ test('should show confirmation email on login attempt', async () => {
   await page.fill('[placeholder~="email" i]', 'johndoe123@gmail.com');
   await page.click('text=/continue/i');
 
-  await expect(
-    page.waitForNavigation({
-      url: /auth/,
-    })
-  ).resolves.not.toThrow();
+  await page.waitForNavigation({ url: '/verifyEmail' });
 
   expect(await page.isVisible('text=/check.+email/i')).toBe(true);
 });

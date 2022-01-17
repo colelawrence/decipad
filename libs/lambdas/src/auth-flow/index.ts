@@ -1,22 +1,22 @@
 import { HttpHandler } from '@architect/functions';
-import NextAuth, { TokenSet } from 'next-auth';
 import {
+  GithubUser,
   User,
   UserInput,
   UserWithSecret,
-  GithubUser,
 } from '@decipad/backendtypes';
-import tables from '@decipad/tables';
+import { auth as authConfig } from '@decipad/config';
 import { jwt } from '@decipad/services/authentication';
 import {
   create as createUser,
   maybeEnrich as maybeEnrichUser,
 } from '@decipad/services/users';
-import { auth as authConfig } from '@decipad/config';
-import { Github, Email } from './providers';
+import tables from '@decipad/tables';
+import NextAuth, { TokenSet } from 'next-auth';
 import adaptReqRes from './adapt-req-res';
 import createDbAdapter from './db-adapter';
 import { isAllowedToLogIn } from './is-allowed';
+import { Email, Github } from './providers';
 
 const {
   providers: { github: githubConfig },
@@ -79,6 +79,9 @@ export default function createAuthHandler(): HttpHandler {
     jwt,
     adapter: createDbAdapter(),
     debug: !!process.env.DEBUG,
+    pages: {
+      verifyRequest: '/verifyEmail',
+    },
   };
 
   // @ts-expect-error Because next-auth types are apparently mistaken
