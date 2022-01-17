@@ -1407,3 +1407,24 @@ describe('user-defined units', () => {
     });
   });
 });
+
+describe('math operators', () => {
+  it('rounds number', async () => {
+    expect(await runCode(`round(1.7 grams)`)).toMatchObject({
+      value: F(2),
+      type: t.number(U('grams')),
+    });
+  });
+  it('rounds a list of numbers', async () => {
+    expect(await runCode(`round([1.7 grams, 3.4 grams])`)).toMatchObject({
+      value: [F(2), F(3)],
+      type: t.column(t.number(U('grams')), 2),
+    });
+  });
+  it('rounds a list of lists of numbers', async () => {
+    expect(await runCode(`round([[1.7 grams, 3.4 grams]])`)).toMatchObject({
+      value: [[F(2), F(3)]],
+      type: t.column(t.column(t.number(U('grams')), 2), 1),
+    });
+  });
+});

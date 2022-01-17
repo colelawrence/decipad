@@ -5,6 +5,9 @@ import { mathOperators as operators } from './math-operators';
 
 describe('math operators', () => {
   it('rounds a number', () => {
+    expect(operators.round.functor?.([t.number(U('bananas'))])).toEqual(
+      t.number(U('bananas'))
+    );
     expect(operators.round.fn?.(F(1127, 1000), F(2)).valueOf()).toBe(1.13);
     expect(operators.round.fn?.(F(1127, 10), F(0)).valueOf()).toBe(113);
   });
