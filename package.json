@@ -129,13 +129,11 @@
     "lodash.debounce": "^4.0.8",
     "lodash.merge": "^4.6.2",
     "lodash.uniqby": "^4.7.0",
-    "lorem-ipsum": "^2.0.3",
     "moo": "^0.5.1",
     "nanoid": "^3.1.23",
     "nearley": "^2.20.1",
     "next": "^10.2.3",
     "next-auth": "^3.27.3",
-    "npm": "^7.21.0",
     "oauth": "^0.9.15",
     "p-series": "^2.1.0",
     "patch-package": "^6.4.7",
@@ -300,7 +298,6 @@
     "url-loader": "^4.1.1",
     "wait-for-expect": "^3.0.2",
     "webpack": "^5.64.4",
-    "ws": "^7.5.3",
-    "yarn": "^1.22.11"
+    "ws": "^7.5.3"
   }
 }
