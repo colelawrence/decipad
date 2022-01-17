@@ -2,7 +2,10 @@ const lightCodeTheme = require('prism-react-renderer/themes/github').default;
 const darkCodeTheme = require('prism-react-renderer/themes/dracula').default;
 
 const plugins = [];
-if (process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY) {
+if (
+  typeof process !== 'undefined' &&
+  process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY
+) {
   plugins.push([
     'docusaurus-plugin-segment',
     {
@@ -11,9 +14,10 @@ if (process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY) {
   ]);
 }
 
-const algoliaIndexName = `docs.${
-  window?.location?.hostname || 'dev.decipad.com'
-}`;
+const algoliaIndexName =
+  typeof window !== 'undefined'
+    ? `docs.${window?.location?.hostname || 'dev.decipad.com'}`
+    : 'docs.dev.decipad.com';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
