@@ -21,7 +21,6 @@ describe('pad content', () => {
   it('can create a table using a calculation block', async () => {
     await focusOnBody();
     await keyPress('Enter');
-    await keyPress('ArrowUp');
     await createCalculationBlock('A = { B = [1,2,3');
 
     const blocks = await getCalculationBlocks();
@@ -55,7 +54,6 @@ describe('pad content', () => {
   it('Get the column `A.B` from the table', async () => {
     await keyPress('ArrowDown');
     await keyPress('Enter');
-    await keyPress('ArrowUp');
     await createCalculationBlock('A.B');
 
     const blocks = await getCalculationBlocks();
@@ -75,7 +73,7 @@ describe('pad content', () => {
 
     const rowTexts = await Promise.all(
       rows.map(async (bodyRow) => {
-        const cell = await bodyRow.$('td');
+        const cell = await bodyRow.$('td:first-of-type');
         return cell!.innerText();
       })
     );
@@ -85,7 +83,6 @@ describe('pad content', () => {
   it('Get an error from getting column that doesnt exist `A.C`', async () => {
     await keyPress('ArrowDown');
     await keyPress('Enter');
-    await keyPress('ArrowUp');
     await createCalculationBlock('A.C');
 
     const blocks = await getCalculationBlocks();

@@ -65,7 +65,7 @@ export async function getPadRoot($page = page): Promise<ElementHandle | null> {
 }
 
 export async function focusOnBody() {
-  const $firstP = await page.$('[contenteditable] p');
+  const $firstP = await page.$('[contenteditable] p >> nth=0');
   expect($firstP).not.toBeNull();
   await $firstP!.click();
 }

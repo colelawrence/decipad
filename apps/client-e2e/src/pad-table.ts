@@ -85,7 +85,7 @@ describe('pad table', () => {
   });
 
   it('can add a new column', async () => {
-    await page.click('button:has-text("Create")');
+    await page.click('th button:has-text("Create")');
     await page.click(':nth-match([placeholder="ColumnName"], 2)');
     await keyPress('Y');
     await writeInTable('2020-01-01', 2); // 2 columns, more `Tab`

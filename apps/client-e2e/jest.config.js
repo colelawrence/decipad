@@ -17,6 +17,7 @@ module.exports = {
       contextOptions: {
         baseURL: baseUrl,
         acceptDownloads: true,
+        strictSelectors: true,
       },
       // defaults, here for ease of tweaking
       launchOptions: { headless: !debug },

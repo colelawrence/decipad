@@ -16,6 +16,6 @@ test('should redirect to workspace if authenticated', async () => {
   await withNewUser();
   await page.goto('/');
   await waitForExpect(async () =>
-    expect(await page.isVisible('text=/all notebooks/i')).toBe(true)
+    expect(await page.isVisible('text=/Workspace/i')).toBe(true)
   );
 });
