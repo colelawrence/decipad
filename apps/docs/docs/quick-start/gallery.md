@@ -2,10 +2,9 @@
 sidebar_position: 7
 ---
 
-# Notebooks Gallery
+# Gallery
 
-Check out our gallery for inspiration.
-Make a copy of any example and use it to create your own notebook. 
+Check out our gallery for inspiration. Make a copy of any example and use it to create your own notebook. 
 
 _Insert links to examples here_
 
