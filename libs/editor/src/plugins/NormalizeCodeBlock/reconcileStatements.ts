@@ -103,10 +103,6 @@ export function reconcileStatements(
   const offsets = getCodeBlockOffsets(editor, codeBlockPath);
   for (const line of codeBlock.children) {
     childIndex += 1;
-    const childText = getCodeLineText(line);
-    if (!childText) {
-      continue;
-    }
     statementIndex += 1;
     const expectedText = statements[statementIndex];
     if (!expectedText) {

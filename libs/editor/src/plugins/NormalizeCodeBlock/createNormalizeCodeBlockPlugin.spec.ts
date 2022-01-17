@@ -4,8 +4,8 @@ import { ELEMENT_CODE_BLOCK } from '../../utils/elementTypes';
 import {
   createEditorWithEmptyCodeBlock,
   createEditorWithTestNodes,
-  codeLine,
   createEmptyEditor,
+  codeLine,
 } from './testUtils';
 
 describe('the normalize code block plugin', () => {
@@ -206,6 +206,34 @@ describe('the normalize code block plugin', () => {
       {
         type: 'code_block',
         children: [codeLine('123'), codeLine('(42 +\n1337)')],
+      },
+    ]);
+  });
+
+  it('allows adding a line before the first one', () => {
+    const editor = createEditorWithTestNodes();
+    editor.apply({
+      type: 'insert_node',
+      path: [0, 0],
+      node: {
+        type: 'code_line',
+        children: [
+          {
+            text: '',
+          },
+        ],
+      } as Descendant,
+    });
+
+    expect(editor.children).toMatchObject([
+      {
+        type: 'code_block',
+        children: [
+          codeLine(''),
+          codeLine('a = 1'),
+          codeLine('t = {\n\n}'),
+          codeLine('b = 2'),
+        ],
       },
     ]);
   });
