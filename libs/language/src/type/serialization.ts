@@ -3,10 +3,10 @@ import { buildType as t, Type } from '..';
 import { Time } from '../date';
 import { F } from '../utils';
 import { ErrSpec, InferError } from './InferError';
-import { Unit, Units } from './unit-type';
+import { TUnit, TUnits, Units } from './unit-type';
 
-export type SerializedUnit = Unit<string>;
-export type SerializedUnits = Units<string>;
+export type SerializedUnit = TUnit<string>;
+export type SerializedUnits = TUnits<string>;
 
 export type SerializedType =
   | { kind: 'number'; unit: SerializedUnits | null }

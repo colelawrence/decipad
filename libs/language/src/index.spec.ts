@@ -1427,4 +1427,10 @@ describe('math operators', () => {
       type: t.column(t.column(t.number(U('grams')), 2), 1),
     });
   });
+  it('sqrt works on units', async () => {
+    expect(await runCode(`sqrt(1 banana)`)).toMatchObject({
+      value: F(1),
+      type: t.number(U('bananas', { known: false, exp: F(1, 2) })),
+    });
+  });
 });

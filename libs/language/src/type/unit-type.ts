@@ -1,6 +1,6 @@
 import Fraction from '@decipad/fraction';
 
-export interface Unit<TNumberType = Fraction> {
+export interface TUnit<TNumberType = Fraction> {
   unit: string;
   exp: TNumberType;
   multiplier: TNumberType;
@@ -8,10 +8,13 @@ export interface Unit<TNumberType = Fraction> {
   aliasFor?: Units;
 }
 
-export interface Units<TNumberType = Fraction> {
+export interface TUnits<TNumberType = Fraction> {
   type: 'units';
-  args: Unit<TNumberType>[];
+  args: TUnit<TNumberType>[];
 }
+
+export type Units = TUnits<Fraction>;
+export type Unit = TUnit<Fraction>;
 
 export const units = (...args: Unit[]): Units => {
   return {

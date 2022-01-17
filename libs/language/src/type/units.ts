@@ -68,6 +68,8 @@ const numberToSubOrSuperscript: Record<string, string[]> = {
   '8': ['₈', '⁸'],
   '9': ['₉', '⁹'],
   '-': ['₋', '⁻'], // minus
+  '.': ['·', '˙'], // dot
+  '/': ['/', 'ᐟ'], // slash
 };
 
 export const timeUnits = new Set([
@@ -89,8 +91,8 @@ export const timeUnits = new Set([
   'milliseconds',
 ]);
 
-function scriptFromNumber(n: string) {
-  return numberToSubOrSuperscript[n][1];
+function scriptFromNumber(n: string): string {
+  return numberToSubOrSuperscript[n]?.[1] || n;
 }
 
 const byExp = (u1: Unit, u2: Unit): number => Number(u2.exp.sub(u1.exp));
@@ -242,6 +244,10 @@ export const setExponent = (unit: Unit, newExponent: Fraction) =>
 export const inverseExponent = (unit: Unit) =>
   setExponent(unit, unit.exp.neg());
 
+const isInteger = (f: Fraction): boolean => {
+  return Number(f.d) === 1;
+};
+
 const stringifyUnit = (unit: Unit) => {
   const symbol = singular(unit.unit);
   const pretty = prettyForSymbol[symbol];
@@ -264,9 +270,15 @@ const stringifyUnit = (unit: Unit) => {
     baseUnitName,
   ];
 
-  if (unit.exp.compare(F(1)) !== 0) {
-    const exp = `${unit.exp}`.replace(/./g, scriptFromNumber);
-    result.push(exp);
+  const { exp } = unit;
+  if (exp.compare(F(1)) !== 0) {
+    const strExp = isInteger(exp)
+      ? exp.toString()
+      : `${[Math.sign(Number(exp.s)) === -1 && '-', exp.n, '/', exp.d]
+          .filter(Boolean)
+          .join('')}`;
+    const showExp = strExp.replace(/./g, scriptFromNumber);
+    result.push(showExp);
   }
 
   return result.join('');
