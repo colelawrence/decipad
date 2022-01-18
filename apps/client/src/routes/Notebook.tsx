@@ -1,8 +1,9 @@
+import { ClientEventsContext } from '@decipad/client-events';
 import { Editor } from '@decipad/editor';
 import { PermissionType, useSharePadWithSecret } from '@decipad/queries';
 import { LoadingSpinnerPage, NotebookTopbar } from '@decipad/ui';
-import { ClientEventsContext } from '@decipad/client-events';
 import styled from '@emotion/styled';
+import Head from 'next/head';
 import { FC, useContext, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { getSecretPadLink } from '../lib/secret';
@@ -100,6 +101,9 @@ export const Notebook = ({
 
   return (
     <Wrapper>
+      <Head>
+        <title>{data.getPadById?.name} - Decipad</title>
+      </Head>
       <EditorWrapper>
         <EditorInner>
           {data && data.getPadById && (
