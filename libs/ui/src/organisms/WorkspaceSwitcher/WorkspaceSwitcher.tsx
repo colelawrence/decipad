@@ -1,13 +1,17 @@
 import { css } from '@emotion/react';
 import { ComponentProps, FC, useState } from 'react';
+import { WorkspaceMenu } from '..';
 import { Avatar, NavigationItem } from '../../atoms';
 import { Chevron } from '../../icons';
 import { cssVar, p15Medium, setCssVar } from '../../primitives';
-import { WorkspaceMenu } from '..';
 
 const nameStyles = css(p15Medium, {
   height: '40px',
+  maxWidth: '200px',
   padding: '12px 0',
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
 });
 
 const chevronStyles = css(
