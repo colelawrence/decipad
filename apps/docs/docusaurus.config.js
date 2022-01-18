@@ -15,12 +15,13 @@ if (
 }
 
 const algoliaConfig = require('./algolia.config');
+const baseName = require('./base.config');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Decipad',
   tagline: 'Make sense of numbers',
-  url: 'https://decipad.com',
+  url: baseName(),
   baseUrl: '/docs/',
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
