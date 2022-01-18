@@ -2,6 +2,7 @@ import pSeries from 'p-series';
 
 import { AST } from '..';
 import { InferError, Type, build as t } from '../type';
+import { matchUnitArraysForColumn } from '../type/units';
 import { getDefined, zip, getIdentifierString, getOfType } from '../utils';
 import { getDateFromAstForm } from '../date';
 import { callBuiltinFunctor } from '../builtins';
@@ -96,18 +97,21 @@ export const inferExpression = wrap(
         if (cellTypes.length === 0) {
           return t.impossible(InferError.unexpectedEmptyColumn());
         } else {
-          const [cellType, ...hopefullyConsistentTypes] = cellTypes;
+          const [firstCell, ...hopefullyConsistentRest] = cellTypes;
 
-          for (const furtherCell of hopefullyConsistentTypes) {
-            const unified = furtherCell.sameAs(cellType);
-            if (unified.errorCause) {
+          for (const restCell of hopefullyConsistentRest) {
+            const unified = restCell.sameAs(firstCell);
+            if (
+              unified.errorCause ||
+              !matchUnitArraysForColumn(firstCell.unit, restCell.unit)
+            ) {
               return t.impossible(
-                InferError.columnContainsInconsistentType(cellType, furtherCell)
+                InferError.columnContainsInconsistentType(firstCell, restCell)
               );
             }
           }
 
-          return t.column(cellType, cellTypes.length, optionalIndex?.args[0]);
+          return t.column(firstCell, cellTypes.length, optionalIndex?.args[0]);
         }
       }
       case 'table': {

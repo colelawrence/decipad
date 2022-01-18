@@ -2,6 +2,17 @@ const lightCodeTheme = require('prism-react-renderer/themes/github').default;
 const darkCodeTheme = require('prism-react-renderer/themes/dracula').default;
 
 const plugins = [];
+
+// Reverse the sidebar items ordering (including nested category items)
+function removeAcceptanceTests(items) {
+  return items.filter((item) => {
+    return (
+      item.type === 'category' ||
+      (item.type === 'doc' && !/\.acceptance/.test(item.id))
+    );
+  });
+}
+
 if (
   typeof process !== 'undefined' &&
   process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY
@@ -38,6 +49,13 @@ const config = {
           routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl: 'https://github.com/decipad/documentation/edit/main',
+          async sidebarItemsGenerator({
+            defaultSidebarItemsGenerator,
+            ...args
+          }) {
+            const sidebarItems = await defaultSidebarItemsGenerator(args);
+            return removeAcceptanceTests(sidebarItems);
+          },
         },
         blog: {
           showReadingTime: true,

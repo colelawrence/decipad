@@ -1,5 +1,6 @@
 import { produce } from 'immer';
 import Fraction from '@decipad/fraction';
+import { lenientZip } from '@decipad/utils';
 import pluralize, { singular } from '../pluralize';
 import { Type } from '..';
 import { F, getDefined } from '../utils';
@@ -150,6 +151,30 @@ export const matchUnitArrays = (
   }
 
   return pendingMatch.length === 0;
+};
+
+export const matchUnitArraysForColumn = (
+  _units1: Units | null,
+  _units2: Units | null
+) => {
+  const units1 = normalizeUnits(_units1?.args ?? []) ?? [];
+  const units2 = normalizeUnits(_units2?.args ?? []) ?? [];
+
+  if ((units1.length === 0) !== (units2.length === 0)) {
+    return true;
+  }
+
+  return lenientZip(units1, units2).every(([left, right]) => {
+    if (left == null || right == null) {
+      return false;
+    }
+
+    return (
+      left.unit === right.unit &&
+      left.multiplier.compare(right.multiplier) === 0 &&
+      left.exp.compare(right.exp) === 0
+    );
+  });
 };
 
 export const removeSingleUnitless = (a: Type, b: Type) => {

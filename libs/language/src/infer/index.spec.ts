@@ -170,6 +170,22 @@ describe('columns', () => {
     });
   });
 
+  it('does not mangle units', async () => {
+    expect(
+      await inferExpression(
+        nilCtx,
+        col(c('*', l(1), r('cm')), c('*', l(1), r('m')))
+      )
+    ).toMatchInlineSnapshot(`Error: Column cannot contain both cm and m`);
+
+    expect(
+      await inferExpression(
+        nilCtx,
+        col(c('*', l(1), r('cm')), c('*', l(1), r('ft')))
+      )
+    ).toMatchInlineSnapshot(`Error: Column cannot contain both cm and ft`);
+  });
+
   it('column-ness is infectious', async () => {
     expect(await inferExpression(nilCtx, c('+', col(1, 2, 3), l(1)))).toEqual(
       t.column(t.number(), 3)
