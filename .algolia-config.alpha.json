@@ -1,6 +1,6 @@
 {
   "index_name": "docs.alpha.decipad.com",
-  "site_maps": ["https://alpha.decipad.com/docs/sitemap.xml"],
+  "sitemap_urls": ["https://alpha.decipad.com/docs/sitemap.xml"],
   "selectors": {
     "default": {
       "lvl0": {
