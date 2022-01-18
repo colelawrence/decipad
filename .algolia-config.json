@@ -1,6 +1,6 @@
 {
   "index_name": "docs.dev.decipad.com",
-  "start_urls": ["https://decipad.com/docs"],
+  "start_urls": ["https://dev.decipad.com/docs"],
   "sitemap_urls": ["https://dev.decipad.com/docs/sitemap.xml"],
   "selectors": {
     "default": {
