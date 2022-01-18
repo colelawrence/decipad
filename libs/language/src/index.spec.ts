@@ -8,9 +8,9 @@ import {
   objectToTableValue,
   runAST,
 } from './testUtils';
-import { parseUTCDate } from './date';
+import { date, parseUTCDate } from './date';
 import { Column, Scalar } from './interpreter/Value';
-import { block, n, F, U, u } from './utils';
+import { block, n, F, U, u, c } from './utils';
 import { stringifyResult } from './repl';
 import { number } from './type/build';
 
@@ -55,6 +55,12 @@ describe('basic code', () => {
       type: { cellType: { type: 'boolean' } },
       value: [true, false, true, false, true],
     });
+  });
+
+  it('boolean ops support dates', async () => {
+    const eq = c('==', date('2021-01', 'month'), date('2021-01', 'month'));
+
+    expect(await runAST(block(eq))).toMatchInlineSnapshot(`Result(true)`);
   });
 
   it('has correct operator precedence', async () => {
