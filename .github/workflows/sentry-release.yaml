@@ -9,6 +9,7 @@ on:
 
 jobs:
   index:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     concurrency:
       group: sentry-release-${{ github.head_ref }}
