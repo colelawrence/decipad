@@ -1,5 +1,6 @@
 {
   "index_name": "docs.alpha.decipad.com",
+  "start_urls": ["https://alpha.decipad.com/docs"],
   "sitemap_urls": ["https://alpha.decipad.com/docs/sitemap.xml"],
   "selectors": {
     "default": {
