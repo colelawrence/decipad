@@ -104,8 +104,8 @@ export function reconcileStatements(
   for (const line of codeBlock.children) {
     childIndex += 1;
     statementIndex += 1;
-    const expectedText = statements[statementIndex];
-    if (expectedText && needsReconciliation(line, expectedText)) {
+    const expectedText = statements[statementIndex] || '';
+    if (needsReconciliation(line, expectedText)) {
       const changed = reconcileLine(editor, line, expectedText, [
         ...codeBlockPath,
         childIndex,

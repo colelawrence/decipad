@@ -237,4 +237,26 @@ describe('the normalize code block plugin', () => {
       },
     ]);
   });
+
+  it('allows adding a newline char before the first one', () => {
+    const editor = createEditorWithTestNodes();
+    editor.apply({
+      type: 'insert_text',
+      path: [0, 0, 0],
+      offset: 0,
+      text: '\n',
+    });
+
+    expect(editor.children).toMatchObject([
+      {
+        type: 'code_block',
+        children: [
+          codeLine(''),
+          codeLine('a = 1'),
+          codeLine('t = {\n\n}'),
+          codeLine('b = 2'),
+        ],
+      },
+    ]);
+  });
 });
