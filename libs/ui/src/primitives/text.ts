@@ -23,7 +23,7 @@ const usualRemPxs = 16;
 // heading
 
 const hFontFamily: TypographyStyles['fontFamily'] =
-  '"Neue Haas Grotesk Display Pro", Helvetica, "Open Sans", sans-serif';
+  '"Neue Haas Grotesk Display Pro", Inter, Helvetica, "Open Sans", sans-serif';
 
 const hDefault: TypographyStyles = {
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
