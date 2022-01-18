@@ -14,10 +14,7 @@ if (
   ]);
 }
 
-const algoliaIndexName =
-  typeof window !== 'undefined'
-    ? `docs.${window?.location?.hostname || 'dev.decipad.com'}`
-    : 'docs.dev.decipad.com';
+const algoliaConfig = require('./algolia.config');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -146,13 +143,11 @@ const config = {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
       },
-      algolia: {
-        appId: 'TV8XZ0RFSZ',
-        // Public API key: it is safe to commit it
-        apiKey: '79605e8d8a0277fe1804b4899df3ce42',
-        indexName: algoliaIndexName,
-      },
+      algolia: algoliaConfig(),
     }),
 };
+
+// eslint-disable-next-line no-console
+console.log('algolia config:', config.themeConfig.algolia);
 
 module.exports = config;
