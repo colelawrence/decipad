@@ -4,6 +4,45 @@ import {
   APIInteractionResponseChannelMessageWithSource,
 } from 'discord-api-types/payloads/v9/interactions';
 
+// notebook
+
+export type NotebookWriteApplicationCommandDataOption = {
+  name: 'write';
+  options: [
+    {
+      name: 'url';
+      value: string;
+    },
+    {
+      name: 'workspace';
+      value: string;
+    },
+    {
+      name: 'user';
+      value: string;
+    }
+  ];
+};
+
+export type NotebookReadApplicationCommandDataOption = {
+  name: 'read';
+  options: [
+    {
+      name: 'url';
+      value: string;
+    }
+  ];
+};
+
+export type NotebookApplicationCommandDataOption =
+  | NotebookWriteApplicationCommandDataOption
+  | NotebookReadApplicationCommandDataOption;
+
+export type NotebookCommandData = {
+  name: 'notebook';
+  options: NotebookApplicationCommandDataOption[];
+};
+
 // allowlist
 
 export type AllowlistAddApplicationCommandDataOption = {
