@@ -4,7 +4,7 @@ import { identity } from '../utils';
 export const units: UnitOfMeasure[] = [
   {
     name: 'steradian',
-    abbreviations: ['sr'],
+    symbols: ['sr'],
     baseQuantity: 'solid angle',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,

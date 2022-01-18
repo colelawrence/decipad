@@ -4,7 +4,7 @@ import { identity } from '../utils';
 export const units: UnitOfMeasure[] = [
   {
     name: 'newton',
-    abbreviations: ['n'],
+    symbols: ['n'],
     pretty: 'N',
     baseQuantity: 'force',
     toBaseQuantity: identity,

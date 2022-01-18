@@ -56,8 +56,8 @@ Decipad understands some basic units. To convert between them you can use the `i
 Since Decipad understands unit multipliers (`deca` `mili`, `centi`, `h`, `k`), you can use them as unit prefixes:
 
 ```deci live
-30 cm in m
-==> 0.3 m
+1 decimetre in centimetre
+==> 10 centimetres
 ```
 
 ### Complex units
@@ -110,7 +110,7 @@ In Decipad the following
 
 ```deci live
 Bolt = 44.72 km/hour in meter/sec
-==> 12.4(2) meters/sec
+==> 12.4(2) meters per sec
 ```
 
 is the same as

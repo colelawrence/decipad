@@ -20,7 +20,7 @@ const ha: Converter = (x) => x.mul(10_000);
 export const units: UnitOfMeasure[] = [
   {
     name: 'squaremeter',
-    abbreviations: ['m2', 'm²'],
+    symbols: ['m2', 'm²'],
     pretty: 'm²',
     baseQuantity: 'area',
     toBaseQuantity: identity,
@@ -30,7 +30,7 @@ export const units: UnitOfMeasure[] = [
     // https://en.wikipedia.org/wiki/Conversion_of_units
     // ≡ 10e6 m2
     name: 'squarekilometre',
-    abbreviations: ['km2', 'km²'],
+    symbols: ['km2', 'km²'],
     pretty: 'km²',
     baseQuantity: 'area',
     toBaseQuantity: squarekilometre,
@@ -41,7 +41,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 2.589988110336×10e6 m2
     // ≡ 1 m × 1 m
     name: 'squaremile',
-    abbreviations: ['sqmi'],
+    symbols: ['mi2', 'mi²', 'sqmi'],
     pretty: 'mi²',
     baseQuantity: 'area',
     toBaseQuantity: squaremile,
@@ -52,7 +52,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 0.83612736 m2
     // ≡ 1 yd × 1 yd
     name: 'squareyard',
-    abbreviations: ['sqyd'],
+    symbols: ['yd2', 'yd²', 'sqyd'],
     pretty: 'yd²',
     baseQuantity: 'area',
     toBaseQuantity: squareyard,
@@ -63,7 +63,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 9.290304×10e−2 m2
     // ≡ 1 ft × 1 ft
     name: 'squarefoot',
-    abbreviations: ['sqft'],
+    symbols: ['ft2', 'ft²', 'sqft'],
     pretty: 'ft²',
     baseQuantity: 'area',
     toBaseQuantity: squarefoot,
@@ -74,7 +74,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 6.4516×10e−4 m2
     // ≡ 1 inch × 1 inch
     name: 'squareinch',
-    abbreviations: ['sqin'],
+    symbols: ['in2', 'in²', 'sqin'],
     pretty: 'in²',
     baseQuantity: 'area',
     toBaseQuantity: squareinch,
@@ -85,7 +85,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 4046.8564224 m2
     // ≡ 1 ch × 10 ch = 4840 sq yd
     name: 'acre',
-    abbreviations: ['ac'],
+    symbols: ['ac'],
     baseQuantity: 'area',
     toBaseQuantity: acre,
     fromBaseQuantity: invert(acre),
@@ -102,7 +102,7 @@ export const units: UnitOfMeasure[] = [
     // https://en.wikipedia.org/wiki/Conversion_of_units
     // ≡ 10000 m2
     name: 'hectare',
-    abbreviations: ['ha'],
+    symbols: ['ha'],
     baseQuantity: 'area',
     toBaseQuantity: ha,
     fromBaseQuantity: invert(ha),
@@ -120,7 +120,7 @@ export const units: UnitOfMeasure[] = [
     // https://en.wikipedia.org/wiki/Conversion_of_units
     // ≡ 10e−28 m2
     name: 'barn',
-    abbreviations: ['b'],
+    symbols: ['b'],
     baseQuantity: 'area',
     toBaseQuantity: barn,
     fromBaseQuantity: invert(barn),

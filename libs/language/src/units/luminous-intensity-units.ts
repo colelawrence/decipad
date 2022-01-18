@@ -4,7 +4,7 @@ import { identity } from '../utils';
 export const units: UnitOfMeasure[] = [
   {
     name: 'candela',
-    abbreviations: ['ca'],
+    symbols: ['ca'],
     baseQuantity: 'luminous intensity',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,

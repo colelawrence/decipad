@@ -10,21 +10,21 @@ const psi: Converter = (x) => x.div(14_696).mul(1e3);
 export const units: UnitOfMeasure[] = [
   {
     name: 'atmosphere',
-    abbreviations: ['atm'],
+    symbols: ['atm'],
     baseQuantity: 'pressure',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
   },
   {
     name: 'pascal',
-    abbreviations: ['pa'],
+    symbols: ['pa'],
     baseQuantity: 'pressure',
     toBaseQuantity: pascal,
     fromBaseQuantity: invert(pascal),
   },
   {
     name: 'bar',
-    abbreviations: ['ba'],
+    symbols: ['ba'],
     baseQuantity: 'pressure',
     toBaseQuantity: bar,
     fromBaseQuantity: invert(bar),
@@ -32,7 +32,7 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'mmhg',
     baseQuantity: 'pressure',
-    abbreviations: ['torr'],
+    symbols: ['torr'],
     toBaseQuantity: mmhg,
     fromBaseQuantity: invert(mmhg),
   },

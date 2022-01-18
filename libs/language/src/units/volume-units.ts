@@ -29,7 +29,7 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'cubicmeter',
     baseQuantity: 'volume',
-    abbreviations: ['m3', 'm³'],
+    symbols: ['m3', 'm³'],
     pretty: 'm³',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
@@ -39,7 +39,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 1 in * 1 in * 1 in
     name: 'cubicinch',
     baseQuantity: 'volume',
-    abbreviations: ['in3', 'in³', 'cuin'],
+    symbols: ['in3', 'in³', 'cuin'],
     pretty: 'in³',
     toBaseQuantity: cubicinch,
     fromBaseQuantity: invert(cubicinch),
@@ -49,7 +49,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 1 ft * 1 ft * 1 ft
     name: 'cubicfoot',
     baseQuantity: 'volume',
-    abbreviations: ['ft3', 'ft³', 'cuft'],
+    symbols: ['ft3', 'ft³', 'cuft'],
     pretty: 'ft³',
     toBaseQuantity: cubicfoot,
     fromBaseQuantity: invert(cubicfoot),
@@ -59,7 +59,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 1 yd * 1 yd * 1 yd
     name: 'cubicyd',
     baseQuantity: 'volume',
-    abbreviations: ['yd3', 'yd³', 'cuyd'],
+    symbols: ['yd3', 'yd³', 'cuyd'],
     pretty: 'yd³',
     toBaseQuantity: cubicyard,
     fromBaseQuantity: invert(cubicyard),
@@ -69,7 +69,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 1 mi * 1 mi * 1 mi
     name: 'cubicmile',
     baseQuantity: 'volume',
-    abbreviations: ['cumi'],
+    symbols: ['cumi'],
     pretty: 'cu mi',
     toBaseQuantity: cubicmile,
     fromBaseQuantity: invert(cubicmile),
@@ -79,7 +79,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 0.001 m3
     name: 'liter',
     baseQuantity: 'volume',
-    abbreviations: ['l'],
+    symbols: ['l'],
     toBaseQuantity: liters,
     fromBaseQuantity: invert(liters),
   },
@@ -104,7 +104,7 @@ export const units: UnitOfMeasure[] = [
     // ≡  15×10−6 m3
     name: 'tablespoon',
     baseQuantity: 'volume',
-    abbreviations: ['tbsp'],
+    symbols: ['tbsp'],
     toBaseQuantity: tablespoon,
     fromBaseQuantity: invert(tablespoon),
   },
@@ -113,7 +113,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 28.4130625×10e−6 m3
     name: 'ounce_fluid_imperial',
     baseQuantity: 'volume',
-    abbreviations: ['floz'],
+    symbols: ['floz'],
     toBaseQuantity: ounce,
     fromBaseQuantity: invert(ounce),
   },
@@ -130,7 +130,7 @@ export const units: UnitOfMeasure[] = [
     // ≡  5×10−6 m3
     name: 'teaspoon',
     baseQuantity: 'volume',
-    abbreviations: ['tsp'],
+    symbols: ['tsp'],
     toBaseQuantity: teaspoon,
     fromBaseQuantity: invert(teaspoon),
   },
@@ -155,7 +155,7 @@ export const units: UnitOfMeasure[] = [
     // = 0.16365924 m3
     name: 'barrel',
     baseQuantity: 'volume',
-    abbreviations: ['bl'],
+    symbols: ['bl'],
     toBaseQuantity: barrel,
     fromBaseQuantity: invert(barrel),
   },
@@ -164,7 +164,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 4.54609×10−3 m3
     name: 'gallon',
     baseQuantity: 'volume',
-    abbreviations: ['gal'],
+    symbols: ['gal'],
     toBaseQuantity: gallon,
     fromBaseQuantity: invert(gallon),
   },
@@ -173,7 +173,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 8 gal
     name: 'bushel',
     baseQuantity: 'volume',
-    abbreviations: ['bu'],
+    symbols: ['bu'],
     toBaseQuantity: bushel,
     fromBaseQuantity: invert(bushel),
   },
@@ -182,7 +182,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 4 gal
     name: 'bucket',
     baseQuantity: 'volume',
-    abbreviations: ['bkt'],
+    symbols: ['bkt'],
     toBaseQuantity: bucket,
     fromBaseQuantity: invert(bucket),
   },
@@ -191,7 +191,7 @@ export const units: UnitOfMeasure[] = [
     // = 1233.48183754752 m3
     name: 'acrefoot',
     baseQuantity: 'volume',
-    abbreviations: ['acft'],
+    symbols: ['acft'],
     toBaseQuantity: acrefoot,
     fromBaseQuantity: invert(acrefoot),
   },

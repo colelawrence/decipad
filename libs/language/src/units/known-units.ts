@@ -58,7 +58,8 @@ export type BaseQuantity =
 export type UnitOfMeasure = {
   name: string;
   baseQuantity: BaseQuantity;
-  abbreviations?: string[];
+  symbols?: string[];
+  aliases?: string[];
   pretty?: string;
   doesNotScaleOnConversion?: true;
   toBaseQuantity: (n: Fraction) => Fraction;
@@ -92,9 +93,9 @@ const allUnitPackages = [
   SolidAngleUnits,
 ];
 
-const duplicates: Record<string, string> = {};
+const duplicates: Set<string> = new Set();
 
-const abbreviations: string[] = [];
+const symbols: string[] = [];
 export const prettyForSymbol: Record<string, string> = {};
 
 function makePrettyRecord(symbol: string, prty: string | undefined) {
@@ -105,32 +106,35 @@ function makePrettyRecord(symbol: string, prty: string | undefined) {
 
 allUnitPackages.map((x) => {
   x.units.map((unit) => {
-    if (duplicates[unit.name]) {
+    if (duplicates.has(unit.name)) {
       throw new Error(`Trying to declare twice ${unit.name}`);
     }
-    duplicates[unit.name] = unit.name;
+    duplicates.add(unit.name);
     makePrettyRecord(unit.name, unit.pretty);
-    (unit.abbreviations || []).forEach((abbr) => {
-      if (duplicates[abbr]) {
-        throw new Error(`Trying to declare twice ${abbr}`);
+    (unit.aliases || []).forEach((alias) => {
+      if (duplicates.has(alias)) {
+        throw new Error(`Trying to declare twice ${alias}`);
       }
-      abbreviations.push(abbr);
-      duplicates[abbr] = abbr;
-      makePrettyRecord(abbr, unit.pretty);
+      duplicates.add(alias);
+      makePrettyRecord(alias, unit.pretty);
+    });
+    (unit.symbols || []).forEach((symbol) => {
+      if (duplicates.has(symbol)) {
+        throw new Error(`Trying to declare twice ${symbol}`);
+      }
+      symbols.push(symbol);
+      duplicates.add(symbol);
+      makePrettyRecord(symbol, unit.pretty);
     });
   });
 });
 
-//
-// is this unit a symbol
-// (we call symbols abbreviations in our codebase)
-//
 export const unitIsSymbol = (unit: string): boolean => {
-  return abbreviations.some((u) => u === unit);
+  return symbols.some((u) => u === unit);
 };
 
-abbreviations.map((abbr) => {
-  doNotPluralize(abbr);
+symbols.map((symbol) => {
+  doNotPluralize(symbol);
 });
 
 const allUnits: UnitOfMeasure[] = allUnitPackages.flatMap(
@@ -141,10 +145,15 @@ const allSymbols = new Map<string, UnitOfMeasure>();
 
 export const unitsByName = allUnits.reduce((byName, unit) => {
   byName.set(unit.name, unit);
-  if (unit.abbreviations) {
-    for (const abbreviation of unit.abbreviations) {
-      allSymbols.set(abbreviation, unit);
-      byName.set(abbreviation.toLowerCase(), unit);
+  if (unit.symbols) {
+    for (const symbol of unit.symbols) {
+      allSymbols.set(symbol, unit);
+      byName.set(symbol.toLowerCase(), unit);
+    }
+  }
+  if (unit.aliases) {
+    for (const alias of unit.aliases) {
+      byName.set(alias.toLowerCase(), unit);
     }
   }
   return byName;

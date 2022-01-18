@@ -4,7 +4,7 @@ import { identity } from '../utils';
 export const units: UnitOfMeasure[] = [
   {
     name: 'euro',
-    abbreviations: ['eur', '€'],
+    symbols: ['€', 'eur'],
     baseQuantity: 'EUR',
     pretty: '€',
     toBaseQuantity: identity,
@@ -12,7 +12,8 @@ export const units: UnitOfMeasure[] = [
   },
   {
     name: 'usdollar',
-    abbreviations: ['$', 'usd', 'dollar'],
+    symbols: ['$', 'usd'],
+    aliases: ['dollar'],
     baseQuantity: 'USD',
     pretty: '$',
     toBaseQuantity: identity,
@@ -20,7 +21,7 @@ export const units: UnitOfMeasure[] = [
   },
   {
     name: 'britishpound',
-    abbreviations: ['£', 'gbp'],
+    symbols: ['£', 'gbp'],
     baseQuantity: 'GBP',
     pretty: '£',
     toBaseQuantity: identity,
@@ -28,7 +29,7 @@ export const units: UnitOfMeasure[] = [
   },
   {
     name: 'swedishkrona',
-    abbreviations: ['sek'],
+    symbols: ['sek'],
     baseQuantity: 'SEK',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,

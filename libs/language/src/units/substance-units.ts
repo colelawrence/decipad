@@ -5,7 +5,7 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'mole',
     baseQuantity: 'substance',
-    abbreviations: ['mol'],
+    symbols: ['mol'],
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
   },

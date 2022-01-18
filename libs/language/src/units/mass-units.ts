@@ -11,14 +11,14 @@ const ton: Converter = (x) => x.mul(10_160_469_088).div(1e4);
 export const units: UnitOfMeasure[] = [
   {
     name: 'gram',
-    abbreviations: ['g', 'gr'],
+    symbols: ['g', 'gr'],
     baseQuantity: 'mass',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
   },
   {
     name: 'pound',
-    abbreviations: ['lbav'],
+    symbols: ['lbav'],
     baseQuantity: 'mass',
     toBaseQuantity: pound,
     fromBaseQuantity: invert(pound),
@@ -26,14 +26,14 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'ounce',
     baseQuantity: 'mass',
-    abbreviations: ['ozav'],
+    symbols: ['ozav'],
     toBaseQuantity: ounce,
     fromBaseQuantity: invert(ounce),
   },
   {
     name: 'ounce_us_food_nutrition_labbeling',
     baseQuantity: 'mass',
-    abbreviations: ['oz'],
+    symbols: ['oz'],
     toBaseQuantity: oz,
     fromBaseQuantity: invert(oz),
   },

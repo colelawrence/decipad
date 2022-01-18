@@ -4,7 +4,7 @@ import { identity } from '../utils';
 export const units: UnitOfMeasure[] = [
   {
     name: 'volt',
-    abbreviations: ['V'],
+    symbols: ['V'],
     baseQuantity: 'voltage',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,

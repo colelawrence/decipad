@@ -7,14 +7,14 @@ const calorie: Converter = (x) => x.mul(4184).div(1000);
 export const units: UnitOfMeasure[] = [
   {
     name: 'joule',
-    abbreviations: ['j'],
+    symbols: ['j'],
     baseQuantity: 'energy',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
   },
   {
     name: 'calorie',
-    abbreviations: ['cal'],
+    symbols: ['cal'],
     baseQuantity: 'energy',
     toBaseQuantity: calorie,
     fromBaseQuantity: invert(calorie),

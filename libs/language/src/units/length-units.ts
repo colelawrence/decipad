@@ -43,7 +43,8 @@ const pica: Converter = (x) => x.mul(12).mul(oneInch).div(72_272).mul(1e3);
 export const units: UnitOfMeasure[] = [
   {
     name: 'meter',
-    abbreviations: ['m', 'metre'],
+    symbols: ['m'],
+    aliases: ['metre'],
     baseQuantity: 'length',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
@@ -52,7 +53,7 @@ export const units: UnitOfMeasure[] = [
     // https://en.wikipedia.org/wiki/Conversion_of_units
     // ≡ 0.0254 m
     name: 'inch',
-    abbreviations: ['in'],
+    symbols: ['in'],
     baseQuantity: 'length',
     toBaseQuantity: inch,
     fromBaseQuantity: invert(inch),
@@ -62,7 +63,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 0.3048 m
     name: 'foot',
     baseQuantity: 'length',
-    abbreviations: ['ft'],
+    symbols: ['ft'],
     toBaseQuantity: foot,
     fromBaseQuantity: invert(foot),
   },
@@ -70,7 +71,7 @@ export const units: UnitOfMeasure[] = [
     // https://en.wikipedia.org/wiki/Conversion_of_units
     // ≡ 0.9144 m
     name: 'yard',
-    abbreviations: ['yd'],
+    symbols: ['yd'],
     baseQuantity: 'length',
     toBaseQuantity: yard,
     fromBaseQuantity: invert(yard),
@@ -79,7 +80,7 @@ export const units: UnitOfMeasure[] = [
     // https://en.wikipedia.org/wiki/Conversion_of_units
     // = 201.168 m
     name: 'furlong',
-    abbreviations: ['fur'],
+    symbols: ['fur'],
     baseQuantity: 'length',
     toBaseQuantity: furlong,
     fromBaseQuantity: invert(furlong),
@@ -88,7 +89,7 @@ export const units: UnitOfMeasure[] = [
     // https://en.wikipedia.org/wiki/Conversion_of_units
     // ≡ 1609.344 m
     name: 'mile',
-    abbreviations: ['mi'],
+    symbols: ['mi'],
     baseQuantity: 'length',
     toBaseQuantity: mile,
     fromBaseQuantity: invert(mile),
@@ -97,7 +98,7 @@ export const units: UnitOfMeasure[] = [
     // https://en.wikipedia.org/wiki/Conversion_of_units
     // ≡ 1852 m
     name: 'nauticalmile',
-    abbreviations: ['nmi'],
+    symbols: ['nmi'],
     baseQuantity: 'length',
     pretty: 'nautical mile',
     toBaseQuantity: nauticalmile,
@@ -107,7 +108,7 @@ export const units: UnitOfMeasure[] = [
     // https://en.wikipedia.org/wiki/Conversion_of_units
     // = 5556 m
     name: 'nauticalleague',
-    abbreviations: ['nl'],
+    symbols: ['nl'],
     baseQuantity: 'length',
     pretty: 'nautical league',
     toBaseQuantity: nauticalleague,
@@ -118,7 +119,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 0.1 nm
     name: 'angstrom',
     baseQuantity: 'length',
-    abbreviations: ['Å'],
+    symbols: ['Å'],
     pretty: 'Å',
     toBaseQuantity: angstrom,
     fromBaseQuantity: invert(angstrom),
@@ -127,7 +128,7 @@ export const units: UnitOfMeasure[] = [
     // https://physics.nist.gov/cgi-bin/cuu/Value?bohrrada0
     // ≈ 5.29177210903 x 10e-11 m
     name: 'bohr',
-    abbreviations: ['a0', 'a₀'],
+    symbols: ['a0', 'a₀'],
     pretty: 'a₀',
     baseQuantity: 'length',
     toBaseQuantity: bohr,
@@ -138,7 +139,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 1×10e−18 m
     name: 'attometre',
     baseQuantity: 'length',
-    abbreviations: ['am'],
+    symbols: ['am'],
     toBaseQuantity: attometre,
     fromBaseQuantity: invert(attometre),
   },
@@ -147,7 +148,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 1×10e−15 m
     name: 'fermi',
     baseQuantity: 'length',
-    abbreviations: ['fm'],
+    symbols: ['fm'],
     toBaseQuantity: fermi,
     fromBaseQuantity: invert(fermi),
   },
@@ -163,7 +164,7 @@ export const units: UnitOfMeasure[] = [
     // https://en.wikipedia.org/wiki/Conversion_of_units
     // ≡ 149597870700 m
     name: 'astronomicalunit',
-    abbreviations: ['au'],
+    symbols: ['au'],
     baseQuantity: 'length',
     pretty: 'astronomic alunit',
     toBaseQuantity: astronomicalunit,
@@ -173,7 +174,7 @@ export const units: UnitOfMeasure[] = [
     // https://en.wikipedia.org/wiki/Light-second
     // ≡ 299792458 m
     name: 'lightsecond',
-    abbreviations: ['ls'],
+    symbols: ['ls'],
     baseQuantity: 'length',
     pretty: 'light second',
     toBaseQuantity: lightsecond,
@@ -192,7 +193,7 @@ export const units: UnitOfMeasure[] = [
     // https://en.wikipedia.org/wiki/Conversion_of_units
     // ≡ 60 light-minutes
     name: 'lighthour',
-    abbreviations: ['lh'],
+    symbols: ['lh'],
     baseQuantity: 'length',
     pretty: 'light hour',
     toBaseQuantity: lighthour,
@@ -202,7 +203,7 @@ export const units: UnitOfMeasure[] = [
     // https://en.wikipedia.org/wiki/Conversion_of_units
     // ≡ 24 light-hours
     name: 'lightday',
-    abbreviations: ['ld'],
+    symbols: ['ld'],
     pretty: 'light day',
     baseQuantity: 'length',
     toBaseQuantity: lightday,
@@ -212,7 +213,7 @@ export const units: UnitOfMeasure[] = [
     // https://en.wikipedia.org/wiki/Conversion_of_units
     // ≡ 9.4607304725808×10e15 m
     name: 'lightyear',
-    abbreviations: ['ly'],
+    symbols: ['ly'],
     pretty: 'light year',
     baseQuantity: 'length',
     toBaseQuantity: lightyear,
@@ -224,7 +225,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 66 ft (US) ≡ 4 rods
     name: 'chain',
     baseQuantity: 'length',
-    abbreviations: ['ch'],
+    symbols: ['ch'],
     toBaseQuantity: chain,
     fromBaseQuantity: invert(chain),
   },
@@ -234,7 +235,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 6 ft (US)
     name: 'fathom',
     baseQuantity: 'length',
-    abbreviations: ['ftm'],
+    symbols: ['ftm'],
     toBaseQuantity: fathom,
     fromBaseQuantity: invert(fathom),
   },
@@ -244,7 +245,7 @@ export const units: UnitOfMeasure[] = [
     // ≈ 0.2011684 m
     name: 'link',
     baseQuantity: 'length',
-    abbreviations: ['lnk'],
+    symbols: ['lnk'],
     toBaseQuantity: link,
     fromBaseQuantity: invert(link),
   },
@@ -261,7 +262,7 @@ export const units: UnitOfMeasure[] = [
     // ≈ 30856775814913673 m
     name: 'parsec',
     baseQuantity: 'length',
-    abbreviations: ['pc'],
+    symbols: ['pc'],
     toBaseQuantity: parsec,
     fromBaseQuantity: invert(parsec),
   },
@@ -271,7 +272,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 1⁄72.272 in
     name: 'point',
     baseQuantity: 'length',
-    abbreviations: ['pt'],
+    symbols: ['pt'],
     toBaseQuantity: point,
     fromBaseQuantity: invert(point),
   },
@@ -281,7 +282,7 @@ export const units: UnitOfMeasure[] = [
     // ≡ 1⁄1440 in
     name: 'twip',
     baseQuantity: 'length',
-    abbreviations: ['twp'],
+    symbols: ['twp'],
     toBaseQuantity: twip,
     fromBaseQuantity: invert(twip),
   },
@@ -299,7 +300,7 @@ export const units: UnitOfMeasure[] = [
     // = 5.0292 m
     name: 'rod',
     baseQuantity: 'length',
-    abbreviations: ['rd'],
+    symbols: ['rd'],
     toBaseQuantity: rod,
     fromBaseQuantity: invert(rod),
   },
@@ -308,7 +309,7 @@ export const units: UnitOfMeasure[] = [
     // ≈ 4828 m
     name: 'league',
     baseQuantity: 'length',
-    abbreviations: ['lea'],
+    symbols: ['lea'],
     toBaseQuantity: league,
     fromBaseQuantity: invert(league),
   },

@@ -4,14 +4,14 @@ import { UnitOfMeasure } from './known-units';
 export const units: UnitOfMeasure[] = [
   {
     name: 'kelvin',
-    abbreviations: ['k'],
+    symbols: ['k'],
     baseQuantity: 'temperature',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
   },
   {
     name: 'celsius',
-    abbreviations: ['°c'],
+    symbols: ['°c'],
     pretty: '°c',
     baseQuantity: 'temperature',
     doesNotScaleOnConversion: true,
@@ -20,7 +20,7 @@ export const units: UnitOfMeasure[] = [
   },
   {
     name: 'fahrenheit',
-    abbreviations: ['°f'],
+    symbols: ['°f'],
     baseQuantity: 'temperature',
     pretty: '°f',
     doesNotScaleOnConversion: true,

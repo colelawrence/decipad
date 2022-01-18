@@ -4,7 +4,7 @@ import { identity } from '../utils';
 export const units: UnitOfMeasure[] = [
   {
     name: 'ohm',
-    abbreviations: ['Ω'],
+    symbols: ['Ω'],
     pretty: 'Ω',
     baseQuantity: 'electrical resistance',
     toBaseQuantity: identity,

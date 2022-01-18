@@ -1227,16 +1227,15 @@ describe('number units work together', () => {
     });
   });
 
-  //
-  // > (new Fraction(1)).div(new Fraction(10).mul(9))
-  // { s: 1n, n: 1n, d: 90n }
-  // first we need to change the muiltipliers to be fractions instead of JS numbers
-  // (change the type)
-  // then, change the way we create multipliers in unit.ne
-  // then, compile the grammar
-  // then, run the typechecker
-  // and fix the errors
-  //
+  it('should convert 1 cm into millimetre', async () => {
+    const run = await runCode(`1 cm in millimetre`);
+
+    expect(run).toMatchObject({
+      value: F(10),
+      type: t.number(U([u('metre', { multiplier: new Fraction(1, 1000) })])),
+    });
+  });
+
   it('should convert 1mm into nm', async () => {
     const run = await runCode(`1 mm in nm`);
 

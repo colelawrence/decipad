@@ -4,7 +4,7 @@ import { UnitOfMeasure } from './known-units';
 export const units: UnitOfMeasure[] = [
   {
     name: 'hertz',
-    abbreviations: ['hz'],
+    symbols: ['hz'],
     baseQuantity: 'frequency',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
