@@ -281,6 +281,7 @@
     "mkdirp": "^1.0.4",
     "mock-socket": "^9.0.5",
     "node-watch": "^0.7.1",
+    "p-retry": "^5.0.0",
     "playwright": "^1.13.1",
     "playwright-core": "^1.5.1",
     "postcss": "^8.3.5",

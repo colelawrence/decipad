@@ -35,7 +35,7 @@ type OnSavedCallback = (source: Source) => void;
 type OnConnectedCallback = () => void;
 type OnDisconnectedCallback = () => void;
 
-export type DocSyncEditor = Editor &
+export type DocSyncEditor<E extends Editor = Editor> = E &
   YjsEditor &
   CursorEditor & {
     onLoaded: (cb: OnLoadedCallback) => void;
@@ -80,13 +80,13 @@ function ensureInitialDocument(doc: YDoc, root: DocTypes.Doc) {
   });
 }
 
-function docSyncEditor(
-  editor: Editor & YjsEditor & CursorEditor,
+function docSyncEditor<E extends Editor>(
+  editor: E & YjsEditor & CursorEditor,
   shared: YArray<SyncElement>,
   doc: YDoc,
   store: IndexeddbPersistence,
   ws?: WebsocketProvider
-): DocSyncEditor {
+): E & DocSyncEditor {
   const events = new EventEmitter();
   let isConnected = false;
 
@@ -170,11 +170,11 @@ async function wsAddress(docId: string): Promise<string> {
   return `${await (await fetch('/api/ws')).text()}?doc=${docId}`;
 }
 
-export function withDocSync(
-  editor: Editor,
+export function withDocSync<E extends Editor>(
+  editor: E,
   docId: string,
   options: Options = {}
-): DocSyncEditor {
+): E & DocSyncEditor {
   const {
     authSecret,
     onError,

@@ -5,6 +5,7 @@ import os from 'os';
 import path from 'path';
 import { readFile } from 'fs/promises';
 import { nanoid } from 'nanoid';
+import waitForExpect from 'wait-for-expect';
 import { withNewUser } from '../utils';
 
 interface Pad {
@@ -37,6 +38,11 @@ export async function setUp() {
 }
 
 export async function getPadList(): Promise<PadList> {
+  // wait for notebooks to show up
+  waitForExpect(async () => {
+    expect(await page.$$('//main//li//a//strong')).not.toHaveLength(0);
+  });
+
   const names = await page.$$('//main//li//a//strong');
   const pads: PadList = [];
   for (const name of names) {

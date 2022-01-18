@@ -6,6 +6,7 @@ import {
   ELEMENT_H1,
   PlatePluginComponent,
 } from '@udecode/plate';
+import { noop } from '@decipad/utils';
 import { Transforms } from 'slate';
 import { Title } from './Title';
 import { findDomNodePath } from '../../utils/slateReact';
@@ -18,6 +19,7 @@ it('shows a placeholder only when empty', async () => {
       initialValue={[{ type: ELEMENT_H1, children: [{ text: 'text' }] }]}
       plugins={[createHeadingPlugin({ levels: 1 })]}
       components={{ [ELEMENT_H1]: Title as PlatePluginComponent }}
+      editableProps={{ scrollSelectionIntoView: noop }}
     />
   );
   const h1Element = getByText('text').closest('h1');
@@ -41,4 +43,20 @@ it('shows a placeholder only when empty', async () => {
     'aria-placeholder',
     expect.stringMatching(/title/i)
   );
+});
+
+it('autofocuses on first render', async () => {
+  const editor = createEditorPlugins();
+  const { getByRole } = render(
+    <Plate
+      editor={editor}
+      initialValue={[{ type: ELEMENT_H1, children: [{ text: 'text' }] }]}
+      plugins={[createHeadingPlugin({ levels: 1 })]}
+      components={{ [ELEMENT_H1]: Title as PlatePluginComponent }}
+      editableProps={{ scrollSelectionIntoView: noop }}
+    />
+  );
+
+  expect(document.activeElement).toBe(getByRole('textbox'));
+  expect(editor.selection!.focus.path).toEqual([0, 0]);
 });

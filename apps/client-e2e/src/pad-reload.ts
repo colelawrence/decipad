@@ -5,7 +5,7 @@ import {
   waitForSaveFlush,
 } from './page-utils/Pad';
 
-describe('pad content', () => {
+describe('pad reload', () => {
   beforeAll(() => setUp());
 
   beforeAll(() => waitForEditorToLoad());
@@ -24,8 +24,11 @@ describe('pad content', () => {
   it('stuff is there after reload', async () => {
     await page.reload();
     await waitForEditorToLoad();
-    expect(await page.$$('[contenteditable] p')).toHaveLength(3);
-    const p3 = (await page.$$('[contenteditable] p'))[2];
-    expect(await p3.textContent()).toBe('this is the third paragraph');
+    const lastParagraph = await page.waitForSelector(
+      '[contenteditable] p >> nth=-1'
+    );
+    expect(await lastParagraph.textContent()).toBe(
+      'this is the third paragraph'
+    );
   });
 });

@@ -4,5 +4,6 @@ import { ELEMENT_TABLE_INPUT } from '../../utils/elementTypes';
 export const createInteractiveTablePlugin = (): PlatePlugin => {
   return {
     renderElement: getRenderElement([ELEMENT_TABLE_INPUT]),
+    voidTypes: () => [ELEMENT_TABLE_INPUT],
   };
 };

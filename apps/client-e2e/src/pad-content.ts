@@ -48,8 +48,7 @@ describe('pad content', () => {
 
   it('allows to go back to the previous paragraph and remove some text', async () => {
     await keyPress('ArrowUp');
-    await keyPress('ArrowRight');
-    await keyPress('ArrowRight');
+    await keyPress('End');
     for (let i = 0; i < ' paragraph'.length; i += 1) {
       await keyPress('Backspace');
     }

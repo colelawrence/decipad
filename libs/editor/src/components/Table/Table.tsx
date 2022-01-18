@@ -1,8 +1,7 @@
-import { useEventEditorId, useStoreEditorState } from '@udecode/plate';
 import { FC, useCallback } from 'react';
 import { Node, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
-import { getDefined } from '@decipad/utils';
+import { useEditorState } from '@udecode/plate';
 
 import { TableData } from '../../utils/tableTypes';
 import { TableInner } from './TableInner';
@@ -18,10 +17,7 @@ export const Table: PlateComponent = ({
     throw new Error('Table is meant to render table elements');
   }
 
-  const editor = getDefined(
-    useStoreEditorState(useEventEditorId('focus')),
-    'missing editor'
-  );
+  const editor = useEditorState();
 
   const onChange = useCallback(
     (newValue: TableData) => {
@@ -39,10 +35,14 @@ export const Table: PlateComponent = ({
   // IMPORTANT NOTE: do not remove the children elements from rendering.
   // Even though they're one element with an empty text property, their absence triggers
   // an uncaught exception in slate-react.
+  // Also, be careful with the element structure:
+  // https://github.com/ianstormtaylor/slate/issues/3930#issuecomment-723288696
   return (
-    <div contentEditable={false} {...attributes}>
-      {children}
-      <TableInner value={value} onChange={onChange} />
+    <div {...attributes}>
+      <div contentEditable={false}>
+        {children}
+        <TableInner value={value} onChange={onChange} />
+      </div>
     </div>
   );
 };

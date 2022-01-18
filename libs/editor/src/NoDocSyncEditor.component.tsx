@@ -63,7 +63,6 @@ export const NoDocSyncEditorBase = (props: PlateProps): ReturnType<FC> => {
           plugins={editorPlugins}
           options={options}
           components={components as Record<string, PlatePluginComponent>}
-          editableProps={{ autoFocus: true }}
           {...props}
         >
           <Tooltip />

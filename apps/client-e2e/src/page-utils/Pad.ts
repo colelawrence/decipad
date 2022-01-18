@@ -1,8 +1,8 @@
+import retry from 'p-retry';
 import { Pad, User, WorkspaceRecord } from '@decipad/backendtypes';
 import { pads } from '@decipad/services';
 import tables from '@decipad/tables';
 import { nanoid } from 'nanoid';
-import { Page } from 'playwright';
 import { timeout, withNewUser } from '../utils';
 import { navigateToPlayground } from './Playground';
 import { clickNewPadButton, navigateToWorkspacePage } from './Workspace';
@@ -11,22 +11,36 @@ interface SetupOptions {
   createAndNavigateToNewPad?: boolean;
 }
 
-export async function waitForEditorToLoad(p?: Page) {
-  const browserPage = p || page;
+export async function waitForEditorToLoad(browserPage = page) {
   await browserPage.waitForSelector('[contenteditable] h1');
+  try {
+    await browserPage.waitForSelector('[contenteditable] h1', {
+      timeout: 20_000,
+    });
+  } catch {
+    browserPage.reload();
+    await browserPage.waitForSelector('[contenteditable] h1', {
+      timeout: 20_000,
+    });
+  }
 }
 
 export async function setUp(options: SetupOptions = {}) {
   const { createAndNavigateToNewPad = true } = options;
   const newUser = await withNewUser();
-  await navigateToWorkspacePage();
-  if (createAndNavigateToNewPad) {
-    await Promise.all([
-      clickNewPadButton(),
-      page.waitForNavigation({ url: '/workspaces/*/pads/*' }),
-    ]);
-    await waitForEditorToLoad();
-  }
+  await retry(
+    async () => {
+      await navigateToWorkspacePage();
+      if (createAndNavigateToNewPad) {
+        await Promise.all([
+          clickNewPadButton(),
+          page.waitForNavigation({ url: '/workspaces/*/pads/*' }),
+        ]);
+        await waitForEditorToLoad();
+      }
+    },
+    { retries: 3 }
+  );
 
   return newUser;
 }
@@ -43,22 +57,19 @@ export async function getPadName() {
 }
 
 export async function focusOnBody() {
-  const $firstP = await page.$('[contenteditable] p >> nth=0');
-  expect($firstP).not.toBeNull();
-  await $firstP!.click();
+  const firstP = await page.waitForSelector('[contenteditable] p >> nth=0');
+  await firstP.click();
 }
 
 export async function waitForSaveFlush() {
-  await Promise.all([
-    page.waitForLoadState('networkidle'),
-    // TODO: this is bad. Should wait for local storage to flush instead.
-    page.waitForTimeout(500),
-  ]);
+  await page.waitForTimeout(1000);
+  // TODO: this is bad. Should wait for local storage to flush instead.
+  await page.waitForLoadState('networkidle');
 }
 
 export async function keyPress(k: string) {
   await page.keyboard.press(k);
-  await timeout(250);
+  await timeout(100);
 }
 
 export async function createTable() {

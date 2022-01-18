@@ -147,7 +147,6 @@ export const Notebook = ({
             padId={getPadById.id}
             readOnly={getPadById.myPermissionType === 'READ'}
             authSecret={secret}
-            autoFocus
           />
         </EditorInner>
       </EditorWrapper>

@@ -19,11 +19,15 @@ module.exports = {
         acceptDownloads: true,
         strictSelectors: true,
       },
-      // defaults, here for ease of tweaking
+      actionTimeout: 2_000,
+      navigationTimeout: 10_000,
+
       launchOptions: { headless: !debug },
       browsers: ['chromium'],
     },
   },
+
   testRegex: 'src/[^/]*\\.ts$',
-  testTimeout: debug ? 0 : 45000,
+
+  testTimeout: debug ? 0 : 60_000,
 };

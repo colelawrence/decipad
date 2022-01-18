@@ -58,7 +58,7 @@ describe('Workspace', () => {
 
   test('can navigate to pad detail', async () => {
     const pads = await getPadList();
-    expect(pads.length).toBeGreaterThanOrEqual(0);
+    expect(pads.length).toBeGreaterThan(0);
     const pad = pads[0];
     await pad.anchor.click();
     expect(page.url()).toMatch(/\/workspaces\/[^/]+\/pads\/[^/]+/);

@@ -1,5 +1,6 @@
 import { FC, useMemo, useState, useEffect } from 'react';
 import { captureException } from '@sentry/react';
+import { identity } from '@decipad/utils';
 import {
   ProgramBlocksContextProvider,
   ResultsContextProvider,
@@ -27,36 +28,38 @@ export interface EditorProps {
   padId: string;
   readOnly: boolean;
   authSecret?: string;
-  autoFocus: boolean;
 }
 
-const SlateEditor = ({
-  padId,
-  authSecret,
-  autoFocus,
-  readOnly,
-}: EditorProps) => {
+const LoadingEditable = (): ReturnType<FC> => <>Loading editor...</>;
+const renderLoadingEditable = () => <LoadingEditable />;
+
+const EditorInternal = ({ padId, authSecret, readOnly }: EditorProps) => {
   const [editorId] = useState(nanoid);
-  const editor1 = useStoreEditorRef(editorId);
+  const [editorLoaded, setEditorLoaded] = useState(false);
+  const editor = useStoreEditorRef(editorId);
 
   const { results, languagePlugin } = useLanguagePlugin();
 
   // DocSync
-  const editor = useDocSync({
+  const docsyncEditor = useDocSync({
     padId,
-    editor: editor1,
+    editor,
     authSecret,
     onError: captureException,
   });
 
   useEffect(() => {
-    return () => {
-      if (editor) {
-        editor.disconnect();
-        editor.destroy();
-      }
-    };
-  }, [editor]);
+    if (docsyncEditor) {
+      docsyncEditor.onLoaded(() => {
+        setEditorLoaded(true);
+      });
+      return () => {
+        docsyncEditor.disconnect();
+        docsyncEditor.destroy();
+      };
+    }
+    return undefined;
+  }, [docsyncEditor]);
 
   // Cursor remote presence
   // useCursors(editor);
@@ -68,16 +71,18 @@ const SlateEditor = ({
     startUpload,
     uploadState,
     clearAll: clearAllUploads,
-  } = useUploadDataPlugin({ editor });
+  } = useUploadDataPlugin({ editor: docsyncEditor });
   const importDataPlugin = useImportDataPlugin();
-  const { createOrUpdateExternalData } = useExternalDataPlugin({ editor });
+  const { createOrUpdateExternalData } = useExternalDataPlugin({
+    editor: docsyncEditor,
+  });
 
   const editorPlugins = useMemo(
     () => [...plugins, languagePlugin, notebookTitlePlugin, importDataPlugin],
     [languagePlugin, notebookTitlePlugin, importDataPlugin]
   );
 
-  const programBlocks = editor ? editorProgramBlocks(editor) : {};
+  const programBlocks = docsyncEditor ? editorProgramBlocks(docsyncEditor) : {};
 
   return (
     <ResultsContextProvider value={results}>
@@ -85,13 +90,18 @@ const SlateEditor = ({
         <ExternalAuthenticationContextProvider
           value={{ createOrUpdateExternalData }}
         >
-          <DropFile editor={editor} startUpload={startUpload} padId={padId}>
+          <DropFile
+            editor={docsyncEditor}
+            startUpload={startUpload}
+            padId={padId}
+          >
             <Plate
               id={editorId}
+              renderEditable={editorLoaded ? identity : renderLoadingEditable}
               plugins={editorPlugins}
               options={options}
               components={components as Record<string, PlatePluginComponent>}
-              editableProps={{ autoFocus, readOnly }}
+              editableProps={{ readOnly }}
             >
               <Tooltip />
               <UploadDialogue
@@ -110,7 +120,7 @@ export const Editor = (props: EditorProps): ReturnType<FC> => {
   return (
     <DndProvider backend={HTML5Backend}>
       <ComputerContextProvider>
-        <SlateEditor key={props.padId} {...props} />
+        <EditorInternal key={props.padId} {...props} />
       </ComputerContextProvider>
     </DndProvider>
   );
