@@ -1,12 +1,6 @@
 {
   "index_name": "docs.alpha.decipad.com",
-  "start_urls": [
-    {
-      "url": "https://alpha.decipad.com/docs",
-      "selectors_key": "language",
-      "tags": ["language"]
-    }
-  ],
+  "site_maps": ["https://alpha.decipad.com/docs/sitemap.xml"],
   "selectors": {
     "default": {
       "lvl0": {

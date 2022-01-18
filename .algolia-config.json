@@ -1,12 +1,6 @@
 {
   "index_name": "docs.dev.decipad.com",
-  "start_urls": [
-    {
-      "url": "https://dev.decipad.com/docs",
-      "selectors_key": "language",
-      "tags": ["language"]
-    }
-  ],
+  "site_maps": ["https://dev.decipad.com/docs/sitemap.xml"],
   "selectors": {
     "default": {
       "lvl0": {
