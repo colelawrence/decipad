@@ -1,11 +1,12 @@
 /* eslint-disable jest/expect-expect */
 import waitForExpect from 'wait-for-expect';
-import { setUp } from './page-utils/Pad';
+import { setUp, waitForEditorToLoad } from './page-utils/Pad';
+import { withNewUser } from './utils';
 
 waitForExpect.defaults.interval = 1000;
+let link: string;
 
 describe('Share pad', () => {
-  let link: string;
   beforeAll(() => setUp());
 
   beforeAll(async () => {
@@ -35,7 +36,21 @@ describe('Share pad', () => {
     const newPage = await context.newPage();
     expect(link.length).toBeGreaterThan(0);
 
+    //
+    // meet bob, a new user
+    // bob, go do your thing
+    //
+    await withNewUser(context);
     await newPage.goto(link);
-    expect(await page.$$('[contenteditable] p')).toHaveLength(4);
+
+    await newPage.waitForSelector('text=Duplicate notebook');
+
+    await newPage.click('text=Duplicate notebook');
+
+    await newPage.waitForSelector('text=Copy of hello world');
+    await newPage.click('text=Copy of hello world');
+
+    await waitForEditorToLoad(newPage);
+    expect(await newPage.$$('[contenteditable] p')).toHaveLength(4);
   });
 });

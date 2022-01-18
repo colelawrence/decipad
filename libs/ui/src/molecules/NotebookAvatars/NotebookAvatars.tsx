@@ -2,18 +2,17 @@ import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Avatar, Tooltip } from '../../atoms';
 import { cssVar, p12Regular, p13SemiBold, setCssVar } from '../../primitives';
-
-type PermissionType = 'ADMIN' | 'READ' | 'WRITE';
+import { PermissionType } from '../../types';
 
 interface NotebookAvatar {
   user: {
     id: string;
     name: string;
   };
-  permission: PermissionType | null;
+  permission: PermissionType;
 }
 
-const genRole = (permission: PermissionType | null) => {
+const genRole = (permission: PermissionType) => {
   switch (permission) {
     case 'ADMIN':
       return 'Owner';
@@ -21,8 +20,6 @@ const genRole = (permission: PermissionType | null) => {
       return 'Can Edit';
     case 'READ':
       return 'View Only';
-    case null:
-      throw new Error('Missing permission type');
   }
 };
 

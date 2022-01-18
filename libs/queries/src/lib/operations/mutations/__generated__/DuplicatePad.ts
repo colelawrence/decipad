@@ -19,4 +19,5 @@ export interface DuplicatePad {
 
 export interface DuplicatePadVariables {
   id: string;
+  targetWorkspace?: string | null;
 }

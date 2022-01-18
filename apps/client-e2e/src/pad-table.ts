@@ -9,7 +9,7 @@ import {
 
 describe('pad table', () => {
   beforeAll(goToPlayground);
-  beforeEach(waitForEditorToLoad);
+  beforeAll(() => waitForEditorToLoad());
 
   it('creates a table', async () => {
     expect(await page.$('[contenteditable] table')).toBe(null);

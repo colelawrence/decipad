@@ -1,11 +1,21 @@
+import { useMutation, useQuery } from '@apollo/client';
 import { ClientEventsContext } from '@decipad/client-events';
 import { Editor } from '@decipad/editor';
-import { PermissionType, useSharePadWithSecret } from '@decipad/queries';
+import {
+  DuplicatePad,
+  DuplicatePadVariables,
+  DUPLICATE_PAD,
+  GetWorkspaces,
+  GET_WORKSPACES,
+  PermissionType,
+  useSharePadWithSecret,
+} from '@decipad/queries';
 import { LoadingSpinnerPage, NotebookTopbar } from '@decipad/ui';
 import styled from '@emotion/styled';
 import Head from 'next/head';
 import { FC, useContext, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
+import { useToasts } from 'react-toast-notifications';
 import { getSecretPadLink } from '../lib/secret';
 import { useGetPadById } from '../queries/useGetPadById';
 
@@ -68,7 +78,9 @@ export const Notebook = ({
   workspaceId,
   notebookId,
 }: NotebookProps): ReturnType<FC> => {
+  const history = useHistory();
   const { search } = useLocation();
+  const { addToast } = useToasts();
   const secret = new URLSearchParams(search).get('secret') ?? undefined;
 
   const { data, loading, error } = useGetPadById({
@@ -82,13 +94,38 @@ export const Notebook = ({
     useSharePadWithSecret();
   const [shareSecret, setShareSecret] = useState<string>();
 
+  const { data: workspaces } = useQuery<GetWorkspaces>(GET_WORKSPACES);
+
+  const [duplicatePad] =
+    useMutation<DuplicatePad, DuplicatePadVariables>(DUPLICATE_PAD);
+  const handleDuplicateNotebook = (id: string) =>
+    duplicatePad({
+      variables: {
+        id,
+        targetWorkspace: workspaces?.workspaces[0].id,
+      },
+      context: {
+        headers: {
+          authorization: `Bearer ${secret}`,
+        },
+      },
+      refetchQueries: ['GetWorkspaceById'],
+      awaitRefetchQueries: true,
+    })
+      .then(() => history.push(`/workspaces/${workspaces?.workspaces[0].id}`))
+      .catch((err) =>
+        addToast(`Error duplicating notebook: ${err.message}`, {
+          appearance: 'error',
+        })
+      );
   const clientEvent = useContext(ClientEventsContext);
 
   if (loading) {
     return <LoadingSpinnerPage />;
   }
 
-  if (error || !data) {
+  const { getPadById } = data ?? {};
+  if (error || !data || !getPadById) {
     return (
       <ErrorWrapper>
         <ErrorHeader>Error loading pad: ${error?.message}</ErrorHeader>
@@ -106,23 +143,21 @@ export const Notebook = ({
       </Head>
       <EditorWrapper>
         <EditorInner>
-          {data && data.getPadById && (
-            <Editor
-              padId={data.getPadById.id}
-              readOnly={data.getPadById.myPermissionType === 'READ'}
-              authSecret={secret}
-              autoFocus
-            />
-          )}
+          <Editor
+            padId={getPadById.id}
+            readOnly={getPadById.myPermissionType === 'READ'}
+            authSecret={secret}
+            autoFocus
+          />
         </EditorInner>
       </EditorWrapper>
       <TopbarWrapper>
         <NotebookTopbar
-          workspaceName={data.getPadById?.workspace.name || ''}
-          notebookName={data.getPadById?.name || '<unnamed notebook>'}
+          workspaceName={getPadById.workspace.name || ''}
+          notebookName={getPadById.name || '<unnamed notebook>'}
           workspaceHref={`/workspaces/${workspaceId}`}
-          usersWithAccess={data.getPadById?.access.users || []}
-          permission={data.getPadById?.myPermissionType}
+          usersWithAccess={getPadById.access.users ?? []}
+          permission={getPadById.myPermissionType ?? undefined}
           link={
             shareSecret
               ? getSecretPadLink(workspaceId, notebookId, shareSecret)
@@ -152,6 +187,9 @@ export const Notebook = ({
                 });
               }
             }
+          }}
+          onDuplicateNotebook={async () => {
+            await handleDuplicateNotebook(getPadById.id);
           }}
         />
       </TopbarWrapper>

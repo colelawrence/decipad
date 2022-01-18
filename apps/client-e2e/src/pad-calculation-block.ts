@@ -11,7 +11,7 @@ import {
 
 describe('pad content', () => {
   beforeAll(() => setUp());
-  beforeAll(waitForEditorToLoad);
+  beforeAll(() => waitForEditorToLoad());
 
   it('starts empty', async () => {
     expect((await page.textContent('[contenteditable] h1'))!.trim()).toBe('');

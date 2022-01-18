@@ -1,17 +1,19 @@
-import { nanoid } from 'nanoid';
 import { Pad, User, WorkspaceRecord } from '@decipad/backendtypes';
 import { pads } from '@decipad/services';
 import tables from '@decipad/tables';
-import { withNewUser, timeout } from '../utils';
-import { clickNewPadButton, navigateToWorkspacePage } from './Workspace';
+import { nanoid } from 'nanoid';
+import { Page } from 'playwright';
+import { timeout, withNewUser } from '../utils';
 import { navigateToPlayground } from './Playground';
+import { clickNewPadButton, navigateToWorkspacePage } from './Workspace';
 
 interface SetupOptions {
   createAndNavigateToNewPad?: boolean;
 }
 
-export async function waitForEditorToLoad() {
-  await page.waitForSelector('[contenteditable] h1');
+export async function waitForEditorToLoad(p?: Page) {
+  const browserPage = p || page;
+  await browserPage.waitForSelector('[contenteditable] h1');
 }
 
 export async function setUp(options: SetupOptions = {}) {

@@ -1,11 +1,13 @@
 import { docs } from '@decipad/routing';
 import { css } from '@emotion/react';
+import { useSession } from 'next-auth/client';
 import { ComponentProps, FC } from 'react';
 import { Button, IconButton } from '../../atoms';
 import { LeftArrow } from '../../icons';
 import { NotebookAvatars, NotebookPath } from '../../molecules';
 import { NotebookSharingPopUp } from '../../organisms';
 import { cssVar, p14Medium } from '../../primitives';
+import { PermissionType } from '../../types';
 import { Anchor, noop } from '../../utils';
 
 const topbarWrapperStyles = css({
@@ -40,22 +42,24 @@ export type NotebookTopbarProps = Pick<
 > &
   Pick<ComponentProps<typeof NotebookAvatars>, 'usersWithAccess'> & {
     workspaceHref: string;
-    permission?: string | null;
+    permission: PermissionType;
     link: string;
     onToggleShare?: () => void;
+    onDuplicateNotebook?: () => void;
   };
 
 export const NotebookTopbar = ({
   workspaceName,
   notebookName,
   onToggleShare = noop,
+  onDuplicateNotebook = noop,
   usersWithAccess,
   permission,
   link,
   workspaceHref,
 }: NotebookTopbarProps): ReturnType<FC> => {
+  const [session] = useSession();
   const isAdmin = permission === 'ADMIN';
-  const isNotUser = permission === 'READ';
   return (
     <div css={topbarWrapperStyles}>
       {/* Left side */}
@@ -79,10 +83,20 @@ export const NotebookTopbar = ({
           Need help?
         </Anchor>
         <NotebookAvatars usersWithAccess={usersWithAccess} />
-        {isAdmin && (
-          <NotebookSharingPopUp onToggleShare={onToggleShare} link={link} />
+
+        {session?.user ? (
+          isAdmin ? (
+            <NotebookSharingPopUp onToggleShare={onToggleShare} link={link} />
+          ) : (
+            <Button onClick={() => onDuplicateNotebook()}>
+              Duplicate notebook
+            </Button>
+          )
+        ) : (
+          <Button href="https://www.decipad.com/get-early-access">
+            Try Decipad
+          </Button>
         )}
-        {isNotUser && <Button href="/">Try Decipad</Button>}
       </div>
     </div>
   );

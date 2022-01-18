@@ -1,4 +1,4 @@
-import { QueryHookOptions, QueryResult, useQuery, gql } from '@apollo/client';
+import { gql, QueryHookOptions, QueryResult, useQuery } from '@apollo/client';
 
 // eslint-disable-next-line no-shadow
 export enum PermissionType {
@@ -35,7 +35,7 @@ interface User {
     id: string;
     name: string;
   };
-  permission: PermissionType | null;
+  permission: PermissionType;
 }
 
 interface Data {
@@ -43,7 +43,7 @@ interface Data {
     __typename: 'Pad';
     id: string;
     name: string;
-    myPermissionType: PermissionType | null;
+    myPermissionType: PermissionType;
     access: {
       users: User[];
     };

@@ -1,16 +1,18 @@
+import { BrowserContext } from 'playwright';
 import { URL } from 'url';
-import { newRandomUser, credentials } from '.';
+import { credentials, newRandomUser } from '.';
 import { baseUrl } from '../../testConfig';
 
-export async function withNewUser() {
+export async function withNewUser(ctx?: BrowserContext) {
   const userCreationResult = await newRandomUser();
   const { cookies } = await credentials(userCreationResult.user, {
     domain: new URL(baseUrl).host,
     secure: true,
     sameSite: 'Lax',
   });
-  context.clearCookies();
-  await context.addCookies(cookies);
+  const Context = ctx || context;
+  Context.clearCookies();
+  await Context.addCookies(cookies);
 
   return userCreationResult;
 }

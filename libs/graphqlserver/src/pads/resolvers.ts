@@ -1,35 +1,34 @@
-import assert from 'assert';
-import { nanoid } from 'nanoid';
-import { UserInputError } from 'apollo-server-lambda';
 import {
-  ID,
   GraphqlContext,
-  PageInput,
-  PadInput,
+  ID,
   Pad,
+  PadInput,
   PadRecord,
-  WorkspaceRecord,
+  PageInput,
   RoleRecord,
   User,
+  WorkspaceRecord,
 } from '@decipad/backendtypes';
-import tables from '@decipad/tables';
+import Resource from '@decipad/graphqlresource';
 import { expectAuthorized } from '@decipad/services/authorization';
-import {
-  ensurePublicWorkspaceForUser,
-  ensurePrivateWorkspaceForUser,
-} from '@decipad/services/workspaces';
-import { subscribe } from '@decipad/services/pubsub';
 import {
   create as createPad2,
   duplicate as duplicateSharedDoc,
 } from '@decipad/services/pads';
-import Resource from '@decipad/graphqlresource';
-import { identity } from '@decipad/utils';
-
+import { subscribe } from '@decipad/services/pubsub';
 import {
+  ensurePrivateWorkspaceForUser,
+  ensurePublicWorkspaceForUser,
+} from '@decipad/services/workspaces';
+import tables from '@decipad/tables';
+import { identity } from '@decipad/utils';
+import { UserInputError } from 'apollo-server-lambda';
+import assert from 'assert';
+import { nanoid } from 'nanoid';
+import {
+  isAuthenticatedAndAuthorized,
   loadUser,
   requireUser,
-  isAuthenticatedAndAuthorized,
 } from '../authorization';
 import paginate from '../utils/paginate';
 
@@ -125,7 +124,7 @@ const resolvers = {
 
     async duplicatePad(
       _: unknown,
-      { id }: { id: ID },
+      { id, targetWorkspace }: { id: ID; targetWorkspace?: string },
       context: GraphqlContext
     ): Promise<Pad> {
       const resource = `/pads/${id}`;
@@ -140,17 +139,15 @@ const resolvers = {
 
       previousPad.name = `Copy of ${previousPad.name}`;
 
-      const workspaceResource = `/workspaces/${previousPad.workspace_id}`;
+      const workspaceId = targetWorkspace || previousPad.workspace_id;
+
+      const workspaceResource = `/workspaces/${workspaceId}`;
       const user = await isAuthenticatedAndAuthorized(
         workspaceResource,
         context,
         'WRITE'
       );
-      const clonedPad = await createPad2(
-        previousPad.workspace_id,
-        previousPad,
-        user
-      );
+      const clonedPad = await createPad2(workspaceId, previousPad, user);
 
       await duplicateSharedDoc(id, clonedPad.id, previousPad.name);
 

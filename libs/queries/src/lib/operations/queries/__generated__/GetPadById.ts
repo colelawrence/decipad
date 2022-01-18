@@ -36,7 +36,7 @@ export interface GetPadById_getPadById {
   __typename: "Pad";
   id: string;
   name: string;
-  myPermissionType: PermissionType | null;
+  myPermissionType: PermissionType;
   access: GetPadById_getPadById_access;
   workspace: GetPadById_getPadById_workspace;
 }

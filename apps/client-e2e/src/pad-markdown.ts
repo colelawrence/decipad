@@ -7,7 +7,7 @@ import {
 
 beforeAll(goToPlayground);
 
-beforeEach(waitForEditorToLoad);
+beforeAll(() => waitForEditorToLoad());
 
 it('inserts a link using markdown syntax', async () => {
   await focusOnBody();

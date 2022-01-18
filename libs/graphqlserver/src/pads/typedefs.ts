@@ -21,7 +21,7 @@ export default gql`
     id: ID!
     name: String!
     access: PadAccess!
-    myPermissionType: PermissionType
+    myPermissionType: PermissionType!
     workspace: Workspace!
     createdAt: DateTime
     isPublic: Boolean
@@ -49,7 +49,7 @@ export default gql`
     createPad(workspaceId: ID!, pad: PadInput!): Pad!
     updatePad(id: ID!, pad: PadInput!): Pad!
     removePad(id: ID!): Boolean
-    duplicatePad(id: ID!): Pad!
+    duplicatePad(id: ID!, targetWorkspace: ID): Pad!
 
     setPadPublic(id: ID!, isPublic: Boolean!): Pad!
 

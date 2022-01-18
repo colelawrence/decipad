@@ -8,7 +8,7 @@ import {
 describe('pad content', () => {
   beforeAll(() => setUp());
 
-  beforeEach(waitForEditorToLoad);
+  beforeAll(() => waitForEditorToLoad());
 
   it('type lots of stuff', async () => {
     await focusOnBody();
