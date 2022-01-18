@@ -23,7 +23,14 @@ export async function resolveCsv(
 
 type AcceptableType = number | boolean | string | Date;
 
-export function csv(source: string): Promise<Table> {
+export async function csv(source: string): Promise<Table> {
+  const [columnNames, data] = await csvToData(source);
+  return toTable(columnNames, data);
+}
+
+export function csvToData(
+  source: string
+): Promise<[string[], AcceptableType[][]]> {
   return new Promise((resolve, reject) => {
     let columnNames: string[];
     const data: AcceptableType[][] = [];
@@ -45,7 +52,7 @@ export function csv(source: string): Promise<Table> {
     });
     parser.once('end', () => {
       isDone = true;
-      resolve(toTable(columnNames, data));
+      resolve([columnNames, data]);
     });
     parser.once('error', reject);
     parser.end(source);
@@ -68,7 +75,7 @@ function toTable(columnNames: string[], data: AcceptableType[][]): Table {
   return Table.fromStruct(builder.toVector());
 }
 
-function columnType(data: AcceptableType[][], columnIndex: number) {
+export function columnType(data: AcceptableType[][], columnIndex: number) {
   for (let rowIndex = 0; rowIndex < data.length; rowIndex += 1) {
     const row = data[rowIndex] || [];
     const cell = row[columnIndex];
