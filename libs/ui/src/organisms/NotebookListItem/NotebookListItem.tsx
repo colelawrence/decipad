@@ -126,7 +126,7 @@ export const NotebookListItem = ({
             description || noDescriptionNameStyles,
           ]}
         >
-          {name || '<unnamed notebook>'}
+          {name || 'My notebook title'}
         </strong>
         <div css={descriptionStyles}>{description}</div>
         <div

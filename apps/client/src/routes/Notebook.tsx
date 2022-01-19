@@ -154,7 +154,7 @@ export const Notebook = ({
       <TopbarWrapper>
         <NotebookTopbar
           workspaceName={getPadById.workspace.name || ''}
-          notebookName={getPadById.name || '<unnamed notebook>'}
+          notebookName={getPadById.name || 'My notebook title'}
           workspaceHref={`/workspaces/${workspaceId}`}
           usersWithAccess={getPadById.access.users ?? []}
           permission={getPadById.myPermissionType ?? undefined}

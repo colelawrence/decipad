@@ -23,5 +23,5 @@ it('renders a placeholder for an empty name', () => {
   const { getByText } = render(
     <NotebookListItem {...props} name="" href="/my-notebook" />
   );
-  expect(getByText(/un(named|titled)/i)).toBeVisible();
+  expect(getByText(/my note(book|pad)/i)).toBeVisible();
 });

@@ -16,7 +16,9 @@ export const Title: PlateComponent = ({ attributes, children, element }) => {
     <div {...attributes}>
       <atoms.Display
         Heading="h1"
-        placeholder={Editor.isEmpty(editor, element) ? 'Untitled' : undefined}
+        placeholder={
+          Editor.isEmpty(editor, element) ? 'My notebook title' : undefined
+        }
       >
         {children}
       </atoms.Display>
