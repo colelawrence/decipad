@@ -1,7 +1,6 @@
 import { timeout } from '@decipad/utils';
 import { ElementHandle } from 'playwright';
 import waitForExpect from 'wait-for-expect';
-import { keyPress } from './Pad';
 
 interface CalculationBlockLine {
   code: string;
@@ -13,10 +12,29 @@ interface CalculationBlock {
   result: ElementHandle | null;
 }
 
-export async function createCalculationBlock(decilang: string) {
-  await page.keyboard.type('/calc');
-  await keyPress('Tab');
-  await keyPress('Enter');
+export async function createCalculationBlockBelow(decilang: string) {
+  await page.click('[contenteditable] p >> nth=-1');
+
+  await page.keyboard.type('/');
+  await waitForExpect(async () =>
+    expect(
+      await page.$$('[contenteditable] [role="menuitem"]')
+    ).not.toHaveLength(0)
+  );
+
+  await page.keyboard.type('calc');
+  await waitForExpect(async () =>
+    expect(await page.$$('[contenteditable] [role="menuitem"]')).toHaveLength(1)
+  );
+
+  const { length: numCodeElements } = await page.$$('[contenteditable] code');
+  await page.click('text=/calculation/i');
+  await waitForExpect(async () =>
+    expect(await page.$$('[contenteditable] code')).toHaveLength(
+      numCodeElements + 1
+    )
+  );
+
   await page.keyboard.type(decilang);
 }
 

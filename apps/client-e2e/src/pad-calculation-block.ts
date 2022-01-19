@@ -5,7 +5,7 @@ import {
   keyPress,
 } from './page-utils/Pad';
 import {
-  createCalculationBlock,
+  createCalculationBlockBelow,
   getCalculationBlocks,
 } from './page-utils/CalculationBlock';
 
@@ -20,8 +20,7 @@ describe('pad content', () => {
 
   it('can create a table using a calculation block', async () => {
     await focusOnBody();
-    await keyPress('Enter');
-    await createCalculationBlock('A = { B = [1,2,3] }');
+    await createCalculationBlockBelow('A = { B = [1,2,3] }');
 
     const blocks = await getCalculationBlocks();
     expect(blocks).toMatchObject([
@@ -53,8 +52,7 @@ describe('pad content', () => {
 
   it('Get the column `A.B` from the table', async () => {
     await keyPress('ArrowDown');
-    await keyPress('Enter');
-    await createCalculationBlock('A.B');
+    await createCalculationBlockBelow('A.B');
 
     const blocks = await getCalculationBlocks();
     expect(blocks).toMatchObject([
@@ -82,8 +80,7 @@ describe('pad content', () => {
 
   it('Get an error from getting column that doesnt exist `A.C`', async () => {
     await keyPress('ArrowDown');
-    await keyPress('Enter');
-    await createCalculationBlock('A.C');
+    await createCalculationBlockBelow('A.C');
 
     const blocks = await getCalculationBlocks();
     expect(blocks).toMatchObject([
