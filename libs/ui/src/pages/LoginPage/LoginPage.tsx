@@ -5,8 +5,10 @@ import { AuthContent } from '../../molecules';
 
 const wrapperStyles = css({
   height: '100%',
+
   display: 'grid',
-  justifyContent: 'center',
+  gridTemplateColumns: 'minmax(100%, 374px)',
+
   justifyItems: 'center',
   alignContent: 'center',
 });
@@ -37,9 +39,10 @@ export const LoginPage = ({ onSubmit }: LoginPageProps): ReturnType<FC> => {
       <form
         ref={formRef}
         css={{
+          justifySelf: 'stretch',
+          padding: '24px 8px',
+
           display: 'grid',
-          minWidth: '374px',
-          padding: '24px 0',
           gridGap: '12px',
         }}
       >
