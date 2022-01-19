@@ -37,10 +37,10 @@ lookup(Flights, "BA456").PassengerCount
 
 ## Cashflow positive for the month
 
-For FP&A models you often need to:
+For FP\&A models you often need to:
 
-* Calculate growth based on previous months
-* Find the point in your model where you break even
+- Calculate growth based on previous months
+- Find the point in your model where you break even
 
 You can achieve this using `lookup`, `previous`, and `next`.
 

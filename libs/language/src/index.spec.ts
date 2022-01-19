@@ -1442,6 +1442,31 @@ describe('unit conversion', () => {
       type: t.column(t.number(U('watts')), 3),
     });
   });
+
+  it('can work accross multi-dimensional operations', async () => {
+    expect(
+      await runCode(`
+        Animals = {
+          Name = ["Person", "Falcon", "Turtle"]
+          Speed = [27.33 mph, 55 mph, 22 mph]
+        }
+  
+        Race = {
+          Name = ["Quarter", "Half", "Marathon"]
+          Distance = [0.25 marathon, 0.5 marathon, 1 marathon]
+        }
+  
+        Hours = sum(Race.Distance / Animals.Speed over Animals) in hours
+      `)
+    ).toMatchObject({
+      value: [
+        F(307671875, 183264048),
+        F(2461375, 2950464),
+        F(12306875, 5900928),
+      ],
+      type: t.column(t.number(U('hours')), 3, 'Animals'),
+    });
+  });
 });
 
 describe('user-defined units', () => {
