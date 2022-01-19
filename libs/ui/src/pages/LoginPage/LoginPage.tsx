@@ -7,8 +7,9 @@ const wrapperStyles = css({
   height: '100%',
 
   display: 'grid',
-  gridTemplateColumns: 'minmax(100%, 374px)',
+  gridTemplateColumns: 'min(374px, 100%)',
 
+  justifyContent: 'center',
   justifyItems: 'center',
   alignContent: 'center',
 });
