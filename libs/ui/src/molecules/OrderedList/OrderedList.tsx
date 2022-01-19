@@ -3,9 +3,11 @@ import { css } from '@emotion/react';
 import { listItemCounter } from '../../utils';
 import { cssVar, p16Regular, setCssVar } from '../../primitives';
 
+// Note on counters: This could just be counter-reset on the ol, counter-increment on the li::before, but Safari can't handle pseudo elements
+
 const styles = css({
   display: 'grid',
-  gridTemplateColumns: 'minmax(24px, auto) 1fr',
+  gridTemplateColumns: 'minmax(24px, auto) 1fr 0px',
   gridAutoFlow: 'row',
 
   padding: '6px 0',
@@ -16,6 +18,7 @@ const styles = css({
   columnGap: '8px',
 
   counterReset: listItemCounter,
+  counterIncrement: listItemCounter,
 });
 
 const itemStyles = css({
@@ -26,8 +29,11 @@ const itemStyles = css({
     ...setCssVar('currentTextColor', cssVar('weakTextColor')),
     textAlign: 'center',
 
-    counterIncrement: listItemCounter,
     content: `counter(${listItemCounter}) "."`,
+  },
+  '::after': {
+    counterIncrement: listItemCounter,
+    content: '" "',
   },
 });
 
