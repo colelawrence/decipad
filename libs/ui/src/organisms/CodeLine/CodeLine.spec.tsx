@@ -1,4 +1,5 @@
 import { render } from '@testing-library/react';
+import { Result } from '@decipad/language';
 import { runCode } from '../../test-utils';
 
 import { CodeLine } from './CodeLine';
@@ -23,6 +24,30 @@ describe('displayInline prop', () => {
       </CodeLine>
     );
     expect(getByText('10')).toBeVisible();
+  });
+
+  it('always renders type errors inline', async () => {
+    const result: Result = {
+      value: null,
+      type: {
+        kind: 'type-error',
+        errorCause: {
+          errType: 'free-form',
+          message: 'Some error,',
+        },
+      },
+    };
+    const { getByTitle, rerender } = render(
+      <CodeLine result={result}>9 +</CodeLine>
+    );
+    expect(getByTitle(/info/i).closest('svg')).toBeVisible();
+
+    rerender(
+      <CodeLine displayInline result={result}>
+        9 +
+      </CodeLine>
+    );
+    expect(getByTitle(/info/i).closest('svg')).toBeVisible();
   });
 });
 

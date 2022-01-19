@@ -58,9 +58,11 @@ export const CodeLine = ({
     <div css={styles}>
       <code>{children}</code>
       <output css={inlineResultStyles} contentEditable={false}>
-        {!syntaxError && displayInline && result && (
-          <CodeResult {...result} variant="inline" />
-        )}
+        {!syntaxError &&
+          result &&
+          (displayInline || result.type.kind === 'type-error') && (
+            <CodeResult {...result} variant="inline" />
+          )}
         {syntaxError && <CodeError {...syntaxError} />}
       </output>
     </div>
