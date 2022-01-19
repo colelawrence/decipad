@@ -165,3 +165,16 @@ export async function evaluate(
     }
   }
 }
+
+export async function evaluateBlock(
+  realm: Realm,
+  block: AST.Block
+): Promise<Value> {
+  let previous;
+  for (const statement of block.args) {
+    // eslint-disable-next-line no-await-in-loop
+    previous = await evaluate(realm, statement);
+  }
+
+  return getDefined(previous, 'panic: Unexpected empty block');
+}

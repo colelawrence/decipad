@@ -434,6 +434,32 @@ describe('Tables', () => {
     `);
   });
 
+  it('can create per-cell formulae', async () => {
+    expect(
+      await runCode(`
+        Table = {
+          Column = [1, 2, 0, 0, 3, -3, -3]
+          CumulativeSum(currentRow) = currentRow.Column + previous(0)
+        }
+      `)
+    ).toMatchInlineSnapshot(`
+      Result({
+        Column = [ 1, 2, 0, 0, 3, -3, -3 ],
+        CumulativeSum = [ 1, 3, 3, 3, 6, 3, 0 ]
+      })
+    `);
+
+    await expect(
+      runCode(`
+        Table = {
+          Index = [1,2,3]
+          CannotAccessNextCol(currentRow) = currentRow.NotYet
+          NotYet = [1, 2, 3]
+        }
+      `)
+    ).rejects.not.toBeNull();
+  });
+
   it('Can spread new tables', async () => {
     expect(
       await runCode(`

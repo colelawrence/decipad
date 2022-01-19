@@ -1,7 +1,9 @@
 import { makeContext } from '.';
-import { table, col, n, c, l } from '../utils';
-import { findTableSize } from './table';
+import { AST } from '..';
+import { table, col, n, c, l, block, r } from '../utils';
 import { build as t } from '../type';
+import { objectToMap } from '../testUtils';
+import { inferTableFormula, findTableSize } from './table';
 
 const nilCtx = makeContext({
   inAssignment: 'TableName',
@@ -61,4 +63,55 @@ it('gets the table size from a spread', async () => {
     n('table-spread', n('ref', 'SomeExistingTable'))
   );
   expect(await findTableSize(nilCtx, tbl)).toEqual(['SomeExistingTable', 1234]);
+});
+
+describe('table with formulae', () => {
+  const testFormula = (expression: AST.Expression) =>
+    inferTableFormula(
+      makeContext(),
+      objectToMap({ OtherColumn: t.column(t.number(), 3) }),
+      n(
+        'table-formula',
+        n('coldef', 'Formula'),
+        n('def', 'currentRow'),
+        block(expression)
+      ),
+      3
+    );
+
+  it('can run a formula', async () => {
+    expect(await testFormula(l('a string'))).toEqual(t.column(t.string(), 3));
+    expect(await testFormula(col('one', 'two'))).toEqual(
+      t.column(t.column(t.string(), 2), 3)
+    );
+  });
+
+  it('can run a formula with previous', async () => {
+    expect(await testFormula(c('previous', l('hello')))).toEqual(
+      t.column(t.string(), 3)
+    );
+  });
+
+  it('can use another column', async () => {
+    expect(
+      await testFormula(
+        c('+', n('property-access', r('currentRow'), 'OtherColumn'), l(1))
+      )
+    ).toEqual(t.column(t.number(), 3));
+  });
+
+  it('propagates errors', async () => {
+    expect(
+      (await testFormula(n('property-access', r('currentRow'), 'MissingRow')))
+        .errorCause
+    ).not.toBeNull();
+
+    expect(
+      (
+        await testFormula(
+          n('property-access', r('wrongVariableForRow'), 'OtherColumn')
+        )
+      ).errorCause
+    ).not.toBeNull();
+  });
 });

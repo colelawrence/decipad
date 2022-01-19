@@ -77,6 +77,21 @@ Harvest = {
 }
 ```
 
+## One row at a time!
+
+Sometimes, when deriving a column from another, you might want to go cell-by-cell, and only look at the current row at a cell-by-cell basis. When you want to do this, you can create a formula column by using parentheses and specifying what you want the current row to be called.
+
+```
+Table = {
+  Column = [1, 2, 0, 0, 3, -3, -3]
+  CumulativeSum(currentRow) = currentRow.Column + previous(0)
+}
+==> {
+  Column = [ 1, 2, 0, 0, 3, -3, -3 ],
+  CumulativeSum = [ 1, 3, 3, 3, 6, 3, 0 ]
+}
+```
+
 ## Access columns
 
 You can access the table columns individually:

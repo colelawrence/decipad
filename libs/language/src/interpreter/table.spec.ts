@@ -1,10 +1,16 @@
-import { AST } from '..';
+import { AST, Column } from '..';
 import { inferProgram } from '../infer';
-import { n, c, l, block, assign, col } from '../utils';
+import { objectToMap } from '../testUtils';
+import { n, c, l, block, assign, col, r } from '../utils';
 import { evaluate } from './evaluate';
 
 import { Realm } from './Realm';
-import { usesRecursion, evaluateTableColumn } from './table';
+import {
+  usesRecursion,
+  evaluateTableColumn,
+  evaluateTableFormula,
+} from './table';
+import { fromJS } from './Value';
 
 it('can find a previous symbol', () => {
   expect(usesRecursion(c('previous', l(1)))).toEqual(true);
@@ -58,5 +64,53 @@ describe('evaluateTableColumn', () => {
         Fraction(24),
       ]
     `);
+  });
+});
+
+describe('evaluateTableFormula', () => {
+  const testEvaluate = async (exp: AST.Expression, rowCount: number) => {
+    const testBlock = block(assign('numbers', col(1, 2, 3, 4)), exp);
+    const realm = new Realm(await inferProgram([testBlock]));
+
+    // Evaluate first line, to inject "numbers"
+    await evaluate(realm, testBlock.args[0]);
+
+    const result = await evaluateTableFormula(
+      realm,
+      objectToMap({ OtherColumn: fromJS([1, 2, 3]) as Column }),
+      n(
+        'table-formula',
+        n('coldef', 'Formula'),
+        n('def', 'currentRow'),
+        block(testBlock.args[1] as AST.Expression)
+      ),
+      rowCount
+    );
+
+    // Should be cleaned
+    expect(realm.previousValue).toEqual(null);
+
+    return result;
+  };
+
+  it('evaluates formulae', async () => {
+    const form = await testEvaluate(l(1), 2);
+
+    expect(form.getData().join(', ')).toMatchInlineSnapshot(`"1, 1"`);
+  });
+
+  it('lets us access the current row', async () => {
+    const form = await testEvaluate(
+      c('+', n('property-access', r('currentRow'), 'OtherColumn'), l(100)),
+      3
+    );
+
+    expect(form.getData().join(', ')).toMatchInlineSnapshot(`"101, 102, 103"`);
+  });
+
+  it('lets us access the previous item of this column', async () => {
+    const form = await testEvaluate(c('+', l(1), c('previous', l(1))), 3);
+
+    expect(form.getData().join(', ')).toMatchInlineSnapshot(`"2, 3, 4"`);
   });
 });

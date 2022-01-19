@@ -1,4 +1,4 @@
-import { getDefined, zip } from '@decipad/utils';
+import { getDefined, unzip, zip } from '@decipad/utils';
 import { AST } from '..';
 import {
   walk,
@@ -6,7 +6,7 @@ import {
   isExpression,
   getInstanceof,
 } from '../utils';
-import { evaluate } from './evaluate';
+import { evaluate, evaluateBlock } from './evaluate';
 import { mapWithPrevious } from './previous';
 import { Realm } from './Realm';
 import { Column, Row, Table, Value } from './Value';
@@ -53,6 +53,34 @@ export const evaluateTableColumn = async (
   return Column.fromValues(rows);
 };
 
+const nthRow = (columns: Map<string, Column>, rowIndex: number) => {
+  const [cellNames, columnValues] = unzip(columns.entries());
+  const cellValues = columnValues.map((col) => col.atIndex(rowIndex));
+
+  return Row.fromNamedCells(cellValues, cellNames);
+};
+
+export const evaluateTableFormula = async (
+  realm: Realm,
+  otherColumns: Map<string, Column>,
+  { args: [, currentRowArg, body] }: AST.TableFormula,
+  rowCount: number
+): Promise<Column> =>
+  realm.stack.withPush(async () => {
+    const currentRowName = getIdentifierString(currentRowArg);
+
+    const cells = await mapWithPrevious(realm, async function* mapper() {
+      for (let index = 0; index < rowCount; index++) {
+        realm.stack.top.set(currentRowName, nthRow(otherColumns, index));
+
+        // eslint-disable-next-line no-await-in-loop
+        yield evaluateBlock(realm, body);
+      }
+    });
+
+    return Column.fromValues(cells);
+  });
+
 const repeat = <T>(value: T, length: number) =>
   Array.from({ length }, () => value);
 
@@ -60,8 +88,7 @@ export const evaluateTable = async (
   realm: Realm,
   table: AST.Table
 ): Promise<Table> => {
-  const colNames: string[] = [];
-  const colValues: Value[] = [];
+  const tableColumns = new Map<string, Column>();
   const { args: items } = table;
   const { tableLength } = realm.getTypeAt(table);
 
@@ -70,15 +97,14 @@ export const evaluateTable = async (
   }
 
   return realm.stack.withPush(async () => {
-    const addColumn = (name: string, value: Value) => {
+    const addColumn = (name: string, value: Column | Value) => {
       if (!(value instanceof Column)) {
         value = Column.fromValues(repeat(value, tableLength));
       }
 
       realm.stack.set(name, value);
 
-      colNames.push(name);
-      colValues.push(value);
+      tableColumns.set(name, value as Column);
     };
 
     for (const item of items) {
@@ -93,7 +119,19 @@ export const evaluateTable = async (
         );
 
         addColumn(colName, columnData);
-      } else {
+      } else if (item.type === 'table-formula') {
+        const colName = getIdentifierString(item.args[0]);
+
+        // eslint-disable-next-line no-await-in-loop
+        const columnData = await evaluateTableFormula(
+          realm,
+          tableColumns,
+          item,
+          tableLength
+        );
+
+        addColumn(colName, columnData);
+      } else if (item.type === 'table-spread') {
         // eslint-disable-next-line no-await-in-loop
         const baseTable = await evaluate(realm, item.args[0]);
 
@@ -101,10 +139,16 @@ export const evaluateTable = async (
         for (const [name, value] of zip(getDefined(columnNames), columns)) {
           addColumn(name, value);
         }
+        // istanbul ignore else
+      } else {
+        throw new Error('panic: unreachable');
       }
     }
 
-    return Table.fromNamedColumns(colValues, colNames);
+    return Table.fromNamedColumns(
+      [...tableColumns.values()],
+      [...tableColumns.keys()]
+    );
   });
 };
 

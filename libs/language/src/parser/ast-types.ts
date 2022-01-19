@@ -130,6 +130,13 @@ export interface TableColumn {
   end?: Pos;
 }
 
+export interface TableFormula {
+  type: 'table-formula';
+  args: [name: ColDef, currentRowDef: Def, body: Block];
+  start?: Pos;
+  end?: Pos;
+}
+
 export interface TableSpread {
   type: 'table-spread';
   args: [spreadTableRef: Ref];
@@ -139,7 +146,7 @@ export interface TableSpread {
 
 export interface Table {
   type: 'table';
-  args: (TableColumn | TableSpread)[];
+  args: (TableColumn | TableFormula | TableSpread)[];
   start?: Pos;
   end?: Pos;
 }
@@ -249,6 +256,7 @@ export type Node =
   | Identifier
   | Lists
   | TableColumn
+  | TableFormula
   | TableSpread;
 
 export interface TypeToNode {
@@ -270,6 +278,7 @@ export interface TypeToNode {
   column: Column;
   'generic-list': GenericList;
   'table-column': TableColumn;
+  'table-formula': TableFormula;
   'table-spread': TableSpread;
   table: Table;
   'property-access': PropertyAccess;

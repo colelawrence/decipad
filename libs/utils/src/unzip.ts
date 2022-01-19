@@ -1,4 +1,4 @@
-export const unzip = <K, V>(arg: [K, V][]): [K[], V[]] => {
+export const unzip = <K, V>(arg: [K, V][] | Iterable<[K, V]>): [K[], V[]] => {
   const keys = [];
   const values = [];
 

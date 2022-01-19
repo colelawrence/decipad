@@ -1,10 +1,10 @@
-import { getDefined, zip } from '@decipad/utils';
+import { getDefined, unzip, zip } from '@decipad/utils';
 import { produce } from 'immer';
 
 import type { AST } from '..';
 import { Type, build as t, InferError } from '../type';
 import { equalOrUnknown, getIdentifierString, getOfType } from '../utils';
-import { inferExpression } from '.';
+import { inferBlock, inferExpression } from '.';
 import { Context, pushStackAndPrevious } from './context';
 import { linearizeType } from '../dimtools/common';
 
@@ -58,29 +58,41 @@ export const inferTable = async (ctx: Context, table: AST.Table) => {
   const [indexName, tableLength] = await findTableSize(ctx, table);
 
   return pushStackAndPrevious(ctx, async () => {
-    const columnNames: string[] = [];
-    const columnTypes: Type[] = [];
+    const columns = new Map<string, Type>();
 
     const addColumn = (name: string, type: Type) => {
       type = coerceIndices(type, indexName, tableLength);
 
       ctx.stack.set(name, type);
 
-      columnTypes.push(type);
-      columnNames.push(name);
+      columns.set(name, type);
     };
 
     for (const tableItem of table.args) {
       if (tableItem.type === 'table-column') {
         const [colDef, expr] = tableItem.args;
         const name = getIdentifierString(colDef);
+
         // eslint-disable-next-line no-await-in-loop
         const type = await inferExpression(ctx, expr);
 
         // Bail on error
-        if (type.errorCause) {
-          return type;
-        }
+        if (type.errorCause) return type;
+
+        addColumn(name, type);
+      } else if (tableItem.type === 'table-formula') {
+        const name = getIdentifierString(tableItem.args[0]);
+
+        // eslint-disable-next-line no-await-in-loop
+        const type = await inferTableFormula(
+          ctx,
+          columns,
+          tableItem,
+          tableLength
+        );
+
+        // Bail on error
+        if (type.errorCause) return type;
 
         addColumn(name, type);
       } else if (tableItem.type === 'table-spread') {
@@ -90,9 +102,7 @@ export const inferTable = async (ctx: Context, table: AST.Table) => {
         const source = (await inferExpression(ctx, ref)).isTable();
         const { tableLength, columnNames, columnTypes } = source;
 
-        if (source.errorCause) {
-          return source;
-        }
+        if (source.errorCause) return source;
 
         for (const [name, type] of zip(
           getDefined(columnNames),
@@ -100,8 +110,12 @@ export const inferTable = async (ctx: Context, table: AST.Table) => {
         )) {
           addColumn(name, t.column(type, getDefined(tableLength), indexName));
         }
+      } else {
+        throw new Error('panic: unreachable');
       }
     }
+
+    const [columnNames, columnTypes] = unzip(columns.entries());
 
     if (columnTypes.length === 0) {
       return t.impossible(InferError.unexpectedEmptyTable());
@@ -119,3 +133,27 @@ export const inferTable = async (ctx: Context, table: AST.Table) => {
     }
   });
 };
+
+export async function inferTableFormula(
+  ctx: Context,
+  otherColumns: Map<string, Type>,
+  { args: [, argName, body] }: AST.TableFormula,
+  tableLength: number | 'unknown'
+) {
+  const currentRowArg = getIdentifierString(argName);
+
+  const cellType = await pushStackAndPrevious(ctx, async () => {
+    const [rowCellNames, columns] = unzip(otherColumns.entries());
+
+    // Turn column types into cell types
+    const rowCellTypes = columns.map((col) => col.reduced());
+
+    const currentRowType = t.row(rowCellTypes, rowCellNames);
+
+    ctx.stack.top.set(currentRowArg, currentRowType);
+
+    return inferBlock(body, ctx);
+  });
+
+  return t.column(cellType, tableLength);
+}

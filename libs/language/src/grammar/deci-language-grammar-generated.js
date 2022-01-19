@@ -951,6 +951,7 @@ let ParserRules = [
     symbols: ['identifier', '_', { literal: '=' }, '_', 'expression'],
     postprocess: (d) => {
       const ref = d[0];
+
       const colDef = addLoc(
         {
           type: 'coldef',
@@ -965,6 +966,61 @@ let ParserRules = [
           args: [colDef, d[4]],
         },
         d
+      );
+    },
+  },
+  {
+    name: 'tableItem',
+    symbols: [
+      'identifier',
+      '_',
+      'tableFormulaArg',
+      '_',
+      { literal: '=' },
+      '_',
+      'expression',
+    ],
+    postprocess: (d) => {
+      const [theDef, , rowArgName, , , , body] = d;
+
+      const colDef = addLoc(
+        {
+          type: 'coldef',
+          args: [theDef.name],
+        },
+        theDef
+      );
+
+      return addArrayLoc(
+        {
+          type: 'table-formula',
+          args: [
+            colDef,
+            rowArgName,
+            addArrayLoc(
+              {
+                type: 'block',
+                args: [body],
+              },
+              body
+            ),
+          ],
+        },
+        d
+      );
+    },
+  },
+  {
+    name: 'tableFormulaArg',
+    symbols: [{ literal: '(' }, '_', 'identifier', '_', { literal: ')' }],
+    postprocess: (d) => {
+      const ident = d[2];
+      return addLoc(
+        {
+          type: 'def',
+          args: [ident.name],
+        },
+        ident
       );
     },
   },

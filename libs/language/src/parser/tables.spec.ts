@@ -1,5 +1,5 @@
 import { n } from '.';
-import { col } from '../utils';
+import { assign, block, col } from '../utils';
 import { runTests } from './run-tests';
 
 runTests({
@@ -145,6 +145,7 @@ runTests({
     ],
   },
 
+  /*
   'table with trailing comma': {
     source: ' Table = { abc, } ',
     ast: [
@@ -237,6 +238,7 @@ runTests({
       },
     ],
   },
+  */
 
   'table with three implicit coldefs': {
     source: ' Table = { abc  ,  def,   ghi} ',
@@ -426,6 +428,7 @@ runTests({
     ],
   },
 
+  /*
   'table with explicit value as column': {
     source: ' Table = { abc = [ 1 , 2 ]  }',
     ast: [
@@ -485,11 +488,11 @@ runTests({
       },
     ],
   },
+  */
 
   'table with mixed defs in each line': {
     source: ' Table = { \n abc \n def = [ 1 , 2 ] \n  }',
     sourceMap: false,
-    only: true,
     ast: [
       {
         type: 'assign',
@@ -512,7 +515,6 @@ runTests({
 
   'table with spreads': {
     source: ' Table = {...A } ',
-    only: true,
     ast: [
       {
         type: 'assign',
@@ -587,6 +589,30 @@ runTests({
           column: 16,
         },
       },
+    ],
+  },
+
+  'table with formula': {
+    source: ' Table = { Col = [1], Formula(currentRow) = currentRow.Col } ',
+    sourceMap: false,
+    ast: [
+      assign('Table', {
+        type: 'table',
+        args: [
+          {
+            type: 'table-column',
+            args: [{ type: 'coldef', args: ['Col'] }, col(1)],
+          },
+          {
+            type: 'table-formula',
+            args: [
+              { type: 'coldef', args: ['Formula'] },
+              n('def', 'currentRow'),
+              block(n('property-access', n('ref', 'currentRow'), 'Col')),
+            ],
+          },
+        ],
+      }),
     ],
   },
 });
