@@ -211,7 +211,19 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     noAutoconvert: true,
     argCount: 1,
     fn: (n: Fraction) => {
-      return getInstanceof(n, Fraction).pow(0.5);
+      let result = getInstanceof(n, Fraction).pow(0.5);
+      if (result == null) {
+        // TODO: fraction.js gives us a null result when the result is non-rational
+        // TODO: this is an approximation, so we should warn the user
+        const nonRationalResult = n.valueOf() ** 0.5;
+        if (Number.isNaN(nonRationalResult)) {
+          throw new RuntimeError(
+            `square root of ${n.toString()} is not a number`
+          );
+        }
+        result = new Fraction(nonRationalResult);
+      }
+      return result;
     },
     functor: ([n]) => Type.combine(n.isScalar('number'), n.divideUnit(2)),
   },

@@ -1559,4 +1559,10 @@ describe('math operators', () => {
       type: t.number(U('bananas', { known: false, exp: F(1, 2) })),
     });
   });
+  it('sqrt works on non-rational results by approximation', async () => {
+    expect(await runCode(`sqrt(60 m / 9.8m / s^2)`)).toMatchObject({
+      value: F(9032400, 3650401),
+      type: t.number(U('s', { exp: F(-1) })),
+    });
+  });
 });
