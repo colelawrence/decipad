@@ -1,30 +1,22 @@
 import Fraction from '@decipad/fraction';
 import { produce } from 'immer';
 import { getDefined } from '@decipad/utils';
-import { RuntimeError } from '../../interpreter';
 import { UnitOfMeasure, getUnitByName } from '../known-units';
 import { normalizeUnits, Unit, Units } from '../../type';
 import { BaseQuantityExpansion, expansions } from './expansions';
 import { baseUnitForBaseQuantity } from '../base-units';
 import { identity, F } from '../../utils';
 import { Converter, ExpandUnitResult } from '.';
-import { normalizeUnitNames, stringifyUnits } from '../../type/units';
+import { normalizeUnitNames } from '../../type/units';
 
-function nonScalarExpansion(units: Units): [Units, Converter] {
-  const u = units?.args || [];
-  if (u.length !== 1) {
-    throw new RuntimeError(
-      `Don't know how to expand non-scalar unit ${stringifyUnits(units)}`
-    );
-  }
-  const knownUnit = getDefined(getUnitByName(u[0].unit));
+export type NonScalarExpansion = (u: Unit) => [Unit, Converter];
+export type ScaleConverter = (convert: Converter) => Converter;
+
+function nonScalarExpansionFromBaseQuantity(u: Unit): [Unit, Converter] {
+  const knownUnit = getDefined(getUnitByName(u.unit));
   const baseUnit = baseUnitForBaseQuantity(knownUnit.baseQuantity);
-  const newUnits = produce(units, (units) => {
-    units.args = units.args.map((u) =>
-      produce(u, (u) => {
-        u.unit = baseUnit;
-      })
-    );
+  const newUnits = produce(u, (unit) => {
+    unit.unit = baseUnit;
   });
 
   return [newUnits, knownUnit.toBaseQuantity];
@@ -74,10 +66,19 @@ function convertKnownUnitToBase(
   return [newUnit, convert];
 }
 
-function expandUnit(unit: Unit): ExpandUnitResult {
+export function expandUnit(
+  unit: Unit,
+  nonScalarExpansion: NonScalarExpansion = nonScalarExpansionFromBaseQuantity,
+  scale: ScaleConverter = identity
+): ExpandUnitResult {
   if (unit.unit) {
     const knownUnit = getUnitByName(unit.unit);
     if (knownUnit) {
+      if (doesNotScaleOnConversion(unit)) {
+        const [baseUnit, convertToBaseUnit] = nonScalarExpansion(unit);
+        return [[baseUnit], convertToBaseUnit];
+      }
+
       const expandTo = expansions[knownUnit.baseQuantity];
       const [baseUnit, convertToBaseUnit] = convertKnownUnitToBase(
         knownUnit,
@@ -92,23 +93,27 @@ function expandUnit(unit: Unit): ExpandUnitResult {
         const convert: Converter = (n) =>
           convertToBaseUnit(n).mul(expansionFactor);
 
-        return [newUnits, convert];
+        return [newUnits, scale(convert)];
       }
 
-      return [[baseUnit], convertToBaseUnit];
+      return [[baseUnit], scale(convertToBaseUnit)];
     }
   }
   return [[unit], identity];
 }
 
-function expandUnitArgs(_units: Unit[]): [Unit[] | null, Converter] {
+function expandUnitArgs(
+  _units: Unit[],
+  nonScalarExpansion: NonScalarExpansion = nonScalarExpansionFromBaseQuantity,
+  scale: ScaleConverter = identity
+): [Unit[] | null, Converter] {
   let units = _units;
   let converter: Converter = identity;
   let beforeCount = units.length;
   // eslint-disable-next-line no-constant-condition
   while (true) {
     const [expandedUnits, newConverter] = units
-      .map(expandUnit)
+      .map((u) => expandUnit(u, nonScalarExpansion, scale))
       .reduce(
         ([allExpandedUnits, allConverters], [expandedUnits, converter]) => [
           [...(allExpandedUnits ?? []), ...expandedUnits],
@@ -126,14 +131,19 @@ function expandUnitArgs(_units: Unit[]): [Unit[] | null, Converter] {
   return [units, converter];
 }
 
-export function expandUnits(units: Units | null): [Units | null, Converter] {
+export function expandUnits(
+  units: Units | null,
+  nonScalarExpansion: NonScalarExpansion = nonScalarExpansionFromBaseQuantity,
+  scale: ScaleConverter = identity
+): [Units | null, Converter] {
   if (units === null) {
     return [null, identity];
   }
-  if (units.args.some(doesNotScaleOnConversion)) {
-    return nonScalarExpansion(units);
-  }
-  const [unitArgs, converter] = expandUnitArgs(normalizeUnitNames(units.args));
+  const [unitArgs, converter] = expandUnitArgs(
+    normalizeUnitNames(units.args),
+    nonScalarExpansion,
+    scale
+  );
 
   return [
     produce(units, (u) => {

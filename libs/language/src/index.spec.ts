@@ -1420,6 +1420,15 @@ describe('number units work together', () => {
       }),
     });
   });
+
+  it("nonscalar unit conversions don't get in the way", async () => {
+    expect(await runCode(`44 zettabytes/year`)).toMatchObject({
+      value: F(44),
+      type: t.number(
+        U([u('bytes', { multiplier: F(1e21) }), u('years', { exp: F(-1) })])
+      ),
+    });
+  });
 });
 
 describe('unit conversion', () => {

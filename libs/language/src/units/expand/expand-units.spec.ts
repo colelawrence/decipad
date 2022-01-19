@@ -155,7 +155,7 @@ describe('expand', () => {
 
   it('expands non-scalar unit', () => {
     const [resultUnits, convert] = expandUnits(U('celsius'));
-    expect(resultUnits).toMatchObject(U('kelvin'));
+    expect(resultUnits).toMatchObject(U('kelvins'));
     expect(convert(F(2))).toMatchObject(F(27515, 100));
   });
 });
