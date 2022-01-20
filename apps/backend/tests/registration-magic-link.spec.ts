@@ -3,7 +3,7 @@
 
 import waitForExpect from 'wait-for-expect';
 import arc from '@architect/functions';
-import { parse as parseCookie } from 'simple-cookie';
+// import { parse as parseCookie } from 'simple-cookie';
 import { User } from '@decipad/backendtypes';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
 
@@ -19,7 +19,7 @@ test('registration via magic link', (ctx) => {
   const { test: it } = ctx;
   let user: User;
   let userKeyValidation: UserKeyValidation;
-  let token: string;
+  // let token: string;
 
   it('registers', async () => {
     const client = ctx.graphql.withoutAuth();
@@ -38,7 +38,9 @@ test('registration via magic link', (ctx) => {
     expect(user).toBeDefined();
   });
 
-  it('a user key validation request was created', async () => {
+  // TODO: enable this and enable user key validation emails
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('a user key validation request was created', async () => {
     await waitForExpect(async () => {
       const data = await arc.tables();
       const userKeys = (
@@ -71,7 +73,8 @@ test('registration via magic link', (ctx) => {
 
   // TODO merge WHEN test with THEN test?
   // eslint-disable-next-line jest/expect-expect
-  it('can ask to resend link', async () => {
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('can ask to resend link', async () => {
     const client = ctx.graphql.withoutAuth();
     await client.mutate({
       mutation: ctx.gql`
@@ -82,15 +85,17 @@ test('registration via magic link', (ctx) => {
     });
   });
 
-  it('can visit that link and get authenticated', async () => {
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('can visit that link and get authenticated', async () => {
     const link = `/api/userkeyvalidations/${userKeyValidation.id}/validate?redirect=false`;
     const resp = await ctx.http.call(link);
     const cookie = resp.headers.get('set-cookie');
     expect(cookie).toMatch('next-auth.session-token=');
-    token = parseCookie(cookie!).value;
+    // token = parseCookie(cookie!).value;
   });
 
-  it('no longer can ask to resend link', async () => {
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('no longer can ask to resend link', async () => {
     const client = ctx.graphql.withoutAuth();
     await expect(
       client.mutate({
@@ -104,7 +109,7 @@ test('registration via magic link', (ctx) => {
   });
 
   it('lets user update their name', async () => {
-    const client = ctx.graphql.withAuth({ token });
+    const client = ctx.graphql.withAuth(await ctx.auth());
     const { self } = (
       await client.query({
         query: ctx.gql`
@@ -118,7 +123,7 @@ test('registration via magic link', (ctx) => {
       })
     ).data;
 
-    expect(self).toMatchObject({ id: user.id, name: '' });
+    expect(self).toMatchObject({ id: 'test user id 1', name: 'Test User' });
 
     const selfAfter = (
       await client.mutate({
@@ -133,7 +138,10 @@ test('registration via magic link', (ctx) => {
       })
     ).data.updateSelf;
 
-    expect(selfAfter).toMatchObject({ id: user.id, name: 'My new name' });
+    expect(selfAfter).toMatchObject({
+      id: 'test user id 1',
+      name: 'My new name',
+    });
   });
 
   it('does not let register twice with the same email', async () => {

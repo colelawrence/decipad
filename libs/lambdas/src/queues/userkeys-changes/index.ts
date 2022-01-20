@@ -11,6 +11,8 @@ export const handler = handle(userKeyChangesHandler);
 const { userKeyValidationExpirationSeconds } = authConfig();
 const { urlBase } = appConfig();
 
+const sendEmailValidationLink = false;
+
 async function userKeyChangesHandler(event: TableRecordChanges<UserKeyRecord>) {
   const { table } = event;
 
@@ -26,6 +28,11 @@ async function userKeyChangesHandler(event: TableRecordChanges<UserKeyRecord>) {
   }
 
   if (args.validated_at || args.validation_msg_sent_at) {
+    return;
+  }
+
+  if (!sendEmailValidationLink) {
+    // TODO: send email validation link only after the user has signed in
     return;
   }
 
