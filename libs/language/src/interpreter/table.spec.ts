@@ -1,16 +1,7 @@
-import { AST, Column } from '..';
-import { inferProgram } from '../infer';
-import { objectToMap } from '../testUtils';
-import { n, c, l, block, assign, col, r } from '../utils';
-import { evaluate } from './evaluate';
+import { AST, runAST } from '..';
+import { n, c, l, block, assign, col, r, tableDef } from '../utils';
 
-import { Realm } from './Realm';
-import {
-  usesRecursion,
-  evaluateTableColumn,
-  evaluateTableFormula,
-} from './table';
-import { fromJS } from './Value';
+import { usesRecursion } from './table';
 
 it('can find a previous symbol', () => {
   expect(usesRecursion(c('previous', l(1)))).toEqual(true);
@@ -21,26 +12,21 @@ it('can find a previous symbol', () => {
 });
 
 describe('evaluateTableColumn', () => {
-  const testEvaluate = async (exp: AST.Expression, rowCount: number) => {
-    const testBlock = block(assign('numbers', col(1, 2, 3, 4)), exp);
-    const realm = new Realm(await inferProgram([testBlock]));
-
-    // Evaluate first line, to inject "numbers"
-    await evaluate(realm, testBlock.args[0]);
-    const result = await evaluateTableColumn(
-      realm,
-      testBlock.args[1] as AST.Expression,
-      rowCount
+  const testEvaluate = async (exp: AST.Expression) => {
+    const testBlock = block(
+      assign('numbers', col(1, 2, 3, 4)),
+      tableDef('Table', {
+        numbers: col(1, 2, 3, 4),
+        theTestColumn: exp,
+      }),
+      n('property-access', r('Table'), 'theTestColumn')
     );
 
-    // Should be cleaned
-    expect(realm.previousValue).toEqual(null);
-
-    return result;
+    return (await runAST(testBlock)).value as unknown[];
   };
 
   it('can emulate a quadratic function', async () => {
-    expect((await testEvaluate(c('*', l(2), c('previous', l(1))), 4)).getData())
+    expect(await testEvaluate(c('*', l(2), c('previous', l(1)))))
       .toMatchInlineSnapshot(`
         Array [
           Fraction(2),
@@ -52,65 +38,32 @@ describe('evaluateTableColumn', () => {
   });
 
   it('can be used in a column with inherent size', async () => {
-    expect(
-      (
-        await testEvaluate(c('*', n('ref', 'numbers'), c('previous', l(1))), 4)
-      ).getData()
-    ).toMatchInlineSnapshot(`
-      Array [
-        Fraction(1),
-        Fraction(2),
-        Fraction(6),
-        Fraction(24),
-      ]
-    `);
+    expect(await testEvaluate(c('*', n('ref', 'numbers'), c('previous', l(1)))))
+      .toMatchInlineSnapshot(`
+        Array [
+          Fraction(1),
+          Fraction(2),
+          Fraction(6),
+          Fraction(24),
+        ]
+      `);
   });
-});
-
-describe('evaluateTableFormula', () => {
-  const testEvaluate = async (exp: AST.Expression, rowCount: number) => {
-    const testBlock = block(assign('numbers', col(1, 2, 3, 4)), exp);
-    const realm = new Realm(await inferProgram([testBlock]));
-
-    // Evaluate first line, to inject "numbers"
-    await evaluate(realm, testBlock.args[0]);
-
-    const result = await evaluateTableFormula(
-      realm,
-      objectToMap({ OtherColumn: fromJS([1, 2, 3]) as Column }),
-      n(
-        'table-formula',
-        n('coldef', 'Formula'),
-        n('def', 'currentRow'),
-        block(testBlock.args[1] as AST.Expression)
-      ),
-      rowCount
-    );
-
-    // Should be cleaned
-    expect(realm.previousValue).toEqual(null);
-
-    return result;
-  };
 
   it('evaluates formulae', async () => {
-    const form = await testEvaluate(l(1), 2);
+    const form = await testEvaluate(l(1));
 
-    expect(form.getData().join(', ')).toMatchInlineSnapshot(`"1, 1"`);
+    expect(form.join(', ')).toMatchInlineSnapshot(`"1, 1, 1, 1"`);
   });
 
   it('lets us access the current row', async () => {
-    const form = await testEvaluate(
-      c('+', n('property-access', r('currentRow'), 'OtherColumn'), l(100)),
-      3
-    );
+    const form = await testEvaluate(c('+', r('OtherColumn'), l(100)));
 
-    expect(form.getData().join(', ')).toMatchInlineSnapshot(`"101, 102, 103"`);
+    expect(form.join(', ')).toMatchInlineSnapshot(`"101, 101, 101, 101"`);
   });
 
   it('lets us access the previous item of this column', async () => {
-    const form = await testEvaluate(c('+', l(1), c('previous', l(1))), 3);
+    const form = await testEvaluate(c('+', l(1), c('previous', l(1))));
 
-    expect(form.getData().join(', ')).toMatchInlineSnapshot(`"2, 3, 4"`);
+    expect(form.join(', ')).toMatchInlineSnapshot(`"2, 3, 4, 5"`);
   });
 });

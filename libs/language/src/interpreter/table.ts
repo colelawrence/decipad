@@ -1,12 +1,13 @@
-import { getDefined, unzip, zip } from '@decipad/utils';
+import { getDefined, zip } from '@decipad/utils';
 import { AST } from '..';
+import { refersToOtherColumnsByName } from '../infer/table';
 import {
   walk,
   getIdentifierString,
   isExpression,
   getInstanceof,
 } from '../utils';
-import { evaluate, evaluateBlock } from './evaluate';
+import { evaluate } from './evaluate';
 import { mapWithPrevious } from './previous';
 import { Realm } from './Realm';
 import { Column, Row, Table, Value } from './Value';
@@ -27,54 +28,43 @@ export const usesRecursion = (expr: AST.Expression) => {
   return result;
 };
 
-const atIndex = (v: Value, index: number): Value => {
-  if (!(v instanceof Column)) return v;
-
-  return v.atIndex(index);
-};
-
 export const evaluateTableColumn = async (
   realm: Realm,
+  tableColumns: Map<string, Column>,
   column: AST.Expression,
   rowCount: number
 ): Promise<Value> => {
-  if (!usesRecursion(column)) {
-    return evaluate(realm, column);
+  if (
+    refersToOtherColumnsByName(column, tableColumns) ||
+    usesRecursion(column)
+  ) {
+    return evaluateTableColumnIteratively(
+      realm,
+      tableColumns,
+      column,
+      rowCount
+    );
   }
 
-  const rows = await mapWithPrevious(realm, async function* mapper() {
-    for (let i = 0; i < rowCount; i++) {
-      // TODO should this be parallel?
-      // eslint-disable-next-line no-await-in-loop
-      yield atIndex(await evaluate(realm, column), i);
-    }
-  });
-
-  return Column.fromValues(rows);
+  // Evaluate the column as a whole
+  return evaluate(realm, column);
 };
 
-const nthRow = (columns: Map<string, Column>, rowIndex: number) => {
-  const [cellNames, columnValues] = unzip(columns.entries());
-  const cellValues = columnValues.map((col) => col.atIndex(rowIndex));
-
-  return Row.fromNamedCells(cellValues, cellNames);
-};
-
-export const evaluateTableFormula = async (
+export const evaluateTableColumnIteratively = async (
   realm: Realm,
   otherColumns: Map<string, Column>,
-  { args: [, currentRowArg, body] }: AST.TableFormula,
+  column: AST.Expression,
   rowCount: number
 ): Promise<Column> =>
   realm.stack.withPush(async () => {
-    const currentRowName = getIdentifierString(currentRowArg);
-
     const cells = await mapWithPrevious(realm, async function* mapper() {
       for (let index = 0; index < rowCount; index++) {
-        realm.stack.top.set(currentRowName, nthRow(otherColumns, index));
-
+        // Make other cells available
+        for (const [otherColName, otherCol] of otherColumns) {
+          realm.stack.top.set(otherColName, otherCol.atIndex(index));
+        }
         // eslint-disable-next-line no-await-in-loop
-        yield evaluateBlock(realm, body);
+        yield evaluate(realm, column);
       }
     });
 
@@ -90,7 +80,7 @@ export const evaluateTable = async (
 ): Promise<Table> => {
   const tableColumns = new Map<string, Column>();
   const { args: items } = table;
-  const { tableLength } = realm.getTypeAt(table);
+  const { tableLength, indexName } = realm.getTypeAt(table);
 
   if (typeof tableLength !== 'number') {
     throw new Error('panic: unknown table length');
@@ -102,9 +92,9 @@ export const evaluateTable = async (
         value = Column.fromValues(repeat(value, tableLength));
       }
 
-      realm.stack.set(name, value);
-
       tableColumns.set(name, value as Column);
+      realm.stack.set(name, value);
+      realm.stack.set(getDefined(indexName), Table.fromMapping(tableColumns));
     };
 
     for (const item of items) {
@@ -114,19 +104,8 @@ export const evaluateTable = async (
         // eslint-disable-next-line no-await-in-loop
         const columnData = await evaluateTableColumn(
           realm,
-          column,
-          tableLength
-        );
-
-        addColumn(colName, columnData);
-      } else if (item.type === 'table-formula') {
-        const colName = getIdentifierString(item.args[0]);
-
-        // eslint-disable-next-line no-await-in-loop
-        const columnData = await evaluateTableFormula(
-          realm,
           tableColumns,
-          item,
+          column,
           tableLength
         );
 
@@ -145,10 +124,7 @@ export const evaluateTable = async (
       }
     }
 
-    return Table.fromNamedColumns(
-      [...tableColumns.values()],
-      [...tableColumns.keys()]
-    );
+    return Table.fromMapping(tableColumns);
   });
 };
 

@@ -1,5 +1,5 @@
 import { n } from '.';
-import { assign, block, col } from '../utils';
+import { col } from '../utils';
 import { runTests } from './run-tests';
 
 runTests({
@@ -589,30 +589,6 @@ runTests({
           column: 16,
         },
       },
-    ],
-  },
-
-  'table with formula': {
-    source: ' Table = { Col = [1], Formula(currentRow) = currentRow.Col } ',
-    sourceMap: false,
-    ast: [
-      assign('Table', {
-        type: 'table',
-        args: [
-          {
-            type: 'table-column',
-            args: [{ type: 'coldef', args: ['Col'] }, col(1)],
-          },
-          {
-            type: 'table-formula',
-            args: [
-              { type: 'coldef', args: ['Formula'] },
-              n('def', 'currentRow'),
-              block(n('property-access', n('ref', 'currentRow'), 'Col')),
-            ],
-          },
-        ],
-      }),
     ],
   },
 });

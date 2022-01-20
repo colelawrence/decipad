@@ -409,6 +409,22 @@ describe('tables', () => {
       );
     });
   });
+
+  it('Evaluates iteratively when it sees a plain reference to another column', async () => {
+    const block = n(
+      'block',
+      tableDef('Table', {
+        MaybeNegative: col(1, -2, 3),
+        Positive: c('min', col(r('MaybeNegative'), 0)),
+      })
+    );
+
+    expect(
+      (await inferProgram([block])).stack.get('Table')?.toString()
+    ).toMatchInlineSnapshot(
+      `"table (3) { MaybeNegative = <number>, Positive = <number> }"`
+    );
+  });
 });
 
 describe('Property access', () => {

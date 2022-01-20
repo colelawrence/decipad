@@ -969,61 +969,6 @@ let ParserRules = [
       );
     },
   },
-  {
-    name: 'tableItem',
-    symbols: [
-      'identifier',
-      '_',
-      'tableFormulaArg',
-      '_',
-      { literal: '=' },
-      '_',
-      'expression',
-    ],
-    postprocess: (d) => {
-      const [theDef, , rowArgName, , , , body] = d;
-
-      const colDef = addLoc(
-        {
-          type: 'coldef',
-          args: [theDef.name],
-        },
-        theDef
-      );
-
-      return addArrayLoc(
-        {
-          type: 'table-formula',
-          args: [
-            colDef,
-            rowArgName,
-            addArrayLoc(
-              {
-                type: 'block',
-                args: [body],
-              },
-              body
-            ),
-          ],
-        },
-        d
-      );
-    },
-  },
-  {
-    name: 'tableFormulaArg',
-    symbols: [{ literal: '(' }, '_', 'identifier', '_', { literal: ')' }],
-    postprocess: (d) => {
-      const ident = d[2];
-      return addLoc(
-        {
-          type: 'def',
-          args: [ident.name],
-        },
-        ident
-      );
-    },
-  },
   { name: 'tableSep$subexpression$1', symbols: ['__n'] },
   { name: 'tableSep$subexpression$1', symbols: ['_', { literal: ',' }, '_'] },
   { name: 'tableSep', symbols: ['tableSep$subexpression$1'], postprocess: id },

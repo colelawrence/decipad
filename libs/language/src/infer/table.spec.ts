@@ -1,9 +1,9 @@
 import { makeContext } from '.';
 import { AST } from '..';
-import { table, col, n, c, l, block, r } from '../utils';
+import { table, col, n, c, l, r } from '../utils';
 import { build as t } from '../type';
 import { objectToMap } from '../testUtils';
-import { inferTableFormula, findTableSize } from './table';
+import { findTableSize, inferTableColumnPerCell } from './table';
 
 const nilCtx = makeContext({
   inAssignment: 'TableName',
@@ -66,52 +66,36 @@ it('gets the table size from a spread', async () => {
 });
 
 describe('table with formulae', () => {
-  const testFormula = (expression: AST.Expression) =>
-    inferTableFormula(
+  const testComputed = (expression: AST.Expression) =>
+    inferTableColumnPerCell(
       makeContext(),
       objectToMap({ OtherColumn: t.column(t.number(), 3) }),
-      n(
-        'table-formula',
-        n('coldef', 'Formula'),
-        n('def', 'currentRow'),
-        block(expression)
-      ),
+      expression,
       3
     );
 
   it('can run a formula', async () => {
-    expect(await testFormula(l('a string'))).toEqual(t.column(t.string(), 3));
-    expect(await testFormula(col('one', 'two'))).toEqual(
+    expect(await testComputed(l('a string'))).toEqual(t.column(t.string(), 3));
+    expect(await testComputed(col('one', 'two'))).toEqual(
       t.column(t.column(t.string(), 2), 3)
     );
   });
 
   it('can run a formula with previous', async () => {
-    expect(await testFormula(c('previous', l('hello')))).toEqual(
+    expect(await testComputed(c('previous', l('hello')))).toEqual(
       t.column(t.string(), 3)
     );
   });
 
   it('can use another column', async () => {
-    expect(
-      await testFormula(
-        c('+', n('property-access', r('currentRow'), 'OtherColumn'), l(1))
-      )
-    ).toEqual(t.column(t.number(), 3));
+    expect(await testComputed(c('+', r('OtherColumn'), l(1)))).toEqual(
+      t.column(t.number(), 3)
+    );
   });
 
   it('propagates errors', async () => {
     expect(
-      (await testFormula(n('property-access', r('currentRow'), 'MissingRow')))
-        .errorCause
-    ).not.toBeNull();
-
-    expect(
-      (
-        await testFormula(
-          n('property-access', r('wrongVariableForRow'), 'OtherColumn')
-        )
-      ).errorCause
+      (await testComputed(c('+', r('seconds'), r('meters')))).errorCause
     ).not.toBeNull();
   });
 });

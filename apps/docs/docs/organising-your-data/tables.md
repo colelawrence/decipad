@@ -47,7 +47,7 @@ MyTable = {
 
 ## Columns as expressions
 
-Instead of manually inputting values, you can base your column off of other columns:
+Instead of manually inputting values, each column's cell can be based on the outputs of other cells:
 
 ```deci live
 MyTable = {
@@ -62,7 +62,7 @@ MyTable = {
 
 ## Using previous values
 
-You can access previous column values by using the word `previous` and providing a default value like this:
+You can access previous column values by using the word `previous` and providing a value for the first cell, like this:
 
 ```devi live
 Harvest = {
@@ -74,21 +74,6 @@ Harvest = {
   Date = [ day 2022-02-20, day 2022-02-21, day 2022-02-22, day 2022-02-23, day 2022-02-24, day 2022-02-25, day 2022-02-26, day 2022-02-27, day 2022-02-28, day 2022-03-01, day 2022-03-02, day 2022-03-03, day 2022-03-04, day 2022-03-05 ],
   Oranges = [ 10 oranges, 15 oranges, 20 oranges, 9 oranges, 4 oranges, 54 oranges, 23 oranges, 45 oranges, 53 oranges, 63 oranges, 54 oranges, 12 oranges, 0 oranges, 1 oranges ],
   Count = [ 1 oranges, 2 oranges, 3 oranges, 4 oranges, 5 oranges, 6 oranges, 7 oranges, 8 oranges, 9 oranges, 10 oranges, 11 oranges, 12 oranges, 13 oranges, 14 oranges ]
-}
-```
-
-## One row at a time!
-
-Sometimes, when deriving a column from another, you might want to go cell-by-cell, and only look at the current row at a cell-by-cell basis. When you want to do this, you can create a formula column by using parentheses and specifying what you want the current row to be called.
-
-```
-Table = {
-  Column = [1, 2, 0, 0, 3, -3, -3]
-  CumulativeSum(currentRow) = currentRow.Column + previous(0)
-}
-==> {
-  Column = [ 1, 2, 0, 0, 3, -3, -3 ],
-  CumulativeSum = [ 1, 3, 3, 3, 6, 3, 0 ]
 }
 ```
 
@@ -116,6 +101,19 @@ Table = {
 
 Table.A / Table.B
 ==> [ 0.25 bananas per orange, 0.4 bananas per orange, 0.5 bananas per orange ]
+```
+
+Even inside your table, you can refer to its previous columns, if you need to aggregate them.
+
+```deci live
+Table = {
+  A = [1 bananas, 2, 3]
+  AverageBananas = total(Table.A) / len(Table.A)
+}
+==> {
+  A = [ 1 bananas, 2 bananas, 3 bananas ],
+  AverageBananas = [ 2 bananas, 2 bananas, 2 bananas ]
+}
 ```
 
 ## Index column

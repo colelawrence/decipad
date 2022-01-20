@@ -316,6 +316,22 @@ describe('Tables', () => {
     });
   });
 
+  it('can refer to another column as a cell', async () => {
+    expect(
+      await runCode(`
+        Table = {
+          Index = [1, 2, 3, 4]
+          Cell = max([Index, 2])
+        }
+      `)
+    ).toMatchInlineSnapshot(`
+      Result({
+        Index = [ 1, 2, 3, 4 ],
+        Cell = [ 2, 2, 3, 4 ]
+      })
+    `);
+  });
+
   it('can perform calculations between columns', async () => {
     expect(
       await runCode(`
@@ -390,7 +406,7 @@ describe('Tables', () => {
         Growth = {
           Period = [1, 2, 3]
           Profit = 1
-          MoneyInTheBank = stepgrowth(Profit)
+          MoneyInTheBank = stepgrowth(Growth.Profit)
         }
       `)
     ).toMatchInlineSnapshot(`
@@ -422,7 +438,7 @@ describe('Tables', () => {
         Growth = {
           Period = [1, 2, 3]
           Profit = 500 USD + previous(0)
-          MoneyInTheBank = stepgrowth(Profit)
+          MoneyInTheBank = stepgrowth(Growth.Profit)
         }
       `)
     ).toMatchInlineSnapshot(`
@@ -439,7 +455,7 @@ describe('Tables', () => {
       await runCode(`
         Table = {
           Column = [1, 2, 0, 0, 3, -3, -3]
-          CumulativeSum(currentRow) = currentRow.Column + previous(0)
+          CumulativeSum = Column + previous(0)
         }
       `)
     ).toMatchInlineSnapshot(`
@@ -453,7 +469,7 @@ describe('Tables', () => {
       runCode(`
         Table = {
           Index = [1,2,3]
-          CannotAccessNextCol(currentRow) = currentRow.NotYet
+          CannotAccessNextCol = NotYet + 1 meter
           NotYet = [1, 2, 3]
         }
       `)
@@ -531,7 +547,7 @@ describe('Tables', () => {
       }
     `;
 
-    const result = await runCode(fuelTable('Years * Cars.Num'));
+    const result = await runCode(fuelTable('Fuel.Years * Cars.Num'));
     expect(result).toMatchInlineSnapshot(`
       Result({
         Years = [ 1, 2, 3 ],
@@ -542,7 +558,9 @@ describe('Tables', () => {
       `"table (3) { Years = <number>, Cost = <number> x 2 }"`
     );
 
-    const resultInvertedDims = await runCode(fuelTable('Cars.Num * Years'));
+    const resultInvertedDims = await runCode(
+      fuelTable('Cars.Num * Fuel.Years')
+    );
     expect(resultInvertedDims).toMatchInlineSnapshot(`
       Result({
         Years = [ 1, 2, 3 ],
@@ -553,7 +571,9 @@ describe('Tables', () => {
       `"table (3) { Years = <number>, Cost = <number> x 3 }"`
     );
 
-    const resultExtraDim = await runCode(fuelTable('Cars.Num * Years * [1]'));
+    const resultExtraDim = await runCode(
+      fuelTable('Cars.Num * Fuel.Years * [1]')
+    );
     expect(resultExtraDim).toMatchInlineSnapshot(`
       Result({
         Years = [ 1, 2, 3 ],
@@ -564,7 +584,9 @@ describe('Tables', () => {
       `"table (3) { Years = <number>, Cost = <number> x 1 x 3 }"`
     );
 
-    const resultExtraDim2 = await runCode(fuelTable('Cars.Num * [1] * Years'));
+    const resultExtraDim2 = await runCode(
+      fuelTable('Cars.Num * [1] * Fuel.Years')
+    );
     expect(resultExtraDim2).toMatchInlineSnapshot(`
       Result({
         Years = [ 1, 2, 3 ],
@@ -1476,12 +1498,12 @@ describe('unit conversion', () => {
           Name = ["Person", "Falcon", "Turtle"]
           Speed = [27.33 mph, 55 mph, 22 mph]
         }
-  
+
         Race = {
           Name = ["Quarter", "Half", "Marathon"]
           Distance = [0.25 marathon, 0.5 marathon, 1 marathon]
         }
-  
+
         Hours = sum(Race.Distance / Animals.Speed over Animals) in hours
       `)
     ).toMatchObject({

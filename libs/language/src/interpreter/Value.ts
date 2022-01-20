@@ -1,8 +1,15 @@
 /* eslint-disable no-underscore-dangle */
 import Fraction from '@decipad/fraction';
+import { unzip } from '@decipad/utils';
 import { singular } from 'pluralize';
 import { Time, Interpreter, Units } from '..';
-import { filterUnzipped, getDefined, getInstanceof } from '../utils';
+import {
+  AnyMapping,
+  anyMappingToMap,
+  filterUnzipped,
+  getDefined,
+  getInstanceof,
+} from '../utils';
 import {
   addTimeQuantity,
   cleanDate,
@@ -440,6 +447,11 @@ export class Table implements Value {
 
   static fromNamedColumns(values: Value[], columnNames: string[]) {
     const columns = values.map((v) => getInstanceof(v, Column));
+    return new Table(columns, columnNames);
+  }
+
+  static fromMapping(mapping: AnyMapping<Column>) {
+    const [columnNames, columns] = unzip(anyMappingToMap(mapping).entries());
     return new Table(columns, columnNames);
   }
 

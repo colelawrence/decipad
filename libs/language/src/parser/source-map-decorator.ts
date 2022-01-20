@@ -12,7 +12,6 @@ const typesWithArgs = new Set([
   'column-items',
   'table',
   'table-column',
-  'table-formula',
   'table-spread',
   'generic-list',
   'range',

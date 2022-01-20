@@ -9,7 +9,6 @@ import {
   date,
   funcDef,
   tableDef,
-  table,
   prop,
   block,
   assign,
@@ -17,8 +16,16 @@ import {
 } from '../utils';
 import { parseUTCDate } from '../date';
 import { runAST } from '../testUtils';
+import { Type } from '..';
+import { stringifyResult } from '../repl';
 
 import { run, runOne } from './index';
+
+expect.addSnapshotSerializer({
+  test: (arg) => arg?.type instanceof Type && arg.value != null,
+  serialize: ({ type, value }) =>
+    `Result(${stringifyResult(value, type, (x) => x)})`,
+});
 
 it('evaluates and returns', async () => {
   const basicProgram = [
@@ -320,7 +327,7 @@ describe('Tables', () => {
   it('sets the "previous" reference', async () => {
     expect(
       await runOne(
-        table({
+        tableDef('Table', {
           Col1: col(1, 2, 3),
           Col2: c('+', c('previous', l(0)), l(1)),
         })
@@ -361,6 +368,23 @@ describe('Tables', () => {
       [F(11), F(12)],
       [F(1), F(1)],
     ]);
+  });
+
+  it('Refers to other columns by name (and gets a cell)', async () => {
+    const block = n(
+      'block',
+      tableDef('Table', {
+        MaybeNegative: col(1, -2, 3),
+        Positive: c('max', col(r('MaybeNegative'), 0)),
+      })
+    );
+
+    expect(await runAST(block)).toMatchInlineSnapshot(`
+      Result({
+        MaybeNegative = [ 1, -2, 3 ],
+        Positive = [ 1, 0, 3 ]
+      })
+    `);
   });
 });
 
