@@ -75,3 +75,44 @@ grow(Speed, 10%, [1, 2, 3])
 transpose([[5$],[10$],[15$]])
 ==> [ [ 5 $, 10 $, 15 $ ] ]
 ```
+
+## [ENG-286](https://linear.app/decipad/issue/ENG-286)
+
+```deci live
+Animals = {
+  Name = ["Person", "Falcon"]
+  Speed = [27.33 miles/hour, 55 miles/hour]
+}
+
+Animals2 = {
+  Name = Animals.Name
+  Speed = [27.33 mph, 55 mph]
+}
+
+Animals3 = {
+  Name = Animals.Name
+  Speed = [27.33 miles/hour in kilometer/second, 55 miles/hour in kilometer/second]
+}
+
+Race = {
+  Name = ["Quarter", "Half", "Marathon"]
+  Distance = [0.25 marathon, 0.5 marathon, 1 marathon]
+}
+
+Hours = round(sum(1/(Animals.Speed / Race.Distance) in hours), 2)
+Hours2 = round(sum(1/(Animals2.Speed / Race.Distance) in hours), 2)
+Hours3 = round(sum(1/(Animals3.Speed / Race.Distance) in hours), 2)
+
+
+[Hours, Hours2, Hours3]
+==> [ [ 1.68 hours, 0.83 hours ], [ 1.68 hours, 0.83 hours ], [ 1.68 hours, 0.83 hours ] ]
+```
+
+Why?
+
+```deci live
+Distance = 1.75 marathons in miles
+Speed = [27.33 miles/hour, 55 miles/hour]
+round(1/(Speed / Distance), 2)
+==> [ 1.68 hours, 0.83 hours ]
+```

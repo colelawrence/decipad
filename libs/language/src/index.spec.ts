@@ -1491,7 +1491,7 @@ describe('unit conversion', () => {
     });
   });
 
-  it('can work accross multi-dimensional operations', async () => {
+  it('can work accross multi-dimensional operations (1)', async () => {
     expect(
       await runCode(`
         Animals = {
@@ -1514,6 +1514,41 @@ describe('unit conversion', () => {
       ],
       type: t.column(t.number(U('hours')), 3, 'Animals'),
     });
+  });
+
+  it('can work accross multi-dimensional operations (2)', async () => {
+    expect(
+      await runCode(`
+        Animals = {
+          Name = ["Person", "Falcon"]
+          Speed = [27.33 miles/hour, 55 miles/hour]
+        }
+
+        Animals2 = {
+          Name = Animals.Name
+          Speed = [27.33 mph, 55 mph]
+        }
+
+        Animals3 = {
+          Name = Animals.Name
+          Speed = [27.33 miles/hour in kilometer/second, 55 miles/hour in kilometer/second]
+        }
+
+        Race = {
+          Name = ["Quarter", "Half", "Marathon"]
+          Distance = [0.25 marathon, 0.5 marathon, 1 marathon]
+        }
+
+        Hours = round(sum(1/(Animals.Speed / Race.Distance) in hours), 2)
+        Hours2 = round(sum(1/(Animals2.Speed / Race.Distance) in hours), 2)
+        Hours3 = round(sum(1/(Animals3.Speed / Race.Distance) in hours), 2)
+
+
+        [Hours, Hours2, Hours3]
+    `)
+    ).toMatchInlineSnapshot(
+      `Result([ [ 1.68 hours, 0.83 hours ], [ 1.68 hours, 0.83 hours ], [ 1.68 hours, 0.83 hours ] ])`
+    );
   });
 });
 

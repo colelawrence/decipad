@@ -100,10 +100,15 @@ export const inferExpression = wrap(
           const [firstCell, ...hopefullyConsistentRest] = cellTypes;
 
           for (const restCell of hopefullyConsistentRest) {
-            const unified = restCell.sameAs(firstCell);
+            const unified = restCell
+              .reducedToLowest()
+              .sameAs(firstCell.reducedToLowest());
             if (
               unified.errorCause ||
-              !matchUnitArraysForColumn(firstCell.unit, restCell.unit)
+              !matchUnitArraysForColumn(
+                firstCell.reducedToLowest().unit,
+                restCell.reducedToLowest().unit
+              )
             ) {
               return t.impossible(
                 InferError.columnContainsInconsistentType(firstCell, restCell)

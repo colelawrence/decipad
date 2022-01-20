@@ -40,7 +40,7 @@ export async function getType(
   if (unitExpressionType.errorCause) {
     return unitExpressionType;
   }
-  const { unit } = unitExpressionType.reducedOrSelf();
+  const { unit } = unitExpressionType.reducedToLowest();
   let targetUnit = unit;
   if (unitExpr.type === 'ref' && unit && isUserUnit(unitExpr, unit)) {
     targetUnit = U(
@@ -93,7 +93,7 @@ export async function getValue(
   );
 
   const expressionType = await getNodeType(expression);
-  const sourceUnits = expressionType.reducedOrSelf().unit;
+  const sourceUnits = expressionType.reducedToLowest().unit;
   const targetUnitsExpressionType = await getNodeType(unitsExpression);
   const units = targetUnitsExpressionType.unit
     ? inlineUnitAliases(targetUnitsExpressionType.unit)
