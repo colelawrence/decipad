@@ -17,10 +17,25 @@ const colorNames: Record<ColorId, string> = {
   grey400: 'Grey 400',
   offWhite: 'Off-White',
 
-  purple300: 'Purple 300',
   electricGreen100: 'Electric Green 100',
   electricGreen200: 'Electric Green 200',
   electricGreen500: 'Electric Green 500',
+
+  red100: 'Red 100',
+  red200: 'Red 200',
+  red300: 'Red 300',
+  red400: 'Red 400',
+  red500: 'Red 500',
+  red600: 'Red 600',
+
+  orange100: 'Orange 100',
+  orange200: 'Orange 200',
+  orange300: 'Orange 300',
+  orange400: 'Orange 400',
+  orange500: 'Orange 500',
+  orange600: 'Orange 600',
+
+  purple300: 'Purple 300',
 
   blockquote: 'Blockquote',
   codeBubbleBackground: 'Code Bubble Background',

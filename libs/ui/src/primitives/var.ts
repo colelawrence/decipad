@@ -1,7 +1,16 @@
 import type { Property } from 'csstype';
-import { grey200 } from '.';
-
-import { black, grey100, grey300, grey400, offWhite, white } from './color';
+import {
+  black,
+  electricGreen200,
+  grey100,
+  grey200,
+  grey300,
+  grey400,
+  offWhite,
+  orange500,
+  red500,
+  white,
+} from './color';
 
 export interface CssVariables {
   readonly backgroundColor: Property.Color;
@@ -14,6 +23,10 @@ export interface CssVariables {
   readonly weakTextColor: Property.Color;
   readonly normalTextColor: Property.Color;
   readonly strongTextColor: Property.Color;
+
+  readonly normalDangerColor: Property.Color;
+  readonly normalWarningColor: Property.Color;
+  readonly normalBrandColor: Property.Color;
 
   readonly currentTextColor: Property.Color;
 }
@@ -28,6 +41,10 @@ const defaults: CssVariables = {
   weakTextColor: grey300.rgb,
   normalTextColor: grey400.rgb,
   strongTextColor: black.rgb,
+
+  normalDangerColor: red500.rgb,
+  normalWarningColor: orange500.rgb,
+  normalBrandColor: electricGreen200.rgb,
 
   get currentTextColor() {
     return cssVar('normalTextColor');

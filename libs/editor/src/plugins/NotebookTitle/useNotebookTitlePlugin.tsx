@@ -55,7 +55,7 @@ export const useNotebookTitlePlugin = ({
         mutate({
           variables: { padId, name: newTitle },
         }).then(() => {
-          addToast('Pad Title Updated', {
+          addToast('Notebook title updated', {
             appearance: 'info',
           });
         });

@@ -34,9 +34,24 @@ export function transparency(
   };
 }
 
+export const electricGreen100 = color(205, 251, 137);
+export const electricGreen200 = color(193, 250, 107);
+
+export const red100 = color(252, 218, 218);
+export const red200 = color(249, 181, 181);
+export const red300 = color(246, 143, 143);
+export const red400 = color(243, 106, 106);
+export const red500 = color(240, 69, 69);
+export const red600 = color(216, 49, 49);
+
+export const orange100 = color(255, 232, 209);
+export const orange200 = color(255, 209, 163);
+export const orange300 = color(255, 186, 117);
+export const orange400 = color(255, 163, 71);
+export const orange500 = color(255, 140, 25);
+export const orange600 = color(238, 125, 13);
+
 export const purple300 = color(171, 165, 252);
-export const electricGreen100 = color(235, 249, 186);
-export const electricGreen200 = color(225, 249, 128);
 export const electricGreen500 = color(193, 250, 107);
 
 export const white = color(255, 255, 255);

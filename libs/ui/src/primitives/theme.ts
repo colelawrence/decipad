@@ -1,4 +1,14 @@
-import { black, grey300, grey400, grey200, grey100, white } from './color';
+import { electricGreen200 } from '.';
+import {
+  black,
+  grey100,
+  grey200,
+  grey300,
+  grey400,
+  orange500,
+  red500,
+  white,
+} from './color';
 import { cssVar, CssVariableKey, CssVariables, setCssVar } from './var';
 
 export const darkTheme: Record<
@@ -15,6 +25,10 @@ export const darkTheme: Record<
   ...setCssVar('weakTextColor', grey200.rgb),
   ...setCssVar('normalTextColor', grey100.rgb),
   ...setCssVar('strongTextColor', white.rgb),
+
+  ...setCssVar('normalDangerColor', red500.rgb),
+  ...setCssVar('normalWarningColor', orange500.rgb),
+  ...setCssVar('normalBrandColor', electricGreen200.rgb),
 
   ...setCssVar('currentTextColor', cssVar('normalTextColor')),
 };
