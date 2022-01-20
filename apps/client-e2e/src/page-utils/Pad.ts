@@ -69,7 +69,7 @@ export async function waitForSaveFlush() {
 
 export async function keyPress(k: string) {
   await page.keyboard.press(k);
-  await timeout(100);
+  await timeout(200);
 }
 
 export async function createTable() {

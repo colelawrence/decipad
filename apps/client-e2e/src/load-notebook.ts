@@ -40,6 +40,6 @@ describe('load notebook', () => {
       )
     ).toBeDefined();
 
-    expect(await page.$('text=1,024,000,000')).toBeDefined();
+    expect(await page.$('text=756,869,701')).toBeDefined();
   });
 });

@@ -26,4 +26,16 @@ describe('splitCodeIntoStatements', () => {
       splitCodeIntoStatements('a = 1\nb = (2\n  +  \n1)\nc = 3')
     ).toMatchObject(['a = 1', 'b = (2\n  +  \n1)', 'c = 3']);
   });
+
+  it('the second of two consecutive code lines ends up in next statement', () => {
+    expect(
+      splitCodeIntoStatements('a = 1\n\nb = (2\n  +  \n1)\nc = 3')
+    ).toMatchObject(['a = 1', '\nb = (2\n  +  \n1)', 'c = 3']);
+  });
+
+  it('works with lines ending in white space without eating it', () => {
+    expect(
+      splitCodeIntoStatements('a = \nb = (2\n  +  \n1)\nc = 3')
+    ).toMatchObject(['a = ', 'b = (2\n  +  \n1)', 'c = 3']);
+  });
 });

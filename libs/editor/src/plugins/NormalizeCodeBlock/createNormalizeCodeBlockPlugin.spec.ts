@@ -259,4 +259,25 @@ describe('the normalize code block plugin', () => {
       },
     ]);
   });
+
+  it('a new line after the statement begins the next statement', () => {
+    const editor = createEditorWithTestNodes();
+    editor.apply({
+      type: 'insert_text',
+      path: [0, 0, 0],
+      offset: 5,
+      text: '\n',
+    });
+
+    expect(editor.children).toMatchObject([
+      {
+        type: 'code_block',
+        children: [
+          codeLine('a = 1'),
+          codeLine('\nt = {\n\n}'),
+          codeLine('b = 2'),
+        ],
+      },
+    ]);
+  });
 });
