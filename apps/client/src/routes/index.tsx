@@ -1,3 +1,4 @@
+import { GlobalStyles, VerifyEmail } from '@decipad/ui';
 import { FC } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { RequireSession } from '../components/RequireSession';
@@ -38,6 +39,11 @@ export function Router(): ReturnType<FC> {
         <RouteEvents category="playground">
           <Playground />
         </RouteEvents>
+      </Route>
+      <Route path="/verifyEmail">
+        <GlobalStyles>
+          <VerifyEmail />
+        </GlobalStyles>
       </Route>
       <Route path="/">
         <RequireSession>
