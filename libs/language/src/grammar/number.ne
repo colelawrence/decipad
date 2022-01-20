@@ -3,7 +3,7 @@
 
 import Fraction from '@decipad/fraction';
 
-function numberLiteralFromUnits(parentNode, n, units) {
+function makeNumber(parentNode, n) {
   const fraction = n instanceof Fraction ? n : new Fraction(n);
 
   const node = {
@@ -22,28 +22,28 @@ function numberLiteralFromUnits(parentNode, n, units) {
 ### Number ###
 ##############
 
-number       -> unitlessNumber                          {%
-                                                        ([n]) => {
-                                                          return numberLiteralFromUnits(n, n.n);
+number       -> unsignedNumber                          {%
+                                                        (d) => {
+                                                          return makeNumber(d, d[0].n);
                                                         }
                                                         %}
-number       -> "-" unitlessNumber                      {%
+number       -> "-" unsignedNumber                      {%
                                                         (d) => {
-                                                          return numberLiteralFromUnits(d, new Fraction(d[1].n).neg())
+                                                          return makeNumber(d, new Fraction(d[1].n).neg())
                                                         }
                                                         %}
 percentage -> "-" decimal "%"                           {%
                                                         (d) => {
-                                                          return addArrayLoc(numberLiteralFromUnits(d, new Fraction((d[1].n).neg()).div(new Fraction(100))), d)
+                                                          return makeNumber(d, new Fraction((d[1].n).neg()).div(new Fraction(100)))
                                                         }
                                                         %}
 percentage -> decimal "%"                               {%
                                                         (d) => {
-                                                          return addArrayLoc(numberLiteralFromUnits(d, new Fraction((d[0].n)).div(new Fraction(100))), d)
+                                                          return makeNumber(d, new Fraction((d[0].n)).div(new Fraction(100)))
                                                         }
                                                         %}
 
-unitlessNumber -> %number                               {%
+unsignedNumber -> %number                               {%
                                                         ([number]) => {
                                                           return addLoc({
                                                             n: number.value

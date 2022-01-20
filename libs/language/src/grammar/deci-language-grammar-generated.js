@@ -180,7 +180,7 @@ function addArrayLoc(node, locArray) {
 
 import Fraction from '@decipad/fraction';
 
-function numberLiteralFromUnits(parentNode, n, units) {
+function makeNumber(parentNode, n) {
   const fraction = n instanceof Fraction ? n : new Fraction(n);
 
   const node = {
@@ -286,6 +286,32 @@ const unaryMinusHandler = (d) => {
     d
   );
 };
+
+function basicBinop([left, _spc, op, _spc2, right]) {
+  return addLoc(
+    {
+      type: 'function-call',
+      args: [
+        addLoc({ type: 'funcref', args: [op.name] }, op),
+        addLoc(
+          {
+            type: 'argument-list',
+            args: [left, right],
+          },
+          left,
+          right
+        ),
+      ],
+    },
+    left,
+    right
+  );
+}
+
+function simpleOperator(d) {
+  const token = d[0][0];
+  return addLoc({ name: token.value }, token);
+}
 let Lexer = tokenizer;
 let ParserRules = [
   {
@@ -351,43 +377,34 @@ let ParserRules = [
   },
   {
     name: 'number',
-    symbols: ['unitlessNumber'],
-    postprocess: ([n]) => {
-      return numberLiteralFromUnits(n, n.n);
+    symbols: ['unsignedNumber'],
+    postprocess: (d) => {
+      return makeNumber(d, d[0].n);
     },
   },
   {
     name: 'number',
-    symbols: [{ literal: '-' }, 'unitlessNumber'],
+    symbols: [{ literal: '-' }, 'unsignedNumber'],
     postprocess: (d) => {
-      return numberLiteralFromUnits(d, new Fraction(d[1].n).neg());
+      return makeNumber(d, new Fraction(d[1].n).neg());
     },
   },
   {
     name: 'percentage',
     symbols: [{ literal: '-' }, 'decimal', { literal: '%' }],
     postprocess: (d) => {
-      return addArrayLoc(
-        numberLiteralFromUnits(
-          d,
-          new Fraction(d[1].n.neg()).div(new Fraction(100))
-        ),
-        d
-      );
+      return makeNumber(d, new Fraction(d[1].n.neg()).div(new Fraction(100)));
     },
   },
   {
     name: 'percentage',
     symbols: ['decimal', { literal: '%' }],
     postprocess: (d) => {
-      return addArrayLoc(
-        numberLiteralFromUnits(d, new Fraction(d[0].n).div(new Fraction(100))),
-        d
-      );
+      return makeNumber(d, new Fraction(d[0].n).div(new Fraction(100)));
     },
   },
   {
-    name: 'unitlessNumber',
+    name: 'unsignedNumber',
     symbols: [tokenizer.has('number') ? { type: 'number' } : number],
     postprocess: ([number]) => {
       return addLoc(
@@ -1101,13 +1118,13 @@ let ParserRules = [
       );
     },
   },
-  { name: 'asExp', symbols: ['divMulOp'], postprocess: id },
+  { name: 'asExp', symbols: ['orOp'], postprocess: id },
   { name: 'asExp$subexpression$1', symbols: [{ literal: 'as' }] },
   { name: 'asExp$subexpression$1', symbols: [{ literal: 'to' }] },
   { name: 'asExp$subexpression$1', symbols: [{ literal: 'in' }] },
   {
     name: 'asExp',
-    symbols: ['asExp', '_', 'asExp$subexpression$1', '_', 'divMulOp'],
+    symbols: ['asExp', '_', 'asExp$subexpression$1', '_', 'orOp'],
     postprocess: (d) => {
       const exp = d[0];
       const unit = d[4];
@@ -1120,10 +1137,34 @@ let ParserRules = [
       );
     },
   },
-  { name: 'divMulOp', symbols: ['addSubOp'], postprocess: id },
+  { name: 'orOp', symbols: ['andOp'], postprocess: id },
   {
-    name: 'divMulOp',
-    symbols: ['divMulOp', '_', 'additiveOperator', '_', 'addSubOp'],
+    name: 'orOp',
+    symbols: ['orOp', '_', 'orOperator', '_', 'andOp'],
+    postprocess: basicBinop,
+  },
+  { name: 'andOp', symbols: ['equalityOp'], postprocess: id },
+  {
+    name: 'andOp',
+    symbols: ['andOp', '_', 'andOperator', '_', 'equalityOp'],
+    postprocess: basicBinop,
+  },
+  { name: 'equalityOp', symbols: ['compareOp'], postprocess: id },
+  {
+    name: 'equalityOp',
+    symbols: ['equalityOp', '_', 'eqDiffOperator', '_', 'compareOp'],
+    postprocess: basicBinop,
+  },
+  { name: 'compareOp', symbols: ['addSubUp'], postprocess: id },
+  {
+    name: 'compareOp',
+    symbols: ['compareOp', '_', 'cmpOperator', '_', 'addSubUp'],
+    postprocess: basicBinop,
+  },
+  { name: 'addSubUp', symbols: ['divMulOp'], postprocess: id },
+  {
+    name: 'addSubUp',
+    symbols: ['addSubUp', '_', 'additiveOperator', '_', 'divMulOp'],
     postprocess: (d, _l, reject) => {
       const left = d[0];
       const op = d[2];
@@ -1138,62 +1179,20 @@ let ParserRules = [
         return reject;
       }
 
-      return addArrayLoc(
-        {
-          type: 'function-call',
-          args: [
-            addLoc(
-              {
-                type: 'funcref',
-                args: [op.name],
-              },
-              op
-            ),
-            addArrayLoc(
-              {
-                type: 'argument-list',
-                args: [left, right],
-              },
-              d
-            ),
-          ],
-        },
-        d
-      );
+      return basicBinop(d);
     },
   },
-  { name: 'addSubOp', symbols: ['implicitMult'], postprocess: id },
+  { name: 'divMulOp', symbols: ['powOp'], postprocess: id },
   {
-    name: 'addSubOp',
-    symbols: ['addSubOp', '_', 'multOp', '_', 'implicitMult'],
-    postprocess: (d) => {
-      const left = d[0];
-      const op = d[2];
-      const right = d[4];
-
-      return addArrayLoc(
-        {
-          type: 'function-call',
-          args: [
-            addLoc(
-              {
-                type: 'funcref',
-                args: [op.name],
-              },
-              op
-            ),
-            addArrayLoc(
-              {
-                type: 'argument-list',
-                args: [left, right],
-              },
-              d
-            ),
-          ],
-        },
-        d
-      );
-    },
+    name: 'divMulOp',
+    symbols: ['divMulOp', '_', 'divMulOperator', '_', 'powOp'],
+    postprocess: basicBinop,
+  },
+  { name: 'powOp', symbols: ['implicitMult'], postprocess: id },
+  {
+    name: 'powOp',
+    symbols: ['implicitMult', '_', 'powOperator', '_', 'powOp'],
+    postprocess: basicBinop,
   },
   { name: 'implicitMult', symbols: ['primary'], postprocess: id },
   {
@@ -1256,7 +1255,7 @@ let ParserRules = [
     symbols: ['primary', '_', { literal: '^' }, '_', 'int'],
     postprocess: (d) => {
       const left = d[0];
-      const right = numberLiteralFromUnits(d, d[4].n);
+      const right = makeNumber(d, d[4].n);
 
       return addArrayLoc(
         {
@@ -1306,48 +1305,56 @@ let ParserRules = [
     symbols: [{ literal: '(' }, '_', 'expression', '_', { literal: ')' }],
     postprocess: (d) => addArrayLoc(d[2], d),
   },
+  { name: 'orOperator$subexpression$1', symbols: [{ literal: '||' }] },
+  { name: 'orOperator$subexpression$1', symbols: [{ literal: 'or' }] },
+  {
+    name: 'orOperator',
+    symbols: ['orOperator$subexpression$1'],
+    postprocess: simpleOperator,
+  },
+  { name: 'andOperator$subexpression$1', symbols: [{ literal: '&&' }] },
+  { name: 'andOperator$subexpression$1', symbols: [{ literal: 'and' }] },
+  {
+    name: 'andOperator',
+    symbols: ['andOperator$subexpression$1'],
+    postprocess: simpleOperator,
+  },
+  { name: 'eqDiffOperator$subexpression$1', symbols: [{ literal: '==' }] },
+  { name: 'eqDiffOperator$subexpression$1', symbols: [{ literal: '!=' }] },
+  {
+    name: 'eqDiffOperator',
+    symbols: ['eqDiffOperator$subexpression$1'],
+    postprocess: simpleOperator,
+  },
+  { name: 'cmpOperator$subexpression$1', symbols: [{ literal: '>' }] },
+  { name: 'cmpOperator$subexpression$1', symbols: [{ literal: '<' }] },
+  { name: 'cmpOperator$subexpression$1', symbols: [{ literal: '<=' }] },
+  { name: 'cmpOperator$subexpression$1', symbols: [{ literal: '>=' }] },
+  {
+    name: 'cmpOperator',
+    symbols: ['cmpOperator$subexpression$1'],
+    postprocess: simpleOperator,
+  },
   { name: 'additiveOperator$subexpression$1', symbols: [{ literal: '-' }] },
   { name: 'additiveOperator$subexpression$1', symbols: [{ literal: '+' }] },
-  { name: 'additiveOperator$subexpression$1', symbols: [{ literal: '&&' }] },
-  { name: 'additiveOperator$subexpression$1', symbols: [{ literal: '||' }] },
-  { name: 'additiveOperator$subexpression$1', symbols: [{ literal: 'or' }] },
-  { name: 'additiveOperator$subexpression$1', symbols: [{ literal: 'and' }] },
   {
     name: 'additiveOperator',
     symbols: ['additiveOperator$subexpression$1'],
-    postprocess: (d) => {
-      const op = d[0][0].value;
-      return addArrayLoc(
-        {
-          name: op,
-        },
-        d
-      );
-    },
+    postprocess: simpleOperator,
   },
-  { name: 'multOp$subexpression$1', symbols: [{ literal: '**' }] },
-  { name: 'multOp$subexpression$1', symbols: [{ literal: '>' }] },
-  { name: 'multOp$subexpression$1', symbols: [{ literal: '<' }] },
-  { name: 'multOp$subexpression$1', symbols: [{ literal: '<=' }] },
-  { name: 'multOp$subexpression$1', symbols: [{ literal: '>=' }] },
-  { name: 'multOp$subexpression$1', symbols: [{ literal: '==' }] },
-  { name: 'multOp$subexpression$1', symbols: [{ literal: '!=' }] },
-  { name: 'multOp$subexpression$1', symbols: [{ literal: 'contains' }] },
-  { name: 'multOp$subexpression$1', symbols: [{ literal: ' %' }] },
+  { name: 'divMulOperator$subexpression$1', symbols: [{ literal: '*' }] },
+  { name: 'divMulOperator$subexpression$1', symbols: [{ literal: '/' }] },
   {
-    name: 'multOp',
-    symbols: ['multOp$subexpression$1'],
-    postprocess: (d) => {
-      return addArrayLoc(
-        {
-          name: d[0].map((t) => t.value).join(''),
-        },
-        d[0]
-      );
-    },
+    name: 'divMulOperator$subexpression$1',
+    symbols: [{ literal: 'contains' }],
   },
   {
-    name: 'multOp',
+    name: 'divMulOperator',
+    symbols: ['divMulOperator$subexpression$1'],
+    postprocess: simpleOperator,
+  },
+  {
+    name: 'divMulOperator',
     symbols: ['__', { literal: '%' }],
     postprocess: (d) => {
       return addArrayLoc(
@@ -1358,19 +1365,11 @@ let ParserRules = [
       );
     },
   },
-  { name: 'multOp$subexpression$2', symbols: [{ literal: '*' }] },
-  { name: 'multOp$subexpression$2', symbols: [{ literal: '/' }] },
+  { name: 'powOperator$subexpression$1', symbols: [{ literal: '**' }] },
   {
-    name: 'multOp',
-    symbols: ['multOp$subexpression$2'],
-    postprocess: (d) => {
-      return addArrayLoc(
-        {
-          name: d[0][0].value,
-        },
-        d
-      );
-    },
+    name: 'powOperator',
+    symbols: ['powOperator$subexpression$1'],
+    postprocess: simpleOperator,
   },
   {
     name: 'range',

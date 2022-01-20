@@ -67,8 +67,8 @@ overExp       -> overExp _ "over" _ genericIdentifier   {%
                                                         }
                                                         %}
 
-asExp         -> divMulOp                               {% id %}
-asExp         -> asExp _ ("as" | "to" | "in") _ divMulOp   {%
+asExp         -> orOp                                   {% id %}
+asExp         -> asExp _ ("as" | "to" | "in") _ orOp    {%
                                                         (d) => {
                                                           const exp = d[0]
                                                           const unit = d[4]
@@ -79,8 +79,35 @@ asExp         -> asExp _ ("as" | "to" | "in") _ divMulOp   {%
                                                         }
                                                         %}
 
-divMulOp      -> addSubOp                               {% id %}
-divMulOp      -> divMulOp _ additiveOperator _ addSubOp {%
+@{%
+function basicBinop([left, _spc, op, _spc2, right]) {
+  return addLoc({
+    type: 'function-call',
+    args: [
+      addLoc({ type: 'funcref', args: [op.name] }, op),
+      addLoc({
+        type: 'argument-list',
+        args: [left, right]
+      }, left, right)
+    ],
+  }, left, right)
+}
+%}
+
+orOp          -> andOp                                  {% id %}
+orOp          -> orOp      _ orOperator _ andOp         {% basicBinop %}
+
+andOp         -> equalityOp                             {% id %}
+andOp         -> andOp _ andOperator _ equalityOp       {% basicBinop %}
+
+equalityOp    -> compareOp                              {% id %}
+equalityOp    -> equalityOp _ eqDiffOperator _ compareOp{% basicBinop %}
+
+compareOp     -> addSubUp                               {% id %}
+compareOp     -> compareOp _ cmpOperator _ addSubUp     {% basicBinop %}
+
+addSubUp      -> divMulOp                               {% id %}
+addSubUp      -> addSubUp _ additiveOperator _ divMulOp {%
                                                         (d, _l, reject) => {
                                                           const left = d[0]
                                                           const op = d[2]
@@ -95,44 +122,15 @@ divMulOp      -> divMulOp _ additiveOperator _ addSubOp {%
                                                             return reject
                                                           }
 
-                                                          return addArrayLoc({
-                                                            type: 'function-call',
-                                                            args: [
-                                                              addLoc({
-                                                                type: 'funcref',
-                                                                args: [op.name],
-                                                              }, op),
-                                                              addArrayLoc({
-                                                                type: 'argument-list',
-                                                                args: [left, right],
-                                                              }, d)
-                                                            ],
-                                                          }, d)
+                                                          return basicBinop(d)
                                                         }
                                                         %}
 
-addSubOp     -> implicitMult                            {% id %}
-addSubOp     -> addSubOp _ multOp _ implicitMult        {%
-                                                        (d) => {
-                                                          const left = d[0]
-                                                          const op = d[2]
-                                                          const right = d[4]
+divMulOp      -> powOp                                  {% id %}
+divMulOp      -> divMulOp _ divMulOperator _ powOp      {% basicBinop %}
 
-                                                          return addArrayLoc({
-                                                            type: 'function-call',
-                                                            args: [
-                                                              addLoc({
-                                                                type: 'funcref',
-                                                                args: [op.name],
-                                                              }, op),
-                                                              addArrayLoc({
-                                                                type: 'argument-list',
-                                                                args: [left, right]
-                                                              }, d)
-                                                            ],
-                                                          }, d)
-                                                        }
-                                                        %}
+powOp         -> implicitMult                           {% id %}
+powOp         -> implicitMult _ powOperator _ powOp     {% basicBinop %}
 
 implicitMult  -> primary                                {% id %}
 implicitMult  -> implicitMult ref                       {% implicitMultHandler %}
@@ -171,7 +169,7 @@ primary      -> ("!" | "not") _ expression              {%
 primary     -> primary _ "^" _ int                      {%
                                                         (d) => {
                                                           const left = d[0]
-                                                          const right = numberLiteralFromUnits(d, d[4].n)
+                                                          const right = makeNumber(d, d[4].n)
 
                                                           return addArrayLoc({
                                                             type: 'function-call',
@@ -211,24 +209,27 @@ parenthesizedExpression -> "(" _ expression _ ")"       {%
 ### Operators ###
 #################
 
-additiveOperator  -> ("-" | "+" | "&&" | "||" | "or" | "and")  {%
-                                                        (d) => {
-                                                          const op = d[0][0].value
-                                                          return addArrayLoc({
-                                                            name: op
-                                                          }, d)
-                                                        }
-                                                        %}
 
-multOp -> ("**" | ">" | "<" | "<=" | ">=" | "==" | "!=" | "contains" | " %") {%
-                                                        (d) => {
-                                                          return addArrayLoc({
-                                                            name: d[0].map(t => t.value).join(''),
-                                                          }, d[0])
-                                                        }
-                                                        %}
+@{%
+function simpleOperator(d) {
+  const token = d[0][0]
+  return addLoc({ name: token.value }, token)
+}
+%}
 
-multOp -> __ "%"                                        {%
+orOperator -> ("||" | "or")                             {% simpleOperator %}
+
+andOperator -> ("&&" | "and")                           {% simpleOperator %}
+
+eqDiffOperator -> ("==" | "!=")                         {% simpleOperator %}
+
+cmpOperator -> (">" | "<" | "<=" | ">=")                {% simpleOperator %}
+
+additiveOperator  -> ("-" | "+")                        {% simpleOperator %}
+
+divMulOperator -> ("*" | "/" | "contains")              {% simpleOperator %}
+
+divMulOperator -> __ "%"                                {%
                                                         (d) => {
                                                           return addArrayLoc({
                                                             name: d[1].value,
@@ -236,10 +237,4 @@ multOp -> __ "%"                                        {%
                                                         }
                                                         %}
 
-multOp -> ("*" | "/")                                   {%
-                                                        (d) => {
-                                                          return addArrayLoc({
-                                                            name: d[0][0].value
-                                                          }, d)
-                                                        }
-                                                        %}
+powOperator -> ("**")                                   {% simpleOperator %}
