@@ -15,6 +15,8 @@ const notebookNameStyles = css(p15Medium, {
 });
 
 const iconStyles = css({
+  flexShrink: 0,
+
   width: '12px',
   height: '12px',
   display: 'inline-block',

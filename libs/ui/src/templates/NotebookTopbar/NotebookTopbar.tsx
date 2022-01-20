@@ -13,27 +13,35 @@ import { Anchor, noop } from '../../utils';
 const topbarWrapperStyles = css({
   display: 'flex',
   justifyContent: 'space-between',
-  alignItems: 'center',
+  flexWrap: 'wrap',
+  rowGap: '8px',
+
+  padding: '16px 0',
+
   borderBottom: '1px solid',
   borderColor: cssVar('highlightColor'),
-  padding: '16px 0',
 });
 
 const topbarLeftSideStyles = css({
-  height: '32px',
+  flexGrow: 999,
+
   display: 'grid',
-  gridTemplateColumns: 'repeat(2, minmax(32px, auto))',
+  gridTemplateColumns: '32px auto',
+  alignItems: 'center',
   gap: '6px',
 });
 
 const topbarRightSideStyles = css({
-  display: 'flex',
+  flexGrow: 1,
+
+  display: 'grid',
+  gridTemplateColumns: '1fr max-content max-content',
   alignItems: 'center',
   gap: '1rem',
 });
 
 const helpButtonStyles = css(p14Medium, {
-  marginRight: '16px',
+  paddingRight: '16px',
 });
 
 export type NotebookTopbarProps = Pick<
@@ -79,9 +87,9 @@ export const NotebookTopbar = ({
 
       {/* Right side */}
       <div css={topbarRightSideStyles}>
-        <Anchor href={docs({}).$} css={helpButtonStyles}>
-          Need help?
-        </Anchor>
+        <em css={helpButtonStyles}>
+          <Anchor href={docs({}).$}>Need help?</Anchor>
+        </em>
         <NotebookAvatars usersWithAccess={usersWithAccess} />
 
         {session?.user ? (
