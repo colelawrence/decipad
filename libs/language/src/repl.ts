@@ -6,8 +6,8 @@ import Fraction from '@decipad/fraction';
 import { AST, buildType, Interpreter } from '.';
 import { getDefined, zip } from './utils';
 import { parseBlock } from './parser';
-import { runOne, Realm } from './interpreter';
-import { inferStatement, makeContext as makeInferContext } from './infer';
+import { Realm, runBlock } from './interpreter';
+import { inferBlock, makeContext as makeInferContext } from './infer';
 import { stringifyDate } from './date';
 import { Type } from './type';
 import { validateResult } from './result';
@@ -90,10 +90,10 @@ export const stringifyResult = (
   return [color(util.inspect(result)), type?.toString()].join(' ');
 };
 
-const wrappedParse = (source: string): AST.Statement | null => {
+const wrappedParse = (source: string): AST.Block | null => {
   const parsed = parseBlock({ id: '<repl>', source });
 
-  return parsed.solutions[0]?.args?.[0] ?? null;
+  return parsed.solutions[0] ?? null;
 };
 
 let accumulatedSource = '';
@@ -106,15 +106,15 @@ export const reset = () => {
   realm = new Realm(inferContext);
 };
 
-async function execDeci(ast: AST.Statement) {
+async function execDeci(ast: AST.Block) {
   try {
-    const type = await inferStatement(inferContext, ast);
+    const type = await inferBlock(ast, inferContext);
 
     if (type.errorCause != null) {
       return type.toString();
     }
 
-    const value = await runOne(ast, realm);
+    const value = await runBlock(ast, realm);
 
     return stringifyResult(value, type);
   } catch (error) {
@@ -134,15 +134,15 @@ export const replEval = (
     return;
   }
 
-  const ast = wrappedParse(cmd);
+  const block = wrappedParse(cmd);
 
-  if (ast == null) {
+  if (block == null) {
     const pleaseContinueTyping = new repl.Recoverable(new Error('continue'));
     callback(pleaseContinueTyping, null);
   } else {
     accumulatedSource += `\n${cmd}`;
 
-    execDeci(ast).then(
+    execDeci(block).then(
       (result) => callback(null, result),
       (error) => callback(error, null)
     );
