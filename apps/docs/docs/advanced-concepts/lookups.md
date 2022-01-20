@@ -111,9 +111,9 @@ lookup(Cashflow, Cashflow.BankBalance >= 0).Month
 ==> month 2023-04
 ```
 
-If you want to calculate how much of a interest free loan orextra investment you need:
+If you want to calculate how much of a interest free loan or extra investment you need:
 
-```
+```deci live
 InitialInvestment = 100 £
 Cashflow = {
   Month = [date(2023-01) .. date(2023-05) by month]
