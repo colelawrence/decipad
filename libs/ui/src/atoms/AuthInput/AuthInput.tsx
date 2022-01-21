@@ -4,12 +4,15 @@ import { cssVar, grey250, p14Regular, setCssVar } from '../../primitives';
 import { noop } from '../../utils';
 
 const inputStyles = css({
+  padding: '12px',
+
+  backgroundColor: cssVar('backgroundColor'),
+
+  border: `1px solid ${grey250.rgb}`,
+  borderRadius: '6px',
+
   ...p14Regular,
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
-  border: '1px solid',
-  borderColor: grey250.rgb,
-  padding: '12px',
-  borderRadius: '6px',
   '&::placeholder': {
     ...setCssVar('currentTextColor', cssVar('weakTextColor')),
   },
