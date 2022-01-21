@@ -22,7 +22,7 @@ describe('pad content', () => {
     await focusOnBody();
     await createCalculationBlockBelow('A = { B = [1,2,3] }');
 
-    const blocks = await getCalculationBlocks();
+    const blocks = await getCalculationBlocks(true);
     expect(blocks).toMatchObject([
       {
         lines: [
@@ -54,7 +54,7 @@ describe('pad content', () => {
     await keyPress('ArrowDown');
     await createCalculationBlockBelow('A.B');
 
-    const blocks = await getCalculationBlocks();
+    const blocks = await getCalculationBlocks(true);
     expect(blocks).toMatchObject([
       expect.any(Object),
       {
@@ -90,6 +90,7 @@ describe('pad content', () => {
         lines: [
           {
             code: 'A.C',
+            result: expect.stringMatching(/err|info/i),
           },
         ],
         result: null,

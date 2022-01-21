@@ -62,8 +62,9 @@ export async function focusOnBody() {
 }
 
 export async function waitForSaveFlush() {
-  await page.waitForTimeout(1000);
   // TODO: this is bad. Should wait for local storage to flush instead.
+  await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(5_010);
   await page.waitForLoadState('networkidle');
 }
 

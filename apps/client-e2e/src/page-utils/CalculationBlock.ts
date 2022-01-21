@@ -48,15 +48,21 @@ async function stringifyCodeLineAndResult([codeLine, lineResult]: Readonly<
 }
 
 async function fetchCalculationBlock(
-  codeBlock: ElementHandle
+  codeBlock: ElementHandle,
+  expectNoErrors = false
 ): Promise<CalculationBlock> {
-  // wait for the results to show up
+  // Wait for the results to show up.
+  // It's hard to tell if these results are current since outdated ones to not immediately vanish,
+  // so better wait a little longer.
   await Promise.all([
     waitForExpect(async () =>
       expect(await codeBlock.$$('output')).not.toHaveLength(0)
     ),
-    timeout(500),
-  ]);
+    expectNoErrors
+      ? codeBlock.waitForSelector('xpath=/output')
+      : Promise.resolve(),
+    timeout(2_010),
+  ] as Promise<void>[]);
 
   const codeLines = await codeBlock.$$('code');
   const codeLinesWithResults = await Promise.all(
@@ -76,9 +82,15 @@ async function fetchCalculationBlock(
   };
 }
 
-export async function getCalculationBlocks(): Promise<CalculationBlock[]> {
+export async function getCalculationBlocks(
+  expectNoErrors = false
+): Promise<CalculationBlock[]> {
   const calculationBlocks = await page.$$(
     '//*[@contenteditable]//section[//code]'
   );
-  return Promise.all(calculationBlocks.map(fetchCalculationBlock));
+  return Promise.all(
+    calculationBlocks.map((block) =>
+      fetchCalculationBlock(block, expectNoErrors)
+    )
+  );
 }
