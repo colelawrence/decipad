@@ -63,6 +63,18 @@ describe('basic code', () => {
     expect(await runAST(block(eq))).toMatchInlineSnapshot(`Result(true)`);
   });
 
+  it('boolean ops support booleans', async () => {
+    expect(
+      await runCode(`
+        [
+          true == true,
+          false != true,
+          false == false
+        ]
+      `)
+    ).toMatchInlineSnapshot(`Result([ true, true, true ])`);
+  });
+
   it('has correct operator precedence', async () => {
     expect(await runCode('1 + 2 / 4 - 5 ** 2 / 4')).toMatchObject({
       type: { type: 'number' },
