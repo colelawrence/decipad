@@ -1,6 +1,7 @@
 import { IdentifiedResult, isSyntaxError } from '@decipad/language';
+import { useResults } from '@decipad/react-contexts';
 import { docs } from '@decipad/routing';
-import { organisms, useResults } from '@decipad/ui';
+import { organisms } from '@decipad/ui';
 import { PlateComponent } from '../../utils/components';
 import { useComputer } from '../../contexts/Computer';
 

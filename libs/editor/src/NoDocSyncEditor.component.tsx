@@ -8,10 +8,8 @@ import {
 import { FC, useMemo, useEffect, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import {
-  ProgramBlocksContextProvider,
-  ResultsContextProvider,
-} from '@decipad/ui';
+import { ProgramBlocksContextProvider } from '@decipad/ui';
+import { ResultsContext } from '@decipad/react-contexts';
 import {
   editorProgramBlocks,
   useLanguagePlugin,
@@ -56,7 +54,7 @@ export const NoDocSyncEditorBase = (props: PlateProps): ReturnType<FC> => {
   );
 
   return (
-    <ResultsContextProvider value={results}>
+    <ResultsContext.Provider value={results}>
       <ProgramBlocksContextProvider value={programBlocks}>
         <Plate
           id={editorId}
@@ -68,7 +66,7 @@ export const NoDocSyncEditorBase = (props: PlateProps): ReturnType<FC> => {
           <Tooltip />
         </Plate>
       </ProgramBlocksContextProvider>
-    </ResultsContextProvider>
+    </ResultsContext.Provider>
   );
 };
 

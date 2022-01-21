@@ -130,14 +130,6 @@
             "buildTarget": "client:build:production"
           }
         },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/client"],
-          "options": {
-            "jestConfig": "apps/client/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
@@ -161,8 +153,7 @@
         "e2e": {
           "executor": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "apps/client-e2e/jest.config.js",
-            "passWithNoTests": true
+            "jestConfig": "apps/client-e2e/jest.config.js"
           }
         },
         "lint": {
@@ -279,14 +270,6 @@
           "executor": "@nrwl/workspace:run-commands",
           "options": {
             "command": "yarn tsc -b libs/dom-test-utils"
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/dom-test-utils"],
-          "options": {
-            "jestConfig": "libs/dom-test-utils/jest.config.js",
-            "passWithNoTests": true
           }
         }
       }
@@ -563,8 +546,7 @@
           "executor": "@nrwl/jest:jest",
           "outputs": ["coverage/libs/language"],
           "options": {
-            "jestConfig": "libs/language/jest.config.js",
-            "passWithNoTests": true
+            "jestConfig": "libs/language/jest.config.js"
           }
         },
         "typecheck": {
@@ -620,13 +602,25 @@
             "lintFilePatterns": ["libs/queries/**/*.{ts,tsx,js,jsx}"],
             "maxWarnings": 0
           }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/queries"],
+        }
+      }
+    },
+    "react-contexts": {
+      "root": "libs/react-contexts",
+      "sourceRoot": "libs/react-contexts/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
           "options": {
-            "jestConfig": "libs/queries/jest.config.js",
-            "passWithNoTests": true
+            "lintFilePatterns": ["libs/react-contexts/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/react-contexts"
           }
         }
       }
@@ -952,8 +946,7 @@
           "executor": "@nrwl/jest:jest",
           "outputs": ["coverage/libs/fraction"],
           "options": {
-            "jestConfig": "libs/fraction/jest.config.js",
-            "passWithNoTests": true
+            "jestConfig": "libs/fraction/jest.config.js"
           }
         }
       }
@@ -1034,14 +1027,6 @@
           "executor": "@nrwl/workspace:run-commands",
           "options": {
             "command": "yarn tsc -b libs/client-events"
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/client-events"],
-          "options": {
-            "jestConfig": "libs/client-events/jest.config.js",
-            "passWithNoTests": true
           }
         }
       }

@@ -1,13 +1,13 @@
 import { FC } from 'react';
 import { css } from '@emotion/react';
 import { SerializedType } from '@decipad/language';
+import { useResults } from '@decipad/react-contexts';
 import { cssVar, setCssVar } from '../../primitives';
 import { TableData } from '../../atoms';
 import { TableRow } from '../../molecules';
 import { CodeResult, Table } from '..';
-import { ResultProps } from '../../lib/results';
-import { useResults } from '../../lib/Contexts/Results';
 import { table } from '../../styles';
+import { CodeResultProps } from '../../types';
 
 function isNestedColumnOrTable(type: SerializedType | undefined) {
   return type != null && (type.kind === 'column' || type.kind === 'table');
@@ -30,7 +30,7 @@ export const ColumnResult = ({
   parentType,
   type,
   value,
-}: ResultProps<'column'>): ReturnType<FC> => {
+}: CodeResultProps<'column'>): ReturnType<FC> => {
   const { indexedBy, cellType } = type;
   const { indexLabels } = useResults();
 

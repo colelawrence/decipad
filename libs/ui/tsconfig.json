@@ -9,6 +9,7 @@
   "references": [
     { "path": "../dom-test-utils" },
     { "path": "../language" },
+    { "path": "../react-contexts" },
     { "path": "../react-utils" },
     { "path": "../routing" },
     { "path": "../testutils" },

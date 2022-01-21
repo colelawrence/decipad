@@ -1,4 +1,5 @@
-import { organisms, useResults } from '@decipad/ui';
+import { useResults } from '@decipad/react-contexts';
+import { organisms } from '@decipad/ui';
 import { PlateComponent } from '../../utils/components';
 import { Element } from '../../utils/elements';
 

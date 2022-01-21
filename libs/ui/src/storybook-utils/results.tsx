@@ -1,23 +1,26 @@
 import { DecoratorFn } from '@storybook/react';
-import { IdentifiedResult } from '@decipad/language';
+import { ResultsContext, useResults } from '@decipad/react-contexts';
+import { ComponentProps, ContextType, FC } from 'react';
 
-import {
-  ResultsContextProvider,
-  makeResultsContextValue,
-} from '../lib/Contexts/Results';
-
-type ResultDecoratorFactory = (blockResults: {
-  [blockId: string]: IdentifiedResult;
-}) => DecoratorFn;
-
-export const withResults: ResultDecoratorFactory = (blockResults) => (Story) =>
+const ResultsProvider: FC<
+  Pick<ContextType<typeof ResultsContext>, 'blockResults'>
+> = ({ blockResults, children }) => (
+  <ResultsContext.Provider
+    value={{
+      ...useResults(),
+      blockResults,
+    }}
+  >
+    {children}
+  </ResultsContext.Provider>
+);
+export const withResults =
   (
-    <ResultsContextProvider
-      value={{
-        ...makeResultsContextValue(),
-        blockResults,
-      }}
-    >
-      <Story />
-    </ResultsContextProvider>
-  );
+    blockResults: ComponentProps<typeof ResultsProvider>['blockResults']
+  ): DecoratorFn =>
+  (Story, context) =>
+    (
+      <ResultsProvider blockResults={blockResults}>
+        <Story {...context} />
+      </ResultsProvider>
+    );

@@ -3,9 +3,9 @@ import { captureException } from '@sentry/react';
 import { identity } from '@decipad/utils';
 import {
   ProgramBlocksContextProvider,
-  ResultsContextProvider,
   ExternalAuthenticationContextProvider,
 } from '@decipad/ui';
+import { ResultsContext } from '@decipad/react-contexts';
 import { Plate, PlatePluginComponent, useStoreEditorRef } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { DndProvider } from 'react-dnd';
@@ -85,7 +85,7 @@ const EditorInternal = ({ padId, authSecret, readOnly }: EditorProps) => {
   const programBlocks = docsyncEditor ? editorProgramBlocks(docsyncEditor) : {};
 
   return (
-    <ResultsContextProvider value={results}>
+    <ResultsContext.Provider value={results}>
       <ProgramBlocksContextProvider value={programBlocks}>
         <ExternalAuthenticationContextProvider
           value={{ createOrUpdateExternalData }}
@@ -112,7 +112,7 @@ const EditorInternal = ({ padId, authSecret, readOnly }: EditorProps) => {
           </DropFile>
         </ExternalAuthenticationContextProvider>
       </ProgramBlocksContextProvider>
-    </ResultsContextProvider>
+    </ResultsContext.Provider>
   );
 };
 

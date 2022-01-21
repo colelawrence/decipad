@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { css } from '@emotion/react';
 import { stringifyUnits, deserializeUnit } from '@decipad/language';
 import Fraction from '@decipad/fraction';
-import { ResultProps } from '../../lib/results';
+import { CodeResultProps } from '../../types';
 
 const commaStyles = css({
   userSelect: 'none',
@@ -50,7 +50,7 @@ const removeFpArtifacts = (decimalPart: string) => {
 export const NumberResult = ({
   type,
   value,
-}: ResultProps<'number'>): ReturnType<FC> => {
+}: CodeResultProps<'number'>): ReturnType<FC> => {
   const fraction = new Fraction(value);
   const asString = fraction.toString();
 

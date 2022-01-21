@@ -1,12 +1,12 @@
 import { FC } from 'react';
-import { ResultProps } from '../../lib/results';
 import { CodeResult } from '..';
+import { CodeResultProps } from '../../types';
 
 export const RangeResult = ({
   type: { rangeOf },
   value,
   variant,
-}: ResultProps<'range'>): ReturnType<FC> => {
+}: CodeResultProps<'range'>): ReturnType<FC> => {
   if (!rangeOf) {
     return null;
   }

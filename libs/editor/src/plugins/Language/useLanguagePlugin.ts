@@ -1,15 +1,12 @@
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { PlatePlugin } from '@udecode/plate';
-import { useEffect, useMemo, useState } from 'react';
+import { ContextType, useEffect, useMemo, useState } from 'react';
 import { dequal } from 'dequal';
 import { captureException } from '@sentry/react';
 import { Editor, Node, Transforms } from 'slate';
-import {
-  makeResultsContextValue,
-  ResultsContextValue,
-  ProgramBlocksContextValue,
-} from '@decipad/ui';
+import { ProgramBlocksContextValue } from '@decipad/ui';
+import { ResultsContext, useResults } from '@decipad/react-contexts';
 import { ComputeRequest, makeComputeStream } from '@decipad/language';
 import { getCursorPos, CursorPos } from './getCursorPos';
 import { slateDocumentToComputeRequest } from './slateDocumentToComputeRequest';
@@ -19,7 +16,7 @@ import { useComputer } from '../../contexts/Computer';
 
 interface UseLanguagePluginRet {
   languagePlugin: PlatePlugin;
-  results: ResultsContextValue;
+  results: ContextType<typeof ResultsContext>;
 }
 
 interface IdentifiableBlock {
@@ -36,9 +33,8 @@ type ParsedProgramBlocks = ParsedProgramBlock[];
 
 export const useLanguagePlugin = (): UseLanguagePluginRet => {
   const computer = useComputer();
-  const [results, setResults] = useState<ResultsContextValue>(
-    makeResultsContextValue
-  );
+  const defaultResults = useResults();
+  const [results, setResults] = useState(defaultResults);
 
   const [evaluationRequests] = useState(
     () => new Subject<[ComputeRequest, CursorPos | null]>()
@@ -56,7 +52,7 @@ export const useLanguagePlugin = (): UseLanguagePluginRet => {
       .subscribe({
         next: ([res, cursor]) => {
           if (res.type === 'compute-panic') {
-            setResults(makeResultsContextValue());
+            setResults(defaultResults);
             captureException(new Error(res.message));
           } else {
             setResults((ctx) => {
@@ -86,7 +82,7 @@ export const useLanguagePlugin = (): UseLanguagePluginRet => {
     return () => {
       sub.unsubscribe();
     };
-  }, [evaluationRequests, computer]);
+  }, [evaluationRequests, computer, defaultResults]);
 
   return {
     languagePlugin: useMemo(

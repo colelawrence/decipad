@@ -11,6 +11,7 @@
     { "path": "../docsync" },
     { "path": "../queries" },
     { "path": "../utils" },
+    { "path": "../react-contexts" },
     { "path": "../react-utils" },
     { "path": "../fraction" },
     { "path": "../routing" },

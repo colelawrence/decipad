@@ -1,11 +1,8 @@
 import { FC } from 'react';
 import { render } from '@testing-library/react';
 import { IdentifiedResult, InBlockResult } from '@decipad/language';
+import { ResultsContext, useResults } from '@decipad/react-contexts';
 import { runCode } from '../../test-utils';
-import {
-  ResultsContextProvider,
-  makeResultsContextValue,
-} from '../../lib/Contexts/Results';
 import { CodeBlock } from './CodeBlock';
 
 const getResultFor = async (code: string): Promise<[IdentifiedResult, FC]> => {
@@ -19,9 +16,9 @@ const getResultFor = async (code: string): Promise<[IdentifiedResult, FC]> => {
   return [
     block as IdentifiedResult,
     ({ children }) => (
-      <ResultsContextProvider
+      <ResultsContext.Provider
         value={{
-          ...makeResultsContextValue(),
+          ...useResults(),
           blockResults: {
             [block.blockId]: {
               results: [{ statementIndex: 0, ...result }] as InBlockResult[],
@@ -30,7 +27,7 @@ const getResultFor = async (code: string): Promise<[IdentifiedResult, FC]> => {
         }}
       >
         {children}
-      </ResultsContextProvider>
+      </ResultsContext.Provider>
     ),
   ];
 };

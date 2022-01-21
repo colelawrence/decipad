@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { format as formatDate, utcToZonedTime } from 'date-fns-tz';
-import { ResultProps } from '../../lib/results';
+import { CodeResultProps } from '../../types';
 
 export const formatUTCDate = (date: Date, form: string): string => {
   const zonedDate = utcToZonedTime(date, 'UTC');
@@ -10,7 +10,7 @@ export const formatUTCDate = (date: Date, form: string): string => {
 export const DateResult = ({
   type,
   value,
-}: ResultProps<'date'>): ReturnType<FC> => {
+}: CodeResultProps<'date'>): ReturnType<FC> => {
   const date = new Date(Number(value));
   let format;
   switch (type.date) {

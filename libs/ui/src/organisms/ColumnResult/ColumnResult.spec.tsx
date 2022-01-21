@@ -1,24 +1,23 @@
-import { FC } from 'react';
+import { ContextType, FC } from 'react';
 import {
   render,
   getAllByRole as getAllDescendantsByRole,
 } from '@testing-library/react';
 import { findParentWithStyle } from '@decipad/dom-test-utils';
+import { ResultsContext } from '@decipad/react-contexts';
 import { runCode } from '../../test-utils';
 
 import { ColumnResult } from '..';
-import {
-  ResultsContextProvider,
-  ResultsContextValue,
-} from '../../lib/Contexts';
 
-function withResultContextWrapper(value: Partial<ResultsContextValue>): FC {
+function withResultContextWrapper(
+  value: Partial<ContextType<typeof ResultsContext>>
+): FC {
   return ({ children }) => {
     const { cursor = null, blockResults = {}, indexLabels = new Map() } = value;
     return (
-      <ResultsContextProvider value={{ cursor, blockResults, indexLabels }}>
+      <ResultsContext.Provider value={{ cursor, blockResults, indexLabels }}>
         {children}
-      </ResultsContextProvider>
+      </ResultsContext.Provider>
     );
   };
 }

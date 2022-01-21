@@ -2,18 +2,18 @@ import { FC } from 'react';
 import { css } from '@emotion/react';
 import { SerializedType } from '@decipad/language';
 import { CodeResult, Table } from '..';
-import { ResultProps } from '../../lib/results';
 import { TableCellType } from '../EditorTable/types';
 import { TableData, TableHeader } from '../../atoms';
 import { TableHeaderRow, TableRow } from '../../molecules';
 import { table } from '../../styles';
+import { CodeResultProps } from '../../types';
 
 const cellWrapperStyles = css({
   overflowX: 'hidden',
   padding: `2px ${table.cellSidePadding}`,
 });
 
-export function toTableHeaderType(type: SerializedType): TableCellType {
+function toTableHeaderType(type: SerializedType): TableCellType {
   switch (true) {
     case type.kind === 'number':
       return 'number';
@@ -35,7 +35,7 @@ export function toTableHeaderType(type: SerializedType): TableCellType {
 export const TableResult = ({
   type,
   value,
-}: ResultProps<'table'>): ReturnType<FC> => {
+}: CodeResultProps<'table'>): ReturnType<FC> => {
   const { columnNames, columnTypes } = type;
   const tableLength = value[0].length;
 

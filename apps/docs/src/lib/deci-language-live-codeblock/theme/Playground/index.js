@@ -19,9 +19,8 @@ const {
 
 const {
   useResults,
-  ResultsContextProvider,
-  makeResultsContextValue,
-} = require('../../../../../../../libs/ui/src/lib/Contexts/Results');
+  ResultsContext,
+} = require('../../../../../../../libs/react-contexts/src/index');
 
 function identityFn(o) {
   return o;
@@ -74,7 +73,7 @@ function Preview({ blockId }) {
 function LivePreviewOrError({ code: liveCode }) {
   const [blockId] = useState(nanoid);
   const [computer] = useState(() => new Computer());
-  const [resultsContext, setResultsContext] = useState(makeResultsContextValue);
+  const [resultsContext, setResultsContext] = useState(useResults());
   const [code, setCode] = useState(null);
   const [needsCompute, setNeedsCompute] = useState(false);
   const [error, setError] = useState(null);
@@ -146,10 +145,10 @@ function LivePreviewOrError({ code: liveCode }) {
   }, [blockId, code, computer, needsCompute, resultsContext]);
 
   return (
-    <ResultsContextProvider value={resultsContext}>
+    <ResultsContext.Provider value={resultsContext}>
       <LiveError error={error} />
       <Preview blockId={blockId} />
-    </ResultsContextProvider>
+    </ResultsContext.Provider>
   );
 }
 
