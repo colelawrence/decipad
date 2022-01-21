@@ -7,7 +7,13 @@ rm -rf apps/backend/public
 mkdir apps/backend/public
 
 echo "Configuring the client..."
-echo "NEXT_PUBLIC_SENTRY_DSN=${NEXT_PUBLIC_SENTRY_DSN:-}" > apps/client/.env.production
+touch apps/client/.env.production
+echo "SENTRY_DSN=${SENTRY_DSN:-}" >> apps/client/.env.production
+echo "SENTRY_ORG=${SENTRY_ORG:-}" >> apps/client/.env.production
+echo "SENTRY_PROJECT=${SENTRY_PROJECT:-}" >> apps/client/.env.production
+echo "SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN:-}" >> apps/client/.env.production
+echo "SENTRY_ENVIRONMENT=${SENTRY_ENVIRONMENT}" >> apps/client/.env.production
+echo "NEXT_PUBLIC_SENTRY_DSN=${NEXT_PUBLIC_SENTRY_DSN:-}" >> apps/client/.env.production
 echo "NEXT_PUBLIC_SENTRY_ENVIRONMENT=${NEXT_PUBLIC_SENTRY_ENVIRONMENT:-}" >> apps/client/.env.production
 echo "NEXT_PUBLIC_ANALYTICS_WRITE_KEY=${NEXT_PUBLIC_ANALYTICS_WRITE_KEY:-}" >> apps/client/.env.production
 

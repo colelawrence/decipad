@@ -1,47 +1,17 @@
 /* eslint-disable no-underscore-dangle */
 import { ApolloProvider } from '@apollo/client';
 import { ChakraProvider } from '@chakra-ui/react';
-import { setErrorReporter } from '@decipad/language';
 import { GlobalStyles, theme, ToastDisplay } from '@decipad/ui';
-import {
-  captureException,
-  init,
-  reactRouterV5Instrumentation,
-  setUser,
-  withProfiler,
-} from '@sentry/react';
-import { Integrations } from '@sentry/tracing';
-import { createBrowserHistory } from 'history';
 import { Provider as AuthProvider, useSession } from 'next-auth/client';
+import { AppProps } from 'next/app';
 import Head from 'next/head';
+import { FC } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { ClientEventsAnalytics } from '../components/ClientEventsAnalytics';
 import { useApollo } from '../lib/apolloClient';
 import { Router } from '../routes';
 
 const inBrowser = typeof window !== 'undefined';
-
-const history = inBrowser ? createBrowserHistory() : null;
-const sentryDSN = process.env.NEXT_PUBLIC_SENTRY_DSN;
-const usingSentry = !!sentryDSN;
-
-if (history && usingSentry) {
-  init({
-    environment: process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT,
-    dsn: sentryDSN,
-    integrations: [
-      new Integrations.BrowserTracing({
-        routingInstrumentation: reactRouterV5Instrumentation(history),
-      }),
-    ],
-
-    // Set tracesSampleRate to 1.0 to capture 100%
-    // of transactions for performance monitoring.
-    // We recommend adjusting this value in production
-    tracesSampleRate: 0.1,
-  });
-  setErrorReporter(captureException);
-}
 
 if (inBrowser && process.env.NEXT_PUBLIC_HOTJAR_SITE_ID) {
   // HOTJAR POLLUTION
@@ -57,17 +27,9 @@ if (inBrowser && process.env.NEXT_PUBLIC_HOTJAR_SITE_ID) {
   };
 }
 
-export default withProfiler(Index);
-
-function Index({ pageProps = {} }) {
+const Index = ({ pageProps = {} }: AppProps): ReturnType<FC> => {
   const apolloClient = useApollo(pageProps);
   const [session] = useSession();
-
-  if (usingSentry && session?.user) {
-    setUser({
-      id: session.user.id,
-    });
-  }
 
   return (
     <>
@@ -103,4 +65,6 @@ function Index({ pageProps = {} }) {
       </ClientEventsAnalytics>
     </>
   );
-}
+};
+
+export default Index;

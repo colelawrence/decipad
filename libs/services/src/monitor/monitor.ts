@@ -1,9 +1,9 @@
 import { HttpResponse } from '@architect/functions';
-import { boomify } from '@hapi/boom';
-import { Context, Handler } from 'aws-lambda';
-import { AWSLambda as SentryAWSLambda } from '@sentry/serverless';
 import { monitor as monitorConfig } from '@decipad/config';
 import meta from '@decipad/meta';
+import { boomify } from '@hapi/boom';
+import { AWSLambda as SentryAWSLambda } from '@sentry/serverless';
+import { Context, Handler } from 'aws-lambda';
 
 interface WrapOptions {
   rethrow: boolean;
@@ -19,7 +19,7 @@ if (sentryDSN) {
   SentryAWSLambda.init({
     dsn: sentryDSN,
     tracesSampleRate: 0.01,
-    environment: process.env.NODE_ENV,
+    environment: process.env.SENTRY_ENVIRONMENT,
     release: meta().version,
   });
 }

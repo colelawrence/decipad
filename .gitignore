@@ -264,3 +264,6 @@ apps/docs/build
 
 # Tests
 .sandboxlock
+
+# Sentry
+# .sentryclirc
