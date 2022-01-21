@@ -1,7 +1,7 @@
 import { FC, ReactNode, Children, createContext, useContext } from 'react';
 import { css } from '@emotion/react';
 import { listItemCounter } from '../../utils';
-import { cssVar, setCssVar } from '../../primitives';
+import { cssVar, p16Regular, setCssVar } from '../../primitives';
 import { Bullet } from '../../icons';
 
 const Depth = createContext(0);
@@ -27,20 +27,16 @@ const itemStyles = css({
 });
 
 const bulletStyles = css({
-  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
-
   justifySelf: 'center',
-  display: 'flex',
-  width: '6px',
-
   // align vertically with the first line, even if the item is multiline
   alignSelf: 'start',
-  '::before': {
-    content: '" "',
-    whiteSpace: 'pre',
-    width: 0,
-    visibility: 'hidden',
-  },
+
+  width: '6px',
+  height: `calc(${p16Regular.lineHeight} * ${p16Regular.fontSize})`,
+
+  display: 'grid',
+  alignContent: 'center',
+  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
 });
 
 type UnorderedListProps = {
