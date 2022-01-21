@@ -22,6 +22,7 @@ type Resolvers = Record<string, Resolver>;
 
 const resolvers: Resolvers = {
   'text/csv': resolveCsv,
+  'text/plain': resolveCsv,
   'application/x-apache-arrow-stream': resolveArrow,
 };
 
@@ -47,7 +48,10 @@ function resolveForContentType(
   contentType: string,
   maxRows: number
 ): Promise<DataTable> {
-  const resolve = resolvers[contentType];
+  const resolveKey: undefined | keyof typeof resolvers = Object.keys(
+    resolvers
+  ).find((x) => contentType.includes(x));
+  const resolve = resolveKey && resolvers[resolveKey];
   if (!resolve) {
     throw new Error(`don't know how to handle content of type ${contentType}`);
   }

@@ -169,8 +169,8 @@ export interface GenericList {
 
 // Imported data
 
-export interface ImportedData {
-  type: 'imported-data';
+export interface FetchData {
+  type: 'fetch-data';
   args: [string, string?];
   start?: Pos;
   end?: Pos;
@@ -236,7 +236,7 @@ export type Expression =
   | Sequence
   | Date
   | Table
-  | ImportedData
+  | FetchData
   | Directive;
 
 export type Statement = FunctionDefinition | Assign | Expression;
@@ -277,5 +277,5 @@ export interface TypeToNode {
   'argument-names': FunctionArgumentNames;
   'function-definition': FunctionDefinition;
   block: Block;
-  'imported-data': ImportedData;
+  'fetch-data': FetchData;
 }

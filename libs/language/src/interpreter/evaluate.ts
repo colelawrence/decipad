@@ -153,7 +153,7 @@ export async function evaluate(
       // but we want to always return something
       return UnknownValue;
     }
-    case 'imported-data': {
+    case 'fetch-data': {
       const [url, contentType] = node.args;
       return evaluateData(
         await resolveData({ url, contentType, fetch: realm.inferContext.fetch })

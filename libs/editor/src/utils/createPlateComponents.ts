@@ -64,7 +64,7 @@ export const createPlateComponents = (): PlateComponents => {
       [ELEMENT_LINK]: Link,
 
       // Custom elements
-      [elementTypes.ELEMENT_IMPORT_DATA]: ImportDataElement as PlateComponent, // TODO rewrite with editor/UI separation
+      [elementTypes.ELEMENT_FETCH]: ImportDataElement as PlateComponent, // TODO rewrite with editor/UI separation
       [elementTypes.ELEMENT_TABLE_INPUT]: Table,
 
       // Marks

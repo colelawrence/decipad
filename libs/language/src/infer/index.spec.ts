@@ -16,7 +16,7 @@ import {
   tableDef,
   funcDef,
   prop,
-  importedData,
+  fetchData,
   assign,
   block,
 } from '../utils';
@@ -588,7 +588,7 @@ describe('inferProgram', () => {
 });
 
 jest.mock('../data', () => ({
-  // Mock dataTable
+  // Mock fetchData
   resolve: jest.fn(() => ({
     numCols: 0,
     length: 0,
@@ -604,7 +604,7 @@ describe('Data', () => {
         ctx,
         assign(
           'IndexName',
-          importedData('http://example.com/data', 'text/whatever')
+          fetchData('http://example.com/data', 'text/whatever')
         )
       )
     ).toEqual(

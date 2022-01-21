@@ -1,13 +1,13 @@
 @lexer tokenizer
 
 ###################
-### Import Data ###
+### Fetch Data ###
 ###################
 
-importData -> "import_data" __ %string      {%
+fetchData -> "fetch" __ %string      {%
                                             (d) => {
                                               return addArrayLoc({
-                                                type: 'imported-data',
+                                                type: 'fetch-data',
                                                 args: [d[2].value]
                                               }, d)
                                             }

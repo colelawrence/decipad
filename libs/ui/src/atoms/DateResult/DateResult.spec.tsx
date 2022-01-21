@@ -30,5 +30,7 @@ it('renders time', async () => {
     <DateResult {...await runCode('date(2021-01-01 00:00)')} />
   );
 
-  expect(container.textContent).toMatchInlineSnapshot(`"Jan 1st 2021 24:00"`);
+  expect(container.textContent).toMatchInlineSnapshot(
+    `"Jan 1st 2021 00:00 UTC"`
+  );
 });

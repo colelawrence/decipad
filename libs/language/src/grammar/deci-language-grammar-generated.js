@@ -1103,7 +1103,7 @@ let ParserRules = [
     },
   },
   { name: 'expression', symbols: ['overExp'], postprocess: id },
-  { name: 'expression', symbols: ['importData'], postprocess: id },
+  { name: 'expression', symbols: ['fetchData'], postprocess: id },
   { name: 'overExp', symbols: ['asExp'], postprocess: id },
   {
     name: 'overExp',
@@ -1465,16 +1465,16 @@ let ParserRules = [
     postprocess: () => null,
   },
   {
-    name: 'importData',
+    name: 'fetchData',
     symbols: [
-      { literal: 'import_data' },
+      { literal: 'fetch' },
       '__',
       tokenizer.has('string') ? { type: 'string' } : string,
     ],
     postprocess: (d) => {
       return addArrayLoc(
         {
-          type: 'imported-data',
+          type: 'fetch-data',
           args: [d[2].value],
         },
         d

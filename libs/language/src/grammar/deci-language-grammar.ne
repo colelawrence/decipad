@@ -21,7 +21,7 @@ import { tokenizer } from './tokenizer'
 @include "./expression.ne"
 @include "./range.ne"
 @include "./sequence.ne"
-@include "./import-data.ne"
+@include "./fetch-data.ne"
 @include "./functions.ne"
 
 

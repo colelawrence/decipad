@@ -18,7 +18,7 @@ const SLASH_COMMANDS = [
   'table',
   'heading1',
   'heading2',
-  'import-data',
+  'import',
 ] as const;
 type SlashCommand = typeof SLASH_COMMANDS[number];
 
@@ -76,24 +76,6 @@ const groups: ReadonlyArray<SlashCommandGroup> = [
         description: 'Add secondary text heading',
         icon: <Text />,
         extraSearchTerms: [],
-      },
-    ],
-  },
-  {
-    title: 'Import',
-    items: [
-      {
-        command: 'import-data',
-        title: 'Import Table',
-        description: 'Import table from CSV file or Google Sheets',
-        icon: <Table />,
-        extraSearchTerms: [
-          'import csv',
-          'import gsheets',
-          'import google sheets',
-          'import sheet',
-          'import spreadsheet',
-        ],
       },
     ],
   },

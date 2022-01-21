@@ -18,7 +18,7 @@ import {
 } from './plugins/Language/useLanguagePlugin';
 import { useNotebookTitlePlugin } from './plugins/NotebookTitle/useNotebookTitlePlugin';
 import { UploadDialogue } from './plugins/UploadData/components/UploadDialogue';
-import { useImportDataPlugin } from './plugins/ImportData/useImportDataPlugin';
+import { useFetchDataPlugin } from './plugins/fetchData/useFetchDataPlugin';
 import { useExternalDataPlugin } from './plugins/ExternalData/useExternalDataPlugin';
 import { useUploadDataPlugin } from './plugins/UploadData/useUploadDataPlugin';
 import { DropFile, Tooltip } from './components';
@@ -66,20 +66,20 @@ const EditorInternal = ({ padId, authSecret, readOnly }: EditorProps) => {
 
   const notebookTitlePlugin = useNotebookTitlePlugin({ padId });
 
-  // upload / import data
+  // upload / fetchdata
   const {
     startUpload,
     uploadState,
     clearAll: clearAllUploads,
-  } = useUploadDataPlugin({ editor: docsyncEditor });
-  const importDataPlugin = useImportDataPlugin();
+  } = useUploadDataPlugin({ editor });
+  const fetchDataPlugin = useFetchDataPlugin();
   const { createOrUpdateExternalData } = useExternalDataPlugin({
     editor: docsyncEditor,
   });
 
   const editorPlugins = useMemo(
-    () => [...plugins, languagePlugin, notebookTitlePlugin, importDataPlugin],
-    [languagePlugin, notebookTitlePlugin, importDataPlugin]
+    () => [...plugins, languagePlugin, notebookTitlePlugin, fetchDataPlugin],
+    [languagePlugin, notebookTitlePlugin, fetchDataPlugin]
   );
 
   const programBlocks = docsyncEditor ? editorProgramBlocks(docsyncEditor) : {};

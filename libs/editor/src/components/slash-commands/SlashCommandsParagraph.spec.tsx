@@ -202,8 +202,8 @@ it('uses the text after the slash to search for commands', async () => {
     path: findDomNodePath(editor, getByText('/')),
     offset: '/'.length,
   });
-  Transforms.insertText(editor, 'import');
+  Transforms.insertText(editor, 'secondary');
 
-  expect(await findByText(/import.+csv/i)).toBeVisible();
-  expect(queryByText(/heading/i)).not.toBeInTheDocument();
+  expect(await findByText(/secondary.+heading/i)).toBeVisible();
+  expect(queryByText(/calculation/i)).not.toBeInTheDocument();
 });

@@ -70,8 +70,8 @@ export function indexedCol(
   );
 }
 
-export function importedData(url: string, contentType?: string) {
-  return n('imported-data', url, contentType);
+export function fetchData(url: string, contentType?: string) {
+  return n('fetch-data', url, contentType);
 }
 
 export function seq(

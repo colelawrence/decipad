@@ -6,7 +6,7 @@ const style = css({
   marginRight: '1em',
 });
 
-export const ELEMENT_IMPORT_DATA = 'ELEMENT_IMPORT_DATA';
+export const ELEMENT_IMPORT = 'ELEMENT_IMPORT';
 
 export function ImportDataIconElement({
   contentType,

@@ -1,10 +1,13 @@
 import { FC } from 'react';
-import { format as formatDate, utcToZonedTime } from 'date-fns-tz';
+import { format as formatDate } from 'date-fns-tz';
 import { CodeResultProps } from '../../types';
 
-export const formatUTCDate = (date: Date, form: string): string => {
-  const zonedDate = utcToZonedTime(date, 'UTC');
-  return formatDate(zonedDate, form, { timeZone: 'UTC' });
+export const formatUTCDate = (
+  date: Date,
+  form: string,
+  fullUTC = false
+): string => {
+  return formatDate(date, form, { timeZone: 'UTC' }) + (fullUTC ? ' UTC' : '');
 };
 
 export const DateResult = ({
@@ -12,6 +15,7 @@ export const DateResult = ({
   value,
 }: CodeResultProps<'date'>): ReturnType<FC> => {
   const date = new Date(Number(value));
+  let fullUTC = false;
   let format;
   switch (type.date) {
     case 'year': {
@@ -28,12 +32,15 @@ export const DateResult = ({
     }
     default: {
       if (date.getUTCSeconds() === 0 && date.getUTCMilliseconds() === 0) {
-        format = 'MMM do uuuu kk:mm';
+        fullUTC = true;
+        format = 'MMM do uuuu HH:mm';
       }
       break;
     }
   }
 
-  const string = format ? formatUTCDate(date, format) : date.toISOString();
+  const string = format
+    ? formatUTCDate(date, format, fullUTC)
+    : date.toISOString();
   return <span>{string}</span>;
 };

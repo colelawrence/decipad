@@ -6,7 +6,7 @@ import { useToasts } from 'react-toast-notifications';
 import camelcase from 'camelcase';
 import slug from 'slug';
 import * as upload from './upload';
-import { ELEMENT_IMPORT_DATA } from '../../utils/elementTypes';
+import { ELEMENT_FETCH } from '../../utils/elementTypes';
 
 export interface OneFileUploadState {
   file: File;
@@ -132,7 +132,7 @@ function insertFileInDoc(
 ) {
   const block = {
     id: nanoid(),
-    type: ELEMENT_IMPORT_DATA,
+    type: ELEMENT_FETCH,
     'data-varname': varNamify(fileName),
     'data-href': url,
     'data-contenttype': fileType,

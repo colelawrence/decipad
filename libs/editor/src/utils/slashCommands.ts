@@ -3,7 +3,7 @@ import { Path, Transforms } from 'slate';
 import { organisms } from '@decipad/ui';
 import { ELEMENT_H2, ELEMENT_H3, SPEditor } from '@udecode/plate';
 
-import { ELEMENT_IMPORT_DATA } from './elementTypes';
+import { ELEMENT_FETCH } from './elementTypes';
 import { insertBlockOfTypeBelow } from './block';
 import { insertCodeBlockBelow } from './codeBlock';
 import { insertTableBelow } from './table';
@@ -27,8 +27,8 @@ export const execute = (
     case 'table':
       insertTableBelow(editor, path);
       break;
-    case 'import-data':
-      insertBlockOfTypeBelow(editor, path, ELEMENT_IMPORT_DATA);
+    case 'import':
+      insertBlockOfTypeBelow(editor, path, ELEMENT_FETCH);
       break;
     case 'heading1':
       insertBlockOfTypeBelow(editor, path, ELEMENT_H2);

@@ -33,7 +33,7 @@ export const isSlateNode = (thing?: unknown): thing is SlateNode => {
   return typeof (thing as any)?.type === 'string' && Element.isElement(thing);
 };
 
-export interface ImportDataNode extends SlateNode {
+export interface FetchDataNode extends SlateNode {
   'data-varname': string;
   'data-href': string;
   'data-contenttype': string;

@@ -13,6 +13,7 @@ import { Buffer } from 'buffer';
 import { cast } from './cast';
 import { DataTable } from './DataTable';
 import { bufferBody } from './buffer-body';
+import { RuntimeError } from '../interpreter';
 
 export async function resolveCsv(
   bodyStream: AsyncIterable<ArrayBuffer>
@@ -27,6 +28,8 @@ export async function csv(source: string): Promise<Table> {
   const [columnNames, data] = await csvToData(source);
   return toTable(columnNames, data);
 }
+
+const MAX_ROWS = 10_000;
 
 export function csvToData(
   source: string
@@ -45,6 +48,11 @@ export function csvToData(
             columnNames = row.map((value) => value.toString());
             hadFirstRow = true;
           } else {
+            if (data.length >= MAX_ROWS) {
+              throw new RuntimeError(
+                `Maximum row size of ${MAX_ROWS} exceeded`
+              );
+            }
             data.push(row);
           }
         }

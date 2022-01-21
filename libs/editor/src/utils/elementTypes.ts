@@ -4,7 +4,7 @@ import * as elementTypes from './elementTypes';
 
 type FixedDefaultPlatePluginKey = DefaultPlatePluginKey | typeof ELEMENT_LIC;
 
-export const ELEMENT_IMPORT_DATA = 'import-data';
+export const ELEMENT_FETCH = 'fetch-data';
 export const ELEMENT_TABLE_INPUT = 'table-input';
 export const ELEMENT_CODE_BLOCK = 'code_block';
 export const ELEMENT_CODE_LINE = 'code_line';

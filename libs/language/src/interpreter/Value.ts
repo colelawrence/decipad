@@ -37,7 +37,7 @@ export type NonColumn =
   | StringValue
   | BooleanValue
   | Range
-  | Date
+  | DateValue
   | TimeQuantity
   | Table
   | Row;
@@ -47,8 +47,11 @@ const MAX_ITERATIONS = 10_000; // Failsafe
 
 export class Scalar {
   static fromValue(
-    value: number | bigint | Fraction | boolean | string | symbol
+    value: number | bigint | Fraction | boolean | string | symbol | Date
   ): NonColumn {
+    if (value instanceof Date) {
+      return DateValue.fromDateAndSpecificity(value.getTime(), 'millisecond');
+    }
     if (value instanceof Fraction) {
       return FractionValue.fromValue(value);
     }
@@ -117,7 +120,7 @@ export class BooleanValue implements Value {
   }
 }
 
-export class Date implements Value {
+class DateValue implements Value {
   specificity: Time.Specificity;
   moment: bigint;
 
@@ -130,7 +133,7 @@ export class Date implements Value {
     date: bigint | number,
     specificity: Time.Specificity
   ) {
-    return new Date(cleanDate(date, specificity), specificity);
+    return new DateValue(cleanDate(date, specificity), specificity);
   }
 
   getData() {
@@ -151,9 +154,11 @@ export class Date implements Value {
 
   getEndDate() {
     const moment = this.getEnd();
-    return new Date(moment, this.specificity);
+    return new DateValue(moment, this.specificity);
   }
 }
+
+export { DateValue as Date };
 
 export class TimeQuantity implements Value {
   timeUnits = new Map<Time.Unit, bigint>();
@@ -221,7 +226,7 @@ export class Range implements Value {
   }
 
   static fromBounds(start: Value, end: Value): Range {
-    if (start instanceof Date && end instanceof Date) {
+    if (start instanceof DateValue && end instanceof DateValue) {
       return new Range({
         start,
         end: end.getEndDate(),
@@ -278,7 +283,11 @@ export class Column implements Value {
     return Column.fromValues(array);
   }
 
-  static fromDateSequence(startD: Date, endD: Date, by: Time.Unit): Column {
+  static fromDateSequence(
+    startD: DateValue,
+    endD: DateValue,
+    by: Time.Unit
+  ): Column {
     const start = startD.getData();
     const end = endD.getEnd();
     const spec = getSpecificity(by);
@@ -290,7 +299,7 @@ export class Column implements Value {
       cur <= end;
       cur = addTimeQuantity(cur, new TimeQuantity({ [by]: 1 }))
     ) {
-      array.push(Date.fromDateAndSpecificity(cur, spec));
+      array.push(DateValue.fromDateAndSpecificity(cur, spec));
     }
 
     return Column.fromValues(array);
@@ -309,7 +318,7 @@ export class Column implements Value {
   }
 
   getData(): Interpreter.OneResult[] {
-    return this.values.map((v) => v.getData());
+    return this.values.map((value) => value.getData());
   }
 
   filterMap(fn: (value: Value, index?: number) => boolean): boolean[] {
@@ -464,7 +473,7 @@ export class Table implements Value {
   }
 
   getData() {
-    return this.columns.map((v) => v.getData());
+    return this.columns.map((column) => column.getData());
   }
 
   mapColumns(mapFn: (col: Column, index: number) => Column): Table {

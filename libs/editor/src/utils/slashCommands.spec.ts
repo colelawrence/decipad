@@ -8,7 +8,7 @@ import {
 } from '@udecode/plate';
 import {
   ElementType,
-  ELEMENT_IMPORT_DATA,
+  ELEMENT_FETCH,
   ELEMENT_TABLE_INPUT,
 } from './elementTypes';
 import { execute, SlashCommand } from './slashCommands';
@@ -17,7 +17,7 @@ const expectedTypes: Record<SlashCommand, ElementType> = {
   table: ELEMENT_TABLE_INPUT,
   heading1: ELEMENT_H2,
   heading2: ELEMENT_H3,
-  'import-data': ELEMENT_IMPORT_DATA,
+  import: ELEMENT_FETCH,
   'calculation-block': ELEMENT_CODE_BLOCK,
 };
 

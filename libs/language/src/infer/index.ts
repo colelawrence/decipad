@@ -189,7 +189,7 @@ export const inferExpression = wrap(
           return callBuiltinFunctor(fName, givenArguments, fArgs);
         }
       }
-      case 'imported-data': {
+      case 'fetch-data': {
         const [url, contentType] = expr.args;
         if (!url) {
           return t.impossible('No data URL defined');

@@ -11,7 +11,7 @@ import { ComputeRequest, makeComputeStream } from '@decipad/language';
 import { getCursorPos, CursorPos } from './getCursorPos';
 import { slateDocumentToComputeRequest } from './slateDocumentToComputeRequest';
 import { SlateNode } from './common';
-import { ELEMENT_IMPORT_DATA } from '../../utils/elementTypes';
+import { ELEMENT_FETCH } from '../../utils/elementTypes';
 import { useComputer } from '../../contexts/Computer';
 
 interface UseLanguagePluginRet {
@@ -104,9 +104,7 @@ export function editorProgramBlocks(editor: Editor): ProgramBlocksContextValue {
   const editorBlocks: Node[] = editor.children;
   const parsedProgramBlocks = editorBlocks
     .map((block, index) => {
-      if (
-        (block as unknown as IdentifiableBlock).type === ELEMENT_IMPORT_DATA
-      ) {
+      if ((block as unknown as IdentifiableBlock).type === ELEMENT_FETCH) {
         return {
           id: (block as unknown as IdentifiableBlock).id,
           index,

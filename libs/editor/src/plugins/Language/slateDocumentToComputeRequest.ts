@@ -3,7 +3,7 @@ import { ComputeRequest, Program, AST } from '@decipad/language';
 import {
   getCodeFromBlock,
   SlateNode,
-  ImportDataNode,
+  FetchDataNode,
   getAssignmentBlock,
 } from './common';
 import {
@@ -11,7 +11,7 @@ import {
   extractTable,
   isInteractiveTable,
 } from './extractTable';
-import { ELEMENT_IMPORT_DATA } from '../../utils/elementTypes';
+import { ELEMENT_FETCH } from '../../utils/elementTypes';
 
 export function slateDocumentToComputeRequest(
   slateDoc: SlateNode[]
@@ -32,14 +32,11 @@ export function slateDocumentToComputeRequest(
       }
     }
 
-    if (
-      block.type === ELEMENT_IMPORT_DATA &&
-      (block as ImportDataNode)['data-href']
-    ) {
+    if (block.type === ELEMENT_FETCH && (block as FetchDataNode)['data-href']) {
       program.push({
         id: block.id,
         type: 'parsed-block',
-        block: getAstFromImportData(block as ImportDataNode),
+        block: getAstFromFetchData(block as FetchDataNode),
       });
     }
 
@@ -59,10 +56,10 @@ export function slateDocumentToComputeRequest(
   return { program };
 }
 
-function getAstFromImportData(importData: ImportDataNode): AST.Block {
-  return getAssignmentBlock(importData.id, importData['data-varname'], {
-    type: 'imported-data',
-    args: [importData['data-href'], importData['data-contenttype']],
+function getAstFromFetchData(fetchData: FetchDataNode): AST.Block {
+  return getAssignmentBlock(fetchData.id, fetchData['data-varname'], {
+    type: 'fetch-data',
+    args: [fetchData['data-href'], fetchData['data-contenttype']],
   });
 }
 

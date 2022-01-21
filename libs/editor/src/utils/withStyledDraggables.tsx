@@ -14,7 +14,7 @@ import {
 } from '@udecode/plate';
 import { GrDrag } from 'react-icons/gr';
 import { PlateComponent } from './components';
-import { ELEMENT_IMPORT_DATA } from './elementTypes';
+import { ELEMENT_FETCH } from './elementTypes';
 
 const GrabberTooltipContent = () => (
   <div style={{ fontSize: 12, textAlign: 'center' }}>
@@ -62,7 +62,7 @@ export const withStyledDraggables = (
         ELEMENT_IMAGE,
         ELEMENT_UL,
         ELEMENT_CODE_BLOCK,
-        ELEMENT_IMPORT_DATA,
+        ELEMENT_FETCH,
         ELEMENT_TABLE,
       ],
       onRenderDragHandle: ({ className, styles }) => {
@@ -124,7 +124,7 @@ export const withStyledDraggables = (
       },
     },
     {
-      key: ELEMENT_IMPORT_DATA,
+      key: ELEMENT_FETCH,
       styles: {
         gutterLeft: {
           padding: '42px 8px 0 0',

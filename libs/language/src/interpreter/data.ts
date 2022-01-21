@@ -1,6 +1,6 @@
 import { getDefined } from '@decipad/utils';
 import { DataTable } from '../data/DataTable';
-import { Column, Table, Value } from './Value';
+import { Column, fromJS, Table, Value } from './Value';
 
 export async function evaluateData(data: DataTable): Promise<Table> {
   const colNames: string[] = [];
@@ -16,7 +16,7 @@ export async function evaluateData(data: DataTable): Promise<Table> {
     // TODO: This is extremely innefficient. We should instead use values in the table directly.
     const values: Value[] = [];
     for (let rowIndex = 0; rowIndex < column.length; rowIndex += 1) {
-      values.push(column.get(rowIndex));
+      values.push(fromJS(column.get(rowIndex)));
     }
     colValues.push(Column.fromValues(values));
   }

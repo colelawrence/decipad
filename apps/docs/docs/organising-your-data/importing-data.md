@@ -4,12 +4,12 @@ sidebar_position: 130
 
 # Importing data
 
-You can import data from an external file in the language. To do that you'll need to use a function called `import_data`, followed by an URL.
+You can get data from an external file in the language. To do that you'll need to use a function called `fetch`, followed by an URL.
 
 In this example I've uploaded a CSV file to Github and I have the URL for it.
 
 ```deci live
-import_data "https://decipad-packages.s3.eu-west-2.amazonaws.com/static/example-1.csv"
+fetch "https://decipad-packages.s3.eu-west-2.amazonaws.com/static/example-1.csv"
 ==> fetch is not defined
 ```
 
@@ -25,7 +25,7 @@ You can check [the section about tables](/docs/organising-your-data/tables) if y
 Give a name to your imported data:
 
 ```deci live
-MyExample = import_data "https://decipad-packages.s3.eu-west-2.amazonaws.com/static/example-1.csv"
+MyExample = fetch "https://decipad-packages.s3.eu-west-2.amazonaws.com/static/example-1.csv"
 
 MyExample.Col1
 ==> fetch is not defined
@@ -36,7 +36,7 @@ MyExample.Col1
 In this previous example we were extracting a list from a table by using the `.` operator like this:
 
 ```deci live
-MyExample = import_data "https://decipad-packages.s3.eu-west-2.amazonaws.com/static/example-1.csv"
+MyExample = fetch "https://decipad-packages.s3.eu-west-2.amazonaws.com/static/example-1.csv"
 
 MyExample.Col2
 ==> fetch is not defined
