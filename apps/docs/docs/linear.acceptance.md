@@ -116,3 +116,11 @@ Speed = [27.33 miles/hour, 55 miles/hour]
 round(1/(Speed / Distance), 2)
 ==> [ 1.68 hours, 0.83 hours ]
 ```
+
+## [ENG-139](https://linear.app/decipad/issue/ENG-139)
+
+```deci live
+A = 3
+SQRTZ = sqrt(A * 3)
+==> 3
+```
