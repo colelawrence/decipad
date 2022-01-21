@@ -1,4 +1,4 @@
-import { inferStatement } from '../infer';
+import { inferExpression, inferStatement } from '../infer';
 import { evaluate as evaluateStatement, RuntimeError } from '../interpreter';
 
 import {
@@ -6,7 +6,10 @@ import {
   ExternalDataMap,
   AutocompleteName,
   serializeType,
+  serializeUnit,
   serializeResult,
+  parseOneBlock,
+  SerializedUnits,
 } from '..';
 import { captureException } from '../reporting';
 import {
@@ -23,7 +26,7 @@ import { ParseRet, updateParse } from './parse';
 import { ComputationRealm } from './ComputationRealm';
 import { build as t } from '../type';
 import { getAllBlockLocations, getGoodBlocks, getStatement } from './utils';
-import { anyMappingToMap } from '../utils';
+import { anyMappingToMap, isExpression } from '../utils';
 import { validateResult } from '../result';
 
 /*
@@ -283,5 +286,17 @@ export class Computer {
       (stmt.type === 'literal' ||
         (stmt.type === 'assign' && stmt.args[1].type === 'literal'))
     );
+  }
+
+  async getUnitFromText(text: string): Promise<SerializedUnits | null> {
+    const ast = parseOneBlock(text);
+    if (!isExpression(ast.args[0])) {
+      return null;
+    }
+    const expr = await inferExpression(
+      this.computationRealm.inferContext,
+      ast.args[0]
+    );
+    return serializeUnit(expr.unit);
   }
 }

@@ -1,5 +1,6 @@
 import { Meta, Story } from '@storybook/react';
 import { TableHeader } from '../../atoms';
+import { getNumberType, getStringType } from '../../utils';
 import { TableHeaderRow } from './TableHeaderRow';
 
 export default {
@@ -10,8 +11,8 @@ export default {
 export const Normal: Story = () => (
   <table>
     <TableHeaderRow>
-      <TableHeader type="string">Header1</TableHeader>
-      <TableHeader type="number">Header2</TableHeader>
+      <TableHeader type={getStringType()}>Header1</TableHeader>
+      <TableHeader type={getNumberType()}>Header2</TableHeader>
     </TableHeaderRow>
   </table>
 );
@@ -19,8 +20,8 @@ export const Normal: Story = () => (
 export const ReadOnly: Story = () => (
   <table>
     <TableHeaderRow readOnly>
-      <TableHeader type="string">Header1</TableHeader>
-      <TableHeader type="number">Header2</TableHeader>
+      <TableHeader type={getStringType()}>Header1</TableHeader>
+      <TableHeader type={getNumberType()}>Header2</TableHeader>
     </TableHeaderRow>
   </table>
 );

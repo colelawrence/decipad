@@ -19,7 +19,7 @@ export const getTableLength = (data: TableData): number =>
 export const addColumn = produce((data: TableData) => {
   data.columns.push({
     columnName: '',
-    cellType: 'string',
+    cellType: { kind: 'string' },
     cells: Array.from({ length: getTableLength(data) }, () => ''),
   });
 });

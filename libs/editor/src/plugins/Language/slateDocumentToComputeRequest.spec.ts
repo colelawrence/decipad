@@ -12,17 +12,17 @@ const testTableData: TableData = {
   columns: [
     {
       columnName: 'Col1',
-      cellType: 'string',
+      cellType: { kind: 'string' },
       cells: ['Hello', 'World'],
     },
     {
       columnName: 'Col2',
-      cellType: 'number',
+      cellType: { kind: 'number', unit: null },
       cells: ['123', '456'],
     },
     {
       columnName: 'Col3',
-      cellType: 'date/year',
+      cellType: { kind: 'date', date: 'year' },
       cells: ['2020', '2030'],
     },
   ],

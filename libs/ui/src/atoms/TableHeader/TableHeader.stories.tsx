@@ -1,7 +1,7 @@
 import { ComponentProps } from 'react';
 import { Meta, Story } from '@storybook/react';
 import { TableHeader } from './TableHeader';
-import {} from '../../storybook-utils';
+import { getNumberType } from '../../utils';
 
 export default {
   title: 'Atoms / Table / Header',
@@ -17,7 +17,7 @@ export const Normal: Story<ComponentProps<typeof TableHeader>> = (args) => (
 
 export const AnotherType: Story<ComponentProps<typeof TableHeader>> = (
   args
-) => <TableHeader type="number" {...args} />;
+) => <TableHeader type={getNumberType()} {...args} />;
 
 export const Highlighted: Story<ComponentProps<typeof TableHeader>> = (
   args

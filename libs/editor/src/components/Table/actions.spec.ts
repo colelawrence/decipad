@@ -40,12 +40,12 @@ const testTable: TableData = {
   columns: [
     {
       columnName: 'Str',
-      cellType: 'string',
+      cellType: { kind: 'string' },
       cells: ['Hey'],
     },
     {
       columnName: 'Num',
-      cellType: 'number',
+      cellType: { kind: 'number', unit: null },
       cells: ['123'],
     },
   ],
@@ -74,9 +74,12 @@ it('can rename columns', () => {
 });
 
 it('can change the column type and clear now-invalid data', () => {
-  const stringAsNumber = changeColumnType(testTable, 0, 'number');
+  const stringAsNumber = changeColumnType(testTable, 0, {
+    kind: 'number',
+    unit: null,
+  });
   expect(stringAsNumber.columns[0]).toMatchObject({
-    cellType: 'number',
+    cellType: { kind: 'number', unit: null },
   });
   expect(stringAsNumber).toMatchInlineSnapshot(`
     Str | Num
@@ -84,7 +87,8 @@ it('can change the column type and clear now-invalid data', () => {
     ""  | 123
   `);
 
-  expect(changeColumnType(testTable, 1, 'string')).toMatchInlineSnapshot(`
+  expect(changeColumnType(testTable, 1, { kind: 'string' }))
+    .toMatchInlineSnapshot(`
     Str | Num
     ---------
     Hey | 123

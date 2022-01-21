@@ -280,13 +280,13 @@ const isInteger = (f: Fraction): boolean => {
   return Number(f.d) === 1;
 };
 
-const stringifyUnit = (unit: Unit) => {
+const stringifyUnit = (unit: Unit, prettify = true) => {
   const symbol = singular(unit.unit);
   const pretty = prettyForSymbol[symbol];
   let isSymbol = unitIsSymbol(symbol);
   let baseUnitName = unit.unit;
 
-  if (pretty) {
+  if (prettify && pretty) {
     isSymbol = true;
     baseUnitName = pretty;
   }
@@ -309,8 +309,13 @@ const stringifyUnit = (unit: Unit) => {
       : `${[Math.sign(Number(exp.s)) === -1 && '-', exp.n, '/', exp.d]
           .filter(Boolean)
           .join('')}`;
-    const showExp = strExp.replace(/./g, scriptFromNumber);
-    result.push(showExp);
+    const prettyExp = strExp.replace(/./g, scriptFromNumber);
+
+    if (prettify) {
+      result.push(prettyExp);
+    } else {
+      result.push('^', strExp);
+    }
   }
 
   return result.join('');
@@ -327,7 +332,8 @@ function produceExp(unit: Unit, makePositive: boolean): Unit {
 
 export const stringifyUnitArgs = (
   units: Unit[] | null,
-  value?: Fraction
+  value?: Fraction,
+  prettify = true
 ): string => {
   return (units ?? [])
     .reduce((parts: string[], unit: Unit): string[] => {
@@ -340,13 +346,13 @@ export const stringifyUnitArgs = (
         // you use international system like `m.s-1`
         //
         if (units?.length === 2 && unit.exp.compare(F(-1)) === 0) {
-          prefix = unitIsSymbol(unit.unit) ? '/' : ' per ';
+          prefix = prettify ? (unitIsSymbol(unit.unit) ? '/' : ' per ') : '/';
           parts.push(prefix);
-          parts.push(stringifyUnit(produceExp(unit, true)));
+          parts.push(stringifyUnit(produceExp(unit, true), prettify));
         } else {
-          prefix = '·';
+          prefix = prettify ? '·' : '*';
           parts.push(prefix);
-          parts.push(stringifyUnit(produceExp(unit, false)));
+          parts.push(stringifyUnit(produceExp(unit, false), prettify));
         }
       } else {
         //
@@ -357,7 +363,8 @@ export const stringifyUnitArgs = (
             pluralizeUnit(
               unit,
               units && units.length > 2 ? 2 : value?.valueOf() || 2
-            )
+            ),
+            prettify
           )
         );
       }
@@ -368,7 +375,8 @@ export const stringifyUnitArgs = (
 
 export const stringifyUnits = (
   units: Units | null,
-  value?: Fraction
+  value?: Fraction,
+  prettify = true
 ): string => {
   if (units == null || units.args.length === 0) {
     return 'unitless';
@@ -377,7 +385,7 @@ export const stringifyUnits = (
     const sortedUnits = produce(simplified, (units) => {
       units.args.sort(byExp);
     });
-    return stringifyUnitArgs(sortedUnits.args, value);
+    return stringifyUnitArgs(sortedUnits.args, value, prettify);
   }
 };
 

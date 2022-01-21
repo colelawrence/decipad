@@ -286,3 +286,29 @@ it('creates a result from an error', () => {
     }
   `);
 });
+
+it('can extract units from text', async () => {
+  await computeOnTestComputer({
+    program: getUnparsed('Foo = 30cm', 'Bar = 30'),
+  });
+
+  // Internal units
+  let units = await computer.getUnitFromText('W');
+  expect(units?.args[0].unit).toBe('W');
+  units = await computer.getUnitFromText('km/h');
+  console.log({ units });
+  expect(units?.args[0].unit).toBe('h');
+  expect(units?.args[1].unit).toBe('m');
+
+  // Custom units
+  units = await computer.getUnitFromText('Bananas');
+  expect(units?.args[0].unit).toBe('Bananas');
+  units = await computer.getUnitFromText('Foo');
+  expect(units?.args[0].unit).toBe('m');
+
+  // Non units
+  units = await computer.getUnitFromText('Bar');
+  expect(units).toBeNull();
+  units = await computer.getUnitFromText('10');
+  expect(units).toBeNull();
+});

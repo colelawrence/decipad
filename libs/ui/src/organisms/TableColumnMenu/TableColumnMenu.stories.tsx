@@ -1,4 +1,5 @@
 import { Meta, Story } from '@storybook/react';
+import { getNumberType } from '../../utils';
 import { TableColumnMenu } from './TableColumnMenu';
 
 export default {
@@ -7,5 +8,9 @@ export default {
 } as Meta;
 
 export const Normal: Story = () => (
-  <TableColumnMenu open trigger={<button>anchor</button>} type="number" />
+  <TableColumnMenu
+    open
+    trigger={<button>anchor</button>}
+    type={getNumberType()}
+  />
 );

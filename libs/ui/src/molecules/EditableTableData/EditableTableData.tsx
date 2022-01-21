@@ -9,10 +9,11 @@ const cellWrapperStyles = css({
 
 type EditableTableDataProps = Pick<
   ComponentProps<typeof CellInput>,
-  'onChange' | 'readOnly' | 'validate' | 'value'
+  'format' | 'onChange' | 'readOnly' | 'validate' | 'value'
 >;
 
 export const EditableTableData = ({
+  format,
   onChange,
   readOnly,
   validate,
@@ -22,6 +23,7 @@ export const EditableTableData = ({
     <TableData>
       <div css={cellWrapperStyles}>
         <CellInput
+          format={format}
           onChange={onChange}
           validate={validate}
           value={value}

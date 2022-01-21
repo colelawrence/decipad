@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { EditableTableHeader } from './EditableTableHeader';
 
 const defaultProps: ComponentProps<typeof EditableTableHeader> = {
-  type: 'string',
+  type: { kind: 'string' },
   value: 'TableHeader',
 };
 
@@ -36,7 +36,6 @@ it('renders the updated value', () => {
   expect(getByRole('textbox')).toHaveValue('TableHeader');
 
   userEvent.type(getByRole('textbox'), 'Edited');
-  fireEvent.keyDown(getByRole('textbox'), { key: 'Enter' });
 
   expect(getByRole('textbox')).toHaveValue('TableHeaderEdited');
 });

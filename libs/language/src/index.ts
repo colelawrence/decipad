@@ -31,7 +31,11 @@ export {
 } from './interpreter/Value';
 
 export { prettyPrintAST } from './parser/utils';
-export type { SerializedType, SerializedTypeKind } from './type';
+export type {
+  SerializedType,
+  SerializedTypeKind,
+  SerializedUnits,
+} from './type';
 export type { Unit, Units };
 export {
   Type,
@@ -39,6 +43,7 @@ export {
   deserializeType,
   InferError,
   serializeType,
+  serializeUnit,
   stringifyUnits,
   deserializeUnit,
 } from './type';

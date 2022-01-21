@@ -1,19 +1,16 @@
 import { ComponentProps, ReactNode } from 'react';
-import { Number, Placeholder, Shapes, Text, Trash } from '../../icons';
+import { deserializeUnit, stringifyUnits } from '@decipad/language';
+import Fraction from '@decipad/fraction';
+import { noop } from '@decipad/utils';
+import { All, Number, Placeholder, Shapes, Text, Trash } from '../../icons';
 import { MenuItem, TriggerMenuItem } from '../../atoms';
-import { MenuList } from '../../molecules';
-import { noop } from '../../utils';
-
-export type TableCellType =
-  | 'string'
-  | 'number'
-  | 'date/time'
-  | 'date/day'
-  | 'date/month'
-  | 'date/year';
+import { MenuList, UnitMenuItem } from '../../molecules';
+import { getDateType, getNumberType, getStringType } from '../../utils';
+import { TableCellType } from '../../types';
 
 interface TableColumnMenuProps
-  extends Pick<ComponentProps<typeof MenuList>, 'open' | 'onChangeOpen'> {
+  extends Pick<ComponentProps<typeof MenuList>, 'open' | 'onChangeOpen'>,
+    Pick<ComponentProps<typeof UnitMenuItem>, 'parseUnit'> {
   readonly onChangeColumnType?: (type: TableCellType) => void;
   readonly onRemoveColumn?: () => void;
   readonly trigger: ReactNode;
@@ -25,6 +22,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
   onChangeOpen,
   onChangeColumnType = noop,
   onRemoveColumn = noop,
+  parseUnit,
   trigger,
   type,
 }) => (
@@ -42,17 +40,28 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
         </TriggerMenuItem>
       }
     >
+      <UnitMenuItem
+        onSelect={(unit) => {
+          onChangeColumnType({ kind: 'number', unit });
+        }}
+        parseUnit={parseUnit}
+      />
+      {type.kind === 'number' && type.unit != null && (
+        <MenuItem icon={<All />} selected>
+          {stringifyUnits(deserializeUnit(type.unit), new Fraction(1))}
+        </MenuItem>
+      )}
       <MenuItem
         icon={<Number />}
-        onSelect={() => onChangeColumnType('number')}
-        selected={type === 'number'}
+        onSelect={() => onChangeColumnType(getNumberType())}
+        selected={type.kind === 'number' && type.unit == null}
       >
         Number
       </MenuItem>
       <MenuItem
         icon={<Text />}
-        onSelect={() => onChangeColumnType('string')}
-        selected={type === 'string'}
+        onSelect={() => onChangeColumnType(getStringType())}
+        selected={type.kind === 'string'}
       >
         Text
       </MenuItem>
@@ -65,29 +74,29 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
       >
         <MenuItem
           icon={<Placeholder />}
-          onSelect={() => onChangeColumnType('date/year')}
-          selected={type === 'date/year'}
+          onSelect={() => onChangeColumnType(getDateType('year'))}
+          selected={type.kind === 'date' && type.date === 'year'}
         >
           Year
         </MenuItem>
         <MenuItem
           icon={<Placeholder />}
-          onSelect={() => onChangeColumnType('date/month')}
-          selected={type === 'date/month'}
+          onSelect={() => onChangeColumnType(getDateType('month'))}
+          selected={type.kind === 'date' && type.date === 'month'}
         >
           Month
         </MenuItem>
         <MenuItem
           icon={<Placeholder />}
-          onSelect={() => onChangeColumnType('date/day')}
-          selected={type === 'date/day'}
+          onSelect={() => onChangeColumnType(getDateType('day'))}
+          selected={type.kind === 'date' && type.date === 'day'}
         >
           Day
         </MenuItem>
         <MenuItem
           icon={<Placeholder />}
-          onSelect={() => onChangeColumnType('date/time')}
-          selected={type === 'date/time'}
+          onSelect={() => onChangeColumnType(getDateType('minute'))}
+          selected={type.kind === 'date' && type.date === 'minute'}
         >
           Time
         </MenuItem>

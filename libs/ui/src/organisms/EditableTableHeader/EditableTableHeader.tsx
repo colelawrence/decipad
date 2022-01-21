@@ -1,7 +1,7 @@
 import { ComponentProps, FC, useState } from 'react';
 import { css } from '@emotion/react';
 import { CellInput, TableHeader } from '../../atoms';
-import { typeIcons } from '../../atoms/TableHeader/TableHeader';
+import { getStringType, getTypeIcon } from '../../utils';
 
 import { TableColumnMenu } from '..';
 import { identifierNamePattern } from '../../utils/language';
@@ -28,7 +28,7 @@ type EditableTableHeaderProps = Pick<
 > &
   Pick<
     ComponentProps<typeof TableColumnMenu>,
-    'onChangeColumnType' | 'onRemoveColumn'
+    'onChangeColumnType' | 'onRemoveColumn' | 'parseUnit'
   > &
   Pick<ComponentProps<typeof CellInput>, 'onChange' | 'readOnly' | 'value'>;
 
@@ -36,13 +36,14 @@ export const EditableTableHeader: FC<EditableTableHeaderProps> = ({
   onChangeColumnType,
   onChange,
   onRemoveColumn,
+  parseUnit,
+  type = getStringType(),
   readOnly = false,
-  type = 'string',
   value,
 }) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
 
-  const IconComponent = typeIcons[type];
+  const IconComponent = getTypeIcon(type);
   const icon = (
     <button css={[triggerStyles, readOnly && triggerReadOnlyStyles]}>
       <IconComponent />
@@ -60,6 +61,7 @@ export const EditableTableHeader: FC<EditableTableHeaderProps> = ({
             onChangeOpen={setMenuOpen}
             onChangeColumnType={onChangeColumnType}
             onRemoveColumn={onRemoveColumn}
+            parseUnit={parseUnit}
             type={type}
           />
         )

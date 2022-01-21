@@ -11,7 +11,7 @@ const tableElement = {
       {
         columnName: '',
         cells: ['', '', ''],
-        cellType: 'string',
+        cellType: { kind: 'string' },
       },
     ],
   },

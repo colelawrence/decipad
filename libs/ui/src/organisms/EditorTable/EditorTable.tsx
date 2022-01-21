@@ -1,4 +1,6 @@
 import { FC } from 'react';
+import { SerializedUnits } from '@decipad/language';
+import { noop } from '@decipad/utils';
 import {
   AddTableRowButton,
   EditableTableCaption,
@@ -7,32 +9,40 @@ import {
   TableRow,
 } from '../../molecules';
 import { EditableTableHeader, Table } from '..';
-import { TableCellType, TableColumn, TableData } from './types';
-import { noop } from '../../utils';
+import { TableCellType, TableColumn, TableData } from '../../types';
 
 const alwaysTrue = () => true;
 
 interface EditorTableProps {
   readOnly?: boolean;
   value: TableData;
-  onAddColumn?: () => void;
-  onAddRow?: () => void;
-  onChangeCaption?: (newValue: string) => void;
-  onChangeColumnName?: (columnIndex: number, newColumnName: string) => void;
-  onChangeColumnType?: (columnIndex: number, newType: TableCellType) => void;
-  onChangeCell?: (
+  readonly formatValue?: (column: TableColumn, text: string) => string;
+  readonly onAddColumn?: () => void;
+  readonly onAddRow?: () => void;
+  readonly onChangeCaption?: (newValue: string) => void;
+  readonly onChangeColumnName?: (
+    columnIndex: number,
+    newColumnName: string
+  ) => void;
+  readonly onChangeColumnType?: (
+    columnIndex: number,
+    newType: TableCellType
+  ) => void;
+  readonly onChangeCell?: (
     columnIndex: number,
     rowIndex: number,
     newValue: string
   ) => void;
-  onRemoveColumn?: (columnIndex: number) => void;
-  onRemoveRow?: (rowIndex: number) => void;
-  onValidateCell?: (column: TableColumn, value: string) => boolean;
+  readonly onRemoveColumn?: (columnIndex: number) => void;
+  readonly onRemoveRow?: (rowIndex: number) => void;
+  readonly onValidateCell?: (column: TableColumn, value: string) => boolean;
+  readonly parseUnit?: (value: string) => Promise<SerializedUnits | null>;
 }
 
 export const EditorTable = ({
   readOnly = false,
   value,
+  formatValue = (_, text) => text,
   onAddColumn,
   onAddRow,
   onChangeCaption,
@@ -42,6 +52,7 @@ export const EditorTable = ({
   onRemoveColumn = noop,
   onRemoveRow = noop,
   onValidateCell = alwaysTrue,
+  parseUnit,
 }: EditorTableProps): ReturnType<FC> => {
   const tableLength = value.columns[0].cells.length;
   return (
@@ -69,6 +80,7 @@ export const EditorTable = ({
                   onRemoveColumn={() => {
                     onRemoveColumn(columnIndex);
                   }}
+                  parseUnit={parseUnit}
                   readOnly={readOnly}
                 />
               );
@@ -89,6 +101,7 @@ export const EditorTable = ({
                   return (
                     <EditableTableData
                       key={colIndex}
+                      format={(text) => formatValue(column, text)}
                       value={column.cells[rowIndex]}
                       onChange={(newValue) => {
                         onChangeCell(colIndex, rowIndex, newValue);

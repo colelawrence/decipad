@@ -2,6 +2,7 @@ import { ComponentProps } from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { EditorTable } from './EditorTable';
+import { getNumberType, getStringType } from '../../utils';
 
 const defaultProps: ComponentProps<typeof EditorTable> = {
   value: {
@@ -10,12 +11,12 @@ const defaultProps: ComponentProps<typeof EditorTable> = {
       {
         columnName: 'FirstName',
         cells: ['Mary', 'Pena', 'Zé'],
-        cellType: 'string',
+        cellType: getStringType(),
       },
       {
         columnName: 'Numbers',
         cells: ['1', '2', '3'],
-        cellType: 'number',
+        cellType: getNumberType(),
       },
     ],
   },

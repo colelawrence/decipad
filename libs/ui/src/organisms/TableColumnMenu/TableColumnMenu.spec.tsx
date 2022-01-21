@@ -3,10 +3,12 @@ import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
 import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
 import { mockConsoleWarn } from '@decipad/testutils';
-import { TableCellType, TableColumnMenu } from './TableColumnMenu';
+import { getDateType, getNumberType, getStringType } from '../../utils';
+import { TableColumnMenu } from './TableColumnMenu';
+import { TableCellType } from '../../types';
 
 const props: ComponentProps<typeof TableColumnMenu> = {
-  type: 'string',
+  type: getStringType(),
   trigger: 'trigger',
 };
 
@@ -45,15 +47,15 @@ mockConsoleWarn();
 let cleanup: undefined | (() => void);
 afterEach(() => cleanup?.());
 
-const types: [TableCellType, string][] = [
-  ['string', 'Text'],
-  ['number', 'Number'],
-  ['date/time', 'Time'],
-  ['date/day', 'Day'],
-  ['date/month', 'Month'],
-  ['date/year', 'Year'],
+const types: [string, TableCellType, string][] = [
+  ['string', getStringType(), 'Text'],
+  ['number', getNumberType(), 'Number'],
+  ['date time', getDateType('minute'), 'Time'],
+  ['date day', getDateType('day'), 'Day'],
+  ['date month', getDateType('month'), 'Month'],
+  ['date year', getDateType('year'), 'Year'],
 ];
-it.each(types)('highlights selected type %s', async (type, textContent) => {
+it.each(types)('highlights selected type %s', async (_, type, textContent) => {
   const { findByRole, findAllByRole, findByText } = render(
     <TableColumnMenu trigger={<button>trigger</button>} type={type} open />
   );

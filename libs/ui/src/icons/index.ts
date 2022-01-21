@@ -1,4 +1,5 @@
 export { Actions } from './Actions/Actions';
+export { All } from './All/All';
 export { Bold } from './Bold/Bold';
 export { Bullet } from './Bullet/Bullet';
 export { Caret } from './Caret/Caret';

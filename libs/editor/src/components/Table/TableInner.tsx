@@ -15,6 +15,8 @@ import {
 } from './actions';
 import { TableData } from '../../utils/tableTypes';
 import { parseCell } from '../../utils/parseCell';
+import { useComputer } from '../../contexts/Computer';
+import { formatCell } from '../../utils/formatCell';
 
 interface TableInnerProps {
   value: TableData;
@@ -26,9 +28,11 @@ export const TableInner = ({
   value,
   onChange,
 }: TableInnerProps): ReturnType<FC> => {
+  const computer = useComputer();
   const readOnly = useReadOnly();
   return (
     <organisms.EditorTable
+      formatValue={(column, text) => formatCell(column.cellType, text)}
       onAddColumn={() => {
         onChange(addColumn(value));
       }}
@@ -56,6 +60,7 @@ export const TableInner = ({
       onValidateCell={(column, text) =>
         parseCell(column.cellType, text) != null
       }
+      parseUnit={computer.getUnitFromText.bind(computer)}
       readOnly={readOnly}
       value={value}
     />

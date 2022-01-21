@@ -1,5 +1,11 @@
 import { render } from '@testing-library/react';
-import { TableHeader, typeIcons } from './TableHeader';
+import { TableHeader } from './TableHeader';
+import {
+  getTypeIcon,
+  getDateType,
+  getNumberType,
+  getStringType,
+} from '../../utils';
 
 it('renders the children', () => {
   const { getByText } = render(
@@ -32,22 +38,24 @@ describe('icon prop', () => {
 });
 
 describe('type prop', () => {
-  it.each(Object.entries(typeIcons))(
-    'renders icon for type %s',
-    (type, Icon) => {
-      const { getByTitle } = render(
-        <table>
-          <thead>
-            <tr>
-              <TableHeader type={type as keyof typeof typeIcons}>
-                Th Element
-              </TableHeader>
-            </tr>
-          </thead>
-        </table>
-      );
+  it.each([
+    ['date day', getDateType('day'), getTypeIcon(getDateType('day'))],
+    ['date month', getDateType('month'), getTypeIcon(getDateType('month'))],
+    ['date year', getDateType('year'), getTypeIcon(getDateType('year'))],
+    ['date time', getDateType('minute'), getTypeIcon(getDateType('minute'))],
+    ['number', getNumberType(), getTypeIcon(getNumberType())],
+    ['string', getStringType(), getTypeIcon(getStringType())],
+  ])('renders icon for type %s', (_, type, Icon) => {
+    const { getByTitle } = render(
+      <table>
+        <thead>
+          <tr>
+            <TableHeader type={type}>Th Element</TableHeader>
+          </tr>
+        </thead>
+      </table>
+    );
 
-      expect(getByTitle(new RegExp(Icon.name))).toBeInTheDocument();
-    }
-  );
+    expect(getByTitle(new RegExp(Icon.name))).toBeInTheDocument();
+  });
 });

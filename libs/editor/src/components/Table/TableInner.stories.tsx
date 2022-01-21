@@ -15,12 +15,12 @@ export const Normal: Story = () => {
       {
         columnName: 'FirstName',
         cells: ['Mary', 'Pena', 'Zé'],
-        cellType: 'string',
+        cellType: { kind: 'string' },
       },
       {
         columnName: 'Numbers',
         cells: ['1', '2', '3'],
-        cellType: 'number',
+        cellType: { kind: 'number', unit: null },
       },
     ],
   });

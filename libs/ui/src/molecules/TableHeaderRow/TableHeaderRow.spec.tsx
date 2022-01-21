@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TableHeader } from '../../atoms';
+import { getStringType } from '../../utils';
 import { EditableTableHeader } from '../../organisms';
 import { TableHeaderRow } from './TableHeaderRow';
 
@@ -9,7 +10,7 @@ it('renders a table data', () => {
     <table>
       <tbody>
         <TableHeaderRow>
-          <TableHeader type="string">Table Data</TableHeader>
+          <TableHeader type={getStringType()}>Table Data</TableHeader>
         </TableHeaderRow>
       </tbody>
     </table>
@@ -23,7 +24,7 @@ it('renders an editable table data', () => {
     <table>
       <tbody>
         <TableHeaderRow>
-          <EditableTableHeader type="string" value="Table Data" />
+          <EditableTableHeader type={getStringType()} value="Table Data" />
         </TableHeaderRow>
       </tbody>
     </table>
@@ -37,7 +38,7 @@ it('renders the add new column button', () => {
     <table>
       <tbody>
         <TableHeaderRow>
-          <EditableTableHeader type="string" value="Table Data" />
+          <EditableTableHeader type={getStringType()} value="Table Data" />
         </TableHeaderRow>
       </tbody>
     </table>
@@ -53,7 +54,7 @@ describe('onAddColumn prop', () => {
       <table>
         <tbody>
           <TableHeaderRow onAddColumn={onAddColumn}>
-            <TableHeader type="string">Table Data</TableHeader>
+            <TableHeader type={getStringType()}>Table Data</TableHeader>
           </TableHeaderRow>
         </tbody>
       </table>
@@ -71,7 +72,7 @@ describe('readOnly prop', () => {
       <table>
         <tbody>
           <TableHeaderRow>
-            <TableHeader type="string">Table Data</TableHeader>
+            <TableHeader type={getStringType()}>Table Data</TableHeader>
           </TableHeaderRow>
         </tbody>
       </table>
@@ -83,7 +84,7 @@ describe('readOnly prop', () => {
       <table>
         <tbody>
           <TableHeaderRow readOnly>
-            <TableHeader type="string">Table Data</TableHeader>
+            <TableHeader type={getStringType()}>Table Data</TableHeader>
           </TableHeaderRow>
         </tbody>
       </table>

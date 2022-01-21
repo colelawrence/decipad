@@ -1,0 +1,18 @@
+import { Meta, Story } from '@storybook/react';
+import { SerializedUnits } from '@decipad/language';
+import { inMenu } from '../../storybook-utils';
+import { UnitMenuItem } from './UnitMenuItem';
+
+interface Args {
+  children: string;
+}
+
+export default {
+  title: 'Molecules / Table / Units Menu Item',
+  component: UnitMenuItem,
+  decorators: [inMenu],
+} as Meta<Args>;
+
+export const Normal: Story = () => (
+  <UnitMenuItem parseUnit={() => Promise.resolve({} as SerializedUnits)} />
+);

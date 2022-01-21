@@ -4,6 +4,7 @@ import { isElement } from 'react-is';
 import * as RadixDropdownMenu from '@radix-ui/react-dropdown-menu';
 
 import { MenuItem, TriggerMenuItem } from '../../atoms';
+import { UnitMenuItem } from '..';
 import { cssVar, grey300, transparency } from '../../primitives';
 
 const Depth = createContext(0);
@@ -102,9 +103,14 @@ export const MenuList = ({
         <div css={dropdown || undropdownifyContentStyles}>
           <RadixDropdownMenu.Content css={styles} portalled={dropdown}>
             {Children.map(children, (child) => {
+              if (child == null) {
+                return null;
+              }
               if (
                 isElement(child) &&
-                (child.type === MenuItem || child.type === MenuList)
+                (child.type === MenuItem ||
+                  child.type === MenuList ||
+                  child.type === UnitMenuItem)
               ) {
                 return child;
               }

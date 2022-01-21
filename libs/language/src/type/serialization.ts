@@ -34,7 +34,7 @@ export type SerializedType =
 
 export type SerializedTypeKind = SerializedType['kind'];
 
-function serializeUnit(unit: Units | null): SerializedUnits | null {
+export function serializeUnit(unit: Units | null): SerializedUnits | null {
   if (unit == null) {
     return unit;
   }

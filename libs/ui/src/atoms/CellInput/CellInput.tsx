@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { useRef, useEffect, FC } from 'react';
+import { useRef, useEffect, FC, useState } from 'react';
 import { identity, noop } from '@decipad/utils';
 import { h2, p13Medium, p14Medium } from '../../primitives';
 
@@ -32,6 +32,7 @@ export interface CellInputProps {
   readonly readOnly?: boolean;
   readonly variant?: Variant;
   readonly value: string;
+  readonly format?: (value: string) => string;
   readonly onChange?: (newValue: string) => void;
   readonly validate?: (value: string) => boolean;
   readonly transform?: (newValue: string) => string;
@@ -43,30 +44,34 @@ export const CellInput = ({
   readOnly = false,
   variant = 'data',
   value,
+  format = identity,
   onChange = noop,
   validate = alwaysTrue,
   transform = identity,
 }: CellInputProps): ReturnType<FC> => {
+  const [state, setState] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Reset our state whenever `props.value` change.
   useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.value = value;
-    }
+    setState(null);
   }, [value]);
 
   const submit = () => {
-    const newValue = inputRef.current?.value;
+    if (state == null) {
+      return;
+    }
 
-    if (newValue == null) return;
-
-    if (validate(newValue)) {
-      onChange(transform(newValue));
-    } else if (inputRef.current) {
-      inputRef.current.value = '';
+    if (validate(state)) {
+      onChange(transform(state));
+    } else {
       onChange('');
     }
+
+    setState(null);
   };
+
+  const displayValue = state != null ? state : format(value);
 
   return (
     <input
@@ -77,8 +82,13 @@ export const CellInput = ({
         variant === 'data' && dataStyles,
       ]}
       ref={inputRef}
-      defaultValue={value}
       onBlur={submit}
+      onChange={(e) => {
+        setState(e.target.value);
+      }}
+      onFocus={() => {
+        setState(value);
+      }}
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
           submit();
@@ -86,6 +96,7 @@ export const CellInput = ({
       }}
       placeholder={placeholder}
       readOnly={readOnly}
+      value={displayValue}
     />
   );
 };

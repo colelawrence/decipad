@@ -1,5 +1,10 @@
 import Fraction from '@decipad/fraction';
-import { AST } from '@decipad/language';
+import {
+  AST,
+  deserializeUnit,
+  parseOneBlock,
+  stringifyUnits,
+} from '@decipad/language';
 import { getDefined } from '@decipad/utils';
 import { parse } from 'date-fns';
 import { TableCellType } from './tableTypes';
@@ -9,34 +14,66 @@ export function parseCell(
   cellType: TableCellType,
   text: string
 ): AST.Expression | null {
-  switch (cellType) {
+  switch (cellType.kind) {
     case 'number': {
       const n = Number(text);
-      if (!Number.isNaN(n)) {
-        return astNode('literal', 'number' as const, new Fraction(n || 0));
+      if (Number.isNaN(n) || !Number.isFinite(n)) {
+        return null;
       }
-      return null;
+
+      const literal = astNode('literal', 'number' as const, new Fraction(n));
+      const unit = unitToAST(cellType.unit);
+
+      if (unit == null) {
+        return literal;
+      }
+
+      return astNode(
+        'function-call',
+        astNode('funcref', '*'),
+        astNode('argument-list', literal, unit)
+      );
     }
-    case 'string': {
-      return astNode('literal', 'string' as const, text);
-    }
-    default: {
+    case 'date': {
       const asDate: Date | null = parseDate(cellType, text);
 
       if (!asDate) return null;
 
       return dateToAST(cellType, asDate);
     }
+    default: {
+      // NOTE: Defaulting to string catches string values but it also catches legacy iterations of
+      // cell types without breaking the whole notebook.
+      return astNode('literal', 'string' as const, text);
+    }
+  }
+}
+
+function unitToAST(
+  unit: Extract<TableCellType, { kind: 'number' }>['unit']
+): AST.Expression | null {
+  if (unit == null) {
+    return null;
+  }
+  try {
+    // NOTE: seems more error prone to generate an AST from the Units object than to stringify the
+    // units back to the language and parse the AST.
+    const ast = parseOneBlock(
+      stringifyUnits(deserializeUnit(unit), new Fraction(1), false)
+    );
+    return ast.args.length > 0 ? (ast.args[0] as AST.Expression) : null;
+  } catch {
+    return null;
   }
 }
 
 export const getNullReplacementValue = (
   cellType: TableCellType
 ): AST.Expression => {
-  if (cellType.startsWith('date/')) {
+  if (cellType.kind === 'date') {
     return dateToAST(cellType, new Date('2020-01-01'));
   }
-  if (cellType === 'number') {
+  if (cellType.kind === 'number') {
     return getDefined(parseCell(cellType, '0'));
   }
   throw new Error(`unexpected cell type ${cellType}`);
@@ -47,13 +84,13 @@ function dateToAST(cellType: TableCellType, asDate: Date) {
 
   (() => {
     parts.push('year', BigInt(asDate.getUTCFullYear()));
-    if (cellType === 'date/year') return;
+    if (cellType.kind === 'date' && cellType.date === 'year') return;
 
     parts.push('month', BigInt(asDate.getUTCMonth() + 1));
-    if (cellType === 'date/month') return;
+    if (cellType.kind === 'date' && cellType.date === 'month') return;
 
     parts.push('day', BigInt(asDate.getUTCDate()));
-    if (cellType === 'date/day') return;
+    if (cellType.kind === 'date' && cellType.date === 'day') return;
 
     parts.push('hour', BigInt(asDate.getUTCHours()));
     parts.push('minute', BigInt(asDate.getUTCMinutes()));
@@ -83,16 +120,7 @@ const dateFormats = (text: string, formatStrings: string[]) => {
 const yearFormats = ['yy', 'yyyy'];
 const monthFormats = ['yyyy-MM', 'MM-yyyy'];
 const dayFormats = ['dd-MM-yyyy', 'yyyy-MM-dd'];
-const timeFormats = [
-  'H:m',
-  'HH:mm',
-  'HHmm',
-  'HH:mm:ss',
-  'h:m aaa',
-  'hh:mm aaa',
-  'hhmm aaa',
-  'hh:mm:ss aaa',
-];
+const timeFormats = ['HH:mm', 'HHmm', 'h:m aaa', 'hh:mm aaa', 'hhmm aaa'];
 const dateTimeFormats = [
   ...dayFormats.flatMap((date) =>
     timeFormats.flatMap((time) => [`${date} ${time}`, `${time} ${date}`])
@@ -100,20 +128,25 @@ const dateTimeFormats = [
 ];
 
 export function parseDate(cellType: TableCellType, text: string): Date | null {
-  switch (cellType) {
-    case 'date/year': {
+  if (cellType.kind !== 'date') {
+    throw new Error(
+      `Expected cell type kind 'date', received ${cellType.kind}`
+    );
+  }
+  switch (cellType.date) {
+    case 'year': {
       return dateFormats(text, yearFormats);
     }
-    case 'date/month': {
+    case 'month': {
       return dateFormats(text, monthFormats);
     }
-    case 'date/day': {
+    case 'day': {
       return dateFormats(text, dayFormats);
     }
-    case 'date/time': {
+    case 'minute': {
       return dateFormats(text, dateTimeFormats);
     }
     default:
-      throw new Error(`unknown cell type ${cellType}`);
+      return null;
   }
 }

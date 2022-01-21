@@ -2,33 +2,26 @@ import { FC } from 'react';
 import { css } from '@emotion/react';
 import { SerializedType } from '@decipad/language';
 import { CodeResult, Table } from '..';
-import { TableCellType } from '../EditorTable/types';
 import { TableData, TableHeader } from '../../atoms';
 import { TableHeaderRow, TableRow } from '../../molecules';
 import { table } from '../../styles';
-import { CodeResultProps } from '../../types';
+import { CodeResultProps, TableCellType } from '../../types';
 
 const cellWrapperStyles = css({
   overflowX: 'hidden',
   padding: `2px ${table.cellSidePadding}`,
 });
 
-function toTableHeaderType(type: SerializedType): TableCellType {
-  switch (true) {
-    case type.kind === 'number':
-      return 'number';
-    case type.kind === 'string':
-      return 'string';
-    case type.kind === 'date' && type.date === 'day':
-      return 'date/day';
-    case type.kind === 'date' && type.date === 'month':
-      return 'date/month';
-    case type.kind === 'date' && type.date === 'year':
-      return 'date/year';
-    case type.kind === 'date':
-      return 'date/time';
+export function toTableHeaderType(
+  type: SerializedType
+): TableCellType | undefined {
+  switch (type.kind) {
+    case 'number':
+    case 'string':
+    case 'date':
+      return type;
     default:
-      return 'string' as never;
+      return undefined as never;
   }
 }
 

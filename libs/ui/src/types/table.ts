@@ -1,10 +1,9 @@
+import { SerializedType } from '@decipad/language';
+
 export type TableCellType =
-  | 'number'
-  | 'string'
-  | 'date/time'
-  | 'date/day'
-  | 'date/month'
-  | 'date/year';
+  | Extract<SerializedType, { kind: 'number' }>
+  | Extract<SerializedType, { kind: 'string' }>
+  | Extract<SerializedType, { kind: 'date' }>;
 
 export interface TableColumn {
   columnName: string;

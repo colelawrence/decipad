@@ -47,6 +47,26 @@ it('takes a new value from the props', async () => {
   expect(getByRole('textbox')).toHaveValue('new');
 });
 
+describe('format prop', () => {
+  it('formats input when blurred', () => {
+    const format = jest.fn((value) => `${value} bananas`);
+    const { getByRole } = render(<CellInput format={format} value="text" />);
+
+    expect(getByRole('textbox')).toHaveValue('text bananas');
+  });
+
+  it('restores original value when focused', () => {
+    const format = jest.fn((value) => `${value} bananas`);
+    const { getByRole } = render(<CellInput format={format} value="text" />);
+
+    fireEvent.focus(getByRole('textbox'));
+    expect(getByRole('textbox')).toHaveValue('text');
+
+    fireEvent.blur(getByRole('textbox'));
+    expect(getByRole('textbox')).toHaveValue('text bananas');
+  });
+});
+
 describe('readOnly prop', () => {
   it('disables the ability to input text', () => {
     const { getByRole } = render(<CellInput readOnly value="text" />);
@@ -81,9 +101,10 @@ describe('transform prop', () => {
 
 describe('validate prop', () => {
   it('validates the input before submitting', async () => {
+    const onChange = jest.fn();
     const validate = jest.fn(() => true);
     const { getByRole, rerender } = render(
-      <CellInput validate={validate} value="" />
+      <CellInput onChange={onChange} validate={validate} value="" />
     );
 
     userEvent.type(getByRole('textbox'), 'text');
@@ -91,15 +112,15 @@ describe('validate prop', () => {
 
     expect(validate).toHaveBeenCalledTimes(1);
     expect(validate).toHaveBeenCalledWith('text');
-    expect(getByRole('textbox')).toHaveValue('text');
+    expect(onChange).toHaveBeenCalledWith('text');
 
     const noValidate = jest.fn(() => false);
-    rerender(<CellInput validate={noValidate} value="" />);
+    rerender(<CellInput onChange={onChange} validate={noValidate} value="" />);
 
     userEvent.type(getByRole('textbox'), 'text');
     fireEvent.blur(getByRole('textbox'));
 
     expect(noValidate).toHaveBeenCalledTimes(1);
-    expect(getByRole('textbox')).toHaveValue('');
+    expect(onChange).toHaveBeenCalledWith('text');
   });
 });

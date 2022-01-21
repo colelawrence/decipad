@@ -1,4 +1,5 @@
 import { Meta, Story } from '@storybook/react';
+import { getStringType } from '../../utils';
 import { TableHeaderRow } from '../../molecules';
 import { EditableTableHeader } from './EditableTableHeader';
 
@@ -9,6 +10,6 @@ export default {
 
 export const Normal: Story = () => (
   <table>
-    <EditableTableHeader type="string" value="Header1" />
+    <EditableTableHeader type={getStringType()} value="Header1" />
   </table>
 );

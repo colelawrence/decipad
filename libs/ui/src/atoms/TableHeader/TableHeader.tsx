@@ -1,8 +1,9 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { Number, Text, Placeholder } from '../../icons';
+import { getStringType, getTypeIcon } from '../../utils';
 import { cssVar, grey250, p13Medium } from '../../primitives';
 import { table } from '../../styles';
+import { TableCellType } from '../../types';
 
 const columnStyles = css(p13Medium, {
   display: 'grid',
@@ -38,31 +39,20 @@ const columnTypeStyles = css({
   },
 });
 
-export const typeIcons = {
-  string: Text,
-  number: Number,
-  'date/time': Placeholder,
-  'date/day': Placeholder,
-  'date/month': Placeholder,
-  'date/year': Placeholder,
-};
-
-type Type = keyof typeof typeIcons;
-
 export interface TableHeaderProps {
   children?: React.ReactNode;
   highlight?: boolean;
   icon?: React.ReactNode;
-  type?: Type;
+  type?: TableCellType;
 }
 
 export const TableHeader = ({
   children,
   highlight = false,
   icon,
-  type = 'string',
+  type = getStringType(),
 }: TableHeaderProps): ReturnType<FC> => {
-  const Icon = typeIcons[type];
+  const Icon = getTypeIcon(type);
   return (
     <th css={columnStyles} data-highlight={highlight}>
       <div css={headerWrapperStyles}>
