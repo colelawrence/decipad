@@ -29,6 +29,7 @@ type Variant = 'heading' | 'header' | 'data';
 
 export interface CellInputProps {
   readonly placeholder?: string;
+  readonly readOnly?: boolean;
   readonly variant?: Variant;
   readonly value: string;
   readonly onChange?: (newValue: string) => void;
@@ -39,6 +40,7 @@ export interface CellInputProps {
 /** Sort of coupled to tables. Once blurred, commits changes by calling onChange */
 export const CellInput = ({
   placeholder,
+  readOnly = false,
   variant = 'data',
   value,
   onChange = noop,
@@ -83,6 +85,7 @@ export const CellInput = ({
         }
       }}
       placeholder={placeholder}
+      readOnly={readOnly}
     />
   );
 };

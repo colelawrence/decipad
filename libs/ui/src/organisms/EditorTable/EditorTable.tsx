@@ -13,6 +13,7 @@ import { noop } from '../../utils';
 const alwaysTrue = () => true;
 
 interface EditorTableProps {
+  readOnly?: boolean;
   value: TableData;
   onAddColumn?: () => void;
   onAddRow?: () => void;
@@ -30,6 +31,7 @@ interface EditorTableProps {
 }
 
 export const EditorTable = ({
+  readOnly = false,
   value,
   onAddColumn,
   onAddRow,
@@ -48,9 +50,10 @@ export const EditorTable = ({
         <EditableTableCaption
           value={value.variableName}
           onChange={onChangeCaption}
+          readOnly={readOnly}
         />
         <thead>
-          <TableHeaderRow onAddColumn={onAddColumn}>
+          <TableHeaderRow onAddColumn={onAddColumn} readOnly={readOnly}>
             {value.columns.map((col, columnIndex) => {
               return (
                 <EditableTableHeader
@@ -66,6 +69,7 @@ export const EditorTable = ({
                   onRemoveColumn={() => {
                     onRemoveColumn(columnIndex);
                   }}
+                  readOnly={readOnly}
                 />
               );
             })}
@@ -79,6 +83,7 @@ export const EditorTable = ({
                 onRemove={() => {
                   onRemoveRow(rowIndex);
                 }}
+                readOnly={readOnly}
               >
                 {value.columns.map((column, colIndex) => {
                   return (
@@ -89,6 +94,7 @@ export const EditorTable = ({
                         onChangeCell(colIndex, rowIndex, newValue);
                       }}
                       validate={(newValue) => onValidateCell(column, newValue)}
+                      readOnly={readOnly}
                     />
                   );
                 })}
@@ -96,12 +102,14 @@ export const EditorTable = ({
             );
           })}
         </tbody>
-        <tfoot>
-          <AddTableRowButton
-            colSpan={value.columns.length + 1}
-            onAddRow={onAddRow}
-          />
-        </tfoot>
+        {!readOnly && (
+          <tfoot>
+            <AddTableRowButton
+              colSpan={value.columns.length + 1}
+              onAddRow={onAddRow}
+            />
+          </tfoot>
+        )}
       </Table>
     </div>
   );

@@ -47,6 +47,17 @@ it('takes a new value from the props', async () => {
   expect(getByRole('textbox')).toHaveValue('new');
 });
 
+describe('readOnly prop', () => {
+  it('disables the ability to input text', () => {
+    const { getByRole } = render(<CellInput readOnly value="text" />);
+
+    userEvent.type(getByRole('textbox'), 'foo');
+    fireEvent.blur(getByRole('textbox'));
+
+    expect(getByRole('textbox')).toHaveValue('text');
+  });
+});
+
 describe('transform prop', () => {
   it('transforms the input before submitting', () => {
     const onChange = jest.fn(() => 'transformed');

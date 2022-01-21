@@ -109,3 +109,36 @@ describe('onChange prop', () => {
     expect(onChange).toHaveBeenCalledWith('$Edited123');
   });
 });
+
+describe('readOnly prop', () => {
+  it('does not render the column menu', () => {
+    const { queryAllByRole, rerender } = render(
+      <table>
+        <thead>
+          <tr>
+            <EditableTableHeader {...defaultProps} readOnly={false} />
+          </tr>
+        </thead>
+      </table>
+    );
+    const getPopupButton = () =>
+      queryAllByRole(
+        (content, element) =>
+          content === 'button' && element?.getAttribute('aria-haspopup')
+      );
+
+    expect(getPopupButton()).toHaveLength(1);
+    expect(getPopupButton()[0]).toBeVisible();
+
+    rerender(
+      <table>
+        <thead>
+          <tr>
+            <EditableTableHeader {...defaultProps} readOnly />
+          </tr>
+        </thead>
+      </table>
+    );
+    expect(getPopupButton()).toHaveLength(0);
+  });
+});

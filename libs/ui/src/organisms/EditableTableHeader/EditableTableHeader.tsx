@@ -18,6 +18,10 @@ const triggerStyles = css({
   },
 });
 
+const triggerReadOnlyStyles = css({
+  cursor: 'auto',
+});
+
 type EditableTableHeaderProps = Pick<
   ComponentProps<typeof TableHeader>,
   'type'
@@ -26,34 +30,39 @@ type EditableTableHeaderProps = Pick<
     ComponentProps<typeof TableColumnMenu>,
     'onChangeColumnType' | 'onRemoveColumn'
   > &
-  Pick<ComponentProps<typeof CellInput>, 'onChange' | 'value'>;
+  Pick<ComponentProps<typeof CellInput>, 'onChange' | 'readOnly' | 'value'>;
 
 export const EditableTableHeader: FC<EditableTableHeaderProps> = ({
   onChangeColumnType,
   onChange,
   onRemoveColumn,
+  readOnly = false,
   type = 'string',
   value,
 }) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
 
-  const Icon = typeIcons[type];
-
+  const IconComponent = typeIcons[type];
+  const icon = (
+    <button css={[triggerStyles, readOnly && triggerReadOnlyStyles]}>
+      <IconComponent />
+    </button>
+  );
   return (
     <TableHeader
       icon={
-        <TableColumnMenu
-          trigger={
-            <button css={triggerStyles}>
-              <Icon />
-            </button>
-          }
-          open={isMenuOpen}
-          onChangeOpen={setMenuOpen}
-          onChangeColumnType={onChangeColumnType}
-          onRemoveColumn={onRemoveColumn}
-          type={type}
-        />
+        readOnly ? (
+          icon
+        ) : (
+          <TableColumnMenu
+            trigger={icon}
+            open={isMenuOpen}
+            onChangeOpen={setMenuOpen}
+            onChangeColumnType={onChangeColumnType}
+            onRemoveColumn={onRemoveColumn}
+            type={type}
+          />
+        )
       }
       highlight={isMenuOpen}
       type={type}
@@ -61,6 +70,7 @@ export const EditableTableHeader: FC<EditableTableHeaderProps> = ({
       <CellInput
         onChange={onChange}
         placeholder="ColumnName"
+        readOnly={readOnly}
         transform={(newValue) =>
           newValue.match(identifierNamePattern)?.join('') ?? ''
         }

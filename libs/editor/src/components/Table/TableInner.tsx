@@ -2,6 +2,7 @@ import { FC } from 'react';
 
 import { organisms } from '@decipad/ui';
 
+import { useReadOnly } from 'slate-react';
 import {
   changeVariableName,
   addColumn,
@@ -25,6 +26,7 @@ export const TableInner = ({
   value,
   onChange,
 }: TableInnerProps): ReturnType<FC> => {
+  const readOnly = useReadOnly();
   return (
     <organisms.EditorTable
       onAddColumn={() => {
@@ -54,6 +56,7 @@ export const TableInner = ({
       onValidateCell={(column, text) =>
         parseCell(column.cellType, text) != null
       }
+      readOnly={readOnly}
       value={value}
     />
   );

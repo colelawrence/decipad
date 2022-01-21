@@ -16,13 +16,14 @@ const tableIconSizeStyles = css({
   height: '16px',
 });
 
-type EditableTableCaptionProps = Omit<
+type EditableTableCaptionProps = Pick<
   ComponentProps<typeof CellInput>,
-  'className' | 'validate' | 'placeholder'
+  'onChange' | 'readOnly' | 'value'
 >;
 
 export const EditableTableCaption = ({
   onChange,
+  readOnly,
   value,
 }: EditableTableCaptionProps): ReturnType<FC> => {
   return (
@@ -34,6 +35,7 @@ export const EditableTableCaption = ({
         <CellInput
           onChange={onChange}
           placeholder="TableName"
+          readOnly={readOnly}
           transform={(newValue) =>
             newValue.match(identifierNamePattern)?.join('') ?? ''
           }

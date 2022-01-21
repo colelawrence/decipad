@@ -7,14 +7,14 @@ const cellWrapperStyles = css({
   padding: `0 ${table.cellSidePadding}`,
 });
 
-type EditableTableDataProps = Omit<
-  ComponentProps<typeof TableData>,
-  'children'
-> &
-  Omit<ComponentProps<typeof CellInput>, 'className'>;
+type EditableTableDataProps = Pick<
+  ComponentProps<typeof CellInput>,
+  'onChange' | 'readOnly' | 'validate' | 'value'
+>;
 
 export const EditableTableData = ({
   onChange,
+  readOnly,
   validate,
   value,
 }: EditableTableDataProps): ReturnType<FC> => {
@@ -26,6 +26,7 @@ export const EditableTableData = ({
           validate={validate}
           value={value}
           variant="data"
+          readOnly={readOnly}
         />
       </div>
     </TableData>
