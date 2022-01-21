@@ -54,7 +54,7 @@ export const ColumnResult = ({
                 <div
                   css={[
                     { display: 'grid' },
-                    !isNestedColumnOrTable(type) && cellPaddingStyles,
+                    !isNestedColumnOrTable(type.cellType) && cellPaddingStyles,
                     // In case there is a nested dimension but no labels (ie. the nested dimension
                     // will render in the first column), we need to give it some space from the row
                     // number
