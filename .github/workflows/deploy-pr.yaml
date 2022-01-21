@@ -9,8 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     concurrency:
-      group: deploy-pr-${{ github.head_ref }}
-      cancel-in-progress: true
+      group: deploy-stack
     steps:
       #### Prepare
 

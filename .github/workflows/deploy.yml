@@ -12,7 +12,7 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     concurrency:
-      group: deploy-${{ github.head_ref }}
+      group: deploy-stack
 
     steps:
       - name: Configure AWS credentials
