@@ -23,8 +23,8 @@ Here, each column is a list with the same length. As with lists, you can specify
 
 ```deci live
 MyTable = {
-  A = [1 bananas, 2, 3]
-  B = [4 oranges, 5, 6]
+  A = [1, 2, 3] bananas
+  B = [4, 5, 6] oranges
 }
 ==> {
   A = [ 1 bananas, 2 bananas, 3 bananas ],
@@ -96,8 +96,8 @@ You can access the table columns individually:
 
 ```deci live
 Table = {
-  A = [1 bananas, 2, 3]
-  B = [4 oranges, 5, 6]
+  A = [1, 2, 3] bananas
+  B = [4, 5, 6] oranges
 }
 
 Table.B
@@ -108,8 +108,8 @@ You can then use them as lists:
 
 ```deci live
 Table = {
-  A = [1 bananas, 2, 3]
-  B = [4 oranges, 5, 6]
+  A = [1, 2, 3] bananas
+  B = [4, 5, 6] oranges
 }
 
 Table.A / Table.B
@@ -120,7 +120,7 @@ Even inside your table, you can refer to its previous columns, if you need to ag
 
 ```deci live
 Table = {
-  A = [1 bananas, 2, 3]
+  A = [1, 2, 3] bananas
   AverageBananas = total(Table.A) / len(Table.A)
 }
 ==> {
