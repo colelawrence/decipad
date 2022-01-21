@@ -13,6 +13,13 @@ addIrregularRule('mph', 'mph');
 addIrregularRule('u', 'u');
 addIrregularRule('lumen', 'lumen');
 
+// easter eggs
+addIrregularRule('lol', 'lulz');
+addIrregularRule('lul', 'lulz');
+addIrregularRule('omegalul', 'omegalulz');
+addIrregularRule('UwU', 'UwU');
+addIrregularRule('OwO', 'OwO');
+
 function pluralizeBigint(str: string, n: number | bigint = 2n) {
   return pluralize(str, Number(n));
 }
