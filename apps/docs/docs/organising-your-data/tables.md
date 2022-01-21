@@ -38,25 +38,58 @@ You can also declare a column like this:
 
 ```deci live
 MyTable = {
-  ArrivalDate = [date(2022-02-20) through date(2022-03-05) by day]
+  ArrivalDate = [date(2022-02-20) through date(2022-02-24) by day]
 }
 ==> {
-  ArrivalDate = [ day 2022-02-20, day 2022-02-21, day 2022-02-22, day 2022-02-23, day 2022-02-24, day 2022-02-25, day 2022-02-26, day 2022-02-27, day 2022-02-28, day 2022-03-01, day 2022-03-02, day 2022-03-03, day 2022-03-04, day 2022-03-05 ]
+  ArrivalDate = [ day 2022-02-20, day 2022-02-21, day 2022-02-22, day 2022-02-23, day 2022-02-24 ]
 }
 ```
 
-## Columns as expressions
+## Columns with calculations
 
 Instead of manually inputting values, each column's cell can be based on the outputs of other cells:
 
 ```deci live
 MyTable = {
-  ArrivalDate = [date(2022-02-20) through date(2022-03-05) by day]
+  ArrivalDate = [date(2022-02-20) through date(2022-02-24) by day]
   DepartureDate = ArrivalDate + 7 days
 }
 ==> {
-  ArrivalDate = [ day 2022-02-20, day 2022-02-21, day 2022-02-22, day 2022-02-23, day 2022-02-24, day 2022-02-25, day 2022-02-26, day 2022-02-27, day 2022-02-28, day 2022-03-01, day 2022-03-02, day 2022-03-03, day 2022-03-04, day 2022-03-05 ],
-  DepartureDate = [ day 2022-02-27, day 2022-02-28, day 2022-03-01, day 2022-03-02, day 2022-03-03, day 2022-03-04, day 2022-03-05, day 2022-03-06, day 2022-03-07, day 2022-03-08, day 2022-03-09, day 2022-03-10, day 2022-03-11, day 2022-03-12 ]
+  ArrivalDate = [ day 2022-02-20, day 2022-02-21, day 2022-02-22, day 2022-02-23, day 2022-02-24 ],
+  DepartureDate = [ day 2022-02-27, day 2022-02-28, day 2022-03-01, day 2022-03-02, day 2022-03-03 ]
+}
+```
+
+## Using columns as a whole
+
+Sometimes, when deriving a column from another with an expression, you might want to use the whole column at once instead of doing your calculations at a row-by-row basis. Like when you want to know the maximum of a column:
+
+```deci live
+Table = {
+  TestResults = [1, 2, 0, -3]
+  ComparedToMax = TestResults - max(Table.TestResults)
+}
+==> {
+  TestResults = [ 1, 2, 0, -3 ],
+  ComparedToMax = [ -1, 0, -2, -5 ]
+}
+```
+
+Or analyze changes to your profits:
+
+```deci live
+  InitialProfit = 500
+  Table = {
+    Months = [date(2020-01) through date(2020-04) by month]
+    Profit = [InitialProfit, 300, 125, 230] GBP
+    RelativeChangeInProfit = stepgrowth(Table.Profit)
+    PercentOfProfit = round(Profit / total(Table.Profit) in 1/100)
+  }
+==> {
+  Months = [ month 2020-01, month 2020-02, month 2020-03, month 2020-04 ],
+  Profit = [ 500 GBP, 300 GBP, 125 GBP, 230 GBP ],
+  RelativeChangeInProfit = [ 500 GBP, -200 GBP, -175 GBP, 105 GBP ],
+  PercentOfProfit = [ 43, 26, 11, 20 ]
 }
 ```
 
@@ -64,7 +97,7 @@ MyTable = {
 
 You can access previous column values by using the word `previous` and providing a value for the first cell, like this:
 
-```devi live
+```deci live
 Harvest = {
   Date = [date(2022-02-20) through date(2022-03-05) by day]
   Oranges = [10 oranges, 15, 20, 9, 4, 54, 23, 45, 53, 63, 54, 12, 0, 1],
@@ -76,19 +109,6 @@ Harvest = {
   Count = [ 1 oranges, 2 oranges, 3 oranges, 4 oranges, 5 oranges, 6 oranges, 7 oranges, 8 oranges, 9 oranges, 10 oranges, 11 oranges, 12 oranges, 13 oranges, 14 oranges ]
 }
 ```
-
-## One row at a time!
-
-Sometimes, when deriving a column from another, you might want to go cell-by-cell, and only look at the current row at a cell-by-cell basis. When you want to do this, you can create a formula column by using parentheses and specifying what you want the current row to be called.
-
-    Table = {
-      Column = [1, 2, 0, 0, 3, -3, -3]
-      CumulativeSum(currentRow) = currentRow.Column + previous(0)
-    }
-    ==> {
-      Column = [ 1, 2, 0, 0, 3, -3, -3 ],
-      CumulativeSum = [ 1, 3, 3, 3, 6, 3, 0 ]
-    }
 
 ## Access columns
 
