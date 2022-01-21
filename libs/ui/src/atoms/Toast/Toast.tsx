@@ -15,7 +15,7 @@ const getAppearanceType = (appearance: AppearanceTypes) => {
     warning: warningStyle,
   };
 
-  return type[appearance] || type.info;
+  return type[appearance];
 };
 
 const getIconType = (appearance: AppearanceTypes) => {
@@ -26,7 +26,7 @@ const getIconType = (appearance: AppearanceTypes) => {
     warning: <Warning />,
   };
 
-  return type[appearance] || type.info;
+  return type[appearance];
 };
 
 const baseStyles = css(p14Regular, {
@@ -43,7 +43,7 @@ const baseStyles = css(p14Regular, {
 });
 
 const errorStyle = css(baseStyles, {
-  backgroundColor: cssVar('normalDangerColor'),
+  backgroundColor: cssVar('dangerColor'),
   color: cssVar('backgroundColor'),
 });
 
@@ -53,12 +53,12 @@ const infoStyle = css(baseStyles, {
 });
 
 const successStyle = css(baseStyles, {
-  backgroundColor: cssVar('normalBrandColor'),
+  backgroundColor: cssVar('successColor'),
   color: cssVar('strongTextColor'),
 });
 
 const warningStyle = css(baseStyles, {
-  backgroundColor: cssVar('normalWarningColor'),
+  backgroundColor: cssVar('warningColor'),
   color: cssVar('backgroundColor'),
 });
 

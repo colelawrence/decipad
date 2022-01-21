@@ -1,54 +1,58 @@
-import { Meta } from '@storybook/react';
-import React, { ComponentProps } from 'react';
+import { Meta, Story } from '@storybook/react';
+import { ComponentProps } from 'react';
 import { AppearanceTypes, useToasts } from 'react-toast-notifications';
 import { ToastDisplay } from './ToastDisplay';
+
+const args = {
+  text: 'Toast text',
+};
 
 export default {
   title: 'Templates / Toast Display',
   component: ToastDisplay,
+  args,
 } as Meta<ComponentProps<typeof ToastDisplay>>;
 
 interface ToastButtonProps {
-  appearance: AppearanceTypes;
+  readonly appearance: AppearanceTypes;
+  readonly text: string;
 }
 
-const ToastButton = ({ appearance }: ToastButtonProps) => {
+const ToastButton = ({ appearance, text }: ToastButtonProps) => {
   const { addToast } = useToasts();
   return (
-    <button onClick={() => addToast('wawawea', { appearance })}>
-      Click me
-    </button>
+    <button onClick={() => addToast(text, { appearance })}>Click me</button>
   );
 };
 
-export const Info = (): ReturnType<React.FC> => {
+export const Info: Story<typeof args> = (props) => {
   return (
     <ToastDisplay>
-      <ToastButton appearance="info" />
+      <ToastButton {...props} appearance="info" />
     </ToastDisplay>
   );
 };
 
-export const Success = (): ReturnType<React.FC> => {
+export const Success: Story<typeof args> = (props) => {
   return (
     <ToastDisplay>
-      <ToastButton appearance="success" />
+      <ToastButton {...props} appearance="success" />
     </ToastDisplay>
   );
 };
 
-export const Error = (): ReturnType<React.FC> => {
+export const Error: Story<typeof args> = (props) => {
   return (
     <ToastDisplay>
-      <ToastButton appearance="error" />
+      <ToastButton {...props} appearance="error" />
     </ToastDisplay>
   );
 };
 
-export const Warning = (): ReturnType<React.FC> => {
+export const Warning: Story<typeof args> = (props) => {
   return (
     <ToastDisplay>
-      <ToastButton appearance="warning" />
+      <ToastButton {...props} appearance="warning" />
     </ToastDisplay>
   );
 };

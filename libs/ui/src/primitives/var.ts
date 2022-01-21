@@ -13,24 +13,42 @@ import {
 } from './color';
 
 export interface CssVariables {
+  // Accent
+
+  readonly brandColor: Property.Color;
+
+  readonly successColor: Property.Color;
+  readonly dangerColor: Property.Color;
+  readonly warningColor: Property.Color;
+
+  // Fill
+
   readonly backgroundColor: Property.Color;
   readonly iconBackgroundColor: Property.Color;
   readonly offColor: Property.Color;
 
+  // Highlighting
+
   readonly highlightColor: Property.Color;
   readonly strongHighlightColor: Property.Color;
+
+  // Text
 
   readonly weakTextColor: Property.Color;
   readonly normalTextColor: Property.Color;
   readonly strongTextColor: Property.Color;
 
-  readonly normalDangerColor: Property.Color;
-  readonly normalWarningColor: Property.Color;
-  readonly normalBrandColor: Property.Color;
-
   readonly currentTextColor: Property.Color;
 }
 const defaults: CssVariables = {
+  brandColor: electricGreen200.rgb,
+
+  get successColor() {
+    return cssVar('brandColor');
+  },
+  dangerColor: red500.rgb,
+  warningColor: orange500.rgb,
+
   backgroundColor: white.rgb,
   iconBackgroundColor: grey200.rgb,
   offColor: offWhite.rgb,
@@ -41,10 +59,6 @@ const defaults: CssVariables = {
   weakTextColor: grey300.rgb,
   normalTextColor: grey400.rgb,
   strongTextColor: black.rgb,
-
-  normalDangerColor: red500.rgb,
-  normalWarningColor: orange500.rgb,
-  normalBrandColor: electricGreen200.rgb,
 
   get currentTextColor() {
     return cssVar('normalTextColor');

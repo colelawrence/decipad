@@ -8,6 +8,7 @@ import Head from 'next/head';
 import { FC } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { ClientEventsAnalytics } from '../components/ClientEventsAnalytics';
+import { IdentifyUserAnalytics } from '../components/IdentifyUserAnalytics';
 import { useApollo } from '../lib/apolloClient';
 import { Router } from '../routes';
 
@@ -51,15 +52,17 @@ const Index = ({ pageProps = {} }: AppProps): ReturnType<FC> => {
       <ClientEventsAnalytics>
         <ToastDisplay>
           <AuthProvider session={session ?? undefined}>
-            <ApolloProvider client={apolloClient}>
-              <GlobalStyles>
-                <ChakraProvider theme={theme}>
-                  <BrowserRouter>
-                    <Router />
-                  </BrowserRouter>
-                </ChakraProvider>
-              </GlobalStyles>
-            </ApolloProvider>
+            <IdentifyUserAnalytics>
+              <ApolloProvider client={apolloClient}>
+                <GlobalStyles>
+                  <ChakraProvider theme={theme}>
+                    <BrowserRouter>
+                      <Router />
+                    </BrowserRouter>
+                  </ChakraProvider>
+                </GlobalStyles>
+              </ApolloProvider>
+            </IdentifyUserAnalytics>
           </AuthProvider>
         </ToastDisplay>
       </ClientEventsAnalytics>

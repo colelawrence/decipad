@@ -12,9 +12,7 @@ describe('Toast atom', () => {
     const { rerender, getByText } = render(
       <Toast appearance="info">toast</Toast>
     );
-
     cleanup = await applyCssVars();
-
     const { backgroundColor: infoColor } = findParentWithStyle(
       getByText('toast'),
       'backgroundColor'
@@ -23,9 +21,7 @@ describe('Toast atom', () => {
     cleanup();
 
     rerender(<Toast appearance="success">toast</Toast>);
-
     cleanup = await applyCssVars();
-
     const { backgroundColor: successColor } = findParentWithStyle(
       getByText('toast'),
       'backgroundColor'
