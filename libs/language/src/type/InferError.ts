@@ -59,6 +59,10 @@ export type ErrSpec =
       errType: 'expected-table-and-associated-column';
       gotTable: Type;
       gotColumn: Type;
+    }
+  | {
+      errType: 'duplicated-name';
+      duplicatedName: string;
     };
 
 // exhaustive switch
@@ -123,6 +127,9 @@ function specToString(spec: ErrSpec): string {
     }
     case 'expected-table-and-associated-column': {
       return `Expected table and associated column`;
+    }
+    case 'duplicated-name': {
+      return `The name ${spec.duplicatedName} is already being used. You cannot have duplicate names`;
     }
   }
 }
@@ -248,6 +255,13 @@ export class InferError {
       errType: 'expected-table-and-associated-column',
       gotTable,
       gotColumn,
+    });
+  }
+
+  static duplicatedName(duplicatedName: string) {
+    return new InferError({
+      errType: 'duplicated-name',
+      duplicatedName,
     });
   }
 

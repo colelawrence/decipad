@@ -248,3 +248,31 @@ dinheiro = 800000 €
 quid = 800000 £
 ==> 800000 £
 ```
+
+## Duplicated name
+
+:::caution `duplicated-name`
+The name VariableName is already being used. You cannot have duplicate names
+:::
+
+You named two variables with the same name. One of the biggest advantages of Decipad is how descriptive it is. Your reader will probably feel like they can truly understand your thought process.
+
+A big part of that is the name you give to your calculations. So, while in a hurry you might just want to call everything `Monies` or `Funds`, that makes it quite confusing to those reading.
+
+So we require you to use descriptive names for your variables, to make your notebooks easier to understand.
+
+```deci live
+Cash = 100 $
+Coffee = 5 $
+Cash = Cash - Coffee
+==> The name Cash is already being used. You cannot have duplicate names
+```
+
+You can fix it by providing descriptive variable names:
+
+```deci live
+PocketCash = 100 $
+Coffee = 5 $
+LeftoverCashAfterCoffee = PocketCash - Coffee
+==> 95 $
+```

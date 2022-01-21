@@ -259,9 +259,7 @@ export const inferStatement = wrap(
         ctx.inAssignment = varName;
         const type = await (!ctx.stack.top.has(varName)
           ? inferExpression(ctx, nValue)
-          : t.impossible(
-              `The name ${varName} is already being used. You cannot have duplicate names`
-            ));
+          : t.impossible(InferError.duplicatedName(varName)));
         ctx.inAssignment = null;
 
         ctx.stack.set(varName, type);
