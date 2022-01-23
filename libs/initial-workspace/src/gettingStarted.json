@@ -1,30 +1,31 @@
 {
   "children": [
     {
-      "type": "h1",
       "children": [
         {
-          "text": "🚀 Getting Started"
+          "text": "👋 Meet Decipad! Learn the basics"
         }
-      ]
+      ],
+      "type": "h1",
+      "id": "hN74W2FJYgN2QYiIiMbUe"
     },
     {
       "children": [
         {
-          "text": "Welcome to our alpha experience!"
+          "text": "We're excited to get your feedback and grateful for your support"
         }
       ],
       "type": "h2",
-      "id": "4ZRDDQL8y0ObVB1q78GSn"
+      "id": "_4kRi3ui91Toh4-uYAQTF"
     },
     {
       "children": [
         {
-          "text": "We're excited to get your feedback and grateful for your support. Alpha is a notebook to write text, perform calculations and build models using the Decipad language. The Decipad language is a more human way to write with numbers."
+          "text": "Decipad is a notebook to write text, perform calculations and build models in a more human way. We're excited to see what you create!"
         }
       ],
       "type": "p",
-      "id": "O8lXF5qn1po87ijJ3ji2H"
+      "id": "5hTCnYQPUw6sIoHN71P2E"
     },
     {
       "children": [
@@ -32,16 +33,17 @@
           "text": ""
         }
       ],
-      "type": "p"
+      "type": "p",
+      "id": "YnfwxZ_6c-b0kMx3gBsDh"
     },
     {
       "children": [
         {
-          "text": "What's possible in alpha?  "
+          "text": "What's possible in alpha?"
         }
       ],
       "type": "p",
-      "id": "m5Ggi9mDTHQ3RALC7NuD9"
+      "id": "wcGvRJt8Hwevyi15G23dT"
     },
     {
       "children": [
@@ -54,37 +56,74 @@
                   "bold": true
                 },
                 {
-                  "text": " Just start writing. Format your text using the "
+                  "text": " Just start writing. Use the "
                 },
                 {
                   "children": [
                     {
-                      "text": "styling menu"
+                      "text": ""
                     }
                   ],
                   "type": "a",
-                  "url": "https://alpha.decipad.com/docs"
+                  "url": "https://alpha.decipad.com/docs",
+                  "id": "zuU3rEm9a4oFMIqOMp7c1"
                 },
                 {
-                  "text": " or supported markdown. "
+                  "text": "menu that pops up or markdown to style your "
+                },
+                {
+                  "text": "text",
+                  "bold": true
+                },
+                {
+                  "text": " "
+                },
+                {
+                  "text": "however",
+                  "italic": true
+                },
+                {
+                  "text": " "
+                },
+                {
+                  "text": "you",
+                  "underline": true
+                },
+                {
+                  "text": " "
+                },
+                {
+                  "text": "like",
+                  "code": true
+                },
+                {
+                  "text": "."
                 }
               ],
               "type": "lic",
               "id": "UqrZa2jlHxvfYOU8wlaDK"
             }
           ],
-          "type": "li"
+          "type": "li",
+          "id": "fCVJRbV1pbaMa7eMBKnFe"
         },
         {
           "children": [
             {
               "children": [
                 {
-                  "text": "Insert a calculation block:",
+                  "text": "Insert a calculations block:",
                   "bold": true
                 },
                 {
-                  "text": " Use the \"/\" command. Add numbers and calculations to your notebook using the "
+                  "text": " Hit "
+                },
+                {
+                  "text": "/",
+                  "code": true
+                },
+                {
+                  "text": "  and add numbers and calculations to your notebook using the "
                 },
                 {
                   "children": [
@@ -93,7 +132,8 @@
                     }
                   ],
                   "type": "a",
-                  "url": "https://alpha.decipad.com/docs/docs/introduction/introduction-to-the-language"
+                  "url": "https://alpha.decipad.com/docs/docs/introduction/introduction-to-the-language",
+                  "id": "u_iYHcIIENk-GFe7rD4U8"
                 },
                 {
                   "text": "."
@@ -103,7 +143,8 @@
               "id": "_MC-bHAI-C-w4YLg_KMer"
             }
           ],
-          "type": "li"
+          "type": "li",
+          "id": "amZur1ZdVsSyB4mUbF7_n"
         },
         {
           "children": [
@@ -114,7 +155,14 @@
                   "bold": true
                 },
                 {
-                  "text": " Enhance your notebook with additional data using the \"/\" command. Or, build a "
+                  "text": " Enhance your notebook with additional data by using the "
+                },
+                {
+                  "text": "/",
+                  "code": true
+                },
+                {
+                  "text": " command. Or, build a "
                 },
                 {
                   "children": [
@@ -123,7 +171,8 @@
                     }
                   ],
                   "type": "a",
-                  "url": "https://alpha.decipad.com/docs/docs/language/organising-your-data/tables"
+                  "url": "https://alpha.decipad.com/docs/docs/language/organising-your-data/tables",
+                  "id": "HFE5olDOqzEtVJ2cq93xM"
                 },
                 {
                   "text": " from scratch using the language."
@@ -133,7 +182,8 @@
               "id": "bR4SmDy2ddjszftWicSQr"
             }
           ],
-          "type": "li"
+          "type": "li",
+          "id": "91XseSkveFxxIt1ixjRF6"
         },
         {
           "children": [
@@ -144,57 +194,85 @@
                   "bold": true
                 },
                 {
-                  "text": " Enable a public link, anyone with the link can view. Don't forget to share with us on Discord (if you can)!"
+                  "text": " Enable a public link, anyone with the link can view. Don't forget to share with us on "
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Discord"
+                    }
+                  ],
+                  "type": "a",
+                  "url": "https://discord.com/invite/HwDMqwbGmc",
+                  "id": "dR-RJex2Ww-uffVLRgucq"
+                },
+                {
+                  "text": " (if you can)!﻿"
                 }
               ],
               "type": "lic",
               "id": "MvXtbeqmCoAXWUsXyG07h"
             }
           ],
-          "type": "li"
+          "type": "li",
+          "id": "J4bR2kK0hZ3DoVQAmxdV7"
         }
       ],
-      "type": "ol"
+      "type": "ol",
+      "id": "vUYFHoJu20QjASx99gUth"
     },
     {
       "children": [
         {
-          "text": "﻿"
+          "text": ""
         }
       ],
       "type": "p",
-      "id": "1Rn2W90frn5-I35c-4YG-"
+      "id": "7xQVMnbJVxaavMlyJ6P82"
     },
     {
       "children": [
         {
-          "text": "💡 Visit "
+          "text": "💡 Review our "
         },
         {
           "children": [
             {
-              "text": "Help",
-              "bold": true
+              "text": "documentation"
             }
           ],
           "type": "a",
-          "url": "https://alpha.decipad.com/docs"
+          "url": "https://alpha.decipad.com/docs",
+          "id": "r08lrY-zkkHysUE6mi2ox"
         },
         {
-          "text": " to learn the basics, review our documentation and get inspiration from our gallery of examples."
+          "text": " and get inspiration from our "
+        },
+        {
+          "children": [
+            {
+              "text": "gallery of examples"
+            }
+          ],
+          "type": "a",
+          "url": "https://alpha.decipad.com/docs/quick-start/gallery",
+          "id": "K5Uxnt5moXakG0Wfuo6mJ"
+        },
+        {
+          "text": "."
         }
       ],
       "type": "p",
-      "id": "Af5DMUnAEekMWMTeN5Q7h"
+      "id": "dK7nP4_e7asUETGM1WLrt"
     },
     {
       "children": [
         {
-          "text": "﻿"
+          "text": ""
         }
       ],
       "type": "p",
-      "id": "gvHF-sQM-n-FYbXgiapTq"
+      "id": "viXS9HWSpo2EbE4HDdLXI"
     },
     {
       "children": [
@@ -203,7 +281,7 @@
         }
       ],
       "type": "h2",
-      "id": "uhKlYQlzE0uF0xJJuzowN"
+      "id": "CSXNmGqkEmT8sVvGf2Hvg"
     },
     {
       "children": [
@@ -219,61 +297,69 @@
         }
       ],
       "type": "p",
-      "id": "s2PlbZiH1F51Aeo3kcSSu"
+      "id": "oza6UvZGBNNGdrhnaH1Ei"
     },
     {
       "children": [
         {
-          "text": "A calculation block lets you add calculations, functions and more to your notebook. Assign a name to any value or calculation to a create named variable that can be "
+          "text": "A calculation block lets you add calculations, functions and more to your notebook using the "
+        },
+        {
+          "children": [
+            {
+              "text": "Decipad language"
+            }
+          ],
+          "type": "a",
+          "url": "https://alpha.decipad.com/docs/language/introduction-to-the-language",
+          "id": "NmoGnavM-EONaBsFbOa9d"
+        },
+        {
+          "text": ". Assign a name to any value or calculation to a create named variable that can be "
         },
         {
           "text": "reused",
           "bold": true
         },
         {
-          "text": " throughout your notebook. See "
-        },
-        {
-          "text": "this",
-          "underline": true
-        },
-        {
-          "text": " example of a simple model built on Decipad."
+          "text": " throughout your notebook."
         }
       ],
       "type": "p",
-      "id": "T8ufoa__AU8zIBfZ0hUmV"
+      "id": "SCo0_K9Xqp2WblUrlKHjQ"
     },
     {
       "children": [
         {
           "children": [
             {
-              "text": "RunningGoal = 3.0 miles/day"
+              "text": "RunningGoal = 3.0 miles/run"
             }
           ],
-          "type": "code_line"
+          "type": "code_line",
+          "id": "tpzqK7YREYgVwJlRPXwyQ"
         },
         {
           "children": [
             {
-              "text": "TargetFrequency = 5 days/week"
+              "text": "Frequency = 5 runs/week"
             }
           ],
           "type": "code_line",
-          "id": "7lyaAE41Itw-HVb4Utf_E"
+          "id": "E8cy17A3qdTZtRzAtjj1o"
         },
         {
           "children": [
             {
-              "text": "TargetDistance = RunningGoal * TargetFrequency"
+              "text": "Distance = RunningGoal * Frequency"
             }
           ],
           "type": "code_line",
-          "id": "zLWiKojEZt_Hvi434fiIe"
+          "id": "gZ9fXWMnUVVNj-Jl9mlGd"
         }
       ],
-      "type": "code_block"
+      "type": "code_block",
+      "id": "i6Qj7w06oB5dkX5I039Sy"
     },
     {
       "children": [
@@ -281,7 +367,8 @@
           "text": ""
         }
       ],
-      "type": "p"
+      "type": "p",
+      "id": "e2qfIikDSkBYBJlLVKP00"
     },
     {
       "children": [
@@ -297,47 +384,91 @@
         }
       ],
       "type": "p",
-      "id": "oI4l4hFdsxGlZY1POcgA9"
+      "id": "bmqJKoAxB7TodJQ8_fpJs"
     },
     {
       "children": [
         {
-          "text": "You can add simple or supported "
+          "text": "You can add custom or "
         },
         {
-          "text": "units",
-          "underline": true
+          "children": [
+            {
+              "text": "supported units"
+            }
+          ],
+          "type": "a",
+          "url": "https://alpha.decipad.com/docs/supported-units",
+          "id": "E_dtyv97JHKYbExmtKcS4"
         },
         {
-          "text": " to any value inside a calculation block. Easily convert between Decipad "
+          "text": " to any value inside a calculation block. Easily convert between Decipad supported units. If we don't support a unit you need, create your "
         },
         {
-          "text": "supported units",
-          "underline": true
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "a",
+          "url": "https://alpha.decipad.com/docs/supported-units",
+          "id": "6WT2-vim1MECjAXSrLj3P"
         },
         {
-          "text": ".  If we don't support a unit you need, create your own conversion 🤯. Check out "
+          "text": ""
         },
         {
-          "text": "this example",
-          "underline": true
+          "children": [
+            {
+              "text": "own conversion"
+            }
+          ],
+          "type": "a",
+          "url": "https://alpha.decipad.com/docs/language/units#custom-conversions"
+        },
+        {
+          "text": " 🤯. Check out "
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "a",
+          "url": "https://alpha.decipad.com/workspaces/le4O74eh9NlQ1scCSA1jo/pads/Q5sDRcpQ4lYSg84Hrs3gf?secret=Bf2nWPe5ZAuDJL9MEWP1L",
+          "id": "47gWYbhs340H6AmCAknnE"
+        },
+        {
+          "text": "this "
+        },
+        {
+          "children": [
+            {
+              "text": "example"
+            }
+          ],
+          "type": "a",
+          "url": "https://alpha.decipad.com/workspaces/AD6wi5YFzY5mXfKXokl0G/pads/fr5dMjzJTFSuSWKMbKu7R?secret=iDH1zMCO7Exjpp_UM8DVj",
+          "id": "rp4yRlVvGkTEhCrfv1x0J"
         },
         {
           "text": " to see the power of units in action. "
         }
       ],
       "type": "p",
-      "id": "BjEUsOf9f2Ycqqv2bdIax"
+      "id": "DwL4Dl8PqtERPRzVOQOOv"
     },
     {
       "children": [
         {
           "children": [
             {
-              "text": "round(RunningGoal in km/day)"
+              "text": "round(RunningGoal in km/run)"
             }
           ],
-          "type": "code_line"
+          "type": "code_line",
+          "id": "GA80T5e_yqssU-NibNr8r"
         },
         {
           "children": [
@@ -367,7 +498,8 @@
           "id": "z3RfpKY1DSpcuJM6aTxzl"
         }
       ],
-      "type": "code_block"
+      "type": "code_block",
+      "id": "trd_4vnuOEO63E7oF9aR9"
     },
     {
       "children": [
@@ -376,7 +508,7 @@
         }
       ],
       "type": "p",
-      "id": "qXAhrVZfZUzWddSIARcIh"
+      "id": "kZaKr8DS4phcEwWeBDyXQ"
     },
     {
       "children": [
@@ -392,7 +524,7 @@
         }
       ],
       "type": "p",
-      "id": "DrCD3wykzscWT_LSx_wEz"
+      "id": "_lzkjJOciyCxJGdxR-cSO"
     },
     {
       "children": [
@@ -404,18 +536,11 @@
           "bold": true
         },
         {
-          "text": " into your calculations. At this time, you can't perform calculations to change data within your table. See "
-        },
-        {
-          "text": "this example",
-          "underline": true
-        },
-        {
-          "text": " of tables in action. "
+          "text": " into your calculations. At this time, you can't perform calculations to change data within your table."
         }
       ],
       "type": "p",
-      "id": "zZiWyylz8UcnGHleFl7Gn"
+      "id": "b3Nb2-kLwNhlgsH1a4aY1"
     },
     {
       "children": [
@@ -429,16 +554,30 @@
         "columns": [
           {
             "columnName": "Name",
-            "cells": ["ParkRoute", "StreetRoute", "OceanRoute"],
+            "cells": ["Park Route", "Street Route", "Ocean Route"],
             "cellType": "string"
           },
           {
             "columnName": "Distance",
-            "cellType": "number",
+            "cellType": {
+              "kind": "number",
+              "unit": {
+                "type": "units",
+                "args": [
+                  {
+                    "unit": "miles",
+                    "exp": "1",
+                    "multiplier": "1",
+                    "known": true
+                  }
+                ]
+              }
+            },
             "cells": ["3.2", "2.8", "4"]
           }
         ]
-      }
+      },
+      "id": "I5_YzMc8QCU9uhG6b42GS"
     },
     {
       "children": [
@@ -447,120 +586,79 @@
         }
       ],
       "type": "p",
-      "id": "se0zCgOuGrlKEQ8ClYKTm"
+      "id": "-WuO2L3CVy5SxsIZNddFV"
     },
     {
       "children": [
         {
-          "text": "❹  "
+          "text": "❹ "
         },
         {
-          "text": "(Advanced)",
-          "italic": true
-        },
-        {
-          "text": " "
-        },
-        {
-          "text": "Build a table with our language",
+          "text": "Build a table with our language ",
           "bold": true
+        },
+        {
+          "text": "(advanced)",
+          "italic": true
         }
       ],
       "type": "p",
-      "id": "VY5cDSMqs8yC8pl_agrez"
+      "id": "KGkJDf5NJ8LBoIiSMXx3l"
     },
     {
       "children": [
         {
-          "text": "Build a table using the Decipad language to explore more complex capabilities like calculations! See this "
+          "text": "Build a table using the Decipad language to explore more complex capabilities like calculations! See this example of a "
         },
         {
-          "text": "example",
-          "underline": true
+          "children": [
+            {
+              "text": "complex model"
+            }
+          ],
+          "type": "a",
+          "url": "https://alpha.decipad.com/workspaces/le4O74eh9NlQ1scCSA1jo/pads/NTcziPjPgtDqbimQAKu06?secret=QKMp0FtT_9WGNSpCB4FWl",
+          "id": "6seboTRUfeN3pOteFLrNN"
         },
         {
-          "text": " of a complex model built in Decipad. "
+          "text": " built in Decipad. "
         }
       ],
       "type": "p",
-      "id": "3oQDyxb5WHhCv1aQAFiPY"
+      "id": "_1kmG_oRO32OIlb7CoCcG"
     },
     {
       "children": [
         {
           "children": [
             {
-              "text": "StartingRate = 6 mph in m/s"
+              "text": "InitialPace = 10 minutes/mile"
             }
           ],
           "type": "code_line",
-          "id": "RPyuqEA7JKEUKpr6Q16GO"
+          "id": "6vf7Rou9HDOLhxrXjb0N8"
         },
         {
           "children": [
             {
-              "text": "WeeklyRateIncrease = 5%"
+              "text": "WeeklyImprovementRate = 5%"
             }
           ],
           "type": "code_line",
-          "id": "RPyuqEA7JKEUKpr6Q16GO"
+          "id": "q3XJZqek_4x40oR8uRBBv"
         },
         {
           "children": [
             {
-              "text": "Table = {"
+              "text": "Table = {\n  Period = [\"Week 1\", \"Week 2\", \"Week 3\", \"Week 4\"]\n  TargetPace = round(grow(InitialPace, - WeeklyImprovementRate, Table.Period) in minutes/km, 2)\n  TargetTime = round(TargetPace * (Routes.Distance))\n}"
             }
           ],
           "type": "code_line",
-          "id": "qzDJ5YD-BjLhSJ7TkNqLN"
-        },
-        {
-          "children": [
-            {
-              "text": "  Period = [\"Week 1\", \"Week 2\", \"Week 3\", \"Week 4\"]"
-            }
-          ],
-          "type": "code_line",
-          "id": "GRxijJLoNmrt-SNUxCMsq"
-        },
-        {
-          "children": [
-            {
-              "text": "  TargetSpeed = (grow(StartingRate, WeeklyRateIncrease, Period) m/s) in miles/hour"
-            }
-          ],
-          "type": "code_line",
-          "id": "wDj0KD0gaaH7RWgvk4MU-"
-        },
-        {
-          "children": [
-            {
-              "text": "  TargetTime = round((1/(TargetSpeed in miles/minute) * (Routes.Distance in miles)))"
-            }
-          ],
-          "type": "code_line",
-          "id": "iV7nXb1cC8bmCVDnlXpCg"
-        },
-        {
-          "children": [
-            {
-              "text": "  Pace = TargetTime / (Routes.Distance in miles)"
-            }
-          ],
-          "type": "code_line",
-          "id": "RleGPz9laAY7HtLrRkANp"
-        },
-        {
-          "children": [
-            {
-              "text": "}"
-            }
-          ],
-          "type": "code_line",
-          "id": "J5CF0VwNxnD7wrFN-_iRF"
+          "id": "GxMNem6NXg5FpANG4wJ9w"
         }
       ],
-      "type": "code_block"
+      "type": "code_block",
+      "id": "bAhxyMQ4_zbzG8c5DLs9-"
     },
     {
       "children": [
@@ -569,7 +667,7 @@
         }
       ],
       "type": "p",
-      "id": "vhNmmAERXBRq_wenipS6_"
+      "id": "fDXKB5pkeqwQuWDugYpPV"
     },
     {
       "children": [
@@ -578,7 +676,7 @@
         }
       ],
       "type": "h2",
-      "id": "7esW3l72kCwk8wy46nIg-"
+      "id": "Vlz8joVsDHz_nMDpjaHdG"
     },
     {
       "children": [
@@ -587,45 +685,101 @@
             {
               "children": [
                 {
-                  "text": "We only support chromium based browsers (at this time)"
+                  "text": "We only support chromium-based browsers (at this time)"
                 }
               ],
               "type": "lic",
               "id": "UZU_hr-JWi4cdCQEUYIqW"
             }
           ],
-          "type": "li"
+          "type": "li",
+          "id": "2kPojB_l8x9Z-zF9i4xzv"
         },
         {
           "children": [
             {
               "children": [
                 {
-                  "text": "It's early, you may run into some bugs or glitches 🐞. Just report them on Discord."
+                  "text": "It's early, you may run into some bugs or glitches 🐞. Just report them on "
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Discord"
+                    }
+                  ],
+                  "type": "a",
+                  "url": "https://discord.com/invite/HwDMqwbGmc",
+                  "id": "dR-RJex2Ww-uffVLRgucq"
+                },
+                {
+                  "text": "."
                 }
               ],
               "type": "lic",
               "id": "-yySoNDNnJ9VajGLIcA66"
             }
           ],
-          "type": "li"
+          "type": "li",
+          "id": "blSSvfHZzk0gdBYd2sKB5"
         },
         {
           "children": [
             {
               "children": [
                 {
-                  "text": "Want to collaborate with us on a use case? Let's 🍐 on Discord. See you there!"
+                  "text": "Want to collaborate with us on a use case? Let's 🍐 on "
+                },
+                {
+                  "children": [
+                    {
+                      "text": "Discord"
+                    }
+                  ],
+                  "type": "a",
+                  "url": "https://discord.com/invite/HwDMqwbGmc",
+                  "id": "dR-RJex2Ww-uffVLRgucq"
+                },
+                {
+                  "text": ". See you there!"
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "type": "a",
+                  "url": "https://dev.decipad.com/workspaces/M88a_E6v2urAHdIDYGB0S/pads/St9SqDMjK2_yiPFogeDMX?secret=EjZz6gZ3u7BSCIpMzTDKc",
+                  "id": "P7vQy4o2cD4Kid-lY8lIt"
+                },
+                {
+                  "text": ""
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "type": "a",
+                  "url": "https://discord.com/invite/HwDMqwbGmc",
+                  "id": "dR-RJex2Ww-uffVLRgucq"
+                },
+                {
+                  "text": ""
                 }
               ],
               "type": "lic",
               "id": "iNxhdZlStdo_ulNM7RcrS"
             }
           ],
-          "type": "li"
+          "type": "li",
+          "id": "S1r_xywVBTT684xfoZvPz"
         }
       ],
-      "type": "ul"
+      "type": "ul",
+      "id": "xSJjQ4hmliVgtyxIcLBcb"
     },
     {
       "children": [
@@ -634,7 +788,143 @@
         }
       ],
       "type": "p",
-      "id": "tUueHNhw7twtqP5mw_SNI"
+      "id": "kDFTIQB_AjtkDjaV3oMRl"
+    },
+    {
+      "children": [
+        {
+          "text": "✨ And a list of some examples in case you need inspiration"
+        }
+      ],
+      "type": "h2",
+      "id": "wkeWNzuFSN5hDbOQRUC1v"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                },
+                {
+                  "children": [
+                    {
+                      "text": "🚙 Should I buy an electric car?"
+                    }
+                  ],
+                  "type": "a",
+                  "url": "https://alpha.decipad.com/workspaces/le4O74eh9NlQ1scCSA1jo/pads/bxTv4RqJC_DCPv3xXLuLX?secret=RFmB4s_xKJQo-K3RMHDnY",
+                  "id": "KaiLV95PkfyoU8oJtWzIW"
+                },
+                {
+                  "text": ""
+                }
+              ],
+              "type": "lic",
+              "id": "l1icno4CD3eeFEIEeKk4p"
+            }
+          ],
+          "type": "li",
+          "id": "_yY6aB_wWLSu0hya2bmz1"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                },
+                {
+                  "children": [
+                    {
+                      "text": "🤒 Giving Calpol to a child older than 6 years old"
+                    }
+                  ],
+                  "type": "a",
+                  "url": "https://alpha.decipad.com/workspaces/le4O74eh9NlQ1scCSA1jo/pads/VlKVyJVuK1rKveg7YLzpK?secret=JkHVzPOQKxmsSga-BObkK",
+                  "id": "sJglM2FvEA9W9zOjVU6tY"
+                },
+                {
+                  "text": ""
+                }
+              ],
+              "type": "lic",
+              "id": "-HPjHoUYiFU_6vJzFSb7W"
+            }
+          ],
+          "type": "li",
+          "id": "eF43At4ckJtobV38TDA_B"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                },
+                {
+                  "children": [
+                    {
+                      "text": "💰 Fee Estimate for Consulting Projects"
+                    }
+                  ],
+                  "type": "a",
+                  "url": "https://alpha.decipad.com/workspaces/le4O74eh9NlQ1scCSA1jo/pads/Gz8KiW5S0jvV18ByBso3g?secret=MOsYGSxh3VcJPUOr5RWuJ",
+                  "id": "jxdCPscJJ9YEQEPUUwvO2"
+                },
+                {
+                  "text": ""
+                }
+              ],
+              "type": "lic",
+              "id": "-HPjHoUYiFU_6vJzFSb7W"
+            }
+          ],
+          "type": "li",
+          "id": "yQuBl8T-uxIP86SXN7NNo"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                },
+                {
+                  "children": [
+                    {
+                      "text": "🍏 The Pulling Force"
+                    }
+                  ],
+                  "type": "a",
+                  "url": "https://alpha.decipad.com/workspaces/le4O74eh9NlQ1scCSA1jo/pads/Q5sDRcpQ4lYSg84Hrs3gf?secret=Bf2nWPe5ZAuDJL9MEWP1L",
+                  "id": "pvW9HEbWi51VB9yVE2PLj"
+                },
+                {
+                  "text": ""
+                }
+              ],
+              "type": "lic",
+              "id": "5pkNIWR53557fVdQfqxBP"
+            }
+          ],
+          "type": "li",
+          "id": "cI-_5OdGiByIPbWF4xp9x"
+        }
+      ],
+      "type": "ul",
+      "id": "FL-e_zIqM2nCxQCpwkZvn"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "5olEkeyifQ0YTT3PEXF9E"
     },
     {
       "children": [
@@ -668,7 +958,7 @@
         }
       ],
       "type": "p",
-      "id": "ci4pT80W1pYILlD2wPWcn"
+      "id": "CVMySEOSmy8X5tYDHhgCK"
     },
     {
       "children": [
@@ -677,24 +967,7 @@
         }
       ],
       "type": "p",
-      "id": "A2tZ8lqfukcHA5qx2wVVE"
-    },
-    {
-      "children": [
-        {
-          "text": "The Decipad Team "
-        }
-      ],
-      "type": "p",
-      "id": "sMHu0S2bWOaRdbOveVw5o"
-    },
-    {
-      "children": [
-        {
-          "text": ""
-        }
-      ],
-      "type": "p"
+      "id": "Ar1AplNr4di945yeSvBZt"
     },
     {
       "children": [
@@ -703,7 +976,42 @@
         }
       ],
       "type": "p",
-      "id": "bDalB_XDHI79Sso3jBt3S"
+      "id": "dCRKHp2wiRKkdeWC1bwa_"
+    },
+    {
+      "children": [
+        {
+          "text": "The Decipad Team"
+        }
+      ],
+      "type": "p",
+      "id": "g2k5_rVB53kz4BXMtox2p"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "Cncdi8hvzWNyNLeTqb_rS"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "WFo4vpAeU4mabaHB79gWC"
+    },
+    {
+      "type": "p",
+      "children": [
+        {
+          "text": ""
+        }
+      ]
     }
   ]
 }

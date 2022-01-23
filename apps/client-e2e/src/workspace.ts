@@ -1,4 +1,5 @@
 import waitForExpect from 'wait-for-expect';
+import { initialWorkspace } from '@decipad/initial-workspace';
 import {
   clickNewPadButton,
   duplicatePad,
@@ -29,7 +30,7 @@ describe('Workspace', () => {
   test('can list pads', async () => {
     await waitForExpect(async () => {
       const pads = await getPadList();
-      expect(pads).toHaveLength(5);
+      expect(pads).toHaveLength(initialWorkspace.notebooks.length + 1);
     });
   });
 
@@ -41,7 +42,7 @@ describe('Workspace', () => {
     await removePad(padIndex);
     await waitForExpect(async () => {
       const pads = await getPadList();
-      expect(pads).toHaveLength(4);
+      expect(pads).toHaveLength(initialWorkspace.notebooks.length);
     });
   });
 
@@ -49,7 +50,7 @@ describe('Workspace', () => {
     await duplicatePad(0);
     await waitForExpect(async () => {
       const pads = await getPadList();
-      expect(pads).toHaveLength(5);
+      expect(pads).toHaveLength(initialWorkspace.notebooks.length + 1);
     });
     const pads = await getPadList();
     const copyIndex = pads.findIndex((pad) => pad.name?.startsWith('Copy of'));

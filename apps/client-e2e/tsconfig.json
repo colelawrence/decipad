@@ -11,6 +11,7 @@
     { "path": "../../libs/tables" },
     { "path": "../../libs/backendtypes" },
     { "path": "../../libs/utils" },
-    { "path": "../../libs/services" }
+    { "path": "../../libs/services" },
+    { "path": "../../libs/initial-workspace" }
   ]
 }

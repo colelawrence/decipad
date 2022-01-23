@@ -1,5 +1,6 @@
 /* eslint-disable jest/expect-expect */
 import { timeout } from '@decipad/utils';
+import { initialWorkspace } from '@decipad/initial-workspace';
 import waitForExpect from 'wait-for-expect';
 import { setUp } from './page-utils/Pad';
 import {
@@ -26,7 +27,7 @@ describe('Duplicate pad', () => {
     // make sure pad is there
     await waitForExpect(async () => {
       const pads = await getPadList();
-      expect(pads).toHaveLength(5);
+      expect(pads).toHaveLength(initialWorkspace.notebooks.length + 1);
       padToCopyIndex = pads.findIndex((pad) => pad.name === 'pad title here');
       expect(padToCopyIndex).toBeGreaterThanOrEqual(0);
     });
