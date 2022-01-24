@@ -1,6 +1,7 @@
 @preprocessor esmodule
 
 @{%
+/* eslint-disable */
 import { tokenizer } from './tokenizer'
 %}
 

@@ -4,6 +4,7 @@ function id(x) {
   return x[0];
 }
 
+/* eslint-disable */
 import { tokenizer } from './tokenizer';
 
 const initialReservedWords = new Set([
