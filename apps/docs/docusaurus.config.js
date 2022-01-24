@@ -101,7 +101,7 @@ const config = {
             type: 'doc',
             docId: 'quick-start/help-and-support',
             position: 'left',
-            label: 'Help',
+            label: 'Support',
           },
         ],
       },

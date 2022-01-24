@@ -8,7 +8,7 @@ Here you can learn more about terms and references commonly used in the document
 
 ### Argument
 
-An argument is a variable that affects a functions result.
+An argument is a variable that affects a function's result.
 
 ### Binary operator
 
@@ -18,9 +18,9 @@ A binary operator is an operator that operates on two operands and manipulates t
 
 A Boolean is a data type with two possible values: `true` or `false`.
 
-### Calculation block
+### Calculations block
 
-The calculation block is the place where you can type numbers and perform operations in a more natural way powered by the Decipad language. In the calculation block, you can type numbers, units, variables, functions, as well as create tables.
+The calculations block is the place where you can type numbers and perform operations in a more natural way, powered by the Decipad language. In the calculations block, you can type numbers, units, variables, functions, as well as create tables.
 
 ```deci live
 2 + 2
@@ -39,7 +39,7 @@ if sun_is_down then "dinner👩‍🍳" else "lunch💪"
 
 ### Decipad language
 
-The language is how you interact and use data in a calculation block.
+The language is how you interact and use data in a calculations block.
 
 ```deci live
 CurrentSavings = 50000
@@ -48,7 +48,7 @@ CurrentSavings = 50000
 
 ### Dimension
 
-A dimension is basically a category that can be broken down into different categories.
+A dimension is a category that can be broken down into different items.
 
 ### Exponentiation
 

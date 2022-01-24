@@ -18,7 +18,7 @@ But once you define a numeric value, they have 0 dimensions, since they can no l
 
 ## One degree of freedom
 
-You can define 1-dimensional value by creating a table with at least two columns.
+You can define a 1-dimensional value by creating a table with at least two columns.
 In the first column you place a name, and in the second column you place a value, like this:
 
 ```deci live
@@ -125,7 +125,7 @@ total(DollarsSpentPerYear)
 
 This should display the total on a per-year basis. This is because `Consumption`'s first degree of freedom is based on the Fuel table. But this doesn't make sense for us unless we're going to buy all 3 cars.
 
-We want to know how much Then we would replace the last line with `total(Consumption over Cars)`, meaning it would calculate the total per car.
+We want to know how much we would spend per car in this time period. To do so, we need to replace the last line with `total(DollarsSpentPerYear over Cars)`, meaning it would calculate the total per car.
 
 ```deci live
 Cars = {

@@ -51,8 +51,8 @@ Quote.Price * Job.Size
 
 Using dimensions has two main advantages:
 
-1.  You will be able to add and remove characterics without breaking your notebook
-2.  In the future, you will be able to re-use dimensions across all of your notebooks
+1.  You will be able to add and remove characteristics without breaking your notebook
+2.  In the future, you will be able to re-use dimensions across your notebooks
 
 ## Converting Units
 

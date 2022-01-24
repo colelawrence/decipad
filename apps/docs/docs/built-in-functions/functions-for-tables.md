@@ -47,7 +47,7 @@ sortby(Flights, Flights.DepartureTime)
 
 ## splitby
 
-This function splits the table into several different tables, splitted by the unique values of a column:
+This function splits the table into several different tables, split by the unique values of a column:
 
 ```deci live
 Flights = {

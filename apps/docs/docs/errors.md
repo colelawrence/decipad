@@ -10,7 +10,7 @@ sidebar_position: 490
 Don't know how to convert between units cup and grams
 :::
 
-You will get this error message when you cannot convert in between units.
+You will get this error message when you cannot convert between units.
 
 ```deci live
 1 cup in gram
@@ -73,7 +73,7 @@ You can also get this error if you try to perform an operation in incompatible u
 ==> This operation requires compatible units
 ```
 
-This is because different months have different amount of days.
+This is because different months have different amounts of days.
 
 ```deci live
 DaysInMonth = 31 days
@@ -179,9 +179,9 @@ Date + 1 year
 Expected table and associated column
 :::
 
-You passed a column that's not associated to the table.
+You passed a column that's not associated with that table.
 
-When creating a table, its columns are inherently associated to it. Functions such as `splitby` need this association.
+When creating a table, its columns are inherently associated with it. Functions such as `splitby` need this association.
 
 ```deci live
 OtherTable = {
@@ -223,7 +223,7 @@ Syntax Error
 
 The calculation you wrote is not valid in the language.
 
-You may have miss-spelled something, or even tried to insert data in a way what is not supported yet:
+You may have miss-spelled something, or even tried to insert data in a way that is not supported yet:
 
     1==2 ? 10 : 20
 
@@ -257,7 +257,7 @@ The name VariableName is already being used. You cannot have duplicate names
 
 You named two variables with the same name. One of the biggest advantages of Decipad is how descriptive it is. Your reader will probably feel like they can truly understand your thought process.
 
-A big part of that is the name you give to your calculations. So, while in a hurry you might just want to call everything `Monies` or `Funds`, that makes it quite confusing to those reading.
+A big part of that is the name you give to your calculations. So, while in a hurry you might just want to call everything `Monies` or `Funds`, which makes it quite confusing to those reading.
 
 So we require you to use descriptive names for your variables, to make your notebooks easier to understand.
 

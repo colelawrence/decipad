@@ -97,7 +97,7 @@ round(1 month in weeks, 1)
 ==> 4.3 weeks
 ```
 
-However you need to be mindful. Now, `year` is defined as a number of days. So you can't convert a year into a decade for example:
+However, you need to be mindful. Now, `year` is defined as a number of days. So you can't convert a year into a decade for example:
 
 ```deci live
 year = 365 days

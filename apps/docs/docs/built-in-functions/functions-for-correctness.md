@@ -4,7 +4,7 @@ sidebar_position: 4000
 
 # Functions for correctness
 
-The following functions help you ensure your notebook is always in a correct state, by double checking your calculations programmatically
+The following functions help you ensure your notebook is always in a correct state, by double-checking your calculations programmatically.
 
 ## assert
 

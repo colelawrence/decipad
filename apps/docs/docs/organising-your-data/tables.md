@@ -62,7 +62,7 @@ MyTable = {
 
 ## Using columns as a whole
 
-Sometimes, when deriving a column from another with an expression, you might want to use the whole column at once instead of doing your calculations at a row-by-row basis. Like when you want to know the maximum of a column:
+Sometimes, when deriving a column from another with an expression, you might want to use the whole column at once instead of doing your calculations on a row-by-row basis. Like when you want to know the maximum of a column:
 
 ```deci live
 Table = {
@@ -251,7 +251,7 @@ Flights3 = {
 }
 ```
 
-This allows you to further augment the table without listing every previous computed value.
+This allows you to further augment the table without listing every previously computed value.
 
 ## Functions on tables
 

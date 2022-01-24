@@ -126,7 +126,7 @@ SpeedInMetersSecond = SpeedInSeconds * KmToMeters
 
 ### Creating your own units
 
-We don't support all units. However you can create your own:
+We don't support all units. However, you can create your own:
 
 ```deci live
 SpeedOfSound = 1234.8 km/h

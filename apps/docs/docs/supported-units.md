@@ -2,9 +2,9 @@
 sidebar_position: 390
 ---
 
-# Appendix A: Supported units
+# Supported units
 
-Decipad supports the following units, and compositions of them. Unless stated, units default to the international standard.
+Decipad supports the following units and compositions of them. Unless stated, units default to the international standard.
 
 For example, when we say Inch we mean Inch (International), i.e. `0.0254 m`.
 
@@ -135,7 +135,7 @@ The following are also supported:
 
 The default unit is Square Meter (`squaremeter`, `m2`, `m²`).
 
-Square meter can be expressed as `m2` and we support expanding (or contracting) any area unit to SI units.
+Square meter can be expressed as `m2` and we support expanding (or contracting) any area unit to si units.
 
 The following are also supported:
 
@@ -306,7 +306,7 @@ Watt can be expressed as `kg⋅m2⋅s−3⋅A−2` and we support expanding (or 
 
 The default unit is Coulomb (`coulomb`, `C`).
 
-coulomb can be expressed as `s⋅A` and we support expanding (or contracting) any electric charge unit to SI units.
+Coulomb can be expressed as `s⋅A` and we support expanding (or contracting) any electric charge unit to SI units.
 
 ## Electrical capacitance
 
