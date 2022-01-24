@@ -21,7 +21,6 @@ import { createForcedLayoutPlugin } from '../plugins/ForcedLayout/createForcedLa
 import { createInteractiveTablePlugin } from '../plugins/InteractiveTable/createInteractiveTablePlugin';
 import { createMarksPlugins } from '../plugins/Marks/createMarksPlugins';
 import { createLinkPlugin } from '../plugins/Link/createLinkPlugin';
-import { createNormalizeCodePlugin } from '../plugins/NormalizeCode/createNormalizeCodePlugin';
 import { createNormalizeCodeBlockPlugin } from '../plugins/NormalizeCodeBlock/createNormalizeCodeBlockPlugin';
 import { autoformatRules } from './autoformat';
 import { exitBreakOptions } from './exitBreakOptions';
@@ -62,7 +61,6 @@ export const plugins = [
   createLinkPlugin(),
 
   // code editing
-  createNormalizeCodePlugin(),
   createNormalizeCodeBlockPlugin(),
   createCodeVariableHighlightingPlugin(),
   createAutoPairsPlugin(),

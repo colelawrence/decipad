@@ -1,7 +1,7 @@
 import { CodeBlockElement, CodeLineElement } from '../../utils/elements';
 
 function codeLineToCode(line: CodeLineElement): string {
-  return line.children.map((textChild) => textChild.text).join('');
+  return line.children[0].text;
 }
 
 export function codeBlockToCode(codeBlock: CodeBlockElement): string {

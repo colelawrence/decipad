@@ -1,10 +1,5 @@
-import { CodeLineElement } from '../../utils/elements';
 import { codeBlockToCode } from './codeBlockToCode';
-
-const codeLine = (text: string): CodeLineElement => ({
-  type: 'code_line',
-  children: [{ text }],
-});
+import { codeLine } from './testUtils';
 
 describe('blockChildrenToCode', () => {
   it('works on no children', () => {
@@ -23,20 +18,6 @@ describe('blockChildrenToCode', () => {
         ],
       })
     ).toBe('');
-  });
-
-  it('concatenates multiple text nodes into one', () => {
-    expect(
-      codeBlockToCode({
-        type: 'code_block',
-        children: [
-          {
-            type: 'code_line',
-            children: [{ text: 'a = ' }, { text: '1' }],
-          },
-        ],
-      })
-    ).toBe('a = 1');
   });
 
   it('concatenates multiple incomplete code_line nodes into different lines', () => {

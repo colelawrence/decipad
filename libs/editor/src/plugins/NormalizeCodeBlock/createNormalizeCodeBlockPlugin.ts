@@ -1,21 +1,76 @@
 /* eslint-disable no-param-reassign */
-import { getPlatePluginWithOverrides, WithOverride } from '@udecode/plate';
-import { Element, NodeEntry } from 'slate';
+import {
+  getPlatePluginWithOverrides,
+  TNode,
+  WithOverride,
+  wrapNodes,
+} from '@udecode/plate';
+import { Text, Node, Element, NodeEntry, Transforms } from 'slate';
 import { splitCodeIntoStatements } from './splitCodeIntoStatements';
 import { reconcileStatements } from './reconcileStatements';
 import { codeBlockToCode } from './codeBlockToCode';
-import { Node } from '../../utils/elements';
-import { ELEMENT_CODE_BLOCK } from '../../utils/elementTypes';
+import {
+  ELEMENT_CODE_BLOCK,
+  ELEMENT_CODE_LINE,
+} from '../../utils/elementTypes';
+import { CodeBlockElement } from '../../utils/elements';
 
 const withNormalizeCodeBlock = (): WithOverride => (editor) => {
   const { normalizeNode } = editor;
 
   editor.normalizeNode = (entry) => {
-    const [node, path] = entry as NodeEntry<Node>;
+    const [node, path] = entry as NodeEntry<TNode>;
 
-    // If the element is a code block, ensure its children are valid.
+    // Code line
+    if (Element.isElement(node) && node.type === ELEMENT_CODE_LINE) {
+      for (const lineChild of Node.children(editor, path)) {
+        const [lineChildNode, lineChildPath] = lineChild as NodeEntry<TNode>;
+
+        // Children must be text
+        if (Element.isElement(lineChildNode)) {
+          Transforms.unwrapNodes(editor, { at: lineChildPath });
+          return;
+        }
+
+        // Text must be plain
+        const props = Object.keys(Node.extractProps(lineChildNode));
+        if (props.length) {
+          Transforms.unsetNodes(editor, props[0], { at: lineChildPath });
+          return;
+        }
+      }
+    }
+
+    // Code block
     if (Element.isElement(node) && node.type === ELEMENT_CODE_BLOCK) {
-      const blockCode = codeBlockToCode(node);
+      for (const blockChild of Node.children(editor, path)) {
+        const [blockChildNode, blockChildPath] = blockChild as NodeEntry<TNode>;
+
+        // Element children must be code lines, else unwrap their text
+        if (
+          Element.isElement(blockChildNode) &&
+          blockChildNode.type !== ELEMENT_CODE_LINE
+        ) {
+          Transforms.unwrapNodes(editor, { at: blockChildPath });
+          return;
+        }
+
+        // Text must be wrapped in a code line
+        if (Text.isText(blockChildNode)) {
+          wrapNodes(
+            editor,
+            { type: ELEMENT_CODE_LINE, children: [] },
+            { at: blockChildPath }
+          );
+          return;
+        }
+      }
+
+      // At this point the normalization has ensured a matching structure
+      const codeBlockNode = node as CodeBlockElement;
+
+      // Split and merge lines to match statements
+      const blockCode = codeBlockToCode(codeBlockNode);
       const statements = splitCodeIntoStatements(blockCode);
       if (statements.length) {
         if (reconcileStatements(editor, statements, path)) {

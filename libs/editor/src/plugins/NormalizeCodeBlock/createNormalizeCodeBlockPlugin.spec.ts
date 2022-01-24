@@ -1,16 +1,127 @@
 import { Descendant, Editor } from 'slate';
+import {
+  createEditorPlugins,
+  ELEMENT_BLOCKQUOTE,
+  ELEMENT_CODE_LINE,
+  ELEMENT_PARAGRAPH,
+  SPEditor,
+  TElement,
+} from '@udecode/plate';
 import { Element } from '../../utils/elements';
 import { ELEMENT_CODE_BLOCK } from '../../utils/elementTypes';
-import {
-  createEditorWithEmptyCodeBlock,
-  createEditorWithTestNodes,
-  createEmptyEditor,
-  codeLine,
-} from './testUtils';
+import { codeLine, emptyCodeBlock, exampleCodeBlock } from './testUtils';
+import { createNormalizeCodeBlockPlugin } from './createNormalizeCodeBlockPlugin';
 
-describe('the normalize code block plugin', () => {
+let editor: SPEditor;
+beforeEach(() => {
+  editor = createEditorPlugins({
+    plugins: [createNormalizeCodeBlockPlugin()],
+  });
+});
+
+describe('in a code block', () => {
+  it('wraps text in a code block in code lines', () => {
+    editor.children = [
+      {
+        type: ELEMENT_CODE_BLOCK,
+        children: [{ text: 'code' }],
+      },
+    ];
+
+    Editor.normalize(editor, { force: true });
+    expect(editor.children).toEqual([
+      {
+        type: ELEMENT_CODE_BLOCK,
+        children: [codeLine('code')],
+      },
+    ]);
+  });
+
+  it('unwraps code lines from other elements', () => {
+    editor.children = [
+      {
+        type: ELEMENT_CODE_BLOCK,
+        children: [
+          {
+            type: ELEMENT_BLOCKQUOTE,
+            children: [
+              {
+                type: ELEMENT_PARAGRAPH,
+                children: [
+                  {
+                    type: ELEMENT_CODE_LINE,
+                    children: [
+                      {
+                        text: 'code',
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ] as TElement[];
+
+    Editor.normalize(editor, { force: true });
+    expect(editor.children).toEqual([
+      {
+        type: ELEMENT_CODE_BLOCK,
+        children: [codeLine('code')],
+      },
+    ]);
+  });
+});
+
+describe('in a code line', () => {
+  it('merges all text', () => {
+    editor.children = [
+      {
+        type: ELEMENT_CODE_BLOCK,
+        children: [
+          {
+            type: ELEMENT_CODE_LINE,
+            children: [
+              { text: 'code' },
+              { type: ELEMENT_PARAGRAPH, children: [{ text: '1' }] },
+              { text: '2' },
+              { type: ELEMENT_CODE_LINE, children: [{ text: '3' }] },
+            ],
+          },
+        ],
+      },
+    ] as TElement[];
+
+    Editor.normalize(editor, { force: true });
+    expect(editor.children).toEqual([
+      { type: ELEMENT_CODE_BLOCK, children: [codeLine('code123')] },
+    ]);
+  });
+
+  it('does not allow marks', () => {
+    editor.children = [
+      {
+        type: ELEMENT_CODE_BLOCK,
+        children: [
+          {
+            type: ELEMENT_CODE_LINE,
+            children: [{ text: 'code', bold: true, italic: false }],
+          },
+        ],
+      },
+    ] as TElement[];
+
+    Editor.normalize(editor, { force: true });
+    expect(editor.children).toEqual([
+      { type: ELEMENT_CODE_BLOCK, children: [codeLine('code')] },
+    ]);
+  });
+});
+
+describe('statement-based line splitting and merging', () => {
   it('keeps one line intact', () => {
-    const editor = createEditorWithEmptyCodeBlock();
+    editor.children = [emptyCodeBlock()];
     editor.apply({
       type: 'insert_text',
       path: [0, 0, 0],
@@ -27,7 +138,7 @@ describe('the normalize code block plugin', () => {
   });
 
   it('keeps next empty line intact', () => {
-    const editor = createEditorWithTestNodes();
+    editor.children = [exampleCodeBlock()];
     editor.apply({
       type: 'insert_node',
       path: [0, 3],
@@ -48,7 +159,7 @@ describe('the normalize code block plugin', () => {
   });
 
   it('joins two code lines when they belong to the same statement', () => {
-    const editor = createEditorWithTestNodes();
+    editor.children = [exampleCodeBlock()];
     editor.apply({
       type: 'insert_text',
       path: [0, 0, 0],
@@ -65,7 +176,7 @@ describe('the normalize code block plugin', () => {
   });
 
   it('splits two or more lines when they belong to different statements', () => {
-    const editor = createEditorWithEmptyCodeBlock();
+    editor.children = [emptyCodeBlock()];
     editor.apply({
       type: 'insert_text',
       path: [0, 0, 0],
@@ -98,7 +209,7 @@ describe('the normalize code block plugin', () => {
   });
 
   it('allows removing a bit of the first line', () => {
-    const editor = createEditorWithTestNodes();
+    editor.children = [exampleCodeBlock()];
     editor.apply({
       type: 'remove_text',
       path: [0, 0, 0],
@@ -115,7 +226,7 @@ describe('the normalize code block plugin', () => {
   });
 
   it('allows enter after last line', () => {
-    const editor = createEditorWithTestNodes();
+    editor.children = [exampleCodeBlock()];
     editor.apply({
       type: 'insert_node',
       path: [0, 3],
@@ -143,7 +254,7 @@ describe('the normalize code block plugin', () => {
   });
 
   it('allows adding some code to the new line', () => {
-    const editor = createEditorWithTestNodes();
+    editor.children = [exampleCodeBlock()];
     editor.apply({
       type: 'insert_node',
       path: [0, 3],
@@ -176,7 +287,7 @@ describe('the normalize code block plugin', () => {
   });
 
   it('allows completely removing the content of the first line', () => {
-    const editor = createEditorWithTestNodes();
+    editor.children = [exampleCodeBlock()];
     editor.apply({
       type: 'remove_text',
       path: [0, 0, 0],
@@ -193,7 +304,6 @@ describe('the normalize code block plugin', () => {
   });
 
   it('applies a split and a merge at once', () => {
-    const editor = createEmptyEditor();
     editor.children = [
       {
         type: ELEMENT_CODE_BLOCK,
@@ -211,7 +321,7 @@ describe('the normalize code block plugin', () => {
   });
 
   it('allows adding a line before the first one', () => {
-    const editor = createEditorWithTestNodes();
+    editor.children = [exampleCodeBlock()];
     editor.apply({
       type: 'insert_node',
       path: [0, 0],
@@ -239,7 +349,7 @@ describe('the normalize code block plugin', () => {
   });
 
   it('allows adding a newline char before the first one', () => {
-    const editor = createEditorWithTestNodes();
+    editor.children = [exampleCodeBlock()];
     editor.apply({
       type: 'insert_text',
       path: [0, 0, 0],
@@ -261,7 +371,7 @@ describe('the normalize code block plugin', () => {
   });
 
   it('a new line after the statement begins the next statement', () => {
-    const editor = createEditorWithTestNodes();
+    editor.children = [exampleCodeBlock()];
     editor.apply({
       type: 'insert_text',
       path: [0, 0, 0],
@@ -280,4 +390,41 @@ describe('the normalize code block plugin', () => {
       },
     ]);
   });
+});
+
+it('normalizes a terribly broken node', () => {
+  const { isInline } = editor;
+  editor.isInline = (element) =>
+    (element as TElement).type === 'nestedBullshit' || isInline(editor);
+  editor.children = [
+    {
+      type: ELEMENT_CODE_BLOCK,
+      children: [
+        {
+          type: 'bullshit',
+          children: [
+            { text: 'x=(' },
+            {
+              type: 'nestedBullshit',
+              children: [{ text: '42' }],
+            },
+            { text: ')' },
+          ],
+        },
+        {
+          type: ELEMENT_CODE_LINE,
+          children: [{ text: 'y=42\nz=(' }],
+        },
+        { text: '42' },
+      ],
+    },
+  ] as TElement[];
+
+  Editor.normalize(editor, { force: true });
+  expect(editor.children).toEqual([
+    {
+      type: ELEMENT_CODE_BLOCK,
+      children: [codeLine('x=(\n42\n)'), codeLine('y=42'), codeLine('z=(\n42')],
+    },
+  ]);
 });
