@@ -34,4 +34,12 @@ export const units: UnitOfMeasure[] = [
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
   },
+  {
+    name: 'scarab',
+    symbols: ['¤', 'xxx'],
+    baseQuantity: 'XXX',
+    pretty: '¤',
+    toBaseQuantity: identity,
+    fromBaseQuantity: identity,
+  },
 ];

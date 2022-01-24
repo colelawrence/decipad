@@ -29,6 +29,7 @@ const baseQuantityToBaseUnit: Record<BaseQuantity, string> = {
   USD: 'USD',
   GBP: 'GBP',
   SEK: 'SEK',
+  XXX: 'XXX',
 };
 
 export function baseUnitForBaseQuantity(baseQuantity: BaseQuantity): string {

@@ -11,6 +11,7 @@ addIrregularRule('kph', 'kph');
 addIrregularRule('mph', 'mph');
 addIrregularRule('u', 'u');
 addIrregularRule('lumen', 'lumen');
+addIrregularRule('scarab', 'scarab');
 
 // easter eggs
 addIrregularRule('lol', 'lulz');
