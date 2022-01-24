@@ -5,6 +5,7 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'kelvin',
     symbols: ['k'],
+    pretty: 'K',
     baseQuantity: 'temperature',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
@@ -12,7 +13,7 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'celsius',
     symbols: ['°c'],
-    pretty: '°c',
+    pretty: '°C',
     baseQuantity: 'temperature',
     doesNotScaleOnConversion: true,
     toBaseQuantity: (celsius) => celsius.add(273.15),
@@ -22,7 +23,7 @@ export const units: UnitOfMeasure[] = [
     name: 'fahrenheit',
     symbols: ['°f'],
     baseQuantity: 'temperature',
-    pretty: '°f',
+    pretty: '°F',
     doesNotScaleOnConversion: true,
     toBaseQuantity: (fahrenheit) =>
       fahrenheit.sub(32).mul(5).div(9).add(273.15),

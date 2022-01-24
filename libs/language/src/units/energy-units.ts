@@ -8,6 +8,7 @@ export const units: UnitOfMeasure[] = [
   {
     name: 'joule',
     symbols: ['j'],
+    pretty: 'J',
     baseQuantity: 'energy',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,

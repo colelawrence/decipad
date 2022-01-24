@@ -14,6 +14,7 @@ export const units: UnitOfMeasure[] = [
   },
   {
     name: 'byte',
+    symbols: ['B'],
     baseQuantity: 'information',
     doesNotScaleOnConversion: true,
     toBaseQuantity: byte,

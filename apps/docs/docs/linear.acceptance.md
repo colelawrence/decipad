@@ -66,7 +66,7 @@ grow(Speed, 10%, [1, 2, 3])
 
 ```deci live
 1 fahrenheit + 1
-==> 2 °f
+==> 2 °F
 ```
 
 ## [ENG-211](https://linear.app/decipad/issue/ENG-211)

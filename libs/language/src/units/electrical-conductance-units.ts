@@ -3,7 +3,7 @@ import { identity } from '../utils';
 
 export const units: UnitOfMeasure[] = [
   {
-    name: 'siemen',
+    name: 'siemens',
     baseQuantity: 'electrical conductance',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,

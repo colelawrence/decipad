@@ -2,8 +2,7 @@ import pluralize, { singular, plural, addIrregularRule } from 'pluralize';
 
 addIrregularRule('calorie', 'calories');
 addIrregularRule('celsius', 'celsius');
-addIrregularRule('USD', 'USD');
-addIrregularRule('EUR', 'EUR');
+addIrregularRule('siemens', 'siemens');
 addIrregularRule('are', 'ares');
 addIrregularRule('s', 's');
 addIrregularRule('h', 'h');

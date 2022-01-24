@@ -119,7 +119,7 @@ It takes over 26 horse races to make a marathon.
 
 The default unit is Kilometer per hour (`kph`).
 
-Kilometer per hour can be expressed as `kilometer/hour` and we support expanding (or contracting) any area unit to si units, i.e. `meters/second`.
+Kilometer per hour can be expressed as `kilometer/hour` and we support expanding (or contracting) any area unit to SI units, i.e. `meters/second`.
 
 The following are also supported:
 
@@ -135,7 +135,7 @@ The following are also supported:
 
 The default unit is Square Meter (`squaremeter`, `m2`, `m²`).
 
-Square meter can be expressed as `m2` and we support expanding (or contracting) any area unit to si units.
+Square meter can be expressed as `m2` and we support expanding (or contracting) any area unit to SI units.
 
 The following are also supported:
 
@@ -170,7 +170,7 @@ Surveyor:
 
 The default unit is Square Meter (`cubicmeter`, `m3`, `m³`).
 
-Gallon can be expressed as `m3` and we support expanding (or contracting) any volume unit to si units.
+Gallon can be expressed as `m3` and we support expanding (or contracting) any volume unit to SI units.
 
 The following are also supported:
 
@@ -215,7 +215,7 @@ Cooking:
 
 The default unit is Atmosphere (`atmosphere`, `atm`).
 
-Pascal can be expressed as `kg⋅m−1⋅s−2` and we support expanding (or contracting) any pressure unit to si units.
+Pascal can be expressed as `kg⋅m−1⋅s−2` and we support expanding (or contracting) any pressure unit to SI units.
 
 The following are also supported:
 
@@ -226,9 +226,9 @@ The following are also supported:
 
 ## Energy units
 
-The default unit is Joule (`joule`, `j`).
+The default unit is Joule (`Joule`, `J`).
 
-Joule can be expressed as `kg⋅m2⋅s−2` and we support expanding (or contracting) any energy unit to si units.
+Joule can be expressed as `kg⋅m2⋅s−2` and we support expanding (or contracting) any energy unit to SI units.
 
 The following are also supported:
 
@@ -236,7 +236,7 @@ The following are also supported:
 
 ## Force units
 
-The default unit is Netwon (`newton`, `n`). Newton is expressed as `1 kg⋅m⋅s−2` and we support expanding (or contracting) any force unit to si units.
+The default unit is Newton (`newton`, `N`). Newton is expressed as `1 kg⋅m⋅s−2` and we support expanding (or contracting) any force unit to SI units.
 
 ## Mass units
 
@@ -252,7 +252,7 @@ The following are also supported:
 
 ## Temperature units
 
-The default unit is Kelvin (`kelvin`, `k`).
+The default unit is Kelvin (`kelvin`, `K`).
 
 The following are also supported:
 
@@ -274,9 +274,9 @@ The following are also supported:
 
 ## Frequency units
 
-The default unit is Netwon (`hertz`, `hz`).
+The default unit is Newton (`hertz`, `Hz`).
 
-Hertz can be expressed as `s−1` and we support expanding (or contracting) any frequency unit to si units.
+Hertz can be expressed as `s−1` and we support expanding (or contracting) any frequency unit to SI units.
 
 ## Information units
 
@@ -290,7 +290,7 @@ Currently we don't support [binary unit prefixes](https://en.wikipedia.org/wiki/
 
 The default unit is Watt (`watt`, `W`).
 
-Watt can be expressed as `kg⋅m2⋅s−3` and we support expanding (or contracting) any power unit to si units.
+Watt can be expressed as `kg⋅m2⋅s−3` and we support expanding (or contracting) any power unit to SI units.
 
 ## Substance units
 
@@ -300,37 +300,37 @@ The default unit is Mole (`mole`, `mol`).
 
 The default unit is Watt (`ampere`, `A`).
 
-Watt can be expressed as `kg⋅m2⋅s−3⋅A−2` and we support expanding (or contracting) any eletrical current unit to si units.
+Watt can be expressed as `kg⋅m2⋅s−3⋅A−2` and we support expanding (or contracting) any electrical current unit to SI units.
 
 ## Electric charge units
 
 The default unit is Coulomb (`coulomb`, `C`).
 
-Coulomb can be expressed as `s⋅A` and we support expanding (or contracting) any eletric charge unit to si units.
+coulomb can be expressed as `s⋅A` and we support expanding (or contracting) any electric charge unit to SI units.
 
 ## Electrical capacitance
 
 The default unit is Farad (`farad`, `F`).
 
-Farad can be expressed as `kg−1⋅m−2⋅s4⋅A2` and we support expanding (or contracting) any eletrical capacitance unit to si units.
+Farad can be expressed as `kg−1⋅m−2⋅s4⋅A2` and we support expanding (or contracting) any electrical capacitance unit to SI units.
 
 ## Electrical resistance
 
 The default unit is Omh (`omh`, `Ω`).
 
-Ohm can be expressed as `kg⋅m2⋅s−3⋅A−2` and we support expanding (or contracting) any eletrical resistance unit to si units.
+Ohm can be expressed as `kg⋅m2⋅s−3⋅A−2` and we support expanding (or contracting) any electrical resistance unit to SI units.
 
 ## Electrical conductance
 
-The default unit is Siemen (`siemen`).
+The default unit is Siemens (`siemens`).
 
-Siemen can be expressed as `kg−1⋅m−2⋅s3⋅A2` and we support expanding (or contracting) any eletrical conductance unit to si units.
+Siemens can be expressed as `kg−1⋅m−2⋅s3⋅A2` and we support expanding (or contracting) any electrical conductance unit to SI units.
 
 ## Voltage
 
-The default unit is Volt (`volt`, `v`).
+The default unit is Volt (`volt`, `V`).
 
-Volt can be expressed as `kg⋅m2⋅s−3⋅A−1` and we support expanding (or contracting) any voltage unit to si units.
+Volt can be expressed as `kg⋅m2⋅s−3⋅A−1` and we support expanding (or contracting) any voltage unit to SI units.
 
 ## Luminous Intensity
 
@@ -340,7 +340,7 @@ The default unit is Candela (`candela`, `cd`).
 
 The default unit is Lumen (`lumen`, `lm`).
 
-Lumen can be expressed as `cd⋅sr` and we support expanding (or contracting) any luminous flow unit to si units.
+Lumen can be expressed as `cd⋅sr` and we support expanding (or contracting) any luminous flow unit to SI units.
 
 ## Solid Angle
 
