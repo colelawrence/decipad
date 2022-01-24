@@ -1635,3 +1635,16 @@ describe('math operators', () => {
     });
   });
 });
+
+describe('len', () => {
+  it('len a column of dates', async () => {
+    expect(await runCode(`len(date(2020))`)).toMatchObject({
+      value: F(1),
+      type: t.number(U('year')),
+    });
+    expect(await runCode(`len([date(2020), date(2021)])`)).toMatchObject({
+      value: F(2),
+      type: t.number(U('year')),
+    });
+  });
+});

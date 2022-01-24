@@ -46,21 +46,42 @@ describe('list operators', () => {
       t.number()
     );
 
-    expect(operators.len.fnValuesNoAutomap?.([fromJS(2)]))
-      .toMatchInlineSnapshot(`
-          FractionValue {
-            "value": Fraction(1),
-          }
-      `);
-
     expect(
       operators.len.functorNoAutomap?.([t.column(t.number(), 3)])
     ).toMatchObject(t.number());
+
+    expect(operators.len.functorNoAutomap?.([t.date('year')])).toMatchObject(
+      t.number(U('year'))
+    );
 
     expect(operators.len.fnValuesNoAutomap?.([fromJS([1, 2, 3])]))
       .toMatchInlineSnapshot(`
           FractionValue {
             "value": Fraction(3),
+          }
+      `);
+
+    expect(operators.len.fnValuesNoAutomap?.([fromJS([])]))
+      .toMatchInlineSnapshot(`
+        FractionValue {
+          "value": Fraction(0),
+        }
+      `);
+
+    expect(
+      operators.len.fnValuesNoAutomap?.([
+        fromJS([new Date(), new Date(), new Date()]),
+      ])
+    ).toMatchInlineSnapshot(`
+      FractionValue {
+        "value": Fraction(3),
+      }
+    `);
+
+    expect(operators.len.fnValuesNoAutomap?.([fromJS(2)]))
+      .toMatchInlineSnapshot(`
+          FractionValue {
+            "value": Fraction(1),
           }
       `);
   });
@@ -117,19 +138,6 @@ describe('list operators', () => {
       .toMatchInlineSnapshot(`
           FractionValue {
             "value": Fraction(6),
-          }
-      `);
-  });
-
-  it('count: counts the number of elements in a list', () => {
-    expect(operators.count.functor!([t.column(t.number(), 3)])).toMatchObject(
-      t.number()
-    );
-
-    expect(operators.countif.fnValues?.([fromJS([1, 2, 3])]))
-      .toMatchInlineSnapshot(`
-          FractionValue {
-            "value": Fraction(3),
           }
       `);
   });

@@ -513,7 +513,7 @@ export class Row implements Value {
   }
 }
 
-type FromJSOneArg = Interpreter.OneResult | number;
+type FromJSOneArg = Interpreter.OneResult | number | Date;
 type FromJSArg = FromJSOneArg | FromJSOneArg[];
 
 export const fromJS = (thing: FromJSArg): AnyValue => {

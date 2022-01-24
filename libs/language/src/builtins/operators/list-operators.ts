@@ -4,7 +4,7 @@ import produce from 'immer';
 import { RuntimeError } from '../../interpreter';
 import { Value, Column, Table, fromJS } from '../../interpreter/Value';
 import { Type, build as t } from '../../type';
-import { getInstanceof } from '../../utils';
+import { getInstanceof, U } from '../../utils';
 import { BuiltinSpec } from '../interfaces';
 import { approximateSubsetSumIndices } from '../table';
 
@@ -19,7 +19,23 @@ export const listOperators: Record<string, BuiltinSpec> = {
       }
       return fromJS(1);
     },
-    functorNoAutomap: () => t.number(),
+    functorNoAutomap: ([a]) => {
+      const reduced = a.reduced();
+      return Type.either(
+        Type.combine(
+          a.isColumn(),
+          reduced.isDate(),
+          t.number(reduced.date && U(reduced.date))
+        ),
+        Type.combine(a.isDate(), a.date ? t.number(U(a.date)) : t.number()),
+        Type.combine(
+          a.isColumn(),
+          reduced.isDate(),
+          reduced.date ? t.number(U(reduced.date)) : t.number()
+        ),
+        t.number()
+      );
+    },
   },
   cat: {
     argCount: 2,
@@ -64,13 +80,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
     functor: ([a]) => Type.combine(a.reducedOrSelf()),
   },
   count: {
-    argCount: 1,
-    argCardinalities: [2],
-    fnValues: ([a]: Value[]) => {
-      const aData = a.getData();
-      return fromJS(Array.isArray(aData) ? aData.length : 1);
-    },
-    functor: () => t.number(),
+    aliasFor: 'len',
   },
   countif: {
     argCount: 1,
