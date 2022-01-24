@@ -19,6 +19,7 @@ import { createAutoPairsPlugin } from '../plugins/AutoPairs/createAutoPairsPlugi
 import { createCodeVariableHighlightingPlugin } from '../plugins/CodeVariableHighlighting/createCodeVariableHighlightingPlugin';
 import { createForcedLayoutPlugin } from '../plugins/ForcedLayout/createForcedLayoutPlugin';
 import { createInteractiveTablePlugin } from '../plugins/InteractiveTable/createInteractiveTablePlugin';
+import { createSentryBreadcrumbsPlugin } from '../plugins/SentryBreadcrumbsPlugin/createSentryBreadcrumbsPlugin';
 import { createMarksPlugins } from '../plugins/Marks/createMarksPlugins';
 import { createLinkPlugin } from '../plugins/Link/createLinkPlugin';
 import { createNormalizeCodeBlockPlugin } from '../plugins/NormalizeCodeBlock/createNormalizeCodeBlockPlugin';
@@ -31,6 +32,9 @@ export const plugins = [
   // fundamentals
   createReactPlugin(),
   createHistoryPlugin(),
+
+  // Sentry plugin
+  createSentryBreadcrumbsPlugin(),
 
   // basic blocks
   createParagraphPlugin(),
