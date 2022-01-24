@@ -1,6 +1,8 @@
 import { Value, AnyValue } from '../interpreter/Value';
 import { Type } from '../type';
 import { AST } from '../parser';
+import { Context } from '../infer';
+import { Realm } from '../interpreter';
 
 export interface BuiltinSpec {
   argCount?: number | number[];
@@ -15,8 +17,21 @@ export interface BuiltinSpec {
   fn?: (...args: any[]) => any;
   noAutoconvert?: boolean;
   // Variant that operates on Value specifically
-  fnValuesNoAutomap?: (args: Value[], argTypes?: Type[]) => AnyValue;
-  fnValues?: (args: AnyValue[], argTypes?: Type[]) => AnyValue;
-  functor?: (types: Type[], values?: AST.Expression[]) => Type;
-  functorNoAutomap?: (types: Type[], values?: AST.Expression[]) => Type;
+
+  fnValuesNoAutomap?: (
+    args: Value[],
+    argTypes?: Type[],
+    realm?: Realm
+  ) => AnyValue;
+  fnValues?: (args: AnyValue[], argTypes?: Type[], realm?: Realm) => AnyValue;
+  functor?: (
+    types: Type[],
+    values?: AST.Expression[],
+    context?: Context
+  ) => Type;
+  functorNoAutomap?: (
+    types: Type[],
+    values?: AST.Expression[],
+    context?: Context
+  ) => Type;
 }

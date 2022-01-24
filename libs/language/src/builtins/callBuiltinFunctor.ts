@@ -1,3 +1,4 @@
+import { Context } from '..';
 import { Type, build as t } from '../type';
 import { automapTypes, automapTypesForReducer } from '../dimtools';
 import { getDefined } from '../utils';
@@ -9,6 +10,7 @@ function typeHasError(t: Type) {
 }
 
 export const callBuiltinFunctor = (
+  context: Context,
   opName: string,
   givenArguments: Type[],
   givenValues?: AST.Expression[]
@@ -24,7 +26,12 @@ export const callBuiltinFunctor = (
     return t.impossible(`The operator ${opName} does not exist`);
   } else {
     if (op.aliasFor) {
-      return callBuiltinFunctor(op.aliasFor, givenArguments, givenValues);
+      return callBuiltinFunctor(
+        context,
+        op.aliasFor,
+        givenArguments,
+        givenValues
+      );
     }
 
     let { argCount: argCounts = [] } = op;
@@ -38,11 +45,14 @@ export const callBuiltinFunctor = (
     }
 
     if (op.isReducer) {
-      return automapTypesForReducer(givenArguments[0], getDefined(op.functor));
+      const lowerDimFunctor = getDefined(op.functor);
+      return automapTypesForReducer(givenArguments[0], (types: Type[]) =>
+        lowerDimFunctor(types, givenValues, context)
+      );
     }
 
     if (op.functorNoAutomap != null) {
-      return op.functorNoAutomap(givenArguments, givenValues);
+      return op.functorNoAutomap(givenArguments, givenValues, context);
     }
 
     return automapTypes(
@@ -51,7 +61,8 @@ export const callBuiltinFunctor = (
         Type.combine(type, ...rest).mapType(() =>
           getDefined(op.functor, 'need a builtin functor')(
             [type, ...rest],
-            givenValues
+            givenValues,
+            context
           )
         ),
       op.argCardinalities

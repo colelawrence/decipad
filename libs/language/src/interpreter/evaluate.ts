@@ -92,7 +92,7 @@ export async function evaluate(
           getDefined(realm.inferContext.nodeTypes.get(arg))
         );
         const returnType = getDefined(realm.inferContext.nodeTypes.get(node));
-        return callBuiltin(funcName, args, argTypes, returnType);
+        return callBuiltin(realm, funcName, args, argTypes, returnType);
       }
     }
     case 'range': {

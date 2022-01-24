@@ -3,7 +3,7 @@ import { automapValues, automapValuesForReducer } from '../dimtools';
 
 import { Value, AnyValue, Column, fromJS } from '../interpreter/Value';
 import { getDefined, getInstanceof } from '../utils';
-import { RuntimeError } from '../interpreter';
+import { Realm, RuntimeError } from '../interpreter';
 import type { Type } from '../type';
 import { autoconvertResult, autoconvertArguments } from '../units';
 import { BuiltinSpec } from './interfaces';
@@ -19,13 +19,14 @@ function shouldAutoconvert(types: Type[]): boolean {
 }
 
 function callBuiltinAfterAutoconvert(
+  realm: Realm,
   funcName: string,
   builtin: BuiltinSpec,
   args: Value[],
   argTypes: Type[]
 ): Value {
   if (builtin.fnValuesNoAutomap) {
-    return builtin.fnValuesNoAutomap(args, argTypes);
+    return builtin.fnValuesNoAutomap(args, argTypes, realm);
   }
 
   const lowerDimFn = (argsLowerDims: Value[], typesLowerDims: Type[]) => {
@@ -43,7 +44,11 @@ function callBuiltinAfterAutoconvert(
         );
       }
     } else if (builtin.fnValues != null) {
-      return builtin.fnValues(argsLowerDims as AnyValue[], typesLowerDims);
+      return builtin.fnValues(
+        argsLowerDims as AnyValue[],
+        typesLowerDims,
+        realm
+      );
     } else {
       /* istanbul ignore next */
       throw new Error('unreachable');
@@ -62,6 +67,7 @@ function callBuiltinAfterAutoconvert(
 }
 
 export function callBuiltin(
+  realm: Realm,
   funcName: string,
   argsBeforeConvert: Value[],
   argTypes: Type[],
@@ -73,7 +79,13 @@ export function callBuiltin(
   );
 
   if (op.aliasFor) {
-    return callBuiltin(op.aliasFor, argsBeforeConvert, argTypes, returnType);
+    return callBuiltin(
+      realm,
+      op.aliasFor,
+      argsBeforeConvert,
+      argTypes,
+      returnType
+    );
   }
 
   const autoConvert = !op.noAutoconvert && shouldAutoconvert(argTypes);
@@ -82,6 +94,7 @@ export function callBuiltin(
     : argsBeforeConvert;
 
   const resultBeforeConvertingBack = callBuiltinAfterAutoconvert(
+    realm,
     funcName,
     op,
     args,

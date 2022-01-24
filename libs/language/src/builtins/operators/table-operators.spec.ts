@@ -1,12 +1,14 @@
+import { makeContext } from '@decipad/language';
 import {
   Column,
   Table,
   Date as DateValue,
   fromJS,
 } from '../../interpreter/Value';
-import { build as t } from '../../type';
+import { build as t, Type } from '../../type';
 import { tableOperators as operators } from './table-operators';
 import { F, U } from '../../utils';
+import { Realm, RuntimeError } from '../../interpreter';
 
 describe('table operators', () => {
   it('concatenates tables', () => {
@@ -115,6 +117,47 @@ describe('table operators', () => {
     ).toThrowErrorMatchingInlineSnapshot(
       `"Could not find a row with the given condition"`
     );
+  });
+
+  it('can lookup a column', () => {
+    const table = t.table({
+      length: 3,
+      columnNames: ['indexcolumn', 'booooleans'],
+      columnTypes: [t.number(U('bananas')), t.boolean()],
+    });
+    const column = t.column(table.columnTypes?.[1] as Type, 3, 'TheTable');
+
+    expect(
+      operators.lookup.functorNoAutomap!([column, t.number()]).toString()
+    ).toMatchInlineSnapshot(`"<boolean>"`);
+
+    const tableValue = Table.fromNamedColumns(
+      [
+        fromJS([1, 2, 3, 4, 5, 6]),
+        fromJS([false, true, true, false, false, true]),
+      ],
+      ['Nums', 'Bools']
+    );
+    const columnValue = tableValue.getColumn('Bools');
+    const preloadedRealm = new Realm(
+      makeContext({
+        initialGlobalScope: { TheTable: table },
+      })
+    );
+    preloadedRealm.stack.set('TheTable', tableValue);
+    expect(
+      operators.lookup
+        .fnValuesNoAutomap?.([columnValue, fromJS(3)], [column], preloadedRealm)
+        .getData()
+    ).toMatchInlineSnapshot(`true`);
+
+    expect(() =>
+      operators.lookup.fnValuesNoAutomap?.(
+        [columnValue, fromJS(404)],
+        [column],
+        preloadedRealm
+      )
+    ).toThrow(RuntimeError);
   });
 
   it('looks things up with a condition', () => {

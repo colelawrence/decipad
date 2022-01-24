@@ -12,8 +12,8 @@ export type CompareResult = -1 | 0 | 1;
 
 /** Returns the sign of a comparison between two things, whatever they may be */
 export function compareToNumber(
-  a: Value | string | number | BigInt | Fraction,
-  b: Value | string | number | BigInt | Fraction
+  a: Value | string | boolean | number | BigInt | Fraction,
+  b: Value | string | boolean | number | BigInt | Fraction
 ): number | bigint {
   if (a instanceof Fraction && b instanceof Fraction) {
     return a.compare(b);
@@ -23,6 +23,9 @@ export function compareToNumber(
   }
   if (typeof a === 'number' && typeof b === 'number') {
     return a - b;
+  }
+  if (typeof a === 'boolean' && typeof b === 'boolean') {
+    return Number(a) - Number(b);
   }
   if (typeof a === 'bigint' && typeof b === 'bigint') {
     return a - b;
@@ -50,8 +53,8 @@ const sign = (diff: number | BigInt): CompareResult => {
 };
 
 export function compare(
-  a: Value | string | number | BigInt | Fraction,
-  b: Value | string | number | BigInt | Fraction
+  a: Value | string | boolean | number | BigInt | Fraction,
+  b: Value | string | boolean | number | BigInt | Fraction
 ): CompareResult {
   return sign(compareToNumber(a, b));
 }

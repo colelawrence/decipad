@@ -3,6 +3,8 @@ import produce from 'immer';
 import { dequal } from 'dequal';
 import { getInstanceof, zip } from '../../utils';
 import { Column, Table, Row } from '../../interpreter/Value';
+import { Realm } from '../../interpreter';
+import { compare } from '../../interpreter/compare-values';
 import { RuntimeError } from '../../interpreter/RuntimeError';
 import { BuiltinSpec } from '../interfaces';
 import { Type, build as t } from '../../type';
@@ -11,31 +13,69 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
   lookup: {
     argCount: 2,
     functorNoAutomap: ([table, cond]) => {
-      return table
-        .isTable()
-        .withMinimumColumnCount(1)
-        .mapType((table) => {
-          const columnTypes = getDefined(table.columnTypes);
-          const columnNames = getDefined(table.columnNames);
+      const isBoolColumn = cond.isColumn().reduced().isScalar('boolean');
 
-          return Type.either(
-            cond.isColumn().reduced().isScalar('boolean'),
-            columnTypes[0].sameAs(cond)
-          ).mapType(() => t.row(columnTypes, columnNames));
-        });
+      const whenTable = (table: Type) =>
+        table
+          .isTable()
+          .withMinimumColumnCount(1)
+          .mapType((table) => {
+            const columnTypes = getDefined(table.columnTypes);
+            const columnNames = getDefined(table.columnNames);
+
+            return Type.either(
+              isBoolColumn,
+              columnTypes[0].sameAs(cond)
+            ).mapType(() => t.row(columnTypes, columnNames));
+          });
+
+      if (table.cellType != null) {
+        return table.isColumn().reduced();
+      } else {
+        return whenTable(table);
+      }
     },
-    fnValuesNoAutomap: ([_table, needle]) => {
-      const table = getInstanceof(_table, Table);
+    fnValuesNoAutomap: (
+      [tableOrColumn, needle],
+      [tableType] = [],
+      realm?: Realm
+    ) => {
+      const getNeedleIndexAtTable = (table: Table) => {
+        const needleVal = needle.getData();
+        const firstColumn = table.columns[0];
+
+        return firstColumn.values.findIndex(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (value) => compare(value.getData() as any, needleVal as any) === 0
+        );
+      };
+
+      if (tableOrColumn instanceof Column) {
+        const originalTable = getInstanceof(
+          getDefined(realm).stack.globalVariables.get(
+            getDefined(tableType.indexedBy)
+          ),
+          Table
+        );
+
+        const lookedUp =
+          tableOrColumn.values[getNeedleIndexAtTable(originalTable)];
+        if (!lookedUp) {
+          throw new RuntimeError(
+            `Could not find a row with the given condition`
+          );
+        }
+
+        return lookedUp;
+      }
+
+      const table = getInstanceof(tableOrColumn, Table);
+
       let rowIndex: number;
       if (needle instanceof Column) {
         rowIndex = needle.getData().findIndex(Boolean);
       } else {
-        const needleVal = needle.getData();
-        const firstColumn = table.columns[0];
-
-        rowIndex = firstColumn.values.findIndex(
-          (value) => value.getData() === needleVal
-        );
+        rowIndex = getNeedleIndexAtTable(table);
       }
 
       if (rowIndex === -1) {
