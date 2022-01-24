@@ -18,7 +18,7 @@ Add any element by typing its name or scrolling to the one you want to and press
 
 ## Writing and styling basics
 
-Start writing in your notebook anywhere. Highlight any text and a menu of text styling options appears to you. Using the menu, you can convert your text into a **paragraph**, **heading 1** or **heading 2**. And you can also style it in **bold** `B`, _italics_ `I`, **underlined** `U` or ` monospace code``<> `.
+Start writing in your notebook anywhere. Highlight any text and a menu of text styling options appears to you. Using the menu, you can convert your text into a **paragraph**, **heading 1** or **heading 2**. And you can also style it in **bold** `B`, _italics_ `I`, **underlined** `U` or `monospace code` `<>`.
 
 ![Jan-17-2022 11-59-58](https://user-images.githubusercontent.com/76447845/149757797-ffd467a6-9a37-4322-970d-437ec71ff0e8.gif)
 
