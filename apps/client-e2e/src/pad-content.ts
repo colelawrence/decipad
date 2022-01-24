@@ -47,12 +47,18 @@ describe('pad content', () => {
   });
 
   it('allows to go back to the previous paragraph and remove some text', async () => {
+    const [, p2] = await page.$$('[contenteditable] p');
+
+    // navigate to the element with flake redundancy
     await keyPress('ArrowUp');
+    p2.focus();
+    // navigate to the end with flake redundancy
     await keyPress('End');
+    await keyPress('End');
+
     for (let i = 0; i < ' paragraph'.length; i += 1) {
       await keyPress('Backspace');
     }
-    const [, p2] = await page.$$('[contenteditable] p');
     expect(await p2.textContent()).toBe('this is the content for the second');
   });
 
