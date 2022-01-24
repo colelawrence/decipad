@@ -1,8 +1,8 @@
+import { SERVER_SIDE_ROUTES } from '@decipad/routing';
 import { SerializedStyles } from '@emotion/react';
 import { AnchorHTMLAttributes, ComponentProps } from 'react';
 import { matchPath } from 'react-router-dom';
-import { SERVER_SIDE_ROUTES } from '@decipad/routing';
-import { NavHashLink, HashLink } from 'react-router-hash-link';
+import { HashLink, NavHashLink } from 'react-router-hash-link';
 import { useHasRouter } from './routing';
 
 export const resolveHref = (

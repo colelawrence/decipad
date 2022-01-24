@@ -1,7 +1,8 @@
+import { useWindowListener } from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import { FC, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { Button, Toggle } from '../../atoms';
+import { Button, Toggle, Tooltip } from '../../atoms';
 import { Link } from '../../icons';
 import {
   cssVar,
@@ -113,45 +114,73 @@ export const NotebookSharingPopUp = ({
   link,
   onToggleShare = noop,
 }: NotebookSharingPopUpProps): ReturnType<FC> => {
+  const [copiedStatusVisible, setCopiedStatusVisible] = useState(false);
   const [shareLinkVisible, setShareLinkVisible] = useState(false);
   const [shareMenuOpen, setShareMenuOpen] = useState(false);
+
+  const handleClickOutside = () => {
+    setShareMenuOpen(false);
+  };
+
+  useWindowListener('click', handleClickOutside);
+
   return (
-    <div css={{ position: 'relative' }}>
+    <div css={{ position: 'relative' }} onClick={(e) => e.stopPropagation()}>
       <Button onClick={() => setShareMenuOpen(!shareMenuOpen)}>Share</Button>
 
-      {shareMenuOpen && (
-        <div css={[popUpStyles]}>
-          <div css={innerPopUpStyles}>
-            <div>
-              <p css={css(p14Medium)}>Share public link</p>
-              <p css={descriptionStyles}>
-                Enable to share links with the public
-              </p>
+      <div>
+        {shareMenuOpen && (
+          <div css={[popUpStyles]}>
+            <div css={innerPopUpStyles}>
+              <div>
+                <p css={css(p14Medium)}>Share public link</p>
+                <p css={descriptionStyles}>
+                  Enable to share links with the public
+                </p>
+              </div>
+              <Toggle
+                active={shareLinkVisible}
+                onChange={(active) => {
+                  setShareLinkVisible(active);
+                  onToggleShare();
+                }}
+              />
             </div>
-            <Toggle
-              active={shareLinkVisible}
-              onChange={(active) => {
-                setShareLinkVisible(active);
-                onToggleShare();
-              }}
-            />
-          </div>
 
-          {shareLinkVisible && (
-            <div css={clipboardWrapperStyles}>
-              <CopyToClipboard text={link}>
-                <button css={copyButtonStyles}>
-                  <span css={copyButtonIconStyles}>
-                    <Link />
-                  </span>{' '}
-                  Copy
-                </button>
-              </CopyToClipboard>
-              <p css={padLinkTextStyles}>{link}</p>
-            </div>
-          )}
-        </div>
-      )}
+            {shareLinkVisible && (
+              <div css={clipboardWrapperStyles}>
+                <Tooltip
+                  variant="small"
+                  open={copiedStatusVisible}
+                  trigger={
+                    <div>
+                      <CopyToClipboard
+                        text={link}
+                        onCopy={() => {
+                          setCopiedStatusVisible(true);
+                          setTimeout(() => {
+                            setCopiedStatusVisible(false);
+                          }, 1000);
+                        }}
+                      >
+                        <button css={copyButtonStyles}>
+                          <span css={copyButtonIconStyles}>
+                            <Link />
+                          </span>{' '}
+                          Copy
+                        </button>
+                      </CopyToClipboard>
+                    </div>
+                  }
+                >
+                  <p>Copied!</p>
+                </Tooltip>
+                <p css={padLinkTextStyles}>{link}</p>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
