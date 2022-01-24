@@ -296,7 +296,6 @@ it('can extract units from text', async () => {
   let units = await computer.getUnitFromText('W');
   expect(units?.args[0].unit).toBe('W');
   units = await computer.getUnitFromText('km/h');
-  console.log({ units });
   expect(units?.args[0].unit).toBe('h');
   expect(units?.args[1].unit).toBe('m');
 

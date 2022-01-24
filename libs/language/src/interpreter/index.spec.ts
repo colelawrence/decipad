@@ -17,7 +17,7 @@ import {
 import { parseUTCDate } from '../date';
 import { runAST } from '../testUtils';
 import { Type } from '..';
-import { stringifyResult } from '../repl';
+import { stringifyResult } from '../result';
 
 import { run, runOne } from './index';
 

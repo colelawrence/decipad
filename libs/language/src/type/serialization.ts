@@ -8,7 +8,7 @@ import { TUnit, TUnits, Units } from './unit-type';
 export type SerializedUnit = TUnit<string>;
 export type SerializedUnits = TUnits<string>;
 
-export type SerializedType =
+export type SerializedType = Readonly<
   | { kind: 'number'; unit: SerializedUnits | null }
   | { kind: 'boolean' }
   | { kind: 'string' }
@@ -30,7 +30,8 @@ export type SerializedType =
   | { kind: 'row'; rowCellTypes: SerializedType[]; rowCellNames: string[] }
   | { kind: 'time-quantity'; timeUnits: Time.Unit[] }
   | { kind: 'function' }
-  | { kind: 'type-error'; errorCause: ErrSpec };
+  | { kind: 'type-error'; errorCause: ErrSpec }
+>;
 
 export type SerializedTypeKind = SerializedType['kind'];
 

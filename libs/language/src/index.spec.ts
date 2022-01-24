@@ -11,7 +11,7 @@ import {
 import { date, parseUTCDate } from './date';
 import { Column, Scalar } from './interpreter/Value';
 import { block, n, F, U, u, c } from './utils';
-import { stringifyResult } from './repl';
+import { stringifyResult } from './result';
 import { number } from './type/build';
 
 expect.addSnapshotSerializer({

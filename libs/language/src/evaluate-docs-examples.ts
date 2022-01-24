@@ -1,4 +1,6 @@
-import { stringifyResult } from './repl';
+/* istanbul ignore file */
+
+import { stringifyResult } from './result';
 import { runCode } from '.';
 import { RuntimeError } from './interpreter';
 
