@@ -9,6 +9,7 @@ export const GET_WORKSPACES = gql`
         items {
           id
           name
+          createdAt
         }
       }
     }

@@ -225,6 +225,7 @@
     "@types/nearley": "^2.11.1",
     "@types/node": "15.6.1",
     "@types/oauth": "^0.9.1",
+    "@types/p-retry": "^3.0.1",
     "@types/pluralize": "^0.0.29",
     "@types/prismjs": "^1.16.5",
     "@types/proper-lockfile": "^4.1.2",

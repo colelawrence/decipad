@@ -1,15 +1,13 @@
-import { ComponentProps, FC } from 'react';
-import { useQuery } from '@apollo/client';
-import { CountPads, CountPadsVariables, COUNT_PADS } from '@decipad/queries';
 import { DashboardTopbar } from '@decipad/ui';
 import { signOut, useSession } from 'next-auth/client';
+import { ComponentProps, FC } from 'react';
 
 type TopbarProps = {
-  readonly workspaceId: string;
+  readonly numberOfNotebooks: number;
 } & Required<Pick<ComponentProps<typeof DashboardTopbar>, 'onCreateNotebook'>>;
 
 export const Topbar = ({
-  workspaceId,
+  numberOfNotebooks,
   onCreateNotebook,
 }: TopbarProps): ReturnType<FC> => {
   const [session] = useSession();
@@ -19,17 +17,13 @@ export const Topbar = ({
     );
   }
 
-  const { data } = useQuery<CountPads, CountPadsVariables>(COUNT_PADS, {
-    variables: { workspaceId },
-  });
-
   return (
     <DashboardTopbar
       name={session.user.name}
       email={session.user.email ?? ''}
       onLogout={signOut}
       onCreateNotebook={onCreateNotebook}
-      numberOfNotebooks={data?.pads.count}
+      numberOfNotebooks={numberOfNotebooks}
     />
   );
 };

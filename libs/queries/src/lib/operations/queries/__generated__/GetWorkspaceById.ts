@@ -8,18 +8,19 @@
 // ====================================================
 
 export interface GetWorkspaceById_getWorkspaceById_pads_items {
-  __typename: "Pad";
+  __typename: 'Pad';
   id: string;
   name: string;
+  createdAt: any | null;
 }
 
 export interface GetWorkspaceById_getWorkspaceById_pads {
-  __typename: "PagedPadResult";
+  __typename: 'PagedPadResult';
   items: GetWorkspaceById_getWorkspaceById_pads_items[];
 }
 
 export interface GetWorkspaceById_getWorkspaceById {
-  __typename: "Workspace";
+  __typename: 'Workspace';
   id: string;
   name: string;
   pads: GetWorkspaceById_getWorkspaceById_pads;

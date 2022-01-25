@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useMutation, useQuery } from '@apollo/client';
+import { ClientEventsContext } from '@decipad/client-events';
 import {
   CountPadsVariables,
   COUNT_PADS,
@@ -20,8 +21,7 @@ import {
   REMOVE_PAD,
 } from '@decipad/queries';
 import { Dashboard, NotebookList, NotebookListPlaceholder } from '@decipad/ui';
-import { ClientEventsContext } from '@decipad/client-events';
-import { FC, useCallback, useState, useContext } from 'react';
+import { FC, useCallback, useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
 import { SideMenu } from '../components/SideMenu';
@@ -123,7 +123,7 @@ export function Workspace({
     <Dashboard
       topbar={
         <Topbar
-          workspaceId={workspaceId}
+          numberOfNotebooks={data?.getWorkspaceById?.pads.items.length || 0}
           onCreateNotebook={handleCreateNotebook}
         />
       }
@@ -133,16 +133,25 @@ export function Workspace({
           data.getWorkspaceById ? (
             <NotebookList
               Heading="h1"
-              notebooks={data.getWorkspaceById.pads.items.map((notebook) => ({
-                ...notebook,
-                href: `/workspaces/${
-                  // checked a couple lines earlier
-                  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                  data.getWorkspaceById!.id
-                }/pads/${encodeVanityUrlComponent(notebook.name, notebook.id)}`,
-                exportHref: `/api/pads/${notebook.id}/export`,
-                exportFileName: `notebook-${notebook.id}.json`,
-              }))}
+              notebooks={data.getWorkspaceById.pads.items
+                .slice()
+                .sort(
+                  (a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt)
+                )
+                .reverse()
+                .map((notebook) => ({
+                  ...notebook,
+                  href: `/workspaces/${
+                    // checked a couple lines earlier
+                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                    data.getWorkspaceById!.id
+                  }/pads/${encodeVanityUrlComponent(
+                    notebook.name,
+                    notebook.id
+                  )}`,
+                  exportHref: `/api/pads/${notebook.id}/export`,
+                  exportFileName: `notebook-${notebook.id}.json`,
+                }))}
               onCreateNotebook={handleCreateNotebook}
               onDuplicate={handleDuplicateNotebook}
               onDelete={handleDeleteNotebook}
