@@ -22,7 +22,7 @@ Start writing in your notebook anywhere. Highlight any text and a menu of text s
 
 ![Jan-17-2022 11-59-58](https://user-images.githubusercontent.com/76447845/149757797-ffd467a6-9a37-4322-970d-437ec71ff0e8.gif)
 
-## The Calculations Block
+## The Calculation Block
 
 Add a `/calculation block` onto your notebook and you'll be able to use the [Decipad language](/docs/language/introduction-to-the-language) to play with numbers.
 
@@ -32,7 +32,7 @@ The results of your calculations will always be displayed per line except for th
 
 To exit the calculations block and go back to text mode, simply click outside of it or press `⌘/ctrl` + `Enter`.
 
-## Table Blocks
+## Tables
 
 Add a `/table` to input data in a tabular format to your notebook without using the language.
 

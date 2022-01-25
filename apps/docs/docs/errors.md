@@ -225,6 +225,11 @@ The calculation you wrote is not valid in the language.
 
 You may have miss-spelled something, or even tried to insert data in a way that is not supported yet:
 
+    Final Cost = 8000 €
+    Final_Cost = 8000 €
+    
+doesn't work because variables for now can't use spaces, symbols, and they are case sensitive.
+
     1==2 ? 10 : 20
 
 doesn't work because that is not the right syntax for an `if.. then.. else` statement.
