@@ -1,5 +1,8 @@
 import { F, l, c, r } from '../utils';
 import { runTests } from './run-tests';
+import { getDefined } from '@decipad/utils';
+import { parseBlock } from './index';
+
 
 runTests({
   'ref as expression': {
@@ -664,13 +667,24 @@ runTests({
 
   'multiply by default': {
     sourceMap: false,
-    source: '100 200',
-    ast: [c('*', l(100), l(200))],
+    source: '10 bananas',
+    ast: [c('*', l(10), r('bananas'))],
   },
 
-  'multiply by default (2)': {
+  'multiply by dafault accepts lots of stuff after the number': {
     sourceMap: false,
-    source: '38 a 25',
-    ast: [c('*', c('*', l(38), r('a')), l(25))],
-  },
+    source: '10 bunch of arguments',
+    ast: [c('*', c('*', c('*', l(10), r('bunch')), r('of')), r('arguments'))]
+  }
+});
+
+
+it('multiply by default only accepts number in the first position', async () => {
+  const errors = getDefined(parseBlock({ id: '', source: 'a 25' }).errors);
+  expect(errors).toHaveLength(1);
+});
+
+it('multiply by default only accepts one number', async () => {
+  const errors = getDefined(parseBlock({ id: '', source: '100 200' }).errors);
+  expect(errors).toHaveLength(1);
 });

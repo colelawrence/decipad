@@ -1203,29 +1203,34 @@ let ParserRules = [
   },
   {
     name: 'implicitMult',
-    symbols: ['implicitMult', '__', 'primary'],
+    symbols: ['implicitMult', '__', 'nonLitPrimary'],
     postprocess: implicitMultHandler,
   },
-  { name: 'primary', symbols: ['functionCall'], postprocess: id },
-  { name: 'primary', symbols: ['select'], postprocess: id },
+  { name: 'primary', symbols: ['nonLitPrimary'], postprocess: id },
   { name: 'primary', symbols: ['literal'], postprocess: id },
-  { name: 'primary', symbols: ['ref'], postprocess: id },
-  { name: 'primary', symbols: ['parenthesizedExpression'], postprocess: id },
+  { name: 'nonLitPrimary', symbols: ['functionCall'], postprocess: id },
+  { name: 'nonLitPrimary', symbols: ['select'], postprocess: id },
+  { name: 'nonLitPrimary', symbols: ['ref'], postprocess: id },
   {
-    name: 'primary',
+    name: 'nonLitPrimary',
+    symbols: ['parenthesizedExpression'],
+    postprocess: id,
+  },
+  {
+    name: 'nonLitPrimary',
     symbols: [{ literal: '-' }, '_', 'parenthesizedExpression'],
     postprocess: unaryMinusHandler,
   },
   {
-    name: 'primary',
+    name: 'nonLitPrimary',
     symbols: [{ literal: '-' }, '_', 'ref'],
     postprocess: unaryMinusHandler,
   },
-  { name: 'primary$subexpression$1', symbols: [{ literal: '!' }] },
-  { name: 'primary$subexpression$1', symbols: [{ literal: 'not' }] },
+  { name: 'nonLitPrimary$subexpression$1', symbols: [{ literal: '!' }] },
+  { name: 'nonLitPrimary$subexpression$1', symbols: [{ literal: 'not' }] },
   {
-    name: 'primary',
-    symbols: ['primary$subexpression$1', '_', 'expression'],
+    name: 'nonLitPrimary',
+    symbols: ['nonLitPrimary$subexpression$1', '_', 'expression'],
     postprocess: (d) => {
       return addArrayLoc(
         {
@@ -1252,7 +1257,7 @@ let ParserRules = [
     },
   },
   {
-    name: 'primary',
+    name: 'nonLitPrimary',
     symbols: ['primary', '_', { literal: '^' }, '_', 'int'],
     postprocess: (d) => {
       const left = d[0];
@@ -1279,14 +1284,17 @@ let ParserRules = [
       );
     },
   },
-  { name: 'primary$subexpression$2', symbols: ['ref'] },
-  { name: 'primary$subexpression$2', symbols: ['functionCall'] },
-  { name: 'primary$subexpression$2', symbols: ['parenthesizedExpression'] },
-  { name: 'primary$subexpression$2', symbols: ['select'] },
+  { name: 'nonLitPrimary$subexpression$2', symbols: ['ref'] },
+  { name: 'nonLitPrimary$subexpression$2', symbols: ['functionCall'] },
   {
-    name: 'primary',
+    name: 'nonLitPrimary$subexpression$2',
+    symbols: ['parenthesizedExpression'],
+  },
+  { name: 'nonLitPrimary$subexpression$2', symbols: ['select'] },
+  {
+    name: 'nonLitPrimary',
     symbols: [
-      'primary$subexpression$2',
+      'nonLitPrimary$subexpression$2',
       '_',
       { literal: '.' },
       '_',

@@ -134,21 +134,23 @@ powOp         -> implicitMult _ powOperator _ powOp     {% basicBinop %}
 
 implicitMult  -> primary                                {% id %}
 implicitMult  -> implicitMult ref                       {% implicitMultHandler %}
-implicitMult  -> implicitMult __ primary                {% implicitMultHandler %}
+implicitMult  -> implicitMult __ nonLitPrimary          {% implicitMultHandler %}
+
+primary            -> nonLitPrimary                     {% id %}
+primary            -> literal                           {% id %}
+
+nonLitPrimary      -> functionCall                      {% id %}
+nonLitPrimary      -> select                            {% id %}
 
 
-primary      -> functionCall                            {% id %}
-primary      -> select                                  {% id %}
+nonLitPrimary      -> ref                               {% id %}
 
-primary      -> literal                                 {% id %}
-primary      -> ref                                     {% id %}
+nonLitPrimary      -> parenthesizedExpression           {% id %}
 
-primary      -> parenthesizedExpression                 {% id %}
+nonLitPrimary      -> "-" _ parenthesizedExpression     {% unaryMinusHandler %}
+nonLitPrimary      -> "-" _ ref                         {% unaryMinusHandler %}
 
-primary      -> "-" _ parenthesizedExpression           {% unaryMinusHandler %}
-primary      -> "-" _ ref                               {% unaryMinusHandler %}
-
-primary      -> ("!" | "not") _ expression              {%
+nonLitPrimary      -> ("!" | "not") _ expression        {%
                                                         (d) => {
                                                           return addArrayLoc({
                                                             type: 'function-call',
@@ -166,7 +168,7 @@ primary      -> ("!" | "not") _ expression              {%
                                                         }
                                                         %}
 
-primary     -> primary _ "^" _ int                      {%
+nonLitPrimary     -> primary _ "^" _ int                {%
                                                         (d) => {
                                                           const left = d[0]
                                                           const right = makeNumber(d, d[4].n)
@@ -187,7 +189,7 @@ primary     -> primary _ "^" _ int                      {%
                                                         }
                                                         %}
 
-primary -> (ref | functionCall | parenthesizedExpression | select) _ "." _ %identifier {%
+nonLitPrimary -> (ref | functionCall | parenthesizedExpression | select) _ "." _ %identifier {%
                                                         (d) =>
                                                           addArrayLoc({
                                                             type: 'property-access',
