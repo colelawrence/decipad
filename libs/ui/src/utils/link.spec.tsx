@@ -63,9 +63,11 @@ describe('Anchor', () => {
     ${'without a router'} | ${undefined}
   `('$contextDescription', ({ wrapper }) => {
     describe.each`
-      linkDescription    | href
-      ${'external link'} | ${'https://parkinsonsroadmap.org/'}
-      ${'internal link'} | ${'/'}
+      linkDescription                | href
+      ${'external link'}             | ${'https://example.com/'}
+      ${'internal server-side link'} | ${docs({}).$}
+      ${'internal server-side link'} | ${docs({}).page({ name: 'example' }).$}
+      ${'internal link'}             | ${'/'}
     `("for an $linkDescription to '$href'", ({ href }) => {
       it('applies the href to the anchor', () => {
         const { getByRole } = render(<Anchor href={href}>text</Anchor>, {
@@ -86,42 +88,51 @@ describe('Anchor', () => {
     });
   });
 
-  describe('for an external link', () => {
+  describe.each`
+    linkDescription                | href
+    ${'external link'}             | ${'https://example.com/'}
+    ${'internal server-side link'} | ${docs({}).$}
+    ${'internal server-side link'} | ${docs({}).page({ name: 'example' }).$}
+  `('for an $linkDescription to $href', ({ href }) => {
     it('sets the anchor target to open in a new page', () => {
-      const { getByRole } = render(
-        <Anchor href="https://parkinsonsroadmap.org/">text</Anchor>
-      );
+      const { getByRole } = render(<Anchor href={href}>text</Anchor>);
       const { target } = getByRole('link') as HTMLAnchorElement;
       expect(target).toBe('_blank');
     });
 
+    mockConsoleError();
+    it('triggers a full page navigation on click', () => {
+      const { getByRole } = render(<Anchor href={href}>text</Anchor>);
+      const anchor = getByRole('link') as HTMLAnchorElement;
+      expect(fireEvent.click(anchor)).toBe(true);
+    });
+  });
+  describe('for an external link', () => {
     it('secures the link against third parties', () => {
       const { getByRole } = render(
-        <Anchor href="https://parkinsonsroadmap.org/">text</Anchor>
+        <Anchor href="https://example.com">text</Anchor>
       );
       const { relList } = getByRole('link') as HTMLAnchorElement;
       expect(relList).toContain('noreferrer');
       expect(relList).toContain('noopener');
     });
-
-    mockConsoleError();
-    it('triggers a full page navigation on click', () => {
-      const { getByRole } = render(
-        <Anchor href="https://parkinsonsroadmap.org/">text</Anchor>
-      );
-      const anchor = getByRole('link') as HTMLAnchorElement;
-      expect(fireEvent.click(anchor)).toBe(true);
+  });
+  describe('for an internal serer-side link', () => {
+    it('does not secure the link against third parties', () => {
+      const { getByRole } = render(<Anchor href={docs({}).$}>text</Anchor>);
+      const { relList } = getByRole('link') as HTMLAnchorElement;
+      expect(relList).not.toContain('noreferrer');
+      expect(relList).not.toContain('noopener');
     });
   });
 
   describe.each`
-    description           | wrapper         | href
-    ${'with a router'}    | ${StaticRouter} | ${'/'}
-    ${'without a router'} | ${undefined}    | ${'/'}
-    ${'without a router'} | ${undefined}    | ${docs({}).$}
-  `('for an internal link $description to $href', ({ wrapper, href }) => {
+    description           | wrapper
+    ${'with a router'}    | ${StaticRouter}
+    ${'without a router'} | ${undefined}
+  `('for an internal link $description', ({ wrapper }) => {
     it('does not set the anchor target', () => {
-      const { getByRole } = render(<Anchor href={href}>text</Anchor>, {
+      const { getByRole } = render(<Anchor href="/">text</Anchor>, {
         wrapper,
       });
       const { target } = getByRole('link') as HTMLAnchorElement;
@@ -138,21 +149,6 @@ describe('Anchor', () => {
 
   describe('for an internal link with a router', () => {
     mockConsoleError();
-    it('triggers a normal full page navigation on click if the link is server-side', () => {
-      const { getByRole } = render(
-        <Anchor
-          href={`${window.location.protocol}//${window.location.host}${
-            docs({}).$
-          }`}
-        >
-          text
-        </Anchor>,
-        { wrapper: StaticRouter }
-      );
-      const anchor = getByRole('link') as HTMLAnchorElement;
-      expect(fireEvent.click(anchor)).toBe(true);
-    });
-
     it('does not trigger a full page navigation on click', () => {
       const { getByRole } = render(
         <Anchor

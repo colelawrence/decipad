@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import { Info } from '../../icons';
 import { codeErrorIconFill, setCssVar, p12Regular } from '../../primitives';
 import { Tooltip } from '..';
+import { Anchor } from '../../utils';
 
 const iconWrapperStyles = css({
   ...setCssVar('currentTextColor', codeErrorIconFill.rgb),
@@ -40,9 +41,9 @@ export const CodeError = ({ message, url }: CodeErrorProps): ReturnType<FC> => {
       }
     >
       <span css={messageStyles}>{message}</span>
-      <a css={urlStyles} href={url}>
+      <Anchor css={urlStyles} href={url}>
         Check our docs
-      </a>
+      </Anchor>
     </Tooltip>
   );
 };

@@ -22,7 +22,7 @@ it('renders message when hovering the icon', async () => {
 
 it('renders documentation url when hovering the icon', async () => {
   const { findByText, getByTitle, queryByText } = render(
-    <CodeError message="" url="http://decipad.com" />
+    <CodeError message="" url="http://decipad.com/" />
   );
 
   expect(await queryByText(/doc/i)).toBeNull();
@@ -32,6 +32,6 @@ it('renders documentation url when hovering the icon', async () => {
   expect(await findByText(/doc/i)).toBeInTheDocument();
   expect(await findByText(/doc/i)).toHaveAttribute(
     'href',
-    'http://decipad.com'
+    'http://decipad.com/'
   );
 });

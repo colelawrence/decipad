@@ -1,3 +1,5 @@
-import { route } from 'typesafe-routes';
+import { route, stringParser } from 'typesafe-routes';
 
-export default route('/docs', {}, {});
+const page = route('/:name', { name: stringParser }, {});
+
+export default route('/docs', {}, { page });

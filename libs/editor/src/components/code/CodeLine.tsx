@@ -45,7 +45,7 @@ function getSyntaxError(line: IdentifiedResult) {
     ? {
         line: isSyntaxError(line.error) ? line.error.token.line + 1 : 1,
         message: 'Syntax Error',
-        url: `${docs({}).$}/errors#syntax-error`,
+        url: `${docs({}).page({ name: 'errors' }).$}#syntax-error`,
       }
     : undefined;
 }

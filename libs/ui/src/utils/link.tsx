@@ -57,39 +57,55 @@ export const Anchor: React.FC<AnchorProps> = ({
   exact,
   ...props
 }) => {
+  /*
+   * Logic table (please keep updated along with tests!):
+   * href                 | hasRouter | activeStyles || anchor impl | target  | rel
+   * internal             | false     | no           || a           | default | default
+   * internal             | false     | yes          || a           | default | default
+   * internal             | true      | no           || HashLink    |         |
+   * internal             | true      | yes          || NavHashLink |         |
+   * internal server-side | false     | no           || a           | _blank  | default
+   * internal server-side | false     | yes          || a           | _blank  | default
+   * internal server-side | true      | no           || a           | _blank  | default
+   * internal server-side | true      | yes          || a           | _blank  | default
+   * external             | false     | no           || a           | _blank  | secure
+   * external             | false     | yes          || a           | _blank  | secure
+   * external             | true      | no           || a           | _blank  | secure
+   * external             | true      | yes          || a           | _blank  | secure
+   */
+
   const hasRouter = useHasRouter();
   const { internal = false, resolved = href } = href ? resolveHref(href) : {};
 
   // like href, resolved can still be falsy from here, indicating an empty href that does not navigate
-  if (resolved) {
-    if (
-      hasRouter &&
-      internal &&
-      SERVER_SIDE_ROUTES.every(
-        (route) => matchPath(resolved, { path: route.template }) == null
-      )
-    ) {
-      if (activeStyles) {
-        return (
-          <NavHashLink
-            {...props}
-            activeClassName={activeClassName}
-            css={[props.css, { [`&.${activeClassName}`]: activeStyles }]}
-            to={resolved}
-            exact={exact}
-            smooth
-          />
-        );
-      }
-      return <HashLink {...props} to={resolved} smooth />;
-    }
+
+  const sameApp =
+    resolved &&
+    internal &&
+    SERVER_SIDE_ROUTES.every(
+      (route) => matchPath(resolved, { path: route.template }) == null
+    );
+
+  if (hasRouter && resolved && sameApp) {
+    return activeStyles ? (
+      <NavHashLink
+        {...props}
+        activeClassName={activeClassName}
+        css={[props.css, { [`&.${activeClassName}`]: activeStyles }]}
+        to={resolved}
+        exact={exact}
+        smooth
+      />
+    ) : (
+      <HashLink {...props} to={resolved} smooth />
+    );
   }
 
   return (
     <a
       {...props}
       href={resolved}
-      target={internal ? undefined : '_blank'}
+      target={sameApp ? undefined : '_blank'}
       rel={internal ? undefined : 'noreferrer noopener'}
     />
   );
