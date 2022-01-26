@@ -3,12 +3,12 @@ import { InferError, Type, build as t } from '../type';
 import {
   AnyValue,
   Date,
-  TimeQuantity,
   Range,
   StringValue,
   BooleanValue,
   FractionValue,
 } from '../interpreter/Value';
+import { TimeQuantity } from '../date';
 import { getDefined } from '../utils';
 import { AST } from '..';
 

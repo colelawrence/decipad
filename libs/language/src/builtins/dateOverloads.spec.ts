@@ -1,10 +1,6 @@
 import { build as t } from '../type';
-import {
-  TimeQuantity,
-  Date as IDate,
-  FractionValue,
-} from '../interpreter/Value';
-import { parseUTCDate, Time } from '../date';
+import { Date as IDate, FractionValue } from '../interpreter/Value';
+import { parseUTCDate, Time, TimeQuantity } from '../date';
 import { overloadBuiltin } from './overloadBuiltin';
 import {
   dateOverloads,

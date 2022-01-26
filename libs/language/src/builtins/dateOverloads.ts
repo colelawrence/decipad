@@ -1,11 +1,12 @@
 import Fraction from '@decipad/fraction';
 
-import { Date, TimeQuantity, FractionValue } from '../interpreter/Value';
+import { Date, FractionValue } from '../interpreter/Value';
 import {
   addTimeQuantity,
   cmpSpecificities,
   getHighestSpecificity as getMostSpecific,
   subtractDates,
+  TimeQuantity,
 } from '../date';
 import { F, getDefined, getInstanceof } from '../utils';
 import { Type, build as t, InferError } from '../type';

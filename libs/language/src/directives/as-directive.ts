@@ -3,14 +3,9 @@ import Fraction from '@decipad/fraction';
 
 import produce from 'immer';
 import { RuntimeError } from '../interpreter';
-import { convertTimeQuantityTo, Time } from '../date';
+import { convertTimeQuantityTo, Time, TimeQuantity } from '../date';
 import { automapTypes, automapValues } from '../dimtools';
-import {
-  FractionValue,
-  fromJS,
-  TimeQuantity,
-  Value,
-} from '../interpreter/Value';
+import { FractionValue, fromJS, Value } from '../interpreter/Value';
 import { AST } from '../parser';
 import { Expression } from '../parser/ast-types';
 import { build as t, InferError, Type, Unit, Units } from '../type';

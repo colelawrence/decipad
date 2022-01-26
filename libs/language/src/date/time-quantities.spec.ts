@@ -1,5 +1,4 @@
-import { parseUTCDate as d } from '.';
-import { TimeQuantity } from '../interpreter/Value';
+import { parseUTCDate as d, TimeQuantity } from '.';
 import { addTimeQuantity } from './time-quantities';
 
 it('can add composite quantities', () => {

@@ -53,16 +53,6 @@ it('can stringify a type', () => {
       "kind": "string",
     }
   `);
-  expect(serializeType(t.timeQuantity(['month', 'day'])))
-    .toMatchInlineSnapshot(`
-      Object {
-        "kind": "time-quantity",
-        "timeUnits": Array [
-          "month",
-          "day",
-        ],
-      }
-    `);
   expect(serializeType(t.range(t.number()))).toMatchInlineSnapshot(`
     Object {
       "kind": "range",
@@ -209,50 +199,6 @@ it('can parse a type', () => {
       columnNames: ['Hi', 'Hi2'],
     })
   ).toMatchInlineSnapshot(`"table (123) { Hi = <number>, Hi2 = <number> }"`);
-
-  expect(
-    deserializeType({
-      kind: 'time-quantity',
-      timeUnits: ['day', 'year'],
-    })
-  ).toMatchInlineSnapshot(`
-    Type {
-      "atParentIndex": null,
-      "cellType": null,
-      "columnNames": null,
-      "columnSize": null,
-      "columnTypes": null,
-      "date": null,
-      "errorCause": null,
-      "functionness": false,
-      "indexName": null,
-      "indexedBy": null,
-      "node": null,
-      "rangeOf": null,
-      "rowCellNames": null,
-      "rowCellTypes": null,
-      "tableLength": null,
-      "type": "time-quantity",
-      "unit": Object {
-        "args": Array [
-          Object {
-            "exp": Fraction(1),
-            "known": true,
-            "multiplier": Fraction(1),
-            "unit": "day",
-          },
-          Object {
-            "exp": Fraction(1),
-            "known": true,
-            "multiplier": Fraction(1),
-            "unit": "year",
-          },
-        ],
-        "type": "units",
-      },
-      Symbol(immer-draftable): true,
-    }
-  `);
 
   expect(deserializeType({ kind: 'function' })).toMatchObject({
     functionness: true,

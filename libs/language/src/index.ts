@@ -20,15 +20,7 @@ export type { Context } from './infer';
 export { Interpreter } from './interpreter';
 export * from './run';
 export { setErrorReporter } from './reporting';
-export {
-  Scalar,
-  Date,
-  Range,
-  TimeQuantity,
-  Column,
-  Table,
-  Row,
-} from './interpreter/Value';
+export { Scalar, Date, Range, Column, Table, Row } from './interpreter/Value';
 
 export { prettyPrintAST } from './parser/utils';
 export type {

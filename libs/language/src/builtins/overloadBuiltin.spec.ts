@@ -1,4 +1,4 @@
-import { Date, fromJS, TimeQuantity } from '../interpreter/Value';
+import { Date, fromJS } from '../interpreter/Value';
 import { InferError, build as t } from '../type';
 import { getDefined } from '../utils';
 import {
@@ -48,9 +48,6 @@ describe('utils', () => {
     expect(
       getOverloadedTypeFromValue(Date.fromDateAndSpecificity(0n, 'hour'))
     ).toEqual('date');
-    expect(getOverloadedTypeFromValue(new TimeQuantity(new Map()))).toEqual(
-      'time-quantity'
-    );
   });
 
   it('getOverloadTypeFromType', () => {
@@ -58,9 +55,6 @@ describe('utils', () => {
     expect(getOverloadedTypeFromType(t.number())).toEqual('number');
     expect(getOverloadedTypeFromType(t.boolean())).toEqual('boolean');
     expect(getOverloadedTypeFromType(t.date('day'))).toEqual('date');
-    expect(getOverloadedTypeFromType(t.timeQuantity(['day']))).toEqual(
-      'time-quantity'
-    );
     expect(
       getOverloadedTypeFromType(
         t.table({ length: 1, columnTypes: [], columnNames: [] })

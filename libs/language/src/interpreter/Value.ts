@@ -1,8 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import Fraction from '@decipad/fraction';
 import { unzip } from '@decipad/utils';
-import { singular } from 'pluralize';
-import { Time, Interpreter, Units } from '..';
+import { Time, Interpreter } from '..';
 import {
   AnyMapping,
   anyMappingToMap,
@@ -12,10 +11,9 @@ import {
 } from '../utils';
 import {
   addTimeQuantity,
+  TimeQuantity,
   cleanDate,
   getSpecificity,
-  sortTimeUnits,
-  timeUnitFromUnit,
 } from '../date';
 import { compare } from './compare-values';
 import { Unknown } from './Unknown';
@@ -38,7 +36,6 @@ export type NonColumn =
   | BooleanValue
   | Range
   | DateValue
-  | TimeQuantity
   | Table
   | Row;
 export type AnyValue = NonColumn | Column;
@@ -159,62 +156,6 @@ class DateValue implements Value {
 }
 
 export { DateValue as Date };
-
-export class TimeQuantity implements Value {
-  timeUnits = new Map<Time.Unit, bigint>();
-  timeUnitsDiff = new Map<Time.Unit, bigint>();
-
-  constructor(
-    timeUnits: TimeQuantity['timeUnits'] | Partial<Record<Time.Unit, bigint>>,
-    timeUnitsDiff?:
-      | TimeQuantity['timeUnits']
-      | Partial<Record<Time.Unit, bigint>>
-  ) {
-    {
-      const entries =
-        timeUnits instanceof Map
-          ? timeUnits.entries()
-          : (Object.entries(timeUnits) as Iterable<[Time.Unit, bigint]>);
-
-      const unsorted = new Map(entries);
-      for (const unit of sortTimeUnits(unsorted.keys())) {
-        this.timeUnits.set(
-          timeUnitFromUnit(unit),
-          getDefined(unsorted.get(unit))
-        );
-      }
-    }
-
-    if (timeUnitsDiff) {
-      const entries =
-        timeUnitsDiff instanceof Map
-          ? timeUnitsDiff.entries()
-          : (Object.entries(timeUnitsDiff) as Iterable<[Time.Unit, bigint]>);
-
-      const unsorted = new Map(entries);
-      for (const unit of sortTimeUnits(unsorted.keys())) {
-        this.timeUnitsDiff.set(
-          timeUnitFromUnit(unit),
-          getDefined(unsorted.get(unit))
-        );
-      }
-    }
-  }
-
-  static fromUnits(number: bigint, units: Units): TimeQuantity {
-    if (units.args.length !== 1) {
-      throw new RuntimeError(
-        'Cannot construct time quantity from more than one unit of time'
-      );
-    }
-    const unit = singular(units.args[0].unit);
-    return new TimeQuantity({ [unit]: number });
-  }
-
-  getData() {
-    return Array.from(this.timeUnits.entries());
-  }
-}
 
 export class Range implements Value {
   start: Value;

@@ -4,8 +4,8 @@ import isoFetch from 'isomorphic-fetch';
 import parseDataUrl from 'data-urls';
 import Fraction from '@decipad/fraction';
 /* eslint-enable import/no-extraneous-dependencies */
-import { Date as IDate, TimeQuantity } from './src/interpreter/Value';
-import { stringifyDate } from './src/date';
+import { Date as IDate } from './src/interpreter/Value';
+import { stringifyDate, TimeQuantity } from './src/date';
 
 // import { ReadableStream } from "web-streams-polyfill/ponyfill";
 

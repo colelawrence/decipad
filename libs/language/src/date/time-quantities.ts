@@ -6,8 +6,8 @@ import {
   jsUnitToIndex,
   Time,
   timeUnitToJSDateUnit,
+  TimeQuantity,
 } from '.';
-import { TimeQuantity } from '../interpreter/Value';
 import { getDefined } from '../utils';
 
 export const convertToMs: Partial<Record<Time.Unit, bigint>> = {

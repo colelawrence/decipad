@@ -6,7 +6,6 @@ import { getSpecificity } from '../date';
 import { Interpreter } from '../interpreter';
 import { Unknown } from '../interpreter/Unknown';
 import { SerializedType, SerializedTypeKind, serializeType } from '../type';
-import { timeUnits } from '../type/units';
 
 export function validateResult(
   type: Type | SerializedType,
@@ -98,12 +97,6 @@ export function validateResult(
         type.rowCellTypes,
         getArray(value as Interpreter.ResultRow)
       ).every(([type, value]) => validateResult(type, value));
-    }
-    case 'time-quantity': {
-      return getArray(value as Interpreter.ResultTimeQuantity).every(
-        ([timeUnit, howMuch]) =>
-          timeUnits.has(timeUnit) && typeof howMuch === 'bigint'
-      );
     }
     case 'function':
     case 'type-error': {

@@ -1,4 +1,3 @@
-import { getDefined } from '@decipad/utils';
 import { buildType as t, Type } from '..';
 import { Time } from '../date';
 import { F } from '../utils';
@@ -28,7 +27,6 @@ export type SerializedType = Readonly<
       columnNames: string[];
     }
   | { kind: 'row'; rowCellTypes: SerializedType[]; rowCellNames: string[] }
-  | { kind: 'time-quantity'; timeUnits: Time.Unit[] }
   | { kind: 'function' }
   | { kind: 'type-error'; errorCause: ErrSpec }
 >;
@@ -58,13 +56,6 @@ export function serializeType(type: Type): SerializedType {
     return { kind: 'string' };
   } else if (type.date) {
     return { kind: 'date', date: type.date };
-  } else if (type.type === 'time-quantity') {
-    return {
-      kind: 'time-quantity',
-      timeUnits: getDefined(
-        type.unit?.args.map((unit) => unit.unit as Time.Unit)
-      ),
-    };
   } else if (type.rangeOf) {
     return { kind: 'range', rangeOf: serializeType(type.rangeOf) };
   } else if (type.cellType && type.columnSize) {
@@ -140,8 +131,6 @@ export function deserializeType(type: SerializedType): Type {
         type.rowCellTypes.map((t) => deserializeType(t)),
         type.rowCellNames
       );
-    case 'time-quantity':
-      return t.timeQuantity(type.timeUnits);
     case 'function':
       return t.functionPlaceholder();
     case 'type-error':
