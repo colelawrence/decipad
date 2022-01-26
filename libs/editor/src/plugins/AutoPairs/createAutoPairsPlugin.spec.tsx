@@ -1,10 +1,6 @@
-import {
-  createEditorPlugins,
-  ELEMENT_CODE_LINE,
-  ELEMENT_PARAGRAPH,
-  SPEditor,
-} from '@udecode/plate';
+import { createEditorPlugins, SPEditor } from '@udecode/plate';
 import { createAutoPairsPlugin } from './createAutoPairsPlugin';
+import { ELEMENT_CODE_LINE, ELEMENT_PARAGRAPH } from '../../elements';
 
 const insert = (editor: SPEditor, key: string) => {
   const event = new KeyboardEvent('keydown', { key, cancelable: true });

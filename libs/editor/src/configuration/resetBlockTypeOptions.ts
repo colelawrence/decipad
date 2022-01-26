@@ -1,9 +1,5 @@
-import {
-  ELEMENT_BLOCKQUOTE,
-  ELEMENT_PARAGRAPH,
-  isBlockAboveEmpty,
-  isSelectionAtBlockStart,
-} from '@udecode/plate';
+import { isBlockAboveEmpty, isSelectionAtBlockStart } from '@udecode/plate';
+import { ELEMENT_BLOCKQUOTE, ELEMENT_PARAGRAPH } from '../elements';
 
 const resetBlockTypesCommonRule = {
   types: [ELEMENT_BLOCKQUOTE],

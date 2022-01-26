@@ -3,7 +3,7 @@ import {
   getRenderElement,
   PlatePlugin,
 } from '@udecode/plate';
-import { ELEMENT_FETCH } from '../../utils/elementTypes';
+import { ELEMENT_FETCH } from '../../elements';
 
 export const useFetchDataPlugin = (): PlatePlugin => {
   return {

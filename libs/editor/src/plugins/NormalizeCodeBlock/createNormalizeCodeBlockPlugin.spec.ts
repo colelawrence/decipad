@@ -1,16 +1,14 @@
 import { Descendant, Editor } from 'slate';
-import {
-  createEditorPlugins,
-  ELEMENT_BLOCKQUOTE,
-  ELEMENT_CODE_LINE,
-  ELEMENT_PARAGRAPH,
-  SPEditor,
-  TElement,
-} from '@udecode/plate';
-import { Element } from '../../utils/elements';
-import { ELEMENT_CODE_BLOCK } from '../../utils/elementTypes';
+import { createEditorPlugins, SPEditor, TElement } from '@udecode/plate';
 import { codeLine, emptyCodeBlock, exampleCodeBlock } from './testUtils';
 import { createNormalizeCodeBlockPlugin } from './createNormalizeCodeBlockPlugin';
+import {
+  Element,
+  ELEMENT_CODE_BLOCK,
+  ELEMENT_BLOCKQUOTE,
+  ELEMENT_PARAGRAPH,
+  ELEMENT_CODE_LINE,
+} from '../../elements';
 
 let editor: SPEditor;
 beforeEach(() => {
@@ -417,8 +415,8 @@ it('normalizes a terribly broken node', () => {
         },
         { text: '42' },
       ],
-    },
-  ] as TElement[];
+    } as Element,
+  ];
 
   Editor.normalize(editor, { force: true });
   expect(editor.children).toEqual([

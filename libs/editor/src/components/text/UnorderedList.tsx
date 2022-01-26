@@ -1,5 +1,5 @@
 import { molecules } from '@decipad/ui';
-import { PlateComponent } from '../../utils/components';
+import { PlateComponent } from '../../types';
 
 export const UnorderedList: PlateComponent = ({ attributes, children }) => {
   return (

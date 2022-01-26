@@ -1,5 +1,6 @@
-import { ELEMENT_CODE_LINE, getParent, PlatePlugin } from '@udecode/plate';
+import { getParent, PlatePlugin } from '@udecode/plate';
 import { Range, Transforms } from 'slate';
+import { ELEMENT_CODE_LINE } from '../../elements';
 
 const pairs = [
   {

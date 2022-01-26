@@ -3,13 +3,13 @@ import {
   createEditorPlugins,
   Plate,
   createHeadingPlugin,
-  ELEMENT_H1,
   PlatePluginComponent,
 } from '@udecode/plate';
 import { noop } from '@decipad/utils';
 import { Transforms } from 'slate';
 import { Title } from './Title';
 import { findDomNodePath } from '../../utils/slateReact';
+import { ELEMENT_H1 } from '../../elements';
 
 it('shows a placeholder only when empty', async () => {
   const editor = createEditorPlugins();

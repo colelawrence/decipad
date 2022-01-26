@@ -1,14 +1,16 @@
 import {
   createAutoformatPlugin,
   createEditorPlugins,
-  ELEMENT_H1,
-  ELEMENT_LINK,
-  ELEMENT_PARAGRAPH,
   SPEditor,
 } from '@udecode/plate';
 import { Transforms } from 'slate';
 import { createLinkPlugin } from '../../plugins/Link/createLinkPlugin';
-import { Element } from '../../utils/elements';
+import {
+  ELEMENT_PARAGRAPH,
+  ELEMENT_H1,
+  Element,
+  ELEMENT_LINK,
+} from '../../elements';
 
 import { autoformatLinks } from './autoformatLinks';
 

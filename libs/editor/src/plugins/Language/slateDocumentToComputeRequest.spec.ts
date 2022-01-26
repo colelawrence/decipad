@@ -1,6 +1,6 @@
 import { ParsedBlock, prettyPrintAST } from '@decipad/language';
-import { TableData } from '../../utils/tableTypes';
-import { ELEMENT_TABLE_INPUT } from '../../utils/elementTypes';
+import { ELEMENT_TABLE_INPUT } from '../../elements';
+import { TableData } from '../../types';
 import { SlateNode } from './common';
 import { slateDocumentToComputeRequest } from './slateDocumentToComputeRequest';
 

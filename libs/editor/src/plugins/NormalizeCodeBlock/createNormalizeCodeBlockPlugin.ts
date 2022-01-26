@@ -10,10 +10,10 @@ import { splitCodeIntoStatements } from './splitCodeIntoStatements';
 import { reconcileStatements } from './reconcileStatements';
 import { codeBlockToCode } from './codeBlockToCode';
 import {
+  CodeBlockElement,
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
-} from '../../utils/elementTypes';
-import { CodeBlockElement } from '../../utils/elements';
+} from '../../elements';
 
 const withNormalizeCodeBlock = (): WithOverride => (editor) => {
   const { normalizeNode } = editor;

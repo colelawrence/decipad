@@ -1,13 +1,12 @@
 import {
   createAutoformatPlugin,
   createEditorPlugins,
-  ELEMENT_H2,
-  ELEMENT_PARAGRAPH,
   SPEditor,
 } from '@udecode/plate';
 import { Transforms } from 'slate';
 
 import { autoformatMarks } from './autoformatMarks';
+import { ELEMENT_H2, ELEMENT_PARAGRAPH } from '../../elements';
 
 const initialText = '__*t';
 

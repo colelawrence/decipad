@@ -1,14 +1,13 @@
-import {
-  createEditorPlugins,
-  ELEMENT_CODE_BLOCK,
-  ELEMENT_CODE_LINE,
-  ELEMENT_PARAGRAPH,
-  SPEditor,
-} from '@udecode/plate';
+import { createEditorPlugins, SPEditor } from '@udecode/plate';
 import {
   insertCodeBlockBelow,
   insertCodeBlockBelowOrReplace,
 } from './codeBlock';
+import {
+  ELEMENT_CODE_BLOCK,
+  ELEMENT_CODE_LINE,
+  ELEMENT_PARAGRAPH,
+} from '../elements';
 
 let editor: SPEditor;
 beforeEach(() => {

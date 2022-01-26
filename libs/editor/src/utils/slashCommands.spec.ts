@@ -1,19 +1,16 @@
+import { createCodeBlockPlugin, createEditorPlugins } from '@udecode/plate';
 import {
-  createCodeBlockPlugin,
-  createEditorPlugins,
+  ELEMENT_FETCH,
+  ELEMENT_PARAGRAPH,
+  ELEMENT_TABLE_INPUT,
   ELEMENT_CODE_BLOCK,
   ELEMENT_H2,
   ELEMENT_H3,
-  ELEMENT_PARAGRAPH,
-} from '@udecode/plate';
-import {
-  ElementType,
-  ELEMENT_FETCH,
-  ELEMENT_TABLE_INPUT,
-} from './elementTypes';
+  ElementKind,
+} from '../elements';
 import { execute, SlashCommand } from './slashCommands';
 
-const expectedTypes: Record<SlashCommand, ElementType> = {
+const expectedTypes: Record<SlashCommand, ElementKind> = {
   table: ELEMENT_TABLE_INPUT,
   heading1: ELEMENT_H2,
   heading2: ELEMENT_H3,
@@ -21,7 +18,7 @@ const expectedTypes: Record<SlashCommand, ElementType> = {
   'calculation-block': ELEMENT_CODE_BLOCK,
 };
 
-test.each(Object.entries(expectedTypes) as [SlashCommand, ElementType][])(
+test.each(Object.entries(expectedTypes) as [SlashCommand, ElementKind][])(
   'command "%s" replaces the block with a "%s" block',
   (command, expectedType) => {
     const editor = createEditorPlugins({ plugins: [createCodeBlockPlugin()] });

@@ -1,9 +1,10 @@
 import { atoms } from '@decipad/ui';
-import { ELEMENT_H1, useEditorState } from '@udecode/plate';
+import { useEditorState } from '@udecode/plate';
 import { useEffect, useState } from 'react';
 import { Editor, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
-import { PlateComponent } from '../../utils/components';
+import { PlateComponent } from '../../types';
+import { ELEMENT_H1 } from '../../elements';
 
 // TODO Title should probably not be a part of the editor in the first place
 

@@ -3,7 +3,7 @@ import {
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_PARAGRAPH,
-} from '@udecode/plate';
+} from '../elements';
 
 export const exitBreakOptions = {
   rules: [

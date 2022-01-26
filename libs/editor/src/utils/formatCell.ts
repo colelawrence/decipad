@@ -1,6 +1,6 @@
 import Fraction from '@decipad/fraction';
 import { deserializeUnit, stringifyUnits } from '@decipad/language';
-import { TableCellType } from './tableTypes';
+import { TableCellType } from '../types';
 
 export function formatCell(cellType: TableCellType, text: string): string {
   if (cellType.kind !== 'number' || cellType.unit == null) {

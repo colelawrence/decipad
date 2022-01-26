@@ -1,7 +1,11 @@
 import { icons } from '@decipad/ui';
 import { css } from '@emotion/react';
-import { ELEMENT_H2, ELEMENT_H3, ELEMENT_PARAGRAPH } from '@udecode/plate';
 import { FC, MouseEventHandler, useState } from 'react';
+import {
+  ELEMENT_H2,
+  ELEMENT_H3,
+  ELEMENT_PARAGRAPH,
+} from '../../../../elements';
 import { ToggleElementButton } from './ToggleElementButton/ToggleElementButton';
 
 const wrapperStyles = css({

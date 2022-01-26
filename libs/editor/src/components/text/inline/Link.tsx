@@ -1,7 +1,7 @@
-import { ELEMENT_LINK } from '@udecode/plate';
 import { atoms } from '@decipad/ui';
 import { useSafeState } from '@decipad/react-utils';
-import { PlateComponent } from '../../../utils/components';
+import { PlateComponent } from '../../../types';
+import { ELEMENT_LINK } from '../../../elements';
 
 export const Link: PlateComponent = ({ attributes, children, element }) => {
   if ('data-slate-leaf' in attributes) {

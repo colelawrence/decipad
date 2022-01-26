@@ -1,8 +1,9 @@
-import { CodeBlockElement, CodeLineElement } from '../../utils/elements';
 import {
+  CodeBlockElement,
+  CodeLineElement,
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
-} from '../../utils/elementTypes';
+} from '../../elements';
 
 export function codeLine(code: string): CodeLineElement {
   return {

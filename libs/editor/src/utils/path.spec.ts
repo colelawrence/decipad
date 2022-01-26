@@ -1,13 +1,10 @@
-import {
-  createEditorPlugins,
-  ELEMENT_PARAGRAPH,
-  SPEditor,
-} from '@udecode/plate';
+import { createEditorPlugins, SPEditor } from '@udecode/plate';
 import {
   getBlockParentPath,
   requireBlockParentPath,
   requirePathBelowBlock,
 } from './path';
+import { ELEMENT_PARAGRAPH } from '../elements';
 
 let editor: SPEditor;
 beforeEach(() => {

@@ -1,6 +1,6 @@
 import { produce } from 'immer';
 import { parseCell } from '../../utils/parseCell';
-import type { TableCellType, TableData } from '../../utils/tableTypes';
+import type { TableCellType, TableData } from '../../types';
 
 // We'll be reassigning parameters this entire file, since it's all immer.
 /* eslint-disable no-param-reassign */

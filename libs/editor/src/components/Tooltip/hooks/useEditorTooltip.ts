@@ -1,6 +1,4 @@
 import {
-  ELEMENT_LIC,
-  ELEMENT_UL,
   getParent,
   isCollapsed,
   toggleList,
@@ -12,6 +10,7 @@ import { Editor, Element } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { allowsTextStyling } from '../../../utils/block';
 import { getPathContainingSelection } from '../../../utils/selection';
+import { ELEMENT_LIC, ELEMENT_UL } from '../../../elements';
 
 interface UseEditorTooltip {
   ref: RefObject<HTMLDivElement>;

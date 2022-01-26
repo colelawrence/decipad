@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Element } from './elements';
+import { Element } from '../elements';
 
 interface ElementAttributes {
   'data-slate-node': 'element';

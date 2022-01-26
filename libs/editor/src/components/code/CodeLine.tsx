@@ -2,7 +2,7 @@ import { IdentifiedResult, isSyntaxError } from '@decipad/language';
 import { useResults } from '@decipad/react-contexts';
 import { docs } from '@decipad/routing';
 import { organisms } from '@decipad/ui';
-import { PlateComponent } from '../../utils/components';
+import { PlateComponent } from '../../types';
 import { useComputer } from '../../contexts/Computer';
 
 export const CodeLine: PlateComponent = ({ attributes, children, element }) => {

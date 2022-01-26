@@ -7,7 +7,7 @@ import {
 } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
 import { parse } from 'date-fns';
-import { TableCellType } from './tableTypes';
+import { TableCellType } from '../types';
 import { astNode } from './astNode';
 
 export function parseCell(

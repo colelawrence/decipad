@@ -1,5 +1,5 @@
 import { atoms } from '@decipad/ui';
-import { PlateComponent } from '../../../utils/components';
+import { PlateComponent } from '../../../types';
 
 export const Strikethrough: PlateComponent = ({ attributes, children }) => {
   return (

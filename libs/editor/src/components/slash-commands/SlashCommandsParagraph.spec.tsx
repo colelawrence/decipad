@@ -9,17 +9,16 @@ import userEvent from '@testing-library/user-event';
 import {
   createEditorPlugins,
   Plate,
-  ELEMENT_PARAGRAPH,
   createParagraphPlugin,
   PlateProps,
   SPEditor,
-  ELEMENT_H2,
   PlatePluginComponent,
 } from '@udecode/plate';
 import { Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { findDomNodePath } from '../../utils/slateReact';
 import { SlashCommandsParagraph } from './SlashCommandsParagraph';
+import { ELEMENT_PARAGRAPH, ELEMENT_H2 } from '../../elements';
 
 let editor: SPEditor & ReactEditor;
 let plateProps: PlateProps;

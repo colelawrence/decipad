@@ -12,7 +12,6 @@ import {
   createReactPlugin,
   createResetNodePlugin,
   createTrailingBlockPlugin,
-  ELEMENT_PARAGRAPH,
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { createAutoPairsPlugin } from '../plugins/AutoPairs/createAutoPairsPlugin';
@@ -27,6 +26,7 @@ import { autoformatRules } from './autoformat';
 import { exitBreakOptions } from './exitBreakOptions';
 import { resetBlockTypeOptions } from './resetBlockTypeOptions';
 import { createSoftBreakPlugin } from '../plugins/createSoftBreakPlugin/createSoftBreakPlugin';
+import { ELEMENT_PARAGRAPH } from '../elements';
 
 export const plugins = [
   // fundamentals

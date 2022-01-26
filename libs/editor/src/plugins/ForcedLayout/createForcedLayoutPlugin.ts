@@ -2,13 +2,12 @@
 // TODO fix node types
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  ELEMENT_H1,
-  ELEMENT_PARAGRAPH,
   getNode,
   getPlatePluginWithOverrides,
   WithOverride,
 } from '@udecode/plate';
 import { Transforms } from 'slate';
+import { ELEMENT_H1, ELEMENT_PARAGRAPH } from '../../elements';
 
 export const WithForcedLayout = (): WithOverride => (editor) => {
   const { normalizeNode } = editor;

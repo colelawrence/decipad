@@ -1,4 +1,5 @@
 import { Meta, Story } from '@storybook/react';
+import { nanoid } from 'nanoid';
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
@@ -6,8 +7,7 @@ import {
   ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_PARAGRAPH,
-} from '@udecode/plate';
-import { nanoid } from 'nanoid';
+} from './elements';
 import { NoDocSyncEditor } from './NoDocSyncEditor.component';
 
 export default {

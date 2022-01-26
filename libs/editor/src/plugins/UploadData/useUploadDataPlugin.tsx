@@ -6,7 +6,7 @@ import { useToasts } from 'react-toast-notifications';
 import camelcase from 'camelcase';
 import slug from 'slug';
 import * as upload from './upload';
-import { ELEMENT_FETCH } from '../../utils/elementTypes';
+import { ELEMENT_FETCH } from '../../elements';
 
 export interface OneFileUploadState {
   file: File;

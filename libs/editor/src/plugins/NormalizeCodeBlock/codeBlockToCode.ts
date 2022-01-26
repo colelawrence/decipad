@@ -1,4 +1,4 @@
-import { CodeBlockElement, CodeLineElement } from '../../utils/elements';
+import { CodeBlockElement, CodeLineElement } from '../../elements';
 
 function codeLineToCode(line: CodeLineElement): string {
   return line.children[0].text;

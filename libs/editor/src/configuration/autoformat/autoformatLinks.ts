@@ -1,14 +1,9 @@
 import { allPass } from 'ramda';
-import {
-  ELEMENT_LINK,
-  AutoformatRule,
-  getNode,
-  wrapNodes,
-} from '@udecode/plate';
+import { AutoformatRule, getNode, wrapNodes } from '@udecode/plate';
 import { BasePoint, Editor, Path, Text, Transforms } from 'slate';
 import { requireCollapsedSelection } from '../../utils/selection';
 import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
-import { Element, LinkElement } from '../../utils/elements';
+import { Element, ELEMENT_LINK, LinkElement } from '../../elements';
 import { getTrailingLink } from '../../utils/link';
 
 const TRIGGER = ')';

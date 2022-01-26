@@ -11,7 +11,7 @@ import { ComputeRequest, makeComputeStream } from '@decipad/language';
 import { getCursorPos, CursorPos } from './getCursorPos';
 import { slateDocumentToComputeRequest } from './slateDocumentToComputeRequest';
 import { SlateNode } from './common';
-import { ELEMENT_FETCH } from '../../utils/elementTypes';
+import { ELEMENT_FETCH } from '../../elements';
 import { useComputer } from '../../contexts/Computer';
 
 interface UseLanguagePluginRet {

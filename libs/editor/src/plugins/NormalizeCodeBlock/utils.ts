@@ -1,7 +1,7 @@
 import { Path, Node, Selection, Editor, Transforms } from 'slate';
-import { CodeLineElement, Text } from '../../utils/elements';
+import { CodeLineElement } from '../../elements';
 
-export function getCodeLineText(node: CodeLineElement | Text): string {
+export function getCodeLineText(node: CodeLineElement): string {
   return Node.string(node);
 }
 

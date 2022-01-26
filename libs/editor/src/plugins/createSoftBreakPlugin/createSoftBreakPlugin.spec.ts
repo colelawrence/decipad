@@ -1,11 +1,10 @@
+import { createEditorPlugins, TNode } from '@udecode/plate';
+import { createSoftBreakPlugin } from './createSoftBreakPlugin';
 import {
-  createEditorPlugins,
+  CodeLineElement,
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
-  TNode,
-} from '@udecode/plate';
-import { CodeLineElement } from '../../utils/elements';
-import { createSoftBreakPlugin } from './createSoftBreakPlugin';
+} from '../../elements';
 
 const getNewEditorState = () => [
   {

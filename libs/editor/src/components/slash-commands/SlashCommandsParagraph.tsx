@@ -6,7 +6,7 @@ import { useEditorState } from '@udecode/plate';
 import { useCallback, useEffect, useState, useContext } from 'react';
 import { Editor } from 'slate';
 import { ReactEditor, useFocused, useSelected } from 'slate-react';
-import { PlateComponent } from '../../utils/components';
+import { PlateComponent } from '../../types';
 import { execute } from '../../utils/slashCommands';
 import { Paragraph } from '../text';
 

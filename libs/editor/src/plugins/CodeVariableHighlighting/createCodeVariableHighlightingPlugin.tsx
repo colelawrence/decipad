@@ -1,12 +1,7 @@
-import {
-  Decorate,
-  ELEMENT_CODE_LINE,
-  getText,
-  PlatePlugin,
-  TDescendant,
-} from '@udecode/plate';
+import { Decorate, getText, PlatePlugin, TDescendant } from '@udecode/plate';
 import { NodeEntry } from 'slate';
 import { CodeVariable } from '../../components';
+import { ELEMENT_CODE_LINE } from '../../elements';
 import { getVariableRanges } from './getVariableRanges';
 
 const IS_CODE_VARIABLE = 'IS_CODE_VARIABLE';

@@ -1,20 +1,19 @@
 import { css } from '@emotion/react';
 import Tippy, { TippyProps } from '@tippyjs/react';
-import {
-  DefaultPlatePluginKey,
-  ELEMENT_BLOCKQUOTE,
-  ELEMENT_CODE_BLOCK,
-  ELEMENT_H2,
-  ELEMENT_H3,
-  ELEMENT_IMAGE,
-  ELEMENT_PARAGRAPH,
-  ELEMENT_TABLE,
-  ELEMENT_UL,
-  withDraggables,
-} from '@udecode/plate';
+import { DefaultPlatePluginKey, withDraggables } from '@udecode/plate';
 import { GrDrag } from 'react-icons/gr';
-import { PlateComponent } from './components';
-import { ELEMENT_FETCH } from './elementTypes';
+import { PlateComponent } from '../types';
+import {
+  ELEMENT_FETCH,
+  ELEMENT_H2,
+  ELEMENT_PARAGRAPH,
+  ELEMENT_BLOCKQUOTE,
+  ELEMENT_H3,
+  ELEMENT_UL,
+  ELEMENT_OL,
+  ELEMENT_CODE_BLOCK,
+  ELEMENT_TABLE_INPUT,
+} from '../elements';
 
 const GrabberTooltipContent = () => (
   <div style={{ fontSize: 12, textAlign: 'center' }}>
@@ -59,11 +58,11 @@ export const withStyledDraggables = (
         ELEMENT_BLOCKQUOTE,
         ELEMENT_H2,
         ELEMENT_H3,
-        ELEMENT_IMAGE,
         ELEMENT_UL,
+        ELEMENT_OL,
         ELEMENT_CODE_BLOCK,
         ELEMENT_FETCH,
-        ELEMENT_TABLE,
+        ELEMENT_TABLE_INPUT,
       ],
       onRenderDragHandle: ({ className, styles }) => {
         return (
@@ -92,7 +91,7 @@ export const withStyledDraggables = (
       },
     },
     {
-      key: ELEMENT_TABLE,
+      key: ELEMENT_TABLE_INPUT,
       styles: {
         gutterLeft: {
           padding: '16px 8px 0 0',

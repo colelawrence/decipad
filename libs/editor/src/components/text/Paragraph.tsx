@@ -2,7 +2,7 @@ import { atoms } from '@decipad/ui';
 import { useEditorState, isSelectionExpanded } from '@udecode/plate';
 import { Editor } from 'slate';
 import { useSelected } from 'slate-react';
-import { PlateComponent } from '../../utils/components';
+import { PlateComponent } from '../../types';
 
 export const Paragraph: PlateComponent = ({
   attributes,

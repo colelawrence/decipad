@@ -1,7 +1,7 @@
 import { useResults } from '@decipad/react-contexts';
 import { organisms } from '@decipad/ui';
-import { PlateComponent } from '../../utils/components';
-import { Element } from '../../utils/elements';
+import { PlateComponent } from '../../types';
+import { Element } from '../../elements';
 
 export const CodeBlock: PlateComponent = ({
   attributes,

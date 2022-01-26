@@ -1,6 +1,5 @@
 import {
   createParagraphPlugin,
-  ELEMENT_PARAGRAPH,
   Plate,
   createEditorPlugins,
   PlatePluginComponent,
@@ -9,6 +8,7 @@ import { render, waitFor } from '@testing-library/react';
 import { Transforms } from 'slate';
 import { Paragraph } from './Paragraph';
 import { findDomNodePath } from '../../utils/slateReact';
+import { ELEMENT_PARAGRAPH } from '../../elements';
 
 it('shows a placeholder when empty and selected', async () => {
   const editor = createEditorPlugins();

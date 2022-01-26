@@ -1,15 +1,10 @@
-import {
-  SPEditor,
-  createEditorPlugins,
-  ELEMENT_PARAGRAPH,
-  ELEMENT_CODE_BLOCK,
-  TElement,
-} from '@udecode/plate';
+import { SPEditor, createEditorPlugins, TElement } from '@udecode/plate';
 import {
   allowsTextStyling,
   closestBlockAncestorHasType,
   insertBlockOfTypeBelow,
 } from './block';
+import { ELEMENT_CODE_BLOCK, ELEMENT_PARAGRAPH } from '../elements';
 
 let editor: SPEditor;
 beforeEach(() => {

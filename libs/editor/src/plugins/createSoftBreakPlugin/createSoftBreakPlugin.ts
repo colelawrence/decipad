@@ -1,10 +1,7 @@
-import {
-  ELEMENT_BLOCKQUOTE,
-  ELEMENT_CODE_LINE,
-  PlatePlugin,
-} from '@udecode/plate';
+import { PlatePlugin } from '@udecode/plate';
 import { filterStatementSeparator } from './filterStatementSeparator';
 import { getSoftBreakOnKeyDown } from './getSoftBreakOnKeyDown';
+import { ELEMENT_CODE_LINE, ELEMENT_BLOCKQUOTE } from '../../elements';
 
 /**
  * Insert soft break following configurable rules.

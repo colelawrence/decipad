@@ -1,9 +1,6 @@
-import {
-  createEditorPlugins,
-  ELEMENT_PARAGRAPH,
-  SPEditor,
-} from '@udecode/plate';
+import { createEditorPlugins, SPEditor } from '@udecode/plate';
 import { Point } from 'slate';
+import { ELEMENT_PARAGRAPH } from '../elements';
 import {
   requireCollapsedSelection,
   getPathContainingSelection,

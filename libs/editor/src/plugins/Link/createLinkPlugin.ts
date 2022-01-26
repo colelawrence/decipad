@@ -1,4 +1,5 @@
-import { ELEMENT_LINK, getRenderElement, PlatePlugin } from '@udecode/plate';
+import { getRenderElement, PlatePlugin } from '@udecode/plate';
+import { ELEMENT_LINK } from '../../elements';
 
 export const createLinkPlugin = (): PlatePlugin => {
   return {

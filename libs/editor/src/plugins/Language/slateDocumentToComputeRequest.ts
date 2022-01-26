@@ -1,4 +1,3 @@
-import { ELEMENT_CODE_BLOCK, ELEMENT_CODE_LINE } from '@udecode/plate';
 import { ComputeRequest, Program, AST } from '@decipad/language';
 import {
   getCodeFromBlock,
@@ -11,7 +10,11 @@ import {
   extractTable,
   isInteractiveTable,
 } from './extractTable';
-import { ELEMENT_FETCH } from '../../utils/elementTypes';
+import {
+  ELEMENT_CODE_BLOCK,
+  ELEMENT_CODE_LINE,
+  ELEMENT_FETCH,
+} from '../../elements';
 
 export function slateDocumentToComputeRequest(
   slateDoc: SlateNode[]

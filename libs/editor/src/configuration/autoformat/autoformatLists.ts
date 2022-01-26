@@ -1,11 +1,5 @@
-import {
-  AutoformatRule,
-  ELEMENT_LI,
-  ELEMENT_OL,
-  ELEMENT_UL,
-  SPEditor,
-  toggleList,
-} from '@udecode/plate';
+import { AutoformatRule, SPEditor, toggleList } from '@udecode/plate';
+import { ELEMENT_LI, ELEMENT_OL, ELEMENT_UL } from '../../elements';
 import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
 
 export const autoformatLists: AutoformatRule[] = [

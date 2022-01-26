@@ -3,10 +3,9 @@ import { Node, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { useEditorState } from '@udecode/plate';
 
-import { TableData } from '../../utils/tableTypes';
 import { TableInner } from './TableInner';
-import { PlateComponent } from '../../utils/components';
-import { ELEMENT_TABLE_INPUT } from '../../utils/elementTypes';
+import { PlateComponent, TableData } from '../../types';
+import { ELEMENT_TABLE_INPUT } from '../../elements';
 
 export const Table: PlateComponent = ({
   children,

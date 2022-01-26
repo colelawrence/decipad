@@ -1,9 +1,9 @@
 import { ComponentProps } from 'react';
 import { Path, Transforms } from 'slate';
 import { organisms } from '@decipad/ui';
-import { ELEMENT_H2, ELEMENT_H3, SPEditor } from '@udecode/plate';
+import { SPEditor } from '@udecode/plate';
 
-import { ELEMENT_FETCH } from './elementTypes';
+import { ELEMENT_H2, ELEMENT_H3, ELEMENT_FETCH } from '../elements';
 import { insertBlockOfTypeBelow } from './block';
 import { insertCodeBlockBelow } from './codeBlock';
 import { insertTableBelow } from './table';

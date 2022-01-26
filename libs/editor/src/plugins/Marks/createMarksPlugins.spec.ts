@@ -1,9 +1,5 @@
-import {
-  createEditorPlugins,
-  ELEMENT_CODE_BLOCK,
-  ELEMENT_PARAGRAPH,
-  SPEditor,
-} from '@udecode/plate';
+import { createEditorPlugins, SPEditor } from '@udecode/plate';
+import { ELEMENT_CODE_BLOCK, ELEMENT_PARAGRAPH } from '../../elements';
 import { createMarksPlugins } from './createMarksPlugins';
 
 describe('Ctrl+b', () => {

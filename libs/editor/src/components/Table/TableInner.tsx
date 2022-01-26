@@ -13,7 +13,7 @@ import {
   removeColumn,
   removeRow,
 } from './actions';
-import { TableData } from '../../utils/tableTypes';
+import { TableData } from '../../types';
 import { parseCell } from '../../utils/parseCell';
 import { useComputer } from '../../contexts/Computer';
 import { formatCell } from '../../utils/formatCell';

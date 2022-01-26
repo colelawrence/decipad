@@ -8,7 +8,7 @@ import {
   changeCell,
   changeColumnType,
 } from './actions';
-import { TableData } from '../../utils/tableTypes';
+import { TableData } from '../../types';
 
 expect.addSnapshotSerializer({
   test: (val) =>

@@ -1,19 +1,12 @@
-import {
-  ELEMENT_LIC,
-  ELEMENT_PARAGRAPH,
-  getNode,
-  insertNodes,
-  TEditor,
-  TElement,
-} from '@udecode/plate';
+import { getNode, insertNodes, TEditor, TElement } from '@udecode/plate';
 import { Editor, Path } from 'slate';
-import { ElementType } from './elementTypes';
+import { ElementKind, ELEMENT_PARAGRAPH, ELEMENT_LIC } from '../elements';
 import { getBlockParentPath, requirePathBelowBlock } from './path';
 
 export const closestBlockAncestorHasType = (
   editor: TEditor,
   path: Path,
-  type: ElementType
+  type: ElementKind
 ): boolean => {
   const blockParentPath = getBlockParentPath(editor, path);
   if (!blockParentPath) {
@@ -27,7 +20,7 @@ export const closestBlockAncestorHasType = (
   return block.type === type;
 };
 
-const BLOCKS_ALLOWING_TEXT_STYLING: ReadonlyArray<ElementType> = [
+const BLOCKS_ALLOWING_TEXT_STYLING: ReadonlyArray<ElementKind> = [
   ELEMENT_PARAGRAPH,
   ELEMENT_LIC,
 ];
@@ -45,7 +38,7 @@ export const allowsTextStyling = (
 export const insertBlockOfTypeBelow = (
   editor: Editor,
   path: Path,
-  type: ElementType
+  type: ElementKind
 ): void => {
   insertNodes<TElement>(
     editor,
