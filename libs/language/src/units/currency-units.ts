@@ -42,4 +42,12 @@ export const units: UnitOfMeasure[] = [
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
   },
+  {
+    name: 'norwegiankrona',
+    symbols: ['nok'],
+    baseQuantity: 'NOK',
+    pretty: 'kr',
+    toBaseQuantity: identity,
+    fromBaseQuantity: identity,
+  },
 ];

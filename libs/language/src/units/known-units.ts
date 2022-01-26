@@ -54,7 +54,8 @@ export type BaseQuantity =
   | 'USD'
   | 'GBP'
   | 'SEK'
-  | 'XXX';
+  | 'XXX'
+  | 'NOK';
 
 export type UnitOfMeasure = {
   name: string;
