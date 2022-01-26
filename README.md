@@ -48,6 +48,11 @@ Using the command line, inside your local copy of the decipad repo, you should d
 yarn install
 ```
 
+### (Optional) Git hooks
+
+If you'd like to set up lint and test running before commit, run `yarn husky install`.
+Note that the hooks may behave differently than CI. CI is the authoritative source for lint and test verification.
+
 ## AWS local setup
 
 For you to be able to develop you will need access to a Deci development AWS user account.
