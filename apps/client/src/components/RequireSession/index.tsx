@@ -1,7 +1,7 @@
 import { LoginPage } from '@decipad/ui';
 import { signIn, useSession } from 'next-auth/client';
 import { FC, ReactNode } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { SECRET_URL_PARAM } from '../../lib/secret';
 
 interface RequireSessionProps {
@@ -14,6 +14,7 @@ export function RequireSession({
   allowSecret = false,
   children,
 }: RequireSessionProps): ReturnType<FC> {
+  const history = useHistory();
   const [session, sessionLoading] = useSession();
 
   const { search } = useLocation();
@@ -27,5 +28,12 @@ export function RequireSession({
     return <>Loading...</>;
   }
 
-  return <LoginPage onSubmit={(email) => signIn('email', { email })} />;
+  return (
+    <LoginPage
+      onSubmit={(email) => {
+        signIn('email', { email, redirect: false });
+        history.push('/verifyEmail');
+      }}
+    />
+  );
 }
