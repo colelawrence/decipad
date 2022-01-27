@@ -22,10 +22,10 @@ import { createSentryBreadcrumbsPlugin } from '../plugins/SentryBreadcrumbsPlugi
 import { createMarksPlugins } from '../plugins/Marks/createMarksPlugins';
 import { createLinkPlugin } from '../plugins/Link/createLinkPlugin';
 import { createNormalizeCodeBlockPlugin } from '../plugins/NormalizeCodeBlock/createNormalizeCodeBlockPlugin';
+import { createSoftBreakPlugin } from '../plugins/SoftBreakPlugin/createSoftBreakPlugin';
 import { autoformatRules } from './autoformat';
 import { exitBreakOptions } from './exitBreakOptions';
 import { resetBlockTypeOptions } from './resetBlockTypeOptions';
-import { createSoftBreakPlugin } from '../plugins/createSoftBreakPlugin/createSoftBreakPlugin';
 import { ELEMENT_PARAGRAPH } from '../elements';
 
 export const plugins = [

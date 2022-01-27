@@ -18,7 +18,7 @@ import {
 } from './plugins/Language/useLanguagePlugin';
 import { useNotebookTitlePlugin } from './plugins/NotebookTitle/useNotebookTitlePlugin';
 import { UploadDialogue } from './plugins/UploadData/components/UploadDialogue';
-import { useFetchDataPlugin } from './plugins/fetchData/useFetchDataPlugin';
+import { useFetchDataPlugin } from './plugins/FetchData/useFetchDataPlugin';
 import { useExternalDataPlugin } from './plugins/ExternalData/useExternalDataPlugin';
 import { useUploadDataPlugin } from './plugins/UploadData/useUploadDataPlugin';
 import { DropFile, Tooltip } from './components';
