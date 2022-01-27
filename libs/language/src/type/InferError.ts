@@ -67,6 +67,9 @@ export type ErrSpec =
   | {
       errType: 'expected-associated-column';
       gotColumn: Type;
+    }
+  | {
+      errType: 'complex-expression-exponent';
     };
 
 // exhaustive switch
@@ -137,6 +140,9 @@ function specToString(spec: ErrSpec): string {
     }
     case 'expected-associated-column': {
       return `Expected a column associated to a table`;
+    }
+    case 'complex-expression-exponent': {
+      return `Complex expressions not supported in exponents`;
     }
   }
 }
@@ -276,6 +282,12 @@ export class InferError {
     return new InferError({
       errType: 'expected-associated-column',
       gotColumn,
+    });
+  }
+
+  static complexExpressionExponent() {
+    return new InferError({
+      errType: 'complex-expression-exponent',
     });
   }
 

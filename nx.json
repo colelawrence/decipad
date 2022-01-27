@@ -54,7 +54,13 @@
       "tags": [],
       "implicitDependencies": ["client", "backend"]
     },
+    "client-events": {
+      "tags": []
+    },
     "config": {
+      "tags": []
+    },
+    "discord-customerservice-lambda": {
       "tags": []
     },
     "docsync": {
@@ -84,10 +90,16 @@
     "fnqueue": {
       "tags": []
     },
+    "fraction": {
+      "tags": []
+    },
     "graphqlresource": {
       "tags": []
     },
     "graphqlserver": {
+      "tags": []
+    },
+    "initial-workspace": {
       "tags": []
     },
     "interfaces": {
@@ -142,18 +154,6 @@
       "tags": []
     },
     "y-websocket": {
-      "tags": []
-    },
-    "fraction": {
-      "tags": []
-    },
-    "discord-customerservice-lambda": {
-      "tags": []
-    },
-    "initial-workspace": {
-      "tags": []
-    },
-    "client-events": {
       "tags": []
     }
   }

@@ -32,6 +32,13 @@ grow(Offer, Step, Duration)
 ==> 4 bars
 ```
 
+## [ENG-140](https://linear.app/decipad/issue/ENG-140)
+
+```deci live
+(900*m**2)**(1/2)
+==> 30 m
+```
+
 ## [ENG-263](https://linear.app/decipad/issue/ENG-263)
 
 ```deci live

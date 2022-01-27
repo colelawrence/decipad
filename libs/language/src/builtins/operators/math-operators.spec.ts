@@ -1,7 +1,9 @@
 import { fromJS } from '../../interpreter/Value';
-import { build as t } from '../../type';
-import { n, l, F, U } from '../../utils';
+import { InferError, build as t } from '../../type';
+import { col, c, n, l, F, U } from '../../utils';
 import { mathOperators as operators } from './math-operators';
+import { makeContext, inferExpression } from '../../infer';
+import { AST } from '../../parser';
 
 describe('math operators', () => {
   it('rounds a number', () => {
@@ -90,7 +92,14 @@ describe('math operators', () => {
     expect(operators.ln.fn?.(Math.E)).toBe(1);
   });
 
-  it('exponentiates number with unit', () => {
+  const exponentTestHelper = async (expArg: AST.Expression) => {
+    const ctx = makeContext();
+    await inferExpression(ctx, expArg);
+    return { ctx, expArg };
+  };
+
+  it('exponentiates number with unit (1)', async () => {
+    const { ctx, expArg } = await exponentTestHelper(l(2));
     expect(
       operators['**'].functor?.(
         [
@@ -104,13 +113,16 @@ describe('math operators', () => {
           ]),
           t.number(),
         ],
-
-        [l(1), l(2)]
+        [l(1), expArg],
+        ctx
       )
     ).toMatchObject(
       t.number([{ unit: 'meters', exp: F(2), multiplier: F(1), known: false }])
     );
+  });
 
+  it('exponentiates number with unit (2)', async () => {
+    const { ctx, expArg } = await exponentTestHelper(l('hey'));
     expect(
       operators['**'].functor?.(
         [
@@ -124,11 +136,18 @@ describe('math operators', () => {
           ]),
           t.number(),
         ],
-
-        [l(1), l('hey')]
+        [l(1), expArg],
+        ctx
       )
-    ).toMatchObject(t.impossible('exponent value must be a literal number'));
+    ).toMatchObject(
+      t.impossible(InferError.expectedButGot('number', 'string'))
+    );
+  });
 
+  it('exponentiates number with unit (3)', async () => {
+    const { ctx, expArg } = await exponentTestHelper(
+      n('function-call', n('funcref', '+'), n('argument-list', l(2), l(2)))
+    );
     expect(
       operators['**'].functor?.(
         [
@@ -142,12 +161,71 @@ describe('math operators', () => {
           ]),
           t.number(),
         ],
-
-        [
-          l(1),
-          n('function-call', n('funcref', '+'), n('argument-list', l(2), l(2))),
-        ]
+        [l(1), expArg],
+        ctx
       )
-    ).toMatchObject(t.impossible('exponent value must be a literal number'));
+    ).toEqual(
+      t.number([
+        {
+          unit: 'meters',
+          exp: F(4),
+          multiplier: F(1),
+          known: false,
+        },
+      ])
+    );
+  });
+
+  it('exponentiation allows simple expressions as exponents of unit-ed values', async () => {
+    const { ctx, expArg } = await exponentTestHelper(c('/', l(1), l(2)));
+    expect(
+      operators['**'].functor?.(
+        [
+          t.number([
+            {
+              unit: 'meters',
+              exp: F(1),
+              multiplier: F(1),
+              known: false,
+            },
+          ]),
+          t.number(),
+        ],
+        [l(30), expArg],
+        ctx
+      )
+    ).toEqual(
+      t.number([
+        {
+          unit: 'meters',
+          exp: F(1, 2),
+          multiplier: F(1),
+          known: false,
+        },
+      ])
+    );
+  });
+
+  it('exponentiation does not allow >0 dimensioned functions as exponents of unit-ed values', async () => {
+    const { ctx, expArg } = await exponentTestHelper(
+      c('*', col(1, 2, 3), l(2))
+    );
+    expect(
+      operators['**'].functor?.(
+        [
+          t.number([
+            {
+              unit: 'meters',
+              exp: F(1),
+              multiplier: F(1),
+              known: false,
+            },
+          ]),
+          t.column(t.number(), 3),
+        ],
+        [l(30), expArg],
+        ctx
+      )
+    ).toMatchObject(t.impossible(InferError.complexExpressionExponent()));
   });
 });

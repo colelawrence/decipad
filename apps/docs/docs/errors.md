@@ -94,6 +94,19 @@ containsdate(5, date(2050-Feb-02 15:30))
 ==> This operation requires a range and a number was entered
 ```
 
+## Complex expression in exponent
+
+:::caution `complex-expression-exponent`
+The exponent must be a simple expression
+:::
+
+The power component in an exponentiation can only be a simple expression (a number or expression composed of built-in functions).
+
+```deci live
+(30 m)**([1,2,3])
+==> Complex expressions not supported in exponents
+```
+
 ## Expected arg count
 
 :::caution `expected-arg-count`
@@ -227,7 +240,7 @@ You may have miss-spelled something, or even tried to insert data in a way that 
 
     Final Cost = 8000 €
     Final_Cost = 8000 €
-    
+
 doesn't work because variables for now can't use spaces, symbols, and they are case sensitive.
 
     1==2 ? 10 : 20

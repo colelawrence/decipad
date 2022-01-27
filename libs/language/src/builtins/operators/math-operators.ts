@@ -2,9 +2,9 @@
 import produce from 'immer';
 import Fraction from '@decipad/fraction';
 import { getDefined } from '@decipad/utils';
-import { RuntimeError } from '../../interpreter';
+import { RuntimeError, Realm } from '../../interpreter';
 import { F, getInstanceof } from '../../utils';
-import { Type, build as t } from '../../type';
+import { InferError, Type, build as t } from '../../type';
 import {
   Column,
   AnyValue,
@@ -17,6 +17,9 @@ import { overloadBuiltin } from '../overloadBuiltin';
 import { dateOverloads } from '../dateOverloads';
 import { BuiltinSpec } from '../interfaces';
 import { compare } from '../../interpreter/compare-values';
+import { Context } from '../../infer';
+
+import { simpleExpressionEvaluate } from '../../interpreter/simple-expression-evaluate';
 
 const ZERO = new Fraction(0);
 
@@ -32,24 +35,36 @@ const removeUnit = produce((t: Type) => {
   if (t.type === 'number') t.unit = null;
 });
 
-const exponentiationFunctor = ([a, b]: Type[], values?: AST.Expression[]) => {
-  const bValue = getDefined(getDefined(values)[1]);
-  if (
-    a.unit &&
-    a.unit.args.length > 0 &&
-    (bValue.type !== 'literal' || bValue.args[0] !== 'number')
-  ) {
-    return t.impossible('exponent value must be a literal number');
-  }
-  return binopFunctor([a, removeUnit(b)]).mapType(
-    produce((arg1) => {
-      for (const unit of arg1.unit?.args ?? []) {
-        unit.exp = (unit.exp || F(1)).mul(
-          getDefined(bValue.args[1]) as Fraction
-        );
+const exponentiationFunctor = (
+  [a, b]: Type[],
+  values?: AST.Expression[],
+  context?: Context
+) => {
+  const bValue = getDefined(values?.[1]);
+  const ctx = getDefined(context, 'context should be defined');
+
+  let u: Fraction;
+  if (a.unit && a.unit.args.length > 0) {
+    const realm = new Realm(ctx);
+    try {
+      u = simpleExpressionEvaluate(realm, bValue).getData();
+    } catch (err) {
+      if (err instanceof InferError) {
+        return t.impossible(err);
+      } else {
+        throw err;
       }
-    })
-  );
+    }
+    return binopFunctor([a, removeUnit(b)]).mapType(
+      produce((arg1) => {
+        for (const unit of arg1.unit?.args ?? []) {
+          unit.exp = (unit.exp || F(1)).mul(u);
+        }
+      })
+    );
+  } else {
+    return binopFunctor([a, removeUnit(b)]);
+  }
 };
 
 const roundFunctor: BuiltinSpec['functor'] = ([

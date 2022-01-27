@@ -171,6 +171,26 @@
         }
       }
     },
+    "client-events": {
+      "root": "libs/client-events",
+      "sourceRoot": "libs/client-events/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/client-events/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/client-events"
+          }
+        }
+      }
+    },
     "config": {
       "root": "libs/config",
       "sourceRoot": "libs/config/src",
@@ -187,6 +207,26 @@
           "executor": "@nrwl/workspace:run-commands",
           "options": {
             "command": "yarn tsc -b libs/config"
+          }
+        }
+      }
+    },
+    "discord-customerservice-lambda": {
+      "root": "libs/discord-customerservice-lambda",
+      "sourceRoot": "libs/discord-customerservice-lambda/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/discord-customerservice-lambda/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/discord-customerservice-lambda"
           }
         }
       }
@@ -451,6 +491,33 @@
         }
       }
     },
+    "fraction": {
+      "root": "libs/fraction",
+      "sourceRoot": "libs/fraction/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/fraction/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/fraction"
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/fraction"],
+          "options": {
+            "jestConfig": "libs/fraction/jest.config.js"
+          }
+        }
+      }
+    },
     "graphqlresource": {
       "root": "libs/graphqlresource",
       "sourceRoot": "libs/graphqlresource/src",
@@ -486,6 +553,26 @@
           "executor": "@nrwl/workspace:run-commands",
           "options": {
             "command": "yarn tsc -b libs/graphqlserver"
+          }
+        }
+      }
+    },
+    "initial-workspace": {
+      "root": "libs/initial-workspace",
+      "sourceRoot": "libs/initial-workspace/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/client-events/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/client-events"
           }
         }
       }
@@ -746,6 +833,26 @@
         }
       }
     },
+    "tables": {
+      "root": "libs/tables",
+      "sourceRoot": "libs/tables/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/client-events/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/client-events"
+          }
+        }
+      }
+    },
     "testutils": {
       "root": "libs/testutils",
       "sourceRoot": "libs/testutils/src",
@@ -920,113 +1027,6 @@
           "executor": "@nrwl/workspace:run-commands",
           "options": {
             "command": "yarn tsc -b libs/y-websocket"
-          }
-        }
-      }
-    },
-    "fraction": {
-      "root": "libs/fraction",
-      "sourceRoot": "libs/fraction/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/fraction/**/*.ts"],
-            "maxWarnings": 0
-          }
-        },
-        "typecheck": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "yarn tsc -b libs/fraction"
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/fraction"],
-          "options": {
-            "jestConfig": "libs/fraction/jest.config.js"
-          }
-        }
-      }
-    },
-    "discord-customerservice-lambda": {
-      "root": "libs/discord-customerservice-lambda",
-      "sourceRoot": "libs/discord-customerservice-lambda/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/discord-customerservice-lambda/**/*.ts"],
-            "maxWarnings": 0
-          }
-        },
-        "typecheck": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "yarn tsc -b libs/discord-customerservice-lambda"
-          }
-        }
-      }
-    },
-    "initial-workspace": {
-      "root": "libs/initial-workspace",
-      "sourceRoot": "libs/initial-workspace/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/client-events/**/*.ts"],
-            "maxWarnings": 0
-          }
-        },
-        "typecheck": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "yarn tsc -b libs/client-events"
-          }
-        }
-      }
-    },
-    "tables": {
-      "root": "libs/tables",
-      "sourceRoot": "libs/tables/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/client-events/**/*.ts"],
-            "maxWarnings": 0
-          }
-        },
-        "typecheck": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "yarn tsc -b libs/client-events"
-          }
-        }
-      }
-    },
-    "client-events": {
-      "root": "libs/client-events",
-      "sourceRoot": "libs/client-events/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/client-events/**/*.ts"],
-            "maxWarnings": 0
-          }
-        },
-        "typecheck": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "yarn tsc -b libs/client-events"
           }
         }
       }
