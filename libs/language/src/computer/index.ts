@@ -24,7 +24,7 @@ import type {
 } from './types';
 import { Computer } from './Computer';
 
-export { isSyntaxError } from './utils';
+export { isSyntaxError, isBracketError } from './utils';
 
 export { Computer };
 

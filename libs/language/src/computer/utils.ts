@@ -1,7 +1,7 @@
-import { AST } from '..';
+import { AST, SyntaxError, BracketError } from '..';
 import { walk, getIdentifierString, getDefined } from '../utils';
 import { ParseRet } from './parse';
-import { SyntaxError, ValueLocation } from './types';
+import { ValueLocation } from './types';
 
 export const stringifyLoc = (loc: ValueLocation) => loc.join('/');
 export const parseLoc = (loc: string) => {
@@ -176,4 +176,12 @@ export const setIntersection = <T>(setA: Set<T>, setB: Set<T>) =>
   new Set([...setA].filter((itemA) => setB.has(itemA)));
 
 export const isSyntaxError = (error: unknown): error is SyntaxError =>
-  error instanceof Error && 'token' in error;
+  error instanceof Object && 'message' in error && 'token' in error;
+
+export const isBracketError = (error: unknown): error is BracketError => {
+  return (
+    error instanceof Object &&
+    'type' in error &&
+    ('close' in error || 'open' in error)
+  );
+};

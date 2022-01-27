@@ -9,8 +9,13 @@ export interface UnparsedBlock {
 export interface ParserError {
   blockId: string;
   message: string;
+  detailMessage?: string;
   bracketError?: BracketError;
   token?: moo.Token;
+  line?: number;
+  column?: number;
+  expected?: string[];
+  source?: string;
 }
 
 export interface ParsedBlock {

@@ -103,7 +103,11 @@ export function runTests(tests) {
         if (!expectError) {
           throw parseError;
         } else {
-          expect(parseError.message).toMatch(expectError);
+          const testError =
+            typeof expectError === 'string'
+              ? { message: expectError }
+              : expectError;
+          expect(parseError).toMatchObject(testError);
         }
       } else {
         if (expectError) {

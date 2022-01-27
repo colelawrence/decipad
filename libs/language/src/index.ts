@@ -14,7 +14,7 @@ import { builtinsForAutocomplete } from './builtins';
 export { units };
 export { tokenize, tokenRules, STATEMENT_SEP_TOKEN_TYPE } from './grammar';
 export * from './grammar/containmentCounting';
-export { parse, AST, Parser } from './parser';
+export { parse, AST, Parser, SyntaxError } from './parser';
 export { inferBlock, makeContext } from './infer';
 export type { Context } from './infer';
 export { Interpreter } from './interpreter';

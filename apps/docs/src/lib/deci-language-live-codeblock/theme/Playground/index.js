@@ -154,11 +154,8 @@ function LivePreviewOrError({ code: liveCode }) {
 
 function LiveError({ error }) {
   if (error) {
-    let message = error.message || error;
-    if (message.length > 100) {
-      message = `${message.substring(0, 100)}…`;
-    }
-    return <div className={styles.playgroundError}>{message}</div>;
+    const message = error.message || error;
+    return <pre className={styles.playgroundError}>{message}</pre>;
   }
   return null;
 }

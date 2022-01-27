@@ -1,17 +1,11 @@
-import nearley from 'nearley';
-
 import { n } from '../utils';
 import * as AST from './ast-types';
 import * as Parser from './parser-types';
-import { compiledGrammar } from '../grammar';
 import { tokenizer, BracketCounter } from '../grammar/tokenizer';
-import { ParserNode } from './types';
-import { sourceMapDecorator } from './source-map-decorator';
-import { prettyPrintAST } from '..';
+import { parse as languageParse } from './parser';
+import { SyntaxError } from './SyntaxError';
 
-export { AST, Parser, n };
-
-const grammar = nearley.Grammar.fromCompiled(compiledGrammar);
+export { AST, Parser, n, SyntaxError };
 
 export function parseBlock({
   source,
@@ -32,26 +26,9 @@ export function parseBlock({
     }
 
     try {
-      const parser = new nearley.Parser(grammar);
-      parser.feed(source.trimEnd());
-      parser.finish();
-
-      const solutions = (parser.results as ParserNode[])
-        .map(sourceMapDecorator(source))
-        .map(ensureId);
-
-      if (solutions.length > 1) {
-        solutions.forEach((solution) => {
-          console.error(prettyPrintAST(solution));
-        });
-
-        // If this ever happens, it's a problem with the grammar
-        throw new Error('panic: multiple solutions');
-      }
-
-      if (solutions.length === 0) {
-        throw new Error('No solutions');
-      }
+      const solutions = (languageParse(source.trimEnd()) as AST.Block[]).map(
+        ensureId
+      );
 
       return { id, solutions, errors: [] };
     } catch (err) {
@@ -69,11 +46,20 @@ export function parse(blocks: Parser.UnparsedBlock[]): Parser.ParsedBlock[] {
 }
 
 function fromParseError(blockId: string, err: Error): Parser.ParserError {
-  return {
+  const resultError: Parser.ParserError = {
     blockId,
     message: err.message,
     token: (err as unknown as { token?: moo.Token }).token,
   };
+  if (err instanceof SyntaxError) {
+    resultError.detailMessage = err.detailMessage;
+    resultError.line = err.line;
+    resultError.column = err.column;
+    resultError.expected = err.expected;
+    resultError.source = err.source;
+    resultError.expected = err.expected;
+  }
+  return resultError;
 }
 
 function validateBrackets(source: string) {
