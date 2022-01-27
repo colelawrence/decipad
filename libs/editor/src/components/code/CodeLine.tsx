@@ -8,23 +8,23 @@ import { docs } from '@decipad/routing';
 import { organisms } from '@decipad/ui';
 import { PlateComponent } from '../../types';
 import { useComputer } from '../../contexts/Computer';
+import { ELEMENT_CODE_LINE } from '../../elements';
 
 export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
+  if (!element || element.type !== ELEMENT_CODE_LINE) {
+    throw new Error('CodeLine is meant to render code line elements');
+  }
+  if ('data-slate-leaf' in attributes) {
+    throw new Error('CodeLine is not a leaf');
+  }
+
   const computer = useComputer();
   const { blockResults: lineResults } = useResults();
-
-  if (!element) {
-    throw new Error('CodeBlock is not a leaf');
-  }
 
   const { id: lineId } = element;
   if (lineId == null) {
     console.error('Missing line id in element: ', element);
     throw new Error('Missing line id.');
-  }
-
-  if ('data-slate-leaf' in attributes) {
-    throw new Error('CodeLine is not a leaf');
   }
 
   const line = lineResults[lineId];

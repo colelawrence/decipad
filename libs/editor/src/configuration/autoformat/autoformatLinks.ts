@@ -1,9 +1,9 @@
 import { allPass } from 'ramda';
-import { AutoformatRule, getNode, wrapNodes } from '@udecode/plate';
+import { AutoformatRule, getNode, wrapNodes, isElement } from '@udecode/plate';
 import { BasePoint, Editor, Path, Text, Transforms } from 'slate';
 import { requireCollapsedSelection } from '../../utils/selection';
 import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
-import { Element, ELEMENT_LINK, LinkElement } from '../../elements';
+import { ELEMENT_LINK, LinkElement, Node } from '../../elements';
 import { getTrailingLink } from '../../utils/link';
 
 const TRIGGER = ')';
@@ -52,11 +52,13 @@ const convertPrecedingTextWithTriggerToLink = (editor: Editor): void => {
     }
   );
 
-  if (getNode<Element>(editor, path)?.type !== ELEMENT_LINK) {
+  let node = getNode<Node>(editor, path);
+  if (!(isElement(node) && node.type === ELEMENT_LINK)) {
     // There was a split at the start (because there was text before the link)
     path = Path.next(path);
   }
-  if (getNode<Element>(editor, path)?.type !== ELEMENT_LINK) {
+  node = getNode<Node>(editor, path);
+  if (!(isElement(node) && node.type === ELEMENT_LINK)) {
     throw new Error('Cannot find created link after split');
   }
 

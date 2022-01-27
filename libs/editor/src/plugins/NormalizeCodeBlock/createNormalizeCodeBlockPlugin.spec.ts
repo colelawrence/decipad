@@ -1,16 +1,15 @@
 import { Descendant, Editor } from 'slate';
-import { createEditorPlugins, SPEditor, TElement } from '@udecode/plate';
+import { createEditorPlugins, TDescendant, TElement } from '@udecode/plate';
 import { codeLine, emptyCodeBlock, exampleCodeBlock } from './testUtils';
 import { createNormalizeCodeBlockPlugin } from './createNormalizeCodeBlockPlugin';
 import {
-  Element,
   ELEMENT_CODE_BLOCK,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_PARAGRAPH,
   ELEMENT_CODE_LINE,
 } from '../../elements';
 
-let editor: SPEditor;
+let editor: Editor;
 beforeEach(() => {
   editor = createEditorPlugins({
     plugins: [createNormalizeCodeBlockPlugin()],
@@ -24,7 +23,7 @@ describe('in a code block', () => {
         type: ELEMENT_CODE_BLOCK,
         children: [{ text: 'code' }],
       },
-    ];
+    ] as TDescendant[];
 
     Editor.normalize(editor, { force: true });
     expect(editor.children).toEqual([
@@ -60,7 +59,7 @@ describe('in a code block', () => {
           },
         ],
       },
-    ] as TElement[];
+    ] as TDescendant[];
 
     Editor.normalize(editor, { force: true });
     expect(editor.children).toEqual([
@@ -89,7 +88,7 @@ describe('in a code line', () => {
           },
         ],
       },
-    ] as TElement[];
+    ] as TDescendant[];
 
     Editor.normalize(editor, { force: true });
     expect(editor.children).toEqual([
@@ -108,7 +107,7 @@ describe('in a code line', () => {
           },
         ],
       },
-    ] as TElement[];
+    ] as TDescendant[];
 
     Editor.normalize(editor, { force: true });
     expect(editor.children).toEqual([
@@ -306,8 +305,8 @@ describe('statement-based line splitting and merging', () => {
       {
         type: ELEMENT_CODE_BLOCK,
         children: [codeLine('123\n(42 +'), codeLine('1337)')],
-      } as Element,
-    ];
+      },
+    ] as TDescendant[];
     Editor.normalize(editor, { force: true });
 
     expect(editor.children).toMatchObject([
@@ -415,8 +414,8 @@ it('normalizes a terribly broken node', () => {
         },
         { text: '42' },
       ],
-    } as Element,
-  ];
+    },
+  ] as TDescendant[];
 
   Editor.normalize(editor, { force: true });
   expect(editor.children).toEqual([

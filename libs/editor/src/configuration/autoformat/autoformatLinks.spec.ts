@@ -2,15 +2,11 @@ import {
   createAutoformatPlugin,
   createEditorPlugins,
   SPEditor,
+  TDescendant,
 } from '@udecode/plate';
 import { Transforms } from 'slate';
 import { createLinkPlugin } from '../../plugins/Link/createLinkPlugin';
-import {
-  ELEMENT_PARAGRAPH,
-  ELEMENT_H1,
-  Element,
-  ELEMENT_LINK,
-} from '../../elements';
+import { ELEMENT_PARAGRAPH, ELEMENT_H1, ELEMENT_LINK } from '../../elements';
 
 import { autoformatLinks } from './autoformatLinks';
 
@@ -48,8 +44,8 @@ it('ignores input that is already in a link', () => {
       children: [
         { type: ELEMENT_LINK, url: 'href', children: [{ text: 'link' }] },
       ],
-    } as Element,
-  ];
+    },
+  ] as TDescendant[];
   Transforms.select(editor, { path: [0, 0, 0], offset: 2 });
   editor.insertText('[a](b)');
   expect(editor.children).toEqual([
