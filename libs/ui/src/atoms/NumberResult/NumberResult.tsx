@@ -8,6 +8,12 @@ const commaStyles = css({
   userSelect: 'none',
 });
 
+const numberResultStyles = css({
+  wordBreak: 'break-all',
+});
+
+const DECIMAL_PLACES_TEST_JUMP = 10;
+
 const commatizeEveryThreeDigits = (digits: string) => {
   const numLeadingDigits = digits.length % 3 || 3;
 
@@ -31,20 +37,33 @@ const commatizeEveryThreeDigits = (digits: string) => {
   return segments;
 };
 
-const removeFpArtifacts = (decimalPart: string) => {
-  if (decimalPart.length > 8) {
-    // Round to 8 places. If the rounding ends in zeroes,
-    // that's a heuristic telling us that the FP error has
-    // probably been eliminated
-    const rounded = Number(`0${decimalPart}`).toFixed(8);
+const firstIndexOfNonZero = (n: string): number => {
+  return n.split('').findIndex((c) => c !== '.' && c !== '0');
+};
 
-    const [, digits, zeroes] = rounded.match(/0\.(\d+?)(0+)$/) ?? [];
-    if (digits && zeroes) {
-      return `.${digits}`;
+const roundIfNeeded = (f: Fraction, decimalPlaces: number): string => {
+  let s = f.toString(decimalPlaces);
+  const morePrecise = f.toString(decimalPlaces + 1);
+  if (morePrecise !== s) {
+    const nextNumber = Number(morePrecise[morePrecise.length - 1]);
+    if (nextNumber >= 5) {
+      const lastNumber = Number(s[s.length - 1]) + 1;
+      s = s.slice(0, s.length - 1) + lastNumber;
     }
+    return `${s}(...)`;
   }
+  return s;
+};
 
-  return decimalPart;
+const toString = (f: Fraction, decimalPlaces = 15): string => {
+  const s = f.toString(decimalPlaces);
+  if (s === '0') {
+    return s;
+  }
+  if (firstIndexOfNonZero(s) < 0) {
+    return toString(f, decimalPlaces + DECIMAL_PLACES_TEST_JUMP);
+  }
+  return roundIfNeeded(f, decimalPlaces);
 };
 
 export const NumberResult = ({
@@ -52,7 +71,7 @@ export const NumberResult = ({
   value,
 }: CodeResultProps<'number'>): ReturnType<FC> => {
   const fraction = new Fraction(value);
-  const asString = fraction.toString();
+  const asString = toString(fraction);
 
   // Numbers' toString isn't always formatted like [-]####.###
   const basicNumberMatch = asString.match(/^(-?)(\d+)(\.\d+)?$/);
@@ -68,14 +87,18 @@ export const NumberResult = ({
         : integerPart;
 
     return (
-      <span>
+      <span css={numberResultStyles}>
         {sign}
         {formattedIntegerPart}
-        {decimalPart && removeFpArtifacts(decimalPart)}
+        {decimalPart}
         {unitPart}
       </span>
     );
   }
 
-  return <span>{[asString, unitPart].filter(Boolean).join(' ')}</span>;
+  return (
+    <span css={numberResultStyles}>
+      {[asString, unitPart].filter(Boolean).join(' ')}
+    </span>
+  );
 };
