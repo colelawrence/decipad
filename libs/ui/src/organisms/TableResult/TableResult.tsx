@@ -6,10 +6,19 @@ import { TableData, TableHeader } from '../../atoms';
 import { TableHeaderRow, TableRow } from '../../molecules';
 import { table } from '../../styles';
 import { CodeResultProps, TableCellType } from '../../types';
+import { isTabularType } from '../../utils';
 
 const cellWrapperStyles = css({
   overflowX: 'hidden',
+  display: 'grid',
+});
+
+const cellSidePadding = css({
   padding: `2px ${table.cellSidePadding}`,
+});
+
+const cellLeftPaddingStyles = css({
+  paddingLeft: table.cellSidePadding,
 });
 
 export function toTableHeaderType(
@@ -26,6 +35,7 @@ export function toTableHeaderType(
 }
 
 export const TableResult = ({
+  parentType,
   type,
   value,
 }: CodeResultProps<'table'>): ReturnType<FC> => {
@@ -33,7 +43,7 @@ export const TableResult = ({
   const tableLength = value[0].length;
 
   return (
-    <Table>
+    <Table border={isTabularType(parentType) ? 'inner' : 'all'}>
       <thead>
         <TableHeaderRow readOnly>
           {columnNames?.map((columnName, index) => (
@@ -51,7 +61,13 @@ export const TableResult = ({
           <TableRow key={rowIndex} readOnly>
             {value.map((column, colIndex) => (
               <TableData key={colIndex}>
-                <div css={cellWrapperStyles}>
+                <div
+                  css={[
+                    cellWrapperStyles,
+                    !isTabularType(columnTypes[colIndex]) && cellSidePadding,
+                    colIndex === 0 && cellLeftPaddingStyles,
+                  ]}
+                >
                   <CodeResult
                     parentType={type}
                     type={columnTypes[colIndex]}

@@ -1,6 +1,7 @@
 export * from './counter';
 export * from './link';
 export * from './props';
+export * from './results';
 export * from './routing';
 export * from './storage';
 export * from './table';

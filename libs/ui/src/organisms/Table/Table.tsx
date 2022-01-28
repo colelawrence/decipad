@@ -74,8 +74,7 @@ export const Table = ({
   <table
     css={[
       tableBaseStyles,
-      borderRadiusStyles,
-      b === 'all' && allBorderStyles,
+      b === 'all' && [borderRadiusStyles, allBorderStyles],
       b === 'inner' && innerBorderStyles,
     ]}
   >
