@@ -390,14 +390,19 @@ export class Table implements Value {
   columns: Column[];
   columnNames: string[];
 
-  constructor(values: Column[], columnNames: string[]) {
-    this.columns = values;
+  constructor(columns: Column[], columnNames: string[]) {
+    if (columns.length === 0 || columnNames.length === 0) {
+      throw new Error('panic: unexpected empty table');
+    }
+    this.columns = columns;
     this.columnNames = columnNames;
   }
 
-  static fromNamedColumns(values: Value[], columnNames: string[]) {
-    const columns = values.map((v) => getInstanceof(v, Column));
-    return new Table(columns, columnNames);
+  static fromNamedColumns(columns: Value[], columnNames: string[]) {
+    return new Table(
+      columns.map((v) => getInstanceof(v, Column)),
+      columnNames
+    );
   }
 
   static fromMapping(mapping: AnyMapping<Column>) {

@@ -1,6 +1,6 @@
 import { F } from '../utils';
 import { parseUTCDate } from '../date';
-import { Scalar, Column, Range, Date, fromJS } from './Value';
+import { Scalar, Column, Table, Range, Date, fromJS } from './Value';
 
 it('can get from JS for testing', () => {
   expect(fromJS(1)).toEqual(Scalar.fromValue(1));
@@ -36,4 +36,11 @@ it('can represent a column of dates', () => {
   ]);
 
   expect(dates.getData()).toEqual([d('2021-02'), d('2021-06')]);
+});
+
+it('refuses to represent an empty table', () => {
+  expect(() => Table.fromNamedColumns([fromJS([])], [])).toThrow(
+    /empty table/i
+  );
+  expect(() => Table.fromNamedColumns([], ['hi'])).toThrow(/empty table/i);
 });
