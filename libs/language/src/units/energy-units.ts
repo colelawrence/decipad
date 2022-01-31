@@ -3,6 +3,7 @@ import { identity, invert } from '../utils';
 
 type Converter = UnitOfMeasure['toBaseQuantity'];
 const calorie: Converter = (x) => x.mul(4184).div(1000);
+const wh: Converter = (x) => x.mul(3_600);
 
 export const units: UnitOfMeasure[] = [
   {
@@ -19,5 +20,13 @@ export const units: UnitOfMeasure[] = [
     baseQuantity: 'energy',
     toBaseQuantity: calorie,
     fromBaseQuantity: invert(calorie),
+  },
+  {
+    name: 'watthour',
+    symbols: ['wh'],
+    pretty: 'Wh',
+    baseQuantity: 'energy',
+    toBaseQuantity: wh,
+    fromBaseQuantity: invert(wh),
   },
 ];

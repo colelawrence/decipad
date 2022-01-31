@@ -132,6 +132,28 @@ SQRTZ = sqrt(A * 3)
 ==> 3
 ```
 
+## [ENG-326](https://linear.app/decipad/issue/ENG-139)
+
+```deci live
+3600 kj in kw h
+==> 1 kW·h
+```
+
+```deci live
+1 kwh in kj
+==> 3600 kJ
+```
+
+```deci live
+1 wh in j
+==> 3600 J
+```
+
+```deci live
+1 kwh in wh
+==> 1000 Wh
+```
+
 ## [ENG-327](https://linear.app/decipad/issue/ENG-327)
 
 ```deci live

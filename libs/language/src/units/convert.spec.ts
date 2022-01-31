@@ -322,6 +322,9 @@ describe('convert', () => {
   });
 
   it('converts between energy units', () => {
+    expect(convertBetweenUnits(F(3_600), U('joules'), U('wh'))).toMatchObject(
+      F(1)
+    );
     expect(convertBetweenUnits(F(2), U('joules'), U('calories'))).toMatchObject(
       F(250, 523)
     );

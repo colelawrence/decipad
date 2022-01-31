@@ -233,6 +233,7 @@ Joule can be expressed as `kg⋅m2⋅s−2` and we support expanding (or contrac
 The following are also supported:
 
 - Calorie (`calorie`, `cal`) = `4.1868 J`
+- Watt hour (`Wh`) = `3600 J`
 
 ## Force units
 

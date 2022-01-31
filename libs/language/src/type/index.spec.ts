@@ -10,6 +10,7 @@ import { Unit, units } from './unit-type';
 const meter = u('meters');
 const second = u('seconds');
 const cm = u('m', { multiplier: new Fraction(1, 100) });
+const kw = u('W', { multiplier: new Fraction(1000) });
 
 const invMeter: Unit = inverseExponent(meter);
 const invSecond: Unit = inverseExponent(second);
@@ -18,7 +19,7 @@ const numberInMeter = t.number([meter]);
 const numberInMeterBySecond = t.number([meter, second]);
 const numberInMeterPerSecond = t.number([meter, invSecond]);
 
-it('can follow SI rules and style conventions', () => {
+it('can follow SI unit rules and style conventions', () => {
   expect(t.number([u('s')]).toString()).toEqual('s');
   expect(t.number([second]).toString()).toEqual('seconds');
   // cm = 0.01m
@@ -29,12 +30,18 @@ it('can follow SI rules and style conventions', () => {
   expect(t.number([meter, inverseExponent(second)]).toBasicString()).toEqual(
     'meters per second'
   );
+  expect(t.number([meter, inverseExponent(second)]).toBasicString()).toEqual(
+    'meters per second'
+  );
   expect(t.number([u('m'), inverseExponent(u('s'))]).toBasicString()).toEqual(
     'm/s'
   );
   expect(t.number([u('meter'), u('banana')]).toBasicString()).toEqual(
     'meters·banana'
   );
+  expect(t.number([u('watt'), u('hour')]).toBasicString()).toEqual('W·hour');
+  expect(t.number([u('w'), u('h')]).toBasicString()).toEqual('W·h');
+  expect(t.number([kw, u('h')]).toBasicString()).toEqual('kW·h');
   // cm3 = 0.01m3
   const cm3 = t.number([
     u('m', { multiplier: new Fraction(1, 100), exp: F(3) }),

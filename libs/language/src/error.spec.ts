@@ -13,7 +13,7 @@ describe('Correctness of error behaviour', () => {
 describe('Error messages are intuitive for users', () => {
   it('Cannot convert units that have nothing to do with each other', async () => {
     await expect(() => runCode(`1 m * 1 m * 1 cm in yA`)).rejects.toThrowError(
-      "Don't know how to convert between units cm³ and 1.0000000000000001e-24A"
+      "Don't know how to convert between units m³ and 1.0000000000000001e-24A"
     );
   });
 });

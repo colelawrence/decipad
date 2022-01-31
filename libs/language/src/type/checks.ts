@@ -258,7 +258,7 @@ export const sameDatenessAs = checker((me: Type, other: Type) => {
 });
 
 export const multiplyUnit = checker((me: Type, withUnits: Units | null) => {
-  return setUnit(me, combineUnits(me.unit, withUnits));
+  return setUnit(me, combineUnits(me.unit, withUnits, { mult: true }));
 });
 
 export const divideUnit = checker(

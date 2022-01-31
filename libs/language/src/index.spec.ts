@@ -998,15 +998,15 @@ describe('number units work together', () => {
         type: 'units',
         args: [
           {
-            unit: 'hours',
-            exp: F(1),
-            multiplier: new Fraction(1),
-            known: true,
-          },
-          {
             unit: 'meters',
             exp: F(1),
             multiplier: new Fraction(1000),
+            known: true,
+          },
+          {
+            unit: 'hours',
+            exp: F(1),
+            multiplier: new Fraction(1),
             known: true,
           },
         ],
@@ -1288,6 +1288,15 @@ describe('number units work together', () => {
     expect(await runCode(`1 newtons/meter^2 in bars`)).toMatchObject({
       value: F(1, 100000),
       type: t.number(U('bars')),
+    });
+  });
+
+  it('should convert joules into kw hour', async () => {
+    const run = await runCode(`3600 kj in kw h`);
+
+    expect(run).toMatchObject({
+      value: F(1),
+      type: t.number(U([u('w', { multiplier: new Fraction(1000) }), u('h')])),
     });
   });
 
