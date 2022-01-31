@@ -44,7 +44,7 @@ jobs:
           aws-region: eu-west-2
 
       - name: Run end-to-end tests
-        run: ./scripts/e2e.sh
+        run: ./scripts/e2e.sh || ./scripts/e2e.sh || ./scripts/e2e.sh
 
   notify:
     name: Discord Notification
