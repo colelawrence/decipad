@@ -4,7 +4,8 @@ import { stringifyResult } from './result';
 import { runCode } from '.';
 import { RuntimeError } from './interpreter';
 
-async function getDocTestString(codeExample: string) {
+type EvaluatedDoc = string | { crash: string };
+async function getDocTestString(codeExample: string): Promise<EvaluatedDoc> {
   try {
     const { value, type } = await runCode(codeExample);
     return stringifyResult(value, type, (x) => x);
@@ -12,9 +13,10 @@ async function getDocTestString(codeExample: string) {
     if (error instanceof TypeError || error instanceof RuntimeError) {
       return error.message;
     } else {
-      console.error('Error in getDocTestString for the followingCode:');
-      console.error(codeExample);
-      throw error;
+      const detail = `${codeExample}\n\n${error.stack || error.message}`;
+      return {
+        crash: `Error in getDocTestString for the following code:\n${detail}`,
+      };
     }
   }
 }
@@ -28,13 +30,17 @@ const loadStdin = async () => {
 };
 
 async function main() {
-  const codeExamples: string[] = JSON.parse(await loadStdin());
+  const codeExamples: Record<string, string[]> = JSON.parse(await loadStdin());
 
-  const out = [];
-  for (const code of codeExamples) {
-    // eslint-disable-next-line no-await-in-loop
-    out.push(await getDocTestString(code));
+  const out: Record<string, EvaluatedDoc[]> = {};
+  for (const [file, liveBlocks] of Object.entries(codeExamples)) {
+    out[file] = [];
+    for (const code of liveBlocks) {
+      // eslint-disable-next-line no-await-in-loop
+      out[file].push(await getDocTestString(code));
+    }
   }
+
   return out;
 }
 

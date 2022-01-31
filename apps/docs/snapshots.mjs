@@ -21,8 +21,8 @@ let failures = 0;
 // HACK: This function is equivalent to `return await runCode(source)`
 // But I can't import the language and I've already spent hours trying.
 const runCode = (sources) => {
-  if (sources.length === 0) {
-    return [];
+  if (sources.size === 0) {
+    return new Map();
   }
 
   // NOTE: this is very slow even when batching all examples in each .md file
@@ -33,7 +33,7 @@ const runCode = (sources) => {
       '--extensions=.js,.jsx,.ts,.tsx',
       pathJoin(docsDir, '../../libs/language/src/evaluate-docs-examples.ts'),
     ],
-    { input: JSON.stringify(sources) }
+    { input: JSON.stringify(Object.fromEntries(sources.entries())) }
   );
 
   if (stderr && stderr.length) {
@@ -46,7 +46,7 @@ const runCode = (sources) => {
   } else {
     const out = stdout.toString('utf-8');
     try {
-      return JSON.parse(out);
+      return new Map(Object.entries(JSON.parse(out)));
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(`Error parsing output ${out}`);
@@ -55,32 +55,52 @@ const runCode = (sources) => {
   }
 };
 
+const getCodeNodes = (document) => {
+  return document.children
+    .filter(
+      ({ type, lang, meta }) =>
+        type === 'code' && lang === 'deci' && meta === 'live'
+    )
+    .map((node) => {
+      const [code, snapshot = '(no snapshot)'] =
+        node.value.split(snapshotSeparator);
+
+      return { node, code, snapshot };
+    });
+};
+
+const getRemark = () =>
+  remark().use(remarkMdx).use(remarkGfm).use(remarkFrontmatter);
+
+async function collectOneFile(codeNodesPerFile, fileName) {
+  const theTests = fs.readFileSync(fileName, { encoding: 'utf-8' });
+
+  await getRemark()
+    .use(() => (document) => {
+      codeNodesPerFile.set(
+        fileName,
+        getCodeNodes(document).map((node) => node.code)
+      );
+    })
+    .process(theTests);
+}
+
 const snapshotTestingPlugin =
-  (fileName) =>
-  () =>
-  async ({ children: topLevelNodes }) => {
-    const nodes = topLevelNodes
-      .filter(
-        ({ type, lang, meta }) =>
-          type === 'code' && lang === 'deci' && meta === 'live'
-      )
-      .map((node) => {
-        const [code, snapshot = '(no snapshot)'] =
-          node.value.split(snapshotSeparator);
+  (resultsContext, fileName, relativeFileName) => () => async (document) => {
+    const nodes = getCodeNodes(document);
 
-        return { node, code, snapshot };
-      });
-
-    const results = await runCode(nodes.map((n) => n.code));
+    const results = resultsContext.get(fileName);
 
     for (let i = 0; i < nodes.length; i += 1) {
       const { node, code, snapshot } = nodes[i];
       const actualValue = results[i];
 
-      if (snapshot !== actualValue) {
+      if (actualValue?.crash) {
+        console.error(chalk.red(actualValue.crash));
+      } else if (snapshot !== actualValue) {
         failures += 1;
         // eslint-disable-next-line no-console
-        console.error(`--\ndifferent result in ${fileName}`);
+        console.error(`--\ndifferent result in ${relativeFileName}`);
 
         diffLines(snapshot, actualValue).forEach((part) => {
           const colorizeLine = part.added
@@ -99,14 +119,11 @@ const snapshotTestingPlugin =
     }
   };
 
-async function testOneFile(fileName, relativeFileName) {
+async function testOneFile(resultsContext, fileName, relativeFileName) {
   const theTests = fs.readFileSync(fileName, { encoding: 'utf-8' });
 
-  const file = await remark()
-    .use(remarkMdx)
-    .use(remarkGfm)
-    .use(remarkFrontmatter)
-    .use(snapshotTestingPlugin(relativeFileName))
+  const file = await getRemark()
+    .use(snapshotTestingPlugin(resultsContext, fileName, relativeFileName))
     .process(theTests);
 
   if (isUpdating) {
@@ -121,9 +138,18 @@ async function testOneFile(fileName, relativeFileName) {
 }
 
 async function runDocTests() {
+  const codeNodesPerFile = new Map();
   for (const file of glob.sync('docs/**/*.md', { cwd: docsDir })) {
     // eslint-disable-next-line no-await-in-loop
-    await testOneFile(pathJoin(docsDir, file), file);
+    await collectOneFile(codeNodesPerFile, pathJoin(docsDir, file));
+  }
+
+  // Run all the tests on all the code!
+  const resultsContext = await runCode(codeNodesPerFile);
+
+  for (const file of glob.sync('docs/**/*.md', { cwd: docsDir })) {
+    // eslint-disable-next-line no-await-in-loop
+    await testOneFile(resultsContext, pathJoin(docsDir, file), file);
   }
 
   if (failures > 0 && !isUpdating) {
