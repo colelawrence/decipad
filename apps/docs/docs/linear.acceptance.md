@@ -153,3 +153,22 @@ Table = { A = 1 }
 select(Table, B, A)
 ==> The selected column does not exist in the reference table
 ```
+
+## [ENG-297](https://linear.app/decipad/issue/ENG-327)
+
+Part 1: splitby was malfunctioning
+
+```deci live
+People = {
+  Name = ["Peter", "Paul", "Mary"]
+  Origin = ["US", "UK", "US"]
+}
+Countries = splitby(People, People.Origin)
+lookup(Countries, Countries.Origin == "UK")
+==> {
+  Origin = 'UK',
+  Values = {
+  Name = [ 'Paul' ]
+}
+}
+```

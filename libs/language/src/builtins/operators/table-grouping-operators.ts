@@ -20,8 +20,7 @@ export const tableGroupingOperators: { [fname: string]: BuiltinSpec } = {
             );
           }
 
-          const columnIndex = getDefined(column.atParentIndex);
-          const columnName = getDefined(table.columnNames?.[columnIndex]);
+          const [columnIndex, columnName] = columnIndexAndName(table, column);
 
           const tableWithout = produce(table, (table) => {
             table.columnTypes?.splice(columnIndex, 1);
@@ -35,7 +34,7 @@ export const tableGroupingOperators: { [fname: string]: BuiltinSpec } = {
           });
         }
       ),
-    fnValuesNoAutomap: ([_table, _byColumn]) => {
+    fnValuesNoAutomap: ([_table, _byColumn], [tableType, colType] = []) => {
       const table = getInstanceof(_table, Table);
       const byColumn = getInstanceof(_byColumn, Column);
 
@@ -55,7 +54,16 @@ export const tableGroupingOperators: { [fname: string]: BuiltinSpec } = {
         uniqueSortedColumn,
         Column.fromValues(slicedTables),
       ];
-      return Column.fromValues(columnsForNewTable);
+
+      const [, columnName] = columnIndexAndName(tableType, colType);
+      return Table.fromNamedColumns(columnsForNewTable, [columnName, 'Values']);
     },
   },
+};
+
+const columnIndexAndName = (tableType: Type, colType: Type) => {
+  const columnIndex = getDefined(colType.atParentIndex);
+  const columnName = getDefined(tableType.columnNames?.[columnIndex]);
+
+  return [columnIndex, columnName] as const;
 };

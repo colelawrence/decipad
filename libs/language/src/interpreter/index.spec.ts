@@ -15,17 +15,11 @@ import {
   r,
 } from '../utils';
 import { parseUTCDate } from '../date';
-import { runAST } from '../testUtils';
-import { Type } from '..';
-import { stringifyResult } from '../result';
+import { runAST, resultSnapshotSerializer } from '../testUtils';
 
 import { run, runOne } from './index';
 
-expect.addSnapshotSerializer({
-  test: (arg) => arg?.type instanceof Type && arg.value != null,
-  serialize: ({ type, value }) =>
-    `Result(${stringifyResult(value, type, (x) => x)})`,
-});
+expect.addSnapshotSerializer(resultSnapshotSerializer);
 
 it('evaluates and returns', async () => {
   const basicProgram = [

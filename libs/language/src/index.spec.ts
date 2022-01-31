@@ -1,24 +1,20 @@
 // E2e tests
 import Fraction from '@decipad/fraction';
-import { build as t, Type, units } from './type';
+import { build as t, units } from './type';
 import { runCode } from './run';
 import {
   runCodeForVariables,
   objectToTableType,
   objectToTableValue,
+  resultSnapshotSerializer,
   runAST,
 } from './testUtils';
 import { date, parseUTCDate } from './date';
 import { Column, Scalar } from './interpreter/Value';
 import { block, n, F, U, u, c } from './utils';
-import { stringifyResult } from './result';
 import { number } from './type/build';
 
-expect.addSnapshotSerializer({
-  test: (arg) => arg?.type instanceof Type && arg.value != null,
-  serialize: ({ type, value }) =>
-    `Result(${stringifyResult(value, type, (x) => x)})`,
-});
+expect.addSnapshotSerializer(resultSnapshotSerializer);
 
 describe('basic code', () => {
   it('runs basic operations', async () => {
@@ -608,6 +604,26 @@ describe('Tables', () => {
     expect(resultExtraDim2.type.toString()).toMatchInlineSnapshot(
       `"table (3) { Years = <number>, Cost = <number> x 3 x 1 }"`
     );
+  });
+
+  it('Regression: splitby + lookup issue', async () => {
+    expect(
+      await runCode(`
+        Table = {
+          Name = ["Ava", "Eva", "Adam"],
+          Country = ["🇵🇹", "🇬🇧", "🇬🇧"]
+        }
+        Countries = splitby(Table, Table.Country)
+        lookup(Countries, Countries.Country == "🇬🇧")
+      `)
+    ).toMatchInlineSnapshot(`
+      Result({
+        Country = '🇬🇧',
+        Values = {
+        Name = [ 'Eva', 'Adam' ]
+      }
+      })
+    `);
   });
 });
 

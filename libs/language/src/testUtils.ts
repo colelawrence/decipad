@@ -3,6 +3,7 @@ import { Interpreter, Realm, run } from './interpreter';
 import { fromJS, Table } from './interpreter/Value';
 import { inferProgram, inferBlock, makeContext } from './infer';
 import { zip, AnyMapping } from './utils';
+import { stringifyResult } from './result';
 import { Type, build as t } from './type';
 import { parseOneBlock } from './run';
 
@@ -82,3 +83,9 @@ export const objectToMap = <K extends string, V, Obj extends ObjectOf<V>>(
 export function dataUrl(data: Buffer | string, contentType: string): string {
   return `data:${contentType};base64,${Buffer.from(data).toString('base64')}`;
 }
+
+export const resultSnapshotSerializer: jest.SnapshotSerializerPlugin = {
+  test: (arg) => arg?.type instanceof Type && arg.value != null,
+  serialize: ({ type, value }) =>
+    `Result(${stringifyResult(value, type, (x) => x)})`,
+};

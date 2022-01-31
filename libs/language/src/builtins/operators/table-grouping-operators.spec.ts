@@ -29,10 +29,10 @@ describe('table splitting and grouping operators', () => {
       [initialIndexColumn, groupByColumn],
       ['initial_index', 'other_column']
     );
-    const result = operators.splitby.fnValuesNoAutomap?.([
-      table,
-      groupByColumn,
-    ]);
+    const result = operators.splitby.fnValuesNoAutomap?.(
+      [table, groupByColumn],
+      [tableType, groupByColumnType]
+    );
     expect(result?.getData()).toMatchInlineSnapshot(`
       Array [
         Array [

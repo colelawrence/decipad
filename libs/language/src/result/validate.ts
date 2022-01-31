@@ -7,31 +7,23 @@ import { Interpreter } from '../interpreter';
 import { Unknown } from '../interpreter/Unknown';
 import { SerializedType, SerializedTypeKind, serializeType } from '../type';
 
-export function validateResult(
-  type: Type | SerializedType,
+function validate(
+  type: SerializedType,
   value: Interpreter.OneResult | null
 ): boolean {
-  if (type instanceof Type) {
-    return validateResult(serializeType(type), value);
-  }
-
-  const reportError = () => {
-    console.error('Failed to validate a Result:');
-    console.error({ type, value });
-  };
   const getTrue = (cond: boolean, failureMessage: string) => {
     if (cond) return true;
-    reportError();
+    reportError(type, value);
     throw new Error(failureMessage);
   };
   const getArray = <T>(thing: T) => {
     if (Array.isArray(thing)) return thing;
-    reportError();
+    reportError(type, value);
     throw new Error('panic: expected array');
   };
   const getOfKind = (type: SerializedType, ...kinds: SerializedTypeKind[]) => {
     if (kinds.includes(type.kind)) return type;
-    reportError();
+    reportError(type, value);
     throw new Error(`panic: wanted ${kinds.join('/')} and got ${type.kind}`);
   };
 
@@ -68,15 +60,12 @@ export function validateResult(
 
       const rangeType = getOfKind(type.rangeOf, 'date', 'number');
 
-      return (
-        validateResult(rangeType, values[0]) &&
-        validateResult(rangeType, values[1])
-      );
+      return validate(rangeType, values[0]) && validate(rangeType, values[1]);
     }
     case 'column': {
       const array = getArray(value as Interpreter.ResultColumn);
       equalOrUnknown(array.length, type.columnSize);
-      return array.every((cell) => validateResult(type.cellType, cell));
+      return array.every((cell) => validate(type.cellType, cell));
     }
     case 'table': {
       return zip(
@@ -89,18 +78,42 @@ export function validateResult(
           columnSize: 'unknown',
           indexedBy: null,
         };
-        return validateResult(implicitColumn, value);
+        return validate(implicitColumn, value);
       });
     }
     case 'row': {
       return zip(
         type.rowCellTypes,
         getArray(value as Interpreter.ResultRow)
-      ).every(([type, value]) => validateResult(type, value));
+      ).every(([type, value]) => validate(type, value));
     }
     case 'function':
     case 'type-error': {
       return getTrue(value == null || value === Unknown, 'expected no value');
     }
+  }
+}
+
+const reportError = (
+  type: SerializedType,
+  value: Interpreter.OneResult | null
+) => {
+  console.error('Failed to validate a Result:');
+  console.error({ type, value });
+};
+
+export function validateResult(
+  type: Type | SerializedType,
+  value: Interpreter.OneResult | null
+) {
+  if (type instanceof Type) {
+    type = serializeType(type);
+  }
+
+  try {
+    return validate(type, value);
+  } catch (e) {
+    reportError(type, value);
+    throw e;
   }
 }
