@@ -33,6 +33,7 @@ const Wrapper = styled('div')({
 const EditorWrapper = styled('main')({
   gridArea: 'editor',
   position: 'relative',
+  paddingBottom: '180px',
 });
 const EditorInner = styled('div')({
   maxWidth: '120ch',
