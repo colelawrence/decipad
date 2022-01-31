@@ -28,6 +28,12 @@ export const select: Directive = {
         (key) => columns.includes(key)
       );
 
+      if (columns.length !== columnNames.length) {
+        return t.impossible(
+          'The selected column does not exist in the reference table'
+        );
+      }
+
       return t.table({
         indexName,
         length: getDefined(tableLength),

@@ -131,3 +131,25 @@ A = 3
 SQRTZ = sqrt(A * 3)
 ==> 3
 ```
+
+## [ENG-327](https://linear.app/decipad/issue/ENG-327)
+
+```deci live
+Table = { A = 1 }
+select(Table, B)
+==> The selected column does not exist in the reference table
+```
+
+```deci live
+Table = { A = 1 }
+select(Table, A)
+==> {
+  A = [ 1 ]
+}
+```
+
+```deci live
+Table = { A = 1 }
+select(Table, B, A)
+==> The selected column does not exist in the reference table
+```

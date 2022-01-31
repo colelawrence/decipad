@@ -1,4 +1,5 @@
 import { findParentWithStyle } from '@decipad/dom-test-utils';
+import { mockConsoleError } from '@decipad/testutils';
 import {
   getAllByRole as getAllDescendantsByRole,
   render,
@@ -71,5 +72,41 @@ describe('dimensions', () => {
     expect(
       dimensions.map((cell) => findParentWithStyle(cell, 'padding')?.padding)
     ).toEqual([undefined, undefined]);
+  });
+});
+
+describe('given invalid input', () => {
+  mockConsoleError();
+  it('refuses to render zero columns', () => {
+    expect(() =>
+      render(
+        <TableResult
+          type={{
+            kind: 'table',
+            indexName: null,
+            columnNames: [],
+            columnTypes: [],
+            tableLength: 'unknown',
+          }}
+          value={[]}
+        />
+      )
+    ).toThrow(/zero/i);
+  });
+  it('catches mismatching type and value column lengths', () => {
+    expect(() =>
+      render(
+        <TableResult
+          type={{
+            kind: 'table',
+            indexName: null,
+            columnNames: ['C'],
+            columnTypes: [{ kind: 'string' }],
+            tableLength: 'unknown',
+          }}
+          value={[['asdf'], ['asdf']]}
+        />
+      )
+    ).toThrow(/2/);
   });
 });

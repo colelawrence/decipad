@@ -40,6 +40,15 @@ export const TableResult = ({
   value,
 }: CodeResultProps<'table'>): ReturnType<FC> => {
   const { columnNames, columnTypes } = type;
+  if (!columnNames.length) {
+    throw new Error('Cannot render table with zero columns');
+  }
+  if (value.length !== columnNames.length) {
+    throw new Error(
+      `There are ${columnNames.length} column names. Expected values for ${columnNames.length} columns, but received values for ${value.length} columns.`
+    );
+  }
+
   const tableLength = value[0].length;
 
   return (
