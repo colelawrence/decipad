@@ -1,9 +1,8 @@
 import { css } from '@emotion/react';
-import { ReactNode, Children, FC } from 'react';
+import { Children, FC, ReactNode } from 'react';
 import { isElement } from 'react-is';
-
-import { NavigationItem } from '../../atoms';
 import { WorkspaceItem } from '..';
+import { NavigationItem } from '../../atoms';
 
 const styles = css({
   display: 'grid',

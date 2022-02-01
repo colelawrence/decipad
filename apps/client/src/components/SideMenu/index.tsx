@@ -1,12 +1,11 @@
 import { useQuery } from '@apollo/client';
+import { Spinner } from '@chakra-ui/react';
+import { GetWorkspaces, GET_WORKSPACES } from '@decipad/queries';
 import { DashboardSidebar } from '@decipad/ui';
-import { GET_WORKSPACES, GetWorkspaces } from '@decipad/queries';
 import { FC } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
-
-import { Spinner } from '@chakra-ui/react';
-import { WorkspacePreferences } from './WorkspacePreferences';
 import { CreateWorkspaceModal } from './CreateWorkspaceModal';
+import { WorkspacePreferences } from './WorkspacePreferences';
 
 export interface SideMenuProps {
   workspaceId: string;
