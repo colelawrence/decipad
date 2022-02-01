@@ -31,6 +31,20 @@ describe('Notebook Path', () => {
     expect(queryByRole('link')).not.toBeInTheDocument();
   });
 
+  it("doesn't render the workspace name when shared", () => {
+    const { queryByText, queryByRole } = render(
+      <NotebookPath
+        isAdmin={false}
+        workspaceName="John's Workspace"
+        notebookName="Use of funds"
+        workspaceHref="/workspace"
+      />
+    );
+
+    expect(queryByRole('link')).not.toBeInTheDocument();
+    expect(queryByText("John's Workspace")).not.toBeInTheDocument();
+  });
+
   it('renders the notebook name', () => {
     const { getByText } = render(
       <NotebookPath

@@ -38,18 +38,17 @@ export const NotebookPath = ({
 }: NotebookPathProps): ReturnType<FC> => {
   return (
     <div css={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-      {isAdmin ? (
-        <Anchor href={workspaceHref} css={workspaceNameStyles}>
-          {workspaceName}
-        </Anchor>
-      ) : (
-        <em css={css([workspaceNameStyles, { cursor: 'default' }])}>
-          {workspaceName}
-        </em>
+      {isAdmin && (
+        <>
+          <Anchor href={workspaceHref} css={workspaceNameStyles}>
+            {workspaceName}
+          </Anchor>
+          <div css={iconStyles}>
+            <Slash />
+          </div>
+        </>
       )}
-      <div css={iconStyles}>
-        <Slash />
-      </div>
+
       <em css={notebookNameStyles}>{notebookName}</em>
     </div>
   );

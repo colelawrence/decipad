@@ -25,8 +25,7 @@ const topbarWrapperStyles = css({
 const topbarLeftSideStyles = css({
   flexGrow: 999,
 
-  display: 'grid',
-  gridTemplateColumns: '32px auto',
+  display: 'flex',
   alignItems: 'center',
   gap: '6px',
 });
@@ -73,9 +72,11 @@ export const NotebookTopbar = ({
       {/* Left side */}
       <div css={topbarLeftSideStyles}>
         {isAdmin && (
-          <IconButton href={workspaceHref}>
-            <LeftArrow />
-          </IconButton>
+          <div css={{ width: '32px', display: 'grid' }}>
+            <IconButton href={workspaceHref}>
+              <LeftArrow />
+            </IconButton>
+          </div>
         )}
         <NotebookPath
           isAdmin={isAdmin}
