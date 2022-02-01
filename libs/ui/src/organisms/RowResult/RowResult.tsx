@@ -1,37 +1,26 @@
 import { FC } from 'react';
 import { css } from '@emotion/react';
-import { CodeResult, Table } from '..';
 import { TableData, TableHeader } from '../../atoms';
 import { TableHeaderRow, TableRow } from '../../molecules';
+import { CodeResult, Table } from '..';
 import { table } from '../../styles';
 import { CodeResultProps } from '../../types';
 import { isTabularType, toTableHeaderType } from '../../utils';
 
-export const TableResult = ({
+export const RowResult = ({
   parentType,
   type,
   value,
-}: CodeResultProps<'table'>): ReturnType<FC> => {
-  const { columnNames, columnTypes } = type;
-  if (!columnNames.length) {
-    throw new Error('Cannot render table with zero columns');
-  }
-  if (value.length !== columnNames.length) {
-    throw new Error(
-      `There are ${columnNames.length} column names. Expected values for ${columnNames.length} columns, but received values for ${value.length} columns.`
-    );
-  }
-
-  const tableLength = value[0].length;
-
+}: CodeResultProps<'row'>): ReturnType<FC> => {
+  const { rowCellNames, rowCellTypes } = type;
   return (
     <Table border={isTabularType(parentType) ? 'inner' : 'all'}>
       <thead>
         <TableHeaderRow readOnly>
-          {columnNames?.map((columnName, index) => (
+          {rowCellNames.map((columnName, colIndex) => (
             <TableHeader
-              key={index}
-              type={toTableHeaderType(columnTypes[index])}
+              key={colIndex}
+              type={toTableHeaderType(rowCellTypes[colIndex])}
             >
               {columnName}
             </TableHeader>
@@ -39,27 +28,27 @@ export const TableResult = ({
         </TableHeaderRow>
       </thead>
       <tbody>
-        {Array.from({ length: tableLength }, (_, rowIndex) => (
-          <TableRow key={rowIndex} readOnly>
-            {value.map((column, colIndex) => (
+        <TableRow readOnly>
+          {value.map((col, colIndex) => {
+            return (
               <TableData key={colIndex}>
                 <div
                   css={[
-                    css(table.getCellWrapperStyles(columnTypes[colIndex])),
+                    css(table.getCellWrapperStyles(rowCellTypes[colIndex])),
                     colIndex === 0 && table.cellLeftPaddingStyles,
                   ]}
                 >
                   <CodeResult
                     parentType={type}
-                    type={columnTypes[colIndex]}
-                    value={column[rowIndex]}
+                    type={rowCellTypes[colIndex]}
+                    value={col}
                     variant="block"
                   />
                 </div>
               </TableData>
-            ))}
-          </TableRow>
-        ))}
+            );
+          })}
+        </TableRow>
       </tbody>
     </Table>
   );

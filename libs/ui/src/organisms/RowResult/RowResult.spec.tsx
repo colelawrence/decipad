@@ -1,48 +1,57 @@
-import { findParentWithStyle } from '@decipad/dom-test-utils';
 import {
-  getAllByRole as getAllDescendantsByRole,
   render,
+  getAllByRole as getAllDescendantsByRole,
 } from '@testing-library/react';
+import { findParentWithStyle } from '@decipad/dom-test-utils';
 import { runCode } from '../../test-utils';
 
-import { TableResult } from '..';
+import { RowResult } from '..';
 
-const code = 'my_table = { H1 = [1, 2], H2 = ["A", "B"]}';
-it('renders a table', async () => {
-  const { getAllByRole } = render(<TableResult {...await runCode(code)} />);
+const code = `
+  Table = {
+    Names = ["Adam", "Eve"]
+    Dates = [date(2030), date(2069)]
+  }
+  Table
 
-  const headers = getAllByRole('columnheader');
-  const cells = getAllByRole('cell');
-  expect(headers).toHaveLength(2);
-  expect(cells).toHaveLength(4);
-  [...headers, ...cells].forEach((element) => expect(element).toBeVisible());
+  lookup(Table, Table.Dates == date(2030))
+`;
+it('renders a single body row table', async () => {
+  const { getAllByRole } = render(<RowResult {...await runCode(code)} />);
+
+  const rows = getAllByRole('row');
+
+  expect(rows.map((row) => row.parentElement?.tagName)).toEqual([
+    'THEAD',
+    'TBODY',
+  ]);
 });
 
 it('render side padding on cells with non-tabular content', async () => {
-  const { getByText } = render(<TableResult {...await runCode(code)} />);
+  const { getByText } = render(<RowResult {...await runCode(code)} />);
 
-  const cellPaddings = ['1', '2', 'A', 'B']
+  const cellPaddings = ['Adam', '2030']
     .map((text) => getByText(text))
     .map((cell) => findParentWithStyle(cell, 'padding')!.padding);
 
-  expect(cellPaddings).toEqual(Array(4).fill(expect.stringMatching(/.+/)));
+  expect(cellPaddings).toEqual(Array(2).fill(expect.stringMatching(/.+/)));
 });
 
 describe('dimensions', () => {
   const dimensionalCode = `
-    table1 = {
-      col11 = ["A", "B", "C"]
-      col12 = ["D", "E", "F"]
+    Table = {
+      Numbers = [[1, 2], [3, 4]]
+      MoreNumbers = [[5, 6], [7, 8]]
+      Names = ["Adam", "Eve"]
     }
-    table2 = {
-      col21 = table1
-      col22 = table1
-    }
+    Table
+    
+    lookup(Table, Table.Names == "Adam")  
   `;
 
   it('renders tables inside tables', async () => {
     const { container } = render(
-      <TableResult {...await runCode(dimensionalCode)} />
+      <RowResult {...await runCode(dimensionalCode)} />
     );
 
     const dimensions = getAllDescendantsByRole(
@@ -55,7 +64,7 @@ describe('dimensions', () => {
 
   it('renders left padding on first column cells containing another dimension', async () => {
     const { container } = render(
-      <TableResult {...await runCode(dimensionalCode)} />
+      <RowResult {...await runCode(dimensionalCode)} />
     );
 
     const dimensions = getAllDescendantsByRole(

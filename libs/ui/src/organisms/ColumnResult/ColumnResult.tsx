@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import { css } from '@emotion/react';
-import { SerializedType } from '@decipad/language';
 import { useResults } from '@decipad/react-contexts';
 import { cssVar, setCssVar } from '../../primitives';
 import { TableData } from '../../atoms';
@@ -8,22 +7,11 @@ import { TableRow } from '../../molecules';
 import { CodeResult, Table } from '..';
 import { table } from '../../styles';
 import { CodeResultProps } from '../../types';
-
-function isNestedColumnOrTable(type: SerializedType | undefined) {
-  return type != null && (type.kind === 'column' || type.kind === 'table');
-}
+import { isTabularType } from '../../utils';
 
 const rowLabelStyles = css({
   ...setCssVar('currentTextColor', cssVar('weakTextColor')),
   color: cssVar('currentTextColor'),
-});
-
-const cellPaddingStyles = css({
-  padding: `0 ${table.cellSidePadding}`,
-});
-
-const cellLeftPaddingStyles = css({
-  paddingLeft: table.cellSidePadding,
 });
 
 export const ColumnResult = ({
@@ -35,7 +23,7 @@ export const ColumnResult = ({
   const { indexLabels } = useResults();
 
   return (
-    <Table border={isNestedColumnOrTable(parentType) ? 'inner' : 'all'}>
+    <Table border={isTabularType(parentType) ? 'inner' : 'all'}>
       {/* TODO: Column caption should say the name of the variable (if there is one. */}
       <tbody>
         {value.map((row, rowIndex) => {
@@ -45,7 +33,7 @@ export const ColumnResult = ({
             <TableRow key={rowIndex} readOnly>
               {labels && (
                 <TableData>
-                  <span css={[rowLabelStyles, cellPaddingStyles]}>
+                  <span css={[rowLabelStyles, table.cellSidePaddingStyles]}>
                     {labels[rowIndex]}
                   </span>
                 </TableData>
@@ -53,12 +41,11 @@ export const ColumnResult = ({
               <TableData>
                 <div
                   css={[
-                    { display: 'grid' },
-                    !isNestedColumnOrTable(type.cellType) && cellPaddingStyles,
+                    css(table.getCellWrapperStyles(type.cellType)),
                     // In case there is a nested dimension but no labels (ie. the nested dimension
                     // will render in the first column), we need to give it some space from the row
                     // number
-                    !labels && cellLeftPaddingStyles,
+                    !labels && table.cellLeftPaddingStyles,
                   ]}
                 >
                   <CodeResult

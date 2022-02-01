@@ -4,6 +4,7 @@ import { isTabularType } from './results';
 describe('isTabularType function', () => {
   it('should be true for tabular types', () => {
     expect(isTabularType({ kind: 'column' } as SerializedType)).toBe(true);
+    expect(isTabularType({ kind: 'row' } as SerializedType)).toBe(true);
     expect(isTabularType({ kind: 'table' } as SerializedType)).toBe(true);
   });
 

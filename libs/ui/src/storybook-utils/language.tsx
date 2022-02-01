@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { DecoratorFn } from '@storybook/react';
-import { Result } from '@decipad/language';
+import { Result, SerializedTypeKind } from '@decipad/language';
 import { runCode } from '../test-utils';
 
 type CodeDecoratorFactory = (code: string) => DecoratorFn;
+
+export type WithCodeProps<T extends SerializedTypeKind> = Result<T>;
 
 export const withCode: CodeDecoratorFactory =
   (code: string) => (Story, context) => {

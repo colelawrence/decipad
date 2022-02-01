@@ -2,7 +2,14 @@ import { SerializedTypeKind } from '@decipad/language';
 import { CodeResultProps } from '../../types';
 import { NumberResult, DateResult } from '../../atoms';
 import { InlineCodeError } from '../../molecules';
-import { TableResult, ColumnResult, InlineColumnResult, RangeResult } from '..';
+import {
+  TableResult,
+  ColumnResult,
+  InlineColumnResult,
+  RangeResult,
+  RowResult,
+  InlineRowResult,
+} from '..';
 
 // Simple result components
 
@@ -52,6 +59,14 @@ const getResultMatchers = (): ResultMatcher[] => [
     component: InlineColumnResult,
     match: ({ type, variant }) =>
       type.kind === 'column' && variant === 'inline',
+  },
+  {
+    component: RowResult,
+    match: ({ type, variant }) => type.kind === 'row' && variant === 'block',
+  },
+  {
+    component: InlineRowResult,
+    match: ({ type, variant }) => type.kind === 'row' && variant === 'inline',
   },
   {
     component: FunctionResult,

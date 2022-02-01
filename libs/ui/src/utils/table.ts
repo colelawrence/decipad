@@ -29,3 +29,16 @@ export function getNumberType(
 export function getStringType(): Extract<SerializedType, { kind: 'string' }> {
   return { kind: 'string' };
 }
+
+export function toTableHeaderType(
+  type: SerializedType
+): TableCellType | undefined {
+  switch (type.kind) {
+    case 'number':
+    case 'string':
+    case 'date':
+      return type;
+    default:
+      return undefined;
+  }
+}
