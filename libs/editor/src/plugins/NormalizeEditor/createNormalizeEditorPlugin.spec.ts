@@ -11,6 +11,7 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_UL,
   H1Element,
+  Element,
 } from '../../elements';
 
 const h1Element = (): H1Element => ({
@@ -50,7 +51,7 @@ describe('the title normalization', () => {
         type: ELEMENT_PARAGRAPH,
         children: [{ text: '' }],
       },
-    ]);
+    ] as Element[]);
   });
   it('applies to moved but unchanged blocks', () => {
     editor.children = [
@@ -64,7 +65,7 @@ describe('the title normalization', () => {
         type: ELEMENT_PARAGRAPH,
         children: [{ text: 'text' }],
       },
-    ]);
+    ] as Element[]);
   });
 });
 
@@ -82,7 +83,7 @@ it.each([ELEMENT_H2, ELEMENT_UL, ELEMENT_BLOCKQUOTE])(
     expect(editor.children).toEqual([
       expect.anything(),
       { type, children: [{ text: '' }] },
-    ]);
+    ] as Element[]);
   }
 );
 it.each([ELEMENT_LI, ELEMENT_LINK, ELEMENT_CODE_LINE, 'asdf'])(
@@ -99,7 +100,7 @@ it.each([ELEMENT_LI, ELEMENT_LINK, ELEMENT_CODE_LINE, 'asdf'])(
     expect(editor.children).toEqual([
       expect.anything(),
       { type: ELEMENT_PARAGRAPH, children: [{ text: '' }] },
-    ]);
+    ] as Element[]);
   }
 );
 
@@ -109,5 +110,5 @@ it('converts text at top level to a paragraph', () => {
   expect(editor.children).toEqual([
     expect.anything(),
     { type: ELEMENT_PARAGRAPH, children: [{ text: '' }] },
-  ]);
+  ] as Element[]);
 });

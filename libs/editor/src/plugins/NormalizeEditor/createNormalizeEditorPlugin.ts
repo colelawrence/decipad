@@ -23,7 +23,7 @@ import {
   ELEMENT_UL,
 } from '../../elements';
 
-const WithNormalizeEditor = (): WithOverride => (editor) => {
+const withNormalizeEditor = (): WithOverride => (editor) => {
   const { normalizeNode } = editor;
 
   editor.normalizeNode = (entry) => {
@@ -99,4 +99,4 @@ const WithNormalizeEditor = (): WithOverride => (editor) => {
 };
 
 export const createNormalizeEditorPlugin =
-  getPlatePluginWithOverrides(WithNormalizeEditor);
+  getPlatePluginWithOverrides(withNormalizeEditor);

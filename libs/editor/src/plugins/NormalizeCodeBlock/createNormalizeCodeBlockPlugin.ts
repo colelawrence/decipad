@@ -14,6 +14,7 @@ import {
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
 } from '../../elements';
+import { normalizeExcessProperties } from '../../utils/normalize';
 
 const withNormalizeCodeBlock = (): WithOverride => (editor) => {
   const { normalizeNode } = editor;
@@ -33,9 +34,7 @@ const withNormalizeCodeBlock = (): WithOverride => (editor) => {
         }
 
         // Text must be plain
-        const props = Object.keys(Node.extractProps(lineChildNode));
-        if (props.length) {
-          Transforms.unsetNodes(editor, props[0], { at: lineChildPath });
+        if (normalizeExcessProperties(editor, lineChild)) {
           return;
         }
       }

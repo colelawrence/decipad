@@ -18,7 +18,7 @@ import {
   ELEMENT_BLOCKQUOTE,
 } from './kinds';
 import { TableData } from '../types';
-import * as marks from '../marks';
+import { MarkKind } from '../marks';
 
 // Defining specific elements
 
@@ -85,12 +85,14 @@ export interface ListItemContentElement {
 // Inline
 export interface LinkElement extends BaseElement {
   type: typeof ELEMENT_LINK;
+  children: Array<RichText>;
   url: string;
 }
 
 // Special elements
 export interface TableElement extends BaseElement {
   type: typeof ELEMENT_TABLE_INPUT;
+  children: [EmptyText];
   tableData: TableData;
 }
 export interface FetchElement extends BaseElement {
@@ -112,14 +114,13 @@ type EmptyText = {
   text: '';
 };
 type PlainText = EmptyText | { text: string };
-type RichText = PlainText & Partial<Record<keyof typeof marks, true>>;
+type RichText = PlainText & Partial<Record<MarkKind, true>>;
 
 type BlockElement =
   // Headings
   | H1Element
   | H2Element
   | H3Element
-  | TableElement
   // Text blocks
   | ParagraphElement
   | BlockquoteElement
@@ -131,10 +132,9 @@ type BlockElement =
   | OrderedListElement
   | ListItemElement
   | ListItemContentElement
-  // Inline
-  | InlineElement
   // Special elements
-  | FetchElement;
+  | FetchElement
+  | TableElement;
 type InlineElement = LinkElement;
 export type Element = BlockElement | InlineElement;
 
@@ -145,13 +145,13 @@ export type Editor = SPEditor &
         | H1Element
         | H2Element
         | H3Element
-        | TableElement
         | ParagraphElement
         | BlockquoteElement
         | CodeBlockElement
         | UnorderedListElement
         | OrderedListElement
         | FetchElement
+        | TableElement
       >;
   };
 

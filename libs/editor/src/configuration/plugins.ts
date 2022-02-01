@@ -27,6 +27,9 @@ import { createLinkPlugin } from '../plugins/Link/createLinkPlugin';
 import { createNormalizeCodeBlockPlugin } from '../plugins/NormalizeCodeBlock/createNormalizeCodeBlockPlugin';
 import { createSoftBreakPlugin } from '../plugins/SoftBreakPlugin/createSoftBreakPlugin';
 import { createNormalizeEditorPlugin } from '../plugins/NormalizeEditor/createNormalizeEditorPlugin';
+import { createNormalizeRichTextBlockPlugin } from '../plugins/NormalizeRichTextBlock/createNormalizeRichTextBlockPlugin';
+import { createNormalizePlainTextBlockPlugin } from '../plugins/NormalizePlainTextBlock/createNormalizePlainTextBlockPlugin';
+import { createNormalizeTextPlugin } from '../plugins/NormalizeText/createNormalizeTextPlugin';
 
 export const plugins = [
   // fundamentals
@@ -51,7 +54,18 @@ export const plugins = [
 
   // structure enforcement
   createNormalizeEditorPlugin(),
+
+  // TODO void block plugin (table/fetch)
+
+  createNormalizeRichTextBlockPlugin(),
+  createNormalizePlainTextBlockPlugin(),
   createNormalizeCodeBlockPlugin(),
+  // TODO NormalizeListPlugin
+
+  // TODO NormalizeLinkPlugin for props and only rich text
+
+  createNormalizeTextPlugin(),
+
   createTrailingBlockPlugin({ type: ELEMENT_PARAGRAPH }),
 
   // block manipulation
