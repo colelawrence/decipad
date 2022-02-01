@@ -14,19 +14,19 @@ import {
   createTrailingBlockPlugin,
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
+import { ELEMENT_PARAGRAPH } from '../elements';
+import { autoformatRules } from './autoformat';
+import { exitBreakOptions } from './exitBreakOptions';
+import { resetBlockTypeOptions } from './resetBlockTypeOptions';
 import { createAutoPairsPlugin } from '../plugins/AutoPairs/createAutoPairsPlugin';
 import { createCodeVariableHighlightingPlugin } from '../plugins/CodeVariableHighlighting/createCodeVariableHighlightingPlugin';
-import { createForcedLayoutPlugin } from '../plugins/ForcedLayout/createForcedLayoutPlugin';
 import { createInteractiveTablePlugin } from '../plugins/InteractiveTable/createInteractiveTablePlugin';
 import { createSentryBreadcrumbsPlugin } from '../plugins/SentryBreadcrumbsPlugin/createSentryBreadcrumbsPlugin';
 import { createMarksPlugins } from '../plugins/Marks/createMarksPlugins';
 import { createLinkPlugin } from '../plugins/Link/createLinkPlugin';
 import { createNormalizeCodeBlockPlugin } from '../plugins/NormalizeCodeBlock/createNormalizeCodeBlockPlugin';
 import { createSoftBreakPlugin } from '../plugins/SoftBreakPlugin/createSoftBreakPlugin';
-import { autoformatRules } from './autoformat';
-import { exitBreakOptions } from './exitBreakOptions';
-import { resetBlockTypeOptions } from './resetBlockTypeOptions';
-import { ELEMENT_PARAGRAPH } from '../elements';
+import { createNormalizeEditorPlugin } from '../plugins/NormalizeEditor/createNormalizeEditorPlugin';
 
 export const plugins = [
   // fundamentals
@@ -50,7 +50,8 @@ export const plugins = [
   createCodeBlockPlugin(),
 
   // structure enforcement
-  createForcedLayoutPlugin(),
+  createNormalizeEditorPlugin(),
+  createNormalizeCodeBlockPlugin(),
   createTrailingBlockPlugin({ type: ELEMENT_PARAGRAPH }),
 
   // block manipulation
@@ -65,7 +66,6 @@ export const plugins = [
   createLinkPlugin(),
 
   // code editing
-  createNormalizeCodeBlockPlugin(),
   createCodeVariableHighlightingPlugin(),
   createAutoPairsPlugin(),
 ];
