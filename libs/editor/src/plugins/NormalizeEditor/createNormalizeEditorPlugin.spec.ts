@@ -1,5 +1,5 @@
 import { createEditorPlugins, TDescendant, TElement } from '@udecode/plate';
-import { Editor } from 'slate';
+import { Editor, Transforms } from 'slate';
 import { createNormalizeEditorPlugin } from './createNormalizeEditorPlugin';
 import {
   ELEMENT_H1,
@@ -49,6 +49,20 @@ describe('the title normalization', () => {
       {
         type: ELEMENT_PARAGRAPH,
         children: [{ text: '' }],
+      },
+    ]);
+  });
+  it('applies to moved but unchanged blocks', () => {
+    editor.children = [
+      { type: ELEMENT_H1, children: [{ text: 'text' }] },
+    ] as TElement[];
+    Transforms.select(editor, { path: [0, 0], offset: 0 });
+    editor.insertNode({ children: [{ text: '' }] });
+    expect(editor.children).toEqual([
+      h1Element(),
+      {
+        type: ELEMENT_PARAGRAPH,
+        children: [{ text: 'text' }],
       },
     ]);
   });
