@@ -119,6 +119,14 @@ describe('sequences', () => {
       F(5),
     ]);
 
+    expect(await runOne(seq(l(5), l(1), l(-1)))).toEqual([
+      F(5),
+      F(4),
+      F(3),
+      F(2),
+      F(1),
+    ]);
+
     expect(
       await runOne(
         seq(
@@ -128,6 +136,16 @@ describe('sequences', () => {
         )
       )
     ).toEqual([parseUTCDate('2020-01'), parseUTCDate('2020-02')]);
+
+    expect(
+      await runOne(
+        seq(
+          date('2020-02', 'month'),
+          date('2020-01', 'month'),
+          n('ref', 'month')
+        )
+      )
+    ).toEqual([parseUTCDate('2020-02'), parseUTCDate('2020-01')]);
 
     const dates = (await runOne(
       seq(date('2020-01', 'year'), date('2020-01', 'year'), n('ref', 'month'))
@@ -143,7 +161,12 @@ describe('sequences', () => {
       await runOne(seq(date('2020-01', 'month'), date('2020-02', 'month')))
     ).toEqual([parseUTCDate('2020-01'), parseUTCDate('2020-02')]);
 
+    expect(
+      await runOne(seq(date('2020-02', 'month'), date('2020-01', 'month')))
+    ).toEqual([parseUTCDate('2020-02'), parseUTCDate('2020-01')]);
+
     expect(await runOne(seq(l(1), l(3)))).toEqual([F(1), F(2), F(3)]);
+    expect(await runOne(seq(l(3), l(1)))).toEqual([F(3), F(2), F(1)]);
   });
 });
 

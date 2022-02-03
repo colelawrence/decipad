@@ -2,7 +2,7 @@ import Fraction from '@decipad/fraction';
 import { getDefined } from '@decipad/utils';
 import { AST, Time, Date as IDate } from '..';
 import { getIdentifierString, getOfType } from '../utils';
-import { build as t, Type } from '../type';
+import { InferError, build as t, Type } from '../type';
 import {
   dateToArray,
   getJSDateUnitAndMultiplier,
@@ -22,16 +22,20 @@ export const getNumberSequenceCount = (
   start: Fraction,
   end: Fraction,
   by: Fraction
-): number | string => {
+): number | InferError => {
   const diff = start.compare(end);
   if (diff === 0) {
     return 1;
+  } else if (by.equals(0)) {
+    return InferError.sequenceStepZero();
+  } else if (Math.sign(diff) === by.compare(0)) {
+    return InferError.invalidSequenceStep(
+      start.valueOf(),
+      end.valueOf(),
+      by.valueOf()
+    );
   } else if (diff > 0) {
     return getNumberSequenceCount(end, start, by.neg());
-  } else if (by.equals(0)) {
-    return 'Sequence interval must not be zero';
-  } else if (by.valueOf() < 0) {
-    return 'Divergent sequence';
   } else {
     return end.sub(start).div(by).add(new Fraction(1)).floor().valueOf();
   }
@@ -41,7 +45,7 @@ export const getNumberSequenceCountN = (
   start: number | bigint,
   end: number | bigint,
   by: number | bigint
-): number | string =>
+): number | InferError =>
   getNumberSequenceCount(
     new Fraction(start),
     new Fraction(end),
@@ -62,11 +66,14 @@ export const getDateSequenceLength = (
   end: bigint,
   boundsSpecificity: Time.Specificity,
   by: Time.Unit
-): number | string => {
+): number | InferError => {
   // Get the end of the year, month or day.
   end = IDate.fromDateAndSpecificity(end, boundsSpecificity).getEnd();
 
   let [stepUnit, steps] = getJSDateUnitAndMultiplier(by);
+  if (start > end) {
+    steps = -steps;
+  }
 
   if (stepUnit in toSimpleTimeUnit) {
     const [newUnit, multiplier] = toSimpleTimeUnit[stepUnit];
@@ -162,7 +169,7 @@ export const inferSequence = async (
       increment
     );
 
-    return typeof countOrError === 'string'
+    return countOrError instanceof InferError
       ? t.impossible(countOrError)
       : t.column(t.date(specificity), countOrError);
   } else {
@@ -172,14 +179,20 @@ export const inferSequence = async (
     }
     const start = tryGetNumber(startN);
     const end = tryGetNumber(endN);
-    const by = byN ? tryGetNumber(byN) : new Fraction(1n);
-    if (start && end && by) {
-      const countOrError = getNumberSequenceCount(start, end, by);
-      return typeof countOrError === 'string'
-        ? t.impossible(countOrError)
-        : t.column(boundTypes, countOrError);
-    } else {
-      return t.column(boundTypes, 'unknown');
+
+    if (start && end) {
+      const by = byN
+        ? tryGetNumber(byN)
+        : start.compare(end) < 0
+        ? new Fraction(1n)
+        : new Fraction(-1n);
+      if (by) {
+        const countOrError = getNumberSequenceCount(start, end, by);
+        return countOrError instanceof InferError
+          ? t.impossible(countOrError)
+          : t.column(boundTypes, countOrError);
+      }
     }
+    return t.column(boundTypes, 'unknown');
   }
 };

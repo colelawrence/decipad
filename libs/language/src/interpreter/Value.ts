@@ -200,19 +200,24 @@ export class Column implements Value {
     return new Column(values);
   }
 
-  static fromSequence(
-    startV: Value,
-    endV: Value,
-    byV: Value = Scalar.fromValue(1)
-  ): Column {
-    const [start, end, by] = [startV, endV, byV].map(
-      (val) => val.getData() as Fraction
-    );
+  static fromSequence(startV: Value, endV: Value, byV?: Value): Column {
+    const [start, end] = [startV, endV].map((val) => val.getData() as Fraction);
+
+    const by = byV
+      ? (byV.getData() as Fraction)
+      : start.compare(end) < 0
+      ? new Fraction(1)
+      : new Fraction(-1);
 
     const array = [];
     let iterations = 0;
 
-    for (let i = start; i.compare(end) <= 0; i = i.add(by)) {
+    // helper to allow decreasing sequences
+    const cmpFn = (s: Fraction, e: Fraction, i: Fraction) => {
+      return s.compare(e) < 0 ? i.compare(e) <= 0 : i.compare(e) >= 0;
+    };
+
+    for (let i = start; cmpFn(start, end, i); i = i.add(by)) {
       if (++iterations > MAX_ITERATIONS) {
         throw new RuntimeError(
           `A maximum number of ${MAX_ITERATIONS} has been reached in sequence. Check for an unbound sequence in your code.`
@@ -229,16 +234,29 @@ export class Column implements Value {
     endD: DateValue,
     by: Time.Unit
   ): Column {
-    const start = startD.getData();
-    const end = endD.getEnd();
+    let start = startD.getData();
+    let end = endD.getData();
+    if (end >= start) {
+      end = endD.getEnd();
+    } else {
+      start = startD.getEnd();
+    }
+
     const spec = getSpecificity(by);
 
     const array = [];
 
+    // helper to allow decreasing date sequences
+    const cmpFn = (s: bigint, e: bigint, i: bigint) => {
+      return s < e ? i <= e : i >= e;
+    };
+
+    const signal = start < end ? 1 : -1;
+    const add = new TimeQuantity({ [by]: 1 * signal });
     for (
       let cur = start;
-      cur <= end;
-      cur = addTimeQuantity(cur, new TimeQuantity({ [by]: 1 }))
+      cmpFn(start, end, cur);
+      cur = addTimeQuantity(cur, add)
     ) {
       array.push(DateValue.fromDateAndSpecificity(cur, spec));
     }

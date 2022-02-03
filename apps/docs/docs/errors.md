@@ -107,6 +107,32 @@ The power component in an exponentiation can only be a simple expression (a numb
 ==> Complex expressions not supported in exponents
 ```
 
+## Sequence step must not be zero
+
+:::caution `sequence-step-zero`
+The step value on a sequence must not be zero
+
+A sequence can have an optional argument specifying its step, which
+cannot be zero.
+
+```deci live
+[1 .. 3 by 0]
+==> Sequence step must not be zero
+```
+
+## Invalid step in sequence
+
+:::caution `invalid-sequence-step`
+The step of a sequence must be compatible with the sequence
+
+If you specify a step for an ascending sequence, it must be positive. If
+you specify a step for a descending sequence, it must be negative.
+
+```deci live
+[1 .. 3 by -1]
+==> Invalid step in sequence: sequence is ascending but step is negative
+```
+
 ## Expected arg count
 
 :::caution `expected-arg-count`

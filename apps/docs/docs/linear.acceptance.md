@@ -132,7 +132,7 @@ SQRTZ = sqrt(A * 3)
 ==> 3
 ```
 
-## [ENG-326](https://linear.app/decipad/issue/ENG-139)
+## [ENG-326](https://linear.app/decipad/issue/ENG-326)
 
 ```deci live
 3600 kj in kw h
@@ -176,7 +176,7 @@ select(Table, B, A)
 ==> The selected column does not exist in the reference table
 ```
 
-## [ENG-297](https://linear.app/decipad/issue/ENG-327)
+## [ENG-297](https://linear.app/decipad/issue/ENG-297)
 
 Part 1: splitby was malfunctioning
 
@@ -193,4 +193,31 @@ lookup(Countries, Countries.Origin == "UK")
   Name = [ 'Paul' ]
 }
 }
+```
+
+## [ENG-281](https://linear.app/decipad/issue/ENG-281)
+
+```deci live
+[10 .. 1 by -2]
+==> [ 10, 8, 6, 4, 2 ]
+```
+
+```deci live
+[10 .. 5]
+==> [ 10, 9, 8, 7, 6, 5 ]
+```
+
+```deci live
+[date(2003) .. date(2000) by month]
+==> [ month 2003-12, month 2003-11, month 2003-10, month 2003-09, month 2003-08, month 2003-07, month 2003-06, month 2003-05, month 2003-04, month 2003-03, month 2003-02, month 2003-01, month 2002-12, month 2002-11, month 2002-10, month 2002-09, month 2002-08, month 2002-07, month 2002-06, month 2002-05, month 2002-04, month 2002-03, month 2002-02, month 2002-01, month 2001-12, month 2001-11, month 2001-10, month 2001-09, month 2001-08, month 2001-07, month 2001-06, month 2001-05, month 2001-04, month 2001-03, month 2001-02, month 2001-01, month 2000-12, month 2000-11, month 2000-10, month 2000-09, month 2000-08, month 2000-07, month 2000-06, month 2000-05, month 2000-04, month 2000-03, month 2000-02, month 2000-01 ]
+```
+
+```deci live
+[date(2003) .. date(2000)]
+==> [ year 2003, year 2002, year 2001, year 2000 ]
+```
+
+```deci live
+[10 .. 11 by -2]
+==> Invalid step in sequence: sequence is ascending but step is negative
 ```

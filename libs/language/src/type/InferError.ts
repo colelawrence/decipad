@@ -70,6 +70,15 @@ export type ErrSpec =
     }
   | {
       errType: 'complex-expression-exponent';
+    }
+  | {
+      errType: 'sequence-step-zero';
+    }
+  | {
+      errType: 'invalid-sequence-step';
+      start: number;
+      end: number;
+      by: number;
     };
 
 // exhaustive switch
@@ -143,6 +152,14 @@ function specToString(spec: ErrSpec): string {
     }
     case 'complex-expression-exponent': {
       return `Complex expressions not supported in exponents`;
+    }
+    case 'sequence-step-zero': {
+      return `Sequence step must not be zero`;
+    }
+    case 'invalid-sequence-step': {
+      const dir = spec.start < spec.end ? 'ascending' : 'descending';
+      const stepSignal = Math.sign(spec.by) > 0 ? 'positive' : 'negative';
+      return `Invalid step in sequence: sequence is ${dir} but step is ${stepSignal}`;
     }
   }
 }
@@ -288,6 +305,21 @@ export class InferError {
   static complexExpressionExponent() {
     return new InferError({
       errType: 'complex-expression-exponent',
+    });
+  }
+
+  static sequenceStepZero() {
+    return new InferError({
+      errType: 'sequence-step-zero',
+    });
+  }
+
+  static invalidSequenceStep(start: number, end: number, by: number) {
+    return new InferError({
+      errType: 'invalid-sequence-step',
+      start,
+      end,
+      by,
     });
   }
 

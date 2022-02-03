@@ -16,6 +16,10 @@ it('infers sequences of numbers', async () => {
   expect(await inferSequence(nilCtx, seq(l(1), l(10), l(1)))).toEqual(
     t.column(t.number(), 10)
   );
+
+  expect(await inferSequence(nilCtx, seq(l(10), l(1), l(-1)))).toEqual(
+    t.column(t.number(), 10)
+  );
 });
 
 it('catches multiple errors', async () => {
@@ -23,9 +27,13 @@ it('catches multiple errors', async () => {
     (await inferSequence(nilCtx, seq(l(start), l(end), l(by)))).errorCause
       ?.message;
 
-  expect(await msg(10, 1, 1)).toEqual('Divergent sequence');
-  expect(await msg(1, 10, -1)).toEqual('Divergent sequence');
-  expect(await msg(1, 10, 0)).toEqual('Sequence interval must not be zero');
+  expect(await msg(10, 1, 1)).toEqual(
+    'Invalid step in sequence: sequence is descending but step is positive'
+  );
+  expect(await msg(1, 10, -1)).toEqual(
+    'Invalid step in sequence: sequence is ascending but step is negative'
+  );
+  expect(await msg(1, 10, 0)).toEqual('Sequence step must not be zero');
 });
 
 describe('sequences of dates', () => {
@@ -165,6 +173,10 @@ describe('sequence counts', () => {
 
   it('allows to omit the "by" clause', async () => {
     expect((await inferSequence(nilCtx, seq(l(1), l(10)))).columnSize).toEqual(
+      10
+    );
+
+    expect((await inferSequence(nilCtx, seq(l(10), l(1)))).columnSize).toEqual(
       10
     );
 
