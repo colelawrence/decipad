@@ -152,5 +152,5 @@ A variable is a way to store a value in a name, which can then be used in furthe
 Total_Revenue = 50000 USD
 Total_Costs = 23000 USD
 Yearly_Profit = Total_Revenue - Total_Costs
-==> 27000 USD
+==> 27000 $
 ```

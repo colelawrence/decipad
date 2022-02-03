@@ -70,7 +70,7 @@ Fuel = {
 ==> {
   Year = [ year 2020, year 2021, year 2022, year 2023, year 2024, year 2025 ],
   InterestRateFromYear = [ 1, 1.08, 1.1664, 1.2597, 1.3604, 1.4693 ],
-  Price = [ 4 USD per gallon, 4.32 USD per gallon, 4.67 USD per gallon, 5.04 USD per gallon, 5.44 USD per gallon, 5.88 USD per gallon ]
+  Price = [ 4 $ per gallon, 4.32 $ per gallon, 4.67 $ per gallon, 5.04 $ per gallon, 5.44 $ per gallon, 5.88 $ per gallon ]
 }
 ```
 
@@ -93,7 +93,7 @@ Fuel = {
 }
 
 round(Fuel.Price / Cars.FuelConsumption, 2)
-==> [ [ 0.17 USD per mile, 0.09 USD per mile, 0.14 USD per mile ], [ 0.19 USD per mile, 0.1 USD per mile, 0.15 USD per mile ], [ 0.2 USD per mile, 0.1 USD per mile, 0.17 USD per mile ], [ 0.22 USD per mile, 0.11 USD per mile, 0.18 USD per mile ], [ 0.24 USD per mile, 0.12 USD per mile, 0.19 USD per mile ], [ 0.26 USD per mile, 0.13 USD per mile, 0.21 USD per mile ] ]
+==> [ [ 0.17 $ per mile, 0.09 $ per mile, 0.14 $ per mile ], [ 0.19 $ per mile, 0.1 $ per mile, 0.15 $ per mile ], [ 0.2 $ per mile, 0.1 $ per mile, 0.17 $ per mile ], [ 0.22 $ per mile, 0.11 $ per mile, 0.18 $ per mile ], [ 0.24 $ per mile, 0.12 $ per mile, 0.19 $ per mile ], [ 0.26 $ per mile, 0.13 $ per mile, 0.21 $ per mile ] ]
 ```
 
 ## The over directive
@@ -120,7 +120,7 @@ GallonsSpent = (1 / Cars.FuelConsumption) * EstimatedUsage
 DollarsSpentPerYear = round(Fuel.Price * GallonsSpent)
 
 total(DollarsSpentPerYear)
-==> [ 40566 USD, 43812 USD, 47361 USD, 51113 USD, 55170 USD, 59632 USD ]
+==> [ 40566 $, 43812 $, 47361 $, 51113 $, 55170 $, 59632 $ ]
 ```
 
 This should display the total on a per-year basis. This is because `Consumption`'s first degree of freedom is based on the Fuel table. But this doesn't make sense for us unless we're going to buy all 3 cars.
@@ -147,7 +147,7 @@ GallonsSpent = (1 / Cars.FuelConsumption) * EstimatedUsage
 DollarsSpentPerYear = round(Fuel.Price * GallonsSpent)
 
 total(DollarsSpentPerYear over Cars)
-==> [ 127608 USD, 65223 USD, 104823 USD ]
+==> [ 127608 $, 65223 $, 104823 $ ]
 ```
 
 ## Another example of dimensions combined with unit conversions

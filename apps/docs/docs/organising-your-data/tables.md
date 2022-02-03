@@ -87,8 +87,8 @@ Or analyze changes to your profits:
   }
 ==> {
   Months = [ month 2020-01, month 2020-02, month 2020-03, month 2020-04 ],
-  Profit = [ 500 GBP, 300 GBP, 125 GBP, 230 GBP ],
-  RelativeChangeInProfit = [ 500 GBP, -200 GBP, -175 GBP, 105 GBP ],
+  Profit = [ 500 £, 300 £, 125 £, 230 £ ],
+  RelativeChangeInProfit = [ 500 £, -200 £, -175 £, 105 £ ],
   PercentOfProfit = [ 43, 26, 11, 20 ]
 }
 ```

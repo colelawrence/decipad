@@ -452,8 +452,8 @@ describe('Tables', () => {
     ).toMatchInlineSnapshot(`
       Result({
         Period = [ 1, 2, 3 ],
-        Profit = [ 500 USD, 1000 USD, 1500 USD ],
-        MoneyInTheBank = [ 500 USD, 500 USD, 500 USD ]
+        Profit = [ 500 $, 1000 $, 1500 $ ],
+        MoneyInTheBank = [ 500 $, 500 $, 500 $ ]
       })
     `);
   });
@@ -727,7 +727,7 @@ describe('Units', () => {
     const { type, value } = await runCode(
       '(120 meter^2) * (50 USD/meter^2/month)'
     );
-    expect(type.toString()).toEqual('USD per month');
+    expect(type.toString()).toEqual('$ per month');
     expect(value.valueOf()).toEqual(6000);
   });
 });

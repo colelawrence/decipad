@@ -93,7 +93,7 @@ You can generate a new list that contains all the unique elements in the source 
 
 ```deci live
 unique([4 USD, 3 USD, 1 USD, 1 USD, 4 USD, 3 USD, 3 USD])
-==> [ 1 USD, 3 USD, 4 USD ]
+==> [ 1 $, 3 $, 4 $ ]
 ```
 
 ## reverse
@@ -129,5 +129,5 @@ If you have a list of numbers, like a profit per month, you might want a list th
 
 ```deci live
 stepgrowth([10 USD, 11 USD, 9 USD, 14 USD])
-==> [ 10 USD, 1 USD, -2 USD, 5 USD ]
+==> [ 10 $, 1 $, -2 $, 5 $ ]
 ```

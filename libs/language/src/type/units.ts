@@ -286,25 +286,20 @@ const isInteger = (f: Fraction): boolean => {
 };
 
 const stringifyUnit = (unit: Unit, prettify = true) => {
-  const symbol = singular(unit.unit);
+  const symbol = singular(unit.unit.toLowerCase());
   const pretty = prettyForSymbol[symbol];
-  let isSymbol = unitIsSymbol(symbol);
-  let baseUnitName = unit.unit;
-
-  if (prettify && pretty) {
-    isSymbol = true;
-    baseUnitName = pretty;
-  }
+  const isSymbol = unitIsSymbol(symbol);
 
   const multiPrefix = unit.multiplier ? unit.multiplier.valueOf() : 1;
   const prefix = multipliersToPrefixes[multiPrefix as AvailablePrefixes];
+
   const result = [
     prefix != null
       ? isSymbol
         ? prefix[0]
         : prefix[1]
       : multiPrefix.toString(),
-    baseUnitName,
+    prettify && pretty ? pretty : unit.unit,
   ];
 
   const { exp } = unit;

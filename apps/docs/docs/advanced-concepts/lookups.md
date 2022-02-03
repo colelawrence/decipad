@@ -53,9 +53,9 @@ Cashflow = {
 }
 ==> {
   Month = [ month 2023-01, month 2023-02, month 2023-03, month 2023-04, month 2023-05 ],
-  Expenses = [ 500 GBP, 500 GBP, 600 GBP, 700 GBP, 700 GBP ],
-  Income = [ 0 GBP, 400 GBP, 800 GBP, 2000 GBP, 3000 GBP ],
-  Profit = [ -500 GBP, -100 GBP, 200 GBP, 1300 GBP, 2300 GBP ]
+  Expenses = [ 500 £, 500 £, 600 £, 700 £, 700 £ ],
+  Income = [ 0 £, 400 £, 800 £, 2000 £, 3000 £ ],
+  Profit = [ -500 £, -100 £, 200 £, 1300 £, 2300 £ ]
 }
 ```
 

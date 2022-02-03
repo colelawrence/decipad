@@ -19,7 +19,7 @@ const numberInMeter = t.number([meter]);
 const numberInMeterBySecond = t.number([meter, second]);
 const numberInMeterPerSecond = t.number([meter, invSecond]);
 
-it('can follow SI unit rules and style conventions', () => {
+it('can follow SI units rules and style conventions', () => {
   expect(t.number([u('s')]).toString()).toEqual('s');
   expect(t.number([second]).toString()).toEqual('seconds');
   // cm = 0.01m
@@ -73,6 +73,51 @@ it('can follow SI unit rules and style conventions', () => {
   expect(
     t.number([u('sqin', { multiplier: new Fraction(1, 100) })]).toString()
   ).toEqual('cin²');
+  expect(
+    t.number([u('wh', { multiplier: new Fraction(1000) })]).toString()
+  ).toEqual('kWh');
+  expect(
+    t.number([u('Wh', { multiplier: new Fraction(1000) })]).toString()
+  ).toEqual('kWh');
+  expect(
+    t.number([u('EUR', { multiplier: new Fraction(1000) })]).toString()
+  ).toEqual('k€');
+  expect(
+    t.number([u('c', { multiplier: new Fraction(1) })]).toString()
+  ).toEqual('C');
+  expect(
+    t.number([u('f', { multiplier: new Fraction(1) })]).toString()
+  ).toEqual('F');
+  expect(
+    t.number([u('F', { multiplier: new Fraction(1) })]).toString()
+  ).toEqual('F');
+  expect(
+    t.number([u('Hz', { multiplier: new Fraction(1) })]).toString()
+  ).toEqual('Hz');
+  expect(
+    t.number([u('hz', { multiplier: new Fraction(1) })]).toString()
+  ).toEqual('Hz');
+  expect(
+    t.number([u('W', { multiplier: new Fraction(1) })]).toString()
+  ).toEqual('W');
+  expect(
+    t.number([u('w', { multiplier: new Fraction(1) })]).toString()
+  ).toEqual('W');
+  expect(
+    t.number([u('°c', { multiplier: new Fraction(1) })]).toString()
+  ).toEqual('°C');
+  expect(
+    t.number([u('°C', { multiplier: new Fraction(1) })]).toString()
+  ).toEqual('°C');
+  expect(
+    t.number([u('SEK', { multiplier: new Fraction(1) })]).toString()
+  ).toEqual('kr');
+  expect(
+    t.number([u('v', { multiplier: new Fraction(1) })]).toString()
+  ).toEqual('V');
+  expect(
+    t.number([u('V', { multiplier: new Fraction(1) })]).toString()
+  ).toEqual('V');
 });
 
 it.todo('support yotta and zetta');

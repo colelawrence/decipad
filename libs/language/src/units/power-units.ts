@@ -4,7 +4,7 @@ import { UnitOfMeasure } from './known-units';
 export const units: UnitOfMeasure[] = [
   {
     name: 'watt',
-    symbols: ['W', 'VA'],
+    symbols: ['w', 'va'],
     baseQuantity: 'power',
     pretty: 'W',
     toBaseQuantity: identity,

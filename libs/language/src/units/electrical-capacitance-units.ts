@@ -4,7 +4,7 @@ import { identity } from '../utils';
 export const units: UnitOfMeasure[] = [
   {
     name: 'farad',
-    symbols: ['F'],
+    symbols: ['f'],
     pretty: 'F',
     baseQuantity: 'electrical capacitance',
     toBaseQuantity: identity,

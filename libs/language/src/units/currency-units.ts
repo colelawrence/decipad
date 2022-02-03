@@ -31,6 +31,7 @@ export const units: UnitOfMeasure[] = [
     name: 'swedishkrona',
     symbols: ['sek'],
     baseQuantity: 'SEK',
+    pretty: 'kr',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
   },
