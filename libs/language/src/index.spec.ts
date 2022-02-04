@@ -708,7 +708,7 @@ describe('Units', () => {
       await runCode(`
         Speed = 6 meter/second
 
-        Distance = Speed / 3 meter
+        Frequency = Speed / (3 meter)
       `)
     ).toMatchObject({
       value: F(2),
@@ -1038,7 +1038,7 @@ describe('number units work together', () => {
   });
 
   it('divides two simple units', async () => {
-    expect(await runCode(`3 kilometers / 1 minute`)).toMatchObject({
+    expect(await runCode(`3 kilometers / ( 1 minute )`)).toMatchObject({
       value: F(3, 1),
       type: t.number({
         type: 'units',
@@ -1373,28 +1373,28 @@ describe('number units work together', () => {
   });
 
   it('divides and cancels unknown units', async () => {
-    expect(await runCode(`1 banana / 3 bananas`)).toMatchObject({
+    expect(await runCode(`1 banana / ( 3 bananas )`)).toMatchObject({
       value: F(1, 3),
       type: t.number(),
     });
   });
 
   it('divides and cancels known units', async () => {
-    expect(await runCode(`1 hour / 3 hours`)).toMatchObject({
+    expect(await runCode(`1 hour / ( 3 hours )`)).toMatchObject({
       value: F(1, 3),
       type: t.number(),
     });
   });
 
   it('divides and cancels time units', async () => {
-    expect(await runCode(`1 hour / 3 minutes`)).toMatchObject({
+    expect(await runCode(`1 hour / ( 3 minutes )`)).toMatchObject({
       value: F(20),
       type: t.number(),
     });
   });
 
   it('autoconverts time units correctly', async () => {
-    expect(await runCode(`1 hour / 3 minutes^2`)).toMatchObject({
+    expect(await runCode(`1 hour / ( 3 minutes^2 )`)).toMatchObject({
       value: F(20),
       type: t.number(U('minutes', { exp: F(-1) })),
     });
@@ -1654,7 +1654,7 @@ describe('math operators', () => {
     });
   });
   it('sqrt works on non-rational results by approximation', async () => {
-    expect(await runCode(`sqrt(60 m / 9.8m / s^2)`)).toMatchObject({
+    expect(await runCode(`sqrt(60 m / (9.8m) / s^2)`)).toMatchObject({
       value: F(9032400, 3650401),
       type: t.number(U('s', { exp: F(-1) })),
     });

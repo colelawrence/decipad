@@ -230,6 +230,10 @@ const implicitMultHandler = (d, _l, reject) => {
   const left = d[0];
   const right = d[2] || d[1];
 
+  if (right.type === 'literal') {
+    return reject;
+  }
+
   // disambiguate things like `2 - 1` <- this is not `2 * (- 1)`!
   if (right.type === 'function-call') {
     const funcRef = right.args[0];
@@ -1189,48 +1193,42 @@ let ParserRules = [
     symbols: ['divMulOp', '_', 'divMulOperator', '_', 'powOp'],
     postprocess: basicBinop,
   },
-  { name: 'powOp', symbols: ['implicitMult'], postprocess: id },
+  {
+    name: 'divMulOp',
+    symbols: ['divMulOp', 'ref'],
+    postprocess: implicitMultHandler,
+  },
+  {
+    name: 'divMulOp',
+    symbols: ['divMulOp', '__', 'powOp'],
+    postprocess: implicitMultHandler,
+  },
+  { name: 'powOp', symbols: ['primary'], postprocess: id },
   {
     name: 'powOp',
-    symbols: ['implicitMult', '_', 'powOperator', '_', 'powOp'],
+    symbols: ['primary', '_', 'powOperator', '_', 'powOp'],
     postprocess: basicBinop,
   },
-  { name: 'implicitMult', symbols: ['primary'], postprocess: id },
-  {
-    name: 'implicitMult',
-    symbols: ['implicitMult', 'ref'],
-    postprocess: implicitMultHandler,
-  },
-  {
-    name: 'implicitMult',
-    symbols: ['implicitMult', '__', 'nonLitPrimary'],
-    postprocess: implicitMultHandler,
-  },
-  { name: 'primary', symbols: ['nonLitPrimary'], postprocess: id },
   { name: 'primary', symbols: ['literal'], postprocess: id },
-  { name: 'nonLitPrimary', symbols: ['functionCall'], postprocess: id },
-  { name: 'nonLitPrimary', symbols: ['select'], postprocess: id },
-  { name: 'nonLitPrimary', symbols: ['ref'], postprocess: id },
+  { name: 'primary', symbols: ['functionCall'], postprocess: id },
+  { name: 'primary', symbols: ['select'], postprocess: id },
+  { name: 'primary', symbols: ['ref'], postprocess: id },
+  { name: 'primary', symbols: ['parenthesizedExpression'], postprocess: id },
   {
-    name: 'nonLitPrimary',
-    symbols: ['parenthesizedExpression'],
-    postprocess: id,
-  },
-  {
-    name: 'nonLitPrimary',
+    name: 'primary',
     symbols: [{ literal: '-' }, '_', 'parenthesizedExpression'],
     postprocess: unaryMinusHandler,
   },
   {
-    name: 'nonLitPrimary',
+    name: 'primary',
     symbols: [{ literal: '-' }, '_', 'ref'],
     postprocess: unaryMinusHandler,
   },
-  { name: 'nonLitPrimary$subexpression$1', symbols: [{ literal: '!' }] },
-  { name: 'nonLitPrimary$subexpression$1', symbols: [{ literal: 'not' }] },
+  { name: 'primary$subexpression$1', symbols: [{ literal: '!' }] },
+  { name: 'primary$subexpression$1', symbols: [{ literal: 'not' }] },
   {
-    name: 'nonLitPrimary',
-    symbols: ['nonLitPrimary$subexpression$1', '_', 'expression'],
+    name: 'primary',
+    symbols: ['primary$subexpression$1', '_', 'expression'],
     postprocess: (d) => {
       return addArrayLoc(
         {
@@ -1256,45 +1254,14 @@ let ParserRules = [
       );
     },
   },
+  { name: 'primary$subexpression$2', symbols: ['ref'] },
+  { name: 'primary$subexpression$2', symbols: ['functionCall'] },
+  { name: 'primary$subexpression$2', symbols: ['parenthesizedExpression'] },
+  { name: 'primary$subexpression$2', symbols: ['select'] },
   {
-    name: 'nonLitPrimary',
-    symbols: ['primary', '_', { literal: '^' }, '_', 'int'],
-    postprocess: (d) => {
-      const left = d[0];
-      const right = makeNumber(d, d[4].n);
-
-      return addArrayLoc(
-        {
-          type: 'function-call',
-          args: [
-            {
-              type: 'funcref',
-              args: ['^'],
-            },
-            addArrayLoc(
-              {
-                type: 'argument-list',
-                args: [left, right],
-              },
-              d
-            ),
-          ],
-        },
-        d
-      );
-    },
-  },
-  { name: 'nonLitPrimary$subexpression$2', symbols: ['ref'] },
-  { name: 'nonLitPrimary$subexpression$2', symbols: ['functionCall'] },
-  {
-    name: 'nonLitPrimary$subexpression$2',
-    symbols: ['parenthesizedExpression'],
-  },
-  { name: 'nonLitPrimary$subexpression$2', symbols: ['select'] },
-  {
-    name: 'nonLitPrimary',
+    name: 'primary',
     symbols: [
-      'nonLitPrimary$subexpression$2',
+      'primary$subexpression$2',
       '_',
       { literal: '.' },
       '_',
@@ -1375,6 +1342,7 @@ let ParserRules = [
     },
   },
   { name: 'powOperator$subexpression$1', symbols: [{ literal: '**' }] },
+  { name: 'powOperator$subexpression$1', symbols: [{ literal: '^' }] },
   {
     name: 'powOperator',
     symbols: ['powOperator$subexpression$1'],

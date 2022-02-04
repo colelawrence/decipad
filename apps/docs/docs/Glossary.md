@@ -55,7 +55,7 @@ A dimension is a category that can be broken down into different items.
 Exponentiation is the mathematical operation of raising a quantity to a power.
 
 ```deci live
-3 meters ** 2
+(3 meters) ** 2
 ==> 9 meters²
 ```
 

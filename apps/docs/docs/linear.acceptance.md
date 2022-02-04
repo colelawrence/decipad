@@ -132,6 +132,13 @@ SQRTZ = sqrt(A * 3)
 ==> 3
 ```
 
+## [ENG-308](https://linear.app/decipad/issue/ENG-308)
+
+```deci live
+round(1/2 pint in ml)
+==> 284 ml
+```
+
 ## [ENG-326](https://linear.app/decipad/issue/ENG-326)
 
 ```deci live

@@ -5,6 +5,10 @@ const implicitMultHandler = (d, _l, reject) => {
   const left = d[0]
   const right = d[2] || d[1]
 
+  if (right.type === 'literal') {
+    return reject;
+  }
+
   // disambiguate things like `2 - 1` <- this is not `2 * (- 1)`!
   if (right.type === 'function-call') {
     const funcRef = right.args[0];
@@ -55,7 +59,7 @@ const unaryMinusHandler = (d) => {
 
 
 expression    -> overExp                                {% id %}
-expression    -> fetchData                             {% id %}
+expression    -> fetchData                              {% id %}
 
 overExp       -> asExp                                  {% id %}
 overExp       -> overExp _ "over" _ genericIdentifier   {%
@@ -126,31 +130,24 @@ addSubUp      -> addSubUp _ additiveOperator _ divMulOp {%
                                                         }
                                                         %}
 
-divMulOp      -> powOp                                  {% id %}
-divMulOp      -> divMulOp _ divMulOperator _ powOp      {% basicBinop %}
+divMulOp           -> powOp                             {% id %}
+divMulOp           -> divMulOp _ divMulOperator _ powOp {% basicBinop %}
+divMulOp           -> divMulOp ref                      {% implicitMultHandler %}
+divMulOp           -> divMulOp __  powOp                {% implicitMultHandler %}
 
-powOp         -> implicitMult                           {% id %}
-powOp         -> implicitMult _ powOperator _ powOp     {% basicBinop %}
+powOp              -> primary                           {% id %}
+powOp              -> primary _ powOperator _ powOp     {% basicBinop %}
 
-implicitMult  -> primary                                {% id %}
-implicitMult  -> implicitMult ref                       {% implicitMultHandler %}
-implicitMult  -> implicitMult __ nonLitPrimary          {% implicitMultHandler %}
-
-primary            -> nonLitPrimary                     {% id %}
 primary            -> literal                           {% id %}
+primary            -> functionCall                      {% id %}
+primary            -> select                            {% id %}
+primary            -> ref                               {% id %}
+primary            -> parenthesizedExpression           {% id %}
 
-nonLitPrimary      -> functionCall                      {% id %}
-nonLitPrimary      -> select                            {% id %}
+primary            -> "-" _ parenthesizedExpression     {% unaryMinusHandler %}
+primary            -> "-" _ ref                         {% unaryMinusHandler %}
 
-
-nonLitPrimary      -> ref                               {% id %}
-
-nonLitPrimary      -> parenthesizedExpression           {% id %}
-
-nonLitPrimary      -> "-" _ parenthesizedExpression     {% unaryMinusHandler %}
-nonLitPrimary      -> "-" _ ref                         {% unaryMinusHandler %}
-
-nonLitPrimary      -> ("!" | "not") _ expression        {%
+primary            -> ("!" | "not") _ expression        {%
                                                         (d) => {
                                                           return addArrayLoc({
                                                             type: 'function-call',
@@ -168,28 +165,7 @@ nonLitPrimary      -> ("!" | "not") _ expression        {%
                                                         }
                                                         %}
 
-nonLitPrimary     -> primary _ "^" _ int                {%
-                                                        (d) => {
-                                                          const left = d[0]
-                                                          const right = makeNumber(d, d[4].n)
-
-                                                          return addArrayLoc({
-                                                            type: 'function-call',
-                                                            args: [
-                                                              {
-                                                                type: 'funcref',
-                                                                args: ['^'],
-                                                              },
-                                                              addArrayLoc({
-                                                                type: 'argument-list',
-                                                                args: [left, right]
-                                                              }, d)
-                                                            ],
-                                                          }, d)
-                                                        }
-                                                        %}
-
-nonLitPrimary -> (ref | functionCall | parenthesizedExpression | select) _ "." _ %identifier {%
+primary       -> (ref | functionCall | parenthesizedExpression | select) _ "." _ %identifier {%
                                                         (d) =>
                                                           addArrayLoc({
                                                             type: 'property-access',
@@ -202,9 +178,7 @@ nonLitPrimary -> (ref | functionCall | parenthesizedExpression | select) _ "." _
 
 # This acts like a precedence black hole, where a composed expression can
 # become a primary expression
-parenthesizedExpression -> "(" _ expression _ ")"       {%
-                                                        (d) => addArrayLoc(d[2], d)
-                                                        %}
+parenthesizedExpression -> "(" _ expression _ ")"       {% (d) => addArrayLoc(d[2], d) %}
 
 
 #################
@@ -219,19 +193,13 @@ function simpleOperator(d) {
 }
 %}
 
-orOperator -> ("||" | "or")                             {% simpleOperator %}
-
-andOperator -> ("&&" | "and")                           {% simpleOperator %}
-
-eqDiffOperator -> ("==" | "!=")                         {% simpleOperator %}
-
-cmpOperator -> (">" | "<" | "<=" | ">=")                {% simpleOperator %}
-
-additiveOperator  -> ("-" | "+")                        {% simpleOperator %}
-
-divMulOperator -> ("*" | "/" | "contains")              {% simpleOperator %}
-
-divMulOperator -> __ "%"                                {%
+orOperator         -> ("||" | "or")                     {% simpleOperator %}
+andOperator        -> ("&&" | "and")                    {% simpleOperator %}
+eqDiffOperator     -> ("==" | "!=")                     {% simpleOperator %}
+cmpOperator        -> (">" | "<" | "<=" | ">=")         {% simpleOperator %}
+additiveOperator   -> ("-" | "+")                       {% simpleOperator %}
+divMulOperator     -> ("*" | "/" | "contains")          {% simpleOperator %}
+divMulOperator     -> __ "%"                            {%
                                                         (d) => {
                                                           return addArrayLoc({
                                                             name: d[1].value,
@@ -239,4 +207,4 @@ divMulOperator -> __ "%"                                {%
                                                         }
                                                         %}
 
-powOperator -> ("**")                                   {% simpleOperator %}
+powOperator        -> ("**" | "^")                      {% simpleOperator %}
