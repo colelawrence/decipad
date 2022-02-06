@@ -422,6 +422,12 @@ describe('convert', () => {
     expect(convertBetweenUnits(F(16), U('bits'), U('byte'))).toMatchObject(
       F(2)
     );
+    expect(convertBetweenUnits(F(20), U('bits'), U('byte'))).toMatchObject(
+      F(5, 2)
+    );
+    expect(convertBetweenUnits(F(7, 2), U('byte'), U('bit'))).toMatchObject(
+      F(28)
+    );
   });
 
   it('can convert between known units with negative exponent', () => {

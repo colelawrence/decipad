@@ -1,9 +1,8 @@
 import { UnitOfMeasure } from './known-units';
-import { identity } from '../utils';
+import { identity, invert } from '../utils';
 
 type Converter = UnitOfMeasure['toBaseQuantity'];
 const byte: Converter = (x) => x.mul(8);
-const invertbyte: Converter = (x) => x.div(8).ceil();
 
 export const units: UnitOfMeasure[] = [
   {
@@ -16,8 +15,7 @@ export const units: UnitOfMeasure[] = [
     name: 'byte',
     pretty: 'B',
     baseQuantity: 'information',
-    doesNotScaleOnConversion: true,
     toBaseQuantity: byte,
-    fromBaseQuantity: invertbyte,
+    fromBaseQuantity: invert(byte),
   },
 ];
