@@ -1,8 +1,8 @@
 import { getOperatorByName } from './operators';
 import { automapValues, automapValuesForReducer } from '../dimtools';
 
-import { Value, AnyValue, Column, fromJS } from '../interpreter/Value';
-import { getDefined, getInstanceof } from '../utils';
+import { Value, AnyValue, fromJS } from '../interpreter/Value';
+import { getDefined } from '../utils';
 import { Realm, RuntimeError } from '../interpreter';
 import type { Type } from '../type';
 import { autoconvertResult, autoconvertArguments } from '../units';
@@ -56,11 +56,7 @@ function callBuiltinAfterAutoconvert(
   };
 
   if (builtin.isReducer) {
-    return automapValuesForReducer(
-      argTypes[0],
-      getInstanceof(args[0], Column),
-      lowerDimFn
-    );
+    return automapValuesForReducer(argTypes[0], args[0], lowerDimFn);
   }
 
   return automapValues(argTypes, args, lowerDimFn, builtin.argCardinalities);

@@ -114,14 +114,6 @@ export const reduced = checker((me: Type) => {
   }
 });
 
-export const reducedOrSelf = checker((me: Type) => {
-  if (me.cellType != null) {
-    return me.cellType;
-  } else {
-    return me;
-  }
-});
-
 export const reducedToLowest = checker((me: Type) => {
   while (me.cellType) {
     me = me.cellType;

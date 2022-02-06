@@ -125,9 +125,10 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
 
   sortby: {
     argCount: 2,
-    functorNoAutomap: ([table, column]) =>
+    argCardinalities: [1, 2],
+    functor: ([table, column]) =>
       Type.combine(column.isColumn().withAtParentIndex(), table.isTable()),
-    fnValuesNoAutomap: ([_table, _column]) => {
+    fnValues: ([_table, _column]) => {
       const column = getInstanceof(_column, Column);
       const sortMap = column.sortMap();
       const table = getInstanceof(_table, Table);
@@ -141,10 +142,9 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
       Type.combine(
         column.isColumn().reduced().isScalar('boolean'),
         table.isTable(),
-        (table) =>
-          produce(table, (table) => {
-            table.tableLength = 'unknown';
-          })
+        produce((table) => {
+          table.tableLength = 'unknown';
+        })
       ),
     fnValuesNoAutomap: ([_table, _column]) => {
       const filterMap = getInstanceof(_column, Column).getData() as boolean[];

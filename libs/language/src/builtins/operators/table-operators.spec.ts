@@ -193,18 +193,15 @@ describe('table operators', () => {
       columnTypes: [t.number(U('bananas'))],
     });
     const column = t.column(t.number(U('bananas')), 3, undefined, 1);
-    expect(operators.sortby.functorNoAutomap!([table, column])).toMatchObject(
-      table
-    );
+    expect(operators.sortby.functor!([table, column])).toMatchObject(table);
 
     const tableValue = Table.fromNamedColumns(
       [fromJS([1, 2, 3]), fromJS([6, 4, 5])],
       ['A', 'B']
     );
     const columnValue = tableValue.getColumn('B');
-    expect(
-      operators.sortby.fnValuesNoAutomap?.([tableValue, columnValue]).getData()
-    ).toMatchInlineSnapshot(`
+    expect(operators.sortby.fnValues?.([tableValue, columnValue]).getData())
+      .toMatchInlineSnapshot(`
       Array [
         Array [
           Fraction(2),
@@ -227,7 +224,7 @@ describe('table operators', () => {
       columnTypes: [t.number(U('bananas')), t.boolean()],
     });
     const column = t.column(t.boolean(), 3, undefined, 1);
-    expect(operators.filter.functorNoAutomap!([table, column])).toMatchObject(
+    expect(operators.filter.functorNoAutomap?.([table, column])).toMatchObject(
       t.table({
         length: 'unknown',
         columnNames: ['indexcolumn', 'booooleans'],

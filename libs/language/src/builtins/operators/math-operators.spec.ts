@@ -28,56 +28,38 @@ describe('math operators', () => {
     expect(operators.rounddown.fn?.(F(1127, 10)).valueOf()).toBe(112);
   });
 
-  it('max of a number is itself', () => {
-    expect(operators.max.fnValuesNoAutomap?.([fromJS(2)])).toEqual(fromJS(2));
-  });
-
   it('max of a list of numbers', () => {
-    expect(operators.max.fnValuesNoAutomap?.([fromJS([2, 4, 3])])).toEqual(
-      fromJS(4)
-    );
-  });
-
-  it('min of a number is itself', () => {
-    expect(operators.min.fnValuesNoAutomap?.([fromJS(2)])).toEqual(fromJS(2));
+    expect(operators.max.fnValues?.([fromJS([2, 4, 3])])).toEqual(fromJS(4));
   });
 
   it('min of a list of numbers', () => {
-    expect(operators.min.fnValuesNoAutomap?.([fromJS([2, 4, 3])])).toEqual(
-      fromJS(2)
-    );
+    expect(operators.min.fnValues?.([fromJS([2, 4, 3])])).toEqual(fromJS(2));
   });
 
   it('average of a list of numbers', () => {
-    expect(operators.average.fnValuesNoAutomap?.([fromJS([2, 4, 3])])).toEqual(
+    expect(operators.average.fnValues?.([fromJS([2, 4, 3])])).toEqual(
       fromJS(3)
-    );
-  });
-
-  it('average of a number is that number', () => {
-    expect(operators.average.fnValuesNoAutomap?.([fromJS(2)])).toEqual(
-      fromJS(2)
     );
   });
 
   it('averageif: averages the elements against boolean elements in a second list', () => {
     expect(
-      operators.averageif.functorNoAutomap!([
+      operators.averageif.functor!([
         t.column(t.number(), 3),
         t.column(t.boolean(), 3),
       ])
     ).toMatchObject(t.number());
 
     expect(
-      operators.averageif.fnValuesNoAutomap?.([
+      operators.averageif.fnValues?.([
         fromJS([1, 2, 3]),
         fromJS([true, false, true]),
       ])
     ).toMatchInlineSnapshot(`
-    FractionValue {
-      "value": Fraction(2),
-    }
-  `);
+      FractionValue {
+        "value": Fraction(2),
+      }
+    `);
   });
 
   it('calculates sqrt', () => {

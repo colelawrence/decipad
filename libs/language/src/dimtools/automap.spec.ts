@@ -533,7 +533,7 @@ describe('automapValues', () => {
             ]),
           ],
           combine,
-          [1, 1, 1]
+          [1, 1]
         ).getData()
       ).toMatchInlineSnapshot(`
         Array [
@@ -551,10 +551,13 @@ describe('automapValues', () => {
       `);
     });
 
-    it('panics with less than 1 dimension', () => {
-      expect(() => {
-        automapValues([t.number()], [Values.fromJS(1)], sumOne, [2]);
-      }).toThrow(/Panic/i);
+    it('heightens dimensions if needed', () => {
+      expect(automapValues([t.number()], [Values.fromJS(1)], sumOne, [2]))
+        .toMatchInlineSnapshot(`
+          FractionValue {
+            "value": Fraction(1),
+          }
+        `);
     });
   });
 
@@ -617,99 +620,129 @@ describe('automap for reducers', () => {
     Values.fromJS((value.getData() as Fraction[]).reduce((a, b) => a.add(b)));
   const sumFunctor = ([type]: Type[]) => type.reduced().isScalar('number');
 
-  it('automapTypesForReducer can call a reducer', () => {
-    const oneDeeType = t.column(t.number(), 1, 'X');
+  describe('automapTypesForReducer', () => {
+    it('automapTypesForReducer can call a reducer', () => {
+      const oneDeeType = t.column(t.number(), 1, 'X');
 
-    expect(
-      automapTypesForReducer(oneDeeType, sumFunctor).toString()
-    ).toMatchInlineSnapshot(`"<number>"`);
+      expect(
+        automapTypesForReducer(oneDeeType, sumFunctor).toString()
+      ).toMatchInlineSnapshot(`"<number>"`);
+    });
+
+    it('automapTypesForReducer can reduce', () => {
+      const twoDeeType = t.column(t.column(t.number(), 1, 'X'), 2, 'Y');
+
+      expect(
+        automapTypesForReducer(twoDeeType, sumFunctor).toString()
+      ).toMatchInlineSnapshot(`"<number> x 2"`);
+    });
+
+    it('automapTypesForReducer can reduce the other way', () => {
+      const twoDeeType = t.column(t.column(t.number(), 2, 'X'), 1, 'Y');
+
+      expect(
+        automapTypesForReducer(twoDeeType, sumFunctor).toString()
+      ).toMatchInlineSnapshot(`"<number> x 1"`);
+    });
+
+    it('automapTypesForReducer works with 1D arguments', () => {
+      const oneDeeType = t.number();
+
+      expect(
+        automapTypesForReducer(oneDeeType, sumFunctor).toString()
+      ).toMatchInlineSnapshot(`"<number>"`);
+    });
   });
 
-  it('automapTypesForReducer can reduce', () => {
-    const twoDeeType = t.column(t.column(t.number(), 1, 'X'), 2, 'Y');
+  describe('automapValuesForReducer', () => {
+    it('automapValuesForReducer can call a reducer', () => {
+      const oneDeeType = t.column(t.number(), 1, 'X');
+      const oneDeeValue = Values.fromJS([1, 2]);
 
-    expect(
-      automapTypesForReducer(twoDeeType, sumFunctor).toString()
-    ).toMatchInlineSnapshot(`"<number> x 2"`);
-  });
+      expect(
+        automapValuesForReducer(
+          oneDeeType,
+          oneDeeValue as Values.Column,
+          sum
+        )?.getData()
+      ).toMatchInlineSnapshot(`Fraction(3)`);
+    });
 
-  it('automapTypesForReducer can reduce the other way', () => {
-    const twoDeeType = t.column(t.column(t.number(), 2, 'X'), 1, 'Y');
+    it('automapValuesForReducer can reduce', () => {
+      const twoDeeType = t.column(t.column(t.number(), 1, 'X'), 2, 'Y');
+      const twoDeeValue = Values.fromJS([[1n], [2n]]);
 
-    expect(
-      automapTypesForReducer(twoDeeType, sumFunctor).toString()
-    ).toMatchInlineSnapshot(`"<number> x 1"`);
-  });
+      expect(
+        automapValuesForReducer(
+          twoDeeType,
+          twoDeeValue as Values.Column,
+          sum
+        )?.getData()
+      ).toMatchInlineSnapshot(`
+        Array [
+          Fraction(1),
+          Fraction(2),
+        ]
+      `);
+    });
 
-  it('automapValuesForReducer can call a reducer', () => {
-    const oneDeeType = t.column(t.number(), 1, 'X');
-    const oneDeeValue = Values.fromJS([1, 2]);
+    it('automapValuesForReducer can reduce the other way', () => {
+      const twoDeeType = t.column(t.column(t.number(), 2, 'X'), 1, 'Y');
+      const twoDeeValue = Values.fromJS([[1n, 2n]]);
 
-    expect(
-      automapValuesForReducer(
+      expect(
+        automapValuesForReducer(
+          twoDeeType,
+          twoDeeValue as Values.Column,
+          sum
+        )?.getData()
+      ).toMatchInlineSnapshot(`
+        Array [
+          Fraction(3),
+        ]
+      `);
+    });
+
+    it('can pass the correct types to the function', () => {
+      const mapFn = jest.fn(() => Values.fromJS(1));
+
+      const oneDeeType = t.column(t.number(), 2, 'X');
+      const oneDeeValue = Values.fromJS([1n, 2n]);
+
+      automapValuesForReducer(oneDeeType, oneDeeValue as Values.Column, mapFn);
+
+      expect(mapFn).toHaveBeenCalledWith([oneDeeValue], [oneDeeType]);
+    });
+
+    it('can pass the correct types to the function (with higher-dimensional args)', () => {
+      const mapFn = jest.fn(() => Values.fromJS(1));
+
+      const oneDeeType = t.column(t.number(), 2, 'X');
+      const twoDeeType = t.column(oneDeeType, 1, 'Y');
+      const oneDeeValue = Values.fromJS([1n, 2n]);
+      const twoDeeValue = Values.Column.fromValues([oneDeeValue]);
+
+      automapValuesForReducer(twoDeeType, twoDeeValue as Values.Column, mapFn);
+
+      expect(mapFn).toHaveBeenCalledWith([oneDeeValue], [oneDeeType]);
+    });
+
+    it('Works with 1-dimensional arg', () => {
+      const mapFn = jest.fn(() => Values.fromJS('ret'));
+
+      const oneDeeType = t.string();
+      const oneDeeValue = Values.fromJS([new Fraction(1)]);
+
+      const ret = automapValuesForReducer(
         oneDeeType,
         oneDeeValue as Values.Column,
-        sum
-      )?.getData()
-    ).toMatchInlineSnapshot(`Fraction(3)`);
-  });
-
-  it('automapValuesForReducer can reduce', () => {
-    const twoDeeType = t.column(t.column(t.number(), 1, 'X'), 2, 'Y');
-    const twoDeeValue = Values.fromJS([[1n], [2n]]);
-
-    expect(
-      automapValuesForReducer(
-        twoDeeType,
-        twoDeeValue as Values.Column,
-        sum
-      )?.getData()
-    ).toMatchInlineSnapshot(`
-      Array [
-        Fraction(1),
-        Fraction(2),
-      ]
-    `);
-  });
-
-  it('automapValuesForReducer can reduce the other way', () => {
-    const twoDeeType = t.column(t.column(t.number(), 2, 'X'), 1, 'Y');
-    const twoDeeValue = Values.fromJS([[1n, 2n]]);
-
-    expect(
-      automapValuesForReducer(
-        twoDeeType,
-        twoDeeValue as Values.Column,
-        sum
-      )?.getData()
-    ).toMatchInlineSnapshot(`
-      Array [
-        Fraction(3),
-      ]
-    `);
-  });
-
-  it('can pass the correct types to the function', () => {
-    const mapFn = jest.fn(() => Values.fromJS(1));
-
-    const oneDeeType = t.column(t.number(), 2, 'X');
-    const oneDeeValue = Values.fromJS([1n, 2n]);
-
-    automapValuesForReducer(oneDeeType, oneDeeValue as Values.Column, mapFn);
-
-    expect(mapFn).toHaveBeenCalledWith([oneDeeValue], [oneDeeType]);
-  });
-
-  it('can pass the correct types to the function (with higher-dimensional args)', () => {
-    const mapFn = jest.fn(() => Values.fromJS(1));
-
-    const oneDeeType = t.column(t.number(), 2, 'X');
-    const twoDeeType = t.column(oneDeeType, 1, 'Y');
-    const oneDeeValue = Values.fromJS([1n, 2n]);
-    const twoDeeValue = Values.Column.fromValues([oneDeeValue]);
-
-    automapValuesForReducer(twoDeeType, twoDeeValue as Values.Column, mapFn);
-
-    expect(mapFn).toHaveBeenCalledWith([oneDeeValue], [oneDeeType]);
+        mapFn
+      );
+      expect(ret).toEqual(Values.fromJS('ret'));
+      expect(mapFn).toHaveBeenCalledWith(
+        [Values.Column.fromValues([oneDeeValue])],
+        [t.column(oneDeeType, 1)]
+      );
+    });
   });
 });

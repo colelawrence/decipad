@@ -17,7 +17,6 @@ import {
   multiplyUnit,
   noUnitsOrSameUnitsAs,
   reduced,
-  reducedOrSelf,
   reducedToLowest,
   sameAs,
   sameUnitsAs,
@@ -224,10 +223,6 @@ export class Type {
 
   reduced(): Type {
     return reduced(this);
-  }
-
-  reducedOrSelf(): Type {
-    return reducedOrSelf(this);
   }
 
   reducedToLowest(): Type {

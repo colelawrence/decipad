@@ -19,12 +19,11 @@ export const reducerOperators: { [fname: string]: BuiltinSpec } = {
   sumif: {
     argCount: 2,
     noAutoconvert: true,
-    fnValuesNoAutomap: (args: Value[]) => {
-      const [__numbers, __bools] = args;
-      const _numbers = __numbers.getData();
-      const numbers = Array.isArray(_numbers) ? _numbers : [_numbers];
-      const _bools = __bools.getData();
-      const bools = Array.isArray(_bools) ? _bools : [_bools];
+    argCardinalities: [2, 2],
+    fnValues: ([_numbers, _bools]: Value[]) => {
+      const numbers = _numbers.getData() as Fraction[];
+      const bools = _bools.getData() as boolean[];
+
       return fromJS(
         numbers.reduce<Fraction>(
           (count, elem, index) =>
@@ -33,10 +32,10 @@ export const reducerOperators: { [fname: string]: BuiltinSpec } = {
         )
       );
     },
-    functorNoAutomap: ([numbers, booleans]) =>
+    functor: ([numbers, booleans]) =>
       Type.combine(
-        booleans.reducedOrSelf().isScalar('boolean'),
-        numbers.reducedOrSelf().isScalar('number')
+        booleans.reduced().isScalar('boolean'),
+        numbers.reduced().isScalar('number')
       ),
   },
 };

@@ -9,6 +9,8 @@ import {
   getCardinality,
   linearizeType,
   validateCardinalities,
+  heightenValueDimensionsIfNecessary,
+  heightenDimensionsIfNecessary,
 } from './common';
 import { Hypercube } from './hypercube';
 import {
@@ -32,6 +34,8 @@ export const automapTypes = (
   mapFn: (types: Type[]) => Type,
   expectedCardinalities = arrayOfOnes(argTypes.length)
 ): Type => {
+  argTypes = heightenDimensionsIfNecessary(argTypes, expectedCardinalities);
+
   if (!validateCardinalities(argTypes, expectedCardinalities)) {
     return t.impossible('A column is required');
   }
@@ -73,6 +77,12 @@ export const automapValues = (
   mapFn: (values: Value.Value[], types: Type[]) => Value.Value,
   expectedCardinalities = arrayOfOnes(argValues.length)
 ): Value.Value => {
+  [argTypes, argValues] = heightenValueDimensionsIfNecessary(
+    argTypes,
+    argValues,
+    expectedCardinalities
+  );
+
   if (!validateCardinalities(argTypes, expectedCardinalities)) {
     throw new Error('panic: one or more cardinalities are too low');
   }
@@ -129,6 +139,8 @@ export const automapTypesForReducer = (
   argType: Type,
   mapFn: (types: Type[]) => Type
 ): Type => {
+  [argType] = heightenDimensionsIfNecessary([argType], [2]);
+
   if (!validateCardinalities([argType], [2])) {
     return t.impossible('A column is required');
   }
@@ -148,9 +160,15 @@ export const automapTypesForReducer = (
 
 export const automapValuesForReducer = (
   argType: Type,
-  argValue: Value.Column,
+  argValue: Value.Value,
   mapFn: (values: Value.Value[], types: Type[]) => Value.Value
 ): Value.Value => {
+  [[argType], [argValue]] = heightenValueDimensionsIfNecessary(
+    [argType],
+    [argValue],
+    [2]
+  );
+
   if (!validateCardinalities([argType], [2])) {
     throw new Error('panic: cardinality is too low');
   }
@@ -159,7 +177,11 @@ export const automapValuesForReducer = (
     return mapFn([argValue], [argType]);
   } else {
     return Value.Column.fromValues(
-      argValue.values.map((v) =>
+      getInstanceof(
+        argValue,
+        Value.Column,
+        'reducers always take columnar arguments'
+      ).values.map((v) =>
         automapValuesForReducer(
           argType.reduced(),
           getInstanceof(v, Value.Column),

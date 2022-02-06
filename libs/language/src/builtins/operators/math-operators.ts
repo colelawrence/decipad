@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import produce from 'immer';
 import Fraction from '@decipad/fraction';
-import { getDefined } from '@decipad/utils';
+import { getDefined, zip } from '@decipad/utils';
 import { RuntimeError, Realm } from '../../interpreter';
 import { F, getInstanceof } from '../../utils';
 import { InferError, Type, build as t } from '../../type';
@@ -29,7 +29,7 @@ const binopFunctor = ([a, b]: Type[]) =>
   Type.combine(a.isScalar('number'), b.sameAs(a));
 
 const numberReducerFunctor = ([t]: Type[]) =>
-  Type.combine(t.reducedOrSelf().isScalar('number'));
+  Type.combine(t.reduced().isScalar('number'));
 
 const removeUnit = produce((t: Type) => {
   if (t.type === 'number') t.unit = null;
@@ -72,15 +72,10 @@ const roundFunctor: BuiltinSpec['functor'] = ([
   decimalPrecision = t.number(),
 ]) => Type.combine(decimalPrecision.isScalar('number'), n.isScalar('number'));
 
-const firstArgumentReducedOrSelfFunctor = ([t]: Type[]): Type =>
-  t.reducedOrSelf();
+const firstArgumentReducedFunctor = ([t]: Type[]) => t.reduced();
 
 const coherceToFraction = (value: unknown): Fraction => {
   return getInstanceof(value, Fraction);
-};
-
-const coherceToArray = <T>(value: T | T[]): T[] => {
-  return Array.isArray(value) ? value : [value];
 };
 
 const max = ([value]: Value[]): Value => {
@@ -126,7 +121,7 @@ const min = ([value]: Value[]): Value => {
 };
 
 const average = ([value]: Value[]): AnyValue => {
-  const fractions = coherceToArray(value.getData()).map(coherceToFraction);
+  const fractions = (value.getData() as Fraction[]).map(coherceToFraction);
   if (fractions.length === 0) {
     throw new RuntimeError('average needs at least one element');
   }
@@ -173,51 +168,53 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   },
   max: {
     argCount: 1,
-    functorNoAutomap: firstArgumentReducedOrSelfFunctor,
-    fnValuesNoAutomap: max,
+    argCardinalities: [2],
+    functor: firstArgumentReducedFunctor,
+    fnValues: max,
   },
   min: {
     argCount: 1,
-    functorNoAutomap: firstArgumentReducedOrSelfFunctor,
-    fnValuesNoAutomap: min,
+    argCardinalities: [2],
+    functor: firstArgumentReducedFunctor,
+    fnValues: min,
   },
   average: {
     argCount: 1,
-    functorNoAutomap: numberReducerFunctor,
-    fnValuesNoAutomap: average,
+    argCardinalities: [2],
+    functor: numberReducerFunctor,
+    fnValues: average,
   },
   avg: { aliasFor: 'average' },
   mean: { aliasFor: 'average' },
   averageif: {
     argCount: 2,
     noAutoconvert: true,
-    fnValuesNoAutomap: (args: Value[]) => {
-      const [__numbers, __bools] = args;
-      const _numbers = __numbers.getData();
-      const numbers = Array.isArray(_numbers) ? _numbers : [_numbers];
-      const _bools = __bools.getData();
-      const bools = Array.isArray(_bools) ? _bools : [_bools];
+    argCardinalities: [2, 2],
+    fnValues: ([_numbers, _bools]: Value[]) => {
+      const numbers = _numbers.getData() as Fraction[];
+      const bools = _bools.getData() as boolean[];
       if (numbers.length === 0) {
         throw new RuntimeError(
           'average: cannot compute average on zero elements'
         );
       }
-      const res = numbers.reduce<[Fraction, number]>(
-        (acc, elem, index) => {
-          if (bools[index]) {
-            return [acc[0].add(elem as Fraction), acc[1] + 1];
-          } else {
-            return acc;
-          }
-        },
-        [new Fraction(0), 0]
-      );
-      return fromJS(res[0].div(res[1]));
+
+      let count = 0;
+      let sum = new Fraction(0);
+
+      for (const [bool, num] of zip(bools, numbers)) {
+        if (bool) {
+          count++;
+          sum = sum.add(num);
+        }
+      }
+
+      return fromJS(sum.div(count));
     },
-    functorNoAutomap: ([numbers, booleans]) =>
+    functor: ([numbers, booleans]) =>
       Type.combine(
-        booleans.reducedOrSelf().isScalar('boolean'),
-        numbers.reducedOrSelf().isScalar('number')
+        booleans.reduced().isScalar('boolean'),
+        numbers.reduced().isScalar('number')
       ),
   },
   avgif: { aliasFor: 'averageif' },

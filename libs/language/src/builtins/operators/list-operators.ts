@@ -11,73 +11,53 @@ import { approximateSubsetSumIndices } from '../table';
 export const listOperators: Record<string, BuiltinSpec> = {
   len: {
     argCount: 1,
+    isReducer: true,
     noAutoconvert: true,
-    fnValuesNoAutomap: (a: Value[]) => {
-      const v = a[0];
-      if (v instanceof Column) {
-        return fromJS(v.rowCount);
-      }
-      return fromJS(1);
-    },
-    functorNoAutomap: ([a]) => {
-      const reduced = a.reduced();
-      return Type.either(
-        Type.combine(
-          a.isColumn(),
-          reduced.isDate(),
-          t.number(reduced.date && U(reduced.date))
-        ),
-        Type.combine(a.isDate(), a.date ? t.number(U(a.date)) : t.number()),
-        Type.combine(
-          a.isColumn(),
-          reduced.isDate(),
-          reduced.date ? t.number(U(reduced.date)) : t.number()
-        ),
+    argCardinalities: [2],
+    fnValues: ([col]: Value[]) => fromJS(getInstanceof(col, Column).rowCount),
+    functor: ([a]) =>
+      Type.either(
+        a
+          .reduced()
+          .isDate()
+          .mapType((date) => t.number(U(getDefined(date.date)))),
         t.number()
-      );
-    },
+      ),
   },
   cat: {
     argCount: 2,
+    argCardinalities: [2, 2],
     // TODO: make this a varargs function
-    fnValuesNoAutomap: (args: Value[]) => {
-      const [a, b] = args;
-      const aData = a.getData();
-      const aElements = Array.isArray(aData) ? aData : [aData];
-      const bData = b.getData();
-      const bElements = Array.isArray(bData) ? bData : [bData];
-      return fromJS(aElements.concat(bElements));
+    fnValues: ([a, b]: Value[]) => {
+      const allElements = [
+        ...getInstanceof(a, Column).values,
+        ...getInstanceof(b, Column).values,
+      ];
+      return Column.fromValues(allElements);
     },
-    functorNoAutomap: ([a, b]) =>
-      Type.combine(a.reducedOrSelf().sameAs(b.reducedOrSelf())).mapType(() => {
+    functor: ([a, b]) =>
+      Type.combine(a.reduced().sameAs(b.reduced())).mapType(() => {
         const resultColumnSize =
           a.columnSize === 'unknown' || b.columnSize === 'unknown'
             ? 'unknown'
             : (a.columnSize || 1) + (b.columnSize || 1);
-        return t.column(a.reducedOrSelf(), resultColumnSize);
+        return t.column(a.reduced(), resultColumnSize);
       }),
   },
   first: {
     argCount: 1,
     argCardinalities: [2],
-    fnValues: (args: Value[]) => {
-      const [a] = args;
-      const aData = a.getData();
-      const aElements = Array.isArray(aData) ? aData : [aData];
-      return fromJS(aElements[0]);
-    },
-    functor: ([a]) => Type.combine(a.reducedOrSelf()),
+    fnValues: ([arg]: Value[]) => getInstanceof(arg, Column).atIndex(0),
+    functor: ([a]) => a.reduced(),
   },
   last: {
     argCount: 1,
     argCardinalities: [2],
-    fnValues: (args: Value[]) => {
-      const [a] = args;
-      const aData = a.getData();
-      const aElements = Array.isArray(aData) ? aData : [aData];
-      return fromJS(aElements[aElements.length - 1]);
+    fnValues: ([arg]: Value[]) => {
+      const col = getInstanceof(arg, Column);
+      return col.atIndex(col.rowCount - 1);
     },
-    functor: ([a]) => Type.combine(a.reducedOrSelf()),
+    functor: ([a]) => Type.combine(a.reduced()),
   },
   count: {
     aliasFor: 'len',
@@ -85,19 +65,13 @@ export const listOperators: Record<string, BuiltinSpec> = {
   countif: {
     argCount: 1,
     argCardinalities: [2],
-    fnValues: (args: Value[]) => {
-      const [a] = args;
-      const aData = a.getData();
-      const aElements = Array.isArray(aData) ? aData : [aData];
+    fnValues: ([a]: Value[]) => {
+      const aData = getInstanceof(a, Column).getData();
       return fromJS(
-        aElements.reduce<number>(
-          (count, elem) => (elem.valueOf() ? count + 1 : count),
-          0
-        )
+        aData.reduce((count, elem) => (elem.valueOf() ? count + 1 : count), 0)
       );
     },
-    functor: ([a]) =>
-      Type.combine(a.reducedOrSelf().isScalar('boolean'), t.number()),
+    functor: ([a]) => Type.combine(a.reduced().isScalar('boolean'), t.number()),
   },
   stepgrowth: {
     argCount: 1,
@@ -156,25 +130,22 @@ export const listOperators: Record<string, BuiltinSpec> = {
 
   sort: {
     argCount: 1,
-    functorNoAutomap: ([column]) => column.isColumn(),
-    fnValuesNoAutomap: ([_column]) => {
-      const column = getInstanceof(_column, Column);
-      return column.sort();
-    },
+    argCardinalities: [2],
+    functor: ([column]) => column.isColumn(),
+    fnValues: ([column]) => getInstanceof(column, Column).sort(),
   },
 
   unique: {
     argCount: 1,
-    functorNoAutomap: ([column]) =>
-      Type.combine(column.isColumn(), (column) =>
-        produce(column, (column) => {
+    argCardinalities: [2],
+    functor: ([column]) =>
+      Type.combine(
+        column.isColumn(),
+        produce((column) => {
           column.columnSize = 'unknown';
         })
       ),
-    fnValuesNoAutomap: ([_column]) => {
-      const column = getInstanceof(_column, Column);
-      return column.unique();
-    },
+    fnValues: ([column]) => getInstanceof(column, Column).unique(),
   },
 
   reverse: {
@@ -184,8 +155,9 @@ export const listOperators: Record<string, BuiltinSpec> = {
     fnValuesNoAutomap: ([column]) => {
       if (column instanceof Table) {
         return column.mapColumns((column) => column.reverse());
+      } else {
+        return getInstanceof(column, Column).reverse();
       }
-      return getInstanceof(column, Column).reverse();
     },
   },
 

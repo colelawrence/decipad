@@ -1,6 +1,8 @@
 import { produce } from 'immer';
+import { zip } from '@decipad/utils';
 import { equalOrUnknown } from '../utils';
-import { Type } from '../type';
+import { Column, Value } from '../interpreter/Value';
+import { Type, build as t } from '../type';
 
 export type IndexNames = (string | null)[];
 
@@ -45,3 +47,55 @@ export const chooseFirst = <T>(indexOnTop: number, items: T[]): T[] => [
   items[indexOnTop],
   ...items.filter((_, i) => i !== indexOnTop),
 ];
+
+export function heightenValueDimensionsIfNecessary(
+  argTypes: Type[],
+  argValues: Value[],
+  expectedCardinalities: number[]
+): [raised: Type[], raisedValues: Value[]] {
+  const heightenOne = (
+    type: Type,
+    value: Value,
+    expected: number
+  ): [Type, Value] => {
+    if (getCardinality(type) < expected) {
+      return heightenOne(
+        t.column(type, 1),
+        Column.fromValues([value]),
+        expected
+      );
+    } else {
+      return [type, value];
+    }
+  };
+
+  const retTypes = [];
+  const retValues = [];
+  for (let i = 0; i < expectedCardinalities.length; i++) {
+    const [type, value] = heightenOne(
+      argTypes[i],
+      argValues[i],
+      expectedCardinalities[i]
+    );
+    retTypes.push(type);
+    retValues.push(value);
+  }
+
+  return [retTypes, retValues];
+}
+
+export function heightenDimensionsIfNecessary(
+  argTypes: Type[],
+  expectedCardinalities: number[]
+): Type[] {
+  return zip(argTypes, expectedCardinalities).map(function heighten([
+    type,
+    expectedCardinality,
+  ]): Type {
+    if (getCardinality(type) < expectedCardinality) {
+      return heighten([t.column(type, 1), expectedCardinality]);
+    } else {
+      return type;
+    }
+  });
+}
