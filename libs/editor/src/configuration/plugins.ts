@@ -30,6 +30,9 @@ import { createNormalizeEditorPlugin } from '../plugins/NormalizeEditor/createNo
 import { createNormalizeRichTextBlockPlugin } from '../plugins/NormalizeRichTextBlock/createNormalizeRichTextBlockPlugin';
 import { createNormalizePlainTextBlockPlugin } from '../plugins/NormalizePlainTextBlock/createNormalizePlainTextBlockPlugin';
 import { createNormalizeTextPlugin } from '../plugins/NormalizeText/createNormalizeTextPlugin';
+import { createNormalizeListPlugin } from '../plugins/NormalizeListPlugin/createNormalizeListPlugin';
+import { createNormalizeVoidPlugin } from '../plugins/NormalizeVoidPlugin/createNormalizeVoidPlugin';
+import { createNormalizeLinkPlugin } from '../plugins/NormalizeLinkPlugin/createNormalizeLinkPlugin';
 
 export const plugins = [
   // fundamentals
@@ -55,14 +58,14 @@ export const plugins = [
   // structure enforcement
   createNormalizeEditorPlugin(),
 
-  // TODO void block plugin (table/fetch)
+  createNormalizeVoidPlugin(),
 
   createNormalizeRichTextBlockPlugin(),
   createNormalizePlainTextBlockPlugin(),
   createNormalizeCodeBlockPlugin(),
-  // TODO NormalizeListPlugin
+  createNormalizeListPlugin(),
 
-  // TODO NormalizeLinkPlugin for props and only rich text
+  createNormalizeLinkPlugin(),
 
   createNormalizeTextPlugin(),
 

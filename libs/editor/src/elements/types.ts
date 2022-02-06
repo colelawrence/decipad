@@ -81,9 +81,9 @@ export interface OrderedListElement {
 }
 export interface ListItemElement {
   type: typeof ELEMENT_LI;
-  children: Array<
-    UnorderedListElement | OrderedListElement | ListItemContentElement
-  >;
+  children:
+    | [ListItemContentElement]
+    | [ListItemContentElement, UnorderedListElement | OrderedListElement];
 }
 export interface ListItemContentElement {
   type: typeof ELEMENT_LIC;
