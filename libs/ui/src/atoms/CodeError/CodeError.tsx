@@ -6,7 +6,8 @@ import {
   codeErrorIconFill,
   setCssVar,
   p12Regular,
-  p12Bold,
+  white,
+  p12Medium,
 } from '../../primitives';
 import { Tooltip } from '..';
 import { Anchor } from '../../utils';
@@ -24,76 +25,39 @@ const iconWrapperStyles = css({
   },
 });
 
-const messageStyles = css({
-  textAlign: 'center',
-});
-
-const detailMessageStyles = css(p12Bold, {
-  textAlign: 'center',
-  margin: '0.5rem',
-});
-
-const expectedStyles = css(p12Regular, {
-  textAlign: 'center',
-});
-
-const bracketErrorStyles = css(p12Regular, {
+const messageStyles = css(p12Medium, {
+  color: white.rgb,
   textAlign: 'center',
 });
 
 const urlStyles = css(p12Regular, {
   textDecoration: 'underline',
-  margin: '0.5rem',
 });
 
 interface CodeErrorProps {
   message: string;
   url: string;
   detailMessage?: string;
-  line?: number;
-  column?: number;
-  expected?: string[];
   bracketError?: BracketError;
 }
-
-const tokenLocationString = (token: moo.Token): string => {
-  return `line ${token.line}, column ${token.col}`;
-};
 
 const bracketErrorMessage = (err: BracketError) => {
   switch (err.type) {
     case 'never-opened':
-      return `Closed bracket "${err.close.text}" at ${tokenLocationString(
-        err.close
-      )} that never opened`;
+      return `Closed a bracket "${err.close.text}" that was never opened`;
     case 'mismatched-brackets':
-      return `Mismatched bracket "${
-        err.open.text
-      }" opened at ${tokenLocationString(
-        err.open
-      )} and closed at ${tokenLocationString(err.close)}`;
+      return `Mismatched brackets "${err.open.text}" and "${err.close.text}"`;
     case 'never-closed':
-      return `Bracket "${err.open.text}" opened at ${tokenLocationString(
-        err.open
-      )} is not being closed`;
+      return `Bracket "${err.open.text}" was opened but it is not being closed`;
   }
 };
 
 export const CodeError = ({
   message,
   detailMessage,
-  line,
-  column,
-  expected,
   url,
   bracketError,
 }: CodeErrorProps): ReturnType<FC> => {
-  const lineColString = `${line ? `line ${line}` : ''}${
-    line && column ? ', ' : ''
-  }${column ? `column ${column}` : ''}`;
-  const userMessage = `${message}${
-    (lineColString && ` at ${lineColString}`) || ''
-  }`;
   return (
     <Tooltip
       trigger={
@@ -102,11 +66,10 @@ export const CodeError = ({
         </span>
       }
     >
-      <span css={messageStyles}>{userMessage}</span>
-      {detailMessage && <p css={detailMessageStyles}>{detailMessage}</p>}
-      {expected && <p css={expectedStyles}>{expected.join(', ')}</p>}
+      <p css={messageStyles}>{message}</p>
+      {detailMessage && <p css={messageStyles}>{detailMessage}</p>}
       {bracketError && (
-        <p css={bracketErrorStyles}>{bracketErrorMessage(bracketError)}</p>
+        <p css={messageStyles}>{bracketErrorMessage(bracketError)}</p>
       )}
       <Anchor css={urlStyles} href={url}>
         Check our docs

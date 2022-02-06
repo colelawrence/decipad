@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Element } from '../elements';
+import { Element, AnnotatedRichText } from '../elements';
 
 interface ElementAttributes {
   'data-slate-node': 'element';
@@ -17,9 +17,11 @@ export type PlateComponent = FC<
   | {
       readonly attributes: ElementAttributes;
       readonly element: Element;
+      readonly leaf?: undefined;
     }
   | {
       readonly attributes: LeafAttributes;
       readonly element?: undefined;
+      readonly leaf: AnnotatedRichText;
     }
 >;

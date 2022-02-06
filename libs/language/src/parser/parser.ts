@@ -66,12 +66,12 @@ export class Parser extends NearleyParser {
     error.column = column;
 
     if (expectantStates.length === 0) {
-      error.detailMessage = `Unexpected ${tokenDisplay}. I did not expect any more input. Here is the state of my parse table:\n`;
+      error.detailMessage = `Unexpected ${tokenDisplay}. I did not expect any more input.\n`;
       const lines: string[] = [];
       self.displayStateStack(lastColumn.states, lines);
       error.detailMessage += lines.join('\n');
     } else {
-      error.detailMessage = `Unexpected ${tokenDisplay}. Instead, I was expecting to see one of the following:`;
+      error.detailMessage = `Unexpected ${tokenDisplay}.`;
       // Display a "state stack" for each expectant state
       // - which shows you how this state came to be, step by step.
       // If there is more than one derivation, we only display the first one.
@@ -127,7 +127,10 @@ export function parse(source: string): ParserNode[] {
         console.warn(err2);
       }
       if (syntaxError) {
-        throw SyntaxError.fromNearleySyntaxError(syntaxError);
+        throw SyntaxError.fromNearleySyntaxError({
+          ...(err as Error),
+          ...syntaxError,
+        });
       }
     }
     throw err;
