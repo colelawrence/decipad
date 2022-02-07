@@ -160,7 +160,12 @@ export const Notebook = ({
           permission={getPadById.myPermissionType ?? undefined}
           link={
             shareSecret
-              ? getSecretPadLink(workspaceId, notebookId, shareSecret)
+              ? getSecretPadLink(
+                  workspaceId,
+                  notebookId,
+                  getPadById.name || '',
+                  shareSecret
+                )
               : 'Loading...'
           }
           onToggleShare={async () => {
@@ -181,6 +186,7 @@ export const Notebook = ({
                     url: getSecretPadLink(
                       workspaceId,
                       notebookId,
+                      getPadById.name || '',
                       shareSecret ?? ''
                     ),
                   },
