@@ -7,6 +7,11 @@ const Wrapper = styled('div')({
   margin: '0 auto',
 });
 
+const EditorWrapper = styled('div')({
+  maxWidth: '90ch',
+  margin: '0 auto',
+});
+
 export function Playground(): ReturnType<FC> {
   useEffect(() => {
     return () => {
@@ -16,7 +21,9 @@ export function Playground(): ReturnType<FC> {
 
   return (
     <Wrapper>
-      <NoDocSyncEditor />
+      <EditorWrapper>
+        <NoDocSyncEditor />
+      </EditorWrapper>
     </Wrapper>
   );
 }

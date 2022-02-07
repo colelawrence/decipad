@@ -1,14 +1,12 @@
 import { SerializedUnits } from '@decipad/language';
-import { All, Number, Placeholder, Text } from '../icons';
+import { All, Number, Calendar, Text } from '../icons';
 import { getTypeIcon } from './table';
 
 describe('getTypeIcon()', () => {
   it.each(['day', 'month', 'year', 'minute'] as const)(
     'should return an icon for type date and specificity %s',
     (specificity) => {
-      expect(getTypeIcon({ kind: 'date', date: specificity })).toBe(
-        Placeholder
-      );
+      expect(getTypeIcon({ kind: 'date', date: specificity })).toBe(Calendar);
     }
   );
 

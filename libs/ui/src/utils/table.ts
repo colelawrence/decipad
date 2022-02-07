@@ -1,12 +1,12 @@
 import { FunctionComponent } from 'react';
 import { SerializedType, Time, SerializedUnits } from '@decipad/language';
-import { All, Number, Placeholder, Text } from '../icons';
+import { All, Number, Calendar, Text } from '../icons';
 import { TableCellType } from '../types';
 
 export function getTypeIcon(type: TableCellType): FunctionComponent {
   switch (type.kind) {
     case 'date':
-      return Placeholder;
+      return Calendar;
     case 'number':
       return type.unit == null ? Number : All;
     default:

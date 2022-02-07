@@ -1,11 +1,11 @@
 import { FC, ReactNode } from 'react';
 import { css } from '@emotion/react';
 import { Tooltip } from '../../atoms';
-import { codeErrorIconFill } from '../../primitives';
+import { red600 } from '../../primitives';
 
 const highlightStyles = css({
-  borderBottom: `1px dotted ${codeErrorIconFill.rgb}`,
-  color: codeErrorIconFill.rgb,
+  borderBottom: `1px dotted ${red600.rgb}`,
+  color: red600.rgb,
 });
 
 interface CodeSyntaxErrorHighlightProps {

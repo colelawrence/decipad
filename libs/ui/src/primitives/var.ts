@@ -1,11 +1,11 @@
 import type { Property } from 'csstype';
 import {
   black,
-  electricGreen200,
+  brand500,
   grey100,
   grey200,
-  grey300,
-  grey400,
+  grey500,
+  grey600,
   offWhite,
   orange500,
   red500,
@@ -39,9 +39,10 @@ export interface CssVariables {
   readonly strongTextColor: Property.Color;
 
   readonly currentTextColor: Property.Color;
+  readonly currentBackgroundColor: Property.Color;
 }
 const defaults: CssVariables = {
-  brandColor: electricGreen200.rgb,
+  brandColor: brand500.rgb,
 
   get successColor() {
     return cssVar('brandColor');
@@ -56,12 +57,15 @@ const defaults: CssVariables = {
   highlightColor: grey100.rgb,
   strongHighlightColor: grey200.rgb,
 
-  weakTextColor: grey300.rgb,
-  normalTextColor: grey400.rgb,
+  weakTextColor: grey500.rgb,
+  normalTextColor: grey600.rgb,
   strongTextColor: black.rgb,
 
   get currentTextColor() {
     return cssVar('normalTextColor');
+  },
+  get currentBackgroundColor() {
+    return cssVar('backgroundColor');
   },
 };
 

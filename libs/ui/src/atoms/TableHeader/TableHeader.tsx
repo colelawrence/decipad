@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { getStringType, getTypeIcon } from '../../utils';
-import { cssVar, grey250, p13Medium } from '../../primitives';
+import { cssVar, grey200, p13Medium } from '../../primitives';
 import { table } from '../../styles';
 import { TableCellType } from '../../types';
 
@@ -16,7 +16,7 @@ const columnStyles = css(p13Medium, {
     backgroundColor: cssVar('strongHighlightColor'),
   },
 
-  boxShadow: `inset 0px -2px 0px ${grey250.rgb}`,
+  boxShadow: `inset 0px -2px 0px ${grey200.rgb}`,
 
   minHeight: table.thMinHeight,
   paddingLeft: table.cellSidePadding,

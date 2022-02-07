@@ -4,8 +4,8 @@ import { noop } from '@decipad/utils';
 import { SerializedUnits } from '@decipad/language';
 import {
   cssVar,
-  grey250,
-  grey270,
+  grey200,
+  grey300,
   p12Medium,
   p13Medium,
   setCssVar,
@@ -16,10 +16,10 @@ import { menu } from '../../styles';
 
 const menuItemStyles = css({
   background: white.rgb,
-  border: `1px solid ${grey250.rgb}`,
+  border: `1px solid ${grey200.rgb}`,
   borderRadius: '6px',
   ':hover, :focus-within': {
-    borderColor: `${grey270.rgb}`,
+    borderColor: `${grey300.rgb}`,
   },
 
   display: 'flex',

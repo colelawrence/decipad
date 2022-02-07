@@ -2,7 +2,7 @@ import { ComponentProps, ReactNode } from 'react';
 import { deserializeUnit, stringifyUnits } from '@decipad/language';
 import Fraction from '@decipad/fraction';
 import { noop } from '@decipad/utils';
-import { All, Number, Placeholder, Shapes, Text, Trash } from '../../icons';
+import { All, Number, Calendar, Shapes, Text, Trash } from '../../icons';
 import { MenuItem, TriggerMenuItem } from '../../atoms';
 import { MenuList, UnitMenuItem } from '../../molecules';
 import { getDateType, getNumberType, getStringType } from '../../utils';
@@ -67,34 +67,34 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
       </MenuItem>
       <MenuList
         itemTrigger={
-          <TriggerMenuItem icon={<Placeholder />}>
+          <TriggerMenuItem icon={<Calendar />}>
             <div css={{ minWidth: '116px' }}>Date</div>
           </TriggerMenuItem>
         }
       >
         <MenuItem
-          icon={<Placeholder />}
+          icon={<Calendar />}
           onSelect={() => onChangeColumnType(getDateType('year'))}
           selected={type.kind === 'date' && type.date === 'year'}
         >
           Year
         </MenuItem>
         <MenuItem
-          icon={<Placeholder />}
+          icon={<Calendar />}
           onSelect={() => onChangeColumnType(getDateType('month'))}
           selected={type.kind === 'date' && type.date === 'month'}
         >
           Month
         </MenuItem>
         <MenuItem
-          icon={<Placeholder />}
+          icon={<Calendar />}
           onSelect={() => onChangeColumnType(getDateType('day'))}
           selected={type.kind === 'date' && type.date === 'day'}
         >
           Day
         </MenuItem>
         <MenuItem
-          icon={<Placeholder />}
+          icon={<Calendar />}
           onSelect={() => onChangeColumnType(getDateType('minute'))}
           selected={type.kind === 'date' && type.date === 'minute'}
         >

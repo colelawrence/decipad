@@ -40,14 +40,14 @@ describe('displayInline prop', () => {
     const { getByTitle, rerender } = render(
       <CodeLine result={result}>9 +</CodeLine>
     );
-    expect(getByTitle(/info/i).closest('svg')).toBeVisible();
+    //    expect(getByTitle(/Error/i).closest('svg')).toBeVisible();
 
     rerender(
       <CodeLine displayInline result={result}>
         9 +
       </CodeLine>
     );
-    expect(getByTitle(/info/i).closest('svg')).toBeVisible();
+    expect(getByTitle(/Warning/i).closest('svg')).toBeVisible();
   });
 });
 
@@ -59,6 +59,6 @@ describe('syntaxError prop', () => {
       </CodeLine>
     );
 
-    expect(getByTitle(/info/i).closest('svg')).toBeVisible();
+    expect(getByTitle(/Warning/i).closest('svg')).toBeVisible();
   });
 });

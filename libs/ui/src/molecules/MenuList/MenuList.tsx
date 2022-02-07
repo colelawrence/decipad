@@ -5,12 +5,12 @@ import * as RadixDropdownMenu from '@radix-ui/react-dropdown-menu';
 
 import { MenuItem, TriggerMenuItem } from '../../atoms';
 import { UnitMenuItem } from '..';
-import { cssVar, grey300, transparency } from '../../primitives';
+import { cssVar, grey500, transparency } from '../../primitives';
 
 const Depth = createContext(0);
 
-const shadow1 = transparency(grey300, 0.02).rgba;
-const shadow2 = transparency(grey300, 0.08).rgba;
+const shadow1 = transparency(grey500, 0.02).rgba;
+const shadow2 = transparency(grey500, 0.08).rgba;
 
 const styles = css({
   padding: '6px',

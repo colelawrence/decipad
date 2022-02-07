@@ -28,7 +28,7 @@ const hFontFamily: TypographyStyles['fontFamily'] =
   '"Neue Haas Grotesk Display Pro", Inter, Helvetica, "Open Sans", sans-serif';
 
 const hDefault: TypographyStyles = {
-  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
+  ...setCssVar('currentTextColor', cssVar('normalTextColor')),
   color: cssVar('currentTextColor'),
   fontFamily: hFontFamily,
   fontStyle: 'normal',
@@ -41,12 +41,14 @@ const hDefault: TypographyStyles = {
 
 export const display: TypographyStyles = {
   ...hDefault,
+  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
   fontSize: `${36 / usualRemPxs}rem`,
   lineHeight: 1.13,
   fontFeatureSettings: "'ss04' on, 'ss08' on, 'ss06' on",
 };
 export const h1: TypographyStyles = {
   ...hDefault,
+  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
   fontSize: `${24 / usualRemPxs}rem`,
   lineHeight: 1.3,
   fontFeatureSettings: "'ss04' on, 'ss02' on",

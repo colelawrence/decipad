@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
-import { code, codeBubbleBackground, codeBubbleText } from '../../primitives';
+import { code, teal50, teal600 } from '../../primitives';
 
 const styles = css(code, {
-  color: codeBubbleText.rgb,
-  backgroundColor: codeBubbleBackground.rgb,
+  color: teal600.rgb,
+  backgroundColor: teal50.rgb,
   borderRadius: '8px',
   padding: '4px 8px',
 });

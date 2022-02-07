@@ -36,7 +36,7 @@ const EditorWrapper = styled('main')({
   paddingBottom: '180px',
 });
 const EditorInner = styled('div')({
-  maxWidth: '120ch',
+  maxWidth: '90ch',
   margin: 'auto',
 });
 

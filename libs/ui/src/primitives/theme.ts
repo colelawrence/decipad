@@ -1,10 +1,10 @@
-import { electricGreen200 } from '.';
+import { brand500 } from '.';
 import {
   black,
   grey100,
   grey200,
-  grey300,
-  grey400,
+  grey500,
+  grey600,
   orange500,
   red500,
   white,
@@ -15,21 +15,22 @@ export const darkTheme: Record<
   CssVariableKey<keyof CssVariables>,
   CssVariables[keyof CssVariables]
 > = {
-  ...setCssVar('brandColor', electricGreen200.rgb),
+  ...setCssVar('brandColor', brand500.rgb),
   ...setCssVar('successColor', cssVar('brandColor')),
   ...setCssVar('dangerColor', red500.rgb),
   ...setCssVar('warningColor', orange500.rgb),
 
   ...setCssVar('backgroundColor', black.rgb),
-  ...setCssVar('iconBackgroundColor', grey300.rgb),
-  ...setCssVar('offColor', grey400.rgb),
+  ...setCssVar('iconBackgroundColor', grey500.rgb),
+  ...setCssVar('offColor', grey600.rgb),
 
-  ...setCssVar('highlightColor', grey400.rgb),
-  ...setCssVar('strongHighlightColor', grey300.rgb),
+  ...setCssVar('highlightColor', grey600.rgb),
+  ...setCssVar('strongHighlightColor', grey500.rgb),
 
   ...setCssVar('weakTextColor', grey200.rgb),
   ...setCssVar('normalTextColor', grey100.rgb),
   ...setCssVar('strongTextColor', white.rgb),
 
   ...setCssVar('currentTextColor', cssVar('normalTextColor')),
+  ...setCssVar('currentBackgroundColor', cssVar('backgroundColor')),
 };

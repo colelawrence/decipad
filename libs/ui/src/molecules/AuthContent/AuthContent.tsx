@@ -3,9 +3,8 @@ import { FC } from 'react';
 import { Deci } from '../../icons';
 import {
   cssVar,
-  electricGreen500,
-  logoSecondColor,
-  logoThirdColor,
+  brand500,
+  brand400,
   p16Regular,
   p24Bold,
   setCssVar,
@@ -16,9 +15,9 @@ const deciLogoWrapper = css({
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
   width: '60px',
   height: '60px',
-  background: `linear-gradient(145.97deg, ${electricGreen500.rgb} 10.08%, ${
-    transparency(logoSecondColor, 0.8).rgba
-  } 75.32%, ${logoThirdColor.rgb} 94.81%)`,
+  background: `linear-gradient(145.97deg, ${brand500.rgb} 10.08%, ${
+    transparency(brand400, 0.8).rgba
+  } 75.32%, ${brand500.rgb} 94.81%)`,
   borderRadius: '12px',
   padding: '12px',
   marginBottom: '24px',

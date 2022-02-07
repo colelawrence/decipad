@@ -5,11 +5,12 @@ import {
   PlateProps,
   useStoreEditorRef,
 } from '@udecode/plate';
-import { FC, useMemo, useEffect, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { ProgramBlocksContextProvider } from '@decipad/ui';
 import { ResultsContext } from '@decipad/react-contexts';
+import { POPULATE_PLAYGROUND } from 'libs/ui/src/utils/storage';
 import {
   editorProgramBlocks,
   useLanguagePlugin,
@@ -17,33 +18,16 @@ import {
 import { Tooltip } from './components';
 import { components, options, plugins } from './configuration';
 import { ComputerContextProvider } from './contexts/Computer';
+import { NoDocSyncEditorInitialValue } from './NoDocSyncEditorInitialValue';
+import { EmptyNotebook } from './EmptyNotebook';
+
+const populatePlayground = () =>
+  window.localStorage.getItem(POPULATE_PLAYGROUND) === 'true';
 
 export const NoDocSyncEditorBase = (props: PlateProps): ReturnType<FC> => {
   const [editorId] = useState(nanoid);
 
   const editor = useStoreEditorRef(editorId);
-  useEffect(() => {
-    if (editor) {
-      editor.children = [
-        {
-          type: 'h1',
-          children: [
-            {
-              text: '',
-            },
-          ],
-        },
-        {
-          type: 'p',
-          children: [
-            {
-              text: '',
-            },
-          ],
-        },
-      ];
-    }
-  }, [editor]);
 
   const { results, languagePlugin } = useLanguagePlugin();
   const programBlocks = editor ? editorProgramBlocks(editor) : {};
@@ -61,6 +45,9 @@ export const NoDocSyncEditorBase = (props: PlateProps): ReturnType<FC> => {
           plugins={editorPlugins}
           options={options}
           components={components as Record<string, PlatePluginComponent>}
+          initialValue={
+            populatePlayground() ? NoDocSyncEditorInitialValue : EmptyNotebook
+          }
           {...props}
         >
           <Tooltip />

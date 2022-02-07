@@ -1,11 +1,11 @@
 import { FC, ReactNode } from 'react';
 import { css } from '@emotion/react';
 import { Result } from '@decipad/language';
-import { code, cssVar, grey250 } from '../../primitives';
+import { code, cssVar, grey200 } from '../../primitives';
 import { CodeResult } from '..';
 
 const codeBlockStyles = css(code, {
-  border: `1px solid ${grey250.rgb}`,
+  border: `1px solid ${grey200.rgb}`,
 
   borderRadius: '12px',
   overflow: 'hidden',

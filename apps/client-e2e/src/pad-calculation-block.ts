@@ -83,6 +83,7 @@ describe('pad content', () => {
     await createCalculationBlockBelow('A.C');
 
     const blocks = await getCalculationBlocks();
+
     expect(blocks).toMatchObject([
       expect.any(Object),
       expect.any(Object),
@@ -90,7 +91,7 @@ describe('pad content', () => {
         lines: [
           {
             code: 'A.C',
-            result: expect.stringMatching(/err|info/i),
+            result: expect.stringMatching(/warning/i),
           },
         ],
         result: null,

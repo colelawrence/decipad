@@ -5,6 +5,7 @@ export { Bullet } from './Bullet/Bullet';
 export { Caret } from './Caret/Caret';
 export { Chat } from './Chat/Chat';
 export { Chevron } from './Chevron/Chevron';
+export { Calendar } from './Calendar/Calendar';
 export { Code } from './Code/Code';
 export { Create } from './Create/Create';
 export { Deci } from './Deci/Deci';

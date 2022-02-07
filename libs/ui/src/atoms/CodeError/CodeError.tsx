@@ -1,11 +1,12 @@
 import { FC } from 'react';
 import { css } from '@emotion/react';
 import { BracketError } from '@decipad/language';
-import { Info } from '../../icons';
+import { Warning } from '../../icons';
 import {
-  codeErrorIconFill,
+  red600,
   setCssVar,
   p12Regular,
+  red200,
   white,
   p12Medium,
 } from '../../primitives';
@@ -13,7 +14,8 @@ import { Tooltip } from '..';
 import { Anchor } from '../../utils';
 
 const iconWrapperStyles = css({
-  ...setCssVar('currentTextColor', codeErrorIconFill.rgb),
+  ...setCssVar('currentBackgroundColor', red200.rgb),
+  ...setCssVar('currentTextColor', red600.rgb),
 
   cursor: 'pointer',
 
@@ -62,7 +64,7 @@ export const CodeError = ({
     <Tooltip
       trigger={
         <span css={iconWrapperStyles} title={message}>
-          <Info />
+          <Warning />
         </span>
       }
     >

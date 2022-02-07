@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { AuthContent } from '../../molecules';
-import { grey300 } from '../../primitives';
+import { grey500 } from '../../primitives';
 import { Anchor } from '../../utils';
 
 const wrapperStyles = css({
@@ -25,7 +25,7 @@ export const VerifyEmail = (): ReturnType<FC> => {
         css={css({
           marginTop: '48px',
           textDecoration: 'none',
-          color: grey300.rgb,
+          color: grey500.rgb,
         })}
       >
         Back to login

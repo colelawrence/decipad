@@ -6,6 +6,7 @@ const styles = css(
   p16Regular,
   setCssVar('currentTextColor', cssVar('weakTextColor')),
   {
+    margin: '8px 0',
     padding: '6px 0 6px 12px',
     borderLeft: `6px solid ${purple300.rgb}`,
   }

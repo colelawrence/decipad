@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import Tippy, { TippyProps } from '@tippyjs/react';
 import { DefaultPlatePluginKey, withDraggables } from '@udecode/plate';
-import { GrDrag } from 'react-icons/gr';
+import { DragHandle } from 'libs/ui/src/icons';
 import { PlateComponent } from '../types';
 import {
   ELEMENT_FETCH,
@@ -35,8 +35,6 @@ export const grabberTooltipProps: TippyProps = {
 };
 
 const iconStyles = css({
-  width: 18,
-  height: 18,
   opacity: 0.3,
   transition: 'opacity 0.2s ease-out',
   '&:hover': {
@@ -68,7 +66,7 @@ export const withStyledDraggables = (
         return (
           <Tippy {...grabberTooltipProps}>
             <button type="button" className={className} css={styles}>
-              <GrDrag css={iconStyles} />
+              <DragHandle css={iconStyles} />
             </button>
           </Tippy>
         );
@@ -78,7 +76,10 @@ export const withStyledDraggables = (
       key: ELEMENT_H2,
       styles: {
         gutterLeft: {
-          padding: '16px 8px 0 0',
+          padding: '21px 8px 0 0',
+        },
+        dragHandle: {
+          height: '30px',
         },
       },
     },
@@ -86,7 +87,10 @@ export const withStyledDraggables = (
       key: ELEMENT_H3,
       styles: {
         gutterLeft: {
-          padding: '14px 8px 0 0',
+          padding: '15px 8px 0 0',
+        },
+        dragHandle: {
+          height: '30px',
         },
       },
     },
@@ -94,7 +98,10 @@ export const withStyledDraggables = (
       key: ELEMENT_TABLE_INPUT,
       styles: {
         gutterLeft: {
-          padding: '16px 8px 0 0',
+          padding: '12px 8px 0 0',
+        },
+        dragHandle: {
+          height: '30px',
         },
       },
     },
@@ -104,13 +111,19 @@ export const withStyledDraggables = (
         gutterLeft: {
           padding: '8px 8px 0 0',
         },
+        dragHandle: {
+          height: '30px',
+        },
       },
     },
     {
       key: ELEMENT_BLOCKQUOTE,
       styles: {
         gutterLeft: {
-          padding: '28px 8px 0 0',
+          padding: '5px 8px 0 0',
+        },
+        dragHandle: {
+          height: '30px',
         },
       },
     },
@@ -118,7 +131,32 @@ export const withStyledDraggables = (
       key: ELEMENT_CODE_BLOCK,
       styles: {
         gutterLeft: {
-          padding: '42px 8px 0 0',
+          padding: '16px 8px 0 0',
+        },
+        dragHandle: {
+          height: '30px',
+        },
+      },
+    },
+    {
+      key: ELEMENT_OL,
+      styles: {
+        gutterLeft: {
+          padding: '6px 8px 0 0',
+        },
+        dragHandle: {
+          height: '30px',
+        },
+      },
+    },
+    {
+      key: ELEMENT_UL,
+      styles: {
+        gutterLeft: {
+          padding: '8px 8px 0 0',
+        },
+        dragHandle: {
+          height: '30px',
         },
       },
     },
@@ -127,6 +165,9 @@ export const withStyledDraggables = (
       styles: {
         gutterLeft: {
           padding: '42px 8px 0 0',
+        },
+        dragHandle: {
+          height: '30px',
         },
       },
     },

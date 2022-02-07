@@ -11,9 +11,9 @@ it('renders menuitems triggering different commands', () => {
     expect.stringContaining('calculation')
   );
 
-  userEvent.click(getByText(/heading.*1/i));
+  userEvent.click(getByText(/Heading/));
   expect(handleExecute).toHaveBeenLastCalledWith(
-    expect.stringMatching(/heading.*1/)
+    expect.stringContaining('heading')
   );
 });
 
@@ -86,8 +86,8 @@ describe('search', () => {
     expect(getAllByRole('group')).toHaveLength(1);
     expect(getAllByRole('menuitem')).toHaveLength(2);
 
-    expect(getByText(/heading.+1/i)).toBeInTheDocument();
-    expect(getByText(/heading.+2/i)).toBeInTheDocument();
+    expect(getByText(/Heading/)).toBeInTheDocument();
+    expect(getByText(/Sub-heading/)).toBeInTheDocument();
   });
 
   it('affects arrow key selection', () => {

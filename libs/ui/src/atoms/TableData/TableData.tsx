@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import {
   cssVar,
-  grey400,
+  grey600,
   p12Medium,
   p14Medium,
   setCssVar,
@@ -24,7 +24,7 @@ const tdBaseStyles = css(p14Medium, {
 
   '&:focus-within': {
     borderRadius: '6px',
-    boxShadow: `0 0 0 1.5px ${grey400.rgb}`,
+    boxShadow: `0 0 0 1.5px ${grey600.rgb}`,
     zIndex: 1,
   },
 

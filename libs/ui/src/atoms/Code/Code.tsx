@@ -1,11 +1,12 @@
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
-import { code, cssVar, p16Regular } from '../../primitives';
+import { code, teal50, teal600 } from '../../primitives';
 
 const styles = css(code, {
-  backgroundColor: cssVar('highlightColor'),
-  borderRadius: '100vmax',
-  padding: `calc((${p16Regular.fontSize} - ${code.fontSize}) / 2)`,
+  color: teal600.rgb,
+  backgroundColor: teal50.rgb,
+  padding: `4px`,
+  borderRadius: '4px',
   margin: '0 6px',
 });
 

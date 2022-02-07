@@ -48,7 +48,7 @@ it('renders the menu when typing in the selected paragraph starting with a /', a
   Transforms.insertText(editor, 'a');
 
   await findByText('/a');
-  expect(getByText(/heading.*1/i)).toBeVisible();
+  expect(getByText(/Heading/)).toBeVisible();
 });
 it('does not render the menu when the editor is not focused', async () => {
   const { getByText, queryByText, findByText } = render(
@@ -62,7 +62,7 @@ it('does not render the menu when the editor is not focused', async () => {
   Transforms.insertText(editor, 'a');
 
   await findByText('/a');
-  expect(queryByText(/heading.*1/i)).not.toBeInTheDocument();
+  expect(queryByText(/Heading/)).not.toBeInTheDocument();
 });
 it('does not render the menu when the paragraph is not selected', async () => {
   const { getByText, queryByText, findByText } = render(
@@ -80,7 +80,7 @@ it('does not render the menu when the paragraph is not selected', async () => {
   });
 
   await findByText('/a');
-  expect(queryByText(/heading.*1/i)).not.toBeInTheDocument();
+  expect(queryByText(/Heading/)).not.toBeInTheDocument();
 });
 it('does not render the menu before typing', async () => {
   const { getByText, queryByText, findByText } = render(
@@ -96,7 +96,7 @@ it('does not render the menu before typing', async () => {
   });
 
   await findByText('/');
-  expect(queryByText(/heading.*1/i)).not.toBeInTheDocument();
+  expect(queryByText(/Heading/)).not.toBeInTheDocument();
 });
 it.each([' /cmd', '/cmd#', '/42'])(
   'does not render the menu for the non-command text "%s"',
@@ -124,7 +124,7 @@ it.each([' /cmd', '/cmd#', '/42'])(
     await findByText(text, {
       normalizer: getDefaultNormalizer({ trim: false }),
     });
-    expect(queryByText(/heading.*1/i)).not.toBeInTheDocument();
+    expect(queryByText(/Heading/i)).not.toBeInTheDocument();
   }
 );
 
@@ -142,13 +142,13 @@ describe('the escape key', () => {
       offset: '/'.length,
     });
     Transforms.insertText(editor, 'a');
-    await findByText(/heading.*1/i);
+    await findByText(/Heading/);
 
     userEvent.keyboard('{esc}');
-    expect(queryByText(/heading.*1/i)).not.toBeInTheDocument();
+    expect(queryByText(/Heading/)).not.toBeInTheDocument();
 
     Transforms.insertText(editor, 'd');
-    expect(await findByText(/heading.*1/i)).toBeVisible();
+    expect(await findByText(/Heading/)).toBeVisible();
   });
 
   it('does not hide the menu while holding shift', async () => {
@@ -162,10 +162,10 @@ describe('the escape key', () => {
       offset: '/'.length,
     });
     Transforms.insertText(editor, 'a');
-    await findByText(/heading.*1/i);
+    await findByText(/Heading/);
 
     userEvent.keyboard('{shift}{esc}');
-    expect(getByText(/heading.*1/i)).toBeVisible();
+    expect(getByText(/Heading/)).toBeVisible();
   });
 });
 
@@ -181,7 +181,7 @@ it('executes a command on click', async () => {
   });
   Transforms.insertText(editor, 'a');
 
-  userEvent.click(await findByText(/heading.*1/i));
+  userEvent.click(await findByText(/Heading/));
   await waitFor(() => {
     expect(editor.children).toEqual([
       { type: ELEMENT_H2, children: [{ text: '' }] },

@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { electricGreen200 } from '../../primitives';
+import { brand500 } from '../../primitives';
 import { Button } from './Button';
 
 it('renders the button text', () => {
@@ -37,13 +37,13 @@ describe('when disabled', () => {
     const { getByRole, rerender } = render(<Button>text</Button>);
 
     expect(getComputedStyle(getByRole('button')).backgroundColor).toBe(
-      electricGreen200.rgb
+      brand500.rgb
     );
 
     rerender(<Button disabled>text</Button>);
 
     expect(getComputedStyle(getByRole('button')).backgroundColor).not.toBe(
-      electricGreen200.rgb
+      brand500.rgb
     );
   });
 });

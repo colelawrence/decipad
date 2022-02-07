@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import { h2 } from '../../primitives';
 
 const styles = css(h2, {
-  padding: '12px 0',
+  padding: '18px 0 16px 0',
 });
 
 interface Heading2Props {

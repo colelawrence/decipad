@@ -65,14 +65,14 @@ const groups: ReadonlyArray<SlashCommandGroup> = [
     items: [
       {
         command: 'heading1',
-        title: 'Heading 1',
+        title: 'Heading',
         description: 'Add main text heading',
         icon: <Text />,
         extraSearchTerms: [],
       },
       {
         command: 'heading2',
-        title: 'Heading 2',
+        title: 'Sub-heading',
         description: 'Add secondary text heading',
         icon: <Text />,
         extraSearchTerms: [],

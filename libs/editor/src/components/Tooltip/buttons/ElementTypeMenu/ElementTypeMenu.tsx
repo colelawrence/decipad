@@ -111,12 +111,12 @@ export const ElementTypeMenu = ({
         <ToggleElementButton
           currentBlockType={currentBlockType}
           type={ELEMENT_H2}
-          label="Heading 1"
+          label="Heading"
         />
         <ToggleElementButton
           currentBlockType={currentBlockType}
           type={ELEMENT_H3}
-          label="Heading 2"
+          label="Sub-heading"
         />
         <ToggleElementButton
           currentBlockType={currentBlockType}

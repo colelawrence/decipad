@@ -2,9 +2,9 @@ import { css } from '@emotion/react';
 import {
   black,
   cssVar,
-  electricGreen200,
+  brand500,
   grey200,
-  grey270,
+  grey300,
   p13SemiBold,
   shortAnimationDuration,
   transparency,
@@ -22,7 +22,7 @@ const styles = css(p13SemiBold, {
   padding: '8px 14px',
   borderRadius: '6px',
 
-  backgroundColor: electricGreen200.rgb,
+  backgroundColor: brand500.rgb,
   color: black.rgb,
   boxShadow: `0 0 0 1px ${cssVar('backgroundColor')}`,
 
@@ -48,7 +48,7 @@ const extraLargeStyles = css({
 
 const disabledStyles = css({
   backgroundColor: grey200.rgb,
-  color: grey270.rgb,
+  color: grey300.rgb,
 });
 
 type ButtonTypes =

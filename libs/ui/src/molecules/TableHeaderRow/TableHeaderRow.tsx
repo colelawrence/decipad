@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { Children, FC, ReactNode } from 'react';
 import { isElement } from 'react-is';
-import { cssVar, grey250 } from '../../primitives';
+import { cssVar, grey200 } from '../../primitives';
 import { Create } from '../../icons';
 import { noop } from '../../utils';
 import { TableHeader } from '../../atoms';
@@ -14,7 +14,7 @@ const createColumnThStyles = css({
     backgroundColor: cssVar('strongHighlightColor'),
   },
 
-  boxShadow: `inset 0px -2px 0px ${grey250.rgb}`,
+  boxShadow: `inset 0px -2px 0px ${grey200.rgb}`,
 
   // Each row is as tall as the tallest cell, so our rows are at least this high.
   minHeight: table.thMinHeight,

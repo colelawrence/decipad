@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { SerializedUnits } from '@decipad/language';
 import { noop } from '@decipad/utils';
+import { css } from '@emotion/react';
 import {
   AddTableRowButton,
   EditableTableCaption,
@@ -12,6 +13,11 @@ import { EditableTableHeader, Table } from '..';
 import { TableCellType, TableColumn, TableData } from '../../types';
 
 const alwaysTrue = () => true;
+
+const etStyle = css({
+  marginBottom: '8px',
+  paddingBottom: '6px',
+});
 
 interface EditorTableProps {
   readOnly?: boolean;
@@ -56,7 +62,7 @@ export const EditorTable = ({
 }: EditorTableProps): ReturnType<FC> => {
   const tableLength = value.columns[0].cells.length;
   return (
-    <div>
+    <div css={etStyle}>
       <Table>
         <EditableTableCaption
           value={value.variableName}

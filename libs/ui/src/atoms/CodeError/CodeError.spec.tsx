@@ -5,7 +5,7 @@ import { CodeError } from './CodeError';
 
 it('renders error icon', () => {
   const { getByTitle } = render(<CodeError message="" url="" />);
-  expect(getByTitle(/info/i)).toBeInTheDocument();
+  expect(getByTitle(/Warning/i)).toBeInTheDocument();
 });
 
 it('renders message when hovering the icon', async () => {
@@ -15,7 +15,7 @@ it('renders message when hovering the icon', async () => {
 
   expect(await queryByText('Message')).toBeNull();
 
-  userEvent.hover(getByTitle(/info/i));
+  userEvent.hover(getByTitle(/Warning/i));
 
   expect(await findByText('Message')).toBeInTheDocument();
 });
@@ -27,7 +27,7 @@ it('renders documentation url when hovering the icon', async () => {
 
   expect(await queryByText(/doc/i)).toBeNull();
 
-  userEvent.hover(getByTitle(/info/i));
+  userEvent.hover(getByTitle(/Warning/i));
 
   expect(await findByText(/doc/i)).toBeInTheDocument();
   expect(await findByText(/doc/i)).toHaveAttribute(
