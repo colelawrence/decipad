@@ -10,13 +10,21 @@ export function IdentifyUserAnalytics({
   const analytics = useAnalytics();
   const [session] = useSession();
   const [userId, setUserId] = useState<string | undefined>();
+  const [userEmail, setUserEmail] = useState<string | undefined>();
 
   useEffect(() => {
-    if (analytics && session?.user && session.user.id !== userId) {
+    if (
+      analytics &&
+      session?.user &&
+      (session.user.id !== userId || session.user.email !== userEmail)
+    ) {
       setUserId(session.user.id);
-      analytics.identify(session.user.id);
+      setUserEmail(session.user.email);
+      analytics.identify(session.user.id, {
+        email: session.user.email,
+      });
     }
-  }, [analytics, session, userId]);
+  }, [analytics, session, userId, userEmail]);
 
   return <>{children}</>;
 }
