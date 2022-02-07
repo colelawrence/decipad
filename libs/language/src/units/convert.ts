@@ -4,13 +4,34 @@ import { getUnitByName } from './known-units';
 import { expandUnits, contractUnits } from './expand';
 import { RuntimeError } from '../interpreter';
 import { Unit, Units } from '../type/unit-type';
-import { simplifyUnits, stringifyUnits } from '../type/units';
+import { normalizeUnits, simplifyUnits, stringifyUnits } from '../type/units';
+import { zip } from '../utils';
 
 function areQuantityUnitsCompatible(a: Unit, b: Unit): boolean {
   return (
     a.unit === b.unit &&
     a.exp.compare(b.exp) === 0 &&
     a.multiplier.compare(b.multiplier) === 0
+  );
+}
+
+function areQuantityUnitsReversible(a: Units | null, b: Units | null): boolean {
+  if (!a || !b) {
+    return false;
+  }
+
+  const sortedA = normalizeUnits(
+    baseQuantityUnits(a)?.args as Unit[]
+  ) as Unit[];
+  const sortedB = normalizeUnits(
+    baseQuantityUnits(b)?.args as Unit[]
+  ) as Unit[];
+
+  return (
+    sortedA.length === sortedB.length &&
+    zip(sortedA, sortedB).every(
+      ([a, b]) => a.unit === b.unit && a.exp.equals(b.exp.neg())
+    )
   );
 }
 
@@ -44,6 +65,10 @@ export function areUnitsConvertible(unitsA: Units, unitsB: Units): boolean {
     (baseQuantityTargetUnits?.args ?? []).length
   ) {
     return false;
+  }
+
+  if (areQuantityUnitsReversible(sourceUnits, targetUnits)) {
+    return true;
   }
 
   const pendingMatchUnits = new Set(baseQuantityTargetUnits?.args);
@@ -105,11 +130,37 @@ export function convertBetweenUnits(
   const [expandedUnits, expandedN] = toExpandedBaseQuantity(n, from);
   const [outputUnits, revertedN] = fromExpandedBaseQuantity(expandedN, to);
 
-  const convertedN = convertToOutputMultipliers(
-    revertedN,
-    expandedUnits,
-    outputUnits
-  );
-
+  let convertedN;
+  if (areQuantityUnitsReversible(expandedUnits, outputUnits)) {
+    const [, revertedNReversed] = fromExpandedBaseQuantity(
+      expandedN.inverse(),
+      to
+    );
+    convertedN = convertToOutputMultipliers(
+      revertedNReversed,
+      invertMultiplier(expandedUnits),
+      outputUnits
+    );
+  } else {
+    convertedN = convertToOutputMultipliers(
+      revertedN,
+      expandedUnits,
+      outputUnits
+    );
+  }
   return convertedN;
+}
+
+function invertMultiplier(units: Units | null): Units | null {
+  if (!units) {
+    return units;
+  }
+  const invertedArgs = (units?.args ?? []).map(
+    produce((partialUnit) => {
+      partialUnit.multiplier = partialUnit.multiplier.inverse();
+    })
+  );
+  return produce(units, (units) => {
+    units.args = invertedArgs;
+  });
 }

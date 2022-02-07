@@ -47,7 +47,6 @@ export async function getType(
     if (!sourceUnits || sourceUnits.args.length === 0) {
       return t.number(targetUnit);
     }
-
     if (unit && !areUnitsConvertible(sourceUnits, unit)) {
       return t.impossible(
         InferError.cannotConvertBetweenUnits(sourceUnits, unit)
@@ -117,6 +116,7 @@ export async function getValue(
       if (!units || !sourceUnits || sourceUnits.args.length < 1) {
         return fromJS(value.getData().div(unitsData));
       }
+
       const converted = convertBetweenUnits(
         value.getData(),
         sourceUnits,

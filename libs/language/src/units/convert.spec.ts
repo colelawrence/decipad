@@ -588,4 +588,42 @@ describe('convert', () => {
       convertBetweenUnits(F(1), U('ton_displacement'), U('ft3')).valueOf()
     ).toBe(35);
   });
+
+  it('can convert between invertible units', () => {
+    expect(
+      convertBetweenUnits(
+        F(1),
+        U([u('bananas'), u('second', { exp: F(-1) })]),
+        U([u('second'), u('banana', { exp: F(-1) })])
+      )
+    ).toMatchObject(F(1));
+
+    expect(
+      convertBetweenUnits(
+        F(1),
+        U([u('second'), u('banana', { exp: F(-1) })]),
+        U([u('banana'), u('minute', { exp: F(-1) })])
+      )
+    ).toMatchObject(F(60));
+
+    expect(
+      convertBetweenUnits(
+        F(1),
+        U([u('bananas'), u('second', { exp: F(-2) })]),
+        U([u('second', { exp: F(2) }), u('banana', { exp: F(-1) })])
+      )
+    ).toMatchObject(F(1));
+
+    expect(
+      convertBetweenUnits(
+        F(1),
+        U([u('bananas'), u('man'), u('second', { exp: F(-1) })]),
+        U([
+          u('second', { exp: F(1) }),
+          u('banana', { exp: F(-1) }),
+          u('man', { exp: F(-1) }),
+        ])
+      )
+    ).toMatchObject(F(1));
+  });
 });

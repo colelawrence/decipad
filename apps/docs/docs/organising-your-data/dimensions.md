@@ -39,7 +39,7 @@ You can now calculate quotes:
 ```deci live
 Quote = {
   Name = ["Bhakta Construction", "Precido Builders", "MBD Firm"],
-  Price = [750 £/sqft, 900 £/sqft, 435 £/sqft]
+  Price = [750 gbp/sqft, 900 gbp/sqft, 435 gbp/sqft]
 }
 Job = {
   Name = ["Small", "Medium", "Large"],

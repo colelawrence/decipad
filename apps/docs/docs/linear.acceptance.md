@@ -202,6 +202,33 @@ lookup(Countries, Countries.Origin == "UK")
 }
 ```
 
+## [ENG-332](https://linear.app/decipad/issue/ENG-332)
+
+```deci live
+10 minutes/km in km/hour
+==> 6 km per hour
+```
+
+```deci live
+10 s/km in km/s
+==> 0.1 km/s
+```
+
+```deci live
+10 s/m in m/s
+==> 0.1 m/s
+```
+
+```deci live
+10 s/km^2 in km^2/s
+==> 0.1 km²/s
+```
+
+```deci live
+10 banana/s/m in banana/m/s
+==> 10 bananas·m⁻¹·s⁻¹
+```
+
 ## [ENG-281](https://linear.app/decipad/issue/ENG-281)
 
 ```deci live
