@@ -38,6 +38,7 @@ export {
   serializeUnit,
   stringifyUnits,
   deserializeUnit,
+  convertToMultiplierUnit,
 } from './type';
 export { Time } from './date';
 export { ExternalData } from './data';

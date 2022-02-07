@@ -143,6 +143,11 @@ const allUnits: UnitOfMeasure[] = allUnitPackages.flatMap(
   (unitPackage) => unitPackage.units
 );
 
+const baseQuantitiesThatDoNotUseUnitPrefixes: Set<BaseQuantity> = new Set();
+baseQuantitiesThatDoNotUseUnitPrefixes.add('area');
+baseQuantitiesThatDoNotUseUnitPrefixes.add('volume');
+baseQuantitiesThatDoNotUseUnitPrefixes.add('speed');
+
 const allSymbols = new Map<string, UnitOfMeasure>();
 
 export const unitsByName = allUnits.reduce((byName, unit) => {
@@ -172,6 +177,18 @@ export function getUnitByName(unit: string): UnitOfMeasure | null {
 
 export function knowsUnit(unit: string): boolean {
   return unitsByName.has(normalizeUnitName(unit));
+}
+
+export function unitUsesPrefixes(unit: string): boolean {
+  const n = getUnitByName(unit);
+  //
+  // this means user defined units can use prefixes by default
+  // should we disable that?
+  //
+  if (!n) {
+    return true;
+  }
+  return !baseQuantitiesThatDoNotUseUnitPrefixes.has(n.baseQuantity);
 }
 
 export function areUnitsCompatible(

@@ -12,3 +12,9 @@ import Fraction from 'fraction.js/bigfraction';
   };
 
 export default Fraction;
+
+export interface FractionLike {
+  n: bigint | number;
+  d: bigint | number;
+  s: bigint | number;
+}

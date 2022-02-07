@@ -12,22 +12,22 @@ const cmpFunctor = ([left, right]: Type[]): Type => {
 export const comparisonOperators: Record<string, BuiltinSpec> = {
   '<': {
     argCount: 2,
-    fn: (a, b) => compare(a, b) < 0,
+    fn: ([a, b]) => compare(a, b) < 0,
     functor: cmpFunctor,
   },
   '>': {
     argCount: 2,
-    fn: (a, b) => compare(a, b) > 0,
+    fn: ([a, b]) => compare(a, b) > 0,
     functor: cmpFunctor,
   },
   '<=': {
     argCount: 2,
-    fn: (a, b) => compare(a, b) <= 0,
+    fn: ([a, b]) => compare(a, b) <= 0,
     functor: cmpFunctor,
   },
   '>=': {
     argCount: 2,
-    fn: (a, b) => compare(a, b) >= 0,
+    fn: ([a, b]) => compare(a, b) >= 0,
     functor: cmpFunctor,
   },
 };

@@ -132,6 +132,79 @@ SQRTZ = sqrt(A * 3)
 ==> 3
 ```
 
+## [ENG-311](https://linear.app/decipad/issue/ENG-311)
+
+```deci live
+1000 milliliters in liters
+==> 1 liters
+```
+
+```deci live
+nuno = 100 kg
+2 tonnes in nuno
+==> 20 nunos
+```
+
+```deci live
+nuno = 100 kg
+1 nuno + 1 kg
+==> 101 kg
+```
+
+```deci live
+[1 kg, 4]
+==> [ 1 kg, 4 kg ]
+```
+
+## [ENG-307](https://linear.app/decipad/issue/ENG-307)
+
+```deci live
+1 cm^3 in cm3
+==> 1 cm³
+```
+
+```deci live
+(cm * cm * cm) in cm3
+==> 1 cm³
+```
+
+```deci live
+(cm * cm * cm) in cm^3
+==> 1 cm³
+```
+
+```deci live
+(1 km * 1 km) in km2
+==> 1 km²
+```
+
+```deci live
+(1 km * 1 km) in km^2
+==> 1 km²
+```
+
+```deci live
+(1 km * 1 km)
+==> 1 km²
+```
+
+```deci live
+(1 km * 1 km) in m^2
+==> 1000000 m²
+```
+
+```deci live
+(1 km * 1 km) in cm^2
+==> 10000000000 cm²
+```
+
+```deci live
+(1 km * 1 km) in cm2
+==> 10000000000 cm²
+```
+
+## [ENG-326](https://linear.app/decipad/issue/ENG-139)
+
 ## [ENG-308](https://linear.app/decipad/issue/ENG-308)
 
 ```deci live
@@ -254,4 +327,14 @@ lookup(Countries, Countries.Origin == "UK")
 ```deci live
 [10 .. 11 by -2]
 ==> Invalid step in sequence: sequence is ascending but step is negative
+```
+
+## [ENG-336](https://linear.app/decipad/issue/ENG-336)
+
+```deci live
+Datez = { Year = [date(2021) .. date(2025)] }
+DatezA = last(Datez.Year)
+DatezFoo = date(2025)
+DatezA == DatezFoo
+==> true
 ```

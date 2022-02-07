@@ -16,12 +16,12 @@ const isEqual = (a: any, b: any) => {
 export const equalityOperators: Record<string, BuiltinSpec> = {
   '==': {
     argCount: 2,
-    fn: (a, b) => isEqual(a, b),
+    fn: ([a, b]) => isEqual(a, b),
     functor: cmpFunctor,
   },
   '!=': {
     argCount: 2,
-    fn: (a, b) => !isEqual(a, b),
+    fn: ([a, b]) => !isEqual(a, b),
     functor: cmpFunctor,
   },
 };

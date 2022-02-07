@@ -896,18 +896,8 @@ describe('number units work together', () => {
         10 centimeters
       `)
     ).toMatchObject({
-      value: F(10),
-      type: t.number({
-        type: 'units',
-        args: [
-          {
-            unit: 'meters',
-            exp: F(1),
-            multiplier: new Fraction(0.01),
-            known: true,
-          },
-        ],
-      }),
+      value: F(10, 100),
+      type: t.number(U('meters', { multiplier: F(1, 100) })),
     });
   });
 
@@ -918,17 +908,7 @@ describe('number units work together', () => {
       `)
     ).toMatchObject({
       value: F(6),
-      type: t.number({
-        type: 'units',
-        args: [
-          {
-            unit: 'meters',
-            exp: F(1),
-            multiplier: new Fraction(1),
-            known: true,
-          },
-        ],
-      }),
+      type: t.number(U('meters')),
     });
   });
 
@@ -938,7 +918,7 @@ describe('number units work together', () => {
         10 centimeters + 2 centimeters
       `)
     ).toMatchObject({
-      value: F(12),
+      value: F(12, 100),
       type: t.number({
         type: 'units',
         args: [
@@ -960,17 +940,7 @@ describe('number units work together', () => {
       `)
     ).toMatchObject({
       value: F(21, 10),
-      type: t.number({
-        type: 'units',
-        args: [
-          {
-            unit: 'meters',
-            exp: F(1),
-            multiplier: new Fraction(1),
-            known: true,
-          },
-        ],
-      }),
+      type: t.number(U('meters')),
     });
   });
 
@@ -993,70 +963,26 @@ describe('number units work together', () => {
 
   it('multiplies units', async () => {
     expect(await runCode(`10 kilometers * 3 hours`)).toMatchObject({
-      value: F(30, 1),
-      type: t.number({
-        type: 'units',
-        args: [
-          {
-            unit: 'meters',
-            exp: F(1),
-            multiplier: new Fraction(1000),
-            known: true,
-          },
-          {
-            unit: 'hours',
-            exp: F(1),
-            multiplier: new Fraction(1),
-            known: true,
-          },
-        ],
-      }),
+      value: F(30000, 1),
+      type: t.number(U([u('meters', { multiplier: F(1000) }), u('hours')])),
     });
   });
 
   it('can use divided units', async () => {
     expect(await runCode(`3 kilometers/minute`)).toMatchObject({
-      value: F(3, 1),
-      type: t.number({
-        type: 'units',
-        args: [
-          {
-            unit: 'meters',
-            exp: F(1),
-            multiplier: new Fraction(1000),
-            known: true,
-          },
-          {
-            unit: 'minutes',
-            exp: F(-1),
-            multiplier: new Fraction(1),
-            known: true,
-          },
-        ],
-      }),
+      value: F(3000),
+      type: t.number(
+        U([u('meters', { multiplier: F(1000) }), u('minutes', { exp: F(-1) })])
+      ),
     });
   });
 
   it('divides two simple units', async () => {
-    expect(await runCode(`3 kilometers / ( 1 minute )`)).toMatchObject({
-      value: F(3, 1),
-      type: t.number({
-        type: 'units',
-        args: [
-          {
-            unit: 'meters',
-            exp: F(1),
-            multiplier: new Fraction(1000),
-            known: true,
-          },
-          {
-            unit: 'minutes',
-            exp: F(-1),
-            multiplier: new Fraction(1),
-            known: true,
-          },
-        ],
-      }),
+    expect(await runCode('3 kilometers / (1 minute)')).toMatchObject({
+      value: F(3000, 1),
+      type: t.number(
+        U([u('meters', { multiplier: F(1000) }), u('minutes', { exp: F(-1) })])
+      ),
     });
   });
 
@@ -1223,11 +1149,18 @@ describe('number units work together', () => {
     });
   });
 
+  it('converts between exponentiated and non-exponentiated but expandable to same', async () => {
+    expect(await runCode('1 cm^3 in cm3')).toMatchObject({
+      value: F(1, 1000000),
+      type: t.number(U('m', { exp: F(3), multiplier: F(1, 100) })),
+    });
+  });
+
   it('autoconverts complex units', async () => {
     expect(
       await runCode(`1 joule/meter^2 + 2 calories/inch^2 as kg/second^2`)
     ).toMatchObject({
-      value: F(209216129, 16129),
+      value: F(209216129000, 16129),
       type: t.number(
         U([
           u('g', { multiplier: new Fraction(1000) }),
@@ -1295,7 +1228,7 @@ describe('number units work together', () => {
     const run = await runCode(`3600 kj in kw h`);
 
     expect(run).toMatchObject({
-      value: F(1),
+      value: F(1000),
       type: t.number(U([u('w', { multiplier: new Fraction(1000) }), u('h')])),
     });
   });
@@ -1304,7 +1237,7 @@ describe('number units work together', () => {
     const run = await runCode(`1 cm in mm`);
 
     expect(run).toMatchObject({
-      value: F(10),
+      value: F(1, 100),
       type: t.number(U([u('m', { multiplier: new Fraction(0.001) })])),
     });
   });
@@ -1313,7 +1246,7 @@ describe('number units work together', () => {
     const run = await runCode(`1 decimetre in centimetre`);
 
     expect(run).toMatchObject({
-      value: F(10),
+      value: F(1, 10),
       type: t.number(U([u('metre', { multiplier: new Fraction(0.01) })])),
     });
   });
@@ -1322,7 +1255,7 @@ describe('number units work together', () => {
     const run = await runCode(`1 cm in millimetre`);
 
     expect(run).toMatchObject({
-      value: F(10),
+      value: F(1, 100),
       type: t.number(U([u('metre', { multiplier: new Fraction(1, 1000) })])),
     });
   });
@@ -1331,7 +1264,7 @@ describe('number units work together', () => {
     const run = await runCode(`1 mm in nm`);
 
     expect(run).toMatchObject({
-      value: F(1_000_000),
+      value: F(1, 1000),
       type: t.number(
         U([u('m', { multiplier: new Fraction(1, 1_000_000_000) })])
       ),
@@ -1342,7 +1275,7 @@ describe('number units work together', () => {
     const run = await runCode(`1 mm in μm`);
 
     expect(run).toMatchObject({
-      value: F(1_000),
+      value: F(1, 1000),
       type: t.number(U([u('m', { multiplier: new Fraction(0.000001) })])),
     });
   });
@@ -1351,7 +1284,7 @@ describe('number units work together', () => {
     const run = await runCode(`1 cF + 1 cF`);
 
     expect(run).toMatchObject({
-      value: F(2),
+      value: F(2, 100),
       type: t.number(U([u('F', { multiplier: new Fraction(1, 100) })])),
     });
   });
@@ -1360,7 +1293,7 @@ describe('number units work together', () => {
     const run = await runCode(`1 centifarad + 1 centifarad`);
 
     expect(run).toMatchObject({
-      value: F(2),
+      value: F(2, 100),
       type: t.number(U([u('farads', { multiplier: new Fraction(1, 100) })])),
     });
   });
@@ -1508,7 +1441,7 @@ describe('number units work together', () => {
 
   it("nonscalar unit conversions don't get in the way", async () => {
     expect(await runCode(`44 zettabytes/year`)).toMatchObject({
-      value: F(44),
+      value: F(44000000000000000000000),
       type: t.number(
         U([u('bytes', { multiplier: F(1e21) }), u('years', { exp: F(-1) })])
       ),
@@ -1517,7 +1450,16 @@ describe('number units work together', () => {
 });
 
 describe('unit conversion', () => {
-  it('as can be applied to columns', async () => {
+  it('does not loose precision when chained', async () => {
+    expect(
+      await runCode('27.33 miles/hour in kilometer/second in mph')
+    ).toMatchObject({
+      value: F(2733, 100),
+      type: t.number(U('mph')),
+    });
+  });
+
+  it('can be applied to columns', async () => {
     expect(
       await runCode(`
         [1, 2, 3] as watts
@@ -1587,6 +1529,13 @@ describe('unit conversion', () => {
       `Result([ [ 1.68 hours, 0.83 hours ], [ 1.68 hours, 0.83 hours ], [ 1.68 hours, 0.83 hours ] ])`
     );
   });
+
+  it('converts autoexpanding units correctly', async () => {
+    expect(await runCode(`1000 milliliters in liters`)).toMatchObject({
+      value: F(1),
+      type: t.number(U('liters')),
+    });
+  });
 });
 
 describe('user-defined units', () => {
@@ -1624,6 +1573,18 @@ describe('user-defined units', () => {
     ).toMatchObject({
       value: F(200),
       type: t.number(U('g')),
+    });
+  });
+
+  it('can derive custom units', async () => {
+    expect(
+      await runCode(`
+      Sugar = 1 cup
+      Glass = 0.33 L
+      Sugar in Glass`)
+    ).toMatchObject({
+      value: F(25, 33),
+      type: t.number(U('Glass', { known: false })),
     });
   });
 });
@@ -1678,6 +1639,23 @@ describe('len', () => {
     expect(await runCode(`len(date(2020))`)).toMatchObject({
       value: F(1),
       type: t.number(U('year')),
+    });
+  });
+});
+
+describe('type cohercion', () => {
+  it('can type coherce column cells to the same unit', async () => {
+    expect(await runCode(`[1 centigram, 2]`)).toMatchObject({
+      value: [F(1, 100), F(2, 100)],
+      type: t.column(t.number(U('grams', { multiplier: F(1, 100) })), 2),
+    });
+  });
+
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('can coherce the arguments of an autoconverted function', async () => {
+    expect(await runCode(`1 centigram + 2`)).toMatchObject({
+      value: F(3, 100),
+      type: t.number(U('grams', { multiplier: F(1, 100) })),
     });
   });
 });

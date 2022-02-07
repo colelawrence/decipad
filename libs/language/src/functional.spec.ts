@@ -241,11 +241,11 @@ describe('more models', () => {
       )
     ).toMatchObject({
       variables: {
-        InitialCashFlow: F(10),
+        InitialCashFlow: F(1, 100),
         Years: years,
         GrowthRate: F(1, 4),
-        CashFlows: [F(10, 1), F(25, 2), F(125, 8), F(625, 32)],
-        YearlyCashFlows: [F(8, 1), F(10, 1), F(25, 2), F(125, 8)],
+        CashFlows: [F(1, 100), F(1, 80), F(1, 64), F(5, 256)],
+        YearlyCashFlows: [F(1, 125), F(1, 100), F(1, 80), F(1, 64)],
       },
       types: {
         InitialCashFlow: {

@@ -10,7 +10,7 @@ export const reducerOperators: { [fname: string]: BuiltinSpec } = {
     argCount: 1,
     argCardinalities: [2],
     isReducer: true,
-    fn: (nums: number[]) => nums.reduce((a, b) => a + b, 0),
+    fn: ([nums]: number[][]) => nums.reduce((a, b) => a + b, 0),
     functor: ([nums]) => nums.reduced().isScalar('number'),
   },
   sum: {

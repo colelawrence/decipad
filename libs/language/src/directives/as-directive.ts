@@ -2,19 +2,22 @@ import { singular } from 'pluralize';
 import Fraction from '@decipad/fraction';
 
 import produce from 'immer';
+import { getDefined } from '@decipad/utils';
 import { RuntimeError } from '../interpreter';
 import { convertTimeQuantityTo, Time, TimeQuantity } from '../date';
 import { automapTypes, automapValues } from '../dimtools';
 import { FractionValue, fromJS, Value } from '../interpreter/Value';
 import { AST } from '../parser';
-import { Expression } from '../parser/ast-types';
 import { build as t, InferError, Type, Unit, Units } from '../type';
 import { matchUnitArrays, stringifyUnits } from '../type/units';
 import { areUnitsConvertible, convertBetweenUnits, parseUnit } from '../units';
 import type { GetTypeCtx, GetValueCtx, Directive } from './types';
-import { getIdentifierString, getInstanceof, U, u } from '../utils';
+import { F, getIdentifierString, getInstanceof, U } from '../utils';
 
-function isUserUnit(exp: AST.Ref, targetUnit: Units) {
+function isUserUnit(exp: AST.Expression, targetUnit: Units) {
+  if (exp.type !== 'ref') {
+    return false;
+  }
   const unit: Units = {
     type: 'units',
     args: [parseUnit(getIdentifierString(exp))],
@@ -22,7 +25,25 @@ function isUserUnit(exp: AST.Ref, targetUnit: Units) {
   return !matchUnitArrays(unit, targetUnit);
 }
 
+function multiplyUnitMultipliers(units: Units | null | undefined): Fraction {
+  return (units?.args || []).reduce(
+    (acc, unit) => acc.mul(unit.multiplier.pow(unit.exp)),
+    F(1)
+  );
+}
+
+function multiplyUnitMultipliersIfNeedsEnforcing(
+  units: Units | null | undefined
+): Fraction {
+  return (units?.args || []).reduce(
+    (acc, unit) =>
+      unit.enforceMultiplier ? acc.mul(unit.multiplier.pow(unit.exp)) : acc,
+    F(1)
+  );
+}
+
 export async function getType(
+  _: AST.Expression,
   { infer }: GetTypeCtx,
   expr: AST.Expression,
   unitExpr: AST.Expression
@@ -38,32 +59,45 @@ export async function getType(
   const { unit } = unitExpressionType.reducedToLowest();
   let targetUnit = unit;
   if (unitExpr.type === 'ref' && unit && isUserUnit(unitExpr, unit)) {
-    targetUnit = U(
-      u(getIdentifierString(unitExpr), { known: false, aliasFor: unit })
-    );
+    targetUnit = U(getIdentifierString(unitExpr), {
+      known: false,
+      aliasFor: unit,
+    });
   }
-  return automapTypes([expressionType], ([expressionType]: Type[]): Type => {
-    const sourceUnits = expressionType.unit;
-    if (!sourceUnits || sourceUnits.args.length === 0) {
+  const ret = automapTypes(
+    [expressionType],
+    ([expressionType]: Type[]): Type => {
+      const sourceUnits = expressionType.unit;
+      if (!sourceUnits || sourceUnits.args.length === 0) {
+        return t.number(targetUnit);
+      }
+
+      if (unit && !areUnitsConvertible(sourceUnits, unit)) {
+        return t.impossible(
+          InferError.cannotConvertBetweenUnits(sourceUnits, unit)
+        );
+      }
+
       return t.number(targetUnit);
     }
-    if (unit && !areUnitsConvertible(sourceUnits, unit)) {
-      return t.impossible(
-        InferError.cannotConvertBetweenUnits(sourceUnits, unit)
-      );
-    }
-
-    return t.number(targetUnit);
-  });
+  );
+  return ret;
 }
 
-function inlineUnitAliases(unit: Units): Units {
-  return produce(unit, (unit) => {
-    unit.args = unit.args.reduce<Unit[]>((units, oneUnit) => {
+function inlineUnitAliases(units: Units | null): Units | null {
+  if (!units) {
+    return null;
+  }
+  return produce(units, (units) => {
+    units.args = units.args.reduce<Unit[]>((units, oneUnit) => {
       if (oneUnit.aliasFor != null) {
-        const unit = inlineUnitAliases(oneUnit.aliasFor);
+        const unit = getDefined(inlineUnitAliases(oneUnit.aliasFor));
         for (const u of unit.args) {
-          units.push(u);
+          units.push(
+            produce(u, (unit) => {
+              unit.enforceMultiplier = true;
+            })
+          );
         }
       } else {
         units.push(oneUnit);
@@ -74,35 +108,49 @@ function inlineUnitAliases(unit: Units): Units {
 }
 
 export async function getValue(
+  root: AST.Expression,
   { evaluate, getNodeType }: GetValueCtx,
-  expression: Expression,
-  unitsExpression: Expression
+  expression: AST.Expression,
+  unitsExpression: AST.Expression
 ): Promise<Value> {
   const evalResult = await evaluate(expression);
-  const unitsEvalResult = await evaluate(unitsExpression);
-  const unitsData = getInstanceof(
-    unitsEvalResult.getData(),
+  const targetUnitsEvalResult = await evaluate(unitsExpression);
+  const targetUnitsData = getInstanceof(
+    targetUnitsEvalResult.getData(),
     Fraction,
     `units needs to be a number`
   );
 
+  const returnExpressionType = await getNodeType(root);
+  const returnTypeDivider = multiplyUnitMultipliersIfNeedsEnforcing(
+    inlineUnitAliases(returnExpressionType.unit)
+  );
+
   const expressionType = await getNodeType(expression);
-  const sourceUnits = expressionType.reducedToLowest().unit;
+
+  const sourceUnits = inlineUnitAliases(expressionType.reducedToLowest().unit);
   const targetUnitsExpressionType = await getNodeType(unitsExpression);
-  const units = targetUnitsExpressionType.unit
-    ? inlineUnitAliases(targetUnitsExpressionType.unit)
-    : undefined;
+  const targetUnits = inlineUnitAliases(targetUnitsExpressionType.unit);
+
+  const targetUnitsMultiplier = multiplyUnitMultipliers(targetUnits);
+  const targetMultiplierConversionRate = targetUnitsData.div(
+    targetUnitsMultiplier
+  );
+
+  const conversionRate = targetMultiplierConversionRate.mul(returnTypeDivider);
 
   return automapValues([expressionType], [evalResult], ([value]) => {
     if (value instanceof TimeQuantity) {
-      if (units && units.args.length > 1) {
+      if (targetUnits && targetUnits.args.length > 1) {
         throw new RuntimeError(
-          `Don't know how to convert to composed unit ${stringifyUnits(units)}`
+          `Don't know how to convert to composed unit ${stringifyUnits(
+            targetUnits
+          )}`
         );
       }
 
       const targetUnitAsString = singular(
-        (units?.args[0].unit ?? '').toLocaleLowerCase()
+        (targetUnits?.args[0].unit ?? '').toLocaleLowerCase()
       );
       return fromJS(
         convertTimeQuantityTo(
@@ -113,21 +161,23 @@ export async function getValue(
     }
 
     if (value instanceof FractionValue) {
-      if (!units || !sourceUnits || sourceUnits.args.length < 1) {
-        return fromJS(value.getData().div(unitsData));
+      if (!targetUnits || !sourceUnits || sourceUnits.args.length < 1) {
+        return fromJS(value.getData().div(conversionRate));
       }
 
       const converted = convertBetweenUnits(
         value.getData(),
         sourceUnits,
-        units
-      ).div(unitsData);
-      return fromJS(converted);
+        targetUnits
+      );
+
+      return fromJS(converted.div(conversionRate));
     }
 
     throw new RuntimeError(
       `Don't know how to convert value to ${
-        (units && stringifyUnits(units)) || value.getData().toString()
+        (targetUnits && stringifyUnits(targetUnits)) ||
+        value.getData().toString()
       }`
     );
   });

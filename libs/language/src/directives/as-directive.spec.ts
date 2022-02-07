@@ -2,7 +2,7 @@ import { build as t } from '../type';
 import { c, col, l, U, u, ne, r, F } from '../utils';
 import { date } from '../date';
 import { getType, getValue } from './as-directive';
-import { testGetType, testGetValue } from './testUtils';
+import { testGetType, testGetValue, directiveFor } from './testUtils';
 import { makeContext } from '../infer';
 import * as expand from './expand';
 
@@ -35,7 +35,12 @@ describe('getType', () => {
     );
     const quantity = ne(2, 'ton');
     const ref = r('nuno');
-    expect(await expand.getType(ctx, getType, [quantity, ref])).toMatchObject(
+    expect(
+      await expand.getType(directiveFor([quantity, ref]), ctx, getType, [
+        quantity,
+        ref,
+      ])
+    ).toMatchObject(
       t.number(
         U(
           u('nuno', { known: false, aliasFor: U('g', { multiplier: F(1000) }) })

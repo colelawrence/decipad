@@ -1,5 +1,5 @@
 import Fraction from '@decipad/fraction';
-import { knowsUnit } from '.';
+import { knowsUnit, unitUsesPrefixes } from '.';
 import { Unit } from '..';
 import { F } from '../utils';
 
@@ -86,7 +86,10 @@ export function parseUnit(unitString: string): Unit {
       known: true,
     };
   } else {
-    let [multiplier, name] = trimPrefix(unitString);
+    const trimResult = trimPrefix(unitString);
+    let multiplier = trimResult[0];
+    let name = trimResult[1];
+    const exponent = 1;
     const known = knowsUnit(name);
 
     const smallPrefix = unitString.length - name.length < 3;
@@ -95,10 +98,32 @@ export function parseUnit(unitString: string): Unit {
       name = unitString;
       multiplier = F(1);
     }
+    if (!unitUsesPrefixes(name)) {
+      const matchesExponent = name.match(/(.*)([0-9])+$/);
+      if (matchesExponent) {
+        const [, name, exponent] = matchesExponent;
+
+        return {
+          unit: name,
+          exp: F(exponent),
+          multiplier,
+          known,
+        };
+      } else {
+        //
+        // this is a user invented unit that collided?
+        // or is this an error?
+        //
+        // cause microkph is not really a thing
+        //
+        // todo: code review
+        //
+      }
+    }
 
     return {
       unit: name,
-      exp: F(1),
+      exp: F(exponent),
       multiplier,
       known,
     };

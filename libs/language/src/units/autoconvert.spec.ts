@@ -20,7 +20,7 @@ describe('autoconvert arguments', () => {
   it('autoconverts unitful (standard unit and multiplier) argument', () => {
     expect(
       autoconvertArguments(
-        [fromJS(F(2))],
+        [fromJS(F(200))],
         [number(U('meter', { multiplier: new Fraction(100) }))]
       )
     ).toMatchObject([fromJS(F(200))]);
@@ -61,15 +61,6 @@ describe('autoconvert result', () => {
     expect(autoconvertResult(fromJS(F(2)), number(U('meter')))).toMatchObject(
       fromJS(F(2))
     );
-  });
-
-  it('autoconverts unitful (standard unit and multiplier) argument', () => {
-    expect(
-      autoconvertResult(
-        fromJS(F(200)),
-        number(U('meter', { multiplier: new Fraction(100) }))
-      )
-    ).toMatchObject(fromJS(F(2)));
   });
 
   it('autoconverts from expandable (but standard) units (2)', () => {

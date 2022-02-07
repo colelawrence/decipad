@@ -45,14 +45,14 @@ You cannot have lists that contain different types of elements. Here are some ex
 
 ```deci live
 [true, "that"]
-==> Column cannot contain both boolean and string
+==> This operation requires a boolean and a string was entered
 ```
 
 If numbers have units, they must be the same:
 
 ```deci live
 [1 orange, 2 pears]
-==> Column cannot contain both oranges and pears
+==> This operation requires compatible units
 ```
 
 ## Creating lists from sequences

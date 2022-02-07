@@ -1,4 +1,3 @@
-import Fraction from '@decipad/fraction';
 import { F, U, u } from '../../utils';
 import { expandUnits } from '.';
 
@@ -24,15 +23,9 @@ describe('expand', () => {
   });
 
   it('expands known unit to the same unit and value (2)', () => {
-    const [resultUnits, convert] = expandUnits(
-      U('watts', { multiplier: new Fraction(1000) })
-    );
+    const [resultUnits, convert] = expandUnits(U('watts'));
     expect(resultUnits).toMatchObject(
-      U([
-        u('grams', { multiplier: new Fraction(1000) }),
-        u('meters', { exp: F(2) }),
-        u('seconds', { exp: F(-3) }),
-      ])
+      U([u('grams'), u('meters', { exp: F(2) }), u('seconds', { exp: F(-3) })])
     );
     expect(convert(F(2))).toMatchObject(F(2000));
   });
@@ -53,6 +46,32 @@ describe('expand', () => {
     expect(convert(F(18))).toMatchObject(F(5));
   });
 
+  it('expands electrical resistance units', () => {
+    const [resultUnits, convert] = expandUnits(U('ohm'));
+    expect(resultUnits).toMatchObject(
+      U([
+        u('amperes', { exp: F(-2) }),
+        u('grams'),
+        u('meters', { exp: F(2) }),
+        u('seconds', { exp: F(-3) }),
+      ])
+    );
+    expect(convert(F(1))).toMatchObject(F(1000));
+  });
+
+  it('expands electrical conductance units', () => {
+    const [resultUnits, convert] = expandUnits(U('siemens'));
+    expect(resultUnits).toMatchObject(
+      U([
+        u('amperes', { exp: F(2) }),
+        u('grams', { exp: F(-1) }),
+        u('meters', { exp: F(-2) }),
+        u('seconds', { exp: F(3) }),
+      ])
+    );
+    expect(convert(F(1))).toMatchObject(F(1, 1000));
+  });
+
   it('expands known negative exp unit to the same unit and value (2)', () => {
     const [resultUnits, convert] = expandUnits(U('second', { exp: F(-1) }));
     expect(resultUnits).toMatchObject(U('seconds', { exp: F(-1) }));
@@ -71,10 +90,10 @@ describe('expand', () => {
 
   it('expands known and unknown negative exp units to the same units and value (2)', () => {
     const [resultUnits, convert] = expandUnits(
-      U([u('bananas'), u('second', { exp: F(-1), multiplier: F(1, 1000) })])
+      U([u('bananas'), u('second', { exp: F(-1) })])
     );
     expect(resultUnits).toMatchObject(
-      U([u('bananas'), u('seconds', { exp: F(-1), multiplier: F(1, 1000) })])
+      U([u('bananas'), u('seconds', { exp: F(-1) })])
     );
     expect(convert(F(2))).toMatchObject(F(2));
   });
@@ -93,22 +112,14 @@ describe('expand', () => {
   });
 
   it('expands unknown unit with exp and multiplier to the same units and value', () => {
-    const [resultUnits, convert] = expandUnits(
-      U('bananas', { exp: F(2), multiplier: F(100) })
-    );
-    expect(resultUnits).toMatchObject(
-      U('bananas', { exp: F(2), multiplier: F(100) })
-    );
+    const [resultUnits, convert] = expandUnits(U('bananas', { exp: F(2) }));
+    expect(resultUnits).toMatchObject(U('bananas', { exp: F(2) }));
     expect(convert(F(2))).toMatchObject(F(2));
   });
 
   it('expands known unit with exp and multiplier to the same units and value', () => {
-    const [resultUnits, convert] = expandUnits(
-      U([u('meters', { exp: F(2), multiplier: F(1, 1000) })])
-    );
-    expect(resultUnits).toMatchObject(
-      U('meters', { exp: F(2), multiplier: F(1, 1000) })
-    );
+    const [resultUnits, convert] = expandUnits(U([u('meters', { exp: F(2) })]));
+    expect(resultUnits).toMatchObject(U('meters', { exp: F(2) }));
     expect(convert(F(2))).toMatchObject(F(2));
   });
 
@@ -118,21 +129,6 @@ describe('expand', () => {
     expect(resultUnits).toMatchObject(
       U([
         u('grams', { exp: F(1) }),
-        u('meters', { exp: F(2) }),
-        u('seconds', { exp: F(-2) }),
-      ])
-    );
-    expect(convert(F(2))).toMatchObject(F(8368));
-  });
-
-  it('expands standard known unit with multiplier to the correct units', () => {
-    const [resultUnits, convert] = expandUnits(
-      U('calories', { multiplier: new Fraction(1, 1000) })
-    );
-
-    expect(resultUnits).toMatchObject(
-      U([
-        u('grams', { exp: F(1), multiplier: F(1, 1000) }),
         u('meters', { exp: F(2) }),
         u('seconds', { exp: F(-2) }),
       ])

@@ -1,6 +1,10 @@
 import { FC } from 'react';
 import { css } from '@emotion/react';
-import { stringifyUnits, deserializeUnit } from '@decipad/language';
+import {
+  stringifyUnits,
+  deserializeUnit,
+  convertToMultiplierUnit,
+} from '@decipad/language';
 import Fraction from '@decipad/fraction';
 import { CodeResultProps } from '../../types';
 
@@ -70,7 +74,10 @@ export const NumberResult = ({
   type,
   value,
 }: CodeResultProps<'number'>): ReturnType<FC> => {
-  const fraction = new Fraction(value);
+  let fraction = new Fraction(value);
+  if (type.unit) {
+    fraction = convertToMultiplierUnit(fraction, type.unit);
+  }
   const asString = toString(fraction);
 
   // Numbers' toString isn't always formatted like [-]####.###

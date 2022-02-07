@@ -36,6 +36,7 @@ import { Unit, Units, units } from './unit-type';
 export type { Unit, Units };
 
 export * from './serialization';
+export * from './convert-to-multiplier-unit';
 export { setUnit, stringifyUnits, normalizeUnits, units };
 export { InferError, inverseExponent, t as build };
 

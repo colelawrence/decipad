@@ -17,6 +17,14 @@ export interface GetValueCtx {
  */
 export interface Directive {
   argCount: number;
-  getType(ctx: GetTypeCtx, ...args: AST.Node[]): Promise<Type>;
-  getValue(ctx: GetValueCtx, ...args: AST.Node[]): Promise<Value>;
+  getType(
+    root: AST.Expression,
+    ctx: GetTypeCtx,
+    ...args: AST.Node[]
+  ): Promise<Type>;
+  getValue(
+    root: AST.Expression,
+    ctx: GetValueCtx,
+    ...args: AST.Node[]
+  ): Promise<Value>;
 }

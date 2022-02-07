@@ -21,16 +21,16 @@ it('turns cells into AST nodes', () => {
           type: 'units',
           args: [
             {
-              exp: '1',
+              exp: { n: 1, d: 1, s: 1 },
               known: false,
-              multiplier: '1',
+              multiplier: { n: 1, d: 1, s: 1 },
               unit: 'bananas',
             },
 
             {
-              exp: '-2',
+              exp: { n: 2, d: 1, s: -1 },
               known: true,
-              multiplier: '1000',
+              multiplier: { n: 1000, d: 1, s: 1 },
               unit: 'm',
             },
           ],
@@ -48,16 +48,16 @@ it('turns cells into AST nodes', () => {
           type: 'units',
           args: [
             {
-              exp: '1',
+              exp: { n: 1, d: 1, s: 1 },
               known: true,
-              multiplier: '1',
+              multiplier: { n: 1, d: 1, s: 1 },
               unit: 'm',
             },
 
             {
-              exp: '1',
+              exp: { n: 1, d: 1, s: 1 },
               known: true,
-              multiplier: '1',
+              multiplier: { n: 1, d: 1, s: 1 },
               unit: 's',
             },
           ],

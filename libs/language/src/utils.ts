@@ -1,4 +1,4 @@
-import Fraction from '@decipad/fraction';
+import Fraction, { FractionLike } from '@decipad/fraction';
 import { Class } from 'utility-types';
 import { AST, Unit, Units } from '.';
 
@@ -323,9 +323,9 @@ export function invert(
 }
 
 export function F(n: number | bigint, d?: number | bigint): Fraction;
-export function F(n: string | Fraction): Fraction;
+export function F(n: string | Fraction | FractionLike): Fraction;
 export function F(
-  n: number | bigint | string | Fraction,
+  n: number | bigint | string | Fraction | FractionLike,
   d: number | bigint = 1n
 ) {
   return typeof n === 'number' || typeof n === 'bigint'
@@ -368,4 +368,18 @@ export function ne(n: number, unit: string): AST.Expression {
       },
     ],
   };
+}
+
+export function multiplyMultipliers(
+  units: Units | undefined | null,
+  start: Fraction = F(1)
+): Fraction {
+  if (!units) {
+    return start;
+  }
+  let acc = start;
+  for (const unit of units.args) {
+    acc = acc.mul(unit.multiplier.pow(unit.exp));
+  }
+  return acc;
 }

@@ -158,10 +158,7 @@ describe('columns', () => {
 
     const mixedCol = col(l(1), l('hi'));
     expect(await inferExpression(nilCtx, mixedCol)).toMatchObject({
-      errorCause: InferError.columnContainsInconsistentType(
-        t.number(),
-        t.string()
-      ),
+      errorCause: InferError.expectedButGot(t.number(), t.string()),
     });
 
     const emptyCol = col();
@@ -171,13 +168,6 @@ describe('columns', () => {
   });
 
   it('does not mangle units', async () => {
-    expect(
-      await inferExpression(
-        nilCtx,
-        col(c('*', l(1), r('cm')), c('*', l(1), r('m')))
-      )
-    ).toMatchInlineSnapshot(`Error: Column cannot contain both cm and m`);
-
     expect(
       await inferExpression(
         nilCtx,

@@ -96,6 +96,7 @@ const snapshotTestingPlugin =
       const actualValue = results[i];
 
       if (actualValue?.crash) {
+        // eslint-disable-next-line no-console
         console.error(chalk.red(actualValue.crash));
       } else if (snapshot !== actualValue) {
         failures += 1;
@@ -111,6 +112,7 @@ const snapshotTestingPlugin =
 
           const lines = part.value.split('\n').map(colorizeLine).join('\n');
 
+          // eslint-disable-next-line no-console
           console.error(lines);
         });
       }

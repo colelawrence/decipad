@@ -173,6 +173,15 @@ describe('parses units', () => {
     expect(parseUnit('YWatts')).toMatchObject(
       u('Watts', { multiplier: F(1_000_000_000_000_000_000_000_000) })
     );
+    expect(parseUnit('cm3')).toMatchObject(
+      u('m', { multiplier: F(1, 100), exp: F(3) })
+    );
+    expect(parseUnit('cm2')).toMatchObject(
+      u('m', { multiplier: F(1, 100), exp: F(2) })
+    );
+    expect(parseUnit('mft2')).toMatchObject(
+      u('ft', { multiplier: F(1, 1000), exp: F(2) })
+    );
   });
 
   it('parses ambiguous units', () => {

@@ -10,22 +10,30 @@ describe('math operators', () => {
     expect(operators.round.functor?.([t.number(U('bananas'))])).toEqual(
       t.number(U('bananas'))
     );
-    expect(operators.round.fn?.(F(1127, 1000), F(2)).valueOf()).toBe(1.13);
-    expect(operators.round.fn?.(F(1127, 10), F(0)).valueOf()).toBe(113);
+    expect(
+      operators.round.fn?.([F(1127, 1000), F(2)], [t.number()]).valueOf()
+    ).toBe(1.13);
+    expect(
+      operators.round.fn?.([F(1127, 10), F(0)], [t.number()]).valueOf()
+    ).toBe(113);
   });
 
   it('rounds a number and decimal units default to 0', () => {
-    expect(operators.round.fn?.(F(1127, 10)).valueOf()).toBe(113);
-  });
-
-  it('rounds down a number with decimal units', () => {
-    expect(operators.rounddown.fn?.(F(112799, 1000), F(1)).valueOf()).toBe(
-      112.7
+    expect(operators.round.fn?.([F(1127, 10)], [t.number()]).valueOf()).toBe(
+      113
     );
   });
 
+  it('rounds down a number with decimal units', () => {
+    expect(
+      operators.rounddown.fn?.([F(112799, 1000), F(1)], [t.number()]).valueOf()
+    ).toBe(112.7);
+  });
+
   it('rounds down a number', () => {
-    expect(operators.rounddown.fn?.(F(1127, 10)).valueOf()).toBe(112);
+    expect(
+      operators.rounddown.fn?.([F(1127, 10)], [t.number()]).valueOf()
+    ).toBe(112);
   });
 
   it('max of a list of numbers', () => {
@@ -67,11 +75,11 @@ describe('math operators', () => {
     expect(operators.sqrt.functor?.([t.number(U('W'))])).toEqual(
       t.number(U('W', { exp: F(1, 2) }))
     );
-    expect(operators.sqrt.fn?.(F(4))).toMatchObject(F(2));
+    expect(operators.sqrt.fn?.([F(4)])).toMatchObject(F(2));
   });
 
   it("calculates a number's ln", () => {
-    expect(operators.ln.fn?.(Math.E)).toBe(1);
+    expect(operators.ln.fn?.([Math.E])).toBe(1);
   });
 
   const exponentTestHelper = async (expArg: AST.Expression) => {

@@ -33,7 +33,7 @@ function callBuiltinAfterAutoconvert(
     if (builtin.fn != null) {
       const argData = argsLowerDims.map((a) => getDefined(a.getData()));
       try {
-        return fromJS(builtin.fn(...argData));
+        return fromJS(builtin.fn(argData, typesLowerDims));
       } catch (err) {
         if (err instanceof RuntimeError) {
           throw err;

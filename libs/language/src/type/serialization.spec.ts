@@ -12,8 +12,8 @@ import {
 const meter: Unit = { unit: 'meter', exp: F(1), multiplier: F(1), known: true };
 const smeter: SerializedUnit = {
   unit: 'meter',
-  exp: '1',
-  multiplier: '1',
+  exp: { n: 1, d: 1, s: 1 },
+  multiplier: { n: 1, d: 1, s: 1 },
   known: true,
 };
 const errorCause = InferError.expectedButGot('A', 'B');
@@ -38,9 +38,9 @@ it('can stringify a type', () => {
       "unit": Object {
         "args": Array [
           Object {
-            "exp": "1",
+            "exp": Fraction(1),
             "known": true,
-            "multiplier": "1",
+            "multiplier": Fraction(1),
             "unit": "meter",
           },
         ],

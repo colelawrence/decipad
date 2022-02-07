@@ -20,8 +20,11 @@ export type { Context };
 
 const wrap =
   <T extends AST.Node>(fn: (ctx: Context, thing: T) => Promise<Type>) =>
-  async (ctx: Context, thing: T): Promise<Type> => {
-    const type = await fn(ctx, thing);
+  async (ctx: Context, thing: T, cohercingTo?: Type): Promise<Type> => {
+    let type = await fn(ctx, thing);
+    if (cohercingTo) {
+      type = type.sameAs(cohercingTo);
+    }
     ctx.nodeTypes.set(thing, type);
 
     if (type.errorCause != null && type.node == null) {
@@ -87,37 +90,37 @@ export const inferExpression = wrap(
       }
       case 'column': {
         const [columnItems, optionalIndex] = expr.args;
-        const cellTypes = await pSeries(
-          columnItems.args.map((a) => () => inferExpression(ctx, a))
+        if (columnItems.args.length === 0) {
+          return t.impossible(InferError.unexpectedEmptyColumn());
+        }
+        const [firstCellNode, ...restCellNodes] = columnItems.args;
+        const firstCellType = await inferExpression(ctx, firstCellNode);
+        const restCellTypes = await pSeries(
+          restCellNodes.map((a) => () => inferExpression(ctx, a, firstCellType))
         );
 
-        const erroredCell = cellTypes.find((cell) => cell.errorCause != null);
+        const erroredCell = [firstCellType, ...restCellTypes].find(
+          (cell) => cell.errorCause != null
+        );
         if (erroredCell != null) return erroredCell;
 
-        if (cellTypes.length === 0) {
-          return t.impossible(InferError.unexpectedEmptyColumn());
-        } else {
-          const [firstCell, ...hopefullyConsistentRest] = cellTypes;
-
-          for (const restCell of hopefullyConsistentRest) {
-            const unified = restCell
-              .reducedToLowest()
-              .sameAs(firstCell.reducedToLowest());
-            if (
-              unified.errorCause ||
-              !matchUnitArraysForColumn(
-                firstCell.reducedToLowest().unit,
-                restCell.reducedToLowest().unit
-              )
-            ) {
-              return t.impossible(
-                InferError.columnContainsInconsistentType(firstCell, restCell)
-              );
-            }
+        for (const restCell of restCellTypes) {
+          if (
+            !matchUnitArraysForColumn(
+              firstCellType.reducedToLowest().unit,
+              restCell.reducedToLowest().unit
+            )
+          ) {
+            return t.impossible(
+              InferError.columnContainsInconsistentType(firstCellType, restCell)
+            );
           }
-
-          return t.column(firstCell, cellTypes.length, optionalIndex?.args[0]);
         }
+        return t.column(
+          firstCellType,
+          columnItems.args.length,
+          optionalIndex?.args[0]
+        );
       }
       case 'table': {
         return inferTable(ctx, expr);
@@ -207,7 +210,7 @@ export const inferExpression = wrap(
       }
       case 'directive': {
         const [name, ...args] = expr.args;
-        return expandDirectiveToType(ctx, name, args);
+        return expandDirectiveToType(expr, ctx, name, args);
       }
     }
   }

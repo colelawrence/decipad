@@ -76,7 +76,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
   stepgrowth: {
     argCount: 1,
     argCardinalities: [2],
-    fn: (a: number[]) =>
+    fn: ([a]: number[][]) =>
       a.map((item, index) => {
         const previous = a[index - 1] ?? 0;
         return item - previous;
@@ -87,7 +87,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
   grow: {
     argCount: 3,
     argCardinalities: [1, 1, 2],
-    fn: (initial: number, growthRate: number, { length }: unknown[]) =>
+    fn: ([initial, growthRate, { length }]) =>
       Array.from({ length }, (_, i) => {
         const growth = (1 + growthRate) ** i;
         return initial * growth;

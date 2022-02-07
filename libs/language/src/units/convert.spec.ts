@@ -519,34 +519,24 @@ describe('convert', () => {
     ).toMatchObject(F(2));
   });
 
-  it('can convert between units with multipliers', () => {
-    expect(
-      convertBetweenUnits(
-        F(1),
-        U([u('meters', { multiplier: F(1000) })]),
-        U([u('meters', { multiplier: F(1) })])
-      )
-    ).toMatchObject(F(1000));
-  });
-
   it('can convert between units with multipliers expoentiated', () => {
     expect(
       convertBetweenUnits(
-        F(2),
+        F(2000),
         U([u('meters', { multiplier: F(1000), exp: F(2) })]),
         U([u('meters', { multiplier: F(1), exp: F(2) })])
       )
-    ).toMatchObject(F(2_000_000));
+    ).toMatchObject(F(2_000));
   });
 
   it('can convert between units with multipliers negatively expoentiated', () => {
     expect(
       convertBetweenUnits(
-        F(2),
+        F(2000),
         U([u('meters', { multiplier: F(1000), exp: F(-2) })]),
         U([u('meters', { multiplier: F(1), exp: F(-2) })])
       )
-    ).toMatchObject(F(2, 1000000));
+    ).toMatchObject(F(2000));
   });
 
   it('can convert complex units with multipliers negatively expoentiated', () => {

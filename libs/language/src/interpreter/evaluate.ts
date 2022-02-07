@@ -1,8 +1,12 @@
 import pSeries from 'p-series';
-
 import { AST } from '..';
 import { callBuiltin } from '../builtins';
-import { getOfType, getDefined, getIdentifierString } from '../utils';
+import {
+  getOfType,
+  getDefined,
+  getIdentifierString,
+  multiplyMultipliers,
+} from '../utils';
 import { dateNodeToTimeUnit, getDateFromAstForm } from '../date';
 import { resolve as resolveData } from '../data';
 import { expandDirectiveToValue } from '../directives';
@@ -24,7 +28,15 @@ export async function evaluate(
   switch (node.type) {
     case 'literal': {
       switch (node.args[0]) {
-        case 'number':
+        case 'number': {
+          const type = realm.maybeGetTypeAt(node);
+          if (type && type.unit) {
+            return Scalar.fromValue(
+              multiplyMultipliers(type.unit, node.args[1])
+            );
+          }
+          return Scalar.fromValue(node.args[1]);
+        }
         case 'string':
         case 'boolean': {
           return Scalar.fromValue(node.args[1]);
@@ -48,7 +60,9 @@ export async function evaluate(
       if (value != null) {
         return value;
       }
-      return Scalar.fromValue(1);
+      const type = realm.getTypeAt(node);
+      const unit = getDefined(type.unit);
+      return Scalar.fromValue(multiplyMultipliers(unit));
     }
     case 'externalref': {
       const { value } = getDefined(realm.externalData.get(node.args[0]));
@@ -161,7 +175,7 @@ export async function evaluate(
     }
     case 'directive': {
       const [name, ...args] = node.args;
-      return expandDirectiveToValue(realm, name, args);
+      return expandDirectiveToValue(node, realm, name, args);
     }
   }
 }

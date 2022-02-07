@@ -3,7 +3,7 @@ import produce from 'immer';
 import Fraction from '@decipad/fraction';
 import { getDefined, zip } from '@decipad/utils';
 import { RuntimeError, Realm } from '../../interpreter';
-import { F, getInstanceof } from '../../utils';
+import { F, getInstanceof, multiplyMultipliers } from '../../utils';
 import { InferError, Type, build as t } from '../../type';
 import {
   Column,
@@ -72,6 +72,21 @@ const roundFunctor: BuiltinSpec['functor'] = ([
   decimalPrecision = t.number(),
 ]) => Type.combine(decimalPrecision.isScalar('number'), n.isScalar('number'));
 
+const roundWrap = (
+  round: (f: Fraction, decimalPrecisionValue: number) => Fraction
+): BuiltinSpec['fn'] => {
+  return ([nValue, decimalPrecisionValue], [type] = []) => {
+    const n = getInstanceof(nValue, Fraction);
+    const multiplier = multiplyMultipliers(type.unit);
+    const decimalPrecision = decimalPrecisionValue
+      ? getInstanceof(decimalPrecisionValue, Fraction)
+      : ZERO;
+    // in order for the round function to round at the correct precision, we need to first divide by
+    // the unit multiplier, do the rouding, and *then* multiply by it at the end.
+    return round(n.div(multiplier), decimalPrecision.valueOf()).mul(multiplier);
+  };
+};
+
 const firstArgumentReducedFunctor = ([t]: Type[]) => t.reduced();
 
 const coherceToFraction = (value: unknown): Fraction => {
@@ -136,22 +151,24 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   abs: {
     argCount: 1,
     noAutoconvert: true,
-    fn: (n) => Math.abs(n as number),
+    fn: ([n]) => Math.abs(n as number),
     functor: simpleUnaryOpFunctor,
   },
   round: {
     argCount: [1, 2],
     noAutoconvert: true,
     functor: roundFunctor,
-    fn: (n: Fraction, decimalPrecision: Fraction = ZERO) =>
-      n.round(decimalPrecision.valueOf()),
+    fn: roundWrap((n: Fraction, decimalPlaces: number) =>
+      n.round(decimalPlaces)
+    ),
   },
   roundup: {
     argCount: [1, 2],
     noAutoconvert: true,
     functor: roundFunctor,
-    fn: (n: Fraction, decimalPrecision: Fraction = ZERO) =>
-      n.ceil(decimalPrecision.valueOf()),
+    fn: roundWrap((n: Fraction, decimalPlaces: number) =>
+      n.ceil(decimalPlaces)
+    ),
   },
   ceil: {
     aliasFor: 'roundup',
@@ -160,8 +177,9 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     argCount: [1, 2],
     noAutoconvert: true,
     functor: roundFunctor,
-    fn: (n: Fraction, decimalPrecision: Fraction = ZERO) =>
-      n.floor(decimalPrecision.valueOf()),
+    fn: roundWrap((n: Fraction, decimalPlaces: number) =>
+      n.floor(decimalPlaces)
+    ),
   },
   floor: {
     aliasFor: 'rounddown',
@@ -222,7 +240,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   sqrt: {
     noAutoconvert: true,
     argCount: 1,
-    fn: (n: Fraction) => {
+    fn: ([n]) => {
       let result = getInstanceof(n, Fraction).pow(0.5);
       if (result == null) {
         // TODO: fraction.js gives us a null result when the result is non-rational
@@ -242,7 +260,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   ln: {
     argCount: 1,
     noAutoconvert: true,
-    fn: (n) => Math.log(n),
+    fn: ([n]) => Math.log(n),
     functor: simpleUnaryOpFunctor,
   },
   '+': overloadBuiltin('+', 2, [
@@ -278,12 +296,12 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   'unary-': {
     argCount: 1,
     noAutoconvert: true,
-    fn: (a: Fraction) => a.neg(),
+    fn: ([a]) => a.neg(),
     functor: ([n]) => n.isScalar('number'),
   },
   '*': {
     argCount: 2,
-    fn: (a, b) => getInstanceof(a, Fraction).mul(b),
+    fn: ([a, b]) => getInstanceof(a, Fraction).mul(b),
     functor: ([a, b]) =>
       Type.combine(
         a.isScalar('number'),
@@ -293,7 +311,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   },
   '/': {
     argCount: 2,
-    fn: (a, b) => getInstanceof(a, Fraction).div(b),
+    fn: ([a, b]) => getInstanceof(a, Fraction).div(b),
     functor: ([a, b]) =>
       Type.combine(
         a.isScalar('number'),
@@ -303,12 +321,12 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   },
   '%': {
     argCount: 2,
-    fn: (a: Fraction, b: Fraction) => a.mod(b),
+    fn: ([a, b]) => a.mod(b),
     functor: binopFunctor,
   },
   '**': {
     argCount: 2,
-    fn: (a: Fraction, b: Fraction) => {
+    fn: ([a, b]) => {
       const result = a.pow(b);
       if (result == null) {
         const resultNumber = a.valueOf() ** b.valueOf();

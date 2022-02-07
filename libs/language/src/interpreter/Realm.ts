@@ -21,9 +21,13 @@ export class Realm {
     this.inferContext.externalData = value;
   }
 
+  maybeGetTypeAt(node: AST.Node) {
+    return this.inferContext.nodeTypes.get(node);
+  }
+
   getTypeAt(node: AST.Node) {
     return getDefined(
-      this.inferContext.nodeTypes.get(node),
+      this.maybeGetTypeAt(node),
       `Could not find type for ${node.type}`
     );
   }

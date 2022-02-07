@@ -18,15 +18,17 @@ const getDirective = (directiveName: string, argCount: number) => {
 };
 
 export const expandDirectiveToType = (
+  root: AST.Expression,
   ctx: Context,
   name: string,
   args: AST.Node[]
 ): Promise<Type> =>
-  expand.getType(ctx, getDirective(name, args.length).getType, args);
+  expand.getType(root, ctx, getDirective(name, args.length).getType, args);
 
 export const expandDirectiveToValue = (
+  root: AST.Expression,
   realm: Realm,
   name: string,
   args: AST.Node[]
 ): Promise<Value> =>
-  expand.getValue(realm, getDirective(name, args.length).getValue, args);
+  expand.getValue(root, realm, getDirective(name, args.length).getValue, args);

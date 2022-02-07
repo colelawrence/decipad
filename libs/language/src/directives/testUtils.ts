@@ -1,4 +1,5 @@
 import type { AST } from '..';
+import { buildType } from '..';
 import { isExpression } from '../utils';
 import { Realm } from '../interpreter';
 import { inferExpression, makeContext } from '../infer';
@@ -6,12 +7,21 @@ import { inferExpression, makeContext } from '../infer';
 import { Directive } from './types';
 import * as expand from './expand';
 
+export const directiveFor = (args: AST.Node[]): AST.Directive => {
+  return {
+    type: 'directive',
+    args: ['directive', ...args],
+  };
+};
+
 export const testGetValue = async (
   getValue: Directive['getValue'],
   ...args: AST.Node[]
 ) => {
   const ctx = makeContext();
   const realm = new Realm(ctx);
+  const root = directiveFor(args);
+  realm.inferContext.nodeTypes.set(root, buildType.number());
 
   // Preload passed arguments into ctx.nodeTypes
   for (const passedArg of args) {
@@ -21,12 +31,12 @@ export const testGetValue = async (
     }
   }
 
-  return expand.getValue(realm, getValue, args);
+  return expand.getValue(root, realm, getValue, args);
 };
 
 export const testGetType = (
   getType: Directive['getType'],
   ...args: AST.Node[]
 ) => {
-  return expand.getType(makeContext(), getType, args);
+  return expand.getType(directiveFor(args), makeContext(), getType, args);
 };

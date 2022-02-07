@@ -8,11 +8,7 @@ import { normalizeUnits, simplifyUnits, stringifyUnits } from '../type/units';
 import { zip } from '../utils';
 
 function areQuantityUnitsCompatible(a: Unit, b: Unit): boolean {
-  return (
-    a.unit === b.unit &&
-    a.exp.compare(b.exp) === 0 &&
-    a.multiplier.compare(b.multiplier) === 0
-  );
+  return a.unit === b.unit && a.exp.compare(b.exp) === 0;
 }
 
 function areQuantityUnitsReversible(a: Units | null, b: Units | null): boolean {
@@ -46,7 +42,6 @@ function baseQuantityUnits(units: Units | null): Units | null {
           const knownUnit = getUnitByName(unit.unit);
           return produce(unit, (unit) => {
             unit.unit = knownUnit ? knownUnit.baseQuantity : unit.unit;
-            unit.multiplier = new Fraction(1);
           });
         });
       });
@@ -93,20 +88,6 @@ export function toExpandedBaseQuantity(
   return [expandedUnits, convert(n)];
 }
 
-function convertToOutputMultipliers(
-  n: Fraction,
-  fromUnits: Units | null,
-  toUnits: Units | null
-): Fraction {
-  const from = (fromUnits?.args ?? []).reduce((n, { multiplier, exp }) => {
-    return n.mul(multiplier.pow(new Fraction(exp)));
-  }, n);
-  const to = (toUnits?.args ?? []).reduce((n, { multiplier, exp }) => {
-    return n.div(multiplier.pow(new Fraction(exp)));
-  }, from);
-  return to;
-}
-
 export function fromExpandedBaseQuantity(
   n: Fraction,
   targetUnits: Units
@@ -127,40 +108,18 @@ export function convertBetweenUnits(
       )} and ${stringifyUnits(to)}`
     );
   }
+
   const [expandedUnits, expandedN] = toExpandedBaseQuantity(n, from);
   const [outputUnits, revertedN] = fromExpandedBaseQuantity(expandedN, to);
 
-  let convertedN;
   if (areQuantityUnitsReversible(expandedUnits, outputUnits)) {
     const [, revertedNReversed] = fromExpandedBaseQuantity(
       expandedN.inverse(),
       to
     );
-    convertedN = convertToOutputMultipliers(
-      revertedNReversed,
-      invertMultiplier(expandedUnits),
-      outputUnits
-    );
-  } else {
-    convertedN = convertToOutputMultipliers(
-      revertedN,
-      expandedUnits,
-      outputUnits
-    );
-  }
-  return convertedN;
-}
 
-function invertMultiplier(units: Units | null): Units | null {
-  if (!units) {
-    return units;
+    return revertedNReversed;
   }
-  const invertedArgs = (units?.args ?? []).map(
-    produce((partialUnit) => {
-      partialUnit.multiplier = partialUnit.multiplier.inverse();
-    })
-  );
-  return produce(units, (units) => {
-    units.args = invertedArgs;
-  });
+
+  return revertedN;
 }

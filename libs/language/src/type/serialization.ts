@@ -4,8 +4,14 @@ import { F } from '../utils';
 import { ErrSpec, InferError } from './InferError';
 import { TUnit, TUnits, Units } from './unit-type';
 
-export type SerializedUnit = TUnit<string>;
-export type SerializedUnits = TUnits<string>;
+export interface SerializedFraction {
+  n: bigint | number;
+  d: bigint | number;
+  s: bigint | number;
+}
+
+export type SerializedUnit = TUnit<SerializedFraction>;
+export type SerializedUnits = TUnits<SerializedFraction>;
 
 export type SerializedType = Readonly<
   | { kind: 'number'; unit: SerializedUnits | null }
@@ -34,17 +40,7 @@ export type SerializedType = Readonly<
 export type SerializedTypeKind = SerializedType['kind'];
 
 export function serializeUnit(unit: Units | null): SerializedUnits | null {
-  if (unit == null) {
-    return unit;
-  }
-  return {
-    type: 'units',
-    args: unit.args.map((u) => ({
-      ...u,
-      multiplier: u.multiplier.toString(),
-      exp: u.exp.toString(),
-    })),
-  };
+  return unit;
 }
 
 export function serializeType(type: Type): SerializedType {

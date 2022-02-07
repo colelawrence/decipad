@@ -30,14 +30,14 @@ FlourDensity = 0.8 g/ml
 ## Column contains inconsistent type
 
 :::caution `column-contains-inconsistent-type`
-Column cannot contain both oranges and pears
+Column cannot contain both ft and cm
 :::
 
 We don't support having multiple types in the same column.
 
 ```deci live
-[1 orange, 2 pears]
-==> Column cannot contain both oranges and pears
+[1 ft, 2 cm]
+==> Column cannot contain both ft and cm
 ```
 
 You can organise them in different columns:

@@ -5,7 +5,7 @@ import Fraction from '@decipad/fraction';
 import { buildType, Interpreter } from '..';
 import { getDefined, zip } from '../utils';
 import { stringifyDate } from '../date';
-import { Type } from '../type';
+import { Type, convertToMultiplierUnit } from '../type';
 import { validateResult } from '.';
 
 type Colorizer = (s: string) => string;
@@ -30,7 +30,10 @@ export const stringifyResult = (
   }
 
   if (type.type === 'number') {
-    const numStr = (result as Fraction).toString(4);
+    const numStr = convertToMultiplierUnit(
+      result as Fraction,
+      type.unit
+    ).toString(4);
     if (type.unit == null) return color(numStr);
     return [color(numStr), type.toString()].join(' ');
   }

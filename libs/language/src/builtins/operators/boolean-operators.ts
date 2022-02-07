@@ -11,7 +11,7 @@ const booleanBinopFunctor = ([left, right]: Type[]): Type =>
 export const booleanOperators: Record<string, BuiltinSpec> = {
   '!': {
     argCount: 1,
-    fn: (a) => !a,
+    fn: ([a]) => !a,
     functor: ([a]) => a.isScalar('boolean'),
   },
   not: {
@@ -19,7 +19,7 @@ export const booleanOperators: Record<string, BuiltinSpec> = {
   },
   '&&': {
     argCount: 2,
-    fn: (a, b) => a && b,
+    fn: ([a, b]) => a && b,
     functor: booleanBinopFunctor,
   },
   and: {
@@ -27,7 +27,7 @@ export const booleanOperators: Record<string, BuiltinSpec> = {
   },
   '||': {
     argCount: 2,
-    fn: (a, b) => a || b,
+    fn: ([a, b]) => a || b,
     functor: booleanBinopFunctor,
   },
   or: {

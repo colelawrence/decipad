@@ -20,12 +20,12 @@ export const dateOperators: Record<string, BuiltinSpec> = {
   // Date stuff (TODO operator overloading)
   dateequals: {
     argCount: 2,
-    fn: (date1, date2) => date1 === date2,
+    fn: ([date1, date2]) => date1 === date2,
     functor: dateCmpFunctor,
   },
   dategte: {
     argCount: 2,
-    fn: (date1, date2) => date1 >= date2,
+    fn: ([date1, date2]) => date1 >= date2,
     functor: dateCmpFunctor,
   },
 };

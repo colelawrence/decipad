@@ -11,12 +11,12 @@ const cleanAST = (...args: AST.Node[]) =>
 
 export const over: Directive = {
   argCount: 2,
-  async getType({ infer }, ...args) {
+  async getType(_, { infer }, ...args) {
     const [matrix, indexName] = cleanAST(...args);
 
     return dimSwapTypes(indexName, await infer(matrix));
   },
-  async getValue({ evaluate, getNodeType }, ...args) {
+  async getValue(_, { evaluate, getNodeType }, ...args) {
     const [matrix, indexName] = cleanAST(...args);
 
     const value = await evaluate(matrix);

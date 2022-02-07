@@ -50,7 +50,7 @@ Besides the menu styling menu that pops up when you select text, Decipad support
 
 - `##` followed by a `space` to create an **heading 1**
 - `###` followed by a `space` to create an **heading 2**
-- `````followed by a`space` to create a **calculations block**
+- \`\`\`followed by a`space` to create a **calculations block**
 - `-` or `*` followed by a `space` to create a **bullet list**
 - `1.` followed by a `space` to create a **numbered list**
 - `>` followed by a `space` to create a **block quote**

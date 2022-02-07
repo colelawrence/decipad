@@ -6,6 +6,7 @@ export interface TUnit<TNumberType = Fraction> {
   multiplier: TNumberType;
   known: boolean;
   aliasFor?: Units;
+  enforceMultiplier?: boolean;
 }
 
 export interface TUnits<TNumberType = Fraction> {

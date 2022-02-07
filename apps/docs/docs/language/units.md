@@ -172,13 +172,13 @@ For instance, in Decipad a cup is equivalent to 0.25 litres, which is the standa
 ==> 0.25 L
 ```
 
-But different countries can have different cup sizes, so you can overwrite the default conversion as you wish:
+But different countries can have different cup sizes, so you can define a custom unit to use in conversions as you wish:
 
 ```deci live
 Flour = 0.75 L
-cup = 0.2 L
-Flour in cups
-==> 3 cups
+MyCup = 0.2 L
+Flour in MyCup
+==> 3.75 MyCups
 ```
 
 This also means that you can create your custom units:
