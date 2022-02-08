@@ -64,7 +64,7 @@ const EditorInternal = ({ padId, authSecret, readOnly }: EditorProps) => {
   // Cursor remote presence
   // useCursors(editor);
 
-  const notebookTitlePlugin = useNotebookTitlePlugin({ padId });
+  const notebookTitlePlugin = useNotebookTitlePlugin({ padId, readOnly });
 
   // upload / fetchdata
   const {

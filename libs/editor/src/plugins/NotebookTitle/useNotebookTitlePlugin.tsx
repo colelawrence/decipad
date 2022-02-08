@@ -14,10 +14,12 @@ import { Editor } from 'slate';
 
 export interface UseNotebookTitlePluginProps {
   padId: string;
+  readOnly: boolean;
 }
 
 export const useNotebookTitlePlugin = ({
   padId,
+  readOnly,
 }: UseNotebookTitlePluginProps): PlatePlugin => {
   const { addToast } = useToasts();
   const [newTitle, setNewTitle] = useState<null | string>(null);
@@ -50,7 +52,7 @@ export const useNotebookTitlePlugin = ({
   // Change the pad's title after the user has stopped typing by 1 second
   useEffect(() => {
     const timeout = setTimeout(() => {
-      if (newTitle !== null) {
+      if (newTitle !== null && !readOnly) {
         // change the title of the pad
         mutate({
           variables: { padId, name: newTitle },
@@ -62,7 +64,7 @@ export const useNotebookTitlePlugin = ({
       }
     }, 1000);
     return () => clearTimeout(timeout);
-  }, [mutate, newTitle, padId, addToast]);
+  }, [mutate, newTitle, padId, addToast, readOnly]);
 
   // return a slate plugin
   return useMemo(
