@@ -13,7 +13,7 @@ import {
 import { LoadingSpinnerPage, NotebookTopbar } from '@decipad/ui';
 import styled from '@emotion/styled';
 import Head from 'next/head';
-import { FC, useContext, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
 import { getSecretPadLink } from '../lib/secret';
@@ -80,7 +80,7 @@ export const Notebook = ({
   notebookId,
 }: NotebookProps): ReturnType<FC> => {
   const history = useHistory();
-  const { search } = useLocation();
+  const { pathname, search } = useLocation();
   const { addToast } = useToasts();
   const secret = new URLSearchParams(search).get('secret') ?? undefined;
 
@@ -120,6 +120,17 @@ export const Notebook = ({
         })
       );
   const clientEvent = useContext(ClientEventsContext);
+
+  useEffect(() => {
+    if (data) {
+      clientEvent({
+        type: 'page',
+        category: 'notebook',
+        url: pathname,
+        title: data.getPadById?.name,
+      });
+    }
+  }, [data, pathname, clientEvent]);
 
   if (loading) {
     return <LoadingSpinnerPage />;

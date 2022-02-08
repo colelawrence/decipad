@@ -16,12 +16,10 @@ export function Router(): ReturnType<FC> {
         path="/workspaces/:workspaceid/pads/:padid"
         render={({ match }) => (
           <RequireSession allowSecret>
-            <RouteEvents category="notebook">
-              <Notebook
-                workspaceId={match.params.workspaceid}
-                notebookId={decodeVanityUrlComponent(match.params.padid)}
-              />
-            </RouteEvents>
+            <Notebook
+              workspaceId={match.params.workspaceid}
+              notebookId={decodeVanityUrlComponent(match.params.padid)}
+            />
           </RequireSession>
         )}
       />

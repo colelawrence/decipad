@@ -4,4 +4,5 @@ export type PageEvent = {
   type: 'page';
   url: string;
   category: PageCategory;
+  title?: string;
 };
