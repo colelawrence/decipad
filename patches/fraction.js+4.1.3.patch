@@ -26,9 +26,9 @@ index 0000000..1b5e11c
 +  constructor (numbers: (number | string | BigInt)[]);
 +  constructor (fraction: NumeratorDenominator);
 +
-+  s: number;
-+  n: number;
-+  d: number;
++  s: bigint;
++  n: bigint;
++  d: bigint;
 +
 +  abs(): Fraction;
 +  neg(): Fraction;
@@ -62,25 +62,3 @@ index 0000000..1b5e11c
 +  toContinued(): number[];
 +  clone(): Fraction;
 +}
-diff --git a/node_modules/fraction.js/fraction.js b/node_modules/fraction.js/fraction.js
-index 6338725..cd622cc 100644
---- a/node_modules/fraction.js/fraction.js
-+++ b/node_modules/fraction.js/fraction.js
-@@ -862,7 +862,7 @@
- 
-       var str = this['s'] === -1 ? "-" : "";
- 
--      str += N / D | 0;
-+      str += Math.floor(N / D);
- 
-       N %= D;
-       N *= 10;
-@@ -873,7 +873,7 @@
-       if (cycLen) {
- 
-         for (var i = cycOff; i--;) {
--          str += N / D | 0;
-+          str += Math.floor(N / D);
-           N %= D;
-           N *= 10;
-         }
