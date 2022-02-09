@@ -8,6 +8,7 @@ const AWARENESS: WeakMap<Editor, Awareness> = new WeakMap();
 
 export interface CursorEditor extends YjsEditor {
   awareness: Awareness;
+  setReady: (ready: boolean) => void;
 }
 
 export const CursorEditor = {
@@ -38,6 +39,7 @@ export function withCursor<T extends YjsEditor>(
   editor: T,
   awareness: Awareness
 ): T & CursorEditor {
+  let ready = false;
   const e = editor as T & CursorEditor;
 
   AWARENESS.set(e, awareness);
@@ -46,11 +48,18 @@ export function withCursor<T extends YjsEditor>(
   const { onChange } = editor;
 
   e.onChange = () => {
-    setTimeout(() => CursorEditor.updateCursor(e), 0);
+    if (ready) {
+      // only do stuff if the editor is loaded and ready
+      setTimeout(() => CursorEditor.updateCursor(e), 0);
+    }
 
     if (onChange) {
       onChange();
     }
+  };
+
+  e.setReady = (_ready: boolean) => {
+    ready = _ready;
   };
 
   return e;

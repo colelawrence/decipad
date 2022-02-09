@@ -38,7 +38,9 @@ const EditorInternal = ({ padId, authSecret, readOnly }: EditorProps) => {
   const [editorLoaded, setEditorLoaded] = useState(false);
   const editor = useStoreEditorRef(editorId);
 
-  const { results, languagePlugin } = useLanguagePlugin();
+  const { results, languagePlugin } = useLanguagePlugin({
+    ready: editorLoaded,
+  });
 
   // DocSync
   const docsyncEditor = useDocSync({
@@ -64,7 +66,11 @@ const EditorInternal = ({ padId, authSecret, readOnly }: EditorProps) => {
   // Cursor remote presence
   // useCursors(editor);
 
-  const notebookTitlePlugin = useNotebookTitlePlugin({ padId, readOnly });
+  const notebookTitlePlugin = useNotebookTitlePlugin({
+    padId,
+    readOnly,
+    ready: editorLoaded,
+  });
 
   // upload / fetchdata
   const {

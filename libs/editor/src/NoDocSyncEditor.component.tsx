@@ -29,7 +29,7 @@ export const NoDocSyncEditorBase = (props: PlateProps): ReturnType<FC> => {
 
   const editor = useStoreEditorRef(editorId);
 
-  const { results, languagePlugin } = useLanguagePlugin();
+  const { results, languagePlugin } = useLanguagePlugin({ ready: true });
   const programBlocks = editor ? editorProgramBlocks(editor) : {};
 
   const editorPlugins = useMemo(

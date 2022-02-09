@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Editor } from 'slate';
 import { withDocSync, DocSyncEditor } from '@decipad/docsync';
 
@@ -17,9 +17,20 @@ export const useDocSync = <E extends Editor>({
   authSecret,
   onError,
 }: IUseDocSync<E>): DocSyncEditor<E> | undefined => {
+  const [ready, setReady] = useState(false);
   const docSync = useMemo<DocSyncEditor<E> | undefined>(
     () => editor && withDocSync(editor, padId, { authSecret, onError }),
     [padId, editor, authSecret, onError]
   );
+  useEffect(() => {
+    if (docSync) {
+      docSync.onLoaded(() => {
+        if (!ready) {
+          setReady(true);
+        }
+      });
+    }
+  }, [docSync, ready]);
+
   return docSync;
 };
