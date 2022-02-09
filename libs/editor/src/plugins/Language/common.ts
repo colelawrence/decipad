@@ -1,6 +1,17 @@
 import { Element } from 'slate';
+import { TText } from '@udecode/plate';
 import { AST } from '@decipad/language';
+import { ComponentProps } from 'react';
 import { astNode } from '../../utils/astNode';
+import { CodeErrorHighlight } from '../../components';
+
+export interface SyntaxErrorAnnotation {
+  isSyntaxError: true;
+  variant: ComponentProps<typeof CodeErrorHighlight>['variant'];
+}
+export const hasSyntaxError = (
+  leaf: TText
+): leaf is TText & SyntaxErrorAnnotation => leaf.isSyntaxError === true;
 
 export function getAssignmentBlock(
   id: string,

@@ -19,10 +19,8 @@ export const CodeSyntaxErrorHighlight = ({
 }: CodeSyntaxErrorHighlightProps): ReturnType<FC> => {
   return (
     <Tooltip trigger={<span css={highlightStyles}>{children}</span>}>
-      {variant === 'never-closed' &&
-        'This bracket was never closed. Did you forget the closing bracket "]" or typed too many brackets?'}
-      {variant === 'never-opened' &&
-        'This bracket was never opened. Did you forget the opening bracket "[" or typed too many brackets?'}
+      {variant === 'never-closed' && 'Did you forget to close this bracket?'}
+      {variant === 'never-opened' && 'Did you forget the opening bracket?'}
       {variant === 'mismatched-brackets' &&
         'This bracket does not match the other one.'}
       {variant == null && 'This character is invalid here'}

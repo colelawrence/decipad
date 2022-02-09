@@ -4,8 +4,7 @@ import {
   isSyntaxError,
 } from '@decipad/language';
 import { Path, Range } from 'slate';
-import { ANNOTATION_SYNTAX_ERROR } from '../../annotations';
-import { SyntaxErrorAnnotation } from '../../elements';
+import { SyntaxErrorAnnotation } from './common';
 
 export function getSyntaxErrorRanges(
   path: Path,
@@ -24,7 +23,8 @@ export function getSyntaxErrorRanges(
           path,
           offset: token.offset + 1,
         },
-        type: ANNOTATION_SYNTAX_ERROR,
+        isSyntaxError: true,
+        variant: undefined,
       },
     ];
   }
@@ -49,7 +49,7 @@ export function getSyntaxErrorRanges(
           path,
           offset: token.offset + 1,
         },
-        type: ANNOTATION_SYNTAX_ERROR,
+        isSyntaxError: true,
         variant: bracketError.type,
       }));
   }

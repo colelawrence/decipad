@@ -1,25 +1,13 @@
 import { molecules } from '@decipad/ui';
-import { ANNOTATION_SYNTAX_ERROR } from '../../annotations';
+import { ComponentProps } from 'react';
 import { PlateComponent } from '../../types';
 
-export const CodeErrorHighlight: PlateComponent = ({
-  attributes,
-  children,
-  leaf,
-}) => {
-  if (
-    leaf == null ||
-    !('type' in leaf) ||
-    leaf.type !== ANNOTATION_SYNTAX_ERROR
-  ) {
-    throw new Error(
-      'CodeErrorHighlight is meant to render syntax error elements'
-    );
-  }
-
+export const CodeErrorHighlight: PlateComponent<
+  Pick<ComponentProps<typeof molecules.CodeSyntaxErrorHighlight>, 'variant'>
+> = ({ attributes, children, variant }) => {
   return (
     <span {...attributes}>
-      <molecules.CodeSyntaxErrorHighlight variant={leaf.variant}>
+      <molecules.CodeSyntaxErrorHighlight variant={variant}>
         {children}
       </molecules.CodeSyntaxErrorHighlight>
     </span>

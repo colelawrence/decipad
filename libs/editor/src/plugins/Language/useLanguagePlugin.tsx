@@ -10,12 +10,11 @@ import { ResultsContext, useResults } from '@decipad/react-contexts';
 import { ComputeRequest, makeComputeStream } from '@decipad/language';
 import { getCursorPos, CursorPos } from './getCursorPos';
 import { slateDocumentToComputeRequest } from './slateDocumentToComputeRequest';
-import { SlateNode } from './common';
+import { hasSyntaxError, SlateNode } from './common';
 import { ELEMENT_CODE_LINE, ELEMENT_FETCH } from '../../elements';
 import { useComputer } from '../../contexts/Computer';
 import { CodeErrorHighlight } from '../../components';
 import { getSyntaxErrorRanges } from './getSyntaxErrorRanges';
-import { ANNOTATION_SYNTAX_ERROR } from '../../annotations';
 
 interface UseLanguagePluginRet {
   languagePlugin: PlatePlugin;
@@ -108,12 +107,11 @@ export const useLanguagePlugin = (): UseLanguagePluginRet => {
             return getSyntaxErrorRanges(path, lineResult);
           },
         renderLeaf: (_editor) => (props) => {
-          switch (props.leaf.type) {
-            case ANNOTATION_SYNTAX_ERROR:
-              return <CodeErrorHighlight {...props} />;
-            default:
-              return props.children;
-          }
+          return hasSyntaxError(props.leaf) ? (
+            <CodeErrorHighlight {...props} variant={props.leaf.variant} />
+          ) : (
+            props.children
+          );
         },
       }),
       [evaluationRequests, results]

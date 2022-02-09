@@ -13,8 +13,8 @@ it('renders children', () => {
 
 it.each<[ComponentProps<typeof CodeSyntaxErrorHighlight>['variant'], RegExp]>([
   ['mismatched-brackets', /not.+match/i],
-  ['never-closed', /never.+closed/i],
-  ['never-opened', /never.+opened/i],
+  ['never-closed', /forget.+clos/i],
+  ['never-opened', /forget.+open/i],
 ])(
   'renders a message for a %s error when hovering the text',
   async (variant, message) => {
@@ -24,7 +24,7 @@ it.each<[ComponentProps<typeof CodeSyntaxErrorHighlight>['variant'], RegExp]>([
       </CodeSyntaxErrorHighlight>
     );
 
-    expect(await queryByText(message)).toBeNull();
+    expect(queryByText(message)).toBeNull();
 
     userEvent.hover(getByText('text'));
 
@@ -37,7 +37,7 @@ it('renders a message for a other syntax errors when hovering the text', async (
     <CodeSyntaxErrorHighlight>text</CodeSyntaxErrorHighlight>
   );
 
-  expect(await queryByText(/invalid/i)).toBeNull();
+  expect(queryByText(/invalid/i)).toBeNull();
 
   userEvent.hover(getByText('text'));
 

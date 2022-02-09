@@ -18,15 +18,7 @@ import {
   ELEMENT_BLOCKQUOTE,
 } from './kinds';
 import { TableData } from '../types';
-import { ANNOTATION_SYNTAX_ERROR } from '../annotations';
 import { MarkKind } from '../marks';
-
-// Annotations
-
-export interface SyntaxErrorAnnotation {
-  type: typeof ANNOTATION_SYNTAX_ERROR;
-  variant?: 'mismatched-brackets' | 'never-closed' | 'never-opened';
-}
 
 // Defining specific elements
 
@@ -122,9 +114,7 @@ type EmptyText = {
   text: '';
 };
 type PlainText = EmptyText | { text: string };
-type RichText = PlainText & Partial<Record<MarkKind, true>>;
-type AnnotatedPlainText = PlainText & (PlainText | SyntaxErrorAnnotation);
-export type AnnotatedRichText = AnnotatedPlainText & RichText;
+export type RichText = PlainText & Partial<Record<MarkKind, true>>;
 
 type BlockElement =
   // Headings
@@ -172,4 +162,4 @@ type Descendant = Element | RichText;
 type InlineChildren = Array<InlineDescendant>;
 type PlainTextChildren = [PlainText];
 
-export type Node = Editor | Element | AnnotatedRichText;
+export type Node = Editor | Element;

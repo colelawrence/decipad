@@ -1,5 +1,4 @@
 import { IdentifiedResult } from '@decipad/language';
-import { ANNOTATION_SYNTAX_ERROR } from '../../annotations';
 import { getSyntaxErrorRanges } from './getSyntaxErrorRanges';
 
 const path = [0];
@@ -50,7 +49,7 @@ describe('when it is a syntax error', () => {
       {
         anchor: { offset, path },
         focus: { offset: offset + 1, path },
-        type: ANNOTATION_SYNTAX_ERROR,
+        isSyntaxError: true,
       },
     ]);
   });
@@ -76,13 +75,13 @@ describe('when it is a bracket error', () => {
       {
         anchor: { offset, path },
         focus: { offset: offset + 1, path },
-        type: ANNOTATION_SYNTAX_ERROR,
+        isSyntaxError: true,
         variant: 'mismatched-brackets',
       },
       {
         anchor: { offset: offset2, path },
         focus: { offset: offset2 + 1, path },
-        type: ANNOTATION_SYNTAX_ERROR,
+        isSyntaxError: true,
         variant: 'mismatched-brackets',
       },
     ]);
@@ -108,7 +107,7 @@ describe('when it is a bracket error', () => {
       {
         anchor: { offset, path },
         focus: { offset: offset + 1, path },
-        type: ANNOTATION_SYNTAX_ERROR,
+        isSyntaxError: true,
         variant,
       },
     ]);
