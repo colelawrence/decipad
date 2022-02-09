@@ -1,8 +1,24 @@
-type PageCategory = 'workspace' | 'notebook' | 'playground';
-
-export type PageEvent = {
+type WorkspacePageEvent = {
   type: 'page';
   url: string;
-  category: PageCategory;
-  title?: string;
+  category: 'workspace';
+  props?: undefined;
 };
+type NotebookPageEvent = {
+  type: 'page';
+  url: string;
+  category: 'notebook';
+  props: {
+    title: string;
+  };
+};
+type PlaygroundPageEvent = {
+  type: 'page';
+  url: string;
+  category: 'playground';
+  props?: undefined;
+};
+export type PageEvent =
+  | WorkspacePageEvent
+  | NotebookPageEvent
+  | PlaygroundPageEvent;

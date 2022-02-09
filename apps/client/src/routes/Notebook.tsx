@@ -122,12 +122,14 @@ export const Notebook = ({
   const clientEvent = useContext(ClientEventsContext);
 
   useEffect(() => {
-    if (data) {
+    if (data && data.getPadById) {
       clientEvent({
         type: 'page',
         category: 'notebook',
         url: pathname,
-        title: data.getPadById?.name,
+        props: {
+          title: data.getPadById.name,
+        },
       });
     }
   }, [data, pathname, clientEvent]);

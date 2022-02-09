@@ -2,15 +2,18 @@ import { ClientEvent, ClientEventsContext } from '@decipad/client-events';
 import { FC, useContext, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-interface RouteAnalyticsProps {
+type PageEvent = ClientEvent & { type: 'page' };
+type PlainPageEvent = PageEvent & { props: undefined };
+
+interface RouteEventsProps {
   children: JSX.Element;
-  category: (ClientEvent & { type: 'page' })['category'];
+  category: PlainPageEvent['category'];
 }
 
 export function RouteEvents({
   children,
   category,
-}: RouteAnalyticsProps): ReturnType<FC> {
+}: RouteEventsProps): ReturnType<FC> {
   const clientEvent = useContext(ClientEventsContext);
   const location = useLocation();
 
