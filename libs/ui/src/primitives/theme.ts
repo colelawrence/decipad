@@ -1,6 +1,6 @@
-import { brand500 } from '.';
 import {
   black,
+  brand500,
   grey100,
   grey200,
   grey500,
@@ -15,8 +15,7 @@ export const darkTheme: Record<
   CssVariableKey<keyof CssVariables>,
   CssVariables[keyof CssVariables]
 > = {
-  ...setCssVar('brandColor', brand500.rgb),
-  ...setCssVar('successColor', cssVar('brandColor')),
+  ...setCssVar('successColor', brand500.rgb),
   ...setCssVar('dangerColor', red500.rgb),
   ...setCssVar('warningColor', orange500.rgb),
 
@@ -32,5 +31,4 @@ export const darkTheme: Record<
   ...setCssVar('strongTextColor', white.rgb),
 
   ...setCssVar('currentTextColor', cssVar('normalTextColor')),
-  ...setCssVar('currentBackgroundColor', cssVar('backgroundColor')),
 };

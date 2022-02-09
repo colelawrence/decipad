@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import Tippy, { TippyProps } from '@tippyjs/react';
 import { DefaultPlatePluginKey, withDraggables } from '@udecode/plate';
-import { DragHandle } from 'libs/ui/src/icons';
+import { icons } from '@decipad/ui';
 import { PlateComponent } from '../types';
 import {
   ELEMENT_FETCH,
@@ -66,7 +66,7 @@ export const withStyledDraggables = (
         return (
           <Tippy {...grabberTooltipProps}>
             <button type="button" className={className} css={styles}>
-              <DragHandle css={iconStyles} />
+              <icons.DragHandle css={iconStyles} />
             </button>
           </Tippy>
         );

@@ -71,21 +71,21 @@ export interface CodeBlockElement extends BaseElement {
 }
 
 // Lists
-export interface UnorderedListElement {
+export interface UnorderedListElement extends BaseElement {
   type: typeof ELEMENT_UL;
   children: Array<ListItemElement>;
 }
-export interface OrderedListElement {
+export interface OrderedListElement extends BaseElement {
   type: typeof ELEMENT_OL;
   children: Array<ListItemElement>;
 }
-export interface ListItemElement {
+export interface ListItemElement extends BaseElement {
   type: typeof ELEMENT_LI;
   children:
     | [ListItemContentElement]
     | [ListItemContentElement, UnorderedListElement | OrderedListElement];
 }
-export interface ListItemContentElement {
+export interface ListItemContentElement extends BaseElement {
   type: typeof ELEMENT_LIC;
   children: InlineChildren;
 }
@@ -148,22 +148,23 @@ type BlockElement =
 type InlineElement = LinkElement;
 export type Element = BlockElement | InlineElement;
 
-export type Editor = SPEditor &
-  ReactEditor & {
-    children: [H1Element] &
-      Array<
-        | H1Element
-        | H2Element
-        | H3Element
-        | ParagraphElement
-        | BlockquoteElement
-        | CodeBlockElement
-        | UnorderedListElement
-        | OrderedListElement
-        | FetchElement
-        | TableElement
-      >;
-  };
+export type Editor = Omit<SPEditor & ReactEditor, 'children'> & {
+  children: [
+    H1Element,
+    ...Array<
+      | H1Element
+      | H2Element
+      | H3Element
+      | TableElement
+      | ParagraphElement
+      | BlockquoteElement
+      | CodeBlockElement
+      | UnorderedListElement
+      | OrderedListElement
+      | FetchElement
+    >
+  ];
+};
 
 type InlineDescendant = InlineElement | RichText;
 type Descendant = Element | RichText;

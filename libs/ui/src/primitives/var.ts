@@ -15,8 +15,6 @@ import {
 export interface CssVariables {
   // Accent
 
-  readonly brandColor: Property.Color;
-
   readonly successColor: Property.Color;
   readonly dangerColor: Property.Color;
   readonly warningColor: Property.Color;
@@ -39,14 +37,9 @@ export interface CssVariables {
   readonly strongTextColor: Property.Color;
 
   readonly currentTextColor: Property.Color;
-  readonly currentBackgroundColor: Property.Color;
 }
 const defaults: CssVariables = {
-  brandColor: brand500.rgb,
-
-  get successColor() {
-    return cssVar('brandColor');
-  },
+  successColor: brand500.rgb,
   dangerColor: red500.rgb,
   warningColor: orange500.rgb,
 
@@ -63,9 +56,6 @@ const defaults: CssVariables = {
 
   get currentTextColor() {
     return cssVar('normalTextColor');
-  },
-  get currentBackgroundColor() {
-    return cssVar('backgroundColor');
   },
 };
 

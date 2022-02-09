@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { cssVar, grey200, p14Regular, setCssVar } from '../../primitives';
+import { cssVar, p14Regular, setCssVar } from '../../primitives';
 import { noop } from '../../utils';
 
 const inputStyles = css({
@@ -8,7 +8,7 @@ const inputStyles = css({
 
   backgroundColor: cssVar('backgroundColor'),
 
-  border: `1px solid ${grey200.rgb}`,
+  border: `1px solid ${cssVar('strongHighlightColor')}`,
   borderRadius: '6px',
 
   ...p14Regular,

@@ -3,12 +3,12 @@ import {
   black,
   cssVar,
   brand500,
-  grey200,
-  grey300,
   p13SemiBold,
   shortAnimationDuration,
   transparency,
   white,
+  setCssVar,
+  grey300,
 } from '../../primitives';
 import { Anchor, noop, TextChildren } from '../../utils';
 
@@ -47,8 +47,8 @@ const extraLargeStyles = css({
 });
 
 const disabledStyles = css({
-  backgroundColor: grey200.rgb,
-  color: grey300.rgb,
+  backgroundColor: cssVar('strongHighlightColor'),
+  ...setCssVar('currentTextColor', grey300.rgb),
 });
 
 type ButtonTypes =

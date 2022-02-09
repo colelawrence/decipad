@@ -1,4 +1,26 @@
-export const NoDocSyncEditorInitialValue = [
+import Fraction from '@decipad/fraction';
+import { Editor } from './elements';
+
+export const emptyNotebook: Editor['children'] = [
+  {
+    children: [
+      {
+        text: '',
+      },
+    ],
+    type: 'h1',
+  },
+  {
+    children: [
+      {
+        text: '',
+      },
+    ],
+    type: 'p',
+  },
+];
+
+export const introNotebook: Editor['children'] = [
   {
     children: [
       {
@@ -373,8 +395,8 @@ export const NoDocSyncEditorInitialValue = [
               args: [
                 {
                   unit: 'miles',
-                  exp: '1',
-                  multiplier: '1',
+                  exp: new Fraction(1),
+                  multiplier: new Fraction(1),
                   known: true,
                 },
               ],

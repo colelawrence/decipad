@@ -14,7 +14,7 @@ import { Tooltip } from '..';
 import { Anchor } from '../../utils';
 
 const iconWrapperStyles = css({
-  ...setCssVar('currentBackgroundColor', red200.rgb),
+  ...setCssVar('iconBackgroundColor', red200.rgb),
   ...setCssVar('currentTextColor', red600.rgb),
 
   cursor: 'pointer',

@@ -10,7 +10,6 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { ProgramBlocksContextProvider } from '@decipad/ui';
 import { ResultsContext } from '@decipad/react-contexts';
-import { POPULATE_PLAYGROUND } from 'libs/ui/src/utils/storage';
 import {
   editorProgramBlocks,
   useLanguagePlugin,
@@ -18,11 +17,8 @@ import {
 import { Tooltip } from './components';
 import { components, options, plugins } from './configuration';
 import { ComputerContextProvider } from './contexts/Computer';
-import { NoDocSyncEditorInitialValue } from './NoDocSyncEditorInitialValue';
-import { EmptyNotebook } from './EmptyNotebook';
-
-const populatePlayground = () =>
-  window.localStorage.getItem(POPULATE_PLAYGROUND) === 'true';
+import { POPULATE_PLAYGROUND } from './utils/storage';
+import { emptyNotebook, introNotebook } from './exampleNotebooks';
 
 export const NoDocSyncEditorBase = (props: PlateProps): ReturnType<FC> => {
   const [editorId] = useState(nanoid);
@@ -46,7 +42,9 @@ export const NoDocSyncEditorBase = (props: PlateProps): ReturnType<FC> => {
           options={options}
           components={components as Record<string, PlatePluginComponent>}
           initialValue={
-            populatePlayground() ? NoDocSyncEditorInitialValue : EmptyNotebook
+            window.localStorage.getItem(POPULATE_PLAYGROUND) === 'true'
+              ? introNotebook
+              : emptyNotebook
           }
           {...props}
         >

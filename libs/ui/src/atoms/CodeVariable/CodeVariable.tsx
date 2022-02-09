@@ -1,12 +1,10 @@
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
-import { code, teal50, teal600 } from '../../primitives';
+import { codeBlock } from '../../styles';
 
-const styles = css(code, {
-  color: teal600.rgb,
-  backgroundColor: teal50.rgb,
-  borderRadius: '8px',
+const styles = css(codeBlock.variableStyles, {
   padding: '4px 8px',
+  borderRadius: '8px',
 });
 
 interface CodeVariableProps {
