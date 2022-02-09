@@ -5,10 +5,10 @@ function splitSeparationTokenText(text: string): [string, string] {
   const before = [];
   const after = [];
   for (const c of text) {
-    if (hadNewLine) {
-      after.push(c);
-    } else if (c === '\n' && !hadNewLine) {
+    if (c === '\n' && !hadNewLine) {
       hadNewLine = true;
+    } else if (hadNewLine) {
+      after.push(c);
     } else {
       before.push(c);
     }
@@ -21,11 +21,16 @@ export function splitCodeIntoStatements(code: string): string[] {
   const resultStatements = tokenize(code).reduce<string[]>(
     (statements, token) => {
       if (token.type === STATEMENT_SEP_TOKEN_TYPE) {
-        const [beginning, rest] = splitSeparationTokenText(token.text);
-        pending.push(beginning);
-        const statement = pending.join('');
-        statements.push(statement);
-        pending = [rest];
+        let rest: string = token.text;
+        do {
+          const beforeAndAfter = splitSeparationTokenText(rest);
+          const beginning = beforeAndAfter[0];
+          [, rest] = beforeAndAfter;
+          pending.push(beginning);
+          const statement = pending.join('');
+          statements.push(statement);
+          pending = [];
+        } while (rest.length > 0);
       } else {
         pending.push(token.text);
       }
@@ -37,5 +42,5 @@ export function splitCodeIntoStatements(code: string): string[] {
   if (pending.length) {
     resultStatements.push(pending.join(''));
   }
-  return resultStatements; // remove empty statements
+  return resultStatements;
 }

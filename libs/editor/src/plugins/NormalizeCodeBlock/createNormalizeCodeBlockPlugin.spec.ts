@@ -381,7 +381,8 @@ describe('statement-based line splitting and merging', () => {
         type: 'code_block',
         children: [
           codeLine('a = 1'),
-          codeLine('\nt = {\n\n}'),
+          codeLine(''),
+          codeLine('t = {\n\n}'),
           codeLine('b = 2'),
         ],
       },
