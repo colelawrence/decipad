@@ -57,44 +57,42 @@ jobs:
           DECI_CUSTOM_DOMAIN: '${{ github.event.pull_request.number }}.dev.decipad.com'
           DECI_ZONE_ID: '${{secrets.DECI_ZONE_ID}}'
           DECI_CERTIFICATE_ARN: '${{secrets.DECI_CERTIFICATE_ARN}}'
-          SENTRY_DSN: ${{secrets.SENTRY_DSN}}
-          SENTRY_ORG: ${{secrets.SENTRY_ORG}}
-          SENTRY_PROJECT: ${{secrets.SENTRY_PROJECT}}
-          SENTRY_AUTH_TOKEN: ${{secrets.SENTRY_AUTH_TOKEN}}
-          SENTRY_ENVIRONMENT: development
+          SENTRY_DSN: '${{secrets.SENTRY_DSN}}'
+          SENTRY_ORG: '${{secrets.SENTRY_ORG}}'
+          SENTRY_PROJECT: '${{secrets.SENTRY_PROJECT}}'
+          SENTRY_AUTH_TOKEN: '${{secrets.SENTRY_AUTH_TOKEN}}'
+          SENTRY_ENVIRONMENT: 'development'
+          JWT_SIGNING_PRIVATE_KEY: '${{secrets.JWT_SIGNING_PRIVATE_KEY}}'
+          NEXTAUTH_URL: 'https://${{ github.event.pull_request.number }}.dev.decipad.com/api/auth'
+          GITHUB_CLIENT_ID: '${{secrets.DECI_GITHUB_CLIENT_ID}}'
+          GITHUB_CLIENT_SECRET: '${{secrets.DECI_GITHUB_CLIENT_SECRET}}'
+          JWT_SECRET: '${{secrets.JWT_SECRET}}'
+          DECI_SES_ACCESS_KEY_ID: '${{secrets.DECI_SES_ACCESS_KEY_ID}}'
+          DECI_SES_SECRET_ACCESS_KEY: '${{secrets.DECI_SES_SECRET_ACCESS_KEY}}'
+          DECI_INVITE_EXPIRATION_SECONDS: '${{secrets.DECI_INVITE_EXPIRATION_SECONDS}}'
+          DECI_KEY_VALIDATION_EXPIRATION_SECONDS: '${{secrets.DECI_KEY_VALIDATION_EXPIRATION_SECONDS}}'
+          DECI_FROM_EMAIL_ADDRESS: '${{secrets.DECI_FROM_EMAIL_ADDRESS}}'
+          DECI_APP_URL_BASE: 'https://${{ github.event.pull_request.number }}.dev.decipad.com'
+          DECI_S3_ENDPOINT: 's3.eu-west-2.amazonaws.com'
+          DECI_S3_ACCESS_KEY_ID: '${{secrets.DECI_S3_ACCESS_KEY_ID}}'
+          DECI_S3_SECRET_ACCESS_KEY: '${{secrets.DECI_S3_SECRET_ACCESS_KEY}}'
+          DECI_S3_PADS_BUCKET: '${{secrets.DECI_S3_PADS_BUCKET}}'
+          DECI_S3_ATTACHMENTS_BUCKET: '${{secrets.DECI_S3_ATTACHMENTS_BUCKET}}'
+          DECI_GOOGLESHEETS_API_KEY: '${{secrets.DECI_GOOGLESHEETS_API_KEY}}'
+          DECI_GOOGLESHEETS_CLIENT_ID: '${{secrets.DECI_GOOGLESHEETS_CLIENT_ID}}'
+          DECI_GOOGLESHEETS_CLIENT_SECRET: '${{secrets.DECI_GOOGLESHEETS_CLIENT_SECRET}}'
+          DISCORD_PUBLIC_KEY: '${{secrets.DISCORD_PUBLIC_KEY}}'
+          DISCORD_APP_ID: '${{secrets.DISCORD_APP_ID}}'
+          NODE_OPTIONS: '--enable-source-maps'
+          NEXT_PUBLIC_ANALYTICS_WRITE_KEY: '${{secrets.DEV_ANALYTICS_WRITE_KEY}}'
         run: |
           export SAM_LOCATION="s3://decipad-backend-sam/${{env.DECI_CUSTOM_DOMAIN}}"
           scripts/pull-sam.sh
 
           cd apps/backend
           export PATH=../../node_modules/.bin:$PATH
-          arc env staging JWT_SIGNING_PRIVATE_KEY ${{secrets.JWT_SIGNING_PRIVATE_KEY}}
-          arc env staging NEXTAUTH_URL "https://${{ github.event.pull_request.number }}.dev.decipad.com/api/auth"
-          arc env staging GITHUB_CLIENT_ID ${{secrets.DECI_GITHUB_CLIENT_ID}}
-          arc env staging GITHUB_CLIENT_SECRET ${{secrets.DECI_GITHUB_CLIENT_SECRET}}
-          arc env staging JWT_SECRET ${{secrets.JWT_SECRET}}
-          arc env staging SENTRY_DSN ${{secrets.SENTRY_DSN}}
-          arc env staging SENTRY_ENVIRONMENT development
-          arc env staging DECI_SES_ACCESS_KEY_ID '${{secrets.DECI_SES_ACCESS_KEY_ID}}'
-          arc env staging DECI_SES_SECRET_ACCESS_KEY '${{secrets.DECI_SES_SECRET_ACCESS_KEY}}'
-          arc env staging DECI_INVITE_EXPIRATION_SECONDS '${{secrets.DECI_INVITE_EXPIRATION_SECONDS}}'
-          arc env staging DECI_KEY_VALIDATION_EXPIRATION_SECONDS '${{secrets.DECI_KEY_VALIDATION_EXPIRATION_SECONDS}}'
-          arc env staging DECI_FROM_EMAIL_ADDRESS '${{secrets.DECI_FROM_EMAIL_ADDRESS}}'
-          arc env staging DECI_APP_URL_BASE "https://${{ github.event.pull_request.number }}.dev.decipad.com"
-          arc env staging DECI_S3_ENDPOINT 's3.eu-west-2.amazonaws.com'
-          arc env staging DECI_S3_ACCESS_KEY_ID '${{secrets.DECI_S3_ACCESS_KEY_ID}}'
-          arc env staging DECI_S3_SECRET_ACCESS_KEY '${{secrets.DECI_S3_SECRET_ACCESS_KEY}}'
-          arc env staging DECI_S3_PADS_BUCKET '${{secrets.DECI_S3_PADS_BUCKET}}'
-          arc env staging DECI_S3_ATTACHMENTS_BUCKET '${{secrets.DECI_S3_ATTACHMENTS_BUCKET}}'
-          arc env staging DECI_GOOGLESHEETS_API_KEY '${{secrets.DECI_GOOGLESHEETS_API_KEY}}'
-          arc env staging DECI_GOOGLESHEETS_CLIENT_ID '${{secrets.DECI_GOOGLESHEETS_CLIENT_ID}}'
-          arc env staging DECI_GOOGLESHEETS_CLIENT_SECRET '${{secrets.DECI_GOOGLESHEETS_CLIENT_SECRET}}'
-          arc env staging DISCORD_PUBLIC_KEY '${{secrets.DISCORD_PUBLIC_KEY}}'
-          arc env staging DISCORD_APP_ID '${{secrets.DISCORD_APP_ID}}'
           arc env staging NODE_OPTIONS --enable-source-maps
           cd ../..
-
-          export NEXT_PUBLIC_ANALYTICS_WRITE_KEY=${{secrets.DEV_ANALYTICS_WRITE_KEY}}
 
           yarn deploy:pr
           scripts/push-sam.sh

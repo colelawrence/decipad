@@ -213,7 +213,7 @@ const setupWS = (provider: WebsocketProvider) => {
         // eslint-disable-next-line no-console
         console.error(err);
         if (provider.onError) {
-          provider.onError(err);
+          provider.onError(err as Error);
         }
       }
     };

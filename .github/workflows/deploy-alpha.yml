@@ -52,11 +52,35 @@ jobs:
           DECI_CUSTOM_DOMAIN: 'alpha.decipad.com'
           DECI_ZONE_ID: '${{secrets.DECI_ZONE_ID}}'
           DECI_CERTIFICATE_ARN: '${{secrets.DECI_ALPHA_CERTIFICATE_ARN}}'
-          SENTRY_DSN: ${{secrets.SENTRY_DSN}}
-          SENTRY_ORG: ${{secrets.SENTRY_ORG}}
+          SENTRY_DSN: '${{secrets.SENTRY_DSN}}'
+          SENTRY_ORG: '${{secrets.SENTRY_ORG}}'
           SENTRY_PROJECT: ${{secrets.SENTRY_PROJECT}}
           SENTRY_AUTH_TOKEN: ${{secrets.SENTRY_AUTH_TOKEN}}
           SENTRY_ENVIRONMENT: alpha
+          JWT_SIGNING_PRIVATE_KEY: '${{secrets.ALPHA_JWT_SIGNING_PRIVATE_KEY}}'
+          NEXTAUTH_URL: 'https://alpha.decipad.com/api/auth'
+          GITHUB_CLIENT_ID: '${{secrets.DECI_ALPHA_GITHUB_CLIENT_ID}}'
+          GITHUB_CLIENT_SECRET: '${{secrets.DECI_ALPHA_GITHUB_CLIENT_SECRET}}'
+          JWT_SECRET: '${{secrets.ALPHA_JWT_SECRET}}'
+          DECI_SES_ACCESS_KEY_ID: '${{secrets.DECI_SES_ACCESS_KEY_ID}}'
+          DECI_SES_SECRET_ACCESS_KEY: '${{secrets.DECI_SES_SECRET_ACCESS_KEY}}'
+          DECI_INVITE_EXPIRATION_SECONDS: '${{secrets.DECI_INVITE_EXPIRATION_SECONDS}}'
+          DECI_KEY_VALIDATION_EXPIRATION_SECONDS: '${{secrets.DECI_KEY_VALIDATION_EXPIRATION_SECONDS}}'
+          DECI_FROM_EMAIL_ADDRESS: '${{secrets.DECI_FROM_EMAIL_ADDRESS}}'
+          DECI_APP_URL_BASE: 'https://alpha.decipad.com'
+          DECI_S3_ENDPOINT: 's3.eu-west-2.amazonaws.com'
+          DECI_S3_ACCESS_KEY_ID: '${{secrets.DECI_S3_ACCESS_KEY_ID}}'
+          DECI_S3_SECRET_ACCESS_KEY: '${{secrets.DECI_S3_SECRET_ACCESS_KEY}}'
+          DECI_S3_PADS_BUCKET: '${{secrets.DECI_S3_PADS_BUCKET}}'
+          DECI_S3_ATTACHMENTS_BUCKET: '${{secrets.ALPHA_DECI_S3_ATTACHMENTS_BUCKET}}'
+          DECI_GOOGLESHEETS_API_KEY: '${{secrets.ALPHA_DECI_GOOGLESHEETS_API_KEY}}'
+          DECI_GOOGLESHEETS_CLIENT_ID: '${{secrets.ALPHA_DECI_GOOGLESHEETS_CLIENT_ID}}'
+          DECI_GOOGLESHEETS_CLIENT_SECRET: '${{secrets.ALPHA_DECI_GOOGLESHEETS_CLIENT_SECRET}}'
+          DISCORD_PUBLIC_KEY: '${{secrets.DISCORD_PUBLIC_KEY}}'
+          DISCORD_APP_ID: '${{secrets.DISCORD_APP_ID}}'
+          NEXT_PUBLIC_HOTJAR_SITE_ID: '${{secrets.ALPHA_HOTJAR_SITE_ID}}'
+          NEXT_PUBLIC_ANALYTICS_WRITE_KEY: '${{secrets.ALPHA_ANALYTICS_WRITE_KEY}}'
+          NODE_OPTIONS: '--enable-source-maps'
 
         run: |
           export SAM_LOCATION="s3://decipad-backend-sam/alpha.decipad.com"
@@ -64,50 +88,8 @@ jobs:
 
           cd apps/backend
           export PATH=./node_modules/.bin:$PATH
-          arc env staging JWT_SIGNING_PRIVATE_KEY ${{secrets.ALPHA_JWT_SIGNING_PRIVATE_KEY}}
-          arc env staging NEXTAUTH_URL https://alpha.decipad.com/api/auth
-          arc env staging GITHUB_CLIENT_ID ${{secrets.DECI_ALPHA_GITHUB_CLIENT_ID}}
-          arc env staging GITHUB_CLIENT_SECRET ${{secrets.DECI_ALPHA_GITHUB_CLIENT_SECRET}}
-          arc env staging JWT_SECRET ${{secrets.ALPHA_JWT_SECRET}}
-          arc env staging SENTRY_DSN ${{secrets.SENTRY_DSN}}
-          arc env staging SENTRY_ENVIRONMENT alpha
-          arc env staging DECI_SES_ACCESS_KEY_ID '${{secrets.DECI_SES_ACCESS_KEY_ID}}'
-          arc env staging DECI_SES_SECRET_ACCESS_KEY '${{secrets.DECI_SES_SECRET_ACCESS_KEY}}'
-          arc env staging DECI_INVITE_EXPIRATION_SECONDS '${{secrets.DECI_INVITE_EXPIRATION_SECONDS}}'
-          arc env staging DECI_KEY_VALIDATION_EXPIRATION_SECONDS '${{secrets.DECI_KEY_VALIDATION_EXPIRATION_SECONDS}}'
-          arc env staging DECI_FROM_EMAIL_ADDRESS '${{secrets.DECI_FROM_EMAIL_ADDRESS}}'
-          arc env staging DECI_APP_URL_BASE https://alpha.decipad.com
-          arc env staging DECI_S3_ENDPOINT 's3.eu-west-2.amazonaws.com'
-          arc env staging DECI_S3_ACCESS_KEY_ID '${{secrets.DECI_S3_ACCESS_KEY_ID}}'
-          arc env staging DECI_S3_SECRET_ACCESS_KEY '${{secrets.DECI_S3_SECRET_ACCESS_KEY}}'
-          arc env staging DECI_S3_PADS_BUCKET '${{secrets.DECI_S3_PADS_BUCKET}}'
-          arc env staging DECI_S3_ATTACHMENTS_BUCKET '${{secrets.ALPHA_DECI_S3_ATTACHMENTS_BUCKET}}'
-          arc env staging DECI_GOOGLESHEETS_API_KEY '${{secrets.ALPHA_DECI_GOOGLESHEETS_API_KEY}}'
-          arc env staging DECI_GOOGLESHEETS_CLIENT_ID '${{secrets.ALPHA_DECI_GOOGLESHEETS_CLIENT_ID}}'
-          arc env staging DECI_GOOGLESHEETS_CLIENT_SECRET '${{secrets.ALPHA_DECI_GOOGLESHEETS_CLIENT_SECRET}}'
-          arc env staging DISCORD_PUBLIC_KEY '${{secrets.DISCORD_PUBLIC_KEY}}'
-          arc env staging DISCORD_APP_ID '${{secrets.DISCORD_APP_ID}}'
           arc env staging NODE_OPTIONS --enable-source-maps
           cd ../..
 
-          export NEXT_PUBLIC_HOTJAR_SITE_ID=${{secrets.ALPHA_HOTJAR_SITE_ID}}
-          export NEXT_PUBLIC_ANALYTICS_WRITE_KEY=${{secrets.ALPHA_ANALYTICS_WRITE_KEY}}
           yarn deploy:alpha
           scripts/push-sam.sh
-
-  # notify:
-  #   name: Discord Notification
-  #   runs-on: ubuntu-latest
-  #   needs: # make sure the notification is sent AFTER the jobs you want included have completed
-  #     - deploy
-  #   if: ${{ failure() }}
-  #   steps:
-  #     - name: Notify
-  #       uses: nobrayner/discord-webhook@v1
-  #       with:
-  #         title: "${{ needs.deploy.result == 'failure' && '🔴' || '💚'}} alpha deploy"
-  #         description: 'https://alpha.dev.decipad.com'
-  #         github-token: ${{ secrets.github_token }}
-  #         avatar-url: "https://singlecolorimage.com/get/${{ needs.deploy.result == 'failure' && 'f6dae1' || 'd2ec7b' }}/100x100"
-  #         discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
-  #         include-details: true

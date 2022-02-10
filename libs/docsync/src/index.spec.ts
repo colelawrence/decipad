@@ -67,18 +67,22 @@ test('sync many', (ctx) => {
     fetch.mockClear();
     fetch.enableMocks();
     fetch.mockResponse(async (req) => {
-      switch (req.url) {
-        case 'http://localhost:4200/api/ws': {
+      const { pathname } = new URL(req.url);
+      switch (pathname) {
+        case '/api/ws': {
           return ctx.websocketURL();
         }
-        case 'http://localhost:4200/api/auth/token?for=pubsub': {
+        case '/api/auth/token': {
           return auth.token;
         }
         default:
-          throw new Error(`Unknown URL${req.url}`);
+          throw new Error(`Unknown pathname${pathname}`);
       }
     });
-    fetch.mockIf((req) => req.url.startsWith('http://localhost:4200/api'));
+    fetch.mockIf((req) => {
+      const { pathname } = new URL(req.url);
+      return pathname.startsWith('/api');
+    });
 
     for (let i = 0; i < replicaCount; i += 1) {
       const editor = withDocSync(createEditor(), pad.id, {

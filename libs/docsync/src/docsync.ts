@@ -164,7 +164,11 @@ function docSyncEditor<E extends Editor>(
 async function fetchToken(): Promise<string> {
   const resp = await fetch(`/api/auth/token?for=pubsub`);
   if (!resp.ok) {
-    throw new Error(`Error fetching token: ${await resp.text()}`);
+    throw new Error(
+      `Error fetching token: response code was ${resp.status}: ${
+        resp.statusText
+      }. response was ${(await resp.text()) || JSON.stringify(resp)}`
+    );
   }
   return resp.text();
 }

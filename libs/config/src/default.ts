@@ -1,6 +1,8 @@
 // these are the values that are good for the development sandbox
 // there are no important secrets here, so you can relax.
-export const defaultEnvValues = {
+// we need this to be JS because of our build script, which injects default
+// values into the builkd targets.
+const defaultEnvValues = {
   APP_ROOT_PATH: '/',
   AWS_REGION: 'eu-west-2',
 
@@ -47,7 +49,6 @@ export const defaultEnvValues = {
 };
 
 export type SupportedEnvKey = keyof typeof defaultEnvValues;
-
 export function defaultEnv(key: SupportedEnvKey): string {
   return defaultEnvValues[key];
 }
