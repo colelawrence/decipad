@@ -89,7 +89,6 @@ function docSyncEditor<E extends Editor>(
 ): E & DocSyncEditor {
   const events = new EventEmitter();
   let isConnected = false;
-  let firstLoaded = false;
 
   store.on('synced', function onStoreSynced() {
     events.emit('loaded', 'local');
@@ -122,7 +121,7 @@ function docSyncEditor<E extends Editor>(
 
   const useEditor = Object.assign(editor, {
     onLoaded(cb: OnLoadedCallback) {
-      events.on('first loaded', cb);
+      events.on('loaded', cb);
     },
     onSaved(cb: OnSavedCallback) {
       events.on('saved', cb);
@@ -150,11 +149,9 @@ function docSyncEditor<E extends Editor>(
     },
   });
 
-  events.on('loaded', (source: 'local' | 'remote') => {
-    if (!firstLoaded && (source === 'remote' || !ws)) {
-      firstLoaded = true;
+  useEditor.onLoaded((source: 'local' | 'remote') => {
+    if (!ws || source === 'remote') {
       ensureInitialDocument(doc, shared);
-      events.emit('first loaded', source);
     }
   });
 
@@ -219,13 +216,6 @@ export function withDocSync<E extends Editor>(
     awareness = new Awareness(doc);
   }
   const shared = doc.getArray<SyncElement>();
-  const cursorEditor = withCursor(
-    withYjs(editor, shared),
-    getDefined(awareness)
-  );
-  const syncEditor = docSyncEditor(cursorEditor, shared, doc, store, wsp);
-  syncEditor.onLoaded(() => {
-    cursorEditor.setReady(true);
-  });
-  return syncEditor;
+  const syncEditor = withCursor(withYjs(editor, shared), getDefined(awareness));
+  return docSyncEditor(syncEditor, shared, doc, store, wsp);
 }

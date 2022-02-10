@@ -34,13 +34,7 @@ interface ParsedProgramBlock {
 
 type ParsedProgramBlocks = ParsedProgramBlock[];
 
-interface UseLanguagePluginArgs {
-  ready: boolean;
-}
-
-export const useLanguagePlugin = ({
-  ready,
-}: UseLanguagePluginArgs): UseLanguagePluginRet => {
+export const useLanguagePlugin = (): UseLanguagePluginRet => {
   const computer = useComputer();
   const defaultResults = useResults();
   const [results, setResults] = useState(defaultResults);
@@ -51,9 +45,6 @@ export const useLanguagePlugin = ({
 
   // Get some computation results based on evaluation requests
   useEffect(() => {
-    if (!ready) {
-      return;
-    }
     const sub = evaluationRequests
       .pipe(
         // Debounce to give React an easier time
@@ -94,17 +85,16 @@ export const useLanguagePlugin = ({
     return () => {
       sub.unsubscribe();
     };
-  }, [evaluationRequests, computer, defaultResults, ready]);
+  }, [evaluationRequests, computer, defaultResults]);
 
   return {
     languagePlugin: useMemo(
       () => ({
         onChange: (editor) => () => {
-          if (ready) {
-            const value = editor.children as SlateNode[];
-            const computeRequest = slateDocumentToComputeRequest(value);
-            evaluationRequests.next([computeRequest, getCursorPos(editor)]);
-          }
+          const value = editor.children as SlateNode[];
+          const computeRequest = slateDocumentToComputeRequest(value);
+
+          evaluationRequests.next([computeRequest, getCursorPos(editor)]);
         },
         decorate:
           (_editor) =>
@@ -126,7 +116,7 @@ export const useLanguagePlugin = ({
           }
         },
       }),
-      [evaluationRequests, results, ready]
+      [evaluationRequests, results]
     ),
     results,
   };

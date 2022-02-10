@@ -14,13 +14,11 @@ import { Editor } from 'slate';
 
 export interface UseNotebookTitlePluginProps {
   padId: string;
-  ready: boolean;
   readOnly: boolean;
 }
 
 export const useNotebookTitlePlugin = ({
   padId,
-  ready,
   readOnly,
 }: UseNotebookTitlePluginProps): PlatePlugin => {
   const { addToast } = useToasts();
@@ -36,9 +34,6 @@ export const useNotebookTitlePlugin = ({
   // Get the first node's text value, if it is not the same as the current pad's name, then i set the newTitle state
   const onChangeNotebookTitle: OnChange = useCallback(
     (editor) => () => {
-      if (!ready) {
-        return;
-      }
       const { selection } = editor;
 
       // TODO fix Node types
@@ -51,7 +46,7 @@ export const useNotebookTitlePlugin = ({
       }
       /* eslint-enable @typescript-eslint/no-explicit-any */
     },
-    [data, ready]
+    [data]
   );
 
   // Change the pad's title after the user has stopped typing by 1 second
