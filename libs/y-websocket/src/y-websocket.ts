@@ -126,12 +126,21 @@ const permissionDeniedHandler = (provider: WebsocketProvider, reason: string) =>
   // eslint-disable-next-line no-console
   console.warn(`Permission denied to access ${provider.url}.\n${reason}`);
 
+const isAcceptableMessage = (buf: string | Buffer | Uint8Array): boolean => {
+  return (
+    typeof buf === 'string' || Buffer.isBuffer(buf) || buf instanceof Uint8Array
+  );
+};
+
 const readMessage = (
   provider: WebsocketProvider,
   buf: string | Uint8Array,
   emitSynced: boolean,
   isBase64Encoded = false
-): encoding.Encoder => {
+): undefined | encoding.Encoder => {
+  if (!isAcceptableMessage(buf)) {
+    return;
+  }
   if (isBase64Encoded && typeof buf !== 'string') {
     // be extremely defensive about the encoding in these messages
     try {
@@ -198,10 +207,13 @@ const setupWS = (provider: WebsocketProvider) => {
     };
 
     websocket.onmessage = (event) => {
+      if (!event.data) {
+        return;
+      }
       provider.wsLastMessageReceived = time.getUnixTime();
       try {
         const encoder = readMessage(provider, event.data, true, true);
-        if (encoding.length(encoder) > 1) {
+        if (encoder && encoding.length(encoder) > 1) {
           const message = encoding.toUint8Array(encoder);
           provider.send(message);
         }
@@ -451,7 +463,7 @@ export class WebsocketProvider extends Observable<string> {
   private _bcSubscriber(data: ArrayBuffer) {
     this.mux(() => {
       const encoder = readMessage(this, new Uint8Array(data), false);
-      if (encoding.length(encoder) > 1) {
+      if (encoder && encoding.length(encoder) > 1) {
         bc.publish(getDefined(this.bcChannel), encoding.toUint8Array(encoder));
       }
     });

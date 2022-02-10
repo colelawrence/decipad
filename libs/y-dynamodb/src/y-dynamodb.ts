@@ -11,6 +11,8 @@ import { fnQueue } from '@decipad/fnqueue';
 import { DocSyncRecord } from '@decipad/backendtypes';
 import tables, { allPages } from '@decipad/tables';
 
+const DYNAMODB_PERSISTENCE_ORIGIN = 'ddb';
+
 export class DynamodbPersistence extends Observable<string> {
   public db: IDBDatabase | null = null;
   public doc: YDoc;
@@ -68,7 +70,7 @@ export class DynamodbPersistence extends Observable<string> {
 
       this.doc.transact(() =>
         updates.forEach((val) =>
-          applyUpdate(this.doc, val, DynamodbPersistence)
+          applyUpdate(this.doc, val, DYNAMODB_PERSISTENCE_ORIGIN)
         )
       );
 
@@ -77,7 +79,7 @@ export class DynamodbPersistence extends Observable<string> {
   }
 
   async storeUpdate(update: Uint8Array, origin: unknown): Promise<void> {
-    if (this._readOnly || origin === DynamodbPersistence) {
+    if (this._readOnly || origin === DYNAMODB_PERSISTENCE_ORIGIN) {
       return;
     }
     await this._mux.push(async () => {
