@@ -54,7 +54,7 @@ const groups: ReadonlyArray<SlashCommandGroup> = [
       {
         command: 'table',
         title: 'Table',
-        description: 'Input data in a tabular format',
+        description: 'Input your data in a table',
         icon: <Table />,
         extraSearchTerms: [],
       },
