@@ -9,7 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     concurrency:
-      group: deploy-stack
+      group: 'deploy-pr-${{ github.event.pull_request.number }}'
     steps:
       #### Prepare
 
