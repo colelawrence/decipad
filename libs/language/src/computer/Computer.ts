@@ -20,6 +20,7 @@ import {
   InBlockResult,
   IdentifiedBlock,
   ComputeRequest,
+  OptionalValueLocation,
 } from './types';
 import { ParseRet, updateParse } from './parse';
 import { ComputationRealm } from './ComputationRealm';
@@ -240,6 +241,33 @@ export class Computer {
     }
 
     return Array.from(findNames());
+  }
+
+  /**
+   * Take a cursor position in "editor space" [blockId, lineNo]
+   * and turn it into "language space" [blockId, statementIndex]
+   */
+  cursorPosToValueLocation(
+    cursorPos?: ValueLocation | null
+  ): OptionalValueLocation | null {
+    if (cursorPos == null) return null;
+
+    const [blockId, lineNo] = cursorPos;
+
+    const block = (
+      this.previouslyParsed.find(
+        (block) => block.id === blockId
+      ) as IdentifiedBlock
+    )?.block;
+
+    if (block == null) return null;
+
+    const statementIndex = block.args.findIndex(
+      ({ start, end }) =>
+        start && start.line <= lineNo && end && end.line >= lineNo
+    );
+
+    return statementIndex !== -1 ? [blockId, statementIndex] : [blockId, null];
   }
 
   getStatement(blockId: string, statementIndex: number): AST.Statement | null {
