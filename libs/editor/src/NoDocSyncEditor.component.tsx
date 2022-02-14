@@ -43,8 +43,8 @@ export const NoDocSyncEditorBase = (props: PlateProps): ReturnType<FC> => {
           components={components as Record<string, PlatePluginComponent>}
           initialValue={
             window.localStorage.getItem(POPULATE_PLAYGROUND) === 'true'
-              ? introNotebook
-              : emptyNotebook
+              ? introNotebook()
+              : emptyNotebook()
           }
           {...props}
         >

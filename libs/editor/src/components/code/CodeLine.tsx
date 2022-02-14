@@ -22,10 +22,6 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   const { blockResults: lineResults } = useResults();
 
   const { id: lineId } = element;
-  if (lineId == null) {
-    console.error('Missing line id in element: ', element);
-    throw new Error('Missing line id.');
-  }
 
   const line = lineResults[lineId];
   const lineResult = line?.results[0];
@@ -53,7 +49,7 @@ function getSyntaxError(line: IdentifiedResult) {
   if (!line.isSyntaxError) {
     return {
       message: error.message,
-      url: `${docs({}).$}/errors`,
+      url: docs({}).page({ name: 'errors' }).$,
     };
   }
   return isSyntaxError(error)
@@ -63,16 +59,16 @@ function getSyntaxError(line: IdentifiedResult) {
         message: error.message,
         detailMessage: error.detailMessage,
         expected: error.expected,
-        url: `${docs({}).$}/errors#syntax-error`,
+        url: `${docs({}).page({ name: 'errors' }).$}#syntax-error`,
       }
     : isBracketError(error.bracketError)
     ? {
         message: 'Bracket error',
         bracketError: error.bracketError,
-        url: `${docs({}).$}/errors#syntax-error`,
+        url: `${docs({}).page({ name: 'errors' }).$}#syntax-error`,
       }
     : {
         message: error.message,
-        url: `${docs({}).$}/errors`,
+        url: docs({}).page({ name: 'errors' }).$,
       };
 }

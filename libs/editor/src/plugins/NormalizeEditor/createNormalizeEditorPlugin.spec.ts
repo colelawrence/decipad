@@ -14,10 +14,11 @@ import {
   Element,
 } from '../../elements';
 
-const h1Element = (): H1Element => ({
-  type: ELEMENT_H1,
-  children: [{ text: '' }],
-});
+const h1Element = () =>
+  ({
+    type: ELEMENT_H1,
+    children: [{ text: '' }],
+  } as H1Element);
 
 let editor: Editor;
 beforeEach(() => {

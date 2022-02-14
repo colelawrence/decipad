@@ -34,6 +34,7 @@ describe.each([ELEMENT_PARAGRAPH, ELEMENT_BLOCKQUOTE, ELEMENT_LIC] as const)(
       editor.children = [
         {
           type,
+          id: 'id',
           children: [{ text: '' }],
         } as TElement,
       ];
@@ -41,6 +42,7 @@ describe.each([ELEMENT_PARAGRAPH, ELEMENT_BLOCKQUOTE, ELEMENT_LIC] as const)(
       expect(editor.children).toEqual([
         {
           type,
+          id: 'id',
           children: [{ text: '' }],
         },
       ] as Element[]);
@@ -49,6 +51,7 @@ describe.each([ELEMENT_PARAGRAPH, ELEMENT_BLOCKQUOTE, ELEMENT_LIC] as const)(
       editor.children = [
         {
           type,
+          id: 'id',
           children: [{ text: '', [MARK_BOLD]: true }],
         } as TElement,
       ];
@@ -56,6 +59,7 @@ describe.each([ELEMENT_PARAGRAPH, ELEMENT_BLOCKQUOTE, ELEMENT_LIC] as const)(
       expect(editor.children).toEqual([
         {
           type,
+          id: 'id',
           children: [{ text: '', [MARK_BOLD]: true }],
         },
       ] as Element[]);
@@ -64,9 +68,11 @@ describe.each([ELEMENT_PARAGRAPH, ELEMENT_BLOCKQUOTE, ELEMENT_LIC] as const)(
       editor.children = [
         {
           type,
+          id: 'id',
           children: [
             {
               type: ELEMENT_LINK,
+              id: 'id',
               url: 'https://example.com',
               children: [{ text: '' }],
             },
@@ -77,9 +83,11 @@ describe.each([ELEMENT_PARAGRAPH, ELEMENT_BLOCKQUOTE, ELEMENT_LIC] as const)(
       expect(editor.children).toEqual([
         {
           type,
+          id: 'id',
           children: [
             {
               type: ELEMENT_LINK,
+              id: 'id',
               url: 'https://example.com',
               children: [{ text: '' }],
             },
@@ -92,6 +100,7 @@ describe.each([ELEMENT_PARAGRAPH, ELEMENT_BLOCKQUOTE, ELEMENT_LIC] as const)(
       editor.children = [
         {
           type,
+          id: 'id',
           children: [{ type: ELEMENT_PARAGRAPH, children: [{ text: '' }] }],
         } as TElement,
       ];
@@ -99,6 +108,7 @@ describe.each([ELEMENT_PARAGRAPH, ELEMENT_BLOCKQUOTE, ELEMENT_LIC] as const)(
       expect(editor.children).toEqual([
         {
           type,
+          id: 'id',
           children: [{ text: '' }],
         },
       ] as Element[]);

@@ -35,7 +35,7 @@ const convertPrecedingTextWithTriggerToLink = (editor: Editor): void => {
   }
 
   let { path } = cursor;
-  wrapNodes<LinkElement>(
+  wrapNodes<Omit<LinkElement, 'id'>>(
     editor,
     {
       type: ELEMENT_LINK,

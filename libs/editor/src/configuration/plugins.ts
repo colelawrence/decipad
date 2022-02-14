@@ -33,6 +33,7 @@ import { createNormalizeTextPlugin } from '../plugins/NormalizeText/createNormal
 import { createNormalizeListPlugin } from '../plugins/NormalizeListPlugin/createNormalizeListPlugin';
 import { createNormalizeVoidPlugin } from '../plugins/NormalizeVoidPlugin/createNormalizeVoidPlugin';
 import { createNormalizeLinkPlugin } from '../plugins/NormalizeLinkPlugin/createNormalizeLinkPlugin';
+import { createNormalizeElementIdPlugin } from '../plugins/NormalizeElementId/createNormalizeElementIdPlugin';
 
 export const plugins = [
   // fundamentals
@@ -47,9 +48,6 @@ export const plugins = [
   createBlockquotePlugin(),
   createHeadingPlugin({ levels: 3 }),
   createListPlugin(),
-
-  // needed for the language integration
-  createNodeIdPlugin({ idCreator: nanoid }),
 
   // custom blocks
   createInteractiveTablePlugin(),
@@ -67,6 +65,8 @@ export const plugins = [
 
   createNormalizeLinkPlugin(),
 
+  createNodeIdPlugin({ idCreator: nanoid }),
+  createNormalizeElementIdPlugin(),
   createNormalizeTextPlugin(),
 
   createTrailingBlockPlugin({ type: ELEMENT_PARAGRAPH }),

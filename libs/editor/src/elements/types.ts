@@ -25,7 +25,7 @@ import { MarkKind } from '../marks';
 interface BaseElement {
   type: ElementKind;
   children: Array<Descendant>;
-  id?: string;
+  id: string;
 }
 
 // Headings

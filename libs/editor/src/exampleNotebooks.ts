@@ -1,26 +1,29 @@
 import Fraction from '@decipad/fraction';
+import { nanoid } from 'nanoid';
 import { Editor } from './elements';
 
-export const emptyNotebook: Editor['children'] = [
+export const emptyNotebook = (): Editor['children'] => [
   {
+    type: 'h1',
+    id: nanoid(),
     children: [
       {
         text: '',
       },
     ],
-    type: 'h1',
   },
   {
+    type: 'p',
+    id: nanoid(),
     children: [
       {
         text: '',
       },
     ],
-    type: 'p',
   },
 ];
 
-export const introNotebook: Editor['children'] = [
+export const introNotebook = (): Editor['children'] => [
   {
     children: [
       {
@@ -28,6 +31,7 @@ export const introNotebook: Editor['children'] = [
       },
     ],
     type: 'h1',
+    id: nanoid(),
   },
   {
     children: [
@@ -36,6 +40,7 @@ export const introNotebook: Editor['children'] = [
       },
     ],
     type: 'h2',
+    id: nanoid(),
   },
   {
     children: [
@@ -45,8 +50,8 @@ export const introNotebook: Editor['children'] = [
             text: 'You = 55 kg',
           },
         ],
-        id: 'UcRb5Rzuc67OPu5kuRoYw',
         type: 'code_line',
+        id: nanoid(),
       },
       {
         children: [
@@ -54,8 +59,8 @@ export const introNotebook: Editor['children'] = [
             text: 'Feather = 0.008 g',
           },
         ],
-        id: 'AcRb5Rzuc67OPu5kuRoYw',
         type: 'code_line',
+        id: nanoid(),
       },
       {
         children: [
@@ -63,11 +68,12 @@ export const introNotebook: Editor['children'] = [
             text: 'You in Feather',
           },
         ],
-        id: 'AcRb5Rzuc37OPu5kuRoYw',
         type: 'code_line',
+        id: nanoid(),
       },
     ],
     type: 'code_block',
+    id: nanoid(),
   },
   {
     children: [
@@ -76,9 +82,11 @@ export const introNotebook: Editor['children'] = [
       },
     ],
     type: 'h2',
+    id: nanoid(),
   },
   {
     type: 'p',
+    id: nanoid(),
     children: [
       {
         text: 'From crypto to cashflows, everyone should be able to explore cool and interesting things with data. Decipad is an interactive notebook to gather information, build models in minutes and bring data-driven ideas to life.',
@@ -92,6 +100,7 @@ export const introNotebook: Editor['children'] = [
       },
     ],
     type: 'blockquote',
+    id: nanoid(),
   },
   {
     children: [
@@ -100,6 +109,7 @@ export const introNotebook: Editor['children'] = [
       },
     ],
     type: 'p',
+    id: nanoid(),
   },
   {
     children: [
@@ -108,6 +118,7 @@ export const introNotebook: Editor['children'] = [
       },
     ],
     type: 'h3',
+    id: nanoid(),
   },
   {
     children: [
@@ -124,9 +135,11 @@ export const introNotebook: Editor['children'] = [
               },
             ],
             type: 'lic',
+            id: nanoid(),
           },
         ],
         type: 'li',
+        id: nanoid(),
       },
       {
         children: [
@@ -162,10 +175,11 @@ export const introNotebook: Editor['children'] = [
               },
             ],
             type: 'lic',
+            id: nanoid(),
           },
         ],
         type: 'li',
-        id: 'UcRbdRzucI7OPu5kuRoYw',
+        id: nanoid(),
       },
       {
         children: [
@@ -180,9 +194,11 @@ export const introNotebook: Editor['children'] = [
               },
             ],
             type: 'lic',
+            id: nanoid(),
           },
         ],
         type: 'li',
+        id: nanoid(),
       },
       {
         children: [
@@ -197,12 +213,15 @@ export const introNotebook: Editor['children'] = [
               },
             ],
             type: 'lic',
+            id: nanoid(),
           },
         ],
         type: 'li',
+        id: nanoid(),
       },
     ],
     type: 'ol',
+    id: nanoid(),
   },
   {
     children: [
@@ -211,6 +230,7 @@ export const introNotebook: Editor['children'] = [
       },
     ],
     type: 'h2',
+    id: nanoid(),
   },
   {
     children: [
@@ -219,6 +239,7 @@ export const introNotebook: Editor['children'] = [
       },
     ],
     type: 'p',
+    id: nanoid(),
   },
   {
     children: [
@@ -227,6 +248,7 @@ export const introNotebook: Editor['children'] = [
       },
     ],
     type: 'blockquote',
+    id: nanoid(),
   },
   {
     children: [
@@ -244,6 +266,7 @@ export const introNotebook: Editor['children'] = [
                   },
                 ],
                 type: 'a',
+                id: nanoid(),
                 url: 'https://discord.com/invite/HwDMqwbGmc',
               },
               {
@@ -251,12 +274,15 @@ export const introNotebook: Editor['children'] = [
               },
             ],
             type: 'lic',
+            id: nanoid(),
           },
         ],
         type: 'li',
+        id: nanoid(),
       },
     ],
     type: 'ul',
+    id: nanoid(),
   },
   {
     children: [
@@ -265,7 +291,7 @@ export const introNotebook: Editor['children'] = [
       },
     ],
     type: 'p',
-    id: 'DrZhJkCJEgPYEj68KINq7',
+    id: nanoid(),
   },
   {
     children: [
@@ -276,7 +302,7 @@ export const introNotebook: Editor['children'] = [
           },
         ],
         type: 'code_line',
-        id: 'yx-jwIBQMd3Oq80p5N6Jo',
+        id: nanoid(),
       },
       {
         children: [
@@ -285,7 +311,7 @@ export const introNotebook: Editor['children'] = [
           },
         ],
         type: 'code_line',
-        id: 'BPg1b6Q1Au7tqrH-Lomnx',
+        id: nanoid(),
       },
       {
         children: [
@@ -294,10 +320,11 @@ export const introNotebook: Editor['children'] = [
           },
         ],
         type: 'code_line',
-        id: 'XrIH70dhctIfUQ-qkYj4w',
+        id: nanoid(),
       },
     ],
     type: 'code_block',
+    id: nanoid(),
   },
   {
     children: [
@@ -306,6 +333,7 @@ export const introNotebook: Editor['children'] = [
       },
     ],
     type: 'p',
+    id: nanoid(),
   },
   {
     children: [
@@ -316,10 +344,11 @@ export const introNotebook: Editor['children'] = [
           },
         ],
         type: 'code_line',
-        id: 'HytEJN3L2SOSw3-60DiLI',
+        id: nanoid(),
       },
     ],
     type: 'code_block',
+    id: nanoid(),
   },
   {
     children: [
@@ -328,6 +357,7 @@ export const introNotebook: Editor['children'] = [
       },
     ],
     type: 'p',
+    id: nanoid(),
   },
   {
     children: [
@@ -338,7 +368,7 @@ export const introNotebook: Editor['children'] = [
           },
         ],
         type: 'code_line',
-        id: 'nqp0NJWrZ1J3Ql0m5qc9v',
+        id: nanoid(),
       },
       {
         children: [
@@ -347,7 +377,7 @@ export const introNotebook: Editor['children'] = [
           },
         ],
         type: 'code_line',
-        id: 'w87MCCE4kOTVoscwj05JQ',
+        id: nanoid(),
       },
       {
         children: [
@@ -356,10 +386,11 @@ export const introNotebook: Editor['children'] = [
           },
         ],
         type: 'code_line',
-        id: 'Nbh80MCpaBgZlghHI4VUz',
+        id: nanoid(),
       },
     ],
     type: 'code_block',
+    id: nanoid(),
   },
   {
     children: [
@@ -368,6 +399,7 @@ export const introNotebook: Editor['children'] = [
       },
     ],
     type: 'p',
+    id: nanoid(),
   },
   {
     children: [
@@ -376,6 +408,7 @@ export const introNotebook: Editor['children'] = [
       },
     ],
     type: 'table-input',
+    id: nanoid(),
     tableData: {
       variableName: 'Routes',
       columns: [
@@ -414,6 +447,7 @@ export const introNotebook: Editor['children'] = [
       },
     ],
     type: 'p',
+    id: nanoid(),
   },
   {
     children: [
@@ -423,7 +457,7 @@ export const introNotebook: Editor['children'] = [
             text: 'Baseline = 5 miles/hour',
           },
         ],
-        id: '434434',
+        id: nanoid(),
         type: 'code_line',
       },
       {
@@ -432,11 +466,12 @@ export const introNotebook: Editor['children'] = [
             text: 'Improvement = 5%',
           },
         ],
-        id: '4344dsffdfd34',
+        id: nanoid(),
         type: 'code_line',
       },
     ],
     type: 'code_block',
+    id: nanoid(),
   },
   {
     children: [
@@ -445,6 +480,7 @@ export const introNotebook: Editor['children'] = [
       },
     ],
     type: 'p',
+    id: nanoid(),
   },
   {
     children: [
@@ -455,10 +491,11 @@ export const introNotebook: Editor['children'] = [
           },
         ],
         type: 'code_line',
-        id: 'WhFw4GC0Ryy0ml55tncbP',
+        id: nanoid(),
       },
     ],
     type: 'code_block',
+    id: nanoid(),
   },
   {
     children: [
@@ -467,5 +504,6 @@ export const introNotebook: Editor['children'] = [
       },
     ],
     type: 'p',
+    id: nanoid(),
   },
 ];

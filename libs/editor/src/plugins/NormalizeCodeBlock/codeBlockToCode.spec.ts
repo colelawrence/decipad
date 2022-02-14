@@ -13,6 +13,7 @@ describe('blockChildrenToCode', () => {
         children: [
           {
             type: 'code_line',
+            id: 'id',
             children: [{ text: '' }],
           },
         ],
@@ -24,6 +25,7 @@ describe('blockChildrenToCode', () => {
     expect(
       codeBlockToCode({
         type: 'code_block',
+
         children: [
           codeLine('a = 1'),
           codeLine('t = {'),

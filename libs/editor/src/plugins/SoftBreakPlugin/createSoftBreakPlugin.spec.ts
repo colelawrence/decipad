@@ -9,9 +9,11 @@ import {
 const getNewEditorState = () => [
   {
     type: ELEMENT_CODE_BLOCK,
+    id: 'id',
     children: [
       {
         type: ELEMENT_CODE_LINE,
+        id: 'id',
         children: [
           {
             text: '[1, 2, 3]',
@@ -25,6 +27,7 @@ const getNewEditorState = () => [
 const codeLine = (code: string): CodeLineElement => {
   return {
     type: 'code_line',
+    id: 'id',
     children: [
       {
         text: code,

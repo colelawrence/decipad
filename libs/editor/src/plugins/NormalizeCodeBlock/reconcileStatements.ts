@@ -54,7 +54,7 @@ function reconcileBySplitting(
   if (nextLineText.startsWith('\n')) {
     nextLineText = nextLineText.substring(1);
   }
-  const newNode: CodeLineElement = {
+  const newNode: Omit<CodeLineElement, 'id'> = {
     type: ELEMENT_CODE_LINE,
     children: [
       {
