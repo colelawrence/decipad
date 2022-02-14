@@ -1,16 +1,16 @@
 import { Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { PlatePlugin, TDescendant } from '@udecode/plate';
 import { ContextType, useEffect, useMemo, useState } from 'react';
 import { dequal } from 'dequal';
 import { captureException } from '@sentry/react';
 import { Editor, Node, NodeEntry, Transforms } from 'slate';
+
 import { ProgramBlocksContextValue } from '@decipad/ui';
 import { ResultsContext, useResults } from '@decipad/react-contexts';
-import { ComputeRequest, makeComputeStream } from '@decipad/language';
-import { getCursorPos, CursorPos } from './getCursorPos';
+import { ComputeRequest } from '@decipad/language';
 import { slateDocumentToComputeRequest } from './slateDocumentToComputeRequest';
-import { hasSyntaxError, SlateNode } from './common';
+import { hasSyntaxError } from './common';
 import { ELEMENT_CODE_LINE, ELEMENT_FETCH } from '../../elements';
 import { useComputer } from '../../contexts/Computer';
 import { CodeErrorHighlight } from '../../components';
@@ -38,21 +38,22 @@ export const useLanguagePlugin = (): UseLanguagePluginRet => {
   const defaultResults = useResults();
   const [results, setResults] = useState(defaultResults);
 
-  const [evaluationRequests] = useState(
-    () => new Subject<[ComputeRequest, CursorPos | null]>()
-  );
+  const [computeRequests] = useState(() => new Subject<ComputeRequest>());
 
   // Get some computation results based on evaluation requests
   useEffect(() => {
-    const sub = evaluationRequests
+    const sub = computeRequests
       .pipe(
         // Debounce to give React an easier time
         debounceTime(100),
-        makeComputeStream({ computer })
+        // Make sure the new request is actually different
+        distinctUntilChanged(dequal),
+        // Compute me some computes!
+        switchMap((req) => computer.compute(req))
       )
       // Catch all errors here
       .subscribe({
-        next: ([res, cursor]) => {
+        next: (res) => {
           if (res.type === 'compute-panic') {
             setResults(defaultResults);
             captureException(new Error(res.message));
@@ -71,7 +72,6 @@ export const useLanguagePlugin = (): UseLanguagePluginRet => {
               });
 
               return {
-                cursor,
                 blockResults: Object.fromEntries(blockResultsKv),
                 indexLabels: res.indexLabels,
               };
@@ -84,16 +84,15 @@ export const useLanguagePlugin = (): UseLanguagePluginRet => {
     return () => {
       sub.unsubscribe();
     };
-  }, [evaluationRequests, computer, defaultResults]);
+  }, [computeRequests, computer, defaultResults]);
 
   return {
     languagePlugin: useMemo(
       () => ({
         onChange: (editor) => () => {
-          const value = editor.children as SlateNode[];
-          const computeRequest = slateDocumentToComputeRequest(value);
+          const computeRequest = slateDocumentToComputeRequest(editor.children);
 
-          evaluationRequests.next([computeRequest, getCursorPos(editor)]);
+          computeRequests.next(computeRequest);
         },
         decorate:
           (_editor) =>
@@ -110,11 +109,11 @@ export const useLanguagePlugin = (): UseLanguagePluginRet => {
           return hasSyntaxError(props.leaf) ? (
             <CodeErrorHighlight {...props} variant={props.leaf.variant} />
           ) : (
-            props.children
+            <>{props.children}</>
           );
         },
       }),
-      [evaluationRequests, results]
+      [computeRequests, results]
     ),
     results,
   };

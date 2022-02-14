@@ -13,9 +13,9 @@ function withResultContextWrapper(
   value: Partial<ContextType<typeof ResultsContext>>
 ): FC {
   return ({ children }) => {
-    const { cursor = null, blockResults = {}, indexLabels = new Map() } = value;
+    const { blockResults = {}, indexLabels = new Map() } = value;
     return (
-      <ResultsContext.Provider value={{ cursor, blockResults, indexLabels }}>
+      <ResultsContext.Provider value={{ blockResults, indexLabels }}>
         {children}
       </ResultsContext.Provider>
     );

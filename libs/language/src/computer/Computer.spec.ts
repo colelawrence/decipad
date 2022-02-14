@@ -19,7 +19,7 @@ import {
 } from './testutils';
 import { ComputationRealm } from './ComputationRealm';
 import { computeProgram, Computer, resultFromError } from './Computer';
-import { ComputeRequest, UnparsedBlock, ValueLocation } from './types';
+import { ComputeRequest, UnparsedBlock } from './types';
 
 let computer: Computer;
 beforeEach(() => {
@@ -183,32 +183,6 @@ it('can reset itself', async () => {
 
   computer.reset();
   expect(computer).toEqual(new Computer());
-});
-
-it('can turn a cursor location into a ValueLocation', async () => {
-  await computeOnTestComputer({
-    program: [
-      {
-        id: 'id',
-        type: 'unparsed-block',
-        source: ['A = 1', '', '', 'B = 2', 'C = 3'].join('\n'),
-      },
-    ],
-  });
-
-  const locOf = (loc: ValueLocation | null) =>
-    computer.cursorPosToValueLocation(loc);
-
-  expect(locOf(null)).toEqual(null);
-  expect(locOf(['missing-id', 0])).toEqual(null);
-  expect(locOf(['id', 99999])).toEqual(['id', null]);
-
-  expect(locOf(['id', 0])).toEqual(['id', null]);
-  expect(locOf(['id', 1])).toEqual(['id', 0]);
-  expect(locOf(['id', 2])).toEqual(['id', null]);
-  expect(locOf(['id', 3])).toEqual(['id', null]);
-  expect(locOf(['id', 4])).toEqual(['id', 1]);
-  expect(locOf(['id', 5])).toEqual(['id', 2]);
 });
 
 it('can pass on injected data', async () => {
