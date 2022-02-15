@@ -19,5 +19,7 @@ module.exports = {
     '<rootDir>/libs/sync-connection-lambdas',
     '<rootDir>/libs/slate-yjs',
     '<rootDir>/libs/client-events',
+    '<rootDir>/libs/externaldata',
+    '<rootDir>/libs/fraction',
   ],
 };

@@ -199,10 +199,12 @@ const setupWS = (provider: WebsocketProvider) => {
     provider.synced = false;
 
     websocket.onerror = (event) => {
-      // eslint-disable-next-line no-console
-      console.error('Websocket error:', event);
-      if (provider.onError) {
-        provider.onError(event);
+      if ((event as ErrorEvent).error?.code !== 'ECONNRESET') {
+        // eslint-disable-next-line no-console
+        console.error('Websocket error:', event);
+        if (provider.onError) {
+          provider.onError(event);
+        }
       }
     };
 

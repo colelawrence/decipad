@@ -4,9 +4,6 @@ import { TableData } from '../../types';
 import { SlateNode } from './common';
 import { slateDocumentToComputeRequest } from './slateDocumentToComputeRequest';
 
-// Can't use apache arrow in jest
-jest.mock('@apache-arrow/es5-cjs', () => ({}));
-
 const testTableData: TableData = {
   variableName: 'TheTitle',
   columns: [

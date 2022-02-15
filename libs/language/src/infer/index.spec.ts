@@ -603,23 +603,21 @@ jest.mock('../data', () => ({
 
 describe('Data', () => {
   // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('infers imported data', async () => {
+  it('infers imported data', async () => {
     const ctx = makeContext();
     expect(
       await inferStatement(
         ctx,
         assign(
           'IndexName',
-          fetchData('http://example.com/data', 'text/whatever')
+          fetchData(
+            'data:text/csv;base64,TnVtYmEsU3RyYWluZyxCdWxpYW4sRG9pdGUKMSxoZXlhLHRydWUsMjAyMC0wMS0wMQoyLHRoZXJlLGZhbHNlLDIwMjAtMDEtMzE=',
+            'text/csv'
+          )
         )
       )
-    ).toEqual(
-      t.table({
-        indexName: 'IndexName',
-        length: 0,
-        columnNames: [],
-        columnTypes: [],
-      })
+    ).toMatchInlineSnapshot(
+      `table (2) { Numba = <number>, Straing = <string>, Bulian = <boolean>, Doite = millisecond }`
     );
   });
 });

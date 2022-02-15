@@ -1,12 +1,32 @@
-import { Float64, Utf8, Bool, DateMillisecond } from 'apache-arrow';
+import {
+  Float64,
+  Utf8,
+  Bool,
+  DateMillisecond,
+  tableFromArrays,
+  tableToIPC,
+} from 'apache-arrow';
 import { resolve } from '.';
 import { dataURL } from './data-url';
 
 it('resolves csv', async () => {
-  const source =
-    'Numba,Straing,Bulian,Doite\n1,heya,true,2020-01-01\n2,there,false,2020-01-31';
-  const url = dataURL(Buffer.from(source), 'text/csv');
-  const table = await resolve({ url, contentType: 'text/csv' });
+  const source = tableFromArrays({
+    Numba: [1, 2],
+    Straing: ['heya', 'there'],
+    Bulian: [true, false],
+    Doite: [
+      new Date('2020-01-01T00:00:00.000Z'),
+      new Date('2020-01-31T00:00:00.000Z'),
+    ],
+  });
+  const url = dataURL(
+    Buffer.from(tableToIPC(source)),
+    'application/x-apache-arrow-stream'
+  );
+  const table = await resolve({
+    url: url.toString(),
+    contentType: 'application/x-apache-arrow-stream',
+  });
   expect(table.schema.fields).toHaveLength(4);
 
   // validate inferred schema

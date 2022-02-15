@@ -1,13 +1,4 @@
-import {
-  Table,
-  Type,
-  Vector,
-  FloatVector,
-  BoolVector,
-  Utf8Vector,
-  DateDayVector,
-  DateMillisecondVector,
-} from '@apache-arrow/es5-cjs';
+import { Table, Type, Vector, vectorFromArray } from 'apache-arrow';
 import { columnNameFromIndex } from './column-name';
 import { parseDate, dateGranularityFromString } from '../date';
 
@@ -20,36 +11,32 @@ export interface Sheet {
 }
 
 export function toTable(data: Sheet): Table {
-  const columnNames: string[] = [];
-  const types: Type[] = [];
   const columns = data.values;
-  for (let colIndex = 0; colIndex < columns.length; colIndex += 1) {
-    const column = columns[colIndex];
-    columnNames.push(columnNameFromIndex(colIndex));
-    types.push(columnType(column));
-  }
+  const columnMap: Record<string, Vector> = {};
+  columns.forEach((column, index) => {
+    const columnName = columnNameFromIndex(index);
+    columnMap[columnName] = columnToArrowVector(column);
+  });
 
-  const vectors = types.map((type, index) =>
-    columnToArrowVector(type, columns[index])
-  );
-  return Table.new(vectors, columnNames);
+  return new Table(columnMap);
 }
 
-function columnToArrowVector(type: Type, data: Value[]): Vector {
+function columnToArrowVector(data: Column): Vector {
+  const type = columnType(data);
   switch (type) {
     case Type.Bool:
-      return BoolVector.from(data);
+      return vectorFromArray(data);
     case Type.Float:
     case Type.Float16:
     case Type.Float32:
     case Type.Float64:
-      return FloatVector.from(new Float64Array(data as number[]));
+      return vectorFromArray(new Float64Array(data as number[]));
     case Type.DateDay:
-      return DateDayVector.from((data as string[]).map(parseDate));
+      return vectorFromArray((data as string[]).map(parseDate));
     case Type.DateMillisecond:
-      return DateMillisecondVector.from((data as string[]).map(parseDate));
+      return vectorFromArray((data as string[]).map(parseDate));
     case Type.Utf8:
-      return Utf8Vector.from(data);
+      return vectorFromArray(data);
     default:
       throw new Error(
         `don't know how to translate arrow type ${type} into a vector`

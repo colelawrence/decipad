@@ -1,4 +1,4 @@
-import { Table } from '@apache-arrow/es5-cjs';
+import { Table } from 'apache-arrow';
 import { ExternalKeyRecord } from '@decipad/backendtypes';
 import { ProviderOptions, Provider } from '.';
 import { request } from '../http/request';

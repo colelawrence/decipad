@@ -1,5 +1,5 @@
-import { Table } from '@apache-arrow/es5-cjs';
+import { Table, tableToIPC } from 'apache-arrow';
 
 export function encodeTable(table: Table): string {
-  return Buffer.from(table.serialize()).toString('base64');
+  return Buffer.from(tableToIPC(table)).toString('base64');
 }

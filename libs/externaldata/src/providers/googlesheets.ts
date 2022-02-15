@@ -1,5 +1,5 @@
 import { stringify as encodeQuery } from 'querystring';
-import { Table } from '@apache-arrow/es5-cjs';
+import { Table } from 'apache-arrow';
 import { notAcceptable } from '@hapi/boom';
 import { ExternalKeyRecord } from '@decipad/backendtypes';
 import { thirdParty } from '@decipad/config';
@@ -22,6 +22,10 @@ interface SpreadsheetMeta {
 interface SpreadsheetMetaResponse {
   body: SpreadsheetMeta;
 }
+
+type ErrorWithCode = Error & {
+  code: number;
+};
 
 async function sheetNumericIdToSheetName(
   sheetId: number,
@@ -87,7 +91,7 @@ async function fetch(
     const { body } = await request(dataUrl, key, true);
     return toTable(body as unknown as Sheet);
   } catch (err) {
-    if (err.code === 401) {
+    if ((err as ErrorWithCode).code === 401) {
       // try to renew the key and try again
       const newKey = await renewKey(key, provider);
       if (newKey) {

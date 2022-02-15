@@ -14,19 +14,17 @@ module.exports = {
 
   collectCoverageFrom: [
     ...collectCoverageFrom,
-    '!<rootDir>/src/data/*.ts',
     '!<rootDir>/src/builtins/operators/*.ts',
   ],
   coveragePathIgnorePatterns: [
     ...coveragePathIgnorePatterns,
     '/node_modules/',
     'src/testUtils',
-    'src/data/*.ts',
   ],
   coverageThreshold: {
     global: {
       statements: 93,
-      branches: 84,
+      branches: 83,
       functions: 96,
       lines: 92,
     },

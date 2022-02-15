@@ -1,58 +1,35 @@
-import {
-  Table,
-  Field,
-  Struct,
-  Builder,
-  Utf8,
-  Float64,
-  Bool,
-  DateMillisecond,
-} from '@apache-arrow/es5-cjs';
+import { Table, Type, Utf8, Vector, vectorFromArray } from 'apache-arrow';
 import parseCSV from 'csv-parse';
-import { Buffer } from 'buffer';
 import { cast } from './cast';
-import { DataTable } from './DataTable';
 import { bufferBody } from './buffer-body';
 import { RuntimeError } from '../interpreter';
 
+type AcceptableCellType = number | boolean | string | Date;
+type Row = AcceptableCellType[];
+type Column = AcceptableCellType[];
+
 export async function resolveCsv(
-  bodyStream: AsyncIterable<ArrayBuffer>
-): Promise<DataTable> {
-  const body = Buffer.from(await bufferBody(bodyStream)).toString('utf-8');
-  return csv(body);
-}
-
-type AcceptableType = number | boolean | string | Date;
-
-export async function csv(source: string): Promise<Table> {
-  const [columnNames, data] = await csvToData(source);
-  return toTable(columnNames, data);
-}
-
-const MAX_ROWS = 10_000;
-
-export function csvToData(
-  source: string
-): Promise<[string[], AcceptableType[][]]> {
+  bodyStream: AsyncIterable<ArrayBuffer>,
+  maxRows: number
+): Promise<Table> {
+  const source = await bufferBody(bodyStream);
   return new Promise((resolve, reject) => {
     let columnNames: string[];
-    const data: AcceptableType[][] = [];
+    const data: AcceptableCellType[][] = [];
     const parser = parseCSV({ cast });
     let isDone = false;
     let hadFirstRow = false;
     parser.on('readable', () => {
-      let row: AcceptableType[];
+      if (data.length >= maxRows) {
+        return;
+      }
+      let row: AcceptableCellType[];
       while ((row = parser.read())) {
         if (!isDone) {
           if (!hadFirstRow) {
             columnNames = row.map((value) => value.toString());
             hadFirstRow = true;
           } else {
-            if (data.length >= MAX_ROWS) {
-              throw new RuntimeError(
-                `Maximum row size of ${MAX_ROWS} exceeded`
-              );
-            }
             data.push(row);
           }
         }
@@ -60,43 +37,75 @@ export function csvToData(
     });
     parser.once('end', () => {
       isDone = true;
-      resolve([columnNames, data]);
+      resolve(toTable(columnNames, data));
     });
     parser.once('error', reject);
     parser.end(source);
   });
 }
 
-function toTable(columnNames: string[], data: AcceptableType[][]): Table {
-  const fields = columnNames.map((columnName, columnIndex) => {
-    const type = columnType(data, columnIndex);
-    const nullable = true;
-    return new Field(columnName, type, nullable);
+function toTable(
+  columnNames: string[],
+  rowOrientedData: AcceptableCellType[][]
+): Table {
+  const data = pivot(rowOrientedData);
+  const columnMap: Record<string, Vector> = {};
+  columnNames.forEach((columnName, index) => {
+    const column = data[index];
+    if (!column) {
+      throw new RuntimeError(`no data in column ${columnName}`);
+    }
+    columnMap[columnName] = columnToArrowVector(column);
   });
 
-  const struct = new Struct(fields);
-  const builder = Builder.new({ type: struct });
-  for (const row of data) {
-    builder.append(row);
-  }
-  builder.finish();
-  return Table.fromStruct(builder.toVector());
+  return new Table(columnMap);
 }
 
-export function columnType(data: AcceptableType[][], columnIndex: number) {
+function pivot(rows: Row[]): Column[] {
+  const columns: Column[] = [];
+  for (const row of rows) {
+    row.forEach((cell, columnIndex) => {
+      const column: Column = columns[columnIndex] || [];
+      column.push(cell);
+      columns[columnIndex] = column;
+    });
+  }
+  return columns;
+}
+
+function columnToArrowVector(data: Column): Vector {
+  const type = columnType(data);
+  switch (type) {
+    case Type.Float:
+    case Type.Float16:
+    case Type.Float32:
+    case Type.Float64:
+      return vectorFromArray(new Float64Array(data as number[]));
+    case Type.Bool:
+    case Type.DateDay:
+    case Type.DateMillisecond:
+    case Type.Utf8:
+      return vectorFromArray(data);
+    default:
+      throw new Error(
+        `don't know how to translate arrow type ${type} into a vector`
+      );
+  }
+}
+
+function columnType(data: Column) {
   for (let rowIndex = 0; rowIndex < data.length; rowIndex += 1) {
-    const row = data[rowIndex] || [];
-    const cell = row[columnIndex];
+    const cell = data[rowIndex];
     if (cell instanceof Date) {
-      return new DateMillisecond();
+      return Type.DateMillisecond;
     }
     switch (typeof cell) {
       case 'boolean':
-        return new Bool();
+        return Type.Bool;
       case 'number':
-        return new Float64();
+        return Type.Float64;
       case 'string':
-        return new Utf8();
+        return Type.Utf8;
     }
   }
   // return default type string

@@ -10,15 +10,24 @@ export async function inferData(
   const columnNames: string[] = [];
 
   for (let colIndex = 0; colIndex < data.numCols; colIndex += 1) {
-    const column = getDefined(data.getColumnAt(colIndex));
-    const columnType: Type = toInternalType(column.type.toString());
-    columnTypes.push(columnType);
-    columnNames.push(column.name);
+    const columnMeta = data.schema.fields[colIndex];
+    try {
+      const column = getDefined(data.getChildAt(colIndex));
+      const columnType: Type = toInternalType(column.type.toString());
+      columnTypes.push(columnType);
+      columnNames.push(columnMeta.name);
+    } catch (err) {
+      return t.impossible(
+        `Error inferring type of column ${columnMeta.name}: ${
+          (err as Error).message
+        }`
+      );
+    }
   }
 
   return t.table({
     indexName,
-    length: data.length,
+    length: data.numRows,
     columnTypes,
     columnNames,
   });

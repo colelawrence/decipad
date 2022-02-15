@@ -66,7 +66,8 @@
     ]
   },
   "dependencies": {
-    "@apache-arrow/es5-cjs": "^5.0.0",
+    "apache-arrow": "^7.0.0",
+    "@types/apache-arrow": "npm:@apache-arrow/ts@^7.0.0",
     "@apollo/client": "^3.3.20",
     "@architect/architect": "^8.6.0",
     "@architect/asap": "^4.1.0",

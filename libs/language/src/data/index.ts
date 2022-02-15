@@ -8,7 +8,7 @@ export { defaultFetch, ExternalData };
 
 type IResolve = {
   url: string;
-  fetch: ExternalData.FetchFunction;
+  fetch?: ExternalData.FetchFunction;
   contentType?: string | undefined | null;
   maxRows?: number | undefined;
 };
@@ -30,17 +30,13 @@ export async function resolve({
   url,
   contentType,
   maxRows = Infinity,
-  fetch,
+  fetch = defaultFetch,
 }: IResolve): Promise<DataTable> {
   const response = await fetch(url);
   if (!contentType) {
-    contentType = response.contentType;
+    contentType = response.contentType || 'text/csv';
   }
-  return resolveForContentType(
-    response.result,
-    contentType || 'text/csv',
-    maxRows
-  );
+  return resolveForContentType(response.result, contentType, maxRows);
 }
 
 function resolveForContentType(

@@ -8,10 +8,11 @@ export async function evaluateData(data: DataTable): Promise<Table> {
 
   for (let colIndex = 0; colIndex < data.numCols; colIndex += 1) {
     const column = getDefined(
-      data.getColumnAt(colIndex),
+      data.getChildAt(colIndex),
       `expected column at ${colIndex}`
     );
-    colNames.push(column.name);
+    const columnMeta = data.schema.fields[colIndex];
+    colNames.push(columnMeta.name);
     // TODO: Here we're extracting the values and copying them to a column.
     // TODO: This is extremely innefficient. We should instead use values in the table directly.
     const values: Value[] = [];

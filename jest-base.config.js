@@ -9,7 +9,7 @@ module.exports = {
     '^.+\\.[jt]sx?$': 'babel-jest',
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(@apache-arrow/es5-cjs|lib0|p-retry|y-protocols)/)',
+    'node_modules/(?!(lib0|p-retry|y-protocols)/)',
     '\\.pnp\\.[^\\/]+$',
   ],
 };

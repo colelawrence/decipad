@@ -1,9 +1,9 @@
-import { Table } from '@apache-arrow/es5-cjs';
+import { tableFromIPC } from 'apache-arrow';
 import { DataTable } from './DataTable';
 import { bufferBody } from './buffer-body';
 
 export async function resolveArrow(
   bodyStream: AsyncIterable<ArrayBuffer>
 ): Promise<DataTable> {
-  return Table.from([await bufferBody(bodyStream)]);
+  return tableFromIPC(await bufferBody(bodyStream));
 }

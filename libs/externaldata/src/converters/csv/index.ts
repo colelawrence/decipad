@@ -1,27 +1,20 @@
-import {
-  Table,
-  Field,
-  Struct,
-  Builder,
-  Utf8,
-  Float64,
-  Bool,
-  DateMillisecond,
-} from '@apache-arrow/es5-cjs';
+import { Table, Type, Utf8, Vector, vectorFromArray } from 'apache-arrow';
 import parseCSV from 'csv-parse';
 import { cast } from './cast';
 
-type AcceptableType = number | boolean | string | Date;
+type AcceptableCellType = number | boolean | string | Date;
+type Row = AcceptableCellType[];
+type Column = AcceptableCellType[];
 
 export function csv(source: string): Promise<Table> {
   return new Promise((resolve, reject) => {
     let columnNames: string[];
-    const data: AcceptableType[][] = [];
+    const data: AcceptableCellType[][] = [];
     const parser = parseCSV({ cast });
     let isDone = false;
     let hadFirstRow = false;
     parser.on('readable', () => {
-      let row: AcceptableType[];
+      let row: AcceptableCellType[];
       while ((row = parser.read())) {
         if (!isDone) {
           if (!hadFirstRow) {
@@ -42,36 +35,65 @@ export function csv(source: string): Promise<Table> {
   });
 }
 
-function toTable(columnNames: string[], data: AcceptableType[][]): Table {
-  const fields = columnNames.map((columnName, columnIndex) => {
-    const type = columnType(data, columnIndex);
-    const nullable = true;
-    return new Field(columnName, type, nullable);
+function toTable(
+  columnNames: string[],
+  rowOrientedData: AcceptableCellType[][]
+): Table {
+  const data = pivot(rowOrientedData);
+  const columnMap: Record<string, Vector> = {};
+  columnNames.forEach((columnName, index) => {
+    const column = data[index];
+    columnMap[columnName] = columnToArrowVector(column);
   });
 
-  const struct = new Struct(fields);
-  const builder = Builder.new({ type: struct });
-  for (const row of data) {
-    builder.append(row);
-  }
-  builder.finish();
-  return Table.fromStruct(builder.toVector());
+  return new Table(columnMap);
 }
 
-function columnType(data: AcceptableType[][], columnIndex: number) {
+function pivot(rows: Row[]): Column[] {
+  const columns: Column[] = [];
+  for (const row of rows) {
+    row.forEach((cell, columnIndex) => {
+      const column: Column = columns[columnIndex] || [];
+      column.push(cell);
+      columns[columnIndex] = column;
+    });
+  }
+  return columns;
+}
+
+function columnToArrowVector(data: Column): Vector {
+  const type = columnType(data);
+  switch (type) {
+    case Type.Float:
+    case Type.Float16:
+    case Type.Float32:
+    case Type.Float64:
+      return vectorFromArray(new Float64Array(data as number[]));
+    case Type.Bool:
+    case Type.DateDay:
+    case Type.DateMillisecond:
+    case Type.Utf8:
+      return vectorFromArray(data);
+    default:
+      throw new Error(
+        `don't know how to translate arrow type ${type} into a vector`
+      );
+  }
+}
+
+function columnType(data: Column) {
   for (let rowIndex = 0; rowIndex < data.length; rowIndex += 1) {
-    const row = data[rowIndex] || [];
-    const cell = row[columnIndex];
+    const cell = data[rowIndex];
     if (cell instanceof Date) {
-      return new DateMillisecond();
+      return Type.DateMillisecond;
     }
     switch (typeof cell) {
       case 'boolean':
-        return new Bool();
+        return Type.Bool;
       case 'number':
-        return new Float64();
+        return Type.Float64;
       case 'string':
-        return new Utf8();
+        return Type.Utf8;
     }
   }
   // return default type string

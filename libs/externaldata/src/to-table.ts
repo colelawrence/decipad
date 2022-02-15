@@ -1,4 +1,4 @@
-import { Table } from '@apache-arrow/es5-cjs';
+import { Table } from 'apache-arrow';
 import { csv } from './converters/csv';
 
 const converters: Record<string, (source: string) => Promise<Table>> = {

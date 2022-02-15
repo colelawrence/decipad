@@ -1,4 +1,4 @@
-import { Table, Type as ArrowType } from '@apache-arrow/es5-cjs';
+import { Table, Type as ArrowType } from 'apache-arrow';
 import { Type, build as t } from '../type';
 
 export type DataTable = Table;
@@ -34,6 +34,7 @@ export function toInternalType(_type: ArrowType): Type {
     case ArrowType.Float32:
     case ArrowType.Float64:
       return t.number();
+    case 'Dictionary<Int32, Utf8>':
     case 'Utf8':
     case ArrowType.Utf8:
       return t.string();
