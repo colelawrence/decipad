@@ -1,5 +1,5 @@
 import { getDependents } from './dependents';
-import { deeperProgram } from './testutils';
+import { deeperProgram, implicitDepProgram } from './testutils';
 
 describe('getDependents', () => {
   it('finds dependents of a set of locs', () => {
@@ -26,5 +26,29 @@ describe('getDependents', () => {
       ['block-1', 1],
       ['block-1', 2],
     ]);
+  });
+
+  it('finds implicit previous dependencies', () => {
+    expect(getDependents(implicitDepProgram, [['block-1', 0]]))
+      .toMatchInlineSnapshot(`
+      Array [
+        Array [
+          "block-2",
+          0,
+        ],
+        Array [
+          "block-3",
+          0,
+        ],
+        Array [
+          "block-3",
+          1,
+        ],
+        Array [
+          "block-4",
+          0,
+        ],
+      ]
+    `);
   });
 });

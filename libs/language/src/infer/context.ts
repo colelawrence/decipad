@@ -7,7 +7,7 @@ import { AnyMapping, anyMappingToMap } from '../utils';
 export interface Context {
   stack: Stack<Type>;
   functionDefinitions: Map<string, AST.FunctionDefinition>;
-  hasPrevious: boolean;
+  previous?: Type;
   inAssignment: string | null;
   nodeTypes: Map<AST.Node, Type>;
   fetch: ExternalData.FetchFunction;
@@ -30,7 +30,6 @@ export const makeContext = ({
   return {
     stack: new Stack(initialGlobalScope),
     functionDefinitions: new Map(),
-    hasPrevious: false,
     inAssignment,
     nodeTypes: new Map(),
     fetch,
@@ -38,16 +37,15 @@ export const makeContext = ({
   };
 };
 
-/** Push the stack and set Context.hasPrevious for the duration of `fn` */
+/** Push the stack and set Context.previous for the duration of `fn` */
 export const pushStackAndPrevious = async <T>(
   ctx: Context,
   fn: () => Promise<T>
 ): Promise<T> => {
-  const savedHasPrevious = ctx.hasPrevious;
-  ctx.hasPrevious = true;
+  const previousPrevious = ctx.previous;
   try {
     return await ctx.stack.withPush(fn);
   } finally {
-    ctx.hasPrevious = savedHasPrevious;
+    ctx.previous = previousPrevious;
   }
 };

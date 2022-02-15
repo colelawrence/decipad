@@ -14,9 +14,18 @@ import { Context, makeContext } from './context';
 import { inferSequence } from './sequence';
 import { inferTable } from './table';
 import { inferData } from './data';
+import { isPreviousRef } from '../previous-ref';
 
 export { makeContext };
 export type { Context };
+
+const assigningPrevious =
+  <T extends AST.Node>(fn: (ctx: Context, thing: T) => Promise<Type>) =>
+  async (ctx: Context, thing: T): Promise<Type> => {
+    const type = await fn(ctx, thing);
+    ctx.previous = type;
+    return type;
+  };
 
 const wrap =
   <T extends AST.Node>(fn: (ctx: Context, thing: T) => Promise<Type>) =>
@@ -50,8 +59,11 @@ export const inferExpression = wrap(
     switch (expr.type) {
       case 'ref': {
         const name = getIdentifierString(expr);
+        if (isPreviousRef(name)) {
+          const { previous } = ctx;
+          return previous || t.impossible(InferError.noPreviousStatement());
+        }
         const value = ctx.stack.get(name);
-
         return value ?? t.number([parseUnit(name)]);
       }
       case 'externalref': {
@@ -180,7 +192,7 @@ export const inferExpression = wrap(
           fArgs.map((arg) => () => inferExpression(ctx, arg))
         );
 
-        if (ctx.hasPrevious && fName === 'previous') {
+        if (fName === 'previous') {
           return givenArguments[0];
         }
 
@@ -248,38 +260,40 @@ export const inferFunction = async (
   });
 };
 
-export const inferStatement = wrap(
-  async (
-    /* Mutable! */ ctx: Context,
-    statement: AST.Statement
-  ): Promise<Type> => {
-    switch (statement.type) {
-      case 'assign': {
-        const [nName, nValue] = statement.args;
+export const inferStatement = assigningPrevious(
+  wrap(
+    async (
+      /* Mutable! */ ctx: Context,
+      statement: AST.Statement
+    ): Promise<Type> => {
+      switch (statement.type) {
+        case 'assign': {
+          const [nName, nValue] = statement.args;
 
-        const varName = getIdentifierString(nName);
+          const varName = getIdentifierString(nName);
 
-        ctx.inAssignment = varName;
-        const type = await (!ctx.stack.top.has(varName)
-          ? inferExpression(ctx, nValue)
-          : t.impossible(InferError.duplicatedName(varName)));
-        ctx.inAssignment = null;
+          ctx.inAssignment = varName;
+          const type = await (!ctx.stack.top.has(varName)
+            ? inferExpression(ctx, nValue)
+            : t.impossible(InferError.duplicatedName(varName)));
+          ctx.inAssignment = null;
 
-        ctx.stack.set(varName, type);
-        return type;
-      }
-      case 'function-definition': {
-        const fName = getIdentifierString(statement.args[0]);
+          ctx.stack.set(varName, type);
+          return type;
+        }
+        case 'function-definition': {
+          const fName = getIdentifierString(statement.args[0]);
 
-        ctx.functionDefinitions.set(fName, statement);
+          ctx.functionDefinitions.set(fName, statement);
 
-        return t.functionPlaceholder();
-      }
-      default: {
-        return inferExpression(ctx, statement);
+          return t.functionPlaceholder();
+        }
+        default: {
+          return inferExpression(ctx, statement);
+        }
       }
     }
-  }
+  )
 );
 
 export const inferBlock = async (

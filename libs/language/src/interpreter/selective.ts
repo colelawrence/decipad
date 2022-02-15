@@ -2,7 +2,7 @@
 
 import { AST } from '..';
 import { getDefined, getIdentifierString } from '../utils';
-import { evaluate } from './evaluate';
+import { evaluateStatement } from './evaluate';
 import { Realm } from './Realm';
 import { UnknownValue, Value } from './Value';
 
@@ -61,7 +61,7 @@ export async function evaluateTargets(
     for (const statement of block.args) {
       // TODO should this be parallel?
       // eslint-disable-next-line no-await-in-loop
-      const value: Value = await evaluate(realm, statement);
+      const value: Value = await evaluateStatement(realm, statement);
 
       if (targetSet.has(statement)) {
         targetSet.set(statement, value);

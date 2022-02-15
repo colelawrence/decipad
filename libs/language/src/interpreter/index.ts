@@ -4,7 +4,7 @@ import { AST } from '..';
 import { block } from '../utils';
 import { inferProgram } from '../infer';
 
-import { evaluate } from './evaluate';
+import { evaluate, evaluateStatement } from './evaluate';
 import { evaluateTargets } from './selective';
 import { Realm } from './Realm';
 import * as Interpreter from './interpreter-types';
@@ -12,7 +12,7 @@ import type { Value } from './Value';
 
 export type { Value };
 export { RuntimeError } from './RuntimeError';
-export { Realm, Interpreter, evaluate };
+export { Realm, Interpreter, evaluate, evaluateStatement };
 
 export const run = async (
   program: AST.Block[],

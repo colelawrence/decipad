@@ -79,6 +79,9 @@ export type ErrSpec =
       start: number;
       end: number;
       by: number;
+    }
+  | {
+      errType: 'no-previous-statement';
     };
 
 // exhaustive switch
@@ -160,6 +163,9 @@ function specToString(spec: ErrSpec): string {
       const dir = spec.start < spec.end ? 'ascending' : 'descending';
       const stepSignal = Math.sign(spec.by) > 0 ? 'positive' : 'negative';
       return `Invalid step in sequence: sequence is ${dir} but step is ${stepSignal}`;
+    }
+    case 'no-previous-statement': {
+      return 'No previous statement';
     }
   }
 }
@@ -320,6 +326,12 @@ export class InferError {
       start,
       end,
       by,
+    });
+  }
+
+  static noPreviousStatement() {
+    return new InferError({
+      errType: 'no-previous-statement',
     });
   }
 

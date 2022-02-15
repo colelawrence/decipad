@@ -1,5 +1,5 @@
 import { inferExpression, inferStatement } from '../infer';
-import { evaluate as evaluateStatement, RuntimeError } from '../interpreter';
+import { evaluateStatement, RuntimeError } from '../interpreter';
 
 import {
   AST,

@@ -45,12 +45,16 @@ expect.addSnapshotSerializer({
 
 afterEach(() => {
   nilCtx.nodeTypes = new Map();
-  if (!dequal(nilCtx, makeContext())) {
-    // Restore to avoid failing further stillEmpty checks
-    nilCtx = makeContext();
-
-    throw new Error('sanity check failed: nilCtx was modified');
+  const newContext = makeContext();
+  if (!dequal(nilCtx, newContext)) {
+    newContext.previous = nilCtx.previous;
+    if (!dequal(nilCtx, newContext)) {
+      // Restore to avoid failing further stillEmpty checks
+      nilCtx = makeContext();
+      throw new Error('sanity check failed: nilCtx was modified');
+    }
   }
+  nilCtx = makeContext();
 });
 
 it('infers literals', async () => {

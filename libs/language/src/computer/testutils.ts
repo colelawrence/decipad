@@ -28,6 +28,15 @@ export const deeperProgram = testBlocks(
   block(assign('C', r('B')), assign('D', r('C')))
 );
 
+export const implicitDepProgram = testBlocks(
+  block(assign('A', l(1)), assign('Unused', l(123))),
+  block(l(1)),
+  block(c('+', r('_'), r('B'))),
+  block(assign('C', r('_')), assign('D', r('_'))),
+  block(assign('E', r('C'))),
+  block(assign('F', r('A')))
+);
+
 export const programContainingReassign = testBlocks(
   block(assign('A', l(1))),
   block(assign('A', l(2)))

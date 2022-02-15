@@ -16,6 +16,8 @@ import { Scalar, Range, Date, Column, Value, UnknownValue } from './Value';
 import { evaluateTable, getProperty } from './table';
 import { evaluateData } from './data';
 import { getDateSequenceIncrement } from '../infer/sequence';
+import { RuntimeError } from '.';
+import { isPreviousRef } from '../previous-ref';
 
 // Gets a single value from an expanded AST.
 
@@ -56,6 +58,13 @@ export async function evaluate(
     }
     case 'ref': {
       const identifier = getIdentifierString(node);
+      if (isPreviousRef(identifier)) {
+        const previous = realm.previousValue;
+        if (previous == null) {
+          throw new RuntimeError('No previous value');
+        }
+        return previous;
+      }
       const value = realm.stack.get(identifier);
       if (value != null) {
         return value;
@@ -180,6 +189,15 @@ export async function evaluate(
   }
 }
 
+export async function evaluateStatement(
+  realm: Realm,
+  statement: AST.Statement
+) {
+  const value = await evaluate(realm, statement);
+  realm.previousValue = value;
+  return value;
+}
+
 export async function evaluateBlock(
   realm: Realm,
   block: AST.Block
@@ -187,7 +205,7 @@ export async function evaluateBlock(
   let previous;
   for (const statement of block.args) {
     // eslint-disable-next-line no-await-in-loop
-    previous = await evaluate(realm, statement);
+    previous = await evaluateStatement(realm, statement);
   }
 
   return getDefined(previous, 'panic: Unexpected empty block');
