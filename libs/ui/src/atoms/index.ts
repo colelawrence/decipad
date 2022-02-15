@@ -10,6 +10,7 @@ export { CodeVariable } from './CodeVariable/CodeVariable';
 export { DateResult } from './DateResult/DateResult';
 export { Display } from './Display/Display';
 export { Divider } from './Divider/Divider';
+export { DropLine } from './DropLine/DropLine';
 export { Heading1 } from './Heading1/Heading1';
 export { Heading2 } from './Heading2/Heading2';
 export { IconButton } from './IconButton/IconButton';
