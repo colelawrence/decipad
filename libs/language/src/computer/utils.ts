@@ -139,6 +139,16 @@ export const getAllSymbolsDefined = (blocks: AST.Block[]) =>
     })
   );
 
+export function* getSymbolsDefinedInLocs(
+  program: AST.Block[],
+  locs: ValueLocation[]
+) {
+  for (const loc of locs) {
+    const sym = getDefinedSymbol(getStatement(program, loc));
+    if (sym != null) yield sym;
+  }
+}
+
 export const getReferredSymbol = (node: AST.Node) => {
   switch (node.type) {
     case 'ref':

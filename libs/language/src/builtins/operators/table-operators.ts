@@ -144,6 +144,7 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
         table.isTable(),
         produce((table) => {
           table.tableLength = 'unknown';
+          table.indexName = null;
         })
       ),
     fnValuesNoAutomap: ([_table, _column]) => {

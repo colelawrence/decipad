@@ -201,6 +201,22 @@ describe('columns', () => {
   });
 });
 
+describe('error source tracking', () => {
+  it('remembers where the error came from', async () => {
+    const badExp = c('+', l(1), l('hi'));
+    const badStatement = assign('BadVar', badExp);
+    const badStatement2 = c('+', r('BadVar'), l(1));
+    const program = block(badStatement, badStatement2);
+
+    const ctx = makeContext();
+    await inferBlock(program, ctx);
+
+    // Both errors came from the same place
+    expect(ctx.nodeTypes.get(badStatement)?.node).toEqual(badExp);
+    expect(ctx.nodeTypes.get(badStatement2)?.node).toEqual(badExp);
+  });
+});
+
 describe('tables', () => {
   it('infers table defs', async () => {
     const tableContext = makeContext();

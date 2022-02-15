@@ -111,12 +111,12 @@ export const getStatementsToEvict = ({
     getSomeBlockLocations(oldBlocks, changedBlockIds)
   );
 
-  const dirtySymbols = new Set(
-    Array.from(getChangedExternalData(oldExternalData, newExternalData))
-      .concat(Array.from(findSymbolsAffectedByChange(oldBlocks, newBlocks)))
-      .concat(Array.from(findSymbolErrors(oldBlocks)))
-      .concat(Array.from(findSymbolErrors(newBlocks)))
-  );
+  const dirtySymbols = new Set([
+    ...getChangedExternalData(oldExternalData, newExternalData),
+    ...findSymbolsAffectedByChange(oldBlocks, newBlocks),
+    ...findSymbolErrors(oldBlocks),
+    ...findSymbolErrors(newBlocks),
+  ]);
 
   const dependentsOfBlocksAndSymbols = getDependents(
     oldBlocks,

@@ -123,7 +123,5 @@ export const impossible = (
     }
 
     impossibleType.errorCause = errorCause;
-    if (inNode) {
-      impossibleType.node = inNode;
-    }
+    impossibleType.node = inNode;
   });

@@ -1,8 +1,7 @@
+import { getDefined } from '@decipad/utils';
 import { F, l, c, r } from '../utils';
 import { runTests } from './run-tests';
-import { getDefined } from '@decipad/utils';
 import { parseBlock } from './index';
-
 
 runTests({
   'ref as expression': {
@@ -674,10 +673,9 @@ runTests({
   'multiply by dafault accepts lots of stuff after the number': {
     sourceMap: false,
     source: '10 bunch of arguments',
-    ast: [c('*', c('*', c('*', l(10), r('bunch')), r('of')), r('arguments'))]
-  }
+    ast: [c('*', c('*', c('*', l(10), r('bunch')), r('of')), r('arguments'))],
+  },
 });
-
 
 it('multiply by default only accepts number in the first position', async () => {
   const errors = getDefined(parseBlock({ id: '', source: 'a 25' }).errors);
