@@ -3,16 +3,13 @@ import { Range, Transforms } from 'slate';
 import { ELEMENT_CODE_LINE } from '../../elements';
 
 const pairs = [
-  {
-    start: '{',
-    end: '}',
-  },
+  { start: '{', end: '}' },
   { start: '[', end: ']' },
-  {
-    start: '(',
-    end: ')',
-  },
+  { start: '(', end: ')' },
 ];
+
+const isAtEndOfLine = (text: string, cursorOffset: number) =>
+  text[cursorOffset] === '\n' || text[cursorOffset] === undefined;
 
 export const createAutoPairsPlugin = (): PlatePlugin => ({
   onKeyDown: (editor) => (event) => {
@@ -27,9 +24,10 @@ export const createAutoPairsPlugin = (): PlatePlugin => ({
 
         if (node.type === ELEMENT_CODE_LINE) {
           const activePair = pairs.find((pair) => pair.start === event.key);
+
           if (
             activePair &&
-            node.children[0].text[cursor.offset + 1] === undefined
+            isAtEndOfLine(node.children[0].text, cursor.offset)
           ) {
             event.preventDefault();
             editor.insertText(activePair.start + activePair.end);

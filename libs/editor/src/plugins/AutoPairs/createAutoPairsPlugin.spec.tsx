@@ -107,6 +107,22 @@ describe('in a code block', () => {
       ]);
     }
   );
+
+  it('supports closing a paren before a \\n (not before the end of the code)', () => {
+    const editor = createEditorPlugins();
+    const fname = 'func';
+    const text = '[\nfunc\n]';
+    editor.children = [{ type: ELEMENT_CODE_LINE, children: [{ text }] }];
+    editor.selection = {
+      anchor: { path: [0, 0], offset: text.indexOf(fname) + fname.length },
+      focus: { path: [0, 0], offset: text.indexOf(fname) + fname.length },
+    };
+
+    insert(editor, '(');
+    expect(editor.children).toEqual([
+      { type: ELEMENT_CODE_LINE, children: [{ text: '[\nfunc()\n]' }] },
+    ]);
+  });
 });
 
 describe('outside a code block', () => {
