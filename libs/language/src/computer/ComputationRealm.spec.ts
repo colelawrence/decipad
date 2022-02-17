@@ -3,27 +3,38 @@
 import { buildType, Column, Table, Date } from '..';
 import { parseUTCDate } from '../date';
 import { fromJS } from '../interpreter/Value';
+import { assign, funcDef, l } from '../utils';
 import { ComputationRealm } from './ComputationRealm';
-import { program } from './testutils';
+import { testBlocks } from './testutils';
 
 let realm: ComputationRealm;
 beforeEach(() => {
   realm = new ComputationRealm();
 });
 
+const program = testBlocks(
+  assign('A', l(1)),
+  assign('Unused', l(1)),
+  funcDef('Func', [], l(1))
+);
+
 it('evictStatement', () => {
-  realm.locCache.set(['block-0', 1], 'something' as any);
-  realm.inferContext.stack.set('A', null as any);
+  realm.locCache.set(['block-1', 0], 'something' as any);
+  realm.inferContext.stack.set('A', 'something' as any);
+  realm.inferContext.functionDefinitions.set('Func', 'something' as any);
 
   // Delete from locCache
-  realm.evictStatement(program, ['block-0', 1]);
+  realm.evictStatement(program, ['block-1', 0]);
 
-  expect(realm.locCache.get(['block-0', 1])).toEqual(undefined);
+  expect(realm.locCache.get(['block-1', 0])).toEqual(undefined);
   expect(realm.inferContext.stack.has('A')).toBe(true);
+  expect(realm.inferContext.functionDefinitions.has('Func')).toBe(true);
 
   // Delete var A
   realm.evictStatement(program, ['block-0', 0]);
+  realm.evictStatement(program, ['block-2', 0]);
   expect(realm.inferContext.stack.has('A')).toBe(false);
+  expect(realm.inferContext.functionDefinitions.has('Func')).toBe(false);
 });
 
 it('getIndexLabels', () => {

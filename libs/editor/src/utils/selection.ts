@@ -15,6 +15,13 @@ export const requireCollapsedSelection = (editor: Editor): Point => {
   return editor.selection.anchor;
 };
 
+export const getCollapsedSelection = (editor: Editor): Point | null => {
+  if (!editor.selection || isSelectionExpanded(editor)) {
+    return null;
+  }
+  return editor.selection.anchor;
+};
+
 export const getPathContainingSelection = (editor: Editor): Path | null => {
   return editor.selection && Editor.node(editor, editor.selection)?.[1];
 };

@@ -11,11 +11,16 @@ import {
 } from './types';
 import { wrappedParse } from './parse';
 
-const testBlocks = (...blocks: AST.Block[]) => {
-  blocks.forEach((block, index) => {
-    block.id = `block-${index}`;
+export const testBlocks = (
+  ...blocks: (AST.Block | AST.Statement)[]
+): AST.Block[] => {
+  return blocks.map((item, index) => {
+    if (item.type !== 'block') {
+      item = block(item);
+    }
+    item.id = `block-${index}`;
+    return item;
   });
-  return blocks;
 };
 
 export const program = testBlocks(
