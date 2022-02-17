@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { Arrow, Content, Root, Trigger } from '@radix-ui/react-hover-card';
+import { useControllableState } from '@radix-ui/react-use-controllable-state';
 import { FC } from 'react';
 import {
   black,
@@ -55,6 +56,12 @@ export const Tooltip = ({
   onChangeOpen,
   variant,
 }: TooltipProps): ReturnType<FC> => {
+  // eslint-disable-next-line no-param-reassign
+  [open, onChangeOpen] = useControllableState({
+    prop: open,
+    onChange: onChangeOpen,
+  });
+
   return (
     <Root
       openDelay={100}
@@ -62,7 +69,16 @@ export const Tooltip = ({
       open={open}
       onOpenChange={onChangeOpen}
     >
-      <Trigger asChild>{trigger}</Trigger>
+      <Trigger
+        onMouseMove={(e) => {
+          if (e.buttons) {
+            onChangeOpen?.(false);
+          }
+        }}
+        asChild
+      >
+        {trigger}
+      </Trigger>
       <Content
         css={[contentWrapperStyles, variant === 'small' && smallVariantStyles]}
       >

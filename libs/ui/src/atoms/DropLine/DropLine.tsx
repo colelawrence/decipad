@@ -8,5 +8,5 @@ const styles = css({
 });
 
 export const DropLine = (): ReturnType<React.FC> => (
-  <hr role="presentation" css={styles} />
+  <hr role="presentation" aria-label="Drop Line" css={styles} />
 );

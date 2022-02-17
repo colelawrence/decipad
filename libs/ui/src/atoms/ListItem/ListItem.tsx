@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { p16Regular } from '../../primitives';
+import { blockAlignment } from '../../styles';
 
-const styles = css(p16Regular);
+const styles = css(blockAlignment.list.typography);
 
 type ListItemProps = {
   readonly children?: ReactNode;

@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
 import { useRef, useEffect, FC, useState } from 'react';
 import { identity, noop } from '@decipad/utils';
-import { h2, p13Medium, p14Medium } from '../../primitives';
+import { p13Medium, p14Medium } from '../../primitives';
+import { blockAlignment } from '../../styles';
 
 const inputStyles = css({
   width: '100%',
@@ -13,7 +14,10 @@ const inputStyles = css({
   },
 });
 
-const headingStyles = css(h2);
+const headingStyles = css(blockAlignment.editorTable.typography, {
+  // Height needs to be explicitly set to the line height because <input>s are weird
+  height: `calc(${blockAlignment.editorTable.typography?.lineHeight} * ${blockAlignment.editorTable.typography?.fontSize})`,
+});
 
 const headerStyles = css(p13Medium, {
   padding: '6px 0',

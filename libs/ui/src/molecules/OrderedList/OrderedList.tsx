@@ -2,6 +2,7 @@ import { FC, ReactNode, Children } from 'react';
 import { css } from '@emotion/react';
 import { listItemCounter } from '../../utils';
 import { cssVar, p16Regular, setCssVar } from '../../primitives';
+import { blockAlignment } from '../../styles';
 
 // Note on counters: This could just be counter-reset on the ol, counter-increment on the li::before, but Safari can't handle pseudo elements
 
@@ -10,7 +11,7 @@ const styles = css({
   gridTemplateColumns: 'minmax(24px, auto) 1fr 0px',
   gridAutoFlow: 'row',
 
-  padding: '6px 0',
+  padding: `${blockAlignment.list.paddingTop} 0`,
   'li &': {
     paddingBottom: 0,
   },

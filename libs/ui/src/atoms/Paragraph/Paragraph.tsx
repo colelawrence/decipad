@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
 import { cssVar, p16Regular, setCssVar } from '../../primitives';
+import { blockAlignment } from '../../styles';
 
 const placeholderStyles = css({
   cursor: 'text',
@@ -21,8 +22,8 @@ const placeholderStyles = css({
   },
 });
 
-const styles = css(p16Regular, placeholderStyles, {
-  padding: '6px 0',
+const styles = css(blockAlignment.paragraph.typography, placeholderStyles, {
+  padding: `${blockAlignment.paragraph.paddingTop} 0`,
 });
 
 interface ParagraphProps {

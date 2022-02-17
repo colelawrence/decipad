@@ -8,7 +8,7 @@ const args = {
 };
 
 export default {
-  title: 'Editor / Slash Commands Menu / Item',
+  title: 'Organisms / Editor / Slash Commands Menu / Item',
   component: SlashCommandsMenuItem,
   args,
   decorators: [padding(8), inMenu],

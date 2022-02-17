@@ -21,7 +21,7 @@ export interface TransparentColor extends Color {
 }
 // Only list the few opacities we use here so that
 // we do not end up with all kinds of similar but not identical transparent colors.
-export type Opacity = 0.02 | 0.08 | 0.65 | 0.8;
+export type Opacity = 0.02 | 0.08 | 0.4 | 0.65 | 0.8;
 export function transparency(
   { red, green, blue }: OpaqueColor,
   opacity: Opacity

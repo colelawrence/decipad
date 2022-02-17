@@ -16,4 +16,6 @@ export const itemStyles = css(p14Regular, {
   '&:hover, &:focus, &[data-selected="true"]': {
     backgroundColor: cssVar('highlightColor'),
   },
+
+  outline: 'none',
 });

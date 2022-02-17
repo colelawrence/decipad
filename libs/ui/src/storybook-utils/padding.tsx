@@ -1,20 +1,37 @@
 import { DecoratorFn } from '@storybook/react';
 
 export const sidePadding =
-  (padding: number): DecoratorFn =>
+  (pixelsOrValueString: number | string): DecoratorFn =>
   (story) =>
     (
-      <div style={{ width: '100%', height: '100%', padding: `0 ${padding}px` }}>
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          padding: `0 ${
+            typeof pixelsOrValueString === 'number'
+              ? `${pixelsOrValueString}px`
+              : pixelsOrValueString
+          }`,
+        }}
+      >
         {story()}
       </div>
     );
 
 export const padding =
-  (paddingWidth: number): DecoratorFn =>
+  (pixelsOrValueString: number | string): DecoratorFn =>
   (story) =>
     (
       <div
-        style={{ width: '100%', height: '100%', padding: `${paddingWidth}px` }}
+        style={{
+          width: '100%',
+          height: '100%',
+          padding:
+            typeof pixelsOrValueString === 'number'
+              ? `${pixelsOrValueString}px`
+              : pixelsOrValueString,
+        }}
       >
         {story()}
       </div>

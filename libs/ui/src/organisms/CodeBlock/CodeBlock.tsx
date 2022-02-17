@@ -1,19 +1,20 @@
 import { FC, ReactNode } from 'react';
 import { css } from '@emotion/react';
 import { Result } from '@decipad/language';
-import { code, cssVar, grey200 } from '../../primitives';
+import { cssVar, grey200 } from '../../primitives';
 import { CodeResult } from '..';
+import { blockAlignment } from '../../styles';
 
-const codeBlockStyles = css(code, {
+const codeBlockStyles = css({
   border: `1px solid ${grey200.rgb}`,
 
   borderRadius: '12px',
   overflow: 'hidden',
 
-  margin: '16px 0',
+  margin: `${blockAlignment.codeBlock.paddingTop} 0`,
 });
 
-const codeStyles = css(code, {
+const codeStyles = css({
   backgroundColor: cssVar('backgroundColor'),
   padding: '4px 8px',
 });

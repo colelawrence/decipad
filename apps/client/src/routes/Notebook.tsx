@@ -27,7 +27,7 @@ const Wrapper = styled('div')({
     /100%
   `,
 
-  padding: '0 16px',
+  padding: '0 40px',
 });
 
 const EditorWrapper = styled('main')({

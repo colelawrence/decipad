@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { FC, useEffect } from 'react';
 
 const Wrapper = styled('div')({
-  padding: '32px',
+  padding: '40px',
   margin: '0 auto',
 });
 

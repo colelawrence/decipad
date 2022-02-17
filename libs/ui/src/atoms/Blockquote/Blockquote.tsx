@@ -1,13 +1,14 @@
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
-import { cssVar, p16Regular, purple300, setCssVar } from '../../primitives';
+import { cssVar, purple300, setCssVar } from '../../primitives';
+import { blockAlignment } from '../../styles';
 
 const styles = css(
-  p16Regular,
+  blockAlignment.blockquote.typography,
   setCssVar('currentTextColor', cssVar('weakTextColor')),
   {
-    margin: '8px 0',
-    padding: '6px 0 6px 12px',
+    margin: `calc(${blockAlignment.blockquote.paddingTop} - 6px) 0`,
+    padding: `6px 0 6px 12px`,
     borderLeft: `6px solid ${purple300.rgb}`,
   }
 );

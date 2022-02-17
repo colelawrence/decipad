@@ -1,7 +1,7 @@
 import { CSSObject, Interpolation } from '@emotion/react';
 import { cssVar, setCssVar } from './var';
 
-type TypographyStyles = Readonly<
+export type TypographyStyles = Readonly<
   Required<
     Pick<
       CSSObject,
@@ -11,7 +11,6 @@ type TypographyStyles = Readonly<
       | 'fontStyle'
       | 'fontWeight'
       | 'fontSize'
-      | 'lineHeight'
       | 'letterSpacing'
       | 'fontFeatureSettings'
     > & {
@@ -34,7 +33,7 @@ const hDefault: TypographyStyles = {
   fontStyle: 'normal',
   fontWeight: 600,
   fontSize: `${24 / usualRemPxs}rem`,
-  lineHeight: 1,
+  lineHeight: 1.3,
   letterSpacing: '0.01em',
   fontFeatureSettings: 'unset',
 };
@@ -50,7 +49,6 @@ export const h1: TypographyStyles = {
   ...hDefault,
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
   fontSize: `${24 / usualRemPxs}rem`,
-  lineHeight: 1.3,
   fontFeatureSettings: "'ss04' on, 'ss02' on",
 };
 export const h2: TypographyStyles = {

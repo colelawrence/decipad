@@ -6,7 +6,7 @@ const args = {
 };
 
 export default {
-  title: 'Editor / Slash Commands Menu',
+  title: 'Organisms / Editor / Slash Commands Menu',
   component: SlashCommandsMenu,
   args,
 } as Meta;

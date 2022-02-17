@@ -3,15 +3,17 @@ import { ComponentProps, FC } from 'react';
 import { Table as TableIcon } from '../../icons';
 import { CellInput } from '../../atoms/CellInput/CellInput';
 import { identifierNamePattern } from '../../utils/language';
+import { blockAlignment } from '../../styles';
 
 const tableTitleWrapper = css({
   alignItems: 'center',
   display: 'flex',
   gap: '9px',
-  padding: '12px 0',
+  padding: `${blockAlignment.editorTable.paddingTop} 0`,
 });
 
 const tableIconSizeStyles = css({
+  display: 'grid',
   width: '16px',
   height: '16px',
 });

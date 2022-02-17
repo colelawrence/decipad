@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
-import { h1 } from '../../primitives';
+import { blockAlignment } from '../../styles';
 
-const styles = css(h1, {
-  padding: '18px 0 16px 0',
+const styles = css(blockAlignment.heading1.typography, {
+  padding: `${blockAlignment.heading1.paddingTop} 0 16px 0`,
 });
 
 interface Heading1Props {
