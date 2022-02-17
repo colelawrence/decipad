@@ -1,5 +1,5 @@
 import { Node } from 'slate';
-import { SharedType, toSharedType } from 'slate-yjs';
+import { SharedType, toSharedType } from '@decipad/slate-yjs';
 import { Doc as YDoc } from 'yjs';
 import { DynamodbPersistence } from '@decipad/y-dynamodb';
 

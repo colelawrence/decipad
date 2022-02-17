@@ -105,8 +105,6 @@ test('sync many', (ctx) => {
     expect(editors.length).toBeGreaterThan(0);
     await randomChangesToEditors(editors, randomChangeCountPerReplica);
 
-    console.log('random changes completed');
-
     await waitForExpect(async () => {
       const expectedContents = clone(editors[0].children);
       expect(editors.length).toBe(replicaCount);

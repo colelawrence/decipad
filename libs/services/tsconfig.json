@@ -13,6 +13,7 @@
     { "path": "../utils" },
     { "path": "../dynamodb-lock" },
     { "path": "../initial-workspace" },
-    { "path": "../y-dynamodb" }
+    { "path": "../y-dynamodb" },
+    { "path": "../slate-yjs" }
   ]
 }

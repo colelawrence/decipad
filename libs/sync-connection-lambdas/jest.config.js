@@ -5,4 +5,5 @@ module.exports = {
   rootDir: __dirname,
   displayName: 'sync-connection-lambdas',
   setupFiles: [...setupFiles, './jest.setup.js'],
+  testTimeout: 15000,
 };

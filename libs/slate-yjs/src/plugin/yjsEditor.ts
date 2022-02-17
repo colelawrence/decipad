@@ -94,12 +94,20 @@ function applyLocalOperations(editor: YjsEditor): void {
 function applyRemoteYjsEvents(_editor: YjsEditor, events: Y.YEvent[]): void {
   const apply = (editor: YjsEditor) =>
     Editor.withoutNormalizing(editor, () =>
-      YjsEditor.asRemote(editor, () =>
-        applyYjsEvents(
-          editor,
-          events.filter((event) => event.transaction.origin !== slateYjsSymbol)
-        )
-      )
+      YjsEditor.asRemote(editor, () => {
+        try {
+          applyYjsEvents(
+            editor,
+            events.filter(
+              (event) => event.transaction.origin !== slateYjsSymbol
+            )
+          );
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.error('Error applying remote event', err);
+          throw err;
+        }
+      })
     );
   if (HistoryEditor.isHistoryEditor(_editor)) {
     HistoryEditor.withoutSaving(_editor, () => {
@@ -132,7 +140,13 @@ export function withYjs<T extends Editor>(
   e.apply = (op: Operation) => {
     trackLocalOperations(e, op);
 
-    apply(op);
+    try {
+      apply(op);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('Error applying op', op);
+      throw err;
+    }
   };
 
   e.onChange = () => {

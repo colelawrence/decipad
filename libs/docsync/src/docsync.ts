@@ -54,29 +54,21 @@ function ensureInitialDocument(doc: YDoc, root: DocTypes.Doc) {
       return;
     }
     if (root.length < 1) {
-      root.push([new YMap()]);
+      root.push([
+        new YMap([
+          ['type', 'h1'],
+          ['children', YArray.from([new YMap([['text', new YText()]])])],
+        ]),
+      ]);
     }
-    const h1 = root.get(0);
-    h1.set('type', 'h1');
-    h1.set('children', new YArray());
-
-    const h1Leafs = getDefined(
-      h1.get('children')
-    ) as YArray<DocTypes.LeafElement>;
-    h1Leafs.push([new YMap()]);
-    const h1Leaf = getDefined(h1Leafs.get(0));
-    h1Leaf.set('text', new YText());
-
-    root.push([new YMap()]);
-    const p = root.get(1);
-    p.set('type', 'p');
-    p.set('children', new YArray());
-    const pLeafs = getDefined(
-      p.get('children')
-    ) as YArray<DocTypes.LeafElement>;
-    pLeafs.push([new YMap()]);
-    const pLeaf = getDefined(pLeafs.get(0));
-    pLeaf.set('text', new YText());
+    if (root.length < 2) {
+      root.push([
+        new YMap([
+          ['type', 'p'],
+          ['children', YArray.from([new YMap([['text', new YText()]])])],
+        ]),
+      ]);
+    }
   });
 }
 
