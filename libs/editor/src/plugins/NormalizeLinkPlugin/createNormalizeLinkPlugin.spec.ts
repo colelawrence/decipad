@@ -11,21 +11,42 @@ beforeEach(() => {
   });
 });
 
-it('must have a url', () => {
+it('is not a link without a url', () => {
   editor.children = [
     {
-      type: ELEMENT_LINK,
-      children: [{ text: '' }],
+      type: ELEMENT_PARAGRAPH,
+      children: [
+        {
+          type: ELEMENT_LINK,
+          children: [{ text: 'text' }],
+        },
+      ],
     } as TElement,
   ];
   Editor.normalize(editor, { force: true });
   expect(editor.children).toEqual([
     {
-      type: ELEMENT_LINK,
-      url: '',
-      children: [{ text: '' }],
+      type: ELEMENT_PARAGRAPH,
+      children: [{ text: 'text' }],
     },
   ] as Element[]);
+});
+it('is not a link with empty text', () => {
+  editor.children = [
+    {
+      type: ELEMENT_PARAGRAPH,
+      children: [
+        {
+          type: ELEMENT_LINK,
+          children: [{ text: '' }],
+        },
+      ],
+    } as TElement,
+  ];
+  Editor.normalize(editor, { force: true });
+  expect(editor.children).toEqual([
+    { type: ELEMENT_PARAGRAPH, children: [{ text: '' }] },
+  ]);
 });
 it('cannot have extra properties', () => {
   editor.children = [
@@ -33,7 +54,7 @@ it('cannot have extra properties', () => {
       type: ELEMENT_LINK,
       id: '42',
       url: 'https://example.com',
-      children: [{ text: '' }],
+      children: [{ text: 'text' }],
       extra: true,
     } as TElement,
   ];
@@ -53,7 +74,7 @@ it('can contain plain text', () => {
     {
       type: ELEMENT_LINK,
       url: 'https://example.com',
-      children: [{ text: '' }],
+      children: [{ text: 'text' }],
     } as TElement,
   ];
   Editor.normalize(editor, { force: true });
@@ -61,7 +82,7 @@ it('can contain plain text', () => {
     {
       type: ELEMENT_LINK,
       url: 'https://example.com',
-      children: [{ text: '' }],
+      children: [{ text: 'text' }],
     },
   ] as Element[]);
 });
@@ -70,7 +91,7 @@ it('can contain rich text', () => {
     {
       type: ELEMENT_LINK,
       url: 'https://example.com',
-      children: [{ text: '', [MARK_BOLD]: true }],
+      children: [{ text: 'text', [MARK_BOLD]: true }],
     } as TElement,
   ];
   Editor.normalize(editor, { force: true });
@@ -78,7 +99,7 @@ it('can contain rich text', () => {
     {
       type: ELEMENT_LINK,
       url: 'https://example.com',
-      children: [{ text: '', [MARK_BOLD]: true }],
+      children: [{ text: 'text', [MARK_BOLD]: true }],
     },
   ] as Element[]);
 });

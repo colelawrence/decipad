@@ -4,7 +4,6 @@ import {
   TNode,
   getPlatePluginWithOverrides,
   isElement,
-  setNodes,
 } from '@udecode/plate';
 import { Node, NodeEntry, Transforms } from 'slate';
 import { ELEMENT_LINK } from '../../elements';
@@ -21,8 +20,8 @@ const withNormalizeLink = (): WithOverride => (editor) => {
         return;
       }
 
-      if (!('url' in node)) {
-        setNodes(editor, { url: '' }, { at: path });
+      if (!('url' in node) || Node.string(node) === '') {
+        Transforms.unwrapNodes(editor, { at: path });
         return;
       }
 
