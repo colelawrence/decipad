@@ -34,6 +34,7 @@ import { createNormalizeListPlugin } from '../plugins/NormalizeListPlugin/create
 import { createNormalizeVoidPlugin } from '../plugins/NormalizeVoidPlugin/createNormalizeVoidPlugin';
 import { createNormalizeLinkPlugin } from '../plugins/NormalizeLinkPlugin/createNormalizeLinkPlugin';
 import { createNormalizeElementIdPlugin } from '../plugins/NormalizeElementId/createNormalizeElementIdPlugin';
+import { createAutoFormatCodeBlockPlugin } from '../plugins/AutoFormatCodeBlock/createAutoFormatCodeBlockPlugin';
 
 export const plugins = [
   // fundamentals
@@ -81,6 +82,7 @@ export const plugins = [
   ...createMarksPlugins(),
   createAutoformatPlugin(autoformatRules),
   createLinkPlugin(),
+  createAutoFormatCodeBlockPlugin(),
 
   // code editing
   createCodeVariableHighlightingPlugin(),
