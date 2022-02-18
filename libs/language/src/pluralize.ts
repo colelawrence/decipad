@@ -12,6 +12,7 @@ addIrregularRule('mph', 'mph');
 addIrregularRule('u', 'u');
 addIrregularRule('lumen', 'lumen');
 addIrregularRule('scarab', 'scarab');
+addIrregularRule('previous', 'previous');
 
 // easter eggs
 addIrregularRule('lol', 'lulz');
