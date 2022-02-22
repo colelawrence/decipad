@@ -88,9 +88,11 @@ export const NotebookTopbar = ({
 
       {/* Right side */}
       <div css={topbarRightSideStyles}>
-        <em css={helpButtonStyles}>
-          <Anchor href={docs({}).$}>Need help?</Anchor>
-        </em>
+        {isAdmin && (
+          <em css={helpButtonStyles}>
+            <Anchor href={docs({}).$}>Need help?</Anchor>
+          </em>
+        )}
         <NotebookAvatars usersWithAccess={usersWithAccess} />
 
         {session?.user ? (

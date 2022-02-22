@@ -67,4 +67,16 @@ describe('Notebook Topbar', () => {
     );
     expect(getByText(/share/i)).toBeVisible();
   });
+
+  it("doesn't render the need help button when shared", () => {
+    const { getByText, rerender, queryByText } = render(
+      <NotebookTopbar {...props} permission="ADMIN" />
+    );
+
+    expect(getByText(/need help/i)).toBeInTheDocument();
+
+    rerender(<NotebookTopbar {...props} permission="READ" />);
+
+    expect(queryByText(/need help/i)).not.toBeInTheDocument();
+  });
 });
