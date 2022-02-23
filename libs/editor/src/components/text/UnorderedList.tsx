@@ -1,10 +1,21 @@
 import { molecules } from '@decipad/ui';
 import { PlateComponent } from '../../types';
+import { DraggableBlock } from '../block-management';
 
-export const UnorderedList: PlateComponent = ({ attributes, children }) => {
+export const UnorderedList: PlateComponent = ({
+  attributes,
+  children,
+  element,
+}) => {
+  if (!element) {
+    throw new Error('UnorderedList is not a leaf');
+  }
+
   return (
     <div {...attributes}>
-      <molecules.UnorderedList>{children}</molecules.UnorderedList>
+      <DraggableBlock blockKind="list" element={element}>
+        <molecules.UnorderedList>{children}</molecules.UnorderedList>
+      </DraggableBlock>
     </div>
   );
 };

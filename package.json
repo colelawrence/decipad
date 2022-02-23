@@ -66,8 +66,6 @@
     ]
   },
   "dependencies": {
-    "apache-arrow": "^7.0.0",
-    "@types/apache-arrow": "npm:@apache-arrow/ts@^7.0.0",
     "@apollo/client": "^3.3.20",
     "@architect/architect": "^8.6.0",
     "@architect/asap": "^4.1.0",
@@ -97,8 +95,10 @@
     "@storybook/addon-knobs": "^6.2.9",
     "@storybook/react": "^6.2.9",
     "@tippyjs/react": "^4.2.5",
+    "@types/apache-arrow": "npm:@apache-arrow/ts@^7.0.0",
     "@udecode/plate": "^4.2.0",
     "@udecode/plate-test-utils": "^3.2.0",
+    "apache-arrow": "^7.0.0",
     "apollo-server-lambda": "^2.25.2",
     "aws-lambda": "^1.0.6",
     "camelcase": "^6.2.0",
@@ -290,6 +290,8 @@
     "postcss": "^8.3.5",
     "prettier": "2.3.0",
     "proper-lockfile": "^4.1.2",
+    "react-dnd-test-backend": "^15.1.1",
+    "react-dnd-test-utils": "^15.1.1",
     "realpath": "^1.1.0",
     "remark": "^14.0.1",
     "remark-frontmatter": "^4.0.1",

@@ -1,10 +1,21 @@
 import { atoms } from '@decipad/ui';
 import { PlateComponent } from '../../types';
+import { DraggableBlock } from '../block-management';
 
-export const Blockquote: PlateComponent = ({ attributes, children }) => {
+export const Blockquote: PlateComponent = ({
+  attributes,
+  children,
+  element,
+}) => {
+  if (!element) {
+    throw new Error('Blockquote is not a leaf');
+  }
+
   return (
     <div {...attributes}>
-      <atoms.Blockquote>{children}</atoms.Blockquote>
+      <DraggableBlock blockKind="blockquote" element={element}>
+        <atoms.Blockquote>{children}</atoms.Blockquote>
+      </DraggableBlock>
     </div>
   );
 };

@@ -49,6 +49,12 @@ window.ResizeObserver = class ResizeObserver {
   }
 };
 
+window.DragEvent = class DragEvent extends MouseEvent {
+  constructor(...args) {
+    super(...args);
+    this.dataTransfer = { getData: () => '' };
+  }
+};
 // Since PointerEvent extends MouseEvent and we don't care about testing
 // pressure and other hardware specific inputs, we can simply fake a MouseEvent
 // as a PointerEvent.

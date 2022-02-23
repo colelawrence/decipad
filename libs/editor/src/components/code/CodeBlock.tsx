@@ -2,6 +2,7 @@ import { useResults } from '@decipad/react-contexts';
 import { organisms } from '@decipad/ui';
 import { ELEMENT_CODE_BLOCK } from '../../elements';
 import { PlateComponent } from '../../types';
+import { DraggableBlock } from '../block-management';
 
 export const CodeBlock: PlateComponent = ({
   attributes,
@@ -23,9 +24,11 @@ export const CodeBlock: PlateComponent = ({
   const lastLine = blockResults?.[lastLineId]?.results?.[0];
   return (
     <div {...attributes}>
-      <organisms.CodeBlock expandedResult={lastLine}>
-        {children}
-      </organisms.CodeBlock>
+      <DraggableBlock blockKind="codeBlock" element={element}>
+        <organisms.CodeBlock expandedResult={lastLine}>
+          {children}
+        </organisms.CodeBlock>
+      </DraggableBlock>
     </div>
   );
 };

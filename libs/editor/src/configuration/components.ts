@@ -42,14 +42,13 @@ import {
   Code,
   Link,
 } from '../components';
-import { withStyledDraggables } from '../utils/withStyledDraggables';
 import { PlateComponent } from '../types';
 
 export type PlateComponents = Partial<
   Record<ElementKind | MarkKind, PlateComponent>
 >;
 
-export const components: PlateComponents = withStyledDraggables({
+export const components: PlateComponents = {
   // Headings
   [ELEMENT_H1]: Title,
   [ELEMENT_H2]: Heading1,
@@ -80,4 +79,4 @@ export const components: PlateComponents = withStyledDraggables({
   [MARK_STRIKETHROUGH]: Strikethrough,
   [MARK_ITALIC]: Italic,
   [MARK_CODE]: Code,
-} as PlateComponents);
+};

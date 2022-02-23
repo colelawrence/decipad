@@ -6,6 +6,7 @@ import { useEditorState } from '@udecode/plate';
 import { TableInner } from './TableInner';
 import { PlateComponent, TableData } from '../../types';
 import { ELEMENT_TABLE_INPUT } from '../../elements';
+import { DraggableBlock } from '../block-management';
 
 export const Table: PlateComponent = ({
   children,
@@ -40,7 +41,9 @@ export const Table: PlateComponent = ({
     <div {...attributes}>
       <div contentEditable={false}>
         {children}
-        <TableInner value={value} onChange={onChange} />
+        <DraggableBlock blockKind="editorTable" element={element}>
+          <TableInner value={value} onChange={onChange} />
+        </DraggableBlock>
       </div>
     </div>
   );

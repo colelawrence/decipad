@@ -8,20 +8,23 @@ import {
 import userEvent from '@testing-library/user-event';
 import {
   createEditorPlugins,
-  Plate,
   createParagraphPlugin,
   PlateProps,
   SPEditor,
   PlatePluginComponent,
+  Plate,
 } from '@udecode/plate';
 import { Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { findDomNodePath } from '../../utils/slateReact';
 import { SlashCommandsParagraph } from './SlashCommandsParagraph';
 import { ELEMENT_PARAGRAPH, ELEMENT_H3 } from '../../elements';
 
 let editor: SPEditor & ReactEditor;
 let plateProps: PlateProps;
+let wrapper: React.FC;
 beforeEach(() => {
   editor = createEditorPlugins();
   plateProps = {
@@ -33,10 +36,15 @@ beforeEach(() => {
       [ELEMENT_PARAGRAPH]: SlashCommandsParagraph as PlatePluginComponent,
     },
   };
+  wrapper = ({ children }) => (
+    <DndProvider backend={HTML5Backend}>{children}</DndProvider>
+  );
 });
 
 it('renders the menu when typing in the selected paragraph starting with a /', async () => {
-  const { getByText, findByText } = render(<Plate {...plateProps} />);
+  const { getByText, findByText } = render(<Plate {...plateProps} />, {
+    wrapper,
+  });
 
   act(() => {
     ReactEditor.focus(editor);
@@ -52,7 +60,8 @@ it('renders the menu when typing in the selected paragraph starting with a /', a
 });
 it('does not render the menu when the editor is not focused', async () => {
   const { getByText, queryByText, findByText } = render(
-    <Plate {...plateProps} />
+    <Plate {...plateProps} />,
+    { wrapper }
   );
 
   Transforms.select(editor, {
@@ -66,7 +75,8 @@ it('does not render the menu when the editor is not focused', async () => {
 });
 it('does not render the menu when the paragraph is not selected', async () => {
   const { getByText, queryByText, findByText } = render(
-    <Plate {...plateProps} />
+    <Plate {...plateProps} />,
+    { wrapper }
   );
 
   act(() => {
@@ -84,7 +94,8 @@ it('does not render the menu when the paragraph is not selected', async () => {
 });
 it('does not render the menu before typing', async () => {
   const { getByText, queryByText, findByText } = render(
-    <Plate {...plateProps} />
+    <Plate {...plateProps} />,
+    { wrapper }
   );
 
   act(() => {
@@ -102,7 +113,8 @@ it.each([' /cmd', '/cmd#', '/42'])(
   'does not render the menu for the non-command text "%s"',
   async (text) => {
     const { getByText, queryByText, findByText } = render(
-      <Plate {...plateProps} />
+      <Plate {...plateProps} />,
+      { wrapper }
     );
 
     act(() => {
@@ -131,7 +143,8 @@ it.each([' /cmd', '/cmd#', '/42'])(
 describe('the escape key', () => {
   it('hides the menu until typing again', async () => {
     const { getByText, queryByText, findByText } = render(
-      <Plate {...plateProps} />
+      <Plate {...plateProps} />,
+      { wrapper }
     );
 
     act(() => {
@@ -152,7 +165,9 @@ describe('the escape key', () => {
   });
 
   it('does not hide the menu while holding shift', async () => {
-    const { getByText, findByText } = render(<Plate {...plateProps} />);
+    const { getByText, findByText } = render(<Plate {...plateProps} />, {
+      wrapper,
+    });
 
     act(() => {
       ReactEditor.focus(editor);
@@ -170,7 +185,9 @@ describe('the escape key', () => {
 });
 
 it('executes a command on click', async () => {
-  const { getByText, findByText } = render(<Plate {...plateProps} />);
+  const { getByText, findByText } = render(<Plate {...plateProps} />, {
+    wrapper,
+  });
 
   act(() => {
     ReactEditor.focus(editor);
@@ -191,7 +208,8 @@ it('executes a command on click', async () => {
 
 it('uses the text after the slash to search for commands', async () => {
   const { getByText, queryByText, findByText } = render(
-    <Plate {...plateProps} />
+    <Plate {...plateProps} />,
+    { wrapper }
   );
 
   act(() => {

@@ -6,9 +6,15 @@ import {
 } from '@udecode/plate';
 import { render, waitFor } from '@testing-library/react';
 import { Transforms } from 'slate';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Paragraph } from './Paragraph';
 import { findDomNodePath } from '../../utils/slateReact';
 import { ELEMENT_PARAGRAPH } from '../../elements';
+
+const wrapper: React.FC = ({ children }) => (
+  <DndProvider backend={HTML5Backend}>{children}</DndProvider>
+);
 
 it('shows a placeholder when empty and selected', async () => {
   const editor = createEditorPlugins();
@@ -18,7 +24,8 @@ it('shows a placeholder when empty and selected', async () => {
       initialValue={[{ type: ELEMENT_PARAGRAPH, children: [{ text: 'text' }] }]}
       plugins={[createParagraphPlugin()]}
       components={{ [ELEMENT_PARAGRAPH]: Paragraph as PlatePluginComponent }}
-    />
+    />,
+    { wrapper }
   );
   const textElement = getByText('text');
   const paragraphElement = textElement.closest('p');
@@ -46,7 +53,8 @@ it('does not show a placeholder when not empty', async () => {
       initialValue={[{ type: ELEMENT_PARAGRAPH, children: [{ text: 'text' }] }]}
       plugins={[createParagraphPlugin()]}
       components={{ [ELEMENT_PARAGRAPH]: Paragraph as PlatePluginComponent }}
-    />
+    />,
+    { wrapper }
   );
   const textElement = getByText('text');
   const paragraphElement = textElement.closest('p');
@@ -73,7 +81,8 @@ it('does not show a placeholder when not selected', async () => {
       ]}
       plugins={[createParagraphPlugin()]}
       components={{ [ELEMENT_PARAGRAPH]: Paragraph as PlatePluginComponent }}
-    />
+    />,
+    { wrapper }
   );
   const textElement = getByText('text');
   const paragraphElement = textElement.closest('p');
@@ -102,7 +111,8 @@ it('does not show a placeholder when selecting more than the paragraph', async (
       ]}
       plugins={[createParagraphPlugin()]}
       components={{ [ELEMENT_PARAGRAPH]: Paragraph as PlatePluginComponent }}
-    />
+    />,
+    { wrapper }
   );
   const textElement = getByText('text');
   const paragraphElement = textElement.closest('p');

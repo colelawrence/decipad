@@ -3,6 +3,7 @@ import { useEditorState, isSelectionExpanded } from '@udecode/plate';
 import { Editor } from 'slate';
 import { useSelected } from 'slate-react';
 import { PlateComponent } from '../../types';
+import { DraggableBlock } from '../block-management';
 
 export const Paragraph: PlateComponent = ({
   attributes,
@@ -18,17 +19,19 @@ export const Paragraph: PlateComponent = ({
 
   return (
     <div {...attributes}>
-      <atoms.Paragraph
-        placeholder={
-          Editor.isEmpty(editor, element) &&
-          selected &&
-          !isSelectionExpanded(editor)
-            ? 'Type “/” for commands or write text'
-            : undefined
-        }
-      >
-        {children}
-      </atoms.Paragraph>
+      <DraggableBlock blockKind="paragraph" element={element}>
+        <atoms.Paragraph
+          placeholder={
+            Editor.isEmpty(editor, element) &&
+            selected &&
+            !isSelectionExpanded(editor)
+              ? 'Type “/” for commands or write text'
+              : undefined
+          }
+        >
+          {children}
+        </atoms.Paragraph>
+      </DraggableBlock>
     </div>
   );
 };
