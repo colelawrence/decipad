@@ -1,30 +1,40 @@
-// eslint-disable-next-line import/no-duplicates
-import differenceInMonths from 'date-fns/differenceInMonths';
-// eslint-disable-next-line import/no-duplicates
-import differenceInYears from 'date-fns/differenceInYears';
-
 import { singular } from 'pluralize';
+import { DateTime } from 'luxon';
+
 import Fraction from '@decipad/fraction';
 import { AST, Unit } from '..';
 import { n, pairwise, getDefined } from '../utils';
 import { Date as LanguageDate } from '../interpreter/Value';
+
 import * as Time from './time-types';
 
 export * from './time-quantities';
+
 export { TimeQuantity } from './TimeQuantity';
 export { Time };
 
 /*
- * Check out ./interfaces.ts for documentation about different kinds of time units
+ * Check out ./time-types.ts for documentation about different kinds of time units
  */
-/* Warning: extremely hacky
- *
- * There was an initial version of this code which used date-fns, however its
- * UTC support leaves a lot to be desired. They're working on a new date-fns/utc
- * which I think we should adopt as soon as it comes out
- *
- * For now, here's some nonsense about turning dates into arrays and back:
+
+/**
+ * Create a Luxon DateTime without a timezone offset from a date-like arg
  */
+export const toLuxonUTC = (date: bigint | number | LanguageDate | DateTime) => {
+  if (date instanceof LanguageDate) {
+    date = date.getData();
+  }
+  if (typeof date === 'bigint') {
+    date = Number(date);
+  }
+  if (date instanceof DateTime) {
+    return date.toUTC();
+  }
+  if (typeof date !== 'number') {
+    throw new Error('panic: toLuxon(date) passed an invalid date');
+  }
+  return DateTime.fromMillis(date).toUTC();
+};
 
 const specificities: Time.Specificity[] = [
   'year',
@@ -94,40 +104,6 @@ const timeUnitToIndex: Record<Time.Unit, number> = {
   millisecond: 11,
 };
 
-// fixme: this doesnt seem to be used. dead code?
-export const timeIndexToUnit: Record<number, Time.Unit> = {
-  0: 'millennium',
-  1: 'century',
-  2: 'decade',
-  3: 'year',
-  4: 'quarter',
-  5: 'month',
-  6: 'week',
-  7: 'day',
-  8: 'hour',
-  9: 'minute',
-  10: 'second',
-  11: 'millisecond',
-};
-
-export const timeUnitToNormalMax: Record<Time.Unit, number> = {
-  millennium: Infinity,
-  century: Infinity,
-  decade: Infinity,
-  year: Infinity,
-  quarter: 3,
-  month: 11,
-  week: Infinity,
-  day: Infinity,
-  hour: 24,
-  minute: 59,
-  second: 59,
-  millisecond: 999,
-};
-
-// Deal with annoying intersections
-type AnyUnit = Time.Unit | Time.Specificity | Time.JSDateUnit;
-
 export const timeUnitFromUnit = (unit: Unit | string): Time.Unit => {
   const u = singular((unit as Unit).unit ?? unit);
   if (!timeUnits.has(u)) {
@@ -155,19 +131,6 @@ export const getSpecificity = (thing?: string | Unit): Time.Specificity => {
   }
 
   throw new Error(`panic: Expected Time.JSDateUnit, got ${unit}`);
-};
-
-export const getJSDateUnit = (thing: AnyUnit) => {
-  if (thing in timeUnitToJSDateUnit) {
-    // Eliminate quarter, week
-    [thing] = timeUnitToJSDateUnit[thing as Time.Unit];
-  }
-
-  if (thing in jsUnitToIndex) {
-    return thing as Time.JSDateUnit;
-  }
-
-  throw new Error(`panic: Expected Time.JSDateUnit, got ${thing}`);
 };
 
 export const getTimeUnit = (thing: string) => {
@@ -227,7 +190,7 @@ export const cleanDate = (
 };
 
 export const dateToArray = (date: Date | number | bigint) => {
-  const d = typeof date === 'bigint' ? new Date(Number(date)) : new Date(date);
+  const d = new Date(Number(date));
 
   return [
     BigInt(d.getUTCFullYear()),
@@ -376,20 +339,21 @@ export const subtractDates = (
   d2: LanguageDate,
   specificity: Time.Specificity
 ): Fraction => {
-  const ms1 = Number(d1.getData());
-  const ms2 = Number(d2.getData());
+  const dateTime1 = toLuxonUTC(d1.getData());
+  const dateTime2 = toLuxonUTC(d2.getData());
 
   switch (specificity) {
     case 'year': {
-      return new Fraction(differenceInYears(ms1, ms2) * 12);
+      return new Fraction(dateTime1.diff(dateTime2, 'years').years * 12);
     }
     case 'month': {
-      return new Fraction(differenceInMonths(ms1, ms2));
+      return new Fraction(dateTime1.diff(dateTime2, 'months').months);
     }
     default: {
-      const msDifference = d1.getData() - d2.getData();
-
-      return new Fraction(msDifference, 1000n);
+      return new Fraction(
+        dateTime1.diff(dateTime2, 'milliseconds').milliseconds,
+        1000n
+      );
     }
   }
 };

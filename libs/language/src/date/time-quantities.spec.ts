@@ -1,4 +1,4 @@
-import { parseUTCDate as d, TimeQuantity } from '.';
+import { convertTimeQuantityTo, parseUTCDate as d, TimeQuantity } from '.';
 import { addTimeQuantity } from './time-quantities';
 
 it('can add composite quantities', () => {
@@ -54,4 +54,28 @@ it("rounds down the day if it's over the end of a month", () => {
   expect(
     addTimeQuantity(d('2020-02-29'), new TimeQuantity({ year: 1n }))
   ).toEqual(d('2021-02-28'));
+});
+
+it('can convert time units to other units', () => {
+  expect(
+    convertTimeQuantityTo(new TimeQuantity({}), 'minute')
+  ).toMatchInlineSnapshot(`Fraction(0)`);
+
+  expect(
+    convertTimeQuantityTo(new TimeQuantity({ minute: 10n }), 'minute')
+  ).toMatchInlineSnapshot(`Fraction(10)`);
+
+  expect(
+    convertTimeQuantityTo(
+      new TimeQuantity({ minute: 10n, second: 60n }),
+      'minute'
+    )
+  ).toMatchInlineSnapshot(`Fraction(11)`);
+
+  expect(
+    convertTimeQuantityTo(
+      new TimeQuantity({ minute: 1n, second: 9n }),
+      'second'
+    )
+  ).toMatchInlineSnapshot(`Fraction(69)`);
 });

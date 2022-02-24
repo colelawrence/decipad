@@ -1,13 +1,10 @@
 import { FC } from 'react';
-import { format as formatDate } from 'date-fns-tz';
+import { DateTime } from 'luxon';
 import { CodeResultProps } from '../../types';
 
-export const formatUTCDate = (
-  date: Date,
-  form: string,
-  fullUTC = false
-): string => {
-  return formatDate(date, form, { timeZone: 'UTC' }) + (fullUTC ? ' UTC' : '');
+export const formatUTCDate = (date: Date, form: string, tz = false): string => {
+  const dateTime = DateTime.fromMillis(date.valueOf()).toUTC();
+  return dateTime.toFormat(form) + (tz ? ' UTC' : '');
 };
 
 export const DateResult = ({
@@ -19,21 +16,21 @@ export const DateResult = ({
   let format;
   switch (type.date) {
     case 'year': {
-      format = 'uuuu';
+      format = 'yyyy';
       break;
     }
     case 'month': {
-      format = 'MMM uuuu';
+      format = 'MMM yyyy';
       break;
     }
     case 'day': {
-      format = 'MMM do uuuu';
+      format = 'MMM d yyyy';
       break;
     }
     default: {
       if (date.getUTCSeconds() === 0 && date.getUTCMilliseconds() === 0) {
         fullUTC = true;
-        format = 'MMM do uuuu HH:mm';
+        format = 'MMM d yyyy HH:mm';
       }
       break;
     }

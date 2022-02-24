@@ -9,16 +9,9 @@ type TimeUnitInit = Map<Time.Unit, bigint> | Partial<Record<Time.Unit, bigint>>;
 
 export class TimeQuantity {
   timeUnits = new Map<Time.Unit, bigint>();
-  timeUnitsDiff = new Map<Time.Unit, bigint>();
 
-  constructor(
-    timeUnits: TimeUnitInit,
-    timeUnitsDiff: TimeUnitInit = new Map()
-  ) {
+  constructor(timeUnits: TimeUnitInit) {
     this.timeUnits = toTimeUnitMap(timeUnits);
-    this.timeUnitsDiff = timeUnitsDiff
-      ? toTimeUnitMap(timeUnitsDiff)
-      : new Map();
   }
 
   static fromUnits(number: bigint, units: Units): TimeQuantity {

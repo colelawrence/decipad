@@ -1047,6 +1047,21 @@ describe('number units work together', () => {
     });
   });
 
+  it('(historical dates regression): can subtract dates', async () => {
+    expect(
+      await runCode(`date(1883-12) - date(1883-10)`)
+    ).toMatchInlineSnapshot(`Result(2 months)`);
+    expect(
+      await runCode(`date(1884-01) - date(1883-01)`)
+    ).toMatchInlineSnapshot(`Result(12 months)`);
+    expect(await runCode(`date(1900) - date(1883)`)).toMatchInlineSnapshot(
+      `Result(17 years)`
+    );
+    expect(await runCode(`date(2200) - date(1883)`)).toMatchInlineSnapshot(
+      `Result(317 years)`
+    );
+  });
+
   it('calculates number from time quantity decade', async () => {
     expect(await runCode(`(date(2040) - date(2030)) as decade`)).toMatchObject({
       value: F(1),

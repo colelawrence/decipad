@@ -1,13 +1,5 @@
 import Fraction from '@decipad/fraction';
-import {
-  arrayToDate,
-  dateToArray,
-  getJSDateUnit,
-  jsUnitToIndex,
-  Time,
-  timeUnitToJSDateUnit,
-  TimeQuantity,
-} from '.';
+import { Time, timeUnitToJSDateUnit, TimeQuantity, toLuxonUTC } from '.';
 import { getDefined } from '../utils';
 
 export const convertToMs: Partial<Record<Time.Unit, bigint>> = {
@@ -17,41 +9,6 @@ export const convertToMs: Partial<Record<Time.Unit, bigint>> = {
   minute: BigInt(60 * 1000),
   second: BigInt(1000),
   millisecond: BigInt(1),
-};
-
-// Strategy taken from date-fns getDaysInMonth -- seems to be timezone agnostic
-const getDaysInMonth = (year: bigint | number, month: bigint | number) => {
-  const d = new Date(0);
-  d.setFullYear(
-    Number(year),
-    Number(month) /* next month */,
-    0 /* last day of prev month */
-  );
-  d.setHours(0, 0, 0, 0);
-  return d.getDate();
-};
-
-// Strategy taken from date-fns addMonths, but this one works in UTC
-const addMonths = (date: bigint, months: bigint) => {
-  const dateArray = dateToArray(date);
-
-  const [desiredYear, desiredMonth] = dateToArray(
-    arrayToDate([dateArray[0], BigInt(dateArray[1]) + months])
-  );
-
-  const daysInDesiredMonth = getDaysInMonth(
-    BigInt(desiredYear),
-    BigInt(desiredMonth)
-  );
-
-  const [, , day, ...rest] = dateArray;
-
-  return arrayToDate([
-    desiredYear,
-    desiredMonth,
-    BigInt(Math.min(Number(day), daysInDesiredMonth)),
-    ...rest,
-  ]);
 };
 
 const addSingleQuantity = (
@@ -64,23 +21,11 @@ const addSingleQuantity = (
     `bad time unit ${timeUnit}`
   );
 
-  timeUnit = composedUnit;
-  quantity = BigInt(quantity) * compositeMultiplier;
+  const added = toLuxonUTC(date).plus({
+    [composedUnit]: Number(BigInt(quantity) * compositeMultiplier),
+  });
 
-  if (timeUnit === 'year') {
-    return addMonths(date, quantity * 12n);
-  } else if (timeUnit === 'month') {
-    return addMonths(date, quantity);
-  } else {
-    // JS Date and Date.UTC support out-of-bounds values,
-    // by rolling over to the next second/minute/hour/day/year
-    // So a naive += is appropriate.
-    const dateArray = dateToArray(date);
-
-    dateArray[jsUnitToIndex[getJSDateUnit(timeUnit)]] += quantity;
-
-    return arrayToDate(dateArray);
-  }
+  return BigInt(added.toMillis());
 };
 
 export const addTimeQuantity = (date: bigint, quantities: TimeQuantity) =>
@@ -89,44 +34,10 @@ export const addTimeQuantity = (date: bigint, quantities: TimeQuantity) =>
     date
   );
 
-export const addTimeQuantities = (
-  quantities1: TimeQuantity,
-  quantities2: TimeQuantity
-): TimeQuantity => {
-  const quantitiesMap = new Map<Time.Unit, bigint>(quantities1.timeUnits);
-  for (const [unit, value] of quantities2.timeUnits.entries()) {
-    const existing = quantitiesMap.get(unit);
-    if (existing != null) {
-      quantitiesMap.set(unit, existing + value);
-    } else {
-      quantitiesMap.set(unit, value);
-    }
-  }
-  return new TimeQuantity(quantitiesMap);
-};
-
-export const negateTimeQuantity = (quantity: TimeQuantity) => {
-  const retMap = new Map();
-
-  quantity.timeUnits.forEach((quantity, unit) => {
-    retMap.set(unit, -quantity);
-  });
-
-  return new TimeQuantity(retMap);
-};
-
 export const convertTimeQuantityTo = (
-  quantity: TimeQuantity,
+  { timeUnits }: TimeQuantity,
   convertTo: Time.Unit
 ): Fraction => {
-  if (
-    quantity.timeUnitsDiff &&
-    quantity.timeUnitsDiff.size === 1 &&
-    quantity.timeUnitsDiff.has(convertTo)
-  ) {
-    return new Fraction(quantity.timeUnitsDiff.get(convertTo) as bigint);
-  }
-  const { timeUnits } = quantity;
   if (timeUnits.size === 0) {
     return new Fraction(0);
   }
@@ -136,21 +47,17 @@ export const convertTimeQuantityTo = (
 
   let accInMs = 0n;
   for (const [unit, value] of timeUnits.entries()) {
-    const convertRatio = convertToMs[unit];
-    if (!convertRatio) {
-      throw new TypeError(
-        `time quantity: don't know how to convert from ${unit}`
-      );
-    }
+    const convertRatio = getDefined(
+      convertToMs[unit],
+      `time quantity: don't know how to convert from ${unit}`
+    );
     accInMs += value * convertRatio;
   }
 
-  const convertRatio = convertToMs[convertTo];
-  if (!convertRatio) {
-    throw new TypeError(
-      `time quantity: don't know how to convert time quantity to ${convertTo}`
-    );
-  }
+  const convertRatio = getDefined(
+    convertToMs[convertTo],
+    `time quantity: don't know how to convert time quantity to ${convertTo}`
+  );
 
   return new Fraction(accInMs, convertRatio);
 };
