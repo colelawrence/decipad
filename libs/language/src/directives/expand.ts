@@ -16,7 +16,7 @@ export const getType = (
     infer: (exp) => inferExpression(ctx, exp),
   };
 
-  return getType(root, directiveContext, ...args);
+  return getType(root, directiveContext, args);
 };
 
 export const getValue = (
@@ -35,5 +35,5 @@ export const getValue = (
     },
   };
 
-  return getValue(root, directiveContext, ...args);
+  return getValue(root, directiveContext, args);
 };

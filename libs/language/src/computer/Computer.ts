@@ -1,5 +1,6 @@
+import assert from 'assert';
 import { inferExpression, inferStatement } from '../infer';
-import { evaluateStatement, RuntimeError } from '../interpreter';
+import { evaluateStatement, RuntimeError, Value } from '../interpreter';
 
 import {
   AST,
@@ -37,31 +38,36 @@ const computeStatement = async (
   program: AST.Block[],
   location: ValueLocation,
   realm: ComputationRealm
-): Promise<InBlockResult> => {
+): Promise<[InBlockResult, Value | undefined]> => {
   let result = realm.getFromCache(location);
+  let value: Value | undefined;
 
   if (result == null) {
     const [blockId, statementIndex] = location;
     const statement = getStatement(program, location);
-    const valueType = await inferStatement(realm.inferContext, statement);
-
-    let value = null;
+    const valueType = await inferStatement(
+      realm.inferContext,
+      statement,
+      undefined
+    );
 
     if (!(valueType.errorCause != null && !valueType.functionness)) {
-      const evaluated = await evaluateStatement(
-        realm.interpreterRealm,
-        statement
-      );
-      value = evaluated.getData();
+      value = await evaluateStatement(realm.interpreterRealm, statement);
     }
 
-    validateResult(valueType, value);
+    if (value) {
+      validateResult(valueType, value.getData());
+    }
 
-    result = { blockId, statementIndex, ...serializeResult(valueType, value) };
+    result = {
+      blockId,
+      statementIndex,
+      ...serializeResult(valueType, value?.getData()),
+    };
   }
 
   realm.addToCache(location, result);
-  return result;
+  return [result, value];
 };
 
 const resultsToUpdates = (results: InBlockResult[]) => {
@@ -114,14 +120,17 @@ export const computeProgram = async (
   realm: ComputationRealm
 ): Promise<InBlockResult[]> => {
   const results: InBlockResult[] = [];
-
   for (const location of getAllBlockLocations(program)) {
     try {
       // eslint-disable-next-line no-await-in-loop
-      const result = await computeStatement(program, location, realm);
+      const [result, value] = await computeStatement(program, location, realm);
+      realm.inferContext.previousStatement = result.type;
+      realm.interpreterRealm.previousStatementValue = value;
       results.push(result);
     } catch (err) {
       results.push(resultFromError(err as Error, location));
+      realm.inferContext.previousStatement = undefined;
+      realm.interpreterRealm.previousStatementValue = undefined;
     }
   }
 
@@ -132,6 +141,7 @@ export class Computer {
   private previouslyParsed: ParseRet[] = [];
   private previousExternalData: ExternalDataMap = new Map();
   private computationRealm = new ComputationRealm();
+  private computing = false;
 
   private ingestComputeRequest({ program, externalData }: ComputeRequest) {
     const newExternalData = anyMappingToMap(externalData ?? new Map());
@@ -154,6 +164,11 @@ export class Computer {
   async compute(req: ComputeRequest): Promise<ComputeResponse | ComputePanic> {
     /* istanbul ignore catch */
     try {
+      assert(
+        !this.computing,
+        'the computer does not allow concurrent requests'
+      );
+      this.computing = true;
       const blocks = this.ingestComputeRequest(req);
       const goodBlocks = getGoodBlocks(blocks);
       const computeResults = await computeProgram(
@@ -188,6 +203,8 @@ export class Computer {
         type: 'compute-panic',
         message: (error as Error).message,
       };
+    } finally {
+      this.computing = false;
     }
   }
 

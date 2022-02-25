@@ -59,11 +59,10 @@ export async function evaluate(
     case 'ref': {
       const identifier = getIdentifierString(node);
       if (isPreviousRef(identifier)) {
-        const previous = realm.previousValue;
-        if (previous == null) {
+        if (realm.previousStatementValue == null) {
           throw new RuntimeError('No previous value');
         }
-        return previous;
+        return realm.previousStatementValue;
       }
       const value = realm.stack.get(identifier);
       if (value != null) {
@@ -194,7 +193,6 @@ export async function evaluateStatement(
   statement: AST.Statement
 ) {
   const value = await evaluate(realm, statement);
-  realm.previousValue = value;
   return value;
 }
 

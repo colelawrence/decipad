@@ -1,5 +1,5 @@
 import { AST, ExternalData, ExternalDataMap, InjectableExternalData } from '..';
-import { Type } from '../type';
+import { Type, SerializedType } from '../type';
 import { Stack } from '../stack';
 import defaultFetch from '../data/default-fetch';
 import { AnyMapping, anyMappingToMap } from '../utils';
@@ -12,6 +12,7 @@ export interface Context {
   nodeTypes: Map<AST.Node, Type>;
   fetch: ExternalData.FetchFunction;
   externalData: ExternalDataMap;
+  previousStatement?: SerializedType;
 }
 
 interface MakeContextArgs {

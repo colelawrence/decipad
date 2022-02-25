@@ -1,7 +1,7 @@
 import pSeries from 'p-series';
 
 import { AST } from '..';
-import { InferError, Type, build as t } from '../type';
+import { InferError, Type, build as t, deserializeType } from '../type';
 import { matchUnitArraysForColumn } from '../type/units';
 import { getDefined, zip, getIdentifierString, getOfType } from '../utils';
 import { getDateFromAstForm } from '../date';
@@ -19,16 +19,10 @@ import { isPreviousRef } from '../previous-ref';
 export { makeContext };
 export type { Context };
 
-const assigningPrevious =
-  <T extends AST.Node>(fn: (ctx: Context, thing: T) => Promise<Type>) =>
-  async (ctx: Context, thing: T): Promise<Type> => {
-    const type = await fn(ctx, thing);
-    ctx.previous = type;
-    return type;
-  };
-
 const wrap =
-  <T extends AST.Node>(fn: (ctx: Context, thing: T) => Promise<Type>) =>
+  <T extends AST.Node>(
+    fn: (ctx: Context, thing: T, cohercingTo?: Type) => Promise<Type>
+  ) =>
   async (ctx: Context, thing: T, cohercingTo?: Type): Promise<Type> => {
     let type = await fn(ctx, thing);
     if (cohercingTo) {
@@ -60,8 +54,10 @@ export const inferExpression = wrap(
       case 'ref': {
         const name = getIdentifierString(expr);
         if (isPreviousRef(name)) {
-          const { previous } = ctx;
-          return previous || t.impossible(InferError.noPreviousStatement());
+          return (
+            (ctx.previousStatement && deserializeType(ctx.previousStatement)) ||
+            t.impossible(InferError.noPreviousStatement())
+          );
         }
         const value = ctx.stack.get(name);
         return value ?? t.number([parseUnit(name)]);
@@ -260,40 +256,38 @@ export const inferFunction = async (
   });
 };
 
-export const inferStatement = assigningPrevious(
-  wrap(
-    async (
-      /* Mutable! */ ctx: Context,
-      statement: AST.Statement
-    ): Promise<Type> => {
-      switch (statement.type) {
-        case 'assign': {
-          const [nName, nValue] = statement.args;
+export const inferStatement = wrap(
+  async (
+    /* Mutable! */ ctx: Context,
+    statement: AST.Statement
+  ): Promise<Type> => {
+    switch (statement.type) {
+      case 'assign': {
+        const [nName, nValue] = statement.args;
 
-          const varName = getIdentifierString(nName);
+        const varName = getIdentifierString(nName);
 
-          ctx.inAssignment = varName;
-          const type = await (!ctx.stack.top.has(varName)
-            ? inferExpression(ctx, nValue)
-            : t.impossible(InferError.duplicatedName(varName)));
-          ctx.inAssignment = null;
+        ctx.inAssignment = varName;
+        const type = await (!ctx.stack.top.has(varName)
+          ? inferExpression(ctx, nValue)
+          : t.impossible(InferError.duplicatedName(varName)));
+        ctx.inAssignment = null;
 
-          ctx.stack.set(varName, type);
-          return type;
-        }
-        case 'function-definition': {
-          const fName = getIdentifierString(statement.args[0]);
+        ctx.stack.set(varName, type);
+        return type;
+      }
+      case 'function-definition': {
+        const fName = getIdentifierString(statement.args[0]);
 
-          ctx.functionDefinitions.set(fName, statement);
+        ctx.functionDefinitions.set(fName, statement);
 
-          return t.functionPlaceholder();
-        }
-        default: {
-          return inferExpression(ctx, statement);
-        }
+        return t.functionPlaceholder();
+      }
+      default: {
+        return inferExpression(ctx, statement);
       }
     }
-  )
+  }
 );
 
 export const inferBlock = async (

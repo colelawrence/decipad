@@ -176,6 +176,42 @@ describe('caching', () => {
   });
 });
 
+describe('uses previous value', () => {
+  it('works the first and second time', async () => {
+    expect(
+      await computeOnTestComputer({
+        program: getUnparsed('A = 3', 'previous'),
+      })
+    ).toMatchInlineSnapshot(`
+      Array [
+        "block-0/0 -> 3",
+        "block-1/0 -> 3",
+      ]
+    `);
+
+    expect(
+      await computeOnTestComputer({
+        program: getUnparsed('A = 4'),
+      })
+    ).toMatchInlineSnapshot(`
+      Array [
+        "block-0/0 -> 4",
+      ]
+    `);
+
+    expect(
+      await computeOnTestComputer({
+        program: getUnparsed('A = 5', 'previous'),
+      })
+    ).toMatchInlineSnapshot(`
+      Array [
+        "block-0/0 -> 5",
+        "block-1/0 -> 5",
+      ]
+    `);
+  });
+});
+
 it('can reset itself', async () => {
   // Make the cache dirty
   await computeOnTestComputer({ program: unparsedProgram });

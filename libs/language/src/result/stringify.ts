@@ -10,7 +10,7 @@ import { validateResult } from '.';
 
 type Colorizer = (s: string) => string;
 export const stringifyResult = (
-  result: Interpreter.OneResult,
+  result: Interpreter.OneResult | undefined | null,
   type: Type,
   color: Colorizer = chalk.blue
 ): string => {

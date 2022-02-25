@@ -37,7 +37,7 @@ export interface Result<T extends SerializedTypeKind = SerializedTypeKind> {
 
 export function serializeResult<T extends SerializedTypeKind>(
   type: Type,
-  value: Interpreter.OneResult | null
+  value: Interpreter.OneResult | null | undefined
 ): Result<T> {
   validateResult(type, value);
   const serializedType = serializeType(type);

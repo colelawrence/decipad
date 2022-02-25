@@ -45,8 +45,7 @@ function multiplyUnitMultipliersIfNeedsEnforcing(
 export async function getType(
   _: AST.Expression,
   { infer }: GetTypeCtx,
-  expr: AST.Expression,
-  unitExpr: AST.Expression
+  [expr, unitExpr]: [AST.Expression, AST.Expression]
 ): Promise<Type> {
   const expressionType = await infer(expr);
   if (expressionType.errorCause) {
@@ -110,8 +109,7 @@ function inlineUnitAliases(units: Units | null): Units | null {
 export async function getValue(
   root: AST.Expression,
   { evaluate, getNodeType }: GetValueCtx,
-  expression: AST.Expression,
-  unitsExpression: AST.Expression
+  [expression, unitsExpression]: [AST.Expression, AST.Expression]
 ): Promise<Value> {
   const evalResult = await evaluate(expression);
   const targetUnitsEvalResult = await evaluate(unitsExpression);

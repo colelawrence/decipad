@@ -14,7 +14,7 @@ const cleanAST = (...args: AST.Node[]) =>
 
 export const select: Directive = {
   argCount: 2,
-  async getType(_, { infer }, ...args) {
+  async getType(_, { infer }, args) {
     const [tableRef, columns] = cleanAST(...args);
 
     const table = (await infer(tableRef)).isTable();
@@ -42,7 +42,7 @@ export const select: Directive = {
       });
     });
   },
-  async getValue(_, { evaluate }, ...args) {
+  async getValue(_, { evaluate }, args) {
     const [tableRef, columns] = cleanAST(...args);
 
     const table = getInstanceof(await evaluate(tableRef), Table);

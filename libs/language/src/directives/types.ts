@@ -1,8 +1,9 @@
-import type { AST, Type } from '..';
+import type { AST, SerializedType, Type } from '..';
 import type { Value } from '../interpreter';
+import { OneResult } from '../interpreter/interpreter-types';
 
 export interface GetTypeCtx {
-  infer: (exp: AST.Expression) => Promise<Type>;
+  infer: (exp: AST.Expression, previous?: SerializedType) => Promise<Type>;
 }
 
 export interface GetValueCtx {
@@ -20,11 +21,13 @@ export interface Directive {
   getType(
     root: AST.Expression,
     ctx: GetTypeCtx,
-    ...args: AST.Node[]
+    args: AST.Node[],
+    previous?: SerializedType
   ): Promise<Type>;
   getValue(
     root: AST.Expression,
     ctx: GetValueCtx,
-    ...args: AST.Node[]
+    args: AST.Node[],
+    previous?: OneResult
   ): Promise<Value>;
 }

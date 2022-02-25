@@ -13,6 +13,7 @@ export class Realm {
   functions = new Map<string, AST.FunctionDefinition>();
   previousValue: Value | null = null;
   inferContext: Context;
+  previousStatementValue?: Value;
 
   get externalData() {
     return this.inferContext.externalData;

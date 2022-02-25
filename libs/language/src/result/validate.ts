@@ -9,7 +9,7 @@ import { SerializedType, SerializedTypeKind, serializeType } from '../type';
 
 function validate(
   type: SerializedType,
-  value: Interpreter.OneResult | null
+  value: Interpreter.OneResult | null | undefined
 ): boolean {
   const getTrue = (cond: boolean, failureMessage: string) => {
     if (cond) return true;
@@ -96,7 +96,7 @@ function validate(
 
 const reportError = (
   type: SerializedType,
-  value: Interpreter.OneResult | null
+  value: Interpreter.OneResult | null | undefined
 ) => {
   console.error('Failed to validate a Result:');
   console.error({ type, value });
@@ -104,7 +104,7 @@ const reportError = (
 
 export function validateResult(
   type: Type | SerializedType,
-  value: Interpreter.OneResult | null
+  value: Interpreter.OneResult | null | undefined
 ) {
   if (type instanceof Type) {
     type = serializeType(type);
