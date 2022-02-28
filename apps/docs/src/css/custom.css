@@ -101,6 +101,11 @@ table tr:nth-child(2n) {
   color: var(--ifm-color-primary-dark);
 }
 
+/* Markdown Tables */
+html[data-theme='dark'] table tr:nth-child(2n) {
+  background-color: var(--ifm-code-background);
+}
+
 /* Footer */
 .theme-doc-footer {
   padding: 0px 48px;
