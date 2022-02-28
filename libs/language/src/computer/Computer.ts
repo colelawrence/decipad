@@ -26,7 +26,7 @@ import { ParseRet, updateParse } from './parse';
 import { ComputationRealm } from './ComputationRealm';
 import { build as t } from '../type';
 import { getAllBlockLocations, getGoodBlocks, getStatement } from './utils';
-import { anyMappingToMap, isExpression } from '../utils';
+import { anyMappingToMap, getDefined, isExpression } from '../utils';
 import { validateResult } from '../result';
 
 /*
@@ -39,35 +39,39 @@ const computeStatement = async (
   location: ValueLocation,
   realm: ComputationRealm
 ): Promise<[InBlockResult, Value | undefined]> => {
-  let result = realm.getFromCache(location);
+  const result = realm.getFromCache(location);
   let value: Value | undefined;
 
-  if (result == null) {
-    const [blockId, statementIndex] = location;
-    const statement = getStatement(program, location);
-    const valueType = await inferStatement(
-      realm.inferContext,
-      statement,
-      undefined
-    );
+  if (result) {
+    return [getDefined(result.result), result.value];
+  }
 
-    if (!(valueType.errorCause != null && !valueType.functionness)) {
-      value = await evaluateStatement(realm.interpreterRealm, statement);
-    }
+  const [blockId, statementIndex] = location;
+  const statement = getStatement(program, location);
+  const valueType = await inferStatement(
+    realm.inferContext,
+    statement,
+    undefined
+  );
 
-    if (value) {
-      validateResult(valueType, value.getData());
-    }
+  if (!(valueType.errorCause != null && !valueType.functionness)) {
+    value = await evaluateStatement(realm.interpreterRealm, statement);
+  }
 
-    result = {
+  if (value) {
+    validateResult(valueType, value.getData());
+  }
+
+  const newResult = {
+    result: {
       blockId,
       statementIndex,
       ...serializeResult(valueType, value?.getData()),
-    };
-  }
-
-  realm.addToCache(location, result);
-  return [result, value];
+    },
+    value,
+  };
+  realm.addToCache(location, newResult);
+  return [newResult.result, value];
 };
 
 const resultsToUpdates = (results: InBlockResult[]) => {

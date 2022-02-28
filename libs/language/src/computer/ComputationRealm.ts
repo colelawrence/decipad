@@ -1,7 +1,7 @@
 import { AST, Table, ExternalDataMap } from '..';
 import { stringifyDate } from '../date';
 import { makeContext as makeInferContext } from '../infer';
-import { Realm } from '../interpreter';
+import { Realm, Value } from '../interpreter';
 
 import {
   getStatementsToEvict,
@@ -15,7 +15,10 @@ import {
   LocationMap,
 } from './utils';
 
-type CacheContents = InBlockResult | null;
+export type CacheContents = {
+  result: InBlockResult | null;
+  value: Value | undefined;
+};
 export class ComputationRealm {
   inferContext = makeInferContext();
   interpreterRealm = new Realm(this.inferContext);
@@ -92,7 +95,7 @@ export class ComputationRealm {
   }
 
   addToCache(loc: ValueLocation, result: CacheContents) {
-    if (result?.type?.kind !== 'type-error') {
+    if (result.result?.type?.kind !== 'type-error') {
       this.locCache.set(loc, result);
     } else {
       this.errorLocs.add(loc);
