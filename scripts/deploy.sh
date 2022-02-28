@@ -9,6 +9,7 @@ mkdir apps/backend/public
 
 echo "Configuring the client..."
 touch apps/client/.env.production
+echo "GIT_COMMIT_HASH=${GIT_COMMIT_HASH:-${GITHUB_SHA:-}}" >> apps/client/.env.production
 echo "SENTRY_DSN=${SENTRY_DSN:-}" >> apps/client/.env.production
 echo "SENTRY_ORG=${SENTRY_ORG:-}" >> apps/client/.env.production
 echo "SENTRY_PROJECT=${SENTRY_PROJECT:-}" >> apps/client/.env.production

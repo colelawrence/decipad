@@ -81,6 +81,7 @@ jobs:
           NEXT_PUBLIC_HOTJAR_SITE_ID: '${{secrets.ALPHA_HOTJAR_SITE_ID}}'
           NEXT_PUBLIC_ANALYTICS_WRITE_KEY: '${{secrets.ALPHA_ANALYTICS_WRITE_KEY}}'
           NODE_OPTIONS: '--enable-source-maps'
+          GIT_COMMIT_HASH: '${{github.sha}}'
 
         run: |
           export SAM_LOCATION="s3://decipad-backend-sam/alpha.decipad.com"
