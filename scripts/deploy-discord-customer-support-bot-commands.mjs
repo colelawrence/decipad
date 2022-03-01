@@ -12,52 +12,6 @@ process.on('unhandledRejection', (err) => {
 
   const commands = [
     {
-      name: 'notebook',
-      type: 1,
-      application_id: process.env.DISCORD_APP_ID,
-      description: 'operations on notebooks',
-      options: [
-        {
-          name: 'write',
-          description: 'import a document from a public Decipad notebook url',
-          type: 1,
-          options: [
-            {
-              name: 'url',
-              description: 'The url of the notebook to be written to Decipad',
-              required: true,
-              type: 3
-            },
-            { 
-              name: 'user',
-              description: 'The id of the user where we store the file.  If ommited defaults to the same workspace as the url.',
-              required: false,
-              type: 3
-            },
-            { 
-              name: 'workspace',
-              description: 'The id of the workspace where we want to store the file. If ommited defaults to the same workspace as the url.',
-              required: false,
-              type: 3
-            }
-          ]
-        },
-        {
-          name: 'read',
-          description: 'export a document from a public Decipad notebook url',
-          type: 1,
-          options: [
-            {
-              name: 'url',
-              description: 'The url of the notebook to be exported',
-              required: true,
-              type: 3
-            }
-          ]
-        }
-      ]
-    },
-    {
       name: 'allowlist',
       type: 1,
       application_id: process.env.DISCORD_APP_ID,
