@@ -2,7 +2,7 @@ import { organisms } from '@decipad/ui';
 import { useDndBlock, useEditorState } from '@udecode/plate';
 import { ComponentProps, createContext, useContext, useRef } from 'react';
 import { Transforms } from 'slate';
-import { ReactEditor } from 'slate-react';
+import { ReactEditor, useReadOnly } from 'slate-react';
 import { Element } from '../../elements';
 
 const InDraggableBlock = createContext(false);
@@ -16,6 +16,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
   ...props
 }) => {
   const editor = useEditorState();
+  const readOnly = useReadOnly();
   const { id } = element;
 
   const blockRef = useRef<HTMLDivElement>(null);
@@ -29,7 +30,9 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
   const isInDraggableBlock = useContext(InDraggableBlock);
   if (isInDraggableBlock) return <>{children}</>;
 
-  return (
+  return readOnly ? (
+    <>{children}</>
+  ) : (
     <organisms.DraggableBlock
       {...props}
       dragSource={dragRef}

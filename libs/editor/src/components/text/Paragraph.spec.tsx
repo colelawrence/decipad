@@ -135,3 +135,27 @@ it('does not show a placeholder when selecting more than the paragraph', async (
   await waitFor(() => expect(paragraphElement).toHaveTextContent(/^$/));
   expect(paragraphElement).not.toHaveAttribute('aria-placeholder');
 });
+
+it('does not show a placeholder when in readOnly mode', async () => {
+  const editor = createEditorPlugins();
+  const { container } = render(
+    <Plate
+      editor={editor}
+      initialValue={[{ type: ELEMENT_PARAGRAPH, children: [{ text: '' }] }]}
+      plugins={[createParagraphPlugin()]}
+      components={{ [ELEMENT_PARAGRAPH]: Paragraph as PlatePluginComponent }}
+      editableProps={{
+        readOnly: true,
+      }}
+    />,
+    { wrapper }
+  );
+  const paragraphElement = container.querySelector('p')!;
+
+  Transforms.select(editor, {
+    path: findDomNodePath(editor, paragraphElement),
+    offset: 0,
+  });
+  await waitFor(() => expect(paragraphElement).toHaveTextContent(/^$/));
+  expect(paragraphElement).not.toHaveAttribute('aria-placeholder');
+});

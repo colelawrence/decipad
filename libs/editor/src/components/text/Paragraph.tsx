@@ -1,7 +1,7 @@
 import { atoms } from '@decipad/ui';
 import { useEditorState, isSelectionExpanded } from '@udecode/plate';
 import { Editor } from 'slate';
-import { useSelected } from 'slate-react';
+import { useReadOnly, useSelected } from 'slate-react';
 import { PlateComponent } from '../../types';
 import { DraggableBlock } from '../block-management';
 
@@ -12,6 +12,7 @@ export const Paragraph: PlateComponent = ({
 }) => {
   const editor = useEditorState();
   const selected = useSelected();
+  const readOnly = useReadOnly();
 
   if (!element) {
     throw new Error('Paragraph is not a leaf');
@@ -24,7 +25,8 @@ export const Paragraph: PlateComponent = ({
           placeholder={
             Editor.isEmpty(editor, element) &&
             selected &&
-            !isSelectionExpanded(editor)
+            !isSelectionExpanded(editor) &&
+            !readOnly
               ? 'Type “/” for commands or write text'
               : undefined
           }

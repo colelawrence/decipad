@@ -58,6 +58,19 @@ it('renders a drag handle', async () => {
   expect(getByTitle(/drag/i)).toBeInTheDocument();
 });
 
+describe('when editor is in readOnly mode', () => {
+  it('does not render the drag handle', async () => {
+    const props = {
+      ...plateProps,
+      editableProps: { ...plateProps.editableProps, readOnly: true },
+    };
+    const { queryByTitle } = render(<Plate {...props} />, {
+      wrapper,
+    });
+    expect(queryByTitle(/drag/i)).not.toBeInTheDocument();
+  });
+});
+
 it('can delete the block', () => {
   plateProps.initialValue = [
     { type: ELEMENT_PARAGRAPH, id: '0', children: [{ text: 'first' }] },
