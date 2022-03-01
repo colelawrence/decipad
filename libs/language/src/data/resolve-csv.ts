@@ -1,4 +1,4 @@
-import { Table, Type, Utf8, Vector, vectorFromArray } from 'apache-arrow';
+import { Table, Type, Vector, vectorFromArray, Utf8 } from 'apache-arrow';
 import parseCSV from 'csv-parse';
 import { cast } from './cast';
 import { bufferBody } from './buffer-body';
@@ -55,7 +55,19 @@ function toTable(
     if (!column) {
       throw new RuntimeError(`no data in column ${columnName}`);
     }
-    columnMap[columnName] = columnToArrowVector(column);
+    try {
+      columnMap[columnName] = columnToArrowVector(column);
+    } catch (err) {
+      try {
+        columnMap[columnName] = columnToArrowVector(column, Type.Utf8);
+      } catch (err2) {
+        console.error(
+          `Error trying to transform column ${columnName} into arrow vector`,
+          err2
+        );
+        throw err2;
+      }
+    }
   });
 
   return new Table(columnMap);
@@ -73,27 +85,26 @@ function pivot(rows: Row[]): Column[] {
   return columns;
 }
 
-function columnToArrowVector(data: Column): Vector {
-  const type = columnType(data);
-  switch (type) {
-    case Type.Float:
-    case Type.Float16:
-    case Type.Float32:
+type ColumnType = Type.Bool | Type.Float64 | Type.Utf8 | Type.DateMillisecond;
+
+function columnToArrowVector(data: Column, forceType?: ColumnType): Vector {
+  const TType = forceType || columnType(data);
+  switch (TType) {
     case Type.Float64:
       return vectorFromArray(new Float64Array(data as number[]));
     case Type.Bool:
-    case Type.DateDay:
     case Type.DateMillisecond:
-    case Type.Utf8:
       return vectorFromArray(data);
+    case Type.Utf8:
+      return vectorFromArray(data, new Utf8());
     default:
       throw new Error(
-        `don't know how to translate arrow type ${type} into a vector`
+        `don't know how to translate arrow type ${TType} into a vector`
       );
   }
 }
 
-function columnType(data: Column) {
+function columnType(data: Column): ColumnType {
   for (let rowIndex = 0; rowIndex < data.length; rowIndex += 1) {
     const cell = data[rowIndex];
     if (cell instanceof Date) {
@@ -109,5 +120,5 @@ function columnType(data: Column) {
     }
   }
   // return default type string
-  return new Utf8();
+  return Type.Utf8;
 }

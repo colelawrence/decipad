@@ -40,3 +40,30 @@ it('resolves csv', async () => {
     ]
   `);
 });
+
+it('resolves csv (2)', async () => {
+  const source = `Header, Numbers, Dates, Other Dates, Booleans
+Kill Bill 1, 0.0456, 2022-10-01, 2022-10-01, true
+Something, 128349.1, 2022-10-01, 2022-10-01, false
+Testest, 128349.1, 2022-10-01, 2022-10-01, false
+TesTest, 128349.1, 2022-10-01, 2022-10-01, true`;
+
+  const url = dataURL(Buffer.from(source), 'text/csv');
+  const table = await resolve({ url, contentType: 'text/csv' });
+  expect(table.schema.fields).toHaveLength(5);
+
+  expect(table.schema.fields[0].name).toBe('Header');
+  expect(table.schema.fields[0].type).toMatchObject(new Utf8());
+
+  expect(table.schema.fields[1].name).toBe(' Numbers');
+  expect(table.schema.fields[1].type).toMatchObject(new Float64());
+
+  expect(table.schema.fields[2].name).toBe(' Dates');
+  expect(table.schema.fields[2].type).toMatchObject(new DateMillisecond());
+
+  expect(table.schema.fields[3].name).toBe(' Other Dates');
+  expect(table.schema.fields[3].type).toMatchObject(new DateMillisecond());
+
+  expect(table.schema.fields[4].name).toBe(' Booleans');
+  expect(table.schema.fields[4].type).toMatchObject(new Bool());
+});
