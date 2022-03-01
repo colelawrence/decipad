@@ -27,6 +27,15 @@ const styles = css(code, {
   },
 });
 
+const codeStyles = css({
+  // Hackish way to make slate leafs behave and wrap long pieces of code (e.g. fetch urls).
+  // Can't simply use `overflowWrap: 'anywhere'` because Safari does not have support.
+  '& span': {
+    overflowWrap: 'break-word',
+    wordBreak: 'break-word',
+  },
+});
+
 const inlineResultStyles = css(p14Regular, {
   ...setCssVar('currentTextColor', cssVar('weakTextColor')),
 
@@ -56,7 +65,7 @@ export const CodeLine = ({
 }: CodeLineProps): ReturnType<React.FC> => {
   return (
     <div css={styles}>
-      <code>{children}</code>
+      <code css={codeStyles}>{children}</code>
       <output css={inlineResultStyles} contentEditable={false}>
         {!syntaxError &&
           result &&
