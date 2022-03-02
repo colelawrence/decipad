@@ -20,9 +20,22 @@ const keywords = moo.keywords(
   Object.fromEntries(keywordStrings.map((kw) => [`${kw} keyword`, kw]))
 );
 
+/** HACK: Our toolchain doesn't support regex expressions with the /u flag. Using a
+ * function adds some indirection to avoid failing the build */
+const regexHack = (text: string, flags = 'u') => {
+  return new RegExp(text, flags);
+};
+const identifierRegExp = regexHack(
+  '[\\p{L}\\p{Sc}\\p{Emoji_Presentation}_μ°][\\p{L}\\p{Nd}\\p{Sc}\\p{Emoji_Presentation}_μ°]*'
+);
+export const identifierRegExpGlobal = regexHack(
+  '[\\p{L}\\p{Sc}\\p{Emoji_Presentation}_μ°][\\p{L}\\p{Nd}\\p{Sc}\\p{Emoji_Presentation}_μ°]*',
+  'gu'
+);
+
 export const tokenRules = {
   main: {
-    ws: { match: /[ \t\n\v\f]+/, lineBreaks: true },
+    ws: { match: regexHack('[ \\t\\n\\v\\f]+'), lineBreaks: true },
 
     // Punctuation
     notEquals: '!=',
@@ -43,7 +56,9 @@ export const tokenRules = {
     rightSquareBracket: ']',
     leftCurlyBracket: '{',
     rightCurlyBracket: '}',
-    minus: '-',
+    // This is a RegExp because if we use '-', moo will place `\-` (an invalid escape) into
+    // a RegExp, and then cause a SyntaxError
+    minus: regexHack('-'),
     plus: '+',
     times: '*',
     caret: '^',
@@ -60,31 +75,31 @@ export const tokenRules = {
     // Move into the "date" state
     // https://www.npmjs.com/package/moo#states
     beginDate: {
-      match: /date *\(/,
+      match: regexHack('date *\\('),
       push: 'date',
     },
 
     identifier: {
-      match: /[a-zA-Z_μ°€£$$][a-zA-Z0-9_μ°€£$$]*/,
+      match: identifierRegExp,
       type: keywords,
     },
-    number: /[0-9]+(?:\.[0-9]+)?/,
+    number: regexHack('[0-9]+(?:\\.[0-9]+)?'),
     string: {
       // Adding control characters to comply with https://json.org
       /* eslint-disable-next-line no-control-regex */
-      match: /"(?:[^\\"\0-\x1F\x7F]|\\u[0-9a-fA-F]{4}|\\["\\/bfnrt])+"/,
+      match: regexHack('"(?:\\\\["bfnrt/\\\\]|\\\\u[a-fA-F0-9]{4}|[^"\\\\])*"'),
       value: (validJsonString: string) => JSON.parse(validJsonString),
     },
     // Moo crashes by default, but we can give it an error token to return us
     error,
   },
   date: {
-    digits: /[0-9]+/,
-    punc: /[T.:/+-]/,
-    ws: /[ \t]+/,
-    monthName: /[a-zA-Z]+/,
+    digits: regexHack('[0-9]+'),
+    punc: regexHack('[T.:/+-]'),
+    ws: regexHack('[ \\t]+'),
+    monthName: regexHack('[a-zA-Z]+'),
     endDate: {
-      match: /\)/,
+      match: regexHack('\\)'),
       pop: 1,
     },
     // See above. This needs to be passed into date mode as well

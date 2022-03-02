@@ -40,6 +40,7 @@ it('parses strings using JSON.parse', () => {
 });
 
 it('finds identifiers and keywords', () => {
+  expect(testTokenizer('🔥')).toMatchInlineSnapshot(`"identifier(🔥)"`);
   expect(testTokenizer('helloif')).toMatchInlineSnapshot(
     `"identifier(helloif)"`
   );
@@ -135,4 +136,10 @@ describe("extended tokenizer's mismatch tracker", () => {
       `"identifier(a) ws( ) equalSign(=) ws( ) number(1) /stmt/ identifier(t) ws( ) equalSign(=) ws( ) leftCurlyBracket({) ws(<newline>) rightCurlyBracket(}) /stmt/ identifier(b) ws( ) equalSign(=) ws( ) number(2)"`
     );
   });
+});
+
+it('can find `-` after the regex hack', () => {
+  expect(testTokenizer('- 1')).toMatchInlineSnapshot(
+    `"minus(-) ws( ) number(1)"`
+  );
 });
