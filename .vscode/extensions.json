@@ -1,0 +1,24 @@
+{
+  "recommendations": [
+    "formulahendry.auto-close-tag",
+    "formulahendry.auto-rename-tag",
+    "architect.architect",
+    "aaron-bond.better-comments",
+    "CoenraadS.bracket-pair-colorizer-2",
+    "streetsidesoftware.code-spell-checker",
+    "mikestead.dotenv",
+    "EditorConfig.EditorConfig",
+    "dsznajder.es7-react-js-snippets",
+    "dbaeumer.vscode-eslint",
+    "GitHub.vscode-pull-request-github",
+    "eamodio.gitlens",
+    "GraphQL.vscode-graphql",
+    "firsttris.vscode-jest-runner",
+    "oderwat.indent-rainbow",
+    "yzhang.markdown-all-in-one",
+    "DavidAnson.vscode-markdownlint",
+    "PKief.material-icon-theme",
+    "nrwl.angular-console",
+    "esbenp.prettier-vscode"
+  ]
+}
