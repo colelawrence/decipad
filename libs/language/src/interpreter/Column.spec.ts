@@ -1,4 +1,4 @@
-import { Column, fromJS } from './Value';
+import { Column, fromJS, ValueTransforms } from './Value';
 
 describe('column value', () => {
   it('can be constructed from values', () => {
@@ -34,7 +34,7 @@ describe('column value', () => {
 
   it('can be sorted', () => {
     const originalColumn = Column.fromValues([3, 1, 2].map(fromJS));
-    const sortedColumn = originalColumn.sort();
+    const sortedColumn = ValueTransforms.sort(originalColumn);
     expect(originalColumn.getData()).toMatchInlineSnapshot(`
       Array [
         Fraction(3),
@@ -52,10 +52,8 @@ describe('column value', () => {
   });
 
   it('can derive a column with unique values', () => {
-    const originalColumn = Column.fromValues(
-      [3, 1, 2, 3, 3, 5, 1, 2, 3, 0].map(fromJS)
-    );
-    const uniqueValuesColumn = originalColumn.unique();
+    const originalColumn = fromJS([3, 1, 2, 3, 3, 5, 1, 2, 3, 0]) as Column;
+    const uniqueValuesColumn = ValueTransforms.unique(originalColumn);
     expect(originalColumn.getData()).toMatchInlineSnapshot(`
       Array [
         Fraction(3),
@@ -83,11 +81,9 @@ describe('column value', () => {
   });
 
   it('a column can be sliced', () => {
-    const originalColumn = Column.fromValues(
-      [1, 2, 3, 4, 5, 6, 7, 8, 9].map(fromJS)
-    );
-    const slice1 = originalColumn.slice(3, 6);
-    const slice2 = originalColumn.slice(7, 9);
+    const originalColumn = fromJS([1, 2, 3, 4, 5, 6, 7, 8, 9]) as Column;
+    const slice1 = ValueTransforms.slice(originalColumn, 3, 6);
+    const slice2 = ValueTransforms.slice(originalColumn, 7, 9);
     expect(originalColumn.getData()).toMatchInlineSnapshot(`
       Array [
         Fraction(1),

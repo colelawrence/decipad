@@ -10,7 +10,7 @@ import {
 import { evaluate } from './evaluate';
 import { mapWithPrevious } from './previous';
 import { Realm } from './Realm';
-import { Column, Row, Table, Value } from './Value';
+import { Column, ColumnLike, isColumnLike, Row, Table, Value } from './Value';
 
 const isRecursiveReference = (expr: AST.Expression) =>
   expr.type === 'function-call' &&
@@ -30,7 +30,7 @@ export const usesRecursion = (expr: AST.Expression) => {
 
 export const evaluateTableColumn = async (
   realm: Realm,
-  tableColumns: Map<string, Column>,
+  tableColumns: Map<string, ColumnLike>,
   column: AST.Expression,
   rowCount: number
 ): Promise<Value> => {
@@ -52,10 +52,10 @@ export const evaluateTableColumn = async (
 
 export const evaluateTableColumnIteratively = async (
   realm: Realm,
-  otherColumns: Map<string, Column>,
+  otherColumns: Map<string, ColumnLike>,
   column: AST.Expression,
   rowCount: number
-): Promise<Column> =>
+): Promise<ColumnLike> =>
   realm.stack.withPush(async () => {
     const cells = await mapWithPrevious(realm, async function* mapper() {
       for (let index = 0; index < rowCount; index++) {
@@ -78,7 +78,7 @@ export const evaluateTable = async (
   realm: Realm,
   table: AST.Table
 ): Promise<Table> => {
-  const tableColumns = new Map<string, Column>();
+  const tableColumns = new Map<string, ColumnLike>();
   const { args: items } = table;
   const { tableLength, indexName } = realm.getTypeAt(table);
 
@@ -87,12 +87,12 @@ export const evaluateTable = async (
   }
 
   return realm.stack.withPush(async () => {
-    const addColumn = (name: string, value: Column | Value) => {
-      if (!(value instanceof Column)) {
+    const addColumn = (name: string, value: ColumnLike | Value) => {
+      if (!isColumnLike(value)) {
         value = Column.fromValues(repeat(value, tableLength));
       }
 
-      tableColumns.set(name, value as Column);
+      tableColumns.set(name, value as ColumnLike);
       realm.stack.set(name, value);
       realm.stack.set(getDefined(indexName), Table.fromMapping(tableColumns));
     };

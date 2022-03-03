@@ -1,7 +1,7 @@
 import { getOperatorByName } from './operators';
 import { automapValues, automapValuesForReducer } from '../dimtools';
 
-import { Value, AnyValue, fromJS } from '../interpreter/Value';
+import { Value, fromJS } from '../interpreter/Value';
 import { getDefined } from '../utils';
 import { Realm, RuntimeError } from '../interpreter';
 import type { Type } from '../type';
@@ -44,11 +44,7 @@ function callBuiltinAfterAutoconvert(
         );
       }
     } else if (builtin.fnValues != null) {
-      return builtin.fnValues(
-        argsLowerDims as AnyValue[],
-        typesLowerDims,
-        realm
-      );
+      return builtin.fnValues(argsLowerDims as Value[], typesLowerDims, realm);
     } else {
       /* istanbul ignore next */
       throw new Error('unreachable');

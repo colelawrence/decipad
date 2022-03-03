@@ -1,13 +1,13 @@
 /* eslint-disable no-underscore-dangle */
 import Fraction from '@decipad/fraction';
 import { unzip } from '@decipad/utils';
+import { DeepReadonly } from 'utility-types';
 import { Time, Interpreter } from '..';
 import {
   AnyMapping,
   anyMappingToMap,
   filterUnzipped,
   getDefined,
-  getInstanceof,
 } from '../utils';
 import {
   addTimeQuantity,
@@ -15,13 +15,36 @@ import {
   cleanDate,
   getSpecificity,
 } from '../date';
-import { compare } from './compare-values';
 import { Unknown } from './Unknown';
 import { RuntimeError } from '.';
+import { Hypercube } from '../dimtools/hypercube';
+import * as ValueTransforms from './ValueTransforms';
+
+export { ValueTransforms };
 
 export interface Value {
   getData(): Interpreter.OneResult;
 }
+
+export interface ColumnLike extends Value {
+  values: DeepReadonly<Value[]>;
+  atIndex(i: number): DeepReadonly<Value>;
+  rowCount: number;
+  getData(): Interpreter.OneResult;
+}
+
+export const isColumnLike = (thing: Value): thing is ColumnLike =>
+  thing instanceof Hypercube || thing instanceof Column;
+
+export const getColumnLike = (
+  thing: Value,
+  message = 'panic: expected column-like value'
+): ColumnLike => {
+  if (!isColumnLike(thing)) {
+    throw new Error(message);
+  }
+  return thing;
+};
 
 export const UnknownValue: Value = {
   getData() {
@@ -38,7 +61,6 @@ export type NonColumn =
   | DateValue
   | Table
   | Row;
-export type AnyValue = NonColumn | Column;
 
 const MAX_ITERATIONS = 10_000; // Failsafe
 
@@ -189,14 +211,14 @@ export class Range implements Value {
 export type SliceRange = [start: number, end: number];
 export type SlicesMap = SliceRange[];
 
-export class Column implements Value {
-  readonly _values: Value[];
+export class Column implements Value, ColumnLike {
+  readonly _values: DeepReadonly<Value[]>;
 
-  constructor(values: Column['values']) {
+  constructor(values: DeepReadonly<Column['values']>) {
     this._values = values;
   }
 
-  static fromValues(values: Value[]): Column {
+  static fromValues(values: DeepReadonly<Value[]>): Column {
     return new Column(values);
   }
 
@@ -279,68 +301,6 @@ export class Column implements Value {
   getData(): Interpreter.OneResult[] {
     return this.values.map((value) => value.getData());
   }
-
-  filterMap(fn: (value: Value, index?: number) => boolean): boolean[] {
-    return this.values.map(fn);
-  }
-
-  sortMap(): number[] {
-    const unsortedIndexes = Array.from({ length: this.rowCount }, (_, i) => i);
-    return unsortedIndexes.sort((aIndex, bIndex) => {
-      return compare(this.values[aIndex], this.values[bIndex]);
-    });
-  }
-
-  sort(): Column {
-    return MappedColumn.fromColumnAndMap(this, this.sortMap());
-  }
-
-  unique(): Column {
-    const sorted = this.sort();
-    const slices = sorted.contiguousSlices().map(([index]) => index);
-    return sorted.applyMap(slices);
-  }
-
-  reverseMap() {
-    const length = this.rowCount;
-    return Array.from({ length: this.values.length }, (_, i) => length - i - 1);
-  }
-
-  reverse(): Column {
-    return MappedColumn.fromColumnAndMap(this, this.reverseMap());
-  }
-
-  slice(begin: number, end: number): ColumnSlice {
-    return ColumnSlice.fromColumnAndRange(this, begin, end);
-  }
-
-  applyMap(map: number[]): Column {
-    return MappedColumn.fromColumnAndMap(this, map);
-  }
-
-  applyFilterMap(map: boolean[]): Column {
-    return FilteredColumn.fromColumnAndMap(this, map);
-  }
-
-  contiguousSlices(): SlicesMap {
-    const slices: SlicesMap = [];
-    let lastValue: undefined | Value;
-    let nextSliceBeginsAt = 0;
-    this.values.forEach((currentValue, index) => {
-      if (lastValue && compare(lastValue, currentValue) !== 0) {
-        // at the beginning of a new slice
-        slices.push([nextSliceBeginsAt, index - 1]);
-        nextSliceBeginsAt = index;
-      }
-      lastValue = currentValue;
-    });
-
-    if (nextSliceBeginsAt <= this.values.length - 1) {
-      slices.push([nextSliceBeginsAt, this.values.length - 1]);
-    }
-
-    return slices;
-  }
 }
 
 export class ColumnSlice extends Column {
@@ -353,7 +313,7 @@ export class ColumnSlice extends Column {
     this.end = end;
   }
 
-  static fromColumnAndRange(column: Column, begin: number, end: number) {
+  static fromColumnAndRange(column: ColumnLike, begin: number, end: number) {
     return new ColumnSlice(column.values, begin, end);
   }
 
@@ -365,7 +325,7 @@ export class ColumnSlice extends Column {
 export class MappedColumn extends Column {
   private map: number[];
 
-  constructor(values: Column['values'], map: number[]) {
+  constructor(values: DeepReadonly<Column['values']>, map: number[]) {
     super(values);
     this.map = map;
   }
@@ -374,7 +334,7 @@ export class MappedColumn extends Column {
     return this.map.map((index) => this._values[index]);
   }
 
-  static fromColumnAndMap(column: Column, map: number[]): MappedColumn {
+  static fromColumnAndMap(column: ColumnLike, map: number[]): MappedColumn {
     return new MappedColumn(column.values, map);
   }
 }
@@ -399,16 +359,16 @@ export class FilteredColumn extends Column {
     });
   }
 
-  static fromColumnAndMap(column: Column, map: boolean[]): FilteredColumn {
+  static fromColumnAndMap(column: ColumnLike, map: boolean[]): FilteredColumn {
     return new FilteredColumn(column.values, map);
   }
 }
 
 export class Table implements Value {
-  columns: Column[];
+  columns: ColumnLike[];
   columnNames: string[];
 
-  constructor(columns: Column[], columnNames: string[]) {
+  constructor(columns: ColumnLike[], columnNames: string[]) {
     if (columns.length === 0 || columnNames.length === 0) {
       throw new Error('panic: unexpected empty table');
     }
@@ -418,12 +378,12 @@ export class Table implements Value {
 
   static fromNamedColumns(columns: Value[], columnNames: string[]) {
     return new Table(
-      columns.map((v) => getInstanceof(v, Column)),
+      columns.map((v) => getColumnLike(v)),
       columnNames
     );
   }
 
-  static fromMapping(mapping: AnyMapping<Column>) {
+  static fromMapping(mapping: AnyMapping<ColumnLike>) {
     const [columnNames, columns] = unzip(anyMappingToMap(mapping).entries());
     return new Table(columns, columnNames);
   }
@@ -440,11 +400,11 @@ export class Table implements Value {
     return this.columns.map((column) => column.getData());
   }
 
-  mapColumns(mapFn: (col: Column, index: number) => Column): Table {
+  mapColumns(mapFn: (col: ColumnLike, index: number) => ColumnLike): Table {
     return Table.fromNamedColumns(this.columns.map(mapFn), this.columnNames);
   }
 
-  filterColumns(fn: (colName: string, col: Column) => boolean): Table {
+  filterColumns(fn: (colName: string, col: ColumnLike) => boolean): Table {
     const [names, columns] = filterUnzipped(this.columnNames, this.columns, fn);
 
     return Table.fromNamedColumns(columns, names);
@@ -480,7 +440,7 @@ export class Row implements Value {
 type FromJSOneArg = Interpreter.OneResult | number | Date;
 type FromJSArg = FromJSOneArg | FromJSOneArg[];
 
-export const fromJS = (thing: FromJSArg): AnyValue => {
+export const fromJS = (thing: FromJSArg): Value => {
   // TODO this doesn't distinguish Range/Date from Column, and it can't possibly do it!
   if (thing == null) {
     throw new TypeError('result cannot be null');

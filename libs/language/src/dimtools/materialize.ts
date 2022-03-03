@@ -1,7 +1,12 @@
 import { produce } from 'immer';
 import { Column, Value } from '../interpreter/Value';
 import { getDefined } from '../utils';
-import type { Dimension, DimensionId, HypercubeLike } from './hypercube';
+import type {
+  Dimension,
+  DimensionId,
+  Hypercube,
+  HypercubeLike,
+} from './hypercube';
 import { uniqDimensions } from './multidimensional-utils';
 
 export function getAt(
@@ -43,6 +48,13 @@ export function materializeToValue(hc: HypercubeLike): Value {
       return getAt(hc, coordinates);
     }
   })(uniqDimensions(hc.dimensions), new Map());
+}
+
+export function materializeWhenNonDimensional(hc: Hypercube): Value {
+  if (hc.dimensions.length) {
+    return hc;
+  }
+  return materializeToValue(hc);
 }
 
 export function materialize(hc: HypercubeLike) {

@@ -1,15 +1,14 @@
 import uniqBy from 'lodash.uniqby';
-
-import { Column, Value } from '../interpreter/Value';
+import { Column, ColumnLike, getColumnLike, Value } from '../interpreter/Value';
 import type { Type } from '../type';
-import { enumerate, getDefined, getInstanceof } from '../utils';
+import { enumerate, getDefined } from '../utils';
 import { linearizeType } from './common';
 import type { Dimension, HypercubeLike } from './hypercube';
 
 function getDimensions(value: Value, type: Type) {
   const linearTypes = linearizeType(type);
 
-  return (function recurse(value: Column, index = 0): Dimension[] {
+  return (function recurse(value: ColumnLike, index = 0): Dimension[] {
     const thisType = linearTypes[index];
 
     const thisDim = {
@@ -17,12 +16,12 @@ function getDimensions(value: Value, type: Type) {
       dimensionId: thisType.indexedBy ?? index,
     };
     if (thisType.cellType?.cellType) {
-      const firstCell = getInstanceof(value.values[0], Column);
+      const firstCell = getColumnLike(value.values[0]);
       return [thisDim, ...recurse(firstCell, index + 1)];
     } else {
       return [thisDim];
     }
-  })(value as Column);
+  })(getColumnLike(value));
 }
 
 export const uniqDimensions = (dimensions: Dimension[]) =>
@@ -94,14 +93,25 @@ export class DimensionalValue implements HypercubeLike {
       );
     }
     let cursor: Value = this.value;
-    while (keys.length) {
-      const key = getDefined(keys.shift());
-      cursor = getInstanceof(cursor, Column).values[key];
+    for (const index of keys) {
+      cursor = getColumnLike(cursor).atIndex(index);
     }
     return cursor;
   }
 
-  materialize() {
+  get values(): readonly Value[] {
+    return getColumnLike(this.value).values;
+  }
+
+  get rowCount() {
+    return getColumnLike(this.value).rowCount;
+  }
+
+  atIndex(i: number) {
+    return getColumnLike(this.value).atIndex(i);
+  }
+
+  getData() {
     return this.value.getData();
   }
 }

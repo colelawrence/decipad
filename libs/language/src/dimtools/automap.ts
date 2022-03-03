@@ -1,4 +1,4 @@
-import { allMatch, getInstanceof, zip } from '../utils';
+import { allMatch, zip } from '../utils';
 import { Type, build as t } from '../type';
 import * as Value from '../interpreter/Value';
 import { getReductionPlan } from './getReductionPlan';
@@ -17,7 +17,10 @@ import {
   DimensionalValue,
   groupTypesByDimension,
 } from './multidimensional-utils';
-import { materializeToValue } from './materialize';
+import {
+  materializeToValue,
+  materializeWhenNonDimensional,
+} from './materialize';
 
 /**
  * Takes a function expects a certain cardinality in each argument,
@@ -99,7 +102,9 @@ export const automapValues = (
     const mapFnAndTypes = (values: Value.Value[]) =>
       mapFn(values, reducedArgTypes);
 
-    return materializeToValue(new Hypercube(mapFnAndTypes, ...dimensionalArgs));
+    return materializeWhenNonDimensional(
+      new Hypercube(mapFnAndTypes, ...dimensionalArgs)
+    );
   } else {
     const whichToReduce = getReductionPlan(argTypes, expectedCardinalities);
 
@@ -177,14 +182,13 @@ export const automapValuesForReducer = (
     return mapFn([argValue], [argType]);
   } else {
     return Value.Column.fromValues(
-      getInstanceof(
+      Value.getColumnLike(
         argValue,
-        Value.Column,
         'reducers always take columnar arguments'
       ).values.map((v) =>
         automapValuesForReducer(
           argType.reduced(),
-          getInstanceof(v, Value.Column),
+          Value.getColumnLike(v),
           mapFn
         )
       )

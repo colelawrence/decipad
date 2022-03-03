@@ -1,7 +1,7 @@
 import { BuiltinSpec } from './interfaces';
 import { InferError, Type, build as t } from '../type';
 import {
-  AnyValue,
+  Value,
   Date,
   Range,
   StringValue,
@@ -22,7 +22,7 @@ export type OverloadTypeName =
 
 export interface OverloadedBuiltinSpec {
   argTypes: OverloadTypeName[];
-  fnValues: (values: AnyValue[], types?: Type[]) => AnyValue;
+  fnValues: (values: Value[], types?: Type[]) => Value;
   functor: (types: Type[], values?: AST.Expression[]) => Type;
 }
 
@@ -35,7 +35,7 @@ export const overloadBuiltin = (
     overloads.map((o) => [argTypesKey(o.argTypes), o])
   );
 
-  function getOverload(values: AnyValue[]): OverloadedBuiltinSpec {
+  function getOverload(values: Value[]): OverloadedBuiltinSpec {
     const argTypeNames = values.map(getOverloadedTypeFromValue);
     return getDefined(
       byArgTypes.get(argTypesKey(argTypeNames)),
@@ -45,7 +45,7 @@ export const overloadBuiltin = (
     );
   }
 
-  const fnValues = (values: AnyValue[], types?: Type[]) => {
+  const fnValues = (values: Value[], types?: Type[]) => {
     return getOverload(values).fnValues(values, types);
   };
 
@@ -71,7 +71,7 @@ export const overloadBuiltin = (
 const argTypesKey = (types: (OverloadTypeName | null)[]) => types.join(';');
 
 export const getOverloadedTypeFromValue = (
-  val: AnyValue
+  val: Value
 ): OverloadTypeName | null => {
   if (val instanceof StringValue) {
     return 'string';

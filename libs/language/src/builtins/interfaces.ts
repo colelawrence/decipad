@@ -1,8 +1,8 @@
-import { Value, AnyValue } from '../interpreter/Value';
-import { Type } from '../type';
-import { AST } from '../parser';
-import { Context } from '../infer';
-import { Realm } from '../interpreter';
+import type { Value } from '../interpreter/Value';
+import type { Type } from '../type';
+import type { AST } from '../parser';
+import type { Context } from '../infer';
+import type { Realm } from '../interpreter';
 
 export interface BuiltinSpec {
   argCount?: number | number[];
@@ -22,8 +22,8 @@ export interface BuiltinSpec {
     args: Value[],
     argTypes?: Type[],
     realm?: Realm
-  ) => AnyValue;
-  fnValues?: (args: AnyValue[], argTypes?: Type[], realm?: Realm) => AnyValue;
+  ) => Value;
+  fnValues?: (args: Value[], argTypes?: Type[], realm?: Realm) => Value;
   functor?: (
     types: Type[],
     values?: AST.Expression[],

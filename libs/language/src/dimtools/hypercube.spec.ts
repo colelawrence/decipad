@@ -109,11 +109,11 @@ describe('getAt', () => {
 
 describe('materializing', () => {
   it('can return an interpreter Result with getData()', () => {
-    expect(multiDimX.materialize()).toEqual([F(1), F(2), F(3)]);
+    expect(multiDimX.getData()).toEqual([F(1), F(2), F(3)]);
   });
 
   it('can return a 2D array', () => {
-    expect(multidimDivision.materialize()).toMatchInlineSnapshot(`
+    expect(multidimDivision.getData()).toMatchInlineSnapshot(`
 Array [
   Array [
     Fraction(100),
@@ -135,12 +135,12 @@ Array [
   });
 
   it('can materialize if 2 dims are the same', () => {
-    expect(multiDimXTwice.materialize()).toEqual([F(1, 2), F(1, 2), F(1, 2)]);
+    expect(multiDimXTwice.getData()).toEqual([F(1, 2), F(1, 2), F(1, 2)]);
   });
 
   it('can materialize with anon indices', () => {
-    expect(anonDimHaver.materialize()).toEqual([F(1), F(2), F(3)]);
-    expect(twoAnonDims.materialize()).toEqual([
+    expect(anonDimHaver.getData()).toEqual([F(1), F(2), F(3)]);
+    expect(twoAnonDims.getData()).toEqual([
       [F(11), F(101), F(1001)],
       [F(12), F(102), F(1002)],
       [F(13), F(103), F(1003)],
@@ -175,7 +175,7 @@ describe('can be turned from, and into, Column values', () => {
   );
 
   it('can be created from a column', () => {
-    expect(fromCol.materialize()).toEqual([
+    expect(fromCol.getData()).toEqual([
       [F(1), F(2), F(3)],
       [F(4), F(5), F(6)],
     ]);

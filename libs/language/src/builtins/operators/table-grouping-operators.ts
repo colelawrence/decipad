@@ -2,7 +2,12 @@ import produce from 'immer';
 import { getDefined } from '@decipad/utils';
 import { BuiltinSpec } from '../interfaces';
 import { Type, build as t, InferError } from '../../type';
-import { Column, Table } from '../../interpreter/Value';
+import {
+  Column,
+  getColumnLike,
+  Table,
+  ValueTransforms,
+} from '../../interpreter/Value';
 import { getInstanceof } from '../../utils';
 
 export const tableGroupingOperators: { [fname: string]: BuiltinSpec } = {
@@ -36,20 +41,28 @@ export const tableGroupingOperators: { [fname: string]: BuiltinSpec } = {
       ),
     fnValuesNoAutomap: ([_table, _byColumn], [tableType, colType] = []) => {
       const table = getInstanceof(_table, Table);
-      const byColumn = getInstanceof(_byColumn, Column);
+      const byColumn = getColumnLike(_byColumn);
 
-      const sortMap = byColumn.sortMap();
-      const sortedColumn = byColumn.applyMap(sortMap);
-      const slices = sortedColumn.contiguousSlices();
+      const sortMap = ValueTransforms.sortMap(byColumn);
+      const sortedColumn = ValueTransforms.applyMap(byColumn, sortMap);
+      const slices = ValueTransforms.contiguousSlices(sortedColumn);
       const slicedTables = slices.map(([sliceStartIndex, sliceEndIndex]) =>
         table
           .filterColumns((_colName, col) => col !== byColumn)
-          .mapColumns((col) =>
-            col.applyMap(sortMap).slice(sliceStartIndex, sliceEndIndex)
-          )
+          .mapColumns((col) => {
+            const sorted = ValueTransforms.applyMap(col, sortMap);
+            return ValueTransforms.slice(
+              sorted,
+              sliceStartIndex,
+              sliceEndIndex
+            );
+          })
       );
       const uniqueIndexes = slices.map(([uniqueIndex]) => uniqueIndex);
-      const uniqueSortedColumn = sortedColumn.applyMap(uniqueIndexes);
+      const uniqueSortedColumn = ValueTransforms.applyMap(
+        sortedColumn,
+        uniqueIndexes
+      );
       const columnsForNewTable = [
         uniqueSortedColumn,
         Column.fromValues(slicedTables),

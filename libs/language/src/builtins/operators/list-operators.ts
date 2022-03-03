@@ -2,7 +2,16 @@ import Fraction from '@decipad/fraction';
 import { getDefined } from '@decipad/utils';
 import produce from 'immer';
 import { RuntimeError } from '../../interpreter';
-import { Value, Column, Table, fromJS } from '../../interpreter/Value';
+import { OneResult } from '../../interpreter/interpreter-types';
+import {
+  Value,
+  Column,
+  Table,
+  fromJS,
+  getColumnLike,
+  ColumnLike,
+  ValueTransforms,
+} from '../../interpreter/Value';
 import { Type, build as t } from '../../type';
 import { getInstanceof, U } from '../../utils';
 import { BuiltinSpec } from '../interfaces';
@@ -14,7 +23,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
     isReducer: true,
     noAutoconvert: true,
     argCardinalities: [2],
-    fnValues: ([col]: Value[]) => fromJS(getInstanceof(col, Column).rowCount),
+    fnValues: ([col]: Value[]) => fromJS(getColumnLike(col).rowCount),
     functor: ([a]) =>
       Type.either(
         a
@@ -30,8 +39,8 @@ export const listOperators: Record<string, BuiltinSpec> = {
     // TODO: make this a varargs function
     fnValues: ([a, b]: Value[]) => {
       const allElements = [
-        ...getInstanceof(a, Column).values,
-        ...getInstanceof(b, Column).values,
+        ...getColumnLike(a).values,
+        ...getColumnLike(b).values,
       ];
       return Column.fromValues(allElements);
     },
@@ -47,14 +56,14 @@ export const listOperators: Record<string, BuiltinSpec> = {
   first: {
     argCount: 1,
     argCardinalities: [2],
-    fnValues: ([arg]: Value[]) => getInstanceof(arg, Column).atIndex(0),
+    fnValues: ([arg]: Value[]) => getColumnLike(arg).atIndex(0),
     functor: ([a]) => a.reduced(),
   },
   last: {
     argCount: 1,
     argCardinalities: [2],
     fnValues: ([arg]: Value[]) => {
-      const col = getInstanceof(arg, Column);
+      const col = getColumnLike(arg);
       return col.atIndex(col.rowCount - 1);
     },
     functor: ([a]) => Type.combine(a.reduced()),
@@ -66,7 +75,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
     argCount: 1,
     argCardinalities: [2],
     fnValues: ([a]: Value[]) => {
-      const aData = getInstanceof(a, Column).getData();
+      const aData = getColumnLike(a).getData() as OneResult[];
       return fromJS(
         aData.reduce((count, elem) => (elem.valueOf() ? count + 1 : count), 0)
       );
@@ -103,15 +112,15 @@ export const listOperators: Record<string, BuiltinSpec> = {
     argCount: 1,
     argCardinalities: [3],
     fnValues: ([_matrix]) => {
-      const matrix = getInstanceof(_matrix, Column);
+      const matrix = getColumnLike(_matrix);
       const matrixWidth = matrix.rowCount;
-      const matrixHeight = getInstanceof(matrix.values[0], Column).rowCount;
+      const matrixHeight = getColumnLike(matrix.values[0]).rowCount;
 
       return Column.fromValues(
         Array.from({ length: matrixHeight }, (_, y) =>
           Column.fromValues(
             Array.from({ length: matrixWidth }, (_, x) =>
-              getDefined((matrix.values[x] as Column).values[y])
+              getDefined((matrix.values[x] as ColumnLike).values[y])
             )
           )
         )
@@ -132,7 +141,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
     argCount: 1,
     argCardinalities: [2],
     functor: ([column]) => column.isColumn(),
-    fnValues: ([column]) => getInstanceof(column, Column).sort(),
+    fnValues: ([column]) => ValueTransforms.sort(getColumnLike(column)),
   },
 
   unique: {
@@ -145,7 +154,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
           column.columnSize = 'unknown';
         })
       ),
-    fnValues: ([column]) => getInstanceof(column, Column).unique(),
+    fnValues: ([column]) => ValueTransforms.unique(getColumnLike(column)),
   },
 
   reverse: {
@@ -154,9 +163,9 @@ export const listOperators: Record<string, BuiltinSpec> = {
       Type.either(column.isColumn(), column.isTable()),
     fnValuesNoAutomap: ([column]) => {
       if (column instanceof Table) {
-        return column.mapColumns((column) => column.reverse());
+        return column.mapColumns((column) => ValueTransforms.reverse(column));
       } else {
-        return getInstanceof(column, Column).reverse();
+        return ValueTransforms.reverse(getColumnLike(column));
       }
     },
   },

@@ -5,13 +5,7 @@ import { getDefined, zip } from '@decipad/utils';
 import { RuntimeError, Realm } from '../../interpreter';
 import { F, getInstanceof, multiplyMultipliers } from '../../utils';
 import { InferError, Type, build as t } from '../../type';
-import {
-  Column,
-  AnyValue,
-  fromJS,
-  Scalar,
-  Value,
-} from '../../interpreter/Value';
+import { fromJS, Scalar, Value, isColumnLike } from '../../interpreter/Value';
 import { AST } from '../../parser';
 import { overloadBuiltin } from '../overloadBuiltin';
 import { dateOverloads } from '../dateOverloads';
@@ -95,7 +89,7 @@ const coherceToFraction = (value: unknown): Fraction => {
 
 const max = ([value]: Value[]): Value => {
   let max: Value | undefined;
-  if (!(value instanceof Column)) {
+  if (!isColumnLike(value)) {
     return value;
   }
   for (let i = 0; i < value.rowCount; i += 1) {
@@ -116,7 +110,7 @@ const max = ([value]: Value[]): Value => {
 
 const min = ([value]: Value[]): Value => {
   let min: Value | undefined;
-  if (!(value instanceof Column)) {
+  if (!isColumnLike(value)) {
     return value;
   }
   for (let i = 0; i < value.rowCount; i += 1) {
@@ -135,7 +129,7 @@ const min = ([value]: Value[]): Value => {
   return min;
 };
 
-const average = ([value]: Value[]): AnyValue => {
+const average = ([value]: Value[]): Value => {
   const fractions = (value.getData() as Fraction[]).map(coherceToFraction);
   if (fractions.length === 0) {
     throw new RuntimeError('average needs at least one element');

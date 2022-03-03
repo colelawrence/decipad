@@ -583,8 +583,8 @@ describe('automapValues', () => {
 
     const colVal = Values.Column.fromValues([tableVal]);
     const col = t.column(table, 1);
-    expect(automapValues([col], [colVal], callee)).toEqual(
-      Values.Column.fromValues([otherTable])
+    expect(automapValues([col], [colVal], callee).getData()).toEqual(
+      Values.Column.fromValues([otherTable]).getData()
     );
     expect(callee).toHaveBeenCalledWith([tableVal], [table]);
     callee.mockClear();
@@ -609,7 +609,9 @@ describe('automapValues', () => {
     const reducedValue = Values.fromJS(1n);
     const value = Values.Column.fromValues([reducedValue]);
 
-    automapValues([type], [value], mapFn);
+    const hc = automapValues([type], [value], mapFn);
+
+    hc.getData(); // trigger lazy execution
 
     expect(mapFn).toHaveBeenCalledWith([reducedValue], [reducedType]);
   });

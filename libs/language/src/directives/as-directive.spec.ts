@@ -92,21 +92,13 @@ describe('getValue', () => {
   it('works on a unitful column', async () => {
     const quantity = col(ne(1, 'km'), ne(2, 'km'), ne(3, 'km'));
 
-    expect(await testGetValue(getValue, quantity, ne(1, 'miles')))
+    expect((await testGetValue(getValue, quantity, ne(1, 'miles'))).getData())
       .toMatchInlineSnapshot(`
-      Column {
-        "_values": Array [
-          FractionValue {
-            "value": Fraction(0.6(213711922373339696174341843633182215859381)),
-          },
-          FractionValue {
-            "value": Fraction(1.(242742384474667939234868368726636443171876)),
-          },
-          FractionValue {
-            "value": Fraction(1.8(641135767120019088523025530899546647578143)),
-          },
-        ],
-      }
+      Array [
+        Fraction(0.6(213711922373339696174341843633182215859381)),
+        Fraction(1.(242742384474667939234868368726636443171876)),
+        Fraction(1.8(641135767120019088523025530899546647578143)),
+      ]
     `);
   });
 });

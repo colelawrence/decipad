@@ -1,13 +1,21 @@
 import { getDefined } from '@decipad/utils';
-import produce from 'immer';
 import { dequal } from 'dequal';
-import { getInstanceof, zip } from '../../utils';
-import { Column, Table, Row } from '../../interpreter/Value';
+import produce from 'immer';
 import { Realm } from '../../interpreter';
 import { compare } from '../../interpreter/compare-values';
+import { OneResult } from '../../interpreter/interpreter-types';
 import { RuntimeError } from '../../interpreter/RuntimeError';
+import {
+  Column,
+  getColumnLike,
+  isColumnLike,
+  Row,
+  Table,
+  ValueTransforms,
+} from '../../interpreter/Value';
+import { build as t, Type } from '../../type';
+import { getInstanceof, zip } from '../../utils';
 import { BuiltinSpec } from '../interfaces';
-import { Type, build as t } from '../../type';
 
 export const tableOperators: { [fname: string]: BuiltinSpec } = {
   lookup: {
@@ -50,7 +58,7 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
         );
       };
 
-      if (tableOrColumn instanceof Column) {
+      if (isColumnLike(tableOrColumn)) {
         const originalTable = getInstanceof(
           getDefined(realm).stack.globalVariables.get(
             getDefined(tableType.indexedBy)
@@ -58,22 +66,21 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
           Table
         );
 
-        const lookedUp =
-          tableOrColumn.values[getNeedleIndexAtTable(originalTable)];
-        if (!lookedUp) {
+        const index = getNeedleIndexAtTable(originalTable);
+        if (index === -1) {
           throw new RuntimeError(
             `Could not find a row with the given condition`
           );
         }
 
-        return lookedUp;
+        return tableOrColumn.atIndex(index);
       }
 
       const table = getInstanceof(tableOrColumn, Table);
 
       let rowIndex: number;
-      if (needle instanceof Column) {
-        rowIndex = needle.getData().findIndex(Boolean);
+      if (isColumnLike(needle)) {
+        rowIndex = (needle.getData() as OneResult[]).findIndex(Boolean);
       } else {
         rowIndex = getNeedleIndexAtTable(table);
       }
@@ -129,10 +136,10 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
     functor: ([table, column]) =>
       Type.combine(column.isColumn().withAtParentIndex(), table.isTable()),
     fnValues: ([_table, _column]) => {
-      const column = getInstanceof(_column, Column);
-      const sortMap = column.sortMap();
+      const column = getColumnLike(_column);
+      const sortMap = ValueTransforms.sortMap(column);
       const table = getInstanceof(_table, Table);
-      return table.mapColumns((col) => col.applyMap(sortMap));
+      return table.mapColumns((col) => ValueTransforms.applyMap(col, sortMap));
     },
   },
 
@@ -148,9 +155,11 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
         })
       ),
     fnValuesNoAutomap: ([_table, _column]) => {
-      const filterMap = getInstanceof(_column, Column).getData() as boolean[];
+      const filterMap = getColumnLike(_column).getData() as boolean[];
       const table = getInstanceof(_table, Table);
-      return table.mapColumns((col) => col.applyFilterMap(filterMap));
+      return table.mapColumns((col) =>
+        ValueTransforms.applyFilterMap(col, filterMap)
+      );
     },
   },
 };
