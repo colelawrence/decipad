@@ -16,7 +16,9 @@ export const createAutoFormatCodeBlockPlugin = (): PlatePlugin => {
   let lastFormattedBlock: LastFormattedBlock = null;
   return {
     onKeyDown: (editor) => (event) => {
-      if (event.key === '=') {
+      const hasModifiers = event.ctrlKey || event.altKey || event.metaKey;
+
+      if (!hasModifiers && event.key === '=') {
         const entry = getBlockAbove(editor);
 
         if (!entry) return;
@@ -61,9 +63,7 @@ export const createAutoFormatCodeBlockPlugin = (): PlatePlugin => {
             text: isEqualSignAfterOneWord ? nodeText : node.children[0].text,
           };
         }
-      }
-
-      if (event.key === 'Backspace') {
+      } else if (!hasModifiers && event.key === 'Backspace') {
         const entry = getBlockAbove(editor, {
           match: (n) => n.type === ELEMENT_CODE_BLOCK,
         });
@@ -85,9 +85,7 @@ export const createAutoFormatCodeBlockPlugin = (): PlatePlugin => {
 
           lastFormattedBlock = null;
         }
-      }
-
-      if (event.key !== 'Backspace' && event.key !== '=') {
+      } else {
         lastFormattedBlock = null;
       }
     },

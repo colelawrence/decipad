@@ -59,8 +59,12 @@ const renderEditorCodeBlock = (text: string) => {
   };
 };
 
-const pressKey = (key: '=' | 'Backspace' | 'w') => {
+const pressKey = (
+  key: '=' | 'Backspace' | 'w',
+  modifierKeys: Partial<Pick<KeyboardEvent, 'shiftKey' | 'altKey'>> = {}
+) => {
   const event = new KeyboardEvent('keydown', {
+    ...modifierKeys,
     key,
     cancelable: true,
   });
@@ -68,7 +72,7 @@ const pressKey = (key: '=' | 'Backspace' | 'w') => {
   // @ts-expect-error DOM KeyboardEvent vs React event
   plugin.onKeyDown?.(editor as SPEditor)(event);
 
-  if (!event.defaultPrevented) {
+  if (!event.defaultPrevented && !modifierKeys.altKey) {
     switch (key) {
       case '=':
         editor.insertText('=');
@@ -98,11 +102,30 @@ describe('Auto format code block plugin', () => {
     expect(editor.children).toEqual(makeCodeBlock('hello ='));
   });
 
-  it('goes back to a paragraph when backspace is pressed', () => {
+  it('formats a paragraph to a code block when = is pressed while holding shift on some keyboard layouts', () => {
+    renderEditorParagraph('');
+    pressKey('=', { shiftKey: true });
+    expect(editor.children).toEqual(makeCodeBlock(''));
+  });
+
+  it('does not format a paragraph to a code block when holding modifier keys', () => {
+    renderEditorParagraph('');
+    pressKey('=', { altKey: true });
+    expect(editor.children).toEqual(makeParagraph(''));
+  });
+
+  it('goes back to a paragraph with just the identifier when pressing equal and backspace', () => {
     renderEditorParagraph('hello ');
     pressKey('=');
     pressKey('Backspace');
     expect(editor.children).toEqual(makeParagraph('hello ='));
+  });
+
+  it('does not go back to a paragraph when holding modifier keys', () => {
+    renderEditorParagraph('hello ');
+    pressKey('=');
+    pressKey('Backspace', { altKey: true });
+    expect(editor.children).toEqual(makeCodeBlock('hello ='));
   });
 
   it('does not go back to a paragraph from a code block created through other means', () => {
