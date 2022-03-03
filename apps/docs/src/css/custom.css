@@ -92,18 +92,14 @@ table thead svg {
   opacity: 0;
 }
 
-table tr:nth-child(2n) {
-  background-color: #ccc
-}
-
 .theme-doc-markdown p {
   max-width: 652px;
   color: var(--ifm-color-primary-dark);
 }
 
-/* Markdown Tables */
-html[data-theme='dark'] table tr:nth-child(2n) {
-  background-color: var(--ifm-code-background);
+/* Tables */
+table tr:nth-child(2n) {
+  background-color: rgba(204, 204, 204, 0.3);
 }
 
 /* Footer */
@@ -120,7 +116,6 @@ html[data-theme='dark'] table tr:nth-child(2n) {
 }
 
 /* Search */
-
 [data-theme='light'] .DocSearch {
   /* --docsearch-primary-color: var(--ifm-color-primary); */
   /* --docsearch-text-color: var(--ifm-font-color-base); */
