@@ -1,3 +1,7 @@
+// While we have Nx and can't know that a package.json script has already set TZ because there are so many ways of running Jest,
+// we need to also ensure a defined TZ for the tests here just in case of e.g. `yarn nx test ui`.
+process.env.TZ = process.env.TZ || 'America/Los_Angeles';
+
 module.exports = {
   collectCoverageFrom: ['<rootDir>/src/**'],
   coveragePathIgnorePatterns: ['^((?!<rootDir>).)*$'],
