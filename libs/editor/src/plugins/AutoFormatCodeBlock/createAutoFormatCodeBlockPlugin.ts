@@ -5,7 +5,6 @@ import {
   setNodes,
   unwrapCodeBlock,
 } from '@udecode/plate';
-import isHotkey from 'is-hotkey';
 import { ELEMENT_CODE_BLOCK, ELEMENT_PARAGRAPH } from '../../elements';
 
 type LastFormattedBlock = null | {
@@ -17,7 +16,7 @@ export const createAutoFormatCodeBlockPlugin = (): PlatePlugin => {
   let lastFormattedBlock: LastFormattedBlock = null;
   return {
     onKeyDown: (editor) => (event) => {
-      if (isHotkey('=', event)) {
+      if (event.key === '=') {
         const entry = getBlockAbove(editor);
 
         if (!entry) return;
@@ -64,7 +63,7 @@ export const createAutoFormatCodeBlockPlugin = (): PlatePlugin => {
         }
       }
 
-      if (isHotkey('backspace', event)) {
+      if (event.key === 'Backspace') {
         const entry = getBlockAbove(editor, {
           match: (n) => n.type === ELEMENT_CODE_BLOCK,
         });
@@ -88,7 +87,7 @@ export const createAutoFormatCodeBlockPlugin = (): PlatePlugin => {
         }
       }
 
-      if (!isHotkey('backspace', event) && !isHotkey('=', event)) {
+      if (event.key !== 'Backspace' && event.key !== '=') {
         lastFormattedBlock = null;
       }
     },

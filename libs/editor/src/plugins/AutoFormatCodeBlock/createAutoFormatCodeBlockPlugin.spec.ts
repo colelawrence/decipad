@@ -1,5 +1,4 @@
 import { createEditorPlugins, PlatePlugin, SPEditor } from '@udecode/plate';
-import { toKeyCode } from 'is-hotkey';
 import { Editor, Node } from 'slate';
 import {
   Element,
@@ -60,12 +59,10 @@ const renderEditorCodeBlock = (text: string) => {
   };
 };
 
-const pressKey = (key: '=' | 'backspace' | 'w') => {
+const pressKey = (key: '=' | 'Backspace' | 'w') => {
   const event = new KeyboardEvent('keydown', {
     key,
     cancelable: true,
-    // @ts-expect-error nonstandard but widely supported property
-    which: toKeyCode(key),
   });
 
   // @ts-expect-error DOM KeyboardEvent vs React event
@@ -76,7 +73,7 @@ const pressKey = (key: '=' | 'backspace' | 'w') => {
       case '=':
         editor.insertText('=');
         break;
-      case 'backspace':
+      case 'Backspace':
         editor.deleteBackward('character');
         break;
       case 'w':
@@ -104,13 +101,13 @@ describe('Auto format code block plugin', () => {
   it('goes back to a paragraph when backspace is pressed', () => {
     renderEditorParagraph('hello ');
     pressKey('=');
-    pressKey('backspace');
+    pressKey('Backspace');
     expect(editor.children).toEqual(makeParagraph('hello ='));
   });
 
   it('does not go back to a paragraph from a code block created through other means', () => {
     renderEditorCodeBlock('a =');
-    pressKey('backspace');
+    pressKey('Backspace');
     expect(editor.children).toEqual(makeCodeBlock('a '));
   });
 
@@ -136,7 +133,7 @@ describe('Auto format code block plugin', () => {
     renderEditorParagraph('hello ');
     pressKey('=');
     editor.insertText(' 10 apples');
-    pressKey('backspace');
+    pressKey('Backspace');
     expect(editor.children).toEqual(makeCodeBlock('hello = 10 apple'));
   });
 
@@ -178,7 +175,7 @@ describe('Auto format code block plugin', () => {
       focus: { path: [0, 0, 0], offset: 'hello = 10 apples'.length },
     };
 
-    pressKey('backspace');
+    pressKey('Backspace');
 
     // Press backspace on the formatted code block (second one) and expect it to undo to paragraph
     editor.selection = {
@@ -186,7 +183,7 @@ describe('Auto format code block plugin', () => {
       focus: { path: [1, 0, 0], offset: 'hello2 ='.length },
     };
 
-    pressKey('backspace');
+    pressKey('Backspace');
 
     expect(editor.children).toEqual([
       expect.objectContaining({ type: ELEMENT_CODE_BLOCK }),
@@ -227,7 +224,7 @@ describe('Auto format code block plugin', () => {
       focus: { path: [0, 0, 0], offset: 'a ='.length },
     };
 
-    pressKey('backspace');
+    pressKey('Backspace');
 
     expect(editor.children[0]).toEqual(
       expect.objectContaining({ type: ELEMENT_CODE_BLOCK })
