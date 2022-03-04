@@ -1,3 +1,4 @@
+import waitForExpect from 'wait-for-expect';
 import {
   focusOnBody,
   setUp,
@@ -82,20 +83,22 @@ describe('pad content', () => {
     await keyPress('ArrowDown');
     await createCalculationBlockBelow('A.C');
 
-    const blocks = await getCalculationBlocks();
+    await waitForExpect(async () => {
+      const blocks = await getCalculationBlocks();
 
-    expect(blocks).toMatchObject([
-      expect.any(Object),
-      expect.any(Object),
-      {
-        lines: [
-          {
-            code: 'A.C',
-            result: expect.stringMatching(/warning/i),
-          },
-        ],
-        result: null,
-      },
-    ]);
+      expect(blocks).toMatchObject([
+        expect.any(Object),
+        expect.any(Object),
+        {
+          lines: [
+            {
+              code: 'A.C',
+              result: expect.stringMatching(/warning/i),
+            },
+          ],
+          result: null,
+        },
+      ]);
+    });
   });
 });

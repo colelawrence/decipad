@@ -36,6 +36,11 @@ export async function createCalculationBlockBelow(decilang: string) {
   );
 
   await page.keyboard.type(decilang);
+
+  await waitForExpect(async () => {
+    const lastCode = await page.$('[contenteditable] code >> nth=-1');
+    expect(await lastCode?.textContent()).toEqual(decilang);
+  });
 }
 
 async function stringifyCodeLineAndResult([codeLine, lineResult]: Readonly<
@@ -85,12 +90,14 @@ async function fetchCalculationBlock(
 export async function getCalculationBlocks(
   expectNoErrors = false
 ): Promise<CalculationBlock[]> {
-  const calculationBlocks = await page.$$(
-    '//*[@contenteditable]//section[//code]'
-  );
+  let blocks: ElementHandle[] = [];
+
+  await waitForExpect(async () => {
+    // waitForExpect doesn't propagate the returned value
+    blocks = await page.$$('//*[@contenteditable]//section[//code]');
+    expect(blocks.length).toBeGreaterThan(0);
+  });
   return Promise.all(
-    calculationBlocks.map((block) =>
-      fetchCalculationBlock(block, expectNoErrors)
-    )
+    blocks.map((block) => fetchCalculationBlock(block, expectNoErrors))
   );
 }
