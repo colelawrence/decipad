@@ -1,9 +1,9 @@
 /* istanbul ignore file */
 import { nanoid } from 'nanoid';
-import { stringifyResult } from './result';
 import { Computer, ComputeResponse, deserializeType, InferError } from '.';
 import { RuntimeError } from './interpreter';
-import { identity } from './utils';
+import { stringifyResult } from './result';
+import { getDefined, identity } from './utils';
 
 type EvaluatedDoc = string | { crash: string };
 
@@ -73,6 +73,12 @@ const loadStdin = async () => {
   return loadedCode;
 };
 
+function timeout(ms: number, code: string): Promise<never> {
+  return new Promise((_resolve, reject) => {
+    setTimeout(() => reject(new Error(`timeout evaluating ${code}`)), ms);
+  });
+}
+
 async function main() {
   const codeExamples: Record<string, string[]> = JSON.parse(await loadStdin());
 
@@ -81,7 +87,12 @@ async function main() {
     out[file] = [];
     for (const code of liveBlocks) {
       // eslint-disable-next-line no-await-in-loop
-      out[file].push(await getDocTestString(code));
+      const evalResult = await Promise.any([
+        timeout(10000, code),
+        getDocTestString(code),
+      ]);
+      // eslint-disable-next-line no-await-in-loop
+      out[file].push(getDefined(evalResult));
     }
   }
 

@@ -10,6 +10,7 @@ import { diffLines } from 'diff';
 import prettier from 'prettier';
 import chalk from 'chalk';
 
+const DOCS_TEST_TIMEOUT_MS = 60000;
 const docsDir = new URL('.', import.meta.url).pathname;
 
 const snapshotSeparator = '\n==> ';
@@ -33,7 +34,10 @@ const runCode = (sources) => {
       '--extensions=.js,.jsx,.ts,.tsx',
       pathJoin(docsDir, '../../libs/language/src/evaluate-docs-examples.ts'),
     ],
-    { input: JSON.stringify(Object.fromEntries(sources.entries())) }
+    {
+      input: JSON.stringify(Object.fromEntries(sources.entries())),
+      timeout: DOCS_TEST_TIMEOUT_MS,
+    }
   );
 
   if (stderr && stderr.length) {

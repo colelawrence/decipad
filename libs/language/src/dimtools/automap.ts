@@ -17,10 +17,7 @@ import {
   DimensionalValue,
   groupTypesByDimension,
 } from './multidimensional-utils';
-import {
-  materializeToValue,
-  materializeWhenNonDimensional,
-} from './materialize';
+import { materializeToValue } from './materialize';
 
 /**
  * Takes a function expects a certain cardinality in each argument,
@@ -102,9 +99,7 @@ export const automapValues = (
     const mapFnAndTypes = (values: Value.Value[]) =>
       mapFn(values, reducedArgTypes);
 
-    return materializeWhenNonDimensional(
-      new Hypercube(mapFnAndTypes, ...dimensionalArgs)
-    );
+    return materializeToValue(new Hypercube(mapFnAndTypes, ...dimensionalArgs));
   } else {
     const whichToReduce = getReductionPlan(argTypes, expectedCardinalities);
 
