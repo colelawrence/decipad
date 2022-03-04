@@ -5,7 +5,15 @@ import {
   setNodes,
   unwrapCodeBlock,
 } from '@udecode/plate';
-import { ELEMENT_CODE_BLOCK, ELEMENT_PARAGRAPH } from '../../elements';
+import { NodeEntry } from 'slate';
+import {
+  BlockElement,
+  CodeBlockElement,
+  ELEMENT_CODE_BLOCK,
+  ELEMENT_PARAGRAPH,
+  ParagraphElement,
+  RichText,
+} from '../../elements';
 
 type LastFormattedBlock = null | {
   readonly id: string;
@@ -23,11 +31,13 @@ export const createAutoFormatCodeBlockPlugin = (): PlatePlugin => {
 
         if (!entry) return;
 
-        const [node] = entry;
+        const [node] = entry as NodeEntry<BlockElement>;
 
         if (node.type !== ELEMENT_PARAGRAPH || node.children.length > 1) return;
+        // Because children.length is 0, we know know there is only a text child
+        const paragraph = node as ParagraphElement & { children: [RichText] };
 
-        const nodeText = `${node.children[0].text}=`;
+        const nodeText = `${paragraph.children[0].text}=`;
 
         const tokens = tokenize(nodeText).filter(
           (token) => token.type !== 'ws'
@@ -60,7 +70,9 @@ export const createAutoFormatCodeBlockPlugin = (): PlatePlugin => {
           setNodes(editor, { type: ELEMENT_CODE_BLOCK });
           lastFormattedBlock = {
             id: node.id,
-            text: isEqualSignAfterOneWord ? nodeText : node.children[0].text,
+            text: isEqualSignAfterOneWord
+              ? nodeText
+              : paragraph.children[0].text,
           };
         }
       } else if (!hasModifiers && event.key === 'Backspace') {
@@ -70,7 +82,7 @@ export const createAutoFormatCodeBlockPlugin = (): PlatePlugin => {
 
         if (!entry) return;
 
-        const [node, path] = entry;
+        const [node, path] = entry as NodeEntry<CodeBlockElement>;
 
         if (
           lastFormattedBlock &&
@@ -81,7 +93,9 @@ export const createAutoFormatCodeBlockPlugin = (): PlatePlugin => {
           unwrapCodeBlock(editor);
           setNodes(editor, { type: ELEMENT_PARAGRAPH }, { at: path });
 
-          if (lastFormattedBlock === null) editor.insertText('=');
+          if (!node.children[0].children[0].text.endsWith('=')) {
+            editor.insertText('=');
+          }
 
           lastFormattedBlock = null;
         }

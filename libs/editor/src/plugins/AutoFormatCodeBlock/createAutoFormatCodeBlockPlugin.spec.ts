@@ -121,6 +121,13 @@ describe('Auto format code block plugin', () => {
     expect(editor.children).toEqual(makeParagraph('hello ='));
   });
 
+  it('goes back to an empty paragraph when pressing equal and backspace', () => {
+    renderEditorParagraph('');
+    pressKey('=');
+    pressKey('Backspace');
+    expect(editor.children).toEqual(makeParagraph('='));
+  });
+
   it('does not go back to a paragraph when holding modifier keys', () => {
     renderEditorParagraph('hello ');
     pressKey('=');

@@ -116,7 +116,7 @@ type EmptyText = {
 type PlainText = EmptyText | { text: string };
 export type RichText = PlainText & Partial<Record<MarkKind, true>>;
 
-type BlockElement =
+export type BlockElement =
   // Headings
   | H1Element
   | H2Element
