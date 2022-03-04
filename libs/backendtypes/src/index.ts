@@ -1,3 +1,4 @@
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 /* Basic */
@@ -416,7 +417,8 @@ export interface DataTable<T extends TableRecordBase> {
   __deci_observed__?: boolean;
 }
 
-interface EnhancedDataTable<T extends TableRecordBase> extends DataTable<T> {
+export interface EnhancedDataTable<T extends TableRecordBase>
+  extends DataTable<T> {
   create(doc: T): Promise<void>;
 }
 
@@ -435,6 +437,7 @@ export interface EnhancedDataTables {
 }
 
 export interface DataTables extends EnhancedDataTables {
+  _doc: DocumentClient;
   tags: DataTable<TagRecord>;
   usertaggedresources: DataTable<UserTaggedResourceRecord>;
   usertags: DataTable<UserTagRecord>;

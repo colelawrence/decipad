@@ -8,14 +8,16 @@ import {
   DataTable,
   DataTables,
   EnhancedDataTables,
+  EnhancedDataTable,
   TableRecordIdentifier,
   VersionedDataTable,
   VersionedTableRecord,
   VersionedDataTables,
 } from '@decipad/backendtypes';
 import { withLock, WithLockUserFunction } from '@decipad/dynamodb-lock';
-import timestamp from './timestamp';
 import allPages, { allScanPages } from './all-pages';
+import assert from 'assert';
+import { timestamp } from './timestamp';
 
 export { allPages, allScanPages };
 
@@ -56,17 +58,17 @@ export default async function tables(userId?: string): Promise<DataTables> {
     arc
       .tables()
       .then((_tables) => {
-        const dataTables = { ..._tables } as unknown as DataTables;
+        const tables = _tables as unknown as DataTables;
         for (const enhancedTableName of enhancedTables) {
-          enhance(dataTables, enhancedTableName);
+          enhance(tables, enhancedTableName);
         }
         for (const observedTable of observedTables) {
-          observe(dataTables, observedTable, userId);
+          observe(tables, observedTable, userId);
         }
         for (const versionedTable of versionedTables) {
-          withWithVersion(dataTables, arc.tables.doc, versionedTable);
+          withWithVersion(tables, tables._doc, versionedTable);
         }
-        resolve(dataTables);
+        resolve(tables);
       })
       .catch(reject);
   });
@@ -149,14 +151,17 @@ function deleteReplacer<T extends ConcreteRecord>(
   };
 }
 
-function enhance(dataTables: DataTables, tableName: keyof DataTables) {
-  const table = dataTables[tableName];
+function enhance(
+  dataTables: DataTables,
+  tableName: keyof DataTables
+): EnhancedDataTable<any> {
+  const table = dataTables[tableName] as unknown as EnhancedDataTable<any>;
   if (!table) {
     throw new Error(`No table named ${tableName}`);
   }
 
-  if (typeof table.create === 'function') {
-    return;
+  if (typeof (table as unknown as DataTable<any>).create === 'function') {
+    return table;
   }
 
   // TODO type this magic property
@@ -168,20 +173,25 @@ function enhance(dataTables: DataTables, tableName: keyof DataTables) {
 
     return table.put(doc, noEvents);
   };
+  return table;
 }
 
 function withWithVersion(
   dataTables: DataTables,
   db: DocumentClient,
   tableName: keyof VersionedDataTables
-) {
-  const table = dataTables[tableName];
+): VersionedDataTable<VersionedTableRecord> {
+  assert(db, 'need a db');
+  const table = dataTables[
+    tableName
+  ] as VersionedDataTable<VersionedTableRecord>;
   if (!table) {
     throw new Error(`No table named ${tableName}`);
   }
   const locking = withLock(db, tableName);
-  (table as VersionedDataTable<VersionedTableRecord>).withLock = (
+  table.withLock = (
     id: string,
     fn: WithLockUserFunction<VersionedTableRecord>
   ) => locking(id, fn);
+  return table;
 }

@@ -4,7 +4,7 @@ import Boom from '@hapi/boom';
 import tables from '@decipad/tables';
 import { DynamodbPersistence } from '@decipad/y-dynamodb';
 import { LambdaWebsocketProvider } from '@decipad/y-lambdawebsocket';
-import { getDefined } from '@decipad/utils';
+import { getDefined, timeout } from '@decipad/utils';
 
 export interface AfterConnectPayload {
   connectionId: string;
@@ -29,6 +29,8 @@ export async function afterConnect({
 
   await comms.flush();
   await persistence.flush();
+
+  await timeout(1000);
 
   return { statusCode: 200 };
 }

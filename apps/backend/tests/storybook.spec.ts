@@ -24,12 +24,9 @@ test('the storybook handler', (env) => {
     }
   });
 
-  it.each(['/.storybook/', '/.storybook'])(
-    'redirects %s to the storybook index.html',
-    async (pathname) => {
-      const resp = await env.http.call(pathname);
-      expect(resp.redirected).toBe(true);
-      expect(new URL(resp.url).pathname).toBe('/.storybook/index.html');
-    }
-  );
+  it('redirects /.storybook to the storybook index.html', async () => {
+    const resp = await env.http.call('/.storybook', { redirect: 'manual' });
+    expect(resp.status).toBe(301);
+    expect(resp.headers.get('location')).toMatch(/\.storybook\/index\.html/);
+  });
 });

@@ -1,18 +1,30 @@
 @app
 decipad-backend
 
+@sandbox
+useAws false
+no-hydrate true
+
+@sandbox-startup
+node scripts/sandbox_seed_db.js
 
 @http
-get /graphql
-post /graphql
-get /.storybook
 get /docs
 get /docs/*
+get /.storybook
+get /.storybook/*
+
+get /graphql
+post /graphql
+
+get /api/version
+
 post /api/auth/signin/:provider
 get /api/auth/callback/:provider
 get /api/auth/token
 post /api/auth/signout
 get /api/auth/*
+
 get /api/invites/:inviteid/accept
 get /api/userkeyvalidations/:userkeyvalidationid/validate
 get /api/externaldatasources/:id/auth
@@ -22,7 +34,8 @@ get /api/pads/:padid/attachments/:attachmentid
 get /api/pads/:padid/export
 post /api/discord
 get /api/ws
-get /api/version
+
+@static
 
 @ws
 
@@ -193,7 +206,7 @@ superadminactionlogs
   id *String
   expiresAt TTL
 
-@indexes
+@tables-indexes
 users
   secret *String
   name bySecret

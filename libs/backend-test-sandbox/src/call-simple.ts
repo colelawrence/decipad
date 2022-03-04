@@ -39,7 +39,7 @@ export default ({ apiPort }: { apiPort: number }): CallSimple => {
 
   async function call(url: string, options: RequestInit = {}) {
     const response = await justFetch(url, options);
-    if (!response.ok) {
+    if (!response.ok && response.status >= 400) {
       throw new Error(
         `response from ${url} was not ok: ${
           response.status

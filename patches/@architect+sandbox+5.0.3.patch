@@ -1,9 +1,9 @@
 diff --git a/node_modules/@architect/sandbox/src/http/invoke-http/index.js b/node_modules/@architect/sandbox/src/http/invoke-http/index.js
-index dcb3042..69f3a19 100644
+index 943d529..13cfadc 100644
 --- a/node_modules/@architect/sandbox/src/http/invoke-http/index.js
 +++ b/node_modules/@architect/sandbox/src/http/invoke-http/index.js
-@@ -87,11 +87,11 @@ module.exports = function invokeHTTP (params) {
- function end (res, body = '') {
+@@ -80,12 +80,12 @@ function end (res, body = '', opts) {
+   let { livereload, ports } = opts
    let MB = 1000 * 1000
    let itBeChonky = 6 * MB // Max Lambda payload size
 -  if (body.length > itBeChonky) {
@@ -13,21 +13,121 @@ index dcb3042..69f3a19 100644
      invalid(res, body)
      res.end(body)
    }
+   else if (livereload) _livereload(res, body, ports)
 -  else res.end(body)
 +  else res.end(body || '')
  }
+diff --git a/node_modules/@architect/sandbox/src/invoke-lambda/index.js b/node_modules/@architect/sandbox/src/invoke-lambda/index.js
+index 5e416fc..6474c5e 100644
+--- a/node_modules/@architect/sandbox/src/invoke-lambda/index.js
++++ b/node_modules/@architect/sandbox/src/invoke-lambda/index.js
+@@ -1,73 +1 @@
+-let { existsSync } = require('fs')
+-let chalk = require('chalk')
+-
+-let getEnv = require('./env')
+-let exec = require('./exec')
+-let warn = require('./warn')
+-
+-let serialize = i => chalk.dim(JSON.stringify(i, null, 2))
+-
+-module.exports = function invokeLambda (params, callback) {
+-  let { apiType, cwd, event, inventory, lambda, staticPath, update } = params
+-
+-  // handlerFile is defined for all non-ASAP functions; ASAP bypasses this check
+-  if (!hasHandler(lambda)) {
+-    return callback(Error('lambda_not_found'))
+-  }
+-
+-  // Next check payload size is within limits
+-  let maxSize = 1000 * 6000
+-  let { body, Records } = event
+-  let bodySize = body && JSON.stringify(body).length || 0
+-  let payloadSize = Records && JSON.stringify(Records).length || 0
+-  if (bodySize > maxSize || payloadSize > maxSize) {
+-    let err = Error('Maximum event body exceeded: Lambda allows up to 6MB payloads (base64-encoded)')
+-    return callback(err)
+-  }
+-
+-  // Now send along for execution
+-  let { build, src, config } = lambda
+-  let lambdaPath = src.replace(cwd, '').substr(1)
+-
+-  update.debug.status(`Lambda config: ${lambdaPath}`)
+-  update.debug.raw(serialize(lambda))
+-
+-  let max = 10000
+-  let output = serialize(event).substr(0, max)
+-  let chonky = output.length === 10000
+-  update.debug.status(`Lambda event payload: ${lambdaPath}`)
+-  update.debug.raw(output + '...')
+-  if (chonky) update.debug.status('Truncated event payload log at 10KB')
+-
+-  exec(lambda, {
+-    // Internal execution context
+-    context: { apiType, inventory, staticPath, update },
+-    // Child process options
+-    options: {
+-      cwd: build || src,
+-      env: getEnv(params),
+-      shell: true,
+-    },
+-    request: JSON.stringify(event),
+-    timeout: config.timeout * 1000,
+-  }, function done (err, result, meta = {}) {
+-    if (err) callback(err)
+-    else {
+-      let { missing, debug } = meta
+-      // Dependency warning debugger - handy for introspection during Lambda execution
+-      if (debug) {
+-        update.debug.status(`Lambda debug data: ${lambdaPath}`)
+-        update.debug.raw(serialize(debug))
+-      }
+-      warn({ missing, inventory, src, update })
+-      callback(null, result)
+-    }
+-  })
+-}
+-
+-function hasHandler (lambda) {
+-  let { handlerFile, arcStaticAssetProxy, _skipHandlerCheck } = lambda
+-  // We don't need to do a handlerFile check if it's an ASAP / Arc 6 greedy root req
+-  if (arcStaticAssetProxy || _skipHandlerCheck) return true
+-  return existsSync(handlerFile)
+-}
++module.exports = require('./nodelambda/invoke');
+diff --git a/node_modules/@architect/sandbox/src/invoke-lambda/nodelambda/get-env.js b/node_modules/@architect/sandbox/src/invoke-lambda/nodelambda/get-env.js
+new file mode 100644
+index 0000000..045c30e
+--- /dev/null
++++ b/node_modules/@architect/sandbox/src/invoke-lambda/nodelambda/get-env.js
+@@ -0,0 +1,13 @@
++const defaultEnv = (ports) => ({
++  'ARC_WSS_URL': `ws://localhost:${ports.http}/ws`
++})
++
++module.exports.getEnv = function getEnv(ports) {
++  const env = process.env;
++  for (const [key, value] of Object.entries(defaultEnv(ports))) {
++    if (!env[key]) {
++      env[key] = value;
++    }
++  }
++  return env;
++}
 diff --git a/node_modules/@architect/sandbox/src/invoke-lambda/nodelambda/invoke.js b/node_modules/@architect/sandbox/src/invoke-lambda/nodelambda/invoke.js
 new file mode 100644
-index 0000000..bec49ef
+index 0000000..08ca95b
 --- /dev/null
 +++ b/node_modules/@architect/sandbox/src/invoke-lambda/nodelambda/invoke.js
-@@ -0,0 +1,82 @@
+@@ -0,0 +1,83 @@
 +const { workerFor } = require('./workers');
++const { getEnv } = require('./get-env');
++
++const DEFAULT_TIMEOUT = 60000;
 +
 +module.exports = function invokeByRunning(params, callback) {
-+  const { options, request, timeout, update } = params;
-+  const { env, cwd } = options;
-+  const functionPath = `${cwd}/index.js`;
++  const { event, ports, lambda: { handlerFile }, update, timeout = DEFAULT_TIMEOUT } = params;
 +  const headers = {
 +    'content-type': 'text/html; charset=utf8;',
 +    'cache-control':
@@ -35,8 +135,8 @@ index 0000000..bec49ef
 +  };
 +  let returned = false;
 +
-+  const event = JSON.parse(request);
-+  const worker = workerFor(functionPath, env, update);
++  const env = getEnv(ports);
++  const worker = workerFor(handlerFile, env, update);
 +  worker.work(event, (err, response) => {
 +    returned = true;
 +    done(err, response);
@@ -106,7 +206,7 @@ index 0000000..bec49ef
 +};
 diff --git a/node_modules/@architect/sandbox/src/invoke-lambda/nodelambda/run.js b/node_modules/@architect/sandbox/src/invoke-lambda/nodelambda/run.js
 new file mode 100644
-index 0000000..017ab7c
+index 0000000..76dd75d
 --- /dev/null
 +++ b/node_modules/@architect/sandbox/src/invoke-lambda/nodelambda/run.js
 @@ -0,0 +1,67 @@
@@ -115,10 +215,9 @@ index 0000000..017ab7c
 +const { join } = require('path');
 +const { existsSync: exists, readFileSync: read } = require('fs');
 +
-+const { arcConfig, arcContext, functionPath } = workerData;
++const { functionPath } = workerData;
 +
-+const { handlerFunction, shared } = arcConfig;
-+const context = arcContext;
++const handlerFunction = 'handler';
 +const cwd = process.cwd();
 +const fn = loadFunction();
 +
@@ -128,7 +227,7 @@ index 0000000..017ab7c
 +  JSON.parse(read(join(dir, 'package.json')));
 +const lambdaPackage = pkg(cwd);
 +
-+const debug = [{ note: 'Execution metadata', cwd, lambdaPackage, shared }];
++const debug = [{ note: 'Execution metadata', cwd, lambdaPackage }];
 +
 +function callback(err, result) {
 +  if (err) console.log(err);
@@ -149,6 +248,7 @@ index 0000000..017ab7c
 +      callback(err, result);
 +    }
 +  };
++  const context = {};
 +  const result = fn(event, context, callbackGuard);
 +  if (result instanceof Promise) {
 +    result
@@ -179,10 +279,10 @@ index 0000000..017ab7c
 +}
 diff --git a/node_modules/@architect/sandbox/src/invoke-lambda/nodelambda/workers.js b/node_modules/@architect/sandbox/src/invoke-lambda/nodelambda/workers.js
 new file mode 100644
-index 0000000..f8d87a9
+index 0000000..9232634
 --- /dev/null
 +++ b/node_modules/@architect/sandbox/src/invoke-lambda/nodelambda/workers.js
-@@ -0,0 +1,117 @@
+@@ -0,0 +1,115 @@
 +const { Worker } = require('worker_threads');
 +const assert = require('assert');
 +const watch = require('node-watch');
@@ -195,8 +295,6 @@ index 0000000..f8d87a9
 +  const replyQueue = [];
 +
 +  const workerData = {
-+    arcConfig: JSON.parse(env.__ARC_CONFIG__),
-+    arcContext: JSON.parse(env.__ARC_CONTEXT__),
 +    functionPath: functionName,
 +  };
 +
@@ -300,22 +398,3 @@ index 0000000..f8d87a9
 +
 +  return fn;
 +};
-diff --git a/node_modules/@architect/sandbox/src/invoke-lambda/run-in-node.js b/node_modules/@architect/sandbox/src/invoke-lambda/run-in-node.js
-index f788df1..6474c5e 100644
---- a/node_modules/@architect/sandbox/src/invoke-lambda/run-in-node.js
-+++ b/node_modules/@architect/sandbox/src/invoke-lambda/run-in-node.js
-@@ -1,13 +1 @@
--let load = require('./runtimes/_loader')
--let spawn = require('./spawn')
--
--module.exports = function runInNode (params, callback) {
--  let { node } = load()
--  let minify = script => '"' + script.replace(/\n/g, '').trim() + '"'
--  let script = minify(node)
--  spawn({
--    command: 'node',
--    args: [ '-e', script ],
--    ...params,
--  }, callback)
--}
-+module.exports = require('./nodelambda/invoke');

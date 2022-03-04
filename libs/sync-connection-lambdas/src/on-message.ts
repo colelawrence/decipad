@@ -1,6 +1,6 @@
 import { Doc as YDoc } from 'yjs';
 import { nanoid } from 'nanoid';
-import { HttpResponse, ws } from '@architect/functions';
+import arc, { HttpResponse } from '@architect/functions';
 import Boom from '@hapi/boom';
 import tables from '@decipad/tables';
 import { DynamodbPersistence } from '@decipad/y-dynamodb';
@@ -22,7 +22,7 @@ type ErrorWithCode = Error & {
 
 async function send(connId: string, message: Uint8Array): Promise<void> {
   const payload = Buffer.from(message).toString('base64');
-  await ws.send({ id: connId, payload });
+  await arc.ws.send({ id: connId, payload });
 }
 
 async function trySend(connId: string, payload: Uint8Array): Promise<void> {

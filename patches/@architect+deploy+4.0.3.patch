@@ -1,0 +1,13 @@
+diff --git a/node_modules/@architect/deploy/src/sam/index.js b/node_modules/@architect/deploy/src/sam/index.js
+index ff8fb1d..3cfbc46 100644
+--- a/node_modules/@architect/deploy/src/sam/index.js
++++ b/node_modules/@architect/deploy/src/sam/index.js
+@@ -55,7 +55,7 @@ module.exports = function samDeploy (params, callback) {
+   let compat, finalCloudFormation
+ 
+   if (name) {
+-    stackname += toLogicalID(name)
++    stackname += toLogicalID(name.toString())
+   }
+ 
+   if (eject) {

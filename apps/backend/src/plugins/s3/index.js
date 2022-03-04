@@ -35,11 +35,9 @@ function pkg({ arc, cloudformation, stage='staging', inventory, createFunction }
   return cloudformation;
 }
 
-function start({ arc, inventory, invokeFunction, services }, callback) {
+function start({ arc, inventory, invokeFunction, services }) {
   s3rver = new S3rver(options);
-  s3rver.run()
-    .then(() => callback())
-    .catch(callback);
+  return s3rver.run();
 }
 
 function end({ arc, inventory, services }, callback) {

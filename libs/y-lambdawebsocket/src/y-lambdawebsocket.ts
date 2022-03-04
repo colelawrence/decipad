@@ -7,7 +7,7 @@ import * as syncProtocol from 'y-protocols/sync';
 import * as authProtocol from 'y-protocols/auth';
 import * as awarenessProtocol from 'y-protocols/awareness';
 import { Observable } from 'lib0/observable';
-import { ws } from '@architect/functions';
+import arc from '@architect/functions';
 import tables from '@decipad/tables';
 import { fnQueue } from '@decipad/fnqueue';
 import { noop } from '@decipad/utils';
@@ -168,7 +168,7 @@ const broadcastMessage = async (
 
 const send = async (connId: string, message: Uint8Array): Promise<void> => {
   const payload = Buffer.from(message).toString('base64');
-  await ws.send({ id: connId, payload });
+  await arc.ws.send({ id: connId, payload });
 };
 
 const trySend = async (connId: string, payload: Uint8Array): Promise<void> => {

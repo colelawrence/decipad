@@ -97,7 +97,6 @@ async function esBuildOptions(env) {
 }
 
 const env = getEnv();
-console.log('Env vars:\n', env);
 printEnv(env);
 console.log('');
 

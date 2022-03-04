@@ -25,6 +25,20 @@ export interface TestContext {
   gql: typeof gql;
 }
 
+function cleanse(env: Env): Env {
+  const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, ...rest } = env;
+  const cleansed: Record<string, string | undefined> = {
+    ...rest,
+  };
+  if (AWS_ACCESS_KEY_ID) {
+    cleansed.AWS_ACCESS_KEY_ID = '***REDACTED***';
+  }
+  if (AWS_SECRET_ACCESS_KEY) {
+    cleansed.AWS_SECRET_ACCESS_KEY = '***REDACTED***';
+  }
+  return cleansed;
+}
+
 export function testWithSandbox(
   description: string,
   spec: (ctx: TestContext) => void
@@ -94,7 +108,7 @@ export function testWithSandbox(
       shownEnv = true;
       console.log(
         `Printing sandbox environment because an error happened:\n${JSON.stringify(
-          env,
+          cleanse(env),
           null,
           '\t'
         )}`
