@@ -9,13 +9,13 @@ no-hydrate true
 node scripts/sandbox_seed_db.js
 
 @http
-get /docs
-get /docs/*
-get /.storybook
-get /.storybook/*
+any /*
+any /docs
+any /docs/*
+any /.storybook
+any /.storybook/*
 
-get /graphql
-post /graphql
+any /graphql
 
 get /api/version
 
@@ -36,6 +36,7 @@ post /api/discord
 get /api/ws
 
 @static
+folder public
 
 @ws
 

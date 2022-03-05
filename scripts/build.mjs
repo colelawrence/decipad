@@ -30,6 +30,7 @@ const envVarNames = [
   'DISCORD_PUBLIC_KEY',
   'DISCORD_APP_ID',
   'NODE_OPTIONS',
+  'ARC_STATIC_SPA',
 ];
 
 function getEnvVar(name) {

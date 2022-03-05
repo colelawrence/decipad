@@ -14,5 +14,13 @@
       "source.organizeImports": true
     }
   },
-  "cSpell.words": ["Buildable", "cacheable", "frontends", "nrwl"]
+  "cSpell.words": [
+    "Buildable",
+    "cacheable",
+    "DECI",
+    "frontends",
+    "GOOGLESHEETS",
+    "NEXTAUTH",
+    "nrwl"
+  ]
 }

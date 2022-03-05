@@ -9,6 +9,10 @@ export const handler = async (req) => {
       },
     };
   }
-  const params = { cacheControl: 'max-age=0' };
+  const params = {
+    cacheControl: 'max-age=0',
+    sandboxPath: 'public',
+    env: process.env.ARC_ENV || 'testing',
+  };
   return asap(params)(req);
 };

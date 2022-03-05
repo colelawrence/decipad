@@ -2,13 +2,13 @@
 // existing sequential test "story" very granular
 /* eslint-disable jest/expect-expect */
 
-import waitForExpect from 'wait-for-expect';
+import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
+import { Attachment, Pad, Workspace } from '@decipad/backendtypes';
 import FormData from 'form-data';
 import { createReadStream } from 'fs';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
-import { Workspace, Pad, Attachment } from '@decipad/backendtypes';
-import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
+import waitForExpect from 'wait-for-expect';
 
 test('attach files', (ctx) => {
   const { test: it } = ctx;
@@ -300,34 +300,5 @@ test('attach files', (ctx) => {
         }
       `,
     });
-  });
-
-  it('other user can no longer list attachment in pad', async () => {
-    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
-    const pad2: Pad = (
-      await client.query({
-        query: ctx.gql`
-          query {
-            getPadById(id: "${pad.id}") {
-              id
-              attachments {
-                id
-                fileName
-                fileType
-                fileSize
-                uploadedBy {
-                  id
-                }
-                pad {
-                  id
-                }
-              }
-            }
-          }
-        `,
-      })
-    ).data.getPadById;
-
-    expect(pad2.attachments).toHaveLength(0);
   });
 });
