@@ -1,26 +1,26 @@
-import {
-  APIGatewayProxyEventV2 as APIGatewayProxyEvent,
-  APIGatewayProxyResultV2 as HttpResponse,
-  APIGatewayProxyEventQueryStringParameters,
-} from 'aws-lambda';
-import { OAuth2 } from 'oauth';
-import { nanoid } from 'nanoid';
-import { parse as decodeCookie } from 'simple-cookie';
-import Boom from '@hapi/boom';
 import { ExternalKeyRecord } from '@decipad/backendtypes';
-import tables from '@decipad/tables';
+import { app, thirdParty as thirdPartyConfig } from '@decipad/config';
+import { provider as externalDataProvider } from '@decipad/externaldata';
 import { expectAuthenticated } from '@decipad/services/authentication';
 import { expectAuthorized } from '@decipad/services/authorization';
-import { provider as externalDataProvider } from '@decipad/externaldata';
-import { thirdParty as thirdPartyConfig, app } from '@decipad/config';
-import handle from '../handle';
-import { HttpError } from '../HttpError';
+import tables from '@decipad/tables';
+import Boom from '@hapi/boom';
+import {
+  APIGatewayProxyEventQueryStringParameters,
+  APIGatewayProxyEventV2 as APIGatewayProxyEvent,
+  APIGatewayProxyResultV2 as HttpResponse,
+} from 'aws-lambda';
+import { nanoid } from 'nanoid';
+import { OAuth2 } from 'oauth';
+import { parse as decodeCookie } from 'simple-cookie';
 import getDefined from '../../common/get-defined';
 import timestamp from '../../common/timestamp';
+import handle from '../handle';
+import { HttpError } from '../HttpError';
 
 export const handler = handle(
   async (event: APIGatewayProxyEvent): Promise<HttpResponse> => {
-    const { user } = await expectAuthenticated(event);
+    const [{ user }] = await expectAuthenticated(event);
 
     const cookies = event.cookies?.map((c) => decodeCookie(c));
     const id = cookies?.find((c) => c.name === 'externaldatasourceid')?.value;

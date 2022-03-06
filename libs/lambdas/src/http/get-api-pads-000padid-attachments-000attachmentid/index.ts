@@ -1,13 +1,13 @@
-import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
-import Boom from '@hapi/boom';
 import { expectAuthenticated } from '@decipad/services/authentication';
 import { expectAuthorized } from '@decipad/services/authorization';
 import { getURL } from '@decipad/services/blobs/attachments';
 import tables from '@decipad/tables';
+import Boom from '@hapi/boom';
+import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
 import handle from '../handle';
 
 exports.handler = handle(async (event: APIGatewayProxyEvent) => {
-  const { user } = await expectAuthenticated(event);
+  const [{ user }] = await expectAuthenticated(event);
   if (!event.pathParameters) {
     throw Boom.notAcceptable('missing parameters');
   }

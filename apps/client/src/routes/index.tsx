@@ -13,18 +13,8 @@ export function Router(): ReturnType<FC> {
   return (
     <Switch>
       <Route
-        path="/workspaces/:workspaceid/pads/:padid"
-        render={({ match }) => (
-          <RequireSession allowSecret>
-            <Notebook
-              workspaceId={match.params.workspaceid}
-              notebookId={decodeVanityUrlComponent(match.params.padid)}
-            />
-          </RequireSession>
-        )}
-      />
-      <Route
-        path="/workspaces/:workspaceid"
+        exact
+        path={['/workspaces/:workspaceid', '/w/:workspaceid']}
         render={({ match }) => (
           <RequireSession>
             <RouteEvents category="workspace">
@@ -33,21 +23,35 @@ export function Router(): ReturnType<FC> {
           </RequireSession>
         )}
       />
-      <Route path="/playground">
+      <Route exact path="/playground">
         <RouteEvents category="playground">
           <Playground />
         </RouteEvents>
       </Route>
-      <Route path="/verifyEmail">
+      <Route exact path="/verifyEmail">
         <GlobalStyles>
           <VerifyEmail />
         </GlobalStyles>
       </Route>
-      <Route path="/">
+      <Route exact path="/">
         <RequireSession>
           <Home />
         </RequireSession>
       </Route>
+      <Route
+        path={[
+          '/n/:padid',
+          '/workspaces/:workspaceid/pads/:padid',
+          '/w/:workspaceid/pads/:padid',
+        ]}
+        render={({ match }) => (
+          <RequireSession allowSecret>
+            <Notebook
+              notebookId={decodeVanityUrlComponent(match.params.padid)}
+            />
+          </RequireSession>
+        )}
+      />
       <Route render={() => <>Not Found</>} />
     </Switch>
   );

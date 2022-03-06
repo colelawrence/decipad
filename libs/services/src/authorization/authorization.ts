@@ -1,10 +1,10 @@
-import Boom from '@hapi/boom';
 import {
-  TableRecordIdentifier,
-  PermissionType,
   PermissionRecord,
+  PermissionType,
+  TableRecordIdentifier,
 } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
+import Boom from '@hapi/boom';
 import { hasMinimumPermission } from './minimum-permission';
 
 function canonizeResource(resource: string): string {

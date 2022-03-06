@@ -71,10 +71,10 @@ async function fetchCalculationBlock(
 
   const codeLines = await codeBlock.$$('code');
   const codeLinesWithResults = await Promise.all(
-    codeLines.map(
-      async (codeLine) =>
-        [codeLine, (await codeLine.$$('//following::output'))[0]] as const
-    )
+    codeLines.map(async (codeLine) => {
+      const output = (await codeLine.$$('//following::output'))[0];
+      return [codeLine, output] as const;
+    })
   );
 
   const blockResult = await codeBlock.$('xpath=/output');

@@ -1,6 +1,6 @@
-import { ForbiddenError } from 'apollo-server-lambda';
 import { PermissionType, User } from '@decipad/backendtypes';
 import { isAuthorized as isAuthorizedBase } from '@decipad/services/authorization';
+import { ForbiddenError } from 'apollo-server-lambda';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 type Context = {

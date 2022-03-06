@@ -1,5 +1,5 @@
-import waitForExpect from 'wait-for-expect';
 import { initialWorkspace } from '@decipad/initial-workspace';
+import waitForExpect from 'wait-for-expect';
 import {
   clickNewPadButton,
   duplicatePad,
@@ -22,7 +22,7 @@ describe('Workspace', () => {
   test('creates a new pad and navigates to pad detail', async () => {
     await clickNewPadButton();
     await expect(
-      page.waitForNavigation({ url: '/workspaces/*/pads/*' })
+      page.waitForNavigation({ url: '/n/*' })
     ).resolves.not.toThrow();
     await page.goBack();
   });
@@ -62,7 +62,7 @@ describe('Workspace', () => {
     expect(pads.length).toBeGreaterThan(0);
     const pad = pads[0];
     await pad.anchor.click();
-    expect(page.url()).toMatch(/\/workspaces\/[^/]+\/pads\/[^/]+/);
+    expect(page.url()).toMatch(/\/n\/[^/]+/);
     await page.goBack();
   });
 });

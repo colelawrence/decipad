@@ -1,22 +1,23 @@
+import { app } from '@decipad/config';
+import { provider as externalDataProvider } from '@decipad/externaldata';
+import { expectAuthenticated } from '@decipad/services/authentication';
+import { expectAuthorized } from '@decipad/services/authorization';
+import tables from '@decipad/tables';
+import { getDefined } from '@decipad/utils';
+import Boom from '@hapi/boom';
 import {
   APIGatewayProxyEventV2 as APIGatewayProxyEvent,
   APIGatewayProxyResultV2,
 } from 'aws-lambda';
-import Boom from '@hapi/boom';
-import { OAuth2 } from 'oauth';
 import { nanoid } from 'nanoid';
+import { OAuth2 } from 'oauth';
 import { stringify as encodeCookie } from 'simple-cookie';
-import tables from '@decipad/tables';
-import { expectAuthenticated } from '@decipad/services/authentication';
-import { expectAuthorized } from '@decipad/services/authorization';
-import { provider as externalDataProvider } from '@decipad/externaldata';
-import { app } from '@decipad/config';
-import { getDefined } from '@decipad/utils';
 import handle from '../handle';
 
 export const handler = handle(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResultV2> => {
-    const { user } = await expectAuthenticated(event);
+    const [credentials] = await expectAuthenticated(event);
+    const { user } = credentials;
     const { id } = event.pathParameters || {};
     if (!id) {
       throw Boom.badRequest('missing parameters');

@@ -1,18 +1,18 @@
 import {
+  ExternalDataSourceRecord,
+  ExternalKeyRecord,
+  User,
+} from '@decipad/backendtypes';
+import { encodeTable, provider as getProvider } from '@decipad/externaldata';
+import { expectAuthenticated } from '@decipad/services/authentication';
+import { expectAuthorized } from '@decipad/services/authorization';
+import tables from '@decipad/tables';
+import { getDefined } from '@decipad/utils';
+import Boom from '@hapi/boom';
+import {
   APIGatewayProxyEventV2 as APIGatewayProxyEvent,
   APIGatewayProxyResultV2,
 } from 'aws-lambda';
-import Boom from '@hapi/boom';
-import {
-  User,
-  ExternalDataSourceRecord,
-  ExternalKeyRecord,
-} from '@decipad/backendtypes';
-import tables from '@decipad/tables';
-import { expectAuthenticated } from '@decipad/services/authentication';
-import { expectAuthorized } from '@decipad/services/authorization';
-import { provider as getProvider, encodeTable } from '@decipad/externaldata';
-import { getDefined } from '@decipad/utils';
 import handle from '../handle';
 
 async function checkAccess(
@@ -89,7 +89,7 @@ export const handler = handle(
       };
     }
 
-    const { user } = await expectAuthenticated(event);
+    const [{ user }] = await expectAuthenticated(event);
     await checkAccess(user, externalDataSource);
 
     const key = await getAccessKey(externalDataSource);

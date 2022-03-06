@@ -71,14 +71,10 @@ const LinkButton = styled(Link)({
 });
 
 export interface NotebookProps {
-  workspaceId: string;
   notebookId: string;
 }
 
-export const Notebook = ({
-  workspaceId,
-  notebookId,
-}: NotebookProps): ReturnType<FC> => {
+export const Notebook = ({ notebookId }: NotebookProps): ReturnType<FC> => {
   const history = useHistory();
   const { pathname, search } = useLocation();
   const { addToast } = useToasts();
@@ -113,7 +109,7 @@ export const Notebook = ({
       refetchQueries: ['GetWorkspaceById'],
       awaitRefetchQueries: true,
     })
-      .then(() => history.push(`/workspaces/${workspaces?.workspaces[0].id}`))
+      .then(() => history.push(`/w/${workspaces?.workspaces[0].id}`))
       .catch((err) =>
         addToast(`Error duplicating notebook: ${err.message}`, {
           appearance: 'error',
@@ -139,13 +135,17 @@ export const Notebook = ({
   }
 
   const { getPadById } = data ?? {};
-  if (error || !data || !getPadById) {
+  const workspaceId = getPadById?.workspace.id;
+
+  if (error || !data || !getPadById || !workspaceId) {
     return (
       <ErrorWrapper>
-        <ErrorHeader>Error loading pad: ${error?.message}</ErrorHeader>
-        <LinkButton to={`/workspaces/${workspaceId}`}>
-          Back to workspace
-        </LinkButton>
+        <ErrorHeader>
+          Error loading pad: {error?.message || 'Unknown Error'}
+        </ErrorHeader>
+        {workspaceId && (
+          <LinkButton to={`/w/${workspaceId}`}>Back to workspace</LinkButton>
+        )}
       </ErrorWrapper>
     );
   }
@@ -168,17 +168,12 @@ export const Notebook = ({
         <NotebookTopbar
           workspaceName={getPadById.workspace.name || ''}
           notebookName={getPadById.name || 'My notebook title'}
-          workspaceHref={`/workspaces/${workspaceId}`}
+          workspaceHref={`/w/${workspaceId}`}
           usersWithAccess={getPadById.access.users ?? []}
           permission={getPadById.myPermissionType ?? undefined}
           link={
             shareSecret
-              ? getSecretPadLink(
-                  workspaceId,
-                  notebookId,
-                  getPadById.name || '',
-                  shareSecret
-                )
+              ? getSecretPadLink(notebookId, getPadById.name || '', shareSecret)
               : 'Loading...'
           }
           onToggleShare={async () => {
@@ -197,7 +192,6 @@ export const Notebook = ({
                   action: 'notebook shared',
                   props: {
                     url: getSecretPadLink(
-                      workspaceId,
                       notebookId,
                       getPadById.name || '',
                       shareSecret ?? ''

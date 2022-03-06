@@ -1,18 +1,18 @@
-import EventEmitter from 'events';
-import { Editor } from 'slate';
-import { Doc as YDoc, Array as YArray, Map as YMap, Text as YText } from 'yjs';
+import { fetch } from '@decipad/fetch';
 import {
+  CursorEditor,
+  SyncElement,
   withCursor,
   withYjs,
-  SyncElement,
   YjsEditor,
-  CursorEditor,
 } from '@decipad/slate-yjs';
-import { Awareness } from 'y-protocols/awareness';
-import { WebsocketProvider } from '@decipad/y-websocket';
-import { IndexeddbPersistence } from '@decipad/y-indexeddb';
-import { fetch } from '@decipad/fetch';
 import { getDefined } from '@decipad/utils';
+import { IndexeddbPersistence } from '@decipad/y-indexeddb';
+import { WebsocketProvider } from '@decipad/y-websocket';
+import EventEmitter from 'events';
+import { Editor } from 'slate';
+import { Awareness } from 'y-protocols/awareness';
+import { Array as YArray, Doc as YDoc, Map as YMap, Text as YText } from 'yjs';
 import * as DocTypes from './types';
 
 interface Options {

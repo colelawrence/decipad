@@ -1,8 +1,8 @@
-import { FC, useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { GET_WORKSPACES, GetWorkspaces } from '@decipad/queries';
-import { Redirect, useHistory } from 'react-router-dom';
+import { GetWorkspaces, GET_WORKSPACES } from '@decipad/queries';
 import { LoadingSpinnerPage } from '@decipad/ui';
+import { FC, useEffect, useState } from 'react';
+import { Redirect, useHistory } from 'react-router-dom';
 
 export function Home(): ReturnType<FC> {
   const [workspaceId, setWorkspaceId] = useState<string | null>(null);
@@ -20,7 +20,7 @@ export function Home(): ReturnType<FC> {
   }, [history, query, workspaceId]);
 
   if (workspaceId) {
-    return <Redirect to={`/workspaces/${workspaceId}`} />;
+    return <Redirect to={`/w/${workspaceId}`} />;
   }
 
   return <LoadingSpinnerPage />;

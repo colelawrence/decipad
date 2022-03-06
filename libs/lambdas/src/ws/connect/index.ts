@@ -1,17 +1,21 @@
-import Boom from '@hapi/boom';
 import { HttpResponse } from '@architect/functions';
 import { WSRequest } from '@decipad/backendtypes';
-import { authenticate } from '@decipad/services/authentication';
+import { authenticate, AuthResult } from '@decipad/services/authentication';
 import { wrapHandler } from '@decipad/services/monitor';
-import { getDefined } from '@decipad/utils';
 import { onConnect } from '@decipad/sync-connection-lambdas';
+import { getDefined } from '@decipad/utils';
+import Boom from '@hapi/boom';
 import { docIdFromPath } from '../path';
+
+function isValidAuthResult(authResult: AuthResult): boolean {
+  return !!authResult.secret || !!authResult.user;
+}
 
 export const handler = wrapHandler(async function ws(
   event: WSRequest
 ): Promise<HttpResponse> {
-  const authResult = await authenticate(event);
-  if (!authResult.user && !authResult.secret) {
+  const authResult = (await authenticate(event)).filter(isValidAuthResult);
+  if (!authResult.length) {
     throw Boom.unauthorized();
   }
 

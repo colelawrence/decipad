@@ -1,7 +1,11 @@
-import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
 import { HttpResponse } from '@architect/functions';
+import {
+  authenticate,
+  AuthResult,
+  jwt as jwtConf,
+} from '@decipad/services/authentication';
+import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
 import NextAuthJWT from 'next-auth/jwt';
-import { authenticate, jwt as jwtConf } from '@decipad/services/authentication';
 import handle from '../handle';
 
 interface DefaultJWT extends Record<string, unknown> {
@@ -29,12 +33,17 @@ const purposes: Record<string, Partial<JWTEncodeParams>> = {
   },
 };
 
+function credentialHasUserOrSecret(cred: AuthResult): boolean {
+  return !!cred.user || !!cred.secret;
+}
+
 export const handler = handle(async (event: APIGatewayProxyEvent): Promise<
   HttpResponse | string
 > => {
-  const { user, secret } = await authenticate(event);
+  const credentials = await authenticate(event);
 
-  if ((user || secret) && event.queryStringParameters?.for) {
+  const firstCompleteCredential = credentials.find(credentialHasUserOrSecret);
+  if (firstCompleteCredential && event.queryStringParameters?.for) {
     const purposeName = event.queryStringParameters.for;
     const purpose = purposes[purposeName];
     if (!purpose) {
@@ -43,11 +52,16 @@ export const handler = handle(async (event: APIGatewayProxyEvent): Promise<
         body: 'No such purpose',
       };
     }
-    if (user && secret) {
-      return generateToken(secret!, purpose);
+    if (firstCompleteCredential.user && firstCompleteCredential.secret) {
+      const token = await generateToken(
+        firstCompleteCredential.secret,
+        purpose
+      );
+      console.log('GENERATED NEW TOKEN:', token);
+      return token;
     }
-    if (secret) {
-      return secret;
+    if (firstCompleteCredential.secret) {
+      return firstCompleteCredential.secret;
     }
   }
   return {

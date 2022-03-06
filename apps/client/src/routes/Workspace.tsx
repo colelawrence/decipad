@@ -72,12 +72,7 @@ export function Workspace({
         }
         const newPad = creation.createPad;
         addToast('Notebook created successfully', { appearance: 'success' });
-        history.push(
-          `/workspaces/${workspaceId}/pads/${encodeVanityUrlComponent(
-            '',
-            newPad.id
-          )}`
-        );
+        history.push(`/n/${encodeVanityUrlComponent('', newPad.id)}`);
         clientEvent({ type: 'action', action: 'notebook created' });
       } catch (err) {
         addToast(`Error creating notebook: ${(err as Error).message}`, {
@@ -141,11 +136,7 @@ export function Workspace({
                 .reverse()
                 .map((notebook) => ({
                   ...notebook,
-                  href: `/workspaces/${
-                    // checked a couple lines earlier
-                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                    data.getWorkspaceById!.id
-                  }/pads/${encodeVanityUrlComponent(
+                  href: `/n/${encodeVanityUrlComponent(
                     notebook.name,
                     notebook.id
                   )}`,

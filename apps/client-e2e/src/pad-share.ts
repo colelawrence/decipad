@@ -22,7 +22,7 @@ describe('Share pad', () => {
   }, 60000);
 
   test('click share button and extract text', async () => {
-    const linkSelector = 'text=/workspaces/[^/]+/';
+    const linkSelector = 'text=/n/hello-world/';
     await page.click('text=share');
     await page.click('[aria-checked="false"]');
     await page.waitForSelector(linkSelector);
@@ -41,7 +41,10 @@ describe('Share pad', () => {
     // bob, go do your thing
     //
     await withNewUser(context);
+
     await newPage.goto(link);
+
+    await waitForEditorToLoad(newPage);
 
     await newPage.waitForSelector('text=Duplicate notebook');
 
@@ -52,5 +55,5 @@ describe('Share pad', () => {
 
     await waitForEditorToLoad(newPage);
     expect(await newPage.$$('[contenteditable] p')).toHaveLength(4);
-  });
+  }, 60000);
 });

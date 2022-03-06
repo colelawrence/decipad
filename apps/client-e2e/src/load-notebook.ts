@@ -1,10 +1,10 @@
 import { Pad, User, WorkspaceRecord } from '@decipad/backendtypes';
 import {
-  setUp,
-  navigateToNotebook,
-  waitForEditorToLoad,
   createPadFromUpdates,
   getPadName,
+  navigateToNotebook,
+  setUp,
+  waitForEditorToLoad,
 } from './page-utils/Pad';
 import docUpdateData from './__fixtures__/001-notebook-encoded-update.json';
 
@@ -26,7 +26,7 @@ describe('load notebook', () => {
   });
 
   it('navigates to notebook and loads it', async () => {
-    await navigateToNotebook(workspace.id, notebook.id);
+    await navigateToNotebook(notebook.id);
     // some time for the notebook to render
     await page.waitForTimeout(1000);
     await waitForEditorToLoad();

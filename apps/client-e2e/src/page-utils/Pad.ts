@@ -1,8 +1,8 @@
-import retry from 'p-retry';
 import { Pad, User, WorkspaceRecord } from '@decipad/backendtypes';
 import { pads } from '@decipad/services';
 import tables from '@decipad/tables';
 import { nanoid } from 'nanoid';
+import retry from 'p-retry';
 import { timeout, withNewUser } from '../utils';
 import { navigateToPlayground } from './Playground';
 import { clickNewPadButton, navigateToWorkspacePage } from './Workspace';
@@ -34,7 +34,7 @@ export async function setUp(options: SetupOptions = {}) {
       if (createAndNavigateToNewPad) {
         await Promise.all([
           clickNewPadButton(),
-          page.waitForNavigation({ url: '/workspaces/*/pads/*' }),
+          page.waitForNavigation({ url: '/n/*' }),
         ]);
         await waitForEditorToLoad();
       }
@@ -94,11 +94,8 @@ export async function writeInTable(text: string, columns = 1) {
   await page.keyboard.type(text);
 }
 
-export async function navigateToNotebook(
-  workspaceId: string,
-  notebookId: string
-) {
-  await page.goto(`/workspaces/${workspaceId}/pads/pad-title:${notebookId}`);
+export async function navigateToNotebook(notebookId: string) {
+  await page.goto(`/n/pad-title:${notebookId}`);
 }
 
 export async function createPadFromUpdates(

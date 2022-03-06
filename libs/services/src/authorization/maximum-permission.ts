@@ -5,15 +5,21 @@ interface PermissionLikeRecord {
   type: PermissionType;
 }
 
+function permissionType(permission: PermissionLikeRecord | PermissionType) {
+  return (permission as PermissionLikeRecord).type
+    ? (permission as PermissionLikeRecord).type
+    : (permission as PermissionType);
+}
+
 export function maximumPermissionIn(
-  permissions: PermissionLikeRecord[]
-): PermissionType | null {
-  let maximumPermissionType: PermissionType | null = null;
+  permissions: PermissionLikeRecord[] | PermissionType[]
+): PermissionType | undefined {
+  let maximumPermissionType: PermissionType | undefined;
   let maximumPermissionLevel = 0;
   for (const permission of permissions) {
-    const permissionLevel = permissionLevelFrom(permission.type);
+    const permissionLevel = permissionLevelFrom(permissionType(permission));
     if (permissionLevel > maximumPermissionLevel) {
-      maximumPermissionType = permission.type;
+      maximumPermissionType = permissionType(permission);
       maximumPermissionLevel = permissionLevel;
     }
   }

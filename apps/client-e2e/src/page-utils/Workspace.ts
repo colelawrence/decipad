@@ -1,10 +1,10 @@
-import { ElementHandle, Page } from 'playwright';
 import { getDefined } from '@decipad/utils';
-import { URL } from 'url';
-import os from 'os';
-import path from 'path';
 import { readFile } from 'fs/promises';
 import { nanoid } from 'nanoid';
+import os from 'os';
+import path from 'path';
+import { ElementHandle, Page } from 'playwright';
+import { URL } from 'url';
 import waitForExpect from 'wait-for-expect';
 import { withNewUser } from '../utils';
 
@@ -18,7 +18,7 @@ type PadList = Pad[];
 
 function isOnWorkspacePage(page: Page | URL): boolean {
   const url = page instanceof URL ? page : new URL(page.url());
-  return url.pathname.match(/^\/workspaces\/[^/]+$/) !== null;
+  return url.pathname.match(/^\/w\/[^/]+$/) !== null;
 }
 
 export async function navigateToWorkspacePage() {

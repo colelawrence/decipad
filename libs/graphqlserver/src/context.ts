@@ -1,6 +1,10 @@
 import { User } from '@decipad/backendtypes';
-import { authenticate } from '@decipad/services/authentication';
+import { authenticate, AuthResult } from '@decipad/services/authentication';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
+
+function hasUser(authResult: AuthResult): boolean {
+  return !!authResult.user;
+}
 
 export default () =>
   async ({
@@ -8,7 +12,13 @@ export default () =>
   }: {
     context: { event: APIGatewayProxyEventV2; user: User | undefined };
   }) => {
-    const { user } = await authenticate(context.event);
-    context.user = user;
+    const credentials = await authenticate(context.event);
+    const userCred = credentials.find(hasUser);
+    if (userCred) {
+      context.user = userCred.user;
+    } else {
+      context.user = undefined;
+    }
+
     return context;
   };

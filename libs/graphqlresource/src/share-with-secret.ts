@@ -1,18 +1,18 @@
-import { UserInputError } from 'apollo-server-lambda';
-import { nanoid } from 'nanoid';
 import {
-  ID,
-  GraphqlContext,
   ConcreteRecord,
+  GraphqlContext,
   GraphqlObjectType,
+  ID,
   PermissionType,
 } from '@decipad/backendtypes';
 import {
   create as createResourcePermission,
   getSecretPermissions,
 } from '@decipad/services/permissions';
-import { expectAuthenticatedAndAuthorized, requireUser } from './authorization';
+import { UserInputError } from 'apollo-server-lambda';
+import { nanoid } from 'nanoid';
 import { Resource } from './';
+import { expectAuthenticatedAndAuthorized, requireUser } from './authorization';
 
 export type ShareWithSecretArgs = {
   id: ID;
@@ -59,8 +59,12 @@ export function shareWithSecret<
       return existingPermissions[0].secret!;
     }
 
+    const secret = nanoid();
+    console.log(
+      `about to create secret for resource resource ${resource}: ${secret}`
+    );
     const permission: Parameters<typeof createResourcePermission>[0] = {
-      secret: nanoid(),
+      secret,
       givenByUserId: actorUser.id,
       resourceUri: resource,
       type: args.permissionType,

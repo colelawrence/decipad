@@ -1,14 +1,14 @@
 import waitForExpect from 'wait-for-expect';
 import {
-  focusOnBody,
-  setUp,
-  waitForEditorToLoad,
-  keyPress,
-} from './page-utils/Pad';
-import {
   createCalculationBlockBelow,
   getCalculationBlocks,
 } from './page-utils/CalculationBlock';
+import {
+  focusOnBody,
+  keyPress,
+  setUp,
+  waitForEditorToLoad,
+} from './page-utils/Pad';
 
 describe('pad content', () => {
   beforeAll(() => setUp());

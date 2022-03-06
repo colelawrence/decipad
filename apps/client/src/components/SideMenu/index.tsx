@@ -34,20 +34,20 @@ export const SideMenu = ({ workspaceId }: SideMenuProps): ReturnType<FC> => {
         Heading="h1"
         activeWorkspace={{
           ...currentWorkspace,
-          href: `/workspaces/${currentWorkspace.id}`,
+          href: `/w/${currentWorkspace.id}`,
           numberOfMembers: 1,
         }}
         otherWorkspaces={
           allOtherWorkspaces?.map((workspace) => ({
             ...workspace,
-            href: `/workspaces/${workspace.id}`,
+            href: `/w/${workspace.id}`,
             numberOfMembers: 1,
           })) ?? []
         }
         allNotebooksHref={url}
-        preferencesHref={`/workspaces/${currentWorkspace.id}/preferences`}
+        preferencesHref={`/w/${currentWorkspace.id}/preferences`}
         onCreateWorkspace={() =>
-          history.push(`/workspaces/${currentWorkspace.id}/create-workspace`)
+          history.push(`/w/${currentWorkspace.id}/create-workspace`)
         }
       />
       <WorkspacePreferences currentWorkspace={currentWorkspace} />

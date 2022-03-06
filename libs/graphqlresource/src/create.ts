@@ -1,11 +1,11 @@
 import {
-  GraphqlContext,
   ConcreteRecord,
+  GraphqlContext,
   GraphqlObjectType,
 } from '@decipad/backendtypes';
 import { create as createPermission } from '@decipad/services/permissions';
-import { requireUser } from './authorization';
 import { Resource } from './';
+import { requireUser } from './authorization';
 
 export type CreateFunction<
   GraphqlT extends GraphqlObjectType,

@@ -4,8 +4,8 @@
 /* eslint-disable jest/expect-expect */
 
 import arc from '@architect/functions';
-import { Workspace, Pad, Role, RoleInvitation } from '@decipad/backendtypes';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
+import { Pad, Role, RoleInvitation, Workspace } from '@decipad/backendtypes';
 import { timeout } from './utils/timeout';
 
 test('pads', (ctx) => {

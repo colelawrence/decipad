@@ -1,10 +1,10 @@
+import { User } from '@decipad/backendtypes';
+import { expectAuthenticated } from '@decipad/services/authentication';
+import { expectAuthorized } from '@decipad/services/authorization';
+import { getDefined } from '@decipad/utils';
+import { DynamodbPersistence } from '@decipad/y-dynamodb';
 import Boom from '@hapi/boom';
 import { Doc as YDoc } from 'yjs';
-import { getDefined } from '@decipad/utils';
-import { expectAuthorized } from '@decipad/services/authorization';
-import { expectAuthenticated } from '@decipad/services/authentication';
-import { User } from '@decipad/backendtypes';
-import { DynamodbPersistence } from '@decipad/y-dynamodb';
 import handle from '../handle';
 
 async function checkAccess(
@@ -41,7 +41,7 @@ function exportPad(id: string): Promise<string> {
 export const handler = handle(async (event) => {
   const padId = getDefined(getDefined(event.pathParameters).padid);
 
-  const { user } = await expectAuthenticated(event);
+  const [{ user }] = await expectAuthenticated(event);
   await checkAccess(user, padId);
 
   const response = await exportPad(padId);

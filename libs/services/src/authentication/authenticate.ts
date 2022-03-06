@@ -1,17 +1,17 @@
 /* eslint-disable no-console */
-import Boom from '@hapi/boom';
-import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
-import { parse as parseCookie } from 'simple-cookie';
-import NextAuthJWT from 'next-auth/jwt';
-import { getDefined } from '@decipad/utils';
 import { User, UserWithSecret } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
+import { getDefined } from '@decipad/utils';
+import Boom from '@hapi/boom';
+import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
+import NextAuthJWT from 'next-auth/jwt';
+import { parse as parseCookie } from 'simple-cookie';
 import { jwt as jwtConf } from './jwt';
 
 export type AuthResult = {
-  user: User | undefined;
-  token: string | undefined;
-  secret: string | undefined;
+  user?: User;
+  token?: string;
+  secret?: string;
   gotFromSecProtocolHeader: boolean;
 };
 
@@ -36,21 +36,15 @@ export const TOKEN_COOKIE_NAMES = [
   '__Secure-next-auth.session-token',
 ];
 
-export async function authenticate(event: Request): Promise<AuthResult> {
+function validAuthResult(authResult: AuthResult): boolean {
+  return !!authResult.secret || !!authResult.user;
+}
+
+export async function authenticate(event: Request): Promise<AuthResult[]> {
   const tokens = getSessionTokens(event);
-  for (const token of tokens) {
-    // eslint-disable-next-line no-await-in-loop
-    const authenticated = await authenticateOneToken(token);
-    if (authenticated.secret || authenticated.user) {
-      return authenticated;
-    }
-  }
-  return {
-    user: undefined,
-    token: undefined,
-    secret: undefined,
-    gotFromSecProtocolHeader: false,
-  };
+  return (await Promise.all(tokens.map(authenticateOneToken))).filter(
+    validAuthResult
+  );
 }
 
 export async function authenticateOneToken({
@@ -98,18 +92,32 @@ export async function authenticateOneToken({
   return { user, token, secret, gotFromSecProtocolHeader };
 }
 
-export async function expectAuthenticated(
-  event: Request
-): Promise<AuthenticatedAuthResult> {
-  const result = await authenticate(event);
-  if (!result.user || !result.token) {
-    throw Boom.forbidden('Forbidden');
-  }
+function authenticatedAuthResultFromAuthResult(
+  result: AuthResult
+): AuthenticatedAuthResult {
   return {
     ...result,
     user: getDefined(result.user),
     token: getDefined(result.token),
   };
+}
+
+function validAuthenticatedAuthResult(
+  authResult: AuthenticatedAuthResult
+): boolean {
+  return !!authResult.user || !!authResult.token;
+}
+
+export async function expectAuthenticated(
+  event: Request
+): Promise<AuthenticatedAuthResult[]> {
+  const results = (await authenticate(event))
+    .map(authenticatedAuthResultFromAuthResult)
+    .filter(validAuthenticatedAuthResult);
+  if (results.length < 1) {
+    throw Boom.forbidden('Forbidden');
+  }
+  return results;
 }
 
 async function findUserByAccessToken(
