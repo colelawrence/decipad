@@ -6,6 +6,8 @@ import { Provider as AuthProvider, useSession } from 'next-auth/client';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { FC } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { BrowserRouter } from 'react-router-dom';
 import { ClientEventsAnalytics } from '../components/ClientEventsAnalytics';
 import { IdentifyUserAnalytics } from '../components/IdentifyUserAnalytics';
@@ -51,19 +53,21 @@ const Index = ({ pageProps = {} }: AppProps): ReturnType<FC> => {
       </Head>
       <ClientEventsAnalytics>
         <ToastDisplay>
-          <AuthProvider session={session ?? undefined}>
-            <IdentifyUserAnalytics>
-              <ApolloProvider client={apolloClient}>
-                <GlobalStyles>
-                  <ChakraProvider theme={theme}>
-                    <BrowserRouter>
-                      <Router />
-                    </BrowserRouter>
-                  </ChakraProvider>
-                </GlobalStyles>
-              </ApolloProvider>
-            </IdentifyUserAnalytics>
-          </AuthProvider>
+          <DndProvider backend={HTML5Backend}>
+            <AuthProvider session={session ?? undefined}>
+              <IdentifyUserAnalytics>
+                <ApolloProvider client={apolloClient}>
+                  <GlobalStyles>
+                    <ChakraProvider theme={theme}>
+                      <BrowserRouter>
+                        <Router />
+                      </BrowserRouter>
+                    </ChakraProvider>
+                  </GlobalStyles>
+                </ApolloProvider>
+              </IdentifyUserAnalytics>
+            </AuthProvider>
+          </DndProvider>
         </ToastDisplay>
       </ClientEventsAnalytics>
     </>

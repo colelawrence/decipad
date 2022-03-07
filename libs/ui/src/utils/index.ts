@@ -4,6 +4,6 @@ export * from './props';
 export * from './results';
 export * from './routing';
 export * from './storage';
-export * from './table';
 export * from './svg';
+export * from './table';
 export * from './viewport';

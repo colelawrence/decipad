@@ -14,6 +14,7 @@ import { expectAuthorized } from '@decipad/services/authorization';
 import {
   create as createPad2,
   duplicate as duplicateSharedDoc,
+  importDoc,
 } from '@decipad/services/pads';
 import { subscribe } from '@decipad/services/pubsub';
 import {
@@ -175,6 +176,21 @@ const resolvers = {
       pad.workspace_id = targetWorkspace.id;
       await data.pads.put(pad);
       return pad;
+    },
+
+    async importPad(
+      _: unknown,
+      { workspaceId, source }: { workspaceId: ID; source: string },
+      context: GraphqlContext
+    ): Promise<Pad> {
+      const workspaceResource = `/workspaces/${workspaceId}`;
+      const user = await isAuthenticatedAndAuthorized(
+        workspaceResource,
+        context,
+        'WRITE'
+      );
+
+      return importDoc(workspaceId, source, user);
     },
   },
 

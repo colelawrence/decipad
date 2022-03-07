@@ -9,13 +9,29 @@ import { matchers } from '@emotion/jest';
 expect.extend(matchers);
 
 // Text{En,De}coder
-
 import { TextEncoder, TextDecoder } from 'util';
 if (!global.TextEncoder) {
   global.TextEncoder = TextEncoder;
   // @ts-expect-error Node's version is a good enough polyfill
   global.TextDecoder = TextDecoder;
 }
+
+// Blob methods
+import { Buffer } from 'buffer';
+window.Blob = class Blob extends window.Blob {
+  constructor(parts, ...args) {
+    super(parts, ...args);
+    this.text = () =>
+      Buffer.concat(parts.map((part) => Buffer.from(part))).toString();
+  }
+};
+window.File = class File extends window.File {
+  constructor(parts, ...args) {
+    super(parts, ...args);
+    this.text = () =>
+      Buffer.concat(parts.map((part) => Buffer.from(part))).toString();
+  }
+};
 
 // storage event
 const originalSetItem = Storage.prototype.setItem;
@@ -49,6 +65,7 @@ window.ResizeObserver = class ResizeObserver {
   }
 };
 
+// events
 window.DragEvent = class DragEvent extends MouseEvent {
   constructor(...args) {
     super(...args);

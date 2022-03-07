@@ -6,8 +6,6 @@ import {
   useStoreEditorRef,
 } from '@udecode/plate';
 import { FC, useMemo, useState } from 'react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import { ProgramBlocksContextProvider } from '@decipad/ui';
 import { ResultsContext } from '@decipad/react-contexts';
 import {
@@ -57,10 +55,8 @@ export const NoDocSyncEditorBase = (props: PlateProps): ReturnType<FC> => {
 
 export const NoDocSyncEditor = (props: PlateProps): ReturnType<FC> => {
   return (
-    <DndProvider backend={HTML5Backend}>
-      <ComputerContextProvider>
-        <NoDocSyncEditorBase {...props} />
-      </ComputerContextProvider>
-    </DndProvider>
+    <ComputerContextProvider>
+      <NoDocSyncEditorBase {...props} />
+    </ComputerContextProvider>
   );
 };

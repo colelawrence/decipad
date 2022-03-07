@@ -1,7 +1,9 @@
+import { findParentWithStyle } from '@decipad/dom-test-utils';
 import { getByTitle, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
-import { findParentWithStyle } from '@decipad/dom-test-utils';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { NotebookList } from './NotebookList';
 
 const props: ComponentProps<typeof NotebookList> = {
@@ -10,30 +12,36 @@ const props: ComponentProps<typeof NotebookList> = {
 };
 
 it('renders a CTA to create a notebook if there are none', () => {
-  const { getByText } = render(<NotebookList {...props} notebooks={[]} />);
+  const { getByText } = render(
+    <DndProvider backend={HTML5Backend}>
+      <NotebookList {...props} notebooks={[]} />
+    </DndProvider>
+  );
   expect(getByText(/create/i)).toBeVisible();
 });
 it('renders a list of notebooks', () => {
   const { getAllByRole } = render(
-    <NotebookList
-      {...props}
-      notebooks={[
-        {
-          id: '0',
-          name: 'First',
-          href: '',
-          exportFileName: '',
-          exportHref: '',
-        },
-        {
-          id: '1',
-          name: 'Second',
-          href: '',
-          exportFileName: '',
-          exportHref: '',
-        },
-      ]}
-    />
+    <DndProvider backend={HTML5Backend}>
+      <NotebookList
+        {...props}
+        notebooks={[
+          {
+            id: '0',
+            name: 'First',
+            href: '',
+            exportFileName: '',
+            exportHref: '',
+          },
+          {
+            id: '1',
+            name: 'Second',
+            href: '',
+            exportFileName: '',
+            exportHref: '',
+          },
+        ]}
+      />
+    </DndProvider>
   );
   expect(
     getAllByRole('listitem').map(({ textContent }) => textContent)
@@ -45,25 +53,27 @@ it('renders a list of notebooks', () => {
 
 it('renders an item with actions open on top', () => {
   const { getByText } = render(
-    <NotebookList
-      {...props}
-      notebooks={[
-        {
-          id: '0',
-          name: 'First',
-          href: '',
-          exportFileName: '',
-          exportHref: '',
-        },
-        {
-          id: '1',
-          name: 'Second',
-          href: '',
-          exportFileName: '',
-          exportHref: '',
-        },
-      ]}
-    />
+    <DndProvider backend={HTML5Backend}>
+      <NotebookList
+        {...props}
+        notebooks={[
+          {
+            id: '0',
+            name: 'First',
+            href: '',
+            exportFileName: '',
+            exportHref: '',
+          },
+          {
+            id: '1',
+            name: 'Second',
+            href: '',
+            exportFileName: '',
+            exportHref: '',
+          },
+        ]}
+      />
+    </DndProvider>
   );
   userEvent.click(getByTitle(getByText('First').closest('li')!, /ellipsis/i));
 
@@ -76,25 +86,27 @@ it('renders an item with actions open on top', () => {
 
 it('only allows one open actions menu at a time', () => {
   const { getByText } = render(
-    <NotebookList
-      {...props}
-      notebooks={[
-        {
-          id: '0',
-          name: 'First',
-          href: '',
-          exportFileName: '',
-          exportHref: '',
-        },
-        {
-          id: '1',
-          name: 'Second',
-          href: '',
-          exportFileName: '',
-          exportHref: '',
-        },
-      ]}
-    />
+    <DndProvider backend={HTML5Backend}>
+      <NotebookList
+        {...props}
+        notebooks={[
+          {
+            id: '0',
+            name: 'First',
+            href: '',
+            exportFileName: '',
+            exportHref: '',
+          },
+          {
+            id: '1',
+            name: 'Second',
+            href: '',
+            exportFileName: '',
+            exportHref: '',
+          },
+        ]}
+      />
+    </DndProvider>
   );
   userEvent.click(getByTitle(getByText('Second').closest('li')!, /ellipsis/i));
   userEvent.click(getByTitle(getByText('First').closest('li')!, /ellipsis/i));
@@ -105,26 +117,28 @@ it('only allows one open actions menu at a time', () => {
 it('emits duplicate events', () => {
   const handleDuplicate = jest.fn();
   const { getByText } = render(
-    <NotebookList
-      {...props}
-      notebooks={[
-        {
-          id: '0',
-          name: 'First',
-          href: '',
-          exportFileName: '',
-          exportHref: '',
-        },
-        {
-          id: '1',
-          name: 'Second',
-          href: '',
-          exportFileName: '',
-          exportHref: '',
-        },
-      ]}
-      onDuplicate={handleDuplicate}
-    />
+    <DndProvider backend={HTML5Backend}>
+      <NotebookList
+        {...props}
+        notebooks={[
+          {
+            id: '0',
+            name: 'First',
+            href: '',
+            exportFileName: '',
+            exportHref: '',
+          },
+          {
+            id: '1',
+            name: 'Second',
+            href: '',
+            exportFileName: '',
+            exportHref: '',
+          },
+        ]}
+        onDuplicate={handleDuplicate}
+      />
+    </DndProvider>
   );
 
   userEvent.click(getByTitle(getByText('Second').closest('li')!, /ellipsis/i));
@@ -134,26 +148,28 @@ it('emits duplicate events', () => {
 it('emits delete events', () => {
   const handleDelete = jest.fn();
   const { getByText } = render(
-    <NotebookList
-      {...props}
-      notebooks={[
-        {
-          id: '0',
-          name: 'First',
-          href: '',
-          exportFileName: '',
-          exportHref: '',
-        },
-        {
-          id: '1',
-          name: 'Second',
-          href: '',
-          exportFileName: '',
-          exportHref: '',
-        },
-      ]}
-      onDelete={handleDelete}
-    />
+    <DndProvider backend={HTML5Backend}>
+      <NotebookList
+        {...props}
+        notebooks={[
+          {
+            id: '0',
+            name: 'First',
+            href: '',
+            exportFileName: '',
+            exportHref: '',
+          },
+          {
+            id: '1',
+            name: 'Second',
+            href: '',
+            exportFileName: '',
+            exportHref: '',
+          },
+        ]}
+        onDelete={handleDelete}
+      />
+    </DndProvider>
   );
 
   userEvent.click(getByTitle(getByText('Second').closest('li')!, /ellipsis/i));

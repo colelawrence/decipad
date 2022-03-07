@@ -16,11 +16,15 @@ import {
   GET_PADS,
   GET_WORKSPACES,
   GET_WORKSPACE_BY_ID,
+  ImportPad,
+  ImportPadVariables,
+  IMPORT_PAD,
   RemovePad,
   RemovePadVariables,
   REMOVE_PAD,
 } from '@decipad/queries';
 import { Dashboard, NotebookList, NotebookListPlaceholder } from '@decipad/ui';
+import { sortBy } from 'ramda';
 import { FC, useCallback, useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
@@ -55,6 +59,13 @@ export function Workspace({
       { query: GET_PADS, variables: { workspaceId } as GetPadsVariables },
     ],
   });
+  const [importPad] = useMutation<ImportPad, ImportPadVariables>(IMPORT_PAD, {
+    refetchQueries: [
+      { query: GET_WORKSPACES },
+      { query: COUNT_PADS, variables: { workspaceId } as CountPadsVariables },
+      { query: GET_PADS, variables: { workspaceId } as GetPadsVariables },
+    ],
+  });
 
   const [creatingPad, setCreatingPad] = useState(false);
   const handleCreateNotebook = useCallback(async () => {
@@ -83,6 +94,7 @@ export function Workspace({
       }
     }
   }, [creatingPad, createPad, workspaceId, addToast, history, clientEvent]);
+
   const handleDuplicateNotebook = (id: string) =>
     duplicatePad({
       variables: { id },
@@ -98,6 +110,7 @@ export function Workspace({
           appearance: 'error',
         })
       );
+
   const handleDeleteNotebook = (id: string) =>
     removePad({
       variables: { id },
@@ -114,6 +127,23 @@ export function Workspace({
         })
       );
 
+  const handleImportNotebook = (source: string) => {
+    return importPad({
+      variables: { workspaceId, source },
+      refetchQueries: ['GetWorkspaceById'],
+      awaitRefetchQueries: true,
+    })
+      .then(() => {
+        addToast('Notebook imported', { appearance: 'info' });
+        clientEvent({ type: 'action', action: 'notebook deleted' });
+      })
+      .catch((err) => {
+        addToast(`Error importing notebook: ${err.message}`, {
+          appearance: 'error',
+        });
+      });
+  };
+
   return (
     <Dashboard
       topbar={
@@ -128,24 +158,22 @@ export function Workspace({
           data.getWorkspaceById ? (
             <NotebookList
               Heading="h1"
-              notebooks={data.getWorkspaceById.pads.items
-                .slice()
-                .sort(
-                  (a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt)
-                )
-                .reverse()
-                .map((notebook) => ({
-                  ...notebook,
-                  href: `/n/${encodeVanityUrlComponent(
-                    notebook.name,
-                    notebook.id
-                  )}`,
-                  exportHref: `/api/pads/${notebook.id}/export`,
-                  exportFileName: `notebook-${notebook.id}.json`,
-                }))}
+              notebooks={sortBy(
+                (item) => -Date.parse(item.createdAt),
+                data.getWorkspaceById.pads.items
+              ).map((notebook) => ({
+                ...notebook,
+                href: `/n/${encodeVanityUrlComponent(
+                  notebook.name,
+                  notebook.id
+                )}`,
+                exportHref: `/api/pads/${notebook.id}/export`,
+                exportFileName: `notebook-${notebook.id}.json`,
+              }))}
               onCreateNotebook={handleCreateNotebook}
               onDuplicate={handleDuplicateNotebook}
               onDelete={handleDeleteNotebook}
+              onImport={handleImportNotebook}
             />
           ) : (
             'Workspace not found'

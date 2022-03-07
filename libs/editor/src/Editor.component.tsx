@@ -8,8 +8,6 @@ import {
 import { ResultsContext } from '@decipad/react-contexts';
 import { Plate, PlatePluginComponent, useStoreEditorRef } from '@udecode/plate';
 import { nanoid } from 'nanoid';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import { components, options, plugins } from './configuration';
 import { useDocSync } from './plugins/DocSync/useDocSync';
 import {
@@ -118,10 +116,8 @@ const EditorInternal = ({ padId, authSecret, readOnly }: EditorProps) => {
 
 export const Editor = (props: EditorProps): ReturnType<FC> => {
   return (
-    <DndProvider backend={HTML5Backend}>
-      <ComputerContextProvider>
-        <EditorInternal key={props.padId} {...props} />
-      </ComputerContextProvider>
-    </DndProvider>
+    <ComputerContextProvider>
+      <EditorInternal key={props.padId} {...props} />
+    </ComputerContextProvider>
   );
 };

@@ -1,6 +1,6 @@
 import { getDefined } from '@decipad/utils';
 import { DataTable, toInternalType } from '../data/DataTable';
-import { Type, build as t } from '../type';
+import { build as t, Type } from '../type';
 
 export async function inferData(
   indexName: string | null,
