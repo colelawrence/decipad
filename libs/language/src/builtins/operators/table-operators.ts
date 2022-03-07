@@ -90,7 +90,7 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
       }
 
       return Row.fromNamedCells(
-        table.columns.map((column) => column.values[rowIndex]),
+        table.columns.map((column) => column.atIndex(rowIndex)),
         table.columnNames
       );
     },

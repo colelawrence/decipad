@@ -2,10 +2,10 @@ import Fraction from '@decipad/fraction';
 import { Value } from '../interpreter';
 import { FractionValue, fromJS, Column } from '../interpreter/Value';
 import { getInstanceof } from '../utils';
-import { Hypercube } from './hypercube';
-import { DimensionalValue } from './multidimensional-utils';
+import { Hypercube } from '.';
 import { SwappedHypercube } from './SwappedHypercube';
 import { materialize } from './materialize';
+import { ConcreteValue } from './ConcreteValue';
 
 const op =
   (simpleCallback: (...args: Fraction[]) => Fraction) => (args: Value[]) =>
@@ -19,13 +19,13 @@ const jsCol = (items: number[]) => fromJS(items) as Column;
 
 const multiDimX = new Hypercube(
   op((a) => a),
-  DimensionalValue.fromColAndDim(jsCol([1, 2, 3]), 'X')
+  ConcreteValue.fromColAndDim(jsCol([1, 2, 3]), 'X')
 );
 
 const twoAnonDims = new Hypercube(
   op((a, b) => a.add(b)),
-  DimensionalValue.fromColAndDim(jsCol([1, 2]), 0),
-  DimensionalValue.fromColAndDim(jsCol([10, 100]), 1)
+  ConcreteValue.fromColAndDim(jsCol([1, 2]), 0),
+  ConcreteValue.fromColAndDim(jsCol([10, 100]), 1)
 );
 
 it('can swap dimensions of a hypercube', () => {
@@ -73,14 +73,14 @@ it('can swap nothing if the dimension is 1D', () => {
 
 const multiDimXTwice = new Hypercube(
   op((a, b) => a.div(b)),
-  DimensionalValue.fromColAndDim(jsCol([1, 2]), 'X'),
-  DimensionalValue.fromColAndDim(jsCol([2, 4]), 'X')
+  ConcreteValue.fromColAndDim(jsCol([1, 2]), 'X'),
+  ConcreteValue.fromColAndDim(jsCol([2, 4]), 'X')
 );
 
 const multiDimXTwiceWithOneBefore = new Hypercube(
   op((a, b) => a.div(b)),
   multiDimXTwice,
-  DimensionalValue.fromColAndDim(jsCol([2, 4]), 'Y')
+  ConcreteValue.fromColAndDim(jsCol([2, 4]), 'Y')
 );
 
 describe('with dupe dimensions', () => {

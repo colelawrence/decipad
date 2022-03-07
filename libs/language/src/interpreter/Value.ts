@@ -17,7 +17,6 @@ import {
 } from '../date';
 import { Unknown } from './Unknown';
 import { RuntimeError } from '.';
-import { Hypercube } from '../dimtools/hypercube';
 import * as ValueTransforms from './ValueTransforms';
 
 export { ValueTransforms };
@@ -33,8 +32,14 @@ export interface ColumnLike extends Value {
   getData(): Interpreter.OneResult;
 }
 
-export const isColumnLike = (thing: Value): thing is ColumnLike =>
-  thing instanceof Hypercube || thing instanceof Column;
+export const isColumnLike = (thing: Value): thing is ColumnLike => {
+  const col = thing as ColumnLike;
+  return (
+    Array.isArray(col.values) &&
+    typeof col.atIndex === 'function' &&
+    typeof col.rowCount === 'number'
+  );
+};
 
 export const getColumnLike = (
   thing: Value,
@@ -211,7 +216,7 @@ export class Range implements Value {
 export type SliceRange = [start: number, end: number];
 export type SlicesMap = SliceRange[];
 
-export class Column implements Value, ColumnLike {
+export class Column implements Value {
   readonly _values: DeepReadonly<Value[]>;
 
   constructor(values: DeepReadonly<Column['values']>) {

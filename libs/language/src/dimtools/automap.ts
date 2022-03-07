@@ -1,23 +1,24 @@
-import { allMatch, zip } from '../utils';
-import { Type, build as t } from '../type';
 import * as Value from '../interpreter/Value';
-import { getReductionPlan } from './getReductionPlan';
+import { Hypercube } from '../lazy';
+import { ConcreteValue } from '../lazy/ConcreteValue';
+import {
+  materializeToValue,
+  materializeWhenNonDimensional,
+} from '../lazy/materialize';
+import { build as t, Type } from '../type';
+import { allMatch, zip } from '../utils';
 import {
   arrayOfOnes,
   compareDimensions,
   deLinearizeType,
   getCardinality,
+  heightenDimensionsIfNecessary,
+  heightenValueDimensionsIfNecessary,
   linearizeType,
   validateCardinalities,
-  heightenValueDimensionsIfNecessary,
-  heightenDimensionsIfNecessary,
 } from './common';
-import { Hypercube } from './hypercube';
-import {
-  DimensionalValue,
-  groupTypesByDimension,
-} from './multidimensional-utils';
-import { materializeToValue } from './materialize';
+import { getReductionPlan } from './getReductionPlan';
+import { groupTypesByDimension } from './multidimensional-utils';
 
 /**
  * Takes a function expects a certain cardinality in each argument,
@@ -88,7 +89,7 @@ export const automapValues = (
   }
 
   const dimensionalArgs = zip(argTypes, argValues).map(([type, value]) =>
-    DimensionalValue.fromValue(value, type)
+    ConcreteValue.fromValue(value, type)
   );
 
   if (expectedCardinalities.every((c) => c === 1)) {
@@ -105,7 +106,10 @@ export const automapValues = (
 
     if (whichToReduce.every((doReduce) => doReduce === false)) {
       // Reduce nothing -- input dimensions are correct
-      return mapFn(dimensionalArgs.map(materializeToValue), argTypes);
+      return mapFn(
+        dimensionalArgs.map(materializeWhenNonDimensional),
+        argTypes
+      );
     } else {
       throw new Error(
         'panic: Operating upon multiple dimensional values is not supported yet'

@@ -1,13 +1,8 @@
 import { produce } from 'immer';
+import { uniqDimensions } from '../dimtools/multidimensional-utils';
 import { Column, Value } from '../interpreter/Value';
 import { getDefined } from '../utils';
-import type {
-  Dimension,
-  DimensionId,
-  Hypercube,
-  HypercubeLike,
-} from './hypercube';
-import { uniqDimensions } from './multidimensional-utils';
+import type { Dimension, DimensionId, HypercubeLike } from './types';
 
 export function getAt(
   hc: HypercubeLike,
@@ -50,7 +45,11 @@ export function materializeToValue(hc: HypercubeLike): Value {
   })(uniqDimensions(hc.dimensions), new Map());
 }
 
-export function materializeWhenNonDimensional(hc: Hypercube): Value {
+/**
+ * Hypercubes can be 0-dimensional, but when using as a Value we don't want
+ * this flexibility.
+ */
+export function materializeWhenNonDimensional(hc: HypercubeLike): Value {
   if (hc.dimensions.length) {
     return hc;
   }

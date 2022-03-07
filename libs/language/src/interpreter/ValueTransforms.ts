@@ -66,8 +66,8 @@ export function contiguousSlices(column: ColumnLike): SlicesMap {
     lastValue = currentValue;
   });
 
-  if (nextSliceBeginsAt <= column.values.length - 1) {
-    slices.push([nextSliceBeginsAt, column.values.length - 1]);
+  if (nextSliceBeginsAt <= column.rowCount - 1) {
+    slices.push([nextSliceBeginsAt, column.rowCount - 1]);
   }
 
   return slices;
