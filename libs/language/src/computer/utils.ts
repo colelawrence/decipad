@@ -110,6 +110,10 @@ export const getDefinedSymbol = (stmt: AST.Statement) => {
       return `var:${getIdentifierString(stmt.args[0])}`;
     case 'function-definition':
       return `fn:${getIdentifierString(stmt.args[0])}`;
+    case 'categories':
+      return `var:${getIdentifierString(stmt.args[0])}`;
+    case 'matrix-assign':
+      return `var:${getIdentifierString(stmt.args[0])}`;
     default:
       return null;
   }
@@ -178,6 +182,10 @@ export const findSymbolsUsed = (stmt: AST.Statement) => {
     const sym = getReferredSymbol(node);
     if (sym != null) symbols.push(sym);
   });
+
+  if (stmt.type === 'matrix-assign') {
+    symbols.push(getDefined(getDefinedSymbol(stmt)));
+  }
 
   return symbols;
 };

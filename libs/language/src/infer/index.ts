@@ -15,6 +15,8 @@ import { inferSequence } from './sequence';
 import { inferTable } from './table';
 import { inferData } from './data';
 import { isPreviousRef } from '../previous-ref';
+import { inferMatrixAssign, inferMatrixRef } from '../matrix';
+import { inferCategories } from '../categories';
 
 export { makeContext };
 export type { Context };
@@ -181,6 +183,9 @@ export const inferExpression = wrap(
           return type;
         }
       }
+      case 'matrix-ref': {
+        return inferMatrixRef(ctx, expr);
+      }
       case 'function-call': {
         const fName = getIdentifierString(expr.args[0]);
         const fArgs = getOfType('argument-list', expr.args[1]).args;
@@ -275,6 +280,12 @@ export const inferStatement = wrap(
 
         ctx.stack.set(varName, type);
         return type;
+      }
+      case 'matrix-assign': {
+        return inferMatrixAssign(ctx, statement);
+      }
+      case 'categories': {
+        return inferCategories(ctx, statement);
       }
       case 'function-definition': {
         const fName = getIdentifierString(statement.args[0]);

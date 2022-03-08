@@ -15,6 +15,7 @@ const keywordStrings = [
   'date',
   'through',
   'fetch',
+  'categories',
 ];
 const keywords = moo.keywords(
   Object.fromEntries(keywordStrings.map((kw) => [`${kw} keyword`, kw]))

@@ -141,6 +141,7 @@ powOp              -> primary _ powOperator _ powOp     {% basicBinop %}
 primary            -> literal                           {% id %}
 primary            -> functionCall                      {% id %}
 primary            -> select                            {% id %}
+primary            -> matrixRef                         {% id %}
 primary            -> ref                               {% id %}
 primary            -> parenthesizedExpression           {% id %}
 

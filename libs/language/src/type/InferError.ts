@@ -15,6 +15,10 @@ export type ErrSpec =
       expectedButGot: [Type | string, Type | string];
     }
   | {
+      errType: 'expected-primitive';
+      butGot: Type;
+    }
+  | {
       errType: 'expected-arg-count';
       expectedArgCount: [string, number, number];
     }
@@ -101,6 +105,11 @@ function specToString(spec: ErrSpec): string {
       );
 
       return `This operation requires a ${expected} and a ${got} was entered`;
+    }
+    case 'expected-primitive': {
+      const got = spec.butGot.toBasicString();
+
+      return `This operation requires a primitive value (string, number, boolean or date) and a ${got} was entered`;
     }
     case 'expected-unit': {
       return 'This operation requires compatible units';
@@ -199,6 +208,10 @@ export class InferError {
       errType: 'expected-but-got',
       expectedButGot: [expected, got],
     });
+  }
+
+  static expectedPrimitive(butGot: Type): InferError {
+    return new InferError({ errType: 'expected-primitive', butGot });
   }
 
   static expectedArgCount(

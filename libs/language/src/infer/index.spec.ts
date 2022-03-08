@@ -449,7 +449,7 @@ describe('Property access', () => {
   it('Accesses columns in tables', async () => {
     expect(
       (await inferExpression(scopeWithTable, prop('Table', 'Col'))).toString()
-    ).toMatchInlineSnapshot(`"<number> x 3"`);
+    ).toMatchInlineSnapshot(`"<number> x 3 (Table)"`);
 
     expect(
       (await inferExpression(scopeWithTable, prop('Row', 'Name'))).toString()

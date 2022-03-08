@@ -286,3 +286,18 @@ export const sameAs = checker((me: Type, other: Type) => {
 
   return type;
 });
+
+export const isPrimitive = checker((me: Type) => {
+  const anyOf = Type.either(
+    me.isDate(),
+    me.isScalar('string'),
+    me.isScalar('number'),
+    me.isScalar('boolean')
+  );
+
+  if (anyOf.errorCause) {
+    return t.impossible(InferError.expectedPrimitive(me));
+  } else {
+    return me;
+  }
+});

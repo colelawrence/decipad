@@ -14,6 +14,13 @@ export interface Def {
   end?: Pos;
 }
 
+export interface CatDef {
+  type: 'catdef';
+  args: [varName: string];
+  start?: Pos;
+  end?: Pos;
+}
+
 export interface Ref {
   type: 'ref';
   args: [varName: string];
@@ -55,6 +62,7 @@ export type Identifier =
   | ExternalRef
   | GenericIdentifier
   | Def
+  | CatDef
   | FuncDef
   | ColDef;
 
@@ -151,6 +159,38 @@ export interface PropertyAccess {
   end?: Pos;
 }
 
+// Matrix stuff
+
+export interface MatrixAssign {
+  type: 'matrix-assign';
+  args: [def: Def, where: MatrixMatchers, assignee: Expression];
+  start?: Pos;
+  end?: Pos;
+}
+
+export interface MatrixRef {
+  type: 'matrix-ref';
+  args: [ref: Ref, where: MatrixMatchers];
+  start?: Pos;
+  end?: Pos;
+}
+
+export interface MatrixMatchers {
+  type: 'matrix-matchers';
+  args: Expression[];
+  start?: Pos;
+  end?: Pos;
+}
+
+// Sets
+
+export interface Categories {
+  type: 'categories';
+  args: [setName: CatDef, setContents: Expression];
+  start?: Pos;
+  end?: Pos;
+}
+
 // Generic stuff
 
 export interface GenericIdentifier {
@@ -237,11 +277,22 @@ export type Expression =
   | Date
   | Table
   | FetchData
-  | Directive;
+  | Directive
+  | MatrixRef;
 
-export type Statement = FunctionDefinition | Assign | Expression;
+export type Statement =
+  | FunctionDefinition
+  | Assign
+  | MatrixAssign
+  | Categories
+  | Expression;
 
-type Lists = FunctionArgumentNames | ArgList | ColumnItems | GenericList;
+type Lists =
+  | FunctionArgumentNames
+  | ArgList
+  | ColumnItems
+  | GenericList
+  | MatrixMatchers;
 
 export type Node =
   | Block
@@ -254,6 +305,7 @@ export type Node =
 export interface TypeToNode {
   directive: Directive;
   def: Def;
+  catdef: CatDef;
   ref: Ref;
   externalref: ExternalRef;
   'generic-identifier': GenericIdentifier;
@@ -273,6 +325,10 @@ export interface TypeToNode {
   'table-spread': TableSpread;
   table: Table;
   'property-access': PropertyAccess;
+  'matrix-ref': MatrixRef;
+  'matrix-assign': MatrixAssign;
+  'matrix-matchers': MatrixMatchers;
+  categories: Categories;
   assign: Assign;
   'argument-names': FunctionArgumentNames;
   'function-definition': FunctionDefinition;

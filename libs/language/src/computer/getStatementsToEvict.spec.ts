@@ -30,6 +30,19 @@ describe('findSymbolErrors', () => {
       new Set(['var:B'])
     );
   });
+
+  it('works for categories', () => {
+    expect(
+      findSymbolErrors(
+        parse(
+          'Cat = categories [1, 2]',
+          'Matrix[Cat] = 1',
+          'Matrix',
+          'Matrix[Cat]'
+        )
+      )
+    ).toEqual(new Set());
+  });
 });
 
 describe('getChangedBlocks', () => {
@@ -188,6 +201,86 @@ describe('evictCache', () => {
       newBlocks: parse('A = B + 9', 'B = A + 9'),
 
       expectEvicted: [0, 1],
+    });
+  });
+
+  describe('sets/matrices', () => {
+    it('deals with matrices', () => {
+      testEvictBlocks({
+        oldBlocks: parse(
+          'Cat = categories [1, 2]',
+          'Matrix[Cat] = 1',
+          'Matrix[Cat]'
+        ),
+        newBlocks: parse(
+          'Cat = categories [1, 2]',
+          'Matrix[Cat] = 2',
+          'Matrix[Cat]'
+        ),
+
+        expectEvicted: [1, 2],
+      });
+
+      testEvictBlocks({
+        oldBlocks: parse(
+          'Cat = categories [1, 2]',
+          'Matrix[Cat] = 1',
+          'Matrix'
+        ),
+        newBlocks: parse(
+          'Cat = categories [1, 2]',
+          'Matrix[Cat] = 2',
+          'Matrix'
+        ),
+
+        expectEvicted: [1, 2],
+      });
+    });
+
+    it('propagates changes in the set', () => {
+      testEvictBlocks({
+        oldBlocks: parse('Cat = categories [1, 2]', 'Matrix[Cat] = 1'),
+        newBlocks: parse('Cat = categories [1, 2, 3]', 'Matrix[Cat] = 1'),
+
+        expectEvicted: [0, 1],
+      });
+
+      testEvictBlocks({
+        oldBlocks: parse('Cat = categories [1, 2]', 'Matrix[Cat] = 1'),
+        newBlocks: parse('Cat = categories [1, 2, 3]', 'Matrix[Cat] = 2'),
+
+        expectEvicted: [0, 1],
+      });
+
+      testEvictBlocks({
+        oldBlocks: parse(
+          'Cat = categories [1, 2]',
+          'Matrix[Cat] = 1',
+          'Matrix[Cat]'
+        ),
+        newBlocks: parse(
+          'Cat = categories [1, 2, 3]',
+          'Matrix[Cat] = 1',
+          'Matrix[Cat]'
+        ),
+
+        expectEvicted: [0, 1, 2],
+      });
+    });
+
+    it('deals with nothing having changed', () => {
+      const old = parse(
+        'Cat = categories [1, 2]',
+        'Matrix[Cat] = 1',
+        'Matrix',
+        'Matrix[Cat]'
+      );
+      testEvictBlocks({
+        oldBlocks: old,
+        newBlocks: [...old],
+
+        expectEvicted: [],
+      });
     });
   });
 

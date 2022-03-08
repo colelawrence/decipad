@@ -18,6 +18,8 @@ import { evaluateData } from './data';
 import { getDateSequenceIncrement } from '../infer/sequence';
 import { RuntimeError } from '.';
 import { isPreviousRef } from '../previous-ref';
+import { evaluateMatrixRef, evaluateMatrixAssign } from '../matrix';
+import { evaluateCategories } from '../categories';
 
 // Gets a single value from an expanded AST.
 
@@ -166,6 +168,15 @@ export async function evaluate(
     case 'property-access': {
       const tableOrRow = await evaluate(realm, node.args[0]);
       return getProperty(tableOrRow, node.args[1]);
+    }
+    case 'matrix-assign': {
+      return evaluateMatrixAssign(realm, node);
+    }
+    case 'matrix-ref': {
+      return evaluateMatrixRef(realm, node);
+    }
+    case 'categories': {
+      return evaluateCategories(realm, node);
     }
     case 'function-definition': {
       const funcName = getIdentifierString(getDefined(node.args[0]));

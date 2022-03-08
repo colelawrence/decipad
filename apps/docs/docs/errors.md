@@ -94,6 +94,14 @@ containsdate(5, date(2050-Feb-02 15:30))
 ==> This operation requires a range and a number was entered
 ```
 
+## Expected primitive
+
+:::caution `expected-primitive`
+This operation requires a primitive value (string, number, boolean or date) and a table was entered
+:::
+
+You are trying to use an operation that requires a primitive value, for example searching a matrix. To solve this you need to pass in a primitive value, such as a string, number, boolean, or date.
+
 ## Complex expression in exponent
 
 :::caution `complex-expression-exponent`

@@ -1,5 +1,4 @@
 import { immerable, produce } from 'immer';
-import Fraction from '@decipad/fraction';
 import { Time } from '..';
 import * as AST from '../parser/ast-types';
 import { zip } from '../utils';
@@ -23,6 +22,7 @@ import {
   withColumnSize,
   withMinimumColumnCount,
   withAtParentIndex,
+  isPrimitive,
 } from './checks';
 import { InferError } from './InferError';
 import {
@@ -103,18 +103,26 @@ export class Type {
     return notErrored ?? types[0];
   }
 
-  toString(value?: Fraction): string {
+  toString({
+    isTableColumn = false,
+  }: { isTableColumn?: boolean } = {}): string {
     if (this.errorCause != null) {
       return `Error: ${this.errorCause.message}`;
     }
 
     if (this.columnSize != null && this.cellType != null) {
-      return `${this.cellType.toString(value)} x ${this.columnSize}`;
+      const columnStr = `${this.cellType.toString()} x ${this.columnSize}`;
+
+      if (!isTableColumn && this.indexedBy) {
+        return `${columnStr} (${this.indexedBy})`;
+      } else {
+        return columnStr;
+      }
     }
 
     if (this.columnTypes != null && this.columnNames != null) {
       const columnStrings = zip(this.columnNames, this.columnTypes).map(
-        ([name, cell]) => `${name} = ${cell.toString()}`
+        ([name, col]) => `${name} = ${col.toString({ isTableColumn: true })}`
       );
 
       return `table (${this.tableLength}) { ${columnStrings.join(', ')} }`;
@@ -133,7 +141,7 @@ export class Type {
     }
 
     if (this.unit != null && this.unit.args.length > 0) {
-      return stringifyUnits(this.unit, value);
+      return stringifyUnits(this.unit);
     }
 
     if (this.date != null) {
@@ -240,6 +248,10 @@ export class Type {
 
   withMinimumColumnCount(columnSize: number | 'unknown' | null): Type {
     return withMinimumColumnCount(this, columnSize);
+  }
+
+  isPrimitive(): Type {
+    return isPrimitive(this);
   }
 
   isRange(): Type {

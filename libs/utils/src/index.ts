@@ -1,4 +1,5 @@
 export * from './get-defined';
+export * from './get-only';
 export * from './get-defined-promise';
 export * from './identity';
 export * from './lenient-zip';

@@ -1,33 +1,37 @@
 import assert from 'assert';
-import { inferExpression, inferStatement } from '../infer';
-import { evaluateStatement, RuntimeError, Value } from '../interpreter';
-
 import {
   AST,
-  ExternalDataMap,
   AutocompleteName,
-  serializeType,
-  serializeUnit,
-  serializeResult,
+  ExternalDataMap,
   parseOneBlock,
   SerializedUnits,
+  serializeResult,
+  serializeType,
+  serializeUnit,
 } from '..';
+import { inferExpression, inferStatement } from '../infer';
+import { evaluateStatement, RuntimeError, Value } from '../interpreter';
 import { captureException } from '../reporting';
+import { validateResult } from '../result';
+import { build as t } from '../type';
+import { anyMappingToMap, getDefined, isExpression } from '../utils';
+import { ComputationRealm } from './ComputationRealm';
+import { ParseRet, updateParse } from './parse';
 import {
   ComputePanic,
-  ValueLocation,
+  ComputeRequest,
   ComputeResponse,
+  IdentifiedBlock,
   IdentifiedResult,
   InBlockResult,
-  IdentifiedBlock,
-  ComputeRequest,
+  ValueLocation,
 } from './types';
-import { ParseRet, updateParse } from './parse';
-import { ComputationRealm } from './ComputationRealm';
-import { build as t } from '../type';
-import { getAllBlockLocations, getGoodBlocks, getStatement } from './utils';
-import { anyMappingToMap, getDefined, isExpression } from '../utils';
-import { validateResult } from '../result';
+import {
+  getAllBlockLocations,
+  getDefinedSymbol,
+  getGoodBlocks,
+  getStatement,
+} from './utils';
 
 /*
  - Skip cached stuff
@@ -235,9 +239,17 @@ export class Computer {
 
     const { nodeTypes } = this.computationRealm.inferContext;
     function* findNames(): Iterable<AutocompleteName> {
+      const seenSymbols = new Set<string>();
+
       for (const block of program) {
         for (const statement of block.args) {
           if (statement === findUntil) return;
+
+          const symbol = getDefinedSymbol(statement);
+          if (symbol) {
+            if (seenSymbols.has(symbol)) continue;
+            seenSymbols.add(symbol);
+          }
 
           const type = nodeTypes.get(statement);
 
@@ -277,7 +289,8 @@ export class Computer {
     return (
       stmt != null &&
       (stmt.type === 'literal' ||
-        (stmt.type === 'assign' && stmt.args[1].type === 'literal'))
+        (stmt.type === 'assign' && stmt.args[1].type === 'literal') ||
+        (stmt.type === 'matrix-assign' && stmt.args[2].type === 'literal'))
     );
   }
 

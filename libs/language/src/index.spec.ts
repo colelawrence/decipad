@@ -602,7 +602,7 @@ describe('Tables', () => {
       })
     `);
     expect(resultExtraDim2.type.toString()).toMatchInlineSnapshot(
-      `"table (3) { Years = <number>, Cost = <number> x 3 x 1 }"`
+      `"table (3) { Years = <number>, Cost = <number> x 3 (Fuel) x 1 }"`
     );
   });
 
@@ -624,6 +624,50 @@ describe('Tables', () => {
       }
       })
     `);
+  });
+});
+
+describe('Matrices', () => {
+  const createVars = `
+    Cities = categories ["Lisbon", "Faro"]
+    CoffeePrice[Cities] = 0.70 EUR
+  `;
+  it('can assign contents', async () => {
+    expect(
+      await runCode(`
+        ${createVars}
+        CoffeePrice[Cities] = 1.20 EUR
+      `)
+    ).toMatchInlineSnapshot(`Result([ 1.2 €, 1.2 € ])`);
+  });
+
+  it('can assign partial contents', async () => {
+    expect(
+      await runCode(`
+        ${createVars}
+        CoffeePrice[Cities == "Faro"] = 1.20 EUR
+      `)
+    ).toMatchInlineSnapshot(`Result([ 0.7 €, 1.2 € ])`);
+  });
+
+  it('can read contents', async () => {
+    expect(
+      await runCode(`
+        ${createVars}
+        CoffeePrice[Cities == "Faro"] = 1.20 EUR
+        CoffeePrice[Cities]
+      `)
+    ).toMatchInlineSnapshot(`Result([ 0.7 €, 1.2 € ])`);
+  });
+
+  it('can read partial contents', async () => {
+    expect(
+      await runCode(`
+        ${createVars}
+        CoffeePrice[Cities == "Faro"] = 1.2
+        CoffeePrice[Cities == "Faro"]
+      `)
+    ).toMatchInlineSnapshot(`Result([ 1.2 € ])`);
   });
 });
 

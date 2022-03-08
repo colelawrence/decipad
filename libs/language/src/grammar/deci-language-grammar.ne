@@ -12,6 +12,9 @@ import { tokenizer } from './tokenizer'
 @include "./reserved.ne"
 @include "./utils.ne"
 @include "./white-space.ne"
+@include "./assign.ne"
+@include "./categories.ne"
+@include "./matrix.ne"
 @include "./literal.ne"
 @include "./number.ne"
 @include "./string.ne"
@@ -45,24 +48,10 @@ block         -> (%statementSep | %ws):? statement (%statementSep statement):* (
                                                         %}
 
 statement     -> assign                                 {% id %}
+statement     -> matrixAssign                           {% id %}
 statement     -> functionDef                            {% id %}
 statement     -> expression                             {% id %}
-
-assign -> identifier _ "=" _ assignable                 {%
-                                                        (d) => addArrayLoc({
-                                                          type: 'assign',
-                                                          args: [
-                                                            addLoc({
-                                                              type: 'def',
-                                                              args: [d[0].name]
-                                                            }, d[0]),
-                                                            d[4]
-                                                          ]
-                                                        }, d)
-                                                        %}
-
-assignable -> expression                                {% id %}
-assignable -> table                                     {% id %}
+statement     -> categories                             {% id %}
 
 ##################
 ### References ###

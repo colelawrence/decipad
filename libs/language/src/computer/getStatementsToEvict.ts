@@ -1,16 +1,15 @@
 import { dequal } from 'dequal';
-
 import { AST, ExternalDataMap } from '..';
 import { getDependents } from './dependents';
 import { ValueLocation } from './types';
 import {
-  iterProgram,
+  findSymbolsUsed,
+  getAllSymbolsDefined,
   getDefinedSymbol,
   getSomeBlockLocations,
-  getAllSymbolsDefined,
-  setIntersection,
+  iterProgram,
   LocationSet,
-  findSymbolsUsed,
+  setIntersection,
 } from './utils';
 
 const getChangedMapKeys = <T>(
@@ -52,13 +51,16 @@ export const findSymbolErrors = (program: AST.Block[]) => {
   const seen = new Set<string>();
 
   iterProgram(program, (stmt) => {
+    const sym = getDefinedSymbol(stmt);
+
     for (const usedSym of findSymbolsUsed(stmt)) {
+      if (sym === usedSym) continue;
+
       if (!seen.has(usedSym)) {
         maybeUsedBeforeDef.add(usedSym);
       }
     }
 
-    const sym = getDefinedSymbol(stmt);
     if (sym != null) {
       if (seen.has(sym)) {
         reassigned.add(sym);

@@ -1,5 +1,15 @@
 import Fraction from '@decipad/fraction';
-import { block, assign, l, r, c } from '../utils';
+import {
+  block,
+  assign,
+  l,
+  r,
+  c,
+  categories,
+  col,
+  matrixRef,
+  matrixAssign,
+} from '../utils';
 import { AST } from '..';
 import {
   ComputePanic,
@@ -53,6 +63,16 @@ export const programContainingError = testBlocks(
     assign('Error', c('+', r('A'), l('hi i was supposed to be a number'))),
     c('+', r('A'), l(1)),
     c('+', r('Error'), l(1))
+  )
+);
+
+export const programContainingMatrix = testBlocks(
+  block(
+    categories('Locations', col('Lisbon', 'Faro')),
+    r('Locations'),
+    matrixAssign('CoffeePrice', [r('Locations')], l(1)),
+    matrixAssign('CoffeePrice', [c('==', r('Locations'), l('Faro'))], l(2)),
+    matrixRef('CoffeePrice', [r('Locations')])
   )
 );
 
@@ -124,3 +144,6 @@ export const simplifyComputeResponse = (
 
   return simpleUpdates;
 };
+
+export const simplifyLocs = (ids: [string, number][]) =>
+  ids.map((id) => id.join('/'));

@@ -1,0 +1,44 @@
+import { AST, Column, Context } from '..';
+import { Realm, RuntimeError } from '../interpreter';
+import { build as t, Type, InferError } from '../type';
+import { getIdentifierString } from '../utils';
+
+export const getIndexName = (type: Type) =>
+  type.indexedBy ?? type.indexName ?? null;
+
+export const inferVariable = (
+  context: Context,
+  varName: RefLike,
+  expectedDim?: string | null
+) => {
+  const variable = context.stack.get(refName(varName));
+
+  if (!variable) {
+    return t.impossible(InferError.missingVariable(refName(varName)));
+  } else if (expectedDim && getIndexName(variable) !== expectedDim) {
+    return t.impossible(InferError.expectedAssociatedColumn(variable));
+  } else {
+    return variable.isColumn();
+  }
+};
+
+export const evaluateVariable = (realm: Realm, varName: RefLike) => {
+  const variable = realm.stack.get(refName(varName));
+
+  if (!variable) {
+    throw new RuntimeError(InferError.missingVariable(refName(varName)));
+  } else if (!(variable instanceof Column)) {
+    throw new RuntimeError('Expected column');
+  } else {
+    return variable;
+  }
+};
+
+type RefLike = AST.Ref | AST.Def | string;
+const refName = (refLike: RefLike) => {
+  if (typeof refLike === 'string') {
+    return refLike;
+  } else {
+    return getIdentifierString(refLike);
+  }
+};

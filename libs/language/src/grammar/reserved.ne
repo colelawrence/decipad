@@ -9,6 +9,8 @@ const initialReservedWords = new Set([
   'where',
   'given',
   'per',
+  'set',
+  'categories',
   'true',
   'false',
   'if',

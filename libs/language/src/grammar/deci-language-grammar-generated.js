@@ -16,6 +16,8 @@ const initialReservedWords = new Set([
   'where',
   'given',
   'per',
+  'set',
+  'categories',
   'true',
   'false',
   'if',
@@ -346,6 +348,170 @@ let ParserRules = [
       } else {
         return d[0];
       }
+    },
+  },
+  {
+    name: 'assign',
+    symbols: ['assignTarget', 'spacedEq', 'assignable'],
+    postprocess: (d) =>
+      addArrayLoc(
+        {
+          type: 'assign',
+          args: [d[0], d[2]],
+        },
+        d
+      ),
+  },
+  { name: 'assignable', symbols: ['expression'], postprocess: id },
+  { name: 'assignable', symbols: ['table'], postprocess: id },
+  { name: 'spacedEq', symbols: ['_', { literal: '=' }, '_'], postprocess: id },
+  {
+    name: 'assignTarget',
+    symbols: ['identifier'],
+    postprocess: (d) => {
+      return addLoc(
+        {
+          type: 'def',
+          args: [d[0].name],
+        },
+        d[0]
+      );
+    },
+  },
+  {
+    name: 'categories',
+    symbols: [
+      'identifier',
+      '_',
+      { literal: '=' },
+      '_',
+      { literal: 'categories' },
+      '_',
+      'expression',
+    ],
+    postprocess: (d) => {
+      return addArrayLoc(
+        {
+          type: 'categories',
+          args: [
+            addLoc(
+              {
+                type: 'catdef',
+                args: [d[0].name],
+              },
+              d[0]
+            ),
+            d[6],
+          ],
+        },
+        d
+      );
+    },
+  },
+  {
+    name: 'matrixMatchers$ebnf$1',
+    symbols: [{ literal: ',' }],
+    postprocess: id,
+  },
+  {
+    name: 'matrixMatchers$ebnf$1',
+    symbols: [],
+    postprocess: function (d) {
+      return null;
+    },
+  },
+  {
+    name: 'matrixMatchers',
+    symbols: [
+      { literal: '[' },
+      '_',
+      'matrixMatchersInner',
+      '_',
+      'matrixMatchers$ebnf$1',
+      '_',
+      { literal: ']' },
+    ],
+    postprocess: (d) => {
+      return addArrayLoc(
+        {
+          type: 'matrix-matchers',
+          args: [...d[2]],
+        },
+        d
+      );
+    },
+  },
+  {
+    name: 'matrixMatchersInner',
+    symbols: ['matcherExp'],
+    postprocess: (d) => [d[0]],
+  },
+  {
+    name: 'matrixMatchersInner$subexpression$1',
+    symbols: ['_', { literal: ',' }, '_'],
+  },
+  {
+    name: 'matrixMatchersInner',
+    symbols: [
+      'matrixMatchersInner',
+      'matrixMatchersInner$subexpression$1',
+      'matcherExp',
+    ],
+    postprocess: ([accum, _, exp]) => [...accum, exp],
+  },
+  {
+    name: 'matrixAssign',
+    symbols: ['assignTarget', '_', 'matrixMatchers', 'spacedEq', 'expression'],
+    postprocess: (d) => {
+      return addArrayLoc(
+        {
+          type: 'matrix-assign',
+          args: [d[0], d[2], d[4]],
+        },
+        d
+      );
+    },
+  },
+  {
+    name: 'matrixRef',
+    symbols: ['ref', 'matrixMatchers'],
+    postprocess: (d) => {
+      return addArrayLoc(
+        {
+          type: 'matrix-ref',
+          args: [d[0], d[1]],
+        },
+        d
+      );
+    },
+  },
+  { name: 'matcherExp', symbols: ['ref'], postprocess: id },
+  {
+    name: 'matcherExp',
+    symbols: ['ref', '_', { literal: '==' }, '_', 'expression'],
+    postprocess: (d) => {
+      return addArrayLoc(
+        {
+          type: 'function-call',
+          args: [
+            addArrayLoc(
+              {
+                type: 'funcref',
+                args: ['=='],
+              },
+              d
+            ),
+            addArrayLoc(
+              {
+                type: 'argument-list',
+                args: [d[0], d[4]],
+              },
+              d
+            ),
+          ],
+        },
+        d
+      );
     },
   },
   { name: 'literal', symbols: ['boolean'], postprocess: id },
@@ -1212,6 +1378,7 @@ let ParserRules = [
   { name: 'primary', symbols: ['literal'], postprocess: id },
   { name: 'primary', symbols: ['functionCall'], postprocess: id },
   { name: 'primary', symbols: ['select'], postprocess: id },
+  { name: 'primary', symbols: ['matrixRef'], postprocess: id },
   { name: 'primary', symbols: ['ref'], postprocess: id },
   { name: 'primary', symbols: ['parenthesizedExpression'], postprocess: id },
   {
@@ -1727,31 +1894,10 @@ let ParserRules = [
     },
   },
   { name: 'statement', symbols: ['assign'], postprocess: id },
+  { name: 'statement', symbols: ['matrixAssign'], postprocess: id },
   { name: 'statement', symbols: ['functionDef'], postprocess: id },
   { name: 'statement', symbols: ['expression'], postprocess: id },
-  {
-    name: 'assign',
-    symbols: ['identifier', '_', { literal: '=' }, '_', 'assignable'],
-    postprocess: (d) =>
-      addArrayLoc(
-        {
-          type: 'assign',
-          args: [
-            addLoc(
-              {
-                type: 'def',
-                args: [d[0].name],
-              },
-              d[0]
-            ),
-            d[4],
-          ],
-        },
-        d
-      ),
-  },
-  { name: 'assignable', symbols: ['expression'], postprocess: id },
-  { name: 'assignable', symbols: ['table'], postprocess: id },
+  { name: 'statement', symbols: ['categories'], postprocess: id },
   {
     name: 'identifier',
     symbols: [

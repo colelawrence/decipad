@@ -636,7 +636,7 @@ describe('automap for reducers', () => {
 
       expect(
         automapTypesForReducer(twoDeeType, sumFunctor).toString()
-      ).toMatchInlineSnapshot(`"<number> x 2"`);
+      ).toMatchInlineSnapshot(`"<number> x 2 (Y)"`);
     });
 
     it('automapTypesForReducer can reduce the other way', () => {
@@ -644,7 +644,7 @@ describe('automap for reducers', () => {
 
       expect(
         automapTypesForReducer(twoDeeType, sumFunctor).toString()
-      ).toMatchInlineSnapshot(`"<number> x 1"`);
+      ).toMatchInlineSnapshot(`"<number> x 1 (Y)"`);
     });
 
     it('automapTypesForReducer works with 1D arguments', () => {

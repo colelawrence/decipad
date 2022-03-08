@@ -21,7 +21,7 @@ This command generates static content into the `build` directory and can be serv
 ### Test
 
 ```
-$ nx test docs [--update]
+$ nx test docs -- [--update]
 ```
 
-This runs the snapshot tests. Snapshots are found in code blocks (after the `==>`). Add `--update` to update those snapshots.
+This runs the snapshot tests. Snapshots are found in code blocks (after the `==>`). Add `-- --update` to update those snapshots.

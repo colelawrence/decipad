@@ -45,7 +45,8 @@ const asParsed = ({ id, block }: ParsedBlock): ParseRet => ({
 });
 
 /**
- * Parse the changed bits of a program
+ * Parse the changed bits of a program.
+ * Returns the same AST if the block didn't change.
  */
 export const updateParse = (
   program: Program,

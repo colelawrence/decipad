@@ -353,40 +353,40 @@ Currencies can be expressed as their symbol or by their name.
 
 ### List of supported currencies
 
-| Currency               | Name | Symbol |
-|------------------------|------|--------|
-| 🇺🇸 United States dollar | USD |    $   |
-| 🇪🇺 Euro                 | EUR |    €   |
-| 🇯🇵 Japanese yen         | JPY |    ¥   |
-| 🇬🇧 Pound sterling       | GBP |    £   |
-| 🇦🇺 Australian dollar    | AUD |   A$   |
-| 🇨🇦 Canadian dollar      | CAD |   C$   |
-| 🇨🇭 Swiss franc          | CHF |   CHF  |
-| 🇨🇳 Renminbi             | CNY |    ¥   |
-| 🇭🇰 Hong Kong dollar     | HKD |   HK$  |
-| 🇳🇿 New Zealand dollar   | NZD |   NZ$  |
-| 🇸🇪 Swedish krona        | SEK |   kr   |
-| 🇰🇷 South Korean won     | KRW |    ₩   |
-| 🇸🇬 Singapore dollar     | SGD |   S$   |
-| 🇳🇴 Norwegian krone      | NOK |   kr   |
-| 🇲🇽 Mexican peso         | MXN |    $   |
-| 🇮🇳 Indian rupee         | INR |    ₹   |
-| 🇷🇺 Russian ruble        | RUB |    ₽   |
-| 🇿🇦 South African rand   | ZAR |    R   |
-| 🇹🇷 Turkish lira         | TRY |    ₺   |
-| 🇧🇷 Brazilian real       | BRL |   R$   |
-| 🇹🇼 New Taiwan dollar    | TWD |   NT$  |
-| 🇩🇰 Danish krone         | DKK |   kr   |
-| 🇵🇱 Polish złoty         | PLN |   zł   |
-| 🇹🇭 Thai baht            | THB |    ฿   |
-| 🇮🇩 Indonesian rupiah    | IDR |   Rp   |
-| 🇭🇺 Hungarian forint     | HUF |   Ft   |
-| 🇨🇿 Czech koruna         | CZK |   Kč   |
-| 🇮🇱 Israeli new shekel   | ILS |    ₪   |
-| 🇨🇱 Chilean peso         | CLP |  CLP$  |
-| 🇵🇭 Philippine peso      | PHP |    ₱   |
-| 🇦🇪 UAE dirham           | AED |   د.إ  |
-| 🇨🇴 Colombian peso       | COP |  COL$  |
-| 🇸🇦 Saudi riyal          | SAR |   ﷼    |
-| 🇲🇾 Malaysian ringgit    | MYR |   RM   |
-| 🇷🇴 Romanian leu         | RON |    L   |
+| Currency                | Name | Symbol |
+| ----------------------- | ---- | ------ |
+| 🇺🇸 United States dollar | USD  | $      |
+| 🇪🇺 Euro                 | EUR  | €      |
+| 🇯🇵 Japanese yen         | JPY  | ¥      |
+| 🇬🇧 Pound sterling       | GBP  | £      |
+| 🇦🇺 Australian dollar    | AUD  | A$     |
+| 🇨🇦 Canadian dollar      | CAD  | C$     |
+| 🇨🇭 Swiss franc          | CHF  | CHF    |
+| 🇨🇳 Renminbi             | CNY  | ¥      |
+| 🇭🇰 Hong Kong dollar     | HKD  | HK$    |
+| 🇳🇿 New Zealand dollar   | NZD  | NZ$    |
+| 🇸🇪 Swedish krona        | SEK  | kr     |
+| 🇰🇷 South Korean won     | KRW  | ₩      |
+| 🇸🇬 Singapore dollar     | SGD  | S$     |
+| 🇳🇴 Norwegian krone      | NOK  | kr     |
+| 🇲🇽 Mexican peso         | MXN  | $      |
+| 🇮🇳 Indian rupee         | INR  | ₹      |
+| 🇷🇺 Russian ruble        | RUB  | ₽      |
+| 🇿🇦 South African rand   | ZAR  | R      |
+| 🇹🇷 Turkish lira         | TRY  | ₺      |
+| 🇧🇷 Brazilian real       | BRL  | R$     |
+| 🇹🇼 New Taiwan dollar    | TWD  | NT$    |
+| 🇩🇰 Danish krone         | DKK  | kr     |
+| 🇵🇱 Polish złoty         | PLN  | zł     |
+| 🇹🇭 Thai baht            | THB  | ฿      |
+| 🇮🇩 Indonesian rupiah    | IDR  | Rp     |
+| 🇭🇺 Hungarian forint     | HUF  | Ft     |
+| 🇨🇿 Czech koruna         | CZK  | Kč     |
+| 🇮🇱 Israeli new shekel   | ILS  | ₪      |
+| 🇨🇱 Chilean peso         | CLP  | CLP$   |
+| 🇵🇭 Philippine peso      | PHP  | ₱      |
+| 🇦🇪 UAE dirham           | AED  | د.إ    |
+| 🇨🇴 Colombian peso       | COP  | COL$   |
+| 🇸🇦 Saudi riyal          | SAR  | ﷼      |
+| 🇲🇾 Malaysian ringgit    | MYR  | RM     |
+| 🇷🇴 Romanian leu         | RON  | L      |

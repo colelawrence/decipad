@@ -37,89 +37,112 @@ it('evictStatement', () => {
   expect(realm.inferContext.functionDefinitions.has('Func')).toBe(false);
 });
 
-it('getIndexLabels', () => {
-  realm.inferContext.stack.set(
-    'DimName',
-    buildType.table({
-      indexName: 'DimName',
-      length: 1,
-      columnTypes: [buildType.string(), buildType.number()],
-      columnNames: ['Names', 'Numbers'],
-    })
-  );
-  realm.interpreterRealm.stack.set(
-    'DimName',
-    Table.fromNamedColumns(
-      [fromJS(['One', 'Two', 'Three']), fromJS([1, 2, 3])],
-      ['Names', 'Numbers']
-    )
-  );
+describe('getIndexLabels', () => {
+  it('getIndexLabels', () => {
+    realm.inferContext.stack.set(
+      'DimName',
+      buildType.table({
+        indexName: 'DimName',
+        length: 1,
+        columnTypes: [buildType.string(), buildType.number()],
+        columnNames: ['Names', 'Numbers'],
+      })
+    );
+    realm.interpreterRealm.stack.set(
+      'DimName',
+      Table.fromNamedColumns(
+        [fromJS(['One', 'Two', 'Three']), fromJS([1, 2, 3])],
+        ['Names', 'Numbers']
+      )
+    );
 
-  expect(realm.getIndexLabels()).toMatchInlineSnapshot(`
-    Map {
-      "DimName" => Array [
-        "One",
-        "Two",
-        "Three",
-      ],
-    }
-  `);
-});
+    expect(realm.getIndexLabels()).toMatchInlineSnapshot(`
+      Map {
+        "DimName" => Array [
+          "One",
+          "Two",
+          "Three",
+        ],
+      }
+    `);
+  });
 
-it('getIndexLabels with numbers', () => {
-  realm.inferContext.stack.set(
-    'Diabetes',
-    buildType.table({
-      indexName: 'Diabetes',
-      length: 1,
-      columnTypes: [buildType.number()],
-      columnNames: ['Nums'],
-    })
-  );
+  it('getIndexLabels for Sets', () => {
+    realm.inferContext.stack.set(
+      'DimName',
+      buildType.column(buildType.string(), 3, 'DimName')
+    );
+    realm.interpreterRealm.stack.set(
+      'DimName',
+      fromJS(['One', 'Two', 'Three'])
+    );
 
-  realm.interpreterRealm.stack.set(
-    'Diabetes',
-    Table.fromNamedColumns([fromJS([1, 2])], ['Nums'])
-  );
+    expect(realm.getIndexLabels()).toMatchInlineSnapshot(`
+      Map {
+        "DimName" => Array [
+          "One",
+          "Two",
+          "Three",
+        ],
+      }
+    `);
+  });
 
-  expect(realm.getIndexLabels()).toMatchInlineSnapshot(`
-    Map {
-      "Diabetes" => Array [
-        "1",
-        "2",
-      ],
-    }
-  `);
-});
+  it('getIndexLabels with numbers', () => {
+    realm.inferContext.stack.set(
+      'Diabetes',
+      buildType.table({
+        indexName: 'Diabetes',
+        length: 1,
+        columnTypes: [buildType.number()],
+        columnNames: ['Nums'],
+      })
+    );
 
-it('getIndexLabels with dates', () => {
-  realm.inferContext.stack.set(
-    'Dates',
-    buildType.table({
-      indexName: 'Dates',
-      length: 1,
-      columnTypes: [buildType.date('month')],
-      columnNames: ['Dates'],
-    })
-  );
+    realm.interpreterRealm.stack.set(
+      'Diabetes',
+      Table.fromNamedColumns([fromJS([1, 2])], ['Nums'])
+    );
 
-  realm.interpreterRealm.stack.set(
-    'Dates',
-    Table.fromNamedColumns(
-      [
-        Column.fromValues([
-          Date.fromDateAndSpecificity(parseUTCDate('2020-01'), 'month'),
-        ]),
-      ],
-      ['Dates']
-    )
-  );
+    expect(realm.getIndexLabels()).toMatchInlineSnapshot(`
+      Map {
+        "Diabetes" => Array [
+          "1",
+          "2",
+        ],
+      }
+    `);
+  });
 
-  expect(realm.getIndexLabels()).toMatchInlineSnapshot(`
-    Map {
-      "Dates" => Array [
-        "2020-01",
-      ],
-    }
-  `);
+  it('getIndexLabels with dates', () => {
+    realm.inferContext.stack.set(
+      'Dates',
+      buildType.table({
+        indexName: 'Dates',
+        length: 1,
+        columnTypes: [buildType.date('month')],
+        columnNames: ['Dates'],
+      })
+    );
+
+    realm.interpreterRealm.stack.set(
+      'Dates',
+      Table.fromNamedColumns(
+        [
+          Column.fromValues([
+            Date.fromDateAndSpecificity(parseUTCDate('2020-01'), 'month'),
+          ]),
+        ],
+        ['Dates']
+      )
+    );
+
+    expect(realm.getIndexLabels()).toMatchInlineSnapshot(`
+      Map {
+        "Dates" => Array [
+          "2020-01",
+        ],
+      }
+    `);
+  });
 });

@@ -112,6 +112,19 @@ export function tableDef(
   return n('assign', n('def', name), table(columns));
 }
 
+export const matrixAssign = (
+  name: string,
+  matchers: AST.Expression[],
+  value: AST.Expression
+) =>
+  n('matrix-assign', n('def', name), n('matrix-matchers', ...matchers), value);
+
+export const matrixRef = (name: string, matchers: AST.Expression[]) =>
+  n('matrix-ref', n('ref', name), n('matrix-matchers', ...matchers));
+
+export const categories = (name: string, catContents: AST.Expression) =>
+  n('categories', n('catdef', name), catContents);
+
 export const assign = (name: string, value: AST.Expression) =>
   n('assign', n('def', name), value);
 
@@ -170,6 +183,7 @@ export const isNode = (value: unknown | AST.Node): value is AST.Node => {
 const expressionTypesSet = new Set([
   'function-call',
   'ref',
+  'external-ref',
   'property-access',
   'literal',
   'time-quantity',
@@ -178,6 +192,7 @@ const expressionTypesSet = new Set([
   'range',
   'sequence',
   'date',
+  'matrix-ref',
   'directive',
 ]);
 
@@ -186,7 +201,12 @@ export const isExpression = (
 ): value is AST.Expression =>
   isNode(value) && expressionTypesSet.has(value.type);
 
-const statementTypesSet = new Set(['assign', 'function-definition']);
+const statementTypesSet = new Set([
+  'matrix-assign',
+  'categories',
+  'assign',
+  'function-definition',
+]);
 
 export const isStatement = (
   value: unknown | AST.Statement
@@ -195,6 +215,7 @@ export const isStatement = (
 export const getIdentifierString = ({ type, args }: AST.Identifier): string => {
   if (
     (type !== 'ref' &&
+      type !== 'catdef' &&
       type !== 'def' &&
       type !== 'funcdef' &&
       type !== 'generic-identifier' &&

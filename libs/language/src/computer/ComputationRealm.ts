@@ -1,7 +1,8 @@
-import { AST, Table, ExternalDataMap } from '..';
+import { AST, Table, ExternalDataMap, Column, Type } from '..';
 import { stringifyDate } from '../date';
 import { makeContext as makeInferContext } from '../infer';
 import { Realm, Value } from '../interpreter';
+import { ColumnLike } from '../interpreter/Value';
 
 import {
   getStatementsToEvict,
@@ -66,32 +67,45 @@ export class ComputationRealm {
 
   /** Retrieve labels (first column) for each table, indexed by table name. */
   getIndexLabels(): Map<string, string[]> {
-    const ret = new Map();
+    const labels = new Map();
 
-    for (const [name, type] of this.inferContext.stack.top.entries()) {
-      let labels: string[] | undefined;
-      if (type.indexName && type.columnTypes) {
-        const table = this.interpreterRealm.stack.top.get(name);
-        const [colType] = type.columnTypes;
-
-        if (table instanceof Table) {
-          const data = table.columns[0].getData();
-
-          if (colType.type === 'string' || colType.type === 'number') {
-            labels = (data as string[]).map((s) => String(s));
-          }
-
-          const { date } = colType;
-          if (date) {
-            labels = (data as bigint[]).map((d) => stringifyDate(d, date));
-          }
-        }
+    const addLabels = (name: string, column?: ColumnLike, cellType?: Type) => {
+      if (!column || !cellType) {
+        return;
       }
 
-      if (labels) ret.set(name, labels);
+      const data = column.getData();
+
+      if (cellType.type === 'string' || cellType.type === 'number') {
+        labels.set(
+          name,
+          (data as string[]).map((s) => String(s))
+        );
+      }
+
+      const { date } = cellType;
+      if (date) {
+        labels.set(
+          name,
+          (data as bigint[]).map((d) => stringifyDate(d, date))
+        );
+      }
+    };
+
+    for (const [
+      name,
+      type,
+    ] of this.inferContext.stack.globalVariables.entries()) {
+      const table = this.interpreterRealm.stack.globalVariables.get(name);
+
+      if (table instanceof Table) {
+        addLabels(name, table.columns[0], type.columnTypes?.[0]);
+      } else if (table instanceof Column) {
+        addLabels(name, table, type.cellType ?? undefined);
+      }
     }
 
-    return ret;
+    return labels;
   }
 
   addToCache(loc: ValueLocation, result: CacheContents) {
