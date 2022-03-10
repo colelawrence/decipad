@@ -110,7 +110,7 @@ export const NotebookTopbar = ({
             </Button>
           )
         ) : (
-          <Button href="https://www.decipad.com/get-early-access">
+          <Button href="https://rcagp49qi5w.typeform.com/to/i8uXYEtd">
             Try Decipad
           </Button>
         )}

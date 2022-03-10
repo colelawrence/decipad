@@ -32,7 +32,7 @@ describe('Notebook Topbar', () => {
     rerender(<NotebookTopbar {...props} permission="READ" />);
     expect(getByText(/try decipad/i)).toHaveAttribute(
       'href',
-      expect.stringMatching(/early.*access/i)
+      expect.stringMatching(/typeform/i)
     );
   });
 
