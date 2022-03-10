@@ -4,7 +4,7 @@ import { authenticate, AuthResult } from '@decipad/services/authentication';
 import { wrapHandler } from '@decipad/services/monitor';
 import { onConnect } from '@decipad/sync-connection-lambdas';
 import { getDefined } from '@decipad/utils';
-import Boom from '@hapi/boom';
+import Boom, { boomify } from '@hapi/boom';
 import { docIdFromPath } from '../path';
 
 function isValidAuthResult(authResult: AuthResult): boolean {
@@ -14,17 +14,37 @@ function isValidAuthResult(authResult: AuthResult): boolean {
 export const handler = wrapHandler(async function ws(
   event: WSRequest
 ): Promise<HttpResponse> {
-  const authResult = (await authenticate(event)).filter(isValidAuthResult);
-  if (!authResult.length) {
-    throw Boom.unauthorized();
-  }
+  try {
+    const authResult = (await authenticate(event)).filter(isValidAuthResult);
+    if (!authResult.length) {
+      throw Boom.unauthorized();
+    }
 
-  const connId = event.requestContext.connectionId;
-  const qs = getDefined(event.queryStringParameters);
-  const docId = docIdFromPath(qs.doc || '');
-  if (!docId) {
-    throw Boom.notAcceptable('no doc id');
+    const connId = event.requestContext.connectionId;
+    const qs = getDefined(event.queryStringParameters);
+    const docId = docIdFromPath(qs.doc || '');
+    if (!docId) {
+      throw Boom.notAcceptable('no doc id');
+    }
+    const resource = `/pads/${docId}`;
+    await onConnect(connId, resource, authResult);
+
+    const wsProtocol =
+      event.headers['sec-websocket-protocol'] ||
+      event.headers['Sec-WebSocket-Protocol'];
+    return {
+      statusCode: 200,
+      headers: wsProtocol
+        ? {
+            'Sec-WebSocket-Protocol': wsProtocol,
+          }
+        : {},
+    };
+  } catch (err) {
+    const e = boomify(err as Error);
+    console.error('Error on connect:', e);
+    return {
+      statusCode: e.output.statusCode,
+    };
   }
-  const resource = `/pads/${docId}`;
-  return onConnect(connId, resource, authResult, event);
 });

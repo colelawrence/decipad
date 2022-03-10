@@ -1,12 +1,12 @@
 /* eslint-disable jest/expect-expect */
 /* eslint-disable jest/no-done-callback */
 /* eslint-env jest */
-import waitForExpect from 'wait-for-expect';
-import { Doc as YDoc, Text as YText, Map as YMap } from 'yjs';
-import { Workspace, Pad } from '@decipad/backendtypes';
+import { Pad, Workspace } from '@decipad/backendtypes';
 import { timeout } from '@decipad/utils';
-import { WebsocketProvider, WSStatus } from '../../y-websocket/src';
+import waitForExpect from 'wait-for-expect';
+import { Doc as YDoc, Map as YMap, Text as YText } from 'yjs';
 import { testWithSandbox as test } from '../../backend-test-sandbox/src';
+import { WebsocketProvider, WSStatus } from '../../y-websocket/src';
 
 type TextNode = YMap<YText>;
 
@@ -105,6 +105,11 @@ test('connection', (ctx) => {
       expect(textNode.get('text')?.toString()).toBe('hey');
       provider?.once('synced', resolve);
     });
+  });
+
+  it('waits a bit', async () => {
+    // we have to wait a bit because Y.js debounces changes for ~1 second
+    await timeout(2000);
   });
 
   it('can disconnect', () => {

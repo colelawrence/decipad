@@ -1,14 +1,14 @@
-import { Buffer } from 'buffer';
-import Boom from '@hapi/boom';
 import { HttpResponse } from '@architect/functions';
 import { WSRequest } from '@decipad/backendtypes';
-import { onMessage } from '@decipad/sync-connection-lambdas';
-import tables from '@decipad/tables';
 import { monitor as monitorConfig } from '@decipad/config';
 import meta from '@decipad/meta';
+import { onMessage } from '@decipad/sync-connection-lambdas';
+import tables from '@decipad/tables';
 import { noop } from '@decipad/utils';
+import Boom from '@hapi/boom';
 import { AWSLambda as SentryAWSLambda } from '@sentry/serverless';
 import { Context } from 'aws-lambda';
+import { Buffer } from 'buffer';
 
 type Handler = (req: WSRequest, ctx: Context) => Promise<HttpResponse>;
 
@@ -36,6 +36,7 @@ function handleErrors(_handle: Handler) {
       return returnValue;
     } catch (err) {
       const error = Boom.boomify(err as Error);
+      console.error('Error while receiving or sending WS message', err);
       return {
         statusCode: error.output.statusCode,
       };
