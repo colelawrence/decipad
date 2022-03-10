@@ -2,13 +2,13 @@ import { encode as encodeVanityUrlComponent } from './vanityUrlComponent';
 
 export const SECRET_URL_PARAM = 'secret';
 
-export const getSecretPadLink = (
-  padId: string,
-  padTitle: string,
+export const getSecretNotebookLink = (
+  notebookId: string,
+  notebookTitle: string,
   secret: string
 ): string => {
   const url = new URL(
-    `/n/${encodeVanityUrlComponent(padTitle, padId)}`,
+    `/n/${encodeVanityUrlComponent(notebookTitle, notebookId)}`,
     window.location.origin
   );
   url.searchParams.set(SECRET_URL_PARAM, secret);

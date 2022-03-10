@@ -1,29 +1,29 @@
-import { FC, useMemo, useState, useEffect } from 'react';
-import { captureException } from '@sentry/react';
-import { identity } from '@decipad/utils';
-import {
-  ProgramBlocksContextProvider,
-  ExternalAuthenticationContextProvider,
-} from '@decipad/ui';
 import { ResultsContext } from '@decipad/react-contexts';
+import {
+  ExternalAuthenticationContextProvider,
+  ProgramBlocksContextProvider,
+} from '@decipad/ui';
+import { identity } from '@decipad/utils';
+import { captureException } from '@sentry/react';
 import { Plate, PlatePluginComponent, useStoreEditorRef } from '@udecode/plate';
 import { nanoid } from 'nanoid';
+import { FC, useEffect, useMemo, useState } from 'react';
+import { DropFile, Tooltip } from './components';
 import { components, options, plugins } from './configuration';
+import { ComputerContextProvider } from './contexts/Computer';
 import { useDocSync } from './plugins/DocSync/useDocSync';
+import { useExternalDataPlugin } from './plugins/ExternalData/useExternalDataPlugin';
+import { useFetchDataPlugin } from './plugins/FetchData/useFetchDataPlugin';
 import {
   editorProgramBlocks,
   useLanguagePlugin,
 } from './plugins/Language/useLanguagePlugin';
 import { useNotebookTitlePlugin } from './plugins/NotebookTitle/useNotebookTitlePlugin';
 import { UploadDialogue } from './plugins/UploadData/components/UploadDialogue';
-import { useFetchDataPlugin } from './plugins/FetchData/useFetchDataPlugin';
-import { useExternalDataPlugin } from './plugins/ExternalData/useExternalDataPlugin';
 import { useUploadDataPlugin } from './plugins/UploadData/useUploadDataPlugin';
-import { DropFile, Tooltip } from './components';
-import { ComputerContextProvider } from './contexts/Computer';
 
 export interface EditorProps {
-  padId: string;
+  notebookId: string;
   readOnly: boolean;
   authSecret?: string;
 }
@@ -31,7 +31,7 @@ export interface EditorProps {
 const LoadingEditable = (): ReturnType<FC> => <>Loading editor...</>;
 const renderLoadingEditable = () => <LoadingEditable />;
 
-const EditorInternal = ({ padId, authSecret, readOnly }: EditorProps) => {
+const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
   const [editorId] = useState(nanoid);
   const [editorLoaded, setEditorLoaded] = useState(false);
   const editor = useStoreEditorRef(editorId);
@@ -40,7 +40,7 @@ const EditorInternal = ({ padId, authSecret, readOnly }: EditorProps) => {
 
   // DocSync
   const docsyncEditor = useDocSync({
-    padId,
+    notebookId,
     editor,
     authSecret,
     onError: captureException,
@@ -62,7 +62,7 @@ const EditorInternal = ({ padId, authSecret, readOnly }: EditorProps) => {
   // Cursor remote presence
   // useCursors(editor);
 
-  const notebookTitlePlugin = useNotebookTitlePlugin({ padId, readOnly });
+  const notebookTitlePlugin = useNotebookTitlePlugin({ notebookId, readOnly });
 
   // upload / fetchdata
   const {
@@ -91,7 +91,7 @@ const EditorInternal = ({ padId, authSecret, readOnly }: EditorProps) => {
           <DropFile
             editor={docsyncEditor}
             startUpload={startUpload}
-            padId={padId}
+            notebookId={notebookId}
           >
             <Plate
               id={editorId}
@@ -117,7 +117,7 @@ const EditorInternal = ({ padId, authSecret, readOnly }: EditorProps) => {
 export const Editor = (props: EditorProps): ReturnType<FC> => {
   return (
     <ComputerContextProvider>
-      <EditorInternal key={props.padId} {...props} />
+      <EditorInternal key={props.notebookId} {...props} />
     </ComputerContextProvider>
   );
 };

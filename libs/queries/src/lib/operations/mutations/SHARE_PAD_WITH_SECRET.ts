@@ -1,4 +1,5 @@
 import { gql, useMutation } from '@apollo/client';
+import { PermissionType } from '@decipad/queries';
 import {
   SharePadWithSecret,
   SharePadWithSecretVariables,
@@ -19,11 +20,19 @@ export const SHARE_PAD_WITH_SECRET = gql`
 `;
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const useSharePadWithSecret = () =>
+export const useShareNotebookWithSecret = (
+  notebookId: string,
+  permission: PermissionType
+) =>
   useMutation<SharePadWithSecret, SharePadWithSecretVariables>(
     SHARE_PAD_WITH_SECRET,
     {
-      refetchQueries: [],
+      refetchQueries: ['GetPadById'],
       awaitRefetchQueries: true,
+      variables: {
+        id: notebookId,
+        permissionType: permission,
+        canComment: false,
+      },
     }
   );

@@ -1,12 +1,12 @@
-import { useState, useEffect, useCallback } from 'react';
-import { nanoid } from 'nanoid';
-import { Transforms } from 'slate';
 import { TEditor } from '@udecode/plate';
-import { useToasts } from 'react-toast-notifications';
 import camelcase from 'camelcase';
+import { nanoid } from 'nanoid';
+import { useCallback, useEffect, useState } from 'react';
+import { useToasts } from 'react-toast-notifications';
+import { Transforms } from 'slate';
 import slug from 'slug';
-import * as upload from './upload';
 import { ELEMENT_FETCH } from '../../elements';
+import * as upload from './upload';
 
 export interface OneFileUploadState {
   file: File;
@@ -25,7 +25,7 @@ export type UploadState = OneFileUploadState[];
 
 export interface UploadDataOptions {
   file: File;
-  padId: string;
+  notebookId: string;
 }
 
 interface UploadDataPluginOptions {
@@ -45,11 +45,11 @@ export const useUploadDataPlugin = ({
   const { addToast } = useToasts();
 
   const startUpload = useCallback(
-    ({ file, padId }: UploadDataOptions) => {
+    ({ file, notebookId }: UploadDataOptions) => {
       const newUploadState = [...uploadState].concat([
         {
           file,
-          padId,
+          padId: notebookId,
           filename: file.name,
           handling: false,
           loading: false,

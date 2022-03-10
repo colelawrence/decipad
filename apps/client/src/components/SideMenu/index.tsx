@@ -1,6 +1,5 @@
-import { useQuery } from '@apollo/client';
 import { Spinner } from '@chakra-ui/react';
-import { GetWorkspaces, GET_WORKSPACES } from '@decipad/queries';
+import { useGetWorkspaces } from '@decipad/queries';
 import { DashboardSidebar } from '@decipad/ui';
 import { FC } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
@@ -15,7 +14,7 @@ export const SideMenu = ({ workspaceId }: SideMenuProps): ReturnType<FC> => {
   const history = useHistory();
   const { url } = useRouteMatch();
 
-  const { data } = useQuery<GetWorkspaces>(GET_WORKSPACES);
+  const { data } = useGetWorkspaces();
   if (!data) {
     return <Spinner />;
   }

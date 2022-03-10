@@ -1,29 +1,27 @@
 import {
-  ID,
-  DataTable,
   ConcreteRecord,
-  GraphqlObjectType,
+  DataTable,
   GraphqlContext,
+  GraphqlObjectType,
+  ID,
   PermissionType,
 } from '@decipad/backendtypes';
-import { getById } from './get-by-id';
+import { access, Access } from './access';
 import { create } from './create';
-import { update } from './update';
-import { remove } from './remove';
-import { shareWithUser } from './share-with-user';
-import { unshareWithUser } from './unshare-with-user';
-import { shareWithRole } from './share-with-role';
-import { unshareWithRole } from './unshare-with-role';
-import { shareWithEmail } from './share-with-email';
-import { access } from './access';
-import { ShareWithUserArgs } from './share-with-user';
-import { UnshareWithUserArgs } from './unshare-with-user';
-import { ShareWithRoleArgs } from './share-with-role';
-import { UnshareWithRoleArgs } from './unshare-with-role';
-import { ShareWithEmailArgs } from './share-with-email';
-import { Access } from './access';
-import { shareWithSecret, ShareWithSecretArgs } from './share-with-secret';
+import { getById } from './get-by-id';
 import { myPermissionType } from './my-permission-type';
+import { remove } from './remove';
+import { shareWithEmail, ShareWithEmailArgs } from './share-with-email';
+import { shareWithRole, ShareWithRoleArgs } from './share-with-role';
+import { shareWithSecret, ShareWithSecretArgs } from './share-with-secret';
+import { shareWithUser, ShareWithUserArgs } from './share-with-user';
+import { unshareWithRole, UnshareWithRoleArgs } from './unshare-with-role';
+import {
+  unshareWithSecret,
+  UnshareWithSecretArgs,
+} from './unshare-with-secret';
+import { unshareWithUser, UnshareWithUserArgs } from './unshare-with-user';
+import { update } from './update';
 
 export interface Resource<
   DataTableType extends ConcreteRecord,
@@ -101,6 +99,11 @@ export interface ResourceResolvers<DataT, GraphqlT, CreateT, UpdateT> {
     args: ShareWithSecretArgs,
     context: GraphqlContext
   ) => Promise<string>;
+  unshareWithSecret: (
+    _: unknown,
+    args: UnshareWithSecretArgs,
+    context: GraphqlContext
+  ) => Promise<boolean>;
   access: (
     parent: DataT,
     _: unknown,
@@ -135,5 +138,6 @@ export default function <
     shareWithSecret: shareWithSecret(resourceType),
     access: access(resourceType),
     myPermissionType: myPermissionType(resourceType),
+    unshareWithSecret: unshareWithSecret(resourceType),
   };
 }

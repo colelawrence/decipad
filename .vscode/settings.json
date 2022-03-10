@@ -21,6 +21,7 @@
     "frontends",
     "GOOGLESHEETS",
     "NEXTAUTH",
-    "nrwl"
+    "nrwl",
+    "Topbar"
   ]
 }

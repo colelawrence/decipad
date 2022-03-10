@@ -1,13 +1,13 @@
 import { FC, ReactNode } from 'react';
-import { useDrop, DropTargetMonitor } from 'react-dnd';
+import { DropTargetMonitor, useDrop } from 'react-dnd';
 import { NativeTypes } from 'react-dnd-html5-backend';
 import { Editor } from 'slate';
-import { DropHint } from './DropHint';
 import { UploadDataOptions } from '../../plugins/UploadData/useUploadDataPlugin';
+import { DropHint } from './DropHint';
 
 interface DropFileProps {
   editor?: Editor;
-  padId: string;
+  notebookId: string;
   startUpload: (options: UploadDataOptions) => void;
   children: ReactNode;
 }
@@ -21,7 +21,7 @@ const baseStyle = { position: 'relative' };
 
 export function DropFile({
   editor,
-  padId,
+  notebookId,
   children,
   startUpload,
 }: DropFileProps): ReturnType<FC> {
@@ -35,7 +35,7 @@ export function DropFile({
         if (isFileAcceptable(file)) {
           // eslint-disable-next-line no-await-in-loop
           startUpload({
-            padId,
+            notebookId,
             file,
           });
         }

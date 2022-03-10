@@ -1,4 +1,10 @@
-import { gql } from '@apollo/client';
+/* eslint-disable camelcase */
+import { gql, useQuery } from '@apollo/client';
+import {
+  GetPadById,
+  GetPadByIdVariables,
+  GetPadById_getPadById,
+} from './__generated__/GetPadById';
 
 export const GET_PAD_BY_ID = gql`
   query GetPadById($id: ID!) {
@@ -14,6 +20,10 @@ export const GET_PAD_BY_ID = gql`
           }
           permission
         }
+        secrets {
+          permission
+          secret
+        }
       }
       workspace {
         id
@@ -22,3 +32,30 @@ export const GET_PAD_BY_ID = gql`
     }
   }
 `;
+
+type UseGetNotebookById = {
+  notebook?: GetPadById_getPadById | null;
+  notebookReadOnly: boolean;
+  notebookLoading: boolean;
+};
+
+export const useGetNotebookById = (
+  notebookId: string,
+  secret?: string
+): UseGetNotebookById => {
+  const { data, loading } = useQuery<GetPadById, GetPadByIdVariables>(
+    GET_PAD_BY_ID,
+    {
+      variables: { id: notebookId },
+      context: secret
+        ? { headers: { authorization: `Bearer ${secret}` } }
+        : undefined,
+    }
+  );
+
+  return {
+    notebook: data?.getPadById,
+    notebookReadOnly: data?.getPadById?.myPermissionType === 'READ',
+    notebookLoading: loading,
+  };
+};

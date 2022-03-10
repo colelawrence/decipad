@@ -1,25 +1,25 @@
+import { DocSyncEditor, withDocSync } from '@decipad/docsync';
 import { useMemo } from 'react';
 import { Editor } from 'slate';
-import { withDocSync, DocSyncEditor } from '@decipad/docsync';
 
 export type { DocSyncEditor };
 
 interface IUseDocSync<E extends Editor> {
-  padId: string;
+  notebookId: string;
   editor: E | undefined;
   authSecret?: string | undefined;
   onError?: (event: Error | Event) => void;
 }
 
 export const useDocSync = <E extends Editor>({
-  padId,
+  notebookId,
   editor,
   authSecret,
   onError,
 }: IUseDocSync<E>): DocSyncEditor<E> | undefined => {
   const docSync = useMemo<DocSyncEditor<E> | undefined>(
-    () => editor && withDocSync(editor, padId, { authSecret, onError }),
-    [padId, editor, authSecret, onError]
+    () => editor && withDocSync(editor, notebookId, { authSecret, onError }),
+    [notebookId, editor, authSecret, onError]
   );
   return docSync;
 };

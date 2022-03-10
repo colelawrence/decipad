@@ -3,7 +3,7 @@ import { gql } from 'apollo-server-lambda';
 export default gql`
   type User {
     id: ID!
-    name: String
+    name: String!
     email: String
     image: String
     createdAt: DateTime

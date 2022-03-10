@@ -15,6 +15,7 @@ test('pads', (ctx) => {
   let invitations: RoleInvitation[];
   let pad: Pad;
   let targetUserId: string;
+  let secret: string;
 
   beforeAll(async () => {
     const client = ctx.graphql.withAuth(await ctx.auth());
@@ -149,6 +150,12 @@ test('pads', (ctx) => {
                 id
                 name
               }
+              access {
+                secrets {
+                  permission
+                  secret
+                }
+              }
             }
           }
         `,
@@ -236,6 +243,36 @@ test('pads', (ctx) => {
       `,
       })
     ).rejects.toThrow('Forbidden');
+  });
+
+  it('the creator can share a notebook with secret', async () => {
+    const client = ctx.graphql.withAuth(await ctx.auth());
+
+    const result = await client.mutate({
+      mutation: ctx.gql`
+        mutation {
+          sharePadWithSecret(id: "${pad.id}", permissionType: READ, canComment: false)
+        }
+      `,
+    });
+
+    secret = result.data.sharePadWithSecret;
+
+    expect(result.data.sharePadWithSecret).toBeTruthy();
+  });
+
+  it('the creator can unshare a notebook with secret', async () => {
+    const client = ctx.graphql.withAuth(await ctx.auth());
+
+    const result = await client.mutate({
+      mutation: ctx.gql`
+        mutation {
+          unshareNotebookWithSecret(id: "${pad.id}", secret: "${secret}")
+        }
+      `,
+    });
+
+    expect(result.data.unshareNotebookWithSecret).toBe(true);
   });
 
   it('the creator can share pad with role', async () => {

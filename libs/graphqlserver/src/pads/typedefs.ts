@@ -84,6 +84,8 @@ export default gql`
       permissionType: PermissionType!
       canComment: Boolean!
     ): String!
+
+    unshareNotebookWithSecret(id: ID!, secret: String!): Boolean
   }
 
   extend type Subscription {

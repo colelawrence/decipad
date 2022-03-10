@@ -13,12 +13,12 @@ import { useToasts } from 'react-toast-notifications';
 import { Editor } from 'slate';
 
 export interface UseNotebookTitlePluginProps {
-  padId: string;
+  notebookId: string;
   readOnly: boolean;
 }
 
 export const useNotebookTitlePlugin = ({
-  padId,
+  notebookId,
   readOnly,
 }: UseNotebookTitlePluginProps): PlatePlugin => {
   const { addToast } = useToasts();
@@ -26,7 +26,7 @@ export const useNotebookTitlePlugin = ({
 
   // Getting the current pad's name
   const { data } = useQuery<GetPadById, GetPadByIdVariables>(GET_PAD_BY_ID, {
-    variables: { id: padId },
+    variables: { id: notebookId },
   });
 
   const [mutate] = useMutation<RenamePad, RenamePadVariables>(RENAME_PAD);
@@ -55,7 +55,7 @@ export const useNotebookTitlePlugin = ({
       if (newTitle !== null && !readOnly) {
         // change the title of the pad
         mutate({
-          variables: { padId, name: newTitle },
+          variables: { padId: notebookId, name: newTitle },
         }).then(() => {
           addToast('Notebook title updated', {
             appearance: 'info',
@@ -64,7 +64,7 @@ export const useNotebookTitlePlugin = ({
       }
     }, 1000);
     return () => clearTimeout(timeout);
-  }, [mutate, newTitle, padId, addToast, readOnly]);
+  }, [mutate, newTitle, notebookId, addToast, readOnly]);
 
   // return a slate plugin
   return useMemo(

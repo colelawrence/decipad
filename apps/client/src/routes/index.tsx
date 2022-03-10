@@ -12,6 +12,11 @@ import { Workspace } from './Workspace';
 export function Router(): ReturnType<FC> {
   return (
     <Switch>
+      <Route exact path="/">
+        <RequireSession>
+          <Home />
+        </RequireSession>
+      </Route>
       <Route
         exact
         path={['/workspaces/:workspaceid', '/w/:workspaceid']}
@@ -23,22 +28,8 @@ export function Router(): ReturnType<FC> {
           </RequireSession>
         )}
       />
-      <Route exact path="/playground">
-        <RouteEvents category="playground">
-          <Playground />
-        </RouteEvents>
-      </Route>
-      <Route exact path="/verifyEmail">
-        <GlobalStyles>
-          <VerifyEmail />
-        </GlobalStyles>
-      </Route>
-      <Route exact path="/">
-        <RequireSession>
-          <Home />
-        </RequireSession>
-      </Route>
       <Route
+        exact
         path={[
           '/n/:padid',
           '/workspaces/:workspaceid/pads/:padid',
@@ -52,6 +43,16 @@ export function Router(): ReturnType<FC> {
           </RequireSession>
         )}
       />
+      <Route exact path="/playground">
+        <RouteEvents category="playground">
+          <Playground />
+        </RouteEvents>
+      </Route>
+      <Route exact path="/verifyEmail">
+        <GlobalStyles>
+          <VerifyEmail />
+        </GlobalStyles>
+      </Route>
       <Route render={() => <>Not Found</>} />
     </Switch>
   );

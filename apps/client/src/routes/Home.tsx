@@ -1,12 +1,11 @@
-import { useQuery } from '@apollo/client';
-import { GetWorkspaces, GET_WORKSPACES } from '@decipad/queries';
+import { useGetWorkspaces } from '@decipad/queries';
 import { LoadingSpinnerPage } from '@decipad/ui';
 import { FC, useEffect, useState } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
 
 export function Home(): ReturnType<FC> {
   const [workspaceId, setWorkspaceId] = useState<string | null>(null);
-  const query = useQuery<GetWorkspaces>(GET_WORKSPACES);
+  const query = useGetWorkspaces();
   const history = useHistory();
 
   useEffect(() => {

@@ -1,73 +1,34 @@
-import { useMutation, useQuery } from '@apollo/client';
-import { ClientEventsContext } from '@decipad/client-events';
 import { Editor } from '@decipad/editor';
 import {
-  DuplicatePad,
-  DuplicatePadVariables,
-  DUPLICATE_PAD,
-  GetWorkspaces,
-  GET_WORKSPACES,
   PermissionType,
-  useSharePadWithSecret,
+  useDuplicateNotebook,
+  useGetNotebookById,
+  useGetWorkspaces,
+  useShareNotebookWithSecret,
+  useUnshareNotebookWithSecret,
 } from '@decipad/queries';
 import { LoadingSpinnerPage, NotebookTopbar } from '@decipad/ui';
 import styled from '@emotion/styled';
-import Head from 'next/head';
-import { FC, useContext, useEffect, useState } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { FC, useEffect, useState } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
-import { getSecretPadLink } from '../lib/secret';
-import { useGetPadById } from '../queries/useGetPadById';
+import { getSecretNotebookLink } from '../lib/secret';
 
 const Wrapper = styled('div')({
+  padding: '0 32px',
   display: 'grid',
-  gridTemplate: `
-    "topbar" auto
-    "editor" 1fr
-    /100%
-  `,
-
-  padding: '0 40px',
 });
 
-const EditorWrapper = styled('main')({
-  gridArea: 'editor',
-  position: 'relative',
-  paddingBottom: '180px',
-});
-const EditorInner = styled('div')({
-  maxWidth: '90ch',
+const EditorWrapper = styled('div')({
+  order: 2,
+  width: 'min(100%, 120ch)',
   margin: 'auto',
 });
 
-const TopbarWrapper = styled('header')({
-  gridArea: 'topbar',
-});
-
 const ErrorWrapper = styled('div')({
-  minHeight: '100vh',
-  minWidth: '100vw',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-});
-
-const ErrorHeader = styled('h1')({
-  fontSize: '2rem',
-  fontWeight: 'bold',
-  margin: '0',
-  padding: '0',
-});
-
-const LinkButton = styled(Link)({
-  backgroundColor: '#111',
-  color: '#fff',
-  padding: '8px 16px',
-  borderRadius: '6px',
-  display: 'flex',
-  alignItems: 'center',
-  gap: '0.75rem',
+  height: '100%',
+  display: 'grid',
+  placeItems: 'center',
 });
 
 export interface NotebookProps {
@@ -76,136 +37,119 @@ export interface NotebookProps {
 
 export const Notebook = ({ notebookId }: NotebookProps): ReturnType<FC> => {
   const history = useHistory();
-  const { pathname, search } = useLocation();
   const { addToast } = useToasts();
+  // See if the route is a shared notebook or an owned one
+  const { search } = useLocation();
   const secret = new URLSearchParams(search).get('secret') ?? undefined;
 
-  const { data, loading, error } = useGetPadById({
-    variables: { id: notebookId },
-    context: secret
-      ? { headers: { authorization: `Bearer ${secret}` } }
-      : undefined,
-  });
+  // State
+  const [sharingActive, setSharingActive] = useState(false);
+  const [shareSecretKey, setShareSecretKey] = useState('');
 
-  const [sharePadWithSecret, { loading: secretLoading }] =
-    useSharePadWithSecret();
-  const [shareSecret, setShareSecret] = useState<string>();
+  // Queries
+  const { notebook, notebookReadOnly, notebookLoading } = useGetNotebookById(
+    notebookId,
+    secret
+  );
 
-  const { data: workspaces } = useQuery<GetWorkspaces>(GET_WORKSPACES);
+  const { data: { workspaces } = {}, refetch: fetchWorkspaces } =
+    useGetWorkspaces();
 
-  const [duplicatePad] =
-    useMutation<DuplicatePad, DuplicatePadVariables>(DUPLICATE_PAD);
-  const handleDuplicateNotebook = (id: string) =>
-    duplicatePad({
-      variables: {
-        id,
-        targetWorkspace: workspaces?.workspaces[0].id,
-      },
-      context: {
-        headers: {
-          authorization: `Bearer ${secret}`,
-        },
-      },
-      refetchQueries: ['GetWorkspaceById'],
-      awaitRefetchQueries: true,
-    })
-      .then(() => history.push(`/w/${workspaces?.workspaces[0].id}`))
-      .catch((err) =>
-        addToast(`Error duplicating notebook: ${err.message}`, {
-          appearance: 'error',
-        })
-      );
-  const clientEvent = useContext(ClientEventsContext);
+  // Mutations
+  const [unshareNotebook] = useUnshareNotebookWithSecret(
+    notebook?.id || '',
+    notebook && notebook?.access.secrets.length > 0
+      ? notebook?.access.secrets[0].secret
+      : ''
+  );
+  const [shareNotebook] = useShareNotebookWithSecret(
+    notebook?.id || '',
+    PermissionType.READ
+  );
+  const [duplicateNotebook] = useDuplicateNotebook(
+    notebook?.id || '',
+    notebook?.workspace.id || '',
+    secret || ''
+  );
 
+  // Set the share toggle button to be active if the notebook has secrets
   useEffect(() => {
-    if (data && data.getPadById) {
-      clientEvent({
-        type: 'page',
-        category: 'notebook',
-        url: pathname,
-        props: {
-          title: data.getPadById.name,
-        },
+    if (notebook && notebook.access.secrets.length > 0) {
+      setSharingActive(true);
+      setShareSecretKey(notebook.access.secrets[0].secret);
+    } else {
+      setSharingActive(false);
+      setShareSecretKey('');
+    }
+  }, [notebook]);
+
+  const notebookUrlWithSecret = getSecretNotebookLink(
+    notebook?.id || '',
+    notebook?.name || '',
+    shareSecretKey
+  );
+
+  const onShareToggleClick = async () => {
+    if (sharingActive) {
+      unshareNotebook();
+      setShareSecretKey('');
+    } else {
+      await shareNotebook();
+    }
+  };
+
+  const onDuplicateNotebook = async () => {
+    const [firstWorkspace] =
+      workspaces ?? (await fetchWorkspaces({ asdf: 42 })).data.workspaces;
+    const { errors } = await duplicateNotebook({
+      // This callback cannot run from a render where notebook is not defined
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      variables: { id: notebook!.id, targetWorkspace: firstWorkspace.id },
+    });
+
+    if (errors) {
+      addToast(`Error duplicating notebook: ${errors[0].message}`, {
+        appearance: 'error',
       });
     }
-  }, [data, pathname, clientEvent]);
 
-  if (loading) {
+    history.push(`/workspaces/${firstWorkspace.id}`);
+  };
+
+  if (notebookLoading) {
     return <LoadingSpinnerPage />;
   }
 
-  const { getPadById } = data ?? {};
-  const workspaceId = getPadById?.workspace.id;
-
-  if (error || !data || !getPadById || !workspaceId) {
+  if (!notebook) {
     return (
       <ErrorWrapper>
-        <ErrorHeader>
-          Error loading pad: {error?.message || 'Unknown Error'}
-        </ErrorHeader>
-        {workspaceId && (
-          <LinkButton to={`/w/${workspaceId}`}>Back to workspace</LinkButton>
-        )}
+        <h1 style={{ fontSize: '2rem' }}>Couldn't get the notebook</h1>
       </ErrorWrapper>
     );
   }
 
   return (
     <Wrapper>
-      <Head>
-        <title>{data.getPadById?.name} - Decipad</title>
-      </Head>
       <EditorWrapper>
-        <EditorInner>
-          <Editor
-            padId={getPadById.id}
-            readOnly={getPadById.myPermissionType === 'READ'}
-            authSecret={secret}
-          />
-        </EditorInner>
-      </EditorWrapper>
-      <TopbarWrapper>
-        <NotebookTopbar
-          workspaceName={getPadById.workspace.name || ''}
-          notebookName={getPadById.name || 'My notebook title'}
-          workspaceHref={`/w/${workspaceId}`}
-          usersWithAccess={getPadById.access.users ?? []}
-          permission={getPadById.myPermissionType ?? undefined}
-          link={
-            shareSecret
-              ? getSecretPadLink(notebookId, getPadById.name || '', shareSecret)
-              : 'Loading...'
-          }
-          onToggleShare={async () => {
-            if (!shareSecret && !secretLoading) {
-              const response = await sharePadWithSecret({
-                variables: {
-                  id: notebookId,
-                  permissionType: PermissionType.READ,
-                  canComment: false,
-                },
-              });
-              if (response?.data?.sharePadWithSecret) {
-                setShareSecret(response.data.sharePadWithSecret);
-                clientEvent({
-                  type: 'action',
-                  action: 'notebook shared',
-                  props: {
-                    url: getSecretPadLink(
-                      notebookId,
-                      getPadById.name || '',
-                      shareSecret ?? ''
-                    ),
-                  },
-                });
-              }
-            }
-          }}
-          onDuplicateNotebook={async () => {
-            await handleDuplicateNotebook(getPadById.id);
-          }}
+        <Editor
+          notebookId={notebook?.id}
+          readOnly={notebookReadOnly}
+          authSecret={secret}
         />
-      </TopbarWrapper>
+      </EditorWrapper>
+      <NotebookTopbar
+        workspaceName={notebook.workspace.name}
+        notebookName={
+          notebook.name === '' ? '<unnamed-notebook>' : notebook.name
+        }
+        workspaceHref={`/workspaces/${notebook.workspace.id}`}
+        usersWithAccess={notebook.access.users}
+        permission={notebook.myPermissionType}
+        link={notebookUrlWithSecret}
+        sharingActive={sharingActive}
+        onToggleShare={onShareToggleClick}
+        onDuplicateNotebook={onDuplicateNotebook}
+      />
     </Wrapper>
   );
 };

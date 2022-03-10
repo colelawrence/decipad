@@ -6,7 +6,10 @@ describe('when the menu is open', () => {
   let result!: RenderResult;
   beforeEach(() => {
     result = render(
-      <NotebookSharingPopUp link="peanut-butter-jelly-time-peanut-" />
+      <NotebookSharingPopUp
+        link="peanut-butter-jelly-time-peanut-"
+        sharingActive={true}
+      />
     );
     userEvent.click(result.getByText(/share/i));
   });
@@ -29,6 +32,12 @@ describe('when the menu is open', () => {
   });
 
   it('does not initially show the sharing link', () => {
+    result.rerender(
+      <NotebookSharingPopUp
+        link="peanut-butter-jelly-time-peanut-"
+        sharingActive={false}
+      />
+    );
     expect(
       result.queryByText('peanut-butter-jelly-time-peanut-')
     ).not.toBeInTheDocument();

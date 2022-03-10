@@ -12,7 +12,7 @@ import { PermissionType } from "./../../../../../__generated__/globalTypes";
 export interface GetPadById_getPadById_access_users_user {
   __typename: "User";
   id: string;
-  name: string | null;
+  name: string;
 }
 
 export interface GetPadById_getPadById_access_users {
@@ -21,9 +21,16 @@ export interface GetPadById_getPadById_access_users {
   permission: PermissionType;
 }
 
+export interface GetPadById_getPadById_access_secrets {
+  __typename: "SecretAccess";
+  permission: PermissionType;
+  secret: string;
+}
+
 export interface GetPadById_getPadById_access {
   __typename: "PadAccess";
   users: GetPadById_getPadById_access_users[];
+  secrets: GetPadById_getPadById_access_secrets[];
 }
 
 export interface GetPadById_getPadById_workspace {

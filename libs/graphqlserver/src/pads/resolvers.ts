@@ -122,6 +122,7 @@ const resolvers = {
     unsharePadWithUser: padResource.unshareWithUser,
     sharePadWithEmail: padResource.shareWithEmail,
     sharePadWithSecret: padResource.shareWithSecret,
+    unshareNotebookWithSecret: padResource.unshareWithSecret,
 
     async duplicatePad(
       _: unknown,

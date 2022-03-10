@@ -103,6 +103,7 @@ const padLinkTextStyles = css(
 export interface NotebookSharingPopUpProps {
   link: string;
   onToggleShare?: () => void;
+  sharingActive?: boolean;
 }
 
 /**
@@ -112,10 +113,10 @@ export interface NotebookSharingPopUpProps {
  */
 export const NotebookSharingPopUp = ({
   link,
+  sharingActive = false,
   onToggleShare = noop,
 }: NotebookSharingPopUpProps): ReturnType<FC> => {
   const [copiedStatusVisible, setCopiedStatusVisible] = useState(false);
-  const [shareLinkVisible, setShareLinkVisible] = useState(false);
   const [shareMenuOpen, setShareMenuOpen] = useState(false);
 
   const handleClickOutside = () => {
@@ -139,15 +140,14 @@ export const NotebookSharingPopUp = ({
                 </p>
               </div>
               <Toggle
-                active={shareLinkVisible}
-                onChange={(active) => {
-                  setShareLinkVisible(active);
+                active={sharingActive}
+                onChange={() => {
                   onToggleShare();
                 }}
               />
             </div>
 
-            {shareLinkVisible && (
+            {sharingActive && (
               <div css={clipboardWrapperStyles}>
                 <Tooltip
                   variant="small"

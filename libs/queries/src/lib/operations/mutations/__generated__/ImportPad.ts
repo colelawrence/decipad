@@ -8,7 +8,7 @@
 // ====================================================
 
 export interface ImportPad_importPad {
-  __typename: 'Pad';
+  __typename: "Pad";
   id: string;
   name: string;
 }

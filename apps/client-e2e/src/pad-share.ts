@@ -1,4 +1,5 @@
 /* eslint-disable jest/expect-expect */
+import type { Page } from 'playwright';
 import waitForExpect from 'wait-for-expect';
 import { setUp, waitForEditorToLoad } from './page-utils/Pad';
 import { withNewUser } from './utils';
@@ -22,7 +23,7 @@ describe('Share pad', () => {
   }, 60000);
 
   test('click share button and extract text', async () => {
-    const linkSelector = 'text=/n/hello-world/';
+    const linkSelector = 'text=//n/hello-world/';
     await page.click('text=share');
     await page.click('[aria-checked="false"]');
     await page.waitForSelector(linkSelector);
@@ -31,29 +32,27 @@ describe('Share pad', () => {
     expect(link.length).toBeGreaterThan(0);
   }, 60000);
 
-  test('another browser joins on the given link', async () => {
-    const context = await browser.newContext();
-    const newPage = await context.newPage();
-    expect(link.length).toBeGreaterThan(0);
+  let otherUserPage: Page;
+  test('another user can join on the given link', async () => {
+    const newContext = await browser.newContext();
+    otherUserPage = await newContext.newPage();
 
-    //
-    // meet bob, a new user
-    // bob, go do your thing
-    //
-    await withNewUser(context);
+    // Meet Bob, a new user. Bob, go do your thing.
+    await withNewUser(newContext);
 
-    await newPage.goto(link);
+    await otherUserPage.goto(link);
+    await waitForEditorToLoad(otherUserPage);
 
-    await waitForEditorToLoad(newPage);
+    await otherUserPage.waitForSelector('text=hello world');
+    expect(await otherUserPage.$$('[contenteditable] p')).toHaveLength(4);
+  });
 
-    await newPage.waitForSelector('text=Duplicate notebook');
+  test('the other user can duplicate', async () => {
+    await otherUserPage.click('text=Duplicate notebook');
+    await otherUserPage.click('text=Copy of hello world');
 
-    await newPage.click('text=Duplicate notebook');
-
-    await newPage.waitForSelector('text=Copy of hello world');
-    await newPage.click('text=Copy of hello world');
-
-    await waitForEditorToLoad(newPage);
-    expect(await newPage.$$('[contenteditable] p')).toHaveLength(4);
+    await waitForEditorToLoad(otherUserPage);
+    await otherUserPage.waitForSelector('text=hello world');
+    expect(await otherUserPage.$$('[contenteditable] p')).toHaveLength(4);
   }, 60000);
 });

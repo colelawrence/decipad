@@ -53,6 +53,7 @@ export type NotebookTopbarProps = Pick<
     link: string;
     onToggleShare?: () => void;
     onDuplicateNotebook?: () => void;
+    sharingActive?: boolean;
   };
 
 export const NotebookTopbar = ({
@@ -62,6 +63,7 @@ export const NotebookTopbar = ({
   onDuplicateNotebook = noop,
   usersWithAccess,
   permission,
+  sharingActive = false,
   link,
   workspaceHref,
 }: NotebookTopbarProps): ReturnType<FC> => {
@@ -97,7 +99,11 @@ export const NotebookTopbar = ({
 
         {session?.user ? (
           isAdmin ? (
-            <NotebookSharingPopUp onToggleShare={onToggleShare} link={link} />
+            <NotebookSharingPopUp
+              sharingActive={sharingActive}
+              onToggleShare={onToggleShare}
+              link={link}
+            />
           ) : (
             <Button onClick={() => onDuplicateNotebook()}>
               Duplicate notebook
