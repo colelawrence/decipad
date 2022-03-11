@@ -186,125 +186,143 @@ const readMessage = (
   return encoder;
 };
 
-const setupWS = (provider: WebsocketProvider) => {
-  if (provider.shouldConnect && !provider.ws) {
-    const websocket = new provider._WS(
-      getDefined(provider.url),
-      provider.protocol
-    );
-    websocket.binaryType = 'arraybuffer';
-    provider.ws = websocket;
-    provider.wsconnecting = true;
-    provider.wsconnected = false;
-    provider.synced = false;
+const setupWS = async (provider: WebsocketProvider) => {
+  const scheduleReconnect = () => {
+    // Start with no reconnect timeout and increase timeout by
+    // log10(wsUnsuccessfulReconnects).
+    // The idea is to increase reconnect timeout slowly and have no reconnect
+    // timeout at the beginning (log(1) = 0)
+    if (provider.shouldConnect) {
+      setTimeout(
+        setupWS,
+        math.min(
+          math.log10(provider.wsUnsuccessfulReconnects + 1) *
+            reconnectTimeoutBase,
+          maxReconnectTimeout
+        ),
+        provider
+      );
+    }
+  };
 
-    websocket.onerror = (event) => {
-      if ((event as ErrorEvent).error?.code !== 'ECONNRESET') {
-        // eslint-disable-next-line no-console
-        console.error('Websocket error:', event);
-        if (provider.onError) {
-          provider.onError(event);
-        }
+  try {
+    if (provider.shouldConnect && !provider.ws && !provider.wsconnecting) {
+      if (provider.beforeConnect) {
+        await provider.beforeConnect(provider);
       }
-    };
 
-    websocket.onmessage = (event) => {
-      if (!event.data) {
-        return;
-      }
-      provider.wsLastMessageReceived = time.getUnixTime();
-      try {
-        const encoder = readMessage(provider, event.data, true, true);
-        if (encoder && encoding.length(encoder) > 1) {
-          const message = encoding.toUint8Array(encoder);
-          provider.send(message);
-        }
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error(
-          'An error was detected while reading a message from a websocket'
-        );
-        // eslint-disable-next-line no-console
-        console.error(err);
-        if (provider.onError) {
-          provider.onError(err as Error);
-        }
-      }
-    };
+      const websocket = new provider._WS(
+        getDefined(provider.url),
+        provider.protocol
+      );
+      websocket.binaryType = 'arraybuffer';
+      provider.ws = websocket;
+      provider.wsconnecting = true;
+      provider.wsconnected = false;
+      provider.synced = false;
 
-    websocket.onclose = () => {
-      provider.ws = undefined;
-      provider.wsconnecting = false;
-      if (provider.wsconnected) {
-        provider.wsconnected = false;
-        provider.synced = false;
-        // update awareness (all users except local left)
-        awarenessProtocol.removeAwarenessStates(
-          provider.awareness,
-          Array.from(provider.awareness.getStates().keys()).filter(
-            (client) => client !== provider.doc.clientID
-          ),
-          provider
-        );
+      websocket.onerror = (event) => {
+        if ((event as ErrorEvent).error?.code !== 'ECONNRESET') {
+          // eslint-disable-next-line no-console
+          console.error('Websocket error:', event);
+          if (provider.onError) {
+            provider.onError(event);
+          }
+        }
+      };
+
+      websocket.onmessage = (event) => {
+        if (!event.data) {
+          return;
+        }
+        provider.wsLastMessageReceived = time.getUnixTime();
+        try {
+          const encoder = readMessage(provider, event.data, true, true);
+          if (encoder && encoding.length(encoder) > 1) {
+            const message = encoding.toUint8Array(encoder);
+            provider.send(message);
+          }
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.error(
+            'An error was detected while reading a message from a websocket'
+          );
+          // eslint-disable-next-line no-console
+          console.error(err);
+          provider.onError?.(err as Error);
+        }
+      };
+
+      websocket.onclose = () => {
+        provider.ws = undefined;
+        provider.wsconnecting = false;
+        if (provider.wsconnected) {
+          provider.wsconnected = false;
+          provider.synced = false;
+          // update awareness (all users except local left)
+          awarenessProtocol.removeAwarenessStates(
+            provider.awareness,
+            Array.from(provider.awareness.getStates().keys()).filter(
+              (client) => client !== provider.doc.clientID
+            ),
+            provider
+          );
+          provider.emit('status', [
+            {
+              status: 'disconnected',
+            },
+          ]);
+        } else {
+          provider.wsUnsuccessfulReconnects += 1;
+        }
+
+        if (provider.shouldConnect) {
+          scheduleReconnect();
+        }
+      };
+
+      websocket.onopen = () => {
+        provider.wsLastMessageReceived = time.getUnixTime();
+        provider.wsconnecting = false;
+        provider.wsconnected = true;
+        provider.wsUnsuccessfulReconnects = 0;
         provider.emit('status', [
           {
-            status: 'disconnected',
+            status: 'connected',
           },
         ]);
-      } else {
-        provider.wsUnsuccessfulReconnects += 1;
-      }
-      // Start with no reconnect timeout and increase timeout by
-      // log10(wsUnsuccessfulReconnects).
-      // The idea is to increase reconnect timeout slowly and have no reconnect
-      // timeout at the beginning (log(1) = 0)
-      if (provider.shouldConnect) {
-        setTimeout(
-          setupWS,
-          math.min(
-            math.log10(provider.wsUnsuccessfulReconnects + 1) *
-              reconnectTimeoutBase,
-            maxReconnectTimeout
-          ),
-          provider
-        );
-      }
-    };
+        // always send sync step 1 when connected
+        const encoder = encoding.createEncoder();
+        encoding.writeVarUint(encoder, messageSync);
+        syncProtocol.writeSyncStep1(encoder, provider.doc);
+        provider.send(encoding.toUint8Array(encoder));
+        // broadcast local awareness state
+        if (provider.awareness.getLocalState() != null) {
+          const encoderAwarenessState = encoding.createEncoder();
+          encoding.writeVarUint(encoderAwarenessState, messageAwareness);
+          encoding.writeVarUint8Array(
+            encoderAwarenessState,
+            awarenessProtocol.encodeAwarenessUpdate(provider.awareness, [
+              provider.doc.clientID,
+            ])
+          );
+          provider.send(encoding.toUint8Array(encoderAwarenessState));
+        }
+      };
 
-    websocket.onopen = () => {
-      provider.wsLastMessageReceived = time.getUnixTime();
-      provider.wsconnecting = false;
-      provider.wsconnected = true;
-      provider.wsUnsuccessfulReconnects = 0;
       provider.emit('status', [
         {
-          status: 'connected',
+          status: 'connecting',
         },
       ]);
-      // always send sync step 1 when connected
-      const encoder = encoding.createEncoder();
-      encoding.writeVarUint(encoder, messageSync);
-      syncProtocol.writeSyncStep1(encoder, provider.doc);
-      provider.send(encoding.toUint8Array(encoder));
-      // broadcast local awareness state
-      if (provider.awareness.getLocalState() !== null) {
-        const encoderAwarenessState = encoding.createEncoder();
-        encoding.writeVarUint(encoderAwarenessState, messageAwareness);
-        encoding.writeVarUint8Array(
-          encoderAwarenessState,
-          awarenessProtocol.encodeAwarenessUpdate(provider.awareness, [
-            provider.doc.clientID,
-          ])
-        );
-        provider.send(encoding.toUint8Array(encoderAwarenessState));
-      }
-    };
-
-    provider.emit('status', [
-      {
-        status: 'connecting',
-      },
-    ]);
+    }
+  } catch (err) {
+    if (provider.ws && provider.ws.readyState === provider.ws.OPEN) {
+      provider.ws.close();
+    }
+    provider.ws = undefined;
+    provider.wsconnecting = false;
+    scheduleReconnect();
   }
 };
 
@@ -649,10 +667,7 @@ export class WebsocketProvider extends Observable<string> {
   async connect(): Promise<void> {
     this.shouldConnect = true;
     if (!this.wsconnected && !this.ws) {
-      if (this.beforeConnect) {
-        await this.beforeConnect(this);
-      }
-      setupWS(this);
+      await setupWS(this);
       if (this.willConnectBc) {
         this.connectBc();
       }
