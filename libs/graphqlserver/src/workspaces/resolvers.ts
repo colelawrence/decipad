@@ -1,25 +1,26 @@
-import assert from 'assert';
-import { UserInputError } from 'apollo-server-lambda';
 import {
-  ID,
   GraphqlContext,
-  WorkspaceRecord,
-  WorkspaceInput,
-  Workspace,
+  ID,
   PageInput,
   PermissionRecord,
+  Workspace,
+  WorkspaceInput,
+  WorkspaceRecord,
 } from '@decipad/backendtypes';
-import tables from '@decipad/tables';
 import {
   queryAccessibleResources,
   removeAllPermissionsFor,
 } from '@decipad/services/permissions';
 import { notifyAllWithAccessTo, subscribe } from '@decipad/services/pubsub';
 import { create as createWorkspace2 } from '@decipad/services/workspaces';
+import tables from '@decipad/tables';
+import { UserInputError } from 'apollo-server-lambda';
+import assert from 'assert';
 import {
-  requireUser,
   isAuthenticatedAndAuthorized,
   isAuthorized,
+  loadUser,
+  requireUser,
 } from '../authorization';
 import by from '../utils/by';
 import paginate from '../utils/paginate';
@@ -38,8 +39,15 @@ export default {
       return data.workspaces.get({ id });
     },
 
-    async workspaces(_: unknown, __: unknown, context: GraphqlContext) {
-      const user = requireUser(context);
+    async workspaces(
+      _: unknown,
+      __: unknown,
+      context: GraphqlContext
+    ): Promise<WorkspaceRecord[]> {
+      const user = loadUser(context);
+      if (!user) {
+        return [];
+      }
       const data = await tables();
 
       const permissions = (
