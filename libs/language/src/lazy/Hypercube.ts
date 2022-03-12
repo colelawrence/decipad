@@ -1,11 +1,21 @@
-import { Value } from '../interpreter/Value';
+import { getDefined } from '@decipad/utils';
+import { Type } from '..';
+import { typeToDimensionIds } from '../dimtools/common';
+import { isColumnLike, Value } from '../interpreter/Value';
+import { zip } from '../utils';
 import { implementColumnLike } from './implementColumnLike';
 import type {
-  OperationFunction,
-  HypercubeLike,
   Dimension,
+  DimensionId,
   MinimalHypercube,
+  OperationFunction,
 } from './types';
+
+export type HypercubeArg = [arg: Value, argDimensionIds: DimensionId[]];
+export type HypercubeArgLoose = [
+  arg: Value,
+  dimensionLike: DimensionId[] | Type
+];
 
 /**
  * Represents an operation and X amount of arguments. It's used to represent
@@ -16,29 +26,88 @@ import type {
 export const Hypercube = implementColumnLike(
   class Hypercube implements MinimalHypercube {
     readonly op: OperationFunction;
-    readonly args: HypercubeLike[];
+    readonly args: HypercubeArg[];
 
-    constructor(op: OperationFunction, ...args: HypercubeLike[]) {
+    readonly dimensions: Dimension[];
+    readonly dimensionIds: DimensionId[];
+
+    constructor(op: OperationFunction, ...args: HypercubeArgLoose[]) {
       this.op = op;
-      this.args = args;
-    }
+      this.args = args.map(getHypercubeArg);
 
-    get dimensions(): Dimension[] {
-      return this.args.flatMap((arg) => arg.dimensions);
+      const [dimensionIds, dimensions] = uniqDimensions(this.args);
+      this.dimensionIds = dimensionIds;
+      this.dimensions = dimensions;
     }
 
     lowLevelGet(...keys: number[]): Value {
-      let keyIndex = 0;
-      const getInner = (arg: HypercubeLike): Value => {
-        const keysWeNeed = arg.dimensions.length;
-        const start = keyIndex;
-        keyIndex += keysWeNeed;
+      if (this.dimensions.length !== keys.length) {
+        throw new Error('panic: mismatched dimensions in core lazy operation');
+      }
 
-        return arg.lowLevelGet(...keys.slice(start, keyIndex));
-      };
+      const operationArgs = this.args.map(([arg, argDimIds]): Value => {
+        if (isColumnLike(arg)) {
+          // Key indices match dimensions indices
+          const keysForThisArg = argDimIds.map((argDim) => {
+            const whichKey = this.dimensionIds.findIndex(
+              (myDim) => myDim === argDim
+            );
 
-      const { op, args } = this;
-      return op(args.map(getInner));
+            return getDefined(
+              keys[whichKey],
+              'index out of bounds in core lazy operation'
+            );
+          });
+
+          return arg.lowLevelGet(...keysForThisArg);
+        } else {
+          return arg;
+        }
+      });
+
+      return this.op(operationArgs);
     }
   }
 );
+
+/**
+ * Hypercubes can be 0-dimensional, but when using as a Value we don't want
+ * this flexibility.
+ */
+export const createLazyOperation = (
+  op: OperationFunction,
+  argValues: Value[],
+  argTypes: Type[]
+) => {
+  const lazyOperation = new Hypercube(op, ...zip(argValues, argTypes));
+  if (lazyOperation.dimensions.length) {
+    return lazyOperation;
+  } else {
+    return lazyOperation.lowLevelGet();
+  }
+};
+
+export const getHypercubeArg = ([value, dimsOrType]: HypercubeArgLoose) => {
+  const dims = Array.isArray(dimsOrType)
+    ? dimsOrType
+    : typeToDimensionIds(dimsOrType);
+  return [value, dims] as HypercubeArg;
+};
+
+export const uniqDimensions = (
+  args: HypercubeArg[]
+): [DimensionId[], Dimension[]] => {
+  const retDimensions = new Map<DimensionId, Dimension>();
+
+  for (const [arg, argDimIds] of args) {
+    if (!isColumnLike(arg)) continue;
+
+    for (const [argDim, dimId] of zip(arg.dimensions, argDimIds)) {
+      if (!retDimensions.has(dimId)) {
+        retDimensions.set(dimId, argDim);
+      }
+    }
+  }
+
+  return [[...retDimensions.keys()], [...retDimensions.values()]];
+};

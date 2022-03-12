@@ -65,7 +65,7 @@ export const tableGroupingOperators: { [fname: string]: BuiltinSpec } = {
       );
       const columnsForNewTable = [
         uniqueSortedColumn,
-        Column.fromValues(slicedTables),
+        Column.fromValues(slicedTables, []),
       ];
 
       const [, columnName] = columnIndexAndName(tableType, colType);

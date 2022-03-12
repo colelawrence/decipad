@@ -1,61 +1,27 @@
-import { produce } from 'immer';
-import { uniqDimensions } from '../dimtools/multidimensional-utils';
-import { Column, Value } from '../interpreter/Value';
-import { getDefined } from '../utils';
-import type { Dimension, DimensionId, HypercubeLike } from './types';
-
-export function getAt(
-  hc: HypercubeLike,
-  coordinates: Map<string | number, number>
-) {
-  const uniqueDimensions = uniqDimensions(hc.dimensions);
-  if (coordinates.size !== uniqueDimensions.length) {
-    throw new Error(
-      `panic: not enough keys: given ${[
-        ...coordinates.keys(),
-      ]} and wanted ${uniqueDimensions.map((d) => d.dimensionId)}`
-    );
-  }
-
-  const linearArgs = hc.dimensions.map((dimVal) =>
-    getDefined(coordinates.get(dimVal.dimensionId))
-  );
-
-  return hc.lowLevelGet(...linearArgs);
-}
-
-export function materializeToValue(hc: HypercubeLike): Value {
-  return (function recurse(
-    dims: Dimension[],
-    coordinates: Map<DimensionId, number>
-  ): Value {
-    if (dims.length > 0) {
-      const [firstDim, ...restDims] = dims;
-      return Column.fromValues(
-        Array.from({ length: firstDim.dimensionLength }, (_, i) => {
-          const innerCoords = produce(coordinates, (cursor) => {
-            cursor.set(firstDim.dimensionId, i);
-          });
-          return recurse(restDims, innerCoords);
-        })
-      );
-    } else {
-      return getAt(hc, coordinates);
-    }
-  })(uniqDimensions(hc.dimensions), new Map());
-}
+import { OneResult } from '../interpreter/interpreter-types';
+import type { Dimension, MinimalHypercube } from './types';
 
 /**
- * Hypercubes can be 0-dimensional, but when using as a Value we don't want
- * this flexibility.
- */
-export function materializeWhenNonDimensional(hc: HypercubeLike): Value {
-  if (hc.dimensions.length) {
-    return hc;
+ * Come up with all possible .lowLevelGet arg combinations and call
+ * it while building a nested array
+ * */
+export function materialize(hc: MinimalHypercube): OneResult {
+  if (hc.dimensions.some((dim) => dim.dimensionLength === 0)) {
+    return [];
   }
-  return materializeToValue(hc);
-}
 
-export function materialize(hc: HypercubeLike) {
-  return materializeToValue(hc).getData();
+  /** args for lowLevelGet(). We'll be mutating this as we go */
+  const currentCoordinates = hc.dimensions.map(() => 0);
+
+  return (function recurse(dims: Dimension[], currentDepth: number): OneResult {
+    if (dims.length > 0) {
+      const [firstDim, ...restDims] = dims;
+      return Array.from({ length: firstDim.dimensionLength }, (_, i) => {
+        currentCoordinates[currentDepth] = i;
+        return recurse(restDims, currentDepth + 1);
+      });
+    } else {
+      return hc.lowLevelGet(...currentCoordinates).getData();
+    }
+  })(hc.dimensions, 0);
 }

@@ -2,24 +2,26 @@
 import Fraction from '@decipad/fraction';
 import { unzip } from '@decipad/utils';
 import { DeepReadonly } from 'utility-types';
-import { Time, Interpreter } from '..';
+import { Interpreter, Time } from '..';
+import {
+  addTimeQuantity,
+  cleanDate,
+  getSpecificity,
+  TimeQuantity,
+} from '../date';
+import { Dimension, EmptyColumn, lowLevelGet } from '../lazy';
 import {
   AnyMapping,
   anyMappingToMap,
   filterUnzipped,
   getDefined,
 } from '../utils';
-import {
-  addTimeQuantity,
-  TimeQuantity,
-  cleanDate,
-  getSpecificity,
-} from '../date';
-import { Unknown } from './Unknown';
 import { RuntimeError } from '.';
+import { Unknown } from './Unknown';
 import * as ValueTransforms from './ValueTransforms';
 
 export { ValueTransforms };
+export { DateValue as Date };
 
 export interface Value {
   getData(): Interpreter.OneResult;
@@ -30,15 +32,13 @@ export interface ColumnLike extends Value {
   atIndex(i: number): DeepReadonly<Value>;
   rowCount: number;
   getData(): Interpreter.OneResult;
+  lowLevelGet(...keys: number[]): Value;
+  dimensions: Dimension[];
 }
 
 export const isColumnLike = (thing: Value): thing is ColumnLike => {
   const col = thing as ColumnLike;
-  return (
-    Array.isArray(col.values) &&
-    typeof col.atIndex === 'function' &&
-    typeof col.rowCount === 'number'
-  );
+  return typeof col.lowLevelGet === 'function';
 };
 
 export const getColumnLike = (
@@ -182,8 +182,6 @@ class DateValue implements Value {
   }
 }
 
-export { DateValue as Date };
-
 export class Range implements Value {
   start: Value;
   end: Value;
@@ -216,18 +214,45 @@ export class Range implements Value {
 export type SliceRange = [start: number, end: number];
 export type SlicesMap = SliceRange[];
 
-export class Column implements Value {
+export class Column implements ColumnLike {
   readonly _values: DeepReadonly<Value[]>;
 
   constructor(values: DeepReadonly<Column['values']>) {
     this._values = values;
   }
 
-  static fromValues(values: DeepReadonly<Value[]>): Column {
+  get dimensions() {
+    const contents = this.values[0];
+
+    if (isColumnLike(contents)) {
+      return [{ dimensionLength: this.rowCount }, ...contents.dimensions];
+    } else {
+      return [{ dimensionLength: this.rowCount }];
+    }
+  }
+
+  lowLevelGet(...keys: number[]) {
+    return lowLevelGet(this.atIndex(keys[0]), keys.slice(1));
+  }
+
+  /**
+   * Create a column from the values inside. Empty columns return a special value.
+   */
+  static fromValues(
+    values: DeepReadonly<Value[]>,
+    innerDimensions?: Dimension[]
+  ): ColumnLike {
+    if (values.length === 0) {
+      if (innerDimensions) {
+        // We can create a column with no values
+        return new EmptyColumn(innerDimensions);
+      }
+      throw new Error('panic: Empty columns are forbidden');
+    }
     return new Column(values);
   }
 
-  static fromSequence(startV: Value, endV: Value, byV?: Value): Column {
+  static fromSequence(startV: Value, endV: Value, byV?: Value): ColumnLike {
     const [start, end] = [startV, endV].map((val) => val.getData() as Fraction);
 
     const by = byV
@@ -260,7 +285,7 @@ export class Column implements Value {
     startD: DateValue,
     endD: DateValue,
     by: Time.Unit
-  ): Column {
+  ): ColumnLike {
     let start = startD.getData();
     let end = endD.getData();
     if (end >= start) {
@@ -442,8 +467,14 @@ export class Row implements Value {
   }
 }
 
-type FromJSOneArg = Interpreter.OneResult | number | Date;
-type FromJSArg = FromJSOneArg | FromJSOneArg[];
+export type FromJSArg =
+  | string
+  | boolean
+  | number
+  | bigint
+  | Date
+  | Fraction
+  | FromJSArg[];
 
 export const fromJS = (thing: FromJSArg): Value => {
   // TODO this doesn't distinguish Range/Date from Column, and it can't possibly do it!
@@ -452,6 +483,8 @@ export const fromJS = (thing: FromJSArg): Value => {
   }
   if (!Array.isArray(thing)) {
     return Scalar.fromValue(thing);
+  } else if (thing.length === 0) {
+    return Column.fromValues([], []);
   } else {
     return Column.fromValues(thing.map((t) => fromJS(t)));
   }

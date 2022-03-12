@@ -1,32 +1,13 @@
-import Fraction from '@decipad/fraction';
-import { Value } from '../interpreter';
-import { FractionValue, fromJS, Column } from '../interpreter/Value';
-import { getInstanceof } from '../utils';
-import { Hypercube } from '.';
-import { SwappedHypercube } from './SwappedHypercube';
 import { materialize } from './materialize';
-import { ConcreteValue } from './ConcreteValue';
+import { SwappedHypercube } from './SwappedHypercube';
+import { jsCol } from './testUtils';
 
-const op =
-  (simpleCallback: (...args: Fraction[]) => Fraction) => (args: Value[]) =>
-    fromJS(
-      simpleCallback(
-        ...args.map((a) => getInstanceof(a, FractionValue).getData())
-      )
-    );
+const multiDimX = jsCol([1n, 2n, 3n]);
 
-const jsCol = (items: number[]) => fromJS(items) as Column;
-
-const multiDimX = new Hypercube(
-  op((a) => a),
-  ConcreteValue.fromColAndDim(jsCol([1, 2, 3]), 'X')
-);
-
-const twoAnonDims = new Hypercube(
-  op((a, b) => a.add(b)),
-  ConcreteValue.fromColAndDim(jsCol([1, 2]), 0),
-  ConcreteValue.fromColAndDim(jsCol([10, 100]), 1)
-);
+const twoAnonDims = jsCol([
+  [11n, 101n],
+  [12n, 102n],
+]);
 
 it('can swap dimensions of a hypercube', () => {
   expect(materialize(new SwappedHypercube(twoAnonDims, 1)))
@@ -61,7 +42,7 @@ it('or left alone', () => {
 });
 
 it('can swap nothing if the dimension is 1D', () => {
-  expect(materialize(new SwappedHypercube(multiDimX, 'X')))
+  expect(materialize(new SwappedHypercube(multiDimX, 0)))
     .toMatchInlineSnapshot(`
       Array [
         Fraction(1),
@@ -69,50 +50,4 @@ it('can swap nothing if the dimension is 1D', () => {
         Fraction(3),
       ]
     `);
-});
-
-const multiDimXTwice = new Hypercube(
-  op((a, b) => a.div(b)),
-  ConcreteValue.fromColAndDim(jsCol([1, 2]), 'X'),
-  ConcreteValue.fromColAndDim(jsCol([2, 4]), 'X')
-);
-
-const multiDimXTwiceWithOneBefore = new Hypercube(
-  op((a, b) => a.div(b)),
-  multiDimXTwice,
-  ConcreteValue.fromColAndDim(jsCol([2, 4]), 'Y')
-);
-
-describe('with dupe dimensions', () => {
-  it('can keep 2 of the same dimensions on top', () => {
-    expect(materialize(new SwappedHypercube(multiDimXTwiceWithOneBefore, 'X')))
-      .toMatchInlineSnapshot(`
-        Array [
-          Array [
-            Fraction(0.25),
-            Fraction(0.125),
-          ],
-          Array [
-            Fraction(0.25),
-            Fraction(0.125),
-          ],
-        ]
-      `);
-  });
-
-  it('can pull another dimension from under 2 of the same', () => {
-    expect(materialize(new SwappedHypercube(multiDimXTwiceWithOneBefore, 'Y')))
-      .toMatchInlineSnapshot(`
-        Array [
-          Array [
-            Fraction(0.25),
-            Fraction(0.25),
-          ],
-          Array [
-            Fraction(0.125),
-            Fraction(0.125),
-          ],
-        ]
-      `);
-  });
 });

@@ -2,7 +2,7 @@ import produce from 'immer';
 
 import { getOnly } from '@decipad/utils';
 
-import { AST, Column, Context, Type } from '..';
+import { AST, Context, Type } from '..';
 import { inferExpression } from '../infer';
 import { Realm } from '../interpreter';
 import { getIdentifierString } from '../utils';
@@ -91,7 +91,7 @@ export async function inferMatrixAssign(
 export async function evaluateMatrixAssign(
   realm: Realm,
   assign: AST.MatrixAssign
-): Promise<Column> {
+): Promise<ColumnLike> {
   const [varRef, matchers] = assign.args;
 
   const varName = getIdentifierString(varRef);

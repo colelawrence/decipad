@@ -1,9 +1,9 @@
-import { HypercubeLike } from '.';
+import { ColumnLike } from '../interpreter/Value';
 import { implementColumnLike } from './implementColumnLike';
 import { MinimalHypercube } from './types';
 
 /**
- * Used to turn a hypercube of an array into an array of the hypercubes inside
+ * Used to lazily lookup into a hypercube
  *
  * hc // -> [
  *   [1, 2],
@@ -15,11 +15,16 @@ import { MinimalHypercube } from './types';
 export const HypercubeAtIndex = implementColumnLike(
   class HypercubeAtIndex implements MinimalHypercube {
     index: number;
-    innerHC: HypercubeLike;
+    innerHC: ColumnLike;
 
-    constructor(innerHC: HypercubeLike, index: number) {
+    constructor(innerHC: ColumnLike, index: number) {
       this.innerHC = innerHC;
       this.index = index;
+
+      const { dimensionLength } = this.innerHC.dimensions[0];
+      if (index < 0 || index >= dimensionLength) {
+        throw new Error(`panic: index ${index} out of bounds`);
+      }
     }
 
     get dimensions() {

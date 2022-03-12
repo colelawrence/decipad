@@ -1,12 +1,7 @@
 import * as Value from '../interpreter/Value';
-import { Hypercube } from '../lazy';
-import { ConcreteValue } from '../lazy/ConcreteValue';
-import {
-  materializeToValue,
-  materializeWhenNonDimensional,
-} from '../lazy/materialize';
+import { createLazyOperation } from '../lazy';
 import { build as t, Type } from '../type';
-import { allMatch, zip } from '../utils';
+import { allMatch } from '../utils';
 import {
   arrayOfOnes,
   compareDimensions,
@@ -88,10 +83,6 @@ export const automapValues = (
     throw new Error('panic: one or more cardinalities are too low');
   }
 
-  const dimensionalArgs = zip(argTypes, argValues).map(([type, value]) =>
-    ConcreteValue.fromValue(value, type)
-  );
-
   if (expectedCardinalities.every((c) => c === 1)) {
     const reducedArgTypes = hackilyReduceArgTypes(
       argTypes,
@@ -100,16 +91,13 @@ export const automapValues = (
     const mapFnAndTypes = (values: Value.Value[]) =>
       mapFn(values, reducedArgTypes);
 
-    return materializeToValue(new Hypercube(mapFnAndTypes, ...dimensionalArgs));
+    return createLazyOperation(mapFnAndTypes, argValues, argTypes);
   } else {
     const whichToReduce = getReductionPlan(argTypes, expectedCardinalities);
 
     if (whichToReduce.every((doReduce) => doReduce === false)) {
       // Reduce nothing -- input dimensions are correct
-      return mapFn(
-        dimensionalArgs.map(materializeWhenNonDimensional),
-        argTypes
-      );
+      return mapFn(argValues, argTypes);
     } else {
       throw new Error(
         'panic: Operating upon multiple dimensional values is not supported yet'
@@ -180,17 +168,19 @@ export const automapValuesForReducer = (
   if (getCardinality(argType) === 2) {
     return mapFn([argValue], [argType]);
   } else {
+    const argCol = Value.getColumnLike(
+      argValue,
+      'reducers always take columnar arguments'
+    );
     return Value.Column.fromValues(
-      Value.getColumnLike(
-        argValue,
-        'reducers always take columnar arguments'
-      ).values.map((v) =>
+      argCol.values.map((v) =>
         automapValuesForReducer(
           argType.reduced(),
           Value.getColumnLike(v),
           mapFn
         )
-      )
+      ),
+      argCol.dimensions.slice(1)
     );
   }
 };

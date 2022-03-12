@@ -123,7 +123,10 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
 
       return Table.fromNamedColumns(
         zip(columns1, columns2).map(([c1, c2]) =>
-          Column.fromValues([...c1.values, ...c2.values])
+          Column.fromValues(
+            [...c1.values, ...c2.values],
+            c1.dimensions.slice(1)
+          )
         ),
         getDefined(columnNames)
       );

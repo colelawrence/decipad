@@ -1,9 +1,10 @@
 import { getDefined } from '@decipad/utils';
-import { AST, Column, Context } from '..';
+import { AST, Context } from '..';
 import { inferExpression } from '../infer';
 import { evaluate, Realm } from '../interpreter';
+import { ColumnLike, getColumnLike } from '../interpreter/Value';
 import { build as t, InferError, Type } from '../type';
-import { getIdentifierString, getInstanceof } from '../utils';
+import { getIdentifierString } from '../utils';
 
 export const inferCategories = async (
   ctx: Context,
@@ -35,13 +36,13 @@ export const inferCategories = async (
 export const evaluateCategories = async (
   realm: Realm,
   category: AST.Categories
-): Promise<Column> => {
+): Promise<ColumnLike> => {
   const [nameExp, contentsExp] = category.args;
 
   const name = getIdentifierString(nameExp);
   const contents = await evaluate(realm, contentsExp);
 
-  const theSet = getInstanceof(contents, Column);
+  const theSet = getColumnLike(contents);
 
   realm.stack.set(name, theSet);
   return theSet;

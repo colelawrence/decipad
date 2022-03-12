@@ -1,7 +1,8 @@
 import { enableMapSet } from 'immer';
 
 enableMapSet();
-
-export { ConcreteValue } from './ConcreteValue';
-export { Hypercube } from './Hypercube';
-export type { HypercubeLike, Dimension } from './types';
+export { createLazyOperation } from './Hypercube';
+export { EmptyColumn } from './EmptyColumn';
+export { SwappedHypercube } from './SwappedHypercube';
+export { lowLevelGet } from './lowLevelGetImpl';
+export type { Dimension, DimensionId } from './types';

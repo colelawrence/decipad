@@ -1,5 +1,6 @@
-import { AST, Column, Context } from '..';
+import { AST, Context } from '..';
 import { Realm, RuntimeError } from '../interpreter';
+import { isColumnLike } from '../interpreter/Value';
 import { build as t, Type, InferError } from '../type';
 import { getIdentifierString } from '../utils';
 
@@ -27,7 +28,7 @@ export const evaluateVariable = (realm: Realm, varName: RefLike) => {
 
   if (!variable) {
     throw new RuntimeError(InferError.missingVariable(refName(varName)));
-  } else if (!(variable instanceof Column)) {
+  } else if (!isColumnLike(variable)) {
     throw new RuntimeError('Expected column');
   } else {
     return variable;

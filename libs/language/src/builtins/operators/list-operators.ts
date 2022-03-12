@@ -188,7 +188,10 @@ export const listOperators: Record<string, BuiltinSpec> = {
       );
 
       return table.mapColumns((column) =>
-        Column.fromValues(column.values.filter((_, i) => indices.includes(i)))
+        Column.fromValues(
+          column.values.filter((_, i) => indices.includes(i)),
+          []
+        )
       );
     },
     functor: ([upperBound, table, columnName]) =>

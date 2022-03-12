@@ -1,6 +1,6 @@
 import { AST, InjectableExternalData } from '.';
-import { Interpreter, Realm, run } from './interpreter';
-import { fromJS, Table } from './interpreter/Value';
+import { Realm, run } from './interpreter';
+import { fromJS, FromJSArg, Table } from './interpreter/Value';
 import { inferProgram, inferBlock, makeContext } from './infer';
 import { zip, AnyMapping } from './utils';
 import { stringifyResult } from './result';
@@ -63,9 +63,7 @@ export const objectToTableType = (
     columnNames: Object.keys(obj),
   });
 
-export const objectToTableValue = (
-  obj: Record<string, Interpreter.OneResult[]>
-) => {
+export const objectToTableValue = (obj: Record<string, FromJSArg[]>) => {
   const values = Object.values(obj).map((v) => fromJS(v));
 
   return Table.fromNamedColumns(values, Object.keys(obj)).getData();

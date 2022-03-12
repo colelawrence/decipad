@@ -1,9 +1,9 @@
 import { getDefined } from '@decipad/utils';
 import { Value } from '../interpreter';
 import { InferError, Type, build as t } from '../type';
+import { SwappedHypercube } from '../lazy';
+import { getColumnLike } from '../interpreter/Value';
 import { chooseFirst, deLinearizeType, linearizeType } from './common';
-import { SwappedHypercube } from '../lazy/SwappedHypercube';
-import { ConcreteValue } from '../lazy/ConcreteValue';
 
 export const dimSwapTypes = (dominantIndexName: string, type: Type) => {
   return type.isColumn().mapType((matrix) => {
@@ -24,9 +24,12 @@ export const dimSwapValues = (
   type: Type,
   value: Value
 ) => {
+  const indexOfDominantDimension = linearizeType(type).findIndex(
+    (t) => t.indexedBy === dominantIndexName
+  );
   const swapped = new SwappedHypercube(
-    ConcreteValue.fromValue(value, type),
-    dominantIndexName
+    getColumnLike(value),
+    indexOfDominantDimension
   );
 
   return swapped;

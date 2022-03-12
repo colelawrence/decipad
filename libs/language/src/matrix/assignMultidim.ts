@@ -2,6 +2,7 @@ import { getDefined } from '@decipad/utils';
 
 import { AST, Column, Type } from '..';
 import { evaluate, Realm, RuntimeError } from '../interpreter';
+import { ColumnLike, isColumnLike } from '../interpreter/Value';
 import { build as t, InferError } from '../type';
 import { equalOrUnknown } from '../utils';
 import { getIndexName } from './getVariable';
@@ -36,7 +37,7 @@ export function inferMultidimAssignment(
 export async function evaluateMultidimAssignment(
   realm: Realm,
   node: AST.MatrixAssign,
-  dimension: Column
+  dimension: ColumnLike
 ) {
   const [, matchers, assigneeExp] = node.args;
   const [matchCount, matches] = await matchTargets(realm, matchers);
@@ -44,7 +45,7 @@ export async function evaluateMultidimAssignment(
   const assignee = await evaluate(realm, assigneeExp);
 
   let getAssignee = () => assignee;
-  if (assignee instanceof Column) {
+  if (isColumnLike(assignee)) {
     // There must be one item for each match
     if (assignee.values.length !== matchCount) {
       throw new RuntimeError(new InferError('Mismatched column sizes'));

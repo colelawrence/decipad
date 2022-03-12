@@ -3,6 +3,7 @@ import { zip } from '@decipad/utils';
 import { equalOrUnknown } from '../utils';
 import { Column, Value } from '../interpreter/Value';
 import { Type, build as t } from '../type';
+import { DimensionId } from '../lazy';
 
 export type IndexNames = (string | null)[];
 
@@ -41,6 +42,11 @@ export const deLinearizeType = (types: Type[]): Type => {
           type.cellType = deLinearizeType(rest);
         })
   );
+};
+
+export const typeToDimensionIds = (type: Type): DimensionId[] => {
+  const linear = linearizeType(type).slice(0, -1);
+  return linear.map((t, i) => t.indexedBy ?? i);
 };
 
 export const chooseFirst = <T>(indexOnTop: number, items: T[]): T[] => [

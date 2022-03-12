@@ -1,8 +1,8 @@
-import { AST, Table, ExternalDataMap, Column, Type } from '..';
+import { AST, Table, ExternalDataMap, Type } from '..';
 import { stringifyDate } from '../date';
 import { makeContext as makeInferContext } from '../infer';
 import { Realm, Value } from '../interpreter';
-import { ColumnLike } from '../interpreter/Value';
+import { ColumnLike, isColumnLike } from '../interpreter/Value';
 
 import {
   getStatementsToEvict,
@@ -100,7 +100,7 @@ export class ComputationRealm {
 
       if (table instanceof Table) {
         addLabels(name, table.columns[0], type.columnTypes?.[0]);
-      } else if (table instanceof Column) {
+      } else if (table != null && isColumnLike(table)) {
         addLabels(name, table, type.cellType ?? undefined);
       }
     }

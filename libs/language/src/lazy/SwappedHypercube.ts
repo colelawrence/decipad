@@ -1,11 +1,7 @@
 import { chooseFirst } from '../dimtools/common';
+import { ColumnLike } from '../interpreter/Value';
 import { implementColumnLike } from './implementColumnLike';
-import {
-  Dimension,
-  DimensionId,
-  HypercubeLike,
-  MinimalHypercube,
-} from './types';
+import { Dimension, MinimalHypercube } from './types';
 
 /**
  * Swaps a dimension like so (pseudocode):
@@ -26,17 +22,15 @@ import {
  */
 export const SwappedHypercube = implementColumnLike(
   class SwappedHypercube implements MinimalHypercube {
-    unswappedHC: HypercubeLike;
+    unswappedHC: ColumnLike;
 
     dimensions: Dimension[];
     dominantDimensionIndex: number;
 
-    constructor(unswappedHC: HypercubeLike, dominantDimensionId: DimensionId) {
+    constructor(unswappedHC: ColumnLike, dominantDimensionIndex: number) {
       this.unswappedHC = unswappedHC;
 
-      this.dominantDimensionIndex = unswappedHC.dimensions.findIndex(
-        (dim) => dominantDimensionId === dim.dimensionId
-      );
+      this.dominantDimensionIndex = dominantDimensionIndex;
       this.dimensions = chooseFirst(
         this.dominantDimensionIndex,
         unswappedHC.dimensions
