@@ -15,6 +15,7 @@ export { DragHandle } from './DragHandle/DragHandle';
 export { Ellipsis } from './Ellipsis/Ellipsis';
 export { File } from './File/File';
 export { Folder } from './Folder/Folder';
+export { Frame } from './Frame/Frame';
 export { Globe } from './Globe/Globe';
 export { Info } from './Info/Info';
 export { Italic } from './Italic/Italic';

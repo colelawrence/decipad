@@ -8,6 +8,7 @@ import { insertBlockOfTypeBelow } from './block';
 import { insertCodeBlockBelow } from './codeBlock';
 import { insertTableBelow } from './table';
 import { requireBlockParentPath } from './path';
+import { insertInputBelow } from './input';
 
 type SlashCommandHandler = Exclude<
   ComponentProps<typeof organisms.SlashCommandsMenu>['onExecute'],
@@ -23,6 +24,9 @@ export const execute = (
   switch (command) {
     case 'calculation-block':
       insertCodeBlockBelow(editor, path);
+      break;
+    case 'input':
+      insertInputBelow(editor, path);
       break;
     case 'table':
       insertTableBelow(editor, path);

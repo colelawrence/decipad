@@ -8,6 +8,7 @@ import {
   ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_H3,
+  ELEMENT_INPUT,
   ELEMENT_LI,
   ELEMENT_LINK,
   ELEMENT_OL,
@@ -41,6 +42,7 @@ import {
   Italic,
   Code,
   Link,
+  Input,
 } from '../components';
 import { PlateComponent } from '../types';
 
@@ -72,6 +74,7 @@ export const components: PlateComponents = {
   // Special elements
   [ELEMENT_FETCH]: ImportDataElement as PlateComponent, // TODO kill/rewrite with editor/UI separation
   [ELEMENT_TABLE_INPUT]: Table,
+  [ELEMENT_INPUT]: Input,
 
   // Marks
   [MARK_BOLD]: Bold,

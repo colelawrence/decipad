@@ -144,6 +144,13 @@ export const p24Bold: TypographyStyles = {
   fontWeight: 600,
   fontSize: `${24 / usualRemPxs}rem`,
 };
+export const p32Medium: TypographyStyles = {
+  ...pDefault,
+  fontWeight: 500,
+  fontSize: `${32 / usualRemPxs}rem`,
+  lineHeight: 1.36,
+  letterSpacing: '-0.8%',
+};
 
 // monospace
 

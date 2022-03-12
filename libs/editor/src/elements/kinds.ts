@@ -27,4 +27,6 @@ export const ELEMENT_FETCH = 'fetch-data';
 
 export const ELEMENT_TABLE_INPUT = 'table-input';
 
+export const ELEMENT_INPUT = 'input';
+
 export type ElementKind = typeof elementKinds[keyof typeof elementKinds];

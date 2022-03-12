@@ -1,5 +1,10 @@
 import { captureException } from '@sentry/react';
-import { PlatePlugin, TDescendant } from '@udecode/plate';
+import {
+  getPlatePluginTypes,
+  getRenderElement,
+  PlatePlugin,
+  TDescendant,
+} from '@udecode/plate';
 import { dequal } from 'dequal';
 import { ContextType, useEffect, useMemo, useState } from 'react';
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -18,6 +23,7 @@ import { hasSyntaxError } from './common';
 import { delayErrors } from './delayErrors';
 import { getCursorPos } from './getCursorPos';
 import { getSyntaxErrorRanges } from './getSyntaxErrorRanges';
+import { languageElements } from './languageElements';
 import { slateDocumentToComputeRequest } from './slateDocumentToComputeRequest';
 
 interface UseLanguagePluginRet {
@@ -120,6 +126,8 @@ export const useLanguagePlugin = (): UseLanguagePluginRet => {
             <>{props.children}</>
           );
         },
+        renderElement: getRenderElement(languageElements),
+        voidTypes: getPlatePluginTypes(languageElements),
       }),
       [computeRequests, cursors, results]
     ),

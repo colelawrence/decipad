@@ -101,7 +101,6 @@ export const EditorTable = ({
                 onRemove={() => {
                   onRemoveRow(rowIndex);
                 }}
-                readOnly={readOnly}
               >
                 {value.columns.map((column, colIndex) => {
                   return (
@@ -113,7 +112,6 @@ export const EditorTable = ({
                         onChangeCell(colIndex, rowIndex, newValue);
                       }}
                       validate={(newValue) => onValidateCell(column, newValue)}
-                      readOnly={readOnly}
                     />
                   );
                 })}
@@ -121,14 +119,12 @@ export const EditorTable = ({
             );
           })}
         </tbody>
-        {!readOnly && (
-          <tfoot>
-            <AddTableRowButton
-              colSpan={value.columns.length + 1}
-              onAddRow={onAddRow}
-            />
-          </tfoot>
-        )}
+        <tfoot>
+          <AddTableRowButton
+            colSpan={value.columns.length + 1}
+            onAddRow={onAddRow}
+          />
+        </tfoot>
       </Table>
     </div>
   );

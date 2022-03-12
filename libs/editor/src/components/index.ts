@@ -1,4 +1,5 @@
 export { Error } from './Error';
+export { Input } from './Input/Input';
 export { Table } from './Table';
 export { Tooltip } from './Tooltip';
 

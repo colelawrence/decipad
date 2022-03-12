@@ -3,7 +3,7 @@ import { ReactNode, Children, FC, createContext, useContext } from 'react';
 import { isElement } from 'react-is';
 import * as RadixDropdownMenu from '@radix-ui/react-dropdown-menu';
 
-import { MenuItem, TriggerMenuItem } from '../../atoms';
+import { MenuItem, MenuSeparator, TriggerMenuItem } from '../../atoms';
 import { UnitMenuItem } from '..';
 import { cssVar, grey500, transparency } from '../../primitives';
 
@@ -101,7 +101,11 @@ export const MenuList = ({
       >
         {triggerNode}
         <div css={dropdown || undropdownifyContentStyles}>
-          <RadixDropdownMenu.Content css={styles} portalled={dropdown}>
+          <RadixDropdownMenu.Content
+            css={styles}
+            align="start"
+            portalled={dropdown}
+          >
             {Children.map(children, (child) => {
               if (child == null) {
                 return null;
@@ -110,6 +114,7 @@ export const MenuList = ({
                 isElement(child) &&
                 (child.type === MenuItem ||
                   child.type === MenuList ||
+                  child.type === MenuSeparator ||
                   child.type === UnitMenuItem)
               ) {
                 return child;

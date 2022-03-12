@@ -48,6 +48,7 @@ export {
 export { Time } from './date';
 export { ExternalData } from './data';
 export * from './computer';
+export { isExpression } from './utils';
 
 export interface InjectableExternalData {
   type: Type;

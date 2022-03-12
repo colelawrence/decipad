@@ -2,6 +2,7 @@ import { Element } from 'slate';
 import { TText } from '@udecode/plate';
 import { AST } from '@decipad/language';
 import { ComponentProps } from 'react';
+import { Node, PlainText } from '../../elements/types';
 import { astNode } from '../../utils/astNode';
 import { CodeErrorHighlight } from '../../components';
 
@@ -25,8 +26,8 @@ export function getAssignmentBlock(
   };
 }
 
-export function getCodeFromBlock(block: SlateNode): string {
-  if (block.text) {
+export function getCodeFromBlock(block: Node | PlainText): string {
+  if ('text' in block) {
     return block.text;
   }
   return (block.children || []).map(getCodeFromBlock).join('\n');
@@ -43,9 +44,3 @@ export const isSlateNode = (thing?: unknown): thing is SlateNode => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return typeof (thing as any)?.type === 'string' && Element.isElement(thing);
 };
-
-export interface FetchDataNode extends SlateNode {
-  'data-varname': string;
-  'data-href': string;
-  'data-contenttype': string;
-}

@@ -6,6 +6,7 @@ export { EditableTableCaption } from './EditableTableCaption/EditableTableCaptio
 export { EditableTableData } from './EditableTableData/EditableTableData';
 export { HelpButton } from './HelpButton/HelpButton';
 export { InlineCodeError } from './InlineCodeError/InlineCodeError';
+export { Interactive } from './Interactive/Interactive';
 export { MenuList } from './MenuList/MenuList';
 export { NavigationList } from './NavigationList/NavigationList';
 export { NotebookAvatars } from './NotebookAvatars/NotebookAvatars';

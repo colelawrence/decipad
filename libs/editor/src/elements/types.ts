@@ -16,13 +16,14 @@ import {
   ELEMENT_FETCH,
   ELEMENT_PARAGRAPH,
   ELEMENT_BLOCKQUOTE,
+  ELEMENT_INPUT,
 } from './kinds';
 import { TableData } from '../types';
 import { MarkKind } from '../marks';
 
 // Defining specific elements
 
-interface BaseElement {
+export interface BaseElement {
   type: ElementKind;
   children: Array<Descendant>;
   id: string;
@@ -108,12 +109,19 @@ export interface FetchElement extends BaseElement {
   'data-varname': string;
 }
 
+export interface InputElement extends BaseElement {
+  type: typeof ELEMENT_INPUT;
+  children: [EmptyText];
+  value: string;
+  variableName: string;
+}
+
 // Overall node types
 
 type EmptyText = {
   text: '';
 };
-type PlainText = EmptyText | { text: string };
+export type PlainText = EmptyText | { text: string };
 export type RichText = PlainText & Partial<Record<MarkKind, true>>;
 
 export type BlockElement =
@@ -134,7 +142,8 @@ export type BlockElement =
   | ListItemContentElement
   // Special elements
   | FetchElement
-  | TableElement;
+  | TableElement
+  | InputElement;
 type InlineElement = LinkElement;
 export type Element = BlockElement | InlineElement;
 
@@ -152,6 +161,8 @@ export type Editor = Omit<SPEditor & ReactEditor, 'children'> & {
       | UnorderedListElement
       | OrderedListElement
       | FetchElement
+      | TableElement
+      | InputElement
     >
   ];
 };

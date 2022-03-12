@@ -43,6 +43,11 @@ it('renders the cells', () => {
   expect(getByDisplayValue('3')).toBeVisible();
 });
 
+it('renders the add row button', () => {
+  const { getByText } = render(<EditorTable {...defaultProps} />);
+  expect(getByText(/add.+row/i)).toBeVisible();
+});
+
 describe('onChangeColumnName', () => {
   it('gets called with the correct parameters', () => {
     const onChangeColumnName = jest.fn();

@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { ComponentProps, FC, useCallback, useEffect, useState } from 'react';
 import { useWindowListener } from '@decipad/react-utils';
 import { SlashCommandsMenuItem } from '../../atoms';
-import { Shapes, Table, Text } from '../../icons';
+import { Placeholder, Shapes, Table, Text } from '../../icons';
 import { SlashCommandsMenuGroup } from '../../molecules';
 import {
   black,
@@ -15,6 +15,7 @@ import { noop } from '../../utils';
 
 const SLASH_COMMANDS = [
   'calculation-block',
+  'input',
   'table',
   'heading1',
   'heading2',
@@ -36,6 +37,18 @@ type SlashCommandItem = Omit<
   readonly extraSearchTerms: ReadonlyArray<string>;
 };
 const groups: ReadonlyArray<SlashCommandGroup> = [
+  {
+    title: 'Interactivity',
+    items: [
+      {
+        command: 'input',
+        title: 'Number Field',
+        description: 'Add an input users can interact with',
+        icon: <Placeholder />,
+        extraSearchTerms: [],
+      },
+    ],
+  },
   {
     title: 'Data',
     items: [

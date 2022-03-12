@@ -20,7 +20,6 @@ import { exitBreakOptions } from './exitBreakOptions';
 import { resetBlockTypeOptions } from './resetBlockTypeOptions';
 import { createAutoPairsPlugin } from '../plugins/AutoPairs/createAutoPairsPlugin';
 import { createCodeVariableHighlightingPlugin } from '../plugins/CodeVariableHighlighting/createCodeVariableHighlightingPlugin';
-import { createInteractiveTablePlugin } from '../plugins/InteractiveTable/createInteractiveTablePlugin';
 import { createSentryBreadcrumbsPlugin } from '../plugins/SentryBreadcrumbsPlugin/createSentryBreadcrumbsPlugin';
 import { createMarksPlugins } from '../plugins/Marks/createMarksPlugins';
 import { createLinkPlugin } from '../plugins/Link/createLinkPlugin';
@@ -51,7 +50,6 @@ export const plugins = [
   createListPlugin(),
 
   // custom blocks
-  createInteractiveTablePlugin(),
   createCodeBlockPlugin(),
 
   // structure enforcement

@@ -66,9 +66,9 @@ describe('onAddColumn prop', () => {
   });
 });
 
-describe('readOnly prop', () => {
-  it('does not render the actions column', () => {
-    const { getAllByRole, rerender } = render(
+describe('actionsColumn prop', () => {
+  it('renders the actions column by default', () => {
+    const { getAllByRole } = render(
       <table>
         <tbody>
           <TableHeaderRow>
@@ -79,8 +79,28 @@ describe('readOnly prop', () => {
     );
 
     expect(getAllByRole('columnheader')).toHaveLength(2);
+  });
 
-    rerender(
+  describe('when false', () => {
+    it('does not render the actions column', () => {
+      const { getAllByRole } = render(
+        <table>
+          <tbody>
+            <TableHeaderRow actionsColumn={false}>
+              <TableHeader type={getStringType()}>Table Data</TableHeader>
+            </TableHeaderRow>
+          </tbody>
+        </table>
+      );
+
+      expect(getAllByRole('columnheader')).toHaveLength(1);
+    });
+  });
+});
+
+describe('readOnly prop', () => {
+  it('does not render the add new column button on the actions column', () => {
+    const { getAllByRole, queryByTitle } = render(
       <table>
         <tbody>
           <TableHeaderRow readOnly>
@@ -90,6 +110,7 @@ describe('readOnly prop', () => {
       </table>
     );
 
-    expect(getAllByRole('columnheader')).toHaveLength(1);
+    expect(getAllByRole('columnheader')).toHaveLength(2);
+    expect(queryByTitle(/create/i)).not.toBeInTheDocument();
   });
 });

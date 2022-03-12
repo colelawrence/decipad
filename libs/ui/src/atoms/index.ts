@@ -18,6 +18,7 @@ export { Italic } from './Italic/Italic';
 export { Link } from './Link/Link';
 export { ListItem } from './ListItem/ListItem';
 export { MenuItem } from './MenuItem/MenuItem';
+export { MenuSeparator } from './MenuSeparator/MenuSeparator';
 export { NavigationItem } from './NavigationItem/NavigationItem';
 export { NumberResult } from './NumberResult/NumberResult';
 export { Paragraph } from './Paragraph/Paragraph';

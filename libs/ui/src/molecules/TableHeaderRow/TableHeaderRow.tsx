@@ -38,12 +38,14 @@ const iconWrapperStyles = css({
 
 interface TableHeaderRowProps {
   readonly children: ReactNode;
+  readonly actionsColumn?: boolean;
   readonly onAddColumn?: () => void;
   readonly readOnly?: boolean;
 }
 
 export const TableHeaderRow = ({
   children,
+  actionsColumn = true,
   onAddColumn = noop,
   readOnly = false,
 }: TableHeaderRowProps): ReturnType<FC> => {
@@ -53,7 +55,7 @@ export const TableHeaderRow = ({
         display: 'grid',
         gridTemplate: table.rowTemplate(
           Children.toArray(children).length,
-          readOnly
+          !actionsColumn
         ),
       }}
     >
@@ -73,13 +75,15 @@ export const TableHeaderRow = ({
         );
         throw new Error('Expected all children to be table header components');
       })}
-      {!readOnly && (
+      {actionsColumn && (
         <th css={createColumnThStyles}>
-          <button css={buttonStyles} onClick={onAddColumn}>
-            <span css={iconWrapperStyles}>
-              <Create />
-            </span>
-          </button>
+          {!readOnly && (
+            <button css={buttonStyles} onClick={onAddColumn}>
+              <span css={iconWrapperStyles}>
+                <Create />
+              </span>
+            </button>
+          )}
         </th>
       )}
     </tr>

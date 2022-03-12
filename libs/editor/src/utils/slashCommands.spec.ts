@@ -7,6 +7,7 @@ import {
   ELEMENT_H2,
   ELEMENT_H3,
   ElementKind,
+  ELEMENT_INPUT,
 } from '../elements';
 import { execute, SlashCommand } from './slashCommands';
 
@@ -16,6 +17,7 @@ const expectedTypes: Record<SlashCommand, ElementKind> = {
   heading2: ELEMENT_H3,
   import: ELEMENT_FETCH,
   'calculation-block': ELEMENT_CODE_BLOCK,
+  input: ELEMENT_INPUT,
 };
 
 test.each(Object.entries(expectedTypes) as [SlashCommand, ElementKind][])(

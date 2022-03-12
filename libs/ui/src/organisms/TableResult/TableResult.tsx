@@ -27,7 +27,7 @@ export const TableResult = ({
   return (
     <Table border={isTabularType(parentType) ? 'inner' : 'all'}>
       <thead>
-        <TableHeaderRow readOnly>
+        <TableHeaderRow actionsColumn={false} readOnly>
           {columnNames?.map((columnName, index) => (
             <TableHeader
               key={index}
