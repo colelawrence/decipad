@@ -5,8 +5,8 @@ import {
 } from '@udecode/plate';
 import { Transforms } from 'slate';
 
+import { ELEMENT_H2, ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import { autoformatMarks } from './autoformatMarks';
-import { ELEMENT_H2, ELEMENT_PARAGRAPH } from '../../elements';
 
 const initialText = '__*t';
 

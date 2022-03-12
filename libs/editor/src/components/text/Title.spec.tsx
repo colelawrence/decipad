@@ -7,9 +7,9 @@ import {
 } from '@udecode/plate';
 import { noop } from '@decipad/utils';
 import { Transforms } from 'slate';
+import { ELEMENT_H1 } from '@decipad/editor-types';
 import { Title } from './Title';
 import { findDomNodePath } from '../../utils/slateReact';
-import { ELEMENT_H1 } from '../../elements';
 
 it('shows a placeholder only when empty', async () => {
   const editor = createEditorPlugins();

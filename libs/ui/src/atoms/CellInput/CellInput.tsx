@@ -32,6 +32,7 @@ const alwaysTrue = () => true;
 type Variant = 'heading' | 'header' | 'data';
 
 export interface CellInputProps {
+  readonly id?: string;
   readonly placeholder?: string;
   readonly readOnly?: boolean;
   readonly variant?: Variant;
@@ -44,6 +45,7 @@ export interface CellInputProps {
 
 /** Sort of coupled to tables. Once blurred, commits changes by calling onChange */
 export const CellInput = ({
+  id,
   placeholder,
   readOnly = false,
   variant = 'data',
@@ -79,6 +81,7 @@ export const CellInput = ({
 
   return (
     <input
+      id={id}
       css={[
         inputStyles,
         variant === 'heading' && headingStyles,

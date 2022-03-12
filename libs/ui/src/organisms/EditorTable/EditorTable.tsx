@@ -1,7 +1,8 @@
-import { FC } from 'react';
 import { SerializedUnits } from '@decipad/language';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
+import { FC } from 'react';
+import { EditableTableHeader, Table } from '..';
 import {
   AddTableRowButton,
   EditableTableCaption,
@@ -9,7 +10,6 @@ import {
   TableHeaderRow,
   TableRow,
 } from '../../molecules';
-import { EditableTableHeader, Table } from '..';
 import { TableCellType, TableColumn, TableData } from '../../types';
 
 const alwaysTrue = () => true;

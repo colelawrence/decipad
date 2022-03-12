@@ -63,6 +63,9 @@ window.ResizeObserver = class ResizeObserver {
   unobserve() {
     // Do nothing.
   }
+  disconnect() {
+    // do nothing
+  }
 };
 
 // events

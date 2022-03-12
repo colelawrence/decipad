@@ -1,4 +1,13 @@
-import { Element, Node, Path, Text } from 'slate';
+import {
+  BlockElement,
+  Descendant,
+  Element,
+  Node,
+  PlainText,
+  isElement,
+  isText,
+} from '@decipad/editor-types';
+import { Path } from 'slate';
 import * as Y from 'yjs';
 import { SharedType, SyncElement } from '../model';
 
@@ -13,10 +22,12 @@ export function toSlateNode(element: SyncElement): Node {
 
   const node: Partial<Element | Node> = {};
   if (text !== undefined) {
-    (node as Text).text = text.toString();
+    (node as PlainText).text = text.toString();
   }
   if (children !== undefined) {
-    (node as Element).children = children.map(toSlateNode);
+    (node as BlockElement).children = children.map(
+      toSlateNode
+    ) as BlockElement['children'];
   }
 
   Array.from(element.entries()).forEach(([key, value]) => {
@@ -41,17 +52,17 @@ export function toSlateDoc(doc: SharedType): Node[] {
  *
  * @param node
  */
-export function toSyncElement(node: Node): SyncElement {
+export function toSyncElement(node: Element | Descendant): SyncElement {
   const element: SyncElement = new Y.Map();
 
-  if (Element.isElement(node)) {
+  if (isElement(node)) {
     const childElements = node.children.map(toSyncElement);
     const childContainer = new Y.Array();
     childContainer.insert(0, childElements);
     element.set('children', childContainer);
   }
 
-  if (Text.isText(node)) {
+  if (isText(node)) {
     const textElement = new Y.Text(node.text);
     element.set('text', textElement);
   }
@@ -72,7 +83,7 @@ export function toSyncElement(node: Node): SyncElement {
  * @param sharedType
  * @param doc
  */
-export function toSharedType(sharedType: SharedType, doc: Node[]): void {
+export function toSharedType(sharedType: SharedType, doc: Element[]): void {
   sharedType.insert(0, doc.map(toSyncElement));
 }
 

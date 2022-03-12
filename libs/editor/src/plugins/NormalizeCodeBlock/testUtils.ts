@@ -3,7 +3,7 @@ import {
   CodeLineElement,
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
-} from '../../elements';
+} from '@decipad/editor-types';
 
 export function codeLine(code: string): CodeLineElement {
   return {

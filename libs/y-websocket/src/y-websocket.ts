@@ -370,12 +370,12 @@ export class WebsocketProvider extends Observable<string> {
   mux: mutex.mutex;
   destroyed = false;
   outUpdates: Uint8Array[] = [];
-  debouncedBroadcastUpdateMessage = debounce(
+  debouncedBroadcastUpdateMessage: () => void = debounce(
     this.broadcastPendingUpdateMessages.bind(this),
     debounceBroadcast
   );
   outAwarenessUpdates: number[] = [];
-  debouncedBroadcastAwarenessUpdateMessage = debounce(
+  debouncedBroadcastAwarenessUpdateMessage: () => void = debounce(
     this.broadcastPendingAwarenessUpdateMessages.bind(this),
     debounceBroadcast
   );

@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Node, Transforms } from 'slate';
+import { Node, Transforms, Editor as SlateEditor } from 'slate';
 import { produce } from 'immer';
-import { TEditor } from '@udecode/plate';
 import { useLocation } from 'react-router-dom';
+import { Editor } from '@decipad/editor-types';
 import * as externalData from './external-data';
 
 interface Identifiable {
@@ -10,7 +10,7 @@ interface Identifiable {
 }
 
 interface ExternalDataPluginOptions {
-  editor?: TEditor;
+  editor?: Editor;
 }
 
 interface CreateOrUpdateExternalDataOptions {
@@ -104,9 +104,9 @@ export const useExternalDataPlugin = ({
               'data-href': dataUrl,
             });
           } catch (err) {
-            saveState(blockId, { error: err.message });
+            saveState(blockId, { error: (err as Error).message });
             saveToDocState(editor, blockId, {
-              'data-error': err.message,
+              'data-error': (err as Error).message,
             });
           } finally {
             saveState(blockId, {
@@ -166,19 +166,23 @@ export const useExternalDataPlugin = ({
   };
 };
 
-function blockIdToBlockIndex(editor: TEditor, blockId: string): number {
+function blockIdToBlockIndex(editor: Editor, blockId: string): number {
   return editor.children.findIndex(
     (block) => (block as unknown as Identifiable).id === blockId
   );
 }
 
 function saveToDocState(
-  editor: TEditor | undefined,
+  editor: Editor | undefined,
   blockId: string,
   props: Record<string, string>
 ) {
   if (editor) {
     const blockIndex = blockIdToBlockIndex(editor, blockId);
-    Transforms.setNodes(editor, props as Partial<Node>, { at: [blockIndex] });
+    Transforms.setNodes(
+      editor as unknown as SlateEditor,
+      props as Partial<Node>,
+      { at: [blockIndex] }
+    );
   }
 }

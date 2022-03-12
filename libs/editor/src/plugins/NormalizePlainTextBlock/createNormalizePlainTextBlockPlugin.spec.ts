@@ -7,8 +7,8 @@ import {
   ELEMENT_H3,
   ELEMENT_PARAGRAPH,
   ELEMENT_LINK,
-} from '../../elements';
-import { MARK_BOLD } from '../../marks';
+  MARK_BOLD,
+} from '@decipad/editor-types';
 import { createNormalizePlainTextBlockPlugin } from './createNormalizePlainTextBlockPlugin';
 
 let editor: Editor;

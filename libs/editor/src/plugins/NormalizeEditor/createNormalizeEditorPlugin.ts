@@ -1,5 +1,18 @@
 /* eslint-disable no-param-reassign */
 import {
+  ELEMENT_BLOCKQUOTE,
+  ELEMENT_CODE_BLOCK,
+  ELEMENT_FETCH,
+  ELEMENT_H1,
+  ELEMENT_H2,
+  ELEMENT_H3,
+  ELEMENT_OL,
+  ELEMENT_PARAGRAPH,
+  ELEMENT_PLOT,
+  ELEMENT_TABLE_INPUT,
+  ELEMENT_UL,
+} from '@decipad/editor-types';
+import {
   getPlatePluginWithOverrides,
   insertNodes,
   isElement,
@@ -10,18 +23,20 @@ import {
   wrapNodes,
 } from '@udecode/plate';
 import { Node, NodeEntry, Transforms } from 'slate';
-import {
-  ELEMENT_BLOCKQUOTE,
-  ELEMENT_CODE_BLOCK,
-  ELEMENT_FETCH,
+
+const allowedTopLevelBlockTypes = [
   ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_H3,
-  ELEMENT_OL,
   ELEMENT_PARAGRAPH,
-  ELEMENT_TABLE_INPUT,
+  ELEMENT_BLOCKQUOTE,
+  ELEMENT_CODE_BLOCK,
   ELEMENT_UL,
-} from '../../elements';
+  ELEMENT_OL,
+  ELEMENT_TABLE_INPUT,
+  ELEMENT_FETCH,
+  ELEMENT_PLOT,
+];
 
 const withNormalizeEditor = (): WithOverride => (editor) => {
   const { normalizeNode } = editor;
@@ -73,18 +88,7 @@ const withNormalizeEditor = (): WithOverride => (editor) => {
         }
         if (
           isElement(blockNode) &&
-          ![
-            ELEMENT_H1,
-            ELEMENT_H2,
-            ELEMENT_H3,
-            ELEMENT_PARAGRAPH,
-            ELEMENT_BLOCKQUOTE,
-            ELEMENT_CODE_BLOCK,
-            ELEMENT_UL,
-            ELEMENT_OL,
-            ELEMENT_TABLE_INPUT,
-            ELEMENT_FETCH,
-          ].includes(blockNode.type)
+          !allowedTopLevelBlockTypes.includes(blockNode.type)
         ) {
           Transforms.unwrapNodes(editor, { at: blockPath });
           return;

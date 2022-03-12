@@ -2,11 +2,16 @@ import { icons } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { PortalBody } from '@udecode/plate';
 import { FC } from 'react';
+import {
+  MARK_BOLD,
+  MARK_CODE,
+  MARK_ITALIC,
+  MARK_UNDERLINE,
+} from '@decipad/editor-types';
 import { ElementTypeMenu } from './buttons/ElementTypeMenu/ElementTypeMenu';
 import { ToggleMarkButton } from './buttons/ToggleMarkButton/ToggleMarkButton';
 import { useEditorTooltip } from './hooks/useEditorTooltip';
 import { wrapperStyles } from './styles/wrapper';
-import { MARK_BOLD, MARK_CODE, MARK_ITALIC, MARK_UNDERLINE } from '../../marks';
 
 const iconWrapper = css({
   width: '16px',

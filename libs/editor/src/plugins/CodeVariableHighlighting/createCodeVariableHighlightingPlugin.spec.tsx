@@ -1,8 +1,8 @@
 import { render } from '@testing-library/react';
 import { findParentWithStyle } from '@decipad/dom-test-utils';
 import { TElement, createCodeBlockPlugin, Plate } from '@udecode/plate';
+import { ELEMENT_CODE_BLOCK, ELEMENT_CODE_LINE } from '@decipad/editor-types';
 import { createCodeVariableHighlightingPlugin } from './createCodeVariableHighlightingPlugin';
-import { ELEMENT_CODE_BLOCK, ELEMENT_CODE_LINE } from '../../elements';
 
 it('highlights identifiers specially', () => {
   const { getByText } = render(

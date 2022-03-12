@@ -15,8 +15,8 @@ it('formats cell value according to the column type', () => {
           args: [
             {
               unit: 'banana',
-              exp: { n: 1, d: 1, s: 1 },
-              multiplier: { n: 1, d: 1, s: 1 },
+              exp: { n: 1n, d: 1n, s: 1n },
+              multiplier: { n: 1n, d: 1n, s: 1n },
               known: false,
             },
           ],
@@ -34,8 +34,8 @@ it('formats cell value according to the column type', () => {
           args: [
             {
               unit: 'banana',
-              exp: { n: 1, d: 1, s: 1 },
-              multiplier: { n: 1, d: 1, s: 1 },
+              exp: { n: 1n, d: 1n, s: 1n },
+              multiplier: { n: 1n, d: 1n, s: 1n },
               known: false,
             },
           ],
@@ -53,8 +53,8 @@ it('formats cell value according to the column type', () => {
           args: [
             {
               unit: 'banana',
-              exp: { n: 1, d: 1, s: 1 },
-              multiplier: { n: 1, d: 1, s: 1 },
+              exp: { n: 1n, d: 1n, s: 1n },
+              multiplier: { n: 1n, d: 1n, s: 1n },
               known: false,
             },
           ],

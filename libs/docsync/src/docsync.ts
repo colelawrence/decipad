@@ -1,3 +1,4 @@
+import { Editor } from '@decipad/editor-types';
 import { fetch } from '@decipad/fetch';
 import {
   CursorEditor,
@@ -10,7 +11,6 @@ import { getDefined } from '@decipad/utils';
 import { IndexeddbPersistence } from '@decipad/y-indexeddb';
 import { WebsocketProvider } from '@decipad/y-websocket';
 import EventEmitter from 'events';
-import { Editor } from 'slate';
 import { Awareness } from 'y-protocols/awareness';
 import { Array as YArray, Doc as YDoc, Map as YMap, Text as YText } from 'yjs';
 import * as DocTypes from './types';

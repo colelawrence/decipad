@@ -1,10 +1,5 @@
 import { nanoid } from 'nanoid';
-import {
-  Plate,
-  PlatePluginComponent,
-  PlateProps,
-  useStoreEditorRef,
-} from '@udecode/plate';
+import { Plate, PlatePluginComponent, PlateProps } from '@udecode/plate';
 import { FC, useMemo, useState } from 'react';
 import { ProgramBlocksContextProvider } from '@decipad/ui';
 import { ResultsContext } from '@decipad/react-contexts';
@@ -17,6 +12,7 @@ import { components, options, plugins } from './configuration';
 import { ComputerContextProvider } from './contexts/Computer';
 import { POPULATE_PLAYGROUND } from './utils/storage';
 import { emptyNotebook, introNotebook } from './exampleNotebooks';
+import { useStoreEditorRef } from './contexts/useStoreEditorRef';
 
 export const NoDocSyncEditorBase = (props: PlateProps): ReturnType<FC> => {
   const [editorId] = useState(nanoid);

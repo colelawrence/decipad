@@ -145,6 +145,51 @@ export const computeProgram = async (
   return results;
 };
 
+function* findNames(
+  realm: ComputationRealm,
+  program: AST.Block[],
+  [blockId, stmtIdx]: ValueLocation,
+  stopIfNotFound: boolean
+): Iterable<AutocompleteName> {
+  const seenSymbols = new Set<string>();
+  const { nodeTypes } = realm.inferContext;
+  // Our search stops at this statement
+  const findUntil = program.find((b) => b.id === blockId)?.args[stmtIdx];
+  if (stopIfNotFound && !findUntil) {
+    return [];
+  }
+
+  for (const block of program) {
+    for (const statement of block.args) {
+      if (statement === findUntil) return;
+
+      const symbol = getDefinedSymbol(statement);
+      if (symbol) {
+        if (seenSymbols.has(symbol)) continue;
+        seenSymbols.add(symbol);
+      }
+
+      const type = nodeTypes.get(statement);
+
+      if (statement.type === 'assign' && type) {
+        yield {
+          kind: 'variable',
+          type: serializeType(type),
+          name: statement.args[0].args[0],
+        };
+      }
+
+      if (statement.type === 'function-definition' && type) {
+        yield {
+          kind: 'function',
+          type: serializeType(type),
+          name: statement.args[0].args[0],
+        };
+      }
+    }
+  }
+}
+
 export class Computer {
   private previouslyParsed: ParseRet[] = [];
   private previousExternalData: ExternalDataMap = new Map();
@@ -228,51 +273,14 @@ export class Computer {
   /**
    * Get names for the autocomplete, and information about them
    */
-  async getNamesDefinedBefore([blockId, stmtIdx]: ValueLocation): Promise<
-    AutocompleteName[]
-  > {
+  getNamesDefinedBefore(
+    location: ValueLocation,
+    stopIfNotFound = true
+  ): AutocompleteName[] {
     const program = getGoodBlocks(this.previouslyParsed);
-
-    // Our search stops at this statement
-    const findUntil = program.find((b) => b.id === blockId)?.args[stmtIdx];
-    if (!findUntil) return [];
-
-    const { nodeTypes } = this.computationRealm.inferContext;
-    function* findNames(): Iterable<AutocompleteName> {
-      const seenSymbols = new Set<string>();
-
-      for (const block of program) {
-        for (const statement of block.args) {
-          if (statement === findUntil) return;
-
-          const symbol = getDefinedSymbol(statement);
-          if (symbol) {
-            if (seenSymbols.has(symbol)) continue;
-            seenSymbols.add(symbol);
-          }
-
-          const type = nodeTypes.get(statement);
-
-          if (statement.type === 'assign' && type) {
-            yield {
-              kind: 'variable',
-              type: serializeType(type),
-              name: statement.args[0].args[0],
-            };
-          }
-
-          if (statement.type === 'function-definition' && type) {
-            yield {
-              kind: 'function',
-              type: serializeType(type),
-              name: statement.args[0].args[0],
-            };
-          }
-        }
-      }
-    }
-
-    return Array.from(findNames());
+    return Array.from(
+      findNames(this.computationRealm, program, location, stopIfNotFound)
+    );
   }
 
   getStatement(blockId: string, statementIndex: number): AST.Statement | null {

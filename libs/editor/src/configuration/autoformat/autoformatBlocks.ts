@@ -1,13 +1,13 @@
 import { AutoformatRule, TEditor } from '@udecode/plate';
-import { insertCodeBlockBelowOrReplace } from '../../utils/codeBlock';
-import { requireCollapsedSelection } from '../../utils/selection';
-import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
   ELEMENT_H2,
   ELEMENT_H3,
-} from '../../elements';
+} from '@decipad/editor-types';
+import { insertCodeBlockBelowOrReplace } from '../../utils/codeBlock';
+import { requireCollapsedSelection } from '../../utils/selection';
+import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
 
 export const autoformatBlocks: AutoformatRule[] = [
   {

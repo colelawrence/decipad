@@ -1,16 +1,15 @@
-import { FC, useCallback } from 'react';
-import { Editor, Transforms, Node, BaseElement } from 'slate';
-import { ReactEditor, useReadOnly } from 'slate-react';
-import { useEditorState } from '@udecode/plate';
-import { organisms } from '@decipad/ui';
-
-import { PlateComponent } from '../../types';
 import {
-  ELEMENT_INPUT,
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
+  ELEMENT_INPUT,
   InputElement,
-} from '../../elements';
+} from '@decipad/editor-types';
+import { organisms } from '@decipad/ui';
+import { useEditorState } from '@udecode/plate';
+import { FC, useCallback } from 'react';
+import { BaseElement, Editor, Node, Transforms } from 'slate';
+import { ReactEditor, useReadOnly } from 'slate-react';
+import { PlateComponent } from '../../types';
 
 export const Input: PlateComponent = ({
   children,

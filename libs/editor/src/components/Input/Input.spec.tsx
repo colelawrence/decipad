@@ -1,25 +1,25 @@
-import { noop } from '@decipad/utils';
-import { fireEvent, render } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import {
-  createEditorPlugins,
-  SPEditor,
-  PlatePluginComponent,
-  Plate,
-  createCodeBlockPlugin,
-  TElement,
-  getText,
-} from '@udecode/plate';
-import { ReactEditor } from 'slate-react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { useLanguagePlugin } from '../../plugins/Language/useLanguagePlugin';
 import {
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
   ELEMENT_INPUT,
-} from '../../elements';
+} from '@decipad/editor-types';
+import { noop } from '@decipad/utils';
+import { fireEvent, render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import {
+  createCodeBlockPlugin,
+  createEditorPlugins,
+  getText,
+  Plate,
+  PlatePluginComponent,
+  SPEditor,
+  TElement,
+} from '@udecode/plate';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { ReactEditor } from 'slate-react';
 import { CodeBlock, CodeLine } from '..';
+import { useLanguagePlugin } from '../../plugins/Language/useLanguagePlugin';
 import { Input } from './Input';
 
 const FakePlate = ({ editor }: { editor: SPEditor & ReactEditor }) => {

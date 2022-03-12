@@ -1,0 +1,4 @@
+{
+  "$comment": "remove when we got rid of Nx and are running Jest ourselves",
+  "extends": "./tsconfig.json"
+}

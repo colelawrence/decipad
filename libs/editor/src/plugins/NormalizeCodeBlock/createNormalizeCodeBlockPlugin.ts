@@ -6,14 +6,14 @@ import {
   wrapNodes,
 } from '@udecode/plate';
 import { Text, Node, Element, NodeEntry, Transforms } from 'slate';
-import { splitCodeIntoStatements } from './splitCodeIntoStatements';
-import { reconcileStatements } from './reconcileStatements';
-import { codeBlockToCode } from './codeBlockToCode';
 import {
   CodeBlockElement,
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
-} from '../../elements';
+} from '@decipad/editor-types';
+import { splitCodeIntoStatements } from './splitCodeIntoStatements';
+import { reconcileStatements } from './reconcileStatements';
+import { codeBlockToCode } from './codeBlockToCode';
 import { normalizeExcessProperties } from '../../utils/normalize';
 
 const withNormalizeCodeBlock = (): WithOverride => (editor) => {

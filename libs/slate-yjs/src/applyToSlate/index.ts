@@ -1,5 +1,6 @@
-import { Editor, Operation } from 'slate';
+import { Editor as SlateEditor, Operation } from 'slate';
 import * as Y from 'yjs';
+import { Editor } from '@decipad/editor-types';
 import translateArrayEvent from './arrayEvent';
 import translateMapEvent from './mapEvent';
 import translateTextEvent from './textEvent';
@@ -32,7 +33,7 @@ export function translateYjsEvent(
  * Applies multiple yjs events to a slate editor.
  */
 export function applyYjsEvents(editor: Editor, events: Y.YEvent[]): void {
-  Editor.withoutNormalizing(editor, () => {
+  SlateEditor.withoutNormalizing(editor as unknown as SlateEditor, () => {
     events.forEach((event) =>
       translateYjsEvent(editor, event).forEach(editor.apply)
     );

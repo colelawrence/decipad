@@ -1,9 +1,19 @@
+import { Element, LinkElement } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { useState } from 'react';
 import { createEditor } from 'slate';
-import { Editable, ReactEditor, Slate, withReact } from 'slate-react';
+import {
+  Editable,
+  ReactEditor,
+  Slate,
+  withReact,
+  useSlate,
+  RenderElementProps,
+} from 'slate-react';
 
-import { findDomNodePath } from './slateReact';
+import { findDomNodePath, useElementMutatorCallback } from './slateReact';
 
 describe('findDomNodePath', () => {
   it('finds the Slate Node for a DOM Node', () => {
@@ -20,5 +30,58 @@ describe('findDomNodePath', () => {
   it('throws if given DOM Node is not part of the editor', () => {
     const editor = withReact(createEditor() as ReactEditor);
     expect(() => findDomNodePath(editor, document.body)).toThrow(/node/i);
+  });
+});
+
+describe('useElementMutatorCallback', () => {
+  const Link: React.FC<RenderElementProps> = ({
+    element,
+    attributes,
+    children,
+  }) => {
+    const [text, setText] = useState('');
+    const editor = useSlate() as ReactEditor;
+    const mutateElement = useElementMutatorCallback(
+      editor,
+      element as LinkElement,
+      'url'
+    );
+    return (
+      <div {...attributes}>
+        <div contentEditable={false}>
+          <label>
+            value
+            <input
+              value={text}
+              onChange={(event) => setText(event.target.value)}
+            />
+          </label>
+          <button onClick={() => mutateElement(text)}>mutate</button>
+        </div>
+        {children}
+      </div>
+    );
+  };
+
+  it('hook tests', () => {
+    const editor = withReact(createEditor() as ReactEditor);
+    const { getByText, getByLabelText } = render(
+      <Slate
+        editor={editor}
+        value={
+          [
+            { type: 'a', id: 'asdf', url: '', children: [{ text: '' }] },
+          ] as Element[]
+        }
+        onChange={noop}
+      >
+        <Editable renderElement={(props) => <Link {...props} />} />
+      </Slate>
+    );
+
+    userEvent.type(getByLabelText('value'), 'test');
+    userEvent.click(getByText('mutate'));
+
+    expect(editor).toHaveProperty('children.0.url', 'test');
   });
 });

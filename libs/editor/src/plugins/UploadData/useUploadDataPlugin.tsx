@@ -1,11 +1,10 @@
-import { TEditor } from '@udecode/plate';
+import { Editor, ELEMENT_FETCH } from '@decipad/editor-types';
 import camelcase from 'camelcase';
 import { nanoid } from 'nanoid';
 import { useCallback, useEffect, useState } from 'react';
 import { useToasts } from 'react-toast-notifications';
-import { Transforms } from 'slate';
+import { Editor as SlateEditor, Transforms } from 'slate';
 import slug from 'slug';
-import { ELEMENT_FETCH } from '../../elements';
 import * as upload from './upload';
 
 export interface OneFileUploadState {
@@ -29,7 +28,7 @@ export interface UploadDataOptions {
 }
 
 interface UploadDataPluginOptions {
-  editor: TEditor | undefined;
+  editor: Editor | undefined;
 }
 
 interface UseUploadDataPluginReturn {
@@ -105,7 +104,7 @@ export const useUploadDataPlugin = ({
             fileType: file.file.type,
           });
         } catch (err) {
-          file.error = err.message;
+          file.error = (err as Error).message;
         }
         if (!file.error) {
           const index = uploadState.findIndex((f) => f === file);
@@ -123,7 +122,7 @@ export const useUploadDataPlugin = ({
 };
 
 function insertFileInDoc(
-  editor: TEditor | undefined,
+  editor: Editor | undefined,
   {
     url,
     fileName,
@@ -143,8 +142,8 @@ function insertFileInDoc(
     ],
   };
   if (editor) {
-    Transforms.insertNodes(editor, [block]);
-    Transforms.move(editor);
+    Transforms.insertNodes(editor as unknown as SlateEditor, [block]);
+    Transforms.move(editor as unknown as SlateEditor);
   }
 }
 

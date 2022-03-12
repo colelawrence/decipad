@@ -1,6 +1,6 @@
 import { useResults } from '@decipad/react-contexts';
 import { organisms } from '@decipad/ui';
-import { ELEMENT_CODE_BLOCK } from '../../elements';
+import { ELEMENT_CODE_BLOCK } from '@decipad/editor-types';
 import { PlateComponent } from '../../types';
 import { DraggableBlock } from '../block-management';
 

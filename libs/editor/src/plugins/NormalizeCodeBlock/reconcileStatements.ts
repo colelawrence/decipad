@@ -1,12 +1,12 @@
 import { Editor, Transforms, Path } from 'slate';
 import { getNode } from '@udecode/plate';
 import { getDefined } from '@decipad/utils';
-import { getCodeLineText, incrementLastElementOfPath } from './utils';
 import {
   CodeBlockElement,
   CodeLineElement,
   ELEMENT_CODE_LINE,
-} from '../../elements';
+} from '@decipad/editor-types';
+import { getCodeLineText, incrementLastElementOfPath } from './utils';
 import { getCodeBlockOffsets, reinstateCursorOffsets } from './offsets';
 
 function reconcileCodeLineByMergingWithNext(

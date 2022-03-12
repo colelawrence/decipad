@@ -1,7 +1,7 @@
+import { Editor } from '@decipad/editor-types';
 import { FC, ReactNode } from 'react';
 import { DropTargetMonitor, useDrop } from 'react-dnd';
 import { NativeTypes } from 'react-dnd-html5-backend';
-import { Editor } from 'slate';
 import { UploadDataOptions } from '../../plugins/UploadData/useUploadDataPlugin';
 import { DropHint } from './DropHint';
 

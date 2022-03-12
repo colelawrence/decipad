@@ -1,10 +1,9 @@
-import { Element } from 'slate';
-import { TText } from '@udecode/plate';
+import { isText, Node } from '@decipad/editor-types';
 import { AST } from '@decipad/language';
+import { TText } from '@udecode/plate';
 import { ComponentProps } from 'react';
-import { Node, PlainText } from '../../elements/types';
-import { astNode } from '../../utils/astNode';
 import { CodeErrorHighlight } from '../../components';
+import { astNode } from '../../utils/astNode';
 
 export interface SyntaxErrorAnnotation {
   isSyntaxError: true;
@@ -26,21 +25,17 @@ export function getAssignmentBlock(
   };
 }
 
-export function getCodeFromBlock(block: Node | PlainText): string {
-  if ('text' in block) {
+export function getRefBlock(id: string, name: string): AST.Block {
+  return {
+    type: 'block',
+    id,
+    args: [astNode('ref', name)],
+  };
+}
+
+export function getCodeFromBlock(block: Node): string {
+  if (isText(block)) {
     return block.text;
   }
   return (block.children || []).map(getCodeFromBlock).join('\n');
 }
-
-export interface SlateNode {
-  type: string;
-  children?: SlateNode[];
-  text?: string;
-  id: string;
-}
-
-export const isSlateNode = (thing?: unknown): thing is SlateNode => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return typeof (thing as any)?.type === 'string' && Element.isElement(thing);
-};

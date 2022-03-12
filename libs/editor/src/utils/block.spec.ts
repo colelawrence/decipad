@@ -1,10 +1,10 @@
 import { SPEditor, createEditorPlugins, TElement } from '@udecode/plate';
+import { ELEMENT_CODE_BLOCK, ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import {
   allowsTextStyling,
   closestBlockAncestorHasType,
   insertBlockOfTypeBelow,
 } from './block';
-import { ELEMENT_CODE_BLOCK, ELEMENT_PARAGRAPH } from '../elements';
 
 let editor: SPEditor;
 beforeEach(() => {

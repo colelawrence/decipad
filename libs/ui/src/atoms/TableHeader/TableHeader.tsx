@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { getStringType, getTypeIcon } from '../../utils';
 import { cssVar, p13Medium } from '../../primitives';
 import { table } from '../../styles';
-import { TableCellType } from '../../types';
+import type { TableCellType } from '../../types';
+import { getStringType, getTypeIcon } from '../../utils';
 
 const columnStyles = css(p13Medium, {
   display: 'grid',

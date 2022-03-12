@@ -8,9 +8,9 @@ import {
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { Editor, Element } from 'slate';
 import { ReactEditor } from 'slate-react';
+import { ELEMENT_LIC, ELEMENT_UL } from '@decipad/editor-types';
 import { allowsTextStyling } from '../../../utils/block';
 import { getPathContainingSelection } from '../../../utils/selection';
-import { ELEMENT_LIC, ELEMENT_UL } from '../../../elements';
 
 interface UseEditorTooltip {
   ref: RefObject<HTMLDivElement>;

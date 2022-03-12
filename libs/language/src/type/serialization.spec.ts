@@ -12,8 +12,8 @@ import {
 const meter: Unit = { unit: 'meter', exp: F(1), multiplier: F(1), known: true };
 const smeter: SerializedUnit = {
   unit: 'meter',
-  exp: { n: 1, d: 1, s: 1 },
-  multiplier: { n: 1, d: 1, s: 1 },
+  exp: { n: 1n, d: 1n, s: 1n },
+  multiplier: { n: 1n, d: 1n, s: 1n },
   known: true,
 };
 const errorCause = InferError.expectedButGot('A', 'B');

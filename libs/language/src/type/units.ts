@@ -1,18 +1,18 @@
-import { produce } from 'immer';
-import Fraction from '@decipad/fraction';
+import Fraction, { FractionLike } from '@decipad/fraction';
 import { lenientZip } from '@decipad/utils';
-import pluralize, { singular } from '../pluralize';
+import { Draft, produce } from 'immer';
 import { Type } from '..';
-import { F, getDefined } from '../utils';
-import { Unit, Units, units } from './unit-type';
+import pluralize, { singular } from '../pluralize';
 import {
-  isKnownSymbol,
   areUnitsCompatible,
   expandUnits,
-  unitIsSymbol,
-  prettyForSymbol,
   getUnitByName,
+  isKnownSymbol,
+  prettyForSymbol,
+  unitIsSymbol,
 } from '../units';
+import { F, getDefined } from '../utils';
+import { FUnit, FUnits, TUnit, TUnits, Unit, Units, units } from './unit-type';
 
 export type AvailablePrefixes =
   | 1e24
@@ -103,9 +103,12 @@ function scriptFromNumber(n: string): string {
   return numberToSubOrSuperscript[n]?.[1] || n;
 }
 
-const byExp = (u1: Unit, u2: Unit): number => Number(u2.exp.sub(u1.exp));
+const byExp = (u1: FUnit, u2: FUnit): number => Number(F(u2.exp).sub(u1.exp));
 
-const pluralizeUnit = (baseUnit: Unit, value: bigint | number = 2n): Unit => {
+const pluralizeUnit = <TF extends FractionLike>(
+  baseUnit: TUnit<TF>,
+  value: bigint | number = 2n
+): TUnit<TF> => {
   const { unit } = baseUnit;
   if (isKnownSymbol(unit)) {
     return baseUnit;
@@ -171,8 +174,8 @@ export const matchUnitArraysForColumn = (
 
     return (
       left.unit === right.unit &&
-      left.multiplier.compare(right.multiplier) === 0 &&
-      left.exp.compare(right.exp) === 0
+      F(left.multiplier).compare(right.multiplier as Fraction) === 0 &&
+      F(left.exp).compare(right.exp as Fraction) === 0
     );
   });
 };
@@ -188,22 +191,24 @@ export const removeSingleUnitless = (a: Type, b: Type) => {
   }
 };
 
-const simplifyUnitsArgs = (units: Unit[]): Unit[] => {
+const simplifyUnitsArgs = <TF extends FractionLike>(
+  units: TUnit<TF>[]
+): TUnit<TF>[] => {
   return units
     .map((u) => pluralizeUnit(u))
-    .reduce<Unit[]>((units, unit) => {
+    .reduce<FUnit[]>((units, unit) => {
       const matchingUnitIndex = units.findIndex(
         (candidate) => unit.unit === candidate.unit
       );
       if (matchingUnitIndex >= 0) {
         const matchingUnit = units[matchingUnitIndex];
         units[matchingUnitIndex] = produce(matchingUnit, (match) => {
-          match.exp = match.exp.add(unit.exp);
+          match.exp = F(match.exp).add(unit.exp);
           //
           // match.multiplier *= unit.multiplier ** Number(unit.exp);
           //
-          match.multiplier = match.multiplier.mul(
-            unit.multiplier.pow(unit.exp)
+          match.multiplier = F(match.multiplier).mul(
+            F(unit.multiplier).pow(unit.exp)
           );
         });
         return units;
@@ -211,10 +216,12 @@ const simplifyUnitsArgs = (units: Unit[]): Unit[] => {
         return [...units, unit];
       }
     }, [])
-    .filter((unit) => unit.exp.compare(F(0)) !== 0);
+    .filter((unit) => F(unit.exp).compare(F(0)) !== 0) as TUnit<TF>[];
 };
 
-export const simplifyUnits = (units: Units | null): Units | null => {
+export const simplifyUnits = <TF extends FractionLike>(
+  units: TUnits<TF> | null
+): TUnits<TF> | null => {
   if (units == null) {
     return units;
   }
@@ -237,10 +244,10 @@ export const normalizeUnitNames = (units: Unit[]): Unit[] => {
   return units.map(normalizeUnitName);
 };
 
-export const normalizeUnits = (
-  units: Unit[] | null,
+export const normalizeUnits = <TF extends FractionLike>(
+  units: TUnit<TF>[] | null,
   { mult = false }: { mult?: boolean } = {}
-): Unit[] | null => {
+): TUnit<TF>[] | null => {
   if (units == null) {
     return null;
   }
@@ -264,7 +271,9 @@ export const normalizeUnits = (
   }
 };
 
-export const normalizeUnitsOf = (unit: Units | null): Units | null => {
+export const normalizeUnitsOf = <TF extends FractionLike>(
+  unit: TUnits<TF> | null
+): TUnits<TF> | null => {
   if (unit == null) {
     return null;
   }
@@ -281,11 +290,11 @@ export const setExponent = (unit: Unit, newExponent: Fraction) =>
 export const inverseExponent = (unit: Unit) =>
   setExponent(unit, unit.exp.neg());
 
-const isInteger = (f: Fraction): boolean => {
+const isInteger = (f: FractionLike): boolean => {
   return Number(f.d) === 1;
 };
 
-const stringifyUnit = (unit: Unit, prettify = true) => {
+const stringifyUnit = (unit: FUnit, prettify = true) => {
   const symbol = singular(unit.unit.toLowerCase());
   const pretty = prettyForSymbol[symbol];
   const isSymbol = unitIsSymbol(symbol);
@@ -303,7 +312,7 @@ const stringifyUnit = (unit: Unit, prettify = true) => {
   ];
 
   const { exp } = unit;
-  if (exp.compare(F(1)) !== 0) {
+  if (F(exp).compare(F(1)) !== 0) {
     const strExp = isInteger(exp)
       ? exp.toString()
       : `${[Math.sign(Number(exp.s)) === -1 && '-', exp.n, '/', exp.d]
@@ -321,22 +330,22 @@ const stringifyUnit = (unit: Unit, prettify = true) => {
   return result.join('');
 };
 
-function produceExp(unit: Unit, makePositive: boolean): Unit {
+function produceExp(unit: FUnit, makePositive: boolean): FUnit {
   return produce(unit, (unit) => {
     unit.unit = singular(unit.unit);
     if (makePositive) {
-      unit.exp = unit.exp.abs();
+      unit.exp = F(unit.exp).abs();
     }
   });
 }
 
 export const stringifyUnitArgs = (
-  units: Unit[] | null,
+  units: FUnit[] | null,
   value?: Fraction,
   prettify = true
 ): string => {
   return (units ?? [])
-    .reduce((parts: string[], unit: Unit): string[] => {
+    .reduce((parts: string[], unit: FUnit): string[] => {
       if (parts.length > 0) {
         let prefix: string;
         //
@@ -345,7 +354,7 @@ export const stringifyUnitArgs = (
         // but when you have more
         // you use international system like `m.s-1`
         //
-        if (units?.length === 2 && unit.exp.compare(F(-1)) === 0) {
+        if (units?.length === 2 && F(unit.exp).compare(F(-1)) === 0) {
           prefix = prettify ? (unitIsSymbol(unit.unit) ? '/' : ' per ') : '/';
           parts.push(prefix);
           parts.push(stringifyUnit(produceExp(unit, true), prettify));
@@ -374,7 +383,7 @@ export const stringifyUnitArgs = (
 };
 
 export const stringifyUnits = (
-  units: Units | null,
+  units: FUnits | null | undefined,
   value?: Fraction,
   prettify = true
 ): string => {
@@ -389,17 +398,17 @@ export const stringifyUnits = (
   }
 };
 
-export const combineUnits = (
-  myUnitsObj: Units | null,
-  theirUnitsObj: Units | null,
+export const combineUnits = <TF extends FractionLike>(
+  myUnitsObj: TUnits<TF> | null,
+  theirUnitsObj: TUnits<TF> | null,
   { mult = false }: { mult?: boolean } = {}
-): Units | null => {
+): TUnits<TF> | null => {
   const myUnits = normalizeUnits(myUnitsObj?.args ?? null, { mult }) ?? [];
   const theirUnits =
     normalizeUnits(theirUnitsObj?.args ?? null, { mult }) ?? [];
 
-  const outputUnits: Unit[] = mult ? [...myUnits] : [...theirUnits];
-  const sourceUnits: Unit[] = mult ? theirUnits : myUnits;
+  const outputUnits: TUnit<TF>[] = mult ? [...myUnits] : [...theirUnits];
+  const sourceUnits: TUnit<TF>[] = mult ? theirUnits : myUnits;
 
   // Combine their units in
   for (const thisUnit of sourceUnits) {
@@ -410,7 +419,9 @@ export const combineUnits = (
       outputUnits[existingUnitIndex] = produce(
         outputUnits[existingUnitIndex],
         (inversed) => {
-          inversed.exp = inversed.exp.add(thisUnit.exp);
+          inversed.exp = F(inversed.exp).add(
+            thisUnit.exp
+          ) as unknown as Draft<TF>;
         }
       );
     } else {
@@ -422,12 +433,15 @@ export const combineUnits = (
   return ret == null ? ret : units(...ret);
 };
 
-export const multiplyExponent = (myUnits: Units, by: number): Units | null =>
+export const multiplyExponent = <TF extends FractionLike>(
+  myUnits: TUnits<TF>,
+  by: number
+): TUnits<TF> | null =>
   normalizeUnitsOf(
     produce(myUnits, (myUnits) => {
       for (const u of myUnits.args) {
         try {
-          u.exp = u.exp.mul(by);
+          u.exp = F(u.exp).mul(by) as unknown as Draft<TF>;
         } catch (err) {
           const error = new Error(
             `error multiplying ${u.exp} by ${by}: ${(err as Error).message}`

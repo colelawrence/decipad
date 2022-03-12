@@ -116,7 +116,7 @@ export interface ResourceResolvers<DataT, GraphqlT, CreateT, UpdateT> {
   ) => Promise<PermissionType | undefined>;
 }
 
-export default function <
+export default function createGraphqlResource<
   DataTableT extends ConcreteRecord,
   GraphqlT extends GraphqlObjectType,
   CreateInputT,

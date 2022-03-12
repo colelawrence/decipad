@@ -5,7 +5,7 @@ import {
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
-} from '../../elements';
+} from '@decipad/editor-types';
 import { createNormalizeCodeBlockPlugin } from '../NormalizeCodeBlock/createNormalizeCodeBlockPlugin';
 import { createAutoFormatCodeBlockPlugin } from './createAutoFormatCodeBlockPlugin';
 

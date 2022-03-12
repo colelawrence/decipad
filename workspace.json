@@ -1030,6 +1030,46 @@
           }
         }
       }
+    },
+    "editor-types": {
+      "root": "libs/editor-types",
+      "sourceRoot": "libs/editor-types/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/editor-types/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/editor-types"
+          }
+        }
+      }
+    },
+    "feature-flags": {
+      "root": "libs/feature-flags",
+      "sourceRoot": "libs/feature-flags/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/feature-flags/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/feature-flags"
+          }
+        }
+      }
     }
   }
 }

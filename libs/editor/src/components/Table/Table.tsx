@@ -1,11 +1,10 @@
-import { FC, useCallback } from 'react';
-import { Node, Transforms } from 'slate';
-import { ReactEditor } from 'slate-react';
+import { FC } from 'react';
 import { useEditorState } from '@udecode/plate';
+import { ELEMENT_TABLE_INPUT } from '@decipad/editor-types';
 
 import { TableInner } from './TableInner';
-import { PlateComponent, TableData } from '../../types';
-import { ELEMENT_TABLE_INPUT } from '../../elements';
+import { PlateComponent } from '../../types';
+import { useElementMutatorCallback } from '../../utils/slateReact';
 import { DraggableBlock } from '../block-management';
 
 export const Table: PlateComponent = ({
@@ -19,16 +18,7 @@ export const Table: PlateComponent = ({
 
   const editor = useEditorState();
 
-  const onChange = useCallback(
-    (newValue: TableData) => {
-      const at = ReactEditor.findPath(editor, element);
-
-      Transforms.setNodes(editor, { tableData: newValue } as Partial<Node>, {
-        at,
-      });
-    },
-    [editor, element]
-  );
+  const onChange = useElementMutatorCallback(editor, element, 'tableData');
 
   const value = element.tableData;
 

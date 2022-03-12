@@ -11,7 +11,7 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_LIC,
-} from '../../elements';
+} from '@decipad/editor-types';
 import { normalizeExcessProperties } from '../../utils/normalize';
 
 const RICH_TEXT_BLOCK_TYPES = [

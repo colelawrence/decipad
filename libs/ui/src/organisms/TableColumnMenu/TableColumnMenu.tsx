@@ -1,12 +1,12 @@
-import { ComponentProps, ReactNode } from 'react';
-import { deserializeUnit, stringifyUnits } from '@decipad/language';
 import Fraction from '@decipad/fraction';
+import { deserializeUnit, stringifyUnits } from '@decipad/language';
 import { noop } from '@decipad/utils';
-import { All, Number, Calendar, Shapes, Text, Trash } from '../../icons';
+import { ComponentProps, ReactNode } from 'react';
 import { MenuItem, TriggerMenuItem } from '../../atoms';
+import { All, Calendar, Number, Shapes, Text, Trash } from '../../icons';
 import { MenuList, UnitMenuItem } from '../../molecules';
-import { getDateType, getNumberType, getStringType } from '../../utils';
 import { TableCellType } from '../../types';
+import { getDateType, getNumberType, getStringType } from '../../utils';
 
 interface TableColumnMenuProps
   extends Pick<ComponentProps<typeof MenuList>, 'open' | 'onChangeOpen'>,

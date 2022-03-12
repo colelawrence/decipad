@@ -1,31 +1,37 @@
 import { SPEditor } from '@udecode/plate';
+import {
+  Editor as SlateEditor,
+  Element as SlateElement,
+  Text as SlateText,
+} from 'slate';
 import { ReactEditor } from 'slate-react';
 import {
   ElementKind,
-  ELEMENT_LI,
-  ELEMENT_LIC,
-  ELEMENT_UL,
-  ELEMENT_OL,
-  ELEMENT_TABLE_INPUT,
+  ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
+  ELEMENT_FETCH,
   ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_H3,
-  ELEMENT_LINK,
-  ELEMENT_FETCH,
-  ELEMENT_PARAGRAPH,
-  ELEMENT_BLOCKQUOTE,
   ELEMENT_INPUT,
-} from './kinds';
-import { TableData } from '../types';
-import { MarkKind } from '../marks';
+  ELEMENT_LI,
+  ELEMENT_LIC,
+  ELEMENT_LINK,
+  ELEMENT_OL,
+  ELEMENT_PARAGRAPH,
+  ELEMENT_PLOT,
+  ELEMENT_TABLE_INPUT,
+  ELEMENT_UL,
+  MarkKind,
+} from '.';
+import { TableData } from './tables';
 
 // Defining specific elements
 
 export interface BaseElement {
   type: ElementKind;
-  children: Array<Descendant>;
+  children: Array<Descendant | PlainText | RichText>;
   id: string;
 }
 
@@ -108,6 +114,25 @@ export interface FetchElement extends BaseElement {
   'data-provider': string;
   'data-varname': string;
 }
+export interface PlotElement extends BaseElement {
+  type: typeof ELEMENT_PLOT;
+  sourceVarName: string;
+  markType:
+    | 'bar'
+    | 'circle'
+    | 'square'
+    | 'tick'
+    | 'line'
+    | 'area'
+    | 'point'
+    | 'arc';
+  xColumnName: string;
+  yColumnName: string;
+  sizeColumnName: string;
+  colorColumnName: string;
+  thetaColumnName: string;
+  children: [EmptyText];
+}
 
 export interface InputElement extends BaseElement {
   type: typeof ELEMENT_INPUT;
@@ -123,6 +148,7 @@ type EmptyText = {
 };
 export type PlainText = EmptyText | { text: string };
 export type RichText = PlainText & Partial<Record<MarkKind, true>>;
+type Text = PlainText | RichText;
 
 export type BlockElement =
   // Headings
@@ -143,11 +169,12 @@ export type BlockElement =
   // Special elements
   | FetchElement
   | TableElement
+  | PlotElement
   | InputElement;
 type InlineElement = LinkElement;
 export type Element = BlockElement | InlineElement;
 
-export type Editor = Omit<SPEditor & ReactEditor, 'children'> & {
+export type Editor = Omit<SlateEditor & SPEditor & ReactEditor, 'children'> & {
   children: [
     H1Element,
     ...Array<
@@ -155,6 +182,7 @@ export type Editor = Omit<SPEditor & ReactEditor, 'children'> & {
       | H2Element
       | H3Element
       | TableElement
+      | PlotElement
       | ParagraphElement
       | BlockquoteElement
       | CodeBlockElement
@@ -168,9 +196,17 @@ export type Editor = Omit<SPEditor & ReactEditor, 'children'> & {
 };
 
 type InlineDescendant = InlineElement | RichText;
-type Descendant = Element | RichText;
+export type Descendant = Element | Text;
 
 type InlineChildren = Array<InlineDescendant>;
 type PlainTextChildren = [PlainText];
 
-export type Node = Editor | Element;
+export type Node = Editor | Descendant;
+
+export function isElement(node: Node): node is Element {
+  return SlateElement.isElement(node);
+}
+
+export function isText(node: Node): node is Text {
+  return SlateText.isText(node);
+}

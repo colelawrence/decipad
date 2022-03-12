@@ -155,6 +155,12 @@
     },
     "y-websocket": {
       "tags": []
+    },
+    "editor-types": {
+      "tags": []
+    },
+    "feature-flags": {
+      "tags": []
     }
   }
 }

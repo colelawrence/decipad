@@ -8,7 +8,7 @@ import {
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { NodeEntry } from 'slate';
-import { Element } from '../../elements';
+import { Element } from '@decipad/editor-types';
 
 const withNormalizeElementIdPlugin = (): WithOverride => (editor) => {
   const { normalizeNode } = editor;

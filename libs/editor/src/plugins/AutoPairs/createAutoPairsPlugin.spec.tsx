@@ -1,6 +1,6 @@
 import { createEditorPlugins, SPEditor } from '@udecode/plate';
+import { ELEMENT_CODE_LINE, ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import { createAutoPairsPlugin } from './createAutoPairsPlugin';
-import { ELEMENT_CODE_LINE, ELEMENT_PARAGRAPH } from '../../elements';
 
 const insert = (editor: SPEditor, key: string) => {
   const event = new KeyboardEvent('keydown', { key, cancelable: true });

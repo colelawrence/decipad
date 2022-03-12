@@ -1,7 +1,7 @@
 import { atoms } from '@decipad/ui';
 import { useSafeState } from '@decipad/react-utils';
+import { ELEMENT_LINK } from '@decipad/editor-types';
 import { PlateComponent } from '../../../types';
-import { ELEMENT_LINK } from '../../../elements';
 
 export const Link: PlateComponent = ({ attributes, children, element }) => {
   if ('data-slate-leaf' in attributes) {

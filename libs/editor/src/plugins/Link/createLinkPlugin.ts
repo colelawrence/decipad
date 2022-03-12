@@ -1,5 +1,5 @@
 import { getRenderElement, PlatePlugin } from '@udecode/plate';
-import { ELEMENT_LINK } from '../../elements';
+import { ELEMENT_LINK } from '@decipad/editor-types';
 
 export const createLinkPlugin = (): PlatePlugin => {
   return {

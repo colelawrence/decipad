@@ -1,54 +1,54 @@
 /* istanbul ignore file: just config and re-export */
+import { builtinsForAutocomplete } from './builtins';
 import { Value } from './interpreter/Value';
 import {
-  Type,
   build as t,
-  serializeType,
   SerializedType,
-  Units,
+  serializeType,
+  Type,
   Unit,
+  Units,
   units,
 } from './type';
-import { builtinsForAutocomplete } from './builtins';
 
-export { units };
+export * from './computer';
+export { ExternalData } from './data';
+export { Time } from './date';
 export {
-  tokenize,
-  tokenRules,
   identifierRegExpGlobal,
   STATEMENT_SEP_TOKEN_TYPE,
+  tokenize,
+  tokenRules,
 } from './grammar';
 export * from './grammar/containmentCounting';
-export { parse, AST, Parser, SyntaxError } from './parser';
 export { inferBlock, makeContext } from './infer';
 export type { Context } from './infer';
 export { Interpreter } from './interpreter';
-export * from './run';
-export { setErrorReporter } from './reporting';
-export { Scalar, Date, Range, Column, Table, Row } from './interpreter/Value';
-
+export { Column, Date, Range, Row, Scalar, Table } from './interpreter/Value';
+export { AST, parse, Parser, SyntaxError } from './parser';
 export { prettyPrintAST } from './parser/utils';
+export { setErrorReporter } from './reporting';
+export type { OneResult } from './result';
+export * from './run';
+export {
+  build as buildType,
+  convertToMultiplierUnit,
+  deserializeType,
+  deserializeUnit,
+  InferError,
+  serializeType,
+  serializeUnit,
+  stringifyUnits,
+  Type,
+} from './type';
 export type {
   SerializedType,
   SerializedTypeKind,
   SerializedUnits,
 } from './type';
-export type { Unit, Units };
-export {
-  Type,
-  build as buildType,
-  deserializeType,
-  InferError,
-  serializeType,
-  serializeUnit,
-  stringifyUnits,
-  deserializeUnit,
-  convertToMultiplierUnit,
-} from './type';
-export { Time } from './date';
-export { ExternalData } from './data';
-export * from './computer';
 export { isExpression } from './utils';
+export { units };
+export type { Unit, Units };
 
 export interface InjectableExternalData {
   type: Type;

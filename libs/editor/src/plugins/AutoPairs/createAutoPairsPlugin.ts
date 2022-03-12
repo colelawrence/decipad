@@ -1,6 +1,6 @@
 import { getParent, PlatePlugin } from '@udecode/plate';
 import { Range, Transforms } from 'slate';
-import { ELEMENT_CODE_LINE } from '../../elements';
+import { ELEMENT_CODE_LINE } from '@decipad/editor-types';
 
 const pairs = [
   { start: '{', end: '}' },

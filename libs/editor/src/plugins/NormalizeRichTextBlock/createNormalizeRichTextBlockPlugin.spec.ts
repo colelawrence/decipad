@@ -6,8 +6,8 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_LINK,
   ELEMENT_LIC,
-} from '../../elements';
-import { MARK_BOLD } from '../../marks';
+  MARK_BOLD,
+} from '@decipad/editor-types';
 import { createNormalizeRichTextBlockPlugin } from './createNormalizeRichTextBlockPlugin';
 
 let editor: Editor;

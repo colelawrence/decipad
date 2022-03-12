@@ -1,7 +1,7 @@
+import { SerializedType, SerializedUnits, Time } from '@decipad/language';
 import { FunctionComponent } from 'react';
-import { SerializedType, Time, SerializedUnits } from '@decipad/language';
-import { All, Number, Calendar, Text } from '../icons';
-import { TableCellType } from '../types';
+import { All, Calendar, Number, Text } from '../icons';
+import type { TableCellType } from '../types';
 
 export function getTypeIcon(type: TableCellType): FunctionComponent {
   switch (type.kind) {

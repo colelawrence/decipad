@@ -1,13 +1,13 @@
-import { ParsedBlock, prettyPrintAST } from '@decipad/language';
 import {
-  ELEMENT_INPUT,
-  ELEMENT_TABLE_INPUT,
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
-  ELEMENT_PARAGRAPH,
   ELEMENT_H1,
-} from '../../elements';
-import { TableData } from '../../types';
+  ELEMENT_INPUT,
+  ELEMENT_PARAGRAPH,
+  ELEMENT_TABLE_INPUT,
+  TableData,
+} from '@decipad/editor-types';
+import { ParsedBlock, prettyPrintAST } from '@decipad/language';
 import { slateDocumentToComputeRequest } from './slateDocumentToComputeRequest';
 
 const testTableData: TableData = {
@@ -34,6 +34,11 @@ const testTableData: TableData = {
 it('can find tables in the document', () => {
   const { program } = slateDocumentToComputeRequest([
     {
+      id: 'line-id1',
+      type: ELEMENT_H1,
+      children: [{ text: '' }],
+    },
+    {
       type: ELEMENT_TABLE_INPUT,
       children: [{ text: '' }],
       id: 'the-table-id',
@@ -56,6 +61,11 @@ it('can find tables in the document', () => {
 it('can find inputs in the document', () => {
   const { program } = slateDocumentToComputeRequest([
     {
+      id: 'line-id1',
+      type: ELEMENT_H1,
+      children: [{ text: '' }],
+    },
+    {
       type: ELEMENT_INPUT,
       children: [{ text: '' }],
       id: 'input-id',
@@ -75,6 +85,11 @@ it('can find inputs in the document', () => {
 
 it('can find code lines in the document', () => {
   const { program } = slateDocumentToComputeRequest([
+    {
+      id: 'line-id1',
+      type: ELEMENT_H1,
+      children: [{ text: '' }],
+    },
     {
       type: ELEMENT_CODE_BLOCK,
       id: 'block-id',
@@ -98,11 +113,16 @@ it('cannot find other elements in the document', () => {
   const { program } = slateDocumentToComputeRequest([
     {
       id: 'line-id1',
-      type: ELEMENT_PARAGRAPH,
+      type: ELEMENT_H1,
       children: [{ text: '' }],
     },
     {
       id: 'line-id2',
+      type: ELEMENT_PARAGRAPH,
+      children: [{ text: '' }],
+    },
+    {
+      id: 'line-id3',
       type: ELEMENT_H1,
       children: [{ text: '' }],
     },

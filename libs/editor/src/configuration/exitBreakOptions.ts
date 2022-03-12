@@ -3,7 +3,7 @@ import {
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_PARAGRAPH,
-} from '../elements';
+} from '@decipad/editor-types';
 
 export const exitBreakOptions = {
   rules: [

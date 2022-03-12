@@ -1,6 +1,6 @@
 import Fraction from '@decipad/fraction';
 import { nanoid } from 'nanoid';
-import { Editor } from './elements';
+import { Editor } from '@decipad/editor-types';
 
 export const emptyNotebook = (): Editor['children'] => [
   {

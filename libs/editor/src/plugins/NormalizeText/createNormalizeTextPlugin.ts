@@ -6,7 +6,7 @@ import {
   isText,
 } from '@udecode/plate';
 import { NodeEntry } from 'slate';
-import * as marks from '../../marks';
+import { markKinds } from '@decipad/editor-types';
 import { normalizeExcessProperties } from '../../utils/normalize';
 
 const withNormalizeTextPlugin = (): WithOverride => (editor) => {
@@ -16,7 +16,7 @@ const withNormalizeTextPlugin = (): WithOverride => (editor) => {
     const [node] = entry as NodeEntry<TNode>;
 
     if (isText(node)) {
-      if (normalizeExcessProperties(editor, entry, Object.values(marks))) {
+      if (normalizeExcessProperties(editor, entry, Object.values(markKinds))) {
         return;
       }
     }

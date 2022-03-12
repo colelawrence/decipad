@@ -16,6 +16,7 @@
     { "path": "../fraction" },
     { "path": "../routing" },
     { "path": "../utils" },
-    { "path": "../client-events" }
+    { "path": "../client-events" },
+    { "path": "../editor-types" }
   ]
 }

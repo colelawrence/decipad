@@ -3,8 +3,8 @@ import { useEditorState } from '@udecode/plate';
 import { useEffect, useState } from 'react';
 import { Editor, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
+import { ELEMENT_H1 } from '@decipad/editor-types';
 import { PlateComponent } from '../../types';
-import { ELEMENT_H1 } from '../../elements';
 
 // TODO Title should probably not be a part of the editor in the first place
 

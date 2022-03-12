@@ -1,5 +1,5 @@
 import { Path, Node, Selection, Editor, Transforms } from 'slate';
-import { CodeLineElement } from '../../elements';
+import { CodeLineElement } from '@decipad/editor-types';
 
 export function getCodeLineText(node: CodeLineElement): string {
   return Node.string(node);

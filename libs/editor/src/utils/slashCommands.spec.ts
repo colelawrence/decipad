@@ -1,14 +1,15 @@
-import { createCodeBlockPlugin, createEditorPlugins } from '@udecode/plate';
 import {
-  ELEMENT_FETCH,
-  ELEMENT_PARAGRAPH,
-  ELEMENT_TABLE_INPUT,
+  ElementKind,
   ELEMENT_CODE_BLOCK,
+  ELEMENT_FETCH,
   ELEMENT_H2,
   ELEMENT_H3,
-  ElementKind,
   ELEMENT_INPUT,
-} from '../elements';
+  ELEMENT_PARAGRAPH,
+  ELEMENT_PLOT,
+  ELEMENT_TABLE_INPUT,
+} from '@decipad/editor-types';
+import { createCodeBlockPlugin, createEditorPlugins } from '@udecode/plate';
 import { execute, SlashCommand } from './slashCommands';
 
 const expectedTypes: Record<SlashCommand, ElementKind> = {
@@ -17,6 +18,7 @@ const expectedTypes: Record<SlashCommand, ElementKind> = {
   heading2: ELEMENT_H3,
   import: ELEMENT_FETCH,
   'calculation-block': ELEMENT_CODE_BLOCK,
+  plot: ELEMENT_PLOT,
   input: ELEMENT_INPUT,
 };
 

@@ -3,10 +3,11 @@ import { Path, Transforms } from 'slate';
 import { organisms } from '@decipad/ui';
 import { SPEditor } from '@udecode/plate';
 
-import { ELEMENT_H2, ELEMENT_H3, ELEMENT_FETCH } from '../elements';
+import { ELEMENT_H2, ELEMENT_H3, ELEMENT_FETCH } from '@decipad/editor-types';
 import { insertBlockOfTypeBelow } from './block';
 import { insertCodeBlockBelow } from './codeBlock';
 import { insertTableBelow } from './table';
+import { insertPlotBelow } from './plot';
 import { requireBlockParentPath } from './path';
 import { insertInputBelow } from './input';
 
@@ -30,6 +31,9 @@ export const execute = (
       break;
     case 'table':
       insertTableBelow(editor, path);
+      break;
+    case 'plot':
+      insertPlotBelow(editor, path);
       break;
     case 'import':
       insertBlockOfTypeBelow(editor, path, ELEMENT_FETCH);

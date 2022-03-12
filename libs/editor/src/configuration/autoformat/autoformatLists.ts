@@ -1,5 +1,5 @@
 import { AutoformatRule, SPEditor, toggleList } from '@udecode/plate';
-import { ELEMENT_LI, ELEMENT_OL, ELEMENT_UL } from '../../elements';
+import { ELEMENT_LI, ELEMENT_OL, ELEMENT_UL } from '@decipad/editor-types';
 import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
 
 export const autoformatLists: AutoformatRule[] = [

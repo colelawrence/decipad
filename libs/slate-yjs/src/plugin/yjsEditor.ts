@@ -1,4 +1,5 @@
-import { Editor, Operation } from 'slate';
+import type { Editor } from '@decipad/editor-types';
+import { Editor as SlateEditor, Operation } from 'slate';
 import { HistoryEditor } from 'slate-history';
 import invariant from 'tiny-invariant';
 import * as Y from 'yjs';
@@ -13,6 +14,8 @@ const SHARED_TYPES: WeakMap<Editor, SharedType> = new WeakMap();
 
 export interface YjsEditor extends Editor {
   sharedType: SharedType;
+  onChange: SlateEditor['onChange'];
+  apply: SlateEditor['apply'];
 }
 
 export type WithYjsOptions = {
@@ -24,8 +27,8 @@ export const YjsEditor = {
    * Set the editor value to the content of the to the editor bound shared type.
    */
   synchronizeValue: (e: YjsEditor): void => {
-    Editor.withoutNormalizing(e, () => {
-      e.children = toSlateDoc(e.sharedType);
+    SlateEditor.withoutNormalizing(e as unknown as SlateEditor, () => {
+      e.children = toSlateDoc(e.sharedType) as YjsEditor['children'];
       e.onChange();
     });
   },
@@ -91,30 +94,30 @@ function applyLocalOperations(editor: YjsEditor): void {
 /**
  * Apply Yjs events to slate
  */
+
+const yjsApply = (editor: YjsEditor, events: Y.YEvent[]) =>
+  SlateEditor.withoutNormalizing(editor as unknown as SlateEditor, () =>
+    YjsEditor.asRemote(editor, () => {
+      try {
+        applyYjsEvents(
+          editor,
+          events.filter((event) => event.transaction.origin !== slateYjsSymbol)
+        );
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error('Error applying remote event', err);
+        throw err;
+      }
+    })
+  );
+
 function applyRemoteYjsEvents(_editor: YjsEditor, events: Y.YEvent[]): void {
-  const apply = (editor: YjsEditor) =>
-    Editor.withoutNormalizing(editor, () =>
-      YjsEditor.asRemote(editor, () => {
-        try {
-          applyYjsEvents(
-            editor,
-            events.filter(
-              (event) => event.transaction.origin !== slateYjsSymbol
-            )
-          );
-        } catch (err) {
-          // eslint-disable-next-line no-console
-          console.error('Error applying remote event', err);
-          throw err;
-        }
-      })
-    );
   if (HistoryEditor.isHistoryEditor(_editor)) {
     HistoryEditor.withoutSaving(_editor, () => {
-      apply(_editor);
+      yjsApply(_editor, events);
     });
   } else {
-    apply(_editor);
+    yjsApply(_editor, events);
   }
 }
 

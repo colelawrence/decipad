@@ -1,0 +1,7 @@
+{
+  "extends": ["../../libs/eslint-config-decipad"],
+  "ignorePatterns": ["!**/*"],
+  "rules": {
+    "no-shadow": "off"
+  }
+}

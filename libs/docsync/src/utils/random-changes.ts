@@ -1,5 +1,6 @@
-import { Editor, Operation, Node } from 'slate';
+import { Operation, Node, Editor as SlateEditor } from 'slate';
 import { nanoid } from 'nanoid';
+import { Editor } from '@decipad/editor-types';
 import { timeout } from '../../../utils/src';
 import { randomChar } from './random-char';
 
@@ -40,7 +41,7 @@ async function randomChangesToEditor(editor: Editor, changeCount: number) {
     // eslint-disable-next-line no-await-in-loop
     await randomSmallTimeout();
     const ops = randomChangeToEditor(editor);
-    Editor.withoutNormalizing(editor, () => {
+    SlateEditor.withoutNormalizing(editor as unknown as SlateEditor, () => {
       for (const op of ops) {
         editor.apply(op);
       }

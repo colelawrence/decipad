@@ -21,5 +21,6 @@ module.exports = {
     '<rootDir>/libs/client-events',
     '<rootDir>/libs/externaldata',
     '<rootDir>/libs/fraction',
+    '<rootDir>/libs/editor-types',
   ],
 };

@@ -1,4 +1,4 @@
-import { Editor } from 'slate';
+import { Editor } from '@decipad/editor-types';
 import invariant from 'tiny-invariant';
 import { Awareness } from 'y-protocols/awareness';
 import { absolutePositionToRelativePosition } from '../cursor/utils';

@@ -5,7 +5,7 @@ import {
   ID,
 } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
-import { Resource } from './';
+import { Resource } from '.';
 import { expectAuthenticatedAndAuthorized } from './authorization';
 
 export type UnshareWithSecretArgs = {
@@ -14,7 +14,7 @@ export type UnshareWithSecretArgs = {
 };
 
 export type UnshareWithSecretFunction = (
-  _: any,
+  _: unknown,
   args: UnshareWithSecretArgs,
   context: GraphqlContext
 ) => Promise<boolean>;
@@ -27,8 +27,8 @@ export function unshareWithSecret<
 >(
   resourceType: Resource<RecordT, GraphqlT, CreateInputT, UpdateInputT>
 ): UnshareWithSecretFunction {
-  return async function (
-    _: any,
+  return async function doUnshareWithSecret(
+    _: unknown,
     args: UnshareWithSecretArgs,
     context: GraphqlContext
   ) {

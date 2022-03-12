@@ -1,4 +1,5 @@
-import { Editor, Node, Text, TextOperation } from 'slate';
+import { Node, Text, TextOperation } from 'slate';
+import { Editor } from '@decipad/editor-types';
 import invariant from 'tiny-invariant';
 import * as Y from 'yjs';
 import { toSlatePath } from '../utils/convert';

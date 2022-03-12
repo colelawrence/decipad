@@ -14,7 +14,7 @@ import {
   ELEMENT_OL,
   ELEMENT_LI,
   ELEMENT_LIC,
-} from '../../elements';
+} from '@decipad/editor-types';
 import { normalizeExcessProperties } from '../../utils/normalize';
 
 const withNormalizeList = (): WithOverride => (editor) => {

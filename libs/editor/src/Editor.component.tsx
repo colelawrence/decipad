@@ -5,7 +5,7 @@ import {
 } from '@decipad/ui';
 import { identity } from '@decipad/utils';
 import { captureException } from '@sentry/react';
-import { Plate, PlatePluginComponent, useStoreEditorRef } from '@udecode/plate';
+import { Plate, PlatePluginComponent } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { DropFile, Tooltip } from './components';
@@ -21,6 +21,7 @@ import {
 import { useNotebookTitlePlugin } from './plugins/NotebookTitle/useNotebookTitlePlugin';
 import { UploadDialogue } from './plugins/UploadData/components/UploadDialogue';
 import { useUploadDataPlugin } from './plugins/UploadData/useUploadDataPlugin';
+import { useStoreEditorRef } from './utils/useStoreEditorRef';
 
 export interface EditorProps {
   notebookId: string;

@@ -7,3 +7,4 @@ export * from './code';
 export * from './dnd';
 export * from './slash-commands';
 export * from './text';
+export * from './plot';

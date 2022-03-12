@@ -11,7 +11,7 @@ import {
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
   ELEMENT_UL,
-} from '../../elements';
+} from '@decipad/editor-types';
 import { autoformatLists } from './autoformatLists';
 
 let editor: SPEditor;

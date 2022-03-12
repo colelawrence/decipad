@@ -7,7 +7,11 @@ import {
   isText,
 } from '@udecode/plate';
 import { Node, NodeEntry, Transforms } from 'slate';
-import { ELEMENT_TABLE_INPUT, ELEMENT_FETCH } from '../../elements';
+import {
+  ELEMENT_TABLE_INPUT,
+  ELEMENT_FETCH,
+  ELEMENT_PLOT,
+} from '@decipad/editor-types';
 import { normalizeExcessProperties } from '../../utils/normalize';
 
 const VOID_TYPE_PROPERTIES = {
@@ -21,6 +25,15 @@ const VOID_TYPE_PROPERTIES = {
     'data-href',
     'data-provider',
     'data-varname',
+  ],
+  [ELEMENT_PLOT]: [
+    'sourceVarName',
+    'markType',
+    'xColumnName',
+    'yColumnName',
+    'sizeColumnName',
+    'colorColumnName',
+    'thetaColumnName',
   ],
 };
 

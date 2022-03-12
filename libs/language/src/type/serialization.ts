@@ -5,9 +5,9 @@ import { ErrSpec, InferError } from './InferError';
 import { TUnit, TUnits, Units } from './unit-type';
 
 export interface SerializedFraction {
-  n: bigint | number;
-  d: bigint | number;
-  s: bigint | number;
+  n: bigint;
+  d: bigint;
+  s: bigint;
 }
 
 export type SerializedUnit = TUnit<SerializedFraction>;
@@ -86,9 +86,11 @@ export function serializeType(type: Type): SerializedType {
   throw new Error(`panic: serializing invalid type ${type.type}`);
 }
 
-export function deserializeUnit(unit: SerializedUnits | null): Units | null {
+export function deserializeUnit(
+  unit: SerializedUnits | undefined | null
+): Units | undefined {
   if (unit == null) {
-    return unit;
+    return undefined;
   }
   return {
     type: 'units',
@@ -96,6 +98,7 @@ export function deserializeUnit(unit: SerializedUnits | null): Units | null {
       ...u,
       multiplier: F(u.multiplier),
       exp: F(u.exp),
+      aliasFor: u.aliasFor ? deserializeUnit(u.aliasFor) : undefined,
     })),
   };
 }

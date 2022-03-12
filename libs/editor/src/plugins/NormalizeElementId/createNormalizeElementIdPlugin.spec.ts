@@ -1,7 +1,7 @@
 import { Editor } from 'slate';
 import { createEditorPlugins, TDescendant } from '@udecode/plate';
+import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import { createNormalizeElementIdPlugin } from './createNormalizeElementIdPlugin';
-import { ELEMENT_PARAGRAPH } from '../../elements';
 
 let editor: Editor;
 beforeEach(() => {

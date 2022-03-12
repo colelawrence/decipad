@@ -1,5 +1,6 @@
-import { Editor, Node, NodeOperation } from 'slate';
+import { Node, NodeOperation } from 'slate';
 import * as Y from 'yjs';
+import { Editor } from '@decipad/editor-types';
 import { SyncElement } from '../model';
 import { toSlatePath } from '../utils/convert';
 

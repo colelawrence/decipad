@@ -9,15 +9,19 @@ import { dequal } from 'dequal';
 import { ContextType, useEffect, useMemo, useState } from 'react';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { concatMap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { Editor, Node, NodeEntry, Transforms } from 'slate';
+import { Editor as SlateEditor, Node, NodeEntry, Transforms } from 'slate';
 
 import { ComputeRequest } from '@decipad/language';
 import { ResultsContext, useResults } from '@decipad/react-contexts';
 import { ProgramBlocksContextValue } from '@decipad/ui';
+import {
+  Editor,
+  ELEMENT_CODE_LINE,
+  ELEMENT_FETCH,
+} from '@decipad/editor-types';
 
 import { CodeErrorHighlight } from '../../components';
 import { useComputer } from '../../contexts/Computer';
-import { ELEMENT_CODE_LINE, ELEMENT_FETCH } from '../../elements';
 
 import { hasSyntaxError } from './common';
 import { delayErrors } from './delayErrors';
@@ -105,7 +109,11 @@ export const useLanguagePlugin = (): UseLanguagePluginRet => {
     languagePlugin: useMemo(
       () => ({
         onChange: (editor) => () => {
-          computeRequests.next(slateDocumentToComputeRequest(editor.children));
+          computeRequests.next(
+            slateDocumentToComputeRequest(
+              (editor as unknown as Editor).children
+            )
+          );
           cursors.next(getCursorPos(editor));
         },
         decorate:
@@ -153,7 +161,7 @@ export function editorProgramBlocks(editor: Editor): ProgramBlocksContextValue {
     setBlockVarName(blockId: string, varName: string): void {
       withBlock(blockId, parsedProgramBlocks, (block) => {
         Transforms.setNodes(
-          editor,
+          editor as unknown as SlateEditor,
           { 'data-varname': varName } as Partial<Node>,
           { at: [block.index] }
         );
@@ -162,7 +170,7 @@ export function editorProgramBlocks(editor: Editor): ProgramBlocksContextValue {
     setBlockProvider(blockId: string, provider: string): void {
       withBlock(blockId, parsedProgramBlocks, (block) => {
         Transforms.setNodes(
-          editor,
+          editor as unknown as SlateEditor,
           { 'data-provider': provider } as Partial<Node>,
           { at: [block.index] }
         );
@@ -171,7 +179,7 @@ export function editorProgramBlocks(editor: Editor): ProgramBlocksContextValue {
     setBlockExternalId(blockId: string, externalId: string): void {
       withBlock(blockId, parsedProgramBlocks, (block) => {
         Transforms.setNodes(
-          editor,
+          editor as unknown as SlateEditor,
           { 'data-external-id': externalId } as Partial<Node>,
           {
             at: [block.index],

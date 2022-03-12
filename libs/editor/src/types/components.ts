@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Element, RichText } from '../elements';
+import { Element, RichText } from '@decipad/editor-types';
 
 interface ElementAttributes {
   'data-slate-node': 'element';

@@ -1,6 +1,6 @@
 import { insertNodes, TDescendant, TEditor } from '@udecode/plate';
 import { Path } from 'slate';
-import { ELEMENT_TABLE_INPUT } from '../elements';
+import { ELEMENT_TABLE_INPUT } from '@decipad/editor-types';
 import { requirePathBelowBlock } from './path';
 
 const tableElement = {

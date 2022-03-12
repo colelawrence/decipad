@@ -1,6 +1,6 @@
 import { createEditorPlugins, SPEditor } from '@udecode/plate';
 import { Point } from 'slate';
-import { ELEMENT_PARAGRAPH } from '../elements';
+import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import {
   requireCollapsedSelection,
   getPathContainingSelection,

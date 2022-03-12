@@ -17,11 +17,11 @@ import {
 } from '@udecode/plate';
 import { Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
+import { ELEMENT_PARAGRAPH, ELEMENT_H3 } from '@decipad/editor-types';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { findDomNodePath } from '../../utils/slateReact';
 import { SlashCommandsParagraph } from './SlashCommandsParagraph';
-import { ELEMENT_PARAGRAPH, ELEMENT_H3 } from '../../elements';
 
 let editor: SPEditor & ReactEditor;
 let plateProps: PlateProps;

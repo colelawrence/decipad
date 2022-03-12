@@ -1,6 +1,10 @@
 import { Editor } from 'slate';
 import { createEditorPlugins, TElement } from '@udecode/plate';
-import { Element, ELEMENT_TABLE_INPUT, ELEMENT_FETCH } from '../../elements';
+import {
+  Element,
+  ELEMENT_TABLE_INPUT,
+  ELEMENT_FETCH,
+} from '@decipad/editor-types';
 import { createNormalizeVoidPlugin } from './createNormalizeVoidPlugin';
 
 let editor: Editor;

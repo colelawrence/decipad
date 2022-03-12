@@ -12,6 +12,7 @@
     { "path": "../slate-yjs" },
     { "path": "../fetch" },
     { "path": "../sync-connection-lambdas" },
-    { "path": "../backend-test-sandbox" }
+    { "path": "../backend-test-sandbox" },
+    { "path": "../editor-types" }
   ]
 }

@@ -3,7 +3,7 @@ import {
   getRenderElement,
   PlatePlugin,
 } from '@udecode/plate';
-import { ELEMENT_FETCH } from '../../elements';
+import { ELEMENT_FETCH } from '@decipad/editor-types';
 
 export const useFetchDataPlugin = (): PlatePlugin => {
   return {

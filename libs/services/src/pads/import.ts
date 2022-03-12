@@ -1,6 +1,7 @@
 import { PadRecord, User } from '@decipad/backendtypes';
+import { Element } from '@decipad/editor-types';
 import Boom from '@hapi/boom';
-import { Element, Node } from 'slate';
+import { Element as SlateElement } from 'slate';
 import { create as createContent } from '../pad-content';
 import { create as createPad } from './create';
 
@@ -9,15 +10,15 @@ export async function importDoc(
   source: string,
   user: User
 ): Promise<PadRecord> {
-  let doc: Node[] | undefined;
+  let doc: Element[] | undefined;
   try {
     const root = JSON.parse(source);
-    if (!Element.isElement(root)) {
+    if (!SlateElement.isElement(root)) {
       throw Boom.badData(
         "Cannot import notebook because it's not a valid Slate Element"
       );
     }
-    doc = root.children;
+    doc = root.children as Element[];
   } catch (err) {
     throw Boom.notAcceptable(
       `Error parsing import content: ${(err as Error).message}`

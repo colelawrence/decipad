@@ -1,7 +1,7 @@
-import { createContext, useContext } from 'react';
 import { IdentifiedResult } from '@decipad/language';
+import { createContext, useContext } from 'react';
 
-interface ResultsContextValue {
+export interface ResultsContextValue {
   readonly blockResults: {
     readonly [blockId: string]: Readonly<IdentifiedResult>;
   };

@@ -1,4 +1,4 @@
-import { CodeBlockElement, CodeLineElement } from '../../elements';
+import { CodeBlockElement, CodeLineElement } from '@decipad/editor-types';
 
 function codeLineToCode(line: CodeLineElement): string {
   return line.children[0].text;

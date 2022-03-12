@@ -8,6 +8,7 @@ import {
 import { nanoid } from 'nanoid';
 import { initialWorkspace } from '@decipad/initial-workspace';
 import tables from '@decipad/tables';
+import { Element } from '@decipad/editor-types';
 import { create as createWorkspace } from '../workspaces/create';
 import { create as createPad } from '../pads/create';
 import { create as createContent } from '../pad-content';
@@ -40,7 +41,7 @@ async function createInitialWorkspace(
         user
       );
 
-      await createContent(pad.id, notebook.content.children);
+      await createContent(pad.id, notebook.content.children as Element[]);
       return pad;
     })
   );

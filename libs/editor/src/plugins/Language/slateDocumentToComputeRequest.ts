@@ -1,13 +1,19 @@
+import {
+  Editor,
+  ELEMENT_CODE_BLOCK,
+  ELEMENT_CODE_LINE,
+  ELEMENT_PLOT,
+} from '@decipad/editor-types';
 import { ComputeRequest, Program } from '@decipad/language';
 import { getCodeFromBlock } from './common';
-import { ELEMENT_CODE_BLOCK, ELEMENT_CODE_LINE, Node } from '../../elements';
 import {
   getAstBlockFromLanguageElement,
+  getAstFromVarName,
   isLanguageElement,
 } from './languageElements';
 
 export function slateDocumentToComputeRequest(
-  slateDoc: Node[]
+  slateDoc: Editor['children']
 ): ComputeRequest {
   const program: Program = [];
 
@@ -38,6 +44,14 @@ export function slateDocumentToComputeRequest(
           block: parsedBlobk,
         });
       }
+    }
+
+    if (block.type === ELEMENT_PLOT && block.sourceVarName) {
+      program.push({
+        id: block.id,
+        type: 'parsed-block',
+        block: getAstFromVarName(block.id, block.sourceVarName),
+      });
     }
   }
 

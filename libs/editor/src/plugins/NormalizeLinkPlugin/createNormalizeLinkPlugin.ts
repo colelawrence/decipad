@@ -6,7 +6,7 @@ import {
   isElement,
 } from '@udecode/plate';
 import { Node, NodeEntry, Transforms } from 'slate';
-import { ELEMENT_LINK } from '../../elements';
+import { ELEMENT_LINK } from '@decipad/editor-types';
 import { normalizeExcessProperties } from '../../utils/normalize';
 
 const withNormalizeLink = (): WithOverride => (editor) => {

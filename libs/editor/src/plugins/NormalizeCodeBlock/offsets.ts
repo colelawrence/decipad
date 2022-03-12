@@ -1,7 +1,7 @@
 import { getDefined } from '@decipad/utils';
 import { getChildren, getNode } from '@udecode/plate';
 import { Editor, Path, Point, Node, Selection, Transforms } from 'slate';
-import { CodeBlockElement, CodeLineElement } from '../../elements';
+import { CodeBlockElement, CodeLineElement } from '@decipad/editor-types';
 import { cloneSelection } from './utils';
 
 interface Offsets {

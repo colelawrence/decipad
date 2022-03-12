@@ -1,8 +1,9 @@
+import { isEnabled } from '@decipad/feature-flags';
+import { useWindowListener } from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import { ComponentProps, FC, useCallback, useEffect, useState } from 'react';
-import { useWindowListener } from '@decipad/react-utils';
 import { SlashCommandsMenuItem } from '../../atoms';
-import { Placeholder, Shapes, Table, Text } from '../../icons';
+import { Placeholder, Plot, Shapes, Table, Text } from '../../icons';
 import { SlashCommandsMenuGroup } from '../../molecules';
 import {
   black,
@@ -17,6 +18,7 @@ const SLASH_COMMANDS = [
   'calculation-block',
   'input',
   'table',
+  'plot',
   'heading1',
   'heading2',
   'import',
@@ -36,6 +38,40 @@ type SlashCommandItem = Omit<
   readonly command: SlashCommand;
   readonly extraSearchTerms: ReadonlyArray<string>;
 };
+
+const dataItems = [
+  {
+    command: 'calculation-block',
+    title: 'Calculations',
+    description: 'Play with your data, add inputs and see results',
+    icon: <Shapes />,
+    extraSearchTerms: [
+      'deci language',
+      'calculation block',
+      'language block',
+      'model block',
+    ],
+  },
+  {
+    command: 'table',
+    title: 'Table',
+    description: 'Input your data in a table',
+    icon: <Table />,
+    extraSearchTerms: [],
+  },
+];
+
+// plots are hidden in prod
+if (isEnabled()) {
+  dataItems.push({
+    command: 'plot',
+    title: 'Plot',
+    description: 'Plot your data in a graph',
+    icon: <Plot />,
+    extraSearchTerms: [],
+  });
+}
+
 const groups: ReadonlyArray<SlashCommandGroup> = [
   {
     title: 'Interactivity',
@@ -51,27 +87,7 @@ const groups: ReadonlyArray<SlashCommandGroup> = [
   },
   {
     title: 'Data',
-    items: [
-      {
-        command: 'calculation-block',
-        title: 'Calculations',
-        description: 'Play with your data, add inputs and see results',
-        icon: <Shapes />,
-        extraSearchTerms: [
-          'deci language',
-          'calculation block',
-          'language block',
-          'model block',
-        ],
-      },
-      {
-        command: 'table',
-        title: 'Table',
-        description: 'Input your data in a table',
-        icon: <Table />,
-        extraSearchTerms: [],
-      },
-    ],
+    items: dataItems as SlashCommandGroup['items'],
   },
   {
     title: 'Text',

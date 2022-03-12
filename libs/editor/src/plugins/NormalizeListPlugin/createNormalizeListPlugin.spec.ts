@@ -7,7 +7,7 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_LI,
   ELEMENT_LIC,
-} from '../../elements';
+} from '@decipad/editor-types';
 import { createNormalizeListPlugin } from './createNormalizeListPlugin';
 
 let editor: Editor;

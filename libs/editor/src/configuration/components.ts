@@ -1,4 +1,3 @@
-import { ImportDataElement } from '@decipad/ui';
 import {
   ElementKind,
   ELEMENT_BLOCKQUOTE,
@@ -13,36 +12,37 @@ import {
   ELEMENT_LINK,
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
+  ELEMENT_PLOT,
   ELEMENT_TABLE_INPUT,
   ELEMENT_UL,
-} from '../elements';
-import {
   MarkKind,
   MARK_BOLD,
   MARK_CODE,
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
   MARK_UNDERLINE,
-} from '../marks';
+} from '@decipad/editor-types';
+import { ImportDataElement } from '@decipad/ui';
 import {
-  CodeLine,
-  CodeBlock,
-  SlashCommandsParagraph,
-  Table,
-  OrderedList,
-  ListItem,
-  UnorderedList,
-  Title,
   Blockquote,
+  Bold,
+  Code,
+  CodeBlock,
+  CodeLine,
   Heading1,
   Heading2,
-  Bold,
-  Strikethrough,
-  Underline,
-  Italic,
-  Code,
-  Link,
   Input,
+  Italic,
+  Link,
+  ListItem,
+  OrderedList,
+  Plot,
+  SlashCommandsParagraph,
+  Strikethrough,
+  Table,
+  Title,
+  Underline,
+  UnorderedList,
 } from '../components';
 import { PlateComponent } from '../types';
 
@@ -74,6 +74,7 @@ export const components: PlateComponents = {
   // Special elements
   [ELEMENT_FETCH]: ImportDataElement as PlateComponent, // TODO kill/rewrite with editor/UI separation
   [ELEMENT_TABLE_INPUT]: Table,
+  [ELEMENT_PLOT]: Plot,
   [ELEMENT_INPUT]: Input,
 
   // Marks

@@ -1,7 +1,11 @@
 import { Editor } from 'slate';
 import { createEditorPlugins, TElement } from '@udecode/plate';
-import { Element, ELEMENT_LINK, ELEMENT_PARAGRAPH } from '../../elements';
-import { MARK_BOLD } from '../../marks';
+import {
+  Element,
+  ELEMENT_LINK,
+  ELEMENT_PARAGRAPH,
+  MARK_BOLD,
+} from '@decipad/editor-types';
 import { createNormalizeLinkPlugin } from './createNormalizeLinkPlugin';
 
 let editor: Editor;

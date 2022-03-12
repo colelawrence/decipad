@@ -6,4 +6,5 @@ module.exports = {
       { runtime: 'automatic', importSource: '@emotion/react' },
     ],
   ],
+  plugins: ['@babel/plugin-transform-runtime'],
 };

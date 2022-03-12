@@ -1,11 +1,11 @@
+import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
+import { mockConsoleWarn } from '@decipad/testutils';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
-import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
-import { mockConsoleWarn } from '@decipad/testutils';
+import type { TableCellType } from '../../types';
 import { getDateType, getNumberType, getStringType } from '../../utils';
 import { TableColumnMenu } from './TableColumnMenu';
-import { TableCellType } from '../../types';
 
 const props: ComponentProps<typeof TableColumnMenu> = {
   type: getStringType(),

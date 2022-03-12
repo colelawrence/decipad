@@ -1,10 +1,6 @@
 import { FC } from 'react';
 import { css } from '@emotion/react';
-import {
-  stringifyUnits,
-  deserializeUnit,
-  convertToMultiplierUnit,
-} from '@decipad/language';
+import { stringifyUnits, convertToMultiplierUnit } from '@decipad/language';
 import Fraction from '@decipad/fraction';
 import { CodeResultProps } from '../../types';
 
@@ -82,9 +78,7 @@ export const NumberResult = ({
 
   // Numbers' toString isn't always formatted like [-]####.###
   const basicNumberMatch = asString.match(/^(-?)(\d+)(\.\d+)?$/);
-  const unitPart = type.unit
-    ? ` ${stringifyUnits(deserializeUnit(type.unit), fraction)}`
-    : '';
+  const unitPart = type.unit ? ` ${stringifyUnits(type.unit, fraction)}` : '';
   if (basicNumberMatch != null) {
     const [, sign, integerPart, decimalPart] = basicNumberMatch;
 

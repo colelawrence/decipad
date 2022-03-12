@@ -1,13 +1,13 @@
 import { createEditorPlugins, SPEditor } from '@udecode/plate';
 import {
-  insertCodeBlockBelow,
-  insertCodeBlockBelowOrReplace,
-} from './codeBlock';
-import {
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
-} from '../elements';
+} from '@decipad/editor-types';
+import {
+  insertCodeBlockBelow,
+  insertCodeBlockBelowOrReplace,
+} from './codeBlock';
 
 let editor: SPEditor;
 beforeEach(() => {

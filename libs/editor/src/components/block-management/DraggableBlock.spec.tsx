@@ -12,13 +12,13 @@ import {
 import userEvent from '@testing-library/user-event';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { DraggableBlock } from './DraggableBlock';
 import {
   ELEMENT_PARAGRAPH,
   ELEMENT_UL,
   ELEMENT_LI,
   ELEMENT_LIC,
-} from '../../elements';
+} from '@decipad/editor-types';
+import { DraggableBlock } from './DraggableBlock';
 import { PlateComponent } from '../../types';
 
 const DraggableParagraph: PlateComponent = ({ element, children }) => (

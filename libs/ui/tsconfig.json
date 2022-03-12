@@ -13,6 +13,7 @@
     { "path": "../react-utils" },
     { "path": "../routing" },
     { "path": "../testutils" },
-    { "path": "../utils" }
+    { "path": "../utils" },
+    { "path": "../feature-flags" }
   ]
 }

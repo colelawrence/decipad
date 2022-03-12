@@ -6,9 +6,9 @@ import {
 import { useResults } from '@decipad/react-contexts';
 import { docs } from '@decipad/routing';
 import { organisms } from '@decipad/ui';
+import { ELEMENT_CODE_LINE } from '@decipad/editor-types';
 import { PlateComponent } from '../../types';
 import { useComputer } from '../../contexts/Computer';
-import { ELEMENT_CODE_LINE } from '../../elements';
 
 export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   if (!element || element.type !== ELEMENT_CODE_LINE) {

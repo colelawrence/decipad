@@ -1,9 +1,9 @@
+import { Element } from '@decipad/editor-types';
 import { organisms } from '@decipad/ui';
 import { useDndBlock, useEditorState } from '@udecode/plate';
 import { ComponentProps, createContext, useContext, useRef } from 'react';
 import { Transforms } from 'slate';
 import { ReactEditor, useReadOnly } from 'slate-react';
-import { Element } from '../../elements';
 
 const InDraggableBlock = createContext(false);
 

@@ -1,3 +1,11 @@
+import {
+  BlockElement,
+  CodeBlockElement,
+  ELEMENT_CODE_BLOCK,
+  ELEMENT_PARAGRAPH,
+  ParagraphElement,
+  RichText,
+} from '@decipad/editor-types';
 import { tokenize } from '@decipad/language';
 import {
   getBlockAbove,
@@ -6,14 +14,6 @@ import {
   unwrapCodeBlock,
 } from '@udecode/plate';
 import { NodeEntry } from 'slate';
-import {
-  BlockElement,
-  CodeBlockElement,
-  ELEMENT_CODE_BLOCK,
-  ELEMENT_PARAGRAPH,
-  ParagraphElement,
-  RichText,
-} from '../../elements';
 
 type LastFormattedBlock = null | {
   readonly id: string;

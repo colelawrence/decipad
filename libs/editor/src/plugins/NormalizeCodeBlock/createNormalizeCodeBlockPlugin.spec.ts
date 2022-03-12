@@ -1,13 +1,13 @@
 import { Descendant, Editor } from 'slate';
 import { createEditorPlugins, TDescendant, TElement } from '@udecode/plate';
-import { codeLine, emptyCodeBlock, exampleCodeBlock } from './testUtils';
-import { createNormalizeCodeBlockPlugin } from './createNormalizeCodeBlockPlugin';
 import {
   ELEMENT_CODE_BLOCK,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_PARAGRAPH,
   ELEMENT_CODE_LINE,
-} from '../../elements';
+} from '@decipad/editor-types';
+import { codeLine, emptyCodeBlock, exampleCodeBlock } from './testUtils';
+import { createNormalizeCodeBlockPlugin } from './createNormalizeCodeBlockPlugin';
 
 let editor: Editor;
 beforeEach(() => {

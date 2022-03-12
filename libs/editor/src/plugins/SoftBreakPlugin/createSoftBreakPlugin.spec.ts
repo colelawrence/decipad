@@ -1,10 +1,10 @@
 import { createEditorPlugins, TNode } from '@udecode/plate';
-import { createSoftBreakPlugin } from './createSoftBreakPlugin';
 import {
   CodeLineElement,
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
-} from '../../elements';
+} from '@decipad/editor-types';
+import { createSoftBreakPlugin } from './createSoftBreakPlugin';
 
 const getNewEditorState = () => [
   {

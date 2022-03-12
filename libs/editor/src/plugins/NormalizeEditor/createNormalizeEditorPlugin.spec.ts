@@ -1,6 +1,5 @@
 import { createEditorPlugins, TDescendant, TElement } from '@udecode/plate';
 import { Editor, Transforms } from 'slate';
-import { createNormalizeEditorPlugin } from './createNormalizeEditorPlugin';
 import {
   ELEMENT_H1,
   ELEMENT_H2,
@@ -12,7 +11,8 @@ import {
   ELEMENT_UL,
   H1Element,
   Element,
-} from '../../elements';
+} from '@decipad/editor-types';
+import { createNormalizeEditorPlugin } from './createNormalizeEditorPlugin';
 
 const h1Element = () =>
   ({

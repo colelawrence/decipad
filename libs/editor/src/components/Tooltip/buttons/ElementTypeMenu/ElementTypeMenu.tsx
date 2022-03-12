@@ -5,7 +5,7 @@ import {
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_PARAGRAPH,
-} from '../../../../elements';
+} from '@decipad/editor-types';
 import { ToggleElementButton } from './ToggleElementButton/ToggleElementButton';
 
 const wrapperStyles = css({

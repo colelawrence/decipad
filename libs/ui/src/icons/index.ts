@@ -25,6 +25,7 @@ export { Logout } from './Logout/Logout';
 export { Minus } from './Minus/Minus';
 export { Number } from './Number/Number';
 export { Placeholder } from './Placeholder/Placeholder';
+export { Plot } from './Plot/Plot';
 export { Settings } from './Settings/Settings';
 export { Shapes } from './Shapes/Shapes';
 export { Slash } from './Slash/Slash';

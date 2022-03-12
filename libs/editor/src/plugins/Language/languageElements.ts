@@ -1,17 +1,17 @@
-import { AST, isExpression, parseOneBlock } from '@decipad/language';
 import {
-  TableElement,
-  InputElement,
+  ELEMENT_FETCH,
   ELEMENT_INPUT,
   ELEMENT_TABLE_INPUT,
-  ELEMENT_FETCH,
   FetchElement,
+  InputElement,
   Node,
-} from '../../elements';
+  TableElement,
+} from '@decipad/editor-types';
+import { AST, isExpression, parseOneBlock } from '@decipad/language';
 import { TableData } from '../../types';
 import { astNode } from '../../utils/astNode';
 import { getNullReplacementValue, parseCell } from '../../utils/parseCell';
-import { getAssignmentBlock } from './common';
+import { getAssignmentBlock, getRefBlock } from './common';
 
 type TransformerFn<T extends LanguageElement> = (arg: T) => OutputNode | null;
 
@@ -123,4 +123,11 @@ export const getAstBlockFromLanguageElement = <T extends LanguageElement>(
   return result == null
     ? null
     : getAssignmentBlock(element.id, result.name, result.expression);
+};
+
+export const getAstFromVarName = (
+  id: string,
+  sourceVarName: string
+): AST.Block => {
+  return getRefBlock(id, sourceVarName);
 };

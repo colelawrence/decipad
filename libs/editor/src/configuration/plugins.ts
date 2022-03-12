@@ -14,7 +14,7 @@ import {
   createTrailingBlockPlugin,
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
-import { ELEMENT_PARAGRAPH } from '../elements';
+import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import { autoformatRules } from './autoformat';
 import { exitBreakOptions } from './exitBreakOptions';
 import { resetBlockTypeOptions } from './resetBlockTypeOptions';
@@ -34,6 +34,7 @@ import { createNormalizeVoidPlugin } from '../plugins/NormalizeVoidPlugin/create
 import { createNormalizeLinkPlugin } from '../plugins/NormalizeLinkPlugin/createNormalizeLinkPlugin';
 import { createNormalizeElementIdPlugin } from '../plugins/NormalizeElementId/createNormalizeElementIdPlugin';
 import { createAutoFormatCodeBlockPlugin } from '../plugins/AutoFormatCodeBlock/createAutoFormatCodeBlockPlugin';
+import { createPlotPlugin } from '../plugins/Plot/createPlotPlugin';
 
 export const plugins = [
   // fundamentals
@@ -51,6 +52,7 @@ export const plugins = [
 
   // custom blocks
   createCodeBlockPlugin(),
+  createPlotPlugin(),
 
   // structure enforcement
   createNormalizeEditorPlugin(),

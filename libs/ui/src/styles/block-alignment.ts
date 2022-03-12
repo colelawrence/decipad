@@ -32,3 +32,6 @@ export const editorTable: VerticalAlignmentData = {
   paddingTop: '12px',
   typography: h2,
 };
+export const plot: VerticalAlignmentData = {
+  paddingTop: '16px',
+};

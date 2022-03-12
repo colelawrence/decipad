@@ -5,6 +5,7 @@ import waitForExpect from 'wait-for-expect';
 import { createEditor } from 'slate';
 import fetch from 'jest-fetch-mock';
 import { Pad } from '@decipad/backendtypes';
+import { Editor } from '@decipad/editor-types';
 import { testWithSandbox as test } from '../../backend-test-sandbox/src';
 import { randomChangesToEditors } from './utils/random-changes';
 import { clone } from './utils/clone';
@@ -85,7 +86,7 @@ test('sync many', (ctx) => {
     });
 
     for (let i = 0; i < replicaCount; i += 1) {
-      const editor = withDocSync(createEditor(), pad.id, {
+      const editor = withDocSync(createEditor() as unknown as Editor, pad.id, {
         connectBc: false,
       });
       editors.push(editor);
@@ -103,7 +104,10 @@ test('sync many', (ctx) => {
 
   it('makes random changes to the editors and pad contents converge', async () => {
     expect(editors.length).toBeGreaterThan(0);
-    await randomChangesToEditors(editors, randomChangeCountPerReplica);
+    await randomChangesToEditors(
+      editors as unknown as Array<Editor>,
+      randomChangeCountPerReplica
+    );
 
     await waitForExpect(async () => {
       const expectedContents = clone(editors[0].children);

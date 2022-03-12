@@ -1,12 +1,12 @@
 import { AutoformatRule } from '@udecode/plate';
-import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
 import {
   MARK_BOLD,
   MARK_CODE,
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
   MARK_UNDERLINE,
-} from '../../marks';
+} from '@decipad/editor-types';
+import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
 
 export const autoformatMarks: AutoformatRule[] = [
   {

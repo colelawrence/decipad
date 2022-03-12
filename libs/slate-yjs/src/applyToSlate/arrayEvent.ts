@@ -1,4 +1,5 @@
-import { Editor, Node, NodeOperation, Text } from 'slate';
+import { Node, NodeOperation, Text } from 'slate';
+import { Editor } from '@decipad/editor-types';
 import invariant from 'tiny-invariant';
 import * as Y from 'yjs';
 import { SyncElement } from '../model';

@@ -5,8 +5,12 @@ import {
   TDescendant,
 } from '@udecode/plate';
 import { Transforms } from 'slate';
+import {
+  ELEMENT_PARAGRAPH,
+  ELEMENT_H1,
+  ELEMENT_LINK,
+} from '@decipad/editor-types';
 import { createLinkPlugin } from '../../plugins/Link/createLinkPlugin';
-import { ELEMENT_PARAGRAPH, ELEMENT_H1, ELEMENT_LINK } from '../../elements';
 
 import { autoformatLinks } from './autoformatLinks';
 

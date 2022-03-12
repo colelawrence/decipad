@@ -1,4 +1,4 @@
-import Fraction from 'fraction.js/bigfraction';
+import FFraction from 'fraction.js/bigfraction';
 
 (BigInt.prototype as unknown as { toJSON: () => string }).toJSON =
   function toJSON() {
@@ -6,15 +6,15 @@ import Fraction from 'fraction.js/bigfraction';
   };
 
 /* eslint-disable */
-(Fraction as any).prototype[Symbol.for('nodejs.util.inspect.custom')] =
+(FFraction as any).prototype[Symbol.for('nodejs.util.inspect.custom')] =
   function stringifyFractionForNodeConsole(_depth: any, options: any) {
     return `Fraction { ${options.stylize(this.toString(), 'number')} }`;
   };
 
-export default Fraction;
+export default FFraction;
 
-export interface FractionLike {
-  n: bigint | number;
-  d: bigint | number;
-  s: bigint | number;
-}
+export type FractionLike = {
+  n: bigint;
+  d: bigint;
+  s: bigint;
+};

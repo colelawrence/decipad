@@ -7,7 +7,7 @@ import {
   isText,
 } from '@udecode/plate';
 import { Node, NodeEntry, Transforms } from 'slate';
-import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '../../elements';
+import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@decipad/editor-types';
 import { normalizeExcessProperties } from '../../utils/normalize';
 
 const PLAIN_TEXT_BLOCK_TYPES = [ELEMENT_H1, ELEMENT_H2, ELEMENT_H3];

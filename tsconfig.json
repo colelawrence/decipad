@@ -93,13 +93,14 @@
       "@decipad/y-lambdawebsocket": ["libs/y-lambdawebsocket/src/index.ts"],
       "@decipad/y-websocket": ["libs/y-websocket/src/index.ts"],
       "@decipad/fraction": ["libs/fraction/src/index.ts"],
-      "test-utils": ["libs/ui/src/lib/utils/test-utils.tsx"],
       "@decipad/discord-customerservice-lambda": [
         "libs/discord-customerservice-lambda/src/index.ts"
       ],
       "@decipad/initial-workspace": ["libs/initial-workspace/src/index.ts"],
       "@decipad/tables": ["libs/tables/src"],
-      "@decipad/client-events": ["libs/client-events/src/index.ts"]
+      "@decipad/client-events": ["libs/client-events/src/index.ts"],
+      "@decipad/editor-types": ["libs/editor-types/src/index.ts"],
+      "@decipad/feature-flags": ["libs/feature-flags/src/index.ts"]
     }
   },
   "files": [],

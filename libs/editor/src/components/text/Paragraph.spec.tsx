@@ -6,11 +6,11 @@ import {
 } from '@udecode/plate';
 import { render, waitFor } from '@testing-library/react';
 import { Transforms } from 'slate';
+import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Paragraph } from './Paragraph';
 import { findDomNodePath } from '../../utils/slateReact';
-import { ELEMENT_PARAGRAPH } from '../../elements';
 
 const wrapper: React.FC = ({ children }) => (
   <DndProvider backend={HTML5Backend}>{children}</DndProvider>
