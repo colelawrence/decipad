@@ -4,35 +4,50 @@ sidebar_position: 5
 
 # Get started with Decipad
 
-## Step 1 - Create your first notebook
+## 1 - Create your first notebook
 
-Think of a notebook as a place where narrative and data coexist. In a notebook, you can type text as well as type `/`to create calculation blocks and tables and move these up and down.
+A notebook is a place where narrative and data coexist.
+Use it as a notebook and start to write some text, or type `/` to add calculation blocks, tables or inputs.
 
-## Step 2 - Add calculations
+## 2 - Explore numbers: Calculations
 
-If what you are looking for is to play with numbers, then you'll have fun with the `/calculation block`. The calculation block is the place where you can type numbers and perform operations in a more natural way, powered by the [Decipad language](/docs/language/introduction-to-the-language).
+If what you are looking for is to play with numbers, then you'll have fun with the `/calculation block`. To add one, write `/` in a new paragraph and select **Calculations**.
+
+The calculation blocks are the place where you can work with numbers by performing operations in a natural way, powered by the [Decipad language](../language).
 
 ```deci live
 2 + 2
 ==> 4
 ```
 
-## Step 3 - Name your data
+## 3 - Name your data: Variables
 
-In a calculation block, you can assign a name to your data by using the `=` operator - we call it creating [variables](/docs/language/variables). This is a useful way to reuse data throughout your notebook as you build your model. For now, variables can't use spaces, symbols or emojis, and they are case sensitive.
+In a calculation block, assign names to data by using the `=` sign - we call it creating [variables](/docs/language/variables).
+
+For now, variables can't have spaces, but you can use symbols or emojis. Don't forget that [Variables](/docs/language/variables) are case-sensitive.
+
+Call these variables throughout your notebook to reference your data on calculations.
 
 ```deci live
 NameSomethingInDecipad = 300
 ==> 300
 ```
 
-## Step 4 - Use tables to add more data
+```deci live
+🐙 = 300
+==> 300
+```
 
-Type `/table` and add a table to your notebook. Data in a table can be text, numbers (with or without units) or dates. Same as with variables, you can name your table and use it as an input in an operation.
+## 4 - Organize your data: Tables
+
+Type `/` and select **Table** to add a table to your notebook.
+
+Data in a table can be text, numbers (with or without units) or dates.
+As with variables, you can name your table and use it in a calculation.
 
 ![tables](https://user-images.githubusercontent.com/76447845/146926068-463a1bc4-e70d-443d-a05b-6f49dcecf310.gif)
 
-If you're a builder, you can always build your table using the [Decipad language](/docs/organising-your-data/tables).
+If you are looking to create complex tables, you can always build your own table using the [Decipad language](/docs/organising-your-data/tables).
 
 ```deci live
 SimpleTable = {
@@ -45,6 +60,6 @@ SimpleTable = {
 }
 ```
 
-## Step 5 - Share your work
+## Share your model!
 
-You've done it! You created your first notebook and now you can share it with the world. Click on the `Share` button on the right corner of your notebook to generate a public link that you can then copy and share with anyone.
+You've done it! You created your first notebook and now you can share it with the world. Click the `Share` button on the right corner of your notebook to generate a public link.

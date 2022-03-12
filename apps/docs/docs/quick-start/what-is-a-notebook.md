@@ -1,8 +1,8 @@
 ---
-sidebar_position: 5
+sidebar_position: 7
 ---
 
-# What is a notebook?
+# Notebooks 101
 
 In a Decipad notebook, you can bring together your thoughts, data and calculations.
 
@@ -16,15 +16,15 @@ Add any element by typing its name or scrolling to the one you want to and press
 
 ![heading](https://user-images.githubusercontent.com/76447845/149759719-390e3a33-da96-4cad-af83-df375249b47f.gif)
 
-## Writing and styling basics
+## Writing and styling
 
-Start writing in your notebook anywhere. Highlight any text and a menu of text styling options appears to you. Using the menu, you can convert your text into a **paragraph**, **heading 1** or **heading 2**. And you can also style it in **bold** `B`, _italics_ `I`, **underlined** `U` or `monospace code` `<>`.
+Start writing in your notebook anywhere. Highlight any text and a menu of styling will appear. You are able to turn your text into a **paragraph**, **heading 1** or **heading 2**. You can also style it in **bold** `B`, _italics_ `I`, **underlined** `U` or `monospace code` `<>`.
 
 ![Jan-17-2022 11-59-58](https://user-images.githubusercontent.com/76447845/149757797-ffd467a6-9a37-4322-970d-437ec71ff0e8.gif)
 
-## The Calculation Block
+## Calculation blocks
 
-Add a `/calculation block` onto your notebook and you'll be able to use the [Decipad language](/docs/language/introduction-to-the-language) to play with numbers.
+Add a `/calculation block` onto your notebook and you'll be able to use the [Decipad language](../language) to play with numbers.
 
 ![calcBlock2](https://user-images.githubusercontent.com/61380949/150771744-edbe5396-6c36-4d1d-ab54-0ac1e68bbbd2.gif)
 

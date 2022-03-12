@@ -2,11 +2,7 @@
 sidebar_position: 10
 ---
 
-# Introduction to the language
-
-Let's discover The **Decipad language in less than 5 minutes**.
-
-## Numbers and units
+# Numbers
 
 You can express simple integer numbers like this:
 

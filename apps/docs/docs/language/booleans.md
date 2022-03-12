@@ -4,8 +4,6 @@ sidebar_position: 28
 
 # Booleans
 
-## What they are
-
 A boolean value can either be true or false.
 
 You can express boolean values like this:

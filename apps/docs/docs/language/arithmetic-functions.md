@@ -4,8 +4,6 @@ sidebar_position: 20
 
 # Arithmetic operations
 
-## Operations
-
 In Decipad you have all the arithmetic operations you would expect:
 
 ```deci live

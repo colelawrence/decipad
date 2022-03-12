@@ -2,7 +2,7 @@
 sidebar_position: 70
 ---
 
-# Conditionals
+# Conditions
 
 ## If Then Else
 
