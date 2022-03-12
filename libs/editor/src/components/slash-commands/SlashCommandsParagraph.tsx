@@ -3,7 +3,7 @@ import { organisms } from '@decipad/ui';
 import { useWindowListener } from '@decipad/react-utils';
 import { ClientEventsContext } from '@decipad/client-events';
 import { useEditorState } from '@udecode/plate';
-import { useCallback, useEffect, useState, useContext } from 'react';
+import { useCallback, useEffect, useState, useContext, useRef } from 'react';
 import { Editor } from 'slate';
 import { ReactEditor, useFocused, useSelected } from 'slate-react';
 import { PlateComponent } from '../../types';
@@ -44,6 +44,11 @@ export const SlashCommandsParagraph: PlateComponent = (props) => {
   const showSlashCommands =
     selected && focused && !menuSuppressed && search !== undefined;
 
+  const menuRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    menuRef.current?.scrollIntoView({ block: 'nearest' });
+  }, [showSlashCommands, search]);
+
   const onKeyDown = useCallback(
     (event: KeyboardEvent) => {
       if (showSlashCommands && !event.shiftKey) {
@@ -65,6 +70,7 @@ export const SlashCommandsParagraph: PlateComponent = (props) => {
       <>
         <Paragraph {...props} />
         <div
+          ref={menuRef}
           contentEditable={false}
           css={{
             position: 'absolute',

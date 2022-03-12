@@ -1,4 +1,5 @@
 import { noop } from '@decipad/utils';
+import { findParentWithStyle } from '@decipad/dom-test-utils';
 import {
   act,
   getDefaultNormalizer,
@@ -139,6 +140,55 @@ it.each([' /cmd', '/cmd#', '/42'])(
     expect(queryByText(/sub-head/i)).not.toBeInTheDocument();
   }
 );
+
+describe('the menu', () => {
+  it('is scrolled into view on opening', async () => {
+    const { getByText, findByText } = render(<Plate {...plateProps} />, {
+      wrapper,
+    });
+
+    act(() => {
+      ReactEditor.focus(editor);
+    });
+    Transforms.select(editor, {
+      path: findDomNodePath(editor, getByText('/')),
+      offset: '/'.length,
+    });
+    Transforms.insertText(editor, 'a');
+
+    await findByText('/a');
+    expect(
+      findParentWithStyle(getByText(/sub-head/i), 'zIndex')!.element
+        .scrollIntoView
+    ).toHaveBeenCalled();
+  });
+
+  it('is scrolled into view when typing', async () => {
+    const { getByText, findByText } = render(<Plate {...plateProps} />, {
+      wrapper,
+    });
+
+    act(() => {
+      ReactEditor.focus(editor);
+    });
+    Transforms.select(editor, {
+      path: findDomNodePath(editor, getByText('/')),
+      offset: '/'.length,
+    });
+    Transforms.insertText(editor, 'a');
+
+    await findByText('/a');
+    const menuElement = findParentWithStyle(
+      getByText(/sub-head/i),
+      'zIndex'
+    )!.element;
+    menuElement.scrollIntoView = jest.fn();
+
+    Transforms.insertText(editor, 'b');
+    await findByText('/ab');
+    expect(menuElement.scrollIntoView).toHaveBeenCalled();
+  });
+});
 
 describe('the escape key', () => {
   it('hides the menu until typing again', async () => {
