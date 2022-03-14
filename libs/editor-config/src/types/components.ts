@@ -1,0 +1,30 @@
+import { Element, RichText } from '@decipad/editor-types';
+import { FC } from 'react';
+
+interface ElementAttributes {
+  'data-slate-node': 'element';
+  'data-slate-inline'?: true;
+  'data-slate-void'?: true;
+  dir?: 'rtl';
+  // from Slate attribute typings
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ref: any;
+}
+interface LeafAttributes {
+  'data-slate-leaf': true;
+}
+export type PlateComponent<AdditionalProps = Record<never, never>> = FC<
+  (
+    | {
+        readonly attributes: ElementAttributes;
+        readonly element: Element;
+        readonly leaf?: undefined;
+      }
+    | {
+        readonly attributes: LeafAttributes;
+        readonly element?: undefined;
+        readonly leaf: RichText;
+      }
+  ) &
+    AdditionalProps
+>;

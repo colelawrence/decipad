@@ -1,3 +1,12 @@
+import {
+  Editor,
+  ELEMENT_CODE_LINE,
+  ELEMENT_FETCH,
+  interactiveElements,
+} from '@decipad/editor-types';
+import { ComputeRequest } from '@decipad/language';
+import { ResultsContext, useResults } from '@decipad/react-contexts';
+import { ProgramBlocksContextValue } from '@decipad/ui';
 import { captureException } from '@sentry/react';
 import {
   getPlatePluginTypes,
@@ -10,24 +19,12 @@ import { ContextType, useEffect, useMemo, useState } from 'react';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { concatMap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Editor as SlateEditor, Node, NodeEntry, Transforms } from 'slate';
-
-import { ComputeRequest } from '@decipad/language';
-import { ResultsContext, useResults } from '@decipad/react-contexts';
-import { ProgramBlocksContextValue } from '@decipad/ui';
-import {
-  Editor,
-  ELEMENT_CODE_LINE,
-  ELEMENT_FETCH,
-} from '@decipad/editor-types';
-
-import { CodeErrorHighlight } from '../../components';
 import { useComputer } from '../../contexts/Computer';
-
+import { CodeErrorHighlight } from '../../plate-components';
 import { hasSyntaxError } from './common';
 import { delayErrors } from './delayErrors';
 import { getCursorPos } from './getCursorPos';
 import { getSyntaxErrorRanges } from './getSyntaxErrorRanges';
-import { languageElements } from './languageElements';
 import { slateDocumentToComputeRequest } from './slateDocumentToComputeRequest';
 
 interface UseLanguagePluginRet {
@@ -134,8 +131,8 @@ export const useLanguagePlugin = (): UseLanguagePluginRet => {
             <>{props.children}</>
           );
         },
-        renderElement: getRenderElement(languageElements),
-        voidTypes: getPlatePluginTypes(languageElements),
+        renderElement: getRenderElement([...interactiveElements]),
+        voidTypes: getPlatePluginTypes([...interactiveElements]),
       }),
       [computeRequests, cursors, results]
     ),

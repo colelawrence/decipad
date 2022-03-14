@@ -10,22 +10,18 @@ import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
-  ELEMENT_FETCH,
   ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_H3,
-  ELEMENT_INPUT,
   ELEMENT_LI,
   ELEMENT_LIC,
   ELEMENT_LINK,
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
-  ELEMENT_PLOT,
-  ELEMENT_TABLE_INPUT,
   ELEMENT_UL,
+  InteractiveElement,
   MarkKind,
 } from '.';
-import { TableData } from './tables';
 
 // Defining specific elements
 
@@ -96,59 +92,14 @@ export interface LinkElement extends BaseElement {
   url: string;
 }
 
-// Special elements
-export interface TableElement extends BaseElement {
-  type: typeof ELEMENT_TABLE_INPUT;
-  children: [EmptyText];
-  tableData: TableData;
-}
-export interface FetchElement extends BaseElement {
-  type: typeof ELEMENT_FETCH;
-  children: [EmptyText];
-  'data-auth-url': string;
-  'data-contenttype': string;
-  'data-error': string;
-  'data-external-data-source-id': string;
-  'data-external-id': string;
-  'data-href': string;
-  'data-provider': string;
-  'data-varname': string;
-}
-export interface PlotElement extends BaseElement {
-  type: typeof ELEMENT_PLOT;
-  sourceVarName: string;
-  markType:
-    | 'bar'
-    | 'circle'
-    | 'square'
-    | 'tick'
-    | 'line'
-    | 'area'
-    | 'point'
-    | 'arc';
-  xColumnName: string;
-  yColumnName: string;
-  sizeColumnName: string;
-  colorColumnName: string;
-  thetaColumnName: string;
-  children: [EmptyText];
-}
-
-export interface InputElement extends BaseElement {
-  type: typeof ELEMENT_INPUT;
-  children: [EmptyText];
-  value: string;
-  variableName: string;
-}
-
 // Overall node types
 
-type EmptyText = {
+export type EmptyText = {
   text: '';
 };
 export type PlainText = EmptyText | { text: string };
 export type RichText = PlainText & Partial<Record<MarkKind, true>>;
-type Text = PlainText | RichText;
+export type Text = PlainText | RichText;
 
 export type BlockElement =
   // Headings
@@ -167,10 +118,7 @@ export type BlockElement =
   | ListItemElement
   | ListItemContentElement
   // Special elements
-  | FetchElement
-  | TableElement
-  | PlotElement
-  | InputElement;
+  | InteractiveElement;
 type InlineElement = LinkElement;
 export type Element = BlockElement | InlineElement;
 
@@ -181,16 +129,12 @@ export type Editor = Omit<SlateEditor & SPEditor & ReactEditor, 'children'> & {
       | H1Element
       | H2Element
       | H3Element
-      | TableElement
-      | PlotElement
       | ParagraphElement
       | BlockquoteElement
       | CodeBlockElement
       | UnorderedListElement
       | OrderedListElement
-      | FetchElement
-      | TableElement
-      | InputElement
+      | InteractiveElement
     >
   ];
 };

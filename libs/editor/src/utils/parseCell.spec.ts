@@ -1,6 +1,6 @@
+import { TableCellType } from '@decipad/editor-types';
 import { prettyPrintAST } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
-import { TableCellType } from '../types';
 import { parseCell, parseDate } from './parseCell';
 
 type ValidateTest = [string, TableCellType, string];

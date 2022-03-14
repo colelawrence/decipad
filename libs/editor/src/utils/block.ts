@@ -1,10 +1,10 @@
-import { getNode, insertNodes, TEditor, TElement } from '@udecode/plate';
-import { Editor, Path } from 'slate';
 import {
   ElementKind,
-  ELEMENT_PARAGRAPH,
   ELEMENT_LIC,
+  ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
+import { getNode, insertNodes, TEditor, TElement } from '@udecode/plate';
+import { Editor, Path } from 'slate';
 import { getBlockParentPath, requirePathBelowBlock } from './path';
 
 export const closestBlockAncestorHasType = (

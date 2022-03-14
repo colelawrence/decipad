@@ -1,3 +1,4 @@
+import { types } from '@decipad/editor-config';
 import {
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
@@ -5,12 +6,11 @@ import {
   ELEMENT_INPUT,
   ELEMENT_PARAGRAPH,
   ELEMENT_TABLE_INPUT,
-  TableData,
 } from '@decipad/editor-types';
 import { ParsedBlock, prettyPrintAST } from '@decipad/language';
 import { slateDocumentToComputeRequest } from './slateDocumentToComputeRequest';
 
-const testTableData: TableData = {
+const testTableData: types.TableData = {
   variableName: 'TheTitle',
   columns: [
     {
@@ -61,7 +61,7 @@ it('can find tables in the document', () => {
 it('can find inputs in the document', () => {
   const { program } = slateDocumentToComputeRequest([
     {
-      id: 'line-id1',
+      id: 'id1',
       type: ELEMENT_H1,
       children: [{ text: '' }],
     },

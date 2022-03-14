@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react';
 import { findParentWithStyle } from '@decipad/dom-test-utils';
-import { TElement, createCodeBlockPlugin, Plate } from '@udecode/plate';
 import { ELEMENT_CODE_BLOCK, ELEMENT_CODE_LINE } from '@decipad/editor-types';
+import { render } from '@testing-library/react';
+import { createCodeBlockPlugin, Plate, TElement } from '@udecode/plate';
 import { createCodeVariableHighlightingPlugin } from './createCodeVariableHighlightingPlugin';
 
 it('highlights identifiers specially', () => {

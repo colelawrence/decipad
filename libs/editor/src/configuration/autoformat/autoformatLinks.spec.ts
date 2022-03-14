@@ -1,3 +1,9 @@
+import { plugins } from '@decipad/editor-config';
+import {
+  ELEMENT_H1,
+  ELEMENT_LINK,
+  ELEMENT_PARAGRAPH,
+} from '@decipad/editor-types';
 import {
   createAutoformatPlugin,
   createEditorPlugins,
@@ -5,13 +11,6 @@ import {
   TDescendant,
 } from '@udecode/plate';
 import { Transforms } from 'slate';
-import {
-  ELEMENT_PARAGRAPH,
-  ELEMENT_H1,
-  ELEMENT_LINK,
-} from '@decipad/editor-types';
-import { createLinkPlugin } from '../../plugins/Link/createLinkPlugin';
-
 import { autoformatLinks } from './autoformatLinks';
 
 let editor: SPEditor;
@@ -19,7 +18,7 @@ beforeEach(() => {
   editor = createEditorPlugins({
     plugins: [
       createAutoformatPlugin({ rules: autoformatLinks }),
-      createLinkPlugin(),
+      plugins.createLinkPlugin(),
     ],
   });
   editor.children = [{ type: ELEMENT_PARAGRAPH, children: [{ text: '' }] }];

@@ -12,7 +12,7 @@ import {
 import { createCodeBlockPlugin, createEditorPlugins } from '@udecode/plate';
 import { execute, SlashCommand } from './slashCommands';
 
-const expectedTypes: Record<SlashCommand, ElementKind> = {
+const expectedTypes = {
   table: ELEMENT_TABLE_INPUT,
   heading1: ELEMENT_H2,
   heading2: ELEMENT_H3,

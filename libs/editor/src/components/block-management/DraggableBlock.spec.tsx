@@ -1,27 +1,27 @@
-import { noop } from '@decipad/utils';
-import { fireEvent, render } from '@testing-library/react';
+import { types } from '@decipad/editor-config';
 import {
-  SPEditor,
-  PlateProps,
-  createEditorPlugins,
-  createParagraphPlugin,
-  PlatePluginComponent,
-  Plate,
-  createListPlugin,
-} from '@udecode/plate';
-import userEvent from '@testing-library/user-event';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import {
-  ELEMENT_PARAGRAPH,
-  ELEMENT_UL,
   ELEMENT_LI,
   ELEMENT_LIC,
+  ELEMENT_PARAGRAPH,
+  ELEMENT_UL,
 } from '@decipad/editor-types';
+import { noop } from '@decipad/utils';
+import { fireEvent, render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import {
+  createEditorPlugins,
+  createListPlugin,
+  createParagraphPlugin,
+  Plate,
+  PlatePluginComponent,
+  PlateProps,
+  SPEditor,
+} from '@udecode/plate';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DraggableBlock } from './DraggableBlock';
-import { PlateComponent } from '../../types';
 
-const DraggableParagraph: PlateComponent = ({ element, children }) => (
+const DraggableParagraph: types.PlateComponent = ({ element, children }) => (
   <DraggableBlock blockKind="paragraph" element={element!}>
     <p>{children}</p>
   </DraggableBlock>
@@ -140,7 +140,10 @@ it('can move the block', () => {
 
 it('does not render a drag handle when nested in another DraggableBlock', async () => {
   plateProps.plugins = [createListPlugin()];
-  const DraggableUnorderedList: PlateComponent = ({ element, children }) => (
+  const DraggableUnorderedList: types.PlateComponent = ({
+    element,
+    children,
+  }) => (
     <DraggableBlock blockKind="list" element={element!}>
       {children}
     </DraggableBlock>

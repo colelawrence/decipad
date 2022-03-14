@@ -8,15 +8,11 @@
   "include": ["src", "storybook"],
   "references": [
     { "path": "../ui" },
-    { "path": "../docsync" },
-    { "path": "../queries" },
     { "path": "../utils" },
     { "path": "../react-contexts" },
-    { "path": "../react-utils" },
-    { "path": "../fraction" },
-    { "path": "../routing" },
     { "path": "../utils" },
-    { "path": "../client-events" },
-    { "path": "../editor-types" }
+    { "path": "../editor-types" },
+    { "path": "../editor-config" },
+    { "path": "../client-events" }
   ]
 }

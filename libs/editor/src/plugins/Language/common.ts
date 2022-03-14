@@ -2,7 +2,7 @@ import { isText, Node } from '@decipad/editor-types';
 import { AST } from '@decipad/language';
 import { TText } from '@udecode/plate';
 import { ComponentProps } from 'react';
-import { CodeErrorHighlight } from '../../components';
+import { CodeErrorHighlight } from '../../plate-components';
 import { astNode } from '../../utils/astNode';
 
 export interface SyntaxErrorAnnotation {

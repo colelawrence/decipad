@@ -1,17 +1,17 @@
 import {
-  createAutoformatPlugin,
-  createEditorPlugins,
-  createListPlugin,
-  SPEditor,
-} from '@udecode/plate';
-import { Transforms } from 'slate';
-import {
   ELEMENT_H2,
   ELEMENT_LI,
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
   ELEMENT_UL,
 } from '@decipad/editor-types';
+import {
+  createAutoformatPlugin,
+  createEditorPlugins,
+  createListPlugin,
+  SPEditor,
+} from '@udecode/plate';
+import { Transforms } from 'slate';
 import { autoformatLists } from './autoformatLists';
 
 let editor: SPEditor;

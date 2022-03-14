@@ -1,7 +1,7 @@
+import { ELEMENT_CODE_LINE } from '@decipad/editor-types';
 import { Decorate, getText, PlatePlugin, TDescendant } from '@udecode/plate';
 import { NodeEntry } from 'slate';
-import { ELEMENT_CODE_LINE } from '@decipad/editor-types';
-import { CodeVariable } from '../../components';
+import { CodeVariable } from '../../plate-components';
 import { getVariableRanges } from './getVariableRanges';
 
 const IS_CODE_VARIABLE = 'IS_CODE_VARIABLE';

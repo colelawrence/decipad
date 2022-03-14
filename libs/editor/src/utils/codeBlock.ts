@@ -1,6 +1,6 @@
+import { ELEMENT_CODE_BLOCK, ELEMENT_CODE_LINE } from '@decipad/editor-types';
 import { insertNodes, TDescendant, TEditor } from '@udecode/plate';
 import { Editor, Path, Transforms } from 'slate';
-import { ELEMENT_CODE_BLOCK, ELEMENT_CODE_LINE } from '@decipad/editor-types';
 import { requireBlockParentPath, requirePathBelowBlock } from './path';
 
 const codeBlockElement = {

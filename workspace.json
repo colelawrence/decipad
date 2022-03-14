@@ -1031,6 +1031,33 @@
         }
       }
     },
+    "editor-config": {
+      "root": "libs/editor-config",
+      "sourceRoot": "libs/editor-config/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/editor-config/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/editor-config"
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/editor-config"],
+          "options": {
+            "jestConfig": "libs/editor-config/jest.config.js"
+          }
+        }
+      }
+    },
     "editor-types": {
       "root": "libs/editor-types",
       "sourceRoot": "libs/editor-types/src",

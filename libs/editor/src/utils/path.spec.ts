@@ -1,5 +1,5 @@
-import { createEditorPlugins, SPEditor } from '@udecode/plate';
 import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
+import { createEditorPlugins, SPEditor } from '@udecode/plate';
 import {
   getBlockParentPath,
   requireBlockParentPath,

@@ -1,3 +1,4 @@
+import { plugins } from '@decipad/editor-config';
 import { ResultsContext } from '@decipad/react-contexts';
 import {
   ExternalAuthenticationContextProvider,
@@ -8,19 +9,11 @@ import { captureException } from '@sentry/react';
 import { Plate, PlatePluginComponent } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { FC, useEffect, useMemo, useState } from 'react';
-import { DropFile, Tooltip } from './components';
-import { components, options, plugins } from './configuration';
+import * as components from './components';
+import * as configuration from './configuration';
 import { ComputerContextProvider } from './contexts/Computer';
-import { useDocSync } from './plugins/DocSync/useDocSync';
-import { useExternalDataPlugin } from './plugins/ExternalData/useExternalDataPlugin';
-import { useFetchDataPlugin } from './plugins/FetchData/useFetchDataPlugin';
-import {
-  editorProgramBlocks,
-  useLanguagePlugin,
-} from './plugins/Language/useLanguagePlugin';
-import { useNotebookTitlePlugin } from './plugins/NotebookTitle/useNotebookTitlePlugin';
-import { UploadDialogue } from './plugins/UploadData/components/UploadDialogue';
-import { useUploadDataPlugin } from './plugins/UploadData/useUploadDataPlugin';
+import { Tooltip, UploadDialogue } from './plate-components';
+import { editorProgramBlocks, useLanguagePlugin } from './plugins';
 import { useStoreEditorRef } from './utils/useStoreEditorRef';
 
 export interface EditorProps {
@@ -40,7 +33,7 @@ const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
   const { results, languagePlugin } = useLanguagePlugin();
 
   // DocSync
-  const docsyncEditor = useDocSync({
+  const docsyncEditor = plugins.useDocSync({
     notebookId,
     editor,
     authSecret,
@@ -63,22 +56,24 @@ const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
   // Cursor remote presence
   // useCursors(editor);
 
-  const notebookTitlePlugin = useNotebookTitlePlugin({ notebookId, readOnly });
+  const notebookTitlePlugin = plugins.useNotebookTitlePlugin({
+    notebookId,
+    readOnly,
+  });
 
   // upload / fetchdata
   const {
     startUpload,
     uploadState,
     clearAll: clearAllUploads,
-  } = useUploadDataPlugin({ editor });
-  const fetchDataPlugin = useFetchDataPlugin();
-  const { createOrUpdateExternalData } = useExternalDataPlugin({
+  } = plugins.useUploadDataPlugin({ editor });
+  const { createOrUpdateExternalData } = plugins.useExternalDataPlugin({
     editor: docsyncEditor,
   });
 
   const editorPlugins = useMemo(
-    () => [...plugins, languagePlugin, notebookTitlePlugin, fetchDataPlugin],
-    [languagePlugin, notebookTitlePlugin, fetchDataPlugin]
+    () => [...configuration.plugins, languagePlugin, notebookTitlePlugin],
+    [languagePlugin, notebookTitlePlugin]
   );
 
   const programBlocks = docsyncEditor ? editorProgramBlocks(docsyncEditor) : {};
@@ -89,7 +84,7 @@ const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
         <ExternalAuthenticationContextProvider
           value={{ createOrUpdateExternalData }}
         >
-          <DropFile
+          <components.DropFile
             editor={docsyncEditor}
             startUpload={startUpload}
             notebookId={notebookId}
@@ -98,8 +93,10 @@ const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
               id={editorId}
               renderEditable={editorLoaded ? identity : renderLoadingEditable}
               plugins={editorPlugins}
-              options={options}
-              components={components as Record<string, PlatePluginComponent>}
+              options={configuration.options}
+              components={
+                configuration.components as Record<string, PlatePluginComponent>
+              }
               editableProps={{ readOnly }}
             >
               <Tooltip />
@@ -108,7 +105,7 @@ const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
                 clearAll={clearAllUploads}
               />
             </Plate>
-          </DropFile>
+          </components.DropFile>
         </ExternalAuthenticationContextProvider>
       </ProgramBlocksContextProvider>
     </ResultsContext.Provider>

@@ -1,3 +1,5 @@
+import { plugins as deciPlatePlugins } from '@decipad/editor-config';
+import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import {
   createAutoformatPlugin,
   createBlockquotePlugin,
@@ -14,27 +16,11 @@ import {
   createTrailingBlockPlugin,
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
-import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
+import { createCodeVariableHighlightingPlugin } from '../plugins/CodeVariableHighlighting/createCodeVariableHighlightingPlugin';
+import { createMarksPlugins } from '../plugins/Marks/createMarksPlugins';
 import { autoformatRules } from './autoformat';
 import { exitBreakOptions } from './exitBreakOptions';
 import { resetBlockTypeOptions } from './resetBlockTypeOptions';
-import { createAutoPairsPlugin } from '../plugins/AutoPairs/createAutoPairsPlugin';
-import { createCodeVariableHighlightingPlugin } from '../plugins/CodeVariableHighlighting/createCodeVariableHighlightingPlugin';
-import { createSentryBreadcrumbsPlugin } from '../plugins/SentryBreadcrumbsPlugin/createSentryBreadcrumbsPlugin';
-import { createMarksPlugins } from '../plugins/Marks/createMarksPlugins';
-import { createLinkPlugin } from '../plugins/Link/createLinkPlugin';
-import { createNormalizeCodeBlockPlugin } from '../plugins/NormalizeCodeBlock/createNormalizeCodeBlockPlugin';
-import { createSoftBreakPlugin } from '../plugins/SoftBreakPlugin/createSoftBreakPlugin';
-import { createNormalizeEditorPlugin } from '../plugins/NormalizeEditor/createNormalizeEditorPlugin';
-import { createNormalizeRichTextBlockPlugin } from '../plugins/NormalizeRichTextBlock/createNormalizeRichTextBlockPlugin';
-import { createNormalizePlainTextBlockPlugin } from '../plugins/NormalizePlainTextBlock/createNormalizePlainTextBlockPlugin';
-import { createNormalizeTextPlugin } from '../plugins/NormalizeText/createNormalizeTextPlugin';
-import { createNormalizeListPlugin } from '../plugins/NormalizeListPlugin/createNormalizeListPlugin';
-import { createNormalizeVoidPlugin } from '../plugins/NormalizeVoidPlugin/createNormalizeVoidPlugin';
-import { createNormalizeLinkPlugin } from '../plugins/NormalizeLinkPlugin/createNormalizeLinkPlugin';
-import { createNormalizeElementIdPlugin } from '../plugins/NormalizeElementId/createNormalizeElementIdPlugin';
-import { createAutoFormatCodeBlockPlugin } from '../plugins/AutoFormatCodeBlock/createAutoFormatCodeBlockPlugin';
-import { createPlotPlugin } from '../plugins/Plot/createPlotPlugin';
 
 export const plugins = [
   // fundamentals
@@ -42,49 +28,46 @@ export const plugins = [
   createHistoryPlugin(),
 
   // Sentry plugin
-  createSentryBreadcrumbsPlugin(),
+  deciPlatePlugins.createSentryBreadcrumbsPlugin(),
 
   // basic blocks
   createParagraphPlugin(),
   createBlockquotePlugin(),
   createHeadingPlugin({ levels: 3 }),
   createListPlugin(),
-
-  // custom blocks
   createCodeBlockPlugin(),
-  createPlotPlugin(),
 
   // structure enforcement
-  createNormalizeEditorPlugin(),
+  deciPlatePlugins.createNormalizeEditorPlugin(),
 
-  createNormalizeVoidPlugin(),
+  deciPlatePlugins.createNormalizeVoidPlugin(),
 
-  createNormalizeRichTextBlockPlugin(),
-  createNormalizePlainTextBlockPlugin(),
-  createNormalizeCodeBlockPlugin(),
-  createNormalizeListPlugin(),
+  deciPlatePlugins.createNormalizeRichTextBlockPlugin(),
+  deciPlatePlugins.createNormalizePlainTextBlockPlugin(),
+  deciPlatePlugins.createNormalizeCodeBlockPlugin(),
+  deciPlatePlugins.createNormalizeListPlugin(),
 
-  createNormalizeLinkPlugin(),
+  deciPlatePlugins.createNormalizeLinkPlugin(),
 
   createNodeIdPlugin({ idCreator: nanoid }),
-  createNormalizeElementIdPlugin(),
-  createNormalizeTextPlugin(),
+  deciPlatePlugins.createNormalizeElementIdPlugin(),
+  deciPlatePlugins.createNormalizeTextPlugin(),
 
   createTrailingBlockPlugin({ type: ELEMENT_PARAGRAPH }),
 
   // block manipulation
   createExitBreakPlugin(exitBreakOptions),
-  createSoftBreakPlugin(),
+  deciPlatePlugins.createSoftBreakPlugin(),
   createResetNodePlugin(resetBlockTypeOptions),
   createDndPlugin(),
 
   // creating elements
   ...createMarksPlugins(),
   createAutoformatPlugin(autoformatRules),
-  createLinkPlugin(),
-  createAutoFormatCodeBlockPlugin(),
+  deciPlatePlugins.createLinkPlugin(),
+  deciPlatePlugins.createAutoFormatCodeBlockPlugin(),
 
   // code editing
   createCodeVariableHighlightingPlugin(),
-  createAutoPairsPlugin(),
+  deciPlatePlugins.createAutoPairsPlugin(),
 ];

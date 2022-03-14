@@ -1,5 +1,5 @@
-import { SPEditor, createEditorPlugins, TElement } from '@udecode/plate';
 import { ELEMENT_CODE_BLOCK, ELEMENT_PARAGRAPH } from '@decipad/editor-types';
+import { createEditorPlugins, SPEditor, TElement } from '@udecode/plate';
 import {
   allowsTextStyling,
   closestBlockAncestorHasType,

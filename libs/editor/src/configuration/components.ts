@@ -1,3 +1,4 @@
+import { types } from '@decipad/editor-config';
 import {
   ElementKind,
   ELEMENT_BLOCKQUOTE,
@@ -43,11 +44,10 @@ import {
   Title,
   Underline,
   UnorderedList,
-} from '../components';
-import { PlateComponent } from '../types';
+} from '../plate-components';
 
 export type PlateComponents = Partial<
-  Record<ElementKind | MarkKind, PlateComponent>
+  Record<ElementKind | MarkKind, types.PlateComponent>
 >;
 
 export const components: PlateComponents = {
@@ -72,8 +72,9 @@ export const components: PlateComponents = {
   [ELEMENT_LINK]: Link,
 
   // Special elements
-  [ELEMENT_FETCH]: ImportDataElement as PlateComponent, // TODO kill/rewrite with editor/UI separation
+  [ELEMENT_FETCH]: ImportDataElement as types.PlateComponent, // TODO kill/rewrite with editor/UI separation
   [ELEMENT_TABLE_INPUT]: Table,
+  [ELEMENT_INPUT]: Input,
   [ELEMENT_PLOT]: Plot,
   [ELEMENT_INPUT]: Input,
 

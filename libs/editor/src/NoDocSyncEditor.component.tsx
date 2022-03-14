@@ -1,18 +1,15 @@
-import { nanoid } from 'nanoid';
-import { Plate, PlatePluginComponent, PlateProps } from '@udecode/plate';
-import { FC, useMemo, useState } from 'react';
-import { ProgramBlocksContextProvider } from '@decipad/ui';
 import { ResultsContext } from '@decipad/react-contexts';
-import {
-  editorProgramBlocks,
-  useLanguagePlugin,
-} from './plugins/Language/useLanguagePlugin';
-import { Tooltip } from './components';
-import { components, options, plugins } from './configuration';
-import { ComputerContextProvider } from './contexts/Computer';
-import { POPULATE_PLAYGROUND } from './utils/storage';
-import { emptyNotebook, introNotebook } from './exampleNotebooks';
+import { ProgramBlocksContextProvider } from '@decipad/ui';
+import { Plate, PlatePluginComponent, PlateProps } from '@udecode/plate';
+import { nanoid } from 'nanoid';
+import { FC, useMemo, useState } from 'react';
+import * as configuration from './configuration';
+import * as contexts from './contexts';
 import { useStoreEditorRef } from './contexts/useStoreEditorRef';
+import { emptyNotebook, introNotebook } from './exampleNotebooks';
+import { Tooltip } from './plate-components';
+import { editorProgramBlocks, useLanguagePlugin } from './plugins';
+import { POPULATE_PLAYGROUND } from './utils/storage';
 
 export const NoDocSyncEditorBase = (props: PlateProps): ReturnType<FC> => {
   const [editorId] = useState(nanoid);
@@ -23,7 +20,7 @@ export const NoDocSyncEditorBase = (props: PlateProps): ReturnType<FC> => {
   const programBlocks = editor ? editorProgramBlocks(editor) : {};
 
   const editorPlugins = useMemo(
-    () => [...plugins, languagePlugin],
+    () => [...configuration.plugins, languagePlugin],
     [languagePlugin]
   );
 
@@ -33,8 +30,10 @@ export const NoDocSyncEditorBase = (props: PlateProps): ReturnType<FC> => {
         <Plate
           id={editorId}
           plugins={editorPlugins}
-          options={options}
-          components={components as Record<string, PlatePluginComponent>}
+          options={configuration.options}
+          components={
+            configuration.components as Record<string, PlatePluginComponent>
+          }
           initialValue={
             window.localStorage.getItem(POPULATE_PLAYGROUND) === 'true'
               ? introNotebook()
@@ -51,8 +50,8 @@ export const NoDocSyncEditorBase = (props: PlateProps): ReturnType<FC> => {
 
 export const NoDocSyncEditor = (props: PlateProps): ReturnType<FC> => {
   return (
-    <ComputerContextProvider>
+    <contexts.ComputerContextProvider>
       <NoDocSyncEditorBase {...props} />
-    </ComputerContextProvider>
+    </contexts.ComputerContextProvider>
   );
 };

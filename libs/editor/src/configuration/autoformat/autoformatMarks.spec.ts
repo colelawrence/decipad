@@ -1,11 +1,10 @@
+import { ELEMENT_H2, ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import {
   createAutoformatPlugin,
   createEditorPlugins,
   SPEditor,
 } from '@udecode/plate';
 import { Transforms } from 'slate';
-
-import { ELEMENT_H2, ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import { autoformatMarks } from './autoformatMarks';
 
 const initialText = '__*t';

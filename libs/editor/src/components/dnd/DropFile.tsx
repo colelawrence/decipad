@@ -1,14 +1,14 @@
+import { plugins } from '@decipad/editor-config';
 import { Editor } from '@decipad/editor-types';
 import { FC, ReactNode } from 'react';
 import { DropTargetMonitor, useDrop } from 'react-dnd';
 import { NativeTypes } from 'react-dnd-html5-backend';
-import { UploadDataOptions } from '../../plugins/UploadData/useUploadDataPlugin';
 import { DropHint } from './DropHint';
 
 interface DropFileProps {
   editor?: Editor;
   notebookId: string;
-  startUpload: (options: UploadDataOptions) => void;
+  startUpload: (options: plugins.UploadDataOptions) => void;
   children: ReactNode;
 }
 

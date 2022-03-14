@@ -1,8 +1,8 @@
-import assert from 'assert';
-import { nanoid } from 'nanoid';
 import arc from '@architect/functions';
 import { TableRecordChanges, UserKeyRecord } from '@decipad/backendtypes';
-import { auth as authConfig, app as appConfig } from '@decipad/config';
+import { app as appConfig, auth as authConfig } from '@decipad/config';
+import assert from 'assert';
+import { nanoid } from 'nanoid';
 import timestamp from '../../common/timestamp';
 import handle from '../handle';
 

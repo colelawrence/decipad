@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["esnext", "dom", "dom.iterable"],
+    "jsx": "react-jsx"
+  },
+  "include": ["src"],
+  "references": [
+    { "path": "../dom-test-utils" },
+    { "path": "../language" },
+    { "path": "../docsync" },
+    { "path": "../queries" },
+    { "path": "../utils" },
+    { "path": "../client-events" },
+    { "path": "../editor-types" }
+  ]
+}

@@ -6,22 +6,29 @@
   "explorer.compactFolders": false,
   "[typescript]": {
     "editor.codeActionsOnSave": {
-      "source.organizeImports": true
+      "source.organizeImports": false
     }
   },
   "[typescriptreact]": {
     "editor.codeActionsOnSave": {
-      "source.organizeImports": true
+      "source.organizeImports": false
     }
   },
   "cSpell.words": [
+    "boomify",
     "Buildable",
     "cacheable",
+    "camelcase",
     "DECI",
+    "docsync",
     "frontends",
+    "functionness",
     "GOOGLESHEETS",
+    "graphqlserver",
     "NEXTAUTH",
     "nrwl",
-    "Topbar"
+    "Topbar",
+    "typedefs",
+    "udecode"
   ]
 }

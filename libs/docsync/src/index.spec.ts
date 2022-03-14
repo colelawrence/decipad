@@ -1,15 +1,15 @@
 /* eslint-disable no-console */
 /* eslint-disable jest/no-done-callback */
 /* eslint-disable jest/expect-expect */
-import waitForExpect from 'wait-for-expect';
-import { createEditor } from 'slate';
-import fetch from 'jest-fetch-mock';
 import { Pad } from '@decipad/backendtypes';
 import { Editor } from '@decipad/editor-types';
+import fetch from 'jest-fetch-mock';
+import { createEditor } from 'slate';
+import waitForExpect from 'wait-for-expect';
+import { DocSyncEditor, withDocSync } from '.';
 import { testWithSandbox as test } from '../../backend-test-sandbox/src';
-import { randomChangesToEditors } from './utils/random-changes';
 import { clone } from './utils/clone';
-import { withDocSync, DocSyncEditor } from '.';
+import { randomChangesToEditors } from './utils/random-changes';
 
 waitForExpect.defaults.interval = 500;
 const replicaCount = 3;

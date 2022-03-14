@@ -1,11 +1,11 @@
-import {
-  APIGatewayProxyEvent,
-  APIGatewayProxyResult,
-  APIGatewayProxyCallback,
-  Context as LambdaContext,
-} from 'aws-lambda';
 import { HttpHandler } from '@architect/functions';
 import { wrapHandler } from '@decipad/services/monitor';
+import {
+  APIGatewayProxyCallback,
+  APIGatewayProxyEvent,
+  APIGatewayProxyResult,
+  Context as LambdaContext,
+} from 'aws-lambda';
 import createServer from './server';
 
 type AdditionalContext = {

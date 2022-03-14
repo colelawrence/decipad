@@ -99,6 +99,7 @@
       "@decipad/initial-workspace": ["libs/initial-workspace/src/index.ts"],
       "@decipad/tables": ["libs/tables/src"],
       "@decipad/client-events": ["libs/client-events/src/index.ts"],
+      "@decipad/editor-config": ["libs/editor-config/src/index.ts"],
       "@decipad/editor-types": ["libs/editor-types/src/index.ts"],
       "@decipad/feature-flags": ["libs/feature-flags/src/index.ts"]
     }

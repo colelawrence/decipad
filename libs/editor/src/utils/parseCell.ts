@@ -1,3 +1,4 @@
+import { TableCellType } from '@decipad/editor-types';
 import Fraction from '@decipad/fraction';
 import {
   AST,
@@ -7,7 +8,6 @@ import {
 } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
 import { parse } from 'date-fns';
-import { TableCellType } from '../types';
 import { astNode } from './astNode';
 
 export function parseCell(

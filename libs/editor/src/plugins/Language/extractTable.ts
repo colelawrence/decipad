@@ -1,7 +1,6 @@
+import { ELEMENT_TABLE_INPUT, TableData } from '@decipad/editor-types';
 import { AST } from '@decipad/language';
-import { ELEMENT_TABLE_INPUT } from '@decipad/editor-types';
 import { astNode } from '../../utils/astNode';
-import { TableData } from '../../types';
 import { getNullReplacementValue, parseCell } from '../../utils/parseCell';
 
 interface InteractiveTableNode {

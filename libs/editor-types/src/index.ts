@@ -10,5 +10,7 @@ export * from './element-kinds';
 import * as elementKinds from './element-kinds';
 export type ElementKind = typeof elementKinds[keyof typeof elementKinds];
 
+export * from './interactive-elements';
 export * from './elements';
+
 export * from './tables';

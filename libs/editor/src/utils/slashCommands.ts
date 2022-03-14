@@ -1,15 +1,14 @@
-import { ComponentProps } from 'react';
-import { Path, Transforms } from 'slate';
+import { ELEMENT_FETCH, ELEMENT_H2, ELEMENT_H3 } from '@decipad/editor-types';
 import { organisms } from '@decipad/ui';
 import { SPEditor } from '@udecode/plate';
-
-import { ELEMENT_H2, ELEMENT_H3, ELEMENT_FETCH } from '@decipad/editor-types';
+import { ComponentProps } from 'react';
+import { Path, Transforms } from 'slate';
 import { insertBlockOfTypeBelow } from './block';
 import { insertCodeBlockBelow } from './codeBlock';
-import { insertTableBelow } from './table';
-import { insertPlotBelow } from './plot';
-import { requireBlockParentPath } from './path';
 import { insertInputBelow } from './input';
+import { requireBlockParentPath } from './path';
+import { insertPlotBelow } from './plot';
+import { insertTableBelow } from './table';
 
 type SlashCommandHandler = Exclude<
   ComponentProps<typeof organisms.SlashCommandsMenu>['onExecute'],

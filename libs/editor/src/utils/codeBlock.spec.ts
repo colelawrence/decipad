@@ -1,9 +1,9 @@
-import { createEditorPlugins, SPEditor } from '@udecode/plate';
 import {
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
+import { createEditorPlugins, SPEditor } from '@udecode/plate';
 import {
   insertCodeBlockBelow,
   insertCodeBlockBelowOrReplace,

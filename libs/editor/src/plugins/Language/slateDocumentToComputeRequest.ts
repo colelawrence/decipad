@@ -3,14 +3,14 @@ import {
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
   ELEMENT_PLOT,
+  isInteractiveElement,
 } from '@decipad/editor-types';
 import { ComputeRequest, Program } from '@decipad/language';
 import { getCodeFromBlock } from './common';
 import {
-  getAstBlockFromLanguageElement,
+  getAstBlockFromInteractiveElement,
   getAstFromVarName,
-  isLanguageElement,
-} from './languageElements';
+} from './interactiveElements';
 
 export function slateDocumentToComputeRequest(
   slateDoc: Editor['children']
@@ -35,13 +35,13 @@ export function slateDocumentToComputeRequest(
       }
     }
 
-    if (isLanguageElement(block)) {
-      const parsedBlobk = getAstBlockFromLanguageElement(block);
-      if (parsedBlobk != null) {
+    if (isInteractiveElement(block)) {
+      const parsedBlock = getAstBlockFromInteractiveElement(block);
+      if (parsedBlock != null) {
         program.push({
           id: block.id,
           type: 'parsed-block',
-          block: parsedBlobk,
+          block: parsedBlock,
         });
       }
     }
