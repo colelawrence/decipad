@@ -23,11 +23,11 @@ import {
   RemovePadVariables,
   REMOVE_PAD,
 } from '@decipad/queries';
+import { useToast } from '@decipad/react-contexts';
 import { Dashboard, NotebookList, NotebookListPlaceholder } from '@decipad/ui';
 import { sortBy } from 'ramda';
 import { FC, useCallback, useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useToasts } from 'react-toast-notifications';
 import { SideMenu } from '../components/SideMenu';
 import { Topbar } from '../components/Topbar';
 import { encode as encodeVanityUrlComponent } from '../lib/vanityUrlComponent';
@@ -38,7 +38,7 @@ export function Workspace({
   workspaceId: string;
 }): ReturnType<FC> {
   const history = useHistory();
-  const { addToast } = useToasts();
+  const toast = useToast();
   const clientEvent = useContext(ClientEventsContext);
 
   const { data } = useQuery<GetWorkspaceById, GetWorkspaceByIdVariables>(
@@ -82,18 +82,16 @@ export function Workspace({
           throw new Error('No notebook creation result');
         }
         const newPad = creation.createPad;
-        addToast('Notebook created successfully', { appearance: 'success' });
+        toast('Notebook created successfully', 'success');
         history.push(`/n/${encodeVanityUrlComponent('', newPad.id)}`);
         clientEvent({ type: 'action', action: 'notebook created' });
       } catch (err) {
-        addToast(`Error creating notebook: ${(err as Error).message}`, {
-          appearance: 'error',
-        });
+        toast(`Error creating notebook: ${(err as Error).message}`, 'error');
       } finally {
         setCreatingPad(false);
       }
     }
-  }, [creatingPad, createPad, workspaceId, addToast, history, clientEvent]);
+  }, [creatingPad, createPad, workspaceId, toast, history, clientEvent]);
 
   const handleDuplicateNotebook = (id: string) =>
     duplicatePad({
@@ -102,13 +100,11 @@ export function Workspace({
       awaitRefetchQueries: true,
     })
       .then(() => {
-        addToast('Notebook duplicated', { appearance: 'info' });
+        toast('Notebook duplicated', 'info');
         clientEvent({ type: 'action', action: 'notebook duplicated' });
       })
       .catch((err) =>
-        addToast(`Error duplicating notebook: ${err.message}`, {
-          appearance: 'error',
-        })
+        toast(`Error duplicating notebook: ${err.message}`, 'error')
       );
 
   const handleDeleteNotebook = (id: string) =>
@@ -118,13 +114,11 @@ export function Workspace({
       awaitRefetchQueries: true,
     })
       .then(() => {
-        addToast('Notebook removed', { appearance: 'info' });
+        toast('Notebook removed', 'info');
         clientEvent({ type: 'action', action: 'notebook deleted' });
       })
       .catch((err) =>
-        addToast(`Error removing notebook: ${err.message}`, {
-          appearance: 'error',
-        })
+        toast(`Error removing notebook: ${err.message}`, 'error')
       );
 
   const handleImportNotebook = (source: string) => {
@@ -134,13 +128,11 @@ export function Workspace({
       awaitRefetchQueries: true,
     })
       .then(() => {
-        addToast('Notebook imported', { appearance: 'info' });
+        toast('Notebook imported', 'info');
         clientEvent({ type: 'action', action: 'notebook deleted' });
       })
       .catch((err) => {
-        addToast(`Error importing notebook: ${err.message}`, {
-          appearance: 'error',
-        });
+        toast(`Error importing notebook: ${err.message}`, 'error');
       });
   };
 

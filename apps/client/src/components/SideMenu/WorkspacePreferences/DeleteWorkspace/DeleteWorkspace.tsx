@@ -1,4 +1,5 @@
 import { FC, useMemo, useState } from 'react';
+import { useToast } from '@decipad/react-contexts';
 import { useQuery } from '@apollo/client';
 import { Button, Collapse, Heading, Input, Text } from '@chakra-ui/react';
 import {
@@ -7,7 +8,6 @@ import {
   GetWorkspaces,
 } from '@decipad/queries';
 import { useHistory } from 'react-router-dom';
-import { useToasts } from 'react-toast-notifications';
 import { WorkspacePreferencesProps } from '..';
 
 interface DeleteWorkspaceProps extends WorkspacePreferencesProps {
@@ -28,7 +28,7 @@ export const DeleteWorkspace = ({
     [deleteValue, currentWorkspace?.name]
   );
   const history = useHistory();
-  const { addToast } = useToasts();
+  const toast = useToast();
 
   if (data?.workspaces.length === 1) return null;
 
@@ -57,17 +57,13 @@ export const DeleteWorkspace = ({
           onClick={() => {
             deleteMutation()
               .then(() => {
-                addToast('Workspace successfully deleted', {
-                  appearance: 'success',
-                });
+                toast('Workspace successfully deleted', 'success');
                 onClose();
 
                 history.push(`/`);
               })
               .catch((err) => {
-                addToast(`Error deleting workspace: ${err.message}`, {
-                  appearance: 'error',
-                });
+                toast(`Error deleting workspace: ${err.message}`, 'error');
               });
           }}
         >

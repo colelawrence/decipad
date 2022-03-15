@@ -1,6 +1,6 @@
+import { ToastType, useToast } from '@decipad/react-contexts';
 import { Meta, Story } from '@storybook/react';
 import { ComponentProps } from 'react';
-import { AppearanceTypes, useToasts } from 'react-toast-notifications';
 import { ToastDisplay } from './ToastDisplay';
 
 const args = {
@@ -14,21 +14,19 @@ export default {
 } as Meta<ComponentProps<typeof ToastDisplay>>;
 
 interface ToastButtonProps {
-  readonly appearance: AppearanceTypes;
+  readonly type: ToastType;
   readonly text: string;
 }
 
-const ToastButton = ({ appearance, text }: ToastButtonProps) => {
-  const { addToast } = useToasts();
-  return (
-    <button onClick={() => addToast(text, { appearance })}>Click me</button>
-  );
+const ToastButton = ({ type, text }: ToastButtonProps) => {
+  const toast = useToast();
+  return <button onClick={() => toast(text, type)}>Click me</button>;
 };
 
 export const Info: Story<typeof args> = (props) => {
   return (
     <ToastDisplay>
-      <ToastButton {...props} appearance="info" />
+      <ToastButton {...props} type="info" />
     </ToastDisplay>
   );
 };
@@ -36,7 +34,7 @@ export const Info: Story<typeof args> = (props) => {
 export const Success: Story<typeof args> = (props) => {
   return (
     <ToastDisplay>
-      <ToastButton {...props} appearance="success" />
+      <ToastButton {...props} type="success" />
     </ToastDisplay>
   );
 };
@@ -44,7 +42,7 @@ export const Success: Story<typeof args> = (props) => {
 export const Error: Story<typeof args> = (props) => {
   return (
     <ToastDisplay>
-      <ToastButton {...props} appearance="error" />
+      <ToastButton {...props} type="error" />
     </ToastDisplay>
   );
 };
@@ -52,7 +50,7 @@ export const Error: Story<typeof args> = (props) => {
 export const Warning: Story<typeof args> = (props) => {
   return (
     <ToastDisplay>
-      <ToastButton {...props} appearance="warning" />
+      <ToastButton {...props} type="warning" />
     </ToastDisplay>
   );
 };

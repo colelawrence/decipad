@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
+import { useToast } from '@decipad/react-contexts';
 import {
   GetPadById,
   GetPadByIdVariables,
@@ -9,7 +10,6 @@ import {
 } from '@decipad/queries';
 import { isCollapsed, OnChange, PlatePlugin } from '@udecode/plate';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useToasts } from 'react-toast-notifications';
 import { Editor } from 'slate';
 
 export interface UseNotebookTitlePluginProps {
@@ -21,7 +21,7 @@ export const useNotebookTitlePlugin = ({
   notebookId,
   readOnly,
 }: UseNotebookTitlePluginProps): PlatePlugin => {
-  const { addToast } = useToasts();
+  const toast = useToast();
   const [newTitle, setNewTitle] = useState<null | string>(null);
 
   // Getting the current pad's name
@@ -57,14 +57,12 @@ export const useNotebookTitlePlugin = ({
         mutate({
           variables: { padId: notebookId, name: newTitle },
         }).then(() => {
-          addToast('Notebook title updated', {
-            appearance: 'info',
-          });
+          toast('Notebook title updated', 'info');
         });
       }
     }, 1000);
     return () => clearTimeout(timeout);
-  }, [mutate, newTitle, notebookId, addToast, readOnly]);
+  }, [mutate, newTitle, notebookId, toast, readOnly]);
 
   // return a slate plugin
   return useMemo(

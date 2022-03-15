@@ -1,8 +1,8 @@
 import { Editor, ELEMENT_FETCH } from '@decipad/editor-types';
+import { useToast } from '@decipad/react-contexts';
 import camelcase from 'camelcase';
 import { nanoid } from 'nanoid';
 import { useCallback, useEffect, useState } from 'react';
-import { useToasts } from 'react-toast-notifications';
 import { Editor as SlateEditor, Transforms } from 'slate';
 import slug from 'slug';
 import * as upload from './upload';
@@ -41,7 +41,7 @@ export const useUploadDataPlugin = ({
   editor,
 }: UploadDataPluginOptions): UseUploadDataPluginReturn => {
   const [uploadState, setUploadState] = useState<UploadState>([]);
-  const { addToast } = useToasts();
+  const toast = useToast();
 
   const startUpload = useCallback(
     ({ file, notebookId }: UploadDataOptions) => {
@@ -113,10 +113,10 @@ export const useUploadDataPlugin = ({
           }
         }
         setUploadState(uploadState);
-        addToast(`File ${file.filename} successfully uploaded`);
+        toast(`File ${file.filename} successfully uploaded`, 'success');
       }
     })();
-  }, [addToast, editor, uploadState]);
+  }, [toast, editor, uploadState]);
 
   return { startUpload, uploadState, clearAll };
 };

@@ -1,13 +1,13 @@
+import { ToastType } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
-import { AppearanceTypes } from 'react-toast-notifications';
 import { Success, Warning } from '../../icons';
 import { black, cssVar, p14Regular, transparency } from '../../primitives';
 
 type ToastProps = {
-  readonly appearance: AppearanceTypes;
+  readonly appearance: ToastType;
 };
 
-const getAppearanceType = (appearance: AppearanceTypes) => {
+const getAppearanceType = (appearance: ToastType) => {
   const type = {
     error: errorStyle,
     info: infoStyle,
@@ -18,7 +18,7 @@ const getAppearanceType = (appearance: AppearanceTypes) => {
   return type[appearance];
 };
 
-const getIconType = (appearance: AppearanceTypes) => {
+const getIconType = (appearance: ToastType) => {
   const type = {
     error: <Warning />,
     info: <Success />,

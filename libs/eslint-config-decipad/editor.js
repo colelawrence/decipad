@@ -4,8 +4,6 @@ module.exports = {
   extends: ['../../libs/eslint-config-decipad/react'],
   ignorePatterns: ['!**/*'],
   rules: {
-    'no-console': ['error', { allow: ['error'] }],
-
     'no-restricted-imports': [
       'error',
       {

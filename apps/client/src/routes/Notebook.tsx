@@ -7,11 +7,11 @@ import {
   useShareNotebookWithSecret,
   useUnshareNotebookWithSecret,
 } from '@decipad/queries';
+import { useToast } from '@decipad/react-contexts';
 import { LoadingSpinnerPage, NotebookTopbar } from '@decipad/ui';
 import styled from '@emotion/styled';
 import { FC, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useToasts } from 'react-toast-notifications';
 import { getSecretNotebookLink } from '../lib/secret';
 
 const Wrapper = styled('div')({
@@ -37,7 +37,7 @@ export interface NotebookProps {
 
 export const Notebook = ({ notebookId }: NotebookProps): ReturnType<FC> => {
   const history = useHistory();
-  const { addToast } = useToasts();
+  const toast = useToast();
   // See if the route is a shared notebook or an owned one
   const { search } = useLocation();
   const secret = new URLSearchParams(search).get('secret') ?? undefined;
@@ -108,9 +108,7 @@ export const Notebook = ({ notebookId }: NotebookProps): ReturnType<FC> => {
     });
 
     if (errors) {
-      addToast(`Error duplicating notebook: ${errors[0].message}`, {
-        appearance: 'error',
-      });
+      toast(`Error duplicating notebook: ${errors[0].message}`, 'error');
     }
 
     history.push(`/workspaces/${firstWorkspace.id}`);
