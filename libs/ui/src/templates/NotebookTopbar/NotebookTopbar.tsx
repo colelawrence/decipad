@@ -1,4 +1,5 @@
 import { docs } from '@decipad/routing';
+import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { useSession } from 'next-auth/client';
 import { ComponentProps, FC } from 'react';
@@ -8,7 +9,7 @@ import { NotebookAvatars, NotebookPath } from '../../molecules';
 import { NotebookSharingPopUp } from '../../organisms';
 import { cssVar, p14Medium } from '../../primitives';
 import { PermissionType } from '../../types';
-import { Anchor, noop } from '../../utils';
+import { Anchor } from '../../utils';
 
 const topbarWrapperStyles = css({
   display: 'flex',

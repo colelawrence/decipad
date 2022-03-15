@@ -1,7 +1,7 @@
 import { Meta, Story } from '@storybook/react';
+import { noop } from '@decipad/utils';
 import { NavigationItem } from '../../atoms';
 import { sidePadding } from '../../storybook-utils';
-import { noop } from '../../utils';
 import { NavigationList } from './NavigationList';
 
 export default {

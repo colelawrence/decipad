@@ -2,6 +2,7 @@ import { isEnabled } from '@decipad/feature-flags';
 import { useWindowListener } from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import { ComponentProps, FC, useCallback, useEffect, useState } from 'react';
+import { noop } from '@decipad/utils';
 import { SlashCommandsMenuItem } from '../../atoms';
 import { Placeholder, Plot, Shapes, Table, Text } from '../../icons';
 import { SlashCommandsMenuGroup } from '../../molecules';
@@ -12,7 +13,6 @@ import {
   setCssVar,
   transparency,
 } from '../../primitives';
-import { noop } from '../../utils';
 
 const SLASH_COMMANDS = [
   'calculation-block',

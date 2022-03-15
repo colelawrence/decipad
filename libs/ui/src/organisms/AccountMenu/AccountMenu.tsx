@@ -1,11 +1,11 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
 
+import { noop } from '@decipad/utils';
 import { Divider, NavigationItem } from '../../atoms';
 import { Logout } from '../../icons';
 import { NavigationList } from '../../molecules';
 import { cssVar, p14Medium, p12Regular } from '../../primitives';
-import { noop } from '../../utils';
 
 const styles = css({
   display: 'grid',

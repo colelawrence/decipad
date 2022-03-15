@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
+import { noop } from '@decipad/utils';
 import { cssVar, p14Regular, setCssVar } from '../../primitives';
-import { noop } from '../../utils';
 
 const inputStyles = css({
   padding: '12px',

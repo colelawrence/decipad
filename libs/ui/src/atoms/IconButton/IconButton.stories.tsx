@@ -1,7 +1,7 @@
 import { Meta, Story } from '@storybook/react';
+import { noop } from '@decipad/utils';
 import { IconButton } from './IconButton';
 import { circleIcon } from '../../storybook-utils';
-import { noop } from '../../utils';
 
 export default {
   title: 'Atoms / Icon Button',

@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import { useWindowListener } from '@decipad/react-utils';
 import { FC, ReactNode, useCallback } from 'react';
+import { noop } from '@decipad/utils';
 import { cssVar, p12Regular, p14Medium } from '../../primitives';
-import { noop } from '../../utils';
 
 const styles = css({
   display: 'grid',

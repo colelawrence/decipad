@@ -1,6 +1,6 @@
 import { Meta, Story } from '@storybook/react';
+import { noop } from '@decipad/utils';
 import { circleIcon, sidePadding } from '../../storybook-utils';
-import { noop } from '../../utils';
 
 import { NavigationItem } from './NavigationItem';
 

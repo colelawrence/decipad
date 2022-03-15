@@ -1,3 +1,4 @@
+import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import {
   black,
@@ -10,7 +11,7 @@ import {
   setCssVar,
   grey300,
 } from '../../primitives';
-import { Anchor, noop, TextChildren } from '../../utils';
+import { Anchor, TextChildren } from '../../utils';
 
 const styles = css(p13SemiBold, {
   flexGrow: 1,

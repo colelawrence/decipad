@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
+import { noop } from '@decipad/utils';
 import { Button } from '../../atoms';
 
 import { computerScreen } from '../../images';
 import { cssVar, h1, p14Regular, setCssVar } from '../../primitives';
-import { noop } from '../../utils';
 
 const styles = css({
   display: 'grid',

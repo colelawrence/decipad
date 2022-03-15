@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { ComponentProps, useState } from 'react';
+import { noop } from '@decipad/utils';
 import { Divider } from '../../atoms';
 import {
   DragAndDropImportNotebook,
@@ -8,7 +9,6 @@ import {
 } from '../../organisms';
 import { cssVar, p13Regular, setCssVar } from '../../primitives';
 import { notebookList } from '../../styles';
-import { noop } from '../../utils';
 
 const styles = css({
   padding: `${notebookList.verticalPadding} ${notebookList.horizontalPadding}`,

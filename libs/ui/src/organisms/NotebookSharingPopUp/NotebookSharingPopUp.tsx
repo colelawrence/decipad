@@ -2,6 +2,7 @@ import { useWindowListener } from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import { FC, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { noop } from '@decipad/utils';
 import { Button, Toggle, Tooltip } from '../../atoms';
 import { Link } from '../../icons';
 import {
@@ -11,7 +12,6 @@ import {
   p14Regular,
   setCssVar,
 } from '../../primitives';
-import { noop } from '../../utils';
 
 /**
  * The parent div styles, this handles the position of the pop up relative to the button.

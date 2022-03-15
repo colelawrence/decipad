@@ -1,12 +1,12 @@
 import { css } from '@emotion/react';
 import { ComponentProps, FC } from 'react';
 
+import { noop } from '@decipad/utils';
 import { Divider, IconButton } from '../../atoms';
 import { Create } from '../../icons';
 import { NavigationList, WorkspaceItem } from '../../molecules';
 import { p13Regular } from '../../primitives';
 import { card } from '../../styles';
-import { noop } from '../../utils';
 
 const styles = css({
   ...card.styles,

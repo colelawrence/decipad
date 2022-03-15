@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { once } from 'ramda';
+import { noop } from '@decipad/utils';
 import { MenuItem, Tooltip } from '../../atoms';
 import { Delete, DragHandle } from '../../icons';
 import { MenuList } from '../../molecules';
-import { noop } from '../../utils';
 import { editorLayout } from '../../styles';
 import { p12Bold, p12Regular } from '../../primitives';
 

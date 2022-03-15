@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
+import { noop } from '@decipad/utils';
 import { cssVar, setCssVar, p13Medium } from '../../primitives';
 import { Create } from '../../icons';
-import { noop } from '../../utils';
 import { table } from '../../styles';
 
 const tdStyles = css({

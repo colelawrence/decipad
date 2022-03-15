@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
 import { Children, FC, ReactNode } from 'react';
 import { isElement } from 'react-is';
+import { noop } from '@decipad/utils';
 import { cssVar, grey200 } from '../../primitives';
 import { Create } from '../../icons';
-import { noop } from '../../utils';
 import { TableHeader } from '../../atoms';
 import { EditableTableHeader } from '../../organisms';
 import { table } from '../../styles';

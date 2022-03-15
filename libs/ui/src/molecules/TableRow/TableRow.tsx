@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
 import { Children, FC, ReactNode } from 'react';
 import { isElement } from 'react-is';
+import { noop } from '@decipad/utils';
 import { TableData } from '../../atoms';
 import { Minus } from '../../icons';
 import { table } from '../../styles';
-import { noop } from '../../utils';
 import { EditableTableData } from '../index';
 
 const tdStyles = css({

@@ -4,7 +4,7 @@ import { createMemoryHistory } from 'history';
 import { MemoryRouter, Router } from 'react-router-dom';
 import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
 import { mockConsoleWarn } from '@decipad/testutils';
-import { noop } from '../../utils';
+import { noop } from '@decipad/utils';
 import { NavigationItem } from './NavigationItem';
 
 it('renders the children', () => {

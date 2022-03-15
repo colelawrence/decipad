@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import { mockConsoleError } from '@decipad/testutils';
 
-import { noop } from '../../utils';
+import { noop } from '@decipad/utils';
 import { NavigationItem } from '../../atoms';
 import { NavigationList } from './NavigationList';
 

@@ -2,8 +2,8 @@ import { nanoid } from 'nanoid';
 import { ComponentProps, useState } from 'react';
 import { css } from '@emotion/react';
 
+import { noop } from '@decipad/utils';
 import { Avatar } from '../../atoms';
-import { noop } from '../../utils';
 import { Chevron } from '../../icons';
 import {
   cssVar,

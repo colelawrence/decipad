@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
+import { noop } from '@decipad/utils';
 import { cssVar, shortAnimationDuration } from '../../primitives';
-import { noop } from '../../utils';
 
 const toggleStyles = css({
   backgroundColor: cssVar('strongHighlightColor'),

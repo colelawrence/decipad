@@ -1,3 +1,4 @@
+import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { IconButton } from '../../atoms';
@@ -13,7 +14,7 @@ import {
   transparency,
 } from '../../primitives';
 import { notebookList } from '../../styles';
-import { Anchor, noop } from '../../utils';
+import { Anchor } from '../../utils';
 
 const { gridStyles } = notebookList;
 const styles = css(gridStyles, {

@@ -5,7 +5,7 @@ import {
 } from '@decipad/dom-test-utils';
 import { mockConsoleWarn } from '@decipad/testutils';
 
-import { noop } from '../../utils';
+import { noop } from '@decipad/utils';
 import { GlobalStyles } from './GlobalStyles';
 import { black } from '../../primitives';
 

@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
 import { ComponentProps, useState } from 'react';
+import { noop } from '@decipad/utils';
 import { Button } from '../../atoms';
 import { AccountAvatar, NotebookListHeader } from '../../molecules';
 import { AccountMenu } from '../../organisms';
 import { dashboard, notebookList } from '../../styles';
-import { noop } from '../../utils';
 
 const styles = css({
   padding: `

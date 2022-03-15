@@ -1,9 +1,10 @@
+import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { Divider } from '../../atoms';
 import { Delete } from '../../icons';
 import { p14Regular } from '../../primitives';
 import { card } from '../../styles';
-import { Anchor, noop } from '../../utils';
+import { Anchor } from '../../utils';
 
 const styles = css({
   ...card.styles,
