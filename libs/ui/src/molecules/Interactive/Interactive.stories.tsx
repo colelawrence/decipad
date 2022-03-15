@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react';
 import { Placeholder } from '../../icons';
-import { padding } from '../../storybook-utils';
 import { Interactive } from './Interactive';
 
 const defaultArgs = {
@@ -10,7 +9,6 @@ const defaultArgs = {
 export default {
   title: 'Molecules / Editor / Interactive',
   component: Interactive,
-  decorators: [padding(10)],
 } as Meta;
 
 export const Normal: Story<typeof defaultArgs> = (props) => (

@@ -1,6 +1,5 @@
 import { BlockIsActiveProvider } from '@decipad/react-contexts';
 import { Meta, Story } from '@storybook/react';
-import { sidePadding } from '../../storybook-utils';
 import { Heading1 } from './Heading1';
 
 const args = { children: 'Text' };
@@ -9,7 +8,6 @@ export default {
   title: 'Atoms / Editor / Text / Heading 1',
   component: Heading1,
   args,
-  decorators: [sidePadding(6)],
 } as Meta;
 
 export const Normal: Story<typeof args> = (props) => (

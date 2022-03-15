@@ -1,11 +1,9 @@
 import { Meta, Story } from '@storybook/react';
-import { padding } from '../../storybook-utils';
 import { EditorInteractiveInput } from './EditorInteractiveInput';
 
 export default {
   title: 'Organisms / Editor / Interactive Input',
   component: EditorInteractiveInput,
-  decorators: [padding(10)],
 } as Meta;
 
 export const Normal: Story = () => <EditorInteractiveInput />;

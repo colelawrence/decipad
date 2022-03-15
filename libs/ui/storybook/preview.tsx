@@ -1,5 +1,5 @@
 import { ChakraProvider } from '@chakra-ui/react';
-import { DecoratorFn, Parameters } from '@storybook/react';
+import { DecoratorFn, Parameters, ArgTypes } from '@storybook/react';
 import { useEffect } from 'react';
 import { useDarkMode } from 'storybook-dark-mode';
 import { GlobalStyles, theme } from '../src';
@@ -38,7 +38,41 @@ const withDarkMode: DecoratorFn = (StoryFn, context) => {
   );
 };
 
-export const decorators: DecoratorFn[] = [withGlobalStyles, withDarkMode];
+const withPadding: DecoratorFn = (StoryFn, context) => {
+  return (
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        padding: `${context.globals.padding}px`,
+      }}
+    >
+      <StoryFn {...context} />
+    </div>
+  );
+};
+
+export const decorators: DecoratorFn[] = [
+  withGlobalStyles,
+  withDarkMode,
+  withPadding,
+];
+export const globalTypes: ArgTypes = {
+  padding: {
+    name: 'Padding around component',
+    defaultValue: 0,
+    toolbar: {
+      icon: 'box',
+      items: [
+        { value: 0, title: 'None' },
+        ...[2, 4, 6, 8, 10, 12, 16, 20, 24, 32].map((value) => ({
+          value,
+          title: `${value} pixels`,
+        })),
+      ],
+    },
+  },
+};
 
 export const parameters: Parameters = {
   viewport: {

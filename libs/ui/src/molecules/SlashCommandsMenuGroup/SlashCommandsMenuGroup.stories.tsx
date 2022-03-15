@@ -1,6 +1,6 @@
 import { Meta, Story } from '@storybook/react';
 import { SlashCommandsMenuItem } from '../../atoms';
-import { circleIcon, inMenu, sidePadding } from '../../storybook-utils';
+import { circleIcon, inMenu } from '../../storybook-utils';
 import { SlashCommandsMenuGroup } from './SlashCommandsMenuGroup';
 
 const args = {
@@ -12,7 +12,7 @@ export default {
   title: 'Organisms / Editor / Slash Commands Menu / Group',
   component: SlashCommandsMenuGroup,
   args,
-  decorators: [inMenu, sidePadding(8)],
+  decorators: [inMenu],
 } as Meta;
 
 export const Normal: Story<typeof args> = ({ numberOfItems, ...props }) => (

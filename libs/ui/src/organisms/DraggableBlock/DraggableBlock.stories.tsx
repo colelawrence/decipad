@@ -1,6 +1,5 @@
 import { Meta, Story, ArgTypes } from '@storybook/react';
-import { sidePadding } from '../../storybook-utils';
-import { blockAlignment, editorLayout } from '../../styles';
+import { blockAlignment } from '../../styles';
 import { DraggableBlock } from './DraggableBlock';
 
 const argTypes: ArgTypes = {
@@ -15,7 +14,6 @@ export default {
   title: 'Organisms / Editor / Draggable Block',
   component: DraggableBlock,
   argTypes,
-  decorators: [sidePadding(editorLayout.gutterWidth())],
 } as Meta;
 
 export const Normal: Story<Args> = (props) => (
@@ -36,7 +34,3 @@ export const DragHoveringBelow: Story<Args> = (props) => (
     block
   </DraggableBlock>
 );
-export const EnoughSidePaddingForMenu: Story<Args> = (props) => (
-  <DraggableBlock {...props}>block</DraggableBlock>
-);
-EnoughSidePaddingForMenu.decorators = [sidePadding(200)];

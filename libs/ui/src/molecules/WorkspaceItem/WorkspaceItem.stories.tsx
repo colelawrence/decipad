@@ -1,5 +1,4 @@
 import { Meta, Story } from '@storybook/react';
-import { sidePadding } from '../../storybook-utils';
 import { WorkspaceItem } from './WorkspaceItem';
 
 const args = {
@@ -9,7 +8,6 @@ const args = {
 export default {
   title: 'Molecules / Workspaces / Item',
   component: WorkspaceItem,
-  decorators: [sidePadding(8)],
   args,
 } as Meta;
 

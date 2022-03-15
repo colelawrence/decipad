@@ -1,6 +1,5 @@
 import { BlockIsActiveProvider } from '@decipad/react-contexts';
 import { Meta, Story } from '@storybook/react';
-import { sidePadding } from '../../storybook-utils';
 import { ListItemContent } from './ListItemContent';
 
 const args = {
@@ -11,7 +10,6 @@ export default {
   title: 'Atoms / List / Item Content',
   component: ListItemContent,
   args,
-  decorators: [sidePadding(6)],
 } as Meta;
 
 export const Normal: Story<typeof args> = (props) => (

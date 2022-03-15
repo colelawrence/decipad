@@ -1,6 +1,6 @@
 import { Meta, Story } from '@storybook/react';
 import { noop } from '@decipad/utils';
-import { circleIcon, sidePadding } from '../../storybook-utils';
+import { circleIcon } from '../../storybook-utils';
 
 import { NavigationItem } from './NavigationItem';
 
@@ -11,7 +11,6 @@ interface Args {
 export default {
   title: 'Atoms / Navigation Item',
   component: NavigationItem,
-  decorators: [sidePadding(8)],
   args: {
     children: 'Text',
   },

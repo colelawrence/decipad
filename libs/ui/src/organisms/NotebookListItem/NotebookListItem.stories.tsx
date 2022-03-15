@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react';
 import { ComponentProps } from 'react';
-import { sidePadding } from '../../storybook-utils';
 import { NotebookListItem } from './NotebookListItem';
 
 type Args = Pick<
@@ -10,7 +9,6 @@ type Args = Pick<
 
 export default {
   title: 'Organisms / Notebook List / Item',
-  decorators: [sidePadding(12)],
   component: NotebookListItem,
   args: {
     name: 'Getting started with Decipad',
