@@ -62,7 +62,7 @@ const dataItems = [
 ];
 
 // plots are hidden in prod
-if (isEnabled()) {
+if (isEnabled('PLOT_ELEMENTS')) {
   dataItems.push({
     command: 'plot',
     title: 'Plot',

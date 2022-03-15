@@ -16,4 +16,8 @@ module.exports = {
     'node_modules/(?!(lib0|p-retry|y-protocols)/)',
     '\\.pnp\\.[^\\/]+$',
   ],
+
+  setupFilesAfterEnv: [
+    require.resolve('./libs/testutils/src/feature-flags-setup-after-env.js'),
+  ],
 };

@@ -1095,6 +1095,13 @@
           "options": {
             "command": "yarn tsc -b libs/feature-flags"
           }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/feature-flags"],
+          "options": {
+            "jestConfig": "libs/feature-flags/jest.config.js"
+          }
         }
       }
     }
