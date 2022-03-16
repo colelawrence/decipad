@@ -21,6 +21,16 @@ import { inferCategories } from '../categories';
 export { makeContext };
 export type { Context };
 
+export const linkToAST = (ctx: Context, node: AST.Node, type: Type) => {
+  ctx.nodeTypes.set(node, type);
+
+  if (type.errorCause != null && type.node == null) {
+    return type.inNode(node);
+  } else {
+    return type;
+  }
+};
+
 const wrap =
   <T extends AST.Node>(
     fn: (ctx: Context, thing: T, cohercingTo?: Type) => Promise<Type>
@@ -30,13 +40,7 @@ const wrap =
     if (cohercingTo) {
       type = type.sameAs(cohercingTo);
     }
-    ctx.nodeTypes.set(thing, type);
-
-    if (type.errorCause != null && type.node == null) {
-      return type.inNode(thing);
-    } else {
-      return type;
-    }
+    return linkToAST(ctx, thing, type);
   };
 
 /*

@@ -13,7 +13,11 @@ import * as components from './components';
 import * as configuration from './configuration';
 import { ComputerContextProvider } from './contexts/Computer';
 import { Tooltip, UploadDialogue } from './plate-components';
-import { editorProgramBlocks, useLanguagePlugin } from './plugins';
+import {
+  editorProgramBlocks,
+  useLanguagePlugin,
+  useCodeVariableHighlightingPlugin,
+} from './plugins';
 import { useStoreEditorRef } from './utils/useStoreEditorRef';
 
 export interface EditorProps {
@@ -31,6 +35,7 @@ const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
   const editor = useStoreEditorRef(editorId);
 
   const { results, languagePlugin } = useLanguagePlugin();
+  const variableHighlightPlugin = useCodeVariableHighlightingPlugin();
 
   // DocSync
   const docsyncEditor = plugins.useDocSync({
@@ -72,8 +77,13 @@ const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
   });
 
   const editorPlugins = useMemo(
-    () => [...configuration.plugins, languagePlugin, notebookTitlePlugin],
-    [languagePlugin, notebookTitlePlugin]
+    () => [
+      ...configuration.plugins,
+      languagePlugin,
+      variableHighlightPlugin,
+      notebookTitlePlugin,
+    ],
+    [languagePlugin, variableHighlightPlugin, notebookTitlePlugin]
   );
 
   const programBlocks = docsyncEditor ? editorProgramBlocks(docsyncEditor) : {};

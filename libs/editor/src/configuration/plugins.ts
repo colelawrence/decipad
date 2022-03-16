@@ -16,7 +16,6 @@ import {
   createTrailingBlockPlugin,
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
-import { createCodeVariableHighlightingPlugin } from '../plugins/CodeVariableHighlighting/createCodeVariableHighlightingPlugin';
 import { createMarksPlugins } from '../plugins/Marks/createMarksPlugins';
 import { autoformatRules } from './autoformat';
 import { exitBreakOptions } from './exitBreakOptions';
@@ -67,7 +66,5 @@ export const plugins = [
   deciPlatePlugins.createLinkPlugin(),
   deciPlatePlugins.createAutoFormatCodeBlockPlugin(),
 
-  // code editing
-  createCodeVariableHighlightingPlugin(),
   deciPlatePlugins.createAutoPairsPlugin(),
 ];

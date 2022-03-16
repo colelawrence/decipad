@@ -57,7 +57,7 @@ export interface InjectableExternalData {
 export type ExternalDataMap = Map<string, InjectableExternalData>;
 
 export interface AutocompleteName {
-  kind: 'function' | 'variable';
+  kind: 'function' | 'variable' | 'column';
   type: SerializedType;
   name: string;
 }

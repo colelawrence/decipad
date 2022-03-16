@@ -33,6 +33,8 @@ import {
   getStatement,
 } from './utils';
 
+export { getUsedIdentifiers } from './getUsedIdentifiers';
+
 /*
  - Skip cached stuff
  - Infer this statement
@@ -156,9 +158,8 @@ function* findNames(
   // Our search stops at this statement
   const findUntil = program.find((b) => b.id === blockId)?.args[stmtIdx];
   if (stopIfNotFound && !findUntil) {
-    return [];
+    return;
   }
-
   for (const block of program) {
     for (const statement of block.args) {
       if (statement === findUntil) return;
@@ -177,6 +178,19 @@ function* findNames(
           type: serializeType(type),
           name: statement.args[0].args[0],
         };
+
+        if (statement.args[1].type === 'table') {
+          for (const col of statement.args[1].args) {
+            const colType = nodeTypes.get(col);
+            if (colType) {
+              yield {
+                kind: 'column',
+                type: serializeType(colType),
+                name: `${statement.args[0].args[0]}.${col.args[0].args[0]}`,
+              };
+            }
+          }
+        }
       }
 
       if (statement.type === 'function-definition' && type) {

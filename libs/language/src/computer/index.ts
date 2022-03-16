@@ -10,11 +10,10 @@ import type {
   ValueLocation,
   UnparsedBlock,
 } from './types';
-import { Computer } from './Computer';
+
+export { Computer, getUsedIdentifiers } from './Computer';
 
 export { isSyntaxError, isBracketError } from './utils';
-
-export { Computer };
 
 export { serializeResult } from '../result';
 

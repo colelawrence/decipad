@@ -4,7 +4,7 @@ import { produce } from 'immer';
 import type { AST } from '..';
 import { Type, build as t, InferError } from '../type';
 import { equalOrUnknown, getIdentifierString, getOfType, walk } from '../utils';
-import { inferExpression } from '.';
+import { inferExpression, linkToAST } from '.';
 import { Context, pushStackAndPrevious } from './context';
 import { linearizeType } from '../dimtools/common';
 
@@ -103,7 +103,7 @@ export const inferTable = async (ctx: Context, table: AST.Table) => {
         // Bail on error
         if (type.errorCause) return type;
 
-        addColumn(name, type);
+        addColumn(name, linkToAST(ctx, tableItem, type));
       } else if (tableItem.type === 'table-spread') {
         const ref = getOfType('ref', tableItem.args[0]);
 

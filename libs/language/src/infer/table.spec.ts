@@ -1,4 +1,4 @@
-import { makeContext } from '.';
+import { inferStatement, makeContext } from '.';
 import { AST } from '..';
 import { table, col, n, c, l, r } from '../utils';
 import { build as t } from '../type';
@@ -42,6 +42,17 @@ it('finds the size of a table by inferring', async () => {
 it('finds the size of a table that only has a single number in it', async () => {
   const tbl = table({ Num: l(1) });
   expect(await findTableSize(nilCtx, tbl)).toEqual(['TableName', 1]);
+});
+
+it('puts column types in ether', async () => {
+  const col1 = n('table-column', n('coldef', 'ColA'), col(1, 2));
+  const col2 = n('table-column', n('coldef', 'ColA'), col(3, 4));
+  const tbl = n('assign', n('def', 'tbl'), n('table', col1, col2));
+
+  const ctx = makeContext();
+  await inferStatement(ctx, tbl);
+  expect(ctx.nodeTypes.has(col1)).toBe(true);
+  expect(ctx.nodeTypes.has(col2)).toBe(true);
 });
 
 it('returns zero for an empty table', async () => {

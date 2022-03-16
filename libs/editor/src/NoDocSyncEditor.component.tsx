@@ -7,6 +7,7 @@ import * as configuration from './configuration';
 import * as contexts from './contexts';
 import { useStoreEditorRef } from './contexts/useStoreEditorRef';
 import { emptyNotebook, introNotebook } from './exampleNotebooks';
+import { useCodeVariableHighlightingPlugin } from './plugins/CodeVariableHighlighting/useCodeVariableHighlightingPlugin';
 import { Tooltip } from './plate-components';
 import { editorProgramBlocks, useLanguagePlugin } from './plugins';
 import { POPULATE_PLAYGROUND } from './utils/storage';
@@ -17,11 +18,12 @@ export const NoDocSyncEditorBase = (props: PlateProps): ReturnType<FC> => {
   const editor = useStoreEditorRef(editorId);
 
   const { results, languagePlugin } = useLanguagePlugin();
+  const variableHighlightPlugin = useCodeVariableHighlightingPlugin();
   const programBlocks = editor ? editorProgramBlocks(editor) : {};
 
   const editorPlugins = useMemo(
-    () => [...configuration.plugins, languagePlugin],
-    [languagePlugin]
+    () => [...configuration.plugins, languagePlugin, variableHighlightPlugin],
+    [languagePlugin, variableHighlightPlugin]
   );
 
   return (
