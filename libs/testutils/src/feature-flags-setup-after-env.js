@@ -1,3 +1,5 @@
+import { reset } from '@decipad/feature-flags';
+
 beforeEach(() => {
-  require('@decipad/feature-flags').reset();
+  reset();
 });
