@@ -1,5 +1,5 @@
 import { Meta, Story } from '@storybook/react';
-import { ListItem } from '../../atoms';
+import { ListItemContent } from '../../atoms';
 import { UnorderedList } from './UnorderedList';
 
 const args = {
@@ -15,7 +15,7 @@ export default {
 export const Normal: Story<typeof args> = ({ numberOfItems }) => (
   <UnorderedList>
     {Array.from({ length: numberOfItems }, (_, i) => (
-      <ListItem key={i}>Item {i + 1}</ListItem>
+      <ListItemContent key={i}>Item {i + 1}</ListItemContent>
     ))}
   </UnorderedList>
 );
@@ -27,10 +27,10 @@ export const Nested: Story<typeof nestedArgs> = (
 ) => (
   <UnorderedList>
     {Array.from({ length: numberOfItems }, (_, i) => (
-      <ListItem key={i}>
+      <ListItemContent key={i}>
         Item {i + 1}
         {levels > 1 && Nested({ numberOfItems, levels: levels - 1 }, context)}
-      </ListItem>
+      </ListItemContent>
     ))}
   </UnorderedList>
 );

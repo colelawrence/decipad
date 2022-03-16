@@ -1,5 +1,6 @@
 import { ConnectDragSource } from 'react-dnd';
-import { FC, ReactNode, RefObject, useState } from 'react';
+import { FC, Fragment, ReactNode, RefObject, useState } from 'react';
+import { BlockIsActiveProvider } from '@decipad/react-contexts';
 import { BlockDragHandle } from '..';
 import { DropLine } from '../../atoms';
 import {
@@ -7,10 +8,10 @@ import {
   Opacity,
   shortAnimationDuration,
 } from '../../primitives';
-import { editor, blockAlignment } from '../../styles';
+import { editorLayout, blockAlignment } from '../../styles';
 
 const handleAndMenuReservedSpace = 172;
-const totalSpaceWithGap = handleAndMenuReservedSpace + editor.gutterGap;
+const totalSpaceWithGap = handleAndMenuReservedSpace + editorLayout.gutterGap;
 
 const draggingOpacity: Opacity = 0.4;
 
@@ -39,6 +40,7 @@ export const DraggableBlock = ({
   children,
 }: DraggableBlockProps): ReturnType<FC> => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const BlockActiveProvider = menuOpen ? BlockIsActiveProvider : Fragment;
 
   const { paddingTop, typography } = blockAlignment[blockKind];
 
@@ -47,7 +49,7 @@ export const DraggableBlock = ({
       css={{
         display: 'grid',
         gridTemplateColumns: `${handleAndMenuReservedSpace}px 1fr`,
-        gridColumnGap: `${editor.gutterGap}px`,
+        gridColumnGap: `${editorLayout.gutterGap}px`,
 
         marginLeft: menuOpen
           ? // -totalSpaceWithGap when the free space on the left ((100vw - 100%) / 2)
@@ -57,7 +59,7 @@ export const DraggableBlock = ({
               (
                 (100vw - 100%) / 2 - ${totalSpaceWithGap}px
               ) * -9999,
-              -${editor.gutterGap}px
+              -${editorLayout.gutterGap}px
             )`
           : `-${totalSpaceWithGap}px`,
         justifyContent: 'end',
@@ -82,7 +84,7 @@ export const DraggableBlock = ({
                 (
                   ${typography.lineHeight} * ${typography.fontSize}
                   -
-                  ${editor.gutterHandleHeight()}
+                  ${editorLayout.gutterHandleHeight()}
                 ) / 2
               )`
             : paddingTop,
@@ -106,7 +108,7 @@ export const DraggableBlock = ({
             <DropLine />
           </div>
         )}
-        {children}
+        <BlockActiveProvider>{children}</BlockActiveProvider>
         {dropLine === 'bottom' && (
           <div contentEditable={false}>
             <DropLine />

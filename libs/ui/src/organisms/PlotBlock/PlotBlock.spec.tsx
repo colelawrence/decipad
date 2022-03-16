@@ -17,8 +17,8 @@ const result: ComponentProps<typeof PlotBlock>['result'] = {
     data: { name: 'table' },
     encoding: {
       x: { field: 'aa', type: 'nominal' },
-      y: { field: 'bb', type: 'quantitative' },
-      size: { field: 'bb', type: 'quantitative' },
+      y: { field: 'bb', type: 'quantitative', scale: { domain: [2, 26] } },
+      size: { field: 'bb', type: 'quantitative', scale: { domain: [2, 26] } },
       color: { field: 'aa', type: 'nominal' },
     },
     mark: { type: 'circle', tooltip: true },

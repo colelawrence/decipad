@@ -1,3 +1,5 @@
+import { findParentWithStyle } from '@decipad/dom-test-utils';
+import { BlockIsActiveProvider } from '@decipad/react-contexts';
 import { render } from '@testing-library/react';
 import { Paragraph } from './Paragraph';
 
@@ -14,4 +16,25 @@ it('assigns a given placeholder', () => {
     'aria-placeholder',
     'text goes here'
   );
+});
+
+describe('when active', () => {
+  it('has a different background', () => {
+    const { getByText, rerender } = render(<Paragraph>text</Paragraph>);
+    const normalBoxShadow = findParentWithStyle(
+      getByText('text'),
+      'boxShadow'
+    )?.boxShadow;
+
+    rerender(
+      <BlockIsActiveProvider>
+        <Paragraph>text</Paragraph>
+      </BlockIsActiveProvider>
+    );
+    const activeBoxShadow = findParentWithStyle(
+      getByText('text'),
+      'boxShadow'
+    )?.boxShadow;
+    expect(activeBoxShadow).not.toEqual(normalBoxShadow);
+  });
 });

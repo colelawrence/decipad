@@ -10,13 +10,14 @@ export const Paragraph: types.PlateComponent = ({
   children,
   element,
 }) => {
-  const editor = useEditorState();
-  const selected = useSelected();
-  const readOnly = useReadOnly();
-
   if (!element) {
     throw new Error('Paragraph is not a leaf');
   }
+
+  const editor = useEditorState();
+  const readOnly = useReadOnly();
+
+  const selected = useSelected();
 
   return (
     <div {...attributes}>

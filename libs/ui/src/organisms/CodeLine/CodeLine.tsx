@@ -21,9 +21,10 @@ const styles = css(code, {
   ':hover': {
     background: cssVar('highlightColor'),
     borderRadius: '10px',
-    boxShadow: `4px 0px 0px 0px ${cssVar(
-      'highlightColor'
-    )}, -4px 0px 0px 0px ${cssVar('highlightColor')}`,
+    boxShadow: `
+      -4px 0px 0px 0px ${cssVar('highlightColor')},
+      4px  0px 0px 0px ${cssVar('highlightColor')}
+    `,
   },
 });
 

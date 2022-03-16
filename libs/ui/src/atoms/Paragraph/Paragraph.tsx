@@ -1,3 +1,4 @@
+import { useIsBlockActive } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
 import { cssVar, p16Regular, setCssVar } from '../../primitives';
@@ -26,6 +27,13 @@ const styles = css(blockAlignment.paragraph.typography, placeholderStyles, {
   padding: `${blockAlignment.paragraph.paddingTop} 0`,
 });
 
+const verticalClipInset = `calc(${blockAlignment.paragraph.paddingTop} * 0.75)`;
+const activeStyles = css({
+  backgroundColor: cssVar('highlightColor'),
+  boxShadow: `0px 0px 0px 100vmin ${cssVar('highlightColor')}`,
+  clipPath: `inset(${verticalClipInset} -8px ${verticalClipInset} -8px round 8px)`,
+});
+
 interface ParagraphProps {
   readonly children: ReactNode;
   /**
@@ -40,8 +48,13 @@ export const Paragraph = ({
   children,
   placeholder,
 }: ParagraphProps): ReturnType<React.FC> => {
+  const isBlockActive = useIsBlockActive();
+
   return (
-    <p aria-placeholder={placeholder} css={styles}>
+    <p
+      aria-placeholder={placeholder}
+      css={[styles, isBlockActive && activeStyles]}
+    >
       <span>{children}</span>
     </p>
   );

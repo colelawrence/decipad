@@ -1,6 +1,6 @@
 import { Meta, Story, ArgTypes } from '@storybook/react';
 import { sidePadding } from '../../storybook-utils';
-import { blockAlignment, editor } from '../../styles';
+import { blockAlignment, editorLayout } from '../../styles';
 import { DraggableBlock } from './DraggableBlock';
 
 const argTypes: ArgTypes = {
@@ -15,7 +15,7 @@ export default {
   title: 'Organisms / Editor / Draggable Block',
   component: DraggableBlock,
   argTypes,
-  decorators: [sidePadding(editor.gutterWidth())],
+  decorators: [sidePadding(editorLayout.gutterWidth())],
 } as Meta;
 
 export const Normal: Story<Args> = (props) => (

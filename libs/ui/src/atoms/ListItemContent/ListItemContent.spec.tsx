@@ -1,17 +1,17 @@
 import { findParentWithStyle } from '@decipad/dom-test-utils';
 import { BlockIsActiveProvider } from '@decipad/react-contexts';
 import { render } from '@testing-library/react';
-import { Heading2 } from './Heading2';
+import { ListItemContent } from './ListItemContent';
 
 it('renders the children', () => {
-  const { container } = render(<Heading2 Heading="h3">text</Heading2>);
-  expect(container).toHaveTextContent('text');
+  const { getByText } = render(<ListItemContent>text</ListItemContent>);
+  expect(getByText('text')).toBeVisible();
 });
 
 describe('when active', () => {
   it('has a different background', () => {
     const { getByText, rerender } = render(
-      <Heading2 Heading="h3">text</Heading2>
+      <ListItemContent>text</ListItemContent>
     );
     const normalBoxShadow = findParentWithStyle(
       getByText('text'),
@@ -20,7 +20,7 @@ describe('when active', () => {
 
     rerender(
       <BlockIsActiveProvider>
-        <Heading2 Heading="h3">text</Heading2>
+        <ListItemContent>text</ListItemContent>
       </BlockIsActiveProvider>
     );
     const activeBoxShadow = findParentWithStyle(

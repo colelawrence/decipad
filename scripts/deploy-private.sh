@@ -50,6 +50,6 @@ arc env staging DECI_S3_ACCESS_KEY_ID "$DECI_S3_ACCESS_KEY_ID"
 arc env staging DECI_S3_SECRET_ACCESS_KEY "$DECI_S3_SECRET_ACCESS_KEY"
 arc env staging DECI_S3_PADS_BUCKET "$DECI_S3_PADS_BUCKET"
 arc env staging NODE_OPTIONS --enable-source-maps
-arc env staging GIT_COMMIT_HASH "$GIT_COMMIT_HASH"
+arc env staging GIT_COMMIT_HASH "${GIT_COMMIT_HASH:=$(git rev-parse HEAD)}"
 
 arc deploy --prune --no-hydrate --name "$DEPLOY_NAME"

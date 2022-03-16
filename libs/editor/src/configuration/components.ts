@@ -10,6 +10,7 @@ import {
   ELEMENT_H3,
   ELEMENT_INPUT,
   ELEMENT_LI,
+  ELEMENT_LIC,
   ELEMENT_LINK,
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
@@ -36,6 +37,7 @@ import {
   Italic,
   Link,
   ListItem,
+  ListItemContent,
   OrderedList,
   Plot,
   SlashCommandsParagraph,
@@ -67,6 +69,7 @@ export const components: PlateComponents = {
   [ELEMENT_UL]: UnorderedList,
   [ELEMENT_OL]: OrderedList,
   [ELEMENT_LI]: ListItem,
+  [ELEMENT_LIC]: ListItemContent,
 
   // Inline
   [ELEMENT_LINK]: Link,

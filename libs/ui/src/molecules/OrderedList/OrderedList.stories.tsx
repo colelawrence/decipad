@@ -1,5 +1,5 @@
 import { Meta, Story } from '@storybook/react';
-import { ListItem } from '../../atoms';
+import { ListItemContent } from '../../atoms';
 import { OrderedList } from './OrderedList';
 
 const args = {
@@ -17,7 +17,7 @@ export const Normal: Story<typeof args> = ({ numberOfItems }) => (
     {Array(numberOfItems)
       .fill(null)
       .map((_, i) => (
-        <ListItem key={i}>Item {i + 1}</ListItem>
+        <ListItemContent key={i}>Item {i + 1}</ListItemContent>
       ))}
   </OrderedList>
 );

@@ -1,23 +1,25 @@
 import { BlockIsActiveProvider } from '@decipad/react-contexts';
 import { Meta, Story } from '@storybook/react';
 import { sidePadding } from '../../storybook-utils';
-import { Heading1 } from './Heading1';
+import { ListItemContent } from './ListItemContent';
 
-const args = { children: 'Text' };
+const args = {
+  children: 'Item',
+};
 
 export default {
-  title: 'Atoms / Editor / Text / Heading 1',
-  component: Heading1,
+  title: 'Atoms / List / Item Content',
+  component: ListItemContent,
   args,
   decorators: [sidePadding(6)],
 } as Meta;
 
 export const Normal: Story<typeof args> = (props) => (
-  <Heading1 Heading="h2" {...props} />
+  <ListItemContent {...props} />
 );
 
 export const Active: Story<typeof args> = (props) => (
   <BlockIsActiveProvider>
-    <Heading1 Heading="h2" {...props} />
+    <ListItemContent {...props} />
   </BlockIsActiveProvider>
 );

@@ -5,16 +5,16 @@ import { MenuItem, Tooltip } from '../../atoms';
 import { Delete, DragHandle } from '../../icons';
 import { MenuList } from '../../molecules';
 import { noop } from '../../utils';
-import { editor } from '../../styles';
+import { editorLayout } from '../../styles';
 import { p12Bold, p12Regular } from '../../primitives';
 
 const gridStyles = once(() =>
   css({
     display: 'grid',
     gridTemplate: `
-      ".                          handle                       " ${editor.gutterHandleHeight()}
-      "menu                       .                            " auto
-      /minmax(max-content, 144px) ${editor.gutterHandleWidth()}
+      ".                          handle                             " ${editorLayout.gutterHandleHeight()}
+      "menu                       .                                  " auto
+      /minmax(max-content, 144px) ${editorLayout.gutterHandleWidth()}
     `,
     justifyContent: 'end',
   })

@@ -22,7 +22,8 @@ const placeholderStyles = css({
 });
 
 const styles = css(display, placeholderStyles, {
-  padding: '28px 0 24px 0',
+  paddingTop: '28px',
+  paddingBottom: '24px',
 });
 
 interface DisplayProps {
