@@ -4,8 +4,12 @@ import {
   ELEMENT_FETCH,
   interactiveElements,
 } from '@decipad/editor-types';
-import { ComputeRequest } from '@decipad/language';
-import { ResultsContext, useResults } from '@decipad/react-contexts';
+import { ComputeRequest, getDelayedBlockId } from '@decipad/language';
+import {
+  defaultResults,
+  ResultsContext,
+  ResultsContextItem,
+} from '@decipad/react-contexts';
 import { ProgramBlocksContextValue } from '@decipad/ui';
 import { captureException } from '@sentry/react';
 import {
@@ -15,14 +19,19 @@ import {
   TDescendant,
 } from '@udecode/plate';
 import { dequal } from 'dequal';
-import { ContextType, useEffect, useMemo, useState } from 'react';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { concatMap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { ContextType, useEffect, useMemo, useRef, useState } from 'react';
+import { EMPTY, Subject } from 'rxjs';
+import {
+  concatMap,
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  shareReplay,
+} from 'rxjs/operators';
 import { Editor as SlateEditor, Node, NodeEntry, Transforms } from 'slate';
 import { useComputer } from '../../contexts/Computer';
 import { CodeErrorHighlight } from '../../plate-components';
 import { hasSyntaxError } from './common';
-import { delayErrors } from './delayErrors';
 import { getCursorPos } from './getCursorPos';
 import { getSyntaxErrorRanges } from './getSyntaxErrorRanges';
 import { slateDocumentToComputeRequest } from './slateDocumentToComputeRequest';
@@ -46,61 +55,50 @@ type ParsedProgramBlocks = ParsedProgramBlock[];
 
 export const useLanguagePlugin = (): UseLanguagePluginRet => {
   const computer = useComputer();
-  const defaultResults = useResults();
-  const [results, setResults] = useState(defaultResults);
+  const [results, setResults] =
+    useState<ContextType<typeof ResultsContext>>(EMPTY);
 
   const [computeRequests] = useState(() => new Subject<ComputeRequest>());
-  const [cursors] = useState(() => new BehaviorSubject<string | null>(null));
+  const cursorBlockIdRef = useRef<string | null>(null);
+  const previousResultRef = useRef<ResultsContextItem>(defaultResults);
 
   // Get some computation results based on evaluation requests
   useEffect(() => {
-    const sub = computeRequests
-      .pipe(
-        // Debounce to give React an easier time
-        debounceTime(100),
-        // Make sure the new request is actually different
-        distinctUntilChanged((prevReq, req) => dequal(prevReq, req)),
-        // Compute me some computes!
-        concatMap((req) => computer.compute(req)),
-        delayErrors({
-          distinctCursor$: cursors.pipe(distinctUntilChanged()),
-          getCursor: () => cursors.getValue(),
-        })
-      )
-      // Catch all errors here
-      .subscribe({
-        next: (res) => {
-          if (res.type === 'compute-panic') {
-            setResults(defaultResults);
-            captureException(new Error(res.message));
-          } else {
-            setResults((previous) => {
-              const blockResultsKv = res.updates.map((newResult) => {
-                const previousResult = previous.blockResults[newResult.blockId];
+    const results$ = computeRequests.pipe(
+      // Debounce to give React an easier time
+      debounceTime(100),
+      // Make sure the new request is actually different
+      distinctUntilChanged((prevReq, req) => dequal(prevReq, req)),
+      // Compute me some computes!
+      concatMap((req) => computer.compute(req)),
+      map((res): ResultsContextItem => {
+        if (res.type === 'compute-panic') {
+          captureException(new Error(res.message));
+          return defaultResults;
+        }
+        const blockResults = Object.fromEntries(
+          res.updates.map((result) => [result.blockId, result])
+        );
 
-                // Stabilize newResult here -- it'll be equal but not ===
-                // Don't trigger a re-render for results tables and whatnot
-                const value = dequal(previousResult, newResult)
-                  ? previousResult
-                  : newResult;
+        return {
+          blockResults,
+          indexLabels: res.indexLabels,
+          delayedResultBlockId: getDelayedBlockId(
+            res,
+            cursorBlockIdRef.current
+          ),
+        };
+      }),
+      shareReplay(1)
+    );
 
-                return [newResult.blockId, value];
-              });
+    setResults(results$);
 
-              return {
-                blockResults: Object.fromEntries(blockResultsKv),
-                indexLabels: res.indexLabels,
-              };
-            });
-          }
-        },
-        error: captureException,
-      });
-
-    return () => {
-      sub.unsubscribe();
-    };
-  }, [computeRequests, cursors, computer, defaultResults]);
+    const previousResultSub = results$.subscribe((result) => {
+      previousResultRef.current = result;
+    });
+    return () => previousResultSub.unsubscribe();
+  }, [computeRequests, computer]);
 
   return {
     languagePlugin: useMemo(
@@ -111,7 +109,7 @@ export const useLanguagePlugin = (): UseLanguagePluginRet => {
               (editor as unknown as Editor).children
             )
           );
-          cursors.next(getCursorPos(editor));
+          cursorBlockIdRef.current = getCursorPos(editor);
         },
         decorate:
           (_editor) =>
@@ -120,7 +118,7 @@ export const useLanguagePlugin = (): UseLanguagePluginRet => {
               return [];
             }
 
-            const lineResult = results.blockResults[node.id];
+            const lineResult = previousResultRef.current.blockResults[node.id];
 
             return getSyntaxErrorRanges(path, lineResult);
           },
@@ -134,7 +132,7 @@ export const useLanguagePlugin = (): UseLanguagePluginRet => {
         renderElement: getRenderElement([...interactiveElements]),
         voidTypes: getPlatePluginTypes([...interactiveElements]),
       }),
-      [computeRequests, cursors, results]
+      [computeRequests]
     ),
     results,
   };

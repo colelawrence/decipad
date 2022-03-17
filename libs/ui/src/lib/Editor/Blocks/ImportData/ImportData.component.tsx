@@ -4,7 +4,7 @@ import { useParams as useRouteParams } from 'react-router-dom';
 import { SPRenderElementProps, PlatePluginComponent } from '@udecode/plate';
 import { getDefined } from '@decipad/utils';
 import { InferError } from '@decipad/language';
-import { useResults } from '@decipad/react-contexts';
+import { useResult } from '@decipad/react-contexts';
 import { CodeResult } from '../../../../organisms';
 import { ImportDataIconElement } from './ImportDataIcon.component';
 import { Button } from '../../../../atoms/Button/Button';
@@ -54,7 +54,6 @@ function padIdFromPadIdURiComponent(
 
 export const ImportDataElement: PlatePluginComponent = (props) => {
   const blocks = useContext<ProgramBlocksContextValue>(ProgramBlocksContext);
-  const { blockResults: blocksResults } = useResults();
   const { createOrUpdateExternalData } = useContext(
     ExternalAuthenticationContext
   );
@@ -73,7 +72,7 @@ export const ImportDataElement: PlatePluginComponent = (props) => {
     'data-auth-url': authUrl,
   } = element;
 
-  const blockResults = blocksResults && blocksResults[blockId];
+  const blockResults = useResult(blockId);
   const firstResultError = blockResults?.results?.find(
     (r) => !r.value && r?.type?.kind === 'type-error'
   );

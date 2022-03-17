@@ -5,7 +5,7 @@ import {
   isBracketError,
   isSyntaxError,
 } from '@decipad/language';
-import { useResults } from '@decipad/react-contexts';
+import { useResult } from '@decipad/react-contexts';
 import { docs } from '@decipad/routing';
 import { organisms } from '@decipad/ui';
 import { useComputer } from '../../contexts';
@@ -23,13 +23,11 @@ export const CodeLine: types.PlateComponent = ({
   }
 
   const computer = useComputer();
-  const { blockResults: lineResults } = useResults();
-
   const { id: lineId } = element;
+  const line = useResult(lineId);
 
-  const line = lineResults[lineId];
   const lineResult = line?.results[0];
-  const statement = computer.getStatement(line?.blockId, 0);
+  const statement = computer.getStatement(lineId, 0);
   const syntaxError = getSyntaxError(line);
 
   return (
@@ -45,7 +43,7 @@ export const CodeLine: types.PlateComponent = ({
   );
 };
 
-function getSyntaxError(line: IdentifiedResult) {
+function getSyntaxError(line: IdentifiedResult | null) {
   if (!line || !line.error) {
     return undefined;
   }

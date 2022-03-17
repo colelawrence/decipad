@@ -1,7 +1,10 @@
 import { ELEMENT_PLOT, PlotElement } from '@decipad/editor-types';
 import Fraction from '@decipad/fraction';
 import { SerializedType } from '@decipad/language';
-import { ResultsContext, ResultsContextValue } from '@decipad/react-contexts';
+import {
+  ResultsContextItem,
+  TestResultsProvider,
+} from '@decipad/react-contexts';
 import { render } from '@testing-library/react';
 import { Plate } from '@udecode/plate';
 import { createRef } from 'react';
@@ -12,7 +15,7 @@ import { Plot } from './Plot';
 
 interface PlotWithProvidersParams {
   element?: Partial<PlotElement>;
-  blockResults?: ResultsContextValue['blockResults'];
+  blockResults?: ResultsContextItem['blockResults'];
 }
 
 function F(n: number) {
@@ -82,7 +85,7 @@ const PlotWithProviders = ({
   };
   return (
     <DndProvider backend={HTML5Backend}>
-      <ResultsContext.Provider value={{ blockResults, indexLabels: new Map() }}>
+      <TestResultsProvider blockResults={blockResults}>
         <ComputerContextProvider>
           <Plate>
             <Plot
@@ -94,7 +97,7 @@ const PlotWithProviders = ({
             />
           </Plate>
         </ComputerContextProvider>
-      </ResultsContext.Provider>
+      </TestResultsProvider>
     </DndProvider>
   );
 };

@@ -1,40 +1,46 @@
 import { EMPTY, firstValueFrom, from, Observable } from 'rxjs';
 
 import {
-  buildType,
-  ComputePanic,
-  ComputeResponse,
+  buildType as t,
+  getDelayedBlockId,
   serializeType,
 } from '@decipad/language';
 import { timeout } from '@decipad/utils';
 
-import { delayErrors } from './delayErrors';
+import { delayErrors, SingleBlockRes } from './delayErrors';
 
-const goodRes: ComputeResponse = {
-  type: 'compute-response',
-  updates: [],
-  indexLabels: new Map(),
+const goodRes: SingleBlockRes = {
+  result: {
+    blockId: 'blockId',
+    error: undefined,
+    isSyntaxError: false,
+    results: [
+      {
+        type: serializeType(t.number()),
+        blockId: 'blockId',
+        statementIndex: 0,
+        value: null,
+      },
+    ],
+  },
+  needsDelay: false,
 };
-const errorRes: ComputeResponse = {
-  type: 'compute-response',
-  updates: [
-    {
-      blockId: 'blockId',
-      error: undefined,
-      isSyntaxError: false,
-      results: [
-        {
-          type: serializeType(buildType.impossible('type error!')),
-          blockId: 'blockId',
-          statementIndex: 0,
-          value: null,
-        },
-      ],
-    },
-  ],
-  indexLabels: new Map(),
+const errorRes: SingleBlockRes = {
+  result: {
+    blockId: 'blockId',
+    error: undefined,
+    isSyntaxError: false,
+    results: [
+      {
+        type: serializeType(t.impossible('type error!')),
+        blockId: 'blockId',
+        statementIndex: 0,
+        value: null,
+      },
+    ],
+  },
+  needsDelay: true,
 };
-const panicRes: ComputePanic = { type: 'compute-panic' };
 
 /* like of() but doesn't complete */
 const incompleteOf = <T>(item: T) =>
@@ -42,12 +48,15 @@ const incompleteOf = <T>(item: T) =>
     subscriber.next(item);
   });
 
+let timeoutFn = () => Promise.resolve();
+beforeEach(() => {
+  timeoutFn = jest.fn(() => timeout(0));
+});
+
 it('does not delay non-error results', async () => {
-  const timeoutFn = jest.fn();
   const stream = incompleteOf(goodRes).pipe(
     delayErrors({
-      distinctCursor$: EMPTY,
-      getCursor: () => null,
+      shouldDelay$: EMPTY,
       timeoutFn,
     })
   );
@@ -56,43 +65,22 @@ it('does not delay non-error results', async () => {
   expect(timeoutFn).not.toHaveBeenCalled();
 });
 
-it('does not delay a panic', async () => {
-  const timeoutFn = jest.fn();
-  const stream = incompleteOf(panicRes).pipe(
-    delayErrors({
-      distinctCursor$: EMPTY,
-      getCursor: () => null,
-      timeoutFn,
-    })
-  );
-
-  expect(await firstValueFrom(stream)).toEqual(panicRes);
-  expect(timeoutFn).not.toHaveBeenCalled();
-});
-
 describe('error results', () => {
   it('pipes out an error instantly, if it came from another block ID different from the cursor', async () => {
-    const timeoutFn = jest.fn();
-
     const stream = incompleteOf(errorRes).pipe(
       delayErrors({
-        distinctCursor$: EMPTY,
-        getCursor: () => 'another-block-id',
+        shouldDelay$: incompleteOf(false),
         timeoutFn,
       })
     );
 
     expect(await firstValueFrom(stream)).toEqual(errorRes);
-    expect(timeoutFn).not.toHaveBeenCalled();
   });
 
   it('delays errors, until the timeout passes', async () => {
-    const timeoutFn = jest.fn(() => timeout(0));
-
     const stream = incompleteOf(errorRes).pipe(
       delayErrors({
-        distinctCursor$: incompleteOf('fake block id stream'),
-        getCursor: () => 'blockId',
+        shouldDelay$: incompleteOf(false),
         timeoutFn,
       })
     );
@@ -106,20 +94,17 @@ describe('error results', () => {
 
     let firstValue = null;
 
-    const timeoutFn = jest.fn(timeout);
-
     const stream = incompleteOf(errorRes).pipe(
       delayErrors({
-        distinctCursor$: from(
+        shouldDelay$: from(
           (function* yieldBlockIdsWhileChecking() {
             expect(firstValue).toEqual(null);
-            yield 'blockId';
+            yield true;
             expect(firstValue).toEqual(null);
-            yield 'blockId2';
+            yield false;
             expect(false).toEqual(true); // This won't run
           })()
         ),
-        getCursor: () => 'blockId',
         timeoutFn,
       })
     );
@@ -131,13 +116,10 @@ describe('error results', () => {
   });
 
   it("multiple errors don't cause further delays", async () => {
-    const timeoutFn = jest.fn(() => timeout(0));
-
     const finalError = { ...errorRes };
     const stream = from([errorRes, errorRes, finalError]).pipe(
       delayErrors({
-        distinctCursor$: incompleteOf('blockId'),
-        getCursor: () => 'blockId',
+        shouldDelay$: incompleteOf(true),
         timeoutFn,
       })
     );
@@ -147,17 +129,46 @@ describe('error results', () => {
   });
 
   it('error delays can be interrupted by a good result', async () => {
-    const timeoutFn = jest.fn(() => timeout(0));
-
     const stream = from([errorRes, goodRes]).pipe(
       delayErrors({
-        distinctCursor$: incompleteOf('blockId'),
-        getCursor: () => 'blockId',
+        shouldDelay$: incompleteOf(true),
         timeoutFn,
       })
     );
 
     expect(await firstValueFrom(stream)).toBe(goodRes);
     expect(timeoutFn).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('getDelayedBlockId', () => {
+  it('delays errors under cursor', () => {
+    expect(
+      getDelayedBlockId(
+        {
+          type: 'compute-response',
+          indexLabels: new Map(),
+          updates: [errorRes.result],
+        },
+        'blockId'
+      )
+    ).toEqual('blockId');
+  });
+  it('does not delay good results', () => {
+    expect(
+      getDelayedBlockId(
+        {
+          type: 'compute-response',
+          indexLabels: new Map(),
+          updates: [goodRes.result],
+        },
+        'blockId'
+      )
+    ).toEqual(null);
+  });
+  it('does not delay panics', () => {
+    expect(
+      getDelayedBlockId({ type: 'compute-panic', message: '' }, 'blockid')
+    ).toEqual(null);
   });
 });

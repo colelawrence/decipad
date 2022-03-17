@@ -1,22 +1,29 @@
 import { from, Observable, of, OperatorFunction, race } from 'rxjs';
-import { filter, mapTo, switchMap } from 'rxjs/operators';
+import { filter, mapTo, switchMap, distinctUntilChanged } from 'rxjs/operators';
 
-import { ComputePanic, ComputeResponse } from '@decipad/language';
+import {
+  ComputePanic,
+  ComputeResponse,
+  IdentifiedResult,
+} from '@decipad/language';
 import { timeout } from '@decipad/utils';
 
 interface DelayErrorsArgs {
-  distinctCursor$: Observable<string | null>;
-  getCursor: () => string | null;
+  shouldDelay$: Observable<boolean>;
   timeoutFn?: (ms: number) => Promise<unknown>;
 }
 
 type SimpleRes = ComputeResponse | ComputePanic;
 
+export interface SingleBlockRes {
+  result: IdentifiedResult;
+  needsDelay: boolean;
+}
+
 export const delayErrors = ({
-  distinctCursor$,
-  getCursor,
+  shouldDelay$,
   timeoutFn = timeout,
-}: DelayErrorsArgs): OperatorFunction<SimpleRes, SimpleRes> => {
+}: DelayErrorsArgs): OperatorFunction<SingleBlockRes, SingleBlockRes> => {
   /* How many ms do we delay revealing an error under the cursor */
   const errorRevealDelay = 2000;
   /** If another call to this function is already waiting, wait alongside it.
@@ -31,13 +38,14 @@ export const delayErrors = ({
     nextErrorReveal = null;
   };
 
-  return switchMap((res: SimpleRes) => {
-    const cursor = getCursor();
-
-    if (cursor != null && isErrorUnderCursor(res, cursor)) {
+  return switchMap((res: SingleBlockRes) => {
+    if (res.needsDelay) {
       return mapTo(res)(
         race(
-          distinctCursor$.pipe(filter((blockId) => blockId !== cursor)),
+          shouldDelay$.pipe(
+            distinctUntilChanged(),
+            filter((shouldDelay) => !shouldDelay)
+          ),
           from(waitForNextErrorRevealTime())
         )
       );
@@ -45,6 +53,16 @@ export const delayErrors = ({
     return of(res);
   });
 };
+
+export function getDelayedBlockId(
+  res: SimpleRes,
+  cursorBlockId: string | null
+): string | null {
+  if (cursorBlockId != null && isErrorUnderCursor(res, cursorBlockId)) {
+    return cursorBlockId;
+  }
+  return null;
+}
 
 function isErrorUnderCursor(res: SimpleRes, cursorBlockId: string | null) {
   if (res.type === 'compute-panic') {

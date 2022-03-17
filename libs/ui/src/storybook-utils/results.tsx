@@ -1,15 +1,18 @@
 import { DecoratorFn } from '@storybook/react';
-import { ResultsContext, useResults } from '@decipad/react-contexts';
-import { ComponentProps, ContextType, FC } from 'react';
+import {
+  ResultsContext,
+  ResultsContextItem,
+  useResults,
+} from '@decipad/react-contexts';
+import { ComponentProps, FC } from 'react';
+import { BehaviorSubject } from 'rxjs';
 
-const ResultsProvider: FC<
-  Pick<ContextType<typeof ResultsContext>, 'blockResults'>
-> = ({ blockResults, children }) => (
+const ResultsProvider: FC<Pick<ResultsContextItem, 'blockResults'>> = ({
+  blockResults,
+  children,
+}) => (
   <ResultsContext.Provider
-    value={{
-      ...useResults(),
-      blockResults,
-    }}
+    value={new BehaviorSubject({ ...useResults(), blockResults })}
   >
     {children}
   </ResultsContext.Provider>
