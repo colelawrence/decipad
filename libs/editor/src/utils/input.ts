@@ -1,14 +1,14 @@
-import { ELEMENT_INPUT } from '@decipad/editor-types';
-import Fraction from '@decipad/fraction';
+import { ELEMENT_INPUT, InputElement } from '@decipad/editor-types';
 import { insertNodes, TDescendant, TEditor } from '@udecode/plate';
 import { Path } from 'slate';
 import { requirePathBelowBlock } from './path';
 
-const inputElement = {
+const inputElement: Omit<InputElement, 'id'> = {
   type: ELEMENT_INPUT,
-  value: new Fraction(0),
-  children: [],
-} as const;
+  variableName: '',
+  value: '',
+  children: [{ text: '' }],
+};
 
 export const insertInputBelow = (editor: TEditor, path: Path): void => {
   insertNodes<TDescendant>(editor, inputElement, {

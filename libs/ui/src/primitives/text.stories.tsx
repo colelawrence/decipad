@@ -17,6 +17,7 @@ import {
   p15Medium,
   p16Regular,
   p24Bold,
+  p32Medium,
 } from './text';
 // eslint-disable-next-line import/no-self-import
 import * as storyExports from './text.stories';
@@ -72,6 +73,9 @@ export const P16Bold: React.FC = ({ children }) => (
 );
 export const P24Bold: React.FC = ({ children }) => (
   <p css={css(p24Bold)}>{children}</p>
+);
+export const P32Medium: React.FC = ({ children }) => (
+  <p css={css(p32Medium)}>{children}</p>
 );
 
 export const Code: React.FC = ({ children }) => (

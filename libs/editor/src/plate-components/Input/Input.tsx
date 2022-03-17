@@ -1,5 +1,7 @@
 import { types } from '@decipad/editor-config';
 import {
+  CodeBlockElement,
+  CodeLineElement,
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
   ELEMENT_INPUT,
@@ -8,8 +10,9 @@ import {
 import { organisms } from '@decipad/ui';
 import { useEditorState } from '@udecode/plate';
 import { FC, useCallback } from 'react';
-import { BaseElement, Editor, Node, Transforms } from 'slate';
+import { Editor, Transforms } from 'slate';
 import { ReactEditor, useReadOnly } from 'slate-react';
+import { useElementMutatorCallback } from '../../utils/slateReact';
 
 export const Input: types.PlateComponent = ({
   children,
@@ -23,24 +26,15 @@ export const Input: types.PlateComponent = ({
     throw new Error('Input is meant to render input elements');
   }
 
-  const onChangeVariableName = useCallback(
-    (variableName) => {
-      const at = ReactEditor.findPath(editor, element);
-      Transforms.setNodes(editor, { variableName } as Partial<InputElement>, {
-        at,
-      });
-    },
-    [editor, element]
+  const onChangeVariableName = useElementMutatorCallback<InputElement>(
+    editor,
+    element,
+    'variableName'
   );
-
-  const onChangeValue = useCallback(
-    (value) => {
-      const at = ReactEditor.findPath(editor, element);
-      Transforms.setNodes(editor, { value } as Partial<InputElement>, {
-        at,
-      });
-    },
-    [editor, element]
+  const onChangeValue = useElementMutatorCallback<InputElement>(
+    editor,
+    element,
+    'value'
   );
 
   const onConvert = useCallback(() => {
@@ -52,7 +46,7 @@ export const Input: types.PlateComponent = ({
           type: ELEMENT_CODE_LINE,
           variableName: undefined,
           value: undefined,
-        } as Partial<Node>,
+        } as Partial<CodeLineElement>,
 
         { at }
       );
@@ -63,7 +57,10 @@ export const Input: types.PlateComponent = ({
       );
       Transforms.wrapNodes(
         editor,
-        { type: ELEMENT_CODE_BLOCK } as unknown as BaseElement,
+        { type: ELEMENT_CODE_BLOCK, children: [] } as Omit<
+          CodeBlockElement,
+          'id'
+        >,
         { at }
       );
     });
