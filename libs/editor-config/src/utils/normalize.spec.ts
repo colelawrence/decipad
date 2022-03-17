@@ -2,7 +2,10 @@ import { TElement } from '@udecode/plate';
 import { createEditor, Editor } from 'slate';
 import { mockConsoleError } from '@decipad/testutils';
 
-import { normalizeExcessProperties } from './normalize';
+import {
+  normalizeExcessProperties,
+  normalizeMissingProperties,
+} from './normalize';
 
 describe('normalizeExcessProperties', () => {
   let editor!: Editor;
@@ -89,6 +92,30 @@ describe('normalizeExcessProperties', () => {
         ['extraProp']
       );
       expect(editor).toHaveProperty('children.0.extraProp');
+    });
+  });
+
+  describe('missingPropGenerator', () => {
+    mockConsoleError();
+
+    it('adds missing mandatory property', () => {
+      normalizeMissingProperties(
+        editor,
+        Editor.node(editor, { path: [0], offset: 0 }),
+        ['mandatoryProp'],
+        { mandatoryProp: () => 'val' }
+      );
+      expect(editor).toHaveProperty('children.0.mandatoryProp', 'val');
+    });
+
+    it('deletes the element if there is a missing mandatory property that we cannot generate', () => {
+      normalizeMissingProperties(
+        editor,
+        Editor.node(editor, { path: [0], offset: 0 }),
+        ['missingProp'],
+        {}
+      );
+      expect(editor.children).toHaveLength(0);
     });
   });
 });
