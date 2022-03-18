@@ -4,8 +4,8 @@ import { produce } from 'immer';
 import type { AST } from '..';
 import { Type, build as t, InferError } from '../type';
 import { equalOrUnknown, getIdentifierString, getOfType, walk } from '../utils';
-import { inferExpression, linkToAST } from '.';
-import { Context, pushStackAndPrevious } from './context';
+import { inferExpression, linkToAST } from '../infer';
+import { Context, pushStackAndPrevious } from '../infer/context';
 import { linearizeType } from '../dimtools/common';
 
 const coerceIndices = (
@@ -91,19 +91,19 @@ export const inferTable = async (ctx: Context, table: AST.Table) => {
         const [colDef, expr] = tableItem.args;
         const name = getIdentifierString(colDef);
 
-        let type;
-        if (refersToOtherColumnsByName(expr, columns)) {
-          // eslint-disable-next-line no-await-in-loop
-          type = await inferTableColumnPerCell(ctx, columns, expr, tableLength);
-        } else {
-          // eslint-disable-next-line no-await-in-loop
-          type = await inferExpression(ctx, expr);
-        }
+        // eslint-disable-next-line no-await-in-loop
+        const type = await inferTableColumn(ctx, {
+          indexName,
+          otherColumns: columns,
+          columnAst: expr,
+          linkTo: tableItem,
+          tableLength,
+        });
 
         // Bail on error
         if (type.errorCause) return type;
 
-        addColumn(name, linkToAST(ctx, tableItem, type));
+        addColumn(name, type);
       } else if (tableItem.type === 'table-spread') {
         const ref = getOfType('ref', tableItem.args[0]);
 
@@ -127,6 +127,29 @@ export const inferTable = async (ctx: Context, table: AST.Table) => {
     return getCurrentTable();
   });
 };
+
+export async function inferTableColumn(
+  ctx: Context,
+  {
+    otherColumns,
+    columnAst,
+    linkTo = columnAst,
+    tableLength,
+    indexName,
+  }: {
+    otherColumns: Map<string, Type>;
+    columnAst: AST.Expression;
+    linkTo?: AST.Node;
+    tableLength: number | 'unknown';
+    indexName: string | null;
+  }
+): Promise<Type> {
+  const type = refersToOtherColumnsByName(columnAst, otherColumns)
+    ? await inferTableColumnPerCell(ctx, otherColumns, columnAst, tableLength)
+    : await inferExpression(ctx, columnAst);
+
+  return coerceIndices(linkToAST(ctx, linkTo, type), indexName, tableLength);
+}
 
 export async function inferTableColumnPerCell(
   ctx: Context,

@@ -106,13 +106,15 @@ export const getSomeBlockLocations = (
 
 export const getDefinedSymbol = (stmt: AST.Statement) => {
   switch (stmt.type) {
-    case 'assign':
-      return `var:${getIdentifierString(stmt.args[0])}`;
     case 'function-definition':
       return `fn:${getIdentifierString(stmt.args[0])}`;
+    case 'assign':
+      return `var:${getIdentifierString(stmt.args[0])}`;
     case 'categories':
       return `var:${getIdentifierString(stmt.args[0])}`;
     case 'matrix-assign':
+      return `var:${getIdentifierString(stmt.args[0])}`;
+    case 'table-column-assign':
       return `var:${getIdentifierString(stmt.args[0])}`;
     default:
       return null;
@@ -183,7 +185,7 @@ export const findSymbolsUsed = (stmt: AST.Statement) => {
     if (sym != null) symbols.push(sym);
   });
 
-  if (stmt.type === 'matrix-assign') {
+  if (stmt.type === 'matrix-assign' || stmt.type === 'table-column-assign') {
     symbols.push(getDefined(getDefinedSymbol(stmt)));
   }
 

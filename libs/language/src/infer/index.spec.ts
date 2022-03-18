@@ -1,7 +1,7 @@
 import { dequal } from 'dequal';
 
 import { AST, inferBlock, Unit } from '..';
-import { InferError, Type, build as t } from '../type';
+import { InferError, build as t } from '../type';
 import {
   F,
   l,
@@ -20,7 +20,11 @@ import {
   assign,
   block,
 } from '../utils';
-import { objectToMap, objectToTableType } from '../testUtils';
+import {
+  objectToMap,
+  objectToTableType,
+  typeSnapshotSerializer,
+} from '../testUtils';
 import { TableColumn, TableSpread } from '../parser/ast-types';
 
 import {
@@ -38,10 +42,7 @@ const degC: Unit = {
   multiplier: F(1),
   known: true,
 };
-expect.addSnapshotSerializer({
-  test: (item) => item instanceof Type,
-  serialize: (item: Type) => item.toString(),
-});
+expect.addSnapshotSerializer(typeSnapshotSerializer);
 
 afterEach(() => {
   nilCtx.nodeTypes = new Map();

@@ -34,7 +34,7 @@ export const runCodeForVariables = async (
 
   const inferResult = await inferProgram(program);
 
-  const types = Object.fromEntries(inferResult.stack.top.entries());
+  const types = Object.fromEntries(inferResult.stack.globalVariables.entries());
 
   const erroredType = Object.values(types).find((t) => t.errorCause != null);
   if (erroredType != null) {
@@ -86,4 +86,9 @@ export const resultSnapshotSerializer: jest.SnapshotSerializerPlugin = {
   test: (arg) => arg?.type instanceof Type && arg.value != null,
   serialize: ({ type, value }) =>
     `Result(${stringifyResult(value, type, (x) => x)})`,
+};
+
+export const typeSnapshotSerializer: jest.SnapshotSerializerPlugin = {
+  test: (item) => item instanceof Type,
+  serialize: (item: Type) => item.toString(),
 };

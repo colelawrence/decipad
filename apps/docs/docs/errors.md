@@ -262,6 +262,25 @@ splitby(TableToSplitBy, TableToSplitBy.SplitKey)
 }
 ```
 
+## Duplicated table column
+
+:::caution `duplicated-table-column`
+The column NameOfTheColumn already exists in this table
+:::
+
+Table column names must be unique. This error appears when you're attempting to add a column to a table, like for instance:
+
+    Table = { Names = ["Anna", "Kate"] }
+    Table.Names = ["Other", "Names"]
+
+You need to choose another name for your new column:
+
+```deci live
+Table = { Names = ["Anna", "Kate"] }
+Table.NewNames = ["Other", "Names"]
+==> [ 'Other', 'Names' ]
+```
+
 ## Syntax error
 
 :::caution `syntax-error`

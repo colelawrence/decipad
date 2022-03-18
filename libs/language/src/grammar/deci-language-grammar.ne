@@ -13,6 +13,7 @@ import { tokenizer } from './tokenizer'
 @include "./utils.ne"
 @include "./white-space.ne"
 @include "./assign.ne"
+@include "./column_assign.ne"
 @include "./categories.ne"
 @include "./matrix.ne"
 @include "./literal.ne"
@@ -48,6 +49,7 @@ block         -> (%statementSep | %ws):? statement (%statementSep statement):* (
                                                         %}
 
 statement     -> assign                                 {% id %}
+statement     -> column_assign                          {% id %}
 statement     -> matrixAssign                           {% id %}
 statement     -> functionDef                            {% id %}
 statement     -> expression                             {% id %}

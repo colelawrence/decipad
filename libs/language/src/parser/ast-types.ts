@@ -14,6 +14,14 @@ export interface Def {
   end?: Pos;
 }
 
+/** The table part of a table column definition */
+export interface TablePartialDef {
+  type: 'tablepartialdef';
+  args: [tableName: string];
+  start?: Pos;
+  end?: Pos;
+}
+
 export interface CatDef {
   type: 'catdef';
   args: [varName: string];
@@ -62,6 +70,7 @@ export type Identifier =
   | ExternalRef
   | GenericIdentifier
   | Def
+  | TablePartialDef
   | CatDef
   | FuncDef
   | ColDef;
@@ -155,6 +164,13 @@ export interface Table {
 export interface PropertyAccess {
   type: 'property-access';
   args: [Expression, string];
+  start?: Pos;
+  end?: Pos;
+}
+
+export interface TableColumnAssign {
+  type: 'table-column-assign';
+  args: [tableName: TablePartialDef, columnName: ColDef, value: Expression];
   start?: Pos;
   end?: Pos;
 }
@@ -283,6 +299,7 @@ export type Expression =
 export type Statement =
   | FunctionDefinition
   | Assign
+  | TableColumnAssign
   | MatrixAssign
   | Categories
   | Expression;
@@ -305,6 +322,7 @@ export type Node =
 export interface TypeToNode {
   directive: Directive;
   def: Def;
+  tablepartialdef: TablePartialDef;
   catdef: CatDef;
   ref: Ref;
   externalref: ExternalRef;
@@ -325,6 +343,7 @@ export interface TypeToNode {
   'table-spread': TableSpread;
   table: Table;
   'property-access': PropertyAccess;
+  'table-column-assign': TableColumnAssign;
   'matrix-ref': MatrixRef;
   'matrix-assign': MatrixAssign;
   'matrix-matchers': MatrixMatchers;

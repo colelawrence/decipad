@@ -379,6 +379,44 @@ let ParserRules = [
     },
   },
   {
+    name: 'column_assign',
+    symbols: [
+      'identifier',
+      '_',
+      { literal: '.' },
+      '_',
+      'identifier',
+      '_',
+      { literal: '=' },
+      '_',
+      'expression',
+    ],
+    postprocess: (d) => {
+      const table = addLoc(
+        {
+          type: 'tablepartialdef',
+          args: [d[0].name],
+        },
+        d[0]
+      );
+      const column = addLoc(
+        {
+          type: 'coldef',
+          args: [d[4].name],
+        },
+        d[4]
+      );
+
+      return addArrayLoc(
+        {
+          type: 'table-column-assign',
+          args: [table, column, d[8]],
+        },
+        d
+      );
+    },
+  },
+  {
     name: 'categories',
     symbols: [
       'identifier',
@@ -1894,6 +1932,7 @@ let ParserRules = [
     },
   },
   { name: 'statement', symbols: ['assign'], postprocess: id },
+  { name: 'statement', symbols: ['column_assign'], postprocess: id },
   { name: 'statement', symbols: ['matrixAssign'], postprocess: id },
   { name: 'statement', symbols: ['functionDef'], postprocess: id },
   { name: 'statement', symbols: ['expression'], postprocess: id },

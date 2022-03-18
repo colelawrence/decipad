@@ -1,16 +1,22 @@
 import { getDefined, zip } from '@decipad/utils';
 import { AST } from '..';
-import { refersToOtherColumnsByName } from '../infer/table';
+import { refersToOtherColumnsByName } from './inference';
+import {
+  Column,
+  ColumnLike,
+  isColumnLike,
+  Row,
+  Table,
+  Value,
+} from '../interpreter/Value';
+import { mapWithPrevious } from '../interpreter/previous';
 import {
   walk,
   getIdentifierString,
   isExpression,
   getInstanceof,
 } from '../utils';
-import { evaluate } from './evaluate';
-import { mapWithPrevious } from './previous';
-import { Realm } from './Realm';
-import { Column, ColumnLike, isColumnLike, Row, Table, Value } from './Value';
+import { Realm, evaluate } from '../interpreter';
 
 const isRecursiveReference = (expr: AST.Expression) =>
   expr.type === 'function-call' &&
@@ -33,7 +39,7 @@ export const evaluateTableColumn = async (
   tableColumns: Map<string, ColumnLike>,
   column: AST.Expression,
   rowCount: number
-): Promise<Value> => {
+): Promise<ColumnLike> => {
   if (
     refersToOtherColumnsByName(column, tableColumns) ||
     usesRecursion(column)
@@ -47,7 +53,7 @@ export const evaluateTableColumn = async (
   }
 
   // Evaluate the column as a whole
-  return evaluate(realm, column);
+  return coerceToColumn(await evaluate(realm, column), rowCount);
 };
 
 export const evaluateTableColumnIteratively = async (
@@ -74,6 +80,12 @@ export const evaluateTableColumnIteratively = async (
 const repeat = <T>(value: T, length: number) =>
   Array.from({ length }, () => value);
 
+const coerceToColumn = (
+  value: ColumnLike | Value,
+  tableLength: number
+): ColumnLike =>
+  !isColumnLike(value) ? Column.fromValues(repeat(value, tableLength)) : value;
+
 export const evaluateTable = async (
   realm: Realm,
   table: AST.Table
@@ -87,12 +99,8 @@ export const evaluateTable = async (
   }
 
   return realm.stack.withPush(async () => {
-    const addColumn = (name: string, value: ColumnLike | Value) => {
-      if (!isColumnLike(value)) {
-        value = Column.fromValues(repeat(value, tableLength));
-      }
-
-      tableColumns.set(name, value as ColumnLike);
+    const addColumn = (name: string, value: ColumnLike) => {
+      tableColumns.set(name, value);
       realm.stack.set(name, value);
       realm.stack.set(getDefined(indexName), Table.fromMapping(tableColumns));
     };

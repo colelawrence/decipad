@@ -1,7 +1,7 @@
 import { AST, runAST } from '..';
 import { n, c, l, block, assign, col, r, tableDef } from '../utils';
 
-import { usesRecursion } from './table';
+import { usesRecursion } from './evaluate';
 
 it('can find a previous symbol', () => {
   expect(usesRecursion(c('previous', l(1)))).toEqual(true);

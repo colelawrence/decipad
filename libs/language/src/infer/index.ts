@@ -9,10 +9,11 @@ import { callBuiltinFunctor } from '../builtins';
 import { resolve as resolveData } from '../data';
 import { expandDirectiveToType } from '../directives';
 import { parseUnit } from '../units';
+import { inferTable } from '../tables/inference';
+import { inferColumnAssign } from '../tables/column-assign';
 
 import { Context, makeContext } from './context';
 import { inferSequence } from './sequence';
-import { inferTable } from './table';
 import { inferData } from './data';
 import { isPreviousRef } from '../previous-ref';
 import { inferMatrixAssign, inferMatrixRef } from '../matrix';
@@ -284,6 +285,9 @@ export const inferStatement = wrap(
 
         ctx.stack.set(varName, type);
         return type;
+      }
+      case 'table-column-assign': {
+        return inferColumnAssign(ctx, statement);
       }
       case 'matrix-assign': {
         return inferMatrixAssign(ctx, statement);

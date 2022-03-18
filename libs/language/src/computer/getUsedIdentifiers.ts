@@ -57,6 +57,8 @@ const relevantTokenTypes = [
   'rightCurlyBracket',
 ];
 
+const endOf = (tok: moo.Token) => tok.offset + tok.text.length;
+
 export const getUsedIdentifiers = (code: string, prevDefined: Set<string>) => {
   const lineInfo = new LineInfo();
   const tokens = tokenize(code).filter((tok) => tok.type !== 'ws');
@@ -81,18 +83,35 @@ export const getUsedIdentifiers = (code: string, prevDefined: Set<string>) => {
       continue;
     }
 
+    const identDotIdent =
+      tokens[i + 1]?.type === 'dot' && tokens[i + 2]?.type === 'identifier';
+
+    // table column assignment (TableName.ColumnName = ...)
+    if (identDotIdent && tokens[i + 3]?.type === 'equalSign') {
+      const fullId = `${currentTok.text}.${tokens[i + 2].text}`;
+
+      if (prevDefined.has(currentTok.text) || lineInfo.has(currentTok.text)) {
+        // TableName.ColumnName = ...
+        lineInfo.add({
+          text: fullId,
+          start: currentTok.offset,
+          end: endOf(tokens[i + 2]),
+        });
+      }
+      // Skip anyway so this doesn't get interpreted as other kinds of constructs
+      i += 3;
+      continue;
+    }
+
     // column access (Table.Column)
     if (prevDefined.has(currentTok.text) || lineInfo.has(currentTok.text)) {
-      if (
-        tokens[i + 1]?.type === 'dot' &&
-        tokens[i + 2]?.type === 'identifier'
-      ) {
+      if (identDotIdent) {
         const fullId = `${currentTok.text}.${tokens[i + 2].text}`;
         if (prevDefined.has(fullId) || lineInfo.has(fullId)) {
           const newTok = {
             text: fullId,
             start: currentTok.offset,
-            end: tokens[i + 2].offset + tokens[i + 2].text.length,
+            end: endOf(tokens[i + 2]),
           };
           lineInfo.add(newTok);
         }
@@ -111,7 +130,7 @@ export const getUsedIdentifiers = (code: string, prevDefined: Set<string>) => {
         lineInfo.add({
           text: fullId,
           start: currentTok.offset,
-          end: currentTok.offset + currentTok.text.length,
+          end: endOf(currentTok),
         });
         continue;
       }

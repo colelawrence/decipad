@@ -60,6 +60,10 @@ export type ErrSpec =
       dimensionId: string | number;
     }
   | {
+      errType: 'duplicated-table-column';
+      columnName: string;
+    }
+  | {
       errType: 'expected-table-and-associated-column';
       gotTable: Type;
       gotColumn: Type;
@@ -152,6 +156,9 @@ function specToString(spec: ErrSpec): string {
     }
     case 'unknown-category': {
       return `Unknown category ${spec.dimensionId}`;
+    }
+    case 'duplicated-table-column': {
+      return `The column ${spec.columnName} already exists in this table`;
     }
     case 'expected-table-and-associated-column': {
       return `Expected table and associated column`;
@@ -296,6 +303,13 @@ export class InferError {
     return new InferError({
       errType: 'unknown-category',
       dimensionId,
+    });
+  }
+
+  static duplicateTableColumn(columnName: string) {
+    return new InferError({
+      errType: 'duplicated-table-column',
+      columnName,
     });
   }
 

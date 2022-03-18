@@ -1,9 +1,9 @@
-import { inferStatement, makeContext } from '.';
 import { AST } from '..';
+import { inferStatement, makeContext } from '../infer';
 import { table, col, n, c, l, r } from '../utils';
 import { build as t } from '../type';
 import { objectToMap } from '../testUtils';
-import { findTableSize, inferTableColumnPerCell } from './table';
+import { findTableSize, inferTableColumnPerCell } from './inference';
 
 const nilCtx = makeContext({
   inAssignment: 'TableName',

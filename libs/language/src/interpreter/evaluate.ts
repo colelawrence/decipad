@@ -13,13 +13,14 @@ import { expandDirectiveToValue } from '../directives';
 
 import { Realm } from './Realm';
 import { Scalar, Range, Date, Column, Value, UnknownValue } from './Value';
-import { evaluateTable, getProperty } from './table';
+import { evaluateTable, getProperty } from '../tables/evaluate';
 import { evaluateData } from './data';
 import { getDateSequenceIncrement } from '../infer/sequence';
 import { RuntimeError } from '.';
 import { isPreviousRef } from '../previous-ref';
 import { evaluateMatrixRef, evaluateMatrixAssign } from '../matrix';
 import { evaluateCategories } from '../categories';
+import { evaluateColumnAssign } from '../tables/column-assign';
 
 // Gets a single value from an expanded AST.
 
@@ -168,6 +169,9 @@ export async function evaluate(
     case 'property-access': {
       const tableOrRow = await evaluate(realm, node.args[0]);
       return getProperty(tableOrRow, node.args[1]);
+    }
+    case 'table-column-assign': {
+      return evaluateColumnAssign(realm, node);
     }
     case 'matrix-assign': {
       return evaluateMatrixAssign(realm, node);

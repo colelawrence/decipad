@@ -23,6 +23,7 @@ import {
   withMinimumColumnCount,
   withAtParentIndex,
   isPrimitive,
+  canAddTableColumn,
 } from './checks';
 import { InferError } from './InferError';
 import {
@@ -224,6 +225,10 @@ export class Type {
 
   isTable(): Type {
     return isTable(this);
+  }
+
+  canAddTableColumn(colName: string): Type {
+    return canAddTableColumn(this, colName);
   }
 
   isTableOrRow(): Type {

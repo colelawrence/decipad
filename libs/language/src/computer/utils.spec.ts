@@ -1,4 +1,13 @@
-import { r, c, l, assign, matrixRef, matrixAssign, categories } from '../utils';
+import {
+  r,
+  c,
+  l,
+  assign,
+  matrixRef,
+  matrixAssign,
+  categories,
+  tableColAssign,
+} from '../utils';
 import { program } from './testutils';
 import {
   findSymbolsUsed,
@@ -15,6 +24,9 @@ it('figures out what symbol a statement creates, if any', () => {
     'var:Mat'
   );
   expect(getDefinedSymbol(matrixRef('Mat', [r('Set')]))).toEqual(null);
+  expect(getDefinedSymbol(tableColAssign('Table', 'Col', l(1)))).toEqual(
+    'var:Table'
+  );
 });
 
 it('figures out what symbols a statement uses, if any', () => {
@@ -28,6 +40,10 @@ it('figures out what symbols a statement uses, if any', () => {
     'var:Set',
     'var:Exp',
     'var:Mat',
+  ]);
+  expect(findSymbolsUsed(tableColAssign('Table', 'Col', r('Hello')))).toEqual([
+    'var:Hello',
+    'var:Table',
   ]);
 });
 

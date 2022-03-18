@@ -42,6 +42,12 @@ export class Stack<T> {
     this.top.set(varName, value);
   }
 
+  setMulti(variables: Map<string, T>) {
+    for (const [k, v] of variables.entries()) {
+      this.set(k, v);
+    }
+  }
+
   has(varName: string) {
     for (const scope of this.getVisibleScopes()) {
       if (scope.has(varName)) return true;

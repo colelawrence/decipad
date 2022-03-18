@@ -1,10 +1,11 @@
 import { AST } from '..';
 import { ParserNode } from './types';
 
-const typesWithArgs = new Set([
+const typesWithArgs = new Set<AST.Node['type']>([
   'argument-list',
   'function-call',
   'assign',
+  'table-column-assign',
   'categories',
   'matrix-ref',
   'matrix-assign',
@@ -18,7 +19,6 @@ const typesWithArgs = new Set([
   'table-spread',
   'generic-list',
   'range',
-  'units',
   'sequence',
 ]);
 
@@ -60,7 +60,7 @@ export function sourceMapDecorator(
       column: endColumn,
     };
 
-    if (typesWithArgs.has(node.type)) {
+    if (typesWithArgs.has(node.type as AST.Node['type'])) {
       node.args = (node.args as AST.Node[]).map((node: unknown) =>
         decorateNode(node as ParserNode)
       ) as ParserNode[];

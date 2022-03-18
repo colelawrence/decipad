@@ -47,3 +47,13 @@ it('find column usage inside table definition (II)', () => {
   const ids = getUsedIdentifiers('A = {\n  B = 1\n  C = A.B\n}', new Set());
   expect(ids[3]).toStrictEqual({ text: 'A.B', start: 20, end: 23 });
 });
+
+it('finds table column assignments', () => {
+  expect(
+    getUsedIdentifiers('Table.Hewwo = 1', new Set(['Table']))
+  ).toStrictEqual([{ text: 'Table.Hewwo', start: 0, end: 11 }]);
+
+  expect(
+    getUsedIdentifiers('UnknownTable.Hewwo = 1', new Set([]))
+  ).toStrictEqual([]);
+});

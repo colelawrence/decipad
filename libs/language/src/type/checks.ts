@@ -95,6 +95,16 @@ export const isTable = checker((me: Type) => {
   }
 });
 
+export const canAddTableColumn = checker((me: Type, colName: string) => {
+  return isTable(me).mapType((table) => {
+    if (table.columnNames?.includes(colName)) {
+      return t.impossible(InferError.duplicateTableColumn(colName));
+    } else {
+      return me;
+    }
+  });
+});
+
 export const isTableOrRow = checker((me: Type) => {
   if (
     (me.columnNames != null && me.columnTypes != null) ||

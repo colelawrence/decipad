@@ -112,6 +112,19 @@ export function tableDef(
   return n('assign', n('def', name), table(columns));
 }
 
+export function tableColAssign(
+  tableName: string,
+  columnName: string,
+  value: AST.Expression
+): AST.TableColumnAssign {
+  return n(
+    'table-column-assign',
+    n('tablepartialdef', tableName),
+    n('coldef', columnName),
+    value
+  );
+}
+
 export const matrixAssign = (
   name: string,
   matchers: AST.Expression[],
@@ -217,6 +230,7 @@ export const getIdentifierString = ({ type, args }: AST.Identifier): string => {
     (type !== 'ref' &&
       type !== 'catdef' &&
       type !== 'def' &&
+      type !== 'tablepartialdef' &&
       type !== 'funcdef' &&
       type !== 'generic-identifier' &&
       type !== 'funcref' &&

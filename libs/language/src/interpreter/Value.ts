@@ -413,6 +413,10 @@ export class Table implements Value {
     );
   }
 
+  get tableRowCount() {
+    return this.columns[0].rowCount;
+  }
+
   static fromMapping(mapping: AnyMapping<ColumnLike>) {
     const [columnNames, columns] = unzip(anyMappingToMap(mapping).entries());
     return new Table(columns, columnNames);
