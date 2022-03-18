@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     concurrency:
       group: deploy-alpha
+      cancel-in-progress: false
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
