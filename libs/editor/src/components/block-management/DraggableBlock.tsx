@@ -17,6 +17,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
 }) => {
   const editor = useEditorState();
   const readOnly = useReadOnly();
+  const isInDraggableBlock = useContext(InDraggableBlock);
   const { id } = element;
 
   const blockRef = useRef<HTMLDivElement>(null);
@@ -25,14 +26,12 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
     blockRef,
   });
 
+  if (readOnly) return <>{children}</>;
   // Nested Draggables (such as lists) do not work well enough with useDndBlock; they are very buggy.
   // If we want this, we need to build a better dnd.
-  const isInDraggableBlock = useContext(InDraggableBlock);
   if (isInDraggableBlock) return <>{children}</>;
 
-  return readOnly ? (
-    <>{children}</>
-  ) : (
+  return (
     <organisms.DraggableBlock
       {...props}
       dragSource={dragRef}
