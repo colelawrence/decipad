@@ -9,6 +9,7 @@ export { InlineCodeError } from './InlineCodeError/InlineCodeError';
 export { Interactive } from './Interactive/Interactive';
 export { MenuList } from './MenuList/MenuList';
 export { Modal } from './Modal/Modal';
+export { ClosableModalHeader } from './ClosableModalHeader/ClosableModalHeader';
 export { NavigationList } from './NavigationList/NavigationList';
 export { NotebookAvatars } from './NotebookAvatars/NotebookAvatars';
 export { NotebookListHeader } from './NotebookListHeader/NotebookListHeader';

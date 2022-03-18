@@ -4,6 +4,7 @@ export { CodeBlock } from './CodeBlock/CodeBlock';
 export { CodeLine } from './CodeLine/CodeLine';
 export { CodeResult } from './CodeResult/CodeResult';
 export { ColumnResult } from './ColumnResult/ColumnResult';
+export { ClosableModal } from './ClosableModal/ClosableModal';
 export { DragAndDropImportNotebook } from './DragAndDropImportNotebook/DragAndDropImportNotebook';
 export { DraggableBlock } from './DraggableBlock/DraggableBlock';
 export { EditableTableHeader } from './EditableTableHeader/EditableTableHeader';

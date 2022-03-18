@@ -6,6 +6,7 @@ export { Caret } from './Caret/Caret';
 export { Chat } from './Chat/Chat';
 export { Chevron } from './Chevron/Chevron';
 export { Calendar } from './Calendar/Calendar';
+export { Close } from './Close/Close';
 export { Code } from './Code/Code';
 export { Create } from './Create/Create';
 export { Deci } from './Deci/Deci';
