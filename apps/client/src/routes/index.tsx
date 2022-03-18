@@ -1,6 +1,6 @@
 import { GlobalStyles, VerifyEmail } from '@decipad/ui';
 import { FC } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import { RequireSession } from '../components/RequireSession';
 import { RouteEvents } from '../components/RouteEvents';
 import { decode as decodeVanityUrlComponent } from '../lib/vanityUrlComponent';
@@ -17,9 +17,9 @@ export function Router(): ReturnType<FC> {
           <Home />
         </RequireSession>
       </Route>
+      <Redirect from="/workspaces/:workspaceid" to="/w/:workspaceid" />
       <Route
-        exact
-        path={['/workspaces/:workspaceid', '/w/:workspaceid']}
+        path="/w/:workspaceid"
         render={({ match }) => (
           <RequireSession>
             <RouteEvents category="workspace">
@@ -29,12 +29,7 @@ export function Router(): ReturnType<FC> {
         )}
       />
       <Route
-        exact
-        path={[
-          '/n/:padid',
-          '/workspaces/:workspaceid/pads/:padid',
-          '/w/:workspaceid/pads/:padid',
-        ]}
+        path={['/n/:padid']}
         render={({ match }) => (
           <RequireSession allowSecret>
             <Notebook

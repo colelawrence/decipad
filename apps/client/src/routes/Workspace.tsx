@@ -27,7 +27,13 @@ import { useToast } from '@decipad/react-contexts';
 import { Dashboard, NotebookList, NotebookListPlaceholder } from '@decipad/ui';
 import { sortBy } from 'ramda';
 import { FC, useCallback, useContext, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import {
+  Redirect,
+  Route,
+  Switch,
+  useHistory,
+  useRouteMatch,
+} from 'react-router-dom';
 import { SideMenu } from '../components/SideMenu';
 import { Topbar } from '../components/Topbar';
 import { encode as encodeVanityUrlComponent } from '../lib/vanityUrlComponent';
@@ -37,6 +43,7 @@ export function Workspace({
 }: {
   workspaceId: string;
 }): ReturnType<FC> {
+  const { path } = useRouteMatch();
   const history = useHistory();
   const toast = useToast();
   const clientEvent = useContext(ClientEventsContext);
@@ -137,43 +144,53 @@ export function Workspace({
   };
 
   return (
-    <Dashboard
-      topbar={
-        <Topbar
-          numberOfNotebooks={data?.getWorkspaceById?.pads.items.length || 0}
-          onCreateNotebook={handleCreateNotebook}
-        />
-      }
-      sidebar={<SideMenu workspaceId={workspaceId} />}
-      notebookList={
-        data ? (
-          data.getWorkspaceById ? (
-            <NotebookList
-              Heading="h1"
-              notebooks={sortBy(
-                (item) => -Date.parse(item.createdAt),
-                data.getWorkspaceById.pads.items
-              ).map((notebook) => ({
-                ...notebook,
-                href: `/n/${encodeVanityUrlComponent(
-                  notebook.name,
-                  notebook.id
-                )}`,
-                exportHref: `/api/pads/${notebook.id}/export`,
-                exportFileName: `notebook-${notebook.id}.json`,
-              }))}
+    <Switch>
+      <Redirect
+        // redirect legacy notebook path for a while
+        exact
+        from={`${path}/pads/:notebookId`}
+        to="/n/:notebookId"
+      />
+      <Route>
+        <Dashboard
+          topbar={
+            <Topbar
+              numberOfNotebooks={data?.getWorkspaceById?.pads.items.length || 0}
               onCreateNotebook={handleCreateNotebook}
-              onDuplicate={handleDuplicateNotebook}
-              onDelete={handleDeleteNotebook}
-              onImport={handleImportNotebook}
             />
-          ) : (
-            'Workspace not found'
-          )
-        ) : (
-          <NotebookListPlaceholder />
-        )
-      }
-    />
+          }
+          sidebar={<SideMenu workspaceId={workspaceId} />}
+          notebookList={
+            data ? (
+              data.getWorkspaceById ? (
+                <NotebookList
+                  Heading="h1"
+                  notebooks={sortBy(
+                    (item) => -Date.parse(item.createdAt),
+                    data.getWorkspaceById.pads.items
+                  ).map((notebook) => ({
+                    ...notebook,
+                    href: `/n/${encodeVanityUrlComponent(
+                      notebook.name,
+                      notebook.id
+                    )}`,
+                    exportHref: `/api/pads/${notebook.id}/export`,
+                    exportFileName: `notebook-${notebook.id}.json`,
+                  }))}
+                  onCreateNotebook={handleCreateNotebook}
+                  onDuplicate={handleDuplicateNotebook}
+                  onDelete={handleDeleteNotebook}
+                  onImport={handleImportNotebook}
+                />
+              ) : (
+                'Workspace not found'
+              )
+            ) : (
+              <NotebookListPlaceholder />
+            )
+          }
+        />
+      </Route>
+    </Switch>
   );
 }
