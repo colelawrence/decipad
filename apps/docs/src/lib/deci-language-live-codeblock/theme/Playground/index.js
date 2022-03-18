@@ -3,6 +3,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import Editor from 'react-simple-code-editor';
 import Highlight, { Prism } from 'prism-react-renderer';
 import { nanoid } from 'nanoid';
+import { BehaviorSubject } from 'rxjs';
 // eslint-disable-next-line import/no-unresolved
 import useIsBrowser from '@docusaurus/useIsBrowser';
 // eslint-disable-next-line import/no-unresolved
@@ -20,6 +21,7 @@ const {
 const {
   useResults,
   ResultsContext,
+  defaultResults,
 } = require('../../../../../../../libs/react-contexts/src/index');
 
 function identityFn(o) {
@@ -73,7 +75,7 @@ function Preview({ blockId }) {
 function LivePreviewOrError({ code: liveCode }) {
   const [blockId] = useState(nanoid);
   const [computer] = useState(() => new Computer());
-  const [resultsContext, setResultsContext] = useState(useResults());
+  const [resultsContext] = useState(() => new BehaviorSubject(defaultResults));
   const [code, setCode] = useState(null);
   const [needsCompute, setNeedsCompute] = useState(false);
   const [error, setError] = useState(null);
@@ -127,7 +129,7 @@ function LivePreviewOrError({ code: liveCode }) {
             setError(null);
           }
           if (contextValue) {
-            setResultsContext(contextValue);
+            resultsContext.next(contextValue);
           }
         } catch (err) {
           // eslint-disable-next-line no-console
