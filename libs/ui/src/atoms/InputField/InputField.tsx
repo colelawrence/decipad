@@ -18,30 +18,40 @@ const inputStyles = css({
   },
 });
 
-export type AuthInputProps = {
-  readonly placeholder: string;
-  readonly type?: string;
+type FieldType =
+  | 'text'
+  | 'search'
+  | 'email'
+  | 'tel'
+  | 'url'
+  | 'password'
+  | 'date';
+export type InputFieldProps = {
+  readonly type?: FieldType;
   readonly required?: boolean;
+
+  readonly placeholder?: string;
 
   readonly value: string;
   readonly onChange?: (newValue: string) => void;
 };
 
-export const AuthInput = ({
-  placeholder,
+export const InputField = ({
   type = 'text',
   required = false,
 
+  placeholder,
+
   value,
   onChange = noop,
-}: AuthInputProps): ReturnType<FC> => {
+}: InputFieldProps): ReturnType<FC> => {
   return (
     <input
       css={inputStyles}
-      placeholder={placeholder}
-      value={value}
       type={type}
       required={required}
+      placeholder={placeholder}
+      value={value}
       onChange={(event) => onChange(event.currentTarget.value)}
     />
   );

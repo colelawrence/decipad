@@ -1,80 +1,74 @@
 import { Route, useHistory, useRouteMatch } from 'react-router-dom';
 import {
-  Button,
-  Heading,
-  Input,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
-} from '@chakra-ui/react';
-import {
-  GetWorkspaceById_getWorkspaceById,
+  GetWorkspaces,
+  GET_WORKSPACES,
+  useDeleteWorkspace,
   useRenameWorkspace,
 } from '@decipad/queries';
-import React, { FC, FormEvent, useRef, useState } from 'react';
-import { DeleteWorkspace } from './DeleteWorkspace/DeleteWorkspace';
+import React, { FC } from 'react';
+import { EditWorkspaceModal } from '@decipad/ui';
+import { useQuery } from '@apollo/client';
+import { Spinner } from '@chakra-ui/react';
+import { useToast } from '@decipad/react-contexts';
 
-export interface WorkspacePreferencesProps {
-  currentWorkspace: GetWorkspaceById_getWorkspaceById | null | undefined;
-}
-
-export const WorkspacePreferences = ({
-  currentWorkspace,
-}: WorkspacePreferencesProps): ReturnType<FC> => {
+export const WorkspacePreferences = (): ReturnType<FC> => {
   const history = useHistory();
-  const { path, url } = useRouteMatch();
+  const {
+    path,
+    url,
+    params: { workspaceid },
+  } = useRouteMatch<{ workspaceid: string }>();
 
-  const renameInputRef = useRef(null);
-  const [name, setName] = useState(currentWorkspace?.name || '');
-  const [renameMutate] = useRenameWorkspace({
-    id: currentWorkspace?.id || '',
-    name,
-  });
+  const toast = useToast();
 
-  const handleClose = () => {
-    history.push(url);
-  };
+  const [renameWorkspace] = useRenameWorkspace();
+  const [deleteWorkspace] = useDeleteWorkspace();
 
-  const renameWorkspace = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    renameMutate();
-    handleClose();
-  };
+  const { data: { workspaces } = {} } = useQuery<GetWorkspaces>(GET_WORKSPACES);
+  if (!workspaces) {
+    return <Spinner />;
+  }
+
+  const currentWorkspace = workspaces.find(({ id }) => id === workspaceid);
+  if (!currentWorkspace) {
+    console.error(
+      'Cannot find workspace with id',
+      workspaceid,
+      'in list of workspaces',
+      workspaces
+    );
+    throw new Error(`Cannot find workspace with id ${workspaceid}`);
+  }
 
   return (
     <Route path={`${path}/preferences`}>
-      <Modal isOpen onClose={handleClose} initialFocusRef={renameInputRef}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>{name} Preferences</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody pb={6}>
-            <Heading mb={3} size="sm">
-              Rename Workspace
-            </Heading>
-            <form onSubmit={renameWorkspace}>
-              <Input
-                type="text"
-                placeholder={currentWorkspace?.name}
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                ref={renameInputRef}
-              />
-              <Button w="100%" type="submit" colorScheme="messenger" mt={3}>
-                Rename
-              </Button>
-            </form>
-
-            <DeleteWorkspace
-              onClose={handleClose}
-              currentWorkspace={currentWorkspace}
-            />
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      <EditWorkspaceModal
+        Heading="h1"
+        name={currentWorkspace.name}
+        allowDelete={workspaces.length > 1}
+        closeHref={url}
+        onRename={(newName) =>
+          renameWorkspace({ variables: { id: workspaceid, name: newName } })
+            .then(() => {
+              history.push(url);
+            })
+            .catch((err) => {
+              console.error('Failed to rename workspace. Error:', err);
+              toast('Failed to rename workspace.', 'error');
+            })
+        }
+        onDelete={() => {
+          history.push('/');
+          return deleteWorkspace({ variables: { id: workspaceid } })
+            .then(() => {
+              toast('Workspace deleted.', 'success');
+            })
+            .catch((err) => {
+              console.error('Failed to delete workspace. Error:', err);
+              toast('Failed to delete workspace.', 'error');
+            });
+        }}
+      />
     </Route>
   );
 };

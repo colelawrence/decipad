@@ -98,10 +98,7 @@ export const Button = ({
         size === 'extraLarge' && extraLargeStyles,
         disabled && disabledStyles,
       ]}
-      onClick={(event) => {
-        event.preventDefault();
-        onClick();
-      }}
+      onClick={onClick}
     >
       {children}
     </button>

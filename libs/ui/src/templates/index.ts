@@ -1,5 +1,7 @@
+export { CreateWorkspaceModal } from './CreateWorkspaceModal/CreateWorkspaceModal';
 export { DashboardSidebar } from './DashboardSidebar/DashboardSidebar';
 export { DashboardTopbar } from './DashboardTopbar/DashboardTopbar';
+export { EditWorkspaceModal } from './EditWorkspaceModal/EditWorkspaceModal';
 export { GlobalStyles } from './GlobalStyles/GlobalStyles';
 export { NotebookList } from './NotebookList/NotebookList';
 export { NotebookListPlaceholder } from './NotebookListPlaceholder/NotebookListPlaceholder';

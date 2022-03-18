@@ -14,7 +14,7 @@ export const RENAME_WORKSPACE = gql`
 `;
 
 export const useRenameWorkspace = (
-  variables: RenameWorkspaceVariables
+  variables?: RenameWorkspaceVariables
 ): MutationTuple<RenameWorkspace, RenameWorkspaceVariables> =>
   useMutation<RenameWorkspace, RenameWorkspaceVariables>(RENAME_WORKSPACE, {
     variables,

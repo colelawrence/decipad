@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { FC, useRef, useState } from 'react';
-import { AuthInput, Button } from '../../atoms';
+import { InputField, Button } from '../../atoms';
 import { AuthContent } from '../../molecules';
 
 const wrapperStyles = css({
@@ -47,7 +47,7 @@ export const LoginPage = ({ onSubmit }: LoginPageProps): ReturnType<FC> => {
           gridGap: '12px',
         }}
       >
-        <AuthInput
+        <InputField
           placeholder="Your Email"
           type="email"
           required

@@ -14,11 +14,11 @@ export interface DeleteWorkspaceVars {
   id: string;
 }
 
-export const useDeleteWorkspace = ({
-  id,
-}: DeleteWorkspaceVars): MutationTuple<DeleteWorkspace, DeleteWorkspaceVars> =>
+export const useDeleteWorkspace = (
+  variables?: DeleteWorkspaceVars
+): MutationTuple<DeleteWorkspace, DeleteWorkspaceVars> =>
   useMutation<DeleteWorkspace, DeleteWorkspaceVars>(DELETE_WORKSPACE, {
-    variables: { id },
+    variables,
     refetchQueries: ['GetWorkspaces'],
     awaitRefetchQueries: true,
   });

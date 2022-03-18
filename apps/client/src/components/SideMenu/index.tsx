@@ -3,7 +3,7 @@ import { useGetWorkspaces } from '@decipad/queries';
 import { DashboardSidebar } from '@decipad/ui';
 import { FC } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import { CreateWorkspaceModal } from './CreateWorkspaceModal';
+import { CreateWorkspace } from './CreateWorkspace';
 import { WorkspacePreferences } from './WorkspacePreferences';
 
 export interface SideMenuProps {
@@ -49,8 +49,8 @@ export const SideMenu = ({ workspaceId }: SideMenuProps): ReturnType<FC> => {
           history.push(`/w/${currentWorkspace.id}/create-workspace`)
         }
       />
-      <WorkspacePreferences currentWorkspace={currentWorkspace} />
-      <CreateWorkspaceModal />
+      <WorkspacePreferences />
+      <CreateWorkspace Heading="h2" />
     </>
   );
 };

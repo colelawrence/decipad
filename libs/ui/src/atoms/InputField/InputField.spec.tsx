@@ -1,11 +1,11 @@
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { AuthInput } from './AuthInput';
+import { InputField } from './InputField';
 
 describe('Auth Input', () => {
   it('renders the input value', () => {
     const { getByRole } = render(
-      <AuthInput
+      <InputField
         placeholder="Placeholder"
         value="This is an input"
         onChange={jest.fn()}
@@ -20,7 +20,7 @@ describe('Auth Input', () => {
   it('onChange gets called', () => {
     const onChange = jest.fn();
     const { getByRole } = render(
-      <AuthInput placeholder="Placeholder" value="" onChange={onChange} />
+      <InputField placeholder="Placeholder" value="" onChange={onChange} />
     );
 
     const input = getByRole('textbox');
