@@ -8,7 +8,7 @@ A string is a data type used to represent text.
 
 ## Declaring a string
 
-You can declare a string value by placing text between quotation marks ("):
+Declare a string value by placing text between quotation marks ("):
 
 ```deci live
 "Hello world!"
@@ -17,7 +17,7 @@ You can declare a string value by placing text between quotation marks ("):
 
 ## Joining two strings
 
-You can join two strings by using the `+` operator like this:
+Join two strings with the `+` operator like this:
 
 ```deci live
 A = "Hello "

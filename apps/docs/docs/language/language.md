@@ -4,19 +4,19 @@ sidebar_position: 10
 
 # Language
 
-The Decipad language allows you to model in an easy and intuitive way with calculation blocks.
+Model on calculation blocks with the Decipad language.
 
 ## Introduction to the language
 
-To get started, discover the fundamental concepts:
+Discover the fundamental concepts:
+
+- [Variables](variables)
 
 - [Numbers](numbers)
 
 - [Arithmetic operations](arithmetic-functions)
 
 - [Strings](strings)
-
-- [Variables](variables)
 
 - [Booleans](booleans)
 

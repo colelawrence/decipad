@@ -1,5 +1,5 @@
 ---
-sidebar_position: 5
+sidebar_position: 0
 ---
 
 # Get started with Decipad
@@ -7,7 +7,7 @@ sidebar_position: 5
 ## 1 - Create your first notebook
 
 A notebook is a place where narrative and data coexist.
-Use it as a notebook and start to write some text, or type `/` to add calculation blocks, tables or inputs.
+Use it as a textbook or type `/` to add calculation blocks, tables or inputs.
 
 ## 2 - Explore numbers: Calculations
 
@@ -24,7 +24,7 @@ The calculation blocks are the place where you can work with numbers by performi
 
 In a calculation block, assign names to data by using the `=` sign - we call it creating [variables](/docs/language/variables).
 
-For now, variables can't have spaces, but you can use symbols or emojis. Don't forget that [Variables](/docs/language/variables) are case-sensitive.
+For now, variables can't have spaces, but you can use symbols or emojis. Don't forget that [variables](/docs/language/variables) are case-sensitive.
 
 Call these variables throughout your notebook to reference your data on calculations.
 

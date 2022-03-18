@@ -6,7 +6,7 @@ sidebar_position: 28
 
 A boolean value can either be true or false.
 
-You can express boolean values like this:
+Express boolean values like this:
 
 ```deci live
 true
@@ -20,16 +20,16 @@ false
 
 ## Comparing values
 
-You can also compare two values like this:
+Compare two values like this:
 
 ```deci live
 3 > 2
 ==> true
 ```
 
-This comparison results in a boolean value (`true` in this case).
+In this example, the comparison result is `true`.
 
-You can use other comparators:
+The list of available comparators is the following:
 
 - `>`: "greater than"
 - `<`: "less than"
@@ -38,12 +38,16 @@ You can use other comparators:
 - `==`: "equals"
 - `!=`: "different"
 
+## Parenthesis
+
+Use parenthesis to chain operators and define priorities
+
 ```deci live
 10 bananas != (20 bananas / 2)
 ==> false
 ```
 
-> We're using parenthesis to ensure that the operation on the right side of the `==` is done **before** we compare. If you are chaining operators, we recommend you use parenthesis.
+> Parentheses are used to ensure that the `/` operation on the right side of the `!=` is performed **before** the evaluation of the `!=` itself.
 
 ## Functions on booleans
 

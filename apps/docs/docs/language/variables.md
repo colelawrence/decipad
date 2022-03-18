@@ -1,21 +1,27 @@
 ---
-sidebar_position: 25
+sidebar_position: 0
 ---
 
 # Variables
 
-A variable is a way to store a value in a name, which can then be used in further calculations.
+Name your data with variables.
 
-You can declare a variable by using the `=` operator:
+They improve readability of notebooks with a layer of abstraction.
+
+## Declaration
+
+Declare a variable with the `=` operator:
 
 ```deci live
 OfficeSpace = 120 meters^2
 ==> 120 meters²
 ```
 
-> Variables should start with a letter ("a" through "z" and "A" through "Z") and can not contain spaces or characters other than numbers, letters or underscore ("\_").
+> Variables can contain letters from a to z, upper or lower case. They can't contain spaces or special characters except numbers, underscores ("\_") or emojis.
 
-You can then use these variables throughout the code
+## Referencing
+
+Reference variables on calculation blocks:
 
 ```deci live
 OfficeSpace = 120 m^2
@@ -24,7 +30,9 @@ OfficeCost = OfficeSpace * OfficePrice
 ==> 6000 $ per month
 ```
 
-You cannot change the value of an existing variable after it has been declared. This is invalid:
+## Redefinition
+
+Existing variables can't be redefined after declaration:
 
 ```deci live
 Beans = 1 bean
@@ -32,7 +40,7 @@ Beans = Beans + 1
 ==> The name Beans is already being used. You cannot have duplicate names
 ```
 
-Instead, you will need to declare a new variable:
+A simple solution is declaring a new variable:
 
 ```deci live
 Beans = 1 bean

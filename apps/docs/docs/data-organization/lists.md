@@ -4,7 +4,9 @@ sidebar_position: 140
 
 # Lists
 
-You can create lists by placing elements inside square brackets (`[]`):
+Lists help us organize two-dimensional data.
+
+Create lists by placing elements inside square brackets (`[]`):
 
 ```deci live
 [1, 2, 3, 4]
@@ -18,14 +20,14 @@ A list can contain numbers (with or without units):
 ==> [ 2 oranges, 4 oranges, 6 oranges ]
 ```
 
-Or dates:
+Dates:
 
 ```deci live
 [date(2020), date(2021), date(2022)]
 ==> [ year 2020, year 2021, year 2022 ]
 ```
 
-Or text strings:
+Text strings:
 
 ```deci live
 ["Hello", "World", "!"]
@@ -41,14 +43,14 @@ Or even booleans:
 
 ## A list must be coherent
 
-You cannot have lists that contain different types of elements. Here are some examples of non-valid lists:
+Lists cannot contain different types of elements. Here are some examples of non-valid lists:
 
 ```deci live
 [true, "that"]
 ==> This operation requires a boolean and a string was entered
 ```
 
-If numbers have units, they must be the same:
+Units on lists must be consistent:
 
 ```deci live
 [1 orange, 2 pears]
@@ -57,7 +59,7 @@ If numbers have units, they must be the same:
 
 ## Creating lists from sequences
 
-You can also create a list by specifying a sequence:
+Create a list by specifying a [sequence](../advanced-concepts/sequences):
 
 ```deci live
 [1 .. 10 by 2]
