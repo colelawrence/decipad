@@ -23,6 +23,7 @@ export { MenuItem } from './MenuItem/MenuItem';
 export { MenuSeparator } from './MenuSeparator/MenuSeparator';
 export { NavigationItem } from './NavigationItem/NavigationItem';
 export { NumberResult } from './NumberResult/NumberResult';
+export { Overlay } from './Overlay/Overlay';
 export { Paragraph } from './Paragraph/Paragraph';
 export { Placeholder } from './Placeholder/Placeholder';
 export { SlashCommandsMenuItem } from './SlashCommandsMenuItem/SlashCommandsMenuItem';
