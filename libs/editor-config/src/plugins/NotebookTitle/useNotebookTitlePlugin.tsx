@@ -10,59 +10,73 @@ import {
 } from '@decipad/queries';
 import { isCollapsed, OnChange, PlatePlugin } from '@udecode/plate';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Editor } from 'slate';
+import { Editor, Node } from 'slate';
 
 export interface UseNotebookTitlePluginProps {
   notebookId: string;
   readOnly: boolean;
 }
 
+const DEBOUNCE_TITLE_UPDATE_MS = 1000;
+
 export const useNotebookTitlePlugin = ({
   notebookId,
   readOnly,
 }: UseNotebookTitlePluginProps): PlatePlugin => {
   const toast = useToast();
-  const [newTitle, setNewTitle] = useState<null | string>(null);
+  const [editorTitle, setEditorTitle] = useState<string | undefined>(undefined);
 
   // Getting the current pad's name
   const { data } = useQuery<GetPadById, GetPadByIdVariables>(GET_PAD_BY_ID, {
     variables: { id: notebookId },
   });
 
-  const [mutate] = useMutation<RenamePad, RenamePadVariables>(RENAME_PAD);
+  const [renameNotebook] =
+    useMutation<RenamePad, RenamePadVariables>(RENAME_PAD);
+  const remoteTitle = data?.getPadById?.name;
+
+  const setNewTitle = useCallback(
+    (newTitle: string) =>
+      renameNotebook({
+        variables: { padId: notebookId, name: newTitle },
+      }).then(() => {
+        toast('Notebook title updated', 'info');
+      }),
+    [notebookId, renameNotebook, toast]
+  );
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (editorTitle && editorTitle !== remoteTitle) {
+        setNewTitle(editorTitle);
+      }
+    }, DEBOUNCE_TITLE_UPDATE_MS);
+    return () => clearTimeout(timeout);
+  }, [editorTitle, remoteTitle, setNewTitle]);
 
   // Get the first node's text value, if it is not the same as the current pad's name, then i set the newTitle state
   const onChangeNotebookTitle: OnChange = useCallback(
     (editor) => () => {
+      if (readOnly) {
+        return;
+      }
       const { selection } = editor;
-
-      // TODO fix Node types
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-      if (selection && data && isCollapsed(selection)) {
+      try {
         const [node] = Editor.node(editor, [0, 0]);
-        if (data.getPadById?.name !== (node as any).text) {
-          setNewTitle((node as any).text);
-        }
-      }
-      /* eslint-enable @typescript-eslint/no-explicit-any */
-    },
-    [data]
-  );
+        const editableTitle = Node.string(node);
 
-  // Change the pad's title after the user has stopped typing by 1 second
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (newTitle !== null && !readOnly) {
-        // change the title of the pad
-        mutate({
-          variables: { padId: notebookId, name: newTitle },
-        }).then(() => {
-          toast('Notebook title updated', 'info');
-        });
+        if (selection && isCollapsed(selection)) {
+          if (editableTitle && remoteTitle !== editableTitle) {
+            setEditorTitle(editableTitle);
+          }
+        }
+      } catch (err) {
+        console.error('Error trying to get the notebook title:', err);
+        console.error(err);
       }
-    }, 1000);
-    return () => clearTimeout(timeout);
-  }, [mutate, newTitle, notebookId, toast, readOnly]);
+    },
+    [readOnly, remoteTitle]
+  );
 
   // return a slate plugin
   return useMemo(
