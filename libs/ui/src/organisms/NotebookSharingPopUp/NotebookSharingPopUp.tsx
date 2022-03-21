@@ -1,6 +1,7 @@
 import { useWindowListener } from '@decipad/react-utils';
+import { ClientEventsContext } from '@decipad/client-events';
 import { css } from '@emotion/react';
-import { FC, useState } from 'react';
+import { FC, useState, useContext } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { noop } from '@decipad/utils';
 import { Button, Toggle, Tooltip } from '../../atoms';
@@ -118,6 +119,7 @@ export const NotebookSharingPopUp = ({
 }: NotebookSharingPopUpProps): ReturnType<FC> => {
   const [copiedStatusVisible, setCopiedStatusVisible] = useState(false);
   const [shareMenuOpen, setShareMenuOpen] = useState(false);
+  const clientEvent = useContext(ClientEventsContext);
 
   const handleClickOutside = () => {
     setShareMenuOpen(false);
@@ -161,6 +163,11 @@ export const NotebookSharingPopUp = ({
                           setTimeout(() => {
                             setCopiedStatusVisible(false);
                           }, 1000);
+                          // Analytics
+                          clientEvent({
+                            type: 'action',
+                            action: 'notebook share link copied',
+                          });
                         }}
                       >
                         <button css={copyButtonStyles}>

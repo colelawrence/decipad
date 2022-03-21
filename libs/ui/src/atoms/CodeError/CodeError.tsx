@@ -1,4 +1,5 @@
-import { FC } from 'react';
+import { ClientEventsContext } from '@decipad/client-events';
+import { FC, useContext } from 'react';
 import { css } from '@emotion/react';
 import { BracketError } from '@decipad/language';
 import { Warning } from '../../icons';
@@ -60,6 +61,7 @@ export const CodeError = ({
   url,
   bracketError,
 }: CodeErrorProps): ReturnType<FC> => {
+  const clientEvent = useContext(ClientEventsContext);
   return (
     <Tooltip
       trigger={
@@ -73,7 +75,17 @@ export const CodeError = ({
       {bracketError && (
         <p css={messageStyles}>{bracketErrorMessage(bracketError)}</p>
       )}
-      <Anchor css={urlStyles} href={url}>
+      <Anchor
+        css={urlStyles}
+        href={url}
+        // Analytics
+        onClick={() =>
+          clientEvent({
+            type: 'action',
+            action: 'notebook code error docs link clicked',
+          })
+        }
+      >
         Check our docs
       </Anchor>
     </Tooltip>

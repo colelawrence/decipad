@@ -1,8 +1,9 @@
 import { docs } from '@decipad/routing';
 import { noop } from '@decipad/utils';
+import { ClientEventsContext } from '@decipad/client-events';
 import { css } from '@emotion/react';
 import { useSession } from 'next-auth/client';
-import { ComponentProps, FC } from 'react';
+import { ComponentProps, FC, useContext } from 'react';
 import { Button, IconButton } from '../../atoms';
 import { LeftArrow } from '../../icons';
 import { NotebookAvatars, NotebookPath } from '../../molecules';
@@ -70,6 +71,8 @@ export const NotebookTopbar = ({
 }: NotebookTopbarProps): ReturnType<FC> => {
   const [session] = useSession();
   const isAdmin = permission === 'ADMIN';
+  const clientEvent = useContext(ClientEventsContext);
+
   return (
     <div css={topbarWrapperStyles}>
       {/* Left side */}
@@ -93,7 +96,18 @@ export const NotebookTopbar = ({
       <div css={topbarRightSideStyles}>
         {isAdmin && (
           <em css={helpButtonStyles}>
-            <Anchor href={docs({}).$}>Need help?</Anchor>
+            <Anchor
+              href={docs({}).$}
+              // Analytics
+              onClick={() =>
+                clientEvent({
+                  type: 'action',
+                  action: 'notebook help link clicked',
+                })
+              }
+            >
+              Need help?
+            </Anchor>
           </em>
         )}
         <NotebookAvatars usersWithAccess={usersWithAccess} />
