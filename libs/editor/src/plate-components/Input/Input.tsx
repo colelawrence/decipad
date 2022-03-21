@@ -9,7 +9,8 @@ import {
 } from '@decipad/editor-types';
 import { organisms } from '@decipad/ui';
 import { useEditorState } from '@udecode/plate';
-import { FC, useCallback } from 'react';
+import { ClientEventsContext } from '@decipad/client-events';
+import { FC, useCallback, useContext } from 'react';
 import { Editor, Transforms } from 'slate';
 import { ReactEditor, useReadOnly } from 'slate-react';
 import { useElementMutatorCallback } from '../../utils/slateReact';
@@ -21,6 +22,7 @@ export const Input: types.PlateComponent = ({
 }): ReturnType<FC> => {
   const editor = useEditorState();
   const isReadOnly = useReadOnly();
+  const clientEvent = useContext(ClientEventsContext);
 
   if (element?.type !== ELEMENT_INPUT) {
     throw new Error('Input is meant to render input elements');
@@ -34,7 +36,13 @@ export const Input: types.PlateComponent = ({
   const onChangeValue = useElementMutatorCallback<InputElement>(
     editor,
     element,
-    'value'
+    'value',
+    () =>
+      clientEvent({
+        type: 'action',
+        action: 'number field updated',
+        props: { isReadOnly },
+      })
   );
 
   const onConvert = useCallback(() => {

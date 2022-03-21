@@ -4,6 +4,7 @@ type Action =
   | { action: 'notebook deleted'; props?: undefined }
   | { action: 'notebook created'; props?: undefined }
   // Editor actions
+  | { action: 'number field updated'; props: { isReadOnly: boolean } }
   | { action: 'notebook share link copied'; props?: undefined }
   | { action: 'notebook help link clicked'; props?: undefined }
   | { action: 'notebook code error docs link clicked'; props?: undefined }

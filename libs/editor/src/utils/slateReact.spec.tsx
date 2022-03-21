@@ -34,6 +34,11 @@ describe('findDomNodePath', () => {
 });
 
 describe('useElementMutatorCallback', () => {
+  let effectsFn: () => void;
+  beforeEach(() => {
+    effectsFn = jest.fn();
+  });
+
   const Link: React.FC<RenderElementProps> = ({
     element,
     attributes,
@@ -44,7 +49,8 @@ describe('useElementMutatorCallback', () => {
     const mutateElement = useElementMutatorCallback(
       editor,
       element as LinkElement,
-      'url'
+      'url',
+      effectsFn
     );
     return (
       <div {...attributes}>
@@ -83,5 +89,29 @@ describe('useElementMutatorCallback', () => {
     userEvent.click(getByText('mutate'));
 
     expect(editor).toHaveProperty('children.0.url', 'test');
+  });
+
+  it('calls effects callback', () => {
+    const editor = withReact(createEditor() as ReactEditor);
+    const { getByText, getByLabelText } = render(
+      <Slate
+        editor={editor}
+        value={
+          [
+            { type: 'a', id: 'asdf', url: '', children: [{ text: '' }] },
+          ] as Element[]
+        }
+        onChange={noop}
+      >
+        <Editable renderElement={(props) => <Link {...props} />} />
+      </Slate>
+    );
+
+    expect(effectsFn).not.toHaveBeenCalled();
+
+    userEvent.type(getByLabelText('value'), 'test');
+    userEvent.click(getByText('mutate'));
+
+    expect(effectsFn).toHaveBeenCalledTimes(1);
   });
 });
