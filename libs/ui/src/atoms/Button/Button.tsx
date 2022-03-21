@@ -52,24 +52,16 @@ const disabledStyles = css({
   ...setCssVar('currentTextColor', grey300.rgb),
 });
 
-type ButtonTypes =
-  | {
-      readonly href: string;
-      readonly onClick?: undefined;
-      readonly submit?: undefined;
-    }
-  | {
-      readonly href?: undefined;
-      readonly onClick?: () => void;
-      readonly submit?: boolean;
-    };
-
 type ButtonProps = {
   readonly primary?: boolean;
   readonly children: TextChildren;
   readonly disabled?: boolean;
   readonly size?: 'extraSlim' | 'extraLarge';
-} & ButtonTypes;
+
+  readonly href?: string;
+  readonly onClick?: () => void;
+  readonly submit?: boolean;
+};
 
 export const Button = ({
   primary = false,
@@ -91,6 +83,7 @@ export const Button = ({
         size === 'extraLarge' && extraLargeStyles,
         disabled && disabledStyles,
       ])}
+      onClick={onClick}
     >
       {children}
     </Anchor>

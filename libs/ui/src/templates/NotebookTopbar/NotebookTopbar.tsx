@@ -125,7 +125,16 @@ export const NotebookTopbar = ({
             </Button>
           )
         ) : (
-          <Button href="https://rcagp49qi5w.typeform.com/to/i8uXYEtd">
+          <Button
+            href="https://rcagp49qi5w.typeform.com/to/i8uXYEtd"
+            // Analytics
+            onClick={() =>
+              clientEvent({
+                type: 'action',
+                action: 'try decipad',
+              })
+            }
+          >
             Try Decipad
           </Button>
         )}

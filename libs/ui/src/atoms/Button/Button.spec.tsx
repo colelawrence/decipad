@@ -107,6 +107,18 @@ describe('with an href', () => {
     expect(getByRole('link')).toHaveAttribute('href', '/page');
   });
 
+  it('emits click events', () => {
+    const handleClick = jest.fn();
+    const { getByRole } = render(
+      <Button href="/page" onClick={handleClick}>
+        icon
+      </Button>
+    );
+
+    userEvent.click(getByRole('link'));
+    expect(handleClick).toHaveBeenCalled();
+  });
+
   it('renders a noop href when disabled', () => {
     const { getByRole } = render(
       <Button href="/page" disabled>

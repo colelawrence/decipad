@@ -3,6 +3,8 @@ type Action =
   | { action: 'notebook duplicated'; props?: undefined }
   | { action: 'notebook deleted'; props?: undefined }
   | { action: 'notebook created'; props?: undefined }
+  // Visitor
+  | { action: 'try decipad'; props?: undefined }
   // Editor actions
   | { action: 'number field updated'; props: { isReadOnly: boolean } }
   | { action: 'notebook share link copied'; props?: undefined }
