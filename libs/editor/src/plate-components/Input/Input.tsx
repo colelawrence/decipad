@@ -38,13 +38,7 @@ export const Input: types.PlateComponent = ({
   const onChangeValue = useElementMutatorCallback<InputElement>(
     editor,
     element,
-    'value',
-    () =>
-      clientEvent({
-        type: 'action',
-        action: 'number field updated',
-        props: { isReadOnly },
-      })
+    'value'
   );
 
   const onConvert = useCallback(() => {
@@ -99,7 +93,14 @@ export const Input: types.PlateComponent = ({
             );
           }}
           onChangeName={onChangeVariableName}
-          onChangeValue={onChangeValue}
+          onChangeValue={(value) => {
+            onChangeValue(value);
+            clientEvent({
+              type: 'action',
+              action: 'number field updated',
+              props: { isReadOnly },
+            });
+          }}
           onConvert={onConvert}
           onCopy={() => {
             // TODO
