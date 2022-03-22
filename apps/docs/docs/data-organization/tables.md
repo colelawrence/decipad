@@ -149,6 +149,24 @@ Table = {
 }
 ```
 
+## Add columns
+
+Add new columns to a defined table with `.` followed by their name. Their sizes must match the existing table columns.
+
+```deci live
+ MyTable = {
+   A = [1, 2, 3]
+   B = [4, 5, 6]
+ }
+ MyTable.C = [7, 8, 9]
+ MyTable
+==> {
+  A = [ 1, 2, 3 ],
+  B = [ 4, 5, 6 ],
+  C = [ 7, 8, 9 ]
+}
+```
+
 ## Index column
 
 You can use the first column as an index for the row by using cells of text:
