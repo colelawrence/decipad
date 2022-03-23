@@ -41,7 +41,7 @@ export const CreateWorkspaceModal = ({
           value={name}
           onChange={setName}
         />
-        <Button primary disabled={!name || isSubmitting}>
+        <Button type="secondary" submit disabled={!name || isSubmitting}>
           Create Workspace
         </Button>
       </form>

@@ -63,7 +63,7 @@ export const DashboardTopbar = ({
         />
       </div>
       <div css={rightStyles}>
-        <Button primary size="extraSlim" onClick={onCreateNotebook}>
+        <Button type="primary" size="extraSlim" onClick={onCreateNotebook}>
           Create New
         </Button>
         <div css={{ position: 'relative' }}>

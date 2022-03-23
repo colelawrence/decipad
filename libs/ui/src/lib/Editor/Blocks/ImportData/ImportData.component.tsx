@@ -167,7 +167,7 @@ export const ImportDataElement: PlatePluginComponent = ({
           <div>
             <Button
               disabled={!needsCreateOrUpdateExternalData}
-              primary
+              type="primary"
               onClick={() => {
                 if (createOrUpdateExternalData) {
                   createOrUpdateExternalData({

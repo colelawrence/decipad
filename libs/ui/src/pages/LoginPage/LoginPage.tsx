@@ -55,6 +55,7 @@ export const LoginPage = ({ onSubmit }: LoginPageProps): ReturnType<FC> => {
           onChange={onChangeEmail}
         />
         <Button
+          type="primaryBrand"
           submit
           size="extraLarge"
           disabled={!formValid}

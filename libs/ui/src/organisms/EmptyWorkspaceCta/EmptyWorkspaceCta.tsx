@@ -45,7 +45,7 @@ export const EmptyWorkspaceCta = ({
         Start modelling your finances, runway and others
       </p>
       <div css={{ gridRow: 'button' }}>
-        <Button primary onClick={onCreateNotebook}>
+        <Button type="primary" onClick={onCreateNotebook}>
           Create new notebook
         </Button>
       </div>

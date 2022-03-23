@@ -129,7 +129,12 @@ export const NotebookSharingPopUp = ({
 
   return (
     <div css={{ position: 'relative' }} onClick={(e) => e.stopPropagation()}>
-      <Button onClick={() => setShareMenuOpen(!shareMenuOpen)}>Share</Button>
+      <Button
+        type="primaryBrand"
+        onClick={() => setShareMenuOpen(!shareMenuOpen)}
+      >
+        Share
+      </Button>
 
       <div>
         {shareMenuOpen && (

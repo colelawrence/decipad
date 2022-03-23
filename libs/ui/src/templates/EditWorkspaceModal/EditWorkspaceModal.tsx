@@ -62,7 +62,8 @@ export const EditWorkspaceModal = ({
             onChange={setNewName}
           />
           <Button
-            primary
+            type="secondary"
+            submit
             disabled={!newName || newName === name || isSubmitting}
           >
             Rename
@@ -94,6 +95,7 @@ export const EditWorkspaceModal = ({
               onChange={setDeletionConfirmationPrompt}
             />
             <Button
+              type="danger"
               submit
               disabled={deletionConfirmationPrompt !== name || isSubmitting}
             >

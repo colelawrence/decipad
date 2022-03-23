@@ -9,41 +9,27 @@ export default {
       control: { type: 'text', required: true },
       defaultValue: 'Text',
     },
+    type: {
+      control: { type: 'radio' },
+      options: ['secondary', 'primary', 'primaryBrand', 'danger'],
+      defaultValue: 'secondary',
+    },
+    size: {
+      control: { type: 'radio' },
+      options: ['normal', 'extraSlim', 'extraLarge'],
+      defaultValue: 'normal',
+    },
+    disabled: {
+      control: { type: 'boolean' },
+      defaultValue: false,
+    },
   },
 } as Meta;
+interface Args {
+  children: string;
+  type: 'primary' | 'primaryBrand' | 'secondary' | 'danger';
+  size: 'normal' | 'extraSlim' | 'extraLarge';
+  disabled: boolean;
+}
 
-export const Secondary: Story<{ children: string }> = (args) => (
-  <Button {...args} />
-);
-
-export const SecondaryExtraSlim: Story<{ children: string }> = (args) => (
-  <Button size="extraSlim" {...args} />
-);
-
-export const SecondaryExtraLarge: Story<{ children: string }> = (args) => (
-  <Button size="extraLarge" {...args} />
-);
-
-export const Primary: Story<{ children: string }> = (args) => (
-  <Button primary {...args} />
-);
-
-export const PrimaryExtraSlim: Story<{ children: string }> = (args) => (
-  <Button primary size="extraSlim" {...args} />
-);
-
-export const PrimaryExtraLarge: Story<{ children: string }> = (args) => (
-  <Button primary size="extraLarge" {...args} />
-);
-
-export const Disabled: Story<{ children: string }> = (args) => (
-  <Button disabled {...args} />
-);
-
-export const DisabledExtraSlim: Story<{ children: string }> = (args) => (
-  <Button disabled size="extraSlim" {...args} />
-);
-
-export const DisabledExtraLarge: Story<{ children: string }> = (args) => (
-  <Button disabled size="extraLarge" {...args} />
-);
+export const Normal: Story<Args> = (props) => <Button {...props} />;

@@ -1,6 +1,5 @@
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { brand500 } from '../../primitives';
 import { Button } from './Button';
 
 it('renders the button text', () => {
@@ -23,7 +22,7 @@ describe('when primary', () => {
       getByRole('button')
     ).backgroundColor;
 
-    rerender(<Button primary>text</Button>);
+    rerender(<Button type="primary">text</Button>);
     const primaryBackgroundColor = getComputedStyle(
       getByRole('button')
     ).backgroundColor;
@@ -33,18 +32,24 @@ describe('when primary', () => {
 });
 
 describe('when disabled', () => {
-  it("doesn't render with green background", () => {
-    const { getByRole, rerender } = render(<Button>text</Button>);
-
-    expect(getComputedStyle(getByRole('button')).backgroundColor).toBe(
-      brand500.rgb
+  it('has a different background color', () => {
+    const { getByRole, rerender } = render(
+      <Button type="primary">text</Button>
     );
+    const normalBackgroundColor = getComputedStyle(
+      getByRole('button')
+    ).backgroundColor;
 
-    rerender(<Button disabled>text</Button>);
-
-    expect(getComputedStyle(getByRole('button')).backgroundColor).not.toBe(
-      brand500.rgb
+    rerender(
+      <Button type="primary" disabled>
+        text
+      </Button>
     );
+    const disabledBackgroundColor = getComputedStyle(
+      getByRole('button')
+    ).backgroundColor;
+
+    expect(disabledBackgroundColor).not.toEqual(normalBackgroundColor);
   });
 });
 
@@ -87,13 +92,13 @@ describe('the type', () => {
   });
 
   it('is submit by default for a primary button', () => {
-    const { getByRole } = render(<Button primary>text</Button>);
+    const { getByRole } = render(<Button type="primary">text</Button>);
     expect(getByRole('button')).toHaveAttribute('type', 'submit');
   });
 
   it('can be overriden', () => {
     const { getByRole } = render(
-      <Button primary submit={false}>
+      <Button type="primary" submit={false}>
         text
       </Button>
     );
@@ -107,7 +112,7 @@ describe('with an href', () => {
     expect(getByRole('link')).toHaveAttribute('href', '/page');
   });
 
-  it('emits click events', () => {
+  it('still emits click events', () => {
     const handleClick = jest.fn();
     const { getByRole } = render(
       <Button href="/page" onClick={handleClick}>
