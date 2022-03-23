@@ -95,13 +95,9 @@ describe('pad table', () => {
 
     const inputs = await page.$$('tr input');
 
-    expect(await inputs[2].getAttribute('value')).toBe('1');
-    expect(await inputs[3].getAttribute('value')).toBe('2020-01-01');
-    expect(await inputs[4].getAttribute('value')).toBe('2');
-    expect(await inputs[5].getAttribute('value')).toBe('2020-02-01');
-    expect(await inputs[6].getAttribute('value')).toBe('7');
-    expect(await inputs[7].getAttribute('value')).toBe('2020-03-01');
-    expect(await inputs[0].getAttribute('value')).toBe('X');
+    expect(await inputs[2].getAttribute('value')).toBe('2020-01-01');
+    expect(await inputs[4].getAttribute('value')).toBe('2020-02-01');
+    expect(await inputs[6].getAttribute('value')).toBe('2020-03-01');
     expect(await inputs[1].getAttribute('value')).toBe('Y');
   });
 

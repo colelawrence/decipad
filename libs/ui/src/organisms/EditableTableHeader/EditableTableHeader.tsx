@@ -1,25 +1,18 @@
 import { ComponentProps, FC, useState } from 'react';
 import { css } from '@emotion/react';
 import { CellInput, TableHeader } from '../../atoms';
-import { getStringType, getTypeIcon } from '../../utils';
+import { getStringType } from '../../utils';
 
 import { TableColumnMenu } from '..';
 import { identifierNamePattern } from '../../utils/language';
+import { Caret } from '../../icons';
 
-const triggerStyles = css({
-  cursor: 'pointer',
-  display: 'flex',
-
-  padding: '6px 0',
-
+const rightSlotStyles = css({
+  display: 'grid',
   '& > svg': {
     height: '16px',
     width: '16px',
   },
-});
-
-const triggerReadOnlyStyles = css({
-  cursor: 'auto',
 });
 
 type EditableTableHeaderProps = Pick<
@@ -42,21 +35,16 @@ export const EditableTableHeader: FC<EditableTableHeaderProps> = ({
   value,
 }) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
-
-  const IconComponent = getTypeIcon(type);
-  const icon = (
-    <button css={[triggerStyles, readOnly && triggerReadOnlyStyles]}>
-      <IconComponent />
-    </button>
-  );
   return (
     <TableHeader
-      icon={
-        readOnly ? (
-          icon
-        ) : (
+      rightSlot={
+        !readOnly && (
           <TableColumnMenu
-            trigger={icon}
+            trigger={
+              <button css={rightSlotStyles}>
+                <Caret variant="down" />
+              </button>
+            }
             open={isMenuOpen}
             onChangeOpen={setMenuOpen}
             onChangeColumnType={onChangeColumnType}

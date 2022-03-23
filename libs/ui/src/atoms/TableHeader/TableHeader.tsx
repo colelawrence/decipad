@@ -33,10 +33,9 @@ const headerWrapperStyles = css({
 });
 
 const columnTypeStyles = css({
-  '& > svg': {
-    height: '16px',
-    width: '16px',
-  },
+  height: '16px',
+  width: '16px',
+  display: 'grid',
 });
 
 export interface TableHeaderProps {
@@ -44,6 +43,7 @@ export interface TableHeaderProps {
   highlight?: boolean;
   icon?: React.ReactNode;
   type?: TableCellType;
+  rightSlot?: React.ReactNode;
 }
 
 export const TableHeader = ({
@@ -51,6 +51,7 @@ export const TableHeader = ({
   highlight = false,
   icon,
   type = getStringType(),
+  rightSlot,
 }: TableHeaderProps): ReturnType<FC> => {
   const Icon = getTypeIcon(type);
   return (
@@ -62,6 +63,7 @@ export const TableHeader = ({
           </span>
         )}
         {children}
+        {rightSlot}
       </div>
     </th>
   );

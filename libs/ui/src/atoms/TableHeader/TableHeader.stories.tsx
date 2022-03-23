@@ -1,24 +1,36 @@
-import { ComponentProps } from 'react';
 import { Meta, Story } from '@storybook/react';
-import { TableHeader } from './TableHeader';
+import { ComponentProps } from 'react';
+import { Caret } from '../../icons';
 import { getNumberType } from '../../utils';
+import { TableHeader } from './TableHeader';
+
+const args: ComponentProps<typeof TableHeader> = {
+  children: 'Column title',
+};
 
 export default {
   title: 'Atoms / Table / Header',
   component: TableHeader,
-  args: {
-    children: 'Column title',
-  },
+  args,
 } as Meta;
 
-export const Normal: Story<ComponentProps<typeof TableHeader>> = (args) => (
-  <TableHeader {...args} />
+export const Normal: Story<typeof args> = (props) => <TableHeader {...props} />;
+
+export const AnotherType: Story<typeof args> = (props) => (
+  <TableHeader {...props} type={getNumberType()} />
 );
 
-export const AnotherType: Story<ComponentProps<typeof TableHeader>> = (
-  args
-) => <TableHeader type={getNumberType()} {...args} />;
+export const WithRightSlotIcon: Story<typeof args> = (props) => (
+  <TableHeader
+    {...props}
+    rightSlot={
+      <div style={{ width: '16px', height: '16px' }}>
+        <Caret variant="down" />
+      </div>
+    }
+  />
+);
 
-export const Highlighted: Story<ComponentProps<typeof TableHeader>> = (
-  args
-) => <TableHeader highlight {...args} />;
+export const Highlighted: Story<typeof args> = (props) => (
+  <TableHeader {...props} highlight />
+);
