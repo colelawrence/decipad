@@ -21,6 +21,7 @@ import {
   createCodeVariableHighlightPlugin,
   createSyntaxErrorHighlightPlugin,
   createLayoutColumnsPlugin,
+  createPlotPlugin,
 } from '@decipad/editor-plugins';
 import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import {
@@ -91,6 +92,9 @@ export const plugins = createPlugins(
     // inputs
     createInputPlugin(),
     createInteractiveTablePlugin(),
+
+    // plots
+    createPlotPlugin(),
   ],
   {
     components,

@@ -32,6 +32,24 @@ export const elementToLanguageBlock = (
       .flat() as ProgramBlock[];
   }
 
+  if (interactiveElement.resultsInExpression) {
+    const exp = interactiveElement.getExpressionFromElement(element);
+    if (!exp) {
+      return null;
+    }
+    return [
+      {
+        type: 'parsed-block',
+        id: element.id,
+        block: {
+          type: 'block',
+          id: element.id,
+          args: [exp],
+        },
+      },
+    ];
+  }
+
   // blocks that return (name, element) pairs:
   if (interactiveElement.resultsInNameAndExpression) {
     const nameAndExpression =

@@ -10,8 +10,17 @@ interface InteractiveLanguageElementBase {
   type: string;
 }
 
+type ExpressionInteractiveLanguageElement = InteractiveLanguageElementBase & {
+  resultsInExpression: true;
+  resultsInNameAndExpression?: false;
+  resultsInUnparsedBlock?: false;
+  isStructural?: false;
+  getExpressionFromElement: (element: Element) => AST.Expression | null;
+};
+
 type NameAndExpressionInteractiveLanguageElement =
   InteractiveLanguageElementBase & {
+    resultsInExpression?: false;
     resultsInNameAndExpression: true;
     resultsInUnparsedBlock?: false;
     isStructural?: false;
@@ -22,6 +31,7 @@ type NameAndExpressionInteractiveLanguageElement =
 
 type UnparsedBlockInteractiveLanguageElement =
   InteractiveLanguageElementBase & {
+    resultsInExpression?: false;
     resultsInNameAndExpression?: false;
     resultsInUnparsedBlock: true;
     isStructural?: false;
@@ -30,9 +40,13 @@ type UnparsedBlockInteractiveLanguageElement =
 
 type StructuralElement = InteractiveLanguageElementBase & {
   isStructural: true;
+  resultsInExpression?: false;
+  resultsInNameAndExpression?: false;
+  resultsInUnparsedBlock?: true;
 };
 
 export type InteractiveLanguageElement =
+  | ExpressionInteractiveLanguageElement
   | NameAndExpressionInteractiveLanguageElement
   | UnparsedBlockInteractiveLanguageElement
   | StructuralElement;

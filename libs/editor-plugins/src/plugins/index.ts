@@ -22,6 +22,7 @@ export * from './NormalizeRichTextBlock';
 export * from './NormalizeText';
 export * from './NormalizeVoidPlugin';
 export * from './NotebookTitle';
+export * from './Plot';
 export * from './SentryBreadcrumbsPlugin';
 export * from './SoftBreakPlugin';
 export * from './SyntaxErrorHighlight';
