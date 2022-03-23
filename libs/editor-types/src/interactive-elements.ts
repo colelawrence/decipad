@@ -58,12 +58,9 @@ export type InteractiveElement =
   | PlotElement
   | InputElement;
 
-export const interactiveElements: ReadonlyArray<InteractiveElement['type']> = [
-  ELEMENT_FETCH,
-  ELEMENT_INPUT,
-  ELEMENT_TABLE_INPUT,
-  ELEMENT_PLOT,
-] as const;
+export const interactiveElementKinds: ReadonlyArray<
+  InteractiveElement['type']
+> = [ELEMENT_FETCH, ELEMENT_INPUT, ELEMENT_TABLE_INPUT, ELEMENT_PLOT] as const;
 
 export const isInteractiveElement = (node: Node): node is InteractiveElement =>
-  'type' in node && interactiveElements.includes(node.type);
+  'type' in node && interactiveElementKinds.includes(node.type);

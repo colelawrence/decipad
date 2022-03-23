@@ -1,9 +1,9 @@
 import { ELEMENT_LINK, LinkElement, Node } from '@decipad/editor-types';
+import { requireCollapsedSelection } from '@decipad/editor-utils';
 import { AutoformatRule, getNode, isElement, wrapNodes } from '@udecode/plate';
 import { allPass } from 'ramda';
 import { BasePoint, Editor, Path, Text, Transforms } from 'slate';
 import { getTrailingLink } from '../../utils/link';
-import { requireCollapsedSelection } from '../../utils/selection';
 import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
 
 const TRIGGER = ')';
@@ -59,6 +59,13 @@ const convertPrecedingTextWithTriggerToLink = (editor: Editor): void => {
   }
   node = getNode<Node>(editor, path);
   if (!(isElement(node) && node.type === ELEMENT_LINK)) {
+    console.error(
+      'Cannot find created link after split. Editor children:',
+      editor.children,
+      '. Searched path',
+      path,
+      'and the previous path'
+    );
     throw new Error('Cannot find created link after split');
   }
 

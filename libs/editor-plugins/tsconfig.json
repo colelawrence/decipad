@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["esnext", "dom", "dom.iterable"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react"
+  },
+  "include": ["src"],
+  "references": [
+    { "path": "../dom-test-utils" },
+    { "path": "../language" },
+    { "path": "../docsync" },
+    { "path": "../queries" },
+    { "path": "../utils" },
+    { "path": "../client-events" },
+    { "path": "../editor-types" },
+    { "path": "../slate-react-utils" },
+    { "path": "../ui" },
+    { "path": "../react-contexts" },
+    { "path": "../editor-utils" },
+    { "path": "../editor-components" }
+  ]
+}

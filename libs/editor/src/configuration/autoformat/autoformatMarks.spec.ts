@@ -1,18 +1,18 @@
 import { ELEMENT_H2, ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import {
   createAutoformatPlugin,
-  createEditorPlugins,
-  SPEditor,
+  createPlateEditor,
+  TEditor,
 } from '@udecode/plate';
 import { Transforms } from 'slate';
 import { autoformatMarks } from './autoformatMarks';
 
 const initialText = '__*t';
 
-let editor: SPEditor;
+let editor: TEditor;
 beforeEach(() => {
-  editor = createEditorPlugins({
-    plugins: [createAutoformatPlugin({ rules: autoformatMarks })],
+  editor = createPlateEditor({
+    plugins: [createAutoformatPlugin({ options: { rules: autoformatMarks } })],
   });
   editor.children = [
     { type: ELEMENT_PARAGRAPH, children: [{ text: initialText }] },

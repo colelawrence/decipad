@@ -1,26 +1,18 @@
-import { useContext } from 'react';
-import { css } from '@emotion/react';
-import { useParams as useRouteParams } from 'react-router-dom';
-import { SPRenderElementProps, PlatePluginComponent } from '@udecode/plate';
-import { getDefined } from '@decipad/utils';
 import { InferError } from '@decipad/language';
 import { useResult } from '@decipad/react-contexts';
-import { CodeResult } from '../../../../organisms';
-import { ImportDataIconElement } from './ImportDataIcon.component';
+import { getDefined } from '@decipad/utils';
+import { css } from '@emotion/react';
+import { PlatePluginComponent } from '@udecode/plate';
+import { useContext } from 'react';
+import { useParams as useRouteParams } from 'react-router-dom';
 import { Button } from '../../../../atoms/Button/Button';
+import { CodeResult } from '../../../../organisms';
 import {
+  ExternalAuthenticationContext,
   ProgramBlocksContext,
   ProgramBlocksContextValue,
-  ExternalAuthenticationContext,
 } from '../../../Contexts';
-
-interface ExtendedElementProps {
-  'data-href'?: string;
-  'data-contenttype'?: string;
-  'data-varname'?: string;
-}
-
-export type ImportDataElementProps = SPRenderElementProps<ExtendedElementProps>;
+import { ImportDataIconElement } from './ImportDataIcon.component';
 
 const styles = css({
   borderRadius: '16px',
@@ -52,7 +44,11 @@ function padIdFromPadIdURiComponent(
   return parts[0];
 }
 
-export const ImportDataElement: PlatePluginComponent = (props) => {
+export const ImportDataElement: PlatePluginComponent = ({
+  attributes,
+  element,
+  children,
+}) => {
   const blocks = useContext<ProgramBlocksContextValue>(ProgramBlocksContext);
   const { createOrUpdateExternalData } = useContext(
     ExternalAuthenticationContext
@@ -60,7 +56,6 @@ export const ImportDataElement: PlatePluginComponent = (props) => {
   const { padid: padIdUriComponent } = useRouteParams() as { padid?: string };
   const padId = padIdFromPadIdURiComponent(padIdUriComponent);
 
-  const { attributes, element, children } = props as ImportDataElementProps;
   const { id: blockId } = element;
   const {
     'data-contenttype': contentType,

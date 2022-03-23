@@ -1,7 +1,7 @@
 import { isElement, Element, CodeLineElement } from '@decipad/editor-types';
 import { getAbove } from '@udecode/plate';
 import { Editor } from 'slate';
-import { getCollapsedSelection } from '../../utils/selection';
+import { getCollapsedSelection } from '@decipad/editor-utils';
 
 export function getCursorPos(editor: Editor): string | null {
   const cursor = getCollapsedSelection(editor);

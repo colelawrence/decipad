@@ -1,24 +1,27 @@
-import { plugins } from '@decipad/editor-config';
-import { ResultsContext } from '@decipad/react-contexts';
+import { Editor as TEditor } from '@decipad/editor-types';
+import {
+  ResultsContext,
+  ComputerContextProvider,
+  useComputer,
+} from '@decipad/react-contexts';
 import {
   ExternalAuthenticationContextProvider,
   ProgramBlocksContextProvider,
 } from '@decipad/ui';
 import { identity } from '@decipad/utils';
+import {
+  useDocSync,
+  useNotebookTitlePlugin,
+  useUploadDataPlugin,
+  useExternalDataPlugin,
+} from '@decipad/editor-plugins';
 import { captureException } from '@sentry/react';
-import { Plate, PlatePluginComponent } from '@udecode/plate';
-import { nanoid } from 'nanoid';
+import { Plate, PlateProvider, usePlateEditorRef } from '@udecode/plate';
 import { FC, useEffect, useMemo, useState } from 'react';
 import * as components from './components';
 import * as configuration from './configuration';
-import { ComputerContextProvider, useComputer } from './contexts';
-import { Tooltip, UploadDialogue } from './plate-components';
-import {
-  editorProgramBlocks,
-  useLanguagePlugin,
-  useCodeVariableHighlightingPlugin,
-} from './plugins';
-import { useStoreEditorRef } from './utils/useStoreEditorRef';
+import { useLanguagePlugin } from './plugins';
+import { editorProgramBlocks } from './utils/editorProgramBlocks';
 
 export interface EditorProps {
   notebookId: string;
@@ -30,16 +33,14 @@ const LoadingEditable = (): ReturnType<FC> => <>Loading editor...</>;
 const renderLoadingEditable = () => <LoadingEditable />;
 
 const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
-  const [editorId] = useState(nanoid);
   const [editorLoaded, setEditorLoaded] = useState(false);
-  const editor = useStoreEditorRef(editorId);
+  const editor = usePlateEditorRef(notebookId) as TEditor;
 
   const languagePlugin = useLanguagePlugin();
-  const variableHighlightPlugin = useCodeVariableHighlightingPlugin();
   const computer = useComputer();
 
   // DocSync
-  const docsyncEditor = plugins.useDocSync({
+  const docsyncEditor = useDocSync({
     notebookId,
     editor,
     authSecret,
@@ -62,7 +63,7 @@ const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
   // Cursor remote presence
   // useCursors(editor);
 
-  const notebookTitlePlugin = plugins.useNotebookTitlePlugin({
+  const notebookTitlePlugin = useNotebookTitlePlugin({
     notebookId,
     readOnly,
   });
@@ -72,19 +73,14 @@ const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
     startUpload,
     uploadState,
     clearAll: clearAllUploads,
-  } = plugins.useUploadDataPlugin({ editor });
-  const { createOrUpdateExternalData } = plugins.useExternalDataPlugin({
+  } = useUploadDataPlugin({ editor });
+  const { createOrUpdateExternalData } = useExternalDataPlugin({
     editor: docsyncEditor,
   });
 
   const editorPlugins = useMemo(
-    () => [
-      ...configuration.plugins,
-      languagePlugin,
-      variableHighlightPlugin,
-      notebookTitlePlugin,
-    ],
-    [languagePlugin, variableHighlightPlugin, notebookTitlePlugin]
+    () => [...configuration.plugins, languagePlugin, notebookTitlePlugin],
+    [languagePlugin, notebookTitlePlugin]
   );
 
   const programBlocks = docsyncEditor ? editorProgramBlocks(docsyncEditor) : {};
@@ -101,17 +97,13 @@ const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
             notebookId={notebookId}
           >
             <Plate
-              id={editorId}
+              id={notebookId}
               renderEditable={editorLoaded ? identity : renderLoadingEditable}
               plugins={editorPlugins}
-              options={configuration.options}
-              components={
-                configuration.components as Record<string, PlatePluginComponent>
-              }
               editableProps={{ readOnly }}
             >
-              <Tooltip />
-              <UploadDialogue
+              <components.Tooltip />
+              <components.UploadDialogue
                 uploadState={uploadState}
                 clearAll={clearAllUploads}
               />
@@ -125,8 +117,10 @@ const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
 
 export const Editor = (props: EditorProps): ReturnType<FC> => {
   return (
-    <ComputerContextProvider>
-      <EditorInternal key={props.notebookId} {...props} />
-    </ComputerContextProvider>
+    <PlateProvider id={props.notebookId}>
+      <ComputerContextProvider>
+        <EditorInternal key={props.notebookId} {...props} />
+      </ComputerContextProvider>
+    </PlateProvider>
   );
 };

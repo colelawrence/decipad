@@ -12,7 +12,10 @@
     { "path": "../react-contexts" },
     { "path": "../utils" },
     { "path": "../editor-types" },
-    { "path": "../editor-config" },
-    { "path": "../client-events" }
+    { "path": "../editor-plugins" },
+    { "path": "../client-events" },
+    { "path": "../slate-react-utils" },
+    { "path": "../editor-language-elements" },
+    { "path": "../editor-components" }
   ]
 }

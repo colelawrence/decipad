@@ -161,6 +161,21 @@
     },
     "feature-flags": {
       "tags": []
+    },
+    "slate-react-utils": {
+      "tags": []
+    },
+    "editor-plugins": {
+      "tags": []
+    },
+    "editor-language-elements": {
+      "tags": []
+    },
+    "editor-utils": {
+      "tags": []
+    },
+    "editor-components": {
+      "tags": []
     }
   }
 }

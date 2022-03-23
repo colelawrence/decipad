@@ -7,6 +7,7 @@ import type {
   IdentifiedResult,
   InBlockResult,
   Program,
+  ProgramBlock,
   ValueLocation,
   UnparsedBlock,
 } from './types';
@@ -29,6 +30,7 @@ export type {
   IdentifiedResult,
   ParsedBlock,
   Program,
+  ProgramBlock,
   Result,
   ValueLocation,
   UnparsedBlock,

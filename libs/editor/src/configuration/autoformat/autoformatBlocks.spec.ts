@@ -6,16 +6,16 @@ import {
 } from '@decipad/editor-types';
 import {
   createAutoformatPlugin,
-  createEditorPlugins,
-  SPEditor,
+  createPlateEditor,
+  PlateEditor,
 } from '@udecode/plate';
 import { Transforms } from 'slate';
 import { autoformatBlocks } from './autoformatBlocks';
 
-let editor: SPEditor;
+let editor: PlateEditor;
 beforeEach(() => {
-  editor = createEditorPlugins({
-    plugins: [createAutoformatPlugin({ rules: autoformatBlocks })],
+  editor = createPlateEditor({
+    plugins: [createAutoformatPlugin({ options: { rules: autoformatBlocks } })],
   });
   editor.children = [{ type: ELEMENT_PARAGRAPH, children: [{ text: '' }] }];
   Transforms.select(editor, [0, 0]);

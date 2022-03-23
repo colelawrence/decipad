@@ -1,6 +1,8 @@
 import { Editor } from 'slate';
-import { allowsTextStyling } from '../../utils/block';
-import { getPathContainingSelection } from '../../utils/selection';
+import {
+  allowsTextStyling,
+  getPathContainingSelection,
+} from '@decipad/editor-utils';
 
 export const doesSelectionAllowTextStyling = (editor: Editor): boolean =>
   allowsTextStyling(editor, getPathContainingSelection(editor));

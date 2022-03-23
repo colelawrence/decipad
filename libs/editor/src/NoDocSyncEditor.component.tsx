@@ -1,41 +1,46 @@
-import { ResultsContext } from '@decipad/react-contexts';
+import { Editor } from '@decipad/editor-types';
 import { ProgramBlocksContextProvider } from '@decipad/ui';
-import { Plate, PlatePluginComponent, PlateProps } from '@udecode/plate';
-import { nanoid } from 'nanoid';
-import { FC, useMemo, useState } from 'react';
+import {
+  ResultsContext,
+  ComputerContextProvider,
+  useComputer,
+} from '@decipad/react-contexts';
+import {
+  Plate,
+  PlateProps,
+  PlateProvider,
+  usePlateEditorRef,
+} from '@udecode/plate';
+import { FC, useMemo } from 'react';
 import * as configuration from './configuration';
-import * as contexts from './contexts';
-import { useStoreEditorRef } from './contexts/useStoreEditorRef';
 import { emptyNotebook, introNotebook } from './exampleNotebooks';
-import { useCodeVariableHighlightingPlugin } from './plugins/CodeVariableHighlighting/useCodeVariableHighlightingPlugin';
-import { Tooltip } from './plate-components';
-import { editorProgramBlocks, useLanguagePlugin } from './plugins';
+import { useLanguagePlugin } from './plugins';
+import { Tooltip } from './components';
 import { POPULATE_PLAYGROUND } from './utils/storage';
-import { useComputer } from './contexts';
+import { editorProgramBlocks } from './utils/editorProgramBlocks';
+
+const NO_DOC_SYNC_EDITOR_ID = 'nodocsynceditorid';
 
 export const NoDocSyncEditorBase = (props: PlateProps): ReturnType<FC> => {
-  const [editorId] = useState(nanoid);
-  const editor = useStoreEditorRef(editorId);
+  const editor = usePlateEditorRef(NO_DOC_SYNC_EDITOR_ID);
   const languagePlugin = useLanguagePlugin();
-  const variableHighlightPlugin = useCodeVariableHighlightingPlugin();
   const computer = useComputer();
+
   const editorPlugins = useMemo(
-    () => [...configuration.plugins, languagePlugin, variableHighlightPlugin],
-    [languagePlugin, variableHighlightPlugin]
+    () => [...configuration.plugins, languagePlugin],
+    [languagePlugin]
   );
 
-  const programBlocks = editor ? editorProgramBlocks(editor) : {};
+  const programBlocks = editor
+    ? editorProgramBlocks(editor as unknown as Editor)
+    : {};
 
   return (
     <ResultsContext.Provider value={computer.results.asObservable()}>
       <ProgramBlocksContextProvider value={programBlocks}>
         <Plate
-          id={editorId}
+          id={NO_DOC_SYNC_EDITOR_ID}
           plugins={editorPlugins}
-          options={configuration.options}
-          components={
-            configuration.components as Record<string, PlatePluginComponent>
-          }
           initialValue={
             window.localStorage.getItem(POPULATE_PLAYGROUND) === 'true'
               ? introNotebook()
@@ -52,8 +57,10 @@ export const NoDocSyncEditorBase = (props: PlateProps): ReturnType<FC> => {
 
 export const NoDocSyncEditor = (props: PlateProps): ReturnType<FC> => {
   return (
-    <contexts.ComputerContextProvider>
-      <NoDocSyncEditorBase {...props} />
-    </contexts.ComputerContextProvider>
+    <PlateProvider id={NO_DOC_SYNC_EDITOR_ID}>
+      <ComputerContextProvider>
+        <NoDocSyncEditorBase {...props} />
+      </ComputerContextProvider>
+    </PlateProvider>
   );
 };

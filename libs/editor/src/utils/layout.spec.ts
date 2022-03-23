@@ -1,4 +1,4 @@
-import { createEditorPlugins, SPEditor } from '@udecode/plate';
+import { createPlateEditor, PlateEditor } from '@udecode/plate';
 import {
   ELEMENT_COLUMNS,
   ELEMENT_INPUT,
@@ -6,9 +6,9 @@ import {
 } from '@decipad/editor-types';
 import { hasLayoutAncestor, insertNodeIntoColumns } from './layout';
 
-let editor: SPEditor;
+let editor: PlateEditor;
 beforeEach(() => {
-  editor = createEditorPlugins();
+  editor = createPlateEditor();
   editor.children = [
     { type: ELEMENT_INPUT, children: [{ text: '' }] },
     {

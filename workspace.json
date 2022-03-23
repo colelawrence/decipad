@@ -1000,29 +1000,29 @@
         }
       }
     },
-    "editor-config": {
-      "root": "libs/editor-config",
-      "sourceRoot": "libs/editor-config/src",
+    "editor-plugins": {
+      "root": "libs/editor-plugins",
+      "sourceRoot": "libs/editor-plugins/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/editor-config/**/*.ts"],
+            "lintFilePatterns": ["libs/editor-plugins/**/*.ts"],
             "maxWarnings": 0
           }
         },
         "typecheck": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
-            "command": "yarn tsc -b libs/editor-config"
+            "command": "yarn tsc -b libs/editor-plugins"
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/editor-config"],
+          "outputs": ["coverage/libs/editor-plugins"],
           "options": {
-            "jestConfig": "libs/editor-config/jest.config.js"
+            "jestConfig": "libs/editor-plugins/jest.config.js"
           }
         }
       }
@@ -1070,6 +1070,107 @@
           "outputs": ["coverage/libs/feature-flags"],
           "options": {
             "jestConfig": "libs/feature-flags/jest.config.js"
+          }
+        }
+      }
+    },
+    "slate-react-utils": {
+      "root": "libs/slate-react-utils",
+      "sourceRoot": "libs/slate-react-utils/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/slate-react-utils/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/slate-react-utils"
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/slate-react-utils"],
+          "options": {
+            "jestConfig": "libs/slate-react-utils/jest.config.js"
+          }
+        }
+      }
+    },
+    "editor-language-elements": {
+      "root": "libs/editor-language-elements",
+      "sourceRoot": "libs/editor-language-elements/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/editor-language-elements/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/editor-language-elements"
+          }
+        }
+      }
+    },
+    "editor-utils": {
+      "root": "libs/editor-utils",
+      "sourceRoot": "libs/editor-utils/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/editor-utils/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/editor-utils"
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/editor-utils"],
+          "options": {
+            "jestConfig": "libs/editor-utils/jest.config.js"
+          }
+        }
+      }
+    },
+    "editor-components": {
+      "root": "libs/editor-components",
+      "sourceRoot": "libs/editor-components/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/editor-components/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/editor-components"
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/editor-components"],
+          "options": {
+            "jestConfig": "libs/editor-components/jest.config.js"
           }
         }
       }

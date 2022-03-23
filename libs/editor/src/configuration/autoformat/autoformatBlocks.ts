@@ -5,8 +5,10 @@ import {
   ELEMENT_H3,
 } from '@decipad/editor-types';
 import { AutoformatRule, TEditor } from '@udecode/plate';
-import { insertCodeBlockBelowOrReplace } from '../../utils/codeBlock';
-import { requireCollapsedSelection } from '../../utils/selection';
+import {
+  insertCodeBlockBelowOrReplace,
+  requireCollapsedSelection,
+} from '@decipad/editor-utils';
 import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
 
 export const autoformatBlocks: AutoformatRule[] = [

@@ -12,5 +12,5 @@ export type ElementKind = typeof elementKinds[keyof typeof elementKinds];
 
 export * from './interactive-elements';
 export * from './elements';
-
 export * from './tables';
+export * from './components';

@@ -1,25 +1,34 @@
-import { plugins } from '@decipad/editor-config';
 import {
   ELEMENT_H1,
   ELEMENT_LINK,
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
+import { Link } from '@decipad/editor-components';
 import {
+  createLinkPlugin,
   createAutoformatPlugin,
-  createEditorPlugins,
-  SPEditor,
+  createPlateEditor,
+  createPlugins,
   TDescendant,
+  TEditor,
 } from '@udecode/plate';
 import { Transforms } from 'slate';
 import { autoformatLinks } from './autoformatLinks';
 
-let editor: SPEditor;
+let editor: TEditor;
 beforeEach(() => {
-  editor = createEditorPlugins({
-    plugins: [
-      createAutoformatPlugin({ rules: autoformatLinks }),
-      plugins.createLinkPlugin(),
-    ],
+  editor = createPlateEditor({
+    plugins: createPlugins(
+      [
+        createLinkPlugin(),
+        createAutoformatPlugin({ options: { rules: autoformatLinks } }),
+      ],
+      {
+        components: {
+          [ELEMENT_LINK]: Link,
+        },
+      }
+    ),
   });
   editor.children = [{ type: ELEMENT_PARAGRAPH, children: [{ text: '' }] }];
   Transforms.select(editor, [0, 0]);

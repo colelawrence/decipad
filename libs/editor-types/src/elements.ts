@@ -1,4 +1,4 @@
-import { SPEditor } from '@udecode/plate';
+import { PlateEditor } from '@udecode/plate';
 import {
   Editor as SlateEditor,
   Element as SlateElement,
@@ -22,6 +22,9 @@ import {
   ELEMENT_UL,
   InputElement,
   InteractiveElement,
+  ELEMENT_TABLE_INPUT,
+  ELEMENT_FETCH,
+  ELEMENT_PLOT,
   MarkKind,
 } from '.';
 
@@ -132,7 +135,10 @@ export type BlockElement =
 type InlineElement = LinkElement;
 export type Element = BlockElement | InlineElement;
 
-export type Editor = Omit<SlateEditor & SPEditor & ReactEditor, 'children'> & {
+export type Editor = Omit<
+  SlateEditor & PlateEditor & ReactEditor,
+  'children'
+> & {
   children: [
     H1Element,
     ...Array<
@@ -165,3 +171,18 @@ export function isElement(node: Node): node is Element {
 export function isText(node: Node): node is Text {
   return SlateText.isText(node);
 }
+
+export const topLevelBlockKinds: string[] = [
+  ELEMENT_H1,
+  ELEMENT_H2,
+  ELEMENT_H3,
+  ELEMENT_PARAGRAPH,
+  ELEMENT_BLOCKQUOTE,
+  ELEMENT_CODE_BLOCK,
+  ELEMENT_UL,
+  ELEMENT_OL,
+  ELEMENT_TABLE_INPUT,
+  ELEMENT_FETCH,
+  ELEMENT_PLOT,
+  ELEMENT_COLUMNS,
+];
