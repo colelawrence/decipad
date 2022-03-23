@@ -10,6 +10,7 @@ import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
+  ELEMENT_COLUMNS,
   ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_H3,
@@ -19,6 +20,7 @@ import {
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
   ELEMENT_UL,
+  InputElement,
   InteractiveElement,
   MarkKind,
 } from '.';
@@ -92,6 +94,12 @@ export interface LinkElement extends BaseElement {
   url: string;
 }
 
+// Layout
+export interface ColumnsElement extends BaseElement {
+  type: typeof ELEMENT_COLUMNS;
+  children: [InputElement, InputElement, ...Array<InputElement>];
+}
+
 // Overall node types
 
 export type EmptyText = {
@@ -117,6 +125,8 @@ export type BlockElement =
   | OrderedListElement
   | ListItemElement
   | ListItemContentElement
+  // Layout
+  | ColumnsElement
   // Special elements
   | InteractiveElement;
 type InlineElement = LinkElement;
@@ -134,6 +144,7 @@ export type Editor = Omit<SlateEditor & SPEditor & ReactEditor, 'children'> & {
       | CodeBlockElement
       | UnorderedListElement
       | OrderedListElement
+      | ColumnsElement
       | InteractiveElement
     >
   ];

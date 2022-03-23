@@ -1,5 +1,6 @@
 export * from './code';
 export * from './Input';
+export * from './layout';
 export * from './plot';
 export * from './slash-commands';
 export * from './Table';

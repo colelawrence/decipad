@@ -2,6 +2,7 @@ import { types } from '@decipad/editor-config';
 import {
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
+  ELEMENT_COLUMNS,
   ELEMENT_H1,
   ELEMENT_INPUT,
   ELEMENT_PARAGRAPH,
@@ -129,4 +130,45 @@ it('cannot find other elements in the document', () => {
   ]);
 
   expect(program).toHaveLength(0);
+});
+
+it('works recursively inside layout elements', () => {
+  const { program } = slateDocumentToComputeRequest([
+    {
+      id: 'column-id',
+      type: ELEMENT_COLUMNS,
+      children: [
+        {
+          type: ELEMENT_INPUT,
+          children: [{ text: '' }],
+          id: 'input-id-1',
+          value: '11',
+          variableName: 'var1',
+        },
+        {
+          type: ELEMENT_INPUT,
+          children: [{ text: '' }],
+          id: 'input-id-2',
+          value: '12',
+          variableName: 'var2',
+        },
+      ],
+    },
+  ]);
+
+  expect(program).toHaveLength(2);
+  expect(prettyPrintAST((program[0] as ParsedBlock).block))
+    .toMatchInlineSnapshot(`
+    "(block
+      (assign
+        (def var1)
+        11))"
+  `);
+  expect(prettyPrintAST((program[1] as ParsedBlock).block))
+    .toMatchInlineSnapshot(`
+    "(block
+      (assign
+        (def var2)
+        12))"
+  `);
 });

@@ -14,6 +14,8 @@ import { FC, useCallback, useContext } from 'react';
 import { Editor, Transforms } from 'slate';
 import { ReactEditor, useReadOnly } from 'slate-react';
 import { useElementMutatorCallback } from '../../utils/slateReact';
+import { insertNodeIntoColumns } from '../../utils/layout';
+import { DraggableBlock } from '../../components';
 
 export const Input: types.PlateComponent = ({
   children,
@@ -82,22 +84,35 @@ export const Input: types.PlateComponent = ({
   return (
     <div {...attributes} contentEditable={false}>
       {children}
-      <organisms.EditorInteractiveInput
-        name={element.variableName}
-        onChangeName={onChangeVariableName}
-        onChangeValue={onChangeValue}
-        onConvert={onConvert}
-        onCopy={() => {
-          // TODO
-        }}
-        onDelete={() => {
-          Transforms.delete(editor, {
-            at: ReactEditor.findPath(editor, element),
-          });
-        }}
-        readOnly={isReadOnly}
-        value={element.value}
-      />
+      <DraggableBlock blockKind="interactive" element={element}>
+        <organisms.EditorInteractiveInput
+          name={element.variableName}
+          onAdd={() => {
+            const at = ReactEditor.findPath(editor, element);
+            insertNodeIntoColumns(
+              editor,
+              {
+                type: ELEMENT_INPUT,
+                children: [{ text: '' }],
+              },
+              at
+            );
+          }}
+          onChangeName={onChangeVariableName}
+          onChangeValue={onChangeValue}
+          onConvert={onConvert}
+          onCopy={() => {
+            // TODO
+          }}
+          onDelete={() => {
+            Transforms.delete(editor, {
+              at: ReactEditor.findPath(editor, element),
+            });
+          }}
+          readOnly={isReadOnly}
+          value={element.value}
+        />
+      </DraggableBlock>
     </div>
   );
 };

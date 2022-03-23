@@ -2,6 +2,7 @@ import {
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
   ELEMENT_INPUT,
+  ELEMENT_COLUMNS,
 } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import { fireEvent, render } from '@testing-library/react';
@@ -117,4 +118,17 @@ it('deletes element', async () => {
   userEvent.click(await findByText(/delete/i));
 
   expect(editor.children).toHaveLength(0);
+});
+
+it('adds a new input element', async () => {
+  const { getByTitle } = render(<FakePlate editor={editor} />, {
+    wrapper,
+  });
+
+  userEvent.click(getByTitle(/add/i));
+
+  expect(editor.children[0].type).toBe(ELEMENT_COLUMNS);
+  expect(editor.children[0].children).toHaveLength(2);
+  expect(editor.children[0].children[0].type).toBe(ELEMENT_INPUT);
+  expect(editor.children[0].children[1].type).toBe(ELEMENT_INPUT);
 });

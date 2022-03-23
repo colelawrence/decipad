@@ -1,7 +1,7 @@
 import { SerializedUnits } from '@decipad/language';
 import { noop } from '@decipad/utils';
-import { css } from '@emotion/react';
 import { FC } from 'react';
+import { css } from '@emotion/react';
 import { EditableTableHeader, Table } from '..';
 import {
   AddTableRowButton,
@@ -45,7 +45,7 @@ interface EditorTableProps {
   readonly parseUnit?: (value: string) => Promise<SerializedUnits | null>;
 }
 
-export const EditorTable = ({
+export const EditorTable: FC<EditorTableProps> = ({
   readOnly = false,
   value,
   formatValue = (_, text) => text,

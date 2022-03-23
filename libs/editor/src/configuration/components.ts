@@ -4,6 +4,7 @@ import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
+  ELEMENT_COLUMNS,
   ELEMENT_FETCH,
   ELEMENT_H1,
   ELEMENT_H2,
@@ -31,6 +32,7 @@ import {
   Code,
   CodeBlock,
   CodeLine,
+  Columns,
   Heading1,
   Heading2,
   Input,
@@ -73,6 +75,9 @@ export const components: PlateComponents = {
 
   // Inline
   [ELEMENT_LINK]: Link,
+
+  // Layout
+  [ELEMENT_COLUMNS]: Columns,
 
   // Special elements
   [ELEMENT_FETCH]: ImportDataElement as types.PlateComponent, // TODO kill/rewrite with editor/UI separation

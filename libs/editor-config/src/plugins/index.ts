@@ -2,6 +2,7 @@ export * from './AutoFormatCodeBlock/createAutoFormatCodeBlockPlugin';
 export * from './AutoPairs/createAutoPairsPlugin';
 export * from './DocSync/useDocSync';
 export * from './ExternalData/useExternalDataPlugin';
+export * from './LayoutColumnsPlugin/createLayoutColumnsPlugin';
 export * from './Link/createLinkPlugin';
 export * from './NormalizeCodeBlock/createNormalizeCodeBlockPlugin';
 export * from './NormalizeEditor/createNormalizeEditorPlugin';

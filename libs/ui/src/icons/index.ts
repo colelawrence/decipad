@@ -1,11 +1,12 @@
 export { Actions } from './Actions/Actions';
+export { Add } from './Add/Add';
 export { All } from './All/All';
 export { Bold } from './Bold/Bold';
 export { Bullet } from './Bullet/Bullet';
+export { Calendar } from './Calendar/Calendar';
 export { Caret } from './Caret/Caret';
 export { Chat } from './Chat/Chat';
 export { Chevron } from './Chevron/Chevron';
-export { Calendar } from './Calendar/Calendar';
 export { Close } from './Close/Close';
 export { Code } from './Code/Code';
 export { Create } from './Create/Create';

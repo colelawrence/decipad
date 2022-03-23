@@ -1,6 +1,7 @@
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, ReactNode } from 'react';
+import { ComponentProps, FC, ReactNode } from 'react';
+import { AddNew } from '../../atoms';
 import { Frame } from '../../icons';
 import {
   black,
@@ -12,6 +13,7 @@ import {
   setCssVar,
   transparency,
 } from '../../primitives';
+import { blockAlignment } from '../../styles';
 import { identifierNamePattern } from '../../utils/language';
 import { useSubmittableInput } from '../../utils/useSubmittableInput';
 
@@ -24,7 +26,7 @@ const spacingStyles = css({
   display: 'grid',
   justifyContent: 'center',
 
-  margin: '34px 0',
+  margin: `${blockAlignment.interactive.paddingTop} 0`,
 });
 
 const wrapperStyles = css({
@@ -40,8 +42,8 @@ const wrapperStyles = css({
   backgroundClip: 'content-box, border-box',
 
   // Last shadow is the left side color bar.
-  boxShadow: `0px 2px 20px ${transparency(grey700, 0.04).rgba}, 
-    0px 2px 8px ${transparency(black, 0.02).rgba}, 
+  boxShadow: `0px 2px 20px ${transparency(grey700, 0.04).rgba},
+    0px 2px 8px ${transparency(black, 0.02).rgba},
     -${leftBarSize}px 0px ${brand600.rgb}`,
   marginLeft: `${leftBarSize}px`,
 
@@ -83,7 +85,8 @@ const inputStyles = css(
 
 type InputProps = Parameters<typeof useSubmittableInput>[0];
 
-interface InteractiveProps {
+interface InteractiveProps
+  extends Pick<ComponentProps<typeof AddNew>, 'onAdd'> {
   children: ReactNode;
   icon?: ReactNode;
   name?: InputProps['value'];
@@ -96,6 +99,7 @@ export const Interactive = ({
   children,
   icon = <Frame />,
   name = '',
+  onAdd,
   onChangeName = noop,
   readOnly = false,
   right,
@@ -106,24 +110,28 @@ export const Interactive = ({
     value: name,
   });
 
+  const component = (
+    <div css={wrapperStyles}>
+      <div css={widgetWrapperStyles}>
+        <div css={nameWrapperStyles}>
+          <span css={iconWrapperStyles}>{icon}</span>
+          <input
+            {...nameInputProps}
+            css={inputStyles}
+            placeholder="VariableName"
+            readOnly={readOnly}
+            size={1}
+          />
+          {!readOnly && right && <span css={iconWrapperStyles}>{right}</span>}
+        </div>
+        {children}
+      </div>
+    </div>
+  );
+
   return (
     <div css={spacingStyles}>
-      <div css={wrapperStyles}>
-        <div css={widgetWrapperStyles}>
-          <div css={nameWrapperStyles}>
-            <span css={iconWrapperStyles}>{icon}</span>
-            <input
-              {...nameInputProps}
-              css={inputStyles}
-              placeholder="VariableName"
-              readOnly={readOnly}
-              size={1}
-            />
-            {!readOnly && right && <span css={iconWrapperStyles}>{right}</span>}
-          </div>
-          {children}
-        </div>
-      </div>
+      {readOnly ? component : <AddNew onAdd={onAdd}>{component}</AddNew>}
     </div>
   );
 };

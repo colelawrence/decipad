@@ -11,8 +11,8 @@ type DraggableBlockProps = {
   readonly element: Element;
 } & Pick<ComponentProps<typeof organisms.DraggableBlock>, 'blockKind'>;
 export const DraggableBlock: React.FC<DraggableBlockProps> = ({
-  element,
   children,
+  element,
   ...props
 }) => {
   const editor = useEditorState();

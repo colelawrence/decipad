@@ -1,3 +1,4 @@
+export { AddNew } from './AddNew/AddNew';
 export { AuthInput } from './AuthInput/AuthInput';
 export { Avatar } from './Avatar/Avatar';
 export { Blockquote } from './Blockquote/Blockquote';
@@ -12,6 +13,7 @@ export { Display } from './Display/Display';
 export { Divider } from './Divider/Divider';
 export { DropLine } from './DropLine/DropLine';
 export { ErrorMessage } from './ErrorMessage/ErrorMessage';
+export { EditorColumns } from './EditorColumns/EditorColumns';
 export { Heading1 } from './Heading1/Heading1';
 export { Heading2 } from './Heading2/Heading2';
 export { IconButton } from './IconButton/IconButton';

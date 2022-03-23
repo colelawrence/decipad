@@ -1,7 +1,8 @@
 import {
-  Editor,
+  Node,
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
+  ELEMENT_COLUMNS,
   ELEMENT_PLOT,
   isInteractiveElement,
 } from '@decipad/editor-types';
@@ -13,13 +14,16 @@ import {
 } from './interactiveElements';
 
 export function slateDocumentToComputeRequest(
-  slateDoc: Editor['children']
+  slateDoc: Node[],
+  program: Program = []
 ): ComputeRequest {
-  const program: Program = [];
-
   for (const block of slateDoc) {
     if (!('type' in block) || !('id' in block) || block.id == null) {
       continue;
+    }
+
+    if (block.type === ELEMENT_COLUMNS) {
+      slateDocumentToComputeRequest(block.children, program);
     }
 
     if (block.type === ELEMENT_CODE_BLOCK) {

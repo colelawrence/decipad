@@ -17,6 +17,9 @@ export {
   ELEMENT_UL,
 } from '@udecode/plate';
 
+// Layout
+export const ELEMENT_COLUMNS = 'columns';
+
 export const ELEMENT_FETCH = 'fetch-data';
 export const ELEMENT_TABLE_INPUT = 'table-input';
 export const ELEMENT_PLOT = 'plot';

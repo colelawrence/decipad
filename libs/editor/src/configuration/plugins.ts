@@ -36,6 +36,9 @@ export const plugins = [
   createListPlugin(),
   createCodeBlockPlugin(),
 
+  // Layout blocks
+  deciPlatePlugins.createLayoutColumnsPlugin(),
+
   // structure enforcement
   deciPlatePlugins.createNormalizeEditorPlugin(),
 
