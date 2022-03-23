@@ -11,7 +11,7 @@ import { nanoid } from 'nanoid';
 import { FC, useEffect, useMemo, useState } from 'react';
 import * as components from './components';
 import * as configuration from './configuration';
-import { ComputerContextProvider } from './contexts/Computer';
+import { ComputerContextProvider, useComputer } from './contexts';
 import { Tooltip, UploadDialogue } from './plate-components';
 import {
   editorProgramBlocks,
@@ -34,8 +34,9 @@ const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
   const [editorLoaded, setEditorLoaded] = useState(false);
   const editor = useStoreEditorRef(editorId);
 
-  const { results, languagePlugin } = useLanguagePlugin();
+  const languagePlugin = useLanguagePlugin();
   const variableHighlightPlugin = useCodeVariableHighlightingPlugin();
+  const computer = useComputer();
 
   // DocSync
   const docsyncEditor = plugins.useDocSync({
@@ -89,7 +90,7 @@ const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
   const programBlocks = docsyncEditor ? editorProgramBlocks(docsyncEditor) : {};
 
   return (
-    <ResultsContext.Provider value={results}>
+    <ResultsContext.Provider value={computer.results.asObservable()}>
       <ProgramBlocksContextProvider value={programBlocks}>
         <ExternalAuthenticationContextProvider
           value={{ createOrUpdateExternalData }}

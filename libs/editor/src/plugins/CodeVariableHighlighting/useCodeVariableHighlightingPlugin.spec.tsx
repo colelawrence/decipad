@@ -8,6 +8,7 @@ import {
 import { render } from '@testing-library/react';
 import { createCodeBlockPlugin, Plate } from '@udecode/plate';
 import { Computer } from '@decipad/language';
+import { timeout } from '@decipad/utils';
 import { useCodeVariableHighlightingPlugin } from './useCodeVariableHighlightingPlugin';
 import { ComputerContextProvider } from '../../contexts/Computer';
 
@@ -43,7 +44,7 @@ describe('variable highlights', () => {
 
   it('show bubbles in usages of defined variables', async () => {
     const computer = new Computer();
-    await computer.compute({
+    await computer.pushCompute({
       program: [
         {
           type: 'unparsed-block',
@@ -57,6 +58,8 @@ describe('variable highlights', () => {
         },
       ],
     });
+
+    await timeout(100);
 
     const children = [
       {
@@ -85,7 +88,7 @@ describe('variable highlights', () => {
 
   it('highlights defined columns of a table', async () => {
     const computer = new Computer();
-    await computer.compute({
+    await computer.pushCompute({
       program: [
         {
           type: 'unparsed-block',
@@ -99,6 +102,8 @@ describe('variable highlights', () => {
         },
       ],
     });
+
+    await timeout(100);
 
     const children = [
       {
@@ -144,7 +149,7 @@ describe('variable highlights', () => {
 
   it('highlights column access inside table', async () => {
     const computer = new Computer();
-    await computer.compute({
+    await computer.pushCompute({
       program: [
         {
           type: 'unparsed-block',
@@ -153,6 +158,8 @@ describe('variable highlights', () => {
         },
       ],
     });
+
+    await timeout(100);
 
     const children = [
       {
@@ -183,7 +190,7 @@ describe('variable highlights', () => {
 
   it('highlights column access with spaces', async () => {
     const computer = new Computer();
-    await computer.compute({
+    await computer.pushCompute({
       program: [
         {
           type: 'unparsed-block',
@@ -223,7 +230,7 @@ describe('variable highlights', () => {
 
   it('show bubbles in table spreads', async () => {
     const computer = new Computer();
-    await computer.compute({
+    await computer.pushCompute({
       program: [
         {
           type: 'unparsed-block',
@@ -237,6 +244,8 @@ describe('variable highlights', () => {
         },
       ],
     });
+
+    await timeout(100);
 
     const children = [
       {
@@ -265,7 +274,7 @@ describe('variable highlights', () => {
 
   it('does not mistake a table column access for another declared variable', async () => {
     const computer = new Computer();
-    await computer.compute({
+    await computer.pushCompute({
       program: [
         {
           type: 'unparsed-block',
@@ -284,6 +293,8 @@ describe('variable highlights', () => {
         },
       ],
     });
+
+    await timeout(100);
 
     const children = [
       {
@@ -319,7 +330,7 @@ describe('variable highlights', () => {
 
   it('show bubbles for external variables in function declarations', async () => {
     const computer = new Computer();
-    await computer.compute({
+    await computer.pushCompute({
       program: [
         {
           type: 'unparsed-block',
@@ -333,6 +344,8 @@ describe('variable highlights', () => {
         },
       ],
     });
+
+    await timeout(100);
 
     const children = [
       {

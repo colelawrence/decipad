@@ -1,5 +1,5 @@
 import produce from 'immer';
-
+import { timeout } from '@decipad/utils';
 import {
   AST,
   InjectableExternalData,
@@ -30,7 +30,7 @@ const testCompute = async (program: AST.Block[]) =>
   simplifyInBlockResults(await computeProgram(program, new ComputationRealm()));
 
 const computeOnTestComputer = async (req: ComputeRequest) => {
-  const res = await computer.compute(req);
+  const res = await computer.computeRequest(req);
   return simplifyComputeResponse(res);
 };
 
@@ -214,11 +214,12 @@ describe('uses previous value', () => {
 
 it('can reset itself', async () => {
   // Make the cache dirty
-  await computeOnTestComputer({ program: unparsedProgram });
-  expect(computer).not.toEqual(new Computer());
+  await computer.pushCompute({ program: unparsedProgram });
+  await timeout(200); // give time to compute
+  expect(computer.results.getValue().blockResults).not.toEqual({});
 
   computer.reset();
-  expect(computer).toEqual(new Computer());
+  expect(computer.results.getValue().blockResults).toEqual({});
 });
 
 it('can pass on injected data', async () => {

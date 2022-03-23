@@ -13,6 +13,8 @@ import type {
 
 export { Computer, getUsedIdentifiers } from './Computer';
 
+export { defaultComputerResults } from './defaultComputerResults';
+
 export { delayErrors, getDelayedBlockId } from './delayErrors';
 
 export { isSyntaxError, isBracketError } from './utils';

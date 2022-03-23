@@ -36,7 +36,7 @@ async function getDocTestString(codeExample: string): Promise<EvaluatedDoc> {
   try {
     const blockId = nanoid();
     const computer = new Computer();
-    const result = await computer.compute({
+    const result = await computer.computeRequest({
       program: [
         {
           type: 'unparsed-block',

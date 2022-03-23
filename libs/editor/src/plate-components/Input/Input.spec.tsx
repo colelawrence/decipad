@@ -24,7 +24,7 @@ import { useLanguagePlugin } from '../../plugins/Language/useLanguagePlugin';
 import { Input } from './Input';
 
 const FakePlate = ({ editor }: { editor: SPEditor & ReactEditor }) => {
-  const { languagePlugin } = useLanguagePlugin();
+  const languagePlugin = useLanguagePlugin();
   return (
     <Plate
       editor={editor}

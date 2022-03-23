@@ -62,3 +62,10 @@ export interface InBlockResult extends Result {
   blockId: string;
   statementIndex: number;
 }
+export interface ResultsContextItem {
+  readonly blockResults: {
+    readonly [blockId: string]: Readonly<IdentifiedResult>;
+  };
+  readonly indexLabels: ReadonlyMap<string, ReadonlyArray<string>>;
+  readonly delayedResultBlockId: string | null;
+}

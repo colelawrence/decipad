@@ -8,7 +8,11 @@ import {
 } from 'rxjs';
 import { dequal } from 'dequal';
 
-import { IdentifiedResult, delayErrors } from '@decipad/language';
+import {
+  IdentifiedResult,
+  delayErrors,
+  defaultComputerResults,
+} from '@decipad/language';
 
 export interface ResultsContextItem {
   readonly blockResults: {
@@ -18,12 +22,6 @@ export interface ResultsContextItem {
   readonly delayedResultBlockId: string | null;
 }
 
-export const defaultResults: ResultsContextItem = {
-  blockResults: {},
-  indexLabels: new Map(),
-  delayedResultBlockId: null,
-};
-
 export const ResultsContext =
   createContext<Observable<ResultsContextItem>>(EMPTY);
 
@@ -32,13 +30,16 @@ export const TestResultsProvider: React.FC<Partial<ResultsContextItem>> = ({
   children,
   ...contextItem
 }) => {
-  const value = new BehaviorSubject({ ...defaultResults, ...contextItem });
+  const value = new BehaviorSubject({
+    ...defaultComputerResults,
+    ...contextItem,
+  });
   return React.createElement(ResultsContext.Provider, { value }, children);
 };
 
 export const useResults = (): ResultsContextItem => {
   const subject = useContext(ResultsContext);
-  const [resultsItem, setResultsItem] = useState(defaultResults);
+  const [resultsItem, setResultsItem] = useState(defaultComputerResults);
 
   useEffect(() => {
     const subscription = subject.subscribe(setResultsItem);

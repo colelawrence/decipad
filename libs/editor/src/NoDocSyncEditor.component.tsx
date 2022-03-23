@@ -11,23 +11,23 @@ import { useCodeVariableHighlightingPlugin } from './plugins/CodeVariableHighlig
 import { Tooltip } from './plate-components';
 import { editorProgramBlocks, useLanguagePlugin } from './plugins';
 import { POPULATE_PLAYGROUND } from './utils/storage';
+import { useComputer } from './contexts';
 
 export const NoDocSyncEditorBase = (props: PlateProps): ReturnType<FC> => {
   const [editorId] = useState(nanoid);
-
   const editor = useStoreEditorRef(editorId);
-
-  const { results, languagePlugin } = useLanguagePlugin();
+  const languagePlugin = useLanguagePlugin();
   const variableHighlightPlugin = useCodeVariableHighlightingPlugin();
-  const programBlocks = editor ? editorProgramBlocks(editor) : {};
-
+  const computer = useComputer();
   const editorPlugins = useMemo(
     () => [...configuration.plugins, languagePlugin, variableHighlightPlugin],
     [languagePlugin, variableHighlightPlugin]
   );
 
+  const programBlocks = editor ? editorProgramBlocks(editor) : {};
+
   return (
-    <ResultsContext.Provider value={results}>
+    <ResultsContext.Provider value={computer.results.asObservable()}>
       <ProgramBlocksContextProvider value={programBlocks}>
         <Plate
           id={editorId}

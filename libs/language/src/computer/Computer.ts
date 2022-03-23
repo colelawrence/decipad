@@ -1,5 +1,14 @@
 import assert from 'assert';
 import {
+  concatMap,
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  shareReplay,
+} from 'rxjs/operators';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { dequal } from 'dequal';
+import {
   AST,
   AutocompleteName,
   ExternalDataMap,
@@ -25,6 +34,7 @@ import {
   IdentifiedResult,
   InBlockResult,
   ValueLocation,
+  ResultsContextItem,
 } from './types';
 import {
   getAllBlockLocations,
@@ -32,6 +42,8 @@ import {
   getGoodBlocks,
   getStatement,
 } from './utils';
+import { getDelayedBlockId } from './delayErrors';
+import { defaultComputerResults } from './defaultComputerResults';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
 
@@ -209,6 +221,46 @@ export class Computer {
   private previousExternalData: ExternalDataMap = new Map();
   private computationRealm = new ComputationRealm();
   private computing = false;
+  private cursorBlockId: string | null = null;
+
+  // streams
+  private readonly computeRequests = new Subject<ComputeRequest>();
+  public results = new BehaviorSubject<ResultsContextItem>(
+    defaultComputerResults
+  );
+
+  constructor() {
+    this.wireRequestsToResults();
+  }
+
+  private wireRequestsToResults() {
+    this.computeRequests
+      .pipe(
+        // Debounce to give React an easier time
+        debounceTime(100),
+        // Make sure the new request is actually different
+        distinctUntilChanged((prevReq, req) => dequal(prevReq, req)),
+        // Compute me some computes!
+        concatMap((req) => this.computeRequest(req)),
+        map((res): ResultsContextItem => {
+          if (res.type === 'compute-panic') {
+            captureException(new Error(res.message));
+            return defaultComputerResults;
+          }
+          const blockResults = Object.fromEntries(
+            res.updates.map((result) => [result.blockId, result])
+          );
+
+          return {
+            blockResults,
+            indexLabels: res.indexLabels,
+            delayedResultBlockId: getDelayedBlockId(res, this.cursorBlockId),
+          };
+        }),
+        shareReplay(1)
+      )
+      .subscribe(this.results);
+  }
 
   private ingestComputeRequest({ program, externalData }: ComputeRequest) {
     const newExternalData = anyMappingToMap(externalData ?? new Map());
@@ -228,7 +280,9 @@ export class Computer {
     return newParse;
   }
 
-  async compute(req: ComputeRequest): Promise<ComputeResponse | ComputePanic> {
+  public async computeRequest(
+    req: ComputeRequest
+  ): Promise<ComputeResponse | ComputePanic> {
     /* istanbul ignore catch */
     try {
       assert(
@@ -275,6 +329,14 @@ export class Computer {
     }
   }
 
+  public pushCompute(req: ComputeRequest): void {
+    this.computeRequests.next(req);
+  }
+
+  public setCursorBlockId(blockId: string | null): void {
+    this.cursorBlockId = blockId;
+  }
+
   /**
    * Reset computer's state -- called when it panicks
    */
@@ -282,6 +344,10 @@ export class Computer {
     this.previouslyParsed = [];
     this.previousExternalData = new Map();
     this.computationRealm = new ComputationRealm();
+    this.results = new BehaviorSubject<ResultsContextItem>(
+      defaultComputerResults
+    );
+    this.wireRequestsToResults();
   }
 
   /**
