@@ -28,35 +28,6 @@ function identityFn(o) {
   return o;
 }
 
-function resultsContextFromComputerResult(blockId, result) {
-  for (const update of result.updates) {
-    if (update.blockId === blockId) {
-      let error = update.error && update.error.message;
-      if (!error) {
-        const resultWithError = update.results.find(
-          (res) => res.type.errorCause != null
-        );
-        if (resultWithError) {
-          error = new InferError(resultWithError.type.errorCause).message;
-        }
-      }
-      const lastResult = update.results[update.results.length - 1];
-      return [
-        error,
-        {
-          blockResults: {
-            [blockId]: {
-              isSyntaxError: update.isSyntaxError,
-              results: [lastResult],
-            },
-          },
-          indexLabels: result.indexLabels,
-        },
-      ];
-    }
-  }
-}
-
 function Preview({ blockId }) {
   const { blockResults } = useResults();
   const block = blockResults[blockId];
@@ -102,52 +73,55 @@ function LivePreviewOrError({ code: liveCode }) {
   }, [code, liveCode]);
 
   useEffect(() => {
-    let timeout;
-    (async () => {
-      if (code && needsCompute) {
-        try {
-          setNeedsCompute(false);
-          const result = await computer.compute({
-            program: [
-              {
-                type: 'unparsed-block',
-                id: blockId,
-                source: code,
-              },
-            ],
-            subscriptions: [blockId],
-          });
-          if (result.type === 'compute-panic') {
-            setError(new Error(result.message));
-            return;
-          }
-          const [computerError, contextValue] =
-            resultsContextFromComputerResult(blockId, result);
-          if (computerError) {
-            setError(computerError);
-          } else {
-            setError(null);
-          }
-          if (contextValue) {
-            resultsContext.next(contextValue);
-          }
-        } catch (err) {
-          // eslint-disable-next-line no-console
-          console.error(err);
-          setError(err);
-        }
+    if (code && needsCompute) {
+      try {
+        setNeedsCompute(false);
+        computer.pushCompute({
+          program: [
+            {
+              type: 'unparsed-block',
+              id: blockId,
+              source: code,
+            },
+          ],
+          subscriptions: [blockId],
+        });
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err);
+        setError(err);
       }
-    })();
-
-    return () => {
-      if (timeout) {
-        clearTimeout(timeout);
-      }
-    };
+    }
   }, [blockId, code, computer, needsCompute, resultsContext]);
 
+  useEffect(() => {
+    const subscription = computer.results.subscribe(({ blockResults }) => {
+      const result = blockResults[blockId];
+      if (!result) {
+        return;
+      }
+      if (result.error) {
+        setError(result.error.message);
+        return;
+      }
+      const blockResult = result.results.find((r) => r.blockId === blockId);
+      if (!blockResult) {
+        return;
+      }
+      if (blockResult.type === 'compute-panic') {
+        setError(new Error(result.message));
+      } else if (blockResult.type.kind === 'type-error') {
+        const inferError = new InferError(blockResult.type.errorCause);
+        setError(new Error(inferError.message));
+      } else {
+        setError(null);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [blockId, computer]);
+
   return (
-    <ResultsContext.Provider value={resultsContext}>
+    <ResultsContext.Provider value={computer.results}>
       <LiveError error={error} />
       <Preview blockId={blockId} />
     </ResultsContext.Provider>
