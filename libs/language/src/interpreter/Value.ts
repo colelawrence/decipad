@@ -19,6 +19,7 @@ import {
 import { RuntimeError } from '.';
 import { Unknown } from './Unknown';
 import * as ValueTransforms from './ValueTransforms';
+import { getLabelIndex } from '../dimtools';
 
 export { ValueTransforms };
 export { DateValue as Date };
@@ -33,6 +34,9 @@ export interface ColumnLike extends Value {
   rowCount: number;
   getData(): Interpreter.OneResult;
   lowLevelGet(...keys: number[]): Value;
+  /** Useful when filtering or sorting.
+   * By default the identity function is used and no index changes are assumed to exist */
+  indexToLabelIndex?: (index: number) => number;
   dimensions: Dimension[];
 }
 
@@ -333,30 +337,13 @@ export class Column implements ColumnLike {
   }
 }
 
-export class ColumnSlice extends Column {
-  begin: number;
-  end: number;
-
-  constructor(values: Column['values'], begin: number, end: number) {
-    super(values);
-    this.begin = begin;
-    this.end = end;
-  }
-
-  static fromColumnAndRange(column: ColumnLike, begin: number, end: number) {
-    return new ColumnSlice(column.values, begin, end);
-  }
-
-  get values(): Value[] {
-    return this._values.slice(this.begin, this.end + 1);
-  }
-}
-
-export class MappedColumn extends Column {
+export class MappedColumn extends Column implements ColumnLike {
   private map: number[];
+  sourceColumn: ColumnLike;
 
-  constructor(values: DeepReadonly<Column['values']>, map: number[]) {
-    super(values);
+  constructor(col: ColumnLike, map: number[]) {
+    super(col.values);
+    this.sourceColumn = col;
     this.map = map;
   }
 
@@ -365,15 +352,29 @@ export class MappedColumn extends Column {
   }
 
   static fromColumnAndMap(column: ColumnLike, map: number[]): MappedColumn {
-    return new MappedColumn(column.values, map);
+    return new MappedColumn(column, map);
+  }
+
+  get rowCount() {
+    return this.map.length;
+  }
+
+  atIndex(index: number) {
+    return this._values[this.map[index]];
+  }
+
+  indexToLabelIndex(mappedIndex: number) {
+    return getLabelIndex(this.sourceColumn, this.map[mappedIndex]);
   }
 }
 
-export class FilteredColumn extends Column {
+export class FilteredColumn extends Column implements ColumnLike {
   private map: boolean[];
+  private sourceColumn: ColumnLike;
 
-  constructor(values: Column['values'], map: boolean[]) {
-    super(values);
+  constructor(col: ColumnLike, map: boolean[]) {
+    super(col.values);
+    this.sourceColumn = col;
     this.map = map;
   }
 
@@ -390,7 +391,38 @@ export class FilteredColumn extends Column {
   }
 
   static fromColumnAndMap(column: ColumnLike, map: boolean[]): FilteredColumn {
-    return new FilteredColumn(column.values, map);
+    return new FilteredColumn(column, map);
+  }
+
+  get rowCount() {
+    let count = 0;
+    for (const bool of this.map) {
+      count += Number(bool);
+    }
+    return count;
+  }
+
+  private getSourceIndex(outwardIndex: number) {
+    let trueCount = -1;
+    for (let sourceIndex = 0; sourceIndex < this.map.length; sourceIndex++) {
+      if (this.map[sourceIndex] === true) {
+        trueCount++;
+        if (trueCount === outwardIndex) {
+          return sourceIndex;
+        }
+      }
+    }
+
+    throw new Error(`panic: index not found: ${outwardIndex}`);
+  }
+
+  atIndex(wantedIndex: number) {
+    return this._values[this.getSourceIndex(wantedIndex)];
+  }
+
+  indexToLabelIndex(filteredIndex: number) {
+    const sourceIndex = this.getSourceIndex(filteredIndex);
+    return getLabelIndex(this.sourceColumn, sourceIndex);
   }
 }
 

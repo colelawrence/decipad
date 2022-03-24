@@ -625,6 +625,18 @@ describe('Tables', () => {
       })
     `);
   });
+
+  it('looked-up rows can be accessed', async () => {
+    expect(
+      await runCode(`
+        Table = {
+          Names = ["Hello", "World"],
+          Numbers = [0, 1]
+        }
+        lookup(Table, Table.Names == "World").Numbers
+      `)
+    ).toMatchInlineSnapshot(`Result(1)`);
+  });
 });
 
 describe('Matrices', () => {

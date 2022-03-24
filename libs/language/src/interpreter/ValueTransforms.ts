@@ -1,12 +1,7 @@
 import { Value } from '.';
+import { ColumnSlice } from '../lazy/ColumnSlice';
 import { compare } from './compare-values';
-import {
-  ColumnLike,
-  ColumnSlice,
-  FilteredColumn,
-  MappedColumn,
-  SlicesMap,
-} from './Value';
+import { ColumnLike, FilteredColumn, MappedColumn, SlicesMap } from './Value';
 
 export function filterMap(
   col: ColumnLike,

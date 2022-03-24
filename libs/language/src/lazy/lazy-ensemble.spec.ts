@@ -1,4 +1,4 @@
-import { createLazyOperation } from '.';
+import { ConcatenatedColumn, createLazyOperation } from '.';
 import { OneResult } from '../interpreter/interpreter-types';
 import {
   Column,
@@ -10,6 +10,7 @@ import {
   Value,
 } from '../interpreter/Value';
 import { build as t } from '../type';
+import { ColumnSlice } from './ColumnSlice';
 import { HypercubeAtIndex } from './HypercubeAtIndex';
 import { SwappedHypercube } from './SwappedHypercube';
 import { jsCol } from './testUtils';
@@ -42,6 +43,8 @@ describe.each(
       [toAdd],
       [t.column(t.number(), 3, 'X')]
     ),
+    ConcatenatedColumn: new ConcatenatedColumn(jsCol([1]), jsCol([2, 3])),
+    ColumnSlice: new ColumnSlice(jsCol([0, 1, 2, 3, 4]), 1, 4),
   })
 )('One dimensional tests: %s', (_name, lazyThing: ColumnLike) => {
   it('can getData()', () => {

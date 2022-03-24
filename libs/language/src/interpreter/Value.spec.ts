@@ -1,6 +1,17 @@
 import { F } from '../utils';
 import { parseUTCDate } from '../date';
-import { Scalar, Column, Table, Range, Date, fromJS } from './Value';
+import { jsCol } from '../lazy/testUtils';
+import {
+  Scalar,
+  Column,
+  Table,
+  Range,
+  Date,
+  fromJS,
+  FilteredColumn,
+  MappedColumn,
+} from './Value';
+import { getLabelIndex } from '../dimtools';
 
 it('can get from JS for testing', () => {
   expect(fromJS(1)).toEqual(Scalar.fromValue(1));
@@ -43,4 +54,32 @@ it('refuses to represent an empty table', () => {
     /empty table/i
   );
   expect(() => Table.fromNamedColumns([], ['hi'])).toThrow(/empty table/i);
+});
+
+it('Can retrieve the original index in a filtered column', () => {
+  const values = jsCol([1, 2, 3]);
+  const doNothingFilter = new FilteredColumn(values, [true, true, true]);
+  expect(getLabelIndex(doNothingFilter, 1)).toEqual(1);
+
+  const firstTakenOff = new FilteredColumn(values, [false, true, true]);
+  expect(getLabelIndex(firstTakenOff, 0)).toEqual(1);
+  expect(getLabelIndex(firstTakenOff, 1)).toEqual(2);
+  expect(() => getLabelIndex(firstTakenOff, 2)).toThrow();
+});
+
+it('Can retrieve the original index in a doubly filtered column', () => {
+  const values = jsCol([1, 2, 3]);
+  const firstTakenOff = new FilteredColumn(values, [false, true, true]);
+  const lastTakenOff = new FilteredColumn(firstTakenOff, [true, false]);
+
+  expect(getLabelIndex(lastTakenOff, 0)).toEqual(1);
+  expect(() => getLabelIndex(lastTakenOff, 1)).toThrow(/index not found/);
+});
+
+it('Can retrieve the original index in a mapped column', () => {
+  const values = jsCol([1, 2, 3]);
+
+  const reversed = new MappedColumn(values, [2, 1, 0]);
+  expect(getLabelIndex(reversed, 0)).toEqual(2);
+  expect(getLabelIndex(reversed, 2)).toEqual(0);
 });

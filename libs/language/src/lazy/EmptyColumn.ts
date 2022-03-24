@@ -1,6 +1,7 @@
 import { Dimension } from '.';
 import { Value } from '../interpreter';
 import { implementColumnLike } from './implementColumnLike';
+import { MinimalHypercube } from './types';
 
 /**
  * Sometimes we may access `.values[0]` of a column to figure out its dimensionality.
@@ -10,7 +11,7 @@ import { implementColumnLike } from './implementColumnLike';
  * Column.fromValues() returns this when given dimension information and zero values
  */
 export const EmptyColumn = implementColumnLike(
-  class EmptyColumn {
+  class EmptyColumn implements MinimalHypercube {
     dimensions: Dimension[];
 
     constructor(dimensions: Dimension[]) {
@@ -19,6 +20,12 @@ export const EmptyColumn = implementColumnLike(
 
     lowLevelGet(): Value {
       throw new Error('panic: Attempting to access an empty column');
+    }
+
+    indexToLabelIndex(): number {
+      throw new Error(
+        'panic: Attempting to get source index on an empty column'
+      );
     }
   }
 );

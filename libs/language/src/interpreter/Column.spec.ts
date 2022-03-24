@@ -82,7 +82,7 @@ describe('column value', () => {
 
   it('a column can be sliced', () => {
     const originalColumn = fromJS([1, 2, 3, 4, 5, 6, 7, 8, 9]) as Column;
-    const slice1 = ValueTransforms.slice(originalColumn, 3, 6);
+    const slice1 = ValueTransforms.slice(originalColumn, 3, 7);
     const slice2 = ValueTransforms.slice(originalColumn, 7, 9);
     expect(originalColumn.getData()).toMatchInlineSnapshot(`
       Array [
@@ -96,20 +96,20 @@ describe('column value', () => {
         Fraction(8),
         Fraction(9),
       ]
-      `);
+    `);
     expect(slice1.getData()).toMatchInlineSnapshot(`
-Array [
-  Fraction(4),
-  Fraction(5),
-  Fraction(6),
-  Fraction(7),
-]
-`);
+      Array [
+        Fraction(4),
+        Fraction(5),
+        Fraction(6),
+        Fraction(7),
+      ]
+    `);
     expect(slice2.getData()).toMatchInlineSnapshot(`
       Array [
         Fraction(8),
         Fraction(9),
       ]
-      `);
+    `);
   });
 });

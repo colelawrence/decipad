@@ -1,18 +1,17 @@
 import { getDefined } from '@decipad/utils';
 import { dequal } from 'dequal';
 import produce from 'immer';
-import { Realm } from '../../interpreter';
 import { compare } from '../../interpreter/compare-values';
 import { OneResult } from '../../interpreter/interpreter-types';
 import { RuntimeError } from '../../interpreter/RuntimeError';
 import {
-  Column,
   getColumnLike,
   isColumnLike,
   Row,
   Table,
   ValueTransforms,
 } from '../../interpreter/Value';
+import { ConcatenatedColumn } from '../../lazy/ConcatenatedColumn';
 import { build as t, Type } from '../../type';
 import { getInstanceof, zip } from '../../utils';
 import { BuiltinSpec } from '../interfaces';
@@ -43,11 +42,7 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
         return whenTable(table);
       }
     },
-    fnValuesNoAutomap: (
-      [tableOrColumn, needle],
-      [tableType] = [],
-      realm?: Realm
-    ) => {
+    fnValuesNoAutomap: ([tableOrColumn, needle], [tableType] = [], realm) => {
       const getNeedleIndexAtTable = (table: Table) => {
         const needleVal = needle.getData();
         const firstColumn = table.columns[0];
@@ -95,6 +90,7 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
       );
     },
   },
+
   concatenate: {
     argCount: 2,
     functor: ([tab1, tab2]) =>
@@ -118,16 +114,11 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
         }
       }),
     fnValues: ([tab1, tab2]) => {
-      const { columns: columns1, columnNames } = getInstanceof(tab1, Table);
-      const { columns: columns2 } = getInstanceof(tab2, Table);
+      const { columns: cols1, columnNames } = getInstanceof(tab1, Table);
+      const { columns: cols2 } = getInstanceof(tab2, Table);
 
       return Table.fromNamedColumns(
-        zip(columns1, columns2).map(([c1, c2]) =>
-          Column.fromValues(
-            [...c1.values, ...c2.values],
-            c1.dimensions.slice(1)
-          )
-        ),
+        zip(cols1, cols2).map(([c1, c2]) => new ConcatenatedColumn(c1, c2)),
         getDefined(columnNames)
       );
     },

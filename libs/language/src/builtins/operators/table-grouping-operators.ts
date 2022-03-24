@@ -54,7 +54,7 @@ export const tableGroupingOperators: { [fname: string]: BuiltinSpec } = {
             return ValueTransforms.slice(
               sorted,
               sliceStartIndex,
-              sliceEndIndex
+              sliceEndIndex + 1
             );
           })
       );

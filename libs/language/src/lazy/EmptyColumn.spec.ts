@@ -5,6 +5,7 @@ import { EmptyColumn } from './EmptyColumn';
 
 it('forbids access into it', () => {
   expect(() => new EmptyColumn([]).lowLevelGet()).toThrow();
+  expect(() => new EmptyColumn([]).indexToLabelIndex()).toThrow();
   expect(() =>
     new EmptyColumn([{ dimensionLength: 1 }]).lowLevelGet()
   ).toThrow();

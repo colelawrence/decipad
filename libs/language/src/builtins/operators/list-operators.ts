@@ -9,9 +9,9 @@ import {
   Table,
   fromJS,
   getColumnLike,
-  ColumnLike,
   ValueTransforms,
 } from '../../interpreter/Value';
+import { SwappedHypercube, ConcatenatedColumn } from '../../lazy';
 import { Type, build as t } from '../../type';
 import { getInstanceof, U } from '../../utils';
 import { BuiltinSpec } from '../interfaces';
@@ -37,13 +37,8 @@ export const listOperators: Record<string, BuiltinSpec> = {
     argCount: 2,
     argCardinalities: [2, 2],
     // TODO: make this a varargs function
-    fnValues: ([a, b]: Value[]) => {
-      const allElements = [
-        ...getColumnLike(a).values,
-        ...getColumnLike(b).values,
-      ];
-      return Column.fromValues(allElements);
-    },
+    fnValues: ([a, b]: Value[]) =>
+      new ConcatenatedColumn(getColumnLike(a), getColumnLike(b)),
     functor: ([a, b]) =>
       Type.combine(a.reduced().sameAs(b.reduced())).mapType(() => {
         const resultColumnSize =
@@ -111,21 +106,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
   transpose: {
     argCount: 1,
     argCardinalities: [3],
-    fnValues: ([_matrix]) => {
-      const matrix = getColumnLike(_matrix);
-      const matrixWidth = matrix.rowCount;
-      const matrixHeight = getColumnLike(matrix.values[0]).rowCount;
-
-      return Column.fromValues(
-        Array.from({ length: matrixHeight }, (_, y) =>
-          Column.fromValues(
-            Array.from({ length: matrixWidth }, (_, x) =>
-              getDefined((matrix.values[x] as ColumnLike).values[y])
-            )
-          )
-        )
-      );
-    },
+    fnValues: ([matrix]) => new SwappedHypercube(getColumnLike(matrix), 1),
     functor: ([matrix]) =>
       Type.combine(matrix.isColumn().reduced().isColumn().reduced()).mapType(
         (cell) => {
