@@ -5,6 +5,7 @@ import {
   useComputer,
 } from '@decipad/react-contexts';
 import {
+  EditorPlaceholder,
   ExternalAuthenticationContextProvider,
   ProgramBlocksContextProvider,
 } from '@decipad/ui';
@@ -28,9 +29,6 @@ export interface EditorProps {
   readOnly: boolean;
   authSecret?: string;
 }
-
-const LoadingEditable = (): ReturnType<FC> => <>Loading editor...</>;
-const renderLoadingEditable = () => <LoadingEditable />;
 
 const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
   const [editorLoaded, setEditorLoaded] = useState(false);
@@ -96,18 +94,21 @@ const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
             startUpload={startUpload}
             notebookId={notebookId}
           >
-            <Plate
-              id={notebookId}
-              renderEditable={editorLoaded ? identity : renderLoadingEditable}
-              plugins={editorPlugins}
-              editableProps={{ readOnly }}
-            >
-              <components.Tooltip />
-              <components.UploadDialogue
-                uploadState={uploadState}
-                clearAll={clearAllUploads}
-              />
-            </Plate>
+            {!editorLoaded && <EditorPlaceholder />}
+            <div css={{ display: editorLoaded ? 'unset' : 'none' }}>
+              <Plate
+                id={notebookId}
+                renderEditable={identity}
+                plugins={editorPlugins}
+                editableProps={{ readOnly }}
+              >
+                <components.Tooltip />
+                <components.UploadDialogue
+                  uploadState={uploadState}
+                  clearAll={clearAllUploads}
+                />
+              </Plate>
+            </div>
           </components.DropFile>
         </ExternalAuthenticationContextProvider>
       </ProgramBlocksContextProvider>

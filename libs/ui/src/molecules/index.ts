@@ -23,3 +23,4 @@ export { TableRow } from './TableRow/TableRow';
 export { UnitMenuItem } from './UnitMenuItem/UnitMenuItem';
 export { UnorderedList } from './UnorderedList/UnorderedList';
 export { WorkspaceItem } from './WorkspaceItem/WorkspaceItem';
+export { ParagraphPlaceholder } from './ParagraphPlaceholder/ParagraphPlaceholder';

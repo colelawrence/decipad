@@ -7,3 +7,4 @@ export { NotebookList } from './NotebookList/NotebookList';
 export { NotebookListPlaceholder } from './NotebookListPlaceholder/NotebookListPlaceholder';
 export { NotebookTopbar } from './NotebookTopbar/NotebookTopbar';
 export { ToastDisplay } from './ToastDisplay/ToastDisplay';
+export { EditorPlaceholder } from './EditorPlaceholder/EditorPlaceholder';
