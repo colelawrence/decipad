@@ -1,11 +1,11 @@
 diff --git a/node_modules/@udecode/plate-autoformat/dist/index.es.js b/node_modules/@udecode/plate-autoformat/dist/index.es.js
-index 2e30af0..054bddb 100644
+index ef14dcf..6281155 100644
 --- a/node_modules/@udecode/plate-autoformat/dist/index.es.js
 +++ b/node_modules/@udecode/plate-autoformat/dist/index.es.js
-@@ -149,9 +148,13 @@ const autoformatBlock = (editor, {
+@@ -148,9 +148,13 @@ const autoformatBlock = (editor, {
        if (isBelowSameBlockType) continue;
      }
-
+ 
 -    Transforms.delete(editor, {
 -      at: matchRange
 -    });
@@ -17,16 +17,16 @@ index 2e30af0..054bddb 100644
 +    }
 +
      preFormat === null || preFormat === void 0 ? void 0 : preFormat(editor);
-
+ 
      if (!format) {
 diff --git a/node_modules/@udecode/plate-autoformat/dist/index.js b/node_modules/@udecode/plate-autoformat/dist/index.js
-index 931555e..f4b4c14 100644
+index fb9d8c7..c26b6bb 100644
 --- a/node_modules/@udecode/plate-autoformat/dist/index.js
 +++ b/node_modules/@udecode/plate-autoformat/dist/index.js
-@@ -153,9 +153,13 @@ const autoformatBlock = (editor, {
+@@ -152,9 +152,13 @@ const autoformatBlock = (editor, {
        if (isBelowSameBlockType) continue;
      }
-
+ 
 -    slate.Transforms.delete(editor, {
 -      at: matchRange
 -    });
@@ -38,5 +38,5 @@ index 931555e..f4b4c14 100644
 +    }
 +
      preFormat === null || preFormat === void 0 ? void 0 : preFormat(editor);
-
+ 
      if (!format) {
