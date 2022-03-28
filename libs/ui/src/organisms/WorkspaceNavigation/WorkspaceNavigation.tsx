@@ -34,7 +34,10 @@ export const WorkspaceNavigation = ({
         <NavigationItem href={docs({}).$} icon={<Docs />}>
           <span css={itemTextStyles}>Check the docs</span>
         </NavigationItem>
-        <NavigationItem href="https://discord.gg/HwDMqwbGmc" icon={<Chat />}>
+        <NavigationItem
+          href="https://discord.com/invite/YT2cuJkHkS"
+          icon={<Chat />}
+        >
           <span css={itemTextStyles}>Join our Discord</span>
         </NavigationItem>
       </NavigationList>
