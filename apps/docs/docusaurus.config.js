@@ -121,7 +121,7 @@ const config = {
               },
               {
                 label: 'Technical Documentation',
-                to: '/docs/language/introduction-to-the-language',
+                to: '/docs/language',
               },
             ],
           },

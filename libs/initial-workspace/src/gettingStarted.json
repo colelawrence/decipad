@@ -132,7 +132,7 @@
                     }
                   ],
                   "type": "a",
-                  "url": "https://alpha.decipad.com/docs/docs/introduction/introduction-to-the-language",
+                  "url": "https://alpha.decipad.com/docs/language",
                   "id": "u_iYHcIIENk-GFe7rD4U8"
                 },
                 {
@@ -171,7 +171,7 @@
                     }
                   ],
                   "type": "a",
-                  "url": "https://alpha.decipad.com/docs/docs/language/organising-your-data/tables",
+                  "url": "https://alpha.decipad.com/docs/data-organization/tables",
                   "id": "HFE5olDOqzEtVJ2cq93xM"
                 },
                 {
@@ -311,7 +311,7 @@
             }
           ],
           "type": "a",
-          "url": "https://alpha.decipad.com/docs/language/introduction-to-the-language",
+          "url": "https://alpha.decipad.com/docs/language",
           "id": "NmoGnavM-EONaBsFbOa9d"
         },
         {
@@ -424,7 +424,7 @@
             }
           ],
           "type": "a",
-          "url": "https://alpha.decipad.com/docs/language/units#custom-conversions"
+          "url": "https://alpha.decipad.com/docs/language/units/#custom-conversions"
         },
         {
           "text": " 🤯. Check out "
