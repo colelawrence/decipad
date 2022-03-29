@@ -99,6 +99,12 @@ const config = {
           },
           {
             type: 'doc',
+            docId: 'get-inspiration',
+            position: 'left',
+            label: 'Get Inspiration',
+          },
+          {
+            type: 'doc',
             docId: 'quick-start/help-and-support',
             position: 'left',
             label: 'Support',

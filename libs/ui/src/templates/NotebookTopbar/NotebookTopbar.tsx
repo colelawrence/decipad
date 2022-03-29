@@ -12,7 +12,7 @@ import { cssVar, p14Medium } from '../../primitives';
 import { PermissionType } from '../../types';
 import { Anchor } from '../../utils';
 
-const topbarWrapperStyles = css({
+const wrapperStyles = css({
   display: 'flex',
   justifyContent: 'space-between',
   flexWrap: 'wrap',
@@ -24,7 +24,7 @@ const topbarWrapperStyles = css({
   borderColor: cssVar('highlightColor'),
 });
 
-const topbarLeftSideStyles = css({
+const leftSideStyles = css({
   flexGrow: 999,
 
   display: 'flex',
@@ -32,7 +32,7 @@ const topbarLeftSideStyles = css({
   gap: '6px',
 });
 
-const topbarRightSideStyles = css({
+const rightSideStyles = css({
   flexGrow: 1,
 
   display: 'grid',
@@ -41,9 +41,11 @@ const topbarRightSideStyles = css({
   gap: '1rem',
 });
 
-const helpButtonStyles = css(p14Medium, {
-  paddingRight: '16px',
+const linksStyles = css({
+  display: 'flex',
+  gap: '12px',
 });
+const helpLinkStyles = css(p14Medium);
 
 export type NotebookTopbarProps = Pick<
   ComponentProps<typeof NotebookPath>,
@@ -74,9 +76,9 @@ export const NotebookTopbar = ({
   const clientEvent = useContext(ClientEventsContext);
 
   return (
-    <div css={topbarWrapperStyles}>
+    <div css={wrapperStyles}>
       {/* Left side */}
-      <div css={topbarLeftSideStyles}>
+      <div css={leftSideStyles}>
         {isAdmin && (
           <div css={{ width: '32px', display: 'grid' }}>
             <IconButton href={workspaceHref}>
@@ -93,22 +95,38 @@ export const NotebookTopbar = ({
       </div>
 
       {/* Right side */}
-      <div css={topbarRightSideStyles}>
+      <div css={rightSideStyles}>
         {isAdmin && (
-          <em css={helpButtonStyles}>
-            <Anchor
-              href={docs({}).$}
-              // Analytics
-              onClick={() =>
-                clientEvent({
-                  type: 'action',
-                  action: 'notebook help link clicked',
-                })
-              }
-            >
-              Need help?
-            </Anchor>
-          </em>
+          <div css={linksStyles}>
+            <em css={helpLinkStyles}>
+              <Anchor
+                href={docs({}).page({ name: 'get-inspiration' }).$}
+                // Analytics
+                onClick={() =>
+                  clientEvent({
+                    type: 'action',
+                    action: 'notebook get inspiration link clicked',
+                  })
+                }
+              >
+                Get Inspiration
+              </Anchor>
+            </em>
+            <em css={helpLinkStyles}>
+              <Anchor
+                href={docs({}).$}
+                // Analytics
+                onClick={() =>
+                  clientEvent({
+                    type: 'action',
+                    action: 'notebook help link clicked',
+                  })
+                }
+              >
+                Need help?
+              </Anchor>
+            </em>
+          </div>
         )}
         <NotebookAvatars usersWithAccess={usersWithAccess} />
 
