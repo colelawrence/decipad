@@ -61,8 +61,9 @@ export const useNotebookTitlePlugin = ({
         return;
       }
       const { selection } = editor;
-      try {
-        const [node] = Editor.node(editor, [0, 0]);
+      const titlePath = [0, 0];
+      if (Editor.hasPath(editor, titlePath)) {
+        const [node] = Editor.node(editor, titlePath);
         const editableTitle = Node.string(node);
 
         if (selection && isCollapsed(selection)) {
@@ -70,9 +71,6 @@ export const useNotebookTitlePlugin = ({
             setEditorTitle(editableTitle);
           }
         }
-      } catch (err) {
-        console.error('Error trying to get the notebook title:', err);
-        console.error(err);
       }
     },
     [readOnly, remoteTitle]
