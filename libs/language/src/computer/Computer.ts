@@ -44,6 +44,7 @@ import {
 } from './utils';
 import { getDelayedBlockId } from './delayErrors';
 import { defaultComputerResults } from './defaultComputerResults';
+import { getVisibleVariables } from './getVisibleVariables';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
 
@@ -85,6 +86,11 @@ const computeStatement = async (
       blockId,
       statementIndex,
       ...serializeResult(valueType, value?.getData()),
+      visibleVariables: getVisibleVariables(
+        program,
+        location[0],
+        realm.inferContext
+      ),
     },
     value,
   };
@@ -134,6 +140,7 @@ export const resultFromError = (
     blockId,
     statementIndex,
     ...serializeResult(t.impossible(message), null),
+    visibleVariables: new Set(),
   };
 };
 
@@ -216,12 +223,17 @@ function* findNames(
   }
 }
 
+interface ComputerOpts {
+  requestDebounceMs: number;
+}
+
 export class Computer {
   private previouslyParsed: ParseRet[] = [];
   private previousExternalData: ExternalDataMap = new Map();
   private computationRealm = new ComputationRealm();
   private computing = false;
   private cursorBlockId: string | null = null;
+  private requestDebounceMs: number;
 
   // streams
   private readonly computeRequests = new Subject<ComputeRequest>();
@@ -229,7 +241,8 @@ export class Computer {
     defaultComputerResults
   );
 
-  constructor() {
+  constructor({ requestDebounceMs = 100 }: Partial<ComputerOpts> = {}) {
+    this.requestDebounceMs = requestDebounceMs;
     this.wireRequestsToResults();
   }
 
@@ -237,7 +250,7 @@ export class Computer {
     this.computeRequests
       .pipe(
         // Debounce to give React an easier time
-        debounceTime(100),
+        debounceTime(this.requestDebounceMs),
         // Make sure the new request is actually different
         distinctUntilChanged((prevReq, req) => dequal(prevReq, req)),
         // Compute me some computes!

@@ -61,7 +61,9 @@ export interface IdentifiedResult {
 export interface InBlockResult extends Result {
   blockId: string;
   statementIndex: number;
+  visibleVariables: ReadonlySet<string>;
 }
+
 export interface ResultsContextItem {
   readonly blockResults: {
     readonly [blockId: string]: Readonly<IdentifiedResult>;

@@ -9,7 +9,10 @@ import { render } from '@testing-library/react';
 import { Plate } from '@udecode/plate';
 import { Computer } from '@decipad/language';
 import { timeout } from '@decipad/utils';
-import { ComputerContextProvider } from '@decipad/react-contexts';
+import {
+  ComputerContextProvider,
+  ResultsContext,
+} from '@decipad/react-contexts';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import {
@@ -23,44 +26,63 @@ const PlateWrapper = ({
   computer,
 }: Pick<CodeBlockElement, 'children'> & { computer: Computer }) => (
   <DndProvider backend={HTML5Backend}>
-    <Plate
-      initialValue={[
-        {
-          type: ELEMENT_CODE_BLOCK,
-          children,
-        },
-      ]}
-      plugins={[
-        createCodeBlockPlugin(),
-        createCodeLinePlugin(computer),
-        createCodeVariableHighlightPlugin(),
-      ]}
-    />
+    <ResultsContext.Provider value={computer.results}>
+      <ComputerContextProvider computer={computer}>
+        <Plate
+          initialValue={[
+            {
+              type: ELEMENT_CODE_BLOCK,
+              children,
+            },
+          ]}
+          plugins={[
+            createCodeBlockPlugin(),
+            createCodeLinePlugin(computer),
+            createCodeVariableHighlightPlugin(),
+          ]}
+        />
+      </ComputerContextProvider>
+    </ResultsContext.Provider>
   </DndProvider>
 );
 
 describe('variable highlights', () => {
-  it('show bubbles in variable declarations', () => {
+  it('show bubbles in variable declarations', async () => {
+    const computer = new Computer({ requestDebounceMs: 0 });
+    await computer.pushCompute({
+      program: [
+        {
+          type: 'unparsed-block',
+          id: 'x1',
+          source: 'id = 42',
+        },
+      ],
+    });
+
+    await timeout(0);
+
     const children = [
       {
         type: ELEMENT_CODE_LINE,
-        children: [{ text: 'id=42' }],
+        id: 'x1',
+        children: [{ text: 'id = 42' }],
       } as CodeLineElement,
     ];
 
-    const { getByText } = render(
-      <PlateWrapper children={children} computer={new Computer()} />
+    const { getByText, getAllByText } = render(
+      <PlateWrapper children={children} computer={computer} />
     );
 
     expect(
       findParentWithStyle(getByText(/id/), 'backgroundColor')!.backgroundColor
     ).not.toEqual(
-      findParentWithStyle(getByText(/42/), 'backgroundColor')?.backgroundColor
+      findParentWithStyle(getAllByText(/42/)[0], 'backgroundColor')
+        ?.backgroundColor
     );
   });
 
   it('show bubbles in usages of defined variables', async () => {
-    const computer = new Computer();
+    const computer = new Computer({ requestDebounceMs: 0 });
     await computer.pushCompute({
       program: [
         {
@@ -76,7 +98,7 @@ describe('variable highlights', () => {
       ],
     });
 
-    await timeout(200);
+    await timeout(0);
 
     const children = [
       {
@@ -92,9 +114,7 @@ describe('variable highlights', () => {
     ];
 
     const { getAllByText } = render(
-      <ComputerContextProvider computer={computer}>
-        <PlateWrapper children={children} computer={computer} />
-      </ComputerContextProvider>
+      <PlateWrapper children={children} computer={computer} />
     );
 
     const [xDecl, xUsage] = getAllByText(/x/);
@@ -104,7 +124,7 @@ describe('variable highlights', () => {
   });
 
   it('highlights defined columns of a table', async () => {
-    const computer = new Computer();
+    const computer = new Computer({ requestDebounceMs: 0 });
     await computer.pushCompute({
       program: [
         {
@@ -120,7 +140,7 @@ describe('variable highlights', () => {
       ],
     });
 
-    await timeout(200);
+    await timeout(0);
 
     const children = [
       {
@@ -141,9 +161,7 @@ describe('variable highlights', () => {
     ];
 
     const { getByText, getAllByText } = render(
-      <ComputerContextProvider computer={computer}>
-        <PlateWrapper children={children} computer={computer} />
-      </ComputerContextProvider>
+      <PlateWrapper children={children} computer={computer} />
     );
 
     const [tableDecl, tableUsage, notTableUsage] = getAllByText(/MyTable/).map(
@@ -165,9 +183,14 @@ describe('variable highlights', () => {
   });
 
   it('highlights column access inside table', async () => {
-    const computer = new Computer();
+    const computer = new Computer({ requestDebounceMs: 0 });
     await computer.pushCompute({
       program: [
+        {
+          type: 'unparsed-block',
+          id: 'defining t for test purposes',
+          source: 't = {A = 1}',
+        },
         {
           type: 'unparsed-block',
           id: 'x1',
@@ -176,7 +199,7 @@ describe('variable highlights', () => {
       ],
     });
 
-    await timeout(200);
+    await timeout(0);
 
     const children = [
       {
@@ -187,9 +210,7 @@ describe('variable highlights', () => {
     ];
 
     const { getAllByText } = render(
-      <ComputerContextProvider computer={computer}>
-        <PlateWrapper children={children} computer={computer} />
-      </ComputerContextProvider>
+      <PlateWrapper children={children} computer={computer} />
     );
 
     const [colDecl, colUsage1, colUsage2] = getAllByText(/A/);
@@ -206,7 +227,7 @@ describe('variable highlights', () => {
   });
 
   it('highlights column access with spaces', async () => {
-    const computer = new Computer();
+    const computer = new Computer({ requestDebounceMs: 0 });
     await computer.pushCompute({
       program: [
         {
@@ -217,6 +238,8 @@ describe('variable highlights', () => {
       ],
     });
 
+    await timeout(0);
+
     const children = [
       {
         type: ELEMENT_CODE_LINE,
@@ -226,9 +249,7 @@ describe('variable highlights', () => {
     ];
 
     const { getAllByText } = render(
-      <ComputerContextProvider computer={computer}>
-        <PlateWrapper children={children} computer={computer} />
-      </ComputerContextProvider>
+      <PlateWrapper children={children} computer={computer} />
     );
 
     const [colDecl, colUsage] = getAllByText(/A/);
@@ -246,7 +267,7 @@ describe('variable highlights', () => {
   });
 
   it('show bubbles in table spreads', async () => {
-    const computer = new Computer();
+    const computer = new Computer({ requestDebounceMs: 0 });
     await computer.pushCompute({
       program: [
         {
@@ -262,7 +283,7 @@ describe('variable highlights', () => {
       ],
     });
 
-    await timeout(200);
+    await timeout(0);
 
     const children = [
       {
@@ -278,9 +299,7 @@ describe('variable highlights', () => {
     ];
 
     const { getAllByText } = render(
-      <ComputerContextProvider computer={computer}>
-        <PlateWrapper children={children} computer={computer} />
-      </ComputerContextProvider>
+      <PlateWrapper children={children} computer={computer} />
     );
 
     const [xDecl, xUsage] = getAllByText(/x/);
@@ -290,7 +309,7 @@ describe('variable highlights', () => {
   });
 
   it('does not mistake a table column access for another declared variable', async () => {
-    const computer = new Computer();
+    const computer = new Computer({ requestDebounceMs: 0 });
     await computer.pushCompute({
       program: [
         {
@@ -311,7 +330,7 @@ describe('variable highlights', () => {
       ],
     });
 
-    await timeout(200);
+    await timeout(0);
 
     const children = [
       {
@@ -332,9 +351,7 @@ describe('variable highlights', () => {
     ];
 
     const { getAllByText } = render(
-      <ComputerContextProvider computer={computer}>
-        <PlateWrapper children={children} computer={computer} />
-      </ComputerContextProvider>
+      <PlateWrapper children={children} computer={computer} />
     );
 
     const [bVar, bColumn] = getAllByText(/B/);
@@ -346,7 +363,7 @@ describe('variable highlights', () => {
   });
 
   it('show bubbles for external variables in function declarations', async () => {
-    const computer = new Computer();
+    const computer = new Computer({ requestDebounceMs: 0 });
     await computer.pushCompute({
       program: [
         {
@@ -362,7 +379,7 @@ describe('variable highlights', () => {
       ],
     });
 
-    await timeout(200);
+    await timeout(0);
 
     const children = [
       {
@@ -378,12 +395,11 @@ describe('variable highlights', () => {
     ];
 
     const { getAllByText } = render(
-      <ComputerContextProvider computer={computer}>
-        <PlateWrapper children={children} computer={computer} />
-      </ComputerContextProvider>
+      <PlateWrapper children={children} computer={computer} />
     );
 
     const [xDecl, xUsage] = getAllByText(/X/);
+
     expect(
       findParentWithStyle(xDecl, 'backgroundColor')!.backgroundColor
     ).toEqual(findParentWithStyle(xUsage, 'backgroundColor')!.backgroundColor);

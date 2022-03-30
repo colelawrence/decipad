@@ -1,10 +1,7 @@
 import { getVariableRanges } from './getVariableRanges';
 
-const testFindVariables = (
-  code: string,
-  previouslyDefined: Set<string> = new Set()
-) => {
-  const ranges = getVariableRanges(code, [], previouslyDefined);
+const testFindVariables = (code: string) => {
+  const ranges = getVariableRanges(code, [], 'blockId');
 
   return ranges.map((range) =>
     code.slice(range.anchor.offset, range.focus.offset)
@@ -15,17 +12,24 @@ it('finds bubbles', () => {
   expect(testFindVariables('Ayy = B\nC = D')).toMatchInlineSnapshot(`
     Array [
       "Ayy",
+      "B",
       "C",
+      "D",
     ]
   `);
 
-  expect(testFindVariables('Ayy == B')).toMatchInlineSnapshot(`Array []`);
+  expect(testFindVariables('Ayy == B')).toMatchInlineSnapshot(`
+    Array [
+      "Ayy",
+      "B",
+    ]
+  `);
 
   expect(testFindVariables('"A = B"')).toMatchInlineSnapshot(`Array []`);
 });
 
 it('finds bubbles for previously defined variables', () => {
-  expect(testFindVariables('Ayy = B', new Set('B'))).toMatchInlineSnapshot(`
+  expect(testFindVariables('Ayy = B')).toMatchInlineSnapshot(`
     Array [
       "Ayy",
       "B",
@@ -33,18 +37,11 @@ it('finds bubbles for previously defined variables', () => {
   `);
 });
 
-it('does not find bubbles for variables used that were not previously defined', () => {
-  expect(testFindVariables('Ayy = B', new Set())).toMatchInlineSnapshot(`
-    Array [
-      "Ayy",
-    ]
-  `);
-});
-
 it('finds bubbles for external variables in function declarations', () => {
-  expect(testFindVariables('F(A) = A + Y', new Set('Y')))
-    .toMatchInlineSnapshot(`
+  expect(testFindVariables('F(A) = A + Y')).toMatchInlineSnapshot(`
     Array [
+      "A",
+      "A",
       "Y",
     ]
   `);
@@ -65,6 +62,7 @@ it('takes leading whitespace into account', () => {
   expect(testFindVariables('  Ayy = B')).toMatchInlineSnapshot(`
     Array [
       "Ayy",
+      "B",
     ]
   `);
 });

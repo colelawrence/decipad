@@ -19,6 +19,7 @@ const block = {
         columnSize: 5,
         indexedBy: null,
       } as SerializedType,
+      visibleVariables: new Set() as ReadonlySet<string>,
     },
   ],
 };

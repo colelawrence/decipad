@@ -24,18 +24,12 @@ export const decorateCodeLine =
       node,
       path,
     ]: NodeEntry<TDescendant>): Range[] => {
-      const names = computer
-        .getNamesDefinedBefore([node.id, 0], false)
-        .map((n) => n.name);
-
-      return getVariableRanges(
-        getText(editor, path),
-        path,
-        new Set(names || [])
-      ).map((range: Range) => ({
-        ...range,
-        [DECORATE_CODE_VARIABLE]: true,
-      }));
+      return getVariableRanges(getText(editor, path), path, node.id).map(
+        (range) => ({
+          ...range,
+          [DECORATE_CODE_VARIABLE]: true,
+        })
+      );
     };
 
     return (entry: NodeEntry<TDescendant>) => {

@@ -9,10 +9,12 @@ const styles = css(codeBlock.variableStyles, {
 
 interface CodeVariableProps {
   readonly children: ReactNode;
+  readonly variableMissing?: boolean;
 }
 
 export const CodeVariable = ({
   children,
+  variableMissing = false,
 }: CodeVariableProps): ReturnType<React.FC> => {
-  return <span css={styles}>{children}</span>;
+  return <span css={variableMissing ? null : styles}>{children}</span>;
 };

@@ -131,6 +131,7 @@ it('shows a plot if has data and options', async () => {
               statementIndex: 0,
               type: tableType,
               value: tableData,
+              visibleVariables: new Set(),
             },
           ],
         },

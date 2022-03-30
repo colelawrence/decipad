@@ -5,6 +5,7 @@ import {
   EMPTY,
   map,
   Observable,
+  switchMap,
 } from 'rxjs';
 import { dequal } from 'dequal';
 
@@ -53,32 +54,61 @@ export const useResults = (): ResultsContextItem => {
  * Obtain a code line's result from the results context.
  * Errors are debounced if the cursor is in this line, for UX reasons.
  * */
-export const useResult = (blockId: string): IdentifiedResult | null => {
+export const useResult = (
+  blockId: string,
+  element?: Element | null
+): IdentifiedResult | null => {
   const subject = useContext(ResultsContext);
   const [result, setResult] = useState<IdentifiedResult | null>(null);
 
   useEffect(() => {
-    const subscription = subject
-      .pipe(
-        map(({ blockResults, delayedResultBlockId }) => ({
-          result: blockResults[blockId] ?? null,
-          needsDelay: delayedResultBlockId === blockId,
-        })),
-        distinctUntilChanged((a, b) => dequal(a, b)),
-        delayErrors({
-          shouldDelay$: subject.pipe(
-            map(({ delayedResultBlockId }) => delayedResultBlockId === blockId)
-          ),
-        })
-      )
-      .subscribe((possiblyDelayed) => {
-        setResult(possiblyDelayed.result);
-      });
+    const results$ = subject.pipe(
+      map(({ blockResults, delayedResultBlockId }) => ({
+        result: blockResults[blockId] ?? null,
+        needsDelay: delayedResultBlockId === blockId,
+      })),
+      distinctUntilChanged((a, b) => dequal(a, b)),
+      delayErrors({
+        shouldDelay$: subject.pipe(
+          map(({ delayedResultBlockId }) => delayedResultBlockId === blockId)
+        ),
+      }),
+      pauseWhenOffScreen(element)
+    );
+
+    const subscription = results$.subscribe((possiblyDelayed) => {
+      setResult(possiblyDelayed.result);
+    });
 
     return () => {
       subscription.unsubscribe();
     };
-  }, [subject, blockId]);
+  }, [subject, blockId, element]);
 
   return result;
 };
+
+const pauseWhenOffScreen =
+  (target?: Element | null) =>
+  <T>(results$: Observable<T>) => {
+    if (!target || typeof IntersectionObserver === 'undefined') {
+      return results$;
+    }
+
+    const onScreen$ = new Observable<boolean>((subscriber) => {
+      const options = { rootMargin: '100px' };
+
+      const observer = new IntersectionObserver(([intersection]) => {
+        subscriber.next(intersection.isIntersecting);
+      }, options);
+
+      observer.observe(target);
+      return () => {
+        observer.disconnect();
+      };
+    });
+
+    return onScreen$.pipe(
+      switchMap((onScreen) => (onScreen ? results$ : EMPTY))
+    );
+  };
