@@ -45,6 +45,7 @@ const tdBaseStyles = css(p14Medium, {
     right: `calc(100% - ${lineNumberWidth})`,
     top: '50%',
     transform: 'translateY(-50%)',
+    fontVariantNumeric: 'tabular-nums',
   },
 });
 

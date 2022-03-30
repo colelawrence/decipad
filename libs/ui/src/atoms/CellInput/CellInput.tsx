@@ -8,6 +8,7 @@ const inputStyles = css({
   width: '100%',
   background: 'transparent',
   border: 0,
+  fontVariantNumeric: 'tabular-nums',
 
   '::placeholder': {
     opacity: 0.5,
