@@ -17,6 +17,7 @@ export function Router(): ReturnType<FC> {
           <Home />
         </RequireSession>
       </Route>
+      <Redirect from="/workspaces/:workspaceId/pads/:padId" to="/n/:padId" />
       <Redirect from="/workspaces/:workspaceid" to="/w/:workspaceid" />
       <Route
         path="/w/:workspaceid"
