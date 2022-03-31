@@ -1,7 +1,7 @@
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { ComponentProps, FC } from 'react';
-import { cssVar, p32Medium } from '../../primitives';
+import { ComponentProps, FC, ReactNode } from 'react';
+import { cssVar, grey100, p32Medium } from '../../primitives';
 import { Ellipsis } from '../../icons';
 import { Interactive } from '../../molecules';
 import { useSubmittableInput } from '../../utils/useSubmittableInput';
@@ -10,17 +10,18 @@ import { InteractiveInputMenu } from '../InteractiveInputMenu/InteractiveInputMe
 const numberInputStyles = css(p32Medium, {
   color: cssVar('strongTextColor'),
   borderRadius: '8px',
-  backgroundColor: cssVar('backgroundColor'),
-  ':hover, :focus': {
-    backgroundColor: cssVar('strongHighlightColor'),
-  },
-  textOverflow: 'ellipsis',
-
+  backgroundColor: grey100.rgb,
   minWidth: 0,
-  padding: '6px 8px',
+  padding: '3px 8px',
 });
 
 type InputProps = Parameters<typeof useSubmittableInput>[0];
+
+interface ValueInputProps {
+  onChange: (value: string) => void;
+  value: string;
+  children?: ReactNode;
+}
 
 interface EditorInteractiveProps
   extends Pick<
@@ -31,9 +32,27 @@ interface EditorInteractiveProps
       ComponentProps<typeof InteractiveInputMenu>,
       'onConvert' | 'onCopy' | 'onDelete'
     > {
-  onChangeValue?: InputProps['onChange'];
+  onChangeValue?: ValueInputProps['onChange'];
   value?: InputProps['value'];
+  input?: ValueInputProps;
+  children?: ReactNode;
 }
+
+const DefaultInput = ({
+  onChange,
+  value,
+  children,
+}: ValueInputProps): ReturnType<FC> => {
+  const valueInputProps = useSubmittableInput({
+    onChange,
+    value,
+  });
+  return (
+    <input {...valueInputProps} placeholder="10">
+      {children}
+    </input>
+  );
+};
 
 export const EditorInteractiveInput = ({
   name,
@@ -45,11 +64,8 @@ export const EditorInteractiveInput = ({
   onDelete,
   readOnly = false,
   value = '',
+  children,
 }: EditorInteractiveProps): ReturnType<FC> => {
-  const valueInputProps = useSubmittableInput({
-    onChange: onChangeValue,
-    value,
-  });
   return (
     <Interactive
       name={name}
@@ -69,7 +85,9 @@ export const EditorInteractiveInput = ({
         />
       }
     >
-      <input {...valueInputProps} css={numberInputStyles} placeholder="10" />
+      <div css={numberInputStyles}>
+        {children || <DefaultInput value={value} onChange={onChangeValue} />}
+      </div>
     </Interactive>
   );
 };

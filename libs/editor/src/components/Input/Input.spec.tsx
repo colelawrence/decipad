@@ -51,13 +51,13 @@ beforeEach(() => {
 });
 
 it('renders the element properties', () => {
-  const { getByDisplayValue } = render(
+  const { getByDisplayValue, getByText } = render(
     <Plate {...plateProps} editor={editor} />,
     { wrapper }
   );
 
   expect(getByDisplayValue('var')).toBeVisible();
-  expect(getByDisplayValue('10')).toBeVisible();
+  expect(getByText('10')).toBeVisible();
 });
 
 it('updates the element name when edited', () => {
@@ -73,21 +73,6 @@ it('updates the element name when edited', () => {
   fireEvent.keyDown(input, { key: 'Enter' });
 
   expect(editor.children[0].variableName).toBe('variable');
-});
-
-it('updates the element value when edited', () => {
-  const { getByDisplayValue } = render(
-    <Plate {...plateProps} editor={editor} />,
-    {
-      wrapper,
-    }
-  );
-
-  const input = getByDisplayValue('10');
-  userEvent.type(input, '0');
-  fireEvent.keyDown(input, { key: 'Enter' });
-
-  expect(editor.children[0].value).toBe('100');
 });
 
 it('converts element to code block', async () => {

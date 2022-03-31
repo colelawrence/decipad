@@ -3,7 +3,6 @@ export * from './CodeBlock';
 export * from './CodeErrorHighlight';
 export * from './CodeLine';
 export * from './CodeVariable';
-export * from './Input';
 export * from './Plot';
 export * from './slash-commands';
 export * from './Table';

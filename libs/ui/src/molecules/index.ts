@@ -2,6 +2,7 @@ export { AccountAvatar } from './AccountAvatar/AccountAvatar';
 export { AddTableRowButton } from './AddTableRowButton/AddTableRowButton';
 export { AuthContent } from './AuthContent/AuthContent';
 export { CodeSyntaxErrorHighlight } from './CodeSyntaxErrorHighlight/CodeSyntaxErrorHighlight';
+export { EditableExpression } from './EditableExpression/EditableExpression';
 export { EditableTableCaption } from './EditableTableCaption/EditableTableCaption';
 export { EditableTableData } from './EditableTableData/EditableTableData';
 export { HelpButton } from './HelpButton/HelpButton';

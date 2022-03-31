@@ -10,6 +10,7 @@ export { DraggableBlock } from './DraggableBlock/DraggableBlock';
 export { EditableTableHeader } from './EditableTableHeader/EditableTableHeader';
 export { EditorInteractiveInput } from './EditorInteractiveInput/EditorInteractiveInput';
 export { EditorTable } from './EditorTable/EditorTable';
+export { ExpressionEditor } from './ExpressionEditor/ExpressionEditor';
 export { EmptyWorkspaceCta } from './EmptyWorkspaceCta/EmptyWorkspaceCta';
 export { InlineColumnResult } from './InlineColumnResult/InlineColumnResult';
 export { InlineRowResult } from './InlineRowResult/InlineRowResult';

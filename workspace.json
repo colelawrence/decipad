@@ -1174,6 +1174,38 @@
           }
         }
       }
+    },
+    "editor-expression-editor": {
+      "root": "libs/editor-expression-editor",
+      "sourceRoot": "libs/editor-expression-editor/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/editor-expression-editor/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/editor-expression-editor"
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/editor-expression-editor"],
+          "options": {
+            "jestConfig": "libs/editor-expression-editor/jest.config.js"
+          }
+        }
+      }
+    },
+    "babel-config-editor": {
+      "root": "libs/babel-config-editor",
+      "sourceRoot": "libs/babel-config-editor",
+      "projectType": "library"
     }
   }
 }

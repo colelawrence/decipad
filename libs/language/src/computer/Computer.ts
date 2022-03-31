@@ -35,6 +35,7 @@ import {
   InBlockResult,
   ValueLocation,
   ResultsContextItem,
+  ComputerParseStatementResult,
 } from './types';
 import {
   getAllBlockLocations,
@@ -44,6 +45,7 @@ import {
 } from './utils';
 import { getDelayedBlockId } from './delayErrors';
 import { defaultComputerResults } from './defaultComputerResults';
+import { parseBlock } from '../parser';
 import { getVisibleVariables } from './getVisibleVariables';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
@@ -405,5 +407,17 @@ export class Computer {
       ast.args[0]
     );
     return serializeUnit(expr.unit);
+  }
+
+  parseStatement(source: string): ComputerParseStatementResult {
+    const parseResult = parseBlock({ id: 'block-id', source });
+    return {
+      statement: parseResult.solutions[0]?.args[0],
+      error: parseResult.errors[0],
+    };
+  }
+
+  isExpression(statement: AST.Statement): statement is AST.Expression {
+    return isExpression(statement);
   }
 }

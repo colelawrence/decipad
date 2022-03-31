@@ -1,6 +1,8 @@
 /* eslint-disable import/newline-after-import */
 /* eslint-disable import/first */
 
+export * from './decorator-kinds';
+
 export * from './mark-kinds';
 import * as markKinds from './mark-kinds';
 export { markKinds };
