@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { noop } from '@decipad/utils';
+import { isEnabled } from '@decipad/feature-flags';
 import { Code } from '../../icons';
 import { MenuItem, MenuSeparator } from '../../atoms';
 import { MenuList } from '../../molecules';
@@ -22,7 +23,7 @@ export const InteractiveInputMenu: React.FC<InteractiveInputMenuProps> = ({
       <div css={{ minWidth: '165px' }}>Turn into code</div>
     </MenuItem>
     <MenuSeparator />
-    <MenuItem onSelect={onCopy}>Copy</MenuItem>
+    {isEnabled('INPUT_COPY') && <MenuItem onSelect={onCopy}>Copy</MenuItem>}
     <MenuItem onSelect={onDelete}>Delete</MenuItem>
   </MenuList>
 );
