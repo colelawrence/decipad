@@ -4,8 +4,8 @@ import {
   isSyntaxError,
 } from '@decipad/language';
 import { Path, Range } from 'slate';
-import { DECORATE_SYNTAX_ERROR } from '@decipad/editor-types';
 import { SyntaxErrorAnnotation } from './SyntaxErrorAnnotation';
+import { DECORATE_SYNTAX_ERROR } from '../../constants';
 
 export function getSyntaxErrorRanges(
   path: Path,

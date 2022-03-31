@@ -23,7 +23,7 @@ const transformIdentifierName = (newValue: string): string =>
 const leftBarSize = 6;
 
 const spacingStyles = css({
-  display: 'flex',
+  display: 'grid',
   justifyContent: 'center',
 
   margin: `${blockAlignment.interactive.paddingTop} 0`,
@@ -48,7 +48,6 @@ const wrapperStyles = css({
   marginLeft: `${leftBarSize}px`,
 
   maxWidth: '324px',
-  width: '100%',
 });
 
 const widgetWrapperStyles = css({
@@ -56,7 +55,6 @@ const widgetWrapperStyles = css({
   display: 'grid',
   gap: '9px',
   padding: '12px',
-  overflow: 'hidden',
 });
 
 const nameWrapperStyles = css({
@@ -113,27 +111,27 @@ export const Interactive = ({
   });
 
   const component = (
-    <div css={widgetWrapperStyles}>
-      <div css={nameWrapperStyles}>
-        <span css={iconWrapperStyles}>{icon}</span>
-        <input
-          {...nameInputProps}
-          css={inputStyles}
-          placeholder="VariableName"
-          readOnly={readOnly}
-          size={1}
-        />
-        {!readOnly && right && <span css={iconWrapperStyles}>{right}</span>}
+    <div css={wrapperStyles}>
+      <div css={widgetWrapperStyles}>
+        <div css={nameWrapperStyles}>
+          <span css={iconWrapperStyles}>{icon}</span>
+          <input
+            {...nameInputProps}
+            css={inputStyles}
+            placeholder="VariableName"
+            readOnly={readOnly}
+            size={1}
+          />
+          {!readOnly && right && <span css={iconWrapperStyles}>{right}</span>}
+        </div>
+        {children}
       </div>
-      {children}
     </div>
   );
 
   return (
     <div css={spacingStyles}>
-      <div css={wrapperStyles}>
-        {readOnly ? component : <AddNew onAdd={onAdd}>{component}</AddNew>}
-      </div>
+      {readOnly ? component : <AddNew onAdd={onAdd}>{component}</AddNew>}
     </div>
   );
 };

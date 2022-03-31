@@ -1,6 +1,6 @@
 import { createPluginFactory } from '@udecode/plate';
 import { CodeErrorHighlight } from '@decipad/editor-components';
-import { DECORATE_SYNTAX_ERROR } from '@decipad/editor-types';
+import { DECORATE_SYNTAX_ERROR } from '../../constants';
 
 export const createSyntaxErrorHighlightPlugin = createPluginFactory({
   key: DECORATE_SYNTAX_ERROR,

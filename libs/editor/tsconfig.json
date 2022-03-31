@@ -16,7 +16,6 @@
     { "path": "../client-events" },
     { "path": "../slate-react-utils" },
     { "path": "../editor-language-elements" },
-    { "path": "../editor-components" },
-    { "path": "../editor-expression-editor" }
+    { "path": "../editor-components" }
   ]
 }

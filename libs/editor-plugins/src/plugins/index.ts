@@ -5,6 +5,7 @@ export * from './CodeBlock';
 export * from './CodeLine';
 export * from './DocSync';
 export * from './ExternalData';
+export * from './Input';
 export * from './InteractiveTable';
 export * from './LayoutColumns';
 export * from './Link';

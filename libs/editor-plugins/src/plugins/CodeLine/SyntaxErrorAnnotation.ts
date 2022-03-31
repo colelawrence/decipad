@@ -1,6 +1,6 @@
 import { ComponentProps } from 'react';
 import type { CodeErrorHighlight } from '@decipad/editor-components';
-import { DECORATE_SYNTAX_ERROR } from '@decipad/editor-types';
+import { DECORATE_SYNTAX_ERROR } from '../../constants';
 
 export interface SyntaxErrorAnnotation {
   [DECORATE_SYNTAX_ERROR]: true;

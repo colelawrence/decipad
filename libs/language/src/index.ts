@@ -20,7 +20,6 @@ export {
   tokenize,
   tokenRules,
 } from './grammar';
-export type { Token } from './grammar';
 export * from './grammar/containmentCounting';
 export { inferBlock, makeContext } from './infer';
 export type { Context } from './infer';

@@ -107,10 +107,7 @@
         "libs/editor-language-elements/src/index.ts"
       ],
       "@decipad/editor-utils": ["libs/editor-utils/src/index.ts"],
-      "@decipad/editor-components": ["libs/editor-components/src/index.ts"],
-      "@decipad/editor-expression-editor": [
-        "libs/editor-expression-editor/src/index.ts"
-      ]
+      "@decipad/editor-components": ["libs/editor-components/src/index.ts"]
     }
   },
   "files": [],

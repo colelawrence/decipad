@@ -71,8 +71,3 @@ export interface ResultsContextItem {
   readonly indexLabels: ReadonlyMap<string, ReadonlyArray<string>>;
   readonly delayedResultBlockId: string | null;
 }
-
-export interface ComputerParseStatementResult {
-  statement?: AST.Statement;
-  error?: ParserError;
-}

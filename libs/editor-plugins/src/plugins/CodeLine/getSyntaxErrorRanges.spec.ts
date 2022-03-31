@@ -1,6 +1,6 @@
 import { IdentifiedResult } from '@decipad/language';
-import { DECORATE_SYNTAX_ERROR } from '@decipad/editor-types';
 import { getSyntaxErrorRanges } from './getSyntaxErrorRanges';
+import { DECORATE_SYNTAX_ERROR } from '../../constants';
 
 const path = [0];
 const offset = 10;

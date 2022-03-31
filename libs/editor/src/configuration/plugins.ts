@@ -14,8 +14,9 @@ import {
   createMarksPlugins,
   createAutoFormatCodeBlockPlugin,
   createAutoPairsPlugin,
-  createInteractiveTablePlugin,
   createLinkPlugin,
+  createInputPlugin,
+  createInteractiveTablePlugin,
   createCodeBlockPlugin,
   createCodeVariableHighlightPlugin,
   createSyntaxErrorHighlightPlugin,
@@ -41,7 +42,6 @@ import { components } from './components';
 import { autoformatRules } from './autoformat';
 import { exitBreakOptions } from './exitBreakOptions';
 import { resetBlockTypeOptions } from './resetBlockTypeOptions';
-import { createInputPlugin } from '../plugins';
 
 export const plugins = createPlugins(
   [

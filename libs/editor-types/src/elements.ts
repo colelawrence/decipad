@@ -164,7 +164,7 @@ type PlainTextChildren = [PlainText];
 
 export type Node = Editor | Descendant;
 
-export function isElement(node: unknown): node is Element {
+export function isElement(node: Node): node is Element {
   return SlateElement.isElement(node);
 }
 
