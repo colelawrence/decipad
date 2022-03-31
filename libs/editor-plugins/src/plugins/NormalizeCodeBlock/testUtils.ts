@@ -16,16 +16,11 @@ export function codeLine(code: string): CodeLineElement {
   } as CodeLineElement;
 }
 
-export function emptyCodeBlock(): CodeBlockElement {
+export function codeBlock(
+  ...codeLines: Omit<CodeLineElement, 'id'>[]
+): CodeBlockElement {
   return {
     type: ELEMENT_CODE_BLOCK,
-    children: [codeLine('')],
-  } as CodeBlockElement;
-}
-
-export function exampleCodeBlock(): CodeBlockElement {
-  return {
-    type: ELEMENT_CODE_BLOCK,
-    children: [codeLine('a = 1'), codeLine('t = {\n\n}'), codeLine('b = 2')],
+    children: codeLines as CodeLineElement[],
   } as CodeBlockElement;
 }

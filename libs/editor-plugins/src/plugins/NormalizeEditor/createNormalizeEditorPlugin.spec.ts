@@ -70,7 +70,7 @@ describe('the title normalization', () => {
   });
 });
 
-it.each([ELEMENT_H2, ELEMENT_UL, ELEMENT_BLOCKQUOTE])(
+it.each([ELEMENT_H2, ELEMENT_UL, ELEMENT_BLOCKQUOTE, ELEMENT_CODE_LINE])(
   'allows the %s element at top level',
   (type) => {
     editor.children = [
@@ -87,7 +87,7 @@ it.each([ELEMENT_H2, ELEMENT_UL, ELEMENT_BLOCKQUOTE])(
     ] as Element[]);
   }
 );
-it.each([ELEMENT_LI, ELEMENT_LINK, ELEMENT_CODE_LINE, 'asdf'])(
+it.each([ELEMENT_LI, ELEMENT_LINK, 'asdf'])(
   'converts the %s element forbidden at top level to a paragraph',
   (type) => {
     editor.children = [

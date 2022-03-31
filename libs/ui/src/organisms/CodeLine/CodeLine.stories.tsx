@@ -8,7 +8,11 @@ import { withCode } from '../../storybook-utils';
 export default {
   title: 'Organisms / Editor / Code / Line',
   component: CodeLine,
-  decorators: [withCode('10')],
+  decorators: [withCode('1 + 1')],
+  args: {
+    displayInline: true,
+    children: '1 + 1',
+  },
 } as Meta;
 
 export const Normal: Story<ComponentProps<typeof CodeLine> & Result> = ({
@@ -16,17 +20,26 @@ export const Normal: Story<ComponentProps<typeof CodeLine> & Result> = ({
   value,
   ...props
 }) => <CodeLine {...props} result={{ type, value }} />;
-Normal.args = {
-  children: '10',
+
+export const WithHighlightedLine: Story<
+  ComponentProps<typeof CodeLine> & Result
+> = ({ type, value, ...props }) => (
+  <CodeLine {...props} result={{ type, value }} />
+);
+WithHighlightedLine.args = {
+  displayInline: true,
+  highlight: true,
 };
 
-export const WithInlineResult: Story<ComponentProps<typeof CodeLine> & Result> =
-  ({ type, value, ...props }) => (
-    <CodeLine {...props} result={{ type, value }} />
-  );
-WithInlineResult.args = {
-  displayInline: true,
-  children: '9 + 1',
+export const WithExpandedResult: Story<
+  ComponentProps<typeof CodeLine> & Result
+> = ({ type, value, ...props }) => (
+  <CodeLine {...props} result={{ type, value }} />
+);
+WithExpandedResult.decorators = [withCode('[1, 2, 3]')];
+WithExpandedResult.args = {
+  displayInline: false,
+  children: '[1, 2, 3]',
 };
 
 export const WithError: Story<ComponentProps<typeof CodeLine> & Result> = ({
@@ -35,6 +48,6 @@ export const WithError: Story<ComponentProps<typeof CodeLine> & Result> = ({
   ...props
 }) => <CodeLine {...props} result={{ type, value }} />;
 WithError.args = {
-  children: '9 +',
+  children: '[1, 2,',
   syntaxError: { message: 'Syntax Error', url: docs({}).$ },
 };

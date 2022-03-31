@@ -6,7 +6,7 @@ import {
 } from '@decipad/editor-types';
 import { AutoformatRule, TEditor } from '@udecode/plate';
 import {
-  insertCodeBlockBelowOrReplace,
+  insertCodeLineBelowOrReplace,
   requireCollapsedSelection,
 } from '@decipad/editor-utils';
 import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
@@ -37,7 +37,7 @@ export const autoformatBlocks: AutoformatRule[] = [
     query: doesSelectionAllowTextStyling,
     triggerAtBlockStart: false,
     format: (editor: TEditor): void =>
-      insertCodeBlockBelowOrReplace(
+      insertCodeLineBelowOrReplace(
         editor,
         requireCollapsedSelection(editor).path,
         true

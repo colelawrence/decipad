@@ -10,7 +10,8 @@ import {
   waitForEditorToLoad,
 } from './page-utils/Pad';
 
-describe('pad content', () => {
+// eslint-disable-next-line jest/no-disabled-tests
+describe.skip('pad calculation block', () => {
   beforeAll(() => setUp());
   beforeAll(() => waitForEditorToLoad());
 

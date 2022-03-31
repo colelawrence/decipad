@@ -1,15 +1,15 @@
 import { SerializedTypeKind } from '@decipad/language';
-import { CodeResultProps } from '../../types';
-import { NumberResult, DateResult } from '../../atoms';
-import { InlineCodeError } from '../../molecules';
 import {
-  TableResult,
   ColumnResult,
   InlineColumnResult,
+  InlineRowResult,
   RangeResult,
   RowResult,
-  InlineRowResult,
+  TableResult,
 } from '..';
+import { DateResult, NumberResult } from '../../atoms';
+import { InlineCodeError } from '../../molecules';
+import { CodeResultProps } from '../../types';
 
 // Simple result components
 

@@ -154,8 +154,7 @@ export const p32Medium: TypographyStyles = {
 
 // monospace
 
-const mFontFamily: TypographyStyles['fontFamily'] =
-  '"JetBrains Mono", monospace';
+const mFontFamily: TypographyStyles['fontFamily'] = '"Inter", monospace';
 
 export const code: TypographyStyles = {
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
@@ -165,7 +164,7 @@ export const code: TypographyStyles = {
   fontWeight: 'normal',
   fontSize: `${14 / usualRemPxs}rem`,
   lineHeight: 1.4,
-  letterSpacing: '0.01em',
+  letterSpacing: '-0.8%',
   fontFeatureSettings: 'unset',
 };
 

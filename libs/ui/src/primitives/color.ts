@@ -91,7 +91,7 @@ export const blue900 = color(10, 20, 49);
 //
 // teal
 //
-export const teal50 = color(242, 255, 252);
+export const teal50 = color(242, 250, 249);
 export const teal100 = color(208, 241, 237);
 export const teal200 = color(161, 227, 219);
 export const teal300 = color(115, 213, 201);

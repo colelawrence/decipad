@@ -1,6 +1,6 @@
 import {
   ElementKind,
-  ELEMENT_CODE_BLOCK,
+  ELEMENT_CODE_LINE,
   ELEMENT_FETCH,
   ELEMENT_H2,
   ELEMENT_H3,
@@ -17,7 +17,7 @@ const expectedTypes = {
   heading1: ELEMENT_H2,
   heading2: ELEMENT_H3,
   import: ELEMENT_FETCH,
-  'calculation-block': ELEMENT_CODE_BLOCK,
+  'calculation-block': ELEMENT_CODE_LINE,
   plot: ELEMENT_PLOT,
   input: ELEMENT_INPUT,
 };

@@ -1,14 +1,14 @@
 import {
   BlockElement,
-  CodeBlockElement,
-  ELEMENT_CODE_BLOCK,
+  CodeLineElement,
+  ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
   ParagraphElement,
   RichText,
 } from '@decipad/editor-types';
 import { tokenize } from '@decipad/language';
 import { pluginStore } from '@decipad/editor-utils';
-import { getBlockAbove, setNodes, unwrapCodeBlock } from '@udecode/plate';
+import { getBlockAbove, setNodes } from '@udecode/plate';
 import { NodeEntry } from 'slate';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 
@@ -77,7 +77,7 @@ export const createAutoFormatCodeBlockPlugin = createOnKeyDownPluginFactory({
           if (isEqualAtTheStart) {
             event.preventDefault(); // Do not type the = when it's only an equal sign
           }
-          setNodes(editor, { type: ELEMENT_CODE_BLOCK });
+          setNodes(editor, { type: ELEMENT_CODE_LINE });
           store.lastFormattedBlock = {
             id: node.id,
             text: isEqualSignAfterOneWord
@@ -87,24 +87,23 @@ export const createAutoFormatCodeBlockPlugin = createOnKeyDownPluginFactory({
         }
       } else if (!hasModifiers && event.key === 'Backspace') {
         const entry = getBlockAbove(editor, {
-          match: (n) => n.type === ELEMENT_CODE_BLOCK,
+          match: (n) => n.type === ELEMENT_CODE_LINE,
         });
 
         if (!entry) return;
 
-        const [node, path] = entry as NodeEntry<CodeBlockElement>;
+        const [node, path] = entry as NodeEntry<CodeLineElement>;
 
         const { lastFormattedBlock } = store;
         if (
           lastFormattedBlock &&
           node.id === lastFormattedBlock.id &&
-          node.children[0].children[0].text === lastFormattedBlock.text
+          node.children[0].text === lastFormattedBlock.text
         ) {
           event.preventDefault();
-          unwrapCodeBlock(editor);
           setNodes(editor, { type: ELEMENT_PARAGRAPH }, { at: path });
 
-          if (!node.children[0].children[0].text.endsWith('=')) {
+          if (!node.children[0].text.endsWith('=')) {
             editor.insertText('=');
           }
           delete store.lastFormattedBlock;

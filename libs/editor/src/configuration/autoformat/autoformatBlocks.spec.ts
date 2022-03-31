@@ -1,5 +1,5 @@
 import {
-  ELEMENT_CODE_BLOCK,
+  ELEMENT_CODE_LINE,
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_PARAGRAPH,
@@ -53,7 +53,7 @@ describe('inserting a code block', () => {
         type: ELEMENT_PARAGRAPH,
         children: [{ text: 'text' }],
       },
-      { type: ELEMENT_CODE_BLOCK },
+      { type: ELEMENT_CODE_LINE },
     ]);
   });
 });

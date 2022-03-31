@@ -69,7 +69,12 @@ export const elementToLanguageBlock = (
 
   // blocks that return unparsed code:
   if (interactiveElement.resultsInUnparsedBlock) {
-    return interactiveElement.getUnparsedBlocksFromElement(element);
+    const unparsedBlock =
+      interactiveElement.getUnparsedBlockFromElement(element);
+    if (!unparsedBlock) {
+      return null;
+    }
+    return [unparsedBlock];
   }
 
   return null;

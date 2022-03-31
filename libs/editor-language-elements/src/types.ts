@@ -35,7 +35,7 @@ type UnparsedBlockInteractiveLanguageElement =
     resultsInNameAndExpression?: false;
     resultsInUnparsedBlock: true;
     isStructural?: false;
-    getUnparsedBlocksFromElement: (element: Element) => UnparsedBlock[];
+    getUnparsedBlockFromElement: (element: Element) => UnparsedBlock | null;
   };
 
 type StructuralElement = InteractiveLanguageElementBase & {

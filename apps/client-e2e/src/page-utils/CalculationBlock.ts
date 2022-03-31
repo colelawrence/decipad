@@ -63,21 +63,19 @@ async function fetchCalculationBlock(
     waitForExpect(async () =>
       expect(await codeBlock.$$('output')).not.toHaveLength(0)
     ),
-    expectNoErrors
-      ? codeBlock.waitForSelector('xpath=/output')
-      : Promise.resolve(),
+    expectNoErrors ? codeBlock.waitForSelector('output') : Promise.resolve(),
     timeout(2_010),
   ] as Promise<void>[]);
 
   const codeLines = await codeBlock.$$('code');
   const codeLinesWithResults = await Promise.all(
     codeLines.map(async (codeLine) => {
-      const output = (await codeLine.$$('//following::output'))[0];
+      const output = (await codeLine.$$('output'))[0];
       return [codeLine, output] as const;
     })
   );
 
-  const blockResult = await codeBlock.$('xpath=/output');
+  const blockResult = await codeBlock.$('output');
 
   return {
     lines: await Promise.all(
@@ -94,7 +92,7 @@ export async function getCalculationBlocks(
 
   await waitForExpect(async () => {
     // waitForExpect doesn't propagate the returned value
-    blocks = await page.$$('//*[@contenteditable]//section[//code]');
+    blocks = await page.$$('//*[@contenteditable][//code]');
     expect(blocks.length).toBeGreaterThan(0);
   });
   return Promise.all(

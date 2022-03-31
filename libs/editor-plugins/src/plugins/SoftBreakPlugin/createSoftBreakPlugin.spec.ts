@@ -78,7 +78,7 @@ describe('code lines', () => {
     expect(editor.children).toMatchObject([
       {
         type: 'code_block',
-        children: [codeLine('[1, 2, 3]\n')],
+        children: [codeLine('[1, 2, 3]')],
       },
     ]);
   });

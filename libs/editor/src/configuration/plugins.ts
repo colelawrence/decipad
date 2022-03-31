@@ -22,6 +22,7 @@ import {
   createSyntaxErrorHighlightPlugin,
   createLayoutColumnsPlugin,
   createPlotPlugin,
+  createNormalizeCodeLinePlugin,
 } from '@decipad/editor-plugins';
 import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import {
@@ -64,6 +65,7 @@ export const plugins = createPlugins(
     createNormalizeRichTextBlockPlugin(),
     createNormalizePlainTextBlockPlugin(),
     createNormalizeCodeBlockPlugin(),
+    createNormalizeCodeLinePlugin(),
     createNormalizeListPlugin(),
     createNormalizeLinkPlugin(),
     createNormalizeElementIdPlugin(),

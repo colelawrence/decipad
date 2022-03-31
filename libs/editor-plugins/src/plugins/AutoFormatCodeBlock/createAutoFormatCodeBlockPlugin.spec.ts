@@ -1,7 +1,6 @@
 import { createPlateEditor, PlateEditor, PlatePlugin } from '@udecode/plate';
 import {
   Element,
-  ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
@@ -9,13 +8,18 @@ import { Node } from 'slate';
 import React from 'react';
 import { createNormalizeCodeBlockPlugin } from '../NormalizeCodeBlock/createNormalizeCodeBlockPlugin';
 import { createAutoFormatCodeBlockPlugin } from './createAutoFormatCodeBlockPlugin';
+import { createNormalizeCodeLinePlugin } from '../NormalizeCodeLine';
 
 let editor: PlateEditor;
 let plugin: PlatePlugin;
 beforeEach(() => {
   plugin = createAutoFormatCodeBlockPlugin();
   editor = createPlateEditor({
-    plugins: [plugin, createNormalizeCodeBlockPlugin()],
+    plugins: [
+      plugin,
+      createNormalizeCodeBlockPlugin(),
+      createNormalizeCodeLinePlugin(),
+    ],
   });
 });
 
@@ -27,16 +31,11 @@ const makeParagraph = (text: string): Element[] =>
     },
   ] as Element[];
 
-const makeCodeBlock = (text: string): Element[] =>
+const makeCodeLine = (text: string): Element[] =>
   [
     {
-      type: ELEMENT_CODE_BLOCK,
-      children: [
-        {
-          type: ELEMENT_CODE_LINE,
-          children: [{ text }],
-        },
-      ],
+      type: ELEMENT_CODE_LINE,
+      children: [{ text }],
     },
   ] as Element[];
 
@@ -49,11 +48,11 @@ const renderEditorParagraph = (text: string) => {
   };
 };
 
-const renderEditorCodeBlock = (text: string) => {
-  editor.children = makeCodeBlock(text);
+const renderEditorCodeLine = (text: string) => {
+  editor.children = makeCodeLine(text);
   editor.selection = {
-    anchor: { path: [0, 0, 0], offset: text.length },
-    focus: { path: [0, 0, 0], offset: text.length },
+    anchor: { path: [0, 0], offset: text.length },
+    focus: { path: [0, 0], offset: text.length },
   };
 };
 
@@ -87,26 +86,26 @@ const pressKey = (
   }
 };
 
-describe('Auto format code block plugin', () => {
-  it('formats a paragraph to a code block when = is pressed at the start', () => {
+describe('Auto format code line plugin', () => {
+  it('formats a paragraph to a code line when = is pressed at the start', () => {
     renderEditorParagraph('');
     pressKey('=');
-    expect(editor.children).toEqual(makeCodeBlock(''));
+    expect(editor.children).toEqual(makeCodeLine(''));
   });
 
-  it('formats a paragraph to a code block when = is pressed following a variable', () => {
+  it('formats a paragraph to a code line when = is pressed following a variable', () => {
     renderEditorParagraph('hello ');
     pressKey('=');
-    expect(editor.children).toEqual(makeCodeBlock('hello ='));
+    expect(editor.children).toEqual(makeCodeLine('hello ='));
   });
 
-  it('formats a paragraph to a code block when = is pressed while holding shift on some keyboard layouts', () => {
+  it('formats a paragraph to a code line when = is pressed while holding shift on some keyboard layouts', () => {
     renderEditorParagraph('');
     pressKey('=', { shiftKey: true });
-    expect(editor.children).toEqual(makeCodeBlock(''));
+    expect(editor.children).toEqual(makeCodeLine(''));
   });
 
-  it('does not format a paragraph to a code block when holding modifier keys', () => {
+  it('does not format a paragraph to a code line when holding modifier keys', () => {
     renderEditorParagraph('');
     pressKey('=', { altKey: true });
     expect(editor.children).toEqual(makeParagraph(''));
@@ -130,13 +129,13 @@ describe('Auto format code block plugin', () => {
     renderEditorParagraph('hello ');
     pressKey('=');
     pressKey('Backspace', { altKey: true });
-    expect(editor.children).toEqual(makeCodeBlock('hello ='));
+    expect(editor.children).toEqual(makeCodeLine('hello ='));
   });
 
-  it('does not go back to a paragraph from a code block created through other means', () => {
-    renderEditorCodeBlock('a =');
+  it('does not go back to a paragraph from a code line created through other means', () => {
+    renderEditorCodeLine('a =');
     pressKey('Backspace');
-    expect(editor.children).toEqual(makeCodeBlock('a '));
+    expect(editor.children).toEqual(makeCodeLine('a '));
   });
 
   it('does not format a paragraph that has spaces at the start', () => {
@@ -162,21 +161,15 @@ describe('Auto format code block plugin', () => {
     pressKey('=');
     editor.insertText(' 10 apples');
     pressKey('Backspace');
-    expect(editor.children).toEqual(makeCodeBlock('hello = 10 apple'));
+    expect(editor.children).toEqual(makeCodeLine('hello = 10 apple'));
   });
 
-  it('only undoes the code block that has been formatted', () => {
-    // start with a code block and a paragraph
+  it('only undoes the code line that has been formatted', () => {
+    // start with a code line and a paragraph
     editor.children = [
       {
-        id: '0',
-        type: ELEMENT_CODE_BLOCK,
-        children: [
-          {
-            type: ELEMENT_CODE_LINE,
-            children: [{ text: 'hello = 10 apples' }],
-          },
-        ],
+        type: ELEMENT_CODE_LINE,
+        children: [{ text: 'hello = 10 apples' }],
       },
       {
         id: '1',
@@ -185,7 +178,7 @@ describe('Auto format code block plugin', () => {
       },
     ] as Element[];
 
-    // Press = on the paragraph, expect two code blocks after
+    // Press = on the paragraph, expect two code lines after
     editor.selection = {
       anchor: { path: [1, 0], offset: 'hello2 '.length },
       focus: { path: [1, 0], offset: 'hello2 '.length },
@@ -194,29 +187,29 @@ describe('Auto format code block plugin', () => {
     pressKey('=');
 
     expect(editor.children).toEqual([
-      expect.objectContaining({ type: ELEMENT_CODE_BLOCK }),
-      expect.objectContaining({ type: ELEMENT_CODE_BLOCK }),
+      expect.objectContaining({ type: ELEMENT_CODE_LINE }),
+      expect.objectContaining({ type: ELEMENT_CODE_LINE }),
     ]);
     expect(Node.string(editor.children[1])).toEqual('hello2 =');
 
-    // press backspace on the first code block, expect it to not format to a paragraph
+    // press backspace on the first code line, expect it to not format to a paragraph
     editor.selection = {
-      anchor: { path: [0, 0, 0], offset: 'hello = 10 apples'.length },
-      focus: { path: [0, 0, 0], offset: 'hello = 10 apples'.length },
+      anchor: { path: [0, 0], offset: 'hello = 10 apples'.length },
+      focus: { path: [0, 0], offset: 'hello = 10 apples'.length },
     };
 
     pressKey('Backspace');
 
-    // Press backspace on the formatted code block (second one) and expect it to undo to paragraph
+    // Press backspace on the formatted code line (second one) and expect it to undo to paragraph
     editor.selection = {
-      anchor: { path: [1, 0, 0], offset: 'hello2 ='.length },
-      focus: { path: [1, 0, 0], offset: 'hello2 ='.length },
+      anchor: { path: [1, 0], offset: 'hello2 ='.length },
+      focus: { path: [1, 0], offset: 'hello2 ='.length },
     };
 
     pressKey('Backspace');
 
     expect(editor.children).toEqual([
-      expect.objectContaining({ type: ELEMENT_CODE_BLOCK }),
+      expect.objectContaining({ type: ELEMENT_CODE_LINE }),
       expect.objectContaining({ type: ELEMENT_PARAGRAPH }),
     ]);
     expect(Node.string(editor.children[0])).toEqual('hello = 10 apple');
@@ -250,19 +243,19 @@ describe('Auto format code block plugin', () => {
     pressKey('w');
 
     editor.selection = {
-      anchor: { path: [0, 0, 0], offset: 'a ='.length },
-      focus: { path: [0, 0, 0], offset: 'a ='.length },
+      anchor: { path: [0, 0], offset: 'a ='.length },
+      focus: { path: [0, 0], offset: 'a ='.length },
     };
 
     pressKey('Backspace');
 
     expect(editor.children[0]).toEqual(
-      expect.objectContaining({ type: ELEMENT_CODE_BLOCK })
+      expect.objectContaining({ type: ELEMENT_CODE_LINE })
     );
     expect(Node.string(editor.children[0])).toEqual('a ');
   });
 
-  it('does not format to code block when text is not plain', () => {
+  it('does not format to code line when text is not plain', () => {
     editor.children = [
       {
         type: ELEMENT_PARAGRAPH,

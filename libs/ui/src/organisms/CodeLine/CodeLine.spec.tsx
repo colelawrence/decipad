@@ -1,8 +1,36 @@
-import { render } from '@testing-library/react';
 import { Result } from '@decipad/language';
+import { render } from '@testing-library/react';
+import { ComponentProps } from 'react';
 import { runCode } from '../../test-utils';
-
 import { CodeLine } from './CodeLine';
+
+let tabularProps: ComponentProps<typeof CodeLine>;
+let nonTabularProps: ComponentProps<typeof CodeLine>;
+let typeErrorProps: ComponentProps<typeof CodeLine>;
+const syntaxError = { message: 'Syntax Error', url: 'https://foo' };
+beforeAll(async () => {
+  tabularProps = {
+    children: '[1, 2, 3]',
+    result: await runCode('[1, 2, 3]'),
+  };
+  nonTabularProps = {
+    children: '9 + 1',
+    result: await runCode('9 + 1'),
+  };
+  typeErrorProps = {
+    children: '1 apple + 1 banana',
+    result: {
+      value: null,
+      type: {
+        kind: 'type-error',
+        errorCause: {
+          errType: 'free-form',
+          message: 'some error',
+        },
+      },
+    },
+  };
+});
 
 it('renders children', () => {
   const { getByText } = render(<CodeLine>10</CodeLine>);
@@ -40,7 +68,6 @@ describe('displayInline prop', () => {
     const { getByTitle, rerender } = render(
       <CodeLine result={result}>9 +</CodeLine>
     );
-    //    expect(getByTitle(/Error/i).closest('svg')).toBeVisible();
 
     rerender(
       <CodeLine displayInline result={result}>
@@ -51,14 +78,53 @@ describe('displayInline prop', () => {
   });
 });
 
+describe('when result is tabular', () => {
+  it('should render the expanded result', () => {
+    const { getByRole } = render(<CodeLine {...tabularProps} highlight />);
+    expect(getByRole('table')).toBeVisible();
+  });
+
+  it('should not render the result inline', () => {
+    const { getByRole, getAllByRole, queryByRole } = render(
+      <CodeLine {...tabularProps} highlight />
+    );
+
+    const queryInlineResultElement = () =>
+      queryByRole(
+        (content, element) =>
+          content === 'status' && element!.textContent === '1, 2, 3'
+      );
+
+    expect(getAllByRole('status')).toHaveLength(1);
+    expect(queryInlineResultElement()).toBeNull();
+    expect(getByRole('table')).toBeVisible();
+  });
+});
+
+describe('when result is an error', () => {
+  it('should render just the inline error', () => {
+    const { getAllByRole, queryByTitle } = render(
+      <CodeLine {...typeErrorProps} />
+    );
+    expect(getAllByRole('status')).toHaveLength(1);
+    expect(queryByTitle(/warning/i)!.closest('svg')).toBeVisible();
+  });
+});
+
 describe('syntaxError prop', () => {
   it('renders the error inline', () => {
     const { getByTitle } = render(
-      <CodeLine syntaxError={{ message: 'Syntax Error', url: 'https://foo' }}>
-        10
-      </CodeLine>
+      <CodeLine syntaxError={syntaxError}>10</CodeLine>
     );
 
     expect(getByTitle(/Warning/i).closest('svg')).toBeVisible();
+  });
+
+  it('does not render inline nor expanded results', () => {
+    const { queryAllByRole } = render(
+      <CodeLine {...nonTabularProps} syntaxError={syntaxError} displayInline />
+    );
+
+    expect(queryAllByRole('status')).toHaveLength(0);
   });
 });

@@ -28,6 +28,9 @@ export const list: VerticalAlignmentData = {
 export const codeBlock: VerticalAlignmentData = {
   paddingTop: '16px',
 };
+export const codeLine: VerticalAlignmentData = {
+  paddingTop: '16px',
+};
 export const editorTable: VerticalAlignmentData = {
   paddingTop: '12px',
   typography: h2,

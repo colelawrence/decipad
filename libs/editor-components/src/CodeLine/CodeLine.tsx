@@ -7,6 +7,8 @@ import {
 import { useResult, useComputer } from '@decipad/react-contexts';
 import { docs } from '@decipad/routing';
 import { organisms } from '@decipad/ui';
+import { useSelected } from 'slate-react';
+import { DraggableBlock } from '../block-management';
 
 export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   if (!element || element.type !== ELEMENT_CODE_LINE) {
@@ -17,6 +19,8 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   }
 
   const computer = useComputer();
+  const selected = useSelected();
+
   const { id: lineId } = element;
   const line = useResult(lineId);
 
@@ -26,13 +30,16 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
 
   return (
     <div {...attributes}>
-      <organisms.CodeLine
-        displayInline={!computer.isLiteralValueOrAssignment(statement)}
-        result={lineResult}
-        syntaxError={syntaxError}
-      >
-        {children}
-      </organisms.CodeLine>
+      <DraggableBlock blockKind="codeLine" element={element}>
+        <organisms.CodeLine
+          displayInline={!computer.isLiteralValueOrAssignment(statement)}
+          highlight={selected}
+          result={lineResult}
+          syntaxError={syntaxError}
+        >
+          {children}
+        </organisms.CodeLine>
+      </DraggableBlock>
     </div>
   );
 };

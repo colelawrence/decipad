@@ -9,3 +9,5 @@ export default {
 export const Down: Story = () => <Caret variant="down" />;
 
 export const Right: Story = () => <Caret variant="right" />;
+
+export const Up: Story = () => <Caret variant="up" />;

@@ -7,7 +7,6 @@ import {
 import { TNode, wrapNodes } from '@udecode/plate';
 import { Editor, Element, Node, NodeEntry, Text, Transforms } from 'slate';
 import { createNormalizerPluginFactory } from '../../pluginFactories';
-import { normalizeExcessProperties } from '../../utils/normalize';
 import { codeBlockToCode } from './codeBlockToCode';
 import { reconcileStatements } from './reconcileStatements';
 import { splitCodeIntoStatements } from './splitCodeIntoStatements';
@@ -15,25 +14,7 @@ import { splitCodeIntoStatements } from './splitCodeIntoStatements';
 const normalizeCodeBlock = (editor: Editor) => (entry: NodeEntry) => {
   const [node, path] = entry as NodeEntry<TNode>;
 
-  // Code line
-  if (Element.isElement(node) && node.type === ELEMENT_CODE_LINE) {
-    for (const lineChild of Node.children(editor, path)) {
-      const [lineChildNode, lineChildPath] = lineChild as NodeEntry<TNode>;
-
-      // Children must be text
-      if (Element.isElement(lineChildNode)) {
-        Transforms.unwrapNodes(editor, { at: lineChildPath });
-        return true;
-      }
-
-      // Text must be plain
-      if (normalizeExcessProperties(editor, lineChild)) {
-        return true;
-      }
-    }
-  }
-
-  // Code block
+  // Code block legacy component
   if (Element.isElement(node) && node.type === ELEMENT_CODE_BLOCK) {
     for (const blockChild of Node.children(editor, path)) {
       const [blockChildNode, blockChildPath] = blockChild as NodeEntry<TNode>;
@@ -69,6 +50,10 @@ const normalizeCodeBlock = (editor: Editor) => (entry: NodeEntry) => {
         return true;
       }
     }
+
+    // We don't use code blocks anymore so we unwrap their code lines.
+    Transforms.unwrapNodes(editor, { at: path });
+    return true;
   }
   return false;
 };

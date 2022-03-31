@@ -6,7 +6,7 @@ import { Path, Transforms } from 'slate';
 import {
   insertBlockOfTypeBelow,
   requireBlockParentPath,
-  insertCodeBlockBelow,
+  insertCodeLineBelow,
 } from '@decipad/editor-utils';
 import { insertInputBelow } from './input';
 import { insertPlotBelow } from './plot';
@@ -25,7 +25,7 @@ export const execute = (
 ): void => {
   switch (command) {
     case 'calculation-block':
-      insertCodeBlockBelow(editor, path);
+      insertCodeLineBelow(editor, path);
       break;
     case 'input':
       insertInputBelow(editor, path);

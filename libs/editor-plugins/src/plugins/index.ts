@@ -12,6 +12,7 @@ export * from './Link';
 export * from './Marks';
 export * from './Marks';
 export * from './NormalizeCodeBlock';
+export * from './NormalizeCodeLine';
 export * from './NormalizeColumns';
 export * from './NormalizeEditor';
 export * from './NormalizeElementId';
