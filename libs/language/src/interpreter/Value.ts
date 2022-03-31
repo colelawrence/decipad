@@ -40,9 +40,10 @@ export interface ColumnLike extends Value {
   dimensions: Dimension[];
 }
 
-export const isColumnLike = (thing: Value): thing is ColumnLike => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const isColumnLike = (thing: any): thing is ColumnLike => {
   const col = thing as ColumnLike;
-  return typeof col.lowLevelGet === 'function';
+  return typeof col === 'object' && typeof col?.lowLevelGet === 'function';
 };
 
 export const getColumnLike = (

@@ -426,6 +426,30 @@ describe('Tables', () => {
     `);
   });
 
+  it('can be splitby() a 2d column', async () => {
+    expect(
+      await runCode(`
+        A = { B = [ 1, 2 ] }
+        X = { Y = [ 3, 4 ] }
+        Table = {
+          Names = ["First", "Second"]
+          Numbers = A.B * X.Y
+        }
+
+        splitby(Table, Table.Numbers)
+      `)
+    ).toMatchInlineSnapshot(`
+      Result({
+        Numbers = [ [ 3, 4 ], [ 6, 8 ] ],
+        Values = [ {
+        Names = [ 'First' ]
+      }, {
+        Names = [ 'Second' ]
+      } ]
+      })
+    `);
+  });
+
   it('Regression: tables inside tables', async () => {
     expect(
       await runCode(`

@@ -1,4 +1,6 @@
 import Fraction from '@decipad/fraction';
+import { zip } from '@decipad/utils';
+import { DeepReadonly } from 'utility-types';
 import { RuntimeError } from './RuntimeError';
 import {
   Value,
@@ -6,15 +8,22 @@ import {
   StringValue,
   BooleanValue,
   Date as DateValue,
+  isColumnLike,
 } from './Value';
 
 export type CompareResult = -1 | 0 | 1;
 
+type Comparable =
+  | DeepReadonly<Value>
+  | string
+  | boolean
+  | number
+  | BigInt
+  | Fraction
+  | ReadonlyArray<Comparable>;
+
 /** Returns the sign of a comparison between two things, whatever they may be */
-export function compareToNumber(
-  a: Value | string | boolean | number | BigInt | Fraction,
-  b: Value | string | boolean | number | BigInt | Fraction
-): number | bigint {
+function compareToNumber(a: Comparable, b: Comparable): number | bigint {
   if (a instanceof Fraction && b instanceof Fraction) {
     return a.compare(b);
   }
@@ -42,6 +51,24 @@ export function compareToNumber(
   if (a instanceof DateValue && b instanceof DateValue) {
     return a.moment < b.moment ? -1 : a.moment === b.moment ? 0 : 1;
   }
+  if (isColumnLike(a) && isColumnLike(b)) {
+    return compareToNumber(a.values, b.values);
+  }
+  if (Array.isArray(a) && Array.isArray(b)) {
+    const lengthComparison = a.length - b.length;
+
+    if (lengthComparison === 0) {
+      for (const [aItem, bItem] of zip(a, b)) {
+        const thisItem = compare(aItem, bItem);
+
+        if (thisItem !== 0) {
+          return thisItem;
+        }
+      }
+    }
+
+    return lengthComparison;
+  }
   throw new RuntimeError(`Don't know how to compare ${a} against ${b}`);
 }
 
@@ -52,9 +79,6 @@ const sign = (diff: number | BigInt): CompareResult => {
   return diff > 0n ? 1 : diff < 0n ? -1 : 0;
 };
 
-export function compare(
-  a: Value | string | boolean | number | BigInt | Fraction,
-  b: Value | string | boolean | number | BigInt | Fraction
-): CompareResult {
+export function compare(a: Comparable, b: Comparable): CompareResult {
   return sign(compareToNumber(a, b));
 }
