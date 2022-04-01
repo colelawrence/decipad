@@ -1,6 +1,7 @@
 import arc from '@architect/functions';
 import { TableRecordChanges, UserKeyRecord } from '@decipad/backendtypes';
 import { app as appConfig, auth as authConfig } from '@decipad/config';
+import tables from '@decipad/tables';
 import assert from 'assert';
 import { nanoid } from 'nanoid';
 import timestamp from '../../common/timestamp';
@@ -13,10 +14,9 @@ const { urlBase } = appConfig();
 
 const sendEmailValidationLink = false;
 
-async function userKeyChangesHandler(event: TableRecordChanges<UserKeyRecord>) {
-  const { table } = event;
-
-  assert.equal(table, 'userkeys');
+async function sendEmailValidationEmail(
+  event: TableRecordChanges<UserKeyRecord>
+) {
   if (event.action !== 'put') {
     return;
   }
@@ -69,4 +69,34 @@ async function userKeyChangesHandler(event: TableRecordChanges<UserKeyRecord>) {
   userkey.validation_msg_sent_at = timestamp();
 
   await data.userkeys.put(userkey);
+}
+
+async function removeFromAllowList(event: TableRecordChanges<UserKeyRecord>) {
+  if (event.action !== 'put') {
+    return;
+  }
+
+  const data = await tables();
+
+  const { args } = event;
+  const { id } = args;
+
+  if (!id.startsWith('email:')) {
+    return;
+  }
+
+  const email = id.slice('email:'.length);
+  const allowListEntry = await data.allowlist.get({
+    id: email.trim().toLocaleLowerCase(),
+  });
+  if (allowListEntry) {
+    await data.allowlist.delete({ id });
+  }
+}
+
+async function userKeyChangesHandler(event: TableRecordChanges<UserKeyRecord>) {
+  const { table } = event;
+  assert.strictEqual(table, 'userkeys');
+  await sendEmailValidationEmail(event);
+  await removeFromAllowList(event);
 }

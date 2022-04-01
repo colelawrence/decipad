@@ -27,6 +27,7 @@
     "graphqlserver",
     "NEXTAUTH",
     "nrwl",
+    "Superadmins",
     "Topbar",
     "udecode"
   ]
