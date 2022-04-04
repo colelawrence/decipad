@@ -1,10 +1,10 @@
 import slug from 'slug';
 
 export function encode(name: string, id: string): string {
-  return `${slug(name)}:${id}`;
+  return encodeURIComponent(`${slug(name)}:${id}`);
 }
 
-export function decode(urlComponent: string): string {
-  const parts = urlComponent.split(':');
+export function decode(encodedUrlComponent: string): string {
+  const parts = decodeURIComponent(encodedUrlComponent).split(':');
   return parts[parts.length - 1];
 }

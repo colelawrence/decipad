@@ -8,11 +8,17 @@ import {
   useUnshareNotebookWithSecret,
 } from '@decipad/queries';
 import { useToast } from '@decipad/react-contexts';
+import {
+  notebooks,
+  useRouteParams,
+  workspaces as workspacesRoute,
+} from '@decipad/routing';
 import { LoadingSpinnerPage, NotebookTopbar } from '@decipad/ui';
 import styled from '@emotion/styled';
 import { FC, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { getSecretNotebookLink } from '../lib/secret';
+import { decode as decodeVanityUrlComponent } from '../lib/vanityUrlComponent';
 
 const Wrapper = styled('div')({
   padding: '0 32px',
@@ -31,16 +37,16 @@ const ErrorWrapper = styled('div')({
   placeItems: 'center',
 });
 
-export interface NotebookProps {
-  notebookId: string;
-}
-
-export const Notebook = ({ notebookId }: NotebookProps): ReturnType<FC> => {
+export const Notebook = (): ReturnType<FC> => {
   const history = useHistory();
-  const toast = useToast();
+  const params = useRouteParams(notebooks({}).notebook);
+  const notebookId = decodeVanityUrlComponent(params.notebookId);
+
   // See if the route is a shared notebook or an owned one
   const { search } = useLocation();
   const secret = new URLSearchParams(search).get('secret') ?? undefined;
+
+  const toast = useToast();
 
   // State
   const [sharingActive, setSharingActive] = useState(false);
@@ -111,7 +117,9 @@ export const Notebook = ({ notebookId }: NotebookProps): ReturnType<FC> => {
       toast(`Error duplicating notebook: ${errors[0].message}`, 'error');
     }
 
-    history.push(`/workspaces/${firstWorkspace.id}`);
+    history.push(
+      workspacesRoute({}).workspace({ workspaceId: firstWorkspace.id }).$
+    );
   };
 
   if (notebookLoading) {
@@ -140,7 +148,10 @@ export const Notebook = ({ notebookId }: NotebookProps): ReturnType<FC> => {
         notebookName={
           notebook.name === '' ? '<unnamed-notebook>' : notebook.name
         }
-        workspaceHref={`/workspaces/${notebook.workspace.id}`}
+        workspaceHref={
+          workspacesRoute({}).workspace({ workspaceId: notebook.workspace.id })
+            .$
+        }
         usersWithAccess={notebook.access.users}
         permission={notebook.myPermissionType}
         link={notebookUrlWithSecret}

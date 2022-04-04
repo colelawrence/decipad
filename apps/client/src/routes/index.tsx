@@ -1,9 +1,9 @@
+import { notebooks, playground, workspaces } from '@decipad/routing';
 import { GlobalStyles, VerifyEmail } from '@decipad/ui';
 import { FC } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { RequireSession } from '../components/RequireSession';
 import { RouteEvents } from '../components/RouteEvents';
-import { decode as decodeVanityUrlComponent } from '../lib/vanityUrlComponent';
 import { Home } from './Home';
 import { Notebook } from './Notebook';
 import { Playground } from './Playground';
@@ -17,29 +17,20 @@ export function Router(): ReturnType<FC> {
           <Home />
         </RequireSession>
       </Route>
-      <Redirect from="/workspaces/:workspaceId/pads/:padId" to="/n/:padId" />
-      <Redirect from="/workspaces/:workspaceid" to="/w/:workspaceid" />
-      <Route
-        path="/w/:workspaceid"
-        render={({ match }) => (
-          <RequireSession>
-            <RouteEvents category="workspace">
-              <Workspace workspaceId={match.params.workspaceid} />
-            </RouteEvents>
-          </RequireSession>
-        )}
-      />
-      <Route
-        path={['/n/:padid']}
-        render={({ match }) => (
-          <RequireSession allowSecret>
-            <Notebook
-              notebookId={decodeVanityUrlComponent(match.params.padid)}
-            />
-          </RequireSession>
-        )}
-      />
-      <Route exact path="/playground">
+      <Redirect from="/workspaces/**" to={`${workspaces.template}/**`} />
+      <Route path={workspaces.template + workspaces({}).workspace.template}>
+        <RequireSession>
+          <RouteEvents category="workspace">
+            <Workspace />
+          </RouteEvents>
+        </RequireSession>
+      </Route>
+      <Route path={notebooks.template + notebooks({}).notebook.template}>
+        <RequireSession allowSecret>
+          <Notebook />
+        </RequireSession>
+      </Route>
+      <Route exact path={playground.template}>
         <RouteEvents category="playground">
           <Playground />
         </RouteEvents>

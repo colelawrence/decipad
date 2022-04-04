@@ -10,14 +10,15 @@ import { EditWorkspaceModal } from '@decipad/ui';
 import { useQuery } from '@apollo/client';
 import { Spinner } from '@chakra-ui/react';
 import { useToast } from '@decipad/react-contexts';
+import {
+  useRouteParams,
+  workspaces as workspacesRoute,
+} from '@decipad/routing';
 
 export const WorkspacePreferences = (): ReturnType<FC> => {
   const history = useHistory();
-  const {
-    path,
-    url,
-    params: { workspaceid },
-  } = useRouteMatch<{ workspaceid: string }>();
+  const { path, url } = useRouteMatch();
+  const { workspaceId } = useRouteParams(workspacesRoute({}).workspace);
 
   const toast = useToast();
 
@@ -29,26 +30,28 @@ export const WorkspacePreferences = (): ReturnType<FC> => {
     return <Spinner />;
   }
 
-  const currentWorkspace = workspaces.find(({ id }) => id === workspaceid);
+  const currentWorkspace = workspaces.find(({ id }) => id === workspaceId);
   if (!currentWorkspace) {
     console.error(
       'Cannot find workspace with id',
-      workspaceid,
+      workspaceId,
       'in list of workspaces',
       workspaces
     );
-    throw new Error(`Cannot find workspace with id ${workspaceid}`);
+    throw new Error(`Cannot find workspace with id ${workspaceId}`);
   }
 
   return (
-    <Route path={`${path}/preferences`}>
+    <Route
+      path={path + workspacesRoute({}).workspace({ workspaceId }).edit.template}
+    >
       <EditWorkspaceModal
         Heading="h1"
         name={currentWorkspace.name}
         allowDelete={workspaces.length > 1}
         closeHref={url}
         onRename={(newName) =>
-          renameWorkspace({ variables: { id: workspaceid, name: newName } })
+          renameWorkspace({ variables: { id: workspaceId, name: newName } })
             .then(() => {
               history.push(url);
             })
@@ -59,7 +62,7 @@ export const WorkspacePreferences = (): ReturnType<FC> => {
         }
         onDelete={() => {
           history.push('/');
-          return deleteWorkspace({ variables: { id: workspaceid } })
+          return deleteWorkspace({ variables: { id: workspaceId } })
             .then(() => {
               toast('Workspace deleted.', 'success');
             })

@@ -1,3 +1,13 @@
+/* eslint-disable import/first */
+
+// client side routes
+
+export { default as workspaces } from './workspaces';
+export { default as notebooks } from './notebooks';
+export { default as playground } from './playground';
+
+// server side routes
+
 import docs from './docs';
 import storybook from './storybook';
 
@@ -9,4 +19,7 @@ export { docs, storybook };
  */
 export const SERVER_SIDE_ROUTES = [docs, storybook];
 
+// misc
+
 export type { RouteNode } from 'typesafe-routes';
+export { useRouteParams } from 'typesafe-routes/react-router';

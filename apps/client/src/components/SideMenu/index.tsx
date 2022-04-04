@@ -1,18 +1,16 @@
 import { Spinner } from '@chakra-ui/react';
 import { useGetWorkspaces } from '@decipad/queries';
+import { useRouteParams, workspaces } from '@decipad/routing';
 import { DashboardSidebar } from '@decipad/ui';
 import { FC } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { CreateWorkspace } from './CreateWorkspace';
 import { WorkspacePreferences } from './WorkspacePreferences';
 
-export interface SideMenuProps {
-  workspaceId: string;
-}
-
-export const SideMenu = ({ workspaceId }: SideMenuProps): ReturnType<FC> => {
+export const SideMenu = (): ReturnType<FC> => {
   const history = useHistory();
   const { url } = useRouteMatch();
+  const { workspaceId } = useRouteParams(workspaces({}).workspace);
 
   const { data } = useGetWorkspaces();
   if (!data) {
@@ -23,6 +21,10 @@ export const SideMenu = ({ workspaceId }: SideMenuProps): ReturnType<FC> => {
   if (!currentWorkspace) {
     throw new Error(`Cannot find workspace ${workspaceId}`);
   }
+  const currentWorkspaceRoute = workspaces({}).workspace({
+    workspaceId: currentWorkspace.id,
+  });
+
   const allOtherWorkspaces = data?.workspaces.filter(
     (w) => w.id !== workspaceId
   );
@@ -33,20 +35,20 @@ export const SideMenu = ({ workspaceId }: SideMenuProps): ReturnType<FC> => {
         Heading="h1"
         activeWorkspace={{
           ...currentWorkspace,
-          href: `/w/${currentWorkspace.id}`,
+          href: currentWorkspaceRoute.$,
           numberOfMembers: 1,
         }}
         otherWorkspaces={
           allOtherWorkspaces?.map((workspace) => ({
             ...workspace,
-            href: `/w/${workspace.id}`,
+            href: workspaces({}).workspace({ workspaceId: workspace.id }).$,
             numberOfMembers: 1,
           })) ?? []
         }
         allNotebooksHref={url}
-        preferencesHref={`/w/${currentWorkspace.id}/preferences`}
+        preferencesHref={currentWorkspaceRoute.edit({}).$}
         onCreateWorkspace={() =>
-          history.push(`/w/${currentWorkspace.id}/create-workspace`)
+          history.push(currentWorkspaceRoute.createNew({}).$)
         }
       />
       <WorkspacePreferences />

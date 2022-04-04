@@ -24,6 +24,7 @@ import {
   REMOVE_PAD,
 } from '@decipad/queries';
 import { useToast } from '@decipad/react-contexts';
+import { notebooks, useRouteParams, workspaces } from '@decipad/routing';
 import { Dashboard, NotebookList, NotebookListPlaceholder } from '@decipad/ui';
 import { sortBy } from 'ramda';
 import { FC, useCallback, useContext, useState } from 'react';
@@ -38,12 +39,9 @@ import { SideMenu } from '../components/SideMenu';
 import { Topbar } from '../components/Topbar';
 import { encode as encodeVanityUrlComponent } from '../lib/vanityUrlComponent';
 
-export function Workspace({
-  workspaceId,
-}: {
-  workspaceId: string;
-}): ReturnType<FC> {
+export function Workspace(): ReturnType<FC> {
   const { path } = useRouteMatch();
+  const { workspaceId } = useRouteParams(workspaces({}).workspace);
   const history = useHistory();
   const toast = useToast();
   const clientEvent = useContext(ClientEventsContext);
@@ -90,7 +88,11 @@ export function Workspace({
         }
         const newPad = creation.createPad;
         toast('Notebook created successfully', 'success');
-        history.push(`/n/${encodeVanityUrlComponent('', newPad.id)}`);
+        history.push(
+          notebooks({}).notebook({
+            notebookId: encodeVanityUrlComponent('', newPad.id),
+          }).$
+        );
         clientEvent({ type: 'action', action: 'notebook created' });
       } catch (err) {
         toast(`Error creating notebook: ${(err as Error).message}`, 'error');
@@ -148,8 +150,8 @@ export function Workspace({
       <Redirect
         // redirect legacy notebook path for a while
         exact
-        from={`${path}/pads/:notebookId`}
-        to="/n/:notebookId"
+        from={`${path}/pads${notebooks({}).notebook.template}`}
+        to={notebooks.template + notebooks({}).notebook.template}
       />
       <Route>
         <Dashboard
@@ -159,7 +161,7 @@ export function Workspace({
               onCreateNotebook={handleCreateNotebook}
             />
           }
-          sidebar={<SideMenu workspaceId={workspaceId} />}
+          sidebar={<SideMenu />}
           notebookList={
             data ? (
               data.getWorkspaceById ? (
@@ -170,10 +172,12 @@ export function Workspace({
                     data.getWorkspaceById.pads.items
                   ).map((notebook) => ({
                     ...notebook,
-                    href: `/n/${encodeVanityUrlComponent(
-                      notebook.name,
-                      notebook.id
-                    )}`,
+                    href: notebooks({}).notebook({
+                      notebookId: encodeVanityUrlComponent(
+                        notebook.name,
+                        notebook.id
+                      ),
+                    }).$,
                     exportHref: `/api/pads/${notebook.id}/export`,
                     exportFileName: `notebook-${notebook.id}.json`,
                   }))}

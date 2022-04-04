@@ -5,6 +5,7 @@ import {
   CREATE_WORKSPACE,
 } from '@decipad/queries';
 import { useToast } from '@decipad/react-contexts';
+import { useRouteParams, workspaces } from '@decipad/routing';
 import { CreateWorkspaceModal } from '@decipad/ui';
 import React, { ComponentProps, FC } from 'react';
 import { Route, useHistory, useRouteMatch } from 'react-router-dom';
@@ -19,6 +20,7 @@ export const CreateWorkspace = (
 ): ReturnType<FC> => {
   const { path, url } = useRouteMatch();
   const history = useHistory();
+  const { workspaceId } = useRouteParams(workspaces({}).workspace);
 
   const toast = useToast();
 
@@ -34,7 +36,16 @@ export const CreateWorkspace = (
       awaitRefetchQueries: true,
     })
       .then((res) => {
-        history.push(`../${res.data?.createWorkspace.id}`);
+        if (res.data) {
+          history.push(
+            workspaces({}).workspace({
+              workspaceId: res.data.createWorkspace.id,
+            }).$
+          );
+        } else {
+          console.error('Missing created workspace data in response', res);
+          toast('An error occurred while creating the workspace', 'error');
+        }
       })
       .catch((err) => {
         console.error(err);
@@ -43,7 +54,10 @@ export const CreateWorkspace = (
   };
 
   return (
-    <Route exact path={`${path}/create-workspace`}>
+    <Route
+      exact
+      path={path + workspaces({}).workspace({ workspaceId }).createNew.template}
+    >
       <CreateWorkspaceModal
         {...props}
         closeHref={url}
