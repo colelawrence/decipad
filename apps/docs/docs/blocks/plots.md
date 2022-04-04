@@ -2,7 +2,7 @@
 sidebar_position: 20
 ---
 
-# Plot Blocks
+# Plots
 
 :::caution `Experimental Feature`
 Plot Blocks are currently being developed. Limited availability.

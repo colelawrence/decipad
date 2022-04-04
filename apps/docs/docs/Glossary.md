@@ -154,3 +154,7 @@ Total_Costs = 23000 USD
 Yearly_Profit = Total_Revenue - Total_Costs
 ==> 27000 $
 ```
+
+## Widgets
+
+Widgets are no code blocks you can place on your notebooks. Everyone with access will be able to update them and check how it affects the model.

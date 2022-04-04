@@ -4,7 +4,7 @@ sidebar_position: 0
 
 # Blocks
 
-Super-power notebooks with blocks.
+Super-power notebooks with no/low code blocks.
 
 Access the block menu on a notebook by typing `/` on a new paragraph.
 
@@ -12,7 +12,7 @@ Access the block menu on a notebook by typing `/` on a new paragraph.
 
 Each block unlocks new modeling possibilities:
 
-- [Number Fields](number-fields)
-- [Calculations](calculation-blocks)
-- [Plots](plots-blocks)
-- [Tables](tables-blocks)
+- [Widgets](widgets)
+- [Calculations](calculations)
+- [Plots](plots)
+- [Tables](tables)
