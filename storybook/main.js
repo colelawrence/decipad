@@ -5,6 +5,9 @@ module.exports = {
   core: {
     builder: 'webpack5',
   },
+  features: {
+    storyStoreV7: true,
+  },
   typescript: {
     reactDocgen: false,
   },
@@ -27,13 +30,14 @@ module.exports = {
             resourceQuery: /raw/,
             type: 'asset/source',
           },
-          ...config.module.rules,
+          ...config.module?.rules,
         ],
       },
     ];
 
     // Fallback for node APIs used in dependencies such as csv-parse.
     config.resolve.fallback = {
+      ...config.resolve?.fallback,
       stream: require.resolve('stream-browserify'),
     };
     config.plugins.push(
@@ -41,6 +45,15 @@ module.exports = {
         Buffer: ['buffer', 'Buffer'],
       })
     );
+    // Avoid hitting payload size limit if served via Lambda
+    config.optimization = {
+      ...config.optimization,
+      splitChunks: {
+        ...config.optimization?.splitChunks,
+        chunks: 'all',
+        maxSize: 1024 * 1024,
+      },
+    };
 
     return config;
   },

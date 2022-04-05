@@ -83,10 +83,11 @@ export const Code: React.FC = ({ children }) => (
 );
 
 // make sure all types of text are covered by stories
-const { default: _storyDefault, ...stories } = storyExports;
-const { globalTextStyles: _globalTextStyles, ...textStyles } = textExports;
-if (Object.keys(stories).length !== Object.keys(textStyles).length)
+if (
+  Object.keys(storyExports).filter((name) => name !== 'default').length !==
+  Object.keys(textExports).filter((name) => name !== 'globalTextStyles').length
+)
   console.error(
-    'Not all text styles covered by stories! Text styles:',
-    Object.keys(textStyles)
+    'Not all text styles covered by stories! Text style exports:',
+    Object.keys(textExports)
   );

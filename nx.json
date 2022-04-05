@@ -9,7 +9,8 @@
     "tslint.json": "*",
     "libs/eslint-config-decipad/index.js": "*",
     "libs/eslint-config-decipad/react.js": "*",
-    "nx.json": "*"
+    "nx.json": "*",
+    "storybook/**": ["ui"]
   },
   "affected": {
     "defaultBase": "main"
