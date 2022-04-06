@@ -1,5 +1,5 @@
 import { ELEMENT_H1, PlateComponent } from '@decipad/editor-types';
-import { atoms } from '@decipad/ui';
+import { molecules } from '@decipad/ui';
 import { useEditorState } from '@udecode/plate';
 import { useEffect, useState } from 'react';
 import { Editor, Transforms } from 'slate';
@@ -28,17 +28,14 @@ export const Title: PlateComponent = ({ attributes, children, element }) => {
 
   return (
     <div {...attributes}>
-      <atoms.Display
+      <molecules.EditorTitle
         Heading="h1"
         placeholder={
           Editor.isEmpty(editor, element) ? 'My notebook title' : undefined
         }
       >
         {children}
-      </atoms.Display>
-      <div contentEditable={false} css={{ paddingBottom: '16px' }}>
-        <atoms.Divider />
-      </div>
+      </molecules.EditorTitle>
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import { ComponentProps, FC, useCallback, useEffect, useState } from 'react';
 import { noop } from '@decipad/utils';
 import { SlashCommandsMenuItem } from '../../atoms';
-import { Placeholder, Plot, Shapes, Table, Text } from '../../icons';
+import { Heading, Input, Pie, Shapes, Table } from '../../icons';
 import { SlashCommandsMenuGroup } from '../../molecules';
 import {
   black,
@@ -67,7 +67,7 @@ if (isEnabled('PLOT_ELEMENTS')) {
     command: 'plot',
     title: 'Plot',
     description: 'Plot your data in a graph',
-    icon: <Plot />,
+    icon: <Pie />,
     extraSearchTerms: [],
   });
 }
@@ -80,7 +80,7 @@ const groups: ReadonlyArray<SlashCommandGroup> = [
         command: 'input',
         title: 'Number Field',
         description: 'Add an input users can interact with',
-        icon: <Placeholder />,
+        icon: <Input />,
         extraSearchTerms: [],
       },
     ],
@@ -96,14 +96,14 @@ const groups: ReadonlyArray<SlashCommandGroup> = [
         command: 'heading1',
         title: 'Heading',
         description: 'Add main text heading',
-        icon: <Text />,
+        icon: <Heading />,
         extraSearchTerms: [],
       },
       {
         command: 'heading2',
         title: 'Sub-heading',
         description: 'Add secondary text heading',
-        icon: <Text />,
+        icon: <Heading />,
         extraSearchTerms: [],
       },
     ],

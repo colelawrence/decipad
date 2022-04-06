@@ -20,6 +20,7 @@ const styles = css({
 
   counterReset: listItemCounter,
   counterIncrement: listItemCounter,
+  wordBreak: 'break-word',
 });
 
 const itemStyles = css({

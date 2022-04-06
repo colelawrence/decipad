@@ -1,5 +1,7 @@
 import { atoms } from '@decipad/ui';
 import { PlateComponent } from '@decipad/editor-types';
+import { blockquote } from 'libs/ui/src/styles/block-alignment';
+import { css } from '@emotion/react';
 import { DraggableBlock } from '../block-management';
 
 export const Blockquote: PlateComponent = ({
@@ -12,7 +14,13 @@ export const Blockquote: PlateComponent = ({
   }
 
   return (
-    <div {...attributes}>
+    <div
+      {...attributes}
+      css={css({
+        width: `min(100%, ${blockquote.desiredWidth}px)`,
+        margin: 'auto',
+      })}
+    >
       <DraggableBlock blockKind="blockquote" element={element}>
         <atoms.Blockquote>{children}</atoms.Blockquote>
       </DraggableBlock>

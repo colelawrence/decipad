@@ -1,12 +1,12 @@
 import { CSSObject } from '@emotion/react';
-import { code, teal600, teal50, setCssVar } from '../primitives';
+import { code, setCssVar, grey300, cssVar } from '../primitives';
 
-export const lineHeight = '26px';
+export const lineHeight = '36px';
 
 export const variableStyles: CSSObject = {
   ...code,
-  ...setCssVar('currentTextColor', teal600.rgb),
-  backgroundColor: teal50.rgb,
+  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
+  backgroundColor: grey300.rgb,
   fontWeight: 500,
   fontSize: '13px',
 };

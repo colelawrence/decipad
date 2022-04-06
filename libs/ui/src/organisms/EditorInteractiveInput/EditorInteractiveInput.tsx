@@ -7,6 +7,14 @@ import { Interactive } from '../../molecules';
 import { useSubmittableInput } from '../../utils/useSubmittableInput';
 import { InteractiveInputMenu } from '../InteractiveInputMenu/InteractiveInputMenu';
 
+const buttonWrapperStyles = css({
+  padding: '2px',
+  ':hover': {
+    backgroundColor: cssVar('highlightColor'),
+    borderRadius: '50%',
+  },
+});
+
 const numberInputStyles = css(p32Medium, {
   color: cssVar('strongTextColor'),
   borderRadius: '8px',
@@ -15,9 +23,8 @@ const numberInputStyles = css(p32Medium, {
     backgroundColor: cssVar('strongHighlightColor'),
   },
   textOverflow: 'ellipsis',
-
   minWidth: 0,
-  padding: '6px 8px',
+  padding: '0px 8px',
 });
 
 type InputProps = Parameters<typeof useSubmittableInput>[0];
@@ -62,7 +69,7 @@ export const EditorInteractiveInput = ({
           onCopy={onCopy}
           onDelete={onDelete}
           trigger={
-            <button>
+            <button css={buttonWrapperStyles}>
               <Ellipsis />
             </button>
           }

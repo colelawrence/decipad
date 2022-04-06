@@ -11,10 +11,13 @@ import {
   TableRow,
 } from '../../molecules';
 import { TableCellType, TableColumn, TableData } from '../../types';
+import { blockAlignment } from '../../styles';
 
 const alwaysTrue = () => true;
 
 const etStyle = css({
+  maxWidth: blockAlignment.editorTable.desiredWidth,
+  margin: 'auto',
   marginBottom: '8px',
   paddingBottom: '6px',
 });

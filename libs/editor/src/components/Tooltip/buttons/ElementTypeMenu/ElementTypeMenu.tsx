@@ -5,6 +5,7 @@ import {
 } from '@decipad/editor-types';
 import { icons } from '@decipad/ui';
 import { css } from '@emotion/react';
+import { Heading, Text } from 'libs/ui/src/icons';
 import { FC, MouseEventHandler, useState } from 'react';
 import { ToggleElementButton } from './ToggleElementButton/ToggleElementButton';
 
@@ -111,16 +112,19 @@ export const ElementTypeMenu = ({
         <ToggleElementButton
           currentBlockType={currentBlockType}
           type={ELEMENT_H2}
+          icon={<Heading />}
           label="Heading"
         />
         <ToggleElementButton
           currentBlockType={currentBlockType}
           type={ELEMENT_H3}
+          icon={<Heading />}
           label="Sub-heading"
         />
         <ToggleElementButton
           currentBlockType={currentBlockType}
           type={ELEMENT_PARAGRAPH}
+          icon={<Text />}
           label="Paragraph"
         />
       </ul>

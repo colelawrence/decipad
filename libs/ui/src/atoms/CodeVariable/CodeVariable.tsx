@@ -11,7 +11,6 @@ interface CodeVariableProps {
   readonly children: ReactNode;
   readonly variableMissing?: boolean;
 }
-
 export const CodeVariable = ({
   children,
   variableMissing = false,

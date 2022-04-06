@@ -7,29 +7,30 @@ import {
   code,
   cssVar,
   grey300,
-  grey400,
   p14Medium,
   p14Regular,
   setCssVar,
 } from '../../primitives';
-import { codeBlock } from '../../styles';
+import { blockAlignment, codeBlock } from '../../styles';
 import { isTabularType } from '../../utils/results';
 
 const { lineHeight } = codeBlock;
 
 const spacingStyles = css({
-  padding: '8px 0',
+  maxWidth: blockAlignment.codeLine.desiredWidth,
+  margin: 'auto',
+  paddingTop: blockAlignment.codeLine.paddingTop,
 });
 
 const highlightedLineStyles = {
-  borderColor: grey400.rgb,
+  borderColor: grey300.rgb,
 };
 
 const codeLineStyles = css({
-  backgroundColor: cssVar('backgroundColor'),
+  backgroundColor: cssVar('highlightColor'),
   ':hover': highlightedLineStyles,
 
-  border: `1px solid ${grey300.rgb}`,
+  border: `1px solid ${cssVar('strongHighlightColor')}`,
   borderRadius: '10px',
 
   display: 'grid',
@@ -41,44 +42,43 @@ const codeLineStyles = css({
     /minmax(0, 70%)  25%
   `,
 
-  padding: '4px',
+  padding: '4px 10px',
 });
 
 const inlineStyles = css({
   gridArea: 'inline-res',
 
-  display: 'flex',
-  gap: '8px',
-  justifySelf: 'end',
-  height: 'fit-content',
   maxWidth: '100%',
-  minHeight: lineHeight,
+  display: 'flex',
+  justifySelf: 'end',
+  alignSelf: 'center',
 
   userSelect: 'none',
 });
 
 const codeStyles = css(code, {
   gridArea: 'code',
-
+  padding: '3px 0',
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
   lineHeight,
   whiteSpace: 'pre-wrap',
 });
 
 const inlineResultStyles = css(p14Regular, {
-  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
-
-  lineHeight,
-
-  // Truncates text
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   whiteSpace: 'nowrap',
+
+  padding: '2px 8px',
+
+  backgroundColor: cssVar('backgroundColor'),
+  border: `1px solid ${cssVar('strongHighlightColor')}`,
+  borderRadius: '8px',
+  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
 });
 
 const expandedResultStyles = css(p14Medium, {
   gridArea: 'expanded-res',
-
   display: 'grid',
   marginTop: '4px',
 });

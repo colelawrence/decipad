@@ -8,11 +8,10 @@ import { identifierNamePattern } from '../../utils/language';
 import { Caret } from '../../icons';
 
 const rightSlotStyles = css({
-  display: 'grid',
-  '& > svg': {
-    height: '16px',
-    width: '16px',
-  },
+  display: 'flex',
+  placeItems: 'stretch',
+  width: '16px',
+  height: '16px',
 });
 
 type EditableTableHeaderProps = Pick<

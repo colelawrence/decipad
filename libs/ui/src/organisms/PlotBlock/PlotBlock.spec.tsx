@@ -69,10 +69,10 @@ it('displays the plot params unless readonly', () => {
   const { getByLabelText, queryByLabelText, rerender } = render(
     <PlotBlock {...plotProps} readOnly={false} />
   );
-  expect(getByLabelText(/source/i)).toBeVisible();
+  expect(getByLabelText(/table/i)).toBeVisible();
 
   rerender(<PlotBlock {...plotProps} readOnly />);
-  expect(queryByLabelText(/source/i)).not.toBeInTheDocument();
+  expect(queryByLabelText(/table/i)).not.toBeInTheDocument();
 });
 
 it('shows a given error message', () => {

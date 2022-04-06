@@ -3,6 +3,9 @@ import { p14Regular } from '../primitives';
 import { DragHandle } from '../icons';
 import { getSvgAspectRatio } from '../utils';
 
+export const slimBlockWidth = 580;
+export const wideBlockWidth = 700;
+
 export const gutterHandleHeight = once(
   () => `calc(${p14Regular.lineHeight} * ${p14Regular.fontSize})`
 );

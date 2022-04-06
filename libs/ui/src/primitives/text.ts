@@ -24,10 +24,10 @@ const usualRemPxs = 16;
 // heading
 
 const hFontFamily: TypographyStyles['fontFamily'] =
-  '"Neue Haas Grotesk Display Pro", Inter, Helvetica, "Open Sans", sans-serif';
+  'Inter, "Neue Haas Grotesk Display Pro", Helvetica, "Open Sans", sans-serif';
 
 const hDefault: TypographyStyles = {
-  ...setCssVar('currentTextColor', cssVar('normalTextColor')),
+  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
   color: cssVar('currentTextColor'),
   fontFamily: hFontFamily,
   fontStyle: 'normal',
@@ -40,14 +40,14 @@ const hDefault: TypographyStyles = {
 
 export const display: TypographyStyles = {
   ...hDefault,
-  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
-  fontSize: `${36 / usualRemPxs}rem`,
-  lineHeight: 1.13,
+  fontSize: `${32 / usualRemPxs}rem`,
+  fontWeight: 500,
+  letterSpacing: '-0.01em',
+  lineHeight: 1.21,
   fontFeatureSettings: "'ss04' on, 'ss08' on, 'ss06' on",
 };
 export const h1: TypographyStyles = {
   ...hDefault,
-  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
   fontSize: `${24 / usualRemPxs}rem`,
   fontFeatureSettings: "'ss04' on, 'ss02' on",
 };
@@ -119,6 +119,7 @@ export const p14Medium: TypographyStyles = {
   ...pDefault,
   fontWeight: 500,
   fontSize: `${14 / usualRemPxs}rem`,
+  lineHeight: 1.4,
 };
 export const p15Medium: TypographyStyles = {
   ...pDefault,

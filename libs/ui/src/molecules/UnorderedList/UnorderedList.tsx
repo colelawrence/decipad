@@ -20,6 +20,7 @@ const styles = css({
   columnGap: '8px',
 
   counterReset: listItemCounter,
+  wordBreak: 'break-word',
 });
 
 const itemStyles = css({

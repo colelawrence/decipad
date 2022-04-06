@@ -18,14 +18,18 @@ const iconWrapperStyles = css({
   ...setCssVar('iconBackgroundColor', red200.rgb),
   ...setCssVar('currentTextColor', red600.rgb),
 
-  cursor: 'pointer',
-
-  alignSelf: 'center',
   display: 'inline-flex',
+  //
+  // strange safari bug makes errors not show
+  // if this is replaced with simply height and width
+  //
   '> svg': {
-    height: '14px',
-    width: '14px',
+    height: '16px',
+    width: '16px',
   },
+
+  verticalAlign: 'middle',
+  cursor: 'pointer',
 });
 
 const messageStyles = css(p12Medium, {

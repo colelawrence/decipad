@@ -15,6 +15,7 @@ import {
 } from '@decipad/routing';
 import { LoadingSpinnerPage, NotebookTopbar } from '@decipad/ui';
 import styled from '@emotion/styled';
+import { wideBlockWidth } from 'libs/ui/src/styles/editor-layout';
 import { FC, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { getSecretNotebookLink } from '../lib/secret';
@@ -27,8 +28,10 @@ const Wrapper = styled('div')({
 
 const EditorWrapper = styled('div')({
   order: 2,
-  width: 'min(100%, 120ch)',
+  width: `min(100%, ${wideBlockWidth}px)`,
   margin: 'auto',
+  marginTop: '72px',
+  marginBottom: '200px',
 });
 
 const ErrorWrapper = styled('div')({

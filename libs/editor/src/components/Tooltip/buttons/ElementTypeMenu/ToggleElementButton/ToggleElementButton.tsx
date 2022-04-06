@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
-import { FC, MouseEventHandler } from 'react';
+import { grey100 } from 'libs/ui/src/primitives';
+import { FC, MouseEventHandler, ReactNode } from 'react';
 import { useEditorTooltip } from '../../../hooks/useEditorTooltip';
 
 const buttonStyles = css({
@@ -28,21 +29,20 @@ const buttonStyles = css({
 });
 
 const iconStyles = css({
-  width: '28px',
-  height: '28px',
+  width: '24px',
+  height: '24px',
   display: 'grid',
   placeItems: 'center',
   backgroundColor: 'transparent',
   transition: 'background-color 0.2s ease-out',
-  background: '#f0f0f2',
+  background: grey100.rgb,
   borderRadius: '3px',
-  fontSize: '13px',
-  fontWeight: 'bold',
 });
 
 interface ToggleElementButtonProps {
   type: string;
   label: string;
+  icon: ReactNode;
   currentBlockType: string | null;
   onMouseDown?: MouseEventHandler<HTMLButtonElement>;
 }
@@ -50,6 +50,7 @@ interface ToggleElementButtonProps {
 export const ToggleElementButton = ({
   type,
   label,
+  icon,
   currentBlockType,
   onMouseDown,
 }: ToggleElementButtonProps): ReturnType<FC> => {
@@ -70,7 +71,7 @@ export const ToggleElementButton = ({
           })
         }
       >
-        <span css={iconStyles}>Aa</span>
+        <span css={iconStyles}>{icon}</span>
         {label}
       </button>
     </li>

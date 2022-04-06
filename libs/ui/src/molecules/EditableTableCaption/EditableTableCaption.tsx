@@ -9,7 +9,7 @@ const tableTitleWrapper = css({
   alignItems: 'center',
   display: 'flex',
   gap: '9px',
-  padding: `${blockAlignment.editorTable.paddingTop} 0`,
+  padding: `${blockAlignment.editorTable.paddingTop} 0 12px 0`,
 });
 
 const tableIconSizeStyles = css({

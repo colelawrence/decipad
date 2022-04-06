@@ -2,19 +2,14 @@ import { css } from '@emotion/react';
 import type { ComponentProps } from 'react';
 import { FC } from 'react';
 import { ErrorMessage } from '../../atoms';
-import { cssVar } from '../../primitives';
 import { blockAlignment } from '../../styles';
 import { PlotParams } from '../PlotParams/PlotParams';
 import { PlotResult } from '../PlotResult/PlotResult';
 
 const plotBlockStyles = css({
-  margin: `${blockAlignment.plot.paddingTop} 0`,
-  border: `1px solid ${cssVar('strongHighlightColor')}`,
-  borderRadius: '12px',
-  padding: '6px 12px',
-
+  padding: `${blockAlignment.plot.paddingTop} 0`,
   display: 'grid',
-  rowGap: '8px',
+  rowGap: '16px',
 });
 
 const plotStyles = css({

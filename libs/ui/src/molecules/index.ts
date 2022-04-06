@@ -4,6 +4,7 @@ export { AuthContent } from './AuthContent/AuthContent';
 export { CodeSyntaxErrorHighlight } from './CodeSyntaxErrorHighlight/CodeSyntaxErrorHighlight';
 export { EditableTableCaption } from './EditableTableCaption/EditableTableCaption';
 export { EditableTableData } from './EditableTableData/EditableTableData';
+export { EditorTitle } from './EditorTitle/EditorTitle';
 export { HelpButton } from './HelpButton/HelpButton';
 export { InlineCodeError } from './InlineCodeError/InlineCodeError';
 export { Interactive } from './Interactive/Interactive';

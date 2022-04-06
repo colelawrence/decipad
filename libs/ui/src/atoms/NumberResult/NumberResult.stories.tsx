@@ -27,3 +27,8 @@ export const Unit: Story<ComponentProps<typeof NumberResult>> = (props) => (
   <NumberResult {...props} />
 );
 Unit.decorators = [withCode('1 banana + 1 banana')];
+
+export const LongDecimal: Story<ComponentProps<typeof NumberResult>> = (
+  props
+) => <NumberResult {...props} />;
+LongDecimal.decorators = [withCode('0.123456789123456789')];

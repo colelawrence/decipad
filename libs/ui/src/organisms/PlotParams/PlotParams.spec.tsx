@@ -4,10 +4,10 @@ import type { ComponentProps } from 'react';
 import { PlotParams } from './PlotParams';
 
 const expectedPropToLabelName = {
-  sourceVarName: /var/i,
-  markType: /mark/i,
-  xColumnName: /horizontal/i,
-  yColumnName: /vertical/i,
+  sourceVarName: /table/i,
+  markType: /chart/i,
+  xColumnName: /x/i,
+  yColumnName: /y/i,
   sizeColumnName: /size/i,
   colorColumnName: /color/i,
 };

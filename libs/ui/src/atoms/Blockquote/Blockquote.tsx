@@ -1,7 +1,7 @@
 import { useIsBlockActive } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
-import { cssVar, purple300, setCssVar } from '../../primitives';
+import { cssVar, grey100, setCssVar } from '../../primitives';
 import { blockAlignment } from '../../styles';
 
 const verticalPadding = '6px';
@@ -11,9 +11,10 @@ const styles = css(
   blockAlignment.blockquote.typography,
   setCssVar('currentTextColor', cssVar('weakTextColor')),
   {
-    margin: `${verticalMargin} 0`,
-    padding: `${verticalPadding} 0 ${verticalPadding} 12px`,
-    borderLeft: `6px solid ${purple300.rgb}`,
+    margin: `${verticalMargin} auto`,
+    padding: `${verticalPadding} 30px ${verticalPadding} 12px`,
+    borderLeft: `4px solid ${grey100.rgb}`,
+    wordBreak: 'break-word',
   }
 );
 

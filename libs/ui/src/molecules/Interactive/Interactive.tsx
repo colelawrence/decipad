@@ -2,10 +2,11 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { ComponentProps, FC, ReactNode } from 'react';
 import { AddNew } from '../../atoms';
+import { blockAlignment } from '../../styles';
 import { Frame } from '../../icons';
 import {
   black,
-  brand600,
+  brand500,
   cssVar,
   grey300,
   grey700,
@@ -13,7 +14,6 @@ import {
   setCssVar,
   transparency,
 } from '../../primitives';
-import { blockAlignment } from '../../styles';
 import { identifierNamePattern } from '../../utils/language';
 import { useSubmittableInput } from '../../utils/useSubmittableInput';
 
@@ -23,9 +23,8 @@ const transformIdentifierName = (newValue: string): string =>
 const leftBarSize = 6;
 
 const spacingStyles = css({
-  display: 'grid',
+  display: 'flex',
   justifyContent: 'center',
-
   margin: `${blockAlignment.interactive.paddingTop} 0`,
 });
 
@@ -37,30 +36,32 @@ const wrapperStyles = css({
   borderRadius: '8px',
   backgroundImage: `linear-gradient(${cssVar('backgroundColor')}, ${cssVar(
     'backgroundColor'
-  )}), linear-gradient(to right, ${brand600.rgb} 0%, ${grey300.rgb} 18.71%)`,
+  )}), linear-gradient(to right, ${brand500.rgb} 0%, ${grey300.rgb} 18.71%)`,
   backgroundOrigin: 'border-box',
   backgroundClip: 'content-box, border-box',
 
   // Last shadow is the left side color bar.
   boxShadow: `0px 2px 20px ${transparency(grey700, 0.04).rgba},
     0px 2px 8px ${transparency(black, 0.02).rgba},
-    -${leftBarSize}px 0px ${brand600.rgb}`,
+    -${leftBarSize}px 0px ${brand500.rgb}`,
   marginLeft: `${leftBarSize}px`,
 
-  maxWidth: '324px',
+  maxWidth: `324px`,
+  minWidth: '175px',
 });
 
 const widgetWrapperStyles = css({
   alignItems: 'center',
   display: 'grid',
-  gap: '9px',
-  padding: '12px',
+  gap: '4px',
+  padding: '8px',
 });
 
 const nameWrapperStyles = css({
   alignItems: 'center',
   display: 'flex',
   gap: '4px',
+  padding: '4px 4px 0 4px',
 });
 
 const iconWrapperStyles = css(
@@ -76,9 +77,11 @@ const inputStyles = css(
   p13Medium,
   setCssVar('currentTextColor', cssVar('weakTextColor')),
   {
-    backgroundColor: cssVar('backgroundColor'),
     flexGrow: 1,
-    padding: '1px 0',
+
+    backgroundColor: cssVar('backgroundColor'),
+    lineHeight: '13px',
+    padding: '4px 0',
     textOverflow: 'ellipsis',
   }
 );
@@ -118,7 +121,7 @@ export const Interactive = ({
           <input
             {...nameInputProps}
             css={inputStyles}
-            placeholder="VariableName"
+            placeholder="InputName"
             readOnly={readOnly}
             size={1}
           />

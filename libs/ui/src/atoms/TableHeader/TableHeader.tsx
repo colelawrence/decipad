@@ -33,9 +33,10 @@ const headerWrapperStyles = css({
 });
 
 const columnTypeStyles = css({
-  height: '16px',
+  display: 'flex',
+  placeItems: 'stretch',
   width: '16px',
-  display: 'grid',
+  height: '16px',
 });
 
 export interface TableHeaderProps {

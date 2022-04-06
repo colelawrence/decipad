@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { Label } from '../../atoms';
-import { p12Medium } from '../../primitives';
+import { blue50, cssVar, p12Medium } from '../../primitives';
 
 type StringSetter = (str: string) => void;
 
@@ -39,17 +39,19 @@ interface PlotParamsProps {
 interface SelectInputProps {
   readonly labelText: string;
   readonly children: ReactNode;
-
   readonly value: string;
   readonly setValue: StringSetter;
 }
 
-const selectStyles = css(p12Medium);
+const selectFontStyles = css(p12Medium);
+
+const selectStyles = css({
+  backgroundColor: blue50.rgb,
+});
 
 const SelectInput = ({
   labelText,
   children,
-
   value,
   setValue,
 }: SelectInputProps): ReturnType<FC> => {
@@ -57,7 +59,7 @@ const SelectInput = ({
     <Label
       renderContent={(id) => (
         <select
-          css={selectStyles}
+          css={[selectFontStyles, selectStyles]}
           id={id}
           onChange={(ev) => {
             setValue(ev.target.value);
@@ -68,19 +70,19 @@ const SelectInput = ({
         </select>
       )}
     >
-      <span css={selectStyles}>{labelText}:</span>
+      <span css={selectFontStyles}>{labelText}:</span>
     </Label>
   );
 };
 
 const containerStyles = css({
-  display: 'grid',
-  rowGap: '16px',
-});
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: '4px',
 
-const groupStyles = css({
-  display: 'grid',
-  rowGap: '8px',
+  paddingLeft: '30px',
+  marginBottom: '20px',
+  borderLeft: `4px solid ${cssVar('highlightColor')}`,
 });
 
 export const PlotParams = ({
@@ -101,11 +103,7 @@ export const PlotParams = ({
   thetaColumnName,
   setThetaColumnName,
 }: PlotParamsProps): ReturnType<FC> => {
-  const emptyColumnOption = (
-    <option key="__none" value="">
-      -
-    </option>
-  );
+  const emptyColumnOption = <option key="__none" value=""></option>;
   const sourceVarNameOptionsOptions = [emptyColumnOption].concat(
     sourceVarNameOptions.map((sourceVarNameOption) => (
       <option key={sourceVarNameOption} value={sourceVarNameOption}>
@@ -113,6 +111,7 @@ export const PlotParams = ({
       </option>
     ))
   );
+
   const columnOptions = [emptyColumnOption].concat(
     columnNameOptions.map((columnNameOption) => (
       <option key={columnNameOption} value={columnNameOption}>
@@ -131,59 +130,43 @@ export const PlotParams = ({
 
   return (
     <div css={containerStyles}>
-      <div css={groupStyles}>
-        <SelectInput
-          labelText="Source var name"
-          setValue={setSourceVarName}
-          value={sourceVarName}
-        >
-          {sourceVarNameOptionsOptions}
-        </SelectInput>
-        <SelectInput
-          labelText="Mark type"
-          setValue={setMarkType}
-          value={markType}
-        >
-          {markTypeOptions}
-        </SelectInput>
-      </div>
-      <div css={groupStyles}>
-        <SelectInput
-          labelText="Horizontal values"
-          setValue={setXColumnName}
-          value={xColumnName}
-        >
-          {columnOptions}
-        </SelectInput>
-        <SelectInput
-          labelText="Vertical values"
-          setValue={setYColumnName}
-          value={yColumnName}
-        >
-          {columnOptions}
-        </SelectInput>
-        <SelectInput
-          labelText="Size values"
-          setValue={setSizeColumnName}
-          value={sizeColumnName}
-        >
-          {columnOptions}
-        </SelectInput>
-        <SelectInput
-          labelText="Color values"
-          setValue={setColorColumnName}
-          value={colorColumnName}
-        >
-          {columnOptions}
-        </SelectInput>
-        <SelectInput
-          labelText="Theta values"
-          setValue={setThetaColumnName}
-          value={thetaColumnName}
-        >
-          {columnOptions}
-        </SelectInput>
-      </div>
+      <SelectInput
+        labelText="Table"
+        setValue={setSourceVarName}
+        value={sourceVarName}
+      >
+        {sourceVarNameOptionsOptions}
+      </SelectInput>
+      <SelectInput labelText="Chart" setValue={setMarkType} value={markType}>
+        {markTypeOptions}
+      </SelectInput>
+      <SelectInput labelText="x" setValue={setXColumnName} value={xColumnName}>
+        {columnOptions}
+      </SelectInput>
+      <SelectInput labelText="y" setValue={setYColumnName} value={yColumnName}>
+        {columnOptions}
+      </SelectInput>
+      <SelectInput
+        labelText="Sizes"
+        setValue={setSizeColumnName}
+        value={sizeColumnName}
+      >
+        {columnOptions}
+      </SelectInput>
+      <SelectInput
+        labelText="Colors"
+        setValue={setColorColumnName}
+        value={colorColumnName}
+      >
+        {columnOptions}
+      </SelectInput>
+      <SelectInput
+        labelText="Theta"
+        setValue={setThetaColumnName}
+        value={thetaColumnName}
+      >
+        {columnOptions}
+      </SelectInput>
     </div>
   );
 };

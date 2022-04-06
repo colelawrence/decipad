@@ -10,7 +10,7 @@ const buttonWidth = iconSize + buttonPadding * 2;
 
 const wrapperStyles = css({
   display: 'grid',
-  gridTemplateColumns: `1fr ${buttonWidth}px`,
+  gridTemplateColumns: `auto ${buttonWidth}px`,
   gridColumnGap: `${gutterGap}px`,
   marginRight: `-${buttonWidth + gutterGap}px`,
 });

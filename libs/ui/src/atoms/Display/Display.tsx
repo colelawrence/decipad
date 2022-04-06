@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
 import { cssVar, display, setCssVar } from '../../primitives';
+import { editorLayout } from '../../styles';
 
 const placeholderStyles = css({
   cursor: 'text',
@@ -22,6 +23,9 @@ const placeholderStyles = css({
 });
 
 const styles = css(display, placeholderStyles, {
+  maxWidth: `${editorLayout.slimBlockWidth}px`,
+  margin: 'auto',
+
   paddingTop: '28px',
   paddingBottom: '24px',
 });

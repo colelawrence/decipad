@@ -69,6 +69,13 @@ it('renders repetitive decimal', async () => {
   expect(container.textContent).toMatchInlineSnapshot(`"0.(3)"`);
 });
 
+it('shows approximation of long decimal', async () => {
+  const { container } = render(
+    <NumberResult {...await runCode(`5.81 / 41248.20`)} />
+  );
+  expect(container.textContent).toMatchInlineSnapshot(`"0.00014(...)"`);
+});
+
 describe('units', () => {
   it('renders unit', async () => {
     const { container } = render(

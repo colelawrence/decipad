@@ -52,6 +52,7 @@ export const black = color(22, 31, 44);
 //
 // brand
 //
+export const brand50 = color(249, 255, 235);
 export const brand100 = color(243, 254, 225);
 export const brand200 = color(230, 253, 196);
 export const brand300 = color(218, 252, 166);
@@ -78,6 +79,7 @@ export const purple900 = color(23, 21, 50);
 //
 // blue
 //
+export const blue50 = color(232, 242, 255);
 export const blue100 = color(214, 224, 253);
 export const blue200 = color(173, 194, 251);
 export const blue300 = color(132, 163, 249);

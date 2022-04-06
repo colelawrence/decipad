@@ -23,15 +23,19 @@ const placeholderStyles = css({
   },
 });
 
+const { paddingTop } = blockAlignment.paragraph;
+const paddingBottom = '4px';
 const styles = css(blockAlignment.paragraph.typography, placeholderStyles, {
-  padding: `${blockAlignment.paragraph.paddingTop} 0`,
+  paddingTop,
+  paddingBottom,
+  wordBreak: 'break-word',
 });
 
-const verticalClipInset = `calc(${blockAlignment.paragraph.paddingTop} * 0.75)`;
+const topClipInset = `calc(${paddingTop} - ${paddingBottom})`;
 const activeStyles = css({
   backgroundColor: cssVar('highlightColor'),
   boxShadow: `0px 0px 0px 100vmin ${cssVar('highlightColor')}`,
-  clipPath: `inset(${verticalClipInset} -8px ${verticalClipInset} -8px round 8px)`,
+  clipPath: `inset(${topClipInset} -8px 0 -8px round 8px)`,
 });
 
 interface ParagraphProps {

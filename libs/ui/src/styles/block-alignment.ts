@@ -1,43 +1,55 @@
 import { h1, h2, p16Regular, TypographyStyles } from '../primitives';
+import { wideBlockWidth, slimBlockWidth } from './editor-layout';
 
-interface VerticalAlignmentData {
+interface StyleData {
   paddingTop: string;
   typography?: TypographyStyles;
+  desiredWidth: number;
 }
 
-export const paragraph: VerticalAlignmentData = {
-  paddingTop: '6px',
+export const paragraph: StyleData = {
+  paddingTop: '20px',
   typography: p16Regular,
+  desiredWidth: slimBlockWidth,
 };
-export const blockquote: VerticalAlignmentData = {
-  paddingTop: '14px',
+export const blockquote: StyleData = {
+  paddingTop: '40px',
   typography: p16Regular,
+  desiredWidth: slimBlockWidth,
 };
-export const heading1: VerticalAlignmentData = {
-  paddingTop: '18px',
+export const heading1: StyleData = {
+  paddingTop: '40px',
   typography: h1,
+  desiredWidth: slimBlockWidth,
 };
-export const heading2: VerticalAlignmentData = {
-  paddingTop: '18px',
+export const heading2: StyleData = {
+  paddingTop: '40px',
   typography: h2,
+  desiredWidth: slimBlockWidth,
 };
-export const list: VerticalAlignmentData = {
-  paddingTop: '6px',
+export const list: StyleData = {
+  paddingTop: '20px',
   typography: p16Regular,
+  desiredWidth: slimBlockWidth,
 };
-export const codeBlock: VerticalAlignmentData = {
+export const codeBlock: StyleData = {
   paddingTop: '16px',
+  desiredWidth: wideBlockWidth,
 };
-export const codeLine: VerticalAlignmentData = {
+export const codeLine: StyleData = {
   paddingTop: '16px',
+  desiredWidth: wideBlockWidth,
 };
-export const editorTable: VerticalAlignmentData = {
-  paddingTop: '12px',
+export const editorTable: StyleData = {
+  paddingTop: '40px',
   typography: h2,
+  desiredWidth: wideBlockWidth,
 };
-export const plot: VerticalAlignmentData = {
-  paddingTop: '16px',
+export const plot: StyleData = {
+  paddingTop: '46px',
+  desiredWidth: wideBlockWidth,
 };
-export const interactive: VerticalAlignmentData = {
-  paddingTop: '34px',
+export const interactive: StyleData = {
+  paddingTop: '40px',
+  desiredWidth: wideBlockWidth,
 };
