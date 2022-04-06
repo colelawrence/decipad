@@ -143,6 +143,7 @@ subscriptions
 pads
   id *String
   name String
+  icon String
   workspace_id String
 
 tags

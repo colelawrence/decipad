@@ -142,10 +142,11 @@ test('pads', (ctx) => {
           mutation {
             createPad(
               workspaceId: "${workspace.id}"
-              pad: { name: "Pad 1" }
+              pad: { name: "Pad 1", icon: "icon" }
             ) {
               id
               name
+              icon
               workspace {
                 id
                 name
@@ -190,9 +191,10 @@ test('pads', (ctx) => {
       await client.mutate({
         mutation: ctx.gql`
           mutation {
-            updatePad(id: "${pad.id}", pad: { name: "Pad 1 renamed" }) {
+            updatePad(id: "${pad.id}", pad: { name: "Pad 1 renamed", icon: "icon updated" }) {
               id
               name
+              icon
             }
           }
       `,
@@ -201,6 +203,7 @@ test('pads', (ctx) => {
 
     expect(pad).toMatchObject({
       name: 'Pad 1 renamed',
+      icon: 'icon updated',
     });
   });
 
@@ -214,6 +217,7 @@ test('pads', (ctx) => {
             getPadById(id: "${pad.id}") {
               id
               name
+              icon
               createdAt
             }
           }
@@ -224,6 +228,7 @@ test('pads', (ctx) => {
     expect(pad2).toMatchObject({
       id: pad.id,
       name: 'Pad 1 renamed',
+      icon: 'icon updated',
     });
 
     expect(pad2.createdAt).toBeDefined();

@@ -96,12 +96,14 @@ export type Pad = {
   name: string;
   access?: PadAccess;
   workspace?: Workspace;
+  icon?: string;
   tags?: string[];
   attachments?: Attachment[];
 };
 
 export type PadInput = {
   name: string;
+  icon?: string;
 };
 
 export type VerificationRequest = {
@@ -270,6 +272,7 @@ export interface PadRecord extends TableRecordBase {
   name: string;
   workspace_id: ID;
   isPublic?: boolean;
+  icon?: string;
 }
 
 export interface WorkspaceRecord extends TableRecordBase {

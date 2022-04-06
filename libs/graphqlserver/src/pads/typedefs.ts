@@ -3,6 +3,7 @@ import { gql } from 'apollo-server-lambda';
 export default gql`
   input PadInput {
     name: String
+    icon: String
     tags: [String!]
   }
 
@@ -25,6 +26,7 @@ export default gql`
     workspace: Workspace!
     createdAt: DateTime
     isPublic: Boolean
+    icon: String
   }
 
   type PagedPadResult {

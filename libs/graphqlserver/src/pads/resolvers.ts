@@ -49,6 +49,7 @@ const padResource = Resource({
   }) => ({
     id: nanoid(),
     name: pad.name,
+    icon: pad.icon,
     workspace_id: workspaceId,
   }),
 
