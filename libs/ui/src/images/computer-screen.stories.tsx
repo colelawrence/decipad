@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import computerScreen from './computer-screen.png';
 
 export default {
-  title: 'Images',
+  title: 'Images / Computer Screen',
 } as Meta;
 
 export const ComputerScreen: Story = () => (

@@ -81,6 +81,8 @@ const colorNames: Record<ColorId, string> = {
   blue700: 'Blue 700',
   blue800: 'Blue 800',
   blue900: 'Blue 900',
+
+  lavender000: 'Lavender 000',
 };
 export default {
   title: 'Primitives / Color',

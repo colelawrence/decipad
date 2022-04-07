@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { Meta } from '@storybook/react';
 import * as textExports from './text';
 import {
+  banner,
   code,
   display,
   h1,
@@ -16,6 +17,7 @@ import {
   p14Regular,
   p15Medium,
   p16Regular,
+  p18Regular,
   p24Bold,
   p32Medium,
 } from './text';
@@ -32,6 +34,9 @@ export default {
   },
 } as Meta;
 
+export const Banner: React.FC = ({ children }) => (
+  <h1 css={css(banner)}>{children}</h1>
+);
 export const Display: React.FC = ({ children }) => (
   <h1 css={css(display)}>{children}</h1>
 );
@@ -70,6 +75,9 @@ export const P16Regular: React.FC = ({ children }) => (
 );
 export const P16Bold: React.FC = ({ children }) => (
   <p css={css(p16Regular)}>{children}</p>
+);
+export const P18Regular: React.FC = ({ children }) => (
+  <p css={css(p18Regular)}>{children}</p>
 );
 export const P24Bold: React.FC = ({ children }) => (
   <p css={css(p24Bold)}>{children}</p>

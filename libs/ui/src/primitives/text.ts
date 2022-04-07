@@ -38,6 +38,14 @@ const hDefault: TypographyStyles = {
   fontFeatureSettings: 'unset',
 };
 
+export const banner: TypographyStyles = {
+  ...hDefault,
+  fontSize: `${56 / usualRemPxs}rem`,
+  fontWeight: 400,
+  letterSpacing: '-0.01em',
+  lineHeight: 1.05,
+  fontFeatureSettings: "'ss04' on, 'ss09' on, 'ss01' on",
+};
 export const display: TypographyStyles = {
   ...hDefault,
   fontSize: `${32 / usualRemPxs}rem`,
@@ -140,6 +148,12 @@ export const p16Bold: TypographyStyles = {
   letterSpacing: '-0.004em',
   fontFeatureSettings: "'ss04' on, 'ss02' on",
 };
+export const p18Regular: TypographyStyles = {
+  ...pDefault,
+  fontSize: `${18 / usualRemPxs}rem`,
+  lineHeight: 1.45,
+  letterSpacing: '-0.2px',
+};
 export const p24Bold: TypographyStyles = {
   ...pDefault,
   fontWeight: 600,
@@ -174,7 +188,7 @@ export const code: TypographyStyles = {
 export const globalTextStyles: Interpolation<unknown> = [
   // @import is not as good for performance as <link rel>, but the web font URLs will need to change with changes to the styles above,
   // so it's good to have them co-located, which if using <link> would be more difficult to achieve.
-  `@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Open+Sans:wght@600&family=JetBrains+Mono&display=swap');`,
+  `@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600);`,
   {
     html: {
       ...pDefault,

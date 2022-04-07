@@ -129,3 +129,8 @@ export const red600 = color(192, 55, 55);
 export const red700 = color(144, 41, 41);
 export const red800 = color(96, 28, 28);
 export const red900 = color(48, 14, 14);
+
+//
+// lavender
+//
+export const lavender000 = color(95, 100, 134);
