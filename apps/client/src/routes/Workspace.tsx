@@ -147,11 +147,15 @@ export function Workspace(): ReturnType<FC> {
 
   return (
     <Switch>
-      <Redirect
+      <Route
         // redirect legacy notebook path for a while
         exact
-        from={`${path}/pads${notebooks({}).notebook.template}`}
-        to={notebooks.template + notebooks({}).notebook.template}
+        path={`${path}/pads${notebooks({}).notebook.template}`}
+        render={({ match }) => {
+          const { notebookId } = match.params as { notebookId: string };
+          // At this point, props.location and history.location both show search as "". Use window.location
+          return <Redirect to={`/n/${notebookId}${window.location.search}`} />;
+        }}
       />
       <Route>
         <Dashboard

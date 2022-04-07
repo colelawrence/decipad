@@ -98,6 +98,12 @@ export async function navigateToNotebook(notebookId: string) {
   await page.goto(`/n/pad-title:${notebookId}`);
 }
 
+export async function navigateToNotebookWithClassicUrl(notebookId: string) {
+  await page.goto(
+    `/workspaces/ignoredWorkspaceId/pads/pad-title:${notebookId}`
+  );
+}
+
 export async function createPadFromUpdates(
   updates: string[],
   user: User,
