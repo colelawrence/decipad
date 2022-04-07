@@ -4,6 +4,7 @@ export { All } from './All/All';
 export { Bold } from './Bold/Bold';
 export { Bullet } from './Bullet/Bullet';
 export { Calendar } from './Calendar/Calendar';
+export { Callout } from './Callout/Callout';
 export { Caret } from './Caret/Caret';
 export { Chat } from './Chat/Chat';
 export { Chevron } from './Chevron/Chevron';

@@ -23,6 +23,7 @@ import {
   createLayoutColumnsPlugin,
   createPlotPlugin,
   createNormalizeCodeLinePlugin,
+  createCalloutPlugin,
 } from '@decipad/editor-plugins';
 import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import {
@@ -54,6 +55,7 @@ export const plugins = createPlugins(
     createBlockquotePlugin(),
     createHeadingPlugin({ options: { levels: 3 } }),
     createListPlugin(),
+    createCalloutPlugin(),
 
     // Layout blocks
     createLayoutColumnsPlugin(),

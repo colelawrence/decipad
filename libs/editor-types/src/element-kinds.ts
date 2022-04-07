@@ -24,3 +24,4 @@ export const ELEMENT_FETCH = 'fetch-data';
 export const ELEMENT_TABLE_INPUT = 'table-input';
 export const ELEMENT_PLOT = 'plot';
 export const ELEMENT_INPUT = 'input';
+export const ELEMENT_CALLOUT = 'callout';

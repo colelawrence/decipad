@@ -1,4 +1,9 @@
-import { ELEMENT_FETCH, ELEMENT_H2, ELEMENT_H3 } from '@decipad/editor-types';
+import {
+  ELEMENT_CALLOUT,
+  ELEMENT_FETCH,
+  ELEMENT_H2,
+  ELEMENT_H3,
+} from '@decipad/editor-types';
 import { organisms } from '@decipad/ui';
 import { TEditor } from '@udecode/plate';
 import { ComponentProps } from 'react';
@@ -44,6 +49,9 @@ export const execute = (
       break;
     case 'heading2':
       insertBlockOfTypeBelow(editor, path, ELEMENT_H3);
+      break;
+    case 'callout':
+      insertBlockOfTypeBelow(editor, path, ELEMENT_CALLOUT);
       break;
   }
   Transforms.delete(editor, { at: requireBlockParentPath(editor, path) });

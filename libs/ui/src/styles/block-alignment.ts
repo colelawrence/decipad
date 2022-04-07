@@ -1,4 +1,4 @@
-import { h1, h2, p16Regular, TypographyStyles } from '../primitives';
+import { h1, h2, p14Medium, p16Regular, TypographyStyles } from '../primitives';
 import { wideBlockWidth, slimBlockWidth } from './editor-layout';
 
 interface StyleData {
@@ -17,6 +17,12 @@ export const blockquote: StyleData = {
   typography: p16Regular,
   desiredWidth: slimBlockWidth,
 };
+export const callout: StyleData = {
+  paddingTop: '40px',
+  typography: p14Medium,
+  desiredWidth: slimBlockWidth,
+};
+
 export const heading1: StyleData = {
   paddingTop: '40px',
   typography: h1,

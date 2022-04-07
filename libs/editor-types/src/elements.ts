@@ -8,6 +8,7 @@ import { ReactEditor } from 'slate-react';
 import {
   ElementKind,
   ELEMENT_BLOCKQUOTE,
+  ELEMENT_CALLOUT,
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
   ELEMENT_COLUMNS,
@@ -57,6 +58,10 @@ export interface ParagraphElement extends BaseElement {
 }
 export interface BlockquoteElement extends BaseElement {
   type: typeof ELEMENT_BLOCKQUOTE;
+  children: InlineChildren;
+}
+export interface CalloutElement extends BaseElement {
+  type: typeof ELEMENT_CALLOUT;
   children: InlineChildren;
 }
 
@@ -177,6 +182,7 @@ export const topLevelBlockKinds: string[] = [
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_PARAGRAPH,
+  ELEMENT_CALLOUT,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK, // Legacy
   ELEMENT_CODE_LINE,

@@ -84,7 +84,7 @@ describe('search', () => {
     );
 
     expect(getAllByRole('group')).toHaveLength(1);
-    expect(getAllByRole('menuitem')).toHaveLength(2);
+    expect(getAllByRole('menuitem')).toHaveLength(3);
 
     expect(getByText(/main.+heading/)).toBeInTheDocument();
     expect(getByText(/secondary.+heading/)).toBeInTheDocument();

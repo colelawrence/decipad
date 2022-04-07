@@ -3,6 +3,7 @@ export { Avatar } from './Avatar/Avatar';
 export { Blockquote } from './Blockquote/Blockquote';
 export { Bold } from './Bold/Bold';
 export { Button } from './Button/Button';
+export { Callout } from './Callout/Callout';
 export { CellInput } from './CellInput/CellInput';
 export { Code } from './Code/Code';
 export { CodeError } from './CodeError/CodeError';

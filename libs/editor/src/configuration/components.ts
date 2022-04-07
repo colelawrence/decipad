@@ -3,6 +3,7 @@ import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
+  ELEMENT_CALLOUT,
   ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_H3,
@@ -22,6 +23,7 @@ import {
 import {
   Blockquote,
   Bold,
+  Callout,
   Code,
   CodeBlock,
   CodeLine,
@@ -51,6 +53,7 @@ export const components: PlateComponents = {
   // Text blocks
   [ELEMENT_PARAGRAPH]: SlashCommandsParagraph,
   [ELEMENT_BLOCKQUOTE]: Blockquote,
+  [ELEMENT_CALLOUT]: Callout,
 
   // Code
   [ELEMENT_CODE_BLOCK]: CodeBlock,
