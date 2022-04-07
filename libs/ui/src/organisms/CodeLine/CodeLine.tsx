@@ -111,7 +111,7 @@ export const CodeLine = ({
     hasTypeError || (hasResult && displayInline && !renderExpandedResult);
 
   return (
-    <div css={spacingStyles}>
+    <div css={spacingStyles} spellCheck={false}>
       <div css={[codeLineStyles, highlight && highlightedLineStyles]}>
         <code css={codeStyles}>{children}</code>
         <div css={inlineStyles} contentEditable={false}>
