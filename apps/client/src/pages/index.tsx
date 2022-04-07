@@ -37,7 +37,6 @@ const Index = ({ pageProps = {} }: AppProps): ReturnType<FC> => {
   return (
     <>
       <Head>
-        <title>Decipad — Make sense of numbers</title>
         <link
           href="/assets/favicon.png"
           rel="shortcut icon"
