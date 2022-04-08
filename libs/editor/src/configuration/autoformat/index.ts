@@ -1,3 +1,4 @@
+import { autoformatArrow, autoformatPunctuation } from '@udecode/plate';
 import { autoformatBlocks } from './autoformatBlocks';
 import { autoformatLinks } from './autoformatLinks';
 import { autoformatLists } from './autoformatLists';
@@ -8,4 +9,6 @@ export const autoformatRules = [
   ...autoformatLists,
   ...autoformatMarks,
   ...autoformatLinks,
+  ...autoformatPunctuation,
+  ...autoformatArrow,
 ];
