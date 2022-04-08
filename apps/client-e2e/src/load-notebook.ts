@@ -3,6 +3,7 @@ import {
   createPadFromUpdates,
   getPadName,
   navigateToNotebook,
+  navigateToNotebookWithClassicUrl,
   setUp,
   waitForEditorToLoad,
 } from './page-utils/Pad';
@@ -41,5 +42,16 @@ describe('load notebook', () => {
     ).toBeDefined();
 
     expect(await page.$('text=756,869,701')).toBeDefined();
+  });
+
+  it('old-style URLs work and pass on search params', async () => {
+    await navigateToNotebookWithClassicUrl(notebook.id, '?searchParam=foo');
+    // some time for the notebook to render
+    await page.waitForTimeout(1000);
+    await waitForEditorToLoad();
+    expect(await getPadName()).toBe(
+      'Negotiating your VC first priced round as a founder'
+    );
+    expect(new URL(page.url()).searchParams.get('searchParam')).toEqual('foo');
   });
 });

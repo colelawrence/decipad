@@ -98,9 +98,12 @@ export async function navigateToNotebook(notebookId: string) {
   await page.goto(`/n/pad-title:${notebookId}`);
 }
 
-export async function navigateToNotebookWithClassicUrl(notebookId: string) {
+export async function navigateToNotebookWithClassicUrl(
+  notebookId: string,
+  searchParams = ''
+) {
   await page.goto(
-    `/workspaces/ignoredWorkspaceId/pads/pad-title:${notebookId}`
+    `/workspaces/ignoredWorkspaceId/pads/pad-title:${notebookId}${searchParams}`
   );
 }
 
