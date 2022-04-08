@@ -3,7 +3,6 @@ import React, { Fragment, useState, useEffect } from 'react';
 import Editor from 'react-simple-code-editor';
 import Highlight, { Prism } from 'prism-react-renderer';
 import { nanoid } from 'nanoid';
-import { BehaviorSubject } from 'rxjs';
 // eslint-disable-next-line import/no-unresolved
 import useIsBrowser from '@docusaurus/useIsBrowser';
 // eslint-disable-next-line import/no-unresolved
@@ -18,27 +17,17 @@ const {
   CodeResult,
 } = require('../../../../../../../libs/ui/src/organisms/CodeResult/CodeResult');
 
-const {
-  useResults,
-  ResultsContext,
-  defaultResults,
-} = require('../../../../../../../libs/react-contexts/src/index');
-
 function identityFn(o) {
   return o;
 }
 
-function Preview({ blockId }) {
-  const { blockResults } = useResults();
-  const block = blockResults[blockId];
+function Preview({ result }) {
+  if (!result) {
+    return;
+  }
   return (
     <div className={styles.playgroundPreview}>
-      {block?.results[0] && (
-        <CodeResult
-          type={block.results[0].type}
-          value={block.results[0].value}
-        />
-      )}
+      {result && <CodeResult type={result.type} value={result.value} />}
     </div>
   );
 }
@@ -46,10 +35,10 @@ function Preview({ blockId }) {
 function LivePreviewOrError({ code: liveCode }) {
   const [blockId] = useState(nanoid);
   const [computer] = useState(() => new Computer());
-  const [resultsContext] = useState(() => new BehaviorSubject(defaultResults));
   const [code, setCode] = useState(null);
   const [needsCompute, setNeedsCompute] = useState(false);
   const [error, setError] = useState(null);
+  const [result, setResult] = useState(null);
 
   useEffect(() => {
     let timeout;
@@ -92,39 +81,42 @@ function LivePreviewOrError({ code: liveCode }) {
         setError(err);
       }
     }
-  }, [blockId, code, computer, needsCompute, resultsContext]);
+  }, [blockId, code, computer, needsCompute]);
 
   useEffect(() => {
     const subscription = computer.results.subscribe(({ blockResults }) => {
-      const result = blockResults[blockId];
-      if (!result) {
+      const r = blockResults[blockId];
+      if (!r) {
         return;
       }
-      if (result.error) {
-        setError(result.error.message);
+      if (r.error) {
+        setError(r.error.message);
         return;
       }
-      const blockResult = result.results.find((r) => r.blockId === blockId);
-      if (!blockResult) {
-        return;
-      }
-      if (blockResult.type === 'compute-panic') {
-        setError(new Error(result.message));
-      } else if (blockResult.type.kind === 'type-error') {
-        const inferError = new InferError(blockResult.type.errorCause);
-        setError(new Error(inferError.message));
-      } else {
-        setError(null);
-      }
+      const results = r.results.filter((res) => res.blockId === blockId);
+
+      results.forEach((res) => {
+        if (res.type === 'compute-panic') {
+          setResult(null);
+          setError(new Error(res.message));
+        } else if (res.type.kind === 'type-error') {
+          const inferError = new InferError(res.type.errorCause);
+          setResult(null);
+          setError(new Error(inferError.message));
+        } else {
+          setResult(res);
+          setError(null);
+        }
+      });
     });
     return () => subscription.unsubscribe();
-  }, [blockId, computer]);
+  }, [blockId, computer, result?.error?.message, result?.message]);
 
   return (
-    <ResultsContext.Provider value={computer.results}>
+    <>
       <LiveError error={error} />
-      <Preview blockId={blockId} />
-    </ResultsContext.Provider>
+      {result && <Preview result={result} />}
+    </>
   );
 }
 
