@@ -4,30 +4,28 @@
   "editor.formatOnSave": true,
   "cSpell.userWords": ["decipad"],
   "explorer.compactFolders": false,
-  "[typescript]": {
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": false
-    }
-  },
-  "[typescriptreact]": {
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": false
-    }
-  },
   "cSpell.words": [
+    "backendtypes",
     "boomify",
     "Buildable",
     "cacheable",
     "camelcase",
+    "customerservice",
     "DECI",
     "docsync",
+    "externaldata",
+    "fnqueue",
     "frontends",
     "functionness",
     "GOOGLESHEETS",
+    "graphqlresource",
     "graphqlserver",
+    "indexeddb",
+    "lambdawebsocket",
     "NEXTAUTH",
     "nrwl",
     "Superadmins",
+    "testutils",
     "Topbar",
     "udecode"
   ]
