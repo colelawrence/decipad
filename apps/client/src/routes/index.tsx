@@ -19,11 +19,26 @@ export function Router(): ReturnType<FC> {
       </Route>
       <Redirect from="/workspaces/**" to={`${workspaces.template}/**`} />
       <Route path={workspaces.template + workspaces({}).workspace.template}>
-        <RequireSession>
-          <RouteEvents category="workspace">
-            <Workspace />
-          </RouteEvents>
-        </RequireSession>
+        <Switch>
+          <Redirect
+            // redirect legacy notebook path for a while
+            exact
+            from={`${workspaces.template}${
+              workspaces({}).workspace.template
+            }/pads${notebooks({}).notebook.template}`}
+            to={{
+              pathname: notebooks.template + notebooks({}).notebook.template,
+              search: window.location.search,
+            }}
+          />
+          <Route>
+            <RequireSession>
+              <RouteEvents category="workspace">
+                <Workspace />
+              </RouteEvents>
+            </RequireSession>
+          </Route>
+        </Switch>
       </Route>
       <Route path={notebooks.template + notebooks({}).notebook.template}>
         <RequireSession allowSecret>
