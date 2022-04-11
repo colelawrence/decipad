@@ -15,13 +15,13 @@ export const autoformatBlocks: AutoformatRule[] = [
   {
     mode: 'block',
     type: ELEMENT_H2,
-    match: '## ',
+    match: '# ',
     query: doesSelectionAllowTextStyling,
   },
   {
     mode: 'block',
     type: ELEMENT_H3,
-    match: '### ',
+    match: '## ',
     query: doesSelectionAllowTextStyling,
   },
   {

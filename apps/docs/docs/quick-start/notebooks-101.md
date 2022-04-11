@@ -50,8 +50,8 @@ Besides the menu styling menu that pops up when you select text, Decipad support
 
 ### Full Block Commands
 
-- `##` followed by a `space` to create an **heading 1**
-- `###` followed by a `space` to create an **heading 2**
+- `#` followed by a `space` to create an **Heading**
+- `##` followed by a `space` to create an **Sub-heading**
 - \`\`\`followed by a`space` to create a **calculations block**
 - `-` or `*` followed by a `space` to create a **bullet list**
 - `1.` followed by a `space` to create a **numbered list**

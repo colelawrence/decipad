@@ -24,7 +24,6 @@ beforeEach(() => {
 describe('a block', () => {
   it('can be changed from paragraph to another type', () => {
     editor.insertText('#');
-    editor.insertText('#');
     editor.insertText(' ');
     expect(editor.children).toMatchObject([{ type: ELEMENT_H2 }]);
   });
