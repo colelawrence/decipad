@@ -1,11 +1,14 @@
+import { ComponentProps } from 'react';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { createMemoryHistory } from 'history';
+import { createMemoryHistory, History } from 'history';
 import { MemoryRouter, Router } from 'react-router-dom';
 import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
 import { mockConsoleWarn } from '@decipad/testutils';
 import { noop } from '@decipad/utils';
 import { NavigationItem } from './NavigationItem';
+
+type ExpectedHistory = ComponentProps<typeof Router>['history'];
 
 it('renders the children', () => {
   const { getByText } = render(
@@ -75,9 +78,11 @@ describe('with a router', () => {
 
   describe('and the exact prop', () => {
     it('is not considered active on sub-routes', async () => {
-      const history = createMemoryHistory({ initialEntries: ['/page'] });
+      const history: History = createMemoryHistory({
+        initialEntries: ['/page'],
+      });
       const { getByText } = render(
-        <Router history={history}>
+        <Router history={history as unknown as ExpectedHistory}>
           <NavigationItem exact href="/page">
             Text
           </NavigationItem>

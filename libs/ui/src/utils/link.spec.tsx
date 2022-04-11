@@ -1,3 +1,4 @@
+import { ComponentProps } from 'react';
 import { Router, MemoryRouter, StaticRouter } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { css } from '@emotion/react';
@@ -5,8 +6,9 @@ import { render, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { docs } from '@decipad/routing';
 import { mockConsoleError } from '@decipad/testutils';
-
 import { Anchor, resolveHref } from './link';
+
+type ExpectedHistory = ComponentProps<typeof Router>['history'];
 
 describe('resolveHref', () => {
   it.each`
@@ -197,7 +199,7 @@ describe('Anchor', () => {
       it('does not apply the active styles when on a sub page and exact is set', () => {
         const history = createMemoryHistory({ initialEntries: ['/page'] });
         const { getByText } = render(
-          <Router history={history}>
+          <Router history={history as unknown as ExpectedHistory}>
             <Anchor exact href="/page" activeStyles={css({ color: 'red' })}>
               text
             </Anchor>
