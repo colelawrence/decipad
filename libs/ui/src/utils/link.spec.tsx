@@ -156,7 +156,7 @@ describe('Anchor', () => {
         >
           text
         </Anchor>,
-        { wrapper: StaticRouter }
+        { wrapper: (props) => <StaticRouter {...props} /> }
       );
       const anchor = getByRole('link') as HTMLAnchorElement;
       expect(fireEvent.click(anchor)).toBe(false);
@@ -168,7 +168,7 @@ describe('Anchor', () => {
           <Anchor href={`#fragment`}>text</Anchor>
           <main id="fragment">text</main>
         </>,
-        { wrapper: StaticRouter }
+        { wrapper: (props) => <StaticRouter {...props} /> }
       );
       const main = getByRole('main');
       const spyScrollIntoView = jest.spyOn(main, 'scrollIntoView');

@@ -81,6 +81,6 @@ export function withLock<RecordType extends VersionedTableRecord>(
 
       throw err;
     }
-    return newRecord as RecordType;
+    return newRecord as unknown as RecordType;
   };
 }

@@ -1,5 +1,5 @@
 import { Table, Type, Vector, vectorFromArray, Utf8 } from 'apache-arrow';
-import parseCSV from 'csv-parse';
+import { parse as parseCSV } from 'csv-parse';
 import { cast } from './cast';
 import { bufferBody } from './buffer-body';
 import { RuntimeError } from '../interpreter';

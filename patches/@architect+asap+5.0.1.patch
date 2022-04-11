@@ -32,7 +32,7 @@ index 4088699..ff1d493 100644
    let { ARC_STATIC_BUCKET, ARC_STATIC_PREFIX: staticPrefix } = process.env
    let headers = {}
 diff --git a/node_modules/@architect/asap/src/read/_s3.js b/node_modules/@architect/asap/src/read/_s3.js
-index 57b01e6..acacb51 100644
+index d43d62c..88b5bb8 100644
 --- a/node_modules/@architect/asap/src/read/_s3.js
 +++ b/node_modules/@architect/asap/src/read/_s3.js
 @@ -75,6 +75,8 @@ module.exports = async function readS3 (params) {

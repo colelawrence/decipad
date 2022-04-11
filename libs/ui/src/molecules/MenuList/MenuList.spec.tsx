@@ -59,7 +59,9 @@ describe('the dropdown root MenuList', () => {
         {null}
       </MenuList>
     );
-    userEvent.click(getByText('trigger'));
+    userEvent.click(getByText('trigger'), undefined, {
+      skipPointerEventsCheck: true,
+    });
     expect(handleChangeOpen).toHaveBeenLastCalledWith(true);
   });
 
@@ -134,7 +136,9 @@ describe('the non-root MenuList', () => {
     );
     expect(queryByText('nested item')).not.toBeInTheDocument();
 
-    userEvent.click(getByText('item'));
+    userEvent.click(getByText('item'), undefined, {
+      skipPointerEventsCheck: true,
+    });
     expect(getByText('nested item')).toBeInTheDocument();
   });
 

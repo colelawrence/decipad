@@ -28,7 +28,7 @@ const textDragEventProps = (text: string) => {
             getAsString() {
               return text;
             }
-            webkitGetAsEntry() {
+            webkitGetAsEntry(): FileSystemEntry | null {
               throw new Error("This ain't webkit");
             }
           })()
@@ -59,7 +59,7 @@ const fileDragEventProps = (files: File[]) => {
                 getAsString() {
                   throw new Error('Sir this is a file');
                 }
-                webkitGetAsEntry() {
+                webkitGetAsEntry(): FileSystemEntry | null {
                   throw new Error("This ain't webkit");
                 }
               })()

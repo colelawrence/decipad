@@ -108,9 +108,15 @@ it('can delete the block', () => {
   ]);
 });
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 const originalCaretPositionFromPoint: typeof document.caretPositionFromPoint =
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   document.caretPositionFromPoint;
 afterEach(() => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   document.caretPositionFromPoint = originalCaretPositionFromPoint;
 });
 it('can move the block', () => {
@@ -128,6 +134,8 @@ it('can move the block', () => {
   expect(dragHandles).toHaveLength(2);
   const [firstDragHandle] = dragHandles;
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   document.caretPositionFromPoint = (x, y) => {
     if (x !== 100 || y !== 100)
       throw new Error('Do not know position for this point');

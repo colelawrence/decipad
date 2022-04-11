@@ -1,0 +1,14 @@
+diff --git a/node_modules/patch-package/dist/makePatch.js b/node_modules/patch-package/dist/makePatch.js
+index 985589e..2c49096 100644
+--- a/node_modules/patch-package/dist/makePatch.js
++++ b/node_modules/patch-package/dist/makePatch.js
+@@ -64,7 +64,8 @@ function makePatch({ packagePathSpecifier, appPath, packageManager, includePaths
+                 fs_extra_2.copySync(rcPath, path_1.join(tmpRepo.name, rcFile));
+             }
+         });
+-        if (packageManager === "yarn") {
++        // for some reason yarn doesnt work on my system. Using npm fixes it.
++        if (false && packageManager === "yarn") {
+             console.info(chalk_1.default.grey("•"), `Installing ${packageDetails.name}@${packageVersion} with yarn`);
+             try {
+                 // try first without ignoring scripts in case they are required

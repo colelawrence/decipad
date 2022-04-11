@@ -1,5 +1,5 @@
 import { Table, Type, Utf8, Vector, vectorFromArray } from 'apache-arrow';
-import parseCSV from 'csv-parse';
+import { parse as parseCSV } from 'csv-parse';
 import { cast } from './cast';
 
 type AcceptableCellType = number | boolean | string | Date;

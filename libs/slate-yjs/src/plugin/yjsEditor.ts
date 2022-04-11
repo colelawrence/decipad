@@ -95,7 +95,8 @@ function applyLocalOperations(editor: YjsEditor): void {
  * Apply Yjs events to slate
  */
 
-const yjsApply = (editor: YjsEditor, events: Y.YEvent[]) =>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const yjsApply = (editor: YjsEditor, events: Y.YEvent<any>[]) =>
   SlateEditor.withoutNormalizing(editor as unknown as SlateEditor, () =>
     YjsEditor.asRemote(editor, () => {
       try {
@@ -111,7 +112,11 @@ const yjsApply = (editor: YjsEditor, events: Y.YEvent[]) =>
     })
   );
 
-function applyRemoteYjsEvents(_editor: YjsEditor, events: Y.YEvent[]): void {
+function applyRemoteYjsEvents(
+  _editor: YjsEditor,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  events: Y.YEvent<any>[]
+): void {
   if (HistoryEditor.isHistoryEditor(_editor)) {
     HistoryEditor.withoutSaving(_editor, () => {
       yjsApply(_editor, events);

@@ -36,9 +36,12 @@ describe.each([
       <InteractiveInputMenu {...props} {...testProp} />
     );
 
-    userEvent.click(await findByText(/trigger/i));
-    userEvent.click(await findByText(text));
-
+    userEvent.click(await findByText(/trigger/i), undefined, {
+      skipPointerEventsCheck: true,
+    });
+    userEvent.click(await findByText(text), undefined, {
+      skipPointerEventsCheck: true,
+    });
     expect(testProp[prop]).toHaveBeenCalledTimes(1);
   });
 });

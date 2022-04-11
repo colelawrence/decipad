@@ -21,7 +21,6 @@ describe('Ctrl+b', () => {
         new KeyboardEvent('keydown', {
           key: 'b',
           ctrlKey: true,
-          // @ts-expect-error nonstandard but widely supported property
           which: 66,
         })
       );
