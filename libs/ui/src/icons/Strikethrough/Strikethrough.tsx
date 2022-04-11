@@ -5,7 +5,6 @@ export const Strikethrough = (): ReturnType<FC> => {
   return (
     <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
       <title>Strikethrough</title>
-
       <path
         d="M2.5 8.41681H13.3334"
         stroke={cssVar('normalTextColor')}
