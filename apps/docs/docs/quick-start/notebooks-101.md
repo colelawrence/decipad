@@ -56,6 +56,8 @@ Besides the menu styling menu that pops up when you select text, Decipad support
 - `-` or `*` followed by a `space` to create a **bullet list**
 - `1.` followed by a `space` to create a **numbered list**
 - `>` followed by a `space` to create a **block quote**
+- `>!` followed by a `space` to create a **callout**
+- `---` followed by a `space` to create a **divider**
 
 ### Inline Text Formatting Commands
 
