@@ -10,8 +10,10 @@ export const ClosableModal = ({
 }: ClosableModalProps): ReturnType<React.FC> => {
   return (
     <Modal closeAction={props.closeAction}>
-      <ClosableModalHeader {...props} />
-      {children}
+      <div css={{ display: 'grid', rowGap: '12px' }}>
+        <ClosableModalHeader {...props} />
+        {children}
+      </div>
     </Modal>
   );
 };

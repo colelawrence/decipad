@@ -34,10 +34,10 @@ const dialogStyles = css({
   maxHeight: '75%',
   overflowY: 'auto',
 
-  padding: '12px',
+  padding: '24px',
   backgroundColor: cssVar('backgroundColor'),
   border: `1px solid ${grey300.rgb}`,
-  borderRadius: '8px',
+  borderRadius: '10px',
   boxShadow: `
     0px 2px 20px ${transparency(grey700, 0.04).rgba},
     0px 2px 8px ${transparency(black, 0.02).rgba}

@@ -130,6 +130,12 @@ export const p14Medium: TypographyStyles = {
   fontSize: `${14 / usualRemPxs}rem`,
   lineHeight: 1.4,
 };
+export const p15Regular: TypographyStyles = {
+  ...pDefault,
+  fontSize: `${15 / usualRemPxs}rem`,
+  lineHeight: 1.4,
+  letterSpacing: '-0.002em',
+};
 export const p15Medium: TypographyStyles = {
   ...pDefault,
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
@@ -154,6 +160,11 @@ export const p18Regular: TypographyStyles = {
   fontSize: `${18 / usualRemPxs}rem`,
   lineHeight: 1.45,
   letterSpacing: '-0.2px',
+};
+export const p20Medium: TypographyStyles = {
+  ...pDefault,
+  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
+  fontWeight: 500,
 };
 export const p24Bold: TypographyStyles = {
   ...pDefault,

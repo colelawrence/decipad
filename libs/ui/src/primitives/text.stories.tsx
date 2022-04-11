@@ -16,8 +16,10 @@ import {
   p14Medium,
   p14Regular,
   p15Medium,
+  p15Regular,
   p16Regular,
   p18Regular,
+  p20Medium,
   p24Bold,
   p32Medium,
 } from './text';
@@ -67,6 +69,9 @@ export const P14Regular: React.FC = ({ children }) => (
 export const P14Medium: React.FC = ({ children }) => (
   <p css={css(p14Medium)}>{children}</p>
 );
+export const P15Regular: React.FC = ({ children }) => (
+  <p css={css(p15Regular)}>{children}</p>
+);
 export const P15Medium: React.FC = ({ children }) => (
   <p css={css(p15Medium)}>{children}</p>
 );
@@ -78,6 +83,9 @@ export const P16Bold: React.FC = ({ children }) => (
 );
 export const P18Regular: React.FC = ({ children }) => (
   <p css={css(p18Regular)}>{children}</p>
+);
+export const P20Medium: React.FC = ({ children }) => (
+  <p css={css(p20Medium)}>{children}</p>
 );
 export const P24Bold: React.FC = ({ children }) => (
   <p css={css(p24Bold)}>{children}</p>
