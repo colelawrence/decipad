@@ -24,10 +24,9 @@ export const CreateWorkspace = (
 
   const toast = useToast();
 
-  const [mutate] =
-    useMutation<CreateWorkspaceResult, CreateWorkspaceVariables>(
-      CREATE_WORKSPACE
-    );
+  const [mutate] = useMutation<CreateWorkspaceResult, CreateWorkspaceVariables>(
+    CREATE_WORKSPACE
+  );
 
   const createNewWorkspace = (name: string) => {
     mutate({

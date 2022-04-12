@@ -49,8 +49,9 @@ export function Workspace(): ReturnType<FC> {
   );
 
   const [removePad] = useMutation<RemovePad, RemovePadVariables>(REMOVE_PAD);
-  const [duplicatePad] =
-    useMutation<DuplicatePad, DuplicatePadVariables>(DUPLICATE_PAD);
+  const [duplicatePad] = useMutation<DuplicatePad, DuplicatePadVariables>(
+    DUPLICATE_PAD
+  );
   const [createPad] = useMutation<CreatePad, CreatePadVariables>(CREATE_PAD, {
     refetchQueries: [
       { query: GET_WORKSPACES },

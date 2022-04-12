@@ -37,37 +37,37 @@ function credentialHasUserOrSecret(cred: AuthResult): boolean {
   return !!cred.user || !!cred.secret;
 }
 
-export const handler = handle(async (event: APIGatewayProxyEvent): Promise<
-  HttpResponse | string
-> => {
-  const credentials = await authenticate(event);
+export const handler = handle(
+  async (event: APIGatewayProxyEvent): Promise<HttpResponse | string> => {
+    const credentials = await authenticate(event);
 
-  const firstCompleteCredential = credentials.find(credentialHasUserOrSecret);
-  if (firstCompleteCredential && event.queryStringParameters?.for) {
-    const purposeName = event.queryStringParameters.for;
-    const purpose = purposes[purposeName];
-    if (!purpose) {
-      return {
-        statusCode: 406,
-        body: 'No such purpose',
-      };
+    const firstCompleteCredential = credentials.find(credentialHasUserOrSecret);
+    if (firstCompleteCredential && event.queryStringParameters?.for) {
+      const purposeName = event.queryStringParameters.for;
+      const purpose = purposes[purposeName];
+      if (!purpose) {
+        return {
+          statusCode: 406,
+          body: 'No such purpose',
+        };
+      }
+      if (firstCompleteCredential.user && firstCompleteCredential.secret) {
+        const token = await generateToken(
+          firstCompleteCredential.secret,
+          purpose
+        );
+        console.log('GENERATED NEW TOKEN:', token);
+        return token;
+      }
+      if (firstCompleteCredential.secret) {
+        return firstCompleteCredential.secret;
+      }
     }
-    if (firstCompleteCredential.user && firstCompleteCredential.secret) {
-      const token = await generateToken(
-        firstCompleteCredential.secret,
-        purpose
-      );
-      console.log('GENERATED NEW TOKEN:', token);
-      return token;
-    }
-    if (firstCompleteCredential.secret) {
-      return firstCompleteCredential.secret;
-    }
+    return {
+      statusCode: 403,
+    };
   }
-  return {
-    statusCode: 403,
-  };
-});
+);
 
 async function generateToken(
   secret: string,
