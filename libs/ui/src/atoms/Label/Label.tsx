@@ -2,7 +2,7 @@ import { nanoid } from 'nanoid';
 import { useState } from 'react';
 import { css } from '@emotion/react';
 import { codeBlock } from '../../styles';
-import { blue50, blue300 } from '../../primitives';
+import { cssVar } from '../../primitives';
 
 // If we get further types of labels,
 // consider pulling up the bubble styles into some Bubble Label molecule
@@ -16,8 +16,8 @@ const bubbleStyles = css(codeBlock.variableStyles, {
   padding: '4px 8px',
   borderRadius: '8px',
 
-  backgroundColor: blue50.rgb,
-  border: `solid 1px ${blue300.rgb}`,
+  backgroundColor: cssVar('highlightColor'),
+  border: `solid 1px ${cssVar('strongerHighlightColor')}`,
 });
 
 interface LabelProps {

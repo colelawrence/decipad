@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import { css } from '@emotion/react';
 import * as RadixDropdownMenu from '@radix-ui/react-dropdown-menu';
-import { grey300 } from '../../primitives';
+import { cssVar } from '../../primitives';
 
 const styles = css({
-  backgroundColor: grey300.rgb,
+  backgroundColor: cssVar('strongerHighlightColor'),
   height: 1,
   margin: '6px 6px',
 });

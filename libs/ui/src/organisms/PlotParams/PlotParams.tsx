@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { Label } from '../../atoms';
-import { blue50, cssVar, p12Medium } from '../../primitives';
+import { cssVar, p12Medium } from '../../primitives';
 
 type StringSetter = (str: string) => void;
 
@@ -46,7 +46,7 @@ interface SelectInputProps {
 const selectFontStyles = css(p12Medium);
 
 const selectStyles = css({
-  backgroundColor: blue50.rgb,
+  backgroundColor: cssVar('highlightColor'),
 });
 
 const SelectInput = ({

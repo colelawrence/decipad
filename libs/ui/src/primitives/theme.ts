@@ -3,6 +3,7 @@ import {
   brand500,
   grey100,
   grey200,
+  grey400,
   grey500,
   grey600,
   orange500,
@@ -25,6 +26,7 @@ export const darkTheme: Record<
 
   ...setCssVar('highlightColor', grey600.rgb),
   ...setCssVar('strongHighlightColor', grey500.rgb),
+  ...setCssVar('strongerHighlightColor', grey400.rgb),
 
   ...setCssVar('weakTextColor', grey200.rgb),
   ...setCssVar('normalTextColor', grey100.rgb),

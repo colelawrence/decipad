@@ -1,4 +1,4 @@
-import { findParentWithStyle } from '@decipad/dom-test-utils';
+import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
 import {
   CodeBlockElement,
   CodeLineElement,
@@ -20,6 +20,9 @@ import {
   createCodeLinePlugin,
   createCodeVariableHighlightPlugin,
 } from '..';
+
+let cleanup: undefined | (() => void);
+afterEach(() => cleanup?.());
 
 const PlateWrapper = ({
   children,
@@ -72,13 +75,18 @@ describe('variable highlights', () => {
     const { getByText, getAllByText } = render(
       <PlateWrapper children={children} computer={computer} />
     );
+    cleanup = await applyCssVars();
+    const bubbleBackgroundColor = findParentWithStyle(
+      getByText(/id/),
+      'backgroundColor'
+    )?.backgroundColor;
+    const normalBackgroundColor = findParentWithStyle(
+      getAllByText(/42/)[0],
+      'backgroundColor'
+    )?.backgroundColor;
+    cleanup();
 
-    expect(
-      findParentWithStyle(getByText(/id/), 'backgroundColor')!.backgroundColor
-    ).not.toEqual(
-      findParentWithStyle(getAllByText(/42/)[0], 'backgroundColor')
-        ?.backgroundColor
-    );
+    expect(bubbleBackgroundColor).not.toEqual(normalBackgroundColor);
   });
 
   it('show bubbles in usages of defined variables', async () => {
@@ -118,9 +126,18 @@ describe('variable highlights', () => {
     );
 
     const [xDecl, xUsage] = getAllByText(/x/);
-    expect(
-      findParentWithStyle(xDecl, 'backgroundColor')!.backgroundColor
-    ).toEqual(findParentWithStyle(xUsage, 'backgroundColor')!.backgroundColor);
+
+    cleanup = await applyCssVars();
+    const xDBackgroundColor = findParentWithStyle(
+      xDecl,
+      'backgroundColor'
+    )?.backgroundColor;
+    const xUBackgroundColor = findParentWithStyle(
+      xUsage,
+      'backgroundColor'
+    )?.backgroundColor;
+    cleanup();
+    expect(xDBackgroundColor).toEqual(xUBackgroundColor);
   });
 
   it('highlights defined columns of a table', async () => {
@@ -164,12 +181,14 @@ describe('variable highlights', () => {
       <PlateWrapper children={children} computer={computer} />
     );
 
+    cleanup = await applyCssVars();
     const [tableDecl, tableUsage, notTableUsage] = getAllByText(/MyTable/).map(
       (t) => findParentWithStyle(t, 'backgroundColor')
     );
     const colDecl = findParentWithStyle(getByText(/\.A/), 'backgroundColor');
     const colUse = findParentWithStyle(getAllByText(/A/)[0], 'backgroundColor');
     const notCol = findParentWithStyle(getByText(/\.B/), 'backgroundColor');
+    cleanup();
 
     expect(tableDecl!.backgroundColor).toEqual(tableUsage!.backgroundColor);
     expect(tableDecl?.backgroundColor).not.toEqual(
@@ -214,6 +233,7 @@ describe('variable highlights', () => {
     );
 
     const [colDecl, colUsage1, colUsage2] = getAllByText(/A/);
+    cleanup = await applyCssVars();
     expect(
       findParentWithStyle(colDecl, 'backgroundColor')!.backgroundColor
     ).toEqual(
@@ -254,6 +274,7 @@ describe('variable highlights', () => {
 
     const [colDecl, colUsage] = getAllByText(/A/);
     const [tableDecl, tableUsage] = getAllByText(/x/);
+    cleanup = await applyCssVars();
     expect(
       findParentWithStyle(colDecl, 'backgroundColor')!.backgroundColor
     ).toEqual(
@@ -303,6 +324,7 @@ describe('variable highlights', () => {
     );
 
     const [xDecl, xUsage] = getAllByText(/x/);
+    cleanup = await applyCssVars();
     expect(
       findParentWithStyle(xDecl, 'backgroundColor')!.backgroundColor
     ).toEqual(findParentWithStyle(xUsage, 'backgroundColor')!.backgroundColor);
@@ -355,6 +377,7 @@ describe('variable highlights', () => {
     );
 
     const [bVar, bColumn] = getAllByText(/B/);
+    cleanup = await applyCssVars();
     expect(
       findParentWithStyle(bVar, 'backgroundColor')?.backgroundColor
     ).not.toEqual(
@@ -399,7 +422,7 @@ describe('variable highlights', () => {
     );
 
     const [xDecl, xUsage] = getAllByText(/X/);
-
+    cleanup = await applyCssVars();
     expect(
       findParentWithStyle(xDecl, 'backgroundColor')!.backgroundColor
     ).toEqual(findParentWithStyle(xUsage, 'backgroundColor')!.backgroundColor);

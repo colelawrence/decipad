@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { Children, FC, ReactNode } from 'react';
 import { isElement } from 'react-is';
 import { noop } from '@decipad/utils';
-import { cssVar, grey200 } from '../../primitives';
+import { cssVar } from '../../primitives';
 import { Create } from '../../icons';
 import { TableHeader } from '../../atoms';
 import { EditableTableHeader } from '../../organisms';
@@ -14,7 +14,7 @@ const createColumnThStyles = css({
     backgroundColor: cssVar('strongHighlightColor'),
   },
 
-  boxShadow: `inset 0px -2px 0px ${grey200.rgb}`,
+  boxShadow: `inset 0px -2px 0px ${cssVar('strongHighlightColor')}`,
 
   // Each row is as tall as the tallest cell, so our rows are at least this high.
   minHeight: table.thMinHeight,

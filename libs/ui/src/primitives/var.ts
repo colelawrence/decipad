@@ -4,6 +4,7 @@ import {
   brand500,
   grey100,
   grey200,
+  grey300,
   grey500,
   grey600,
   offWhite,
@@ -29,6 +30,7 @@ export interface CssVariables {
 
   readonly highlightColor: Property.Color;
   readonly strongHighlightColor: Property.Color;
+  readonly strongerHighlightColor: Property.Color;
 
   // Text
 
@@ -49,6 +51,7 @@ const defaults: CssVariables = {
 
   highlightColor: grey100.rgb,
   strongHighlightColor: grey200.rgb,
+  strongerHighlightColor: grey300.rgb,
 
   weakTextColor: grey500.rgb,
   normalTextColor: grey600.rgb,

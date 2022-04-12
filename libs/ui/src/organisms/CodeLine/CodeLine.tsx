@@ -6,7 +6,6 @@ import { CodeError } from '../../atoms';
 import {
   code,
   cssVar,
-  grey300,
   p14Medium,
   p14Regular,
   setCssVar,
@@ -23,7 +22,7 @@ const spacingStyles = css({
 });
 
 const highlightedLineStyles = {
-  borderColor: grey300.rgb,
+  borderColor: cssVar('strongerHighlightColor'),
 };
 
 const codeLineStyles = css({

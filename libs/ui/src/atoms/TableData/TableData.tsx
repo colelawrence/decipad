@@ -1,12 +1,6 @@
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import {
-  cssVar,
-  grey600,
-  p12Medium,
-  p14Medium,
-  setCssVar,
-} from '../../primitives';
+import { cssVar, p12Medium, p14Medium, setCssVar } from '../../primitives';
 import { table } from '../../styles';
 import { tableRowCounter } from '../../utils';
 
@@ -24,7 +18,7 @@ const tdBaseStyles = css(p14Medium, {
 
   '&:focus-within': {
     borderRadius: '6px',
-    boxShadow: `0 0 0 1.5px ${grey600.rgb}`,
+    boxShadow: `0 0 0 1.5px ${cssVar('normalTextColor')}`,
     zIndex: 1,
   },
 

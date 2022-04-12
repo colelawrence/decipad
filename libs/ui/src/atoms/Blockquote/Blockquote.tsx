@@ -1,7 +1,7 @@
 import { useIsBlockActive } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
-import { cssVar, grey100, setCssVar } from '../../primitives';
+import { cssVar, setCssVar } from '../../primitives';
 import { blockAlignment } from '../../styles';
 
 const verticalPadding = '6px';
@@ -13,7 +13,7 @@ const styles = css(
   {
     margin: `${verticalMargin} auto`,
     padding: `${verticalPadding} 30px ${verticalPadding} 12px`,
-    borderLeft: `4px solid ${grey100.rgb}`,
+    borderLeft: `4px solid ${cssVar('highlightColor')}`,
     wordBreak: 'break-word',
   }
 );
