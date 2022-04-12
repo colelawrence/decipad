@@ -9,7 +9,7 @@ import {
 import { tokenize } from '@decipad/language';
 import { pluginStore } from '@decipad/editor-utils';
 import { getBlockAbove, setNodes } from '@udecode/plate';
-import { NodeEntry } from 'slate';
+import { NodeEntry, Node } from 'slate';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 
 type LastFormattedBlock = null | {
@@ -94,16 +94,23 @@ export const createAutoFormatCodeBlockPlugin = createOnKeyDownPluginFactory({
 
         const [node, path] = entry as NodeEntry<CodeLineElement>;
 
+        const nodeText = Node.string(node);
+
+        if (nodeText === '') {
+          event.preventDefault();
+          setNodes(editor, { type: ELEMENT_PARAGRAPH }, { at: path });
+        }
+
         const { lastFormattedBlock } = store;
+
         if (
           lastFormattedBlock &&
           node.id === lastFormattedBlock.id &&
-          node.children[0].text === lastFormattedBlock.text
+          nodeText === lastFormattedBlock.text
         ) {
           event.preventDefault();
           setNodes(editor, { type: ELEMENT_PARAGRAPH }, { at: path });
-
-          if (!node.children[0].text.endsWith('=')) {
+          if (!nodeText.endsWith('=')) {
             editor.insertText('=');
           }
           delete store.lastFormattedBlock;

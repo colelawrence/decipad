@@ -138,6 +138,12 @@ describe('Auto format code line plugin', () => {
     expect(editor.children).toEqual(makeCodeLine('a '));
   });
 
+  it('when removing a codeline it inserts a paragraph', () => {
+    renderEditorCodeLine('');
+    pressKey('Backspace');
+    expect(editor.children).toEqual(makeParagraph(''));
+  });
+
   it('does not format a paragraph that has spaces at the start', () => {
     renderEditorParagraph('      a ');
     pressKey('=');
