@@ -1,5 +1,6 @@
-import { CSSObject, Interpolation } from '@emotion/react';
+import { CSSObject, Global } from '@emotion/react';
 import { cssVar, setCssVar } from './var';
+import { allianceNo1Medium } from '../fonts';
 
 export type TypographyStyles = Readonly<
   Required<
@@ -40,11 +41,11 @@ const hDefault: TypographyStyles = {
 
 export const banner: TypographyStyles = {
   ...hDefault,
+  fontFamily: allianceNo1Medium.name,
   fontSize: `${56 / usualRemPxs}rem`,
   fontWeight: 400,
   letterSpacing: '-0.01em',
   lineHeight: 1.05,
-  fontFeatureSettings: "'ss04' on, 'ss09' on, 'ss01' on",
 };
 export const display: TypographyStyles = {
   ...hDefault,
@@ -185,15 +186,21 @@ export const code: TypographyStyles = {
 
 // global
 
-export const globalTextStyles: Interpolation<unknown> = [
-  // @import is not as good for performance as <link rel>, but the web font URLs will need to change with changes to the styles above,
-  // so it's good to have them co-located, which if using <link> would be more difficult to achieve.
-  `@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600);`,
-  {
-    html: {
-      ...pDefault,
-      textRendering: 'optimizeLegibility',
-      fontSmoothing: 'antialiased',
-    },
-  },
-];
+export const GlobalTextStyles = (): ReturnType<React.FC> => (
+  <>
+    {/* @import is not as good for performance as <link rel>, but the web font URLs will need to change with changes to the styles above,
+        so it's good to have them co-located, which if using <link> would be more difficult to achieve.
+        While these text styles are still undergoing frequent changes, let's keep it like this. */}
+    <Global styles="@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600');" />
+    <Global styles={allianceNo1Medium.atRule} />
+    <Global
+      styles={{
+        html: {
+          ...pDefault,
+          textRendering: 'optimizeLegibility',
+          fontSmoothing: 'antialiased',
+        },
+      }}
+    />
+  </>
+);

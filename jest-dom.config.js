@@ -11,7 +11,7 @@ module.exports = {
 
   transform: {
     ...transform,
-    '\\.(gif|jpg|png|svg)$': require.resolve(
+    '\\.(gif|jpg|png|svg|woff|woff2|otf)$': require.resolve(
       './libs/testutils/src/filename-transform.js'
     ),
     '\\.css\\?raw$': require.resolve(

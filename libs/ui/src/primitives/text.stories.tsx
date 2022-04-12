@@ -93,7 +93,7 @@ export const Code: React.FC = ({ children }) => (
 // make sure all types of text are covered by stories
 if (
   Object.keys(storyExports).filter((name) => name !== 'default').length !==
-  Object.keys(textExports).filter((name) => name !== 'globalTextStyles').length
+  Object.keys(textExports).filter((name) => name !== 'GlobalTextStyles').length
 )
   console.error(
     'Not all text styles covered by stories! Text style exports:',

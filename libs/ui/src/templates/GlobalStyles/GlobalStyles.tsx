@@ -5,7 +5,7 @@ import { Global } from '@emotion/react';
 import emotionNormalize from 'emotion-normalize';
 import emotionReset from 'emotion-reset';
 
-import { cssVar, darkTheme, globalTextStyles } from '../../primitives';
+import { cssVar, darkTheme, GlobalTextStyles } from '../../primitives';
 import { ALLOW_DARK_THEME_LOCAL_STORAGE_KEY } from '../../utils';
 
 const allowDarkTheme = () =>
@@ -48,7 +48,7 @@ export const GlobalStyles: React.FC = ({ children }) => (
         },
       }}
     />
-    <Global styles={globalTextStyles} />
+    <GlobalTextStyles />
     <DarkThemeStyles />
     {children}
   </>
