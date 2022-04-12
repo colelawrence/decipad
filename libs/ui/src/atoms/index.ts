@@ -7,6 +7,7 @@ export { Callout } from './Callout/Callout';
 export { CellInput } from './CellInput/CellInput';
 export { Code } from './Code/Code';
 export { CodeError } from './CodeError/CodeError';
+export { CodeSyntax } from './CodeSyntax/CodeSyntax';
 export { CodeVariable } from './CodeVariable/CodeVariable';
 export { DateResult } from './DateResult/DateResult';
 export { Display } from './Display/Display';

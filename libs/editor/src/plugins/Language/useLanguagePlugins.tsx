@@ -3,6 +3,7 @@ import { createPlugins, PlatePlugin } from '@udecode/plate';
 import { useMemo } from 'react';
 import { useComputer } from '@decipad/react-contexts';
 import { createCodeLinePlugin } from '@decipad/editor-plugins';
+import { createVariableDefPlugin } from '@decipad/editor-variable-def';
 import { createCursorsPlugin } from './cursorsPlugin';
 import { createUpdateComputerPlugin } from './updateComputerPlugin';
 
@@ -17,6 +18,7 @@ export const useLanguagePlugin = (): PlatePlugin => {
           createCodeLinePlugin(computer),
           createCursorsPlugin(computer),
           createUpdateComputerPlugin(computer),
+          createVariableDefPlugin(computer),
         ]),
       [computer]
     ),

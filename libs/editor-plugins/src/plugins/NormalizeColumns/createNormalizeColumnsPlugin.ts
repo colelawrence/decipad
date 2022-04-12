@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { ELEMENT_COLUMNS, ELEMENT_INPUT } from '@decipad/editor-types';
+import { ELEMENT_COLUMNS, ELEMENT_VARIABLE_DEF } from '@decipad/editor-types';
 import { isElement, isText, TDescendant } from '@udecode/plate';
 import { Editor, Node, NodeEntry, Transforms } from 'slate';
 import { createNormalizerPluginFactory } from '../../pluginFactories';
@@ -12,7 +12,7 @@ const normalizeColumns = (editor: Editor) => (entry: NodeEntry) => {
 
       if (
         isText(childNode) ||
-        (isElement(childNode) && childNode.type !== ELEMENT_INPUT)
+        (isElement(childNode) && childNode.type !== ELEMENT_VARIABLE_DEF)
       ) {
         Transforms.liftNodes(editor, { at: childPath });
         return true;
@@ -33,5 +33,6 @@ const normalizeColumns = (editor: Editor) => (entry: NodeEntry) => {
 
 export const createNormalizeColumnsPlugin = createNormalizerPluginFactory({
   name: 'NORMALIZE_COLUMNS_PLUGIN',
+  elementType: ELEMENT_COLUMNS,
   plugin: normalizeColumns,
 });

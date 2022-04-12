@@ -6,3 +6,5 @@ export * from './selection';
 export * from './codeBlock';
 export * from './pluginStore';
 export * from './layout';
+export * from './getSyntaxErrorRanges';
+export * from './decorateTextSyntax';

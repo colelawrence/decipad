@@ -1,16 +1,91 @@
+import { isElement } from '@decipad/editor-types';
 import { PlateEditor, createPluginFactory, WithOverride } from '@udecode/plate';
-import { Editor, NodeEntry } from 'slate';
+import { Element, Editor, NodeEntry, Transforms, Node } from 'slate';
 
 type NormalizerPlugin = (editor: Editor) => (entry: NodeEntry) => boolean;
 
-const withNormalizerOverride = (plugin: NormalizerPlugin): WithOverride => {
+type ElementWithType = Element & { type: string };
+interface NormalizerPluginProps {
+  name: string;
+  elementType?: ElementWithType['type'];
+  acceptableElementProperties?: string[];
+  acceptableSubElements?: string[];
+  plugin?: NormalizerPlugin;
+}
+
+type NormalizerOverrideProps = Omit<NormalizerPluginProps, 'name'>;
+
+const EXPECTED_ELEMENT_PROPERTIES = ['type', 'id', 'children'];
+
+const withRemoveUnacceptableElementProperties = (
+  editor: Editor,
+  acceptableElementProperties: NormalizerPluginProps['acceptableElementProperties'] = [],
+  acceptableSubElements: NormalizerPluginProps['acceptableSubElements'] = []
+) => {
+  const acceptable = new Set(
+    [...acceptableElementProperties].concat(EXPECTED_ELEMENT_PROPERTIES)
+  );
+  const acceptableSubElementNames = new Set(acceptableSubElements);
+  const isNotAcceptableSubElement = (node: Node): boolean => {
+    return !isElement(node) || !acceptableSubElementNames.has(node.type);
+  };
+  return (entry: NodeEntry): boolean => {
+    const [node, path] = entry;
+    const propertiesToRemove: string[] = [];
+    for (const key of Object.keys(node)) {
+      if (!acceptable.has(key)) {
+        propertiesToRemove.push(key);
+      }
+    }
+    if (propertiesToRemove.length > 0) {
+      Transforms.unsetNodes(editor, propertiesToRemove, { at: path });
+      return true;
+    }
+    if (isElement(node)) {
+      const removeIndex =
+        node?.children?.findIndex(isNotAcceptableSubElement) || -1;
+      if (removeIndex >= 0) {
+        const removePath = [...path, removeIndex];
+        Transforms.delete(editor, { at: removePath });
+        return true;
+      }
+    }
+
+    return false;
+  };
+};
+
+const withNormalizerOverride = ({
+  plugin,
+  elementType,
+  acceptableElementProperties,
+  acceptableSubElements,
+}: NormalizerOverrideProps): WithOverride => {
   return (editor: PlateEditor) => {
     const { normalizeNode } = editor;
-    const newNormalize = plugin(editor);
+    const newNormalize = plugin && plugin(editor);
+
+    const removeUnacceptableElementProperties =
+      withRemoveUnacceptableElementProperties(
+        editor,
+        acceptableElementProperties,
+        acceptableSubElements
+      );
+
     // eslint-disable-next-line no-param-reassign
     editor.normalizeNode = (entry: NodeEntry) => {
-      if (newNormalize(entry)) {
-        return;
+      const [node] = entry;
+      if (!elementType || Element.isElement(node)) {
+        if (elementType && (node as ElementWithType).type !== elementType) {
+          // no match, break early
+          return normalizeNode(entry);
+        }
+        if (elementType && removeUnacceptableElementProperties(entry)) {
+          return;
+        }
+        if (newNormalize && newNormalize(entry)) {
+          return;
+        }
       }
       return normalizeNode(entry);
     };
@@ -18,16 +93,12 @@ const withNormalizerOverride = (plugin: NormalizerPlugin): WithOverride => {
   };
 };
 
-interface NormalizerPluginProps {
-  name: string;
-  plugin: NormalizerPlugin;
-}
-
 export const createNormalizerPluginFactory = ({
   name,
-  plugin,
-}: NormalizerPluginProps): ReturnType<typeof createPluginFactory> =>
-  createPluginFactory({
+  ...props
+}: NormalizerPluginProps): ReturnType<typeof createPluginFactory> => {
+  return createPluginFactory({
     key: name,
-    withOverrides: withNormalizerOverride(plugin),
+    withOverrides: withNormalizerOverride(props),
   });
+};

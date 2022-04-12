@@ -9,7 +9,7 @@ import React, { FC } from 'react';
 import { EditWorkspaceModal } from '@decipad/ui';
 import { useQuery } from '@apollo/client';
 import { Spinner } from '@chakra-ui/react';
-import { useToast } from '@decipad/react-contexts';
+import { useToast } from '@decipad/toast';
 import {
   useRouteParams,
   workspaces as workspacesRoute,

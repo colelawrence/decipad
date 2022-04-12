@@ -1,13 +1,14 @@
 export { AccountAvatar } from './AccountAvatar/AccountAvatar';
 export { AddTableRowButton } from './AddTableRowButton/AddTableRowButton';
 export { AuthContent } from './AuthContent/AuthContent';
+export { Caption } from './Caption/Caption';
 export { CodeSyntaxErrorHighlight } from './CodeSyntaxErrorHighlight/CodeSyntaxErrorHighlight';
 export { EditableTableCaption } from './EditableTableCaption/EditableTableCaption';
 export { EditableTableData } from './EditableTableData/EditableTableData';
+export { Expression } from './Expression/Expression';
 export { EditorTitle } from './EditorTitle/EditorTitle';
 export { HelpButton } from './HelpButton/HelpButton';
 export { InlineCodeError } from './InlineCodeError/InlineCodeError';
-export { Interactive } from './Interactive/Interactive';
 export { MenuList } from './MenuList/MenuList';
 export { Modal } from './Modal/Modal';
 export { ClosableModalHeader } from './ClosableModalHeader/ClosableModalHeader';

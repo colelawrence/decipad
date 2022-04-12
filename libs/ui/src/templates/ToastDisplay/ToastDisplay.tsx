@@ -1,4 +1,4 @@
-import { ToastContext } from '@decipad/react-contexts';
+import { ToastContext } from '@decipad/toast';
 import * as ReactToastNotifications from 'react-toast-notifications';
 import { Toast } from '../../atoms';
 

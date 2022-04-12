@@ -1,4 +1,4 @@
-import { ToastType, useToast } from '@decipad/react-contexts';
+import { ToastType, useToast } from '@decipad/toast';
 import { Meta, Story } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { ToastDisplay } from './ToastDisplay';

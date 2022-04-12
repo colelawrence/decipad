@@ -1,7 +1,7 @@
 import { AST } from '@decipad/language';
 import { Element } from '@decipad/editor-types';
 
-interface OutputNode {
+export interface OutputNode {
   name: string;
   expression: AST.Expression;
 }

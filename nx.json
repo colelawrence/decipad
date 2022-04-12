@@ -177,6 +177,12 @@
     },
     "editor-components": {
       "tags": []
+    },
+    "editor-variable-def": {
+      "tags": []
+    },
+    "toast": {
+      "tags": []
     }
   }
 }

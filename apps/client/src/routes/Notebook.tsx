@@ -7,7 +7,7 @@ import {
   useShareNotebookWithSecret,
   useUnshareNotebookWithSecret,
 } from '@decipad/queries';
-import { useToast } from '@decipad/react-contexts';
+import { useToast } from '@decipad/toast';
 import {
   notebooks,
   useRouteParams,

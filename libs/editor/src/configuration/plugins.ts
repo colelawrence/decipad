@@ -5,6 +5,7 @@ import {
   createNormalizeRichTextBlockPlugin,
   createNormalizePlainTextBlockPlugin,
   createNormalizeCodeBlockPlugin,
+  createNormalizeCodeLinePlugin,
   createNormalizeColumnsPlugin,
   createNormalizeListPlugin,
   createNormalizeLinkPlugin,
@@ -14,15 +15,13 @@ import {
   createMarksPlugins,
   createAutoFormatCodeBlockPlugin,
   createAutoPairsPlugin,
-  createLinkPlugin,
-  createInputPlugin,
   createInteractiveTablePlugin,
+  createLinkPlugin,
   createCodeBlockPlugin,
   createCodeVariableHighlightPlugin,
   createSyntaxErrorHighlightPlugin,
   createLayoutColumnsPlugin,
   createPlotPlugin,
-  createNormalizeCodeLinePlugin,
   createCalloutPlugin,
 } from '@decipad/editor-plugins';
 import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
@@ -94,7 +93,6 @@ export const plugins = createPlugins(
     createAutoPairsPlugin(),
 
     // inputs
-    createInputPlugin(),
     createInteractiveTablePlugin(),
 
     // plots

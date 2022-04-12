@@ -4,10 +4,10 @@ import {
   ELEMENT_FETCH,
   ELEMENT_H2,
   ELEMENT_H3,
-  ELEMENT_INPUT,
   ELEMENT_PARAGRAPH,
   ELEMENT_PLOT,
   ELEMENT_TABLE_INPUT,
+  ELEMENT_VARIABLE_DEF,
 } from '@decipad/editor-types';
 import { createCodeBlockPlugin, createPlateEditor } from '@udecode/plate';
 import { execute, SlashCommand } from './slashCommands';
@@ -19,7 +19,7 @@ const expectedTypes = {
   import: ELEMENT_FETCH,
   'calculation-block': ELEMENT_CODE_LINE,
   plot: ELEMENT_PLOT,
-  input: ELEMENT_INPUT,
+  input: ELEMENT_VARIABLE_DEF,
 };
 
 test.each(Object.entries(expectedTypes) as [SlashCommand, ElementKind][])(

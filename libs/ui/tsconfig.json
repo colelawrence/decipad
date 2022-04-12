@@ -15,6 +15,7 @@
     { "path": "../testutils" },
     { "path": "../utils" },
     { "path": "../feature-flags" },
-    { "path": "../client-events" }
+    { "path": "../client-events" },
+    { "path": "../toast" }
   ]
 }

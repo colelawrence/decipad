@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { ELEMENT_CODE_LINE } from '@decipad/editor-types';
 import { TNode } from '@udecode/plate';
 import { Editor, Element, Node, NodeEntry, Transforms } from 'slate';
@@ -24,10 +25,12 @@ const normalizeCodeLine = (editor: Editor) => (entry: NodeEntry) => {
       }
     }
   }
+
   return false;
 };
 
 export const createNormalizeCodeLinePlugin = createNormalizerPluginFactory({
   name: 'NORMALIZE_CODE_LINE_PLUGIN',
+  elementType: ELEMENT_CODE_LINE,
   plugin: normalizeCodeLine,
 });

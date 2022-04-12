@@ -1,4 +1,4 @@
-import { ToastType } from '@decipad/react-contexts';
+import { ToastType } from '@decipad/toast';
 import { css } from '@emotion/react';
 import { Success, Warning } from '../../icons';
 import { black, cssVar, p14Regular, transparency } from '../../primitives';

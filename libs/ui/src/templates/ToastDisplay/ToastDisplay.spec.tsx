@@ -1,4 +1,4 @@
-import { useToast } from '@decipad/react-contexts';
+import { useToast } from '@decipad/toast';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { FC } from 'react';

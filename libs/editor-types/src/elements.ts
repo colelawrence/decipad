@@ -28,6 +28,8 @@ import {
   ELEMENT_PLOT,
   MarkKind,
 } from '.';
+import { ELEMENT_VARIABLE_DEF } from './element-kinds';
+import { CaptionElement, ExpressionElement } from './interactive-elements';
 
 // Defining specific elements
 
@@ -136,8 +138,11 @@ export type BlockElement =
   // Layout
   | ColumnsElement
   // Special elements
+  | ExpressionElement
+  | CaptionElement
   | InteractiveElement;
 type InlineElement = LinkElement;
+
 export type Element = BlockElement | InlineElement;
 
 export type Editor = Omit<
@@ -169,7 +174,7 @@ type PlainTextChildren = [PlainText];
 
 export type Node = Editor | Descendant;
 
-export function isElement(node: Node): node is Element {
+export function isElement(node: unknown): node is Element {
   return SlateElement.isElement(node);
 }
 
@@ -192,4 +197,5 @@ export const topLevelBlockKinds: string[] = [
   ELEMENT_FETCH,
   ELEMENT_PLOT,
   ELEMENT_COLUMNS,
+  ELEMENT_VARIABLE_DEF,
 ];

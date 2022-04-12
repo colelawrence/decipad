@@ -1,4 +1,9 @@
-import { ELEMENT_INPUT, ELEMENT_PARAGRAPH } from '@decipad/editor-types';
+import {
+  ELEMENT_CAPTION,
+  ELEMENT_EXPRESSION,
+  ELEMENT_PARAGRAPH,
+  ELEMENT_VARIABLE_DEF,
+} from '@decipad/editor-types';
 import { createPlateEditor, PlateEditor } from '@udecode/plate';
 import { insertInputBelow } from './input';
 
@@ -12,10 +17,17 @@ describe('insertInputBelow', () => {
   it('inserts an input element', () => {
     insertInputBelow(editor, [0]);
     expect(editor.children[1]).toMatchObject({
-      type: ELEMENT_INPUT,
-      variableName: '',
-      value: '',
-      children: [{ text: '' }],
+      type: ELEMENT_VARIABLE_DEF,
+      children: [
+        {
+          type: ELEMENT_CAPTION,
+          children: [{ text: '' }],
+        },
+        {
+          type: ELEMENT_EXPRESSION,
+          children: [{ text: '' }],
+        },
+      ],
     });
   });
 });

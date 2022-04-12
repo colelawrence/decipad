@@ -1,6 +1,7 @@
 import moo, { error, Token } from 'moo';
 import { BracketCounter, doSeparateStatement } from './containmentCounting';
 
+export type { Token };
 export { BracketCounter };
 
 const keywordStrings = [

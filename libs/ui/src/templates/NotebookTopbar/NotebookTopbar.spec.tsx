@@ -1,7 +1,9 @@
-import { mockConsoleError } from '@decipad/testutils';
+import { ComponentProps, FC } from 'react';
 import { render } from '@testing-library/react';
-import { Provider } from 'next-auth/client';
-import { ComponentProps } from 'react';
+import { Provider as SessionProvider } from 'next-auth/client';
+import { mockConsoleError } from '@decipad/testutils';
+import { ClientEventsContext } from '@decipad/client-events';
+import { noop } from '@decipad/utils';
 import { NotebookTopbar } from './NotebookTopbar';
 
 const props: ComponentProps<typeof NotebookTopbar> = {
@@ -18,14 +20,20 @@ const props: ComponentProps<typeof NotebookTopbar> = {
   link: '',
 };
 
+const WithProviders: FC = ({ children }) => (
+  <ClientEventsContext.Provider value={noop}>
+    <SessionProvider session={{ user: {} }}>{children}</SessionProvider>
+  </ClientEventsContext.Provider>
+);
+
 describe('Notebook Topbar', () => {
   mockConsoleError();
 
   it('renders the try decipad button only for non authenticated users', () => {
     const { getByText, queryByText, rerender } = render(
-      <Provider session={{ user: {} }}>
+      <WithProviders>
         <NotebookTopbar {...props} permission="READ" />
-      </Provider>
+      </WithProviders>
     );
     expect(queryByText(/try decipad/i)).not.toBeInTheDocument();
 
@@ -38,44 +46,50 @@ describe('Notebook Topbar', () => {
 
   it('renders the duplicate button only when not admin', () => {
     const { getByText, queryByText, rerender } = render(
-      <Provider session={{ user: {} }}>
+      <WithProviders>
         <NotebookTopbar {...props} permission="ADMIN" />
-      </Provider>
+      </WithProviders>
     );
     expect(queryByText(/dup/i)).not.toBeInTheDocument();
 
     rerender(
-      <Provider session={{ user: {} }}>
+      <WithProviders>
         <NotebookTopbar {...props} permission="READ" />
-      </Provider>
+      </WithProviders>
     );
     expect(getByText(/dup/i)).toBeVisible();
   });
 
   it('renders the share button only when admin', () => {
     const { getByText, queryByText, rerender } = render(
-      <Provider session={{ user: {} }}>
+      <WithProviders>
         <NotebookTopbar {...props} permission="WRITE" />
-      </Provider>
+      </WithProviders>
     );
     expect(queryByText(/share/i)).not.toBeInTheDocument();
 
     rerender(
-      <Provider session={{ user: {} }}>
+      <WithProviders>
         <NotebookTopbar {...props} permission="ADMIN" />
-      </Provider>
+      </WithProviders>
     );
     expect(getByText(/share/i)).toBeVisible();
   });
 
   it("doesn't render the need help button when shared", () => {
     const { getByText, rerender, queryByText } = render(
-      <NotebookTopbar {...props} permission="ADMIN" />
+      <WithProviders>
+        <NotebookTopbar {...props} permission="ADMIN" />
+      </WithProviders>
     );
 
     expect(getByText(/need help/i)).toBeInTheDocument();
 
-    rerender(<NotebookTopbar {...props} permission="READ" />);
+    rerender(
+      <WithProviders>
+        <NotebookTopbar {...props} permission="READ" />
+      </WithProviders>
+    );
 
     expect(queryByText(/need help/i)).not.toBeInTheDocument();
   });

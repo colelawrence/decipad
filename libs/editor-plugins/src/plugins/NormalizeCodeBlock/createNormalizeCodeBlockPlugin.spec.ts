@@ -13,12 +13,20 @@ import {
   TNode,
 } from '@udecode/plate';
 import { Editor } from 'slate';
-import { createNormalizeCodeBlockPlugin } from './createNormalizeCodeBlockPlugin';
+import {
+  createNormalizeCodeBlockPlugin,
+  createNormalizeCodeLinePlugin,
+} from '..';
 import { codeBlock, codeLine } from './testUtils';
+
+// Here we're testing the code block and code line normalization together
 
 let editor: PlateEditor;
 beforeEach(() => {
-  const plugins = createPlugins([createNormalizeCodeBlockPlugin()]);
+  const plugins = createPlugins([
+    createNormalizeCodeBlockPlugin(),
+    createNormalizeCodeLinePlugin(),
+  ]);
   editor = createPlateEditor({
     plugins,
   });

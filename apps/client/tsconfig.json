@@ -25,6 +25,9 @@
     },
     {
       "path": "../../libs/client-events"
+    },
+    {
+      "path": "../../libs/toast"
     }
   ]
 }

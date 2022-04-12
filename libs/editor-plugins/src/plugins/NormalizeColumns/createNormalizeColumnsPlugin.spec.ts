@@ -1,12 +1,11 @@
 import { createPlateEditor, TElement } from '@udecode/plate';
-import { Editor, Transforms } from 'slate';
+import { Editor, Node, Transforms } from 'slate';
 import {
   ColumnsElement,
   ELEMENT_CODE_BLOCK,
   ELEMENT_COLUMNS,
-  ELEMENT_INPUT,
+  ELEMENT_VARIABLE_DEF,
   ELEMENT_PARAGRAPH,
-  InputElement,
 } from '@decipad/editor-types';
 import { createNormalizeColumnsPlugin } from './createNormalizeColumnsPlugin';
 
@@ -51,20 +50,20 @@ describe('with interactive elements as children', () => {
     editor.children = [
       {
         type: ELEMENT_COLUMNS,
-        children: [{ type: ELEMENT_INPUT, children: [{ text: '' }] }],
+        children: [{ type: ELEMENT_VARIABLE_DEF, children: [{ text: '' }] }],
       } as TElement,
     ];
     Editor.normalize(editor, { force: true });
     expect(editor.children).toHaveLength(1);
-    expect(editor.children[0]).toHaveProperty('type', ELEMENT_INPUT);
+    expect(editor.children[0]).toHaveProperty('type', ELEMENT_VARIABLE_DEF);
   });
   it('can contain 2 or more elements', () => {
     editor.children = [
       {
         type: ELEMENT_COLUMNS,
         children: [
-          { type: ELEMENT_INPUT, children: [{ text: '' }] },
-          { type: ELEMENT_INPUT, children: [{ text: '' }] },
+          { type: ELEMENT_VARIABLE_DEF, children: [{ text: '' }] },
+          { type: ELEMENT_VARIABLE_DEF, children: [{ text: '' }] },
         ],
       } as TElement,
     ];
@@ -77,9 +76,9 @@ describe('with interactive elements as children', () => {
     Transforms.insertNodes(
       editor,
       {
-        type: ELEMENT_INPUT,
+        type: ELEMENT_VARIABLE_DEF,
         children: [{ text: '' }],
-      } as InputElement,
+      } as Node,
       { at: [0, 0] }
     );
     Editor.normalize(editor, { force: true });

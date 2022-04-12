@@ -4,7 +4,7 @@ import {
   CreateWorkspaceVariables,
   CREATE_WORKSPACE,
 } from '@decipad/queries';
-import { useToast } from '@decipad/react-contexts';
+import { useToast } from '@decipad/toast';
 import { useRouteParams, workspaces } from '@decipad/routing';
 import { CreateWorkspaceModal } from '@decipad/ui';
 import React, { ComponentProps, FC } from 'react';

@@ -8,4 +8,6 @@ export {
   STATEMENT_SEP_TOKEN_TYPE,
 } from './tokenizer';
 
+export type { Token } from './tokenizer';
+
 export const compiledGrammar = G as nearley.CompiledRules;

@@ -7,7 +7,13 @@ import {
   BaseElement,
   TableData,
   EmptyText,
+  PlainText,
 } from '.';
+import {
+  ELEMENT_CAPTION,
+  ELEMENT_EXPRESSION,
+  ELEMENT_VARIABLE_DEF,
+} from './element-kinds';
 
 export interface TableElement extends BaseElement {
   type: typeof ELEMENT_TABLE_INPUT;
@@ -52,15 +58,36 @@ export interface InputElement extends BaseElement {
   variableName: string;
 }
 
+export interface CaptionElement extends BaseElement {
+  type: typeof ELEMENT_CAPTION;
+  children: [PlainText];
+}
+
+export interface ExpressionElement extends BaseElement {
+  type: typeof ELEMENT_EXPRESSION;
+  children: [PlainText];
+}
+export interface VariableDefinitionElement extends BaseElement {
+  type: typeof ELEMENT_VARIABLE_DEF;
+  children: [CaptionElement, ExpressionElement];
+}
+
 export type InteractiveElement =
   | TableElement
   | FetchElement
   | PlotElement
-  | InputElement;
+  | InputElement
+  | VariableDefinitionElement;
 
 export const interactiveElementKinds: ReadonlyArray<
   InteractiveElement['type']
-> = [ELEMENT_FETCH, ELEMENT_INPUT, ELEMENT_TABLE_INPUT, ELEMENT_PLOT] as const;
+> = [
+  ELEMENT_FETCH,
+  ELEMENT_INPUT,
+  ELEMENT_TABLE_INPUT,
+  ELEMENT_PLOT,
+  ELEMENT_VARIABLE_DEF,
+] as const;
 
 export const isInteractiveElement = (node: Node): node is InteractiveElement =>
   'type' in node && interactiveElementKinds.includes(node.type);

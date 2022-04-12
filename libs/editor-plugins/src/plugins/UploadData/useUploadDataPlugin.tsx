@@ -1,5 +1,5 @@
 import { Editor, ELEMENT_FETCH } from '@decipad/editor-types';
-import { useToast } from '@decipad/react-contexts';
+import { useToast } from '@decipad/toast';
 import camelcase from 'camelcase';
 import { nanoid } from 'nanoid';
 import { useCallback, useEffect, useState } from 'react';
