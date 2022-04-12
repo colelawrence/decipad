@@ -6,6 +6,7 @@ import { inferExpression, makeContext } from '../infer';
 
 import { Directive } from './types';
 import * as expand from './expand';
+import { Type } from '../type';
 
 export const directiveFor = (args: AST.Node[]): AST.Directive => {
   return {
@@ -37,6 +38,6 @@ export const testGetValue = async (
 export const testGetType = (
   getType: Directive['getType'],
   ...args: AST.Node[]
-) => {
+): Promise<Type> => {
   return expand.getType(directiveFor(args), makeContext(), getType, args);
 };

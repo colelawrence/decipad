@@ -122,6 +122,13 @@ const pluralizeUnit = <TF extends FractionLike>(
   });
 };
 
+const areUnitQualitiesCompatible = (
+  quality1?: string,
+  quality2?: string
+): boolean => {
+  return (quality1 == null && quality2 == null) || quality1 === quality2;
+};
+
 export const matchUnitArrays = (
   units1: Units | null,
   units2: Units | null
@@ -198,7 +205,9 @@ const simplifyUnitsArgs = <TF extends FractionLike>(
     .map((u) => pluralizeUnit(u))
     .reduce<FUnit[]>((units, unit) => {
       const matchingUnitIndex = units.findIndex(
-        (candidate) => unit.unit === candidate.unit
+        (candidate) =>
+          unit.unit === candidate.unit &&
+          areUnitQualitiesCompatible(unit.quality, candidate.quality)
       );
       if (matchingUnitIndex >= 0) {
         const matchingUnit = units[matchingUnitIndex];
@@ -244,6 +253,19 @@ export const normalizeUnitNames = (units: Unit[]): Unit[] => {
   return units.map(normalizeUnitName);
 };
 
+const byUnitName = <TF extends FractionLike>(
+  a: TUnit<TF>,
+  b: TUnit<TF>
+): number => {
+  if (a.unit > b.unit) {
+    return 1;
+  } else if (a.unit < b.unit) {
+    return -1;
+  } else {
+    return 0;
+  }
+};
+
 export const normalizeUnits = <TF extends FractionLike>(
   units: TUnit<TF>[] | null,
   { mult = false }: { mult?: boolean } = {}
@@ -251,7 +273,6 @@ export const normalizeUnits = <TF extends FractionLike>(
   if (units == null) {
     return null;
   }
-
   const simplified = simplifyUnitsArgs(units);
 
   if (simplified.length === 0) {
@@ -259,15 +280,7 @@ export const normalizeUnits = <TF extends FractionLike>(
   } else if (mult) {
     return simplified;
   } else {
-    return simplified.sort((a, b) => {
-      if (a.unit > b.unit) {
-        return 1;
-      } else if (a.unit < b.unit) {
-        return -1;
-      } else {
-        return 0;
-      }
-    });
+    return simplified.sort(byUnitName);
   }
 };
 
@@ -325,6 +338,10 @@ const stringifyUnit = (unit: FUnit, prettify = true) => {
     } else {
       result.push('^', strExp);
     }
+  }
+
+  if (unit.quality) {
+    result.push(` of ${unit.quality}`);
   }
 
   return result.join('');
@@ -412,9 +429,12 @@ export const combineUnits = <TF extends FractionLike>(
 
   // Combine their units in
   for (const thisUnit of sourceUnits) {
-    const existingUnitIndex = outputUnits.findIndex((u) =>
-      areUnitsCompatible(u.unit, thisUnit.unit)
-    );
+    const existingUnitIndex = outputUnits.findIndex((u) => {
+      return (
+        areUnitQualitiesCompatible(u.quality, thisUnit.quality) &&
+        areUnitsCompatible(u.unit, thisUnit.unit)
+      );
+    });
     if (existingUnitIndex >= 0) {
       outputUnits[existingUnitIndex] = produce(
         outputUnits[existingUnitIndex],

@@ -273,8 +273,8 @@ export const divideUnit = checker(
       return me;
     } else {
       const invTheirUnits = divideBy?.args.map((u) => inverseExponent(u)) ?? [];
-
-      return setUnit(me, combineUnits(me.unit, units(...invTheirUnits)));
+      const combinedUnits = combineUnits(me.unit, units(...invTheirUnits));
+      return setUnit(me, combinedUnits);
     }
   }
 );

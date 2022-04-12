@@ -4,6 +4,7 @@ const initialReservedWords = new Set([
   'in',
   'as',
   'to',
+  'of',
   'by',
   'contains',
   'where',

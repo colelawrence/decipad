@@ -1754,3 +1754,58 @@ describe('type cohercion', () => {
     });
   });
 });
+
+describe('unit qualities', () => {
+  it('cannot be applied to numbers without units', async () => {
+    await expect(runCode('3 of sugar')).rejects.toThrow(
+      'Need one and only one unit'
+    );
+  });
+
+  it('applies to numbers with single unit', async () => {
+    expect(await runCode('3 grams of sugar')).toMatchObject({
+      value: F(3),
+      type: t.number(U('grams', { quality: 'sugar' })),
+    });
+  });
+
+  it('applies to numbers with single unit with exponent', async () => {
+    expect(await runCode('600 m^2 of land')).toMatchObject({
+      value: F(600),
+      type: t.number(U('m', { exp: F(2), quality: 'land' })),
+    });
+  });
+
+  it('applies to multi-dimensional values', async () => {
+    expect(await runCode('[1, 2, 3] grams of sugar')).toMatchObject({
+      value: [F(1), F(2), F(3)],
+      type: t.column(t.number(U('grams', { quality: 'sugar' })), 3),
+    });
+  });
+
+  it('propagates through addition', async () => {
+    expect(await runCode('3 grams of sugar + 1')).toMatchObject({
+      value: F(4),
+      type: t.number(U('grams', { quality: 'sugar' })),
+    });
+  });
+
+  it('propagates when divided by unitless number', async () => {
+    expect(await runCode('3 grams of sugar / 2')).toMatchObject({
+      value: F(3, 2),
+      type: t.number(U('grams', { quality: 'sugar' })),
+    });
+  });
+
+  it('propagates when divided by number with quality', async () => {
+    expect(await runCode('3 grams / kilogram of bodymass')).toMatchObject({
+      value: F(3, 1000),
+      type: t.number(
+        U([
+          u('grams', { quality: 'bodymass', exp: F(-1), multiplier: F(1000) }),
+          u('grams'),
+        ])
+      ),
+    });
+  });
+});

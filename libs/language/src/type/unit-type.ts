@@ -7,6 +7,7 @@ export interface TUnit<TNumberType = Fraction> {
   known: boolean;
   aliasFor?: TUnits<TNumberType>;
   enforceMultiplier?: boolean;
+  quality?: string;
 }
 
 export interface TUnits<TNumberType = Fraction> {

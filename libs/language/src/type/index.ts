@@ -141,15 +141,13 @@ export class Type {
       return `range of ${this.rangeOf.toString()}`;
     }
 
-    if (this.unit != null && this.unit.args.length > 0) {
-      return stringifyUnits(this.unit);
-    }
-
     if (this.date != null) {
       return this.date;
     }
 
-    return `<${this.type}>`;
+    const unitString = this.unit && stringifyUnits(this.unit);
+
+    return unitString || `<${this.type}>`;
   }
 
   toBasicString() {

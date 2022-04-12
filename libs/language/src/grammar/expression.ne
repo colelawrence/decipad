@@ -130,10 +130,24 @@ addSubUp      -> addSubUp _ additiveOperator _ divMulOp {%
                                                         }
                                                         %}
 
-divMulOp           -> powOp                             {% id %}
-divMulOp           -> divMulOp _ divMulOperator _ powOp {% basicBinop %}
+
+
+
+divMulOp           -> ofExp                             {% id %}
+divMulOp           -> divMulOp _ divMulOperator _ ofExp {% basicBinop %}
 divMulOp           -> divMulOp ref                      {% implicitMultHandler %}
-divMulOp           -> divMulOp __  powOp                {% implicitMultHandler %}
+divMulOp           -> divMulOp __  ofExp                {% implicitMultHandler %}
+
+ofExp         -> powOp                                  {% id %}
+ofExp         -> ofExp _ "of" _ genericIdentifier       {%
+                                                        (d) => {
+                                                          return addArrayLoc({
+                                                            type: 'directive',
+                                                            args: ['of', d[0], d[4]]
+                                                          }, d)
+                                                        }
+                                                        %}
+
 
 powOp              -> primary                           {% id %}
 powOp              -> primary _ powOperator _ powOp     {% basicBinop %}

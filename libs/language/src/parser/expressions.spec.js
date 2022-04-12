@@ -672,8 +672,8 @@ runTests({
 
   'multiply by dafault accepts lots of stuff after the number': {
     sourceMap: false,
-    source: '10 bunch of arguments',
-    ast: [c('*', c('*', c('*', l(10), r('bunch')), r('of')), r('arguments'))],
+    source: '10 bunch offf arguments',
+    ast: [c('*', c('*', c('*', l(10), r('bunch')), r('offf')), r('arguments'))],
   },
 });
 

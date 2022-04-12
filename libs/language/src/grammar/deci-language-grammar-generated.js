@@ -11,6 +11,7 @@ const initialReservedWords = new Set([
   'in',
   'as',
   'to',
+  'of',
   'by',
   'contains',
   'where',
@@ -1316,7 +1317,7 @@ let ParserRules = [
   { name: 'overExp', symbols: ['asExp'], postprocess: id },
   {
     name: 'overExp',
-    symbols: ['overExp', '_', { literal: 'over' }, '_', 'genericIdentifier'],
+    symbols: ['asExp', '_', { literal: 'over' }, '_', 'genericIdentifier'],
     postprocess: (d) => {
       return addArrayLoc(
         {
@@ -1391,10 +1392,10 @@ let ParserRules = [
       return basicBinop(d);
     },
   },
-  { name: 'divMulOp', symbols: ['powOp'], postprocess: id },
+  { name: 'divMulOp', symbols: ['ofExp'], postprocess: id },
   {
     name: 'divMulOp',
-    symbols: ['divMulOp', '_', 'divMulOperator', '_', 'powOp'],
+    symbols: ['divMulOp', '_', 'divMulOperator', '_', 'ofExp'],
     postprocess: basicBinop,
   },
   {
@@ -1404,8 +1405,22 @@ let ParserRules = [
   },
   {
     name: 'divMulOp',
-    symbols: ['divMulOp', '__', 'powOp'],
+    symbols: ['divMulOp', '__', 'ofExp'],
     postprocess: implicitMultHandler,
+  },
+  { name: 'ofExp', symbols: ['powOp'], postprocess: id },
+  {
+    name: 'ofExp',
+    symbols: ['powOp', '_', { literal: 'of' }, '_', 'genericIdentifier'],
+    postprocess: (d) => {
+      return addArrayLoc(
+        {
+          type: 'directive',
+          args: ['of', d[0], d[4]],
+        },
+        d
+      );
+    },
   },
   { name: 'powOp', symbols: ['primary'], postprocess: id },
   {

@@ -90,6 +90,9 @@ export type ErrSpec =
     }
   | {
       errType: 'no-previous-statement';
+    }
+  | {
+      errType: 'need-one-only-one-unit';
     };
 
 // exhaustive switch
@@ -182,6 +185,9 @@ function specToString(spec: ErrSpec): string {
     }
     case 'no-previous-statement': {
       return 'No previous statement';
+    }
+    case 'need-one-only-one-unit': {
+      return 'Need one and only one unit';
     }
   }
 }
@@ -359,6 +365,12 @@ export class InferError {
   static noPreviousStatement() {
     return new InferError({
       errType: 'no-previous-statement',
+    });
+  }
+
+  static needOneAndOnlyOneUnit() {
+    return new InferError({
+      errType: 'need-one-only-one-unit',
     });
   }
 
