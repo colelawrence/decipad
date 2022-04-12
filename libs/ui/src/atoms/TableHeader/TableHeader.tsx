@@ -33,8 +33,8 @@ const headerWrapperStyles = css({
 });
 
 const columnTypeStyles = css({
-  display: 'flex',
-  placeItems: 'stretch',
+  display: 'grid',
+  alignItems: 'center',
   width: '16px',
   height: '16px',
 });

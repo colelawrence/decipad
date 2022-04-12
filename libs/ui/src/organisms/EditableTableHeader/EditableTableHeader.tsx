@@ -8,8 +8,8 @@ import { identifierNamePattern } from '../../utils/language';
 import { Caret } from '../../icons';
 
 const rightSlotStyles = css({
-  display: 'flex',
-  placeItems: 'stretch',
+  display: 'grid',
+  alignItems: 'center',
   width: '16px',
   height: '16px',
 });
