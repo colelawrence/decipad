@@ -1,5 +1,5 @@
 import nearley, { Parser as NearleyParser } from 'nearley';
-import { compiledGrammar } from '../grammar';
+import { compiledGrammar, tokenize } from '../grammar';
 import { ParserNode } from './types';
 import { sourceMapDecorator } from './source-map-decorator';
 import { AST, prettyPrintAST } from '..';
@@ -108,7 +108,8 @@ function tryParse(source: string): ParserNode[] {
   }
 
   if (solutions.length === 0) {
-    throw new SyntaxError({ message: 'No solutions' });
+    const token = tokenize(source).pop();
+    throw new SyntaxError({ message: 'No solutions', token });
   }
 
   return solutions;
