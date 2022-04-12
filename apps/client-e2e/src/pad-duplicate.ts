@@ -23,7 +23,6 @@ describe('Duplicate pad', () => {
     await page.keyboard.type('this is the second paragraph');
     await page.keyboard.press('Enter');
     await page.keyboard.type('this is the third paragraph');
-    await page.pause();
     expect(await page.$$('[contenteditable] p')).toHaveLength(4);
 
     await timeout(10000);
