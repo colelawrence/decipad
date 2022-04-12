@@ -31,7 +31,7 @@ jobs:
 
       - name: Cache yarn
         id: yarn-cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.cache/yarn
           key: yarn-cache-${{ hashFiles('yarn.lock') }}
@@ -43,7 +43,7 @@ jobs:
 
       - name: Cache NX things
         id: node-modules-nx-cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             node_modules/.cache
