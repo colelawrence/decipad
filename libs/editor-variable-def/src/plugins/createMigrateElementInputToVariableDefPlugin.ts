@@ -16,5 +16,6 @@ export const createMigrateElementInputToVariableDefPlugin =
   createNormalizerPluginFactory({
     name: 'MIGRATE_ELEMENT_INPUT_TO_VARIABLE_DEF_PLUGIN',
     elementType: ELEMENT_INPUT,
+    acceptableElementProperties: ['variableName', 'value'],
     plugin: normalize,
   });

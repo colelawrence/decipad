@@ -17,12 +17,12 @@ export const inputElementToVariableDef = (
       {
         id: nanoid(),
         type: ELEMENT_CAPTION,
-        children: [{ text: inputElement.variableName }],
+        children: [{ text: inputElement.variableName || '' }],
       },
       {
         id: nanoid(),
         type: ELEMENT_EXPRESSION,
-        children: [{ text: inputElement.value }],
+        children: [{ text: inputElement.value || '' }],
       },
     ],
   };
