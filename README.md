@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://uploads-ssl.webflow.com/61dda5267f2552f1a1c52b1f/61dee4589e7bd451f2fc14a1_Webclip.png" width="50">
+  <img src="https://user-images.githubusercontent.com/12210180/162798827-fd60eab3-907c-4ca1-a0dc-12ef34acb518.png" width="50">
 </p>
 
 <h2 align="center">Decipad - Make sense of numbers</h2>
