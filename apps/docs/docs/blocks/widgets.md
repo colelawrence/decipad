@@ -4,15 +4,16 @@ sidebar_position: 5
 
 # Widgets
 
-Widgets are no code blocks you can place on your notebooks. Everyone with access will be able to update them and check how it affects the model.
+Widgets are no code blocks you can place on your notebooks so everyone will be able to interact with your model when you publish it.
 
 ## Number Fields
 
-:::caution `Experimental Feature`
-Number Fields are currently being developed. Limited availability.
-:::
-
 Type `/` and select **Number Field** to add an input users can interact.
+
+![](https://user-images.githubusercontent.com/12210180/162924914-71b57c82-d406-40dc-9855-d4d024e4af65.gif)
+
+
+
 
 ## Sliders
 

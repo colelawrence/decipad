@@ -379,6 +379,6 @@ export class InferError {
   }
 
   get url() {
-    return `/docs/errors#${this.spec.errType}`;
+    return `/docs/language/language-errors#${this.spec.errType}`;
   }
 }

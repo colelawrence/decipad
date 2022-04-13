@@ -2,7 +2,7 @@
 sidebar_position: 490
 ---
 
-# Errors
+# Language Errors
 
 ## Cannot convert between units
 
