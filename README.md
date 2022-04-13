@@ -6,7 +6,12 @@
 
 > All the things Deci.
 
-## Preparation
+# TOC
+
+- [Setup](#set-up)
+- [Development cycle](docs/DEVELOPMENT.md)
+
+## Set up
 
 For you to be able to run Deci locally, you need to have Node.js version 14.x installed.
 
@@ -181,19 +186,19 @@ Then you will need to change or add the typedef with the GraphQL interface and t
 
 You should have a server up and running, so that you can manually test your GraphQL server. To do that, you can run:
 
-`$ yarn serve:all`
+`yarn serve:all`
 
 or, if you prefer to run things in separate terminal windows, in two separate terminal windows:
 
 ```bash
-$ nx serve backend
-$ nx serve client
+nx serve backend
+nx serve client
 ```
 
 You should also run the following watch in a separate window to generate the back-end from your typescripts:
 
 ```bash
-$ yarn build:backend:watch
+yarn build:backend:watch
 ```
 
 (The `nx serve backend` runs everything you should need in the backend for you: database, queues and respective lambdas, graphQL server, HTTP lambdas and websockets).
@@ -207,19 +212,19 @@ When changing the Graphql API, you should always add or change the integration t
 To run all the back-end tests you can run:
 
 ```bash
-$ nx test backend
+nx test backend
 ```
 
 But if you need to test a specific file you can do:
 
 ```
-$ jest apps/backend/tests/<file>.spec.ts --testTimeout=10000
+jest apps/backend/tests/<file>.spec.ts --testTimeout=10000
 ```
 
 Alternatively, you can watch the file for changes and run the test every time there is a change:
 
 ```
-$ jest apps/backend/tests/<file>.spec.ts --testTimeout=10000 --watch
+jest apps/backend/tests/<file>.spec.ts --testTimeout=10000 --watch
 ```
 
 ### Generating your GraqphQL client stuffs
@@ -227,7 +232,7 @@ $ jest apps/backend/tests/<file>.spec.ts --testTimeout=10000 --watch
 If you're also doing client-side stuff that depends on the changes, you will need to run the following commands:
 
 ```bash
-$ yarn build:graphql:schema
+yarn build:graphql:schema
 ```
 
 This command will build a schema file from your local server schema.
@@ -235,7 +240,7 @@ This command will build a schema file from your local server schema.
 Then you'll need to generate the client-side typescript files:
 
 ```bash
-$ yarn build:graphql:queries
+yarn build:graphql:queries
 ```
 
 This will generate files in `libs/queries`.
@@ -246,6 +251,7 @@ If you add or change a file in `libs/queries/src/lib`, you'll need to re-run the
 
 If you're adding a file to You may also need to `libs/queries/src/lib/operations/{mutations,queries}`, you'll also need to export it in `libs/queries/src/lib/index.ts`, so that the client code may use it.
 
-## Sub-package documentation
+## Resources
 
-- [backend](apps/backend/README.md)
+- [Development cycle](docs/DEVELOPMENT.md)
+- [Cheat sheet](docs/CHEAT_SHEET.md)
