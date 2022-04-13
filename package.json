@@ -261,7 +261,7 @@
     "babel-loader": "^8.2.2",
     "babel-plugin-tsconfig-paths": "^1.0.1",
     "buffer": "^6.0.3",
-    "chokidar-cli": "^2.1.0",
+    "chokidar-cli": "^3.0.0",
     "css-vars-ponyfill": "^2.4.5",
     "csstype": "^3.0.8",
     "data-urls": "^3.0.0",
