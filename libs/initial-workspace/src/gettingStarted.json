@@ -12,16 +12,7 @@
     {
       "children": [
         {
-          "text": "We're excited to get your feedback and grateful for your support"
-        }
-      ],
-      "type": "h2",
-      "id": "_4kRi3ui91Toh4-uYAQTF"
-    },
-    {
-      "children": [
-        {
-          "text": "Decipad is a notebook to write text, perform calculations and build models in a more human way. We're excited to see what you create!"
+          "text": "Decipad is a notebook where you can write, perform calculations and build models."
         }
       ],
       "type": "p",
@@ -30,20 +21,68 @@
     {
       "children": [
         {
-          "text": ""
+          "text": "A few tips before you get started"
         }
       ],
-      "type": "p",
-      "id": "YnfwxZ_6c-b0kMx3gBsDh"
+      "type": "h2",
+      "id": "V437OR8MJSJ8LATvJ5cGR"
     },
     {
       "children": [
         {
-          "text": "What's possible in alpha?"
+          "text": "Our journey of reimagining how people interact with data and numbers just began! You may run into bugs 🐞, glitches ⚡️ and missing features 🧐"
         }
       ],
       "type": "p",
-      "id": "wcGvRJt8Hwevyi15G23dT"
+      "id": "iNxhdZlStdo_ulNM7RcrS"
+    },
+    {
+      "children": [
+        {
+          "text": "Help us along our adventures! ",
+          "bold": true
+        }
+      ],
+      "type": "p",
+      "id": "iNxhdZlStdo_ulNM7RcrS"
+    },
+    {
+      "children": [
+        {
+          "text": "Share any feedback or ideas with our team on our "
+        },
+        {
+          "children": [
+            {
+              "text": "Discord"
+            }
+          ],
+          "type": "a",
+          "url": "https://discord.com/invite/YT2cuJkHkS",
+          "id": "hMSK_E5fdo9lLVSWXFjxF"
+        },
+        {
+          "text": " channel or use the "
+        },
+        {
+          "text": "Feedback",
+          "code": true
+        },
+        {
+          "text": "button on your notebook."
+        }
+      ],
+      "type": "p",
+      "id": "iNxhdZlStdo_ulNM7RcrS"
+    },
+    {
+      "children": [
+        {
+          "text": "What's possible in Alpha?"
+        }
+      ],
+      "type": "h3",
+      "id": "znVQ8Xss9Z2lbmAgUjVnx"
     },
     {
       "children": [
@@ -56,23 +95,11 @@
                   "bold": true
                 },
                 {
-                  "text": " Just start writing. Use the "
+                  "text": " Just start writing. Use the menu that pops up when you select text to style your "
                 },
                 {
-                  "children": [
-                    {
-                      "text": ""
-                    }
-                  ],
-                  "type": "a",
-                  "url": "https://alpha.decipad.com/docs",
-                  "id": "zuU3rEm9a4oFMIqOMp7c1"
-                },
-                {
-                  "text": "menu that pops up or markdown to style your "
-                },
-                {
-                  "text": "text",
+                  "text": "it",
+                  "italic": true,
                   "bold": true
                 },
                 {
@@ -88,9 +115,6 @@
                 {
                   "text": "you",
                   "underline": true
-                },
-                {
-                  "text": " "
                 },
                 {
                   "text": "like",
@@ -112,18 +136,86 @@
             {
               "children": [
                 {
-                  "text": "Insert a calculations block:",
+                  "text": "Play with widgets: ",
                   "bold": true
                 },
                 {
-                  "text": " Hit "
+                  "text": "Type"
                 },
                 {
                   "text": "/",
                   "code": true
                 },
                 {
-                  "text": "  and add numbers and calculations to your notebook using the "
+                  "text": "and select"
+                },
+                {
+                  "text": "Number Fields",
+                  "code": true
+                },
+                {
+                  "text": "to add an input everyone can interact with."
+                }
+              ],
+              "type": "lic"
+            }
+          ],
+          "type": "li"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Build a table:",
+                  "bold": true
+                },
+                {
+                  "text": " Enhance your notebook with additional data by placing a "
+                },
+                {
+                  "children": [
+                    {
+                      "text": "table"
+                    }
+                  ],
+                  "type": "a",
+                  "url": "https://alpha.decipad.com/docs/data-organization/tables",
+                  "id": "DHW5E7CKssTAVMZa5N4fr"
+                },
+                {
+                  "text": " with the"
+                },
+                {
+                  "text": "/",
+                  "code": true
+                },
+                {
+                  "text": "command."
+                }
+              ],
+              "type": "lic"
+            }
+          ],
+          "type": "li"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Insert calculations:",
+                  "bold": true
+                },
+                {
+                  "text": " Hit"
+                },
+                {
+                  "text": "/",
+                  "code": true
+                },
+                {
+                  "text": "and add numbers and calculations to your notebook using the "
                 },
                 {
                   "children": [
@@ -151,63 +243,18 @@
             {
               "children": [
                 {
-                  "text": "Build a table:",
-                  "bold": true
-                },
-                {
-                  "text": " Enhance your notebook with additional data by using the "
-                },
-                {
-                  "text": "/",
-                  "code": true
-                },
-                {
-                  "text": " command. Or, build a "
-                },
-                {
-                  "children": [
-                    {
-                      "text": "table"
-                    }
-                  ],
-                  "type": "a",
-                  "url": "https://alpha.decipad.com/docs/data-organization/tables",
-                  "id": "HFE5olDOqzEtVJ2cq93xM"
-                },
-                {
-                  "text": " from scratch using the language."
-                }
-              ],
-              "type": "lic",
-              "id": "bR4SmDy2ddjszftWicSQr"
-            }
-          ],
-          "type": "li",
-          "id": "91XseSkveFxxIt1ixjRF6"
-        },
-        {
-          "children": [
-            {
-              "children": [
-                {
                   "text": "Share your work:",
                   "bold": true
                 },
                 {
-                  "text": " Enable a public link, anyone with the link can view. Don't forget to share with us on "
+                  "text": " Generate a public link with the"
                 },
                 {
-                  "children": [
-                    {
-                      "text": "Discord"
-                    }
-                  ],
-                  "type": "a",
-                  "url": "https://discord.com/invite/HwDMqwbGmc",
-                  "id": "dR-RJex2Ww-uffVLRgucq"
+                  "text": "Share",
+                  "code": true
                 },
                 {
-                  "text": " (if you can)!﻿"
+                  "text": "button. We're excited to see what you create!"
                 }
               ],
               "type": "lic",
@@ -224,29 +271,16 @@
     {
       "children": [
         {
-          "text": ""
+          "text": "No Ideas?"
         }
       ],
-      "type": "p",
-      "id": "7xQVMnbJVxaavMlyJ6P82"
+      "type": "h2",
+      "id": "w5jjnbCYlf3eO6-c7jNmV"
     },
     {
       "children": [
         {
-          "text": "💡 Review our "
-        },
-        {
-          "children": [
-            {
-              "text": "documentation"
-            }
-          ],
-          "type": "a",
-          "url": "https://alpha.decipad.com/docs",
-          "id": "r08lrY-zkkHysUE6mi2ox"
-        },
-        {
-          "text": " and get inspiration from our "
+          "text": "Get inspired with our "
         },
         {
           "children": [
@@ -256,548 +290,14 @@
           ],
           "type": "a",
           "url": "https://alpha.decipad.com/docs/get-inspiration",
-          "id": "K5Uxnt5moXakG0Wfuo6mJ"
+          "id": "EfYhO-wz4W5wdSsZDjJcK"
         },
         {
-          "text": "."
+          "text": ":"
         }
       ],
       "type": "p",
-      "id": "dK7nP4_e7asUETGM1WLrt"
-    },
-    {
-      "children": [
-        {
-          "text": ""
-        }
-      ],
-      "type": "p",
-      "id": "viXS9HWSpo2EbE4HDdLXI"
-    },
-    {
-      "children": [
-        {
-          "text": "A few things to try"
-        }
-      ],
-      "type": "h2",
-      "id": "CSXNmGqkEmT8sVvGf2Hvg"
-    },
-    {
-      "children": [
-        {
-          "text": "❶ "
-        },
-        {
-          "text": "Type \"/\" to insert a calculation block",
-          "bold": true
-        },
-        {
-          "text": " "
-        }
-      ],
-      "type": "p",
-      "id": "oza6UvZGBNNGdrhnaH1Ei"
-    },
-    {
-      "children": [
-        {
-          "text": "A calculation block lets you add calculations, functions and more to your notebook using the "
-        },
-        {
-          "children": [
-            {
-              "text": "Decipad language"
-            }
-          ],
-          "type": "a",
-          "url": "https://alpha.decipad.com/docs/language",
-          "id": "NmoGnavM-EONaBsFbOa9d"
-        },
-        {
-          "text": ". Assign a name to any value or calculation to a create named variable that can be "
-        },
-        {
-          "text": "reused",
-          "bold": true
-        },
-        {
-          "text": " throughout your notebook."
-        }
-      ],
-      "type": "p",
-      "id": "SCo0_K9Xqp2WblUrlKHjQ"
-    },
-    {
-      "children": [
-        {
-          "children": [
-            {
-              "text": "RunningGoal = 3.0 miles/run"
-            }
-          ],
-          "type": "code_line",
-          "id": "tpzqK7YREYgVwJlRPXwyQ"
-        },
-        {
-          "children": [
-            {
-              "text": "Frequency = 5 runs/week"
-            }
-          ],
-          "type": "code_line",
-          "id": "E8cy17A3qdTZtRzAtjj1o"
-        },
-        {
-          "children": [
-            {
-              "text": "Distance = RunningGoal * Frequency"
-            }
-          ],
-          "type": "code_line",
-          "id": "gZ9fXWMnUVVNj-Jl9mlGd"
-        }
-      ],
-      "type": "code_block",
-      "id": "i6Qj7w06oB5dkX5I039Sy"
-    },
-    {
-      "children": [
-        {
-          "text": ""
-        }
-      ],
-      "type": "p",
-      "id": "e2qfIikDSkBYBJlLVKP00"
-    },
-    {
-      "children": [
-        {
-          "text": "❷ "
-        },
-        {
-          "text": "Convert units effortlessly",
-          "bold": true
-        },
-        {
-          "text": " "
-        }
-      ],
-      "type": "p",
-      "id": "bmqJKoAxB7TodJQ8_fpJs"
-    },
-    {
-      "children": [
-        {
-          "text": "You can add custom or "
-        },
-        {
-          "children": [
-            {
-              "text": "supported units"
-            }
-          ],
-          "type": "a",
-          "url": "https://alpha.decipad.com/docs/supported-units",
-          "id": "E_dtyv97JHKYbExmtKcS4"
-        },
-        {
-          "text": " to any value inside a calculation block. Easily convert between Decipad supported units. If we don't support a unit you need, create your "
-        },
-        {
-          "children": [
-            {
-              "text": ""
-            }
-          ],
-          "type": "a",
-          "url": "https://alpha.decipad.com/docs/supported-units",
-          "id": "6WT2-vim1MECjAXSrLj3P"
-        },
-        {
-          "text": ""
-        },
-        {
-          "children": [
-            {
-              "text": "own conversion"
-            }
-          ],
-          "type": "a",
-          "url": "https://alpha.decipad.com/docs/language/units/#custom-conversions"
-        },
-        {
-          "text": " 🤯. Check out "
-        },
-        {
-          "children": [
-            {
-              "text": ""
-            }
-          ],
-          "type": "a",
-          "url": "https://alpha.decipad.com/workspaces/le4O74eh9NlQ1scCSA1jo/pads/Q5sDRcpQ4lYSg84Hrs3gf?secret=Bf2nWPe5ZAuDJL9MEWP1L",
-          "id": "47gWYbhs340H6AmCAknnE"
-        },
-        {
-          "text": "this "
-        },
-        {
-          "children": [
-            {
-              "text": "example"
-            }
-          ],
-          "type": "a",
-          "url": "https://alpha.decipad.com/workspaces/AD6wi5YFzY5mXfKXokl0G/pads/fr5dMjzJTFSuSWKMbKu7R?secret=iDH1zMCO7Exjpp_UM8DVj",
-          "id": "rp4yRlVvGkTEhCrfv1x0J"
-        },
-        {
-          "text": " to see the power of units in action. "
-        }
-      ],
-      "type": "p",
-      "id": "DwL4Dl8PqtERPRzVOQOOv"
-    },
-    {
-      "children": [
-        {
-          "children": [
-            {
-              "text": "round(RunningGoal in km/run)"
-            }
-          ],
-          "type": "code_line",
-          "id": "GA80T5e_yqssU-NibNr8r"
-        },
-        {
-          "children": [
-            {
-              "text": "ParkTrail = 3.2 miles"
-            }
-          ],
-          "type": "code_line",
-          "id": "TRZAB7OhEFKBdJ_b5IBvp"
-        },
-        {
-          "children": [
-            {
-              "text": "TrackLoop = 400 meters"
-            }
-          ],
-          "type": "code_line",
-          "id": "pluQvN52ESj2sQ3j6q9mR"
-        },
-        {
-          "children": [
-            {
-              "text": "ParkTrail in TrackLoop"
-            }
-          ],
-          "type": "code_line",
-          "id": "z3RfpKY1DSpcuJM6aTxzl"
-        }
-      ],
-      "type": "code_block",
-      "id": "trd_4vnuOEO63E7oF9aR9"
-    },
-    {
-      "children": [
-        {
-          "text": ""
-        }
-      ],
-      "type": "p",
-      "id": "kZaKr8DS4phcEwWeBDyXQ"
-    },
-    {
-      "children": [
-        {
-          "text": "❸ "
-        },
-        {
-          "text": "Insert a table",
-          "bold": true
-        },
-        {
-          "text": " "
-        }
-      ],
-      "type": "p",
-      "id": "_lzkjJOciyCxJGdxR-cSO"
-    },
-    {
-      "children": [
-        {
-          "text": "Use the \"/\" command to insert a table. You can use table data as an "
-        },
-        {
-          "text": "input",
-          "bold": true
-        },
-        {
-          "text": " into your calculations. At this time, you can't perform calculations to change data within your table."
-        }
-      ],
-      "type": "p",
-      "id": "b3Nb2-kLwNhlgsH1a4aY1"
-    },
-    {
-      "children": [
-        {
-          "text": ""
-        }
-      ],
-      "type": "table-input",
-      "tableData": {
-        "variableName": "Routes",
-        "columns": [
-          {
-            "columnName": "Name",
-            "cells": ["Park Route", "Street Route", "Ocean Route"],
-            "cellType": "string"
-          },
-          {
-            "columnName": "Distance",
-            "cellType": {
-              "kind": "number",
-              "unit": {
-                "type": "units",
-                "args": [
-                  {
-                    "unit": "miles",
-                    "exp": "1",
-                    "multiplier": "1",
-                    "known": true
-                  }
-                ]
-              }
-            },
-            "cells": ["3.2", "2.8", "4"]
-          }
-        ]
-      },
-      "id": "I5_YzMc8QCU9uhG6b42GS"
-    },
-    {
-      "children": [
-        {
-          "text": ""
-        }
-      ],
-      "type": "p",
-      "id": "-WuO2L3CVy5SxsIZNddFV"
-    },
-    {
-      "children": [
-        {
-          "text": "❹ "
-        },
-        {
-          "text": "Build a table with our language ",
-          "bold": true
-        },
-        {
-          "text": "(advanced)",
-          "italic": true
-        }
-      ],
-      "type": "p",
-      "id": "KGkJDf5NJ8LBoIiSMXx3l"
-    },
-    {
-      "children": [
-        {
-          "text": "Build a table using the Decipad language to explore more complex capabilities like calculations! See this example of a "
-        },
-        {
-          "children": [
-            {
-              "text": "complex model"
-            }
-          ],
-          "type": "a",
-          "url": "https://alpha.decipad.com/workspaces/le4O74eh9NlQ1scCSA1jo/pads/NTcziPjPgtDqbimQAKu06?secret=QKMp0FtT_9WGNSpCB4FWl",
-          "id": "6seboTRUfeN3pOteFLrNN"
-        },
-        {
-          "text": " built in Decipad. "
-        }
-      ],
-      "type": "p",
-      "id": "_1kmG_oRO32OIlb7CoCcG"
-    },
-    {
-      "children": [
-        {
-          "children": [
-            {
-              "text": "InitialPace = 10 minutes/mile"
-            }
-          ],
-          "type": "code_line",
-          "id": "6vf7Rou9HDOLhxrXjb0N8"
-        },
-        {
-          "children": [
-            {
-              "text": "WeeklyImprovementRate = 5%"
-            }
-          ],
-          "type": "code_line",
-          "id": "q3XJZqek_4x40oR8uRBBv"
-        },
-        {
-          "children": [
-            {
-              "text": "Table = {\n  Period = [\"Week 1\", \"Week 2\", \"Week 3\", \"Week 4\"]\n  TargetPace = round(grow(InitialPace, - WeeklyImprovementRate, Table.Period) in minutes/km, 2)\n  TargetTime = round(TargetPace * (Routes.Distance))\n}"
-            }
-          ],
-          "type": "code_line",
-          "id": "GxMNem6NXg5FpANG4wJ9w"
-        }
-      ],
-      "type": "code_block",
-      "id": "bAhxyMQ4_zbzG8c5DLs9-"
-    },
-    {
-      "children": [
-        {
-          "text": ""
-        }
-      ],
-      "type": "p",
-      "id": "fDXKB5pkeqwQuWDugYpPV"
-    },
-    {
-      "children": [
-        {
-          "text": "🛠 A few tips before you get started"
-        }
-      ],
-      "type": "h2",
-      "id": "Vlz8joVsDHz_nMDpjaHdG"
-    },
-    {
-      "children": [
-        {
-          "children": [
-            {
-              "children": [
-                {
-                  "text": "We only support chromium-based browsers (at this time)"
-                }
-              ],
-              "type": "lic",
-              "id": "UZU_hr-JWi4cdCQEUYIqW"
-            }
-          ],
-          "type": "li",
-          "id": "2kPojB_l8x9Z-zF9i4xzv"
-        },
-        {
-          "children": [
-            {
-              "children": [
-                {
-                  "text": "It's early, you may run into some bugs or glitches 🐞. Just report them on "
-                },
-                {
-                  "children": [
-                    {
-                      "text": "Discord"
-                    }
-                  ],
-                  "type": "a",
-                  "url": "https://discord.com/invite/HwDMqwbGmc",
-                  "id": "dR-RJex2Ww-uffVLRgucq"
-                },
-                {
-                  "text": "."
-                }
-              ],
-              "type": "lic",
-              "id": "-yySoNDNnJ9VajGLIcA66"
-            }
-          ],
-          "type": "li",
-          "id": "blSSvfHZzk0gdBYd2sKB5"
-        },
-        {
-          "children": [
-            {
-              "children": [
-                {
-                  "text": "Want to collaborate with us on a use case? Let's 🍐 on "
-                },
-                {
-                  "children": [
-                    {
-                      "text": "Discord"
-                    }
-                  ],
-                  "type": "a",
-                  "url": "https://discord.com/invite/HwDMqwbGmc",
-                  "id": "dR-RJex2Ww-uffVLRgucq"
-                },
-                {
-                  "text": ". See you there!"
-                },
-                {
-                  "children": [
-                    {
-                      "text": ""
-                    }
-                  ],
-                  "type": "a",
-                  "url": "https://dev.decipad.com/workspaces/M88a_E6v2urAHdIDYGB0S/pads/St9SqDMjK2_yiPFogeDMX?secret=EjZz6gZ3u7BSCIpMzTDKc",
-                  "id": "P7vQy4o2cD4Kid-lY8lIt"
-                },
-                {
-                  "text": ""
-                },
-                {
-                  "children": [
-                    {
-                      "text": ""
-                    }
-                  ],
-                  "type": "a",
-                  "url": "https://discord.com/invite/HwDMqwbGmc",
-                  "id": "dR-RJex2Ww-uffVLRgucq"
-                },
-                {
-                  "text": ""
-                }
-              ],
-              "type": "lic",
-              "id": "iNxhdZlStdo_ulNM7RcrS"
-            }
-          ],
-          "type": "li",
-          "id": "S1r_xywVBTT684xfoZvPz"
-        }
-      ],
-      "type": "ul",
-      "id": "xSJjQ4hmliVgtyxIcLBcb"
-    },
-    {
-      "children": [
-        {
-          "text": ""
-        }
-      ],
-      "type": "p",
-      "id": "kDFTIQB_AjtkDjaV3oMRl"
-    },
-    {
-      "children": [
-        {
-          "text": "✨ And a list of some examples in case you need inspiration"
-        }
-      ],
-      "type": "h2",
-      "id": "wkeWNzuFSN5hDbOQRUC1v"
+      "id": "V05SvXfc2igToRFx5zXnS"
     },
     {
       "children": [
@@ -915,59 +415,95 @@
         }
       ],
       "type": "ul",
-      "id": "FL-e_zIqM2nCxQCpwkZvn"
+      "id": "zAM0mBmJj_B-l7mnE8eD9"
     },
     {
       "children": [
         {
-          "text": ""
-        }
-      ],
-      "type": "p",
-      "id": "5olEkeyifQ0YTT3PEXF9E"
-    },
-    {
-      "children": [
-        {
-          "text": "Ready?",
-          "bold": true
+          "text": "Superpower your modeling on Decipad by taking a look at our "
         },
         {
-          "text": " Start building models that are "
-        },
-        {
-          "text": "easy to read",
-          "code": true
-        },
-        {
-          "text": ", "
-        },
-        {
-          "text": "less error prone",
-          "code": true
-        },
-        {
-          "text": " and "
-        },
-        {
-          "text": "more adaptable",
-          "code": true
+          "children": [
+            {
+              "text": "documentation"
+            }
+          ],
+          "type": "a",
+          "url": "https://alpha.decipad.com/docs",
+          "id": "yb-FXk8Mf4S5-01NmOz1J"
         },
         {
           "text": ". "
         }
       ],
       "type": "p",
-      "id": "CVMySEOSmy8X5tYDHhgCK"
+      "id": "w5jjnbCYlf3eO6-c7jNmV"
     },
     {
       "children": [
         {
-          "text": "This is just the beginning! Thank you for being part of our mission to empower everyone to use numbers in meaningful ways."
+          "text": "Some Cool Thing to Try"
+        }
+      ],
+      "type": "h2",
+      "id": "Q59q8E8IYhf4u_S9p91OL"
+    },
+    {
+      "children": [
+        {
+          "text": "Type",
+          "bold": true
+        },
+        {
+          "text": "/",
+          "code": true,
+          "bold": true
+        },
+        {
+          "text": " to add a number field",
+          "bold": true
         }
       ],
       "type": "p",
-      "id": "Ar1AplNr4di945yeSvBZt"
+      "id": "vTY7evpx3aRHebSasg5AT"
+    },
+    {
+      "children": [
+        {
+          "text": "Add widgets to your notebooks so that everyone will be able to interact with your model when you publish it."
+        }
+      ],
+      "type": "p",
+      "id": "kHOCE8Ar8BtVwdv5FcJ2x"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "aNumber"
+            }
+          ],
+          "type": "caption"
+        },
+        {
+          "children": [
+            {
+              "text": "10"
+            }
+          ],
+          "type": "exp"
+        }
+      ],
+      "type": "def"
+    },
+    {
+      "children": [
+        {
+          "text": "aNumber * 10"
+        }
+      ],
+      "type": "code_line"
     },
     {
       "children": [
@@ -975,17 +511,46 @@
           "text": ""
         }
       ],
-      "type": "p",
-      "id": "dCRKHp2wiRKkdeWC1bwa_"
+      "type": "p"
     },
     {
       "children": [
         {
-          "text": "The Decipad Team"
+          "text": "Type",
+          "bold": true
+        },
+        {
+          "text": "/",
+          "code": true,
+          "bold": true
+        },
+        {
+          "text": " to add a Table",
+          "bold": true
         }
       ],
       "type": "p",
-      "id": "g2k5_rVB53kz4BXMtox2p"
+      "id": "--W46vqYPcAkYGlRr8jVl"
+    },
+    {
+      "children": [
+        {
+          "text": "Use tables as an "
+        },
+        {
+          "text": "input",
+          "bold": true
+        },
+        {
+          "text": " for your calculations. "
+        },
+        {
+          "text": "(We're working on it!)",
+          "italic": true
+        }
+      ],
+      "type": "p",
+      "id": "b3Nb2-kLwNhlgsH1a4aY1"
     },
     {
       "children": [
@@ -993,8 +558,294 @@
           "text": ""
         }
       ],
+      "type": "table-input",
+      "tableData": {
+        "variableName": "Routes",
+        "columns": [
+          {
+            "columnName": "Name",
+            "cells": ["Park Route", "Street Route", "Ocean Route"],
+            "cellType": "string"
+          },
+          {
+            "columnName": "Distance",
+            "cellType": {
+              "kind": "number",
+              "unit": {
+                "type": "units",
+                "args": [
+                  {
+                    "unit": "miles",
+                    "exp": "1",
+                    "multiplier": "1",
+                    "known": true
+                  }
+                ]
+              }
+            },
+            "cells": ["3.2", "2.8", "4"]
+          }
+        ]
+      },
+      "id": "nDsT4_nB38AsJcMjJBJeR"
+    },
+    {
+      "children": [
+        {
+          "text": "",
+          "bold": true
+        }
+      ],
       "type": "p",
-      "id": "Cncdi8hvzWNyNLeTqb_rS"
+      "id": "vTY7evpx3aRHebSasg5AT"
+    },
+    {
+      "children": [
+        {
+          "text": "Type",
+          "bold": true
+        },
+        {
+          "text": "/",
+          "code": true,
+          "bold": true
+        },
+        {
+          "text": " to insert a calculation block",
+          "bold": true
+        }
+      ],
+      "type": "p",
+      "id": "vkasg7BbbqNySRFzFkENX"
+    },
+    {
+      "children": [
+        {
+          "text": "A calculation block lets you add calculations, functions and more to your notebook using the "
+        },
+        {
+          "children": [
+            {
+              "text": "Decipad Language"
+            }
+          ],
+          "type": "a",
+          "url": "https://alpha.decipad.com/docs/language",
+          "id": "NmoGnavM-EONaBsFbOa9d"
+        },
+        {
+          "text": ". Assign a name to any value or calculation to create a variable that can be "
+        },
+        {
+          "text": "reused",
+          "bold": true
+        },
+        {
+          "text": " throughout your notebook."
+        }
+      ],
+      "type": "p",
+      "id": "SCo0_K9Xqp2WblUrlKHjQ"
+    },
+    {
+      "children": [
+        {
+          "text": "RunningGoal = 3.0 miles/run"
+        }
+      ],
+      "type": "code_line",
+      "id": "tpzqK7YREYgVwJlRPXwyQ"
+    },
+    {
+      "children": [
+        {
+          "text": "Frequency = 5 runs/week"
+        }
+      ],
+      "type": "code_line",
+      "id": "E8cy17A3qdTZtRzAtjj1o"
+    },
+    {
+      "children": [
+        {
+          "text": "Distance = RunningGoal * Frequency"
+        }
+      ],
+      "type": "code_line",
+      "id": "gZ9fXWMnUVVNj-Jl9mlGd"
+    },
+    {
+      "children": [
+        {
+          "text": "",
+          "bold": true
+        }
+      ],
+      "type": "p",
+      "id": "ykR6XM5ZHQAbvrsx-RIkK"
+    },
+    {
+      "children": [
+        {
+          "text": "Convert units effortlessly",
+          "bold": true
+        }
+      ],
+      "type": "p",
+      "id": "pbCsli0MTC3eVylRY9aTE"
+    },
+    {
+      "children": [
+        {
+          "text": "You can specify custom or use "
+        },
+        {
+          "children": [
+            {
+              "text": "supported units"
+            }
+          ],
+          "type": "a",
+          "url": "https://alpha.decipad.com/docs/language/units/supported-units",
+          "id": "E_dtyv97JHKYbExmtKcS4"
+        },
+        {
+          "text": " with any value, as well as convert between them. Check out this "
+        },
+        {
+          "children": [
+            {
+              "text": "example"
+            }
+          ],
+          "type": "a",
+          "url": "https://alpha.decipad.com/n/fr5dMjzJTFSuSWKMbKu7R?secret=iDH1zMCO7Exjpp_UM8DVj",
+          "id": "rp4yRlVvGkTEhCrfv1x0J"
+        },
+        {
+          "text": " to see the power of units in action. "
+        }
+      ],
+      "type": "p",
+      "id": "DwL4Dl8PqtERPRzVOQOOv"
+    },
+    {
+      "children": [
+        {
+          "text": "round(RunningGoal in km/run)"
+        }
+      ],
+      "type": "code_line",
+      "id": "GA80T5e_yqssU-NibNr8r"
+    },
+    {
+      "children": [
+        {
+          "text": "ParkTrail = 3.2 miles"
+        }
+      ],
+      "type": "code_line",
+      "id": "TRZAB7OhEFKBdJ_b5IBvp"
+    },
+    {
+      "children": [
+        {
+          "text": "TrackLoop = 400 meters"
+        }
+      ],
+      "type": "code_line",
+      "id": "pluQvN52ESj2sQ3j6q9mR"
+    },
+    {
+      "children": [
+        {
+          "text": "ParkTrail in TrackLoop"
+        }
+      ],
+      "type": "code_line",
+      "id": "z3RfpKY1DSpcuJM6aTxzl"
+    },
+    {
+      "children": [
+        {
+          "text": "",
+          "bold": true
+        }
+      ],
+      "type": "p",
+      "id": "WGdDAvJytU4G1_4FK_Vb_"
+    },
+    {
+      "children": [
+        {
+          "text": "Try the Decipad Language (Advanced)",
+          "bold": true
+        }
+      ],
+      "type": "p",
+      "id": "4IcVItu-0ydWCSdNQZdek"
+    },
+    {
+      "children": [
+        {
+          "text": "Build a table using the "
+        },
+        {
+          "children": [
+            {
+              "text": "Decipad Language"
+            }
+          ],
+          "type": "a",
+          "url": "https://alpha.decipad.com/docs/language",
+          "id": "NmoGnavM-EONaBsFbOa9d"
+        },
+        {
+          "text": " to explore more complex capabilities! Check this example of a more "
+        },
+        {
+          "children": [
+            {
+              "text": "complex model"
+            }
+          ],
+          "type": "a",
+          "url": "https://alpha.decipad.com/n/NTcziPjPgtDqbimQAKu06?secret=QKMp0FtT_9WGNSpCB4FWl",
+          "id": "6seboTRUfeN3pOteFLrNN"
+        },
+        {
+          "text": "."
+        }
+      ],
+      "type": "p",
+      "id": "_1kmG_oRO32OIlb7CoCcG"
+    },
+    {
+      "children": [
+        {
+          "text": "InitialPace = 10 minutes/mile"
+        }
+      ],
+      "type": "code_line",
+      "id": "6vf7Rou9HDOLhxrXjb0N8"
+    },
+    {
+      "children": [
+        {
+          "text": "WeeklyImprovementRate = 5%"
+        }
+      ],
+      "type": "code_line",
+      "id": "q3XJZqek_4x40oR8uRBBv"
+    },
+    {
+      "children": [
+        {
+          "text": "Table = {\n  Period = [\"Week 1\", \"Week 2\", \"Week 3\", \"Week 4\"]\n  TargetPace = round(grow(InitialPace, - WeeklyImprovementRate, Table.Period) in minutes/km, 2)\n  TargetTime = round(TargetPace * Routes.Distance)\n}"
+        }
+      ],
+      "type": "code_line",
+      "id": "GxMNem6NXg5FpANG4wJ9w"
     },
     {
       "children": [
@@ -1002,16 +853,58 @@
           "text": ""
         }
       ],
-      "type": "p",
-      "id": "WFo4vpAeU4mabaHB79gWC"
+      "type": "p"
     },
     {
-      "type": "p",
       "children": [
         {
-          "text": ""
+          "text": "Thanks for your feedback and interest!"
         }
-      ]
+      ],
+      "type": "h3"
+    },
+    {
+      "children": [
+        {
+          "text": "This is just the beginning. Thank you for being part of our mission to empower everyone to use numbers in meaningful ways."
+        }
+      ],
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "text": "We're really looking forward to keep learning from you, so join our community on "
+        },
+        {
+          "children": [
+            {
+              "text": "Discord"
+            }
+          ],
+          "type": "a",
+          "url": "https://discord.com/invite/YT2cuJkHkS",
+          "id": "RZecO5lIkGblx1SZMo1HN"
+        },
+        {
+          "text": " and share your needs and thoughts with us. "
+        }
+      ],
+      "type": "p",
+      "id": "R_1t8ShBAT9d67wZWLEmt"
+    },
+    {
+      "children": [
+        {
+          "text": "See you there"
+        },
+        {
+          "text": "The Decipad Team",
+          "code": true
+        }
+      ],
+      "type": "p",
+      "id": "LPi2w1mLwDdbJLrSdAEZQ"
     }
   ]
 }
