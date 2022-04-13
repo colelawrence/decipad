@@ -9721,10 +9721,10 @@
   dependencies:
     "@udecode/plate-core" "10.2.2"
 
-"@udecode/plate-test-utils@^3.2.0":
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-test-utils/-/plate-test-utils-3.2.0.tgz#889e4ed08b21a85fd20b7c7c084bb4d483da8c78"
-  integrity sha512-TvwSLrsDgzlzpcs+DbYHOV5fnUYI2v+dQ2nysc6QmFjS8cIi8ec1JF3GGb7IfLbEiQdMzxfLNmLkQYexN7gE1Q==
+"@udecode/plate-test-utils@^10.0.0":
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-test-utils/-/plate-test-utils-10.1.0.tgz#5d21a58b4d7eb7a5ad0505598ab1fff355212c82"
+  integrity sha512-xAssnvq8kQiqZqzjD+suWU/ZWQ+Y57rO92bHvg43xpmJxwhF8iFCP2iLH1AHVJFWbICc58XV/UjlDtILHOTAvQ==
 
 "@udecode/plate-trailing-block@10.2.2":
   version "10.2.2"
