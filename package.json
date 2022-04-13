@@ -264,7 +264,7 @@
     "chokidar-cli": "^2.1.0",
     "css-vars-ponyfill": "^2.4.5",
     "csstype": "^3.0.8",
-    "data-urls": "^2.0.0",
+    "data-urls": "^3.0.0",
     "diff": "^5.0.0",
     "dom-to-playwright": "^0.1.2",
     "domhandler": "^4.3.0",
