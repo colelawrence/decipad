@@ -14,6 +14,14 @@ import auth from './auth';
 import { websocketURL } from './websocket-url';
 import { createWebsocket } from './websocket';
 
+interface DoneCallback {
+  (...args: unknown[]): unknown;
+  fail(error?: string | { message: string }): unknown;
+}
+type ProvidesCallback =
+  | ((cb: DoneCallback) => void | undefined)
+  | (() => Promise<unknown>);
+
 export interface TestContext {
   test: typeof it;
   beforeAll: typeof beforeAll;
@@ -96,7 +104,7 @@ export function testWithSandbox(
   }
 
   function wrapTestHelper(
-    targetFn: (desc: string, fn: () => void | Promise<unknown>) => unknown
+    targetFn: (name: string, fn?: ProvidesCallback, timeout?: number) => unknown
   ) {
     return (desc: string, fn: () => void | Promise<unknown>) => {
       targetFn(desc, wrap(fn));
@@ -129,7 +137,7 @@ export function testWithSandbox(
     testFn.todo = it.todo;
     testFn.concurrent = wrapTestHelper(it.concurrent);
     testFn.each = (collection: Array<unknown>) =>
-      wrapTestHelper(it.each(collection));
+      wrapTestHelper(it.each(collection) as DoneCallback);
     return testFn as typeof global.test;
   }
 }
