@@ -9,6 +9,7 @@ import {
   ELEMENT_H3,
   ELEMENT_LI,
   ELEMENT_LIC,
+  ELEMENT_HR,
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
   ELEMENT_UL,
@@ -27,6 +28,7 @@ import {
   Code,
   CodeBlock,
   CodeLine,
+  Divider,
   Heading1,
   Heading2,
   Italic,
@@ -54,6 +56,7 @@ export const components: PlateComponents = {
   [ELEMENT_PARAGRAPH]: SlashCommandsParagraph,
   [ELEMENT_BLOCKQUOTE]: Blockquote,
   [ELEMENT_CALLOUT]: Callout,
+  [ELEMENT_HR]: Divider,
 
   // Code
   [ELEMENT_CODE_BLOCK]: CodeBlock,

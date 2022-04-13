@@ -81,6 +81,18 @@ const pDefault: TypographyStyles = {
   fontFeatureSettings: 'unset',
 };
 
+export const p8Regular: TypographyStyles = {
+  ...pDefault,
+  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+  fontSize: `${8 / usualRemPxs}rem`,
+  lineHeight: 1,
+};
+export const p8Medium: TypographyStyles = {
+  ...pDefault,
+  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+  fontSize: `${8 / usualRemPxs}rem`,
+  fontWeight: 500,
+};
 export const p12Regular: TypographyStyles = {
   ...pDefault,
   ...setCssVar('currentTextColor', cssVar('weakTextColor')),

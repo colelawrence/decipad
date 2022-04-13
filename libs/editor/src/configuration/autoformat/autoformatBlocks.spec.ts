@@ -2,6 +2,7 @@ import {
   ELEMENT_CODE_LINE,
   ELEMENT_H2,
   ELEMENT_H3,
+  ELEMENT_HR,
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
 import {
@@ -35,6 +36,24 @@ describe('a block', () => {
     editor.insertText('#');
     editor.insertText(' ');
     expect(editor.children).toMatchObject([{ type: ELEMENT_H3 }]);
+  });
+
+  it('can create an horizontal rule', () => {
+    editor.insertText('-');
+    expect(editor.children).toMatchObject([{ type: ELEMENT_PARAGRAPH }]);
+    editor.insertText('-');
+    expect(editor.children).toMatchObject([{ type: ELEMENT_PARAGRAPH }]);
+    editor.insertText('-');
+    expect(editor.children).toMatchObject([{ type: ELEMENT_HR }]);
+  });
+
+  it('can create an horizontal rule with tilde', () => {
+    editor.insertText('~');
+    expect(editor.children).toMatchObject([{ type: ELEMENT_PARAGRAPH }]);
+    editor.insertText('~');
+    expect(editor.children).toMatchObject([{ type: ELEMENT_PARAGRAPH }]);
+    editor.insertText('~');
+    expect(editor.children).toMatchObject([{ type: ELEMENT_HR }]);
   });
 });
 describe('inserting a code block', () => {

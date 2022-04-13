@@ -17,6 +17,7 @@ import {
   ELEMENT_H3,
   ELEMENT_LI,
   ELEMENT_LIC,
+  ELEMENT_HR,
   ELEMENT_LINK,
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
@@ -65,6 +66,10 @@ export interface BlockquoteElement extends BaseElement {
 export interface CalloutElement extends BaseElement {
   type: typeof ELEMENT_CALLOUT;
   children: InlineChildren;
+}
+export interface DividerElement extends BaseElement {
+  type: typeof ELEMENT_HR;
+  children: [EmptyText];
 }
 
 // Code
@@ -127,6 +132,7 @@ export type BlockElement =
   // Text blocks
   | ParagraphElement
   | BlockquoteElement
+  | DividerElement
   // Code
   | CodeBlockElement
   | CodeLineElement
@@ -157,6 +163,7 @@ export type Editor = Omit<
       | H3Element
       | ParagraphElement
       | BlockquoteElement
+      | DividerElement
       | CodeBlockElement
       | UnorderedListElement
       | OrderedListElement
@@ -186,6 +193,7 @@ export const topLevelBlockKinds: string[] = [
   ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_H3,
+  ELEMENT_HR,
   ELEMENT_PARAGRAPH,
   ELEMENT_CALLOUT,
   ELEMENT_BLOCKQUOTE,

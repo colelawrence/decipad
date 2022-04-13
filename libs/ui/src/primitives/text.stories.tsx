@@ -22,6 +22,8 @@ import {
   p20Medium,
   p24Bold,
   p32Medium,
+  p8Regular,
+  p8Medium,
 } from './text';
 // eslint-disable-next-line import/no-self-import
 import * as storyExports from './text.stories';
@@ -47,6 +49,12 @@ export const H2: React.FC = ({ children }) => <h2 css={css(h2)}>{children}</h2>;
 
 export const P12Regular: React.FC = ({ children }) => (
   <p css={css(p12Regular)}>{children}</p>
+);
+export const P8Regular: React.FC = ({ children }) => (
+  <p css={css(p8Regular)}>{children}</p>
+);
+export const P8Medium: React.FC = ({ children }) => (
+  <p css={css(p8Medium)}>{children}</p>
 );
 export const P12Medium: React.FC = ({ children }) => (
   <p css={css(p12Medium)}>{children}</p>

@@ -2,15 +2,16 @@ import { atoms } from '@decipad/ui';
 import { PlateComponent } from '@decipad/editor-types';
 import { DraggableBlock } from '../block-management';
 
-export const Divider: PlateComponent = ({ attributes, element }) => {
+export const Divider: PlateComponent = ({ attributes, element, children }) => {
   if (!element) {
     throw new Error('Divider is not a leaf');
   }
 
   return (
-    <div {...attributes}>
-      <DraggableBlock blockKind="paragraph" element={element}>
-        <atoms.Divider></atoms.Divider>
+    <div {...attributes} contentEditable={false}>
+      {children}
+      <DraggableBlock blockKind="divider" element={element}>
+        <atoms.Divider />
       </DraggableBlock>
     </div>
   );

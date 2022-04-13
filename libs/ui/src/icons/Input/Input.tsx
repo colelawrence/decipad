@@ -1,37 +1,32 @@
 import { FC } from 'react';
-import { cssVar } from '../../primitives';
+import { teal100, teal200, teal500 } from '../../primitives';
 
 export const Input = (): ReturnType<FC> => {
   return (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
       <title>Input</title>
       <path
-        d="M15.75 7.75H17.25C18.3546 7.75 19.25 8.64543 19.25 9.75V14.25C19.25 15.3546 18.3546 16.25 17.25 16.25H15.75M8.25 16.25H6.75C5.64543 16.25 4.75 15.3546 4.75 14.25V9.75C4.75 8.64543 5.64543 7.75 6.75 7.75H8.25"
-        stroke={cssVar('currentTextColor')}
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        d="M0 9.6C0 6.23969 0 4.55953 0.653961 3.27606C1.2292 2.14708 2.14708 1.2292 3.27606 0.653961C4.55953 0 6.23969 0 9.6 0H30.4C33.7603 0 35.4405 0 36.7239 0.653961C37.8529 1.2292 38.7708 2.14708 39.346 3.27606C40 4.55953 40 6.23969 40 9.6V30.4C40 33.7603 40 35.4405 39.346 36.7239C38.7708 37.8529 37.8529 38.7708 36.7239 39.346C35.4405 40 33.7603 40 30.4 40H9.6C6.23969 40 4.55953 40 3.27606 39.346C2.14708 38.7708 1.2292 37.8529 0.653961 36.7239C0 35.4405 0 33.7603 0 30.4V9.6Z"
+        fill={teal100.rgb}
       />
-      <path
-        d="M10.75 4.75H13.25"
-        stroke={cssVar('currentTextColor')}
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+      <rect
+        x="8.65"
+        y="11.65"
+        width="22.7"
+        height="16.7"
+        rx="3.35"
+        fill="white"
+        stroke={teal500.rgb}
+        strokeWidth="1.3"
       />
-      <path
-        d="M10.75 19.25H13.25"
-        stroke={cssVar('currentTextColor')}
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M12 5V19"
-        stroke={cssVar('currentTextColor')}
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+      <rect
+        x="13"
+        y="15"
+        width="10"
+        height="1.3"
+        rx="0.65"
+        transform="rotate(90 13 15)"
+        fill={teal200.rgb}
       />
     </svg>
   );

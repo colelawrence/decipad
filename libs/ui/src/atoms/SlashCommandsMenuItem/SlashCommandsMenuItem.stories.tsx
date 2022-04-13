@@ -5,6 +5,7 @@ import { SlashCommandsMenuItem } from './SlashCommandsMenuItem';
 const args = {
   title: 'Title',
   description: 'Description goes here',
+  enabled: true,
 };
 
 export default {

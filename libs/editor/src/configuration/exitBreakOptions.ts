@@ -5,6 +5,7 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_CODE_LINE,
   ELEMENT_CALLOUT,
+  ELEMENT_BLOCKQUOTE,
 } from '@decipad/editor-types';
 
 export const exitBreakOptions = {
@@ -28,6 +29,7 @@ export const exitBreakOptions = {
           ELEMENT_PARAGRAPH,
           ELEMENT_CODE_LINE,
           ELEMENT_CALLOUT,
+          ELEMENT_BLOCKQUOTE,
         ],
       },
     },

@@ -4,7 +4,7 @@ import {
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
 import { getNode, insertNodes, TEditor, TElement } from '@udecode/plate';
-import { Editor, Path } from 'slate';
+import { Editor, Path, Transforms } from 'slate';
 import { getBlockParentPath, requirePathBelowBlock } from './path';
 
 export const closestBlockAncestorHasType = (
@@ -37,6 +37,22 @@ export const allowsTextStyling = (
         closestBlockAncestorHasType(editor, path, type)
       )
     : false;
+};
+
+export const insertDividerBelow = (
+  editor: Editor,
+  path: Path,
+  type: ElementKind
+): void => {
+  const at = requirePathBelowBlock(editor, path);
+  insertNodes<TElement>(editor, { type, children: [{ text: '' }] }, { at });
+
+  const next = Editor.next(editor, { at });
+  if (next) {
+    const [, nextPath] = next;
+    const end = Editor.end(editor, nextPath);
+    Transforms.setSelection(editor, { anchor: end, focus: end });
+  }
 };
 
 export const insertBlockOfTypeBelow = (

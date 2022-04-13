@@ -25,6 +25,7 @@ export const Normal: Story<typeof args> = ({ numberOfItems, ...props }) => (
           title={`Item ${i + 1}`}
           description={`Description ${i + 1} goes here`}
           icon={circleIcon}
+          enabled
         />
       ))}
   </SlashCommandsMenuGroup>

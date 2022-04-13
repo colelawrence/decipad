@@ -9,6 +9,7 @@ const props: ComponentProps<typeof SlashCommandsMenuItem> = {
   title: 'Title',
   description: 'Description',
   icon: <svg />,
+  enabled: true,
 };
 
 mockConsoleWarn();

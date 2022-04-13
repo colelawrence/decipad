@@ -1,8 +1,12 @@
-import { ELEMENT_BLOCKQUOTE, ELEMENT_PARAGRAPH } from '@decipad/editor-types';
+import {
+  ELEMENT_BLOCKQUOTE,
+  ELEMENT_CALLOUT,
+  ELEMENT_PARAGRAPH,
+} from '@decipad/editor-types';
 import { isBlockAboveEmpty, isSelectionAtBlockStart } from '@udecode/plate';
 
 const resetBlockTypesCommonRule = {
-  types: [ELEMENT_BLOCKQUOTE],
+  types: [ELEMENT_BLOCKQUOTE, ELEMENT_CALLOUT],
   defaultType: ELEMENT_PARAGRAPH,
 };
 

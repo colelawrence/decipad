@@ -28,3 +28,4 @@ export const ELEMENT_VARIABLE_DEF = 'def';
 export const ELEMENT_CAPTION = 'caption';
 export const ELEMENT_EXPRESSION = 'exp';
 export const ELEMENT_CALLOUT = 'callout';
+export const ELEMENT_HR = 'divider';

@@ -3,6 +3,8 @@ import {
   ELEMENT_FETCH,
   ELEMENT_H2,
   ELEMENT_H3,
+  ELEMENT_HR,
+  ELEMENT_BLOCKQUOTE,
 } from '@decipad/editor-types';
 import { organisms } from '@decipad/ui';
 import { TEditor } from '@udecode/plate';
@@ -12,6 +14,7 @@ import {
   insertBlockOfTypeBelow,
   requireBlockParentPath,
   insertCodeLineBelow,
+  insertDividerBelow,
 } from '@decipad/editor-utils';
 import { insertInputBelow } from './input';
 import { insertPlotBelow } from './plot';
@@ -50,8 +53,14 @@ export const execute = (
     case 'heading2':
       insertBlockOfTypeBelow(editor, path, ELEMENT_H3);
       break;
+    case 'divider':
+      insertDividerBelow(editor, path, ELEMENT_HR);
+      break;
     case 'callout':
       insertBlockOfTypeBelow(editor, path, ELEMENT_CALLOUT);
+      break;
+    case 'blockquote':
+      insertBlockOfTypeBelow(editor, path, ELEMENT_BLOCKQUOTE);
       break;
   }
   Transforms.delete(editor, { at: requireBlockParentPath(editor, path) });

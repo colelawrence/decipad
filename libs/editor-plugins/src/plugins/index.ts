@@ -4,6 +4,7 @@ export * from './CodeVariableHighlight';
 export * from './Callout';
 export * from './CodeBlock';
 export * from './CodeLine';
+export * from './Divider';
 export * from './DocSync';
 export * from './ExternalData';
 export * from './InteractiveTable';

@@ -1,4 +1,11 @@
-import { h1, h2, p14Medium, p16Regular, TypographyStyles } from '../primitives';
+import {
+  h1,
+  h2,
+  p14Medium,
+  p16Regular,
+  p8Regular,
+  TypographyStyles,
+} from '../primitives';
 import { wideBlockWidth, slimBlockWidth } from './editor-layout';
 
 interface StyleData {
@@ -58,4 +65,9 @@ export const plot: StyleData = {
 export const interactive: StyleData = {
   paddingTop: '40px',
   desiredWidth: wideBlockWidth,
+};
+export const divider: StyleData = {
+  paddingTop: '24px',
+  typography: p8Regular,
+  desiredWidth: slimBlockWidth,
 };

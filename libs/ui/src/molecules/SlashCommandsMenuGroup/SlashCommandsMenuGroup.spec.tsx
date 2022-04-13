@@ -12,11 +12,13 @@ it('renders given items in a group', () => {
         title="item 0"
         description="desc 0"
         icon={<svg />}
+        enabled
       />
       <SlashCommandsMenuItem
         title="item 1"
         description="desc 1"
         icon={<svg />}
+        enabled
       />
     </SlashCommandsMenuGroup>
   );

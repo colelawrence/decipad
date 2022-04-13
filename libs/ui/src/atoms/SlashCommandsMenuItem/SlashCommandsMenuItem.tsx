@@ -2,7 +2,13 @@ import { css } from '@emotion/react';
 import { useWindowListener } from '@decipad/react-utils';
 import { FC, ReactNode, useCallback } from 'react';
 import { noop } from '@decipad/utils';
-import { cssVar, p12Regular, p14Medium } from '../../primitives';
+import {
+  cssVar,
+  p12Regular,
+  p14Medium,
+  p8Medium,
+  setCssVar,
+} from '../../primitives';
 
 const styles = css({
   display: 'grid',
@@ -22,22 +28,50 @@ const iconStyles = css({
   height: '40px',
 
   display: 'grid',
-  padding: '12px',
 
   backgroundColor: cssVar('iconBackgroundColor'),
   borderRadius: '6px',
 });
+
 const textStyles = css({
   display: 'grid',
   textAlign: 'start',
   rowGap: '6px',
 });
 
+const soonStyles = css(p8Medium, {
+  padding: '2px 4px',
+  borderRadius: '3px',
+  backgroundColor: cssVar('strongHighlightColor'),
+  height: '14px',
+});
+
+const inlineStyles = css({
+  display: 'flex',
+  gap: '8px',
+});
+
+const titleStyles = css(
+  p14Medium,
+  setCssVar('currentTextColor', 'strongTextColor')
+);
+const descriptionStyles = css(p12Regular);
+
+const disabledStyles = css(
+  setCssVar('currentTextColor', cssVar('weakerTextColor'))
+);
+const enabledStyles = css(
+  setCssVar('currentTextColor', cssVar('weakTextColor'))
+);
+const blackFontStyles = css(
+  setCssVar('currentTextColor', cssVar('strongTextColor'))
+);
+
 interface SlashCommandsMenuItemProps {
   readonly icon: ReactNode;
   readonly title: string;
   readonly description: string;
-
+  readonly enabled: boolean;
   /**
    * Unfortunately, we canont use real browser focus for this menu since we need the editor to stay focused.
    * Even a "switching focus back and forth on key presses" does not work well enough because Slate tends to lose selection state on blur.
@@ -49,19 +83,19 @@ export const SlashCommandsMenuItem = ({
   icon,
   title,
   description,
-
+  enabled,
   focused,
   onExecute = noop,
 }: SlashCommandsMenuItemProps): ReturnType<FC> => {
   const onKeyDown = useCallback(
     (event: KeyboardEvent) => {
       if (focused && event.key === 'Enter' && !event.shiftKey) {
-        onExecute();
+        enabled && onExecute();
         event.stopPropagation();
         event.preventDefault();
       }
     },
-    [onExecute, focused]
+    [onExecute, focused, enabled]
   );
   useWindowListener('keydown', onKeyDown, true);
 
@@ -70,16 +104,29 @@ export const SlashCommandsMenuItem = ({
       role="menuitem"
       css={styles}
       onMouseDown={(event) => {
-        onExecute();
+        enabled && onExecute();
         event.stopPropagation();
         event.preventDefault();
       }}
       data-focused={focused}
     >
-      <span css={iconStyles}>{icon}</span>
+      <span css={[iconStyles, !enabled && css({ opacity: '0.5' })]}>
+        {icon}
+      </span>
       <div css={textStyles}>
-        <strong css={css(p14Medium)}>{title}</strong>
-        <span css={css(p12Regular)}>{description}</span>
+        <div css={inlineStyles}>
+          <strong
+            css={[titleStyles, enabled ? blackFontStyles : disabledStyles]}
+          >
+            {title}
+          </strong>
+          {!enabled && <span css={soonStyles}>SOON</span>}
+        </div>
+        <span
+          css={[descriptionStyles, enabled ? enabledStyles : disabledStyles]}
+        >
+          {description}
+        </span>
       </div>
     </button>
   );

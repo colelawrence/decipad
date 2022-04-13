@@ -4,7 +4,19 @@ import { css } from '@emotion/react';
 import { ComponentProps, FC, useCallback, useEffect, useState } from 'react';
 import { noop } from '@decipad/utils';
 import { SlashCommandsMenuItem } from '../../atoms';
-import { Heading, Input, Pie, Shapes, Table, Callout } from '../../icons';
+import {
+  Input,
+  Slider,
+  TableSlash,
+  Calculations,
+  Chart,
+  DatePicker,
+  Heading1,
+  Heading2,
+  Divider,
+  Callout,
+  Blockquote,
+} from '../../icons';
 import { SlashCommandsMenuGroup } from '../../molecules';
 import {
   black,
@@ -22,7 +34,12 @@ const SLASH_COMMANDS = [
   'heading1',
   'heading2',
   'import',
+  'slider',
+  'datepicker',
+  'divider',
   'callout',
+  'blockquote',
+  'divider',
 ] as const;
 type SlashCommand = typeof SLASH_COMMANDS[number];
 
@@ -44,8 +61,9 @@ const dataItems = [
   {
     command: 'calculation-block',
     title: 'Calculations',
-    description: 'Play with your data, add inputs and see results',
-    icon: <Shapes />,
+    description: 'Use formulas to derive insight',
+    icon: <Calculations />,
+    enabled: true,
     extraSearchTerms: [
       'deci language',
       'calculation block',
@@ -56,39 +74,54 @@ const dataItems = [
   {
     command: 'table',
     title: 'Table',
-    description: 'Input your data in a table',
-    icon: <Table />,
+    description: 'Empty table to structure your data',
+    icon: <TableSlash />,
+    enabled: true,
+    extraSearchTerms: [],
+  },
+  {
+    command: 'plot',
+    title: 'Chart',
+    description: 'Chart some of your data',
+    icon: <Chart />,
+    enabled: isEnabled('PLOT_ELEMENTS'),
     extraSearchTerms: [],
   },
 ];
 
-// plots are hidden in prod
-if (isEnabled('PLOT_ELEMENTS')) {
-  dataItems.push({
-    command: 'plot',
-    title: 'Plot',
-    description: 'Plot your data in a graph',
-    icon: <Pie />,
-    extraSearchTerms: [],
-  });
-}
-
 const groups: ReadonlyArray<SlashCommandGroup> = [
   {
-    title: 'Interactivity',
+    title: 'Numbers',
+    items: dataItems as SlashCommandGroup['items'],
+  },
+  {
+    title: 'Widgets',
     items: [
       {
         command: 'input',
-        title: 'Number Field',
-        description: 'Add an input users can interact with',
+        title: 'Input',
+        description: 'Share your notebook and have others interact with it',
         icon: <Input />,
-        extraSearchTerms: [],
+        enabled: true,
+        extraSearchTerms: ['input', 'number', 'publish'],
+      },
+      {
+        command: 'datepicker',
+        title: 'Date',
+        description: 'Interact with your notebook using dates',
+        icon: <DatePicker />,
+        enabled: false,
+        extraSearchTerms: ['input', 'date', 'calendar', 'publish'],
+      },
+      {
+        command: 'slider',
+        title: 'Slider',
+        description: 'Let users interact with your notebook with a slider',
+        icon: <Slider />,
+        enabled: false,
+        extraSearchTerms: ['input', 'number', 'slider', 'publish'],
       },
     ],
-  },
-  {
-    title: 'Data',
-    items: dataItems as SlashCommandGroup['items'],
   },
   {
     title: 'Text',
@@ -97,22 +130,41 @@ const groups: ReadonlyArray<SlashCommandGroup> = [
         command: 'heading1',
         title: 'Heading',
         description: 'Add main text heading',
-        icon: <Heading />,
-        extraSearchTerms: [],
+        icon: <Heading1 />,
+        enabled: true,
+        extraSearchTerms: ['h1'],
       },
       {
         command: 'heading2',
         title: 'Sub-heading',
         description: 'Add secondary text heading',
-        icon: <Heading />,
-        extraSearchTerms: [],
+        icon: <Heading2 />,
+        enabled: true,
+        extraSearchTerms: ['h2'],
       },
       {
         command: 'callout',
         title: 'Callout',
-        description: 'Make your text stand out with an icon',
+        description: 'Grabs the readers attention',
         icon: <Callout />,
-        extraSearchTerms: [],
+        enabled: true,
+        extraSearchTerms: ['highlight', 'pop', 'hero'],
+      },
+      {
+        command: 'blockquote',
+        title: 'Quote',
+        description: 'Quote something, or someone.',
+        icon: <Blockquote />,
+        enabled: true,
+        extraSearchTerms: ['>', 'quote', 'blockquote'],
+      },
+      {
+        command: 'divider',
+        title: 'Divider',
+        description: 'A separator between your text',
+        icon: <Divider />,
+        enabled: true,
+        extraSearchTerms: ['hr', 'divider', '-'],
       },
     ],
   },

@@ -1,5 +1,6 @@
 export { Blockquote } from './Blockquote';
 export { Callout } from './Callout';
+export { Divider } from './Divider';
 export { Heading1 } from './Heading1';
 export { Heading2 } from './Heading2';
 export { ListItem } from './ListItem';
