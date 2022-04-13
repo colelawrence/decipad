@@ -17,11 +17,11 @@ export const createEnterOnExpressionPlugin = createOnKeyDownPluginFactory({
             const [, path] = next;
             const anchor = { offset: 0, path };
             Transforms.setSelection(editor, { anchor, focus: anchor });
+            return true;
           }
-          return false;
         }
       }
     }
-    return true;
+    return false;
   },
 });
