@@ -24,7 +24,7 @@ interface BlockDragHandleProps {
   readonly menuOpen?: boolean;
   readonly onChangeMenuOpen?: (newMenuOpen: boolean) => void;
 
-  readonly onDelete?: () => void;
+  readonly onDelete?: (() => void) | false;
 }
 
 export const BlockDragHandle = ({
@@ -56,13 +56,16 @@ export const BlockDragHandle = ({
           </span>
         </Tooltip>
       )}
-      <div css={{ gridArea: 'menu', zIndex: 1 }}>
-        <MenuList root open={menuOpen} onChangeOpen={onChangeMenuOpen}>
-          <MenuItem icon={<Delete />} onSelect={onDelete}>
-            Delete
-          </MenuItem>
-        </MenuList>
-      </div>
+      {/* onDelete is only false when disabled by the parent component */}
+      {onDelete !== false && (
+        <div css={{ gridArea: 'menu', zIndex: 1 }}>
+          <MenuList root open={menuOpen} onChangeOpen={onChangeMenuOpen}>
+            <MenuItem icon={<Delete />} onSelect={onDelete}>
+              Delete
+            </MenuItem>
+          </MenuList>
+        </div>
+      )}
     </div>
   );
 };

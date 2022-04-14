@@ -81,7 +81,7 @@ export const VariableDef: PlateComponent = ({
       <DraggableBlock
         blockKind="interactive"
         element={element}
-        onDelete={onDelete}
+        onDelete={false}
       >
         <organisms.VariableEditor
           onConvert={onConvert}

@@ -22,7 +22,7 @@ interface DraggableBlockProps {
   readonly dragSource?: ConnectDragSource;
   readonly blockRef?: RefObject<HTMLDivElement>;
 
-  readonly onDelete?: () => void;
+  readonly onDelete?: (() => void) | false;
 
   readonly blockKind: keyof typeof blockAlignment;
   readonly children: ReactNode;

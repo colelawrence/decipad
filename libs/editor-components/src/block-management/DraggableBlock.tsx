@@ -58,7 +58,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
       blockRef={blockRef}
       dropLine={dropLine || undefined}
       isBeingDragged={isDragging}
-      onDelete={onDelete}
+      onDelete={parentOnDelete === false ? false : onDelete}
     >
       <InDraggableBlock.Provider value={true}>
         {children}
