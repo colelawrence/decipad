@@ -305,7 +305,7 @@
     "proper-lockfile": "^4.1.2",
     "react-dnd-test-backend": "^15.1.2",
     "react-dnd-test-utils": "^15.1.2",
-    "realpath": "^1.1.0",
+    "realpath": "^2.0.0",
     "remark": "^14.0.1",
     "remark-frontmatter": "^4.0.1",
     "remark-gfm": "^3.0.1",
