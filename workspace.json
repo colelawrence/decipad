@@ -1202,11 +1202,6 @@
         }
       }
     },
-    "babel-config-editor": {
-      "root": "libs/babel-config-editor",
-      "sourceRoot": "libs/babel-config-editor",
-      "projectType": "library"
-    },
     "toast": {
       "root": "libs/toast",
       "sourceRoot": "libs/toast",

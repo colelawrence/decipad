@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import {
   BehaviorSubject,
   distinctUntilChanged,
@@ -27,10 +33,9 @@ export const ResultsContext =
   createContext<Observable<ResultsContextItem>>(EMPTY);
 
 /** A ResultsContext.Provider with a value for tests */
-export const TestResultsProvider: React.FC<Partial<ResultsContextItem>> = ({
-  children,
-  ...contextItem
-}) => {
+export const TestResultsProvider: React.FC<
+  Partial<ResultsContextItem> & { children?: ReactNode }
+> = ({ children, ...contextItem }) => {
   const value = new BehaviorSubject({
     ...defaultComputerResults,
     ...contextItem,

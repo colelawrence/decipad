@@ -70,7 +70,10 @@ const iconStyles = css({
   marginRight: '6px',
 });
 
-export const Toast: React.FC<ToastProps> = ({ appearance, children }) => {
+export const Toast: React.FC<React.PropsWithChildren<ToastProps>> = ({
+  appearance,
+  children,
+}) => {
   return (
     <div css={getAppearanceType(appearance)}>
       <span css={iconStyles}>{getIconType(appearance)}</span>

@@ -18,6 +18,7 @@ import {
   PlatePluginComponent,
   PlateProps,
 } from '@udecode/plate';
+import { PropsWithChildren } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DraggableBlock } from './DraggableBlock';
@@ -37,7 +38,7 @@ const DraggableParagraphPlugin: PlatePlugin = {
 
 let editor: PlateEditor;
 let plateProps: PlateProps;
-let wrapper: React.FC;
+let wrapper: React.FC<PropsWithChildren<unknown>>;
 beforeEach(() => {
   const plugins = createPlugins([DraggableParagraphPlugin]);
   plateProps = {

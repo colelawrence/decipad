@@ -13,7 +13,9 @@ const itemStyles = css({
   flexBasis: `calc((${smallestMobile.landscape.width}px - 100%) * 999)`,
 });
 
-export const EditorColumns: FC = ({ children }) => {
+export const EditorColumns: FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => {
   return (
     <ul css={styles}>
       {Children.map(children, (child) => (

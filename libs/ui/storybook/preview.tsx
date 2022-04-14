@@ -20,7 +20,9 @@ const withGlobalStyles: DecoratorFn = (StoryFn, context) => {
   );
 };
 
-const SetAllowDarkMode: React.FC = ({ children }) => {
+const SetAllowDarkMode: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => {
   const allowDarkMode = useDarkMode();
   useEffect(() => {
     localStorage.setItem(

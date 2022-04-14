@@ -41,7 +41,10 @@ interface AddNewProps {
   readonly onAdd?: () => void;
 }
 
-export const AddNew: React.FC<AddNewProps> = ({ children, onAdd = noop }) => (
+export const AddNew: React.FC<React.PropsWithChildren<AddNewProps>> = ({
+  children,
+  onAdd = noop,
+}) => (
   <div css={wrapperStyles}>
     {children}
     <button css={addButtonStyles} onClick={onAdd}>

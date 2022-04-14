@@ -38,73 +38,77 @@ export default {
   },
 } as Meta;
 
-export const Banner: React.FC = ({ children }) => (
-  <h1 css={css(banner)}>{children}</h1>
-);
-export const Display: React.FC = ({ children }) => (
-  <h1 css={css(display)}>{children}</h1>
-);
-export const H1: React.FC = ({ children }) => <h1 css={css(h1)}>{children}</h1>;
-export const H2: React.FC = ({ children }) => <h2 css={css(h2)}>{children}</h2>;
+export const Banner: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => <h1 css={css(banner)}>{children}</h1>;
+export const Display: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => <h1 css={css(display)}>{children}</h1>;
+export const H1: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => <h1 css={css(h1)}>{children}</h1>;
+export const H2: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => <h2 css={css(h2)}>{children}</h2>;
 
-export const P12Regular: React.FC = ({ children }) => (
-  <p css={css(p12Regular)}>{children}</p>
-);
-export const P8Regular: React.FC = ({ children }) => (
-  <p css={css(p8Regular)}>{children}</p>
-);
-export const P8Medium: React.FC = ({ children }) => (
-  <p css={css(p8Medium)}>{children}</p>
-);
-export const P12Medium: React.FC = ({ children }) => (
-  <p css={css(p12Medium)}>{children}</p>
-);
-export const P12Bold: React.FC = ({ children }) => (
-  <p css={css(p12Bold)}>{children}</p>
-);
-export const P13Regular: React.FC = ({ children }) => (
-  <p css={css(p13Regular)}>{children}</p>
-);
-export const P13Medium: React.FC = ({ children }) => (
-  <p css={css(p13Medium)}>{children}</p>
-);
-export const P13SemiBold: React.FC = ({ children }) => (
-  <p css={css(p13SemiBold)}>{children}</p>
-);
-export const P14Regular: React.FC = ({ children }) => (
-  <p css={css(p14Regular)}>{children}</p>
-);
-export const P14Medium: React.FC = ({ children }) => (
-  <p css={css(p14Medium)}>{children}</p>
-);
-export const P15Regular: React.FC = ({ children }) => (
-  <p css={css(p15Regular)}>{children}</p>
-);
-export const P15Medium: React.FC = ({ children }) => (
-  <p css={css(p15Medium)}>{children}</p>
-);
-export const P16Regular: React.FC = ({ children }) => (
-  <p css={css(p16Regular)}>{children}</p>
-);
-export const P16Bold: React.FC = ({ children }) => (
-  <p css={css(p16Regular)}>{children}</p>
-);
-export const P18Regular: React.FC = ({ children }) => (
-  <p css={css(p18Regular)}>{children}</p>
-);
-export const P20Medium: React.FC = ({ children }) => (
-  <p css={css(p20Medium)}>{children}</p>
-);
-export const P24Bold: React.FC = ({ children }) => (
-  <p css={css(p24Bold)}>{children}</p>
-);
-export const P32Medium: React.FC = ({ children }) => (
-  <p css={css(p32Medium)}>{children}</p>
-);
+export const P12Regular: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => <p css={css(p12Regular)}>{children}</p>;
+export const P8Regular: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => <p css={css(p8Regular)}>{children}</p>;
+export const P8Medium: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => <p css={css(p8Medium)}>{children}</p>;
+export const P12Medium: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => <p css={css(p12Medium)}>{children}</p>;
+export const P12Bold: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => <p css={css(p12Bold)}>{children}</p>;
+export const P13Regular: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => <p css={css(p13Regular)}>{children}</p>;
+export const P13Medium: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => <p css={css(p13Medium)}>{children}</p>;
+export const P13SemiBold: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => <p css={css(p13SemiBold)}>{children}</p>;
+export const P14Regular: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => <p css={css(p14Regular)}>{children}</p>;
+export const P14Medium: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => <p css={css(p14Medium)}>{children}</p>;
+export const P15Regular: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => <p css={css(p15Regular)}>{children}</p>;
+export const P15Medium: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => <p css={css(p15Medium)}>{children}</p>;
+export const P16Regular: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => <p css={css(p16Regular)}>{children}</p>;
+export const P16Bold: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => <p css={css(p16Regular)}>{children}</p>;
+export const P18Regular: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => <p css={css(p18Regular)}>{children}</p>;
+export const P20Medium: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => <p css={css(p20Medium)}>{children}</p>;
+export const P24Bold: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => <p css={css(p24Bold)}>{children}</p>;
+export const P32Medium: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => <p css={css(p32Medium)}>{children}</p>;
 
-export const Code: React.FC = ({ children }) => (
-  <p css={css(code)}>{children}</p>
-);
+export const Code: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => <p css={css(code)}>{children}</p>;
 
 // make sure all types of text are covered by stories
 if (

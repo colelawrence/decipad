@@ -26,7 +26,9 @@ const DarkThemeStyles = (): ReturnType<React.FC> => {
   ) : null;
 };
 
-export const GlobalStyles: React.FC = ({ children }) => (
+export const GlobalStyles: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => (
   <>
     <Global styles={emotionNormalize} />
     <Global styles={emotionReset} />

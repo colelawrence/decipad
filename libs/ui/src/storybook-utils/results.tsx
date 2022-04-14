@@ -7,10 +7,9 @@ import {
 import { ComponentProps, FC } from 'react';
 import { BehaviorSubject } from 'rxjs';
 
-const ResultsProvider: FC<Pick<ResultsContextItem, 'blockResults'>> = ({
-  blockResults,
-  children,
-}) => (
+const ResultsProvider: FC<
+  React.PropsWithChildren<Pick<ResultsContextItem, 'blockResults'>>
+> = ({ blockResults, children }) => (
   <ResultsContext.Provider
     value={new BehaviorSubject({ ...useResults(), blockResults })}
   >

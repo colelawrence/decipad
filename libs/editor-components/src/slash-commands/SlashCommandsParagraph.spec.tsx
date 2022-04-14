@@ -22,10 +22,11 @@ import { Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { findDomNodePath } from '@decipad/slate-react-utils';
 import { SlashCommandsParagraph } from './SlashCommandsParagraph';
+import { PropsWithChildren } from 'react';
 
 let editor: PlateEditor;
 let plateProps: PlateProps;
-let wrapper: React.FC;
+let wrapper: React.FC<PropsWithChildren<unknown>>;
 beforeEach(() => {
   const plugins = createPlugins([createParagraphPlugin()], {
     components: {

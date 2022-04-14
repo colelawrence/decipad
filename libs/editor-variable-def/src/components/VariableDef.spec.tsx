@@ -23,7 +23,9 @@ import { VariableDef } from './VariableDef';
 
 let plateProps: PlateProps;
 let editor: PlateEditor;
-let wrapper: React.FC;
+let wrapper: React.FC<
+  React.PropsWithChildren<React.PropsWithChildren<unknown>>
+>;
 beforeEach(() => {
   const inputPlugin: PlatePlugin = {
     key: ELEMENT_VARIABLE_DEF,

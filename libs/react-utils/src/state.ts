@@ -33,12 +33,12 @@ export function useSafeState<S>(
   const [state, setState] = useState<S | undefined>(initialState);
 
   const setSafeState = useCallback(
-    (value) => {
+    (value: S) => {
       if (mounted.current) {
         setState(value);
       }
     },
     [mounted]
   );
-  return [state, setSafeState];
+  return [state, setSafeState as Dispatch<SetStateAction<S | undefined>>];
 }

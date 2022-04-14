@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, PropsWithChildren } from 'react';
 import { Element, RichText } from './elements';
 
 interface ElementAttributes {
@@ -14,17 +14,19 @@ interface LeafAttributes {
   'data-slate-leaf': true;
 }
 export type PlateComponent<AdditionalProps = Record<never, never>> = FC<
-  (
-    | {
-        readonly attributes: ElementAttributes;
-        readonly element: Element;
-        readonly leaf?: undefined;
-      }
-    | {
-        readonly attributes: LeafAttributes;
-        readonly element?: undefined;
-        readonly leaf: RichText;
-      }
-  ) &
-    AdditionalProps
+  PropsWithChildren<
+    (
+      | {
+          readonly attributes: ElementAttributes;
+          readonly element: Element;
+          readonly leaf?: undefined;
+        }
+      | {
+          readonly attributes: LeafAttributes;
+          readonly element?: undefined;
+          readonly leaf: RichText;
+        }
+    ) &
+      AdditionalProps
+  >
 >;

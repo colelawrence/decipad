@@ -1,10 +1,1 @@
-module.exports = {
-  presets: [
-    '@nrwl/web/babel',
-    [
-      require.resolve('@babel/preset-react'),
-      { runtime: 'automatic', importSource: '@emotion/react' },
-    ],
-  ],
-  plugins: ['@babel/plugin-transform-runtime'],
-};
+module.exports = require('../../babel-web.babelrc');

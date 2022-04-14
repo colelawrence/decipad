@@ -5,7 +5,7 @@ import { MenuWrapper } from '../../test-utils';
 import { TriggerMenuItem } from './TriggerMenuItem';
 
 // TriggerMenuItem must be created instantiated inside a nested menu
-const wrapper: FC = ({ children }) => (
+const wrapper: FC<React.PropsWithChildren<unknown>> = ({ children }) => (
   <MenuWrapper>
     <MenuWrapper>{children}</MenuWrapper>
   </MenuWrapper>

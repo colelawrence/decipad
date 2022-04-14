@@ -1,1 +1,1 @@
-module.exports = require('../babel-config-editor');
+module.exports = require('../../babel-web.babelrc');

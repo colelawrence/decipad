@@ -7,15 +7,5 @@ module.exports = {
     ],
     require.resolve('@docusaurus/core/lib/babel/preset'),
   ],
-  plugins: [
-    [
-      require.resolve('@babel/plugin-proposal-private-methods'),
-      { loose: true },
-    ],
-    [
-      require.resolve('@babel/plugin-proposal-private-property-in-object'),
-      { loose: true },
-    ],
-    require.resolve('@emotion/babel-plugin'),
-  ],
+  plugins: [require.resolve('@emotion/babel-plugin')],
 };

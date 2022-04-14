@@ -12,9 +12,10 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Transforms } from 'slate';
 import { findDomNodePath } from '@decipad/slate-react-utils';
+import { PropsWithChildren } from 'react';
 import { Paragraph } from './Paragraph';
 
-const wrapper: React.FC = ({ children }) => (
+const wrapper: React.FC<PropsWithChildren<unknown>> = ({ children }) => (
   <DndProvider backend={HTML5Backend}>{children}</DndProvider>
 );
 

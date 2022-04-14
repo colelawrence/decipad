@@ -12,7 +12,9 @@ import { runCode } from '../../test-utils';
 
 import { ColumnResult } from '..';
 
-function withResultContextWrapper(value: Partial<ResultsContextItem>): FC {
+function withResultContextWrapper(
+  value: Partial<ResultsContextItem>
+): FC<React.PropsWithChildren<unknown>> {
   return ({ children }) => {
     return <TestResultsProvider {...value}>{children}</TestResultsProvider>;
   };

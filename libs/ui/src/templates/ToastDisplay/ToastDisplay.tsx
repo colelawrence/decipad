@@ -2,7 +2,9 @@ import { ToastContext } from '@decipad/toast';
 import * as ReactToastNotifications from 'react-toast-notifications';
 import { Toast } from '../../atoms';
 
-const ToastProvider: React.FC = ({ children }) => {
+const ToastProvider: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => {
   const { addToast } = ReactToastNotifications.useToasts();
   return (
     <ToastContext.Provider
@@ -15,7 +17,9 @@ const ToastProvider: React.FC = ({ children }) => {
   );
 };
 
-export const ToastDisplay: React.FC = ({ children }) => {
+export const ToastDisplay: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => {
   return (
     <ReactToastNotifications.ToastProvider
       components={{ Toast }}

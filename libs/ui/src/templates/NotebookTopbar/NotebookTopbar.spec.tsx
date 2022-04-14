@@ -20,7 +20,7 @@ const props: ComponentProps<typeof NotebookTopbar> = {
   link: '',
 };
 
-const WithProviders: FC = ({ children }) => (
+const WithProviders: FC<React.PropsWithChildren<unknown>> = ({ children }) => (
   <ClientEventsContext.Provider value={noop}>
     <SessionProvider session={{ user: {} }}>{children}</SessionProvider>
   </ClientEventsContext.Provider>

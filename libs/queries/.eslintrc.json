@@ -1,4 +1,4 @@
 {
-  "extends": ["../../libs/eslint-config-decipad/react"],
+  "extends": ["../../libs/eslint-config-decipad"],
   "ignorePatterns": ["!**/*"]
 }

@@ -1,7 +1,13 @@
 import { Element } from '@decipad/editor-types';
 import { organisms } from '@decipad/ui';
 import { useDndBlock, useEditorState } from '@udecode/plate';
-import { ComponentProps, createContext, useContext, useRef } from 'react';
+import {
+  ComponentProps,
+  createContext,
+  ReactNode,
+  useContext,
+  useRef,
+} from 'react';
 import { Transforms } from 'slate';
 import { ReactEditor, useReadOnly } from 'slate-react';
 
@@ -9,6 +15,7 @@ const InDraggableBlock = createContext(false);
 
 type DraggableBlockProps = {
   readonly element: Element;
+  readonly children: ReactNode;
 } & Pick<ComponentProps<typeof organisms.DraggableBlock>, 'blockKind'>;
 export const DraggableBlock: React.FC<DraggableBlockProps> = ({
   children,

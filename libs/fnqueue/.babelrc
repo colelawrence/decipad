@@ -1,4 +1,0 @@
-{
-  "presets": ["@nrwl/web/babel"],
-  "plugins": [["@babel/plugin-proposal-private-methods", { "loose": true }]]
-}
