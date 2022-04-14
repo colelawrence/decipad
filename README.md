@@ -57,6 +57,12 @@ Using the command line, inside your local copy of the decipad repo, you should d
 yarn install
 ```
 
+After dependency upgrades, some existing compilation caches can cause problems. To clean them, you might need to run:
+
+```bash
+yarn clean:all
+```
+
 ### (Optional) Git hooks
 
 If you'd like to set up lint and test running before commit, run `yarn husky install`.
