@@ -7,8 +7,8 @@ import {
   ELEMENT_CAPTION,
   ELEMENT_EXPRESSION,
 } from '@decipad/editor-types';
-import { ReactEditor } from 'slate-react';
-import { serializeHtml, usePlateEditorRef } from '@udecode/plate';
+import { ReactEditor, useSlateStatic } from 'slate-react';
+import { PlateEditor, serializeHtml } from '@udecode/plate';
 import copy from 'copy-to-clipboard';
 import { Node, Transforms } from 'slate';
 import { insertNodeIntoColumns } from '@decipad/editor-utils';
@@ -23,9 +23,9 @@ export const VariableDef: PlateComponent = ({
     throw new Error(`VariableDef is meant to render variable def elements`);
   }
 
-  const editor = usePlateEditorRef();
+  const editor = useSlateStatic();
   const onConvert = useCallback(() => {
-    const path = ReactEditor.findPath(editor, element);
+    const path = ReactEditor.findPath(editor as ReactEditor, element);
     Transforms.delete(editor, { at: path });
     Transforms.insertNodes(
       editor,
@@ -45,18 +45,18 @@ export const VariableDef: PlateComponent = ({
   }, [editor, element]);
 
   const onDelete = useCallback(() => {
-    const path = ReactEditor.findPath(editor, element);
+    const path = ReactEditor.findPath(editor as ReactEditor, element);
     Transforms.delete(editor, { at: path });
   }, [editor, element]);
 
   const onCopy = useCallback(() => {
-    copy(serializeHtml(editor, { nodes: [element] }), {
+    copy(serializeHtml(editor as PlateEditor, { nodes: [element] }), {
       format: 'text/html',
     });
   }, [editor, element]);
 
   const onAdd = useCallback(() => {
-    const at = ReactEditor.findPath(editor, element);
+    const at = ReactEditor.findPath(editor as ReactEditor, element);
     insertNodeIntoColumns(
       editor,
       {
@@ -78,7 +78,11 @@ export const VariableDef: PlateComponent = ({
 
   return (
     <div {...attributes}>
-      <DraggableBlock blockKind="interactive" element={element}>
+      <DraggableBlock
+        blockKind="interactive"
+        element={element}
+        onDelete={onDelete}
+      >
         <organisms.VariableEditor
           onConvert={onConvert}
           onDelete={onDelete}

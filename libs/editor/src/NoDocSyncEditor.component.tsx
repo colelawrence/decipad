@@ -1,4 +1,3 @@
-import { Editor } from '@decipad/editor-types';
 import { ProgramBlocksContextProvider } from '@decipad/ui';
 import {
   ResultsContext,
@@ -31,9 +30,7 @@ export const NoDocSyncEditorBase = (props: PlateProps): ReturnType<FC> => {
     [languagePlugin]
   );
 
-  const programBlocks = editor
-    ? editorProgramBlocks(editor as unknown as Editor)
-    : {};
+  const programBlocks = editor ? editorProgramBlocks(editor) : {};
 
   return (
     <ResultsContext.Provider value={computer.results.asObservable()}>

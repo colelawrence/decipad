@@ -1,5 +1,6 @@
-import { Editor, ELEMENT_FETCH } from '@decipad/editor-types';
+import { ELEMENT_FETCH } from '@decipad/editor-types';
 import { useToast } from '@decipad/toast';
+import { TEditor } from '@udecode/plate';
 import camelcase from 'camelcase';
 import { nanoid } from 'nanoid';
 import { useCallback, useEffect, useState } from 'react';
@@ -28,7 +29,7 @@ export interface UploadDataOptions {
 }
 
 interface UploadDataPluginOptions {
-  editor: Editor | undefined;
+  editor: TEditor | undefined;
 }
 
 interface UseUploadDataPluginReturn {
@@ -122,7 +123,7 @@ export const useUploadDataPlugin = ({
 };
 
 function insertFileInDoc(
-  editor: Editor | undefined,
+  editor: TEditor | undefined,
   {
     url,
     fileName,

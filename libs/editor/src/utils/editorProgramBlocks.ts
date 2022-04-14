@@ -1,5 +1,6 @@
-import { Editor, ELEMENT_FETCH } from '@decipad/editor-types';
+import { ELEMENT_FETCH } from '@decipad/editor-types';
 import { ProgramBlocksContextValue } from '@decipad/ui';
+import { TEditor } from '@udecode/plate';
 import { Editor as SlateEditor, Node, Transforms } from 'slate';
 
 interface IdentifiableBlock {
@@ -14,7 +15,9 @@ interface ParsedProgramBlock {
 
 type ParsedProgramBlocks = ParsedProgramBlock[];
 
-export function editorProgramBlocks(editor: Editor): ProgramBlocksContextValue {
+export function editorProgramBlocks(
+  editor: TEditor
+): ProgramBlocksContextValue {
   const editorBlocks: Node[] = editor.children;
   const parsedProgramBlocks = editorBlocks
     .map((block, index) => {

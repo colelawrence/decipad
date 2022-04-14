@@ -1,28 +1,33 @@
 import { Element } from '@decipad/editor-types';
 import { organisms } from '@decipad/ui';
-import { useDndBlock, useEditorState } from '@udecode/plate';
+import { useDndBlock } from '@udecode/plate';
 import {
   ComponentProps,
   createContext,
   ReactNode,
+  useCallback,
   useContext,
   useRef,
 } from 'react';
 import { Transforms } from 'slate';
-import { ReactEditor, useReadOnly } from 'slate-react';
+import { ReactEditor, useReadOnly, useSlateStatic } from 'slate-react';
 
 const InDraggableBlock = createContext(false);
 
 type DraggableBlockProps = {
   readonly element: Element;
   readonly children: ReactNode;
-} & Pick<ComponentProps<typeof organisms.DraggableBlock>, 'blockKind'>;
+} & Pick<
+  ComponentProps<typeof organisms.DraggableBlock>,
+  'blockKind' | 'onDelete'
+>;
 export const DraggableBlock: React.FC<DraggableBlockProps> = ({
   children,
   element,
+  onDelete: parentOnDelete,
   ...props
 }) => {
-  const editor = useEditorState();
+  const editor = useSlateStatic() as ReactEditor;
   const readOnly = useReadOnly();
   const isInDraggableBlock = useContext(InDraggableBlock);
   const { id } = element;
@@ -32,6 +37,14 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
     id,
     blockRef,
   });
+
+  const onDelete = useCallback(() => {
+    parentOnDelete
+      ? parentOnDelete()
+      : Transforms.delete(editor, {
+          at: ReactEditor.findPath(editor, element),
+        });
+  }, [parentOnDelete, editor, element]);
 
   if (readOnly) return <>{children}</>;
   // Nested Draggables (such as lists) do not work well enough with useDndBlock; they are very buggy.
@@ -45,9 +58,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
       blockRef={blockRef}
       dropLine={dropLine || undefined}
       isBeingDragged={isDragging}
-      onDelete={() =>
-        Transforms.delete(editor, { at: ReactEditor.findPath(editor, element) })
-      }
+      onDelete={onDelete}
     >
       <InDraggableBlock.Provider value={true}>
         {children}
