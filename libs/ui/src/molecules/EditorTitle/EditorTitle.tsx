@@ -1,6 +1,6 @@
 import { ComponentProps } from 'react';
 import { Display, Divider } from '../../atoms';
-import { editorLayout } from '../../styles';
+import { blockAlignment, editorLayout } from '../../styles';
 
 export const EditorTitle = (
   props: ComponentProps<typeof Display>
@@ -17,7 +17,10 @@ export const EditorTitle = (
       <div>
         <Display {...props} />
       </div>
-      <div contentEditable={false}>
+      <div
+        contentEditable={false}
+        css={{ paddingTop: blockAlignment.divider.paddingTop }}
+      >
         <Divider />
       </div>
     </div>
