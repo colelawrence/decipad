@@ -19,8 +19,8 @@ it('emits a create event when typings a workspace name and submitting', async ()
     <CreateWorkspaceModal {...props} onCreate={handleCreate} />
   );
 
-  userEvent.type(getByPlaceholderText(/workspace/i), 'My Workspace');
-  userEvent.click(getByRole('button'));
+  await userEvent.type(getByPlaceholderText(/workspace/i), 'My Workspace');
+  await userEvent.click(getByRole('button'));
   await act(async () => {
     await waitFor(() =>
       expect(handleCreate).toHaveBeenCalledWith('My Workspace')
@@ -40,8 +40,8 @@ it('disables workspace creation while already submitting', async () => {
   );
 
   try {
-    userEvent.type(getByPlaceholderText(/workspace/i), 'My Workspace');
-    userEvent.click(getByRole('button'));
+    await userEvent.type(getByPlaceholderText(/workspace/i), 'My Workspace');
+    await userEvent.click(getByRole('button'));
     expect(getByRole('button')).toBeDisabled();
   } finally {
     await act(async () => {

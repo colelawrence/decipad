@@ -8,12 +8,12 @@ it('renders a heading at given level', () => {
   expect(getByRole('heading').tagName).toBe('H1');
 });
 
-it('renders a button to create a new notebook', () => {
+it('renders a button to create a new notebook', async () => {
   const handleCreateNotebook = jest.fn();
   const { getByText } = render(
     <EmptyWorkspaceCta Heading="h1" onCreateNotebook={handleCreateNotebook} />
   );
 
-  userEvent.click(getByText(/create/i));
+  await userEvent.click(getByText(/create/i));
   expect(handleCreateNotebook).toHaveBeenCalled();
 });

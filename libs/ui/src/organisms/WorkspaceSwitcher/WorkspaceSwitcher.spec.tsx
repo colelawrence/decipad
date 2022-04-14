@@ -24,7 +24,7 @@ it('shows the active workspace name', () => {
   expect(getByText('My WS')).toBeVisible();
 });
 
-it('opens and closes a workspace menu', () => {
+it('opens and closes a workspace menu', async () => {
   const { getByText, queryByText, getByTitle } = render(
     <WorkspaceSwitcher
       {...props}
@@ -34,9 +34,9 @@ it('opens and closes a workspace menu', () => {
     />
   );
 
-  userEvent.click(getByTitle(/expand/i));
+  await userEvent.click(getByTitle(/expand/i));
   expect(getByText('Other WS')).toBeVisible();
 
-  userEvent.click(getByTitle(/collapse/i));
+  await userEvent.click(getByTitle(/collapse/i));
   expect(queryByText('Other WS')).not.toBeInTheDocument();
 });

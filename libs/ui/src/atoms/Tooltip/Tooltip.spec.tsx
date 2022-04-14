@@ -13,7 +13,7 @@ it('renders tooltip when hovering the trigger', async () => {
   );
   expect(await queryByText('Content')).toBeNull();
 
-  userEvent.hover(getByText('Trigger'));
+  await userEvent.hover(getByText('Trigger'));
   expect(await findByText('Content')).toBeInTheDocument();
 });
 
@@ -23,7 +23,7 @@ it('hides the tooltip when starting to drag', async () => {
   );
   expect(await queryByText('Content')).toBeNull();
 
-  userEvent.hover(getByText('Trigger'));
+  await userEvent.hover(getByText('Trigger'));
   expect(await findByText('Content')).toBeInTheDocument();
 
   fireEvent.mouseDown(getByText('Trigger'));

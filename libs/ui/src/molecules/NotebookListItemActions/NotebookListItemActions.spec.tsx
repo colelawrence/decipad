@@ -33,22 +33,22 @@ it('links to an export download', () => {
   expect(getByText(/export/i)).toHaveAttribute('download', 'export.json');
 });
 
-it('can duplicate an notebook', () => {
+it('can duplicate an notebook', async () => {
   const handleDuplicate = jest.fn();
   const { getByText } = render(
     <NotebookListItemActions {...props} onDuplicate={handleDuplicate} />
   );
 
-  userEvent.click(getByText(/dup/i));
+  await userEvent.click(getByText(/dup/i));
   expect(handleDuplicate).toHaveBeenCalled();
 });
 
-it('can delete an notebook', () => {
+it('can delete an notebook', async () => {
   const handleDelete = jest.fn();
   const { getByText } = render(
     <NotebookListItemActions {...props} onDelete={handleDelete} />
   );
 
-  userEvent.click(getByText(/del|rem/i, { selector: 'button' }));
+  await userEvent.click(getByText(/del|rem/i, { selector: 'button' }));
   expect(handleDelete).toHaveBeenCalled();
 });

@@ -81,7 +81,7 @@ describe('when editor is in readOnly mode', () => {
   });
 });
 
-it('can delete the block', () => {
+it('can delete the block', async () => {
   const { getByTitle, getAllByTitle } = render(
     <Plate
       {...plateProps}
@@ -97,13 +97,13 @@ it('can delete the block', () => {
   );
   const dragHandles = getAllByTitle(/drag/i);
   const [, secondDragHandle] = dragHandles;
-  userEvent.click(secondDragHandle);
+  await userEvent.click(secondDragHandle);
 
   expect(editor.children).toEqual([
     expect.objectContaining({ children: [{ text: 'first' }] }),
     expect.objectContaining({ children: [{ text: 'second' }] }),
   ]);
-  userEvent.click(getByTitle(/delete/i));
+  await userEvent.click(getByTitle(/delete/i));
   expect(editor.children).toEqual([
     expect.objectContaining({ children: [{ text: 'first' }] }),
   ]);

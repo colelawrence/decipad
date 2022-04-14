@@ -2,23 +2,28 @@ import { act, render, RenderResult } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { NotebookSharingPopUp } from './NotebookSharingPopUp';
 
+let user = userEvent.setup();
+beforeEach(() => {
+  user = userEvent.setup();
+});
+
 describe('when the menu is open', () => {
   let result!: RenderResult;
-  beforeEach(() => {
+  beforeEach(async () => {
     result = render(
       <NotebookSharingPopUp
         link="peanut-butter-jelly-time-peanut-"
         sharingActive={true}
       />
     );
-    userEvent.click(result.getByText(/share/i));
+    await user.click(result.getByText(/share/i));
   });
 
   it('shows the menu description', () => {
     expect(result.getByText(/enable.+share/i)).toBeVisible();
   });
 
-  it('closes the menu on click outside', () => {
+  it('closes the menu on click outside', async () => {
     result.rerender(
       <>
         <NotebookSharingPopUp link="peanut-butter-jelly-time-peanut-" />
@@ -27,7 +32,7 @@ describe('when the menu is open', () => {
     );
     expect(result.getByText(/enable.+share/i)).toBeVisible();
 
-    userEvent.click(result.getByText('outside'));
+    await user.click(result.getByText('outside'));
     expect(result.queryByText(/enable.+share/i)).not.toBeInTheDocument();
   });
 
@@ -44,8 +49,8 @@ describe('when the menu is open', () => {
   });
 
   describe('when enabling sharing', () => {
-    beforeEach(() => {
-      userEvent.click(result.getByRole('checkbox'));
+    beforeEach(async () => {
+      await user.click(result.getByRole('checkbox'));
     });
 
     it('renders the share link', async () => {
@@ -65,15 +70,16 @@ describe('when the menu is open', () => {
         document.execCommand = execCommand;
       });
 
-      beforeAll(() => {
+      beforeEach(() => {
         jest.useFakeTimers();
+        user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
       });
-      afterAll(() => {
+      afterEach(() => {
         jest.useRealTimers();
       });
 
-      beforeEach(() => {
-        userEvent.click(result.getByText(/copy/i));
+      beforeEach(async () => {
+        await user.click(result.getByText(/copy/i));
       });
 
       it('shows a confirmation briefly', () => {

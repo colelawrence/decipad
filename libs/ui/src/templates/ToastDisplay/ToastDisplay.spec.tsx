@@ -13,14 +13,14 @@ const ToastButton = (): ReturnType<FC> => {
 };
 
 describe('Toast Display', () => {
-  it('renders a toast on click', () => {
+  it('renders a toast on click', async () => {
     const { getByText } = render(
       <ToastDisplay>
         <ToastButton />
       </ToastDisplay>
     );
 
-    userEvent.click(getByText('Click me'));
+    await userEvent.click(getByText('Click me'));
 
     expect(getByText('Toastie toast')).toBeInTheDocument();
   });

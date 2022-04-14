@@ -13,7 +13,7 @@ it('renders error in tooltip', async () => {
     />
   );
 
-  userEvent.hover(getByTitle(/Warning/i));
+  await userEvent.hover(getByTitle(/Warning/i));
 
   const docLink = (await findByText(/docs/i)).closest('a')!;
 

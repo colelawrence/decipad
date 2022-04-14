@@ -12,10 +12,10 @@ it('links to a close action href', () => {
   expect(getByLabelText(/close/i)).toHaveAttribute('href', '/page');
 });
 
-it('calls a close action handler', () => {
+it('calls a close action handler', async () => {
   const closeAction = jest.fn();
   const { getByLabelText } = render(<Overlay closeAction={closeAction} />);
 
-  userEvent.click(getByLabelText(/close/i));
+  await userEvent.click(getByLabelText(/close/i));
   expect(closeAction).toHaveBeenCalled();
 });

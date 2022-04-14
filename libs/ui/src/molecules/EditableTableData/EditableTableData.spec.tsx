@@ -24,7 +24,7 @@ it('renders the text', () => {
 });
 
 describe('onChange prop', () => {
-  it('gets called only when new text is submitted', () => {
+  it('gets called only when new text is submitted', async () => {
     const onChange = jest.fn();
     const { getByRole } = render(
       <table>
@@ -36,7 +36,7 @@ describe('onChange prop', () => {
       </table>
     );
 
-    userEvent.type(getByRole('textbox'), ' Edited');
+    await userEvent.type(getByRole('textbox'), ' Edited');
 
     expect(onChange).not.toHaveBeenCalled();
 

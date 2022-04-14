@@ -7,11 +7,11 @@ it('renders the button text', () => {
   expect(getByRole('button')).toHaveTextContent('text');
 });
 
-it('emits click events', () => {
+it('emits click events', async () => {
   const handleClick = jest.fn();
   const { getByRole } = render(<Button onClick={handleClick}>text</Button>);
 
-  userEvent.click(getByRole('button'));
+  await userEvent.click(getByRole('button'));
   expect(handleClick).toHaveBeenCalled();
 });
 
@@ -112,7 +112,7 @@ describe('with an href', () => {
     expect(getByRole('link')).toHaveAttribute('href', '/page');
   });
 
-  it('still emits click events', () => {
+  it('still emits click events', async () => {
     const handleClick = jest.fn();
     const { getByRole } = render(
       <Button href="/page" onClick={handleClick}>
@@ -120,7 +120,7 @@ describe('with an href', () => {
       </Button>
     );
 
-    userEvent.click(getByRole('link'));
+    await userEvent.click(getByRole('link'));
     expect(handleClick).toHaveBeenCalled();
   });
 

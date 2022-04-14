@@ -47,7 +47,7 @@ describe('the root MenuList', () => {
 });
 
 describe('the dropdown root MenuList', () => {
-  it('emits changeOpen events when the trigger is clicked', () => {
+  it('emits changeOpen events when the trigger is clicked', async () => {
     const handleChangeOpen = jest.fn();
     const { getByText } = render(
       <MenuList
@@ -59,8 +59,8 @@ describe('the dropdown root MenuList', () => {
         {null}
       </MenuList>
     );
-    userEvent.click(getByText('trigger'), undefined, {
-      skipPointerEventsCheck: true,
+    await userEvent.click(getByText('trigger'), {
+      pointerEventsCheck: 0,
     });
     expect(handleChangeOpen).toHaveBeenLastCalledWith(true);
   });
@@ -126,7 +126,7 @@ describe('the non-root MenuList', () => {
     expect(getByText('nested item')).toBeInTheDocument();
   });
 
-  it('can be uncontrolled', () => {
+  it('can be uncontrolled', async () => {
     const { getByText, queryByText } = render(
       <MenuList root open>
         <MenuList itemTrigger={<TriggerMenuItem>item</TriggerMenuItem>}>
@@ -136,8 +136,8 @@ describe('the non-root MenuList', () => {
     );
     expect(queryByText('nested item')).not.toBeInTheDocument();
 
-    userEvent.click(getByText('item'), undefined, {
-      skipPointerEventsCheck: true,
+    await userEvent.click(getByText('item'), {
+      pointerEventsCheck: 0,
     });
     expect(getByText('nested item')).toBeInTheDocument();
   });

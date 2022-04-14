@@ -16,7 +16,7 @@ it('renders the text', () => {
 });
 
 describe('onAddRow prop', () => {
-  it('gets called when the button is clicked', () => {
+  it('gets called when the button is clicked', async () => {
     const onAddRow = jest.fn();
     const { getByText } = render(
       <table>
@@ -26,7 +26,7 @@ describe('onAddRow prop', () => {
       </table>
     );
 
-    userEvent.click(getByText('Add row'));
+    await userEvent.click(getByText('Add row'));
 
     expect(onAddRow).toHaveBeenCalledTimes(1);
   });

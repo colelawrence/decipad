@@ -8,22 +8,22 @@ it('shows a tooltip when focussing the handle', async () => {
     expect(queryByText(/for options/i)).not.toBeInTheDocument();
   });
 
-  userEvent.hover(getByTitle(/handle/i));
+  await userEvent.hover(getByTitle(/handle/i));
   expect(await findByText(/for options/i)).toBeInTheDocument();
 
-  userEvent.unhover(getByTitle(/handle/i));
+  await userEvent.unhover(getByTitle(/handle/i));
   await waitFor(() => {
     expect(queryByText(/for options/i)).not.toBeInTheDocument();
   });
 });
 
-it('emits a changeMenuOpen event when clicking the handle', () => {
+it('emits a changeMenuOpen event when clicking the handle', async () => {
   const handleChangeMenuOpen = jest.fn();
   const { getByTitle } = render(
     <BlockDragHandle onChangeMenuOpen={handleChangeMenuOpen} />
   );
 
-  userEvent.click(getByTitle(/handle/i));
+  await userEvent.click(getByTitle(/handle/i));
   expect(handleChangeMenuOpen).toHaveBeenLastCalledWith(true);
 });
 
@@ -36,13 +36,13 @@ describe('when the menu is open', () => {
     expect(queryAllByRole('menuitem')).not.toHaveLength(0);
   });
 
-  it('emits delete events', () => {
+  it('emits delete events', async () => {
     const handleDelete = jest.fn();
     const { getByTitle } = render(
       <BlockDragHandle menuOpen onDelete={handleDelete} />
     );
 
-    userEvent.click(getByTitle(/del/i));
+    await userEvent.click(getByTitle(/del/i));
     expect(handleDelete).toHaveBeenCalled();
   });
 });

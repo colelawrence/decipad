@@ -38,7 +38,7 @@ it('shows a pseudo-focused state', async () => {
 });
 
 describe('an execute event', () => {
-  it('is emitted on click', () => {
+  it('is emitted on click', async () => {
     const handleExecute = jest.fn();
     const { getByText } = render(
       <SlashCommandsMenuItem
@@ -48,11 +48,11 @@ describe('an execute event', () => {
       />
     );
 
-    userEvent.click(getByText('Title'));
+    await userEvent.click(getByText('Title'));
     expect(handleExecute).toHaveBeenCalled();
   });
 
-  it('is emitted on pressing enter when focused', () => {
+  it('is emitted on pressing enter when focused', async () => {
     const handleExecute = jest.fn();
     render(
       <SlashCommandsMenuItem
@@ -63,10 +63,10 @@ describe('an execute event', () => {
       />
     );
 
-    userEvent.keyboard(`{enter}`);
+    await userEvent.keyboard(`{enter}`);
     expect(handleExecute).toHaveBeenCalled();
   });
-  it('is not emitted when not focused', () => {
+  it('is not emitted when not focused', async () => {
     const handleExecute = jest.fn();
     render(
       <SlashCommandsMenuItem
@@ -77,10 +77,10 @@ describe('an execute event', () => {
       />
     );
 
-    userEvent.keyboard('{enter}');
+    await userEvent.keyboard('{enter}');
     expect(handleExecute).not.toHaveBeenCalled();
   });
-  it('is not emitted when holding shift', () => {
+  it('is not emitted when holding shift', async () => {
     const handleExecute = jest.fn();
     render(
       <SlashCommandsMenuItem
@@ -91,7 +91,7 @@ describe('an execute event', () => {
       />
     );
 
-    userEvent.keyboard('{shift}{enter}');
+    await userEvent.keyboard('{Shift>}{enter}');
     expect(handleExecute).not.toHaveBeenCalled();
   });
 });

@@ -221,7 +221,7 @@ describe('the escape key', () => {
     Transforms.insertText(editor, 'a');
     await findByText(/sub-head/i);
 
-    userEvent.keyboard('{esc}');
+    await userEvent.keyboard('{Escape}');
     expect(queryByText(/sub-head/i)).not.toBeInTheDocument();
 
     Transforms.insertText(editor, 'd');
@@ -246,7 +246,7 @@ describe('the escape key', () => {
     Transforms.insertText(editor, 'a');
     await findByText(/sub-head/i);
 
-    userEvent.keyboard('{shift}{esc}');
+    await userEvent.keyboard('{Shift>}{Escape}');
     expect(getByText(/sub-head/i)).toBeVisible();
   });
 });
@@ -268,7 +268,7 @@ it('executes a command on click', async () => {
   });
   Transforms.insertText(editor, 'a');
 
-  userEvent.click(await findByText(/sub-head/i));
+  await userEvent.click(await findByText(/sub-head/i));
   await waitFor(() => {
     expect(editor.children).toEqual([
       { type: ELEMENT_H3, children: [{ text: '' }] },

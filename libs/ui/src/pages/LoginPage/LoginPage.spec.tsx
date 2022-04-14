@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { LoginPage } from './LoginPage';
 
 describe('Login page', () => {
-  it('disables the button when the input value is not a valid email', () => {
+  it('disables the button when the input value is not a valid email', async () => {
     const { getByRole } = render(<LoginPage onSubmit={jest.fn()} />);
 
     const input = getByRole('textbox');
@@ -11,20 +11,20 @@ describe('Login page', () => {
 
     expect(submitButton).toHaveAttribute('disabled');
 
-    userEvent.type(input, 'johndoe');
+    await userEvent.type(input, 'johndoe');
     expect(submitButton).toHaveAttribute('disabled');
 
-    userEvent.type(input, '@example.com');
+    await userEvent.type(input, '@example.com');
     expect(submitButton).not.toHaveAttribute('disabled');
   });
 
-  it('emits a submit event when typing an email and clicking continue', () => {
+  it('emits a submit event when typing an email and clicking continue', async () => {
     const { getByText, getByRole } = render(<LoginPage onSubmit={jest.fn()} />);
 
     const input = getByRole('textbox');
     expect(input).toHaveAttribute('type', 'email');
 
-    userEvent.type(input, 'johndoe@example.com');
-    userEvent.click(getByText(/continue/i));
+    await userEvent.type(input, 'johndoe@example.com');
+    await userEvent.click(getByText(/continue/i));
   });
 });

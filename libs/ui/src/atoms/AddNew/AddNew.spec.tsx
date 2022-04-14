@@ -16,12 +16,12 @@ it('renders an add button', () => {
 });
 
 describe('onAdd prop', () => {
-  it('gets called when button is clicked', () => {
+  it('gets called when button is clicked', async () => {
     const onAdd = jest.fn();
     const { getByRole } = render(<AddNew onAdd={onAdd}>text</AddNew>);
 
     expect(onAdd).toHaveBeenCalledTimes(0);
-    userEvent.click(getByRole('button', { hidden: true }));
+    await userEvent.click(getByRole('button', { hidden: true }));
     expect(onAdd).toHaveBeenCalledTimes(1);
   });
 });

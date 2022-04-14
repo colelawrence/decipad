@@ -15,13 +15,13 @@ it('renders the button icon', () => {
   expect(getByTitle('Pretty Icon')).toBeInTheDocument();
 });
 
-it('emits click events', () => {
+it('emits click events', async () => {
   const handleClick = jest.fn();
   const { getByRole } = render(
     <IconButton onClick={handleClick}>icon</IconButton>
   );
 
-  userEvent.click(getByRole('button'));
+  await userEvent.click(getByRole('button'));
   expect(handleClick).toHaveBeenCalled();
 });
 

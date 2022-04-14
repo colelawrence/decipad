@@ -18,12 +18,12 @@ it('allows collapsing when open', () => {
   expect(getByTitle(/collapse/i)).toBeInTheDocument();
 });
 
-it('emits click events', () => {
+it('emits click events', async () => {
   const handleClick = jest.fn();
   const { getByTitle } = render(
     <AccountAvatar name="John Doe" menuOpen={false} onClick={handleClick} />
   );
 
-  userEvent.click(getByTitle(/expand/i));
+  await userEvent.click(getByTitle(/expand/i));
   expect(handleClick).toHaveBeenCalled();
 });

@@ -51,7 +51,7 @@ describe('PlotParams', () => {
 
   it.each(Object.entries(expectedPropToLabelName))(
     '%s is selectable',
-    (propName, labelText) => {
+    async (propName, labelText) => {
       const { getByLabelText } = render(<PlotParams {...params} />);
       props = {};
       const select =
@@ -60,9 +60,9 @@ describe('PlotParams', () => {
           : propName === 'markType'
           ? 'circle'
           : params.columnNameOptions[0];
-      userEvent.selectOptions(getByLabelText(labelText), select);
+      await userEvent.selectOptions(getByLabelText(labelText), select);
       expect(props).toMatchObject({ [propName]: select });
-      userEvent.selectOptions(getByLabelText(labelText), '');
+      await userEvent.selectOptions(getByLabelText(labelText), '');
       expect(props).toMatchObject({ [propName]: '' });
     }
   );

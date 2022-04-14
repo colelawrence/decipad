@@ -19,13 +19,13 @@ it('renders a heading at given level', () => {
   expect(getByRole('heading').tagName).toBe('H1');
 });
 
-it('renders a button to create a workspace', () => {
+it('renders a button to create a workspace', async () => {
   const handleCreateWorkspace = jest.fn();
   const { getByTitle } = render(
     <WorkspaceMenu {...props} onCreateWorkspace={handleCreateWorkspace} />
   );
 
-  userEvent.click(getByTitle(/create/i));
+  await userEvent.click(getByTitle(/create/i));
   expect(handleCreateWorkspace).toHaveBeenCalled();
 });
 

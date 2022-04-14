@@ -18,7 +18,7 @@ it('renders the menu when trigger is clicked', async () => {
   );
   expect(queryAllByRole('menuitem')).toHaveLength(0);
 
-  userEvent.click(await findByText(/trigger/i));
+  await userEvent.click(await findByText(/trigger/i));
 
   expect(await findAllByRole('menuitem')).not.toHaveLength(0);
 });
@@ -36,11 +36,11 @@ describe.each([
       <InteractiveInputMenu {...props} {...testProp} />
     );
 
-    userEvent.click(await findByText(/trigger/i), undefined, {
-      skipPointerEventsCheck: true,
+    await userEvent.click(await findByText(/trigger/i), {
+      pointerEventsCheck: 0,
     });
-    userEvent.click(await findByText(text), undefined, {
-      skipPointerEventsCheck: true,
+    await userEvent.click(await findByText(text), {
+      pointerEventsCheck: 0,
     });
     expect(testProp[prop]).toHaveBeenCalledTimes(1);
   });

@@ -20,12 +20,12 @@ it('shows the email', () => {
   expect(container).toHaveTextContent('john.doe@example.com');
 });
 
-it('allows logging out', () => {
+it('allows logging out', async () => {
   const handleLogout = jest.fn();
   const { getByText } = render(
     <AccountMenu {...props} onLogout={handleLogout} />
   );
 
-  userEvent.click(getByText(/log.*out/i, { selector: 'nav li button' }));
+  await userEvent.click(getByText(/log.*out/i, { selector: 'nav li button' }));
   expect(handleLogout).toHaveBeenCalled();
 });

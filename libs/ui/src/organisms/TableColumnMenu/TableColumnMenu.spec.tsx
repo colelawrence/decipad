@@ -18,7 +18,7 @@ it('renders trigger icon', () => {
   );
   expect(getByText('trigger')).toBeInTheDocument();
 });
-it('emits a changeOpen event when clicking the trigger', () => {
+it('emits a changeOpen event when clicking the trigger', async () => {
   const handleChangeOpen = jest.fn();
   const { getByText } = render(
     <TableColumnMenu
@@ -29,7 +29,7 @@ it('emits a changeOpen event when clicking the trigger', () => {
   );
   expect(getByText('trigger')).toBeInTheDocument();
 
-  userEvent.click(getByText('trigger'));
+  await userEvent.click(getByText('trigger'));
   expect(handleChangeOpen).toHaveBeenLastCalledWith(true);
 });
 
@@ -61,8 +61,12 @@ it.each(types)('highlights selected type %s', async (_, type, textContent) => {
   );
 
   // Open every dropdown level
-  userEvent.click(await findByText(/change type/i));
-  userEvent.click(await findByText(/date/i));
+  await userEvent.click(await findByText(/change type/i), {
+    pointerEventsCheck: 0,
+  });
+  await userEvent.click(await findByText(/date/i), {
+    pointerEventsCheck: 0,
+  });
   await findByText(/month/i);
 
   cleanup = await applyCssVars();

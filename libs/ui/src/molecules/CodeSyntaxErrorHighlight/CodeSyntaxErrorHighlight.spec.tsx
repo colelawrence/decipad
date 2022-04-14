@@ -26,7 +26,7 @@ it.each<[ComponentProps<typeof CodeSyntaxErrorHighlight>['variant'], RegExp]>([
 
     expect(queryByText(message)).toBeNull();
 
-    userEvent.hover(getByText('text'));
+    await userEvent.hover(getByText('text'));
 
     expect(await findByText(message)).toBeInTheDocument();
   }
@@ -39,7 +39,7 @@ it('renders a message for a other syntax errors when hovering the text', async (
 
   expect(queryByText(/invalid/i)).toBeNull();
 
-  userEvent.hover(getByText('text'));
+  await userEvent.hover(getByText('text'));
 
   expect(await findByText(/invalid/i)).toBeInTheDocument();
 });

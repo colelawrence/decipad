@@ -7,12 +7,12 @@ it('renders a dialog with the children', () => {
   expect(getByRole('dialog')).toHaveTextContent('text');
 });
 
-it('can be closed', () => {
+it('can be closed', async () => {
   const closeAction = jest.fn();
   const { getByLabelText } = render(
     <Modal closeAction={closeAction}>text</Modal>
   );
 
-  userEvent.click(getByLabelText(/close/i));
+  await userEvent.click(getByLabelText(/close/i));
   expect(closeAction).toHaveBeenCalled();
 });

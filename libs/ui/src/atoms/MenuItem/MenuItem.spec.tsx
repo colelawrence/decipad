@@ -5,19 +5,24 @@ import userEvent from '@testing-library/user-event';
 import { MenuWrapper as wrapper } from '../../test-utils';
 import { MenuItem } from './MenuItem';
 
+let user = userEvent.setup({ pointerEventsCheck: 0 });
+beforeEach(() => {
+  user = userEvent.setup({ pointerEventsCheck: 0 });
+});
+
 it('renders the children', () => {
   const { getByText } = render(<MenuItem>Text</MenuItem>, { wrapper });
   expect(getByText('Text')).toBeInTheDocument();
 });
 
-it('is clickable', () => {
+it('is clickable', async () => {
   const handleSelect = jest.fn();
   const { getByRole } = render(
     <MenuItem onSelect={handleSelect}>Text</MenuItem>,
     { wrapper }
   );
 
-  userEvent.click(getByRole('menuitem'));
+  await user.click(getByRole('menuitem'));
   expect(handleSelect).toHaveBeenCalled();
 });
 

@@ -9,11 +9,11 @@ const props: ComponentProps<typeof DraggableBlock> = {
   children: <p>block</p>,
 };
 
-it('opens the menu when clicking the drag handle', () => {
+it('opens the menu when clicking the drag handle', async () => {
   const { getByTitle, queryByTitle } = render(<DraggableBlock {...props} />);
   expect(queryByTitle(/delete/i)).not.toBeInTheDocument();
 
-  userEvent.click(getByTitle(/drag/i));
+  await userEvent.click(getByTitle(/drag/i));
   expect(getByTitle(/delete/i)).toBeInTheDocument();
 });
 

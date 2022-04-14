@@ -3,11 +3,11 @@ import userEvent from '@testing-library/user-event';
 import { Toggle } from './Toggle';
 
 describe('Toggle atom', () => {
-  it('emits change event', () => {
+  it('emits change event', async () => {
     const handleChange = jest.fn();
     const { getByRole } = render(<Toggle onChange={handleChange} />);
 
-    userEvent.click(getByRole('button'));
+    await userEvent.click(getByRole('button'));
     expect(handleChange).toHaveBeenCalled();
   });
 

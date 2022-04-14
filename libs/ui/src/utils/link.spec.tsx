@@ -175,7 +175,7 @@ describe('Anchor', () => {
       const main = getByRole('main');
       const spyScrollIntoView = jest.spyOn(main, 'scrollIntoView');
 
-      userEvent.click(getByRole('link'));
+      await userEvent.click(getByRole('link'));
       await waitFor(() =>
         expect(spyScrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' })
       );
@@ -192,7 +192,7 @@ describe('Anchor', () => {
         );
         expect(getComputedStyle(getByRole('link')).color).not.toBe('red');
 
-        userEvent.click(getByRole('link'));
+        await userEvent.click(getByRole('link'));
         expect(getComputedStyle(getByRole('link')).color).toBe('red');
       });
 

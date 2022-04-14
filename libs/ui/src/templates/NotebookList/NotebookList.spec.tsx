@@ -51,7 +51,7 @@ it('renders a list of notebooks', () => {
   ]);
 });
 
-it('renders an item with actions open on top', () => {
+it('renders an item with actions open on top', async () => {
   const { getByText } = render(
     <DndProvider backend={HTML5Backend}>
       <NotebookList
@@ -75,7 +75,9 @@ it('renders an item with actions open on top', () => {
       />
     </DndProvider>
   );
-  userEvent.click(getByTitle(getByText('First').closest('li')!, /ellipsis/i));
+  await userEvent.click(
+    getByTitle(getByText('First').closest('li')!, /ellipsis/i)
+  );
 
   expect(
     Number(findParentWithStyle(getByText('First'), 'zIndex')!.zIndex)
@@ -84,7 +86,7 @@ it('renders an item with actions open on top', () => {
   );
 });
 
-it('only allows one open actions menu at a time', () => {
+it('only allows one open actions menu at a time', async () => {
   const { getByText } = render(
     <DndProvider backend={HTML5Backend}>
       <NotebookList
@@ -108,13 +110,17 @@ it('only allows one open actions menu at a time', () => {
       />
     </DndProvider>
   );
-  userEvent.click(getByTitle(getByText('Second').closest('li')!, /ellipsis/i));
-  userEvent.click(getByTitle(getByText('First').closest('li')!, /ellipsis/i));
+  await userEvent.click(
+    getByTitle(getByText('Second').closest('li')!, /ellipsis/i)
+  );
+  await userEvent.click(
+    getByTitle(getByText('First').closest('li')!, /ellipsis/i)
+  );
 
   expect(getByText('First').closest('li')).toContainElement(getByText(/dup/i));
 });
 
-it('emits duplicate events', () => {
+it('emits duplicate events', async () => {
   const handleDuplicate = jest.fn();
   const { getByText } = render(
     <DndProvider backend={HTML5Backend}>
@@ -141,11 +147,13 @@ it('emits duplicate events', () => {
     </DndProvider>
   );
 
-  userEvent.click(getByTitle(getByText('Second').closest('li')!, /ellipsis/i));
-  userEvent.click(getByText(/dup/i, { selector: 'button' }));
+  await userEvent.click(
+    getByTitle(getByText('Second').closest('li')!, /ellipsis/i)
+  );
+  await userEvent.click(getByText(/dup/i, { selector: 'button' }));
   expect(handleDuplicate).toHaveBeenCalledWith('1');
 });
-it('emits delete events', () => {
+it('emits delete events', async () => {
   const handleDelete = jest.fn();
   const { getByText } = render(
     <DndProvider backend={HTML5Backend}>
@@ -172,7 +180,9 @@ it('emits delete events', () => {
     </DndProvider>
   );
 
-  userEvent.click(getByTitle(getByText('Second').closest('li')!, /ellipsis/i));
-  userEvent.click(getByText(/delete|remove/i, { selector: 'button' }));
+  await userEvent.click(
+    getByTitle(getByText('Second').closest('li')!, /ellipsis/i)
+  );
+  await userEvent.click(getByText(/delete|remove/i, { selector: 'button' }));
   expect(handleDelete).toHaveBeenCalledWith('1');
 });

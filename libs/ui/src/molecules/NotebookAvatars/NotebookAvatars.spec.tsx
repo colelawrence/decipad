@@ -44,17 +44,17 @@ describe('NotebookAvatars Molecule', () => {
 
     expect(await queryByText('Chris Doe')).toBeNull();
 
-    userEvent.hover(getByText('C'));
+    await userEvent.hover(getByText('C'));
 
     expect(await findByText('Chris Doe')).toBeInTheDocument();
     expect(await findByText('Owner')).toBeInTheDocument();
 
-    userEvent.hover(getByText('J'));
+    await userEvent.hover(getByText('J'));
 
     expect(await findByText('John Doe')).toBeInTheDocument();
     expect(await findByText('Can Edit')).toBeInTheDocument();
 
-    userEvent.hover(getByText('B'));
+    await userEvent.hover(getByText('B'));
 
     expect(await findByText('Blake Doe')).toBeInTheDocument();
     expect(await findByText('View Only')).toBeInTheDocument();

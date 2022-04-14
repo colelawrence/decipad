@@ -17,12 +17,12 @@ it('renders a close link for a close action href', () => {
   expect(getByTitle(/close/i).closest('a')).toHaveAttribute('href', '/page');
 });
 
-it('renders a close button triggering a close action callback', () => {
+it('renders a close button triggering a close action callback', async () => {
   const closeAction = jest.fn();
   const { getByTitle } = render(
     <ClosableModalHeader Heading="h1" title="Title" closeAction={closeAction} />
   );
 
-  userEvent.click(getByTitle(/close/i));
+  await userEvent.click(getByTitle(/close/i));
   expect(closeAction).toHaveBeenCalled();
 });

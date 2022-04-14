@@ -4,6 +4,11 @@ import userEvent from '@testing-library/user-event';
 import { MenuWrapper as wrapper } from '../../test-utils';
 import { UnitMenuItem } from './UnitMenuItem';
 
+let user = userEvent.setup({ pointerEventsCheck: 0 });
+beforeEach(() => {
+  user = userEvent.setup({ pointerEventsCheck: 0 });
+});
+
 it('renders the children', () => {
   const { getByRole, queryByRole } = render(<UnitMenuItem />, { wrapper });
   expect(getByRole('textbox')).toBeInTheDocument();
@@ -21,7 +26,7 @@ it('renders a button when parse is successful', async () => {
 
   expect(queryByRole('button')).toBeNull();
 
-  userEvent.type(getByRole('textbox'), 'm/s');
+  await user.type(getByRole('textbox'), 'm/s');
   await expect(findByRole('button')).rejects.toThrow();
 
   // Parse always succedes.
@@ -45,10 +50,10 @@ describe('onSelect prop', () => {
       }
     );
 
-    userEvent.type(getByRole('textbox'), 'm/s');
+    await user.type(getByRole('textbox'), 'm/s');
     expect(onSelect).not.toHaveBeenCalled();
 
-    userEvent.click(await findByRole('button'));
+    await user.click(await findByRole('button'));
     expect(onSelect).toHaveBeenCalled();
   });
 
@@ -64,11 +69,11 @@ describe('onSelect prop', () => {
       }
     );
 
-    userEvent.type(getByRole('textbox'), 'm/s');
+    await user.type(getByRole('textbox'), 'm/s');
     expect(onSelect).not.toHaveBeenCalled();
 
     await findByRole('button');
-    userEvent.keyboard(`{enter}`);
+    await user.keyboard(`{enter}`);
     expect(onSelect).toHaveBeenCalled();
   });
 
@@ -84,10 +89,10 @@ describe('onSelect prop', () => {
       }
     );
 
-    userEvent.type(getByRole('textbox'), 'm/s');
+    await user.type(getByRole('textbox'), 'm/s');
     expect(onSelect).not.toHaveBeenCalled();
     await expect(findByRole('button')).rejects.toThrow();
-    userEvent.keyboard(`{enter}`);
+    await user.keyboard(`{enter}`);
     expect(onSelect).toHaveBeenCalled();
   });
 });

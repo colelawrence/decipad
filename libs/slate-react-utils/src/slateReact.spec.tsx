@@ -63,7 +63,7 @@ describe('useElementMutatorCallback', () => {
     );
   };
 
-  it('hook tests', () => {
+  it('hook tests', async () => {
     const editor = withReact(createEditor() as ReactEditor);
     const { getByText, getByLabelText } = render(
       <Slate
@@ -79,8 +79,8 @@ describe('useElementMutatorCallback', () => {
       </Slate>
     );
 
-    userEvent.type(getByLabelText('value'), 'test');
-    userEvent.click(getByText('mutate'));
+    await userEvent.type(getByLabelText('value'), 'test');
+    await userEvent.click(getByText('mutate'));
 
     expect(editor).toHaveProperty('children.0.url', 'test');
   });

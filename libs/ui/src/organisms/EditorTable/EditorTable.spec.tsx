@@ -49,14 +49,14 @@ it('renders the add row button', () => {
 });
 
 describe('onChangeColumnName', () => {
-  it('gets called with the correct parameters', () => {
+  it('gets called with the correct parameters', async () => {
     const onChangeColumnName = jest.fn();
     const { getByDisplayValue } = render(
       <EditorTable {...defaultProps} onChangeColumnName={onChangeColumnName} />
     );
 
     const columnInput = getByDisplayValue('FirstName');
-    userEvent.type(columnInput, 'Edited');
+    await userEvent.type(columnInput, 'Edited');
     fireEvent.keyDown(columnInput, { key: 'Enter' });
 
     expect(onChangeColumnName).toHaveBeenCalledWith(0, 'FirstNameEdited');
@@ -64,14 +64,14 @@ describe('onChangeColumnName', () => {
 });
 
 describe('onChangeCell', () => {
-  it('gets called with the correct parameters', () => {
+  it('gets called with the correct parameters', async () => {
     const onChangeCell = jest.fn();
     const { getByDisplayValue } = render(
       <EditorTable {...defaultProps} onChangeCell={onChangeCell} />
     );
 
     const columnInput = getByDisplayValue('Zé');
-    userEvent.type(columnInput, ' Edited');
+    await userEvent.type(columnInput, ' Edited');
     fireEvent.keyDown(columnInput, { key: 'Enter' });
 
     expect(onChangeCell).toHaveBeenCalledWith(0, 2, 'Zé Edited');
@@ -79,14 +79,14 @@ describe('onChangeCell', () => {
 });
 
 describe('onValidateCell', () => {
-  it('gets called with the correct parameters', () => {
+  it('gets called with the correct parameters', async () => {
     const onValidateCell = jest.fn();
     const { getByDisplayValue } = render(
       <EditorTable {...defaultProps} onValidateCell={onValidateCell} />
     );
 
     const columnInput = getByDisplayValue('Zé');
-    userEvent.type(columnInput, ' Edited');
+    await userEvent.type(columnInput, ' Edited');
     fireEvent.keyDown(columnInput, { key: 'Enter' });
 
     expect(onValidateCell).toHaveBeenCalledWith(

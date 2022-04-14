@@ -76,11 +76,11 @@ it('converts element to code block', async () => {
     }
   );
 
-  userEvent.click(getByTitle(/ellipsis/i), undefined, {
-    skipPointerEventsCheck: true,
+  await userEvent.click(getByTitle(/ellipsis/i), {
+    pointerEventsCheck: 0,
   });
-  userEvent.click(await findByText(/turn.+code/i), undefined, {
-    skipPointerEventsCheck: true,
+  await userEvent.click(await findByText(/turn.+code/i), {
+    pointerEventsCheck: 0,
   });
 
   expect(editor.children[0].type).toBe(ELEMENT_CODE_LINE);
@@ -95,11 +95,11 @@ it('deletes element', async () => {
     }
   );
 
-  userEvent.click(getByTitle(/ellipsis/i, undefined, {}), undefined, {
-    skipPointerEventsCheck: true,
+  await userEvent.click(getByTitle(/ellipsis/i, undefined, {}), {
+    pointerEventsCheck: 0,
   });
-  userEvent.click(await findByText(/delete/i), undefined, {
-    skipPointerEventsCheck: true,
+  await userEvent.click(await findByText(/delete/i), {
+    pointerEventsCheck: 0,
   });
 
   expect(editor.children).toHaveLength(0);
@@ -110,8 +110,8 @@ it('adds a new input element', async () => {
     wrapper,
   });
 
-  userEvent.click(getByTitle(/add/i), undefined, {
-    skipPointerEventsCheck: true,
+  await userEvent.click(getByTitle(/add/i), {
+    pointerEventsCheck: 0,
   });
 
   expect(editor.children[0].type).toBe(ELEMENT_COLUMNS);

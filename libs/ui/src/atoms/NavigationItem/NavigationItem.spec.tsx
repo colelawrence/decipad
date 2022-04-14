@@ -17,13 +17,13 @@ it('renders the children', () => {
   expect(getByText('Text')).toBeVisible();
 });
 
-it('can render a button and emit click events', () => {
+it('can render a button and emit click events', async () => {
   const handleClick = jest.fn();
   const { getByRole } = render(
     <NavigationItem onClick={handleClick}>Text</NavigationItem>
   );
 
-  userEvent.click(getByRole('button'));
+  await userEvent.click(getByRole('button'));
   expect(handleClick).toHaveBeenCalled();
 });
 it('can render a link with an href', () => {
@@ -66,7 +66,7 @@ describe('with a router', () => {
     )?.backgroundColor;
     cleanup();
 
-    userEvent.click(getByText('Text'));
+    await userEvent.click(getByText('Text'));
     cleanup = await applyCssVars();
     const activeBackgroundColor = findParentWithStyle(
       getByText('Text'),

@@ -15,7 +15,7 @@ it('renders the text', () => {
 });
 
 describe('onChange prop', () => {
-  it('gets called only when new text is submitted', () => {
+  it('gets called only when new text is submitted', async () => {
     const onChange = jest.fn();
     const { getByRole } = render(
       <table>
@@ -23,7 +23,7 @@ describe('onChange prop', () => {
       </table>
     );
 
-    userEvent.type(getByRole('textbox'), 'Edited');
+    await userEvent.type(getByRole('textbox'), 'Edited');
 
     expect(onChange).not.toHaveBeenCalled();
 
@@ -33,7 +33,7 @@ describe('onChange prop', () => {
     expect(onChange).toHaveBeenCalledWith('TableNameEdited');
   });
 
-  it('ignores characters that fail the identifier pattern', () => {
+  it('ignores characters that fail the identifier pattern', async () => {
     const onChange = jest.fn();
     const { getByRole } = render(
       <table>
@@ -43,7 +43,7 @@ describe('onChange prop', () => {
 
     // See https://www.ptiglobal.com/2018/04/26/the-beauty-of-unicode-zero-width-characters/ and
     // the `libs/ui/src/utils/language.ts` file.
-    userEvent.type(
+    await userEvent.type(
       getByRole('textbox'),
       '##123\u200B\u200C\u200D\u2060\uFEFF!#,...-$Edite   d123'
     );

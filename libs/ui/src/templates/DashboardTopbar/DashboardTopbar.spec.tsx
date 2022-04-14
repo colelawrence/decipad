@@ -14,13 +14,13 @@ it('renders a level 1 notebook list header', () => {
   expect(getByText(/notebooks/i).tagName).toBe('H1');
 });
 
-it('renders a button to create a new notebook', () => {
+it('renders a button to create a new notebook', async () => {
   const handleCreateNotebook = jest.fn();
   const { getByText } = render(
     <DashboardTopbar {...props} onCreateNotebook={handleCreateNotebook} />
   );
 
-  userEvent.click(getByText(/create/i));
+  await userEvent.click(getByText(/create/i));
   expect(handleCreateNotebook).toHaveBeenCalled();
 });
 
@@ -29,16 +29,16 @@ it('renders an account menu avatar', () => {
   expect(getByLabelText(/avatar/i)).toBeVisible();
 });
 describe('when clicking the account menu avatar', () => {
-  it('opens and closes the account menu', () => {
+  it('opens and closes the account menu', async () => {
     const { getByLabelText, getByText, queryByText } = render(
       <DashboardTopbar {...props} />
     );
     expect(queryByText(/log.*out/i)).not.toBeInTheDocument();
 
-    userEvent.click(getByLabelText(/avatar/i));
+    await userEvent.click(getByLabelText(/avatar/i));
     expect(getByText(/log.*out/i, { selector: 'nav li button' })).toBeVisible();
 
-    userEvent.click(getByLabelText(/avatar/i));
+    await userEvent.click(getByLabelText(/avatar/i));
     expect(queryByText(/log.*out/i)).not.toBeInTheDocument();
   });
 });

@@ -47,7 +47,7 @@ it('renders the remove row button', () => {
 });
 
 describe('onRemove prop', () => {
-  it('gets called when the remove button is pressed', () => {
+  it('gets called when the remove button is pressed', async () => {
     const onRemove = jest.fn();
     const { getByTitle } = render(
       <table>
@@ -59,7 +59,7 @@ describe('onRemove prop', () => {
       </table>
     );
 
-    userEvent.click(getByTitle(/minus/i).closest('button')!);
+    await userEvent.click(getByTitle(/minus/i).closest('button')!);
 
     expect(onRemove).toHaveBeenCalled();
   });

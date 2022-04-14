@@ -48,7 +48,7 @@ it('renders the add new column button', () => {
 });
 
 describe('onAddColumn prop', () => {
-  it('gets called when the add new column button is clicked', () => {
+  it('gets called when the add new column button is clicked', async () => {
     const onAddColumn = jest.fn();
     const { getByTitle } = render(
       <table>
@@ -60,7 +60,7 @@ describe('onAddColumn prop', () => {
       </table>
     );
 
-    userEvent.click(getByTitle(/create/i).closest('svg')!);
+    await userEvent.click(getByTitle(/create/i).closest('svg')!);
 
     expect(onAddColumn).toHaveBeenCalled();
   });

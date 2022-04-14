@@ -21,11 +21,11 @@ it('cannot rename to the old name', () => {
   expect(getByText(/rename/i, { selector: 'button' })).toBeDisabled();
 });
 
-it('cannot rename to an empty name', () => {
+it('cannot rename to an empty name', async () => {
   const { getByText, getByPlaceholderText } = render(
     <EditWorkspaceModal {...props} />
   );
-  userEvent.clear(getByPlaceholderText(/renamed/i));
+  await userEvent.clear(getByPlaceholderText(/renamed/i));
   expect(getByText(/rename/i, { selector: 'button' })).toBeDisabled();
 });
 
@@ -35,8 +35,8 @@ it('emits a rename event when typing a new workspace name and submitting', async
     <EditWorkspaceModal {...props} onRename={handleRename} />
   );
 
-  userEvent.type(getByPlaceholderText(/renamed/i), 'new');
-  userEvent.click(getByText(/rename/i, { selector: 'button' }));
+  await userEvent.type(getByPlaceholderText(/renamed/i), 'new');
+  await userEvent.click(getByText(/rename/i, { selector: 'button' }));
   await act(async () => {
     await waitFor(() =>
       expect(handleRename).toHaveBeenCalledWith(expect.stringMatching(/new$/))
@@ -73,8 +73,8 @@ describe('with allowDelete', () => {
       />
     );
 
-    userEvent.type(getByPlaceholderText(/workspace name/i), 'The Name');
-    userEvent.click(getByText(/delete/i, { selector: 'button' }));
+    await userEvent.type(getByPlaceholderText(/workspace name/i), 'The Name');
+    await userEvent.click(getByText(/delete/i, { selector: 'button' }));
     await act(async () => {
       await waitFor(() => expect(handleDelete).toHaveBeenCalled());
     });
@@ -97,8 +97,8 @@ describe('with allowDelete', () => {
     );
 
     try {
-      userEvent.type(getByPlaceholderText(/workspace name/i), 'The Name');
-      userEvent.click(getByText(/delete/i, { selector: 'button' }));
+      await userEvent.type(getByPlaceholderText(/workspace name/i), 'The Name');
+      await userEvent.click(getByText(/delete/i, { selector: 'button' }));
       expect(getByText(/rename/i, { selector: 'button' })).toBeDisabled();
       expect(getByText(/delete/i, { selector: 'button' })).toBeDisabled();
     } finally {
