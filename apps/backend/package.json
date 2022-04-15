@@ -8,7 +8,7 @@
   "author": "N1N",
   "license": "Proprietary",
   "dependencies": {
-    "@architect/architect": "8.7.4",
+    "@architect/architect": "10.2.2",
     "@architect/destroy": "decipad/destroy",
     "apollo-server-core": "2.25",
     "aws-sdk": "^2.991.0",
