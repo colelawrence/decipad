@@ -1,4 +1,3 @@
-import { Editor as TEditor } from '@decipad/editor-types';
 import {
   ResultsContext,
   ComputerContextProvider,
@@ -9,6 +8,7 @@ import {
   ExternalAuthenticationContextProvider,
   ProgramBlocksContextProvider,
 } from '@decipad/ui';
+import { identity } from '@decipad/utils';
 import {
   useDocSync,
   useNotebookTitlePlugin,
@@ -16,10 +16,14 @@ import {
   useExternalDataPlugin,
 } from '@decipad/editor-plugins';
 import { captureException } from '@sentry/react';
-import { Plate, PlateProvider, createPlateEditor } from '@udecode/plate';
-import { useSlateStatic } from 'slate-react';
+import {
+  Plate,
+  PlateProvider,
+  usePlateEditorRef,
+  TEditor,
+} from '@udecode/plate';
 import { FC, useEffect, useMemo, useState } from 'react';
-import { DropFile, Tooltip, UploadDialogue } from './components';
+import * as components from './components';
 import * as configuration from './configuration';
 import { useLanguagePlugin } from './plugins';
 import { editorProgramBlocks } from './utils/editorProgramBlocks';
@@ -30,14 +34,17 @@ export interface EditorProps {
   authSecret?: string;
 }
 
-const EditorInternal = ({ notebookId, authSecret }: EditorProps) => {
+const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
   const [editorLoaded, setEditorLoaded] = useState(false);
-  const editor = useSlateStatic();
+  const editor = usePlateEditorRef(notebookId) as TEditor;
+
+  const languagePlugin = useLanguagePlugin();
+  const computer = useComputer();
 
   // DocSync
   const docsyncEditor = useDocSync({
     notebookId,
-    editor: editor as unknown as TEditor,
+    editor,
     authSecret,
     onError: captureException,
   });
@@ -58,73 +65,67 @@ const EditorInternal = ({ notebookId, authSecret }: EditorProps) => {
   // Cursor remote presence
   // useCursors(editor);
 
-  // upload / fetchdata
-
-  const { createOrUpdateExternalData } = useExternalDataPlugin({
-    editor: docsyncEditor,
+  const notebookTitlePlugin = useNotebookTitlePlugin({
+    notebookId,
+    readOnly,
   });
 
+  // upload / fetchdata
   const {
     startUpload,
     uploadState,
     clearAll: clearAllUploads,
   } = useUploadDataPlugin({ editor });
-
-  return (
-    <ExternalAuthenticationContextProvider
-      value={{ createOrUpdateExternalData }}
-    >
-      <DropFile
-        editor={editor}
-        startUpload={startUpload}
-        notebookId={notebookId}
-      >
-        <UploadDialogue uploadState={uploadState} clearAll={clearAllUploads} />
-
-        {!editorLoaded && <EditorPlaceholder />}
-      </DropFile>
-    </ExternalAuthenticationContextProvider>
-  );
-};
-
-const EditorWithResults = (props: EditorProps): ReturnType<FC> => {
-  const computer = useComputer();
-
-  const notebookTitlePlugin = useNotebookTitlePlugin(props);
-  const languagePlugin = useLanguagePlugin();
+  const { createOrUpdateExternalData } = useExternalDataPlugin({
+    editor: docsyncEditor,
+  });
 
   const editorPlugins = useMemo(
     () => [...configuration.plugins, languagePlugin, notebookTitlePlugin],
     [languagePlugin, notebookTitlePlugin]
   );
 
-  const editor = createPlateEditor({
-    id: props.notebookId,
-    plugins: editorPlugins,
-  });
-
-  const programBlocks = editorProgramBlocks(editor);
+  const programBlocks = docsyncEditor ? editorProgramBlocks(editor) : {};
 
   return (
-    <ProgramBlocksContextProvider value={programBlocks}>
-      <ResultsContext.Provider value={computer.results.asObservable()}>
-        <Plate editor={editor} editableProps={{ readOnly: props.readOnly }}>
-          <EditorInternal {...props}></EditorInternal>
-          <Tooltip />
-        </Plate>
-      </ResultsContext.Provider>
-    </ProgramBlocksContextProvider>
+    <ResultsContext.Provider value={computer.results.asObservable()}>
+      <ProgramBlocksContextProvider value={programBlocks}>
+        <ExternalAuthenticationContextProvider
+          value={{ createOrUpdateExternalData }}
+        >
+          <components.DropFile
+            editor={editor}
+            startUpload={startUpload}
+            notebookId={notebookId}
+          >
+            {!editorLoaded && <EditorPlaceholder />}
+            <div css={{ display: editorLoaded ? 'unset' : 'none' }}>
+              <Plate
+                id={notebookId}
+                renderEditable={identity}
+                plugins={editorPlugins}
+                editableProps={{ readOnly }}
+              >
+                <components.Tooltip />
+                <components.UploadDialogue
+                  uploadState={uploadState}
+                  clearAll={clearAllUploads}
+                />
+              </Plate>
+            </div>
+          </components.DropFile>
+        </ExternalAuthenticationContextProvider>
+      </ProgramBlocksContextProvider>
+    </ResultsContext.Provider>
   );
 };
 
-export const EditorWithComputer = (props: EditorProps): ReturnType<FC> => {
+export const Editor = (props: EditorProps): ReturnType<FC> => {
   return (
-    <ComputerContextProvider>
-      <PlateProvider id={props.notebookId}>
-        <EditorWithResults {...props} />
-      </PlateProvider>
-    </ComputerContextProvider>
+    <PlateProvider id={props.notebookId}>
+      <ComputerContextProvider>
+        <EditorInternal key={props.notebookId} {...props} />
+      </ComputerContextProvider>
+    </PlateProvider>
   );
 };
-
-export const Editor = EditorWithComputer;

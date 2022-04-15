@@ -1,17 +1,17 @@
 import { DocSyncEditor, withDocSync } from '@decipad/docsync';
-import { Editor } from '@decipad/editor-types';
+import { TEditor } from '@udecode/plate';
 import { useMemo } from 'react';
 
 export type { DocSyncEditor };
 
-interface IUseDocSync<E extends Editor> {
+interface IUseDocSync<E extends TEditor> {
   notebookId: string;
   editor: E | undefined;
   authSecret?: string | undefined;
   onError?: (event: Error | Event) => void;
 }
 
-export const useDocSync = <E extends Editor>({
+export const useDocSync = <E extends TEditor>({
   notebookId,
   editor,
   authSecret,

@@ -3,8 +3,8 @@
 /* eslint-disable jest/expect-expect */
 import { Pad } from '@decipad/backendtypes';
 import { Editor } from '@decipad/editor-types';
+import { createPlateEditor } from '@udecode/plate';
 import fetch from 'jest-fetch-mock';
-import { createEditor } from 'slate';
 import waitForExpect from 'wait-for-expect';
 import { DocSyncEditor, withDocSync } from '.';
 import { testWithSandbox as test } from '../../backend-test-sandbox/src';
@@ -86,7 +86,7 @@ test('sync many', (ctx) => {
     });
 
     for (let i = 0; i < replicaCount; i += 1) {
-      const editor = withDocSync(createEditor() as unknown as Editor, pad.id, {
+      const editor = withDocSync(createPlateEditor(), pad.id, {
         connectBc: false,
       });
       editors.push(editor);

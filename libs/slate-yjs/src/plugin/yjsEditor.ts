@@ -1,4 +1,4 @@
-import type { Editor } from '@decipad/editor-types';
+import { TEditor } from '@udecode/plate';
 import { Editor as SlateEditor, Operation } from 'slate';
 import { HistoryEditor } from 'slate-history';
 import invariant from 'tiny-invariant';
@@ -8,11 +8,11 @@ import applySlateOps from '../applyToYjs';
 import { SharedType, slateYjsSymbol } from '../model';
 import { toSlateDoc } from '../utils';
 
-const IS_REMOTE: WeakSet<Editor> = new WeakSet();
-const LOCAL_OPERATIONS: WeakMap<Editor, Set<Operation>> = new WeakMap();
-const SHARED_TYPES: WeakMap<Editor, SharedType> = new WeakMap();
+const IS_REMOTE: WeakSet<TEditor> = new WeakSet();
+const LOCAL_OPERATIONS: WeakMap<TEditor, Set<Operation>> = new WeakMap();
+const SHARED_TYPES: WeakMap<TEditor, SharedType> = new WeakMap();
 
-export interface YjsEditor extends Editor {
+export interface YjsEditor extends TEditor {
   sharedType: SharedType;
   onChange: SlateEditor['onChange'];
   apply: SlateEditor['apply'];
@@ -126,7 +126,7 @@ function applyRemoteYjsEvents(
   }
 }
 
-export function withYjs<T extends Editor>(
+export function withYjs<T extends TEditor>(
   editor: T,
   sharedType: SharedType,
   { synchronizeValue = true }: WithYjsOptions = {}

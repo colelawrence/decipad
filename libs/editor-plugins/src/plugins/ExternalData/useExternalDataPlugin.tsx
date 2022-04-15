@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Node, Transforms, Editor as SlateEditor } from 'slate';
 import { produce } from 'immer';
 import { useLocation } from 'react-router-dom';
-import { Editor } from '@decipad/editor-types';
+import { TEditor } from '@udecode/plate';
 import * as externalData from './external-data';
 
 interface Identifiable {
@@ -10,7 +10,7 @@ interface Identifiable {
 }
 
 interface ExternalDataPluginOptions {
-  editor?: Editor;
+  editor?: TEditor;
 }
 
 interface CreateOrUpdateExternalDataOptions {
@@ -166,14 +166,14 @@ export const useExternalDataPlugin = ({
   };
 };
 
-function blockIdToBlockIndex(editor: Editor, blockId: string): number {
+function blockIdToBlockIndex(editor: TEditor, blockId: string): number {
   return editor.children.findIndex(
     (block) => (block as unknown as Identifiable).id === blockId
   );
 }
 
 function saveToDocState(
-  editor: Editor | undefined,
+  editor: TEditor | undefined,
   blockId: string,
   props: Record<string, string>
 ) {

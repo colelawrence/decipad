@@ -1,5 +1,5 @@
+import { TEditor } from '@udecode/plate';
 import { Node, NodeOperation, Text } from 'slate';
-import { Editor } from '@decipad/editor-types';
 import invariant from 'tiny-invariant';
 import * as Y from 'yjs';
 import { SyncElement } from '../model';
@@ -11,7 +11,7 @@ import { toSlateNode, toSlatePath } from '../utils/convert';
  * @param event
  */
 export default function translateArrayEvent(
-  editor: Editor,
+  editor: TEditor,
   event: Y.YArrayEvent<SyncElement>
 ): NodeOperation[] {
   const targetPath = toSlatePath(event.path);

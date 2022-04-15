@@ -1,4 +1,3 @@
-import { Editor } from '@decipad/editor-types';
 import { fetch } from '@decipad/fetch';
 import {
   CursorEditor,
@@ -10,6 +9,7 @@ import {
 import { getDefined } from '@decipad/utils';
 import { IndexeddbPersistence } from '@decipad/y-indexeddb';
 import { WebsocketProvider } from '@decipad/y-websocket';
+import { TEditor } from '@udecode/plate';
 import EventEmitter from 'events';
 import { Awareness } from 'y-protocols/awareness';
 import { Array as YArray, Doc as YDoc, Map as YMap, Text as YText } from 'yjs';
@@ -35,7 +35,7 @@ type OnSavedCallback = (source: Source) => void;
 type OnConnectedCallback = () => void;
 type OnDisconnectedCallback = () => void;
 
-export type DocSyncEditor<E extends Editor = Editor> = E &
+export type DocSyncEditor<E extends TEditor = TEditor> = E &
   YjsEditor &
   CursorEditor & {
     onLoaded: (cb: OnLoadedCallback) => void;
@@ -72,7 +72,7 @@ function ensureInitialDocument(doc: YDoc, root: DocTypes.Doc) {
   });
 }
 
-function docSyncEditor<E extends Editor>(
+function docSyncEditor<E extends TEditor>(
   editor: E & YjsEditor & CursorEditor,
   shared: YArray<SyncElement>,
   doc: YDoc,
@@ -166,7 +166,7 @@ async function wsAddress(docId: string): Promise<string> {
   return `${await (await fetch('/api/ws')).text()}?doc=${docId}`;
 }
 
-export function withDocSync<E extends Editor>(
+export function withDocSync<E extends TEditor>(
   editor: E,
   docId: string,
   options: Options = {}

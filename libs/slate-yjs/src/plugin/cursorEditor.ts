@@ -1,10 +1,10 @@
-import { Editor } from '@decipad/editor-types';
+import { TEditor } from '@udecode/plate';
 import invariant from 'tiny-invariant';
 import { Awareness } from 'y-protocols/awareness';
 import { absolutePositionToRelativePosition } from '../cursor/utils';
 import { YjsEditor } from './yjsEditor';
 
-const AWARENESS: WeakMap<Editor, Awareness> = new WeakMap();
+const AWARENESS: WeakMap<TEditor, Awareness> = new WeakMap();
 
 export interface CursorEditor extends YjsEditor {
   awareness: Awareness;

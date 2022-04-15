@@ -1,7 +1,6 @@
-import { createEditor } from 'slate';
 import waitForExpect from 'wait-for-expect';
-import { Editor } from '@decipad/editor-types';
 import { getDefined } from '@decipad/utils';
+import { createPlateEditor } from '@udecode/plate';
 import { withDocSync, DocSyncEditor } from '.';
 
 describe('pad editor persistence', () => {
@@ -20,7 +19,7 @@ describe('pad editor persistence', () => {
   };
 
   beforeAll(() => {
-    editor = withDocSync(createEditor() as unknown as Editor, 'docid', {
+    editor = withDocSync(createPlateEditor(), 'docid', {
       ws: false,
     });
     editor.onLoaded(onLoaded);
@@ -106,7 +105,7 @@ Array [
       expect(source).toBe('local');
       loaded = true;
     };
-    const editor2 = withDocSync(createEditor() as unknown as Editor, 'docid', {
+    const editor2 = withDocSync(createPlateEditor(), 'docid', {
       ws: false,
     });
     editor2.onLoaded(onLoaded2);

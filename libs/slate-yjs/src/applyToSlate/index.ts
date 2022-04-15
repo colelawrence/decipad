@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { TEditor } from '@udecode/plate';
 import { Editor as SlateEditor, Operation } from 'slate';
 import * as Y from 'yjs';
-import { Editor } from '@decipad/editor-types';
 import translateArrayEvent from './arrayEvent';
 import translateMapEvent from './mapEvent';
 import translateTextEvent from './textEvent';
@@ -12,7 +12,7 @@ import translateTextEvent from './textEvent';
  * @param event
  */
 export function translateYjsEvent(
-  editor: Editor,
+  editor: TEditor,
   event: Y.YEvent<any>
 ): Operation[] {
   if (event instanceof Y.YArrayEvent) {
@@ -33,7 +33,7 @@ export function translateYjsEvent(
 /**
  * Applies multiple yjs events to a slate editor.
  */
-export function applyYjsEvents(editor: Editor, events: Y.YEvent<any>[]): void {
+export function applyYjsEvents(editor: TEditor, events: Y.YEvent<any>[]): void {
   SlateEditor.withoutNormalizing(editor as unknown as SlateEditor, () => {
     events.forEach((event) =>
       translateYjsEvent(editor, event).forEach(editor.apply)

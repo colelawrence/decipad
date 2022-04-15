@@ -1,6 +1,6 @@
+import { TEditor } from '@udecode/plate';
 import { Node, NodeOperation } from 'slate';
 import * as Y from 'yjs';
-import { Editor } from '@decipad/editor-types';
 import { SyncElement } from '../model';
 import { toSlatePath } from '../utils/convert';
 
@@ -10,7 +10,7 @@ import { toSlatePath } from '../utils/convert';
  * @param event
  */
 export default function translateMapEvent(
-  editor: Editor,
+  editor: TEditor,
   event: Y.YMapEvent<unknown>
 ): NodeOperation[] {
   const targetPath = toSlatePath(event.path);

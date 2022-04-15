@@ -1,5 +1,5 @@
+import { TEditor } from '@udecode/plate';
 import { Node, Text, TextOperation } from 'slate';
-import { Editor } from '@decipad/editor-types';
 import invariant from 'tiny-invariant';
 import * as Y from 'yjs';
 import { toSlatePath } from '../utils/convert';
@@ -10,7 +10,7 @@ import { toSlatePath } from '../utils/convert';
  * @param event
  */
 export default function translateTextEvent(
-  editor: Editor,
+  editor: TEditor,
   event: Y.YTextEvent
 ): TextOperation[] {
   const targetPath = toSlatePath(event.path);
