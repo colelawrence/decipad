@@ -34,6 +34,8 @@ interface PlotParamsProps {
   readonly setColorColumnName: StringSetter;
   readonly thetaColumnName: string;
   readonly setThetaColumnName: StringSetter;
+  readonly colorScheme?: string;
+  readonly setColorScheme: StringSetter;
 }
 
 interface SelectInputProps {
@@ -85,6 +87,30 @@ const containerStyles = css({
   borderLeft: `4px solid ${cssVar('highlightColor')}`,
 });
 
+const colorSchemes = [
+  'accent',
+  'category20',
+  'dark2',
+  'paired',
+  'pastel1',
+  'pastel2',
+  'set2',
+  'set3',
+];
+
+const ColorSchemeOptions = () => {
+  return (
+    <>
+      <option key="__none" value=""></option>;
+      {colorSchemes.map((scheme) => (
+        <option key={scheme} value={scheme}>
+          {scheme}
+        </option>
+      ))}
+    </>
+  );
+};
+
 export const PlotParams = ({
   sourceVarName,
   sourceVarNameOptions,
@@ -102,6 +128,8 @@ export const PlotParams = ({
   setColorColumnName,
   thetaColumnName,
   setThetaColumnName,
+  colorScheme,
+  setColorScheme,
 }: PlotParamsProps): ReturnType<FC> => {
   const emptyColumnOption = <option key="__none" value=""></option>;
   const sourceVarNameOptionsOptions = [emptyColumnOption].concat(
@@ -140,33 +168,62 @@ export const PlotParams = ({
       <SelectInput labelText="Chart" setValue={setMarkType} value={markType}>
         {markTypeOptions}
       </SelectInput>
-      <SelectInput labelText="x" setValue={setXColumnName} value={xColumnName}>
-        {columnOptions}
-      </SelectInput>
-      <SelectInput labelText="y" setValue={setYColumnName} value={yColumnName}>
-        {columnOptions}
-      </SelectInput>
-      <SelectInput
-        labelText="Sizes"
-        setValue={setSizeColumnName}
-        value={sizeColumnName}
-      >
-        {columnOptions}
-      </SelectInput>
-      <SelectInput
-        labelText="Colors"
-        setValue={setColorColumnName}
-        value={colorColumnName}
-      >
-        {columnOptions}
-      </SelectInput>
-      <SelectInput
-        labelText="Theta"
-        setValue={setThetaColumnName}
-        value={thetaColumnName}
-      >
-        {columnOptions}
-      </SelectInput>
+      {markType !== 'arc' && (
+        <>
+          <SelectInput
+            labelText="x"
+            setValue={setXColumnName}
+            value={xColumnName}
+          >
+            {columnOptions}
+          </SelectInput>
+          <SelectInput
+            labelText="y"
+            setValue={setYColumnName}
+            value={yColumnName}
+          >
+            {columnOptions}
+          </SelectInput>
+          {markType !== 'line' && markType !== 'area' && (
+            <SelectInput
+              labelText="Sizes"
+              setValue={setSizeColumnName}
+              value={sizeColumnName}
+            >
+              {columnOptions}
+            </SelectInput>
+          )}
+        </>
+      )}
+
+      {markType === 'arc' && (
+        <SelectInput
+          labelText="Slice size"
+          setValue={setThetaColumnName}
+          value={thetaColumnName}
+        >
+          {columnOptions}
+        </SelectInput>
+      )}
+
+      {(markType === 'bar' || markType === 'arc') && (
+        <>
+          <SelectInput
+            labelText="Colors"
+            setValue={setColorColumnName}
+            value={colorColumnName}
+          >
+            {columnOptions}
+          </SelectInput>
+          <SelectInput
+            labelText="Color Scheme"
+            setValue={setColorScheme}
+            value={colorScheme || ''}
+          >
+            <ColorSchemeOptions />
+          </SelectInput>
+        </>
+      )}
     </div>
   );
 };

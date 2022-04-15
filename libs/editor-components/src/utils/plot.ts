@@ -5,6 +5,7 @@ import { requirePathBelowBlock } from '@decipad/editor-utils';
 
 const plotElement: Omit<PlotElement, 'id'> = {
   type: ELEMENT_PLOT,
+  title: 'Chart',
   sourceVarName: '',
   xColumnName: '',
   yColumnName: '',

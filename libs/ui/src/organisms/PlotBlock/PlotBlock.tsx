@@ -1,10 +1,23 @@
-import { css } from '@emotion/react';
-import type { ComponentProps } from 'react';
 import { FC } from 'react';
-import { ErrorMessage } from '../../atoms';
+import { css } from '@emotion/react';
+import { noop } from '@decipad/utils';
+import type { ComponentProps } from 'react';
+import { CellInput, ErrorMessage } from '../../atoms';
 import { blockAlignment } from '../../styles';
 import { PlotParams } from '../PlotParams/PlotParams';
 import { PlotResult } from '../PlotResult/PlotResult';
+import { Plot as PlotIcon } from '../../icons';
+
+const plotIconSizeStyles = css({
+  display: 'grid',
+  width: '28px',
+  height: '28px',
+});
+
+const plotTitleStyles = css({
+  // TODO: title styles
+  display: 'flex',
+});
 
 const plotBlockStyles = css({
   padding: `${blockAlignment.plot.paddingTop} 0`,
@@ -21,6 +34,8 @@ interface PlotBlockProps {
   errorMessage?: string;
   plotParams: ComponentProps<typeof PlotParams>;
   result?: ComponentProps<typeof PlotResult>;
+  title: string;
+  onTitleChange?: (newValue: string) => void;
 }
 
 export const PlotBlock = ({
@@ -28,9 +43,22 @@ export const PlotBlock = ({
   errorMessage,
   plotParams,
   result,
+  title,
+  onTitleChange = noop,
 }: PlotBlockProps): ReturnType<FC> => {
   return (
-    <section css={plotBlockStyles}>
+    <section css={plotBlockStyles} contentEditable={false}>
+      <div css={plotTitleStyles}>
+        <div css={plotIconSizeStyles}>
+          <PlotIcon />
+        </div>
+        <CellInput
+          value={title}
+          onChange={onTitleChange}
+          placeholder="Plot title"
+          variant="heading"
+        />
+      </div>
       {!readOnly && <PlotParams {...plotParams} />}
       {errorMessage && <ErrorMessage message={errorMessage} />}
       {result && (

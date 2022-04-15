@@ -59,7 +59,7 @@ export const editorTable: StyleData = {
   desiredWidth: wideBlockWidth,
 };
 export const plot: StyleData = {
-  paddingTop: '46px',
+  paddingTop: '16px',
   desiredWidth: wideBlockWidth,
 };
 export const interactive: StyleData = {

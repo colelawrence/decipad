@@ -25,6 +25,7 @@ module.exports = {
     '<rootDir>/libs/slate-react-utils',
     '<rootDir>/libs/editor-plugins',
     '<rootDir>/libs/editor-language-elements',
+    '<rootDir>/libs/editor-components',
     '<rootDir>/libs/editor-variable-def',
   ],
 };

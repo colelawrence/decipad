@@ -7,7 +7,7 @@ import type { VegaProps } from 'react-vega/lib/Vega';
 const GOLDEN_RATIO = 1.618;
 // by experience, this is the maximum value in pixels added to the width of a chart
 // to accomodate the labels on the right.
-const SUBTRACT_MARGIN = 230;
+const SUBTRACT_MARGIN = 100;
 
 interface PlotResultProps {
   spec: NonNullable<VegaProps['spec']>;

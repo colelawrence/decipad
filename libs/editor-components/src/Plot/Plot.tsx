@@ -1,18 +1,14 @@
-import { ELEMENT_PLOT, PlateComponent } from '@decipad/editor-types';
-import { Result } from '@decipad/language';
-import { useResults, useComputer } from '@decipad/react-contexts';
-import { organisms } from '@decipad/ui';
-import { useEditorState } from '@udecode/plate';
-import { dequal } from 'dequal';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useReadOnly } from 'slate-react';
-import { useElementMutatorCallback } from '@decipad/slate-react-utils';
+import { useEditorState } from '@udecode/plate';
+import { ELEMENT_PLOT, PlateComponent } from '@decipad/editor-types';
+import { useComputer, useResult } from '@decipad/react-contexts';
+import { organisms } from '@decipad/ui';
 import { DraggableBlock } from '@decipad/editor-components';
-import {
-  enhanceSpecFromWideData,
-  resultToPlotResultData,
-  specFromType,
-} from './plotUtils';
+import { useElementMutatorCallback } from '@decipad/slate-react-utils';
+import { usePlot } from '../utils/usePlot';
+
+const DEFAULT_TITLE = 'Plot';
 
 export const Plot: PlateComponent = ({ attributes, element, children }) => {
   if (!element || element.type !== ELEMENT_PLOT) {
@@ -22,106 +18,19 @@ export const Plot: PlateComponent = ({ attributes, element, children }) => {
     throw new Error('PlotBlock is not a leaf');
   }
   const [error, setError] = useState<string | undefined>();
-  const [sourceVarNameOptions, setSourceVarNameOptions] = useState<string[]>(
-    []
-  );
-  const [columnNameOptions, setColumnNameOptions] = useState<string[]>([]);
-
   const editor = useEditorState();
-
-  const { blockResults } = useResults();
   const computer = useComputer();
-
-  const setSourceVarName = useElementMutatorCallback(
-    editor,
-    element,
-    'sourceVarName'
-  );
-  const setMarkType = useElementMutatorCallback(editor, element, 'markType');
-  const setXColumnName = useElementMutatorCallback(
-    editor,
-    element,
-    'xColumnName'
-  );
-  const setYColumnName = useElementMutatorCallback(
-    editor,
-    element,
-    'yColumnName'
-  );
-  const setSizeColumnName = useElementMutatorCallback(
-    editor,
-    element,
-    'sizeColumnName'
-  );
-  const setColorColumnName = useElementMutatorCallback(
-    editor,
-    element,
-    'colorColumnName'
-  );
-
-  const setThetaColumnName = useElementMutatorCallback(
-    editor,
-    element,
-    'thetaColumnName'
-  );
-
-  useEffect(() => {
-    const names = computer.getNamesDefinedBefore([element.id, 0], false);
-    const tableNames = names
-      .filter((name) => name.type.kind === 'table')
-      .map((name) => name.name);
-    if (!dequal(sourceVarNameOptions, tableNames)) {
-      setSourceVarNameOptions(tableNames);
-    }
-  }, [
-    computer,
-    element.id,
-    sourceVarNameOptions,
-    blockResults, // important dep, as to get called every time something changes in the computer
-  ]);
-
   const readOnly = useReadOnly();
-
-  useEffect(() => {
-    const names = computer.getNamesDefinedBefore([element.id, 0], false);
-    const name = names.find(
-      (varName) => varName.name === element.sourceVarName
-    );
-    if (!name) {
-      return;
-    }
-    const { type } = name;
-    if (type.kind !== 'table') {
-      return;
-    }
-    const candidates = type.columnNames;
-    if (!dequal(columnNameOptions, candidates)) {
-      setColumnNameOptions(candidates);
-    }
-  }, [
+  const identifiedResult = useResult(element.id);
+  const result =
+    identifiedResult?.results[identifiedResult?.results.length - 1];
+  const { spec, data, plotParams } = usePlot({
+    editor,
     computer,
-    element.id,
-    element.sourceVarName,
-    columnNameOptions,
-    blockResults, // important dep, as to get called every time something changes in the computer
-  ]);
-
-  const identifiedResult = blockResults[element.id];
-  const result = identifiedResult?.results[0];
-
-  let spec = specFromType(result?.type, element);
-  const data = resultToPlotResultData(result as Result<'table'>, element);
-  spec = spec && data && enhanceSpecFromWideData(spec, data);
-
-  const {
-    sourceVarName,
-    xColumnName,
-    yColumnName,
-    sizeColumnName,
-    colorColumnName,
-    thetaColumnName,
-    markType,
-  } = element;
+    element,
+    result,
+  });
+  const onTitleChange = useElementMutatorCallback(editor, element, 'title');
 
   // IMPORTANT NOTE: do not remove the children elements from rendering.
   // Even though they're one element with an empty text property, their absence triggers
@@ -137,24 +46,7 @@ export const Plot: PlateComponent = ({ attributes, element, children }) => {
           <organisms.PlotBlock
             readOnly={readOnly}
             errorMessage={identifiedResult?.error?.message || error}
-            plotParams={{
-              sourceVarNameOptions,
-              columnNameOptions,
-              sourceVarName,
-              markType,
-              xColumnName,
-              yColumnName,
-              sizeColumnName,
-              colorColumnName,
-              thetaColumnName,
-              setSourceVarName,
-              setMarkType,
-              setXColumnName,
-              setYColumnName,
-              setSizeColumnName,
-              setColorColumnName,
-              setThetaColumnName,
-            }}
+            plotParams={plotParams}
             result={
               spec &&
               data && {
@@ -163,6 +55,8 @@ export const Plot: PlateComponent = ({ attributes, element, children }) => {
                 onError: (err) => setError(err.message),
               }
             }
+            title={element.title || DEFAULT_TITLE}
+            onTitleChange={onTitleChange}
           />
         </DraggableBlock>
       </div>

@@ -27,6 +27,8 @@ const VOID_TYPE_PROPERTIES = {
     'data-varname',
   ],
   [ELEMENT_PLOT]: [
+    'title',
+    'colorScheme',
     'sourceVarName',
     'markType',
     'xColumnName',
@@ -55,6 +57,7 @@ const MISSING_ATTRIBUTE_GENERATOR = {
     'data-varname': emptyString,
   },
   [ELEMENT_PLOT]: {
+    colorScheme: emptyString,
     sourceVarName: emptyString,
     markType: emptyString,
     xColumnName: emptyString,

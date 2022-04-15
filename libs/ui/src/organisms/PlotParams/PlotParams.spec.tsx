@@ -1,5 +1,4 @@
 import { render } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import type { ComponentProps } from 'react';
 import { PlotParams } from './PlotParams';
 
@@ -9,11 +8,13 @@ const expectedPropToLabelName = {
   xColumnName: /x/i,
   yColumnName: /y/i,
   sizeColumnName: /size/i,
-  colorColumnName: /color/i,
+  colorColumnName: /colors/i,
+  thetaColumnName: /slice/i,
+  colorSchemeColumnName: /scheme/i,
 };
 
 describe('PlotParams', () => {
-  let props: Record<string, string> = {};
+  const props: Record<string, string> = {};
 
   const setter = (prop: string) => (value: string) => {
     props[prop] = value;
@@ -32,6 +33,7 @@ describe('PlotParams', () => {
     sizeColumnName: 'size column name',
     colorColumnName: 'color column name',
     thetaColumnName: 'theta column name',
+    colorScheme: 'color scheme',
     setSourceVarName: setter('sourceVarName'),
     setMarkType: setter('markType'),
     setXColumnName: setter('xColumnName'),
@@ -39,31 +41,43 @@ describe('PlotParams', () => {
     setSizeColumnName: setter('sizeColumnName'),
     setColorColumnName: setter('colorColumnName'),
     setThetaColumnName: setter('thetaColumnName'),
+    setColorScheme: setter('colorScheme'),
   };
 
-  it.each(Object.entries(expectedPropToLabelName))(
-    '%s is visible',
-    (_propName, labelText) => {
-      const { getByLabelText } = render(<PlotParams {...params} />);
-      expect(getByLabelText(labelText)).toBeVisible();
-    }
-  );
+  it('has right selectors when mark type is bar', () => {
+    const { getByLabelText } = render(
+      <PlotParams {...params} markType="bar" />
+    );
+    expect(getByLabelText(expectedPropToLabelName.xColumnName)).toBeVisible();
+    expect(getByLabelText(expectedPropToLabelName.yColumnName)).toBeVisible();
+    expect(
+      getByLabelText(expectedPropToLabelName.sizeColumnName)
+    ).toBeVisible();
+    expect(
+      getByLabelText(expectedPropToLabelName.colorColumnName)
+    ).toBeVisible();
+  });
 
-  it.each(Object.entries(expectedPropToLabelName))(
-    '%s is selectable',
-    async (propName, labelText) => {
-      const { getByLabelText } = render(<PlotParams {...params} />);
-      props = {};
-      const select =
-        propName === 'sourceVarName'
-          ? params.sourceVarNameOptions[0]
-          : propName === 'markType'
-          ? 'circle'
-          : params.columnNameOptions[0];
-      await userEvent.selectOptions(getByLabelText(labelText), select);
-      expect(props).toMatchObject({ [propName]: select });
-      await userEvent.selectOptions(getByLabelText(labelText), '');
-      expect(props).toMatchObject({ [propName]: '' });
-    }
-  );
+  it('has right selectors when mark type is arc', () => {
+    const { getByLabelText } = render(
+      <PlotParams {...params} markType="arc" />
+    );
+    expect(
+      getByLabelText(expectedPropToLabelName.sizeColumnName)
+    ).toBeVisible();
+    expect(
+      getByLabelText(expectedPropToLabelName.thetaColumnName)
+    ).toBeVisible();
+    expect(
+      getByLabelText(expectedPropToLabelName.colorSchemeColumnName)
+    ).toBeVisible();
+  });
+
+  it('has right selectors when mark type is anything else', () => {
+    const { getByLabelText } = render(
+      <PlotParams {...params} markType="line" />
+    );
+    expect(getByLabelText(expectedPropToLabelName.xColumnName)).toBeVisible();
+    expect(getByLabelText(expectedPropToLabelName.yColumnName)).toBeVisible();
+  });
 });

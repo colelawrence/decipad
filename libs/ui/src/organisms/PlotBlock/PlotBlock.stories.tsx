@@ -34,6 +34,7 @@ const plotResult: ComponentProps<typeof PlotBlock>['result'] = {
 };
 
 const props: ComponentProps<typeof PlotBlock> = {
+  title: 'Plot',
   readOnly: false,
   errorMessage: '',
   plotParams: {
@@ -49,6 +50,7 @@ const props: ComponentProps<typeof PlotBlock> = {
     sizeColumnName: 'size column name',
     colorColumnName: 'color column name',
     thetaColumnName: 'theta column name',
+    colorScheme: 'color scheme',
     setSourceVarName: setter('sourceVarName'),
     setMarkType: setter('markType'),
     setXColumnName: setter('xColumnName'),
@@ -56,6 +58,7 @@ const props: ComponentProps<typeof PlotBlock> = {
     setSizeColumnName: setter('sizeColumnName'),
     setColorColumnName: setter('colorColumnName'),
     setThetaColumnName: setter('thetaColumnName'),
+    setColorScheme: setter('colorScheme'),
   },
   result: plotResult,
 };

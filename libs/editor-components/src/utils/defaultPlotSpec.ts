@@ -1,0 +1,108 @@
+/* eslint-disable no-param-reassign */
+import { SerializedType } from '@decipad/language';
+import { encodingFor, PlotSpec } from './plotUtils';
+
+type KindSet = Set<SerializedType['kind']>;
+
+type ExclusionList = Array<string | undefined>;
+
+const quantitativeKinds: KindSet = new Set(['number', 'date']);
+
+const nominalKinds: KindSet = new Set(['string', 'boolean']);
+
+const firstColumnInKind = (
+  type: SerializedType,
+  kinds: KindSet,
+  exclude: ExclusionList = []
+): [string, SerializedType] | undefined => {
+  if (type.kind !== 'table') {
+    return undefined;
+  }
+  let columnIndex = -1;
+  for (const columnType of type.columnTypes) {
+    columnIndex += 1;
+    const columnName = type.columnNames[columnIndex];
+    if (exclude.indexOf(columnName) >= 0) {
+      continue;
+    }
+    if (columnType.kind === 'column' && kinds.has(columnType.cellType.kind)) {
+      return [type.columnNames[columnIndex], columnType.cellType];
+    }
+  }
+  return undefined;
+};
+
+const firstQuantitativeColumn = (
+  type: SerializedType,
+  exclude?: ExclusionList
+) => firstColumnInKind(type, quantitativeKinds, exclude);
+
+const firstNominalColumn = (type: SerializedType, exclude?: ExclusionList) =>
+  firstColumnInKind(type, nominalKinds, exclude);
+
+export const defaultPlotSpec = (
+  type: undefined | SerializedType,
+  spec: PlotSpec | undefined
+): PlotSpec | undefined => {
+  if (type?.kind !== 'table' || !spec) {
+    return spec;
+  }
+
+  // pie charts
+  if (spec.mark.type === 'arc') {
+    const exclude: ExclusionList = [];
+    if (!spec.encoding.theta) {
+      const column = firstQuantitativeColumn(type, exclude);
+      if (column) {
+        exclude.push(column[0]);
+        spec.encoding.theta = encodingFor(...column);
+      }
+    }
+    if (!spec.encoding.color) {
+      const column = firstNominalColumn(type, exclude);
+      if (column) {
+        spec.encoding.theta = encodingFor(...column);
+      }
+    }
+
+    // break here, as pie charts dont need more encodings
+    return spec;
+  }
+
+  if (!spec.encoding.x) {
+    const exclusions = [
+      spec.encoding.y?.field,
+      spec.encoding.size?.field,
+      spec.encoding.color?.field,
+    ];
+    const column =
+      firstNominalColumn(type, exclusions) ||
+      firstQuantitativeColumn(type, exclusions);
+    if (column) {
+      spec.encoding.x = encodingFor(...column);
+    }
+  }
+
+  if (!spec.encoding.y) {
+    const exclusions = [
+      spec.encoding.x?.field,
+      spec.encoding.size?.field,
+      spec.encoding.color?.field,
+    ];
+    const column =
+      firstQuantitativeColumn(type, exclusions) ||
+      firstNominalColumn(type, exclusions);
+    if (column) {
+      spec.encoding.y = encodingFor(...column);
+    }
+  }
+
+  if (!spec.encoding.y) {
+    const column = firstQuantitativeColumn(type) || firstNominalColumn(type);
+    if (column) {
+      spec.encoding.y = encodingFor(...column);
+    }
+  }
+
+  return spec;
+};

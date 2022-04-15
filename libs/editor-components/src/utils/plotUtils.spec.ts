@@ -71,12 +71,34 @@ const tableData = [
 
 describe('specFromType', () => {
   it('returns no spec if no type is provided', () => {
-    expect(specFromType(null, displayProps())).toBeUndefined();
+    expect(specFromType(undefined, displayProps())).toBeUndefined();
   });
 
-  it('returns no spec if anything other than a table is provided', () => {
-    const type: SerializedType = { kind: 'number', unit: null };
-    expect(specFromType(type, displayProps())).toBeUndefined();
+  it('returns no encodings if nothing other than a table and a mark type are provided', () => {
+    const type: SerializedType = {
+      kind: 'table',
+      columnNames: ['col1', 'col2'],
+      columnTypes: [{ kind: 'string' }, { kind: 'number', unit: null }],
+      indexName: 'col1',
+      tableLength: 3,
+    };
+    expect(specFromType(type, displayProps({ markType: 'bar' }))).toEqual({
+      config: {
+        encoding: {
+          color: {
+            scheme: undefined,
+          },
+        },
+      },
+      data: {
+        name: 'table',
+      },
+      encoding: {},
+      mark: {
+        tooltip: true,
+        type: 'bar',
+      },
+    });
   });
 
   it('returns a default spec with default display props', () => {
@@ -307,6 +329,6 @@ describe('enhanceSpecFromWideData', () => {
       data
     );
 
-    expect(spec.encoding.x.scale?.domain).toStrictEqual([0, 9]);
+    expect(spec.encoding.x?.scale?.domain).toStrictEqual([0, 9]);
   });
 });

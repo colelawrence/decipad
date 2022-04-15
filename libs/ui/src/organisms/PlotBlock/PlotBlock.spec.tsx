@@ -50,6 +50,7 @@ const plotParams: ComponentProps<typeof PlotBlock>['plotParams'] = {
   sizeColumnName: 'size column name',
   colorColumnName: 'color column name',
   thetaColumnName: 'color column name',
+  colorScheme: 'color scheme',
   setSourceVarName: setter('sourceVarName'),
   setMarkType: setter('markType'),
   setXColumnName: setter('xColumnName'),
@@ -57,9 +58,11 @@ const plotParams: ComponentProps<typeof PlotBlock>['plotParams'] = {
   setSizeColumnName: setter('sizeColumnName'),
   setColorColumnName: setter('colorColumnName'),
   setThetaColumnName: setter('thetaColumnName'),
+  setColorScheme: setter('colorScheme'),
 };
 
 const plotProps: ComponentProps<typeof PlotBlock> = {
+  title: 'Title',
   readOnly: false,
   result,
   plotParams,

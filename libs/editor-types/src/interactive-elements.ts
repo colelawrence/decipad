@@ -34,6 +34,8 @@ export interface FetchElement extends BaseElement {
 }
 export interface PlotElement extends BaseElement {
   type: typeof ELEMENT_PLOT;
+  title?: string;
+  colorScheme?: string;
   sourceVarName: string;
   markType:
     | 'bar'

@@ -7,6 +7,7 @@ import {
   SerializedType,
   stringifyUnits,
 } from '@decipad/language';
+import { ResultTable } from 'libs/language/src/interpreter/interpreter-types';
 
 export type DisplayProps = {
   sourceVarName: string;
@@ -16,21 +17,74 @@ export type DisplayProps = {
   sizeColumnName: string;
   colorColumnName: string;
   thetaColumnName: string;
+  colorScheme?: string;
 };
+
+interface LegendConfig {
+  direction: 'horizontal' | 'vertical';
+  orient:
+    | 'left'
+    | 'right'
+    | 'top'
+    | 'bottom'
+    | 'top-left'
+    | 'top-right'
+    | 'bottom-left'
+    | 'bottom-right'
+    | 'none';
+}
+
+interface PlotConfig {
+  legend?: LegendConfig;
+  autosize?: 'fit' | 'pad' | 'none';
+  encoding?: {
+    color?: {
+      scheme?: string;
+    };
+  };
+  style?: {
+    cell?: {
+      stroke?: string;
+    };
+  };
+  axis?: {
+    titleColor?: string;
+    gridColor?: string;
+  };
+}
 
 type DisplayType = 'quantitative' | 'temporal' | 'ordinal' | 'nominal';
 
-interface PlotSpec {
-  mark: { type: PlotElement['markType']; tooltip: boolean };
+type Interpolate =
+  | 'linear'
+  | 'linear-closed'
+  | 'step'
+  | 'basis'
+  | 'basis-open'
+  | 'basis-closed'
+  | 'cardinal'
+  | 'cardinal-closed'
+  | 'bundle';
+export interface PlotSpec {
+  mark: {
+    type: PlotElement['markType'];
+    tooltip: boolean;
+    cornerRadiusEnd?: number;
+    interpolate?: Interpolate;
+    point?: boolean;
+    theta?: number;
+    innerRadius?: number;
+  };
   data: { name: 'table' };
   encoding: Record<EncodingKey, EncodingSpec>;
+  config?: PlotConfig;
 }
 
-type AllowedPlotValue = string | boolean | number | Date;
+export type AllowedPlotValue = string | boolean | number | Date;
 
-type Row = Record<string, AllowedPlotValue>;
+export type Row = Record<string, AllowedPlotValue>;
 
-type PlotData = {
+export type PlotData = {
   table: Row[];
 };
 
@@ -43,17 +97,21 @@ type TimeUnit =
   | 'utcyearmonthdatehoursminutes'
   | 'utcyearmonthdatehoursminutesseconds';
 
-type EncodingSpec = {
-  field: string;
-  type: DisplayType;
-  timeUnit?: TimeUnit;
-  title?: string;
-  scale?: {
-    domain?: [number, number];
-    domainMin?: number;
-    domainMax?: number;
-  };
-};
+type EncodingSpec =
+  | undefined
+  | {
+      field: string;
+      type: DisplayType;
+      timeUnit?: TimeUnit;
+      title?: string;
+      scale?: {
+        scheme?: string;
+        range?: Array<string>;
+        domain?: [number, number];
+        domainMin?: number;
+        domainMax?: number;
+      };
+    };
 type EncodingKey = 'x' | 'y' | 'size' | 'color' | 'theta';
 
 const displayPropsToEncoding: Record<string, EncodingKey> = {
@@ -64,15 +122,11 @@ const displayPropsToEncoding: Record<string, EncodingKey> = {
   thetaColumnName: 'theta',
 };
 
-const relevantDataDisplayProps: Array<keyof DisplayProps> = [
-  'xColumnName',
-  'yColumnName',
-  'sizeColumnName',
-  'colorColumnName',
-  'thetaColumnName',
-];
+const relevantDataDisplayProps: Array<keyof DisplayProps> = Object.keys(
+  displayPropsToEncoding
+) as Array<keyof DisplayProps>;
 
-function encodingTypeForColumnType(type: SerializedType): DisplayType {
+export function encodingTypeForColumnType(type: SerializedType): DisplayType {
   switch (type.kind) {
     case 'date':
       return 'temporal';
@@ -126,8 +180,21 @@ function columnTitle(columnName: string, columnType: SerializedType): string {
     : columnName;
 }
 
+export function encodingFor(
+  columnName: string,
+  columnType: SerializedType
+): EncodingSpec {
+  return {
+    field: columnName,
+    type: encodingTypeForColumnType(columnType),
+    title: columnTitle(columnName, columnType),
+    timeUnit:
+      columnType.kind === 'date' ? displayTimeUnitType(columnType) : undefined,
+  };
+}
+
 export function specFromType(
-  type: null | SerializedType,
+  type: undefined | SerializedType,
   displayProps: DisplayProps
 ): undefined | PlotSpec {
   if (!displayProps.markType || !type || type.kind !== 'table') {
@@ -141,34 +208,42 @@ export function specFromType(
     (index) => (index >= 0 && type.columnTypes[index]) || undefined
   );
 
-  const encoding = relevantDataDisplayProps.reduce((encodings, key) => {
-    const channelKey = displayPropsToEncoding[key];
-    const columnName = displayProps[key];
-    if (!columnName) {
-      return encodings;
-    }
-    const columnIndex = columnNames.indexOf(columnName);
-    const columnType = columnTypes[columnIndex];
-    if (columnType) {
-      // eslint-disable-next-line no-param-reassign
-      encodings[channelKey] = {
-        field: columnNames[columnIndex],
-        type: encodingTypeForColumnType(columnType),
-        title: columnTitle(columnName, columnType),
-        timeUnit:
-          columnType.kind === 'date'
-            ? displayTimeUnitType(columnType)
-            : undefined,
-      };
-    }
+  const encoding = relevantDataDisplayProps.reduce(
+    (encodings, specPropName) => {
+      const columnName = displayProps[specPropName];
+      if (!columnName) {
+        return encodings;
+      }
+      const columnIndex = columnNames.indexOf(columnName);
+      const columnType = columnTypes[columnIndex];
+      if (columnType) {
+        const channelKey = displayPropsToEncoding[specPropName];
+        // eslint-disable-next-line no-param-reassign
+        encodings[channelKey] = encodingFor(columnName, columnType);
+      }
 
-    return encodings;
-  }, {} as Record<EncodingKey, EncodingSpec>);
+      return encodings;
+    },
+    {} as Record<EncodingKey, EncodingSpec>
+  );
+
+  if (encoding.color && !encoding.color.scale) {
+    encoding.color.scale = {
+      scheme: displayProps.colorScheme,
+    };
+  }
 
   return {
     mark: { type: displayProps.markType, tooltip: true },
     data: { name: 'table' },
     encoding,
+    config: {
+      encoding: {
+        color: {
+          scheme: displayProps.colorScheme,
+        },
+      },
+    },
   };
 }
 
@@ -214,22 +289,31 @@ function makeWide(
 }
 
 export function resultToPlotResultData(
-  result: undefined | Result<'table'>,
+  result: undefined | Result,
   displayProps: DisplayProps
 ): undefined | PlotData {
   if (!result || result.type.kind !== 'table') {
     return;
   }
+  const type = result?.type;
+  if (!type || type.kind !== 'table') {
+    return undefined;
+  }
+  const value = result?.value;
+  if (!value) {
+    return;
+  }
+  const tableValue = value as ResultTable;
   const columnNames = relevantColumnNames(displayProps);
   const columnsTypesAndResults: Array<[SerializedType, OneResult[]]> =
     columnNames.map((columnName): [SerializedType, OneResult[]] => {
-      const index = result.type.columnNames.indexOf(columnName);
-      return [result.type.columnTypes[index], result.value[index]];
+      const index = type.columnNames.indexOf(columnName);
+      return [type.columnTypes[index], tableValue[index]];
     });
   const returnValue: Record<string, Array<AllowedPlotValue>> = {};
   columnNames.forEach((columnName, index) => {
-    const [type, values] = columnsTypesAndResults[index];
-    returnValue[columnName] = toPlotColumn(type, values);
+    const [columnType, values] = columnsTypesAndResults[index];
+    returnValue[columnName] = toPlotColumn(columnType, values);
   });
   return { table: makeWide(returnValue) };
 }
@@ -262,15 +346,20 @@ export function enhanceSpecFromWideData(
   spec: PlotSpec,
   data: PlotData
 ): PlotSpec {
-  for (const encValue of Object.values(spec?.encoding)) {
-    const { field } = encValue;
-    const domain = findWideDataDomain(field, data.table);
-    if (domain) {
-      if (!encValue.scale) {
-        encValue.scale = {};
+  if (spec.mark.type !== 'arc') {
+    for (const encValue of Object.values(spec?.encoding)) {
+      if (encValue) {
+        const { field } = encValue;
+        const domain = findWideDataDomain(field, data.table);
+        if (domain) {
+          if (!encValue.scale) {
+            encValue.scale = {};
+          }
+          encValue.scale.domain = domain;
+        }
       }
-      encValue.scale.domain = domain;
     }
   }
+
   return spec;
 }
