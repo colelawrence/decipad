@@ -18,7 +18,6 @@ type UserKeyValidation = {
 test('registration via magic link', (ctx) => {
   const { test: it } = ctx;
   let user: User;
-  let userKeyValidation: UserKeyValidation;
   // let token: string;
 
   it('registers', async () => {
@@ -67,45 +66,7 @@ test('registration via magic link', (ctx) => {
       ).Items as UserKeyValidation[];
 
       expect(userKeyValidations).toHaveLength(1);
-      [userKeyValidation] = userKeyValidations;
     });
-  });
-
-  // TODO merge WHEN test with THEN test?
-  // eslint-disable-next-line jest/expect-expect
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('can ask to resend link', async () => {
-    const client = ctx.graphql.withoutAuth();
-    await client.mutate({
-      mutation: ctx.gql`
-        mutation {
-          resendRegistrationMagicLinkEmail(email: "testuser1@decipad.com")
-        }
-      `,
-    });
-  });
-
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('can visit that link and get authenticated', async () => {
-    const link = `/api/userkeyvalidations/${userKeyValidation.id}/validate?redirect=false`;
-    const resp = await ctx.http.call(link);
-    const cookie = resp.headers.get('set-cookie');
-    expect(cookie).toMatch('next-auth.session-token=');
-    // token = parseCookie(cookie!).value;
-  });
-
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('no longer can ask to resend link', async () => {
-    const client = ctx.graphql.withoutAuth();
-    await expect(
-      client.mutate({
-        mutation: ctx.gql`
-          mutation {
-            resendRegistrationMagicLinkEmail(email: "testuser1@decipad.com")
-          }
-        `,
-      })
-    ).rejects.toThrow('User key already validated');
   });
 
   it('lets user update their name', async () => {

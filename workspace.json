@@ -251,13 +251,6 @@
             "cwd": "apps/docs"
           }
         },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/backend/tests/**/*.ts"],
-            "maxWarnings": 0
-          }
-        },
         "test": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {
