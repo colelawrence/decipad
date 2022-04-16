@@ -24,14 +24,12 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Cache yarn
-        id: yarn-cache
+      - name: Cache node_modules
         uses: actions/cache@v3
         with:
-          path: ~/.cache/yarn
-          key: yarn-cache-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            yarn-cache-
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-modules-
 
       - name: Install
         run: yarn install
