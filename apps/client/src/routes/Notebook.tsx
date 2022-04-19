@@ -13,32 +13,16 @@ import {
   useRouteParams,
   workspaces as workspacesRoute,
 } from '@decipad/routing';
-import { LoadingSpinnerPage, NotebookTopbar } from '@decipad/ui';
-import styled from '@emotion/styled';
-import { wideBlockWidth } from 'libs/ui/src/styles/editor-layout';
+import {
+  ErrorPage,
+  LoadingSpinnerPage,
+  NotebookPage,
+  NotebookTopbar,
+} from '@decipad/ui';
 import { FC, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { getSecretNotebookLink } from '../lib/secret';
 import { decode as decodeVanityUrlComponent } from '../lib/vanityUrlComponent';
-
-const Wrapper = styled('div')({
-  padding: '0 32px',
-  display: 'grid',
-});
-
-const EditorWrapper = styled('div')({
-  order: 2,
-  width: `min(100%, ${wideBlockWidth}px)`,
-  margin: 'auto',
-  marginTop: '72px',
-  marginBottom: '200px',
-});
-
-const ErrorWrapper = styled('div')({
-  height: '100%',
-  display: 'grid',
-  placeItems: 'center',
-});
 
 export const Notebook = (): ReturnType<FC> => {
   const history = useHistory();
@@ -130,38 +114,37 @@ export const Notebook = (): ReturnType<FC> => {
   }
 
   if (!notebook) {
-    return (
-      <ErrorWrapper>
-        <h1 style={{ fontSize: '2rem' }}>Couldn't get the notebook</h1>
-      </ErrorWrapper>
-    );
+    return <ErrorPage Heading="h1" wellKnown="404" authenticated />;
   }
 
   return (
-    <Wrapper>
-      <EditorWrapper>
+    <NotebookPage
+      notebook={
         <Editor
           notebookId={notebook?.id}
           readOnly={notebookReadOnly}
           authSecret={secret}
         />
-      </EditorWrapper>
-      <NotebookTopbar
-        workspaceName={notebook.workspace.name}
-        notebookName={
-          notebook.name === '' ? '<unnamed-notebook>' : notebook.name
-        }
-        workspaceHref={
-          workspacesRoute({}).workspace({ workspaceId: notebook.workspace.id })
-            .$
-        }
-        usersWithAccess={notebook.access.users}
-        permission={notebook.myPermissionType}
-        link={notebookUrlWithSecret}
-        sharingActive={sharingActive}
-        onToggleShare={onShareToggleClick}
-        onDuplicateNotebook={onDuplicateNotebook}
-      />
-    </Wrapper>
+      }
+      topbar={
+        <NotebookTopbar
+          workspaceName={notebook.workspace.name}
+          notebookName={
+            notebook.name === '' ? '<unnamed-notebook>' : notebook.name
+          }
+          workspaceHref={
+            workspacesRoute({}).workspace({
+              workspaceId: notebook.workspace.id,
+            }).$
+          }
+          usersWithAccess={notebook.access.users}
+          permission={notebook.myPermissionType}
+          link={notebookUrlWithSecret}
+          sharingActive={sharingActive}
+          onToggleShare={onShareToggleClick}
+          onDuplicateNotebook={onDuplicateNotebook}
+        />
+      }
+    />
   );
 };

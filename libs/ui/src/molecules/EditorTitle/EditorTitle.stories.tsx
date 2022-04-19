@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react';
+import { Meta, Story } from '@storybook/react';
 import { EditorTitle } from './EditorTitle';
 
 export default {
@@ -6,4 +6,4 @@ export default {
   component: EditorTitle,
 } as Meta;
 
-export const Normal = <EditorTitle Heading="h1">Text</EditorTitle>;
+export const Normal: Story = () => <EditorTitle Heading="h1">Text</EditorTitle>;

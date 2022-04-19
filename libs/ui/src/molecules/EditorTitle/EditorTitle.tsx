@@ -8,10 +8,13 @@ export const EditorTitle = (
   return (
     <div
       css={{
-        paddingBottom: '16px',
         maxWidth: `${editorLayout.slimBlockWidth}px`,
         margin: 'auto',
-        justifyContent: 'center',
+
+        paddingBottom: '16px',
+
+        display: 'grid',
+        rowGap: '24px',
       }}
     >
       <div>
