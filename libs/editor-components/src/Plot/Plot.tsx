@@ -5,7 +5,7 @@ import { ELEMENT_PLOT, PlateComponent } from '@decipad/editor-types';
 import { useComputer, useResult } from '@decipad/react-contexts';
 import { organisms } from '@decipad/ui';
 import { DraggableBlock } from '@decipad/editor-components';
-import { useElementMutatorCallback } from '@decipad/slate-react-utils';
+import { useElementMutatorCallback } from '@decipad/editor-utils';
 import { usePlot } from '../utils/usePlot';
 
 const DEFAULT_TITLE = 'Plot';

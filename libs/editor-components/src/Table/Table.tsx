@@ -1,7 +1,7 @@
 import { ELEMENT_TABLE_INPUT, PlateComponent } from '@decipad/editor-types';
 import { useEditorState } from '@udecode/plate';
 import { FC } from 'react';
-import { useElementMutatorCallback } from '@decipad/slate-react-utils';
+import { useElementMutatorCallback } from '@decipad/editor-utils';
 import { DraggableBlock } from '@decipad/editor-components';
 import { TableInner } from './TableInner';
 

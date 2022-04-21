@@ -8,3 +8,6 @@ export * from './pluginStore';
 export * from './layout';
 export * from './getSyntaxErrorRanges';
 export * from './decorateTextSyntax';
+export * from './findPath';
+export * from './findDomNodePath';
+export * from './useElementMutatorCallback';

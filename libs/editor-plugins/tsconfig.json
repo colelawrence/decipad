@@ -14,7 +14,6 @@
     { "path": "../utils" },
     { "path": "../client-events" },
     { "path": "../editor-types" },
-    { "path": "../slate-react-utils" },
     { "path": "../ui" },
     { "path": "../react-contexts" },
     { "path": "../editor-utils" },

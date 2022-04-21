@@ -3,17 +3,12 @@ import {
   ComputerContextProvider,
   useComputer,
 } from '@decipad/react-contexts';
-import {
-  EditorPlaceholder,
-  ExternalAuthenticationContextProvider,
-  ProgramBlocksContextProvider,
-} from '@decipad/ui';
+import { EditorPlaceholder } from '@decipad/ui';
 import { identity } from '@decipad/utils';
 import {
   useDocSync,
   useNotebookTitlePlugin,
   useUploadDataPlugin,
-  useExternalDataPlugin,
 } from '@decipad/editor-plugins';
 import { captureException } from '@sentry/react';
 import {
@@ -22,11 +17,10 @@ import {
   usePlateEditorRef,
   TEditor,
 } from '@udecode/plate';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useCallback, useMemo, useState } from 'react';
 import * as components from './components';
 import * as configuration from './configuration';
 import { useLanguagePlugin } from './plugins';
-import { editorProgramBlocks } from './utils/editorProgramBlocks';
 
 export interface EditorProps {
   notebookId: string;
@@ -41,26 +35,18 @@ const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
   const languagePlugin = useLanguagePlugin();
   const computer = useComputer();
 
+  const onLoaded = useCallback(() => {
+    setEditorLoaded(true);
+  }, []);
+
   // DocSync
-  const docsyncEditor = useDocSync({
+  useDocSync({
     notebookId,
     editor,
     authSecret,
     onError: captureException,
+    onLoaded,
   });
-
-  useEffect(() => {
-    if (docsyncEditor) {
-      docsyncEditor.onLoaded(() => {
-        setEditorLoaded(true);
-      });
-      return () => {
-        docsyncEditor.disconnect();
-        docsyncEditor.destroy();
-      };
-    }
-    return undefined;
-  }, [docsyncEditor]);
 
   // Cursor remote presence
   // useCursors(editor);
@@ -76,46 +62,35 @@ const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
     uploadState,
     clearAll: clearAllUploads,
   } = useUploadDataPlugin({ editor });
-  const { createOrUpdateExternalData } = useExternalDataPlugin({
-    editor: docsyncEditor,
-  });
 
   const editorPlugins = useMemo(
     () => [...configuration.plugins, languagePlugin, notebookTitlePlugin],
     [languagePlugin, notebookTitlePlugin]
   );
 
-  const programBlocks = docsyncEditor ? editorProgramBlocks(editor) : {};
-
   return (
     <ResultsContext.Provider value={computer.results.asObservable()}>
-      <ProgramBlocksContextProvider value={programBlocks}>
-        <ExternalAuthenticationContextProvider
-          value={{ createOrUpdateExternalData }}
-        >
-          <components.DropFile
-            editor={editor}
-            startUpload={startUpload}
-            notebookId={notebookId}
+      <components.DropFile
+        editor={editor}
+        startUpload={startUpload}
+        notebookId={notebookId}
+      >
+        {!editorLoaded && <EditorPlaceholder />}
+        <div css={{ display: editorLoaded ? 'unset' : 'none' }}>
+          <Plate
+            id={notebookId}
+            renderEditable={identity}
+            plugins={editorPlugins}
+            editableProps={{ readOnly }}
           >
-            {!editorLoaded && <EditorPlaceholder />}
-            <div css={{ display: editorLoaded ? 'unset' : 'none' }}>
-              <Plate
-                id={notebookId}
-                renderEditable={identity}
-                plugins={editorPlugins}
-                editableProps={{ readOnly }}
-              >
-                <components.Tooltip />
-                <components.UploadDialogue
-                  uploadState={uploadState}
-                  clearAll={clearAllUploads}
-                />
-              </Plate>
-            </div>
-          </components.DropFile>
-        </ExternalAuthenticationContextProvider>
-      </ProgramBlocksContextProvider>
+            <components.Tooltip />
+            <components.UploadDialogue
+              uploadState={uploadState}
+              clearAll={clearAllUploads}
+            />
+          </Plate>
+        </div>
+      </components.DropFile>
     </ResultsContext.Provider>
   );
 };

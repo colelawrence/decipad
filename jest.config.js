@@ -22,7 +22,6 @@ module.exports = {
     '<rootDir>/libs/externaldata',
     '<rootDir>/libs/fraction',
     '<rootDir>/libs/editor-types',
-    '<rootDir>/libs/slate-react-utils',
     '<rootDir>/libs/editor-plugins',
     '<rootDir>/libs/editor-language-elements',
     '<rootDir>/libs/editor-components',

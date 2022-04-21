@@ -1,7 +1,7 @@
 import { ReactEditor } from 'slate-react';
 import { PlotElement } from '@decipad/editor-types';
 import { Computer, InBlockResult } from '@decipad/language';
-import { useElementMutatorCallback } from '@decipad/slate-react-utils';
+import { useElementMutatorCallback } from '@decipad/editor-utils';
 import {
   enhanceSpecFromWideData,
   resultToPlotResultData,

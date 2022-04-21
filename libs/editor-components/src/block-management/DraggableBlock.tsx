@@ -11,6 +11,7 @@ import {
 } from 'react';
 import { Transforms } from 'slate';
 import { ReactEditor, useReadOnly, useSlateStatic } from 'slate-react';
+import { findPath } from '@decipad/editor-utils';
 
 const InDraggableBlock = createContext(false);
 
@@ -39,11 +40,14 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
   });
 
   const onDelete = useCallback(() => {
-    parentOnDelete
-      ? parentOnDelete()
-      : Transforms.delete(editor, {
-          at: ReactEditor.findPath(editor, element),
-        });
+    const path = findPath(editor, element);
+    if (path) {
+      parentOnDelete
+        ? parentOnDelete()
+        : Transforms.delete(editor, {
+            at: path,
+          });
+    }
   }, [parentOnDelete, editor, element]);
 
   if (readOnly) return <>{children}</>;

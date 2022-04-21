@@ -1067,33 +1067,6 @@
         }
       }
     },
-    "slate-react-utils": {
-      "root": "libs/slate-react-utils",
-      "sourceRoot": "libs/slate-react-utils/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/slate-react-utils/**/*.ts"],
-            "maxWarnings": 0
-          }
-        },
-        "typecheck": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "yarn tsc -b libs/slate-react-utils"
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/slate-react-utils"],
-          "options": {
-            "jestConfig": "libs/slate-react-utils/jest.config.js"
-          }
-        }
-      }
-    },
     "editor-language-elements": {
       "root": "libs/editor-language-elements",
       "sourceRoot": "libs/editor-language-elements/src",

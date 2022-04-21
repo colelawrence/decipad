@@ -121,7 +121,7 @@ export const Notebook = (): ReturnType<FC> => {
     <NotebookPage
       notebook={
         <Editor
-          notebookId={notebook?.id}
+          notebookId={notebookId}
           readOnly={notebookReadOnly}
           authSecret={secret}
         />

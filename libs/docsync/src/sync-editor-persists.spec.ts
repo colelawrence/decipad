@@ -1,7 +1,7 @@
 import waitForExpect from 'wait-for-expect';
 import { getDefined } from '@decipad/utils';
 import { createPlateEditor } from '@udecode/plate';
-import { withDocSync, DocSyncEditor } from '.';
+import { createDocSyncEditor, DocSyncEditor } from '.';
 
 describe('pad editor persistence', () => {
   let editor: DocSyncEditor | undefined;
@@ -19,7 +19,7 @@ describe('pad editor persistence', () => {
   };
 
   beforeAll(() => {
-    editor = withDocSync(createPlateEditor(), 'docid', {
+    editor = createDocSyncEditor(createPlateEditor(), 'docid', {
       ws: false,
     });
     editor.onLoaded(onLoaded);
@@ -105,7 +105,7 @@ Array [
       expect(source).toBe('local');
       loaded = true;
     };
-    const editor2 = withDocSync(createPlateEditor(), 'docid', {
+    const editor2 = createDocSyncEditor(createPlateEditor(), 'docid', {
       ws: false,
     });
     editor2.onLoaded(onLoaded2);

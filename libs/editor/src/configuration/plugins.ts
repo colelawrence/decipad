@@ -1,5 +1,4 @@
 import {
-  createSentryBreadcrumbsPlugin,
   createNormalizeEditorPlugin,
   createNormalizeVoidPlugin,
   createNormalizeRichTextBlockPlugin,
@@ -24,6 +23,7 @@ import {
   createPlotPlugin,
   createCalloutPlugin,
   createDividerPlugin,
+  createEditorApplyErrorReporterPlugin,
 } from '@decipad/editor-plugins';
 import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import {
@@ -47,9 +47,6 @@ import { resetBlockTypeOptions } from './resetBlockTypeOptions';
 
 export const plugins = createPlugins(
   [
-    // Sentry plugin
-    createSentryBreadcrumbsPlugin(),
-
     // basic blocks
     createParagraphPlugin(),
     createBlockquotePlugin(),
@@ -99,6 +96,9 @@ export const plugins = createPlugins(
 
     // plots
     createPlotPlugin(),
+
+    // error handling
+    createEditorApplyErrorReporterPlugin(),
   ],
   {
     components,

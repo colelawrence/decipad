@@ -1,10 +1,7 @@
 import { useCallback } from 'react';
-import { Path, Transforms } from 'slate';
+import { Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { Element } from '@decipad/editor-types';
-
-export const findDomNodePath = (editor: ReactEditor, node: Node): Path =>
-  ReactEditor.findPath(editor, ReactEditor.toSlateNode(editor, node));
 
 export const useElementMutatorCallback = <E extends Element>(
   editor: ReactEditor,

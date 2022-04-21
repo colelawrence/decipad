@@ -28,20 +28,24 @@ interface StatusEvent {
   status: 'connected' | 'disconnected';
 }
 
-type Source = 'local' | 'remote';
+export type Source = 'local' | 'remote';
 
-type OnLoadedCallback = (source: Source) => void;
-type OnSavedCallback = (source: Source) => void;
-type OnConnectedCallback = () => void;
-type OnDisconnectedCallback = () => void;
+export type OnLoadedCallback = (source: Source) => void;
+export type OnSavedCallback = (source: Source) => void;
+export type OnConnectedCallback = () => void;
+export type OnDisconnectedCallback = () => void;
 
-export type DocSyncEditor<E extends TEditor = TEditor> = E &
+export type DocSyncEditor = TEditor &
   YjsEditor &
   CursorEditor & {
     onLoaded: (cb: OnLoadedCallback) => void;
+    offLoaded: (cb: OnLoadedCallback) => void;
     onSaved: (cb: OnSavedCallback) => void;
+    offSaved: (cb: OnSavedCallback) => void;
     onConnected: (cb: OnConnectedCallback) => void;
+    offConnected: (cb: OnConnectedCallback) => void;
     onDisconnected: (cb: OnDisconnectedCallback) => void;
+    offDisconnected: (cb: OnDisconnectedCallback) => void;
     destroy: () => void;
     connect: () => void;
     disconnect: () => void;
@@ -90,8 +94,10 @@ function docSyncEditor<E extends TEditor>(
   });
 
   if (ws) {
-    ws.on('synced', function onWsSynced() {
-      events.emit('loaded', 'remote');
+    ws.on('synced', function onWsSynced(synced: boolean) {
+      if (synced) {
+        events.emit('loaded', 'remote');
+      }
     });
     ws.on('saved', function onWsSaved() {
       events.emit('saved', 'remote');
@@ -115,14 +121,26 @@ function docSyncEditor<E extends TEditor>(
     onLoaded(cb: OnLoadedCallback) {
       events.on('loaded', cb);
     },
+    offLoaded(cb: OnLoadedCallback) {
+      events.off('loaded', cb);
+    },
     onSaved(cb: OnSavedCallback) {
       events.on('saved', cb);
+    },
+    offSaved(cb: OnSavedCallback) {
+      events.off('saved', cb);
     },
     onConnected(cb: OnLoadedCallback) {
       events.on('connected', cb);
     },
+    offConnected(cb: OnLoadedCallback) {
+      events.off('connected', cb);
+    },
     onDisconnected(cb: OnLoadedCallback) {
       events.on('disconnected', cb);
+    },
+    offDisconnected(cb: OnLoadedCallback) {
+      events.off('disconnected', cb);
     },
     destroy() {
       events.removeAllListeners();
@@ -131,46 +149,49 @@ function docSyncEditor<E extends TEditor>(
       ws?.destroy();
     },
     connect() {
-      getDefined(ws, 'no provider').connect();
+      ws?.connect();
     },
     disconnect() {
-      getDefined(ws, 'no provider').disconnect();
+      ws?.disconnect();
     },
     get connected() {
       return isConnected;
     },
   });
 
-  useEditor.onLoaded((source: 'local' | 'remote') => {
+  const onLoaded = (source: 'local' | 'remote') => {
     if (!ws || source === 'remote') {
       ensureInitialDocument(doc, shared);
+      useEditor.offLoaded(onLoaded);
     }
-  });
+  };
+
+  useEditor.onLoaded(onLoaded);
 
   return useEditor;
 }
 
 async function fetchToken(): Promise<string> {
   const resp = await fetch(`/api/auth/token?for=pubsub`);
-  if (!resp.ok) {
+  if (!resp?.ok) {
     throw new Error(
       `Error fetching token: response code was ${resp.status}: ${
         resp.statusText
-      }. response was ${(await resp.text()) || JSON.stringify(resp)}`
+      }. response was ${(await resp?.text()) || JSON.stringify(resp)}`
     );
   }
-  return resp.text();
+  return resp?.text();
 }
 
 async function wsAddress(docId: string): Promise<string> {
-  return `${await (await fetch('/api/ws')).text()}?doc=${docId}`;
+  return `${await (await fetch('/api/ws'))?.text()}?doc=${docId}`;
 }
 
-export function withDocSync<E extends TEditor>(
-  editor: E,
+export function createDocSyncEditor(
+  editor: TEditor,
   docId: string,
   options: Options = {}
-): E & DocSyncEditor {
+): TEditor & DocSyncEditor {
   const {
     authSecret,
     onError,
@@ -179,6 +200,7 @@ export function withDocSync<E extends TEditor>(
     connectBc = true,
     WebSocketPolyfill,
   } = options;
+
   const doc = new YDoc();
   const store = new IndexeddbPersistence(docId, doc);
 
@@ -207,7 +229,18 @@ export function withDocSync<E extends TEditor>(
   } else {
     awareness = new Awareness(doc);
   }
+
+  // Yjs editor
   const shared = doc.getArray<SyncElement>();
-  const syncEditor = withCursor(withYjs(editor, shared), getDefined(awareness));
-  return docSyncEditor(syncEditor, shared, doc, store, wsp);
+  const yjsEditor = withYjs(editor, shared);
+
+  // Cursor editor
+  const cursorEditor = withCursor(yjsEditor, getDefined(awareness));
+
+  // Sync editor
+  const syncEditor = docSyncEditor(cursorEditor, shared, doc, store, wsp);
+  syncEditor.destroy = () => {
+    store.destroy();
+  };
+  return syncEditor;
 }

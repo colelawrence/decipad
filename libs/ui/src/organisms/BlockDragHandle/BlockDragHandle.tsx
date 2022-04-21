@@ -34,7 +34,7 @@ export const BlockDragHandle = ({
 }: BlockDragHandleProps): ReturnType<FC> => {
   const menuButton = (
     <button
-      onClick={() => onChangeMenuOpen(!menuOpen)}
+      onClick={() => onDelete !== false && onChangeMenuOpen(!menuOpen)}
       css={{ gridArea: 'handle' }}
     >
       <DragHandle />

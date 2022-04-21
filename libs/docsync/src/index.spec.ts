@@ -6,7 +6,7 @@ import { Editor } from '@decipad/editor-types';
 import { createPlateEditor } from '@udecode/plate';
 import fetch from 'jest-fetch-mock';
 import waitForExpect from 'wait-for-expect';
-import { DocSyncEditor, withDocSync } from '.';
+import { DocSyncEditor, createDocSyncEditor } from '.';
 import { testWithSandbox as test } from '../../backend-test-sandbox/src';
 import { clone } from './utils/clone';
 import { randomChangesToEditors } from './utils/random-changes';
@@ -86,7 +86,7 @@ test('sync many', (ctx) => {
     });
 
     for (let i = 0; i < replicaCount; i += 1) {
-      const editor = withDocSync(createPlateEditor(), pad.id, {
+      const editor = createDocSyncEditor(createPlateEditor(), pad.id, {
         connectBc: false,
       });
       editors.push(editor);

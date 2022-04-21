@@ -10,7 +10,6 @@
     { "path": "../ui" },
     { "path": "../editor-types" },
     { "path": "../editor-utils" },
-    { "path": "../slate-react-utils" },
     { "path": "../client-events" },
     { "path": "../react-contexts" }
   ]

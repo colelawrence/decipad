@@ -8,6 +8,7 @@ const AWARENESS: WeakMap<TEditor, Awareness> = new WeakMap();
 
 export interface CursorEditor extends YjsEditor {
   awareness: Awareness;
+  destroy: () => void;
 }
 
 export const CursorEditor = {
@@ -43,7 +44,7 @@ export function withCursor<T extends YjsEditor>(
   AWARENESS.set(e, awareness);
   e.awareness = awareness;
 
-  const { onChange } = editor;
+  const { onChange, destroy } = editor;
 
   e.onChange = () => {
     setTimeout(() => CursorEditor.updateCursor(e), 0);
@@ -51,6 +52,11 @@ export function withCursor<T extends YjsEditor>(
     if (onChange) {
       onChange();
     }
+  };
+
+  e.destroy = () => {
+    e.onChange = onChange;
+    destroy.call(e);
   };
 
   return e;

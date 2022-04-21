@@ -11,7 +11,7 @@ import {
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Transforms } from 'slate';
-import { findDomNodePath } from '@decipad/slate-react-utils';
+import { findDomNodePath } from '@decipad/editor-utils';
 import { PropsWithChildren } from 'react';
 import { Paragraph } from './Paragraph';
 

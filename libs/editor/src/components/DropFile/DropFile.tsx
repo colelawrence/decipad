@@ -9,7 +9,7 @@ interface DropFileProps {
   editor?: TEditor;
   notebookId: string;
   startUpload: (options: UploadDataOptions) => void;
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 type Item = { files: File[] } | undefined;

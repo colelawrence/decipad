@@ -14,8 +14,7 @@ const SHARED_TYPES: WeakMap<TEditor, SharedType> = new WeakMap();
 
 export interface YjsEditor extends TEditor {
   sharedType: SharedType;
-  onChange: SlateEditor['onChange'];
-  apply: SlateEditor['apply'];
+  destroy: () => void;
 }
 
 export type WithYjsOptions = {
@@ -32,7 +31,6 @@ export const YjsEditor = {
       e.onChange();
     });
   },
-
   /**
    * Returns whether the editor currently is applying remote changes.
    */
@@ -141,26 +139,29 @@ export function withYjs<T extends TEditor>(
     setTimeout(() => YjsEditor.synchronizeValue(e), 0);
   }
 
-  sharedType.observeDeep((events) => applyRemoteYjsEvents(e, events));
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const observer = (events: Y.YEvent<any>[]) => applyRemoteYjsEvents(e, events);
+  sharedType.observeDeep(observer);
 
-  const { apply, onChange } = e;
+  const { apply, onChange, destroy } = e;
 
   e.apply = (op: Operation) => {
     trackLocalOperations(e, op);
 
-    try {
-      apply(op);
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error('Error applying op', op);
-      throw err;
-    }
+    apply(op);
   };
 
   e.onChange = () => {
     applyLocalOperations(e);
 
     onChange();
+  };
+
+  e.destroy = () => {
+    sharedType.unobserveDeep(observer);
+    e.apply = apply;
+    e.onChange = onChange;
+    destroy.call(e);
   };
 
   return e;

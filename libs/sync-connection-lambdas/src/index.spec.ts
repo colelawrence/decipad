@@ -9,16 +9,7 @@ import { testWithSandbox as test } from '../../backend-test-sandbox/src';
 import { WebsocketProvider, WSStatus } from '../../y-websocket/src';
 
 type TextNode = YMap<YText>;
-
-process.on('uncaughtException', (err) => {
-  // eslint-disable-next-line no-console
-  console.log('uncaught exception', err);
-});
-
-process.on('unhandledRejection', (err) => {
-  // eslint-disable-next-line no-console
-  console.log('unhandled rejection', err);
-});
+type Status = 'connecting' | 'connected' | 'disconnected';
 
 test('connection', (ctx) => {
   const { test: it } = ctx;
@@ -112,18 +103,20 @@ test('connection', (ctx) => {
     await timeout(2000);
   });
 
-  it('can disconnect', () => {
-    return new Promise<void>((resolve) => {
-      provider?.once('status', (status: WSStatus) => {
-        expect(status).toMatchObject({
-          status: 'disconnected',
+  it('can disconnect', async () => {
+    await expect(
+      new Promise<Status>((resolve) => {
+        provider?.once('status', (event: WSStatus) => {
+          resolve(event.status);
         });
-        resolve();
-      });
 
-      provider?.destroy();
-      provider = undefined;
-    });
+        provider?.destroy();
+        provider = undefined;
+      })
+    ).resolves.toEqual('disconnected');
+
+    provider?.destroy();
+    provider = undefined;
   });
 
   it('can connect back', async () => {

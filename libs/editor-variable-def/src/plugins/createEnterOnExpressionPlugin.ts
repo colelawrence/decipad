@@ -4,24 +4,25 @@ import { Editor, Transforms } from 'slate';
 
 export const createEnterOnExpressionPlugin = createOnKeyDownPluginFactory({
   name: 'ENTER_ON_EXPRESSION_PLUGIN',
-  plugin: (editor) => (event) => {
-    const loc = Editor.above(editor);
-    if (loc) {
-      const [node] = loc;
-      if ((node as Element)?.type === ELEMENT_EXPRESSION) {
-        if (event.code === 'Enter') {
-          event.preventDefault();
-          event.stopPropagation();
+  plugin:
+    (editor) =>
+    (event): boolean | void => {
+      const loc = Editor.above(editor);
+      if (loc) {
+        const [node] = loc;
+        if (
+          (node as Element)?.type === ELEMENT_EXPRESSION &&
+          event.code === 'Enter'
+        ) {
           const next = Editor.next(editor);
           if (next) {
+            event.preventDefault();
+            event.stopPropagation();
             const [, path] = next;
             const anchor = { offset: 0, path };
             Transforms.setSelection(editor, { anchor, focus: anchor });
-            return true;
           }
         }
       }
-    }
-    return false;
-  },
+    },
 });

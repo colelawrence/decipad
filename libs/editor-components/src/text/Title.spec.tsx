@@ -10,7 +10,7 @@ import {
   PlateProps,
 } from '@udecode/plate';
 import { Transforms } from 'slate';
-import { findDomNodePath } from '@decipad/slate-react-utils';
+import { findDomNodePath } from '@decipad/editor-utils';
 import { Title } from './Title';
 
 let plateProps: PlateProps;

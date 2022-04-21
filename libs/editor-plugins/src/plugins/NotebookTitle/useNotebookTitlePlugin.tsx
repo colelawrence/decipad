@@ -27,15 +27,28 @@ export const useNotebookTitlePlugin = ({
   const [editorTitle, setEditorTitle] = useState<string | undefined>(undefined);
 
   // Getting the current pad's name
-  const { data } = useQuery<GetPadById, GetPadByIdVariables>(GET_PAD_BY_ID, {
+  const { data, loading: remoteTitleLoading } = useQuery<
+    GetPadById,
+    GetPadByIdVariables
+  >(GET_PAD_BY_ID, {
     variables: { id: notebookId },
   });
+  const [remoteTitleNeedsUpdate, setRemoteTitleNeedsUpdate] = useState(false);
+  useEffect(() => {
+    if (!remoteTitleLoading) {
+      const remoteTitle = data?.getPadById?.name;
+      setRemoteTitleNeedsUpdate(
+        remoteTitle !== undefined && remoteTitle !== editorTitle
+      );
+    }
+  }, [data?.getPadById?.name, editorTitle, remoteTitleLoading]);
 
-  const [renameNotebook] =
-    useMutation<RenamePad, RenamePadVariables>(RENAME_PAD);
-  const remoteTitle = data?.getPadById?.name;
+  const [renameNotebook] = useMutation<RenamePad, RenamePadVariables>(
+    RENAME_PAD
+  );
 
-  const setNewTitle = useCallback(
+  // setting the new remote title
+  const setRemoteTitle = useCallback(
     (newTitle: string) =>
       renameNotebook({
         variables: { padId: notebookId, name: newTitle },
@@ -47,33 +60,36 @@ export const useNotebookTitlePlugin = ({
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      if (editorTitle && editorTitle !== remoteTitle) {
-        setNewTitle(editorTitle);
+      if (remoteTitleNeedsUpdate && editorTitle !== undefined) {
+        setRemoteTitle(editorTitle).catch((err) => {
+          console.error(err);
+          toast('Error updating title', 'error');
+        });
       }
     }, DEBOUNCE_TITLE_UPDATE_MS);
     return () => clearTimeout(timeout);
-  }, [editorTitle, remoteTitle, setNewTitle]);
+  }, [editorTitle, remoteTitleNeedsUpdate, setRemoteTitle, toast]);
 
   // Get the first node's text value, if it is not the same as the current pad's name, then i set the newTitle state
   const onChangeNotebookTitle: OnChange = useCallback(
     (editor) => () => {
-      if (readOnly) {
-        return;
-      }
-      const { selection } = editor;
-      const titlePath = [0, 0];
-      if (Editor.hasPath(editor, titlePath)) {
-        const [node] = Editor.node(editor, titlePath);
-        const editableTitle = Node.string(node);
+      if (!readOnly) {
+        const { selection } = editor;
+        if (!selection || !isCollapsed(selection)) {
+          return; // early
+        }
+        const titlePath = [0, 0];
+        if (Editor.hasPath(editor, titlePath)) {
+          const [node] = Editor.node(editor, titlePath);
+          const editableTitle = Node.string(node);
 
-        if (selection && isCollapsed(selection)) {
-          if (editableTitle && remoteTitle !== editableTitle) {
+          if (editableTitle) {
             setEditorTitle(editableTitle);
           }
         }
       }
     },
-    [readOnly, remoteTitle]
+    [readOnly]
   );
 
   // return a slate plugin

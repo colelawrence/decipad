@@ -5664,7 +5664,7 @@
     dset "3.1.1"
     tiny-hashes "^1.0.1"
 
-"@sentry/browser@6.19.6":
+"@sentry/browser@6.19.6", "@sentry/browser@^6.19.6":
   version "6.19.6"
   resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-6.19.6.tgz#75be467667fffa1f4745382fc7a695568609c634"
   integrity sha512-V5QyY1cO1iuFCI78dOFbHV7vckbeQEPPq3a5dGSXlBQNYnd9Ec5xoxp5nRNpWQPOZ8/Ixt9IgRxdqVTkWib51g==
@@ -8994,10 +8994,10 @@
   dependencies:
     "@udecode/plate-core" "10.5.3"
 
-"@udecode/plate-headless@10.6.1":
-  version "10.6.1"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-10.6.1.tgz#bb0dfbd4a3c9fe8b4f960a586c8f2ba98d30bb41"
-  integrity sha512-Vdebkh9uxnE/35KMDHz1Dn3Lp+F6JPyKeW/GB3BsoCuRa67y+4ThznPJ5e+b3oqJniMk0MUe9P6FAFO4Uhgh1A==
+"@udecode/plate-headless@10.6.3":
+  version "10.6.3"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-10.6.3.tgz#b1ab77b05caed94cc2b916c409b41669d57fe336"
+  integrity sha512-Y2b8hie6zto64JxeRGJvH8axkC7/XXaO6YZMN1VjjdMsLksJpQbtwBf9goNi76kHBt+Jh7BP/WujGBt7BpgqKg==
   dependencies:
     "@udecode/plate-alignment" "10.5.3"
     "@udecode/plate-autoformat" "10.5.3"
@@ -9028,10 +9028,10 @@
     "@udecode/plate-paragraph" "10.5.3"
     "@udecode/plate-reset-node" "10.5.3"
     "@udecode/plate-select" "10.5.3"
-    "@udecode/plate-serializer-csv" "10.5.3"
-    "@udecode/plate-serializer-docx" "10.5.3"
+    "@udecode/plate-serializer-csv" "10.6.3"
+    "@udecode/plate-serializer-docx" "10.6.3"
     "@udecode/plate-serializer-md" "10.6.0"
-    "@udecode/plate-table" "10.5.3"
+    "@udecode/plate-table" "10.6.3"
     "@udecode/plate-trailing-block" "10.5.3"
 
 "@udecode/plate-highlight@10.5.3":
@@ -9159,19 +9159,19 @@
   dependencies:
     "@udecode/plate-core" "10.5.3"
 
-"@udecode/plate-serializer-csv@10.5.3":
-  version "10.5.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-csv/-/plate-serializer-csv-10.5.3.tgz#05e9d0b331c3be990e37c70d774be7d3900ca4c1"
-  integrity sha512-AuxguCW944S7o6yMuilL/HmMPfHaMEeZqD7Vd/81qftACEYUouAzTIiRdYAZ8Ohx9anpn1/swDFvoEDmKsUJkg==
+"@udecode/plate-serializer-csv@10.6.3":
+  version "10.6.3"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-csv/-/plate-serializer-csv-10.6.3.tgz#7555a871cfad015029288f5607f3cc683be5c673"
+  integrity sha512-3Vw+zadIBAn5zT7OghSxaeWTYe0ro8J6HYP0gyOVvGandWkRA5+Te/Y2wRUyaJO5v75zEZ2COHEYZSLHLksI+g==
   dependencies:
     "@udecode/plate-core" "10.5.3"
-    "@udecode/plate-table" "10.5.3"
+    "@udecode/plate-table" "10.6.3"
     papaparse "^5.3.1"
 
-"@udecode/plate-serializer-docx@10.5.3":
-  version "10.5.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-docx/-/plate-serializer-docx-10.5.3.tgz#943c1e0b615d06ccd4b438ea4d3291ad946153a9"
-  integrity sha512-1k5f6RR+0raxiCY35vkTm5evfOt0iggTcxh08xoq0Rjij8NhdXBfBrBpKlJCp2bRRLRd3B3y21sbF5FGW89nzA==
+"@udecode/plate-serializer-docx@10.6.3":
+  version "10.6.3"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-docx/-/plate-serializer-docx-10.6.3.tgz#4b8e127a9166983a82b35ea93c248dfc08d45460"
+  integrity sha512-1jXz0TpcSixsBayAebj7S5d8y1IDPaDpolnENEGfIMuaIBYeNzjIKHHGi2OdBbtCpSS9bTKO0nN9k54DwzEDsA==
   dependencies:
     "@udecode/plate-core" "10.5.3"
     "@udecode/plate-heading" "10.5.3"
@@ -9179,7 +9179,7 @@
     "@udecode/plate-indent" "10.5.3"
     "@udecode/plate-indent-list" "10.5.3"
     "@udecode/plate-paragraph" "10.5.3"
-    "@udecode/plate-table" "10.5.3"
+    "@udecode/plate-table" "10.6.3"
     validator "13.7.0"
 
 "@udecode/plate-serializer-md@10.6.0":
@@ -9206,10 +9206,10 @@
     "@udecode/plate-core" "10.5.3"
     clsx "^1.1.1"
 
-"@udecode/plate-table@10.5.3":
-  version "10.5.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-table/-/plate-table-10.5.3.tgz#34aad1bb14c476717afcf804e96200841d734511"
-  integrity sha512-0/6GAI9YeY92hdyPjGlaFeMeMQ1BcttguwW3DBRDeK6whknvOABubc6MsHc49xvYZlJYoC1xuv1pqBFTa8FLpg==
+"@udecode/plate-table@10.6.3":
+  version "10.6.3"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-table/-/plate-table-10.6.3.tgz#743ad5a8b35d199c2c47fb33f5e31a62145c24b5"
+  integrity sha512-CMT1O9dgdxWQq5qFH0ioCnRn846bxn8lWuwISju1luePEBlx12Ke38+z069fhuGmjQL4MmIPtilr9fcsbva5JQ==
   dependencies:
     "@udecode/plate-core" "10.5.3"
 
@@ -9376,10 +9376,10 @@
     "@udecode/plate-core" "10.5.3"
     "@udecode/plate-styled-components" "10.5.3"
 
-"@udecode/plate-ui-popover@10.5.3":
-  version "10.5.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-popover/-/plate-ui-popover-10.5.3.tgz#62604d13b99ec27ac8662a1cca4987a92d6bba93"
-  integrity sha512-ex5wqC01XV+vxZmfmmPcaSCuZbOrmyNQazm0bVs95TW8vV3bsRdPieWd6vX3a4jfX8sWGnXQMgWq3wpdWz6o7Q==
+"@udecode/plate-ui-popover@10.6.2":
+  version "10.6.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-popover/-/plate-ui-popover-10.6.2.tgz#0c05d2ad40a1a7cef042560d45e8fbcd6c703d20"
+  integrity sha512-RavC3j+EQ0PLAYBbriBoQJIZ5vwfxfxOFSOI25tKfePpoRlvdr47WsqppJe7qW3ZWU0UJIxes2AESTtEQ3hBsQ==
   dependencies:
     "@tippyjs/react" "^4.2.5"
     "@udecode/plate-core" "10.5.3"
@@ -9394,16 +9394,16 @@
     "@udecode/plate-core" "10.5.3"
     react-popper "2.2.5"
 
-"@udecode/plate-ui-table@10.5.3":
-  version "10.5.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-table/-/plate-ui-table-10.5.3.tgz#9ad5133069e662934545cd6eaf7e553289bd8662"
-  integrity sha512-mCT0CA8phY95kQVruSuUH3KNdRkZANC49LsEE1bsr1oj9RN+hESHM0XGnmvmpFRq94pKIfNhtnBD5QLMIFsGGw==
+"@udecode/plate-ui-table@10.6.3":
+  version "10.6.3"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-table/-/plate-ui-table-10.6.3.tgz#e551c6591918a8cbc72b6b3c0a93b97eee50ed2b"
+  integrity sha512-3wUiRqIG+7PbPK4YDcPzAmVFOVrQ97SZn0v44FkwD/m5/iATa3fr1/A//kp0+CTF+mQhYLrRasesRSww3vxcDQ==
   dependencies:
     "@udecode/plate-core" "10.5.3"
     "@udecode/plate-styled-components" "10.5.3"
-    "@udecode/plate-table" "10.5.3"
+    "@udecode/plate-table" "10.6.3"
     "@udecode/plate-ui-button" "10.5.3"
-    "@udecode/plate-ui-popover" "10.5.3"
+    "@udecode/plate-ui-popover" "10.6.2"
     "@udecode/plate-ui-toolbar" "10.5.3"
     jotai "^1.4.0"
     re-resizable "^6.9.1"
@@ -9420,12 +9420,12 @@
     react-popper "^2.2.4"
     react-use "^17.1.1"
 
-"@udecode/plate-ui@10.6.1":
-  version "10.6.1"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui/-/plate-ui-10.6.1.tgz#297640c9abdd47f349e90d1d1cb0ed8a9482e0fd"
-  integrity sha512-HasBcIurFVQBGdnFm36jwXGf7jyfZCswBokaMKw2PrHkQOkXhL9uT0Oc3cXkioKppZTLMl48JfgtSfpAEhb/1A==
+"@udecode/plate-ui@10.6.3":
+  version "10.6.3"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui/-/plate-ui-10.6.3.tgz#62178d03203856cbd77320699ae7e67c69051d67"
+  integrity sha512-92Fvcsnow5I4n6RWhV5Vr+wT4jAqvYS+FpqPPsJxfmQsLGKtTtNgpAXYOt/N9z89vDyvaAVtUYxcku+zTCQ0bA==
   dependencies:
-    "@udecode/plate-headless" "10.6.1"
+    "@udecode/plate-headless" "10.6.3"
     "@udecode/plate-styled-components" "10.5.3"
     "@udecode/plate-ui-alignment" "10.5.3"
     "@udecode/plate-ui-block-quote" "10.5.3"
@@ -9442,18 +9442,18 @@
     "@udecode/plate-ui-media-embed" "10.5.3"
     "@udecode/plate-ui-mention" "10.6.0"
     "@udecode/plate-ui-placeholder" "10.5.3"
-    "@udecode/plate-ui-popover" "10.5.3"
+    "@udecode/plate-ui-popover" "10.6.2"
     "@udecode/plate-ui-popper" "10.5.3"
-    "@udecode/plate-ui-table" "10.5.3"
+    "@udecode/plate-ui-table" "10.6.3"
     "@udecode/plate-ui-toolbar" "10.5.3"
 
-"@udecode/plate@^10.3.0":
-  version "10.6.1"
-  resolved "https://registry.yarnpkg.com/@udecode/plate/-/plate-10.6.1.tgz#e241d233f4a0b4b9503bc49151e82fd1c93e81f5"
-  integrity sha512-f9Jd2TF8rKfFz/f9D1eP0gWxqeMbw7CkDocKSTK1BvDAjiqxvnOI+QJhG7p0Pz+EhR75CAPutxXQVixPyzR5Vw==
+"@udecode/plate@^10.6.3":
+  version "10.6.3"
+  resolved "https://registry.yarnpkg.com/@udecode/plate/-/plate-10.6.3.tgz#8bae232d387476d4c77111745de2965c4e3f3d49"
+  integrity sha512-zIYp87mfvGmslVRNjIbcKj6+4uIlaz6aLEpMbpwQsFh6rwhQMmYWBmpJg2x8vtIiI/Or/A55GyRrbBLTyhuabA==
   dependencies:
-    "@udecode/plate-headless" "10.6.1"
-    "@udecode/plate-ui" "10.6.1"
+    "@udecode/plate-headless" "10.6.3"
+    "@udecode/plate-ui" "10.6.3"
 
 "@udecode/zustood@0.4.4":
   version "0.4.4"

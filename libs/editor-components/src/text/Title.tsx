@@ -1,4 +1,5 @@
 import { ELEMENT_H1, PlateComponent } from '@decipad/editor-types';
+import { findPath } from '@decipad/editor-utils';
 import { molecules } from '@decipad/ui';
 import { useEditorState } from '@udecode/plate';
 import { useEffect, useState } from 'react';
@@ -17,12 +18,15 @@ export const Title: PlateComponent = ({ attributes, children, element }) => {
 
   useEffect(() => {
     if (shouldAutofocus) {
-      Transforms.select(editor, {
-        path: ReactEditor.findPath(editor, element.children[0]),
-        offset: 0,
-      });
-      ReactEditor.focus(editor);
-      setShouldAutofocus(false);
+      const path = findPath(editor, element.children[0]);
+      if (path) {
+        Transforms.select(editor, {
+          path,
+          offset: 0,
+        });
+        ReactEditor.focus(editor);
+        setShouldAutofocus(false);
+      }
     }
   }, [editor, element, shouldAutofocus]);
 

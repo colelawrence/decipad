@@ -14,7 +14,6 @@
     { "path": "../editor-types" },
     { "path": "../editor-plugins" },
     { "path": "../client-events" },
-    { "path": "../slate-react-utils" },
     { "path": "../editor-language-elements" },
     { "path": "../editor-components" },
     { "path": "../editor-variable-def" }

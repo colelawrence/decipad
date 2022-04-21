@@ -61,7 +61,7 @@ export const useUploadDataPlugin = ({
       ]);
       setUploadState(newUploadState);
     },
-    [uploadState, setUploadState]
+    [uploadState]
   );
 
   const clearAll = useCallback(() => {

@@ -13,25 +13,7 @@ import {
   RenderElementProps,
 } from 'slate-react';
 
-import { findDomNodePath, useElementMutatorCallback } from './slateReact';
-
-describe('findDomNodePath', () => {
-  it('finds the Slate Node for a DOM Node', () => {
-    const editor = withReact(createEditor() as ReactEditor);
-    const { getByText } = render(
-      <Slate editor={editor} value={[{ text: 'text' }]} onChange={noop}>
-        <Editable />
-      </Slate>
-    );
-
-    expect(findDomNodePath(editor, getByText('text'))).toEqual([0]);
-  });
-
-  it('throws if given DOM Node is not part of the editor', () => {
-    const editor = withReact(createEditor() as ReactEditor);
-    expect(() => findDomNodePath(editor, document.body)).toThrow(/node/i);
-  });
-});
+import { useElementMutatorCallback } from './useElementMutatorCallback';
 
 describe('useElementMutatorCallback', () => {
   const Link: React.FC<RenderElementProps> = ({

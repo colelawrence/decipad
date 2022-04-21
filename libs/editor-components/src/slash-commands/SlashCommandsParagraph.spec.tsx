@@ -1,3 +1,17 @@
+import { PropsWithChildren } from 'react';
+import {
+  createPlateEditor,
+  createParagraphPlugin,
+  createPlugins,
+  Plate,
+  PlateEditor,
+  PlateProps,
+} from '@udecode/plate';
+import userEvent from '@testing-library/user-event';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { Transforms } from 'slate';
+import { ReactEditor } from 'slate-react';
 import { findParentWithStyle } from '@decipad/dom-test-utils';
 import { ELEMENT_H3, ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
@@ -7,22 +21,8 @@ import {
   render,
   waitFor,
 } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import {
-  createPlateEditor,
-  createParagraphPlugin,
-  createPlugins,
-  Plate,
-  PlateEditor,
-  PlateProps,
-} from '@udecode/plate';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { Transforms } from 'slate';
-import { ReactEditor } from 'slate-react';
-import { findDomNodePath } from '@decipad/slate-react-utils';
+import { findDomNodePath } from '@decipad/editor-utils';
 import { SlashCommandsParagraph } from './SlashCommandsParagraph';
-import { PropsWithChildren } from 'react';
 
 let editor: PlateEditor;
 let plateProps: PlateProps;

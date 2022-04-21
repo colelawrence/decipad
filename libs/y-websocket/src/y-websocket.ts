@@ -211,6 +211,12 @@ const setupWS = async (provider: WebsocketProvider) => {
         await provider.beforeConnect(provider);
       }
 
+      provider.emit('status', [
+        {
+          status: 'connecting',
+        },
+      ]);
+
       const websocket = new provider._WS(
         getDefined(provider.url),
         provider.protocol
@@ -221,18 +227,12 @@ const setupWS = async (provider: WebsocketProvider) => {
       provider.wsconnected = false;
       provider.synced = false;
 
-      websocket.onerror = (event) => {
-        if ((event as ErrorEvent).error?.code !== 'ECONNRESET') {
-          // eslint-disable-next-line no-console
-          console.error('Websocket error:', event);
-          if (provider.onError) {
-            provider.onError(event);
-          }
-        }
+      websocket.onerror = () => {
+        // do nothing
       };
 
       websocket.onmessage = (event) => {
-        if (!event.data) {
+        if (provider.destroyed || !event.data) {
           return;
         }
         provider.wsLastMessageReceived = time.getUnixTime();
@@ -256,7 +256,7 @@ const setupWS = async (provider: WebsocketProvider) => {
       websocket.onclose = () => {
         provider.ws = undefined;
         provider.wsconnecting = false;
-        if (provider.wsconnected) {
+        if (!provider.destroyed && provider.wsconnected) {
           provider.wsconnected = false;
           provider.synced = false;
           // update awareness (all users except local left)
@@ -309,12 +309,6 @@ const setupWS = async (provider: WebsocketProvider) => {
           provider.send(encoding.toUint8Array(encoderAwarenessState));
         }
       };
-
-      provider.emit('status', [
-        {
-          status: 'connecting',
-        },
-      ]);
     }
   } catch (err) {
     if (provider.ws && provider.ws.readyState === provider.ws.OPEN) {
@@ -641,26 +635,19 @@ export class WebsocketProvider extends Observable<string> {
   }
 
   disconnect(): void {
-    try {
-      this.shouldConnect = false;
-      this.disconnectBc();
-      if (this.ws != null) {
-        try {
-          this.ws.close();
-        } catch (err) {
-          // eslint-disable-next-line no-console
-          console.error('Error closing websocket:', err);
-        }
-
-        this.emit('status', [
-          {
-            status: 'disconnected',
-          },
-        ]);
+    this.shouldConnect = false;
+    this.disconnectBc();
+    if (this.ws != null) {
+      try {
+        this.ws.close();
+      } catch (err) {
+        // do nothing
       }
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error('Error closing websocket:', err);
+      this.emit('status', [
+        {
+          status: 'disconnected',
+        },
+      ]);
     }
   }
 
