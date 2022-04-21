@@ -28,13 +28,6 @@ jobs:
         with:
           node-version: 14
 
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-modules-
-
       - name: Install
         run: yarn install
 
