@@ -64,7 +64,7 @@ export const DashboardTopbar = ({
       </div>
       <div css={rightStyles}>
         <Button type="primary" size="extraSlim" onClick={onCreateNotebook}>
-          Create New
+          Create Notebook
         </Button>
         <div css={{ position: 'relative' }}>
           <AccountAvatar

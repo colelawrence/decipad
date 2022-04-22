@@ -75,7 +75,7 @@ function waitForDownload(): Promise<Buffer> {
 }
 
 export async function clickNewPadButton() {
-  const createNewPadButton = await page.$('text=create new');
+  const createNewPadButton = await page.$('text=create notebook');
   expect(createNewPadButton).not.toBeNull();
   await createNewPadButton!.click();
 }

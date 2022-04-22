@@ -20,7 +20,7 @@ it('renders a button to create a new notebook', async () => {
     <DashboardTopbar {...props} onCreateNotebook={handleCreateNotebook} />
   );
 
-  await userEvent.click(getByText(/create/i));
+  await userEvent.click(getByText(/create.+notebook/i));
   expect(handleCreateNotebook).toHaveBeenCalled();
 });
 
