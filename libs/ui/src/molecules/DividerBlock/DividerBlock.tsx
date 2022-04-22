@@ -1,9 +1,10 @@
 import { css } from '@emotion/react';
 import { Divider } from '../../atoms';
-import { divider } from '../../styles/block-alignment';
+import { dividerBlock } from '../../styles/block-alignment';
 
 const styles = css({
-  padding: `${divider.paddingTop} 0`,
+  paddingTop: dividerBlock.paddingTop,
+  height: dividerBlock.height,
 });
 
 export const DividerBlock: React.FC = () => {

@@ -12,6 +12,7 @@ interface StyleData {
   paddingTop: string;
   typography?: TypographyStyles;
   desiredWidth: number;
+  height?: string;
 }
 
 export const paragraph: StyleData = {
@@ -70,4 +71,9 @@ export const divider: StyleData = {
   paddingTop: '24px',
   typography: p8Regular,
   desiredWidth: slimBlockWidth,
+};
+export const dividerBlock: StyleData = {
+  paddingTop: '28px',
+  desiredWidth: slimBlockWidth,
+  height: '48px',
 };
