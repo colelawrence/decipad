@@ -2,6 +2,7 @@ import {
   ElementKind,
   ELEMENT_LIC,
   ELEMENT_PARAGRAPH,
+  ELEMENT_BLOCKQUOTE,
 } from '@decipad/editor-types';
 import { getNode, insertNodes, TEditor, TElement } from '@udecode/plate';
 import { Editor, Path, Transforms } from 'slate';
@@ -27,6 +28,7 @@ export const closestBlockAncestorHasType = (
 const BLOCKS_ALLOWING_TEXT_STYLING: ReadonlyArray<ElementKind> = [
   ELEMENT_PARAGRAPH,
   ELEMENT_LIC,
+  ELEMENT_BLOCKQUOTE,
 ];
 export const allowsTextStyling = (
   editor: Editor,
