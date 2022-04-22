@@ -1,7 +1,8 @@
+import { getDefined } from '@decipad/utils';
 import { fromJS } from '../../interpreter/Value';
 import { InferError, build as t } from '../../type';
 import { col, c, n, l, F, U } from '../../utils';
-import { mathOperators as operators } from './math-operators';
+import { mathOperators, mathOperators as operators } from './math-operators';
 import { makeContext, inferExpression } from '../../infer';
 import { AST } from '../../parser';
 
@@ -217,5 +218,12 @@ describe('math operators', () => {
         ctx
       )
     ).toMatchObject(t.impossible(InferError.complexExpressionExponent()));
+  });
+
+  it('implements the smooth operator', () => {
+    const smooth = getDefined(mathOperators.smooth);
+    expect(smooth.functor?.([]).toString()).toMatchInlineSnapshot(`"<number>"`);
+    expect(smooth.fn?.([1, 2])).toMatchInlineSnapshot(`69`);
+    expect(smooth.fn?.([3, 4])).toMatchInlineSnapshot(`69`);
   });
 });

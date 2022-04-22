@@ -107,11 +107,14 @@ andOp         -> andOp _ andOperator _ equalityOp       {% basicBinop %}
 equalityOp    -> compareOp                              {% id %}
 equalityOp    -> equalityOp _ eqDiffOperator _ compareOp{% basicBinop %}
 
-compareOp     -> addSubUp                               {% id %}
-compareOp     -> compareOp _ cmpOperator _ addSubUp     {% basicBinop %}
+compareOp     -> smoothOp                               {% id %}
+compareOp     -> compareOp _ cmpOperator _ smoothOp     {% basicBinop %}
 
-addSubUp      -> divMulOp                               {% id %}
-addSubUp      -> addSubUp _ additiveOperator _ divMulOp {%
+smoothOp      -> addSubOp                               {% id %}
+smoothOp      -> smoothOp _ smoothOperator _ addSubOp   {% basicBinop %}
+
+addSubOp      -> divMulOp                               {% id %}
+addSubOp      -> addSubOp _ additiveOperator _ divMulOp {%
                                                         (d, _l, reject) => {
                                                           const left = d[0]
                                                           const op = d[2]
@@ -212,6 +215,7 @@ orOperator         -> ("||" | "or")                     {% simpleOperator %}
 andOperator        -> ("&&" | "and")                    {% simpleOperator %}
 eqDiffOperator     -> ("==" | "!=")                     {% simpleOperator %}
 cmpOperator        -> (">" | "<" | "<=" | ">=")         {% simpleOperator %}
+smoothOperator     -> ("smooth")                        {% simpleOperator %}
 additiveOperator   -> ("-" | "+")                       {% simpleOperator %}
 divMulOperator     -> ("*" | "/" | "contains")          {% simpleOperator %}
 divMulOperator     -> __ "%"                            {%

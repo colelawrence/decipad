@@ -34,6 +34,7 @@ const initialReservedWords = new Set([
   'with',
   'when',
   'over',
+  'smooth',
 ]);
 
 const monthStrings = new Set([
@@ -1317,7 +1318,7 @@ let ParserRules = [
   { name: 'overExp', symbols: ['asExp'], postprocess: id },
   {
     name: 'overExp',
-    symbols: ['asExp', '_', { literal: 'over' }, '_', 'genericIdentifier'],
+    symbols: ['overExp', '_', { literal: 'over' }, '_', 'genericIdentifier'],
     postprocess: (d) => {
       return addArrayLoc(
         {
@@ -1365,16 +1366,22 @@ let ParserRules = [
     symbols: ['equalityOp', '_', 'eqDiffOperator', '_', 'compareOp'],
     postprocess: basicBinop,
   },
-  { name: 'compareOp', symbols: ['addSubUp'], postprocess: id },
+  { name: 'compareOp', symbols: ['smoothOp'], postprocess: id },
   {
     name: 'compareOp',
-    symbols: ['compareOp', '_', 'cmpOperator', '_', 'addSubUp'],
+    symbols: ['compareOp', '_', 'cmpOperator', '_', 'smoothOp'],
     postprocess: basicBinop,
   },
-  { name: 'addSubUp', symbols: ['divMulOp'], postprocess: id },
+  { name: 'smoothOp', symbols: ['addSubOp'], postprocess: id },
   {
-    name: 'addSubUp',
-    symbols: ['addSubUp', '_', 'additiveOperator', '_', 'divMulOp'],
+    name: 'smoothOp',
+    symbols: ['smoothOp', '_', 'smoothOperator', '_', 'addSubOp'],
+    postprocess: basicBinop,
+  },
+  { name: 'addSubOp', symbols: ['divMulOp'], postprocess: id },
+  {
+    name: 'addSubOp',
+    symbols: ['addSubOp', '_', 'additiveOperator', '_', 'divMulOp'],
     postprocess: (d, _l, reject) => {
       const left = d[0];
       const op = d[2];
@@ -1411,7 +1418,7 @@ let ParserRules = [
   { name: 'ofExp', symbols: ['powOp'], postprocess: id },
   {
     name: 'ofExp',
-    symbols: ['powOp', '_', { literal: 'of' }, '_', 'genericIdentifier'],
+    symbols: ['ofExp', '_', { literal: 'of' }, '_', 'genericIdentifier'],
     postprocess: (d) => {
       return addArrayLoc(
         {
@@ -1529,6 +1536,12 @@ let ParserRules = [
   {
     name: 'cmpOperator',
     symbols: ['cmpOperator$subexpression$1'],
+    postprocess: simpleOperator,
+  },
+  { name: 'smoothOperator$subexpression$1', symbols: [{ literal: 'smooth' }] },
+  {
+    name: 'smoothOperator',
+    symbols: ['smoothOperator$subexpression$1'],
     postprocess: simpleOperator,
   },
   { name: 'additiveOperator$subexpression$1', symbols: [{ literal: '-' }] },

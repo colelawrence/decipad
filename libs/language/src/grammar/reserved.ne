@@ -26,7 +26,8 @@ const initialReservedWords = new Set([
   'or',
   'with',
   'when',
-  'over'
+  'over',
+  'smooth'
 ]);
 
 const monthStrings = new Set([

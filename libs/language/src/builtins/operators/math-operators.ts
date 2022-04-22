@@ -339,4 +339,9 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   '^': {
     aliasFor: '**',
   },
+  smooth: {
+    argCount: 2,
+    fn: () => 69,
+    functor: () => t.number(),
+  },
 };
