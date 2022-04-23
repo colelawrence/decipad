@@ -26,10 +26,15 @@ export default function createHandler(): HttpHandler {
       context: Context,
       _callback: APIGatewayProxyCallback
     ) => {
+      let calledBack = false;
       const callback = (
         err: Error | null | undefined | string,
-        reply: APIGatewayProxyResult | undefined
+        reply?: APIGatewayProxyResult
       ) => {
+        if (calledBack) {
+          return;
+        }
+        calledBack = true;
         if (!context.additionalHeaders) {
           throw new Error('missing additional headers');
         }
@@ -60,7 +65,12 @@ export default function createHandler(): HttpHandler {
         event.requestContext as unknown as { http: { path: string } }
       ).http.path;
 
-      handler(event, context, callback);
+      const p = handler(event, context, callback);
+      if (p) {
+        p.then((result) => callback(null, result)).catch((err) =>
+          callback(err)
+        );
+      }
     }
   ) as HttpHandler;
 }

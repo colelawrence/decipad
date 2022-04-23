@@ -1,8 +1,7 @@
 import { ApolloServer } from 'apollo-server-lambda';
 import createSchema from './schema';
 import createContext from './context';
-import playground from './playground';
-import monitor from './monitor';
+import { monitor } from './monitor';
 
 export default function createServer() {
   const schema = createSchema();
@@ -10,7 +9,6 @@ export default function createServer() {
   return new ApolloServer({
     schema,
     context,
-    playground,
     plugins: [monitor],
   });
 }

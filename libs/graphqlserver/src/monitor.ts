@@ -1,12 +1,10 @@
-import { ForbiddenError } from 'apollo-server-lambda';
-import type { ApolloServerPlugin } from 'apollo-server-plugin-base';
-import {
-  withScope,
-  Handlers,
-  captureException,
-  captureMessage,
-} from '@sentry/serverless';
+import type {
+  ApolloServerPlugin,
+  GraphQLRequestContext,
+} from 'apollo-server-plugin-base';
+import { withScope, captureException, Severity } from '@sentry/serverless';
 import { monitor as monitorConfig } from '@decipad/config';
+import { GraphqlContext } from '@decipad/backendtypes';
 
 const {
   sentry: { dsn: sentryDSN },
@@ -14,49 +12,46 @@ const {
 
 const hasSentry = !!sentryDSN;
 
-export default {
-  requestDidStart() {
+export const monitor: ApolloServerPlugin = {
+  async requestDidStart(rc: GraphQLRequestContext) {
     return {
-      didEncounterErrors(rc) {
+      async didEncounterErrors(): Promise<void> {
         if (!hasSentry) {
           return;
         }
         withScope((scope) => {
           scope.clear();
-          scope.addEventProcessor((event) =>
-            Handlers.parseRequest(event, rc.context.event)
-          );
+          scope.setTag('kind', rc.operationName);
+          scope.setExtra('query', rc.request.query);
+          scope.setExtra('variables', rc.request.variables);
+          if (rc.errors) {
+            for (const error of rc.errors) {
+              // eslint-disable-next-line no-console
+              console.error(error);
+              if (error.path || error.name !== 'GraphQLError') {
+                scope.addBreadcrumb({
+                  category: 'query-path',
+                  message: error?.path?.join(' > '),
+                  level: Severity.Debug,
+                });
+                scope.setExtras({
+                  path: error.path,
+                });
+              }
 
-          const userId = rc.context.user?.id;
-          if (userId) {
-            scope.setUser({
-              id: userId,
-            });
-          }
+              const contextWithUser = rc as unknown as GraphqlContext;
 
-          scope.setTags({
-            graphql: rc.operation?.operation || 'parse_err',
-            graphqlName: rc.operationName || rc.request.operationName,
-          });
-
-          rc.errors.forEach((error) => {
-            if (error instanceof ForbiddenError) {
-              return; // user error, do nothing
-            }
-            // eslint-disable-next-line no-console
-            console.error(error);
-            if (error.path || error.name !== 'GraphQLError') {
-              scope.setExtras({
-                path: error.path,
-              });
+              const userId = contextWithUser.user?.id;
+              if (userId) {
+                scope.setUser({
+                  id: userId,
+                });
+              }
               captureException(error, scope);
-            } else {
-              scope.setExtras({});
-              captureMessage(`GraphQLWrongQuery: ${error.message}`, scope);
             }
-          });
+          }
         });
       },
     };
   },
-} as ApolloServerPlugin;
+};
