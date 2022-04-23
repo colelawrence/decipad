@@ -94,9 +94,6 @@ interface Swatch {
   [key: string]: OpaqueColor;
 }
 
-export const weakOpacity = 0.08;
-export const normalOpacity = 0.4;
-
 export const colorSwatches: Swatches = {
   Catskill: {
     base: grey200,

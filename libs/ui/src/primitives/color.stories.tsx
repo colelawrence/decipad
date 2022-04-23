@@ -101,6 +101,9 @@ const colorNames: Record<ColorId, string> = {
   sun700: 'Color Swatch Sun 700',
   sun900: 'Color Swatch Sun 900',
   lavender000: 'Lavender 000',
+
+  normalOpacity: 'Normal Opacity',
+  weakOpacity: 'Weak Opacity',
 };
 export default {
   title: 'Primitives / Color',

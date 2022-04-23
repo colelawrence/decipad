@@ -3,19 +3,19 @@ import { cssVar } from '../../primitives';
 
 export const Frame = (): ReturnType<FC> => {
   return (
-    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <title>Frame</title>
       <path
-        d="M11 6.5C11.9763 7.47632 12.5237 8.02368 13.5 9"
-        stroke={cssVar('weakTextColor')}
-        strokeWidth="1.3125"
+        d="M4.75 19.25L9 18.25L18.9491 8.30083C19.3397 7.9103 19.3397 7.27714 18.9491 6.88661L17.1134 5.05083C16.7228 4.6603 16.0897 4.6603 15.6991 5.05083L5.75 15L4.75 19.25Z"
+        stroke={cssVar('normalTextColor')}
+        strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
-        d="M4.99316 15.0067L7.92775 14.3162L14.7975 7.44634C15.0672 7.17668 15.0672 6.73949 14.7975 6.46983L13.53 5.20224C13.2603 4.93259 12.8231 4.93259 12.5534 5.20224L5.68366 12.0721L4.99316 15.0067Z"
+        d="M14.0234 7.03906L17.0234 10.0391"
         stroke={cssVar('normalTextColor')}
-        strokeWidth="1.08752"
+        strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />

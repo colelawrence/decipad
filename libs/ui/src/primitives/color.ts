@@ -167,3 +167,9 @@ export const sun900 = color(77, 67, 15);
 // lavender
 //
 export const lavender000 = color(95, 100, 134);
+
+//
+// Opacity
+//
+export const weakOpacity: Opacity = 0.08;
+export const normalOpacity: Opacity = 0.4;
