@@ -1,18 +1,22 @@
+import { useMutation } from '@apollo/client';
 import { Editor } from '@decipad/editor';
 import {
   PermissionType,
+  UpdateNotebookIcon,
+  UpdateNotebookIconVariables,
+  UPDATE_NOTEBOOK_ICON,
   useDuplicateNotebook,
   useGetNotebookById,
   useGetWorkspaces,
   useShareNotebookWithSecret,
   useUnshareNotebookWithSecret,
 } from '@decipad/queries';
-import { useToast } from '@decipad/toast';
 import {
   notebooks,
   useRouteParams,
   workspaces as workspacesRoute,
 } from '@decipad/routing';
+import { useToast } from '@decipad/toast';
 import {
   ErrorPage,
   LoadingSpinnerPage,
@@ -38,6 +42,8 @@ export const Notebook = (): ReturnType<FC> => {
   // State
   const [sharingActive, setSharingActive] = useState(false);
   const [shareSecretKey, setShareSecretKey] = useState('');
+  const [icon, setIcon] = useState('');
+  const [iconColor, setIconColor] = useState('');
 
   // Queries
   const { notebook, notebookReadOnly, notebookLoading } = useGetNotebookById(
@@ -65,6 +71,11 @@ export const Notebook = (): ReturnType<FC> => {
     secret || ''
   );
 
+  const [updateNotebookIcon] = useMutation<
+    UpdateNotebookIcon,
+    UpdateNotebookIconVariables
+  >(UPDATE_NOTEBOOK_ICON);
+
   // Set the share toggle button to be active if the notebook has secrets
   useEffect(() => {
     if (notebook && notebook.access.secrets.length > 0) {
@@ -74,6 +85,13 @@ export const Notebook = (): ReturnType<FC> => {
       setSharingActive(false);
       setShareSecretKey('');
     }
+
+    const [dataIcon, dataIconColor] = notebook?.icon?.split('-') || [
+      'Rocket',
+      'Catskill',
+    ];
+    setIcon(dataIcon);
+    setIconColor(dataIconColor);
   }, [notebook]);
 
   const notebookUrlWithSecret = getSecretNotebookLink(
@@ -121,6 +139,28 @@ export const Notebook = (): ReturnType<FC> => {
     <NotebookPage
       notebook={
         <Editor
+          iconPopoverProps={{
+            initialColor: iconColor,
+            initialIcon: icon,
+            onChangeIcon: (newIcon) => {
+              setIcon(newIcon);
+              updateNotebookIcon({
+                variables: {
+                  id: notebook.id,
+                  icon: `${newIcon}-${iconColor}`,
+                },
+              });
+            },
+            onChangeColor: (newColor) => {
+              setIconColor(newColor);
+              updateNotebookIcon({
+                variables: {
+                  id: notebook.id,
+                  icon: `${icon}-${newColor}`,
+                },
+              });
+            },
+          }}
           notebookId={notebookId}
           readOnly={notebookReadOnly}
           authSecret={secret}

@@ -8,10 +8,25 @@ import {
   grey300,
   grey500,
   grey600,
+  malibu200,
+  malibu700,
+  malibu900,
+  sun500,
+  sun700,
+  sun900,
   offWhite,
   orange500,
+  perfume200,
+  perfume700,
+  perfume900,
+  pink200,
+  pink700,
+  pink900,
   red500,
+  sulu700,
+  sulu900,
   white,
+  OpaqueColor,
 } from './color';
 
 export interface CssVariables {
@@ -41,6 +56,7 @@ export interface CssVariables {
 
   readonly currentTextColor: Property.Color;
 }
+
 const defaults: CssVariables = {
   successColor: brand500.rgb,
   dangerColor: red500.rgb,
@@ -63,6 +79,63 @@ const defaults: CssVariables = {
     return cssVar('normalTextColor');
   },
 };
+
+interface SwatchColor {
+  base: OpaqueColor;
+  highlight: OpaqueColor;
+  dark: OpaqueColor;
+}
+
+interface Swatches {
+  [key: string]: SwatchColor;
+}
+
+interface Swatch {
+  [key: string]: OpaqueColor;
+}
+
+export const weakOpacity = 0.08;
+export const normalOpacity = 0.4;
+
+export const colorSwatches: Swatches = {
+  Catskill: {
+    base: grey200,
+    highlight: grey500,
+    dark: grey600,
+  },
+  Sulu: {
+    base: brand500,
+    highlight: sulu700,
+    dark: sulu900,
+  },
+  Sun: {
+    base: sun500,
+    highlight: sun700,
+    dark: sun900,
+  },
+  Rose: {
+    base: pink200,
+    highlight: pink700,
+    dark: pink900,
+  },
+  Perfume: {
+    base: perfume200,
+    highlight: perfume700,
+    dark: perfume900,
+  },
+  Malibu: {
+    base: malibu200,
+    highlight: malibu700,
+    dark: malibu900,
+  },
+};
+
+export const swatchNames: string[] = Object.keys(colorSwatches);
+export const baseSwatches: Swatch = swatchNames.reduce((store, currentKey) => {
+  // eslint-disable-next-line no-param-reassign
+  store[currentKey] = colorSwatches[currentKey].base;
+  return store;
+}, {} as Swatch);
 
 const cssVariablePrefix = '--deci-';
 export type CssVariableKey<V extends keyof CssVariables> =

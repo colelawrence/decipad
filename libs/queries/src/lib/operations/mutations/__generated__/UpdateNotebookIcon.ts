@@ -4,20 +4,18 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: ImportPad
+// GraphQL mutation operation: UpdateNotebookIcon
 // ====================================================
 
-export interface ImportPad_importPad {
+export interface UpdateNotebookIcon_updatePad {
   __typename: "Pad";
+}
+
+export interface UpdateNotebookIcon {
+  updatePad: UpdateNotebookIcon_updatePad;
+}
+
+export interface UpdateNotebookIconVariables {
   id: string;
-  name: string;
-}
-
-export interface ImportPad {
-  importPad: ImportPad_importPad;
-}
-
-export interface ImportPadVariables {
-  workspaceId: string;
-  source: string;
+  icon: string;
 }

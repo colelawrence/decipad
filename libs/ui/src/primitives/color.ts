@@ -131,6 +131,39 @@ export const red800 = color(96, 28, 28);
 export const red900 = color(48, 14, 14);
 
 //
+// sulu
+//
+export const sulu700 = color(111, 167, 27);
+export const sulu900 = color(59, 97, 2);
+
+//
+// pink
+//
+export const pink200 = color(251, 218, 225);
+export const pink700 = color(145, 102, 111);
+export const pink900 = color(78, 45, 52);
+
+//
+// perfume
+//
+export const perfume200 = color(193, 199, 248);
+export const perfume700 = color(98, 106, 169);
+export const perfume900 = color(48, 56, 125);
+
+//
+// malibu
+//
+export const malibu200 = color(141, 178, 251);
+export const malibu700 = color(97, 139, 220);
+export const malibu900 = color(44, 84, 164);
+
+//
+// sun
+//
+export const sun500 = color(255, 220, 66);
+export const sun700 = color(131, 116, 36);
+export const sun900 = color(77, 67, 15);
+//
 // lavender
 //
 export const lavender000 = color(95, 100, 134);

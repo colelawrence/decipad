@@ -1,14 +1,15 @@
 import {
-  ResultsContext,
   ComputerContextProvider,
+  ResultsContext,
   useComputer,
 } from '@decipad/react-contexts';
 import { Plate, PlateProps } from '@udecode/plate';
+import { EditorIconPopover } from 'libs/ui/src/organisms';
 import { FC, useMemo } from 'react';
+import { Tooltip } from './components';
 import * as configuration from './configuration';
 import { emptyNotebook, introNotebook } from './exampleNotebooks';
 import { useLanguagePlugin } from './plugins';
-import { Tooltip } from './components';
 import { POPULATE_PLAYGROUND } from './utils/storage';
 
 const NO_DOC_SYNC_EDITOR_ID = 'nodocsynceditorid';
@@ -35,6 +36,9 @@ export const NoDocSyncEditor = (props: PlateProps): ReturnType<FC> => {
           }
           {...props}
         >
+          <div css={{ width: '580px', margin: '0 auto' }}>
+            <EditorIconPopover />
+          </div>
           <Tooltip />
         </Plate>
       </ResultsContext.Provider>

@@ -12,6 +12,7 @@ export const GET_PAD_BY_ID = gql`
       id
       name
       myPermissionType
+      icon
       access {
         users {
           user {
