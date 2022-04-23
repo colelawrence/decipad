@@ -21,7 +21,7 @@ import {
 import { inferExpression, inferStatement } from '../infer';
 import { evaluateStatement, RuntimeError, Value } from '../interpreter';
 import { captureException } from '../reporting';
-import { validateResult } from '../result';
+import { validateResult, Result } from '../result';
 import { build as t } from '../type';
 import { anyMappingToMap, getDefined, isExpression } from '../utils';
 import { ComputationRealm } from './ComputationRealm';
@@ -275,6 +275,16 @@ export class Computer {
         shareReplay(1)
       )
       .subscribe(this.results);
+  }
+
+  getVariable(varName: string): Result | null {
+    const { inferContext, interpreterRealm } = this.computationRealm;
+    const type = inferContext.stack.top.get(varName);
+    const value = interpreterRealm.stack.top.get(varName);
+
+    return type && value
+      ? { type: serializeType(type), value: value.getData() }
+      : null;
   }
 
   private ingestComputeRequest({ program, externalData }: ComputeRequest) {

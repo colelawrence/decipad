@@ -347,3 +347,12 @@ it('can extract units from text', async () => {
   units = await computer.getUnitFromText('10');
   expect(units).toBeNull();
 });
+
+it('can get a specific variable', async () => {
+  await computeOnTestComputer({
+    program: getUnparsed('Foo = 30'),
+  });
+
+  const foo = await computer.getVariable('Foo');
+  expect(foo?.value?.toString()).toBe('30');
+});
