@@ -10,7 +10,7 @@ import {
   useRef,
 } from 'react';
 import { Transforms } from 'slate';
-import { ReactEditor, useReadOnly, useSlateStatic } from 'slate-react';
+import { ReactEditor, useReadOnly, useSlate } from 'slate-react';
 import { findPath } from '@decipad/editor-utils';
 
 const InDraggableBlock = createContext(false);
@@ -28,7 +28,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
   onDelete: parentOnDelete,
   ...props
 }) => {
-  const editor = useSlateStatic() as ReactEditor;
+  const editor = useSlate() as ReactEditor;
   const readOnly = useReadOnly();
   const isInDraggableBlock = useContext(InDraggableBlock);
   const { id } = element;

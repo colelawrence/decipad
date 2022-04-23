@@ -11,3 +11,4 @@ export * from './decorateTextSyntax';
 export * from './findPath';
 export * from './findDomNodePath';
 export * from './useElementMutatorCallback';
+export * from './safeDelete';

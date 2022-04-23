@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { organisms } from '@decipad/ui';
 import {
   PlateComponent,
@@ -7,11 +7,15 @@ import {
   ELEMENT_CAPTION,
   ELEMENT_EXPRESSION,
 } from '@decipad/editor-types';
-import { ReactEditor } from 'slate-react';
-import { PlateEditor, serializeHtml, usePlateEditorRef } from '@udecode/plate';
+import { ReactEditor, useSlate } from 'slate-react';
+import { PlateEditor, serializeHtml } from '@udecode/plate';
 import copy from 'copy-to-clipboard';
 import { Node, Transforms } from 'slate';
-import { findPath, insertNodeIntoColumns } from '@decipad/editor-utils';
+import {
+  findPath,
+  insertNodeIntoColumns,
+  safeDelete,
+} from '@decipad/editor-utils';
 import { DraggableBlock } from '@decipad/editor-components';
 
 export const VariableDef: PlateComponent = ({
@@ -19,11 +23,12 @@ export const VariableDef: PlateComponent = ({
   element,
   children,
 }) => {
+  const [deleted, setDeleted] = useState(false);
   if (element?.type !== ELEMENT_VARIABLE_DEF) {
     throw new Error(`VariableDef is meant to render variable def elements`);
   }
 
-  const editor = usePlateEditorRef();
+  const editor = useSlate();
   const onConvert = useCallback(() => {
     const path = findPath(editor as ReactEditor, element);
     if (path) {
@@ -48,7 +53,8 @@ export const VariableDef: PlateComponent = ({
   const onDelete = useCallback(() => {
     const path = findPath(editor as ReactEditor, element);
     if (path) {
-      Transforms.delete(editor, { at: path, unit: 'block' });
+      setDeleted(true);
+      safeDelete(editor, path);
     }
   }, [editor, element]);
 
@@ -81,12 +87,16 @@ export const VariableDef: PlateComponent = ({
     }
   }, [editor, element]);
 
+  if (deleted) {
+    return <></>;
+  }
+
   return (
     <div {...attributes}>
       <DraggableBlock
         blockKind="interactive"
         element={element}
-        onDelete={false}
+        onDelete={onDelete}
       >
         <organisms.VariableEditor
           onConvert={onConvert}
