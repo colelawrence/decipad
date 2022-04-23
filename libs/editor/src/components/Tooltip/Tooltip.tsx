@@ -4,6 +4,7 @@ import {
   MARK_ITALIC,
   MARK_UNDERLINE,
   MARK_STRIKETHROUGH,
+  MARK_HIGHLIGHT,
 } from '@decipad/editor-types';
 import { icons } from '@decipad/ui';
 import { css } from '@emotion/react';
@@ -57,13 +58,22 @@ const toolTipMarks = [
     divider: false,
   },
   {
+    type: MARK_HIGHLIGHT,
+    icon: (
+      <div css={iconWrapper}>
+        <icons.Highlight />
+      </div>
+    ),
+    divider: true,
+  },
+  {
     type: MARK_CODE,
     icon: (
       <div css={iconWrapper}>
         <icons.Code />
       </div>
     ),
-    divider: true,
+    divider: false,
   },
 ];
 

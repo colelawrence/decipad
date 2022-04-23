@@ -4,17 +4,15 @@ import {
   brand500,
   grey100,
   grey200,
-  grey400,
   grey300,
+  grey400,
   grey500,
   grey600,
   malibu200,
   malibu700,
   malibu900,
-  sun500,
-  sun700,
-  sun900,
   offWhite,
+  OpaqueColor,
   orange500,
   perfume200,
   perfume700,
@@ -25,8 +23,10 @@ import {
   red500,
   sulu700,
   sulu900,
+  sun500,
+  sun700,
+  sun900,
   white,
-  OpaqueColor,
 } from './color';
 
 export interface CssVariables {
@@ -54,6 +54,8 @@ export interface CssVariables {
   readonly normalTextColor: Property.Color;
   readonly strongTextColor: Property.Color;
 
+  readonly textHighlightColor: Property.Color;
+
   readonly currentTextColor: Property.Color;
 }
 
@@ -69,6 +71,8 @@ const defaults: CssVariables = {
   highlightColor: grey100.rgb,
   strongHighlightColor: grey200.rgb,
   strongerHighlightColor: grey300.rgb,
+
+  textHighlightColor: sun500.rgb,
 
   weakerTextColor: grey400.rgb,
   weakTextColor: grey500.rgb,
@@ -156,7 +160,7 @@ export function setCssVar<V extends keyof CssVariables>(
   value: CssVariables[V]
 ): Record<CssVariableKey<V>, CssVariables[V]> {
   // This needs to be cast because
-  // TypeScript widens the dynamic propery key to plain `string`
+  // TypeScript widens the dynamic property key to plain `string`
   return {
     [`${cssVariablePrefix}${name}`]: value,
   } as unknown as Record<CssVariableKey<V>, CssVariables[V]>;

@@ -18,6 +18,7 @@ export { EditorColumns } from './EditorColumns/EditorColumns';
 export { ErrorMessage } from './ErrorMessage/ErrorMessage';
 export { Heading1 } from './Heading1/Heading1';
 export { Heading2 } from './Heading2/Heading2';
+export { Highlight } from './Highlight/Highlight';
 export { IconButton } from './IconButton/IconButton';
 export { InputField } from './InputField/InputField';
 export { Italic } from './Italic/Italic';

@@ -18,6 +18,7 @@ import {
   MARK_CODE,
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
+  MARK_HIGHLIGHT,
   MARK_UNDERLINE,
   PlateComponent,
 } from '@decipad/editor-types';
@@ -31,6 +32,7 @@ import {
   Divider,
   Heading1,
   Heading2,
+  Highlight,
   Italic,
   ListItem,
   ListItemContent,
@@ -74,4 +76,5 @@ export const components: PlateComponents = {
   [MARK_STRIKETHROUGH]: Strikethrough,
   [MARK_ITALIC]: Italic,
   [MARK_CODE]: Code,
+  [MARK_HIGHLIGHT]: Highlight,
 };

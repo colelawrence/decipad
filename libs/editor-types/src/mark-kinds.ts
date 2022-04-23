@@ -4,4 +4,5 @@ export {
   MARK_STRIKETHROUGH,
   MARK_ITALIC,
   MARK_CODE,
+  MARK_HIGHLIGHT,
 } from '@udecode/plate';

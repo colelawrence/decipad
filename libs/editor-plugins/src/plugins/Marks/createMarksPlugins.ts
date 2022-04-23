@@ -1,6 +1,7 @@
 import {
   createBoldPlugin,
   createCodePlugin,
+  createHighlightPlugin,
   createItalicPlugin,
   createStrikethroughPlugin,
   createUnderlinePlugin,
@@ -52,10 +53,14 @@ const strikethroughPlugin = () =>
 const inlineCodePlugin = () =>
   withHotkeyRestrictedToAllowedBlocks(createCodePlugin() as StrictPlugin);
 
+const highlightPlugin = () =>
+  withHotkeyRestrictedToAllowedBlocks(createHighlightPlugin() as StrictPlugin);
+
 export const createMarksPlugins = (): StrictPlugin[] => [
   boldPlugin(),
   italicPlugin(),
   underlinePlugin(),
   inlineCodePlugin(),
   strikethroughPlugin(),
+  highlightPlugin(),
 ];

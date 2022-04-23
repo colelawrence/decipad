@@ -36,3 +36,14 @@ it('does not format text in a forbidden block', () => {
   expect(editor.children[0].children[0]).not.toHaveProperty('underline');
   expect(editor.children[0].children[0]).not.toHaveProperty('italic');
 });
+
+it('can highlight a paragraph', () => {
+  editor = createPlateEditor({
+    plugins: [createAutoformatPlugin({ options: { rules: autoformatMarks } })],
+  });
+  editor.children = [{ type: ELEMENT_PARAGRAPH, children: [{ text: '==h' }] }];
+  Transforms.select(editor, { path: [0, 0], offset: initialText.length });
+  editor.insertText('=');
+  editor.insertText('=');
+  expect(editor.children[0].children[0]).toHaveProperty('highlight', true);
+});
