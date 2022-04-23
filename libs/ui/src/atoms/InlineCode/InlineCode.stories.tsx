@@ -1,12 +1,14 @@
 import { Meta, Story } from '@storybook/react';
-import { Code } from './Code';
+import { InlineCode } from './InlineCode';
 
 export default {
   title: 'Atoms / Editor / Text / Inline / Code',
-  component: Code,
+  component: InlineCode,
   args: {
     children: 'Text',
   },
 } as Meta;
 
-export const Normal: Story<{ children: string }> = (args) => <Code {...args} />;
+export const Normal: Story<{ children: string }> = (args) => (
+  <InlineCode {...args} />
+);

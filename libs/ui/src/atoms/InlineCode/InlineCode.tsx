@@ -9,9 +9,11 @@ const styles = css(codeBlock.variableStyles, {
   borderRadius: '4px',
 });
 
-interface CodeProps {
+interface InlineCodeProps {
   readonly children: ReactNode;
 }
-export const Code = ({ children }: CodeProps): ReturnType<React.FC> => {
+export const InlineCode = ({
+  children,
+}: InlineCodeProps): ReturnType<React.FC> => {
   return <code css={styles}>{children}</code>;
 };
