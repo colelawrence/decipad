@@ -116,6 +116,7 @@ describe('convert', () => {
       F(42195)
     );
     expect(convertBetweenUnits(F(1), U('parsec'), U('m'))).toMatchObject(
+      // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
       F(30_856_775_814_913_673)
     );
     expect(convertBetweenUnits(F(1), U('lightsecond'), U('m'))).toMatchObject(

@@ -31,6 +31,7 @@ const chain: Converter = (x) => x.mul(oneFoot).mul(66);
 const fathom: Converter = (x) => x.mul(oneFoot).mul(6);
 const link: Converter = (x) => x.mul(oneFoot).mul(66).div(1e2);
 const marathon: Converter = (x) => x.mul(42_195);
+// eslint-disable-next-line @typescript-eslint/no-loss-of-precision
 const parsec: Converter = (x) => x.mul(30_856_775_814_913_673);
 const point: Converter = (x) => x.mul(oneInch).div(72_272).mul(1e3);
 const twip: Converter = (x) => x.mul(oneInch).div(1_440);
