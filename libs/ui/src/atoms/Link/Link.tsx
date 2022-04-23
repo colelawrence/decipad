@@ -1,10 +1,11 @@
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
-import { p16Regular } from '../../primitives';
+import { malibu700, p16Regular } from '../../primitives';
 import { Anchor } from '../../utils';
 
 const styles = css(p16Regular, {
   textDecoration: 'underline',
+  color: malibu700.rgb,
   cursor: 'pointer',
 });
 

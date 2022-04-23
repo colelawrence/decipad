@@ -100,6 +100,7 @@ const colorNames: Record<ColorId, string> = {
   sun500: 'Color Swatch Sun 500',
   sun700: 'Color Swatch Sun 700',
   sun900: 'Color Swatch Sun 900',
+
   lavender000: 'Lavender 000',
 
   normalOpacity: 'Normal Opacity',

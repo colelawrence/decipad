@@ -8,7 +8,7 @@
 // ====================================================
 
 export interface UpdateNotebookIcon_updatePad {
-  __typename: "Pad";
+  __typename: 'Pad';
 }
 
 export interface UpdateNotebookIcon {
