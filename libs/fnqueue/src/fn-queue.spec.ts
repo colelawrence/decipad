@@ -6,7 +6,9 @@ describe('fn-queue', () => {
 
     expect(
       await Promise.race([
-        new Promise((resolve) => setTimeout(() => resolve('too late'), 0)),
+        new Promise((resolve) => {
+          setTimeout(() => resolve('too late'), 0);
+        }),
         q.flush(),
       ])
     ).toBe(undefined);

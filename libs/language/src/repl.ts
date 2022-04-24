@@ -1,3 +1,4 @@
+/* eslint-disable import/no-import-module-exports */
 import repl from 'repl';
 
 import { AST } from '.';

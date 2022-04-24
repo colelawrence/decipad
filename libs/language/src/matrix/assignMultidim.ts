@@ -11,6 +11,7 @@ import { matchTargets } from './matcher';
 export function inferMultidimAssignment(
   dimension: Type,
   assignee: Type,
+  // eslint-disable-next-line default-param-last
   outColumnSize = dimension.columnSize,
   previousMatrix?: Type
 ) {

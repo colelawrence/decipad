@@ -42,6 +42,7 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
         return whenTable(table);
       }
     },
+    // eslint-disable-next-line default-param-last
     fnValuesNoAutomap: ([tableOrColumn, needle], [tableType] = [], realm) => {
       const getNeedleIndexAtTable = (table: Table) => {
         const needleVal = needle.getData();

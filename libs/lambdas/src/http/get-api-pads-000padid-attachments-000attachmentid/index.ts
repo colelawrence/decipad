@@ -1,3 +1,4 @@
+/* eslint-disable import/no-import-module-exports */
 import { expectAuthenticated } from '@decipad/services/authentication';
 import { expectAuthorized } from '@decipad/services/authorization';
 import { getURL } from '@decipad/services/blobs/attachments';

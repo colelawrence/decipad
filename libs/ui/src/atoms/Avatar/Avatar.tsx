@@ -29,6 +29,7 @@ const containerStyles = css(p12Bold, {
 });
 
 const initialBackgroundStyles = (
+  // eslint-disable-next-line default-param-last
   hoverSelector = 'svg:hover',
   greyedOut: boolean
 ) =>
