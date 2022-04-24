@@ -6,7 +6,7 @@ function App({ Component, pageProps }: AppProps): ReturnType<FC> {
   return (
     <>
       <Head>
-        <title>Decipad - Make sense of numbers</title>
+        <title>Decipad — Make sense of numbers</title>
         <meta
           name="description"
           content="Decipad is a new way to create, collaborate and build anything you want using numbers. No code. No spreadsheets. No fuss."
@@ -14,7 +14,7 @@ function App({ Component, pageProps }: AppProps): ReturnType<FC> {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@decipad" />
         <meta name="twitter:creator" content="@decipad" />
-        <meta property="og:title" content="Decipad - Make sense of numbers" />
+        <meta property="og:title" content="Decipad — Make sense of numbers" />
         <meta
           property="og:description"
           content="Decipad is a new way to create, collaborate and build anything you want using numbers. No code. No spreadsheets. No fuss."

@@ -16,6 +16,7 @@ import {
   useRouteParams,
   workspaces as workspacesRoute,
 } from '@decipad/routing';
+import Head from 'next/head';
 import { useToast } from '@decipad/toast';
 import {
   ErrorPage,
@@ -136,55 +137,62 @@ export const Notebook = (): ReturnType<FC> => {
   }
 
   return (
-    <NotebookPage
-      notebook={
-        <Editor
-          iconPopoverProps={{
-            initialColor: iconColor,
-            initialIcon: icon,
-            onChangeIcon: (newIcon) => {
-              setIcon(newIcon);
-              updateNotebookIcon({
-                variables: {
-                  id: notebook.id,
-                  icon: `${newIcon}-${iconColor}`,
-                },
-              });
-            },
-            onChangeColor: (newColor) => {
-              setIconColor(newColor);
-              updateNotebookIcon({
-                variables: {
-                  id: notebook.id,
-                  icon: `${icon}-${newColor}`,
-                },
-              });
-            },
-          }}
-          notebookId={notebookId}
-          readOnly={notebookReadOnly}
-          authSecret={secret}
-        />
-      }
-      topbar={
-        <NotebookTopbar
-          workspaceName={notebook.workspace.name}
-          notebookName={
-            notebook.name === '' ? '<unnamed-notebook>' : notebook.name
-          }
-          workspaceHref={
-            workspacesRoute({}).workspace({
-              workspaceId: notebook.workspace.id,
-            }).$
-          }
-          usersWithAccess={notebook.access.users}
-          permission={notebook.myPermissionType}
-          link={notebookUrlWithSecret}
-          sharingActive={sharingActive}
-          onToggleShare={onShareToggleClick}
-          onDuplicateNotebook={onDuplicateNotebook}
-        />
-      }
-    />
+    <div>
+      <Head>
+        <title>
+          {notebook.name ? notebook.name : 'Make sense of numbers'} — Decipad
+        </title>
+      </Head>
+      <NotebookPage
+        notebook={
+          <Editor
+            iconPopoverProps={{
+              initialColor: iconColor,
+              initialIcon: icon,
+              onChangeIcon: (newIcon) => {
+                setIcon(newIcon);
+                updateNotebookIcon({
+                  variables: {
+                    id: notebook.id,
+                    icon: `${newIcon}-${iconColor}`,
+                  },
+                });
+              },
+              onChangeColor: (newColor) => {
+                setIconColor(newColor);
+                updateNotebookIcon({
+                  variables: {
+                    id: notebook.id,
+                    icon: `${icon}-${newColor}`,
+                  },
+                });
+              },
+            }}
+            notebookId={notebookId}
+            readOnly={notebookReadOnly}
+            authSecret={secret}
+          />
+        }
+        topbar={
+          <NotebookTopbar
+            workspaceName={notebook.workspace.name}
+            notebookName={
+              notebook.name === '' ? '<unnamed-notebook>' : notebook.name
+            }
+            workspaceHref={
+              workspacesRoute({}).workspace({
+                workspaceId: notebook.workspace.id,
+              }).$
+            }
+            usersWithAccess={notebook.access.users}
+            permission={notebook.myPermissionType}
+            link={notebookUrlWithSecret}
+            sharingActive={sharingActive}
+            onToggleShare={onShareToggleClick}
+            onDuplicateNotebook={onDuplicateNotebook}
+          />
+        }
+      />
+    </div>
   );
 };

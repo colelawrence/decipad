@@ -2,7 +2,7 @@
   <img src="https://user-images.githubusercontent.com/12210180/162798827-fd60eab3-907c-4ca1-a0dc-12ef34acb518.png" width="50">
 </p>
 
-<h2 align="center">Decipad - Make sense of numbers</h2>
+<h2 align="center">Decipad — Make sense of numbers</h2>
 
 > All the things Deci.
 

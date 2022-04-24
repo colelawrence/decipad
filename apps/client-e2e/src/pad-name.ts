@@ -16,9 +16,10 @@ describe('Pad name', () => {
     await timeout(1000);
   });
 
-  test('got saved', async () => {
+  test('got saved, and html title page is there', async () => {
     await page.reload();
     await waitForEditorToLoad();
     expect(await getPadName()).toBe('hello world');
+    expect(await page.title()).toContain('hello world');
   });
 });
