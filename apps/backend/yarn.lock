@@ -51,18 +51,18 @@
   dependencies:
     xss "^1.0.8"
 
-"@architect/architect@10.2.2":
-  version "10.2.2"
-  resolved "https://registry.yarnpkg.com/@architect/architect/-/architect-10.2.2.tgz#c0c64796fe1722a87a572bd0638b3e236ff6a34a"
-  integrity sha512-vBSSgCKb2ADZZb0cHorWfduSPW7EOTcIoGVTbuMK9vhAKBsg9ccl7TdVXv1geqJvH24Kqh0iMo5VnWNDvvKB3g==
+"@architect/architect@10.3.0":
+  version "10.3.0"
+  resolved "https://registry.yarnpkg.com/@architect/architect/-/architect-10.3.0.tgz#4b2160c5d2197a051e23a9b1e7b97b3e5a5ced53"
+  integrity sha512-dz27XAmTstj+/7K4wDXxnfQZwaSotvHS07PTN131V5m6RSMhPqmpEdLIa8F/K5epXekBrlrp29fMn1i47+rUxg==
   dependencies:
     "@architect/create" "4.0.3"
-    "@architect/deploy" "4.0.7"
+    "@architect/deploy" "4.1.0"
     "@architect/destroy" "3.0.2"
     "@architect/env" "3.0.1"
     "@architect/hydrate" "3.0.2"
     "@architect/logs" "4.0.1"
-    "@architect/sandbox" "5.2.2"
+    "@architect/sandbox" "5.2.3"
     aws-sdk "2.1001.0"
     chalk "4.1.2"
     update-notifier "5.1.0"
@@ -88,10 +88,10 @@
     lambda-runtimes "~1.1.1"
     minimist "~1.2.6"
 
-"@architect/deploy@4.0.7":
-  version "4.0.7"
-  resolved "https://registry.yarnpkg.com/@architect/deploy/-/deploy-4.0.7.tgz#0c7f1c4dc54418697bcf7070ebe8df976cc3006b"
-  integrity sha512-XJv781pKMm7wrQ22qht8D27pYv9AO3YQy3VWpQRcySDR11FncAfdKZUEzyDYJLJhn8tBdklt1ZseH0q5kwjR4Q==
+"@architect/deploy@4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@architect/deploy/-/deploy-4.1.0.tgz#38d6d89a13967a4db8f2cfa7a990b2561873c1ba"
+  integrity sha512-aaYRm/MnyO9lGQp/PaSiwSR4co8/037ZOsnnG1j/qMF/kJYw0DSt94vJoGUabfEHkiWdswyuHPS5gh/51HjFwA==
   dependencies:
     "@architect/create" "~4.0.3"
     "@architect/hydrate" "~3.0.2"
@@ -216,10 +216,10 @@
   resolved "https://registry.yarnpkg.com/@architect/parser/-/parser-6.0.0.tgz#743cd7c72de2a0eb11c95011fee9ca28e4891901"
   integrity sha512-KqpMvxt8LHd+OMR4jGaDxhgNlcLf38F3h0Kub3aR6DQShsyMG1KGa8A9Bs95LvIV3LzGV6dXly5Oamvi2APmgg==
 
-"@architect/sandbox@5.2.2":
-  version "5.2.2"
-  resolved "https://registry.yarnpkg.com/@architect/sandbox/-/sandbox-5.2.2.tgz#7b5d938ae86386dea04108f25c79f6958ff1d9a7"
-  integrity sha512-j/k5IuYRFv+UxaeF6TI7P+7pdx7L6FbDvGwQYWdc+Cvz7k/ly2Yih+VmfP0bs3/g0dqIOgBj0eo6mVODwFqq2g==
+"@architect/sandbox@5.2.3":
+  version "5.2.3"
+  resolved "https://registry.yarnpkg.com/@architect/sandbox/-/sandbox-5.2.3.tgz#be8b10eed646fe3dfbcbe8e8215107cb7b5d47c9"
+  integrity sha512-Xb90Au93mSiYW+eIu10Ib22btKdpkxrHhGhVI9m3vQZnwh4vfy16EpdYjveSNCyf8zNpbsdjZ14qYJZ2ZPHgrw==
   dependencies:
     "@architect/asap" "~5.0.1"
     "@architect/create" "~4.0.3"
