@@ -31,7 +31,7 @@ jobs:
         run: |
           export SAM_LOCATION="s3://decipad-backend-sam/${{ github.event.pull_request.number }}.dev.decipad.com"
 
-          yarn undeploy:pr --app decipad-backend --name ${{ github.event.pull_request.number }} --force
+          yarn undeploy:pr --app decipad-backend --name ${{ github.event.pull_request.number }} --force || yarn undeploy:pr --app decipad-backend --name ${{ github.event.pull_request.number }} --force || yarn undeploy:pr --app decipad-backend --name ${{ github.event.pull_request.number }} --force
           scripts/destroy-sam.sh
 
   #### Notify
