@@ -5,7 +5,7 @@ import {
   toggleMark,
   useEditorRef,
 } from '@udecode/plate';
-import { grey100, grey500, grey700 } from 'libs/ui/src/primitives';
+import { grey100, grey700 } from 'libs/ui/src/primitives';
 import { FC } from 'react';
 import { dividerStyle } from '../../styles/divider';
 
@@ -23,7 +23,6 @@ const buttonStyles = css({
     backgroundColor: `${grey100.rgb}`,
   },
   '> div > svg > path': {
-    stroke: `${grey500.rgb}`,
     transition: 'stroke 0.2s ease-out',
   },
 });
