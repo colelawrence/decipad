@@ -1,6 +1,12 @@
 {
   "extends": ["../../libs/eslint-config-decipad/react"],
-  "ignorePatterns": ["!**/*"],
+  "ignorePatterns": [
+    "!**/*",
+    ".babelrc.js",
+    "jest.config.js",
+    "next.config.js",
+    "sentry.*.config.js"
+  ],
   "rules": {
     // generated graphql queries
     "camelcase": "off"

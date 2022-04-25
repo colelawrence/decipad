@@ -1,4 +1,4 @@
 {
   "extends": ["../../libs/eslint-config-decipad/editor"],
-  "ignorePatterns": ["!**/*"]
+  "ignorePatterns": ["!**/*", ".babelrc.js", "jest.config.js"]
 }

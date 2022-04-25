@@ -98,6 +98,7 @@ export const handler = handle(
             const keyRecord: ExternalKeyRecord = {
               id: nanoid(),
               resource_uri: `/pads/${externalDataSource.padId}`,
+              // eslint-disable-next-line camelcase
               token_type,
               scope,
               access_token: accessToken,
