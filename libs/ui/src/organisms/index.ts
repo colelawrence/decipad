@@ -8,7 +8,6 @@ export { ColumnResult } from './ColumnResult/ColumnResult';
 export { DragAndDropImportNotebook } from './DragAndDropImportNotebook/DragAndDropImportNotebook';
 export { DraggableBlock } from './DraggableBlock/DraggableBlock';
 export { EditableTableHeader } from './EditableTableHeader/EditableTableHeader';
-export { EditorIconPopover } from './EditorIconPopover/EditorIconPopover';
 export { EditorTable } from './EditorTable/EditorTable';
 export { EmptyWorkspaceCta } from './EmptyWorkspaceCta/EmptyWorkspaceCta';
 export { InlineColumnResult } from './InlineColumnResult/InlineColumnResult';

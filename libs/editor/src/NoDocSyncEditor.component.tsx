@@ -4,7 +4,6 @@ import {
   useComputer,
 } from '@decipad/react-contexts';
 import { Plate, PlateProps } from '@udecode/plate';
-import { EditorIconPopover } from 'libs/ui/src/organisms';
 import { FC, useMemo } from 'react';
 import { Tooltip } from './components';
 import * as configuration from './configuration';
@@ -36,9 +35,6 @@ export const NoDocSyncEditor = (props: PlateProps): ReturnType<FC> => {
           }
           {...props}
         >
-          <div css={{ width: '580px', margin: '0 auto' }}>
-            <EditorIconPopover />
-          </div>
           <Tooltip />
         </Plate>
       </ResultsContext.Provider>

@@ -6,5 +6,7 @@ export * from './results';
 export * from './routing';
 export * from './storage';
 export * from './svg';
+export * from './swatches';
 export * from './table';
+export * from './user-icons';
 export * from './viewport';

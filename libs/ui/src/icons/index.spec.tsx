@@ -1,13 +1,14 @@
 import { readdirSync } from 'fs';
+import { isValidElementType } from 'react-is';
+import { ElementType } from 'react';
 import { basename } from 'path';
 import { render, RenderResult } from '@testing-library/react';
 
 import * as icons from '.';
 
-// __esModule should be non-enumerable but for some reason it shows up
-const iconExports = Object.entries(icons).filter((key) => {
-  return !String(key).startsWith('_');
-});
+const iconExports = Object.entries(icons).filter(([, icon]) =>
+  isValidElementType(icon)
+) as Array<[string, Extract<typeof icons[keyof typeof icons], ElementType>]>;
 
 it('exports every icon', () => {
   const numIconFolders = readdirSync(__dirname).filter(notIndexOrSelf).length;

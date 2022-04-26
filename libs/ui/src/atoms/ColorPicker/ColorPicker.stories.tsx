@@ -1,6 +1,6 @@
 import { Meta, Story } from '@storybook/react';
 import { ComponentProps } from 'react';
-import { swatchNames, baseSwatches } from '../../primitives';
+import { swatchNames, baseSwatches } from '../../utils';
 import { ColorPicker } from './ColorPicker';
 
 const args: ComponentProps<typeof ColorPicker> = {

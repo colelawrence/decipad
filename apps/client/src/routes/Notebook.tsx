@@ -16,18 +16,23 @@ import {
   useRouteParams,
   workspaces as workspacesRoute,
 } from '@decipad/routing';
-import Head from 'next/head';
 import { useToast } from '@decipad/toast';
 import {
+  EditorIcon,
   ErrorPage,
   LoadingSpinnerPage,
   NotebookPage,
   NotebookTopbar,
 } from '@decipad/ui';
-import { FC, useEffect, useState } from 'react';
+import Head from 'next/head';
+import { ComponentProps, FC, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { getSecretNotebookLink } from '../lib/secret';
 import { decode as decodeVanityUrlComponent } from '../lib/vanityUrlComponent';
+import { parseIconColorFromIdentifier } from '../lib/parseIconColorFromIdentifier';
+
+type Icon = ComponentProps<typeof EditorIcon>['icon'];
+type IconColor = ComponentProps<typeof EditorIcon>['color'];
 
 export const Notebook = (): ReturnType<FC> => {
   const history = useHistory();
@@ -43,8 +48,8 @@ export const Notebook = (): ReturnType<FC> => {
   // State
   const [sharingActive, setSharingActive] = useState(false);
   const [shareSecretKey, setShareSecretKey] = useState('');
-  const [icon, setIcon] = useState('');
-  const [iconColor, setIconColor] = useState('');
+  const [icon, setIcon] = useState<Icon>('Rocket');
+  const [iconColor, setIconColor] = useState<IconColor>('Catskill');
 
   // Queries
   const { notebook, notebookReadOnly, notebookLoading } = useGetNotebookById(
@@ -87,12 +92,14 @@ export const Notebook = (): ReturnType<FC> => {
       setShareSecretKey('');
     }
 
-    const [dataIcon, dataIconColor] = notebook?.icon?.split('-') || [
-      'Rocket',
-      'Catskill',
-    ];
-    setIcon(dataIcon);
-    setIconColor(dataIconColor);
+    const { newIcon, newIconColor, ok } = parseIconColorFromIdentifier(
+      notebook?.icon
+    );
+
+    if (ok && newIcon && newIconColor) {
+      setIcon(newIcon as Icon);
+      setIconColor(newIconColor as IconColor);
+    }
   }, [notebook]);
 
   const notebookUrlWithSecret = getSecretNotebookLink(
@@ -146,31 +153,33 @@ export const Notebook = (): ReturnType<FC> => {
       <NotebookPage
         notebook={
           <Editor
-            iconPopoverProps={{
-              initialColor: iconColor,
-              initialIcon: icon,
-              onChangeIcon: (newIcon) => {
-                setIcon(newIcon);
-                updateNotebookIcon({
-                  variables: {
-                    id: notebook.id,
-                    icon: `${newIcon}-${iconColor}`,
-                  },
-                });
-              },
-              onChangeColor: (newColor) => {
-                setIconColor(newColor);
-                updateNotebookIcon({
-                  variables: {
-                    id: notebook.id,
-                    icon: `${icon}-${newColor}`,
-                  },
-                });
-              },
-            }}
             notebookId={notebookId}
             readOnly={notebookReadOnly}
             authSecret={secret}
+          />
+        }
+        notebookIcon={
+          <EditorIcon
+            color={iconColor}
+            icon={icon}
+            onChangeIcon={(newIcon) => {
+              setIcon(newIcon);
+              updateNotebookIcon({
+                variables: {
+                  id: notebook.id,
+                  icon: `${newIcon}-${iconColor}`,
+                },
+              });
+            }}
+            onChangeColor={(newIconColor) => {
+              setIconColor(newIconColor);
+              updateNotebookIcon({
+                variables: {
+                  id: notebook.id,
+                  icon: `${icon}-${newIconColor}`,
+                },
+              });
+            }}
           />
         }
         topbar={

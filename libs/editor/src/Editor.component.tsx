@@ -17,8 +17,7 @@ import {
   TEditor,
   usePlateEditorRef,
 } from '@udecode/plate';
-import { EditorIconPopover } from 'libs/ui/src/organisms';
-import { ComponentProps, FC, useCallback, useMemo, useState } from 'react';
+import { FC, useCallback, useMemo, useState } from 'react';
 import * as components from './components';
 import * as configuration from './configuration';
 import { useLanguagePlugin } from './plugins';
@@ -27,15 +26,9 @@ export interface EditorProps {
   notebookId: string;
   readOnly: boolean;
   authSecret?: string;
-  iconPopoverProps?: ComponentProps<typeof EditorIconPopover>;
 }
 
-const EditorInternal = ({
-  notebookId,
-  authSecret,
-  readOnly,
-  iconPopoverProps = {},
-}: EditorProps) => {
+const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
   const [editorLoaded, setEditorLoaded] = useState(false);
   const editor = usePlateEditorRef(notebookId) as TEditor;
 
@@ -84,14 +77,6 @@ const EditorInternal = ({
       >
         {!editorLoaded && <EditorPlaceholder />}
         <div css={{ display: editorLoaded ? 'unset' : 'none' }}>
-          <div css={{ maxWidth: '580px', margin: '0 auto' }}>
-            <EditorIconPopover
-              initialIcon={iconPopoverProps.initialIcon}
-              initialColor={iconPopoverProps.initialColor}
-              onChangeIcon={iconPopoverProps.onChangeIcon}
-              onChangeColor={iconPopoverProps.onChangeColor}
-            />
-          </div>
           <Plate
             id={notebookId}
             renderEditable={identity}

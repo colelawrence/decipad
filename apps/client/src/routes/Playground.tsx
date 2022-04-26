@@ -1,6 +1,6 @@
 import { NoDocSyncEditor } from '@decipad/editor';
-import { NotebookPage } from '@decipad/ui';
-import { FC, useEffect } from 'react';
+import { EditorIcon, NotebookPage } from '@decipad/ui';
+import { ComponentProps, FC, useEffect, useState } from 'react';
 
 export function Playground(): ReturnType<FC> {
   useEffect(() => {
@@ -9,5 +9,22 @@ export function Playground(): ReturnType<FC> {
     };
   }, []);
 
-  return <NotebookPage notebook={<NoDocSyncEditor />} />;
+  const [icon, setIcon] =
+    useState<ComponentProps<typeof EditorIcon>['icon']>('Rocket');
+  const [iconColor, setIconColor] =
+    useState<ComponentProps<typeof EditorIcon>['color']>('Catskill');
+
+  return (
+    <NotebookPage
+      notebook={<NoDocSyncEditor />}
+      notebookIcon={
+        <EditorIcon
+          icon={icon}
+          onChangeIcon={setIcon}
+          color={iconColor}
+          onChangeColor={setIconColor}
+        />
+      }
+    />
+  );
 }

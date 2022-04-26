@@ -9,6 +9,7 @@ export { EditableTableData } from './EditableTableData/EditableTableData';
 export { Expression } from './Expression/Expression';
 export { EditorTitle } from './EditorTitle/EditorTitle';
 export { HelpButton } from './HelpButton/HelpButton';
+export { IconPopover } from './IconPopover/IconPopover';
 export { InlineCodeError } from './InlineCodeError/InlineCodeError';
 export { MenuList } from './MenuList/MenuList';
 export { Modal } from './Modal/Modal';

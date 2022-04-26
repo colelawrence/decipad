@@ -9,6 +9,8 @@ const props: ComponentProps<typeof NotebookListItem> = {
   href: '/my-notebook',
   exportFileName: '',
   exportHref: '',
+  icon: 'Rocket',
+  iconColor: 'Catskill',
 };
 
 describe('without a description', () => {

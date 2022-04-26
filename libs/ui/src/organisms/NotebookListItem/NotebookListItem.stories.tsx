@@ -18,5 +18,12 @@ export default {
 } as Meta<Args>;
 
 export const Normal: Story<Args> = (args) => (
-  <NotebookListItem {...args} href="" exportFileName="" exportHref="" />
+  <NotebookListItem
+    {...args}
+    href=""
+    exportFileName=""
+    exportHref=""
+    icon="Rocket"
+    iconColor="Catskill"
+  />
 );

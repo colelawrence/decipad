@@ -1,6 +1,14 @@
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { black, grey200, setCssVar } from '../../primitives';
+import {
+  black,
+  grey200,
+  normalOpacity,
+  OpaqueColor,
+  setCssVar,
+  transparency,
+} from '../../primitives';
+import { baseSwatches } from '../../utils';
 
 const buttonStyles = css({
   ...setCssVar('currentTextColor', black.rgb),
@@ -21,22 +29,28 @@ const iconSize = css({
 type IconButtonProps = {
   readonly onClick?: () => void;
   readonly children: ReactNode;
-  readonly ariaLabel?: string;
+  readonly color?: OpaqueColor;
 };
 
 export const NotebookIconButton: FC<IconButtonProps> = ({
   children,
   onClick,
-  ariaLabel,
+  color = baseSwatches.Catskill,
 }) => {
   return (
-    <button
-      type="button"
-      aria-label={ariaLabel}
-      css={buttonStyles}
+    <div
+      css={[
+        buttonStyles,
+        css({
+          backgroundColor: transparency(color, normalOpacity).rgba,
+          ':hover, :focus': {
+            backgroundColor: color.rgb,
+          },
+        }),
+      ]}
       onClick={onClick}
     >
       <span css={iconSize}>{children}</span>
-    </button>
+    </div>
   );
 };

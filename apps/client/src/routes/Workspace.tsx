@@ -31,6 +31,7 @@ import { FC, useCallback, useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { SideMenu } from '../components/SideMenu';
 import { Topbar } from '../components/Topbar';
+import { parseIconColorFromIdentifier } from '../lib/parseIconColorFromIdentifier';
 import { encode as encodeVanityUrlComponent } from '../lib/vanityUrlComponent';
 
 export function Workspace(): ReturnType<FC> {
@@ -157,17 +158,27 @@ export function Workspace(): ReturnType<FC> {
               notebooks={sortBy(
                 (item) => -Date.parse(item.createdAt),
                 data.getWorkspaceById.pads.items
-              ).map((notebook) => ({
-                ...notebook,
-                href: notebooks({}).notebook({
-                  notebookId: encodeVanityUrlComponent(
-                    notebook.name,
-                    notebook.id
-                  ),
-                }).$,
-                exportHref: `/api/pads/${notebook.id}/export`,
-                exportFileName: `notebook-${notebook.id}.json`,
-              }))}
+              ).map((notebook) => {
+                const { newIcon, newIconColor, ok } =
+                  parseIconColorFromIdentifier(notebook?.icon);
+
+                const icon = ok && newIcon ? newIcon : 'Rocket';
+                const iconColor =
+                  ok && newIconColor ? newIconColor : 'Catskill';
+                return {
+                  ...notebook,
+                  icon,
+                  iconColor,
+                  href: notebooks({}).notebook({
+                    notebookId: encodeVanityUrlComponent(
+                      notebook.name,
+                      notebook.id
+                    ),
+                  }).$,
+                  exportHref: `/api/pads/${notebook.id}/export`,
+                  exportFileName: `notebook-${notebook.id}.json`,
+                };
+              })}
               onCreateNotebook={handleCreateNotebook}
               onDuplicate={handleDuplicateNotebook}
               onDelete={handleDeleteNotebook}

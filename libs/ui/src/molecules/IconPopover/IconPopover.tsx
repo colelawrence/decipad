@@ -1,41 +1,28 @@
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import * as Popover from '@radix-ui/react-popover';
-import { FC, useState } from 'react';
+import { FC, ReactNode } from 'react';
 import { ColorPicker, Divider, NotebookIconButton } from '../../atoms';
 import { Close } from '../../icons';
+import * as icons from '../../icons';
 import {
-  baseSwatches,
-  black,
   cssVar,
   grey500,
   grey600,
   p13Medium,
   setCssVar,
-  shortAnimationDuration,
-  swatchNames,
-  white,
 } from '../../primitives';
-import { iconChoices } from './iconChoices';
-
-const iconWrapper = css({
-  width: '32px',
-  height: '32px',
-  display: 'grid',
-  placeItems: 'center',
-  borderRadius: '6px',
-  transition: `background-color ${shortAnimationDuration} ease-out`,
-});
-
-const iconSize = css({
-  ...setCssVar('currentTextColor', black.rgb),
-  height: '24px',
-  width: '24px',
-});
+import {
+  swatchNames,
+  baseSwatches,
+  AvailableSwatchColor,
+  UserIconKey,
+  userIconKeys,
+} from '../../utils';
 
 const contentWrapper = css({
   marginTop: '6px',
-  backgroundColor: white.rgb,
+  backgroundColor: cssVar('backgroundColor'),
   padding: '12px',
   borderRadius: '8px',
   maxWidth: '272px',
@@ -68,31 +55,22 @@ const iconsWrapper = css({
   gap: '6px',
 });
 
-type EditorIconPopoverProps = {
-  readonly initialIcon?: string;
-  readonly initialColor?: string;
-  readonly onChangeIcon?: (newIcon: string) => void;
-  readonly onChangeColor?: (newColor: string) => void;
+type IconPopoverProps = {
+  readonly color: AvailableSwatchColor;
+  readonly trigger: ReactNode;
+  readonly onChangeIcon?: (newIcon: UserIconKey) => void;
+  readonly onChangeColor?: (newColor: AvailableSwatchColor) => void;
 };
 
-export const EditorIconPopover = ({
-  initialIcon = 'Rocket',
-  initialColor = 'Catskill',
+export const IconPopover = ({
+  color,
+  trigger,
   onChangeIcon = noop,
   onChangeColor = noop,
-}: EditorIconPopoverProps): ReturnType<FC> => {
-  const [icon, setIcon] = useState(initialIcon);
-  const [iconColor, setIconColor] = useState(baseSwatches[initialColor]);
-
+}: IconPopoverProps): ReturnType<FC> => {
   return (
     <Popover.Root>
-      <Popover.Trigger asChild>
-        <button css={[iconWrapper, { backgroundColor: iconColor.rgb }]}>
-          <div css={iconSize}>
-            {iconChoices.find(({ name }) => name === icon)?.icon}
-          </div>
-        </button>
-      </Popover.Trigger>
+      <Popover.Trigger asChild>{trigger}</Popover.Trigger>
       <Popover.Content css={contentWrapper}>
         <div css={contentHeaderWrapper}>
           <h2 css={contentHeaderText}>Pick a style</h2>
@@ -110,36 +88,42 @@ export const EditorIconPopover = ({
           }}
         >
           {swatchNames.map((key) => {
-            const color = baseSwatches[key];
             return (
               <button
                 key={key}
                 aria-label={key}
                 onClick={() => {
-                  setIconColor(color);
                   onChangeColor(key);
                 }}
               >
-                <ColorPicker color={color} selected={iconColor === color} />
+                <ColorPicker
+                  color={baseSwatches[key]}
+                  selected={key === color}
+                />
               </button>
             );
           })}
         </div>
         <div css={iconsWrapper}>
-          {iconChoices.map((choice) => (
-            <NotebookIconButton
-              key={choice.name}
-              ariaLabel={choice.name}
-              onClick={() => {
-                setIcon(choice.name);
-                onChangeIcon(choice.name);
-              }}
-            >
-              {choice.icon}
-            </NotebookIconButton>
-          ))}
+          {userIconKeys.map((choice) => {
+            const Icon = icons[choice];
+            return (
+              <Popover.Close key={choice} aria-label={choice}>
+                <NotebookIconButton
+                  color={baseSwatches[color]}
+                  onClick={() => {
+                    onChangeIcon(choice);
+                  }}
+                >
+                  <Icon />
+                </NotebookIconButton>
+              </Popover.Close>
+            );
+          })}
         </div>
       </Popover.Content>
     </Popover.Root>
   );
 };
+
+// TODO test and stories

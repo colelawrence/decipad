@@ -31,6 +31,8 @@ it('renders a list of notebooks', () => {
             href: '',
             exportFileName: '',
             exportHref: '',
+            icon: 'Rocket',
+            iconColor: 'Catskill',
           },
           {
             id: '1',
@@ -38,6 +40,8 @@ it('renders a list of notebooks', () => {
             href: '',
             exportFileName: '',
             exportHref: '',
+            icon: 'Rocket',
+            iconColor: 'Catskill',
           },
         ]}
       />
@@ -63,6 +67,8 @@ it('renders an item with actions open on top', async () => {
             href: '',
             exportFileName: '',
             exportHref: '',
+            icon: 'Rocket',
+            iconColor: 'Catskill',
           },
           {
             id: '1',
@@ -70,6 +76,8 @@ it('renders an item with actions open on top', async () => {
             href: '',
             exportFileName: '',
             exportHref: '',
+            icon: 'Rocket',
+            iconColor: 'Catskill',
           },
         ]}
       />
@@ -98,6 +106,8 @@ it('only allows one open actions menu at a time', async () => {
             href: '',
             exportFileName: '',
             exportHref: '',
+            icon: 'Rocket',
+            iconColor: 'Catskill',
           },
           {
             id: '1',
@@ -105,6 +115,8 @@ it('only allows one open actions menu at a time', async () => {
             href: '',
             exportFileName: '',
             exportHref: '',
+            icon: 'Rocket',
+            iconColor: 'Catskill',
           },
         ]}
       />
@@ -133,6 +145,8 @@ it('emits duplicate events', async () => {
             href: '',
             exportFileName: '',
             exportHref: '',
+            icon: 'Rocket',
+            iconColor: 'Catskill',
           },
           {
             id: '1',
@@ -140,6 +154,8 @@ it('emits duplicate events', async () => {
             href: '',
             exportFileName: '',
             exportHref: '',
+            icon: 'Rocket',
+            iconColor: 'Catskill',
           },
         ]}
         onDuplicate={handleDuplicate}
@@ -166,6 +182,8 @@ it('emits delete events', async () => {
             href: '',
             exportFileName: '',
             exportHref: '',
+            icon: 'Rocket',
+            iconColor: 'Catskill',
           },
           {
             id: '1',
@@ -173,6 +191,8 @@ it('emits delete events', async () => {
             href: '',
             exportFileName: '',
             exportHref: '',
+            icon: 'Rocket',
+            iconColor: 'Catskill',
           },
         ]}
         onDelete={handleDelete}
