@@ -11,6 +11,7 @@ export interface GetWorkspaceById_getWorkspaceById_pads_items {
   __typename: 'Pad';
   id: string;
   name: string;
+  icon: string | null;
   createdAt: any | null;
 }
 

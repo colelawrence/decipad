@@ -9,6 +9,7 @@ export const GET_WORKSPACE_BY_ID = gql`
         items {
           id
           name
+          icon
           createdAt
         }
       }

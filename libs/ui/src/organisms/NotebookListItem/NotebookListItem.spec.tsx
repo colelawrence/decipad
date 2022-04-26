@@ -25,3 +25,10 @@ it('renders a placeholder for an empty name', () => {
   );
   expect(getByText(/my note(book|pad)/i)).toBeVisible();
 });
+
+it('renders the default icon', () => {
+  const { getByTitle } = render(
+    <NotebookListItem {...props} name="My Notebook" href="/my-notebook" />
+  );
+  expect(getByTitle(/rocket/i)).toBeInTheDocument();
+});

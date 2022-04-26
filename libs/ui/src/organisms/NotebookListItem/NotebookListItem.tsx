@@ -2,9 +2,10 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { IconButton } from '../../atoms';
-import { Ellipsis, Table } from '../../icons';
+import { Ellipsis } from '../../icons';
 import { NotebookListItemActions } from '../../molecules';
 import {
+  baseSwatches,
   black,
   cssVar,
   p13Regular,
@@ -15,6 +16,7 @@ import {
 } from '../../primitives';
 import { notebookList } from '../../styles';
 import { Anchor } from '../../utils';
+import { iconChoices } from '../EditorIconPopover/iconChoices';
 
 const { gridStyles } = notebookList;
 const styles = css(gridStyles, {
@@ -100,6 +102,8 @@ interface NotebookListItemProps {
   readonly toggleActionsOpen?: () => void;
   readonly onDuplicate?: () => void;
   readonly onDelete?: () => void;
+  readonly icon?: string;
+  readonly iconColor?: string;
 }
 export const NotebookListItem = ({
   name,
@@ -111,13 +115,17 @@ export const NotebookListItem = ({
   toggleActionsOpen = noop,
   onDuplicate = noop,
   onDelete = noop,
+  icon,
 }: NotebookListItemProps): ReturnType<FC> => {
+  const [iconName, iconColor] = icon ? icon.split('-') : ['Rocket', 'Catskill'];
   return (
     <div css={{ position: 'relative' }}>
       <Anchor href={href} css={styles}>
-        <div css={iconStyles}>
+        <div
+          css={[iconStyles, { backgroundColor: baseSwatches[iconColor].rgb }]}
+        >
           <span>
-            <Table />
+            {iconChoices.find((item) => item.name === iconName)?.icon}
           </span>
         </div>
         <strong
