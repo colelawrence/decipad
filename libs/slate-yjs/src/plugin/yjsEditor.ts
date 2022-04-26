@@ -136,6 +136,7 @@ export function withYjs<T extends TEditor>(
   LOCAL_OPERATIONS.set(editor, new Set());
 
   if (synchronizeValue) {
+    e.selection = null;
     setTimeout(() => YjsEditor.synchronizeValue(e), 0);
   }
 

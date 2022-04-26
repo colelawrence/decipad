@@ -12,7 +12,11 @@ export const createCursorsPlugin = (computer: Computer): PlatePlugin => ({
   handlers: {
     onChange: (editor) => () => {
       // eslint-disable-next-line no-param-reassign
-      computer.setCursorBlockId(getCursorPos(editor));
+      try {
+        computer.setCursorBlockId(getCursorPos(editor));
+      } catch (err) {
+        // do nothing, not too important --
+      }
     },
   },
 });

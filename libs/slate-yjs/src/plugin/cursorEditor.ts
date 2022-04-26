@@ -47,11 +47,15 @@ export function withCursor<T extends YjsEditor>(
   const { onChange, destroy } = editor;
 
   e.onChange = () => {
-    setTimeout(() => CursorEditor.updateCursor(e), 0);
+    setTimeout(() => {
+      try {
+        CursorEditor.updateCursor(e);
+      } catch (err) {
+        // do nothing, not important
+      }
+    }, 0);
 
-    if (onChange) {
-      onChange();
-    }
+    onChange();
   };
 
   e.destroy = () => {
