@@ -44,6 +44,9 @@ export const GlobalStyles: React.FC<React.PropsWithChildren<unknown>> = ({
           padding: '0 !important',
           backgroundColor: cssVar('backgroundColor'),
         },
+        'button, [type="button"], [type="reset"], [type="submit"]': {
+          '-webkit-appearance': 'none',
+        },
         // further resets
         '*:focus-visible': {
           outline: 'none',
