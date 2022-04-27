@@ -142,6 +142,13 @@
           "options": {
             "command": "yarn tsc -b apps/client"
           }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/client"],
+          "options": {
+            "jestConfig": "apps/client/jest.config.js"
+          }
         }
       }
     },

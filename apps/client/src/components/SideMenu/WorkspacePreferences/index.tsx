@@ -5,7 +5,7 @@ import {
   useDeleteWorkspace,
   useRenameWorkspace,
 } from '@decipad/queries';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { EditWorkspaceModal } from '@decipad/ui';
 import { useQuery } from '@apollo/client';
 import { Spinner } from '@chakra-ui/react';

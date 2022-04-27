@@ -1,0 +1,83 @@
+import { swatchNames, userIconKeys } from 'libs/ui/src/utils';
+import { parseIconColorFromIdentifier } from './parseIconColorFromIdentifier';
+
+const validCombos: string[] = [
+  'Wallet-Sulu',
+  'Heart-Malibu',
+  'Plane-Perfume',
+  'Sunrise-Sun',
+  'Announcement-Sulu',
+  'Pin-Sulu',
+  'Beach-Sulu',
+  'Star-Rose',
+  'Key-Sun',
+  'Dollar Circle-Rose',
+  'Wallet-Rose',
+  'Music-Sulu',
+  'Heart-Malibu',
+  'Dollar Circle-Sulu',
+  'Percentage-Rose',
+  'Heart-Malibu',
+  'Key-Sun',
+  'Car-Malibu',
+  'Health-Rose',
+  'Annotation Warning-Sun',
+  'Health-Rose',
+  'Leaf-Sulu',
+  'Server-Sulu',
+  'Annotation Warning-Sun',
+  'World-Malibu',
+  'Spider-Sun',
+  'Trophy-Sun',
+  'Beach-Sulu',
+  'Heart-Malibu',
+  'Trophy-Sun',
+  'People-Perfume',
+  'Annotation Warning-Sun',
+  'Shopping Cart-Sun',
+  'Coffee-Perfume',
+  'Key-Sun',
+  'Key-Sun',
+  'Battery-Sulu',
+  'Dollar Circle-Malibu',
+  'Sunrise-Sun',
+  'Annotation Warning-Sun',
+  'Crown-Sun',
+  'Happy-Malibu',
+  'Rocket-Malibu',
+  'Key-Sun',
+  'Moon-Sulu',
+  'People-Malibu',
+  'Car-Sulu',
+  'Health-Rose',
+  'Happy-Malibu',
+];
+
+const badCombos = [
+  null,
+  undefined,
+  'foo-',
+  '-bar',
+  'Doug-Malibu',
+  'Car-Blue',
+  'Malibu-Car',
+  'Coffee Mug-Sulu',
+];
+
+describe.each(validCombos)('With valid combo %s', (combo) => {
+  it(`should parse ${combo}`, () => {
+    const { ok, newIcon, newIconColor } = parseIconColorFromIdentifier(combo);
+    expect(ok).toBeTruthy();
+    expect(userIconKeys).toContain(newIcon);
+    expect(swatchNames).toContain(newIconColor);
+  });
+});
+
+describe.each(badCombos)('With valid combo %s', (combo) => {
+  it(`should not parse ${combo} with a bad term`, () => {
+    const { ok, newIcon, newIconColor } = parseIconColorFromIdentifier(combo);
+    expect(newIcon).toBeUndefined();
+    expect(newIconColor).toBeUndefined();
+    expect(ok).toBeFalsy();
+  });
+});

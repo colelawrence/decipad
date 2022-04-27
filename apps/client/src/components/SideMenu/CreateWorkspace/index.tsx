@@ -7,7 +7,7 @@ import {
 import { useToast } from '@decipad/toast';
 import { useRouteParams, workspaces } from '@decipad/routing';
 import { CreateWorkspaceModal } from '@decipad/ui';
-import React, { ComponentProps, FC } from 'react';
+import { ComponentProps, FC } from 'react';
 import { Route, useHistory, useRouteMatch } from 'react-router-dom';
 
 type CreateWorkspaceProps = Pick<
