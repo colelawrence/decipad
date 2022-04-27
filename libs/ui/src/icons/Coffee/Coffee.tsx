@@ -3,7 +3,7 @@ import { cssVar } from '../../primitives';
 export const Coffee = (): ReturnType<React.FC> => {
   return (
     <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <title>Coffee Mug</title>
+      <title>Coffee</title>
       <path
         d="M7.25 8.75H6.75C5.64543 8.75 4.75 9.64543 4.75 10.75V13.25C4.75 14.3546 5.64543 15.25 6.75 15.25H7.25"
         stroke={cssVar('currentTextColor')}
