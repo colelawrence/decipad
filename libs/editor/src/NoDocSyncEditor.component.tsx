@@ -13,7 +13,7 @@ import { POPULATE_PLAYGROUND } from './utils/storage';
 
 const NO_DOC_SYNC_EDITOR_ID = 'nodocsynceditorid';
 
-export const NoDocSyncEditor = (props: PlateProps): ReturnType<FC> => {
+export const NoDocSyncEditorInternal = (props: PlateProps): ReturnType<FC> => {
   const languagePlugin = useLanguagePlugin();
   const computer = useComputer();
 
@@ -23,21 +23,27 @@ export const NoDocSyncEditor = (props: PlateProps): ReturnType<FC> => {
   );
 
   return (
+    <ResultsContext.Provider value={computer.results.asObservable()}>
+      <Plate
+        id={NO_DOC_SYNC_EDITOR_ID}
+        plugins={editorPlugins}
+        initialValue={
+          window.localStorage.getItem(POPULATE_PLAYGROUND) === 'true'
+            ? introNotebook()
+            : emptyNotebook()
+        }
+        {...props}
+      >
+        <Tooltip />
+      </Plate>
+    </ResultsContext.Provider>
+  );
+};
+
+export const NoDocSyncEditor = (props: PlateProps): ReturnType<FC> => {
+  return (
     <ComputerContextProvider>
-      <ResultsContext.Provider value={computer.results.asObservable()}>
-        <Plate
-          id={NO_DOC_SYNC_EDITOR_ID}
-          plugins={editorPlugins}
-          initialValue={
-            window.localStorage.getItem(POPULATE_PLAYGROUND) === 'true'
-              ? introNotebook()
-              : emptyNotebook()
-          }
-          {...props}
-        >
-          <Tooltip />
-        </Plate>
-      </ResultsContext.Provider>
+      <NoDocSyncEditorInternal {...props}></NoDocSyncEditorInternal>
     </ComputerContextProvider>
   );
 };
