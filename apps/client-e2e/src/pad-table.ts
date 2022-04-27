@@ -2,7 +2,6 @@ import {
   focusOnBody,
   waitForEditorToLoad,
   createTable,
-  keyPress,
   writeInTable,
   goToPlayground,
 } from './page-utils/Pad';
@@ -22,38 +21,21 @@ describe('pad table', () => {
     );
   });
 
-  it('can name a table using [tab]s', async () => {
-    await page.click('[placeholder="TableName"]');
-    await page.keyboard.type('A');
-    await keyPress('Enter');
-    const tableTitle = await page.getAttribute(
-      'input[placeholder="TableName"]',
-      'value'
-    );
-    expect(tableTitle).toBe('A');
-  });
-
-  it('can rename a table', async () => {
-    await page.click('[placeholder="TableName"]');
-    await page.fill('[placeholder="TableName"]', 'B');
-    await keyPress('Enter');
-    const tableTitle = await page.getAttribute(
-      'input[placeholder="TableName"]',
-      'value'
-    );
-    expect(tableTitle).toBe('B');
-  });
-
   it('can fill a table', async () => {
-    await writeInTable('X');
-    await writeInTable('1');
-    await writeInTable('2');
-    await writeInTable('3');
-    await keyPress('Enter');
+    await writeInTable('X', 0);
+    await writeInTable('1', 1);
+    await writeInTable('2', 2);
+    await writeInTable('3', 3);
 
-    const row1 = await page.getAttribute(':nth-match(input, 3)', 'value');
-    const row2 = await page.getAttribute(':nth-match(input, 4)', 'value');
-    const row3 = await page.getAttribute(':nth-match(input, 5)', 'value');
+    const row1 = await page
+      .locator('table > tbody > tr:nth-child(1) > td:nth-child(1)')
+      .textContent();
+    const row2 = await page
+      .locator('table > tbody > tr:nth-child(2) > td:nth-child(1)')
+      .textContent();
+    const row3 = await page
+      .locator('table > tbody > tr:nth-child(3) > td:nth-child(1)')
+      .textContent();
 
     expect(row1).toBe('1');
     expect(row2).toBe('2');
@@ -64,8 +46,12 @@ describe('pad table', () => {
     const delete3 = await page.$(':nth-match(button:has-text("Minus"), 3)');
     await delete3?.click();
 
-    const row1 = await page.getAttribute(':nth-match(input, 3)', 'value');
-    const row2 = await page.getAttribute(':nth-match(input, 4)', 'value');
+    const row1 = await page
+      .locator('table > tbody > tr:nth-child(1) > td:nth-child(1)')
+      .textContent();
+    const row2 = await page
+      .locator('table > tbody > tr:nth-child(2) > td:nth-child(1)')
+      .textContent();
 
     expect(row1).toBe('1');
     expect(row2).toBe('2');
@@ -73,32 +59,41 @@ describe('pad table', () => {
 
   it('can add a new row', async () => {
     await page.click('text=CreateAdd row');
-    const third = await page.$(':nth-match(input, 5)');
-    await third?.click();
+    await page.waitForTimeout(2000);
+    await page
+      .locator('table > tbody > tr:nth-child(3) > td:nth-child(1)')
+      .click();
+    await writeInTable('7', 3, 0);
 
-    await keyPress('7');
-    await keyPress('Enter');
-
-    const row3 = await page.getAttribute(':nth-match(input, 5)', 'value');
+    const row3 = await page
+      .locator('table > tbody > tr:nth-child(3) > td:nth-child(1)')
+      .textContent();
 
     expect(row3).toBe('7');
   });
 
   it('can add a new column', async () => {
+    await page.waitForTimeout(2000);
     await page.click('th button:has-text("Create")');
-    await page.click(':nth-match([placeholder="ColumnName"], 2)');
-    await keyPress('Y');
-    await writeInTable('2020-01-01', 2); // 2 columns, more `Tab`
-    await writeInTable('2020-02-01', 2);
-    await writeInTable('2020-03-01', 2);
-    await keyPress('Enter');
+    await page.waitForTimeout(2000);
+    await writeInTable('Y', 0, 1);
+    await writeInTable('2020-01-01', 1, 1);
+    await writeInTable('2020-02-01', 2, 1);
+    await writeInTable('2020-03-01', 3, 1);
 
-    const inputs = await page.$$('tr input');
+    const row1 = await page
+      .locator('table > tbody > tr:nth-child(1) > td:nth-child(2)')
+      .textContent();
+    const row2 = await page
+      .locator('table > tbody > tr:nth-child(2) > td:nth-child(2)')
+      .textContent();
+    const row3 = await page
+      .locator('table > tbody > tr:nth-child(3) > td:nth-child(2)')
+      .textContent();
 
-    expect(await inputs[2].getAttribute('value')).toBe('2020-01-01');
-    expect(await inputs[4].getAttribute('value')).toBe('2020-02-01');
-    expect(await inputs[6].getAttribute('value')).toBe('2020-03-01');
-    expect(await inputs[1].getAttribute('value')).toBe('Y');
+    expect(row1).toBe('2020-01-01');
+    expect(row2).toBe('2020-02-01');
+    expect(row3).toBe('2020-03-01');
   });
 
   it.todo('has more meaningful css selectors');

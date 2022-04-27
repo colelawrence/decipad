@@ -6,12 +6,20 @@ import { Table } from './Table';
 const body = (
   <tbody>
     <TableRow readOnly>
-      <TableData>Cell 1.1</TableData>
-      <TableData>Cell 1.2</TableData>
+      <td>
+        <TableData>Cell 1.1</TableData>
+      </td>
+      <td>
+        <TableData>Cell 1.2</TableData>
+      </td>
     </TableRow>
     <TableRow readOnly>
-      <TableData>Cell 2.1</TableData>
-      <TableData>Cell 2.2</TableData>
+      <td>
+        <TableData>Cell 2.1</TableData>
+      </td>
+      <td>
+        <TableData>Cell 2.2</TableData>
+      </td>
     </TableRow>
   </tbody>
 );

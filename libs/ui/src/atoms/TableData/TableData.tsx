@@ -1,5 +1,6 @@
-import { css } from '@emotion/react';
-import { FC, ReactNode } from 'react';
+import { ElementType, FC, ReactNode } from 'react';
+import { css, jsx } from '@emotion/react';
+import { PlateComponentAttributes } from '@decipad/editor-types';
 import { cssVar, p12Medium, p14Medium, setCssVar } from '../../primitives';
 import { table } from '../../styles';
 import { tableRowCounter } from '../../utils';
@@ -16,16 +17,14 @@ const tdBaseStyles = css(p14Medium, {
   minHeight: table.tdMinHeight,
   verticalAlign: 'middle',
 
-  '&:focus-within': {
-    borderRadius: '6px',
-    boxShadow: `0 0 0 1.5px ${cssVar('normalTextColor')}`,
-    zIndex: 1,
-  },
+  lineHeight: table.cellLineHeight,
+  paddingRight: '12px',
 
   // Show line numbers on the first cell of each row.
   position: 'relative',
+
   '&:first-of-type': {
-    paddingLeft: lineNumberWidth,
+    paddingLeft: '34px',
   },
   '&:first-of-type::before': {
     ...setCssVar('normalTextColor', cssVar('weakTextColor')),
@@ -43,18 +42,32 @@ const tdBaseStyles = css(p14Medium, {
   },
 });
 
+const editableStyles = css({
+  paddingLeft: '12px',
+});
+
 export interface TableDataProps {
+  as?: ElementType;
+  isEditable?: boolean;
   className?: string;
+  attributes?: PlateComponentAttributes;
   children?: ReactNode;
 }
 
 export const TableData = ({
+  as = 'div',
   className,
+  isEditable = false,
+  attributes,
   children,
 }: TableDataProps): ReturnType<FC> => {
-  return (
-    <td css={[tdBaseStyles]} className={className}>
-      {children}
-    </td>
+  return jsx(
+    as,
+    {
+      ...(attributes || {}),
+      css: [isEditable && editableStyles, tdBaseStyles],
+      className,
+    },
+    children
   );
 };

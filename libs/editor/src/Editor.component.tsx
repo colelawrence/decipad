@@ -20,7 +20,6 @@ import {
 import { FC, useCallback, useMemo, useState } from 'react';
 import * as components from './components';
 import * as configuration from './configuration';
-import { useLanguagePlugin } from './plugins';
 
 export interface EditorProps {
   notebookId: string;
@@ -32,7 +31,6 @@ const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
   const [editorLoaded, setEditorLoaded] = useState(false);
   const editor = usePlateEditorRef(notebookId) as TEditor;
 
-  const languagePlugin = useLanguagePlugin();
   const computer = useComputer();
 
   const onLoaded = useCallback(() => {
@@ -64,8 +62,8 @@ const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
   } = useUploadDataPlugin({ editor });
 
   const editorPlugins = useMemo(
-    () => [...configuration.plugins, languagePlugin, notebookTitlePlugin],
-    [languagePlugin, notebookTitlePlugin]
+    () => [...configuration.plugins(computer), notebookTitlePlugin],
+    [computer, notebookTitlePlugin]
   );
 
   return (

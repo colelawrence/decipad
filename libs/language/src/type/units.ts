@@ -312,7 +312,9 @@ const stringifyUnit = (unit: FUnit, prettify = true) => {
   const pretty = prettyForSymbol[symbol];
   const isSymbol = unitIsSymbol(symbol);
 
-  const multiPrefix = unit.multiplier ? unit.multiplier.valueOf() : 1;
+  const multiPrefix = unit.multiplier
+    ? new Fraction(unit.multiplier).valueOf()
+    : 1;
   const prefix = multipliersToPrefixes[multiPrefix as AvailablePrefixes];
 
   const result = [

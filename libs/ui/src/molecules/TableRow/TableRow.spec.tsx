@@ -1,6 +1,5 @@
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { EditableTableData } from '..';
 import { TableData } from '../../atoms';
 import { TableRow } from './TableRow';
 
@@ -9,7 +8,9 @@ it('renders a table data', () => {
     <table>
       <tbody>
         <TableRow>
-          <TableData>Table Data</TableData>
+          <td>
+            <TableData>Table Data</TableData>
+          </td>
         </TableRow>
       </tbody>
     </table>
@@ -18,26 +19,14 @@ it('renders a table data', () => {
   expect(getByText('Table Data')).toBeVisible();
 });
 
-it('renders an editable table data', () => {
-  const { getByRole } = render(
-    <table>
-      <tbody>
-        <TableRow>
-          <EditableTableData value="Table Data" />
-        </TableRow>
-      </tbody>
-    </table>
-  );
-
-  expect(getByRole('textbox')).toBeVisible();
-});
-
 it('renders the remove row button', () => {
   const { getByTitle } = render(
     <table>
       <tbody>
         <TableRow>
-          <TableData>Table Data</TableData>
+          <td>
+            <TableData>Table Data</TableData>
+          </td>
         </TableRow>
       </tbody>
     </table>
@@ -53,7 +42,9 @@ describe('onRemove prop', () => {
       <table>
         <tbody>
           <TableRow onRemove={onRemove}>
-            <TableData>Table Data</TableData>
+            <td>
+              <TableData>Table Data</TableData>
+            </td>
           </TableRow>
         </tbody>
       </table>
@@ -71,7 +62,9 @@ describe('readOnly prop', () => {
       <table>
         <tbody>
           <TableRow>
-            <TableData>Table Data</TableData>
+            <td>
+              <TableData>Table Data</TableData>
+            </td>
           </TableRow>
         </tbody>
       </table>
@@ -83,7 +76,9 @@ describe('readOnly prop', () => {
       <table>
         <tbody>
           <TableRow readOnly>
-            <TableData>Table Data</TableData>
+            <td>
+              <TableData>Table Data</TableData>
+            </td>
           </TableRow>
         </tbody>
       </table>

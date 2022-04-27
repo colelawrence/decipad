@@ -178,6 +178,9 @@
     "editor-variable-def": {
       "tags": []
     },
+    "editor-table": {
+      "tags": []
+    },
     "toast": {
       "tags": []
     }

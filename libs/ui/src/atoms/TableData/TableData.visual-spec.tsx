@@ -12,8 +12,8 @@ it('renders the row number on the first cell', async () => {
     <table>
       <tbody>
         <tr>
-          <TableData>Td Element</TableData>
-          <TableData>Td Element2</TableData>
+          <TableData as="td">Td Element</TableData>
+          <TableData as="td">Td Element2</TableData>
         </tr>
       </tbody>
     </table>
@@ -34,8 +34,8 @@ it('does not render the row number on the second cell', async () => {
     <table>
       <tbody>
         <tr>
-          <TableData>Td Element</TableData>
-          <TableData>Td Element2</TableData>
+          <TableData as="td">Td Element</TableData>
+          <TableData as="td">Td Element2</TableData>
         </tr>
       </tbody>
     </table>

@@ -43,7 +43,7 @@ export const AddTableRowButton = ({
   onAddRow = noop,
 }: AddTableRowButtonProps): ReturnType<FC> => {
   return (
-    <tr>
+    <tr contentEditable={false}>
       <td css={tdStyles} colSpan={colSpan}>
         <button css={buttonStyles} onClick={onAddRow}>
           <span css={iconWrapperStyles}>

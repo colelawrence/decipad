@@ -6,7 +6,9 @@ it('renders the text', () => {
     <table>
       <tbody>
         <tr>
-          <TableData>Td Element</TableData>
+          <td>
+            <TableData>Td Element</TableData>
+          </td>
         </tr>
       </tbody>
     </table>

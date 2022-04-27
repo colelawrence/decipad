@@ -398,6 +398,20 @@ export class Computer {
     return block?.args[statementIndex] ?? null;
   }
 
+  getAvailableIdentifier(prefix: string, start: number): string {
+    const existingVars = new Set(
+      this.computationRealm.inferContext.stack.globalVariables.keys()
+    );
+    let num = start;
+    const nextProposal = () => `${prefix}${num}`;
+    let proposal = nextProposal();
+    while (existingVars.has(proposal)) {
+      num += 1;
+      proposal = nextProposal();
+    }
+    return proposal;
+  }
+
   isLiteralValueOrAssignment(stmt: AST.Statement | null): boolean {
     return (
       stmt != null &&

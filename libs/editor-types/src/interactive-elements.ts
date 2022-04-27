@@ -5,21 +5,17 @@ import {
   ELEMENT_PLOT,
   Node,
   BaseElement,
-  TableData,
   EmptyText,
   PlainText,
 } from '.';
+import type { TableElement, TableInputElement } from './table';
 import {
   ELEMENT_CAPTION,
   ELEMENT_EXPRESSION,
   ELEMENT_VARIABLE_DEF,
 } from './element-kinds';
 
-export interface TableElement extends BaseElement {
-  type: typeof ELEMENT_TABLE_INPUT;
-  children: [EmptyText];
-  tableData: TableData;
-}
+export type { TableElement };
 export interface FetchElement extends BaseElement {
   type: typeof ELEMENT_FETCH;
   children: [EmptyText];
@@ -75,6 +71,7 @@ export interface VariableDefinitionElement extends BaseElement {
 }
 
 export type InteractiveElement =
+  | TableInputElement
   | TableElement
   | FetchElement
   | PlotElement

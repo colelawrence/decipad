@@ -13,20 +13,23 @@ interface ElementAttributes {
 interface LeafAttributes {
   'data-slate-leaf': true;
 }
+
+export type PlateComponentAttributes = ElementAttributes | LeafAttributes;
+
 export type PlateComponent<AdditionalProps = Record<never, never>> = FC<
   PropsWithChildren<
-    (
-      | {
-          readonly attributes: ElementAttributes;
-          readonly element: Element;
-          readonly leaf?: undefined;
-        }
-      | {
-          readonly attributes: LeafAttributes;
-          readonly element?: undefined;
-          readonly leaf: RichText;
-        }
-    ) &
-      AdditionalProps
-  >
+    | {
+        readonly attributes: ElementAttributes;
+        readonly element: Element;
+        readonly leaf?: undefined;
+        readonly text?: undefined;
+      }
+    | {
+        readonly attributes: LeafAttributes;
+        readonly element?: undefined;
+        readonly leaf: RichText;
+        readonly text: RichText;
+      }
+  > &
+    AdditionalProps
 >;

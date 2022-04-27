@@ -19,8 +19,8 @@ export const RowResult = ({
         <TableHeaderRow readOnly>
           {rowCellNames.map((columnName, colIndex) => (
             <TableHeader
-              key={colIndex}
               type={toTableHeaderType(rowCellTypes[colIndex])}
+              key={colIndex}
             >
               {columnName}
             </TableHeader>
@@ -31,7 +31,7 @@ export const RowResult = ({
         <TableRow readOnly>
           {value.map((col, colIndex) => {
             return (
-              <TableData key={colIndex}>
+              <TableData as="td" key={colIndex}>
                 <div
                   css={[
                     css(table.getCellWrapperStyles(rowCellTypes[colIndex])),

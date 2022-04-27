@@ -16,6 +16,7 @@
     { "path": "../utils" },
     { "path": "../feature-flags" },
     { "path": "../client-events" },
+    { "path": "../editor-types" },
     { "path": "../toast" }
   ]
 }

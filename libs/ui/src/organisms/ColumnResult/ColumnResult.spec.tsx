@@ -72,7 +72,7 @@ describe('dimensions', () => {
     expect(dimensions).toHaveLength(3);
   });
 
-  it('renders labels', async () => {
+  it('renders labelsz', async () => {
     const { container, getAllByRole } = render(
       <ColumnResult {...await runCode(code)} />,
       {

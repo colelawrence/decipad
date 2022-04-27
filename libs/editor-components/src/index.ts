@@ -5,6 +5,5 @@ export * from './CodeLine';
 export * from './CodeVariable';
 export * from './Plot';
 export * from './slash-commands';
-export * from './Table';
 export * from './text';
 export * from './layout';

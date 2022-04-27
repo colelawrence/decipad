@@ -23,7 +23,7 @@ export const AnotherType: Story<typeof args> = (props) => (
 export const WithRightSlotIcon: Story<typeof args> = (props) => (
   <TableHeader
     {...props}
-    rightSlot={
+    menu={
       <div style={{ width: '16px', height: '16px' }}>
         <Caret variant="down" />
       </div>

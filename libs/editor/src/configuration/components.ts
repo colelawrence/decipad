@@ -43,19 +43,20 @@ import {
   Underline,
   UnorderedList,
 } from '@decipad/editor-components';
+import { Computer } from '@decipad/language';
 
 export type PlateComponents = Partial<
   Record<ElementKind | MarkKind, PlateComponent>
 >;
 
-export const components: PlateComponents = {
+export const components = (computer: Computer): PlateComponents => ({
   // Headings
   [ELEMENT_H1]: Title,
   [ELEMENT_H2]: Heading1,
   [ELEMENT_H3]: Heading2,
 
   // Text blocks
-  [ELEMENT_PARAGRAPH]: SlashCommandsParagraph,
+  [ELEMENT_PARAGRAPH]: SlashCommandsParagraph(computer),
   [ELEMENT_BLOCKQUOTE]: Blockquote,
   [ELEMENT_CALLOUT]: Callout,
   [ELEMENT_HR]: Divider,
@@ -77,4 +78,4 @@ export const components: PlateComponents = {
   [MARK_ITALIC]: Italic,
   [MARK_CODE]: Code,
   [MARK_HIGHLIGHT]: Highlight,
-};
+});

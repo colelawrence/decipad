@@ -1,3 +1,4 @@
+import { PlateComponentAttributes } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { cssVar, p13Medium } from '../../primitives';
@@ -7,7 +8,6 @@ import { getStringType, getTypeIcon } from '../../utils';
 
 const columnStyles = css(p13Medium, {
   display: 'grid',
-  overflowX: 'hidden',
   alignItems: 'center',
 
   backgroundColor: cssVar('highlightColor'),
@@ -35,8 +35,15 @@ const headerWrapperStyles = css({
 const columnTypeStyles = css({
   display: 'grid',
   alignItems: 'center',
-  width: '16px',
-  height: '16px',
+  width: '12px',
+  height: '12px',
+});
+
+const childrenWrapperStyles = css({
+  whiteSpace: 'nowrap',
+  width: '75px',
+  overflow: 'hidden',
+  textAlign: 'left',
 });
 
 export interface TableHeaderProps {
@@ -44,7 +51,8 @@ export interface TableHeaderProps {
   highlight?: boolean;
   icon?: React.ReactNode;
   type?: TableCellType;
-  rightSlot?: React.ReactNode;
+  menu?: React.ReactNode;
+  attributes?: PlateComponentAttributes;
 }
 
 export const TableHeader = ({
@@ -52,19 +60,20 @@ export const TableHeader = ({
   highlight = false,
   icon,
   type = getStringType(),
-  rightSlot,
+  menu,
+  attributes,
 }: TableHeaderProps): ReturnType<FC> => {
   const Icon = getTypeIcon(type);
   return (
-    <th css={columnStyles} data-highlight={highlight}>
+    <th {...attributes} css={columnStyles} data-highlight={highlight}>
       <div css={headerWrapperStyles}>
         {icon ?? (
           <span css={columnTypeStyles}>
             <Icon />
           </span>
         )}
-        {children}
-        {rightSlot}
+        <div css={childrenWrapperStyles}>{children}</div>
+        {menu}
       </div>
     </th>
   );

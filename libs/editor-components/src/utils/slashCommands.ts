@@ -26,11 +26,20 @@ type SlashCommandHandler = Exclude<
 >;
 export type SlashCommand = Parameters<SlashCommandHandler>[0];
 
-export const execute = (
-  editor: TEditor,
-  path: Path,
-  command: SlashCommand
-): void => {
+export type GetAvailableIdentifier = (prefix: string, start: number) => string;
+export interface ExecuteProps {
+  editor: TEditor;
+  path: Path;
+  command: SlashCommand;
+  getAvailableIdentifier: GetAvailableIdentifier;
+}
+
+export const execute = ({
+  command,
+  editor,
+  path,
+  getAvailableIdentifier,
+}: ExecuteProps): void => {
   switch (command) {
     case 'calculation-block':
       insertCodeLineBelow(editor, path);
@@ -39,7 +48,7 @@ export const execute = (
       insertInputBelow(editor, path);
       break;
     case 'table':
-      insertTableBelow(editor, path);
+      insertTableBelow(editor, path, getAvailableIdentifier);
       break;
     case 'plot':
       insertPlotBelow(editor, path);

@@ -238,7 +238,9 @@ export const getIdentifierString = ({ type, args }: AST.Identifier): string => {
       type !== 'externalref') ||
     typeof args[0] !== 'string'
   ) {
-    throw new Error('panic: identifier expected');
+    throw new Error(
+      `panic: identifier expected on node of type ${type} and arg[0] of type ${typeof args[0]}`
+    );
   } else {
     return args[0];
   }

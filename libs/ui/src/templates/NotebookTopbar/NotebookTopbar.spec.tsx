@@ -29,7 +29,7 @@ const WithProviders: FC<React.PropsWithChildren<unknown>> = ({ children }) => (
 describe('Notebook Topbar', () => {
   mockConsoleError();
 
-  it('renders the try decipad button only for non authenticated users', () => {
+  it('renders the try decipad button only for non authenticated userz', () => {
     const { getByText, queryByText, rerender } = render(
       <WithProviders>
         <NotebookTopbar {...props} permission="READ" />

@@ -107,6 +107,7 @@
       ],
       "@decipad/editor-utils": ["libs/editor-utils/src/index.ts"],
       "@decipad/editor-components": ["libs/editor-components/src/index.ts"],
+      "@decipad/editor-table": ["libs/editor-table/src/index.ts"],
       "@decipad/editor-variable-def": ["libs/editor-variable-def/src/index.ts"],
       "@decipad/toast": ["libs/toast/src/index.ts"]
     }

@@ -14,8 +14,8 @@
     { "path": "../editor-types" },
     { "path": "../editor-plugins" },
     { "path": "../client-events" },
-    { "path": "../editor-language-elements" },
     { "path": "../editor-components" },
+    { "path": "../editor-table" },
     { "path": "../editor-variable-def" }
   ]
 }

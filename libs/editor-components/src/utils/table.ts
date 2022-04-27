@@ -1,25 +1,84 @@
-import { ELEMENT_TABLE_INPUT } from '@decipad/editor-types';
-import { insertNodes, TDescendant, TEditor } from '@udecode/plate';
-import { Path } from 'slate';
+import {
+  ELEMENT_TABLE,
+  ELEMENT_TABLE_CAPTION,
+  ELEMENT_TD,
+  ELEMENT_TH,
+  ELEMENT_TR,
+  TableElement,
+} from '@decipad/editor-types';
+import { TEditor } from '@udecode/plate';
+import { Path, Transforms } from 'slate';
 import { requirePathBelowBlock } from '@decipad/editor-utils';
+import { clone } from 'lodash';
+import { nanoid } from 'nanoid';
+import { GetAvailableIdentifier } from './slashCommands';
 
-const tableElement = {
-  type: ELEMENT_TABLE_INPUT,
-  tableData: {
-    variableName: '',
-    columns: [
-      {
-        columnName: '',
-        cells: ['', '', ''],
-        cellType: { kind: 'string' },
-      },
-    ],
-  },
-  children: [],
+const initialTableElement = {
+  type: ELEMENT_TABLE,
+  children: [
+    {
+      type: ELEMENT_TABLE_CAPTION,
+      children: [{ text: '' }],
+    },
+    {
+      type: ELEMENT_TR,
+      children: [
+        {
+          type: ELEMENT_TH,
+          cellType: { kind: 'string' },
+          children: [{ text: 'Title' }],
+        },
+        {
+          type: ELEMENT_TH,
+          cellType: { kind: 'number' },
+          children: [{ text: 'Donation' }],
+        },
+        {
+          type: ELEMENT_TH,
+          cellType: { kind: 'date', date: 'month' },
+          children: [{ text: 'Recorded' }],
+        },
+      ],
+    },
+    {
+      type: ELEMENT_TR,
+      children: [
+        {
+          type: ELEMENT_TD,
+          children: [{ text: '' }],
+        },
+      ],
+    },
+    {
+      type: ELEMENT_TR,
+      children: [
+        {
+          type: ELEMENT_TD,
+          children: [{ text: '' }],
+        },
+      ],
+    },
+    {
+      type: ELEMENT_TR,
+      children: [
+        {
+          type: ELEMENT_TD,
+          children: [{ text: '' }],
+        },
+      ],
+    },
+  ],
 } as const;
 
-export const insertTableBelow = (editor: TEditor, path: Path): void => {
-  insertNodes<TDescendant>(editor, tableElement, {
+export const insertTableBelow = (
+  editor: TEditor,
+  path: Path,
+  getAvailableIdentifier: GetAvailableIdentifier
+): void => {
+  const table = clone(initialTableElement) as unknown as TableElement;
+  table.children[0].children[0].text = getAvailableIdentifier('Table', 1);
+  table.id = nanoid();
+  Transforms.insertNodes(editor, table, {
     at: requirePathBelowBlock(editor, path),
   });
 };

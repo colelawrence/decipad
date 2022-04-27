@@ -30,8 +30,8 @@ export const TableResult = ({
         <TableHeaderRow actionsColumn={false} readOnly>
           {columnNames?.map((columnName, index) => (
             <TableHeader
-              key={index}
               type={toTableHeaderType(columnTypes[index])}
+              key={index}
             >
               {columnName}
             </TableHeader>
@@ -42,7 +42,7 @@ export const TableResult = ({
         {Array.from({ length: tableLength }, (_, rowIndex) => (
           <TableRow key={rowIndex} readOnly>
             {value.map((column, colIndex) => (
-              <TableData key={colIndex}>
+              <TableData key={colIndex} as="td">
                 <div
                   css={[
                     css(table.getCellWrapperStyles(columnTypes[colIndex])),

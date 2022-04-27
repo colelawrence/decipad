@@ -1,11 +1,8 @@
 import { css } from '@emotion/react';
 import { Children, FC, ReactNode } from 'react';
-import { isElement } from 'react-is';
 import { noop } from '@decipad/utils';
 import { cssVar } from '../../primitives';
 import { Create } from '../../icons';
-import { TableHeader } from '../../atoms';
-import { EditableTableHeader } from '../../organisms';
 import { table } from '../../styles';
 
 const createColumnThStyles = css({
@@ -59,24 +56,9 @@ export const TableHeaderRow = ({
         ),
       }}
     >
-      {Children.map(children, (child) => {
-        if (child == null) {
-          return null;
-        }
-        if (
-          isElement(child) &&
-          (child.type === TableHeader || child.type === EditableTableHeader)
-        ) {
-          return child;
-        }
-        console.error(
-          'Received child that is not a table header component',
-          child
-        );
-        throw new Error('Expected all children to be table header components');
-      })}
+      {children}
       {actionsColumn && (
-        <th css={createColumnThStyles}>
+        <th contentEditable={false} css={createColumnThStyles}>
           {!readOnly && (
             <button css={buttonStyles} onClick={onAddColumn}>
               <span css={iconWrapperStyles}>

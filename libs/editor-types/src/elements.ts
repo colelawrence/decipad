@@ -25,10 +25,20 @@ import {
   InputElement,
   InteractiveElement,
   ELEMENT_TABLE_INPUT,
+  ELEMENT_TABLE,
   ELEMENT_FETCH,
   ELEMENT_PLOT,
   MarkKind,
 } from '.';
+import {
+  TableInputElement,
+  TableElement,
+  TableCellElement,
+  TableHeaderElement,
+  TableHeaderRowElement,
+  TableRowElement,
+  TableCaptionElement,
+} from './table';
 import { ELEMENT_VARIABLE_DEF } from './element-kinds';
 import { CaptionElement, ExpressionElement } from './interactive-elements';
 
@@ -144,6 +154,15 @@ export type BlockElement =
   // Layout
   | ColumnsElement
   // Special elements
+  | InteractiveElement
+  // Table elements
+  | TableInputElement
+  | TableElement
+  | TableCaptionElement
+  | TableRowElement
+  | TableHeaderRowElement
+  | TableHeaderElement
+  | TableCellElement
   | ExpressionElement
   | CaptionElement
   | InteractiveElement;
@@ -202,6 +221,7 @@ export const topLevelBlockKinds: string[] = [
   ELEMENT_UL,
   ELEMENT_OL,
   ELEMENT_TABLE_INPUT,
+  ELEMENT_TABLE,
   ELEMENT_FETCH,
   ELEMENT_PLOT,
   ELEMENT_COLUMNS,

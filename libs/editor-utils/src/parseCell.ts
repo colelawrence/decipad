@@ -76,6 +76,9 @@ export const getNullReplacementValue = (
   if (cellType.kind === 'number') {
     return getDefined(parseCell(cellType, '0'));
   }
+  if (cellType.kind === 'string') {
+    return getDefined(parseCell(cellType, ''));
+  }
   throw new Error(`unexpected cell type ${cellType}`);
 };
 

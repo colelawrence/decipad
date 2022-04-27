@@ -8,18 +8,16 @@ import { FC, useMemo } from 'react';
 import { Tooltip } from './components';
 import * as configuration from './configuration';
 import { emptyNotebook, introNotebook } from './exampleNotebooks';
-import { useLanguagePlugin } from './plugins';
 import { POPULATE_PLAYGROUND } from './utils/storage';
 
 const NO_DOC_SYNC_EDITOR_ID = 'nodocsynceditorid';
 
 export const NoDocSyncEditorInternal = (props: PlateProps): ReturnType<FC> => {
-  const languagePlugin = useLanguagePlugin();
   const computer = useComputer();
 
   const editorPlugins = useMemo(
-    () => [...configuration.plugins, languagePlugin],
-    [languagePlugin]
+    () => configuration.plugins(computer),
+    [computer]
   );
 
   return (

@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TableHeader } from '../../atoms';
 import { getStringType } from '../../utils';
-import { EditableTableHeader } from '../../organisms';
+import { TableColumnHeader } from '../../organisms';
 import { TableHeaderRow } from './TableHeaderRow';
 
 it('renders a table data', () => {
@@ -19,26 +19,12 @@ it('renders a table data', () => {
   expect(getByText('Table Data')).toBeVisible();
 });
 
-it('renders an editable table data', () => {
-  const { getByRole } = render(
-    <table>
-      <tbody>
-        <TableHeaderRow>
-          <EditableTableHeader type={getStringType()} value="Table Data" />
-        </TableHeaderRow>
-      </tbody>
-    </table>
-  );
-
-  expect(getByRole('textbox')).toBeVisible();
-});
-
 it('renders the add new column button', () => {
   const { getByTitle } = render(
     <table>
       <tbody>
         <TableHeaderRow>
-          <EditableTableHeader type={getStringType()} value="Table Data" />
+          <TableColumnHeader readOnly={false} type={getStringType()} />
         </TableHeaderRow>
       </tbody>
     </table>
@@ -54,7 +40,7 @@ describe('onAddColumn prop', () => {
       <table>
         <tbody>
           <TableHeaderRow onAddColumn={onAddColumn}>
-            <TableHeader type={getStringType()}>Table Data</TableHeader>
+            <TableColumnHeader readOnly={false} type={getStringType()} />
           </TableHeaderRow>
         </tbody>
       </table>

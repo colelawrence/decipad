@@ -14,7 +14,6 @@ import {
   createMarksPlugins,
   createAutoFormatCodeBlockPlugin,
   createAutoPairsPlugin,
-  createInteractiveTablePlugin,
   createLinkPlugin,
   createCodeBlockPlugin,
   createCodeVariableHighlightPlugin,
@@ -24,7 +23,11 @@ import {
   createCalloutPlugin,
   createDividerPlugin,
   createEditorApplyErrorReporterPlugin,
+  createCodeLinePlugin,
+  createCursorsPlugin,
+  createUpdateComputerPlugin,
 } from '@decipad/editor-plugins';
+import { createTablePlugin } from '@decipad/editor-table';
 import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import {
   createAutoformatPlugin,
@@ -40,67 +43,76 @@ import {
   createTrailingBlockPlugin,
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
+import { Computer } from '@decipad/language';
+import { createVariableDefPlugin } from '@decipad/editor-variable-def';
 import { components } from './components';
 import { autoformatRules } from './autoformat';
 import { exitBreakOptions } from './exitBreakOptions';
 import { resetBlockTypeOptions } from './resetBlockTypeOptions';
 
-export const plugins = createPlugins(
-  [
-    // basic blocks
-    createParagraphPlugin(),
-    createBlockquotePlugin(),
-    createHeadingPlugin({ options: { levels: 3 } }),
-    createListPlugin(),
-    createCalloutPlugin(),
-    createDividerPlugin(),
+export const plugins = (computer: Computer): ReturnType<typeof createPlugins> =>
+  createPlugins(
+    [
+      // basic blocks
+      createParagraphPlugin(),
+      createBlockquotePlugin(),
+      createHeadingPlugin({ options: { levels: 3 } }),
+      createListPlugin(),
+      createCalloutPlugin(),
+      createDividerPlugin(),
 
-    // Layout blocks
-    createLayoutColumnsPlugin(),
+      // Layout blocks
+      createLayoutColumnsPlugin(),
 
-    // structure enforcement
-    createNodeIdPlugin({ options: { idCreator: nanoid } }),
-    createNormalizeEditorPlugin(),
-    createNormalizeVoidPlugin(),
-    createNormalizeRichTextBlockPlugin(),
-    createNormalizePlainTextBlockPlugin(),
-    createNormalizeCodeBlockPlugin(),
-    createNormalizeCodeLinePlugin(),
-    createNormalizeListPlugin(),
-    createNormalizeLinkPlugin(),
-    createNormalizeElementIdPlugin(),
-    createNormalizeTextPlugin(),
-    createTrailingBlockPlugin({ type: ELEMENT_PARAGRAPH }),
-    createNormalizeColumnsPlugin(),
+      // structure enforcement
+      createNodeIdPlugin({ options: { idCreator: nanoid } }),
+      createNormalizeEditorPlugin(),
+      createNormalizeVoidPlugin(),
+      createNormalizeRichTextBlockPlugin(),
+      createNormalizePlainTextBlockPlugin(),
+      createNormalizeCodeBlockPlugin(),
+      createNormalizeCodeLinePlugin(),
+      createNormalizeListPlugin(),
+      createNormalizeLinkPlugin(),
+      createNormalizeElementIdPlugin(),
+      createNormalizeTextPlugin(),
+      createTrailingBlockPlugin({ type: ELEMENT_PARAGRAPH }),
+      createNormalizeColumnsPlugin(),
 
-    // block manipulation
-    createExitBreakPlugin({ options: exitBreakOptions }),
-    createSoftBreakPlugin(),
-    createResetNodePlugin({ options: resetBlockTypeOptions }),
-    createDndPlugin(),
+      // block manipulation
+      createExitBreakPlugin({ options: exitBreakOptions }),
+      createSoftBreakPlugin(),
+      createResetNodePlugin({ options: resetBlockTypeOptions }),
+      createDndPlugin(),
 
-    // creating elements
-    ...createMarksPlugins(),
-    createLinkPlugin(),
-    createAutoformatPlugin({ options: { rules: autoformatRules } }),
-    createAutoFormatCodeBlockPlugin(),
-    createCodeBlockPlugin(),
+      // creating elements
+      ...createMarksPlugins(),
+      createLinkPlugin(),
+      createAutoformatPlugin({ options: { rules: autoformatRules } }),
+      createAutoFormatCodeBlockPlugin(),
 
-    // code editing
-    createCodeVariableHighlightPlugin(),
-    createSyntaxErrorHighlightPlugin(),
-    createAutoPairsPlugin(),
+      // code editing
+      createCodeBlockPlugin(),
+      createCodeVariableHighlightPlugin(),
+      createSyntaxErrorHighlightPlugin(),
+      createAutoPairsPlugin(),
 
-    // inputs
-    createInteractiveTablePlugin(),
+      // language
+      createCodeLinePlugin(computer),
+      createCursorsPlugin(computer),
+      createUpdateComputerPlugin(computer),
+      createVariableDefPlugin(computer),
 
-    // plots
-    createPlotPlugin(),
+      // tables
+      createTablePlugin(),
 
-    // error handling
-    createEditorApplyErrorReporterPlugin(),
-  ],
-  {
-    components,
-  }
-);
+      // plots
+      createPlotPlugin(),
+
+      // error handling
+      createEditorApplyErrorReporterPlugin(),
+    ],
+    {
+      components: components(computer),
+    }
+  );

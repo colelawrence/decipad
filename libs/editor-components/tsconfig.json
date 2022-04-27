@@ -11,6 +11,7 @@
     { "path": "../editor-types" },
     { "path": "../editor-utils" },
     { "path": "../client-events" },
-    { "path": "../react-contexts" }
+    { "path": "../react-contexts" },
+    { "path": "../language" }
   ]
 }

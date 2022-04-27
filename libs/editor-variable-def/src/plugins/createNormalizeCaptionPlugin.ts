@@ -5,12 +5,13 @@ import {
   isText,
 } from '@decipad/editor-types';
 import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
-import { identifierRegExpGlobal } from '@decipad/language';
-import { Editor, Node, NodeEntry, Transforms } from 'slate';
+import { Editor, ElementEntry, NodeEntry, Transforms } from 'slate';
+import { normalizeIdentifierElement } from '@decipad/editor-utils';
 
 const normalize =
   (editor: Editor) =>
-  ([node, path]: NodeEntry): boolean => {
+  (entry: NodeEntry): boolean => {
+    const [node, path] = entry;
     if ((node as Element)?.type !== ELEMENT_CAPTION) {
       return false;
     }
@@ -35,16 +36,7 @@ const normalize =
       return true;
     }
 
-    const leaf = node.children[0];
-    const text = Node.string(leaf);
-    const replacement =
-      text.match(new RegExp(identifierRegExpGlobal))?.join('') || '';
-    if (replacement !== text) {
-      Transforms.insertText(editor, replacement, { at: [...path, 0] });
-      return true;
-    }
-
-    return false;
+    return normalizeIdentifierElement(editor, entry as ElementEntry);
   };
 
 export const createNormalizeCaptionPlugin = createNormalizerPluginFactory({

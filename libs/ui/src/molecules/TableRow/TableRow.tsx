@@ -1,17 +1,10 @@
-import { css } from '@emotion/react';
 import { Children, FC, ReactNode } from 'react';
-import { isElement } from 'react-is';
+import { css } from '@emotion/react';
 import { noop } from '@decipad/utils';
+import { PlateComponentAttributes } from '@decipad/editor-types';
 import { TableData } from '../../atoms';
 import { Minus } from '../../icons';
 import { table } from '../../styles';
-import { EditableTableData } from '../index';
-
-const tdStyles = css({
-  // Each row is as tall as the tallest cell, so our rows are at least this high.
-  minHeight: table.tdMinHeight,
-  padding: 0,
-});
 
 const buttonStyles = css({
   display: 'flex',
@@ -19,6 +12,7 @@ const buttonStyles = css({
   justifyContent: 'center',
   height: '100%',
   width: '100%',
+  paddingLeft: '12px',
 });
 
 const iconWrapperStyles = css({
@@ -27,18 +21,21 @@ const iconWrapperStyles = css({
 });
 
 interface TableRowProps {
+  readonly attributes?: PlateComponentAttributes;
   readonly children: ReactNode;
   readonly onRemove?: () => void;
   readonly readOnly?: boolean;
 }
 
 export const TableRow = ({
+  attributes,
   children,
   onRemove = noop,
   readOnly = false,
 }: TableRowProps): ReturnType<FC> => {
   return (
     <tr
+      {...attributes}
       css={{
         display: 'grid',
         gridTemplate: table.rowTemplate(
@@ -47,24 +44,9 @@ export const TableRow = ({
         ),
       }}
     >
-      {Children.map(children, (child) => {
-        if (child == null) {
-          return null;
-        }
-        if (
-          isElement(child) &&
-          (child.type === TableData || child.type === EditableTableData)
-        ) {
-          return child;
-        }
-        console.error(
-          'Received child that is not a table data component',
-          child
-        );
-        throw new Error('Expected all children to be table data components');
-      })}
+      {children}
       {!readOnly && (
-        <TableData css={tdStyles}>
+        <TableData as="td">
           <button css={buttonStyles} onClick={onRemove}>
             <span css={iconWrapperStyles}>
               <Minus />

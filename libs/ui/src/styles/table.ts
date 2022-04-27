@@ -5,9 +5,12 @@ import { isTabularType } from '../utils';
 export const buttonColumnWidth = '44px';
 
 export const thMinHeight = '32px';
+export const thMinWidth = '269px';
 export const tdMinHeight = '36px';
+export const firstTdLeftPadding = '20px';
 
 export const cellSidePadding = '12px';
+export const cellLineHeight = '35px';
 
 export const cellSidePaddingStyles = css({
   padding: `0 ${cellSidePadding}`,
@@ -15,6 +18,7 @@ export const cellSidePaddingStyles = css({
 
 export const cellLeftPaddingStyles = css({
   paddingLeft: cellSidePadding,
+  paddingRight: cellSidePadding,
 });
 
 export const getCellWrapperStyles = (type: SerializedType): CSSObject => ({

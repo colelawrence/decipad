@@ -26,84 +26,86 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
   trigger,
   type,
 }) => (
-  <MenuList
-    root
-    dropdown
-    open={open}
-    onChangeOpen={onChangeOpen}
-    trigger={trigger}
-  >
+  <div contentEditable={false}>
     <MenuList
-      itemTrigger={
-        <TriggerMenuItem icon={<Shapes />}>
-          <div css={{ minWidth: '132px' }}>Change type</div>
-        </TriggerMenuItem>
-      }
+      root
+      dropdown
+      open={open}
+      onChangeOpen={onChangeOpen}
+      trigger={trigger}
     >
-      <UnitMenuItem
-        onSelect={(unit) => {
-          onChangeColumnType({ kind: 'number', unit });
-        }}
-        parseUnit={parseUnit}
-      />
-      {type.kind === 'number' && type.unit != null && (
-        <MenuItem icon={<All />} selected>
-          {stringifyUnits(deserializeUnit(type.unit), new Fraction(1))}
-        </MenuItem>
-      )}
-      <MenuItem
-        icon={<Number />}
-        onSelect={() => onChangeColumnType(getNumberType())}
-        selected={type.kind === 'number' && type.unit == null}
-      >
-        Number
-      </MenuItem>
-      <MenuItem
-        icon={<Text />}
-        onSelect={() => onChangeColumnType(getStringType())}
-        selected={type.kind === 'string'}
-      >
-        Text
-      </MenuItem>
       <MenuList
         itemTrigger={
-          <TriggerMenuItem icon={<Calendar />}>
-            <div css={{ minWidth: '116px' }}>Date</div>
+          <TriggerMenuItem icon={<Shapes />}>
+            <div css={{ minWidth: '132px' }}>Change type</div>
           </TriggerMenuItem>
         }
       >
+        <UnitMenuItem
+          onSelect={(unit) => {
+            onChangeColumnType({ kind: 'number', unit });
+          }}
+          parseUnit={parseUnit}
+        />
+        {type.kind === 'number' && type.unit != null && (
+          <MenuItem icon={<All />} selected>
+            {stringifyUnits(deserializeUnit(type.unit), new Fraction(1))}
+          </MenuItem>
+        )}
         <MenuItem
-          icon={<Calendar />}
-          onSelect={() => onChangeColumnType(getDateType('year'))}
-          selected={type.kind === 'date' && type.date === 'year'}
+          icon={<Number />}
+          onSelect={() => onChangeColumnType(getNumberType())}
+          selected={type.kind === 'number' && type.unit == null}
         >
-          Year
+          Number
         </MenuItem>
         <MenuItem
-          icon={<Calendar />}
-          onSelect={() => onChangeColumnType(getDateType('month'))}
-          selected={type.kind === 'date' && type.date === 'month'}
+          icon={<Text />}
+          onSelect={() => onChangeColumnType(getStringType())}
+          selected={type.kind === 'string'}
         >
-          Month
+          Text
         </MenuItem>
-        <MenuItem
-          icon={<Calendar />}
-          onSelect={() => onChangeColumnType(getDateType('day'))}
-          selected={type.kind === 'date' && type.date === 'day'}
+        <MenuList
+          itemTrigger={
+            <TriggerMenuItem icon={<Calendar />}>
+              <div css={{ minWidth: '116px' }}>Date</div>
+            </TriggerMenuItem>
+          }
         >
-          Day
-        </MenuItem>
-        <MenuItem
-          icon={<Calendar />}
-          onSelect={() => onChangeColumnType(getDateType('minute'))}
-          selected={type.kind === 'date' && type.date === 'minute'}
-        >
-          Time
-        </MenuItem>
+          <MenuItem
+            icon={<Calendar />}
+            onSelect={() => onChangeColumnType(getDateType('year'))}
+            selected={type.kind === 'date' && type.date === 'year'}
+          >
+            Year
+          </MenuItem>
+          <MenuItem
+            icon={<Calendar />}
+            onSelect={() => onChangeColumnType(getDateType('month'))}
+            selected={type.kind === 'date' && type.date === 'month'}
+          >
+            Month
+          </MenuItem>
+          <MenuItem
+            icon={<Calendar />}
+            onSelect={() => onChangeColumnType(getDateType('day'))}
+            selected={type.kind === 'date' && type.date === 'day'}
+          >
+            Day
+          </MenuItem>
+          <MenuItem
+            icon={<Calendar />}
+            onSelect={() => onChangeColumnType(getDateType('minute'))}
+            selected={type.kind === 'date' && type.date === 'minute'}
+          >
+            Time
+          </MenuItem>
+        </MenuList>
       </MenuList>
+      <MenuItem icon={<Trash />} onSelect={() => onRemoveColumn()}>
+        Remove column
+      </MenuItem>
     </MenuList>
-    <MenuItem icon={<Trash />} onSelect={() => onRemoveColumn()}>
-      Remove column
-    </MenuItem>
-  </MenuList>
+  </div>
 );

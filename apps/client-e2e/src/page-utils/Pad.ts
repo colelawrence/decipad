@@ -81,16 +81,15 @@ export async function createTable() {
   await keyPress('Enter');
 }
 
-export async function writeInTable(text: string, columns = 1) {
-  //
-  // you need two tabs to get to the next value
-  // when you have one column
-  // spread is just to get a range from 0 to columns + 1
-  //
-  const tabs = [...Array(columns + 1).keys()].map(() => {
-    return keyPress('Tab');
-  });
-  await Promise.all(tabs);
+export async function writeInTable(text: string, line: number, col = 0) {
+  const parentType = line === 0 ? 'thead' : 'tbody';
+  const cellType = line === 0 ? 'th' : 'td';
+  const lineNumber = line > 0 ? line - 1 : line;
+  const locator = `table > ${parentType} > tr:nth-child(${
+    lineNumber + 1
+  }) > ${cellType}:nth-child(${col + 1})`;
+  const cell = await page.locator(locator);
+  await cell.click();
   await page.keyboard.type(text);
 }
 

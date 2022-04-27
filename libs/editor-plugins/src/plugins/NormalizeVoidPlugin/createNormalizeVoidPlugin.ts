@@ -44,7 +44,7 @@ const emptyString = () => '';
 
 const MISSING_ATTRIBUTE_GENERATOR = {
   [ELEMENT_TABLE_INPUT]: {
-    tableData: () => ({ variableName: 'table', columns: [] }),
+    tableData: () => ({ variableName: 'table', columns: [] }), // legacy
   },
   [ELEMENT_FETCH]: {
     'data-auth-url': emptyString,

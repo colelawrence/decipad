@@ -19,19 +19,24 @@ export const CursorEditor = {
   },
 
   updateCursor: (editor: CursorEditor): void => {
-    const sharedType = YjsEditor.sharedType(editor);
-    const { selection } = editor;
+    try {
+      const sharedType = YjsEditor.sharedType(editor);
+      const { selection } = editor;
 
-    const anchor =
-      selection &&
-      absolutePositionToRelativePosition(sharedType, selection.anchor);
+      const anchor =
+        selection &&
+        absolutePositionToRelativePosition(sharedType, selection.anchor);
 
-    const focus =
-      selection &&
-      absolutePositionToRelativePosition(sharedType, selection.focus);
+      const focus =
+        selection &&
+        absolutePositionToRelativePosition(sharedType, selection.focus);
 
-    const awareness = CursorEditor.awareness(editor);
-    awareness.setLocalState({ ...awareness.getLocalState(), anchor, focus });
+      const awareness = CursorEditor.awareness(editor);
+      awareness.setLocalState({ ...awareness.getLocalState(), anchor, focus });
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('Error updating the cursor position', err);
+    }
   },
 };
 

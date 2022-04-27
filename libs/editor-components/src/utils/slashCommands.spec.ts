@@ -6,14 +6,14 @@ import {
   ELEMENT_H3,
   ELEMENT_PARAGRAPH,
   ELEMENT_PLOT,
-  ELEMENT_TABLE_INPUT,
+  ELEMENT_TABLE,
   ELEMENT_VARIABLE_DEF,
 } from '@decipad/editor-types';
 import { createCodeBlockPlugin, createPlateEditor } from '@udecode/plate';
 import { execute, SlashCommand } from './slashCommands';
 
 const expectedTypes = {
-  table: ELEMENT_TABLE_INPUT,
+  table: ELEMENT_TABLE,
   heading1: ELEMENT_H2,
   heading2: ELEMENT_H3,
   import: ELEMENT_FETCH,
@@ -21,6 +21,9 @@ const expectedTypes = {
   plot: ELEMENT_PLOT,
   input: ELEMENT_VARIABLE_DEF,
 };
+
+const getAvailableIdentifier = (prefix: string, start: number) =>
+  `${prefix}${start}`;
 
 test.each(Object.entries(expectedTypes) as [SlashCommand, ElementKind][])(
   'command "%s" replaces the block with a "%s" block',
@@ -30,7 +33,7 @@ test.each(Object.entries(expectedTypes) as [SlashCommand, ElementKind][])(
       { type: ELEMENT_PARAGRAPH, children: [{ text: '/cmd' }] },
     ];
 
-    execute(editor, [0, 0], command);
+    execute({ editor, path: [0, 0], command, getAvailableIdentifier });
     expect(editor.children).toEqual([
       expect.objectContaining({ type: expectedType }),
     ]);

@@ -32,13 +32,13 @@ export const ColumnResult = ({
           return (
             <TableRow key={rowIndex} readOnly>
               {labels && (
-                <TableData>
+                <TableData as="td">
                   <span css={[rowLabelStyles, table.cellSidePaddingStyles]}>
                     {labels[rowIndex]}
                   </span>
                 </TableData>
               )}
-              <TableData>
+              <TableData as="td">
                 <div
                   css={[
                     css(table.getCellWrapperStyles(type.cellType)),

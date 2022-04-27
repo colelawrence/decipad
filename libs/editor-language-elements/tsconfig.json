@@ -6,9 +6,5 @@
     "jsxImportSource": "@emotion/react"
   },
   "include": ["src", "storybook"],
-  "references": [
-    { "path": "../editor-types" },
-    { "path": "../editor-plugins" },
-    { "path": "../editor-utils" }
-  ]
+  "references": [{ "path": "../editor-types" }, { "path": "../editor-utils" }]
 }

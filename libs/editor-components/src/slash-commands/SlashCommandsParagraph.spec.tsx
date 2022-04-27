@@ -22,6 +22,7 @@ import {
   waitFor,
 } from '@testing-library/react';
 import { findDomNodePath } from '@decipad/editor-utils';
+import { Computer } from '@decipad/language';
 import { SlashCommandsParagraph } from './SlashCommandsParagraph';
 
 let editor: PlateEditor;
@@ -30,7 +31,7 @@ let wrapper: React.FC<PropsWithChildren<unknown>>;
 beforeEach(() => {
   const plugins = createPlugins([createParagraphPlugin()], {
     components: {
-      [ELEMENT_PARAGRAPH]: SlashCommandsParagraph,
+      [ELEMENT_PARAGRAPH]: SlashCommandsParagraph(new Computer()),
     },
   });
 

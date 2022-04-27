@@ -5,7 +5,6 @@ export { Caption } from './Caption/Caption';
 export { CodeSyntaxErrorHighlight } from './CodeSyntaxErrorHighlight/CodeSyntaxErrorHighlight';
 export { DividerBlock } from './DividerBlock/DividerBlock';
 export { EditableTableCaption } from './EditableTableCaption/EditableTableCaption';
-export { EditableTableData } from './EditableTableData/EditableTableData';
 export { Expression } from './Expression/Expression';
 export { EditorTitle } from './EditorTitle/EditorTitle';
 export { HelpButton } from './HelpButton/HelpButton';
