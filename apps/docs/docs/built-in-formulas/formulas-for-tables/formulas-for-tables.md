@@ -2,13 +2,13 @@
 sidebar_position: 180
 ---
 
-# Functions for tables
+# Formulas for tables
 
 Built-in functions that operate on tables:
 
 ## lookup
 
-[Here is documentation on the lookup function](/docs/advanced-concepts/lookups).
+[Here is documentation on the lookup function](/docs/built-in-formulas/formulas-for-tables/lookups).
 
 ## select
 
@@ -30,7 +30,7 @@ Flights2 = select(Flights, Number, PassengerCount)
 
 ## sortby
 
-This function sorts a table by the values of a column:
+This formula sorts a table by the values of a column:
 
 ```deci live
 Flights = {
@@ -47,7 +47,7 @@ sortby(Flights, Flights.DepartureTime)
 
 ## splitby
 
-This function splits the table into several different tables, split by the unique values of a column:
+This formula splits the table into several different tables, split by the unique values of a column:
 
 ```deci live
 Flights = {
@@ -70,7 +70,7 @@ splitby(Flights, Flights.Company)
 
 ## reverse
 
-This function reverses a table:
+This formula reverses a table:
 
 ```deci live
 Flights = {

@@ -29,7 +29,7 @@ To create a notebook, go to your topbar and click on `Create New`.
 
 ![](https://user-images.githubusercontent.com/12210180/162472107-28945a31-5255-4bbc-83fc-8d4222816cb1.gif)
 
-A notebook can be a digital textbook or you can type `/` to add [widgets](/blocks/widgets), [calculation blocks](blocks/calculations) or [tables](blocks/tables) to explore data and numbers. Make it your own!
+A notebook can be a digital textbook or you can type `/` to add [widgets](/blocks/widgets), [calculation blocks](/blocks/calculations) or [tables](/blocks/tables) to explore data and numbers. Make it your own!
 
 ---
 

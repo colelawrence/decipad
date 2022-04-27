@@ -4,11 +4,13 @@ sidebar_position: 40
 
 # Unit quality
 
-Besides a quantity, a unit can also have a quality.
+Besides a quantity, units can also have a quality.
 
-For instance, `1 kilogram of flour` and `30 grams of sugar` have the same quantity fundamental unit (mass), but they have different qualities.
+For instance, `1 kilogram of flour` and `30 grams of sugar` are both represented by units of mass with different qualities `flour` and `sugar`.
 
-You can encode these qualities in Deci:
+You can define **Qualities** with the keyword `of`.
+
+An example will make things easier to grasp:
 
 ```deci live
 flour = 2 kg of flour
@@ -18,9 +20,9 @@ ratio = butter / flour
 ==> 75 g of butter/kg of flour
 ```
 
-Here, using the `of` keyword you can add a **quality** to your quantities, making Deci understand more about your calculations and how to manage operations between them.
+With qualities, you are able to express data relations in a more realistic way. On our example you can clearly see that for every `kg of flour`you will have `75 g of butter`. Awesome right?
 
-Here is another exmple of units with applied qualities:
+Here's another example:
 
 ```deci live
 constructionIndex = 1.6 m^2 of usefularea / m^2 of land

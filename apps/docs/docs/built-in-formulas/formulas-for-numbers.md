@@ -2,13 +2,13 @@
 sidebar_position: 10
 ---
 
-# Functions for numbers
+# Formulas for numbers
 
-Our built-in functions that operate on numbers:
+Our built-in formulas that operate on numbers:
 
 ## abs
 
-This function gives you the absolute value of a number. If the given number is positive or zero, it gives you that number. If it's negative, it gives you the number multiplied by `-1`.
+This formula gives you the absolute value of a number. If the given number is positive or zero, it gives you that number. If it's negative, it gives you the number multiplied by `-1`.
 
 ```deci live
 abs(-10 days)
@@ -26,7 +26,7 @@ ln(12 steps)
 
 ## sqrt
 
-This function gives you the square root of a number:
+This formula gives you the square root of a number:
 
 ```deci live
 sqrt(9 meters^2)
@@ -35,7 +35,7 @@ sqrt(9 meters^2)
 
 ## round
 
-This function gives you a rounded version of a number, with the specified number of decimals:
+This formula gives you a rounded version of a number, with the specified number of decimals:
 
 ```deci live
 round(5.76543, 2)
@@ -79,7 +79,7 @@ rounddown(5.789, 2)
 
 ## max
 
-This function gives you the maximum value of a list or table column:
+This formula gives you the maximum value of a list or table column:
 
 ```deci live
 max([1, 3, 2])
@@ -88,7 +88,7 @@ max([1, 3, 2])
 
 ## min
 
-This function gives you the minimum value of a list or table column:
+This formula gives you the minimum value of a list or table column:
 
 ```deci live
 min([3, 1, 2])
@@ -97,7 +97,7 @@ min([3, 1, 2])
 
 ## sum / total
 
-This function gives you the sum of all numbers in a list or a table column:
+This formula gives you the sum of all numbers in a list or a table column:
 
 ```deci live
 my_table = {
@@ -111,7 +111,7 @@ total(my_table.column_B)
 
 ## average / mean / avg
 
-This function gives you the mean of a list of numbers:
+This formula gives you the mean of a list of numbers:
 
 ```deci live
 average([1, 2, 3, 4])
@@ -120,7 +120,7 @@ average([1, 2, 3, 4])
 
 ## averageif / meanif / avgif
 
-This function gives you the mean of a list of numbers that respect a certain condition:
+This formula gives you the mean of a list of numbers that respect a certain condition:
 
 ```deci live
 Table = {
@@ -134,7 +134,7 @@ averageif(Table.A, Table.B < 6)
 
 ## grow
 
-This function compounds an initial value by a specific rate over any sequence or list of values.
+This formula compounds an initial value by a specific rate over any sequence or list of values.
 
 ```deci live
 Years = [date(2022), date(2023), date(2024), date(2025)]
@@ -145,7 +145,7 @@ grow(500, 10%, Years)
 
 ## stepgrowth
 
-This function gives you the increments (or decrements) between values in a sequence or list.
+This formula gives you the increments (or decrements) between values in a sequence or list.
 
 ```deci live
 BooksRead = {

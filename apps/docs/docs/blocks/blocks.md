@@ -14,5 +14,5 @@ Each block unlocks new modeling possibilities:
 
 - [Widgets](widgets)
 - [Calculations](calculations)
-- [Plots](plots)
 - [Tables](tables)
+- [Charts](charts)

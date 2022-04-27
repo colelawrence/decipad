@@ -40,7 +40,7 @@ Besides the menu styling menu that pops up when you select text, Decipad support
 - Wrap words between `~~` and `~~` for **strikethrough**
 - Wrap words between `==` and `==` for **highlight**
 - Use the notation `[link name](url)` to insert a **link**
-- Wrap words between `and` for **inline code**
+- Wrap words between `` ` `` and `` ` `` for **inline code**
 
 ## Blocks
 

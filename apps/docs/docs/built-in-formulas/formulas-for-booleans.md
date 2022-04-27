@@ -2,9 +2,9 @@
 sidebar_position: 30
 ---
 
-# Functions for booleans
+# Formulas for booleans
 
-Built-in functions that operate on booleans:
+Built-in formulas that operate on booleans:
 
 ## not
 

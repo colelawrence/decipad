@@ -2,9 +2,9 @@
 sidebar_position: 160
 ---
 
-# Functions for lists
+# Formulas for lists
 
-When you have a list, you can apply some functions that are specific to working with lists. Here are some:
+When you have a list, you can apply some formulas that are specific to working with lists. Here are some:
 
 ## abs
 
@@ -26,7 +26,7 @@ len([1, 2, 3])
 
 ## cat
 
-Also, you can join two lists (as long as they have the same type) by using the `cat` function:
+Also, you can join two lists (as long as they have the same type) by using the `cat` formula:
 
 > (`cat` is an abbreviation of `concatenate`).
 
@@ -35,7 +35,7 @@ cat([1, 2, 3], [4, 5, 6])
 ==> [ 1, 2, 3, 4, 5, 6 ]
 ```
 
-You can also use this function to push an element to the end of a list, resulting in a new list:
+You can also use this formula to push an element to the end of a list, resulting in a new list:
 
 ```deci live
 cat([1, 2, 3], 4)
@@ -53,7 +53,7 @@ cat(1, [2, 3, 4])
 
 ## first
 
-If you have a list and want to extract the first element, you can use the `first` function:
+If you have a list and want to extract the first element, you can use the `first` formula:
 
 ```deci live
 first([1 apples, 2 apples, 3 apples])
@@ -62,7 +62,7 @@ first([1 apples, 2 apples, 3 apples])
 
 ## last
 
-Conversely, if you want to extract the last element of a list, you can use the `last` function:
+Conversely, if you want to extract the last element of a list, you can use the `last` formula:
 
 ```deci live
 last([1 apples, 2 apples, 3 apples])

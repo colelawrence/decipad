@@ -2,7 +2,7 @@
 sidebar_position: 190
 ---
 
-# Functions for table columns
+# Formulas for table columns
 
 You may want to reduce the number of columns to a given value.
 
