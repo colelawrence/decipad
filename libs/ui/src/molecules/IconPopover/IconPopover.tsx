@@ -1,10 +1,11 @@
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import * as Popover from '@radix-ui/react-popover';
-import { FC, ReactNode } from 'react';
+import React, { FC } from 'react';
 import { ColorPicker, Divider, NotebookIconButton } from '../../atoms';
-import { Close } from '../../icons';
 import * as icons from '../../icons';
+import { Close } from '../../icons';
 import {
   cssVar,
   grey500,
@@ -13,9 +14,9 @@ import {
   setCssVar,
 } from '../../primitives';
 import {
-  swatchNames,
-  baseSwatches,
   AvailableSwatchColor,
+  baseSwatches,
+  swatchNames,
   UserIconKey,
   userIconKeys,
 } from '../../utils';
@@ -57,7 +58,7 @@ const iconsWrapper = css({
 
 type IconPopoverProps = {
   readonly color: AvailableSwatchColor;
-  readonly trigger: ReactNode;
+  readonly trigger: JSX.Element;
   readonly onChangeIcon?: (newIcon: UserIconKey) => void;
   readonly onChangeColor?: (newColor: AvailableSwatchColor) => void;
 };
@@ -68,9 +69,16 @@ export const IconPopover = ({
   onChangeIcon = noop,
   onChangeColor = noop,
 }: IconPopoverProps): ReturnType<FC> => {
+  if (useIsEditorReadOnly()) {
+    return <span area-label="readOnly">{trigger}</span>;
+  }
+  const triggerWithCursey = React.cloneElement(trigger, {
+    style: { cursor: 'pointer' },
+  });
+
   return (
     <Popover.Root>
-      <Popover.Trigger asChild>{trigger}</Popover.Trigger>
+      <Popover.Trigger asChild>{triggerWithCursey}</Popover.Trigger>
       <Popover.Content css={contentWrapper}>
         <div css={contentHeaderWrapper}>
           <h2 css={contentHeaderText}>Pick a style</h2>
@@ -125,5 +133,3 @@ export const IconPopover = ({
     </Popover.Root>
   );
 };
-
-// TODO test and stories

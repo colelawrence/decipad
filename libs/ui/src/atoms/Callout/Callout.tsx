@@ -32,7 +32,6 @@ const iconWrapperStyles = css({
   display: 'grid',
   height: `calc(${callout.typography?.fontSize} * ${callout.typography?.lineHeight})`,
   width: '16px',
-  cursor: 'pointer',
   'svg > path': {
     stroke: cssVar('currentTextColor'),
   },

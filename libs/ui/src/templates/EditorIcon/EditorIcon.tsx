@@ -28,7 +28,6 @@ const iconWrapper = css({
   placeItems: 'center',
   borderRadius: '6px',
   transition: `background-color ${shortAnimationDuration} ease-out`,
-  cursor: 'pointer',
 });
 
 const iconStyles = css(p14Regular, {

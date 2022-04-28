@@ -11,6 +11,7 @@ import {
   useShareNotebookWithSecret,
   useUnshareNotebookWithSecret,
 } from '@decipad/queries';
+import { EditorIsReadOnlyProvider } from '@decipad/react-contexts';
 import {
   notebooks,
   useRouteParams,
@@ -27,9 +28,9 @@ import {
 import Head from 'next/head';
 import { ComponentProps, FC, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
+import { parseIconColorFromIdentifier } from '../lib/parseIconColorFromIdentifier';
 import { getSecretNotebookLink } from '../lib/secret';
 import { decode as decodeVanityUrlComponent } from '../lib/vanityUrlComponent';
-import { parseIconColorFromIdentifier } from '../lib/parseIconColorFromIdentifier';
 
 type Icon = ComponentProps<typeof EditorIcon>['icon'];
 type IconColor = ComponentProps<typeof EditorIcon>['color'];
@@ -142,66 +143,67 @@ export const Notebook = (): ReturnType<FC> => {
   if (!notebook) {
     return <ErrorPage Heading="h1" wellKnown="404" authenticated />;
   }
-
   return (
-    <div>
-      <Head>
-        <title>
-          {notebook.name ? notebook.name : 'Make sense of numbers'} — Decipad
-        </title>
-      </Head>
-      <NotebookPage
-        notebook={
-          <Editor
-            notebookId={notebookId}
-            readOnly={notebookReadOnly}
-            authSecret={secret}
-          />
-        }
-        notebookIcon={
-          <EditorIcon
-            color={iconColor}
-            icon={icon}
-            onChangeIcon={(newIcon) => {
-              setIcon(newIcon);
-              updateNotebookIcon({
-                variables: {
-                  id: notebook.id,
-                  icon: `${newIcon}-${iconColor}`,
-                },
-              });
-            }}
-            onChangeColor={(newIconColor) => {
-              setIconColor(newIconColor);
-              updateNotebookIcon({
-                variables: {
-                  id: notebook.id,
-                  icon: `${icon}-${newIconColor}`,
-                },
-              });
-            }}
-          />
-        }
-        topbar={
-          <NotebookTopbar
-            workspaceName={notebook.workspace.name}
-            notebookName={
-              notebook.name === '' ? '<unnamed-notebook>' : notebook.name
-            }
-            workspaceHref={
-              workspacesRoute({}).workspace({
-                workspaceId: notebook.workspace.id,
-              }).$
-            }
-            usersWithAccess={notebook.access.users}
-            permission={notebook.myPermissionType}
-            link={notebookUrlWithSecret}
-            sharingActive={sharingActive}
-            onToggleShare={onShareToggleClick}
-            onDuplicateNotebook={onDuplicateNotebook}
-          />
-        }
-      />
-    </div>
+    <EditorIsReadOnlyProvider isEditorReadOnly={notebookReadOnly}>
+      <div>
+        <Head>
+          <title>
+            {notebook.name ? notebook.name : 'Make sense of numbers'} — Decipad
+          </title>
+        </Head>
+        <NotebookPage
+          notebook={
+            <Editor
+              notebookId={notebookId}
+              readOnly={notebookReadOnly}
+              authSecret={secret}
+            />
+          }
+          notebookIcon={
+            <EditorIcon
+              color={iconColor}
+              icon={icon}
+              onChangeIcon={(newIcon) => {
+                setIcon(newIcon);
+                updateNotebookIcon({
+                  variables: {
+                    id: notebook.id,
+                    icon: `${newIcon}-${iconColor}`,
+                  },
+                });
+              }}
+              onChangeColor={(newIconColor) => {
+                setIconColor(newIconColor);
+                updateNotebookIcon({
+                  variables: {
+                    id: notebook.id,
+                    icon: `${icon}-${newIconColor}`,
+                  },
+                });
+              }}
+            />
+          }
+          topbar={
+            <NotebookTopbar
+              workspaceName={notebook.workspace.name}
+              notebookName={
+                notebook.name === '' ? '<unnamed-notebook>' : notebook.name
+              }
+              workspaceHref={
+                workspacesRoute({}).workspace({
+                  workspaceId: notebook.workspace.id,
+                }).$
+              }
+              usersWithAccess={notebook.access.users}
+              permission={notebook.myPermissionType}
+              link={notebookUrlWithSecret}
+              sharingActive={sharingActive}
+              onToggleShare={onShareToggleClick}
+              onDuplicateNotebook={onDuplicateNotebook}
+            />
+          }
+        />
+      </div>
+    </EditorIsReadOnlyProvider>
   );
 };
