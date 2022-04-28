@@ -54,11 +54,15 @@ export interface InputElement extends BaseElement {
   children: [EmptyText];
   value: string;
   variableName: string;
+  icon: string;
+  color: string;
 }
 
 export interface CaptionElement extends BaseElement {
   type: typeof ELEMENT_CAPTION;
   children: [PlainText];
+  icon: string;
+  color: string;
 }
 
 export interface ExpressionElement extends BaseElement {

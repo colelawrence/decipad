@@ -1,6 +1,8 @@
+import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, ReactNode } from 'react';
-import { Frame } from '../../icons';
+import { ComponentProps, FC, ReactNode } from 'react';
+import * as icons from '../../icons';
+
 import {
   cssVar,
   display,
@@ -8,9 +10,16 @@ import {
   p16Regular,
   setCssVar,
 } from '../../primitives';
+import { AvailableSwatchColor, UserIconKey } from '../../utils';
+import { IconPopover } from '../IconPopover/IconPopover';
 
-interface CaptionProps {
-  icon?: ReactNode;
+interface CaptionProps
+  extends Pick<
+    ComponentProps<typeof IconPopover>,
+    'onChangeColor' | 'onChangeIcon'
+  > {
+  color?: AvailableSwatchColor;
+  icon?: UserIconKey;
   empty?: boolean;
   children: ReactNode;
 }
@@ -49,18 +58,31 @@ const placeholderStyles = css(p16Regular, {
 });
 
 export const Caption = ({
-  icon = <Frame />,
   empty = false,
   children,
+  color = 'Sulu',
+  icon = 'Frame',
+  onChangeColor = noop,
+  onChangeIcon = noop,
 }: CaptionProps): ReturnType<FC> => {
+  const Icon = icons[icon];
   return (
     <div css={nameWrapperStyles}>
-      <span contentEditable={false} css={iconWrapperStyles}>
-        {icon}
-      </span>
+      <IconPopover
+        onChangeColor={onChangeColor}
+        onChangeIcon={onChangeIcon}
+        color={color}
+        trigger={
+          <button>
+            <span contentEditable={false} css={iconWrapperStyles}>
+              <Icon />
+            </span>
+          </button>
+        }
+      />
       <div
         css={placeholderStyles}
-        aria-placeholder={empty ? 'VariableName' : ''}
+        aria-placeholder={empty ? 'Name your input' : ''}
       >
         <span>
           <span>{children}</span>

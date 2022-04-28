@@ -18,6 +18,8 @@ export const inputElementToVariableDef = (
         id: nanoid(),
         type: ELEMENT_CAPTION,
         children: [{ text: inputElement.variableName || '' }],
+        icon: inputElement.icon,
+        color: inputElement.color,
       },
       {
         id: nanoid(),

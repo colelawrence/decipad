@@ -17,6 +17,8 @@ describe('VariableDef element', () => {
           id: 'id1',
           type: ELEMENT_CAPTION,
           children: [{ text: 'varName' }],
+          icon: 'Frame',
+          color: 'Sulu',
         },
         {
           id: 'id2',

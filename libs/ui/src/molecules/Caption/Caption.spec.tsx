@@ -11,11 +11,4 @@ describe('Caption Molecule', () => {
     const { getByTitle } = render(<Caption>children</Caption>);
     expect(getByTitle(/frame/i)).toBeInTheDocument();
   });
-
-  it('renders a custom icon', () => {
-    const { getByText } = render(
-      <Caption icon={<span>custom icon</span>}>children</Caption>
-    );
-    expect(getByText('custom icon')).toBeInTheDocument();
-  });
 });

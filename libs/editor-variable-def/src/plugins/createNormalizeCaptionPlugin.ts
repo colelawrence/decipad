@@ -42,6 +42,6 @@ const normalize =
 export const createNormalizeCaptionPlugin = createNormalizerPluginFactory({
   name: 'NORMALIZE_CAPTION_PLUGIN',
   elementType: ELEMENT_CAPTION,
-  acceptableElementProperties: [],
+  acceptableElementProperties: ['icon', 'color'],
   plugin: normalize,
 });

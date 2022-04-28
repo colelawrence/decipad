@@ -17,6 +17,7 @@ import {
   safeDelete,
 } from '@decipad/editor-utils';
 import { DraggableBlock } from '@decipad/editor-components';
+import { AvailableSwatchColor } from 'libs/ui/src/utils';
 
 export const VariableDef: PlateComponent = ({
   attributes,
@@ -91,6 +92,8 @@ export const VariableDef: PlateComponent = ({
     return <></>;
   }
 
+  const { color } = element.children[0];
+
   return (
     <div {...attributes}>
       <DraggableBlock
@@ -103,6 +106,7 @@ export const VariableDef: PlateComponent = ({
           onDelete={onDelete}
           onCopy={onCopy}
           onAdd={onAdd}
+          color={color as AvailableSwatchColor}
         >
           {children}
         </organisms.VariableEditor>
