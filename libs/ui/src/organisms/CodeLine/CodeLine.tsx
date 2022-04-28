@@ -16,8 +16,6 @@ import { isTabularType } from '../../utils/results';
 const { lineHeight } = codeBlock;
 
 const spacingStyles = css({
-  maxWidth: blockAlignment.codeLine.desiredWidth,
-  margin: 'auto',
   paddingTop: blockAlignment.codeLine.paddingTop,
 });
 

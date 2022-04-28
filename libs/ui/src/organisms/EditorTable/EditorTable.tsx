@@ -1,12 +1,10 @@
-import { Children, FC, ReactNode } from 'react';
 import { css } from '@emotion/react';
+import { Children, FC, ReactNode } from 'react';
 import { Table } from '..';
 import { AddTableRowButton } from '../../molecules';
 import { TableColumn } from '../../types';
-import { blockAlignment } from '../../styles';
 
 const etStyle = css({
-  maxWidth: blockAlignment.editorTable.desiredWidth,
   margin: 'auto',
   marginBottom: '8px',
   paddingBottom: '6px',

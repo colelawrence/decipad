@@ -6,7 +6,7 @@ import {
   p8Regular,
   TypographyStyles,
 } from '../primitives';
-import { wideBlockWidth, slimBlockWidth } from './editor-layout';
+import { slimBlockWidth, wideBlockWidth } from './editor-layout';
 
 interface StyleData {
   paddingTop: string;

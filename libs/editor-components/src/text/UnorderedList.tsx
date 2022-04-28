@@ -1,7 +1,5 @@
-import { molecules } from '@decipad/ui';
 import { PlateComponent } from '@decipad/editor-types';
-import { css } from '@emotion/react';
-import { list } from 'libs/ui/src/styles/block-alignment';
+import { molecules } from '@decipad/ui';
 import { DraggableBlock } from '../block-management';
 
 export const UnorderedList: PlateComponent = ({
@@ -14,13 +12,7 @@ export const UnorderedList: PlateComponent = ({
   }
 
   return (
-    <div
-      {...attributes}
-      css={css({
-        width: `min(100%, ${list.desiredWidth}px)`,
-        margin: 'auto',
-      })}
-    >
+    <div {...attributes}>
       <DraggableBlock blockKind="list" element={element}>
         <molecules.UnorderedList>{children}</molecules.UnorderedList>
       </DraggableBlock>

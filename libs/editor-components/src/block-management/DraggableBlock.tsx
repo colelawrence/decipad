@@ -1,6 +1,8 @@
 import { Element } from '@decipad/editor-types';
+import { findPath } from '@decipad/editor-utils';
 import { organisms } from '@decipad/ui';
 import { useDndBlock } from '@udecode/plate';
+import { blockAlignment } from 'libs/ui/src/styles';
 import {
   ComponentProps,
   createContext,
@@ -10,9 +12,8 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Transforms, Editor as SlateEditor } from 'slate';
+import { Editor as SlateEditor, Transforms } from 'slate';
 import { ReactEditor, useReadOnly, useSlate } from 'slate-react';
-import { findPath } from '@decipad/editor-utils';
 
 const InDraggableBlock = createContext(false);
 
@@ -80,7 +81,12 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
   if (deleted) {
     return <></>;
   }
-  if (readOnly) return <>{children}</>;
+  if (readOnly) {
+    const { desiredWidth } = blockAlignment[props.blockKind];
+    return (
+      <div css={{ maxWidth: desiredWidth, margin: 'auto' }}>{children}</div>
+    );
+  }
   // Nested Draggables (such as lists) do not work well enough with useDndBlock; they are very buggy.
   // If we want this, we need to build a better dnd.
   if (isInDraggableBlock) return <>{children}</>;
