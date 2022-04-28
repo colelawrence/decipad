@@ -18,6 +18,7 @@ export {
 } from '@udecode/plate';
 
 // Layout
+export const ELEMENT_CALLOUT = 'callout';
 export const ELEMENT_COLUMNS = 'columns';
 
 // inputs
@@ -36,6 +37,5 @@ export const ELEMENT_TD = 'td';
 // others
 export const ELEMENT_VARIABLE_DEF = 'def';
 export const ELEMENT_CAPTION = 'caption';
-export const ELEMENT_EXPRESSION = 'exp';
-export const ELEMENT_CALLOUT = 'callout';
 export const ELEMENT_HR = 'divider';
+export const ELEMENT_EXPRESSION = 'exp';

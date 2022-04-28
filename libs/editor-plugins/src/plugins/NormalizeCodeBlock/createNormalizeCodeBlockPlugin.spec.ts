@@ -9,7 +9,6 @@ import {
   createPlugins,
   PlateEditor,
   TDescendant,
-  TElement,
   TNode,
 } from '@udecode/plate';
 import { Editor } from 'slate';
@@ -180,40 +179,4 @@ describe('statement-based line splitting and merging', () => {
       codeLine('b = 2'),
     ]);
   });
-});
-
-it('normalizes a terribly broken node', () => {
-  const { isInline } = editor;
-  editor.isInline = (element) =>
-    (element as TElement).type === 'nestedBullshit' || isInline(editor);
-  editor.children = [
-    {
-      type: ELEMENT_CODE_BLOCK,
-      children: [
-        {
-          type: 'bullshit',
-          children: [
-            { text: 'x=(' },
-            {
-              type: 'nestedBullshit',
-              children: [{ text: '42' }],
-            },
-            { text: ')' },
-          ],
-        },
-        {
-          type: ELEMENT_CODE_LINE,
-          children: [{ text: 'y=42\nz=(' }],
-        },
-        { text: '42' },
-      ],
-    },
-  ] as TDescendant[];
-
-  Editor.normalize(editor, { force: true });
-  expect(editor.children).toEqual([
-    codeLine('x=(\n42\n)'),
-    codeLine('y=42'),
-    codeLine('z=(\n42'),
-  ]);
 });

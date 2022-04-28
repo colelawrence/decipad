@@ -76,6 +76,8 @@ export interface BlockquoteElement extends BaseElement {
 export interface CalloutElement extends BaseElement {
   type: typeof ELEMENT_CALLOUT;
   children: InlineChildren;
+  icon?: string;
+  color?: string;
 }
 export interface DividerElement extends BaseElement {
   type: typeof ELEMENT_HR;
@@ -142,6 +144,7 @@ export type BlockElement =
   // Text blocks
   | ParagraphElement
   | BlockquoteElement
+  | CalloutElement
   | DividerElement
   // Code
   | CodeBlockElement
@@ -182,6 +185,7 @@ export type Editor = Omit<
       | H3Element
       | ParagraphElement
       | BlockquoteElement
+      | CalloutElement
       | DividerElement
       | CodeBlockElement
       | UnorderedListElement

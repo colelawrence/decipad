@@ -61,5 +61,6 @@ const normalizeCodeBlock = (editor: Editor) => (entry: NodeEntry) => {
 export const createNormalizeCodeBlockPlugin = createNormalizerPluginFactory({
   name: 'NORMALIZE_CODE_BLOCK_PLUGIN',
   elementType: ELEMENT_CODE_BLOCK,
+  acceptableSubElements: [ELEMENT_CODE_LINE],
   plugin: normalizeCodeBlock,
 });

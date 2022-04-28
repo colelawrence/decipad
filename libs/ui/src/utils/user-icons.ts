@@ -43,6 +43,7 @@ export const userIconKeys = [
   'Sparkles',
   'Beach',
 ] as const;
+
 userIconKeys.forEach((key) => {
   if (!isValidElementType(icons[key])) {
     throw new Error(`Missing user icon ${key}`);

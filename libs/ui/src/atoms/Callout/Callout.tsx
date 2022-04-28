@@ -1,8 +1,11 @@
+import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { ReactNode } from 'react';
-import { Warning } from '../../icons';
-import { cssVar, setCssVar } from '../../primitives';
+import { FC, ReactNode } from 'react';
+import * as icons from '../../icons';
+import { IconPopover } from '../../molecules/IconPopover/IconPopover';
+import { cssVar, setCssVar, transparency } from '../../primitives';
 import { blockAlignment } from '../../styles';
+import { AvailableSwatchColor, baseSwatches, UserIconKey } from '../../utils';
 
 const { callout } = blockAlignment;
 
@@ -13,7 +16,6 @@ const styles = css(
   callout.typography,
   setCssVar('currentTextColor', cssVar('weakTextColor')),
   {
-    backgroundColor: cssVar('highlightColor'),
     borderRadius: '8px',
 
     display: 'grid',
@@ -30,20 +32,45 @@ const iconWrapperStyles = css({
   display: 'grid',
   height: `calc(${callout.typography?.fontSize} * ${callout.typography?.lineHeight})`,
   width: '16px',
+  cursor: 'pointer',
+  'svg > path': {
+    stroke: cssVar('currentTextColor'),
+  },
 });
 
-interface BlockquoteProps {
+interface CalloutProps {
   readonly children: ReactNode;
+  readonly icon?: UserIconKey;
+  readonly color?: AvailableSwatchColor;
+  readonly saveIcon?: (newIcon: UserIconKey) => void;
+  readonly saveColor?: (newColor: AvailableSwatchColor) => void;
 }
 
 export const Callout = ({
   children,
-}: BlockquoteProps): ReturnType<React.FC> => {
+  icon = 'Announcement',
+  color = 'Malibu',
+  saveIcon = noop,
+  saveColor = noop,
+}: CalloutProps): ReturnType<FC> => {
+  const Icon = icons[icon];
   return (
-    <div css={styles}>
-      <span css={iconWrapperStyles}>
-        <Warning />
-      </span>
+    <div
+      css={[
+        styles,
+        { backgroundColor: transparency(baseSwatches[color], 0.4).rgba },
+      ]}
+    >
+      <IconPopover
+        color={color}
+        trigger={
+          <span css={iconWrapperStyles}>
+            <Icon />
+          </span>
+        }
+        onChangeColor={saveColor}
+        onChangeIcon={saveIcon}
+      />
       {children}
     </div>
   );
