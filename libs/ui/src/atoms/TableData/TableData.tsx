@@ -8,7 +8,6 @@ import { tableRowCounter } from '../../utils';
 const lineNumberWidth = '22px';
 
 const tdBaseStyles = css(p14Medium, {
-  display: 'grid',
   overflowX: 'hidden',
   alignItems: 'center',
 
@@ -42,6 +41,10 @@ const tdBaseStyles = css(p14Medium, {
   },
 });
 
+const tdGridStyles = {
+  display: 'grid',
+};
+
 const editableStyles = css({
   paddingLeft: '12px',
 });
@@ -51,6 +54,7 @@ export interface TableDataProps {
   isEditable?: boolean;
   className?: string;
   attributes?: PlateComponentAttributes;
+  noGrid?: boolean;
   children?: ReactNode;
 }
 
@@ -58,6 +62,7 @@ export const TableData = ({
   as = 'div',
   className,
   isEditable = false,
+  noGrid = false,
   attributes,
   children,
 }: TableDataProps): ReturnType<FC> => {
@@ -65,7 +70,11 @@ export const TableData = ({
     as,
     {
       ...(attributes || {}),
-      css: [isEditable && editableStyles, tdBaseStyles],
+      css: [
+        isEditable && editableStyles,
+        tdBaseStyles,
+        !noGrid && tdGridStyles,
+      ],
       className,
     },
     children

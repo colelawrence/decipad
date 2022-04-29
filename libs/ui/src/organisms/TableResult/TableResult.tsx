@@ -42,7 +42,7 @@ export const TableResult = ({
         {Array.from({ length: tableLength }, (_, rowIndex) => (
           <TableRow key={rowIndex} readOnly>
             {value.map((column, colIndex) => (
-              <TableData key={colIndex} as="td">
+              <TableData key={colIndex} as="td" isEditable={false} noGrid>
                 <div
                   css={[
                     css(table.getCellWrapperStyles(columnTypes[colIndex])),

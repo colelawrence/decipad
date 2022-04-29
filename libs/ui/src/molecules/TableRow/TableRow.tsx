@@ -36,13 +36,13 @@ export const TableRow = ({
   return (
     <tr
       {...attributes}
-      css={{
+      css={css({
         display: 'grid',
         gridTemplate: table.rowTemplate(
           Children.toArray(children).length,
           readOnly
         ),
-      }}
+      })}
     >
       {children}
       {!readOnly && (
