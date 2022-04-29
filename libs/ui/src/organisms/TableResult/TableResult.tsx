@@ -1,11 +1,15 @@
-import { FC } from 'react';
 import { css } from '@emotion/react';
+import { FC } from 'react';
 import { CodeResult, Table } from '..';
 import { TableData, TableHeader } from '../../atoms';
 import { TableHeaderRow, TableRow } from '../../molecules';
 import { table } from '../../styles';
 import { CodeResultProps } from '../../types';
-import { isTabularType, toTableHeaderType } from '../../utils';
+import {
+  defaultTableColor,
+  isTabularType,
+  toTableHeaderType,
+} from '../../utils';
 
 export const TableResult = ({
   parentType,
@@ -32,6 +36,7 @@ export const TableResult = ({
             <TableHeader
               type={toTableHeaderType(columnTypes[index])}
               key={index}
+              color={defaultTableColor}
             >
               {columnName}
             </TableHeader>

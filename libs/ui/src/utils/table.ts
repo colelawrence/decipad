@@ -2,6 +2,7 @@ import { SerializedType, SerializedUnits, Time } from '@decipad/language';
 import { FunctionComponent } from 'react';
 import { All, Calendar, Number, Text } from '../icons';
 import type { TableCellType } from '../types';
+import { AvailableSwatchColor } from './swatches';
 
 export function getTypeIcon(type: TableCellType): FunctionComponent {
   switch (type.kind) {
@@ -42,3 +43,5 @@ export function toTableHeaderType(
       return undefined;
   }
 }
+
+export const defaultTableColor: AvailableSwatchColor = 'Catskill';

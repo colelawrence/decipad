@@ -1,8 +1,11 @@
+import { DraggableBlock } from '@decipad/editor-components';
+import { ELEMENT_TABLE, PlateComponent } from '@decipad/editor-types';
+import { useElementMutatorCallback } from '@decipad/editor-utils';
+import { StyleContextProvider } from '@decipad/react-contexts';
+import { organisms } from '@decipad/ui';
+import { AvailableSwatchColor, UserIconKey } from 'libs/ui/src/utils';
 import { useMemo, useState } from 'react';
 import { ReactEditor, useSlate } from 'slate-react';
-import { ELEMENT_TABLE, PlateComponent } from '@decipad/editor-types';
-import { organisms } from '@decipad/ui';
-import { DraggableBlock } from '@decipad/editor-components';
 import { useTableActions } from '../../hooks';
 
 export const Table: PlateComponent = ({ attributes, children, element }) => {
@@ -11,6 +14,9 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
   }
   const [deleted, setDeleted] = useState(false);
   const editor = useSlate() as ReactEditor;
+
+  const saveIcon = useElementMutatorCallback(editor, element, 'icon');
+  const saveColor = useElementMutatorCallback(editor, element, 'color');
 
   const { onDelete, onAddRow } = useTableActions(editor, element);
 
@@ -29,18 +35,32 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
   return (
     <div {...attributes}>
       {!deleted && (
-        <DraggableBlock
-          element={element}
-          blockKind="editorTable"
-          onDelete={() => {
-            setDeleted(true);
-            onDelete();
-          }}
+        <StyleContextProvider
+          icon={element.icon}
+          color={element.color}
+          onIconChange={saveIcon}
+          onColorChange={saveColor}
         >
-          <organisms.EditorTable onAddRow={onAddRow} columns={columns}>
-            {children}
-          </organisms.EditorTable>
-        </DraggableBlock>
+          <DraggableBlock
+            element={element}
+            blockKind="editorTable"
+            onDelete={() => {
+              setDeleted(true);
+              onDelete();
+            }}
+          >
+            <organisms.EditorTable
+              onChangeIcon={saveIcon}
+              onChangeColor={saveColor}
+              color={element.color as AvailableSwatchColor}
+              icon={element.icon as UserIconKey}
+              onAddRow={onAddRow}
+              columns={columns}
+            >
+              {children}
+            </organisms.EditorTable>
+          </DraggableBlock>
+        </StyleContextProvider>
       )}
     </div>
   );

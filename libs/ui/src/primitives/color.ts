@@ -174,3 +174,4 @@ export const lavender000 = color(95, 100, 134);
 //
 export const weakOpacity: Opacity = 0.08;
 export const normalOpacity: Opacity = 0.4;
+export const strongOpacity: Opacity = 0.65;

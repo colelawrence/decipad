@@ -1,22 +1,21 @@
 import { PlateComponentAttributes } from '@decipad/editor-types';
+import { useStyle } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { cssVar, p13Medium } from '../../primitives';
+import { p13Medium, strongOpacity, transparency } from '../../primitives';
 import { table } from '../../styles';
 import type { TableCellType } from '../../types';
-import { getStringType, getTypeIcon } from '../../utils';
+import {
+  AvailableSwatchColor,
+  baseSwatches,
+  defaultTableColor,
+  getStringType,
+  getTypeIcon,
+} from '../../utils';
 
 const columnStyles = css(p13Medium, {
   display: 'grid',
   alignItems: 'center',
-
-  backgroundColor: cssVar('highlightColor'),
-  // Keep hover effect when hovered, focused or the dropdown menu is opened.
-  '&:hover, &:focus-within, &[data-highlight="true"]': {
-    backgroundColor: cssVar('strongHighlightColor'),
-  },
-
-  boxShadow: `inset 0px -2px 0px ${cssVar('strongHighlightColor')}`,
 
   minHeight: table.thMinHeight,
   paddingLeft: table.cellSidePadding,
@@ -49,8 +48,8 @@ const childrenWrapperStyles = css({
 export interface TableHeaderProps {
   children?: React.ReactNode;
   highlight?: boolean;
-  icon?: React.ReactNode;
   type?: TableCellType;
+  color?: AvailableSwatchColor;
   menu?: React.ReactNode;
   attributes?: PlateComponentAttributes;
 }
@@ -58,20 +57,43 @@ export interface TableHeaderProps {
 export const TableHeader = ({
   children,
   highlight = false,
-  icon,
   type = getStringType(),
   menu,
   attributes,
 }: TableHeaderProps): ReturnType<FC> => {
   const Icon = getTypeIcon(type);
+  const { color = defaultTableColor } = useStyle();
   return (
-    <th {...attributes} css={columnStyles} data-highlight={highlight}>
+    <th
+      {...attributes}
+      css={[
+        columnStyles,
+        css({
+          backgroundColor:
+            color &&
+            transparency(
+              baseSwatches[color as AvailableSwatchColor],
+              strongOpacity
+            ).rgba,
+          // Keep hover effect when hovered, focused or the dropdown menu is opened.
+          '&:hover, &:focus-within, &[data-highlight="true"]': {
+            backgroundColor:
+              color && baseSwatches[color as AvailableSwatchColor].rgb,
+          },
+
+          boxShadow:
+            color &&
+            `inset 0px -2px 0px ${
+              baseSwatches[color as AvailableSwatchColor].rgb
+            }`,
+        }),
+      ]}
+      data-highlight={highlight}
+    >
       <div css={headerWrapperStyles}>
-        {icon ?? (
-          <span css={columnTypeStyles}>
-            <Icon />
-          </span>
-        )}
+        <span css={columnTypeStyles}>
+          <Icon />
+        </span>
         <div css={childrenWrapperStyles}>{children}</div>
         {menu}
       </div>

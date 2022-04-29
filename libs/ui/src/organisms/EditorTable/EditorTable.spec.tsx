@@ -1,7 +1,7 @@
-import { ComponentProps } from 'react';
 import { render } from '@testing-library/react';
-import { EditorTable } from './EditorTable';
+import { ComponentProps } from 'react';
 import { getNumberType, getStringType } from '../../utils';
+import { EditorTable } from './EditorTable';
 
 const defaultProps: ComponentProps<typeof EditorTable> = {
   columns: [

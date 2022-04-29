@@ -1,3 +1,5 @@
+import { PlateComponentAttributes } from '@decipad/editor-types';
+import { css } from '@emotion/react';
 import {
   ComponentProps,
   ElementType,
@@ -5,14 +7,11 @@ import {
   PropsWithChildren,
   useState,
 } from 'react';
-import { css } from '@emotion/react';
-import { PlateComponentAttributes } from '@decipad/editor-types';
-import { TableHeader } from '../../atoms';
-import { getStringType } from '../../utils';
-
 import { TableColumnMenu } from '..';
+import { TableHeader } from '../../atoms';
 import { Caret } from '../../icons';
 import { table } from '../../styles';
+import { getStringType } from '../../utils';
 
 const rightSlotStyles = css({
   display: 'grid',
@@ -22,7 +21,7 @@ const rightSlotStyles = css({
 });
 
 type TableColumnHeaderProps = PropsWithChildren<
-  Pick<ComponentProps<typeof TableHeader>, 'type'> &
+  Pick<ComponentProps<typeof TableHeader>, 'type' | 'color'> &
     Pick<
       ComponentProps<typeof TableColumnMenu>,
       'onChangeColumnType' | 'onRemoveColumn' | 'parseUnit'
@@ -39,6 +38,7 @@ export const TableColumnHeader: FC<TableColumnHeaderProps> = ({
   onChangeColumnType,
   onRemoveColumn,
   parseUnit,
+  color,
   type = getStringType(),
   readOnly = false,
   children,
@@ -67,6 +67,7 @@ export const TableColumnHeader: FC<TableColumnHeaderProps> = ({
       }
       highlight={isMenuOpen}
       type={type}
+      color={color}
     >
       {children}
     </TableHeader>

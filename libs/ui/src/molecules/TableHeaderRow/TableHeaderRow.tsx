@@ -1,19 +1,17 @@
+import { useStyle } from '@decipad/react-contexts';
+import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { Children, FC, ReactNode } from 'react';
-import { noop } from '@decipad/utils';
-import { cssVar } from '../../primitives';
 import { Create } from '../../icons';
+import { strongOpacity, transparency } from '../../primitives';
 import { table } from '../../styles';
+import {
+  AvailableSwatchColor,
+  baseSwatches,
+  defaultTableColor,
+} from '../../utils';
 
 const createColumnThStyles = css({
-  backgroundColor: cssVar('highlightColor'),
-  '&:hover, &:focus-within': {
-    backgroundColor: cssVar('strongHighlightColor'),
-  },
-
-  boxShadow: `inset 0px -2px 0px ${cssVar('strongHighlightColor')}`,
-
-  // Each row is as tall as the tallest cell, so our rows are at least this high.
   minHeight: table.thMinHeight,
   width: table.buttonColumnWidth,
 
@@ -46,6 +44,7 @@ export const TableHeaderRow = ({
   onAddColumn = noop,
   readOnly = false,
 }: TableHeaderRowProps): ReturnType<FC> => {
+  const { color = defaultTableColor } = useStyle();
   return (
     <tr
       css={{
@@ -58,7 +57,25 @@ export const TableHeaderRow = ({
     >
       {children}
       {actionsColumn && (
-        <th contentEditable={false} css={createColumnThStyles}>
+        <th
+          contentEditable={false}
+          css={[
+            createColumnThStyles,
+            css({
+              backgroundColor: transparency(
+                baseSwatches[color as AvailableSwatchColor],
+                strongOpacity
+              ).rgba,
+              '&:hover, &:focus-within': {
+                backgroundColor:
+                  baseSwatches[color as AvailableSwatchColor].rgb,
+              },
+              boxShadow: `inset 0px -2px 0px ${
+                baseSwatches[color as AvailableSwatchColor].rgb
+              }`,
+            }),
+          ]}
+        >
           {!readOnly && (
             <button css={buttonStyles} onClick={onAddColumn}>
               <span css={iconWrapperStyles}>

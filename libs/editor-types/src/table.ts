@@ -1,14 +1,14 @@
 import type { EmptyText } from '.';
 import {
-  ELEMENT_TABLE_INPUT,
-  ELEMENT_TR,
-  ELEMENT_TH,
-  ELEMENT_TD,
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
+  ELEMENT_TABLE_INPUT,
+  ELEMENT_TD,
+  ELEMENT_TH,
+  ELEMENT_TR,
 } from './element-kinds';
 import type { BaseElement, Text } from './elements';
-import type { TableData, TableCellType } from './tables-legacy';
+import type { TableCellType, TableData } from './tables-legacy';
 
 export interface TableCaptionElement extends BaseElement {
   type: typeof ELEMENT_TABLE_CAPTION;
@@ -41,6 +41,8 @@ export interface TableHeaderRowElement extends BaseElement {
 export interface TableElement extends BaseElement {
   type: typeof ELEMENT_TABLE;
   children: [TableCaptionElement, TableHeaderRowElement, ...TableRowElement[]];
+  color?: string;
+  icon?: string;
 }
 
 // legacy

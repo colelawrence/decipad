@@ -1,8 +1,11 @@
+import { useStyle } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { FC, PropsWithChildren } from 'react';
-import { Table as TableIcon } from '../../icons';
-import { blockAlignment } from '../../styles';
+import * as icons from '../../icons';
 import { cssVar, display, p16Bold, setCssVar } from '../../primitives';
+import { blockAlignment } from '../../styles';
+import { AvailableSwatchColor, UserIconKey } from '../../utils';
+import { IconPopover } from '../IconPopover/IconPopover';
 
 const tableTitleWrapper = css({
   alignItems: 'center',
@@ -46,10 +49,21 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
   empty,
   children,
 }) => {
+  const { color = 'Catskill', icon = 'Table', setIcon, setColor } = useStyle();
+  const Icon = icons[icon as UserIconKey];
   return (
     <div css={tableTitleWrapper}>
       <div contentEditable={false} css={tableIconSizeStyles}>
-        <TableIcon />
+        <IconPopover
+          color={color as AvailableSwatchColor}
+          trigger={
+            <div>
+              <Icon />
+            </div>
+          }
+          onChangeIcon={setIcon}
+          onChangeColor={setColor}
+        />
       </div>
       <div
         // eslint-disable-next-line jsx-a11y/aria-props

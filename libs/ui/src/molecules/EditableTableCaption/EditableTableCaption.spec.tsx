@@ -1,5 +1,4 @@
 import { render } from '@testing-library/react';
-
 import { EditableTableCaption } from './EditableTableCaption';
 
 it('renders the text', () => {

@@ -3,6 +3,7 @@ import { Children, FC, ReactNode } from 'react';
 import { Table } from '..';
 import { AddTableRowButton } from '../../molecules';
 import { TableColumn } from '../../types';
+import { AvailableSwatchColor, UserIconKey } from '../../utils';
 
 const etStyle = css({
   margin: 'auto',
@@ -18,6 +19,10 @@ interface Column {
 
 interface EditorTableProps {
   readonly onAddRow?: () => void;
+  readonly onChangeIcon?: (newIcon: UserIconKey) => void;
+  readonly onChangeColor?: (newColor: AvailableSwatchColor) => void;
+  readonly icon?: UserIconKey;
+  readonly color?: AvailableSwatchColor;
   readonly columns: Column[];
   readonly children?: ReactNode;
 }
@@ -28,6 +33,7 @@ export const EditorTable: FC<EditorTableProps> = ({
   children,
 }: EditorTableProps): ReturnType<FC> => {
   const [caption, thead, ...tbody] = Children.toArray(children);
+
   return (
     <div css={etStyle}>
       {caption}

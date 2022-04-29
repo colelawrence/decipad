@@ -1,10 +1,10 @@
 /* eslint-disable no-param-reassign */
 import {
+  Element,
   ELEMENT_FETCH,
   ELEMENT_INPUT,
   ELEMENT_PLOT,
   ELEMENT_TABLE_INPUT,
-  Element,
 } from '@decipad/editor-types';
 import { isElement, isText, TNode } from '@udecode/plate';
 import { Editor, Node, NodeEntry, Path, Transforms } from 'slate';

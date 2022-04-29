@@ -21,19 +21,33 @@ it('renders the children', () => {
   expect(getByText('Th Element')).toBeVisible();
 });
 
-describe('icon prop', () => {
-  it('renders icon', () => {
+describe('Can render typed icons', () => {
+  it('renders default type as string', () => {
     const { getByText } = render(
       <table>
         <thead>
           <tr>
-            <TableHeader icon={<span>icon</span>}>Th Element</TableHeader>
+            <TableHeader>A string</TableHeader>
           </tr>
         </thead>
       </table>
     );
 
-    expect(getByText('icon')).toBeVisible();
+    expect(getByText('Text')).toBeDefined();
+  });
+
+  it('renders type icon', () => {
+    const { getByText } = render(
+      <table>
+        <thead>
+          <tr>
+            <TableHeader type={getNumberType()}>Th Element</TableHeader>
+          </tr>
+        </thead>
+      </table>
+    );
+
+    expect(getByText('Number')).toBeDefined();
   });
 });
 

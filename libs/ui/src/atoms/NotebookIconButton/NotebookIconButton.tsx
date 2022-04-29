@@ -25,6 +25,9 @@ const iconSize = css({
   display: 'inline-block',
   width: '22px',
   height: '22px',
+  '> svg > rect': {
+    fill: 'none',
+  },
   '> svg > *': { stroke: cssVar('normalTextColor') },
 });
 

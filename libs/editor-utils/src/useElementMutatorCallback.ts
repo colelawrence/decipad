@@ -1,7 +1,7 @@
+import { Element } from '@decipad/editor-types';
 import { useCallback } from 'react';
 import { Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
-import { Element } from '@decipad/editor-types';
 
 export const useElementMutatorCallback = <E extends Element>(
   editor: ReactEditor,

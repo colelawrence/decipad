@@ -1,19 +1,19 @@
 import {
+  BaseElement,
   ELEMENT_FETCH,
   ELEMENT_INPUT,
-  ELEMENT_TABLE_INPUT,
   ELEMENT_PLOT,
-  Node,
-  BaseElement,
+  ELEMENT_TABLE_INPUT,
   EmptyText,
+  Node,
   PlainText,
 } from '.';
-import type { TableElement, TableInputElement } from './table';
 import {
   ELEMENT_CAPTION,
   ELEMENT_EXPRESSION,
   ELEMENT_VARIABLE_DEF,
 } from './element-kinds';
+import type { TableElement, TableInputElement } from './table';
 
 export type { TableElement };
 export interface FetchElement extends BaseElement {
