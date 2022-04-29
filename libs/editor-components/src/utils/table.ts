@@ -6,11 +6,11 @@ import {
   ELEMENT_TR,
   TableElement,
 } from '@decipad/editor-types';
-import { TEditor } from '@udecode/plate';
-import { Path, Transforms } from 'slate';
 import { requirePathBelowBlock } from '@decipad/editor-utils';
+import { TEditor } from '@udecode/plate';
 import { clone } from 'lodash';
 import { nanoid } from 'nanoid';
+import { Path, Transforms } from 'slate';
 import { GetAvailableIdentifier } from './slashCommands';
 
 const initialTableElement = {
@@ -26,17 +26,17 @@ const initialTableElement = {
         {
           type: ELEMENT_TH,
           cellType: { kind: 'string' },
-          children: [{ text: 'Title' }],
+          children: [{ text: 'Column1' }],
         },
         {
           type: ELEMENT_TH,
           cellType: { kind: 'number' },
-          children: [{ text: 'Donation' }],
+          children: [{ text: 'Column2' }],
         },
         {
           type: ELEMENT_TH,
-          cellType: { kind: 'date', date: 'month' },
-          children: [{ text: 'Recorded' }],
+          cellType: { kind: 'number' },
+          children: [{ text: 'Column3' }],
         },
       ],
     },

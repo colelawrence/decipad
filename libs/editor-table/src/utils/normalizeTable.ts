@@ -1,25 +1,25 @@
 import {
   BaseElement,
-  ELEMENT_TR,
-  ELEMENT_TH,
+  ELEMENT_TABLE_CAPTION,
   ELEMENT_TD,
+  ELEMENT_TH,
+  ELEMENT_TR,
+  isElement,
+  TableElement,
   TableHeaderElement,
   TableRowElement,
-  TableElement,
-  ELEMENT_TABLE_CAPTION,
-  isElement,
 } from '@decipad/editor-types';
 import { normalizeIdentifierElement } from '@decipad/editor-utils';
 import {
   Descendant,
   Editor,
   Element,
-  NodeEntry,
-  Transforms,
+  ElementEntry,
   Node,
+  NodeEntry,
   Path,
   Text,
-  ElementEntry,
+  Transforms,
 } from 'slate';
 
 const normalizeTableStructure = (
@@ -294,7 +294,7 @@ const normalizeTableRowCount = (
   [, path]: NodeEntry<Element>
 ): boolean => {
   // at least two rows of data
-  for (const rowIndex of [2, 3]) {
+  for (const rowIndex of [2]) {
     const firstDataRowPath = [...path, rowIndex];
     if (!Editor.hasPath(editor, firstDataRowPath)) {
       Transforms.insertNodes(

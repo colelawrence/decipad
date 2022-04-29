@@ -1,10 +1,10 @@
 import {
-  ELEMENT_TABLE,
-  ELEMENT_TR,
   ELEMENT_PARAGRAPH,
+  ELEMENT_TABLE,
+  ELEMENT_TABLE_CAPTION,
   ELEMENT_TD,
   ELEMENT_TH,
-  ELEMENT_TABLE_CAPTION,
+  ELEMENT_TR,
 } from '@decipad/editor-types';
 import { createPlateEditor, TElement } from '@udecode/plate';
 import { Editor } from 'slate';
@@ -41,15 +41,6 @@ it('normalizes empty table', () => {
               cellType: {
                 kind: 'string',
               },
-            },
-          ],
-        },
-        {
-          type: ELEMENT_TR,
-          children: [
-            {
-              type: ELEMENT_TD,
-              children: [{ text: '' }],
             },
           ],
         },
@@ -115,14 +106,6 @@ it('inserts tds and ths if needed', () => {
             },
           ],
         },
-        {
-          type: ELEMENT_TR,
-          children: [
-            {
-              type: ELEMENT_TD,
-            },
-          ],
-        },
       ],
     },
   ]);
@@ -170,15 +153,6 @@ it('removes strange types of nodes inside a table', () => {
               cellType: {
                 kind: 'string',
               },
-              children: [{ text: '' }],
-            },
-          ],
-        },
-        {
-          type: ELEMENT_TR,
-          children: [
-            {
-              type: ELEMENT_TD,
               children: [{ text: '' }],
             },
           ],
@@ -450,7 +424,7 @@ it('makes th and td elements contain only text elements', () => {
   ]);
 });
 
-it('makes table have at least two rows', () => {
+it('makes table have at least one row', () => {
   editor.children = [
     {
       type: ELEMENT_TABLE,
@@ -507,19 +481,6 @@ it('makes table have at least two rows', () => {
                 kind: 'string',
               },
               children: [{ text: 'colName2' }],
-            },
-          ],
-        },
-        {
-          type: ELEMENT_TR,
-          children: [
-            {
-              type: ELEMENT_TD,
-              children: [{ text: '' }],
-            },
-            {
-              type: ELEMENT_TD,
-              children: [{ text: '' }],
             },
           ],
         },
