@@ -5,8 +5,8 @@ import { findParentWithStyle } from '@decipad/dom-test-utils';
 import { NotebookListItem } from './NotebookListItem';
 
 const props: ComponentProps<typeof NotebookListItem> = {
+  id: 'my-notebook',
   name: 'My Notebook',
-  href: '/my-notebook',
   exportFileName: '',
   exportHref: '',
   icon: 'Rocket',

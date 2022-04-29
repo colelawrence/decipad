@@ -28,7 +28,6 @@ it('renders a list of notebooks', () => {
           {
             id: '0',
             name: 'First',
-            href: '',
             exportFileName: '',
             exportHref: '',
             icon: 'Rocket',
@@ -37,7 +36,6 @@ it('renders a list of notebooks', () => {
           {
             id: '1',
             name: 'Second',
-            href: '',
             exportFileName: '',
             exportHref: '',
             icon: 'Rocket',
@@ -64,7 +62,6 @@ it('renders an item with actions open on top', async () => {
           {
             id: '0',
             name: 'First',
-            href: '',
             exportFileName: '',
             exportHref: '',
             icon: 'Rocket',
@@ -73,7 +70,6 @@ it('renders an item with actions open on top', async () => {
           {
             id: '1',
             name: 'Second',
-            href: '',
             exportFileName: '',
             exportHref: '',
             icon: 'Rocket',
@@ -103,7 +99,6 @@ it('only allows one open actions menu at a time', async () => {
           {
             id: '0',
             name: 'First',
-            href: '',
             exportFileName: '',
             exportHref: '',
             icon: 'Rocket',
@@ -112,7 +107,6 @@ it('only allows one open actions menu at a time', async () => {
           {
             id: '1',
             name: 'Second',
-            href: '',
             exportFileName: '',
             exportHref: '',
             icon: 'Rocket',
@@ -142,7 +136,6 @@ it('emits duplicate events', async () => {
           {
             id: '0',
             name: 'First',
-            href: '',
             exportFileName: '',
             exportHref: '',
             icon: 'Rocket',
@@ -151,7 +144,6 @@ it('emits duplicate events', async () => {
           {
             id: '1',
             name: 'Second',
-            href: '',
             exportFileName: '',
             exportHref: '',
             icon: 'Rocket',
@@ -179,7 +171,6 @@ it('emits delete events', async () => {
           {
             id: '0',
             name: 'First',
-            href: '',
             exportFileName: '',
             exportHref: '',
             icon: 'Rocket',
@@ -188,7 +179,6 @@ it('emits delete events', async () => {
           {
             id: '1',
             name: 'Second',
-            href: '',
             exportFileName: '',
             exportHref: '',
             icon: 'Rocket',

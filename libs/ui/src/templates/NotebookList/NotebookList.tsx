@@ -19,9 +19,9 @@ type NotebookListProps = {
   readonly notebooks: ReadonlyArray<
     Pick<
       ComponentProps<typeof NotebookListItem>,
+      | 'id'
       | 'name'
       | 'description'
-      | 'href'
       | 'exportHref'
       | 'exportFileName'
       | 'icon'
@@ -69,6 +69,7 @@ export const NotebookList = ({
                   {i === 0 || <Divider />}
                   <NotebookListItem
                     {...notebook}
+                    id={id}
                     actionsOpen={openActionsId === id}
                     toggleActionsOpen={() =>
                       setOpenActionsId(openActionsId === id ? undefined : id)

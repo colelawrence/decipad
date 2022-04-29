@@ -1,3 +1,4 @@
+import { notebooks } from '@decipad/routing';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC } from 'react';
@@ -100,10 +101,10 @@ const actionsStyles = css({
 });
 
 type NotebookListItemProps = {
+  readonly id: string;
   readonly name: string;
   readonly description?: string;
 
-  readonly href: string;
   readonly exportHref: string;
   readonly exportFileName: string;
 
@@ -115,9 +116,9 @@ type NotebookListItemProps = {
   readonly iconColor: AvailableSwatchColor;
 };
 export const NotebookListItem = ({
+  id,
   name,
   description,
-  href,
   exportHref,
   exportFileName,
   actionsOpen = false,
@@ -128,6 +129,9 @@ export const NotebookListItem = ({
   iconColor = 'Catskill',
 }: NotebookListItemProps): ReturnType<FC> => {
   const Icon = icons[icon];
+
+  const href = notebooks({}).notebook({ notebook: { id, name } }).$;
+
   return (
     <div css={{ position: 'relative' }}>
       <Anchor href={href} css={styles}>

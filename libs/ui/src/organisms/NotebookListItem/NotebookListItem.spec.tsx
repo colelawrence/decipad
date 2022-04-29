@@ -3,8 +3,8 @@ import { ComponentProps } from 'react';
 import { NotebookListItem } from './NotebookListItem';
 
 const props: ComponentProps<typeof NotebookListItem> = {
+  id: 'my-notebook',
   name: 'My Notebook',
-  href: '/my-notebook',
   exportFileName: '',
   exportHref: '',
   icon: 'Rocket',
@@ -13,24 +13,20 @@ const props: ComponentProps<typeof NotebookListItem> = {
 
 it('links to the notebook with its name', () => {
   const { getByText } = render(
-    <NotebookListItem {...props} name="My Notebook" href="/my-notebook" />
+    <NotebookListItem {...props} name="My Notebook" id="my-notebook" />
   );
   expect(getByText('My Notebook').closest('a')).toHaveAttribute(
     'href',
-    '/my-notebook'
+    expect.stringContaining('my-notebook')
   );
 });
 
 it('renders a placeholder for an empty name', () => {
-  const { getByText } = render(
-    <NotebookListItem {...props} name="" href="/my-notebook" />
-  );
+  const { getByText } = render(<NotebookListItem {...props} name="" />);
   expect(getByText(/my note(book|pad)/i)).toBeVisible();
 });
 
 it('renders the default icon', () => {
-  const { getByTitle } = render(
-    <NotebookListItem {...props} name="My Notebook" href="/my-notebook" />
-  );
+  const { getByTitle } = render(<NotebookListItem {...props} />);
   expect(getByTitle(/rocket/i)).toBeInTheDocument();
 });

@@ -164,7 +164,6 @@ export function Workspace(): ReturnType<FC> {
                   ...notebook,
                   icon,
                   iconColor,
-                  href: notebooks({}).notebook({ notebook }).$,
                   exportHref: `/api/pads/${notebook.id}/export`,
                   exportFileName: `notebook-${notebook.id}.json`,
                 };
