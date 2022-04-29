@@ -1,6 +1,6 @@
 import { useIsBlockActive } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
-import { ReactNode } from 'react';
+import { ReactNode, RefObject } from 'react';
 import { cssVar, p16Regular, setCssVar } from '../../primitives';
 import { blockAlignment } from '../../styles';
 
@@ -46,11 +46,13 @@ interface ParagraphProps {
    * when there is content in the children that it could overlap with.
    */
   readonly placeholder?: string;
+  paragraphRef?: RefObject<HTMLParagraphElement>;
 }
 
 export const Paragraph = ({
   children,
   placeholder,
+  paragraphRef,
 }: ParagraphProps): ReturnType<React.FC> => {
   const isBlockActive = useIsBlockActive();
 
@@ -58,6 +60,7 @@ export const Paragraph = ({
     <p
       aria-placeholder={placeholder}
       css={[styles, isBlockActive && activeStyles]}
+      ref={paragraphRef}
     >
       <span>{children}</span>
     </p>
