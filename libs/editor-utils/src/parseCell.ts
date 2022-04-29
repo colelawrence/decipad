@@ -41,6 +41,11 @@ export function parseCell(
 
       return dateToAST(cellType, asDate);
     }
+    case 'boolean': {
+      const n = text === 'true';
+
+      return astNode('literal', 'boolean' as const, n);
+    }
     default: {
       // NOTE: Defaulting to string catches string values but it also catches legacy iterations of
       // cell types without breaking the whole notebook.
@@ -75,6 +80,9 @@ export const getNullReplacementValue = (
   }
   if (cellType.kind === 'number') {
     return getDefined(parseCell(cellType, '0'));
+  }
+  if (cellType.kind === 'boolean') {
+    return getDefined(parseCell(cellType, 'true'));
   }
   if (cellType.kind === 'string') {
     return getDefined(parseCell(cellType, ''));

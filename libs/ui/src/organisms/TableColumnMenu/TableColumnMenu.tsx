@@ -3,10 +3,23 @@ import { deserializeUnit, stringifyUnits } from '@decipad/language';
 import { noop } from '@decipad/utils';
 import { ComponentProps, ReactNode } from 'react';
 import { MenuItem, TriggerMenuItem } from '../../atoms';
-import { All, Calendar, Number, Shapes, Text, Trash } from '../../icons';
+import {
+  All,
+  Calendar,
+  CheckboxSelected,
+  Number,
+  Shapes,
+  Text,
+  Trash,
+} from '../../icons';
 import { MenuList, UnitMenuItem } from '../../molecules';
 import { TableCellType } from '../../types';
-import { getDateType, getNumberType, getStringType } from '../../utils';
+import {
+  getBooleanType,
+  getDateType,
+  getNumberType,
+  getStringType,
+} from '../../utils';
 
 interface TableColumnMenuProps
   extends Pick<ComponentProps<typeof MenuList>, 'open' | 'onChangeOpen'>,
@@ -58,6 +71,13 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
           selected={type.kind === 'number' && type.unit == null}
         >
           Number
+        </MenuItem>
+        <MenuItem
+          icon={<CheckboxSelected />}
+          onSelect={() => onChangeColumnType(getBooleanType())}
+          selected={type.kind === 'boolean'}
+        >
+          Checkbox
         </MenuItem>
         <MenuItem
           icon={<Text />}

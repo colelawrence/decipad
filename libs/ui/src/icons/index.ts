@@ -20,6 +20,8 @@ export { Caret } from './Caret/Caret';
 export { Chart } from './Chart/Chart';
 export { Chat } from './Chat/Chat';
 export { Check } from './Check/Check';
+export { CheckboxSelected } from './CheckboxSelected/CheckboxSelected';
+export { CheckboxUnselected } from './CheckboxUnselected/CheckboxUnselected';
 export { Chevron } from './Chevron/Chevron';
 export { Clock } from './Clock/Clock';
 export { Close } from './Close/Close';

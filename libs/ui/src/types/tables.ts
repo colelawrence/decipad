@@ -32,12 +32,14 @@ type TimeSpecificity =
 type SerializedType = Readonly<
   | { kind: 'number'; unit: SerializedUnits | null }
   | { kind: 'string' }
+  | { kind: 'boolean' }
   | { kind: 'date'; date: TimeSpecificity }
 >;
 
 export type TableCellType =
   | Extract<SerializedType, { kind: 'number' }>
   | Extract<SerializedType, { kind: 'string' }>
+  | Extract<SerializedType, { kind: 'boolean' }>
   | Extract<SerializedType, { kind: 'date' }>;
 
 export interface TableColumn {

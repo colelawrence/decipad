@@ -1,6 +1,5 @@
 import { render } from '@testing-library/react';
 import { runCode } from '../../test-utils';
-
 import { CodeResult } from './CodeResult';
 
 it('renders a number result', async () => {
@@ -14,7 +13,7 @@ it('renders a boolean result', async () => {
   const { container } = render(
     <CodeResult {...await runCode('false')} variant="inline" />
   );
-  expect(container.textContent).toContain('false');
+  expect(container.textContent).toContain('Checkbox unselected');
 });
 
 it('renders a string result', async () => {

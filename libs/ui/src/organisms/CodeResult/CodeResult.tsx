@@ -7,7 +7,7 @@ import {
   RowResult,
   TableResult,
 } from '..';
-import { DateResult, NumberResult } from '../../atoms';
+import { BooleanResult, DateResult, NumberResult } from '../../atoms';
 import { InlineCodeError } from '../../molecules';
 import { CodeResultProps } from '../../types';
 
@@ -38,6 +38,10 @@ const getResultMatchers = (): ResultMatcher[] => [
   {
     component: NumberResult,
     match: ({ type }) => type.kind === 'number',
+  },
+  {
+    component: BooleanResult,
+    match: ({ type }) => type.kind === 'boolean',
   },
   {
     component: DateResult,

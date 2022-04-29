@@ -1,6 +1,6 @@
 import { SerializedType, SerializedUnits, Time } from '@decipad/language';
 import { FunctionComponent } from 'react';
-import { All, Calendar, Number, Text } from '../icons';
+import { All, Calendar, CheckboxSelected, Number, Text } from '../icons';
 import type { TableCellType } from '../types';
 import { AvailableSwatchColor } from './swatches';
 
@@ -8,6 +8,8 @@ export function getTypeIcon(type: TableCellType): FunctionComponent {
   switch (type.kind) {
     case 'date':
       return Calendar;
+    case 'boolean':
+      return CheckboxSelected;
     case 'number':
       return type.unit == null ? Number : All;
     default:
@@ -25,6 +27,10 @@ export function getNumberType(
   unit?: SerializedUnits
 ): Extract<SerializedType, { kind: 'number' }> {
   return { kind: 'number', unit: unit ?? null };
+}
+
+export function getBooleanType(): Extract<SerializedType, { kind: 'boolean' }> {
+  return { kind: 'boolean' };
 }
 
 export function getStringType(): Extract<SerializedType, { kind: 'string' }> {
