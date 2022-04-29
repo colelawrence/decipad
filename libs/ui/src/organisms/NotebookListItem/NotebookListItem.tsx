@@ -39,9 +39,15 @@ const iconStyles = css({
   height: '38px',
 
   display: 'grid',
-  gridTemplateColumns: '14px',
+  placeItems: 'center',
   justifyContent: 'center',
   alignContent: 'center',
+  gridTemplateColumns: '14px',
+
+  '> svg': {
+    height: '18px',
+    width: '18px',
+  },
 
   border: `1px solid ${cssVar('strongHighlightColor')}`,
   borderRadius: '4px',
@@ -93,7 +99,7 @@ const actionsStyles = css({
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
 });
 
-interface NotebookListItemProps {
+type NotebookListItemProps = {
   readonly name: string;
   readonly description?: string;
 
@@ -107,7 +113,7 @@ interface NotebookListItemProps {
   readonly onDelete?: () => void;
   readonly icon: UserIconKey;
   readonly iconColor: AvailableSwatchColor;
-}
+};
 export const NotebookListItem = ({
   name,
   description,
@@ -118,8 +124,8 @@ export const NotebookListItem = ({
   toggleActionsOpen = noop,
   onDuplicate = noop,
   onDelete = noop,
-  icon,
-  iconColor,
+  icon = 'Rocket',
+  iconColor = 'Catskill',
 }: NotebookListItemProps): ReturnType<FC> => {
   const Icon = icons[icon];
   return (

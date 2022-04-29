@@ -1,29 +1,44 @@
 import { Meta, Story } from '@storybook/react';
 import { ComponentProps } from 'react';
+import { UserIconKey } from '../../utils';
+import { AvailableSwatchColor, swatchNames } from '../../utils/swatches';
 import { NotebookListItem } from './NotebookListItem';
 
-type Args = Pick<
+const args: Pick<
   ComponentProps<typeof NotebookListItem>,
-  'name' | 'description'
->;
+  'name' | 'description' | 'iconColor' | 'icon'
+> = {
+  iconColor: 'Malibu' as AvailableSwatchColor,
+  icon: 'Rocket' as UserIconKey,
+  name: 'Getting started with Decipad',
+  description:
+    'Decipad is a low-code notebook that is easy and frictionless to use.',
+};
 
 export default {
   title: 'Organisms / Notebook List / Item',
   component: NotebookListItem,
-  args: {
-    name: 'Getting started with Decipad',
-    description:
-      'Decipad is a low-code notebook that is easy and frictionless to use.',
+  argTypes: {
+    iconColor: { options: swatchNames, control: { type: 'radio' } },
+    icon: {
+      options: [
+        'Rocket' as UserIconKey,
+        'Coffee' as UserIconKey,
+        'Sun' as UserIconKey,
+      ],
+      control: { type: 'radio' },
+    },
   },
-} as Meta<Args>;
+  decorators: [
+    (St) => (
+      <div style={{ margin: '5px' }}>
+        <St />
+      </div>
+    ),
+  ],
+  args,
+} as Meta<typeof args>;
 
-export const Normal: Story<Args> = (args) => (
-  <NotebookListItem
-    {...args}
-    href=""
-    exportFileName=""
-    exportHref=""
-    icon="Rocket"
-    iconColor="Catskill"
-  />
+export const Normal: Story<typeof args> = (props) => (
+  <NotebookListItem {...props} href="" exportFileName="" exportHref="" />
 );
