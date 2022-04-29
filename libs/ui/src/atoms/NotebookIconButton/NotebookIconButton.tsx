@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import {
   black,
+  cssVar,
   grey200,
   normalOpacity,
   OpaqueColor,
@@ -24,6 +25,7 @@ const iconSize = css({
   display: 'inline-block',
   width: '22px',
   height: '22px',
+  '> svg > *': { stroke: cssVar('normalTextColor') },
 });
 
 type IconButtonProps = {
