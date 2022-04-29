@@ -32,7 +32,6 @@ import { useHistory } from 'react-router-dom';
 import { SideMenu } from '../components/SideMenu';
 import { Topbar } from '../components/Topbar';
 import { parseIconColorFromIdentifier } from '../lib/parseIconColorFromIdentifier';
-import { encode as encodeVanityUrlComponent } from '../lib/vanityUrlComponent';
 
 export function Workspace(): ReturnType<FC> {
   const { workspaceId } = useRouteParams(workspaces({}).workspace);
@@ -82,13 +81,9 @@ export function Workspace(): ReturnType<FC> {
         if (!creation) {
           throw new Error('No notebook creation result');
         }
-        const newPad = creation.createPad;
+        const notebook = creation.createPad;
         toast('Notebook created successfully', 'success');
-        history.push(
-          notebooks({}).notebook({
-            notebookId: encodeVanityUrlComponent('', newPad.id),
-          }).$
-        );
+        history.push(notebooks({}).notebook({ notebook }).$);
         clientEvent({ type: 'action', action: 'notebook created' });
       } catch (err) {
         toast(`Error creating notebook: ${(err as Error).message}`, 'error');
@@ -169,12 +164,7 @@ export function Workspace(): ReturnType<FC> {
                   ...notebook,
                   icon,
                   iconColor,
-                  href: notebooks({}).notebook({
-                    notebookId: encodeVanityUrlComponent(
-                      notebook.name,
-                      notebook.id
-                    ),
-                  }).$,
+                  href: notebooks({}).notebook({ notebook }).$,
                   exportHref: `/api/pads/${notebook.id}/export`,
                   exportFileName: `notebook-${notebook.id}.json`,
                 };

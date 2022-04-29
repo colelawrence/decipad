@@ -725,6 +725,13 @@
           "options": {
             "command": "yarn tsc -b libs/routing"
           }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/routing"],
+          "options": {
+            "jestConfig": "libs/routing/jest.config.js"
+          }
         }
       }
     },

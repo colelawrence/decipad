@@ -1,4 +1,4 @@
-import { docs } from '@decipad/routing';
+import { docs, workspaces } from '@decipad/routing';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { useSession } from 'next-auth/client';
@@ -49,27 +49,22 @@ const helpLinkStyles = css(p14Medium);
 
 export type NotebookTopbarProps = Pick<
   ComponentProps<typeof NotebookPath>,
-  'workspaceName' | 'notebookName'
+  'workspace'
 > &
-  Pick<ComponentProps<typeof NotebookAvatars>, 'usersWithAccess'> & {
-    workspaceHref: string;
+  Pick<ComponentProps<typeof NotebookAvatars>, 'usersWithAccess'> &
+  ComponentProps<typeof NotebookSharingPopUp> & {
     permission: PermissionType;
-    link: string;
-    onToggleShare?: () => void;
+
     onDuplicateNotebook?: () => void;
-    sharingActive?: boolean;
   };
 
 export const NotebookTopbar = ({
-  workspaceName,
-  notebookName,
-  onToggleShare = noop,
+  workspace,
+  notebook,
   onDuplicateNotebook = noop,
   usersWithAccess,
   permission,
-  sharingActive = false,
-  link,
-  workspaceHref,
+  ...sharingProps
 }: NotebookTopbarProps): ReturnType<FC> => {
   const [session] = useSession();
   const isAdmin = permission === 'ADMIN';
@@ -81,16 +76,17 @@ export const NotebookTopbar = ({
       <div css={leftSideStyles}>
         {isAdmin && (
           <div css={{ width: '32px', display: 'grid' }}>
-            <IconButton href={workspaceHref}>
+            <IconButton
+              href={workspaces({}).workspace({ workspaceId: workspace.id }).$}
+            >
               <LeftArrow />
             </IconButton>
           </div>
         )}
         <NotebookPath
           isAdmin={isAdmin}
-          workspaceName={workspaceName}
-          notebookName={notebookName}
-          workspaceHref={workspaceHref}
+          workspace={workspace}
+          notebookName={notebook.name}
         />
       </div>
 
@@ -132,11 +128,7 @@ export const NotebookTopbar = ({
 
         {session?.user ? (
           isAdmin ? (
-            <NotebookSharingPopUp
-              sharingActive={sharingActive}
-              onToggleShare={onToggleShare}
-              link={link}
-            />
+            <NotebookSharingPopUp notebook={notebook} {...sharingProps} />
           ) : (
             <Button onClick={() => onDuplicateNotebook()}>
               Duplicate notebook

@@ -2,7 +2,7 @@ import { LoginPage } from '@decipad/ui';
 import { signIn, useSession } from 'next-auth/client';
 import { FC, ReactNode } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { SECRET_URL_PARAM } from '../../lib/secret';
+import { SECRET_URL_PARAM } from '@decipad/routing';
 
 interface RequireSessionProps {
   readonly allowSecret?: boolean;

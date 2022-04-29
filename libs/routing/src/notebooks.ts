@@ -1,7 +1,11 @@
 import { route, stringParser } from 'typesafe-routes';
+import { descriptiveIdParser } from './shared/descriptive-id';
+import { SECRET_URL_PARAM } from './shared/secret';
 
-// TODO secret query string
-// TODO vanity url parser
-const notebook = route('/:notebookId', { notebookId: stringParser }, {});
+const notebook = route(
+  `/:notebook&:${SECRET_URL_PARAM}?`,
+  { notebook: descriptiveIdParser, [SECRET_URL_PARAM]: stringParser },
+  {}
+);
 
 export default route('/n', {}, { notebook });

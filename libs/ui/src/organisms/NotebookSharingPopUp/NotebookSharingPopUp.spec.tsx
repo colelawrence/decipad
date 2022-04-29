@@ -12,8 +12,8 @@ describe('when the menu is open', () => {
   beforeEach(async () => {
     result = render(
       <NotebookSharingPopUp
-        link="peanut-butter-jelly-time-peanut-"
-        sharingActive={true}
+        notebook={{ id: 'nbid', name: 'My notebook' }}
+        sharingSecret="secret-to-put-in-link"
       />
     );
     await user.click(result.getByText(/share/i));
@@ -26,7 +26,10 @@ describe('when the menu is open', () => {
   it('closes the menu on click outside', async () => {
     result.rerender(
       <>
-        <NotebookSharingPopUp link="peanut-butter-jelly-time-peanut-" />
+        <NotebookSharingPopUp
+          notebook={{ id: 'nbid', name: 'My notebook' }}
+          sharingSecret="secret-to-put-in-link"
+        />
         outside
       </>
     );
@@ -39,13 +42,11 @@ describe('when the menu is open', () => {
   it('does not initially show the sharing link', () => {
     result.rerender(
       <NotebookSharingPopUp
-        link="peanut-butter-jelly-time-peanut-"
-        sharingActive={false}
+        notebook={{ id: 'nbid', name: 'My notebook' }}
+        sharingSecret={undefined}
       />
     );
-    expect(
-      result.queryByText('peanut-butter-jelly-time-peanut-')
-    ).not.toBeInTheDocument();
+    expect(result.queryByText(/secret-to-put-in-link/)).not.toBeInTheDocument();
   });
 
   describe('when enabling sharing', () => {
@@ -54,9 +55,7 @@ describe('when the menu is open', () => {
     });
 
     it('renders the share link', async () => {
-      expect(
-        result.getByText('peanut-butter-jelly-time-peanut-')
-      ).toBeVisible();
+      expect(result.getByText(/secret-to-put-in-link/)).toBeVisible();
     });
 
     describe('when copying the link', () => {

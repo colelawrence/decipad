@@ -7,9 +7,11 @@ import { noop } from '@decipad/utils';
 import { NotebookTopbar } from './NotebookTopbar';
 
 const props: ComponentProps<typeof NotebookTopbar> = {
-  workspaceHref: '/workspaces/johndoespad',
-  workspaceName: "John's Workspace",
-  notebookName: 'My first notebook',
+  notebook: { id: 'nbid', name: 'My first notebook' },
+  workspace: {
+    id: 'wsid',
+    name: "John's Workspace",
+  },
   permission: 'ADMIN',
   usersWithAccess: [
     {
@@ -17,7 +19,6 @@ const props: ComponentProps<typeof NotebookTopbar> = {
       permission: 'ADMIN',
     },
   ],
-  link: '',
 };
 
 const WithProviders: FC<React.PropsWithChildren<unknown>> = ({ children }) => (

@@ -1,11 +1,8 @@
 import { Meta, Story } from '@storybook/react';
-import {
-  NotebookSharingPopUp,
-  NotebookSharingPopUpProps,
-} from './NotebookSharingPopUp';
+import { NotebookSharingPopUp } from './NotebookSharingPopUp';
 
-const args: NotebookSharingPopUpProps = {
-  link: 'peanut-butter-jelly-time-peanut-',
+const args = {
+  isShared: true,
 };
 
 export default {
@@ -14,6 +11,9 @@ export default {
   args,
 } as Meta<typeof args>;
 
-export const Normal: Story<typeof args> = (props) => (
-  <NotebookSharingPopUp {...props} />
+export const Normal: Story<typeof args> = ({ isShared }) => (
+  <NotebookSharingPopUp
+    notebook={{ id: 'nbid', name: 'My notebook' }}
+    sharingSecret={isShared ? 'secret' : undefined}
+  />
 );

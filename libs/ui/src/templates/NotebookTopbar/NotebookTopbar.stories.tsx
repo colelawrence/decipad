@@ -3,8 +3,11 @@ import { ComponentProps } from 'react';
 import { NotebookTopbar } from './NotebookTopbar';
 
 const args: Omit<ComponentProps<typeof NotebookTopbar>, 'workspaceHref'> = {
-  workspaceName: "John's Workspace",
-  notebookName: 'My first notebook',
+  workspace: { id: 'wsid', name: "John's Workspace" },
+  notebook: {
+    id: 'nbid',
+    name: 'My first notebook',
+  },
   usersWithAccess: [
     {
       user: { id: '1', name: 'John Doe' },
@@ -12,7 +15,6 @@ const args: Omit<ComponentProps<typeof NotebookTopbar>, 'workspaceHref'> = {
     },
   ],
   permission: 'ADMIN',
-  link: 'peanut-butter-jelly-',
 };
 export default {
   title: 'Templates / Notebook / Topbar',
@@ -20,5 +22,5 @@ export default {
 } as Meta;
 
 export const Normal: Story<typeof args> = (props) => (
-  <NotebookTopbar workspaceHref="" {...props} />
+  <NotebookTopbar {...props} />
 );

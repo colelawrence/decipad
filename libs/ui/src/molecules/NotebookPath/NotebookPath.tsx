@@ -1,3 +1,4 @@
+import { workspaces } from '@decipad/routing';
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Slash } from '../../icons';
@@ -25,23 +26,24 @@ const iconStyles = css({
 
 interface NotebookPathProps {
   isAdmin: boolean;
-  workspaceName: string;
   notebookName: string;
-  workspaceHref: string;
+  workspace: { id: string; name: string };
 }
 
 export const NotebookPath = ({
   isAdmin,
-  workspaceName,
+  workspace,
   notebookName,
-  workspaceHref,
 }: NotebookPathProps): ReturnType<FC> => {
   return (
     <div css={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
       {isAdmin && (
         <>
-          <Anchor href={workspaceHref} css={workspaceNameStyles}>
-            {workspaceName}
+          <Anchor
+            href={workspaces({}).workspace({ workspaceId: workspace.id }).$}
+            css={workspaceNameStyles}
+          >
+            {workspace.name}
           </Anchor>
           <div css={iconStyles}>
             <Slash />
@@ -49,7 +51,7 @@ export const NotebookPath = ({
         </>
       )}
 
-      <em css={notebookNameStyles}>{notebookName}</em>
+      <em css={notebookNameStyles}>{notebookName || '<unnamed-notebook>'}</em>
     </div>
   );
 };

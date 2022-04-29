@@ -2,7 +2,10 @@ import { Meta, Story } from '@storybook/react';
 import { NotebookPath } from './NotebookPath';
 
 const args = {
-  workspaceName: "John's workspace",
+  workspace: {
+    id: 'wsid',
+    name: "John's Workspace",
+  },
   notebookName: 'Use of funds',
   isAdmin: true,
 };
@@ -13,5 +16,5 @@ export default {
 } as Meta;
 
 export const Normal: Story<typeof args> = (props) => (
-  <NotebookPath workspaceHref="" {...props} />
+  <NotebookPath {...props} />
 );

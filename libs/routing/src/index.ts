@@ -21,5 +21,6 @@ export const SERVER_SIDE_ROUTES = [docs, storybook];
 
 // misc
 
+export { SECRET_URL_PARAM } from './shared/secret';
 export type { RouteNode } from 'typesafe-routes';
 export { useRouteParams } from 'typesafe-routes/react-router';

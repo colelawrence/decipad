@@ -27,34 +27,29 @@ import {
 } from '@decipad/ui';
 import Head from 'next/head';
 import { ComponentProps, FC, useEffect, useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { parseIconColorFromIdentifier } from '../lib/parseIconColorFromIdentifier';
-import { getSecretNotebookLink } from '../lib/secret';
-import { decode as decodeVanityUrlComponent } from '../lib/vanityUrlComponent';
 
 type Icon = ComponentProps<typeof EditorIcon>['icon'];
 type IconColor = ComponentProps<typeof EditorIcon>['color'];
 
 export const Notebook = (): ReturnType<FC> => {
   const history = useHistory();
-  const params = useRouteParams(notebooks({}).notebook);
-  const notebookId = decodeVanityUrlComponent(params.notebookId);
-
-  // See if the route is a shared notebook or an owned one
-  const { search } = useLocation();
-  const secret = new URLSearchParams(search).get('secret') ?? undefined;
+  const {
+    notebook: { id },
+    secret,
+  } = useRouteParams(notebooks({}).notebook);
 
   const toast = useToast();
 
   // State
-  const [sharingActive, setSharingActive] = useState(false);
-  const [shareSecretKey, setShareSecretKey] = useState('');
+  const [sharingSecret, setSharingSecret] = useState('');
   const [icon, setIcon] = useState<Icon>('Rocket');
   const [iconColor, setIconColor] = useState<IconColor>('Catskill');
 
   // Queries
   const { notebook, notebookReadOnly, notebookLoading } = useGetNotebookById(
-    notebookId,
+    id,
     secret
   );
 
@@ -86,11 +81,9 @@ export const Notebook = (): ReturnType<FC> => {
   // Set the share toggle button to be active if the notebook has secrets
   useEffect(() => {
     if (notebook && notebook.access.secrets.length > 0) {
-      setSharingActive(true);
-      setShareSecretKey(notebook.access.secrets[0].secret);
+      setSharingSecret(notebook.access.secrets[0].secret);
     } else {
-      setSharingActive(false);
-      setShareSecretKey('');
+      setSharingSecret('');
     }
 
     const { newIcon, newIconColor, ok } = parseIconColorFromIdentifier(
@@ -103,16 +96,10 @@ export const Notebook = (): ReturnType<FC> => {
     }
   }, [notebook]);
 
-  const notebookUrlWithSecret = getSecretNotebookLink(
-    notebook?.id || '',
-    notebook?.name || '',
-    shareSecretKey
-  );
-
   const onShareToggleClick = async () => {
-    if (sharingActive) {
+    if (sharingSecret) {
       unshareNotebook();
-      setShareSecretKey('');
+      setSharingSecret('');
     } else {
       await shareNotebook();
     }
@@ -154,7 +141,7 @@ export const Notebook = (): ReturnType<FC> => {
         <NotebookPage
           notebook={
             <Editor
-              notebookId={notebookId}
+              notebookId={id}
               readOnly={notebookReadOnly}
               authSecret={secret}
             />
@@ -185,19 +172,11 @@ export const Notebook = (): ReturnType<FC> => {
           }
           topbar={
             <NotebookTopbar
-              workspaceName={notebook.workspace.name}
-              notebookName={
-                notebook.name === '' ? '<unnamed-notebook>' : notebook.name
-              }
-              workspaceHref={
-                workspacesRoute({}).workspace({
-                  workspaceId: notebook.workspace.id,
-                }).$
-              }
+              workspace={notebook.workspace}
+              notebook={notebook}
               usersWithAccess={notebook.access.users}
               permission={notebook.myPermissionType}
-              link={notebookUrlWithSecret}
-              sharingActive={sharingActive}
+              sharingSecret={sharingSecret}
               onToggleShare={onShareToggleClick}
               onDuplicateNotebook={onDuplicateNotebook}
             />

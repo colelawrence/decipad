@@ -1,3 +1,4 @@
+import { notebooks } from '@decipad/routing';
 import { useWindowListener } from '@decipad/react-utils';
 import { ClientEventsContext } from '@decipad/client-events';
 import { css } from '@emotion/react';
@@ -101,10 +102,10 @@ const padLinkTextStyles = css(
   }
 );
 
-export interface NotebookSharingPopUpProps {
-  link: string;
+interface NotebookSharingPopUpProps {
+  notebook: { id: string; name: string };
+  sharingSecret?: string;
   onToggleShare?: () => void;
-  sharingActive?: boolean;
 }
 
 /**
@@ -113,8 +114,8 @@ export interface NotebookSharingPopUpProps {
  * @returns The notebook sharing pop up.
  */
 export const NotebookSharingPopUp = ({
-  link,
-  sharingActive = false,
+  notebook,
+  sharingSecret,
   onToggleShare = noop,
 }: NotebookSharingPopUpProps): ReturnType<FC> => {
   const [copiedStatusVisible, setCopiedStatusVisible] = useState(false);
@@ -124,8 +125,12 @@ export const NotebookSharingPopUp = ({
   const handleClickOutside = () => {
     setShareMenuOpen(false);
   };
-
   useWindowListener('click', handleClickOutside);
+
+  const link = new URL(
+    notebooks({}).notebook({ notebook, secret: sharingSecret }).$,
+    window.location.origin
+  ).toString();
 
   return (
     <div css={{ position: 'relative' }} onClick={(e) => e.stopPropagation()}>
@@ -147,14 +152,14 @@ export const NotebookSharingPopUp = ({
                 </p>
               </div>
               <Toggle
-                active={sharingActive}
+                active={!!sharingSecret}
                 onChange={() => {
                   onToggleShare();
                 }}
               />
             </div>
 
-            {sharingActive && (
+            {!!sharingSecret && (
               <div css={clipboardWrapperStyles}>
                 <Tooltip
                   variant="small"

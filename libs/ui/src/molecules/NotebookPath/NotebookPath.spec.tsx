@@ -6,15 +6,14 @@ describe('Notebook Path', () => {
     const { getByText } = render(
       <NotebookPath
         isAdmin
-        workspaceName="John's Workspace"
+        workspace={{ id: 'wsid', name: 'John' }}
         notebookName="Use of funds"
-        workspaceHref="/workspace"
       />
     );
 
-    expect(getByText(/john's workspace/i).closest('a')).toHaveAttribute(
+    expect(getByText('John').closest('a')).toHaveAttribute(
       'href',
-      '/workspace'
+      expect.stringContaining('wsid')
     );
   });
 
@@ -22,9 +21,8 @@ describe('Notebook Path', () => {
     const { queryByRole } = render(
       <NotebookPath
         isAdmin={false}
-        workspaceName="John's Workspace"
+        workspace={{ id: 'wsid', name: 'John' }}
         notebookName="Use of funds"
-        workspaceHref="/workspace"
       />
     );
 
@@ -35,23 +33,21 @@ describe('Notebook Path', () => {
     const { queryByText, queryByRole } = render(
       <NotebookPath
         isAdmin={false}
-        workspaceName="John's Workspace"
+        workspace={{ id: 'wsid', name: 'John' }}
         notebookName="Use of funds"
-        workspaceHref="/workspace"
       />
     );
 
     expect(queryByRole('link')).not.toBeInTheDocument();
-    expect(queryByText("John's Workspace")).not.toBeInTheDocument();
+    expect(queryByText('John')).not.toBeInTheDocument();
   });
 
   it('renders the notebook name', () => {
     const { getByText } = render(
       <NotebookPath
         isAdmin
-        workspaceName="John's Workspace"
+        workspace={{ id: 'wsid', name: 'John' }}
         notebookName="Use of funds"
-        workspaceHref=""
       />
     );
 
