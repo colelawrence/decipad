@@ -1,5 +1,6 @@
 import Fraction from '@decipad/fraction';
 import { deserializeUnit, stringifyUnits } from '@decipad/language';
+import { css } from '@emotion/react';
 import { noop } from '@decipad/utils';
 import { ComponentProps, ReactNode } from 'react';
 import { MenuItem, TriggerMenuItem } from '../../atoms';
@@ -21,6 +22,10 @@ import {
   getStringType,
 } from '../../utils';
 
+const tableColumnMenuStyles = css({
+  marginLeft: 'auto',
+});
+
 interface TableColumnMenuProps
   extends Pick<ComponentProps<typeof MenuList>, 'open' | 'onChangeOpen'>,
     Pick<ComponentProps<typeof UnitMenuItem>, 'parseUnit'> {
@@ -39,7 +44,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
   trigger,
   type,
 }) => (
-  <div contentEditable={false}>
+  <div contentEditable={false} css={tableColumnMenuStyles}>
     <MenuList
       root
       dropdown
