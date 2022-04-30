@@ -20,12 +20,13 @@ export const RowResult = ({
   return (
     <Table border={isTabularType(parentType) ? 'inner' : 'all'}>
       <thead>
-        <TableHeaderRow readOnly>
+        <TableHeaderRow readOnly actionsColumn={false}>
           {rowCellNames.map((columnName, colIndex) => (
             <TableHeader
               type={toTableHeaderType(rowCellTypes[colIndex])}
               key={colIndex}
               color={defaultTableColor}
+              showIcon={false}
             >
               {columnName}
             </TableHeader>
@@ -36,7 +37,7 @@ export const RowResult = ({
         <TableRow readOnly>
           {value.map((col, colIndex) => {
             return (
-              <TableData as="td" key={colIndex}>
+              <TableData as="td" key={colIndex} showPlaceholder={false}>
                 <div
                   css={[
                     css(table.getCellWrapperStyles(rowCellTypes[colIndex])),

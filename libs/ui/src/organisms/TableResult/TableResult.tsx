@@ -37,6 +37,8 @@ export const TableResult = ({
               type={toTableHeaderType(columnTypes[index])}
               key={index}
               color={defaultTableColor}
+              isEditable={false}
+              showIcon={false}
             >
               {columnName}
             </TableHeader>
@@ -47,7 +49,12 @@ export const TableResult = ({
         {Array.from({ length: tableLength }, (_, rowIndex) => (
           <TableRow key={rowIndex} readOnly>
             {value.map((column, colIndex) => (
-              <TableData key={colIndex} as="td" isEditable={false} noGrid>
+              <TableData
+                key={colIndex}
+                as="td"
+                isEditable={false}
+                showPlaceholder={false}
+              >
                 <div
                   css={[
                     css(table.getCellWrapperStyles(columnTypes[colIndex])),

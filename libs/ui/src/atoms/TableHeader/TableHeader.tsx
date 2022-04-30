@@ -40,9 +40,12 @@ const columnTypeStyles = css({
 
 const childrenWrapperStyles = css({
   whiteSpace: 'nowrap',
-  width: '75px',
   overflow: 'hidden',
   textAlign: 'left',
+});
+
+const editableChildrenWrapperStyles = css({
+  width: '75px',
 });
 
 export interface TableHeaderProps {
@@ -52,6 +55,8 @@ export interface TableHeaderProps {
   color?: AvailableSwatchColor;
   menu?: React.ReactNode;
   attributes?: PlateComponentAttributes;
+  isEditable?: boolean;
+  showIcon?: boolean;
 }
 
 export const TableHeader = ({
@@ -60,6 +65,8 @@ export const TableHeader = ({
   type = getStringType(),
   menu,
   attributes,
+  isEditable = false,
+  showIcon = true,
 }: TableHeaderProps): ReturnType<FC> => {
   const Icon = getTypeIcon(type);
   const { color = defaultTableColor } = useStyle();
@@ -91,10 +98,19 @@ export const TableHeader = ({
       data-highlight={highlight}
     >
       <div css={headerWrapperStyles}>
-        <span css={columnTypeStyles}>
-          <Icon />
-        </span>
-        <div css={childrenWrapperStyles}>{children}</div>
+        {showIcon && (
+          <span contentEditable={false} css={columnTypeStyles}>
+            <Icon />
+          </span>
+        )}
+        <div
+          css={[
+            childrenWrapperStyles,
+            isEditable && editableChildrenWrapperStyles,
+          ]}
+        >
+          {children}
+        </div>
         {menu}
       </div>
     </th>

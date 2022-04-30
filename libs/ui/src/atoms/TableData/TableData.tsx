@@ -18,7 +18,9 @@ const tdBaseStyles = css(p14Medium, {
 
   lineHeight: table.cellLineHeight,
   paddingRight: '12px',
+});
 
+const tdPlaceholderStyles = css({
   // Show line numbers on the first cell of each row.
   position: 'relative',
 
@@ -54,17 +56,17 @@ export interface TableDataProps {
   isEditable?: boolean;
   className?: string;
   attributes?: PlateComponentAttributes;
-  noGrid?: boolean;
   children?: ReactNode;
+  showPlaceholder?: boolean;
 }
 
 export const TableData = ({
   as = 'div',
   className,
   isEditable = false,
-  noGrid = false,
   attributes,
   children,
+  showPlaceholder = true,
 }: TableDataProps): ReturnType<FC> => {
   return jsx(
     as,
@@ -73,7 +75,8 @@ export const TableData = ({
       css: [
         isEditable && editableStyles,
         tdBaseStyles,
-        !noGrid && tdGridStyles,
+        tdGridStyles,
+        showPlaceholder && tdPlaceholderStyles,
       ],
       className,
     },
