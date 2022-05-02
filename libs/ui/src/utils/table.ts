@@ -1,6 +1,13 @@
 import { SerializedType, SerializedUnits, Time } from '@decipad/language';
 import { FunctionComponent } from 'react';
-import { All, Calendar, CheckboxSelected, Number, Text } from '../icons';
+import {
+  All,
+  Calendar,
+  CheckboxSelected,
+  Formula,
+  Number,
+  Text,
+} from '../icons';
 import type { TableCellType } from '../types';
 import { AvailableSwatchColor } from './swatches';
 
@@ -12,6 +19,8 @@ export function getTypeIcon(type: TableCellType): FunctionComponent {
       return CheckboxSelected;
     case 'number':
       return type.unit == null ? Number : All;
+    case 'table-formula':
+      return Formula;
     default:
       return Text;
   }
@@ -31,6 +40,17 @@ export function getNumberType(
 
 export function getBooleanType(): Extract<SerializedType, { kind: 'boolean' }> {
   return { kind: 'boolean' };
+}
+
+export function getFormulaType(): Extract<
+  TableCellType,
+  { kind: 'table-formula' }
+> {
+  return {
+    kind: 'table-formula',
+    // eslint-disable-next-line no-alert
+    source: prompt('Pls write code') ?? '0',
+  };
 }
 
 export function getStringType(): Extract<SerializedType, { kind: 'string' }> {

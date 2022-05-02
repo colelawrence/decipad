@@ -7,6 +7,10 @@ import { AvailableSwatchColor, UserIconKey } from 'libs/ui/src/utils';
 import { useMemo, useState } from 'react';
 import { ReactEditor, useSlate } from 'slate-react';
 import { useTableActions } from '../../hooks';
+import {
+  EditorTableContext,
+  EditorTableContextValue,
+} from '../../contexts/EditorTableContext';
 
 export const Table: PlateComponent = ({ attributes, children, element }) => {
   if (element?.type !== ELEMENT_TABLE) {
@@ -32,6 +36,12 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
     [tableHeaders]
   );
 
+  const blockId = element.id;
+  const contextValue: EditorTableContextValue = useMemo(
+    () => ({ blockId, cellTypes: columns.map((col) => col.cellType) }),
+    [blockId, columns]
+  );
+
   return (
     <div {...attributes}>
       {!deleted && (
@@ -49,16 +59,18 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
               onDelete();
             }}
           >
-            <organisms.EditorTable
-              onChangeIcon={saveIcon}
-              onChangeColor={saveColor}
-              color={element.color as AvailableSwatchColor}
-              icon={element.icon as UserIconKey}
-              onAddRow={onAddRow}
-              columns={columns}
-            >
-              {children}
-            </organisms.EditorTable>
+            <EditorTableContext.Provider value={contextValue}>
+              <organisms.EditorTable
+                onChangeIcon={saveIcon}
+                onChangeColor={saveColor}
+                color={element.color as AvailableSwatchColor}
+                icon={element.icon as UserIconKey}
+                onAddRow={onAddRow}
+                columns={columns}
+              >
+                {children}
+              </organisms.EditorTable>
+            </EditorTableContext.Provider>
           </DraggableBlock>
         </StyleContextProvider>
       )}

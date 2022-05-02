@@ -15,7 +15,7 @@ export const createUpdateComputerPlugin = (
   handlers: {
     onChange: (editor) => () => {
       computer.pushCompute({
-        program: documentToProgram(editor as unknown as Editor),
+        program: documentToProgram((editor as unknown as Editor).children),
       });
     },
   },

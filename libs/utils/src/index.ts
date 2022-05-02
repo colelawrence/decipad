@@ -1,6 +1,7 @@
 export * from './get-defined';
 export * from './get-only';
 export * from './get-defined-promise';
+export * from './enumerate';
 export * from './identity';
 export * from './lenient-zip';
 export * from './noop';

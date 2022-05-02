@@ -1,13 +1,15 @@
+import { isEnabled } from '@decipad/feature-flags';
 import Fraction from '@decipad/fraction';
 import { deserializeUnit, stringifyUnits } from '@decipad/language';
-import { css } from '@emotion/react';
 import { noop } from '@decipad/utils';
+import { css } from '@emotion/react';
 import { ComponentProps, ReactNode } from 'react';
 import { MenuItem, TriggerMenuItem } from '../../atoms';
 import {
   All,
   Calendar,
   CheckboxSelected,
+  Formula,
   Number,
   Shapes,
   Text,
@@ -21,6 +23,7 @@ import {
   getNumberType,
   getStringType,
 } from '../../utils';
+import { getFormulaType } from '../../utils/table';
 
 const tableColumnMenuStyles = css({
   marginLeft: 'auto',
@@ -31,6 +34,7 @@ interface TableColumnMenuProps
     Pick<ComponentProps<typeof UnitMenuItem>, 'parseUnit'> {
   readonly onChangeColumnType?: (type: TableCellType) => void;
   readonly onRemoveColumn?: () => void;
+  readonly isFirst?: boolean;
   readonly trigger: ReactNode;
   readonly type: TableCellType;
 }
@@ -41,6 +45,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
   onChangeColumnType = noop,
   onRemoveColumn = noop,
   parseUnit,
+  isFirst = false,
   trigger,
   type,
 }) => (
@@ -77,6 +82,15 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
         >
           Number
         </MenuItem>
+        {!isFirst && isEnabled('FORMULA_COLUMNS') && (
+          <MenuItem
+            icon={<Formula />}
+            onSelect={() => onChangeColumnType(getFormulaType())}
+            selected={type.kind === 'table-formula'}
+          >
+            Formula
+          </MenuItem>
+        )}
         <MenuItem
           icon={<CheckboxSelected />}
           onSelect={() => onChangeColumnType(getBooleanType())}

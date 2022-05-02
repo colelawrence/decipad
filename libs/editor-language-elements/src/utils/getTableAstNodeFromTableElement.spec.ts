@@ -7,7 +7,16 @@ import {
   ELEMENT_TABLE_CAPTION,
 } from '@decipad/editor-types';
 import { F } from '@decipad/editor-utils';
-import { getTableAstNodeFromTableElement } from './getTableAstNodeFromTableElement';
+import { prettyPrintAST } from '@decipad/language';
+import {
+  formulaSourceToColumn,
+  getTableAstNodeFromTableElement,
+} from './getTableAstNodeFromTableElement';
+
+expect.addSnapshotSerializer({
+  test: (node) => typeof node?.type === 'string' && Array.isArray(node.args),
+  serialize: (node) => prettyPrintAST(node),
+});
 
 describe('getTableAstNodeFromTableElement', () => {
   it('converts table element into table AST node', () => {
@@ -47,18 +56,13 @@ describe('getTableAstNodeFromTableElement', () => {
             {
               id: 'th2',
               type: ELEMENT_TH,
-              cellType: {
-                kind: 'string',
-              },
+              cellType: { kind: 'string' },
               children: [{ text: 'column2' }],
             },
             {
               id: 'th3',
               type: ELEMENT_TH,
-              cellType: {
-                kind: 'date',
-                date: 'day',
-              },
+              cellType: { kind: 'date', date: 'day' },
               children: [{ text: 'column3' }],
             },
           ],
@@ -129,172 +133,78 @@ describe('getTableAstNodeFromTableElement', () => {
         },
       ],
     };
-    expect(getTableAstNodeFromTableElement(node)).toMatchObject({
-      type: 'table',
-      args: [
+
+    expect(getTableAstNodeFromTableElement(node).expression)
+      .toMatchInlineSnapshot(`
+        (table
+          column1 (column (* 1 (ref banana)) (* 2 (ref banana)) (* 3 (ref banana)))
+          column2 (column "string 1" "string 2" "string 3")
+          column3 (column (date year 2020 month 1 day 1) (date year 2020 month 1 day 1) (date year 2020 month 1 day 1)))
+      `);
+  });
+
+  it('converts table formulas correctly', () => {
+    const node: TableElement = {
+      id: 'table1',
+      type: ELEMENT_TABLE,
+      children: [
         {
-          type: 'table-column',
-          args: [
+          id: 'caption',
+          type: ELEMENT_TABLE_CAPTION,
+          children: [{ text: 'tableVariableName' }],
+        },
+        // header row
+        {
+          id: 'tr1',
+          type: ELEMENT_TR,
+          children: [
             {
-              type: 'coldef',
-              args: ['column1'],
+              id: 'th1',
+              type: ELEMENT_TH,
+              cellType: { kind: 'string' },
+              children: [{ text: 'column1' }],
             },
             {
-              type: 'column',
-              args: [
-                {
-                  type: 'column-items',
-                  args: [
-                    {
-                      type: 'function-call',
-                      args: [
-                        {
-                          args: ['*'],
-                          type: 'funcref',
-                        },
-
-                        {
-                          type: 'argument-list',
-                          args: [
-                            {
-                              type: 'literal',
-                              args: ['number', F(1)],
-                            },
-
-                            {
-                              type: 'ref',
-                              args: ['banana'],
-                            },
-                          ],
-                        },
-                      ],
-                    },
-
-                    {
-                      type: 'function-call',
-                      args: [
-                        {
-                          type: 'funcref',
-                          args: ['*'],
-                        },
-
-                        {
-                          type: 'argument-list',
-                          args: [
-                            {
-                              type: 'literal',
-                              args: ['number', F(2)],
-                            },
-
-                            {
-                              type: 'ref',
-                              args: ['banana'],
-                            },
-                          ],
-                        },
-                      ],
-                    },
-
-                    {
-                      type: 'function-call',
-                      args: [
-                        {
-                          type: 'funcref',
-                          args: ['*'],
-                        },
-
-                        {
-                          type: 'argument-list',
-                          args: [
-                            {
-                              type: 'literal',
-                              args: ['number', F(3)],
-                            },
-
-                            {
-                              type: 'ref',
-                              args: ['banana'],
-                            },
-                          ],
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
+              id: 'th2',
+              type: ELEMENT_TH,
+              cellType: { kind: 'table-formula', source: '1 + 1' },
+              children: [{ text: 'column2' }],
             },
           ],
         },
+        // data row
         {
-          type: 'table-column',
-          args: [
+          id: 'tr2',
+          type: ELEMENT_TR,
+          children: [
             {
-              type: 'coldef',
-              args: ['column2'],
+              type: ELEMENT_TD,
+              id: 'td1',
+              children: [{ text: 'Hello' }],
             },
-
             {
-              type: 'column',
-              args: [
-                {
-                  type: 'column-items',
-                  args: [
-                    {
-                      type: 'literal',
-                      args: ['string', 'string 1'],
-                    },
-
-                    {
-                      type: 'literal',
-                      args: ['string', 'string 2'],
-                    },
-
-                    {
-                      type: 'literal',
-                      args: ['string', 'string 3'],
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-
-        {
-          type: 'table-column',
-          args: [
-            {
-              type: 'coldef',
-              args: ['column3'],
-            },
-
-            {
-              type: 'column',
-              args: [
-                {
-                  type: 'column-items',
-                  args: [
-                    {
-                      type: 'date',
-                      args: ['year', 2020n, 'month', 1n, 'day', 1n],
-                    },
-
-                    {
-                      type: 'date',
-                      args: ['year', 2020n, 'month', 1n, 'day', 1n],
-                    },
-
-                    {
-                      type: 'date',
-                      args: ['year', 2020n, 'month', 1n, 'day', 1n],
-                    },
-                  ],
-                },
-              ],
+              type: ELEMENT_TD,
+              id: 'td2',
+              children: [{ text: '' }],
             },
           ],
         },
       ],
-    });
+    };
+
+    expect(getTableAstNodeFromTableElement(node).expression)
+      .toMatchInlineSnapshot(`
+        (table
+          column1 (column "Hello")
+          column2 (+ 1 1))
+      `);
+  });
+});
+
+describe('formulaSourceToColumn', () => {
+  it('catches parse errors', () => {
+    expect(
+      formulaSourceToColumn('syntax //--// error', 3)
+    ).toMatchInlineSnapshot(`(column 0 0 0)`);
   });
 });

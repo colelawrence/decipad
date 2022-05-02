@@ -1,4 +1,4 @@
-import { AST, InjectableExternalData } from '.';
+import { AST, InjectableExternalData, isExpression } from '.';
 import { inferBlock, makeContext } from './infer';
 import { AnyMapping } from './utils';
 import { parseBlock } from './parser';
@@ -13,6 +13,15 @@ export const parseOneBlock = (source: string): AST.Block => {
   }
 
   return parsed.solutions[0];
+};
+
+export const parseOneExpression = (source: string): AST.Expression => {
+  const block = parseOneBlock(source);
+  const item = block.args[0];
+  if (!isExpression(item)) {
+    throw new TypeError('Expected expression');
+  }
+  return item;
 };
 
 export const runAST = async (

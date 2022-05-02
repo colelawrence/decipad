@@ -43,6 +43,7 @@ export { Education } from './Education/Education';
 export { Ellipsis } from './Ellipsis/Ellipsis';
 export { File } from './File/File';
 export { Folder } from './Folder/Folder';
+export { Formula } from './Formula/Formula';
 export { Frame } from './Frame/Frame';
 export { Generic } from './Generic/Generic';
 export { Globe } from './Globe/Globe';

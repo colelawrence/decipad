@@ -46,6 +46,9 @@ export function parseCell(
 
       return astNode('literal', 'boolean' as const, n);
     }
+    case 'table-formula': {
+      return null;
+    }
     default: {
       // NOTE: Defaulting to string catches string values but it also catches legacy iterations of
       // cell types without breaking the whole notebook.

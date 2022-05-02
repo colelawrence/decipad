@@ -24,7 +24,7 @@ type TableColumnHeaderProps = PropsWithChildren<
   Pick<ComponentProps<typeof TableHeader>, 'type' | 'color'> &
     Pick<
       ComponentProps<typeof TableColumnMenu>,
-      'onChangeColumnType' | 'onRemoveColumn' | 'parseUnit'
+      'onChangeColumnType' | 'onRemoveColumn' | 'parseUnit' | 'isFirst'
     > & {
       as?: ElementType;
       empty?: boolean;
@@ -39,6 +39,7 @@ export const TableColumnHeader: FC<TableColumnHeaderProps> = ({
   onRemoveColumn,
   parseUnit,
   color,
+  isFirst,
   type = getStringType(),
   readOnly = false,
   children,
@@ -61,6 +62,7 @@ export const TableColumnHeader: FC<TableColumnHeaderProps> = ({
             onChangeColumnType={onChangeColumnType}
             onRemoveColumn={onRemoveColumn}
             parseUnit={parseUnit}
+            isFirst={isFirst}
             type={type}
           />
         )

@@ -1,11 +1,11 @@
-import { Editor } from '@decipad/editor-types';
+import type { Editor } from '@decipad/editor-types';
 import { Program } from '@decipad/language';
 import { elementToLanguageBlock } from './elementToProgramBlock';
 
-export const documentToProgram = (doc: Editor): Program => {
+export const documentToProgram = (doc: Editor['children']): Program => {
   let program: Program = [];
 
-  for (const element of doc.children) {
+  for (const element of doc) {
     if (!('type' in element) || !('id' in element)) {
       continue;
     }

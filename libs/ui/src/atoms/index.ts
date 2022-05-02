@@ -38,6 +38,7 @@ export { SlashCommandsMenuItem } from './SlashCommandsMenuItem/SlashCommandsMenu
 export { Strikethrough } from './Strikethrough/Strikethrough';
 export { TableCellWithUnit } from './TableCellWithUnit/TableCellWithUnit';
 export { TableData } from './TableData/TableData';
+export { TableFormulaCell } from './TableFormulaCell/TableFormulaCell';
 export { TableHeader } from './TableHeader/TableHeader';
 export { Toast } from './Toast/Toast';
 export { Toggle } from './Toggle/Toggle';

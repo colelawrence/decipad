@@ -34,6 +34,7 @@ export const TableHeaderCell: PlateComponent = ({
       readOnly={readOnly}
       empty={Node.string(element).length === 0}
       focused={focused}
+      isFirst={nThChild === 0}
       onChangeColumnType={(type) => onChangeColumnType(nThChild, type)}
       onRemoveColumn={() => onRemoveColumn(element.id)}
       parseUnit={computer.getUnitFromText.bind(computer)}

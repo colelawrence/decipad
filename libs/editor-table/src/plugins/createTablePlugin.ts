@@ -20,6 +20,7 @@ import {
 } from './createDecorateTableCellUnitsPlugin';
 // import { createExtraColumnPlaceholderPlugin } from './createExtraColumnPlaceholderPlugin';
 // import { createExtraRowPlaceholderPlugin } from './createExtraRowPlaceholderPlugin';
+import { createNormalizeTableFormulasPlugin } from './createNormalizeTableFormulasPlugin';
 import { createNormalizeTablesPlugin } from './createNormalizeTablesPlugin';
 import { createPreventEnterToCreateCellPlugin } from './createPreventEnterToCreateCellPlugin';
 
@@ -34,6 +35,7 @@ export const createTablePlugin = createPluginFactory({
   plugins: [
     createPreventEnterToCreateCellPlugin(),
     createNormalizeTablesPlugin(),
+    createNormalizeTableFormulasPlugin(),
     createDecorateTableCellUnitsPlugin(),
     createArrowCellNavigationPlugin(),
     // TODO: enable this

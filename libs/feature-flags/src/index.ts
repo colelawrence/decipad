@@ -1,4 +1,8 @@
-export type Flag = 'PERSISTENT_EXAMPLE' | 'PLOT_ELEMENTS' | 'INPUT_COPY';
+export type Flag =
+  | 'PERSISTENT_EXAMPLE'
+  | 'PLOT_ELEMENTS'
+  | 'INPUT_COPY'
+  | 'FORMULA_COLUMNS';
 
 export type Flags = Partial<Record<Flag, boolean>>;
 let overrides: Flags = {
