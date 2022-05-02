@@ -8,5 +8,5 @@ it('renders the children as highlight', () => {
 
   expect(
     findParentWithStyle(getByText('text'), 'borderRadius')!.borderRadius
-  ).toContain('px');
+  ).toContain('em');
 });

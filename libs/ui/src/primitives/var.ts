@@ -11,7 +11,6 @@ import {
   offWhite,
   orange500,
   red500,
-  sun500,
   white,
 } from './color';
 
@@ -40,8 +39,6 @@ export interface CssVariables {
   readonly normalTextColor: Property.Color;
   readonly strongTextColor: Property.Color;
 
-  readonly textHighlightColor: Property.Color;
-
   readonly currentTextColor: Property.Color;
 }
 
@@ -57,8 +54,6 @@ const defaults: CssVariables = {
   highlightColor: grey100.rgb,
   strongHighlightColor: grey200.rgb,
   strongerHighlightColor: grey300.rgb,
-
-  textHighlightColor: sun500.rgb,
 
   weakerTextColor: grey400.rgb,
   weakTextColor: grey500.rgb,

@@ -9,7 +9,6 @@ import {
   grey600,
   orange500,
   red500,
-  sun500,
   white,
 } from './color';
 import { cssVar, CssVariableKey, CssVariables, setCssVar } from './var';
@@ -34,8 +33,6 @@ export const darkTheme: Record<
   ...setCssVar('weakTextColor', grey200.rgb),
   ...setCssVar('normalTextColor', grey100.rgb),
   ...setCssVar('strongTextColor', white.rgb),
-
-  ...setCssVar('textHighlightColor', sun500.rgb),
 
   ...setCssVar('currentTextColor', cssVar('normalTextColor')),
 };
