@@ -1,4 +1,6 @@
 import assert from 'assert';
+import { dequal } from 'dequal';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import {
   concatMap,
   debounceTime,
@@ -6,8 +8,6 @@ import {
   map,
   shareReplay,
 } from 'rxjs/operators';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { dequal } from 'dequal';
 import {
   AST,
   AutocompleteName,
@@ -20,22 +20,26 @@ import {
 } from '..';
 import { inferExpression, inferStatement } from '../infer';
 import { evaluateStatement, RuntimeError, Value } from '../interpreter';
+import { parseBlock } from '../parser';
 import { captureException } from '../reporting';
-import { validateResult, Result } from '../result';
+import { Result, validateResult } from '../result';
 import { build as t } from '../type';
 import { anyMappingToMap, getDefined, isExpression } from '../utils';
 import { ComputationRealm } from './ComputationRealm';
+import { defaultComputerResults } from './defaultComputerResults';
+import { getDelayedBlockId } from './delayErrors';
+import { getVisibleVariables } from './getVisibleVariables';
 import { ParseRet, updateParse } from './parse';
 import {
   ComputePanic,
   ComputeRequest,
   ComputeResponse,
+  ComputerParseStatementResult,
   IdentifiedBlock,
   IdentifiedResult,
   InBlockResult,
-  ValueLocation,
   ResultsContextItem,
-  ComputerParseStatementResult,
+  ValueLocation,
 } from './types';
 import {
   getAllBlockLocations,
@@ -43,10 +47,6 @@ import {
   getGoodBlocks,
   getStatement,
 } from './utils';
-import { getDelayedBlockId } from './delayErrors';
-import { defaultComputerResults } from './defaultComputerResults';
-import { parseBlock } from '../parser';
-import { getVisibleVariables } from './getVisibleVariables';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
 
@@ -281,10 +281,16 @@ export class Computer {
     const { inferContext, interpreterRealm } = this.computationRealm;
     const type = inferContext.stack.top.get(varName);
     const value = interpreterRealm.stack.top.get(varName);
-
     return type && value
       ? { type: serializeType(type), value: value.getData() }
       : null;
+  }
+
+  getVariable$(varName: string): Observable<Result | null> {
+    return this.results.pipe(
+      map(() => this.getVariable(varName)),
+      distinctUntilChanged()
+    );
   }
 
   private ingestComputeRequest({ program, externalData }: ComputeRequest) {

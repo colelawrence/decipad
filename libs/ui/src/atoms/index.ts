@@ -26,6 +26,7 @@ export { Italic } from './Italic/Italic';
 export { Label } from './Label/Label';
 export { Link } from './Link/Link';
 export { ListItemContent } from './ListItemContent/ListItemContent';
+export { MagicNumber } from './MagicNumber/MagicNumber';
 export { MenuItem } from './MenuItem/MenuItem';
 export { MenuSeparator } from './MenuSeparator/MenuSeparator';
 export { NavigationItem } from './NavigationItem/NavigationItem';

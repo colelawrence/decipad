@@ -1,4 +1,8 @@
 import {
+  allowsTextStyling,
+  getPathContainingSelection,
+} from '@decipad/editor-utils';
+import {
   createBoldPlugin,
   createCodePlugin,
   createHighlightPlugin,
@@ -8,10 +12,7 @@ import {
   PlatePlugin,
   WithRequired,
 } from '@udecode/plate';
-import {
-  allowsTextStyling,
-  getPathContainingSelection,
-} from '@decipad/editor-utils';
+import { createMagicNumberPlugin } from '../MagicNumber';
 
 export type StrictPlugin = WithRequired<
   PlatePlugin,
@@ -56,6 +57,11 @@ const inlineCodePlugin = () =>
 const highlightPlugin = () =>
   withHotkeyRestrictedToAllowedBlocks(createHighlightPlugin() as StrictPlugin);
 
+const magicNumberPlugin = () =>
+  withHotkeyRestrictedToAllowedBlocks(
+    createMagicNumberPlugin() as StrictPlugin
+  );
+
 export const createMarksPlugins = (): StrictPlugin[] => [
   boldPlugin(),
   italicPlugin(),
@@ -63,4 +69,5 @@ export const createMarksPlugins = (): StrictPlugin[] => [
   inlineCodePlugin(),
   strikethroughPlugin(),
   highlightPlugin(),
+  magicNumberPlugin(),
 ];

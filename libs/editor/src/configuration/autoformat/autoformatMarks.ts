@@ -1,10 +1,11 @@
 import {
   MARK_BOLD,
   MARK_CODE,
+  MARK_HIGHLIGHT,
   MARK_ITALIC,
+  MARK_MAGICNUMBER,
   MARK_STRIKETHROUGH,
   MARK_UNDERLINE,
-  MARK_HIGHLIGHT,
 } from '@decipad/editor-types';
 import { AutoformatRule } from '@udecode/plate';
 import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
@@ -74,6 +75,12 @@ export const autoformatMarks: AutoformatRule[] = [
     mode: 'mark',
     type: MARK_HIGHLIGHT,
     match: '==',
+    query: doesSelectionAllowTextStyling,
+  },
+  {
+    mode: 'mark',
+    type: MARK_MAGICNUMBER,
+    match: '%',
     query: doesSelectionAllowTextStyling,
   },
 ];

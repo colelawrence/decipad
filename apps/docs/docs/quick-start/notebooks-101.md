@@ -41,6 +41,7 @@ Besides the menu styling menu that pops up when you select text, Decipad support
 - Wrap words between `==` and `==` for **highlight**
 - Use the notation `[link name](url)` to insert a **link**
 - Wrap words between `` ` `` and `` ` `` for **inline code**
+- Wrap a variable name between `%` to get a **magic number**
 
 ## Blocks
 
