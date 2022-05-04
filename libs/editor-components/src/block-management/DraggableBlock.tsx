@@ -1,8 +1,7 @@
 import { Element } from '@decipad/editor-types';
 import { findPath } from '@decipad/editor-utils';
-import { organisms } from '@decipad/ui';
+import { atoms, organisms } from '@decipad/ui';
 import { useDndBlock } from '@udecode/plate';
-import { blockAlignment } from 'libs/ui/src/styles';
 import {
   ComponentProps,
   createContext,
@@ -82,9 +81,10 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
     return <></>;
   }
   if (readOnly) {
-    const { desiredWidth } = blockAlignment[props.blockKind];
     return (
-      <div css={{ maxWidth: desiredWidth, margin: 'auto' }}>{children}</div>
+      <atoms.EditorBlock blockKind={props.blockKind}>
+        {children}
+      </atoms.EditorBlock>
     );
   }
   // Nested Draggables (such as lists) do not work well enough with useDndBlock; they are very buggy.

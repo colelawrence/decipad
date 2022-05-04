@@ -2,7 +2,7 @@ import { ConnectDragSource } from 'react-dnd';
 import { FC, Fragment, ReactNode, RefObject, useState } from 'react';
 import { BlockIsActiveProvider } from '@decipad/react-contexts';
 import { BlockDragHandle } from '..';
-import { DropLine } from '../../atoms';
+import { DropLine, EditorBlock } from '../../atoms';
 import {
   mouseMovingOverTransitionDelay,
   Opacity,
@@ -42,15 +42,10 @@ export const DraggableBlock = ({
   const [menuOpen, setMenuOpen] = useState(false);
   const BlockActiveProvider = menuOpen ? BlockIsActiveProvider : Fragment;
 
-  const { paddingTop, typography, desiredWidth } = blockAlignment[blockKind];
+  const { paddingTop, typography } = blockAlignment[blockKind];
 
   return (
-    <div
-      css={{
-        maxWidth: desiredWidth,
-        margin: 'auto',
-      }}
-    >
+    <EditorBlock blockKind={blockKind}>
       <div
         css={{
           display: 'grid',
@@ -122,6 +117,6 @@ export const DraggableBlock = ({
           )}
         </div>
       </div>
-    </div>
+    </EditorBlock>
   );
 };

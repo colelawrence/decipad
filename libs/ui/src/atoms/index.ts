@@ -14,6 +14,7 @@ export { DateResult } from './DateResult/DateResult';
 export { Display } from './Display/Display';
 export { Divider } from './Divider/Divider';
 export { DropLine } from './DropLine/DropLine';
+export { EditorBlock } from './EditorBlock/EditorBlock';
 export { EditorColumns } from './EditorColumns/EditorColumns';
 export { ErrorMessage } from './ErrorMessage/ErrorMessage';
 export { Heading1 } from './Heading1/Heading1';

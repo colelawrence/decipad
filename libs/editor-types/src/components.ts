@@ -1,7 +1,7 @@
 import { FC, PropsWithChildren } from 'react';
 import { Element, RichText } from './elements';
 
-export interface ElementAttributes {
+interface ElementAttributes {
   'data-slate-node': 'element';
   'data-slate-inline'?: true;
   'data-slate-void'?: true;
@@ -10,7 +10,7 @@ export interface ElementAttributes {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ref: any;
 }
-export interface LeafAttributes {
+interface LeafAttributes {
   'data-slate-leaf': true;
 }
 

@@ -1,14 +1,15 @@
 import { PlateComponent } from '@decipad/editor-types';
 import { atoms } from '@decipad/ui';
 import { isSelectionExpanded, useEditorState } from '@udecode/plate';
-import { RefObject } from 'react';
 import { Editor } from 'slate';
 import { useReadOnly, useSelected } from 'slate-react';
 import { DraggableBlock } from '../block-management';
 
-export const Paragraph: PlateComponent<{
-  paragraphRef?: RefObject<HTMLParagraphElement>;
-}> = ({ attributes, children, element, paragraphRef }) => {
+export const Paragraph: PlateComponent = ({
+  attributes,
+  children,
+  element,
+}) => {
   if (!element) {
     throw new Error('Paragraph is not a leaf');
   }
@@ -30,7 +31,6 @@ export const Paragraph: PlateComponent<{
               ? 'Type “/” for commands or write text'
               : undefined
           }
-          paragraphRef={paragraphRef}
         >
           {children}
         </atoms.Paragraph>
