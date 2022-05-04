@@ -3,7 +3,7 @@ import { Arrow, Content, Root, Trigger } from '@radix-ui/react-hover-card';
 import { useControllableState } from '@radix-ui/react-use-controllable-state';
 import { FC } from 'react';
 import {
-  black,
+  offBlack,
   cssVar,
   darkTheme,
   p12Medium,
@@ -12,7 +12,7 @@ import {
 } from '../../primitives';
 
 const contentWrapperStyles = css({
-  background: black.rgb,
+  background: offBlack.rgb,
 
   outline: `1px solid ${white.rgb}`,
   borderRadius: '6px',

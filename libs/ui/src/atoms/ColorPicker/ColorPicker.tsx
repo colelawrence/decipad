@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Check } from '../../icons';
 import {
-  black,
+  offBlack,
   cssVar,
   normalOpacity,
   weakOpacity,
@@ -40,17 +40,19 @@ export const ColorPicker = ({
         {
           backgroundColor: color.rgb,
           border: `1px solid ${cssVar('backgroundColor')}`,
-          boxShadow: `inset 0 0 0 1px ${transparency(black, weakOpacity).rgba}`,
+          boxShadow: `inset 0 0 0 1px ${
+            transparency(offBlack, weakOpacity).rgba
+          }`,
           ':hover, :focus': {
             boxShadow: `inset 0 0 0 1px ${
-              transparency(black, weakOpacity).rgba
+              transparency(offBlack, weakOpacity).rgba
             },  0 0 0 1px ${transparency(color, normalOpacity).rgba}`,
           },
         },
         selected
           ? {
               boxShadow: `inset 0 0 0 1px ${
-                transparency(black, weakOpacity).rgba
+                transparency(offBlack, weakOpacity).rgba
               },  0 0 0 1px ${transparency(color, normalOpacity).rgba}`,
             }
           : {},

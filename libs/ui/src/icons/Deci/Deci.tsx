@@ -1,12 +1,12 @@
 import { FC } from 'react';
-import { black } from '../../primitives';
+import { offBlack } from '../../primitives';
 
 export const Deci = (): ReturnType<FC> => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 135.8752 135.8809"
-      fill={black.rgb}
+      fill={offBlack.rgb}
     >
       <title>Decipad Logo</title>
       <g>

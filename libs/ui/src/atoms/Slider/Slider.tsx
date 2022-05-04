@@ -1,14 +1,14 @@
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { black, cssVar, grey700, transparency } from '../../primitives';
+import { offBlack, cssVar, grey700, transparency } from '../../primitives';
 
 const thumbBorderWidth = 1;
 const thumbSize = 20;
 
 const thumbStyles = {
   boxShadow: `0px 2px 20px ${transparency(grey700, 0.04)}, 
-    0px 2px 8px ${transparency(black, 0.02)}`,
+    0px 2px 8px ${transparency(offBlack, 0.02)}`,
 
   border: `${thumbBorderWidth}px solid ${cssVar('strongerHighlightColor')}`,
   borderRadius: '8px',

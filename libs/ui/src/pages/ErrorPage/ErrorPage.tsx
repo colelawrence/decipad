@@ -4,7 +4,7 @@ import { Button } from '../../atoms';
 import { gridTile } from '../../images';
 import {
   banner,
-  black,
+  offBlack,
   grey200,
   grey400,
   grey50,
@@ -40,7 +40,7 @@ const styles = css({
 });
 
 // TODO no dark mode on this page atm
-const headingStyles = css(banner, setCssVar('currentTextColor', black.rgb));
+const headingStyles = css(banner, setCssVar('currentTextColor', offBlack.rgb));
 const subHeadingStyles = css(
   p18Regular,
   setCssVar('currentTextColor', lavender000.rgb),

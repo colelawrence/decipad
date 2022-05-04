@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { ComponentProps, ReactNode } from 'react';
 import { Overlay } from '../../atoms';
 import {
-  black,
+  offBlack,
   cssVar,
   grey300,
   grey700,
@@ -40,7 +40,7 @@ const dialogStyles = css({
   borderRadius: '10px',
   boxShadow: `
     0px 2px 20px ${transparency(grey700, 0.04).rgba},
-    0px 2px 8px ${transparency(black, 0.02).rgba}
+    0px 2px 8px ${transparency(offBlack, 0.02).rgba}
   `,
 });
 

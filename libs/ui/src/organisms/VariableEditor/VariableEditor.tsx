@@ -5,7 +5,7 @@ import { AddNew } from '../../atoms';
 import { Ellipsis } from '../../icons';
 import { blockAlignment } from '../../styles';
 import {
-  black,
+  offBlack,
   cssVar,
   grey300,
   grey700,
@@ -38,7 +38,7 @@ const wrapperStyles = (color: string) =>
 
     // Last shadow is the left side color bar.
     boxShadow: `0px 2px 20px ${transparency(grey700, 0.04).rgba},
-     0px 2px 8px ${transparency(black, 0.02).rgba},
+     0px 2px 8px ${transparency(offBlack, 0.02).rgba},
      -${leftBarSize}px 0px ${color}`,
     marginLeft: `${leftBarSize}px`,
 

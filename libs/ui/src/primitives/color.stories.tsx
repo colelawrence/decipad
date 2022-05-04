@@ -7,6 +7,7 @@ type ColorId = Exclude<
   'color' | 'transparency'
 >;
 const colorNames: Record<ColorId, string> = {
+  offBlack: 'Off-Black',
   black: 'Black',
   white: 'White',
   offWhite: 'Off-White',

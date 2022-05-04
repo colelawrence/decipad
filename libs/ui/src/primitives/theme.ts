@@ -1,5 +1,5 @@
 import {
-  black,
+  offBlack,
   brand500,
   grey100,
   grey200,
@@ -21,7 +21,7 @@ export const darkTheme: Record<
   ...setCssVar('dangerColor', red500.rgb),
   ...setCssVar('warningColor', orange500.rgb),
 
-  ...setCssVar('backgroundColor', black.rgb),
+  ...setCssVar('backgroundColor', offBlack.rgb),
   ...setCssVar('iconBackgroundColor', grey500.rgb),
   ...setCssVar('offColor', grey600.rgb),
 

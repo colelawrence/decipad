@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import {
-  black,
+  offBlack,
   cssVar,
   grey200,
   normalOpacity,
@@ -12,7 +12,7 @@ import {
 import { baseSwatches } from '../../utils';
 
 const buttonStyles = css({
-  ...setCssVar('currentTextColor', black.rgb),
+  ...setCssVar('currentTextColor', offBlack.rgb),
   width: '24px',
   height: '24px',
   borderRadius: '4px',

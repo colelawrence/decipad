@@ -1,7 +1,7 @@
 import { noop } from '@decipad/utils';
 import { css, CSSObject } from '@emotion/react';
 import {
-  black,
+  offBlack,
   brand500,
   p13SemiBold,
   transparency,
@@ -37,7 +37,7 @@ const typeStyles: Record<
 > = {
   primary: {
     enabled: {
-      backgroundColor: black.rgb,
+      backgroundColor: offBlack.rgb,
       ...setCssVar('currentTextColor', white.rgb),
       ':hover, :focus': {
         backgroundColor: grey600.rgb,
@@ -51,7 +51,7 @@ const typeStyles: Record<
   primaryBrand: {
     enabled: {
       backgroundColor: brand500.rgb,
-      ...setCssVar('currentTextColor', black.rgb),
+      ...setCssVar('currentTextColor', offBlack.rgb),
       ':hover, :focus': {
         backgroundColor: brand300.rgb,
       },
@@ -64,7 +64,7 @@ const typeStyles: Record<
   secondary: {
     enabled: {
       backgroundColor: grey200.rgb,
-      ...setCssVar('currentTextColor', black.rgb),
+      ...setCssVar('currentTextColor', offBlack.rgb),
       ':hover, :focus': {
         backgroundColor: grey100.rgb,
       },

@@ -6,7 +6,7 @@ import { IconButton } from '../../atoms';
 import * as icons from '../../icons';
 import { NotebookListItemActions } from '../../molecules';
 import {
-  black,
+  offBlack,
   cssVar,
   p13Regular,
   p14Medium,
@@ -55,7 +55,7 @@ const iconStyles = css({
   backgroundColor: cssVar('backgroundColor'),
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
 
-  boxShadow: `0px 2px 24px -4px ${transparency(black, 0.08).rgba}`,
+  boxShadow: `0px 2px 24px -4px ${transparency(offBlack, 0.08).rgba}`,
 });
 const nameStyles = css({
   gridArea: 'title',

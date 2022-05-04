@@ -47,7 +47,8 @@ export const grey400 = color(170, 177, 189);
 export const grey500 = color(119, 126, 137);
 export const grey600 = color(77, 86, 100);
 export const grey700 = color(50, 59, 73);
-export const black = color(22, 31, 44);
+export const offBlack = color(22, 31, 44);
+export const black = color(0, 0, 0);
 
 //
 // brand

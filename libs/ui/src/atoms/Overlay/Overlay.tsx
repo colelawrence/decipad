@@ -1,11 +1,11 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { black, transparency } from '../../primitives';
+import { offBlack, transparency } from '../../primitives';
 import { Anchor } from '../../utils';
 
 const styles = css({
   cursor: 'unset',
-  backgroundColor: transparency(black, 0.16).rgba,
+  backgroundColor: transparency(offBlack, 0.16).rgba,
 });
 
 interface OverlayProps {

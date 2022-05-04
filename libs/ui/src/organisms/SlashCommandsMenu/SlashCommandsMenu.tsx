@@ -19,7 +19,7 @@ import {
 } from '../../icons';
 import { SlashCommandsMenuGroup } from '../../molecules';
 import {
-  black,
+  offBlack,
   cssVar,
   p14Regular,
   setCssVar,
@@ -179,7 +179,7 @@ const styles = css({
   backgroundColor: cssVar('backgroundColor'),
   border: `1px solid ${cssVar('strongHighlightColor')}`,
   borderRadius: '8px',
-  boxShadow: `0px 2px 24px -4px ${transparency(black, 0.08).rgba}`,
+  boxShadow: `0px 2px 24px -4px ${transparency(offBlack, 0.08).rgba}`,
 
   ':empty::before': {
     ...p14Regular,

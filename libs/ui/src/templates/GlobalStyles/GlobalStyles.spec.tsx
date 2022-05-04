@@ -7,7 +7,7 @@ import { mockConsoleWarn } from '@decipad/testutils';
 
 import { noop } from '@decipad/utils';
 import { GlobalStyles } from './GlobalStyles';
-import { black } from '../../primitives';
+import { offBlack } from '../../primitives';
 
 mockConsoleWarn();
 
@@ -41,7 +41,7 @@ it('applies the dark theme when enabled manually and preferred by the user agent
   cleanup = await applyPrefersColorScheme('dark');
   expect(
     findParentWithStyle(container, 'backgroundColor')?.backgroundColor
-  ).toBe(black.rgb);
+  ).toBe(offBlack.rgb);
 });
 it('applies the dark theme when preferred by the user agent *once* enabled manually', async () => {
   const { container } = render(<GlobalStyles />);
@@ -55,7 +55,7 @@ it('applies the dark theme when preferred by the user agent *once* enabled manua
   cleanup = await applyPrefersColorScheme('dark');
   expect(
     findParentWithStyle(container, 'backgroundColor')?.backgroundColor
-  ).toBe(black.rgb);
+  ).toBe(offBlack.rgb);
 });
 it('does not apply the dark theme when not preferred by the user agent', async () => {
   window.localStorage.setItem('deciAllowDarkTheme', 'true');
@@ -64,7 +64,7 @@ it('does not apply the dark theme when not preferred by the user agent', async (
   cleanup = await applyPrefersColorScheme('light');
   expect(
     findParentWithStyle(container, 'backgroundColor')?.backgroundColor
-  ).not.toBe(black.rgb);
+  ).not.toBe(offBlack.rgb);
 });
 it('does not apply the dark theme when not enabled manually', async () => {
   window.localStorage.setItem('deciAllowDarkTheme', 'false');
@@ -73,5 +73,5 @@ it('does not apply the dark theme when not enabled manually', async () => {
   cleanup = await applyPrefersColorScheme('dark');
   expect(
     findParentWithStyle(container, 'backgroundColor')?.backgroundColor
-  ).not.toBe(black.rgb);
+  ).not.toBe(offBlack.rgb);
 });

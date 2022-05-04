@@ -1,6 +1,6 @@
 import type { Property } from 'csstype';
 import {
-  black,
+  offBlack,
   brand500,
   grey100,
   grey200,
@@ -58,7 +58,7 @@ const defaults: CssVariables = {
   weakerTextColor: grey400.rgb,
   weakTextColor: grey500.rgb,
   normalTextColor: grey600.rgb,
-  strongTextColor: black.rgb,
+  strongTextColor: offBlack.rgb,
 
   get currentTextColor() {
     return cssVar('normalTextColor');
