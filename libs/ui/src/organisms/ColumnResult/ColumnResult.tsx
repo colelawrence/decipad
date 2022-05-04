@@ -21,24 +21,23 @@ export const ColumnResult = ({
 }: CodeResultProps<'column'>): ReturnType<FC> => {
   const { indexedBy, cellType } = type;
   const { indexLabels } = useResults();
+  const labels = indexLabels.get(indexedBy ?? '');
 
   return (
     <Table border={isTabularType(parentType) ? 'inner' : 'all'}>
       {/* TODO: Column caption should say the name of the variable (if there is one. */}
       <tbody>
         {value.map((row, rowIndex) => {
-          const labels = indexLabels.get(indexedBy ?? '');
-
           return (
             <TableRow key={rowIndex} readOnly>
               {labels && (
-                <TableData as="td">
+                <TableData as="td" showPlaceholder={false}>
                   <span css={[rowLabelStyles, table.cellSidePaddingStyles]}>
                     {labels[rowIndex]}
                   </span>
                 </TableData>
               )}
-              <TableData as="td">
+              <TableData as="td" showPlaceholder={!labels}>
                 <div
                   css={[
                     css(table.getCellWrapperStyles(type.cellType)),

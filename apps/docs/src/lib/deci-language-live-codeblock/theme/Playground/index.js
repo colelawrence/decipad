@@ -1,3 +1,5 @@
+/* eslint-disable import/first */
+/* eslint-disable import/no-relative-packages */
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { Fragment, useState, useEffect } from 'react';
 import Editor from 'react-simple-code-editor';
@@ -9,13 +11,18 @@ import useIsBrowser from '@docusaurus/useIsBrowser';
 import usePrismTheme from '@theme/hooks/usePrismTheme';
 import styles from './styles.module.css';
 
-// global shenanigans
+// TODO: hairy and ugly:
 require('./pollute-global');
-
-const { Computer, InferError } = require('@decipad/language');
+const { InferError } = require('../../../../../../../libs/language/src');
+// global shenanigans
 const {
   CodeResult,
 } = require('../../../../../../../libs/ui/src/organisms/CodeResult/CodeResult');
+const {
+  useComputer,
+  ComputerContextProvider,
+  ResultsContext,
+} = require('../../../../../../../libs/react-contexts/src');
 
 function identityFn(o) {
   return o;
@@ -34,7 +41,7 @@ function Preview({ result }) {
 
 function LivePreviewOrError({ code: liveCode }) {
   const [blockId] = useState(nanoid);
-  const [computer] = useState(() => new Computer());
+  const computer = useComputer();
   const [code, setCode] = useState(null);
   const [needsCompute, setNeedsCompute] = useState(false);
   const [error, setError] = useState(null);
@@ -141,6 +148,7 @@ function ResultWithHeader({ code }) {
 function EditorWithHeaderAndResuts({ code, transformCode = identityFn }) {
   const [codeValue, setCodeValue] = useState(code);
   const prismTheme = usePrismTheme();
+  const computer = useComputer();
 
   const highlightCode = (c) => (
     <Highlight Prism={Prism} code={c} theme={prismTheme} language="js">
@@ -159,7 +167,7 @@ function EditorWithHeaderAndResuts({ code, transformCode = identityFn }) {
   );
 
   return (
-    <>
+    <ResultsContext.Provider value={computer.results.asObservable()}>
       <div className={styles.playgroundEditor}>
         <Editor
           value={codeValue}
@@ -168,7 +176,7 @@ function EditorWithHeaderAndResuts({ code, transformCode = identityFn }) {
         />
       </div>
       <ResultWithHeader code={codeValue} />
-    </>
+    </ResultsContext.Provider>
   );
 }
 
@@ -178,10 +186,12 @@ export default function Playground({ children, ...props }) {
   return (
     <div className={styles.playgroundContainer}>
       {isBrowser && (
-        <EditorWithHeaderAndResuts
-          code={isBrowser ? children.replace(/\n$/, '') : ''}
-          {...props}
-        />
+        <ComputerContextProvider>
+          <EditorWithHeaderAndResuts
+            code={isBrowser ? children.replace(/\n$/, '') : ''}
+            {...props}
+          />
+        </ComputerContextProvider>
       )}
     </div>
   );
