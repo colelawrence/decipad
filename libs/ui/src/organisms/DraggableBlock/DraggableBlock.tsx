@@ -49,7 +49,7 @@ export const DraggableBlock = ({
       <div
         css={{
           display: 'grid',
-          gridTemplateColumns: `${handleAndMenuReservedSpace}px 1fr`,
+          gridTemplateColumns: `${handleAndMenuReservedSpace}px minmax(0, 1fr)`,
           gridColumnGap: `${editorLayout.gutterGap}px`,
 
           marginLeft: menuOpen

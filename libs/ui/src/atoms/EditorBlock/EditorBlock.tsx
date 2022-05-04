@@ -17,7 +17,6 @@ export const EditorBlock: React.FC<EditorBlockProps> = ({
         margin: 'auto',
 
         display: 'grid',
-        overflowX: 'auto',
       }}
     >
       {children}

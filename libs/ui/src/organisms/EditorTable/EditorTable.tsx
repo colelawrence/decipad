@@ -5,10 +5,15 @@ import { AddTableRowButton } from '../../molecules';
 import { TableColumn } from '../../types';
 import { AvailableSwatchColor, UserIconKey } from '../../utils';
 
-const etStyle = css({
+const wrapperStyles = css({
   margin: 'auto',
   marginBottom: '8px',
   paddingBottom: '6px',
+});
+
+const tableStyles = css({
+  display: 'grid',
+  overflowX: 'auto',
 });
 
 interface Column {
@@ -35,15 +40,20 @@ export const EditorTable: FC<EditorTableProps> = ({
   const [caption, thead, ...tbody] = Children.toArray(children);
 
   return (
-    <div css={etStyle}>
+    <div css={wrapperStyles}>
       {caption}
-      <Table>
-        <thead>{thead}</thead>
-        <tbody>{tbody}</tbody>
-        <tfoot contentEditable={false}>
-          <AddTableRowButton colSpan={columns.length + 1} onAddRow={onAddRow} />
-        </tfoot>
-      </Table>
+      <div css={tableStyles}>
+        <Table>
+          <thead>{thead}</thead>
+          <tbody>{tbody}</tbody>
+          <tfoot contentEditable={false}>
+            <AddTableRowButton
+              colSpan={columns.length + 1}
+              onAddRow={onAddRow}
+            />
+          </tfoot>
+        </Table>
+      </div>
     </div>
   );
 };
