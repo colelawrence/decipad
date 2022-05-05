@@ -3,7 +3,7 @@ import {
   ResultsContext,
   useComputer,
 } from '@decipad/react-contexts';
-import { createPlateEditor, Plate, PlateProps } from '@udecode/plate';
+import { Plate, PlateProps } from '@udecode/plate';
 import { FC, useMemo } from 'react';
 import { Tooltip } from './components';
 import * as configuration from './configuration';
@@ -20,19 +20,11 @@ export const NoDocSyncEditorInternal = (props: PlateProps): ReturnType<FC> => {
     [computer]
   );
 
-  const editor = useMemo(
-    () =>
-      createPlateEditor({
-        id: NO_DOC_SYNC_EDITOR_ID,
-        plugins: editorPlugins,
-      }),
-    [editorPlugins]
-  );
-
   return (
     <ResultsContext.Provider value={computer.results.asObservable()}>
       <Plate
-        editor={editor}
+        id={NO_DOC_SYNC_EDITOR_ID}
+        plugins={editorPlugins}
         initialValue={
           window.localStorage.getItem(POPULATE_PLAYGROUND) === 'true'
             ? introNotebook()

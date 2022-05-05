@@ -10,7 +10,7 @@ import {
 } from '@decipad/react-contexts';
 import { EditorPlaceholder } from '@decipad/ui';
 import { captureException } from '@sentry/react';
-import { createPlateEditor, Plate, PlateProvider } from '@udecode/plate';
+import { Plate, PlateProvider, usePlateEditorRef } from '@udecode/plate';
 import { FC, useCallback, useMemo, useState } from 'react';
 import * as components from './components';
 import * as configuration from './configuration';
@@ -21,7 +21,50 @@ export interface EditorProps {
   authSecret?: string;
 }
 
-const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
+type InsidePlateProps = EditorProps & {
+  onLoaded: () => void;
+};
+
+const InsidePlate = ({
+  notebookId,
+  authSecret,
+  onLoaded,
+}: InsidePlateProps) => {
+  const editor = usePlateEditorRef();
+  // DocSync
+  useDocSync({
+    notebookId,
+    editor,
+    authSecret,
+    onError: captureException,
+    onLoaded,
+  });
+
+  // upload / fetch data
+  const {
+    startUpload,
+    uploadState,
+    clearAll: clearAllUploads,
+  } = useUploadDataPlugin({ editor });
+
+  return (
+    <>
+      <components.Tooltip />
+      <components.DropFile
+        editor={editor}
+        startUpload={startUpload}
+        notebookId={notebookId}
+      />
+      <components.UploadDialogue
+        uploadState={uploadState}
+        clearAll={clearAllUploads}
+      />
+    </>
+  );
+};
+
+const EditorInternal = (props: EditorProps) => {
+  const { notebookId, readOnly } = props;
   const [editorLoaded, setEditorLoaded] = useState(false);
 
   const computer = useComputer();
@@ -43,54 +86,20 @@ const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
     [computer, notebookTitlePlugin]
   );
 
-  const editor = useMemo(
-    () =>
-      createPlateEditor({
-        id: notebookId,
-        plugins: editorPlugins,
-      }),
-    [editorPlugins, notebookId]
-  );
-
-  // DocSync
-  useDocSync({
-    notebookId,
-    editor,
-    authSecret,
-    onError: captureException,
-    onLoaded,
-  });
-
-  // upload / fetch data
-  const {
-    startUpload,
-    uploadState,
-    clearAll: clearAllUploads,
-  } = useUploadDataPlugin({ editor });
-
   return (
     <ResultsContext.Provider value={computer.results.asObservable()}>
-      <components.DropFile
-        editor={editor}
-        startUpload={startUpload}
-        notebookId={notebookId}
-      >
-        {!editorLoaded && <EditorPlaceholder />}
-        <div css={{ display: editorLoaded ? 'unset' : 'none' }}>
-          <Plate
-            editor={editor}
-            editableProps={{
-              readOnly,
-            }}
-          >
-            <components.Tooltip />
-            <components.UploadDialogue
-              uploadState={uploadState}
-              clearAll={clearAllUploads}
-            />
-          </Plate>
-        </div>
-      </components.DropFile>
+      {!editorLoaded && <EditorPlaceholder />}
+      <div css={{ display: editorLoaded ? 'unset' : 'none' }}>
+        <Plate
+          id={notebookId}
+          plugins={editorPlugins}
+          editableProps={{
+            readOnly,
+          }}
+        >
+          <InsidePlate {...props} onLoaded={onLoaded} />
+        </Plate>
+      </div>
     </ResultsContext.Provider>
   );
 };
