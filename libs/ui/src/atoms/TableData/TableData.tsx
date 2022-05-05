@@ -17,7 +17,6 @@ const tdBaseStyles = css(p14Medium, {
   verticalAlign: 'middle',
 
   lineHeight: table.cellLineHeight,
-  paddingRight: '12px',
 });
 
 const tdPlaceholderStyles = css({
@@ -49,6 +48,7 @@ const tdGridStyles = {
 
 const editableStyles = css({
   paddingLeft: '12px',
+  paddingRight: '12px',
 });
 
 export interface TableDataProps {

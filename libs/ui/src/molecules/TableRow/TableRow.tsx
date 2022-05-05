@@ -13,6 +13,7 @@ const buttonStyles = css({
   height: '100%',
   width: '100%',
   paddingLeft: '12px',
+  paddingRight: '12px',
 });
 
 const iconWrapperStyles = css({

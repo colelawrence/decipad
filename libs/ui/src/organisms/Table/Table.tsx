@@ -15,7 +15,6 @@ const tableBaseStyles = css({
   borderSpacing: '0',
   tableLayout: 'fixed',
   counterReset: tableRowCounter,
-  marginRight: '20px',
 });
 
 // Top border and border-radius, applied to table headers if they exist or to the first table row.
