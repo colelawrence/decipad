@@ -13,3 +13,11 @@ export const Normal: Story = () => (
     (below)
   </>
 );
+
+export const Inline: Story = () => (
+  <span>
+    (above)
+    <DropLine variant="inline" />
+    (below)
+  </span>
+);

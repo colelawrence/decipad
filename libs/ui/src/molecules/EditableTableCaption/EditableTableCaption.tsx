@@ -66,8 +66,6 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
         />
       </div>
       <div
-        // eslint-disable-next-line jsx-a11y/aria-props
-        aria-role="caption"
         aria-placeholder={empty ? 'TableName' : ''}
         css={[editableTableCaptionStyles, placeholderStyles]}
       >

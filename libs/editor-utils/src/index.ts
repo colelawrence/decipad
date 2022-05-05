@@ -15,3 +15,5 @@ export * from './useElementMutatorCallback';
 export * from './safeDelete';
 export * from './withPath';
 export * from './normalizeIdentifierElement';
+export * from './isDOMNode';
+export * from './hasTarget';

@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { Children, FC, ReactNode } from 'react';
+import { ConnectDropTarget } from 'react-dnd';
 import { Table } from '..';
 import { AddTableRowButton } from '../../molecules';
 import { TableColumn } from '../../types';
@@ -30,12 +31,14 @@ interface EditorTableProps {
   readonly color?: AvailableSwatchColor;
   readonly columns: Column[];
   readonly children?: ReactNode;
+  readonly dropRef?: ConnectDropTarget;
 }
 
 export const EditorTable: FC<EditorTableProps> = ({
   onAddRow,
   columns,
   children,
+  dropRef,
 }: EditorTableProps): ReturnType<FC> => {
   const [caption, thead, ...tbody] = Children.toArray(children);
 
@@ -43,7 +46,7 @@ export const EditorTable: FC<EditorTableProps> = ({
     <div css={wrapperStyles}>
       {caption}
       <div css={tableStyles}>
-        <Table>
+        <Table dropRef={dropRef}>
           <thead>{thead}</thead>
           <tbody>{tbody}</tbody>
           <tfoot contentEditable={false}>

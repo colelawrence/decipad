@@ -1,3 +1,4 @@
+import { PlateComponentAttributes } from '@decipad/editor-types';
 import { useStyle } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
@@ -36,6 +37,7 @@ interface TableHeaderRowProps {
   readonly actionsColumn?: boolean;
   readonly onAddColumn?: () => void;
   readonly readOnly?: boolean;
+  readonly attributes?: PlateComponentAttributes;
 }
 
 export const TableHeaderRow = ({
@@ -43,10 +45,12 @@ export const TableHeaderRow = ({
   actionsColumn = true,
   onAddColumn = noop,
   readOnly = false,
+  attributes,
 }: TableHeaderRowProps): ReturnType<FC> => {
   const { color = defaultTableColor } = useStyle();
   return (
     <tr
+      {...attributes}
       css={{
         display: 'grid',
         gridTemplate: table.rowTemplate(

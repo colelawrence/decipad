@@ -17,10 +17,10 @@ export const TableCaption: PlateComponent = ({
     );
   }
   return (
-    <caption {...attributes}>
+    <div {...attributes}>
       <molecules.EditableTableCaption empty={Node.string(element).length === 0}>
         {children}
       </molecules.EditableTableCaption>
-    </caption>
+    </div>
   );
 };

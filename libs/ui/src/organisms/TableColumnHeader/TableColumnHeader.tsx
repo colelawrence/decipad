@@ -21,7 +21,16 @@ const rightSlotStyles = css({
 });
 
 type TableColumnHeaderProps = PropsWithChildren<
-  Pick<ComponentProps<typeof TableHeader>, 'type' | 'color'> &
+  Pick<
+    ComponentProps<typeof TableHeader>,
+    | 'type'
+    | 'color'
+    | 'draggingOver'
+    | 'dropDirection'
+    | 'dragSource'
+    | 'dropTarget'
+    | 'dragPreview'
+  > &
     Pick<
       ComponentProps<typeof TableColumnMenu>,
       'onChangeColumnType' | 'onRemoveColumn' | 'parseUnit' | 'isFirst'
@@ -49,6 +58,7 @@ export const TableColumnHeader: FC<TableColumnHeaderProps> = ({
   return (
     <TableHeader
       {...props}
+      isEditable={!readOnly}
       menu={
         !readOnly && (
           <TableColumnMenu
@@ -69,6 +79,7 @@ export const TableColumnHeader: FC<TableColumnHeaderProps> = ({
       }
       highlight={isMenuOpen}
       type={type}
+      draggable
       color={color}
     >
       {children}

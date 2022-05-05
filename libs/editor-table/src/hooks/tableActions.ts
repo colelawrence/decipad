@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import {
   ELEMENT_TD,
   ELEMENT_TH,
@@ -27,6 +28,7 @@ export interface TableActions {
   onRemoveColumn: (columnId: string) => void;
   onAddRow: () => void;
   onRemoveRow: (rowIndex: string) => void;
+  onMoveColumn: (fromColumnIndex: number, toColumnIndex: number) => void;
 }
 
 export const useTableActions = (
@@ -186,6 +188,33 @@ export const useTableActions = (
     [editor, element]
   );
 
+  const onMoveColumn = useCallback(
+    (fromIndex: number, toIndex: number) => {
+      withPath(editor, element, (path) => {
+        Editor.withoutNormalizing(editor, () => {
+          let childIndex = -1;
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          for (const _row of Node.children(editor, path)) {
+            childIndex += 1;
+            if (childIndex < 1) {
+              // skip caption element
+              continue;
+            }
+            const sourcePath = [...path, childIndex, fromIndex];
+            const targetPath = [...path, childIndex, toIndex];
+            if (
+              Editor.hasPath(editor, sourcePath) &&
+              Editor.hasPath(editor, targetPath)
+            ) {
+              Transforms.moveNodes(editor, { at: sourcePath, to: targetPath });
+            }
+          }
+        });
+      });
+    },
+    [editor, element]
+  );
+
   return {
     onDelete,
     onChangeColumnName,
@@ -194,5 +223,6 @@ export const useTableActions = (
     onRemoveColumn,
     onAddRow,
     onRemoveRow,
+    onMoveColumn,
   };
 };

@@ -1,5 +1,6 @@
 import { FC, ReactNode } from 'react';
 import { css } from '@emotion/react';
+import { ConnectDropTarget } from 'react-dnd';
 import { cssVar } from '../../primitives';
 import { tableRowCounter } from '../../utils';
 
@@ -64,15 +65,18 @@ const allBorderStyles = css(innerBorderStyles, {
 type Border = 'all' | 'inner';
 
 interface TableProps {
-  border?: Border;
-  children?: ReactNode;
+  readonly border?: Border;
+  readonly children?: ReactNode;
+  readonly dropRef?: ConnectDropTarget;
 }
 
 export const Table = ({
   border: b = 'all',
   children,
+  dropRef,
 }: TableProps): ReturnType<FC> => (
   <table
+    ref={dropRef}
     css={[
       tableBaseStyles,
       b === 'all' && [borderRadiusStyles, allBorderStyles],

@@ -9,14 +9,8 @@ import {
   useComputer,
 } from '@decipad/react-contexts';
 import { EditorPlaceholder } from '@decipad/ui';
-import { identity } from '@decipad/utils';
 import { captureException } from '@sentry/react';
-import {
-  Plate,
-  PlateProvider,
-  TEditor,
-  usePlateEditorRef,
-} from '@udecode/plate';
+import { createPlateEditor, Plate, PlateProvider } from '@udecode/plate';
 import { FC, useCallback, useMemo, useState } from 'react';
 import * as components from './components';
 import * as configuration from './configuration';
@@ -29,13 +23,34 @@ export interface EditorProps {
 
 const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
   const [editorLoaded, setEditorLoaded] = useState(false);
-  const editor = usePlateEditorRef(notebookId) as TEditor;
 
   const computer = useComputer();
 
   const onLoaded = useCallback(() => {
     setEditorLoaded(true);
   }, []);
+
+  // Cursor remote presence
+  // useCursors(editor);
+
+  const notebookTitlePlugin = useNotebookTitlePlugin({
+    notebookId,
+    readOnly,
+  });
+
+  const editorPlugins = useMemo(
+    () => [...configuration.plugins(computer), notebookTitlePlugin],
+    [computer, notebookTitlePlugin]
+  );
+
+  const editor = useMemo(
+    () =>
+      createPlateEditor({
+        id: notebookId,
+        plugins: editorPlugins,
+      }),
+    [editorPlugins, notebookId]
+  );
 
   // DocSync
   useDocSync({
@@ -46,25 +61,12 @@ const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
     onLoaded,
   });
 
-  // Cursor remote presence
-  // useCursors(editor);
-
-  const notebookTitlePlugin = useNotebookTitlePlugin({
-    notebookId,
-    readOnly,
-  });
-
-  // upload / fetchdata
+  // upload / fetch data
   const {
     startUpload,
     uploadState,
     clearAll: clearAllUploads,
   } = useUploadDataPlugin({ editor });
-
-  const editorPlugins = useMemo(
-    () => [...configuration.plugins(computer), notebookTitlePlugin],
-    [computer, notebookTitlePlugin]
-  );
 
   return (
     <ResultsContext.Provider value={computer.results.asObservable()}>
@@ -76,10 +78,10 @@ const EditorInternal = ({ notebookId, authSecret, readOnly }: EditorProps) => {
         {!editorLoaded && <EditorPlaceholder />}
         <div css={{ display: editorLoaded ? 'unset' : 'none' }}>
           <Plate
-            id={notebookId}
-            renderEditable={identity}
-            plugins={editorPlugins}
-            editableProps={{ readOnly }}
+            editor={editor}
+            editableProps={{
+              readOnly,
+            }}
           >
             <components.Tooltip />
             <components.UploadDialogue

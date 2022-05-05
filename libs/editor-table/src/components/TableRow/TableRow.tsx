@@ -19,12 +19,14 @@ export const TableRow: PlateComponent = ({ attributes, children, element }) => {
   const [table] = Editor.node(editor, tablePath) as NodeEntry<TableElement>;
   const { onAddColumn, onRemoveRow } = useTableActions(editor, table);
 
+  // drop
   const readOnly = useReadOnly();
 
   const firstRow = path[path.length - 1] === 1;
   if (firstRow) {
     return (
       <molecules.TableHeaderRow
+        attributes={attributes}
         readOnly={readOnly}
         actionsColumn={!readOnly}
         onAddColumn={onAddColumn}
