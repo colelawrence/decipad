@@ -12,7 +12,7 @@ import { requirePathBelowBlock } from '@decipad/editor-utils';
 
 const inputElement = {
   type: ELEMENT_VARIABLE_DEF,
-  variant: 'input',
+  variant: 'expression',
   children: [
     {
       type: ELEMENT_CAPTION,

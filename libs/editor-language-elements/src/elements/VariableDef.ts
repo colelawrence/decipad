@@ -28,7 +28,9 @@ export const VariableDef = {
             return { name: variableName, expression: block.args[0] };
           }
           // eslint-disable-next-line no-empty
-        } catch {}
+        } catch (err) {
+          console.error(err);
+        }
       } else if (element.variant === 'slider') {
         return {
           name: variableName,

@@ -11,6 +11,8 @@ import {
 import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
 import { Editor, NodeEntry, Transforms } from 'slate';
 
+const allowableVariant = new Set(['expression', 'slider']);
+
 const normalize =
   (editor: Editor) =>
   ([node, path]: NodeEntry): boolean => {
@@ -22,7 +24,7 @@ const normalize =
       return false;
     }
 
-    if (!('variant' in node)) {
+    if (!('variant' in node) || !allowableVariant.has(node.variant)) {
       Transforms.setNodes(editor, { variant: 'expression' } as Partial<Node>, {
         at: path,
       });
@@ -49,8 +51,28 @@ const normalize =
       return true;
     }
 
+    if (
+      node.variant === 'expression' &&
+      (node.children[1] as Element).type !== ELEMENT_EXPRESSION
+    ) {
+      Transforms.delete(editor, {
+        at: [...path, 1],
+      });
+      return true;
+    }
+
+    if (
+      node.variant === 'slider' &&
+      (node.children[1] as Element).type !== ELEMENT_SLIDER
+    ) {
+      Transforms.delete(editor, {
+        at: [...path, 1],
+      });
+      return true;
+    }
+
     if (node.children.length < 2) {
-      if (node.variant === 'expression') {
+      if (!node.variant || node.variant === 'expression') {
         Transforms.insertNodes(
           editor,
           {
