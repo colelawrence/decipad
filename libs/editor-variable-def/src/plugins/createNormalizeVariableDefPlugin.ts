@@ -51,26 +51,6 @@ const normalize =
       return true;
     }
 
-    if (
-      node.variant === 'expression' &&
-      (node.children[1] as Element).type !== ELEMENT_EXPRESSION
-    ) {
-      Transforms.delete(editor, {
-        at: [...path, 1],
-      });
-      return true;
-    }
-
-    if (
-      node.variant === 'slider' &&
-      (node.children[1] as Element).type !== ELEMENT_SLIDER
-    ) {
-      Transforms.delete(editor, {
-        at: [...path, 1],
-      });
-      return true;
-    }
-
     if (node.children.length < 2) {
       if (!node.variant || node.variant === 'expression') {
         Transforms.insertNodes(
