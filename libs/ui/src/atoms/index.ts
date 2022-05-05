@@ -37,6 +37,7 @@ export { Overlay } from './Overlay/Overlay';
 export { Paragraph } from './Paragraph/Paragraph';
 export { Placeholder } from './Placeholder/Placeholder';
 export { SlashCommandsMenuItem } from './SlashCommandsMenuItem/SlashCommandsMenuItem';
+export { Slider } from './Slider/Slider';
 export { Strikethrough } from './Strikethrough/Strikethrough';
 export { TableCellWithUnit } from './TableCellWithUnit/TableCellWithUnit';
 export { TableData } from './TableData/TableData';

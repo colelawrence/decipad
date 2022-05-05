@@ -18,6 +18,7 @@ import {
 } from '@decipad/editor-utils';
 import { DraggableBlock } from '@decipad/editor-components';
 import { AvailableSwatchColor } from 'libs/ui/src/utils';
+import { getValueAsTextFromElement } from '../utils/getValueAsTextFromElement';
 
 export const VariableDef: PlateComponent = ({
   attributes,
@@ -34,7 +35,8 @@ export const VariableDef: PlateComponent = ({
     const path = findPath(editor as ReactEditor, element);
     if (path) {
       Transforms.delete(editor, { at: path });
-      const [varName, expression] = element.children.map(Node.string);
+      const varName = Node.string(element.children[0]);
+      const expression = getValueAsTextFromElement(element);
       Transforms.insertNodes(
         editor,
         {

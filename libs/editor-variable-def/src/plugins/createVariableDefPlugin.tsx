@@ -2,11 +2,19 @@ import { PlatePlugin } from '@udecode/plate';
 import {
   ELEMENT_CAPTION,
   ELEMENT_EXPRESSION,
+  ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
+  isElement,
 } from '@decipad/editor-types';
 import { Computer } from '@decipad/language';
 import { DECORATION_EXPRESSION_SYNTAX } from '../constants';
-import { VariableDef, Caption, Expression, CodeSyntax } from '../components';
+import {
+  VariableDef,
+  Caption,
+  Expression,
+  CodeSyntax,
+  Slider,
+} from '../components';
 import { createNormalizeVariableDefPlugin } from './createNormalizeVariableDefPlugin';
 import { createMigrateElementInputToVariableDefPlugin } from './createMigrateElementInputToVariableDefPlugin';
 import { createNormalizeCaptionPlugin } from './createNormalizeCaptionPlugin';
@@ -20,10 +28,35 @@ export const createVariableDefPlugin = (computer: Computer): PlatePlugin => ({
   component: VariableDef,
   deserializeHtml: {
     rules: [
-      { validNodeName: 'div', validAttribute: { 'data-type': 'var-def' } },
+      {
+        validNodeName: 'div',
+        validAttribute: { 'data-type': `var-${ELEMENT_VARIABLE_DEF}` },
+      },
     ],
+    getNode: (el) => {
+      return {
+        type: ELEMENT_VARIABLE_DEF,
+        variant: el.getAttribute('data-variant'),
+        children: el.children, // what to do?
+      };
+    },
   },
-  serializeHtml: (props) => <div data-type="var-def">{props.children}</div>,
+  serializeHtml: ({ element, children }) => {
+    if (!isElement(element)) {
+      throw new Error('expected element');
+    }
+    if (element.type !== ELEMENT_VARIABLE_DEF) {
+      throw new Error('expected variable definition element');
+    }
+    return (
+      <div
+        data-type={`var-${ELEMENT_VARIABLE_DEF}`}
+        data-variant={element.variant}
+      >
+        {children}
+      </div>
+    );
+  },
   plugins: [
     createMigrateElementInputToVariableDefPlugin(),
     createNormalizeVariableDefPlugin(),
@@ -61,6 +94,22 @@ export const createVariableDefPlugin = (computer: Computer): PlatePlugin => ({
       isLeaf: true,
       decorate: decorateExpression(computer),
       component: CodeSyntax,
+    },
+    {
+      key: ELEMENT_SLIDER,
+      isElement: true,
+      component: Slider,
+      deserializeHtml: {
+        rules: [
+          {
+            validNodeName: 'div',
+            validAttribute: { 'data-type': ELEMENT_SLIDER },
+          },
+        ],
+      },
+      serializeHtml: (props) => (
+        <div data-type={ELEMENT_SLIDER}>{props.children}</div>
+      ),
     },
   ],
 });

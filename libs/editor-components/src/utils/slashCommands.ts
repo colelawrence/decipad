@@ -16,7 +16,7 @@ import {
   insertCodeLineBelow,
   insertDividerBelow,
 } from '@decipad/editor-utils';
-import { insertInputBelow } from './input';
+import { insertInputBelow, insertSliderInputBelow } from './input';
 import { insertPlotBelow } from './plot';
 import { insertTableBelow } from './table';
 
@@ -46,6 +46,9 @@ export const execute = ({
       break;
     case 'input':
       insertInputBelow(editor, path);
+      break;
+    case 'slider':
+      insertSliderInputBelow(editor, path);
       break;
     case 'table':
       insertTableBelow(editor, path, getAvailableIdentifier);

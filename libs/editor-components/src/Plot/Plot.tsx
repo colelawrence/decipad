@@ -22,8 +22,7 @@ export const Plot: PlateComponent = ({ attributes, element, children }) => {
   const computer = useComputer();
   const readOnly = useReadOnly();
   const identifiedResult = useResult(element.id);
-  const result =
-    identifiedResult?.results[identifiedResult?.results.length - 1];
+  const result = identifiedResult?.results[identifiedResult.results.length - 1];
   const { spec, data, plotParams } = usePlot({
     editor,
     computer,

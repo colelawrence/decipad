@@ -40,7 +40,11 @@ import {
   TableCaptionElement,
 } from './table';
 import { ELEMENT_VARIABLE_DEF } from './element-kinds';
-import { CaptionElement, ExpressionElement } from './interactive-elements';
+import {
+  CaptionElement,
+  ExpressionElement,
+  SliderElement,
+} from './interactive-elements';
 
 // Defining specific elements
 
@@ -168,6 +172,7 @@ export type BlockElement =
   | TableCellElement
   | ExpressionElement
   | CaptionElement
+  | SliderElement
   | InteractiveElement;
 type InlineElement = LinkElement;
 

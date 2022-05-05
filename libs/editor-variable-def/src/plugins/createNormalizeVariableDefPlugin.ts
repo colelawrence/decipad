@@ -6,6 +6,7 @@ import {
   ELEMENT_CAPTION,
   ELEMENT_EXPRESSION,
   Element,
+  ELEMENT_SLIDER,
 } from '@decipad/editor-types';
 import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
 import { Editor, NodeEntry, Transforms } from 'slate';
@@ -19,6 +20,13 @@ const normalize =
 
     if (!isElement(node)) {
       return false;
+    }
+
+    if (!('variant' in node)) {
+      Transforms.setNodes(editor, { variant: 'expression' } as Partial<Node>, {
+        at: path,
+      });
+      return true;
     }
 
     if (node.children.length < 1) {
@@ -42,19 +50,42 @@ const normalize =
     }
 
     if (node.children.length < 2) {
-      Transforms.insertNodes(
-        editor,
-        {
-          id: nanoid(),
-          type: ELEMENT_EXPRESSION,
-          children: [{ text: '' }],
-        } as Node,
-        { at: [...path, 1] }
-      );
-      return true;
+      if (node.variant === 'expression') {
+        Transforms.insertNodes(
+          editor,
+          {
+            id: nanoid(),
+            type: ELEMENT_EXPRESSION,
+            children: [{ text: '' }],
+          } as Node,
+          { at: [...path, 1] }
+        );
+        return true;
+      }
+      if (node.variant === 'slider') {
+        Transforms.insertNodes(
+          editor,
+          {
+            id: nanoid(),
+            type: ELEMENT_SLIDER,
+            max: 10,
+            min: 0,
+            step: 0.1,
+            value: 0,
+            children: [{ text: '' }],
+          } as Node,
+          { at: [...path, 1] }
+        );
+        return true;
+      }
     }
 
-    if ((node.children[1] as Element).type !== ELEMENT_EXPRESSION) {
+    if (
+      (node.variant === 'expression' &&
+        (node.children[1] as Element).type !== ELEMENT_EXPRESSION) ||
+      (node.variant === 'slider' &&
+        (node.children[1] as Element).type !== ELEMENT_SLIDER)
+    ) {
       Transforms.delete(editor, {
         at: [...path, 1],
       });
@@ -67,7 +98,7 @@ const normalize =
 export const createNormalizeVariableDefPlugin = createNormalizerPluginFactory({
   name: 'NORMALIZE_VARIABLE_DEF_PLUGIN',
   elementType: ELEMENT_VARIABLE_DEF,
-  acceptableElementProperties: [],
-  acceptableSubElements: [ELEMENT_CAPTION, ELEMENT_EXPRESSION],
+  acceptableElementProperties: ['variant', 'max', 'min', 'step', 'value'],
+  acceptableSubElements: [ELEMENT_CAPTION, ELEMENT_EXPRESSION, ELEMENT_SLIDER],
   plugin: normalize,
 });

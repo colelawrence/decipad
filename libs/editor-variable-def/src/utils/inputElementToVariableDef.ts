@@ -13,6 +13,7 @@ export const inputElementToVariableDef = (
   return {
     id: inputElement.id,
     type: ELEMENT_VARIABLE_DEF,
+    variant: 'expression',
     children: [
       {
         id: nanoid(),

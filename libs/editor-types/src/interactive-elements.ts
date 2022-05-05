@@ -7,10 +7,12 @@ import {
   EmptyText,
   Node,
   PlainText,
+  BlockElement,
 } from '.';
 import {
   ELEMENT_CAPTION,
   ELEMENT_EXPRESSION,
+  ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
 } from './element-kinds';
 import type { TableElement, TableInputElement } from './table';
@@ -69,10 +71,36 @@ export interface ExpressionElement extends BaseElement {
   type: typeof ELEMENT_EXPRESSION;
   children: [PlainText];
 }
-export interface VariableDefinitionElement extends BaseElement {
-  type: typeof ELEMENT_VARIABLE_DEF;
-  children: [CaptionElement, ExpressionElement];
+
+export interface SliderElement extends BaseElement {
+  type: typeof ELEMENT_SLIDER;
+  max: number;
+  min: number;
+  step: number;
+  value: number;
+  children: [EmptyText];
 }
+
+interface VariableBaseElement<V extends string, T extends BlockElement>
+  extends BaseElement {
+  type: typeof ELEMENT_VARIABLE_DEF;
+  variant: V;
+  children: [CaptionElement, T];
+}
+
+export type VariableExpressionElement = VariableBaseElement<
+  'expression',
+  ExpressionElement
+>;
+
+export type VariableSliderElement = VariableBaseElement<
+  'slider',
+  SliderElement
+>;
+
+export type VariableDefinitionElement =
+  | VariableExpressionElement
+  | VariableSliderElement;
 
 export type InteractiveElement =
   | TableInputElement
@@ -81,6 +109,8 @@ export type InteractiveElement =
   | PlotElement
   | InputElement
   | VariableDefinitionElement;
+
+export type VariableElement = VariableDefinitionElement | VariableSliderElement;
 
 export const interactiveElementKinds: ReadonlyArray<
   InteractiveElement['type']
