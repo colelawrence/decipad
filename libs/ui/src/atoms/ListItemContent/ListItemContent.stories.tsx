@@ -7,7 +7,7 @@ const args = {
 };
 
 export default {
-  title: 'Atoms / List / Item Content',
+  title: 'Atoms / Editor / List / Item',
   component: ListItemContent,
   args,
 } as Meta;

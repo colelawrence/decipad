@@ -9,7 +9,7 @@ const cellStyles = css({
 });
 
 export default {
-  title: 'Molecules / Table / Row',
+  title: 'Molecules / Editor / Table / Row',
   component: TableRow,
 } as Meta;
 

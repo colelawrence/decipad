@@ -7,7 +7,7 @@ const argTypes = {
 };
 
 export default {
-  title: 'Organisms / Editor / Block / Drag Handle',
+  title: 'Organisms / Editor / Drag /  Handle',
   component: BlockDragHandle,
   argTypes,
 } as Meta;

@@ -6,7 +6,7 @@ interface Args {
 }
 
 export default {
-  title: 'Atoms / Menu Separator',
+  title: 'Atoms / UI / Menu / Separator',
   component: MenuSeparator,
 } as Meta<Args>;
 

@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { ParagraphPlaceholder } from './ParagraphPlaceholder';
 
 export default {
-  title: 'Molecules / Paragraph Placeholder',
+  title: 'Molecules / UI / Notebook Placeholder',
   component: ParagraphPlaceholder,
 } as Meta;
 

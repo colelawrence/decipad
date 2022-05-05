@@ -1,12 +1,12 @@
 import { Meta, Story } from '@storybook/react';
 import { MenuItem, TriggerMenuItem } from '../../atoms';
-import { MenuList } from './MenuList';
 import { circleIcon } from '../../storybook-utils';
+import { MenuList } from './MenuList';
 
 const args = { open: true };
 
 export default {
-  title: 'Molecules / Menu List',
+  title: 'Molecules / UI / Menu List',
   component: MenuList,
   args,
 } as Meta;

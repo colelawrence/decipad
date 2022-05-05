@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { CellInput, CellInputProps } from './CellInput';
 
 export default {
-  title: 'Atoms / Table / Cell Input',
+  title: 'Atoms / Editor / Table / Cell',
   component: CellInput,
   args: {
     value: 'Edit me',

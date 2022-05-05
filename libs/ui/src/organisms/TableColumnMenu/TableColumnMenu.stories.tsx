@@ -3,7 +3,7 @@ import { getNumberType } from '../../utils';
 import { TableColumnMenu } from './TableColumnMenu';
 
 export default {
-  title: 'Organisms / Table / Column Menu',
+  title: 'Organisms / Editor / Table / Column Menu',
   component: TableColumnMenu,
 } as Meta;
 

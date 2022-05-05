@@ -6,7 +6,7 @@ const args = {
 };
 
 export default {
-  title: 'Organisms / Notebook / Sharing Pop Up',
+  title: 'Organisms / UI / Share / Button',
   component: NotebookSharingPopUp,
   args,
 } as Meta<typeof args>;

@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { HelpButton } from './HelpButton';
 
 export default {
-  title: 'Molecules / Notebook List / Help Button',
+  title: 'Molecules / UI / Notebook List / Help Button',
   component: HelpButton,
 } as Meta;
 

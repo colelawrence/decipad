@@ -1,12 +1,12 @@
-import { ComponentProps } from 'react';
 import { Meta, Story } from '@storybook/react';
+import { ComponentProps } from 'react';
 import { CodeVariable } from './CodeVariable';
 
 export default {
-  title: 'Atoms / Editor / Code / Variable',
+  title: 'Atoms / Editor / Bubble / Code Variable',
   component: CodeVariable,
   args: {
-    children: 'Variable',
+    children: 'Interest Rate',
   },
 } as Meta;
 

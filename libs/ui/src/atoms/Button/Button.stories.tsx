@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { Button } from './Button';
 
 export default {
-  title: 'Atoms / Button',
+  title: 'Atoms / UI / Button',
   component: Button,
   argTypes: {
     children: {

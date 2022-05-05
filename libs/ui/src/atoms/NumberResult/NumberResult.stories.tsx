@@ -1,10 +1,10 @@
-import { ComponentProps } from 'react';
 import { Meta, Story } from '@storybook/react';
+import { ComponentProps } from 'react';
 import { withCode } from '../../storybook-utils';
 import { NumberResult } from './NumberResult';
 
 export default {
-  title: 'Atoms / Editor / Result / Number',
+  title: 'Atoms / Editor / Results / Number',
   component: NumberResult,
 } as Meta;
 

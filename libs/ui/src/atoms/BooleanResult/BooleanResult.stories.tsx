@@ -4,7 +4,7 @@ import { withCode } from '../../storybook-utils';
 import { BooleanResult } from './BooleanResult';
 
 export default {
-  title: 'Atoms / Editor / Result / Boolean',
+  title: 'Atoms / Editor / Results / Boolean',
   component: BooleanResult,
 } as Meta;
 

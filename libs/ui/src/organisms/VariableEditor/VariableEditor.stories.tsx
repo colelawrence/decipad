@@ -1,9 +1,9 @@
-import { ComponentProps } from 'react';
 import { Meta, Story } from '@storybook/react';
+import { ComponentProps } from 'react';
 import { VariableEditor } from './VariableEditor';
 
 export default {
-  title: 'Organisms / Editor / Expression Editor',
+  title: 'Organisms / Editor / Input / Expression Editor',
   component: VariableEditor,
 } as Meta;
 

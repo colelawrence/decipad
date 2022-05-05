@@ -6,7 +6,7 @@ const args = {
 };
 
 export default {
-  title: 'Atoms / Toggle',
+  title: 'Atoms / UI / Toggle',
   component: Toggle,
   args,
 } as Meta;

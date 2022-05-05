@@ -1,10 +1,10 @@
-import { ComponentProps } from 'react';
 import { Meta, Story } from '@storybook/react';
+import { ComponentProps } from 'react';
 import { withCode } from '../../storybook-utils';
 import { DateResult } from './DateResult';
 
 export default {
-  title: 'Atoms / Editor / Result / Date',
+  title: 'Atoms / Editor / Results / Date',
   component: DateResult,
 } as Meta;
 

@@ -1,6 +1,6 @@
+import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { ComponentProps, useState } from 'react';
-import { noop } from '@decipad/utils';
 import { Divider } from '../../atoms';
 import {
   DragAndDropImportNotebook,

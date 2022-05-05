@@ -22,7 +22,7 @@ const args: ComponentProps<typeof NotebookAvatars> = {
 };
 
 export default {
-  title: 'Molecules / Notebook / Users',
+  title: 'Molecules / UI / Notebook Top Bar / Users',
   component: NotebookAvatars,
   args,
 } as Meta;

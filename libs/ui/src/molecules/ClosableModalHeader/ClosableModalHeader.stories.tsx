@@ -6,7 +6,7 @@ const args = {
 };
 
 export default {
-  title: 'Molecules / Modal / Closable Header',
+  title: 'Molecules / UI / Modal / Closable Header',
   component: ClosableModalHeader,
   args,
 } as Meta;

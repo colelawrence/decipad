@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { AccountMenu, AccountMenuProps } from './AccountMenu';
 
 export default {
-  title: 'Organisms / Account / Menu',
+  title: 'Organisms / UI / Account / Menu',
   component: AccountMenu,
   args: {
     name: 'John Doe',

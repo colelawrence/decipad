@@ -2,10 +2,10 @@ import { BlockIsActiveProvider } from '@decipad/react-contexts';
 import { Meta, Story } from '@storybook/react';
 import { Heading1 } from './Heading1';
 
-const args = { children: 'Text' };
+const args = { children: 'What’s possible?' };
 
 export default {
-  title: 'Atoms / Editor / Text / Heading 1',
+  title: 'Atoms / Editor / Text / Block / Heading 1',
   component: Heading1,
   args,
 } as Meta;

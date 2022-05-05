@@ -1,8 +1,8 @@
+import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { DropTargetMonitor, useDrop } from 'react-dnd';
 import { NativeTypes } from 'react-dnd-html5-backend';
-import { noop } from '@decipad/utils';
 import { grey50 } from '../../primitives';
 
 const acceptableFileTypes = ['application/json'];

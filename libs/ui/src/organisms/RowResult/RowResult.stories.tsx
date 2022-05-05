@@ -13,7 +13,7 @@ const code = `
 `;
 
 export default {
-  title: 'Organisms / Editor / Result / Row',
+  title: 'Organisms / Editor / Results / Row',
   component: RowResult,
   decorators: [withCode(code)],
 } as Meta;

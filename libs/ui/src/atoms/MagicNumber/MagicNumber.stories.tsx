@@ -4,7 +4,7 @@ import { withCode } from '../../storybook-utils';
 import { MagicNumber } from './MagicNumber';
 
 export default {
-  title: 'Atoms / Editor / Text / Inline / Magic Number',
+  title: 'Atoms / Editor / Results / Inline / Magic Number',
   component: MagicNumber,
   decorators: [
     (St) => (

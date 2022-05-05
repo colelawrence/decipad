@@ -8,7 +8,7 @@ const args = {
 };
 
 export default {
-  title: 'Templates / Toast Display',
+  title: 'Templates / Toast',
   component: ToastDisplay,
   args,
 } as Meta<ComponentProps<typeof ToastDisplay>>;

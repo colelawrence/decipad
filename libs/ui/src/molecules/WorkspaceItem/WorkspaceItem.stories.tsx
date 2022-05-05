@@ -6,7 +6,7 @@ const args = {
   numberOfMembers: 1,
 };
 export default {
-  title: 'Molecules / Workspaces / Item',
+  title: 'Molecules / UI / Workspace / Item',
   component: WorkspaceItem,
   args,
 } as Meta;

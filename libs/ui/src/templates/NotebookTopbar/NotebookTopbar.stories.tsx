@@ -17,7 +17,7 @@ const args: Omit<ComponentProps<typeof NotebookTopbar>, 'workspaceHref'> = {
   permission: 'ADMIN',
 };
 export default {
-  title: 'Templates / Notebook / Topbar',
+  title: 'Templates / Notebook / Top Bar / Topbar',
   args,
 } as Meta;
 

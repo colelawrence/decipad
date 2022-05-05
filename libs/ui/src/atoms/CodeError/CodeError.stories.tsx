@@ -1,5 +1,4 @@
 import { Meta, Story } from '@storybook/react';
-
 import { CodeError } from './CodeError';
 
 const args = {
@@ -8,7 +7,7 @@ const args = {
 };
 
 export default {
-  title: 'Atoms / Editor / Result / Error',
+  title: 'Atoms / Editor / Results / Error',
   component: CodeError,
   args,
 } as Meta;

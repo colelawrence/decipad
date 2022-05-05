@@ -1,5 +1,5 @@
-import { ComponentProps } from 'react';
 import { Meta, Story } from '@storybook/react';
+import { ComponentProps } from 'react';
 import { PlotParams } from './PlotParams';
 
 const props: Record<string, string> = {};
@@ -33,7 +33,7 @@ const params: ComponentProps<typeof PlotParams> = {
 };
 
 export default {
-  title: 'Organisms / Plots / Plot Params',
+  title: 'Organisms / Editor / Charts / Params',
   component: PlotParams,
   args: params,
 } as Meta;

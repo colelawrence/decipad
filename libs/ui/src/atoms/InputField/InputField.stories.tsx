@@ -7,7 +7,7 @@ const args: InputFieldProps = {
 };
 
 export default {
-  title: 'Atoms / Input Field',
+  title: 'Atoms / UI / Input Field',
   component: InputField,
   args,
 } as Meta<InputFieldProps>;

@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { DropLine } from './DropLine';
 
 export default {
-  title: 'Atoms / Drag and Drop / Drop Line',
+  title: 'Atoms / Editor / Void / Drag & Drop Line',
   component: DropLine,
 } as Meta;
 

@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { cssVar, setCssVar, p32Medium } from '../../primitives';
+import { cssVar, p32Medium, setCssVar } from '../../primitives';
 
 const leafStylesByTokenType = {
   number: css(p32Medium, {
@@ -12,7 +12,7 @@ const leafStylesByTokenType = {
   ws: undefined,
 };
 
-type TokenType = keyof typeof leafStylesByTokenType;
+export type TokenType = keyof typeof leafStylesByTokenType;
 
 interface CodeSyntaxProps {
   variant: TokenType;

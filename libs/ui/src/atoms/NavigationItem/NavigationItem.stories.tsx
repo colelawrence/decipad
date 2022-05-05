@@ -1,7 +1,6 @@
-import { Meta, Story } from '@storybook/react';
 import { noop } from '@decipad/utils';
+import { Meta, Story } from '@storybook/react';
 import { circleIcon } from '../../storybook-utils';
-
 import { NavigationItem } from './NavigationItem';
 
 interface Args {
@@ -9,7 +8,7 @@ interface Args {
 }
 
 export default {
-  title: 'Atoms / Navigation Item',
+  title: 'Atoms / UI / Navigation Item',
   component: NavigationItem,
   args: {
     children: 'Text',

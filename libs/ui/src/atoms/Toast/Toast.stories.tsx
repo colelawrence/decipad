@@ -8,7 +8,7 @@ const args: ComponentProps<typeof Toast> = {
 };
 
 export default {
-  title: 'Atoms / Toast',
+  title: 'Atoms / UI / Toast',
   component: Toast,
   args,
   argTypes: {

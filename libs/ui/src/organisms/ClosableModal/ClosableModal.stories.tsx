@@ -7,7 +7,7 @@ const args = {
 };
 
 export default {
-  title: 'Organisms / Modal / Closable',
+  title: 'Organisms / UI / Modal / Closable',
   component: ClosableModal,
   args,
 } as Meta;

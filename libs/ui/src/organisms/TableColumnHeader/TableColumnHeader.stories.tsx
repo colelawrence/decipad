@@ -1,10 +1,10 @@
 import { Meta, Story } from '@storybook/react';
-import { getStringType } from '../../utils';
 import { TableHeaderRow } from '../../molecules';
+import { getStringType } from '../../utils';
 import { TableColumnHeader } from './TableColumnHeader';
 
 export default {
-  title: 'Organisms / Table / Column Header',
+  title: 'Organisms / Editor /  Table / Column Header',
   component: TableHeaderRow,
 } as Meta;
 

@@ -2,10 +2,10 @@ import { BlockIsActiveProvider } from '@decipad/react-contexts';
 import { Meta, Story } from '@storybook/react';
 import { Heading2 } from './Heading2';
 
-const args = { children: 'Text' };
+const args = { children: 'Why isn’t data analysis more mainstream?' };
 
 export default {
-  title: 'Atoms / Editor / Text / Heading 2',
+  title: 'Atoms / Editor / Text / Block / Heading 2',
   component: Heading2,
   args,
 } as Meta;

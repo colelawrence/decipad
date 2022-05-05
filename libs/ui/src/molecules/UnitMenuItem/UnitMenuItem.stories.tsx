@@ -1,5 +1,5 @@
-import { Meta, Story } from '@storybook/react';
 import { SerializedUnits } from '@decipad/language';
+import { Meta, Story } from '@storybook/react';
 import { inMenu } from '../../storybook-utils';
 import { UnitMenuItem } from './UnitMenuItem';
 
@@ -8,7 +8,7 @@ interface Args {
 }
 
 export default {
-  title: 'Molecules / Table / Units Menu Item',
+  title: 'Molecules / Editor / Table / Units / Menu Item',
   component: UnitMenuItem,
   decorators: [inMenu],
 } as Meta<Args>;

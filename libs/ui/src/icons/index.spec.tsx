@@ -42,5 +42,9 @@ describe.each(iconExports)('the %s icon', (_name, Icon) => {
 });
 
 function notIndexOrSelf(entry: string) {
-  return entry !== 'index.ts' && entry !== basename(__filename);
+  return (
+    entry !== 'index.ts' &&
+    entry !== 'index.stories.tsx' &&
+    entry !== basename(__filename)
+  );
 }

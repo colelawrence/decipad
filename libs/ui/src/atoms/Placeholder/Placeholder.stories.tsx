@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { Placeholder } from './Placeholder';
 
 export default {
-  title: 'Atoms / Placeholder',
+  title: 'Atoms / Editor / Placeholder',
   component: Placeholder,
 } as Meta;
 

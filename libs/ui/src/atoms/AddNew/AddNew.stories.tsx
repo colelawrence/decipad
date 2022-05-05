@@ -2,12 +2,11 @@ import { Meta, Story } from '@storybook/react';
 import { AddNew } from './AddNew';
 
 const args = {
-  children: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
-  eiusmod tempor incididunt ut labore et dolore magna aliqua. `,
+  children: `Today, people and businesses have access to more data and information than ever before.`,
 };
 
 export default {
-  title: 'Atoms / Add New',
+  title: 'Atoms / Editor / Columns / Add',
   component: AddNew,
   args,
 } as Meta;

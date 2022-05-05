@@ -6,7 +6,7 @@ const args = {
 };
 
 export default {
-  title: 'Organisms / Workspaces / Menu',
+  title: 'Organisms / UI / Workspace / Menu',
   component: WorkspaceMenu,
   args,
 } as Meta;

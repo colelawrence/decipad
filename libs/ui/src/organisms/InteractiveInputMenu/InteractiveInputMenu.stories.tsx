@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { InteractiveInputMenu } from './InteractiveInputMenu';
 
 export default {
-  title: 'Organisms / Editor / Interactive Input / Menu',
+  title: 'Organisms / Editor / Input / Menu',
   component: InteractiveInputMenu,
 } as Meta;
 

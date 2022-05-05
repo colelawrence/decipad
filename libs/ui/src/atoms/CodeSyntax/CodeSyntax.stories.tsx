@@ -1,21 +1,27 @@
 import { Meta, Story } from '@storybook/react';
+import { CodeSyntax, TokenType } from './CodeSyntax';
 
-import { CodeSyntax } from './CodeSyntax';
-
-const args = {
-  variant: 'number',
+export const NormalArgs = {
+  variant: 'number' as TokenType,
+  children: '4 * 5',
 };
-
 export default {
-  title: 'Atoms / Editor / Expression Editor / Code Syntax',
+  title: 'Atoms / Editor / Inputs / Code Syntax',
   component: CodeSyntax,
-  args,
 } as Meta;
 
-export const Normal: Story<typeof args> = (props) => (
-  <CodeSyntax {...props} variant="number" />
+export const Normal: Story<typeof NormalArgs> = (props) => (
+  <CodeSyntax {...props} />
 );
+Normal.args = {
+  variant: 'number',
+  children: '4 * 5',
+};
 
-export const Identifier: Story<typeof args> = (props) => (
-  <CodeSyntax {...props} variant="identifier" />
+export const Identifier: Story<typeof NormalArgs> = (props) => (
+  <CodeSyntax {...props} />
 );
+Identifier.args = {
+  variant: 'identifier',
+  children: 'm/s',
+};

@@ -8,7 +8,7 @@ const args: ComponentProps<typeof NotebookIconButton> = {
 };
 
 export default {
-  title: 'Atoms / Notebook Icon Button',
+  title: 'Atoms / UI / Notebook Icon',
   component: NotebookIconButton,
   args,
   argTypes: {

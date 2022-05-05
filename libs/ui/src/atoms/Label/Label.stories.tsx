@@ -1,5 +1,5 @@
-import { Meta, Story } from '@storybook/react';
 import { css } from '@emotion/react';
+import { Meta, Story } from '@storybook/react';
 import { p14Regular, p16Regular } from '../../primitives';
 import { Label } from './Label';
 
@@ -8,7 +8,7 @@ const args = {
 };
 
 export default {
-  title: 'Atoms / Label',
+  title: 'Atoms / Editor / Charts / Label',
   component: Label,
   args,
 } as Meta;

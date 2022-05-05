@@ -1,6 +1,5 @@
 import { Result } from '@decipad/language';
 import { Meta, Story } from '@storybook/react';
-
 import { InlineCodeError } from './InlineCodeError';
 
 const args = {
@@ -12,7 +11,7 @@ const args = {
 } as Result<'type-error'>;
 
 export default {
-  title: 'Atoms / Editor / Result / Inline / Error',
+  title: 'Atoms / Editor / Results / Inline / Error',
   component: InlineCodeError,
   args,
 } as Meta;

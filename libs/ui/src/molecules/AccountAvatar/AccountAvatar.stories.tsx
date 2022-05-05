@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { AccountAvatar } from './AccountAvatar';
 
 export default {
-  title: 'Molecules / Account Avatar',
+  title: 'Molecules /  UI / Avatar',
   component: AccountAvatar,
   args: {
     menuOpen: false,

@@ -6,6 +6,13 @@ type ColorId = Exclude<
   keyof typeof import('./color'),
   'color' | 'transparency'
 >;
+
+const wrapperStyle = {
+  display: 'grid',
+  gridGap: '5px',
+  gridTemplateColumns: '100px 100px 100px',
+};
+
 const colorNames: Record<ColorId, string> = {
   offBlack: 'Off-Black',
   black: 'Black',
@@ -110,23 +117,21 @@ const colorNames: Record<ColorId, string> = {
 };
 export default {
   title: 'Primitives / Color',
-  argTypes: {
-    color: {
-      control: { type: 'select', labels: colorNames },
-      options: Object.keys(colorNames),
-      mapping: colors,
-      defaultValue: 'white',
-    },
-  },
 } as Meta;
 
-export const Normal: Story<{ color: OpaqueColor }> = ({ color }) => (
-  <div
-    role="presentation"
-    css={{
-      width: '100%',
-      height: '100%',
-      backgroundColor: color.rgb,
-    }}
-  />
+export const Normal: Story = () => (
+  <div style={wrapperStyle}>
+    {Object.keys(colorNames).map((colorName) => (
+      <div
+        role="presentation"
+        css={{
+          width: '100px',
+          height: '24px',
+          backgroundColor: (colors[colorName as ColorId] as OpaqueColor).rgb,
+        }}
+      >
+        {colorName}
+      </div>
+    ))}
+  </div>
 );

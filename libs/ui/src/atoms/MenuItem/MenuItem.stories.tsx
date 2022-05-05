@@ -7,7 +7,7 @@ interface Args {
 }
 
 export default {
-  title: 'Atoms / Menu Item',
+  title: 'Atoms / UI / Menu / Item',
   component: MenuItem,
   args: {
     children: 'Text',

@@ -6,7 +6,7 @@ const args = {
 };
 
 export default {
-  title: 'Molecules / Editor / Caption',
+  title: 'Molecules / Editor / Input / Caption',
   component: Caption,
   args,
 } as Meta<typeof args>;

@@ -8,7 +8,7 @@ const args = {
 };
 
 export default {
-  title: 'Atoms / Tooltip',
+  title: 'Atoms / UI / Tooltip',
   component: Tooltip,
   args,
 } as Meta;

@@ -28,7 +28,7 @@ const params: ComponentProps<typeof PlotResult> = {
 };
 
 export default {
-  title: 'Organisms / Plots / Plot Result',
+  title: 'Organisms / Editor / Charts / Result',
   component: PlotResult,
   args: params,
 } as Meta;

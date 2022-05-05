@@ -2,8 +2,8 @@ import { css } from '@emotion/react';
 import { Meta, Story } from '@storybook/react';
 import { TableData, TableHeader } from '../../atoms';
 import { TableHeaderRow, TableRow } from '../../molecules';
-import { Table } from './Table';
 import { table } from '../../styles';
+import { Table } from './Table';
 
 const cellStyles = css({
   padding: `0 ${table.cellSidePadding}`,
@@ -39,7 +39,7 @@ const body = (
 );
 
 export default {
-  title: 'Organisms / Table',
+  title: 'Organisms / Editor / Table',
   component: Table,
 } as Meta;
 

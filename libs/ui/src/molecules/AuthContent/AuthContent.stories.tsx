@@ -7,7 +7,7 @@ const args: AuthContentProps = {
 };
 
 export default {
-  title: 'Molecules / Auth / Content',
+  title: 'Molecules / UI / Auth / Pane',
   component: AuthContent,
   args,
 } as Meta<AuthContentProps>;

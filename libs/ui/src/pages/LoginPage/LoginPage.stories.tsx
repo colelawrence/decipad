@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { LoginPage, LoginPageProps } from './LoginPage';
 
 export default {
-  title: 'Pages / Login',
+  title: 'Pages / Auth / Login',
   component: LoginPage,
   argTypes: {
     onSubmit: {

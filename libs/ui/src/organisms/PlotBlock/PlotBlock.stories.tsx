@@ -64,7 +64,7 @@ const props: ComponentProps<typeof PlotBlock> = {
 };
 
 export default {
-  title: 'Organisms / Plots / Plot Block',
+  title: 'Organisms / Editor / Charts / Block',
   component: PlotBlock,
 } as Meta;
 

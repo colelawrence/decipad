@@ -9,7 +9,7 @@ interface Args {
 }
 
 export default {
-  title: 'Atoms / Trigger Menu Item',
+  title: 'Atoms / UI / Menu / Trigger Item',
   component: TriggerMenuItem,
   args: {
     children: 'Text',

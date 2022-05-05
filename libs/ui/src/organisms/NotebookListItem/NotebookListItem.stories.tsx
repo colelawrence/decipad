@@ -16,16 +16,12 @@ const args: Pick<
 };
 
 export default {
-  title: 'Organisms / Notebook List / Item',
+  title: 'Organisms / UI / Notebook List / Item',
   component: NotebookListItem,
   argTypes: {
     iconColor: { options: swatchNames, control: { type: 'radio' } },
     icon: {
-      options: [
-        'Rocket' as UserIconKey,
-        'Coffee' as UserIconKey,
-        'Sun' as UserIconKey,
-      ],
+      options: ['Rocket' as UserIconKey, 'Coffee' as UserIconKey],
       control: { type: 'radio' },
     },
   },

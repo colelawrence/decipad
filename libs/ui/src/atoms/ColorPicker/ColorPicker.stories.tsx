@@ -1,6 +1,6 @@
 import { Meta, Story } from '@storybook/react';
 import { ComponentProps } from 'react';
-import { swatchNames, baseSwatches } from '../../utils';
+import { baseSwatches } from '../../utils';
 import { ColorPicker } from './ColorPicker';
 
 const args: ComponentProps<typeof ColorPicker> = {
@@ -9,15 +9,8 @@ const args: ComponentProps<typeof ColorPicker> = {
 };
 
 export default {
-  title: 'Atoms / Color Picker',
+  title: 'Atoms / UI / Color Picker',
   component: ColorPicker,
-  argTypes: {
-    color: {
-      options: swatchNames,
-      mapping: baseSwatches,
-    },
-    selected: { control: 'boolean' },
-  },
   decorators: [
     (St) => (
       <div style={{ margin: '5px' }}>
@@ -28,4 +21,24 @@ export default {
   args,
 } as Meta<typeof args>;
 
-export const Normal: Story<typeof args> = (props) => <ColorPicker {...props} />;
+export const Normal: Story<typeof args> = (props) => (
+  <>
+    <ColorPicker {...props} color={baseSwatches.Malibu} />
+    <ColorPicker {...props} color={baseSwatches.Sun} />
+    <ColorPicker {...props} color={baseSwatches.Catskill} />
+    <ColorPicker {...props} color={baseSwatches.Sulu} />
+    <ColorPicker {...props} color={baseSwatches.Perfume} />
+    <ColorPicker {...props} color={baseSwatches.Rose} />
+  </>
+);
+
+export const Selected: Story<typeof args> = (props) => (
+  <>
+    <ColorPicker {...props} selected={true} color={baseSwatches.Malibu} />
+    <ColorPicker {...props} selected={true} color={baseSwatches.Sun} />
+    <ColorPicker {...props} selected={true} color={baseSwatches.Catskill} />
+    <ColorPicker {...props} selected={true} color={baseSwatches.Sulu} />
+    <ColorPicker {...props} selected={true} color={baseSwatches.Perfume} />
+    <ColorPicker {...props} selected={true} color={baseSwatches.Rose} />
+  </>
+);

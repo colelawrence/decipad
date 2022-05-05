@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { WorkspaceSwitcher } from './WorkspaceSwitcher';
 
 export default {
-  title: 'Organisms / Workspaces / Switcher',
+  title: 'Organisms / UI / Workspace / Switcher',
   component: WorkspaceSwitcher,
 } as Meta;
 

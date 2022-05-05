@@ -7,7 +7,7 @@ const args = {
 };
 
 export default {
-  title: 'Molecules / List / Ordered',
+  title: 'Molecules / Editor / List / Ordered',
   component: OrderedList,
   args,
 } as Meta;

@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { EmptyWorkspaceCta } from './EmptyWorkspaceCta';
 
 export default {
-  title: 'Organisms / Workspaces / Empty Workspace CTA',
+  title: 'Organisms / UI / Workspace / Empty Workspace CTA',
   component: EmptyWorkspaceCta,
 } as Meta;
 

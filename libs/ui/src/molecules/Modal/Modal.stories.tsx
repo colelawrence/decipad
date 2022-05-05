@@ -6,7 +6,7 @@ const args = {
 };
 
 export default {
-  title: 'Molecules / Modal',
+  title: 'Molecules / UI / Modal',
   component: Modal,
   args,
 } as Meta;

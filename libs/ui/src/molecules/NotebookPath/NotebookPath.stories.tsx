@@ -10,7 +10,7 @@ const args = {
   isAdmin: true,
 };
 export default {
-  title: 'Molecules / Notebook / Path',
+  title: 'Molecules / UI / Notebook Top Bar / Path',
   component: NotebookPath,
   args,
 } as Meta;

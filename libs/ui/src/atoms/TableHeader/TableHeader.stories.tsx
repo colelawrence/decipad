@@ -9,7 +9,7 @@ const args: ComponentProps<typeof TableHeader> = {
 };
 
 export default {
-  title: 'Atoms / Table / Header',
+  title: 'Atoms / Editor / Table / Column Header',
   component: TableHeader,
   args,
 } as Meta;

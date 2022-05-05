@@ -1,6 +1,6 @@
-import { ConnectDragSource } from 'react-dnd';
-import { FC, Fragment, ReactNode, RefObject, useState } from 'react';
 import { BlockIsActiveProvider } from '@decipad/react-contexts';
+import { FC, Fragment, ReactNode, RefObject, useState } from 'react';
+import { ConnectDragSource } from 'react-dnd';
 import { BlockDragHandle } from '..';
 import { DropLine, EditorBlock } from '../../atoms';
 import {
@@ -8,7 +8,7 @@ import {
   Opacity,
   shortAnimationDuration,
 } from '../../primitives';
-import { editorLayout, blockAlignment } from '../../styles';
+import { blockAlignment, editorLayout } from '../../styles';
 
 const handleAndMenuReservedSpace = 172;
 const totalSpaceWithGap = handleAndMenuReservedSpace + editorLayout.gutterGap;

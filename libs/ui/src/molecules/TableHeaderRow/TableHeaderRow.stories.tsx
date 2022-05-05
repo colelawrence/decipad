@@ -4,7 +4,7 @@ import { getNumberType, getStringType } from '../../utils';
 import { TableHeaderRow } from './TableHeaderRow';
 
 export default {
-  title: 'Molecules / Table / Header Row',
+  title: 'Molecules / Editor / Table / Header Row',
   component: TableHeaderRow,
 } as Meta;
 

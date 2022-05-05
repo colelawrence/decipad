@@ -2,24 +2,27 @@ import { BlockIsActiveProvider } from '@decipad/react-contexts';
 import { Meta, Story } from '@storybook/react';
 import { Paragraph } from './Paragraph';
 
+const lorem =
+  'Data Programming tools are powerful, but the barrier to entry is high. They require knowledge of complex programming languages like python. It is estimated that only ~0.5% of the world’s population knows how to code. And, inclusivity in data science continues to be a challenge.';
+
 export default {
-  title: 'Atoms / Editor / Text / Paragraph',
+  title: 'Atoms / Editor / Text / Block / Paragraph',
   component: Paragraph,
 } as Meta;
 
 export const Normal: Story<{ children: string }> = (args) => (
   <Paragraph {...args} />
 );
-Normal.args = { children: 'Text' };
+Normal.args = { children: lorem };
 
 export const Active: Story<{ children: string }> = (args) => (
   <BlockIsActiveProvider>
     <Paragraph {...args} />
   </BlockIsActiveProvider>
 );
-Active.args = { children: 'Text' };
+Active.args = { children: lorem };
 
 export const Placeholder: Story<{ placeholder: string }> = (args) => (
   <Paragraph {...args}>{null}</Paragraph>
 );
-Placeholder.args = { placeholder: 'Text goes here' };
+Placeholder.args = { placeholder: 'Press "/" for options' };

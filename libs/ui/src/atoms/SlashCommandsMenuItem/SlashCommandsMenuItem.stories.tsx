@@ -9,7 +9,7 @@ const args = {
 };
 
 export default {
-  title: 'Organisms / Editor / Slash Commands Menu / Item',
+  title: 'Organisms / Editor / Slash Commands / Item',
   component: SlashCommandsMenuItem,
   args,
   decorators: [inMenu],

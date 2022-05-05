@@ -1,5 +1,4 @@
 import { Meta, Story } from '@storybook/react';
-
 import { Avatar } from './Avatar';
 
 const args = {
@@ -8,7 +7,7 @@ const args = {
   greyedOut: false,
 };
 export default {
-  title: 'Atoms / Avatar',
+  title: 'Atoms / UI / Avatar',
   component: Avatar,
   args,
 } as Meta;

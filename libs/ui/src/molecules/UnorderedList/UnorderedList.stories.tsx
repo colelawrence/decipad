@@ -7,7 +7,7 @@ const args = {
 };
 
 export default {
-  title: 'Molecules / List / Unordered',
+  title: 'Molecules / Editor / List / Unordered',
   component: UnorderedList,
   args,
 } as Meta;

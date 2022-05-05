@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { FormulaTableData } from './FormulaTableData';
 
 export default {
-  title: 'Atoms / Table / Data',
+  title: 'Atoms / Editor / Table / Formula Result',
   component: FormulaTableData,
   args: {
     children: 'Table Data',

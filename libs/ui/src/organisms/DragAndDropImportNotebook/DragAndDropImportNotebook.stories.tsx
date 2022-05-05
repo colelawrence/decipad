@@ -7,7 +7,7 @@ import { p16Regular } from '../../primitives';
 import { DragAndDropImportNotebook } from './DragAndDropImportNotebook';
 
 export default {
-  title: 'Organisms / Workspace / Drag and Drop Import Notebook Handler',
+  title: 'Organisms / UI / Workspace / Drag Import Notebook',
   component: DragAndDropImportNotebook,
 } as Meta;
 

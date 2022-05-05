@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { TableData } from './TableData';
 
 export default {
-  title: 'Atoms / Table / Data',
+  title: 'Atoms / Editor / Table / Data',
   component: TableData,
   args: {
     children: 'Table Data',

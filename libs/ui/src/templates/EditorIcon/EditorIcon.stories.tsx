@@ -8,7 +8,7 @@ const args: ComponentProps<typeof EditorIcon> = {
 };
 
 export default {
-  title: 'Organisms / Editor Icon',
+  title: 'Organisms / Editor / Icon',
   component: EditorIcon,
   args,
 } as Meta<typeof args>;

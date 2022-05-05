@@ -1,17 +1,18 @@
-import { Meta, Story, ArgTypes } from '@storybook/react';
+import { ArgTypes, Meta, Story } from '@storybook/react';
 import { blockAlignment } from '../../styles';
 import { DraggableBlock } from './DraggableBlock';
 
 const argTypes: ArgTypes = {
   blockKind: {
     options: Object.keys(blockAlignment),
-    defaultValue: blockAlignment.paragraph,
+    control: { type: 'select' },
+    defaultValue: 'paragraph',
   },
 };
 type Args = { blockKind: keyof typeof blockAlignment };
 
 export default {
-  title: 'Organisms / Editor / Draggable Block',
+  title: 'Organisms / Editor / Drag / Block',
   component: DraggableBlock,
   argTypes,
 } as Meta;

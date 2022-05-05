@@ -6,7 +6,7 @@ const args = {
 };
 
 export default {
-  title: 'Atoms / Plot / Error Message',
+  title: 'Atoms / Editor / Charts / Error Message',
   component: ErrorMessage,
   args,
 } as Meta;
