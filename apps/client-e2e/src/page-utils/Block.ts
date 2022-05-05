@@ -12,23 +12,37 @@ interface CalculationBlock {
   result: ElementHandle | null;
 }
 
-export async function createCalculationBlockBelow(decilang: string) {
+export async function createInputBelow(identifier: string, value: number) {
   await page.click('[contenteditable] p >> nth=-1');
 
-  await page.keyboard.type('/');
+  await page.keyboard.type('/input');
+
   await waitForExpect(async () =>
     expect(
       await page.$$('[contenteditable] [role="menuitem"]')
     ).not.toHaveLength(0)
   );
 
-  await page.keyboard.type('calc');
-  await waitForExpect(async () =>
-    expect(await page.$$('[contenteditable] [role="menuitem"]')).toHaveLength(1)
+  await page.click(
+    'text=InputInputShare your notebook and have others interact with it'
   );
 
+  await page.click('div [aria-placeholder="Name your input"]');
+
+  await page.keyboard.type(identifier);
+
+  await page.click('div [aria-placeholder="1 km"]');
+
+  await page.keyboard.type(value.toString());
+}
+
+export async function createCalculationBlockBelow(decilang: string) {
+  await page.click('[contenteditable] p >> nth=-1');
+
   const { length: numCodeElements } = await page.$$('[contenteditable] code');
-  await page.click('text=/calculation/i');
+
+  await page.keyboard.type('=');
+
   await waitForExpect(async () =>
     expect(await page.$$('[contenteditable] code')).toHaveLength(
       numCodeElements + 1

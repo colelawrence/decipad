@@ -2,7 +2,7 @@ import waitForExpect from 'wait-for-expect';
 import {
   createCalculationBlockBelow,
   getCalculationBlocks,
-} from './page-utils/CalculationBlock';
+} from './page-utils/Block';
 import {
   focusOnBody,
   keyPress,
