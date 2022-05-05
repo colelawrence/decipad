@@ -1,15 +1,16 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useWindowListener } from '@decipad/react-utils';
 import { ClientEventsContext } from '@decipad/client-events';
-import { useEditorState } from '@udecode/plate';
+import { isCollapsed, useEditorState, usePlateSelection } from '@udecode/plate';
 import { organisms } from '@decipad/ui';
 import { PlateComponent } from '@decipad/editor-types';
 import { Paragraph } from '@decipad/editor-components';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { Node } from 'slate';
+import { Editor, Node, Transforms } from 'slate';
 import { useFocused, useSelected } from 'slate-react';
 import { Computer } from '@decipad/language';
 import { findPath } from '@decipad/editor-utils';
+import { dequal } from 'dequal';
 import { execute } from '../utils/slashCommands';
 
 export const SlashCommandsParagraph =
@@ -68,6 +69,20 @@ export const SlashCommandsParagraph =
       [showSlashCommands]
     );
     useWindowListener('keydown', onKeyDown, true);
+
+    const selection = usePlateSelection();
+
+    useEffect(() => {
+      if (showSlashCommands && elementPath && isCollapsed(selection)) {
+        const endPoint = Editor.end(editor, elementPath);
+        if (!dequal(selection?.focus, endPoint)) {
+          Transforms.setSelection(editor, {
+            focus: endPoint,
+            anchor: endPoint,
+          });
+        }
+      }
+    }, [editor, elementPath, selection, selection?.focus, showSlashCommands]);
 
     if (!elementPath) {
       return <></>;
