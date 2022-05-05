@@ -2,7 +2,7 @@
 sidebar_position: 300
 ---
 
-# Gallery
+# Get Inspiration
 
 Check out these examples for inspiration. Duplicate any model to quick-start your own notebook.
 
@@ -18,7 +18,7 @@ Check out these examples for inspiration. Duplicate any model to quick-start you
 
 ---
 
-# Didn't find what you needed?
+# Didn't find what you need?
 
 Looking to build something?
 

@@ -12,35 +12,7 @@
     {
       "children": [
         {
-          "text": "Decipad is a notebook where you can write, perform calculations and build models."
-        }
-      ],
-      "type": "p",
-      "id": "5hTCnYQPUw6sIoHN71P2E"
-    },
-    {
-      "children": [
-        {
-          "text": "A few tips before you get started"
-        }
-      ],
-      "type": "h2",
-      "id": "V437OR8MJSJ8LATvJ5cGR"
-    },
-    {
-      "children": [
-        {
-          "text": "Our journey of reimagining how people interact with data and numbers just began! You may run into bugs 🐞, glitches ⚡️ and missing features 🧐"
-        }
-      ],
-      "type": "p",
-      "id": "iNxhdZlStdo_ulNM7RcrS"
-    },
-    {
-      "children": [
-        {
-          "text": "Help us along our adventures! ",
-          "bold": true
+          "text": "We are at the very beginning! You may run into bugs 🐞, glitches ⚡️ and missing features 🧐. We are looking forward to expanding our features alongside fellow decimates just like you!"
         }
       ],
       "type": "p",
@@ -62,7 +34,7 @@
           "id": "hMSK_E5fdo9lLVSWXFjxF"
         },
         {
-          "text": " channel or use the "
+          "text": " channel, or use the "
         },
         {
           "text": "Feedback",
@@ -78,371 +50,15 @@
     {
       "children": [
         {
-          "text": "What's possible in Alpha?"
+          "text": ""
         }
       ],
-      "type": "h3",
-      "id": "znVQ8Xss9Z2lbmAgUjVnx"
+      "type": "divider"
     },
     {
       "children": [
         {
-          "children": [
-            {
-              "children": [
-                {
-                  "text": "Create a notebook:",
-                  "bold": true
-                },
-                {
-                  "text": " Just start writing. Use the menu that pops up when you select text to style your "
-                },
-                {
-                  "text": "it",
-                  "italic": true,
-                  "bold": true
-                },
-                {
-                  "text": " "
-                },
-                {
-                  "text": "however",
-                  "italic": true
-                },
-                {
-                  "text": " "
-                },
-                {
-                  "text": "you",
-                  "underline": true
-                },
-                {
-                  "text": "like",
-                  "code": true
-                },
-                {
-                  "text": "."
-                }
-              ],
-              "type": "lic",
-              "id": "UqrZa2jlHxvfYOU8wlaDK"
-            }
-          ],
-          "type": "li",
-          "id": "fCVJRbV1pbaMa7eMBKnFe"
-        },
-        {
-          "children": [
-            {
-              "children": [
-                {
-                  "text": "Play with widgets: ",
-                  "bold": true
-                },
-                {
-                  "text": "Type"
-                },
-                {
-                  "text": "/",
-                  "code": true
-                },
-                {
-                  "text": "and select"
-                },
-                {
-                  "text": "Number Fields",
-                  "code": true
-                },
-                {
-                  "text": "to add an input everyone can interact with."
-                }
-              ],
-              "type": "lic"
-            }
-          ],
-          "type": "li"
-        },
-        {
-          "children": [
-            {
-              "children": [
-                {
-                  "text": "Build a table:",
-                  "bold": true
-                },
-                {
-                  "text": " Enhance your notebook with additional data by placing a "
-                },
-                {
-                  "children": [
-                    {
-                      "text": "table"
-                    }
-                  ],
-                  "type": "a",
-                  "url": "https://alpha.decipad.com/docs/data-organization/tables",
-                  "id": "DHW5E7CKssTAVMZa5N4fr"
-                },
-                {
-                  "text": " with the"
-                },
-                {
-                  "text": "/",
-                  "code": true
-                },
-                {
-                  "text": "command."
-                }
-              ],
-              "type": "lic"
-            }
-          ],
-          "type": "li"
-        },
-        {
-          "children": [
-            {
-              "children": [
-                {
-                  "text": "Insert calculations:",
-                  "bold": true
-                },
-                {
-                  "text": " Hit"
-                },
-                {
-                  "text": "/",
-                  "code": true
-                },
-                {
-                  "text": "and add numbers and calculations to your notebook using the "
-                },
-                {
-                  "children": [
-                    {
-                      "text": "Decipad Language"
-                    }
-                  ],
-                  "type": "a",
-                  "url": "https://alpha.decipad.com/docs/language",
-                  "id": "u_iYHcIIENk-GFe7rD4U8"
-                },
-                {
-                  "text": "."
-                }
-              ],
-              "type": "lic",
-              "id": "_MC-bHAI-C-w4YLg_KMer"
-            }
-          ],
-          "type": "li",
-          "id": "amZur1ZdVsSyB4mUbF7_n"
-        },
-        {
-          "children": [
-            {
-              "children": [
-                {
-                  "text": "Share your work:",
-                  "bold": true
-                },
-                {
-                  "text": " Generate a public link with the"
-                },
-                {
-                  "text": "Share",
-                  "code": true
-                },
-                {
-                  "text": "button. We're excited to see what you create!"
-                }
-              ],
-              "type": "lic",
-              "id": "MvXtbeqmCoAXWUsXyG07h"
-            }
-          ],
-          "type": "li",
-          "id": "J4bR2kK0hZ3DoVQAmxdV7"
-        }
-      ],
-      "type": "ol",
-      "id": "vUYFHoJu20QjASx99gUth"
-    },
-    {
-      "children": [
-        {
-          "text": "No Ideas?"
-        }
-      ],
-      "type": "h2",
-      "id": "w5jjnbCYlf3eO6-c7jNmV"
-    },
-    {
-      "children": [
-        {
-          "text": "Get inspired with our "
-        },
-        {
-          "children": [
-            {
-              "text": "gallery of examples"
-            }
-          ],
-          "type": "a",
-          "url": "https://alpha.decipad.com/docs/get-inspiration",
-          "id": "EfYhO-wz4W5wdSsZDjJcK"
-        },
-        {
-          "text": ":"
-        }
-      ],
-      "type": "p",
-      "id": "V05SvXfc2igToRFx5zXnS"
-    },
-    {
-      "children": [
-        {
-          "children": [
-            {
-              "children": [
-                {
-                  "text": ""
-                },
-                {
-                  "children": [
-                    {
-                      "text": "🚙 Should I buy an electric car?"
-                    }
-                  ],
-                  "type": "a",
-                  "url": "https://alpha.decipad.com/n/bxTv4RqJC_DCPv3xXLuLX?secret=RFmB4s_xKJQo-K3RMHDnY",
-                  "id": "KaiLV95PkfyoU8oJtWzIW"
-                },
-                {
-                  "text": ""
-                }
-              ],
-              "type": "lic",
-              "id": "l1icno4CD3eeFEIEeKk4p"
-            }
-          ],
-          "type": "li",
-          "id": "_yY6aB_wWLSu0hya2bmz1"
-        },
-        {
-          "children": [
-            {
-              "children": [
-                {
-                  "text": ""
-                },
-                {
-                  "children": [
-                    {
-                      "text": "🤒 Giving Calpol to a child older than 6 years old"
-                    }
-                  ],
-                  "type": "a",
-                  "url": "https://alpha.decipad.com/n/VlKVyJVuK1rKveg7YLzpK?secret=JkHVzPOQKxmsSga-BObkK",
-                  "id": "sJglM2FvEA9W9zOjVU6tY"
-                },
-                {
-                  "text": ""
-                }
-              ],
-              "type": "lic",
-              "id": "-HPjHoUYiFU_6vJzFSb7W"
-            }
-          ],
-          "type": "li",
-          "id": "eF43At4ckJtobV38TDA_B"
-        },
-        {
-          "children": [
-            {
-              "children": [
-                {
-                  "text": ""
-                },
-                {
-                  "children": [
-                    {
-                      "text": "💰 Fee Estimate for Consulting Projects"
-                    }
-                  ],
-                  "type": "a",
-                  "url": "https://alpha.decipad.com/n/Gz8KiW5S0jvV18ByBso3g?secret=MOsYGSxh3VcJPUOr5RWuJ",
-                  "id": "jxdCPscJJ9YEQEPUUwvO2"
-                },
-                {
-                  "text": ""
-                }
-              ],
-              "type": "lic",
-              "id": "-HPjHoUYiFU_6vJzFSb7W"
-            }
-          ],
-          "type": "li",
-          "id": "yQuBl8T-uxIP86SXN7NNo"
-        },
-        {
-          "children": [
-            {
-              "children": [
-                {
-                  "text": ""
-                },
-                {
-                  "children": [
-                    {
-                      "text": "🍏 The Pulling Force"
-                    }
-                  ],
-                  "type": "a",
-                  "url": "https://alpha.decipad.com/n/Q5sDRcpQ4lYSg84Hrs3gf?secret=Bf2nWPe5ZAuDJL9MEWP1L",
-                  "id": "pvW9HEbWi51VB9yVE2PLj"
-                },
-                {
-                  "text": ""
-                }
-              ],
-              "type": "lic",
-              "id": "5pkNIWR53557fVdQfqxBP"
-            }
-          ],
-          "type": "li",
-          "id": "cI-_5OdGiByIPbWF4xp9x"
-        }
-      ],
-      "type": "ul",
-      "id": "zAM0mBmJj_B-l7mnE8eD9"
-    },
-    {
-      "children": [
-        {
-          "text": "Superpower your modeling on Decipad by taking a look at our "
-        },
-        {
-          "children": [
-            {
-              "text": "documentation"
-            }
-          ],
-          "type": "a",
-          "url": "https://alpha.decipad.com/docs",
-          "id": "yb-FXk8Mf4S5-01NmOz1J"
-        },
-        {
-          "text": ". "
-        }
-      ],
-      "type": "p",
-      "id": "w5jjnbCYlf3eO6-c7jNmV"
-    },
-    {
-      "children": [
-        {
-          "text": "Some Cool Thing to Try"
+          "text": "Cool Things to Try"
         }
       ],
       "type": "h2",
@@ -451,21 +67,26 @@
     {
       "children": [
         {
-          "text": "Type",
-          "bold": true
+          "text": "First things first. The notebook menu can be found "
         },
         {
-          "text": "/",
-          "code": true,
-          "bold": true
+          "text": "by tpying / command on any paragraph",
+          "highlight": true,
+          "underline": true
         },
         {
-          "text": " to add a number field",
-          "bold": true
+          "text": ". You will need it to find everything you can add to your notebook."
         }
       ],
-      "type": "p",
-      "id": "vTY7evpx3aRHebSasg5AT"
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "text": "1. Widgets"
+        }
+      ],
+      "type": "h3"
     },
     {
       "children": [
@@ -479,31 +100,55 @@
     {
       "children": [
         {
+          "text": "Update your Rent on the widget bellow and see how the next calculation block updates. You will see your yearly rent expenses update."
+        }
+      ],
+      "type": "callout",
+      "id": "-NJtfmcmrCz4APHyMvrxn",
+      "color": "Sun",
+      "icon": "Announcement"
+    },
+    {
+      "children": [
+        {
           "children": [
             {
-              "text": "aNumber"
+              "text": "Rent"
             }
           ],
-          "type": "caption"
+          "type": "caption",
+          "icon": "Sunrise",
+          "color": "Sun"
         },
         {
           "children": [
             {
-              "text": "10"
+              "text": "1000$"
             }
           ],
           "type": "exp"
         }
       ],
-      "type": "def"
+      "type": "def",
+      "variant": "expression"
     },
     {
       "children": [
         {
-          "text": "aNumber * 10"
+          "text": "Rent * 12"
         }
       ],
       "type": "code_line"
+    },
+    {
+      "children": [
+        {
+          "text": "Anyone you share your notebook with will be able to edit the input widgets. Awesome, right? "
+        }
+      ],
+      "type": "callout",
+      "id": "eXlSuOYCU60W7hrS5O_pR",
+      "color": "Sun"
     },
     {
       "children": [
@@ -516,37 +161,23 @@
     {
       "children": [
         {
-          "text": "Type",
-          "bold": true
-        },
-        {
-          "text": "/",
-          "code": true,
-          "bold": true
-        },
-        {
-          "text": " to add a Table",
-          "bold": true
+          "text": ""
         }
       ],
-      "type": "p",
-      "id": "--W46vqYPcAkYGlRr8jVl"
+      "type": "divider"
     },
     {
       "children": [
         {
-          "text": "Use tables as an "
-        },
+          "text": "2. Tables"
+        }
+      ],
+      "type": "h3"
+    },
+    {
+      "children": [
         {
-          "text": "input",
-          "bold": true
-        },
-        {
-          "text": " for your calculations. "
-        },
-        {
-          "text": "(We're working on it!)",
-          "italic": true
+          "text": "Use tables to organize your data."
         }
       ],
       "type": "p",
@@ -555,73 +186,181 @@
     {
       "children": [
         {
+          "text": "They, too, can be access by"
+        },
+        {
+          "text": " typing \"/\" anywhere on the notebook",
+          "highlight": true,
+          "underline": true
+        }
+      ],
+      "type": "p"
+    },
+    {
+      "color": "Sun",
+      "icon": "Pin",
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Routes"
+            }
+          ],
+          "id": "44OVbleRZwjsgbRAohSF9",
+          "type": "table-caption"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Name"
+                }
+              ],
+              "id": "qAvy0o3fRDvjLgkXw5SdC",
+              "type": "th",
+              "cellType": "string"
+            },
+            {
+              "children": [
+                {
+                  "text": "Distance"
+                }
+              ],
+              "id": "jSJy9zzk4C024Q4KnektV",
+              "type": "th",
+              "cellType": {
+                "kind": "number",
+                "unit": {
+                  "type": "units",
+                  "args": [
+                    {
+                      "unit": "miles",
+                      "exp": "1",
+                      "multiplier": "1",
+                      "known": true
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "id": "ltdcECK4-rrZDeay5OFM2",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Park Route"
+                }
+              ],
+              "id": "vfiIvE06Q2DVxADSFLUrt",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "3.2"
+                }
+              ],
+              "id": "5rNGu_nWWJcqc1lnQYoWS",
+              "type": "td"
+            }
+          ],
+          "id": "iSm8xHXzOIxPgH-kofDhX",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Street Route"
+                }
+              ],
+              "id": "KU8s8pBIwNy5CN0CCNCKt",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "2.8"
+                }
+              ],
+              "id": "kJoMV1Mt6VC9FnGSVBUH0",
+              "type": "td"
+            }
+          ],
+          "id": "paZqOvGwQIwIjCVxDbcBU",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Ocean Route"
+                }
+              ],
+              "id": "MjhHX08WmGO5A_nEyerpH",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "4"
+                }
+              ],
+              "id": "3awLO0AH6kRbViYco6e9r",
+              "type": "td"
+            }
+          ],
+          "id": "bqn10suKTGJlyCdjf1-z2",
+          "type": "tr"
+        }
+      ],
+      "id": "vn4fFT7pWrscTg6-wCjIC",
+      "type": "table"
+    },
+    {
+      "children": [
+        {
+          "text": "In the future, you will be able to use formulas on tables. We're still working on them! What models are you building with tables? We would love to know. "
+        }
+      ],
+      "type": "callout",
+      "color": "Sun"
+    },
+    {
+      "children": [
+        {
           "text": ""
         }
       ],
-      "type": "table-input",
-      "tableData": {
-        "variableName": "Routes",
-        "columns": [
-          {
-            "columnName": "Name",
-            "cells": ["Park Route", "Street Route", "Ocean Route"],
-            "cellType": "string"
-          },
-          {
-            "columnName": "Distance",
-            "cellType": {
-              "kind": "number",
-              "unit": {
-                "type": "units",
-                "args": [
-                  {
-                    "unit": "miles",
-                    "exp": "1",
-                    "multiplier": "1",
-                    "known": true
-                  }
-                ]
-              }
-            },
-            "cells": ["3.2", "2.8", "4"]
-          }
-        ]
-      },
-      "id": "nDsT4_nB38AsJcMjJBJeR"
+      "type": "p"
     },
     {
       "children": [
         {
-          "text": "",
-          "bold": true
+          "text": ""
         }
       ],
-      "type": "p",
-      "id": "vTY7evpx3aRHebSasg5AT"
+      "type": "divider"
     },
     {
       "children": [
         {
-          "text": "Type",
-          "bold": true
-        },
-        {
-          "text": "/",
-          "code": true,
-          "bold": true
-        },
-        {
-          "text": " to insert a calculation block",
-          "bold": true
+          "text": "3. Calculation Blocks"
         }
       ],
-      "type": "p",
-      "id": "vkasg7BbbqNySRFzFkENX"
+      "type": "h3"
     },
     {
       "children": [
         {
-          "text": "A calculation block lets you add calculations, functions and more to your notebook using the "
+          "text": "Calculation blocks let you add to your notebook calculations, functions and much more using the "
         },
         {
           "children": [
@@ -634,18 +373,25 @@
           "id": "NmoGnavM-EONaBsFbOa9d"
         },
         {
-          "text": ". Assign a name to any value or calculation to create a variable that can be "
+          "text": ". They can also be placed "
         },
         {
-          "text": "reused",
-          "bold": true
-        },
-        {
-          "text": " throughout your notebook."
+          "text": "with the / command menu.",
+          "highlight": true,
+          "underline": true
         }
       ],
       "type": "p",
       "id": "SCo0_K9Xqp2WblUrlKHjQ"
+    },
+    {
+      "children": [
+        {
+          "text": "Calculations might look like programming or math, but they are more than that. An example might be helpful here:"
+        }
+      ],
+      "type": "p",
+      "id": "6y76Ztui44q8shcfRFFLP"
     },
     {
       "children": [
@@ -677,57 +423,101 @@
     {
       "children": [
         {
-          "text": "",
-          "bold": true
+          "text": "See how you can find how much you would be running if your goal was "
+        },
+        {
+          "text": "RunningGoal",
+          "magicnumberz": true
+        },
+        {
+          "text": " with "
+        },
+        {
+          "text": "Frequency",
+          "magicnumberz": true
+        },
+        {
+          "text": " ?"
         }
       ],
-      "type": "p",
-      "id": "ykR6XM5ZHQAbvrsx-RIkK"
+      "type": "p"
     },
     {
       "children": [
         {
-          "text": "Convert units effortlessly",
-          "bold": true
+          "text": "Calculation blocks are a complex concept. We find that the best way to get started is to look at examples and other notebooks"
         }
       ],
-      "type": "p",
-      "id": "pbCsli0MTC3eVylRY9aTE"
+      "type": "callout",
+      "color": "Sun"
     },
     {
       "children": [
         {
-          "text": "You can specify custom or use "
+          "text": "Find more about calculation blocks and the language on our "
         },
         {
           "children": [
             {
-              "text": "supported units"
+              "text": "documentation"
             }
           ],
           "type": "a",
-          "url": "https://alpha.decipad.com/docs/language/units/supported-units",
-          "id": "E_dtyv97JHKYbExmtKcS4"
+          "url": "https://alpha.decipad.com/docs/language/"
         },
         {
-          "text": " with any value, as well as convert between them. Check out this "
-        },
-        {
-          "children": [
-            {
-              "text": "example"
-            }
-          ],
-          "type": "a",
-          "url": "https://alpha.decipad.com/n/fr5dMjzJTFSuSWKMbKu7R?secret=iDH1zMCO7Exjpp_UM8DVj",
-          "id": "rp4yRlVvGkTEhCrfv1x0J"
-        },
-        {
-          "text": " to see the power of units in action. "
+          "text": "."
         }
       ],
       "type": "p",
-      "id": "DwL4Dl8PqtERPRzVOQOOv"
+      "id": "P-hz7cRZNS4mwxcVORizT"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
+          "text": "4. Units"
+        }
+      ],
+      "type": "h3"
+    },
+    {
+      "children": [
+        {
+          "text": "Notebooks also support units."
+        }
+      ],
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "text": "Check how easy it is to convert the "
+        },
+        {
+          "text": "RunningGoal",
+          "code": true
+        },
+        {
+          "text": " to km/run:"
+        }
+      ],
+      "type": "p"
     },
     {
       "children": [
@@ -737,6 +527,25 @@
       ],
       "type": "code_line",
       "id": "GA80T5e_yqssU-NibNr8r"
+    },
+    {
+      "children": [
+        {
+          "text": "With our unit system, we can also infer relations. Check out how many "
+        },
+        {
+          "text": "Trackloops",
+          "code": true
+        },
+        {
+          "text": " equate a "
+        },
+        {
+          "text": "ParkTrail",
+          "code": true
+        }
+      ],
+      "type": "p"
     },
     {
       "children": [
@@ -759,11 +568,20 @@
     {
       "children": [
         {
-          "text": "ParkTrail in TrackLoop"
+          "text": "round(ParkTrail in TrackLoop,3)"
         }
       ],
       "type": "code_line",
       "id": "z3RfpKY1DSpcuJM6aTxzl"
+    },
+    {
+      "children": [
+        {
+          "text": "What would you use units for?"
+        }
+      ],
+      "type": "callout",
+      "color": "Sun"
     },
     {
       "children": [
@@ -778,17 +596,23 @@
     {
       "children": [
         {
-          "text": "Try the Decipad Language (Advanced)",
-          "bold": true
+          "text": ""
         }
       ],
-      "type": "p",
-      "id": "4IcVItu-0ydWCSdNQZdek"
+      "type": "divider"
     },
     {
       "children": [
         {
-          "text": "Build a table using the "
+          "text": "5. Advanced Notebooks "
+        }
+      ],
+      "type": "h3"
+    },
+    {
+      "children": [
+        {
+          "text": "Since our table block is very limited right now, you can explore formulas on tables with calculation blocks powered by the "
         },
         {
           "children": [
@@ -801,24 +625,19 @@
           "id": "NmoGnavM-EONaBsFbOa9d"
         },
         {
-          "text": " to explore more complex capabilities! Check this example of a more "
-        },
-        {
-          "children": [
-            {
-              "text": "complex model"
-            }
-          ],
-          "type": "a",
-          "url": "https://alpha.decipad.com/n/NTcziPjPgtDqbimQAKu06?secret=QKMp0FtT_9WGNSpCB4FWl",
-          "id": "6seboTRUfeN3pOteFLrNN"
-        },
-        {
           "text": "."
         }
       ],
       "type": "p",
       "id": "_1kmG_oRO32OIlb7CoCcG"
+    },
+    {
+      "children": [
+        {
+          "text": "Check how a 5% improvement each week would affect your running performance. "
+        }
+      ],
+      "type": "p"
     },
     {
       "children": [
@@ -850,7 +669,40 @@
     {
       "children": [
         {
-          "text": ""
+          "text": "Keep Exploring"
+        }
+      ],
+      "type": "h3"
+    },
+    {
+      "children": [
+        {
+          "text": "If you want to learn more about Decipad, we have a page of "
+        },
+        {
+          "children": [
+            {
+              "text": "documentation"
+            }
+          ],
+          "type": "a",
+          "url": "https://alpha.decipad.com/docs/quick-start/get-started-with-decipad"
+        },
+        {
+          "text": " that you can explore and some "
+        },
+        {
+          "children": [
+            {
+              "text": "examples"
+            }
+          ],
+          "type": "a",
+          "url": "https://alpha.decipad.com/docs/get-inspiration",
+          "id": "EfYhO-wz4W5wdSsZDjJcK"
+        },
+        {
+          "text": ". "
         }
       ],
       "type": "p"
@@ -858,10 +710,18 @@
     {
       "children": [
         {
+          "text": ""
+        }
+      ],
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
           "text": "Thanks for your feedback and interest!"
         }
       ],
-      "type": "h3"
+      "type": "h2"
     },
     {
       "children": [

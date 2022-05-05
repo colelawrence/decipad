@@ -1,5 +1,5 @@
 ---
-sidebar_position: 10
+sidebar_position: 5
 ---
 
 # Notebooks 101
@@ -59,4 +59,4 @@ You've done it! You created your first notebook and now you can share it with th
 
 # Learn More:
 
-- [Explore Numbers and Data](/quick-start/explore-numbers-and-data)
+- [Explore Numbers and Data](/notebook/explore-numbers-and-data)

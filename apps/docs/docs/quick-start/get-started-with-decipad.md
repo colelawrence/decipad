@@ -12,9 +12,9 @@ Our journey of reimagining how people interact with data and numbers just began!
 
 ## What can I build on Decipad?
 
-You can build anything on Decipad! Your company’s business plan, a physics model, a bitcoin mining company model, a crypto portfolio tracker. The sky is the limit!
+Right now only simple use cases are possible on our editor, we are looking forward to expanding our features alongside our community.
 
-Check our [Gallery](/get-inspiration) for inspiration.
+For examples of what is possible and inspiration [click here](/get-inspiration).
 
 ## First steps
 
@@ -35,5 +35,5 @@ A notebook can be a digital textbook or you can type `/` to add [widgets](/block
 
 # Learn More:
 
-- [Notebooks 101](/quick-start/notebooks-101)
-- [Explore Numbers and Data](/quick-start/explore-numbers-and-data)
+- [Notebooks 101](/notebook/notebooks-101)
+- [Explore Numbers and Data](/notebook/explore-numbers-and-data)

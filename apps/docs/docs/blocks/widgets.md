@@ -13,11 +13,11 @@ Type `/` and select **Input** to add a block to your notebook.
 ## Slider Widget
 
 :::caution `Experimental Feature`
-Slider Widgets are currently being developed. Limited availability.
+Slider Widgets are currently being developed.
 :::
 
 ## Date Widget
 
 :::caution `Experimental Feature`
-Date Widgets are currently being developed. Limited availability.
+Date Widgets are currently being developed.
 :::
