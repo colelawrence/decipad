@@ -19,6 +19,9 @@ async function checkAccess(
   await expectAuthorized({ resource, user, permissionType: 'READ' });
 }
 
+const serialize = (_: string, value: unknown): unknown =>
+  typeof value === 'bigint' ? value.toString() : value;
+
 function exportPad(id: string): Promise<string> {
   return new Promise((resolve, reject) => {
     try {
@@ -27,7 +30,7 @@ function exportPad(id: string): Promise<string> {
       provider.once('fetched', () => {
         try {
           const json = { children: doc.getArray().toJSON() };
-          resolve(JSON.stringify(json, null, '\t'));
+          resolve(JSON.stringify(json, serialize, '\t'));
         } catch (err2) {
           reject(err2);
         }
