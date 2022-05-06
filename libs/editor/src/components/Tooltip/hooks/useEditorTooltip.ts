@@ -9,6 +9,7 @@ import {
   toggleList,
   toggleNodeType,
   usePlateEditorState,
+  usePlateSelection,
 } from '@udecode/plate';
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { Editor, Element } from 'slate';
@@ -26,6 +27,7 @@ export const useEditorTooltip = (): UseEditorTooltip => {
   const ref = useRef<HTMLDivElement>(null);
   const [isActive, setIsActive] = useState(false);
   const [currentBlockType, setCurrentBlockType] = useState<null | string>(null);
+  const selection = usePlateSelection();
 
   // As long as we only ever `setIsActive(true)` we don't cause infinite update loops
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -33,8 +35,6 @@ export const useEditorTooltip = (): UseEditorTooltip => {
     const el = ref.current;
 
     if (editor) {
-      const { selection } = editor;
-
       if (
         selection &&
         ReactEditor.isFocused(editor) &&
@@ -54,7 +54,9 @@ export const useEditorTooltip = (): UseEditorTooltip => {
         const domRange = domSelection?.getRangeAt(0);
         const rect = domRange?.getBoundingClientRect();
 
-        setIsActive(true);
+        if (!isActive) {
+          setIsActive(true);
+        }
 
         if (el && rect) {
           el.style.opacity = '1';
@@ -72,14 +74,16 @@ export const useEditorTooltip = (): UseEditorTooltip => {
       if (el) {
         el.removeAttribute('style');
       }
-      setIsActive(false);
+      if (isActive) {
+        setIsActive(false);
+      }
     };
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editor, isActive, selection, ref.current]);
 
   const toggleElementType = useCallback(
     (type: string) => {
-      if (editor && editor.selection) {
-        const { selection } = editor;
+      if (editor && selection) {
         if (type === ELEMENT_UL) {
           toggleList(editor, { type });
           editor.selection = null;
@@ -98,7 +102,7 @@ export const useEditorTooltip = (): UseEditorTooltip => {
         setIsActive(false);
       }
     },
-    [editor]
+    [editor, selection]
   );
 
   return {
