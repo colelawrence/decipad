@@ -266,3 +266,6 @@ apps/docs/build
 
 # Sentry
 # .sentryclirc
+
+# Lighthouse CI
+.lighthouseci

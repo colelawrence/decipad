@@ -1,0 +1,28 @@
+name: LHCI
+
+on:
+  workflow_run:
+    workflows: ['Deploy PR']
+    types:
+      - completed
+
+jobs:
+  lhci:
+    name: Lighthouse
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: run Lighthouse CI
+        env:
+          LHCI_SERVER_BASE_URL: https://${{ github.event.pull_request.number }}.dev.decipad.com
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+        run: |
+          npm install -g @lhci/cli@0.8.x
+          npm install -g puppeteer
+          lhci autorun --isSinglePageApplication --url /
