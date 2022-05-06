@@ -1,12 +1,13 @@
 import { noop } from '@decipad/utils';
-import { FC } from 'react';
+import { dequal } from 'dequal';
+import { FC, useState, useEffect } from 'react';
 import { useResizeDetector } from 'react-resize-detector';
 import { VegaLite } from 'react-vega';
 import type { VegaProps } from 'react-vega/lib/Vega';
 
 const GOLDEN_RATIO = 1.618;
 // by experience, this is the maximum value in pixels added to the width of a chart
-// to accomodate the labels on the right.
+// to accommodate the labels on the right.
 const SUBTRACT_MARGIN = 100;
 
 interface PlotResultProps {
@@ -14,6 +15,21 @@ interface PlotResultProps {
   data: NonNullable<VegaProps['data']>;
   onError?: VegaProps['onError'];
 }
+
+interface Size {
+  width?: number;
+  height?: number;
+}
+
+const SIZE_QUANTUM_LEAP = 20;
+
+const quantumSize = (size: Size): Size => {
+  let width = (size.width || 600) - SUBTRACT_MARGIN;
+  width -= width % SIZE_QUANTUM_LEAP;
+  width = Math.round(width);
+  const height = Math.round(width / GOLDEN_RATIO);
+  return { width, height };
+};
 
 export const PlotResult = ({
   spec,
@@ -23,22 +39,28 @@ export const PlotResult = ({
   const size = useResizeDetector({
     handleHeight: false,
   });
+  const [actualSize, setActualSize] = useState<Size | undefined>();
+  useEffect(() => {
+    const newSize = quantumSize(size);
+    if (!dequal(newSize, actualSize)) {
+      setActualSize(newSize);
+    }
+  }, [actualSize, size]);
 
-  // The margin to subtract was inferred by experience of using Vega
-  // with this configuration
-  const width = (size.width || 600) - SUBTRACT_MARGIN;
-  const height = Math.round(width / GOLDEN_RATIO);
   return (
-    <div ref={size.ref}>
-      <VegaLite
-        renderer="svg"
-        spec={spec}
-        data={data}
-        width={width}
-        height={height}
-        onError={onError}
-        actions={false}
-      />
-    </div>
+    (actualSize && actualSize.width != null && actualSize.height != null && (
+      <div ref={size.ref}>
+        <VegaLite
+          renderer="svg"
+          spec={spec}
+          data={data}
+          width={actualSize.width}
+          height={actualSize.height}
+          onError={onError}
+          actions={false}
+        />
+      </div>
+    )) ||
+    null
   );
 };
