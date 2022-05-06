@@ -1,5 +1,9 @@
 import { ELEMENT_LIC, ELEMENT_UL } from '@decipad/editor-types';
 import {
+  allowsTextStyling,
+  getPathContainingSelection,
+} from '@decipad/editor-utils';
+import {
   getParent,
   isCollapsed,
   toggleList,
@@ -9,10 +13,6 @@ import {
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { Editor, Element } from 'slate';
 import { ReactEditor } from 'slate-react';
-import {
-  allowsTextStyling,
-  getPathContainingSelection,
-} from '@decipad/editor-utils';
 
 interface UseEditorTooltip {
   ref: RefObject<HTMLDivElement>;

@@ -5,7 +5,7 @@ import {
   toggleMark,
   useEditorRef,
 } from '@udecode/plate';
-import { grey100, grey700 } from 'libs/ui/src/primitives';
+import { cssVar } from 'libs/ui/src/primitives';
 import { FC } from 'react';
 import { dividerStyle } from '../../styles/divider';
 
@@ -20,7 +20,7 @@ const buttonStyles = css({
   cursor: 'pointer',
   transition: 'background-color 0.2s ease-out',
   '&:hover': {
-    backgroundColor: `${grey100.rgb}`,
+    backgroundColor: `${cssVar('highlightColor')}`,
   },
   '> div > svg > path': {
     transition: 'stroke 0.2s ease-out',
@@ -29,7 +29,7 @@ const buttonStyles = css({
 
 const activeButtonStyles = css({
   '> div > svg > path': {
-    stroke: `${grey700.rgb}`,
+    stroke: `${cssVar('normalTextColor')}`,
     strokeWidth: '2',
   },
 });

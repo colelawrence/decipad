@@ -1,10 +1,9 @@
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import {
-  offBlack,
-  cssVar,
   grey200,
   normalOpacity,
+  offBlack,
   OpaqueColor,
   setCssVar,
   transparency,
@@ -28,7 +27,6 @@ const iconSize = css({
   '> svg > rect': {
     fill: 'none',
   },
-  '> svg > *': { stroke: cssVar('normalTextColor') },
 });
 
 type IconButtonProps = {
