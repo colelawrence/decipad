@@ -1,8 +1,8 @@
 import {
   focusOnBody,
+  keyPress,
   setUp,
   waitForEditorToLoad,
-  keyPress,
 } from './page-utils/Pad';
 
 describe('pad content', () => {
@@ -20,6 +20,19 @@ describe('pad content', () => {
     expect(await page.textContent('[contenteditable] p')).toBe(
       'this is the content for the first paragraph'
     );
+  });
+
+  it('can make bold using the toolbar', async () => {
+    const p = await page.locator(
+      'text=this is the content for the first paragraph'
+    );
+    await p.selectText();
+    await page.click('button:has-text("code")');
+    expect(await page.$$('code')).toHaveLength(1);
+    await page.click('button:has-text("code")');
+    await p.selectText();
+    await keyPress('ArrowRight');
+    expect(await page.$$('code')).toHaveLength(0);
   });
 
   it('allows to create a new paragraph', async () => {
