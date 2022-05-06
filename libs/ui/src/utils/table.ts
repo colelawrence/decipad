@@ -1,5 +1,5 @@
 import { SerializedType, SerializedUnits, Time } from '@decipad/language';
-import { FunctionComponent } from 'react';
+import { createContext, FunctionComponent } from 'react';
 import {
   All,
   Calendar,
@@ -10,6 +10,7 @@ import {
 } from '../icons';
 import type { TableCellType } from '../types';
 import { AvailableSwatchColor } from './swatches';
+import { UserIconKey } from './user-icons';
 
 export function getTypeIcon(type: TableCellType): FunctionComponent {
   switch (type.kind) {
@@ -70,4 +71,19 @@ export function toTableHeaderType(
   }
 }
 
-export const defaultTableColor: AvailableSwatchColor = 'Catskill';
+interface TableStyleContextValue {
+  readonly icon: UserIconKey;
+  readonly color: AvailableSwatchColor;
+  readonly setIcon: (newIcon: UserIconKey) => void;
+  readonly setColor: (newColor: AvailableSwatchColor) => void;
+}
+export const TableStyleContext = createContext<TableStyleContextValue>({
+  icon: 'Table',
+  color: 'Catskill',
+  setIcon: () => {
+    throw new Error('No way to change the icon provided');
+  },
+  setColor: () => {
+    throw new Error('No way to change the color provided');
+  },
+});

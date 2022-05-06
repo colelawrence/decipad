@@ -1,7 +1,6 @@
 import { DraggableBlock } from '@decipad/editor-components';
 import { ELEMENT_TABLE, PlateComponent } from '@decipad/editor-types';
 import { useElementMutatorCallback } from '@decipad/editor-utils';
-import { StyleContextProvider } from '@decipad/react-contexts';
 import { organisms } from '@decipad/ui';
 import { AvailableSwatchColor, UserIconKey } from 'libs/ui/src/utils';
 import { useMemo, useState } from 'react';
@@ -45,34 +44,27 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
   return (
     <div {...attributes}>
       {!deleted && (
-        <StyleContextProvider
-          icon={element.icon}
-          color={element.color}
-          onIconChange={saveIcon}
-          onColorChange={saveColor}
+        <DraggableBlock
+          element={element}
+          blockKind="editorTable"
+          onDelete={() => {
+            setDeleted(true);
+            onDelete();
+          }}
         >
-          <DraggableBlock
-            element={element}
-            blockKind="editorTable"
-            onDelete={() => {
-              setDeleted(true);
-              onDelete();
-            }}
-          >
-            <EditorTableContext.Provider value={contextValue}>
-              <organisms.EditorTable
-                onChangeIcon={saveIcon}
-                onChangeColor={saveColor}
-                color={element.color as AvailableSwatchColor}
-                icon={element.icon as UserIconKey}
-                onAddRow={onAddRow}
-                columns={columns}
-              >
-                {children}
-              </organisms.EditorTable>
-            </EditorTableContext.Provider>
-          </DraggableBlock>
-        </StyleContextProvider>
+          <EditorTableContext.Provider value={contextValue}>
+            <organisms.EditorTable
+              onChangeIcon={saveIcon}
+              onChangeColor={saveColor}
+              icon={(element.icon ?? 'Table') as UserIconKey}
+              color={(element.color ?? 'Catskill') as AvailableSwatchColor}
+              onAddRow={onAddRow}
+              columns={columns}
+            >
+              {children}
+            </organisms.EditorTable>
+          </EditorTableContext.Provider>
+        </DraggableBlock>
       )}
     </div>
   );

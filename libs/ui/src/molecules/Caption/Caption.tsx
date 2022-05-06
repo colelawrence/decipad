@@ -1,3 +1,4 @@
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { ComponentProps, FC, ReactNode } from 'react';
@@ -68,18 +69,22 @@ export const Caption = ({
   const Icon = icons[icon];
   return (
     <div css={nameWrapperStyles}>
-      <IconPopover
-        onChangeColor={onChangeColor}
-        onChangeIcon={onChangeIcon}
-        color={color}
-        trigger={
-          <button>
-            <span contentEditable={false} css={iconWrapperStyles}>
+      {useIsEditorReadOnly() ? (
+        <span contentEditable={false} css={iconWrapperStyles}>
+          <Icon />
+        </span>
+      ) : (
+        <IconPopover
+          onChangeColor={onChangeColor}
+          onChangeIcon={onChangeIcon}
+          color={color}
+          trigger={
+            <button contentEditable={false} css={iconWrapperStyles}>
               <Icon />
-            </span>
-          </button>
-        }
-      />
+            </button>
+          }
+        />
+      )}
       <div
         css={placeholderStyles}
         aria-placeholder={empty ? 'Name your input' : ''}

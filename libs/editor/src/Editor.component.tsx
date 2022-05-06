@@ -5,6 +5,7 @@ import {
 } from '@decipad/editor-plugins';
 import {
   ComputerContextProvider,
+  EditorReadOnlyContext,
   ResultsContext,
   useComputer,
 } from '@decipad/react-contexts';
@@ -87,20 +88,22 @@ const EditorInternal = (props: EditorProps) => {
   );
 
   return (
-    <ResultsContext.Provider value={computer.results.asObservable()}>
-      {!editorLoaded && <EditorPlaceholder />}
-      <div css={{ display: editorLoaded ? 'unset' : 'none' }}>
-        <Plate
-          id={notebookId}
-          plugins={editorPlugins}
-          editableProps={{
-            readOnly,
-          }}
-        >
-          <InsidePlate {...props} onLoaded={onLoaded} />
-        </Plate>
-      </div>
-    </ResultsContext.Provider>
+    <EditorReadOnlyContext.Provider value={readOnly}>
+      <ResultsContext.Provider value={computer.results.asObservable()}>
+        {!editorLoaded && <EditorPlaceholder />}
+        <div css={{ display: editorLoaded ? 'unset' : 'none' }}>
+          <Plate
+            id={notebookId}
+            plugins={editorPlugins}
+            editableProps={{
+              readOnly,
+            }}
+          >
+            <InsidePlate {...props} onLoaded={onLoaded} />
+          </Plate>
+        </div>
+      </ResultsContext.Provider>
+    </EditorReadOnlyContext.Provider>
   );
 };
 

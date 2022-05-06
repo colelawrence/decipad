@@ -1,6 +1,5 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import { PlateComponentAttributes } from '@decipad/editor-types';
-import { useStyle } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import {
   ConnectDragPreview,
@@ -19,9 +18,9 @@ import { DragHandle as DragHandleIcon } from '../../icons';
 import {
   AvailableSwatchColor,
   baseSwatches,
-  defaultTableColor,
   getStringType,
   getTypeIcon,
+  TableStyleContext,
 } from '../../utils';
 import type { TableCellType } from '../../types';
 
@@ -192,7 +191,6 @@ export interface TableHeaderProps {
   children?: React.ReactNode;
   highlight?: boolean;
   type?: TableCellType;
-  color?: AvailableSwatchColor;
   menu?: React.ReactNode;
   attributes?: PlateComponentAttributes;
   isEditable?: boolean;
@@ -223,7 +221,7 @@ export const TableHeader = ({
   dragPreview,
 }: TableHeaderProps): ReturnType<FC> => {
   const Icon = getTypeIcon(type);
-  const { color = defaultTableColor } = useStyle();
+  const { color } = useContext(TableStyleContext);
 
   return (
     <th

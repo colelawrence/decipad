@@ -21,7 +21,7 @@ const blockStyles = css({
   borderRadius: '6px',
 });
 
-const iconWrapper = css({
+const iconWrapperStyles = css({
   width: '32px',
   height: '32px',
   display: 'grid',
@@ -41,27 +41,36 @@ type EditorIconProps = {
   readonly color: AvailableSwatchColor;
   readonly onChangeIcon?: (newIcon: UserIconKey) => void;
   readonly onChangeColor?: (newColor: AvailableSwatchColor) => void;
+
+  readonly readOnly?: boolean;
 };
 
-export const EditorIcon = (props: EditorIconProps): ReturnType<FC> => {
+export const EditorIcon = ({
+  readOnly = false,
+  ...props
+}: EditorIconProps): ReturnType<FC> => {
   const Icon = icons[props.icon];
+
+  const IconWrapper = readOnly ? 'div' : 'button';
+  const iconElement = (
+    <IconWrapper
+      css={[
+        iconWrapperStyles,
+        { backgroundColor: baseSwatches[props.color].rgb },
+      ]}
+    >
+      <div css={iconStyles}>
+        <Icon />
+      </div>
+    </IconWrapper>
+  );
   return (
     <div css={blockStyles}>
-      <IconPopover
-        {...props}
-        trigger={
-          <div
-            css={[
-              iconWrapper,
-              { backgroundColor: baseSwatches[props.color].rgb },
-            ]}
-          >
-            <div css={iconStyles}>
-              <Icon />
-            </div>
-          </div>
-        }
-      />
+      {readOnly ? (
+        iconElement
+      ) : (
+        <IconPopover {...props} trigger={iconElement} />
+      )}
     </div>
   );
 };

@@ -5,11 +5,7 @@ import { TableData, TableHeader } from '../../atoms';
 import { TableHeaderRow, TableRow } from '../../molecules';
 import { table } from '../../styles';
 import { CodeResultProps } from '../../types';
-import {
-  defaultTableColor,
-  isTabularType,
-  toTableHeaderType,
-} from '../../utils';
+import { isTabularType, toTableHeaderType } from '../../utils';
 
 export const TableResult = ({
   parentType,
@@ -36,7 +32,6 @@ export const TableResult = ({
             <TableHeader
               type={toTableHeaderType(columnTypes[index])}
               key={index}
-              color={defaultTableColor}
               isEditable={false}
               showIcon={false}
             >

@@ -1,10 +1,10 @@
-import { useStyle } from '@decipad/react-contexts';
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
-import { FC, PropsWithChildren } from 'react';
+import { FC, PropsWithChildren, useContext } from 'react';
 import * as icons from '../../icons';
 import { cssVar, display, p16Bold, setCssVar } from '../../primitives';
 import { blockAlignment } from '../../styles';
-import { AvailableSwatchColor, UserIconKey } from '../../utils';
+import { TableStyleContext } from '../../utils';
 import { IconPopover } from '../IconPopover/IconPopover';
 
 const tableTitleWrapper = css({
@@ -49,21 +49,25 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
   empty,
   children,
 }) => {
-  const { color = 'Catskill', icon = 'Table', setIcon, setColor } = useStyle();
-  const Icon = icons[icon as UserIconKey];
+  const { color, icon, setIcon, setColor } = useContext(TableStyleContext);
+  const Icon = icons[icon];
   return (
     <div css={tableTitleWrapper}>
       <div contentEditable={false} css={tableIconSizeStyles}>
-        <IconPopover
-          color={color as AvailableSwatchColor}
-          trigger={
-            <div>
-              <Icon />
-            </div>
-          }
-          onChangeIcon={setIcon}
-          onChangeColor={setColor}
-        />
+        {useIsEditorReadOnly() ? (
+          <Icon />
+        ) : (
+          <IconPopover
+            color={color}
+            trigger={
+              <button>
+                <Icon />
+              </button>
+            }
+            onChangeIcon={setIcon}
+            onChangeColor={setColor}
+          />
+        )}
       </div>
       <div
         aria-placeholder={empty ? 'TableName' : ''}

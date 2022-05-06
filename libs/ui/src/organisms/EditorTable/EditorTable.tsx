@@ -1,10 +1,15 @@
+import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { Children, FC, ReactNode } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
 import { Table } from '..';
 import { AddTableRowButton } from '../../molecules';
 import { TableColumn } from '../../types';
-import { AvailableSwatchColor, UserIconKey } from '../../utils';
+import {
+  AvailableSwatchColor,
+  TableStyleContext,
+  UserIconKey,
+} from '../../utils';
 
 const wrapperStyles = css({
   margin: 'auto',
@@ -24,14 +29,15 @@ interface Column {
 }
 
 interface EditorTableProps {
-  readonly onAddRow?: () => void;
+  readonly icon: UserIconKey;
+  readonly color: AvailableSwatchColor;
   readonly onChangeIcon?: (newIcon: UserIconKey) => void;
   readonly onChangeColor?: (newColor: AvailableSwatchColor) => void;
-  readonly icon?: UserIconKey;
-  readonly color?: AvailableSwatchColor;
+
   readonly columns: Column[];
   readonly children?: ReactNode;
   readonly dropRef?: ConnectDropTarget;
+  readonly onAddRow?: () => void;
 }
 
 export const EditorTable: FC<EditorTableProps> = ({
@@ -39,24 +45,37 @@ export const EditorTable: FC<EditorTableProps> = ({
   columns,
   children,
   dropRef,
+  icon,
+  color,
+  onChangeIcon = noop,
+  onChangeColor = noop,
 }: EditorTableProps): ReturnType<FC> => {
   const [caption, thead, ...tbody] = Children.toArray(children);
 
   return (
-    <div css={wrapperStyles}>
-      {caption}
-      <div css={tableStyles}>
-        <Table dropRef={dropRef}>
-          <thead>{thead}</thead>
-          <tbody>{tbody}</tbody>
-          <tfoot contentEditable={false}>
-            <AddTableRowButton
-              colSpan={columns.length + 1}
-              onAddRow={onAddRow}
-            />
-          </tfoot>
-        </Table>
+    <TableStyleContext.Provider
+      value={{
+        icon,
+        color,
+        setIcon: onChangeIcon,
+        setColor: onChangeColor,
+      }}
+    >
+      <div css={wrapperStyles}>
+        {caption}
+        <div css={tableStyles}>
+          <Table dropRef={dropRef}>
+            <thead>{thead}</thead>
+            <tbody>{tbody}</tbody>
+            <tfoot contentEditable={false}>
+              <AddTableRowButton
+                colSpan={columns.length + 1}
+                onAddRow={onAddRow}
+              />
+            </tfoot>
+          </Table>
+        </div>
       </div>
-    </div>
+    </TableStyleContext.Provider>
   );
 };

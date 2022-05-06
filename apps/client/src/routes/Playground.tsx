@@ -19,6 +19,7 @@ export function Playground(): ReturnType<FC> {
       notebook={<NoDocSyncEditor />}
       notebookIcon={
         <EditorIcon
+          readOnly
           icon={icon}
           onChangeIcon={setIcon}
           color={iconColor}

@@ -24,7 +24,6 @@ type TableColumnHeaderProps = PropsWithChildren<
   Pick<
     ComponentProps<typeof TableHeader>,
     | 'type'
-    | 'color'
     | 'draggingOver'
     | 'dropDirection'
     | 'dragSource'
@@ -47,7 +46,6 @@ export const TableColumnHeader: FC<TableColumnHeaderProps> = ({
   onChangeColumnType,
   onRemoveColumn,
   parseUnit,
-  color,
   isFirst,
   type = getStringType(),
   readOnly = false,
@@ -79,8 +77,6 @@ export const TableColumnHeader: FC<TableColumnHeaderProps> = ({
       }
       highlight={isMenuOpen}
       type={type}
-      draggable
-      color={color}
     >
       {children}
     </TableHeader>

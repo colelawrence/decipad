@@ -7,10 +7,21 @@ const props: ComponentProps<typeof EditorIcon> = {
   color: 'Sun',
 };
 
-describe('Icon Popover Molecule', () => {
-  it('renders the initial icon', () => {
-    const { getByTitle } = render(<EditorIcon {...props} icon="Spider" />);
+it('renders the initial icon', () => {
+  const { getByTitle } = render(<EditorIcon {...props} icon="Spider" />);
 
-    expect(getByTitle(/spider/i)).toBeInTheDocument();
+  expect(getByTitle(/spider/i)).toBeInTheDocument();
+});
+
+describe('when not readonly', () => {
+  it('has a popup', () => {
+    const { queryByRole } = render(<EditorIcon {...props} readOnly={false} />);
+    expect(queryByRole('button')).toBeInTheDocument();
+  });
+});
+describe('when readonly', () => {
+  it('does not have a popup', () => {
+    const { queryByRole } = render(<EditorIcon {...props} readOnly />);
+    expect(queryByRole('button')).not.toBeInTheDocument();
   });
 });

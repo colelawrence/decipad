@@ -16,6 +16,8 @@ const defaultProps: ComponentProps<typeof EditorTable> = {
       cellType: getNumberType(),
     },
   ],
+  icon: 'Table',
+  color: 'Catskill',
 };
 
 it('renders the children', () => {

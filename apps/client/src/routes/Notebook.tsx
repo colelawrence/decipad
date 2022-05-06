@@ -11,7 +11,6 @@ import {
   useShareNotebookWithSecret,
   useUnshareNotebookWithSecret,
 } from '@decipad/queries';
-import { EditorIsReadOnlyProvider } from '@decipad/react-contexts';
 import {
   notebooks,
   useRouteParams,
@@ -131,58 +130,57 @@ export const Notebook = (): ReturnType<FC> => {
     return <ErrorPage Heading="h1" wellKnown="404" authenticated />;
   }
   return (
-    <EditorIsReadOnlyProvider isEditorReadOnly={notebookReadOnly}>
-      <div>
-        <Head>
-          <title>
-            {notebook.name ? notebook.name : 'Make sense of numbers'} — Decipad
-          </title>
-        </Head>
-        <NotebookPage
-          notebook={
-            <Editor
-              notebookId={id}
-              readOnly={notebookReadOnly}
-              authSecret={secret}
-            />
-          }
-          notebookIcon={
-            <EditorIcon
-              color={iconColor}
-              icon={icon}
-              onChangeIcon={(newIcon) => {
-                setIcon(newIcon);
-                updateNotebookIcon({
-                  variables: {
-                    id: notebook.id,
-                    icon: `${newIcon}-${iconColor}`,
-                  },
-                });
-              }}
-              onChangeColor={(newIconColor) => {
-                setIconColor(newIconColor);
-                updateNotebookIcon({
-                  variables: {
-                    id: notebook.id,
-                    icon: `${icon}-${newIconColor}`,
-                  },
-                });
-              }}
-            />
-          }
-          topbar={
-            <NotebookTopbar
-              workspace={notebook.workspace}
-              notebook={notebook}
-              usersWithAccess={notebook.access.users}
-              permission={notebook.myPermissionType}
-              sharingSecret={sharingSecret}
-              onToggleShare={onShareToggleClick}
-              onDuplicateNotebook={onDuplicateNotebook}
-            />
-          }
-        />
-      </div>
-    </EditorIsReadOnlyProvider>
+    <>
+      <Head>
+        <title>
+          {notebook.name ? notebook.name : 'Make sense of numbers'} — Decipad
+        </title>
+      </Head>
+      <NotebookPage
+        notebook={
+          <Editor
+            notebookId={id}
+            readOnly={notebookReadOnly}
+            authSecret={secret}
+          />
+        }
+        notebookIcon={
+          <EditorIcon
+            readOnly={notebookReadOnly}
+            color={iconColor}
+            icon={icon}
+            onChangeIcon={(newIcon) => {
+              setIcon(newIcon);
+              updateNotebookIcon({
+                variables: {
+                  id: notebook.id,
+                  icon: `${newIcon}-${iconColor}`,
+                },
+              });
+            }}
+            onChangeColor={(newIconColor) => {
+              setIconColor(newIconColor);
+              updateNotebookIcon({
+                variables: {
+                  id: notebook.id,
+                  icon: `${icon}-${newIconColor}`,
+                },
+              });
+            }}
+          />
+        }
+        topbar={
+          <NotebookTopbar
+            workspace={notebook.workspace}
+            notebook={notebook}
+            usersWithAccess={notebook.access.users}
+            permission={notebook.myPermissionType}
+            sharingSecret={sharingSecret}
+            onToggleShare={onShareToggleClick}
+            onDuplicateNotebook={onDuplicateNotebook}
+          />
+        }
+      />
+    </>
   );
 };

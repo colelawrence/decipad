@@ -1,3 +1,4 @@
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
@@ -22,7 +23,7 @@ const styles = css(
     gridTemplateColumns: '16px 1fr',
     gridGap: '16px',
 
-    margin: `${verticalMargin} auto 0 auto`,
+    margin: `${verticalMargin} 0 0`,
     padding: `${verticalPadding} 16px`,
   }
 );
@@ -54,23 +55,29 @@ export const Callout = ({
 }: CalloutProps): ReturnType<FC> => {
   const Icon = icons[icon];
   return (
-    <div
+    <p
       css={[
         styles,
         { backgroundColor: transparency(baseSwatches[color], 0.4).rgba },
       ]}
     >
-      <IconPopover
-        color={color}
-        trigger={
-          <span css={iconWrapperStyles}>
-            <Icon />
-          </span>
-        }
-        onChangeColor={saveColor}
-        onChangeIcon={saveIcon}
-      />
-      {children}
-    </div>
+      {useIsEditorReadOnly() ? (
+        <span css={iconWrapperStyles}>
+          <Icon />
+        </span>
+      ) : (
+        <IconPopover
+          color={color}
+          trigger={
+            <button css={iconWrapperStyles}>
+              <Icon />
+            </button>
+          }
+          onChangeColor={saveColor}
+          onChangeIcon={saveIcon}
+        />
+      )}
+      <em>{children}</em>
+    </p>
   );
 };

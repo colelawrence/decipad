@@ -1,15 +1,14 @@
 import { PlateComponentAttributes } from '@decipad/editor-types';
-import { useStyle } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { Children, FC, ReactNode } from 'react';
+import { Children, FC, ReactNode, useContext } from 'react';
 import { Create } from '../../icons';
 import { strongOpacity, transparency } from '../../primitives';
 import { table } from '../../styles';
 import {
   AvailableSwatchColor,
   baseSwatches,
-  defaultTableColor,
+  TableStyleContext,
 } from '../../utils';
 
 const createColumnThStyles = css({
@@ -47,7 +46,7 @@ export const TableHeaderRow = ({
   readOnly = false,
   attributes,
 }: TableHeaderRowProps): ReturnType<FC> => {
-  const { color = defaultTableColor } = useStyle();
+  const { color } = useContext(TableStyleContext);
   return (
     <tr
       {...attributes}

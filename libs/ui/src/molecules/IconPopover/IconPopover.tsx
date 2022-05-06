@@ -1,4 +1,3 @@
-import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import * as Popover from '@radix-ui/react-popover';
@@ -69,9 +68,6 @@ export const IconPopover = ({
   onChangeIcon = noop,
   onChangeColor = noop,
 }: IconPopoverProps): ReturnType<FC> => {
-  if (useIsEditorReadOnly()) {
-    return <span area-label="readOnly">{trigger}</span>;
-  }
   const triggerWithCursey = React.cloneElement(trigger, {
     style: { cursor: 'pointer' },
   });
