@@ -23,6 +23,6 @@ jobs:
           LHCI_SERVER_BASE_URL: https://${{ github.event.pull_request.number }}.dev.decipad.com
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
         run: |
-          npm install -g @lhci/cli@0.8.x
           npm install -g puppeteer
+          npm install -g @lhci/cli@0.8.x
           lhci autorun --isSinglePageApplication --url /
