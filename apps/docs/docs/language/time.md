@@ -113,7 +113,7 @@ year = 365 days
 ==> 10 years
 ```
 
-## Functions on dates
+## Formulas on dates
 
-[Here is a list of all the functions that work on dates](/docs/built-in-functions/functions-for-dates).
+[Here is a list of all the functions that work on dates](/docs/built-in-formulas/formulas-for-dates).
 [Read more on sequences and how they work with time](/docs/advanced-concepts/sequences).

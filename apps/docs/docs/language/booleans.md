@@ -49,6 +49,6 @@ Use parenthesis to chain operators and define priorities
 
 > Parentheses are used to ensure that the `/` operation on the right side of the `!=` is performed **before** the evaluation of the `!=` itself.
 
-## Functions on booleans
+## Formulas on booleans
 
-[Here is a list of all the functions that work on booleans](/docs/built-in-functions/functions-for-booleans).
+[Here is a list of all the functions that work on booleans](/docs/built-in-formulas/formulas-for-booleans).

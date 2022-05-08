@@ -273,4 +273,4 @@ This allows you to further augment the table without listing every previously co
 
 ## Functions on tables
 
-[Here is a list of all the functions that work on tables](/docs/built-in-functions/functions-for-tables).
+[Here is a list of all the functions that work on tables](/docs/built-in-formulas/formulas-for-tables).

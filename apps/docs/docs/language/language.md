@@ -14,7 +14,7 @@ Discover the fundamental concepts:
 
 - [Numbers](numbers)
 
-- [Arithmetic operations](arithmetic-functions)
+- [Arithmetic operations](/docs/language/numbers/arithmetic-functions)
 
 - [Strings](strings)
 
@@ -26,4 +26,4 @@ Discover the fundamental concepts:
 
 - [Conditions](conditions)
 
-- [Functions](functions)
+- [Formulas](formulas)

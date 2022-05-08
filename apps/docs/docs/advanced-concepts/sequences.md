@@ -42,4 +42,4 @@ The step can be any of `millennium`, `century`, `decade`, `year`, `quarter`, `mo
 
 ## Functions on lists
 
-[Here is a list of all the functions that work on lists](/docs/built-in-functions/functions-for-lists).
+[Here is a list of all the functions that work on lists](/docs/built-in-formulas/formulas-for-lists).

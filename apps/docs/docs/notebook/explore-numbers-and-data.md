@@ -42,7 +42,7 @@ As with variables, you can name your table and use it in a calculation.
 
 ![tables](https://user-images.githubusercontent.com/76447845/146926068-463a1bc4-e70d-443d-a05b-6f49dcecf310.gif)
 
-If you are looking to create complex tables, you can always build your own table using the [Decipad language](/docs/organising-your-data/tables).
+If you are looking to create complex tables, you can always build your own table using the [Decipad language](/docs/data-organization/tables).
 
 ```deci live
 SimpleTable = {

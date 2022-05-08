@@ -61,4 +61,4 @@ range(date(2022-01) through date(2022-06))
 
 ## Functions on ranges
 
-[Here is a list of all the functions that work on ranges](/docs/built-in-functions/functions-for-ranges).
+[Here is a list of all the functions that work on ranges](/docs/built-in-formulas/formulas-for-ranges).
