@@ -11,7 +11,8 @@ export type { DocSyncEditor };
 interface UseDocSyncProps {
   notebookId: string;
   editor?: TEditor;
-  authSecret?: string | undefined;
+  authSecret?: string;
+  readOnly?: boolean;
   onLoaded: (source: 'local' | 'remote') => void;
   onError?: (event: Error | Event) => void;
 }
@@ -20,6 +21,7 @@ export const useDocSync = ({
   notebookId,
   editor,
   authSecret,
+  readOnly = false,
   onLoaded,
   onError,
 }: UseDocSyncProps): DocSyncEditor | undefined => {
@@ -29,6 +31,7 @@ export const useDocSync = ({
     const syncEditor =
       editor &&
       createDocSyncEditor(editor, notebookId, {
+        readOnly,
         authSecret,
         onError,
       });
@@ -42,7 +45,7 @@ export const useDocSync = ({
         setDocSync(undefined);
       }
     };
-  }, [authSecret, editor, notebookId, onError, onLoaded]);
+  }, [authSecret, editor, notebookId, onError, onLoaded, readOnly]);
 
   useEffect(() => {
     if (docSync) {

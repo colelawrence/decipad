@@ -27,6 +27,7 @@ type InsidePlateProps = EditorProps & {
 };
 
 const InsidePlate = ({
+  readOnly,
   notebookId,
   authSecret,
   onLoaded,
@@ -36,6 +37,7 @@ const InsidePlate = ({
   useDocSync({
     notebookId,
     editor,
+    readOnly,
     authSecret,
     onError: captureException,
     onLoaded,

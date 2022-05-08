@@ -16,6 +16,7 @@ import { Array as YArray, Doc as YDoc, Map as YMap, Text as YText } from 'yjs';
 import * as DocTypes from './types';
 
 interface Options {
+  readOnly?: boolean;
   authSecret?: string;
   WebSocketPolyfill?: typeof WebSocket;
   onError?: (event: Error | Event) => void;
@@ -193,6 +194,7 @@ export function createDocSyncEditor(
   options: Options = {}
 ): TEditor & DocSyncEditor {
   const {
+    readOnly = false,
     authSecret,
     onError,
     ws = true,
@@ -219,6 +221,7 @@ export function createDocSyncEditor(
   if (ws) {
     wsp = new WebsocketProvider(doc, {
       WebSocketPolyfill,
+      readOnly,
       connect,
       beforeConnect,
       connectBc,

@@ -19,6 +19,7 @@ export interface WSStatus {
 }
 
 interface Options {
+  readOnly?: boolean;
   connect?: boolean;
   connectBc?: boolean;
   awareness?: awarenessProtocol.Awareness;
@@ -352,6 +353,7 @@ export class WebsocketProvider extends Observable<string> {
   willConnectBc: boolean;
   bcChannel?: string;
   url?: string;
+  readOnly: boolean;
   shouldConnect: boolean;
   onError?: Options['onError'];
   ws: WebSocket | undefined;
@@ -382,6 +384,7 @@ export class WebsocketProvider extends Observable<string> {
   constructor(doc: YDoc, options: Options = {}) {
     super();
     const {
+      readOnly = false,
       connect = true,
       connectBc = true,
       awareness,
@@ -393,6 +396,7 @@ export class WebsocketProvider extends Observable<string> {
     } = options;
 
     // ensure that url is always ends with /
+    this.readOnly = readOnly;
     this.doc = doc;
     this.protocol = protocol;
     this.beforeConnect = beforeConnect;
@@ -413,7 +417,7 @@ export class WebsocketProvider extends Observable<string> {
 
     if (resyncInterval > 0) {
       this._resyncInterval = setInterval(() => {
-        if (this.ws && this.wsconnected) {
+        if (this.ws && this.wsconnected && !this.readOnly) {
           // resend sync step 1
           const encoder = encoding.createEncoder();
           encoding.writeVarUint(encoder, messageSync);
@@ -437,14 +441,18 @@ export class WebsocketProvider extends Observable<string> {
     this._bcSubscriber = this._bcSubscriber.bind(this);
     this._awarenessUpdateHandler = this._awarenessUpdateHandler.bind(this);
 
-    this.doc.on('update', this._updateHandler);
+    if (!this.readOnly) {
+      this.doc.on('update', this._updateHandler);
+    }
 
     if (typeof window !== 'undefined') {
       window.addEventListener('beforeunload', this._beforeUnloadHandler);
     } else if (typeof process !== 'undefined') {
       process.on('exit', () => this._beforeUnloadHandler);
     }
-    this.awareness.on('update', this._awarenessUpdateHandler);
+    if (!readOnly) {
+      this.awareness.on('update', this._awarenessUpdateHandler);
+    }
     this._checkInterval = setInterval(() => {
       if (
         this.wsconnected &&
@@ -484,7 +492,7 @@ export class WebsocketProvider extends Observable<string> {
   }
 
   private _updateHandler(update: Uint8Array, origin: unknown) {
-    if (origin !== this) {
+    if (origin !== this && !this.readOnly) {
       this.outUpdates.push(update);
       this.debouncedBroadcastUpdateMessage();
     }
