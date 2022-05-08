@@ -1,5 +1,5 @@
-import { TEditor } from '@udecode/plate';
-import { Editor as SlateEditor, Operation } from 'slate';
+import { isCollapsed, TEditor } from '@udecode/plate';
+import { Editor, Editor as SlateEditor, Operation } from 'slate';
 import { HistoryEditor } from 'slate-history';
 import invariant from 'tiny-invariant';
 import * as Y from 'yjs';
@@ -136,8 +136,18 @@ export function withYjs<T extends TEditor>(
   LOCAL_OPERATIONS.set(editor, new Set());
 
   if (synchronizeValue) {
+    const { selection } = editor;
     e.selection = null;
-    setTimeout(() => YjsEditor.synchronizeValue(e), 0);
+    setTimeout(() => {
+      YjsEditor.synchronizeValue(e);
+      if (
+        selection?.focus &&
+        isCollapsed(selection) &&
+        Editor.hasPath(editor, selection.focus.path)
+      ) {
+        e.selection = selection;
+      }
+    }, 0);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -2,6 +2,7 @@ import { ELEMENT_LIC, ELEMENT_UL } from '@decipad/editor-types';
 import {
   allowsTextStyling,
   getPathContainingSelection,
+  useSelection,
 } from '@decipad/editor-utils';
 import {
   getParent,
@@ -9,7 +10,6 @@ import {
   toggleList,
   toggleNodeType,
   usePlateEditorState,
-  usePlateSelection,
 } from '@udecode/plate';
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { Editor, Element } from 'slate';
@@ -27,7 +27,7 @@ export const useEditorTooltip = (): UseEditorTooltip => {
   const ref = useRef<HTMLDivElement>(null);
   const [isActive, setIsActive] = useState(false);
   const [currentBlockType, setCurrentBlockType] = useState<null | string>(null);
-  const selection = usePlateSelection();
+  const selection = useSelection();
 
   // As long as we only ever `setIsActive(true)` we don't cause infinite update loops
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -86,7 +86,6 @@ export const useEditorTooltip = (): UseEditorTooltip => {
       if (editor && selection) {
         if (type === ELEMENT_UL) {
           toggleList(editor, { type });
-          editor.selection = null;
           setIsActive(false);
         }
         const parentEntry = getParent(editor, selection);
@@ -98,7 +97,6 @@ export const useEditorTooltip = (): UseEditorTooltip => {
           }
         }
         toggleNodeType(editor, { activeType: type });
-        editor.selection = null;
         setIsActive(false);
       }
     },

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useWindowListener } from '@decipad/react-utils';
 import { ClientEventsContext } from '@decipad/client-events';
-import { isCollapsed, useEditorState, usePlateSelection } from '@udecode/plate';
+import { isCollapsed, useEditorState } from '@udecode/plate';
 import { organisms } from '@decipad/ui';
 import { PlateComponent } from '@decipad/editor-types';
 import { Paragraph } from '@decipad/editor-components';
@@ -9,7 +9,7 @@ import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { Editor, Node, Transforms } from 'slate';
 import { useFocused, useSelected } from 'slate-react';
 import { Computer } from '@decipad/language';
-import { findPath } from '@decipad/editor-utils';
+import { findPath, useSelection } from '@decipad/editor-utils';
 import { dequal } from 'dequal';
 import { execute } from '../utils/slashCommands';
 
@@ -70,7 +70,7 @@ export const SlashCommandsParagraph =
     );
     useWindowListener('keydown', onKeyDown, true);
 
-    const selection = usePlateSelection();
+    const selection = useSelection();
 
     useEffect(() => {
       if (showSlashCommands && elementPath && isCollapsed(selection)) {

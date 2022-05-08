@@ -17,3 +17,4 @@ export * from './withPath';
 export * from './normalizeIdentifierElement';
 export * from './isDOMNode';
 export * from './hasTarget';
+export * from './useSelection';
