@@ -12,7 +12,11 @@ module.exports = {
     collect: {
       url: urlsToScan.map(url),
       startServerCommand: 'echo ready && cat -n', // lolserver
-      puppeteerScript: path.join('scripts', 'puppeteer-populate-playground.js'),
+      puppeteerScript: path.join(
+        '.',
+        'scripts',
+        'puppeteer-populate-playground.js'
+      ),
     },
     upload: {
       target: 'temporary-public-storage',
