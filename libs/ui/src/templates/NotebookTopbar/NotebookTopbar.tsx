@@ -8,9 +8,11 @@ import { Button, IconButton } from '../../atoms';
 import { LeftArrow } from '../../icons';
 import { NotebookAvatars, NotebookPath } from '../../molecules';
 import { NotebookSharingPopUp } from '../../organisms';
-import { cssVar, p14Medium } from '../../primitives';
+import { cssVar, p14Medium, smallestDesktop } from '../../primitives';
 import { PermissionType } from '../../types';
 import { Anchor } from '../../utils';
+
+const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 
 const wrapperStyles = css({
   display: 'flex',
@@ -39,11 +41,15 @@ const rightSideStyles = css({
   gridTemplateColumns: '1fr max-content max-content',
   alignItems: 'center',
   gap: '1rem',
+  marginRight: '-1rem',
 });
 
 const linksStyles = css({
   display: 'flex',
   gap: '12px',
+  [smallScreenQuery]: {
+    display: 'none',
+  },
 });
 const helpLinkStyles = css(p14Medium);
 

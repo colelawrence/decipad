@@ -1,10 +1,10 @@
-import { notebooks } from '@decipad/routing';
-import { useWindowListener } from '@decipad/react-utils';
 import { ClientEventsContext } from '@decipad/client-events';
-import { css } from '@emotion/react';
-import { FC, useState, useContext } from 'react';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { useWindowListener } from '@decipad/react-utils';
+import { notebooks } from '@decipad/routing';
 import { noop } from '@decipad/utils';
+import { css } from '@emotion/react';
+import { FC, useContext, useState } from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Button, Toggle, Tooltip } from '../../atoms';
 import { Link } from '../../icons';
 import {
@@ -13,7 +13,14 @@ import {
   p14Medium,
   p14Regular,
   setCssVar,
+  smallestDesktop,
 } from '../../primitives';
+
+const wrapperStyles = css({
+  position: 'relative',
+});
+
+const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 
 /**
  * The parent div styles, this handles the position of the pop up relative to the button.
@@ -25,6 +32,9 @@ const popUpStyles = css({
 
   width: '350px',
   padding: '20px',
+  [smallScreenQuery]: {
+    width: '250px',
+  },
 
   background: cssVar('backgroundColor'),
   border: '1px solid',
@@ -133,7 +143,7 @@ export const NotebookSharingPopUp = ({
   ).toString();
 
   return (
-    <div css={{ position: 'relative' }} onClick={(e) => e.stopPropagation()}>
+    <div css={wrapperStyles} onClick={(e) => e.stopPropagation()}>
       <Button
         type="primaryBrand"
         onClick={() => setShareMenuOpen(!shareMenuOpen)}
