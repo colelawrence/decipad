@@ -7,7 +7,6 @@ export type ResultDate = bigint;
 export type ResultRange =
   | [ResultNumber, ResultNumber]
   | [ResultDate, ResultDate];
-export type ResultTimeQuantity = [string, bigint][];
 export type ResultColumn = OneResult[];
 export type ResultRow = OneResult[];
 export type ResultTable = OneResult[][];
@@ -19,7 +18,6 @@ export type OneResult =
   | ResultBoolean
   | ResultDate
   | ResultRange
-  | ResultTimeQuantity
   | ResultColumn
   | ResultRow
   | ResultTable

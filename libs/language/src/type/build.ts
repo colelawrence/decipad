@@ -32,12 +32,11 @@ export const date = (specificity: Time.Specificity) =>
   });
 
 export const timeQuantity = (timeUnits: (Unit | string)[]) =>
-  produce(new Type(), (t) => {
-    t.type = 'time-quantity';
-    t.unit = {
+  produce(scalar('number'), (numberType) => {
+    numberType.unit = {
       type: 'units',
       args: timeUnits.map((unit) => ({
-        unit: timeUnitFromUnit(typeof unit === 'string' ? unit : unit.unit),
+        unit: timeUnitFromUnit(unit),
         exp: new Fraction(1),
         multiplier: new Fraction(1),
         known: true,

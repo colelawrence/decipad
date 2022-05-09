@@ -17,7 +17,7 @@ export const miscOperators: Record<string, BuiltinSpec> = {
   // Range stuff
   contains: overloadBuiltin('contains', 2, [
     {
-      argTypes: ['number', 'number'],
+      argTypes: ['range', 'number'],
       fnValues: ([a, b]) => {
         const [aStart, aEnd] = a.getData() as Fraction[];
         const bNumber = b.getData() as Fraction;

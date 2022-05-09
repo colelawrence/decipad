@@ -8,7 +8,6 @@ import {
   BooleanValue,
   FractionValue,
 } from '../interpreter/Value';
-import { TimeQuantity } from '../date';
 import { getDefined } from '../utils';
 import { AST } from '..';
 
@@ -18,7 +17,7 @@ export type OverloadTypeName =
   | 'boolean'
   | 'unit'
   | 'date'
-  | 'time-quantity';
+  | 'range';
 
 export interface OverloadedBuiltinSpec {
   argTypes: OverloadTypeName[];
@@ -81,10 +80,8 @@ export const getOverloadedTypeFromValue = (
     return 'number';
   } else if (val instanceof Date) {
     return 'date';
-  } else if (val instanceof TimeQuantity) {
-    return 'time-quantity';
   } else if (val instanceof Range) {
-    return 'number';
+    return 'range';
   } else {
     return null;
   }
@@ -95,8 +92,8 @@ export const getOverloadedTypeFromType = (t: Type): OverloadTypeName | null => {
     return t.type as 'number' | 'string' | 'boolean';
   } else if (t.date != null) {
     return 'date';
-  } else if (t.rangeOf?.type) {
-    return t.rangeOf.type as 'number' | 'string' | 'boolean';
+  } else if (t.rangeOf) {
+    return 'range';
   } else {
     return null;
   }

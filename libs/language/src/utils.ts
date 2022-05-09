@@ -199,7 +199,6 @@ const expressionTypesSet = new Set([
   'external-ref',
   'property-access',
   'literal',
-  'time-quantity',
   'column',
   'table',
   'range',

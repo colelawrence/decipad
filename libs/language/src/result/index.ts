@@ -28,8 +28,6 @@ export interface Result<T extends SerializedTypeKind = SerializedTypeKind> {
     ? Interpreter.ResultTable
     : T extends 'row'
     ? Interpreter.ResultRow
-    : T extends 'time-quantity'
-    ? Interpreter.ResultTimeQuantity
     : T extends 'function'
     ? Interpreter.ResultUnknown | null
     : T extends 'type-error'
