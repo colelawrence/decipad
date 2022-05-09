@@ -29,6 +29,7 @@ type TableColumnHeaderProps = PropsWithChildren<
     | 'dragSource'
     | 'dropTarget'
     | 'dragPreview'
+    | 'draggable'
   > &
     Pick<
       ComponentProps<typeof TableColumnMenu>,

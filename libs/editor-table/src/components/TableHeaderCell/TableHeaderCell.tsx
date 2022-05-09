@@ -52,6 +52,7 @@ export const TableHeaderCell: PlateComponent = ({
       onRemoveColumn={() => onRemoveColumn(element.id)}
       parseUnit={computer.getUnitFromText.bind(computer)}
       type={element.cellType}
+      draggable={true}
       dragSource={dragSource}
       dropTarget={dropTarget}
       dragPreview={dragPreview}
