@@ -9,6 +9,9 @@ const args = {
 export default {
   title: 'Templates / Dashboard / Sidebar / Edit Workspace Modal',
   component: EditWorkspaceModal,
+  parameters: {
+    chromatic: { viewports: [320, 1280] },
+  },
   args,
 } as Meta;
 

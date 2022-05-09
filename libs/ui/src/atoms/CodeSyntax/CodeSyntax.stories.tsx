@@ -6,7 +6,7 @@ export const NormalArgs = {
   children: '4 * 5',
 };
 export default {
-  title: 'Atoms / Editor / Inputs / Code Syntax',
+  title: 'Atoms / Editor / Input / Code Syntax',
   component: CodeSyntax,
 } as Meta;
 

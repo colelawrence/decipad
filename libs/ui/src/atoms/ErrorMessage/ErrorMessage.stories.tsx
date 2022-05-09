@@ -9,6 +9,9 @@ export default {
   title: 'Atoms / Editor / Charts / Error Message',
   component: ErrorMessage,
   args,
+  parameters: {
+    chromatic: { disable: true },
+  },
 } as Meta;
 
 export const Normal: Story = () => <ErrorMessage {...args} />;

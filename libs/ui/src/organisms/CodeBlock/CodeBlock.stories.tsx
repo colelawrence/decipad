@@ -1,6 +1,6 @@
-import { Meta, Story } from '@storybook/react';
 import { SerializedType } from '@decipad/language';
 import { docs } from '@decipad/routing';
+import { Meta, Story } from '@storybook/react';
 import { CodeLine } from '..';
 import { CodeBlock } from './CodeBlock';
 
@@ -31,6 +31,9 @@ const lines = [
 export default {
   title: 'Organisms / Editor / Code / Block',
   component: CodeBlock,
+  parameters: {
+    chromatic: { viewports: [320, 1280] },
+  },
 } as Meta;
 
 export const Normal: Story = () => (

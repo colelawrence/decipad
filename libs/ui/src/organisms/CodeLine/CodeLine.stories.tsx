@@ -1,9 +1,9 @@
-import { ComponentProps } from 'react';
-import { Meta, Story } from '@storybook/react';
 import { Result } from '@decipad/language';
 import { docs } from '@decipad/routing';
-import { CodeLine } from './CodeLine';
+import { Meta, Story } from '@storybook/react';
+import { ComponentProps } from 'react';
 import { withCode } from '../../storybook-utils';
+import { CodeLine } from './CodeLine';
 
 export default {
   title: 'Organisms / Editor / Code / Line',
@@ -12,6 +12,9 @@ export default {
   args: {
     displayInline: true,
     children: '1 + 1',
+  },
+  parameters: {
+    chromatic: { viewports: [320, 1280] },
   },
 } as Meta;
 

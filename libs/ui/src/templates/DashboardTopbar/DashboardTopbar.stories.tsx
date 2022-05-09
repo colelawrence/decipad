@@ -3,6 +3,9 @@ import { DashboardTopbar } from './DashboardTopbar';
 
 export default {
   title: 'Templates / Dashboard / Topbar',
+  parameters: {
+    chromatic: { viewports: [320, 1280] },
+  },
 } as Meta;
 
 export const Normal: Story = () => (

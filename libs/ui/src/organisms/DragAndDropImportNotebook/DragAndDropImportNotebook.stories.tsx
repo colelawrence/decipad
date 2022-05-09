@@ -9,6 +9,9 @@ import { DragAndDropImportNotebook } from './DragAndDropImportNotebook';
 export default {
   title: 'Organisms / UI / Workspace / Drag Import Notebook',
   component: DragAndDropImportNotebook,
+  parameters: {
+    chromatic: { disable: true },
+  },
 } as Meta;
 
 export const Normal: Story<ComponentProps<typeof DragAndDropImportNotebook>> = (

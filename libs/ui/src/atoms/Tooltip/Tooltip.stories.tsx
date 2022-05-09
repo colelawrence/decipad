@@ -10,6 +10,9 @@ const args = {
 export default {
   title: 'Atoms / UI / Tooltip',
   component: Tooltip,
+  parameters: {
+    chromatic: { disable: true },
+  },
   args,
 } as Meta;
 

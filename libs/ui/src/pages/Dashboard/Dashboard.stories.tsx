@@ -1,12 +1,15 @@
 import { Meta, Story } from '@storybook/react';
-import { Normal as DashboardTopbar } from '../../templates/DashboardTopbar/DashboardTopbar.stories';
 import { Normal as DashboardSidebar } from '../../templates/DashboardSidebar/DashboardSidebar.stories';
+import { Normal as DashboardTopbar } from '../../templates/DashboardTopbar/DashboardTopbar.stories';
 import { Normal as NotebookList } from '../../templates/NotebookList/NotebookList.stories';
 import { Dashboard } from './Dashboard';
 
 export default {
   title: 'Pages / Dashboard',
   component: Dashboard,
+  parameters: {
+    chromatic: { viewports: [320, 1280] },
+  },
 } as Meta;
 
 export const Normal: Story = () => (

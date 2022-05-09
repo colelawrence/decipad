@@ -4,6 +4,9 @@ import { Display } from './Display';
 export default {
   title: 'Atoms / Editor / Text / Title',
   component: Display,
+  parameters: {
+    chromatic: { disable: true },
+  },
 } as Meta;
 
 export const Normal: Story<{ children: string }> = (args) => (

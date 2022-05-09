@@ -9,7 +9,7 @@ const args = {
 };
 
 export default {
-  title: 'Atoms / Editor / Inputs / Slider',
+  title: 'Atoms / Editor / Input / Slider',
   component: Slider,
   args,
 } as Meta;

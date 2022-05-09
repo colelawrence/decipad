@@ -66,6 +66,9 @@ const props: ComponentProps<typeof PlotBlock> = {
 export default {
   title: 'Organisms / Editor / Charts / Block',
   component: PlotBlock,
+  parameters: {
+    chromatic: { viewports: [320, 1280] },
+  },
 } as Meta;
 
 export const Normal: Story = () => <PlotBlock {...props} />;

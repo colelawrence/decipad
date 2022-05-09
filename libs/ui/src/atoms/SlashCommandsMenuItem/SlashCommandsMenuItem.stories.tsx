@@ -12,6 +12,9 @@ export default {
   title: 'Organisms / Editor / Slash Commands / Item',
   component: SlashCommandsMenuItem,
   args,
+  parameters: {
+    chromatic: { disable: true },
+  },
   decorators: [inMenu],
 } as Meta;
 

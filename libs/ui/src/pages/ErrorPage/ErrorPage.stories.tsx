@@ -9,6 +9,9 @@ export default {
   title: 'Pages / Error',
   component: ErrorPage,
   args,
+  parameters: {
+    chromatic: { viewports: [320, 1280] },
+  },
 } as Meta;
 
 export const Error404: Story<typeof args> = (props) => (
