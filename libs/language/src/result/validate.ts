@@ -87,11 +87,11 @@ function validate(
         getArray(value as Interpreter.ResultRow)
       ).every(([type, value]) => validate(type, value));
     }
-    case 'function':
-    case 'type-error': {
+    case 'function': {
       return getTrue(value == null || value === Unknown, 'expected no value');
     }
   }
+  return true;
 }
 
 const reportError = (

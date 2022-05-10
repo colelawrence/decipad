@@ -1,9 +1,9 @@
-import { AST, InjectableExternalData, isExpression } from '.';
-import { inferBlock, makeContext } from './infer';
+import { AST, InjectableExternalData, isExpression, Type } from '.';
+import { Context, inferBlock, makeContext } from './infer';
 import { AnyMapping } from './utils';
 import { parseBlock } from './parser';
 import { Realm, run } from './interpreter';
-import { validateResult } from './result';
+import { OneResult, validateResult } from './result';
 
 export const parseOneBlock = (source: string): AST.Block => {
   const parsed = parseBlock({ id: 'block-id', source });
@@ -24,16 +24,29 @@ export const parseOneExpression = (source: string): AST.Expression => {
   return item;
 };
 
+interface RunAstOptions {
+  externalData?: AnyMapping<InjectableExternalData>;
+  ctx?: Context;
+  throwOnError?: boolean;
+}
+
+interface RunAstResult {
+  type: Type;
+  value: OneResult;
+}
+
 export const runAST = async (
   block: AST.Block,
-  { externalData }: { externalData?: AnyMapping<InjectableExternalData> } = {}
-) => {
-  const ctx = makeContext({ externalData });
-
+  {
+    externalData,
+    ctx = makeContext({ externalData }),
+    throwOnError,
+  }: RunAstOptions = {}
+): Promise<RunAstResult> => {
   const type = await inferBlock(block, ctx);
 
   const erroredType = type.errorCause != null ? type : null;
-  if (erroredType) {
+  if (erroredType && throwOnError) {
     throw new TypeError(type.errorCause?.message || 'Type error');
   }
 

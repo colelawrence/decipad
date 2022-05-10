@@ -72,7 +72,10 @@ export async function evaluate(
         return value;
       }
       const type = realm.getTypeAt(node);
-      const unit = getDefined(type.unit);
+      const unit = getDefined(
+        type.unit,
+        `no unit for ${identifier}, which probably means that ${identifier} is not a number`
+      );
       return Scalar.fromValue(multiplyMultipliers(unit));
     }
     case 'externalref': {

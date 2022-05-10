@@ -1757,8 +1757,8 @@ describe('type cohercion', () => {
 
 describe('unit qualities', () => {
   it('cannot be applied to numbers without units', async () => {
-    await expect(runCode('3 of sugar')).rejects.toThrow(
-      'Need one and only one unit'
+    expect(await runCode('3 of sugar')).toMatchInlineSnapshot(
+      `Result(Fraction { 3 } Error: Need one and only one unit)`
     );
   });
 

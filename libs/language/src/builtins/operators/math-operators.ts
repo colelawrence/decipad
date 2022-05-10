@@ -235,7 +235,12 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     noAutoconvert: true,
     argCount: 1,
     fn: ([n]) => {
-      let result = getInstanceof(n, Fraction).pow(0.5);
+      let result: Fraction | undefined;
+      try {
+        result = getInstanceof(n, Fraction).pow(0.5);
+      } catch (err) {
+        console.error(err);
+      }
       if (result == null) {
         // TODO: fraction.js gives us a null result when the result is non-rational
         // TODO: this is an approximation, so we should warn the user
