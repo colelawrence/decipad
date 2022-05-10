@@ -12,7 +12,7 @@ import {
 } from '../../utils';
 
 const wrapperStyles = css({
-  margin: 'auto',
+  margin: '0',
   marginBottom: '8px',
   paddingBottom: '6px',
 });
