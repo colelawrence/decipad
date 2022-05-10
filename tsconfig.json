@@ -41,6 +41,7 @@
         "libs/backend-test-sandbox/src/index.ts"
       ],
       "@decipad/backendtypes": ["libs/backendtypes/src/index.ts"],
+      "@decipad/computer": ["libs/computer/src/index.ts"],
       "@decipad/config": ["libs/config/src/index.ts"],
       "@decipad/docsync": ["libs/docsync/src/index.ts"],
       "@decipad/dom-test-utils": ["libs/dom-test-utils/src/index.ts"],

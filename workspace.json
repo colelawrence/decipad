@@ -198,6 +198,33 @@
         }
       }
     },
+    "computer": {
+      "root": "libs/computer",
+      "sourceRoot": "libs/computer/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/computer/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/computer"],
+          "options": {
+            "jestConfig": "libs/computer/jest.config.js"
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/computer"
+          }
+        }
+      }
+    },
     "config": {
       "root": "libs/config",
       "sourceRoot": "libs/config/src",
