@@ -61,13 +61,13 @@ describe('Notebook Topbar', () => {
     expect(getByText(/dup/i)).toBeVisible();
   });
 
-  it('renders the share button only when admin', () => {
+  it('renders the share button only when write or admin', () => {
     const { getByText, queryByText, rerender } = render(
       <WithProviders>
         <NotebookTopbar {...props} permission="WRITE" />
       </WithProviders>
     );
-    expect(queryByText(/share/i)).not.toBeInTheDocument();
+    expect(queryByText(/share/i)).toBeVisible();
 
     rerender(
       <WithProviders>
