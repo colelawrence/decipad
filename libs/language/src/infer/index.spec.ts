@@ -104,10 +104,7 @@ describe('ranges', () => {
     expect(await inferExpression(nilCtx, r)).toEqual(t.range(t.date('month')));
 
     expect(
-      await inferExpression(
-        nilCtx,
-        c('containsdate', r, date('2020-01', 'month'))
-      )
+      await inferExpression(nilCtx, c('contains', r, date('2020-01', 'month')))
     ).toEqual(t.boolean());
   });
 
@@ -136,7 +133,7 @@ describe('dates', () => {
     expect(
       await inferExpression(
         nilCtx,
-        c('dateequals', date('2020-01', 'month'), date('2020-01', 'month'))
+        c('==', date('2020-01', 'month'), date('2020-01', 'month'))
       )
     ).toEqual(t.boolean());
 
@@ -144,7 +141,7 @@ describe('dates', () => {
       (
         await inferExpression(
           nilCtx,
-          c('dateequals', date('2020-01-01', 'day'), date('2020-01', 'month'))
+          c('==', date('2020-01-01', 'day'), date('2020-01', 'month'))
         )
       ).errorCause
     ).not.toBeNull();

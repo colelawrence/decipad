@@ -854,7 +854,7 @@ describe('Dates', () => {
         Table = {
           Months = [ date(2020-09), date(2020-10), date(2020-11) ],
           MaybeEqualMonths = [ date(2020-09), date(2020-11), date(2020-10) ],
-          Days = dateequals(Months, MaybeEqualMonths)
+          Days = Months == MaybeEqualMonths
         }
       `)
     ).toMatchInlineSnapshot(`

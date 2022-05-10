@@ -119,6 +119,20 @@ export const orange800 = color(102, 56, 10);
 export const orange900 = color(51, 28, 5);
 
 //
+// yellow
+//
+export const yellow50 = color(255, 253, 243);
+export const yellow100 = color(255, 248, 217);
+export const yellow200 = color(255, 241, 179);
+export const yellow300 = color(255, 234, 142);
+export const yellow400 = color(255, 227, 104);
+export const yellow500 = color(255, 220, 66);
+export const yellow600 = color(245, 213, 72);
+export const yellow700 = color(181, 152, 25);
+export const yellow800 = color(102, 88, 26);
+export const yellow900 = color(51, 44, 13);
+
+//
 // red
 //
 export const red100 = color(252, 218, 218);

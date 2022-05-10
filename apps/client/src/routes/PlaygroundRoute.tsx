@@ -2,7 +2,7 @@ import { NoDocSyncEditor } from '@decipad/editor';
 import { EditorIcon, NotebookPage } from '@decipad/ui';
 import { ComponentProps, FC, useEffect, useState } from 'react';
 
-export function Playground(): ReturnType<FC> {
+export function PlaygroundRoute(): ReturnType<FC> {
   useEffect(() => {
     return () => {
       localStorage.clear();

@@ -3,17 +3,10 @@ import { ColumnSlice } from '../lazy/ColumnSlice';
 import { compare } from './compare-values';
 import { ColumnLike, FilteredColumn, MappedColumn, SlicesMap } from './Value';
 
-export function filterMap(
-  col: ColumnLike,
-  fn: (value: Value, index?: number) => boolean
-): boolean[] {
-  return col.values.map(fn);
-}
-
 export function sortMap(col: ColumnLike): number[] {
   const unsortedIndexes = Array.from({ length: col.rowCount }, (_, i) => i);
   return unsortedIndexes.sort((aIndex, bIndex) => {
-    return compare(col.values[aIndex], col.values[bIndex]);
+    return compare(col.atIndex(aIndex), col.atIndex(bIndex));
   });
 }
 
@@ -29,7 +22,7 @@ export function unique(col: ColumnLike): ColumnLike {
 
 function reverseMap(col: ColumnLike) {
   const length = col.rowCount;
-  return Array.from({ length: col.values.length }, (_, i) => length - i - 1);
+  return Array.from({ length }, (_, i) => length - i - 1);
 }
 
 export function reverse(col: ColumnLike): ColumnLike {

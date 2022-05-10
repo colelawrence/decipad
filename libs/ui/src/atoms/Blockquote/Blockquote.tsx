@@ -11,7 +11,7 @@ const styles = css(
   blockAlignment.blockquote.typography,
   setCssVar('currentTextColor', cssVar('weakTextColor')),
   {
-    margin: `${verticalMargin} auto`,
+    margin: `${verticalMargin} 0 0`,
     padding: `${verticalPadding} 30px ${verticalPadding} 12px`,
     borderLeft: `4px solid ${cssVar('highlightColor')}`,
     wordBreak: 'break-word',

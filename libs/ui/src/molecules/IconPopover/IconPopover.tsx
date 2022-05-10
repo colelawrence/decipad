@@ -1,7 +1,7 @@
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import * as Popover from '@radix-ui/react-popover';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { ColorPicker, Divider, NotebookIconButton } from '../../atoms';
 import * as icons from '../../icons';
 import { Close } from '../../icons';
@@ -68,13 +68,9 @@ export const IconPopover = ({
   onChangeIcon = noop,
   onChangeColor = noop,
 }: IconPopoverProps): ReturnType<FC> => {
-  const triggerWithCursey = React.cloneElement(trigger, {
-    style: { cursor: 'pointer' },
-  });
-
   return (
     <Popover.Root>
-      <Popover.Trigger asChild>{triggerWithCursey}</Popover.Trigger>
+      <Popover.Trigger asChild>{trigger}</Popover.Trigger>
       <Popover.Content css={contentWrapper}>
         <div css={contentHeaderWrapper}>
           <h2 css={contentHeaderText}>Pick a style</h2>

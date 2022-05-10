@@ -5,9 +5,9 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import { RequireSession } from '../components/RequireSession';
 import { RouteEvents } from '../components/RouteEvents';
 import { Home } from './Home';
-import { Notebook } from './Notebook';
-import { Playground } from './Playground';
-import { Workspace } from './Workspace';
+import { NotebookRoute } from './NotebookRoute';
+import { PlaygroundRoute } from './PlaygroundRoute';
+import { WorkspaceRoute } from './WorkspaceRoute';
 
 export function Router(): ReturnType<FC> {
   return (
@@ -34,7 +34,7 @@ export function Router(): ReturnType<FC> {
           <Route>
             <RequireSession>
               <RouteEvents category="workspace">
-                <Workspace />
+                <WorkspaceRoute />
               </RouteEvents>
             </RequireSession>
           </Route>
@@ -42,12 +42,12 @@ export function Router(): ReturnType<FC> {
       </Route>
       <Route path={notebooks.template + notebooks({}).notebook.template}>
         <RequireSession allowSecret>
-          <Notebook />
+          <NotebookRoute />
         </RequireSession>
       </Route>
       <Route exact path={playground.template}>
         <RouteEvents category="playground">
-          <Playground />
+          <PlaygroundRoute />
         </RouteEvents>
       </Route>
       <Route exact path="/verifyEmail">

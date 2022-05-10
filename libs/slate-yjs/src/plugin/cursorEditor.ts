@@ -34,8 +34,7 @@ export const CursorEditor = {
       const awareness = CursorEditor.awareness(editor);
       awareness.setLocalState({ ...awareness.getLocalState(), anchor, focus });
     } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error('Error updating the cursor position', err);
+      // don't care for now
     }
   },
 };

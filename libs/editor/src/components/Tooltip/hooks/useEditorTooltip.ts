@@ -9,7 +9,7 @@ import {
   isCollapsed,
   toggleList,
   toggleNodeType,
-  usePlateEditorState,
+  usePlateEditorRef,
 } from '@udecode/plate';
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { Editor, Element } from 'slate';
@@ -23,7 +23,7 @@ interface UseEditorTooltip {
 }
 
 export const useEditorTooltip = (): UseEditorTooltip => {
-  const editor = usePlateEditorState();
+  const editor = usePlateEditorRef();
   const ref = useRef<HTMLDivElement>(null);
   const [isActive, setIsActive] = useState(false);
   const [currentBlockType, setCurrentBlockType] = useState<null | string>(null);

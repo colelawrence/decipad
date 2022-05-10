@@ -7,7 +7,7 @@ const args = {
     name: "John's Workspace",
   },
   notebookName: 'Use of funds',
-  isAdmin: true,
+  isWriter: true,
 };
 export default {
   title: 'Molecules / UI / Notebook Top Bar / Path',

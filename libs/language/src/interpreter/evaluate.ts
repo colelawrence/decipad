@@ -104,7 +104,6 @@ export async function evaluate(
           const funcBody: AST.Block = customFunc.args[2];
 
           for (let i = 0; i < funcBody.args.length; i++) {
-            // TODO should this be parallel?
             // eslint-disable-next-line no-await-in-loop
             const value = await evaluate(realm, funcBody.args[i]);
 

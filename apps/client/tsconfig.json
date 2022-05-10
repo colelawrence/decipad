@@ -12,6 +12,15 @@
       "path": "../../libs/editor"
     },
     {
+      "path": "../../libs/editor-utils"
+    },
+    {
+      "path": "../../libs/editor-plugins"
+    },
+    {
+      "path": "../../libs/react-contexts"
+    },
+    {
       "path": "../../libs/interfaces"
     },
     {
@@ -28,6 +37,12 @@
     },
     {
       "path": "../../libs/toast"
+    },
+    {
+      "path": "../../libs/notebook"
+    },
+    {
+      "path": "../../libs/docsync"
     }
   ]
 }

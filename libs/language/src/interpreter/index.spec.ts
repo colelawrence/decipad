@@ -77,29 +77,17 @@ describe('ranges', () => {
 
     expect(await runOne(r)).toEqual([d('2020-01-01'), d('2020-12-01') - 1n]);
 
-    expect(
-      await runOne(c('containsdate', r, date('2020-01', 'month')))
-    ).toEqual(true);
-    expect(
-      await runOne(c('containsdate', r, date('2020-02', 'month')))
-    ).toEqual(true);
-    expect(
-      await runOne(c('containsdate', r, date('2020-11', 'month')))
-    ).toEqual(true);
-    expect(
-      await runOne(c('containsdate', r, date('2020-11-30', 'day')))
-    ).toEqual(true);
+    const rContains = (...args: Parameters<typeof date>) =>
+      runOne(c('contains', r, date(...args)));
 
-    expect(
-      await runOne(c('containsdate', r, date('2019-12-31', 'day')))
-    ).toEqual(false);
+    expect(await rContains('2020-01', 'month')).toEqual(true);
+    expect(await rContains('2020-02', 'month')).toEqual(true);
+    expect(await rContains('2020-11', 'month')).toEqual(true);
+    expect(await rContains('2020-11-30', 'day')).toEqual(true);
 
-    expect(
-      await runOne(c('containsdate', r, date('2020-12', 'month')))
-    ).toEqual(false);
-    expect(
-      await runOne(c('containsdate', r, date('2020-12-01', 'day')))
-    ).toEqual(false);
+    expect(await rContains('2019-12-31', 'day')).toEqual(false);
+    expect(await rContains('2020-12', 'month')).toEqual(false);
+    expect(await rContains('2020-12-01', 'day')).toEqual(false);
   });
 
   it('evaluates ranges of dates (2)', async () => {
@@ -260,15 +248,11 @@ describe('dates', () => {
 
   it('can evaluate date functions', async () => {
     expect(
-      await runOne(
-        c('dateequals', date('2021-10', 'month'), date('2021-11', 'month'))
-      )
+      await runOne(c('==', date('2021-10', 'month'), date('2021-11', 'month')))
     ).toEqual(false);
 
     expect(
-      await runOne(
-        c('dateequals', date('2021-10', 'month'), date('2021-10', 'month'))
-      )
+      await runOne(c('==', date('2021-10', 'month'), date('2021-10', 'month')))
     ).toEqual(true);
   });
 });

@@ -48,8 +48,9 @@ export const useDocSync = ({
   }, [authSecret, editor, notebookId, onError, onLoaded, readOnly]);
 
   useEffect(() => {
+    let localOnLoaded: OnLoadedCallback;
     if (docSync) {
-      const localOnLoaded: OnLoadedCallback = (source) => {
+      localOnLoaded = (source) => {
         if (docSync) {
           docSync.offLoaded(onLoaded);
         }
@@ -58,6 +59,11 @@ export const useDocSync = ({
 
       docSync.onLoaded(localOnLoaded);
     }
+    return () => {
+      if (docSync && localOnLoaded) {
+        docSync.offLoaded(localOnLoaded);
+      }
+    };
   }, [docSync, onLoaded]);
 
   return docSync;

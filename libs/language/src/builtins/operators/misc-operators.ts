@@ -1,6 +1,6 @@
 import Fraction from '@decipad/fraction';
 import { getInstanceof } from '../../utils';
-import { Date, fromJS } from '../../interpreter/Value';
+import { Date, Range, fromJS } from '../../interpreter/Value';
 import { Type, build as t } from '../../type';
 import { overloadBuiltin } from '../overloadBuiltin';
 import { BuiltinSpec } from '../interfaces';
@@ -42,6 +42,22 @@ export const miscOperators: Record<string, BuiltinSpec> = {
         );
       },
       functor: ([a, b]) => Type.combine(a.isDate(), b.isDate(), t.boolean()),
+    },
+    {
+      argTypes: ['range', 'date'],
+      fnValues: ([rangeV, dateD]) => {
+        const { start, end } = getInstanceof(rangeV, Range);
+        const startDate = getInstanceof(start, Date);
+        const endDate = getInstanceof(end, Date);
+        const date = getInstanceof(dateD, Date);
+
+        return fromJS(
+          startDate.getData() <= date.getData() &&
+            endDate.getData() >= date.getEnd()
+        );
+      },
+      functor: ([range, date]) =>
+        Type.combine(range.isRange(), date.isDate(), t.boolean()),
     },
   ]),
 };

@@ -41,19 +41,18 @@ type EditorIconProps = {
   readonly color: AvailableSwatchColor;
   readonly onChangeIcon?: (newIcon: UserIconKey) => void;
   readonly onChangeColor?: (newColor: AvailableSwatchColor) => void;
-
   readonly readOnly?: boolean;
 };
 
 export const EditorIcon = ({
   readOnly = false,
+  icon,
   ...props
 }: EditorIconProps): ReturnType<FC> => {
-  const Icon = icons[props.icon];
+  const Icon = icons[icon];
 
-  const IconWrapper = readOnly ? 'div' : 'button';
   const iconElement = (
-    <IconWrapper
+    <button
       css={[
         iconWrapperStyles,
         { backgroundColor: baseSwatches[props.color].rgb },
@@ -62,15 +61,11 @@ export const EditorIcon = ({
       <div css={iconStyles}>
         <Icon />
       </div>
-    </IconWrapper>
+    </button>
   );
   return (
     <div css={blockStyles}>
-      {readOnly ? (
-        iconElement
-      ) : (
-        <IconPopover {...props} trigger={iconElement} />
-      )}
+      <IconPopover {...props} trigger={iconElement} />
     </div>
   );
 };

@@ -51,7 +51,7 @@ export default gql`
     createPad(workspaceId: ID!, pad: PadInput!): Pad!
     updatePad(id: ID!, pad: PadInput!): Pad!
     removePad(id: ID!): Boolean
-    duplicatePad(id: ID!, targetWorkspace: ID): Pad!
+    duplicatePad(id: ID!, targetWorkspace: ID, document: String): Pad!
     importPad(workspaceId: ID!, source: String!): Pad!
 
     setPadPublic(id: ID!, isPublic: Boolean!): Pad!

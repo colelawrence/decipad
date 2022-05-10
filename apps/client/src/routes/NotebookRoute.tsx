@@ -1,5 +1,7 @@
+/* eslint-disable no-alert */
+/* eslint-disable no-restricted-globals */
+import { ComponentProps, FC, useCallback, useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { Editor } from '@decipad/editor';
 import {
   PermissionType,
   UpdateNotebookIcon,
@@ -21,21 +23,28 @@ import {
   EditorIcon,
   ErrorPage,
   LoadingSpinnerPage,
-  NotebookPage,
   NotebookTopbar,
+  ToastDisplay,
 } from '@decipad/ui';
 import Head from 'next/head';
-import { ComponentProps, FC, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { Notebook } from '@decipad/notebook';
+import { PlateEditor } from '@udecode/plate';
+import { serializeDocument } from '@decipad/editor-utils';
+import { DocSyncEditor } from '@decipad/docsync';
 import { parseIconColorFromIdentifier } from '../lib/parseIconColorFromIdentifier';
 
 type Icon = ComponentProps<typeof EditorIcon>['icon'];
 type IconColor = ComponentProps<typeof EditorIcon>['color'];
 
-export const Notebook = (): ReturnType<FC> => {
+export const NotebookRoute = (): ReturnType<FC> => {
+  const [editor, setEditor] = useState<PlateEditor | undefined>();
+  const [docsync, setDocsync] = useState<DocSyncEditor | undefined>();
+
   const history = useHistory();
+
   const {
-    notebook: { id },
+    notebook: { id: notebookId },
     secret,
   } = useRouteParams(notebooks({}).notebook);
 
@@ -47,8 +56,8 @@ export const Notebook = (): ReturnType<FC> => {
   const [iconColor, setIconColor] = useState<IconColor>('Catskill');
 
   // Queries
-  const { notebook, notebookReadOnly, notebookLoading } = useGetNotebookById(
-    id,
+  const { notebook, notebookLoading, readOnly } = useGetNotebookById(
+    notebookId,
     secret
   );
 
@@ -57,7 +66,7 @@ export const Notebook = (): ReturnType<FC> => {
 
   // Mutations
   const [unshareNotebook] = useUnshareNotebookWithSecret(
-    notebook?.id || '',
+    notebookId,
     notebook && notebook?.access.secrets.length > 0
       ? notebook?.access.secrets[0].secret
       : ''
@@ -66,6 +75,7 @@ export const Notebook = (): ReturnType<FC> => {
     notebook?.id || '',
     PermissionType.READ
   );
+
   const [duplicateNotebook] = useDuplicateNotebook(
     notebook?.id || '',
     notebook?.workspace.id || '',
@@ -76,6 +86,31 @@ export const Notebook = (): ReturnType<FC> => {
     UpdateNotebookIcon,
     UpdateNotebookIconVariables
   >(UPDATE_NOTEBOOK_ICON);
+
+  const onIconChange = useCallback(
+    (newIcon: string) => {
+      updateNotebookIcon({
+        variables: {
+          id: notebookId,
+          icon: newIcon,
+        },
+      });
+    },
+    [notebookId, updateNotebookIcon]
+  );
+
+  const onIconColorChange = useCallback(
+    (newIconColor: string) => {
+      setIconColor(newIconColor as IconColor);
+      updateNotebookIcon({
+        variables: {
+          id: notebookId,
+          icon: `${icon}-${newIconColor}`,
+        },
+      });
+    },
+    [icon, notebookId, updateNotebookIcon]
+  );
 
   // Set the share toggle button to be active if the notebook has secrets
   useEffect(() => {
@@ -95,22 +130,31 @@ export const Notebook = (): ReturnType<FC> => {
     }
   }, [notebook]);
 
-  const onShareToggleClick = async () => {
+  const onShareToggleClick = useCallback(async () => {
     if (sharingSecret) {
       unshareNotebook();
       setSharingSecret('');
     } else {
       await shareNotebook();
     }
-  };
+  }, [shareNotebook, sharingSecret, unshareNotebook]);
 
-  const onDuplicateNotebook = async () => {
+  const onDuplicateNotebook = useCallback(async () => {
     const [firstWorkspace] =
       workspaces ?? (await fetchWorkspaces({ asdf: 42 })).data.workspaces;
+
+    if (!editor) {
+      return;
+    }
+    const duplicateParams = {
+      id: notebookId,
+      targetWorkspace: firstWorkspace.id,
+      document: serializeDocument(editor),
+    };
     const { errors } = await duplicateNotebook({
       // This callback cannot run from a render where notebook is not defined
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      variables: { id: notebook!.id, targetWorkspace: firstWorkspace.id },
+      variables: duplicateParams,
     });
 
     if (errors) {
@@ -120,7 +164,20 @@ export const Notebook = (): ReturnType<FC> => {
     history.push(
       workspacesRoute({}).workspace({ workspaceId: firstWorkspace.id }).$
     );
-  };
+  }, [
+    duplicateNotebook,
+    editor,
+    fetchWorkspaces,
+    history,
+    notebookId,
+    toast,
+    workspaces,
+  ]);
+
+  const onRevertChanges = useCallback(async () => {
+    await docsync?.removeLocalChanges();
+    window.location.reload();
+  }, [docsync]);
 
   if (notebookLoading) {
     return <LoadingSpinnerPage />;
@@ -129,6 +186,7 @@ export const Notebook = (): ReturnType<FC> => {
   if (!notebook) {
     return <ErrorPage Heading="h1" wellKnown="404" authenticated />;
   }
+
   return (
     <>
       <Head>
@@ -136,51 +194,40 @@ export const Notebook = (): ReturnType<FC> => {
           {notebook.name ? notebook.name : 'Make sense of numbers'} — Decipad
         </title>
       </Head>
-      <NotebookPage
-        notebook={
-          <Editor
-            notebookId={id}
-            readOnly={notebookReadOnly}
-            authSecret={secret}
-          />
-        }
-        notebookIcon={
-          <EditorIcon
-            readOnly={notebookReadOnly}
-            color={iconColor}
-            icon={icon}
-            onChangeIcon={(newIcon) => {
-              setIcon(newIcon);
-              updateNotebookIcon({
-                variables: {
-                  id: notebook.id,
-                  icon: `${newIcon}-${iconColor}`,
-                },
-              });
-            }}
-            onChangeColor={(newIconColor) => {
-              setIconColor(newIconColor);
-              updateNotebookIcon({
-                variables: {
-                  id: notebook.id,
-                  icon: `${icon}-${newIconColor}`,
-                },
-              });
-            }}
-          />
-        }
-        topbar={
-          <NotebookTopbar
-            workspace={notebook.workspace}
-            notebook={notebook}
-            usersWithAccess={notebook.access.users}
-            permission={notebook.myPermissionType}
-            sharingSecret={sharingSecret}
-            onToggleShare={onShareToggleClick}
-            onDuplicateNotebook={onDuplicateNotebook}
-          />
-        }
-      />
+      <ToastDisplay>
+        <Notebook
+          notebookId={notebookId}
+          readOnly={readOnly}
+          isWriter={!readOnly}
+          secret={secret}
+          onEditor={setEditor}
+          onDocsync={setDocsync}
+          icon={
+            <EditorIcon
+              color={iconColor}
+              icon={icon}
+              onChangeIcon={(newIcon) => {
+                setIcon(newIcon as Icon);
+                onIconChange(`${newIcon}-${iconColor}`);
+              }}
+              onChangeColor={onIconColorChange}
+            />
+          }
+          topbar={
+            <NotebookTopbar
+              workspace={notebook.workspace}
+              notebook={notebook}
+              usersWithAccess={notebook.access.users}
+              permission={notebook.myPermissionType}
+              sharingSecret={sharingSecret}
+              onToggleShare={onShareToggleClick}
+              onDuplicateNotebook={onDuplicateNotebook}
+              hasLocalChanges={docsync?.hasLocalChanges()}
+              onRevertChanges={onRevertChanges}
+            />
+          }
+        ></Notebook>
+      </ToastDisplay>
     </>
   );
 };

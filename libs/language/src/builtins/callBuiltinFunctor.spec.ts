@@ -24,14 +24,11 @@ const nilCtx = makeContext();
 describe('callBuiltin', () => {
   it('dateCmpFunctor', () => {
     expect(
-      callBuiltinFunctor(nilCtx, 'dateequals', [
-        t.date('month'),
-        t.date('month'),
-      ])
+      callBuiltinFunctor(nilCtx, '==', [t.date('month'), t.date('month')])
     ).toEqual(t.boolean());
 
     expect(
-      callBuiltinFunctor(nilCtx, 'dategte', [t.date('day'), t.date('month')])
+      callBuiltinFunctor(nilCtx, '>=', [t.date('day'), t.date('month')])
         .errorCause
     ).not.toBeNull();
   });

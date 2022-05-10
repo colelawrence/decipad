@@ -2,24 +2,8 @@ import { workspaces } from '@decipad/routing';
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Slash } from '../../icons';
-import {
-  cssVar,
-  p15Medium,
-  setCssVar,
-  smallestDesktop,
-} from '../../primitives';
+import { cssVar, p15Medium, setCssVar } from '../../primitives';
 import { Anchor } from '../../utils';
-
-const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
-
-const wrapperStyles = css({
-  display: 'flex',
-  alignItems: 'center',
-  gap: '0.5rem',
-  [smallScreenQuery]: {
-    display: 'none',
-  },
-});
 
 const workspaceNameStyles = css(p15Medium, {
   ...setCssVar('currentTextColor', cssVar('weakTextColor')),
@@ -41,19 +25,19 @@ const iconStyles = css({
 });
 
 interface NotebookPathProps {
-  isAdmin: boolean;
+  isWriter: boolean;
   notebookName: string;
   workspace: { id: string; name: string };
 }
 
 export const NotebookPath = ({
-  isAdmin,
+  isWriter,
   workspace,
   notebookName,
 }: NotebookPathProps): ReturnType<FC> => {
   return (
-    <div css={wrapperStyles}>
-      {isAdmin && (
+    <div css={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+      {isWriter && (
         <>
           <Anchor
             href={workspaces({}).workspace({ workspaceId: workspace.id }).$}

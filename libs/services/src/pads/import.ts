@@ -5,11 +5,19 @@ import { Element as SlateElement } from 'slate';
 import { create as createContent } from '../pad-content';
 import { create as createPad } from './create';
 
-export async function importDoc(
-  workspaceId: string,
-  source: string,
-  user: User
-): Promise<PadRecord> {
+export interface ImportDocProps {
+  workspaceId: string;
+  source: string;
+  user: User;
+  pad?: PadRecord;
+}
+
+export async function importDoc({
+  workspaceId,
+  source,
+  user,
+  pad,
+}: ImportDocProps): Promise<PadRecord> {
   let doc: Element[] | undefined;
   try {
     const root = JSON.parse(source);
@@ -29,7 +37,10 @@ export async function importDoc(
     throw Boom.notAcceptable('no document to import');
   }
 
-  const pad = await createPad(workspaceId, { name: 'Imported notebook' }, user);
+  if (!pad) {
+    pad = await createPad(workspaceId, { name: 'Imported notebook' }, user);
+  }
+
   await createContent(pad.id, doc);
   return pad;
 }

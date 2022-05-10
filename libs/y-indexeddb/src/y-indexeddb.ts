@@ -180,4 +180,10 @@ export class IndexeddbPersistence extends Observable<string> {
     const db = await this._db;
     await db.close();
   }
+
+  async remove(): Promise<void> {
+    await maybeWithStore(this, true, async (store) => {
+      store.clear();
+    });
+  }
 }
