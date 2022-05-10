@@ -2,8 +2,24 @@ import { workspaces } from '@decipad/routing';
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Slash } from '../../icons';
-import { cssVar, p15Medium, setCssVar } from '../../primitives';
+import {
+  cssVar,
+  p15Medium,
+  setCssVar,
+  smallestDesktop,
+} from '../../primitives';
 import { Anchor } from '../../utils';
+
+const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
+
+const wrapperStyles = css({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '0.5rem',
+  [smallScreenQuery]: {
+    display: 'none',
+  },
+});
 
 const workspaceNameStyles = css(p15Medium, {
   ...setCssVar('currentTextColor', cssVar('weakTextColor')),
@@ -36,7 +52,7 @@ export const NotebookPath = ({
   notebookName,
 }: NotebookPathProps): ReturnType<FC> => {
   return (
-    <div css={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+    <div css={wrapperStyles}>
       {isWriter && (
         <>
           <Anchor
