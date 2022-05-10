@@ -90,8 +90,8 @@ This operation requires a range and a number was entered
 You are calling a function with a wrong argument. For instance in the function below we are trying to see if a number contains a date, which doesn't make sense.
 
 ```deci live
-containsdate(5, date(2050-Feb-02 15:30))
-==> This operation requires a range and a number was entered
+splitby(1, 2)
+==> This operation requires a table or row and a number was entered
 ```
 
 ## Expected primitive

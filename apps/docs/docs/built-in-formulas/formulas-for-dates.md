@@ -6,31 +6,13 @@ sidebar_position: 20
 
 Built-in formulas that operate on dates:
 
-## containsdate
+## contains
 
-This formula gives you the ability to check whether a certain range contains a specific date:
+This operator gives you the ability to check whether a certain range contains a specific date:
 
 ```deci live
 Range = range(date(2050-Jan-01) through date(2050-Dec-31))
-containsdate(Range, date(2050-Feb-02 15:30))
-==> true
-```
-
-## dateequals
-
-This formula allows you to compare if two dates are equal:
-
-```deci live
-dateequals(date(2050-Jan-01), date(2050-Dec-31))
-==> false
-```
-
-## dategte
-
-This formula allows you to compare if one date is greater or equal to other:
-
-```deci live
-dategte(date(2050-Jan-01), date(2025-Jun-01))
+Range contains date(2050-Feb-02 15:30)
 ==> true
 ```
 

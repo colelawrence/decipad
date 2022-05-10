@@ -59,7 +59,6 @@ export async function evaluateTargets(
 
   for (const block of program) {
     for (const statement of block.args) {
-      // TODO should this be parallel?
       // eslint-disable-next-line no-await-in-loop
       const value: Value = await evaluateStatement(realm, statement);
 

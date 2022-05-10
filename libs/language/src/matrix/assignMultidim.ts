@@ -53,7 +53,7 @@ export async function evaluateMultidimAssignment(
     }
 
     let targetIndex = 0;
-    getAssignee = () => assignee.values[targetIndex++];
+    getAssignee = () => assignee.atIndex(targetIndex++);
   }
 
   return Column.fromValues(

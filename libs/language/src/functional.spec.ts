@@ -12,7 +12,7 @@ describe('use of funds document', () => {
       IncomeTax = 20%
 
       CostToBusiness(Month Salary StartDate Bonus) = (
-        if dategte(Month, StartDate)
+        if Month >= StartDate
           then Salary + (Salary * 20%) + (if Bonus then Salary * 20% else 0)
           else 0
       )
@@ -131,7 +131,7 @@ Array [
             Bonus = [false, true, false]
           }
 
-          IsWorking(Month StartDate) = dategte(Month, StartDate)
+          IsWorking(Month StartDate) = Month >= StartDate
 
           CostToBusiness(Month, Salary, StartDate, GetsBonus) = if IsWorking(Month, StartDate)
               then Salary + (Salary * 20%) + (if GetsBonus then Salary * 30% else 0)
@@ -429,7 +429,7 @@ ${'' /* Get capital needed */}
         }
 
         Valuation = given MarketData:
-          if dategte Portfolio.PurchaseDate MarketData.Date
+          if Portfolio.PurchaseDate >= MarketData.Date
             then [MarketData.Date, Portfolio.Quantity * MarketData.Prices]
             else [MarketData.Date, 0]
       `,
