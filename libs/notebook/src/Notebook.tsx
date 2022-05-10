@@ -111,9 +111,9 @@ export const Notebook = ({
   const [session] = useSession();
   const warning: string | false =
     readOnly &&
-    `Changes to this notebook are not saved.${
+    `Changes to this notebook are not saved${
       (session?.user &&
-        'Please Duplicate to customize and make it your own.') ||
+        '. Please duplicate to customize and make it your own.') ||
       ''
     }`;
   const [toastedWarning, setToastedWarning] = useState(false);
