@@ -127,7 +127,11 @@ const resolvers = {
 
     async duplicatePad(
       _: unknown,
-      { id, targetWorkspace }: { id: ID; targetWorkspace?: string },
+      {
+        id,
+        targetWorkspace,
+        document,
+      }: { id: ID; targetWorkspace?: string; document?: string },
       context: GraphqlContext
     ): Promise<Pad> {
       const resource = `/pads/${id}`;
@@ -150,10 +154,17 @@ const resolvers = {
         context,
         'WRITE'
       );
+
       const clonedPad = await createPad2(workspaceId, previousPad, user);
-
+      if (document) {
+        return importDoc({
+          workspaceId,
+          source: document,
+          user,
+          pad: clonedPad,
+        });
+      }
       await duplicateSharedDoc(id, clonedPad.id, previousPad.name);
-
       return clonedPad;
     },
 
@@ -192,7 +203,7 @@ const resolvers = {
         'WRITE'
       );
 
-      return importDoc(workspaceId, source, user);
+      return importDoc({ workspaceId, source, user });
     },
   },
 

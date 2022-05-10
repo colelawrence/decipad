@@ -13,6 +13,7 @@ import { TEditor } from '@udecode/plate';
 import EventEmitter from 'events';
 import { Awareness } from 'y-protocols/awareness';
 import { Array as YArray, Doc as YDoc, Map as YMap, Text as YText } from 'yjs';
+import { BehaviorSubject } from 'rxjs';
 import * as DocTypes from './types';
 
 interface Options {
@@ -50,6 +51,8 @@ export type DocSyncEditor = TEditor &
     destroy: () => void;
     connect: () => void;
     disconnect: () => void;
+    hasLocalChanges: () => BehaviorSubject<boolean>;
+    removeLocalChanges: () => Promise<void>;
     connected: boolean;
   };
 
@@ -118,6 +121,19 @@ function docSyncEditor<E extends TEditor>(
     });
   }
 
+  const hasLocalChanges = new BehaviorSubject<boolean>(false);
+
+  store.once('synced', () => {
+    let savedCount = 0;
+    events.on('saved', () => {
+      savedCount += 1;
+      if (savedCount > 1) {
+        savedCount = 1;
+        hasLocalChanges.next(true);
+      }
+    });
+  });
+
   const useEditor = Object.assign(editor, {
     onLoaded(cb: OnLoadedCallback) {
       events.on('loaded', cb);
@@ -157,6 +173,12 @@ function docSyncEditor<E extends TEditor>(
     },
     get connected() {
       return isConnected;
+    },
+    hasLocalChanges() {
+      return hasLocalChanges;
+    },
+    removeLocalChanges() {
+      return store.remove();
     },
   });
 
@@ -242,8 +264,6 @@ export function createDocSyncEditor(
 
   // Sync editor
   const syncEditor = docSyncEditor(cursorEditor, shared, doc, store, wsp);
-  syncEditor.destroy = () => {
-    store.destroy();
-  };
+  syncEditor.destroy = () => store.destroy();
   return syncEditor;
 }

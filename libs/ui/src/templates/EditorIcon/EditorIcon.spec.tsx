@@ -13,15 +13,7 @@ it('renders the initial icon', () => {
   expect(getByTitle(/spider/i)).toBeInTheDocument();
 });
 
-describe('when not readonly', () => {
-  it('has a popup', () => {
-    const { queryByRole } = render(<EditorIcon {...props} readOnly={false} />);
-    expect(queryByRole('button')).toBeInTheDocument();
-  });
-});
-describe('when readonly', () => {
-  it('does not have a popup', () => {
-    const { queryByRole } = render(<EditorIcon {...props} readOnly />);
-    expect(queryByRole('button')).not.toBeInTheDocument();
-  });
+it('has a popup', () => {
+  const { queryByRole } = render(<EditorIcon {...props} readOnly={false} />);
+  expect(queryByRole('button')).toBeInTheDocument();
 });

@@ -36,7 +36,7 @@ export const GET_PAD_BY_ID = gql`
 
 type UseGetNotebookById = {
   notebook?: GetPadById_getPadById | null;
-  notebookReadOnly: boolean;
+  readOnly: boolean;
   notebookLoading: boolean;
 };
 
@@ -56,7 +56,7 @@ export const useGetNotebookById = (
 
   return {
     notebook: data?.getPadById,
-    notebookReadOnly: data?.getPadById?.myPermissionType === 'READ',
+    readOnly: data?.getPadById?.myPermissionType === 'READ',
     notebookLoading: loading,
   };
 };

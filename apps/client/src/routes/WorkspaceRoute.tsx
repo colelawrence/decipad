@@ -33,7 +33,7 @@ import { SideMenu } from '../components/SideMenu';
 import { Topbar } from '../components/Topbar';
 import { parseIconColorFromIdentifier } from '../lib/parseIconColorFromIdentifier';
 
-export function Workspace(): ReturnType<FC> {
+export function WorkspaceRoute(): ReturnType<FC> {
   const { workspaceId } = useRouteParams(workspaces({}).workspace);
   const history = useHistory();
 

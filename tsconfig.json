@@ -110,7 +110,8 @@
       "@decipad/editor-components": ["libs/editor-components/src/index.ts"],
       "@decipad/editor-table": ["libs/editor-table/src/index.ts"],
       "@decipad/editor-variable-def": ["libs/editor-variable-def/src/index.ts"],
-      "@decipad/toast": ["libs/toast/src/index.ts"]
+      "@decipad/toast": ["libs/toast/src/index.ts"],
+      "@decipad/notebook": ["libs/notebook/src/index.ts"]
     }
   },
   "files": [],

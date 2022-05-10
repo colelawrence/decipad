@@ -2,7 +2,8 @@ import { docs, workspaces } from '@decipad/routing';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { useSession } from 'next-auth/client';
-import { ComponentProps, FC, useContext } from 'react';
+import { ComponentProps, FC, useContext, useEffect, useState } from 'react';
+import { BehaviorSubject } from 'rxjs';
 import { ClientEventsContext } from '../../../../client-events/src';
 import { Button, IconButton } from '../../atoms';
 import { LeftArrow } from '../../icons';
@@ -62,25 +63,36 @@ export type NotebookTopbarProps = Pick<
     permission: PermissionType;
 
     onDuplicateNotebook?: () => void;
+    onRevertChanges?: () => void;
+    hasLocalChanges?: BehaviorSubject<boolean>;
   };
 
 export const NotebookTopbar = ({
   workspace,
   notebook,
   onDuplicateNotebook = noop,
+  onRevertChanges = noop,
   usersWithAccess,
   permission,
+  hasLocalChanges: hasLocalChanges$,
   ...sharingProps
 }: NotebookTopbarProps): ReturnType<FC> => {
   const [session] = useSession();
-  const isAdmin = permission === 'ADMIN';
+  const isWriter = permission === 'ADMIN' || permission === 'WRITE';
   const clientEvent = useContext(ClientEventsContext);
+  const [hasLocalChanges, setHasLocalChanges] = useState(false);
+  useEffect(() => {
+    const subscription = hasLocalChanges$?.subscribe(setHasLocalChanges);
+    return () => {
+      subscription?.unsubscribe();
+    };
+  }, [hasLocalChanges$]);
 
   return (
     <div css={wrapperStyles}>
       {/* Left side */}
       <div css={leftSideStyles}>
-        {isAdmin && (
+        {isWriter && (
           <div css={{ width: '32px', display: 'grid' }}>
             <IconButton
               href={workspaces({}).workspace({ workspaceId: workspace.id }).$}
@@ -90,7 +102,7 @@ export const NotebookTopbar = ({
           </div>
         )}
         <NotebookPath
-          isAdmin={isAdmin}
+          isWriter={isWriter}
           workspace={workspace}
           notebookName={notebook.name}
         />
@@ -98,7 +110,7 @@ export const NotebookTopbar = ({
 
       {/* Right side */}
       <div css={rightSideStyles}>
-        {isAdmin && (
+        {isWriter && (
           <div css={linksStyles}>
             <em css={helpLinkStyles}>
               <Anchor
@@ -132,8 +144,12 @@ export const NotebookTopbar = ({
         )}
         <NotebookAvatars usersWithAccess={usersWithAccess} />
 
+        {!isWriter && hasLocalChanges && (
+          <Button onClick={() => onRevertChanges()}>Revert changes</Button>
+        )}
+
         {session?.user ? (
-          isAdmin ? (
+          isWriter ? (
             <NotebookSharingPopUp notebook={notebook} {...sharingProps} />
           ) : (
             <Button onClick={() => onDuplicateNotebook()}>

@@ -1,17 +1,17 @@
 import type { Property } from 'csstype';
 import {
-  offBlack,
-  brand500,
+  brand300,
   grey100,
   grey200,
   grey300,
   grey400,
   grey500,
   grey600,
+  offBlack,
   offWhite,
-  orange500,
   red500,
   white,
+  yellow600,
 } from './color';
 
 export interface CssVariables {
@@ -43,9 +43,9 @@ export interface CssVariables {
 }
 
 const defaults: CssVariables = {
-  successColor: brand500.rgb,
+  successColor: brand300.rgb,
   dangerColor: red500.rgb,
-  warningColor: orange500.rgb,
+  warningColor: yellow600.rgb,
 
   backgroundColor: white.rgb,
   iconBackgroundColor: grey200.rgb,

@@ -1,10 +1,26 @@
 import { ToastType } from '@decipad/toast';
 import { css } from '@emotion/react';
+import { useEffect, useState } from 'react';
 import { Success, Warning } from '../../icons';
-import { offBlack, cssVar, p14Regular, transparency } from '../../primitives';
+import {
+  brand100,
+  brand700,
+  cssVar,
+  grey200,
+  grey600,
+  offBlack,
+  p14Regular,
+  red200,
+  red700,
+  toastTransitionDelay,
+  transparency,
+  yellow200,
+  yellow700,
+} from '../../primitives';
 
 type ToastProps = {
   readonly appearance: ToastType;
+  readonly autoDismiss?: boolean | number;
 };
 
 const getAppearanceType = (appearance: ToastType) => {
@@ -20,10 +36,40 @@ const getAppearanceType = (appearance: ToastType) => {
 
 const getIconType = (appearance: ToastType) => {
   const type = {
-    error: <Warning />,
-    info: <Success />,
-    success: <Success />,
-    warning: <Warning />,
+    error: (
+      <span
+        css={css({ '> svg > path': { stroke: red700.rgb, fill: red200.rgb } })}
+      >
+        <Warning />
+      </span>
+    ),
+    info: (
+      <span
+        css={css({
+          '> svg > path': { stroke: grey600.rgb, fill: grey200.rgb },
+        })}
+      >
+        <Success />
+      </span>
+    ),
+    success: (
+      <span
+        css={css({
+          '> svg > path': { stroke: brand700.rgb, fill: brand100.rgb },
+        })}
+      >
+        <Success />
+      </span>
+    ),
+    warning: (
+      <span
+        css={css({
+          '> svg > path': { stroke: yellow700.rgb, fill: yellow200.rgb },
+        })}
+      >
+        <Warning />
+      </span>
+    ),
   };
 
   return type[appearance];
@@ -39,7 +85,35 @@ const baseStyles = css(p14Regular, {
 
   padding: '6px 12px',
   marginBottom: '8px',
-  maxWidth: '300px',
+  maxWidth: '350px',
+  gap: '6px',
+});
+
+const collapsedBaseStyles = css(baseStyles, {
+  gap: '0px',
+  borderRadius: '999px',
+  padding: '6px',
+  lineHeight: p14Regular.lineHeight,
+  height: '28px',
+  width: '28px',
+
+  '& > p': {
+    maxWidth: '0px',
+    maxHeight: '0px',
+    overflow: 'hidden',
+  },
+
+  '&:hover': {
+    borderRadius: '8px',
+    padding: '6px 12px',
+    gap: '6px',
+    width: 'unset',
+    height: 'unset',
+    '& > p': {
+      maxWidth: '100%',
+      maxHeight: '100%',
+    },
+  },
 });
 
 const errorStyle = css(baseStyles, {
@@ -59,7 +133,7 @@ const successStyle = css(baseStyles, {
 
 const warningStyle = css(baseStyles, {
   backgroundColor: cssVar('warningColor'),
-  color: cssVar('backgroundColor'),
+  color: cssVar('strongTextColor'),
 });
 
 const iconStyles = css({
@@ -67,17 +141,32 @@ const iconStyles = css({
   height: '16px',
 
   display: 'grid',
-  marginRight: '6px',
 });
 
 export const Toast: React.FC<React.PropsWithChildren<ToastProps>> = ({
   appearance,
   children,
+  autoDismiss = true,
 }) => {
+  const [collapsed, setCollapsed] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => {
+      if (!autoDismiss) {
+        setCollapsed(true);
+      }
+    }, toastTransitionDelay);
+
+    return () => {
+      clearTimeout(t);
+    };
+  }, [autoDismiss]);
+
   return (
-    <div css={getAppearanceType(appearance)}>
+    <div
+      css={[getAppearanceType(appearance), collapsed && collapsedBaseStyles]}
+    >
       <span css={iconStyles}>{getIconType(appearance)}</span>
-      {children}
+      <p>{children}</p>
     </div>
   );
 };

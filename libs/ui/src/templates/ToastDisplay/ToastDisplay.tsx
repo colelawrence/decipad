@@ -1,6 +1,8 @@
+import { ComponentType } from 'react';
 import { ToastContext } from '@decipad/toast';
 import * as ReactToastNotifications from 'react-toast-notifications';
 import { Toast } from '../../atoms';
+import { toastTransitionDelay } from '../../primitives';
 
 const ToastProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   children,
@@ -8,8 +10,8 @@ const ToastProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   const { addToast } = ReactToastNotifications.useToasts();
   return (
     <ToastContext.Provider
-      value={(message, type) => {
-        addToast(message, { appearance: type });
+      value={(message, type, options = {}) => {
+        addToast(message, { appearance: type, ...options });
       }}
     >
       {children}
@@ -22,8 +24,11 @@ export const ToastDisplay: React.FC<React.PropsWithChildren<unknown>> = ({
 }) => {
   return (
     <ReactToastNotifications.ToastProvider
-      components={{ Toast }}
+      components={{
+        Toast: Toast as ComponentType<ReactToastNotifications.ToastProps>,
+      }}
       autoDismiss
+      autoDismissTimeout={toastTransitionDelay}
       placement="bottom-right"
     >
       <ToastProvider>{children}</ToastProvider>

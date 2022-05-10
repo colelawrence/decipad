@@ -1262,6 +1262,26 @@
           }
         }
       }
+    },
+    "notebook": {
+      "root": "libs/notebook",
+      "sourceRoot": "libs/notebook",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/notebook/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "typecheck": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn tsc -b libs/notebook"
+          }
+        }
+      }
     }
   }
 }

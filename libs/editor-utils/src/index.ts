@@ -18,3 +18,4 @@ export * from './normalizeIdentifierElement';
 export * from './isDOMNode';
 export * from './hasTarget';
 export * from './useSelection';
+export * from './serializeDocument';

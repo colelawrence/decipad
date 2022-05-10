@@ -1,48 +1,16 @@
-import {
-  useDocSync,
-  useNotebookTitlePlugin,
-  useUploadDataPlugin,
-} from '@decipad/editor-plugins';
-import {
-  ComputerContextProvider,
-  EditorReadOnlyContext,
-  ResultsContext,
-  useComputer,
-} from '@decipad/react-contexts';
+import { useUploadDataPlugin } from '@decipad/editor-plugins';
 import { EditorPlaceholder } from '@decipad/ui';
-import { captureException } from '@sentry/react';
-import { Plate, PlateProvider, usePlateEditorRef } from '@udecode/plate';
-import { FC, useCallback, useMemo, useState } from 'react';
+import { Plate, PlateEditor } from '@udecode/plate';
 import * as components from './components';
-import * as configuration from './configuration';
 
 export interface EditorProps {
   notebookId: string;
+  loaded: boolean;
   readOnly: boolean;
-  authSecret?: string;
+  editor: PlateEditor;
 }
 
-type InsidePlateProps = EditorProps & {
-  onLoaded: () => void;
-};
-
-const InsidePlate = ({
-  readOnly,
-  notebookId,
-  authSecret,
-  onLoaded,
-}: InsidePlateProps) => {
-  const editor = usePlateEditorRef();
-  // DocSync
-  useDocSync({
-    notebookId,
-    editor,
-    readOnly,
-    authSecret,
-    onError: captureException,
-    onLoaded,
-  });
-
+const InsidePlate = ({ notebookId, editor }: EditorProps) => {
   // upload / fetch data
   const {
     startUpload,
@@ -66,55 +34,18 @@ const InsidePlate = ({
   );
 };
 
-const EditorInternal = (props: EditorProps) => {
-  const { notebookId, readOnly } = props;
-  const [editorLoaded, setEditorLoaded] = useState(false);
-
-  const computer = useComputer();
-
-  const onLoaded = useCallback(() => {
-    setEditorLoaded(true);
-  }, []);
-
+export const Editor = (props: EditorProps) => {
+  const { loaded, editor } = props;
   // Cursor remote presence
   // useCursors(editor);
 
-  const notebookTitlePlugin = useNotebookTitlePlugin({
-    notebookId,
-    readOnly,
-  });
-
-  const editorPlugins = useMemo(
-    () => [...configuration.plugins(computer), notebookTitlePlugin],
-    [computer, notebookTitlePlugin]
-  );
+  if (!loaded || !editor) {
+    return <EditorPlaceholder />;
+  }
 
   return (
-    <EditorReadOnlyContext.Provider value={readOnly}>
-      <ResultsContext.Provider value={computer.results.asObservable()}>
-        {!editorLoaded && <EditorPlaceholder />}
-        <div css={{ display: editorLoaded ? 'unset' : 'none' }}>
-          <Plate
-            id={notebookId}
-            plugins={editorPlugins}
-            editableProps={{
-              readOnly,
-            }}
-          >
-            <InsidePlate {...props} onLoaded={onLoaded} />
-          </Plate>
-        </div>
-      </ResultsContext.Provider>
-    </EditorReadOnlyContext.Provider>
-  );
-};
-
-export const Editor = (props: EditorProps): ReturnType<FC> => {
-  return (
-    <PlateProvider id={props.notebookId}>
-      <ComputerContextProvider>
-        <EditorInternal key={props.notebookId} {...props} />
-      </ComputerContextProvider>
-    </PlateProvider>
+    <Plate editor={editor}>
+      <InsidePlate {...props} />
+    </Plate>
   );
 };

@@ -5,3 +5,5 @@ export const shortAnimationDuration = '120ms';
 // from showing up when the user is merely
 // moving the cursor quickly over the element.
 export const mouseMovingOverTransitionDelay = '20ms';
+
+export const toastTransitionDelay = 5000;

@@ -1,5 +1,4 @@
 import {
-  offBlack,
   brand500,
   grey100,
   grey200,
@@ -7,9 +6,10 @@ import {
   grey400,
   grey500,
   grey600,
-  orange500,
+  offBlack,
   red500,
   white,
+  yellow500,
 } from './color';
 import { cssVar, CssVariableKey, CssVariables, setCssVar } from './var';
 
@@ -19,7 +19,7 @@ export const darkTheme: Record<
 > = {
   ...setCssVar('successColor', brand500.rgb),
   ...setCssVar('dangerColor', red500.rgb),
-  ...setCssVar('warningColor', orange500.rgb),
+  ...setCssVar('warningColor', yellow500.rgb),
 
   ...setCssVar('backgroundColor', offBlack.rgb),
   ...setCssVar('iconBackgroundColor', grey500.rgb),

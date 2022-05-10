@@ -23,6 +23,7 @@ interface NotebookPageProps {
   readonly topbar?: ReactNode;
   readonly notebookIcon: ReactNode;
   readonly notebook: ReactNode;
+  readonly warning?: string | false;
 }
 
 export const NotebookPage: React.FC<NotebookPageProps> = ({
