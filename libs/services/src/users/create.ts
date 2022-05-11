@@ -37,6 +37,7 @@ async function createInitialWorkspace(
         workspace.id,
         {
           name: notebook.title,
+          icon: notebook.icon,
         },
         user
       );

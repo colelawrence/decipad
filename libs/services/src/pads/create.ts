@@ -14,8 +14,8 @@ export async function create(
   user: TableRecordIdentifier
 ): Promise<PadRecord> {
   const newPad = {
+    ...pad,
     id: nanoid(),
-    name: pad.name,
     workspace_id: workspaceId,
   };
 

@@ -178,10 +178,7 @@ type InlineElement = LinkElement;
 
 export type Element = BlockElement | InlineElement;
 
-export type Editor = Omit<
-  SlateEditor & PlateEditor & ReactEditor,
-  'children'
-> & {
+export type Document = {
   children: [
     H1Element,
     ...Array<
@@ -200,6 +197,9 @@ export type Editor = Omit<
     >
   ];
 };
+
+export type Editor = Omit<SlateEditor & PlateEditor & ReactEditor, 'children'> &
+  Document;
 
 type InlineDescendant = InlineElement | RichText;
 export type Descendant = Element | Text;

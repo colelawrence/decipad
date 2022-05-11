@@ -3,7 +3,7 @@
     {
       "children": [
         {
-          "text": "👋 Meet Decipad! Learn the basics"
+          "text": "Meet Decipad! Learn the basics"
         }
       ],
       "type": "h1",
@@ -70,7 +70,7 @@
           "text": "First things first. The notebook menu can be found "
         },
         {
-          "text": "by tpying / command on any paragraph",
+          "text": "by typing / command on any paragraph",
           "highlight": true,
           "underline": true
         },
@@ -100,7 +100,7 @@
     {
       "children": [
         {
-          "text": "Update your Rent on the widget bellow and see how the next calculation block updates. You will see your yearly rent expenses update."
+          "text": "Update your Rent on the widget below and see how the next calculation block updates. You will see your yearly rent expenses update."
         }
       ],
       "type": "callout",
@@ -135,7 +135,7 @@
     {
       "children": [
         {
-          "text": "Rent * 12"
+          "text": "Rent * (1 year in months)"
         }
       ],
       "type": "code_line"
