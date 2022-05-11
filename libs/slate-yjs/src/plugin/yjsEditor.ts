@@ -131,6 +131,7 @@ export function withYjs<T extends TEditor>(
 ): T & YjsEditor {
   const e = editor as T & YjsEditor;
 
+  let destroyed = false;
   e.sharedType = sharedType;
   SHARED_TYPES.set(editor, sharedType);
   LOCAL_OPERATIONS.set(editor, new Set());
@@ -139,13 +140,15 @@ export function withYjs<T extends TEditor>(
     const { selection } = editor;
     e.selection = null;
     setTimeout(() => {
-      YjsEditor.synchronizeValue(e);
-      if (
-        selection?.focus &&
-        isCollapsed(selection) &&
-        Editor.hasPath(editor, selection.focus.path)
-      ) {
-        e.selection = selection;
+      if (!destroyed) {
+        YjsEditor.synchronizeValue(e);
+        if (
+          selection?.focus &&
+          isCollapsed(selection) &&
+          Editor.hasPath(editor, selection.focus.path)
+        ) {
+          e.selection = selection;
+        }
       }
     }, 0);
   }
@@ -169,6 +172,7 @@ export function withYjs<T extends TEditor>(
   };
 
   e.destroy = () => {
+    destroyed = true;
     sharedType.unobserveDeep(observer);
     e.apply = apply;
     e.onChange = onChange;
