@@ -5,7 +5,7 @@ var url = function (url) {
   return BASE_URL + url;
 };
 
-var urlsToScan = ['', 'playground'];
+var urlsToScan = ['/', '/playground'];
 
 module.exports = {
   ci: {

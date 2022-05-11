@@ -108,3 +108,30 @@ jobs:
           avatar-url: "https://singlecolorimage.com/get/${{ needs.deploy.result == 'failure' && 'f6dae1' || 'd2ec7b' }}/100x100"
           discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
           include-details: false
+
+  lhci:
+    name: Lighthouse
+    runs-on: ubuntu-latest
+    needs:
+      - deploy
+
+    concurrency:
+      group: 'deploy-pr-lhci-${{ github.event.pull_request.number }}'
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: run Lighthouse CI
+        env:
+          LHCI_SERVER_BASE_URL: https://${{ github.event.pull_request.number }}.dev.decipad.com
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+        run: |
+          npm install puppeteer --force
+          npm install -g @lhci/cli@0.8.x
+          lhci autorun --isSinglePageApplication --url /
