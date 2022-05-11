@@ -43,7 +43,7 @@ import {
   createTrailingBlockPlugin,
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
-import { Computer } from '@decipad/language';
+import { Computer } from '@decipad/computer';
 import { createVariableDefPlugin } from '@decipad/editor-variable-def';
 import { components } from './components';
 import { autoformatRules } from './autoformat';

@@ -6,7 +6,7 @@ import {
   ELEMENT_VARIABLE_DEF,
   isElement,
 } from '@decipad/editor-types';
-import { Computer } from '@decipad/language';
+import { Computer } from '@decipad/computer';
 import { DECORATION_EXPRESSION_SYNTAX } from '../constants';
 import {
   VariableDef,

@@ -3,7 +3,7 @@ import {
   isExpression,
   parseOneBlock,
   parseOneExpression,
-} from '@decipad/language';
+} from '@decipad/computer';
 import { Node } from 'slate';
 import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeInteractiveElementOutput';
 

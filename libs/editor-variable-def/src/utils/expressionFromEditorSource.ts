@@ -1,4 +1,4 @@
-import { AST, Computer, Parser } from '@decipad/language';
+import { AST, Computer, Parser } from '@decipad/computer';
 
 interface ExpressionFromEditorNodesResult {
   expression?: AST.Statement;

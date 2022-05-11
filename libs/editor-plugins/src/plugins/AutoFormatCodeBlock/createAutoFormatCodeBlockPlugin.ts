@@ -6,7 +6,7 @@ import {
   ParagraphElement,
   RichText,
 } from '@decipad/editor-types';
-import { tokenize } from '@decipad/language';
+import { tokenize } from '@decipad/computer';
 import { pluginStore } from '@decipad/editor-utils';
 import { getBlockAbove, setNodes } from '@udecode/plate';
 import { NodeEntry, Node } from 'slate';

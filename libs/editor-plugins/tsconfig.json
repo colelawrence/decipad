@@ -8,7 +8,7 @@
   "include": ["src"],
   "references": [
     { "path": "../dom-test-utils" },
-    { "path": "../language" },
+    { "path": "../computer" },
     { "path": "../docsync" },
     { "path": "../queries" },
     { "path": "../utils" },

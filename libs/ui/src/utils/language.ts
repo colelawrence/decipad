@@ -1,3 +1,3 @@
-import { identifierRegExpGlobal } from '@decipad/language';
+import { identifierRegExpGlobal } from '@decipad/computer';
 
 export const identifierNamePattern = identifierRegExpGlobal;

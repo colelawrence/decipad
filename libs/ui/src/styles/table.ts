@@ -1,4 +1,4 @@
-import { SerializedType } from '@decipad/language';
+import { SerializedType } from '@decipad/computer';
 import { css, CSSObject } from '@emotion/react';
 import { isTabularType } from '../utils';
 

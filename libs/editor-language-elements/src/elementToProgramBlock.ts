@@ -1,5 +1,5 @@
 import { Element, Node } from '@decipad/editor-types';
-import { AST, ProgramBlock } from '@decipad/language';
+import { AST, ProgramBlock } from '@decipad/computer';
 import { astNode } from '@decipad/editor-utils';
 import { interactiveElementsByElementType } from './interactiveElements';
 

@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { InferError } from '@decipad/language';
+import { InferError } from '@decipad/computer';
 import { CodeError } from '../../atoms';
 import { CodeResultProps } from '../../types';
 

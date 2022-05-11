@@ -1,4 +1,4 @@
-import { AST } from '@decipad/language';
+import { AST } from '@decipad/computer';
 import { Element } from '@decipad/editor-types';
 
 export interface OutputNode {

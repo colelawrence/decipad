@@ -19,7 +19,7 @@ import {
   IdentifiedResult,
   delayErrors,
   defaultComputerResults,
-} from '@decipad/language';
+} from '@decipad/computer';
 
 export interface ResultsContextItem {
   readonly blockResults: {

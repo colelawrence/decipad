@@ -1,5 +1,5 @@
 import type { Editor } from '@decipad/editor-types';
-import { Program } from '@decipad/language';
+import { Program } from '@decipad/computer';
 import { elementToLanguageBlock } from './elementToProgramBlock';
 
 export const documentToProgram = (doc: Editor['children']): Program => {

@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { SerializedType } from '@decipad/language';
+import { SerializedType } from '@decipad/computer';
 import { encodingFor, PlotSpec } from './plotUtils';
 
 type KindSet = Set<SerializedType['kind']>;

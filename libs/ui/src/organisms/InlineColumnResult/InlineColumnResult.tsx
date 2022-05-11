@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { Interpreter } from '@decipad/language';
+import { Interpreter } from '@decipad/computer';
 import { CodeResult } from '../CodeResult/CodeResult';
 import { CodeResultProps } from '../../types';
 

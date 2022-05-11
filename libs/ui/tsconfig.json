@@ -8,7 +8,7 @@
   "include": ["src", "storybook"],
   "references": [
     { "path": "../dom-test-utils" },
-    { "path": "../language" },
+    { "path": "../computer" },
     { "path": "../react-contexts" },
     { "path": "../react-utils" },
     { "path": "../routing" },

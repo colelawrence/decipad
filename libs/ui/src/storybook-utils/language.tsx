@@ -1,4 +1,4 @@
-import { Result, SerializedTypeKind } from '@decipad/language';
+import { Result, SerializedTypeKind } from '@decipad/computer';
 import { DecoratorFn } from '@storybook/react';
 import { useEffect, useState } from 'react';
 import { runCode } from '../test-utils';

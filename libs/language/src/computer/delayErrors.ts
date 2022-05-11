@@ -1,12 +1,8 @@
 import { from, Observable, of, OperatorFunction, race } from 'rxjs';
 import { filter, mapTo, switchMap, distinctUntilChanged } from 'rxjs/operators';
 
-import {
-  ComputePanic,
-  ComputeResponse,
-  IdentifiedResult,
-} from '@decipad/language';
 import { timeout } from '@decipad/utils';
+import type { ComputePanic, ComputeResponse, IdentifiedResult } from '..';
 
 interface DelayErrorsArgs {
   shouldDelay$: Observable<boolean>;

@@ -6,7 +6,7 @@ import {
   Result,
   SerializedType,
   stringifyUnits,
-} from '@decipad/language';
+} from '@decipad/computer';
 import { ResultTable } from 'libs/language/src/interpreter/interpreter-types';
 
 export type DisplayProps = {

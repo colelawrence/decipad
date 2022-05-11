@@ -6,7 +6,7 @@ import {
   ELEMENT_TD,
   ELEMENT_TR,
 } from '@decipad/editor-types';
-import { stringifyUnits } from '@decipad/language';
+import { stringifyUnits } from '@decipad/computer';
 import { DECORATION_CELL_UNIT } from '../constants';
 import { TableCellUnitLeaf } from '../components';
 import { DecorationCellUnit } from '../types';

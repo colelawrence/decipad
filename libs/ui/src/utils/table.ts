@@ -1,4 +1,4 @@
-import { SerializedType, SerializedUnits, Time } from '@decipad/language';
+import { SerializedType, SerializedUnits, Time } from '@decipad/computer';
 import { createContext, FunctionComponent } from 'react';
 import {
   All,

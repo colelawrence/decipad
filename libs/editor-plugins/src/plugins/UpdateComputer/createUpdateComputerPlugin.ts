@@ -1,4 +1,4 @@
-import { Computer, ComputeRequest } from '@decipad/language';
+import { Computer, ComputeRequest } from '@decipad/computer';
 import { Editor } from '@decipad/editor-types';
 import { documentToProgram } from '@decipad/editor-language-elements';
 import { Subject } from 'rxjs';

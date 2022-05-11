@@ -1,5 +1,5 @@
 import { Element, ELEMENT_CODE_LINE } from '@decipad/editor-types';
-import { UnparsedBlock } from '@decipad/language';
+import { UnparsedBlock } from '@decipad/computer';
 import { Node as SlateNode } from 'slate';
 import { InteractiveLanguageElement } from '../types';
 

@@ -1,5 +1,5 @@
 import { Editor, ElementEntry, Node, Transforms } from 'slate';
-import { identifierRegExpGlobal } from '@decipad/language';
+import { identifierRegExpGlobal } from '@decipad/computer';
 
 export const normalizeIdentifierElement = (
   editor: Editor,

@@ -10,7 +10,7 @@
     { "path": "../editor-types" },
     { "path": "../editor-plugins" },
     { "path": "../editor-utils" },
-    { "path": "../language" },
+    { "path": "../computer" },
     { "path": "../utils" },
     { "path": "../ui" },
     { "path": "../fraction" }

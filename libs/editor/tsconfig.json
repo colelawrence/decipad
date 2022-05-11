@@ -8,6 +8,7 @@
   "include": ["src", "storybook"],
   "references": [
     { "path": "../ui" },
+    { "path": "../computer" },
     { "path": "../utils" },
     { "path": "../react-contexts" },
     { "path": "../utils" },

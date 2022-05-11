@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/language';
+import { Computer } from '@decipad/computer';
 import { PlatePlugin } from '@udecode/plate';
 import { MutableRefObject } from 'react';
 import { getCursorPos } from './getCursorPos';

@@ -1,6 +1,6 @@
 import { isEnabled } from '@decipad/feature-flags';
 import Fraction from '@decipad/fraction';
-import { deserializeUnit, stringifyUnits } from '@decipad/language';
+import { deserializeUnit, stringifyUnits } from '@decipad/computer';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { ComponentProps, ReactNode } from 'react';

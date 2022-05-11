@@ -1,5 +1,5 @@
 import { Element } from '@decipad/editor-types';
-import { AST, UnparsedBlock } from '@decipad/language';
+import { AST, UnparsedBlock } from '@decipad/computer';
 
 interface NameAndExpression {
   name: string;

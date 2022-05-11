@@ -1,4 +1,4 @@
-import { tokenize, STATEMENT_SEP_TOKEN_TYPE } from '@decipad/language';
+import { tokenize, STATEMENT_SEP_TOKEN_TYPE } from '@decipad/computer';
 
 function splitSeparationTokenText(text: string): [string, string] {
   let hadNewLine = false;

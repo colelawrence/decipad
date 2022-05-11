@@ -2,7 +2,7 @@ import {
   IdentifiedResult,
   isBracketError,
   isSyntaxError,
-} from '@decipad/language';
+} from '@decipad/computer';
 import { Path, Range } from 'slate';
 import { DECORATE_SYNTAX_ERROR } from '@decipad/editor-types';
 import { SyntaxErrorAnnotation } from './SyntaxErrorAnnotation';

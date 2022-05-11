@@ -1,4 +1,4 @@
-import { STATEMENT_SEP_TOKEN_TYPE, tokenize } from '@decipad/language';
+import { STATEMENT_SEP_TOKEN_TYPE, tokenize } from '@decipad/computer';
 import { AnyObject, TEditor, TNode } from '@udecode/plate';
 import { Node, NodeEntry } from 'slate';
 

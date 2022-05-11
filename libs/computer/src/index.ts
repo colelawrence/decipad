@@ -8,12 +8,14 @@ export type {
   InBlockResult,
   OneResult,
   ParsedBlock,
+  Parser,
   Program,
   ProgramBlock,
   Result,
   SerializedType,
   SerializedTypeKind,
   SerializedUnits,
+  Token,
   UnparsedBlock,
 } from '@decipad/language';
 

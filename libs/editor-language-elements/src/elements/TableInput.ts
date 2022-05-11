@@ -4,7 +4,7 @@ import {
   TableData,
   TableInputElement,
 } from '@decipad/editor-types';
-import { AST } from '@decipad/language';
+import { AST } from '@decipad/computer';
 import {
   astNode,
   parseCell,

@@ -1,7 +1,7 @@
 import { FC, useEffect, useReducer } from 'react';
 import { css } from '@emotion/react';
 import { noop } from '@decipad/utils';
-import { SerializedUnits } from '@decipad/language';
+import { SerializedUnits } from '@decipad/computer';
 import { cssVar, p12Medium, p13Medium, setCssVar } from '../../primitives';
 import { MenuItem } from '../../atoms';
 import { menu } from '../../styles';

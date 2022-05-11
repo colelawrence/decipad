@@ -1,6 +1,6 @@
 import { isElement, ELEMENT_EXPRESSION } from '@decipad/editor-types';
 import { getSyntaxErrorRanges } from '@decipad/editor-utils';
-import { tokenize, Token, Computer } from '@decipad/language';
+import { tokenize, Token, Computer } from '@decipad/computer';
 import { Decorate } from '@udecode/plate';
 import { Node, NodeEntry, Path, Range } from 'slate';
 import { DECORATION_EXPRESSION_SYNTAX } from '../constants';

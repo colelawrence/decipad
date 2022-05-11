@@ -1,4 +1,4 @@
-import { Result, SerializedType, SerializedTypeKind } from '@decipad/language';
+import { Result, SerializedType, SerializedTypeKind } from '@decipad/computer';
 
 export interface CodeResultProps<T extends SerializedTypeKind>
   extends Result<T> {

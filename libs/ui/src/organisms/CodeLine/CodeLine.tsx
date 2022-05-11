@@ -1,4 +1,4 @@
-import { Result } from '@decipad/language';
+import { Result } from '@decipad/computer';
 import { css } from '@emotion/react';
 import React, { ComponentProps, ReactNode } from 'react';
 import { CodeResult } from '..';

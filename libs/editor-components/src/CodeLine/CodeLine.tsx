@@ -3,7 +3,7 @@ import {
   IdentifiedResult,
   isBracketError,
   isSyntaxError,
-} from '@decipad/language';
+} from '@decipad/computer';
 import { useResult, useComputer } from '@decipad/react-contexts';
 import { docs } from '@decipad/routing';
 import { organisms } from '@decipad/ui';

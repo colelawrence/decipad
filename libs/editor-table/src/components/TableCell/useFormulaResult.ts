@@ -5,7 +5,7 @@ import { distinctUntilChanged, map, Observable } from 'rxjs';
 import { ReactEditor } from 'slate-react';
 
 import { ELEMENT_TD, Element } from '@decipad/editor-types';
-import { Computer, Result } from '@decipad/language';
+import { Computer, Result } from '@decipad/computer';
 import { useComputer } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { useEditorTableContext } from '../../contexts/EditorTableContext';

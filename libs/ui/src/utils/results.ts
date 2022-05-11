@@ -1,4 +1,4 @@
-import { SerializedType } from '@decipad/language';
+import { SerializedType } from '@decipad/computer';
 
 export function isTabularType(type: SerializedType | undefined): boolean {
   return (

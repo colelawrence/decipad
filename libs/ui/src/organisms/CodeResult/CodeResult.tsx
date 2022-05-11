@@ -1,4 +1,4 @@
-import { SerializedTypeKind } from '@decipad/language';
+import { SerializedTypeKind } from '@decipad/computer';
 import {
   ColumnResult,
   InlineColumnResult,

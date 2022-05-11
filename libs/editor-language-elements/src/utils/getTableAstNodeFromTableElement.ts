@@ -1,5 +1,5 @@
 import { TableElement } from '@decipad/editor-types';
-import { AST, parseOneExpression } from '@decipad/language';
+import { AST, parseOneExpression } from '@decipad/computer';
 import {
   astColumn,
   astNode,

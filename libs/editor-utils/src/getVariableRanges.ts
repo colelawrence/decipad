@@ -1,5 +1,5 @@
 import { Path, Range } from 'slate';
-import { getUsedIdentifiers } from '@decipad/language';
+import { getUsedIdentifiers } from '@decipad/computer';
 
 type RangeWithVariableInfo = Range & {
   readonly variableMissing?: boolean;

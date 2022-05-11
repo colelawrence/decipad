@@ -43,7 +43,7 @@ import {
   Underline,
   UnorderedList,
 } from '@decipad/editor-components';
-import { Computer } from '@decipad/language';
+import { Computer } from '@decipad/computer';
 
 export type PlateComponents = Partial<
   Record<ElementKind | MarkKind, PlateComponent>

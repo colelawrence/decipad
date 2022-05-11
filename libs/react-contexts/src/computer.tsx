@@ -1,5 +1,5 @@
 import { createContext, FC, ReactNode, useContext, useState } from 'react';
-import { Computer } from '@decipad/language';
+import { Computer } from '@decipad/computer';
 
 export type ComputerContextValue = Computer;
 

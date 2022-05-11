@@ -5,7 +5,7 @@ import {
   deserializeUnit,
   parseOneBlock,
   stringifyUnits,
-} from '@decipad/language';
+} from '@decipad/computer';
 import { getDefined } from '@decipad/utils';
 import { parse } from 'date-fns';
 import { astNode } from './astNode';

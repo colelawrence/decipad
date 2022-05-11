@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { css } from '@emotion/react';
-import { stringifyUnits, convertToMultiplierUnit } from '@decipad/language';
+import { stringifyUnits, convertToMultiplierUnit } from '@decipad/computer';
 import Fraction from '@decipad/fraction';
 import { CodeResultProps } from '../../types';
 import { Tooltip } from '../Tooltip/Tooltip';

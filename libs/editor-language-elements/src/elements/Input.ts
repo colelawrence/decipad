@@ -1,5 +1,5 @@
 import { Element, InputElement, ELEMENT_INPUT } from '@decipad/editor-types';
-import { isExpression, parseOneBlock } from '@decipad/language';
+import { isExpression, parseOneBlock } from '@decipad/computer';
 import { InteractiveLanguageElement } from '../types';
 import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeInteractiveElementOutput';
 

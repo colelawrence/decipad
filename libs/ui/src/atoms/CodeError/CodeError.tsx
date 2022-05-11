@@ -1,7 +1,7 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import { FC, useContext } from 'react';
 import { css } from '@emotion/react';
-import { BracketError } from '@decipad/language';
+import { BracketError } from '@decipad/computer';
 import { Warning } from '../../icons';
 import {
   red600,

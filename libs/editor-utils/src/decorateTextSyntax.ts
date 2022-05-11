@@ -1,7 +1,7 @@
 import { getText, TDescendant, Decorate } from '@udecode/plate';
 import { DECORATE_CODE_VARIABLE, Element } from '@decipad/editor-types';
 import { NodeEntry, Range } from 'slate';
-import { Computer } from '@decipad/language';
+import { Computer } from '@decipad/computer';
 import { getVariableRanges } from './getVariableRanges';
 import { getSyntaxErrorRanges } from './getSyntaxErrorRanges';
 

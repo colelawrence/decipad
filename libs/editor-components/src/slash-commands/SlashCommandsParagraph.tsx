@@ -8,7 +8,7 @@ import { Paragraph } from '@decipad/editor-components';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { Editor, Node, Transforms } from 'slate';
 import { useFocused, useSelected } from 'slate-react';
-import { Computer } from '@decipad/language';
+import { Computer } from '@decipad/computer';
 import { findPath, useSelection } from '@decipad/editor-utils';
 import { dequal } from 'dequal';
 import { execute } from '../utils/slashCommands';
