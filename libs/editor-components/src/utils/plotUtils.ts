@@ -102,6 +102,7 @@ type EncodingSpec =
   | {
       field: string;
       type: DisplayType;
+      sort?: null;
       timeUnit?: TimeUnit;
       title?: string;
       scale?: {
@@ -184,13 +185,21 @@ export function encodingFor(
   columnName: string,
   columnType: SerializedType
 ): EncodingSpec {
-  return {
+  const type = encodingTypeForColumnType(columnType);
+  const spec: EncodingSpec = {
     field: columnName,
-    type: encodingTypeForColumnType(columnType),
+    type,
     title: columnTitle(columnName, columnType),
     timeUnit:
       columnType.kind === 'date' ? displayTimeUnitType(columnType) : undefined,
   };
+
+  if (type === 'nominal') {
+    // remove sort
+    spec.sort = null;
+  }
+
+  return spec;
 }
 
 export function specFromType(

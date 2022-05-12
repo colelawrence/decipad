@@ -171,14 +171,14 @@ export const PlotParams = ({
       {markType !== 'arc' && (
         <>
           <SelectInput
-            labelText="x"
+            labelText="horizontal"
             setValue={setXColumnName}
             value={xColumnName}
           >
             {columnOptions}
           </SelectInput>
           <SelectInput
-            labelText="y"
+            labelText="vertical"
             setValue={setYColumnName}
             value={yColumnName}
           >
