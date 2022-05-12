@@ -12,7 +12,7 @@ import { NotebookPage } from '@decipad/ui';
 import { captureException } from '@sentry/browser';
 import { PlateEditor } from '@udecode/plate';
 import { useSession } from 'next-auth/client';
-import { ReactNode, useCallback, useEffect, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
 const LOAD_REMOTELY_TIMEOUT_MS = 5_000;
 
@@ -125,10 +125,15 @@ export const Notebook = ({
     }
   }, [editor, hasLocalChanges, loaded, toast, toastedWarning, warning]);
 
+  const computerObservable = useMemo(
+    () => computer.results.asObservable(),
+    [computer.results]
+  );
+
   return (
     <ComputerContextProvider computer={computer}>
       <EditorReadOnlyContext.Provider value={false}>
-        <ResultsContext.Provider value={computer.results.asObservable()}>
+        <ResultsContext.Provider value={computerObservable}>
           <NotebookPage
             notebook={
               <Editor
