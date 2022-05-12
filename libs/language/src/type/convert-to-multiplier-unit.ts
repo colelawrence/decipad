@@ -1,4 +1,4 @@
-import Fraction from '@decipad/fraction';
+import Fraction, { pow } from '@decipad/fraction';
 import { Units, SerializedUnits } from '.';
 import { F } from '../utils';
 
@@ -6,7 +6,7 @@ function multipliersFor(units: Units | SerializedUnits): Fraction {
   let acc = F(1);
   for (const unit of units.args) {
     acc = acc.mul(
-      new Fraction(unit.multiplier as Fraction).pow(unit.exp as Fraction)
+      pow(new Fraction(unit.multiplier as Fraction), unit.exp as Fraction)
     );
   }
 
@@ -20,5 +20,6 @@ export function convertToMultiplierUnit(
   if (!units) {
     return n;
   }
-  return n.div(multipliersFor(units));
+  const multiplier = multipliersFor(units);
+  return n.div(multiplier);
 }

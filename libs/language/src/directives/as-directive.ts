@@ -1,5 +1,5 @@
 import { singular } from 'pluralize';
-import Fraction from '@decipad/fraction';
+import Fraction, { pow } from '@decipad/fraction';
 
 import produce from 'immer';
 import { getDefined } from '@decipad/utils';
@@ -27,7 +27,7 @@ function isUserUnit(exp: AST.Expression, targetUnit: Units) {
 
 function multiplyUnitMultipliers(units: Units | null | undefined): Fraction {
   return (units?.args || []).reduce(
-    (acc, unit) => acc.mul(unit.multiplier.pow(unit.exp)),
+    (acc, unit) => acc.mul(pow(unit.multiplier, unit.exp)),
     F(1)
   );
 }
@@ -37,7 +37,7 @@ function multiplyUnitMultipliersIfNeedsEnforcing(
 ): Fraction {
   return (units?.args || []).reduce(
     (acc, unit) =>
-      unit.enforceMultiplier ? acc.mul(unit.multiplier.pow(unit.exp)) : acc,
+      unit.enforceMultiplier ? acc.mul(pow(unit.multiplier, unit.exp)) : acc,
     F(1)
   );
 }

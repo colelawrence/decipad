@@ -1,7 +1,11 @@
-import { F } from './utils';
+import { F, u, U } from './utils';
 import { build as t } from './type';
 import { cleanDate } from './date';
-import { runCodeForVariables, objectToTableType } from './testUtils';
+import {
+  runCodeForVariables,
+  objectToTableType,
+  evaluateForVariables,
+} from './testUtils';
 import { runCode } from './run';
 
 // https://observablehq.com/d/0c4bca59558d2985
@@ -40,79 +44,79 @@ describe('use of funds document', () => {
     );
 
     expect(result.value).toMatchInlineSnapshot(`
-Array [
-  Array [
-    1609459200000n,
-    1612137600000n,
-    1614556800000n,
-    1617235200000n,
-    1619827200000n,
-    1622505600000n,
-    1625097600000n,
-    1627776000000n,
-    1630454400000n,
-    1633046400000n,
-    1635724800000n,
-    1638316800000n,
-  ],
-  Array [
-    Fraction(14000),
-    Fraction(14000),
-    Fraction(14000),
-    Fraction(14000),
-    Fraction(14000),
-    Fraction(14000),
-    Fraction(14000),
-    Fraction(14000),
-    Fraction(14000),
-    Fraction(14000),
-    Fraction(14000),
-    Fraction(14000),
-  ],
-  Array [
-    Fraction(0),
-    Fraction(14000),
-    Fraction(14000),
-    Fraction(14000),
-    Fraction(14000),
-    Fraction(14000),
-    Fraction(14000),
-    Fraction(14000),
-    Fraction(14000),
-    Fraction(14000),
-    Fraction(14000),
-    Fraction(14000),
-  ],
-  Array [
-    Fraction(0),
-    Fraction(0),
-    Fraction(12000),
-    Fraction(12000),
-    Fraction(12000),
-    Fraction(12000),
-    Fraction(12000),
-    Fraction(12000),
-    Fraction(12000),
-    Fraction(12000),
-    Fraction(12000),
-    Fraction(12000),
-  ],
-  Array [
-    Fraction(0),
-    Fraction(0),
-    Fraction(14000),
-    Fraction(14000),
-    Fraction(14000),
-    Fraction(14000),
-    Fraction(14000),
-    Fraction(14000),
-    Fraction(14000),
-    Fraction(14000),
-    Fraction(14000),
-    Fraction(14000),
-  ],
-]
-`);
+      Array [
+        Array [
+          1609459200000n,
+          1612137600000n,
+          1614556800000n,
+          1617235200000n,
+          1619827200000n,
+          1622505600000n,
+          1625097600000n,
+          1627776000000n,
+          1630454400000n,
+          1633046400000n,
+          1635724800000n,
+          1638316800000n,
+        ],
+        Array [
+          Fraction(14000),
+          Fraction(14000),
+          Fraction(14000),
+          Fraction(14000),
+          Fraction(14000),
+          Fraction(14000),
+          Fraction(14000),
+          Fraction(14000),
+          Fraction(14000),
+          Fraction(14000),
+          Fraction(14000),
+          Fraction(14000),
+        ],
+        Array [
+          Fraction(0),
+          Fraction(14000),
+          Fraction(14000),
+          Fraction(14000),
+          Fraction(14000),
+          Fraction(14000),
+          Fraction(14000),
+          Fraction(14000),
+          Fraction(14000),
+          Fraction(14000),
+          Fraction(14000),
+          Fraction(14000),
+        ],
+        Array [
+          Fraction(0),
+          Fraction(0),
+          Fraction(12000),
+          Fraction(12000),
+          Fraction(12000),
+          Fraction(12000),
+          Fraction(12000),
+          Fraction(12000),
+          Fraction(12000),
+          Fraction(12000),
+          Fraction(12000),
+          Fraction(12000),
+        ],
+        Array [
+          Fraction(0),
+          Fraction(0),
+          Fraction(14000),
+          Fraction(14000),
+          Fraction(14000),
+          Fraction(14000),
+          Fraction(14000),
+          Fraction(14000),
+          Fraction(14000),
+          Fraction(14000),
+          Fraction(14000),
+          Fraction(14000),
+        ],
+      ]
+    `);
   });
 
   /* eslint-disable-next-line jest/no-disabled-tests */
@@ -558,6 +562,204 @@ ${'' /* Get capital needed */}
             },
           },
         },
+      },
+    });
+  });
+
+  test('rockets', async () => {
+    expect(
+      await evaluateForVariables(
+        `
+          M = 0.05398 kg
+
+          pi = 3.1415926535
+          e = 2.7182818284
+          g = 9.8 meters / (second ^ 2)
+
+          D = 0.976 inches
+          A = pi * (D/2) ^2 in m^2
+          rho = 1.2 kg / (m^3)
+
+          Cd = 0.75
+          k = 0.5 * rho * Cd * A
+
+          I = 9 N s
+          T = 6 N
+          t = I / T
+
+          gF = (M * g) in N
+
+          q = sqrt((T - gF) / k)
+
+          x = 2 * k * q / M
+          temp1 = -x * t
+          temp2 = e ** temp1
+          v = q * (1 - temp2) / (1 + temp2) in m / s
+        `,
+        [
+          'M',
+          'pi',
+          'e',
+          'g',
+          'D',
+          'A',
+          'rho',
+          'Cd',
+          'k',
+          'I',
+          'T',
+          't',
+          'gF',
+          'q',
+          'x',
+          'temp1',
+          'temp2',
+          'v',
+        ]
+      )
+    ).toMatchObject({
+      M: {
+        // M = 0.05398 kg
+        type: { type: 'number', unit: U('g', { multiplier: F(1000) }) },
+        value: F(2699n, 50000n), // 0,05398 ✓
+      },
+      pi: {
+        // pi = 3.1415926535
+        type: { type: 'number', unit: null },
+        value: F(31415926535, 10_000_000_000), // 3.1415926535 ✓
+      },
+      e: {
+        // e = 2.7182818284
+        type: { type: 'number', unit: null },
+        value: F(27182818284, 10_000_000_000), // 2.7182818284 ✓
+      },
+      g: {
+        // g = 9.8 meters / (second ^ 2)
+        type: {
+          type: 'number',
+          unit: U([u('meters'), u('seconds', { exp: F(-2) })]),
+        },
+        value: F(98, 10), // 9,8 ✓
+      },
+      D: {
+        // D = 0.976 inches
+        type: { type: 'number', unit: U('inches') },
+        value: F(976, 1000), // 0,976 ✓
+      },
+      A: {
+        // A = pi * (D/2) ^2 in m^2
+        type: { type: 'number', unit: U('m', { exp: F(2) }) },
+        value: F(377091705933579763n, 781250000000000000000n), // 0,000482677383595 ✓
+      },
+      rho: {
+        // rho = 1.2 kg / (m^3)
+        type: {
+          type: 'number',
+          unit: U([u('g', { multiplier: F(1000) }), u('m', { exp: F(-3) })]),
+        },
+        value: F(6, 5), // 1,2 ✓
+      },
+      Cd: {
+        // Cd = 0.75
+        type: { type: 'number' },
+        value: F(75, 100), // 0,75 ✓
+      },
+      k: {
+        // k = 0.5 * rho * Cd * A
+        type: {
+          type: 'number',
+          unit: U([u('g', { multiplier: F(1000) }), u('m', { exp: F(-1) })]),
+        },
+        value: F(3393825353402217867n, 15625000000000000000000n), // 0,000217204822618 ✓
+      },
+      I: {
+        // I = 9 N s
+        type: { type: 'number', unit: U([u('N'), u('s')]) },
+        value: F(9), // 9 ✓
+      },
+      T: {
+        // T = 6 N
+        type: { type: 'number', unit: U('N') },
+        value: F(6), // 6  ✓
+      },
+      t: {
+        // t = I / T
+        type: { type: 'number', unit: U('s') },
+        value: F(3, 2), // 1,5 ✓
+      },
+      gF: {
+        // gF = (M * g) in N
+        type: {
+          type: 'number',
+          unit: U('N'),
+        },
+        value: F(132_251, 250_000), // 0,529004 ✓
+      },
+      q: {
+        // q = sqrt((T - gF) / k)
+        type: {
+          type: 'number',
+          unit: U([
+            u('N', { exp: F(1, 2) }),
+            u('g', { multiplier: F(1000), exp: F(-1, 2) }),
+            u('m', { exp: F(1, 2) }),
+          ]),
+        },
+        value: F(23990424121480n, 151160896537n), // 158,707871354863318 ✓
+      },
+      x: {
+        // x = 2 * k * q / M
+        type: {
+          type: 'number',
+          unit: U([
+            u('N', { exp: F(1, 2) }),
+            // gram units (g):
+            // k = { multiplier: F(1000) }
+            // q = { multiplier: F(1000), exp: F(-1, 2) }
+            // M = { multiplier: F(1000) }
+            // x = k * q / M
+            // x = { multiplier: F(1000), exp: F(1) + F(-1, 2) - F(1)}
+            // x = { multiplier: F(1000), exp: F(-1, 2)}
+            u('g', { multiplier: F(1000), exp: F(-1, 2) }),
+            u('m', { exp: F(-1, 2) }),
+          ]),
+        },
+        value: F(
+          290783248651253403932167980297n,
+          227669229773082031250000000000n
+        ), // = 2 * 0,000217204822618 * 158,707871354863318 / 0,05398 = 1,277218045413614 ✓
+      },
+      temp1: {
+        // -x * t
+        type: {
+          type: 'number',
+          unit: U([
+            u('N', { exp: F(1, 2) }),
+            u('g', { multiplier: F(1000), exp: F(-1, 2) }),
+            u('m', { exp: F(-1, 2) }),
+            u('s'),
+          ]),
+        },
+        value: F(
+          -872349745953760211796503940891n,
+          455338459546164062500000000000n
+        ), // = -x * t = -1,277218045413614 * 1,5 =  = -1,915827068120421 ☑️
+      },
+      temp2: {
+        // e ** temp1
+        type: {
+          type: 'number',
+          unit: null,
+        },
+        value: F(841864n, 5718407n), // = 2.7182818284 ** -1,915827068120421 = 0,147220021240181
+      },
+      v: {
+        // v = q * (1 - temp2) / (1 + temp2) in m / s
+        type: {
+          type: 'number',
+          unit: U([u('m', { exp: F(1) }), u('s', { exp: F(-1) })]),
+        },
+        value: F(1047819150581832308000n, 8881730413246128321n), // 117,974662799844137
       },
     });
   });

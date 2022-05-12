@@ -29,6 +29,7 @@ import { InferError } from './InferError';
 import {
   inverseExponent,
   normalizeUnits,
+  normalizeUnitsOf,
   setUnit,
   stringifyUnits,
 } from './units';
@@ -38,7 +39,7 @@ export type { Unit, Units };
 
 export * from './serialization';
 export * from './convert-to-multiplier-unit';
-export { setUnit, stringifyUnits, normalizeUnits, units };
+export { setUnit, stringifyUnits, normalizeUnits, normalizeUnitsOf, units };
 export { InferError, inverseExponent, t as build };
 
 export const scalarTypeNames = ['number', 'string', 'boolean'];

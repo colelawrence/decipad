@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import produce from 'immer';
-import Fraction from '@decipad/fraction';
+import Fraction, { pow } from '@decipad/fraction';
 import { getDefined, zip } from '@decipad/utils';
 import { RuntimeError, Realm } from '../../interpreter';
 import { F, getInstanceof, multiplyMultipliers } from '../../utils';
@@ -232,12 +232,11 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   avgif: { aliasFor: 'averageif' },
   meanif: { aliasFor: 'averageif' },
   sqrt: {
-    noAutoconvert: true,
     argCount: 1,
     fn: ([n]) => {
       let result: Fraction | undefined;
       try {
-        result = getInstanceof(n, Fraction).pow(0.5);
+        result = pow(getInstanceof(n, Fraction), F(1, 2));
       } catch (err) {
         console.error(err);
       }
@@ -326,19 +325,10 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   '**': {
     argCount: 2,
     fn: ([a, b]) => {
-      const result = a.pow(b);
-      if (result == null) {
-        const resultNumber = a.valueOf() ** b.valueOf();
-        if (Number.isNaN(resultNumber)) {
-          throw new RuntimeError(
-            `**: result of raising to ${b.toString()} is not rational`
-          );
-        }
-        return new Fraction(resultNumber);
-      }
-      return result;
+      return pow(a, b);
     },
     noAutoconvert: true,
+    absoluteNumberInput: true,
     functor: exponentiationFunctor,
   },
   '^': {

@@ -1,4 +1,4 @@
-import Fraction, { FractionLike } from '@decipad/fraction';
+import Fraction, { FractionLike, pow } from '@decipad/fraction';
 import { lenientZip } from '@decipad/utils';
 import { Draft, produce } from 'immer';
 import { Type } from '..';
@@ -217,7 +217,7 @@ const simplifyUnitsArgs = <TF extends FractionLike>(
           // match.multiplier *= unit.multiplier ** Number(unit.exp);
           //
           match.multiplier = F(match.multiplier).mul(
-            F(unit.multiplier).pow(unit.exp)
+            pow(F(unit.multiplier), F(unit.exp))
           );
         });
         return units;
@@ -349,7 +349,7 @@ const stringifyUnit = (unit: FUnit, prettify = true) => {
   return result.join('');
 };
 
-function produceExp(unit: FUnit, makePositive: boolean): FUnit {
+function produceExp(unit: FUnit, makePositive = false): FUnit {
   return produce(unit, (unit) => {
     unit.unit = singular(unit.unit);
     if (makePositive) {
@@ -380,7 +380,7 @@ export const stringifyUnitArgs = (
         } else {
           prefix = prettify ? '·' : '*';
           parts.push(prefix);
-          parts.push(stringifyUnit(produceExp(unit, false), prettify));
+          parts.push(stringifyUnit(produceExp(unit), prettify));
         }
       } else {
         //

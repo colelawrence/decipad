@@ -1,4 +1,4 @@
-import Fraction, { FractionLike } from '@decipad/fraction';
+import Fraction, { FractionLike, pow } from '@decipad/fraction';
 import { Class } from 'utility-types';
 import { AST, Unit, Units } from '.';
 
@@ -415,7 +415,7 @@ export function multiplyMultipliers(
   }
   let acc = start;
   for (const unit of units.args) {
-    acc = acc.mul(unit.multiplier.pow(unit.exp));
+    acc = acc.mul(pow(unit.multiplier, unit.exp));
   }
   return acc;
 }

@@ -22,7 +22,7 @@ it('styles variable when variable exists', async () => {
   expect(normalBackgroundColor).not.toEqual('');
 });
 
-it('does not style missing variables', async () => {
+it('styles missing variables', async () => {
   const { getByText } = render(
     <CodeVariable variableMissing>Foo</CodeVariable>
   );
@@ -32,5 +32,5 @@ it('does not style missing variables', async () => {
     'backgroundColor'
   )?.backgroundColor;
   cleanup();
-  expect(normalBackgroundColor).toBeUndefined();
+  expect(normalBackgroundColor).not.toEqual('');
 });

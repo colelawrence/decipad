@@ -35,4 +35,10 @@ describe('simplify units', () => {
       simplifyUnits(U([u('m', { exp: F(-1) }), u('m', { exp: F(3) })]))
     ).toMatchObject(U('m', { exp: F(2) }));
   });
+
+  it('simplifies with fractional exponents', () => {
+    expect(
+      simplifyUnits(U([u('m', { exp: F(-1, 2) }), u('m', { exp: F(3, 2) })]))
+    ).toMatchObject(U('m', { exp: F(1) }));
+  });
 });

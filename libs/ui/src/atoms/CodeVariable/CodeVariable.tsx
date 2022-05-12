@@ -1,10 +1,15 @@
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
+import { cssVar } from '../../primitives';
 import { codeBlock } from '../../styles';
 
-const styles = css(codeBlock.variableStyles, {
-  padding: '4px 8px',
-  borderRadius: '8px',
+const varStyles = css(codeBlock.variableStyles, {
+  padding: '2px 6px',
+  borderRadius: '6px',
+});
+
+const missingStyles = css({
+  backgroundColor: cssVar('missingVariableHighlightColor'),
 });
 
 interface CodeVariableProps {
@@ -15,5 +20,7 @@ export const CodeVariable = ({
   children,
   variableMissing = false,
 }: CodeVariableProps): ReturnType<React.FC> => {
-  return <span css={variableMissing ? null : styles}>{children}</span>;
+  return (
+    <span css={[varStyles, variableMissing && missingStyles]}>{children}</span>
+  );
 };

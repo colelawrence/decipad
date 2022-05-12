@@ -1,10 +1,16 @@
+import FFraction from '@decipad/fraction';
 import { AST, InjectableExternalData } from '.';
 import { Realm, run } from './interpreter';
 import { fromJS, FromJSArg, Table } from './interpreter/Value';
 import { inferProgram, inferBlock, makeContext } from './infer';
 import { zip, AnyMapping } from './utils';
-import { stringifyResult } from './result';
-import { Type, build as t } from './type';
+import { OneResult, stringifyResult } from './result';
+import {
+  Type,
+  build as t,
+  normalizeUnitsOf,
+  convertToMultiplierUnit,
+} from './type';
 import { parseOneBlock } from './run';
 
 export const runAST = async (
@@ -49,6 +55,71 @@ export const runCodeForVariables = async (
     types,
     variables: Object.fromEntries(zip(wantedVariables, variables)),
   };
+};
+
+const userValue = (type: Type, value: OneResult): OneResult => {
+  if (value instanceof FFraction) {
+    const units = normalizeUnitsOf(type.unit);
+    return convertToMultiplierUnit(value, units);
+  }
+  return value;
+};
+
+interface TypeAndValuePair {
+  type: Type;
+  value: OneResult;
+}
+
+const typeAndValuePairs = (
+  types: Record<string, Type>,
+  values: Record<string, OneResult>,
+  asUser = true
+): Record<string, TypeAndValuePair> => {
+  const keys = new Set(Object.keys(types));
+  for (const key of Object.keys(values)) {
+    keys.add(key);
+  }
+  const pairs: [string, TypeAndValuePair][] = [];
+  for (const key of keys) {
+    const type = types[key];
+    const value = values[key];
+    pairs.push([
+      key,
+      {
+        type,
+        value: asUser ? userValue(type, value) : value,
+      },
+    ]);
+  }
+
+  return Object.fromEntries(pairs);
+};
+
+export const evaluateForVariables = async (
+  source: string,
+  wantedVariables: string[],
+  asUser = true
+) => {
+  const program = [parseOneBlock(source)];
+
+  const inferResult = await inferProgram(program);
+
+  const types = Object.fromEntries(inferResult.stack.globalVariables.entries());
+
+  const erroredType = Object.values(types).find((t) => t.errorCause != null);
+  if (erroredType != null) {
+    throw new Error(
+      `runCodeForVariables found an error\n${erroredType.toString()}`
+    );
+  }
+
+  const variables = await run(program, wantedVariables);
+
+  return typeAndValuePairs(
+    types,
+    Object.fromEntries(zip(wantedVariables, variables)),
+    asUser
+  );
 };
 
 export const objectToTableType = (

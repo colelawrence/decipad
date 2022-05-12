@@ -36,6 +36,7 @@ export {
   convertToMultiplierUnit,
   deserializeType,
   deserializeUnit,
+  normalizeUnitsOf,
   InferError,
   serializeType,
   serializeUnit,

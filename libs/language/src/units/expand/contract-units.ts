@@ -1,4 +1,5 @@
 import { getDefined } from '@decipad/utils';
+import { isZero } from '@decipad/fraction';
 import { identity, F } from '../../utils';
 import { Converter } from '.';
 import { expandUnits } from './expand-units';
@@ -7,6 +8,9 @@ import { getUnitByName } from '..';
 
 function scalarInversion(convert: Converter): Converter {
   return (n) => {
+    if (isZero(n)) {
+      return n;
+    }
     const div = convert(F(1));
     return n.div(div);
   };

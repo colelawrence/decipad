@@ -11,6 +11,7 @@ import {
   offWhite,
   red500,
   white,
+  orange100,
   yellow600,
 } from './color';
 
@@ -40,6 +41,9 @@ export interface CssVariables {
   readonly strongTextColor: Property.Color;
 
   readonly currentTextColor: Property.Color;
+
+  // Code
+  readonly missingVariableHighlightColor: Property.Color;
 }
 
 const defaults: CssVariables = {
@@ -63,6 +67,8 @@ const defaults: CssVariables = {
   get currentTextColor() {
     return cssVar('normalTextColor');
   },
+
+  missingVariableHighlightColor: orange100.rgb,
 };
 
 const cssVariablePrefix = '--deci-';

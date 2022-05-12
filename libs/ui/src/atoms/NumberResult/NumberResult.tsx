@@ -1,6 +1,10 @@
 import { FC } from 'react';
 import { css } from '@emotion/react';
-import { stringifyUnits, convertToMultiplierUnit } from '@decipad/computer';
+import {
+  stringifyUnits,
+  convertToMultiplierUnit,
+  normalizeUnitsOf,
+} from '@decipad/language';
 import Fraction from '@decipad/fraction';
 import { CodeResultProps } from '../../types';
 import { Tooltip } from '../Tooltip/Tooltip';
@@ -80,7 +84,8 @@ export const NumberResult = ({
 }: CodeResultProps<'number'>): ReturnType<FC> => {
   let fraction = new Fraction(value);
   if (type.unit) {
-    fraction = convertToMultiplierUnit(fraction, type.unit);
+    const units = normalizeUnitsOf(type.unit);
+    fraction = convertToMultiplierUnit(fraction, units);
   }
   const asString = toString(fraction);
 

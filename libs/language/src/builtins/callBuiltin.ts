@@ -1,14 +1,18 @@
+import FFraction from '@decipad/fraction';
 import { getOperatorByName } from './operators';
 import { automapValues, automapValuesForReducer } from '../dimtools';
 
 import { Value, fromJS } from '../interpreter/Value';
 import { getDefined } from '../utils';
 import { Realm, RuntimeError } from '../interpreter';
-import type { Type } from '../type';
+import { convertToMultiplierUnit, Type } from '../type';
 import { autoconvertResult, autoconvertArguments } from '../units';
 import { BuiltinSpec } from './interfaces';
 
 function shouldAutoconvert(types: Type[]): boolean {
+  if (types.length === 1) {
+    return false;
+  }
   if (types.length === 2) {
     const [typeA, typeB] = types.map((t) => t.reducedToLowest());
     if ((typeA.unit && !typeB.unit) || (typeB.unit && !typeA.unit)) {
@@ -58,6 +62,8 @@ function callBuiltinAfterAutoconvert(
   return automapValues(argTypes, args, lowerDimFn, builtin.argCardinalities);
 }
 
+const stages = ['autoConvertArguments', 'builtin', 'autoConvertResult'];
+
 export function callBuiltin(
   realm: Realm,
   funcName: string,
@@ -80,22 +86,41 @@ export function callBuiltin(
     );
   }
 
-  const autoConvert = !op.noAutoconvert && shouldAutoconvert(argTypes);
-  const args = autoConvert
-    ? autoconvertArguments(argsBeforeConvert, argTypes)
-    : argsBeforeConvert;
+  let stage = 0;
+  try {
+    const autoConvert = !op.noAutoconvert && shouldAutoconvert(argTypes);
+    let args = autoConvert
+      ? autoconvertArguments(argsBeforeConvert, argTypes)
+      : argsBeforeConvert;
 
-  const resultBeforeConvertingBack = callBuiltinAfterAutoconvert(
-    realm,
-    funcName,
-    op,
-    args,
-    argTypes
-  );
+    if (op.absoluteNumberInput && !returnType.unit) {
+      args = args.map((value, index) => {
+        const type = argTypes[index];
+        if (type.type === 'number') {
+          let data = value.getData();
+          if (data instanceof FFraction) {
+            data = convertToMultiplierUnit(data, type.unit);
+            return fromJS(data);
+          }
+        }
+        return value;
+      });
+    }
 
-  const result = autoConvert
-    ? autoconvertResult(resultBeforeConvertingBack, returnType)
-    : resultBeforeConvertingBack;
-
-  return result;
+    stage += 1;
+    const resultBeforeConvertingBack = callBuiltinAfterAutoconvert(
+      realm,
+      funcName,
+      op,
+      args,
+      argTypes
+    );
+    stage += 1;
+    return autoConvert
+      ? autoconvertResult(resultBeforeConvertingBack, returnType)
+      : resultBeforeConvertingBack;
+  } catch (err) {
+    console.error(`Error at stage ${stages[stage]}`, err);
+    throw new RuntimeError((err as Error)?.message || 'Unknown error');
+  }
 }
