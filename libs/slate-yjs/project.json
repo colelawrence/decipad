@@ -1,0 +1,20 @@
+{
+  "root": "libs/slate-yjs",
+  "sourceRoot": "libs/slate-yjs/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/slate-yjs/**/*.ts"],
+        "maxWarnings": 0
+      }
+    },
+    "typecheck": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/slate-yjs"
+      }
+    }
+  }
+}

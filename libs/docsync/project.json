@@ -1,0 +1,27 @@
+{
+  "root": "libs/docsync",
+  "sourceRoot": "libs/docsync/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/docsync/**/*.ts"],
+        "maxWarnings": 0
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/docsync"],
+      "options": {
+        "jestConfig": "libs/docsync/jest.config.js"
+      }
+    },
+    "typecheck": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/docsync"
+      }
+    }
+  }
+}

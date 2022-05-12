@@ -1,0 +1,27 @@
+{
+  "root": "libs/routing",
+  "sourceRoot": "libs/routing/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/routing/src/**/*.ts"],
+        "maxWarnings": 0
+      }
+    },
+    "typecheck": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/routing"
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/routing"],
+      "options": {
+        "jestConfig": "libs/routing/jest.config.js"
+      }
+    }
+  }
+}

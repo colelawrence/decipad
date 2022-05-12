@@ -1,0 +1,5 @@
+{
+  "root": "libs/eslint-config-decipad",
+  "sourceRoot": "libs/eslint-config-decipad",
+  "projectType": "library"
+}

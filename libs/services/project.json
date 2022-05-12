@@ -1,0 +1,27 @@
+{
+  "root": "libs/services",
+  "sourceRoot": "libs/services/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/services/src/**/*.ts"],
+        "maxWarnings": 0
+      }
+    },
+    "typecheck": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/services"
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/services"],
+      "options": {
+        "jestConfig": "libs/services/jest.config.js"
+      }
+    }
+  }
+}

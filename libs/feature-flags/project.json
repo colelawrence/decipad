@@ -1,0 +1,27 @@
+{
+  "root": "libs/feature-flags",
+  "sourceRoot": "libs/feature-flags/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/feature-flags/**/*.ts"],
+        "maxWarnings": 0
+      }
+    },
+    "typecheck": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/feature-flags"
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/feature-flags"],
+      "options": {
+        "jestConfig": "libs/feature-flags/jest.config.js"
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "root": "libs/y-indexeddb",
+  "sourceRoot": "libs/y-indexeddb/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/y-indexeddb/**/*.ts"],
+        "maxWarnings": 0
+      },
+      "typecheck": {
+        "executor": "@nrwl/workspace:run-commands",
+        "options": {
+          "command": "yarn tsc -b libs/y-indexeddb"
+        }
+      }
+    }
+  }
+}

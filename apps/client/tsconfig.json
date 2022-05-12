@@ -3,7 +3,9 @@
   "compilerOptions": {
     "lib": ["esnext", "dom", "dom.iterable"],
     "jsx": "preserve",
-    "jsxImportSource": "@emotion/react"
+    "jsxImportSource": "@emotion/react",
+    "emitDeclarationOnly": false,
+    "noEmit": true
   },
   "include": ["src", "types"],
   "exclude": [],

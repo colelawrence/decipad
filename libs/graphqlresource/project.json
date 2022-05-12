@@ -1,0 +1,19 @@
+{
+  "root": "libs/graphqlresource",
+  "sourceRoot": "libs/graphqlresource/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/graphqlserver/src/**/*.ts"]
+      }
+    },
+    "typecheck": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/graphqlresource"
+      }
+    }
+  }
+}

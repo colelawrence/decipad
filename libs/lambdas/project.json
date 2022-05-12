@@ -1,0 +1,20 @@
+{
+  "root": "libs/lambdas",
+  "sourceRoot": "libs/lambdas/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/lambdas/src/**/*.ts"],
+        "maxWarnings": 0
+      }
+    },
+    "typecheck": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/lambdas"
+      }
+    }
+  }
+}

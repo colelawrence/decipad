@@ -1,0 +1,27 @@
+{
+  "root": "libs/dynamodb-lock",
+  "sourceRoot": "libs/dynamodb-lock/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/dynamodb-lock/**/*.ts"],
+        "maxWarnings": 0
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/dynamodb-lock"],
+      "options": {
+        "jestConfig": "libs/dynamodb-lock/jest.config.js"
+      }
+    },
+    "typecheck": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/dynamodb-lock"
+      }
+    }
+  }
+}

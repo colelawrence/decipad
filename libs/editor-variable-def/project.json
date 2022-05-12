@@ -1,0 +1,27 @@
+{
+  "root": "libs/editor-variable-def",
+  "sourceRoot": "libs/editor-variable-def/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/editor-variable-def/**/*.ts"],
+        "maxWarnings": 0
+      }
+    },
+    "typecheck": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/editor-variable-def"
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/editor-variable-def"],
+      "options": {
+        "jestConfig": "libs/editor-variable-def/jest.config.js"
+      }
+    }
+  }
+}

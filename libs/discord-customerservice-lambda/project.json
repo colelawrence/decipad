@@ -1,0 +1,20 @@
+{
+  "root": "libs/discord-customerservice-lambda",
+  "sourceRoot": "libs/discord-customerservice-lambda/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/discord-customerservice-lambda/**/*.ts"],
+        "maxWarnings": 0
+      }
+    },
+    "typecheck": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/discord-customerservice-lambda"
+      }
+    }
+  }
+}

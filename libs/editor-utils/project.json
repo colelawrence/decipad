@@ -1,0 +1,27 @@
+{
+  "root": "libs/editor-utils",
+  "sourceRoot": "libs/editor-utils/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/editor-utils/**/*.ts"],
+        "maxWarnings": 0
+      }
+    },
+    "typecheck": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/editor-utils"
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/editor-utils"],
+      "options": {
+        "jestConfig": "libs/editor-utils/jest.config.js"
+      }
+    }
+  }
+}

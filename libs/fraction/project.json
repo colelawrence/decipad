@@ -1,0 +1,27 @@
+{
+  "root": "libs/fraction",
+  "sourceRoot": "libs/fraction/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/fraction/**/*.ts"],
+        "maxWarnings": 0
+      }
+    },
+    "typecheck": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/fraction"
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/fraction"],
+      "options": {
+        "jestConfig": "libs/fraction/jest.config.js"
+      }
+    }
+  }
+}

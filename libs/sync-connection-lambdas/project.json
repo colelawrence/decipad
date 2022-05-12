@@ -1,0 +1,27 @@
+{
+  "root": "libs/sync-connection-lambdas",
+  "sourceRoot": "libs/sync-connection-lambdas/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/sync-connection-lambdas/**/*.ts"],
+        "maxWarnings": 0
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/sync-connection-lambdas"],
+      "options": {
+        "jestConfig": "libs/sync-connection-lambdas/jest.config.js"
+      }
+    },
+    "typecheck": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/sync-connection-lambdas"
+      }
+    }
+  }
+}

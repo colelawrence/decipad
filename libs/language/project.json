@@ -1,0 +1,27 @@
+{
+  "root": "libs/language",
+  "sourceRoot": "libs/language/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/language/**/*.ts"],
+        "maxWarnings": 0
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/language"],
+      "options": {
+        "jestConfig": "libs/language/jest.config.js"
+      }
+    },
+    "typecheck": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/language"
+      }
+    }
+  }
+}

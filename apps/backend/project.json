@@ -1,0 +1,42 @@
+{
+  "root": "apps/backend",
+  "sourceRoot": "apps/backend/src",
+  "projectType": "application",
+  "prefix": "backend",
+  "targets": {
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "./scripts/sandbox.sh"
+        ],
+        "cwd": "apps/backend"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "apps/backend/tests/**/*.ts"
+        ],
+        "maxWarnings": 0
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/apps/backend"
+      ],
+      "options": {
+        "jestConfig": "apps/backend/jest.config.js",
+        "codeCoverage": false
+      }
+    },
+    "typecheck": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn tsc -b apps/backend"
+      }
+    }
+  }
+}

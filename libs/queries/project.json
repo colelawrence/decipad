@@ -1,0 +1,14 @@
+{
+  "root": "libs/queries",
+  "sourceRoot": "libs/queries/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/queries/**/*.{ts,tsx,js,jsx}"],
+        "maxWarnings": 0
+      }
+    }
+  }
+}
