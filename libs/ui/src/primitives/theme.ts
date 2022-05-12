@@ -37,5 +37,6 @@ export const darkTheme: Record<
 
   ...setCssVar('currentTextColor', cssVar('normalTextColor')),
 
-  ...setCssVar('missingVariableHighlightColor', orange100.rgb),
+  ...setCssVar('variableHighlightColor', orange100.rgb),
+  ...setCssVar('unknownIdentifierHighlightColor', orange100.rgb),
 };

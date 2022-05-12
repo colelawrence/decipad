@@ -6,7 +6,7 @@ export const lineHeight = '36px';
 export const variableStyles: CSSObject = {
   ...code,
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
-  backgroundColor: cssVar('strongerHighlightColor'),
+  backgroundColor: cssVar('variableHighlightColor'),
   fontWeight: 500,
   fontSize: '13px',
 };

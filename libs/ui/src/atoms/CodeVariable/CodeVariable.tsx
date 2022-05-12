@@ -9,7 +9,7 @@ const varStyles = css(codeBlock.variableStyles, {
 });
 
 const missingStyles = css({
-  backgroundColor: cssVar('missingVariableHighlightColor'),
+  backgroundColor: cssVar('unknownIdentifierHighlightColor'),
 });
 
 interface CodeVariableProps {

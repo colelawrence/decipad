@@ -43,7 +43,8 @@ export interface CssVariables {
   readonly currentTextColor: Property.Color;
 
   // Code
-  readonly missingVariableHighlightColor: Property.Color;
+  readonly variableHighlightColor: Property.Color;
+  readonly unknownIdentifierHighlightColor: Property.Color;
 }
 
 const defaults: CssVariables = {
@@ -68,7 +69,8 @@ const defaults: CssVariables = {
     return cssVar('normalTextColor');
   },
 
-  missingVariableHighlightColor: orange100.rgb,
+  variableHighlightColor: orange100.rgb,
+  unknownIdentifierHighlightColor: grey200.rgb,
 };
 
 const cssVariablePrefix = '--deci-';
