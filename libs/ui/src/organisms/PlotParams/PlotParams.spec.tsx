@@ -5,8 +5,8 @@ import { PlotParams } from './PlotParams';
 const expectedPropToLabelName = {
   sourceVarName: /table/i,
   markType: /chart/i,
-  xColumnName: /x/i,
-  yColumnName: /y/i,
+  xColumnName: /horizontal/i,
+  yColumnName: /vertical/i,
   sizeColumnName: /size/i,
   colorColumnName: /colors/i,
   thetaColumnName: /slice/i,
