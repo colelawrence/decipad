@@ -1,4 +1,3 @@
-import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { Children, ComponentProps, FC, ReactNode } from 'react';
 import { AddNew } from '../../atoms';
@@ -12,7 +11,7 @@ import {
   setCssVar,
   transparency,
 } from '../../primitives';
-import { InteractiveInputMenu } from '../InteractiveInputMenu/InteractiveInputMenu';
+import { VariableEditorMenu } from '..';
 import { AvailableSwatchColor, baseSwatches } from '../../utils';
 
 const leftBarSize = 6;
@@ -82,14 +81,12 @@ const addNewWrapperStyles = css({
   marginLeft: '12px',
 });
 
-interface InteractiveProps
-  extends Pick<ComponentProps<typeof AddNew>, 'onAdd'> {
+interface VariableEditorProps
+  extends Pick<ComponentProps<typeof AddNew>, 'onAdd'>,
+    Omit<ComponentProps<typeof VariableEditorMenu>, 'trigger'> {
   children?: ReactNode;
   color?: AvailableSwatchColor;
   readOnly?: boolean;
-  onConvert?: () => void;
-  onCopy?: () => void;
-  onDelete?: () => void;
 }
 
 export const VariableEditor = ({
@@ -97,11 +94,10 @@ export const VariableEditor = ({
   onAdd,
   readOnly = false,
   color = 'Sulu',
-  onConvert = noop,
-  onCopy = noop,
-  onDelete = noop,
-}: InteractiveProps): ReturnType<FC> => {
+  ...menuProps
+}: VariableEditorProps): ReturnType<FC> => {
   const childrenArray = Children.toArray(children);
+
   return (
     <div css={spacingStyles}>
       <div css={wrapperStyles(baseSwatches[color].rgb)}>
@@ -111,16 +107,20 @@ export const VariableEditor = ({
               {childrenArray[0]}
             </div>
             <div contentEditable={false} css={iconWrapperStyles}>
-              <InteractiveInputMenu
-                onConvert={onConvert}
-                onCopy={onCopy}
-                onDelete={onDelete}
-                trigger={
-                  <button css={buttonWrapperStyles}>
-                    <Ellipsis />
-                  </button>
-                }
-              />
+              {!readOnly && (
+                // TS can't tell which variant of the union type that composes VariableEditorMenu
+                // is being used at any given moment but we're using these type definitions on
+                // VariableEditor's typings, so we know things will be ok in the end, we just need
+                // TS to shut up.
+                <VariableEditorMenu
+                  {...(menuProps as unknown)}
+                  trigger={
+                    <button css={buttonWrapperStyles}>
+                      <Ellipsis />
+                    </button>
+                  }
+                />
+              )}
             </div>
           </div>
           {childrenArray[1]}
@@ -132,3 +132,5 @@ export const VariableEditor = ({
     </div>
   );
 };
+
+<VariableEditor variant="expression" />;

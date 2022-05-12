@@ -4,7 +4,7 @@ import { isElement } from 'react-is';
 import * as RadixDropdownMenu from '@radix-ui/react-dropdown-menu';
 
 import { MenuItem, MenuSeparator, TriggerMenuItem } from '../../atoms';
-import { UnitMenuItem } from '..';
+import { InputMenuItem, UnitMenuItem } from '..';
 import { cssVar, grey500, transparency } from '../../primitives';
 
 const Depth = createContext(0);
@@ -115,6 +115,7 @@ export const MenuList = ({
                 (child.type === MenuItem ||
                   child.type === MenuList ||
                   child.type === MenuSeparator ||
+                  child.type === InputMenuItem ||
                   child.type === UnitMenuItem)
               ) {
                 return child;

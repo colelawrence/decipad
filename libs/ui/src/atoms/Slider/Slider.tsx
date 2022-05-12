@@ -5,6 +5,7 @@ import { offBlack, cssVar, grey700, transparency } from '../../primitives';
 
 const thumbBorderWidth = 1;
 const thumbSize = 20;
+const trackHeight = 4;
 
 const thumbStyles = {
   boxShadow: `0px 2px 20px ${transparency(grey700, 0.04)}, 
@@ -25,7 +26,7 @@ const trackStyles = {
   borderRadius: '8px',
 
   width: '100%',
-  height: '4px',
+  height: `${trackHeight}px`,
 
   background: cssVar('highlightColor'),
 
@@ -37,6 +38,7 @@ const progressStyles = {
 };
 
 const styles = css({
+  padding: `calc(${thumbSize}px / 2 - ${trackHeight}px / 2) 0`,
   width: '100%', // Specific width is required for Firefox.
 
   background: 'transparent', // Otherwise white in Chrome.
