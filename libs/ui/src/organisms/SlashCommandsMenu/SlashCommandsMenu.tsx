@@ -1,4 +1,3 @@
-import { isEnabled } from '@decipad/feature-flags';
 import { useWindowListener } from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import { ComponentProps, FC, useCallback, useEffect, useState } from 'react';
@@ -84,7 +83,7 @@ const dataItems = [
     title: 'Chart',
     description: 'Chart some of your data',
     icon: <Chart />,
-    enabled: isEnabled('PLOT_ELEMENTS'),
+    enabled: true,
     extraSearchTerms: [],
   },
 ];
