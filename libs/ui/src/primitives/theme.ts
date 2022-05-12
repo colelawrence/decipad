@@ -9,8 +9,9 @@ import {
   offBlack,
   red500,
   white,
-  orange100,
   yellow500,
+  brand100,
+  teal500,
 } from './color';
 import { cssVar, CssVariableKey, CssVariables, setCssVar } from './var';
 
@@ -37,6 +38,8 @@ export const darkTheme: Record<
 
   ...setCssVar('currentTextColor', cssVar('normalTextColor')),
 
-  ...setCssVar('variableHighlightColor', orange100.rgb),
-  ...setCssVar('unknownIdentifierHighlightColor', orange100.rgb),
+  ...setCssVar('variableHighlightColor', brand100.rgb),
+  ...setCssVar('variableHighlightTextColor', teal500.rgb),
+  ...setCssVar('unknownIdentifierHighlightColor', grey200.rgb),
+  ...setCssVar('unknownIdentifierHighlightTextColor', offBlack.rgb),
 };
