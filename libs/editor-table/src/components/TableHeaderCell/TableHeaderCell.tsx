@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import {
   ELEMENT_TH,
   PlateComponent,
@@ -19,13 +20,13 @@ export const TableHeaderCell: PlateComponent = ({
   if (element?.type !== ELEMENT_TH) {
     throw new Error('TableHeaderCell is meant to render table header cells');
   }
+  const computer = useComputer();
+  const readOnly = useReadOnly();
   const editor = usePlateEditorRef();
   const path = findPath(editor, element);
   if (!path) {
     throw new Error('no path for th element found');
   }
-  const computer = useComputer();
-  const readOnly = useReadOnly();
   const nThChild = path[path.length - 1];
   const tablePath = Path.parent(Path.parent(path));
   const [table] = Editor.node(editor, tablePath) as NodeEntry<TableElement>;
@@ -41,6 +42,11 @@ export const TableHeaderCell: PlateComponent = ({
     element
   );
 
+  const parseUnit = useMemo(
+    () => computer.getUnitFromText.bind(computer),
+    [computer]
+  );
+
   return (
     <organisms.TableColumnHeader
       attributes={attributes}
@@ -50,7 +56,7 @@ export const TableHeaderCell: PlateComponent = ({
       isFirst={nThChild === 0}
       onChangeColumnType={(type) => onChangeColumnType(nThChild, type)}
       onRemoveColumn={() => onRemoveColumn(element.id)}
-      parseUnit={computer.getUnitFromText.bind(computer)}
+      parseUnit={parseUnit}
       type={element.cellType}
       draggable={true}
       dragSource={dragSource}

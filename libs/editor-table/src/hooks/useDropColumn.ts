@@ -50,12 +50,13 @@ export const useDropColumn = (
           );
           if (sourceColumnIndex >= 0 && targetColumnIndex >= 0) {
             const direction = getHoverDirection(editor, monitor, column);
-            return [
+            const swappableColumns: [number, number] = [
               sourceColumnIndex,
               direction === 'right'
-                ? targetColumnIndex + 1
-                : Math.max(targetColumnIndex, 0),
+                ? Math.min(targetColumnIndex, columns.length - 1)
+                : Math.max(targetColumnIndex - 1, 0),
             ];
+            return swappableColumns;
           }
         }
       }

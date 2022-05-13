@@ -97,9 +97,9 @@ const DragHandle = () => {
   );
 };
 
-const dragSurfaceWidth = '8px';
+const dragSurfaceThickness = '8px';
 // This component is a drag detector that is over the table heading and
-// captures mouse events.It does not interfere with the mouse events destined to the underlying components.
+// captures mouse events. It tries to not interfere with the mouse events destined to the underlying components.
 // We need to detect drag events and trigger the DnD behavior, and hovering
 // the drag detector triggers it, without interfering with the text boxes underneath it.
 // Tricky stuff...
@@ -108,14 +108,13 @@ const DragDetector = () => {
     <div
       css={css({ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 })}
     >
-      {/* left */}
       <div
         css={css({
           position: 'absolute',
           top: 0,
           bottom: 0,
           left: 0,
-          width: dragSurfaceWidth,
+          width: dragSurfaceThickness,
           pointerEvents: 'all',
         })}
       ></div>
@@ -125,7 +124,7 @@ const DragDetector = () => {
           top: 0,
           bottom: 0,
           right: 0,
-          width: dragSurfaceWidth,
+          width: dragSurfaceThickness,
           pointerEvents: 'all',
         })}
       ></div>
@@ -135,7 +134,7 @@ const DragDetector = () => {
           top: 0,
           left: 0,
           right: 0,
-          height: dragSurfaceWidth,
+          height: dragSurfaceThickness,
           pointerEvents: 'all',
         })}
       ></div>
@@ -145,7 +144,7 @@ const DragDetector = () => {
           bottom: 0,
           left: 0,
           right: 0,
-          height: dragSurfaceWidth,
+          height: dragSurfaceThickness,
           pointerEvents: 'all',
         })}
       ></div>
