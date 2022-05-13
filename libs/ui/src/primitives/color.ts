@@ -21,7 +21,17 @@ export interface TransparentColor extends Color {
 }
 // Only list the few opacities we use here so that
 // we do not end up with all kinds of similar but not identical transparent colors.
-export type Opacity = 0 | 0.02 | 0.04 | 0.08 | 0.16 | 0.4 | 0.65 | 0.8 | 1;
+export type Opacity =
+  | 0
+  | 0.02
+  | 0.04
+  | 0.06
+  | 0.08
+  | 0.16
+  | 0.4
+  | 0.65
+  | 0.8
+  | 1;
 export function transparency(
   { red, green, blue }: OpaqueColor,
   opacity: Opacity
@@ -47,6 +57,7 @@ export const grey400 = color(170, 177, 189);
 export const grey500 = color(119, 126, 137);
 export const grey600 = color(77, 86, 100);
 export const grey700 = color(50, 59, 73);
+
 export const offBlack = color(22, 31, 44);
 export const black = color(0, 0, 0);
 
@@ -190,3 +201,9 @@ export const lavender000 = color(95, 100, 134);
 export const weakOpacity: Opacity = 0.08;
 export const normalOpacity: Opacity = 0.4;
 export const strongOpacity: Opacity = 0.65;
+
+//
+// shadows
+//
+export const smallShadow = transparency(black, 0.06);
+export const mediumShadow = transparency(black, 0.08);

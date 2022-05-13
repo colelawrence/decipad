@@ -23,6 +23,7 @@ export { NotebookListItemPlaceholder } from './NotebookListItemPlaceholder/Noteb
 export { NotebookPath } from './NotebookPath/NotebookPath';
 export { OrderedList } from './OrderedList/OrderedList';
 export { SlashCommandsMenuGroup } from './SlashCommandsMenuGroup/SlashCommandsMenuGroup';
+export { AutoCompleteMenuGroup } from './AutoCompleteMenuGroup/AutoCompleteMenuGroup';
 export { TableHeaderRow } from './TableHeaderRow/TableHeaderRow';
 export { TableRow } from './TableRow/TableRow';
 export { UnitMenuItem } from './UnitMenuItem/UnitMenuItem';
