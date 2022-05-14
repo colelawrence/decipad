@@ -1,16 +1,6 @@
 import Fraction from '@decipad/fraction';
-import {
-  block,
-  assign,
-  l,
-  r,
-  c,
-  categories,
-  col,
-  matrixRef,
-  matrixAssign,
-} from '../utils';
-import { AST } from '..';
+import { astNode, parseOneStatement } from '@decipad/language';
+import { AST } from '.';
 import {
   ComputePanic,
   ComputeResponse,
@@ -19,14 +9,14 @@ import {
   Program,
   UnparsedBlock,
 } from './types';
-import { wrappedParse } from './parse';
+import { wrappedParse } from './computer/parse';
 
-export const testBlocks = (
-  ...blocks: (AST.Block | AST.Statement)[]
-): AST.Block[] => {
+const block = (...items: AST.Statement[]) => astNode('block', ...items);
+
+export const testBlocks = (...blocks: (AST.Block | string)[]): AST.Block[] => {
   return blocks.map((item, index) => {
-    if (item.type !== 'block') {
-      item = block(item);
+    if (typeof item === 'string') {
+      item = block(parseOneStatement(item));
     }
     item.id = `block-${index}`;
     return item;
@@ -34,46 +24,35 @@ export const testBlocks = (
 };
 
 export const program = testBlocks(
-  block(assign('A', l(1)), assign('Unused', l(123))),
-  block(assign('B', l(2)), c('+', r('A'), l(1)), c('+', r('A'), r('B')))
+  block(parseOneStatement('A = 1'), parseOneStatement('Unused = 123')),
+  block(
+    parseOneStatement('B = 2'),
+    parseOneStatement('A + 1'),
+    parseOneStatement('A + B')
+  )
 );
 
 export const deeperProgram = testBlocks(
   ...program,
-  block(assign('C', r('B')), assign('D', r('C')))
+  block(parseOneStatement('C = B'), parseOneStatement('D = C'))
 );
 
 export const implicitDepProgram = testBlocks(
-  block(assign('A', l(1)), assign('Unused', l(123))),
-  block(l(1)),
-  block(c('+', r('_'), r('B'))),
-  block(assign('C', r('_')), assign('D', r('_'))),
-  block(assign('E', r('C'))),
-  block(assign('F', r('A')))
+  block(parseOneStatement('A = 1'), parseOneStatement('Unused = 123')),
+  '1',
+  '_ + B',
+  block(parseOneStatement('C = _'), parseOneStatement('D = _')),
+  'E = C',
+  'F = A'
 );
 
-export const programContainingReassign = testBlocks(
-  block(assign('A', l(1))),
-  block(assign('A', l(2)))
-);
+export const programContainingReassign = testBlocks('A = 1', 'A = 2');
 
 export const programContainingError = testBlocks(
-  block(
-    assign('A', l(1)),
-    assign('Error', c('+', r('A'), l('hi i was supposed to be a number'))),
-    c('+', r('A'), l(1)),
-    c('+', r('Error'), l(1))
-  )
-);
-
-export const programContainingMatrix = testBlocks(
-  block(
-    categories('Locations', col('Lisbon', 'Faro')),
-    r('Locations'),
-    matrixAssign('CoffeePrice', [r('Locations')], l(1)),
-    matrixAssign('CoffeePrice', [c('==', r('Locations'), l('Faro'))], l(2)),
-    matrixRef('CoffeePrice', [r('Locations')])
-  )
+  'A = 1',
+  'Error = A + "hi i was supposed to be a number"',
+  'A + 1',
+  'Error + 1'
 );
 
 export const unparsedProgram: Program = [

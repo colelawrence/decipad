@@ -28,7 +28,7 @@ import { evaluateColumnAssign } from '../tables/column-assign';
 // eslint-disable-next-line consistent-return
 export async function evaluate(
   realm: Realm,
-  node: AST.Statement | AST.Expression
+  node: AST.Statement
 ): Promise<Value> {
   switch (node.type) {
     case 'literal': {

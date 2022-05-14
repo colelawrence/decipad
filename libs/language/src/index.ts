@@ -11,25 +11,45 @@ import {
   units,
 } from './type';
 
-export * from './computer';
 export { ExternalData } from './data';
-export { Time } from './date';
+export { Time, parseUTCDate, stringifyDate } from './date';
 export {
   identifierRegExpGlobal,
   STATEMENT_SEP_TOKEN_TYPE,
   tokenize,
   tokenRules,
 } from './grammar';
+export { previousRefSymbols } from './previous-ref';
 export type { Token } from './grammar';
 export * from './grammar/containmentCounting';
-export { inferBlock, makeContext } from './infer';
+export {
+  inferBlock,
+  makeContext,
+  inferProgram,
+  inferExpression,
+  inferStatement,
+} from './infer';
 export type { Context } from './infer';
-export { Interpreter } from './interpreter';
-export { Column, Date, Range, Row, Scalar, Table } from './interpreter/Value';
-export { AST, parse, Parser, SyntaxError } from './parser';
+export type { Interpreter, Value, ColumnLike } from './interpreter';
+export {
+  evaluateStatement,
+  RuntimeError,
+  Realm,
+  isColumnLike,
+} from './interpreter';
+export {
+  Column,
+  Date,
+  Range,
+  Row,
+  Scalar,
+  Table,
+  fromJS,
+} from './interpreter/Value';
+export { AST, parse, Parser, parseBlock, SyntaxError } from './parser';
 export { prettyPrintAST } from './parser/utils';
-export { setErrorReporter } from './reporting';
-export type { OneResult } from './result';
+export type { OneResult, Result } from './result';
+export { serializeResult, stringifyResult, validateResult } from './result';
 export * from './run';
 export {
   build as buildType,
@@ -48,7 +68,7 @@ export type {
   SerializedTypeKind,
   SerializedUnits,
 } from './type';
-export { isExpression } from './utils';
+export { isExpression, walkAst, n as astNode } from './utils';
 export { units };
 export type { Unit, Units };
 

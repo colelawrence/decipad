@@ -11,7 +11,7 @@ import {
 } from '../interpreter/Value';
 import { mapWithPrevious } from '../interpreter/previous';
 import {
-  walk,
+  walkAst,
   getIdentifierString,
   isExpression,
   getInstanceof,
@@ -25,7 +25,7 @@ const isRecursiveReference = (expr: AST.Expression) =>
 export const usesRecursion = (expr: AST.Expression) => {
   let result = false;
 
-  walk(expr, (expr) => {
+  walkAst(expr, (expr) => {
     if (isExpression(expr) && isRecursiveReference(expr)) {
       result = true;
     }

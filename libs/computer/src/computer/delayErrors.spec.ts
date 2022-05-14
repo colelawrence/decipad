@@ -1,11 +1,8 @@
 import { EMPTY, firstValueFrom, from, Observable } from 'rxjs';
 
-import {
-  buildType as t,
-  getDelayedBlockId,
-  serializeType,
-} from '@decipad/language';
+import { buildType as t, serializeType } from '@decipad/language';
 import { timeout } from '@decipad/utils';
+import { getDelayedBlockId } from '.';
 
 import { delayErrors, SingleBlockRes } from './delayErrors';
 

@@ -1,5 +1,5 @@
 import { useNotebookTitlePlugin } from '@decipad/editor-plugins';
-import { Computer } from '@decipad/language';
+import { Computer } from '@decipad/computer';
 import { createPlateEditor, PlateEditor } from '@udecode/plate';
 import { useMemo } from 'react';
 import * as configuration from './configuration';

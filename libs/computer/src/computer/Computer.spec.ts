@@ -1,14 +1,15 @@
 import produce from 'immer';
-import { timeout } from '@decipad/utils';
+import { AnyMapping, timeout } from '@decipad/utils';
 import {
   AST,
   InjectableExternalData,
   buildType as t,
   Scalar,
   Column,
-} from '..';
-import { AnyMapping, assign, c, l, n } from '../utils';
-import { RuntimeError } from '../interpreter';
+  RuntimeError,
+  astNode,
+  parseOneStatement,
+} from '@decipad/language';
 import {
   unparsedProgram,
   deeperProgram,
@@ -16,10 +17,10 @@ import {
   simplifyInBlockResults,
   simplifyComputeResponse,
   getUnparsed,
-} from './testutils';
+} from '../testUtils';
 import { ComputationRealm } from './ComputationRealm';
 import { computeProgram, Computer, resultFromError } from './Computer';
-import { ComputeRequest, UnparsedBlock } from './types';
+import { ComputeRequest, UnparsedBlock } from '../types';
 
 let computer: Computer;
 beforeEach(() => {
@@ -79,9 +80,9 @@ it('returns type errors', async () => {
   expect(await testCompute(programContainingError)).toMatchInlineSnapshot(`
     Array [
       "block-0/0 -> 1",
-      "block-0/1 -> Type Error",
-      "block-0/2 -> 2",
-      "block-0/3 -> Type Error",
+      "block-1/0 -> Type Error",
+      "block-2/0 -> 2",
+      "block-3/0 -> Type Error",
     ]
   `);
 });
@@ -176,6 +177,20 @@ describe('caching', () => {
   });
 });
 
+it('creates new, unused identifiers', async () => {
+  expect(computer.getAvailableIdentifier('Name', 1)).toMatchInlineSnapshot(
+    `"Name1"`
+  );
+
+  await computeOnTestComputer({
+    program: getUnparsed('AlreadyUsed1 = 1'),
+  });
+
+  expect(
+    computer.getAvailableIdentifier('AlreadyUsed', 1)
+  ).toMatchInlineSnapshot(`"AlreadyUsed2"`);
+});
+
 describe('uses previous value', () => {
   it('works the first and second time', async () => {
     expect(
@@ -223,10 +238,14 @@ it('can reset itself', async () => {
 });
 
 it('can pass on injected data', async () => {
-  const injectedBlock = n(
+  const injectedBlock = astNode(
     'block',
-    assign('InjectedVar', n('externalref', 'external-reference-id')),
-    n('ref', 'InjectedVar')
+    astNode(
+      'assign',
+      astNode('def', 'InjectedVar'),
+      astNode('externalref', 'external-reference-id')
+    ),
+    astNode('ref', 'InjectedVar')
   );
   injectedBlock.id = 'blockid';
   const externalData: AnyMapping<InjectableExternalData> = {
@@ -280,16 +299,18 @@ describe('tooling data', () => {
   });
 
   it('can figure out if a statement is a basic lit or assignment', () => {
-    expect(computer.isLiteralValueOrAssignment(l(1))).toEqual(true);
-    expect(computer.isLiteralValueOrAssignment(c('+', l(1), l(1)))).toEqual(
-      false
-    );
-
-    expect(computer.isLiteralValueOrAssignment(assign('Var', l(1)))).toEqual(
+    expect(computer.isLiteralValueOrAssignment(parseOneStatement('1'))).toEqual(
       true
     );
     expect(
-      computer.isLiteralValueOrAssignment(assign('Var', c('+', l(1), l(1))))
+      computer.isLiteralValueOrAssignment(parseOneStatement('1 + 1'))
+    ).toEqual(false);
+
+    expect(
+      computer.isLiteralValueOrAssignment(parseOneStatement('Var = 1'))
+    ).toEqual(true);
+    expect(
+      computer.isLiteralValueOrAssignment(parseOneStatement('Var = 1 + 1'))
     ).toEqual(false);
   });
 
@@ -309,7 +330,10 @@ it('creates a result from an error', () => {
   expect(resultFromError(new RuntimeError('Message!'), ['blockid', 3]).type)
     .toMatchInlineSnapshot(`
     Object {
-      "errorCause": ErrSpec:free-form("message" => "Message!"),
+      "errorCause": Object {
+        "errType": "free-form",
+        "message": "Message!",
+      },
       "kind": "type-error",
     }
   `);
@@ -317,7 +341,10 @@ it('creates a result from an error', () => {
   expect(resultFromError(new Error('panic: Message!'), ['blockid', 3]).type)
     .toMatchInlineSnapshot(`
     Object {
-      "errorCause": ErrSpec:free-form("message" => "Internal Error: Message!. Please contact support"),
+      "errorCause": Object {
+        "errType": "free-form",
+        "message": "Internal Error: Message!. Please contact support",
+      },
       "kind": "type-error",
     }
   `);

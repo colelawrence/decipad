@@ -1,13 +1,13 @@
+import { previousRefSymbols } from '@decipad/language';
 import { AST } from '..';
-import { ValueLocation } from './types';
+import { ValueLocation } from '../types';
 import {
   iterProgram,
   findSymbolsUsed,
   getDefinedSymbol,
   getStatement,
   getSymbolsDefinedInLocs,
-} from './utils';
-import { previousRefSymbols } from '../previous-ref';
+} from '../utils';
 
 const previousSymbols = Array.from(previousRefSymbols).map((s) => `var:${s}`);
 

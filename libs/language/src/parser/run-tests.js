@@ -1,10 +1,10 @@
 import assert from 'assert';
-import { walk, zip } from '../utils';
+import { walkAst, zip } from '../utils';
 import { prettyPrintAST } from './utils';
 import { parse } from '.';
 
 const walkWithUnits = (ast, fn) => {
-  walk(ast, (node, path) => {
+  walkAst(ast, (node, path) => {
     fn(node, path);
 
     if (node.type === 'literal' && node.args[2] != null) {

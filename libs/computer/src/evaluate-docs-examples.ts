@@ -1,9 +1,15 @@
 /* istanbul ignore file */
 import { nanoid } from 'nanoid';
-import { Computer, ComputeResponse, deserializeType, InferError } from '.';
-import { RuntimeError } from './interpreter';
-import { stringifyResult } from './result';
-import { getDefined, identity } from './utils';
+
+import { getDefined, identity } from '@decipad/utils';
+import {
+  deserializeType,
+  InferError,
+  RuntimeError,
+  stringifyResult,
+} from '@decipad/language';
+
+import { Computer, ComputeResponse } from '.';
 
 type EvaluatedDoc = string | { crash: string };
 

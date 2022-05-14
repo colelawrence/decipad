@@ -7,7 +7,7 @@ import {
 } from '@decipad/editor-types';
 import { render } from '@testing-library/react';
 import { Plate } from '@udecode/plate';
-import { Computer } from '@decipad/language';
+import { Computer } from '@decipad/computer';
 import { timeout } from '@decipad/utils';
 import {
   ComputerContextProvider,

@@ -1,6 +1,5 @@
-import { getDefined } from '@decipad/utils';
+import { getDefined, AnyMapping, anyMappingToMap } from '@decipad/utils';
 import { immerable } from 'immer';
-import { AnyMapping, anyMappingToMap } from '../utils';
 
 /**
  * Holds scopes, which are maps of variable names to things like Type,

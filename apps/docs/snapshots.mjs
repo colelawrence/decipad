@@ -32,7 +32,7 @@ const runCode = (sources) => {
     pathJoin(docsDir, '../../node_modules/.bin/babel-node'),
     [
       '--extensions=.js,.jsx,.ts,.tsx',
-      pathJoin(docsDir, '../../libs/language/src/evaluate-docs-examples.ts'),
+      pathJoin(docsDir, '../../libs/computer/src/evaluate-docs-examples.ts'),
     ],
     {
       input: JSON.stringify(Object.fromEntries(sources.entries())),

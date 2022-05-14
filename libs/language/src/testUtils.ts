@@ -1,17 +1,17 @@
 import FFraction from '@decipad/fraction';
+import { AnyMapping, zip } from '@decipad/utils';
 import { AST, InjectableExternalData } from '.';
+import { inferBlock, inferProgram, makeContext } from './infer';
 import { Realm, run } from './interpreter';
 import { fromJS, FromJSArg, Table } from './interpreter/Value';
-import { inferProgram, inferBlock, makeContext } from './infer';
-import { zip, AnyMapping } from './utils';
 import { OneResult, stringifyResult } from './result';
-import {
-  Type,
-  build as t,
-  normalizeUnitsOf,
-  convertToMultiplierUnit,
-} from './type';
 import { parseOneBlock } from './run';
+import {
+  build as t,
+  convertToMultiplierUnit,
+  normalizeUnitsOf,
+  Type,
+} from './type';
 
 export const runAST = async (
   block: AST.Block,

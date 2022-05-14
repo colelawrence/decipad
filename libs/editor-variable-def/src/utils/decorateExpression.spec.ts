@@ -1,5 +1,5 @@
 import { ELEMENT_EXPRESSION } from '@decipad/editor-types';
-import { Computer } from '@decipad/language';
+import { Computer } from '@decipad/computer';
 import { PlateEditor, WithPlatePlugin } from '@udecode/plate';
 import { decorateExpression } from './decorateExpression';
 

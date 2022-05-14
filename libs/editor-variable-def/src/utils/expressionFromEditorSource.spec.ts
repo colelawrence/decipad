@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/language';
+import { Computer } from '@decipad/computer';
 import Fraction from '@decipad/fraction';
 import { expressionFromEditorSource } from './expressionFromEditorSource';
 

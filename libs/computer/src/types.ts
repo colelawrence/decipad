@@ -1,6 +1,5 @@
-import { AST, InjectableExternalData, Result } from '..';
-import { AnyMapping } from '../utils';
-import { ParserError } from '../parser/parser-types';
+import { AnyMapping } from '@decipad/utils';
+import { AST, InjectableExternalData, Result, Parser } from '@decipad/language';
 
 export interface IdentifiedBlock {
   type: 'identified-block';
@@ -13,7 +12,7 @@ export interface IdentifiedError {
   type: 'identified-error';
   id: string;
   source: string;
-  error: ParserError;
+  error: Parser.ParserError;
 }
 
 export type ValueLocation = [blockId: string, statementIdx: number];
@@ -53,7 +52,7 @@ export interface ComputeResponse {
 /** Contains the results  */
 export interface IdentifiedResult {
   blockId: string;
-  error?: ParserError;
+  error?: Parser.ParserError;
   isSyntaxError: boolean;
   results: InBlockResult[];
 }
@@ -74,5 +73,5 @@ export interface ResultsContextItem {
 
 export interface ComputerParseStatementResult {
   statement?: AST.Statement;
-  error?: ParserError;
+  error?: Parser.ParserError;
 }

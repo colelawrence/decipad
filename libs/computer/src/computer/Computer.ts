@@ -8,23 +8,30 @@ import {
   map,
   shareReplay,
 } from 'rxjs/operators';
+
+import { anyMappingToMap, getDefined } from '@decipad/utils';
 import {
-  AST,
-  AutocompleteName,
+  buildType as t,
+  serializeType,
+  serializeUnit,
   ExternalDataMap,
+  AutocompleteName,
+  AST,
   parseOneBlock,
   SerializedUnits,
   serializeResult,
-  serializeType,
-  serializeUnit,
-} from '..';
-import { inferExpression, inferStatement } from '../infer';
-import { evaluateStatement, RuntimeError, Value } from '../interpreter';
-import { parseBlock } from '../parser';
+  inferExpression,
+  inferStatement,
+  parseBlock,
+  isExpression,
+  validateResult,
+  Result,
+  evaluateStatement,
+  RuntimeError,
+  Value,
+} from '@decipad/language';
+
 import { captureException } from '../reporting';
-import { Result, validateResult } from '../result';
-import { build as t } from '../type';
-import { anyMappingToMap, getDefined, isExpression } from '../utils';
 import { ComputationRealm } from './ComputationRealm';
 import { defaultComputerResults } from './defaultComputerResults';
 import { getDelayedBlockId } from './delayErrors';
@@ -40,13 +47,13 @@ import {
   InBlockResult,
   ResultsContextItem,
   ValueLocation,
-} from './types';
+} from '../types';
 import {
   getAllBlockLocations,
   getDefinedSymbol,
   getGoodBlocks,
   getStatement,
-} from './utils';
+} from '../utils';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
 
@@ -440,11 +447,8 @@ export class Computer {
   }
 
   parseStatement(source: string): ComputerParseStatementResult {
-    const parseResult = parseBlock({ id: 'block-id', source });
-    return {
-      statement: parseResult.solutions[0]?.args[0],
-      error: parseResult.errors[0],
-    };
+    const { solutions, errors } = parseBlock({ id: 'block-id', source });
+    return { statement: solutions[0]?.args[0], error: errors[0] };
   }
 
   isExpression(statement: AST.Statement): statement is AST.Expression {

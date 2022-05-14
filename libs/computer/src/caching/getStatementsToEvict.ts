@@ -1,7 +1,7 @@
 import { dequal } from 'dequal';
-import { AST, ExternalDataMap } from '..';
+import { AST, ExternalDataMap } from '@decipad/language';
 import { getDependents } from './dependents';
-import { ValueLocation } from './types';
+import { ValueLocation } from '../types';
 import {
   findSymbolsUsed,
   getAllSymbolsDefined,
@@ -10,7 +10,7 @@ import {
   iterProgram,
   LocationSet,
   setIntersection,
-} from './utils';
+} from '../utils';
 
 const getChangedMapKeys = <T>(
   oldMap: Map<string, T>,

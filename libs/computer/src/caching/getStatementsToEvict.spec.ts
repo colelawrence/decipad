@@ -1,6 +1,6 @@
-import { AST, InjectableExternalData } from '..';
-import { anyMappingToMap, n } from '../utils';
+import { AST, InjectableExternalData, astNode } from '@decipad/language';
 
+import { anyMappingToMap } from '@decipad/utils';
 import {
   findSymbolErrors,
   findSymbolsAffectedByChange,
@@ -8,9 +8,9 @@ import {
   getStatementsToEvict,
   GetStatementsToEvictArgs,
 } from './getStatementsToEvict';
-import { parse } from './testutils';
-import { ValueLocation } from './types';
-import { parseLoc } from './utils';
+import { parse } from '../testUtils';
+import { ValueLocation } from '../types';
+import { parseLoc } from '../utils';
 
 describe('findSymbolErrors', () => {
   it('finds variables which are reassigned', () => {
@@ -296,7 +296,7 @@ describe('evictCache', () => {
       {
         id: 'block-0',
         type: 'block',
-        args: [n('externalref', 'extDataId')],
+        args: [astNode('externalref', 'extDataId')],
       },
     ];
 

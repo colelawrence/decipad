@@ -1,8 +1,9 @@
+import { AnyMapping, anyMappingToMap } from '@decipad/utils';
+
 import { AST, ExternalData, ExternalDataMap, InjectableExternalData } from '..';
 import { Type, SerializedType } from '../type';
 import { Stack } from '../stack';
 import defaultFetch from '../data/default-fetch';
-import { AnyMapping, anyMappingToMap } from '../utils';
 
 export interface Context {
   stack: Stack<Type>;

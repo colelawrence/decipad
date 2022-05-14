@@ -1,6 +1,6 @@
-import { AST, SyntaxError, BracketError } from '..';
-import { walk, getIdentifierString, getDefined } from '../utils';
-import { ParseRet } from './parse';
+import { AST, SyntaxError, BracketError, walkAst } from '@decipad/language';
+import { getDefined } from '@decipad/utils';
+import { ParseRet } from './computer/parse';
 import { ValueLocation } from './types';
 
 export const stringifyLoc = (loc: ValueLocation) => loc.join('/');
@@ -104,6 +104,8 @@ export const getSomeBlockLocations = (
     blockIds.includes(block.id) ? blockLocs(block) : []
   );
 
+const getIdentifierString = (ident: AST.Identifier): string => ident.args[0];
+
 export const getDefinedSymbol = (stmt: AST.Statement) => {
   switch (stmt.type) {
     case 'function-definition':
@@ -180,7 +182,7 @@ export const parseDefName = (sym: string): ['var' | 'fn', string] => {
 export const findSymbolsUsed = (stmt: AST.Statement) => {
   const symbols: string[] = [];
 
-  walk(stmt, (node) => {
+  walkAst(stmt, (node) => {
     const sym = getReferredSymbol(node);
     if (sym != null) symbols.push(sym);
   });

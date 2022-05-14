@@ -1,22 +1,22 @@
 // TODO fix types
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { buildType, Column, Table, Date } from '..';
-import { parseUTCDate } from '../date';
-import { fromJS } from '../interpreter/Value';
-import { assign, funcDef, l } from '../utils';
+import {
+  Column,
+  Table,
+  Date,
+  fromJS,
+  buildType,
+  parseUTCDate,
+} from '@decipad/language';
+import { testBlocks } from '../testUtils';
 import { ComputationRealm } from './ComputationRealm';
-import { testBlocks } from './testutils';
 
 let realm: ComputationRealm;
 beforeEach(() => {
   realm = new ComputationRealm();
 });
 
-const program = testBlocks(
-  assign('A', l(1)),
-  assign('Unused', l(1)),
-  funcDef('Func', [], l(1))
-);
+const program = testBlocks('A = 1', 'Unused = 1', 'Func(x) = 1');
 
 it('evictStatement', () => {
   realm.locCache.set(['block-1', 0], 'something' as any);

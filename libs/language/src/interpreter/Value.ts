@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import Fraction from '@decipad/fraction';
-import { unzip } from '@decipad/utils';
+import { unzip, getDefined, AnyMapping, anyMappingToMap } from '@decipad/utils';
 import { DeepReadonly } from 'utility-types';
 import { Interpreter, Time } from '..';
 import {
@@ -10,12 +10,7 @@ import {
   TimeQuantity,
 } from '../date';
 import { Dimension, EmptyColumn, lowLevelGet } from '../lazy';
-import {
-  AnyMapping,
-  anyMappingToMap,
-  filterUnzipped,
-  getDefined,
-} from '../utils';
+import { filterUnzipped } from '../utils';
 import { RuntimeError } from '.';
 import { Unknown } from './Unknown';
 import * as ValueTransforms from './ValueTransforms';

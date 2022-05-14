@@ -6,13 +6,13 @@ export { date } from './date';
 
 type WalkFn = (node: AST.Node, path: number[]) => void;
 
-export const walk = (node: AST.Node, fn: WalkFn, path: number[] = []) => {
+export const walkAst = (node: AST.Node, fn: WalkFn, path: number[] = []) => {
   fn(node, path);
 
   for (let index = 0; index < node.args.length; index++) {
     const arg = node.args[index];
     if (isNode(arg)) {
-      walk(arg, fn, [...path, index]);
+      walkAst(arg, fn, [...path, index]);
     }
   }
 };
@@ -327,18 +327,6 @@ export const allMatch = <T>(array: T[], matchFn: (a: T, b: T) => boolean) =>
 
     return nextItem != null ? matchFn(thisItem, nextItem) : true;
   });
-
-export type AnyMapping<T> =
-  | Map<string, T>
-  | { [key: string]: T }
-  | Array<[key: string, val: T]>;
-export const anyMappingToMap = <T>(mapping: AnyMapping<T>): Map<string, T> => {
-  if (mapping instanceof Map || Array.isArray(mapping)) {
-    return new Map(mapping);
-  } else {
-    return new Map(Object.entries(mapping));
-  }
-};
 
 export function equalOrUnknown(a: number | 'unknown', b: number | 'unknown') {
   if (a === 'unknown' || b === 'unknown') {

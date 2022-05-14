@@ -1,5 +1,5 @@
 import { getDependents } from './dependents';
-import { deeperProgram, implicitDepProgram } from './testutils';
+import { deeperProgram, implicitDepProgram } from '../testUtils';
 
 describe('getDependents', () => {
   it('finds dependents of a set of locs', () => {

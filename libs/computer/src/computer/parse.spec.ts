@@ -1,6 +1,6 @@
 import produce from 'immer';
 import { updateParse } from './parse';
-import { UnparsedBlock } from './types';
+import { UnparsedBlock } from '../types';
 
 it('parses only the necessary parts', () => {
   const program: UnparsedBlock[] = [

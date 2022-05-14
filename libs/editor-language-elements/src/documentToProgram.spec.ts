@@ -1,5 +1,5 @@
 import { CodeBlockElement } from '@decipad/editor-types';
-import { ParsedBlock, prettyPrintAST } from '@decipad/language';
+import { ParsedBlock, prettyPrintAST } from '@decipad/computer';
 import { documentToProgram } from './documentToProgram';
 
 describe('documentToProgram', () => {

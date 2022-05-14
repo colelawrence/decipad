@@ -3,7 +3,12 @@ import { produce } from 'immer';
 
 import type { AST } from '..';
 import { Type, build as t, InferError } from '../type';
-import { equalOrUnknown, getIdentifierString, getOfType, walk } from '../utils';
+import {
+  equalOrUnknown,
+  getIdentifierString,
+  getOfType,
+  walkAst,
+} from '../utils';
 import { inferExpression, linkToAST } from '../infer';
 import { Context, pushStackAndPrevious } from '../infer/context';
 import { linearizeType } from '../dimtools/common';
@@ -175,7 +180,7 @@ export function refersToOtherColumnsByName(
 ) {
   let isReferringToOtherColumnByName = false;
 
-  walk(expr, (node) => {
+  walkAst(expr, (node) => {
     if (node.type === 'ref') {
       const name = getIdentifierString(node);
 

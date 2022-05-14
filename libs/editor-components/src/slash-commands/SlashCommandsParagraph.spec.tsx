@@ -22,7 +22,7 @@ import {
   waitFor,
 } from '@testing-library/react';
 import { findDomNodePath } from '@decipad/editor-utils';
-import { Computer } from '@decipad/language';
+import { Computer } from '@decipad/computer';
 import { SlashCommandsParagraph } from './SlashCommandsParagraph';
 
 let editor: PlateEditor;

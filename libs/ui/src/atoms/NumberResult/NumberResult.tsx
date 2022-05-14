@@ -4,7 +4,7 @@ import {
   stringifyUnits,
   convertToMultiplierUnit,
   normalizeUnitsOf,
-} from '@decipad/language';
+} from '@decipad/computer';
 import Fraction from '@decipad/fraction';
 import { CodeResultProps } from '../../types';
 import { Tooltip } from '../Tooltip/Tooltip';

@@ -1,4 +1,4 @@
-import { tokenize } from '../grammar';
+import { tokenize } from '@decipad/language';
 
 interface TokenPos {
   text: string;

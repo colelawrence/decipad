@@ -1,5 +1,5 @@
-import type { AST, Context } from '..';
-import { getDefinedSymbol } from './utils';
+import type { AST, Context } from '@decipad/language';
+import { getDefinedSymbol } from '../utils';
 
 export const getVisibleVariables = (
   program: AST.Block[],

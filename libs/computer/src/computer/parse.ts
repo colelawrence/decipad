@@ -1,12 +1,11 @@
 import { dequal } from 'dequal';
-import { Parser } from '..';
-import { parseBlock } from '../parser';
+import { Parser, parseBlock } from '@decipad/language';
 import {
   Program,
   IdentifiedBlock,
   IdentifiedError,
   ParsedBlock,
-} from './types';
+} from '../types';
 
 export type ParseRet = IdentifiedBlock | IdentifiedError;
 

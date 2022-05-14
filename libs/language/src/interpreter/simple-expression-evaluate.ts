@@ -13,7 +13,7 @@ import { InferError } from '../type';
 // eslint-disable-next-line consistent-return
 export function simpleExpressionEvaluate(
   realm: Realm,
-  node: AST.Statement | AST.Expression
+  node: AST.Statement
 ): FractionValue {
   switch (node.type) {
     case 'literal': {

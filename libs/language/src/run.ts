@@ -1,8 +1,8 @@
+import { AnyMapping } from '@decipad/utils';
 import { AST, InjectableExternalData, isExpression, Type } from '.';
 import { Context, inferBlock, makeContext } from './infer';
-import { AnyMapping } from './utils';
-import { parseBlock } from './parser';
 import { Realm, run } from './interpreter';
+import { parseBlock } from './parser';
 import { OneResult, validateResult } from './result';
 
 export const parseOneBlock = (source: string): AST.Block => {
@@ -13,6 +13,13 @@ export const parseOneBlock = (source: string): AST.Block => {
   }
 
   return parsed.solutions[0];
+};
+
+export const parseOneStatement = (source: string): AST.Statement => {
+  const block = parseOneBlock(source);
+  const item = block.args[0];
+
+  return item;
 };
 
 export const parseOneExpression = (source: string): AST.Expression => {

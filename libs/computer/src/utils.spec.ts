@@ -1,14 +1,5 @@
-import {
-  r,
-  c,
-  l,
-  assign,
-  matrixRef,
-  matrixAssign,
-  categories,
-  tableColAssign,
-} from '../utils';
-import { program } from './testutils';
+import { parseOneStatement } from '@decipad/language';
+import { program } from './testUtils';
 import {
   findSymbolsUsed,
   getDefinedSymbol,
@@ -17,31 +8,36 @@ import {
 } from './utils';
 
 it('figures out what symbol a statement creates, if any', () => {
-  expect(getDefinedSymbol(assign('A', l(1)))).toEqual('var:A');
-  expect(getDefinedSymbol(l('no-op'))).toEqual(null);
-  expect(getDefinedSymbol(categories('Set', r('Exp')))).toEqual('var:Set');
-  expect(getDefinedSymbol(matrixAssign('Mat', [r('Set')], r('Exp')))).toEqual(
+  expect(getDefinedSymbol(parseOneStatement('A=1'))).toEqual('var:A');
+  expect(getDefinedSymbol(parseOneStatement('"no-op"'))).toEqual(null);
+  expect(
+    getDefinedSymbol(parseOneStatement('Set = categories [ Exp ]'))
+  ).toEqual('var:Set');
+  expect(getDefinedSymbol(parseOneStatement('Mat[Set] = Exp'))).toEqual(
     'var:Mat'
   );
-  expect(getDefinedSymbol(matrixRef('Mat', [r('Set')]))).toEqual(null);
-  expect(getDefinedSymbol(tableColAssign('Table', 'Col', l(1)))).toEqual(
-    'var:Table'
+  expect(getDefinedSymbol(parseOneStatement('Mat[Set]'))).toEqual(null);
+  expect(getDefinedSymbol(parseOneStatement('table.Col = 1'))).toEqual(
+    'var:table'
   );
 });
 
 it('figures out what symbols a statement uses, if any', () => {
-  expect(findSymbolsUsed(c('+', r('A'), l(1)))).toEqual(['fn:+', 'var:A']);
-  expect(findSymbolsUsed(l('no-op'))).toEqual([]);
-  expect(findSymbolsUsed(matrixRef('Mat', [r('Set')]))).toEqual([
+  expect(findSymbolsUsed(parseOneStatement('A + 1'))).toEqual([
+    'fn:+',
+    'var:A',
+  ]);
+  expect(findSymbolsUsed(parseOneStatement('"no-op"'))).toEqual([]);
+  expect(findSymbolsUsed(parseOneStatement('Mat[Set]'))).toEqual([
     'var:Mat',
     'var:Set',
   ]);
-  expect(findSymbolsUsed(matrixAssign('Mat', [r('Set')], r('Exp')))).toEqual([
+  expect(findSymbolsUsed(parseOneStatement('Mat[Set] = Exp'))).toEqual([
     'var:Set',
     'var:Exp',
     'var:Mat',
   ]);
-  expect(findSymbolsUsed(tableColAssign('Table', 'Col', r('Hello')))).toEqual([
+  expect(findSymbolsUsed(parseOneStatement('Table.Col = Hello'))).toEqual([
     'var:Hello',
     'var:Table',
   ]);

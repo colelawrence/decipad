@@ -1,4 +1,4 @@
-import { ResultsContextItem } from './types';
+import { ResultsContextItem } from '../types';
 
 export const defaultComputerResults: ResultsContextItem = {
   blockResults: {},

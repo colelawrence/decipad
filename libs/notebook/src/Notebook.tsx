@@ -1,7 +1,7 @@
 import { DocSyncEditor, OnLoadedCallback } from '@decipad/docsync';
 import { Editor, useCreateEditor } from '@decipad/editor';
 import { useDocSync } from '@decipad/editor-plugins';
-import { Computer } from '@decipad/language';
+import { Computer } from '@decipad/computer';
 import {
   ComputerContextProvider,
   EditorReadOnlyContext,

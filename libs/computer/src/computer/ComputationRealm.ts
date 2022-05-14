@@ -1,20 +1,27 @@
-import { AST, Table, ExternalDataMap, Type } from '..';
-import { stringifyDate } from '../date';
-import { makeContext as makeInferContext } from '../infer';
-import { Realm, Value } from '../interpreter';
-import { ColumnLike, isColumnLike } from '../interpreter/Value';
+import {
+  AST,
+  Table,
+  ExternalDataMap,
+  Type,
+  makeContext as makeInferContext,
+  Realm,
+  Value,
+  ColumnLike,
+  isColumnLike,
+  stringifyDate,
+} from '@decipad/language';
 
 import {
   getStatementsToEvict,
   GetStatementsToEvictArgs,
-} from './getStatementsToEvict';
-import { InBlockResult, ValueLocation } from './types';
+} from '../caching/getStatementsToEvict';
+import { InBlockResult, ValueLocation } from '../types';
 import {
   parseDefName,
   getDefinedSymbolAt,
   LocationSet,
   LocationMap,
-} from './utils';
+} from '../utils';
 
 export type CacheContents = {
   result: InBlockResult | null;

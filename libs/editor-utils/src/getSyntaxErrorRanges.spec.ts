@@ -1,4 +1,4 @@
-import { IdentifiedResult } from '@decipad/language';
+import { IdentifiedResult } from '@decipad/computer';
 import { DECORATE_SYNTAX_ERROR } from '@decipad/editor-types';
 import { getSyntaxErrorRanges } from './getSyntaxErrorRanges';
 
