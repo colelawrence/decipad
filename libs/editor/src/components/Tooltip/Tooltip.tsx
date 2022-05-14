@@ -6,6 +6,7 @@ import {
   MARK_STRIKETHROUGH,
   MARK_UNDERLINE,
 } from '@decipad/editor-types';
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { icons } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { PortalBody } from '@udecode/plate';
@@ -78,8 +79,9 @@ const toolTipMarks = [
 
 export const Tooltip = (): ReturnType<FC> => {
   const { active, ref } = useEditorTooltip();
+  const readOnly = useIsEditorReadOnly();
 
-  if (!active) return null;
+  if (readOnly || !active) return null;
 
   return (
     <PortalBody>

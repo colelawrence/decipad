@@ -1,5 +1,6 @@
-import { Element } from '@decipad/editor-types';
+import { alwaysWritableElementTypes, Element } from '@decipad/editor-types';
 import { findPath } from '@decipad/editor-utils';
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { atoms, organisms } from '@decipad/ui';
 import { useDndBlock } from '@udecode/plate';
 import {
@@ -12,7 +13,7 @@ import {
   useState,
 } from 'react';
 import { Editor as SlateEditor, Transforms } from 'slate';
-import { ReactEditor, useReadOnly, useSlate } from 'slate-react';
+import { ReactEditor, useSlate } from 'slate-react';
 
 const InDraggableBlock = createContext(false);
 
@@ -62,7 +63,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
 }) => {
   const [deleted, setDeleted] = useState(false);
   const editor = useSlate() as ReactEditor;
-  const readOnly = useReadOnly();
+  const readOnly = useIsEditorReadOnly();
   const isInDraggableBlock = useContext(InDraggableBlock);
   const { id } = element;
 
@@ -82,9 +83,15 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
   }
   if (readOnly) {
     return (
-      <atoms.EditorBlock blockKind={props.blockKind}>
-        {children}
-      </atoms.EditorBlock>
+      <div
+        contentEditable={
+          !readOnly || alwaysWritableElementTypes.includes(element.type)
+        }
+      >
+        <atoms.EditorBlock blockKind={props.blockKind}>
+          {children}
+        </atoms.EditorBlock>
+      </div>
     );
   }
   // Nested Draggables (such as lists) do not work well enough with useDndBlock; they are very buggy.

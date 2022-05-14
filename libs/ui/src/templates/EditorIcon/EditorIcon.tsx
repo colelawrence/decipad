@@ -55,7 +55,10 @@ export const EditorIcon = ({
     <button
       css={[
         iconWrapperStyles,
-        { backgroundColor: baseSwatches[props.color].rgb },
+        {
+          backgroundColor: baseSwatches[props.color].rgb,
+          cursor: readOnly ? 'default' : 'pointer',
+        },
       ]}
     >
       <div css={iconStyles}>
@@ -63,6 +66,9 @@ export const EditorIcon = ({
       </div>
     </button>
   );
+  if (readOnly) {
+    return <div css={blockStyles}>{iconElement}</div>;
+  }
   return (
     <div css={blockStyles}>
       <IconPopover {...props} trigger={iconElement} />

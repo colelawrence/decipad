@@ -9,7 +9,7 @@ import { organisms } from '@decipad/ui';
 import { findPath } from '@decipad/editor-utils';
 import { usePlateEditorRef } from '@udecode/plate';
 import { Editor, Node, NodeEntry, Path } from 'slate';
-import { useReadOnly, useSelected } from 'slate-react';
+import { useSelected } from 'slate-react';
 import { useTableActions, useDragColumn, useDropColumn } from '../../hooks';
 
 export const TableHeaderCell: PlateComponent = ({
@@ -21,7 +21,6 @@ export const TableHeaderCell: PlateComponent = ({
     throw new Error('TableHeaderCell is meant to render table header cells');
   }
   const computer = useComputer();
-  const readOnly = useReadOnly();
   const editor = usePlateEditorRef();
   const path = findPath(editor, element);
   if (!path) {
@@ -50,7 +49,7 @@ export const TableHeaderCell: PlateComponent = ({
   return (
     <organisms.TableColumnHeader
       attributes={attributes}
-      readOnly={readOnly}
+      readOnly={false}
       empty={Node.string(element).length === 0}
       focused={focused}
       isFirst={nThChild === 0}

@@ -17,6 +17,7 @@ import {
   safeDelete,
 } from '@decipad/editor-utils';
 import { DraggableBlock } from '@decipad/editor-components';
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { AvailableSwatchColor } from 'libs/ui/src/utils';
 import { getValueAsTextFromElement } from '../utils/getValueAsTextFromElement';
 
@@ -31,6 +32,7 @@ export const VariableDef: PlateComponent = ({
   }
 
   const editor = useSlate();
+  const readOnly = useIsEditorReadOnly();
   const onConvert = useCallback(() => {
     const path = findPath(editor as ReactEditor, element);
     if (path) {
@@ -74,6 +76,7 @@ export const VariableDef: PlateComponent = ({
         editor,
         {
           type: ELEMENT_VARIABLE_DEF,
+          variant: element.variant,
           children: [
             {
               type: ELEMENT_CAPTION,
@@ -97,7 +100,7 @@ export const VariableDef: PlateComponent = ({
   const { color } = element.children[0];
 
   return (
-    <div {...attributes}>
+    <div {...attributes} contentEditable={true}>
       <DraggableBlock
         blockKind="interactive"
         element={element}
@@ -109,6 +112,7 @@ export const VariableDef: PlateComponent = ({
           onCopy={onCopy}
           onAdd={onAdd}
           color={color as AvailableSwatchColor}
+          readOnly={readOnly}
         >
           {children}
         </organisms.VariableEditor>

@@ -19,7 +19,6 @@ const LOAD_REMOTELY_TIMEOUT_MS = 5_000;
 export interface NotebookProps {
   notebookId: string;
   readOnly: boolean;
-  isWriter: boolean;
   icon: ReactNode;
   topbar: ReactNode;
   secret?: string;
@@ -30,7 +29,6 @@ export interface NotebookProps {
 export const Notebook = ({
   notebookId,
   readOnly,
-  isWriter,
   icon,
   secret,
   topbar,
@@ -44,7 +42,7 @@ export const Notebook = ({
   const editor = useCreateEditor({
     notebookId,
     computer,
-    isWriter,
+    readOnly,
   });
 
   useEffect(() => {
@@ -132,7 +130,7 @@ export const Notebook = ({
 
   return (
     <ComputerContextProvider computer={computer}>
-      <EditorReadOnlyContext.Provider value={false}>
+      <EditorReadOnlyContext.Provider value={readOnly}>
         <ResultsContext.Provider value={computerObservable}>
           <NotebookPage
             notebook={

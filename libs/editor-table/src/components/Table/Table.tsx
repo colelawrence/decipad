@@ -42,7 +42,7 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
   );
 
   return (
-    <div {...attributes}>
+    <div {...attributes} contentEditable={true}>
       {!deleted && (
         <DraggableBlock
           element={element}

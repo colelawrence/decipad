@@ -30,6 +30,7 @@ import {
 import { createTablePlugin } from '@decipad/editor-table';
 import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import {
+  createPlugins,
   createAutoformatPlugin,
   createBlockquotePlugin,
   createDndPlugin,
@@ -38,7 +39,6 @@ import {
   createListPlugin,
   createNodeIdPlugin,
   createParagraphPlugin,
-  createPlugins,
   createResetNodePlugin,
   createTrailingBlockPlugin,
 } from '@udecode/plate';

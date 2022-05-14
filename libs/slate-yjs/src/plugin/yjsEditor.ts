@@ -100,7 +100,7 @@ const yjsApply = (editor: YjsEditor, events: Y.YEvent<any>[]) =>
       try {
         applyYjsEvents(
           editor,
-          events.filter((event) => event.transaction.origin !== slateYjsSymbol)
+          events.filter((event) => event.transaction?.origin !== slateYjsSymbol)
         );
       } catch (err) {
         // eslint-disable-next-line no-console

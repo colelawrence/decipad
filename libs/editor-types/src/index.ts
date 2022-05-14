@@ -18,3 +18,8 @@ export * from './elements';
 export * from './table';
 export * from './tables-legacy';
 export * from './components';
+
+export const alwaysWritableElementTypes = [
+  elementKinds.ELEMENT_TABLE,
+  elementKinds.ELEMENT_VARIABLE_DEF,
+];

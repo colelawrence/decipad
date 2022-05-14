@@ -1,5 +1,5 @@
 import { usePlateEditorRef } from '@udecode/plate';
-import { ReactEditor, useReadOnly } from 'slate-react';
+import { ReactEditor } from 'slate-react';
 import { Editor, NodeEntry, Path } from 'slate';
 import { molecules } from '@decipad/ui';
 import {
@@ -19,16 +19,13 @@ export const TableRow: PlateComponent = ({ attributes, children, element }) => {
   const [table] = Editor.node(editor, tablePath) as NodeEntry<TableElement>;
   const { onAddColumn, onRemoveRow } = useTableActions(editor, table);
 
-  // drop
-  const readOnly = useReadOnly();
-
   const firstRow = path[path.length - 1] === 1;
   if (firstRow) {
     return (
       <molecules.TableHeaderRow
         attributes={attributes}
-        readOnly={readOnly}
-        actionsColumn={!readOnly}
+        readOnly={false}
+        actionsColumn={true}
         onAddColumn={onAddColumn}
       >
         {children}
@@ -38,7 +35,7 @@ export const TableRow: PlateComponent = ({ attributes, children, element }) => {
   return (
     <molecules.TableRow
       attributes={attributes}
-      readOnly={readOnly}
+      readOnly={false}
       onRemove={() => onRemoveRow(element.id)}
     >
       {children}

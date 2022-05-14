@@ -6,19 +6,18 @@ import * as configuration from './configuration';
 
 export interface CreateEditorProps {
   notebookId: string;
-  readOnly?: boolean;
-  isWriter: boolean;
+  readOnly: boolean;
   computer: Computer;
 }
 
 export const useCreateEditor = ({
   notebookId,
-  isWriter = true,
+  readOnly = false,
   computer,
 }: CreateEditorProps): PlateEditor => {
   const notebookTitlePlugin = useNotebookTitlePlugin({
     notebookId,
-    isWriter,
+    readOnly,
   });
 
   const editorPlugins = useMemo(

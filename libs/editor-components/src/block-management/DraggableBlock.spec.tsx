@@ -21,6 +21,7 @@ import {
 import { PropsWithChildren } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { EditorReadOnlyContext } from '@decipad/react-contexts';
 import { DraggableBlock } from './DraggableBlock';
 
 const DraggableParagraph: PlateComponent = ({ element, children }) => (
@@ -74,9 +75,14 @@ describe('when editor is in readOnly mode', () => {
       ...plateProps,
       editableProps: { ...plateProps.editableProps, readOnly: true },
     };
-    const { queryByTitle } = render(<Plate {...props} editor={editor} />, {
-      wrapper,
-    });
+    const { queryByTitle } = render(
+      <EditorReadOnlyContext.Provider value={true}>
+        <Plate {...props} editor={editor} />
+      </EditorReadOnlyContext.Provider>,
+      {
+        wrapper,
+      }
+    );
     expect(queryByTitle(/drag/i)).not.toBeInTheDocument();
   });
 });

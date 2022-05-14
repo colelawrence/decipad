@@ -14,14 +14,14 @@ import { Editor, Node } from 'slate';
 
 export interface UseNotebookTitlePluginProps {
   notebookId: string;
-  isWriter: boolean;
+  readOnly: boolean;
 }
 
 const DEBOUNCE_TITLE_UPDATE_MS = 1000;
 
 export const useNotebookTitlePlugin = ({
   notebookId,
-  isWriter,
+  readOnly,
 }: UseNotebookTitlePluginProps): PlatePlugin => {
   const toast = useToast();
   const [editorTitle, setEditorTitle] = useState<string | undefined>(undefined);
@@ -73,7 +73,7 @@ export const useNotebookTitlePlugin = ({
   // Get the first node's text value, if it is not the same as the current pad's name, then i set the newTitle state
   const onChangeNotebookTitle: OnChange = useCallback(
     (editor) => () => {
-      if (isWriter) {
+      if (!readOnly) {
         const { selection } = editor;
         if (!selection || !isCollapsed(selection)) {
           return; // early
@@ -89,7 +89,7 @@ export const useNotebookTitlePlugin = ({
         }
       }
     },
-    [isWriter]
+    [readOnly]
   );
 
   // return a slate plugin

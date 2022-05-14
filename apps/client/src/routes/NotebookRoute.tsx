@@ -198,12 +198,12 @@ export const NotebookRoute = (): ReturnType<FC> => {
         <Notebook
           notebookId={notebookId}
           readOnly={readOnly}
-          isWriter={!readOnly}
           secret={secret}
           onEditor={setEditor}
           onDocsync={setDocsync}
           icon={
             <EditorIcon
+              readOnly={readOnly}
               color={iconColor}
               icon={icon}
               onChangeIcon={(newIcon) => {

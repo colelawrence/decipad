@@ -1,5 +1,6 @@
 import { ELEMENT_H1, PlateComponent } from '@decipad/editor-types';
 import { findPath } from '@decipad/editor-utils';
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { molecules } from '@decipad/ui';
 import { useEditorState } from '@udecode/plate';
 import { useEffect, useState } from 'react';
@@ -15,6 +16,7 @@ export const Title: PlateComponent = ({ attributes, children, element }) => {
 
   const editor = useEditorState();
   const [shouldAutofocus, setShouldAutofocus] = useState(true);
+  const readOnly = useIsEditorReadOnly();
 
   useEffect(() => {
     if (shouldAutofocus) {
@@ -31,7 +33,7 @@ export const Title: PlateComponent = ({ attributes, children, element }) => {
   }, [editor, element, shouldAutofocus]);
 
   return (
-    <div {...attributes}>
+    <div {...attributes} contentEditable={!readOnly}>
       <molecules.EditorTitle
         Heading="h1"
         placeholder={
