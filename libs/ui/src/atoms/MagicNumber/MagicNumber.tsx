@@ -20,7 +20,7 @@ export const MagicNumber = ({
         title={result ? result.value?.toString() : 'Loading'}
         contentEditable={false}
       >
-        {result ? (
+        {result && result.type?.kind !== 'type-error' ? (
           <CodeResult variant="inline" {...result} />
         ) : (
           <span

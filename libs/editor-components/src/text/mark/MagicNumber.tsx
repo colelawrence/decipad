@@ -1,5 +1,5 @@
-import { PlateComponent } from '@decipad/editor-types';
 import { Result } from '@decipad/computer';
+import { PlateComponent } from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
 import { atoms } from '@decipad/ui';
 import { css } from '@emotion/react';
