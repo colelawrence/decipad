@@ -76,6 +76,27 @@
     "editor": {
       "tags": []
     },
+    "editor-components": {
+      "tags": []
+    },
+    "editor-language-elements": {
+      "tags": []
+    },
+    "editor-plugins": {
+      "tags": []
+    },
+    "editor-table": {
+      "tags": []
+    },
+    "editor-types": {
+      "tags": []
+    },
+    "editor-utils": {
+      "tags": []
+    },
+    "editor-variable-def": {
+      "tags": []
+    },
     "emails": {
       "tags": []
     },
@@ -83,6 +104,9 @@
       "tags": []
     },
     "externaldata": {
+      "tags": []
+    },
+    "feature-flags": {
       "tags": []
     },
     "fetch": {
@@ -118,6 +142,9 @@
     "nodelambda": {
       "tags": []
     },
+    "notebook": {
+      "tags": []
+    },
     "queries": {
       "tags": []
     },
@@ -139,6 +166,9 @@
     "testutils": {
       "tags": []
     },
+    "toast": {
+      "tags": []
+    },
     "ui": {
       "tags": []
     },
@@ -155,36 +185,6 @@
       "tags": []
     },
     "y-websocket": {
-      "tags": []
-    },
-    "editor-types": {
-      "tags": []
-    },
-    "feature-flags": {
-      "tags": []
-    },
-    "editor-plugins": {
-      "tags": []
-    },
-    "editor-language-elements": {
-      "tags": []
-    },
-    "editor-utils": {
-      "tags": []
-    },
-    "editor-components": {
-      "tags": []
-    },
-    "editor-variable-def": {
-      "tags": []
-    },
-    "editor-table": {
-      "tags": []
-    },
-    "toast": {
-      "tags": []
-    },
-    "notebook": {
       "tags": []
     }
   }

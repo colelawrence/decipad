@@ -15,6 +15,10 @@ module.exports = {
             ),
             message: 'Use editor element/mark kinds definition',
           },
+          {
+            name: '@decipad/language',
+            message: 'Import language helpers from @decipad/computer',
+          },
         ],
       },
     ],

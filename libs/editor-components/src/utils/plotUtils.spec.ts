@@ -1,5 +1,5 @@
 import Fraction from '@decipad/fraction';
-import { SerializedType } from '@decipad/language';
+import { SerializedType } from '@decipad/computer';
 import { getDefined } from '@decipad/utils';
 import {
   DisplayProps,

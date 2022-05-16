@@ -1,5 +1,5 @@
 import { TableCellType } from '@decipad/editor-types';
-import { prettyPrintAST } from '@decipad/language';
+import { prettyPrintAST } from '@decipad/computer';
 import { getDefined } from '@decipad/utils';
 import { parseCell, parseDate } from './parseCell';
 

@@ -7,7 +7,7 @@ import {
   ELEMENT_TABLE_CAPTION,
 } from '@decipad/editor-types';
 import { F } from '@decipad/editor-utils';
-import { prettyPrintAST } from '@decipad/language';
+import { prettyPrintAST } from '@decipad/computer';
 import {
   formulaSourceToColumn,
   getTableAstNodeFromTableElement,
