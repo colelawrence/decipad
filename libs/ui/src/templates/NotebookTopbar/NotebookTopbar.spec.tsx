@@ -1,9 +1,9 @@
-import { ComponentProps, FC } from 'react';
+import { ClientEventsContext } from '@decipad/client-events';
+import { mockConsoleError } from '@decipad/testutils';
+import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';
 import { Provider as SessionProvider } from 'next-auth/client';
-import { mockConsoleError } from '@decipad/testutils';
-import { ClientEventsContext } from '@decipad/client-events';
-import { noop } from '@decipad/utils';
+import { ComponentProps, FC } from 'react';
 import { NotebookTopbar } from './NotebookTopbar';
 
 const props: ComponentProps<typeof NotebookTopbar> = {
@@ -84,7 +84,7 @@ describe('Notebook Topbar', () => {
       </WithProviders>
     );
 
-    expect(getByText(/need help/i)).toBeInTheDocument();
+    expect(getByText(/help/i)).toBeInTheDocument();
 
     rerender(
       <WithProviders>
@@ -92,6 +92,6 @@ describe('Notebook Topbar', () => {
       </WithProviders>
     );
 
-    expect(queryByText(/need help/i)).not.toBeInTheDocument();
+    expect(queryByText(/help/i)).not.toBeInTheDocument();
   });
 });

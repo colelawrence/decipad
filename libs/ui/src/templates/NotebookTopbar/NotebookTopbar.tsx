@@ -18,7 +18,6 @@ const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px
 const wrapperStyles = css({
   display: 'flex',
   justifyContent: 'space-between',
-  flexWrap: 'wrap',
   rowGap: '8px',
 
   padding: '16px 0',
@@ -28,7 +27,11 @@ const wrapperStyles = css({
 });
 
 const leftSideStyles = css({
-  flexGrow: 999,
+  flex: 1,
+
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
 
   display: 'flex',
   alignItems: 'center',
@@ -36,13 +39,12 @@ const leftSideStyles = css({
 });
 
 const rightSideStyles = css({
-  flexGrow: 1,
-
   display: 'grid',
   gridTemplateColumns: '1fr max-content max-content',
   alignItems: 'center',
   gap: '1rem',
   marginRight: '-1rem',
+  marginLeft: '1rem',
 });
 
 const linksStyles = css({
@@ -55,13 +57,12 @@ const linksStyles = css({
 const helpLinkStyles = css(p14Medium);
 
 export type NotebookTopbarProps = Pick<
-  ComponentProps<typeof NotebookPath>,
-  'workspace'
+  ComponentProps<typeof NotebookAvatars>,
+  'usersWithAccess'
 > &
-  Pick<ComponentProps<typeof NotebookAvatars>, 'usersWithAccess'> &
   ComponentProps<typeof NotebookSharingPopUp> & {
     permission: PermissionType;
-
+    workspace: { id: string; name: string };
     onDuplicateNotebook?: () => void;
     onRevertChanges?: () => void;
     hasLocalChanges?: BehaviorSubject<boolean>;
@@ -101,11 +102,7 @@ export const NotebookTopbar = ({
             </IconButton>
           </div>
         )}
-        <NotebookPath
-          isWriter={isWriter}
-          workspace={workspace}
-          notebookName={notebook.name}
-        />
+        <NotebookPath notebookName={notebook.name} />
       </div>
 
       {/* Right side */}
@@ -123,7 +120,7 @@ export const NotebookTopbar = ({
                   })
                 }
               >
-                Get Inspiration
+                Gallery
               </Anchor>
             </em>
             <em css={helpLinkStyles}>
@@ -137,7 +134,7 @@ export const NotebookTopbar = ({
                   })
                 }
               >
-                Need help?
+                Help
               </Anchor>
             </em>
           </div>

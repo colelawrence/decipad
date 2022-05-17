@@ -26,6 +26,8 @@ const styles = css(display, placeholderStyles, {
   maxWidth: `${editorLayout.slimBlockWidth}px`,
   margin: 'auto',
 
+  wordBreak: 'break-word',
+
   paddingTop: '28px',
 });
 
