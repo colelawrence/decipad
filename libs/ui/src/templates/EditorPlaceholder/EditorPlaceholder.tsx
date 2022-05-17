@@ -2,9 +2,12 @@ import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Divider, Placeholder } from '../../atoms';
 import { ParagraphPlaceholder } from '../../molecules';
+import { slimBlockWidth } from '../../styles/editor-layout';
 
 const wrapperStyles = css({
   paddingTop: '24px',
+  minWidth: `${slimBlockWidth}px`,
+  margin: '0 auto',
 });
 
 const titleStyles = css({
