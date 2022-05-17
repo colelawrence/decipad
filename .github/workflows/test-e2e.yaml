@@ -1,9 +1,12 @@
 name: Run E2E Tests
 
-on: workflow_dispatch
+on:
+  pull_request_review:
+    types: [submitted]
 
 jobs:
-  build-e2e:
+  build:
+    if: github.event.review.state == 'approved'
     runs-on: ubuntu-latest
 
     strategy:
@@ -30,7 +33,9 @@ jobs:
           aws-region: eu-west-2
 
       - name: Run end-to-end tests
-        run: ./scripts/e2e.sh || ./scripts/e2e.sh || ./scripts/e2e.sh
+        env:
+          APPLITOOLS_API_KEY: '${{ secrets.APPLITOOLS_API_KEY }}'
+        run: ./scripts/e2e.sh
 
   notify:
     name: Discord Notification
