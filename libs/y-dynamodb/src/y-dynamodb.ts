@@ -73,9 +73,14 @@ export class DynamodbPersistence extends Observable<string> {
           .filter(Boolean) // make sure we don't have any sneaky undefineds
           .filter((buf) => Buffer.isBuffer(buf)) // make sure we only have buffers
           .filter((buf) => buf.length > 0) // make sure we only have non-empty
-          .forEach((val) =>
-            applyUpdate(this.doc, val, DYNAMODB_PERSISTENCE_ORIGIN)
-          )
+          .forEach((val) => {
+            try {
+              applyUpdate(this.doc, val, DYNAMODB_PERSISTENCE_ORIGIN);
+            } catch (err) {
+              // eslint-disable-next-line no-console
+              console.error(`Error applying update ${val}`, err);
+            }
+          })
       );
 
       this.emit('fetched', [this]);
