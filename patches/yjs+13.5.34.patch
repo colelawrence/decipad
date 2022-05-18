@@ -1,0 +1,13 @@
+diff --git a/node_modules/yjs/src/structs/Item.js b/node_modules/yjs/src/structs/Item.js
+index 0b39a24..86cf68e 100644
+--- a/node_modules/yjs/src/structs/Item.js
++++ b/node_modules/yjs/src/structs/Item.js
+@@ -459,7 +459,7 @@ export class Item extends AbstractStruct {
+         // Let c in conflictingItems, b in itemsBeforeOrigin
+         // ***{origin}bbbb{this}{c,b}{c,b}{o}***
+         // Note that conflictingItems is a subset of itemsBeforeOrigin
+-        while (o !== null && o !== this.right) {
++        while (o != null && o !== this.right) {
+           itemsBeforeOrigin.add(o)
+           conflictingItems.add(o)
+           if (compareIDs(this.origin, o.origin)) {
