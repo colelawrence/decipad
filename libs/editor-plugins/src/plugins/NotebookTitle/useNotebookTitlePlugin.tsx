@@ -1,16 +1,21 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { useToast } from '@decipad/toast';
 import {
+  GET_PAD_BY_ID,
   GetPadById,
   GetPadByIdVariables,
-  GET_PAD_BY_ID,
+  RENAME_PAD,
   RenamePad,
   RenamePadVariables,
-  RENAME_PAD,
 } from '@decipad/queries';
-import { isCollapsed, OnChange, PlatePlugin } from '@udecode/plate';
+import {
+  getNodeEntry,
+  getNodeString,
+  hasNode,
+  isCollapsed,
+} from '@udecode/plate';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Editor, Node } from 'slate';
+import { MyOnChange, MyPlatePlugin } from '@decipad/editor-types';
 
 export interface UseNotebookTitlePluginProps {
   notebookId: string;
@@ -22,7 +27,7 @@ const DEBOUNCE_TITLE_UPDATE_MS = 1000;
 export const useNotebookTitlePlugin = ({
   notebookId,
   readOnly,
-}: UseNotebookTitlePluginProps): PlatePlugin => {
+}: UseNotebookTitlePluginProps): MyPlatePlugin => {
   const toast = useToast();
   const [editorTitle, setEditorTitle] = useState<string | undefined>(undefined);
 
@@ -71,7 +76,7 @@ export const useNotebookTitlePlugin = ({
   }, [editorTitle, remoteTitleNeedsUpdate, setRemoteTitle, toast]);
 
   // Get the first node's text value, if it is not the same as the current pad's name, then i set the newTitle state
-  const onChangeNotebookTitle: OnChange = useCallback(
+  const onChangeNotebookTitle: MyOnChange = useCallback(
     (editor) => () => {
       if (!readOnly) {
         const { selection } = editor;
@@ -79,9 +84,9 @@ export const useNotebookTitlePlugin = ({
           return; // early
         }
         const titlePath = [0, 0];
-        if (Editor.hasPath(editor, titlePath)) {
-          const [node] = Editor.node(editor, titlePath);
-          const editableTitle = Node.string(node);
+        if (hasNode(editor, titlePath)) {
+          const [node] = getNodeEntry(editor, titlePath);
+          const editableTitle = getNodeString(node);
 
           if (editableTitle) {
             setEditorTitle(editableTitle);

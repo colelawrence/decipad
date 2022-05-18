@@ -1,5 +1,5 @@
 import {
-  Element,
+  MyElement,
   ELEMENT_TABLE_INPUT,
   TableData,
   TableInputElement,
@@ -35,7 +35,7 @@ export const TableInput: InteractiveLanguageElement = {
   type: ELEMENT_TABLE_INPUT,
   resultsInNameAndExpression: true,
   getNameAndExpressionFromElement: weakMapMemoizeInteractiveElementOutput(
-    (element: Element) => {
+    (element: MyElement) => {
       const { tableData } = element as TableInputElement;
       if (!tableData || !tableData.variableName) return null;
       const expression = getTableNodeFromTableData(tableData);

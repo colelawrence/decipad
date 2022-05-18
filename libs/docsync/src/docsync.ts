@@ -214,7 +214,7 @@ export function createDocSyncEditor(
   editor: TEditor,
   docId: string,
   options: Options = {}
-): TEditor & DocSyncEditor {
+): DocSyncEditor {
   const {
     readOnly = false,
     authSecret,

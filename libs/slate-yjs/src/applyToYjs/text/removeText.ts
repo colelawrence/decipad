@@ -1,5 +1,5 @@
-import { RemoveTextOperation } from 'slate';
 import { getDefined } from '@decipad/utils';
+import { TRemoveTextOperation } from '@udecode/plate';
 import { SharedType, SyncElement } from '../../model';
 import { getTarget } from '../../path';
 
@@ -11,7 +11,7 @@ import { getTarget } from '../../path';
  */
 export default function removeText(
   doc: SharedType,
-  op: RemoveTextOperation
+  op: TRemoveTextOperation
 ): SharedType {
   const node = getTarget(doc, op.path) as SyncElement;
   const nodeText = getDefined(

@@ -1,8 +1,8 @@
-import { Editor } from '@decipad/editor-types';
+import { MyValue } from '@decipad/editor-types';
 import Fraction from '@decipad/fraction';
 import { nanoid } from 'nanoid';
 
-export const emptyNotebook = (): Editor['children'] => [
+export const emptyNotebook = (): MyValue => [
   {
     type: 'h1',
     id: nanoid(),
@@ -23,7 +23,7 @@ export const emptyNotebook = (): Editor['children'] => [
   },
 ];
 
-export const introNotebook = (): Editor['children'] => [
+export const introNotebook = (): MyValue => [
   {
     children: [
       {

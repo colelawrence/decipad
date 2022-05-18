@@ -1,5 +1,12 @@
-import { isCollapsed, isText } from '@udecode/plate';
-import { Editor, Transforms } from 'slate';
+import {
+  getNextNode,
+  getNodeEntry,
+  getStartPoint,
+  hasNode,
+  isCollapsed,
+  isText,
+  setSelection,
+} from '@udecode/plate';
 import { createOnCursorChangePluginFactory } from '../../../pluginFactories';
 import { isMagicNumber } from '../utils/isMagicNumber';
 
@@ -8,14 +15,14 @@ export const createMagicNumberCursorPlugin = createOnCursorChangePluginFactory(
   (editor) => (selection) => {
     if (isCollapsed(selection)) {
       const path = selection?.focus.path;
-      if (path && Editor.hasPath(editor, path)) {
-        const [node] = Editor.node(editor, path);
+      if (path && hasNode(editor, path)) {
+        const [node] = getNodeEntry(editor, path);
         if (isText(node) && isMagicNumber(node)) {
-          const next = Editor.next(editor, { at: path });
+          const next = getNextNode(editor, { at: path });
           if (next) {
-            const newFocus = Editor.start(editor, next[1]);
+            const newFocus = getStartPoint(editor, next[1]);
             newFocus.offset += 1; // skip to end character
-            Transforms.setSelection(editor, {
+            setSelection(editor, {
               focus: newFocus,
               anchor: newFocus,
             });

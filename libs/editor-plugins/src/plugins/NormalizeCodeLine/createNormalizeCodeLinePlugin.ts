@@ -1,21 +1,24 @@
 /* eslint-disable no-param-reassign */
-import { ELEMENT_CODE_LINE } from '@decipad/editor-types';
-import { TNode } from '@udecode/plate';
-import { Editor, Element, Node, NodeEntry, Transforms } from 'slate';
+import {
+  ELEMENT_CODE_LINE,
+  MyEditor,
+  MyNodeEntry,
+} from '@decipad/editor-types';
+import { getNodeChildren, isElement, unwrapNodes } from '@udecode/plate';
 import { createNormalizerPluginFactory } from '../../pluginFactories';
 import { normalizeExcessProperties } from '../../utils/normalize';
 
-const normalizeCodeLine = (editor: Editor) => (entry: NodeEntry) => {
-  const [node, path] = entry as NodeEntry<TNode>;
+const normalizeCodeLine = (editor: MyEditor) => (entry: MyNodeEntry) => {
+  const [node, path] = entry;
 
   // Code line
-  if (Element.isElement(node) && node.type === ELEMENT_CODE_LINE) {
-    for (const lineChild of Node.children(editor, path)) {
-      const [lineChildNode, lineChildPath] = lineChild as NodeEntry<TNode>;
+  if (isElement(node) && node.type === ELEMENT_CODE_LINE) {
+    for (const lineChild of getNodeChildren(editor, path)) {
+      const [lineChildNode, lineChildPath] = lineChild;
 
       // Children must be text
-      if (Element.isElement(lineChildNode)) {
-        Transforms.unwrapNodes(editor, { at: lineChildPath });
+      if (isElement(lineChildNode)) {
+        unwrapNodes(editor, { at: lineChildPath });
         return true;
       }
 

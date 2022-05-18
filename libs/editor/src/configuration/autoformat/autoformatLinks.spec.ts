@@ -1,4 +1,6 @@
 import {
+  createTAutoformatPlugin,
+  createTPlateEditor,
   ELEMENT_H1,
   ELEMENT_LINK,
   ELEMENT_PARAGRAPH,
@@ -6,22 +8,19 @@ import {
 import { Link } from '@decipad/editor-components';
 import {
   createLinkPlugin,
-  createAutoformatPlugin,
-  createPlateEditor,
   createPlugins,
-  TDescendant,
+  select,
   TEditor,
 } from '@udecode/plate';
-import { Transforms } from 'slate';
 import { autoformatLinks } from './autoformatLinks';
 
 let editor: TEditor;
 beforeEach(() => {
-  editor = createPlateEditor({
+  editor = createTPlateEditor({
     plugins: createPlugins(
       [
         createLinkPlugin(),
-        createAutoformatPlugin({ options: { rules: autoformatLinks } }),
+        createTAutoformatPlugin({ options: { rules: autoformatLinks } }),
       ],
       {
         components: {
@@ -31,7 +30,7 @@ beforeEach(() => {
     ),
   });
   editor.children = [{ type: ELEMENT_PARAGRAPH, children: [{ text: '' }] }];
-  Transforms.select(editor, [0, 0]);
+  select(editor, [0, 0]);
 });
 
 it('ignores input that is not a valid link', () => {
@@ -57,8 +56,8 @@ it('ignores input that is already in a link', () => {
         { type: ELEMENT_LINK, url: 'href', children: [{ text: 'link' }] },
       ],
     },
-  ] as TDescendant[];
-  Transforms.select(editor, { path: [0, 0, 0], offset: 2 });
+  ];
+  select(editor, { path: [0, 0, 0], offset: 2 });
   editor.insertText('[a](b)');
   expect(editor.children).toEqual([
     {
@@ -88,7 +87,7 @@ it('splits off a link at the end', () => {
 });
 it('splits off a link at the start', () => {
   editor.insertText('c');
-  Transforms.select(editor, { path: [0, 0], offset: 0 });
+  select(editor, { path: [0, 0], offset: 0 });
   editor.insertText('[a](b');
   editor.insertText(')');
   expect(editor.children).toEqual([

@@ -1,7 +1,7 @@
 import { ELEMENT_TABLE_CAPTION, PlateComponent } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { molecules } from '@decipad/ui';
-import { Node } from 'slate';
+import { getNodeString } from '@udecode/plate';
 
 export const TableCaption: PlateComponent = ({
   element,
@@ -12,7 +12,7 @@ export const TableCaption: PlateComponent = ({
   return (
     <div {...attributes}>
       <molecules.EditableTableCaption
-        empty={Node.string(element.children[0]).length === 0}
+        empty={getNodeString(element.children[0]).length === 0}
       >
         {children}
       </molecules.EditableTableCaption>

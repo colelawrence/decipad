@@ -1,7 +1,7 @@
 import { useNotebookTitlePlugin } from '@decipad/editor-plugins';
 import { Computer } from '@decipad/computer';
-import { createPlateEditor, PlateEditor } from '@udecode/plate';
 import { useMemo } from 'react';
+import { createTPlateEditor } from '@decipad/editor-types';
 import * as configuration from './configuration';
 
 export interface CreateEditorProps {
@@ -14,7 +14,7 @@ export const useCreateEditor = ({
   notebookId,
   readOnly = false,
   computer,
-}: CreateEditorProps): PlateEditor => {
+}: CreateEditorProps) => {
   const notebookTitlePlugin = useNotebookTitlePlugin({
     notebookId,
     readOnly,
@@ -27,7 +27,7 @@ export const useCreateEditor = ({
 
   const editor = useMemo(
     () =>
-      createPlateEditor({
+      createTPlateEditor({
         id: notebookId,
         plugins: editorPlugins,
       }),

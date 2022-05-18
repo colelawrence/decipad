@@ -1,30 +1,27 @@
-import { TEditor } from '@udecode/plate';
-import { Node, NodeOperation, Text } from 'slate';
+import { getNode, isText, TDescendant, TNodeOperation } from '@udecode/plate';
 import invariant from 'tiny-invariant';
 import * as Y from 'yjs';
+import { MyElement } from '@decipad/editor-types';
+import { YjsEditor } from '@decipad/slate-yjs';
 import { SyncElement } from '../model';
 import { toSlateNode, toSlatePath } from '../utils/convert';
 
 /**
  * Translates a Yjs array event into a slate operations.
- *
- * @param event
  */
 export default function translateArrayEvent(
-  editor: TEditor,
+  editor: YjsEditor,
   event: Y.YArrayEvent<SyncElement>
-): NodeOperation[] {
+): TNodeOperation[] {
   const targetPath = toSlatePath(event.path);
-  const targetElement = Node.get(editor, targetPath);
+  const targetElement = getNode<MyElement>(editor, targetPath);
+  if (!targetElement) return [];
 
-  invariant(
-    !Text.isText(targetElement),
-    'Cannot apply array event to text node'
-  );
+  invariant(!isText(targetElement), 'Cannot apply array event to text node');
 
   let offset = 0;
-  const ops: NodeOperation[] = [];
-  const children = Array.from(targetElement.children);
+  const ops: TNodeOperation[] = [];
+  const children = Array.from(targetElement.children as TDescendant[]);
 
   event.changes.delta.forEach((delta) => {
     if ('retain' in delta) {
@@ -46,7 +43,7 @@ export default function translateArrayEvent(
         )}`
       );
 
-      const toInsert = delta.insert.map(toSlateNode);
+      const toInsert = delta.insert.map(toSlateNode) as TDescendant[];
 
       toInsert.forEach((node, i) => {
         ops.push({

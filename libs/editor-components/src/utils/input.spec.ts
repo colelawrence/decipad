@@ -3,14 +3,17 @@ import {
   ELEMENT_EXPRESSION,
   ELEMENT_PARAGRAPH,
   ELEMENT_VARIABLE_DEF,
+  MyEditor,
 } from '@decipad/editor-types';
-import { createPlateEditor, PlateEditor } from '@udecode/plate';
+import { createPlateEditor } from '@udecode/plate';
 import { insertInputBelow } from './input';
 
-let editor: PlateEditor;
+let editor: MyEditor;
 beforeEach(() => {
   editor = createPlateEditor();
-  editor.children = [{ type: ELEMENT_PARAGRAPH, children: [{ text: '' }] }];
+  editor.children = [
+    { type: ELEMENT_PARAGRAPH, children: [{ text: '' }] } as never,
+  ];
 });
 
 describe('insertInputBelow', () => {

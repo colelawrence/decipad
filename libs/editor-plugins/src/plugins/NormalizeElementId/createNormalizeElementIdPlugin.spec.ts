@@ -1,11 +1,10 @@
-import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
-import { createPlateEditor, TDescendant } from '@udecode/plate';
-import { Editor } from 'slate';
+import { createTPlateEditor, ELEMENT_PARAGRAPH } from '@decipad/editor-types';
+import { normalizeEditor, TEditor } from '@udecode/plate';
 import { createNormalizeElementIdPlugin } from './createNormalizeElementIdPlugin';
 
-let editor: Editor;
+let editor: TEditor;
 beforeEach(() => {
-  editor = createPlateEditor({
+  editor = createTPlateEditor({
     plugins: [createNormalizeElementIdPlugin()],
   });
 });
@@ -16,8 +15,8 @@ it('requires an id on elements', () => {
       type: ELEMENT_PARAGRAPH,
       children: [{ text: 'text' }],
     },
-  ] as TDescendant[];
-  Editor.normalize(editor, { force: true });
+  ];
+  normalizeEditor(editor, { force: true });
   expect(editor).toHaveProperty('children.0.id', expect.stringMatching(/.+/));
 });
 
@@ -27,8 +26,8 @@ it('does not require an id on text', () => {
       type: ELEMENT_PARAGRAPH,
       children: [{ text: 'text' }],
     },
-  ] as TDescendant[];
-  Editor.normalize(editor, { force: true });
+  ];
+  normalizeEditor(editor, { force: true });
   expect(editor).not.toHaveProperty('children.0.children.0.id');
 });
 
@@ -39,7 +38,7 @@ it('does not allow the id to be the empty string', () => {
       id: '',
       children: [{ text: 'text' }],
     },
-  ] as TDescendant[];
-  Editor.normalize(editor, { force: true });
+  ];
+  normalizeEditor(editor, { force: true });
   expect(editor).toHaveProperty('children.0.id', expect.stringMatching(/.+/));
 });

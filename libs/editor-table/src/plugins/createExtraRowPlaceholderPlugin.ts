@@ -1,11 +1,20 @@
 import { createOnCursorChangePluginFactory } from '@decipad/editor-plugins';
-import { isCollapsed } from '@udecode/plate';
-import { Editor, Node, Transforms, Selection, Path, NodeEntry } from 'slate';
+import {
+  getAboveNode,
+  getNodeEntry,
+  hasNode,
+  insertNodes,
+  isCollapsed,
+  isElement,
+  removeNodes,
+} from '@udecode/plate';
+import { Path, Selection } from 'slate';
 import {
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
-  isElement,
+  MyEditor,
+  MyNode,
   TableRowElement,
 } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
@@ -13,14 +22,14 @@ import { getTableColumnCount } from '../utils/getTableColumnCount';
 import { getTableRowCount } from '../utils/getTableRowCount';
 import { isTableRowEmpty } from '../utils/isTableRowEmpty';
 
-const isInsideTableCell = (node: Node): boolean => {
+const isInsideTableCell = (node: MyNode): boolean => {
   return (
     isElement(node) && (node.type === ELEMENT_TD || node.type === ELEMENT_TH)
   );
 };
 
 const withAtLastRow =
-  (editor: Editor) =>
+  (editor: MyEditor) =>
   (tablePath: Path, tableRowCount: number, tableColumnCount: number) => {
     // user is at the last column: add a column
     const newTrPath = [...tablePath, tableRowCount + 2];
@@ -34,35 +43,32 @@ const withAtLastRow =
         children: [{ text: '' }],
       })),
     };
-    Transforms.insertNodes(editor, newTr, { at: newTrPath });
+    insertNodes(editor, newTr, { at: newTrPath });
   };
 
 const withNotAtLastRow =
-  (editor: Editor) => (tablePath: Path, tableRowCount: number) => {
+  (editor: MyEditor) => (tablePath: Path, tableRowCount: number) => {
     const lastRowPath = [...tablePath, tableRowCount + 2];
-    if (!Editor.hasPath(editor, lastRowPath)) {
+    if (!hasNode(editor, lastRowPath)) {
       return;
     }
-    const [rowEntry] = Editor.node(
-      editor,
-      lastRowPath
-    ) as NodeEntry<TableRowElement>;
+    const [rowEntry] = getNodeEntry<TableRowElement>(editor, lastRowPath);
     if (!rowEntry.autoCreated) {
       return;
     }
     if (isTableRowEmpty(editor, tablePath, tableRowCount - 1)) {
-      Transforms.removeNodes(editor, { at: lastRowPath });
+      removeNodes(editor, { at: lastRowPath });
     }
   };
 
-const onCursorChange = (editor: Editor) => {
+const onCursorChange = (editor: MyEditor) => {
   const atLastRow = withAtLastRow(editor);
   const notAtLastRow = withNotAtLastRow(editor);
   return (selection: Selection): void => {
     if (!isCollapsed(selection)) {
       return;
     }
-    const cell = Editor.above(editor, { match: isInsideTableCell });
+    const cell = getAboveNode(editor, { match: isInsideTableCell });
     if (!cell) {
       return;
     }

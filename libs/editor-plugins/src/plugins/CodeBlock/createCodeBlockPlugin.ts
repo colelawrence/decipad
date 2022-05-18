@@ -1,10 +1,12 @@
-import { createPluginFactory } from '@udecode/plate';
-import { ELEMENT_CODE_BLOCK } from '@decipad/editor-types';
+import {
+  createTPluginFactory,
+  ELEMENT_CODE_BLOCK,
+} from '@decipad/editor-types';
 import { CodeBlock } from '@decipad/editor-components';
 import { deserializeCodeBlockHtml } from './deserializeCodeBlockHtml';
 import { serializeCodeBlockHtml } from './serializeCodeBlockHtml';
 
-export const createCodeBlockPlugin = createPluginFactory({
+export const createCodeBlockPlugin = createTPluginFactory({
   key: ELEMENT_CODE_BLOCK,
   isElement: true,
   component: CodeBlock,

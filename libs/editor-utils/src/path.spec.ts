@@ -1,5 +1,5 @@
 import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
-import { createPlateEditor, TEditor } from '@udecode/plate';
+import { createPlateEditor, TEditor, TElement } from '@udecode/plate';
 import {
   getBlockParentPath,
   requireBlockParentPath,
@@ -22,13 +22,13 @@ describe('getBlockParentPath', () => {
   });
 
   it('returns null if there is no block above', () => {
-    editor.children.push({ text: '' });
+    editor.children.push({ text: '' } as unknown as TElement);
     expect(getBlockParentPath(editor, [1])).toBe(null);
   });
 });
 describe('requireBlockParentPath', () => {
   it('throws if there is no block above', () => {
-    editor.children.push({ text: '' });
+    editor.children.push({ text: '' } as unknown as TElement);
     expect(() => requireBlockParentPath(editor, [1])).toThrow(/block/i);
   });
 });

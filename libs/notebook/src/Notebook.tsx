@@ -10,9 +10,9 @@ import {
 import { useToast } from '@decipad/toast';
 import { NotebookPage } from '@decipad/ui';
 import { captureException } from '@sentry/browser';
-import { PlateEditor } from '@udecode/plate';
 import { useSession } from 'next-auth/client';
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { MyEditor } from '@decipad/editor-types';
 
 const LOAD_REMOTELY_TIMEOUT_MS = 5_000;
 
@@ -22,7 +22,7 @@ export interface NotebookProps {
   icon: ReactNode;
   topbar: ReactNode;
   secret?: string;
-  onEditor: (editor: PlateEditor) => void;
+  onEditor: (editor: MyEditor) => void;
   onDocsync: (docsync: DocSyncEditor) => void;
 }
 

@@ -1,7 +1,6 @@
-import { PlateComponent } from '@decipad/editor-types';
+import { PlateComponent, useTEditorState } from '@decipad/editor-types';
 import { atoms } from '@decipad/ui';
-import { isSelectionExpanded, useEditorState } from '@udecode/plate';
-import { Editor } from 'slate';
+import { isElementEmpty, isSelectionExpanded } from '@udecode/plate';
 import { useReadOnly, useSelected } from 'slate-react';
 import { DraggableBlock } from '../block-management';
 
@@ -14,7 +13,7 @@ export const Paragraph: PlateComponent = ({
     throw new Error('Paragraph is not a leaf');
   }
 
-  const editor = useEditorState();
+  const editor = useTEditorState();
   const readOnly = useReadOnly();
 
   const selected = useSelected();
@@ -24,7 +23,7 @@ export const Paragraph: PlateComponent = ({
       <DraggableBlock blockKind="paragraph" element={element}>
         <atoms.Paragraph
           placeholder={
-            Editor.isEmpty(editor, element) &&
+            isElementEmpty(editor, element) &&
             selected &&
             !isSelectionExpanded(editor) &&
             !readOnly

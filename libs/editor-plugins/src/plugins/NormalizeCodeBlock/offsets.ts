@@ -1,7 +1,11 @@
-import { CodeBlockElement, CodeLineElement } from '@decipad/editor-types';
+import {
+  CodeBlockElement,
+  CodeLineElement,
+  MyEditor,
+} from '@decipad/editor-types';
 import { getDefined } from '@decipad/utils';
-import { getChildren, getNode } from '@udecode/plate';
-import { Editor, Node, Path, Point, Selection, Transforms } from 'slate';
+import { getChildren, getNode, getNodeString, select } from '@udecode/plate';
+import { Path, Point, Selection } from 'slate';
 import { cloneSelection } from './utils';
 
 interface Offsets {
@@ -9,7 +13,7 @@ interface Offsets {
   focus: number | null;
 }
 
-function getOffsetFromPath(editor: Editor, path: Path): number {
+function getOffsetFromPath(editor: MyEditor, path: Path): number {
   const [codeBlockIndex] = path;
   let offset = 0;
   const codeBlock = getDefined(
@@ -23,7 +27,7 @@ function getOffsetFromPath(editor: Editor, path: Path): number {
       codeLineEntry
     )) {
       if (Path.compare(codeLineTextPath, path) < 0) {
-        const codeLineText = Node.string(text);
+        const codeLineText = getNodeString(text);
         offset += codeLineText.length;
       } else {
         break;
@@ -39,7 +43,7 @@ function getOffsetFromPath(editor: Editor, path: Path): number {
 }
 
 function getOffsetFromPoint(
-  editor: Editor,
+  editor: MyEditor,
   codeBlockPath: Path,
   point: Point
 ): number | null {
@@ -50,7 +54,7 @@ function getOffsetFromPoint(
 }
 
 export function getCodeBlockOffsets(
-  editor: Editor,
+  editor: MyEditor,
   codeBlockPath: Path
 ): Offsets {
   const sel = editor.selection;
@@ -64,7 +68,7 @@ export function getCodeBlockOffsets(
 }
 
 function getPointFromOffset(
-  editor: Editor,
+  editor: MyEditor,
   codeBlockPath: Path,
   offset: number
 ): Point | null {
@@ -77,7 +81,7 @@ function getPointFromOffset(
     codeBlockPath,
   ])) {
     for (const [text, path] of getChildren<CodeLineElement>(entry)) {
-      const lineText = Node.string(text);
+      const lineText = getNodeString(text);
       if (currentOffset + lineText.length < offset) {
         currentOffset += lineText.length;
       } else {
@@ -93,7 +97,7 @@ function getPointFromOffset(
 }
 
 function getSelectionFromOffsets(
-  editor: Editor,
+  editor: MyEditor,
   codeBlockPath: Path,
   offsets: Offsets
 ): Selection {
@@ -117,12 +121,12 @@ function getSelectionFromOffsets(
 }
 
 export function reinstateCursorOffsets(
-  editor: Editor,
+  editor: MyEditor,
   codeBlockPath: Path,
   offsets: Offsets
 ): void {
   const sel = getSelectionFromOffsets(editor, codeBlockPath, offsets);
   if (sel) {
-    Transforms.select(editor, sel);
+    select(editor, sel);
   }
 }

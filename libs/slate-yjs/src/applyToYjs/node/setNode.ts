@@ -1,4 +1,4 @@
-import { SetNodeOperation } from 'slate';
+import { TSetNodeOperation } from '@udecode/plate';
 import { SharedType, SyncElement } from '../../model';
 import { getTarget } from '../../path';
 
@@ -10,7 +10,7 @@ import { getTarget } from '../../path';
  */
 export default function setNode(
   doc: SharedType,
-  op: SetNodeOperation
+  op: TSetNodeOperation
 ): SharedType {
   const node = getTarget(doc, op.path) as SyncElement;
 

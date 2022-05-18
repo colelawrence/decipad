@@ -1,5 +1,5 @@
 import { useDrag } from 'react-dnd';
-import { TEditor } from '@udecode/plate';
+import { MyEditor } from '@decipad/editor-types';
 import { DragColumnItem } from '../types';
 
 interface CollectedProps {
@@ -7,7 +7,7 @@ interface CollectedProps {
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const useDragColumn = (_editor: TEditor, id: string) => {
+export const useDragColumn = (_editor: MyEditor, id: string) => {
   return useDrag<DragColumnItem, void, CollectedProps>(
     () => ({
       type: 'column',

@@ -1,6 +1,6 @@
-import { getParent } from '@udecode/plate';
+import { deleteText, getParentNode, moveSelection } from '@udecode/plate';
 import { ELEMENT_CODE_LINE } from '@decipad/editor-types';
-import { Range, Transforms } from 'slate';
+import { Range } from 'slate';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 
 const pairs = [
@@ -19,7 +19,7 @@ export const createAutoPairsPlugin = createOnKeyDownPluginFactory({
 
     if (selection) {
       const cursor = Range.start(selection);
-      const parentEntry = getParent(editor, cursor);
+      const parentEntry = getParentNode(editor, cursor);
 
       if (parentEntry) {
         const [node] = parentEntry;
@@ -33,7 +33,7 @@ export const createAutoPairsPlugin = createOnKeyDownPluginFactory({
           ) {
             event.preventDefault();
             editor.insertText(activePair.start + activePair.end);
-            Transforms.move(editor, {
+            moveSelection(editor, {
               distance: 1,
               unit: 'offset',
               reverse: true,
@@ -43,7 +43,7 @@ export const createAutoPairsPlugin = createOnKeyDownPluginFactory({
           const endPair = pairs.find((pair) => pair.end === event.key);
           if (endPair && node.children[0].text[cursor.offset] === endPair.end) {
             event.preventDefault();
-            Transforms.move(editor, {
+            moveSelection(editor, {
               distance: 1,
               unit: 'offset',
             });
@@ -58,8 +58,8 @@ export const createAutoPairsPlugin = createOnKeyDownPluginFactory({
             );
 
             if (startPair && end && startPair === end) {
-              Transforms.move(editor, { unit: 'offset', distance: 1 });
-              Transforms.delete(editor, {
+              moveSelection(editor, { unit: 'offset', distance: 1 });
+              deleteText(editor, {
                 unit: 'character',
                 distance: 1,
                 reverse: true,

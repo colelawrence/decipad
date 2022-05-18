@@ -1,16 +1,11 @@
 import {
   CodeLineElement,
+  createTPlateEditor,
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
-import {
-  createPlateEditor,
-  createPlugins,
-  PlateEditor,
-  TDescendant,
-} from '@udecode/plate';
-import { Editor } from 'slate';
+import { createPlugins, normalizeEditor, PlateEditor } from '@udecode/plate';
 import { createNormalizeCodeLinePlugin } from './createNormalizeCodeLinePlugin';
 
 function codeLine(code: string): CodeLineElement {
@@ -27,9 +22,9 @@ function codeLine(code: string): CodeLineElement {
 let editor: PlateEditor;
 beforeEach(() => {
   const plugins = createPlugins([createNormalizeCodeLinePlugin()]);
-  editor = createPlateEditor({
+  editor = createTPlateEditor({
     plugins,
-  });
+  }) as never;
 });
 
 describe('in a code line', () => {
@@ -49,9 +44,9 @@ describe('in a code line', () => {
           },
         ],
       },
-    ] as TDescendant[];
+    ];
 
-    Editor.normalize(editor, { force: true });
+    normalizeEditor(editor, { force: true });
     expect(editor.children).toEqual([
       { type: ELEMENT_CODE_BLOCK, children: [codeLine('code123')] },
     ]);
@@ -68,9 +63,9 @@ describe('in a code line', () => {
           },
         ],
       },
-    ] as TDescendant[];
+    ];
 
-    Editor.normalize(editor, { force: true });
+    normalizeEditor(editor, { force: true });
     expect(editor.children).toEqual([
       { type: ELEMENT_CODE_BLOCK, children: [codeLine('code')] },
     ]);

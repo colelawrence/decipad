@@ -49,7 +49,7 @@ beforeEach(() => {
     ],
     plugins,
   };
-  editor = createPlateEditor(plateProps);
+  editor = createPlateEditor({ plugins });
   wrapper = ({ children }) => (
     <DndProvider backend={HTML5Backend}>{children}</DndProvider>
   );

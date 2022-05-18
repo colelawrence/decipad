@@ -5,12 +5,13 @@ import {
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
   MARK_UNDERLINE,
+  MyMark,
 } from '@decipad/editor-types';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { icons } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { PortalBody } from '@udecode/plate';
-import { FC } from 'react';
+import { FC, ReactElement } from 'react';
 import { ToggleMarkButton } from './buttons/ToggleMarkButton/ToggleMarkButton';
 import { useEditorTooltip } from './hooks/useEditorTooltip';
 import { wrapperStyles } from './styles/wrapper';
@@ -20,7 +21,13 @@ const iconWrapper = css({
   height: '16px',
 });
 
-const toolTipMarks = [
+interface TooltipMark {
+  type: MyMark;
+  icon: ReactElement;
+  divider: boolean;
+}
+
+const toolTipMarks: TooltipMark[] = [
   {
     type: MARK_BOLD,
     icon: (

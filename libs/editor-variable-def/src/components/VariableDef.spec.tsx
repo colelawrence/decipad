@@ -1,9 +1,9 @@
 import {
-  ELEMENT_COLUMNS,
-  ELEMENT_VARIABLE_DEF,
   ELEMENT_CAPTION,
+  ELEMENT_COLUMNS,
   ELEMENT_EXPRESSION,
   ELEMENT_SLIDER,
+  ELEMENT_VARIABLE_DEF,
 } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';
@@ -53,7 +53,9 @@ describe('Variable def expression element', () => {
         },
       ],
     };
-    editor = createPlateEditor(plateProps);
+    editor = createPlateEditor({
+      plugins,
+    });
 
     wrapper = ({ children }) => (
       <DndProvider backend={HTML5Backend}>{children}</DndProvider>
@@ -140,7 +142,9 @@ describe('Variable def slider element', () => {
         },
       ],
     };
-    editor = createPlateEditor(plateProps);
+    editor = createPlateEditor({
+      plugins,
+    });
 
     wrapper = ({ children }) => (
       <DndProvider backend={HTML5Backend}>{children}</DndProvider>

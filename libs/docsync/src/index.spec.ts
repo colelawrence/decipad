@@ -2,11 +2,11 @@
 /* eslint-disable jest/no-done-callback */
 /* eslint-disable jest/expect-expect */
 import { Pad } from '@decipad/backendtypes';
-import { Editor } from '@decipad/editor-types';
+import { MyEditor } from '@decipad/editor-types';
 import { createPlateEditor } from '@udecode/plate';
 import fetch from 'jest-fetch-mock';
 import waitForExpect from 'wait-for-expect';
-import { DocSyncEditor, createDocSyncEditor } from '.';
+import { createDocSyncEditor, DocSyncEditor } from '.';
 import { testWithSandbox as test } from '../../backend-test-sandbox/src';
 import { clone } from './utils/clone';
 import { randomChangesToEditors } from './utils/random-changes';
@@ -105,7 +105,7 @@ test('sync many', (ctx) => {
   it('makes random changes to the editors and pad contents converge', async () => {
     expect(editors.length).toBeGreaterThan(0);
     await randomChangesToEditors(
-      editors as unknown as Array<Editor>,
+      editors as unknown as Array<MyEditor>,
       randomChangeCountPerReplica
     );
 

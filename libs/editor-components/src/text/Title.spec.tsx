@@ -5,11 +5,13 @@ import {
   createHeadingPlugin,
   createPlateEditor,
   createPlugins,
+  deleteText,
+  insertText,
   Plate,
   PlateEditor,
   PlateProps,
+  select,
 } from '@udecode/plate';
-import { Transforms } from 'slate';
 import { findDomNodePath } from '@decipad/editor-utils';
 import { Title } from './Title';
 
@@ -29,23 +31,23 @@ beforeEach(() => {
     initialValue: [{ type: ELEMENT_H1, children: [{ text: 'text' }] }],
     plugins,
   };
-  editor = createPlateEditor(plateProps);
+  editor = createPlateEditor({ plugins });
 });
 it('shows a placeholder only when empty', async () => {
   const { getByText } = render(<Plate {...plateProps} editor={editor} />);
   const h1Element = getByText('text').closest('h1');
 
-  Transforms.insertText(editor, 'text2', {
+  insertText(editor, 'text2', {
     at: findDomNodePath(editor, getByText('text')),
   });
-  Transforms.select(editor, {
-    path: findDomNodePath(editor, getByText('text')),
+  select(editor, {
+    path: findDomNodePath(editor, getByText('text'))!,
     offset: 0,
   });
   await waitFor(() => expect(h1Element).toHaveTextContent('text2'));
   expect(h1Element).not.toHaveAttribute('aria-placeholder');
 
-  Transforms.delete(editor, {
+  deleteText(editor, {
     at: findDomNodePath(editor, getByText('text2')),
     unit: 'word',
   });

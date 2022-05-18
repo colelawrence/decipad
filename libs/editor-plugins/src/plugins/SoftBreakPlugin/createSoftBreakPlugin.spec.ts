@@ -1,9 +1,10 @@
 import {
+  CodeBlockElement,
   CodeLineElement,
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
 } from '@decipad/editor-types';
-import { createPlateEditor, TNode } from '@udecode/plate';
+import { createPlateEditor } from '@udecode/plate';
 import { createSoftBreakPlugin } from './createSoftBreakPlugin';
 
 const getNewEditorState = () => [
@@ -19,9 +20,9 @@ const getNewEditorState = () => [
             text: '[1, 2, 3]',
           },
         ],
-      } as TNode,
+      },
     ],
-  },
+  } as CodeBlockElement,
 ];
 
 const codeLine = (code: string): CodeLineElement => {

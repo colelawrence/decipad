@@ -7,7 +7,7 @@ import {
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { enumerate } from '@decipad/utils';
-import { Editor, Transforms } from 'slate';
+import { hasNode, insertNodes, deleteText } from '@udecode/plate';
 
 export const createNormalizeTableFormulaPlugin = createNormalizerPluginFactory({
   name: 'NORMALIZE_TABLE_FORMULA_PLUGIN',
@@ -36,7 +36,7 @@ export const createNormalizeTableFormulaPlugin = createNormalizerPluginFactory({
           el.type === ELEMENT_TABLE_COLUMN_FORMULA && el.columnId === header.id
       );
       if (captionChildIndex < 0) {
-        Transforms.insertNodes(
+        insertNodes(
           editor,
           {
             type: ELEMENT_TABLE_COLUMN_FORMULA,
@@ -53,8 +53,8 @@ export const createNormalizeTableFormulaPlugin = createNormalizerPluginFactory({
     for (const formula of formulas) {
       if (!columnIdToHeader.has(formula.columnId)) {
         const formulaPath = [...path, 0, caption.children.indexOf(formula)];
-        if (Editor.hasPath(editor, formulaPath)) {
-          Transforms.delete(editor, {
+        if (hasNode(editor, formulaPath)) {
+          deleteText(editor, {
             at: formulaPath,
           });
           return true;

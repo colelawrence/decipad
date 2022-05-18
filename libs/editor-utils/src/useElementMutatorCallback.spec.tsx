@@ -1,18 +1,11 @@
-import { Element, LinkElement } from '@decipad/editor-types';
+import { LinkElement, MyElement, useTEditorState } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
-import { createEditor } from 'slate';
-import {
-  Editable,
-  ReactEditor,
-  Slate,
-  withReact,
-  useSlate,
-  RenderElementProps,
-} from 'slate-react';
+import { Editable, RenderElementProps, Slate } from 'slate-react';
 
+import { createTEditor, withTReact } from '@udecode/plate';
 import { useElementMutatorCallback } from './useElementMutatorCallback';
 
 describe('useElementMutatorCallback', () => {
@@ -22,7 +15,7 @@ describe('useElementMutatorCallback', () => {
     children,
   }) => {
     const [text, setText] = useState('');
-    const editor = useSlate() as ReactEditor;
+    const editor = useTEditorState();
     const mutateElement = useElementMutatorCallback(
       editor,
       element as LinkElement,
@@ -46,14 +39,14 @@ describe('useElementMutatorCallback', () => {
   };
 
   it('hook tests', async () => {
-    const editor = withReact(createEditor() as ReactEditor);
+    const editor = withTReact(createTEditor());
     const { getByText, getByLabelText } = render(
       <Slate
-        editor={editor}
+        editor={editor as never}
         value={
           [
             { type: 'a', id: 'asdf', url: '', children: [{ text: '' }] },
-          ] as Element[]
+          ] as MyElement[]
         }
         onChange={noop}
       >

@@ -1,6 +1,6 @@
-import { Element } from '@decipad/editor-types';
+import { MyElement, MyReactEditor } from '@decipad/editor-types';
 import { DropTargetMonitor } from 'react-dnd';
-import { ReactEditor } from 'slate-react';
+import { toDOMNode } from '@udecode/plate';
 import { ColumnDndDirection } from '../types';
 
 /**
@@ -8,16 +8,12 @@ import { ColumnDndDirection } from '../types';
  * get the direction of block A relative to block B.
  */
 export const getHoverDirection = (
-  editor: ReactEditor,
+  editor: MyReactEditor,
   monitor: DropTargetMonitor,
-  element: Element
+  element: MyElement
 ): ColumnDndDirection => {
-  let node: HTMLElement;
-  try {
-    node = ReactEditor.toDOMNode(editor, element);
-  } catch (err) {
-    return undefined;
-  }
+  const node = toDOMNode(editor, element);
+  if (!node) return;
 
   // Determine rectangle on screen
   const hoverBoundingRect = node.getBoundingClientRect();

@@ -1,10 +1,14 @@
-import { useEditorRef } from '@udecode/plate';
+import { findNodePath } from '@udecode/plate';
 import { dequal } from 'dequal';
 import { useEffect, useState } from 'react';
 import { distinctUntilChanged, map, Observable } from 'rxjs';
-import { ReactEditor } from 'slate-react';
 
-import { ELEMENT_TD, Element } from '@decipad/editor-types';
+import {
+  ELEMENT_TD,
+  MyElement,
+  MyReactEditor,
+  useTEditorRef,
+} from '@decipad/editor-types';
 import { Computer, Result } from '@decipad/computer';
 import { useComputer } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
@@ -42,10 +46,11 @@ function subscribeToFormulaResult(
 }
 
 const findFormulaCoordinates = (
-  editor: ReactEditor,
-  element: Element
+  editor: MyReactEditor,
+  element: MyElement
 ): [rowIdx: number, colIdx: number] => {
-  const path = ReactEditor.findPath(editor, element);
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const path = findNodePath(editor, element)!;
   const headerRowCount = 2; // skip caption and column headers
   const rowIndex = path[path.length - 2] - headerRowCount;
   const colIndex = path[path.length - 1];
@@ -53,8 +58,8 @@ const findFormulaCoordinates = (
   return [rowIndex, colIndex];
 };
 
-export function useFormulaResult(element: Element): Result<'table'> | null {
-  const editor = useEditorRef();
+export function useFormulaResult(element: MyElement): Result<'table'> | null {
+  const editor = useTEditorRef();
   const computer = useComputer();
   const [result, setResult] = useState<Result<'table'> | null>(null);
   const tableContext = useEditorTableContext();

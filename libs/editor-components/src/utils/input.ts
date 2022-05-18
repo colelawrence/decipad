@@ -3,10 +3,11 @@ import {
   ELEMENT_EXPRESSION,
   ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
+  MyEditor,
   VariableDefinitionElement,
   VariableSliderElement,
 } from '@decipad/editor-types';
-import { insertNodes, TDescendant, TEditor } from '@udecode/plate';
+import { insertNodes } from '@udecode/plate';
 import { Path } from 'slate';
 import { requirePathBelowBlock } from '@decipad/editor-utils';
 
@@ -23,10 +24,10 @@ const inputElement = {
       children: [{ text: '' }],
     },
   ],
-} as unknown as VariableDefinitionElement;
+} as VariableDefinitionElement;
 
-export const insertInputBelow = (editor: TEditor, path: Path): void => {
-  insertNodes<TDescendant>(editor, inputElement, {
+export const insertInputBelow = (editor: MyEditor, path: Path): void => {
+  insertNodes<VariableDefinitionElement>(editor, inputElement, {
     at: requirePathBelowBlock(editor, path),
   });
 };
@@ -50,8 +51,8 @@ const sliderInputElement = {
   ],
 } as VariableSliderElement;
 
-export const insertSliderInputBelow = (editor: TEditor, path: Path): void => {
-  insertNodes<TDescendant>(editor, sliderInputElement, {
+export const insertSliderInputBelow = (editor: MyEditor, path: Path): void => {
+  insertNodes<VariableSliderElement>(editor, sliderInputElement, {
     at: requirePathBelowBlock(editor, path),
   });
 };

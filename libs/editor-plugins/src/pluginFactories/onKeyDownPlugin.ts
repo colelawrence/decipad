@@ -1,19 +1,15 @@
-import {
-  createPluginFactory,
-  KeyboardHandler,
-  PlatePlugin,
-} from '@udecode/plate';
+import { createTPluginFactory, MyKeyboardHandler } from '@decipad/editor-types';
 
 type OnKeyDownFactoryArgs = {
   name: string;
-  plugin: KeyboardHandler;
+  plugin: MyKeyboardHandler;
 };
 
 export const createOnKeyDownPluginFactory = ({
   name,
   plugin,
-}: OnKeyDownFactoryArgs): (() => PlatePlugin) =>
-  createPluginFactory({
+}: OnKeyDownFactoryArgs) =>
+  createTPluginFactory({
     key: name,
     handlers: {
       onKeyDown: plugin,

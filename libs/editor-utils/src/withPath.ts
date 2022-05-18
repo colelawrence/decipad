@@ -1,15 +1,15 @@
-import { Element, Path } from 'slate';
-import { ReactEditor } from 'slate-react';
-import { findPath } from './findPath';
+import { Path } from 'slate';
+import { findNodePath } from '@udecode/plate';
+import { MyEditor, MyElement } from '@decipad/editor-types';
 
 type WithPathFunction = (path: Path) => void;
 
 export const withPath = (
-  editor: ReactEditor,
-  element: Element,
+  editor: MyEditor,
+  element: MyElement,
   fn: WithPathFunction
 ): void => {
-  const path = findPath(editor, element);
+  const path = findNodePath(editor, element);
   if (path) {
     fn(path);
   }

@@ -1,43 +1,37 @@
-import { PlateEditor } from '@udecode/plate';
+import { TElement } from '@udecode/plate';
 import {
-  Editor as SlateEditor,
-  Element as SlateElement,
-  Text as SlateText,
-} from 'slate';
-import { ReactEditor } from 'slate-react';
-import {
-  ElementKind,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CALLOUT,
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
   ELEMENT_COLUMNS,
+  ELEMENT_FETCH,
   ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_H3,
+  ELEMENT_HR,
   ELEMENT_LI,
   ELEMENT_LIC,
-  ELEMENT_HR,
   ELEMENT_LINK,
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
+  ELEMENT_PLOT,
+  ELEMENT_TABLE,
+  ELEMENT_TABLE_INPUT,
   ELEMENT_UL,
+  ElementKind,
   InputElement,
   InteractiveElement,
-  ELEMENT_TABLE_INPUT,
-  ELEMENT_TABLE,
-  ELEMENT_FETCH,
-  ELEMENT_PLOT,
   MarkKind,
 } from '.';
 import {
-  TableInputElement,
-  TableElement,
+  TableCaptionElement,
   TableCellElement,
+  TableElement,
   TableHeaderElement,
   TableHeaderRowElement,
+  TableInputElement,
   TableRowElement,
-  TableCaptionElement,
   TableColumnFormulaElement,
   TableVariableNameElement,
 } from './table';
@@ -50,9 +44,8 @@ import {
 
 // Defining specific elements
 
-export interface BaseElement {
+export interface BaseElement extends TElement {
   type: ElementKind;
-  children: Array<Descendant | PlainText | RichText>;
   id: string;
 }
 
@@ -109,11 +102,12 @@ export interface OrderedListElement extends BaseElement {
   type: typeof ELEMENT_OL;
   children: Array<ListItemElement>;
 }
+
+export type ListElement = UnorderedListElement | OrderedListElement;
+
 export interface ListItemElement extends BaseElement {
   type: typeof ELEMENT_LI;
-  children:
-    | [ListItemContentElement]
-    | [ListItemContentElement, UnorderedListElement | OrderedListElement];
+  children: [ListItemContentElement];
 }
 export interface ListItemContentElement extends BaseElement {
   type: typeof ELEMENT_LIC;
@@ -180,46 +174,32 @@ export type BlockElement =
   | TableColumnFormulaElement;
 type InlineElement = LinkElement;
 
-export type Element = BlockElement | InlineElement;
+export type MyValue = [
+  H1Element,
+  ...Array<
+    | H1Element
+    | H2Element
+    | H3Element
+    | ParagraphElement
+    | BlockquoteElement
+    | CalloutElement
+    | DividerElement
+    | CodeBlockElement
+    | UnorderedListElement
+    | OrderedListElement
+    | ColumnsElement
+    | InteractiveElement
+  >
+];
 
 export type Document = {
-  children: [
-    H1Element,
-    ...Array<
-      | H1Element
-      | H2Element
-      | H3Element
-      | ParagraphElement
-      | BlockquoteElement
-      | CalloutElement
-      | DividerElement
-      | CodeBlockElement
-      | UnorderedListElement
-      | OrderedListElement
-      | ColumnsElement
-      | InteractiveElement
-    >
-  ];
+  children: MyValue;
 };
 
-export type Editor = Omit<SlateEditor & PlateEditor & ReactEditor, 'children'> &
-  Document;
-
 type InlineDescendant = InlineElement | RichText;
-export type Descendant = Element | Text;
 
 type InlineChildren = Array<InlineDescendant>;
 type PlainTextChildren = [PlainText];
-
-export type Node = Editor | Descendant;
-
-export function isElement(node: unknown): node is Element {
-  return SlateElement.isElement(node);
-}
-
-export function isText(node: Node): node is Text {
-  return SlateText.isText(node);
-}
 
 export const topLevelBlockKinds: string[] = [
   ELEMENT_H1,

@@ -1,23 +1,34 @@
-import { isElement, TEditor, TNode } from '@udecode/plate';
-import { Editor, Path, Transforms } from 'slate';
-import { ColumnsElement, ELEMENT_COLUMNS } from '@decipad/editor-types';
+import {
+  getAboveNode,
+  insertNodes,
+  isElement,
+  withoutNormalizing,
+  wrapNodes,
+} from '@udecode/plate';
+import { Path } from 'slate';
+import {
+  ColumnsElement,
+  ELEMENT_COLUMNS,
+  MyEditor,
+  MyElementOrText,
+} from '@decipad/editor-types';
 
-export const hasLayoutAncestor = (editor: TEditor, path: Path): boolean => {
-  return !!Editor.above(editor, {
+export const hasLayoutAncestor = (editor: MyEditor, path: Path): boolean => {
+  return !!getAboveNode(editor, {
     at: path,
     match: (node) => isElement(node) && node.type === ELEMENT_COLUMNS,
   });
 };
 
 export const insertNodeIntoColumns = (
-  editor: TEditor,
-  node: TNode,
+  editor: MyEditor,
+  node: MyElementOrText,
   path: Path
 ): void => {
-  Editor.withoutNormalizing(editor, () => {
+  withoutNormalizing(editor, () => {
     const hasLayoutAncestorElement = hasLayoutAncestor(editor, path);
     if (!hasLayoutAncestorElement) {
-      Transforms.wrapNodes(
+      wrapNodes(
         editor,
         {
           type: ELEMENT_COLUMNS,
@@ -26,7 +37,7 @@ export const insertNodeIntoColumns = (
       );
     }
 
-    Transforms.insertNodes(editor, node, {
+    insertNodes(editor, node, {
       at: hasLayoutAncestorElement ? Path.next(path) : [...path, 1],
     });
   });

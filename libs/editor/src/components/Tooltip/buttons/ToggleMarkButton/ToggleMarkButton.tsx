@@ -3,10 +3,10 @@ import {
   getPreventDefaultHandler,
   isMarkActive,
   toggleMark,
-  useEditorRef,
 } from '@udecode/plate';
 import { cssVar } from 'libs/ui/src/primitives';
 import { FC } from 'react';
+import { MyMark, useTEditorRef } from '@decipad/editor-types';
 import { dividerStyle } from '../../styles/divider';
 
 const buttonStyles = css({
@@ -35,7 +35,7 @@ const activeButtonStyles = css({
 });
 
 interface ToggleMarkButtonProps {
-  type: string;
+  type: MyMark;
   icon: ReturnType<FC>;
   divider?: boolean;
 }
@@ -45,7 +45,7 @@ export const ToggleMarkButton = ({
   icon,
   divider,
 }: ToggleMarkButtonProps): ReturnType<FC> => {
-  const editor = useEditorRef();
+  const editor = useTEditorRef();
 
   const isActive = !!editor?.selection && isMarkActive(editor, type);
 

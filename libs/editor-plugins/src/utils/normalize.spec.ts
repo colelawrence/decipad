@@ -1,5 +1,4 @@
-import { TElement } from '@udecode/plate';
-import { createEditor, Editor } from 'slate';
+import { createTEditor, getNodeEntry, TEditor, TText } from '@udecode/plate';
 import { mockConsoleError } from '@decipad/testutils';
 
 import {
@@ -8,9 +7,9 @@ import {
 } from './normalize';
 
 describe('normalizeExcessProperties', () => {
-  let editor!: Editor;
+  let editor!: TEditor;
   beforeEach(() => {
-    editor = createEditor();
+    editor = createTEditor();
     editor.children = [
       {
         type: 'p',
@@ -18,14 +17,14 @@ describe('normalizeExcessProperties', () => {
         extraProp: 'hi',
         children: [{ text: '', extraProp: 'hi' }],
       },
-    ] as TElement[];
+    ];
   });
 
   it('removes excess properties from a text node', () => {
     expect(editor).toHaveProperty('children.0.children.0.extraProp');
     normalizeExcessProperties(
       editor,
-      Editor.node(editor, { path: [0, 0], offset: 0 })
+      getNodeEntry(editor, { path: [0, 0], offset: 0 })
     );
     expect(editor).not.toHaveProperty('children.0.children.0.extraProp');
   });
@@ -34,28 +33,28 @@ describe('normalizeExcessProperties', () => {
     expect(editor).toHaveProperty('children.0.extraProp');
     normalizeExcessProperties(
       editor,
-      Editor.node(editor, { path: [0], offset: 0 })
+      getNodeEntry(editor, { path: [0], offset: 0 })
     );
     expect(editor).not.toHaveProperty('children.0.extraProp');
   });
 
   it('returns false if no properties were removed', () => {
-    editor.children = [{ type: 'p', children: [{ text: '' }] }] as TElement[];
+    editor.children = [{ type: 'p', children: [{ text: '' }] }];
     expect(
       normalizeExcessProperties(
         editor,
-        Editor.node(editor, { path: [0], offset: 0 })
+        getNodeEntry(editor, { path: [0], offset: 0 })
       )
     ).toBe(false);
   });
   it('returns true if properties were removed', () => {
     editor.children = [
       { type: 'p', extraProp: 'hi', children: [{ text: '' }] },
-    ] as TElement[];
+    ];
     expect(
       normalizeExcessProperties(
         editor,
-        Editor.node(editor, { path: [0], offset: 0 })
+        getNodeEntry(editor, { path: [0], offset: 0 })
       )
     ).toBe(true);
   });
@@ -63,22 +62,22 @@ describe('normalizeExcessProperties', () => {
   describe('given an absurd node', () => {
     mockConsoleError();
     it('does not allow a node to be neither element nor text', () => {
-      editor.children = [{ type: 'p', children: [{}] }] as TElement[];
+      editor.children = [{ type: 'p', children: [{} as TText] }];
       expect(() =>
         normalizeExcessProperties(
           editor,
-          Editor.node(editor, { path: [0, 0], offset: 0 })
+          getNodeEntry(editor, { path: [0, 0], offset: 0 })
         )
       ).toThrow(/element.+text/i);
     });
     it('does not allow a node to be element and text simulatenously', () => {
       editor.children = [
         { type: 'p', children: [{ text: '', children: [{ text: '' }] }] },
-      ] as TElement[];
+      ];
       expect(() =>
         normalizeExcessProperties(
           editor,
-          Editor.node(editor, { path: [0, 0], offset: 0 })
+          getNodeEntry(editor, { path: [0, 0], offset: 0 })
         )
       ).toThrow(/element.+text/i);
     });
@@ -88,7 +87,7 @@ describe('normalizeExcessProperties', () => {
     it('exempts additional properties from removal', () => {
       normalizeExcessProperties(
         editor,
-        Editor.node(editor, { path: [0], offset: 0 }),
+        getNodeEntry(editor, { path: [0], offset: 0 }),
         ['extraProp']
       );
       expect(editor).toHaveProperty('children.0.extraProp');
@@ -101,7 +100,7 @@ describe('normalizeExcessProperties', () => {
     it('adds missing mandatory property', () => {
       normalizeMissingProperties(
         editor,
-        Editor.node(editor, { path: [0], offset: 0 }),
+        getNodeEntry(editor, { path: [0], offset: 0 }),
         ['mandatoryProp'],
         { mandatoryProp: () => 'val' }
       );
@@ -111,7 +110,7 @@ describe('normalizeExcessProperties', () => {
     it('deletes the element if there is a missing mandatory property that we cannot generate', () => {
       normalizeMissingProperties(
         editor,
-        Editor.node(editor, { path: [0], offset: 0 }),
+        getNodeEntry(editor, { path: [0], offset: 0 }),
         ['missingProp'],
         {}
       );

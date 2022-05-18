@@ -1,8 +1,12 @@
-import { isElement, ELEMENT_EXPRESSION } from '@decipad/editor-types';
+import {
+  ELEMENT_EXPRESSION,
+  MyDecorate,
+  MyDecorateEntry,
+} from '@decipad/editor-types';
 import { getSyntaxErrorRanges } from '@decipad/editor-utils';
-import { tokenize, Token, Computer } from '@decipad/computer';
-import { Decorate } from '@udecode/plate';
-import { Node, NodeEntry, Path, Range } from 'slate';
+import { Computer, Token, tokenize } from '@decipad/computer';
+import { getNodeString, isElement } from '@udecode/plate';
+import { Path, Range } from 'slate';
 import { DECORATION_EXPRESSION_SYNTAX } from '../constants';
 import { expressionFromEditorSource } from './expressionFromEditorSource';
 
@@ -27,11 +31,11 @@ const withTokenToRange =
     return undefined;
   };
 
-const syntaxDecorations = ([node, path]: NodeEntry): Range[] | undefined => {
+const syntaxDecorations: MyDecorateEntry = ([node, path]) => {
   if (isElement(node) && node.type === ELEMENT_EXPRESSION) {
     const ranges: CodeSyntaxRange[] = [];
     const tokenToRange = withTokenToRange([...path, 0]);
-    for (const token of tokenize(Node.string(node))) {
+    for (const token of tokenize(getNodeString(node))) {
       const range = tokenToRange(token);
       if (range) {
         ranges.push(range);
@@ -43,10 +47,13 @@ const syntaxDecorations = ([node, path]: NodeEntry): Range[] | undefined => {
 };
 
 const withErrorDecorations =
-  (computer: Computer) =>
-  ([node, path]: NodeEntry): Range[] | undefined => {
+  (computer: Computer): MyDecorateEntry =>
+  ([node, path]) => {
     if (isElement(node) && node.type === ELEMENT_EXPRESSION) {
-      const { error } = expressionFromEditorSource(computer, Node.string(node));
+      const { error } = expressionFromEditorSource(
+        computer,
+        getNodeString(node)
+      );
 
       return getSyntaxErrorRanges(path, {
         blockId: '',
@@ -58,15 +65,15 @@ const withErrorDecorations =
     return undefined;
   };
 
-export const decorateExpression = (computer: Computer): Decorate => {
+export const decorateExpression = (computer: Computer): MyDecorate => {
   const errorDecorations = withErrorDecorations(computer);
-  return () =>
-    (entry: NodeEntry): Range[] | undefined => {
-      const syntax = syntaxDecorations(entry);
-      const error = errorDecorations(entry);
-      if (!syntax && !error) {
-        return undefined;
-      }
-      return (syntax || []).concat(error || []);
-    };
+
+  return () => (entry) => {
+    const syntax = syntaxDecorations(entry);
+    const error = errorDecorations(entry);
+    if (!syntax && !error) {
+      return undefined;
+    }
+    return (syntax || []).concat(error || []);
+  };
 };

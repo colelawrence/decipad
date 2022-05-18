@@ -1,6 +1,5 @@
-import { createPlateEditor } from '@udecode/plate';
-import { ELEMENT_EXPRESSION } from '@decipad/editor-types';
-import { Descendant, Editor } from 'slate';
+import { createPlateEditor, normalizeEditor } from '@udecode/plate';
+import { createTPlateEditor, ELEMENT_EXPRESSION } from '@decipad/editor-types';
 import { createNormalizerPluginFactory } from './normalizerPlugin';
 
 describe('createNormalizerPluginFactory', () => {
@@ -10,7 +9,7 @@ describe('createNormalizerPluginFactory', () => {
       elementType: ELEMENT_EXPRESSION,
       acceptableElementProperties: ['prop1', 'prop2'],
     });
-    const editor = createPlateEditor({
+    const editor = createTPlateEditor({
       plugins: [plugin()],
     });
     editor.children = [
@@ -20,10 +19,10 @@ describe('createNormalizerPluginFactory', () => {
         prop2: 'value2',
         prop3: 'value3',
         children: [{ text: '' }],
-      },
+      } as never,
     ];
 
-    Editor.normalize(editor, { force: true });
+    normalizeEditor(editor, { force: true });
     expect(editor.children).toEqual([
       {
         type: ELEMENT_EXPRESSION,
@@ -54,20 +53,20 @@ describe('createNormalizerPluginFactory', () => {
           {
             type: 'el1',
             children: [{ text: '' }],
-          } as Descendant,
+          },
           {
             type: 'el2',
             children: [{ text: '' }],
-          } as Descendant,
+          },
           {
             type: 'el3',
             children: [{ text: '' }],
-          } as Descendant,
+          },
         ],
-      },
+      } as never,
     ];
 
-    Editor.normalize(editor, { force: true });
+    normalizeEditor(editor, { force: true });
     expect(editor.children).toEqual([
       {
         type: ELEMENT_EXPRESSION,
@@ -75,11 +74,11 @@ describe('createNormalizerPluginFactory', () => {
           {
             type: 'el1',
             children: [{ text: '' }],
-          } as Descendant,
+          },
           {
             type: 'el2',
             children: [{ text: '' }],
-          } as Descendant,
+          },
         ],
       },
     ]);

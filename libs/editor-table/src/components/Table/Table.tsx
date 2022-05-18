@@ -1,5 +1,9 @@
 import { DraggableBlock } from '@decipad/editor-components';
-import { ELEMENT_TABLE, PlateComponent } from '@decipad/editor-types';
+import {
+  ELEMENT_TABLE,
+  PlateComponent,
+  useTEditorState,
+} from '@decipad/editor-types';
 import {
   assertElementType,
   useElementMutatorCallback,
@@ -7,7 +11,6 @@ import {
 import { organisms } from '@decipad/ui';
 import { AvailableSwatchColor, UserIconKey } from 'libs/ui/src/utils';
 import { useMemo, useState } from 'react';
-import { ReactEditor, useSlate } from 'slate-react';
 import { useTableActions } from '../../hooks';
 import {
   EditorTableContext,
@@ -17,7 +20,7 @@ import {
 export const Table: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_TABLE);
   const [deleted, setDeleted] = useState(false);
-  const editor = useSlate() as ReactEditor;
+  const editor = useTEditorState();
 
   const saveIcon = useElementMutatorCallback(editor, element, 'icon');
   const saveColor = useElementMutatorCallback(editor, element, 'color');

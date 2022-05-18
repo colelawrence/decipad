@@ -1,14 +1,19 @@
 import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
-import { ELEMENT_INPUT, InputElement } from '@decipad/editor-types';
-import { Editor, NodeEntry, Transforms } from 'slate';
+import {
+  ELEMENT_INPUT,
+  InputElement,
+  MyEditor,
+  MyNodeEntry,
+} from '@decipad/editor-types';
+import { deleteText, insertNodes } from '@udecode/plate';
 import { inputElementToVariableDef } from '../utils/inputElementToVariableDef';
 
 const normalize =
-  (editor: Editor) =>
-  ([node, path]: NodeEntry): boolean => {
+  (editor: MyEditor) =>
+  ([node, path]: MyNodeEntry): boolean => {
     const replacement = inputElementToVariableDef(node as InputElement);
-    Transforms.delete(editor, { at: path });
-    Transforms.insertNodes(editor, replacement, { at: path });
+    deleteText(editor, { at: path });
+    insertNodes(editor, replacement, { at: path });
     return true;
   };
 

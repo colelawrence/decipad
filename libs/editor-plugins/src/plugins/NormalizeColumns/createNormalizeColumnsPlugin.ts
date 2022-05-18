@@ -1,29 +1,40 @@
 /* eslint-disable no-param-reassign */
-import { ELEMENT_COLUMNS, ELEMENT_VARIABLE_DEF } from '@decipad/editor-types';
-import { isElement, isText, TDescendant } from '@udecode/plate';
-import { Editor, Node, NodeEntry, Transforms } from 'slate';
+import {
+  ELEMENT_COLUMNS,
+  ELEMENT_VARIABLE_DEF,
+  MyEditor,
+  MyNodeEntry,
+} from '@decipad/editor-types';
+import {
+  getNodeChildren,
+  isElement,
+  isText,
+  liftNodes,
+  removeNodes,
+  unwrapNodes,
+} from '@udecode/plate';
 import { createNormalizerPluginFactory } from '../../pluginFactories';
 
-const normalizeColumns = (editor: Editor) => (entry: NodeEntry) => {
+const normalizeColumns = (editor: MyEditor) => (entry: MyNodeEntry) => {
   const [node, path] = entry;
   if (isElement(node) && node.type === ELEMENT_COLUMNS) {
-    for (const childEntry of Node.children(editor, path)) {
-      const [childNode, childPath] = childEntry as NodeEntry<TDescendant>;
+    for (const childEntry of getNodeChildren(editor, path)) {
+      const [childNode, childPath] = childEntry;
 
       if (
         isText(childNode) ||
         (isElement(childNode) && childNode.type !== ELEMENT_VARIABLE_DEF)
       ) {
-        Transforms.liftNodes(editor, { at: childPath });
+        liftNodes(editor, { at: childPath });
         return true;
       }
     }
 
     if (node.children.length === 0) {
-      Transforms.removeNodes(editor, { at: path });
+      removeNodes(editor, { at: path });
     }
     if (node.children.length === 1) {
-      Transforms.unwrapNodes(editor, { at: path });
+      unwrapNodes(editor, { at: path });
     }
     return true;
   }

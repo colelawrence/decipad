@@ -9,8 +9,8 @@ import {
   getNullReplacementValue,
   parseCell,
 } from '@decipad/editor-utils';
-import { Node } from 'slate';
 import Fraction from '@decipad/fraction';
+import { getNodeString } from '@udecode/plate';
 
 export const getTableAstNodeFromTableElement = (
   table: TableElement
@@ -18,7 +18,7 @@ export const getTableAstNodeFromTableElement = (
   const [caption, headerRow, ...dataRows] = table.children;
   const columns = headerRow.children.map((th, columnIndex) => {
     const { cellType } = th;
-    const columnName = Node.string(th);
+    const columnName = getNodeString(th);
 
     const column = (() => {
       if (cellType.kind === 'table-formula') {
@@ -29,14 +29,14 @@ export const getTableAstNodeFromTableElement = (
         );
 
         return formulaSourceToColumn(
-          formula ? Node.string(formula) : '',
+          formula ? getNodeString(formula) : '',
           dataRows.length
         );
       }
       const items = dataRows.map((tr) => {
         const td = tr.children[columnIndex];
         return (
-          (td && parseCell(cellType, Node.string(td))) ??
+          (td && parseCell(cellType, getNodeString(td))) ??
           getNullReplacementValue(cellType)
         );
       });
@@ -47,7 +47,7 @@ export const getTableAstNodeFromTableElement = (
   });
 
   return {
-    name: Node.string(caption.children[0]),
+    name: getNodeString(caption.children[0]),
     expression: astNode('table', ...columns),
   };
 };

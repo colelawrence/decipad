@@ -9,11 +9,15 @@ import {
   ELEMENT_TH,
   ELEMENT_TR,
 } from '@decipad/editor-types';
-import { createPlateEditor, TElement } from '@udecode/plate';
-import { Editor } from 'slate';
+import {
+  createPlateEditor,
+  normalizeEditor,
+  TEditor,
+  TElement,
+} from '@udecode/plate';
 import { createTablePlugin } from './createTablePlugin';
 
-let editor: Editor;
+let editor: TEditor;
 beforeEach(() => {
   const computer = new Computer();
   editor = createPlateEditor({
@@ -26,9 +30,9 @@ it('normalizes empty table', () => {
     {
       type: ELEMENT_TABLE,
       children: [],
-    } as TElement,
+    },
   ];
-  Editor.normalize(editor, { force: true });
+  normalizeEditor(editor, { force: true });
   expect(editor.children).toMatchObject([
     {
       type: 'table',
@@ -85,9 +89,9 @@ it('inserts tds and ths if needed', () => {
           children: [],
         },
       ],
-    } as TElement,
+    },
   ];
-  Editor.normalize(editor, { force: true });
+  normalizeEditor(editor, { force: true });
   expect(editor.children).toMatchObject([
     {
       type: ELEMENT_TABLE,
@@ -147,9 +151,9 @@ it('removes strange types of nodes inside a table', () => {
           children: [],
         },
       ],
-    } as TElement,
+    },
   ];
-  Editor.normalize(editor, { force: true });
+  normalizeEditor(editor, { force: true });
 
   expect(editor.children).toMatchObject([
     {
@@ -250,9 +254,9 @@ it('makes all rows the same size as header row', () => {
           ],
         },
       ],
-    } as TElement,
+    },
   ];
-  Editor.normalize(editor, { force: true });
+  normalizeEditor(editor, { force: true });
 
   expect(editor.children).toMatchObject([
     {
@@ -396,9 +400,9 @@ it('makes th and td elements contain only text elements', () => {
           ],
         },
       ],
-    } as TElement,
+    },
   ];
-  Editor.normalize(editor, { force: true });
+  normalizeEditor(editor, { force: true });
 
   expect(editor.children).toMatchObject([
     {
@@ -497,9 +501,9 @@ it('makes table have at least one row', () => {
           ],
         },
       ],
-    } as TElement,
+    },
   ];
-  Editor.normalize(editor, { force: true });
+  normalizeEditor(editor, { force: true });
 
   expect(editor.children).toMatchObject([
     {
@@ -591,9 +595,9 @@ it('normalizes caption, th and td elements to contain only valid characters', ()
           ],
         },
       ],
-    } as TElement,
+    },
   ];
-  Editor.normalize(editor, { force: true });
+  normalizeEditor(editor, { force: true });
 
   expect(editor.children).toMatchObject([
     {
@@ -691,7 +695,7 @@ it('creates caption formulas when missing', () => {
       ],
     } as TElement,
   ];
-  Editor.normalize(editor, { force: true });
+  normalizeEditor(editor, { force: true });
 
   expect(editor.children).toMatchObject([
     {

@@ -1,20 +1,22 @@
-import { createPlateEditor, PlateEditor, PlatePlugin } from '@udecode/plate';
+import { getNodeString } from '@udecode/plate';
 import {
-  Element,
+  createTPlateEditor,
   ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
+  MyEditor,
+  MyElement,
+  MyPlatePlugin,
 } from '@decipad/editor-types';
-import { Node } from 'slate';
 import React from 'react';
 import { createNormalizeCodeBlockPlugin } from '../NormalizeCodeBlock/createNormalizeCodeBlockPlugin';
 import { createAutoFormatCodeBlockPlugin } from './createAutoFormatCodeBlockPlugin';
 import { createNormalizeCodeLinePlugin } from '../NormalizeCodeLine';
 
-let editor: PlateEditor;
-let plugin: PlatePlugin;
+let editor: MyEditor;
+let plugin: MyPlatePlugin;
 beforeEach(() => {
   plugin = createAutoFormatCodeBlockPlugin();
-  editor = createPlateEditor({
+  editor = createTPlateEditor({
     plugins: [
       plugin,
       createNormalizeCodeBlockPlugin(),
@@ -23,24 +25,24 @@ beforeEach(() => {
   });
 });
 
-const makeParagraph = (text: string): Element[] =>
+const makeParagraph = (text: string): MyElement[] =>
   [
     {
       type: ELEMENT_PARAGRAPH,
       children: [{ text }],
     },
-  ] as Element[];
+  ] as MyElement[];
 
-const makeCodeLine = (text: string): Element[] =>
+const makeCodeLine = (text: string): MyElement[] =>
   [
     {
       type: ELEMENT_CODE_LINE,
       children: [{ text }],
     },
-  ] as Element[];
+  ] as MyElement[];
 
 const renderEditorParagraph = (text: string) => {
-  editor.children = makeParagraph(text);
+  editor.children = makeParagraph(text) as never;
 
   editor.selection = {
     anchor: { path: [0, 0], offset: text.length },
@@ -49,7 +51,7 @@ const renderEditorParagraph = (text: string) => {
 };
 
 const renderEditorCodeLine = (text: string) => {
-  editor.children = makeCodeLine(text);
+  editor.children = makeCodeLine(text) as never;
   editor.selection = {
     anchor: { path: [0, 0], offset: text.length },
     focus: { path: [0, 0], offset: text.length },
@@ -182,7 +184,7 @@ describe('Auto format code line plugin', () => {
         type: ELEMENT_PARAGRAPH,
         children: [{ text: 'hello2 ' }],
       },
-    ] as Element[];
+    ] as never;
 
     // Press = on the paragraph, expect two code lines after
     editor.selection = {
@@ -196,7 +198,7 @@ describe('Auto format code line plugin', () => {
       expect.objectContaining({ type: ELEMENT_CODE_LINE }),
       expect.objectContaining({ type: ELEMENT_CODE_LINE }),
     ]);
-    expect(Node.string(editor.children[1])).toEqual('hello2 =');
+    expect(getNodeString(editor.children[1])).toEqual('hello2 =');
 
     // press backspace on the first code line, expect it to not format to a paragraph
     editor.selection = {
@@ -218,8 +220,8 @@ describe('Auto format code line plugin', () => {
       expect.objectContaining({ type: ELEMENT_CODE_LINE }),
       expect.objectContaining({ type: ELEMENT_PARAGRAPH }),
     ]);
-    expect(Node.string(editor.children[0])).toEqual('hello = 10 apple');
-    expect(Node.string(editor.children[1])).toEqual('hello2 =');
+    expect(getNodeString(editor.children[0])).toEqual('hello = 10 apple');
+    expect(getNodeString(editor.children[1])).toEqual('hello2 =');
   });
 
   it('does not go back to a paragraph after typing in a different block', () => {
@@ -232,7 +234,7 @@ describe('Auto format code line plugin', () => {
         type: ELEMENT_PARAGRAPH,
         children: [{ text: 'hello ' }],
       },
-    ] as Element[];
+    ] as never;
 
     editor.selection = {
       anchor: { path: [0, 0], offset: 'a '.length },
@@ -258,7 +260,7 @@ describe('Auto format code line plugin', () => {
     expect(editor.children[0]).toEqual(
       expect.objectContaining({ type: ELEMENT_CODE_LINE })
     );
-    expect(Node.string(editor.children[0])).toEqual('a ');
+    expect(getNodeString(editor.children[0])).toEqual('a ');
   });
 
   it('does not format to code line when text is not plain', () => {
@@ -267,7 +269,7 @@ describe('Auto format code line plugin', () => {
         type: ELEMENT_PARAGRAPH,
         children: [{ text: 'a' }, { text: 'b ', bold: true }],
       },
-    ] as Element[];
+    ] as never;
 
     editor.selection = {
       anchor: { path: [0, 1], offset: 'ab '.length },
@@ -279,6 +281,6 @@ describe('Auto format code line plugin', () => {
     expect(editor.children).toEqual([
       expect.objectContaining({ type: ELEMENT_PARAGRAPH }),
     ]);
-    expect(Node.string(editor.children[0])).toEqual('ab =');
+    expect(getNodeString(editor.children[0])).toEqual('ab =');
   });
 });

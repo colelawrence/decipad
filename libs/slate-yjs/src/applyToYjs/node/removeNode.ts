@@ -1,5 +1,5 @@
-import { RemoveNodeOperation } from 'slate';
 import invariant from 'tiny-invariant';
+import { TRemoveNodeOperation } from '@udecode/plate';
 import { SharedType, SyncNode } from '../../model';
 import { getParent } from '../../path';
 
@@ -11,7 +11,7 @@ import { getParent } from '../../path';
  */
 export default function removeNode(
   doc: SharedType,
-  op: RemoveNodeOperation
+  op: TRemoveNodeOperation
 ): SharedType {
   const [parent, index] = getParent(doc, op.path);
 

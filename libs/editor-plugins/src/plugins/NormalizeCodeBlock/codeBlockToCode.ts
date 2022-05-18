@@ -7,5 +7,7 @@ function codeLineToCode(line: CodeLineElement): string {
 export function codeBlockToCode(
   codeBlock: Omit<CodeBlockElement, 'id'>
 ): string {
-  return codeBlock.children.map(codeLineToCode).join('\n');
+  return (codeBlock as CodeBlockElement).children
+    .map(codeLineToCode)
+    .join('\n');
 }

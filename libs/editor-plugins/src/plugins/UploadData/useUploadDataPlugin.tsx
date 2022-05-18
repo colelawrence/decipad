@@ -1,10 +1,9 @@
-import { ELEMENT_FETCH } from '@decipad/editor-types';
+import { ELEMENT_FETCH, FetchElement, MyEditor } from '@decipad/editor-types';
 import { useToast } from '@decipad/toast';
-import { TEditor } from '@udecode/plate';
+import { insertNodes, moveSelection } from '@udecode/plate';
 import camelcase from 'camelcase';
 import { nanoid } from 'nanoid';
 import { useCallback, useEffect, useState } from 'react';
-import { Editor as SlateEditor, Transforms } from 'slate';
 import slug from 'slug';
 import * as upload from './upload';
 
@@ -29,7 +28,7 @@ export interface UploadDataOptions {
 }
 
 interface UploadDataPluginOptions {
-  editor: TEditor | undefined;
+  editor: MyEditor | undefined;
 }
 
 interface UseUploadDataPluginReturn {
@@ -123,7 +122,7 @@ export const useUploadDataPlugin = ({
 };
 
 function insertFileInDoc(
-  editor: TEditor | undefined,
+  editor: MyEditor | undefined,
   {
     url,
     fileName,
@@ -141,10 +140,10 @@ function insertFileInDoc(
         text: '', // empty text node
       },
     ],
-  };
+  } as FetchElement;
   if (editor) {
-    Transforms.insertNodes(editor as unknown as SlateEditor, [block]);
-    Transforms.move(editor as unknown as SlateEditor);
+    insertNodes(editor, [block]);
+    moveSelection(editor);
   }
 }
 

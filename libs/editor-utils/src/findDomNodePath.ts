@@ -1,5 +1,12 @@
 import { Path } from 'slate';
-import { ReactEditor } from 'slate-react';
+import { findNodePath, toSlateNode, TReactEditor } from '@udecode/plate';
 
-export const findDomNodePath = (editor: ReactEditor, node: Node): Path =>
-  ReactEditor.findPath(editor, ReactEditor.toSlateNode(editor, node));
+export const findDomNodePath = (
+  editor: TReactEditor,
+  node: Node
+): Path | undefined => {
+  const slateNode = toSlateNode(editor, node);
+  if (!slateNode) return;
+
+  return findNodePath(editor, slateNode);
+};

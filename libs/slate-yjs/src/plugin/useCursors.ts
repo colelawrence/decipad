@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import { NodeEntry, Path, Range, BaseRange, Text } from 'slate';
+import { BaseRange, Path, Range } from 'slate';
+import { isText } from '@udecode/plate';
+import { MyDecorateEntry } from '@decipad/editor-types';
 import { Cursor } from '../model';
 import { relativePositionToAbsolutePosition } from '../cursor/utils';
 import { CursorEditor } from './cursorEditor';
@@ -17,7 +19,7 @@ type RangeWithData = BaseRange &
 export const useCursors = (
   editor: CursorEditor
 ): {
-  decorate: (entry: NodeEntry) => Range[];
+  decorate: MyDecorateEntry;
   cursors: Cursor[];
 } => {
   const [cursors, setCursorData] = useState<Cursor[]>([]);
@@ -52,11 +54,11 @@ export const useCursors = (
     });
   }, [editor]);
 
-  const decorate = useCallback(
-    ([node, path]: NodeEntry) => {
+  const decorate: MyDecorateEntry = useCallback(
+    ([node, path]) => {
       const ranges: RangeWithData[] = [];
 
-      if (Text.isText(node) && cursors?.length) {
+      if (isText(node) && cursors?.length) {
         cursors.forEach((cursor: Cursor) => {
           if (Range.includes(cursor, path)) {
             const { focus, anchor, data } = cursor;

@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-import { Editor } from 'slate';
+import { MyEditor } from '@decipad/editor-types';
 
 const pluginStoreSymbol = Symbol('PLUGIN_STORE');
 
@@ -10,7 +10,7 @@ type StoreBearing = {
 };
 type Creator<T> = () => T;
 
-const editorStore = (editor: Editor): StoreByPlugin => {
+const editorStore = (editor: MyEditor): StoreByPlugin => {
   let store = (editor as StoreBearing)[pluginStoreSymbol];
   if (!store) {
     store = {};
@@ -36,7 +36,7 @@ const getPluginStore = <T>(
 };
 
 export const pluginStore = <T>(
-  editor: Editor,
+  editor: MyEditor,
   pluginKey: string,
   create: Creator<T>
 ): T => {

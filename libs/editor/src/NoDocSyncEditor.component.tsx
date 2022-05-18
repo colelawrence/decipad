@@ -3,8 +3,9 @@ import {
   ResultsContext,
   useComputer,
 } from '@decipad/react-contexts';
-import { Plate, PlateProps } from '@udecode/plate';
+import { Plate } from '@udecode/plate';
 import { FC, useMemo } from 'react';
+import { MyPlateProps, MyValue } from '@decipad/editor-types';
 import { Tooltip } from './components';
 import * as configuration from './configuration';
 import { emptyNotebook, introNotebook } from './exampleNotebooks';
@@ -12,7 +13,9 @@ import { POPULATE_PLAYGROUND } from './utils/storage';
 
 const NO_DOC_SYNC_EDITOR_ID = 'nodocsynceditorid';
 
-export const NoDocSyncEditorInternal = (props: PlateProps): ReturnType<FC> => {
+export const NoDocSyncEditorInternal = (
+  props: MyPlateProps
+): ReturnType<FC> => {
   const computer = useComputer();
 
   const editorPlugins = useMemo(
@@ -22,7 +25,7 @@ export const NoDocSyncEditorInternal = (props: PlateProps): ReturnType<FC> => {
 
   return (
     <ResultsContext.Provider value={computer.results.asObservable()}>
-      <Plate
+      <Plate<MyValue>
         id={NO_DOC_SYNC_EDITOR_ID}
         plugins={editorPlugins}
         initialValue={
@@ -38,10 +41,10 @@ export const NoDocSyncEditorInternal = (props: PlateProps): ReturnType<FC> => {
   );
 };
 
-export const NoDocSyncEditor = (props: PlateProps): ReturnType<FC> => {
+export const NoDocSyncEditor = (props: MyPlateProps): ReturnType<FC> => {
   return (
     <ComputerContextProvider>
-      <NoDocSyncEditorInternal {...props}></NoDocSyncEditorInternal>
+      <NoDocSyncEditorInternal {...props} />
     </ComputerContextProvider>
   );
 };

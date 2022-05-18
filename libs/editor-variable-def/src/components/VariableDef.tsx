@@ -5,15 +5,12 @@ import {
   ELEMENT_VARIABLE_DEF,
   ELEMENT_CAPTION,
   ELEMENT_EXPRESSION,
+  useTEditorState,
+  VariableDefinitionElement,
 } from '@decipad/editor-types';
-import { ReactEditor, useSlate } from 'slate-react';
-import { PlateEditor, serializeHtml } from '@udecode/plate';
 import copy from 'copy-to-clipboard';
-import {
-  findPath,
-  insertNodeIntoColumns,
-  safeDelete,
-} from '@decipad/editor-utils';
+import { findNodePath, PlateEditor, serializeHtml } from '@udecode/plate';
+import { insertNodeIntoColumns, safeDelete } from '@decipad/editor-utils';
 import { DraggableBlock } from '@decipad/editor-components';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { AvailableSwatchColor } from 'libs/ui/src/utils';
@@ -28,11 +25,11 @@ export const VariableDef: PlateComponent = ({
     throw new Error(`VariableDef is meant to render variable def elements`);
   }
 
-  const editor = useSlate();
+  const editor = useTEditorState();
   const readOnly = useIsEditorReadOnly();
 
   const onDelete = useCallback(() => {
-    const path = findPath(editor as ReactEditor, element);
+    const path = findNodePath(editor, element);
     if (path) {
       setDeleted(true);
       safeDelete(editor, path);
@@ -46,7 +43,7 @@ export const VariableDef: PlateComponent = ({
   }, [editor, element]);
 
   const onAdd = useCallback(() => {
-    const at = findPath(editor as ReactEditor, element);
+    const at = findNodePath(editor, element);
     if (at) {
       insertNodeIntoColumns(
         editor,
@@ -63,7 +60,7 @@ export const VariableDef: PlateComponent = ({
               children: [{ text: '' }],
             },
           ],
-        },
+        } as VariableDefinitionElement,
         at
       );
     }

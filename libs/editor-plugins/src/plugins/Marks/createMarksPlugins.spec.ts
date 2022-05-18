@@ -1,13 +1,18 @@
-import { ELEMENT_CODE_BLOCK, ELEMENT_PARAGRAPH } from '@decipad/editor-types';
-import { createPlateEditor, PlateEditor, PlatePlugin } from '@udecode/plate';
+import {
+  createTPlateEditor,
+  ELEMENT_CODE_BLOCK,
+  ELEMENT_PARAGRAPH,
+  MyEditor,
+  MyPlatePlugin,
+} from '@decipad/editor-types';
 import { createMarksPlugins, StrictPlugin } from './createMarksPlugins';
 
 describe('Ctrl+b', () => {
-  let editor: PlateEditor;
-  let plugins: PlatePlugin[];
+  let editor: MyEditor;
+  let plugins: MyPlatePlugin[];
   beforeEach(() => {
     plugins = createMarksPlugins();
-    editor = createPlateEditor({
+    editor = createTPlateEditor({
       plugins,
     });
   });
@@ -29,7 +34,7 @@ describe('Ctrl+b', () => {
 
   it('turns text in a paragraph bold', () => {
     editor.children = [
-      { type: ELEMENT_PARAGRAPH, children: [{ text: 'text' }] },
+      { type: ELEMENT_PARAGRAPH, children: [{ text: 'text' }] } as never,
     ];
     editor.selection = {
       anchor: { path: [0, 0], offset: 0 },
@@ -42,7 +47,7 @@ describe('Ctrl+b', () => {
 
   it('is ignored in a code block', () => {
     editor.children = [
-      { type: ELEMENT_CODE_BLOCK, children: [{ text: 'text' }] },
+      { type: ELEMENT_CODE_BLOCK, children: [{ text: 'text' }] } as never,
     ];
     editor.selection = {
       anchor: { path: [0, 0], offset: 0 },

@@ -1,5 +1,5 @@
 import {
-  Element,
+  createTPlateEditor,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_LINE,
   ELEMENT_H1,
@@ -9,9 +9,9 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_UL,
   H1Element,
+  MyElement,
 } from '@decipad/editor-types';
-import { createPlateEditor, TDescendant, TElement } from '@udecode/plate';
-import { Editor, Transforms } from 'slate';
+import { normalizeEditor, select, TEditor } from '@udecode/plate';
 import { createNormalizeEditorPlugin } from './createNormalizeEditorPlugin';
 
 const h1Element = () =>
@@ -20,9 +20,9 @@ const h1Element = () =>
     children: [{ text: '' }],
   } as H1Element);
 
-let editor: Editor;
+let editor: TEditor;
 beforeEach(() => {
-  editor = createPlateEditor({
+  editor = createTPlateEditor({
     plugins: [createNormalizeEditorPlugin()],
   });
 });
@@ -33,40 +33,38 @@ describe('the title normalization', () => {
       {
         type: ELEMENT_H2,
         children: [{ text: '' }],
-      } as TElement,
+      },
     ];
-    Editor.normalize(editor, { force: true });
+    normalizeEditor(editor, { force: true });
     expect(editor.children).toEqual([h1Element()]);
   });
   it('forces the first H1 to exist', () => {
     editor.children = [];
-    Editor.normalize(editor, { force: true });
+    normalizeEditor(editor, { force: true });
     expect(editor.children).toEqual([h1Element()]);
   });
   it('forbids H1s in the second to last elements and converts them to paragraphs', () => {
-    editor.children = [h1Element(), h1Element()] as TElement[];
-    Editor.normalize(editor, { force: true });
+    editor.children = [h1Element(), h1Element()];
+    normalizeEditor(editor, { force: true });
     expect(editor.children).toEqual([
       expect.anything(),
       {
         type: ELEMENT_PARAGRAPH,
         children: [{ text: '' }],
       },
-    ] as Element[]);
+    ] as MyElement[]);
   });
   it('applies to moved but unchanged blocks', () => {
-    editor.children = [
-      { type: ELEMENT_H1, children: [{ text: 'text' }] },
-    ] as TElement[];
-    Transforms.select(editor, { path: [0, 0], offset: 0 });
-    editor.insertNode({ children: [{ text: '' }] });
+    editor.children = [{ type: ELEMENT_H1, children: [{ text: 'text' }] }];
+    select(editor, { path: [0, 0], offset: 0 });
+    editor.insertNode({ children: [{ text: '' }] } as never);
     expect(editor.children).toEqual([
       h1Element(),
       {
         type: ELEMENT_PARAGRAPH,
         children: [{ text: 'text' }],
       },
-    ] as Element[]);
+    ] as MyElement[]);
   });
 });
 
@@ -78,13 +76,13 @@ it.each([ELEMENT_H2, ELEMENT_UL, ELEMENT_BLOCKQUOTE, ELEMENT_CODE_LINE])(
       {
         type,
         children: [{ text: '' }],
-      } as TDescendant,
+      },
     ];
-    Editor.normalize(editor, { force: true });
+    normalizeEditor(editor, { force: true });
     expect(editor.children).toEqual([
       expect.anything(),
       { type, children: [{ text: '' }] },
-    ] as Element[]);
+    ] as MyElement[]);
   }
 );
 it.each([ELEMENT_LI, ELEMENT_LINK, 'asdf'])(
@@ -95,21 +93,21 @@ it.each([ELEMENT_LI, ELEMENT_LINK, 'asdf'])(
       {
         type,
         children: [{ text: '' }],
-      } as TDescendant,
+      },
     ];
-    Editor.normalize(editor, { force: true });
+    normalizeEditor(editor, { force: true });
     expect(editor.children).toEqual([
       expect.anything(),
       { type: ELEMENT_PARAGRAPH, children: [{ text: '' }] },
-    ] as Element[]);
+    ]);
   }
 );
 
 it('converts text at top level to a paragraph', () => {
-  editor.children = [h1Element(), { text: '' }];
-  Editor.normalize(editor, { force: true });
+  editor.children = [h1Element(), { text: '' } as never];
+  normalizeEditor(editor, { force: true });
   expect(editor.children).toEqual([
     expect.anything(),
     { type: ELEMENT_PARAGRAPH, children: [{ text: '' }] },
-  ] as Element[]);
+  ] as MyElement[]);
 });

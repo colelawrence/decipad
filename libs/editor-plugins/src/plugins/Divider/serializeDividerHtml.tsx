@@ -1,5 +1,5 @@
-import { SerializeHtml } from '@udecode/plate';
+import { MySerializeHtml } from '@decipad/editor-types';
 
-export const serializeDividerHtml: SerializeHtml = () => {
+export const serializeDividerHtml: MySerializeHtml = () => {
   return <hr />;
 };

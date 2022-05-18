@@ -1,12 +1,22 @@
-import { isElement } from '@udecode/plate';
-import { Editor, Node, NodeEntry, Transforms } from 'slate';
+import {
+  getNodeString,
+  hasNode,
+  insertNodes,
+  insertText,
+  isElement,
+  TNodeEntry,
+} from '@udecode/plate';
 import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
 import {
   ELEMENT_TABLE,
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
+  MyEditor,
+  MyNodeEntry,
+  TableCellElement,
   TableElement,
+  TableHeaderElement,
 } from '@decipad/editor-types';
 import { enumerate } from '@decipad/utils';
 import { nanoid } from 'nanoid';
@@ -22,13 +32,18 @@ const getBlankCell = (isHeader: boolean) => {
   const children = [{ text: '' }];
 
   return isHeader
-    ? { id, type: ELEMENT_TH, children, cellType: { kind: 'string' } }
-    : { id, type: ELEMENT_TD, children };
+    ? ({
+        id,
+        type: ELEMENT_TH,
+        children,
+        cellType: { kind: 'string' },
+      } as TableHeaderElement)
+    : ({ id, type: ELEMENT_TD, children } as TableCellElement);
 };
 
 const normalizeFormulaColumns = (
-  editor: Editor,
-  [table, tablePath]: NodeEntry<TableElement>
+  editor: MyEditor,
+  [table, tablePath]: TNodeEntry<TableElement>
 ) => {
   const [, headerRow] = table.children;
   if (!tableIsSquare(table)) return false;
@@ -54,10 +69,10 @@ const normalizeFormulaColumns = (
 
       const newCellPath = [...tablePath, rowIndex, 0];
 
-      if (Editor.hasPath(editor, newCellPath)) {
+      if (hasNode(editor, newCellPath)) {
         const newCell = getBlankCell(row.children[0].type === ELEMENT_TH);
 
-        Transforms.insertNodes(editor, [newCell], { at: newCellPath });
+        insertNodes(editor, [newCell], { at: newCellPath });
         didTransform = true;
       }
     }
@@ -75,10 +90,10 @@ const normalizeFormulaColumns = (
     for (const cellIndex of formulaColIndices) {
       const cell = row.children[cellIndex];
 
-      if (cell.type === ELEMENT_TD && Node.string(cell) !== '') {
+      if (cell.type === ELEMENT_TD && getNodeString(cell) !== '') {
         const tdPath = [...tablePath, rowIndex, cellIndex];
 
-        Transforms.insertText(editor, '', { at: tdPath });
+        insertText(editor, '', { at: tdPath });
         return true;
       }
     }
@@ -88,14 +103,14 @@ const normalizeFormulaColumns = (
 };
 
 export const normalizeTableFormulas =
-  (editor: Editor) =>
-  (entry: NodeEntry): boolean => {
-    const [node] = entry;
+  (editor: MyEditor) =>
+  (entry: MyNodeEntry): boolean => {
+    const [node, path] = entry;
     if (!isElement(node) || node.type !== ELEMENT_TABLE) {
       return false;
     }
     if (node.type === ELEMENT_TABLE) {
-      return normalizeFormulaColumns(editor, entry as NodeEntry<TableElement>);
+      return normalizeFormulaColumns(editor, [node, path]);
     }
     return false;
   };

@@ -1,27 +1,27 @@
-import { Element, ELEMENT_VARIABLE_DEF } from '@decipad/editor-types';
+import { MyElement, ELEMENT_VARIABLE_DEF } from '@decipad/editor-types';
 import {
   isExpression,
   parseOneBlock,
   parseOneExpression,
 } from '@decipad/computer';
-import { Node } from 'slate';
+import { getNodeString } from '@udecode/plate';
 import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeInteractiveElementOutput';
 
 export const VariableDef = {
   type: ELEMENT_VARIABLE_DEF,
   resultsInNameAndExpression: true,
   getNameAndExpressionFromElement: weakMapMemoizeInteractiveElementOutput(
-    (element: Element) => {
+    (element: MyElement) => {
       if (element.type !== ELEMENT_VARIABLE_DEF) {
         throw new Error('element should be a variable def element');
       }
       if (element.children.length < 2) {
         return null;
       }
-      const variableName = Node.string(element.children[0]);
+      const variableName = getNodeString(element.children[0]);
 
       if (element.variant === 'expression') {
-        const value = Node.string(element.children[1]);
+        const value = getNodeString(element.children[1]);
         try {
           const block = parseOneBlock(value);
           if (block.args.length === 1 && isExpression(block.args[0])) {

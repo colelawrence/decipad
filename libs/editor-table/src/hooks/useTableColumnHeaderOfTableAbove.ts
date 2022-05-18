@@ -1,21 +1,23 @@
 import {
   ELEMENT_TABLE,
-  isElement,
+  MyElement,
+  TableElement,
   TableHeaderElement,
+  useTEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType, useElementAbove } from '@decipad/editor-utils';
-import { usePlateEditorRef } from '@udecode/plate';
+import { isElement } from '@udecode/plate';
 import { Node } from 'slate';
 
-const isTable = (node: Node) => {
+const isTable = (node: Node): node is TableElement => {
   return isElement(node) && node.type === ELEMENT_TABLE;
 };
 
 export const useTableColumnHeaderOfTableAbove = (
-  element: Node,
+  element: MyElement,
   columnId: string
 ): TableHeaderElement | undefined => {
-  const editor = usePlateEditorRef();
+  const editor = useTEditorRef();
   const table = useElementAbove(editor, element, { match: isTable });
 
   if (table) {

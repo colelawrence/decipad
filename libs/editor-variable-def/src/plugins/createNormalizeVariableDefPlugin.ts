@@ -1,22 +1,26 @@
 import { nanoid } from 'nanoid';
 import {
-  ELEMENT_VARIABLE_DEF,
-  isElement,
-  Node,
+  CaptionElement,
   ELEMENT_CAPTION,
   ELEMENT_EXPRESSION,
-  Element,
   ELEMENT_SLIDER,
+  ELEMENT_VARIABLE_DEF,
+  ExpressionElement,
+  MyEditor,
+  MyElement,
+  MyNode,
+  MyNodeEntry,
+  SliderElement,
 } from '@decipad/editor-types';
 import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
-import { Editor, NodeEntry, Transforms } from 'slate';
+import { deleteText, insertNodes, isElement, setNodes } from '@udecode/plate';
 
 const allowableVariant = new Set(['expression', 'slider']);
 
 const normalize =
-  (editor: Editor) =>
-  ([node, path]: NodeEntry): boolean => {
-    if ((node as Element)?.type !== ELEMENT_VARIABLE_DEF) {
+  (editor: MyEditor) =>
+  ([node, path]: MyNodeEntry): boolean => {
+    if (!isElement(node) || node.type !== ELEMENT_VARIABLE_DEF) {
       return false;
     }
 
@@ -25,27 +29,27 @@ const normalize =
     }
 
     if (!('variant' in node) || !allowableVariant.has(node.variant)) {
-      Transforms.setNodes(editor, { variant: 'expression' } as Partial<Node>, {
+      setNodes(editor, { variant: 'expression' } as Partial<MyNode>, {
         at: path,
       });
       return true;
     }
 
     if (node.children.length < 1) {
-      Transforms.insertNodes(
+      insertNodes(
         editor,
         {
           id: nanoid(),
           type: ELEMENT_CAPTION,
           children: [{ text: '' }],
-        } as Node,
+        } as CaptionElement,
         { at: [...path, 0] }
       );
       return true;
     }
 
-    if ((node.children[0] as Element).type !== ELEMENT_CAPTION) {
-      Transforms.delete(editor, {
+    if (node.children[0].type !== ELEMENT_CAPTION) {
+      deleteText(editor, {
         at: [...path, 0],
       });
       return true;
@@ -53,19 +57,19 @@ const normalize =
 
     if (node.children.length < 2) {
       if (!node.variant || node.variant === 'expression') {
-        Transforms.insertNodes(
+        insertNodes<ExpressionElement>(
           editor,
           {
             id: nanoid(),
             type: ELEMENT_EXPRESSION,
             children: [{ text: '' }],
-          } as Node,
+          },
           { at: [...path, 1] }
         );
         return true;
       }
       if (node.variant === 'slider') {
-        Transforms.insertNodes(
+        insertNodes<SliderElement>(
           editor,
           {
             id: nanoid(),
@@ -75,7 +79,7 @@ const normalize =
             step: 0.1,
             value: 0,
             children: [{ text: '' }],
-          } as Node,
+          },
           { at: [...path, 1] }
         );
         return true;
@@ -84,11 +88,11 @@ const normalize =
 
     if (
       (node.variant === 'expression' &&
-        (node.children[1] as Element).type !== ELEMENT_EXPRESSION) ||
+        (node.children[1] as MyElement).type !== ELEMENT_EXPRESSION) ||
       (node.variant === 'slider' &&
-        (node.children[1] as Element).type !== ELEMENT_SLIDER)
+        (node.children[1] as MyElement).type !== ELEMENT_SLIDER)
     ) {
-      Transforms.delete(editor, {
+      deleteText(editor, {
         at: [...path, 1],
       });
       return true;

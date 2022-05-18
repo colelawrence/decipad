@@ -1,8 +1,12 @@
-import { ELEMENT_CODE_LINE, ELEMENT_PARAGRAPH } from '@decipad/editor-types';
-import { createPlateEditor, TEditor } from '@udecode/plate';
+import {
+  createTPlateEditor,
+  ELEMENT_CODE_LINE,
+  ELEMENT_PARAGRAPH,
+  MyEditor,
+} from '@decipad/editor-types';
 import { createAutoPairsPlugin } from './createAutoPairsPlugin';
 
-const insert = (editor: TEditor, key: string) => {
+const insert = (editor: MyEditor, key: string) => {
   const event = new KeyboardEvent('keydown', { key, cancelable: true });
   // @ts-expect-error DOM KeyboardEvent vs React event
   createAutoPairsPlugin().handlers?.onKeyDown?.(editor)(event);
@@ -27,8 +31,10 @@ describe('in a code block', () => {
     ${'['} | ${'[]'}
     ${'{'} | ${'{}'}
   `('expands to $pair when pressing $key', ({ key, pair }) => {
-    const editor = createPlateEditor();
-    editor.children = [{ type: ELEMENT_CODE_LINE, children: [{ text: 'fn' }] }];
+    const editor = createTPlateEditor();
+    editor.children = [
+      { type: ELEMENT_CODE_LINE, children: [{ text: 'fn' }] } as never,
+    ];
     editor.selection = {
       anchor: { path: [0, 0], offset: 2 },
       focus: { path: [0, 0], offset: 2 },
@@ -46,8 +52,10 @@ describe('in a code block', () => {
     ${'['}
     ${'{'}
   `('does not expand when $key is pressed with text on right', ({ key }) => {
-    const editor = createPlateEditor();
-    editor.children = [{ type: ELEMENT_CODE_LINE, children: [{ text: 'fn' }] }];
+    const editor = createTPlateEditor();
+    editor.children = [
+      { type: ELEMENT_CODE_LINE, children: [{ text: 'fn' }] } as never,
+    ];
     editor.selection = {
       anchor: { path: [0, 0], offset: 0 },
       focus: { path: [0, 0], offset: 0 },
@@ -67,9 +75,9 @@ describe('in a code block', () => {
   `(
     'skips the $key in $pair when pressing it at the end of a pair',
     ({ key, pair }) => {
-      const editor = createPlateEditor();
+      const editor = createTPlateEditor();
       editor.children = [
-        { type: ELEMENT_CODE_LINE, children: [{ text: pair }] },
+        { type: ELEMENT_CODE_LINE, children: [{ text: pair }] } as never,
       ];
       editor.selection = {
         anchor: { path: [0, 0], offset: 2 },
@@ -92,9 +100,9 @@ describe('in a code block', () => {
   `(
     'deletes the whole pair when pressing backspace in the middle of a pair',
     ({ pair }) => {
-      const editor = createPlateEditor();
+      const editor = createTPlateEditor();
       editor.children = [
-        { type: ELEMENT_CODE_LINE, children: [{ text: pair }] },
+        { type: ELEMENT_CODE_LINE, children: [{ text: pair }] } as never,
       ];
       editor.selection = {
         anchor: { path: [0, 0], offset: 1 },
@@ -109,10 +117,12 @@ describe('in a code block', () => {
   );
 
   it('supports closing a paren before a \\n (not before the end of the code)', () => {
-    const editor = createPlateEditor();
+    const editor = createTPlateEditor();
     const fname = 'func';
     const text = '[\nfunc\n]';
-    editor.children = [{ type: ELEMENT_CODE_LINE, children: [{ text }] }];
+    editor.children = [
+      { type: ELEMENT_CODE_LINE, children: [{ text }] } as never,
+    ];
     editor.selection = {
       anchor: { path: [0, 0], offset: text.indexOf(fname) + fname.length },
       focus: { path: [0, 0], offset: text.indexOf(fname) + fname.length },
@@ -127,9 +137,9 @@ describe('in a code block', () => {
 
 describe('outside a code block', () => {
   it('does not expand a parenthesis', () => {
-    const editor = createPlateEditor();
+    const editor = createTPlateEditor();
     editor.children = [
-      { type: ELEMENT_PARAGRAPH, children: [{ text: 'John' }] },
+      { type: ELEMENT_PARAGRAPH, children: [{ text: 'John' }] } as never,
     ];
     editor.selection = {
       anchor: { path: [0, 0], offset: 4 },

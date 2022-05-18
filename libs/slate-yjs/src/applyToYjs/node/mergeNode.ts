@@ -1,5 +1,5 @@
-import { MergeNodeOperation } from 'slate';
 import invariant from 'tiny-invariant';
+import { TMergeNodeOperation } from '@udecode/plate';
 import { SharedType, SyncNode } from '../../model';
 import { getParent } from '../../path';
 import { cloneSyncElement } from '../../utils';
@@ -12,7 +12,7 @@ import { cloneSyncElement } from '../../utils';
  */
 export default function mergeNode(
   doc: SharedType,
-  op: MergeNodeOperation
+  op: TMergeNodeOperation
 ): SharedType {
   const [parent, index] = getParent(doc, op.path);
 

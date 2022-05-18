@@ -1,8 +1,9 @@
-import { Editor, Path } from 'slate';
+import { Path } from 'slate';
+import { MyEditor } from '@decipad/editor-types';
 import { getColumnNames } from './getColumnNames';
 
 export const getColumnName = (
-  editor: Editor,
+  editor: MyEditor,
   tablePath: Path,
   start: number
 ): string => {

@@ -1,4 +1,6 @@
-import { createEditor, Descendant, Location, Transforms } from 'slate';
+import { Location } from 'slate';
+import { createTEditor, select } from '@udecode/plate';
+import { MyEditor } from '@decipad/editor-types';
 import {
   getCodeBlockOffsets,
   reinstateCursorOffsets as reinstateOffsets,
@@ -6,7 +8,7 @@ import {
 
 describe('offsets', () => {
   it('works getting offset from an editor with no selection', () => {
-    const editor = createEditor();
+    const editor = createTEditor();
     editor.children = [
       {
         type: 'code_block',
@@ -18,18 +20,18 @@ describe('offsets', () => {
                 text: 'abc',
               },
             ],
-          } as Descendant,
+          },
         ],
-      } as Descendant,
+      },
     ];
-    expect(getCodeBlockOffsets(editor, [0])).toMatchObject({
+    expect(getCodeBlockOffsets(editor as MyEditor, [0])).toMatchObject({
       anchor: null,
       focus: null,
     });
   });
 
   it('works getting offset from an editor with selection', () => {
-    const editor = createEditor();
+    const editor = createTEditor();
     editor.children = [
       {
         type: 'code_block',
@@ -41,7 +43,7 @@ describe('offsets', () => {
                 text: 'abcd',
               },
             ],
-          } as Descendant,
+          },
           {
             type: 'code_line',
             children: [
@@ -49,9 +51,9 @@ describe('offsets', () => {
                 text: 'efgh',
               },
             ],
-          } as Descendant,
+          },
         ],
-      } as Descendant,
+      },
     ];
     const location: Location = {
       anchor: {
@@ -63,15 +65,15 @@ describe('offsets', () => {
         offset: 1,
       },
     };
-    Transforms.select(editor, location);
-    expect(getCodeBlockOffsets(editor, [0])).toMatchObject({
+    select(editor, location);
+    expect(getCodeBlockOffsets(editor as MyEditor, [0])).toMatchObject({
       anchor: 6,
       focus: 6,
     });
   });
 
   it('setting an offset', () => {
-    const editor = createEditor();
+    const editor = createTEditor();
     editor.children = [
       {
         type: 'code_block',
@@ -83,7 +85,7 @@ describe('offsets', () => {
                 text: 'abcd',
               },
             ],
-          } as Descendant,
+          },
           {
             type: 'code_line',
             children: [
@@ -91,9 +93,9 @@ describe('offsets', () => {
                 text: 'efgh',
               },
             ],
-          } as Descendant,
+          },
         ],
-      } as Descendant,
+      },
     ];
     const location: Location = {
       anchor: {
@@ -105,8 +107,8 @@ describe('offsets', () => {
         offset: 1,
       },
     };
-    Transforms.select(editor, location);
-    reinstateOffsets(editor, [0], {
+    select(editor, location);
+    reinstateOffsets(editor as MyEditor, [0], {
       anchor: 7,
       focus: 7,
     });

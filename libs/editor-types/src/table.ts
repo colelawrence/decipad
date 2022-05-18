@@ -1,4 +1,5 @@
 import type { EmptyText } from '.';
+import { Text } from '.';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
@@ -9,7 +10,7 @@ import {
   ELEMENT_TH,
   ELEMENT_TR,
 } from './element-kinds';
-import type { BaseElement, Text } from './elements';
+import type { BaseElement } from './value';
 import type { TableCellType, TableData } from './tables-legacy';
 
 export interface TableColumnFormulaElement extends BaseElement {

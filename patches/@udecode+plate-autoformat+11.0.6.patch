@@ -1,42 +1,42 @@
 diff --git a/node_modules/@udecode/plate-autoformat/dist/index.es.js b/node_modules/@udecode/plate-autoformat/dist/index.es.js
-index ef14dcf..6281155 100644
+index e78e5db..0ba216c 100644
 --- a/node_modules/@udecode/plate-autoformat/dist/index.es.js
 +++ b/node_modules/@udecode/plate-autoformat/dist/index.es.js
-@@ -148,9 +148,13 @@ const autoformatBlock = (editor, {
+@@ -147,9 +147,14 @@ const autoformatBlock = (editor, {
        if (isBelowSameBlockType) continue;
      }
  
--    Transforms.delete(editor, {
+-    deleteText(editor, {
 -      at: matchRange
 -    });
++
 +    // if the trigger is only 1 char there is nothing to delete, so we'd delete unrelated text
 +    if (match.length > 1) {
-+      Transforms.delete(editor, {
++      deleteText(editor, {
 +        at: matchRange
 +      });
 +    }
 +
-     preFormat === null || preFormat === void 0 ? void 0 : preFormat(editor);
  
-     if (!format) {
+     if (preFormat) {
+       preFormat(editor);
 diff --git a/node_modules/@udecode/plate-autoformat/dist/index.js b/node_modules/@udecode/plate-autoformat/dist/index.js
-index fb9d8c7..c26b6bb 100644
+index 3debaf1..12b180a 100644
 --- a/node_modules/@udecode/plate-autoformat/dist/index.js
 +++ b/node_modules/@udecode/plate-autoformat/dist/index.js
-@@ -152,9 +152,13 @@ const autoformatBlock = (editor, {
+@@ -151,9 +151,12 @@ const autoformatBlock = (editor, {
        if (isBelowSameBlockType) continue;
      }
  
--    slate.Transforms.delete(editor, {
+-    plateCore.deleteText(editor, {
 -      at: matchRange
 -    });
 +    // if the trigger is only 1 char there is nothing to delete, so we'd delete unrelated text
 +    if (match.length > 1) {
-+      slate.Transforms.delete(editor, {
++      plateCore.deleteText(editor, {
 +        at: matchRange
 +      });
 +    }
-+
-     preFormat === null || preFormat === void 0 ? void 0 : preFormat(editor);
  
-     if (!format) {
+     if (preFormat) {
+       preFormat(editor);

@@ -30,7 +30,7 @@ beforeEach(() => {
       },
     ],
   };
-  editor = createPlateEditor(plateProps);
+  editor = createPlateEditor({ plugins });
 });
 
 it('renders the element properties', () => {

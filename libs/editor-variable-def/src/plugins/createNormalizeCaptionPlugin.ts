@@ -1,43 +1,45 @@
-import {
-  isElement,
-  Element,
-  ELEMENT_CAPTION,
-  isText,
-} from '@decipad/editor-types';
+import { ELEMENT_CAPTION, MyEditor, MyNodeEntry } from '@decipad/editor-types';
 import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
-import { Editor, Node, NodeEntry, Text, Transforms } from 'slate';
 import { normalizeIdentifierElement } from '@decipad/editor-utils';
+import {
+  deleteText,
+  getChildren,
+  insertText,
+  isElement,
+  isText,
+  unwrapNodes,
+} from '@udecode/plate';
 
 const normalize =
-  (editor: Editor) =>
-  (entry: NodeEntry): boolean => {
+  (editor: MyEditor) =>
+  (entry: MyNodeEntry): boolean => {
     const [node, path] = entry;
-    if ((node as Element)?.type !== ELEMENT_CAPTION) {
+    if (isElement(node) && node.type !== ELEMENT_CAPTION) {
       return false;
     }
 
     if (!isElement(node)) {
-      Transforms.unwrapNodes(editor, { at: path });
+      unwrapNodes(editor, { at: path });
       return true;
     }
 
     if (node.children.length > 1) {
-      Transforms.delete(editor, { at: [...path, 1] });
+      deleteText(editor, { at: [...path, 1] });
       return true;
     }
 
     if (!isText(node.children[0])) {
-      Transforms.delete(editor, { at: [...path, 0] });
+      deleteText(editor, { at: [...path, 0] });
       return true;
     }
 
     if (node.children.length < 1) {
-      Transforms.insertText(editor, '', { at: path });
+      insertText(editor, '', { at: path });
       return true;
     }
 
-    const [text] = Node.children(editor, path);
-    return normalizeIdentifierElement(editor, text as NodeEntry<Text>);
+    const [text] = getChildren(entry);
+    return normalizeIdentifierElement(editor, text);
   };
 
 export const createNormalizeCaptionPlugin = createNormalizerPluginFactory({

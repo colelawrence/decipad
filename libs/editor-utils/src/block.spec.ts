@@ -1,15 +1,21 @@
-import { ELEMENT_CODE_BLOCK, ELEMENT_PARAGRAPH } from '@decipad/editor-types';
-import { createPlateEditor, TEditor, TElement } from '@udecode/plate';
+import {
+  ELEMENT_CODE_BLOCK,
+  ELEMENT_PARAGRAPH,
+  MyEditor,
+} from '@decipad/editor-types';
+import { createPlateEditor } from '@udecode/plate';
 import {
   allowsTextStyling,
   closestBlockAncestorHasType,
   insertBlockOfTypeBelow,
 } from './block';
 
-let editor: TEditor;
+let editor: MyEditor;
 beforeEach(() => {
   editor = createPlateEditor();
-  editor.children = [{ type: ELEMENT_PARAGRAPH, children: [{ text: '' }] }];
+  editor.children = [
+    { type: ELEMENT_PARAGRAPH, children: [{ text: '' }] } as never,
+  ];
 });
 
 describe('closestBlockAncestorHasType', () => {
@@ -38,9 +44,9 @@ describe('closestBlockAncestorHasType', () => {
           {
             type: ELEMENT_CODE_BLOCK,
             children: [{ text: '' }],
-          } as TElement,
+          },
         ],
-      },
+      } as never,
     ];
     expect(
       closestBlockAncestorHasType(editor, [0, 0, 0], ELEMENT_PARAGRAPH)
@@ -61,7 +67,7 @@ describe('allowsTextStyling', () => {
       {
         type: ELEMENT_CODE_BLOCK,
         children: [{ text: '' }],
-      },
+      } as never,
     ];
     expect(allowsTextStyling(editor, [0, 0])).toBe(false);
   });

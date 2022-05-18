@@ -8,8 +8,12 @@ import {
 } from '@decipad/editor-types';
 import { tokenize } from '@decipad/computer';
 import { pluginStore } from '@decipad/editor-utils';
-import { getBlockAbove, setNodes } from '@udecode/plate';
-import { NodeEntry, Node } from 'slate';
+import {
+  getBlockAbove,
+  getNodeString,
+  isElement,
+  setNodes,
+} from '@udecode/plate';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 
 type LastFormattedBlock = null | {
@@ -35,11 +39,11 @@ export const createAutoFormatCodeBlockPlugin = createOnKeyDownPluginFactory({
       const hasModifiers = event.ctrlKey || event.altKey || event.metaKey;
 
       if (!hasModifiers && event.key === '=') {
-        const entry = getBlockAbove(editor);
+        const entry = getBlockAbove<BlockElement>(editor);
 
         if (!entry) return;
 
-        const [node] = entry as NodeEntry<BlockElement>;
+        const [node] = entry;
 
         if (node.type !== ELEMENT_PARAGRAPH || node.children.length > 1) return;
         // Because children.length is 0, we know know there is only a text child
@@ -86,15 +90,15 @@ export const createAutoFormatCodeBlockPlugin = createOnKeyDownPluginFactory({
           };
         }
       } else if (!hasModifiers && event.key === 'Backspace') {
-        const entry = getBlockAbove(editor, {
-          match: (n) => n.type === ELEMENT_CODE_LINE,
+        const entry = getBlockAbove<CodeLineElement>(editor, {
+          match: (n) => isElement(n) && n.type === ELEMENT_CODE_LINE,
         });
 
         if (!entry) return;
 
-        const [node, path] = entry as NodeEntry<CodeLineElement>;
+        const [node, path] = entry;
 
-        const nodeText = Node.string(node);
+        const nodeText = getNodeString(node);
 
         if (nodeText === '') {
           event.preventDefault();

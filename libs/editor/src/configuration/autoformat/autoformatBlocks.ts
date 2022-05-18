@@ -5,17 +5,18 @@ import {
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_HR,
+  MyAutoformatRule,
 } from '@decipad/editor-types';
-import { AutoformatRule, TEditor } from '@udecode/plate';
+import { deleteText } from '@udecode/plate';
 import {
   insertCodeLineBelowOrReplace,
   insertDividerBelow,
   requireCollapsedSelection,
 } from '@decipad/editor-utils';
-import { Path, Transforms } from 'slate';
+import { Path } from 'slate';
 import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
 
-export const autoformatBlocks: AutoformatRule[] = [
+export const autoformatBlocks: MyAutoformatRule[] = [
   {
     mode: 'block',
     type: ELEMENT_H2,
@@ -39,10 +40,10 @@ export const autoformatBlocks: AutoformatRule[] = [
     type: ELEMENT_HR,
     match: ['---', '—-', '~~~'],
     query: doesSelectionAllowTextStyling,
-    format: (editor: TEditor): void => {
+    format: (editor): void => {
       const { path } = requireCollapsedSelection(editor);
       insertDividerBelow(editor, path, ELEMENT_HR);
-      Transforms.delete(editor, { at: Path.parent(path), unit: 'block' });
+      deleteText(editor, { at: Path.parent(path), unit: 'block' });
     },
   },
   {
@@ -57,7 +58,7 @@ export const autoformatBlocks: AutoformatRule[] = [
     match: '```',
     query: doesSelectionAllowTextStyling,
     triggerAtBlockStart: false,
-    format: (editor: TEditor): void =>
+    format: (editor): void =>
       insertCodeLineBelowOrReplace(
         editor,
         requireCollapsedSelection(editor).path,

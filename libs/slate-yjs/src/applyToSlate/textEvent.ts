@@ -1,7 +1,7 @@
-import { TEditor } from '@udecode/plate';
-import { Node, Text, TextOperation } from 'slate';
+import { getNode, isText, TTextOperation } from '@udecode/plate';
 import invariant from 'tiny-invariant';
 import * as Y from 'yjs';
+import { YjsEditor } from '@decipad/slate-yjs';
 import { toSlatePath } from '../utils/convert';
 
 /**
@@ -10,20 +10,17 @@ import { toSlatePath } from '../utils/convert';
  * @param event
  */
 export default function translateTextEvent(
-  editor: TEditor,
+  editor: YjsEditor,
   event: Y.YTextEvent
-): TextOperation[] {
+): TTextOperation[] {
   const targetPath = toSlatePath(event.path);
-  const targetText = Node.get(editor, targetPath);
+  const targetText = getNode(editor, targetPath);
 
-  invariant(
-    Text.isText(targetText),
-    'Cannot apply text event to non-text node'
-  );
+  invariant(isText(targetText), 'Cannot apply text event to non-text node');
 
   let offset = 0;
   let { text } = targetText;
-  const ops: TextOperation[] = [];
+  const ops: TTextOperation[] = [];
 
   event.changes.delta.forEach((delta) => {
     if ('retain' in delta) {

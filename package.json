@@ -103,7 +103,7 @@
     "@tippyjs/react": "^4.2.5",
     "@types/apache-arrow": "npm:@apache-arrow/ts@^7.0.0",
     "@types/lodash": "^4.14.182",
-    "@udecode/plate": "^10.6.3",
+    "@udecode/plate": "^11.0.6",
     "apache-arrow": "^7.0.0",
     "apollo-server-lambda": "^3.6.7",
     "aws-lambda": "^1.0.7",

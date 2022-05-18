@@ -269,3 +269,6 @@ apps/docs/build
 
 # Lighthouse CI
 .lighthouseci
+
+# Intellij
+.idea

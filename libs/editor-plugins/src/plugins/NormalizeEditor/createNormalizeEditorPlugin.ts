@@ -2,52 +2,60 @@
 import {
   ELEMENT_H1,
   ELEMENT_PARAGRAPH,
+  H1Element,
+  MyEditor,
+  MyNodeEntry,
+  ParagraphElement,
   topLevelBlockKinds as allowedTopLevelBlockTypes,
 } from '@decipad/editor-types';
 import {
+  getNodeChildren,
   insertNodes,
+  isEditor,
   isElement,
   isText,
-  TDescendant,
-  TNode,
+  unwrapNodes,
   wrapNodes,
 } from '@udecode/plate';
-import { Editor, Node, NodeEntry, Transforms } from 'slate';
 import { createNormalizerPluginFactory } from '../../pluginFactories';
 
-const normalizeEditor = (editor: Editor) => (entry: NodeEntry) => {
-  const [node, path] = entry as NodeEntry<TNode>;
+const normalizeEditor = (editor: MyEditor) => (entry: MyNodeEntry) => {
+  const [node, path] = entry;
 
-  if (!path.length) {
+  if (isEditor(node)) {
     // Enforce leading H1 even if there are no elements
     if (!node.children.length) {
       insertNodes(
         editor,
-        { type: ELEMENT_H1, children: [] },
-        { at: [...path, 0] }
+        { type: ELEMENT_H1, children: [] } as unknown as H1Element,
+        {
+          at: [...path, 0],
+        }
       );
       return true;
     }
-    for (const blockEntry of Node.children(editor, path)) {
-      const [blockNode, blockPath] = blockEntry as NodeEntry<TDescendant>;
+    for (const blockEntry of getNodeChildren(editor, path)) {
+      const [blockNode, blockPath] = blockEntry;
 
       if (blockPath[0] === 0) {
         // Enforce leading H1
         if (isText(blockNode)) {
           wrapNodes(
             editor,
-            { type: ELEMENT_H1, children: [] },
-            { at: blockPath }
+            { type: ELEMENT_H1, children: [] } as unknown as H1Element,
+            {
+              at: blockPath,
+            }
           );
           return true;
         }
         if (isElement(blockNode) && blockNode.type !== ELEMENT_H1) {
-          Transforms.unwrapNodes(editor, { at: blockPath });
+          unwrapNodes(editor, { at: blockPath });
           return true;
         }
       } else if (isElement(blockNode) && blockNode.type === ELEMENT_H1) {
         // Forbid H1s elsewhere
-        Transforms.unwrapNodes(editor, { at: blockPath });
+        unwrapNodes(editor, { at: blockPath });
         return true;
       }
 
@@ -55,8 +63,13 @@ const normalizeEditor = (editor: Editor) => (entry: NodeEntry) => {
       if (isText(blockNode)) {
         wrapNodes(
           editor,
-          { type: ELEMENT_PARAGRAPH, children: [] },
-          { at: blockPath }
+          {
+            type: ELEMENT_PARAGRAPH,
+            children: [],
+          } as unknown as ParagraphElement,
+          {
+            at: blockPath,
+          }
         );
         return true;
       }
@@ -64,7 +77,7 @@ const normalizeEditor = (editor: Editor) => (entry: NodeEntry) => {
         isElement(blockNode) &&
         !allowedTopLevelBlockTypes.includes(blockNode.type)
       ) {
-        Transforms.unwrapNodes(editor, { at: blockPath });
+        unwrapNodes(editor, { at: blockPath });
         return true;
       }
     }

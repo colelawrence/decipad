@@ -1,14 +1,13 @@
 import { MagicNumber } from '@decipad/editor-components';
-import { MARK_MAGICNUMBER } from '@decipad/editor-types';
-import { createPluginFactory } from '@udecode/plate';
+import { createTPluginFactory, MARK_MAGICNUMBER } from '@decipad/editor-types';
 import { withMagicNumberOverrides } from './withMagicNumberOverrides';
 import {
-  createNormalizeMagicNumbersPlugin,
-  createMagicNumberCursorPlugin,
   createMagicCursorKeysPlugin,
+  createMagicNumberCursorPlugin,
+  createNormalizeMagicNumbersPlugin,
 } from './plugins';
 
-export const createMagicNumberPlugin = createPluginFactory({
+export const createMagicNumberPlugin = createTPluginFactory({
   key: MARK_MAGICNUMBER,
   type: MARK_MAGICNUMBER,
   isInline: true,

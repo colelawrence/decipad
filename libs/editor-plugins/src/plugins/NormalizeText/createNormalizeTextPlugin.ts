@@ -1,12 +1,11 @@
 /* eslint-disable no-param-reassign */
-import { markKinds } from '@decipad/editor-types';
-import { isText, TNode } from '@udecode/plate';
-import { Editor, NodeEntry } from 'slate';
+import { markKinds, MyEditor, MyNodeEntry } from '@decipad/editor-types';
+import { isText } from '@udecode/plate';
 import { createNormalizerPluginFactory } from '../../pluginFactories';
 import { normalizeExcessProperties } from '../../utils/normalize';
 
-const normalizeTextPlugin = (editor: Editor) => (entry: NodeEntry) => {
-  const [node] = entry as NodeEntry<TNode>;
+const normalizeTextPlugin = (editor: MyEditor) => (entry: MyNodeEntry) => {
+  const [node] = entry;
 
   if (isText(node)) {
     if (normalizeExcessProperties(editor, entry, Object.values(markKinds))) {

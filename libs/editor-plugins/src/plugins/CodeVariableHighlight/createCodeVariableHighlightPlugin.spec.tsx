@@ -4,6 +4,7 @@ import {
   CodeLineElement,
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
+  MyValue,
 } from '@decipad/editor-types';
 import { render } from '@testing-library/react';
 import { Plate } from '@udecode/plate';
@@ -31,12 +32,12 @@ const PlateWrapper = ({
   <DndProvider backend={HTML5Backend}>
     <ResultsContext.Provider value={computer.results}>
       <ComputerContextProvider computer={computer}>
-        <Plate
+        <Plate<MyValue>
           initialValue={[
             {
               type: ELEMENT_CODE_BLOCK,
               children,
-            },
+            } as never,
           ]}
           plugins={[
             createCodeBlockPlugin(),

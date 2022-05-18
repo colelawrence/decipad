@@ -1,7 +1,7 @@
 import { molecules } from '@decipad/ui';
-import { PlateComponent, ELEMENT_EXPRESSION } from '@decipad/editor-types';
-import { Node } from 'slate';
+import { ELEMENT_EXPRESSION, PlateComponent } from '@decipad/editor-types';
 import { useSelected } from 'slate-react';
+import { getNodeString } from '@udecode/plate';
 
 const DEFAULT_PLACEHOLDER = '1 km';
 
@@ -20,7 +20,7 @@ export const Expression: PlateComponent = ({
     <div {...attributes}>
       <molecules.Expression
         focused={focused}
-        placeholder={Node.string(element) ? '' : DEFAULT_PLACEHOLDER}
+        placeholder={getNodeString(element) ? '' : DEFAULT_PLACEHOLDER}
       >
         {children}
       </molecules.Expression>

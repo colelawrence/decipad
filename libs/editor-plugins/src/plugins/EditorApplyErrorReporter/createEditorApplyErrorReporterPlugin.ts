@@ -1,5 +1,5 @@
 import { captureException } from '@sentry/browser';
-import { Operation } from 'slate';
+import { TOperation } from '@udecode/plate';
 import { createOverrideApplyPluginFactory } from '../../pluginFactories';
 
 const maxHistorySize = 50;
@@ -8,9 +8,9 @@ export const createEditorApplyErrorReporterPlugin =
   createOverrideApplyPluginFactory({
     name: 'USE_EDITOR_APPLY_ERROR_REPORTER',
     plugin: (editor, apply) => {
-      const history: Array<Operation> = [];
+      const history: Array<TOperation> = [];
 
-      const pushOp = (op: Operation) => {
+      const pushOp = (op: TOperation) => {
         history.push(op);
         if (history.length > maxHistorySize) {
           // remove oldest op from history
@@ -18,7 +18,7 @@ export const createEditorApplyErrorReporterPlugin =
         }
       };
 
-      return (op: Operation) => {
+      return (op: TOperation) => {
         pushOp(op);
 
         try {

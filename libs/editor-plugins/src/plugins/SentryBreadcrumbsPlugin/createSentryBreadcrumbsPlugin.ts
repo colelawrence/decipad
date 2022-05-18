@@ -1,7 +1,7 @@
-import { createPluginFactory } from '@udecode/plate';
 import { addBreadcrumb } from '@sentry/react';
+import { createTPluginFactory } from '@decipad/editor-types';
 
-export const createSentryBreadcrumbsPlugin = createPluginFactory({
+export const createSentryBreadcrumbsPlugin = createTPluginFactory({
   key: 'SENTRY_BREADCRUMBS_PLUGIN',
   withOverrides: (editor) => {
     const { apply } = editor;

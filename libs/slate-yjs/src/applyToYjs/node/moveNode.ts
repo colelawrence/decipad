@@ -1,5 +1,5 @@
-import { MoveNodeOperation } from 'slate';
 import invariant from 'tiny-invariant';
+import { TMoveNodeOperation } from '@udecode/plate';
 import { SharedType, SyncNode } from '../../model';
 import { getParent } from '../../path';
 import { cloneSyncElement } from '../../utils';
@@ -12,7 +12,7 @@ import { cloneSyncElement } from '../../utils';
  */
 export default function moveNode(
   doc: SharedType,
-  op: MoveNodeOperation
+  op: TMoveNodeOperation
 ): SharedType {
   const [from, fromIndex] = getParent(doc, op.path);
   const [to, toIndex] = getParent(doc, op.newPath);

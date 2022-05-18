@@ -3,14 +3,14 @@ import {
   ELEMENT_TH,
   PlateComponent,
   TableElement,
+  useTPlateEditorRef,
 } from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
 import { organisms } from '@decipad/ui';
-import { findPath } from '@decipad/editor-utils';
-import { usePlateEditorRef } from '@udecode/plate';
-import { Editor, Node, NodeEntry, Path } from 'slate';
+import { findNodePath, getNodeEntry, getNodeString } from '@udecode/plate';
+import { Path } from 'slate';
 import { useSelected } from 'slate-react';
-import { useTableActions, useDragColumn, useDropColumn } from '../../hooks';
+import { useDragColumn, useDropColumn, useTableActions } from '../../hooks';
 
 export const TableHeaderCell: PlateComponent = ({
   attributes,
@@ -21,14 +21,15 @@ export const TableHeaderCell: PlateComponent = ({
     throw new Error('TableHeaderCell is meant to render table header cells');
   }
   const computer = useComputer();
-  const editor = usePlateEditorRef();
-  const path = findPath(editor, element);
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const editor = useTPlateEditorRef()!;
+  const path = findNodePath(editor, element);
   if (!path) {
     throw new Error('no path for th element found');
   }
   const nThChild = path[path.length - 1];
   const tablePath = Path.parent(Path.parent(path));
-  const [table] = Editor.node(editor, tablePath) as NodeEntry<TableElement>;
+  const [table] = getNodeEntry<TableElement>(editor, tablePath);
   const { onChangeColumnType, onRemoveColumn } = useTableActions(editor, table);
   const focused = useSelected();
   const [{ isDragging }, dragSource, dragPreview] = useDragColumn(
@@ -50,7 +51,7 @@ export const TableHeaderCell: PlateComponent = ({
     <organisms.TableColumnHeader
       attributes={attributes}
       readOnly={false}
-      empty={Node.string(element).length === 0}
+      empty={getNodeString(element).length === 0}
       focused={focused}
       isFirst={nThChild === 0}
       onChangeColumnType={(type) => onChangeColumnType(nThChild, type)}

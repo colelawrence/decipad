@@ -5,13 +5,14 @@ import {
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
+  MyEditor,
   TableElement,
 } from '@decipad/editor-types';
 import { requirePathBelowBlock } from '@decipad/editor-utils';
-import { TEditor } from '@udecode/plate';
+import { insertNodes } from '@udecode/plate';
 import { clone } from 'lodash';
 import { nanoid } from 'nanoid';
-import { Path, Transforms } from 'slate';
+import { Path } from 'slate';
 import { GetAvailableIdentifier } from './slashCommands';
 
 const initialTableElement = {
@@ -74,20 +75,20 @@ const initialTableElement = {
       ],
     },
   ],
-} as const;
+} as unknown as TableElement;
 
 export const insertTableBelow = (
-  editor: TEditor,
+  editor: MyEditor,
   path: Path,
   getAvailableIdentifier: GetAvailableIdentifier
 ): void => {
-  const table = clone(initialTableElement) as unknown as TableElement;
+  const table = clone(initialTableElement);
   table.children[0].children[0].children[0].text = getAvailableIdentifier(
     'Table',
     1
   );
   table.id = nanoid();
-  Transforms.insertNodes(editor, table, {
+  insertNodes(editor, table, {
     at: requirePathBelowBlock(editor, path),
   });
 };

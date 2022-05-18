@@ -1,15 +1,24 @@
 import {
-  ElementKind,
+  ELEMENT_BLOCKQUOTE,
   ELEMENT_LIC,
   ELEMENT_PARAGRAPH,
-  ELEMENT_BLOCKQUOTE,
+  ElementKind,
+  MyEditor,
+  MyElement,
 } from '@decipad/editor-types';
-import { getNode, insertNodes, TEditor, TElement } from '@udecode/plate';
-import { Editor, Path, Transforms } from 'slate';
+import {
+  getEndPoint,
+  getNextNode,
+  getNode,
+  insertNodes,
+  setSelection,
+  TElement,
+} from '@udecode/plate';
+import { Path } from 'slate';
 import { getBlockParentPath, requirePathBelowBlock } from './path';
 
 export const closestBlockAncestorHasType = (
-  editor: TEditor,
+  editor: MyEditor,
   path: Path,
   type: ElementKind
 ): boolean => {
@@ -18,7 +27,7 @@ export const closestBlockAncestorHasType = (
     return false;
   }
 
-  const block = getNode<TElement>(editor, blockParentPath);
+  const block = getNode<MyElement>(editor, blockParentPath);
   if (!block) {
     throw new Error('Cannot find node at the block path');
   }
@@ -31,7 +40,7 @@ const BLOCKS_ALLOWING_TEXT_STYLING: ReadonlyArray<ElementKind> = [
   ELEMENT_BLOCKQUOTE,
 ];
 export const allowsTextStyling = (
-  editor: Editor,
+  editor: MyEditor,
   path: Path | null
 ): boolean => {
   return path
@@ -42,23 +51,23 @@ export const allowsTextStyling = (
 };
 
 export const insertDividerBelow = (
-  editor: Editor,
+  editor: MyEditor,
   path: Path,
   type: ElementKind
 ): void => {
   const at = requirePathBelowBlock(editor, path);
   insertNodes<TElement>(editor, { type, children: [{ text: '' }] }, { at });
 
-  const next = Editor.next(editor, { at });
+  const next = getNextNode(editor, { at });
   if (next) {
     const [, nextPath] = next;
-    const end = Editor.end(editor, nextPath);
-    Transforms.setSelection(editor, { anchor: end, focus: end });
+    const end = getEndPoint(editor, nextPath);
+    setSelection(editor, { anchor: end, focus: end });
   }
 };
 
 export const insertBlockOfTypeBelow = (
-  editor: Editor,
+  editor: MyEditor,
   path: Path,
   type: ElementKind
 ): void => {

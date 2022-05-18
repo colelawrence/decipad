@@ -1,17 +1,11 @@
 import {
+  createTPlateEditor,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
-import {
-  createPlateEditor,
-  createPlugins,
-  PlateEditor,
-  TDescendant,
-  TNode,
-} from '@udecode/plate';
-import { Editor } from 'slate';
+import { createPlugins, normalizeEditor, PlateEditor } from '@udecode/plate';
 import {
   createNormalizeCodeBlockPlugin,
   createNormalizeCodeLinePlugin,
@@ -26,9 +20,9 @@ beforeEach(() => {
     createNormalizeCodeBlockPlugin(),
     createNormalizeCodeLinePlugin(),
   ]);
-  editor = createPlateEditor({
+  editor = createTPlateEditor({
     plugins,
-  });
+  }) as never;
 });
 
 describe('in a code block', () => {
@@ -37,9 +31,9 @@ describe('in a code block', () => {
       {
         type: ELEMENT_CODE_BLOCK,
         children: [{ text: 'code' }],
-      } as TNode,
+      },
     ];
-    Editor.normalize(editor, { force: true });
+    normalizeEditor(editor, { force: true });
     expect(editor.children).toEqual([codeLine('code')]);
   });
 
@@ -68,9 +62,9 @@ describe('in a code block', () => {
           },
         ],
       },
-    ] as TDescendant[];
+    ];
 
-    Editor.normalize(editor, { force: true });
+    normalizeEditor(editor, { force: true });
     expect(editor.children).toEqual([codeLine('code')]);
   });
 });
@@ -79,7 +73,7 @@ describe('statement-based line splitting and merging', () => {
   it('keeps one line intact', () => {
     editor.children = [codeBlock(codeLine('a = 1'))];
 
-    Editor.normalize(editor, { force: true });
+    normalizeEditor(editor, { force: true });
 
     expect(editor.children).toMatchObject([codeLine('a = 1')]);
   });
@@ -90,7 +84,7 @@ describe('statement-based line splitting and merging', () => {
       codeLine(''),
     ];
 
-    Editor.normalize(editor, { force: true });
+    normalizeEditor(editor, { force: true });
 
     expect(editor.children).toMatchObject([
       codeLine('a = 1'),
@@ -105,7 +99,7 @@ describe('statement-based line splitting and merging', () => {
       codeBlock(codeLine('a = (1'), codeLine('t = {\n\n}'), codeLine('b = 2')),
     ];
 
-    Editor.normalize(editor, { force: true });
+    normalizeEditor(editor, { force: true });
 
     expect(editor.children).toMatchObject([
       codeLine('a = (1\nt = {\n\n}\nb = 2'),
@@ -115,7 +109,7 @@ describe('statement-based line splitting and merging', () => {
   it('splits two or more lines when they belong to different statements', () => {
     editor.children = [codeBlock(codeLine('a = 1\nt = {\n\n}\nb = 2'))];
 
-    Editor.normalize(editor, { force: true });
+    normalizeEditor(editor, { force: true });
 
     expect(editor.children).toMatchObject([
       codeLine('a = 1'),
@@ -130,9 +124,9 @@ describe('statement-based line splitting and merging', () => {
         type: ELEMENT_CODE_BLOCK,
         children: [codeLine('123\n(42 +'), codeLine('1337)')],
       },
-    ] as TDescendant[];
+    ];
 
-    Editor.normalize(editor, { force: true });
+    normalizeEditor(editor, { force: true });
 
     expect(editor.children).toMatchObject([
       codeLine('123'),
@@ -150,7 +144,7 @@ describe('statement-based line splitting and merging', () => {
       ),
     ];
 
-    Editor.normalize(editor, { force: true });
+    normalizeEditor(editor, { force: true });
 
     expect(editor.children).toMatchObject([
       codeLine(''),
@@ -170,7 +164,7 @@ describe('statement-based line splitting and merging', () => {
       ),
     ];
 
-    Editor.normalize(editor, { force: true });
+    normalizeEditor(editor, { force: true });
 
     expect(editor.children).toMatchObject([
       codeLine('a = 1'),

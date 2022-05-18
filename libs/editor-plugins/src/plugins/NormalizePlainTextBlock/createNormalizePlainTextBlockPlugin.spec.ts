@@ -1,19 +1,19 @@
 import {
-  Element,
+  createTPlateEditor,
   ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_LINK,
   ELEMENT_PARAGRAPH,
   MARK_BOLD,
+  MyElement,
 } from '@decipad/editor-types';
-import { createPlateEditor, TElement } from '@udecode/plate';
-import { Editor } from 'slate';
+import { normalizeEditor, TEditor } from '@udecode/plate';
 import { createNormalizePlainTextBlockPlugin } from './createNormalizePlainTextBlockPlugin';
 
-let editor: Editor;
+let editor: TEditor;
 beforeEach(() => {
-  editor = createPlateEditor({
+  editor = createTPlateEditor({
     plugins: [createNormalizePlainTextBlockPlugin()],
   });
 });
@@ -23,12 +23,12 @@ describe.each([ELEMENT_H1, ELEMENT_H2, ELEMENT_H3] as const)(
   (type) => {
     it('cannot have extra properties', () => {
       editor.children = [
-        { type, id: '42', children: [{ text: '' }], extra: true } as TElement,
+        { type, id: '42', children: [{ text: '' }], extra: true },
       ];
-      Editor.normalize(editor, { force: true });
+      normalizeEditor(editor, { force: true });
       expect(editor.children).toEqual([
         { type, id: '42', children: expect.anything() },
-      ] as Element[]);
+      ] as MyElement[]);
     });
 
     it('can contain plain text', () => {
@@ -36,30 +36,30 @@ describe.each([ELEMENT_H1, ELEMENT_H2, ELEMENT_H3] as const)(
         {
           type,
           children: [{ text: '' }],
-        } as TElement,
+        },
       ];
-      Editor.normalize(editor, { force: true });
+      normalizeEditor(editor, { force: true });
       expect(editor.children).toEqual([
         {
           type,
           children: [{ text: '' }],
         },
-      ] as Element[]);
+      ] as MyElement[]);
     });
     it('cannot contain rich text', () => {
       editor.children = [
         {
           type,
           children: [{ text: '', [MARK_BOLD]: true }],
-        } as TElement,
+        },
       ];
-      Editor.normalize(editor, { force: true });
+      normalizeEditor(editor, { force: true });
       expect(editor.children).toEqual([
         {
           type,
           children: [{ text: '' }],
         },
-      ] as Element[]);
+      ] as MyElement[]);
     });
 
     it('cannot contain other blocks', () => {
@@ -67,15 +67,15 @@ describe.each([ELEMENT_H1, ELEMENT_H2, ELEMENT_H3] as const)(
         {
           type,
           children: [{ type: ELEMENT_PARAGRAPH, children: [{ text: '' }] }],
-        } as TElement,
+        },
       ];
-      Editor.normalize(editor, { force: true });
+      normalizeEditor(editor, { force: true });
       expect(editor.children).toEqual([
         {
           type,
           children: [{ text: '' }],
         },
-      ] as Element[]);
+      ] as MyElement[]);
     });
     it('cannot contain other inline elements', () => {
       editor.children = [
@@ -88,15 +88,15 @@ describe.each([ELEMENT_H1, ELEMENT_H2, ELEMENT_H3] as const)(
               children: [{ text: 'text' }],
             },
           ],
-        } as TElement,
+        },
       ];
-      Editor.normalize(editor, { force: true });
+      normalizeEditor(editor, { force: true });
       expect(editor.children).toEqual([
         {
           type,
           children: [{ text: 'text' }],
         },
-      ] as Element[]);
+      ] as MyElement[]);
     });
   }
 );

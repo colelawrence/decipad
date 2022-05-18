@@ -1,9 +1,14 @@
-import { Element, TableElement } from '@decipad/editor-types';
-import { findPath } from '@decipad/editor-utils';
+import { MyEditor, MyElement, TableElement } from '@decipad/editor-types';
 import { useCallback, useEffect, useState } from 'react';
 import { DropTargetMonitor, useDrop } from 'react-dnd';
-import { Editor, Node, Transforms } from 'slate';
-import { ReactEditor } from 'slate-react';
+import {
+  findNodePath,
+  focusEditor,
+  getNodeChildren,
+  getStartPoint,
+  hasNode,
+  setSelection,
+} from '@udecode/plate';
 import { ColumnDndDirection, DragColumnItem } from '../types';
 import { getHoverDirection } from '../utils/getHoverDirection';
 import { useTableActions } from './tableActions';
@@ -15,9 +20,9 @@ interface CollectedProps {
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useDropColumn = (
-  editor: ReactEditor,
+  editor: MyEditor,
   table: TableElement,
-  column: Element
+  column: MyElement
 ) => {
   const { onMoveColumn } = useTableActions(editor, table);
   const [timer, setTimer] = useState(0);
@@ -36,17 +41,17 @@ export const useDropColumn = (
       columnItem: DragColumnItem,
       monitor: DropTargetMonitor
     ): [number, number] | void => {
-      const path = findPath(editor, table);
+      const path = findNodePath(editor, table);
       if (path) {
-        const children = Array.from(Node.children(editor, path));
+        const children = Array.from(getNodeChildren(editor, path));
         const firstRow = children[1];
         if (firstRow) {
-          const columns = Array.from(Node.children(editor, firstRow[1]));
+          const columns = Array.from(getNodeChildren(editor, firstRow[1]));
           const sourceColumnIndex = columns.findIndex(
-            (col) => columnItem.id === (col[0] as Element).id
+            (col) => columnItem.id === (col[0] as MyElement).id
           );
           const targetColumnIndex = columns.findIndex(
-            (col) => column.id === (col[0] as Element).id
+            (col) => column.id === (col[0] as MyElement).id
           );
           if (sourceColumnIndex >= 0 && targetColumnIndex >= 0) {
             const direction = getHoverDirection(editor, monitor, column);
@@ -76,13 +81,13 @@ export const useDropColumn = (
       hover: (columnItem, monitor) => {
         const columns = findSwappableColumns(columnItem, monitor);
         if (columns) {
-          ReactEditor.focus(editor);
-          const tablePath = findPath(editor, table);
+          focusEditor(editor);
+          const tablePath = findNodePath(editor, table);
           if (tablePath) {
             const thPath = [...tablePath, 1, columns[1]];
-            if (Editor.hasPath(editor, thPath)) {
-              const newFocus = Editor.start(editor, thPath);
-              Transforms.setSelection(editor, {
+            if (hasNode(editor, thPath)) {
+              const newFocus = getStartPoint(editor, thPath);
+              setSelection(editor, {
                 focus: newFocus,
                 anchor: newFocus,
               });

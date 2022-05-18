@@ -1,10 +1,9 @@
-import { ELEMENT_H2, ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import {
-  createAutoformatPlugin,
-  createPlateEditor,
-  TEditor,
-} from '@udecode/plate';
-import { Transforms } from 'slate';
+  createTAutoformatPlugin,
+  ELEMENT_H2,
+  ELEMENT_PARAGRAPH,
+} from '@decipad/editor-types';
+import { createPlateEditor, select, TEditor } from '@udecode/plate';
 import { autoformatMarks } from './autoformatMarks';
 
 const initialText = '__*t';
@@ -12,12 +11,16 @@ const initialText = '__*t';
 let editor: TEditor;
 beforeEach(() => {
   editor = createPlateEditor({
-    plugins: [createAutoformatPlugin({ options: { rules: autoformatMarks } })],
+    plugins: [
+      createTAutoformatPlugin({
+        options: { rules: autoformatMarks },
+      }),
+    ],
   });
   editor.children = [
     { type: ELEMENT_PARAGRAPH, children: [{ text: initialText }] },
   ];
-  Transforms.select(editor, { path: [0, 0], offset: initialText.length });
+  select(editor, { path: [0, 0], offset: initialText.length });
 });
 
 it('formats text in paragraphs', () => {
@@ -39,10 +42,10 @@ it('does not format text in a forbidden block', () => {
 
 it('can highlight a paragraph', () => {
   editor = createPlateEditor({
-    plugins: [createAutoformatPlugin({ options: { rules: autoformatMarks } })],
+    plugins: [createTAutoformatPlugin({ options: { rules: autoformatMarks } })],
   });
   editor.children = [{ type: ELEMENT_PARAGRAPH, children: [{ text: '==h' }] }];
-  Transforms.select(editor, { path: [0, 0], offset: initialText.length });
+  select(editor, { path: [0, 0], offset: initialText.length });
   editor.insertText('=');
   editor.insertText('=');
   expect(editor.children[0].children[0]).toHaveProperty('highlight', true);

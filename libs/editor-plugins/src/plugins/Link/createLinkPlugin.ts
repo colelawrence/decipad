@@ -1,8 +1,7 @@
-import { createPluginFactory } from '@udecode/plate';
-import { ELEMENT_LINK } from '@decipad/editor-types';
+import { createTPluginFactory, ELEMENT_LINK } from '@decipad/editor-types';
 import { Link } from '@decipad/editor-components';
 
-export const createLinkPlugin = createPluginFactory({
+export const createLinkPlugin = createTPluginFactory({
   key: ELEMENT_LINK,
   isElement: true,
   isInline: true,

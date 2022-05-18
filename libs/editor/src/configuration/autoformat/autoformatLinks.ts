@@ -1,23 +1,39 @@
-import { ELEMENT_LINK, LinkElement, Node } from '@decipad/editor-types';
+import {
+  ELEMENT_LINK,
+  LinkElement,
+  MyAutoformatRule,
+  MyEditor,
+  MyNode,
+} from '@decipad/editor-types';
 import { requireCollapsedSelection } from '@decipad/editor-utils';
-import { AutoformatRule, getNode, isElement, wrapNodes } from '@udecode/plate';
+import {
+  getEditorString,
+  getNode,
+  insertText,
+  isElement,
+  isText,
+  wrapNodes,
+} from '@udecode/plate';
 import { allPass } from 'ramda';
-import { BasePoint, Editor, Path, Text, Transforms } from 'slate';
+import { BasePoint, Path } from 'slate';
 import { getTrailingLink } from '../../utils/link';
 import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
 
 const TRIGGER = ')';
 
-const getTextBeforeCursorWithTrigger = (editor: Editor, cursor: BasePoint) => {
+const getTextBeforeCursorWithTrigger = (
+  editor: MyEditor,
+  cursor: BasePoint
+) => {
   return (
-    Editor.string(editor, {
+    getEditorString(editor, {
       anchor: { path: cursor.path, offset: 0 },
       focus: { path: cursor.path, offset: cursor.offset },
     }) + TRIGGER
   );
 };
 
-const doesTriggerCompleteLink = (editor: Editor) => {
+const doesTriggerCompleteLink = (editor: MyEditor) => {
   return (
     getTrailingLink(
       getTextBeforeCursorWithTrigger(editor, requireCollapsedSelection(editor))
@@ -25,7 +41,7 @@ const doesTriggerCompleteLink = (editor: Editor) => {
   );
 };
 
-const convertPrecedingTextWithTriggerToLink = (editor: Editor): void => {
+const convertPrecedingTextWithTriggerToLink = (editor: MyEditor): void => {
   const cursor = requireCollapsedSelection(editor);
   const link = getTrailingLink(getTextBeforeCursorWithTrigger(editor, cursor));
   if (link === null) {
@@ -35,29 +51,29 @@ const convertPrecedingTextWithTriggerToLink = (editor: Editor): void => {
   }
 
   let { path } = cursor;
-  wrapNodes<Omit<LinkElement, 'id'>>(
+  wrapNodes(
     editor,
     {
       type: ELEMENT_LINK,
       url: link.url,
       children: [],
-    },
+    } as unknown as LinkElement,
     {
       at: {
         anchor: { path, offset: link.startOffset },
         focus: { path, offset: cursor.offset },
       },
       split: true,
-      match: Text.isText,
+      match: isText,
     }
   );
 
-  let node = getNode<Node>(editor, path);
+  let node = getNode<MyNode>(editor, path);
   if (!(isElement(node) && node.type === ELEMENT_LINK)) {
     // There was a split at the start (because there was text before the link)
     path = Path.next(path);
   }
-  node = getNode<Node>(editor, path);
+  node = getNode<MyNode>(editor, path);
   if (!(isElement(node) && node.type === ELEMENT_LINK)) {
     console.error(
       'Cannot find created link after split. Editor children:',
@@ -69,10 +85,10 @@ const convertPrecedingTextWithTriggerToLink = (editor: Editor): void => {
     throw new Error('Cannot find created link after split');
   }
 
-  Transforms.insertText(editor, link.text, { at: [...path, 0] });
+  insertText(editor, link.text, { at: [...path, 0] });
 };
 
-export const autoformatLinks: AutoformatRule[] = [
+export const autoformatLinks: MyAutoformatRule[] = [
   {
     mode: 'block',
     type: ELEMENT_LINK,

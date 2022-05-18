@@ -9,13 +9,13 @@ import {
   createItalicPlugin,
   createStrikethroughPlugin,
   createUnderlinePlugin,
-  PlatePlugin,
   WithRequired,
 } from '@udecode/plate';
+import { MyPlatePlugin } from '@decipad/editor-types';
 import { createMagicNumberPlugin } from '../MagicNumber';
 
 export type StrictPlugin = WithRequired<
-  PlatePlugin,
+  MyPlatePlugin,
   'type' | 'options' | 'inject' | 'editor'
 >;
 

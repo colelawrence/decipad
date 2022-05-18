@@ -3,6 +3,7 @@ import {
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
+  MyEditor,
   TableCellElement,
   TableCellType,
   TableElement,
@@ -13,8 +14,17 @@ import {
 import { withPath } from '@decipad/editor-utils';
 import { nanoid } from 'nanoid';
 import { useCallback } from 'react';
-import { Editor, Node, Transforms } from 'slate';
-import { ReactEditor } from 'slate-react';
+import {
+  deleteText,
+  getNodeChildren,
+  getNodeEntry,
+  hasNode,
+  insertNodes,
+  insertText,
+  moveNodes,
+  setNodes,
+  withoutNormalizing,
+} from '@udecode/plate';
 import { getColumnName } from '../utils/getColumnName';
 
 export interface TableActions {
@@ -32,12 +42,12 @@ export interface TableActions {
 }
 
 export const useTableActions = (
-  editor: ReactEditor,
+  editor: MyEditor,
   element: TableElement
 ): TableActions => {
   const onDelete = useCallback(() => {
     withPath(editor, element, (path) => {
-      Transforms.delete(editor, { at: path });
+      deleteText(editor, { at: path });
     });
   }, [editor, element]);
 
@@ -45,8 +55,8 @@ export const useTableActions = (
     (columnIndex: number, newColumnName: string) => {
       withPath(editor, element, (path) => {
         const columnHeaderPath = [...path, 1, columnIndex];
-        if (Editor.hasPath(editor, columnHeaderPath)) {
-          Transforms.insertText(editor, newColumnName, {
+        if (hasNode(editor, columnHeaderPath)) {
+          insertText(editor, newColumnName, {
             at: path,
           });
         }
@@ -59,8 +69,8 @@ export const useTableActions = (
     (columnIndex: number, cellType: TableCellType) => {
       withPath(editor, element, (path) => {
         const columnHeaderPath = [...path, 1, columnIndex];
-        if (Editor.hasPath(editor, columnHeaderPath)) {
-          Transforms.setNodes<TableHeaderElement>(
+        if (hasNode(editor, columnHeaderPath)) {
+          setNodes<TableHeaderElement>(
             editor,
             { cellType },
             {
@@ -76,37 +86,40 @@ export const useTableActions = (
   const onAddColumn = useCallback(() => {
     withPath(editor, element, (path) => {
       const headerRowPath = [...path, 1];
-      const headerRowEntry = Editor.node(editor, headerRowPath);
-      const headerRow = headerRowEntry[0] as TableHeaderRowElement;
+      const headerRowEntry = getNodeEntry<TableHeaderRowElement>(
+        editor,
+        headerRowPath
+      );
+      const headerRow = headerRowEntry[0];
       const columnCount = headerRow.children.length;
 
-      const tableEntry = Editor.node(editor, path);
-      const table = tableEntry[0] as TableRowElement;
+      const tableEntry = getNodeEntry<TableRowElement>(editor, path);
+      const table = tableEntry[0];
       const [, , ...body] = table.children;
       const columnName = getColumnName(editor, path, columnCount + 1);
-      Editor.withoutNormalizing(editor, () => {
-        Transforms.insertNodes<TableHeaderElement>(
+      withoutNormalizing(editor, () => {
+        insertNodes<TableHeaderElement>(
           editor,
           {
             id: nanoid(),
             type: ELEMENT_TH,
             cellType: { kind: 'string' },
             children: [{ text: columnName }],
-          } as Node,
+          },
           {
             at: [...path, 1, columnCount],
           }
         );
 
         body.forEach((_row, rowIndex) => {
-          Transforms.insertNodes<TableCellElement>(
+          insertNodes<TableCellElement>(
             editor,
             {
               id: nanoid(),
               type: ELEMENT_TD,
               cellType: { kind: 'string' },
               children: [{ text: '' }],
-            } as TableCellElement,
+            },
             {
               at: [...path, rowIndex + 2, columnCount],
             }
@@ -121,21 +134,21 @@ export const useTableActions = (
       withPath(editor, element, (path) => {
         const headerRowPath = [...path, 1];
 
-        const columns = Array.from(Node.children(editor, headerRowPath));
+        const columns = Array.from(getNodeChildren(editor, headerRowPath));
         const columnIndex = columns.findIndex(
           ([column]) => (column as unknown as Element).id === columnHeaderId
         );
 
         if (columnIndex >= 0) {
-          Editor.withoutNormalizing(editor, () => {
-            const children = Array.from(Node.children(editor, path));
+          withoutNormalizing(editor, () => {
+            const children = Array.from(getNodeChildren(editor, path));
             children.forEach(([, childPath], childIndex) => {
               if (childIndex === 0) {
                 // caption
                 return;
               }
               const cellToDeletePath = [...childPath, columnIndex];
-              Transforms.delete(editor, {
+              deleteText(editor, {
                 at: cellToDeletePath,
               });
             });
@@ -149,9 +162,9 @@ export const useTableActions = (
   const onAddRow = useCallback(() => {
     withPath(editor, element, (path) => {
       const headerRowPath = [...path, 1];
-      const [table] = Editor.node(editor, path);
+      const [table] = getNodeEntry(editor, path);
       const elementCount = (table as TableElement).children.length;
-      const headerRowEntry = Editor.node(editor, headerRowPath);
+      const headerRowEntry = getNodeEntry(editor, headerRowPath);
       const headerRow = headerRowEntry[0] as TableHeaderRowElement;
       const columnCount = headerRow.children.length;
       const emptyCells: TableCellElement[] = Array.from(
@@ -167,7 +180,7 @@ export const useTableActions = (
         type: ELEMENT_TR,
         children: emptyCells,
       };
-      Transforms.insertNodes<TableRowElement>(editor, newRow, {
+      insertNodes<TableRowElement>(editor, newRow, {
         at: [...path, elementCount],
       });
     });
@@ -176,12 +189,12 @@ export const useTableActions = (
   const onRemoveRow = useCallback(
     (id: string) => {
       withPath(editor, element, (path) => {
-        const [table] = Editor.node(editor, path);
+        const [table] = getNodeEntry(editor, path);
         const rows = (table as TableElement).children;
         const rowIndex = rows.findIndex((row) => row.id === id);
         const rowPath = [...path, rowIndex];
-        if (Editor.hasPath(editor, rowPath)) {
-          Transforms.delete(editor, { at: rowPath });
+        if (hasNode(editor, rowPath)) {
+          deleteText(editor, { at: rowPath });
         }
       });
     },
@@ -191,10 +204,10 @@ export const useTableActions = (
   const onMoveColumn = useCallback(
     (fromIndex: number, toIndex: number) => {
       withPath(editor, element, (path) => {
-        Editor.withoutNormalizing(editor, () => {
+        withoutNormalizing(editor, () => {
           let childIndex = -1;
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          for (const _row of Node.children(editor, path)) {
+          for (const _row of getNodeChildren(editor, path)) {
             childIndex += 1;
             if (childIndex < 1) {
               // skip caption element
@@ -202,11 +215,8 @@ export const useTableActions = (
             }
             const sourcePath = [...path, childIndex, fromIndex];
             const targetPath = [...path, childIndex, toIndex];
-            if (
-              Editor.hasPath(editor, sourcePath) &&
-              Editor.hasPath(editor, targetPath)
-            ) {
-              Transforms.moveNodes(editor, { at: sourcePath, to: targetPath });
+            if (hasNode(editor, sourcePath) && hasNode(editor, targetPath)) {
+              moveNodes(editor, { at: sourcePath, to: targetPath });
             }
           }
         });

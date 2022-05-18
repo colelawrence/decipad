@@ -2,28 +2,28 @@ import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_INPUT,
-  TableElement,
+  MyEditor,
+  MyNodeEntry,
   TableInputElement,
 } from '@decipad/editor-types';
-import { isElement } from '@udecode/plate';
-import { Editor, NodeEntry, Transforms } from 'slate';
+import { deleteText, insertNodes, isElement, TNodeEntry } from '@udecode/plate';
 import { tableFromLegacyTableInputElement } from '../utils/tableFromLegacyTableInputElement';
 import { normalizeTable } from '../utils/normalizeTable';
 
 const normalizeTableInput = (
-  editor: Editor,
-  entry: NodeEntry<TableInputElement>
+  editor: MyEditor,
+  entry: TNodeEntry<TableInputElement>
 ) => {
   const [element, path] = entry;
   const table = tableFromLegacyTableInputElement(element);
-  Transforms.delete(editor, { at: path });
-  Transforms.insertNodes(editor, table, { at: path });
+  deleteText(editor, { at: path });
+  insertNodes(editor, table, { at: path });
 };
 
 export const normalizeTables =
-  (editor: Editor) =>
-  (entry: NodeEntry): boolean => {
-    const [node] = entry;
+  (editor: MyEditor) =>
+  (entry: MyNodeEntry): boolean => {
+    const [node, path] = entry;
     if (
       !isElement(node) ||
       (node.type !== ELEMENT_TABLE_INPUT && node.type !== ELEMENT_TABLE)
@@ -31,11 +31,11 @@ export const normalizeTables =
       return false;
     }
     if (node.type === ELEMENT_TABLE_INPUT) {
-      normalizeTableInput(editor, entry as NodeEntry<TableInputElement>);
+      normalizeTableInput(editor, [node, path]);
       return true;
     }
     if (node.type === ELEMENT_TABLE) {
-      return normalizeTable(editor, entry as NodeEntry<TableElement>);
+      return normalizeTable(editor, [node, path]);
     }
     return false;
   };

@@ -1,14 +1,9 @@
-import {
-  findNode,
-  FindNodeOptions,
-  getPluginType,
-  PlateEditor,
-} from '@udecode/plate';
-import { MARK_MAGICNUMBER } from '@decipad/editor-types';
+import { findNode, FindNodeOptions, getPluginType } from '@udecode/plate';
+import { MARK_MAGICNUMBER, MyEditor, MyValue } from '@decipad/editor-types';
 
 export const findMagicNumberInput = (
-  editor: PlateEditor,
-  options?: Omit<FindNodeOptions, 'match'>
+  editor: MyEditor,
+  options?: Omit<FindNodeOptions<MyValue>, 'match'>
 ) => {
   return findNode(editor, {
     ...options,

@@ -1,5 +1,5 @@
-import { Operation } from 'slate';
 import invariant from 'tiny-invariant';
+import { TOperation } from '@udecode/plate';
 import { SharedType } from '../model';
 import node from './node';
 import text from './text';
@@ -23,7 +23,7 @@ const opMappers: OpMapper = {
  */
 export function applySlateOp(
   sharedType: SharedType,
-  op: Operation
+  op: TOperation
 ): SharedType {
   const apply = opMappers[op.type] as ApplyFunc<typeof op>;
   if (!apply) {
@@ -38,7 +38,7 @@ export function applySlateOp(
  */
 export default function applySlateOps(
   sharedType: SharedType,
-  ops: Operation[],
+  ops: TOperation[],
   origin: unknown
 ): SharedType {
   invariant(sharedType.doc, 'Shared type without attached document');

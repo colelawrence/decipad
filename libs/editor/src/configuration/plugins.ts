@@ -1,37 +1,40 @@
 import {
-  createNormalizeEditorPlugin,
-  createNormalizeVoidPlugin,
-  createNormalizeRichTextBlockPlugin,
-  createNormalizePlainTextBlockPlugin,
+  createAutoFormatCodeBlockPlugin,
+  createAutoPairsPlugin,
+  createCalloutPlugin,
+  createCodeBlockPlugin,
+  createCodeLinePlugin,
+  createCodeVariableHighlightPlugin,
+  createCursorsPlugin,
+  createDividerPlugin,
+  createEditorApplyErrorReporterPlugin,
+  createLayoutColumnsPlugin,
+  createLinkPlugin,
+  createMarksPlugins,
   createNormalizeCodeBlockPlugin,
   createNormalizeCodeLinePlugin,
   createNormalizeColumnsPlugin,
-  createNormalizeListPlugin,
-  createNormalizeLinkPlugin,
+  createNormalizeEditorPlugin,
   createNormalizeElementIdPlugin,
+  createNormalizeLinkPlugin,
+  createNormalizeListPlugin,
+  createNormalizePlainTextBlockPlugin,
+  createNormalizeRichTextBlockPlugin,
   createNormalizeTextPlugin,
-  createSoftBreakPlugin,
-  createMarksPlugins,
-  createAutoFormatCodeBlockPlugin,
-  createAutoPairsPlugin,
-  createLinkPlugin,
-  createCodeBlockPlugin,
-  createCodeVariableHighlightPlugin,
-  createSyntaxErrorHighlightPlugin,
-  createLayoutColumnsPlugin,
+  createNormalizeVoidPlugin,
   createPlotPlugin,
-  createCalloutPlugin,
-  createDividerPlugin,
-  createEditorApplyErrorReporterPlugin,
-  createCodeLinePlugin,
-  createCursorsPlugin,
+  createSoftBreakPlugin,
+  createSyntaxErrorHighlightPlugin,
   createUpdateComputerPlugin,
 } from '@decipad/editor-plugins';
 import { createTablePlugin } from '@decipad/editor-table';
-import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import {
-  createPlugins,
-  createAutoformatPlugin,
+  createTAutoformatPlugin,
+  ELEMENT_PARAGRAPH,
+  MyEditor,
+  MyValue,
+} from '@decipad/editor-types';
+import {
   createBlockquotePlugin,
   createDndPlugin,
   createExitBreakPlugin,
@@ -39,6 +42,7 @@ import {
   createListPlugin,
   createNodeIdPlugin,
   createParagraphPlugin,
+  createPlugins,
   createResetNodePlugin,
   createTrailingBlockPlugin,
 } from '@udecode/plate';
@@ -50,8 +54,8 @@ import { autoformatRules } from './autoformat';
 import { exitBreakOptions } from './exitBreakOptions';
 import { resetBlockTypeOptions } from './resetBlockTypeOptions';
 
-export const plugins = (computer: Computer): ReturnType<typeof createPlugins> =>
-  createPlugins(
+export const plugins = (computer: Computer) =>
+  createPlugins<MyValue, MyEditor>(
     [
       // basic blocks
       createParagraphPlugin(),
@@ -86,9 +90,12 @@ export const plugins = (computer: Computer): ReturnType<typeof createPlugins> =>
       createDndPlugin(),
 
       // creating elements
-      ...createMarksPlugins(),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ...(createMarksPlugins() as any[]),
       createLinkPlugin(),
-      createAutoformatPlugin({ options: { rules: autoformatRules } }),
+      createTAutoformatPlugin({
+        options: { rules: autoformatRules },
+      }),
       createAutoFormatCodeBlockPlugin(),
 
       // code editing

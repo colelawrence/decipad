@@ -1,14 +1,13 @@
 import {
   BlockElement,
-  Descendant,
-  Element,
-  Node,
+  MyElement,
+  MyDescendant,
+  MyNode,
   PlainText,
-  isElement,
-  isText,
 } from '@decipad/editor-types';
 import { Path } from 'slate';
 import * as Y from 'yjs';
+import { isElement, isText } from '@udecode/plate';
 import { SharedType, SyncElement } from '../model';
 
 /**
@@ -16,11 +15,11 @@ import { SharedType, SyncElement } from '../model';
  *
  * @param element
  */
-export function toSlateNode(element: SyncElement): Node {
+export function toSlateNode(element: SyncElement): MyNode {
   const text = SyncElement.getText(element);
   const children = SyncElement.getChildren(element);
 
-  const node: Partial<Element | Node> = {};
+  const node: Partial<MyElement | MyNode> = {};
   if (text !== undefined) {
     (node as PlainText).text = text.toString();
   }
@@ -36,14 +35,14 @@ export function toSlateNode(element: SyncElement): Node {
     }
   });
 
-  return node as Node;
+  return node as MyNode;
 }
 
 /**
  * Converts a SharedType to a Slate doc
  * @param doc
  */
-export function toSlateDoc(doc: SharedType): Node[] {
+export function toSlateDoc(doc: SharedType): MyNode[] {
   return doc.map(toSlateNode);
 }
 
@@ -52,7 +51,7 @@ export function toSlateDoc(doc: SharedType): Node[] {
  *
  * @param node
  */
-export function toSyncElement(node: Element | Descendant): SyncElement {
+export function toSyncElement(node: MyElement | MyDescendant): SyncElement {
   const element: SyncElement = new Y.Map();
 
   if (isElement(node)) {
@@ -83,7 +82,7 @@ export function toSyncElement(node: Element | Descendant): SyncElement {
  * @param sharedType
  * @param doc
  */
-export function toSharedType(sharedType: SharedType, doc: Element[]): void {
+export function toSharedType(sharedType: SharedType, doc: MyElement[]): void {
   sharedType.insert(0, doc.map(toSyncElement));
 }
 

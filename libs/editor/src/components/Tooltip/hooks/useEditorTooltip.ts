@@ -1,19 +1,24 @@
-import { ELEMENT_LIC, ELEMENT_UL } from '@decipad/editor-types';
+import {
+  ELEMENT_LIC,
+  ELEMENT_UL,
+  MyElement,
+  useTPlateEditorRef,
+} from '@decipad/editor-types';
 import {
   allowsTextStyling,
   getPathContainingSelection,
   useSelection,
 } from '@decipad/editor-utils';
 import {
-  getParent,
+  getEditorString,
+  getParentNode,
   isCollapsed,
+  isEditorFocused,
+  isElement,
   toggleList,
   toggleNodeType,
-  usePlateEditorRef,
 } from '@udecode/plate';
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
-import { Editor, Element } from 'slate';
-import { ReactEditor } from 'slate-react';
 
 interface UseEditorTooltip {
   ref: RefObject<HTMLDivElement>;
@@ -23,7 +28,7 @@ interface UseEditorTooltip {
 }
 
 export const useEditorTooltip = (): UseEditorTooltip => {
-  const editor = usePlateEditorRef();
+  const editor = useTPlateEditorRef();
   const ref = useRef<HTMLDivElement>(null);
   const [isActive, setIsActive] = useState(false);
   const [currentBlockType, setCurrentBlockType] = useState<null | string>(null);
@@ -37,12 +42,12 @@ export const useEditorTooltip = (): UseEditorTooltip => {
     if (editor) {
       if (
         selection &&
-        ReactEditor.isFocused(editor) &&
+        isEditorFocused(editor) &&
         !isCollapsed(selection) &&
-        Editor.string(editor, selection) !== '' &&
+        getEditorString(editor, selection) !== '' &&
         allowsTextStyling(editor, getPathContainingSelection(editor))
       ) {
-        const parentEntry = getParent(editor, selection);
+        const parentEntry = getParentNode<MyElement>(editor, selection);
 
         if (parentEntry) {
           const [node] = parentEntry;
@@ -88,11 +93,11 @@ export const useEditorTooltip = (): UseEditorTooltip => {
           toggleList(editor, { type });
           setIsActive(false);
         }
-        const parentEntry = getParent(editor, selection);
+        const parentEntry = getParentNode(editor, selection);
         if (parentEntry) {
           const [node] = parentEntry;
 
-          if (Element.isElement(node) && node.type === ELEMENT_LIC) {
+          if (isElement(node) && node.type === ELEMENT_LIC) {
             toggleList(editor, { type: ELEMENT_UL });
           }
         }

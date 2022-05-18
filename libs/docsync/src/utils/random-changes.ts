@@ -1,16 +1,16 @@
-import { Operation, Node, Editor as SlateEditor } from 'slate';
 import { nanoid } from 'nanoid';
-import { Editor } from '@decipad/editor-types';
-import { timeout } from '../../../utils/src';
+import { MyEditor, MyElement, MyNode, MyText } from '@decipad/editor-types';
+import { TOperation, withoutNormalizing } from '@udecode/plate';
+import { timeout } from '@decipad/utils';
 import { randomChar } from './random-char';
 
 const maxSmallTimeout = 50;
 
-type DocSyncNode = Node & {
+type DocSyncNode = MyNode & {
   id: string;
 };
 
-function initialInsert(): Operation[] {
+function initialInsert(): TOperation<MyElement>[] {
   return [
     {
       type: 'insert_node',
@@ -21,13 +21,13 @@ function initialInsert(): Operation[] {
             text: '',
           },
         ],
-      },
+      } as MyElement,
     },
   ];
 }
 
 export async function randomChangesToEditors(
-  editors: Editor[],
+  editors: MyEditor[],
   changeCount: number
 ) {
   await Promise.all(
@@ -35,13 +35,13 @@ export async function randomChangesToEditors(
   );
 }
 
-async function randomChangesToEditor(editor: Editor, changeCount: number) {
+async function randomChangesToEditor(editor: MyEditor, changeCount: number) {
   for (let i = 0; i < changeCount; i += 1) {
     // simulation
     // eslint-disable-next-line no-await-in-loop
     await randomSmallTimeout();
     const ops = randomChangeToEditor(editor);
-    SlateEditor.withoutNormalizing(editor as unknown as SlateEditor, () => {
+    withoutNormalizing(editor, () => {
       for (const op of ops) {
         editor.apply(op);
       }
@@ -49,15 +49,14 @@ async function randomChangesToEditor(editor: Editor, changeCount: number) {
   }
 }
 
-function randomChangeToEditor(editor: Editor): Operation[] {
+function randomChangeToEditor(editor: MyEditor): TOperation[] {
   const candidates = editor.children;
   if (candidates.length === 0) {
     return initialInsert();
   }
   const candidateIndex = pickRandomIndex(candidates);
-  const candidate = candidates[candidateIndex] as { children: Node[] };
-  const text = ((candidate.children as Node[])[0] as { text: string })
-    .text as string;
+  const candidate = candidates[candidateIndex];
+  const { text } = candidate.children[0] as MyText;
 
   if (text.length < 6) {
     return randomInsert(candidateIndex, text);
@@ -69,8 +68,8 @@ function randomChangeToEditor(editor: Editor): Operation[] {
   return candidateOp(candidateIndex, text, candidate);
 }
 
-function randomInsert(index: number, text: string): Operation[] {
-  const ops: Operation[] = [];
+function randomInsert(index: number, text: string): TOperation[] {
+  const ops: TOperation[] = [];
   const pos = pickRandomIndex(text);
   ops.push({
     type: 'insert_text',
@@ -82,8 +81,8 @@ function randomInsert(index: number, text: string): Operation[] {
   return ops;
 }
 
-function randomRemove(index: number, text: string): Operation[] {
-  const ops: Operation[] = [];
+function randomRemove(index: number, text: string): TOperation[] {
+  const ops: TOperation[] = [];
   const pos = pickRandomIndex(text);
   ops.push({
     type: 'remove_text',
@@ -95,8 +94,8 @@ function randomRemove(index: number, text: string): Operation[] {
   return ops;
 }
 
-function randomSplit(index: number, text: string, node: Element): Operation[] {
-  const ops: Operation[] = [];
+function randomSplit(index: number, text: string, node: Element): TOperation[] {
+  const ops: TOperation[] = [];
   const pos = pickRandomIndex(text);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { children: _, ...props } = node;

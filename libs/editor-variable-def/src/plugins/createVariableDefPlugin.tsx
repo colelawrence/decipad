@@ -1,19 +1,19 @@
-import { PlatePlugin } from '@udecode/plate';
+import { isElement } from '@udecode/plate';
 import {
   ELEMENT_CAPTION,
   ELEMENT_EXPRESSION,
   ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
-  isElement,
+  MyPlatePlugin,
 } from '@decipad/editor-types';
 import { Computer } from '@decipad/computer';
 import { DECORATION_EXPRESSION_SYNTAX } from '../constants';
 import {
-  VariableDef,
   Caption,
-  Expression,
   CodeSyntax,
+  Expression,
   Slider,
+  VariableDef,
 } from '../components';
 import { createNormalizeVariableDefPlugin } from './createNormalizeVariableDefPlugin';
 import { createMigrateElementInputToVariableDefPlugin } from './createMigrateElementInputToVariableDefPlugin';
@@ -22,7 +22,7 @@ import { createNormalizeExpressionPlugin } from './createNormalizeExpressionPlug
 import { createEnterOnExpressionPlugin } from './createEnterOnExpressionPlugin';
 import { decorateExpression } from '../utils/decorateExpression';
 
-export const createVariableDefPlugin = (computer: Computer): PlatePlugin => ({
+export const createVariableDefPlugin = (computer: Computer): MyPlatePlugin => ({
   key: ELEMENT_VARIABLE_DEF,
   isElement: true,
   component: VariableDef,

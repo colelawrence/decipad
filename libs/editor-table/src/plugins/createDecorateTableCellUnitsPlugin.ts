@@ -1,39 +1,42 @@
-import { Editor, NodeEntry, Text } from 'slate';
-import { createPluginFactory, Decorate } from '@udecode/plate';
+import { getAboveNode, isText } from '@udecode/plate';
 import {
-  Element,
+  createTPluginFactory,
   ELEMENT_TABLE,
   ELEMENT_TD,
   ELEMENT_TR,
+  MyDecorate,
 } from '@decipad/editor-types';
 import { stringifyUnits } from '@decipad/computer';
 import { DECORATION_CELL_UNIT } from '../constants';
 import { TableCellUnitLeaf } from '../components';
 import { DecorationCellUnit } from '../types';
 
-export const decorateTableCellUnits: Decorate =
+export const decorateTableCellUnits: MyDecorate =
   (editor) =>
-  ([node, path]: NodeEntry): DecorationCellUnit[] | undefined => {
-    if (!Text.isText(node)) {
+  ([node, path]): DecorationCellUnit[] | undefined => {
+    if (!isText(node)) {
       return undefined;
     }
     const columnIndex = path[path.length - 2];
-    const [parent, parentPath] = Editor.above(editor, {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const [parent, parentPath] = getAboveNode(editor, {
       at: path,
-    }) as NodeEntry<Element>;
+    })!;
     if (parent.type !== ELEMENT_TD) {
       return undefined;
     }
-    const [row, rowPath] = Editor.above(editor, {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const [row, rowPath] = getAboveNode(editor, {
       at: parentPath,
-    }) as NodeEntry<Element>;
+    })!;
     if (row.type !== ELEMENT_TR) {
       return undefined;
     }
 
-    const [table] = Editor.above(editor, {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const [table] = getAboveNode(editor, {
       at: rowPath,
-    }) as NodeEntry<Element>;
+    })!;
 
     if (table.type !== ELEMENT_TABLE) {
       return undefined;
@@ -67,7 +70,7 @@ export const decorateTableCellUnits: Decorate =
     return undefined;
   };
 
-export const createDecorateTableCellUnitsPlugin = createPluginFactory({
+export const createDecorateTableCellUnitsPlugin = createTPluginFactory({
   key: DECORATION_CELL_UNIT,
   type: DECORATION_CELL_UNIT,
   isLeaf: true,

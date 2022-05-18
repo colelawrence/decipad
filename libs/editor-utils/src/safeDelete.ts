@@ -1,9 +1,11 @@
-import { Editor, Path, Transforms } from 'slate';
+import { Path } from 'slate';
+import { hasNode, removeNodes, withoutNormalizing } from '@udecode/plate';
+import { MyEditor } from '@decipad/editor-types';
 
-export const safeDelete = (editor: Editor, path: Path): boolean => {
-  if (Editor.hasPath(editor, path)) {
-    Editor.withoutNormalizing(editor, () => {
-      Transforms.removeNodes(editor, { at: path });
+export const safeDelete = (editor: MyEditor, path: Path): boolean => {
+  if (hasNode(editor, path)) {
+    withoutNormalizing(editor, () => {
+      removeNodes(editor, { at: path });
     });
     return true;
   }

@@ -1,16 +1,15 @@
 /* eslint-disable no-param-reassign */
-import { Element } from '@decipad/editor-types';
-import { isElement, setNodes, TNode } from '@udecode/plate';
+import { MyEditor, MyElement, MyNodeEntry } from '@decipad/editor-types';
+import { isElement, setNodes } from '@udecode/plate';
 import { nanoid } from 'nanoid';
-import { Editor, NodeEntry } from 'slate';
 import { createNormalizerPluginFactory } from '../../pluginFactories';
 
-const normalizeElementIdPlugin = (editor: Editor) => (entry: NodeEntry) => {
-  const [node, path] = entry as NodeEntry<TNode>;
+const normalizeElementIdPlugin = (editor: MyEditor) => (entry: MyNodeEntry) => {
+  const [node, path] = entry;
 
   if (isElement(node)) {
     if (!node.id) {
-      setNodes<Element>(editor, { id: nanoid() }, { at: path });
+      setNodes<MyElement>(editor, { id: nanoid() }, { at: path });
       return true;
     }
   }

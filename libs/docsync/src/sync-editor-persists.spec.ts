@@ -1,6 +1,6 @@
 import waitForExpect from 'wait-for-expect';
 import { getDefined } from '@decipad/utils';
-import { createPlateEditor } from '@udecode/plate';
+import { createPlateEditor, TElement } from '@udecode/plate';
 import { createDocSyncEditor, DocSyncEditor } from '.';
 
 describe('pad editor persistence', () => {
@@ -54,7 +54,7 @@ describe('pad editor persistence', () => {
     e.apply({
       type: 'insert_node',
       path: [0],
-      node: { children: [{ text: '' }] },
+      node: { children: [{ text: '' }] } as TElement,
     });
 
     e.apply({

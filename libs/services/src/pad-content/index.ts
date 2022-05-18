@@ -1,9 +1,9 @@
 import { SharedType, toSharedType } from '@decipad/slate-yjs';
-import { Element } from '@decipad/editor-types';
+import { MyElement } from '@decipad/editor-types';
 import { Doc as YDoc } from 'yjs';
 import { DynamodbPersistence } from '@decipad/y-dynamodb';
 
-function createPadContent(path: string, content: Element[]): Promise<void> {
+function createPadContent(path: string, content: MyElement[]): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
       const doc = new YDoc();
@@ -24,6 +24,6 @@ function createPadContent(path: string, content: Element[]): Promise<void> {
   });
 }
 
-export async function create(id: string, content: Element[]): Promise<void> {
+export async function create(id: string, content: MyElement[]): Promise<void> {
   await createPadContent(`/pads/${id}`, content);
 }

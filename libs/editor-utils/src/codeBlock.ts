@@ -1,10 +1,17 @@
 import {
   CodeBlockElement,
+  CodeLineElement,
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
+  MyEditor,
 } from '@decipad/editor-types';
-import { getAbove, insertNodes, TDescendant, TEditor } from '@udecode/plate';
-import { Editor, Path, Transforms } from 'slate';
+import {
+  deleteText,
+  getAboveNode,
+  getEditorString,
+  insertNodes,
+} from '@udecode/plate';
+import { Path } from 'slate';
 import {
   requireBlockParentPath,
   requirePathBelowBlock,
@@ -13,30 +20,30 @@ import {
 const codeLineElement = {
   type: ELEMENT_CODE_LINE,
   children: [{ text: '' }],
-} as const;
+} as CodeLineElement;
 
 export const insertCodeLineBelow = (
-  editor: TEditor,
+  editor: MyEditor,
   path: Path,
   select = false
 ): void => {
-  insertNodes<TDescendant>(editor, codeLineElement, {
+  insertNodes<CodeLineElement>(editor, codeLineElement, {
     at: requirePathBelowBlock(editor, path),
     select,
   });
 };
 
 export const insertCodeLineBelowOrReplace = (
-  editor: TEditor,
+  editor: MyEditor,
   path: Path,
   select = false
 ): void => {
   const blockPath = requireBlockParentPath(editor, path);
-  const isBlockEmpty = !Editor.string(editor, blockPath);
+  const isBlockEmpty = !getEditorString(editor, blockPath);
 
   insertCodeLineBelow(editor, blockPath, select);
   if (isBlockEmpty) {
-    Transforms.delete(editor, { at: blockPath });
+    deleteText(editor, { at: blockPath });
   }
 };
 
@@ -46,10 +53,10 @@ export const insertCodeLineBelowOrReplace = (
  * @throws if the path is not inside a code block
  */
 export const isInLastLineOfCodeBlock = (
-  editor: TEditor,
+  editor: MyEditor,
   path: Path
 ): boolean => {
-  const codeBlock = getAbove<CodeBlockElement>(editor, {
+  const codeBlock = getAboveNode<CodeBlockElement>(editor, {
     at: path,
     match: (node) => node.type === ELEMENT_CODE_BLOCK,
   });

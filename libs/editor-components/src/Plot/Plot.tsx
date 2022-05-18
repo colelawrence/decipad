@@ -1,12 +1,16 @@
 import { useState } from 'react';
 import { useReadOnly } from 'slate-react';
-import { useEditorState } from '@udecode/plate';
-import { ELEMENT_PLOT, PlateComponent } from '@decipad/editor-types';
+import {
+  ELEMENT_PLOT,
+  PlateComponent,
+  useTEditorState
+} from '@decipad/editor-types';
 import { useComputer, useResult } from '@decipad/react-contexts';
 import { organisms } from '@decipad/ui';
 import { DraggableBlock } from '@decipad/editor-components';
 import { useElementMutatorCallback } from '@decipad/editor-utils';
 import { usePlot } from '../utils/usePlot';
+import { PlotParamsProps } from '../../../ui/src/organisms/PlotParams/PlotParams';
 
 const DEFAULT_TITLE = 'Plot';
 
@@ -18,7 +22,7 @@ export const Plot: PlateComponent = ({ attributes, element, children }) => {
     throw new Error('PlotBlock is not a leaf');
   }
   const [error, setError] = useState<string | undefined>();
-  const editor = useEditorState();
+  const editor = useTEditorState();
   const computer = useComputer();
   const readOnly = useReadOnly();
   const identifiedResult = useResult(element.id);
@@ -45,7 +49,7 @@ export const Plot: PlateComponent = ({ attributes, element, children }) => {
           <organisms.PlotBlock
             readOnly={readOnly}
             errorMessage={identifiedResult?.error?.message || error}
-            plotParams={plotParams}
+            plotParams={plotParams as unknown as PlotParamsProps}
             result={
               spec &&
               data && {

@@ -1,7 +1,9 @@
 import { createContext, FC, ReactNode, useContext, useEffect } from 'react';
 import { distinctUntilChanged, map, Observable } from 'rxjs';
-import { PlateEditor, usePlateEditorRef } from '@udecode/plate';
 import { dequal } from 'dequal';
+import { PlateEditor, usePlateEditorRef } from '@udecode/plate';
+import type { MyValue } from '@decipad/editor-types';
+import { getDefined } from '@decipad/utils';
 
 export const EditorChangeContext = createContext<Observable<undefined>>(
   new Observable<undefined>()
@@ -18,9 +20,9 @@ export const EditorChangeContextProvider: FC<{
 };
 export function useEditorChange<T>(
   callback: (val: T) => void,
-  selector: (editor: PlateEditor) => T
+  selector: (editor: PlateEditor<MyValue>) => T
 ): void {
-  const editor = usePlateEditorRef();
+  const editor = getDefined(usePlateEditorRef<MyValue>());
   const observable = useContext(EditorChangeContext);
   useEffect(() => {
     const subscription = observable

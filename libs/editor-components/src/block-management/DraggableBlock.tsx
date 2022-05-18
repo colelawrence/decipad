@@ -1,8 +1,19 @@
-import { alwaysWritableElementTypes, Element } from '@decipad/editor-types';
-import { findPath } from '@decipad/editor-utils';
+import {
+  alwaysWritableElementTypes,
+  MyElement,
+  MyReactEditor,
+  useTEditorState,
+} from '@decipad/editor-types';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { atoms, organisms } from '@decipad/ui';
-import { useDndBlock } from '@udecode/plate';
+import {
+  deleteText,
+  findNodePath,
+  getStartPoint,
+  hasNode,
+  setSelection,
+  useDndBlock,
+} from '@udecode/plate';
 import {
   ComponentProps,
   createContext,
@@ -12,13 +23,11 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Editor as SlateEditor, Transforms } from 'slate';
-import { ReactEditor, useSlate } from 'slate-react';
 
 const InDraggableBlock = createContext(false);
 
 type DraggableBlockProps = {
-  readonly element: Element;
+  readonly element: MyElement;
   readonly children: ReactNode;
 } & Pick<
   ComponentProps<typeof organisms.DraggableBlock>,
@@ -28,21 +37,21 @@ type DraggableBlockProps = {
 type OnDelete = (() => void) | false | undefined;
 
 const defaultOnDelete = (
-  editor: ReactEditor,
-  element: Element,
+  editor: MyReactEditor,
+  element: MyElement,
   parentOnDelete?: OnDelete
 ): void => {
-  const path = findPath(editor, element);
+  const path = findNodePath(editor, element);
 
   const onDelete = () => {
     if (path) {
-      Transforms.delete(editor, {
+      deleteText(editor, {
         at: path,
         unit: 'block',
       });
-      if (SlateEditor.hasPath(editor, path)) {
-        const point = SlateEditor.start(editor, path);
-        Transforms.setSelection(editor, {
+      if (hasNode(editor, path)) {
+        const point = getStartPoint(editor, path);
+        setSelection(editor, {
           anchor: point,
           focus: point,
         });
@@ -62,7 +71,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
   ...props
 }) => {
   const [deleted, setDeleted] = useState(false);
-  const editor = useSlate() as ReactEditor;
+  const editor = useTEditorState();
   const readOnly = useIsEditorReadOnly();
   const isInDraggableBlock = useContext(InDraggableBlock);
   const { id } = element;

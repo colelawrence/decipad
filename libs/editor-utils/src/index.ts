@@ -9,7 +9,6 @@ export * from './layout';
 export * from './f';
 export * from './getSyntaxErrorRanges';
 export * from './decorateTextSyntax';
-export * from './findPath';
 export * from './findDomNodePath';
 export * from './safeDelete';
 export * from './withPath';

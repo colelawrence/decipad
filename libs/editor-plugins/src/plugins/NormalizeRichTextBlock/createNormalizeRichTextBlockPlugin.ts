@@ -5,9 +5,11 @@ import {
   ELEMENT_LIC,
   ELEMENT_LINK,
   ELEMENT_PARAGRAPH,
+  MyEditor,
+  MyElement,
+  MyNodeEntry,
 } from '@decipad/editor-types';
-import { isElement, TNode } from '@udecode/plate';
-import { Editor, Node, NodeEntry, Transforms } from 'slate';
+import { getNodeChildren, isElement, unwrapNodes } from '@udecode/plate';
 import { createNormalizerPluginFactory } from '../../pluginFactories';
 
 const RICH_TEXT_BLOCK_TYPES = [
@@ -18,18 +20,18 @@ const RICH_TEXT_BLOCK_TYPES = [
 ];
 const ALLOWED_CHILD_TYPES = [ELEMENT_LINK];
 
-const normalizeRichTextBlock = (editor: Editor) => (entry: NodeEntry) => {
-  const [node, path] = entry as NodeEntry<TNode>;
+const normalizeRichTextBlock = (editor: MyEditor) => (entry: MyNodeEntry) => {
+  const [node, path] = entry;
 
-  if (RICH_TEXT_BLOCK_TYPES.includes(node.type)) {
-    for (const childEntry of Node.children(editor, path)) {
-      const [childNode, childPath] = childEntry as NodeEntry<TNode>;
+  if (isElement(node) && RICH_TEXT_BLOCK_TYPES.includes(node.type)) {
+    for (const childEntry of getNodeChildren(editor, path)) {
+      const [childNode, childPath] = childEntry;
 
       if (
         isElement(childNode) &&
         !ALLOWED_CHILD_TYPES.includes(childNode.type)
       ) {
-        Transforms.unwrapNodes(editor, { at: childPath });
+        unwrapNodes(editor, { at: childPath });
         return true;
       }
     }
@@ -42,7 +44,7 @@ export const createNormalizeRichTextBlockPlugin = createNormalizerPluginFactory(
   {
     name: 'NORMALIZE_RICH_TEXT_BLOCK_PLUGIN',
     plugin: normalizeRichTextBlock,
-    elementType: RICH_TEXT_BLOCK_TYPES,
+    elementType: RICH_TEXT_BLOCK_TYPES as unknown as MyElement['type'],
     acceptableElementProperties: ['icon', 'color'],
   }
 );

@@ -1,6 +1,12 @@
-import { isCollapsed, TEditor } from '@udecode/plate';
-import { Editor, Editor as SlateEditor, Operation } from 'slate';
-import { HistoryEditor } from 'slate-history';
+import {
+  hasNode,
+  isCollapsed,
+  isHistoryEditor,
+  TEditor,
+  TOperation,
+  withoutNormalizing,
+  withoutSavingHistory,
+} from '@udecode/plate';
 import invariant from 'tiny-invariant';
 import * as Y from 'yjs';
 import { applyYjsEvents } from '../applyToSlate';
@@ -9,7 +15,7 @@ import { SharedType, slateYjsSymbol } from '../model';
 import { toSlateDoc } from '../utils';
 
 const IS_REMOTE: WeakSet<TEditor> = new WeakSet();
-const LOCAL_OPERATIONS: WeakMap<TEditor, Set<Operation>> = new WeakMap();
+const LOCAL_OPERATIONS: WeakMap<TEditor, Set<TOperation>> = new WeakMap();
 const SHARED_TYPES: WeakMap<TEditor, SharedType> = new WeakMap();
 
 export interface YjsEditor extends TEditor {
@@ -26,7 +32,7 @@ export const YjsEditor = {
    * Set the editor value to the content of the to the editor bound shared type.
    */
   synchronizeValue: (e: YjsEditor): void => {
-    SlateEditor.withoutNormalizing(e as unknown as SlateEditor, () => {
+    withoutNormalizing(e, () => {
       e.children = toSlateDoc(e.sharedType) as YjsEditor['children'];
       e.onChange();
     });
@@ -62,13 +68,13 @@ export const YjsEditor = {
   },
 };
 
-function localOperations(editor: YjsEditor): Set<Operation> {
+function localOperations(editor: YjsEditor): Set<TOperation> {
   const operations = LOCAL_OPERATIONS.get(editor);
   invariant(operations, 'YjsEditor without attached local operations');
   return operations;
 }
 
-function trackLocalOperations(editor: YjsEditor, operation: Operation): void {
+function trackLocalOperations(editor: YjsEditor, operation: TOperation): void {
   if (!YjsEditor.isRemote(editor)) {
     localOperations(editor).add(operation);
   }
@@ -95,7 +101,7 @@ function applyLocalOperations(editor: YjsEditor): void {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const yjsApply = (editor: YjsEditor, events: Y.YEvent<any>[]) =>
-  SlateEditor.withoutNormalizing(editor as unknown as SlateEditor, () =>
+  withoutNormalizing(editor, () =>
     YjsEditor.asRemote(editor, () => {
       try {
         applyYjsEvents(
@@ -115,8 +121,8 @@ function applyRemoteYjsEvents(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   events: Y.YEvent<any>[]
 ): void {
-  if (HistoryEditor.isHistoryEditor(_editor)) {
-    HistoryEditor.withoutSaving(_editor, () => {
+  if (isHistoryEditor(_editor)) {
+    withoutSavingHistory(_editor, () => {
       yjsApply(_editor, events);
     });
   } else {
@@ -145,7 +151,7 @@ export function withYjs<T extends TEditor>(
         if (
           selection?.focus &&
           isCollapsed(selection) &&
-          Editor.hasPath(editor, selection.focus.path)
+          hasNode(editor, selection.focus.path)
         ) {
           e.selection = selection;
         }
@@ -159,7 +165,7 @@ export function withYjs<T extends TEditor>(
 
   const { apply, onChange, destroy } = e;
 
-  e.apply = (op: Operation) => {
+  e.apply = (op: TOperation) => {
     trackLocalOperations(e, op);
 
     apply(op);

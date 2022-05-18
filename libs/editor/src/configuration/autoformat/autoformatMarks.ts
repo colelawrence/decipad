@@ -6,11 +6,11 @@ import {
   MARK_MAGICNUMBER,
   MARK_STRIKETHROUGH,
   MARK_UNDERLINE,
+  MyAutoformatRule,
 } from '@decipad/editor-types';
-import { AutoformatRule } from '@udecode/plate';
 import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
 
-export const autoformatMarks: AutoformatRule[] = [
+export const autoformatMarks: MyAutoformatRule[] = [
   {
     mode: 'mark',
     type: [MARK_BOLD, MARK_ITALIC],

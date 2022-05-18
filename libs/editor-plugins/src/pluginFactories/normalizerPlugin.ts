@@ -1,13 +1,19 @@
-import { isElement } from '@decipad/editor-types';
-import { PlateEditor, createPluginFactory, WithOverride } from '@udecode/plate';
-import { Element, Editor, NodeEntry, Transforms, Node } from 'slate';
+import { deleteText, isElement, unsetNodes } from '@udecode/plate';
+import {
+  createTPluginFactory,
+  getMyEditor,
+  MyDescendant,
+  MyEditor,
+  MyElement,
+  MyNodeEntry,
+  MyWithOverride,
+} from '@decipad/editor-types';
 
-type NormalizerPlugin = (editor: Editor) => (entry: NodeEntry) => boolean;
+type NormalizerPlugin = (editor: MyEditor) => (entry: MyNodeEntry) => boolean;
 
-type ElementWithType = Element & { type: string };
 interface NormalizerPluginProps {
   name: string;
-  elementType?: ElementWithType['type'] | Array<ElementWithType['type']>;
+  elementType?: MyElement['type'] | Array<MyElement['type']>;
   acceptableElementProperties?: string[];
   acceptableSubElements?: string[];
   plugin?: NormalizerPlugin;
@@ -18,7 +24,7 @@ type NormalizerOverrideProps = Omit<NormalizerPluginProps, 'name'>;
 const EXPECTED_ELEMENT_PROPERTIES = ['type', 'id', 'children', 'text'];
 
 const withRemoveUnacceptableElementProperties = (
-  editor: Editor,
+  editor: MyEditor,
   acceptableElementProperties?: NormalizerPluginProps['acceptableElementProperties'],
   acceptableSubElements?: NormalizerPluginProps['acceptableSubElements']
 ) => {
@@ -29,7 +35,7 @@ const withRemoveUnacceptableElementProperties = (
     );
   const acceptableSubElementNames =
     acceptableSubElements && new Set(acceptableSubElements);
-  const isNotAcceptableSubElement = (node: Node): boolean => {
+  const isNotAcceptableSubElement = (node: MyDescendant): boolean => {
     return (
       !isElement(node) ||
       (acceptableSubElementNames &&
@@ -37,7 +43,7 @@ const withRemoveUnacceptableElementProperties = (
       false
     );
   };
-  return (entry: NodeEntry): boolean => {
+  return (entry: MyNodeEntry): boolean => {
     const [node, path] = entry;
     const propertiesToRemove: string[] = [];
     if (acceptable) {
@@ -48,7 +54,7 @@ const withRemoveUnacceptableElementProperties = (
       }
     }
     if (propertiesToRemove.length > 0) {
-      Transforms.unsetNodes(editor, propertiesToRemove, { at: path });
+      unsetNodes<MyElement>(editor, propertiesToRemove, { at: path });
       return true;
     }
     if (isElement(node)) {
@@ -56,7 +62,7 @@ const withRemoveUnacceptableElementProperties = (
         node?.children?.findIndex(isNotAcceptableSubElement) || -1;
       if (removeIndex >= 0) {
         const removePath = [...path, removeIndex];
-        Transforms.delete(editor, { at: removePath });
+        deleteText(editor, { at: removePath });
         return true;
       }
     }
@@ -70,9 +76,11 @@ const withNormalizerOverride = ({
   elementType,
   acceptableElementProperties,
   acceptableSubElements,
-}: NormalizerOverrideProps): WithOverride => {
-  return (editor: PlateEditor) => {
-    const { normalizeNode } = editor;
+}: NormalizerOverrideProps): MyWithOverride => {
+  return (editor) => {
+    const myEditor = getMyEditor(editor);
+
+    const { normalizeNode } = myEditor;
     const newNormalize = plugin && plugin(editor);
 
     const removeUnacceptableElementProperties =
@@ -82,17 +90,18 @@ const withNormalizerOverride = ({
         acceptableSubElements
       );
 
-    const acceptedTypes: Array<ElementWithType['type']> | undefined =
+    const acceptedTypes: Array<MyElement['type']> | undefined =
       elementType == null || Array.isArray(elementType)
         ? elementType
         : [elementType];
 
     // eslint-disable-next-line no-param-reassign
-    editor.normalizeNode = (entry: NodeEntry) => {
+    myEditor.normalizeNode = (entry) => {
       const [node] = entry;
-      if (!acceptedTypes || Element.isElement(node)) {
+
+      if (!acceptedTypes || isElement(node)) {
         if (acceptedTypes) {
-          if (acceptedTypes.indexOf((node as ElementWithType).type) < 0) {
+          if (acceptedTypes.indexOf((node as MyElement).type) < 0) {
             // no match, break early
             return normalizeNode(entry);
           }
@@ -113,8 +122,8 @@ const withNormalizerOverride = ({
 export const createNormalizerPluginFactory = ({
   name,
   ...props
-}: NormalizerPluginProps): ReturnType<typeof createPluginFactory> => {
-  return createPluginFactory({
+}: NormalizerPluginProps) => {
+  return createTPluginFactory({
     key: name,
     withOverrides: withNormalizerOverride(props),
   });

@@ -1,13 +1,14 @@
+import { isElement } from '@udecode/plate';
 import {
   BaseElement,
+  BlockElement,
   ELEMENT_FETCH,
   ELEMENT_INPUT,
   ELEMENT_PLOT,
   ELEMENT_TABLE_INPUT,
   EmptyText,
-  Node,
+  MyNode,
   PlainText,
-  BlockElement,
 } from '.';
 import {
   ELEMENT_CAPTION,
@@ -81,7 +82,7 @@ export interface SliderElement extends BaseElement {
   children: [EmptyText];
 }
 
-interface VariableBaseElement<V extends string, T extends BlockElement>
+export interface VariableBaseElement<V extends string, T extends BlockElement>
   extends BaseElement {
   type: typeof ELEMENT_VARIABLE_DEF;
   variant: V;
@@ -122,5 +123,8 @@ export const interactiveElementKinds: ReadonlyArray<
   ELEMENT_VARIABLE_DEF,
 ] as const;
 
-export const isInteractiveElement = (node: Node): node is InteractiveElement =>
-  'type' in node && interactiveElementKinds.includes(node.type);
+export const isInteractiveElement = (
+  node: MyNode
+): node is InteractiveElement =>
+  isElement(node) &&
+  interactiveElementKinds.includes(node.type as InteractiveElement['type']);

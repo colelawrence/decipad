@@ -1,7 +1,10 @@
 import { molecules } from '@decipad/ui';
-import { PlateComponent, ELEMENT_CAPTION } from '@decipad/editor-types';
-import { Node } from 'slate';
-import { useEditorState } from '@udecode/plate';
+import {
+  ELEMENT_CAPTION,
+  PlateComponent,
+  useTEditorState,
+} from '@decipad/editor-types';
+import { getNodeString } from '@udecode/plate';
 import { useElementMutatorCallback } from '@decipad/editor-utils';
 import { AvailableSwatchColor, UserIconKey } from 'libs/ui/src/utils';
 
@@ -10,7 +13,7 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
     throw new Error(`Caption is meant to render caption elements`);
   }
 
-  const editor = useEditorState();
+  const editor = useTEditorState();
 
   const setIcon = useElementMutatorCallback(editor, element, 'icon');
   const setColor = useElementMutatorCallback(editor, element, 'color');
@@ -22,7 +25,7 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
         onChangeIcon={setIcon}
         onChangeColor={setColor}
         icon={element.icon as UserIconKey}
-        empty={Node.string(element).length === 0}
+        empty={getNodeString(element).length === 0}
       >
         {children}
       </molecules.Caption>

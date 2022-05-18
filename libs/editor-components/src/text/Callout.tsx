@@ -1,7 +1,10 @@
-import { ELEMENT_CALLOUT, PlateComponent } from '@decipad/editor-types';
+import {
+  ELEMENT_CALLOUT,
+  PlateComponent,
+  useTEditorState,
+} from '@decipad/editor-types';
 import { useElementMutatorCallback } from '@decipad/editor-utils';
 import { atoms } from '@decipad/ui';
-import { useEditorState } from '@udecode/plate';
 import { AvailableSwatchColor, UserIconKey } from 'libs/ui/src/utils';
 import { DraggableBlock } from '../block-management';
 
@@ -14,7 +17,7 @@ export const Callout: PlateComponent = ({ attributes, children, element }) => {
     throw new Error(`This should be a callout element, not ${element?.type}.`);
   }
 
-  const editor = useEditorState();
+  const editor = useTEditorState();
 
   const saveIcon = useElementMutatorCallback(editor, element, 'icon');
   const saveColor = useElementMutatorCallback(editor, element, 'color');

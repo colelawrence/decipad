@@ -1,20 +1,21 @@
 import {
+  ELEMENT_BLOCKQUOTE,
   ELEMENT_CALLOUT,
   ELEMENT_FETCH,
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_HR,
-  ELEMENT_BLOCKQUOTE,
+  MyEditor,
 } from '@decipad/editor-types';
 import { organisms } from '@decipad/ui';
-import { TEditor } from '@udecode/plate';
+import { deleteText } from '@udecode/plate';
 import { ComponentProps } from 'react';
-import { Path, Transforms } from 'slate';
+import { Path } from 'slate';
 import {
   insertBlockOfTypeBelow,
-  requireBlockParentPath,
   insertCodeLineBelow,
   insertDividerBelow,
+  requireBlockParentPath,
 } from '@decipad/editor-utils';
 import { insertInputBelow, insertSliderInputBelow } from './input';
 import { insertPlotBelow } from './plot';
@@ -28,7 +29,7 @@ export type SlashCommand = Parameters<SlashCommandHandler>[0];
 
 export type GetAvailableIdentifier = (prefix: string, start: number) => string;
 export interface ExecuteProps {
-  editor: TEditor;
+  editor: MyEditor;
   path: Path;
   command: SlashCommand;
   getAvailableIdentifier: GetAvailableIdentifier;
@@ -75,5 +76,5 @@ export const execute = ({
       insertBlockOfTypeBelow(editor, path, ELEMENT_BLOCKQUOTE);
       break;
   }
-  Transforms.delete(editor, { at: requireBlockParentPath(editor, path) });
+  deleteText(editor, { at: requireBlockParentPath(editor, path) });
 };

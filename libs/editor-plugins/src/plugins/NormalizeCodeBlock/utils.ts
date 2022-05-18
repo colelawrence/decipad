@@ -1,8 +1,13 @@
-import { CodeLineElement } from '@decipad/editor-types';
-import { Editor, Node, Path, Selection, Transforms } from 'slate';
+import { CodeLineElement, MyEditor } from '@decipad/editor-types';
+import { Path, Selection } from 'slate';
+import {
+  getNodeString,
+  hasNode,
+  setSelection as plateSetSelection,
+} from '@udecode/plate';
 
 export function getCodeLineText(node: CodeLineElement): string {
-  return Node.string(node);
+  return getNodeString(node);
 }
 
 export function incrementLastElementOfPath(path: Path): Path {
@@ -29,8 +34,8 @@ export function cloneSelection(sel: Selection): Selection {
   };
 }
 
-export function setSelection(editor: Editor, sel: Selection): void {
-  if (sel && Node.has(editor, sel.anchor.path)) {
-    Transforms.setSelection(editor, sel);
+export function setSelection(editor: MyEditor, sel: Selection): void {
+  if (sel && hasNode(editor, sel.anchor.path)) {
+    plateSetSelection(editor, sel);
   }
 }

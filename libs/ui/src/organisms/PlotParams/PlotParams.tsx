@@ -17,7 +17,7 @@ const markTypes = [
 ] as const;
 type MarkType = typeof markTypes[number];
 
-interface PlotParamsProps {
+export interface PlotParamsProps {
   readonly sourceVarName: string;
   readonly sourceVarNameOptions: ReadonlyArray<string>;
   readonly setSourceVarName: StringSetter;

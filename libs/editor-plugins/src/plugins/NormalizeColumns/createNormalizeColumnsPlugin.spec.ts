@@ -1,17 +1,17 @@
-import { createPlateEditor, TElement } from '@udecode/plate';
-import { Editor, Node, Transforms } from 'slate';
+import { insertNodes, normalizeEditor, TEditor } from '@udecode/plate';
 import {
   ColumnsElement,
+  createTPlateEditor,
   ELEMENT_CODE_BLOCK,
   ELEMENT_COLUMNS,
-  ELEMENT_VARIABLE_DEF,
   ELEMENT_PARAGRAPH,
+  ELEMENT_VARIABLE_DEF,
 } from '@decipad/editor-types';
 import { createNormalizeColumnsPlugin } from './createNormalizeColumnsPlugin';
 
-let editor: Editor;
+let editor: TEditor;
 beforeEach(() => {
-  editor = createPlateEditor({
+  editor = createTPlateEditor({
     plugins: [createNormalizeColumnsPlugin()],
   });
 });
@@ -21,9 +21,9 @@ it('cannot be empty', () => {
     {
       type: ELEMENT_COLUMNS,
       children: [],
-    } as TElement,
+    },
   ];
-  Editor.normalize(editor, { force: true });
+  normalizeEditor(editor, { force: true });
   expect(editor.children).toHaveLength(0);
 });
 
@@ -36,9 +36,9 @@ it('cannot contain elements other than interactive inputs', () => {
         { type: ELEMENT_PARAGRAPH, children: [{ text: '' }] },
         { type: ELEMENT_CODE_BLOCK, children: [{ text: '' }] },
       ],
-    } as TElement,
+    },
   ];
-  Editor.normalize(editor, { force: true });
+  normalizeEditor(editor, { force: true });
   expect(editor.children).toHaveLength(2);
   expect(editor.children).not.toContainEqual(
     expect.objectContaining({ type: ELEMENT_COLUMNS })
@@ -51,9 +51,9 @@ describe('with interactive elements as children', () => {
       {
         type: ELEMENT_COLUMNS,
         children: [{ type: ELEMENT_VARIABLE_DEF, children: [{ text: '' }] }],
-      } as TElement,
+      },
     ];
-    Editor.normalize(editor, { force: true });
+    normalizeEditor(editor, { force: true });
     expect(editor.children).toHaveLength(1);
     expect(editor.children[0]).toHaveProperty('type', ELEMENT_VARIABLE_DEF);
   });
@@ -65,23 +65,23 @@ describe('with interactive elements as children', () => {
           { type: ELEMENT_VARIABLE_DEF, children: [{ text: '' }] },
           { type: ELEMENT_VARIABLE_DEF, children: [{ text: '' }] },
         ],
-      } as TElement,
+      },
     ];
-    Editor.normalize(editor, { force: true });
+    normalizeEditor(editor, { force: true });
 
     expect(editor.children).toHaveLength(1);
     expect(editor.children[0]).toHaveProperty('type', ELEMENT_COLUMNS);
     expect((editor.children[0] as ColumnsElement).children).toHaveLength(2);
 
-    Transforms.insertNodes(
+    insertNodes(
       editor,
       {
         type: ELEMENT_VARIABLE_DEF,
         children: [{ text: '' }],
-      } as Node,
+      },
       { at: [0, 0] }
     );
-    Editor.normalize(editor, { force: true });
+    normalizeEditor(editor, { force: true });
 
     expect(editor.children).toHaveLength(1);
     expect(editor.children[0]).toHaveProperty('type', ELEMENT_COLUMNS);

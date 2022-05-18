@@ -1,11 +1,17 @@
-import { ELEMENT_H1, PlateComponent } from '@decipad/editor-types';
-import { findPath } from '@decipad/editor-utils';
+import {
+  ELEMENT_H1,
+  PlateComponent,
+  useTEditorState,
+} from '@decipad/editor-types';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { molecules } from '@decipad/ui';
-import { useEditorState } from '@udecode/plate';
+import {
+  findNodePath,
+  focusEditor,
+  isElementEmpty,
+  select,
+} from '@udecode/plate';
 import { useEffect, useState } from 'react';
-import { Editor, Transforms } from 'slate';
-import { ReactEditor } from 'slate-react';
 
 // TODO Title should probably not be a part of the editor in the first place
 
@@ -14,19 +20,19 @@ export const Title: PlateComponent = ({ attributes, children, element }) => {
     throw new Error('Title is not a leaf');
   }
 
-  const editor = useEditorState();
+  const editor = useTEditorState();
   const [shouldAutofocus, setShouldAutofocus] = useState(true);
   const readOnly = useIsEditorReadOnly();
 
   useEffect(() => {
     if (shouldAutofocus) {
-      const path = findPath(editor, element.children[0]);
+      const path = findNodePath(editor, element.children[0]);
       if (path) {
-        Transforms.select(editor, {
+        select(editor, {
           path,
           offset: 0,
         });
-        ReactEditor.focus(editor);
+        focusEditor(editor);
         setShouldAutofocus(false);
       }
     }
@@ -37,7 +43,7 @@ export const Title: PlateComponent = ({ attributes, children, element }) => {
       <molecules.EditorTitle
         Heading="h1"
         placeholder={
-          Editor.isEmpty(editor, element) ? 'My notebook title' : undefined
+          isElementEmpty(editor, element) ? 'My notebook title' : undefined
         }
       >
         {children}

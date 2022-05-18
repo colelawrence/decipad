@@ -1,25 +1,29 @@
 import {
+  createTAutoformatPlugin,
   ELEMENT_CODE_LINE,
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_HR,
   ELEMENT_PARAGRAPH,
+  MyEditor,
+  MyValue,
 } from '@decipad/editor-types';
-import {
-  createAutoformatPlugin,
-  createPlateEditor,
-  PlateEditor,
-} from '@udecode/plate';
-import { Transforms } from 'slate';
+import { createPlateEditor, select } from '@udecode/plate';
 import { autoformatBlocks } from './autoformatBlocks';
 
-let editor: PlateEditor;
+let editor: MyEditor;
 beforeEach(() => {
   editor = createPlateEditor({
-    plugins: [createAutoformatPlugin({ options: { rules: autoformatBlocks } })],
+    plugins: [
+      createTAutoformatPlugin({
+        options: { rules: autoformatBlocks },
+      }),
+    ],
   });
-  editor.children = [{ type: ELEMENT_PARAGRAPH, children: [{ text: '' }] }];
-  Transforms.select(editor, [0, 0]);
+  editor.children = [
+    { type: ELEMENT_PARAGRAPH, children: [{ text: '' }] },
+  ] as unknown as MyValue;
+  select(editor, [0, 0]);
 });
 
 describe('a block', () => {
@@ -30,7 +34,9 @@ describe('a block', () => {
   });
 
   it('cannot be changed from a forbidden type', () => {
-    editor.children = [{ type: ELEMENT_H3, children: [{ text: '' }] }];
+    editor.children = [
+      { type: ELEMENT_H3, children: [{ text: '' }] },
+    ] as unknown as MyValue;
 
     editor.insertText('#');
     editor.insertText('#');
@@ -60,8 +66,8 @@ describe('inserting a code block', () => {
   it('does not delete existing text', () => {
     editor.children = [
       { type: ELEMENT_PARAGRAPH, children: [{ text: 'text' }] },
-    ];
-    Transforms.select(editor, { path: [0, 0], offset: 2 });
+    ] as unknown as MyValue;
+    select(editor, { path: [0, 0], offset: 2 });
 
     editor.insertText('`');
     editor.insertText('`');

@@ -1,4 +1,4 @@
-import { Element, Node } from '@decipad/editor-types';
+import { MyElement, MyNode } from '@decipad/editor-types';
 import { AST, ProgramBlock } from '@decipad/computer';
 import { astNode } from '@decipad/editor-utils';
 import { interactiveElementsByElementType } from './interactiveElements';
@@ -15,10 +15,10 @@ const getAssignmentBlock = (
   };
 };
 
-const mapChildAsElement = (e: Node) => elementToLanguageBlock(e as Element);
+const mapChildAsElement = (e: MyNode) => elementToLanguageBlock(e as MyElement);
 
 export const elementToLanguageBlock = (
-  element: Element
+  element: MyElement
 ): ProgramBlock[] | null => {
   const interactiveElement = interactiveElementsByElementType[element.type];
   if (!interactiveElement) {

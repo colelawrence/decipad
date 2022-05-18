@@ -1,15 +1,20 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useWindowListener } from '@decipad/react-utils';
 import { ClientEventsContext } from '@decipad/client-events';
-import { isCollapsed, useEditorState } from '@udecode/plate';
+import {
+  findNodePath,
+  getEndPoint,
+  getNodeString,
+  isCollapsed,
+  setSelection,
+} from '@udecode/plate';
 import { organisms } from '@decipad/ui';
-import { PlateComponent } from '@decipad/editor-types';
+import { PlateComponent, useTEditorState } from '@decipad/editor-types';
 import { Paragraph } from '@decipad/editor-components';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { Editor, Node, Transforms } from 'slate';
 import { useFocused, useSelected } from 'slate-react';
 import { Computer } from '@decipad/computer';
-import { findPath, useSelection } from '@decipad/editor-utils';
+import { useSelection } from '@decipad/editor-utils';
 import { dequal } from 'dequal';
 import { execute } from '../utils/slashCommands';
 
@@ -20,13 +25,13 @@ export const SlashCommandsParagraph =
       throw new Error('SlashCommandsParagraph is not a leaf');
     }
 
-    const editor = useEditorState();
+    const editor = useTEditorState();
     const selected = useSelected();
     const focused = useFocused();
     const clientEvent = useContext(ClientEventsContext);
 
-    const elementPath = findPath(editor, props.element);
-    const text = Node.string(props.element);
+    const elementPath = findNodePath(editor, props.element);
+    const text = getNodeString(props.element);
 
     const [menuSuppressed, setMenuSuppressed] = useState(true);
     // Show when changing text
@@ -74,9 +79,9 @@ export const SlashCommandsParagraph =
 
     useEffect(() => {
       if (showSlashCommands && elementPath && isCollapsed(selection)) {
-        const endPoint = Editor.end(editor, elementPath);
+        const endPoint = getEndPoint(editor, elementPath);
         if (!dequal(selection?.focus, endPoint)) {
-          Transforms.setSelection(editor, {
+          setSelection(editor, {
             focus: endPoint,
             anchor: endPoint,
           });

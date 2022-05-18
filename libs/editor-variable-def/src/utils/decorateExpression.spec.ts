@@ -1,6 +1,11 @@
-import { ELEMENT_EXPRESSION } from '@decipad/editor-types';
+import {
+  ELEMENT_EXPRESSION,
+  ExpressionElement,
+  MyEditor,
+  MyValue,
+} from '@decipad/editor-types';
 import { Computer } from '@decipad/computer';
-import { PlateEditor, WithPlatePlugin } from '@udecode/plate';
+import { PluginOptions, WithPlatePlugin } from '@udecode/plate';
 import { decorateExpression } from './decorateExpression';
 
 it('decorates code line', () => {
@@ -11,12 +16,12 @@ it('decorates code line', () => {
         text: '123 bananas',
       },
     ],
-  };
+  } as ExpressionElement;
   const path = [0];
   expect(
     decorateExpression(new Computer())(
-      {} as unknown as PlateEditor,
-      {} as unknown as WithPlatePlugin
+      {} as unknown as MyEditor,
+      {} as unknown as WithPlatePlugin<PluginOptions, MyValue>
     )([node, path])
   ).toMatchObject([
     {

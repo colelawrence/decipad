@@ -1,8 +1,9 @@
 import { useUploadDataPlugin } from '@decipad/editor-plugins';
 import { EditorChangeContextProvider } from '@decipad/react-contexts';
 import { EditorPlaceholder } from '@decipad/ui';
-import { Plate, PlateEditor } from '@udecode/plate';
 import { useCallback, useState } from 'react';
+import { Plate } from '@udecode/plate';
+import { MyEditor, MyValue } from '@decipad/editor-types';
 import { Subject } from 'rxjs';
 import * as components from './components';
 
@@ -10,7 +11,7 @@ export interface EditorProps {
   notebookId: string;
   loaded: boolean;
   readOnly: boolean;
-  editor: PlateEditor;
+  editor: MyEditor;
 }
 
 const InsidePlate = ({ notebookId, editor }: EditorProps) => {
@@ -53,7 +54,7 @@ export const Editor = (props: EditorProps) => {
 
   return (
     <EditorChangeContextProvider changeSubject={changeSubject}>
-      <Plate editor={editor} onChange={onChange}>
+      <Plate<MyValue> editor={editor} onChange={onChange}>
         <InsidePlate {...props} />
       </Plate>
     </EditorChangeContextProvider>

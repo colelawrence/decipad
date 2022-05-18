@@ -4,9 +4,9 @@ import { ComponentProps, FC, useCallback, useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import {
   PermissionType,
+  UPDATE_NOTEBOOK_ICON,
   UpdateNotebookIcon,
   UpdateNotebookIconVariables,
-  UPDATE_NOTEBOOK_ICON,
   useDuplicateNotebook,
   useGetNotebookById,
   useGetWorkspaces,
@@ -29,16 +29,16 @@ import {
 import Head from 'next/head';
 import { useHistory } from 'react-router-dom';
 import { Notebook } from '@decipad/notebook';
-import { PlateEditor } from '@udecode/plate';
 import { serializeDocument } from '@decipad/editor-utils';
 import { DocSyncEditor } from '@decipad/docsync';
+import { MyEditor } from '@decipad/editor-types';
 import { parseIconColorFromIdentifier } from '../lib/parseIconColorFromIdentifier';
 
 type Icon = ComponentProps<typeof EditorIcon>['icon'];
 type IconColor = ComponentProps<typeof EditorIcon>['color'];
 
 export const NotebookRoute = (): ReturnType<FC> => {
-  const [editor, setEditor] = useState<PlateEditor | undefined>();
+  const [editor, setEditor] = useState<MyEditor | undefined>();
   const [docsync, setDocsync] = useState<DocSyncEditor | undefined>();
 
   const history = useHistory();

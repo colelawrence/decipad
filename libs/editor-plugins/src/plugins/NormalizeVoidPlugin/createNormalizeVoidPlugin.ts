@@ -1,13 +1,16 @@
 /* eslint-disable no-param-reassign */
 import {
-  Element,
   ELEMENT_FETCH,
   ELEMENT_INPUT,
   ELEMENT_PLOT,
   ELEMENT_TABLE_INPUT,
+  MyEditor,
+  MyElement,
+  MyNodeEntry,
+  MyText,
 } from '@decipad/editor-types';
-import { isElement, isText, TNode } from '@udecode/plate';
-import { Editor, Node, NodeEntry, Path, Transforms } from 'slate';
+import { deleteText, getNodeChildren, isElement, isText } from '@udecode/plate';
+import { Path } from 'slate';
 import { createNormalizerPluginFactory } from '../../pluginFactories';
 import {
   normalizeExcessProperties,
@@ -73,9 +76,9 @@ const MISSING_ATTRIBUTE_GENERATOR = {
 };
 
 const removeExcessProperties = (
-  editor: Editor,
-  entry: NodeEntry,
-  node: Element
+  editor: MyEditor,
+  entry: MyNodeEntry,
+  node: MyElement
 ): boolean => {
   return normalizeExcessProperties(
     editor,
@@ -84,12 +87,15 @@ const removeExcessProperties = (
   );
 };
 
-const removeBadChildren = (editor: Editor, path: Path): boolean => {
-  for (const childEntry of Node.children(editor, path)) {
-    const [childNode, childPath] = childEntry as NodeEntry<TNode>;
+const removeBadChildren = (editor: MyEditor, path: Path): boolean => {
+  for (const childEntry of getNodeChildren(editor, path)) {
+    const [childNode, childPath] = childEntry;
 
-    if (isElement(childNode) || (isText(childNode) && childNode.text !== '')) {
-      Transforms.delete(editor, { at: childPath });
+    if (
+      isElement(childNode) ||
+      (isText(childNode) && (childNode as MyText).text !== '')
+    ) {
+      deleteText(editor, { at: childPath });
       return true;
     }
   }
@@ -97,9 +103,9 @@ const removeBadChildren = (editor: Editor, path: Path): boolean => {
 };
 
 const addMissingProperties = (
-  editor: Editor,
-  entry: NodeEntry,
-  node: Element
+  editor: MyEditor,
+  entry: MyNodeEntry,
+  node: MyElement
 ): boolean => {
   return normalizeMissingProperties(
     editor,
@@ -112,15 +118,18 @@ const addMissingProperties = (
 };
 
 const normalizeVoid =
-  (editor: Editor) =>
-  (entry: NodeEntry): boolean => {
-    const [node, path] = entry as NodeEntry<TNode>;
+  (editor: MyEditor) =>
+  (entry: MyNodeEntry): boolean => {
+    const [node, path] = entry;
 
-    if (Object.keys(VOID_TYPE_PROPERTIES).includes(node.type)) {
+    if (
+      isElement(node) &&
+      Object.keys(VOID_TYPE_PROPERTIES).includes(node.type)
+    ) {
       if (
-        removeExcessProperties(editor, entry, node as Element) ||
+        removeExcessProperties(editor, entry, node as MyElement) ||
         removeBadChildren(editor, path) ||
-        addMissingProperties(editor, entry, node as Element)
+        addMissingProperties(editor, entry, node as MyElement)
       ) {
         return true;
       }

@@ -1,4 +1,4 @@
-import { Element, ELEMENT_PLOT, PlotElement } from '@decipad/editor-types';
+import { MyElement, ELEMENT_PLOT, PlotElement } from '@decipad/editor-types';
 import { InteractiveLanguageElement } from '../types';
 
 const astNode = <T extends string, A extends unknown[]>(
@@ -9,7 +9,7 @@ const astNode = <T extends string, A extends unknown[]>(
 export const Plot: InteractiveLanguageElement = {
   type: ELEMENT_PLOT,
   resultsInExpression: true,
-  getExpressionFromElement: (element: Element) => {
+  getExpressionFromElement: (element: MyElement) => {
     const { sourceVarName } = element as PlotElement;
     if (!sourceVarName) {
       return null;

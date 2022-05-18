@@ -1,6 +1,6 @@
-import { InsertNodeOperation } from 'slate';
 import invariant from 'tiny-invariant';
-import { Element } from '@decipad/editor-types';
+import { MyElement } from '@decipad/editor-types';
+import { TInsertNodeOperation } from '@udecode/plate';
 import { SharedType, SyncNode } from '../../model';
 import { getParent } from '../../path';
 import { toSyncElement } from '../../utils/convert';
@@ -13,7 +13,7 @@ import { toSyncElement } from '../../utils/convert';
  */
 export default function insertNode(
   doc: SharedType,
-  op: InsertNodeOperation
+  op: TInsertNodeOperation
 ): SharedType {
   const [parent, index] = getParent(doc, op.path);
 
@@ -24,6 +24,6 @@ export default function insertNode(
 
   invariant(children, 'cannot apply insert node operation to text node');
 
-  children.insert(index, [toSyncElement(op.node as Element)]);
+  children.insert(index, [toSyncElement(op.node as MyElement)]);
   return doc;
 }

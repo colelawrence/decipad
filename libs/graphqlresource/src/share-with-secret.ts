@@ -11,7 +11,7 @@ import {
 } from '@decipad/services/permissions';
 import { UserInputError } from 'apollo-server-lambda';
 import { nanoid } from 'nanoid';
-import { Resource } from './';
+import { Resource } from '.';
 import { expectAuthenticatedAndAuthorized, requireUser } from './authorization';
 
 export type ShareWithSecretArgs = {
@@ -56,6 +56,7 @@ export function shareWithSecret<
     });
 
     if (existingPermissions.length > 0) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       return existingPermissions[0].secret!;
     }
 
@@ -75,6 +76,7 @@ export function shareWithSecret<
         resourceType.parentResourceUriFromRecord(record);
     }
     await createResourcePermission(permission);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return permission.secret!;
   };
 }

@@ -1,19 +1,19 @@
 import {
   ELEMENT_TABLE,
-  ELEMENT_TR,
-  ELEMENT_TH,
-  ELEMENT_TD,
   ELEMENT_TABLE_CAPTION,
+  ELEMENT_TD,
+  ELEMENT_TH,
+  ELEMENT_TR,
   ELEMENT_TABLE_COLUMN_FORMULA,
+  MyPlatePlugin,
 } from '@decipad/editor-types';
-import { PlatePlugin } from '@udecode/plate';
 import { Computer } from '@decipad/computer';
 import { decorateTextSyntax } from '@decipad/editor-utils';
 import {
   Table,
-  TableRow,
   TableCell,
   TableHeaderCell,
+  TableRow,
   TableCaption,
   TableColumnFormula,
 } from '../components';
@@ -29,7 +29,14 @@ import { createNormalizeTableFormulaCellsPlugin } from './createNormalizeTableFo
 import { createNormalizeTablesPlugin } from './createNormalizeTablesPlugin';
 import { createPreventEnterToCreateCellPlugin } from './createPreventEnterToCreateCellPlugin';
 
-export const createTablePlugin = (computer: Computer): PlatePlugin => ({
+type Attributes =
+  | {
+      colspan?: string;
+      rowspan?: string;
+    }
+  | undefined;
+
+export const createTablePlugin = (computer: Computer): MyPlatePlugin => ({
   key: ELEMENT_TABLE,
   isElement: true,
   component: Table,
@@ -71,8 +78,8 @@ export const createTablePlugin = (computer: Computer): PlatePlugin => ({
       },
       props: ({ element }) => ({
         nodeProps: {
-          colSpan: element?.attributes?.colspan,
-          rowSpan: element?.attributes?.rowspan,
+          colSpan: (element?.attributes as Attributes)?.colspan,
+          rowSpan: (element?.attributes as Attributes)?.rowspan,
         },
       }),
     },
@@ -86,8 +93,8 @@ export const createTablePlugin = (computer: Computer): PlatePlugin => ({
       },
       props: ({ element }) => ({
         nodeProps: {
-          colSpan: element?.attributes?.colspan,
-          rowSpan: element?.attributes?.rowspan,
+          colSpan: (element?.attributes as Attributes)?.colspan,
+          rowSpan: (element?.attributes as Attributes)?.rowspan,
         },
       }),
     },

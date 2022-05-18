@@ -1,16 +1,16 @@
 import {
-  Element,
+  createTPlateEditor,
   ELEMENT_FETCH,
   ELEMENT_INPUT,
   ELEMENT_TABLE_INPUT,
+  MyElement,
 } from '@decipad/editor-types';
-import { createPlateEditor, TElement } from '@udecode/plate';
-import { Editor } from 'slate';
+import { normalizeEditor, TEditor } from '@udecode/plate';
 import { createNormalizeVoidPlugin } from './createNormalizeVoidPlugin';
 
-let editor: Editor;
+let editor: TEditor;
 beforeEach(() => {
-  editor = createPlateEditor({
+  editor = createTPlateEditor({
     plugins: [createNormalizeVoidPlugin()],
   });
 });
@@ -23,9 +23,9 @@ it('does not allow extra properties on a table input', () => {
       children: [{ text: '' }],
       tableData: { variableName: 'table', columns: [] },
       extra: true,
-    } as TElement,
+    },
   ];
-  Editor.normalize(editor, { force: true });
+  normalizeEditor(editor, { force: true });
   expect(editor.children).toEqual([
     {
       type: ELEMENT_TABLE_INPUT,
@@ -33,7 +33,7 @@ it('does not allow extra properties on a table input', () => {
       children: [{ text: '' }],
       tableData: { variableName: 'table', columns: [] },
     },
-  ] as Element[]);
+  ] as MyElement[]);
 });
 
 it('adds missing property on a table input', () => {
@@ -42,9 +42,9 @@ it('adds missing property on a table input', () => {
       type: ELEMENT_TABLE_INPUT,
       id: '42',
       children: [{ text: '' }],
-    } as TElement,
+    },
   ];
-  Editor.normalize(editor, { force: true });
+  normalizeEditor(editor, { force: true });
   expect(editor.children).toEqual([
     {
       type: ELEMENT_TABLE_INPUT,
@@ -63,9 +63,9 @@ it('does not allow extra properties on a fetch element', () => {
       children: [{ text: '' }],
       'data-href': 'https://example.com',
       extra: true,
-    } as TElement,
+    },
   ];
-  Editor.normalize(editor, { force: true });
+  normalizeEditor(editor, { force: true });
   expect(editor.children).toEqual([
     {
       type: ELEMENT_FETCH,
@@ -80,7 +80,7 @@ it('does not allow extra properties on a fetch element', () => {
       'data-provider': '',
       'data-varname': '',
     },
-  ] as Element[]);
+  ] as MyElement[]);
 });
 
 it('does not allow extra properties on an input element', () => {
@@ -92,9 +92,9 @@ it('does not allow extra properties on an input element', () => {
       variableName: 'hello',
       value: 'there',
       extra: true,
-    } as TElement,
+    },
   ];
-  Editor.normalize(editor, { force: true });
+  normalizeEditor(editor, { force: true });
   expect(editor.children).toEqual([
     {
       type: ELEMENT_INPUT,
@@ -103,7 +103,7 @@ it('does not allow extra properties on an input element', () => {
       variableName: 'hello',
       value: 'there',
     },
-  ] as Element[]);
+  ] as MyElement[]);
 });
 
 it('adds missing properties on an input element', () => {
@@ -112,9 +112,9 @@ it('adds missing properties on an input element', () => {
       type: ELEMENT_INPUT,
       id: '42',
       children: [{ text: '' }],
-    } as TElement,
+    },
   ];
-  Editor.normalize(editor, { force: true });
+  normalizeEditor(editor, { force: true });
   expect(editor.children).toEqual([
     {
       type: ELEMENT_INPUT,
@@ -123,7 +123,7 @@ it('adds missing properties on an input element', () => {
       variableName: '',
       value: '',
     },
-  ] as Element[]);
+  ] as MyElement[]);
 });
 
 describe.each([ELEMENT_TABLE_INPUT, ELEMENT_FETCH, ELEMENT_INPUT])(
@@ -135,15 +135,15 @@ describe.each([ELEMENT_TABLE_INPUT, ELEMENT_FETCH, ELEMENT_INPUT])(
           type,
           children: [{ type: 'element', children: [{ text: '' }] }],
           tableData: { variableName: 'table', columns: [] }, // extraneous prop for tables
-        } as TElement,
+        },
       ];
-      Editor.normalize(editor, { force: true });
+      normalizeEditor(editor, { force: true });
       expect(editor.children).toMatchObject([
         {
           type,
           children: [{ text: '' }],
         },
-      ] as Element[]);
+      ] as MyElement[]);
     });
 
     it('cannot have non-empty text', () => {
@@ -152,15 +152,15 @@ describe.each([ELEMENT_TABLE_INPUT, ELEMENT_FETCH, ELEMENT_INPUT])(
           type,
           children: [{ text: 'text' }],
           tableData: { variableName: 'table', columns: [] }, // extraneous prop for tables
-        } as TElement,
+        },
       ];
-      Editor.normalize(editor, { force: true });
+      normalizeEditor(editor, { force: true });
       expect(editor.children).toMatchObject([
         {
           type,
           children: [{ text: '' }],
         },
-      ] as Element[]);
+      ] as MyElement[]);
     });
   }
 );

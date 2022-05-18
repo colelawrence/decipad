@@ -1,16 +1,15 @@
-import { isElement, Element, CodeLineElement } from '@decipad/editor-types';
-import { getAbove } from '@udecode/plate';
-import { Editor } from 'slate';
+import { CodeLineElement, MyEditor } from '@decipad/editor-types';
+import { getAboveNode, isElement } from '@udecode/plate';
 import { getCollapsedSelection } from '@decipad/editor-utils';
 
-export function getCursorPos(editor: Editor): string | null {
+export function getCursorPos(editor: MyEditor): string | null {
   const cursor = getCollapsedSelection(editor);
 
   if (cursor) {
-    const codeLine = getAbove<Element | Editor>(editor, {
+    const codeLine = getAboveNode<CodeLineElement>(editor, {
       at: cursor,
       match: (element) => 'type' in element && element.type === 'code_line',
-    })?.[0] as CodeLineElement;
+    })?.[0];
 
     if (isElement(codeLine)) {
       return codeLine.id;

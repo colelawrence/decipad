@@ -1,19 +1,18 @@
-import { ReactEditor } from 'slate-react';
-import { PlotElement } from '@decipad/editor-types';
+import { MyReactEditor, PlotElement } from '@decipad/editor-types';
 import { Computer, InBlockResult } from '@decipad/computer';
 import { useElementMutatorCallback } from '@decipad/editor-utils';
+import type { PlotData, PlotSpec } from './plotUtils';
 import {
   enhanceSpecFromWideData,
   resultToPlotResultData,
   specFromType,
 } from './plotUtils';
 import { defaultPlotSpec } from './defaultPlotSpec';
-import type { PlotSpec, PlotData } from './plotUtils';
 import { normalizePlotSpec } from './normalizePlotSpec';
 
 type StringSetter = (value: string) => void;
 
-type PlotParams = Omit<PlotElement, 'children' | 'id' | 'type'> & {
+export type PlotParams = Omit<PlotElement, 'children' | 'id' | 'type'> & {
   sourceVarNameOptions: string[];
   columnNameOptions: string[];
   setSourceVarName: StringSetter;
@@ -33,7 +32,7 @@ type UsePlotReturn = {
 };
 
 interface UsePlotProps {
-  editor: ReactEditor;
+  editor: MyReactEditor;
   computer: Computer;
   element: PlotElement;
   result: InBlockResult | undefined;

@@ -1,5 +1,13 @@
-import { isCollapsed, isText } from '@udecode/plate';
-import { Editor, Transforms } from 'slate';
+import {
+  getNodeEntry,
+  getPointAfter,
+  getPointBefore,
+  hasNode,
+  isCollapsed,
+  isText,
+  removeNodes,
+  setSelection,
+} from '@udecode/plate';
 import { createOnKeyDownPluginFactory } from '../../../pluginFactories';
 import { isMagicNumber } from '../utils/isMagicNumber';
 
@@ -10,14 +18,14 @@ export const createMagicCursorKeysPlugin = createOnKeyDownPluginFactory({
       if (event.key === 'ArrowLeft' && !event.altKey && !event.ctrlKey) {
         const focus = editor.selection?.focus;
         if (focus) {
-          const before = Editor.before(editor, focus);
-          if (before && Editor.hasPath(editor, before.path)) {
-            const [beforeNode, beforePath] = Editor.node(editor, before.path);
+          const before = getPointBefore(editor, focus);
+          if (before && hasNode(editor, before.path)) {
+            const [beforeNode, beforePath] = getNodeEntry(editor, before.path);
             if (isText(beforeNode) && isMagicNumber(beforeNode)) {
               // User is going into void element. Try to move the cursor past it
-              const beforeBefore = Editor.before(editor, beforePath);
+              const beforeBefore = getPointBefore(editor, beforePath);
               if (beforeBefore) {
-                Transforms.setSelection(editor, {
+                setSelection(editor, {
                   focus: beforeBefore,
                   anchor: beforeBefore,
                 });
@@ -31,16 +39,16 @@ export const createMagicCursorKeysPlugin = createOnKeyDownPluginFactory({
       if (event.key === 'Backspace') {
         const focus = editor.selection?.focus;
         if (focus) {
-          const before = Editor.before(editor, focus);
-          if (before && Editor.hasPath(editor, before.path)) {
-            const beforeBefore = Editor.before(editor, before);
+          const before = getPointBefore(editor, focus);
+          if (before && hasNode(editor, before.path)) {
+            const beforeBefore = getPointBefore(editor, before);
             if (beforeBefore) {
-              const [beforeNode, beforePath] = Editor.node(
+              const [beforeNode, beforePath] = getNodeEntry(
                 editor,
                 beforeBefore.path
               );
               if (isText(beforeNode) && isMagicNumber(beforeNode)) {
-                Transforms.removeNodes(editor, { at: beforePath });
+                removeNodes(editor, { at: beforePath });
                 return true;
               }
             }
@@ -52,21 +60,21 @@ export const createMagicCursorKeysPlugin = createOnKeyDownPluginFactory({
     if (event.key === 'Delete') {
       const focus = editor.selection?.focus;
       if (focus) {
-        const after = Editor.after(editor, focus);
-        if (after && Editor.hasPath(editor, after.path)) {
-          const [afterNode, afterPath] = Editor.node(editor, after.path);
+        const after = getPointAfter(editor, focus);
+        if (after && hasNode(editor, after.path)) {
+          const [afterNode, afterPath] = getNodeEntry(editor, after.path);
           if (isText(afterNode) && isMagicNumber(afterNode)) {
-            Transforms.removeNodes(editor, { at: afterPath });
+            removeNodes(editor, { at: afterPath });
             return true;
           }
-          const afterAfter = Editor.after(editor, after);
+          const afterAfter = getPointAfter(editor, after);
           if (afterAfter) {
-            const [afterAfterNode, afterAfterPath] = Editor.node(
+            const [afterAfterNode, afterAfterPath] = getNodeEntry(
               editor,
               afterAfter.path
             );
             if (isText(afterAfterNode) && isMagicNumber(afterAfterNode)) {
-              Transforms.removeNodes(editor, { at: afterAfterPath });
+              removeNodes(editor, { at: afterAfterPath });
               return true;
             }
           }

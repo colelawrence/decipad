@@ -1,8 +1,8 @@
-import { SerializeHtml } from '@udecode/plate';
-import { Node } from 'slate';
+import { getNodeString } from '@udecode/plate';
+import { MySerializeHtml } from '@decipad/editor-types';
 
-export const serializeCodeLineHtml: SerializeHtml = ({
+export const serializeCodeLineHtml: MySerializeHtml = ({
   element,
 }): JSX.Element => {
-  return <code>{Node.string(element)}</code>;
+  return <code>{getNodeString(element)}</code>;
 };

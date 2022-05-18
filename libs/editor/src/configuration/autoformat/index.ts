@@ -1,4 +1,5 @@
 import { autoformatArrow, autoformatPunctuation } from '@udecode/plate';
+import { MyAutoformatRule } from '@decipad/editor-types';
 import { autoformatBlocks } from './autoformatBlocks';
 import { autoformatLinks } from './autoformatLinks';
 import { autoformatLists } from './autoformatLists';
@@ -11,4 +12,4 @@ export const autoformatRules = [
   ...autoformatLinks,
   ...autoformatPunctuation,
   ...autoformatArrow,
-];
+] as MyAutoformatRule[];

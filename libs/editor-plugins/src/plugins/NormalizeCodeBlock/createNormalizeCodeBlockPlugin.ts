@@ -1,39 +1,56 @@
 /* eslint-disable no-param-reassign */
 import {
   CodeBlockElement,
+  CodeLineElement,
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
+  MyEditor,
+  MyNodeEntry,
 } from '@decipad/editor-types';
-import { TNode, wrapNodes } from '@udecode/plate';
-import { Editor, Element, Node, NodeEntry, Text, Transforms } from 'slate';
+import {
+  ChildOf,
+  getNodeChildren,
+  isElement,
+  isText,
+  unwrapNodes,
+  wrapNodes,
+} from '@udecode/plate';
 import { createNormalizerPluginFactory } from '../../pluginFactories';
 import { codeBlockToCode } from './codeBlockToCode';
 import { reconcileStatements } from './reconcileStatements';
 import { splitCodeIntoStatements } from './splitCodeIntoStatements';
 
-const normalizeCodeBlock = (editor: Editor) => (entry: NodeEntry) => {
-  const [node, path] = entry as NodeEntry<TNode>;
+const normalizeCodeBlock = (editor: MyEditor) => (entry: MyNodeEntry) => {
+  const [node, path] = entry;
 
   // Code block legacy component
-  if (Element.isElement(node) && node.type === ELEMENT_CODE_BLOCK) {
-    for (const blockChild of Node.children(editor, path)) {
-      const [blockChildNode, blockChildPath] = blockChild as NodeEntry<TNode>;
+  if (isElement(node) && node.type === ELEMENT_CODE_BLOCK) {
+    for (const blockChild of getNodeChildren<ChildOf<CodeBlockElement>>(
+      editor,
+      path
+    )) {
+      const [blockChildNode, blockChildPath] = blockChild;
 
       // Element children must be code lines, else unwrap their text
       if (
-        Element.isElement(blockChildNode) &&
+        isElement(blockChildNode) &&
         blockChildNode.type !== ELEMENT_CODE_LINE
       ) {
-        Transforms.unwrapNodes(editor, { at: blockChildPath });
+        unwrapNodes(editor, { at: blockChildPath });
         return true;
       }
 
       // Text must be wrapped in a code line
-      if (Text.isText(blockChildNode)) {
+      if (isText(blockChildNode)) {
         wrapNodes(
           editor,
-          { type: ELEMENT_CODE_LINE, children: [] },
-          { at: blockChildPath }
+          {
+            type: ELEMENT_CODE_LINE,
+            children: [],
+          } as unknown as CodeLineElement,
+          {
+            at: blockChildPath,
+          }
         );
         return true;
       }
@@ -52,7 +69,7 @@ const normalizeCodeBlock = (editor: Editor) => (entry: NodeEntry) => {
     }
 
     // We don't use code blocks anymore so we unwrap their code lines.
-    Transforms.unwrapNodes(editor, { at: path });
+    unwrapNodes(editor, { at: path });
     return true;
   }
   return false;

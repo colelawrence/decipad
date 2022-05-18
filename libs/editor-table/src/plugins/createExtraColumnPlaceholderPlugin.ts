@@ -1,24 +1,34 @@
 import { createOnCursorChangePluginFactory } from '@decipad/editor-plugins';
-import { isCollapsed } from '@udecode/plate';
-import { Editor, Node, Transforms, Selection, Path, NodeEntry } from 'slate';
+import {
+  getAboveNode,
+  getNodeEntry,
+  hasNode,
+  insertNodes,
+  isCollapsed,
+  isElement,
+  removeNodes,
+} from '@udecode/plate';
+import { Path, Selection } from 'slate';
 import {
   ELEMENT_TD,
   ELEMENT_TH,
-  isElement,
+  MyEditor,
+  MyNode,
+  TableCellElement,
   TableHeaderElement,
 } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
 import { getTableColumnCount } from '../utils/getTableColumnCount';
 import { isTableColumnEmpty } from '../utils/isTableColumnEmpty';
 
-const isInsideTableCell = (node: Node): boolean => {
+const isInsideTableCell = (node: MyNode): boolean => {
   return (
     isElement(node) && (node.type === ELEMENT_TD || node.type === ELEMENT_TH)
   );
 };
 
 const withAtLastColumn =
-  (editor: Editor) => (tablePath: Path, tableColumnCount: number) => {
+  (editor: MyEditor) => (tablePath: Path, tableColumnCount: number) => {
     // user is at the last column: add a column
     const newThPath = [...tablePath, 1, tableColumnCount];
     const newTh: TableHeaderElement = {
@@ -28,36 +38,38 @@ const withAtLastColumn =
       autoCreated: true,
       children: [{ text: `Column${tableColumnCount + 1}` }],
     };
-    Transforms.insertNodes(editor, newTh, { at: newThPath });
+    insertNodes(editor, newTh, { at: newThPath });
   };
 
 const withNotAtLastColumn =
-  (editor: Editor) => (tablePath: Path, tableColumnCount: number) => {
+  (editor: MyEditor) => (tablePath: Path, tableColumnCount: number) => {
     const tableColumnIndex = tableColumnCount - 1;
     const lastHeaderPath = [...tablePath, 1, tableColumnIndex];
-    if (!Editor.hasPath(editor, lastHeaderPath)) {
+    if (!hasNode(editor, lastHeaderPath)) {
       return;
     }
-    const [headerEntry] = Editor.node(
+    const [headerEntry] = getNodeEntry<TableHeaderElement>(
       editor,
       lastHeaderPath
-    ) as NodeEntry<TableHeaderElement>;
+    );
     if (!headerEntry.autoCreated) {
       return;
     }
     if (isTableColumnEmpty(editor, tablePath, tableColumnIndex)) {
-      Transforms.removeNodes(editor, { at: lastHeaderPath });
+      removeNodes(editor, { at: lastHeaderPath });
     }
   };
 
-const onCursorChange = (editor: Editor) => {
+const onCursorChange = (editor: MyEditor) => {
   const atLastColumn = withAtLastColumn(editor);
   const notAtLastColumn = withNotAtLastColumn(editor);
   return (selection: Selection): void => {
     if (!isCollapsed(selection)) {
       return;
     }
-    const cell = Editor.above(editor, { match: isInsideTableCell });
+    const cell = getAboveNode<TableCellElement>(editor, {
+      match: isInsideTableCell,
+    });
     if (!cell) {
       return;
     }

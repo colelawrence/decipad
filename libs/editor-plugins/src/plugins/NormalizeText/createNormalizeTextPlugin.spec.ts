@@ -1,11 +1,14 @@
-import { ELEMENT_PARAGRAPH, MARK_BOLD } from '@decipad/editor-types';
-import { createPlateEditor, TDescendant } from '@udecode/plate';
-import { Editor } from 'slate';
+import {
+  createTPlateEditor,
+  ELEMENT_PARAGRAPH,
+  MARK_BOLD,
+} from '@decipad/editor-types';
+import { normalizeEditor, TEditor } from '@udecode/plate';
 import { createNormalizeTextPlugin } from './createNormalizeTextPlugin';
 
-let editor: Editor;
+let editor: TEditor;
 beforeEach(() => {
-  editor = createPlateEditor({
+  editor = createTPlateEditor({
     plugins: [createNormalizeTextPlugin()],
   });
 });
@@ -16,8 +19,8 @@ it('allows rich text marks on text', () => {
       type: ELEMENT_PARAGRAPH,
       children: [{ text: 'text', [MARK_BOLD]: true }],
     },
-  ] as TDescendant[];
-  Editor.normalize(editor, { force: true });
+  ];
+  normalizeEditor(editor, { force: true });
   expect(editor.children).toEqual([
     expect.objectContaining({
       children: [
@@ -36,8 +39,8 @@ it('forbids unknown marks on text', () => {
       type: ELEMENT_PARAGRAPH,
       children: [{ text: 'text', bs: true }],
     },
-  ] as TDescendant[];
-  Editor.normalize(editor, { force: true });
+  ];
+  normalizeEditor(editor, { force: true });
   expect(editor.children).toEqual([
     expect.objectContaining({
       children: [{ text: 'text' }],

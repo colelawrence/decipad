@@ -1,16 +1,28 @@
-import { Editor, Node, NodeEntry, Element, Text, Transforms } from 'slate';
+import {
+  deleteText,
+  getNodeProps,
+  isElement,
+  isText,
+  setNodes,
+  TEditor,
+  TElement,
+  TNode,
+  TNodeEntry,
+  TNodeProps,
+  unsetNodes,
+} from '@udecode/plate';
 
 const baseProps = {
   element: ['type', 'children', 'id'],
   text: ['text'],
 };
 
-const basePropsFor = (node: Node): string[] => {
-  return Element.isElement(node) ? baseProps.element : baseProps.text;
+const basePropsFor = (node: TNode): string[] => {
+  return isElement(node) ? baseProps.element : baseProps.text;
 };
 
-const assertElementOrText = ([node, path]: NodeEntry): void => {
-  if (!Element.isElement(node) && !Text.isText(node)) {
+const assertElementOrText = ([node, path]: TNodeEntry): void => {
+  if (!isElement(node) && !isText(node)) {
     console.error(
       'Detected a node',
       node,
@@ -19,7 +31,7 @@ const assertElementOrText = ([node, path]: NodeEntry): void => {
     );
     throw new Error('Detected a node that is neither element nor text');
   }
-  if (Element.isElement(node) && Text.isText(node)) {
+  if (isElement(node) && isText(node)) {
     console.error(
       'Detected a node',
       node,
@@ -36,19 +48,19 @@ const assertElementOrText = ([node, path]: NodeEntry): void => {
  * @returns Whether there were excess properties removed.
  */
 export const normalizeExcessProperties = (
-  editor: Editor,
-  entry: NodeEntry,
+  editor: TEditor,
+  entry: TNodeEntry,
   allowedPropKeys: string[] = []
 ): boolean => {
   assertElementOrText(entry);
   const [node, path] = entry;
-  const propKeys = Object.keys(Node.extractProps(node));
+  const propKeys = Object.keys(getNodeProps(node));
   const basePropKeys = basePropsFor(node);
 
   const excessPropKeys = propKeys.filter(
     (key) => !basePropKeys.includes(key) && !allowedPropKeys.includes(key)
   );
-  Transforms.unsetNodes(editor, excessPropKeys, { at: path });
+  unsetNodes<TElement>(editor, excessPropKeys, { at: path });
   return !!excessPropKeys.length;
 };
 
@@ -59,16 +71,16 @@ export const normalizeExcessProperties = (
  * @returns Whether there were excess properties removed.
  */
 export const normalizeMissingProperties = (
-  editor: Editor,
-  entry: NodeEntry,
+  editor: TEditor,
+  entry: TNodeEntry,
   mandatoryPropKeys: string[] = [],
   missingPropGenerator: Record<string, () => unknown> = {}
 ): boolean => {
   assertElementOrText(entry);
   const [node, path] = entry;
-  const presentPropKeys = Object.keys(Node.extractProps(node));
+  const presentPropKeys = Object.keys(getNodeProps(node));
 
-  let newProps: Partial<Node> = {};
+  let newProps: TNodeProps<TElement> = {};
 
   for (const key of mandatoryPropKeys) {
     if (presentPropKeys.includes(key)) {
@@ -89,10 +101,10 @@ export const normalizeMissingProperties = (
       key,
       'and we do not know how to initialize it. Deleting element.'
     );
-    Transforms.delete(editor, { at: path });
+    deleteText(editor, { at: path });
     return true;
   }
 
-  Transforms.setNodes(editor, newProps, { at: path });
+  setNodes(editor, newProps, { at: path });
   return !!Object.keys(newProps).length;
 };

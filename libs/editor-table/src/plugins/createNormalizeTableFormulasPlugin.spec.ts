@@ -1,15 +1,14 @@
 import {
   ELEMENT_TABLE,
-  ELEMENT_TR,
+  ELEMENT_TABLE_CAPTION,
   ELEMENT_TD,
   ELEMENT_TH,
-  ELEMENT_TABLE_CAPTION,
+  ELEMENT_TR,
 } from '@decipad/editor-types';
-import { createPlateEditor, TElement } from '@udecode/plate';
-import { Editor } from 'slate';
+import { createPlateEditor, normalizeEditor, TEditor } from '@udecode/plate';
 import { createNormalizeTableFormulaCellsPlugin } from './createNormalizeTableFormulaCellsPlugin';
 
-let editor: Editor;
+let editor: TEditor;
 beforeEach(() => {
   editor = createPlateEditor({
     plugins: [createNormalizeTableFormulaCellsPlugin()],
@@ -55,9 +54,9 @@ it('cleans existing text in table formula cells', () => {
           ],
         },
       ],
-    } as TElement,
+    },
   ];
-  Editor.normalize(editor, { force: true });
+  normalizeEditor(editor, { force: true });
   expect(editor.children).toMatchObject([
     {
       type: 'table',
@@ -105,9 +104,9 @@ it('ensures that a formula column is not the first column', () => {
           ],
         },
       ],
-    } as TElement,
+    },
   ];
-  Editor.normalize(editor, { force: true });
+  normalizeEditor(editor, { force: true });
   expect(editor.children).toMatchObject([
     {
       type: ELEMENT_TABLE,

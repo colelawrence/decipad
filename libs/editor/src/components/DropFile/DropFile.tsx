@@ -2,11 +2,11 @@ import { UploadDataOptions } from '@decipad/editor-plugins';
 import { FC, ReactNode } from 'react';
 import { DropTargetMonitor, useDrop } from 'react-dnd';
 import { NativeTypes } from 'react-dnd-html5-backend';
-import { TEditor } from '@udecode/plate';
+import { MyEditor } from '@decipad/editor-types';
 import { DropHint } from './DropHint';
 
 interface DropFileProps {
-  editor?: TEditor;
+  editor?: MyEditor;
   notebookId: string;
   startUpload: (options: UploadDataOptions) => void;
   children?: ReactNode;

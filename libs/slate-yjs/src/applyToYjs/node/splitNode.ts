@@ -1,5 +1,5 @@
-import { SplitNodeOperation } from 'slate';
 import invariant from 'tiny-invariant';
+import { TSplitNodeOperation } from '@udecode/plate';
 import { SharedType, SyncNode } from '../../model';
 import { getParent } from '../../path';
 import cloneSyncElement from '../../utils/clone';
@@ -12,7 +12,7 @@ import cloneSyncElement from '../../utils/clone';
  */
 export default function splitNode(
   doc: SharedType,
-  op: SplitNodeOperation
+  op: TSplitNodeOperation
 ): SharedType {
   const [parent, index]: [SyncNode, number] = getParent(doc, op.path);
 

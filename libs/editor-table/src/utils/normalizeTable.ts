@@ -1,61 +1,71 @@
 import {
-  BaseElement,
   ELEMENT_TABLE_CAPTION,
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
   ELEMENT_TABLE_COLUMN_FORMULA,
-  isElement,
+  ELEMENT_TABLE_VARIABLE_NAME,
+  MyEditor,
+  TableCaptionElement,
+  TableCellElement,
   TableElement,
   TableHeaderElement,
   TableRowElement,
-  ELEMENT_TABLE_VARIABLE_NAME,
-  isText,
   TableVariableNameElement,
+  TableColumnFormulaElement,
 } from '@decipad/editor-types';
 import { normalizeIdentifierElement } from '@decipad/editor-utils';
+import {
+  ChildOf,
+  deleteText,
+  getChildren,
+  getNodeChildren,
+  hasNode,
+  insertNodes,
+  isElement,
+  isText,
+  setNodes,
+  TNodeEntry,
+  unwrapNodes,
+  wrapNodes,
+} from '@udecode/plate';
 import { enumerate } from '@decipad/utils';
 import { nanoid } from 'nanoid';
-import {
-  Descendant,
-  Editor,
-  Element,
-  Node,
-  NodeEntry,
-  Path,
-  Text,
-  Transforms,
-} from 'slate';
+import { Path } from 'slate';
 
 const normalizeTableStructure = (
-  editor: Editor,
-  [node, path]: NodeEntry<TableElement>
+  editor: MyEditor,
+  [node, path]: TNodeEntry<TableElement>
 ): boolean => {
   const [caption, header, ...body] = node.children;
 
   // caption
   if (!caption) {
-    Transforms.insertNodes(
+    insertNodes<TableCaptionElement>(
       editor,
       {
         id: node.id,
         type: ELEMENT_TABLE_CAPTION,
         children: [
-          { type: ELEMENT_TABLE_VARIABLE_NAME, children: [{ text: '' }] },
+          {
+            id: nanoid(),
+            type: ELEMENT_TABLE_VARIABLE_NAME,
+            children: [{ text: '' }],
+          },
         ],
-      } as unknown as Node,
+      },
       { at: [...path, 0] }
     );
     return true;
   }
   if (caption.type !== ELEMENT_TABLE_CAPTION) {
-    Transforms.delete(editor, { at: [...path, 0] });
+    deleteText(editor, { at: [...path, 0] });
     return true;
   }
 
   // header
   if (!header) {
-    Transforms.insertNodes(
+    insertNodes(
       editor,
       {
         type: ELEMENT_TR,
@@ -68,14 +78,14 @@ const normalizeTableStructure = (
             children: [{ text: '' }],
           },
         ],
-      } as unknown as Node,
+      } as unknown as TableRowElement,
       { at: [...path, 1] }
     );
     return true;
   }
 
   if (header.type !== ELEMENT_TR) {
-    Transforms.delete(editor, { at: [...path, 1] });
+    deleteText(editor, { at: [...path, 1] });
     return true;
   }
 
@@ -84,7 +94,7 @@ const normalizeTableStructure = (
   for (const row of body) {
     rowIndex += 1;
     if (row.type !== ELEMENT_TR) {
-      Transforms.delete(editor, { at: [...path, 2 + rowIndex] });
+      deleteText(editor, { at: [...path, 2 + rowIndex] });
     }
   }
 
@@ -92,16 +102,15 @@ const normalizeTableStructure = (
 };
 
 const normalizeTableCaption = (
-  editor: Editor,
-  entry: NodeEntry<TableElement>
+  editor: MyEditor,
+  entry: TNodeEntry<TableElement>
 ): boolean => {
-  const [, tablePath] = entry;
-  const [caption] = Node.children(editor, tablePath);
+  const [caption] = getChildren(entry);
   for (const [captionChildIndex, captionChild] of enumerate(
-    Node.children(editor, caption[1])
+    getChildren(caption)
   )) {
-    if (isText(captionChild[0] as Text)) {
-      Transforms.wrapNodes(
+    if (isText(captionChild[0])) {
+      wrapNodes<TableVariableNameElement | TableColumnFormulaElement>(
         editor,
         {
           id: nanoid(),
@@ -117,24 +126,27 @@ const normalizeTableCaption = (
     }
   }
 
-  const [varName] = Node.children(editor, caption[1]);
-  const [varNameText] = Node.children(editor, varName[1]);
-  return normalizeIdentifierElement(editor, varNameText as NodeEntry<Text>);
+  const [varName] = getChildren(caption);
+  const [varNameText] = getChildren(varName);
+  return normalizeIdentifierElement(editor, varNameText);
 };
 
 const normalizeTableHeaderCell = (
-  editor: Editor,
+  editor: MyEditor,
   path: Path,
-  th: BaseElement
+  th: TableHeaderElement
 ): boolean => {
-  if (Text.isText(th)) {
-    Transforms.wrapNodes(
+  if (isText(th)) {
+    wrapNodes<TableHeaderElement>(
       editor,
       {
         id: th.id,
-        type: ELEMENT_TABLE_CAPTION,
+        type: ELEMENT_TH,
+        cellType: {
+          kind: 'string',
+        },
         children: [th],
-      } as BaseElement,
+      },
       {
         at: path,
       }
@@ -146,17 +158,17 @@ const normalizeTableHeaderCell = (
     const replaceWith: Partial<TableHeaderElement> = {
       type: ELEMENT_TH,
     };
-    Transforms.setNodes(editor, replaceWith, {
+    setNodes(editor, replaceWith, {
       at: path,
     });
     return true;
   }
 
-  if (!(th as TableHeaderElement).cellType) {
+  if (!th.cellType) {
     const insert: Partial<TableHeaderElement> = {
       cellType: { kind: 'string' },
     };
-    Transforms.setNodes(editor, insert, {
+    setNodes(editor, insert, {
       at: path,
     });
     return true;
@@ -168,31 +180,35 @@ const normalizeTableHeaderCell = (
     if (isElement(el) && el.type === ELEMENT_TABLE_COLUMN_FORMULA) {
       break;
     }
-    if (!Text.isText(el)) {
-      Transforms.unwrapNodes(editor, { at: [...path, childIndex] });
+    if (!isText(el)) {
+      unwrapNodes(editor, { at: [...path, childIndex] });
       return true;
     }
   }
 
-  const [text] = Node.children(editor, path);
-  return normalizeIdentifierElement(editor, text as NodeEntry<Text>);
+  const [text] = getChildren([th, path]);
+  return normalizeIdentifierElement(editor, text);
 };
 
 const normalizeTableHeaderRow = (
-  editor: Editor,
-  [node, path]: NodeEntry<Element>
+  editor: MyEditor,
+  [node, path]: TNodeEntry<TableElement>
 ): boolean => {
-  const headerRow = node.children[1] as BaseElement;
+  const headerRow = node.children[1];
   const headerRowPath = [...path, 1];
   if (headerRow.type !== ELEMENT_TR) {
-    Transforms.setNodes(editor, { type: ELEMENT_TR } as Partial<Descendant>, {
-      at: headerRowPath,
-    });
+    setNodes(
+      editor,
+      { type: ELEMENT_TR },
+      {
+        at: headerRowPath,
+      }
+    );
     return true;
   }
 
   let thIndex = -1;
-  for (const th of headerRow.children as BaseElement[]) {
+  for (const th of headerRow.children) {
     thIndex += 1;
     const thPath = [...headerRowPath, thIndex];
     if (normalizeTableHeaderCell(editor, thPath, th)) {
@@ -204,17 +220,17 @@ const normalizeTableHeaderRow = (
 };
 
 const normalizeTableDataCell = (
-  editor: Editor,
-  [node, path]: NodeEntry<BaseElement>
+  editor: MyEditor,
+  [node, path]: TNodeEntry<TableCellElement>
 ): boolean => {
-  if (Text.isText(node)) {
-    Transforms.wrapNodes(
+  if (isText(node)) {
+    wrapNodes(
       editor,
       {
         id: node.id,
         type: ELEMENT_TD,
         children: [node],
-      } as BaseElement,
+      },
       {
         at: path,
       }
@@ -223,17 +239,21 @@ const normalizeTableDataCell = (
   }
 
   if (node.type !== ELEMENT_TD) {
-    Transforms.setNodes(editor, { type: ELEMENT_TD } as Partial<Node>, {
-      at: path,
-    });
+    setNodes(
+      editor,
+      { type: ELEMENT_TD },
+      {
+        at: path,
+      }
+    );
     return true;
   }
 
   let childIndex = -1;
   for (const el of node.children || []) {
     childIndex += 1;
-    if (!Text.isText(el)) {
-      Transforms.unwrapNodes(editor, { at: [...path, childIndex] });
+    if (!isText(el)) {
+      unwrapNodes(editor, { at: [...path, childIndex] });
       return true;
     }
   }
@@ -242,11 +262,14 @@ const normalizeTableDataCell = (
 };
 
 const normalizeTableDataRow = (
-  editor: Editor,
-  [, path]: NodeEntry<TableRowElement>
+  editor: MyEditor,
+  [, path]: TNodeEntry<TableRowElement>
 ): boolean => {
-  for (const [cell, cellPath] of Node.children(editor, path)) {
-    if (normalizeTableDataCell(editor, [cell as BaseElement, cellPath])) {
+  for (const [cell, cellPath] of getNodeChildren<ChildOf<TableRowElement>>(
+    editor,
+    path
+  )) {
+    if (normalizeTableDataCell(editor, [cell, cellPath])) {
       return true;
     }
   }
@@ -254,19 +277,23 @@ const normalizeTableDataRow = (
 };
 
 const normalizeTableDataRows = (
-  editor: Editor,
-  [, path]: NodeEntry<Element>
+  editor: MyEditor,
+  [, path]: TNodeEntry<TableElement>
 ): boolean => {
-  for (const [row, rowPath] of Array.from(Node.children(editor, path)).slice(
-    2
-  )) {
-    if ((row as BaseElement).type !== ELEMENT_TR) {
-      Transforms.setNodes(editor, { type: ELEMENT_TR } as Partial<Node>, {
-        at: rowPath,
-      });
+  for (const [row, rowPath] of Array.from(
+    getNodeChildren<ChildOf<TableElement, 2>>(editor, path)
+  ).slice(2)) {
+    if (row.type !== ELEMENT_TR) {
+      setNodes(
+        editor,
+        { type: ELEMENT_TR },
+        {
+          at: rowPath,
+        }
+      );
       return true;
     }
-    if (normalizeTableDataRow(editor, [row as TableRowElement, rowPath])) {
+    if (normalizeTableDataRow(editor, [row, rowPath])) {
       return true;
     }
   }
@@ -274,16 +301,16 @@ const normalizeTableDataRows = (
 };
 
 const normalizeTableRowColumnCount = (
-  editor: Editor,
-  [, path]: NodeEntry<Element>
+  editor: MyEditor,
+  [, path]: TNodeEntry<TableElement>
 ): boolean => {
   let rowIndex = -1;
   let columnCount = -1;
-  for (const [row, rowPath] of Array.from(Node.children(editor, path)).slice(
+  for (const [row, rowPath] of Array.from(getNodeChildren(editor, path)).slice(
     1
   )) {
     rowIndex += 1;
-    if (!Element.isElement(row)) {
+    if (!isElement(row)) {
       return false;
     }
     const rowChildCount = row.children?.length;
@@ -292,17 +319,17 @@ const normalizeTableRowColumnCount = (
     } else if (columnCount >= 0) {
       if (rowChildCount > columnCount) {
         const deleteAt = [...rowPath, columnCount];
-        Transforms.delete(editor, { at: deleteAt });
+        deleteText(editor, { at: deleteAt });
         return true;
       }
       if (rowChildCount < columnCount) {
         const insertAt = [...rowPath, rowChildCount];
-        Transforms.insertNodes(
+        insertNodes(
           editor,
           {
             type: ELEMENT_TD,
             children: [{ text: '' }],
-          } as Node,
+          } as TableCellElement,
           { at: insertAt }
         );
         return true;
@@ -313,14 +340,14 @@ const normalizeTableRowColumnCount = (
 };
 
 const normalizeTableRowCount = (
-  editor: Editor,
-  [, path]: NodeEntry<Element>
+  editor: MyEditor,
+  [, path]: TNodeEntry<TableElement>
 ): boolean => {
   // at least two rows of data
   for (const rowIndex of [2]) {
     const firstDataRowPath = [...path, rowIndex];
-    if (!Editor.hasPath(editor, firstDataRowPath)) {
-      Transforms.insertNodes(
+    if (!hasNode(editor, firstDataRowPath)) {
+      insertNodes(
         editor,
         {
           type: ELEMENT_TR,
@@ -328,9 +355,9 @@ const normalizeTableRowCount = (
             {
               type: ELEMENT_TD,
               children: [{ text: '' }],
-            } as Node,
+            },
           ],
-        } as Node,
+        } as TableRowElement,
         { at: firstDataRowPath }
       );
       return true;
@@ -340,8 +367,8 @@ const normalizeTableRowCount = (
 };
 
 export const normalizeTable = (
-  editor: Editor,
-  entry: NodeEntry<TableElement>
+  editor: MyEditor,
+  entry: TNodeEntry<TableElement>
 ): boolean => {
   return (
     normalizeTableStructure(editor, entry) ||

@@ -1,18 +1,18 @@
-import { Element, ELEMENT_PLOT } from '@decipad/editor-types';
-import { Editor, createEditor } from 'slate';
+import { ELEMENT_PLOT, MyEditor } from '@decipad/editor-types';
+import { createTEditor } from '@udecode/plate';
 import { insertPlotBelow } from './plot';
 
 describe('insertPlotBelow', () => {
-  let editor!: Editor;
+  let editor!: MyEditor;
   beforeEach(() => {
-    editor = createEditor();
+    editor = createTEditor() as MyEditor;
     editor.children = [
       {
         type: 'p',
         id: 'asdf',
         children: [{ text: '' }],
-      },
-    ] as Element[];
+      } as never,
+    ];
   });
 
   it('inserts a plot element below given block path', () => {

@@ -1,17 +1,18 @@
 import { PropsWithChildren } from 'react';
 import {
-  createPlateEditor,
   createParagraphPlugin,
+  createPlateEditor,
   createPlugins,
+  focusEditor,
+  insertText,
   Plate,
   PlateEditor,
   PlateProps,
+  select,
 } from '@udecode/plate';
 import userEvent from '@testing-library/user-event';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { Transforms } from 'slate';
-import { ReactEditor } from 'slate-react';
 import { findParentWithStyle } from '@decipad/dom-test-utils';
 import { ELEMENT_H3, ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
@@ -41,7 +42,7 @@ beforeEach(() => {
     plugins,
   };
 
-  editor = createPlateEditor(plateProps);
+  editor = createPlateEditor({ plugins });
 
   wrapper = ({ children }) => (
     <DndProvider backend={HTML5Backend}>{children}</DndProvider>
@@ -57,13 +58,13 @@ it('renders the menu when typing in the selected paragraph starting with a /', a
   );
 
   act(() => {
-    ReactEditor.focus(editor);
+    focusEditor(editor);
   });
-  Transforms.select(editor, {
-    path: findDomNodePath(editor, getByText('/')),
+  select(editor, {
+    path: findDomNodePath(editor, getByText('/'))!,
     offset: '/'.length,
   });
-  Transforms.insertText(editor, 'a');
+  insertText(editor, 'a');
 
   await findByText('/a');
   expect(getByText(/sub-head/i)).toBeVisible();
@@ -74,11 +75,11 @@ it('does not render the menu when the editor is not focused', async () => {
     { wrapper }
   );
 
-  Transforms.select(editor, {
-    path: findDomNodePath(editor, getByText('/')),
+  select(editor, {
+    path: findDomNodePath(editor, getByText('/'))!,
     offset: '/'.length,
   });
-  Transforms.insertText(editor, 'a');
+  insertText(editor, 'a');
 
   await findByText('/a');
   expect(queryByText(/sub-head/i)).not.toBeInTheDocument();
@@ -90,11 +91,11 @@ it('does not render the menu when the paragraph is not selected', async () => {
   );
 
   act(() => {
-    ReactEditor.focus(editor);
+    focusEditor(editor);
   });
-  Transforms.insertText(editor, 'a', {
+  insertText(editor, 'a', {
     at: {
-      path: findDomNodePath(editor, getByText('/')),
+      path: findDomNodePath(editor, getByText('/'))!,
       offset: '/'.length,
     },
   });
@@ -109,10 +110,10 @@ it('does not render the menu before typing', async () => {
   );
 
   act(() => {
-    ReactEditor.focus(editor);
+    focusEditor(editor);
   });
-  Transforms.select(editor, {
-    path: findDomNodePath(editor, getByText('/')),
+  select(editor, {
+    path: findDomNodePath(editor, getByText('/'))!,
     offset: '/'.length,
   });
 
@@ -128,10 +129,10 @@ it.each([' /cmd', '/cmd#', '/42'])(
     );
 
     act(() => {
-      ReactEditor.focus(editor);
+      focusEditor(editor);
     });
-    const textPath = findDomNodePath(editor, getByText('/'));
-    Transforms.select(editor, {
+    const textPath = findDomNodePath(editor, getByText('/'))!;
+    select(editor, {
       anchor: {
         path: textPath,
         offset: 0,
@@ -141,7 +142,7 @@ it.each([' /cmd', '/cmd#', '/42'])(
         offset: '/'.length,
       },
     });
-    Transforms.insertText(editor, text);
+    insertText(editor, text);
 
     await findByText(text, {
       normalizer: getDefaultNormalizer({ trim: false }),
@@ -160,13 +161,13 @@ describe('the menu', () => {
     );
 
     act(() => {
-      ReactEditor.focus(editor);
+      focusEditor(editor);
     });
-    Transforms.select(editor, {
-      path: findDomNodePath(editor, getByText('/')),
+    select(editor, {
+      path: findDomNodePath(editor, getByText('/'))!,
       offset: '/'.length,
     });
-    Transforms.insertText(editor, 'a');
+    insertText(editor, 'a');
 
     await findByText('/a');
     expect(
@@ -184,13 +185,13 @@ describe('the menu', () => {
     );
 
     act(() => {
-      ReactEditor.focus(editor);
+      focusEditor(editor);
     });
-    Transforms.select(editor, {
-      path: findDomNodePath(editor, getByText('/')),
+    select(editor, {
+      path: findDomNodePath(editor, getByText('/'))!,
       offset: '/'.length,
     });
-    Transforms.insertText(editor, 'a');
+    insertText(editor, 'a');
 
     await findByText('/a');
     const menuElement = findParentWithStyle(
@@ -199,7 +200,7 @@ describe('the menu', () => {
     )!.element;
     menuElement.scrollIntoView = jest.fn();
 
-    Transforms.insertText(editor, 'b');
+    insertText(editor, 'b');
     await findByText('/ab');
     expect(menuElement.scrollIntoView).toHaveBeenCalled();
   });
@@ -213,19 +214,19 @@ describe('the escape key', () => {
     );
 
     act(() => {
-      ReactEditor.focus(editor);
+      focusEditor(editor);
     });
-    Transforms.select(editor, {
-      path: findDomNodePath(editor, getByText('/')),
+    select(editor, {
+      path: findDomNodePath(editor, getByText('/'))!,
       offset: '/'.length,
     });
-    Transforms.insertText(editor, 'a');
+    insertText(editor, 'a');
     await findByText(/sub-head/i);
 
     await userEvent.keyboard('{Escape}');
     expect(queryByText(/sub-head/i)).not.toBeInTheDocument();
 
-    Transforms.insertText(editor, 'd');
+    insertText(editor, 'd');
     expect(await findByText(/sub-head/i)).toBeVisible();
   });
 
@@ -238,13 +239,13 @@ describe('the escape key', () => {
     );
 
     act(() => {
-      ReactEditor.focus(editor);
+      focusEditor(editor);
     });
-    Transforms.select(editor, {
-      path: findDomNodePath(editor, getByText('/')),
+    select(editor, {
+      path: findDomNodePath(editor, getByText('/'))!,
       offset: '/'.length,
     });
-    Transforms.insertText(editor, 'a');
+    insertText(editor, 'a');
     await findByText(/sub-head/i);
 
     await userEvent.keyboard('{Shift>}{Escape}');
@@ -261,13 +262,13 @@ it('executes a command on click', async () => {
   );
 
   act(() => {
-    ReactEditor.focus(editor);
+    focusEditor(editor);
   });
-  Transforms.select(editor, {
-    path: findDomNodePath(editor, getByText('/')),
+  select(editor, {
+    path: findDomNodePath(editor, getByText('/'))!,
     offset: '/'.length,
   });
-  Transforms.insertText(editor, 'a');
+  insertText(editor, 'a');
 
   await userEvent.click(await findByText(/sub-head/i));
   await waitFor(() => {
@@ -284,13 +285,13 @@ it('uses the text after the slash to search for commands', async () => {
   );
 
   act(() => {
-    ReactEditor.focus(editor);
+    focusEditor(editor);
   });
-  Transforms.select(editor, {
-    path: findDomNodePath(editor, getByText('/')),
+  select(editor, {
+    path: findDomNodePath(editor, getByText('/'))!,
     offset: '/'.length,
   });
-  Transforms.insertText(editor, 'secondary');
+  insertText(editor, 'secondary');
 
   expect(await findByText(/secondary.+heading/i)).toBeVisible();
   expect(queryByText(/calculation/i)).not.toBeInTheDocument();

@@ -1,9 +1,9 @@
-import { ELEMENT_PLOT, PlotElement } from '@decipad/editor-types';
-import { insertNodes, TEditor } from '@udecode/plate';
+import { ELEMENT_PLOT, MyEditor, PlotElement } from '@decipad/editor-types';
+import { insertNodes } from '@udecode/plate';
 import { Path } from 'slate';
 import { requirePathBelowBlock } from '@decipad/editor-utils';
 
-const plotElement: Omit<PlotElement, 'id'> = {
+const plotElement = {
   type: ELEMENT_PLOT,
   title: 'Chart',
   sourceVarName: '',
@@ -14,9 +14,9 @@ const plotElement: Omit<PlotElement, 'id'> = {
   sizeColumnName: '',
   colorColumnName: '',
   children: [{ text: '' }],
-};
+} as PlotElement;
 
-export const insertPlotBelow = (editor: TEditor, path: Path): void => {
+export const insertPlotBelow = (editor: MyEditor, path: Path): void => {
   insertNodes(editor, plotElement, {
     at: requirePathBelowBlock(editor, path),
   });

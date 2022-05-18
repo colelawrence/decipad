@@ -1,16 +1,16 @@
-import { Element, ELEMENT_CODE_LINE } from '@decipad/editor-types';
+import { ELEMENT_CODE_LINE, MyElement } from '@decipad/editor-types';
 import { UnparsedBlock } from '@decipad/computer';
-import { Node as SlateNode } from 'slate';
+import { getNodeString } from '@udecode/plate';
 import { InteractiveLanguageElement } from '../types';
 
 export const getUnparsedBlockFromCodeLine = (
-  block: Element
+  block: MyElement
 ): UnparsedBlock | null => {
   if (block.type === ELEMENT_CODE_LINE) {
     return {
       type: 'unparsed-block',
       id: block.id,
-      source: SlateNode.string(block),
+      source: getNodeString(block),
     };
   }
   return null;

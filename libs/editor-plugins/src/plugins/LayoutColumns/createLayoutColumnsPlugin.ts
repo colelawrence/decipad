@@ -1,9 +1,8 @@
 /* eslint-disable no-param-reassign */
-import { createPluginFactory } from '@udecode/plate';
-import { ELEMENT_COLUMNS } from '@decipad/editor-types';
+import { createTPluginFactory, ELEMENT_COLUMNS } from '@decipad/editor-types';
 import { Columns } from '@decipad/editor-components';
 
-export const createLayoutColumnsPlugin = createPluginFactory({
+export const createLayoutColumnsPlugin = createTPluginFactory({
   key: ELEMENT_COLUMNS,
   isElement: true,
   component: Columns,

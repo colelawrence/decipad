@@ -1,4 +1,4 @@
-import { NodeOperation } from 'slate';
+import { TNodeOperation } from '@udecode/plate';
 import { OpMapper } from '../types';
 import insertNode from './insertNode';
 import mergeNode from './mergeNode';
@@ -7,7 +7,7 @@ import removeNode from './removeNode';
 import setNode from './setNode';
 import splitNode from './splitNode';
 
-const mapper: OpMapper<NodeOperation> = {
+const mapper: OpMapper<TNodeOperation> = {
   insert_node: insertNode,
   merge_node: mergeNode,
   move_node: moveNode,

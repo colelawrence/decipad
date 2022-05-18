@@ -1,20 +1,19 @@
-import { Element } from '@decipad/editor-types';
+import { MyElement, MyReactEditor } from '@decipad/editor-types';
 import { useCallback } from 'react';
-import { Transforms } from 'slate';
-import { ReactEditor } from 'slate-react';
+import { findNodePath, setNodes } from '@udecode/plate';
 
-export const useElementMutatorCallback = <E extends Element>(
-  editor: ReactEditor,
+export const useElementMutatorCallback = <E extends MyElement>(
+  editor: MyReactEditor,
   element: E,
   propName: keyof E
 ): ((newValue: E[typeof propName]) => void) => {
   return useCallback(
     (newValue: E[typeof propName]) => {
-      const at = ReactEditor.findPath(editor, element);
+      const at = findNodePath(editor, element);
       const mutation = {
         [propName]: newValue,
       } as unknown as Partial<E>;
-      Transforms.setNodes(editor, mutation, { at });
+      setNodes(editor, mutation, { at });
     },
     [editor, element, propName]
   );

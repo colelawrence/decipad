@@ -1,5 +1,5 @@
-import { InsertTextOperation } from 'slate';
 import invariant from 'tiny-invariant';
+import { TInsertTextOperation } from '@udecode/plate';
 import { SharedType, SyncElement } from '../../model';
 import { getTarget } from '../../path';
 
@@ -11,7 +11,7 @@ import { getTarget } from '../../path';
  */
 export default function insertText(
   doc: SharedType,
-  op: InsertTextOperation
+  op: TInsertTextOperation
 ): SharedType {
   const node = getTarget(doc, op.path) as SyncElement;
   const nodeText = SyncElement.getText(node);

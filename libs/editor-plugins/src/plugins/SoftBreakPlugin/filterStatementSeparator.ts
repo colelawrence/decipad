@@ -1,10 +1,10 @@
 import { STATEMENT_SEP_TOKEN_TYPE, tokenize } from '@decipad/computer';
-import { AnyObject, TEditor, TNode } from '@udecode/plate';
-import { Node, NodeEntry } from 'slate';
+import { getNodeString } from '@udecode/plate';
+import { MyEditor, MyNodeEntry } from '@decipad/editor-types';
 
 export const filterStatementSeparator =
-  (editor: TEditor<AnyObject>) =>
-  (entry: NodeEntry<TNode>): boolean => {
+  (editor: MyEditor) =>
+  (entry: MyNodeEntry): boolean => {
     const anchor = editor.selection?.anchor?.offset ?? 0;
     const focus = editor.selection?.focus?.offset ?? 0;
     const cursorStart = anchor < focus ? anchor : focus;
@@ -14,7 +14,7 @@ export const filterStatementSeparator =
       return false;
     }
 
-    const nText = Node.string(entry[0]);
+    const nText = getNodeString(entry[0]);
 
     // This function runs "onKeyPress", before the newline has been added to
     // the text, so it needs to be added at the cursor position for the sake of

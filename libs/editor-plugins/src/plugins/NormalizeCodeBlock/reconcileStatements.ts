@@ -2,15 +2,16 @@ import {
   CodeBlockElement,
   CodeLineElement,
   ELEMENT_CODE_LINE,
+  MyEditor,
 } from '@decipad/editor-types';
 import { getDefined } from '@decipad/utils';
-import { getNode } from '@udecode/plate';
-import { Editor, Path, Transforms } from 'slate';
+import { getNode, insertNodes, insertText, mergeNodes } from '@udecode/plate';
+import { Path } from 'slate';
 import { getCodeBlockOffsets, reinstateCursorOffsets } from './offsets';
 import { getCodeLineText, incrementLastElementOfPath } from './utils';
 
 function reconcileCodeLineByMergingWithNext(
-  editor: Editor,
+  editor: MyEditor,
   line: CodeLineElement,
   codeLinePath: Path
 ): boolean {
@@ -19,11 +20,11 @@ function reconcileCodeLineByMergingWithNext(
   if (next) {
     const currentCodeLine = getCodeLineText(line);
     // merge the 2 code_line nodes: the one at next_path with the current one
-    Transforms.insertText(editor, `${currentCodeLine}\n`, {
+    insertText(editor, `${currentCodeLine}\n`, {
       at: [...codeLinePath],
     });
 
-    Transforms.mergeNodes(editor, {
+    mergeNodes(editor, {
       at: nextCodeLinePath,
     });
     return true;
@@ -32,7 +33,7 @@ function reconcileCodeLineByMergingWithNext(
 }
 
 function reconcileByMergingWithNext(
-  editor: Editor,
+  editor: MyEditor,
   codeLinePath: Path,
   expectedStatement: string
 ): boolean {
@@ -45,7 +46,7 @@ function reconcileByMergingWithNext(
 }
 
 function reconcileBySplitting(
-  editor: Editor,
+  editor: MyEditor,
   _expectedStatement: string,
   childText: string,
   codeLinePath: Path
@@ -64,17 +65,17 @@ function reconcileBySplitting(
       },
     ],
   };
-  Transforms.insertNodes(editor, newNode, {
+  insertNodes(editor, newNode as CodeLineElement, {
     at: incrementLastElementOfPath(codeLinePath),
   });
-  Transforms.insertText(editor, expectedStatement, {
+  insertText(editor, expectedStatement, {
     at: [...codeLinePath, 0],
   });
   return true;
 }
 
 function reconcileLine(
-  editor: Editor,
+  editor: MyEditor,
   line: CodeLineElement,
   expectedStatement: string,
   codeLinePath: Path
@@ -95,7 +96,7 @@ function needsReconciliation(
 }
 
 export function reconcileStatements(
-  editor: Editor,
+  editor: MyEditor,
   statements: string[],
   codeBlockPath: Path
 ): boolean {

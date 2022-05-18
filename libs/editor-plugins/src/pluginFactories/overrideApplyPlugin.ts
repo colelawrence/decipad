@@ -1,17 +1,15 @@
-import { createPluginFactory, TEditor } from '@udecode/plate';
+import { createTPluginFactory, MyEditor } from '@decipad/editor-types';
 
 interface CreateOverrideApplyPluginFactoryProps {
   name: string;
-  plugin: (editor: TEditor, oldApply: TEditor['apply']) => TEditor['apply'];
+  plugin: (editor: MyEditor, oldApply: MyEditor['apply']) => MyEditor['apply'];
 }
 
 export const createOverrideApplyPluginFactory = ({
   name,
   plugin,
-}: CreateOverrideApplyPluginFactoryProps): ReturnType<
-  typeof createPluginFactory
-> =>
-  createPluginFactory({
+}: CreateOverrideApplyPluginFactoryProps) =>
+  createTPluginFactory({
     key: name,
     withOverrides: (editor) => {
       const { apply } = editor;

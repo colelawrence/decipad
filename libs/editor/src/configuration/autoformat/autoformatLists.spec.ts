@@ -1,11 +1,7 @@
+import { createListPlugin, select, TEditor } from '@udecode/plate';
 import {
-  createAutoformatPlugin,
-  createListPlugin,
-  createPlateEditor,
-  TEditor,
-} from '@udecode/plate';
-import { Transforms } from 'slate';
-import {
+  createTAutoformatPlugin,
+  createTPlateEditor,
   ELEMENT_H2,
   ELEMENT_LI,
   ELEMENT_OL,
@@ -17,14 +13,14 @@ import { autoformatLists } from './autoformatLists';
 
 let editor: TEditor;
 beforeEach(() => {
-  editor = createPlateEditor({
+  editor = createTPlateEditor({
     plugins: [
-      createAutoformatPlugin({ options: { rules: autoformatLists } }),
+      createTAutoformatPlugin({ options: { rules: autoformatLists } }),
       createListPlugin(),
     ],
   });
   editor.children = [{ type: ELEMENT_PARAGRAPH, children: [{ text: '' }] }];
-  Transforms.select(editor, [0, 0]);
+  select(editor, [0, 0]);
 });
 
 describe('a block', () => {

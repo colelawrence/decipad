@@ -1,14 +1,16 @@
-import { Editor, Selection } from 'slate';
-import { createPluginFactory } from '@udecode/plate';
+import { Selection } from 'slate';
 import { dequal } from 'dequal';
+import { createTPluginFactory, MyEditor } from '@decipad/editor-types';
 
-type OnCursorChangePlugin = (editor: Editor) => (selection: Selection) => void;
+type OnCursorChangePlugin = (
+  editor: MyEditor
+) => (selection: Selection) => void;
 
 export const createOnCursorChangePluginFactory = (
   name: string,
   plugin: OnCursorChangePlugin
-): ReturnType<typeof createPluginFactory> =>
-  createPluginFactory({
+) =>
+  createTPluginFactory({
     key: name,
     withOverrides: (editor) => {
       const onSelectionChange = plugin(editor);

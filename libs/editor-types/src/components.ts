@@ -1,5 +1,6 @@
 import { FC, PropsWithChildren } from 'react';
-import { Element, RichText } from './elements';
+import { RichText } from './value';
+import { MyElement } from './node';
 
 interface ElementAttributes {
   'data-slate-node': 'element';
@@ -20,7 +21,7 @@ export type PlateComponent<AdditionalProps = Record<never, never>> = FC<
   PropsWithChildren<
     | {
         readonly attributes: ElementAttributes;
-        readonly element: Element;
+        readonly element: MyElement;
         readonly leaf?: undefined;
         readonly text?: undefined;
       }
