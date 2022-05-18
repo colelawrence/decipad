@@ -63,15 +63,17 @@ export class DynamodbPersistence extends Observable<string> {
           ':id': this.name,
         },
       })) {
-        if (docsyncUpdate) {
+        if (docsyncUpdate && docsyncUpdate.data) {
           updates.push(Buffer.from(docsyncUpdate.data, 'base64'));
         }
       }
 
       this.doc.transact(() =>
-        updates.forEach((val) =>
-          applyUpdate(this.doc, val, DYNAMODB_PERSISTENCE_ORIGIN)
-        )
+        updates
+          .filter(Boolean) // make sure we don't have any sneaky undefineds
+          .forEach((val) =>
+            applyUpdate(this.doc, val, DYNAMODB_PERSISTENCE_ORIGIN)
+          )
       );
 
       this.emit('fetched', [this]);

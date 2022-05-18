@@ -167,24 +167,32 @@ const readMessage = (
       // do nothing
     }
   }
-  const message = Buffer.from(buf as string, 'base64');
-  const decoder = decoding.createDecoder(message);
-  const encoder = encoding.createEncoder();
-  const messageType = decoding.readVarUint(decoder);
-  const messageHandler = provider.messageHandlers[messageType];
-  if (messageHandler) {
-    messageHandler(
-      encoder,
-      decoder,
-      provider,
-      emitSynced,
-      messageType as MessageType
-    );
-  } else {
+  try {
+    const message = Buffer.from(buf as string, 'base64');
+    const decoder = decoding.createDecoder(message);
+    const encoder = encoding.createEncoder();
+    const messageType = decoding.readVarUint(decoder);
+    const messageHandler = provider.messageHandlers[messageType];
+    if (messageHandler) {
+      messageHandler(
+        encoder,
+        decoder,
+        provider,
+        emitSynced,
+        messageType as MessageType
+      );
+    } else {
+      // eslint-disable-next-line no-console
+      console.error(
+        `Could not find handler for message of type ${messageType}`
+      );
+    }
+    return encoder;
+  } catch (err) {
     // eslint-disable-next-line no-console
-    console.error('Unable to compute message');
+    console.error('Error trying to decode message', err);
   }
-  return encoder;
+  return undefined;
 };
 
 const setupWS = async (provider: WebsocketProvider) => {
