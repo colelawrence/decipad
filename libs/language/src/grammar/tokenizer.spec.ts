@@ -19,6 +19,7 @@ it('finds "==" not two "="', () => {
   expect(testTokenizer('**')).toMatchInlineSnapshot(`"twoStars(**)"`);
   expect(testTokenizer('..')).toMatchInlineSnapshot(`"twoDots(..)"`);
   expect(testTokenizer('...')).toMatchInlineSnapshot(`"threeDots(...)"`);
+  expect(testTokenizer('…')).toMatchInlineSnapshot(`"threeDotsEllipsis(…)"`);
 });
 
 it('can go into date mode and back', () => {

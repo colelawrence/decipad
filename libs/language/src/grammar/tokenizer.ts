@@ -47,6 +47,7 @@ export const tokenRules = {
     arrow: '=>',
     twoStars: '**',
     threeDots: '...',
+    threeDotsEllipsis: '…',
     twoDots: '..',
 
     dot: '.',

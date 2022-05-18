@@ -1161,9 +1161,11 @@ let ParserRules = [
       );
     },
   },
+  { name: 'tableItem$subexpression$1', symbols: [{ literal: '…' }] },
+  { name: 'tableItem$subexpression$1', symbols: [{ literal: '...' }] },
   {
     name: 'tableItem',
-    symbols: [{ literal: '...' }, 'ref'],
+    symbols: ['tableItem$subexpression$1', 'ref'],
     postprocess: (d) => {
       return addArrayLoc(
         {
