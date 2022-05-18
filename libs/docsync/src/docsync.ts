@@ -139,25 +139,25 @@ function docSyncEditor<E extends TEditor>(
       events.on('loaded', cb);
     },
     offLoaded(cb: OnLoadedCallback) {
-      events.off('loaded', cb);
+      events.removeListener('loaded', cb);
     },
     onSaved(cb: OnSavedCallback) {
       events.on('saved', cb);
     },
     offSaved(cb: OnSavedCallback) {
-      events.off('saved', cb);
+      events.removeListener('saved', cb);
     },
     onConnected(cb: OnLoadedCallback) {
       events.on('connected', cb);
     },
     offConnected(cb: OnLoadedCallback) {
-      events.off('connected', cb);
+      events.removeListener('connected', cb);
     },
     onDisconnected(cb: OnLoadedCallback) {
       events.on('disconnected', cb);
     },
     offDisconnected(cb: OnLoadedCallback) {
-      events.off('disconnected', cb);
+      events.removeListener('disconnected', cb);
     },
     destroy() {
       events.removeAllListeners();
