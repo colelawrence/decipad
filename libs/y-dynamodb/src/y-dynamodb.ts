@@ -71,6 +71,8 @@ export class DynamodbPersistence extends Observable<string> {
       this.doc.transact(() =>
         updates
           .filter(Boolean) // make sure we don't have any sneaky undefineds
+          .filter((buf) => Buffer.isBuffer(buf)) // make sure we only have buffers
+          .filter((buf) => buf.length > 0) // make sure we only have non-empty
           .forEach((val) =>
             applyUpdate(this.doc, val, DYNAMODB_PERSISTENCE_ORIGIN)
           )
