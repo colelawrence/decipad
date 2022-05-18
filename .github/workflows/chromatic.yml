@@ -4,11 +4,14 @@
 name: 'Chromatic'
 
 # Event for the workflow
-on: push
+on:
+  pull_request_review:
+    types: [submitted]
 
 # List of jobs
 jobs:
   chromatic-deployment:
+    if: github.event.review.state == 'approved'
     # Operating System
     runs-on: ubuntu-latest
     # Job steps
