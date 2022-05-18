@@ -1,19 +1,23 @@
+import { Computer } from '@decipad/computer';
 import {
   ELEMENT_PARAGRAPH,
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
+  ELEMENT_TABLE_COLUMN_FORMULA,
+  ELEMENT_TABLE_VARIABLE_NAME,
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
 } from '@decipad/editor-types';
 import { createPlateEditor, TElement } from '@udecode/plate';
 import { Editor } from 'slate';
-import { createNormalizeTablesPlugin } from './createNormalizeTablesPlugin';
+import { createTablePlugin } from './createTablePlugin';
 
 let editor: Editor;
 beforeEach(() => {
+  const computer = new Computer();
   editor = createPlateEditor({
-    plugins: [createNormalizeTablesPlugin()],
+    plugins: [createTablePlugin(computer)],
   });
 });
 
@@ -31,7 +35,12 @@ it('normalizes empty table', () => {
       children: [
         {
           type: ELEMENT_TABLE_CAPTION,
-          children: [{ text: '' }],
+          children: [
+            {
+              type: ELEMENT_TABLE_VARIABLE_NAME,
+              children: [{ text: '' }],
+            },
+          ],
         },
         {
           type: ELEMENT_TR,
@@ -85,7 +94,12 @@ it('inserts tds and ths if needed', () => {
       children: [
         {
           type: ELEMENT_TABLE_CAPTION,
-          children: [{ text: '' }],
+          children: [
+            {
+              type: ELEMENT_TABLE_VARIABLE_NAME,
+              children: [{ text: '' }],
+            },
+          ],
         },
         {
           type: ELEMENT_TR,
@@ -143,7 +157,12 @@ it('removes strange types of nodes inside a table', () => {
       children: [
         {
           type: ELEMENT_TABLE_CAPTION,
-          children: [{ text: '' }],
+          children: [
+            {
+              type: ELEMENT_TABLE_VARIABLE_NAME,
+              children: [{ text: '' }],
+            },
+          ],
         },
         {
           type: ELEMENT_TR,
@@ -178,7 +197,12 @@ it('makes all rows the same size as header row', () => {
       children: [
         {
           type: ELEMENT_TABLE_CAPTION,
-          children: [{ text: 'varName' }],
+          children: [
+            {
+              type: ELEMENT_TABLE_VARIABLE_NAME,
+              children: [{ text: '' }],
+            },
+          ],
         },
         {
           type: ELEMENT_TR,
@@ -236,7 +260,12 @@ it('makes all rows the same size as header row', () => {
       children: [
         {
           type: ELEMENT_TABLE_CAPTION,
-          children: [{ text: 'varName' }],
+          children: [
+            {
+              type: ELEMENT_TABLE_VARIABLE_NAME,
+              children: [{ text: '' }],
+            },
+          ],
         },
         {
           type: ELEMENT_TR,
@@ -295,7 +324,12 @@ it('makes th and td elements contain only text elements', () => {
       children: [
         {
           type: ELEMENT_TABLE_CAPTION,
-          children: [{ text: '' }],
+          children: [
+            {
+              type: ELEMENT_TABLE_VARIABLE_NAME,
+              children: [{ text: '' }],
+            },
+          ],
         },
         {
           type: ELEMENT_TR,
@@ -372,7 +406,12 @@ it('makes th and td elements contain only text elements', () => {
       children: [
         {
           type: ELEMENT_TABLE_CAPTION,
-          children: [{ text: '' }],
+          children: [
+            {
+              type: ELEMENT_TABLE_VARIABLE_NAME,
+              children: [{ text: '' }],
+            },
+          ],
         },
         {
           type: ELEMENT_TR,
@@ -431,7 +470,12 @@ it('makes table have at least one row', () => {
       children: [
         {
           type: ELEMENT_TABLE_CAPTION,
-          children: [{ text: '' }],
+          children: [
+            {
+              type: ELEMENT_TABLE_VARIABLE_NAME,
+              children: [{ text: '' }],
+            },
+          ],
         },
         {
           type: ELEMENT_TR,
@@ -463,7 +507,12 @@ it('makes table have at least one row', () => {
       children: [
         {
           type: ELEMENT_TABLE_CAPTION,
-          children: [{ text: '' }],
+          children: [
+            {
+              type: ELEMENT_TABLE_VARIABLE_NAME,
+              children: [{ text: '' }],
+            },
+          ],
         },
         {
           type: ELEMENT_TR,
@@ -552,7 +601,12 @@ it('normalizes caption, th and td elements to contain only valid characters', ()
       children: [
         {
           type: ELEMENT_TABLE_CAPTION,
-          children: [{ text: 'caption' }],
+          children: [
+            {
+              type: ELEMENT_TABLE_VARIABLE_NAME,
+              children: [{ text: 'caption' }],
+            },
+          ],
         },
         {
           type: ELEMENT_TR,
@@ -581,6 +635,157 @@ it('normalizes caption, th and td elements to contain only valid characters', ()
             {
               type: ELEMENT_TD,
               children: [{ text: '' }],
+            },
+          ],
+        },
+      ],
+    },
+  ]);
+});
+
+it('creates caption formulas when missing', () => {
+  editor.children = [
+    {
+      type: ELEMENT_TABLE,
+      children: [
+        {
+          type: ELEMENT_TABLE_CAPTION,
+          children: [
+            {
+              type: ELEMENT_TABLE_VARIABLE_NAME,
+              children: [{ text: 'caption' }],
+            },
+          ],
+        },
+        {
+          type: ELEMENT_TR,
+          children: [
+            {
+              id: 'columnforumulaid',
+              type: ELEMENT_TH,
+              cellType: {
+                kind: 'table-formula',
+              },
+              children: [{ text: 'colName1.1' }],
+            },
+          ],
+        },
+        {
+          type: ELEMENT_TR,
+          children: [
+            {
+              type: ELEMENT_TD,
+              children: [{ text: '' }],
+            },
+          ],
+        },
+        {
+          type: ELEMENT_TR,
+          children: [
+            {
+              type: ELEMENT_TD,
+              children: [{ text: '' }],
+            },
+          ],
+        },
+      ],
+    } as TElement,
+  ];
+  Editor.normalize(editor, { force: true });
+
+  expect(editor.children).toMatchObject([
+    {
+      type: 'table',
+      children: [
+        {
+          type: ELEMENT_TABLE_CAPTION,
+          children: [
+            {
+              type: ELEMENT_TABLE_VARIABLE_NAME,
+              children: [
+                {
+                  text: 'caption',
+                },
+              ],
+            },
+            {
+              type: ELEMENT_TABLE_COLUMN_FORMULA,
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              columnId: 'columnforumulaid',
+            },
+          ],
+        },
+        {
+          type: ELEMENT_TR,
+          children: [
+            {
+              type: ELEMENT_TH,
+              cellType: {
+                kind: 'string',
+              },
+              children: [
+                {
+                  text: '',
+                },
+              ],
+            },
+            {
+              type: ELEMENT_TH,
+              cellType: {
+                kind: 'table-formula',
+              },
+              children: [
+                {
+                  text: 'colName1',
+                },
+              ],
+              id: 'columnforumulaid',
+            },
+          ],
+        },
+        {
+          type: ELEMENT_TR,
+          children: [
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: ELEMENT_TD,
+            },
+            {
+              type: ELEMENT_TD,
+              children: [
+                {
+                  text: '',
+                },
+              ],
+            },
+          ],
+        },
+        {
+          type: ELEMENT_TR,
+          children: [
+            {
+              type: ELEMENT_TD,
+              children: [
+                {
+                  text: '',
+                },
+              ],
+            },
+            {
+              type: ELEMENT_TD,
+              children: [
+                {
+                  text: '',
+                },
+              ],
             },
           ],
         },

@@ -4,3 +4,4 @@ export * from './TableRow';
 export * from './TableHeaderCell';
 export * from './TableCell';
 export * from './TableCellUnitLeaf';
+export * from './TableColumnFormula';

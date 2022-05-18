@@ -1,7 +1,8 @@
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
-import { FC, PropsWithChildren, useContext } from 'react';
+import { Children, FC, PropsWithChildren, useContext } from 'react';
 import * as icons from '../../icons';
+import { CodeBlock } from '../../organisms';
 import { cssVar, display, p16Bold, setCssVar } from '../../primitives';
 import { blockAlignment } from '../../styles';
 import { TableStyleContext } from '../../utils';
@@ -51,30 +52,34 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
 }) => {
   const { color, icon, setIcon, setColor } = useContext(TableStyleContext);
   const Icon = icons[icon];
+  const [caption, ...tableFormulaEditors] = Children.toArray(children);
   return (
-    <div css={tableTitleWrapper}>
-      <div contentEditable={false} css={tableIconSizeStyles}>
-        {useIsEditorReadOnly() ? (
-          <Icon />
-        ) : (
-          <IconPopover
-            color={color}
-            trigger={
-              <button>
-                <Icon />
-              </button>
-            }
-            onChangeIcon={setIcon}
-            onChangeColor={setColor}
-          />
-        )}
+    <div>
+      <div css={tableTitleWrapper}>
+        <div contentEditable={false} css={tableIconSizeStyles}>
+          {useIsEditorReadOnly() ? (
+            <Icon />
+          ) : (
+            <IconPopover
+              color={color}
+              trigger={
+                <button>
+                  <Icon />
+                </button>
+              }
+              onChangeIcon={setIcon}
+              onChangeColor={setColor}
+            />
+          )}
+        </div>
+        <div
+          aria-placeholder={empty ? 'TableName' : ''}
+          css={[editableTableCaptionStyles, placeholderStyles]}
+        >
+          {caption}
+        </div>
       </div>
-      <div
-        aria-placeholder={empty ? 'TableName' : ''}
-        css={[editableTableCaptionStyles, placeholderStyles]}
-      >
-        {children}
-      </div>
+      <CodeBlock>{tableFormulaEditors}</CodeBlock>
     </div>
   );
 };

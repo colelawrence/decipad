@@ -7,12 +7,12 @@ import {
 } from '@decipad/editor-types';
 import { createPlateEditor, TElement } from '@udecode/plate';
 import { Editor } from 'slate';
-import { createNormalizeTableFormulasPlugin } from './createNormalizeTableFormulasPlugin';
+import { createNormalizeTableFormulaCellsPlugin } from './createNormalizeTableFormulaCellsPlugin';
 
 let editor: Editor;
 beforeEach(() => {
   editor = createPlateEditor({
-    plugins: [createNormalizeTableFormulasPlugin()],
+    plugins: [createNormalizeTableFormulaCellsPlugin()],
   });
 });
 
@@ -36,7 +36,6 @@ it('cleans existing text in table formula cells', () => {
               type: ELEMENT_TH,
               cellType: {
                 kind: 'table-formula',
-                source: '1 + 1',
               },
               children: [{ text: '' }],
             },

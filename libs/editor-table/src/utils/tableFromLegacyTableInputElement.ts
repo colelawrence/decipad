@@ -11,6 +11,7 @@ import {
   TableInputElement,
   ELEMENT_TABLE_CAPTION,
   TableCaptionElement,
+  ELEMENT_TABLE_VARIABLE_NAME,
 } from '@decipad/editor-types';
 
 export const tableFromLegacyTableInputElement = (
@@ -55,7 +56,13 @@ export const tableFromLegacyTableInputElement = (
   const caption: TableCaptionElement = {
     id: nanoid(),
     type: ELEMENT_TABLE_CAPTION,
-    children: [{ text: tableData.variableName }],
+    children: [
+      {
+        id: nanoid(),
+        type: ELEMENT_TABLE_VARIABLE_NAME,
+        children: [{ text: tableData.variableName }],
+      },
+    ],
   };
 
   return {

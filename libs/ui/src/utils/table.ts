@@ -49,8 +49,6 @@ export function getFormulaType(): Extract<
 > {
   return {
     kind: 'table-formula',
-    // eslint-disable-next-line no-alert
-    source: prompt('Pls write code') ?? '0',
   };
 }
 

@@ -1,9 +1,11 @@
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { blockAlignment } from '../../styles';
+import { cssVar } from '../../primitives';
 
 const codeBlockStyles = css({
-  margin: `${blockAlignment.codeBlock.paddingTop} 0`,
+  border: `1px solid ${cssVar('strongHighlightColor')}`,
+  borderRadius: '10px',
+  backgroundColor: cssVar('highlightColor'),
 });
 
 interface CodeBlockProps {

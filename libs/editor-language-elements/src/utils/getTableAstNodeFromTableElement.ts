@@ -1,4 +1,7 @@
-import { TableElement } from '@decipad/editor-types';
+import {
+  ELEMENT_TABLE_COLUMN_FORMULA,
+  TableElement,
+} from '@decipad/editor-types';
 import { AST, parseOneExpression } from '@decipad/computer';
 import {
   astColumn,
@@ -19,7 +22,16 @@ export const getTableAstNodeFromTableElement = (
 
     const column = (() => {
       if (cellType.kind === 'table-formula') {
-        return formulaSourceToColumn(cellType.source, dataRows.length);
+        const formula = table.children[0].children.find(
+          (child) =>
+            child.type === ELEMENT_TABLE_COLUMN_FORMULA &&
+            child.columnId === th.id
+        );
+
+        return formulaSourceToColumn(
+          formula ? Node.string(formula) : '',
+          dataRows.length
+        );
       }
       const items = dataRows.map((tr) => {
         const td = tr.children[columnIndex];
@@ -35,7 +47,7 @@ export const getTableAstNodeFromTableElement = (
   });
 
   return {
-    name: Node.string(caption),
+    name: Node.string(caption.children[0]),
     expression: astNode('table', ...columns),
   };
 };

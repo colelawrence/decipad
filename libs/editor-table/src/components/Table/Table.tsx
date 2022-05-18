@@ -1,6 +1,9 @@
 import { DraggableBlock } from '@decipad/editor-components';
 import { ELEMENT_TABLE, PlateComponent } from '@decipad/editor-types';
-import { useElementMutatorCallback } from '@decipad/editor-utils';
+import {
+  assertElementType,
+  useElementMutatorCallback,
+} from '@decipad/editor-utils';
 import { organisms } from '@decipad/ui';
 import { AvailableSwatchColor, UserIconKey } from 'libs/ui/src/utils';
 import { useMemo, useState } from 'react';
@@ -12,9 +15,7 @@ import {
 } from '../../contexts/EditorTableContext';
 
 export const Table: PlateComponent = ({ attributes, children, element }) => {
-  if (element?.type !== ELEMENT_TABLE) {
-    throw new Error('Table is meant to render table elements');
-  }
+  assertElementType(element, ELEMENT_TABLE);
   const [deleted, setDeleted] = useState(false);
   const editor = useSlate() as ReactEditor;
 

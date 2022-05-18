@@ -14,6 +14,8 @@ import { IdentifyUserAnalytics } from '../components/IdentifyUserAnalytics';
 import { useApollo } from '../lib/apolloClient';
 import { Router } from '../routes';
 
+require('../suppressSomeReactWarnings');
+
 const inBrowser = typeof window !== 'undefined';
 
 if (inBrowser && process.env.NEXT_PUBLIC_HOTJAR_SITE_ID) {

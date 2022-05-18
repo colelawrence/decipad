@@ -1,6 +1,7 @@
 import {
   ELEMENT_TABLE_CAPTION,
   ELEMENT_TABLE_INPUT,
+  ELEMENT_TABLE_VARIABLE_NAME,
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
@@ -62,7 +63,12 @@ describe('tableFromLegacyTableInputElement', () => {
       children: [
         {
           type: ELEMENT_TABLE_CAPTION,
-          children: [{ text: 'tableVarName' }],
+          children: [
+            {
+              type: ELEMENT_TABLE_VARIABLE_NAME,
+              children: [{ text: 'tableVarName' }],
+            },
+          ],
         },
         {
           children: [

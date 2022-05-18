@@ -1,8 +1,5 @@
-import {
-  BaseElement,
-  ELEMENT_TABLE_CAPTION,
-  PlateComponent,
-} from '@decipad/editor-types';
+import { ELEMENT_TABLE_CAPTION, PlateComponent } from '@decipad/editor-types';
+import { assertElementType } from '@decipad/editor-utils';
 import { molecules } from '@decipad/ui';
 import { Node } from 'slate';
 
@@ -11,14 +8,12 @@ export const TableCaption: PlateComponent = ({
   attributes,
   children,
 }) => {
-  if (!element || (element as BaseElement)?.type !== ELEMENT_TABLE_CAPTION) {
-    throw new Error(
-      `TableCell is meant to render table cells, not ${element?.type}`
-    );
-  }
+  assertElementType(element, ELEMENT_TABLE_CAPTION);
   return (
     <div {...attributes}>
-      <molecules.EditableTableCaption empty={Node.string(element).length === 0}>
+      <molecules.EditableTableCaption
+        empty={Node.string(element.children[0]).length === 0}
+      >
         {children}
       </molecules.EditableTableCaption>
     </div>

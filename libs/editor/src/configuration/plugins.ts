@@ -104,7 +104,7 @@ export const plugins = (computer: Computer): ReturnType<typeof createPlugins> =>
       createVariableDefPlugin(computer),
 
       // tables
-      createTablePlugin(),
+      createTablePlugin(computer),
 
       // plots
       createPlotPlugin(),

@@ -5,6 +5,8 @@ import {
   ELEMENT_TD,
   TableElement,
   ELEMENT_TABLE_CAPTION,
+  ELEMENT_TABLE_VARIABLE_NAME,
+  ELEMENT_TABLE_COLUMN_FORMULA,
 } from '@decipad/editor-types';
 import { F } from '@decipad/editor-utils';
 import { prettyPrintAST } from '@decipad/computer';
@@ -27,7 +29,13 @@ describe('getTableAstNodeFromTableElement', () => {
         {
           id: 'caption',
           type: ELEMENT_TABLE_CAPTION,
-          children: [{ text: 'tableVariableName' }],
+          children: [
+            {
+              id: 'varname',
+              type: ELEMENT_TABLE_VARIABLE_NAME,
+              children: [{ text: 'tableVariableName' }],
+            },
+          ],
         },
         // header row
         {
@@ -151,7 +159,19 @@ describe('getTableAstNodeFromTableElement', () => {
         {
           id: 'caption',
           type: ELEMENT_TABLE_CAPTION,
-          children: [{ text: 'tableVariableName' }],
+          children: [
+            {
+              id: 'varname',
+              type: ELEMENT_TABLE_VARIABLE_NAME,
+              children: [{ text: 'tableVariableName' }],
+            },
+            {
+              id: 'formula',
+              type: ELEMENT_TABLE_COLUMN_FORMULA,
+              columnId: 'th2',
+              children: [{ text: '1 + 1' }],
+            },
+          ],
         },
         // header row
         {
@@ -167,7 +187,7 @@ describe('getTableAstNodeFromTableElement', () => {
             {
               id: 'th2',
               type: ELEMENT_TH,
-              cellType: { kind: 'table-formula', source: '1 + 1' },
+              cellType: { kind: 'table-formula' },
               children: [{ text: 'column2' }],
             },
           ],

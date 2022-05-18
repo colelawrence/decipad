@@ -4,27 +4,32 @@ import {
   ELEMENT_TH,
   ELEMENT_TD,
   ELEMENT_TABLE_CAPTION,
+  ELEMENT_TABLE_COLUMN_FORMULA,
 } from '@decipad/editor-types';
-import { createPluginFactory } from '@udecode/plate';
+import { PlatePlugin } from '@udecode/plate';
+import { Computer } from '@decipad/computer';
+import { decorateTextSyntax } from '@decipad/editor-utils';
 import {
   Table,
   TableRow,
   TableCell,
   TableHeaderCell,
   TableCaption,
+  TableColumnFormula,
 } from '../components';
 import { createArrowCellNavigationPlugin } from './createArrowCellNavigationPlugin';
 import {
   createDecorateTableCellUnitsPlugin,
   decorateTableCellUnits,
 } from './createDecorateTableCellUnitsPlugin';
+import { createNormalizeTableFormulaPlugin } from './createNormalizeTableFormulaPlugin';
 // import { createExtraColumnPlaceholderPlugin } from './createExtraColumnPlaceholderPlugin';
 // import { createExtraRowPlaceholderPlugin } from './createExtraRowPlaceholderPlugin';
-import { createNormalizeTableFormulasPlugin } from './createNormalizeTableFormulasPlugin';
+import { createNormalizeTableFormulaCellsPlugin } from './createNormalizeTableFormulaCellsPlugin';
 import { createNormalizeTablesPlugin } from './createNormalizeTablesPlugin';
 import { createPreventEnterToCreateCellPlugin } from './createPreventEnterToCreateCellPlugin';
 
-export const createTablePlugin = createPluginFactory({
+export const createTablePlugin = (computer: Computer): PlatePlugin => ({
   key: ELEMENT_TABLE,
   isElement: true,
   component: Table,
@@ -35,13 +40,14 @@ export const createTablePlugin = createPluginFactory({
   plugins: [
     createPreventEnterToCreateCellPlugin(),
     createNormalizeTablesPlugin(),
-    createNormalizeTableFormulasPlugin(),
+    createNormalizeTableFormulaCellsPlugin(),
     createDecorateTableCellUnitsPlugin(),
     createArrowCellNavigationPlugin(),
     // TODO: enable this
     // createExtraColumnPlaceholderPlugin(),
     // TODO: enable this
     // createExtraRowPlaceholderPlugin(),
+    createNormalizeTableFormulaPlugin(),
     {
       key: ELEMENT_TABLE_CAPTION,
       isElement: true,
@@ -84,6 +90,12 @@ export const createTablePlugin = createPluginFactory({
           rowSpan: element?.attributes?.rowspan,
         },
       }),
+    },
+    {
+      key: ELEMENT_TABLE_COLUMN_FORMULA,
+      isElement: true,
+      component: TableColumnFormula,
+      decorate: decorateTextSyntax(computer, ELEMENT_TABLE_COLUMN_FORMULA),
     },
   ],
 });

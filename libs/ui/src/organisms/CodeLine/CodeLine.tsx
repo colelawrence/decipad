@@ -15,32 +15,40 @@ import { isTabularType } from '../../utils/results';
 
 const { lineHeight } = codeBlock;
 
-const spacingStyles = css({
-  paddingTop: blockAlignment.codeLine.paddingTop,
-});
+const spacingStyles = (variant: CodeLineProps['variant']) =>
+  css({
+    paddingTop:
+      variant === 'standalone' ? blockAlignment.codeLine.paddingTop : undefined,
+  });
 
 const highlightedLineStyles = {
   borderColor: cssVar('strongerHighlightColor'),
 };
 
-const codeLineStyles = css({
-  backgroundColor: cssVar('highlightColor'),
-  ':hover': highlightedLineStyles,
+const codeLineStyles = (variant: CodeLineProps['variant']) =>
+  css({
+    ...(variant === 'standalone'
+      ? {
+          border: `1px solid ${cssVar('strongHighlightColor')}`,
+          borderRadius: '10px',
+          backgroundColor: cssVar('highlightColor'),
+          padding: '4px 10px',
+        }
+      : {
+          padding: '0px 10px',
+        }),
 
-  border: `1px solid ${cssVar('strongHighlightColor')}`,
-  borderRadius: '10px',
+    ':hover': highlightedLineStyles,
 
-  display: 'grid',
-  gridGap: '0 5%',
-  // `minmax(0, 70%)` prevents a grid blowout when code line is made out of huge consecutive text.
-  gridTemplate: `
+    display: 'grid',
+    gridGap: '0 5%',
+    // `minmax(0, 70%)` prevents a grid blowout when code line is made out of huge consecutive text.
+    gridTemplate: `
     "code            inline-res  " 1fr
     "expanded-res    expanded-res" auto
     /minmax(0, 70%)  25%
   `,
-
-  padding: '4px 10px',
-});
+  });
 
 const inlineStyles = css({
   gridArea: 'inline-res',
@@ -53,13 +61,14 @@ const inlineStyles = css({
   userSelect: 'none',
 });
 
-const codeStyles = css(code, {
-  gridArea: 'code',
-  padding: '3px 0',
-  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
-  lineHeight,
-  whiteSpace: 'pre-wrap',
-});
+const codeStyles = (variant: CodeLineProps['variant']) =>
+  css(code, {
+    gridArea: 'code',
+    padding: variant === 'standalone' ? '3px 0' : undefined,
+    ...setCssVar('currentTextColor', cssVar('strongTextColor')),
+    lineHeight,
+    whiteSpace: 'pre-wrap',
+  });
 
 const inlineResultStyles = css(p14Regular, {
   overflow: 'hidden',
@@ -81,6 +90,7 @@ const expandedResultStyles = css(p14Medium, {
 });
 
 interface CodeLineProps {
+  readonly variant?: 'table' | 'standalone';
   readonly children: ReactNode;
   readonly displayInline?: boolean;
   readonly highlight?: boolean;
@@ -89,6 +99,7 @@ interface CodeLineProps {
 }
 
 export const CodeLine = ({
+  variant = 'standalone',
   children,
   displayInline = false,
   highlight = false,
@@ -108,9 +119,9 @@ export const CodeLine = ({
     hasTypeError || (hasResult && displayInline && !renderExpandedResult);
 
   return (
-    <div css={spacingStyles} spellCheck={false}>
-      <div css={[codeLineStyles, highlight && highlightedLineStyles]}>
-        <code css={codeStyles}>{children}</code>
+    <div css={spacingStyles(variant)} spellCheck={false}>
+      <div css={[codeLineStyles(variant), highlight && highlightedLineStyles]}>
+        <code css={codeStyles(variant)}>{children}</code>
         <div css={inlineStyles} contentEditable={false}>
           {renderInlineResult &&
             !hasSyntaxError &&

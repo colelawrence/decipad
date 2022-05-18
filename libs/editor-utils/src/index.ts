@@ -11,11 +11,14 @@ export * from './getSyntaxErrorRanges';
 export * from './decorateTextSyntax';
 export * from './findPath';
 export * from './findDomNodePath';
-export * from './useElementMutatorCallback';
 export * from './safeDelete';
 export * from './withPath';
 export * from './normalizeIdentifierElement';
 export * from './isDOMNode';
 export * from './hasTarget';
-export * from './useSelection';
 export * from './serializeDocument';
+export * from './assertElementType';
+
+export * from './useElementMutatorCallback';
+export * from './useSelection';
+export * from './useElementAbove';

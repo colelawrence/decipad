@@ -4,17 +4,22 @@ import {
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
+  ELEMENT_TABLE_COLUMN_FORMULA,
   isElement,
   TableElement,
   TableHeaderElement,
   TableRowElement,
+  ELEMENT_TABLE_VARIABLE_NAME,
+  isText,
+  TableVariableNameElement,
 } from '@decipad/editor-types';
 import { normalizeIdentifierElement } from '@decipad/editor-utils';
+import { enumerate } from '@decipad/utils';
+import { nanoid } from 'nanoid';
 import {
   Descendant,
   Editor,
   Element,
-  ElementEntry,
   Node,
   NodeEntry,
   Path,
@@ -35,7 +40,9 @@ const normalizeTableStructure = (
       {
         id: node.id,
         type: ELEMENT_TABLE_CAPTION,
-        children: [{ text: '' }],
+        children: [
+          { type: ELEMENT_TABLE_VARIABLE_NAME, children: [{ text: '' }] },
+        ],
       } as unknown as Node,
       { at: [...path, 0] }
     );
@@ -84,23 +91,35 @@ const normalizeTableStructure = (
   return false;
 };
 
-const normalizeTableCaption = (editor: Editor, entry: NodeEntry): boolean => {
-  const [caption, path] = entry;
-  if (Text.isText(caption)) {
-    Transforms.wrapNodes(
-      editor,
-      {
-        type: ELEMENT_TABLE_CAPTION,
-        children: [caption],
-      } as BaseElement,
-      {
-        at: path,
-      }
-    );
-    return true;
+const normalizeTableCaption = (
+  editor: Editor,
+  entry: NodeEntry<TableElement>
+): boolean => {
+  const [, tablePath] = entry;
+  const [caption] = Node.children(editor, tablePath);
+  for (const [captionChildIndex, captionChild] of enumerate(
+    Node.children(editor, caption[1])
+  )) {
+    if (isText(captionChild[0] as Text)) {
+      Transforms.wrapNodes(
+        editor,
+        {
+          id: nanoid(),
+          type:
+            captionChildIndex === 0
+              ? ELEMENT_TABLE_VARIABLE_NAME
+              : ELEMENT_TABLE_COLUMN_FORMULA,
+          children: [captionChild[0]],
+        } as TableVariableNameElement,
+        { at: captionChild[1] }
+      );
+      return true;
+    }
   }
 
-  return normalizeIdentifierElement(editor, entry as ElementEntry);
+  const [varName] = Node.children(editor, caption[1]);
+  const [varNameText] = Node.children(editor, varName[1]);
+  return normalizeIdentifierElement(editor, varNameText as NodeEntry<Text>);
 };
 
 const normalizeTableHeaderCell = (
@@ -146,13 +165,17 @@ const normalizeTableHeaderCell = (
   let childIndex = -1;
   for (const el of th.children || []) {
     childIndex += 1;
+    if (isElement(el) && el.type === ELEMENT_TABLE_COLUMN_FORMULA) {
+      break;
+    }
     if (!Text.isText(el)) {
       Transforms.unwrapNodes(editor, { at: [...path, childIndex] });
       return true;
     }
   }
 
-  return normalizeIdentifierElement(editor, [th, path]);
+  const [text] = Node.children(editor, path);
+  return normalizeIdentifierElement(editor, text as NodeEntry<Text>);
 };
 
 const normalizeTableHeaderRow = (

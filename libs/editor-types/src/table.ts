@@ -2,6 +2,8 @@ import type { EmptyText } from '.';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
+  ELEMENT_TABLE_COLUMN_FORMULA,
+  ELEMENT_TABLE_VARIABLE_NAME,
   ELEMENT_TABLE_INPUT,
   ELEMENT_TD,
   ELEMENT_TH,
@@ -10,9 +12,19 @@ import {
 import type { BaseElement, Text } from './elements';
 import type { TableCellType, TableData } from './tables-legacy';
 
+export interface TableColumnFormulaElement extends BaseElement {
+  type: typeof ELEMENT_TABLE_COLUMN_FORMULA;
+  columnId: string;
+  children: [Text];
+}
+
+export interface TableVariableNameElement extends BaseElement {
+  type: typeof ELEMENT_TABLE_VARIABLE_NAME;
+  children: [Text];
+}
 export interface TableCaptionElement extends BaseElement {
   type: typeof ELEMENT_TABLE_CAPTION;
-  children: [Text];
+  children: [TableVariableNameElement, ...TableColumnFormulaElement[]];
 }
 export interface TableCellElement extends BaseElement {
   type: typeof ELEMENT_TD;

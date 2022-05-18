@@ -5,7 +5,7 @@ import {
   isText,
 } from '@decipad/editor-types';
 import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
-import { Editor, ElementEntry, NodeEntry, Transforms } from 'slate';
+import { Editor, Node, NodeEntry, Text, Transforms } from 'slate';
 import { normalizeIdentifierElement } from '@decipad/editor-utils';
 
 const normalize =
@@ -36,7 +36,8 @@ const normalize =
       return true;
     }
 
-    return normalizeIdentifierElement(editor, entry as ElementEntry);
+    const [text] = Node.children(editor, path);
+    return normalizeIdentifierElement(editor, text as NodeEntry<Text>);
   };
 
 export const createNormalizeCaptionPlugin = createNormalizerPluginFactory({

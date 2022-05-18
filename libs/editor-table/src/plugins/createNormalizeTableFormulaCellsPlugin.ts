@@ -100,9 +100,8 @@ export const normalizeTableFormulas =
     return false;
   };
 
-export const createNormalizeTableFormulasPlugin = createNormalizerPluginFactory(
-  {
-    name: 'NORMALIZE_TABLE_FORMULAS_PLUGIN',
+export const createNormalizeTableFormulaCellsPlugin =
+  createNormalizerPluginFactory({
+    name: 'NORMALIZE_TABLE_FORMULA_CELLS_PLUGIN',
     plugin: normalizeTableFormulas,
-  }
-);
+  });

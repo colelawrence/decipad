@@ -1,6 +1,9 @@
 import { useUploadDataPlugin } from '@decipad/editor-plugins';
+import { EditorChangeContextProvider } from '@decipad/react-contexts';
 import { EditorPlaceholder } from '@decipad/ui';
 import { Plate, PlateEditor } from '@udecode/plate';
+import { useCallback, useState } from 'react';
+import { Subject } from 'rxjs';
 import * as components from './components';
 
 export interface EditorProps {
@@ -39,13 +42,20 @@ export const Editor = (props: EditorProps) => {
   // Cursor remote presence
   // useCursors(editor);
 
+  const [changeSubject] = useState(() => new Subject<undefined>());
+  const onChange = useCallback(() => {
+    changeSubject.next(undefined);
+  }, [changeSubject]);
+
   if (!loaded || !editor) {
     return <EditorPlaceholder />;
   }
 
   return (
-    <Plate editor={editor}>
-      <InsidePlate {...props} />
-    </Plate>
+    <EditorChangeContextProvider changeSubject={changeSubject}>
+      <Plate editor={editor} onChange={onChange}>
+        <InsidePlate {...props} />
+      </Plate>
+    </EditorChangeContextProvider>
   );
 };

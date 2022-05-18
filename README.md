@@ -120,6 +120,8 @@ To run the backend and the frontend, just copy and past the following command in
 yarn serve:all
 ```
 
+> If you want to suppress some pesky react browser warnings, run `NEXT_PUBLIC_DECI_SUPPRESS_WARNINGS yarn serve:all` instead
+
 ### Testing the project
 
 To run the unit tests for all the monorepos in the project, you can run the following:

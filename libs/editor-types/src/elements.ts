@@ -38,6 +38,8 @@ import {
   TableHeaderRowElement,
   TableRowElement,
   TableCaptionElement,
+  TableColumnFormulaElement,
+  TableVariableNameElement,
 } from './table';
 import { ELEMENT_VARIABLE_DEF } from './element-kinds';
 import {
@@ -162,10 +164,12 @@ export type BlockElement =
   | ColumnsElement
   // Special elements
   | InteractiveElement
+  | InteractiveElement
   // Table elements
   | TableInputElement
   | TableElement
   | TableCaptionElement
+  | TableVariableNameElement
   | TableRowElement
   | TableHeaderRowElement
   | TableHeaderElement
@@ -173,7 +177,7 @@ export type BlockElement =
   | ExpressionElement
   | CaptionElement
   | SliderElement
-  | InteractiveElement;
+  | TableColumnFormulaElement;
 type InlineElement = LinkElement;
 
 export type Element = BlockElement | InlineElement;

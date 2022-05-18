@@ -1,6 +1,7 @@
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
+  ELEMENT_TABLE_VARIABLE_NAME,
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
@@ -18,7 +19,12 @@ const initialTableElement = {
   children: [
     {
       type: ELEMENT_TABLE_CAPTION,
-      children: [{ text: '' }],
+      children: [
+        {
+          type: ELEMENT_TABLE_VARIABLE_NAME,
+          children: [{ text: '' }],
+        },
+      ],
     },
     {
       type: ELEMENT_TR,
@@ -76,7 +82,10 @@ export const insertTableBelow = (
   getAvailableIdentifier: GetAvailableIdentifier
 ): void => {
   const table = clone(initialTableElement) as unknown as TableElement;
-  table.children[0].children[0].text = getAvailableIdentifier('Table', 1);
+  table.children[0].children[0].children[0].text = getAvailableIdentifier(
+    'Table',
+    1
+  );
   table.id = nanoid();
   Transforms.insertNodes(editor, table, {
     at: requirePathBelowBlock(editor, path),
