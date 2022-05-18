@@ -42,7 +42,6 @@ describe('variant prop', () => {
 });
 
 describe.each([
-  ['onConvert', /turn/i],
   ['onCopy', /copy/i],
   ['onDelete', /delete/i],
 ])('%s prop', (prop, text) => {

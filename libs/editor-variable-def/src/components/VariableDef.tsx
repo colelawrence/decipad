@@ -3,14 +3,12 @@ import { organisms } from '@decipad/ui';
 import {
   PlateComponent,
   ELEMENT_VARIABLE_DEF,
-  ELEMENT_CODE_LINE,
   ELEMENT_CAPTION,
   ELEMENT_EXPRESSION,
 } from '@decipad/editor-types';
 import { ReactEditor, useSlate } from 'slate-react';
 import { PlateEditor, serializeHtml } from '@udecode/plate';
 import copy from 'copy-to-clipboard';
-import { Node, Transforms } from 'slate';
 import {
   findPath,
   insertNodeIntoColumns,
@@ -19,7 +17,6 @@ import {
 import { DraggableBlock } from '@decipad/editor-components';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { AvailableSwatchColor } from 'libs/ui/src/utils';
-import { getValueAsTextFromElement } from '../utils/getValueAsTextFromElement';
 
 export const VariableDef: PlateComponent = ({
   attributes,
@@ -33,27 +30,6 @@ export const VariableDef: PlateComponent = ({
 
   const editor = useSlate();
   const readOnly = useIsEditorReadOnly();
-  const onConvert = useCallback(() => {
-    const path = findPath(editor as ReactEditor, element);
-    if (path) {
-      Transforms.delete(editor, { at: path });
-      const varName = Node.string(element.children[0]);
-      const expression = getValueAsTextFromElement(element);
-      Transforms.insertNodes(
-        editor,
-        {
-          id: element.id,
-          type: ELEMENT_CODE_LINE,
-          children: [
-            {
-              text: `${varName} = ${expression}`,
-            },
-          ],
-        } as Node,
-        { at: path }
-      );
-    }
-  }, [editor, element]);
 
   const onDelete = useCallback(() => {
     const path = findPath(editor as ReactEditor, element);
@@ -107,7 +83,6 @@ export const VariableDef: PlateComponent = ({
         onDelete={onDelete}
       >
         <organisms.VariableEditor
-          onConvert={onConvert}
           onDelete={onDelete}
           onCopy={onCopy}
           onAdd={onAdd}

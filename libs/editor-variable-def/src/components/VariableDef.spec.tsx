@@ -1,5 +1,4 @@
 import {
-  ELEMENT_CODE_LINE,
   ELEMENT_COLUMNS,
   ELEMENT_VARIABLE_DEF,
   ELEMENT_CAPTION,
@@ -12,7 +11,6 @@ import userEvent from '@testing-library/user-event';
 import {
   createPlateEditor,
   createPlugins,
-  getText,
   Plate,
   PlateEditor,
   PlatePlugin,
@@ -69,25 +67,6 @@ describe('Variable def expression element', () => {
 
     expect(getByText('var')).toBeVisible();
     expect(getByText('10')).toBeVisible();
-  });
-
-  it('converts element to code block', async () => {
-    const { getByTitle, findByText } = render(
-      <Plate {...plateProps} editor={editor} />,
-      {
-        wrapper,
-      }
-    );
-
-    await userEvent.click(getByTitle(/ellipsis/i), {
-      pointerEventsCheck: 0,
-    });
-    await userEvent.click(await findByText(/turn.+code/i), {
-      pointerEventsCheck: 0,
-    });
-
-    expect(editor.children[0].type).toBe(ELEMENT_CODE_LINE);
-    expect(getText(editor, [0])).toMatchInlineSnapshot(`"var = 10"`);
   });
 
   it('deletes element', async () => {
@@ -174,25 +153,6 @@ describe('Variable def slider element', () => {
     });
 
     expect(getByText('var')).toBeVisible();
-  });
-
-  it('converts element to code block', async () => {
-    const { getByTitle, findByText } = render(
-      <Plate {...plateProps} editor={editor} />,
-      {
-        wrapper,
-      }
-    );
-
-    await userEvent.click(getByTitle(/ellipsis/i), {
-      pointerEventsCheck: 0,
-    });
-    await userEvent.click(await findByText(/turn.+code/i), {
-      pointerEventsCheck: 0,
-    });
-
-    expect(editor.children[0].type).toBe(ELEMENT_CODE_LINE);
-    expect(getText(editor, [0])).toMatchInlineSnapshot(`"var = 5"`);
   });
 
   it('deletes element', async () => {
