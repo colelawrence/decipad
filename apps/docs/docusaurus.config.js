@@ -48,7 +48,7 @@ const config = {
         docs: {
           routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/decipad/documentation/edit/main',
+          /* editUrl: 'https://github.com/decipad/documentation/edit/main',*/
           async sidebarItemsGenerator({
             defaultSidebarItemsGenerator,
             ...args
@@ -59,7 +59,7 @@ const config = {
         },
         blog: {
           showReadingTime: true,
-          editUrl: 'https://github.com/decipad/documentation/edit/main',
+          /* editUrl: 'https://github.com/decipad/documentation/edit/main', */
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
