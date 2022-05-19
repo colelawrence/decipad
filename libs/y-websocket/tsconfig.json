@@ -3,6 +3,6 @@
   "compilerOptions": {
     "lib": ["esnext", "dom"]
   },
-  "include": ["src"],
+  "include": ["src", "src/__fixtures__/*.json"],
   "references": [{ "path": "../utils" }]
 }

@@ -9,16 +9,26 @@ import * as mutex from 'lib0/mutex';
 import { Observable } from 'lib0/observable';
 import * as time from 'lib0/time';
 import debounce from 'lodash.debounce';
-import * as authProtocol from 'y-protocols/auth';
 import * as awarenessProtocol from 'y-protocols/awareness';
 import * as syncProtocol from 'y-protocols/sync';
 import { Doc as YDoc, mergeUpdates } from 'yjs';
+import { messageHandlers } from './messageHandlers';
+import {
+  messageAwareness,
+  MessageHandler,
+  messageQueryAwareness,
+  messageSync,
+  MessageType,
+  TWebSocketProvider,
+} from './types';
+
+export type { TWebSocketProvider };
 
 export interface WSStatus {
   status: 'disconnected' | 'connected' | 'connecting';
 }
 
-interface Options {
+export interface Options {
   readOnly?: boolean;
   connect?: boolean;
   connectBc?: boolean;
@@ -27,15 +37,9 @@ interface Options {
   WebSocketPolyfill?: typeof WebSocket;
   resyncInterval?: number;
   protocol?: string;
-  beforeConnect?: (provider: WebsocketProvider) => Promise<void> | void;
+  beforeConnect?: (provider: TWebSocketProvider) => Promise<void> | void;
   onError?: (err: Error | Event) => void;
 }
-
-type MessageType = 0 | 1 | 2 | 3;
-const messageSync = 0;
-const messageQueryAwareness = 3;
-const messageAwareness = 1;
-const messageAuth = 2;
 
 type ClientId = number;
 
@@ -44,73 +48,6 @@ interface AwarenessUpdate {
   updated: ClientId[];
   removed: ClientId[];
 }
-
-type MessageHandler = (
-  encoder: encoding.Encoder,
-  decoder: decoding.Decoder,
-  provider: WebsocketProvider,
-  emitSynced: boolean,
-  messageType: MessageType
-) => void;
-
-const messageHandlers: MessageHandler[] = [];
-
-messageHandlers[messageSync] = (
-  encoder: encoding.Encoder,
-  decoder: decoding.Decoder,
-  provider: WebsocketProvider,
-  emitSynced: boolean
-) => {
-  encoding.writeVarUint(encoder, messageSync);
-  const syncMessageType = syncProtocol.readSyncMessage(
-    decoder,
-    encoder,
-    provider.doc,
-    provider
-  );
-  if (
-    emitSynced &&
-    syncMessageType === syncProtocol.messageYjsSyncStep2 &&
-    !provider.synced
-  ) {
-    provider.synced = true;
-  }
-};
-
-messageHandlers[messageQueryAwareness] = (
-  encoder: encoding.Encoder,
-  _decoder: decoding.Decoder,
-  provider: WebsocketProvider
-) => {
-  encoding.writeVarUint(encoder, messageAwareness);
-  encoding.writeVarUint8Array(
-    encoder,
-    awarenessProtocol.encodeAwarenessUpdate(
-      provider.awareness,
-      Array.from(provider.awareness.getStates().keys())
-    )
-  );
-};
-
-messageHandlers[messageAwareness] = (
-  _encoder: encoding.Encoder,
-  decoder: decoding.Decoder,
-  provider: WebsocketProvider
-) => {
-  awarenessProtocol.applyAwarenessUpdate(
-    provider.awareness,
-    decoding.readVarUint8Array(decoder),
-    provider
-  );
-};
-
-messageHandlers[messageAuth] = (
-  _encoder: encoding.Encoder,
-  decoder: decoding.Decoder,
-  provider: WebsocketProvider
-) => {
-  authProtocol.readAuthMessage(decoder, provider.doc, permissionDeniedHandler);
-};
 
 const reconnectTimeoutBase = 1200;
 const maxReconnectTimeout = 2500;
@@ -123,18 +60,14 @@ const encodeMessage = (message: Uint8Array): string => {
   return Buffer.from(message).toString('base64');
 };
 
-const permissionDeniedHandler = (provider: WebsocketProvider, reason: string) =>
-  // eslint-disable-next-line no-console
-  console.warn(`Permission denied to access ${provider.url}.\n${reason}`);
-
 const isAcceptableMessage = (buf: string | Buffer | Uint8Array): boolean => {
   return (
     typeof buf === 'string' || Buffer.isBuffer(buf) || buf instanceof Uint8Array
   );
 };
 
-const readMessage = (
-  provider: WebsocketProvider,
+export const readMessage = (
+  provider: TWebSocketProvider,
   buf: string | Uint8Array,
   emitSynced: boolean,
   isBase64Encoded = false
@@ -197,7 +130,7 @@ const readMessage = (
   return undefined;
 };
 
-const setupWS = async (provider: WebsocketProvider) => {
+const setupWS = async (provider: TWebSocketProvider) => {
   const scheduleReconnect = () => {
     // Start with no reconnect timeout and increase timeout by
     // log10(wsUnsuccessfulReconnects).
@@ -354,7 +287,10 @@ const broadcastMessage = (provider: WebsocketProvider, buf: Uint8Array) => {
   }
 };
 
-export class WebsocketProvider extends Observable<string> {
+class WebsocketProvider
+  extends Observable<string>
+  implements TWebSocketProvider
+{
   doc: YDoc;
   protocol: string | undefined;
   beforeConnect: Options['beforeConnect'];
@@ -679,3 +615,10 @@ export class WebsocketProvider extends Observable<string> {
     }
   }
 }
+
+export const createWebsocketProvider = (
+  doc: YDoc,
+  options: Options = {}
+): TWebSocketProvider => {
+  return new WebsocketProvider(doc, options);
+};

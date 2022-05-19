@@ -8,7 +8,10 @@ import {
 } from '@decipad/slate-yjs';
 import { getDefined } from '@decipad/utils';
 import { IndexeddbPersistence } from '@decipad/y-indexeddb';
-import { WebsocketProvider } from '@decipad/y-websocket';
+import {
+  TWebSocketProvider,
+  createWebsocketProvider,
+} from '@decipad/y-websocket';
 import { TEditor } from '@udecode/plate';
 import EventEmitter from 'events';
 import { Awareness } from 'y-protocols/awareness';
@@ -85,7 +88,7 @@ function docSyncEditor<E extends TEditor>(
   shared: YArray<SyncElement>,
   doc: YDoc,
   store: IndexeddbPersistence,
-  ws?: WebsocketProvider
+  ws?: TWebSocketProvider
 ): E & DocSyncEditor {
   const events = new EventEmitter();
   let isConnected = false;
@@ -228,7 +231,7 @@ export function createDocSyncEditor(
   const doc = new YDoc();
   const store = new IndexeddbPersistence(docId, doc);
 
-  const beforeConnect = async (provider: WebsocketProvider) => {
+  const beforeConnect = async (provider: TWebSocketProvider) => {
     try {
       provider.serverUrl = await wsAddress(docId);
       provider.protocol = authSecret || (await fetchToken());
@@ -238,10 +241,10 @@ export function createDocSyncEditor(
     }
   };
 
-  let wsp: WebsocketProvider | undefined;
+  let wsp: TWebSocketProvider | undefined;
   let awareness: Awareness | undefined;
   if (ws) {
-    wsp = new WebsocketProvider(doc, {
+    wsp = createWebsocketProvider(doc, {
       WebSocketPolyfill,
       readOnly,
       connect,

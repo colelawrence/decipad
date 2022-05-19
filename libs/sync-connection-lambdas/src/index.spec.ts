@@ -6,7 +6,11 @@ import { timeout } from '@decipad/utils';
 import waitForExpect from 'wait-for-expect';
 import { Doc as YDoc, Map as YMap, Text as YText } from 'yjs';
 import { testWithSandbox as test } from '../../backend-test-sandbox/src';
-import { WebsocketProvider, WSStatus } from '../../y-websocket/src';
+import {
+  createWebsocketProvider,
+  TWebSocketProvider,
+  WSStatus,
+} from '../../y-websocket/src';
 
 type TextNode = YMap<YText>;
 type Status = 'connecting' | 'connected' | 'disconnected';
@@ -17,7 +21,7 @@ test('connection', (ctx) => {
   let workspace: Workspace;
   let pad: Pad;
   let doc: YDoc;
-  let provider: WebsocketProvider | undefined;
+  let provider: TWebSocketProvider | undefined;
 
   beforeAll(async () => {
     const authRes = await ctx.auth();
@@ -65,7 +69,7 @@ test('connection', (ctx) => {
     const user = await ctx.auth();
     await new Promise<void>((resolve) => {
       doc = new YDoc();
-      provider = new WebsocketProvider(doc, {
+      provider = createWebsocketProvider(doc, {
         protocol: user.token,
         beforeConnect: (p) => {
           // eslint-disable-next-line no-param-reassign
@@ -123,7 +127,7 @@ test('connection', (ctx) => {
     const user = await ctx.auth();
     await new Promise<void>((resolve) => {
       doc = new YDoc();
-      provider = new WebsocketProvider(doc, {
+      provider = createWebsocketProvider(doc, {
         protocol: user.token,
         connectBc: false,
         beforeConnect: (p) => {

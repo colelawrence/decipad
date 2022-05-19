@@ -33,6 +33,8 @@
     "testutils",
     "Topbar",
     "typecheck",
-    "udecode"
+    "udecode",
+    "wsconnected",
+    "wsconnecting"
   ]
 }
