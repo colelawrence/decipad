@@ -177,7 +177,7 @@
     "slate": "^0.78.0",
     "slate-history": "^0.66.0",
     "slate-hyperscript": "^0.77.0",
-    "slate-react": "^0.77.0",
+    "slate-react": "^0.79.0",
     "slug": "^5.1.0",
     "storybook-dark-mode": "^1.0.9",
     "stream-browserify": "^3.0.0",
