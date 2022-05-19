@@ -134,7 +134,7 @@
     "immer": "^9.0.2",
     "is-hotkey": "^0.2.0",
     "isomorphic-fetch": "^3.0.0",
-    "lib0": "^0.2.49",
+    "lib0": "^0.2.51",
     "lodash.debounce": "^4.0.8",
     "lodash.merge": "^4.6.2",
     "lodash.uniqby": "^4.7.0",
@@ -194,7 +194,7 @@
     "vega-lib": "^4.4.0",
     "vega-lite": "^5.2.0",
     "y-protocols": "^1.0.5",
-    "yjs": "^13.5.34"
+    "yjs": "^13.5.38"
   },
   "devDependencies": {
     "@architect/deploy": "^4.0.7",
