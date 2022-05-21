@@ -1,7 +1,8 @@
-import { atoms } from '@decipad/ui';
 import { PlateComponent, RichText } from '@decipad/editor-types';
+import { useComputer, useResult } from '@decipad/react-contexts';
+import { atoms } from '@decipad/ui';
 import { useRef } from 'react';
-import { useResult } from '@decipad/react-contexts';
+import { useObservable } from 'rxjs-hooks';
 
 interface VariableInfo {
   blockId: string;
@@ -23,9 +24,25 @@ export const CodeVariable: CodeLeaf = ({
   const vars = blockResult?.results?.[0]?.visibleVariables;
   const variableMissing = isDeclaration ? false : !vars?.has(variableName);
 
+  const computer = useComputer();
+  const defBlockId = useObservable(() => computer.getBlockId$(variableName));
+
+  const pointyStylesToBeUsed =
+    !isDeclaration && !variableMissing && typeof defBlockId === 'string';
+
   return (
     <span ref={rootRef} {...attributes}>
-      <atoms.CodeVariable variableMissing={variableMissing}>
+      <atoms.CodeVariable
+        setPointyStyles={pointyStylesToBeUsed}
+        variableMissing={variableMissing}
+        onClick={() => {
+          if (pointyStylesToBeUsed) {
+            const el = document.getElementById(defBlockId);
+            el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            el?.focus();
+          }
+        }}
+      >
         {children}
       </atoms.CodeVariable>
     </span>

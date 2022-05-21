@@ -11,11 +11,11 @@ import {
 import { organisms } from '@decipad/ui';
 import { AvailableSwatchColor, UserIconKey } from 'libs/ui/src/utils';
 import { useMemo, useState } from 'react';
-import { useTableActions } from '../../hooks';
 import {
   EditorTableContext,
   EditorTableContextValue,
 } from '../../contexts/EditorTableContext';
+import { useTableActions } from '../../hooks';
 
 export const Table: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_TABLE);
@@ -46,7 +46,7 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
   );
 
   return (
-    <div {...attributes} contentEditable={true}>
+    <div {...attributes} contentEditable={true} id={blockId}>
       {!deleted && (
         <DraggableBlock
           element={element}
