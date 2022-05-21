@@ -28,6 +28,7 @@ import { createNormalizeTableFormulaPlugin } from './createNormalizeTableFormula
 import { createNormalizeTableFormulaCellsPlugin } from './createNormalizeTableFormulaCellsPlugin';
 import { createNormalizeTablesPlugin } from './createNormalizeTablesPlugin';
 import { createPreventEnterToCreateCellPlugin } from './createPreventEnterToCreateCellPlugin';
+import { createPreventDeleteTableFromCaptionPlugin } from './createPreventDeleteTableFromCaptionPlugin';
 
 type Attributes =
   | {
@@ -46,6 +47,7 @@ export const createTablePlugin = (computer: Computer): MyPlatePlugin => ({
   },
   plugins: [
     createPreventEnterToCreateCellPlugin(),
+    createPreventDeleteTableFromCaptionPlugin(),
     createNormalizeTablesPlugin(),
     createNormalizeTableFormulaCellsPlugin(),
     createDecorateTableCellUnitsPlugin(),
