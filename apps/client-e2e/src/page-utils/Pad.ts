@@ -4,6 +4,7 @@ import tables from '@decipad/tables';
 import { nanoid } from 'nanoid';
 import retry from 'p-retry';
 import { timeout, withNewUser } from '../utils';
+import typeSlowly from '../utils/type-slowly';
 import { navigateToPlayground } from './Playground';
 import { clickNewPadButton, navigateToWorkspacePage } from './Workspace';
 
@@ -75,8 +76,10 @@ export async function keyPress(k: string) {
 
 export async function createTable() {
   await keyPress('ArrowDown');
-  await keyPress('Enter'); // And make a new line
-  await page.keyboard.type('/table');
+  await keyPress('Enter');
+  await typeSlowly('/');
+  await keyPress('ArrowRight');
+  await typeSlowly('table');
   await keyPress('Tab');
   await keyPress('Enter');
 }
