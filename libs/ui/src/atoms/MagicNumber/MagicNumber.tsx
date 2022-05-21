@@ -1,20 +1,35 @@
 import { Result } from '@decipad/computer';
+import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { Loading } from '../../icons';
 import { CodeResult } from '../../organisms';
+import { cssVar } from '../../primitives';
 
 type MagicNumberProps = {
   readonly result?: Result | null;
+  readOnly?: boolean;
+  readonly onClick?: () => void;
+  readonly setPointyStyles?: boolean;
 };
+
+const wrapperStyles = css({
+  display: 'inline-flex',
+  cursor: 'pointer',
+});
+
+const baseCreatorStyles = css({
+  color: cssVar('variableHighlightTextColor'),
+});
 
 export const MagicNumber = ({
   result,
+  readOnly = false,
+  onClick = noop,
 }: MagicNumberProps): ReturnType<React.FC> => {
   return (
     <span
-      css={css({
-        display: 'inline-flex',
-      })}
+      onClick={onClick}
+      css={[wrapperStyles, !readOnly && baseCreatorStyles]}
     >
       <span
         title={result ? result.value?.toString() : 'Loading'}

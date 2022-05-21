@@ -1,10 +1,10 @@
-import { ELEMENT_CODE_LINE, PlateComponent } from '@decipad/editor-types';
 import {
   IdentifiedResult,
   isBracketError,
   isSyntaxError,
 } from '@decipad/computer';
-import { useResult, useComputer } from '@decipad/react-contexts';
+import { ELEMENT_CODE_LINE, PlateComponent } from '@decipad/editor-types';
+import { useComputer, useResult } from '@decipad/react-contexts';
 import { docs } from '@decipad/routing';
 import { organisms } from '@decipad/ui';
 import { useSelected } from 'slate-react';
@@ -29,7 +29,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   const syntaxError = getSyntaxError(line);
 
   return (
-    <div {...attributes}>
+    <div {...attributes} id={lineId}>
       <DraggableBlock blockKind="codeLine" element={element}>
         <organisms.CodeLine
           displayInline={!computer.isLiteralValueOrAssignment(statement)}

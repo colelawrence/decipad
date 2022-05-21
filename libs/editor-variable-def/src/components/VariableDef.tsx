@@ -1,19 +1,19 @@
-import { useCallback, useState } from 'react';
-import { organisms } from '@decipad/ui';
+import { DraggableBlock } from '@decipad/editor-components';
 import {
-  PlateComponent,
-  ELEMENT_VARIABLE_DEF,
   ELEMENT_CAPTION,
   ELEMENT_EXPRESSION,
+  ELEMENT_VARIABLE_DEF,
+  PlateComponent,
   useTEditorState,
   VariableDefinitionElement,
 } from '@decipad/editor-types';
-import copy from 'copy-to-clipboard';
-import { findNodePath, PlateEditor, serializeHtml } from '@udecode/plate';
 import { insertNodeIntoColumns, safeDelete } from '@decipad/editor-utils';
-import { DraggableBlock } from '@decipad/editor-components';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
+import { organisms } from '@decipad/ui';
+import { findNodePath, PlateEditor, serializeHtml } from '@udecode/plate';
+import copy from 'copy-to-clipboard';
 import { AvailableSwatchColor } from 'libs/ui/src/utils';
+import { useCallback, useState } from 'react';
 
 export const VariableDef: PlateComponent = ({
   attributes,
@@ -73,7 +73,7 @@ export const VariableDef: PlateComponent = ({
   const { color } = element.children[0];
 
   return (
-    <div {...attributes} contentEditable={true}>
+    <div {...attributes} contentEditable={true} id={element.id}>
       <DraggableBlock
         blockKind="interactive"
         element={element}

@@ -1,26 +1,27 @@
-import produce from 'immer';
-import { AnyMapping, timeout } from '@decipad/utils';
 import {
   AST,
-  InjectableExternalData,
-  buildType as t,
-  Scalar,
-  Column,
-  RuntimeError,
   astNode,
+  buildType as t,
+  Column,
+  InjectableExternalData,
   parseOneStatement,
+  RuntimeError,
+  Scalar,
 } from '@decipad/language';
+import { AnyMapping, timeout } from '@decipad/utils';
+import produce from 'immer';
+import { firstValueFrom } from 'rxjs';
 import {
-  unparsedProgram,
   deeperProgram,
-  programContainingError,
-  simplifyInBlockResults,
-  simplifyComputeResponse,
   getUnparsed,
+  programContainingError,
+  simplifyComputeResponse,
+  simplifyInBlockResults,
+  unparsedProgram,
 } from '../testUtils';
+import { ComputeRequest, UnparsedBlock } from '../types';
 import { ComputationRealm } from './ComputationRealm';
 import { computeProgram, Computer, resultFromError } from './Computer';
-import { ComputeRequest, UnparsedBlock } from '../types';
 
 let computer: Computer;
 beforeEach(() => {
@@ -382,4 +383,40 @@ it('can get a specific variable', async () => {
 
   const foo = await computer.getVariable('Foo');
   expect(foo?.value?.toString()).toBe('30');
+});
+
+it('can get a variable in streaming', async () => {
+  await computeOnTestComputer({
+    program: getUnparsed('Foo = 420'),
+  });
+
+  const fooStream = computer.getVariable$('Foo');
+
+  const firstFoo = await firstValueFrom(fooStream);
+
+  expect(firstFoo?.value?.toString()).toBe('420');
+});
+
+it('can get a variable block id in streaming', async () => {
+  await computeOnTestComputer({
+    program: getUnparsed('Foo = 420'),
+  });
+
+  const fooStream = computer.getBlockId$('Foo');
+
+  const firstFoo = await firstValueFrom(fooStream);
+
+  expect(firstFoo).toBe('block-0');
+});
+
+it('can get a variable block id from a table in streaming', async () => {
+  await computeOnTestComputer({
+    program: getUnparsed('C = 1', 'A = { B = 420 } '),
+  });
+
+  const fooStream = computer.getBlockId$('A.B');
+
+  const firstFoo = await firstValueFrom(fooStream);
+
+  expect(firstFoo).toBe('block-1');
 });

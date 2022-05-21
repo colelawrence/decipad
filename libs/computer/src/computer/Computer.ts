@@ -1,3 +1,24 @@
+import {
+  AST,
+  AutocompleteName,
+  buildType as t,
+  evaluateStatement,
+  ExternalDataMap,
+  inferExpression,
+  inferStatement,
+  isExpression,
+  parseBlock,
+  parseOneBlock,
+  Result,
+  RuntimeError,
+  SerializedUnits,
+  serializeResult,
+  serializeType,
+  serializeUnit,
+  validateResult,
+  Value,
+} from '@decipad/language';
+import { anyMappingToMap, getDefined } from '@decipad/utils';
 import assert from 'assert';
 import { dequal } from 'dequal';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
@@ -8,35 +29,7 @@ import {
   map,
   shareReplay,
 } from 'rxjs/operators';
-
-import { anyMappingToMap, getDefined } from '@decipad/utils';
-import {
-  buildType as t,
-  serializeType,
-  serializeUnit,
-  ExternalDataMap,
-  AutocompleteName,
-  AST,
-  parseOneBlock,
-  SerializedUnits,
-  serializeResult,
-  inferExpression,
-  inferStatement,
-  parseBlock,
-  isExpression,
-  validateResult,
-  Result,
-  evaluateStatement,
-  RuntimeError,
-  Value,
-} from '@decipad/language';
-
 import { captureException } from '../reporting';
-import { ComputationRealm } from './ComputationRealm';
-import { defaultComputerResults } from './defaultComputerResults';
-import { getDelayedBlockId } from './delayErrors';
-import { getVisibleVariables } from './getVisibleVariables';
-import { ParseRet, updateParse } from './parse';
 import {
   ComputePanic,
   ComputeRequest,
@@ -54,6 +47,11 @@ import {
   getGoodBlocks,
   getStatement,
 } from '../utils';
+import { ComputationRealm } from './ComputationRealm';
+import { defaultComputerResults } from './defaultComputerResults';
+import { getDelayedBlockId } from './delayErrors';
+import { getVisibleVariables } from './getVisibleVariables';
+import { ParseRet, updateParse } from './parse';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
 
@@ -291,6 +289,25 @@ export class Computer {
     return type && value
       ? { type: serializeType(type), value: value.getData() }
       : null;
+  }
+
+  getBlockId$(varName: string): Observable<string | undefined> {
+    const mainIdentifier = varName.includes('.') // table.name
+      ? varName.split('.')[0]
+      : varName;
+    return this.results.pipe(
+      map(() => {
+        return this.previouslyParsed.find((p) => {
+          if (p.type === 'identified-block' && p.block.args.length > 0) {
+            const symbol = getDefinedSymbol(p.block.args[0]);
+            return symbol === `var:${mainIdentifier}`;
+          } else {
+            return false;
+          }
+        })?.id;
+      }),
+      distinctUntilChanged()
+    );
   }
 
   getVariable$(varName: string): Observable<Result | null> {
