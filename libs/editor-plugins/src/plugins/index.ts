@@ -13,6 +13,7 @@ export * from './LayoutColumns';
 export * from './Link';
 export * from './Marks';
 export * from './Marks';
+export * from './NewElementIdOnSplit';
 export * from './NormalizeCodeBlock';
 export * from './NormalizeCodeLine';
 export * from './NormalizeColumns';
