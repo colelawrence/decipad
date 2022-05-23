@@ -1,12 +1,14 @@
 name: Run E2E Tests
 
 on:
-  pull_request_review:
-    types: [submitted]
+  push:
+    branches: [main]
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
-    if: github.event.review.state == 'approved'
     runs-on: ubuntu-latest
 
     strategy:
