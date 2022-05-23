@@ -14,7 +14,6 @@ import {
   range,
   date,
   tableDef,
-  funcDef,
   prop,
   fetchData,
   assign,
@@ -27,12 +26,7 @@ import {
 } from '../testUtils';
 import { TableColumn, TableSpread } from '../parser/ast-types';
 
-import {
-  inferStatement,
-  inferExpression,
-  inferFunction,
-  inferProgram,
-} from './index';
+import { inferStatement, inferExpression, inferProgram } from './index';
 import { makeContext } from './context';
 
 let nilCtx = makeContext();
@@ -527,45 +521,6 @@ it('infers conditions', async () => {
   expect((await inferExpression(errorCtx, badConditional)).errorCause).toEqual(
     InferError.expectedButGot(t.string(), t.number())
   );
-});
-
-describe('inferFunction', () => {
-  it('Accepts arguments types and returns a return type', async () => {
-    const functionWithSpecificTypes = funcDef('Fn', ['A'], r('A'));
-
-    expect(
-      await inferFunction(nilCtx, functionWithSpecificTypes, [t.boolean()])
-    ).toEqual(t.boolean());
-  });
-
-  it('disallows wrong argument count', async () => {
-    const unaryFn = funcDef('Fn', ['A'], r('A'));
-
-    let errorCtx = makeContext();
-    expect((await inferFunction(errorCtx, unaryFn, [])).errorCause).toEqual(
-      InferError.expectedArgCount('Fn', 1, 0)
-    );
-
-    errorCtx = makeContext();
-    const badArgumentCountError2 = InferError.expectedArgCount('Fn', 1, 2);
-    expect(
-      (await inferFunction(errorCtx, unaryFn, [t.boolean(), t.string()]))
-        .errorCause
-    ).toEqual(badArgumentCountError2);
-  });
-
-  it("gets a separate stack so as to not see another function's arg", async () => {
-    const funcs = block(
-      funcDef('ShouldFail', [], r('OtherFunctionsArgument')),
-      funcDef('Func', ['OtherFunctionsArgument'], c('ShouldFail')),
-      c('Func', l('string'))
-    );
-
-    const ctx = makeContext();
-    expect((await inferBlock(funcs, ctx)).toString()).toMatch(
-      /OtherFunctionsArgument/
-    );
-  });
 });
 
 describe('inferProgram', () => {

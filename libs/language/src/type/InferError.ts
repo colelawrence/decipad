@@ -11,6 +11,10 @@ export type ErrSpec =
       missingVariable: [name: string];
     }
   | {
+      errType: 'missing-formula';
+      formulaName: string;
+    }
+  | {
       errType: 'expected-but-got';
       expectedButGot: [Type | string, Type | string];
     }
@@ -50,6 +54,10 @@ export type ErrSpec =
       errType: 'cannot-convert-between-units';
       fromUnit: Units;
       toUnit: Units;
+    }
+  | {
+      errType: 'formula-cannot-call-itself';
+      fname: string;
     }
   | {
       errType: 'cannot-convert-to-unit';
@@ -106,6 +114,9 @@ function specToString(spec: ErrSpec): string {
       const [name] = spec.missingVariable;
       return `The variable ${name} is missing`;
     }
+    case 'missing-formula': {
+      return `The formula ${spec.formulaName}() does not exist`;
+    }
     case 'expected-but-got': {
       const [expected, got] = spec.expectedButGot.map((t) =>
         typeof t === 'string' ? t : t.toBasicString()
@@ -153,6 +164,9 @@ function specToString(spec: ErrSpec): string {
       return `Don't know how to convert between units ${stringifyUnits(
         spec.fromUnit
       )} and ${stringifyUnits(spec.toUnit)}`;
+    }
+    case 'formula-cannot-call-itself': {
+      return `Formula ${spec.fname}() cannot use ${spec.fname}()`;
     }
     case 'cannot-convert-to-unit': {
       return `Cannot convert to unit ${stringifyUnits(spec.toUnit)}`;
@@ -210,6 +224,13 @@ export class InferError {
     return new InferError({
       errType: 'missing-variable',
       missingVariable: [varName],
+    });
+  }
+
+  static missingFormula(formulaName: string) {
+    return new InferError({
+      errType: 'missing-formula',
+      formulaName,
     });
   }
 
@@ -296,6 +317,10 @@ export class InferError {
       fromUnit,
       toUnit,
     });
+  }
+
+  static formulaCannotCallItself(fname: string): string | InferError {
+    return new InferError({ errType: 'formula-cannot-call-itself', fname });
   }
 
   static cannotConvertToUnit(toUnit: Units) {

@@ -5,6 +5,7 @@ import {
   getDefinedSymbol,
   getDefinedSymbolAt,
   parseDefName,
+  setIntersection,
 } from './utils';
 
 it('figures out what symbol a statement creates, if any', () => {
@@ -19,6 +20,12 @@ it('figures out what symbol a statement creates, if any', () => {
   expect(getDefinedSymbol(parseOneStatement('Mat[Set]'))).toEqual(null);
   expect(getDefinedSymbol(parseOneStatement('table.Col = 1'))).toEqual(
     'var:table'
+  );
+});
+
+it('intersects two sets of strings', () => {
+  expect(setIntersection(new Set(['1.', '2.']), new Set(['2.', '3.']))).toEqual(
+    new Set(['2.'])
   );
 });
 

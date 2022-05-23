@@ -3,9 +3,8 @@ import pSeries from 'p-series';
 import { AST } from '..';
 import { InferError, Type, build as t, deserializeType } from '../type';
 import { matchUnitArraysForColumn } from '../type/units';
-import { getDefined, zip, getIdentifierString, getOfType } from '../utils';
+import { getDefined, getIdentifierString } from '../utils';
 import { getDateFromAstForm } from '../date';
-import { callBuiltinFunctor } from '../builtins';
 import { resolve as resolveData } from '../data';
 import { expandDirectiveToType } from '../directives';
 import { parseUnit } from '../units';
@@ -18,6 +17,7 @@ import { inferData } from './data';
 import { isPreviousRef } from '../previous-ref';
 import { inferMatrixAssign, inferMatrixRef } from '../matrix';
 import { inferCategories } from '../categories';
+import { inferFunctionDefinition, inferFunctionCall } from './functions';
 
 export { makeContext };
 export type { Context };
@@ -192,23 +192,7 @@ export const inferExpression = wrap(
         return inferMatrixRef(ctx, expr);
       }
       case 'function-call': {
-        const fName = getIdentifierString(expr.args[0]);
-        const fArgs = getOfType('argument-list', expr.args[1]).args;
-        const givenArguments: Type[] = await pSeries(
-          fArgs.map((arg) => () => inferExpression(ctx, arg))
-        );
-
-        if (fName === 'previous') {
-          return givenArguments[0];
-        }
-
-        const functionDefinition = ctx.functionDefinitions.get(fName);
-
-        if (functionDefinition != null) {
-          return inferFunction(ctx, functionDefinition, givenArguments);
-        } else {
-          return callBuiltinFunctor(ctx, fName, givenArguments, fArgs);
-        }
+        return inferFunctionCall(ctx, expr);
       }
       case 'fetch-data': {
         const [url, contentType] = expr.args;
@@ -233,38 +217,6 @@ export const inferExpression = wrap(
     }
   }
 );
-
-export const inferFunction = async (
-  ctx: Context,
-  func: AST.FunctionDefinition,
-  givenArguments: Type[]
-): Promise<Type> => {
-  return ctx.stack.withPushCall(async () => {
-    const [fName, fArgs, fBody] = func.args;
-
-    if (givenArguments.length !== fArgs.args.length) {
-      const error = InferError.expectedArgCount(
-        getIdentifierString(fName),
-        fArgs.args.length,
-        givenArguments.length
-      );
-
-      return t.impossible(error);
-    }
-
-    for (const [argDef, arg] of zip(fArgs.args, givenArguments)) {
-      ctx.stack.set(getIdentifierString(argDef), arg);
-    }
-
-    let returned;
-    for (const statement of fBody.args) {
-      // eslint-disable-next-line no-await-in-loop
-      returned = await inferStatement(ctx, statement);
-    }
-
-    return getDefined(returned, 'panic: function did not return');
-  });
-};
 
 export const inferStatement = wrap(
   async (
@@ -296,11 +248,7 @@ export const inferStatement = wrap(
         return inferCategories(ctx, statement);
       }
       case 'function-definition': {
-        const fName = getIdentifierString(statement.args[0]);
-
-        ctx.functionDefinitions.set(fName, statement);
-
-        return t.functionPlaceholder();
+        return inferFunctionDefinition(ctx, statement);
       }
       default: {
         return inferExpression(ctx, statement);

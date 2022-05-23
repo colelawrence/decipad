@@ -1,5 +1,5 @@
 import { Context } from '..';
-import { Type, build as t } from '../type';
+import { Type, build as t, InferError } from '../type';
 import { automapTypes, automapTypesForReducer } from '../dimtools';
 import { getDefined } from '../utils';
 import { getOperatorByName } from './operators';
@@ -23,7 +23,7 @@ export const callBuiltinFunctor = (
   const op = getOperatorByName(opName);
 
   if (op == null) {
-    return t.impossible(`The operator ${opName} does not exist`);
+    return t.impossible(InferError.missingFormula(opName));
   } else {
     if (op.aliasFor) {
       return callBuiltinFunctor(

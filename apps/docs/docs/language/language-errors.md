@@ -220,6 +220,22 @@ Date + 1 year
 ==> year 2026
 ```
 
+## Formula Cannot Call Itself
+
+:::caution `formula-cannot-call-itself`
+Formula MyFormula() cannot use MyFormula()
+:::
+
+You are trying to call a formula inside the definition for the formula.
+
+```deci live
+MyFormula(Arg) = MyFormula(Arg) + 1
+MyFormula(0)
+==> Formula MyFormula() cannot use MyFormula()
+```
+
+This is not supported.
+
 ## Expected table and associated column
 
 :::caution `expected-table-and-associated-column`
@@ -346,4 +362,25 @@ PocketCash = 100 $
 Coffee = 5 $
 LeftoverCashAfterCoffee = PocketCash - Coffee
 ==> 95 $
+```
+
+## Missing formula
+
+:::caution `missing-formula`
+The formula MyFormula() does not exist
+:::
+
+You attempted to call a formula that isn't available. It might be just a typo, or you forgot to add a custom formula of your own.
+
+```deci live
+MyFormula(1)
+==> The formula MyFormula() does not exist
+```
+
+You can fix it by creating the formula:
+
+```deci live
+MyFormula(X) = X + 1
+MyFormula(1)
+==> 2
 ```

@@ -48,7 +48,7 @@ export const getChangedBlocks = (
 export const findSymbolErrors = (program: AST.Block[]) => {
   const reassigned = new Set<string>();
   const maybeUsedBeforeDef = new Set<string>();
-  const seen = new Set<string>();
+  const seenDefinitions = new Set<string>();
 
   iterProgram(program, (stmt) => {
     const sym = getDefinedSymbol(stmt);
@@ -56,24 +56,24 @@ export const findSymbolErrors = (program: AST.Block[]) => {
     for (const usedSym of findSymbolsUsed(stmt)) {
       if (sym === usedSym) continue;
 
-      if (!seen.has(usedSym)) {
+      if (!seenDefinitions.has(usedSym)) {
         maybeUsedBeforeDef.add(usedSym);
       }
     }
 
     if (sym != null) {
-      if (seen.has(sym)) {
+      if (seenDefinitions.has(sym)) {
         reassigned.add(sym);
       }
 
-      seen.add(sym);
+      seenDefinitions.add(sym);
     }
   });
 
   // It's only used before def, if it's actually defined
-  const usedBeforeDef = setIntersection(maybeUsedBeforeDef, seen);
+  const usedBeforeDef = setIntersection(maybeUsedBeforeDef, seenDefinitions);
 
-  return new Set(Array.from(reassigned).concat(Array.from(usedBeforeDef)));
+  return new Set([...reassigned, ...usedBeforeDef]);
 };
 
 export const findSymbolsAffectedByChange = (
