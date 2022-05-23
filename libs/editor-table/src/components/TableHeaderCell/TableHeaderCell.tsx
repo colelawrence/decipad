@@ -7,6 +7,7 @@ import {
 } from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
 import { organisms } from '@decipad/ui';
+import { assertElementType } from '@decipad/editor-utils';
 import { findNodePath, getNodeEntry, getNodeString } from '@udecode/plate';
 import { Path } from 'slate';
 import { useSelected } from 'slate-react';
@@ -17,9 +18,7 @@ export const TableHeaderCell: PlateComponent = ({
   children,
   element,
 }) => {
-  if (element?.type !== ELEMENT_TH) {
-    throw new Error('TableHeaderCell is meant to render table header cells');
-  }
+  assertElementType(element, ELEMENT_TH);
   const computer = useComputer();
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const editor = useTPlateEditorRef()!;

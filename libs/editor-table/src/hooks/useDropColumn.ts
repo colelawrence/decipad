@@ -1,5 +1,5 @@
 import { MyEditor, MyElement, TableElement } from '@decipad/editor-types';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { DropTargetMonitor, useDrop } from 'react-dnd';
 import {
   findNodePath,
@@ -25,16 +25,6 @@ export const useDropColumn = (
   column: MyElement
 ) => {
   const { onMoveColumn } = useTableActions(editor, table);
-  const [timer, setTimer] = useState(0);
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimer(timer + 1);
-    }, 500);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [timer]);
 
   const findSwappableColumns = useCallback(
     (
@@ -69,39 +59,36 @@ export const useDropColumn = (
     [column, editor, table]
   );
 
-  return useDrop<DragColumnItem, void, CollectedProps>(
-    {
-      accept: 'column',
-      collect: (monitor) => ({
-        isOver: monitor.isOver(),
-        overDirection:
-          (monitor.isOver() && getHoverDirection(editor, monitor, column)) ||
-          undefined,
-      }),
-      hover: (columnItem, monitor) => {
-        const columns = findSwappableColumns(columnItem, monitor);
-        if (columns) {
-          focusEditor(editor);
-          const tablePath = findNodePath(editor, table);
-          if (tablePath) {
-            const thPath = [...tablePath, 1, columns[1]];
-            if (hasNode(editor, thPath)) {
-              const newFocus = getStartPoint(editor, thPath);
-              setSelection(editor, {
-                focus: newFocus,
-                anchor: newFocus,
-              });
-            }
+  return useDrop<DragColumnItem, void, CollectedProps>({
+    accept: 'column',
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      overDirection:
+        (monitor.isOver() && getHoverDirection(editor, monitor, column)) ||
+        undefined,
+    }),
+    hover: (columnItem, monitor) => {
+      const columns = findSwappableColumns(columnItem, monitor);
+      if (columns) {
+        focusEditor(editor);
+        const tablePath = findNodePath(editor, table);
+        if (tablePath) {
+          const thPath = [...tablePath, 1, columns[1]];
+          if (hasNode(editor, thPath)) {
+            const newFocus = getStartPoint(editor, thPath);
+            setSelection(editor, {
+              focus: newFocus,
+              anchor: newFocus,
+            });
           }
         }
-      },
-      drop: (columnItem, monitor) => {
-        const columns = findSwappableColumns(columnItem, monitor);
-        if (columns) {
-          onMoveColumn(...columns);
-        }
-      },
+      }
     },
-    [timer] // every 0.5 seconds this reavaluates
-  );
+    drop: (columnItem, monitor) => {
+      const columns = findSwappableColumns(columnItem, monitor);
+      if (columns) {
+        onMoveColumn(...columns);
+      }
+    },
+  });
 };

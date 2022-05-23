@@ -79,7 +79,9 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
           {caption}
         </div>
       </div>
-      <CodeBlock>{tableFormulaEditors}</CodeBlock>
+      {tableFormulaEditors.length > 0 && (
+        <CodeBlock>{tableFormulaEditors}</CodeBlock>
+      )}
     </div>
   );
 };
