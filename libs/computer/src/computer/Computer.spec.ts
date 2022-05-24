@@ -385,6 +385,18 @@ it('can get a specific variable', async () => {
   expect(foo?.value?.toString()).toBe('30');
 });
 
+it('can get a expression from text in streaming mode', async () => {
+  await computeOnTestComputer({
+    program: getUnparsed('Time = 120 minutes'),
+  });
+
+  const TimeStream = computer.expressionResultFromText$('Time in hours');
+
+  const firstTime = await firstValueFrom(TimeStream);
+
+  expect(firstTime?.value?.toString()).toBe('2');
+});
+
 it('can get a variable in streaming', async () => {
   await computeOnTestComputer({
     program: getUnparsed('Foo = 420'),

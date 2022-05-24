@@ -7,6 +7,7 @@ import { cssVar } from '../../primitives';
 
 type MagicNumberProps = {
   readonly result?: Result | null;
+  readonly loadingState?: boolean;
   readOnly?: boolean;
   readonly onClick?: () => void;
   readonly setPointyStyles?: boolean;
@@ -23,6 +24,7 @@ const baseCreatorStyles = css({
 
 export const MagicNumber = ({
   result,
+  loadingState = false,
   readOnly = false,
   onClick = noop,
 }: MagicNumberProps): ReturnType<React.FC> => {
@@ -35,7 +37,7 @@ export const MagicNumber = ({
         title={result ? result.value?.toString() : 'Loading'}
         contentEditable={false}
       >
-        {result && result.type?.kind !== 'type-error' ? (
+        {result && !loadingState ? (
           <CodeResult variant="inline" {...result} />
         ) : (
           <span

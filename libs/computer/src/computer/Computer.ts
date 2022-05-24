@@ -9,6 +9,7 @@ import {
   isExpression,
   parseBlock,
   parseOneBlock,
+  parseOneExpression,
   Result,
   RuntimeError,
   SerializedUnits,
@@ -314,6 +315,48 @@ export class Computer {
     return this.results.pipe(
       map(() => this.getVariable(varName)),
       distinctUntilChanged()
+    );
+  }
+
+  expressionResultFromText$(decilang: string): Observable<Result | null> {
+    const computerExpression = this.expressionResult$(
+      parseOneExpression(decilang)
+    );
+    return computerExpression;
+  }
+
+  expressionResult$(expression: AST.Expression): Observable<Result> {
+    return this.results.pipe(
+      concatMap(async (): Promise<Result> => {
+        const type = await inferExpression(
+          this.computationRealm.inferContext,
+          expression
+        );
+
+        try {
+          const value = await evaluateStatement(
+            this.computationRealm.interpreterRealm,
+            expression
+          );
+
+          return {
+            value: value.getData(),
+            type: serializeType(type),
+          };
+        } catch (err) {
+          return {
+            value: null,
+            type: {
+              kind: 'type-error',
+              errorCause: {
+                errType: 'free-form',
+                message: 'Magic does not believe in errors',
+              },
+            },
+          };
+        }
+      }),
+      distinctUntilChanged(dequal)
     );
   }
 
