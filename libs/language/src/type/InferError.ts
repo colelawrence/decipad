@@ -36,6 +36,10 @@ export type ErrSpec =
   | { errType: 'unexpected-empty-column' }
   | { errType: 'unexpected-empty-table' }
   | {
+      errType: 'forbidden-inside-function';
+      forbiddenThing: 'table' | 'category';
+    }
+  | {
       errType: 'mismatched-specificity';
       expectedSpecificity: Time.Specificity;
       gotSpecificity: Time.Specificity;
@@ -145,6 +149,12 @@ function specToString(spec: ErrSpec): string {
     }
     case 'unexpected-empty-table': {
       return `Unexpected empty table`;
+    }
+    case 'forbidden-inside-function': {
+      const opType = { table: 'Table', category: 'Category' }[
+        spec.forbiddenThing
+      ];
+      return `${opType} operations are forbidden inside functions`;
     }
     case 'mismatched-specificity': {
       const { expectedSpecificity, gotSpecificity } = spec;
@@ -281,6 +291,13 @@ export class InferError {
   static unexpectedEmptyTable() {
     return new InferError({
       errType: 'unexpected-empty-table',
+    });
+  }
+
+  static forbiddenInsideFunction(forbiddenThing: 'table' | 'category') {
+    return new InferError({
+      errType: 'forbidden-inside-function',
+      forbiddenThing,
     });
   }
 

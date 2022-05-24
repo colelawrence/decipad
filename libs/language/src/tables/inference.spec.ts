@@ -3,7 +3,11 @@ import { inferStatement, makeContext } from '../infer';
 import { table, col, n, c, l, r } from '../utils';
 import { build as t } from '../type';
 import { objectToMap } from '../testUtils';
-import { findTableSize, inferTableColumnPerCell } from './inference';
+import {
+  findTableSize,
+  inferTable,
+  inferTableColumnPerCell,
+} from './inference';
 
 const nilCtx = makeContext({
   inAssignment: 'TableName',
@@ -74,6 +78,19 @@ it('gets the table size from a spread', async () => {
     n('table-spread', n('ref', 'SomeExistingTable'))
   );
   expect(await findTableSize(nilCtx, tbl)).toEqual(['SomeExistingTable', 1234]);
+});
+
+it('forbids tables inside functions', async () => {
+  await nilCtx.stack.withPushCall(async () => {
+    const tbl = table({
+      Calculated: n('ref', 'SomeCol'),
+    });
+    expect(
+      (await inferTable(nilCtx, tbl)).errorCause?.spec
+    ).toMatchInlineSnapshot(
+      `ErrSpec:forbidden-inside-function("forbiddenThing" => "table")`
+    );
+  });
 });
 
 describe('table with formulae', () => {

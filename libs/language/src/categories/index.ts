@@ -10,6 +10,10 @@ export const inferCategories = async (
   ctx: Context,
   category: AST.Categories
 ): Promise<Type> => {
+  if (!ctx.stack.isInGlobalScope) {
+    return t.impossible(InferError.forbiddenInsideFunction('category'));
+  }
+
   const [nameExp, contentsExp] = category.args;
 
   const name = getIdentifierString(nameExp);

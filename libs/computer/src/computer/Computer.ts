@@ -284,8 +284,8 @@ export class Computer {
 
   getVariable(varName: string): Result | null {
     const { inferContext, interpreterRealm } = this.computationRealm;
-    const type = inferContext.stack.top.get(varName);
-    const value = interpreterRealm.stack.top.get(varName);
+    const type = inferContext.stack.get(varName, 'global');
+    const value = interpreterRealm.stack.get(varName, 'global');
     return type && value
       ? { type: serializeType(type), value: value.getData() }
       : null;

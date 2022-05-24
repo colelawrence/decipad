@@ -15,6 +15,10 @@ export async function inferColumnAssign(
   ctx: Context,
   assign: AST.TableColumnAssign
 ) {
+  if (!ctx.stack.isInGlobalScope) {
+    return t.impossible(InferError.forbiddenInsideFunction('table'));
+  }
+
   const [tableNameAst, colNameAst, columnAst] = assign.args;
   const tableName = getIdentifierString(tableNameAst);
   const colName = getIdentifierString(colNameAst);
@@ -68,7 +72,7 @@ export async function inferColumnAssign(
     return updatedTable;
   }
 
-  ctx.stack.globalVariables.set(tableName, updatedTable);
+  ctx.stack.set(tableName, updatedTable, 'global');
 
   return newColumn;
 }

@@ -17,8 +17,8 @@ beforeEach(async () => {
   });
 
   testRealm = new Realm(testContext);
-  testRealm.stack.top.set('City', fromJS(['Lisbon', 'Faro']));
-  testRealm.stack.top.set('CoffeePrice', fromJS([70, 90]));
+  testRealm.stack.set('City', fromJS(['Lisbon', 'Faro']));
+  testRealm.stack.set('CoffeePrice', fromJS([70, 90]));
 });
 
 it('infers sets', async () => {
@@ -29,6 +29,15 @@ it('infers sets', async () => {
   ).toMatchInlineSnapshot(`"<number> x 2 (Name)"`);
 
   expect(testContext.stack.get('Name')).toBeDefined();
+});
+
+it('does not infer inside functions', async () => {
+  await testContext.stack.withPushCall(async () => {
+    expect(
+      (await inferCategories(testContext, categories('Name', col(1, 2))))
+        .errorCause?.spec?.errType
+    ).toMatchInlineSnapshot(`"forbidden-inside-function"`);
+  });
 });
 
 it('does not accept already-existing variable names', async () => {

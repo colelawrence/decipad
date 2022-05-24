@@ -56,6 +56,19 @@ describe('Column assignment inference', () => {
     expect(usingPrevious).toMatchInlineSnapshot(`<number> x 2 (Table)`);
   });
 
+  it('only works in global scope', async () => {
+    ctx.stack.withPushCall(async () => {
+      const error = await inferColumnAssign(
+        ctx,
+        tableColAssign('Table', 'Col2', col(1, 2))
+      );
+
+      expect(error.errorCause?.spec).toMatchInlineSnapshot(
+        `ErrSpec:forbidden-inside-function("forbiddenThing" => "table")`
+      );
+    });
+  });
+
   it('propagates multiple errors', async () => {
     const missingTable = await inferColumnAssign(
       ctx,

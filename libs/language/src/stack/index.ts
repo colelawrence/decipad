@@ -1,5 +1,12 @@
 import { getDefined, AnyMapping, anyMappingToMap } from '@decipad/utils';
-import { immerable } from 'immer';
+
+export type VarGroup =
+  // Global variables
+  | 'global'
+  // Arguments and variables in the current function
+  | 'function'
+  // The temporary scope (and if not found, function and global)
+  | 'lexical';
 
 /**
  * Holds scopes, which are maps of variable names to things like Type,
@@ -13,64 +20,81 @@ import { immerable } from 'immer';
  * temporary scopes and leave only the global variables and a local scope available.
  */
 export class Stack<T> {
-  [immerable] = true;
-
   readonly globalVariables: Map<string, T>;
+
+  /** Current function scope. Cannot be lexically nested */
+  private functionScope: Map<string, T> | undefined = undefined;
+  /** Non-call scopes that can be pushed and popped. Used within tables for storing column names */
   private temporaryScopes: Map<string, T>[] = [];
-  private functionScopes: Map<string, T>[][] = [];
 
   constructor(initialGlobalScope: AnyMapping<T> = new Map()) {
     this.globalVariables = anyMappingToMap(initialGlobalScope);
   }
 
-  *getVisibleScopes() {
-    for (let i = this.temporaryScopes.length - 1; i >= 0; i--) {
-      yield this.temporaryScopes[i];
+  private *getVisibleScopes(varGroup: VarGroup = 'lexical') {
+    if (varGroup === 'lexical') {
+      for (let i = this.temporaryScopes.length - 1; i >= 0; i--) {
+        yield this.temporaryScopes[i];
+      }
+    }
+    if (
+      this.functionScope &&
+      (varGroup === 'lexical' || varGroup === 'function')
+    ) {
+      yield this.functionScope;
     }
     yield this.globalVariables;
   }
 
-  get top(): Map<string, T> {
-    return (
-      this.temporaryScopes[this.temporaryScopes.length - 1] ??
-      this.globalVariables
-    );
+  private getAssignmentScope(varGroup: VarGroup = 'lexical') {
+    if (varGroup === 'lexical' && this.temporaryScopes.length) {
+      return this.temporaryScopes[this.temporaryScopes.length - 1];
+    }
+    if (
+      this.functionScope &&
+      (varGroup === 'function' || varGroup === 'lexical')
+    ) {
+      return this.functionScope;
+    }
+    return this.globalVariables;
   }
 
-  set(varName: string, value: T) {
-    this.top.set(varName, value);
+  get isInGlobalScope() {
+    return !this.functionScope;
   }
 
-  setMulti(variables: Map<string, T>) {
+  set(varName: string, value: T, varGroup: VarGroup = 'lexical') {
+    this.getAssignmentScope(varGroup).set(varName, value);
+  }
+
+  setMulti(variables: Map<string, T>, varGroup: VarGroup = 'lexical') {
     for (const [k, v] of variables.entries()) {
-      this.set(k, v);
+      this.set(k, v, varGroup);
     }
   }
 
-  has(varName: string) {
-    for (const scope of this.getVisibleScopes()) {
+  has(varName: string, varGroup: VarGroup = 'lexical') {
+    for (const scope of this.getVisibleScopes(varGroup)) {
       if (scope.has(varName)) return true;
     }
     return false;
   }
 
-  get(varName: string) {
-    for (const scope of this.getVisibleScopes()) {
+  get(varName: string, varGroup: VarGroup = 'lexical') {
+    for (const scope of this.getVisibleScopes(varGroup)) {
       if (scope.has(varName)) return scope.get(varName);
     }
 
     return null;
   }
 
-  delete(varName: string) {
-    for (const scope of this.getVisibleScopes()) {
+  delete(varName: string, varGroup: VarGroup = 'lexical') {
+    for (const scope of this.getVisibleScopes(varGroup)) {
       if (scope.has(varName)) {
         scope.delete(varName);
         return;
       }
     }
-
-    throw new Error(`panic: deleting an undefined variable ${varName}`);
   }
 
   async withPush<T>(wrapper: () => Promise<T>): Promise<T> {
@@ -84,13 +108,17 @@ export class Stack<T> {
   }
 
   async withPushCall<T>(wrapper: () => Promise<T>): Promise<T> {
-    this.functionScopes.push(this.temporaryScopes);
-    this.temporaryScopes = [new Map()];
+    const preCallTemporaryScopes = this.temporaryScopes;
+    const preCallFunctionScope = this.functionScope;
+
+    this.temporaryScopes = [];
+    this.functionScope = new Map();
 
     try {
       return await wrapper();
     } finally {
-      this.temporaryScopes = getDefined(this.functionScopes.pop());
+      this.temporaryScopes = preCallTemporaryScopes;
+      this.functionScope = preCallFunctionScope;
     }
   }
 }

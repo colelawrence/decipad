@@ -230,12 +230,12 @@ export const inferStatement = wrap(
         const varName = getIdentifierString(nName);
 
         ctx.inAssignment = varName;
-        const type = await (!ctx.stack.top.has(varName)
+        const type = await (!ctx.stack.has(varName, 'function')
           ? inferExpression(ctx, nValue)
           : t.impossible(InferError.duplicatedName(varName)));
         ctx.inAssignment = null;
 
-        ctx.stack.set(varName, type);
+        ctx.stack.set(varName, type, 'function');
         return type;
       }
       case 'table-column-assign': {

@@ -22,7 +22,7 @@ export const getVisibleVariables = (
     if (sym) {
       vars.add(sym);
 
-      const type = inferContext.stack.get(sym);
+      const type = inferContext.stack.get(sym, 'global');
       if (type?.columnNames != null) {
         for (const col of type.columnNames) {
           // Columns are visible within a table

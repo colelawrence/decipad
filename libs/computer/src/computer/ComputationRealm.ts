@@ -59,8 +59,8 @@ export class ComputationRealm {
       const [type, name] = parseDefName(sym);
 
       if (type === 'var') {
-        this.interpreterRealm.stack.globalVariables.delete(name);
-        this.inferContext.stack.globalVariables.delete(name);
+        this.interpreterRealm.stack.delete(name, 'global');
+        this.inferContext.stack.delete(name, 'global');
       } else {
         this.interpreterRealm.functions.delete(name);
         this.inferContext.functionDefinitions.delete(name);
@@ -103,7 +103,7 @@ export class ComputationRealm {
       name,
       type,
     ] of this.inferContext.stack.globalVariables.entries()) {
-      const table = this.interpreterRealm.stack.globalVariables.get(name);
+      const table = this.interpreterRealm.stack.get(name, 'global');
 
       if (table instanceof Table) {
         addLabels(name, table.columns[0], type.columnTypes?.[0]);

@@ -60,6 +60,10 @@ export const findTableSize = async (ctx: Context, table: AST.Table) => {
 };
 
 export const inferTable = async (ctx: Context, table: AST.Table) => {
+  if (!ctx.stack.isInGlobalScope) {
+    return t.impossible(InferError.forbiddenInsideFunction('table'));
+  }
+
   const [indexName, tableLength] = await findTableSize(ctx, table);
 
   return pushStackAndPrevious(ctx, async () => {
@@ -165,7 +169,7 @@ export async function inferTableColumnPerCell(
   const cellType = await pushStackAndPrevious(ctx, async () => {
     // Make other cells in this row available
     for (const [otherColumnName, otherColumn] of otherColumns.entries()) {
-      ctx.stack.top.set(otherColumnName, otherColumn.reduced());
+      ctx.stack.set(otherColumnName, otherColumn.reduced());
     }
 
     return inferExpression(ctx, columnAst);

@@ -56,8 +56,9 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
 
       if (isColumnLike(tableOrColumn)) {
         const originalTable = getInstanceof(
-          getDefined(realm).stack.globalVariables.get(
-            getDefined(tableType.indexedBy)
+          getDefined(realm).stack.get(
+            getDefined(tableType.indexedBy),
+            'global'
           ),
           Table
         );

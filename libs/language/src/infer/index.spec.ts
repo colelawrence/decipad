@@ -537,7 +537,7 @@ describe('inferProgram', () => {
 
     const ctx = await inferProgram(program);
 
-    expect(ctx.stack.top).toEqual(
+    expect(ctx.stack.globalVariables).toEqual(
       objectToMap({
         A: t.number(),
         Error: expect.objectContaining({

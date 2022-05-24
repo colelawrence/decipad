@@ -22,8 +22,8 @@ beforeEach(async () => {
   });
 
   testRealm = new Realm(testContext);
-  testRealm.stack.top.set('City', fromJS(['Lisbon', 'Faro']));
-  testRealm.stack.top.set('CoffeePrice', fromJS([70, 90]));
+  testRealm.stack.set('City', fromJS(['Lisbon', 'Faro']));
+  testRealm.stack.set('CoffeePrice', fromJS([70, 90]));
 });
 
 describe('matrix op evaluation', () => {
