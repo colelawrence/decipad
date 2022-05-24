@@ -96,9 +96,13 @@ function docSyncEditor<E extends TEditor>(
   store.on('synced', function onStoreSynced() {
     events.emit('loaded', 'local');
   });
-  store.on('saved', function onStoreSaved() {
-    events.emit('saved', 'local');
-  });
+  store.on(
+    'saved',
+    function onStoreSaved(_provider: IndexeddbPersistence, isLocal?: boolean) {
+      const source: Source = isLocal ? 'local' : 'remote';
+      events.emit('saved', source);
+    }
+  );
 
   if (ws) {
     ws.on('synced', function onWsSynced(synced: boolean) {
@@ -128,11 +132,11 @@ function docSyncEditor<E extends TEditor>(
 
   store.once('synced', () => {
     let savedCount = 0;
-    events.on('saved', () => {
+    events.on('saved', (ev: Source) => {
       savedCount += 1;
       if (savedCount > 1) {
         savedCount = 1;
-        hasLocalChanges.next(true);
+        if (ev === 'local') hasLocalChanges.next(true);
       }
     });
   });

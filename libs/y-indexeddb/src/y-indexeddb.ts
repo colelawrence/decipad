@@ -149,12 +149,17 @@ export class IndexeddbPersistence extends Observable<string> {
     });
   }
 
-  private async _storeUpdate(update: Uint8Array) {
+  private async _storeUpdate(
+    update: Uint8Array,
+    _origin: unknown,
+    _doc: Y.Doc,
+    tr: Y.Transaction
+  ) {
     await this._mux.push(async () => {
       await this.whenSynced;
       await maybeWithStore(this, true, async (store) => {
         await idb.addAutoKey(store, update);
-        this.emit('saved', [this]);
+        this.emit('saved', [this, tr.local]);
         this._dbsize += 1;
         if (this._dbsize >= PREFERRED_TRIM_SIZE) {
           // debounce store call
