@@ -223,7 +223,7 @@ Date + 1 year
 ## Formula Cannot Call Itself
 
 :::caution `formula-cannot-call-itself`
-Formula MyFormula() cannot use MyFormula()
+MyFormula() cannot be used in its own definition
 :::
 
 You are trying to call a formula inside the definition for the formula.
@@ -231,7 +231,7 @@ You are trying to call a formula inside the definition for the formula.
 ```deci live
 MyFormula(Arg) = MyFormula(Arg) + 1
 MyFormula(0)
-==> Formula MyFormula() cannot use MyFormula()
+==> MyFormula() cannot be used in its own definition
 ```
 
 This is not supported.

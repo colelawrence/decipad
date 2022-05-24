@@ -166,7 +166,7 @@ function specToString(spec: ErrSpec): string {
       )} and ${stringifyUnits(spec.toUnit)}`;
     }
     case 'formula-cannot-call-itself': {
-      return `Formula ${spec.fname}() cannot use ${spec.fname}()`;
+      return `${spec.fname}() cannot be used in its own definition`;
     }
     case 'cannot-convert-to-unit': {
       return `Cannot convert to unit ${stringifyUnits(spec.toUnit)}`;
