@@ -3,7 +3,7 @@ import { useReadOnly } from 'slate-react';
 import {
   ELEMENT_PLOT,
   PlateComponent,
-  useTEditorState
+  useTEditorState,
 } from '@decipad/editor-types';
 import { useComputer, useResult } from '@decipad/react-contexts';
 import { organisms } from '@decipad/ui';

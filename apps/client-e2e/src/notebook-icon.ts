@@ -1,6 +1,7 @@
+import percySnapshot from '@percy/playwright';
 import { setUp } from './page-utils/Pad';
 
-describe('Notebook Icon', () => {
+describe('notebook icon', () => {
   beforeAll(() => setUp());
 
   it('renders the initial color and icon', async () => {
@@ -19,6 +20,8 @@ describe('Notebook Icon', () => {
 
     const green = await page.waitForSelector('button[aria-label="Sulu"]');
     await green?.click();
+
+    await percySnapshot(page, 'UI: Color Picker');
 
     await page.waitForTimeout(200);
 

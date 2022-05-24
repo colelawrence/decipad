@@ -8,5 +8,9 @@ module.exports = {
     require.resolve('@docusaurus/core/lib/babel/preset'),
     '@emotion/babel-preset-css-prop',
   ],
-  plugins: [require.resolve('@emotion/babel-plugin')],
+  plugins: [
+    require.resolve('@emotion/babel-plugin'),
+    ['@babel/plugin-proposal-private-property-in-object', { loose: true }],
+  ],
+  sourceType: 'unambiguous',
 };

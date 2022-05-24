@@ -1,25 +1,25 @@
 import { useWindowListener } from '@decipad/react-utils';
+import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { ComponentProps, FC, useCallback, useEffect, useState } from 'react';
-import { noop } from '@decipad/utils';
 import { SlashCommandsMenuItem } from '../../atoms';
 import {
+  Blockquote,
+  Calculations,
+  Callout,
+  Chart,
+  DatePicker,
+  Divider,
+  Heading1,
+  Heading2,
   Input,
   Slider,
   TableSlash,
-  Calculations,
-  Chart,
-  DatePicker,
-  Heading1,
-  Heading2,
-  Divider,
-  Callout,
-  Blockquote,
 } from '../../icons';
 import { SlashCommandsMenuGroup } from '../../molecules';
 import {
-  offBlack,
   cssVar,
+  offBlack,
   p14Regular,
   setCssVar,
   transparency,
@@ -170,10 +170,14 @@ const groups: ReadonlyArray<SlashCommandGroup> = [
 ];
 
 const styles = css({
-  width: 'max-content',
+  maxWidth: '80vw',
+  maxHeight: '40vh',
+  overflowX: 'hidden',
+  overflowY: 'scroll',
   display: 'grid',
   gridTemplateColumns: 'fit-content(75vw)',
   padding: '12px',
+  marginTop: '30px',
 
   backgroundColor: cssVar('backgroundColor'),
   border: `1px solid ${cssVar('strongHighlightColor')}`,
@@ -250,7 +254,6 @@ export const SlashCommandsMenu = ({
     [focusedCommand, matchingCommands]
   );
   useWindowListener('keydown', onKeyDown, true);
-
   return (
     <div role="menu" aria-orientation="vertical" css={styles}>
       {groupsWithItemsFiltered.map(({ matchingItems, ...group }, i) =>

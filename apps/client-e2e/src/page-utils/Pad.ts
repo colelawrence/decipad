@@ -1,10 +1,10 @@
 import { Pad, User, WorkspaceRecord } from '@decipad/backendtypes';
+import { MyValue } from '@decipad/editor-types';
 import { pads } from '@decipad/services';
 import tables from '@decipad/tables';
 import { nanoid } from 'nanoid';
 import retry from 'p-retry';
 import { timeout, withNewUser } from '../utils';
-import typeSlowly from '../utils/type-slowly';
 import { navigateToPlayground } from './Playground';
 import { clickNewPadButton, navigateToWorkspacePage } from './Workspace';
 
@@ -24,6 +24,26 @@ export async function waitForEditorToLoad(browserPage = page) {
       timeout: 20_000,
     });
   }
+}
+
+export async function createPadFromUpdates(
+  updates: string[],
+  user: User,
+  workspace: WorkspaceRecord
+): Promise<Pad> {
+  const newPad = await pads.create(workspace.id, { name: 'test pad' }, user);
+  const data = await tables();
+  await Promise.all(
+    updates.map((update) =>
+      data.docsyncupdates.put({
+        id: `/pads/${newPad.id}`,
+        seq: `${Date.now()}:${nanoid()}`,
+        data: update,
+      })
+    )
+  );
+
+  return newPad;
 }
 
 export async function setUp(options: SetupOptions = {}) {
@@ -76,10 +96,7 @@ export async function keyPress(k: string) {
 
 export async function createTable() {
   await keyPress('ArrowDown');
-  await keyPress('Enter');
-  await typeSlowly('/');
-  await keyPress('ArrowRight');
-  await typeSlowly('table');
+  await page.keyboard.insertText('/table');
   await keyPress('Tab');
   await keyPress('Enter');
 }
@@ -109,22 +126,18 @@ export async function navigateToNotebookWithClassicUrl(
   );
 }
 
-export async function createPadFromUpdates(
-  updates: string[],
-  user: User,
-  workspace: WorkspaceRecord
-): Promise<Pad> {
-  const newPad = await pads.create(workspace.id, { name: 'test pad' }, user);
-  const data = await tables();
-  await Promise.all(
-    updates.map((update) =>
-      data.docsyncupdates.put({
-        id: `/pads/${newPad.id}`,
-        seq: `${Date.now()}:${nanoid()}`,
-        data: update,
-      })
-    )
-  );
-
-  return newPad;
+export function createNotebook({
+  doc,
+  user,
+  workspace,
+}: {
+  doc: MyValue;
+  user: User;
+  workspace: WorkspaceRecord;
+}): Promise<Pad> {
+  return pads.importDoc({
+    workspaceId: workspace.id,
+    source: doc,
+    user,
+  });
 }

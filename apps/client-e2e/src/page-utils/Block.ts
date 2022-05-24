@@ -1,7 +1,6 @@
 import { timeout } from '@decipad/utils';
 import { ElementHandle } from 'playwright';
 import waitForExpect from 'wait-for-expect';
-import typeSlowly from '../utils/type-slowly';
 
 interface CalculationBlockLine {
   code: string;
@@ -16,7 +15,7 @@ interface CalculationBlock {
 export async function createInputBelow(identifier: string, value: number) {
   await page.click('[contenteditable] p >> nth=-1');
 
-  await typeSlowly('/input');
+  await page.keyboard.insertText('/input');
 
   await waitForExpect(async () =>
     expect(

@@ -21,7 +21,7 @@ export type ShareWithSecretArgs = {
 };
 
 export type ShareWithSecretFunction = (
-  _: any,
+  _: unknown,
   args: ShareWithSecretArgs,
   context: GraphqlContext
 ) => Promise<string>;
@@ -34,8 +34,8 @@ export function shareWithSecret<
 >(
   resourceType: Resource<RecordT, GraphqlT, CreateInputT, UpdateInputT>
 ): ShareWithSecretFunction {
-  return async function (
-    _: any,
+  return async function shareWithSecret(
+    _: unknown,
     args: ShareWithSecretArgs,
     context: GraphqlContext
   ) {

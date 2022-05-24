@@ -1,6 +1,5 @@
 const path = require('path');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
-const { validateThemeConfig } = require('./validateThemeConfig');
 
 function theme() {
   return {
@@ -34,5 +33,3 @@ function theme() {
 }
 
 module.exports = theme;
-
-theme.validateThemeConfig = validateThemeConfig;

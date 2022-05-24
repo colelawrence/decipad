@@ -8,7 +8,11 @@ describe('findDomNodePath', () => {
   it('finds the Slate Node for a DOM Node', () => {
     const editor = withTReact(createTEditor());
     const { getByText } = render(
-      <Slate editor={editor as any} value={[{ text: 'text' }]} onChange={noop}>
+      <Slate
+        editor={editor as never}
+        value={[{ text: 'text' }]}
+        onChange={noop}
+      >
         <Editable />
       </Slate>
     );
