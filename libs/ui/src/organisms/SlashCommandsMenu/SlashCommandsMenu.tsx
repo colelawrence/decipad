@@ -177,7 +177,6 @@ const styles = css({
   display: 'grid',
   gridTemplateColumns: 'fit-content(75vw)',
   padding: '12px',
-  marginTop: '30px',
 
   backgroundColor: cssVar('backgroundColor'),
   border: `1px solid ${cssVar('strongHighlightColor')}`,
