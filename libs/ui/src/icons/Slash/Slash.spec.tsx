@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Slash } from './Slash';
 
 it('renders a slash icon', () => {
-  const { getByTitle } = render(<Slash />);
-  expect(getByTitle(/slash/i)).toBeInTheDocument();
+  render(<Slash />);
+  expect(screen.getByTitle(/slash/i)).toBeInTheDocument();
 });

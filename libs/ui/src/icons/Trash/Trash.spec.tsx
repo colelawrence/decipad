@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Trash } from './Trash';
 
 it('renders a trash icon', () => {
-  const { getByTitle } = render(<Trash />);
-  expect(getByTitle(/trash/i)).toBeInTheDocument();
+  render(<Trash />);
+  expect(screen.getByTitle(/trash/i)).toBeInTheDocument();
 });

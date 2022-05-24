@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Slider } from './Slider';
 
 it('renders a slider icon', () => {
-  const { getByTitle } = render(<Slider />);
-  expect(getByTitle(/slider/i)).toBeInTheDocument();
+  render(<Slider />);
+  expect(screen.getByTitle(/slider/i)).toBeInTheDocument();
 });

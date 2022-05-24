@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { CheckboxUnselected } from './CheckboxUnselected';
 
 it('renders a checkbox unselected icon', () => {
-  const { getByTitle } = render(<CheckboxUnselected />);
-  expect(getByTitle(/unselected/i)).toBeInTheDocument();
+  render(<CheckboxUnselected />);
+  expect(screen.getByTitle(/unselected/i)).toBeInTheDocument();
 });

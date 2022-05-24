@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Crown } from './Crown';
 
 it('renders a crown icon', () => {
-  const { getByTitle } = render(<Crown />);
-  expect(getByTitle(/crown/i)).toBeInTheDocument();
+  render(<Crown />);
+  expect(screen.getByTitle(/crown/i)).toBeInTheDocument();
 });

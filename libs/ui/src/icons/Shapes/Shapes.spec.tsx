@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Shapes } from './Shapes';
 
 it('renders a shapes icon', () => {
-  const { getByTitle } = render(<Shapes />);
-  expect(getByTitle(/shapes/i)).toBeInTheDocument();
+  render(<Shapes />);
+  expect(screen.getByTitle(/shapes/i)).toBeInTheDocument();
 });

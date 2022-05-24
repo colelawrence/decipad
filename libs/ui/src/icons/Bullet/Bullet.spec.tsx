@@ -1,9 +1,9 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Bullet } from './Bullet';
 
 it('renders a bullet icon', () => {
-  const { getByTitle } = render(<Bullet />);
-  expect(getByTitle(/bullet/i)).toBeInTheDocument();
+  render(<Bullet />);
+  expect(screen.getByTitle(/bullet/i)).toBeInTheDocument();
 });
 
 it('cycles through different icons at different depths', () => {

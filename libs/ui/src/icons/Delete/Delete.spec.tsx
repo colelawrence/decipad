@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Delete } from './Delete';
 
 it('renders a delete icon', () => {
-  const { getByTitle } = render(<Delete />);
-  expect(getByTitle(/delete/i)).toBeInTheDocument();
+  render(<Delete />);
+  expect(screen.getByTitle(/delete/i)).toBeInTheDocument();
 });

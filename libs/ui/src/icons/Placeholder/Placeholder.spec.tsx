@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Placeholder } from './Placeholder';
 
 it('renders a placeholder icon', () => {
-  const { getByTitle } = render(<Placeholder />);
-  expect(getByTitle(/placeholder/i)).toBeInTheDocument();
+  render(<Placeholder />);
+  expect(screen.getByTitle(/placeholder/i)).toBeInTheDocument();
 });

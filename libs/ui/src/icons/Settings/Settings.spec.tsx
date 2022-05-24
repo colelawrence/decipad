@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Settings } from './Settings';
 
 it('renders a settings icon', () => {
-  const { getByTitle } = render(<Settings />);
-  expect(getByTitle(/settings/i)).toBeInTheDocument();
+  render(<Settings />);
+  expect(screen.getByTitle(/settings/i)).toBeInTheDocument();
 });

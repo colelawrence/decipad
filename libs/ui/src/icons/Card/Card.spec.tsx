@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Card } from './Card';
 
 it('renders a card icon', () => {
-  const { getByTitle } = render(<Card />);
-  expect(getByTitle(/card/i)).toBeInTheDocument();
+  render(<Card />);
+  expect(screen.getByTitle(/card/i)).toBeInTheDocument();
 });

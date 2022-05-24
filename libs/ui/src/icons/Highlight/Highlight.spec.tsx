@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Highlight } from './Highlight';
 
 it('renders a highlight icon', () => {
-  const { getByTitle } = render(<Highlight />);
-  expect(getByTitle(/highlight/i)).toBeInTheDocument();
+  render(<Highlight />);
+  expect(screen.getByTitle(/highlight/i)).toBeInTheDocument();
 });

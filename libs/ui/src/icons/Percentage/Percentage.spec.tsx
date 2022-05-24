@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Percentage } from './Percentage';
 
 it('renders a percentage icon', () => {
-  const { getByTitle } = render(<Percentage />);
-  expect(getByTitle(/percentage/i)).toBeInTheDocument();
+  render(<Percentage />);
+  expect(screen.getByTitle(/percentage/i)).toBeInTheDocument();
 });

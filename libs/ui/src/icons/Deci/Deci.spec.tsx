@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Deci } from './Deci';
 
 it('renders a deci icon', () => {
-  const { getByTitle } = render(<Deci />);
-  expect(getByTitle(/decipad logo/i)).toBeInTheDocument();
+  render(<Deci />);
+  expect(screen.getByTitle(/decipad logo/i)).toBeInTheDocument();
 });

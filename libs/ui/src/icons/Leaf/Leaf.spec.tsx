@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Leaf } from './Leaf';
 
 it('renders a leaf icon', () => {
-  const { getByTitle } = render(<Leaf />);
-  expect(getByTitle(/leaf/i)).toBeInTheDocument();
+  render(<Leaf />);
+  expect(screen.getByTitle(/leaf/i)).toBeInTheDocument();
 });

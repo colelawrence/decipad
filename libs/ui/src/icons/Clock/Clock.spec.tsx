@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Clock } from './Clock';
 
 it('renders a clock icon', () => {
-  const { getByTitle } = render(<Clock />);
-  expect(getByTitle(/clock/i)).toBeInTheDocument();
+  render(<Clock />);
+  expect(screen.getByTitle(/clock/i)).toBeInTheDocument();
 });

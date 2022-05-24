@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { CheckboxSelected } from './CheckboxSelected';
 
 it('renders a checkbox selected icon', () => {
-  const { getByTitle } = render(<CheckboxSelected />);
-  expect(getByTitle(/selected/i)).toBeInTheDocument();
+  render(<CheckboxSelected />);
+  expect(screen.getByTitle(/selected/i)).toBeInTheDocument();
 });

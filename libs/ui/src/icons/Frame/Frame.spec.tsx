@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Frame } from './Frame';
 
 it('renders a frame icon', () => {
-  const { getByTitle } = render(<Frame />);
-  expect(getByTitle(/frame/i)).toBeInTheDocument();
+  render(<Frame />);
+  expect(screen.getByTitle(/frame/i)).toBeInTheDocument();
 });

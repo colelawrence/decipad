@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Health } from './Health';
 
 it('renders a health icon', () => {
-  const { getByTitle } = render(<Health />);
-  expect(getByTitle(/health/i)).toBeInTheDocument();
+  render(<Health />);
+  expect(screen.getByTitle(/health/i)).toBeInTheDocument();
 });

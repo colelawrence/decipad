@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { TV } from './TV';
 
 it('renders a tv icon', () => {
-  const { getByTitle } = render(<TV />);
-  expect(getByTitle(/tv/i)).toBeInTheDocument();
+  render(<TV />);
+  expect(screen.getByTitle(/tv/i)).toBeInTheDocument();
 });

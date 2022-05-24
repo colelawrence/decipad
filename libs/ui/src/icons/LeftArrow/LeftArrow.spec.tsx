@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { LeftArrow } from './LeftArrow';
 
 it('renders a left arrow icon', () => {
-  const { getByTitle } = render(<LeftArrow />);
-  expect(getByTitle(/left arrow/i)).toBeInTheDocument();
+  render(<LeftArrow />);
+  expect(screen.getByTitle(/left arrow/i)).toBeInTheDocument();
 });

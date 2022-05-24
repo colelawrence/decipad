@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Refresh } from './Refresh';
 
 it('renders a refresh icon', () => {
-  const { getByTitle } = render(<Refresh />);
-  expect(getByTitle(/refresh/i)).toBeInTheDocument();
+  render(<Refresh />);
+  expect(screen.getByTitle(/refresh/i)).toBeInTheDocument();
 });

@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { World } from './World';
 
 it('renders a world icon', () => {
-  const { getByTitle } = render(<World />);
-  expect(getByTitle(/world/i)).toBeInTheDocument();
+  render(<World />);
+  expect(screen.getByTitle(/world/i)).toBeInTheDocument();
 });

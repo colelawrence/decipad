@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { DatePicker } from './DatePicker';
 
 it('renders a deci icon', () => {
-  const { getByTitle } = render(<DatePicker />);
-  expect(getByTitle(/datepicker/i)).toBeInTheDocument();
+  render(<DatePicker />);
+  expect(screen.getByTitle(/datepicker/i)).toBeInTheDocument();
 });

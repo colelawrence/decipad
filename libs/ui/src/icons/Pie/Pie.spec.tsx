@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Pie } from './Pie';
 
 it('renders a pie icon', () => {
-  const { getByTitle } = render(<Pie />);
-  expect(getByTitle(/pie/i)).toBeInTheDocument();
+  render(<Pie />);
+  expect(screen.getByTitle(/pie/i)).toBeInTheDocument();
 });

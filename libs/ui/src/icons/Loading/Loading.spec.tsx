@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Loading } from './Loading';
 
 it('renders a server icon', () => {
-  const { getByTitle } = render(<Loading />);
-  expect(getByTitle(/loading/i)).toBeInTheDocument();
+  render(<Loading />);
+  expect(screen.getByTitle(/loading/i)).toBeInTheDocument();
 });
