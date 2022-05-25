@@ -1,6 +1,5 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { FC } from 'react';
-
 import { MenuWrapper } from '../../test-utils';
 import { TriggerMenuItem } from './TriggerMenuItem';
 
@@ -12,21 +11,21 @@ const wrapper: FC<React.PropsWithChildren<unknown>> = ({ children }) => (
 );
 
 it('renders the children', () => {
-  const { getByText } = render(<TriggerMenuItem>Text</TriggerMenuItem>, {
+  render(<TriggerMenuItem>Text</TriggerMenuItem>, {
     wrapper,
   });
-  expect(getByText('Text')).toBeInTheDocument();
+  expect(screen.getByText('Text')).toBeInTheDocument();
 });
 
 it('renders the right caret icon', () => {
-  const { getByTitle } = render(<TriggerMenuItem>Text</TriggerMenuItem>, {
+  render(<TriggerMenuItem>Text</TriggerMenuItem>, {
     wrapper,
   });
-  expect(getByTitle(/caret right/i)).toBeInTheDocument();
+  expect(screen.getByTitle(/caret right/i)).toBeInTheDocument();
 });
 
 it('renders an optional icon', () => {
-  const { getByTitle } = render(
+  render(
     <TriggerMenuItem
       icon={
         <svg>
@@ -38,5 +37,5 @@ it('renders an optional icon', () => {
     </TriggerMenuItem>,
     { wrapper }
   );
-  expect(getByTitle('Pretty Icon')).toBeInTheDocument();
+  expect(screen.getByTitle('Pretty Icon')).toBeInTheDocument();
 });

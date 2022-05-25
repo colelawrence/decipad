@@ -1,8 +1,8 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { TableData } from './TableData';
 
 it('renders the text', () => {
-  const { getByText } = render(
+  render(
     <table>
       <tbody>
         <tr>
@@ -14,5 +14,5 @@ it('renders the text', () => {
     </table>
   );
 
-  expect(getByText('Td Element')).toBeVisible();
+  expect(screen.getByText('Td Element')).toBeVisible();
 });

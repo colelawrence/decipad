@@ -1,27 +1,27 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { AddNew } from './AddNew';
 
-it('renders children', () => {
-  const { getByText } = render(<AddNew>text</AddNew>);
-  expect(getByText('text')).toBeVisible();
-});
+describe('Add New atom', () => {
+  it('renders children', () => {
+    render(<AddNew>text</AddNew>);
+    expect(screen.getByText('text')).toBeVisible();
+  });
 
-it('renders an add button', () => {
-  const { getByTitle } = render(<AddNew>text</AddNew>);
+  it('renders an add button', () => {
+    render(<AddNew>text</AddNew>);
 
-  const button = getByTitle(/add/i).closest('button');
+    const button = screen.getByTitle(/add/i).closest('button');
 
-  expect(button).toBeInTheDocument();
-});
+    expect(button).toBeInTheDocument();
+  });
 
-describe('onAdd prop', () => {
-  it('gets called when button is clicked', async () => {
+  it('onAdd gets called when button is clicked', async () => {
     const onAdd = jest.fn();
-    const { getByRole } = render(<AddNew onAdd={onAdd}>text</AddNew>);
+    render(<AddNew onAdd={onAdd}>text</AddNew>);
 
     expect(onAdd).toHaveBeenCalledTimes(0);
-    await userEvent.click(getByRole('button', { hidden: true }));
+    await userEvent.click(screen.getByRole('button', { hidden: true }));
     expect(onAdd).toHaveBeenCalledTimes(1);
   });
 });

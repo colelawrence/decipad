@@ -1,6 +1,6 @@
 import { findParentWithStyle } from '@decipad/dom-test-utils';
 import { BlockIsActiveProvider } from '@decipad/react-contexts';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Heading1 } from './Heading1';
 
 it('renders the children', () => {
@@ -10,11 +10,9 @@ it('renders the children', () => {
 
 describe('when active', () => {
   it('has a different background', () => {
-    const { getByText, rerender } = render(
-      <Heading1 Heading="h2">text</Heading1>
-    );
+    const { rerender } = render(<Heading1 Heading="h2">text</Heading1>);
     const normalBoxShadow = findParentWithStyle(
-      getByText('text'),
+      screen.getByText('text'),
       'boxShadow'
     )?.boxShadow;
 
@@ -24,7 +22,7 @@ describe('when active', () => {
       </BlockIsActiveProvider>
     );
     const activeBoxShadow = findParentWithStyle(
-      getByText('text'),
+      screen.getByText('text'),
       'boxShadow'
     )?.boxShadow;
     expect(activeBoxShadow).not.toEqual(normalBoxShadow);

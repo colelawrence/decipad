@@ -1,38 +1,34 @@
-import { ComponentProps } from 'react';
-import { render } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { createMemoryHistory, History } from 'history';
-import { MemoryRouter, Router } from 'react-router-dom';
 import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
 import { mockConsoleWarn } from '@decipad/testutils';
 import { noop } from '@decipad/utils';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { createMemoryHistory, History } from 'history';
+import { ComponentProps } from 'react';
+import { MemoryRouter, Router } from 'react-router-dom';
 import { NavigationItem } from './NavigationItem';
 
 type ExpectedHistory = ComponentProps<typeof Router>['history'];
 
 it('renders the children', () => {
-  const { getByText } = render(
-    <NavigationItem onClick={noop}>Text</NavigationItem>
-  );
-  expect(getByText('Text')).toBeVisible();
+  render(<NavigationItem onClick={noop}>Text</NavigationItem>);
+  expect(screen.getByText('Text')).toBeVisible();
 });
 
 it('can render a button and emit click events', async () => {
   const handleClick = jest.fn();
-  const { getByRole } = render(
-    <NavigationItem onClick={handleClick}>Text</NavigationItem>
-  );
+  render(<NavigationItem onClick={handleClick}>Text</NavigationItem>);
 
-  await userEvent.click(getByRole('button'));
+  await userEvent.click(screen.getByRole('button'));
   expect(handleClick).toHaveBeenCalled();
 });
 it('can render a link with an href', () => {
-  const { getByRole } = render(<NavigationItem href="/">Text</NavigationItem>);
-  expect(getByRole('link')).toHaveAttribute('href', '/');
+  render(<NavigationItem href="/">Text</NavigationItem>);
+  expect(screen.getByRole('link')).toHaveAttribute('href', '/');
 });
 
 it('renders an optional icon', () => {
-  const { getByTitle } = render(
+  render(
     <NavigationItem
       onClick={noop}
       icon={
@@ -44,7 +40,7 @@ it('renders an optional icon', () => {
       Text
     </NavigationItem>
   );
-  expect(getByTitle('Pretty Icon')).toBeInTheDocument();
+  expect(screen.getByTitle('Pretty Icon')).toBeInTheDocument();
 });
 
 describe('with a router', () => {
@@ -54,22 +50,22 @@ describe('with a router', () => {
   afterEach(() => cleanup?.());
 
   it('shows when it is active', async () => {
-    const { getByText } = render(
+    render(
       <MemoryRouter>
         <NavigationItem href="/page">Text</NavigationItem>
       </MemoryRouter>
     );
     cleanup = await applyCssVars();
     const normalBackgroundColor = findParentWithStyle(
-      getByText('Text'),
+      screen.getByText('Text'),
       'backgroundColor'
     )?.backgroundColor;
     cleanup();
 
-    await userEvent.click(getByText('Text'));
+    await userEvent.click(screen.getByText('Text'));
     cleanup = await applyCssVars();
     const activeBackgroundColor = findParentWithStyle(
-      getByText('Text'),
+      screen.getByText('Text'),
       'backgroundColor'
     )?.backgroundColor;
 
@@ -81,7 +77,7 @@ describe('with a router', () => {
       const history: History = createMemoryHistory({
         initialEntries: ['/page'],
       });
-      const { getByText } = render(
+      render(
         <Router history={history as unknown as ExpectedHistory}>
           <NavigationItem exact href="/page">
             Text
@@ -90,7 +86,7 @@ describe('with a router', () => {
       );
       cleanup = await applyCssVars();
       const activeBackgroundColor = findParentWithStyle(
-        getByText('Text'),
+        screen.getByText('Text'),
         'backgroundColor'
       )?.backgroundColor;
       cleanup();
@@ -98,7 +94,7 @@ describe('with a router', () => {
       history.push('/page/child');
       cleanup = await applyCssVars();
       const childBackgroundColor = findParentWithStyle(
-        getByText('Text'),
+        screen.getByText('Text'),
         'backgroundColor'
       )?.backgroundColor;
 

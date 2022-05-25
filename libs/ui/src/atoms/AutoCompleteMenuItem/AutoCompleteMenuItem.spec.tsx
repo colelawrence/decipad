@@ -1,8 +1,8 @@
-import { render } from '@testing-library/react';
+import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
+import { mockConsoleWarn } from '@decipad/testutils';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
-import { mockConsoleWarn } from '@decipad/testutils';
-import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
 import { AutoCompleteMenuItem } from './AutoCompleteMenuItem';
 
 const props: ComponentProps<typeof AutoCompleteMenuItem> = {
@@ -15,12 +15,12 @@ let cleanup: undefined | (() => void);
 afterEach(() => cleanup?.());
 
 it('shows a pseudo-focused state', async () => {
-  const { rerender, getByText } = render(
+  const { rerender } = render(
     <AutoCompleteMenuItem {...props} focused={false} />
   );
   cleanup = await applyCssVars();
   const normalBackgroundColor = findParentWithStyle(
-    getByText('MyVariable'),
+    screen.getByText('MyVariable'),
     'backgroundColor'
   )!.backgroundColor;
   cleanup();
@@ -28,7 +28,7 @@ it('shows a pseudo-focused state', async () => {
   rerender(<AutoCompleteMenuItem {...props} focused />);
   cleanup = await applyCssVars();
   const focusedBackgroundColor = findParentWithStyle(
-    getByText('MyVariable'),
+    screen.getByText('MyVariable'),
     'backgroundColor'
   )!.backgroundColor;
 
@@ -38,11 +38,9 @@ it('shows a pseudo-focused state', async () => {
 describe('an execute event', () => {
   it('is emitted on click', async () => {
     const handleExecute = jest.fn();
-    const { getByText } = render(
-      <AutoCompleteMenuItem {...props} onExecute={handleExecute} />
-    );
+    render(<AutoCompleteMenuItem {...props} onExecute={handleExecute} />);
 
-    await userEvent.click(getByText('MyVariable'));
+    await userEvent.click(screen.getByText('MyVariable'));
     expect(handleExecute).toHaveBeenCalled();
   });
 

@@ -1,6 +1,5 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import domToPlaywright from 'dom-to-playwright';
-
 import { TableData } from './TableData';
 
 afterEach(async () => {
@@ -8,7 +7,7 @@ afterEach(async () => {
 });
 
 it('renders the row number on the first cell', async () => {
-  const { getByText } = render(
+  render(
     <table>
       <tbody>
         <tr>
@@ -20,7 +19,7 @@ it('renders the row number on the first cell', async () => {
   );
   const { select } = await domToPlaywright(page, document);
 
-  const tableDataElement = getByText('Td Element').closest('td')!;
+  const tableDataElement = screen.getByText('Td Element').closest('td')!;
 
   const { content } = await page.$eval(select(tableDataElement), (elem) =>
     getComputedStyle(elem, ':before')
@@ -30,7 +29,7 @@ it('renders the row number on the first cell', async () => {
 });
 
 it('does not render the row number on the second cell', async () => {
-  const { getByText } = render(
+  render(
     <table>
       <tbody>
         <tr>
@@ -42,7 +41,7 @@ it('does not render the row number on the second cell', async () => {
   );
   const { select } = await domToPlaywright(page, document);
 
-  const tableDataElement = getByText('Td Element2').closest('td')!;
+  const tableDataElement = screen.getByText('Td Element2').closest('td')!;
 
   const { content } = await page.$eval(select(tableDataElement), (elem) =>
     getComputedStyle(elem, ':before')

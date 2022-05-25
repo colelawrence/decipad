@@ -1,10 +1,11 @@
-import { render } from '@testing-library/react';
 import { findParentWithStyle } from '@decipad/dom-test-utils';
+import { render, screen } from '@testing-library/react';
 import { Strikethrough } from './Strikethrough';
 
 it('renders the children striked through', () => {
-  const { getByText } = render(<Strikethrough>text</Strikethrough>);
+  render(<Strikethrough>text</Strikethrough>);
   expect(
-    findParentWithStyle(getByText('text'), 'textDecoration')!.textDecoration
+    findParentWithStyle(screen.getByText('text'), 'textDecoration')!
+      .textDecoration
   ).toBe('line-through');
 });

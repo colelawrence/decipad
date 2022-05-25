@@ -1,6 +1,6 @@
 import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
 import { mockConsoleWarn } from '@decipad/testutils';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MenuWrapper as wrapper } from '../../test-utils';
 import { MenuItem } from './MenuItem';
@@ -11,23 +11,20 @@ beforeEach(() => {
 });
 
 it('renders the children', () => {
-  const { getByText } = render(<MenuItem>Text</MenuItem>, { wrapper });
-  expect(getByText('Text')).toBeInTheDocument();
+  render(<MenuItem>Text</MenuItem>, { wrapper });
+  expect(screen.getByText('Text')).toBeInTheDocument();
 });
 
 it('is clickable', async () => {
   const handleSelect = jest.fn();
-  const { getByRole } = render(
-    <MenuItem onSelect={handleSelect}>Text</MenuItem>,
-    { wrapper }
-  );
+  render(<MenuItem onSelect={handleSelect}>Text</MenuItem>, { wrapper });
 
-  await user.click(getByRole('menuitem'));
+  await user.click(screen.getByRole('menuitem'));
   expect(handleSelect).toHaveBeenCalled();
 });
 
 it('renders an optional icon', () => {
-  const { getByTitle } = render(
+  render(
     <MenuItem
       icon={
         <svg>
@@ -39,7 +36,7 @@ it('renders an optional icon', () => {
     </MenuItem>,
     { wrapper }
   );
-  expect(getByTitle('Pretty Icon')).toBeInTheDocument();
+  expect(screen.getByTitle('Pretty Icon')).toBeInTheDocument();
 });
 
 mockConsoleWarn();
@@ -48,21 +45,21 @@ afterEach(() => cleanup?.());
 
 describe('selected prop', () => {
   it('highlights the menu item as selected', async () => {
-    const { getByRole, rerender } = render(<MenuItem>Text</MenuItem>, {
+    const { rerender } = render(<MenuItem>Text</MenuItem>, {
       wrapper,
     });
 
     cleanup = await applyCssVars();
 
     const { backgroundColor: normalBackgroundColor } = findParentWithStyle(
-      getByRole('menuitem'),
+      screen.getByRole('menuitem'),
       'backgroundColor'
     )!;
 
     rerender(<MenuItem selected>Text</MenuItem>);
 
     const { backgroundColor: highlightBackgroundColor } = findParentWithStyle(
-      getByRole('menuitem'),
+      screen.getByRole('menuitem'),
       'backgroundColor'
     )!;
 

@@ -1,37 +1,32 @@
-import userEvent from '@testing-library/user-event';
-import { render } from '@testing-library/react';
 import { noop } from '@decipad/utils';
-
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { IconButton } from './IconButton';
 
 it('renders the button icon', () => {
-  const { getByTitle } = render(
+  render(
     <IconButton onClick={noop}>
       <svg>
         <title>Pretty Icon</title>
       </svg>
     </IconButton>
   );
-  expect(getByTitle('Pretty Icon')).toBeInTheDocument();
+  expect(screen.getByTitle('Pretty Icon')).toBeInTheDocument();
 });
 
 it('emits click events', async () => {
   const handleClick = jest.fn();
-  const { getByRole } = render(
-    <IconButton onClick={handleClick}>icon</IconButton>
-  );
+  render(<IconButton onClick={handleClick}>icon</IconButton>);
 
-  await userEvent.click(getByRole('button'));
+  await userEvent.click(screen.getByRole('button'));
   expect(handleClick).toHaveBeenCalled();
 });
 
 describe('roundedSquare', () => {
   it('changes the border radius', () => {
-    const { rerender, getByRole } = render(
-      <IconButton onClick={noop}>icon</IconButton>
-    );
+    const { rerender } = render(<IconButton onClick={noop}>icon</IconButton>);
     const { borderRadius: normalBorderRadius } = getComputedStyle(
-      getByRole('button')
+      screen.getByRole('button')
     );
 
     rerender(
@@ -40,7 +35,7 @@ describe('roundedSquare', () => {
       </IconButton>
     );
     const { borderRadius: roundedSquareBorderRadius } = getComputedStyle(
-      getByRole('button')
+      screen.getByRole('button')
     );
 
     expect(roundedSquareBorderRadius).not.toEqual(normalBorderRadius);
@@ -49,7 +44,7 @@ describe('roundedSquare', () => {
 
 describe('with an href', () => {
   it('renders as a link', () => {
-    const { getByRole } = render(<IconButton href="/page">icon</IconButton>);
-    expect(getByRole('link')).toHaveAttribute('href', '/page');
+    render(<IconButton href="/page">icon</IconButton>);
+    expect(screen.getByRole('link')).toHaveAttribute('href', '/page');
   });
 });

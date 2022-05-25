@@ -1,10 +1,10 @@
-import { render } from '@testing-library/react';
 import { findParentWithStyle } from '@decipad/dom-test-utils';
+import { render, screen } from '@testing-library/react';
 import { Avatar } from './Avatar';
 
 it('generates a label text', () => {
-  const { getByLabelText } = render(<Avatar name="John Doe" />);
-  expect(getByLabelText(/avatar/i)).toBeVisible();
+  render(<Avatar name="John Doe" />);
+  expect(screen.getByLabelText(/avatar/i)).toBeVisible();
 });
 
 it("shows the user's first initial", () => {
@@ -14,15 +14,15 @@ it("shows the user's first initial", () => {
 
 describe('roundedSquare', () => {
   it('changes the border radius', () => {
-    const { getByText, rerender } = render(<Avatar name="John Doe" />);
+    const { rerender } = render(<Avatar name="John Doe" />);
     const normalBorderRadius = findParentWithStyle(
-      getByText(/.+/),
+      screen.getByText(/.+/),
       'borderRadius'
     );
 
     rerender(<Avatar name="John Doe" roundedSquare />);
     const roundedSquareBorderRadius = findParentWithStyle(
-      getByText(/.+/),
+      screen.getByText(/.+/),
       'borderRadius'
     );
 

@@ -1,8 +1,8 @@
-import { render } from '@testing-library/react';
+import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
+import { mockConsoleWarn } from '@decipad/testutils';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
-import { mockConsoleWarn } from '@decipad/testutils';
-import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
 import { SlashCommandsMenuItem } from './SlashCommandsMenuItem';
 
 const props: ComponentProps<typeof SlashCommandsMenuItem> = {
@@ -17,12 +17,12 @@ let cleanup: undefined | (() => void);
 afterEach(() => cleanup?.());
 
 it('shows a pseudo-focused state', async () => {
-  const { rerender, getByText } = render(
+  const { rerender } = render(
     <SlashCommandsMenuItem {...props} focused={false} title="Title" />
   );
   cleanup = await applyCssVars();
   const normalBackgroundColor = findParentWithStyle(
-    getByText('Title'),
+    screen.getByText('Title'),
     'backgroundColor'
   )!.backgroundColor;
   cleanup();
@@ -30,7 +30,7 @@ it('shows a pseudo-focused state', async () => {
   rerender(<SlashCommandsMenuItem {...props} focused title="Title" />);
   cleanup = await applyCssVars();
   const focusedBackgroundColor = findParentWithStyle(
-    getByText('Title'),
+    screen.getByText('Title'),
     'backgroundColor'
   )!.backgroundColor;
 
@@ -40,7 +40,7 @@ it('shows a pseudo-focused state', async () => {
 describe('an execute event', () => {
   it('is emitted on click', async () => {
     const handleExecute = jest.fn();
-    const { getByText } = render(
+    render(
       <SlashCommandsMenuItem
         {...props}
         title="Title"
@@ -48,7 +48,7 @@ describe('an execute event', () => {
       />
     );
 
-    await userEvent.click(getByText('Title'));
+    await userEvent.click(screen.getByText('Title'));
     expect(handleExecute).toHaveBeenCalled();
   });
 

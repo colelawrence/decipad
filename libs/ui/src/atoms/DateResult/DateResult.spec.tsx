@@ -1,6 +1,5 @@
 import { render } from '@testing-library/react';
 import { runCode } from '../../test-utils';
-
 import { DateResult, formatUTCDate } from './DateResult';
 
 it('renders full date', async () => {

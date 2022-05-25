@@ -1,12 +1,11 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { runCode } from '../../test-utils';
-
 import { NumberResult } from './NumberResult';
 
 it('renders value', async () => {
-  const { getByText } = render(<NumberResult {...await runCode(`10`)} />);
+  render(<NumberResult {...await runCode(`10`)} />);
 
-  expect(getByText('10')).toBeVisible();
+  expect(screen.getByText('10')).toBeVisible();
 });
 
 it('renders negative values', async () => {

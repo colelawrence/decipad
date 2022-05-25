@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Display } from './Display';
 
 it('renders the children', () => {
@@ -7,12 +7,12 @@ it('renders the children', () => {
 });
 
 it('assigns a given placeholder', () => {
-  const { getByText } = render(
+  render(
     <Display Heading="h1" placeholder="text goes here">
       text
     </Display>
   );
-  expect(getByText('text').closest('h1')).toHaveAttribute(
+  expect(screen.getByText('text').closest('h1')).toHaveAttribute(
     'aria-placeholder',
     'text goes here'
   );

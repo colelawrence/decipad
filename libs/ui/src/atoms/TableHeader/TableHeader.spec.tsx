@@ -1,14 +1,14 @@
-import { render } from '@testing-library/react';
-import { TableHeader } from './TableHeader';
+import { render, screen } from '@testing-library/react';
 import {
-  getTypeIcon,
   getDateType,
   getNumberType,
   getStringType,
+  getTypeIcon,
 } from '../../utils';
+import { TableHeader } from './TableHeader';
 
 it('renders the children', () => {
-  const { getByText } = render(
+  render(
     <table>
       <thead>
         <tr>
@@ -18,12 +18,12 @@ it('renders the children', () => {
     </table>
   );
 
-  expect(getByText('Th Element')).toBeVisible();
+  expect(screen.getByText('Th Element')).toBeVisible();
 });
 
 describe('Can render typed icons', () => {
   it('renders default type as string', () => {
-    const { getByText } = render(
+    render(
       <table>
         <thead>
           <tr>
@@ -33,11 +33,11 @@ describe('Can render typed icons', () => {
       </table>
     );
 
-    expect(getByText('Text')).toBeDefined();
+    expect(screen.getByText('Text')).toBeDefined();
   });
 
   it('renders type icon', () => {
-    const { getByText } = render(
+    render(
       <table>
         <thead>
           <tr>
@@ -47,7 +47,7 @@ describe('Can render typed icons', () => {
       </table>
     );
 
-    expect(getByText('Number')).toBeDefined();
+    expect(screen.getByText('Number')).toBeDefined();
   });
 });
 
@@ -60,7 +60,7 @@ describe('type prop', () => {
     ['number', getNumberType(), getTypeIcon(getNumberType())],
     ['string', getStringType(), getTypeIcon(getStringType())],
   ])('renders icon for type %s', (_, type, Icon) => {
-    const { getByTitle } = render(
+    render(
       <table>
         <thead>
           <tr>
@@ -70,6 +70,6 @@ describe('type prop', () => {
       </table>
     );
 
-    expect(getByTitle(new RegExp(Icon.name))).toBeInTheDocument();
+    expect(screen.getByTitle(new RegExp(Icon.name))).toBeInTheDocument();
   });
 });

@@ -1,10 +1,10 @@
-import { render } from '@testing-library/react';
 import { findParentWithStyle } from '@decipad/dom-test-utils';
+import { render, screen } from '@testing-library/react';
 import { InlineCode } from './InlineCode';
 
 it('renders the children as code', () => {
-  const { getByText } = render(<InlineCode>text</InlineCode>);
+  render(<InlineCode>text</InlineCode>);
   expect(
-    findParentWithStyle(getByText('text'), 'fontFamily')!.fontFamily
+    findParentWithStyle(screen.getByText('text'), 'fontFamily')!.fontFamily
   ).toContain('monospace');
 });
