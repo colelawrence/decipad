@@ -2,9 +2,9 @@
 sidebar_position: 5
 ---
 
-# Notebooks 101
+# Telling Stories
 
-Decipad notebooks bring together thoughts, data and calculations.
+Decipad notebooks are not just for numbers, you can create plain text documents or incorporate data and narratives. Here are some of the tools you can use to build your story.
 
 ## Notebook Title
 
@@ -59,4 +59,4 @@ You've done it! You created your first notebook and now you can share it with th
 
 # Learn More:
 
-- [Explore Numbers and Data](/notebook/explore-numbers-and-data)
+- [Explore Numbers and Data](/notebooks/explore-numbers-and-data)

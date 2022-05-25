@@ -13,6 +13,7 @@ Check out these examples for inspiration. Duplicate any notebook to quick-start 
 - [🚙 Should I buy an electric car?](https://alpha.decipad.com/n/bxTv4RqJC_DCPv3xXLuLX?secret=RFmB4s_xKJQo-K3RMHDnY)
 - [💰 Fee Estimate for Consulting Projects](https://alpha.decipad.com/n/-Consulting-Projects-Fee-Estimation%3A8Kx9X0612rXUElUSVFl0S?secret=qdQBEsgCdMvnh-D6_JGxp)
 - [👗 Emily in Paris](https://alpha.decipad.com/n/Emily-in-Paris%3AmCTaRvBPOskMxCEKeKKxt?secret=Zhm1ToqvarE6ZzXHJU2Cn)
+- [💸 Simple Cashflow](https://alpha.decipad.com/n/Simple-Cashflow%3Ak1Zw0l2QmvbU5DIJ_XWxu?secret=vgzyDwDdJhTNN1SccetIe)
 
 ## Hobbies
 
