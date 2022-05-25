@@ -22,7 +22,8 @@ async function sendVerificationRequest(
   const { identifier: email, url, token, baseUrl } = verificationRequest;
 
   if (process.env.ARC_ENV !== 'production') {
-    console.log('validation link:', url);
+    console.log('validation link:');
+    console.log(url);
   }
 
   await arc.queues.publish({
