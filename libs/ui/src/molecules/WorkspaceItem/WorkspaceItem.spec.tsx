@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { ComponentProps } from 'react';
 import { WorkspaceItem } from './WorkspaceItem';
 
@@ -9,17 +9,13 @@ const props: ComponentProps<typeof WorkspaceItem> = {
 };
 
 it('shows the workspace name', () => {
-  const { getByText } = render(
-    <WorkspaceItem {...props} name="Some Workspace" />
-  );
-  expect(getByText('Some Workspace')).toBeVisible();
+  render(<WorkspaceItem {...props} name="Some Workspace" />);
+  expect(screen.getByText('Some Workspace')).toBeVisible();
 });
 
 it('renders an avatar with the initial of the workspace', () => {
-  const { getByLabelText } = render(
-    <WorkspaceItem {...props} name="Some Workspace" />
-  );
-  expect(getByLabelText(/avatar/i)).toHaveTextContent(/^s$/i);
+  render(<WorkspaceItem {...props} name="Some Workspace" />);
+  expect(screen.getByLabelText(/avatar/i)).toHaveTextContent(/^s$/i);
 });
 
 it.each([
@@ -27,8 +23,6 @@ it.each([
   [1, 'member'],
   [2, 'members'],
 ])('shows that there is/are %i member(s)', (numberOfMembers, pluralization) => {
-  const { getByText } = render(
-    <WorkspaceItem {...props} numberOfMembers={numberOfMembers} />
-  );
-  expect(getByText(`${numberOfMembers} ${pluralization}`)).toBeVisible();
+  render(<WorkspaceItem {...props} numberOfMembers={numberOfMembers} />);
+  expect(screen.getByText(`${numberOfMembers} ${pluralization}`)).toBeVisible();
 });

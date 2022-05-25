@@ -1,23 +1,22 @@
-import { render } from '@testing-library/react';
 import { mockConsoleError } from '@decipad/testutils';
-
 import { noop } from '@decipad/utils';
+import { render, screen } from '@testing-library/react';
 import { NavigationItem } from '../../atoms';
 import { NavigationList } from './NavigationList';
 
 mockConsoleError();
 
 it('renders a list', () => {
-  const { getByRole } = render(
+  render(
     <NavigationList>
       <NavigationItem onClick={noop}>Item 1</NavigationItem>
     </NavigationList>
   );
-  expect(getByRole('list')).toBeVisible();
+  expect(screen.getByRole('list')).toBeVisible();
 });
 
 it('renders each child as a list item', () => {
-  const { getAllByRole } = render(
+  render(
     <NavigationList>
       <NavigationItem onClick={noop}>Item 1</NavigationItem>
       {null}
@@ -26,7 +25,7 @@ it('renders each child as a list item', () => {
     </NavigationList>
   );
   expect(
-    getAllByRole('listitem').map(({ textContent }) => textContent)
+    screen.getAllByRole('listitem').map(({ textContent }) => textContent)
   ).toEqual(['Item 1', 'Item 2']);
 });
 

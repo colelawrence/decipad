@@ -1,10 +1,8 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { EditableTableCaption } from './EditableTableCaption';
 
 it('renders the text', () => {
-  const { getByText } = render(
-    <EditableTableCaption>TableName</EditableTableCaption>
-  );
+  render(<EditableTableCaption>TableName</EditableTableCaption>);
 
-  expect(getByText('TableName')).toBeVisible();
+  expect(screen.getByText('TableName')).toBeVisible();
 });

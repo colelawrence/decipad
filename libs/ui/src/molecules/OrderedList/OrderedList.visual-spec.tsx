@@ -1,9 +1,9 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import domToPlaywright from 'dom-to-playwright';
 import { OrderedList } from './OrderedList';
 
 it('numbers the list items', async () => {
-  const { getByText } = render(
+  render(
     <OrderedList>
       <div>Item 1</div>
       <div>Item 2</div>
@@ -12,7 +12,7 @@ it('numbers the list items', async () => {
   const { select } = await domToPlaywright(page, document);
 
   const listItem = await page.waitForSelector(
-    select(getByText('Item 2').closest('li')!),
+    select(screen.getByText('Item 2').closest('li')!),
     { state: 'attached' }
   );
   const { content } = await listItem.evaluate((elem) =>
@@ -22,7 +22,7 @@ it('numbers the list items', async () => {
 });
 
 it('aligns the list items', async () => {
-  const { getByText } = render(
+  render(
     <OrderedList>
       <div>Item 1</div>
       <div>Item 2</div>
@@ -38,8 +38,10 @@ it('aligns the list items', async () => {
   );
   const { select } = await domToPlaywright(page, document);
 
-  const item1 = await page.waitForSelector(select(getByText('Item 1')));
-  const item10 = await page.waitForSelector(select(getByText('Item 10')));
+  const item1 = await page.waitForSelector(select(screen.getByText('Item 1')));
+  const item10 = await page.waitForSelector(
+    select(screen.getByText('Item 10'))
+  );
 
   expect((await item10.boundingBox())!.x).toEqual(
     (await item1.boundingBox())!.x

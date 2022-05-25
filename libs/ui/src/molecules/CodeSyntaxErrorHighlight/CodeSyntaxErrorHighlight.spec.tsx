@@ -1,14 +1,11 @@
-import { ComponentProps } from 'react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-
+import { ComponentProps } from 'react';
 import { CodeSyntaxErrorHighlight } from './CodeSyntaxErrorHighlight';
 
 it('renders children', () => {
-  const { getByText } = render(
-    <CodeSyntaxErrorHighlight>text</CodeSyntaxErrorHighlight>
-  );
-  expect(getByText('text')).toBeVisible();
+  render(<CodeSyntaxErrorHighlight>text</CodeSyntaxErrorHighlight>);
+  expect(screen.getByText('text')).toBeVisible();
 });
 
 it.each<[ComponentProps<typeof CodeSyntaxErrorHighlight>['variant'], RegExp]>([
@@ -18,28 +15,26 @@ it.each<[ComponentProps<typeof CodeSyntaxErrorHighlight>['variant'], RegExp]>([
 ])(
   'renders a message for a %s error when hovering the text',
   async (variant, message) => {
-    const { findByText, getByText, queryByText } = render(
+    render(
       <CodeSyntaxErrorHighlight variant={variant}>
         text
       </CodeSyntaxErrorHighlight>
     );
 
-    expect(queryByText(message)).toBeNull();
+    expect(screen.queryByText(message)).toBeNull();
 
-    await userEvent.hover(getByText('text'));
+    await userEvent.hover(screen.getByText('text'));
 
-    expect(await findByText(message)).toBeInTheDocument();
+    expect(await screen.findByText(message)).toBeInTheDocument();
   }
 );
 
 it('renders a message for a other syntax errors when hovering the text', async () => {
-  const { findByText, getByText, queryByText } = render(
-    <CodeSyntaxErrorHighlight>text</CodeSyntaxErrorHighlight>
-  );
+  render(<CodeSyntaxErrorHighlight>text</CodeSyntaxErrorHighlight>);
 
-  expect(queryByText(/invalid/i)).toBeNull();
+  expect(screen.queryByText(/invalid/i)).toBeNull();
 
-  await userEvent.hover(getByText('text'));
+  await userEvent.hover(screen.getByText('text'));
 
-  expect(await findByText(/invalid/i)).toBeInTheDocument();
+  expect(await screen.findByText(/invalid/i)).toBeInTheDocument();
 });

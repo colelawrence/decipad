@@ -1,21 +1,21 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { AuthContent } from './AuthContent';
 
 describe('Auth Content Molecule', () => {
   it('renders the title and description', () => {
-    const { getByText } = render(
+    render(
       <AuthContent title="My Title" description="This is a description" />
     );
 
-    expect(getByText('My Title')).toBeInTheDocument();
-    expect(getByText('This is a description')).toBeInTheDocument();
+    expect(screen.getByText('My Title')).toBeInTheDocument();
+    expect(screen.getByText('This is a description')).toBeInTheDocument();
   });
 
   it('renders the deci brand svg', () => {
-    const { getByTitle } = render(
+    render(
       <AuthContent title="My Title" description="This is a description" />
     );
 
-    expect(getByTitle(/decipad logo/i)).toBeInTheDocument();
+    expect(screen.getByTitle(/decipad logo/i)).toBeInTheDocument();
   });
 });

@@ -1,27 +1,27 @@
-import { render } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { mockConsoleError } from '@decipad/testutils';
-import { MenuList } from './MenuList';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MenuItem, TriggerMenuItem } from '../../atoms';
+import { MenuList } from './MenuList';
 
 mockConsoleError();
 
 describe('the root MenuList', () => {
   describe('when open', () => {
     it('renders the menu items', () => {
-      const { getByText, queryByText, rerender } = render(
+      const { rerender } = render(
         <MenuList root>
           <MenuItem>item</MenuItem>
         </MenuList>
       );
-      expect(queryByText('item')).not.toBeInTheDocument();
+      expect(screen.queryByText('item')).not.toBeInTheDocument();
 
       rerender(
         <MenuList root open>
           <MenuItem>item</MenuItem>
         </MenuList>
       );
-      expect(getByText('item')).toBeInTheDocument();
+      expect(screen.getByText('item')).toBeInTheDocument();
     });
   });
 
@@ -49,7 +49,7 @@ describe('the root MenuList', () => {
 describe('the dropdown root MenuList', () => {
   it('emits changeOpen events when the trigger is clicked', async () => {
     const handleChangeOpen = jest.fn();
-    const { getByText } = render(
+    render(
       <MenuList
         root
         dropdown
@@ -59,7 +59,7 @@ describe('the dropdown root MenuList', () => {
         {null}
       </MenuList>
     );
-    await userEvent.click(getByText('trigger'), {
+    await userEvent.click(screen.getByText('trigger'), {
       pointerEventsCheck: 0,
     });
     expect(handleChangeOpen).toHaveBeenLastCalledWith(true);
@@ -67,19 +67,19 @@ describe('the dropdown root MenuList', () => {
 
   describe('when open', () => {
     it('renders the menu items', () => {
-      const { getByText, queryByText, rerender } = render(
+      const { rerender } = render(
         <MenuList root dropdown trigger={<button>trigger</button>}>
           <MenuItem>item</MenuItem>
         </MenuList>
       );
-      expect(queryByText('item')).not.toBeInTheDocument();
+      expect(screen.queryByText('item')).not.toBeInTheDocument();
 
       rerender(
         <MenuList root dropdown trigger={<button>trigger</button>} open>
           <MenuItem>item</MenuItem>
         </MenuList>
       );
-      expect(getByText('item')).toBeInTheDocument();
+      expect(screen.getByText('item')).toBeInTheDocument();
     });
   });
 });
@@ -96,25 +96,25 @@ describe('the non-root MenuList', () => {
   });
 
   it('renders its trigger item', () => {
-    const { getByText } = render(
+    render(
       <MenuList root open>
         <MenuList itemTrigger={<TriggerMenuItem>item</TriggerMenuItem>}>
           {null}
         </MenuList>
       </MenuList>
     );
-    expect(getByText('item')).toBeInTheDocument();
+    expect(screen.getByText('item')).toBeInTheDocument();
   });
 
   it('renders its menu items only when open', () => {
-    const { getByText, queryByText, rerender } = render(
+    const { rerender } = render(
       <MenuList root open>
         <MenuList itemTrigger={<TriggerMenuItem>item</TriggerMenuItem>}>
           <MenuItem>nested item</MenuItem>
         </MenuList>
       </MenuList>
     );
-    expect(queryByText('nested item')).not.toBeInTheDocument();
+    expect(screen.queryByText('nested item')).not.toBeInTheDocument();
 
     rerender(
       <MenuList root open>
@@ -123,23 +123,23 @@ describe('the non-root MenuList', () => {
         </MenuList>
       </MenuList>
     );
-    expect(getByText('nested item')).toBeInTheDocument();
+    expect(screen.getByText('nested item')).toBeInTheDocument();
   });
 
   it('can be uncontrolled', async () => {
-    const { getByText, queryByText } = render(
+    render(
       <MenuList root open>
         <MenuList itemTrigger={<TriggerMenuItem>item</TriggerMenuItem>}>
           <MenuItem>nested item</MenuItem>
         </MenuList>
       </MenuList>
     );
-    expect(queryByText('nested item')).not.toBeInTheDocument();
+    expect(screen.queryByText('nested item')).not.toBeInTheDocument();
 
-    await userEvent.click(getByText('item'), {
+    await userEvent.click(screen.getByText('item'), {
       pointerEventsCheck: 0,
     });
-    expect(getByText('nested item')).toBeInTheDocument();
+    expect(screen.getByText('nested item')).toBeInTheDocument();
   });
 
   it('does not allow itemTriggers other than TriggerMenuItems', () => {

@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { NotebookAvatars, NotebookAvatarsProps } from './NotebookAvatars';
 
@@ -38,25 +38,23 @@ describe('NotebookAvatars Molecule', () => {
   });
 
   it("renders the users' names and role inside tooltip", async () => {
-    const { findByText, getByText, queryByText } = render(
-      <NotebookAvatars {...props} />
-    );
+    render(<NotebookAvatars {...props} />);
 
-    expect(await queryByText('Chris Doe')).toBeNull();
+    expect(screen.queryByText('Chris Doe')).toBeNull();
 
-    await userEvent.hover(getByText('C'));
+    await userEvent.hover(screen.getByText('C'));
 
-    expect(await findByText('Chris Doe')).toBeInTheDocument();
-    expect(await findByText('Owner')).toBeInTheDocument();
+    expect(await screen.findByText('Chris Doe')).toBeInTheDocument();
+    expect(await screen.findByText('Owner')).toBeInTheDocument();
 
-    await userEvent.hover(getByText('J'));
+    await userEvent.hover(screen.getByText('J'));
 
-    expect(await findByText('John Doe')).toBeInTheDocument();
-    expect(await findByText('Can Edit')).toBeInTheDocument();
+    expect(await screen.findByText('John Doe')).toBeInTheDocument();
+    expect(await screen.findByText('Can Edit')).toBeInTheDocument();
 
-    await userEvent.hover(getByText('B'));
+    await userEvent.hover(screen.getByText('B'));
 
-    expect(await findByText('Blake Doe')).toBeInTheDocument();
-    expect(await findByText('View Only')).toBeInTheDocument();
+    expect(await screen.findByText('Blake Doe')).toBeInTheDocument();
+    expect(await screen.findByText('View Only')).toBeInTheDocument();
   });
 });

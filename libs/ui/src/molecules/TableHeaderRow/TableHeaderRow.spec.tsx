@@ -1,12 +1,12 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TableHeader } from '../../atoms';
-import { getStringType } from '../../utils';
 import { TableColumnHeader } from '../../organisms';
+import { getStringType } from '../../utils';
 import { TableHeaderRow } from './TableHeaderRow';
 
 it('renders a table data', () => {
-  const { getByText } = render(
+  render(
     <table>
       <tbody>
         <TableHeaderRow>
@@ -16,11 +16,11 @@ it('renders a table data', () => {
     </table>
   );
 
-  expect(getByText('Table Data')).toBeVisible();
+  expect(screen.getByText('Table Data')).toBeVisible();
 });
 
 it('renders the add new column button', () => {
-  const { getByTitle } = render(
+  render(
     <table>
       <tbody>
         <TableHeaderRow>
@@ -30,13 +30,13 @@ it('renders the add new column button', () => {
     </table>
   );
 
-  expect(getByTitle(/create/i).closest('svg')).toBeVisible();
+  expect(screen.getByTitle(/create/i).closest('svg')).toBeVisible();
 });
 
 describe('onAddColumn prop', () => {
   it('gets called when the add new column button is clicked', async () => {
     const onAddColumn = jest.fn();
-    const { getByTitle } = render(
+    render(
       <table>
         <tbody>
           <TableHeaderRow onAddColumn={onAddColumn}>
@@ -46,7 +46,7 @@ describe('onAddColumn prop', () => {
       </table>
     );
 
-    await userEvent.click(getByTitle(/create/i).closest('svg')!);
+    await userEvent.click(screen.getByTitle(/create/i).closest('svg')!);
 
     expect(onAddColumn).toHaveBeenCalled();
   });
@@ -54,7 +54,7 @@ describe('onAddColumn prop', () => {
 
 describe('actionsColumn prop', () => {
   it('renders the actions column by default', () => {
-    const { getAllByRole } = render(
+    render(
       <table>
         <tbody>
           <TableHeaderRow>
@@ -64,12 +64,12 @@ describe('actionsColumn prop', () => {
       </table>
     );
 
-    expect(getAllByRole('columnheader')).toHaveLength(2);
+    expect(screen.getAllByRole('columnheader')).toHaveLength(2);
   });
 
   describe('when false', () => {
     it('does not render the actions column', () => {
-      const { getAllByRole } = render(
+      render(
         <table>
           <tbody>
             <TableHeaderRow actionsColumn={false}>
@@ -79,14 +79,14 @@ describe('actionsColumn prop', () => {
         </table>
       );
 
-      expect(getAllByRole('columnheader')).toHaveLength(1);
+      expect(screen.getAllByRole('columnheader')).toHaveLength(1);
     });
   });
 });
 
 describe('readOnly prop', () => {
   it('does not render the add new column button on the actions column', () => {
-    const { getAllByRole, queryByTitle } = render(
+    render(
       <table>
         <tbody>
           <TableHeaderRow readOnly>
@@ -96,7 +96,7 @@ describe('readOnly prop', () => {
       </table>
     );
 
-    expect(getAllByRole('columnheader')).toHaveLength(2);
-    expect(queryByTitle(/create/i)).not.toBeInTheDocument();
+    expect(screen.getAllByRole('columnheader')).toHaveLength(2);
+    expect(screen.queryByTitle(/create/i)).not.toBeInTheDocument();
   });
 });

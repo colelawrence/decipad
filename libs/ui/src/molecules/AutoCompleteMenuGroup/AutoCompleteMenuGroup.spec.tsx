@@ -1,18 +1,18 @@
-import { render } from '@testing-library/react';
 import { mockConsoleError } from '@decipad/testutils';
+import { render, screen } from '@testing-library/react';
 import { AutoCompleteMenuItem } from '../../atoms';
 import { AutoCompleteMenuGroup } from './AutoCompleteMenuGroup';
 
 mockConsoleError();
 
 it('renders given items in a group', () => {
-  const { getByRole } = render(
+  render(
     <AutoCompleteMenuGroup title="group">
       <AutoCompleteMenuItem kind="variable" identifier="ThisIsAVariable" />
       <AutoCompleteMenuItem kind="variable" identifier="ThisIsAnother" />
     </AutoCompleteMenuGroup>
   );
-  expect(getByRole('group')).toHaveTextContent(
+  expect(screen.getByRole('group')).toHaveTextContent(
     /ThisIsAVariable.*ThisIsAnother/
   );
 });

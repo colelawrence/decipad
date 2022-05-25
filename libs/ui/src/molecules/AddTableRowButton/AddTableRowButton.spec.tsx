@@ -1,10 +1,9 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-
 import { AddTableRowButton } from './AddTableRowButton';
 
 it('renders the text', () => {
-  const { getByText } = render(
+  render(
     <table>
       <tbody>
         <AddTableRowButton colSpan={1} />
@@ -12,13 +11,13 @@ it('renders the text', () => {
     </table>
   );
 
-  expect(getByText('Add row')).toBeVisible();
+  expect(screen.getByText('Add row')).toBeVisible();
 });
 
 describe('onAddRow prop', () => {
   it('gets called when the button is clicked', async () => {
     const onAddRow = jest.fn();
-    const { getByText } = render(
+    render(
       <table>
         <tbody>
           <AddTableRowButton colSpan={1} onAddRow={onAddRow} />
@@ -26,7 +25,7 @@ describe('onAddRow prop', () => {
       </table>
     );
 
-    await userEvent.click(getByText('Add row'));
+    await userEvent.click(screen.getByText('Add row'));
 
     expect(onAddRow).toHaveBeenCalledTimes(1);
   });

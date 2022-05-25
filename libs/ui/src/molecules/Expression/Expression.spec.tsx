@@ -1,17 +1,15 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Expression } from './Expression';
 
 describe('Caption Molecule', () => {
   it('renders the children', () => {
-    const { getByText } = render(<Expression>children</Expression>);
-    expect(getByText('children')).toBeInTheDocument();
+    render(<Expression>children</Expression>);
+    expect(screen.getByText('children')).toBeInTheDocument();
   });
 
   it('renders a placeholder', () => {
-    const { getByText } = render(
-      <Expression placeholder="placeholder">children</Expression>
-    );
-    const textElement = getByText('children');
+    render(<Expression placeholder="placeholder">children</Expression>);
+    const textElement = screen.getByText('children');
     const wrapper = textElement.closest('div');
 
     expect(wrapper).toHaveAttribute(
@@ -25,17 +23,13 @@ describe('Caption Molecule', () => {
       message: 'some error',
       url: 'some url',
     };
-    const { getByTitle } = render(
-      <Expression error={error}>children</Expression>
-    );
-    expect(getByTitle('some error')).toBeInTheDocument();
+    render(<Expression error={error}>children</Expression>);
+    expect(screen.getByTitle('some error')).toBeInTheDocument();
   });
 
   it('scrolls left when loses focus', () => {
-    const { getByText, rerender } = render(
-      <Expression focused>some text</Expression>
-    );
+    const { rerender } = render(<Expression focused>some text</Expression>);
     rerender(<Expression focused={false}>some text</Expression>);
-    expect(getByText('some text').scrollLeft).toBe(0);
+    expect(screen.getByText('some text').scrollLeft).toBe(0);
   });
 });

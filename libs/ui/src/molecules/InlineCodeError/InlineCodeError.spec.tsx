@@ -1,9 +1,9 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { InlineCodeError } from './InlineCodeError';
 
 it('renders error in tooltip', async () => {
-  const { findByText, getByText, getByTitle } = render(
+  render(
     <InlineCodeError
       type={{
         kind: 'type-error',
@@ -13,10 +13,10 @@ it('renders error in tooltip', async () => {
     />
   );
 
-  await userEvent.hover(getByTitle(/Warning/i));
+  await userEvent.hover(screen.getByTitle(/Warning/i));
 
-  const docLink = (await findByText(/docs/i)).closest('a')!;
+  const docLink = (await screen.findByText(/docs/i)).closest('a')!;
 
-  expect(getByText(/foo/i)).toBeInTheDocument();
+  expect(screen.getByText(/foo/i)).toBeInTheDocument();
   expect(docLink.href).toContain('missing-variable');
 });

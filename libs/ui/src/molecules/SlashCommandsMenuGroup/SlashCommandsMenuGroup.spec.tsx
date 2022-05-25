@@ -1,12 +1,12 @@
-import { render } from '@testing-library/react';
 import { mockConsoleError } from '@decipad/testutils';
+import { render, screen } from '@testing-library/react';
 import { SlashCommandsMenuItem } from '../../atoms';
 import { SlashCommandsMenuGroup } from './SlashCommandsMenuGroup';
 
 mockConsoleError();
 
 it('renders given items in a group', () => {
-  const { getByRole } = render(
+  render(
     <SlashCommandsMenuGroup title="group">
       <SlashCommandsMenuItem
         title="item 0"
@@ -22,7 +22,7 @@ it('renders given items in a group', () => {
       />
     </SlashCommandsMenuGroup>
   );
-  expect(getByRole('group')).toHaveTextContent(/item 0.*item 1/);
+  expect(screen.getByRole('group')).toHaveTextContent(/item 0.*item 1/);
 });
 
 it.each([

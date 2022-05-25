@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { DividerBlock } from './DividerBlock';
 
 it('renders a separator', () => {
-  const { getByRole } = render(<DividerBlock />);
-  expect(getByRole('separator')).toBeVisible();
+  render(<DividerBlock />);
+  expect(screen.getByRole('separator')).toBeVisible();
 });

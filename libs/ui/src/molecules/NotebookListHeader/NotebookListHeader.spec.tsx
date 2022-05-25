@@ -1,9 +1,9 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { NotebookListHeader } from './NotebookListHeader';
 
 it('renders a heading at given level', () => {
-  const { getByRole } = render(<NotebookListHeader Heading="h1" />);
-  expect(getByRole('heading').tagName).toBe('H1');
+  render(<NotebookListHeader Heading="h1" />);
+  expect(screen.getByRole('heading').tagName).toBe('H1');
 });
 
 it.each([
@@ -22,9 +22,7 @@ it.each([
   }
 );
 it('can be rendered without a result count', () => {
-  const { getByLabelText, container } = render(
-    <NotebookListHeader Heading="h1" />
-  );
+  const { container } = render(<NotebookListHeader Heading="h1" />);
   expect(container).not.toHaveTextContent(/result/i);
-  expect(getByLabelText(/loading/i)).toBeInTheDocument();
+  expect(screen.getByLabelText(/loading/i)).toBeInTheDocument();
 });

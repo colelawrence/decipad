@@ -1,8 +1,8 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { FormulaTableData } from './FormulaTableData';
 
 it('renders the text', () => {
-  const { getByText } = render(
+  render(
     <table>
       <tbody>
         <tr>
@@ -14,10 +14,10 @@ it('renders the text', () => {
     </table>
   );
 
-  expect(getByText('Result from computer')).toBeVisible();
+  expect(screen.getByText('Result from computer')).toBeVisible();
 
   // Formula cells do pass on {children} to avoid a Slate crash,
   // but visually they only show the result from the computer
-  expect(getByText('Text from document')).toBeInTheDocument();
-  expect(getByText('Text from document')).not.toBeVisible();
+  expect(screen.getByText('Text from document')).toBeInTheDocument();
+  expect(screen.getByText('Text from document')).not.toBeVisible();
 });

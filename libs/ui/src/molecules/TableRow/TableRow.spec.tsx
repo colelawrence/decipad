@@ -1,10 +1,10 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TableData } from '../../atoms';
 import { TableRow } from './TableRow';
 
 it('renders a table data', () => {
-  const { getByText } = render(
+  render(
     <table>
       <tbody>
         <TableRow>
@@ -16,11 +16,11 @@ it('renders a table data', () => {
     </table>
   );
 
-  expect(getByText('Table Data')).toBeVisible();
+  expect(screen.getByText('Table Data')).toBeVisible();
 });
 
 it('renders the remove row button', () => {
-  const { getByTitle } = render(
+  render(
     <table>
       <tbody>
         <TableRow>
@@ -32,13 +32,13 @@ it('renders the remove row button', () => {
     </table>
   );
 
-  expect(getByTitle(/minus/i).closest('button')!).toBeVisible();
+  expect(screen.getByTitle(/minus/i).closest('button')!).toBeVisible();
 });
 
 describe('onRemove prop', () => {
   it('gets called when the remove button is pressed', async () => {
     const onRemove = jest.fn();
-    const { getByTitle } = render(
+    render(
       <table>
         <tbody>
           <TableRow onRemove={onRemove}>
@@ -50,7 +50,7 @@ describe('onRemove prop', () => {
       </table>
     );
 
-    await userEvent.click(getByTitle(/minus/i).closest('button')!);
+    await userEvent.click(screen.getByTitle(/minus/i).closest('button')!);
 
     expect(onRemove).toHaveBeenCalled();
   });
@@ -58,7 +58,7 @@ describe('onRemove prop', () => {
 
 describe('readOnly prop', () => {
   it('does not render the actions column', () => {
-    const { getAllByRole, rerender } = render(
+    const { rerender } = render(
       <table>
         <tbody>
           <TableRow>
@@ -70,7 +70,7 @@ describe('readOnly prop', () => {
       </table>
     );
 
-    expect(getAllByRole('cell')).toHaveLength(2);
+    expect(screen.getAllByRole('cell')).toHaveLength(2);
 
     rerender(
       <table>
@@ -84,6 +84,6 @@ describe('readOnly prop', () => {
       </table>
     );
 
-    expect(getAllByRole('cell')).toHaveLength(1);
+    expect(screen.getAllByRole('cell')).toHaveLength(1);
   });
 });

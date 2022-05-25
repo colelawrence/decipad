@@ -1,5 +1,5 @@
 import { SerializedUnits } from '@decipad/language';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MenuWrapper as wrapper } from '../../test-utils';
 import { UnitMenuItem } from './UnitMenuItem';
@@ -10,37 +10,37 @@ beforeEach(() => {
 });
 
 it('renders the children', () => {
-  const { getByRole, queryByRole } = render(<UnitMenuItem />, { wrapper });
-  expect(getByRole('textbox')).toBeInTheDocument();
-  expect(queryByRole('button')).toBeNull();
+  render(<UnitMenuItem />, { wrapper });
+  expect(screen.getByRole('textbox')).toBeInTheDocument();
+  expect(screen.queryByRole('button')).toBeNull();
 });
 
 it('renders a button when parse is successful', async () => {
   // Parse always fails.
-  const { getByRole, findByRole, queryByRole, rerender } = render(
+  const { rerender } = render(
     <UnitMenuItem parseUnit={() => Promise.resolve(null)} />,
     {
       wrapper,
     }
   );
 
-  expect(queryByRole('button')).toBeNull();
+  expect(screen.queryByRole('button')).toBeNull();
 
-  await user.type(getByRole('textbox'), 'm/s');
-  await expect(findByRole('button')).rejects.toThrow();
+  await user.type(screen.getByRole('textbox'), 'm/s');
+  await expect(screen.findByRole('button')).rejects.toThrow();
 
   // Parse always succedes.
   rerender(
     <UnitMenuItem parseUnit={() => Promise.resolve({} as SerializedUnits)} />
   );
 
-  expect(await findByRole('button')).toBeInTheDocument();
+  expect(await screen.findByRole('button')).toBeInTheDocument();
 });
 
 describe('onSelect prop', () => {
   it('gets called when parse is successful and button is pressed', async () => {
     const onSelect = jest.fn();
-    const { getByRole, findByRole } = render(
+    render(
       <UnitMenuItem
         onSelect={onSelect}
         parseUnit={() => Promise.resolve({} as SerializedUnits)}
@@ -50,16 +50,16 @@ describe('onSelect prop', () => {
       }
     );
 
-    await user.type(getByRole('textbox'), 'm/s');
+    await user.type(screen.getByRole('textbox'), 'm/s');
     expect(onSelect).not.toHaveBeenCalled();
 
-    await user.click(await findByRole('button'));
+    await user.click(await screen.findByRole('button'));
     expect(onSelect).toHaveBeenCalled();
   });
 
   it('gets called when parse is successful and Enter is pressed', async () => {
     const onSelect = jest.fn();
-    const { getByRole, findByRole } = render(
+    render(
       <UnitMenuItem
         onSelect={onSelect}
         parseUnit={() => Promise.resolve({} as SerializedUnits)}
@@ -69,17 +69,17 @@ describe('onSelect prop', () => {
       }
     );
 
-    await user.type(getByRole('textbox'), 'm/s');
+    await user.type(screen.getByRole('textbox'), 'm/s');
     expect(onSelect).not.toHaveBeenCalled();
 
-    await findByRole('button');
+    await screen.findByRole('button');
     await user.keyboard(`{enter}`);
     expect(onSelect).toHaveBeenCalled();
   });
 
   it('does not gets called when parse is unsuccessful', async () => {
     const onSelect = jest.fn();
-    const { getByRole, findByRole } = render(
+    render(
       <UnitMenuItem
         onSelect={onSelect}
         parseUnit={() => Promise.resolve(null)}
@@ -89,9 +89,9 @@ describe('onSelect prop', () => {
       }
     );
 
-    await user.type(getByRole('textbox'), 'm/s');
+    await user.type(screen.getByRole('textbox'), 'm/s');
     expect(onSelect).not.toHaveBeenCalled();
-    await expect(findByRole('button')).rejects.toThrow();
+    await expect(screen.findByRole('button')).rejects.toThrow();
     await user.keyboard(`{enter}`);
     expect(onSelect).toHaveBeenCalled();
   });
