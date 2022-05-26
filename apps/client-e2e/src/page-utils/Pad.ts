@@ -94,25 +94,6 @@ export async function keyPress(k: string) {
   await timeout(200);
 }
 
-export async function createTable() {
-  await keyPress('ArrowDown');
-  await page.keyboard.insertText('/table');
-  await keyPress('Tab');
-  await keyPress('Enter');
-}
-
-export async function writeInTable(text: string, line: number, col = 0) {
-  const parentType = line === 0 ? 'thead' : 'tbody';
-  const cellType = line === 0 ? 'th' : 'td';
-  const lineNumber = line > 0 ? line - 1 : line;
-  const locator = `table > ${parentType} > tr:nth-child(${
-    lineNumber + 1
-  }) > ${cellType}:nth-child(${col + 1})`;
-  const cell = await page.locator(locator);
-  await cell.click();
-  await page.keyboard.type(text);
-}
-
 export async function navigateToNotebook(notebookId: string) {
   await page.goto(`/n/pad-title:${notebookId}`);
 }

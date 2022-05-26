@@ -12,6 +12,32 @@ interface CalculationBlock {
   result: ElementHandle | null;
 }
 
+export async function createTable() {
+  await page.click('[contenteditable] p >> nth=-1');
+
+  await page.keyboard.insertText('/table');
+
+  await waitForExpect(async () =>
+    expect(
+      await page.$$('[contenteditable] [role="menuitem"]')
+    ).not.toHaveLength(0)
+  );
+
+  await page.click('text=tableslashTableEmpty table to structure your data');
+}
+
+export async function writeInTable(text: string, line: number, col = 0) {
+  const parentType = line === 0 ? 'thead' : 'tbody';
+  const cellType = line === 0 ? 'th' : 'td';
+  const lineNumber = line > 0 ? line - 1 : line;
+  const locator = `table > ${parentType} > tr:nth-child(${
+    lineNumber + 1
+  }) > ${cellType}:nth-child(${col + 1})`;
+  const cell = await page.locator(locator);
+  await cell.click();
+  await page.keyboard.type(text);
+}
+
 export async function createInputBelow(identifier: string, value: number) {
   await page.click('[contenteditable] p >> nth=-1');
 

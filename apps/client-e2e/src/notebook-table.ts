@@ -1,10 +1,9 @@
+import { createTable, writeInTable } from './page-utils/Block';
 import {
-  createTable,
   focusOnBody,
   goToPlayground,
   keyPress,
   waitForEditorToLoad,
-  writeInTable,
 } from './page-utils/Pad';
 
 describe('notebook table', () => {
