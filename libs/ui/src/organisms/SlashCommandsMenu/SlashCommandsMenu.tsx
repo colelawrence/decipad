@@ -1,3 +1,4 @@
+import { isEnabled } from '@decipad/feature-flags';
 import { useWindowListener } from '@decipad/react-utils';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
@@ -117,7 +118,7 @@ const groups: ReadonlyArray<SlashCommandGroup> = [
         title: 'Slider',
         description: 'Let users interact with your notebook with a slider',
         icon: <Slider />,
-        enabled: false,
+        enabled: isEnabled('SLIDER_ELEMENT'),
         extraSearchTerms: ['input', 'number', 'slider', 'publish'],
       },
     ],

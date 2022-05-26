@@ -75,10 +75,10 @@ export interface ExpressionElement extends BaseElement {
 
 export interface SliderElement extends BaseElement {
   type: typeof ELEMENT_SLIDER;
-  max: number;
-  min: number;
-  step: number;
-  value: number;
+  max: string;
+  min: string;
+  step: string;
+  value: string;
   children: [EmptyText];
 }
 

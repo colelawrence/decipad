@@ -2,7 +2,8 @@ export type Flag =
   | 'PERSISTENT_EXAMPLE'
   | 'PLOT_ELEMENTS'
   | 'INPUT_COPY'
-  | 'FORMULA_COLUMNS';
+  | 'FORMULA_COLUMNS'
+  | 'SLIDER_ELEMENT';
 
 export type Flags = Partial<Record<Flag, boolean>>;
 let overrides: Flags = {

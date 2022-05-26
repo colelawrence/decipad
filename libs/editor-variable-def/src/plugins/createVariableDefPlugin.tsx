@@ -21,6 +21,7 @@ import { createNormalizeCaptionPlugin } from './createNormalizeCaptionPlugin';
 import { createNormalizeExpressionPlugin } from './createNormalizeExpressionPlugin';
 import { createEnterOnExpressionPlugin } from './createEnterOnExpressionPlugin';
 import { decorateExpression } from '../utils/decorateExpression';
+import { createNormalizeSliderPlugin } from './createNormalizeSliderPlugin';
 
 export const createVariableDefPlugin = (computer: Computer): MyPlatePlugin => ({
   key: ELEMENT_VARIABLE_DEF,
@@ -97,6 +98,7 @@ export const createVariableDefPlugin = (computer: Computer): MyPlatePlugin => ({
     },
     {
       key: ELEMENT_SLIDER,
+      isVoid: true,
       isElement: true,
       component: Slider,
       deserializeHtml: {
@@ -111,5 +113,6 @@ export const createVariableDefPlugin = (computer: Computer): MyPlatePlugin => ({
         <div data-type={ELEMENT_SLIDER}>{props.children}</div>
       ),
     },
+    createNormalizeSliderPlugin(),
   ],
 });

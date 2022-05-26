@@ -23,7 +23,7 @@ export const SliderVariant: Story<
   return (
     <VariableEditor variant="slider">
       <Caption>Variable</Caption>
-      <VariableSlider value={5} max={10} min={0} step={1} />
+      <VariableSlider value="5" max="10" min="0" step="1" />
     </VariableEditor>
   );
 };

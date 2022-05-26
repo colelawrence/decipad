@@ -15,12 +15,18 @@ type VariableEditorMenuProps = {
       readonly onChangeMax?: never;
       readonly onChangeMin?: never;
       readonly onChangeStep?: never;
+      readonly max?: never;
+      readonly min?: never;
+      readonly step?: never;
     }
   | {
       readonly variant: 'slider';
       readonly onChangeMax?: ComponentProps<typeof InputMenuItem>['onChange'];
       readonly onChangeMin?: ComponentProps<typeof InputMenuItem>['onChange'];
       readonly onChangeStep?: ComponentProps<typeof InputMenuItem>['onChange'];
+      readonly max?: string;
+      readonly min?: string;
+      readonly step?: string;
     }
 );
 
@@ -30,28 +36,53 @@ export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
   onChangeStep,
   onCopy = noop,
   onDelete = noop,
+  max,
+  min,
+  step,
   trigger,
   variant = 'expression',
 }) => (
   <MenuList root dropdown trigger={trigger}>
     {variant === 'slider' && [
       <InputMenuItem
+        error={
+          max != null && min != null && Number(max) < Number(min)
+            ? `Must be bigger than ${min}`
+            : undefined
+        }
         key="max"
         label="Maximum value"
         onChange={onChangeMax}
         type="number"
+        value={max}
       />,
       <InputMenuItem
+        error={
+          max != null && min != null && Number(min) > Number(max)
+            ? `Must be lower than ${max}`
+            : undefined
+        }
         key="min"
         label="Minimim value"
         onChange={onChangeMin}
         type="number"
+        value={min}
       />,
       <InputMenuItem
+        error={
+          max != null && min != null && step != null
+            ? Math.abs(Number(min) - Number(max)) < Number(step)
+              ? `Must be lower than ${Math.abs(Number(min) - Number(max))}`
+              : Number(step) <= 0
+              ? 'Must be bigger than 0'
+              : undefined
+            : undefined
+        }
         key="step"
         label="Step"
         onChange={onChangeStep}
         type="number"
+        value={step}
       />,
       <MenuSeparator key="sep" />,
     ]}

@@ -1,4 +1,4 @@
-import { atoms } from '@decipad/ui';
+import { molecules } from '@decipad/ui';
 import {
   ELEMENT_SLIDER,
   PlateComponent,
@@ -19,7 +19,7 @@ export const Slider: PlateComponent = ({ attributes, element, children }) => {
     <div {...attributes}>
       {children}
       <div contentEditable={false}>
-        <atoms.Slider {...element} onChange={onValueChange} />
+        <molecules.VariableSlider {...element} onChange={onValueChange} />
       </div>
     </div>
   );

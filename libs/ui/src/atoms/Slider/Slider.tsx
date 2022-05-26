@@ -62,11 +62,11 @@ const styles = css({
 });
 
 interface SliderProps {
-  readonly onChange?: (value: number) => void;
-  readonly max?: number;
-  readonly min?: number;
-  readonly step?: number;
-  readonly value?: number;
+  readonly onChange?: (value: string) => void;
+  readonly max?: string;
+  readonly min?: string;
+  readonly step?: string;
+  readonly value?: string;
 }
 
 export const Slider = ({
@@ -79,7 +79,7 @@ export const Slider = ({
   <input
     css={styles}
     type="range"
-    onChange={(e) => onChange(Number(e.target.value))}
+    onChange={(e) => onChange(e.target.value)}
     max={max}
     min={min}
     step={step}

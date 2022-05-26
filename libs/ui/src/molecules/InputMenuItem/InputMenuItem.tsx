@@ -1,8 +1,8 @@
 import { FC, InputHTMLAttributes } from 'react';
 import { css } from '@emotion/react';
 import { noop } from '@decipad/utils';
-import { cssVar, p13Medium, setCssVar } from '../../primitives';
-import { MenuItem } from '../../atoms';
+import { cssVar, p13Medium, red200, setCssVar } from '../../primitives';
+import { MenuItem, Tooltip } from '../../atoms';
 import { menu } from '../../styles';
 
 const menuItemStyles = css({
@@ -46,7 +46,15 @@ const inputStyles = css(p13Medium, {
   background: cssVar('highlightColor'),
 });
 
+const errorInputStyles = css({
+  borderColor: red200.rgb,
+  '*:hover > &, :focus': {
+    borderColor: red200.rgb,
+  },
+});
+
 interface InputMenuItemProps {
+  readonly error?: string;
   readonly label?: string;
   readonly onChange?: (value: string) => void;
   readonly placeholder?: string;
@@ -55,12 +63,28 @@ interface InputMenuItemProps {
 }
 
 export const InputMenuItem = ({
+  error,
   label,
   onChange = noop,
   placeholder,
   type,
   value,
 }: InputMenuItemProps): ReturnType<FC> => {
+  const input = (
+    <input
+      css={[inputStyles, error && errorInputStyles]}
+      onClick={(e) => {
+        // Prevent propagation to the MenuItem which will try to select itself
+        // as an option and close the dropdown
+        e.stopPropagation();
+      }}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      type={type}
+      value={value}
+    />
+  );
+
   return (
     <MenuItem
       onPointerMove={(e) => {
@@ -70,18 +94,13 @@ export const InputMenuItem = ({
     >
       <div css={menuItemStyles}>
         {label && <span css={labelStyles}>{label}</span>}
-        <input
-          css={inputStyles}
-          onClick={(e) => {
-            // Prevent propagation to the MenuItem which will try to select itself
-            // as an option and close the dropdown
-            e.stopPropagation();
-          }}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder}
-          type={type}
-          value={value}
-        />
+        {error ? (
+          <Tooltip trigger={input}>
+            <p>{error}</p>
+          </Tooltip>
+        ) : (
+          input
+        )}
       </div>
     </MenuItem>
   );

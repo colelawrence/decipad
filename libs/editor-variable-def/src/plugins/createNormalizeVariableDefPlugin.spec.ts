@@ -54,7 +54,7 @@ describe('createNormalizeVariablePlugin for variable def expressions', () => {
   });
 });
 
-const sliderVarDef = (name = '', value = 0) => ({
+const sliderVarDef = (name = '', value = '0') => ({
   type: ELEMENT_VARIABLE_DEF,
   variant: 'slider',
   children: [
@@ -64,9 +64,9 @@ const sliderVarDef = (name = '', value = 0) => ({
     },
     {
       type: ELEMENT_SLIDER,
-      max: 10,
-      min: 0,
-      step: 0.1,
+      max: '10',
+      min: '0',
+      step: '0.1',
       value,
       children: [{ text: '' }],
     },
@@ -89,9 +89,9 @@ describe('createNormalizeVariablePlugin for variable def slider', () => {
     const editor = createTPlateEditor({
       plugins: [createNormalizeVariableDefPlugin()],
     });
-    editor.children = [sliderVarDef('varName', 10) as never];
+    editor.children = [sliderVarDef('varName', '10') as never];
     normalizeEditor(editor, { force: true });
-    expect(editor.children).toMatchObject([sliderVarDef('varName', 10)]);
+    expect(editor.children).toMatchObject([sliderVarDef('varName', '10')]);
   });
 
   it('removes extra attributes', () => {

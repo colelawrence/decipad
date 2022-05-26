@@ -6,8 +6,13 @@ import {
   PlateComponent,
   useTEditorState,
   VariableDefinitionElement,
+  VariableSliderElement,
 } from '@decipad/editor-types';
-import { insertNodeIntoColumns, safeDelete } from '@decipad/editor-utils';
+import {
+  insertNodeIntoColumns,
+  safeDelete,
+  useElementMutatorCallback,
+} from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { organisms } from '@decipad/ui';
 import { findNodePath, PlateEditor, serializeHtml } from '@udecode/plate';
@@ -66,6 +71,23 @@ export const VariableDef: PlateComponent = ({
     }
   }, [editor, element]);
 
+  // Slider
+  const onChangeMax = useElementMutatorCallback(
+    editor,
+    (element as VariableSliderElement).children[1],
+    'max'
+  );
+  const onChangeMin = useElementMutatorCallback(
+    editor,
+    (element as VariableSliderElement).children[1],
+    'min'
+  );
+  const onChangeStep = useElementMutatorCallback(
+    editor,
+    (element as VariableSliderElement).children[1],
+    'step'
+  );
+
   if (deleted) {
     return <></>;
   }
@@ -80,9 +102,16 @@ export const VariableDef: PlateComponent = ({
         onDelete={onDelete}
       >
         <organisms.VariableEditor
+          variant={element.variant}
           onDelete={onDelete}
           onCopy={onCopy}
           onAdd={onAdd}
+          onChangeMax={onChangeMax}
+          onChangeMin={onChangeMin}
+          onChangeStep={onChangeStep}
+          max={(element as VariableSliderElement).children[1].max}
+          min={(element as VariableSliderElement).children[1].min}
+          step={(element as VariableSliderElement).children[1].step}
           color={color as AvailableSwatchColor}
           readOnly={readOnly}
         >

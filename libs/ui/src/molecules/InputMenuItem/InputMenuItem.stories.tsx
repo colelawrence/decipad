@@ -4,6 +4,7 @@ import { InputMenuItem } from './InputMenuItem';
 
 const args = {
   placeholder: 'Write something here',
+  type: 'number',
 };
 
 export default {
@@ -21,7 +22,14 @@ WithValue.args = {
 };
 
 export const WithLabel: Story = (props) => <InputMenuItem {...props} />;
-WithValue.args = {
+WithLabel.args = {
+  label: 'value',
+  value: 10,
+};
+
+export const WithError: Story = (props) => <InputMenuItem {...props} />;
+WithError.args = {
+  error: 'Something went bananas',
   label: 'value',
   value: 10,
 };

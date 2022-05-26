@@ -74,10 +74,10 @@ const normalize =
           {
             id: nanoid(),
             type: ELEMENT_SLIDER,
-            max: 10,
-            min: 0,
-            step: 0.1,
-            value: 0,
+            max: '10',
+            min: '0',
+            step: '0.1',
+            value: '0',
             children: [{ text: '' }],
           },
           { at: [...path, 1] }
