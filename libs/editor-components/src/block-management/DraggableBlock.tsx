@@ -23,6 +23,7 @@ import {
   useRef,
   useState,
 } from 'react';
+import { BlockErrorBoundary } from '../BlockErrorBoundary';
 
 const InDraggableBlock = createContext(false);
 
@@ -98,7 +99,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
         }
       >
         <atoms.EditorBlock blockKind={props.blockKind}>
-          {children}
+          <BlockErrorBoundary>{children}</BlockErrorBoundary>
         </atoms.EditorBlock>
       </div>
     );
@@ -117,7 +118,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
       onDelete={parentOnDelete === false ? false : onDelete}
     >
       <InDraggableBlock.Provider value={true}>
-        {children}
+        <BlockErrorBoundary>{children}</BlockErrorBoundary>
       </InDraggableBlock.Provider>
     </organisms.DraggableBlock>
   );

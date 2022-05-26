@@ -33,6 +33,7 @@ import { serializeDocument } from '@decipad/editor-utils';
 import { DocSyncEditor } from '@decipad/docsync';
 import { MyEditor } from '@decipad/editor-types';
 import { parseIconColorFromIdentifier } from '../lib/parseIconColorFromIdentifier';
+import { GlobalErrorHandler } from '../components/GlobalErrorHandler';
 
 type Icon = ComponentProps<typeof EditorIcon>['icon'];
 type IconColor = ComponentProps<typeof EditorIcon>['color'];
@@ -194,40 +195,42 @@ export const NotebookRoute = (): ReturnType<FC> => {
           {notebook.name ? notebook.name : 'Make sense of numbers'} — Decipad
         </title>
       </Head>
-      <ToastDisplay>
-        <Notebook
-          notebookId={notebookId}
-          readOnly={readOnly}
-          secret={secret}
-          onEditor={setEditor}
-          onDocsync={setDocsync}
-          icon={
-            <EditorIcon
-              readOnly={readOnly}
-              color={iconColor}
-              icon={icon}
-              onChangeIcon={(newIcon) => {
-                setIcon(newIcon as Icon);
-                onIconChange(`${newIcon}-${iconColor}`);
-              }}
-              onChangeColor={onIconColorChange}
-            />
-          }
-          topbar={
-            <NotebookTopbar
-              workspace={notebook.workspace}
-              notebook={notebook}
-              usersWithAccess={notebook.access.users}
-              permission={notebook.myPermissionType}
-              sharingSecret={sharingSecret}
-              onToggleShare={onShareToggleClick}
-              onDuplicateNotebook={onDuplicateNotebook}
-              hasLocalChanges={docsync?.hasLocalChanges()}
-              onRevertChanges={onRevertChanges}
-            />
-          }
-        ></Notebook>
-      </ToastDisplay>
+      <GlobalErrorHandler>
+        <ToastDisplay>
+          <Notebook
+            notebookId={notebookId}
+            readOnly={readOnly}
+            secret={secret}
+            onEditor={setEditor}
+            onDocsync={setDocsync}
+            icon={
+              <EditorIcon
+                readOnly={readOnly}
+                color={iconColor}
+                icon={icon}
+                onChangeIcon={(newIcon) => {
+                  setIcon(newIcon as Icon);
+                  onIconChange(`${newIcon}-${iconColor}`);
+                }}
+                onChangeColor={onIconColorChange}
+              />
+            }
+            topbar={
+              <NotebookTopbar
+                workspace={notebook.workspace}
+                notebook={notebook}
+                usersWithAccess={notebook.access.users}
+                permission={notebook.myPermissionType}
+                sharingSecret={sharingSecret}
+                onToggleShare={onShareToggleClick}
+                onDuplicateNotebook={onDuplicateNotebook}
+                hasLocalChanges={docsync?.hasLocalChanges()}
+                onRevertChanges={onRevertChanges}
+              />
+            }
+          ></Notebook>
+        </ToastDisplay>
+      </GlobalErrorHandler>
     </>
   );
 };

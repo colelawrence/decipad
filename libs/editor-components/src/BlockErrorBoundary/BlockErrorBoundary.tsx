@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo } from 'react';
+import { FC, ReactNode, useMemo } from 'react';
 import { ErrorBoundary } from '@sentry/react';
 import { atoms } from '@decipad/ui';
 
@@ -18,21 +18,18 @@ const Fallback: FC<FallbackProps> = ({
       }`,
     [componentStack, error.message]
   );
-  useEffect(() => {
-    console.error(error);
-  }, [error]);
   return <atoms.ErrorMessage message={message}></atoms.ErrorMessage>;
 };
 
-export function GlobalErrorHandler({
+export function BlockErrorBoundary({
   children,
 }: {
-  children: JSX.Element;
+  children: ReactNode;
 }): ReturnType<FC> {
   return (
     <ErrorBoundary
       fallback={(props) => <Fallback {...props} />}
-      showDialog={process.env.NODE_ENV === 'production'}
+      showDialog={false}
     >
       {children}
     </ErrorBoundary>
