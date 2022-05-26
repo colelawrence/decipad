@@ -1,17 +1,11 @@
 import {
   ELEMENT_TABLE,
   MyElement,
-  TableElement,
   TableHeaderElement,
   useTEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType, useElementAbove } from '@decipad/editor-utils';
-import { isElement } from '@udecode/plate';
-import { Node } from 'slate';
-
-const isTable = (node: Node): node is TableElement => {
-  return isElement(node) && node.type === ELEMENT_TABLE;
-};
+import { isTable } from '../utils/isTable';
 
 export const useTableColumnHeaderOfTableAbove = (
   element: MyElement,

@@ -7,3 +7,4 @@ export * as editorLayout from './editor-layout';
 export * as menu from './menu';
 export * as notebookList from './notebook-list';
 export * as table from './table';
+export * as editorViewportBreakpoints from './editor-viewport-breakpoints';

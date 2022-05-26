@@ -11,6 +11,7 @@ import {
 import { organisms } from '@decipad/ui';
 import { AvailableSwatchColor, UserIconKey } from 'libs/ui/src/utils';
 import { useMemo, useState } from 'react';
+import { WIDE_MIN_COL_COUNT } from '../../constants';
 import {
   EditorTableContext,
   EditorTableContextValue,
@@ -45,12 +46,14 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
     [blockId, columns]
   );
 
+  const wideTable = columns.length >= WIDE_MIN_COL_COUNT;
+
   return (
     <div {...attributes} contentEditable={true} id={blockId}>
       {!deleted && (
         <DraggableBlock
           element={element}
-          blockKind="editorTable"
+          blockKind={wideTable ? 'editorWideTable' : 'editorTable'}
           onDelete={() => {
             setDeleted(true);
             onDelete();

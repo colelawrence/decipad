@@ -57,6 +57,11 @@ export const codeLine: StyleData = {
 export const editorTable: StyleData = {
   paddingTop: '40px',
   typography: h2,
+  desiredWidth: slimBlockWidth,
+};
+export const editorWideTable: StyleData = {
+  paddingTop: '40px',
+  typography: h2,
   desiredWidth: wideBlockWidth,
 };
 export const plot: StyleData = {

@@ -4,9 +4,36 @@ import { Children, FC, PropsWithChildren, useContext } from 'react';
 import * as icons from '../../icons';
 import { CodeBlock } from '../../organisms';
 import { cssVar, display, p16Bold, setCssVar } from '../../primitives';
-import { blockAlignment } from '../../styles';
+import {
+  blockAlignment,
+  editorLayout,
+  editorViewportBreakpoints,
+} from '../../styles';
 import { TableStyleContext } from '../../utils';
 import { IconPopover } from '../IconPopover/IconPopover';
+
+const halfFullWidth = '50vw';
+const halfSlimBlockWidth = `${Math.round(editorLayout.slimBlockWidth / 2)}px`;
+const doubleGutterGap = `${editorLayout.gutterGap * 2}px`;
+const slimMarginLeft = `calc(${halfFullWidth} - ${halfSlimBlockWidth})`;
+const halfDiffBetweenWideAndSlim = `${Math.round(
+  (editorLayout.wideBlockWidth - editorLayout.slimBlockWidth) / 2
+)}px`;
+
+const screenContainingWideBlockMediaQuery = `@media (min-width: ${editorViewportBreakpoints.minWideWidth}px)`;
+const screenContainingBetweenWideAndSlimBlockMediaQuery = `@media (max-width: ${editorViewportBreakpoints.minWideWidth}px) and (min-width: ${editorViewportBreakpoints.minSlimWidth}px)`;
+
+const tableCaptionWideStyles = css({
+  paddingLeft: 0,
+  [screenContainingBetweenWideAndSlimBlockMediaQuery]: {
+    paddingLeft: `calc(${slimMarginLeft} - ${doubleGutterGap})`,
+  },
+  [screenContainingWideBlockMediaQuery]: {
+    paddingLeft: halfDiffBetweenWideAndSlim,
+  },
+});
+
+const tableCaptionSlimStyles = css({});
 
 const tableTitleWrapper = css({
   alignItems: 'center',
@@ -43,18 +70,20 @@ const placeholderStyles = css(p16Bold, {
 
 const editableTableCaptionStyles = css(p16Bold);
 type EditableTableCaptionProps = PropsWithChildren<{
+  isForWideTable?: boolean;
   empty?: boolean;
 }>;
 
 export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
   empty,
+  isForWideTable = false,
   children,
 }) => {
   const { color, icon, setIcon, setColor } = useContext(TableStyleContext);
   const Icon = icons[icon];
   const [caption, ...tableFormulaEditors] = Children.toArray(children);
   return (
-    <div>
+    <div css={isForWideTable ? tableCaptionWideStyles : tableCaptionSlimStyles}>
       <div css={tableTitleWrapper}>
         <div contentEditable={false} css={tableIconSizeStyles}>
           {useIsEditorReadOnly() ? (
