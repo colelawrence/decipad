@@ -16,11 +16,7 @@ import {
 } from '@decipad/react-contexts';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import {
-  createCodeBlockPlugin,
-  createCodeLinePlugin,
-  createCodeVariableHighlightPlugin,
-} from '..';
+import { createCodeLinePlugin, createCodeVariableHighlightPlugin } from '..';
 
 let cleanup: undefined | (() => void);
 afterEach(() => cleanup?.());
@@ -40,7 +36,6 @@ const PlateWrapper = ({
             } as never,
           ]}
           plugins={[
-            createCodeBlockPlugin(),
             createCodeLinePlugin(computer),
             createCodeVariableHighlightPlugin(),
           ]}

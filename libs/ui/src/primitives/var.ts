@@ -13,6 +13,7 @@ import {
   white,
   yellow600,
   teal600,
+  grey50,
 } from './color';
 
 export interface CssVariables {
@@ -25,6 +26,7 @@ export interface CssVariables {
   // Fill
 
   readonly backgroundColor: Property.Color;
+  readonly tintedBackgroundColor: Property.Color;
   readonly iconBackgroundColor: Property.Color;
   readonly offColor: Property.Color;
 
@@ -55,6 +57,7 @@ const defaults: CssVariables = {
   warningColor: yellow600.rgb,
 
   backgroundColor: white.rgb,
+  tintedBackgroundColor: grey50.rgb,
   iconBackgroundColor: grey200.rgb,
   offColor: offWhite.rgb,
 

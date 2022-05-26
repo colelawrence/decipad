@@ -11,7 +11,7 @@ const tdBaseStyles = css(p14Medium, {
   display: 'grid',
   overflowX: 'hidden',
   alignItems: 'center',
-
+  backgroundColor: cssVar('tintedBackgroundColor'),
   minHeight: table.tdMinHeight,
   verticalAlign: 'middle',
 

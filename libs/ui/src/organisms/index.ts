@@ -1,7 +1,7 @@
 export { AccountMenu } from './AccountMenu/AccountMenu';
 export { BlockDragHandle } from './BlockDragHandle/BlockDragHandle';
 export { ClosableModal } from './ClosableModal/ClosableModal';
-export { CodeBlock } from './CodeBlock/CodeBlock';
+export { FormulasDrawer } from './FormulasDrawer/FormulasDrawer';
 export { CodeLine } from './CodeLine/CodeLine';
 export { CodeResult } from './CodeResult/CodeResult';
 export { ColumnResult } from './ColumnResult/ColumnResult';

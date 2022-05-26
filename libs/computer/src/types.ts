@@ -1,5 +1,6 @@
 import { AnyMapping } from '@decipad/utils';
 import { AST, InjectableExternalData, Result, Parser } from '@decipad/language';
+import { VisibleVariables } from './computer/getVisibleVariables';
 
 export interface IdentifiedBlock {
   type: 'identified-block';
@@ -60,7 +61,7 @@ export interface IdentifiedResult {
 export interface InBlockResult extends Result {
   blockId: string;
   statementIndex: number;
-  visibleVariables: ReadonlySet<string>;
+  visibleVariables: VisibleVariables;
 }
 
 export interface ResultsContextItem {

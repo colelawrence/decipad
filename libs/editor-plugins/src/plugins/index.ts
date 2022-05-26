@@ -2,7 +2,6 @@ export * from './AutoFormatCodeBlock/createAutoFormatCodeBlockPlugin';
 export * from './AutoPairs/createAutoPairsPlugin';
 export * from './CodeVariableHighlight';
 export * from './Callout';
-export * from './CodeBlock';
 export * from './CodeLine';
 export * from './Cursors';
 export * from './Divider';

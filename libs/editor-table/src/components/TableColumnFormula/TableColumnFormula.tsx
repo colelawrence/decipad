@@ -13,7 +13,9 @@ export const TableColumnFormula: PlateComponent = ({ children, element }) => {
   return (
     <organisms.CodeLine variant="table">
       <span contentEditable={false}>
-        <atoms.CodeVariable>{header && Node.string(header)}</atoms.CodeVariable>{' '}
+        <atoms.CodeVariable type={{ kind: 'table-formula' }}>
+          {header && Node.string(header)}
+        </atoms.CodeVariable>{' '}
         ={' '}
       </span>
       {children}

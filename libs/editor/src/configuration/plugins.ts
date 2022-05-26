@@ -2,7 +2,6 @@ import {
   createAutoFormatCodeBlockPlugin,
   createAutoPairsPlugin,
   createCalloutPlugin,
-  createCodeBlockPlugin,
   createCodeLinePlugin,
   createCodeVariableHighlightPlugin,
   createCursorsPlugin,
@@ -98,7 +97,6 @@ export const plugins = (computer: Computer) =>
       createAutoFormatCodeBlockPlugin(),
 
       // code editing
-      createCodeBlockPlugin(),
       createCodeVariableHighlightPlugin(),
       createSyntaxErrorHighlightPlugin(),
       createAutoPairsPlugin(),

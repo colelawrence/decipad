@@ -2,7 +2,7 @@ import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { Children, FC, PropsWithChildren, useContext } from 'react';
 import * as icons from '../../icons';
-import { CodeBlock } from '../../organisms';
+import { FormulasDrawer } from '../../organisms';
 import { cssVar, display, p16Bold, setCssVar } from '../../primitives';
 import {
   blockAlignment,
@@ -109,7 +109,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
         </div>
       </div>
       {tableFormulaEditors.length > 0 && (
-        <CodeBlock>{tableFormulaEditors}</CodeBlock>
+        <FormulasDrawer>{tableFormulaEditors}</FormulasDrawer>
       )}
     </div>
   );

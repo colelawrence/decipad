@@ -1,7 +1,7 @@
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CALLOUT,
-  ELEMENT_CODE_BLOCK,
+  ELEMENT_CODE_LINE,
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_HR,
@@ -54,7 +54,7 @@ export const autoformatBlocks: MyAutoformatRule[] = [
   },
   {
     mode: 'block',
-    type: ELEMENT_CODE_BLOCK,
+    type: ELEMENT_CODE_LINE,
     match: '```',
     query: doesSelectionAllowTextStyling,
     triggerAtBlockStart: false,

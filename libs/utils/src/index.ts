@@ -4,6 +4,7 @@ export * from './get-only';
 export * from './get-defined-promise';
 export * from './enumerate';
 export * from './identity';
+export * from './last';
 export * from './lenient-zip';
 export * from './noop';
 export * from './thro';

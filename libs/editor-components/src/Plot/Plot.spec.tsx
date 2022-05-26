@@ -1,6 +1,6 @@
 import { ELEMENT_PLOT, PlotElement } from '@decipad/editor-types';
 import Fraction from '@decipad/fraction';
-import { SerializedType } from '@decipad/language';
+import { SerializedType } from '@decipad/computer';
 import {
   ResultsContextItem,
   TestResultsProvider,
@@ -131,7 +131,10 @@ it('shows a plot if has data and options', async () => {
               statementIndex: 0,
               type: tableType,
               value: tableData,
-              visibleVariables: new Set(),
+              visibleVariables: {
+                global: new Set(),
+                local: new Set(),
+              },
             },
           ],
         },

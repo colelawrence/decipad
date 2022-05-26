@@ -1,5 +1,4 @@
 export * from './block-management';
-export * from './CodeBlock';
 export * from './CodeErrorHighlight';
 export * from './CodeLine';
 export * from './CodeVariable';

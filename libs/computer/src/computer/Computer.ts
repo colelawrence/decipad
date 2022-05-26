@@ -148,7 +148,10 @@ export const resultFromError = (
     blockId,
     statementIndex,
     ...serializeResult(t.impossible(message), null),
-    visibleVariables: new Set(),
+    visibleVariables: {
+      global: new Set(),
+      local: new Set(),
+    },
   };
 };
 

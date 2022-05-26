@@ -1,7 +1,6 @@
 import {
   ElementKind,
   ELEMENT_BLOCKQUOTE,
-  ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
   ELEMENT_CALLOUT,
   ELEMENT_H1,
@@ -27,7 +26,6 @@ import {
   Bold,
   Callout,
   Code,
-  CodeBlock,
   CodeLine,
   Divider,
   Heading1,
@@ -62,7 +60,6 @@ export const components = (computer: Computer): PlateComponents => ({
   [ELEMENT_HR]: Divider,
 
   // Code
-  [ELEMENT_CODE_BLOCK]: CodeBlock,
   [ELEMENT_CODE_LINE]: CodeLine,
 
   // Lists

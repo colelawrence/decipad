@@ -17,7 +17,10 @@ const goodRes: SingleBlockRes = {
         blockId: 'blockId',
         statementIndex: 0,
         value: null,
-        visibleVariables: new Set(),
+        visibleVariables: {
+          global: new Set(),
+          local: new Set(),
+        },
       },
     ],
   },
@@ -34,7 +37,10 @@ const errorRes: SingleBlockRes = {
         blockId: 'blockId',
         statementIndex: 0,
         value: null,
-        visibleVariables: new Set(),
+        visibleVariables: {
+          global: new Set(),
+          local: new Set(),
+        },
       },
     ],
   },

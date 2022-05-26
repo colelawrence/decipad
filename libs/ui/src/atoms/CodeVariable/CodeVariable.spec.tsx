@@ -22,7 +22,7 @@ it('styles variable when variable exists', async () => {
 });
 
 it('styles missing variables', async () => {
-  render(<CodeVariable variableMissing>Foo</CodeVariable>);
+  render(<CodeVariable variableScope="undefined">Foo</CodeVariable>);
   cleanup = await applyCssVars();
   const normalBackgroundColor = findParentWithStyle(
     screen.getByText('Foo'),

@@ -2,7 +2,7 @@ import { SerializedType } from '@decipad/language';
 import { docs } from '@decipad/routing';
 import { Meta, Story } from '@storybook/react';
 import { CodeLine } from '..';
-import { CodeBlock } from './CodeBlock';
+import { FormulasDrawer } from './FormulasDrawer';
 
 const lines = [
   {
@@ -29,18 +29,18 @@ const lines = [
 ];
 
 export default {
-  title: 'Organisms / Editor / Code / Block',
-  component: CodeBlock,
+  title: 'Organisms / Editor / Table / FormulasDrawer',
+  component: FormulasDrawer,
   parameters: {
     chromatic: { viewports: [320, 1280] },
   },
 } as Meta;
 
 export const Normal: Story = () => (
-  <CodeBlock>
+  <FormulasDrawer>
     <CodeLine {...lines[0]}>42 + 1337;</CodeLine>
     <CodeLine {...lines[1]}>
       ["Lorem", "Ipsum", "Dolor", "Sit", "Amet"]
     </CodeLine>
-  </CodeBlock>
+  </FormulasDrawer>
 );

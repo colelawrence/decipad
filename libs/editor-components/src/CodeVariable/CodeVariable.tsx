@@ -1,6 +1,8 @@
 import { PlateComponent, RichText } from '@decipad/editor-types';
 import { useComputer, useResult } from '@decipad/react-contexts';
 import { atoms } from '@decipad/ui';
+import { VisibleVariables } from 'libs/computer/src/computer/getVisibleVariables';
+import { VariableScope } from 'libs/ui/src/atoms/CodeVariable/CodeVariable';
 import { useRef } from 'react';
 import { useObservable } from 'rxjs-hooks';
 
@@ -13,6 +15,19 @@ type CodeLeaf = PlateComponent<{
   leaf: RichText & VariableInfo;
 }>;
 
+export const getVariableScope = (
+  variableName: string,
+  vars: VisibleVariables | undefined
+): VariableScope => {
+  if (vars?.local.has(variableName)) {
+    return 'local';
+  }
+  if (vars?.global.has(variableName)) {
+    return 'global';
+  }
+  return 'undefined';
+};
+
 export const CodeVariable: CodeLeaf = ({
   attributes,
   children,
@@ -22,7 +37,8 @@ export const CodeVariable: CodeLeaf = ({
 
   const blockResult = useResult(blockId, rootRef.current);
   const vars = blockResult?.results?.[0]?.visibleVariables;
-  const variableMissing = isDeclaration ? false : !vars?.has(variableName);
+  const variableScope = getVariableScope(variableName, vars);
+  const variableMissing = variableScope === 'undefined';
 
   const computer = useComputer();
   const defBlockId = useObservable(() => computer.getBlockId$(variableName));
@@ -34,7 +50,7 @@ export const CodeVariable: CodeLeaf = ({
     <span ref={rootRef} {...attributes}>
       <atoms.CodeVariable
         setPointyStyles={pointyStylesToBeUsed}
-        variableMissing={variableMissing}
+        variableScope={variableScope}
         onClick={() => {
           if (pointyStylesToBeUsed) {
             const el = document.getElementById(defBlockId);
