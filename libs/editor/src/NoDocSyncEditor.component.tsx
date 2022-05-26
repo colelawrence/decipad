@@ -1,11 +1,13 @@
 import {
   ComputerContextProvider,
+  EditorChangeContextProvider,
   ResultsContext,
   useComputer,
 } from '@decipad/react-contexts';
 import { Plate } from '@udecode/plate';
-import { FC, useMemo } from 'react';
+import { FC, useCallback, useMemo, useState } from 'react';
 import { MyPlateProps, MyValue } from '@decipad/editor-types';
+import { Subject } from 'rxjs';
 import { Tooltip } from './components';
 import * as configuration from './configuration';
 import { emptyNotebook, introNotebook } from './exampleNotebooks';
@@ -23,20 +25,28 @@ export const NoDocSyncEditorInternal = (
     [computer]
   );
 
+  const [changeSubject] = useState(() => new Subject<undefined>());
+  const onChange = useCallback(() => {
+    changeSubject.next(undefined);
+  }, [changeSubject]);
+
   return (
     <ResultsContext.Provider value={computer.results.asObservable()}>
-      <Plate<MyValue>
-        id={NO_DOC_SYNC_EDITOR_ID}
-        plugins={editorPlugins}
-        initialValue={
-          window.localStorage.getItem(POPULATE_PLAYGROUND) === 'true'
-            ? introNotebook()
-            : emptyNotebook()
-        }
-        {...props}
-      >
-        <Tooltip />
-      </Plate>
+      <EditorChangeContextProvider changeSubject={changeSubject}>
+        <Plate<MyValue>
+          id={NO_DOC_SYNC_EDITOR_ID}
+          plugins={editorPlugins}
+          onChange={onChange}
+          initialValue={
+            window.localStorage.getItem(POPULATE_PLAYGROUND) === 'true'
+              ? introNotebook()
+              : emptyNotebook()
+          }
+          {...props}
+        >
+          <Tooltip />
+        </Plate>
+      </EditorChangeContextProvider>
     </ResultsContext.Provider>
   );
 };

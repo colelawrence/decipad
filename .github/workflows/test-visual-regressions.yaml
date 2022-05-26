@@ -23,9 +23,6 @@ jobs:
       - name: Install
         run: yarn install
 
-      - name: Install Percy
-        run: npm install -g @percy/cli
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -36,7 +33,7 @@ jobs:
       - name: Run end-to-end tests
         env:
           PERCY_TOKEN: '${{ secrets.PERCY_TOKEN }}'
-        run: percy exec -- ./scripts/e2e.sh
+        run: ./node_modules/.bin/percy exec -- ./scripts/e2e.sh
 
   notify:
     name: Discord Notification

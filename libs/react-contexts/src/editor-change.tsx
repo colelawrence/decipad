@@ -1,5 +1,20 @@
-import { createContext, FC, ReactNode, useContext, useEffect } from 'react';
-import { distinctUntilChanged, map, Observable } from 'rxjs';
+import {
+  createContext,
+  FC,
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+} from 'react';
+import {
+  catchError,
+  distinctUntilChanged,
+  EMPTY,
+  filter,
+  map,
+  Observable,
+  take,
+} from 'rxjs';
 import { dequal } from 'dequal';
 import { PlateEditor, usePlateEditorRef } from '@udecode/plate';
 import type { MyValue } from '@decipad/editor-types';
@@ -35,4 +50,29 @@ export function useEditorChange<T>(
       subscription.unsubscribe();
     };
   }, [callback, selector, observable, editor]);
+}
+
+export function useChangedEditorElement() {
+  const editor = getDefined(usePlateEditorRef<MyValue>());
+  const observable = useContext(EditorChangeContext);
+
+  return useCallback(
+    <T,>(
+      selector: (e: PlateEditor<MyValue>) => T | null,
+      cb: (e: T) => void
+    ) => {
+      const subscription = observable
+        .pipe(
+          map(() => selector(editor)),
+          catchError(() => {
+            subscription.unsubscribe();
+            return EMPTY;
+          }),
+          filter((v): v is Exclude<T, null> => v != null),
+          take(1)
+        )
+        .subscribe(cb);
+    },
+    [observable, editor]
+  );
 }

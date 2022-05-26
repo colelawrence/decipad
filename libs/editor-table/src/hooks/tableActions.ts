@@ -11,11 +11,12 @@ import {
   TableHeaderRowElement,
   TableRowElement,
 } from '@decipad/editor-types';
-import { withPath } from '@decipad/editor-utils';
+import { focusAndSetSelection, withPath } from '@decipad/editor-utils';
 import { nanoid } from 'nanoid';
 import { useCallback } from 'react';
 import {
   deleteText,
+  getNode,
   getNodeChildren,
   getNodeEntry,
   hasNode,
@@ -25,7 +26,10 @@ import {
   setNodes,
   withoutNormalizing,
 } from '@udecode/plate';
+import { useChangedEditorElement } from '@decipad/react-contexts';
+import { getDefined } from '@decipad/utils';
 import { getColumnName } from '../utils/getColumnName';
+import { findTableFormulaPath } from '../utils/findTableFormulaPath';
 
 export interface TableActions {
   onDelete: () => void;
@@ -45,6 +49,8 @@ export const useTableActions = (
   editor: MyEditor,
   element: TableElement
 ): TableActions => {
+  const waitForElement = useChangedEditorElement();
+
   const onDelete = useCallback(() => {
     withPath(editor, element, (path) => {
       deleteText(editor, { at: path });
@@ -68,6 +74,16 @@ export const useTableActions = (
   const onChangeColumnType = useCallback(
     (columnIndex: number, cellType: TableCellType) => {
       withPath(editor, element, (path) => {
+        if (cellType.kind === 'table-formula') {
+          waitForElement(
+            () => {
+              const table = getDefined(getNode<TableElement>(editor, path));
+              return findTableFormulaPath(table, path, columnIndex);
+            },
+            (formulaPath) => focusAndSetSelection(editor, formulaPath)
+          );
+        }
+
         const columnHeaderPath = [...path, 1, columnIndex];
         if (hasNode(editor, columnHeaderPath)) {
           setNodes<TableHeaderElement>(
@@ -80,7 +96,7 @@ export const useTableActions = (
         }
       });
     },
-    [editor, element]
+    [editor, element, waitForElement]
   );
 
   const onAddColumn = useCallback(() => {

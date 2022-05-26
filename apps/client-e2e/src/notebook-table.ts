@@ -1,3 +1,4 @@
+import waitForExpect from 'wait-for-expect';
 import { createTable, writeInTable } from './page-utils/Block';
 import {
   focusOnBody,
@@ -96,6 +97,43 @@ describe('notebook table', () => {
     expect(row1).toBe('2020-01-01');
     expect(row2).toBe('2020-02-01');
     expect(row3).toBe('2020-03-01');
+  });
+
+  it('can change column type to a formula', async () => {
+    await page.click('th:nth-child(4) button:has-text("Caret down")');
+    await page.press('[role="menuitem"]:has-text("Change type")', 'Enter');
+    await page.press('[role="menuitem"]:has-text("Formula")', 'Enter');
+
+    const codeBlock = await page.waitForSelector('section:has-text("=")');
+    const codeBlockText = await codeBlock.innerText();
+
+    expect(codeBlockText).toContain('Column4 =');
+  });
+
+  it('focused on formula', async () => {
+    await waitForExpect(async () => {
+      const hasFocusOnSection = `
+        document.hasFocus() &&
+        document.getSelection()?.anchorNode?.parentElement?.closest?.('section') != null
+      `;
+      expect(await page.evaluate(hasFocusOnSection)).toBe(true);
+    });
+  });
+
+  it('formula produced desired output', async () => {
+    await page.keyboard.type('1 + 1');
+
+    const codeBlock = await page.waitForSelector('section:has-text("=")');
+    const codeBlockText = await codeBlock.innerText();
+    expect(codeBlockText).toBe('Column4 = 1 + 1');
+
+    await waitForExpect(async () => {
+      const cell = await page
+        .locator('table > tbody > tr:nth-child(1) > td:nth-child(4)')
+        .textContent();
+
+      expect(cell?.trim()).toBe('2');
+    });
   });
 
   it.todo('has more meaningful css selectors');
