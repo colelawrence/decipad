@@ -1,7 +1,7 @@
-import waitForExpect from 'wait-for-expect';
 import {
   createCalculationBlockBelow,
-  getCalculationBlocks,
+  getCodeLineContent,
+  getResult,
 } from './page-utils/Block';
 import {
   focusOnBody,
@@ -15,91 +15,80 @@ describe.skip('notebook calculation block', () => {
   beforeAll(() => setUp());
   beforeAll(() => waitForEditorToLoad());
 
+  let lineNo = -1;
+
   it('starts empty', async () => {
     expect((await page.textContent('[contenteditable] h1'))!.trim()).toBe('');
     expect((await page.textContent('[contenteditable] p'))!.trim()).toBe('');
   });
 
   it('can create a table using a calculation block', async () => {
+    const lineText = 'A = { B = [1,2,3] }';
     await focusOnBody();
     await createCalculationBlockBelow('A = { B = [1,2,3] }');
 
-    const blocks = await getCalculationBlocks(true);
-    expect(blocks).toMatchObject([
-      {
-        lines: [
-          {
-            code: 'A = { B = [1,2,3] }',
-          },
-        ],
-      },
-    ]);
+    lineNo += 1;
+    const line = await getCodeLineContent(lineNo);
+    expect(line).toBe(lineText);
 
-    const [{ result }] = blocks;
-    const rows = await result!.$$('table tr');
-    expect(rows).toHaveLength(4);
+    const result = await getResult(lineNo);
+    const rows = result.locator('table tr');
+    expect(await rows.count()).toBe(4);
 
-    const [headerRow, ...bodyRows] = rows;
-    const headerCell = await headerRow.$('th');
-    expect(await headerCell!.innerText()).toBe('B');
-
-    const rowTexts = await Promise.all(
-      bodyRows.map(async (bodyRow) => {
-        const cell = await bodyRow.$('td');
-        return cell!.innerText();
-      })
-    );
-    expect(rowTexts).toEqual(['1', '2', '3']);
+    const headerCellContents = await rows.locator('th').allTextContents();
+    const bodyRowsContents = await rows.locator('td').allTextContents();
+    expect(headerCellContents).toEqual(['B']);
+    expect(bodyRowsContents).toEqual(['1', '2', '3']);
   });
 
   it('Get the column `A.B` from the table', async () => {
+    const lineText = 'A.B';
     await keyPress('ArrowDown');
-    await createCalculationBlockBelow('A.B');
+    await createCalculationBlockBelow(lineText);
 
-    const blocks = await getCalculationBlocks(true);
-    expect(blocks).toMatchObject([
-      expect.any(Object),
-      {
-        lines: [
-          {
-            code: 'A.B',
-          },
-        ],
-      },
-    ]);
-    const [, { result }] = blocks;
-    const rows = await result!.$$('tr');
-    expect(rows).toHaveLength(3);
+    lineNo += 1;
+    const line = await getCodeLineContent(lineNo);
+    expect(line).toBe(lineText);
 
-    const rowTexts = await Promise.all(
-      rows.map(async (bodyRow) => {
-        const cell = await bodyRow.$('td:first-of-type');
-        return cell!.innerText();
-      })
-    );
-    expect(rowTexts).toEqual(['1', '2', '3']);
+    const result = await getResult(lineNo);
+    const rows = result.locator('table tr');
+    expect(await rows.count()).toBe(3);
+
+    const cellContents = await rows
+      .locator('td:first-of-type')
+      .allTextContents();
+    expect(cellContents).toEqual(['1', '2', '3']);
   });
 
   it('Get an error from getting column that doesnt exist `A.C`', async () => {
+    const lineText = 'A.C';
     await keyPress('ArrowDown');
-    await createCalculationBlockBelow('A.C');
+    await createCalculationBlockBelow(lineText);
 
-    await waitForExpect(async () => {
-      const blocks = await getCalculationBlocks();
+    lineNo += 1;
 
-      expect(blocks).toMatchObject([
-        expect.any(Object),
-        expect.any(Object),
-        {
-          lines: [
-            {
-              code: 'A.C',
-              result: expect.stringMatching(/warning/i),
-            },
-          ],
-          result: null,
-        },
-      ]);
-    });
+    const line = await getCodeLineContent(lineNo);
+    expect(line).toBe(lineText);
+
+    const result = await getResult(lineNo);
+    expect(await result.allTextContents()).toMatchObject([
+      expect.stringMatching(/warning/i),
+    ]);
+  });
+
+  it('Can show a numerical result inline`', async () => {
+    const lineText = 'total(A.B) miles * hour';
+    await keyPress('ArrowDown');
+    await createCalculationBlockBelow(lineText);
+
+    lineNo += 1;
+
+    const line = await getCodeLineContent(lineNo);
+    expect(line).toBe(lineText);
+
+    const result = await getResult(lineNo);
+    expect(await result.allTextContents()).toMatchObject([
+      expect.stringMatching(/6.+miles.+hour/i),
+    ]);
   });
 });

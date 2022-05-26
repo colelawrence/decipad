@@ -1,16 +1,4 @@
-import { timeout } from '@decipad/utils';
-import { ElementHandle } from 'playwright';
 import waitForExpect from 'wait-for-expect';
-
-interface CalculationBlockLine {
-  code: string;
-  result: string;
-}
-
-interface CalculationBlock {
-  lines: CalculationBlockLine[];
-  result: ElementHandle | null;
-}
 
 export async function createTable() {
   await page.click('[contenteditable] p >> nth=-1');
@@ -83,59 +71,32 @@ export async function createCalculationBlockBelow(decilang: string) {
   });
 }
 
-async function stringifyCodeLineAndResult([codeLine, lineResult]: Readonly<
-  [ElementHandle, ElementHandle]
->): Promise<CalculationBlockLine> {
-  return {
-    code: (await codeLine.textContent()) ?? '',
-    result: (await lineResult.textContent()) ?? '',
-  };
+export function getCodeLineBlockLocator() {
+  return page.locator('//*[@contenteditable][//code]');
 }
 
-async function fetchCalculationBlock(
-  codeBlock: ElementHandle,
-  expectNoErrors = false
-): Promise<CalculationBlock> {
-  // Wait for the results to show up.
-  // It's hard to tell if these results are current since outdated ones to not immediately vanish,
-  // so better wait a little longer.
-  await Promise.all([
-    waitForExpect(async () =>
-      expect(await codeBlock.$$('output')).not.toHaveLength(0)
-    ),
-    expectNoErrors ? codeBlock.waitForSelector('output') : Promise.resolve(),
-    timeout(2_010),
-  ] as Promise<void>[]);
-
-  const codeLines = await codeBlock.$$('code');
-  const codeLinesWithResults = await Promise.all(
-    codeLines.map(async (codeLine) => {
-      const output = (await codeLine.$$('output'))[0];
-      return [codeLine, output] as const;
-    })
-  );
-
-  const blockResult = await codeBlock.$('output');
-
-  return {
-    lines: await Promise.all(
-      codeLinesWithResults.map(stringifyCodeLineAndResult)
-    ),
-    result: blockResult,
-  };
+export function getCodeLines() {
+  return getCodeLineBlockLocator().locator('code');
 }
 
-export async function getCalculationBlocks(
-  expectNoErrors = false
-): Promise<CalculationBlock[]> {
-  let blocks: ElementHandle[] = [];
+export function getResults() {
+  return getCodeLineBlockLocator().locator('output');
+}
 
-  await waitForExpect(async () => {
-    // waitForExpect doesn't propagate the returned value
-    blocks = await page.$$('//*[@contenteditable][//code]');
-    expect(blocks.length).toBeGreaterThan(0);
-  });
-  return Promise.all(
-    blocks.map((block) => fetchCalculationBlock(block, expectNoErrors))
-  );
+export async function getCodeLineContent(n: number) {
+  return (await getCodeLines().nth(n).allTextContents()).join();
+}
+
+export async function getResult(n: number) {
+  const locator = getResults().nth(n);
+  // Computer results have a throttle and may take some time to display.
+  // HACK: should be able to use `locator.waitFor()` instead (see
+  // https://playwright.dev/docs/api/class-locator#locator-wait-for) but jest-playwright is not
+  // being actively maintained and because of that we can't upgrade playwright to v1.16 where this
+  // new function was release.
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  // eslint-disable-next-line no-underscore-dangle
+  await page.waitForSelector(locator._selector);
+  return locator;
 }

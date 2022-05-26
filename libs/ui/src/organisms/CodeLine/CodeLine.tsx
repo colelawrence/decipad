@@ -131,9 +131,9 @@ export const CodeLine = ({
               </output>
             )}
           {syntaxError && ( // The typescript gods punish me for using hasSyntaxError here
-            <div css={inlineResultStyles}>
+            <output css={inlineResultStyles}>
               <CodeError {...syntaxError} />
-            </div>
+            </output>
           )}
         </div>
         {renderExpandedResult && result && (

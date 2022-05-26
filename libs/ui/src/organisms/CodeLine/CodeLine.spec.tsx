@@ -5,17 +5,12 @@ import { runCode } from '../../test-utils';
 import { CodeLine } from './CodeLine';
 
 let tabularProps: ComponentProps<typeof CodeLine>;
-let nonTabularProps: ComponentProps<typeof CodeLine>;
 let typeErrorProps: ComponentProps<typeof CodeLine>;
 const syntaxError = { message: 'Syntax Error', url: 'https://foo' };
 beforeAll(async () => {
   tabularProps = {
     children: '[1, 2, 3]',
     result: await runCode('[1, 2, 3]'),
-  };
-  nonTabularProps = {
-    children: '9 + 1',
-    result: await runCode('9 + 1'),
   };
   typeErrorProps = {
     children: '1 apple + 1 banana',
@@ -118,13 +113,5 @@ describe('syntaxError prop', () => {
     );
 
     expect(getByTitle(/Warning/i).closest('svg')).toBeVisible();
-  });
-
-  it('does not render inline nor expanded results', () => {
-    const { queryAllByRole } = render(
-      <CodeLine {...nonTabularProps} syntaxError={syntaxError} displayInline />
-    );
-
-    expect(queryAllByRole('status')).toHaveLength(0);
   });
 });
