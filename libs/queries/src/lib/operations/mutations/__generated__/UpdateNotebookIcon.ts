@@ -9,6 +9,8 @@
 
 export interface UpdateNotebookIcon_updatePad {
   __typename: 'Pad';
+  id: string;
+  icon: string | null;
 }
 
 export interface UpdateNotebookIcon {

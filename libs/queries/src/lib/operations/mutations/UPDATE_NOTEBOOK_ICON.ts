@@ -8,6 +8,8 @@ export const UPDATE_NOTEBOOK_ICON = gql`
   mutation UpdateNotebookIcon($id: ID!, $icon: String!) {
     updatePad(id: $id, pad: { icon: $icon }) {
       __typename
+      id
+      icon
     }
   }
 `;
