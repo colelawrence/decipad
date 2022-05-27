@@ -1,13 +1,13 @@
 import produce from 'immer';
 import Fraction from '@decipad/fraction';
 import { AST, Time } from '..';
-import { InferError, Type, TypeName } from '.';
+import { InferError, Type, PrimitiveTypeName } from '.';
 import { getDefined } from '../utils';
 import { Unit, Units, units } from './unit-type';
 import { timeUnitFromUnit } from '../date';
 
 // "scalar" is a legacy name
-export const scalar = (type: TypeName) =>
+export const scalar = (type: PrimitiveTypeName) =>
   produce(new Type(), (t) => {
     t.type = type;
   });

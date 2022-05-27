@@ -3,6 +3,7 @@
   "sourceRoot": "apps/docs/src",
   "projectType": "application",
   "prefix": "docs",
+  "implicitDependencies": ["language", "computer"],
   "targets": {
     "serve": {
       "executor": "@nrwl/workspace:run-commands",

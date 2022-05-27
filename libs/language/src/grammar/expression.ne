@@ -218,11 +218,9 @@ cmpOperator        -> (">" | "<" | "<=" | ">=")         {% simpleOperator %}
 smoothOperator     -> ("smooth")                        {% simpleOperator %}
 additiveOperator   -> ("-" | "+")                       {% simpleOperator %}
 divMulOperator     -> ("*" | "/" | "contains")          {% simpleOperator %}
-divMulOperator     -> __ "%"                            {%
+divMulOperator     -> __ ("%" | "mod" | "modulo")       {%
                                                         (d) => {
-                                                          return addArrayLoc({
-                                                            name: d[1].value,
-                                                          }, d)
+                                                          return addArrayLoc({ name: '%' }, d)
                                                         }
                                                         %}
 

@@ -2,7 +2,7 @@ import { dequal } from 'dequal';
 
 import type { Time } from '..';
 import { equalOrUnknown, getDefined, zip } from '../utils';
-import { TypeName, Type } from '.';
+import { PrimitiveTypeName, Type } from '.';
 import * as t from './build';
 import { InferError } from './InferError';
 import {
@@ -28,7 +28,7 @@ const checker = <Args extends unknown[]>(
   };
 };
 
-export const isScalar = checker((me: Type, type: TypeName) => {
+export const isScalar = checker((me: Type, type: PrimitiveTypeName) => {
   if (type === me.type) {
     return me;
   } else {

@@ -42,9 +42,7 @@ export * from './convert-to-multiplier-unit';
 export { setUnit, stringifyUnits, normalizeUnits, normalizeUnitsOf, units };
 export { InferError, inverseExponent, t as build };
 
-export const scalarTypeNames = ['number', 'string', 'boolean'];
-
-export type TypeName = typeof scalarTypeNames[number];
+export type PrimitiveTypeName = 'number' | 'string' | 'boolean';
 
 type CombineArg = Type | ((t: Type) => Type);
 
@@ -54,7 +52,7 @@ export class Type {
   node: AST.Node | null = null;
   errorCause: InferError | null = null;
 
-  type: string | null = null;
+  type: PrimitiveTypeName | null = null;
   unit: Units | null = null;
 
   date: Time.Specificity | null = null;
@@ -206,7 +204,7 @@ export class Type {
     return sameAs(this, other);
   }
 
-  isScalar(type: TypeName): Type {
+  isScalar(type: PrimitiveTypeName): Type {
     return isScalar(this, type);
   }
 
