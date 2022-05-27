@@ -63,7 +63,7 @@ export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
             : undefined
         }
         key="min"
-        label="Minimim value"
+        label="Minimum value"
         onChange={onChangeMin}
         type="number"
         value={min}
