@@ -18,6 +18,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: nrwl/nx-set-shas@v2
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
@@ -37,6 +40,7 @@ jobs:
       - name: Run end-to-end tests
         env:
           APPLITOOLS_API_KEY: '${{ secrets.APPLITOOLS_API_KEY }}'
+          NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
         run: ./scripts/e2e.sh || ./scripts/e2e.sh || ./scripts/e2e.sh
 
   notify:
