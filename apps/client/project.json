@@ -53,6 +53,13 @@
       "options": {
         "jestConfig": "apps/client/jest.config.js"
       }
+    },
+    "deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "apps/backend",
+        "command": "../../node_modules/.bin/arc deploy --static --no-hydrate --name \"$DEPLOY_NAME\""
+      }
     }
   }
 }

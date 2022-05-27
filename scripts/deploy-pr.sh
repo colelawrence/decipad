@@ -36,4 +36,4 @@ yarn build:backend
 echo "Deploying \"$DEPLOY_NAME\"..."
 mkdir -p tmp/deploy
 cd apps/backend
-../../node_modules/.bin/arc deploy --no-hydrate --name "$DEPLOY_NAME"
+nx deploy lambdas || nx deploy backend && nx deploy client

@@ -43,7 +43,7 @@ services_setup () {
     echo " ✅ ~ frontend is already up ~ "
   else
     echo " ⌛ ~ frontend is down, let me start it ~ "
-    nx serve client >frontend.log 2>&1 &
+    nx serve client &
     SERVICE_PIDS="${SERVICE_PIDS} ${!}"
   fi
 
@@ -51,7 +51,7 @@ services_setup () {
     echo " ✅ ~ backend is already up ~ "
   else
     echo " ⌛ ~ backend is down, let me start it ~ "
-    nx serve backend >backend.log 2>&1 &
+    nx serve backend &
     SERVICE_PIDS="${SERVICE_PIDS} ${!}"
   fi
 

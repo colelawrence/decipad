@@ -25,7 +25,45 @@
           "lint",
           "test",
           "e2e",
-          "build-storybook"
+          "build-storybook",
+          "deploy"
+        ],
+        "runtimeCacheInputs": [
+          "node -v",
+          "echo DEPLOY_NAME=$DEPLOY_NAME",
+          "echo NODE_OPTIONS=$NODE_OPTIONS",
+          "echo GIT_COMMIT_HASH=$GIT_COMMIT_HASH",
+          "echo SENTRY_DSN=$SENTRY_DSN",
+          "echo SENTRY_ORG=$SENTRY_ORG",
+          "echo SENTRY_PROJECT=$SENTRY_PROJECT",
+          "echo SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN",
+          "echo SENTRY_ENVIRONMENT=$SENTRY_ENVIRONMENT",
+          "echo NEXT_PUBLIC_ANALYTICS_WRITE_KEY=$NEXT_PUBLIC_ANALYTICS_WRITE_KEY",
+          "echo NEXT_PUBLIC_ANALYTICS_WRITE_KEY=$NEXT_PUBLIC_ANALYTICS_WRITE_KEY",
+          "echo NEXT_PUBLIC_HOTJAR_SITE_ID=$NEXT_PUBLIC_HOTJAR_SITE_ID",
+          "echo JWT_SIGNING_PRIVATE_KEY=$JWT_SIGNING_PRIVATE_KEY",
+          "echo NEXTAUTH_URL=$NEXTAUTH_URL",
+          "echo GIT_COMMIT_HASH=$GIT_COMMIT_HASH",
+          "echo GITHUB_CLIENT_ID=$GITHUB_CLIENT_ID",
+          "echo GITHUB_CLIENT_SECRET=$GITHUB_CLIENT_SECRET",
+          "echo JWT_SECRET=$JWT_SECRET",
+          "echo DECI_SES_ACCESS_KEY_ID=$DECI_SES_ACCESS_KEY_ID",
+          "echo DECI_SES_SECRET_ACCESS_KEY=$DECI_SES_SECRET_ACCESS_KEY",
+          "echo DECI_INVITE_EXPIRATION_SECONDS=$DECI_INVITE_EXPIRATION_SECONDS",
+          "echo DECI_KEY_VALIDATION_EXPIRATION_SECONDS=$DECI_KEY_VALIDATION_EXPIRATION_SECONDS",
+          "echo DECI_FROM_EMAIL_ADDRESS=$DECI_FROM_EMAIL_ADDRESS",
+          "echo DECI_APP_URL_BASE=$DECI_APP_URL_BASE",
+          "echo DECI_S3_ENDPOINT=$DECI_S3_ENDPOINT",
+          "echo DECI_S3_ACCESS_KEY_ID=$DECI_S3_ACCESS_KEY_ID",
+          "echo DECI_S3_SECRET_ACCESS_KEY=$DECI_S3_SECRET_ACCESS_KEY",
+          "echo DECI_S3_PADS_BUCKET=$DECI_S3_PADS_BUCKET",
+          "echo DECI_S3_ATTACHMENTS_BUCKET=$DECI_S3_ATTACHMENTS_BUCKET",
+          "echo DECI_GOOGLESHEETS_API_KEY=$DECI_GOOGLESHEETS_API_KEY",
+          "echo DECI_GOOGLESHEETS_CLIENT_ID=$DECI_GOOGLESHEETS_CLIENT_ID",
+          "echo DECI_GOOGLESHEETS_CLIENT_SECRET=$DECI_GOOGLESHEETS_CLIENT_SECRET",
+          "echo DISCORD_PUBLIC_KEY=$DISCORD_PUBLIC_KEY",
+          "echo DISCORD_APP_ID=$DISCORD_APP_ID",
+          "echo ARC_STATIC_SPA=$ARC_STATIC_SPA"
         ]
       }
     }
@@ -38,7 +76,8 @@
         "lambdas",
         "utils",
         "interfaces",
-        "backendtypes"
+        "backendtypes",
+        "client"
       ]
     },
     "backend-test-sandbox": {

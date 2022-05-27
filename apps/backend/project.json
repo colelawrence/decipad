@@ -7,26 +7,20 @@
     "serve": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "commands": [
-          "./scripts/sandbox.sh"
-        ],
+        "commands": ["./scripts/sandbox.sh"],
         "cwd": "apps/backend"
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": [
-          "apps/backend/tests/**/*.ts"
-        ],
+        "lintFilePatterns": ["apps/backend/tests/**/*.ts"],
         "maxWarnings": 0
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "coverage/apps/backend"
-      ],
+      "outputs": ["coverage/apps/backend"],
       "options": {
         "jestConfig": "apps/backend/jest.config.js",
         "codeCoverage": false
@@ -36,6 +30,13 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "yarn tsc -b apps/backend"
+      }
+    },
+    "deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "apps/backend",
+        "command": "../../node_modules/.bin/arc deploy --no-hydrate --name \"$DEPLOY_NAME\""
       }
     }
   }
