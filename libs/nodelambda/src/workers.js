@@ -1,6 +1,7 @@
 const { Worker } = require('worker_threads');
 const assert = require('assert');
 const watch = require('node-watch');
+const { existsSync } = require('fs');
 
 const workerPath = `${__dirname}/run.js`;
 const workers = new Map();
@@ -30,12 +31,14 @@ function createWorkerFor(functionName, env, update) {
     work,
   };
 
-  const w = watch(functionName, () => {
-    update.status(`function ${functionName} changed`);
-    w.close();
-    fn.terminating = true;
-    fn.worker.terminate();
-  });
+  if (existsSync(functionName)) {
+    const w = watch(functionName, () => {
+      update.status(`function ${functionName} changed`);
+      w.close();
+      fn.terminating = true;
+      fn.worker.terminate();
+    });
+  }
 
   fn.worker.on('message', (message) => {
     if (message === 'ready') {
