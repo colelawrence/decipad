@@ -1,5 +1,6 @@
 export { CreateWorkspaceModal } from './CreateWorkspaceModal/CreateWorkspaceModal';
 export { DashboardSidebar } from './DashboardSidebar/DashboardSidebar';
+export { DashboardPlaceholder } from './DashboardPlaceholder/DashboardPlaceholder';
 export { DashboardTopbar } from './DashboardTopbar/DashboardTopbar';
 export { EditWorkspaceModal } from './EditWorkspaceModal/EditWorkspaceModal';
 export { EditorIcon } from './EditorIcon/EditorIcon';

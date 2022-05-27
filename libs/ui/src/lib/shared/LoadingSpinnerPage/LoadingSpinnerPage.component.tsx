@@ -1,9 +1,9 @@
-import { Spinner, Square } from '@chakra-ui/react';
+import { Spinner, Center } from '@chakra-ui/react';
 
 export const LoadingSpinnerPage = () => {
   return (
-    <Square size="100vw">
+    <Center height="100vh">
       <Spinner size="xl" />
-    </Square>
+    </Center>
   );
 };
