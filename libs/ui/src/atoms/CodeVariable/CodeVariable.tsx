@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { noop } from 'lodash';
 import { ReactNode } from 'react';
-import { cssVar, grey400, grey500 } from '../../primitives';
+import { grey400, grey500 } from '../../primitives';
 import { codeBlock } from '../../styles';
 import { TableCellType } from '../../types';
 import { getTypeIcon } from '../../utils';
@@ -9,6 +9,10 @@ import { getTypeIcon } from '../../utils';
 const varStyles = css(codeBlock.variableStyles, {
   padding: '4px 6px',
   borderRadius: '6px',
+});
+
+const localVarStyles = css({
+  color: grey500.rgb,
 });
 
 const iconStyles = css({
@@ -24,15 +28,6 @@ const typeStyles = css({
   borderStyle: 'solid',
   borderColor: grey400.rgb,
   color: grey500.rgb,
-});
-
-const localStyles = css({
-  color: grey500.rgb,
-});
-
-const missingStyles = css({
-  backgroundColor: cssVar('unknownIdentifierHighlightColor'),
-  color: cssVar('unknownIdentifierHighlightTextColor'),
 });
 
 const pointyStylesInW3C = css({ cursor: 'pointer' });
@@ -58,13 +53,16 @@ export const CodeVariable = ({
   return (
     <span
       onClick={onClick}
-      css={[
-        varStyles,
-        type && typeStyles,
-        variableScope === 'undefined' && missingStyles,
-        variableScope === 'local' && localStyles,
-        setPointyStyles && pointyStylesInW3C,
-      ]}
+      css={
+        variableScope === 'undefined'
+          ? []
+          : [
+              varStyles,
+              type && typeStyles,
+              variableScope === 'local' && localVarStyles,
+              setPointyStyles && pointyStylesInW3C,
+            ]
+      }
     >
       {type ? (
         <span css={iconStyles} contentEditable={false}>

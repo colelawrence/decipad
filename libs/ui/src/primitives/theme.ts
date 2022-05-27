@@ -42,6 +42,4 @@ export const darkTheme: Record<
 
   ...setCssVar('variableHighlightColor', brand100.rgb),
   ...setCssVar('variableHighlightTextColor', teal500.rgb),
-  ...setCssVar('unknownIdentifierHighlightColor', grey200.rgb),
-  ...setCssVar('unknownIdentifierHighlightTextColor', offBlack.rgb),
 };

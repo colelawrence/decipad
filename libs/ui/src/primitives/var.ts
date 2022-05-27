@@ -47,8 +47,6 @@ export interface CssVariables {
   // Code
   readonly variableHighlightTextColor: Property.Color;
   readonly variableHighlightColor: Property.Color;
-  readonly unknownIdentifierHighlightColor: Property.Color;
-  readonly unknownIdentifierHighlightTextColor: Property.Color;
 }
 
 const defaults: CssVariables = {
@@ -76,8 +74,6 @@ const defaults: CssVariables = {
 
   variableHighlightColor: grey200.rgb,
   variableHighlightTextColor: teal600.rgb,
-  unknownIdentifierHighlightColor: grey300.rgb,
-  unknownIdentifierHighlightTextColor: offBlack.rgb,
 };
 
 const cssVariablePrefix = '--deci-';
