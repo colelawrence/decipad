@@ -56,6 +56,9 @@ const widgetWrapperStyles = css({
 const headerWrapperStyles = css({
   display: 'inline-flex',
   gridAutoColumns: 'auto',
+  overflow: 'hidden',
+  minWidth: 0,
+  gap: '4px',
 });
 
 const iconWrapperStyles = css(
@@ -64,11 +67,13 @@ const iconWrapperStyles = css(
     display: 'grid',
     height: '20px',
     width: '20px',
+    flexShrink: 0,
   }
 );
 
 const buttonWrapperStyles = css({
   padding: '2px',
+  flexShrink: 0,
   ':hover': {
     backgroundColor: cssVar('highlightColor'),
     borderRadius: '50%',
@@ -79,6 +84,25 @@ const addNewWrapperStyles = css({
   display: 'flex',
   justifyContent: 'center',
   marginLeft: '12px',
+});
+
+const variableNameStyles = css({
+  alignSelf: 'start',
+  flexGrow: 2,
+  minWidth: 0,
+  position: 'relative',
+
+  '::after': {
+    display: 'block',
+    height: '100%',
+    width: '24px',
+    content: '""',
+    right: 0,
+    top: 0,
+    position: 'absolute',
+    background: 'linear-gradient(90deg, #ffffff00, #ffffff)',
+    pointerEvents: 'none',
+  },
 });
 
 interface VariableEditorProps
@@ -103,9 +127,7 @@ export const VariableEditor = ({
       <div css={wrapperStyles(baseSwatches[color].rgb)}>
         <div css={widgetWrapperStyles}>
           <div css={headerWrapperStyles}>
-            <div css={{ alignSelf: 'start', flexGrow: 2 }}>
-              {childrenArray[0]}
-            </div>
+            <div css={variableNameStyles}>{childrenArray[0]}</div>
             <div contentEditable={false} css={iconWrapperStyles}>
               {!readOnly && (
                 // TS can't tell which variant of the union type that composes VariableEditorMenu
@@ -132,5 +154,3 @@ export const VariableEditor = ({
     </div>
   );
 };
-
-<VariableEditor variant="expression" />;

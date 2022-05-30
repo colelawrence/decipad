@@ -37,6 +37,7 @@ const iconWrapperStyles = css(
     display: 'grid',
     height: '20px',
     width: '20px',
+    flexShrink: 0,
   }
 );
 
@@ -44,6 +45,9 @@ const placeholderOpacity: Opacity = 0.4;
 
 const placeholderStyles = css(p16Regular, {
   display: 'grid',
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
+
   '> span, ::before': {
     gridArea: '1 / 1',
   },
