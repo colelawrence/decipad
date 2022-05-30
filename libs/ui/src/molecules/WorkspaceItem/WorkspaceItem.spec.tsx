@@ -3,8 +3,8 @@ import { ComponentProps } from 'react';
 import { WorkspaceItem } from './WorkspaceItem';
 
 const props: ComponentProps<typeof WorkspaceItem> = {
+  id: '42',
   name: 'Some Workspace',
-  href: '',
   numberOfMembers: 2,
 };
 

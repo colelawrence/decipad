@@ -1,3 +1,4 @@
+import { workspaces } from '@decipad/routing';
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Avatar, NavigationItem } from '../../atoms';
@@ -13,20 +14,21 @@ const styles = css({
 });
 
 export interface WorkspaceItemProps {
+  readonly id: string;
   readonly name: string;
   readonly numberOfMembers: number;
-
-  readonly href: string;
 }
 
 export const WorkspaceItem = ({
+  id,
   name,
   numberOfMembers,
-
-  href,
 }: WorkspaceItemProps): ReturnType<FC> => {
   return (
-    <NavigationItem href={href} icon={<Avatar name={name} roundedSquare />}>
+    <NavigationItem
+      href={workspaces({}).workspace({ workspaceId: id }).$}
+      icon={<Avatar name={name} roundedSquare />}
+    >
       <span css={styles}>
         <strong
           css={css(

@@ -7,8 +7,8 @@ import { WorkspaceSwitcher } from './WorkspaceSwitcher';
 const props: ComponentProps<typeof WorkspaceSwitcher> = {
   Heading: 'h1',
   activeWorkspace: {
+    id: '42',
     name: 'Active Workspace',
-    href: '',
     numberOfMembers: 2,
   },
   otherWorkspaces: [],
@@ -28,9 +28,7 @@ it('opens and closes a workspace menu', async () => {
   const { getByText, queryByText, getByTitle } = render(
     <WorkspaceSwitcher
       {...props}
-      otherWorkspaces={[
-        { name: 'Other WS', id: '0', href: '', numberOfMembers: 1 },
-      ]}
+      otherWorkspaces={[{ name: 'Other WS', id: '0', numberOfMembers: 1 }]}
     />
   );
 

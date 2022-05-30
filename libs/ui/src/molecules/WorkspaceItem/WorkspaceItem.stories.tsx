@@ -2,6 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { WorkspaceItem } from './WorkspaceItem';
 
 const args = {
+  id: '42',
   name: "John Doe's Workspace",
   numberOfMembers: 1,
 };
@@ -12,5 +13,5 @@ export default {
 } as Meta;
 
 export const Normal: Story<typeof args> = (currentArgs) => (
-  <WorkspaceItem href="" {...currentArgs} />
+  <WorkspaceItem {...currentArgs} />
 );

@@ -7,5 +7,5 @@ export default {
 } as Meta;
 
 export const Normal: Story = () => (
-  <WorkspaceNavigation allNotebooksHref="" preferencesHref="" />
+  <WorkspaceNavigation activeWorkspace={{ id: '42' }} />
 );

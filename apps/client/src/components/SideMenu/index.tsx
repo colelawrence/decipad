@@ -3,13 +3,12 @@ import { useGetWorkspaces } from '@decipad/queries';
 import { useRouteParams, workspaces } from '@decipad/routing';
 import { DashboardSidebar } from '@decipad/ui';
 import { FC } from 'react';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { CreateWorkspace } from './CreateWorkspace';
 import { WorkspacePreferences } from './WorkspacePreferences';
 
 export const SideMenu = (): ReturnType<FC> => {
   const history = useHistory();
-  const { url } = useRouteMatch();
   const { workspaceId } = useRouteParams(workspaces({}).workspace);
 
   const { data } = useGetWorkspaces();
@@ -35,7 +34,6 @@ export const SideMenu = (): ReturnType<FC> => {
         Heading="h1"
         activeWorkspace={{
           ...currentWorkspace,
-          href: currentWorkspaceRoute.$,
           numberOfMembers: 1,
         }}
         otherWorkspaces={
@@ -45,8 +43,6 @@ export const SideMenu = (): ReturnType<FC> => {
             numberOfMembers: 1,
           })) ?? []
         }
-        allNotebooksHref={url}
-        preferencesHref={currentWorkspaceRoute.edit({}).$}
         onCreateWorkspace={() =>
           history.push(currentWorkspaceRoute.createNew({}).$)
         }

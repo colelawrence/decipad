@@ -5,13 +5,11 @@ import { DashboardSidebar } from './DashboardSidebar';
 const props: ComponentProps<typeof DashboardSidebar> = {
   Heading: 'h1',
   activeWorkspace: {
+    id: '42',
     name: 'Active Workspace',
-    href: '',
     numberOfMembers: 1,
   },
   otherWorkspaces: [],
-  preferencesHref: '',
-  allNotebooksHref: '',
 };
 
 it('renders the workspace switcher (which has a popup) stacked above the sidebar', () => {

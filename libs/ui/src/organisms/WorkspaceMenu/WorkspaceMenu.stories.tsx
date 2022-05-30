@@ -14,7 +14,7 @@ export default {
 export const Normal: Story<typeof args> = ({ numberOfOtherWorkspaces }) => (
   <WorkspaceMenu
     Heading="h1"
-    activeWorkspace={{ name: 'Active Workspace', href: '', numberOfMembers: 1 }}
+    activeWorkspace={{ name: 'Active Workspace', id: '42', numberOfMembers: 1 }}
     otherWorkspaces={Array(numberOfOtherWorkspaces)
       .fill(null)
       .map((_, i) => ({

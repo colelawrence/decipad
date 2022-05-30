@@ -1,4 +1,4 @@
-import { docs } from '@decipad/routing';
+import { docs, workspaces } from '@decipad/routing';
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Divider, NavigationItem } from '../../atoms';
@@ -13,17 +13,18 @@ const styles = css({
 const itemTextStyles = css({ padding: '8px 0' });
 
 interface WorkspaceNavigationProps {
-  readonly allNotebooksHref: string;
-  readonly preferencesHref: string;
+  readonly activeWorkspace: { readonly id: string };
 }
 export const WorkspaceNavigation = ({
-  allNotebooksHref,
-  preferencesHref,
+  activeWorkspace,
 }: WorkspaceNavigationProps): ReturnType<FC> => {
+  const activeWorkspaceRoute = workspaces({}).workspace({
+    workspaceId: activeWorkspace.id,
+  });
   return (
     <nav css={styles}>
       <NavigationList>
-        <NavigationItem exact href={allNotebooksHref} icon={<Folder />}>
+        <NavigationItem exact href={activeWorkspaceRoute.$} icon={<Folder />}>
           <span css={itemTextStyles}>All Notebooks</span>
         </NavigationItem>
       </NavigationList>
@@ -45,7 +46,10 @@ export const WorkspaceNavigation = ({
         <Divider />
       </div>
       <NavigationList>
-        <NavigationItem href={preferencesHref} icon={<Settings />}>
+        <NavigationItem
+          href={activeWorkspaceRoute.edit({}).$}
+          icon={<Settings />}
+        >
           <span css={itemTextStyles}>Preferences</span>
         </NavigationItem>
       </NavigationList>

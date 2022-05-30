@@ -30,9 +30,7 @@ interface WorkspaceMenuProps {
   readonly Heading: 'h1';
 
   readonly activeWorkspace: ComponentProps<typeof WorkspaceItem>;
-  readonly otherWorkspaces: ReadonlyArray<
-    ComponentProps<typeof WorkspaceItem> & { readonly id: string }
-  >;
+  readonly otherWorkspaces: ReadonlyArray<ComponentProps<typeof WorkspaceItem>>;
   readonly onCreateWorkspace?: () => void;
 }
 
@@ -55,8 +53,8 @@ export const WorkspaceMenu = ({
         <>
           <Divider />
           <NavigationList>
-            {otherWorkspaces.map(({ id, ...workspace }) => (
-              <WorkspaceItem key={id} {...workspace} />
+            {otherWorkspaces.map((workspace) => (
+              <WorkspaceItem key={workspace.id} {...workspace} />
             ))}
           </NavigationList>
         </>

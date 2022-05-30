@@ -7,8 +7,8 @@ import { WorkspaceMenu } from './WorkspaceMenu';
 const props: ComponentProps<typeof WorkspaceMenu> = {
   Heading: 'h1',
   activeWorkspace: {
+    id: '42',
     name: 'Active Workspace',
-    href: '',
     numberOfMembers: 1,
   },
   otherWorkspaces: [],
@@ -35,14 +35,14 @@ it('links to the active workspace', () => {
       {...props}
       activeWorkspace={{
         ...props.activeWorkspace,
+        id: '42',
         name: 'Some Workspace',
-        href: '/some-workspace',
       }}
     />
   );
   expect(getByText('Some Workspace').closest('a')).toHaveAttribute(
     'href',
-    '/some-workspace'
+    expect.stringContaining('42')
   );
 });
 it('links to the other workspaces', () => {
@@ -51,27 +51,25 @@ it('links to the other workspaces', () => {
       {...props}
       otherWorkspaces={[
         {
-          id: '0',
+          id: '42',
           numberOfMembers: 2,
           name: 'Some Workspace',
-          href: '/some-workspace',
         },
         {
-          id: '1',
+          id: '1337',
           numberOfMembers: 2,
           name: 'Other Workspace',
-          href: '/other-workspace',
         },
       ]}
     />
   );
   expect(getByText('Some Workspace').closest('a')).toHaveAttribute(
     'href',
-    '/some-workspace'
+    expect.stringContaining('42')
   );
   expect(getByText('Other Workspace').closest('a')).toHaveAttribute(
     'href',
-    '/other-workspace'
+    expect.stringContaining('1337')
   );
 });
 
@@ -89,7 +87,6 @@ it('shows a separator if there are other workspaces', () => {
           id: '0',
           numberOfMembers: 2,
           name: 'Some Workspace',
-          href: '/some-workspace',
         },
       ]}
     />
