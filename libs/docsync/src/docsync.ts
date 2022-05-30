@@ -12,11 +12,11 @@ import {
   TWebSocketProvider,
   createWebsocketProvider,
 } from '@decipad/y-websocket';
-import { TEditor } from '@udecode/plate';
 import EventEmitter from 'events';
 import { Awareness } from 'y-protocols/awareness';
 import { Array as YArray, Doc as YDoc, Map as YMap, Text as YText } from 'yjs';
 import { BehaviorSubject } from 'rxjs';
+import { MyEditor } from '@decipad/editor-types';
 import * as DocTypes from './types';
 
 interface Options {
@@ -40,7 +40,7 @@ export type OnSavedCallback = (source: Source) => void;
 export type OnConnectedCallback = () => void;
 export type OnDisconnectedCallback = () => void;
 
-export type DocSyncEditor = TEditor &
+export type DocSyncEditor = MyEditor &
   YjsEditor &
   CursorEditor & {
     onLoaded: (cb: OnLoadedCallback) => void;
@@ -83,7 +83,7 @@ function ensureInitialDocument(doc: YDoc, root: DocTypes.Doc) {
   });
 }
 
-function docSyncEditor<E extends TEditor>(
+function docSyncEditor<E extends MyEditor>(
   editor: E & YjsEditor & CursorEditor,
   shared: YArray<SyncElement>,
   doc: YDoc,
@@ -218,7 +218,7 @@ async function wsAddress(docId: string): Promise<string> {
 }
 
 export function createDocSyncEditor(
-  editor: TEditor,
+  editor: MyEditor,
   docId: string,
   options: Options = {}
 ): DocSyncEditor {

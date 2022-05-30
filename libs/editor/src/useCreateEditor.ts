@@ -1,16 +1,18 @@
 import { useNotebookTitlePlugin } from '@decipad/editor-plugins';
 import { Computer } from '@decipad/computer';
 import { useMemo } from 'react';
-import { createTPlateEditor } from '@decipad/editor-types';
+import { createTPlateEditor, MyEditor } from '@decipad/editor-types';
 import * as configuration from './configuration';
 
 export interface CreateEditorProps {
+  editor?: MyEditor;
   notebookId: string;
   readOnly: boolean;
   computer: Computer;
 }
 
 export const useCreateEditor = ({
+  editor: slateEditor,
   notebookId,
   readOnly = false,
   computer,
@@ -29,9 +31,10 @@ export const useCreateEditor = ({
     () =>
       createTPlateEditor({
         id: notebookId,
+        editor: slateEditor,
         plugins: editorPlugins,
       }),
-    [editorPlugins, notebookId]
+    [slateEditor, editorPlugins, notebookId]
   );
 
   return editor;

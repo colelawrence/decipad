@@ -10,7 +10,6 @@ import {
   createLayoutColumnsPlugin,
   createLinkPlugin,
   createMarksPlugins,
-  createNewElementIdOnSplitPlugin,
   createNormalizeCodeBlockPlugin,
   createNormalizeCodeLinePlugin,
   createNormalizeColumnsPlugin,
@@ -40,11 +39,13 @@ import {
   createExitBreakPlugin,
   createHeadingPlugin,
   createListPlugin,
+  createNodeIdPlugin,
   createParagraphPlugin,
   createPlugins,
   createResetNodePlugin,
   createTrailingBlockPlugin,
 } from '@udecode/plate';
+import { nanoid } from 'nanoid';
 import { Computer } from '@decipad/computer';
 import { createVariableDefPlugin } from '@decipad/editor-variable-def';
 import { components } from './components';
@@ -67,7 +68,7 @@ export const plugins = (computer: Computer) =>
       createLayoutColumnsPlugin(),
 
       // structure enforcement
-      createNewElementIdOnSplitPlugin(),
+      createNodeIdPlugin({ options: { idCreator: nanoid } }),
       createNormalizeEditorPlugin(),
       createNormalizeVoidPlugin(),
       createNormalizeRichTextBlockPlugin(),

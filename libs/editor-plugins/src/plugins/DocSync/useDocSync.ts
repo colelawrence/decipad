@@ -3,14 +3,14 @@ import {
   DocSyncEditor,
   createDocSyncEditor,
 } from '@decipad/docsync';
-import { TEditor } from '@udecode/plate';
+import { MyEditor } from '@decipad/editor-types';
 import { useEffect, useState } from 'react';
 
 export type { DocSyncEditor };
 
 interface UseDocSyncProps {
   notebookId: string;
-  editor?: TEditor;
+  editor?: MyEditor;
   authSecret?: string;
   readOnly?: boolean;
   onLoaded: (source: 'local' | 'remote') => void;

@@ -13,6 +13,7 @@ import { captureException } from '@sentry/browser';
 import { useSession } from 'next-auth/client';
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { MyEditor } from '@decipad/editor-types';
+import { createEditor } from 'slate';
 
 const LOAD_REMOTELY_TIMEOUT_MS = 5_000;
 
@@ -38,16 +39,7 @@ export const Notebook = ({
   // Computer
   const [computer] = useState(() => new Computer());
 
-  // Editor
-  const editor = useCreateEditor({
-    notebookId,
-    computer,
-    readOnly,
-  });
-
-  useEffect(() => {
-    onEditor(editor);
-  }, [editor, onEditor]);
+  const [slateBaseEditor] = useState(createEditor);
 
   // DocSync
   const [loaded, setLoaded] = useState(false);
@@ -80,7 +72,7 @@ export const Notebook = ({
 
   const docsync = useDocSync({
     notebookId,
-    editor,
+    editor: slateBaseEditor as MyEditor,
     authSecret: secret,
     onError: captureException,
     onLoaded,
@@ -115,6 +107,21 @@ export const Notebook = ({
       ''
     }`;
   const [toastedWarning, setToastedWarning] = useState(false);
+
+  // Editor
+  // Needs to be created last so other editor (e.g. docsync editor) wrapping editor functions
+  // (e.g. apply, onChange) can be called with the latest values transformed via plugins. Things
+  // get called from the outside in.
+  const editor = useCreateEditor({
+    editor: docsync,
+    notebookId,
+    computer,
+    readOnly,
+  });
+
+  useEffect(() => {
+    onEditor(editor);
+  }, [editor, onEditor]);
 
   useEffect(() => {
     if (warning && hasLocalChanges && !toastedWarning) {
