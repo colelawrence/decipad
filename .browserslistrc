@@ -8,8 +8,13 @@ last 2 edge versions
 unreleased versions
 
 not dead
-not ie 11 # CSS would be all broken anyway
+
+# CSS would be all broken anyway
+not ie <= 11
+
+# So many polyfills causing trouble with iterators etc. that it's not worth it
 not op_mini all
+not android <= 5
 
 [development]
 last 2 chrome versions

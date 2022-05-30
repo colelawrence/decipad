@@ -1,16 +1,7 @@
+const { presets, ...config } = require('../../babel-web.config');
+
 module.exports = {
-  presets: [
-    '@nrwl/web/babel',
-    [
-      require.resolve('@babel/preset-react'),
-      { runtime: 'automatic', importSource: '@emotion/react' },
-    ],
-    require.resolve('@docusaurus/core/lib/babel/preset'),
-    '@emotion/babel-preset-css-prop',
-  ],
-  plugins: [
-    require.resolve('@emotion/babel-plugin'),
-    ['@babel/plugin-proposal-private-property-in-object', { loose: true }],
-  ],
+  ...config,
+  presets: [...presets, require.resolve('@docusaurus/core/lib/babel/preset')],
   sourceType: 'unambiguous',
 };
