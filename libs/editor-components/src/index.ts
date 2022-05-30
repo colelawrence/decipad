@@ -6,3 +6,4 @@ export * from './Plot';
 export * from './slash-commands';
 export * from './text';
 export * from './layout';
+export * from './BlockErrorBoundary';

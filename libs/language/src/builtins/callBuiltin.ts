@@ -97,10 +97,9 @@ export function callBuiltin(
       args = args.map((value, index) => {
         const type = argTypes[index];
         if (type.type === 'number') {
-          let data = value.getData();
+          const data = value.getData();
           if (data instanceof FFraction) {
-            data = convertToMultiplierUnit(data, type.unit);
-            return fromJS(data);
+            return fromJS(convertToMultiplierUnit(data, type.unit));
           }
         }
         return value;

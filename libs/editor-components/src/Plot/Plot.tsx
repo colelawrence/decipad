@@ -3,35 +3,33 @@ import { useReadOnly } from 'slate-react';
 import {
   ELEMENT_PLOT,
   PlateComponent,
-  useTEditorState,
+  useTEditorRef,
 } from '@decipad/editor-types';
 import { useComputer, useResult } from '@decipad/react-contexts';
 import { organisms } from '@decipad/ui';
 import { DraggableBlock } from '@decipad/editor-components';
-import { useElementMutatorCallback } from '@decipad/editor-utils';
+import {
+  assertElementType,
+  useElementMutatorCallback,
+} from '@decipad/editor-utils';
 import { usePlot } from '../utils/usePlot';
 import { PlotParamsProps } from '../../../ui/src/organisms/PlotParams/PlotParams';
 
 const DEFAULT_TITLE = 'Plot';
 
 export const Plot: PlateComponent = ({ attributes, element, children }) => {
-  if (!element || element.type !== ELEMENT_PLOT) {
-    throw new Error('PlotBlock is meant to render plot elements');
-  }
-  if ('data-slate-leaf' in attributes) {
-    throw new Error('PlotBlock is not a leaf');
-  }
+  assertElementType(element, ELEMENT_PLOT);
   const [error, setError] = useState<string | undefined>();
-  const editor = useTEditorState();
-  const computer = useComputer();
+  const editor = useTEditorRef();
   const readOnly = useReadOnly();
-  const identifiedResult = useResult(element.id);
+  const computer = useComputer();
+  const identifiedResult = useResult(element.id as string);
   const result = identifiedResult?.results[identifiedResult.results.length - 1];
   const { spec, data, plotParams } = usePlot({
     editor,
-    computer,
     element,
     result,
+    computer,
   });
   const onTitleChange = useElementMutatorCallback(editor, element, 'title');
 

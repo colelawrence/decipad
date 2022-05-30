@@ -72,10 +72,12 @@ const editableTableCaptionStyles = css(p16Bold);
 type EditableTableCaptionProps = PropsWithChildren<{
   isForWideTable?: boolean;
   empty?: boolean;
+  formulaEditor?: boolean;
 }>;
 
 export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
   empty,
+  formulaEditor = true,
   isForWideTable = false,
   children,
 }) => {
@@ -108,7 +110,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
           {caption}
         </div>
       </div>
-      {tableFormulaEditors.length > 0 && (
+      {formulaEditor && tableFormulaEditors.length > 0 && (
         <FormulasDrawer>{tableFormulaEditors}</FormulasDrawer>
       )}
     </div>

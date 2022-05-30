@@ -48,6 +48,7 @@ import {
 import { nanoid } from 'nanoid';
 import { Computer } from '@decipad/computer';
 import { createVariableDefPlugin } from '@decipad/editor-variable-def';
+import { createPowerTablePlugin } from '@decipad/editor-power-table';
 import { components } from './components';
 import { autoformatRules } from './autoformat';
 import { exitBreakOptions } from './exitBreakOptions';
@@ -110,6 +111,7 @@ export const plugins = (computer: Computer) =>
 
       // tables
       createTablePlugin(computer),
+      createPowerTablePlugin(),
 
       // plots
       createPlotPlugin(),

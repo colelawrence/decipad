@@ -11,6 +11,7 @@ import {
   EMPTY,
   map,
   Observable,
+  Subscription,
   switchMap,
 } from 'rxjs';
 import { dequal } from 'dequal';
@@ -19,7 +20,10 @@ import {
   IdentifiedResult,
   delayErrors,
   defaultComputerResults,
+  AST,
+  Result,
 } from '@decipad/computer';
+import { useComputer } from './computer';
 
 export interface ResultsContextItem {
   readonly blockResults: {
@@ -89,6 +93,31 @@ export const useResult = (
       subscription.unsubscribe();
     };
   }, [subject, blockId, element]);
+
+  return result;
+};
+
+/**
+ * Obtain the result of an expression.
+ * */
+export const useExpressionResult = (
+  expression?: AST.Expression
+): Result.Result | undefined => {
+  const [result, setResult] = useState<Result.Result | undefined>(undefined);
+  const computer = useComputer();
+
+  useEffect(() => {
+    let subscription: Subscription | undefined;
+    if (expression) {
+      subscription = computer
+        .expressionResult$(expression)
+        .subscribe(setResult);
+    }
+
+    return () => {
+      subscription?.unsubscribe();
+    };
+  }, [computer, expression]);
 
   return result;
 };

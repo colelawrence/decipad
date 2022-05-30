@@ -9,7 +9,7 @@ import { useObservable } from 'rxjs-hooks';
 export const MagicNumber: PlateComponent = ({ attributes, text, children }) => {
   const computer = useComputer();
   const exp = text?.text ?? '';
-  const [result, setResult] = useState<Result | null>(null);
+  const [result, setResult] = useState<Result.Result | null>(null);
   useEffect(() => {
     const sub = computer.expressionResultFromText$(exp).subscribe(setResult);
     return () => sub.unsubscribe();

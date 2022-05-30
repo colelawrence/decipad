@@ -8,7 +8,7 @@ const args = {
     errorCause: { errType: 'missing-variable', missingVariable: ['foo'] },
   },
   value: null,
-} as Result<'type-error'>;
+} as Result.Result<'type-error'>;
 
 export default {
   title: 'Atoms / Editor / Results / Inline / Error',

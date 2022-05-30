@@ -48,8 +48,8 @@ export {
 } from './interpreter/Value';
 export { AST, parse, Parser, parseBlock, SyntaxError } from './parser';
 export { prettyPrintAST } from './parser/utils';
-export type { OneResult, Result } from './result';
 export { serializeResult, stringifyResult, validateResult } from './result';
+export * as Result from './result';
 export * from './run';
 export {
   build as buildType,

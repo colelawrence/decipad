@@ -1,8 +1,8 @@
-import { isEnabled } from '@decipad/feature-flags';
 import { useWindowListener } from '@decipad/react-utils';
-import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { ComponentProps, FC, useCallback, useEffect, useState } from 'react';
+import { noop } from '@decipad/utils';
+import { isEnabled } from '@decipad/feature-flags';
 import { SlashCommandsMenuItem } from '../../atoms';
 import {
   Blockquote,
@@ -30,6 +30,7 @@ const SLASH_COMMANDS = [
   'calculation-block',
   'input',
   'table',
+  'power-table',
   'plot',
   'heading1',
   'heading2',
@@ -78,6 +79,14 @@ const dataItems = [
     icon: <TableSlash />,
     enabled: true,
     extraSearchTerms: [],
+  },
+  {
+    command: 'power-table',
+    title: 'Power Table',
+    description: 'Analyze, sort and group data using a table',
+    icon: <TableSlash />,
+    enabled: isEnabled('POWER_TABLE'),
+    extraSearchTerms: ['group', 'sort', 'analyze'],
   },
   {
     command: 'plot',

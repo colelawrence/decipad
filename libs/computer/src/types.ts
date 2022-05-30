@@ -58,7 +58,7 @@ export interface IdentifiedResult {
   results: InBlockResult[];
 }
 
-export interface InBlockResult extends Result {
+export interface InBlockResult extends Result.Result {
   blockId: string;
   statementIndex: number;
   visibleVariables: VisibleVariables;

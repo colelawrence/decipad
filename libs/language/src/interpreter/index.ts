@@ -10,6 +10,7 @@ import { Realm } from './Realm';
 import * as Interpreter from './interpreter-types';
 import type { Value } from './Value';
 
+export * as CompareValues from './compare-values';
 export * from './Value';
 export type { Value };
 export { RuntimeError } from './RuntimeError';

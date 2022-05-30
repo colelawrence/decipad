@@ -45,7 +45,7 @@ export const decorateTextSyntax =
       if (node.type !== elementType) {
         return [];
       }
-      let nodeId = node.id;
+      let nodeId = node.id as string;
       if (node.type === ELEMENT_TABLE_COLUMN_FORMULA) {
         const table = getAboveNode<TableElement>(editor, {
           at: path,

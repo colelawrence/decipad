@@ -11,4 +11,8 @@ export const ErrorMessage = ({
   message,
 }: {
   message: string;
-}): ReturnType<FC> => <p css={errorStyles}>{message}</p>;
+}): ReturnType<FC> => (
+  <p contentEditable={false} css={errorStyles}>
+    {message}
+  </p>
+);

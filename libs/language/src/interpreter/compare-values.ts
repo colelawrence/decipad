@@ -1,4 +1,4 @@
-import Fraction from '@decipad/fraction';
+import FFraction, { FractionLike, isFractionLike } from '@decipad/fraction';
 import { zip } from '@decipad/utils';
 import { DeepReadonly } from 'utility-types';
 import { RuntimeError } from './RuntimeError';
@@ -13,19 +13,23 @@ import {
 
 export type CompareResult = -1 | 0 | 1;
 
-type Comparable =
+export type Comparable =
   | DeepReadonly<Value>
   | string
   | boolean
   | number
   | BigInt
-  | Fraction
+  | FFraction
+  | FractionLike
   | ReadonlyArray<Comparable>;
 
 /** Returns the sign of a comparison between two things, whatever they may be */
 function compareToNumber(a: Comparable, b: Comparable): number | bigint {
-  if (a instanceof Fraction && b instanceof Fraction) {
-    return a.compare(b);
+  if (isFractionLike(a) && isFractionLike(b)) {
+    if (a instanceof FFraction && b instanceof FFraction) {
+      return a.compare(b);
+    }
+    return new FFraction(a).compare(new FFraction(b));
   }
   if (typeof a === 'string' && typeof b === 'string') {
     return a > b ? 1 : a === b ? 0 : -1;
@@ -69,7 +73,9 @@ function compareToNumber(a: Comparable, b: Comparable): number | bigint {
 
     return lengthComparison;
   }
-  throw new RuntimeError(`Don't know how to compare ${a} against ${b}`);
+  throw new RuntimeError(
+    `Don't know how to compare ${a} (${typeof a}) against ${b} (${typeof b})`
+  );
 }
 
 const sign = (diff: number | BigInt): CompareResult => {

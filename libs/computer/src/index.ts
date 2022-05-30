@@ -2,9 +2,7 @@ export type {
   AST,
   BracketError,
   Interpreter,
-  OneResult,
   Parser,
-  Result,
   SerializedType,
   SerializedTypeKind,
   SerializedUnits,
@@ -21,6 +19,7 @@ export {
   parseOneBlock,
   parseOneExpression,
   runCode,
+  Result,
   STATEMENT_SEP_TOKEN_TYPE,
   prettyPrintAST,
   stringifyUnits,
@@ -29,6 +28,7 @@ export {
   tokenize,
 } from '@decipad/language';
 
+export type { AutocompleteName } from '@decipad/language';
 export * from './computer';
 
 export * from './reporting';

@@ -20,6 +20,7 @@ import {
 import { insertInputBelow, insertSliderInputBelow } from './input';
 import { insertPlotBelow } from './plot';
 import { insertTableBelow } from './table';
+import { insertPowerTableBelow } from './power-table';
 
 type SlashCommandHandler = Exclude<
   ComponentProps<typeof organisms.SlashCommandsMenu>['onExecute'],
@@ -53,6 +54,9 @@ export const execute = ({
       break;
     case 'table':
       insertTableBelow(editor, path, getAvailableIdentifier);
+      break;
+    case 'power-table':
+      insertPowerTableBelow(editor, path, getAvailableIdentifier);
       break;
     case 'plot':
       insertPlotBelow(editor, path);

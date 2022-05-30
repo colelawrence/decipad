@@ -94,7 +94,7 @@ interface CodeLineProps {
   readonly children: ReactNode;
   readonly displayInline?: boolean;
   readonly highlight?: boolean;
-  readonly result?: Result;
+  readonly result?: Result.Result;
   readonly syntaxError?: ComponentProps<typeof CodeError>;
 }
 

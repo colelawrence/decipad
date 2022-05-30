@@ -286,7 +286,7 @@ export class Computer {
       .subscribe(this.results);
   }
 
-  getVariable(varName: string): Result | null {
+  getVariable(varName: string): Result.Result | null {
     const { inferContext, interpreterRealm } = this.computationRealm;
     const type = inferContext.stack.get(varName, 'global');
     const value = interpreterRealm.stack.get(varName, 'global');
@@ -314,23 +314,35 @@ export class Computer {
     );
   }
 
-  getVariable$(varName: string): Observable<Result | null> {
+  getNamesDefinedBefore$(
+    location: ValueLocation,
+    stopIfNotFound = true
+  ): Observable<AutocompleteName[]> {
+    return this.results.pipe(
+      map(() => this.getNamesDefinedBefore(location, stopIfNotFound)),
+      distinctUntilChanged(dequal)
+    );
+  }
+
+  getVariable$(varName: string): Observable<Result.Result | null> {
     return this.results.pipe(
       map(() => this.getVariable(varName)),
       distinctUntilChanged()
     );
   }
 
-  expressionResultFromText$(decilang: string): Observable<Result | null> {
+  expressionResultFromText$(
+    decilang: string
+  ): Observable<Result.Result | null> {
     const computerExpression = this.expressionResult$(
       parseOneExpression(decilang)
     );
     return computerExpression;
   }
 
-  expressionResult$(expression: AST.Expression): Observable<Result> {
+  expressionResult$(expression: AST.Expression): Observable<Result.Result> {
     return this.results.pipe(
-      concatMap(async (): Promise<Result> => {
+      concatMap(async (): Promise<Result.Result> => {
         const type = await inferExpression(
           this.computationRealm.inferContext,
           expression

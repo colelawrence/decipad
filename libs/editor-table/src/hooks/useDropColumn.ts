@@ -1,10 +1,8 @@
 import { MyEditor, MyElement, TableElement } from '@decipad/editor-types';
-import { useCallback } from 'react';
-import { DropTargetMonitor, useDrop } from 'react-dnd';
+import { useDrop } from 'react-dnd';
 import {
   findNodePath,
   focusEditor,
-  getNodeChildren,
   getStartPoint,
   hasNode,
   setSelection,
@@ -12,6 +10,7 @@ import {
 import { ColumnDndDirection, DragColumnItem } from '../types';
 import { getHoverDirection } from '../utils/getHoverDirection';
 import { useTableActions } from './tableActions';
+import { useFindSwappableColumns } from './useFindSwappableColumns';
 
 interface CollectedProps {
   isOver: boolean;
@@ -26,38 +25,7 @@ export const useDropColumn = (
 ) => {
   const { onMoveColumn } = useTableActions(editor, table);
 
-  const findSwappableColumns = useCallback(
-    (
-      columnItem: DragColumnItem,
-      monitor: DropTargetMonitor
-    ): [number, number] | void => {
-      const path = findNodePath(editor, table);
-      if (path) {
-        const children = Array.from(getNodeChildren(editor, path));
-        const firstRow = children[1];
-        if (firstRow) {
-          const columns = Array.from(getNodeChildren(editor, firstRow[1]));
-          const sourceColumnIndex = columns.findIndex(
-            (col) => columnItem.id === (col[0] as MyElement).id
-          );
-          const targetColumnIndex = columns.findIndex(
-            (col) => column.id === (col[0] as MyElement).id
-          );
-          if (sourceColumnIndex >= 0 && targetColumnIndex >= 0) {
-            const direction = getHoverDirection(editor, monitor, column);
-            const swappableColumns: [number, number] = [
-              sourceColumnIndex,
-              direction === 'right'
-                ? Math.min(targetColumnIndex, columns.length - 1)
-                : Math.max(targetColumnIndex - 1, 0),
-            ];
-            return swappableColumns;
-          }
-        }
-      }
-    },
-    [column, editor, table]
-  );
+  const findSwappableColumns = useFindSwappableColumns(editor, table, column);
 
   return useDrop<DragColumnItem, void, CollectedProps>({
     accept: 'column',

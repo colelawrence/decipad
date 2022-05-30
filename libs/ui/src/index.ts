@@ -13,3 +13,4 @@ export * from './lib/shared';
 
 // TODO temporary while some visual components are not in `ui`
 export * as icons from './icons';
+export * from './utils';

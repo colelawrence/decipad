@@ -24,6 +24,7 @@
     "GOOGLESHEETS",
     "graphqlresource",
     "graphqlserver",
+    "groupable",
     "indexeddb",
     "lambdawebsocket",
     "NEXTAUTH",

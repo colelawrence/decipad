@@ -17,7 +17,10 @@ export * from './normalizeIdentifierElement';
 export * from './isDOMNode';
 export * from './hasTarget';
 export * from './serializeDocument';
+export * from './useNamesDefinedBefore';
 export * from './assertElementType';
+export * from './matchNodeType';
+export * from './isElementOfType';
 
 export * from './useElementMutatorCallback';
 export * from './useSelection';

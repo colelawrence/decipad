@@ -50,7 +50,7 @@ describe('displayInline prop', () => {
   });
 
   it('always renders type errors inline', async () => {
-    const result: Result = {
+    const result: Result.Result = {
       value: null,
       type: {
         kind: 'type-error',

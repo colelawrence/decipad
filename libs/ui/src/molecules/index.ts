@@ -31,3 +31,5 @@ export { UnorderedList } from './UnorderedList/UnorderedList';
 export { VariableSlider } from './VariableSlider/VariableSlider';
 export { WorkspaceItem } from './WorkspaceItem/WorkspaceItem';
 export { ParagraphPlaceholder } from './ParagraphPlaceholder/ParagraphPlaceholder';
+export { VariableNameSelector } from './VariableNameSelector/VariableNameSelector';
+export { PowerTableRow } from './PowerTableRow/PowerTableRow';

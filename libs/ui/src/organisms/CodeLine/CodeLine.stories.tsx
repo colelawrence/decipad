@@ -18,14 +18,14 @@ export default {
   },
 } as Meta;
 
-export const Normal: Story<ComponentProps<typeof CodeLine> & Result> = ({
+export const Normal: Story<ComponentProps<typeof CodeLine> & Result.Result> = ({
   type,
   value,
   ...props
 }) => <CodeLine {...props} result={{ type, value }} />;
 
 export const WithHighlightedLine: Story<
-  ComponentProps<typeof CodeLine> & Result
+  ComponentProps<typeof CodeLine> & Result.Result
 > = ({ type, value, ...props }) => (
   <CodeLine {...props} result={{ type, value }} />
 );
@@ -35,7 +35,7 @@ WithHighlightedLine.args = {
 };
 
 export const WithExpandedResult: Story<
-  ComponentProps<typeof CodeLine> & Result
+  ComponentProps<typeof CodeLine> & Result.Result
 > = ({ type, value, ...props }) => (
   <CodeLine {...props} result={{ type, value }} />
 );
@@ -45,11 +45,11 @@ WithExpandedResult.args = {
   children: '[1, 2, 3]',
 };
 
-export const WithError: Story<ComponentProps<typeof CodeLine> & Result> = ({
-  type,
-  value,
-  ...props
-}) => <CodeLine {...props} result={{ type, value }} />;
+export const WithError: Story<
+  ComponentProps<typeof CodeLine> & Result.Result
+> = ({ type, value, ...props }) => (
+  <CodeLine {...props} result={{ type, value }} />
+);
 WithError.args = {
   children: '[1, 2,',
   syntaxError: { message: 'Syntax Error', url: docs({}).$ },

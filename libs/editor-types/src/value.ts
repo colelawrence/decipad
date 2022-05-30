@@ -35,12 +35,17 @@ import {
   TableColumnFormulaElement,
   TableVariableNameElement,
 } from './table';
-import { ELEMENT_VARIABLE_DEF } from './element-kinds';
+import { ELEMENT_POWER_TABLE, ELEMENT_VARIABLE_DEF } from './element-kinds';
 import {
   CaptionElement,
   ExpressionElement,
   SliderElement,
 } from './interactive-elements';
+import {
+  PowerTableElement,
+  PowerTableHeader,
+  PowerTableHeaderRowElement,
+} from './power-table';
 
 // Defining specific elements
 
@@ -171,6 +176,10 @@ export type BlockElement =
   | ExpressionElement
   | CaptionElement
   | SliderElement
+  | InteractiveElement
+  | PowerTableElement
+  | PowerTableHeaderRowElement
+  | PowerTableHeader
   | TableColumnFormulaElement;
 type InlineElement = LinkElement;
 
@@ -189,6 +198,7 @@ export type MyValue = [
     | OrderedListElement
     | ColumnsElement
     | InteractiveElement
+    | PowerTableElement
   >
 ];
 
@@ -215,6 +225,7 @@ export const topLevelBlockKinds: string[] = [
   ELEMENT_OL,
   ELEMENT_TABLE_INPUT,
   ELEMENT_TABLE,
+  ELEMENT_POWER_TABLE,
   ELEMENT_FETCH,
   ELEMENT_PLOT,
   ELEMENT_COLUMNS,

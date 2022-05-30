@@ -1,6 +1,7 @@
 import { deleteText, getParentNode, moveSelection } from '@udecode/plate';
 import { ELEMENT_CODE_LINE } from '@decipad/editor-types';
 import { Range } from 'slate';
+import { isElementOfType } from '@decipad/editor-utils';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 
 const pairs = [
@@ -24,7 +25,7 @@ export const createAutoPairsPlugin = createOnKeyDownPluginFactory({
       if (parentEntry) {
         const [node] = parentEntry;
 
-        if (node.type === ELEMENT_CODE_LINE) {
+        if (isElementOfType(node, ELEMENT_CODE_LINE)) {
           const activePair = pairs.find((pair) => pair.start === event.key);
 
           if (

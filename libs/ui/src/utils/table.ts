@@ -12,7 +12,9 @@ import type { TableCellType } from '../types';
 import { AvailableSwatchColor } from './swatches';
 import { UserIconKey } from './user-icons';
 
-export function getTypeIcon(type: TableCellType): FunctionComponent {
+export function getTypeIcon(
+  type: TableCellType | SerializedType
+): FunctionComponent {
   switch (type.kind) {
     case 'date':
       return Calendar;

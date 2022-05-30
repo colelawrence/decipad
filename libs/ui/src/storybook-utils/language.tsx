@@ -5,12 +5,12 @@ import { runCode } from '../test-utils';
 
 type CodeDecoratorFactory = (code: string, asResult?: boolean) => DecoratorFn;
 
-export type WithCodeProps<T extends SerializedTypeKind> = Result<T>;
+export type WithCodeProps<T extends SerializedTypeKind> = Result.Result<T>;
 
 export const withCode: CodeDecoratorFactory =
   (code: string, asResult = false) =>
   (Story, context) => {
-    const [resultProps, setResultProps] = useState<Result | null>(null);
+    const [resultProps, setResultProps] = useState<Result.Result | null>(null);
 
     useEffect(() => {
       (async () => {

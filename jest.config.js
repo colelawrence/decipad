@@ -27,6 +27,7 @@ module.exports = {
     '<rootDir>/libs/editor-table',
     '<rootDir>/libs/editor-components',
     '<rootDir>/libs/editor-variable-def',
+    '<rootDir>/libs/editor-power-table',
     '<rootDir>/libs/y-websocket',
   ],
 };

@@ -17,6 +17,7 @@
     { "path": "../client-events" },
     { "path": "../editor-components" },
     { "path": "../editor-table" },
-    { "path": "../editor-variable-def" }
+    { "path": "../editor-variable-def" },
+    { "path": "../editor-power-table" }
   ]
 }

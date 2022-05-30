@@ -1,6 +1,6 @@
 export type Flag =
   | 'PERSISTENT_EXAMPLE'
-  | 'PLOT_ELEMENTS'
+  | 'POWER_TABLE'
   | 'INPUT_COPY'
   | 'FORMULA_COLUMNS'
   | 'SLIDER_ELEMENT';

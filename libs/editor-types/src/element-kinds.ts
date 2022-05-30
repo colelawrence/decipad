@@ -41,5 +41,11 @@ export const ELEMENT_TH = 'th';
 export const ELEMENT_TD = 'td';
 export const ELEMENT_TABLE_COLUMN_FORMULA = 'table-column-formula';
 export const ELEMENT_TABLE_VARIABLE_NAME = 'table-var-name';
+
+// power-tables
+export const ELEMENT_POWER_TABLE = 'power-table';
+export const ELEMENT_POWER_TR = 'power-tr';
+export const ELEMENT_POWER_TH = 'power-th';
+
 // others
 export const ELEMENT_CAPTION = 'caption';

@@ -41,6 +41,7 @@ export type TableCellType =
   | Extract<SerializedType, { kind: 'string' }>
   | Extract<SerializedType, { kind: 'boolean' }>
   | Extract<SerializedType, { kind: 'date' }>
+  | Extract<SerializedType, { kind: 'range' }>
   | { kind: 'table-formula' };
 
 export interface TableColumn {

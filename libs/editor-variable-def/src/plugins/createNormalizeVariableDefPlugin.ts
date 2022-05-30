@@ -13,21 +13,17 @@ import {
   SliderElement,
 } from '@decipad/editor-types';
 import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
-import { deleteText, insertNodes, isElement, setNodes } from '@udecode/plate';
+import { deleteText, insertNodes, setNodes } from '@udecode/plate';
+import { isElementOfType } from '@decipad/editor-utils';
 
 const allowableVariant = new Set(['expression', 'slider']);
 
 const normalize =
   (editor: MyEditor) =>
   ([node, path]: MyNodeEntry): boolean => {
-    if (!isElement(node) || node.type !== ELEMENT_VARIABLE_DEF) {
+    if (!isElementOfType(node, ELEMENT_VARIABLE_DEF)) {
       return false;
     }
-
-    if (!isElement(node)) {
-      return false;
-    }
-
     if (!('variant' in node) || !allowableVariant.has(node.variant)) {
       setNodes(editor, { variant: 'expression' } as Partial<MyNode>, {
         at: path,

@@ -40,9 +40,8 @@ export interface TableRowElement extends BaseElement {
 
 export interface TableHeaderElement extends BaseElement {
   type: typeof ELEMENT_TH;
-  columnWidth?: number;
-  autoCreated?: boolean;
   cellType: TableCellType;
+  autoCreated?: boolean;
   children: [Text];
 }
 

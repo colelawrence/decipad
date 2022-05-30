@@ -2,7 +2,6 @@ import { PlotElement } from '@decipad/editor-types';
 import Fraction from '@decipad/fraction';
 import {
   convertToMultiplierUnit,
-  OneResult,
   Result,
   SerializedType,
   stringifyUnits,
@@ -258,7 +257,7 @@ export function specFromType(
 
 function toPlotColumn(
   type: SerializedType,
-  column: Array<OneResult>
+  column: Array<Result.OneResult>
 ): Array<AllowedPlotValue> {
   if (!column || !column.length) {
     return column as Array<AllowedPlotValue>;
@@ -298,7 +297,7 @@ function makeWide(
 }
 
 export function resultToPlotResultData(
-  result: undefined | Result,
+  result: undefined | Result.Result,
   displayProps: DisplayProps
 ): undefined | PlotData {
   if (!result || result.type.kind !== 'table') {
@@ -314,8 +313,8 @@ export function resultToPlotResultData(
   }
   const tableValue = value as ResultTable;
   const columnNames = relevantColumnNames(displayProps);
-  const columnsTypesAndResults: Array<[SerializedType, OneResult[]]> =
-    columnNames.map((columnName): [SerializedType, OneResult[]] => {
+  const columnsTypesAndResults: Array<[SerializedType, Result.OneResult[]]> =
+    columnNames.map((columnName): [SerializedType, Result.OneResult[]] => {
       const index = type.columnNames.indexOf(columnName);
       return [type.columnTypes[index], tableValue[index]];
     });

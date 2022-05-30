@@ -19,6 +19,7 @@ export * from './value';
 export * from './table';
 export * from './tables-legacy';
 export * from './components';
+export * from './power-table';
 export * from './utils';
 export * from './node';
 export * from './plate';

@@ -1,15 +1,10 @@
 import { ELEMENT_LINK, PlateComponent } from '@decipad/editor-types';
+import { assertElementType } from '@decipad/editor-utils';
 import { useSafeState } from '@decipad/react-utils';
 import { atoms } from '@decipad/ui';
 
 export const Link: PlateComponent = ({ attributes, children, element }) => {
-  if ('data-slate-leaf' in attributes) {
-    throw new Error('Link is not a leaf');
-  }
-  if (element?.type !== ELEMENT_LINK) {
-    throw new Error('Link is meant to render link elements');
-  }
-
+  assertElementType(element, ELEMENT_LINK);
   const [contentEditable, setContentEditable] = useSafeState(true);
 
   return (

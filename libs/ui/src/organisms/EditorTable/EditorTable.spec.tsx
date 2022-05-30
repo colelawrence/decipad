@@ -7,12 +7,10 @@ const defaultProps: ComponentProps<typeof EditorTable> = {
   columns: [
     {
       name: 'FirstName',
-      width: 10,
       cellType: getStringType(),
     },
     {
       name: 'Numbers',
-      width: 10,
       cellType: getNumberType(),
     },
   ],

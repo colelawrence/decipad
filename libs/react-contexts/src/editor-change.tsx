@@ -14,6 +14,10 @@ import {
   map,
   Observable,
   take,
+  concat,
+  from,
+  merge,
+  debounceTime,
 } from 'rxjs';
 import { dequal } from 'dequal';
 import { PlateEditor, usePlateEditorRef } from '@udecode/plate';
@@ -33,23 +37,46 @@ export const EditorChangeContextProvider: FC<{
     </EditorChangeContext.Provider>
   );
 };
+
+interface UseEditorChangeOptions {
+  debounceTimeMs?: number;
+  injectObservable?: Observable<undefined>;
+}
+
 export function useEditorChange<T>(
   callback: (val: T) => void,
-  selector: (editor: PlateEditor<MyValue>) => T
+  selector: (editor: PlateEditor<MyValue>) => T,
+  { debounceTimeMs = 100, injectObservable }: UseEditorChangeOptions = {}
 ): void {
   const editor = getDefined(usePlateEditorRef<MyValue>());
-  const observable = useContext(EditorChangeContext);
+  const editorChanges = useContext(EditorChangeContext);
+  const first = from([undefined]);
+  const editorChanges$ = concat(first, editorChanges);
   useEffect(() => {
+    const observable = injectObservable
+      ? merge(editorChanges$, injectObservable)
+      : editorChanges$;
     const subscription = observable
       .pipe(
+        debounceTime(debounceTimeMs),
         map(() => selector(editor)),
         distinctUntilChanged(dequal)
       )
       .subscribe(callback);
+
+    // manually trigger the first event
+
     return () => {
       subscription.unsubscribe();
     };
-  }, [callback, selector, observable, editor]);
+  }, [
+    callback,
+    selector,
+    editor,
+    debounceTimeMs,
+    injectObservable,
+    editorChanges$,
+  ]);
 }
 
 export function useChangedEditorElement() {

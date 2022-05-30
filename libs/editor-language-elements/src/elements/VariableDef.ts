@@ -5,6 +5,7 @@ import {
   parseOneExpression,
 } from '@decipad/computer';
 import { getNodeString } from '@udecode/plate';
+import { assertElementType } from '@decipad/editor-utils';
 import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeInteractiveElementOutput';
 
 export const VariableDef = {
@@ -12,9 +13,7 @@ export const VariableDef = {
   resultsInNameAndExpression: true,
   getNameAndExpressionFromElement: weakMapMemoizeInteractiveElementOutput(
     (element: MyElement) => {
-      if (element.type !== ELEMENT_VARIABLE_DEF) {
-        throw new Error('element should be a variable def element');
-      }
+      assertElementType(element, ELEMENT_VARIABLE_DEF);
       if (element.children.length < 2) {
         return null;
       }

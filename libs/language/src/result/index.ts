@@ -36,6 +36,10 @@ export interface Result<T extends SerializedTypeKind = SerializedTypeKind> {
   type: T extends SerializedTypeKind ? Extract<SerializedType, { kind: T }> : T;
 }
 
+export * as ResultTransforms from './ResultTransforms';
+export { Column } from './Column';
+export type { ColumnLike, Comparable } from './Column';
+
 export function serializeResult<T extends SerializedTypeKind>(
   type: Type,
   value: Interpreter.OneResult | null | undefined

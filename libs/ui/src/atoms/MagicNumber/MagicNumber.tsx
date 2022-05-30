@@ -6,7 +6,7 @@ import { CodeResult } from '../../organisms';
 import { cssVar } from '../../primitives';
 
 type MagicNumberProps = {
-  readonly result?: Result | null;
+  readonly result?: Result.Result | null;
   readonly loadingState?: boolean;
   readOnly?: boolean;
   readonly onClick?: () => void;

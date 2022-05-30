@@ -19,11 +19,11 @@ function subscribeToFormulaResult(
   blockId: string,
   rowIndex: number,
   columnIndex: number
-): Observable<Result<'table'> | null> {
+): Observable<Result.Result<'table'> | null> {
   return computer.results.pipe(
     map((computeRes) => {
       const table = computeRes.blockResults[blockId]?.results[0] as
-        | Result<'table'>
+        | Result.Result<'table'>
         | undefined;
 
       if (table == null || table.type.kind !== 'table') {
@@ -58,10 +58,12 @@ const findFormulaCoordinates = (
   return [rowIndex, colIndex];
 };
 
-export function useFormulaResult(element: MyElement): Result<'table'> | null {
+export function useFormulaResult(
+  element: MyElement
+): Result.Result<'table'> | null {
   const editor = useTEditorRef();
   const computer = useComputer();
-  const [result, setResult] = useState<Result<'table'> | null>(null);
+  const [result, setResult] = useState<Result.Result<'table'> | null>(null);
   const tableContext = useEditorTableContext();
 
   const [rowIndex, colIndex] = findFormulaCoordinates(editor, element);

@@ -36,7 +36,6 @@ const tableWrapperStyles = css({
 });
 
 interface Column {
-  width: number | undefined;
   name: string;
   cellType: TableColumn['cellType'];
 }
