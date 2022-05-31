@@ -12,6 +12,7 @@ import {
   UserIconKey,
 } from '../../utils';
 import { TableWidth } from '../Table/Table';
+import { smallestDesktop } from '../../primitives';
 
 const halfSlimBlockWidth = `${Math.round(editorLayout.slimBlockWidth / 2)}px`;
 const totalWidth = '100vw';
@@ -22,6 +23,8 @@ const wideToSlimBlockWidthDifference = `${
 const gutterWidth = '60px';
 const leftMargin = `calc(${halfTotalWidth} - ${halfSlimBlockWidth} - ${wideToSlimBlockWidthDifference})`;
 const restWidthBlock = `calc(${totalWidth} - ${leftMargin} - ${gutterWidth} - ${gutterWidth})`;
+
+const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 
 const wrapperStyles = css({
   margin: '0',
@@ -39,6 +42,10 @@ const tableCaptionWrapperStyles = css({
   maxWidth: restWidthBlock,
   overflowX: 'scroll',
   display: 'inline-block',
+  [smallScreenQuery]: {
+    maxWidth: `calc(100vw - ${gutterWidth})`,
+    minWidth: '0',
+  },
 });
 
 const tableWrapperStyles = css({
@@ -47,6 +54,10 @@ const tableWrapperStyles = css({
   maxWidth: restWidthBlock,
   overflowX: 'scroll',
   display: 'inline-block',
+  [smallScreenQuery]: {
+    maxWidth: `calc(100vw - ${gutterWidth})`,
+    minWidth: '0',
+  },
 });
 
 interface Column {
