@@ -7,7 +7,7 @@
       "lvl0": {
         "selector": "#navmenu .active",
         "global": true,
-        "default_value": "Meet Decipad"
+        "default_value": "Quick Start"
       },
       "lvl1": "article h1",
       "lvl2": "article h2",
