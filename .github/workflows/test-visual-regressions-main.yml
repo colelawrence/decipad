@@ -2,13 +2,13 @@ name: Run Visual Regression Tests
 
 on:
   push:
-  pull_request_review:
-    types: [submitted]
+    # Since Percy will auto-approve main, it'll become the new baseline for
+    # future PRs.
+    branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: ${{ github.event.review.state == 'approved' }}
     strategy:
       matrix:
         node-version: [16.x]
