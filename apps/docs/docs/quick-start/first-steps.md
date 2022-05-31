@@ -46,5 +46,6 @@ Take a look at our [Gallery of examples](/get-inspiration) and try to duplicate 
 
 # Learn More:
 
-- [Notebooks 101](/notebooks)
+- [Notebooks](/notebooks)
+- [Telling Stories](/notebooks/telling-stories)
 - [Explore Numbers and Data](/notebooks/explore-numbers-and-data)

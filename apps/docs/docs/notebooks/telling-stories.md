@@ -4,25 +4,29 @@ sidebar_position: 5
 
 # Telling Stories
 
-Decipad notebooks are not just for numbers, you can create plain text documents or incorporate data and narratives. Here are some of the tools you can use to build your story.
+Decipad notebooks aren't just for numbers, you can create plain text documents or incorporate data and narratives. Here are some of the tools you can use to build your story.
 
-## Notebook Title
+## Notebook Name
 
-You can name every notebook by picking a title. At Decipad we like to use emojis. Be creative!
+To organize your notebooks and help tell your story, pick a name for you notebook by defining a title. At Decipad we like to use emojis. Be creative!
 
 ## Writing and styling
 
-Highlight any text and a menu of styling will appear. Text can be transformed into a **paragraph**, **heading 1** or **heading 2**.
+### Placing Titles
 
-To style use **bold** `B`, _italics_ `I`, **underlined** `U` or `monospace code` `<>`.
+Add headings to you notebook with the '/' command in any paragraph by selecting 'Heading' or 'Sub-heading'.
 
-![Jan-17-2022 11-59-58](https://user-images.githubusercontent.com/76447845/149757797-ffd467a6-9a37-4322-970d-437ec71ff0e8.gif)
+In alternative, you can use the markdown notation. '\#' followed by "Your Title" or '\#\#' followed by "Your Sub-Title" to insert them into any paragraph.
+
+### Styling Paragraphs
+
+To transform your paragraphs you can select the text you wish to change and use the tool menu to pick a style. Currently, the notebook supports bold, italics, underline as well as some custom text decorations as highlighting and code.
 
 ## Markdown Support
 
-Besides the menu styling menu that pops up when you select text, Decipad supports a number of markdown style shortcuts to make editing and writing faster for those of you who prefer these. Supported elements are:
+Besides the styling menu that pops up when you select text, Decipad supports a number of markdown style shortcuts to make editing and writing faster for those of you who prefer. Take a look at the supported shortcuts:
 
-### Full Block Commands
+### Block Shortcuts
 
 - `#` followed by a `space` to create an **Heading**
 - `##` followed by a `space` to create an **Sub-heading**
@@ -42,20 +46,6 @@ Besides the menu styling menu that pops up when you select text, Decipad support
 - Use the notation `[link name](url)` to insert a **link**
 - Wrap words between `` ` `` and `` ` `` for **inline code**
 - Wrap a variable name between `%` to get a **magic number**
-
-## Blocks
-
-Type `/` on a new paragraph and access a menu of different [blocks](../blocks).
-
-<img width="300" alt="How slash commands work in Decipad" src="https://user-images.githubusercontent.com/76447845/149754701-00998f34-37fb-40b1-b921-278d1ae38861.png" />
-
-Select any block by typing its name or scrolling and pressing `enter`.
-
-![heading](https://user-images.githubusercontent.com/76447845/149759719-390e3a33-da96-4cad-af83-df375249b47f.gif)
-
-## Share your Notebook!
-
-You've done it! You created your first notebook and now you can share it with the world. Click the `Share` button on the right corner of your notebook to generate a public link.
 
 # Learn More:
 

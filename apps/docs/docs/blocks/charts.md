@@ -17,3 +17,9 @@ Charts are the best way for you to convey data relations visually on your notebo
 3. Connect you chart block to your table data by selecting the table name and by choosing one of the columns for the horizontal values and another for the vertical's.
 
 Each time your table is updated, the chart will be automatically refreshed.
+
+---
+
+# Learn More:
+
+- [Language](/language)
