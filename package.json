@@ -12,7 +12,7 @@
     "serve:storybook": "nx run ui:storybook",
     "serve:docs": "nx run docs:serve",
     "build": "nx build",
-    "build:grammar": "cd libs/language/src/grammar; nearleyc deci-language-grammar.ne | prettier --stdin-filepath grammar.js > deci-language-grammar-generated.js",
+    "build:grammar": "cd libs/language/src/grammar/nearley; nearleyc deci-language-grammar.ne | prettier --stdin-filepath grammar.js > deci-language-grammar-generated.js",
     "build:grammar:watch": "yarn build:grammar; chokidar 'libs/language/src/grammar/**/*.ne' -c 'yarn build:grammar'",
     "build:frontend": "nx export client",
     "build:storybook": "nx run ui:build-storybook",

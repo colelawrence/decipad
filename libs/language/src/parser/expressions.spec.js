@@ -667,13 +667,19 @@ runTests({
   'multiply by default': {
     sourceMap: false,
     source: '10 bananas',
-    ast: [c('*', l(10), r('bananas'))],
+    ast: [c('implicit*', l(10), r('bananas'))],
   },
 
-  'multiply by dafault accepts lots of stuff after the number': {
+  'multiply by default accepts lots of stuff after the number': {
     sourceMap: false,
     source: '10 bunch offf arguments',
-    ast: [c('*', c('*', c('*', l(10), r('bunch')), r('offf')), r('arguments'))],
+    ast: [
+      c(
+        'implicit*',
+        c('implicit*', c('implicit*', l(10), r('bunch')), r('offf')),
+        r('arguments')
+      ),
+    ],
   },
 });
 

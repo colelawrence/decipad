@@ -39,7 +39,8 @@ it('turns cells into AST nodes', () => {
 
       '123'
     )
-  ).toMatchInlineSnapshot(`"(* 123 (* (ref banana) (^ (ref km) -2)))"`);
+  ).toMatchInlineSnapshot(`"(implicit* 123 (* (ref banana) (^ (ref km) -2)))"`);
+
   expect(
     testParseCell(
       {
@@ -66,7 +67,7 @@ it('turns cells into AST nodes', () => {
 
       '123'
     )
-  ).toMatchInlineSnapshot(`"(* 123 (* (ref m) (ref s)))"`);
+  ).toMatchInlineSnapshot(`"(implicit* 123 (* (ref m) (ref s)))"`);
   expect(testParseCell({ kind: 'string' }, '123')).toMatchInlineSnapshot(
     `"\\"123\\""`
   );

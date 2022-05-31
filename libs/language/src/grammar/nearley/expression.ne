@@ -23,10 +23,10 @@ const implicitMultHandler = (d, _l, reject) => {
   return addArrayLoc({
     type: 'function-call',
     args: [
-      {
+      addArrayLoc({
         type: 'funcref',
-        args: ['*'],
-      },
+        args: ['implicit*'],
+      }, d),
       addArrayLoc({
         type: 'argument-list',
         args: [left, right]

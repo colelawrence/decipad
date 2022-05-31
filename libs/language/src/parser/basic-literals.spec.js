@@ -1,4 +1,4 @@
-import { F } from '../utils';
+import { c, F, l, r } from '../utils';
 import { runTests } from './run-tests';
 
 runTests({
@@ -130,7 +130,7 @@ runTests({
         args: [
           {
             type: 'funcref',
-            args: ['*'],
+            args: ['implicit*'],
           },
           {
             type: 'argument-list',
@@ -148,5 +148,15 @@ runTests({
         ],
       },
     ],
+  },
+
+  'implicit multiplication': {
+    source: 'banana meter',
+    ast: [c('implicit*', r('banana'), r('meter'))],
+  },
+
+  'indirect implicit multiplication': {
+    source: '10 banana meter',
+    ast: [c('implicit*', c('implicit*', l(10), r('banana')), r('meter'))],
   },
 });

@@ -384,7 +384,7 @@ export function ne(n: number, unit: string): AST.Expression {
     args: [
       {
         type: 'funcref',
-        args: ['*'],
+        args: ['implicit*'],
       },
       {
         type: 'argument-list',

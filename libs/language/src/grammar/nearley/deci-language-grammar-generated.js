@@ -5,7 +5,7 @@ function id(x) {
 }
 
 /* eslint-disable */
-import { tokenizer } from './tokenizer';
+import { tokenizer } from '../tokenizer';
 
 const initialReservedWords = new Set([
   'in',
@@ -253,10 +253,13 @@ const implicitMultHandler = (d, _l, reject) => {
     {
       type: 'function-call',
       args: [
-        {
-          type: 'funcref',
-          args: ['*'],
-        },
+        addArrayLoc(
+          {
+            type: 'funcref',
+            args: ['implicit*'],
+          },
+          d
+        ),
         addArrayLoc(
           {
             type: 'argument-list',
@@ -1564,16 +1567,14 @@ let ParserRules = [
     symbols: ['divMulOperator$subexpression$1'],
     postprocess: simpleOperator,
   },
+  { name: 'divMulOperator$subexpression$2', symbols: [{ literal: '%' }] },
+  { name: 'divMulOperator$subexpression$2', symbols: [{ literal: 'mod' }] },
+  { name: 'divMulOperator$subexpression$2', symbols: [{ literal: 'modulo' }] },
   {
     name: 'divMulOperator',
-    symbols: ['__', { literal: '%' }],
+    symbols: ['__', 'divMulOperator$subexpression$2'],
     postprocess: (d) => {
-      return addArrayLoc(
-        {
-          name: d[1].value,
-        },
-        d
-      );
+      return addArrayLoc({ name: '%' }, d);
     },
   },
   { name: 'powOperator$subexpression$1', symbols: [{ literal: '**' }] },

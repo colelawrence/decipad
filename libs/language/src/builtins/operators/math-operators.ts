@@ -307,6 +307,11 @@ export const mathOperators: Record<string, BuiltinSpec> = {
         a.multiplyUnit(b.unit)
       ),
   },
+  // this is added when we use implicit multiplication instead of '*'
+  // there is a separate function because this way we can tell it apart from '*'
+  'implicit*': {
+    aliasFor: '*',
+  },
   '/': {
     argCount: 2,
     fn: ([a, b]) => getInstanceof(a, Fraction).div(b),

@@ -30,7 +30,7 @@ export function parseCell(
 
       return astNode(
         'function-call',
-        astNode('funcref', '*'),
+        astNode('funcref', 'implicit*'),
         astNode('argument-list', literal, unit)
       );
     }

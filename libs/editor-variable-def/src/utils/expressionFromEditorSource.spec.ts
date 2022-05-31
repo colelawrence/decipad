@@ -12,7 +12,7 @@ it('turns an editor node into an expression', () => {
       args: [
         {
           type: 'funcref',
-          args: ['*'],
+          args: ['implicit*'],
         },
         {
           type: 'argument-list',

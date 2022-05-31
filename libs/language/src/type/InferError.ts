@@ -108,7 +108,6 @@ export type ErrSpec =
     };
 
 // exhaustive switch
-// eslint-disable-next-line consistent-return
 function specToString(spec: ErrSpec): string {
   switch (spec.errType) {
     case 'free-form': {
