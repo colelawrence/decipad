@@ -147,32 +147,28 @@ export const withColumnSize = checker(
   }
 );
 
-export const withMinimumColumnCount = (
-  me: Type,
-  minimumColumnSize: number | 'unknown' | null
-) => {
-  const columnCount = (me.columnTypes ?? []).length;
-  if (
-    minimumColumnSize === 'unknown' ||
-    minimumColumnSize === null ||
-    (minimumColumnSize !== null && columnCount >= minimumColumnSize)
-  ) {
+export const withMinimumColumnCount = checker(
+  (me: Type, minColumns: number) => {
+    const columnCount = (me.columnTypes ?? []).length;
+    if (columnCount >= minColumns) {
+      return me;
+    } else {
+      return me.withErrorCause(
+        `Expected table with at least ${minColumns} column${
+          minColumns === 1 ? '' : 's'
+        }`
+      );
+    }
+  }
+);
+
+export const withAtParentIndex = checker((me: Type) => {
+  if (me.atParentIndex != null) {
     return me;
   } else {
     return me.withErrorCause(
-      `Incompatible minimum column count: ${columnCount} and ${minimumColumnSize}`
+      InferError.expectedTableAndAssociatedColumn(null, me)
     );
-  }
-};
-
-export const withAtParentIndex = checker((me: Type, atParentIndex?: number) => {
-  if (
-    (atParentIndex == null && me.atParentIndex != null) ||
-    (atParentIndex != null && me.atParentIndex === atParentIndex)
-  ) {
-    return me;
-  } else {
-    return me.withErrorCause(InferError.expectedColumnContained());
   }
 });
 

@@ -41,9 +41,7 @@ describe('when it is a syntax error', () => {
         error: {
           blockId: '123',
           message: 'some error',
-          token: {
-            offset,
-          },
+          token: { offset },
         },
       } as IdentifiedResult)
     ).toEqual([

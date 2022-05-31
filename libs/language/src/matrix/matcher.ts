@@ -74,7 +74,9 @@ export const inferMatchers = async (
   }
 
   if (getCardinality(dimension) !== 2 && !getIndexName(dimension)) {
-    return t.impossible(InferError.expectedAssociatedColumn(dimension));
+    return t.impossible(
+      InferError.expectedTableAndAssociatedColumn(dimension, undefined)
+    );
   }
 
   if (needleExp == null) {

@@ -179,7 +179,7 @@ describe('matrix op inference', () => {
     ).toMatchObject({
       errorCause: {
         spec: {
-          errType: 'expected-associated-column',
+          errType: 'expected-table-and-associated-column',
         },
       },
     });
@@ -196,7 +196,7 @@ describe('matrix op inference', () => {
     ).toMatchObject({
       errorCause: {
         spec: {
-          errType: 'expected-associated-column',
+          errType: 'expected-table-and-associated-column',
         },
       },
     });

@@ -17,7 +17,12 @@ export const inferVariable = (
   if (!variable) {
     return t.impossible(InferError.missingVariable(refName(varName)));
   } else if (expectedDim && getIndexName(variable) !== expectedDim) {
-    return t.impossible(InferError.expectedAssociatedColumn(variable));
+    const expectedTable = expectedDim
+      ? context.stack.get(expectedDim)
+      : undefined;
+    return t.impossible(
+      InferError.expectedTableAndAssociatedColumn(expectedTable, variable)
+    );
   } else {
     return variable.isColumn();
   }

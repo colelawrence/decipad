@@ -244,11 +244,11 @@ export class Type {
     return withColumnSize(this, columnSize);
   }
 
-  withAtParentIndex(parentIndex?: number): Type {
-    return withAtParentIndex(this, parentIndex);
+  withAtParentIndex(): Type {
+    return withAtParentIndex(this);
   }
 
-  withMinimumColumnCount(columnSize: number | 'unknown' | null): Type {
+  withMinimumColumnCount(columnSize = 1): Type {
     return withMinimumColumnCount(this, columnSize);
   }
 

@@ -30,9 +30,6 @@ export type ErrSpec =
       errType: 'expected-unit';
       expectedUnit: [Units | null, Units | null];
     }
-  | {
-      errType: 'expected-column-contained';
-    }
   | { errType: 'unexpected-empty-column' }
   | { errType: 'unexpected-empty-table' }
   | {
@@ -77,16 +74,12 @@ export type ErrSpec =
     }
   | {
       errType: 'expected-table-and-associated-column';
-      gotTable: Type;
-      gotColumn: Type;
+      gotTable?: Type;
+      gotColumn?: Type;
     }
   | {
       errType: 'duplicated-name';
       duplicatedName: string;
-    }
-  | {
-      errType: 'expected-associated-column';
-      gotColumn: Type;
     }
   | {
       errType: 'complex-expression-exponent';
@@ -140,9 +133,6 @@ function specToString(spec: ErrSpec): string {
 
       return `The function ${fname} requires ${expected} parameters and ${got} parameters were entered`;
     }
-    case 'expected-column-contained': {
-      return `expected column to belong to table`;
-    }
     case 'unexpected-empty-column': {
       return `Unexpected empty column`;
     }
@@ -191,9 +181,6 @@ function specToString(spec: ErrSpec): string {
     }
     case 'duplicated-name': {
       return `The name ${spec.duplicatedName} is already being used. You cannot have duplicate names`;
-    }
-    case 'expected-associated-column': {
-      return `Expected a column associated to a table`;
     }
     case 'complex-expression-exponent': {
       return `Complex expressions not supported in exponents`;
@@ -265,12 +252,6 @@ export class InferError {
     return new InferError({
       errType: 'expected-arg-count',
       expectedArgCount: [fname, expected, got],
-    });
-  }
-
-  static expectedColumnContained() {
-    return new InferError({
-      errType: 'expected-column-contained',
     });
   }
 
@@ -360,11 +341,14 @@ export class InferError {
     });
   }
 
-  static expectedTableAndAssociatedColumn(gotTable: Type, gotColumn: Type) {
+  static expectedTableAndAssociatedColumn(
+    gotTable?: Type | null,
+    gotColumn?: Type | null
+  ) {
     return new InferError({
       errType: 'expected-table-and-associated-column',
-      gotTable,
-      gotColumn,
+      gotTable: gotTable ?? undefined,
+      gotColumn: gotColumn ?? undefined,
     });
   }
 
@@ -372,13 +356,6 @@ export class InferError {
     return new InferError({
       errType: 'duplicated-name',
       duplicatedName,
-    });
-  }
-
-  static expectedAssociatedColumn(gotColumn: Type) {
-    return new InferError({
-      errType: 'expected-associated-column',
-      gotColumn,
     });
   }
 
