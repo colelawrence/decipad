@@ -11,7 +11,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event.review.state == 'approved'
+    if: github.event.type == 'PushEvent' || github.event.review.state == 'approved'
     strategy:
       matrix:
         node-version: [16.x]
