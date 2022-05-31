@@ -47,6 +47,7 @@ const placeholderStyles = css(p16Regular, {
   display: 'grid',
   overflow: 'hidden',
   whiteSpace: 'nowrap',
+  width: '100%',
 
   '> span, ::before': {
     gridArea: '1 / 1',

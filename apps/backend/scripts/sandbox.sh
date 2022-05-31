@@ -15,7 +15,13 @@ teardown () {
 }
 
 trap "teardown" EXIT
-yarn build:backend:watch&
-SERVICE_PIDS="${SERVICE_PIDS} ${!}"
+
+if [[ -z "${CI:-}" ]]; then
+  yarn build:backend:watch&
+  SERVICE_PIDS="${SERVICE_PIDS} ${!}"
+else
+  yarn build:backend
+fi
+
 cd apps/backend
 NEXTAUTH_URL=http://localhost:4200 ../../node_modules/.bin/sandbox
