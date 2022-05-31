@@ -1,6 +1,10 @@
 name: Run Visual Regression Tests
 
 on:
+  push:
+    # Since Percy will auto-approve main, it'll become the new baseline for
+    # future PRs.
+    branches: [main]
   pull_request_review:
     types: [submitted]
 
