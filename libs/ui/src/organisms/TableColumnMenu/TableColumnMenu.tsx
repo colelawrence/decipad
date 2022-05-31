@@ -1,6 +1,7 @@
 import { isEnabled } from '@decipad/feature-flags';
 import Fraction from '@decipad/fraction';
 import { deserializeUnit, stringifyUnits } from '@decipad/computer';
+import type { TableCellType } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { ComponentProps, ReactNode } from 'react';
@@ -16,7 +17,6 @@ import {
   Trash,
 } from '../../icons';
 import { MenuList, UnitMenuItem } from '../../molecules';
-import { TableCellType } from '../../types';
 import {
   getBooleanType,
   getDateType,

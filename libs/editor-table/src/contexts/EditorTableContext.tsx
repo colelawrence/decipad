@@ -1,8 +1,7 @@
 import { TableCellType } from '@decipad/editor-types';
 import { createContext, useContext } from 'react';
-import { DeepReadonly } from 'utility-types';
 
-export type EditorTableContextValue = DeepReadonly<{
+export type EditorTableContextValue = Readonly<{
   blockId: string;
   cellTypes: TableCellType[];
 }>;

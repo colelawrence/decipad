@@ -1,9 +1,9 @@
 import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
+import type { TableCellType } from '@decipad/editor-types';
 import { mockConsoleWarn } from '@decipad/testutils';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
-import type { TableCellType } from '../../types';
 import { getDateType, getNumberType, getStringType } from '../../utils';
 import { TableColumnMenu } from './TableColumnMenu';
 

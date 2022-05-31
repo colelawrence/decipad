@@ -65,6 +65,7 @@ export {
 } from './type';
 export type {
   SerializedType,
+  SerializedTypes,
   SerializedTypeKind,
   SerializedUnits,
 } from './type';

@@ -1,11 +1,11 @@
 import { noop } from '@decipad/utils';
+import type { TableColumn } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import { Children, FC, ReactNode } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
 import { Table } from '..';
 import { AddTableRowButton } from '../../molecules';
 import { editorLayout } from '../../styles';
-import { TableColumn } from '../../types';
 import {
   AvailableSwatchColor,
   TableStyleContext,

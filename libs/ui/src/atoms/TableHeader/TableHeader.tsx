@@ -1,5 +1,8 @@
 import { FC, useContext } from 'react';
-import { PlateComponentAttributes } from '@decipad/editor-types';
+import type {
+  TableCellType,
+  PlateComponentAttributes,
+} from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import {
   ConnectDragPreview,
@@ -22,7 +25,6 @@ import {
   getTypeIcon,
   TableStyleContext,
 } from '../../utils';
-import type { TableCellType } from '../../types';
 
 const columnStyles = css(p13Medium, {
   display: 'grid',

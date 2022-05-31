@@ -47,7 +47,7 @@ it('can stringify a type', () => {
         "type": "units",
       },
     }
-`);
+  `);
   expect(serializeType(t.string())).toMatchInlineSnapshot(`
     Object {
       "kind": "string",

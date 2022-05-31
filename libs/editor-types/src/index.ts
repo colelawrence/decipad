@@ -17,7 +17,6 @@ export type ElementKind = typeof elementKinds[keyof typeof elementKinds];
 export * from './interactive-elements';
 export * from './value';
 export * from './table';
-export * from './tables-legacy';
 export * from './components';
 export * from './power-table';
 export * from './utils';

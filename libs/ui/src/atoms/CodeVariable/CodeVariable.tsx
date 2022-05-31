@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
 import { noop } from 'lodash';
 import { ReactNode } from 'react';
+import type { TableCellType } from '@decipad/editor-types';
 import { grey400, grey500 } from '../../primitives';
 import { codeBlock } from '../../styles';
-import { TableCellType } from '../../types';
 import { getTypeIcon } from '../../utils';
 
 const varStyles = css(codeBlock.variableStyles, {

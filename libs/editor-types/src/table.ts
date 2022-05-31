@@ -1,6 +1,7 @@
-import type { EmptyText } from '.';
-import { Text } from '.';
-import {
+import type { SerializedTypes } from '@decipad/computer';
+
+import type { EmptyText, Text } from '.';
+import type {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
   ELEMENT_TABLE_COLUMN_FORMULA,
@@ -11,7 +12,24 @@ import {
   ELEMENT_TR,
 } from './element-kinds';
 import type { BaseElement } from './value';
-import type { TableCellType, TableData } from './tables-legacy';
+
+export type TableCellType =
+  | SerializedTypes.Number
+  | SerializedTypes.String
+  | SerializedTypes.Boolean
+  | SerializedTypes.Date
+  | Readonly<{ kind: 'table-formula' }>;
+
+export interface TableColumn {
+  columnName: string;
+  cells: string[];
+  cellType: TableCellType;
+}
+
+export interface TableData {
+  variableName: string;
+  columns: TableColumn[];
+}
 
 export interface TableColumnFormulaElement extends BaseElement {
   type: typeof ELEMENT_TABLE_COLUMN_FORMULA;

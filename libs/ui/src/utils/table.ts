@@ -1,4 +1,10 @@
-import { SerializedType, SerializedUnits, Time } from '@decipad/computer';
+import {
+  SerializedType,
+  SerializedTypes,
+  SerializedUnits,
+  Time,
+} from '@decipad/computer';
+import type { TableCellType } from '@decipad/editor-types';
 import { createContext, FunctionComponent } from 'react';
 import {
   All,
@@ -8,7 +14,6 @@ import {
   Number,
   Text,
 } from '../icons';
-import type { TableCellType } from '../types';
 import { AvailableSwatchColor } from './swatches';
 import { UserIconKey } from './user-icons';
 
@@ -31,17 +36,15 @@ export function getTypeIcon(
 
 export function getDateType(
   specificity: Time.Specificity
-): Extract<SerializedType, { kind: 'date' }> {
+): SerializedTypes.Date {
   return { kind: 'date', date: specificity };
 }
 
-export function getNumberType(
-  unit?: SerializedUnits
-): Extract<SerializedType, { kind: 'number' }> {
+export function getNumberType(unit?: SerializedUnits): SerializedTypes.Number {
   return { kind: 'number', unit: unit ?? null };
 }
 
-export function getBooleanType(): Extract<SerializedType, { kind: 'boolean' }> {
+export function getBooleanType(): SerializedTypes.Boolean {
   return { kind: 'boolean' };
 }
 
@@ -54,7 +57,7 @@ export function getFormulaType(): Extract<
   };
 }
 
-export function getStringType(): Extract<SerializedType, { kind: 'string' }> {
+export function getStringType(): SerializedTypes.String {
   return { kind: 'string' };
 }
 

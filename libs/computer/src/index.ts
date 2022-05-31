@@ -4,6 +4,7 @@ export type {
   Interpreter,
   Parser,
   SerializedType,
+  SerializedTypes,
   SerializedTypeKind,
   SerializedUnits,
   Time,

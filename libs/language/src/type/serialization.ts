@@ -1,60 +1,30 @@
 import { buildType as t, Type } from '..';
-import { Time } from '../date';
 import { F } from '../utils';
-import { ErrSpec, InferError } from './InferError';
-import { TUnit, TUnits, Units } from './unit-type';
+import { InferError } from './InferError';
+import {
+  SerializedType,
+  SerializedTypes,
+  SerializedTypeKind,
+  SerializedUnits,
+  SerializedUnit,
+} from './SerializedType';
+import { Units } from './unit-type';
 
-export interface SerializedFraction {
-  n: bigint;
-  d: bigint;
-  s: bigint;
-}
+export type {
+  SerializedType,
+  SerializedTypes,
+  SerializedTypeKind,
+  SerializedUnits,
+  SerializedUnit,
+};
 
-export type SerializedUnit = TUnit<SerializedFraction>;
-export type SerializedUnits = TUnits<SerializedFraction>;
-
-export type SerializedType = Readonly<
-  | { kind: 'number'; unit: SerializedUnits | null }
-  | { kind: 'boolean' }
-  | { kind: 'string' }
-  | { kind: 'date'; date: Time.Specificity }
-  | { kind: 'range'; rangeOf: SerializedType }
-  | {
-      kind: 'column';
-      indexedBy: string | null;
-      cellType: SerializedType;
-      columnSize: number | 'unknown';
-    }
-  | {
-      kind: 'table';
-      indexName: string | null;
-      tableLength: number | 'unknown';
-      columnTypes: SerializedType[];
-      columnNames: string[];
-    }
-  | { kind: 'row'; rowCellTypes: SerializedType[]; rowCellNames: string[] }
-  | { kind: 'function' }
-  | { kind: 'type-error'; errorCause: ErrSpec }
->;
-
-export type SerializedTypeKind = SerializedType['kind'];
-
+// TODO: is this just a lokey type cast?
 export function serializeUnit(unit: Units | null): SerializedUnits | null {
   return unit;
 }
 
 export function serializeType(type: Type): SerializedType {
-  if (type.type === 'number') {
-    return { kind: 'number', unit: serializeUnit(type.unit) };
-  } else if (type.type === 'boolean') {
-    return { kind: 'boolean' };
-  } else if (type.type === 'string') {
-    return { kind: 'string' };
-  } else if (type.date) {
-    return { kind: 'date', date: type.date };
-  } else if (type.rangeOf) {
-    return { kind: 'range', rangeOf: serializeType(type.rangeOf) };
-  } else if (type.cellType && type.columnSize) {
+  if (type.cellType && type.columnSize) {
     return {
       kind: 'column',
       indexedBy: type.indexedBy,
@@ -75,6 +45,16 @@ export function serializeType(type: Type): SerializedType {
       rowCellTypes: type.rowCellTypes.map((t) => serializeType(t)),
       rowCellNames: type.rowCellNames,
     };
+  } else if (type.type === 'number') {
+    return { kind: 'number', unit: serializeUnit(type.unit) };
+  } else if (type.type === 'boolean') {
+    return { kind: 'boolean' };
+  } else if (type.type === 'string') {
+    return { kind: 'string' };
+  } else if (type.date) {
+    return { kind: 'date', date: type.date };
+  } else if (type.rangeOf) {
+    return { kind: 'range', rangeOf: serializeType(type.rangeOf) };
   } else if (type.functionness) {
     return { kind: 'function' };
   } else if (type.errorCause) {
