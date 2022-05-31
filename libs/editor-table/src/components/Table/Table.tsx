@@ -67,6 +67,7 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
               color={(element.color ?? 'Catskill') as AvailableSwatchColor}
               onAddRow={onAddRow}
               columns={columns}
+              tableWidth={wideTable ? 'WIDE' : 'SLIM'}
             >
               {children}
             </organisms.EditorTable>

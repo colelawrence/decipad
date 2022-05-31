@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import { ConnectDropTarget } from 'react-dnd';
 import { cssVar } from '../../primitives';
 import { tableRowCounter } from '../../utils';
+import { slimBlockWidth } from '../../styles/editor-layout';
 
 const border = `1px solid ${cssVar('strongHighlightColor')}`;
 const borderRadius = '6px';
@@ -13,8 +14,16 @@ const tableBaseStyles = css({
   // and <td> separately for borders and border radius.
   borderCollapse: 'inherit',
   borderSpacing: '0',
-  tableLayout: 'fixed',
+  tableLayout: 'auto',
   counterReset: tableRowCounter,
+  width: '100%',
+  maxWidth: slimBlockWidth,
+});
+
+const wideTableStyles = css({
+  tableLayout: 'fixed',
+  width: 'initial',
+  maxWidth: 'initial',
 });
 
 // Top border and border-radius, applied to table headers if they exist or to the first table row.
@@ -62,17 +71,20 @@ const allBorderStyles = css(innerBorderStyles, {
 });
 
 type Border = 'all' | 'inner';
+export type TableWidth = 'SLIM' | 'WIDE';
 
 interface TableProps {
   readonly border?: Border;
   readonly children?: ReactNode;
   readonly dropRef?: ConnectDropTarget;
+  readonly tableWidth?: TableWidth;
 }
 
 export const Table = ({
   border: b = 'all',
   children,
   dropRef,
+  tableWidth,
 }: TableProps): ReturnType<FC> => (
   <table
     ref={dropRef}
@@ -80,6 +92,7 @@ export const Table = ({
       tableBaseStyles,
       b === 'all' && [borderRadiusStyles, allBorderStyles],
       b === 'inner' && innerBorderStyles,
+      tableWidth === 'WIDE' && wideTableStyles,
     ]}
   >
     {children}

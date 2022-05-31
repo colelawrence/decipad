@@ -4,34 +4,11 @@ import { Children, FC, PropsWithChildren, useContext } from 'react';
 import * as icons from '../../icons';
 import { FormulasDrawer } from '../../organisms';
 import { cssVar, display, p16Bold, setCssVar } from '../../primitives';
-import {
-  blockAlignment,
-  editorLayout,
-  editorViewportBreakpoints,
-} from '../../styles';
+import { blockAlignment } from '../../styles';
 import { TableStyleContext } from '../../utils';
 import { IconPopover } from '../IconPopover/IconPopover';
 
-const halfFullWidth = '50vw';
-const halfSlimBlockWidth = `${Math.round(editorLayout.slimBlockWidth / 2)}px`;
-const doubleGutterGap = `${editorLayout.gutterGap * 2}px`;
-const slimMarginLeft = `calc(${halfFullWidth} - ${halfSlimBlockWidth})`;
-const halfDiffBetweenWideAndSlim = `${Math.round(
-  (editorLayout.wideBlockWidth - editorLayout.slimBlockWidth) / 2
-)}px`;
-
-const screenContainingWideBlockMediaQuery = `@media (min-width: ${editorViewportBreakpoints.minWideWidth}px)`;
-const screenContainingBetweenWideAndSlimBlockMediaQuery = `@media (max-width: ${editorViewportBreakpoints.minWideWidth}px) and (min-width: ${editorViewportBreakpoints.minSlimWidth}px)`;
-
-const tableCaptionWideStyles = css({
-  paddingLeft: 0,
-  [screenContainingBetweenWideAndSlimBlockMediaQuery]: {
-    paddingLeft: `calc(${slimMarginLeft} - ${doubleGutterGap})`,
-  },
-  [screenContainingWideBlockMediaQuery]: {
-    paddingLeft: halfDiffBetweenWideAndSlim,
-  },
-});
+const tableCaptionWideStyles = css({});
 
 const tableCaptionSlimStyles = css({});
 
