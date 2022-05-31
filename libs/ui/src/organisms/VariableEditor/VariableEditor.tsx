@@ -100,8 +100,12 @@ const variableNameStyles = css({
     right: 0,
     top: 0,
     position: 'absolute',
-    background: 'linear-gradient(90deg, #ffffff00, #ffffff)',
     pointerEvents: 'none',
+    background: `linear-gradient(
+      90deg,
+      transparent,
+      ${cssVar('backgroundColor')}
+    )`,
   },
 });
 
