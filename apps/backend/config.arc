@@ -1,3 +1,3 @@
 @aws
 timeout 60
-runtime nodejs14.x
+runtime nodejs16.x

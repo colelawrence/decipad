@@ -345,3 +345,4 @@ custom-domain
 @aws
 region eu-west-2
 timeout 30
+runtime nodejs16.x

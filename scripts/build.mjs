@@ -83,7 +83,7 @@ async function esBuildOptions(env) {
       'libs/lambdas/src/queues/*/index.ts',
       'libs/lambdas/src/ws/*/index.ts',
     ]),
-    target: 'node14',
+    target: 'node16',
     platform: 'node',
     format: 'cjs',
     external: ['aws-sdk', '@vue/compiler-sfc'],

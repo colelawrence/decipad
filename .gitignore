@@ -272,3 +272,6 @@ apps/docs/build
 
 # Intellij
 .idea
+
+# We don't use npm
+package-lock.json

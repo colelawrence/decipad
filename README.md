@@ -13,7 +13,7 @@
 
 ## Set up
 
-For you to be able to run Deci locally, you need to have Node.js version 14.x installed.
+For you to be able to run Deci locally, you need to have Node.js version 16.x installed.
 
 If you don't already, you can go to [the Node.js official website](https://nodejs.org/en/) to download and run the installer.
 
@@ -49,7 +49,13 @@ git clone git@github.com:decipad/decipad.git
 
 If you're using Github Desktop, clone the decipad repo (which installs it locally).
 
-### Install dependencies.
+### Install dependencies
+
+We use `yarn` to manage package instalation. If you don't have `yarn` available to your command line, you can install it globally by using:
+
+```bash
+npm install yarn -g
+```
 
 Using the command line, inside your local copy of the decipad repo, you should do:
 
@@ -75,7 +81,7 @@ For you to be able to develop you will need access to a Deci development AWS use
 Also, you'll need to install the AWS CLI. Once you have done that, you'll need to generate an access key, which you'll need to introduce when running:
 
 ```sh
-$ aws configure
+aws configure
 ```
 
 If asked for a _AWS region_, use `eu-west-2`.
@@ -157,24 +163,12 @@ These tests are powered by cypress and are present in apps/client-e2e.
 `cd` to the root of the repo, and run:
 
 ```bash
-./scripts/e2e.sh
+yarn e2e
 ```
 
+> To run the E2E tests you will need the local sandbox server running (which you can start with `yarn serve:all` on a different terminal).
+
 Interesting options are `--headless` (don't show a window) and `--watch` (don't close after running).
-
-### Amazon SES emails
-
-To receive e-mails from the application (like when signing in through e-mail), verify your e-mail in SES (it's in sandbox mode so it only sends to verified e-mails)
-
-- Go to the AWS web console
-- Search for the SES service and go there
-- If you are offered to switch to "Use the new console" in the menu (and thus are on the "classic console"), do it
-- Click "Verified identities" in the menu
-- Click on the button "Create identity"
-- Choose identity type "Email address"
-- Enter the email address you want to send email to
-- Confirm by clicking "Create identity"
-- You will then receive a verification e-mail with instructions to complete the confirmation
 
 ## Private deploys and fast client updates
 
@@ -186,9 +180,9 @@ https://www.loom.com/share/a0b33c1071d343fb8a216ef64ad217ea
 
 Sometimes you may neeed to develop a feature from end to end, or you may want to change or add a Graphql interface. If that's the case, here is what you need to know and do:
 
-The GraphQL API is divided up into separate realms in [`apps/backend/lib/graphql`](apps/backend/lib/graphql). This is mainly to keep things organized, as it's all put together at compile and run time.
+The GraphQL API is divided up into separate realms in [`libs/graphqlserver`](libs/graphqlserver). This is mainly to keep things organized, as it's all put together at compile and run time.
 
-You'll need to search and spot the realm you want to add or change something. If there's no suited realm, you can create one. (If you do, don't forget to add it to `apps/backend/lib/graphql/modules.ts`).
+You'll need to search and spot the realm you want to add or change something. If there's no suited realm, you can create one. (If you do, don't forget to add it to `libs/graphqlserver/src/modules.ts`).
 
 Then you will need to change or add the typedef with the GraphQL interface and the implement or change the resolvers for that interface.
 
@@ -203,17 +197,9 @@ nx serve backend
 nx serve client
 ```
 
-You should also run the following watch in a separate window to generate the back-end from your typescripts:
-
-```bash
-yarn build:backend:watch
-```
-
 (The `nx serve backend` runs everything you should need in the backend for you: database, queues and respective lambdas, graphQL server, HTTP lambdas and websockets).
 
-Then, you can then head out to your local GraphQL playground ([http://localhost:4200/graphql](http://localhost:4200/graphql)) and test your endpoint manually.
-
-#### Adding tests
+### Adding tests
 
 When changing the Graphql API, you should always add or change the integration tests.
 
@@ -225,13 +211,13 @@ nx test backend
 
 But if you need to test a specific file you can do:
 
-```
+```bash
 jest apps/backend/tests/<file>.spec.ts --testTimeout=10000
 ```
 
 Alternatively, you can watch the file for changes and run the test every time there is a change:
 
-```
+```bash
 jest apps/backend/tests/<file>.spec.ts --testTimeout=10000 --watch
 ```
 
