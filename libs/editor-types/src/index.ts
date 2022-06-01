@@ -26,4 +26,5 @@ export * from './plate';
 export const alwaysWritableElementTypes = [
   elementKinds.ELEMENT_TABLE,
   elementKinds.ELEMENT_VARIABLE_DEF,
+  elementKinds.ELEMENT_COLUMNS,
 ];
