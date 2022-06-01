@@ -1,9 +1,10 @@
 export type Flag =
+  | 'FORMULA_COLUMNS'
+  | 'INPUT_COPY'
   | 'PERSISTENT_EXAMPLE'
   | 'POWER_TABLE'
-  | 'INPUT_COPY'
-  | 'FORMULA_COLUMNS'
-  | 'SLIDER_ELEMENT';
+  | 'SLIDER_ELEMENT'
+  | 'TABLE_CELL_SELECTION';
 
 export type Flags = Partial<Record<Flag, boolean>>;
 let overrides: Flags = {

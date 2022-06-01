@@ -17,6 +17,7 @@ import {
   EditorTableContextValue,
 } from '../../contexts/EditorTableContext';
 import { useTableActions } from '../../hooks';
+import { useSelectedCells } from './useSelectedCells';
 
 export const Table: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_TABLE);
@@ -27,6 +28,8 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
   const saveColor = useElementMutatorCallback(editor, element, 'color');
 
   const { onDelete, onAddRow } = useTableActions(editor, element);
+
+  useSelectedCells();
 
   const tableHeaders = element.children[1].children;
 

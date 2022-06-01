@@ -3,6 +3,8 @@ import type { TableColumn } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import { Children, FC, ReactNode } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
+import { useAtom } from 'jotai';
+import { selectedCellsAtom } from '@udecode/plate';
 import { Table } from '..';
 import { AddTableRowButton } from '../../molecules';
 import { editorLayout } from '../../styles';
@@ -90,6 +92,7 @@ export const EditorTable: FC<EditorTableProps> = ({
   onChangeColor = noop,
 }: EditorTableProps): ReturnType<FC> => {
   const [caption, thead, ...tbody] = Children.toArray(children);
+  const [selectedCells] = useAtom(selectedCellsAtom);
 
   return (
     <TableStyleContext.Provider
@@ -104,7 +107,11 @@ export const EditorTable: FC<EditorTableProps> = ({
         <div css={wrapperInnerStyles}>
           <div css={tableCaptionWrapperStyles}>{caption}</div>
           <div css={tableWrapperStyles}>
-            <Table dropRef={dropRef} tableWidth={tableWidth}>
+            <Table
+              dropRef={dropRef}
+              tableWidth={tableWidth}
+              isSelectingCell={!!selectedCells}
+            >
               <thead>{thead}</thead>
               <tbody>{tbody}</tbody>
               <tfoot contentEditable={false}>

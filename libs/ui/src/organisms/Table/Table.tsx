@@ -70,6 +70,12 @@ const allBorderStyles = css(innerBorderStyles, {
     },
 });
 
+const hiddenSelectionStyles = css({
+  '*::selection': {
+    background: 'none',
+  },
+});
+
 type Border = 'all' | 'inner';
 export type TableWidth = 'SLIM' | 'WIDE';
 
@@ -78,6 +84,7 @@ interface TableProps {
   readonly children?: ReactNode;
   readonly dropRef?: ConnectDropTarget;
   readonly tableWidth?: TableWidth;
+  readonly isSelectingCell?: boolean;
 }
 
 export const Table = ({
@@ -85,6 +92,7 @@ export const Table = ({
   children,
   dropRef,
   tableWidth,
+  isSelectingCell,
 }: TableProps): ReturnType<FC> => (
   <table
     ref={dropRef}
@@ -93,6 +101,7 @@ export const Table = ({
       b === 'all' && [borderRadiusStyles, allBorderStyles],
       b === 'inner' && innerBorderStyles,
       tableWidth === 'WIDE' && wideTableStyles,
+      isSelectingCell && hiddenSelectionStyles,
     ]}
   >
     {children}

@@ -1,21 +1,24 @@
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
+  ELEMENT_TABLE_COLUMN_FORMULA,
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
-  ELEMENT_TABLE_COLUMN_FORMULA,
   MyPlatePlugin,
+  MyWithOverride,
 } from '@decipad/editor-types';
 import { Computer } from '@decipad/computer';
 import { decorateTextSyntax } from '@decipad/editor-utils';
+import { withTable } from '@udecode/plate';
+import { isEnabled } from '@decipad/feature-flags';
 import {
   Table,
+  TableCaption,
   TableCell,
+  TableColumnFormula,
   TableHeaderCell,
   TableRow,
-  TableCaption,
-  TableColumnFormula,
 } from '../components';
 import { createArrowCellNavigationPlugin } from './createArrowCellNavigationPlugin';
 import {
@@ -45,6 +48,9 @@ export const createTablePlugin = (computer: Computer): MyPlatePlugin => ({
   deserializeHtml: {
     rules: [{ validNodeName: 'TABLE' }],
   },
+  withOverrides: isEnabled('TABLE_CELL_SELECTION')
+    ? (withTable as MyWithOverride)
+    : undefined,
   plugins: [
     createPreventEnterToCreateCellPlugin(),
     createPreventDeleteTableFromCaptionPlugin(),

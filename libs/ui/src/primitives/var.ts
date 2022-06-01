@@ -5,15 +5,15 @@ import {
   grey200,
   grey300,
   grey400,
+  grey50,
   grey500,
   grey600,
   offBlack,
   offWhite,
   red500,
+  teal600,
   white,
   yellow600,
-  teal600,
-  grey50,
 } from './color';
 
 export interface CssVariables {
@@ -47,6 +47,9 @@ export interface CssVariables {
   // Code
   readonly variableHighlightTextColor: Property.Color;
   readonly variableHighlightColor: Property.Color;
+
+  // Table
+  readonly tableSelectionBackgroundColor: Property.Color;
 }
 
 const defaults: CssVariables = {
@@ -74,6 +77,8 @@ const defaults: CssVariables = {
 
   variableHighlightColor: grey200.rgb,
   variableHighlightTextColor: teal600.rgb,
+
+  tableSelectionBackgroundColor: grey400.rgb,
 };
 
 const cssVariablePrefix = '--deci-';

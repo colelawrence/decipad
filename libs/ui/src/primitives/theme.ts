@@ -1,4 +1,5 @@
 import {
+  brand100,
   brand500,
   grey100,
   grey200,
@@ -6,13 +7,12 @@ import {
   grey400,
   grey500,
   grey600,
+  grey700,
   offBlack,
   red500,
+  teal500,
   white,
   yellow500,
-  brand100,
-  teal500,
-  grey700,
 } from './color';
 import { cssVar, CssVariableKey, CssVariables, setCssVar } from './var';
 
@@ -42,4 +42,6 @@ export const darkTheme: Record<
 
   ...setCssVar('variableHighlightColor', brand100.rgb),
   ...setCssVar('variableHighlightTextColor', teal500.rgb),
+
+  ...setCssVar('tableSelectionBackgroundColor', grey400.rgb),
 };

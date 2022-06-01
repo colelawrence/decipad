@@ -1,12 +1,17 @@
 import { ELEMENT_TD, ELEMENT_TH, PlateComponent } from '@decipad/editor-types';
 import { atoms, molecules, organisms } from '@decipad/ui';
+import { isEnabled } from '@decipad/feature-flags';
 import { useFormulaResult } from './useFormulaResult';
+import { useIsCellSelected } from './useIsCellSelected';
 
 export const TableCell: PlateComponent = ({
   attributes,
   children,
   element,
 }) => {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const selected = useIsCellSelected(element!);
+
   const type = element?.type;
   if (!element || (type !== ELEMENT_TH && type !== ELEMENT_TD)) {
     throw new Error(
@@ -35,6 +40,9 @@ export const TableCell: PlateComponent = ({
   return (
     <atoms.TableData as="td" attributes={attributes} isEditable>
       {children}
+      {isEnabled('TABLE_CELL_SELECTION') && (
+        <atoms.TableCellBackground selected={selected} />
+      )}
     </atoms.TableData>
   );
 };
