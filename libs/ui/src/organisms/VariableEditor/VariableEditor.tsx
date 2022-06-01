@@ -152,7 +152,7 @@ export const VariableEditor = ({
           {childrenArray[1]}
         </div>
       </div>
-      <div css={addNewWrapperStyles}>
+      <div css={addNewWrapperStyles} contentEditable={false}>
         {!readOnly && <AddNew onAdd={onAdd}></AddNew>}
       </div>
     </div>
