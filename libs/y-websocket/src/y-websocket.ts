@@ -102,7 +102,7 @@ export const readMessage = (
   }
   try {
     // eslint-disable-next-line no-console
-    console.log('reading message', buf);
+    console.debug('reading message', buf);
     const message = Buffer.from(buf as string, 'base64');
     const decoder = decoding.createDecoder(message);
     const encoder = encoding.createEncoder();
