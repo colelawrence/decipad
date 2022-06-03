@@ -81,30 +81,7 @@ Once you're satisfied with the code you'll need to
 
 ## Aborting a pull-request
 
-You can decide to close a pull-request without merging. You'll need to clean up some resources, though. Read on.
-
-## Cleaning up a pull-request after closing or merging
-
-When you close or merge a pull-request, a Github action to remove the PR env (this PR env corresponds to a AWS Cloudformation stack). This github action fails most of the times because AWS Cloudformation sometimes fails at removing some of the resources associated with a stack.
-
-If this happens (and you should get a notification from Github when it does), please do the following:
-
-- Go to the web AWS console and log in.
-- Go to Cloudformation
-- From the list of stacks, detect the stack that corresponds to the PR number in question.
-- Try to remove that stack. That should send that stack into the `DELETE_IN_PROGRESS` state.
-- Check back in a while. If the stack no longer appears on the stack list, you're done.
-- If the stack still exists, it should now be in the `DELETE_FAILED` state.
-- Try removing it again, but this time take attention to the dialog box that AWS shows you. This dialog box lists the resources that Cloudformation wasn't able to remove. If that list consists **only** of an S3 static bucket, do the following:
-  - Copy the name of the bucket (something like `decipadbackendstaging1073-staticbucket-pylqowlhk6n0`)
-  - In the Cloudformation remove stack dialogue box (that lists the resources to retain), select the S3 static bucket to be retained and retry removing.
-  - In the local console, run `./scripts/aws-s3-remove-bucklet.sh <bucket>`.
-- If, on the other hand, there are more resources that failed removing, don't retain any resources and try removing again. Repeat until either succeeds or only one S3 bucket is there, and go to the previous point.
-
-The final state should be:
-
-- Cloudformation stack removed without leaking resources
-- S3 bucket removed
+You can decide to close a pull-request without merging.
 
 ## Resources
 
