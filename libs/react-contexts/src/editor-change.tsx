@@ -2,18 +2,13 @@ import {
   createContext,
   FC,
   ReactNode,
-  useCallback,
   useContext,
   useEffect,
 } from 'react';
 import {
-  catchError,
   distinctUntilChanged,
-  EMPTY,
-  filter,
   map,
   Observable,
-  take,
   concat,
   from,
   merge,
@@ -77,29 +72,4 @@ export function useEditorChange<T>(
     injectObservable,
     editorChanges$,
   ]);
-}
-
-export function useChangedEditorElement() {
-  const editor = getDefined(usePlateEditorRef<MyValue>());
-  const observable = useContext(EditorChangeContext);
-
-  return useCallback(
-    <T,>(
-      selector: (e: PlateEditor<MyValue>) => T | null,
-      cb: (e: T) => void
-    ) => {
-      const subscription = observable
-        .pipe(
-          map(() => selector(editor)),
-          catchError(() => {
-            subscription.unsubscribe();
-            return EMPTY;
-          }),
-          filter((v): v is Exclude<T, null> => v != null),
-          take(1)
-        )
-        .subscribe(cb);
-    },
-    [observable, editor]
-  );
 }

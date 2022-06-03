@@ -32,6 +32,8 @@ import { createNormalizeTableFormulaCellsPlugin } from './createNormalizeTableFo
 import { createNormalizeTablesPlugin } from './createNormalizeTablesPlugin';
 import { createPreventEnterToCreateCellPlugin } from './createPreventEnterToCreateCellPlugin';
 import { createPreventDeleteTableFromCaptionPlugin } from './createPreventDeleteTableFromCaptionPlugin';
+import { createCellFormulaShortcutPlugin } from './createCellFormulaShortcutPlugin';
+import { createCursorFocusPlugin } from './createCursorFocusPlugin';
 
 type Attributes =
   | {
@@ -58,11 +60,13 @@ export const createTablePlugin = (computer: Computer): MyPlatePlugin => ({
     createNormalizeTableFormulaCellsPlugin(),
     createDecorateTableCellUnitsPlugin(),
     createArrowCellNavigationPlugin(),
+    createCursorFocusPlugin(),
     // TODO: enable this
     // createExtraColumnPlaceholderPlugin(),
     // TODO: enable this
     // createExtraRowPlaceholderPlugin(),
     createNormalizeTableFormulaPlugin(),
+    createCellFormulaShortcutPlugin(),
     {
       key: ELEMENT_TABLE_CAPTION,
       isElement: true,
