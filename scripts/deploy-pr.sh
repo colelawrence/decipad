@@ -36,4 +36,4 @@ yarn build:backend
 echo "Deploying \"$DEPLOY_NAME\"..."
 mkdir -p tmp/deploy
 cd apps/backend
-nx deploy lambdas || nx deploy backend && nx deploy client
+nx deploy backend
