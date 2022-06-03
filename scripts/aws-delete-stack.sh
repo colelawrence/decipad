@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+export PATH="${PATH}:./node_modules/.bin"
+
 for stack in "${@:-}"
 do
   if [[ -z "$stack" ]]; then
