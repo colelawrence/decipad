@@ -1,20 +1,17 @@
 import { FC } from 'react';
 import { css } from '@emotion/react';
 import {
-  stringifyUnits,
   convertToMultiplierUnit,
   normalizeUnitsOf,
+  stringifyUnits,
 } from '@decipad/computer';
 import Fraction from '@decipad/fraction';
 import { CodeResultProps } from '../../types';
 import { Tooltip } from '../Tooltip/Tooltip';
 
-const commaStyles = css({
-  userSelect: 'none',
-});
-
 const numberResultStyles = css({
   wordBreak: 'break-all',
+  userSelect: 'all',
 });
 
 const DECIMAL_PLACES_TEST_JUMP = 10;
@@ -31,11 +28,7 @@ const commatizeEveryThreeDigits = (digits: string) => {
   for (let i = numLeadingDigits; i < digits.length; i += 3) {
     const threeDigits = digits.slice(i, i + 3);
 
-    segments.push(
-      <span key={i} css={commaStyles}>
-        ,
-      </span>
-    );
+    segments.push(<span key={i}>,</span>);
     segments.push(threeDigits);
   }
 

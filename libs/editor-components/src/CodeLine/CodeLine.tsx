@@ -3,12 +3,17 @@ import {
   isBracketError,
   isSyntaxError,
 } from '@decipad/computer';
-import { ELEMENT_CODE_LINE, PlateComponent } from '@decipad/editor-types';
+import {
+  ELEMENT_CODE_LINE,
+  PlateComponent,
+  useTEditorRef,
+} from '@decipad/editor-types';
 import { useComputer, useResult } from '@decipad/react-contexts';
 import { docs } from '@decipad/routing';
 import { organisms } from '@decipad/ui';
 import { useSelected } from 'slate-react';
 import { DraggableBlock } from '../block-management';
+import { onDragStartCodeLine } from './onDragStartCodeLine';
 
 export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   if (!element || element.type !== ELEMENT_CODE_LINE) {
@@ -20,6 +25,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
 
   const computer = useComputer();
   const selected = useSelected();
+  const editor = useTEditorRef();
 
   const { id: lineId } = element;
   const line = useResult(lineId);
@@ -36,6 +42,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
           highlight={selected}
           result={lineResult}
           syntaxError={syntaxError}
+          onDragStart={onDragStartCodeLine(editor, { element })}
         >
           {children}
         </organisms.CodeLine>

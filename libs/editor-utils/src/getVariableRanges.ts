@@ -3,6 +3,9 @@ import { getUsedIdentifiers } from '@decipad/computer';
 
 type RangeWithVariableInfo = Range & {
   readonly variableMissing?: boolean;
+  readonly variableName?: string;
+  readonly blockId?: string;
+  readonly isDeclaration?: boolean;
 };
 
 export const getVariableRanges = (

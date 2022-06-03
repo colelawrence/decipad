@@ -58,7 +58,7 @@ const inlineStyles = css({
   justifySelf: 'end',
   alignSelf: 'center',
 
-  userSelect: 'none',
+  userSelect: 'all',
 });
 
 const codeStyles = (variant: CodeLineProps['variant']) =>
@@ -96,6 +96,7 @@ interface CodeLineProps {
   readonly highlight?: boolean;
   readonly result?: Result.Result;
   readonly syntaxError?: ComponentProps<typeof CodeError>;
+  readonly onDragStart?: (e: React.DragEvent) => void;
 }
 
 export const CodeLine = ({
@@ -105,6 +106,7 @@ export const CodeLine = ({
   highlight = false,
   result,
   syntaxError,
+  onDragStart,
 }: CodeLineProps): ReturnType<React.FC> => {
   const hasResult = result != null;
   const hasTypeError = result != null && result.type.kind === 'type-error';
@@ -122,7 +124,12 @@ export const CodeLine = ({
     <div css={spacingStyles(variant)} spellCheck={false}>
       <div css={[codeLineStyles(variant), highlight && highlightedLineStyles]}>
         <code css={codeStyles(variant)}>{children}</code>
-        <div css={inlineStyles} contentEditable={false}>
+        <div
+          css={inlineStyles}
+          contentEditable={false}
+          draggable
+          onDragStart={onDragStart}
+        >
           {renderInlineResult &&
             !hasSyntaxError &&
             result && ( // The typescript gods demand me to this

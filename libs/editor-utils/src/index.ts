@@ -19,6 +19,7 @@ export * from './hasTarget';
 export * from './serializeDocument';
 export * from './useNamesDefinedBefore';
 export * from './assertElementType';
+export * from './getVariableRanges';
 export * from './matchNodeType';
 export * from './isElementOfType';
 
