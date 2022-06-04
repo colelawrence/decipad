@@ -79,10 +79,10 @@ const config = {
         defaultMode: 'light',
         disableSwitch: false,
         respectPrefersColorScheme: false,
-        switchConfig: {
-          darkIcon: ' ',
-          lightIcon: ' ',
-        },
+        // switchConfig: {
+        //   darkIcon: ' ',
+        //   lightIcon: ' ',
+        // },
       },
       navbar: {
         title: 'Decipad',

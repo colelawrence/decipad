@@ -80,6 +80,10 @@
         "client"
       ]
     },
+    "docs": {
+      "tags": [],
+      "implicitDependencies": ["ui", "language", "computer", "react-contexts"]
+    },
     "backend-test-sandbox": {
       "tags": []
     },

@@ -8,7 +8,7 @@ import { nanoid } from 'nanoid';
 // eslint-disable-next-line import/no-unresolved
 import useIsBrowser from '@docusaurus/useIsBrowser';
 // eslint-disable-next-line import/no-unresolved
-import usePrismTheme from '@theme/hooks/usePrismTheme';
+import { usePrismTheme } from '@docusaurus/theme-common';
 import styles from './styles.module.css';
 
 // TODO: hairy and ugly:
