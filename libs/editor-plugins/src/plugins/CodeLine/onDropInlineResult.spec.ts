@@ -10,12 +10,12 @@ import {
 } from '@decipad/editor-types';
 import * as plate from '@udecode/plate-core';
 import { DragEvent } from 'react';
-import { onDropCodeLine } from './onDropCodeLine';
-import { onDragStartCodeLine } from '../../../../editor-components/src/CodeLine/onDragStartCodeLine';
+import { onDragStartInlineResult } from '@decipad/editor-components';
+import { onDropInlineResult } from './onDropInlineResult';
 
 const testStorage = new Map();
 
-describe('onDropCodeLine', () => {
+describe('onDropInlineResult', () => {
   let editor: MyEditor;
   let codeLine: CodeLineElement;
   let codeLine2: CodeLineElement;
@@ -70,10 +70,10 @@ describe('onDropCodeLine', () => {
         focus: { path: [0, 0], offset: 0 },
       });
 
-      onDragStartCodeLine(editor, {
+      onDragStartInlineResult(editor, {
         element: codeLine,
       })(testEvent);
-      onDropCodeLine(editor)(testEvent);
+      onDropInlineResult(editor)(testEvent);
 
       expect(editor.children).toEqual([
         {
@@ -94,10 +94,10 @@ describe('onDropCodeLine', () => {
         focus: { path: [1, 0], offset: 0 },
       });
 
-      onDragStartCodeLine(editor, {
+      onDragStartInlineResult(editor, {
         element: codeLine,
       })(testEvent);
-      onDropCodeLine(editor)(testEvent);
+      onDropInlineResult(editor)(testEvent);
 
       expect(editor.children).toEqual([
         codeLine,
@@ -128,10 +128,10 @@ describe('onDropCodeLine', () => {
         focus: { path: [1, 0], offset: 0 },
       });
 
-      onDragStartCodeLine(editor, {
+      onDragStartInlineResult(editor, {
         element: codeLine,
       })(testEvent);
-      onDropCodeLine(editor)(testEvent);
+      onDropInlineResult(editor)(testEvent);
 
       expect(editor.children).toEqual([
         codeLine,
@@ -162,10 +162,10 @@ describe('onDropCodeLine', () => {
         focus: { path: [1, 0], offset: 1 },
       });
 
-      onDragStartCodeLine(editor, {
+      onDragStartInlineResult(editor, {
         element: codeLine,
       })(testEvent);
-      onDropCodeLine(editor)(testEvent);
+      onDropInlineResult(editor)(testEvent);
 
       expect(editor.children).toEqual([
         codeLine,
@@ -196,10 +196,10 @@ describe('onDropCodeLine', () => {
         focus: { path: [1, 0], offset: 0 },
       });
 
-      onDragStartCodeLine(editor, {
+      onDragStartInlineResult(editor, {
         element: codeLine,
       })(testEvent);
-      onDropCodeLine(editor)(testEvent);
+      onDropInlineResult(editor)(testEvent);
 
       expect(editor.children).toEqual([codeLine, codeLine2]);
     });

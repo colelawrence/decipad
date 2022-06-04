@@ -1,6 +1,6 @@
 import { Result } from '@decipad/computer';
 import { css } from '@emotion/react';
-import React, { ComponentProps, ReactNode } from 'react';
+import React, { ComponentProps, ReactNode, useState } from 'react';
 import { CodeResult } from '..';
 import { CodeError } from '../../atoms';
 import {
@@ -12,6 +12,7 @@ import {
 } from '../../primitives';
 import { blockAlignment, codeBlock } from '../../styles';
 import { isTabularType } from '../../utils/results';
+import { CodeResultProps } from '../../types/index';
 
 const { lineHeight } = codeBlock;
 
@@ -59,6 +60,7 @@ const inlineStyles = css({
   alignSelf: 'center',
 
   userSelect: 'all',
+  cursor: 'grab',
 });
 
 const codeStyles = (variant: CodeLineProps['variant']) =>
@@ -89,6 +91,10 @@ const expandedResultStyles = css(p14Medium, {
   marginTop: '4px',
 });
 
+const grabbingStyles = css({
+  cursor: 'grabbing',
+});
+
 interface CodeLineProps {
   readonly variant?: 'table' | 'standalone';
   readonly children: ReactNode;
@@ -96,7 +102,8 @@ interface CodeLineProps {
   readonly highlight?: boolean;
   readonly result?: Result.Result;
   readonly syntaxError?: ComponentProps<typeof CodeError>;
-  readonly onDragStart?: (e: React.DragEvent) => void;
+  readonly onDragStartInlineResult?: (e: React.DragEvent) => void;
+  readonly onDragStartCell?: CodeResultProps<'table'>['onDragStartCell'];
 }
 
 export const CodeLine = ({
@@ -106,8 +113,11 @@ export const CodeLine = ({
   highlight = false,
   result,
   syntaxError,
-  onDragStart,
+  onDragStartInlineResult,
+  onDragStartCell,
 }: CodeLineProps): ReturnType<React.FC> => {
+  const [grabbing, setGrabbing] = useState(false);
+
   const hasResult = result != null;
   const hasTypeError = result != null && result.type.kind === 'type-error';
   const hasSyntaxError = syntaxError != null;
@@ -125,10 +135,14 @@ export const CodeLine = ({
       <div css={[codeLineStyles(variant), highlight && highlightedLineStyles]}>
         <code css={codeStyles(variant)}>{children}</code>
         <div
-          css={inlineStyles}
+          css={[inlineStyles, grabbing && grabbingStyles]}
           contentEditable={false}
           draggable
-          onDragStart={onDragStart}
+          onDragStart={(e) => {
+            onDragStartInlineResult?.(e);
+            setGrabbing(true);
+          }}
+          onDragEnd={() => setGrabbing(false)}
         >
           {renderInlineResult &&
             !hasSyntaxError &&
@@ -145,7 +159,11 @@ export const CodeLine = ({
         </div>
         {renderExpandedResult && result && (
           <output css={expandedResultStyles} contentEditable={false}>
-            <CodeResult {...result} variant="block" />
+            <CodeResult
+              {...result}
+              variant="block"
+              onDragStartCell={onDragStartCell}
+            />
           </output>
         )}
       </div>

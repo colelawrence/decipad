@@ -1,16 +1,16 @@
 import { CodeLineElement, MyEditor } from '@decipad/editor-types';
 import React from 'react';
+import { setSlateFragment } from '@decipad/editor-utils';
 
-export const onDragStartCodeLine =
+export const DRAG_INLINE_RESULT = 'inline-result';
+
+export const onDragStartInlineResult =
   (editor: MyEditor, { element }: { element: CodeLineElement }) =>
   (e: React.DragEvent) => {
     // eslint-disable-next-line no-param-reassign
-    editor.dragging = true;
+    editor.dragging = DRAG_INLINE_RESULT;
 
-    const string = JSON.stringify([element]);
-    const encoded = window.btoa(encodeURIComponent(string));
-    e.dataTransfer.setData('application/x-slate-fragment', encoded);
-    e.dataTransfer.effectAllowed = 'copy';
+    setSlateFragment(e.dataTransfer, [element]);
 
     editor.setFragmentData(e.dataTransfer, 'drag');
   };

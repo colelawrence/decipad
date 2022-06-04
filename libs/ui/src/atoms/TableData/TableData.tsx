@@ -1,4 +1,4 @@
-import { ElementType, FC, ReactNode } from 'react';
+import { ElementType, FC, HTMLAttributes } from 'react';
 import { css, jsx } from '@emotion/react';
 import { PlateComponentAttributes } from '@decipad/editor-types';
 import { cssVar, p12Medium, p14Medium, setCssVar } from '../../primitives';
@@ -17,6 +17,8 @@ const tdBaseStyles = css(p14Medium, {
   verticalAlign: 'middle',
 
   lineHeight: table.cellLineHeight,
+  userSelect: 'all',
+  cursor: 'grab',
 });
 
 const tdPlaceholderStyles = css({
@@ -51,13 +53,16 @@ const editableStyles = css({
   paddingRight: '12px',
 });
 
-export interface TableDataProps {
+const grabbingStyles = css({
+  cursor: 'grabbing',
+});
+
+export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {
   as?: ElementType;
   isEditable?: boolean;
-  className?: string;
   attributes?: PlateComponentAttributes;
-  children?: ReactNode;
   showPlaceholder?: boolean;
+  grabbing?: boolean;
 }
 
 export const TableData = ({
@@ -67,6 +72,8 @@ export const TableData = ({
   attributes,
   children,
   showPlaceholder = true,
+  grabbing,
+  ...props
 }: TableDataProps): ReturnType<FC> => {
   return jsx(
     as,
@@ -76,9 +83,11 @@ export const TableData = ({
         isEditable && editableStyles,
         tdBaseStyles,
         tdGridStyles,
+        grabbing && grabbingStyles,
         showPlaceholder && tdPlaceholderStyles,
       ],
       className,
+      ...props,
     },
     children
   );

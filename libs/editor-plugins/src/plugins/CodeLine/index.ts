@@ -1,2 +1,3 @@
 export * from './createCodeLinePlugin';
-export * from './onDropCodeLine';
+export * from './onDropInlineResult';
+export * from './onDropTableCellResult';

@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
-import { FC } from 'react';
+import { FC, useState } from 'react';
+import { SerializedTypes } from '@decipad/language';
 import { CodeResult, Table } from '..';
 import { TableData, TableHeader } from '../../atoms';
 import { TableHeaderRow, TableRow } from '../../molecules';
@@ -11,6 +12,7 @@ export const TableResult = ({
   parentType,
   type,
   value,
+  onDragStartCell,
 }: CodeResultProps<'table'>): ReturnType<FC> => {
   const { columnNames, columnTypes } = type;
   if (!columnNames.length) {
@@ -21,6 +23,8 @@ export const TableResult = ({
       `There are ${columnNames.length} column names. Expected values for ${columnNames.length} columns, but received values for ${value.length} columns.`
     );
   }
+
+  const [grabbing, setGrabbing] = useState(false);
 
   const tableLength = value[0].length;
 
@@ -49,6 +53,19 @@ export const TableResult = ({
                 as="td"
                 isEditable={false}
                 showPlaceholder={false}
+                draggable
+                grabbing={grabbing}
+                onDragStart={(e) => {
+                  onDragStartCell?.({
+                    tableName: (type as SerializedTypes.Table)
+                      .indexName as string,
+                    columnName: columnNames[colIndex],
+                    cellValue: value[0][rowIndex] as string,
+                  })(e);
+
+                  setGrabbing(true);
+                }}
+                onDragEnd={() => setGrabbing(false)}
               >
                 <div
                   css={[

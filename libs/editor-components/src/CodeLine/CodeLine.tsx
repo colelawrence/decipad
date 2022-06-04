@@ -13,7 +13,8 @@ import { docs } from '@decipad/routing';
 import { organisms } from '@decipad/ui';
 import { useSelected } from 'slate-react';
 import { DraggableBlock } from '../block-management';
-import { onDragStartCodeLine } from './onDragStartCodeLine';
+import { onDragStartInlineResult } from './onDragStartInlineResult';
+import { onDragStartTableCellResult } from './onDragStartTableCellResult';
 
 export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   if (!element || element.type !== ELEMENT_CODE_LINE) {
@@ -42,7 +43,8 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
           highlight={selected}
           result={lineResult}
           syntaxError={syntaxError}
-          onDragStart={onDragStartCodeLine(editor, { element })}
+          onDragStartInlineResult={onDragStartInlineResult(editor, { element })}
+          onDragStartCell={onDragStartTableCellResult(editor)}
         >
           {children}
         </organisms.CodeLine>

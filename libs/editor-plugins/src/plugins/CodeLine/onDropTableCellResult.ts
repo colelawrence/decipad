@@ -1,0 +1,65 @@
+import {
+  CodeLineElement,
+  ELEMENT_CODE_LINE,
+  MyEditor,
+  MyElement,
+  MyText,
+} from '@decipad/editor-types';
+import React from 'react';
+import { getSlateFragment, selectEventRange } from '@decipad/editor-utils';
+import { DRAG_TABLE_CELL_RESULT } from '@decipad/editor-components';
+import {
+  getBlockAbove,
+  insertNodes,
+  isElementEmpty,
+  removeNodes,
+} from '@udecode/plate';
+import { DragCellData } from '../../../../ui/src/types/index';
+
+export const onDropTableCellResult =
+  (editor: MyEditor) => (event: React.DragEvent) => {
+    if (editor.dragging === DRAG_TABLE_CELL_RESULT) {
+      // eslint-disable-next-line no-param-reassign
+      editor.dragging = null;
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      selectEventRange(editor)(event);
+
+      const fragment = getSlateFragment(
+        event.dataTransfer
+      ) as unknown as DragCellData[];
+      if (!fragment) return;
+
+      const filteredFragment: MyText[] = [];
+
+      fragment.forEach((data) => {
+        const blockAbove = getBlockAbove(editor) ?? [];
+        const [block, blockPath] = blockAbove;
+        if (!block) return;
+
+        const text = `lookup(${data.tableName}, "${data.cellValue}").${data.columnName}`;
+
+        if (block.type === ELEMENT_CODE_LINE && isElementEmpty(editor, block)) {
+          filteredFragment.push({
+            text,
+          });
+        } else {
+          if (isElementEmpty(editor, block as MyElement)) {
+            removeNodes(editor, { at: blockPath });
+          }
+          insertNodes(editor, {
+            type: ELEMENT_CODE_LINE,
+            children: [
+              {
+                text,
+              },
+            ],
+          } as CodeLineElement);
+        }
+      });
+
+      editor.insertFragment(filteredFragment);
+    }
+  };

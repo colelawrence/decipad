@@ -101,6 +101,7 @@ export function CodeResult<T extends SerializedTypeKind>({
   type,
   value,
   variant = 'block',
+  onDragStartCell,
 }: CodeResultProps<T>): ReturnType<React.FC> {
   const ResultComponent = getResultComponent({ value, variant, type });
 
@@ -115,6 +116,7 @@ export function CodeResult<T extends SerializedTypeKind>({
       type={type}
       value={value}
       variant={variant}
+      onDragStartCell={onDragStartCell}
     />
   );
 }
