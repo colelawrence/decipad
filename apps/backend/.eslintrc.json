@@ -10,6 +10,7 @@
     "import/no-extraneous-dependencies": "off",
 
     // massively confused by the imported `test` function whose second argument is not actually a done parameter
-    "jest/no-done-callback": "off"
+    "jest/no-done-callback": "off",
+    "jest/no-standalone-expect": "off"
   }
 }

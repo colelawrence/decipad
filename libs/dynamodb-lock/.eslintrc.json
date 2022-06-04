@@ -1,4 +1,7 @@
 {
   "extends": ["../../libs/eslint-config-decipad"],
-  "ignorePatterns": ["!**/*"]
+  "ignorePatterns": ["!**/*"],
+  "rules": {
+    "jest/no-standalone-expect": "off"
+  }
 }

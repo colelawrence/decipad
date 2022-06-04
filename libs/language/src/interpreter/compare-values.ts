@@ -18,7 +18,7 @@ export type Comparable =
   | string
   | boolean
   | number
-  | BigInt
+  | bigint
   | FFraction
   | FractionLike
   | ReadonlyArray<Comparable>;
@@ -78,7 +78,7 @@ function compareToNumber(a: Comparable, b: Comparable): number | bigint {
   );
 }
 
-const sign = (diff: number | BigInt): CompareResult => {
+const sign = (diff: number | bigint): CompareResult => {
   if (typeof diff === 'number') {
     return diff > 0 ? 1 : diff < 0 ? -1 : 0;
   }

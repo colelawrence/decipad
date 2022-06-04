@@ -2,6 +2,7 @@
   "extends": ["../../libs/eslint-config-decipad"],
   "ignorePatterns": ["!**/*"],
   "rules": {
-    "@typescript-eslint/explicit-module-boundary-types": "off"
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "jest/no-standalone-expect": "off"
   }
 }
