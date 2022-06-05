@@ -304,7 +304,7 @@
     "geometry-polyfill": "^1.0.7",
     "glob-base": "^0.3.0",
     "htmlparser2": "^8.0.0",
-    "husky": "^7.0.0",
+    "husky": "^8.0.0",
     "jest": "27.5.1",
     "jest-canvas-mock": "^2.3.1",
     "jest-fetch-mock": "^3.0.3",
