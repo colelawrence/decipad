@@ -58,7 +58,9 @@ export const useExternalDataPlugin = ({
           const dataImport = externalDataImports.find(
             (i) => i.blockId === blockId
           );
-          Object.assign(dataImport, changes);
+          if (dataImport) {
+            Object.assign(dataImport, changes);
+          }
         })
       );
     },

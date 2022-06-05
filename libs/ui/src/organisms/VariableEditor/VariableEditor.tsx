@@ -139,7 +139,7 @@ export const VariableEditor = ({
                 // VariableEditor's typings, so we know things will be ok in the end, we just need
                 // TS to shut up.
                 <VariableEditorMenu
-                  {...(menuProps as unknown)}
+                  {...(menuProps as ComponentProps<typeof VariableEditorMenu>)}
                   trigger={
                     <button css={buttonWrapperStyles}>
                       <Ellipsis />

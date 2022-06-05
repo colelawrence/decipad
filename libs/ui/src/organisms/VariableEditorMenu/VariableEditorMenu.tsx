@@ -20,7 +20,7 @@ type VariableEditorMenuProps = {
       readonly step?: never;
     }
   | {
-      readonly variant: 'slider';
+      readonly variant?: 'slider';
       readonly onChangeMax?: ComponentProps<typeof InputMenuItem>['onChange'];
       readonly onChangeMin?: ComponentProps<typeof InputMenuItem>['onChange'];
       readonly onChangeStep?: ComponentProps<typeof InputMenuItem>['onChange'];
