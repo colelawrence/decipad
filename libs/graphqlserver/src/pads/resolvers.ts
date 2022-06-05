@@ -76,6 +76,20 @@ const padResource = Resource({
     `/workspaces/${workspace_id}`,
 });
 
+const byPadCreationDateDesc = (a: PadRecord, b: PadRecord): number => {
+  const diff = (b.createdAt || 0) - (a.createdAt || 0);
+  if (!diff) {
+    if (a.name > b.name) {
+      return -1;
+    }
+    if (a.name === b.name) {
+      return 0;
+    }
+    return 1;
+  }
+  return diff;
+};
+
 const resolvers = {
   Query: {
     getPadById: padResource.getById,
@@ -109,7 +123,13 @@ const resolvers = {
         },
       };
 
-      return paginate(data.pads, query, page);
+      const pads = await paginate<PadRecord, PadRecord>(data.pads, query, page);
+      return {
+        // TODO: this ad-hoc sorting is a hack, to get stabler outputs for tests
+        // TODO: the sorting should come directly from the database
+        ...pads,
+        items: pads.items.sort(byPadCreationDateDesc),
+      };
     },
   },
 
