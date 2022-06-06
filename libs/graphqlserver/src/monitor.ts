@@ -2,7 +2,7 @@ import type {
   ApolloServerPlugin,
   GraphQLRequestContext,
 } from 'apollo-server-plugin-base';
-import { withScope, captureException, Severity } from '@sentry/serverless';
+import { withScope, captureException } from '@sentry/serverless';
 import { monitor as monitorConfig } from '@decipad/config';
 import { GraphqlContext } from '@decipad/backendtypes';
 
@@ -32,7 +32,7 @@ export const monitor: ApolloServerPlugin = {
                 scope.addBreadcrumb({
                   category: 'query-path',
                   message: error?.path?.join(' > '),
-                  level: Severity.Debug,
+                  level: 'debug',
                 });
                 scope.setExtras({
                   path: error.path,

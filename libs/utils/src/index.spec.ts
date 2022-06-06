@@ -90,7 +90,7 @@ it('can timeout', (done) => {
 
   const nums: number[] = [];
 
-  timeout(2).then(() => {
+  timeout(20).then(() => {
     nums.push(1);
 
     expect(nums).toEqual([0, 1]);
