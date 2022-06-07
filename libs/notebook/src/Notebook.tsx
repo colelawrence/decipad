@@ -1,7 +1,5 @@
-import { DocSyncEditor, OnLoadedCallback } from '@decipad/docsync';
+import { DocSyncEditor } from '@decipad/docsync';
 import { Editor, useCreateEditor } from '@decipad/editor';
-import { useDocSync } from '@decipad/editor-plugins';
-import { Computer } from '@decipad/computer';
 import {
   ComputerContextProvider,
   EditorReadOnlyContext,
@@ -9,13 +7,16 @@ import {
 } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
 import { NotebookPage } from '@decipad/ui';
-import { captureException } from '@sentry/browser';
 import { useSession } from 'next-auth/client';
-import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import { MyEditor } from '@decipad/editor-types';
 import { createEditor } from 'slate';
-
-const LOAD_REMOTELY_TIMEOUT_MS = 5_000;
+import {
+  NotebookStateProvider,
+  useNotebookState,
+} from '@decipad/notebook-state';
+import { useHistory } from 'react-router-dom';
+import { EMPTY } from 'rxjs';
 
 export interface NotebookProps {
   notebookId: string;
@@ -27,7 +28,7 @@ export interface NotebookProps {
   onDocsync: (docsync: DocSyncEditor) => void;
 }
 
-export const Notebook = ({
+const InsideNotebookState = ({
   notebookId,
   readOnly,
   icon,
@@ -37,68 +38,65 @@ export const Notebook = ({
   onDocsync,
 }: NotebookProps) => {
   // Computer
-  const [computer] = useState(() => new Computer());
-
-  const [slateBaseEditor] = useState(createEditor);
-
-  // DocSync
-  const [loaded, setLoaded] = useState(false);
-  const [loadedLocally, setLoadedLocally] = useState(false);
-  const onLoaded: OnLoadedCallback = useCallback((source) => {
-    if (source === 'remote') {
-      setLoaded(true);
-    } else if (source === 'local') {
-      setLoadedLocally(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    let timeout: ReturnType<typeof setTimeout>;
-    if (!loaded && loadedLocally) {
-      timeout = setTimeout(() => {
-        if (!loaded) {
-          setLoaded(true);
-        }
-      }, LOAD_REMOTELY_TIMEOUT_MS);
-    }
-    return () => {
-      if (timeout) {
-        clearTimeout(timeout);
-      }
-    };
-  }, [loaded, loadedLocally]);
-
-  // Doc sync
-
-  const docsync = useDocSync({
-    notebookId,
-    editor: slateBaseEditor as MyEditor,
-    authSecret: secret,
-    onError: captureException,
-    onLoaded,
-    readOnly,
-  });
-
-  useEffect(() => {
-    if (docsync) {
-      onDocsync(docsync);
-    }
-  }, [docsync, onDocsync]);
-
-  const [hasLocalChanges, setHasLocalChanges] = useState(false);
-  useEffect(() => {
-    const subscription = docsync
-      ?.hasLocalChanges()
-      .subscribe(setHasLocalChanges);
-    return () => {
-      subscription?.unsubscribe();
-    };
-  }, [docsync]);
+  const slateBaseEditor = useMemo(createEditor, [notebookId]);
 
   // User warning
 
   const toast = useToast();
   const [session] = useSession();
+
+  // DocSync
+
+  const {
+    syncClientState,
+    docSyncEditor,
+    computer,
+    init,
+    loadedFromRemote,
+    timedOutLoadingFromRemote,
+    hasLocalChanges,
+    destroy,
+  } = useNotebookState();
+  useEffect(() => {
+    if (syncClientState === 'idle') {
+      init(slateBaseEditor as MyEditor, notebookId, {
+        authSecret: secret,
+      });
+    }
+  }, [init, notebookId, secret, slateBaseEditor, syncClientState]);
+
+  // Editor
+  // Needs to be created last so other editor (e.g. docsync editor) wrapping editor functions
+  // (e.g. apply, onChange) can be called with the latest values transformed via plugins. Things
+  // get called from the outside in.
+  const editor = useCreateEditor({
+    editor: docSyncEditor,
+    notebookId,
+    computer,
+    readOnly,
+  });
+
+  useEffect(() => {
+    if (editor) {
+      onEditor(editor);
+    }
+  }, [editor, onEditor]);
+
+  // docSync
+
+  useEffect(() => {
+    if (docSyncEditor) {
+      onDocsync(docSyncEditor);
+    }
+  }, [docSyncEditor, onDocsync]);
+
+  const history = useHistory();
+  useEffect(() => {
+    return history.listen(destroy);
+  }, [destroy, history]);
+
+  // changes warning
+
   const warning: string | false =
     readOnly &&
     `Changes to this notebook are not saved${
@@ -108,51 +106,49 @@ export const Notebook = ({
     }`;
   const [toastedWarning, setToastedWarning] = useState(false);
 
-  // Editor
-  // Needs to be created last so other editor (e.g. docsync editor) wrapping editor functions
-  // (e.g. apply, onChange) can be called with the latest values transformed via plugins. Things
-  // get called from the outside in.
-  const editor = useCreateEditor({
-    editor: docsync,
-    notebookId,
-    computer,
-    readOnly,
-  });
-
-  useEffect(() => {
-    onEditor(editor);
-  }, [editor, onEditor]);
-
   useEffect(() => {
     if (warning && hasLocalChanges && !toastedWarning) {
       setToastedWarning(true);
       toast(warning as string, 'warning', { autoDismiss: false });
     }
-  }, [editor, hasLocalChanges, loaded, toast, toastedWarning, warning]);
+  }, [editor, hasLocalChanges, toast, toastedWarning, warning]);
+
+  // computer
 
   const computerObservable = useMemo(
-    () => computer.results.asObservable(),
-    [computer.results]
+    () => computer?.results.asObservable(),
+    [computer?.results]
   );
 
   return (
-    <ComputerContextProvider computer={computer}>
-      <EditorReadOnlyContext.Provider value={readOnly}>
-        <ResultsContext.Provider value={computerObservable}>
-          <NotebookPage
-            notebook={
-              <Editor
-                notebookId={notebookId}
-                loaded={loaded}
-                editor={editor}
-                readOnly={readOnly}
-              />
-            }
-            notebookIcon={icon}
-            topbar={topbar}
-          />
-        </ResultsContext.Provider>
-      </EditorReadOnlyContext.Provider>
-    </ComputerContextProvider>
+    (editor && (
+      <ComputerContextProvider computer={computer}>
+        <EditorReadOnlyContext.Provider value={readOnly}>
+          <ResultsContext.Provider value={computerObservable || EMPTY}>
+            <NotebookPage
+              notebook={
+                <Editor
+                  notebookId={notebookId}
+                  loaded={loadedFromRemote || timedOutLoadingFromRemote}
+                  editor={editor}
+                  readOnly={readOnly}
+                />
+              }
+              notebookIcon={icon}
+              topbar={topbar}
+            />
+          </ResultsContext.Provider>
+        </EditorReadOnlyContext.Provider>
+      </ComputerContextProvider>
+    )) ||
+    null
+  );
+};
+
+export const Notebook: FC<NotebookProps> = (props) => {
+  return (
+    <NotebookStateProvider>
+      <InsideNotebookState {...props}></InsideNotebookState>
+    </NotebookStateProvider>
   );
 };

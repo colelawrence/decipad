@@ -8,7 +8,7 @@ export interface CreateEditorProps {
   editor?: MyEditor;
   notebookId: string;
   readOnly: boolean;
-  computer: Computer;
+  computer?: Computer;
 }
 
 export const useCreateEditor = ({
@@ -23,12 +23,14 @@ export const useCreateEditor = ({
   });
 
   const editorPlugins = useMemo(
-    () => [...configuration.plugins(computer), notebookTitlePlugin],
+    () => computer && [...configuration.plugins(computer), notebookTitlePlugin],
     [computer, notebookTitlePlugin]
   );
 
   const editor = useMemo(
     () =>
+      slateEditor &&
+      editorPlugins &&
       createTPlateEditor({
         id: notebookId,
         editor: slateEditor,

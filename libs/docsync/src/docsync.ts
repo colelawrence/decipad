@@ -19,7 +19,7 @@ import { BehaviorSubject } from 'rxjs';
 import { MyEditor } from '@decipad/editor-types';
 import * as DocTypes from './types';
 
-interface Options {
+export interface DocSyncOptions {
   readOnly?: boolean;
   authSecret?: string;
   WebSocketPolyfill?: typeof WebSocket;
@@ -220,7 +220,7 @@ async function wsAddress(docId: string): Promise<string> {
 export function createDocSyncEditor(
   editor: MyEditor,
   docId: string,
-  options: Options = {}
+  options: DocSyncOptions = {}
 ): DocSyncEditor {
   const {
     readOnly = false,

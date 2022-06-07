@@ -38,6 +38,7 @@
     "meta": "libs/meta",
     "nodelambda": "libs/nodelambda",
     "notebook": "libs/notebook",
+    "notebook-state": "libs/notebook-state",
     "queries": "libs/queries",
     "react-contexts": "libs/react-contexts",
     "react-utils": "libs/react-utils",

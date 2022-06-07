@@ -1,0 +1,20 @@
+{
+  "root": "libs/notebook-state",
+  "sourceRoot": "libs/notebook-state",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/notebook-state/**/*.ts"],
+        "maxWarnings": 0
+      }
+    },
+    "typecheck": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/notebook-state"
+      }
+    }
+  }
+}

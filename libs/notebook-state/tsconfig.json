@@ -7,13 +7,8 @@
   },
   "include": ["src"],
   "references": [
-    { "path": "../ui" },
-    { "path": "../react-contexts" },
-    { "path": "../editor" },
-    { "path": "../editor-plugins" },
-    { "path": "../toast" },
     { "path": "../docsync" },
-    { "path": "../toast" },
-    { "path": "../notebook-state" }
+    { "path": "../editor-types" },
+    { "path": "../computer" }
   ]
 }

@@ -199,7 +199,8 @@
     "vega-lib": "^4.4.0",
     "vega-lite": "^5.2.0",
     "y-protocols": "^1.0.5",
-    "yjs": "^13.5.38"
+    "yjs": "^13.5.38",
+    "zustand": "^4.0.0-rc.1"
   },
   "devDependencies": {
     "@architect/deploy": "^4.0.7",
