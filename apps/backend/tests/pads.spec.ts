@@ -407,6 +407,30 @@ test('pads', (ctx) => {
     });
   });
 
+  it('target can access pad', async () => {
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
+
+    const { pads } = (
+      await client.query({
+        query: ctx.gql`
+          query {
+            pads(workspaceId: "${workspace.id}", page: { maxItems: 10 }) {
+              items { id name }
+              count
+              hasNextPage
+            }
+          }
+        `,
+      })
+    ).data;
+
+    expect(pads).toMatchObject({
+      items: [{ name: 'Pad 1 renamed' }],
+      count: 1,
+      hasNextPage: false,
+    });
+  });
+
   it('admin user can revoke access to pad after share', async () => {
     const client = ctx.graphql.withAuth(await ctx.auth());
 

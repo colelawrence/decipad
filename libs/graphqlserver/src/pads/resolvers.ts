@@ -5,6 +5,7 @@ import {
   PadInput,
   PadRecord,
   PageInput,
+  PermissionRecord,
   RoleRecord,
   User,
   WorkspaceRecord,
@@ -22,7 +23,7 @@ import {
   ensurePublicWorkspaceForUser,
 } from '@decipad/services/workspaces';
 import tables from '@decipad/tables';
-import { identity } from '@decipad/utils';
+import { getDefined, identity } from '@decipad/utils';
 import { UserInputError } from 'apollo-server-lambda';
 import assert from 'assert';
 import { nanoid } from 'nanoid';
@@ -106,24 +107,45 @@ const resolvers = {
         throw new UserInputError(`Unknown workspace with id ${workspaceId}`);
       }
 
-      if (!workspace.isPublic) {
-        const user = loadUser(context);
-        await expectAuthorized({
-          resource: `/workspaces/${workspaceId}`,
-          user,
-          permissionType: 'READ',
-        });
+      const user = loadUser(context);
+      if (workspace.isPublic) {
+        const query = {
+          IndexName: 'byWorkspace',
+          KeyConditionExpression: 'workspace_id = :workspace_id',
+          ExpressionAttributeValues: {
+            ':workspace_id': workspaceId,
+          },
+        };
+
+        return paginate<PadRecord, PadRecord>(data.pads, query, page);
       }
+      await expectAuthorized({
+        resource: `/workspaces/${workspaceId}`,
+        user,
+        permissionType: 'READ',
+      });
 
       const query = {
-        IndexName: 'byWorkspace',
-        KeyConditionExpression: 'workspace_id = :workspace_id',
+        IndexName: 'byUserId',
+        KeyConditionExpression:
+          'user_id = :user_id and resource_type = :resource_type',
+        FilterExpression: 'parent_resource_uri = :parent_resource_uri',
         ExpressionAttributeValues: {
-          ':workspace_id': workspaceId,
+          ':user_id': getDefined(user).id,
+          ':resource_type': 'pads',
+          ':parent_resource_uri': `/workspaces/${workspace.id}`,
         },
       };
 
-      const pads = await paginate<PadRecord, PadRecord>(data.pads, query, page);
+      const pads = await paginate(
+        data.permissions,
+        query,
+        page,
+        async (permission: PermissionRecord) => {
+          return data.pads.get({ id: permission.resource_id });
+        }
+      );
+
       return {
         // TODO: this ad-hoc sorting is a hack, to get stabler outputs for tests
         // TODO: the sorting should come directly from the database
