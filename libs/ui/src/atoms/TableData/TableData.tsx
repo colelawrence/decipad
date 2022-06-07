@@ -17,8 +17,6 @@ const tdBaseStyles = css(p14Medium, {
   verticalAlign: 'middle',
 
   lineHeight: table.cellLineHeight,
-  userSelect: 'all',
-  cursor: 'grab',
 });
 
 const tdPlaceholderStyles = css({
@@ -53,6 +51,11 @@ const editableStyles = css({
   paddingRight: '12px',
 });
 
+const draggableStyles = css({
+  userSelect: 'all',
+  cursor: 'grab',
+});
+
 const grabbingStyles = css({
   cursor: 'grabbing',
 });
@@ -72,6 +75,7 @@ export const TableData = ({
   attributes,
   children,
   showPlaceholder = true,
+  draggable,
   grabbing,
   ...props
 }: TableDataProps): ReturnType<FC> => {
@@ -83,6 +87,7 @@ export const TableData = ({
         isEditable && editableStyles,
         tdBaseStyles,
         tdGridStyles,
+        draggable && draggableStyles,
         grabbing && grabbingStyles,
         showPlaceholder && tdPlaceholderStyles,
       ],
