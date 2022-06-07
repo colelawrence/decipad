@@ -8,14 +8,19 @@ import {
   SuperadminsApplicationCommandDataOption,
 } from '../command';
 
+interface SuperAdminsOptions {
+  user_id: string;
+}
+
 async function add(
-  options: SuperadminsAddApplicationCommandDataOption['options']
+  options: SuperadminsAddApplicationCommandDataOption['options'],
+  config: SuperAdminsOptions
 ): Promise<string> {
   const option = getDefined(
     options.find((o) => o.name === 'user'),
     'no option named user'
   );
-  const data = await tables();
+  const data = await tables(config.user_id);
   const userId = option.value;
   const userKeyString = `discord:${userId}`;
   let userKey = await data.userkeys.get({ id: userKeyString });
@@ -39,13 +44,14 @@ async function add(
 }
 
 async function remove(
-  options: SuperadminsRemoveApplicationCommandDataOption['options']
+  options: SuperadminsRemoveApplicationCommandDataOption['options'],
+  config: SuperAdminsOptions
 ): Promise<string> {
   const option = getDefined(
     options.find((o) => o.name === 'user'),
     'no option named user'
   );
-  const data = await tables();
+  const data = await tables(config.user_id);
   const userId = option.value;
   const userKeyString = `discord:${userId}`;
   const userKey = await data.userkeys.get({ id: userKeyString });
@@ -83,7 +89,8 @@ async function is(
 }
 
 export default function superadmnins(
-  options: SuperadminsApplicationCommandDataOption[]
+  options: SuperadminsApplicationCommandDataOption[],
+  config: SuperAdminsOptions
 ): Promise<string> {
   if (options.length !== 1) {
     throw Boom.notAcceptable('superadmins command should only have one option');
@@ -91,10 +98,10 @@ export default function superadmnins(
   const option = options[0];
   switch (option.name) {
     case 'add': {
-      return add(option.options);
+      return add(option.options, config);
     }
     case 'remove': {
-      return remove(option.options);
+      return remove(option.options, config);
     }
     case 'is': {
       return is(option.options);

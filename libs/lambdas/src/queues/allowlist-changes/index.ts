@@ -6,7 +6,6 @@ import {
 } from '@decipad/backendtypes';
 import { nanoid } from 'nanoid';
 import tables from '@decipad/tables';
-import { getDefined } from '@decipad/utils';
 import handle from '../handle';
 import timestamp from '../../common/timestamp';
 
@@ -19,12 +18,13 @@ async function allowListChangesHandler(
 ) {
   assert.strictEqual(event.table, 'allowlist');
 
+  if (!event.user_id) {
+    return;
+  }
+
   const superadminEvent: SuperAdminActionLogRecord = {
     id: nanoid(),
-    user_id: getDefined(
-      event.user_id,
-      'no user_id on a change event for the allowlist table'
-    ),
+    user_id: event.user_id,
     subject: 'allowlist',
     action: event.action,
     args: JSON.stringify(event.args),

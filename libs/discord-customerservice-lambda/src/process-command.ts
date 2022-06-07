@@ -4,7 +4,7 @@ import tables from '@decipad/tables';
 import { Command, CommandReply } from './command';
 import commands from './commands';
 
-async function verifyAuth(command: Command) {
+async function verifyAuth(command: Command): Promise<string> {
   const discordUser = getDefined(command.member?.user, 'no command user');
   const userKeyId = `discord:${discordUser.id}`;
 
@@ -22,17 +22,20 @@ async function verifyAuth(command: Command) {
       `Could not find super admin permissions for your user`
     );
   }
+
+  return userKey.user_id;
 }
 
 async function parseAndReplyToCommand(command: Command): Promise<string> {
-  await verifyAuth(command);
+  const userId = await verifyAuth(command);
   const commandData = getDefined(command.data, 'no command data');
+  const options = { user_id: userId };
   switch (commandData.name) {
     case 'allowlist': {
-      return commands.allowlist(commandData.options);
+      return commands.allowlist(commandData.options, options);
     }
     case 'superadmins': {
-      return commands.superadmins(commandData.options);
+      return commands.superadmins(commandData.options, options);
     }
     default: {
       throw Boom.notImplemented(
