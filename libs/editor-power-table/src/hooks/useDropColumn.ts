@@ -7,7 +7,7 @@ import {
   DragColumnItem,
   useFindSwappableColumns,
 } from '@decipad/editor-table';
-import { usePowerTableActions } from './powerTableActions';
+import { usePowerTableActions } from './usePowerTableActions';
 
 interface CollectedProps {
   isOver: boolean;

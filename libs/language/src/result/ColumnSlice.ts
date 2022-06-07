@@ -6,6 +6,7 @@ export class ColumnSlice<T = Comparable> implements ColumnLike<T> {
   private begin: number;
   private end: number;
   private source: ColumnLike<T>;
+  private memo: T[] | undefined;
   rowCount: number;
 
   constructor(col: ColumnLike<T>, begin: number, end: number) {
@@ -21,11 +22,14 @@ export class ColumnSlice<T = Comparable> implements ColumnLike<T> {
     return this.source.atIndex(i + this.begin);
   }
   getData(): T[] {
-    return this.source.getData().slice(this.begin, this.end);
+    return this.values;
   }
 
-  get values() {
-    return this.source.values.slice(this.begin, this.end);
+  get values(): T[] {
+    if (!this.memo) {
+      this.memo = this.source.values.slice(this.begin, this.end);
+    }
+    return this.memo;
   }
 
   static fromColumnAndRange(

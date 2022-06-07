@@ -8,8 +8,7 @@ import {
   assertElementType,
   useElementMutatorCallback,
 } from '@decipad/editor-utils';
-import { organisms } from '@decipad/ui';
-import { AvailableSwatchColor, UserIconKey } from 'libs/ui/src/utils';
+import { organisms, AvailableSwatchColor, UserIconKey } from '@decipad/ui';
 import { useMemo, useState } from 'react';
 import { WIDE_MIN_COL_COUNT } from '../../constants';
 import {
@@ -36,7 +35,6 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
   const columns = useMemo(
     () =>
       tableHeaders.map((th) => ({
-        width: th.columnWidth,
         name: th.children[0].text,
         cellType: th.cellType,
       })),

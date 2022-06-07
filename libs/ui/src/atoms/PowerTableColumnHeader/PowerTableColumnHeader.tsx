@@ -15,8 +15,8 @@ import {
   getTypeIcon,
   TableStyleContext,
 } from '../../utils';
-
 import { DropLine } from '../DropLine/DropLine';
+import { Select } from '../Select/Select';
 
 const columnStyles = css(p13Medium, {
   alignItems: 'center',
@@ -60,26 +60,32 @@ const rightDropStyles = css({
   right: '1px',
 });
 
-export interface PowerTableColumnHeaderProps {
+export interface PowerTableColumnHeaderProps<TAggregation extends string> {
   name: string;
   type: SerializedType;
   attributes?: PlateComponentAttributes;
   children?: ReactNode;
+  selectedAggregation?: TAggregation;
+  availableAggregations: Array<TAggregation>;
+  onAggregationChange: (aggregation: TAggregation) => void;
   connectDragSource?: ConnectDragSource;
   connectDragPreview?: ConnectDragPreview;
   connectDropTarget?: ConnectDropTarget;
   overDirection?: 'left' | 'right';
 }
 
-export const PowerTableColumnHeader = ({
+export function PowerTableColumnHeader<TAggregation extends string>({
   name,
   type,
   attributes,
   children,
+  availableAggregations,
+  selectedAggregation,
+  onAggregationChange,
   connectDragSource,
   connectDropTarget,
   overDirection,
-}: PowerTableColumnHeaderProps): ReturnType<FC> => {
+}: PowerTableColumnHeaderProps<TAggregation>): ReturnType<FC> {
   const { color } = useContext(TableStyleContext);
   const Icon = getTypeIcon(type);
 
@@ -114,13 +120,20 @@ export const PowerTableColumnHeader = ({
           <DropLine variant="inline" />
         </div>
       )}
-      <div ref={connectDropTarget}>
+      <div ref={connectDropTarget} contentEditable={false}>
         <div css={headerWrapperStyles} ref={connectDragSource}>
-          <span contentEditable={false} css={columnTypeStyles}>
+          <span css={columnTypeStyles}>
             <Icon />
           </span>
           {name}
           <div css={childrenWrapperStyles}>{children}</div>
+        </div>
+        <div>
+          <Select
+            options={availableAggregations}
+            value={selectedAggregation}
+            onChange={onAggregationChange}
+          ></Select>
         </div>
       </div>
       {overDirection === 'right' && (
@@ -130,4 +143,4 @@ export const PowerTableColumnHeader = ({
       )}
     </th>
   );
-};
+}

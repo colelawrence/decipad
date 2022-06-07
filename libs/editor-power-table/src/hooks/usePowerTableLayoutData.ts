@@ -1,17 +1,40 @@
 import { useMemo } from 'react';
 import { Interpreter, SerializedType, Result } from '@decipad/computer';
-import { PowerTableDataLayout, RowLayout } from '../types';
+import { zip } from '@decipad/utils';
+import { BehaviorSubject } from 'rxjs';
+import { DataGroup } from '../types';
 
 const { Column, ResultTransforms } = Result;
 
-const sumRowSpan = (sum: number, row: RowLayout): number => {
-  return sum + row.rowSpan;
+type SmartColumnInput = [SerializedType, Result.ColumnLike<Result.Comparable>];
+
+const smartRow = (
+  columns: SmartColumnInput[],
+  columnIndex: number,
+  parentHighlight$?: BehaviorSubject<boolean>
+): DataGroup => {
+  const [column, ...rest] = columns;
+  return {
+    elementType: 'smartrow',
+    children:
+      rest.length > 0
+        ? [smartRow(rest, columnIndex + 1, parentHighlight$)]
+        : [],
+    column: column && {
+      type: column[0],
+      value: column[1],
+    },
+    columnIndex,
+    parentHighlight$,
+  };
 };
 
-export const layoutPower = (
+export const group = (
   columnData: Result.ColumnLike<Result.Comparable>[],
-  columnTypes: SerializedType[]
-): PowerTableDataLayout => {
+  columnTypes: SerializedType[],
+  columnIndex: number,
+  parentHighlight$?: BehaviorSubject<boolean>
+): DataGroup[] => {
   if (columnData.length !== columnTypes.length) {
     throw new Error(
       `number of columns differs from number of types: ${columnData.length} and ${columnTypes.length}`
@@ -24,23 +47,39 @@ export const layoutPower = (
   const [type, ...restOfTypes] = columnTypes;
 
   const sortMap = ResultTransforms.sortMap(firstColumn);
-  const sortedColumn = ResultTransforms.applyMap(firstColumn, sortMap);
-  const slices = ResultTransforms.contiguousSlices(sortedColumn);
+  const sortedFirstColumn = ResultTransforms.applyMap(firstColumn, sortMap);
   const sortedRestOfColumns = restOfColumns.map((column) =>
     ResultTransforms.applyMap(column, sortMap)
   );
+  const slices = ResultTransforms.contiguousSlices(sortedFirstColumn);
 
-  return slices.map(([start, end]): RowLayout => {
-    const value = sortedColumn.atIndex(start);
+  return slices.map(([start, end]): DataGroup => {
+    const value = sortedFirstColumn.atIndex(start);
     const restDataSlice = sortedRestOfColumns.map((column) =>
       ResultTransforms.slice(column, start, end + 1)
     );
-    const rest = layoutPower(restDataSlice, restOfTypes);
+    const selfHighlight$ = new BehaviorSubject<boolean>(false);
+    const sRow =
+      columnIndex > 0 &&
+      (!restDataSlice || !restDataSlice[0] || restDataSlice[0].rowCount < 2)
+        ? undefined
+        : smartRow(
+            zip(restOfTypes, restDataSlice),
+            columnIndex + 1,
+            selfHighlight$
+          );
+
     return {
+      elementType: 'group',
       value,
       type,
-      rest,
-      rowSpan: 1 + rest.reduce(sumRowSpan, 0),
+      children: [
+        ...group(restDataSlice, restOfTypes, columnIndex + 1, selfHighlight$),
+        sRow,
+      ].filter(Boolean) as DataGroup[],
+      columnIndex,
+      selfHighlight$,
+      parentHighlight$,
     };
   });
 };
@@ -49,15 +88,17 @@ export const layoutPowerData = (
   columns: Interpreter.ResultTable,
   columnTypes: SerializedType[]
 ) => {
-  const columnColumns = columns.map(
-    (column) => new Column<Result.Comparable>(column as Result.Comparable[])
+  const sortableColumns = columns.map((column) =>
+    Column.fromValues(column as Result.Comparable[])
   );
-  return layoutPower(columnColumns, columnTypes);
+  return group(sortableColumns, columnTypes, 0).concat(
+    smartRow(zip(columnTypes, sortableColumns), 0)
+  );
 };
 
 export const usePowerTableLayoutData = (
   data: Interpreter.ResultTable,
   columnTypes: SerializedType[]
-): PowerTableDataLayout => {
+): DataGroup[] => {
   return useMemo(() => layoutPowerData(data, columnTypes), [data, columnTypes]);
 };

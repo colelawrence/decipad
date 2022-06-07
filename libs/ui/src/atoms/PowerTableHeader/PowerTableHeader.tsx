@@ -40,29 +40,26 @@ const childrenWrapperStyles = css({
 
 export interface TableHeaderProps {
   children?: React.ReactNode;
-  rowSpan?: number;
   isLastHeader?: boolean;
   isBottomLeftHeader?: boolean;
 }
 
 export const PowerTableHeader = ({
   children,
-  rowSpan = 1,
   isLastHeader = false,
   isBottomLeftHeader = false,
 }: TableHeaderProps): ReturnType<FC> => {
   return (
-    <th
+    <div
       css={[
         headerStyles,
         isLastHeader && lastHeaderStyles,
         isBottomLeftHeader && bottomLeftHeaderStyles,
       ]}
-      rowSpan={rowSpan}
     >
       <div css={headerWrapperStyles}>
         <div css={childrenWrapperStyles}>{children}</div>
       </div>
-    </th>
+    </div>
   );
 };

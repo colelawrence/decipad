@@ -27,6 +27,7 @@ export {
   normalizeUnitsOf,
   serializeResult,
   tokenize,
+  CompareValues,
 } from '@decipad/language';
 
 export type { AutocompleteName } from '@decipad/language';

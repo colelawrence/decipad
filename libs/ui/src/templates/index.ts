@@ -11,3 +11,4 @@ export { NotebookListPlaceholder } from './NotebookListPlaceholder/NotebookListP
 export { NotebookTopbar } from './NotebookTopbar/NotebookTopbar';
 export { ToastDisplay } from './ToastDisplay/ToastDisplay';
 export { EditorPlaceholder } from './EditorPlaceholder/EditorPlaceholder';
+export { SmartCell } from './SmartCell/SmartCell';

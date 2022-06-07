@@ -15,6 +15,14 @@ export interface PowerTableHeaderRowElement extends BaseElement {
 export interface PowerTableHeader extends BaseElement {
   type: typeof ELEMENT_POWER_TH;
   cellType: SerializedType;
+  aggregation?:
+    | 'average'
+    | 'frequency'
+    | 'max'
+    | 'median'
+    | 'min'
+    | 'span'
+    | 'sum';
   name: string;
   children: [EmptyText];
 }

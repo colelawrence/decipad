@@ -24,6 +24,7 @@ import { SerializedType } from '@decipad/computer';
 import { nanoid } from 'nanoid';
 import { dequal } from 'dequal';
 import { Observable, Subject } from 'rxjs';
+import { defaultAggregationTypeForColumnOf } from '../utils/defaultAggregationTypeForColumnOf';
 
 interface Column {
   name: string;
@@ -70,16 +71,22 @@ export const usePowerTableActions = (
       let existingColumns: PowerTableHeader[] | undefined =
         headerRow.children.filter((node) => !isText(node));
 
+      const refreshHeaderRow = () => {
+        headerRow = getNode(editor, headerRowPath);
+        existingColumns = headerRow?.children;
+      };
+
       const maybeRemoveFirstText = () => {
         const firstHeaderRowPath = [...headerRowPath, 0];
         const firstHeaderRowChild = getNode(editor, firstHeaderRowPath);
         if (firstHeaderRowChild && isText(firstHeaderRowChild)) {
           removeNodes(editor, { at: firstHeaderRowPath });
+          return true;
         }
+        return false;
       };
 
       withoutNormalizing(editor, () => {
-        // remove columns not present
         if (!existingColumns) {
           return;
         }
@@ -87,21 +94,37 @@ export const usePowerTableActions = (
           const matchingDataColumn = columns.find(
             (column) => column.name === existingColumn.name
           );
+          const columnPath = findNodePath(editor, existingColumn);
+          // remove columns not present
           if (!matchingDataColumn) {
-            const columnPath = findNodePath(editor, existingColumn);
             if (columnPath && hasNode(editor, columnPath)) {
               removeNodes(editor, { at: columnPath });
+            }
+          } else if (columnPath && hasNode(editor, columnPath)) {
+            if (!dequal(existingColumn.cellType, matchingDataColumn.type)) {
+              setNodes<PowerTableHeader>(
+                editor,
+                {
+                  cellType: matchingDataColumn.type,
+                  aggregation: defaultAggregationTypeForColumnOf(
+                    matchingDataColumn.type
+                  ),
+                },
+                { at: columnPath }
+              );
             }
           }
         }
 
         // add missing columns
-        headerRow = getNode(editor, headerRowPath);
-        existingColumns = headerRow?.children;
+        refreshHeaderRow();
         if (existingColumns) {
           let nextColumnIndex = existingColumns.length;
           for (const column of columns) {
-            maybeRemoveFirstText();
+            if (maybeRemoveFirstText()) {
+              refreshHeaderRow();
+              nextColumnIndex = existingColumns.length;
+            }
 
             const matchingExistingColumn = existingColumns.find(
               (existingColumn) => column.name === existingColumn.name
@@ -114,6 +137,7 @@ export const usePowerTableActions = (
                 cellType: column.type,
                 name: column.name,
                 children: [{ text: '' }],
+                aggregation: defaultAggregationTypeForColumnOf(column.type),
               };
               insertNodes(editor, newHeader, { at: headerPath });
               nextColumnIndex += 1;

@@ -24,7 +24,6 @@ export const useDropColumn = (
   column: MyElement
 ) => {
   const { onMoveColumn } = useTableActions(editor, table);
-
   const findSwappableColumns = useFindSwappableColumns(editor, table, column);
 
   return useDrop<DragColumnItem, void, CollectedProps>({

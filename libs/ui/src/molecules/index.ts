@@ -12,6 +12,7 @@ export { HelpButton } from './HelpButton/HelpButton';
 export { IconPopover } from './IconPopover/IconPopover';
 export { InlineCodeError } from './InlineCodeError/InlineCodeError';
 export { InputMenuItem } from './InputMenuItem/InputMenuItem';
+export { LabeledSelect } from './LabeledSelect/LabeledSelect';
 export { MenuList } from './MenuList/MenuList';
 export { Modal } from './Modal/Modal';
 export { ClosableModalHeader } from './ClosableModalHeader/ClosableModalHeader';

@@ -6,6 +6,7 @@ export * from './pages';
 export * as atoms from './atoms';
 export * as molecules from './molecules';
 export * as organisms from './organisms';
+export * as templates from './templates';
 
 // TODO temporary while these are not yet reworked to be design system components
 export * from './lib/theme';

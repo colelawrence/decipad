@@ -12,6 +12,7 @@
     { "path": "../editor-plugins" },
     { "path": "../editor-utils" },
     { "path": "../editor-table" },
-    { "path": "../computer" }
+    { "path": "../computer" },
+    { "path": "../fraction" }
   ]
 }

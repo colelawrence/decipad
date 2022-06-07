@@ -21,7 +21,8 @@ export const decorateTextSyntax =
   (computer: Computer, elementType: MyElement['type']): MyDecorate =>
   (editor: MyEditor): MyDecorateEntry => {
     const syntaxErrorDecorations = ([node, path]: MyElementEntry): TRange[] => {
-      const lineResult = computer.results.getValue().blockResults[node.id];
+      const lineResult =
+        computer.results.getValue().blockResults[node.id as string];
       if (!lineResult) {
         return [];
       }

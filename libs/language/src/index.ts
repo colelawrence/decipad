@@ -36,6 +36,7 @@ export {
   RuntimeError,
   Realm,
   isColumnLike,
+  CompareValues,
 } from './interpreter';
 export {
   Column,

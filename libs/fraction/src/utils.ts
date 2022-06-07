@@ -34,3 +34,11 @@ export const isFractionLike = (f: unknown): f is FractionLike => {
     )
   );
 };
+
+export const F = (n: number | bigint): Fraction => {
+  return new Fraction(n);
+};
+
+export const from = (f: FractionLike): Fraction => {
+  return f instanceof Fraction ? f : new Fraction(f);
+};

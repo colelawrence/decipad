@@ -35,7 +35,6 @@ const withAtLastColumn =
       id: nanoid(),
       type: ELEMENT_TH,
       cellType: { kind: 'string' },
-      autoCreated: true,
       children: [{ text: `Column${tableColumnCount + 1}` }],
     };
     insertNodes(editor, newTh, { at: newThPath });

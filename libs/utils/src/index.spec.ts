@@ -11,6 +11,7 @@ import { thro } from './thro';
 import { timeout } from './timeout';
 import { unzip } from './unzip';
 import { zip } from './zip';
+import { assertDefined } from './assert-defined';
 
 it('turns a mapping-like into a map', () => {
   expect(anyMappingToMap([['key', 1]])).toEqual(new Map([['key', 1]]));
@@ -99,4 +100,9 @@ it('can timeout', (done) => {
   setTimeout(() => {
     nums.push(0);
   }, 1);
+});
+
+it('asserts defined', () => {
+  expect(() => assertDefined(true)).not.toThrow();
+  expect(() => assertDefined(null)).toThrowError();
 });
