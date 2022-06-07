@@ -10,6 +10,7 @@ import {
   setCssVar,
   white,
 } from '../../primitives';
+import { useIsDragging } from './useIsDragging';
 
 const contentWrapperStyles = css({
   background: offBlack.rgb,
@@ -56,6 +57,7 @@ export const Tooltip = ({
   onChangeOpen,
   variant,
 }: TooltipProps): ReturnType<FC> => {
+  const isDragging = useIsDragging();
   // eslint-disable-next-line no-param-reassign
   [open, onChangeOpen] = useControllableState({
     prop: open,
@@ -66,7 +68,7 @@ export const Tooltip = ({
     <Root
       openDelay={100}
       closeDelay={100}
-      open={open}
+      open={open && !isDragging}
       onOpenChange={onChangeOpen}
     >
       <Trigger

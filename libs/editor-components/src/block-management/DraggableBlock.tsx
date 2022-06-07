@@ -12,7 +12,6 @@ import {
   getStartPoint,
   hasNode,
   setSelection,
-  useDndBlock,
 } from '@udecode/plate';
 import {
   ComponentProps,
@@ -24,6 +23,7 @@ import {
   useState,
 } from 'react';
 import { BlockErrorBoundary } from '../BlockErrorBoundary';
+import { useDndBlock } from './useDndBlock';
 
 const InDraggableBlock = createContext(false);
 
@@ -78,9 +78,11 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
   const { id } = element;
 
   const blockRef = useRef<HTMLDivElement>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
   const { dragRef, dropLine, isDragging } = useDndBlock({
     id,
     blockRef,
+    previewRef,
   });
 
   const onDelete = useCallback(() => {
@@ -113,6 +115,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
       {...props}
       dragSource={dragRef}
       blockRef={blockRef}
+      previewRef={previewRef}
       dropLine={dropLine || undefined}
       isBeingDragged={isDragging}
       onDelete={parentOnDelete === false ? false : onDelete}

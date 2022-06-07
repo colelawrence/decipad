@@ -1,6 +1,7 @@
 import { BlockIsActiveProvider } from '@decipad/react-contexts';
 import { FC, Fragment, ReactNode, RefObject, useState } from 'react';
 import { ConnectDragSource } from 'react-dnd';
+import { css } from '@emotion/react';
 import { BlockDragHandle } from '..';
 import { DropLine, EditorBlock } from '../../atoms';
 import {
@@ -15,12 +16,22 @@ const totalSpaceWithGap = handleAndMenuReservedSpace + editorLayout.gutterGap;
 
 const draggingOpacity: Opacity = 0.4;
 
+const blockWrapperStyle = css({ position: 'relative' });
+const dropLineStyle = css({ position: 'absolute', width: '100%' });
+
+const dropLineEl = (
+  <div contentEditable={false} css={dropLineStyle}>
+    <DropLine />
+  </div>
+);
+
 interface DraggableBlockProps {
   readonly isBeingDragged?: boolean;
   readonly dropLine?: 'top' | 'bottom';
 
   readonly dragSource?: ConnectDragSource;
   readonly blockRef?: RefObject<HTMLDivElement>;
+  readonly previewRef?: RefObject<HTMLDivElement>;
 
   readonly onDelete?: (() => void) | false;
 
@@ -33,6 +44,7 @@ export const DraggableBlock = ({
 
   dragSource,
   blockRef,
+  previewRef,
 
   onDelete,
 
@@ -44,7 +56,7 @@ export const DraggableBlock = ({
 
   const { paddingTop, typography } = blockAlignment[blockKind];
 
-  return (
+  const editorBlock = (
     <EditorBlock blockKind={blockKind}>
       <div
         css={{
@@ -101,22 +113,20 @@ export const DraggableBlock = ({
           />
         </div>
         <div
-          ref={blockRef}
           css={{ opacity: isBeingDragged ? draggingOpacity : 'unset' }}
+          ref={previewRef}
         >
-          {dropLine === 'top' && (
-            <div contentEditable={false}>
-              <DropLine />
-            </div>
-          )}
           <BlockActiveProvider>{children}</BlockActiveProvider>
-          {dropLine === 'bottom' && (
-            <div contentEditable={false}>
-              <DropLine />
-            </div>
-          )}
         </div>
       </div>
     </EditorBlock>
+  );
+
+  return (
+    <div ref={blockRef} css={blockWrapperStyle}>
+      {dropLine === 'top' && dropLineEl}
+      {editorBlock}
+      {dropLine === 'bottom' && dropLineEl}
+    </div>
   );
 };
