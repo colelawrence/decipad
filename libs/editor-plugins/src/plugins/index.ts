@@ -26,6 +26,7 @@ export * from './NormalizeVoidPlugin';
 export * from './NotebookTitle';
 export * from './Plot';
 export * from './SentryBreadcrumbsPlugin';
+export * from './OperationsBlackboxPlugin';
 export * from './SoftBreakPlugin';
 export * from './SyntaxErrorHighlight';
 export * from './UpdateComputer';

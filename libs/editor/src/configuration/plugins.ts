@@ -22,6 +22,7 @@ import {
   createNormalizeTextPlugin,
   createNormalizeVoidPlugin,
   createPlotPlugin,
+  createOperationsBlackboxPlugin,
   createSoftBreakPlugin,
   createSyntaxErrorHighlightPlugin,
   createUpdateComputerPlugin,
@@ -118,6 +119,7 @@ export const plugins = (computer: Computer) =>
 
       // error handling
       createEditorApplyErrorReporterPlugin(),
+      createOperationsBlackboxPlugin(),
     ],
     {
       components: components(computer),
