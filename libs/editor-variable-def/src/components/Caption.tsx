@@ -7,6 +7,7 @@ import {
 import { getNodeString } from '@udecode/plate';
 import { useElementMutatorCallback } from '@decipad/editor-utils';
 import { AvailableSwatchColor, UserIconKey } from 'libs/ui/src/utils';
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
 
 export const Caption: PlateComponent = ({ attributes, element, children }) => {
   if (element?.type !== ELEMENT_CAPTION) {
@@ -18,8 +19,11 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
   const setIcon = useElementMutatorCallback(editor, element, 'icon');
   const setColor = useElementMutatorCallback(editor, element, 'color');
 
+  // Captions are not editable in read mode.
+  const isEditable = !useIsEditorReadOnly();
+
   return (
-    <div {...attributes}>
+    <div {...attributes} contentEditable={isEditable}>
       <molecules.Caption
         color={element.color as AvailableSwatchColor}
         onChangeIcon={setIcon}
