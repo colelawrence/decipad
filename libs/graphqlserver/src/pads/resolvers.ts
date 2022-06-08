@@ -108,17 +108,7 @@ const resolvers = {
       }
 
       const user = loadUser(context);
-      if (workspace.isPublic) {
-        const query = {
-          IndexName: 'byWorkspace',
-          KeyConditionExpression: 'workspace_id = :workspace_id',
-          ExpressionAttributeValues: {
-            ':workspace_id': workspaceId,
-          },
-        };
 
-        return paginate<PadRecord, PadRecord>(data.pads, query, page);
-      }
       await expectAuthorized({
         resource: `/workspaces/${workspaceId}`,
         user,
