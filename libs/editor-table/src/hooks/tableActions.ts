@@ -24,6 +24,7 @@ import {
   moveNodes,
   withoutNormalizing,
 } from '@udecode/plate';
+import { Path } from 'slate';
 import { getColumnName } from '../utils';
 import { changeColumnType } from '../utils/changeColumnType';
 
@@ -40,6 +41,75 @@ export interface TableActions {
   onRemoveRow: (rowIndex: string) => void;
   onMoveColumn: (fromColumnIndex: number, toColumnIndex: number) => void;
 }
+
+export const addColumn = (editor: MyEditor, tablePath: Path) => {
+  const headerRowPath = [...tablePath, 1];
+  const headerRowEntry = getNodeEntry<TableHeaderRowElement>(
+    editor,
+    headerRowPath
+  );
+  const headerRow = headerRowEntry[0];
+  const columnCount = headerRow.children.length;
+
+  const tableEntry = getNodeEntry<TableRowElement>(editor, tablePath);
+  const table = tableEntry[0];
+  const [, , ...body] = table.children;
+  const columnName = getColumnName(editor, tablePath, columnCount + 1);
+  withoutNormalizing(editor, () => {
+    insertNodes<TableHeaderElement>(
+      editor,
+      {
+        id: nanoid(),
+        type: ELEMENT_TH,
+        cellType: { kind: 'string' },
+        children: [{ text: columnName }],
+      },
+      {
+        at: [...tablePath, 1, columnCount],
+      }
+    );
+
+    body.forEach((_row, rowIndex) => {
+      insertNodes<TableCellElement>(
+        editor,
+        {
+          id: nanoid(),
+          type: ELEMENT_TD,
+          cellType: { kind: 'string' },
+          children: [{ text: '' }],
+        },
+        {
+          at: [...tablePath, rowIndex + 2, columnCount],
+        }
+      );
+    });
+  });
+};
+
+export const addRow = (editor: MyEditor, tablePath: Path) => {
+  const headerRowPath = [...tablePath, 1];
+  const [table] = getNodeEntry(editor, tablePath);
+  const elementCount = (table as TableElement).children.length;
+  const headerRowEntry = getNodeEntry(editor, headerRowPath);
+  const headerRow = headerRowEntry[0] as TableHeaderRowElement;
+  const columnCount = headerRow.children.length;
+  const emptyCells: TableCellElement[] = Array.from(
+    { length: columnCount },
+    (): TableCellElement => ({
+      id: nanoid(),
+      type: ELEMENT_TD,
+      children: [{ text: '' }],
+    })
+  );
+  const newRow: TableRowElement = {
+    id: nanoid(),
+    type: ELEMENT_TR,
+    children: emptyCells,
+  };
+  insertNodes<TableRowElement>(editor, newRow, {
+    at: [...tablePath, elementCount],
+  });
+};
 
 export const useTableActions = (
   editor: MyEditor,
@@ -76,47 +146,7 @@ export const useTableActions = (
 
   const onAddColumn = useCallback(() => {
     withPath(editor, element, (path) => {
-      const headerRowPath = [...path, 1];
-      const headerRowEntry = getNodeEntry<TableHeaderRowElement>(
-        editor,
-        headerRowPath
-      );
-      const headerRow = headerRowEntry[0];
-      const columnCount = headerRow.children.length;
-
-      const tableEntry = getNodeEntry<TableRowElement>(editor, path);
-      const table = tableEntry[0];
-      const [, , ...body] = table.children;
-      const columnName = getColumnName(editor, path, columnCount + 1);
-      withoutNormalizing(editor, () => {
-        insertNodes<TableHeaderElement>(
-          editor,
-          {
-            id: nanoid(),
-            type: ELEMENT_TH,
-            cellType: { kind: 'string' },
-            children: [{ text: columnName }],
-          },
-          {
-            at: [...path, 1, columnCount],
-          }
-        );
-
-        body.forEach((_row, rowIndex) => {
-          insertNodes<TableCellElement>(
-            editor,
-            {
-              id: nanoid(),
-              type: ELEMENT_TD,
-              cellType: { kind: 'string' },
-              children: [{ text: '' }],
-            },
-            {
-              at: [...path, rowIndex + 2, columnCount],
-            }
-          );
-        });
-      });
+      addColumn(editor, path);
     });
   }, [editor, element]);
 
@@ -152,28 +182,7 @@ export const useTableActions = (
 
   const onAddRow = useCallback(() => {
     withPath(editor, element, (path) => {
-      const headerRowPath = [...path, 1];
-      const [table] = getNodeEntry(editor, path);
-      const elementCount = (table as TableElement).children.length;
-      const headerRowEntry = getNodeEntry(editor, headerRowPath);
-      const headerRow = headerRowEntry[0] as TableHeaderRowElement;
-      const columnCount = headerRow.children.length;
-      const emptyCells: TableCellElement[] = Array.from(
-        { length: columnCount },
-        (): TableCellElement => ({
-          id: nanoid(),
-          type: ELEMENT_TD,
-          children: [{ text: '' }],
-        })
-      );
-      const newRow: TableRowElement = {
-        id: nanoid(),
-        type: ELEMENT_TR,
-        children: emptyCells,
-      };
-      insertNodes<TableRowElement>(editor, newRow, {
-        at: [...path, elementCount],
-      });
+      addRow(editor, path);
     });
   }, [editor, element]);
 

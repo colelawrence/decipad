@@ -6,12 +6,13 @@ import {
   ELEMENT_TH,
   ELEMENT_TR,
   MyPlatePlugin,
+  MyValue,
   MyWithOverride,
 } from '@decipad/editor-types';
 import { Computer } from '@decipad/computer';
 import { decorateTextSyntax } from '@decipad/editor-utils';
-import { withTable } from '@udecode/plate';
 import { isEnabled } from '@decipad/feature-flags';
+import { TablePlugin, withTable } from '@udecode/plate';
 import {
   Table,
   TableCaption,
@@ -34,6 +35,7 @@ import { createPreventEnterToCreateCellPlugin } from './createPreventEnterToCrea
 import { createPreventDeleteTableFromCaptionPlugin } from './createPreventDeleteTableFromCaptionPlugin';
 import { createCellFormulaShortcutPlugin } from './createCellFormulaShortcutPlugin';
 import { createCursorFocusPlugin } from './createCursorFocusPlugin';
+import { addColumn, addRow } from '../hooks/index';
 
 type Attributes =
   | {
@@ -42,13 +44,25 @@ type Attributes =
     }
   | undefined;
 
-export const createTablePlugin = (computer: Computer): MyPlatePlugin => ({
+export const createTablePlugin = (
+  computer: Computer
+): MyPlatePlugin<TablePlugin<MyValue>> => ({
   key: ELEMENT_TABLE,
   isElement: true,
   component: Table,
   decorate: decorateTableCellUnits,
   deserializeHtml: {
     rules: [{ validNodeName: 'TABLE' }],
+  },
+  options: {
+    insertColumn: (editor, { fromCell }) => {
+      const tablePath = fromCell.slice(0, -2);
+      addColumn(editor, tablePath);
+    },
+    insertRow: (editor, { fromRow }) => {
+      const tablePath = fromRow.slice(0, -1);
+      addRow(editor, tablePath);
+    },
   },
   withOverrides: isEnabled('TABLE_CELL_SELECTION')
     ? (withTable as MyWithOverride)
