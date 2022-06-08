@@ -1,5 +1,5 @@
 import assert from 'assert';
-import NextAuthJWT from 'next-auth/jwt';
+import { encode } from 'next-auth/jwt';
 import { Cookie } from 'playwright';
 import { User } from '@decipad/backendtypes';
 import { authentication } from '@decipad/services';
@@ -32,7 +32,7 @@ export async function credentials(
     maxAge: 1000 * 60 * 60 * 24, // 1 day
   };
   // generate token
-  const token = await NextAuthJWT.encode({
+  const token = await encode({
     ...authentication.jwt,
     token: { accessToken: user.secret },
     ...jwtOptions,

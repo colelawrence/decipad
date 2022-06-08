@@ -4,7 +4,7 @@ import tables from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
 import Boom from '@hapi/boom';
 import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
-import NextAuthJWT from 'next-auth/jwt';
+import { decode as decodeJWT } from 'next-auth/jwt';
 import { parse as parseCookie } from 'simple-cookie';
 import { jwt as jwtConf } from './jwt';
 
@@ -66,14 +66,13 @@ export async function authenticateOneToken({
   let user: User | undefined;
   let secret: string | undefined;
   if (token) {
-    const { decode: decodeJWT } = NextAuthJWT;
     try {
       const decoded = await decodeJWT({
         ...jwtConf,
         token,
       });
 
-      if (decoded.accessToken) {
+      if (decoded?.accessToken) {
         const userWithSecret = await findUserByAccessToken(
           decoded.accessToken as string
         );
@@ -133,7 +132,7 @@ async function findUserByAccessToken(
     },
   });
 
-  return foundUsers.Items[0];
+  return foundUsers.Items[0] as UserWithSecret;
 }
 
 async function secretExists(secret: string): Promise<boolean> {

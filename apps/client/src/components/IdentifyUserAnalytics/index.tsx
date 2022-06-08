@@ -1,5 +1,5 @@
 import { FC, useState, useEffect, ReactNode } from 'react';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import { useAnalytics } from '../../lib/useAnalytics';
 
 export function IdentifyUserAnalytics({
@@ -8,7 +8,7 @@ export function IdentifyUserAnalytics({
   children: ReactNode;
 }): ReturnType<FC> {
   const analytics = useAnalytics();
-  const [session] = useSession();
+  const { data: session } = useSession();
   const [userId, setUserId] = useState<string | undefined>();
   const [userEmail, setUserEmail] = useState<string | undefined>();
 

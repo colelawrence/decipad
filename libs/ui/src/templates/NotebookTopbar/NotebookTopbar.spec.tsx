@@ -2,8 +2,8 @@ import { ClientEventsContext } from '@decipad/client-events';
 import { mockConsoleError } from '@decipad/testutils';
 import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';
-import { Provider as SessionProvider } from 'next-auth/client';
-import { ComponentProps, FC } from 'react';
+import { SessionProvider } from 'next-auth/react';
+import { ComponentProps, FC, ReactNode } from 'react';
 import { NotebookTopbar } from './NotebookTopbar';
 
 const props: ComponentProps<typeof NotebookTopbar> = {
@@ -21,9 +21,25 @@ const props: ComponentProps<typeof NotebookTopbar> = {
   ],
 };
 
-const WithProviders: FC<React.PropsWithChildren<unknown>> = ({ children }) => (
+interface WithProvidersProps {
+  children: ReactNode;
+  noSession?: boolean;
+}
+
+const WithProviders: FC<WithProvidersProps> = ({ children, noSession }) => (
   <ClientEventsContext.Provider value={noop}>
-    <SessionProvider session={{ user: {} }}>{children}</SessionProvider>
+    <SessionProvider
+      session={
+        noSession
+          ? null
+          : {
+              user: {},
+              expires: new Date(Date.now() + 100000000).toISOString(),
+            }
+      }
+    >
+      {children}
+    </SessionProvider>
   </ClientEventsContext.Provider>
 );
 
@@ -31,18 +47,26 @@ describe('Notebook Topbar', () => {
   mockConsoleError();
 
   it('renders the try decipad button only for non authenticated userz', () => {
-    const { getByText, queryByText, rerender } = render(
-      <WithProviders>
-        <NotebookTopbar {...props} permission="READ" />
-      </WithProviders>
-    );
-    expect(queryByText(/try decipad/i)).not.toBeInTheDocument();
+    {
+      const { queryByText } = render(
+        <WithProviders>
+          <NotebookTopbar {...props} permission="READ" />
+        </WithProviders>
+      );
+      expect(queryByText(/try decipad/i)).not.toBeInTheDocument();
+    }
 
-    rerender(<NotebookTopbar {...props} permission="READ" />);
-    expect(getByText(/try decipad/i)).toHaveAttribute(
-      'href',
-      expect.stringMatching(/typeform/i)
-    );
+    {
+      const { getByText } = render(
+        <WithProviders noSession>
+          <NotebookTopbar {...props} permission="READ" />
+        </WithProviders>
+      );
+      expect(getByText(/try decipad/i)).toHaveAttribute(
+        'href',
+        expect.stringMatching(/typeform/i)
+      );
+    }
   });
 
   it('renders the duplicate button only when not admin', () => {

@@ -7,7 +7,7 @@ import {
 } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
 import { NotebookPage } from '@decipad/ui';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import { MyEditor } from '@decipad/editor-types';
 import { createEditor } from 'slate';
@@ -43,7 +43,7 @@ const InsideNotebookState = ({
   // User warning
 
   const toast = useToast();
-  const [session] = useSession();
+  const { data: session } = useSession();
 
   // DocSync
 

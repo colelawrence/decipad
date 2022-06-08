@@ -53,6 +53,7 @@ export default function adaptReqRes(handle: NextApiHandler) {
         method,
         url,
         query,
+        headers,
       };
 
       let statusCode = 200;

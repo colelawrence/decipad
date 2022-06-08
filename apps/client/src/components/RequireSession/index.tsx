@@ -1,5 +1,5 @@
 import { LoginPage } from '@decipad/ui';
-import { signIn, useSession } from 'next-auth/client';
+import { signIn, useSession } from 'next-auth/react';
 import { FC, ReactNode } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { SECRET_URL_PARAM } from '@decipad/routing';
@@ -15,7 +15,7 @@ export function RequireSession({
   children,
 }: RequireSessionProps): ReturnType<FC> {
   const history = useHistory();
-  const [session, sessionLoading] = useSession();
+  const { status, data: session } = useSession();
 
   const { search } = useLocation();
   const secret = new URLSearchParams(search).get(SECRET_URL_PARAM);
@@ -24,7 +24,7 @@ export function RequireSession({
     return <>{children}</>;
   }
 
-  if (sessionLoading) {
+  if (status === 'loading') {
     return <>Loading...</>;
   }
 

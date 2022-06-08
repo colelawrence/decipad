@@ -37,8 +37,6 @@ const defaultEnvValues = {
 
   JWT_MAX_AGE: '2592000', // 1 month (30 * 24 * 60 * 60)
   JWT_SECRET: 'catwalklrjqwr92309endasjkdn023eqhjdskajhaskj',
-  JWT_SIGNING_PRIVATE_KEY:
-    'eyJrdHkiOiJvY3QiLCJraWQiOiJaT1pyczN3WjlHMkFOUU1jMkg3NGZ2Wks5ZzUwZEJkRnVDckVDUXdiem5NIiwiYWxnIjoiSFM1MTIiLCJrIjoiSmJkSFlQc1NZaWlIRGFiSlpUbzFWVUpkOEhGNTZlQ01fNExUYm5jdzhXZyJ9',
 
   NEXTAUTH_URL: 'http://localhost:4200/api/auth',
 

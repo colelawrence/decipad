@@ -1,3 +1,4 @@
+import { Account } from 'next-auth';
 import { UserInput, UserWithSecret } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import {
@@ -6,18 +7,15 @@ import {
 } from '@decipad/services/users';
 import { isAllowedToLogIn } from './is-allowed';
 
-export async function signInEmail(
-  user: UserWithSecret,
-  account: any,
-  metadata: any
-) {
-  if (!(await isAllowedToLogIn(metadata.email))) {
+export async function signInEmail(user: UserWithSecret, account: Account) {
+  const { email } = user;
+  if (!email || !(await isAllowedToLogIn(email))) {
     return false;
   }
 
   let existingUser;
   const data = await tables();
-  const userKeyId = `email:${metadata.email}`;
+  const userKeyId = `email:${email}`;
   const userKey = await data.userkeys.get({ id: userKeyId });
 
   if (userKey) {
@@ -25,10 +23,10 @@ export async function signInEmail(
   }
   if (existingUser) {
     const userInput: Partial<UserInput> = {
-      email: metadata.email as string,
+      email: account.userId,
     };
     if (!existingUser.name) {
-      userInput.name = userInput.email;
+      userInput.name = userInput.email as string | undefined;
     }
     existingUser = await maybeEnrichUser(existingUser, userInput);
   } else {
@@ -38,8 +36,8 @@ export async function signInEmail(
 
     existingUser = (
       await createUser({
-        name: metadata.email,
-        email: metadata.email as string,
+        name: account.userId,
+        email: account.userId,
         provider: account.provider,
       })
     ).user;

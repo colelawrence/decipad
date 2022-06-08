@@ -1,5 +1,5 @@
 import assert from 'assert';
-import NextAuthJWT from 'next-auth/jwt';
+import { encode as encodeJWT } from 'next-auth/jwt';
 import arc from '@architect/functions';
 import { ApolloLink } from '@apollo/client';
 import { User } from '@decipad/backendtypes';
@@ -16,8 +16,6 @@ export default ({ tablesPort }: { tablesPort: number }) => {
   return async function auth(
     userId = 'test user id 1'
   ): Promise<AuthReturnValue> {
-    const { encode: encodeJWT } = NextAuthJWT;
-
     process.env.ARC_TABLES_PORT = `${tablesPort}`;
     const data = await arc.tables();
     const user = await data.users.get({ id: userId });
@@ -32,17 +30,9 @@ export default ({ tablesPort }: { tablesPort: number }) => {
     if (!process.env.JWT_SECRET) {
       throw new Error('Missing JWT secret');
     }
-    if (!process.env.JWT_SIGNING_PRIVATE_KEY) {
-      throw new Error('Missing JWT signing key');
-    }
-
     const encodedToken: string = await encodeJWT({
       token,
       secret: process.env.JWT_SECRET,
-      signingKey: Buffer.from(
-        process.env.JWT_SIGNING_PRIVATE_KEY,
-        'base64'
-      ).toString(),
     });
 
     return {

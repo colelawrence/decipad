@@ -19,7 +19,7 @@ export async function signInGithub(
     email: metadata.email,
   };
 
-  if (!(await isAllowedToLogIn(metadata.email))) {
+  if (!metadata.email || !(await isAllowedToLogIn(metadata.email))) {
     return false;
   }
 

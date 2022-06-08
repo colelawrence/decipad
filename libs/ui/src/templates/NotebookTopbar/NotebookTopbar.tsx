@@ -1,7 +1,7 @@
 import { docs, workspaces } from '@decipad/routing';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import { ComponentProps, FC, useContext, useEffect, useState } from 'react';
 import { BehaviorSubject } from 'rxjs';
 import { ClientEventsContext } from '../../../../client-events/src';
@@ -78,7 +78,7 @@ export const NotebookTopbar = ({
   hasLocalChanges: hasLocalChanges$,
   ...sharingProps
 }: NotebookTopbarProps): ReturnType<FC> => {
-  const [session] = useSession();
+  const { status: sessionStatus } = useSession();
   const isWriter = permission === 'ADMIN' || permission === 'WRITE';
   const clientEvent = useContext(ClientEventsContext);
   const [hasLocalChanges, setHasLocalChanges] = useState(false);
@@ -145,7 +145,7 @@ export const NotebookTopbar = ({
           <Button onClick={() => onRevertChanges()}>Revert changes</Button>
         )}
 
-        {session?.user ? (
+        {sessionStatus === 'authenticated' ? (
           isWriter ? (
             <NotebookSharingPopUp notebook={notebook} {...sharingProps} />
           ) : (

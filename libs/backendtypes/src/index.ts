@@ -11,15 +11,15 @@ export type ID = string;
 export type User = {
   id: ID;
   name: string;
-  email?: string;
-  image?: string;
+  email?: string | null;
+  image?: string | null;
   createdAt?: number | Date;
 };
 
 export interface UserInput {
   name: string;
-  email?: string;
-  image?: string;
+  email?: string | null;
+  image?: string | null;
   provider?: string;
   providerId?: string;
 }
@@ -214,9 +214,9 @@ export type TableRecordChanges<T extends TableRecord> = (
 export interface UserRecord extends TableRecordBase {
   name: string;
   last_login?: number;
-  image?: string;
-  email?: string;
-  secret: string;
+  image?: string | null;
+  email?: string | null;
+  secret?: string;
 }
 
 export interface UserKeyRecord extends TableRecordBase {

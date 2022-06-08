@@ -1,7 +1,7 @@
 import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
 import assert from 'assert';
 import { HttpResponse } from '@architect/functions';
-import NextAuthJWT from 'next-auth/jwt';
+import { encode } from 'next-auth/jwt';
 import tables from '@decipad/tables';
 import { jwt as jwtConf } from '@decipad/services/authentication';
 import timestamp from '../../common/timestamp';
@@ -55,7 +55,7 @@ export const handler = handle(
     }
 
     assert(user.secret, 'user does not have a secret');
-    const token = await NextAuthJWT.encode({
+    const token = await encode({
       ...jwtConf,
       token: { accessToken: user.secret },
     });

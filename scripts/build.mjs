@@ -3,7 +3,6 @@ import { globby } from 'globby';
 import esbuild from 'esbuild';
 
 const envVarNames = [
-  'JWT_SIGNING_PRIVATE_KEY',
   'NEXTAUTH_URL',
   'NEXT_PUBLIC_ANALYTICS_WRITE_KEY',
   'NEXT_PUBLIC_HOTJAR_SITE_ID',
@@ -92,7 +91,7 @@ async function esBuildOptions(env) {
     outdir: 'apps/backend/src',
     keepNames: true,
     define: envVarDefines(env),
-    minify: !!process.env.MINIFY,
+    minify: !process.env.DEBUG && !!process.env.MINIFY,
     watch,
   };
 }

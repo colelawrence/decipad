@@ -1,4 +1,5 @@
 import tables from '@decipad/tables';
+import { app } from '@decipad/config';
 
 const ALLOWLIST_REQUIRED_URL_BASES = [
   'https://alpha.decipad.com',
@@ -22,7 +23,7 @@ export async function isAllowedToLogIn(email?: string): Promise<boolean> {
   if (process.env.NODE_ENV === 'testing') {
     return true;
   }
-  const urlBase = process.env.DECI_APP_URL_BASE;
+  const { urlBase } = app();
   if (!urlBase || ALLOWLIST_REQUIRED_URL_BASES.indexOf(urlBase) < 0) {
     return true;
   }

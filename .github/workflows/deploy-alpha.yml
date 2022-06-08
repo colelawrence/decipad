@@ -50,7 +50,6 @@ jobs:
           SENTRY_PROJECT: ${{secrets.SENTRY_PROJECT}}
           SENTRY_AUTH_TOKEN: ${{secrets.SENTRY_AUTH_TOKEN}}
           SENTRY_ENVIRONMENT: alpha
-          JWT_SIGNING_PRIVATE_KEY: '${{secrets.ALPHA_JWT_SIGNING_PRIVATE_KEY}}'
           NEXTAUTH_URL: 'https://alpha.decipad.com/api/auth'
           GITHUB_CLIENT_ID: '${{secrets.DECI_ALPHA_GITHUB_CLIENT_ID}}'
           GITHUB_CLIENT_SECRET: '${{secrets.DECI_ALPHA_GITHUB_CLIENT_SECRET}}'

@@ -1,20 +1,16 @@
 import { createHash } from 'crypto';
-import {
-  User,
-  UserRecord,
-  UserInput,
-  VerificationRequestRecord,
-} from '@decipad/backendtypes';
+import { Account, NextAuthOptions, User } from 'next-auth';
+import { UserInput } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
-import { create as createUser2 } from '@decipad/services/users';
-import timestamp from '../common/timestamp';
+import { create as createUser } from '@decipad/services/users';
+import { isAllowedToLogIn } from './is-allowed';
 
 // Next-Auth does not expose some types
 // So we have to help here.
-type AdapterOptions = {
+interface AdapterOptions {
   secret: string;
   baseUrl: string;
-};
+}
 
 type SendVerificationRequest = (params: {
   identifier: string;
@@ -28,33 +24,58 @@ type EmailConfig = {
   sendVerificationRequest: SendVerificationRequest;
 };
 
-export default function createAdapter() {
-  async function getAdapter(options: AdapterOptions) {
-    const { secret: secretOption, ...appOptions } = options;
-    const data = await tables();
+type Adapter = NonNullable<NextAuthOptions['adapter']>;
+type AdapterUser = User & { id: string; emailVerified: boolean };
 
-    async function createUser(profile: any) {
-      return (await createUser2(profile as UserInput)).user;
-    }
+interface VerificationRequest {
+  identifier: string;
+  token: string;
+}
 
-    async function getUser(id: string): Promise<User | undefined> {
-      return data.users.get({ id });
-    }
+export const adapter = ({ secret }: AdapterOptions): Adapter => {
+  function hashToken(token: string): string {
+    return createHash('sha256').update(`${token}${secret}`).digest('hex');
+  }
 
-    async function getUserByEmail(email: string): Promise<User | undefined> {
-      const key = await data.userkeys.get({ id: `email:${email}` });
-      let user;
+  return {
+    async createUser(profile: Omit<User, 'id'>): Promise<AdapterUser> {
+      const name = profile.name || 'unknown';
+      return (await createUser({ ...profile, name } as UserInput))
+        .user as unknown as AdapterUser;
+    },
+
+    async getUser(id: string): Promise<User | undefined> {
+      const data = await tables();
+      return (await data.users.get({ id })) as User | undefined;
+    },
+
+    async getUserByEmail(email: string): Promise<User | null> {
+      const data = await tables();
+      const keyId = `email:${email}`;
+      const key = await data.userkeys.get({ id: keyId });
+      let user: User | null = null;
       if (key) {
-        user = await data.users.get({ id: key.user_id });
+        user = (await data.users.get({ id: key.user_id })) as User;
+      }
+      if (!user && (await isAllowedToLogIn(email))) {
+        user = (
+          await createUser({
+            name: email,
+            email,
+            provider: 'email',
+            providerId: email,
+          })
+        ).user;
       }
 
       return user;
-    }
+    },
 
-    async function getUserByProviderAccountId(
+    async getUserByAccount(
       providerId: string,
       providerAccountId: string
     ): Promise<User | undefined> {
+      const data = await tables();
       const userkey = await data.userkeys.get({
         id: `${providerId}:${providerAccountId}`,
       });
@@ -63,10 +84,11 @@ export default function createAdapter() {
         user = await data.users.get({ id: userkey.user_id });
       }
 
-      return user;
-    }
+      return user as undefined | User;
+    },
 
-    async function updateUser(user: UserRecord & { emailVerified?: Date }) {
+    async updateUser(user: User & { emailVerified?: Date }) {
+      const data = await tables();
       if (user.emailVerified) {
         const verifiedAt = new Date(user.emailVerified);
         const userkey = await data.userkeys.get({
@@ -80,153 +102,105 @@ export default function createAdapter() {
         }
       }
 
-      const previousUser = data.users.get({ id: user.id });
-      const newUser = Object.assign(previousUser, user) as User;
-      await data.users.put(user);
+      const previousUser = await data.users.get({ id: user.id });
+      const name = user.name || previousUser?.name || 'unknown';
+      const newUser = { ...previousUser, ...user, name };
+      await data.users.put(newUser);
       return newUser;
-    }
+    },
 
-    async function deleteUser() {
+    async deleteUser() {
       return null;
-    }
+    },
 
-    async function linkAccount(
-      userId: string,
-      providerId: string,
-      providerType: string,
-      providerAccountId: string,
-      refreshToken: string,
-      accessToken: string,
-      accessTokenExpires: Date
-    ) {
+    async linkAccount(account: Account) {
       // already linked, you don't have to do a thing
-      console.log('linkAccount', {
-        userId,
-        providerId,
-        providerType,
-        providerAccountId,
-        refreshToken,
-        accessToken,
-        accessTokenExpires,
-      });
-      return Promise.resolve(true);
-    }
+      console.log('linkAccount', account);
+    },
 
-    async function unlinkAccount(
-      userId: string,
-      providerId: string,
-      providerAccountId: string
-    ) {
-      console.log('unlinkAccount', { userId, providerId, providerAccountId });
-      return null;
-    }
+    async unlinkAccount(account: Account) {
+      console.log('unlinkAccount', account);
+    },
 
     /* Only for username / password */
 
-    async function getUserByCredentials(credentials: any) {
+    async getUserByCredentials(credentials: any) {
       console.log('getUserByCredentials', credentials);
       return null;
-    }
+    },
 
     /* for when not using JWTs */
 
-    async function createSession(user: User) {
-      console.log('createSession', user);
-      return null;
-    }
+    async createSession(session: any) {
+      console.log('createSession', session);
+      return session;
+    },
 
-    async function getSession() {
+    async getSession() {
       return null;
-    }
+    },
 
-    async function updateSession(session: any, force: boolean) {
-      console.log('updateSession', { session, force });
+    async getSessionAndUser(sessionToken: string) {
+      console.log('getSessionAndUser', sessionToken);
       return null;
-    }
+    },
 
-    async function deleteSession(sessionToken: string) {
+    async updateSession(session: any) {
+      console.log('updateSession', { session });
+      return null;
+    },
+
+    async deleteSession(sessionToken: string) {
       console.log('deleteSession', sessionToken);
       return null;
-    }
+    },
 
     /* e-mail / passwordless verification request  */
 
-    async function createVerificationRequest(
-      identifier: string,
-      url: string,
-      token: string,
-      secret: string,
-      provider: EmailConfig
+    async createVerificationToken(
+      verification: VerificationRequest & { expires: Date }
     ) {
+      const { identifier, expires, token } = verification;
+      const data = await tables();
       const hashedToken = hashToken(token);
 
       const newVerificationRequest = {
-        id: hashToken(`${identifier}:${hashedToken}:${secret}`),
+        id: hashToken(`${identifier}:${hashedToken}`),
         identifier,
         token: hashedToken,
-        expires:
-          timestamp() +
-          Number(process.env.DECI_VERIFICATION_EXPIRES_SECONDS || 86400),
+        expires: Math.round(expires.getTime() / 1000),
       };
 
       await data.verificationrequests.put(newVerificationRequest);
+      return verification;
+    },
 
-      await provider.sendVerificationRequest({
-        identifier,
-        url,
-        token,
-        baseUrl: appOptions.baseUrl,
-        provider,
-      });
-    }
-
-    async function getVerificationRequest(
-      identifier: string,
-      token: string,
-      secret: string
-    ): Promise<VerificationRequestRecord | undefined> {
+    async useVerificationToken(verification: VerificationRequest) {
+      const { identifier, token } = verification;
+      const data = await tables();
       const hashedToken = hashToken(token);
-      const id = hashToken(`${identifier}:${hashedToken}:${secret}`);
-      return data.verificationrequests.get({ id });
-    }
+      const id = hashToken(`${identifier}:${hashedToken}`);
+      const verificationRequest = await data.verificationrequests.get({ id });
+      if (verificationRequest) {
+        await data.verificationrequests.delete({ id });
+        const expirationDate = new Date(verificationRequest.expires * 1000);
+        return {
+          ...verificationRequest,
+          expires: expirationDate,
+        };
+      }
+      return null;
+    },
 
-    async function deleteVerificationRequest(
+    async deleteVerificationRequest(
       identifier: string,
       token: string,
-      secret: string
+      secret2: string
     ) {
+      const data = await tables();
       const hashedToken = hashToken(token);
-      const id = hashToken(`${identifier}:${hashedToken}:${secret}`);
+      const id = hashToken(`${identifier}:${hashedToken}:${secret2}`);
       await data.verificationrequests.delete({ id });
-    }
-
-    function hashToken(token: string): string {
-      return createHash('sha256')
-        .update(`${token}${secretOption}`)
-        .digest('hex');
-    }
-
-    return {
-      createUser,
-      getUser,
-      getUserByEmail,
-      getUserByProviderAccountId,
-      getUserByCredentials,
-      updateUser,
-      deleteUser,
-      linkAccount,
-      unlinkAccount,
-      createSession,
-      getSession,
-      updateSession,
-      deleteSession,
-      createVerificationRequest,
-      getVerificationRequest,
-      deleteVerificationRequest,
-    };
-  }
-
-  return {
-    getAdapter,
-  };
-}
+    },
+  } as unknown as Adapter;
+};

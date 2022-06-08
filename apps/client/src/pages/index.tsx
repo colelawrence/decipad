@@ -2,7 +2,7 @@
 import { ApolloProvider } from '@apollo/client';
 import { ChakraProvider } from '@chakra-ui/react';
 import { GlobalStyles, theme, ToastDisplay } from '@decipad/ui';
-import { Provider as AuthProvider, useSession } from 'next-auth/client';
+import { SessionProvider } from 'next-auth/react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { FC } from 'react';
@@ -34,7 +34,6 @@ if (inBrowser && process.env.NEXT_PUBLIC_HOTJAR_SITE_ID) {
 
 const Index = ({ pageProps = {} }: AppProps): ReturnType<FC> => {
   const apolloClient = useApollo(pageProps);
-  const [session] = useSession();
 
   return (
     <>
@@ -55,7 +54,7 @@ const Index = ({ pageProps = {} }: AppProps): ReturnType<FC> => {
       <ClientEventsAnalytics>
         <ToastDisplay>
           <DndProvider backend={HTML5Backend}>
-            <AuthProvider session={session ?? undefined}>
+            <SessionProvider>
               <IdentifyUserAnalytics>
                 <ApolloProvider client={apolloClient}>
                   <GlobalStyles>
@@ -67,7 +66,7 @@ const Index = ({ pageProps = {} }: AppProps): ReturnType<FC> => {
                   </GlobalStyles>
                 </ApolloProvider>
               </IdentifyUserAnalytics>
-            </AuthProvider>
+            </SessionProvider>
           </DndProvider>
         </ToastDisplay>
       </ClientEventsAnalytics>

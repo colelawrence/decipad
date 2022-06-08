@@ -1,7 +1,7 @@
 import { ID, GraphqlContext } from '@decipad/backendtypes';
 import assert from 'assert';
 import { UserInputError, ForbiddenError } from 'apollo-server-lambda';
-import NextAuthJWT, { JWTEncodeParams } from 'next-auth/jwt';
+import { encode, JWTEncodeParams } from 'next-auth/jwt';
 import { tokenize as tokenizeCookies } from 'simple-cookie';
 import tables from '@decipad/tables';
 import { jwt as jwtConf } from '@decipad/services/authentication';
@@ -12,7 +12,7 @@ async function generateToken(
   userSecret: string,
   options: Partial<JWTEncodeParams>
 ) {
-  return NextAuthJWT.encode({
+  return encode({
     ...jwtConf,
     token: { accessToken: userSecret },
     ...options,

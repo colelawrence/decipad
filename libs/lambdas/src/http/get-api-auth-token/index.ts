@@ -5,7 +5,7 @@ import {
   jwt as jwtConf,
 } from '@decipad/services/authentication';
 import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
-import NextAuthJWT from 'next-auth/jwt';
+import { encode } from 'next-auth/jwt';
 import handle from '../handle';
 
 interface DefaultJWT extends Record<string, unknown> {
@@ -71,7 +71,7 @@ async function generateToken(
   secret: string,
   options: Partial<JWTEncodeParams>
 ): Promise<string> {
-  return NextAuthJWT.encode({
+  return encode({
     ...jwtConf,
     token: { accessToken: secret },
     ...options,

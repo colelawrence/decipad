@@ -83,8 +83,6 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.JWT_MAX_AGE);
     case 'JWT_SECRET':
       return valueOrDefault(name, process.env.JWT_SECRET);
-    case 'JWT_SIGNING_PRIVATE_KEY':
-      return valueOrDefault(name, process.env.JWT_SIGNING_PRIVATE_KEY);
     case 'NEXTAUTH_URL':
       return valueOrDefault(name, process.env.NEXTAUTH_URL);
     case 'SENTRY_DSN':
@@ -138,17 +136,7 @@ export function auth() {
     inviteExpirationSeconds: Number(env('DECI_INVITE_EXPIRATION_SECONDS')),
     jwt: {
       secret: env('JWT_SECRET'),
-      signingKey: Buffer.from(
-        env('JWT_SIGNING_PRIVATE_KEY'),
-        'base64'
-      ).toString(),
       maxAge: Number(env('JWT_MAX_AGE')),
-    },
-    providers: {
-      github: {
-        clientId: env('GITHUB_CLIENT_ID'),
-        clientSecret: env('GITHUB_CLIENT_SECRET'),
-      },
     },
   };
 }
