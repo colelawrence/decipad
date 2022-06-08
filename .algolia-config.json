@@ -5,7 +5,7 @@
   "selectors": {
     "default": {
       "lvl0": {
-        "selector": "nav.menu .active",
+        "selector": "nav.menu a[aria-expanded=true]",
         "global": true,
         "default_value": "Quick Start"
       },
