@@ -6,7 +6,8 @@ import {
   PermissionType,
 } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
-import { Resource } from './';
+import { getDefined } from '@decipad/utils';
+import { Resource } from '.';
 import by from './utils/by';
 
 export interface UserAccess {
@@ -31,9 +32,9 @@ export interface SecretAccess {
 }
 
 export interface Access {
-  roles: RoleAccess[];
-  users: UserAccess[];
-  secrets: SecretAccess[];
+  roles?: RoleAccess[];
+  users?: UserAccess[];
+  secrets?: SecretAccess[];
 }
 
 export type AccessFunction<RecordT extends ConcreteRecord> = (
@@ -50,7 +51,7 @@ export function access<
 >(
   resourceType: Resource<RecordT, GraphqlT, CreateT, UpdateT>
 ): AccessFunction<RecordT> {
-  return async function (parent: RecordT): Promise<Access> {
+  return async (parent: RecordT): Promise<Access> => {
     const resource = `/${resourceType.resourceTypeName}/${parent.id}`;
     const data = await tables();
     const permissions = (
@@ -86,10 +87,10 @@ export function access<
     const secretAccesses = permissions
       .filter(
         (p) =>
-          p.user_id === 'null' && p.role_id === 'null' && p.secret != 'null'
+          p.user_id === 'null' && p.role_id === 'null' && p.secret !== 'null'
       )
       .map((p) => ({
-        secret: p.secret!,
+        secret: getDefined(p.secret),
         permission: p.type,
         canComment: p.can_comment,
         createdAt: p.createdAt,

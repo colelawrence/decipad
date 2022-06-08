@@ -29,8 +29,8 @@ export interface GetPadById_getPadById_access_secrets {
 
 export interface GetPadById_getPadById_access {
   __typename: 'PadAccess';
-  users: GetPadById_getPadById_access_users[];
-  secrets: GetPadById_getPadById_access_secrets[];
+  users: GetPadById_getPadById_access_users[] | null;
+  secrets: GetPadById_getPadById_access_secrets[] | null;
 }
 
 export interface GetPadById_getPadById_workspace {
@@ -43,10 +43,11 @@ export interface GetPadById_getPadById {
   __typename: 'Pad';
   id: string;
   name: string;
-  myPermissionType: PermissionType;
+  myPermissionType: PermissionType | null;
   icon: string | null;
+  isPublic: boolean | null;
   access: GetPadById_getPadById_access;
-  workspace: GetPadById_getPadById_workspace;
+  workspace: GetPadById_getPadById_workspace | null;
 }
 
 export interface GetPadById {

@@ -45,6 +45,9 @@
     },
     {
       "path": "../../libs/docsync"
+    },
+    {
+      "path": "../../libs/utils"
     }
   ]
 }

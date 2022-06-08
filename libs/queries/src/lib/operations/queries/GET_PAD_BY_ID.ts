@@ -13,6 +13,7 @@ export const GET_PAD_BY_ID = gql`
       name
       myPermissionType
       icon
+      isPublic
       access {
         users {
           user {

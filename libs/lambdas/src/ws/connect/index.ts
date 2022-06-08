@@ -16,9 +16,6 @@ export const handler = wrapHandler(async function ws(
 ): Promise<HttpResponse> {
   try {
     const authResult = (await authenticate(event)).filter(isValidAuthResult);
-    if (!authResult.length) {
-      throw Boom.unauthorized();
-    }
 
     const connId = event.requestContext.connectionId;
     const qs = getDefined(event.queryStringParameters);
@@ -43,6 +40,7 @@ export const handler = wrapHandler(async function ws(
   } catch (err) {
     const e = boomify(err as Error);
     console.error('Error on connect:', e);
+    console.error('headers:', event.headers);
     return {
       statusCode: e.output.statusCode,
     };

@@ -61,8 +61,8 @@ export type NotebookTopbarProps = Pick<
   'usersWithAccess'
 > &
   ComponentProps<typeof NotebookSharingPopUp> & {
-    permission: PermissionType;
-    workspace: { id: string; name: string };
+    permission?: PermissionType | null;
+    workspace?: { id: string; name: string } | null;
     onDuplicateNotebook?: () => void;
     onRevertChanges?: () => void;
     hasLocalChanges?: BehaviorSubject<boolean>;
@@ -93,7 +93,7 @@ export const NotebookTopbar = ({
     <div css={wrapperStyles}>
       {/* Left side */}
       <div css={leftSideStyles}>
-        {isWriter && (
+        {isWriter && workspace && (
           <div css={{ width: '32px', display: 'grid' }}>
             <IconButton
               href={workspaces({}).workspace({ workspaceId: workspace.id }).$}

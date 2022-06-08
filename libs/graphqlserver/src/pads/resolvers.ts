@@ -18,10 +18,6 @@ import {
   importDoc,
 } from '@decipad/services/pads';
 import { subscribe } from '@decipad/services/pubsub';
-import {
-  ensurePrivateWorkspaceForUser,
-  ensurePublicWorkspaceForUser,
-} from '@decipad/services/workspaces';
 import tables from '@decipad/tables';
 import { getDefined, identity } from '@decipad/utils';
 import { UserInputError } from 'apollo-server-lambda';
@@ -167,13 +163,15 @@ const resolvers = {
       context: GraphqlContext
     ): Promise<Pad> {
       const resource = `/pads/${id}`;
-      await isAuthenticatedAndAuthorized(resource, context, 'READ');
-
       const data = await tables();
       const previousPad = await data.pads.get({ id });
 
       if (!previousPad) {
         throw new UserInputError('No such pad');
+      }
+
+      if (!previousPad.isPublic) {
+        await isAuthenticatedAndAuthorized(resource, context, 'READ');
       }
 
       previousPad.name = `Copy of ${previousPad.name}`;
@@ -212,13 +210,7 @@ const resolvers = {
       if (!pad) {
         throw new UserInputError('No such pad');
       }
-      const user = requireUser(context);
-      const targetWorkspace = await (isPublic
-        ? ensurePublicWorkspaceForUser(user)
-        : ensurePrivateWorkspaceForUser(user));
-
       pad.isPublic = isPublic;
-      pad.workspace_id = targetWorkspace.id;
       await data.pads.put(pad);
       return pad;
     },
@@ -262,7 +254,21 @@ const resolvers = {
 
   Pad: {
     access: padResource.access,
-    myPermissionType: padResource.myPermissionType,
+    myPermissionType: async (
+      parent: PadRecord,
+      params: unknown,
+      context: GraphqlContext
+    ) => {
+      const permissionType = await padResource.myPermissionType(
+        parent,
+        params,
+        context
+      );
+      if (permissionType == null && parent.isPublic) {
+        return 'READ';
+      }
+      return permissionType;
+    },
 
     async workspace(pad: PadRecord): Promise<WorkspaceRecord | undefined> {
       const data = await tables();

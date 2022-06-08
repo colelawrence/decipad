@@ -46,7 +46,7 @@ const tooltipRoleStyles = css({
 });
 
 export interface NotebookAvatarsProps {
-  usersWithAccess: NotebookAvatar[];
+  usersWithAccess?: NotebookAvatar[] | null;
 }
 
 export const NotebookAvatars = ({
@@ -54,7 +54,7 @@ export const NotebookAvatars = ({
 }: NotebookAvatarsProps): ReturnType<FC> => {
   return (
     <div css={avatarsWrapperStyles}>
-      {usersWithAccess.map((avatar) => (
+      {usersWithAccess?.map((avatar) => (
         <Tooltip
           key={avatar.user.id}
           trigger={

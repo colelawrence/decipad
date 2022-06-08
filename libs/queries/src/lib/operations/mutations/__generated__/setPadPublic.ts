@@ -4,21 +4,20 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: DuplicatePad
+// GraphQL mutation operation: setPadPublic
 // ====================================================
 
-export interface DuplicatePad_duplicatePad {
+export interface setPadPublic_setPadPublic {
   __typename: 'Pad';
   id: string;
-  name: string;
+  isPublic: boolean | null;
 }
 
-export interface DuplicatePad {
-  duplicatePad: DuplicatePad_duplicatePad;
+export interface setPadPublic {
+  setPadPublic: setPadPublic_setPadPublic;
 }
 
-export interface DuplicatePadVariables {
+export interface setPadPublicVariables {
   id: string;
-  targetWorkspace: string;
-  document?: string | null;
+  isPublic: boolean;
 }

@@ -41,9 +41,7 @@ export function Router(): ReturnType<FC> {
         </Switch>
       </Route>
       <Route path={notebooks.template + notebooks({}).notebook.template}>
-        <RequireSession allowSecret>
-          <NotebookRoute />
-        </RequireSession>
+        <NotebookRoute />
       </Route>
       <Route exact path={playground.template}>
         <RouteEvents category="playground">

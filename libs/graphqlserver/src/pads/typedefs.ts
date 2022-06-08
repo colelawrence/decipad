@@ -13,17 +13,17 @@ export default gql`
     canComment: Boolean!
   }
   type PadAccess {
-    roles: [RoleAccess!]!
-    users: [UserAccess!]!
-    secrets: [SecretAccess!]!
+    roles: [RoleAccess!]
+    users: [UserAccess!]
+    secrets: [SecretAccess!]
   }
 
   type Pad {
     id: ID!
     name: String!
     access: PadAccess!
-    myPermissionType: PermissionType!
-    workspace: Workspace!
+    myPermissionType: PermissionType
+    workspace: Workspace
     createdAt: DateTime
     isPublic: Boolean
     icon: String
@@ -51,7 +51,7 @@ export default gql`
     createPad(workspaceId: ID!, pad: PadInput!): Pad!
     updatePad(id: ID!, pad: PadInput!): Pad!
     removePad(id: ID!): Boolean
-    duplicatePad(id: ID!, targetWorkspace: ID, document: String): Pad!
+    duplicatePad(id: ID!, targetWorkspace: ID!, document: String): Pad!
     importPad(workspaceId: ID!, source: String!): Pad!
 
     setPadPublic(id: ID!, isPublic: Boolean!): Pad!

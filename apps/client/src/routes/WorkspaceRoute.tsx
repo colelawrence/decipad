@@ -95,7 +95,7 @@ export function WorkspaceRoute(): ReturnType<FC> {
 
   const handleDuplicateNotebook = (id: string) =>
     duplicatePad({
-      variables: { id },
+      variables: { id, targetWorkspace: workspaceId },
       refetchQueries: ['GetWorkspaceById'],
       awaitRefetchQueries: true,
     })

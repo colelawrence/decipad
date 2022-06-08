@@ -2,7 +2,7 @@ import { gql, MutationTuple, useMutation } from '@apollo/client';
 import { DuplicatePad, DuplicatePadVariables } from '..';
 
 export const DUPLICATE_PAD = gql`
-  mutation DuplicatePad($id: ID!, $targetWorkspace: ID, $document: String) {
+  mutation DuplicatePad($id: ID!, $targetWorkspace: ID!, $document: String) {
     duplicatePad(
       id: $id
       targetWorkspace: $targetWorkspace
@@ -17,7 +17,7 @@ export const DUPLICATE_PAD = gql`
 export const useDuplicateNotebook = (
   notebookId: string,
   targetWorkspaceId: string,
-  secret: string
+  secret?: string
 ): MutationTuple<DuplicatePad, DuplicatePadVariables> =>
   useMutation<DuplicatePad, DuplicatePadVariables>(DUPLICATE_PAD, {
     variables: {

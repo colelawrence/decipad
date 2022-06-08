@@ -54,7 +54,7 @@ export async function authenticateOneToken({
   token: string;
   gotFromSecProtocolHeader?: boolean;
 }): Promise<AuthResult> {
-  if (await secretExists(token)) {
+  if (token === 'guest' || (await secretExists(token))) {
     return {
       secret: token,
       user: undefined,

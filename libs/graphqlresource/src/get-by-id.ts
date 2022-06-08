@@ -6,10 +6,10 @@ import {
   GraphqlObjectType,
 } from '@decipad/backendtypes';
 import { expectAuthenticatedAndAuthorized } from './authorization';
-import { Resource } from './';
+import { Resource } from '.';
 
 export type GetByIdFunction<GraphqlT extends GraphqlObjectType> = (
-  _: any,
+  _: unknown,
   { id }: { id: ID },
   context: GraphqlContext
 ) => Promise<GraphqlT>;
@@ -22,14 +22,15 @@ export function getById<
 >(
   resource: Resource<RecordT, GraphqlT, CreateT, UpdateT>
 ): GetByIdFunction<GraphqlT> {
-  return async function (_: any, args, context: GraphqlContext) {
+  return async (_: unknown, args, context: GraphqlContext) => {
     const { id } = args;
     const data = await resource.dataTable();
     const record = await data.get({ id });
-    if (record == undefined) {
+    if (record == null) {
       throw new UserInputError(`No such ${resource.humanName}`);
     }
-    if (!resource.isPublic?.(record)) {
+    console.log('record', record);
+    if (!resource.isPublic || !resource.isPublic(record)) {
       await expectAuthenticatedAndAuthorized(
         `/${resource.resourceTypeName}/${id}`,
         context,

@@ -93,8 +93,8 @@ test('public and private pads', (ctx) => {
     expect(pad).toMatchObject({
       isPublic: true,
       workspace: {
-        name: `Test's Public Workspace`,
-        isPublic: true,
+        name: 'Workspace 1',
+        isPublic: false,
       },
     });
   });

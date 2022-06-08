@@ -12,6 +12,7 @@ import {
   useGetWorkspaces,
   useShareNotebookWithSecret,
   useUnshareNotebookWithSecret,
+  useSetNotebookPublic,
 } from '@decipad/queries';
 import {
   notebooks,
@@ -32,6 +33,7 @@ import { Notebook } from '@decipad/notebook';
 import { serializeDocument } from '@decipad/editor-utils';
 import { DocSyncEditor } from '@decipad/docsync';
 import { MyEditor } from '@decipad/editor-types';
+import { getDefined } from '@decipad/utils';
 import { parseIconColorFromIdentifier } from '../lib/parseIconColorFromIdentifier';
 import { GlobalErrorHandler } from '../components/GlobalErrorHandler';
 
@@ -51,11 +53,6 @@ export const NotebookRoute = (): ReturnType<FC> => {
 
   const toast = useToast();
 
-  // State
-  const [sharingSecret, setSharingSecret] = useState('');
-  const [icon, setIcon] = useState<Icon>('Rocket');
-  const [iconColor, setIconColor] = useState<IconColor>('Catskill');
-
   // Queries
   const { notebook, notebookLoading, readOnly } = useGetNotebookById(
     notebookId,
@@ -65,11 +62,17 @@ export const NotebookRoute = (): ReturnType<FC> => {
   const { data: { workspaces } = {}, refetch: fetchWorkspaces } =
     useGetWorkspaces();
 
+  // State
+  const [sharingSecret, setSharingSecret] = useState('');
+  const [isPublic, setIsPublic] = useState(notebook?.isPublic || false);
+  const [icon, setIcon] = useState<Icon>('Rocket');
+  const [iconColor, setIconColor] = useState<IconColor>('Catskill');
+
   // Mutations
-  const [unshareNotebook] = useUnshareNotebookWithSecret(
+  const [unshareNotebookwithSecret] = useUnshareNotebookWithSecret(
     notebookId,
-    notebook && notebook?.access.secrets.length > 0
-      ? notebook?.access.secrets[0].secret
+    notebook && (notebook?.access?.secrets?.length || 0) > 0
+      ? getDefined(notebook?.access?.secrets?.[0]).secret
       : ''
   );
   const [shareNotebook] = useShareNotebookWithSecret(
@@ -79,8 +82,13 @@ export const NotebookRoute = (): ReturnType<FC> => {
 
   const [duplicateNotebook] = useDuplicateNotebook(
     notebook?.id || '',
-    notebook?.workspace.id || '',
+    notebook?.workspace?.id || '',
     secret || ''
+  );
+
+  const [setNotebookPublic] = useSetNotebookPublic(
+    notebook?.id || '',
+    isPublic
   );
 
   const [updateNotebookIcon] = useMutation<
@@ -115,8 +123,14 @@ export const NotebookRoute = (): ReturnType<FC> => {
 
   // Set the share toggle button to be active if the notebook has secrets
   useEffect(() => {
-    if (notebook && notebook.access.secrets.length > 0) {
-      setSharingSecret(notebook.access.secrets[0].secret);
+    if (
+      notebook &&
+      (notebook.access?.secrets?.length || 0) > 0 &&
+      notebook.myPermissionType !== 'READ'
+    ) {
+      if (getDefined(notebook.access?.secrets?.[0]).secret) {
+        setSharingSecret(getDefined(notebook.access?.secrets?.[0]).secret);
+      }
     } else {
       setSharingSecret('');
     }
@@ -129,16 +143,34 @@ export const NotebookRoute = (): ReturnType<FC> => {
       setIcon(newIcon as Icon);
       setIconColor(newIconColor as IconColor);
     }
+
+    if (notebook && notebook.isPublic) {
+      setIsPublic(notebook.isPublic);
+    }
   }, [notebook]);
 
-  const onShareToggleClick = useCallback(async () => {
+  const onSecretShareToggleClick = useCallback(async () => {
     if (sharingSecret) {
-      unshareNotebook();
+      unshareNotebookwithSecret();
       setSharingSecret('');
     } else {
       await shareNotebook();
     }
-  }, [shareNotebook, sharingSecret, unshareNotebook]);
+  }, [shareNotebook, sharingSecret, unshareNotebookwithSecret]);
+
+  const onToggleMakePublic = useCallback((is: boolean) => {
+    setIsPublic(is);
+  }, []);
+
+  useEffect(() => {
+    if (
+      notebook != null &&
+      notebook.isPublic !== isPublic &&
+      notebook.myPermissionType !== 'READ'
+    ) {
+      setNotebookPublic();
+    }
+  }, [isPublic, notebook, setNotebookPublic]);
 
   const onDuplicateNotebook = useCallback(async () => {
     const [firstWorkspace] =
@@ -219,10 +251,12 @@ export const NotebookRoute = (): ReturnType<FC> => {
               <NotebookTopbar
                 workspace={notebook.workspace}
                 notebook={notebook}
-                usersWithAccess={notebook.access.users}
+                usersWithAccess={notebook.access?.users}
                 permission={notebook.myPermissionType}
                 sharingSecret={sharingSecret}
-                onToggleShare={onShareToggleClick}
+                onToggleSecretShare={onSecretShareToggleClick}
+                onToggleMakePublic={onToggleMakePublic}
+                isPublic={notebook.isPublic || undefined}
                 onDuplicateNotebook={onDuplicateNotebook}
                 hasLocalChanges={docsync?.hasLocalChanges()}
                 onRevertChanges={onRevertChanges}

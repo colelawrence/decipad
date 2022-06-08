@@ -38,10 +38,23 @@ export async function onConnect(
   auth: AuthResult[]
 ): Promise<void> {
   try {
-    const authorizationTypes = (
-      await Promise.all(auth.map(authorizedForResource(resource)))
-    ).filter(Boolean) as PermissionType[];
-    if (authorizationTypes.length < 1) {
+    let permissionTypes: PermissionType[];
+    if (
+      !auth.length &&
+      (await isAuthorized({
+        resource,
+        user: undefined,
+        secret: undefined,
+        minimumPermissionType: 'READ',
+      }))
+    ) {
+      permissionTypes = ['READ'];
+    } else {
+      permissionTypes = (
+        await Promise.all(auth.map(authorizedForResource(resource)))
+      ).filter(Boolean) as PermissionType[];
+    }
+    if (permissionTypes.length < 1) {
       throw Boom.unauthorized();
     }
 
@@ -50,7 +63,7 @@ export async function onConnect(
       id: connId,
       user_id: userFromAny(auth)?.id,
       room: resource,
-      authorizationType: maximumPermissionIn(authorizationTypes),
+      authorizationType: maximumPermissionIn(permissionTypes),
       secret: secretFromAny(auth),
     });
 

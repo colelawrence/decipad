@@ -63,9 +63,7 @@ export const handler = handle(
         return firstCompleteCredential.secret;
       }
     }
-    return {
-      statusCode: 403,
-    };
+    return 'guest';
   }
 );
 

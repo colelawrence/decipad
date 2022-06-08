@@ -1119,8 +1119,24 @@
                 "name": "targetWorkspace",
                 "description": null,
                 "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "document",
+                "description": null,
+                "type": {
                   "kind": "SCALAR",
-                  "name": "ID",
+                  "name": "String",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -2691,13 +2707,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "ENUM",
-                "name": "PermissionType",
-                "ofType": null
-              }
+              "kind": "ENUM",
+              "name": "PermissionType",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -2707,13 +2719,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "Workspace",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "Workspace",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -3657,19 +3665,15 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
+              "kind": "LIST",
               "name": null,
               "ofType": {
-                "kind": "LIST",
+                "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "RoleAccess",
-                    "ofType": null
-                  }
+                  "kind": "OBJECT",
+                  "name": "RoleAccess",
+                  "ofType": null
                 }
               }
             },
@@ -3681,19 +3685,15 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
+              "kind": "LIST",
               "name": null,
               "ofType": {
-                "kind": "LIST",
+                "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "UserAccess",
-                    "ofType": null
-                  }
+                  "kind": "OBJECT",
+                  "name": "UserAccess",
+                  "ofType": null
                 }
               }
             },
@@ -3705,19 +3705,15 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
+              "kind": "LIST",
               "name": null,
               "ofType": {
-                "kind": "LIST",
+                "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "SecretAccess",
-                    "ofType": null
-                  }
+                  "kind": "OBJECT",
+                  "name": "SecretAccess",
+                  "ofType": null
                 }
               }
             },
@@ -5814,13 +5810,13 @@
       },
       {
         "name": "specifiedBy",
-        "description": "Exposes a URL that specifies the behavior of this scalar.",
+        "description": "Exposes a URL that specifies the behaviour of this scalar.",
         "isRepeatable": false,
         "locations": ["SCALAR"],
         "args": [
           {
             "name": "url",
-            "description": "The URL that specifies the behavior of this scalar.",
+            "description": "The URL that specifies the behaviour of this scalar.",
             "type": {
               "kind": "NON_NULL",
               "name": null,

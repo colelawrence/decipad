@@ -66,6 +66,7 @@ describe('notebook load json', () => {
     const linkSelector = 'text=//n/Everything-everywhere-all-at-once/';
     await page.click('text=share');
     await page.click('[aria-checked="false"]');
+
     await page.waitForSelector(linkSelector);
 
     sharedNotebookLink = await page.innerText(linkSelector);

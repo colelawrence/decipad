@@ -55,6 +55,19 @@ export async function isAuthorized({
       ).Items
     : [];
 
+  if (
+    !userPermissions.length &&
+    !secretPermissions.length &&
+    resource.match(/^\/pads\/.*/)
+  ) {
+    // shortcut for when pad is public
+    const padId = resource.split('/')[2];
+    const pad = await data.pads.get({ id: padId });
+    if (pad?.isPublic && minimumPermissionType === 'READ') {
+      return 'READ';
+    }
+  }
+
   const verify = hasMinimumPermission(minimumPermissionType);
   const allUserPermissions = [...userPermissions, ...secretPermissions];
   return verify(allUserPermissions);

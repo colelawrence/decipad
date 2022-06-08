@@ -1,4 +1,3 @@
-import { ForbiddenError } from 'apollo-server-lambda';
 import {
   GraphqlContext,
   ConcreteRecord,
@@ -7,7 +6,7 @@ import {
   PermissionType,
 } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
-import { Resource } from './';
+import { Resource } from '.';
 
 export type MyPermissionTypeFunction<RecordT extends ConcreteRecord> = (
   parent: RecordT,
@@ -23,19 +22,16 @@ export function myPermissionType<
 >(
   resourceType: Resource<RecordT, GraphqlT, CreateT, UpdateT>
 ): MyPermissionTypeFunction<RecordT> {
-  return async function (
+  return async (
     parent: RecordT,
     _: unknown,
     context: GraphqlContext
-  ): Promise<PermissionType | undefined> {
+  ): Promise<PermissionType | undefined> => {
     const resource = `/${resourceType.resourceTypeName}/${parent.id}`;
     const data = await tables();
-    const user = context.user;
+    const { user } = context;
     const secret =
       context.event.headers.authorization?.match(/^Bearer (.+)$/)?.[1];
-    if (!user && !secret) {
-      throw new ForbiddenError('Forbidden');
-    }
     const FilterExpression = [
       user ? 'user_id = :user_id' : '',
       secret ? 'secret = :secret' : '',
@@ -52,16 +48,19 @@ export function myPermissionType<
       ExpressionAttributeValues[':secret'] = secret;
     }
 
-    const permissions = (
-      await data.permissions.query({
-        IndexName: 'byResource',
-        KeyConditionExpression: 'resource_uri = :resource_uri',
-        FilterExpression,
-        ExpressionAttributeValues,
-      })
-    ).Items;
+    if (user || secret) {
+      const permissions = (
+        await data.permissions.query({
+          IndexName: 'byResource',
+          KeyConditionExpression: 'resource_uri = :resource_uri',
+          FilterExpression,
+          ExpressionAttributeValues,
+        })
+      ).Items;
 
-    return maximumPermissionType(permissions);
+      return maximumPermissionType(permissions);
+    }
+    return undefined;
   };
 }
 

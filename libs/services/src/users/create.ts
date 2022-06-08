@@ -92,13 +92,6 @@ export async function create(user: UserInput): Promise<UserCreationResult> {
     workspaceName,
     newUser
   );
-  await createWorkspace(
-    {
-      name: publicWorkspaceNameFor(newUser),
-      isPublic: true,
-    },
-    newUser
-  );
 
   return {
     user: newUser,
