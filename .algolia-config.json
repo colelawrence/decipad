@@ -5,7 +5,7 @@
   "selectors": {
     "default": {
       "lvl0": {
-        "selector": "#navmenu .active",
+        "selector": "nav.menu .active",
         "global": true,
         "default_value": "Quick Start"
       },
