@@ -25,6 +25,11 @@ describe('notebook input', () => {
   });
 
   it('can retrieve the value of an interactive input', async () => {
+    const addInput = page.locator('button:has-text("Add")');
+    await addInput.hover({ force: true });
+    await addInput.click();
+    await keyPress('Enter');
+    await keyPress('ArrowDown');
     await page.keyboard.type('That foo is %Foo% .');
     await keyPress('Enter');
     const elem = await page.textContent('text=1,337');
