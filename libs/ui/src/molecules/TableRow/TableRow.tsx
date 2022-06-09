@@ -47,7 +47,7 @@ export const TableRow = ({
     >
       {children}
       {!readOnly && (
-        <TableData as="td">
+        <TableData contentEditable={false} as="td">
           <button css={buttonStyles} onClick={onRemove}>
             <span css={iconWrapperStyles}>
               <Minus />

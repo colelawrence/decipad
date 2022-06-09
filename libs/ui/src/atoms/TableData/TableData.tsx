@@ -63,6 +63,7 @@ const grabbingStyles = css({
 export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {
   as?: ElementType;
   isEditable?: boolean;
+  contentEditable?: boolean;
   attributes?: PlateComponentAttributes;
   showPlaceholder?: boolean;
   grabbing?: boolean;
@@ -72,6 +73,7 @@ export const TableData = ({
   as = 'div',
   className,
   isEditable = false,
+  contentEditable,
   attributes,
   children,
   showPlaceholder = true,
@@ -82,6 +84,7 @@ export const TableData = ({
   return jsx(
     as,
     {
+      contentEditable,
       ...(attributes || {}),
       css: [
         isEditable && editableStyles,
