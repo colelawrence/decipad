@@ -55,6 +55,7 @@ export async function createCalculationBlockBelow(decilang: string) {
 
   const { length: numCodeElements } = await page.$$('[contenteditable] code');
 
+  await page.waitForTimeout(100);
   await page.keyboard.type('=');
 
   await waitForExpect(
