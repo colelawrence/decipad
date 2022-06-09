@@ -6,6 +6,7 @@ const configs = {
     // Public API key: it is safe to commit it
     apiKey: 'db6e12842f8c0c9dded465872fe17d54',
     indexName: 'docs.dev.decipad.com',
+    searchParameters: {},
   },
   'docs.alpha.decipad.com': {
     appId: 'T5O5EB5YRE',
