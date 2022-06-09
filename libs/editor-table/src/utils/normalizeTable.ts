@@ -14,7 +14,10 @@ import {
   TableVariableNameElement,
   TableColumnFormulaElement,
 } from '@decipad/editor-types';
-import { normalizeIdentifierElement } from '@decipad/editor-utils';
+import {
+  normalizeIdentifierElement,
+  isElementOfType,
+} from '@decipad/editor-utils';
 import {
   ChildOf,
   deleteText,
@@ -109,7 +112,24 @@ const normalizeTableCaption = (
   for (const [captionChildIndex, captionChild] of enumerate(
     getChildren(caption)
   )) {
-    if (isText(captionChild[0])) {
+    const [captionChildNode, captionChildPath] = captionChild;
+    if (
+      captionChildIndex === 0 &&
+      isElement(captionChildNode) &&
+      !isElementOfType(captionChildNode, ELEMENT_TABLE_VARIABLE_NAME)
+    ) {
+      insertNodes(
+        editor,
+        {
+          type: ELEMENT_TABLE_VARIABLE_NAME,
+          children: [{ text: '' }],
+        } as TableVariableNameElement,
+        { at: [...caption[1], 0] }
+      );
+      return true;
+    }
+
+    if (isText(captionChildNode)) {
       wrapNodes<TableVariableNameElement | TableColumnFormulaElement>(
         editor,
         {
@@ -118,9 +138,9 @@ const normalizeTableCaption = (
             captionChildIndex === 0
               ? ELEMENT_TABLE_VARIABLE_NAME
               : ELEMENT_TABLE_COLUMN_FORMULA,
-          children: [captionChild[0]],
+          children: [captionChildNode],
         } as TableVariableNameElement,
-        { at: captionChild[1] }
+        { at: captionChildPath }
       );
       return true;
     }

@@ -70,7 +70,6 @@ export const plugins = (computer: Computer) =>
       createLayoutColumnsPlugin(),
 
       // structure enforcement
-      createNodeIdPlugin({ options: { idCreator: nanoid } }),
       createNormalizeEditorPlugin(),
       createNormalizeVoidPlugin(),
       createNormalizeRichTextBlockPlugin(),
@@ -83,6 +82,7 @@ export const plugins = (computer: Computer) =>
       createNormalizeTextPlugin(),
       createTrailingBlockPlugin({ type: ELEMENT_PARAGRAPH }),
       createNormalizeColumnsPlugin(),
+      createNodeIdPlugin({ options: { idCreator: nanoid } }),
 
       // block manipulation
       createExitBreakPlugin({ options: exitBreakOptions }),

@@ -70,8 +70,6 @@ export const createTablePlugin = (
   plugins: [
     createPreventEnterToCreateCellPlugin(),
     createPreventDeleteTableFromCaptionPlugin(),
-    createNormalizeTablesPlugin(),
-    createNormalizeTableFormulaCellsPlugin(),
     createDecorateTableCellUnitsPlugin(),
     createArrowCellNavigationPlugin(),
     createCursorFocusPlugin(),
@@ -79,8 +77,10 @@ export const createTablePlugin = (
     // createExtraColumnPlaceholderPlugin(),
     // TODO: enable this
     // createExtraRowPlaceholderPlugin(),
-    createNormalizeTableFormulaPlugin(),
     createCellFormulaShortcutPlugin(),
+    createNormalizeTableFormulaPlugin(),
+    createNormalizeTableFormulaCellsPlugin(),
+    createNormalizeTablesPlugin(),
     {
       key: ELEMENT_TABLE_CAPTION,
       isElement: true,

@@ -1,0 +1,123 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Compensation"
+            }
+          ],
+          "type": "table-caption"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Name"
+                }
+              ],
+              "type": "th",
+              "cellType": {
+                "kind": "string"
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "Base"
+                }
+              ],
+              "type": "th",
+              "cellType": {
+                "kind": "number",
+                "unit": {
+                  "type": "units",
+                  "args": [
+                    {
+                      "unit": "gbp",
+                      "exp": {
+                        "s": "1",
+                        "n": "1",
+                        "d": "1"
+                      },
+                      "multiplier": {
+                        "s": "1",
+                        "n": "1",
+                        "d": "1"
+                      },
+                      "known": true
+                    },
+                    {
+                      "unit": "years",
+                      "exp": {
+                        "s": "-1",
+                        "n": "1",
+                        "d": "1"
+                      },
+                      "multiplier": {
+                        "s": "1",
+                        "n": "1",
+                        "d": "1"
+                      },
+                      "known": true
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "Equity"
+                }
+              ],
+              "type": "th",
+              "cellType": {
+                "kind": "number",
+                "unit": {
+                  "type": "units",
+                  "args": [
+                    {
+                      "unit": "options",
+                      "exp": {
+                        "s": "1",
+                        "n": "1",
+                        "d": "1"
+                      },
+                      "multiplier": {
+                        "s": "1",
+                        "n": "1",
+                        "d": "1"
+                      },
+                      "known": false
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "EquityValue"
+                }
+              ],
+              "id": "O6Zn_72P5z3gasIK8q3JD",
+              "type": "th",
+              "cellType": {
+                "kind": "table-formula",
+                "source": "Equity * SharePrice"
+              }
+            }
+          ],
+          "type": "tr"
+        }
+      ],
+      "type": "table",
+      "id": "MPJ31zwvTcjxj8yuTmH-n",
+      "color": "Sun",
+      "icon": "ShoppingCart"
+    }
+  ]
+}

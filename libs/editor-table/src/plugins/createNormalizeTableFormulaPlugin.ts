@@ -6,7 +6,6 @@ import {
   TableHeaderElement,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
-import { enumerate } from '@decipad/utils';
 import { hasNode, insertNodes, deleteText } from '@udecode/plate';
 
 export const createNormalizeTableFormulaPlugin = createNormalizerPluginFactory({
@@ -30,12 +29,13 @@ export const createNormalizeTableFormulaPlugin = createNormalizerPluginFactory({
 
     // insert missing formulas
 
-    for (const [index, header] of enumerate(headersWithFormulas)) {
+    for (const header of headersWithFormulas) {
       const captionChildIndex = caption.children.findIndex(
         (el) =>
           el.type === ELEMENT_TABLE_COLUMN_FORMULA && el.columnId === header.id
       );
       if (captionChildIndex < 0) {
+        const insertPath = [...path, 0, caption.children.length];
         insertNodes(
           editor,
           {
@@ -43,7 +43,7 @@ export const createNormalizeTableFormulaPlugin = createNormalizerPluginFactory({
             columnId: header.id,
             children: [{ text: '' }],
           } as TableColumnFormulaElement,
-          { at: [...path, 0, index + 1] }
+          { at: insertPath }
         );
         return true;
       }
