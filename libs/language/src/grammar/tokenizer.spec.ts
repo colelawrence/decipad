@@ -62,6 +62,12 @@ it('does not crash when it sees an invalid token in date mode', () => {
   );
 });
 
+it('regression: does not crash with multiple line strings', () => {
+  expect(testTokenizer('"hello\nworld"')).toMatchInlineSnapshot(
+    `"error(\\"hello<newline>world\\")"`
+  );
+});
+
 describe('extended tokenizer', () => {
   it('finds statement-ending lines', () => {
     expect(testTokenizer('1\n+\n1')).toMatchInlineSnapshot(

@@ -92,7 +92,9 @@ export const tokenRules = {
     string: {
       // Adding control characters to comply with https://json.org
       /* eslint-disable-next-line no-control-regex */
-      match: regexHack('"(?:\\\\["bfnrt/\\\\]|\\\\u[a-fA-F0-9]{4}|[^"\\\\])*"'),
+      match: regexHack(
+        '"(?:\\\\["bfnrt/\\\\]|\\\\u[a-fA-F0-9]{4}|[^\n"\\\\])*"'
+      ),
       value: (validJsonString: string) => JSON.parse(validJsonString),
     },
     // Moo crashes by default, but we can give it an error token to return us
