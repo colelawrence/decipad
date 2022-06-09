@@ -1,6 +1,8 @@
 {
   "index_name": "docs.dev.decipad.com",
-  "start_urls": ["https://dev.decipad.com/docs"],
+  "start_urls": [
+    "https://dev.decipad.com/docs/quick-start/get-started-with-decipad"
+  ],
   "selectors": {
     "default": {
       "lvl0": {
