@@ -26,6 +26,7 @@ export type SerializedType =
   | SerializedTypes.Range
 
   // Oddball
+  | SerializedTypes.Nothing // No-op
   | SerializedTypes.Function
   | SerializedTypes.TypeError;
 

@@ -20,6 +20,7 @@ type CodeResultComponentType<T extends SerializedTypeKind> = (
 const DefaultResult: CodeResultComponentType<SerializedTypeKind> = ({
   value,
 }) => <span>{String(value ?? '')}</span>;
+const NothingResult: CodeResultComponentType<'nothing'> = () => null;
 const FunctionResult: CodeResultComponentType<'function'> = () => (
   <span>ƒ</span>
 );
@@ -71,6 +72,10 @@ const getResultMatchers = (): ResultMatcher[] => [
   {
     component: InlineRowResult,
     match: ({ type, variant }) => type.kind === 'row' && variant === 'inline',
+  },
+  {
+    component: NothingResult,
+    match: ({ type }) => type.kind === 'nothing',
   },
   {
     component: FunctionResult,

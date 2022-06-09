@@ -8,8 +8,16 @@ mockConsoleError();
 it('renders given items in a group', () => {
   render(
     <AutoCompleteMenuGroup title="group">
-      <AutoCompleteMenuItem kind="variable" identifier="ThisIsAVariable" />
-      <AutoCompleteMenuItem kind="variable" identifier="ThisIsAnother" />
+      <AutoCompleteMenuItem
+        kind="variable"
+        type="number"
+        identifier="ThisIsAVariable"
+      />
+      <AutoCompleteMenuItem
+        kind="variable"
+        type="number"
+        identifier="ThisIsAnother"
+      />
     </AutoCompleteMenuGroup>
   );
   expect(screen.getByRole('group')).toHaveTextContent(

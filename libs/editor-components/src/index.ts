@@ -7,3 +7,4 @@ export * from './slash-commands';
 export * from './text';
 export * from './layout';
 export * from './BlockErrorBoundary';
+export * from './AutoCompleteMenu';

@@ -23,6 +23,7 @@ export const Normal: Story<typeof args> = ({ numberOfItems, ...props }) => (
         <AutoCompleteMenuItem
           key={i}
           kind="variable"
+          type="number"
           identifier={`MyVariable${i}`}
         />
       ))}

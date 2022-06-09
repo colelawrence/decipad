@@ -30,8 +30,8 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
 
   const { id: lineId } = element;
   const line = useResult(lineId);
-
   const lineResult = line?.results[0];
+
   const statement = computer.getStatement(lineId, 0);
   const syntaxError = getSyntaxError(line);
 

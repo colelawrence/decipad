@@ -1,4 +1,5 @@
 import { TRange, getAboveNode, getNodeString } from '@udecode/plate';
+import { isEnabled } from '@decipad/feature-flags';
 import {
   MyDecorate,
   MyElement,
@@ -10,14 +11,16 @@ import {
   MyNodeEntry,
   MyEditor,
   MyDecorateEntry,
+  DECORATE_AUTO_COMPLETE_MENU,
 } from '@decipad/editor-types';
-import { Range } from 'slate';
+import { Path, Range } from 'slate';
 import { Computer } from '@decipad/computer';
 import { getVariableRanges } from './getVariableRanges';
 import { getSyntaxErrorRanges } from './getSyntaxErrorRanges';
 import { isElementOfType } from './isElementOfType';
+import { findWordStart, nextIsWordChar } from './autoComplete';
 
-export const decorateTextSyntax =
+export const decorateCode =
   (computer: Computer, elementType: MyElement['type']): MyDecorate =>
   (editor: MyEditor): MyDecorateEntry => {
     const syntaxErrorDecorations = ([node, path]: MyElementEntry): TRange[] => {
@@ -41,6 +44,31 @@ export const decorateTextSyntax =
       );
     };
 
+    const autoCompleteMenuDecoration = ([node, path]: MyNodeEntry): Range[] => {
+      const { selection } = editor;
+
+      if (
+        isEnabled('AUTO_COMPLETE_MENU') &&
+        // Slate seems to have an issue with decorators on empty lines so we're skipping them.
+        getNodeString(node).length > 0 &&
+        selection?.focus?.path &&
+        Path.isCommon(path, selection.focus.path) &&
+        !nextIsWordChar(editor, selection.focus)
+      ) {
+        const { start } = findWordStart(editor, selection.focus);
+
+        const r = [
+          {
+            anchor: start,
+            focus: start,
+            [DECORATE_AUTO_COMPLETE_MENU]: true,
+          },
+        ];
+        return r;
+      }
+      return [];
+    };
+
     const decorate = (entry: MyElementEntry): Range[] => {
       const [node, path] = entry;
       if (node.type !== elementType) {
@@ -57,9 +85,9 @@ export const decorateTextSyntax =
         }
       }
 
-      const decorations: TRange[] = syntaxErrorDecorations(entry).concat(
-        variableDecorations(nodeId, entry)
-      );
+      const decorations: TRange[] = syntaxErrorDecorations(entry)
+        .concat(variableDecorations(nodeId, entry))
+        .concat(autoCompleteMenuDecoration(entry));
 
       return decorations;
     };

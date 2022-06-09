@@ -31,6 +31,9 @@ export async function evaluate(
   node: AST.Statement
 ): Promise<Value> {
   switch (node.type) {
+    case 'noop': {
+      return UnknownValue;
+    }
     case 'literal': {
       switch (node.args[0]) {
         case 'number': {

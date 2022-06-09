@@ -7,6 +7,13 @@ export interface Pos {
   char: number;
 }
 
+export interface Noop {
+  type: 'noop';
+  args: [];
+  start?: Pos;
+  end?: Pos;
+}
+
 export interface Def {
   type: 'def';
   args: [varName: string];
@@ -282,6 +289,7 @@ export interface Block {
 }
 
 export type Expression =
+  | Noop
   | FunctionCall
   | Ref
   | ExternalRef
@@ -320,6 +328,7 @@ export type Node =
   | TableSpread;
 
 export interface TypeToNode {
+  noop: Noop;
   directive: Directive;
   def: Def;
   tablepartialdef: TablePartialDef;

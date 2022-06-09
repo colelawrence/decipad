@@ -87,6 +87,9 @@ function validate(
         getArray(value as Interpreter.ResultRow)
       ).every(([type, value]) => validate(type, value));
     }
+    case 'nothing': {
+      return getTrue(value == null || value === Unknown, 'expected no value');
+    }
     case 'function': {
       return getTrue(value == null || value === Unknown, 'expected no value');
     }

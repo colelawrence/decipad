@@ -10,7 +10,7 @@ import {
   MyWithOverride,
 } from '@decipad/editor-types';
 import { Computer } from '@decipad/computer';
-import { decorateTextSyntax } from '@decipad/editor-utils';
+import { decorateCode } from '@decipad/editor-utils';
 import { isEnabled } from '@decipad/feature-flags';
 import { TablePlugin, withTable } from '@udecode/plate';
 import {
@@ -128,7 +128,7 @@ export const createTablePlugin = (
       key: ELEMENT_TABLE_COLUMN_FORMULA,
       isElement: true,
       component: TableColumnFormula,
-      decorate: decorateTextSyntax(computer, ELEMENT_TABLE_COLUMN_FORMULA),
+      decorate: decorateCode(computer, ELEMENT_TABLE_COLUMN_FORMULA),
     },
   ],
 });

@@ -58,6 +58,9 @@ export const inferExpression = wrap(
   // eslint-disable-next-line consistent-return
   async (ctx: Context, expr: AST.Expression): Promise<Type> => {
     switch (expr.type) {
+      case 'noop': {
+        return t.nothing();
+      }
       case 'ref': {
         const name = getIdentifierString(expr);
         if (isPreviousRef(name)) {

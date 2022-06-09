@@ -8,6 +8,7 @@
   "references": [
     { "path": "../computer" },
     { "path": "../editor-types" },
+    { "path": "../feature-flags" },
     { "path": "../react-contexts" }
   ]
 }

@@ -6,6 +6,7 @@ const args = {
   title: 'Title',
   kind: 'variable',
   identifier: 'MyVariable',
+  type: 'number',
 };
 
 export default {

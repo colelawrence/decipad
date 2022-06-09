@@ -55,6 +55,8 @@ export function serializeType(type: Type): SerializedType {
     return { kind: 'date', date: type.date };
   } else if (type.rangeOf) {
     return { kind: 'range', rangeOf: serializeType(type.rangeOf) };
+  } else if (type.nothingness) {
+    return { kind: 'nothing' };
   } else if (type.functionness) {
     return { kind: 'function' };
   } else if (type.errorCause) {
@@ -110,6 +112,8 @@ export function deserializeType(type: SerializedType): Type {
         type.rowCellTypes.map((t) => deserializeType(t)),
         type.rowCellNames
       );
+    case 'nothing':
+      return t.nothing();
     case 'function':
       return t.functionPlaceholder();
     case 'type-error':

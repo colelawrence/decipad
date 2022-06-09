@@ -30,5 +30,6 @@ export type Date = Readonly<{ kind: 'date'; date: Time.Specificity }>;
 export type Range = Readonly<{ kind: 'range'; rangeOf: SerializedType }>;
 
 // Oddball
+export type Nothing = Readonly<{ kind: 'nothing' }>; // No-op
 export type Function = Readonly<{ kind: 'function' }>;
 export type TypeError = Readonly<{ kind: 'type-error'; errorCause: ErrSpec }>;

@@ -1,4 +1,5 @@
 export type Flag =
+  | 'AUTO_COMPLETE_MENU'
   | 'FORMULA_COLUMNS'
   | 'INPUT_COPY'
   | 'PERSISTENT_EXAMPLE'

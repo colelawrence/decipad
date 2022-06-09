@@ -131,6 +131,7 @@ describe('caching', () => {
           "block-AB/0 -> 0",
           "block-AB/1 -> 1",
           "block-C/0 -> 11",
+          "block-D/0 -> undefined",
         ]
       `);
   });
@@ -159,6 +160,7 @@ describe('caching', () => {
     ).toMatchInlineSnapshot(`
       Array [
         "block-0/0 -> 1",
+        "block-1/0 -> undefined",
         "block-2/0 -> 3",
       ]
     `);
@@ -171,6 +173,7 @@ describe('caching', () => {
     ).toMatchInlineSnapshot(`
       Array [
         "block-0/0 -> 1",
+        "block-1/0 -> undefined",
         "block-2/0 -> 3",
         "block-3/0 -> 1",
       ]

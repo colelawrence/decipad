@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { useWindowListener } from '@decipad/react-utils';
 import { FC, useCallback } from 'react';
 import { noop } from '@decipad/utils';
-import { Text } from '../../icons';
+import { Calendar, Formula, Number, Table, Text } from '../../icons';
 import { setCssVar, cssVar, p14Medium, teal600 } from '../../primitives';
 
 const styles = css({
@@ -32,6 +32,7 @@ const textStyles = css({
 interface AutoCompleteMenuItemProps {
   readonly kind: string;
   readonly identifier: string;
+  readonly type: string;
 
   /**
    * Unfortunately, we cannot use real browser focus for this menu since we need the editor to stay focused.
@@ -43,6 +44,7 @@ interface AutoCompleteMenuItemProps {
 export const AutoCompleteMenuItem = ({
   identifier,
   focused,
+  type,
   onExecute = noop,
 }: AutoCompleteMenuItemProps): ReturnType<FC> => {
   const onKeyDown = useCallback(
@@ -73,7 +75,13 @@ export const AutoCompleteMenuItem = ({
       data-focused={focused}
     >
       <span css={iconStyles}>
-        <Text />
+        {{
+          number: <Number />,
+          string: <Text />,
+          date: <Calendar />,
+          table: <Table />,
+          function: <Formula />,
+        }[type] || <Number />}
       </span>
       <div css={textStyles}>
         <strong css={css(p14Medium)}>{identifier}</strong>

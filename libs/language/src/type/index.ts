@@ -79,6 +79,9 @@ export class Type {
   // Functions are impossible types with functionness = true
   functionness = false;
 
+  // Set to true when no data will be present. Used for empty blocks
+  nothingness = false;
+
   // Return the first type that has an error, or the last one.
   static combine(initialType: Type, ...types: CombineArg[]): Type {
     let lastNonErrorType = initialType;

@@ -20,7 +20,7 @@ const itemsStyles = css({
 });
 
 interface AutoCompleteMenuGroupProps {
-  readonly title: string;
+  readonly title?: string;
   readonly children?: ReactNode;
 }
 export const AutoCompleteMenuGroup = ({
@@ -29,7 +29,7 @@ export const AutoCompleteMenuGroup = ({
 }: AutoCompleteMenuGroupProps): ReturnType<FC> => {
   return (
     <div css={styles} role="group">
-      <div css={titleStyles}>{title}</div>
+      {title && <div css={titleStyles}>{title}</div>}
       <div css={itemsStyles}>
         {Children.map(children, (child) => {
           if (child == null) {

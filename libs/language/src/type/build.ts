@@ -112,6 +112,11 @@ export const functionPlaceholder = () =>
     fType.functionness = true;
   });
 
+export const nothing = () =>
+  produce(new Type(), (fType) => {
+    fType.nothingness = true;
+  });
+
 export const impossible = (
   errorCause: string | InferError,
   inNode: AST.Node | null = null

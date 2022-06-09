@@ -8,6 +8,7 @@ import { AutoCompleteMenuItem } from './AutoCompleteMenuItem';
 const props: ComponentProps<typeof AutoCompleteMenuItem> = {
   kind: 'variable',
   identifier: 'MyVariable',
+  type: 'number',
 };
 
 mockConsoleWarn();

@@ -5,6 +5,7 @@ import { AutoCompleteMenu } from './AutoCompleteMenu';
 const identifiers = ['OneVar', 'OtherVar', 'AnotherVar'].map((n) => ({
   kind: 'variable' as const,
   identifier: n,
+  type: 'number',
 }));
 
 it('renders menuitems triggering different commands', async () => {
@@ -24,13 +25,23 @@ it('renders menuitems triggering different commands', async () => {
   );
 });
 
+it('first item is pre-selected', async () => {
+  const handleExecute = jest.fn();
+  render(
+    <AutoCompleteMenu onExecuteItem={handleExecute} identifiers={identifiers} />
+  );
+
+  await userEvent.keyboard('{enter}');
+  expect(handleExecute).toHaveBeenCalledTimes(1);
+});
+
 it('focuses menuitems using the arrow keys', async () => {
   const handleExecute = jest.fn();
   render(
     <AutoCompleteMenu onExecuteItem={handleExecute} identifiers={identifiers} />
   );
 
-  await userEvent.keyboard('{arrowdown}{enter}');
+  await userEvent.keyboard('{enter}');
   expect(handleExecute).toHaveBeenCalledTimes(1);
 
   await userEvent.keyboard('{arrowdown}{enter}');
@@ -67,6 +78,45 @@ describe('search', () => {
     expect(getByText(/OneVar/)).toBeInTheDocument();
   });
 
+  it('updates pre-selected first option', async () => {
+    const handleExecute = jest.fn();
+    const { rerender, getAllByRole } = render(
+      <AutoCompleteMenu
+        identifiers={identifiers}
+        search="O"
+        onExecuteItem={handleExecute}
+      />
+    );
+    expect(getAllByRole('menuitem')).toHaveLength(3);
+    expect(getAllByRole('menuitem')[0].textContent).toMatchInlineSnapshot(
+      `"NumberOneVar"`
+    );
+
+    rerender(
+      <AutoCompleteMenu
+        identifiers={identifiers}
+        search="Other"
+        onExecuteItem={handleExecute}
+      />
+    );
+    expect(getAllByRole('menuitem')).toHaveLength(2);
+    expect(getAllByRole('menuitem')[0].textContent).toMatchInlineSnapshot(
+      `"NumberOtherVar"`
+    );
+
+    rerender(
+      <AutoCompleteMenu
+        identifiers={identifiers}
+        search="O"
+        onExecuteItem={handleExecute}
+      />
+    );
+    expect(getAllByRole('menuitem')).toHaveLength(3);
+    expect(getAllByRole('menuitem')[0].textContent).toMatchInlineSnapshot(
+      `"NumberOneVar"`
+    );
+  });
+
   it('affects arrow key selection', async () => {
     const handleExecute = jest.fn();
     const { getAllByRole } = render(
@@ -89,26 +139,5 @@ describe('search', () => {
     const [[secondCommand]] = handleExecute.mock.calls;
 
     expect(secondCommand).toEqual(firstCommand);
-  });
-
-  it('resets the selection when changing', async () => {
-    const handleExecute = jest.fn();
-    const { rerender } = render(
-      <AutoCompleteMenu
-        identifiers={identifiers}
-        onExecuteItem={handleExecute}
-      />
-    );
-
-    await userEvent.keyboard('{arrowdown}');
-    rerender(
-      <AutoCompleteMenu
-        identifiers={identifiers}
-        onExecuteItem={handleExecute}
-        search="a"
-      />
-    );
-    await userEvent.keyboard('{enter}');
-    expect(handleExecute).not.toHaveBeenCalled();
   });
 });

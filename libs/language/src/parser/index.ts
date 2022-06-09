@@ -14,7 +14,7 @@ export function parseBlock({
   const ensureId = (block: AST.Block) => ({ ...block, id });
 
   if (source.trim() === '') {
-    return { id, solutions: [ensureId(n('block'))], errors: [] };
+    return { id, solutions: [ensureId(n('block', n('noop')))], errors: [] };
   } else {
     const bracketError = validateBrackets(source);
     if (bracketError) {

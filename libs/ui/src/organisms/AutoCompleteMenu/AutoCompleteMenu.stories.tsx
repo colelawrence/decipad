@@ -1,16 +1,16 @@
 import { Meta, Story } from '@storybook/react';
-import { AutoCompleteMenu } from './AutoCompleteMenu';
+import { AutoCompleteMenu, AutoCompleteMenuProps } from './AutoCompleteMenu';
 
-const args = {
+const args: AutoCompleteMenuProps = {
   search: '',
   identifiers: [
-    { kind: 'variable' as const, identifier: 'ThisIsAVar' },
-    { kind: 'variable' as const, identifier: 'ThisIsAnotherVar' },
-    { kind: 'variable' as const, identifier: 'Another' },
-    { kind: 'variable' as const, identifier: 'OneMore' },
-    { kind: 'variable' as const, identifier: 'Enough' },
-    { kind: 'variable' as const, identifier: 'NoMore' },
-    { kind: 'variable' as const, identifier: 'Hidden' },
+    { kind: 'variable', type: 'number', identifier: 'ThisIsAVar' },
+    { kind: 'variable', type: 'number', identifier: 'ThisIsAnotherVar' },
+    { kind: 'variable', type: 'number', identifier: 'Another' },
+    { kind: 'variable', type: 'number', identifier: 'OneMore' },
+    { kind: 'variable', type: 'number', identifier: 'Enough' },
+    { kind: 'variable', type: 'number', identifier: 'NoMore' },
+    { kind: 'variable', type: 'number', identifier: 'Hidden' },
   ],
 };
 

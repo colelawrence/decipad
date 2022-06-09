@@ -20,6 +20,7 @@ import {
   createNormalizePlainTextBlockPlugin,
   createNormalizeRichTextBlockPlugin,
   createNormalizeTextPlugin,
+  createAutoCompleteMenuPlugin,
   createNormalizeVoidPlugin,
   createPlotPlugin,
   createOperationsBlackboxPlugin,
@@ -101,6 +102,7 @@ export const plugins = (computer: Computer) =>
 
       // code editing
       createCodeVariableHighlightPlugin(),
+      createAutoCompleteMenuPlugin(),
       createSyntaxErrorHighlightPlugin(),
       createAutoPairsPlugin(),
 

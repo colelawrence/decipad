@@ -57,17 +57,19 @@ export async function createCalculationBlockBelow(decilang: string) {
 
   await page.keyboard.type('=');
 
-  await waitForExpect(async () =>
-    expect(await page.$$('[contenteditable] code')).toHaveLength(
-      numCodeElements + 1
-    )
+  await waitForExpect(
+    async () =>
+      expect(await page.$$('[contenteditable] code')).toHaveLength(
+        numCodeElements + 1
+      ),
+    10_000
   );
 
   await page.keyboard.type(decilang);
 
   await waitForExpect(async () => {
     const lastCode = await page.$('[contenteditable] code >> nth=-1');
-    expect(await lastCode?.textContent()).toEqual(decilang);
+    expect((await lastCode?.textContent())?.includes(decilang)).toBeTruthy();
   });
 }
 
