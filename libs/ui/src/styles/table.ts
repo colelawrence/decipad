@@ -4,6 +4,8 @@ import { isTabularType } from '../utils';
 
 export const buttonColumnWidth = '44px';
 
+export const tableControlWidth = '20px';
+
 export const thMinHeight = '32px';
 export const thMinWidth = '269px';
 export const tdMinHeight = '36px';
@@ -31,4 +33,6 @@ export const rowTemplate = (
   numberOfColumns: number,
   readOnly: boolean
 ): string =>
-  `auto / repeat(${numberOfColumns}, 1fr) ${readOnly ? '' : buttonColumnWidth}`;
+  `auto / ${tableControlWidth} repeat(${numberOfColumns}, 1fr) ${
+    readOnly ? '' : buttonColumnWidth
+  }`;

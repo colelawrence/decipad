@@ -14,7 +14,7 @@ import { blockAlignment, editorLayout } from '../../styles';
 const handleAndMenuReservedSpace = 172;
 const totalSpaceWithGap = handleAndMenuReservedSpace + editorLayout.gutterGap;
 
-const draggingOpacity: Opacity = 0.4;
+export const draggingOpacity: Opacity = 0.4;
 
 const blockWrapperStyle = css({ position: 'relative' });
 const dropLineStyle = css({ position: 'absolute', width: '100%' });

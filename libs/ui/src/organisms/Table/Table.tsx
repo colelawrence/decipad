@@ -4,6 +4,7 @@ import { ConnectDropTarget } from 'react-dnd';
 import { cssVar } from '../../primitives';
 import { tableRowCounter } from '../../utils';
 import { slimBlockWidth } from '../../styles/editor-layout';
+import { tableControlWidth } from '../../styles/table';
 
 const border = `1px solid ${cssVar('strongHighlightColor')}`;
 const borderRadius = '6px';
@@ -29,15 +30,15 @@ const wideTableStyles = css({
 // Top border and border-radius, applied to table headers if they exist or to the first table row.
 // Bottom border-radius, applied to the last table row, whether it's inside the tfoot or tbody.
 const borderRadiusStyles = css({
-  '> thead > tr > th:first-of-type, > tbody:not(thead + tbody) > tr:first-of-type > td:first-of-type':
+  '> thead > tr > th:nth-of-type(2), > tbody:not(thead + tbody) > tr:nth-of-type(2) > td:nth-of-type(2)':
     {
       borderTopLeftRadius: borderRadius,
     },
-  '> thead > tr > th:last-of-type, > tbody:not(thead + tbody) > tr:first-of-type > td:last-of-type':
+  '> thead > tr > th:last-of-type, > tbody:not(thead + tbody) > tr:nth-of-type(2) > td:last-of-type':
     {
       borderTopRightRadius: borderRadius,
     },
-  '> :last-child > tr:last-of-type > td:first-of-type': {
+  '> :last-child > tr:last-of-type > td:nth-of-type(2)': {
     borderBottomLeftRadius: borderRadius,
   },
   '> :last-child > tr:last-of-type > td:last-of-type': {
@@ -61,10 +62,10 @@ const allBorderStyles = css(innerBorderStyles, {
     borderRight: border,
     borderBottom: border,
   },
-  '> thead > tr > th, > tbody:not(thead + tbody) > tr:first-of-type > td': {
+  '> thead > tr > th, > tbody:not(thead + tbody) > tr:nth-of-type(2) > td': {
     borderTop: border,
   },
-  '> thead > tr > th:first-of-type, > tbody > tr > td:first-of-type, > tfoot > tr > td:first-of-type':
+  '> thead > tr > th:nth-of-type(2), > tbody > tr > td:nth-of-type(1), > tfoot > tr > td:nth-of-type(1)':
     {
       borderLeft: border,
     },
@@ -76,6 +77,10 @@ const hiddenSelectionStyles = css({
   },
 });
 
+const translateStyles = css({
+  transform: `translateX(-${tableControlWidth})`,
+});
+
 type Border = 'all' | 'inner';
 export type TableWidth = 'SLIM' | 'WIDE';
 
@@ -85,6 +90,7 @@ interface TableProps {
   readonly dropRef?: ConnectDropTarget;
   readonly tableWidth?: TableWidth;
   readonly isSelectingCell?: boolean;
+  readonly translateX?: boolean;
 }
 
 export const Table = ({
@@ -93,6 +99,7 @@ export const Table = ({
   dropRef,
   tableWidth,
   isSelectingCell,
+  translateX,
 }: TableProps): ReturnType<FC> => (
   <table
     ref={dropRef}
@@ -102,6 +109,7 @@ export const Table = ({
       b === 'inner' && innerBorderStyles,
       tableWidth === 'WIDE' && wideTableStyles,
       isSelectingCell && hiddenSelectionStyles,
+      translateX && translateStyles,
     ]}
   >
     {children}

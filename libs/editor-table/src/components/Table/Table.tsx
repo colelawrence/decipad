@@ -8,8 +8,10 @@ import {
   assertElementType,
   useElementMutatorCallback,
 } from '@decipad/editor-utils';
-import { organisms, AvailableSwatchColor, UserIconKey } from '@decipad/ui';
+import { AvailableSwatchColor, organisms, UserIconKey } from '@decipad/ui';
 import { useMemo, useState } from 'react';
+import { selectedCellsAtom, withProviders } from '@udecode/plate';
+import { Provider, useAtom } from 'jotai';
 import { WIDE_MIN_COL_COUNT } from '../../constants';
 import {
   EditorTableContext,
@@ -18,7 +20,12 @@ import {
 import { useTableActions } from '../../hooks';
 import { useSelectedCells } from './useSelectedCells';
 
-export const Table: PlateComponent = ({ attributes, children, element }) => {
+export const tableScope = Symbol('table');
+
+export const Table: PlateComponent = withProviders([
+  Provider,
+  { scope: tableScope },
+])(({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_TABLE);
   const [deleted, setDeleted] = useState(false);
   const editor = useTEditorState();
@@ -27,6 +34,7 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
   const saveColor = useElementMutatorCallback(editor, element, 'color');
 
   const { onDelete, onAddRow } = useTableActions(editor, element);
+  const [selectedCells] = useAtom(selectedCellsAtom, tableScope);
 
   useSelectedCells();
 
@@ -69,6 +77,7 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
               onAddRow={onAddRow}
               columns={columns}
               tableWidth={wideTable ? 'WIDE' : 'SLIM'}
+              isSelectingCell={!!selectedCells}
             >
               {children}
             </organisms.EditorTable>
@@ -77,4 +86,4 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
       )}
     </div>
   );
-};
+});

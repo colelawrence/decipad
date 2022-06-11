@@ -13,9 +13,15 @@ it('renders a table', async () => {
 
   const headers = getAllByRole('columnheader');
   const cells = getAllByRole('cell');
-  expect(headers).toHaveLength(2);
+  expect(headers).toHaveLength(5);
   expect(cells).toHaveLength(4);
-  [...headers, ...cells].forEach((element) => expect(element).toBeVisible());
+
+  const th = headers.slice(0, 3);
+  const thControls = headers.slice(3, -1);
+
+  th.forEach((element) => expect(element).toBeVisible());
+  thControls.forEach((element) => expect(element).not.toBeVisible());
+  cells.forEach((element) => expect(element).toBeVisible());
 });
 
 it('render side padding on cells with non-tabular content', async () => {

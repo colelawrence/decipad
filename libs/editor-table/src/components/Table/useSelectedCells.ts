@@ -8,13 +8,17 @@ import { useAtom } from 'jotai';
 import { useEffect } from 'react';
 import { dequal } from 'dequal';
 import { isEnabled } from '@decipad/feature-flags';
+import { tableScope } from './Table';
 
 export const useSelectedCells = () => {
   const readOnly = useReadOnly();
   const selected = useSelected();
   const editor = useEditorRef();
 
-  const [selectedCells, setSelectedCells] = useAtom(selectedCellsAtom);
+  const [selectedCells, setSelectedCells] = useAtom(
+    selectedCellsAtom,
+    tableScope
+  );
 
   useEffect(() => {
     if (!selected || readOnly) setSelectedCells(null);

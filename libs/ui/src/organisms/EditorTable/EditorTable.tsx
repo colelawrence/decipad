@@ -3,8 +3,6 @@ import type { TableColumn } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import { Children, FC, ReactNode } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
-import { useAtom } from 'jotai';
-import { selectedCellsAtom } from '@udecode/plate';
 import { Table } from '..';
 import { AddTableRowButton } from '../../molecules';
 import { editorLayout } from '../../styles';
@@ -15,6 +13,7 @@ import {
 } from '../../utils';
 import { TableWidth } from '../Table/Table';
 import { smallestDesktop } from '../../primitives';
+import { tableControlWidth } from '../../styles/table';
 
 const halfSlimBlockWidth = `${Math.round(editorLayout.slimBlockWidth / 2)}px`;
 const totalWidth = '100vw';
@@ -51,6 +50,7 @@ const tableCaptionWrapperStyles = css({
 });
 
 const tableWrapperStyles = css({
+  transform: `translateX(-${tableControlWidth})`,
   width: 'min-content',
   minWidth: editorLayout.slimBlockWidth,
   maxWidth: restWidthBlock,
@@ -78,6 +78,7 @@ interface EditorTableProps {
   readonly dropRef?: ConnectDropTarget;
   readonly onAddRow?: () => void;
   readonly tableWidth?: TableWidth;
+  readonly isSelectingCell?: boolean;
 }
 
 export const EditorTable: FC<EditorTableProps> = ({
@@ -88,11 +89,11 @@ export const EditorTable: FC<EditorTableProps> = ({
   icon,
   color,
   tableWidth,
+  isSelectingCell,
   onChangeIcon = noop,
   onChangeColor = noop,
 }: EditorTableProps): ReturnType<FC> => {
   const [caption, thead, ...tbody] = Children.toArray(children);
-  const [selectedCells] = useAtom(selectedCellsAtom);
 
   return (
     <TableStyleContext.Provider
@@ -110,7 +111,7 @@ export const EditorTable: FC<EditorTableProps> = ({
             <Table
               dropRef={dropRef}
               tableWidth={tableWidth}
-              isSelectingCell={!!selectedCells}
+              isSelectingCell={isSelectingCell}
             >
               <thead>{thead}</thead>
               <tbody>{tbody}</tbody>

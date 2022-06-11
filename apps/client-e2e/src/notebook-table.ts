@@ -31,13 +31,13 @@ describe('notebook table', () => {
     await writeInTable('3', 3);
 
     const row1 = await page
-      .locator('table > tbody > tr:nth-child(1) > td:nth-child(1)')
+      .locator('table > tbody > tr:nth-child(1) > td:nth-child(2)')
       .textContent();
     const row2 = await page
-      .locator('table > tbody > tr:nth-child(2) > td:nth-child(1)')
+      .locator('table > tbody > tr:nth-child(2) > td:nth-child(2)')
       .textContent();
     const row3 = await page
-      .locator('table > tbody > tr:nth-child(3) > td:nth-child(1)')
+      .locator('table > tbody > tr:nth-child(3) > td:nth-child(2)')
       .textContent();
 
     expect(row1).toBe('1');
@@ -50,10 +50,10 @@ describe('notebook table', () => {
     await delete3?.click();
 
     const row1 = await page
-      .locator('table > tbody > tr:nth-child(1) > td:nth-child(1)')
+      .locator('table > tbody > tr:nth-child(1) > td:nth-child(2)')
       .textContent();
     const row2 = await page
-      .locator('table > tbody > tr:nth-child(2) > td:nth-child(1)')
+      .locator('table > tbody > tr:nth-child(2) > td:nth-child(2)')
       .textContent();
 
     expect(row1).toBe('1');
@@ -64,12 +64,12 @@ describe('notebook table', () => {
     await page.click('text=CreateAdd row');
     await page.waitForTimeout(2000);
     await page
-      .locator('table > tbody > tr:nth-child(3) > td:nth-child(1)')
+      .locator('table > tbody > tr:nth-child(3) > td:nth-child(2)')
       .click();
     await writeInTable('7', 3, 0);
 
     const row3 = await page
-      .locator('table > tbody > tr:nth-child(3) > td:nth-child(1)')
+      .locator('table > tbody > tr:nth-child(3) > td:nth-child(2)')
       .textContent();
 
     expect(row3).toBe('7');
@@ -85,13 +85,13 @@ describe('notebook table', () => {
     await writeInTable('2020-03-01', 3, 1);
 
     const row1 = await page
-      .locator('table > tbody > tr:nth-child(1) > td:nth-child(2)')
+      .locator('table > tbody > tr:nth-child(1) > td:nth-child(3)')
       .textContent();
     const row2 = await page
-      .locator('table > tbody > tr:nth-child(2) > td:nth-child(2)')
+      .locator('table > tbody > tr:nth-child(2) > td:nth-child(3)')
       .textContent();
     const row3 = await page
-      .locator('table > tbody > tr:nth-child(3) > td:nth-child(2)')
+      .locator('table > tbody > tr:nth-child(3) > td:nth-child(3)')
       .textContent();
 
     expect(row1).toBe('2020-01-01');
@@ -100,7 +100,7 @@ describe('notebook table', () => {
   });
 
   it('can change column type to a formula', async () => {
-    await page.click('th:nth-child(4) button:has-text("Caret down")');
+    await page.click('th:nth-child(5) button:has-text("Caret down")');
     await page.press('[role="menuitem"]:has-text("Change type")', 'Enter');
     await page.press('[role="menuitem"]:has-text("Formula")', 'Enter');
 
@@ -129,7 +129,7 @@ describe('notebook table', () => {
 
     await waitForExpect(async () => {
       const cell = await page
-        .locator('table > tbody > tr:nth-child(1) > td:nth-child(4)')
+        .locator('table > tbody > tr:nth-child(1) > td:nth-child(5)')
         .textContent();
 
       expect(cell?.trim()).toBe('2');

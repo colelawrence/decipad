@@ -1,5 +1,5 @@
 import { ElementType, FC, HTMLAttributes } from 'react';
-import { css, jsx } from '@emotion/react';
+import { css } from '@emotion/react';
 import { PlateComponentAttributes } from '@decipad/editor-types';
 import { cssVar, p12Medium, p14Medium, setCssVar } from '../../primitives';
 import { table } from '../../styles';
@@ -8,7 +8,7 @@ import { tableRowCounter } from '../../utils';
 const lineNumberWidth = '22px';
 
 const tdBaseStyles = css(p14Medium, {
-  overflowX: 'hidden',
+  overflow: 'visible',
   alignItems: 'center',
 
   background: cssVar('backgroundColor'),
@@ -70,33 +70,26 @@ export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const TableData = ({
-  as = 'div',
-  className,
+  as: Component = 'div',
   isEditable = false,
-  contentEditable,
   attributes,
-  children,
   showPlaceholder = true,
   draggable,
   grabbing,
   ...props
 }: TableDataProps): ReturnType<FC> => {
-  return jsx(
-    as,
-    {
-      contentEditable,
-      ...(attributes || {}),
-      css: [
+  return (
+    <Component
+      {...attributes}
+      css={[
         isEditable && editableStyles,
         tdBaseStyles,
         tdGridStyles,
         draggable && draggableStyles,
         grabbing && grabbingStyles,
         showPlaceholder && tdPlaceholderStyles,
-      ],
-      className,
-      ...props,
-    },
-    children
+      ]}
+      {...props}
+    />
   );
 };

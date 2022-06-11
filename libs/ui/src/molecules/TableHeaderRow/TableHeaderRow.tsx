@@ -10,6 +10,7 @@ import {
   baseSwatches,
   TableStyleContext,
 } from '../../utils';
+import { tableControlWidth } from '../../styles/table';
 
 const createColumnThStyles = css({
   minHeight: table.thMinHeight,
@@ -58,6 +59,15 @@ export const TableHeaderRow = ({
         ),
       }}
     >
+      <th
+        contentEditable={false}
+        css={{
+          position: 'sticky',
+          left: `-${tableControlWidth}`,
+          border: 'none !important',
+          userSelect: 'none',
+        }}
+      />
       {children}
       {actionsColumn && (
         <th

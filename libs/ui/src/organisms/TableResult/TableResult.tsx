@@ -29,7 +29,7 @@ export const TableResult = ({
   const tableLength = value[0].length;
 
   return (
-    <Table border={isTabularType(parentType) ? 'inner' : 'all'}>
+    <Table border={isTabularType(parentType) ? 'inner' : 'all'} translateX>
       <thead>
         <TableHeaderRow actionsColumn={false} readOnly>
           {columnNames?.map((columnName, index) => (

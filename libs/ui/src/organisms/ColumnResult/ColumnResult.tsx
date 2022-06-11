@@ -24,7 +24,7 @@ export const ColumnResult = ({
   const labels = indexLabels.get(indexedBy ?? '');
 
   return (
-    <Table border={isTabularType(parentType) ? 'inner' : 'all'}>
+    <Table border={isTabularType(parentType) ? 'inner' : 'all'} translateX>
       {/* TODO: Column caption should say the name of the variable (if there is one. */}
       <tbody>
         {value.map((row, rowIndex) => {

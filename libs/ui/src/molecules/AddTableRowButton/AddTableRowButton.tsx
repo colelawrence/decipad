@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { noop } from '@decipad/utils';
-import { cssVar, setCssVar, p13Medium } from '../../primitives';
+import { cssVar, p13Medium, setCssVar } from '../../primitives';
 import { Create } from '../../icons';
 import { table } from '../../styles';
 
@@ -43,7 +43,14 @@ export const AddTableRowButton = ({
   onAddRow = noop,
 }: AddTableRowButtonProps): ReturnType<FC> => {
   return (
-    <tr contentEditable={false}>
+    <tr
+      contentEditable={false}
+      css={{
+        display: 'grid',
+        gridTemplate: table.rowTemplate(1, true),
+      }}
+    >
+      <th css={{}} />
       <td css={tdStyles} colSpan={colSpan}>
         <button css={buttonStyles} onClick={onAddRow}>
           <span css={iconWrapperStyles}>

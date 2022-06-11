@@ -64,7 +64,7 @@ describe('actionsColumn prop', () => {
       </table>
     );
 
-    expect(screen.getAllByRole('columnheader')).toHaveLength(2);
+    expect(screen.getAllByRole('columnheader')).toHaveLength(3);
   });
 
   describe('when false', () => {
@@ -79,7 +79,7 @@ describe('actionsColumn prop', () => {
         </table>
       );
 
-      expect(screen.getAllByRole('columnheader')).toHaveLength(1);
+      expect(screen.getAllByRole('columnheader')).toHaveLength(2);
     });
   });
 });
@@ -96,7 +96,7 @@ describe('readOnly prop', () => {
       </table>
     );
 
-    expect(screen.getAllByRole('columnheader')).toHaveLength(2);
+    expect(screen.getAllByRole('columnheader')).toHaveLength(3);
     expect(screen.queryByTitle(/create/i)).not.toBeInTheDocument();
   });
 });

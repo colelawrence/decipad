@@ -1,8 +1,10 @@
 import { ELEMENT_TD, ELEMENT_TH, PlateComponent } from '@decipad/editor-types';
 import { atoms, molecules, organisms } from '@decipad/ui';
+import { useAtom } from 'jotai';
 import { isEnabled } from '@decipad/feature-flags';
 import { useFormulaResult } from './useFormulaResult';
 import { useIsCellSelected } from './useIsCellSelected';
+import { dropLineAtom, trScope } from '../../contexts/tableAtoms';
 
 export const TableCell: PlateComponent = ({
   attributes,
@@ -11,6 +13,8 @@ export const TableCell: PlateComponent = ({
 }) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const selected = useIsCellSelected(element!);
+
+  const [dropLine] = useAtom(dropLineAtom, trScope);
 
   const type = element?.type;
   if (!element || (type !== ELEMENT_TH && type !== ELEMENT_TD)) {
@@ -39,10 +43,12 @@ export const TableCell: PlateComponent = ({
 
   return (
     <atoms.TableData as="td" attributes={attributes} isEditable>
+      {dropLine === 'top' && <atoms.RowDropLine dropLine={dropLine} />}
       {children}
       {isEnabled('TABLE_CELL_SELECTION') && (
         <atoms.TableCellBackground selected={selected} />
       )}
+      {dropLine === 'bottom' && <atoms.RowDropLine dropLine={dropLine} />}
     </atoms.TableData>
   );
 };

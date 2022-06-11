@@ -20,7 +20,7 @@ export async function writeInTable(text: string, line: number, col = 0) {
   const lineNumber = line > 0 ? line - 1 : line;
   const locator = `table > ${parentType} > tr:nth-child(${
     lineNumber + 1
-  }) > ${cellType}:nth-child(${col + 1})`;
+  }) > ${cellType}:nth-child(${col + 2})`;
   const cell = await page.locator(locator);
   await cell.click();
   await page.keyboard.type(text);

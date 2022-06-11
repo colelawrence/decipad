@@ -14,7 +14,7 @@ export const RowResult = ({
 }: CodeResultProps<'row'>): ReturnType<FC> => {
   const { rowCellNames, rowCellTypes } = type;
   return (
-    <Table border={isTabularType(parentType) ? 'inner' : 'all'}>
+    <Table border={isTabularType(parentType) ? 'inner' : 'all'} translateX>
       <thead>
         <TableHeaderRow readOnly actionsColumn={false}>
           {rowCellNames.map((columnName, colIndex) => (
