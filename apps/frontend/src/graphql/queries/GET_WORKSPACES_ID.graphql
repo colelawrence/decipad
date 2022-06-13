@@ -1,0 +1,10 @@
+fragment WorkspaceSwitcherWorkspace on Workspace {
+  id
+  name
+}
+
+query GetWorkspacesIDs {
+  workspaces {
+    ...WorkspaceSwitcherWorkspace
+  }
+}

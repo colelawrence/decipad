@@ -39,11 +39,11 @@ services_wait () {
 services_setup () {
   trap "services_teardown" EXIT
 
-  if services_check localhost:4200; then
+  if services_check localhost:3000; then
     echo " ✅ ~ frontend is already up ~ "
   else
     echo " ⌛ ~ frontend is down, let me start it ~ "
-    nx serve client &
+    nx serve frontend &
     SERVICE_PIDS="${SERVICE_PIDS} ${!}"
   fi
 
@@ -56,5 +56,5 @@ services_setup () {
   fi
 
   services_wait localhost:3333
-  services_wait localhost:4200
+  services_wait localhost:3000
 }

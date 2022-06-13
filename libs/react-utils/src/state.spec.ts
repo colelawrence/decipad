@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { renderHook, act } from '@testing-library/react-hooks';
+import { act } from '@testing-library/react';
+import { renderHook } from '@testing-library/react-hooks';
 import { mockConsoleError } from '@decipad/testutils';
 import { useMounted, useSafeState } from './state';
 

@@ -1,0 +1,3 @@
+mutation DeleteNotebook($id: ID!) {
+  removePad(id: $id)
+}

@@ -58,7 +58,12 @@ export const Table: PlateComponent = withProviders([
   const wideTable = columns.length >= WIDE_MIN_COL_COUNT;
 
   return (
-    <div {...attributes} contentEditable={true} id={blockId}>
+    <div
+      {...attributes}
+      contentEditable={true}
+      suppressContentEditableWarning
+      id={blockId}
+    >
       {!deleted && (
         <DraggableBlock
           element={element}

@@ -141,6 +141,9 @@ typings/
 .nuxt
 dist
 
+# Frontend build outputs
+/apps/frontend/build/
+
 # Storybook build outputs
 .out
 .storybook-out

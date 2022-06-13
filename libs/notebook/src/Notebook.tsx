@@ -1,5 +1,10 @@
 import { DocSyncEditor } from '@decipad/docsync';
 import { Editor, useCreateEditor } from '@decipad/editor';
+import { MyEditor } from '@decipad/editor-types';
+import {
+  NotebookStateProvider,
+  useNotebookState,
+} from '@decipad/notebook-state';
 import {
   ComputerContextProvider,
   EditorReadOnlyContext,
@@ -9,17 +14,13 @@ import { useToast } from '@decipad/toast';
 import { NotebookPage } from '@decipad/ui';
 import { useSession } from 'next-auth/react';
 import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
-import { MyEditor } from '@decipad/editor-types';
-import { createEditor } from 'slate';
-import {
-  NotebookStateProvider,
-  useNotebookState,
-} from '@decipad/notebook-state';
-import { useHistory } from 'react-router-dom';
 import { EMPTY } from 'rxjs';
+import { createEditor } from 'slate';
 
 export interface NotebookProps {
   notebookId: string;
+  notebookTitle: string;
+  onNotebookTitleChange: (newValue: string) => void;
   readOnly: boolean;
   icon: ReactNode;
   topbar: ReactNode;
@@ -30,6 +31,8 @@ export interface NotebookProps {
 
 const InsideNotebookState = ({
   notebookId,
+  notebookTitle,
+  onNotebookTitleChange,
   readOnly,
   icon,
   secret,
@@ -74,6 +77,8 @@ const InsideNotebookState = ({
     notebookId,
     computer,
     readOnly,
+    notebookTitle,
+    onNotebookTitleChange,
   });
 
   useEffect(() => {
@@ -90,10 +95,9 @@ const InsideNotebookState = ({
     }
   }, [docSyncEditor, onDocsync]);
 
-  const history = useHistory();
   useEffect(() => {
-    return history.listen(destroy);
-  }, [destroy, history]);
+    return destroy;
+  }, [destroy]);
 
   // changes warning
 

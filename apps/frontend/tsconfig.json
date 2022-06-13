@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["esnext", "dom", "dom.iterable"],
+    "jsx": "react-jsx"
+  },
+  "include": ["src", "src/**/*.json"],
+  "references": [
+    { "path": "../../libs/editor" },
+    { "path": "../../libs/ui" },
+    { "path": "../../libs/routing" },
+    { "path": "../../libs/client-events" },
+    { "path": "../../libs/toast" },
+    { "path": "../../libs/notebook" }
+  ]
+}

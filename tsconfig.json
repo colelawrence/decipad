@@ -4,6 +4,7 @@
     "rootDir": ".",
     "baseUrl": ".",
     "outDir": "dist",
+    "typeRoots": ["node_modules/@types", "@types"],
 
     "composite": true,
     "incremental": true,

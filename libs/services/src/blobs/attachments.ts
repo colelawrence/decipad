@@ -7,6 +7,7 @@ import { s3 as s3Config, app as appConfig } from '@decipad/config';
 const { buckets, ...config } = s3Config();
 const options = {
   ...config,
+  // @ts-expect-error Architect uses env name testing instead of the conventional test
   sslEnabled: process.env.NODE_ENV !== 'testing',
   s3ForcePathStyle: true,
   signatureVersion: 'v4',

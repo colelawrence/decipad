@@ -1,0 +1,6 @@
+mutation CreateNotebook($workspaceId: ID!, $name: String!) {
+  createPad(workspaceId: $workspaceId, pad: { name: $name }) {
+    ...EditorNotebook
+    ...WorkspaceNotebook
+  }
+}

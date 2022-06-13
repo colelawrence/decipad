@@ -1,5 +1,3 @@
-/* eslint-disable jest/expect-expect */
-/* eslint-disable jest/no-done-callback */
 /* eslint-env jest */
 import { Pad, Workspace } from '@decipad/backendtypes';
 import { timeout } from '@decipad/utils';
@@ -15,6 +13,7 @@ import {
 type TextNode = YMap<YText>;
 type Status = 'connecting' | 'connected' | 'disconnected';
 
+/* eslint-disable jest/no-standalone-expect */
 test('connection', (ctx) => {
   const { test: it } = ctx;
 

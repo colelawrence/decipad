@@ -1,0 +1,15 @@
+overwrite: true
+schema: 'http://localhost:3000/graphql'
+documents: 'apps/frontend/src/graphql/**/*.graphql'
+generates:
+  apps/frontend/src/graphql/generated.ts:
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-urql'
+      - 'typescript-urql-graphcache'
+    config:
+      withHooks: true
+  apps/frontend/src/graphql/schema.generated.json:
+    plugins:
+      - 'introspection'

@@ -1,0 +1,22 @@
+fragment WorkspaceNotebook on Pad {
+  id
+  name
+  icon
+  createdAt
+}
+
+fragment DashboardWorkspace on Workspace {
+  id
+  name
+  pads(page: { maxItems: 10000 }) {
+    items {
+      ...WorkspaceNotebook
+    }
+  }
+}
+
+query GetWorkspaces {
+  workspaces {
+    ...DashboardWorkspace
+  }
+}

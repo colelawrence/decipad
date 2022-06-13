@@ -7,8 +7,8 @@ const defaultEnvValues = {
   AWS_REGION: 'eu-west-2',
 
   DECI_FROM_EMAIL_ADDRESS: 'info@decipad.com',
-  DECI_APP_URL_BASE: 'http://localhost:4200',
-  DECI_PORT: '4200',
+  DECI_APP_URL_BASE: 'http://localhost:3000',
+  DECI_PORT: '3000',
 
   DECI_SES_ACCESS_KEY_ID: 'noneofyourbusiness',
   DECI_SES_SECRET_ACCESS_KEY: 'noneofyourbusiness',
@@ -38,7 +38,7 @@ const defaultEnvValues = {
   JWT_MAX_AGE: '2592000', // 1 month (30 * 24 * 60 * 60)
   JWT_SECRET: 'catwalklrjqwr92309endasjkdn023eqhjdskajhaskj',
 
-  NEXTAUTH_URL: 'http://localhost:4200/api/auth',
+  NEXTAUTH_URL: 'http://localhost:3000/api/auth',
 
   SENTRY_DSN: '',
 

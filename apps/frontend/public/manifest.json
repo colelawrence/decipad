@@ -1,0 +1,15 @@
+{
+  "short_name": "Decipad",
+  "name": "Decipad — Make sense of numbers",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#C1FA6B",
+  "background_color": "#ffffff"
+}

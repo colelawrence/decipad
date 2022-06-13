@@ -10,7 +10,7 @@ The tests are structured like regular ol' jest tests.
 
 ## Relevant env vars:
 
-- `TEST_BASE_URL` (default: `http://localhost:4200`)
+- `TEST_BASE_URL` (default: `http://localhost:3000`)
 
 ## Run them tests
 

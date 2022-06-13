@@ -9,9 +9,9 @@ const styles = css({
   position: 'relative',
   display: 'grid',
   gridTemplate: `
-    "sidebar      " auto
-    "topbar       " auto
-    "notebook-list" auto
+    "sidebar      " max-content
+    "topbar       " max-content
+    "notebook-list" minmax(200px, auto)
     /1fr
   `,
   [crossBarsQuery]: {

@@ -57,7 +57,8 @@ function start(env: Env, config: Config): Promise<void> {
         }
       );
 
-      child.once('exit', (code) => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      child!.once('exit', (code) => {
         started = false;
         if (stoppedResolve) {
           stoppedResolve(code);
@@ -74,7 +75,8 @@ function start(env: Env, config: Config): Promise<void> {
         child = undefined;
       });
 
-      child.on('error', (err) => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      child!.on('error', (err) => {
         console.error('sandbox errored:', err);
         reject(err);
       });
@@ -82,7 +84,7 @@ function start(env: Env, config: Config): Promise<void> {
       let output = '';
 
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      child.stdout!.on('data', (d) => {
+      child!.stdout!.on('data', (d) => {
         output += d;
         if (!started) {
           if (output.indexOf('Sandbox startup scripts ran') >= 0) {
@@ -115,7 +117,7 @@ function start(env: Env, config: Config): Promise<void> {
       });
 
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      child.stderr!.on('data', (d) => {
+      child!.stderr!.on('data', (d) => {
         process.stderr.write(d);
       });
     } catch (err) {

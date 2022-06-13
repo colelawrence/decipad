@@ -1,0 +1,6 @@
+mutation RenameWorkspace($id: ID!, $name: String!) {
+  updateWorkspace(id: $id, workspace: { name: $name }) {
+    id
+    name
+  }
+}

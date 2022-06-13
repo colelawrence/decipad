@@ -3,4 +3,4 @@
 /**
  * @type string
  */
-exports.baseUrl = process.env.TEST_BASE_URL || 'http://localhost:4200/';
+exports.baseUrl = process.env.TEST_BASE_URL || 'http://localhost:3000/';

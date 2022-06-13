@@ -79,7 +79,7 @@ describe('Variable def expression element', () => {
       }
     );
 
-    await userEvent.click(getByTitle(/ellipsis/i, undefined, {}), {
+    await userEvent.click(getByTitle(/ellipsis/i), {
       pointerEventsCheck: 0,
     });
     await userEvent.click(await findByText(/delete/i), {
@@ -167,7 +167,7 @@ describe('Variable def slider element', () => {
       }
     );
 
-    await userEvent.click(getByTitle(/ellipsis/i, undefined, {}), {
+    await userEvent.click(getByTitle(/ellipsis/i), {
       pointerEventsCheck: 0,
     });
     await userEvent.click(await findByText(/delete/i), {

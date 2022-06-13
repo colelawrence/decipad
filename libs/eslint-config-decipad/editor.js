@@ -2,7 +2,6 @@ const plate = require('@udecode/plate');
 
 module.exports = {
   extends: ['../../libs/eslint-config-decipad/react'],
-  ignorePatterns: ['!**/*'],
   rules: {
     'no-restricted-imports': [
       'error',

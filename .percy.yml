@@ -3,7 +3,7 @@ snapshot:
   widths:
     - 375
     - 1280
-  minHeight: 1024
+  minHeight: 16000
   percyCSS: ''
 discovery:
   allowedHostnames: []

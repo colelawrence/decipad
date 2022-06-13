@@ -23,9 +23,8 @@ test('should allow the user to type their email for login', async () => {
 test('should show confirmation email on login attempt', async () => {
   await page.fill('[placeholder~="email" i]', 'johndoe123@gmail.com');
   await page.click('text=/continue/i');
-  await percySnapshot(page, 'Auth: Magic Link Email Sent');
-
   expect(await page.waitForSelector('text=/check.+email/i')).not.toBe(null);
+  await percySnapshot(page, 'Auth: Magic Link Email Sent');
 });
 
 test('should redirect to workspace if authenticated', async () => {

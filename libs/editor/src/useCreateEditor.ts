@@ -1,7 +1,7 @@
-import { useNotebookTitlePlugin } from '@decipad/editor-plugins';
 import { Computer } from '@decipad/computer';
-import { useMemo } from 'react';
+import { useNotebookTitlePlugin } from '@decipad/editor-plugins';
 import { createTPlateEditor, MyEditor } from '@decipad/editor-types';
+import { useMemo } from 'react';
 import * as configuration from './configuration';
 
 export interface CreateEditorProps {
@@ -9,6 +9,8 @@ export interface CreateEditorProps {
   notebookId: string;
   readOnly: boolean;
   computer?: Computer;
+  notebookTitle: string;
+  onNotebookTitleChange: (newValue: string) => void;
 }
 
 export const useCreateEditor = ({
@@ -16,9 +18,12 @@ export const useCreateEditor = ({
   notebookId,
   readOnly = false,
   computer,
+  notebookTitle,
+  onNotebookTitleChange,
 }: CreateEditorProps) => {
   const notebookTitlePlugin = useNotebookTitlePlugin({
-    notebookId,
+    notebookTitle,
+    onNotebookTitleChange,
     readOnly,
   });
 

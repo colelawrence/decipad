@@ -1,8 +1,7 @@
-import { ChakraProvider } from '@chakra-ui/react';
 import { DecoratorFn, Parameters, ArgTypes } from '@storybook/react';
 import { useEffect } from 'react';
 import { useDarkMode } from 'storybook-dark-mode';
-import { GlobalStyles, theme } from '../src';
+import { GlobalStyles } from '../src';
 import {
   largestDesktop,
   smallestDesktop,
@@ -13,9 +12,7 @@ import { ALLOW_DARK_THEME_LOCAL_STORAGE_KEY } from '../src/utils';
 const withGlobalStyles: DecoratorFn = (StoryFn, context) => {
   return (
     <GlobalStyles>
-      <ChakraProvider theme={theme}>
-        <StoryFn {...context} />
-      </ChakraProvider>
+      <StoryFn {...context} />
     </GlobalStyles>
   );
 };

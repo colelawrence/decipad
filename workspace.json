@@ -4,7 +4,6 @@
     "backend": "apps/backend",
     "backend-test-sandbox": "libs/backend-test-sandbox",
     "backendtypes": "libs/backendtypes",
-    "client": "apps/client",
     "client-e2e": "apps/client-e2e",
     "client-events": "libs/client-events",
     "computer": "libs/computer",
@@ -29,6 +28,7 @@
     "fetch": "libs/fetch",
     "fnqueue": "libs/fnqueue",
     "fraction": "libs/fraction",
+    "frontend": "apps/frontend",
     "graphqlresource": "libs/graphqlresource",
     "graphqlserver": "libs/graphqlserver",
     "initial-workspace": "libs/initial-workspace",
@@ -56,5 +56,5 @@
     "y-lambdawebsocket": "libs/y-lambdawebsocket",
     "y-websocket": "libs/y-websocket"
   },
-  "defaultProject": "client"
+  "defaultProject": "frontend"
 }

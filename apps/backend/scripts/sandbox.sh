@@ -24,4 +24,4 @@ else
 fi
 
 cd apps/backend
-NEXTAUTH_URL=http://localhost:4200 ../../node_modules/.bin/sandbox
+NEXTAUTH_URL=http://localhost:3000 ../../node_modules/.bin/sandbox

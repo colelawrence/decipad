@@ -1,16 +1,18 @@
 import { MyEditor } from '@decipad/editor-types';
-import { DragEvent } from 'react';
+import { ComponentProps } from 'react';
 import { setSlateFragment } from '@decipad/editor-utils';
-import { CodeResultProps, DragCellData } from '../../../ui/src/types/index';
+import { organisms } from '@decipad/ui';
 
 export const DRAG_TABLE_CELL_RESULT = 'table-cell-result';
 
 export const onDragStartTableCellResult =
   (
     editor: MyEditor
-  ): NonNullable<CodeResultProps<'table'>['onDragStartCell']> =>
-  (data: DragCellData) =>
-  (e: DragEvent) => {
+  ): NonNullable<
+    ComponentProps<typeof organisms.CodeResult>['onDragStartCell']
+  > =>
+  (data) =>
+  (e) => {
     // eslint-disable-next-line no-param-reassign
     editor.dragging = DRAG_TABLE_CELL_RESULT;
 

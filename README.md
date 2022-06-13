@@ -126,8 +126,6 @@ To run the backend and the frontend, just copy and past the following command in
 yarn serve:all
 ```
 
-> If you want to suppress some pesky react browser warnings, run `NEXT_PUBLIC_DECI_SUPPRESS_WARNINGS yarn serve:all` instead
-
 ### Testing the project
 
 To run the unit tests for all the monorepos in the project, you can run the following:
@@ -198,6 +196,8 @@ nx serve client
 ```
 
 (The `nx serve backend` runs everything you should need in the backend for you: database, queues and respective lambdas, graphQL server, HTTP lambdas and websockets).
+
+Then, you can then head out to your local GraphQL playground ([http://localhost:3000/graphql](http://localhost:3000/graphql)) and test your endpoint manually.
 
 ### Adding tests
 

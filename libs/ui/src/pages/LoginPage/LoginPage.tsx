@@ -15,13 +15,15 @@ const wrapperStyles = css({
 });
 
 export interface LoginPageProps {
-  onSubmit: (email: string) => void;
+  onSubmit: (email: string) => void | Promise<void>;
 }
 
 export const LoginPage = ({ onSubmit }: LoginPageProps): ReturnType<FC> => {
   const formRef = useRef<HTMLFormElement>(null);
   const [formValid, setFormValid] = useState(false);
   const [email, setEmail] = useState('');
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onChangeEmail = (newEmail: string) => {
     setEmail(newEmail);
@@ -46,6 +48,15 @@ export const LoginPage = ({ onSubmit }: LoginPageProps): ReturnType<FC> => {
           display: 'grid',
           gridGap: '12px',
         }}
+        onSubmit={async (event) => {
+          event.preventDefault();
+          setIsSubmitting(true);
+          try {
+            await onSubmit(email);
+          } finally {
+            setIsSubmitting(false);
+          }
+        }}
       >
         <InputField
           placeholder="Your Email"
@@ -56,10 +67,8 @@ export const LoginPage = ({ onSubmit }: LoginPageProps): ReturnType<FC> => {
         />
         <Button
           type="primaryBrand"
-          submit
           size="extraLarge"
-          disabled={!formValid}
-          onClick={() => onSubmit(email)}
+          disabled={!formValid || isSubmitting}
         >
           Continue
         </Button>

@@ -76,7 +76,7 @@ jobs:
           DISCORD_PUBLIC_KEY: '${{secrets.DISCORD_PUBLIC_KEY}}'
           DISCORD_APP_ID: '${{secrets.DISCORD_APP_ID}}'
           NODE_OPTIONS: '--enable-source-maps'
-          NEXT_PUBLIC_ANALYTICS_WRITE_KEY: '${{secrets.DEV_ANALYTICS_WRITE_KEY}}'
+          REACT_APP_HOTJAR_SITE_ID: '${{secrets.ALPHA_HOTJAR_SITE_ID}}'
           GIT_COMMIT_HASH: '${{github.sha}}'
         run: |
           export SAM_LOCATION="s3://decipad-backend-sam/${{env.DECI_CUSTOM_DOMAIN}}"

@@ -1,14 +1,11 @@
+import { FC } from 'react';
+import { MemoryRouter, useNavigate } from 'react-router-dom';
 import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
 import { mockConsoleWarn } from '@decipad/testutils';
 import { noop } from '@decipad/utils';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { createMemoryHistory, History } from 'history';
-import { ComponentProps } from 'react';
-import { MemoryRouter, Router } from 'react-router-dom';
 import { NavigationItem } from './NavigationItem';
-
-type ExpectedHistory = ComponentProps<typeof Router>['history'];
 
 it('renders the children', () => {
   render(<NavigationItem onClick={noop}>Text</NavigationItem>);
@@ -74,15 +71,17 @@ describe('with a router', () => {
 
   describe('and the exact prop', () => {
     it('is not considered active on sub-routes', async () => {
-      const history: History = createMemoryHistory({
-        initialEntries: ['/page'],
-      });
+      const NavigateToChild: FC = () => {
+        const navigate = useNavigate();
+        return <button onClick={() => navigate('child')}>child</button>;
+      };
       render(
-        <Router history={history as unknown as ExpectedHistory}>
+        <MemoryRouter initialEntries={['/page']}>
           <NavigationItem exact href="/page">
             Text
           </NavigationItem>
-        </Router>
+          <NavigateToChild />
+        </MemoryRouter>
       );
       cleanup = await applyCssVars();
       const activeBackgroundColor = findParentWithStyle(
@@ -91,7 +90,7 @@ describe('with a router', () => {
       )?.backgroundColor;
       cleanup();
 
-      history.push('/page/child');
+      await userEvent.click(screen.getByText('child'));
       cleanup = await applyCssVars();
       const childBackgroundColor = findParentWithStyle(
         screen.getByText('Text'),

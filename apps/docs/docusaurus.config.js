@@ -15,12 +15,12 @@ function removeAcceptanceTests(items) {
 
 if (
   typeof process !== 'undefined' &&
-  process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY
+  process.env.REACT_APP_ANALYTICS_WRITE_KEY
 ) {
   plugins.push([
     'docusaurus-plugin-segment',
     {
-      apiKey: process.env.NEXT_PUBLIC_ANALYTICS_WRITE_KEY,
+      apiKey: process.env.REACT_APP_ANALYTICS_WRITE_KEY,
     },
   ]);
 }

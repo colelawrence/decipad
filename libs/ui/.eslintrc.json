@@ -4,24 +4,24 @@
     "!**/*",
     ".babelrc.js",
     "jest-browser.config.js",
-    "jest.config.js",
-    "storybook/main.js"
+    "jest.config.js"
   ],
-  "rules": {},
+  "rules": {
+    "import/no-extraneous-dependencies": [
+      // TODO re-enable when properly using Yarn workspaces
+      "off"
+    ]
+  },
   "overrides": [
     {
       "files": ["src/test-utils/**"],
       "rules": {
         "import/no-extraneous-dependencies": [
-          "error",
-          { "devDependencies": true }
+          // TODO restore comment when properly using Yarn workspaces
+          "off"
+          // "error",
+          // { "devDependencies": true }
         ]
-      }
-    }, // TODO remove when everything is migrated out of src/lib
-    {
-      "files": ["src/lib/**"],
-      "rules": {
-        "@typescript-eslint/explicit-module-boundary-types": "off"
       }
     }
   ]

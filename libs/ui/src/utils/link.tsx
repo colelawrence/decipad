@@ -1,9 +1,17 @@
 import { SERVER_SIDE_ROUTES } from '@decipad/routing';
 import { SerializedStyles } from '@emotion/react';
-import { AnchorHTMLAttributes, ComponentProps } from 'react';
-import { matchPath } from 'react-router-dom';
-import { HashLink, NavHashLink } from 'react-router-hash-link';
+import { AnchorHTMLAttributes, ComponentProps, ReactNode } from 'react';
+import { matchRoutes, RouteObject } from 'react-router-dom';
+import { HashLink, NavHashLink } from '@xzar90/react-router-hash-link';
 import { useHasRouter } from './routing';
+
+const SERVER_SIDE_ROUTE_OBJECTS: Array<RouteObject> =
+  SERVER_SIDE_ROUTES.flatMap((route) => [
+    // server side if it's a server side route ...
+    route.template,
+    // ... or any sub route of a server side route
+    `${route.template}/*`,
+  ]).map((path) => ({ path }));
 
 export const resolveHref = (
   href: string
@@ -24,37 +32,44 @@ export const resolveHref = (
 
 const activeClassName = 'active';
 type AnchorProps = {
+  readonly children: ReactNode;
   // hrefs may conditionally be undefined, but the prop is mandatory so it cannot be forgotten
   readonly href: string | undefined;
-  readonly css?: SerializedStyles;
+  readonly className?: string;
 } & (
   | ({
+      // Non-nav HashLink
       readonly activeStyles?: undefined;
       readonly exact?: undefined;
-    } & Omit<ComponentProps<typeof HashLink>, 'to' | 'smooth'>)
+    } & Omit<
+      ComponentProps<typeof HashLink>,
+      'children' | 'className' | 'to' | 'smooth' | 'style'
+    >)
   | ({
+      // NavHashLink
       readonly activeStyles: SerializedStyles;
       readonly exact?: boolean;
     } & Omit<
       ComponentProps<typeof NavHashLink>,
-      'activeClassName' | 'to' | 'smooth'
+      'children' | 'className' | 'to' | 'smooth' | 'style'
     >)
   | ({
+      // plain HTML anchor
       readonly activeStyles?: undefined;
       readonly exact?: undefined;
     } & Omit<
       AnchorHTMLAttributes<HTMLAnchorElement>,
-      'href' | 'target' | 'rel'
+      'children' | 'className' | 'href' | 'rel' | 'style' | 'target'
     >)
 );
 // ESLint does not understand the abstraction
 /* eslint-disable jsx-a11y/anchor-has-content */
 /* eslint-disable react/jsx-no-target-blank */
 export const Anchor: React.FC<AnchorProps> = ({
-  role = '',
   href,
   activeStyles,
   exact,
+  className,
   ...props
 }) => {
   /*
@@ -82,28 +97,46 @@ export const Anchor: React.FC<AnchorProps> = ({
   const sameApp =
     resolved &&
     internal &&
-    SERVER_SIDE_ROUTES.every(
-      (route) => matchPath(resolved, { path: route.template }) == null
-    );
+    matchRoutes(SERVER_SIDE_ROUTE_OBJECTS, resolved) == null;
 
   if (hasRouter && resolved && sameApp) {
+    const children = (
+      <span
+        className={className}
+        css={[
+          {
+            width: '100%',
+            height: '100%',
+            display: 'block',
+            [`.${activeClassName} > &`]: activeStyles,
+          },
+        ]}
+      >
+        {props.children}
+      </span>
+    );
+
     return activeStyles ? (
       <NavHashLink
         {...props}
-        activeClassName={activeClassName}
-        css={[props.css, { [`&.${activeClassName}`]: activeStyles }]}
+        className={({ isActive }) => (isActive ? activeClassName : '')}
         to={resolved}
-        exact={exact}
+        end={exact}
         smooth
-      />
+      >
+        {children}
+      </NavHashLink>
     ) : (
-      <HashLink {...props} to={resolved} smooth />
+      <HashLink {...props} to={resolved} smooth>
+        {children}
+      </HashLink>
     );
   }
 
   return (
     <a
       {...props}
+      className={className}
       href={resolved}
       target={sameApp ? undefined : '_blank'}
       rel={internal ? undefined : 'noreferrer noopener'}

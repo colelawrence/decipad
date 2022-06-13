@@ -16,6 +16,7 @@ export { docs, storybook };
 /**
  * All routes that are not included in the main frontend bundle
  * and must thus be loaded from the server using a full-page navigation.
+ * All sub-routes of a server-side route must also be server-side.
  */
 export const SERVER_SIDE_ROUTES = [docs, storybook];
 

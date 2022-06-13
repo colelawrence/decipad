@@ -3,7 +3,7 @@ import {
   DynamoDbQuery,
   PermissionRecord,
 } from '@decipad/backendtypes';
-import uniqBy from 'lodash.uniqby';
+import { uniqBy } from 'lodash';
 import tables from '@decipad/tables';
 
 type QueryAccessibleResourcesParams = {

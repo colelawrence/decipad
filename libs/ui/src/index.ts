@@ -8,10 +8,6 @@ export * as molecules from './molecules';
 export * as organisms from './organisms';
 export * as templates from './templates';
 
-// TODO temporary while these are not yet reworked to be design system components
-export * from './lib/theme';
-export * from './lib/shared';
-
 // TODO temporary while some visual components are not in `ui`
 export * as icons from './icons';
 export * from './utils';

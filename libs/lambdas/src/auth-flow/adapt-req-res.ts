@@ -1,5 +1,5 @@
 import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
-import { NextApiRequest, NextApiResponse, NextApiHandler } from 'next';
+import type { NextApiRequest, NextApiResponse, NextApiHandler } from 'next';
 import { HttpResponse } from '@architect/functions';
 import { parse as parseCookie } from 'simple-cookie';
 import { parse as qsParse, ParsedUrlQuery } from 'querystring';

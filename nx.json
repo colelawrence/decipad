@@ -75,8 +75,7 @@
         "lambdas",
         "utils",
         "interfaces",
-        "backendtypes",
-        "client"
+        "backendtypes"
       ]
     },
     "docs": {
@@ -89,13 +88,9 @@
     "backendtypes": {
       "tags": []
     },
-    "client": {
-      "tags": [],
-      "implicitDependencies": ["backend"]
-    },
     "client-e2e": {
       "tags": [],
-      "implicitDependencies": ["client", "backend"]
+      "implicitDependencies": ["frontend", "backend"]
     },
     "client-events": {
       "tags": []
@@ -158,6 +153,9 @@
       "tags": []
     },
     "fraction": {
+      "tags": []
+    },
+    "frontend": {
       "tags": []
     },
     "graphqlresource": {

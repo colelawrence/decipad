@@ -1,0 +1,6 @@
+mutation RenameNotebook($id: ID!, $name: String!) {
+  updatePad(id: $id, pad: { name: $name }) {
+    id
+    name
+  }
+}

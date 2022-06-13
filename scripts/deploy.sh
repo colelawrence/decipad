@@ -7,18 +7,19 @@ echo "Preparing the public files folder...";
 rm -rf apps/backend/public
 mkdir apps/backend/public
 
-echo "Configuring the client..."
-touch apps/client/.env.production
-echo "GIT_COMMIT_HASH=${GIT_COMMIT_HASH:-${GITHUB_SHA:-}}" >> apps/client/.env.production
-echo "SENTRY_DSN=${SENTRY_DSN:-}" >> apps/client/.env.production
-echo "SENTRY_ORG=${SENTRY_ORG:-}" >> apps/client/.env.production
-echo "SENTRY_PROJECT=${SENTRY_PROJECT:-}" >> apps/client/.env.production
-echo "SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN:-}" >> apps/client/.env.production
-echo "SENTRY_ENVIRONMENT=${SENTRY_ENVIRONMENT:-}" >> apps/client/.env.production
+echo "Configuring the frontend..."
+touch apps/frontend/.env.production
+echo "GIT_COMMIT_HASH=${GIT_COMMIT_HASH:-${GITHUB_SHA:-}}" >> apps/frontend/.env.production
+echo "REACT_APP_SENTRY_DSN=${SENTRY_DSN:-}" >> apps/frontend/.env.production
+echo "REACT_APP_SENTRY_ORG=${SENTRY_ORG:-}" >> apps/frontend/.env.production
+echo "REACT_APP_SENTRY_PROJECT=${SENTRY_PROJECT:-}" >> apps/frontend/.env.production
+echo "REACT_APP_SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN:-}" >> apps/frontend/.env.production
+echo "REACT_APP_SENTRY_ENVIRONMENT=${SENTRY_ENVIRONMENT}" >> apps/frontend/.env.production
+echo "REACT_APP_ANALYTICS_WRITE_KEY=${REACT_APP_ANALYTICS_WRITE_KEY:-}" >> apps/frontend/.env.production
 
 echo "Building frontend..."
 yarn build:frontend
-cp -r dist/apps/client/exported/. apps/backend/public
+cp -rT dist/apps/frontend/. apps/backend/public
 
 echo "Building storybook..."
 yarn build:storybook

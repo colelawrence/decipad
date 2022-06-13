@@ -1,9 +1,8 @@
-/* eslint-disable jest/no-done-callback */
-/* eslint-disable no-use-before-define */
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
 import { getDefined } from '@decipad/utils';
 import { concurrentWrites } from './utils/concurrent-writes';
 
+/* eslint-disable jest/no-standalone-expect */
 test('dynamodb lock', (ctx) => {
   const { test: it } = ctx;
   it('works for an unexisting record', async () => {

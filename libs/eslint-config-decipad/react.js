@@ -1,7 +1,11 @@
 const { overrides } = require('.');
 
 module.exports = {
-  extends: ['.', 'eslint-config-react-app', 'eslint-config-prettier'],
+  extends: [
+    './base',
+    'eslint-config-react-app', // includes the TypeScript plugin
+    'eslint-config-prettier',
+  ],
   rules: {
     '@typescript-eslint/explicit-function-return-type': 'off',
 

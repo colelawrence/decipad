@@ -29,6 +29,7 @@
     "lambdawebsocket",
     "NEXTAUTH",
     "nrwl",
+    "prefetch",
     "rowspan",
     "smartrow",
     "Superadmins",
@@ -37,6 +38,7 @@
     "Topbar",
     "typecheck",
     "udecode",
+    "urql",
     "wsconnected",
     "wsconnecting"
   ]

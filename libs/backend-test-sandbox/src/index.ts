@@ -35,7 +35,7 @@ export interface TestContext {
 
 function cleanse(env: Env): Env {
   const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, ...rest } = env;
-  const cleansed: Record<string, string | undefined> = {
+  const cleansed: Env = {
     ...rest,
   };
   if (AWS_ACCESS_KEY_ID) {

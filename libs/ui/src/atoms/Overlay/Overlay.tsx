@@ -14,7 +14,11 @@ interface OverlayProps {
 
 export const Overlay = ({ closeAction }: OverlayProps): ReturnType<FC> => {
   return typeof closeAction === 'string' ? (
-    <Anchor css={styles} aria-label="Close" href={closeAction} />
+    <Anchor css={styles} aria-label="Close" href={closeAction}>
+      {
+        null // Yes, we really want this link to be empty, it has an aria-label instead
+      }
+    </Anchor>
   ) : (
     <button
       css={styles}

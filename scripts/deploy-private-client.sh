@@ -13,11 +13,11 @@ mkdir apps/backend/public
 
 echo "Building frontend..."
 yarn build:frontend
-cp -r dist/apps/client/exported/. apps/backend/public
+cp -rT dist/apps/frontend/. apps/backend/public
 
 echo "Building storybook..."
 yarn build:storybook
-cp -r dist/storybook/ui/. apps/backend/public/.storybook
+cp -rT dist/storybook/ui/. apps/backend/public/.storybook
 
 
 echo "Deploying client on \"$DEPLOY_NAME\"...";

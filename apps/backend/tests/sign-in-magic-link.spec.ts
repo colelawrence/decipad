@@ -34,7 +34,7 @@ test('sign-in via magic link', (ctx) => {
         email: 'test1@decipad.com',
         csrfToken: csrfTokenFirstPart,
         json: 'true',
-        callbackUrl: `http://localhost:4200/`,
+        callbackUrl: `http://localhost:3000/`,
       }),
     });
   });

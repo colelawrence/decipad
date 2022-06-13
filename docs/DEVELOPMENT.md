@@ -24,7 +24,7 @@ To launch all the services you need to run:
 yarn serve:all
 ```
 
-The front-end website will be accessible in [http://localhost:4200](http://localhost:4200).
+The front-end website will be accessible in [http://localhost:3000](http://localhost:3000).
 
 ### Back-end
 

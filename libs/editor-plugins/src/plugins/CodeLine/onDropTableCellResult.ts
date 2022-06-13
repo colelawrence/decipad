@@ -5,7 +5,7 @@ import {
   MyElement,
   MyText,
 } from '@decipad/editor-types';
-import React from 'react';
+import React, { ComponentProps } from 'react';
 import { getSlateFragment, selectEventRange } from '@decipad/editor-utils';
 import { DRAG_TABLE_CELL_RESULT } from '@decipad/editor-components';
 import {
@@ -14,7 +14,11 @@ import {
   isElementEmpty,
   removeNodes,
 } from '@udecode/plate';
-import { DragCellData } from '../../../../ui/src/types/index';
+import { organisms } from '@decipad/ui';
+
+type DragCellData = Parameters<
+  NonNullable<ComponentProps<typeof organisms.CodeResult>['onDragStartCell']>
+>[0];
 
 export const onDropTableCellResult =
   (editor: MyEditor) => (event: React.DragEvent) => {

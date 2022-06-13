@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.png" />
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      href="%PUBLIC_URL%/favicon.png"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Decipad is a new way to create, collaborate and build anything you want using numbers. No code. No spreadsheets. No fuss."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@decipad" />
+    <meta name="twitter:creator" content="@decipad" />
+    <meta property="og:title" content="Decipad — Make sense of numbers" />
+    <meta
+      property="og:description"
+      content="Decipad is a new way to create, collaborate and build anything you want using numbers. No code. No spreadsheets. No fuss."
+    />
+    <meta property="og:url" content="https://decipad.com" />
+    <meta property="og:image" content="%PUBLIC_URL%/preview.png" />
+    <meta property="og:image:alt" content="Decipad cover image" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Decipad" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>Decipad — Make sense of numbers</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root">
+      <!-- Manually adapted from the UI library loading indicator, because a renderToStaticMarkup build process is too expensive to build right now -->
+      <style>
+        html,
+        body,
+        #root {
+          margin: 0;
+          padding: 0;
+          width: 100%;
+          height: 100%;
+        }
+      </style>
+      <div
+        style="
+          width: 100%;
+          height: 100%;
+          display: grid;
+          grid-template-rows: 60px;
+          grid-template-columns: 60px;
+          place-content: center;
+        "
+      >
+        <style>
+          @keyframes dot-keyframes {
+            0% {
+              opacity: 0;
+            }
+            33% {
+              opacity: 1;
+            }
+            67% {
+              opacity: 0;
+            }
+          }
+        </style>
+        <svg
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns-xlink="http://www.w3.org/1999/xlink"
+          x="0px"
+          fill="none"
+          y="0px"
+          viewBox="0 0 16 16"
+        >
+          <title>Loading</title>
+          <circle
+            fill="rgb(77, 86, 100)"
+            stroke="none"
+            cx="4"
+            cy="8"
+            r="1"
+            style="animation: dot-keyframes linear 1s 0.1s infinite"
+          />
+          <circle
+            fill="rgb(77, 86, 100)"
+            stroke="none"
+            cx="8"
+            cy="8"
+            r="1"
+            style="animation: dot-keyframes linear 1s 0.2s infinite"
+          />
+          <circle
+            fill="rgb(77, 86, 100)"
+            stroke="none"
+            cx="12"
+            cy="8"
+            r="1"
+            style="animation: dot-keyframes linear 1s 0.3s infinite"
+          />
+        </svg>
+      </div>
+    </div>
+  </body>
+</html>

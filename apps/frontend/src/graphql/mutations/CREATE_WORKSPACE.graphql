@@ -1,0 +1,5 @@
+mutation CreateWorkspace($name: String!) {
+  createWorkspace(workspace: { name: $name }) {
+    ...DashboardWorkspace
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "name": "@decipad/ui",
+  "version": "0.2.3-alpha",
+  "license": "UNLICENSED",
+  "sideEffects": false
+}

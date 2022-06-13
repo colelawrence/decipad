@@ -1,0 +1,10 @@
+mutation DuplicateNotebook($id: ID!, $targetWorkspace: ID!, $document: String) {
+  duplicatePad(
+    id: $id
+    targetWorkspace: $targetWorkspace
+    document: $document
+  ) {
+    ...EditorNotebook
+    ...WorkspaceNotebook
+  }
+}

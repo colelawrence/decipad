@@ -70,8 +70,8 @@ jobs:
           DECI_GOOGLESHEETS_CLIENT_SECRET: '${{secrets.ALPHA_DECI_GOOGLESHEETS_CLIENT_SECRET}}'
           DISCORD_PUBLIC_KEY: '${{secrets.DISCORD_PUBLIC_KEY}}'
           DISCORD_APP_ID: '${{secrets.DISCORD_APP_ID}}'
-          NEXT_PUBLIC_HOTJAR_SITE_ID: '${{secrets.ALPHA_HOTJAR_SITE_ID}}'
-          NEXT_PUBLIC_ANALYTICS_WRITE_KEY: '${{secrets.ALPHA_ANALYTICS_WRITE_KEY}}'
+          REACT_APP_HOTJAR_SITE_ID: '${{secrets.ALPHA_HOTJAR_SITE_ID}}'
+          REACT_APP_ANALYTICS_WRITE_KEY: '${{secrets.ALPHA_ANALYTICS_WRITE_KEY}}'
           NODE_OPTIONS: '--enable-source-maps'
           GIT_COMMIT_HASH: '${{github.sha}}'
 

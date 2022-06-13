@@ -1,0 +1,41 @@
+{
+  "root": "apps/frontend",
+  "sourceRoot": "apps/frontend",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "DISABLE_ESLINT_PLUGIN=true TSC_COMPILE_ON_ERROR=true craco start",
+        "cwd": "apps/frontend"
+      }
+    },
+    "build": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "BUILD_PATH='../../dist/apps/frontend' DISABLE_ESLINT_PLUGIN=true TSC_COMPILE_ON_ERROR=true craco build",
+        "cwd": "apps/frontend"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["apps/frontend/**/*.{ts,tsx,js,jsx}"],
+        "maxWarnings": 0
+      }
+    },
+    "typecheck": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn tsc -b apps/frontend"
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/frontend"],
+      "options": {
+        "jestConfig": "apps/frontend/jest.config.js"
+      }
+    }
+  }
+}

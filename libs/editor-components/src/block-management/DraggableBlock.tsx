@@ -101,6 +101,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
         contentEditable={
           !readOnly || alwaysWritableElementTypes.includes(element.type)
         }
+        suppressContentEditableWarning
       >
         <atoms.EditorBlock blockKind={props.blockKind}>
           <BlockErrorBoundary>{children}</BlockErrorBoundary>

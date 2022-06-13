@@ -95,7 +95,12 @@ export const VariableDef: PlateComponent = ({
   const { color } = element.children[0];
 
   return (
-    <div {...attributes} contentEditable={true} id={element.id}>
+    <div
+      {...attributes}
+      contentEditable={true}
+      suppressContentEditableWarning
+      id={element.id}
+    >
       <DraggableBlock
         blockKind="interactive"
         element={element}

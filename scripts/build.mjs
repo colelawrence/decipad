@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-import { globby } from 'globby';
+import globby from 'globby';
 import esbuild from 'esbuild';
 
 const envVarNames = [
   'NEXTAUTH_URL',
-  'NEXT_PUBLIC_ANALYTICS_WRITE_KEY',
-  'NEXT_PUBLIC_HOTJAR_SITE_ID',
+  'REACT_APP_ANALYTICS_WRITE_KEY',
+  'REACT_APP_HOTJAR_SITE_ID',
   'GIT_COMMIT_HASH',
   'GITHUB_CLIENT_ID',
   'GITHUB_CLIENT_SECRET',

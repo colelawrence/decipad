@@ -39,7 +39,7 @@ export const Title: PlateComponent = ({ attributes, children, element }) => {
   }, [editor, element, shouldAutofocus]);
 
   return (
-    <div {...attributes} contentEditable={!readOnly}>
+    <div {...attributes} contentEditable={readOnly ? false : undefined}>
       <molecules.EditorTitle
         Heading="h1"
         placeholder={

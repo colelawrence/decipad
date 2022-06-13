@@ -34,7 +34,7 @@ $ npm run build:backend:watch
 
 You can run the GraphQL playground to try out the GraphQL API.
 
-We adivise you to run that through client app (port 4200), so that you can use authenticated requests.
+We adivise you to run that through client app (port 3000), so that you can use authenticated requests.
 
 For that, you'll need two terminal windows. On one, you launch the backend:
 
@@ -48,7 +48,7 @@ On the other you launch the front-end:
 $ nx serve client
 ```
 
-Now you can use the GraphQL playground by accessing [http://localhost:4200/graphql](http://localhost:4200/graphql).
+Now you can use the GraphQL playground by accessing [http://localhost:3000/graphql](http://localhost:3000/graphql).
 
 ## File attachments
 

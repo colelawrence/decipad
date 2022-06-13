@@ -20,6 +20,7 @@ async function isInAllowList(email: string): Promise<boolean> {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function isAllowedToLogIn(email?: string): Promise<boolean> {
+  // @ts-expect-error Architect uses env name testing instead of the conventional test
   if (process.env.NODE_ENV === 'testing') {
     return true;
   }

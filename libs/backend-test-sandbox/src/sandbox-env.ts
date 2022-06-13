@@ -6,7 +6,7 @@ import { Config } from './config';
 import baseUrl from './base-url';
 import getPorts from './get-ports';
 
-export type Env = Record<string, string | undefined>;
+export type Env = NodeJS.ProcessEnv & Record<string, string | undefined>;
 type ISandboxEnvReturn = [Env, Config];
 
 async function loadAWSConfig(): Promise<Record<string, string>> {
@@ -46,7 +46,8 @@ export async function createSandboxEnv(
     LANG: process.env.LANG,
     HOME: process.env.HOME,
     JEST_WORKER_ID: process.env.JEST_WORKER_ID,
-    NODE_ENV: 'testing',
+    // Architect uses env name testing instead of the conventional test
+    NODE_ENV: 'testing' as 'test',
   };
 
   // configure Architect's ports
@@ -78,7 +79,7 @@ export async function createSandboxEnv(
     ARC_SANDBOX: JSON.stringify(ARC_SANDBOX),
     DECI_S3_ENDPOINT: `localhost:${s3Port}`,
     DECI_APP_URL_BASE: `http://localhost:${portBase}`,
-    NEXT_PUBLIC_DECI_WS_URL: `ws://localhost:${portBase}/ws`,
+    REACT_APP_DECI_WS_URL: `ws://localhost:${portBase}/ws`,
     DISCORD_PUBLIC_KEY: process.env.DISCORD_PUBLIC_KEY,
   };
 

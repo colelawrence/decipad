@@ -6,6 +6,7 @@ export { EditWorkspaceModal } from './EditWorkspaceModal/EditWorkspaceModal';
 export { EditorIcon } from './EditorIcon/EditorIcon';
 export { ErrorModal } from './ErrorModal/ErrorModal';
 export { GlobalStyles } from './GlobalStyles/GlobalStyles';
+export { LoadingIndicator } from './LoadingIndicator/LoadingIndicator';
 export { NotebookList } from './NotebookList/NotebookList';
 export { NotebookListPlaceholder } from './NotebookListPlaceholder/NotebookListPlaceholder';
 export { NotebookTopbar } from './NotebookTopbar/NotebookTopbar';

@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react-hooks';
-import { StaticRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 
 import { useHasRouter } from './routing';
 
@@ -14,7 +14,7 @@ describe('useHasRouter', () => {
   it('returns true if there is a router', () => {
     const {
       result: { current },
-    } = renderHook(useHasRouter, { wrapper: StaticRouter });
+    } = renderHook(useHasRouter, { wrapper: MemoryRouter });
     expect(current).toBe(true);
   });
 });

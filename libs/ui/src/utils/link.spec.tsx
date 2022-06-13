@@ -1,14 +1,11 @@
-import { ComponentProps } from 'react';
-import { Router, MemoryRouter, StaticRouter } from 'react-router-dom';
-import { createMemoryHistory } from 'history';
+import { FC } from 'react';
+import { useLocation, MemoryRouter, useNavigate } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { render, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { docs } from '@decipad/routing';
 import { mockConsoleError } from '@decipad/testutils';
 import { Anchor, resolveHref } from './link';
-
-type ExpectedHistory = ComponentProps<typeof Router>['history'];
 
 describe('resolveHref', () => {
   it.each`
@@ -61,7 +58,7 @@ describe('Anchor', () => {
 
   describe.each`
     contextDescription    | wrapper
-    ${'with a router'}    | ${StaticRouter}
+    ${'with a router'}    | ${MemoryRouter}
     ${'without a router'} | ${undefined}
   `('$contextDescription', ({ wrapper }) => {
     describe.each`
@@ -130,7 +127,7 @@ describe('Anchor', () => {
 
   describe.each`
     description           | wrapper
-    ${'with a router'}    | ${StaticRouter}
+    ${'with a router'}    | ${MemoryRouter}
     ${'without a router'} | ${undefined}
   `('for an internal link $description', ({ wrapper }) => {
     it('does not set the anchor target', () => {
@@ -158,7 +155,7 @@ describe('Anchor', () => {
         >
           text
         </Anchor>,
-        { wrapper: StaticRouter }
+        { wrapper: MemoryRouter }
       );
       const anchor = getByRole('link') as HTMLAnchorElement;
       expect(fireEvent.click(anchor)).toBe(false);
@@ -170,7 +167,7 @@ describe('Anchor', () => {
           <Anchor href={`#fragment`}>text</Anchor>
           <main id="fragment">text</main>
         </>,
-        { wrapper: StaticRouter }
+        { wrapper: MemoryRouter }
       );
       const main = getByRole('main');
       const spyScrollIntoView = jest.spyOn(main, 'scrollIntoView');
@@ -183,31 +180,36 @@ describe('Anchor', () => {
 
     describe('and active styles', () => {
       it('applies the active styles only when on the right page', async () => {
-        const { getByRole } = render(
+        const { getByText } = render(
           <MemoryRouter>
             <Anchor href="/page" activeStyles={css({ color: 'red' })}>
               text
             </Anchor>
           </MemoryRouter>
         );
-        expect(getComputedStyle(getByRole('link')).color).not.toBe('red');
+        expect(getComputedStyle(getByText('text')).color).not.toBe('red');
 
-        await userEvent.click(getByRole('link'));
-        expect(getComputedStyle(getByRole('link')).color).toBe('red');
+        await userEvent.click(getByText('text'));
+        expect(getComputedStyle(getByText('text')).color).toBe('red');
       });
 
-      it('does not apply the active styles when on a sub page and exact is set', () => {
-        const history = createMemoryHistory({ initialEntries: ['/page'] });
+      it('does not apply the active styles when on a sub page and exact is set', async () => {
+        const NavigateToChild: FC = () => {
+          const navigate = useNavigate();
+          console.error(useLocation());
+          return <button onClick={() => navigate('child')}>child</button>;
+        };
         const { getByText } = render(
-          <Router history={history as unknown as ExpectedHistory}>
+          <MemoryRouter initialEntries={['/page']}>
             <Anchor exact href="/page" activeStyles={css({ color: 'red' })}>
               text
             </Anchor>
-          </Router>
+            <NavigateToChild />
+          </MemoryRouter>
         );
         expect(getComputedStyle(getByText('text')).color).toBe('red');
 
-        history.push('/page/child');
+        await userEvent.click(getByText('child'));
         expect(getComputedStyle(getByText('text')).color).not.toBe('red');
       });
     });

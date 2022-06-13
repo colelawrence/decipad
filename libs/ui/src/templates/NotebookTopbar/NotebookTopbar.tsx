@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import { useSession } from 'next-auth/react';
 import { ComponentProps, FC, useContext, useEffect, useState } from 'react';
 import { BehaviorSubject } from 'rxjs';
-import { ClientEventsContext } from '../../../../client-events/src';
+import { ClientEventsContext } from '@decipad/client-events';
 import { Button, IconButton } from '../../atoms';
 import { LeftArrow } from '../../icons';
 import { NotebookAvatars, NotebookPath } from '../../molecules';

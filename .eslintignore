@@ -2,3 +2,4 @@ _next
 coverage
 dist
 apps/backend/src
+apps/frontend/src/graphql/generated.ts

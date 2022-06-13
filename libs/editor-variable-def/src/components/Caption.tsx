@@ -23,7 +23,11 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
   const isEditable = !useIsEditorReadOnly();
 
   return (
-    <div {...attributes} contentEditable={isEditable}>
+    <div
+      {...attributes}
+      contentEditable={isEditable}
+      suppressContentEditableWarning
+    >
       <molecules.Caption
         color={element.color as AvailableSwatchColor}
         onChangeIcon={setIcon}

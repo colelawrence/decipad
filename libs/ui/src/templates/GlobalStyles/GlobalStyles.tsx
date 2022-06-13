@@ -1,6 +1,7 @@
 import { fromEvent } from 'rxjs';
 import { map, delay } from 'rxjs/operators';
 import { useObservable } from 'rxjs-hooks';
+import { CSSReset as ChakraCssReset } from '@chakra-ui/css-reset';
 import { Global } from '@emotion/react';
 import emotionNormalize from 'emotion-normalize';
 import emotionReset from 'emotion-reset';
@@ -32,20 +33,27 @@ export const GlobalStyles: React.FC<React.PropsWithChildren<unknown>> = ({
   <>
     <Global styles={emotionNormalize} />
     <Global styles={emotionReset} />
+    <ChakraCssReset />
     <Global
       styles={{
         '*': {
           boxSizing: 'border-box',
         },
-        'html, body, #root, #__next': {
+        'html, body, #root': {
           width: '100%',
           height: '100%',
           margin: '0 !important',
           padding: '0 !important',
+
+          // A grid that aligns to the top like a block layout, but children can still control their alignSelf
+          display: 'grid',
+          alignItems: 'start',
+          overflowX: 'hidden',
+
           backgroundColor: cssVar('backgroundColor'),
         },
         'button, [type="button"], [type="reset"], [type="submit"]': {
-          '-webkit-appearance': 'none',
+          WebkitAppearance: 'none',
         },
         // further resets
         '*:focus-visible': {
