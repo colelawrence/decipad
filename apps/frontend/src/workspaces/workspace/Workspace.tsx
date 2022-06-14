@@ -186,10 +186,10 @@ const Workspace: FC = () => {
                       })
                     }
                   />
-                  <Outlet />
                 </Frame>
               }
             />
+            <Outlet />
           </Frame>
         }
       >
