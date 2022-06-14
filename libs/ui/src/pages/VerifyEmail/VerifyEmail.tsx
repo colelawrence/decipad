@@ -5,7 +5,6 @@ import { cssVar, setCssVar } from '../../primitives';
 import { Anchor } from '../../utils';
 
 const wrapperStyles = css({
-  height: '100%',
   display: 'grid',
   justifyContent: 'center',
   justifyItems: 'center',

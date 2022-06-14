@@ -4,7 +4,9 @@ import { cssVar, smallestDesktop } from '../../primitives';
 
 const crossBarsQuery = `@media (min-width: ${smallestDesktop.portrait.width}px)`;
 const styles = css({
-  height: '100%',
+  // Do not scroll as a whole. The notebook list will scroll individually.
+  height: 0,
+  minHeight: '100%',
 
   position: 'relative',
   display: 'grid',

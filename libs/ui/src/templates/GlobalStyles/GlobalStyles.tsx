@@ -41,13 +41,12 @@ export const GlobalStyles: React.FC<React.PropsWithChildren<unknown>> = ({
         },
         'html, body, #root': {
           width: '100%',
-          height: '100%',
+          minHeight: '100%',
           margin: '0 !important',
           padding: '0 !important',
 
-          // A grid that aligns to the top like a block layout, but children can still control their alignSelf
           display: 'grid',
-          alignItems: 'start',
+          gridTemplateRows: '100%',
           overflowX: 'hidden',
 
           backgroundColor: cssVar('backgroundColor'),

@@ -18,7 +18,6 @@ import {
 import { viewportClampCalc } from '../../utils';
 
 const styles = css({
-  height: '100%',
   padding: viewportClampCalc(smallestMobile, 16, largestDesktop, 66, 'px'),
 
   display: 'grid',

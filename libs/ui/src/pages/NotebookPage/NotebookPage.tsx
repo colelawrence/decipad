@@ -9,6 +9,7 @@ const styles = css({
   padding: '0 32px',
   display: 'grid',
   gridTemplateColumns: '100%',
+  alignContent: 'start',
 });
 
 const notebookStyles = css({

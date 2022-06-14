@@ -4,8 +4,6 @@ import { InputField, Button } from '../../atoms';
 import { AuthContent } from '../../molecules';
 
 const wrapperStyles = css({
-  height: '100%',
-
   display: 'grid',
   gridTemplateColumns: 'min(374px, 100%)',
 
