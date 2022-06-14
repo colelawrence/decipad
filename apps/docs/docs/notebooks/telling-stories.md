@@ -4,19 +4,19 @@ sidebar_position: 5
 
 # Telling Stories
 
-Decipad notebooks aren't just for numbers, you can create plain text documents or incorporate data and narratives. Here are some of the tools you can use to build your story.
+Decipad notebooks aren't just for numbers, narratives are built on top of words. Here are some of the tools you can use to build your story.
 
-## Notebook Name
+## Notebook Names
 
 To organize your notebooks and help tell your story, pick a name for you notebook by defining a title. At Decipad we like to use emojis. Be creative!
 
-## Writing and styling
+## Writing & Styling
 
-### Placing Titles
+### Heading & Sub-Headings
 
 Add headings to you notebook with the '/' command in any paragraph by selecting 'Heading' or 'Sub-heading'.
 
-In alternative, you can use the markdown notation. '\#' followed by "Your Title" or '\#\#' followed by "Your Sub-Title" to insert them into any paragraph.
+In alternative, you can use the markdown notation. '\#' followed by "Your Heading" or '\#\#' followed by "Your Sub-Heading" to insert them into any paragraph.
 
 ### Styling Paragraphs
 

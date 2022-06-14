@@ -2,11 +2,15 @@
 sidebar_position: 28
 ---
 
-# Booleans
+# Opposites
 
-A boolean value can either be true or false.
+On/Off, 1/0, True/False. Lots of data information comes in pairs. We call this data type a boolean. For simplicity a boolean value can either be _true_ or _false_, but you can use it to define any type of data pair you want.
 
-Express boolean values like this:
+## Boolean values
+
+The keywords `true` and `false` are a special on the Decipad Language because they represent a boolean value. Take a look at these examples:
+
+**Example 1**:
 
 ```deci live
 true
@@ -17,6 +21,22 @@ true
 false
 ==> false
 ```
+
+When you use the keyworkds `true` or `false` they will return themselves since they represent a value.
+
+**Example 2**:
+
+```deci live
+On = true
+==> true
+```
+
+```deci live
+Off = false
+==> false
+```
+
+The next time you need to say that something is `On` or `Off` you can use a boolean data type!
 
 ## Comparing values
 

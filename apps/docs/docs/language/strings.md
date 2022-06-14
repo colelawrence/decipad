@@ -2,22 +2,26 @@
 sidebar_position: 25
 ---
 
-# Strings
+# Working with text
 
-A string is a data type used to represent text.
+Text, words, phases, all of these can be data points, but how do you work with them on your notebook?
+The answer is _strings_!
 
-## Declaring a string
+When defining a variable you will have different data types depending on the data you want to represent. For instance, a string is a data type used to represent text.
 
-Declare a string value by placing text between quotation marks ("):
+To declare a string, place your text between quotation marks `"`. Take a look at this example:
 
 ```deci live
-"Hello world!"
+A = "Hello world!"
+A
 ==> 'Hello world!'
 ```
 
+The variable `A` is declared with the string "Hello world!". From now on, each time you use the variable `A`, you will be using "Hello world!" behind the scenes.
+
 ## Joining two strings
 
-Join two strings with the `+` operator like this:
+Sometimes you will have separated variables with the phase you want to display and you may want to join them. Join two strings with the `+` operator like this:
 
 ```deci live
 A = "Hello "
