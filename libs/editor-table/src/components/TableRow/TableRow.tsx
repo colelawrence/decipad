@@ -18,6 +18,7 @@ import { useEffect, useRef } from 'react';
 import { Provider, useAtom } from 'jotai';
 import { useTableActions } from '../../hooks';
 import { dropLineAtom, trScope } from '../../contexts/tableAtoms';
+import { selectRow } from '../../utils/selectRow';
 
 const DRAG_ITEM_ROW = 'row';
 
@@ -74,6 +75,7 @@ export const TableRow: PlateComponent = withProviders([
       attributes={attributes}
       readOnly={false}
       onRemove={() => onRemoveRow(element.id)}
+      onSelect={() => selectRow(editor, path)}
       dragRef={dragRef}
       ref={trRef}
       isBeingDragged={isDragging}

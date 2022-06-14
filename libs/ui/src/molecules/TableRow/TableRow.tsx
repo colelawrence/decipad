@@ -8,7 +8,10 @@ import { Minus } from '../../icons';
 import { table } from '../../styles';
 import { useMergedRef } from '../../hooks/index';
 import { draggingOpacity } from '../../organisms/DraggableBlock/DraggableBlock';
-import { TableCellControls } from '../TableCellControls/TableCellControls';
+import {
+  TableCellControls,
+  TableCellControlsProps,
+} from '../TableCellControls/TableCellControls';
 
 const buttonStyles = css({
   display: 'flex',
@@ -25,7 +28,7 @@ const iconWrapperStyles = css({
   width: '20px',
 });
 
-interface TableRowProps {
+interface TableRowProps extends TableCellControlsProps {
   readonly attributes?: ElementAttributes;
   readonly children: ReactNode;
   readonly onRemove?: () => void;
@@ -46,6 +49,7 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
       attributes,
       children,
       onRemove = noop,
+      onSelect,
       readOnly = false,
       dragRef,
       isBeingDragged,
@@ -68,7 +72,11 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
           opacity: isBeingDragged ? draggingOpacity : 'unset',
         })}
       >
-        <TableCellControls ref={dragRef} readOnly={readOnly} />
+        <TableCellControls
+          ref={dragRef}
+          readOnly={readOnly}
+          onSelect={onSelect}
+        />
         {children}
         {!readOnly && (
           <TableData contentEditable={false} as="td">

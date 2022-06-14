@@ -6,12 +6,15 @@ import {
 } from '../../primitives/index';
 import { DragHandle } from '../../icons/index';
 
+export interface TableCellControlsProps {
+  readonly onSelect?: () => void;
+  readonly readOnly?: boolean;
+}
+
 export const TableCellControls = forwardRef<
   HTMLTableHeaderCellElement,
-  {
-    readonly readOnly?: boolean;
-  }
->(({ readOnly }, ref) => {
+  TableCellControlsProps
+>(({ readOnly, onSelect }, ref) => {
   return (
     <th
       contentEditable={false}
@@ -32,7 +35,7 @@ export const TableCellControls = forwardRef<
       }}
     >
       {!readOnly && (
-        <button css={{ gridArea: 'handle', width: 16 }}>
+        <button css={{ gridArea: 'handle', width: 16 }} onClick={onSelect}>
           <DragHandle />
         </button>
       )}

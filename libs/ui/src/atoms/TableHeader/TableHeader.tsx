@@ -1,7 +1,7 @@
 import { FC, useContext } from 'react';
 import type {
-  TableCellType,
   PlateComponentAttributes,
+  TableCellType,
 } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import {
@@ -158,12 +158,14 @@ interface DropSourceAndTargetProps {
   dragSource: ConnectDragSource;
   dropTarget: ConnectDropTarget;
   draggingOver: boolean;
+  onSelectColumn?: () => void;
 }
 
 const DropSourceAndTarget = ({
   draggingOver,
   dragSource,
   dropTarget,
+  onSelectColumn,
 }: DropSourceAndTargetProps) => {
   return (
     <div
@@ -181,6 +183,7 @@ const DropSourceAndTarget = ({
       ])}
       ref={dragSource && dropTarget && ((node) => dragSource(dropTarget(node)))}
       contentEditable={false}
+      onClick={onSelectColumn}
     >
       {!draggingOver && <DragDetector />}
       <DragHandle />
@@ -188,7 +191,7 @@ const DropSourceAndTarget = ({
   );
 };
 
-export interface TableHeaderProps {
+export interface TableHeaderProps extends Partial<DropSourceAndTargetProps> {
   children?: React.ReactNode;
   highlight?: boolean;
   type?: TableCellType;
@@ -198,10 +201,7 @@ export interface TableHeaderProps {
   showIcon?: boolean;
   // drag
   draggable?: boolean;
-  draggingOver?: boolean;
-  dragSource?: ConnectDragSource;
   // drop
-  dropTarget?: ConnectDropTarget;
   dropDirection?: 'left' | 'right';
   dragPreview?: ConnectDragPreview;
 }
@@ -220,6 +220,7 @@ export const TableHeader = ({
   dropTarget,
   dropDirection,
   dragPreview,
+  onSelectColumn,
 }: TableHeaderProps): ReturnType<FC> => {
   const Icon = getTypeIcon(type);
   const { color } = useContext(TableStyleContext);
@@ -262,6 +263,7 @@ export const TableHeader = ({
             draggingOver={draggingOver}
             dragSource={dragSource}
             dropTarget={dropTarget}
+            onSelectColumn={onSelectColumn}
           />
         )}
 

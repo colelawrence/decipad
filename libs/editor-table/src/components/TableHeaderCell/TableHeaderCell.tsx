@@ -12,6 +12,7 @@ import { findNodePath, getNodeEntry, getNodeString } from '@udecode/plate';
 import { Path } from 'slate';
 import { useSelected } from 'slate-react';
 import { useDragColumn, useDropColumn, useTableActions } from '../../hooks';
+import { selectColumn } from '../../utils/selectColumn';
 
 export const TableHeaderCell: PlateComponent = ({
   attributes,
@@ -55,6 +56,7 @@ export const TableHeaderCell: PlateComponent = ({
       isFirst={nThChild === 0}
       onChangeColumnType={(type) => onChangeColumnType(nThChild, type)}
       onRemoveColumn={() => onRemoveColumn(element.id)}
+      onSelectColumn={() => selectColumn(editor, path)}
       parseUnit={parseUnit}
       type={element.cellType}
       draggable={true}
