@@ -32,11 +32,12 @@ export async function credentials(
     maxAge: 1000 * 60 * 60 * 24, // 1 day
   };
   // generate token
-  const token = await encode({
+  const encodeOptions = {
     ...authentication.jwt,
     token: { accessToken: user.secret },
     ...jwtOptions,
-  });
+  };
+  const token = await encode(encodeOptions);
 
   return {
     cookies: [

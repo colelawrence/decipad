@@ -2,6 +2,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { parse as parseDotEnv } from 'dotenv';
 import AWS from 'aws-sdk';
+import { nanoid } from 'nanoid';
 import { Config } from './config';
 import baseUrl from './base-url';
 import getPorts from './get-ports';
@@ -81,6 +82,7 @@ export async function createSandboxEnv(
     DECI_APP_URL_BASE: `http://localhost:${portBase}`,
     REACT_APP_DECI_WS_URL: `ws://localhost:${portBase}/ws`,
     DISCORD_PUBLIC_KEY: process.env.DISCORD_PUBLIC_KEY,
+    JWT_SECRET: process.env.JWT_SECRET || nanoid(),
   };
 
   // the final sandbox environment:

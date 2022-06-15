@@ -34,7 +34,7 @@
     "typecheck:watch": "yarn typecheck -w",
     "test": "yarn build:backend && TZ=America/Los_Angeles nx run-many --target=test --all",
     "test:coverage": "yarn build:backend && TZ=America/Los_Angeles nx run-many --target=test --all --code-coverage",
-    "e2e": "nx run client-e2e:e2e",
+    "e2e": "./scripts/e2e.sh",
     "deploy": "./scripts/deploy.sh",
     "deploy:private": "./scripts/deploy-private.sh",
     "deploy:private:client": "./scripts/deploy-private-client.sh",

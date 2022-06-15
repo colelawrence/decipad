@@ -37,46 +37,40 @@ export async function onConnect(
   resource: string,
   auth: AuthResult[]
 ): Promise<void> {
-  try {
-    let permissionTypes: PermissionType[];
-    if (
-      !auth.length &&
-      (await isAuthorized({
-        resource,
-        user: undefined,
-        secret: undefined,
-        minimumPermissionType: 'READ',
-      }))
-    ) {
-      permissionTypes = ['READ'];
-    } else {
-      permissionTypes = (
-        await Promise.all(auth.map(authorizedForResource(resource)))
-      ).filter(Boolean) as PermissionType[];
-    }
-    if (permissionTypes.length < 1) {
-      throw Boom.unauthorized();
-    }
-
-    const data = await tables();
-    await data.connections.put({
-      id: connId,
-      user_id: userFromAny(auth)?.id,
-      room: resource,
-      authorizationType: maximumPermissionIn(permissionTypes),
-      secret: secretFromAny(auth),
-    });
-
-    await queues.publish({
-      name: 'sync-after-connect',
-      payload: {
-        connectionId: connId,
-        resource,
-      },
-    });
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error('Error caught on onConnect handler', err);
-    throw err;
+  let permissionTypes: PermissionType[];
+  if (
+    !auth.length &&
+    (await isAuthorized({
+      resource,
+      user: undefined,
+      secret: undefined,
+      minimumPermissionType: 'READ',
+    }))
+  ) {
+    permissionTypes = ['READ'];
+  } else {
+    permissionTypes = (
+      await Promise.all(auth.map(authorizedForResource(resource)))
+    ).filter(Boolean) as PermissionType[];
   }
+  if (permissionTypes.length < 1) {
+    throw Boom.unauthorized();
+  }
+
+  const data = await tables();
+  await data.connections.put({
+    id: connId,
+    user_id: userFromAny(auth)?.id,
+    room: resource,
+    authorizationType: maximumPermissionIn(permissionTypes),
+    secret: secretFromAny(auth),
+  });
+
+  await queues.publish({
+    name: 'sync-after-connect',
+    payload: {
+      connectionId: connId,
+      resource,
+    },
+  });
 }

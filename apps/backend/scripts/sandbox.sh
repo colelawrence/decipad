@@ -6,6 +6,13 @@ cd ../..
 
 SERVICE_PIDS=""
 
+if [[ -z "${DECI_E2E:-}" ]]; then
+  # We're not in E2E mode
+  # Each sandbox start generates a different JWT secret
+  # so that previous JWTs are no longer valid
+  export JWT_SECRET=$RANDOM
+fi
+
 teardown () {
   if [ -n "$SERVICE_PIDS" ]; then
     echo "Killing these PIDEs:" $SERVICE_PIDS

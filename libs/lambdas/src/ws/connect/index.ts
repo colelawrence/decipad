@@ -39,8 +39,10 @@ export const handler = wrapHandler(async function ws(
     };
   } catch (err) {
     const e = boomify(err as Error);
-    console.error('Error on connect:', e);
-    console.error('headers:', event.headers);
+    if (e.isServer) {
+      console.error('Error on connect:', e);
+      console.error('headers:', event.headers);
+    }
     return {
       statusCode: e.output.statusCode,
     };

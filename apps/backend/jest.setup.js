@@ -2,6 +2,7 @@ const rimraf = require('rimraf');
 const path = require('path');
 require('isomorphic-fetch');
 const WebSocket = require('ws');
+const { nanoid } = require('nanoid');
 
 global.WebSocket = WebSocket;
 
