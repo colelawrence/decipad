@@ -1,5 +1,5 @@
 import { DropLineDirection } from '@udecode/plate';
-import { DropLine, dropLineHeight } from './DropLine';
+import { DropLine, dropLineWidth } from './DropLine';
 
 export const RowDropLine = ({ dropLine }: { dropLine: DropLineDirection }) => {
   return (
@@ -7,8 +7,8 @@ export const RowDropLine = ({ dropLine }: { dropLine: DropLineDirection }) => {
       contentEditable={false}
       css={{
         position: 'absolute',
-        top: dropLine === 'top' ? -(dropLineHeight / 2) - 0.5 : undefined,
-        bottom: dropLine === 'bottom' ? -(dropLineHeight / 2) - 1 : undefined,
+        top: dropLine === 'top' ? -(dropLineWidth / 2) - 0.5 : undefined,
+        bottom: dropLine === 'bottom' ? -(dropLineWidth / 2) - 1 : undefined,
         width: 'calc(100% + 1px)',
         zIndex: 1,
       }}

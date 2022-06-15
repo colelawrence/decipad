@@ -1,4 +1,4 @@
-import { PlateComponentAttributes } from '@decipad/editor-types';
+import { ElementAttributes } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import {
   ComponentProps,
@@ -40,7 +40,7 @@ type TableColumnHeaderProps = PropsWithChildren<
       empty?: boolean;
       focused?: boolean;
       readOnly?: boolean;
-      attributes?: PlateComponentAttributes;
+      attributes?: ElementAttributes;
     }
 >;
 

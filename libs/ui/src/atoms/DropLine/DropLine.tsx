@@ -3,12 +3,13 @@ import { blue300 } from '../../primitives';
 
 const dropLineCommonStyles = css({
   backgroundColor: blue300.rgb,
+  zIndex: 1,
 });
 
-export const dropLineHeight = 2;
+export const dropLineWidth = 2;
 
 const dropLineBlockStyles = css({
-  height: `${dropLineHeight}px`,
+  height: `${dropLineWidth}px`,
   border: 'none',
   borderRadius: '4px',
   backgroundColor: blue300.rgb,
@@ -20,8 +21,8 @@ const dropLineTableStyles = css({
 
 const dropLineVerticalStyles = css({
   position: 'absolute',
-  height: '32px',
-  width: '2px',
+  height: '100%',
+  width: `${dropLineWidth}px`,
 });
 
 export type DropLineProps =

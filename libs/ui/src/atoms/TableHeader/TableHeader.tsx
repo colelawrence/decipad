@@ -1,8 +1,6 @@
-import { FC, useContext } from 'react';
-import type {
-  PlateComponentAttributes,
-  TableCellType,
-} from '@decipad/editor-types';
+import { FC, forwardRef, useContext } from 'react';
+import type { TableCellType } from '@decipad/editor-types';
+import { ElementAttributes } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import {
   ConnectDragPreview,
@@ -16,7 +14,6 @@ import {
   transparency,
 } from '../../primitives';
 import { table } from '../../styles';
-import { DropLine } from '..';
 import { DragHandle as DragHandleIcon } from '../../icons';
 import {
   AvailableSwatchColor,
@@ -25,8 +22,11 @@ import {
   getTypeIcon,
   TableStyleContext,
 } from '../../utils';
+import { ColumnDropLine } from '../DropLine/ColumnDropLine';
+import { useMergedRef } from '../../hooks/index';
 
 const columnStyles = css(p13Medium, {
+  position: 'relative',
   display: 'grid',
   alignItems: 'center',
 
@@ -74,19 +74,6 @@ const dragHandleStyles = css({
   },
 });
 
-const dropStyles = css({
-  position: 'absolute',
-  top: 0,
-});
-
-const leftDropStyles = css({
-  left: '-13px',
-});
-
-const rightDropStyles = css({
-  right: '-8px',
-});
-
 const editableChildrenWrapperStyles = css({
   width: '75px',
 });
@@ -99,74 +86,15 @@ const DragHandle = () => {
   );
 };
 
-const dragSurfaceThickness = '8px';
-// This component is a drag detector that is over the table heading and
-// captures mouse events. It tries to not interfere with the mouse events destined to the underlying components.
-// We need to detect drag events and trigger the DnD behavior, and hovering
-// the drag detector triggers it, without interfering with the text boxes underneath it.
-// Tricky stuff...
-const DragDetector = () => {
-  return (
-    <div
-      css={css({ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 })}
-    >
-      <div
-        css={css({
-          position: 'absolute',
-          top: 0,
-          bottom: 0,
-          left: 0,
-          width: dragSurfaceThickness,
-          pointerEvents: 'all',
-        })}
-      ></div>
-      <div
-        css={css({
-          position: 'absolute',
-          top: 0,
-          bottom: 0,
-          right: 0,
-          width: dragSurfaceThickness,
-          pointerEvents: 'all',
-        })}
-      ></div>
-      <div
-        css={css({
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: dragSurfaceThickness,
-          pointerEvents: 'all',
-        })}
-      ></div>
-      <div
-        css={css({
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: dragSurfaceThickness,
-          pointerEvents: 'all',
-        })}
-      ></div>
-    </div>
-  );
-};
-
 interface DropSourceAndTargetProps {
-  dragSource: ConnectDragSource;
-  dropTarget: ConnectDropTarget;
   draggingOver: boolean;
   onSelectColumn?: () => void;
 }
 
-const DropSourceAndTarget = ({
-  draggingOver,
-  dragSource,
-  dropTarget,
-  onSelectColumn,
-}: DropSourceAndTargetProps) => {
+const DropSourceAndTarget = forwardRef<
+  HTMLDivElement,
+  DropSourceAndTargetProps
+>(({ draggingOver, onSelectColumn }, ref) => {
   return (
     <div
       css={css([
@@ -181,29 +109,30 @@ const DropSourceAndTarget = ({
           height: '32px',
         },
       ])}
-      ref={dragSource && dropTarget && ((node) => dragSource(dropTarget(node)))}
+      ref={ref}
       contentEditable={false}
       onClick={onSelectColumn}
     >
-      {!draggingOver && <DragDetector />}
       <DragHandle />
     </div>
   );
-};
+});
 
 export interface TableHeaderProps extends Partial<DropSourceAndTargetProps> {
   children?: React.ReactNode;
   highlight?: boolean;
   type?: TableCellType;
   menu?: React.ReactNode;
-  attributes?: PlateComponentAttributes;
+  attributes?: ElementAttributes;
   isEditable?: boolean;
   showIcon?: boolean;
   // drag
   draggable?: boolean;
-  // drop
-  dropDirection?: 'left' | 'right';
+  dragSource?: ConnectDragSource;
   dragPreview?: ConnectDragPreview;
+  // drop
+  dropTarget?: ConnectDropTarget;
+  dropDirection?: 'left' | 'right';
 }
 
 export const TableHeader = ({
@@ -224,6 +153,8 @@ export const TableHeader = ({
 }: TableHeaderProps): ReturnType<FC> => {
   const Icon = getTypeIcon(type);
   const { color } = useContext(TableStyleContext);
+
+  const thRef = useMergedRef(attributes?.ref, dropTarget);
 
   return (
     <th
@@ -250,19 +181,18 @@ export const TableHeader = ({
             }`,
         }),
       ]}
+      ref={thRef}
       data-highlight={highlight}
     >
+      {isEditable && dropDirection === 'left' && (
+        <ColumnDropLine dropDirection={dropDirection} />
+      )}
+
       <div css={headerWrapperStyles} ref={dragPreview}>
-        {isEditable && draggingOver && dropDirection === 'left' && (
-          <div css={[dropStyles, leftDropStyles]} contentEditable={false}>
-            <DropLine variant="inline" />
-          </div>
-        )}
-        {isEditable && draggable && dragSource && dropTarget && (
+        {isEditable && draggable && dragSource && (
           <DropSourceAndTarget
+            ref={dragSource}
             draggingOver={draggingOver}
-            dragSource={dragSource}
-            dropTarget={dropTarget}
             onSelectColumn={onSelectColumn}
           />
         )}
@@ -281,12 +211,11 @@ export const TableHeader = ({
           {children}
         </div>
         {menu}
-        {isEditable && draggingOver && dropDirection === 'right' && (
-          <div css={[dropStyles, rightDropStyles]} contentEditable={false}>
-            <DropLine variant="inline" />
-          </div>
-        )}
       </div>
+
+      {isEditable && dropDirection === 'right' && (
+        <ColumnDropLine dropDirection={dropDirection} />
+      )}
     </th>
   );
 };

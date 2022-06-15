@@ -1,20 +1,29 @@
-import { ELEMENT_TD, ELEMENT_TH, PlateComponent } from '@decipad/editor-types';
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import {
+  ELEMENT_TD,
+  ELEMENT_TH,
+  PlateComponent,
+  useTEditorRef,
+} from '@decipad/editor-types';
 import { atoms, molecules, organisms } from '@decipad/ui';
 import { useAtom } from 'jotai';
 import { isEnabled } from '@decipad/feature-flags';
 import { useFormulaResult } from './useFormulaResult';
 import { useIsCellSelected } from './useIsCellSelected';
 import { dropLineAtom, trScope } from '../../contexts/tableAtoms';
+import { useColumnDropDirection } from '../../hooks/useColumnDropDirection';
 
 export const TableCell: PlateComponent = ({
   attributes,
   children,
   element,
 }) => {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const editor = useTEditorRef();
   const selected = useIsCellSelected(element!);
 
   const [dropLine] = useAtom(dropLineAtom, trScope);
+
+  const direction = useColumnDropDirection(editor, element!);
 
   const type = element?.type;
   if (!element || (type !== ELEMENT_TH && type !== ELEMENT_TD)) {
@@ -44,9 +53,15 @@ export const TableCell: PlateComponent = ({
   return (
     <atoms.TableData as="td" attributes={attributes} isEditable>
       {dropLine === 'top' && <atoms.RowDropLine dropLine={dropLine} />}
+      {direction === 'left' && (
+        <atoms.ColumnDropLine dropDirection={direction} />
+      )}
       {children}
       {isEnabled('TABLE_CELL_SELECTION') && (
         <atoms.TableCellBackground selected={selected} />
+      )}
+      {direction === 'right' && (
+        <atoms.ColumnDropLine dropDirection={direction} />
       )}
       {dropLine === 'bottom' && <atoms.RowDropLine dropLine={dropLine} />}
     </atoms.TableData>

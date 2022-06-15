@@ -1,7 +1,15 @@
-import { MyElement, MyReactEditor } from '@decipad/editor-types';
+import { MyReactEditor } from '@decipad/editor-types';
 import { DropTargetMonitor } from 'react-dnd';
-import { toDOMNode } from '@udecode/plate';
-import { ColumnDndDirection } from '../types';
+import { TElement, toDOMNode } from '@udecode/plate';
+import { ColumnDndDirection, DragColumnItem } from '../types';
+
+export interface GetHoverDirectionOptions {
+  dragItem?: DragColumnItem;
+
+  monitor: DropTargetMonitor;
+
+  element: TElement;
+}
 
 /**
  * If dragging a block A over another block B:
@@ -9,9 +17,13 @@ import { ColumnDndDirection } from '../types';
  */
 export const getHoverDirection = (
   editor: MyReactEditor,
-  monitor: DropTargetMonitor,
-  element: MyElement
+  { monitor, element, dragItem }: GetHoverDirectionOptions
 ): ColumnDndDirection => {
+  if (dragItem) {
+    // Don't replace items with themselves
+    if (dragItem.id === element.id) return;
+  }
+
   const node = toDOMNode(editor, element);
   if (!node) return;
 
@@ -26,7 +38,6 @@ export const getHoverDirection = (
   if (!clientOffset) return;
 
   const hoverClientX = clientOffset.x - hoverBoundingRect.left;
-
   if (hoverClientX < hoverMiddleX) {
     return 'left';
   }

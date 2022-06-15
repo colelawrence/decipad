@@ -2,9 +2,9 @@ import { MyEditor, MyElement, PowerTableElement } from '@decipad/editor-types';
 import { useEffect, useState } from 'react';
 import { useDrop } from 'react-dnd';
 import {
-  getHoverDirection,
   ColumnDndDirection,
   DragColumnItem,
+  getHoverDirection,
   useFindSwappableColumns,
 } from '@decipad/editor-table';
 import { usePowerTableActions } from './usePowerTableActions';
@@ -32,7 +32,10 @@ export const useDropColumn = (
     };
   }, [timer]);
 
-  const findSwappableColumns = useFindSwappableColumns(editor, table, column);
+  const findSwappableColumns = useFindSwappableColumns(editor, {
+    table,
+    column,
+  });
 
   return useDrop<DragColumnItem, void, CollectedProps>(
     {
@@ -40,7 +43,8 @@ export const useDropColumn = (
       collect: (monitor) => ({
         isOver: monitor.isOver(),
         overDirection:
-          (monitor.isOver() && getHoverDirection(editor, monitor, column)) ||
+          (monitor.isOver() &&
+            getHoverDirection(editor, { monitor, element: column })) ||
           undefined,
       }),
       drop: (columnItem, monitor) => {
