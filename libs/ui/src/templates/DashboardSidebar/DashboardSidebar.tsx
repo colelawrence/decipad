@@ -12,13 +12,16 @@ const styles = css({
 });
 
 type DashboardSidebarProps = ComponentProps<typeof WorkspaceSwitcher> &
-  ComponentProps<typeof WorkspaceNavigation>;
+  ComponentProps<typeof WorkspaceNavigation> & {
+    readonly onPointerEnter?: () => void;
+  };
 
-export const DashboardSidebar = (
-  props: DashboardSidebarProps
-): ReturnType<FC> => {
+export const DashboardSidebar = ({
+  onPointerEnter,
+  ...props
+}: DashboardSidebarProps): ReturnType<FC> => {
   return (
-    <div css={styles}>
+    <div css={styles} onPointerEnter={onPointerEnter}>
       <div css={{ gridRow: 'navigation', display: 'grid' }}>
         <WorkspaceNavigation {...props} />
       </div>

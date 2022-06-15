@@ -1,11 +1,6 @@
 import { useRouteParams, workspaces, notebooks } from '@decipad/routing';
 import { useToast } from '@decipad/toast';
-import {
-  CreateWorkspaceModal,
-  Dashboard,
-  EditWorkspaceModal,
-  NotebookListPlaceholder,
-} from '@decipad/ui';
+import { Dashboard, NotebookListPlaceholder } from '@decipad/ui';
 import { sortBy } from 'lodash';
 import { signOut, useSession } from 'next-auth/react';
 import { FC, lazy, useMemo } from 'react';
@@ -31,6 +26,14 @@ const Sidebar = lazy(loadSidebar);
 const loadNotebookList = () =>
   import(/* webpackChunkName: "notebook-list" */ './NotebookList');
 const NotebookList = lazy(loadNotebookList);
+const loadCreateWorkspaceModal = () =>
+  import(
+    /* webpackChunkName: "create-workspace-modal" */ './CreateWorkspaceModal'
+  );
+const CreateWorkspaceModal = lazy(loadCreateWorkspaceModal);
+const loadEditWorkspaceModal = () =>
+  import(/* webpackChunkName: "edit-workspace-modal" */ './EditWorkspaceModal');
+const EditWorkspaceModal = lazy(loadEditWorkspaceModal);
 
 // prefetch
 loadTopbar().then(loadNotebookList).then(loadSidebar);
@@ -136,6 +139,9 @@ const Workspace: FC = () => {
                     }
                     onCreateWorkspace={() =>
                       navigate(currentWorkspaceRoute.createNew({}).$)
+                    }
+                    onPointerEnter={() =>
+                      loadEditWorkspaceModal().then(loadCreateWorkspaceModal)
                     }
                   />
                 </Frame>
