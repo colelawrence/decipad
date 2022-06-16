@@ -5,6 +5,7 @@ import { sortBy } from 'lodash';
 import { signOut, useSession } from 'next-auth/react';
 import { FC, lazy, useMemo } from 'react';
 import { Outlet, Route, Routes, useNavigate } from 'react-router-dom';
+import { loadNotebooks } from '../../App';
 import {
   useCreateNotebookMutation,
   useCreateWorkspaceMutation,
@@ -154,6 +155,7 @@ const Workspace: FC = () => {
                     numberOfNotebooks={currentWorkspace.pads.items.length}
                     onCreateNotebook={handleCreateNotebook}
                     onLogout={signOut}
+                    onPointerEnter={loadNotebooks}
                   />
                 </Frame>
               }
@@ -191,6 +193,7 @@ const Workspace: FC = () => {
                         toast('Failed to import notebook.', 'error');
                       })
                     }
+                    onPointerEnter={loadNotebooks}
                   />
                 </Frame>
               }

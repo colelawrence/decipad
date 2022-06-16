@@ -1,21 +1,18 @@
 import { FC, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { notebooks, playground, workspaces } from '@decipad/routing';
-import { ErrorPage, Frame, RouteEvents } from './meta';
+import { ErrorPage, Frame, RequireSession, RouteEvents } from './meta';
 import { NotebookRedirect, WorkspaceRedirect } from './url-compat';
 
-const loadWorkspaces = () =>
+export const loadWorkspaces = () =>
   import(/* webpackChunkName: "workspaces" */ './workspaces/Workspaces');
 const Workspaces = lazy(loadWorkspaces);
-const loadNotebooks = () =>
+export const loadNotebooks = () =>
   import(/* webpackChunkName: "notebooks" */ './notebooks/Notebooks');
 const Notebooks = lazy(loadNotebooks);
-const loadPlayground = () =>
+export const loadPlayground = () =>
   import(/* webpackChunkName: "playground" */ './playground/Playground');
 const Playground = lazy(loadPlayground);
-
-// prefetch
-loadWorkspaces().then(loadNotebooks);
 
 export const App: FC = () => {
   return (
@@ -29,11 +26,13 @@ export const App: FC = () => {
       <Route
         path={`${workspaces.template}/*`}
         element={
-          <RouteEvents category="workspace">
-            <Frame Heading="h1" title={null}>
-              <Workspaces />
-            </Frame>
-          </RouteEvents>
+          <RequireSession>
+            <RouteEvents category="workspace">
+              <Frame Heading="h1" title={null}>
+                <Workspaces />
+              </Frame>
+            </RouteEvents>
+          </RequireSession>
         }
       />
       <Route
@@ -44,7 +43,14 @@ export const App: FC = () => {
           </Frame>
         }
       />
-      <Route path={playground.template} element={<Playground />} />
+      <Route
+        path={playground.template}
+        element={
+          <RouteEvents category="playground">
+            <Playground />
+          </RouteEvents>
+        }
+      />
       <Route path="*" element={<ErrorPage Heading="h1" wellKnown="404" />} />
     </Routes>
   );

@@ -30,6 +30,8 @@ type NotebookListProps = {
   >;
   readonly onDuplicate?: (id: string) => void;
   readonly onDelete?: (id: string) => void;
+
+  readonly onPointerEnter?: () => void;
 } & Omit<ComponentProps<typeof DragAndDropImportNotebook>, 'children'> &
   ComponentProps<typeof EmptyWorkspaceCta>;
 export const NotebookList = ({
@@ -41,11 +43,13 @@ export const NotebookList = ({
 
   Heading,
   onCreateNotebook,
+
+  onPointerEnter,
 }: NotebookListProps): ReturnType<React.FC> => {
   const [openActionsId, setOpenActionsId] = useState<string>();
 
   return (
-    <div css={styles}>
+    <div css={styles} onPointerEnter={onPointerEnter}>
       <DragAndDropImportNotebook onImport={onImport}>
         {notebooks.length ? (
           <div css={{ alignSelf: 'start' }}>

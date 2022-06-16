@@ -42,6 +42,8 @@ type DashboardTopbarProps = Pick<
   Pick<ComponentProps<typeof AccountAvatar>, 'name'> &
   ComponentProps<typeof AccountMenu> & {
     readonly onCreateNotebook?: () => void;
+
+    readonly onPointerEnter?: () => void;
   };
 
 export const DashboardTopbar = ({
@@ -52,10 +54,12 @@ export const DashboardTopbar = ({
   name,
   email,
   onLogout,
+
+  onPointerEnter,
 }: DashboardTopbarProps): ReturnType<React.FC> => {
   const [menuOpen, setMenuOpen] = useState(false);
   return (
-    <div css={styles}>
+    <div css={styles} onPointerEnter={onPointerEnter}>
       <div css={leftStyles}>
         <NotebookListHeader
           Heading="h1"
