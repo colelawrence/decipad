@@ -99,7 +99,7 @@ const config = {
           },
           {
             type: 'doc',
-            docId: 'get-inspiration',
+            docId: 'gallery/gallery',
             position: 'left',
             label: 'Get Inspiration',
           },

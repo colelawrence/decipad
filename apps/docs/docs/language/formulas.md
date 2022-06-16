@@ -2,7 +2,7 @@
 sidebar_position: 80
 ---
 
-# Formula
+# Formulas
 
 A formula is a block of reusable Decipad language used to perform a set of operations.
 
