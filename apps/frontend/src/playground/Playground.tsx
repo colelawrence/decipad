@@ -1,6 +1,16 @@
-import { NoDocSyncEditor } from '@decipad/editor';
-import { EditorIcon, NotebookPage } from '@decipad/ui';
-import { useState, ComponentProps } from 'react';
+import { NotebookPage } from '@decipad/ui';
+import { useState, ComponentProps, lazy } from 'react';
+import { Frame } from '../meta';
+
+const loadEditor = () =>
+  import(/* webpackChunkName: "playground-editor" */ './Editor');
+const Editor = lazy(loadEditor);
+const loadEditorIcon = () =>
+  import(/* webpackChunkName: "playground-editor-icon" */ './EditorIcon');
+const EditorIcon = lazy(loadEditorIcon);
+
+// prefetch
+loadEditorIcon().then(loadEditor);
 
 const Playground: React.FC = () => {
   const [icon, setIcon] =
@@ -10,14 +20,20 @@ const Playground: React.FC = () => {
 
   return (
     <NotebookPage
-      notebook={<NoDocSyncEditor />}
+      notebook={
+        <Frame Heading="h1" title={null}>
+          <Editor />
+        </Frame>
+      }
       notebookIcon={
-        <EditorIcon
-          icon={icon}
-          onChangeIcon={setIcon}
-          color={iconColor}
-          onChangeColor={setIconColor}
-        />
+        <Frame Heading="h1" title={null}>
+          <EditorIcon
+            icon={icon}
+            onChangeIcon={setIcon}
+            color={iconColor}
+            onChangeColor={setIconColor}
+          />
+        </Frame>
       }
     />
   );

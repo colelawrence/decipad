@@ -1,7 +1,7 @@
 import { DocSyncEditor } from '@decipad/docsync';
 import { MyEditor } from '@decipad/editor-types';
-import { Notebook } from '@decipad/notebook';
 import { notebooks, useRouteParams } from '@decipad/routing';
+import { NotebookPage } from '@decipad/ui';
 import {
   ComponentProps,
   FC,
@@ -19,17 +19,22 @@ import { ErrorPage, Frame } from '../../meta';
 import { parseIconColorFromIdentifier } from '../../utils/parseIconColorFromIdentifier';
 
 const loadTopbar = () =>
-  import(/* webpackChunkName: "editor-topbar" */ './Topbar');
+  import(/* webpackChunkName: "notebook-topbar" */ './Topbar');
 const Topbar = lazy(loadTopbar);
-
 const loadEditorIcon = () =>
-  import(/* webpackChunkName: "editor-icon" */ './EditorIcon');
+  import(/* webpackChunkName: "notebook-editor-icon" */ './EditorIcon');
 const EditorIcon = lazy(loadEditorIcon);
+const loadEditor = () =>
+  import(/* webpackChunkName: "notebook-editor" */ './Editor');
+const Editor = lazy(loadEditor);
+
+// prefetch
+loadTopbar().then(loadEditorIcon).then(loadEditor);
 
 type Icon = ComponentProps<typeof EditorIcon>['icon'];
 type IconColor = ComponentProps<typeof EditorIcon>['color'];
 
-const NotebookPage: FC = () => {
+const Notebook: FC = () => {
   const [editor, setEditor] = useState<MyEditor | undefined>();
   const [docsync, setDocsync] = useState<DocSyncEditor | undefined>();
 
@@ -93,32 +98,40 @@ const NotebookPage: FC = () => {
     throw new Error('Missing notebook');
   }
 
-  // TODO lazy load Notebook
   return (
     <Frame Heading="h1" title={notebook.name}>
-      <Notebook
-        notebookTitle={notebook.name}
-        onNotebookTitleChange={(newName) => {
-          renameNotebook({
-            id: notebook.id,
-            name: newName,
-          });
-        }}
-        notebookId={notebookId}
-        readOnly={isReadOnly}
-        secret={secret}
-        onEditor={setEditor}
-        onDocsync={setDocsync}
-        icon={
-          <EditorIcon
-            color={iconColor}
-            icon={icon}
-            onChangeIcon={(newIcon) => {
-              setIcon(newIcon as Icon);
-              handleIconChange(`${newIcon}-${iconColor}`);
-            }}
-            onChangeColor={handleIconColorChange}
-          />
+      <NotebookPage
+        notebook={
+          <Frame Heading="h1" title={null}>
+            <Editor
+              notebookTitle={notebook.name}
+              onNotebookTitleChange={(newName) => {
+                renameNotebook({
+                  id: notebook.id,
+                  name: newName,
+                });
+              }}
+              notebookId={notebookId}
+              readOnly={isReadOnly}
+              secret={secret}
+              onEditor={setEditor}
+              onDocsync={setDocsync}
+            />
+          </Frame>
+        }
+        notebookIcon={
+          <Frame Heading="h1" title={null}>
+            <EditorIcon
+              color={iconColor}
+              icon={icon}
+              onChangeIcon={(newIcon) => {
+                setIcon(newIcon as Icon);
+                handleIconChange(`${newIcon}-${iconColor}`);
+              }}
+              onChangeColor={handleIconColorChange}
+              readOnly={isReadOnly}
+            />
+          </Frame>
         }
         topbar={
           <Frame Heading="h1" title={null}>
@@ -130,4 +143,4 @@ const NotebookPage: FC = () => {
   );
 };
 
-export default NotebookPage;
+export default Notebook;

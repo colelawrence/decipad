@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "name": "@decipad/editor-utils",
+  "version": "0.2.3-alpha",
+  "license": "UNLICENSED",
+  "sideEffects": false
+}

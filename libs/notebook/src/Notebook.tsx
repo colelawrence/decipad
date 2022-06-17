@@ -11,9 +11,8 @@ import {
   ResultsContext,
 } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
-import { NotebookPage } from '@decipad/ui';
 import { useSession } from 'next-auth/react';
-import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { EMPTY } from 'rxjs';
 import { createEditor } from 'slate';
 
@@ -22,8 +21,6 @@ export interface NotebookProps {
   notebookTitle: string;
   onNotebookTitleChange: (newValue: string) => void;
   readOnly: boolean;
-  icon: ReactNode;
-  topbar: ReactNode;
   secret?: string;
   onEditor: (editor: MyEditor) => void;
   onDocsync: (docsync: DocSyncEditor) => void;
@@ -34,9 +31,7 @@ const InsideNotebookState = ({
   notebookTitle,
   onNotebookTitleChange,
   readOnly,
-  icon,
   secret,
-  topbar,
   onEditor,
   onDocsync,
 }: NotebookProps) => {
@@ -129,17 +124,11 @@ const InsideNotebookState = ({
       <ComputerContextProvider computer={computer}>
         <EditorReadOnlyContext.Provider value={readOnly}>
           <ResultsContext.Provider value={computerObservable || EMPTY}>
-            <NotebookPage
-              notebook={
-                <Editor
-                  notebookId={notebookId}
-                  loaded={loadedFromRemote || timedOutLoadingFromRemote}
-                  editor={editor}
-                  readOnly={readOnly}
-                />
-              }
-              notebookIcon={icon}
-              topbar={topbar}
+            <Editor
+              notebookId={notebookId}
+              loaded={loadedFromRemote || timedOutLoadingFromRemote}
+              editor={editor}
+              readOnly={readOnly}
             />
           </ResultsContext.Provider>
         </EditorReadOnlyContext.Provider>

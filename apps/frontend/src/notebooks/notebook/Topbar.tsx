@@ -1,5 +1,5 @@
-import { DocSyncEditor } from '@decipad/docsync';
-import { MyEditor } from '@decipad/editor-types';
+import type { DocSyncEditor } from '@decipad/docsync';
+import type { MyEditor } from '@decipad/editor-types';
 import { NotebookTopbar } from '@decipad/ui';
 import { FC } from 'react';
 import {

@@ -1,4 +1,10 @@
 {
   "extends": ["../../libs/eslint-config-decipad/editor"],
-  "ignorePatterns": ["!**/*"]
+  "ignorePatterns": ["!**/*"],
+  "rules": {
+    "import/no-extraneous-dependencies": [
+      // TODO re-enable when properly using Yarn workspaces
+      "off"
+    ]
+  }
 }

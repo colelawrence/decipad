@@ -1,4 +1,4 @@
-import { MyEditor } from '@decipad/editor-types';
+import type { MyEditor } from '@decipad/editor-types';
 import { serializeDocument } from '@decipad/editor-utils';
 import { notebooks } from '@decipad/routing';
 import { useToast } from '@decipad/toast';

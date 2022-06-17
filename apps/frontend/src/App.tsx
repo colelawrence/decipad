@@ -47,7 +47,9 @@ export const App: FC = () => {
         path={playground.template}
         element={
           <RouteEvents category="playground">
-            <Playground />
+            <Frame Heading="h1" title="Playground">
+              <Playground />
+            </Frame>
           </RouteEvents>
         }
       />
