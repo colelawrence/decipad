@@ -1,15 +1,14 @@
+import { useContext, useMemo } from 'react';
 import { MyEditor, MyElement } from '@decipad/editor-types';
-import { useAtom } from 'jotai';
-import { useMemo } from 'react';
-import { columnDropLineAtom } from '../contexts/tableAtoms';
-import { tableScope } from '../components/Table/index';
+
 import { getColumnDropDirection } from '../utils/getColumnDropDirection';
+import { TableDndContext } from '../contexts/TableDndContext';
 
 export const useColumnDropDirection = (
   editor: MyEditor,
   element: MyElement
 ) => {
-  const [columnDropLine] = useAtom(columnDropLineAtom, tableScope);
+  const { columnDropLine } = useContext(TableDndContext);
 
   return useMemo(
     () =>

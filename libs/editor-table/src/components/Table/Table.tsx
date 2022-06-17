@@ -19,6 +19,7 @@ import {
 } from '../../contexts/EditorTableContext';
 import { useTableActions } from '../../hooks';
 import { useSelectedCells } from './useSelectedCells';
+import { TableDndProvider } from '../TableDndProvider/TableDndProvider';
 
 export const tableScope = Symbol('table');
 
@@ -74,18 +75,20 @@ export const Table: PlateComponent = withProviders([
           }}
         >
           <EditorTableContext.Provider value={contextValue}>
-            <organisms.EditorTable
-              onChangeIcon={saveIcon}
-              onChangeColor={saveColor}
-              icon={(element.icon ?? 'Table') as UserIconKey}
-              color={(element.color ?? 'Catskill') as AvailableSwatchColor}
-              onAddRow={onAddRow}
-              columns={columns}
-              tableWidth={wideTable ? 'WIDE' : 'SLIM'}
-              isSelectingCell={!!selectedCells}
-            >
-              {children}
-            </organisms.EditorTable>
+            <TableDndProvider editor={editor} table={element}>
+              <organisms.EditorTable
+                onChangeIcon={saveIcon}
+                onChangeColor={saveColor}
+                icon={(element.icon ?? 'Table') as UserIconKey}
+                color={(element.color ?? 'Catskill') as AvailableSwatchColor}
+                onAddRow={onAddRow}
+                columns={columns}
+                tableWidth={wideTable ? 'WIDE' : 'SLIM'}
+                isSelectingCell={!!selectedCells}
+              >
+                {children}
+              </organisms.EditorTable>
+            </TableDndProvider>
           </EditorTableContext.Provider>
         </DraggableBlock>
       )}

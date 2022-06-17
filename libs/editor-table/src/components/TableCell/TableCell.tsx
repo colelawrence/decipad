@@ -11,7 +11,7 @@ import { isEnabled } from '@decipad/feature-flags';
 import { useFormulaResult } from './useFormulaResult';
 import { useIsCellSelected } from './useIsCellSelected';
 import { dropLineAtom, trScope } from '../../contexts/tableAtoms';
-import { useColumnDropDirection } from '../../hooks/useColumnDropDirection';
+import { useColumnDropDirection, useDropColumn } from '../../hooks';
 
 export const TableCell: PlateComponent = ({
   attributes,
@@ -23,6 +23,7 @@ export const TableCell: PlateComponent = ({
 
   const [dropLine] = useAtom(dropLineAtom, trScope);
 
+  const [, dropTarget] = useDropColumn(editor, element!);
   const direction = useColumnDropDirection(editor, element!);
 
   const type = element?.type;
@@ -51,7 +52,12 @@ export const TableCell: PlateComponent = ({
   }
 
   return (
-    <atoms.TableData as="td" attributes={attributes} isEditable>
+    <atoms.TableData
+      isEditable
+      as="td"
+      attributes={attributes}
+      dropTarget={dropTarget}
+    >
       {dropLine === 'top' && <atoms.RowDropLine dropLine={dropLine} />}
       {direction === 'left' && (
         <atoms.ColumnDropLine dropDirection={direction} />

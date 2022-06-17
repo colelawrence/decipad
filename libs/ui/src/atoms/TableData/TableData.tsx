@@ -1,9 +1,11 @@
 import { ElementType, FC, HTMLAttributes } from 'react';
+import { ConnectDropTarget } from 'react-dnd';
 import { css } from '@emotion/react';
 import { PlateComponentAttributes } from '@decipad/editor-types';
 import { cssVar, p12Medium, p14Medium, setCssVar } from '../../primitives';
 import { table } from '../../styles';
 import { tableRowCounter } from '../../utils';
+import { useMergedRef } from '../../hooks';
 
 const lineNumberWidth = '22px';
 
@@ -67,6 +69,7 @@ export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {
   attributes?: PlateComponentAttributes;
   showPlaceholder?: boolean;
   grabbing?: boolean;
+  dropTarget?: ConnectDropTarget;
 }
 
 export const TableData = ({
@@ -76,11 +79,17 @@ export const TableData = ({
   showPlaceholder = true,
   draggable,
   grabbing,
+  dropTarget,
   ...props
 }: TableDataProps): ReturnType<FC> => {
+  const existingRef =
+    attributes && 'ref' in attributes ? attributes.ref : undefined;
+  const tdRef = useMergedRef(existingRef, dropTarget);
+
   return (
     <Component
       {...attributes}
+      ref={tdRef}
       css={[
         isEditable && editableStyles,
         tdBaseStyles,

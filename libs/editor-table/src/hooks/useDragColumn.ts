@@ -1,0 +1,26 @@
+import { useContext, useMemo } from 'react';
+import { useDragNode } from '@udecode/plate';
+import {
+  MyEditor,
+  TableCellElement,
+  TableHeaderElement,
+} from '@decipad/editor-types';
+import { DRAG_ITEM_COLUMN, TableDndContext } from '../contexts/TableDndContext';
+
+export const useDragColumn = (
+  editor: MyEditor,
+  element: TableHeaderElement | TableCellElement
+) => {
+  const tableDnd = useContext(TableDndContext);
+
+  const [{ isDragging }, dragSource, dragPreview] = useDragNode(editor, {
+    id: element.id,
+    type: DRAG_ITEM_COLUMN,
+    end: tableDnd.onCellDragEnd,
+  });
+
+  return useMemo(
+    () => ({ isDragging, dragSource, dragPreview }),
+    [isDragging, dragSource, dragPreview]
+  );
+};

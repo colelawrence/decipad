@@ -1,31 +1,23 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import {
   ELEMENT_TH,
   PlateComponent,
   TableElement,
-  TableHeaderElement,
   useTPlateEditorRef,
 } from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
 import { organisms } from '@decipad/ui';
 import { assertElementType } from '@decipad/editor-utils';
-import {
-  findNodePath,
-  getNodeEntry,
-  getNodeString,
-  useDragNode,
-} from '@udecode/plate';
+import { findNodePath, getNodeEntry, getNodeString } from '@udecode/plate';
 import { Path } from 'slate';
 import { useSelected } from 'slate-react';
-import { useAtom } from 'jotai';
-import { useDropColumn, useTableActions } from '../../hooks';
-import { columnDropLineAtom } from '../../contexts/tableAtoms';
-import { tableScope } from '../Table/index';
-import { ColumnDndDirection } from '../../types';
-import { useColumnDropDirection } from '../../hooks/useColumnDropDirection';
 import { selectColumn } from '../../utils/selectColumn';
-
-export const DRAG_ITEM_COLUMN = 'column';
+import { useDragColumn } from '../../hooks/useDragColumn';
+import {
+  useDropColumn,
+  useTableActions,
+  useColumnDropDirection,
+} from '../../hooks';
 
 export const TableHeaderCell: PlateComponent = ({
   attributes,
@@ -45,44 +37,13 @@ export const TableHeaderCell: PlateComponent = ({
   const [table] = getNodeEntry<TableElement>(editor, tablePath);
   const { onChangeColumnType, onRemoveColumn } = useTableActions(editor, table);
   const focused = useSelected();
-  const [columnDropLine, setColumnDropLine] = useAtom(
-    columnDropLineAtom,
-    tableScope
-  );
-  const [{ isDragging }, dragSource, dragPreview] = useDragNode(editor, {
-    id: element.id,
-    type: DRAG_ITEM_COLUMN,
-  });
 
+  const { dragSource, dragPreview, isDragging } = useDragColumn(
+    editor,
+    element
+  );
+  const [{ isOver }, dropTarget] = useDropColumn(editor, element);
   const dropDirection = useColumnDropDirection(editor, element);
-
-  const onChangeDropLine = useCallback(
-    (newValue: ColumnDndDirection) => {
-      setColumnDropLine(
-        newValue
-          ? {
-              direction: newValue,
-              element: element as TableHeaderElement,
-            }
-          : null
-      );
-    },
-    [element, setColumnDropLine]
-  );
-
-  const [{ isOver }, dropTarget] = useDropColumn(editor, {
-    table,
-    column: element,
-    dropLine: columnDropLine?.direction,
-    isDragging,
-    onChangeDropLine,
-  });
-
-  useEffect(() => {
-    if (!isDragging) {
-      setColumnDropLine(null);
-    }
-  }, [isDragging, setColumnDropLine]);
 
   const parseUnit = useMemo(
     () => computer.getUnitFromText.bind(computer),

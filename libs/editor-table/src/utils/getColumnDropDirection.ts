@@ -1,15 +1,14 @@
 import { MyEditor, MyElement } from '@decipad/editor-types';
 import { findNodePath } from '@udecode/plate';
-import { ColumnDropLine } from '../contexts/tableAtoms';
+import { ColumnDropLine } from '../contexts/TableDndContext';
 
 export const getColumnDropDirection = (
   editor: MyEditor,
-  { dropLine, element }: { dropLine: ColumnDropLine; element: MyElement }
+  { dropLine, element }: { dropLine: ColumnDropLine | null; element: MyElement }
 ) => {
   if (!dropLine) return;
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const path = findNodePath(editor, element!);
+  const path = findNodePath(editor, element);
   if (!path) return;
 
   const { element: headerElement } = dropLine;

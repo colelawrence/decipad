@@ -1,6 +1,5 @@
 export * from './tableActions';
 export * from './useDropColumn';
-export * from './useFindSwappableColumns';
+export * from './useColumnDropDirection';
 export * from './useTableColumnHeaderOfTableAbove';
-export * from './useFindSwappableColumns';
 export * from './useTableColumnCount';
