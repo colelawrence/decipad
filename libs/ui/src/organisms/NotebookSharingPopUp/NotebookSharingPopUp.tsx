@@ -114,8 +114,6 @@ const padLinkTextStyles = css(
 
 interface NotebookSharingPopUpProps {
   notebook: { id: string; name: string };
-  sharingSecret?: string;
-  onToggleSecretShare?: () => void;
   isPublic?: boolean;
   onToggleMakePublic?: (newIsPublic: boolean) => void;
 }
@@ -127,13 +125,9 @@ interface NotebookSharingPopUpProps {
  */
 export const NotebookSharingPopUp = ({
   notebook,
-  // sharingSecret,
-  // onToggleSecretShare = noop,
   isPublic = false,
   onToggleMakePublic = noop,
 }: NotebookSharingPopUpProps): ReturnType<FC> => {
-  // const [copiedSecretStatusVisible, setCopiedSecretStatusVisible] =
-  //   useState(false);
   const [copiedPublicStatusVisible, setCopiedPublicStatusVisible] =
     useState(false);
   const [shareMenuOpen, setShareMenuOpen] = useState(false);
@@ -148,11 +142,6 @@ export const NotebookSharingPopUp = ({
     notebooks({}).notebook({ notebook }).$,
     window.location.origin
   ).toString();
-
-  // const secretLink = new URL(
-  //   notebooks({}).notebook({ notebook, secret: sharingSecret }).$,
-  //   window.location.origin
-  // ).toString();
 
   return (
     <div css={wrapperStyles} onClick={(e) => e.stopPropagation()}>
@@ -217,61 +206,6 @@ export const NotebookSharingPopUp = ({
                 <p css={padLinkTextStyles}>{link}</p>
               </div>
             )}
-
-            {/* This is still left here to possibly enable
-                when, in the future, we want to re-enable "sharing with a secret"
-
-            <div css={innerPopUpStyles}>
-              <div>
-                <p css={css(p14Medium)}>Share secret link</p>
-                <p css={descriptionStyles}>
-                  Enable to share a link with a secret
-                </p>
-              </div>
-              <Toggle
-                active={!!sharingSecret}
-                onChange={() => {
-                  onToggleSecretShare();
-                }}
-              />
-            </div>
-
-            {!!sharingSecret && (
-              <div css={clipboardWrapperStyles}>
-                <Tooltip
-                  variant="small"
-                  open={copiedSecretStatusVisible}
-                  trigger={
-                    <div>
-                      <CopyToClipboard
-                        text={secretLink}
-                        onCopy={() => {
-                          setCopiedSecretStatusVisible(true);
-                          setTimeout(() => {
-                            setCopiedSecretStatusVisible(false);
-                          }, 1000);
-                          // Analytics
-                          clientEvent({
-                            type: 'action',
-                            action: 'notebook share link copied',
-                          });
-                        }}
-                      >
-                        <button css={copyButtonStyles}>
-                          <span css={copyButtonIconStyles}>
-                            <Link />
-                          </span>{' '}
-                          Copy
-                        </button>
-                      </CopyToClipboard>
-                    </div>
-                  }
-                >
-                  <p>Copied!</p>
-                </Tooltip>
-                <p css={padLinkTextStyles}>{secretLink}</p>
-              </div>
-            )} */}
           </div>
         )}
       </div>

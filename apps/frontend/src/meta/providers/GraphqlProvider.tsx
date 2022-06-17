@@ -1,3 +1,4 @@
+import { devtoolsExchange } from '@urql/devtools';
 import { cacheExchange } from '@urql/exchange-graphcache';
 import { FC, ReactNode } from 'react';
 import {
@@ -14,7 +15,12 @@ const client = createClient({
     credentials: 'same-origin',
   }),
   suspense: true, // React Suspense
-  exchanges: [dedupExchange, cacheExchange(graphCacheConfig), fetchExchange],
+  exchanges: [
+    devtoolsExchange,
+    dedupExchange,
+    cacheExchange(graphCacheConfig),
+    fetchExchange,
+  ],
 });
 
 interface GraphqlProviderProps {

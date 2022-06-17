@@ -4,6 +4,7 @@ mutation DuplicateNotebook($id: ID!, $targetWorkspace: ID!, $document: String) {
     targetWorkspace: $targetWorkspace
     document: $document
   ) {
+    ...TopbarNotebook
     ...EditorNotebook
     ...WorkspaceNotebook
   }

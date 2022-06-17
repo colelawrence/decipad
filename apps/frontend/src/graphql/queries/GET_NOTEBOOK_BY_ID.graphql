@@ -3,24 +3,6 @@ fragment EditorNotebook on Pad {
   name
   myPermissionType
   icon
-  isPublic
-  access {
-    users {
-      user {
-        id
-        name
-      }
-      permission
-    }
-    secrets {
-      permission
-      secret
-    }
-  }
-  workspace {
-    id
-    name
-  }
 }
 
 query GetNotebookById($id: ID!) {

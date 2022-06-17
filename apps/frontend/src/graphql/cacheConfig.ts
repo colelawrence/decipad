@@ -1,7 +1,5 @@
 import { Cache } from '@urql/exchange-graphcache';
 import {
-  GetNotebookByIdDocument,
-  GetNotebookByIdQuery,
   GetWorkspacesDocument,
   GetWorkspacesQuery,
   GraphCacheConfig,
@@ -67,38 +65,40 @@ export const graphCacheConfig: GraphCacheConfig = {
       removePad: (_result, args, cache) => {
         cache.invalidate({ __typename: 'Pad', id: args.id });
       },
-      sharePadWithSecret: (result, args, cache) => {
-        cache.updateQuery<GetNotebookByIdQuery>(
-          { query: GetNotebookByIdDocument },
-          (data) => {
-            const access = data?.getPadById?.access;
-            if (access && access.secrets) {
-              access.secrets = [
-                ...access.secrets,
-                {
-                  __typename: 'SecretAccess',
-                  secret: result.sharePadWithSecret,
-                  permission: args.permissionType,
-                },
-              ];
-            }
-            return data;
-          }
-        );
+      sharePadWithSecret: () => {
+        // No need to update secret access since we're currently not fetching secret access
+        // cache.updateQuery<GetNotebookTopbarQuery>(
+        //   { query: GetNotebookTopbarDocument },
+        //   (data) => {
+        //     const access = data?.getPadById?.access;
+        //     if (access && access.secrets) {
+        //       access.secrets = [
+        //         ...access.secrets,
+        //         {
+        //           __typename: 'SecretAccess',
+        //           secret: result.sharePadWithSecret,
+        //           permission: args.permissionType,
+        //         },
+        //       ];
+        //     }
+        //     return data;
+        //   }
+        // );
       },
-      unshareNotebookWithSecret: (_result, args, cache) => {
-        cache.updateQuery<GetNotebookByIdQuery>(
-          { query: GetNotebookByIdDocument },
-          (data) => {
-            const access = data?.getPadById?.access;
-            if (access && access.secrets) {
-              access.secrets = access.secrets.filter(
-                ({ secret }) => secret !== args.secret
-              );
-            }
-            return data;
-          }
-        );
+      unshareNotebookWithSecret: () => {
+        // No need to update secret access since we're currently not fetching secret access
+        // cache.updateQuery<GetNotebookTopbarQuery>(
+        //   { query: GetNotebookTopbarDocument },
+        //   (data) => {
+        //     const access = data?.getPadById?.access;
+        //     if (access && access.secrets) {
+        //       access.secrets = access.secrets.filter(
+        //         ({ secret }) => secret !== args.secret
+        //       );
+        //     }
+        //     return data;
+        //   }
+        // );
       },
     },
   },

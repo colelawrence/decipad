@@ -636,7 +636,7 @@ export type CreateNotebookMutationVariables = Exact<{
 }>;
 
 
-export type CreateNotebookMutation = { __typename?: 'Mutation', createPad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, createdAt?: any | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null, secrets?: Array<{ __typename?: 'SecretAccess', permission: PermissionType, secret: string }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null } };
+export type CreateNotebookMutation = { __typename?: 'Mutation', createPad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, isPublic?: boolean | null, icon?: string | null, createdAt?: any | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null } };
 
 export type CreateWorkspaceMutationVariables = Exact<{
   name: Scalars['String'];
@@ -666,7 +666,7 @@ export type DuplicateNotebookMutationVariables = Exact<{
 }>;
 
 
-export type DuplicateNotebookMutation = { __typename?: 'Mutation', duplicatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, createdAt?: any | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null, secrets?: Array<{ __typename?: 'SecretAccess', permission: PermissionType, secret: string }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null } };
+export type DuplicateNotebookMutation = { __typename?: 'Mutation', duplicatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, isPublic?: boolean | null, icon?: string | null, createdAt?: any | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null } };
 
 export type ImportNotebookMutationVariables = Exact<{
   workspaceId: Scalars['ID'];
@@ -674,7 +674,7 @@ export type ImportNotebookMutationVariables = Exact<{
 }>;
 
 
-export type ImportNotebookMutation = { __typename?: 'Mutation', importPad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, createdAt?: any | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null, secrets?: Array<{ __typename?: 'SecretAccess', permission: PermissionType, secret: string }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null } };
+export type ImportNotebookMutation = { __typename?: 'Mutation', importPad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, isPublic?: boolean | null, icon?: string | null, createdAt?: any | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null } };
 
 export type RenameNotebookMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -723,16 +723,25 @@ export type UpdateNotebookIconMutationVariables = Exact<{
 }>;
 
 
-export type UpdateNotebookIconMutation = { __typename?: 'Mutation', updatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null, secrets?: Array<{ __typename?: 'SecretAccess', permission: PermissionType, secret: string }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null } };
+export type UpdateNotebookIconMutation = { __typename?: 'Mutation', updatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, isPublic?: boolean | null, icon?: string | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null } };
 
-export type EditorNotebookFragment = { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null, secrets?: Array<{ __typename?: 'SecretAccess', permission: PermissionType, secret: string }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null };
+export type EditorNotebookFragment = { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null };
 
 export type GetNotebookByIdQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type GetNotebookByIdQuery = { __typename?: 'Query', getPadById?: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null, secrets?: Array<{ __typename?: 'SecretAccess', permission: PermissionType, secret: string }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null } | null };
+export type GetNotebookByIdQuery = { __typename?: 'Query', getPadById?: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null } | null };
+
+export type TopbarNotebookFragment = { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, isPublic?: boolean | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null };
+
+export type GetNotebookTopbarQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetNotebookTopbarQuery = { __typename?: 'Query', getPadById?: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, isPublic?: boolean | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null } | null };
 
 export type WorkspaceSwitcherWorkspaceFragment = { __typename?: 'Workspace', id: string, name: string };
 
@@ -756,6 +765,13 @@ export const EditorNotebookFragmentDoc = gql`
   name
   myPermissionType
   icon
+}
+    `;
+export const TopbarNotebookFragmentDoc = gql`
+    fragment TopbarNotebook on Pad {
+  id
+  name
+  myPermissionType
   isPublic
   access {
     users {
@@ -764,10 +780,6 @@ export const EditorNotebookFragmentDoc = gql`
         name
       }
       permission
-    }
-    secrets {
-      permission
-      secret
     }
   }
   workspace {
@@ -804,11 +816,13 @@ export const DashboardWorkspaceFragmentDoc = gql`
 export const CreateNotebookDocument = gql`
     mutation CreateNotebook($workspaceId: ID!, $name: String!) {
   createPad(workspaceId: $workspaceId, pad: {name: $name}) {
+    ...TopbarNotebook
     ...EditorNotebook
     ...WorkspaceNotebook
   }
 }
-    ${EditorNotebookFragmentDoc}
+    ${TopbarNotebookFragmentDoc}
+${EditorNotebookFragmentDoc}
 ${WorkspaceNotebookFragmentDoc}`;
 
 export function useCreateNotebookMutation() {
@@ -846,11 +860,13 @@ export function useDeleteWorkspaceMutation() {
 export const DuplicateNotebookDocument = gql`
     mutation DuplicateNotebook($id: ID!, $targetWorkspace: ID!, $document: String) {
   duplicatePad(id: $id, targetWorkspace: $targetWorkspace, document: $document) {
+    ...TopbarNotebook
     ...EditorNotebook
     ...WorkspaceNotebook
   }
 }
-    ${EditorNotebookFragmentDoc}
+    ${TopbarNotebookFragmentDoc}
+${EditorNotebookFragmentDoc}
 ${WorkspaceNotebookFragmentDoc}`;
 
 export function useDuplicateNotebookMutation() {
@@ -859,11 +875,13 @@ export function useDuplicateNotebookMutation() {
 export const ImportNotebookDocument = gql`
     mutation ImportNotebook($workspaceId: ID!, $source: String!) {
   importPad(workspaceId: $workspaceId, source: $source) {
+    ...TopbarNotebook
     ...EditorNotebook
     ...WorkspaceNotebook
   }
 }
-    ${EditorNotebookFragmentDoc}
+    ${TopbarNotebookFragmentDoc}
+${EditorNotebookFragmentDoc}
 ${WorkspaceNotebookFragmentDoc}`;
 
 export function useImportNotebookMutation() {
@@ -930,10 +948,12 @@ export function useUnshareNotebookWithSecretMutation() {
 export const UpdateNotebookIconDocument = gql`
     mutation UpdateNotebookIcon($id: ID!, $icon: String!) {
   updatePad(id: $id, pad: {icon: $icon}) {
+    ...TopbarNotebook
     ...EditorNotebook
   }
 }
-    ${EditorNotebookFragmentDoc}`;
+    ${TopbarNotebookFragmentDoc}
+${EditorNotebookFragmentDoc}`;
 
 export function useUpdateNotebookIconMutation() {
   return Urql.useMutation<UpdateNotebookIconMutation, UpdateNotebookIconMutationVariables>(UpdateNotebookIconDocument);
@@ -948,6 +968,17 @@ export const GetNotebookByIdDocument = gql`
 
 export function useGetNotebookByIdQuery(options: Omit<Urql.UseQueryArgs<GetNotebookByIdQueryVariables>, 'query'>) {
   return Urql.useQuery<GetNotebookByIdQuery>({ query: GetNotebookByIdDocument, ...options });
+};
+export const GetNotebookTopbarDocument = gql`
+    query GetNotebookTopbar($id: ID!) {
+  getPadById(id: $id) {
+    ...TopbarNotebook
+  }
+}
+    ${TopbarNotebookFragmentDoc}`;
+
+export function useGetNotebookTopbarQuery(options: Omit<Urql.UseQueryArgs<GetNotebookTopbarQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetNotebookTopbarQuery>({ query: GetNotebookTopbarDocument, ...options });
 };
 export const GetWorkspacesIDsDocument = gql`
     query GetWorkspacesIDs {

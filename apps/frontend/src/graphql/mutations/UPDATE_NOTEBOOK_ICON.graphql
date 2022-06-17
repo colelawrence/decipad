@@ -1,5 +1,6 @@
 mutation UpdateNotebookIcon($id: ID!, $icon: String!) {
   updatePad(id: $id, pad: { icon: $icon }) {
+    ...TopbarNotebook
     ...EditorNotebook
   }
 }
